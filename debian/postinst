@@ -121,11 +121,19 @@ EOF
 
     if [ "$2" = "2.8.6" ]; then
 	# Yuck, yuck, yuck...
-	echo "There has been a change in the unstable devscripts bts caching system" >&2
-	echo "in this version; please run a bts cleancache ALL if you wish to use the new" >&2
-	echo "--mbox option and then rebuild your cache as necessary; read the new manpage!" >&2
-	echo "(This message should only appear on upgrades from version = 2.8.6.)" >&2
-	echo "" >&2
+	echo <<EOF >&2
+devscripts warning
+------------------
+
+There has been a change in the caching system for the bts program in
+this version.  This only affects people upgrading from version 2.8.6
+(noone else should receive this message).
+
+If you use the bts cache command and wish to use the new -m/--mbox
+option, then please run "bts cleancache ALL" and then rebuild your cache
+as necessary.  More details of the new frills in the new bts manpage.
+
+EOF
 	echo "Press Return to continue...." >&2
 	read nonsense
     fi

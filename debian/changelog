@@ -4,7 +4,9 @@ devscripts (2.8.7) unstable; urgency=low
     #289672)
   * bts: support reading downloaded mbox versions of bugs with mutt or
     alternative mail readers; also provide finer grained control over what
-    gets cached in general (closes: #251099)
+    gets cached in general.  NOTE that this has changed some incompatible
+    changes from those introduced in version 2.8.6; you may wish to run
+    bts cleancache ALL if you have used that version. (Closes: #251099)
   * debclean: remove obsolete French translation of manpage
 
  -- Julian Gilbey <jdg@debian.org>  Mon, 10 Jan 2005 18:42:20 +0000
