@@ -90,46 +90,14 @@ $modified_conf_msg
 EOF
 }
 
-sub usage_p {
-    print <<"EOF";
-Usage: $progname [options] [.changes file]
-  Generate and sign a .commands file to remove all files referenced by a
-  generated .changes file or a specified one from a Debian FTP upload queue.
-  Good for mindless reaction after uploading a source package built entirely
-  with libraries from experimental.
-
-  Options:
-    --no-conf or      Don\'t read devscripts config files;
-      --noconf          must be the first option given
-    -a<arch>          Search for changes file made for Debian build <arch>
-    -t<target>        Search for changes file made for GNU <target> arch
-    --check-dirname-level N
-                      How much to check directory names:
-                      N=0   never
-                      N=1   only if program changes directory (default)
-                      N=2   always
-    --check-dirname-regex REGEX
-                      What constitutes a matching directory name; REGEX is
-                      a Perl regular expression; the string \`PACKAGE\' will
-                      be replaced by the package name; see manpage for details
-                      (default: 'PACKAGE(-.*)?')
-    --help            Show this message
-    --version         Show version and copyright information
-
-Default settings modified by devscripts configuration files:
-$modified_conf_msg
-EOF
-}
-
 if ($progname eq 'debi') { *usage = \&usage_i; }
 elsif ($progname eq 'debc') { *usage = \&usage_c; }
-elsif ($progname eq 'debpanic') { *usage = \&usage_p; }
 else { die "Unrecognised invocation name: $progname\n"; }
 
 my $version = <<"EOF";
 This is $progname, from the Debian devscripts package, version ###VERSION###
-This code is copyright 1999-2003, Julian Gilbey <jdg\@debian.org>
-and Joshua Kwan <joshk\@triplehelix.org>. All rights reserved.
+This code is copyright 1999-2003, Julian Gilbey <jdg\@debian.org>,
+all rights reserved.
 Based on original code by Christoph Lameter and James R. Van Zandt.
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of

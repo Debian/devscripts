@@ -42,11 +42,13 @@ version:
 	rm -f $@ $@.tmp
 	VERSION=`cat version` && sed -e "s/###VERSION###/$$VERSION/" $< \
 	    > $@.tmp && chmod +x $@.tmp && mv $@.tmp $@
+	sh -n $@
 
 %: %.pl version
 	rm -f $@ $@.tmp
 	VERSION=`cat version` && sed -e "s/###VERSION###/$$VERSION/" $< \
 	    > $@.tmp && chmod +x $@.tmp && mv $@.tmp $@
+	perl -c $@
 
 conf.default: conf.default.in version
 	rm -f $@ $@.tmp
