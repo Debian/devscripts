@@ -89,6 +89,7 @@ my @valid_severities=qw(wishlist minor normal important
 my $browser;  # Will set if necessary
 my $btsurl='http://bugs.debian.org/';
 my $btscgiurl='http://bugs.debian.org/cgi-bin/';
+my $btscgibugurl='http://bugs.debian.org/cgi-bin/bugreport.cgi';
 my $btsemail='control@bugs.debian.org';
 
 my $cachedir=$ENV{'HOME'}."/.devscripts_cache/bts/";
@@ -968,6 +969,10 @@ sub download {
 
 	die "bts: empty page downloaded" unless length $livepage;
 
+	if ($thing =~ /^\d+$/) {
+	    # we've downloaded an individual bug, and it's been updated,
+	    # so we need to also download all the attachments
+	}
 	my $data = $livepage;  # work on a copy, not the original
 	my $cachefile=cachefile($thing);
 	open (OUT_CACHE, ">$cachefile") or die "bts: open $cachefile: $!";

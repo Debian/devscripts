@@ -603,9 +603,13 @@ else
 	    exit 1
 	fi
 
+	# Shift any files that are in the upstream tarball that are also in
+	# the old diff out of the way so the diff is more likely to apply
+	# cleanly, and remember the fact that we moved it
 	for file in $FILES; do
 	    if [ -e "$file" ]; then
 		mv $file $file.upstream
+		MOVEDFILES=("${MOVEDFILES[@]}" "$file")
 	    fi
 	done
 
@@ -618,7 +622,7 @@ else
 	    STATUS=1
 	fi
 
-	for file in $FILES; do
+	for file in "${MOVEDFILES[@]}"; do
 	    if [ -e "$file.upstream" ]; then
 		mv $file $file.debdiff
 		mv $file.upstream $file
