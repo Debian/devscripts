@@ -5,6 +5,7 @@ devscripts (2.8.12) UNRELEASED; urgency=low
   * debchange: use access rather than stat for checking file permissions
     (closes: #298659); also do same to debi and debuild
   * debdiff: don't hardcode wdiff path
+  * debsign: correct obsolete head syntax (closes: #300844)
   * uscan: watch files are now version=3 (should have done this with
     2.8.11, oops)
   * uscan: now support DEHS-style output and --watchfile etc options

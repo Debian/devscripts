@@ -107,7 +107,7 @@ mustsetvar () {
 signfile () {
     if [ $signinterface = gpg ]
     then
-	gpgversion=`gpg --version | head -1 | cut -d' ' -f3`
+	gpgversion=`gpg --version | head -n 1 | cut -d' ' -f3`
 	gpgmajorversion=`echo $gpgversion | cut -d. -f1`
 	gpgminorversion=`echo $gpgversion | cut -d. -f2`
 	if [ $gpgmajorversion -gt 1 -o $gpgminorversion -ge 4 ]
