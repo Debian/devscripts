@@ -11,7 +11,7 @@ Architecture: any
 Conflicts: debmake (<< 3.5), dupload (<< 2.1)
 Depends: dpkg-dev, debianutils (>= 2.0), ${perl:Depends}, ${shlibs:Depends}, ${misc:Depends}
 Recommends: fakeroot
-Suggests: devscripts-el, build-essential, cvs-buildpackage, debian-keyring, dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, libdigest-md5-perl, libtimedate-perl, libnet-ldap-perl, lintian | linda, mailx, patch, patchutils, ssh, strace, wdiff, www-browser
+Suggests: devscripts-el, build-essential, cvs-buildpackage, debian-keyring, dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, libdigest-md5-perl, libtimedate-perl, libnet-ldap-perl, lintian | linda, mailx, patch, patchutils, ssh, strace, wdiff, www-browser, ldap-utils
 Conflicts: suidmanager (<< 0.51)
 Description: Scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
