@@ -1477,8 +1477,6 @@ your passwd entry.
 If set, it specifies the browser to use for the 'show' and 'bugs'
 options.  See the description above.
 
-=over 4
-
 =item BUGSOFFLINE
 
 If set and if cached data exists, it will be used for the 'show' and 'bugs'
