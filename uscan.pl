@@ -836,10 +836,10 @@ EOF
 	$upstream_url = "$base$newfile";
     }
 
-    $dehs_tags{'debian_uversion'} = $lastversion;
-    $dehs_tags{'debian_mangled_uversion'} = $mangled_lastversion;
-    $dehs_tags{'upstream_version'} = $newversion;
-    $dehs_tags{'upstream_url'} = $upstream_url;
+    $dehs_tags{'debian-uversion'} = $lastversion;
+    $dehs_tags{'debian-mangled-uversion'} = $mangled_lastversion;
+    $dehs_tags{'upstream-version'} = $newversion;
+    $dehs_tags{'upstream-url'} = $upstream_url;
 
     print "Newest version on remote site is $newversion, local version is $lastversion\n" .
 	($mangled_lastversion eq $lastversion ? "" : " (mangled local version number $mangled_lastversion)\n")
@@ -1222,8 +1222,8 @@ sub dehs_output ()
     return unless $dehs;
     my $output = 0;
 
-    for my $tag (qw(package debian_uversion debian_mangled_uversion
-		    upstream_version upstream_url
+    for my $tag (qw(package debian-uversion debian-mangled-uversion
+		    upstream-version upstream-url
 		    status messages warnings errors)) {
 	if (exists $dehs_tags{$tag}) {
 	    if (! $output) {
