@@ -516,8 +516,8 @@ sub bts_tags {
     # Parse the rest of the command line.
     my $command="tags $bug";
     my $flag="";
-    if ($_[0] =~ /^[-+=]/) {
-	$flag = $1;
+    if ($_[0] =~ /^[-+=]$/) {
+	$flag = $_[0];
 	$command .= " $flag";
 	shift;
     }
