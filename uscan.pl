@@ -999,8 +999,8 @@ sub recursive_regex_dir ($$$) {
 
     $base =~ m%^(\w+://[^/]+)/(.*)$%;
     my $site = $1;
-    my @dirs = split '/', $2;
-    my $dir = "/";
+    my @dirs = split /(\/)/, $2;
+    my $dir = '/';
 
     foreach my $dirpattern (@dirs) {
 	if ($dirpattern =~ /\(.*\)/) {
@@ -1017,7 +1017,7 @@ sub recursive_regex_dir ($$$) {
 		return '';
 	    }
 	} else {
-	    $dir .= "$dirpattern/";
+	    $dir .= "$dirpattern";
 	}
     }
     return $site . $dir;
