@@ -133,7 +133,7 @@ withecho () {
 # and failure if the file needs signing.  Parameters: $1=filename,
 # $2=file description for message (dsc or changes)
 check_already_signed () {
-    if [ "`head -1 \"$1\"`" != "-----BEGIN PGP SIGNED MESSAGE-----" ]
+    if [ "`head -n 1 \"$1\"`" != "-----BEGIN PGP SIGNED MESSAGE-----" ]
     then
 	return 1
     else

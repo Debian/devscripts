@@ -7,16 +7,17 @@ devscripts (2.7.95.2) UNRELEASED; urgency=low
     - Our BTS web parser is broken. Move to Net::LDAP and the
       more machine-friendly bts2ldap gateway.
     - Do not proceed with parsing versions and contacting the BTS if
-      debian/changelog is not writable. (Closes: #235485)
+      debian/changelog is not writable. (Closes: #235485, #178080)
   * debsign:
     - Don't prompt to overwrite the dsc file (ie. may be owned by root,
       parent dir owned by yourself) - force it and hope it works.
       (Closes: #249950)
+    - Change nonstandard head -1 to head -n 1. (Closes: #231130)
   * bts:
     - Recognize the 'l10n' tag for bts. (Closes: #227735)
-    - bts.1: Fix extraneous indentation. (Closes: #236309) 
+    - bts.1: Fix extraneous indentation. (Closes: #236309)
 
- -- Joshua Kwan <joshk@triplehelix.org>  Thu, 29 Jul 2004 15:37:49 -0700
+ -- Joshua Kwan <joshk@triplehelix.org>  Thu, 29 Jul 2004 15:40:33 -0700
 
 devscripts (2.7.95.1) unstable; urgency=low
 
