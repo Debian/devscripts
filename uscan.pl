@@ -294,53 +294,53 @@ if (defined $opt_watchfile) {
 	process_watchfile(undef, $opt_package, $opt_uversion, $opt_watchfile);
     } else {
 	# Check for debian/changelog file
-	if (-r 'debian/changelog') {
-	    # Figure out package info we need
-	    my $changelog = `dpkg-parsechangelog`;
-	    unless ($? == 0) {
-		die "$progname: Problems running dpkg-parsechangelog\n";
+	until (-r 'debian/changelog') {
+	    chdir '..' or die "$progname: can't chdir ..: $!\n";
+	    if (cwd() eq '/') {
+		die "$progname: cannot find readable debian/changelog anywhere!\nAre you in the source code tree?\n";
 	    }
+	}
 
-	    my ($package, $debversion, $version);
-	    $changelog =~ /^Source: (.*?)$/m and $package=$1;
-	    $changelog =~ /^Version: (.*?)$/m and $debversion=$1;
-	    if (! defined $package || ! defined $debversion) {
-		die "$progname: Problems determining package name and/or version from\n  debian/changelog\n";
-	    }
-	    
-	    # Check the directory is properly named for safety
-	    my $good_dirname = 1;
-	    if ($check_dirname_level ==  2 or
-		($check_dirname_level == 1 and cwd() ne $opwd)) {
-		# that second test is redundant here, but we'll leave it for
-		# safety
-		my $re = $check_dirname_regex;
-		$re =~ s/PACKAGE/\Q$package\E/g;
-		if ($re =~ m%/%) {
-		    $good_dirname = (cwd() =~ m%^$re$%);
-		} else {
-		    $good_dirname = (basename(cwd()) =~ m%^$re$%);
-		}
-	    }
-	    if (! $good_dirname) {
-		die "$progname: not processing watchfile because this directory does not match the package name\n" .
-		    "   or the settings of the--check-dirname-level and --check-dirname-regex options if any.\n";
-	    }
+	# Figure out package info we need
+	my $changelog = `dpkg-parsechangelog`;
+	unless ($? == 0) {
+	    die "$progname: Problems running dpkg-parsechangelog\n";
+	}
 
-	    # Get current upstream version number
-	    if (defined $opt_uversion) {
-		$version = $opt_uversion;
+	my ($package, $debversion, $uversion);
+	$changelog =~ /^Source: (.*?)$/m and $package=$1;
+	$changelog =~ /^Version: (.*?)$/m and $debversion=$1;
+	if (! defined $package || ! defined $debversion) {
+	    die "$progname: Problems determining package name and/or version from\n  debian/changelog\n";
+	}
+	
+	# Check the directory is properly named for safety
+	my $good_dirname = 1;
+	if ($check_dirname_level ==  2 or
+	    ($check_dirname_level == 1 and cwd() ne $opwd)) {
+	    my $re = $check_dirname_regex;
+	    $re =~ s/PACKAGE/\Q$package\E/g;
+	    if ($re =~ m%/%) {
+		$good_dirname = (cwd() =~ m%^$re$%);
 	    } else {
-		$version = $debversion;
-		$version =~ s/-[^-]+$//;  # revision
-		$version =~ s/^\d+://;    # epoch
+		$good_dirname = (basename(cwd()) =~ m%^$re$%);
 	    }
+	}
+	if (! $good_dirname) {
+	    die "$progname: not processing watchfile because this directory does not match the package name\n" .
+		"   or the settings of the--check-dirname-level and --check-dirname-regex options if any.\n";
+	}
 
-	    process_watchfile($opwd, $package, $version, $opt_watchfile);
+	# Get current upstream version number
+	if (defined $opt_uversion) {
+	    $uversion = $opt_uversion;
+	} else {
+	    $uversion = $debversion;
+	    $uversion =~ s/-[^-]+$//;  # revision
+	    $uversion =~ s/^\d+://;    # epoch
 	}
-	else {
-	    die "Couldn't find/read debian/changelog file\n";
-	}
+
+	process_watchfile(cwd(), $package, $uversion, $opt_watchfile);
     }
 
     # Are there any warnings to give if we're using dehs?
@@ -371,6 +371,8 @@ if ($pid) {
     die "$progname: couldn't exec find: $!\n";
 }
 
+die "$progname: No debian directories found\n" unless @dirs;
+
 my @debdirs = ();
 
 my $origdir = cwd;
@@ -394,7 +396,7 @@ for my $dir (@dirs) {
 	    next;
 	}
 
-	my ($package, $debversion, $version);
+	my ($package, $debversion, $uversion);
 	$changelog =~ /^Source: (.*?)$/m and $package=$1;
 	$changelog =~ /^Version: (.*?)$/m and $debversion=$1;
 	if (! defined $package || ! defined $debversion) {
@@ -424,11 +426,11 @@ for my $dir (@dirs) {
 	}
 
 	# Get upstream version number
-	$version = $debversion;
-	$version =~ s/-[^-]+$//;  # revision
-	$version =~ s/^\d+://;    # epoch
+	$uversion = $debversion;
+	$uversion =~ s/-[^-]+$//;  # revision
+	$uversion =~ s/^\d+://;    # epoch
 
-	push @debdirs, [$debversion, $dir, $package, $version];
+	push @debdirs, [$debversion, $dir, $package, $uversion];
     }
     elsif (-r 'debian/watch') {
 	warn "$progname warning: Found watchfile in $dir,\n  but couldn't find/read changelog; skipping\n";
@@ -437,6 +439,15 @@ for my $dir (@dirs) {
     elsif (-f 'debian/watch') {
 	warn "$progname warning: Found watchfile in $dir,\n  but it is not readable; skipping\n";
 	next;
+    }
+}
+
+# Was there a --uversion option?
+if (defined $opt_uversion) {
+    if (@debdirs == 1) {
+	$debdirs[0][3] = $opt_uversion;
+    } else {
+	warn "$progname warning: ignoring --uversion as more than one debian/watch file found\n";
     }
 }
 

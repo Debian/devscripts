@@ -116,6 +116,17 @@ EOF
 # %s is replaced by the mbox name and %% by a single %.
 # BTS_MAIL_READER='mutt -f %s'
 EOF
+	elif dpkg --compare-versions "$2" lt 2.8.12
+	then
+	# Added in devscripts 2.8.12:
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### uscan option added in version 2.8.12:
+# 
+# Should we use DEHS style output (XML format)?
+# USCAN_DEHS_OUTPUT=no
+# 
+EOF
 	fi
     fi
 fi

@@ -211,9 +211,6 @@ uploading it to Debian.
 Only report about newer or absent versions but do not download
 anything.
 .TP
-.B \-\-debug
-Dump the downloaded web pages to stdout for debugging your watch file.
-.TP
 .B \-\-download
 Report and download.  (This is the default behaviour.)
 .TP
@@ -230,11 +227,40 @@ are \fI.tar.gz\fR or \fI.tgz\fR.  (This is the default behaviour.)
 .B \-\-no\-symlink
 Don't make these symlinks.
 .TP
+.B \-\-dehs
+Use an XML format for output, as required by the DEHS system.
+.TP
+.B \-\-no-dehs
+Use the traditional uscan output format.  (This is the default behaviour.)
+.TP
+\fB\-\-package\fR \fIpackage\fR
+Specify the name of the package to check for rather than examining
+\fIdebian/changelog\fR; this requires the \fB\-\-uversion\fR and
+\fB\-\-watchfile\fR options as well.  Furthermore, no directory
+scanning will be done and nothing will be downloaded.  This option is
+probably most useful in conjunction with the DEHS system (and
+\fB\-\-dehs\fR).
+.TP
+\fB\-\-uversion\fR \fIupstream-version\fR
+Specify the current upstream version rather than examine the watchfile
+or changelog to determine it.  This is ignored if a directory scan is
+being performed and more than one watchfile is found.
+.TP
+\fB\-\-watchfile\fR \fIwatchfile\fR
+Specify the watchfile rather than perform a directory scan to
+determine it.  If this option is used without \fB\-\-package\fR, then
+\fBuscan\fR must be called from within the Debian package source tree
+(so that \fIdebian/changelog\fR can be found simply by stepping up
+through the tree).
+.TP
 .B \-\-verbose
 Give verbose output.
 .TP
 .B \-\-no\-verbose
 Don't give verbose output.  (This is the default behaviour.)
+.TP
+.B \-\-debug
+Dump the downloaded web pages to stdout for debugging your watch file.
 .TP
 \fB\-\-check-dirname-level\fR \fIN\fR
 See the above section "Directory name checking" for an explanation of
@@ -276,6 +302,10 @@ the FTP_PASSIVE environment variable).
 If this is set to \fIno\fR, then a pkg_version.orig.tar.gz symlink
 will not be made.  This is equivalent to the \fB\-\-no\-symlink\fR
 option.
+.TP
+.B USCAN_DEHS_OUTPUT
+If this is set to \fIyes\fR, then DEHS-style output will be used.
+This is equivalent to the \fB\-\-dehs\fR option.
 .TP
 .B USCAN_VERBOSE
 If this is set to \fIyes\fR, then verbose output will be given.  This

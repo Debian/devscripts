@@ -24,9 +24,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+use 5.008;
 use strict;
 use Getopt::Long;
 use File::Basename;
+use filetest 'access';
 use Cwd;
 
 my $progname = basename($0,'.pl');  # the '.pl' is for when we're debugging
@@ -199,11 +201,11 @@ my $chdir = 0;
 
 if (! defined $changes) {
     # Look for .changes file via debian/changelog
-    until (-f 'debian/changelog') {
+    until (-r 'debian/changelog') {
 	$chdir = 1;
 	chdir '..' or die "$progname: can't chdir ..: $!\n";
 	if (cwd() eq '/') {
-	    die "$progname: cannot find debian/changelog anywhere!\nAre you in the source code tree?\n";
+	    die "$progname: cannot find readable debian/changelog anywhere!\nAre you in the source code tree?\n";
 	}
     }
 

@@ -1,11 +1,11 @@
 devscripts (2.8.12) UNRELEASED; urgency=low
 
   * debchange: use access rather than stat for checking file permissions
-    (closes: #298659)
+    (closes: #298659); also do same to debi and debuild
   * debdiff: don't hardcode wdiff path
-  * uscan: support DEHS
+  * uscan: now support DEHS-style output and --watchfile etc options
 
- -- Julian Gilbey <jdg@polya.uklinux.net>  Mon, 14 Mar 2005 01:06:45 +0000
+ -- Julian Gilbey <jdg@debian.org>  Tue, 15 Mar 2005 13:12:29 +0000
 
 devscripts (2.8.11) unstable; urgency=low
 

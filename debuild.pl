@@ -51,8 +51,9 @@
 # Please file a bug report if this is the case!
 
 use strict;
-use 5.003;
+use 5.008;
 use File::Basename;
+use filetest 'access';
 use Cwd;
 use IO::Handle;  # for flushing
 use vars qw(*BUILD *OLDOUT *OLDERR);  # prevent a warning
@@ -514,11 +515,11 @@ open OLDERR, ">&STDERR" or fatal "can't dup stderr: $!\n";
 
 # Look for the debian changelog
 my $chdir = 0;
-until (-f 'debian/changelog') {
+until (-r 'debian/changelog') {
     $chdir = 1;
     chdir '..' or fatal "can't chdir ..: $!";
     if (cwd() eq '/') {
-	fatal "cannot find debian/changelog anywhere!\nAre you in the source code tree?";
+	fatal "cannot find readable debian/changelog anywhere!\nAre you in the source code tree?";
     }
 }
 
