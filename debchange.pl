@@ -613,7 +613,7 @@ if ($opt_i || $opt_n || $opt_v || $opt_d) {
     # including epochs.
 
     if (! $NEW_VERSION) {
-	if ($VERSION =~ /(.*?)([a-yA-Y][a-zA-Z]*|\d*)$/i) {
+	if ($VERSION =~ /(.*?)([a-yA-Y][a-zA-Z]*|\d+)$/i) {
 	    my $end=$2;
             my $start=$1;
             # If it's not already an NMU make it so
