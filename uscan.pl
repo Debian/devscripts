@@ -489,7 +489,7 @@ for my $debdir (@debdirs) {
 	next;
     }
 
-    if (process_watchfile($dir, $package, $version, "$dir/debian/watch")
+    if (process_watchfile($dir, $package, $version, "debian/watch")
 	== 0) {
 	$donepkgs{$parentdir}{$package} = 1;
     }
