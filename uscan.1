@@ -58,10 +58,17 @@ http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-(.*)\\.tar\\.gz
 http://www.dataway.ch/~lukasl/amph/amph.html \\
   files/amphetamine-([\\d\\.]*).tar.bz2
 
-# This is the format for an HTTP site which has funny version numbers;
+# This is the format for a site which has funny version numbers;
 # the parenthesised groups will be joined with dots to make a
 # sanitised version number
 http://www.site.com/pub/foobar/foobar_v(\d+)_(\d+)\\.tar\\.gz
+
+# This is another way of handling site with funny version numbers,
+# this time using mangling.  (Note that multiple groups will be
+# concatenated before mangling is performed, and that mangling will
+# only be performed on the basename version, not any path versions.)
+opts=uversionmangle=s/^/0.0/ \\
+  ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/Wine-(.*)\.tar\.gz
 
 .fi
 .PP
@@ -105,11 +112,12 @@ site and path and still be accepted.)  The pattern must contain at
 least one Perl group as explained in the next paragraph.
 .PP
 Having got a list of `files' matching the pattern, their version
-numbers are extracted by treating the part matching the Perl
-regexp groups, demarcated by `(...)', joining them with `.' as a
-separator, and using the result as the version number of the
-file.  The file versions are then compared to find the one with the
-greatest version number, as determined by \fBdpkg
+numbers are extracted by treating the part matching the Perl regexp
+groups, demarcated by `(...)', joining them with `.' as a separator,
+and using the result as the version number of the file.  The version
+number will then be mangled if required by the uversionmangle option
+described below.  Finally, the file versions are then compared to find
+the one with the greatest version number, as determined by \fBdpkg
 --compare-versions\fR.
 .PP
 The current version can be specified as the second parameter in the
@@ -149,11 +157,25 @@ or relative to the base URL specified in the homepage itself with a
 number and action fields as before.
 .SH "PER-SITE OPTIONS"
 A watchfile line may be prefixed with "opts=\fIoptions\fR", where
-\fIoptions\fR is a comma-separated list of options.  The only
-recognised options are currently \fIactive\fR and \fIpassive\fR (or
-\fIpasv\fR), which if used on an FTP line override the choice of
-whether to use PASV mode or not, and force the use of the specified
-mode for this site.
+\fIoptions\fR is a comma-separated list of options.  The
+recognised options are as follows:
+.TP
+\fBactive\fR and \fBpassive\fR (or \fBpasv\fR)
+If used on an FTP line, these override the choice of whether to use
+PASV mode or not, and force the use of the specified mode for this
+site.
+.TP
+\fBuversionmangle=\fIrules\fR
+This is used to mangle the upstream version number as follows.  First,
+the \fIrules\fR string is split into multiple rules at every `;'.
+Then the upstream version number is mangled by executing the Perl
+command:
+.nf
+    $version =~ \fIrule\fR;
+.fi
+for each rule.  Thus, suitable rules might be `s/^/0./' to prepend
+`0.' to the version number and `s/_/./' to change underscores into
+periods.
 .SH "Directory name checking"
 Similarly to several other scripts in the \fBdevscripts\fR package,
 \fBuscan\fR explores the requested directory trees looking for

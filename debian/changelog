@@ -7,8 +7,8 @@ devscripts (2.8.12) UNRELEASED; urgency=low
   * debdiff: don't hardcode wdiff path
   * uscan: now support DEHS-style output and --watchfile etc options
   * uscan: also state upstream URL for newer versions (closes: #230813)
-  * uscan: handle funny version numbers using multiple groups (closes:
-    #282255)
+  * uscan: handle funny upstream version numbers using multiple groups
+    (closes: #282255) and version-number mangling (closes: #266095)
 
  -- Julian Gilbey <jdg@debian.org>  Tue, 15 Mar 2005 15:07:23 +0000
 

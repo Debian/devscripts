@@ -586,6 +586,9 @@ sub process_watchline ($$$$$$)
 		       or $opt eq 'nopassive') {
 		    $options{'pasv'}=0;
 		}
+		elsif ($opt =~ /^uversionmangle=(.+)/) {
+		    @{$options{'uversionmangle'}} = split /;/, $1;
+		}
 		else {
 		    warn "$progname warning: unrecognised option $opt\n";
 		}
@@ -664,6 +667,9 @@ sub process_watchline ($$$$$$)
 	    my $href = $2;
 	    if ($href =~ m&^$pattern$&) {
 		my $mangled_version = join(".", $href =~ m&^$pattern$&);
+		foreach my $pat (@{$options{'uversionmangle'}}) {
+		    eval "\$mangled_version =~ $pat;";
+		}
 		push @hrefs, [$mangled_version, $href];
 	    }
 	}
@@ -717,6 +723,9 @@ sub process_watchline ($$$$$$)
 	           m&(?:<\s*a\s+[^>]*href\s*=\s*\"| )($pattern)(\"| )&gi) {
 	    my $file = $1;
 	    my $mangled_version = join(".", $file =~ m/^$pattern$/);
+	    foreach my $pat (@{$options{'uversionmangle'}}) {
+		eval "\$mangled_version =~ $pat;";
+	    }
 	    push @files, [$mangled_version, $file];
 	}
 	if (@files) {
