@@ -139,13 +139,14 @@ mode for this site.
 Similarly to several other scripts in the \fBdevscripts\fR package,
 \fBuscan\fR explores the requested directory trees looking for
 \fIdebian/changelog\fR and \fIdebian/watch\fR files.  As a safeguard
-against stray files causing potential problems, it will examine the name
-of the parent directory once it finds the \fIdebian/changelog\fR file,
-and check that the directory name corresponds to the package name.  It
-will attempt to download newer versions of the package in any case,
-but it will only perform any requested action if the directory name
-matches the package name.  Precisely how it does this is controlled by
-two configuration file variables DEVSCRIPTS_CHECK_DIRNAME_LEVEL and
+against stray files causing potential problems, and in order to
+promote efficiency, it will examine the name of the parent directory
+once it finds the \fIdebian/changelog\fR file, and check that the
+directory name corresponds to the package name.  It will only attempt
+to download newer versions of the package and then perform any
+requested action if the directory name matches the package name.
+Precisely how it does this is controlled by two configuration file
+variables DEVSCRIPTS_CHECK_DIRNAME_LEVEL and
 DEVSCRIPTS_CHECK_DIRNAME_REGEX, and their corresponding command-line
 options \fB\-\-check-dirname-level\fR and
 \fB\-\-check-dirname-regex\fR.

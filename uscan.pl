@@ -275,7 +275,6 @@ for my $dir (@dirs) {
 
     # Check for debian/watch file
     if (-r 'debian/watch' and -r 'debian/changelog') {
-	print "-- Found watchfile in $dir/debian\n" if $verbose;
 	# Figure out package info we need
 	my $changelog = `dpkg-parsechangelog`;
 	unless ($? == 0) {
@@ -292,15 +291,24 @@ for my $dir (@dirs) {
 	}
 	
 	# Check the directory is properly named for safety
-	my $good_dirname;
+	my $good_dirname = 1;
 	if ($check_dirname_level ==  2 or
 	    ($check_dirname_level == 1 and cwd() ne $opwd)) {
 	    my $re = $check_dirname_regex;
-	    $re =~ s/PACKAGE/\\Q$package\\E/g;
-	    if ($re =~ m%/%) { $good_dirname = eval "cwd() =~ /^$re\$/;"; }
-	    else { $good_dirname = eval "basename(cwd()) =~ /^$re\$/;"; }
+	    $re =~ s/PACKAGE/\Q$package\E/g;
+	    if ($re =~ m%/%) { 
+		$good_dirname = (cwd() =~ m%^$re$%);
+	    } else { 
+		$good_dirname = (basename(cwd()) =~ m%^$re$%);
+	    }
+	}
+	if ($good_dirname) {
+	    print "-- Found watchfile in $dir/debian\n" if $verbose;
 	} else {
-	    $good_dirname = 1;
+	    print "-- Skip watchfile in $dir/debian since it does not match the package name\n".
+	        "   (or the settings of the--check-dirname-level and --check-dirname-regex options if any).\n"
+	        if $verbose;
+	    next;
 	}
 
 	# Get upstream version number
@@ -718,29 +726,15 @@ EOF
 
     # Do whatever the user wishes to do
     if ($action) {
-	if ($good_dirname) {
-	    my $usefile = ($symlink and $newfile_base =~ /\.(tar\.gz|tgz)$/) ?
-		"../${pkg}_${newversion}.orig.tar.gz" : "../$newfile_base";
+	my $usefile = ($symlink and $newfile_base =~ /\.(tar\.gz|tgz)$/) ?
+	    "../${pkg}_${newversion}.orig.tar.gz" : "../$newfile_base";
 
-	    if ($watch_version > 1) {
-		print "-- Executing user specified script\n     $action --upstream-version $newversion $newfile_base" if $verbose;
-		system("$action --upstream-version $newversion $usefile");
-	    } else {
-		print "-- Executing user specified script $action $newfile_base $newversion" if $verbose;
-		system("$action $usefile $newversion");
-	    }
-	}
-	else {
-	    warn <<"EOF";
-$progname warning: An action was requested by the watchfile debian/watch
-for the package $pkg in the directory $pkg_dir
-but this directory name does not match the package name.
-So no action is being performed for safety reasons.
-
-To allow actions to be run in future, see the --check-dirname-level and
---check-dirname-regex options; run $progname --help for more info.
-
-EOF
+	if ($watch_version > 1) {
+	    print "-- Executing user specified script\n     $action --upstream-version $newversion $newfile_base" if $verbose;
+	    system("$action --upstream-version $newversion $usefile");
+	} else {
+	    print "-- Executing user specified script $action $newfile_base $newversion" if $verbose;
+	    system("$action $usefile $newversion");
 	}
     }
 

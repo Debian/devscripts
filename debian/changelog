@@ -12,6 +12,9 @@ devscripts (2.8.11) UNRELEASED; urgency=low
     - debchange: document --nmu in manpage (closes: #299234)
     - debsign: check for gpg version for no-show-policy-url option
       (closes: #293792)
+    - uscan: change behaviour with respect to directory name checking: now
+      only checks directories with matching names, rather than downloading
+      newer versions regardless (closes: #260538)
   * Joshua Kwan
     - dscverify: Don't use --emulate-md-encode-bug in dscverify anymore,
       it's been obsoleted with gnupg 1.4.0. (closes: #293791)
