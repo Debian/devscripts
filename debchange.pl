@@ -55,21 +55,21 @@ use Getopt::Long;
 use File::Copy;
 use File::Basename;
 use Cwd;
-my $lwp_broken = undef;
-sub have_lwp() {
-    return $lwp_broken if defined $lwp_broken;
-    eval { require LWP::Simple; import LWP::Simple (); };
+my $ldap_broken = undef;
+sub have_ldap() {
+    return $ldap_broken if defined $ldap_broken;
+    eval { require Net::LDAP; import Net::LDAP (); };
     if ($@) {
-	if ($@ =~ /^Can\'t locate LWP\/Simple\.pm/) {
-	    $lwp_broken="the libwww-perl package is not installed";
+	if ($@ =~ /^Can\'t locate Net\/LDAP\.pm/) {
+	    $ldap_broken="the libnet-ldap-perl package is not installed";
 	} else {
-	    $lwp_broken="couldn't load LWP::Simple: $@";
+	    $ldap_broken="couldn't load Net::LDAP: $@";
 	}
 	# Have to define the functions we're going to be using
-	eval 'sub get ($) {}';
+	eval 'sub search ($) {}';
     }
-    else { $lwp_broken=''; }
-    return $lwp_broken ? 0 : 1;
+    else { $ldap_broken=''; }
+    return $ldap_broken ? 0 : 1;
 }
 
 # Predeclare functions
@@ -420,8 +420,8 @@ else {
 my @closes_text = ();
 my $warnings = 0;
 if (@closes and $opt_query) { # and we have to query the BTS
-    if (! have_lwp()) {
-	warn "$progname warning: $lwp_broken\ncannot query the bug-tracking system\n";
+    if (! have_ldap()) {
+	warn "$progname warning: $ldap_broken\ncannot query the bug-tracking system\n";
 	$opt_query=0;
 	$warnings++;
 	# This will now go and execute the "if (@closes and ! $opt_query)" code
@@ -437,7 +437,6 @@ if (@closes and $opt_query) { # and we have to query the BTS
         {
                 $filter = '(|' . map { '(debbugsID=' . $_ . ')' } @closes . ')';
         }
-        use Net::LDAP;
         my $ldap = Net::LDAP->new('bugs.debian.org', port => 10101);
         my $mesg = $ldap->search(base => 'dc=current,dc=bugs,dc=debian,dc=org',
                         filter => $filter,

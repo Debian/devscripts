@@ -7,7 +7,8 @@ devscripts (2.7.95.2) UNRELEASED; urgency=low
   * debchange:
     - Add -n / --nmu option for NMUs. (Closes: #184944)
     - Our BTS web parser is broken. Move to Net::LDAP and the
-      more machine-friendly bts2ldap gateway.
+      more machine-friendly bts2ldap gateway. Change the Suggests:
+      on libwww-perl to libnet-ldap-perl.
     - Do not proceed with parsing versions and contacting the BTS if
       debian/changelog is not writable. (Closes: #235485, #178080)
   * debsign:
@@ -26,7 +27,7 @@ devscripts (2.7.95.2) UNRELEASED; urgency=low
   * rc-alert:
     - rc-alert.1: Add SEE ALSO for popbugs(1). (Closes: #227078)
 
- -- Joshua Kwan <joshk@triplehelix.org>  Thu, 29 Jul 2004 16:35:47 -0700
+ -- Joshua Kwan <joshk@triplehelix.org>  Fri, 30 Jul 2004 00:20:12 -0700
 
 devscripts (2.7.95.1) unstable; urgency=low
 
