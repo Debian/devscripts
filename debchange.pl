@@ -437,8 +437,8 @@ if (@closes and $opt_query) { # and we have to query the BTS
         {
                 $filter = '(|' . map { '(debbugsID=' . $_ . ')' } @closes . ')';
         }
-        my $ldap = Net::LDAP->new('bugs.debian.org', port => 10101);
-        my $mesg = $ldap->search(base => 'dc=current,dc=bugs,dc=debian,dc=org',
+        my $ldap = Net::LDAP->new('bugs.debian.org');
+        my $mesg = $ldap->search(base => 'dc=bugs,dc=debian,dc=org',
                         filter => $filter,
                         attrs => ['debbugsPackage', 'debbugsSourcePackage', 'debbugsTitle', 'debbugsID']);
 

@@ -72,8 +72,8 @@ changelog_closes=$(echo "$parsed"| awk -F: '/^Closes: / { print $2 }' | \
   xargs -n1 echo)
 
 if [ "$USE_LDAP" = "1" ]; then
-  bts_pending=$(ldapsearch -h bugs.debian.org -p 10101 -x \
-    -b dc=current,dc=bugs,dc=debian,dc=org \
+  bts_pending=$(ldapsearch -h bugs.debian.org -x \
+    -b dc=bugs,dc=debian,dc=org \
     "(&(debbugsSourcePackage=$srcpkg)(!(debbugsState=done))(debbugsTag=pending))" | \
     awk '/debbugsID: / { print $2 }' | xargs -n1 echo)
 fi
