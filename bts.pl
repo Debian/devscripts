@@ -802,7 +802,7 @@ sub checkbug {
 
     if ($bug eq 'it')
     {
-      if ($it eq undef)
+      if (not defined $it)
       {
         die "You specified 'it', but no previous bug number referenced!\n";
       }

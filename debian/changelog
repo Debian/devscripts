@@ -1,11 +1,15 @@
-devscripts (2.8.3) unstable; urgency=low
+devscripts (2.8.3) unstable; urgency=medium
 
   * The "timely bug report" release.
   * uupdate.sh: [ $# ne 0 ] -> [ $# -ne 0 ]. Thanks Fumitoshi UKAI.
     (Closes: #266221)
   * Run perl -c on all the Perl scripts and sh -n on all of the shell
     scripts, in foresight of future syntax errors.
-  * tagpending.sh: Add a space after the source package name.
+  * tagpending.sh: Add a space after the source package name. Thanks Guillem
+    Jover for pointing this out.
+  * Remove the last remnants of the abandoned debpanic script from debi.pl.
+  * bts.pl: Fix gooood crack in 'it' usage. ($it eq undef -> not defined $it.)
+    (Closes: #266717)
 
  -- Joshua Kwan <joshk@triplehelix.org>  Wed, 18 Aug 2004 01:28:37 -0700
 
