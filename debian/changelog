@@ -4,6 +4,7 @@ devscripts (2.8) UNRELEASED; urgency=low
   * Build system:
     - `pwd` -> $(CURDIR) in debian/rules.
     - Remove $(CWRAPPERS) in Makefile's clean target.
+  * archive/cvs-buildpackage: Remove.
   * debchange:
     - Add -n / --nmu option for NMUs. (Closes: #184944)
     - Our BTS web parser is broken. Move to Net::LDAP and the
@@ -41,7 +42,7 @@ devscripts (2.8) UNRELEASED; urgency=low
     - tagpending: Within a source directory, tags all bugs not already
       'pending' to be as such. (associated: tagpending.1)
 
- -- Joshua Kwan <joshk@triplehelix.org>  Fri, 30 Jul 2004 23:08:24 -0700
+ -- Joshua Kwan <joshk@triplehelix.org>  Mon,  2 Aug 2004 08:45:09 -0700
 
 devscripts (2.7.95.1) unstable; urgency=low
 
