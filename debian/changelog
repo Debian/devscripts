@@ -27,10 +27,6 @@ devscripts (2.8) UNRELEASED; urgency=low
   * rc-alert:
     - rc-alert.1: Add SEE ALSO for popbugs(1). (Closes: #227078)
   * New scripts by me:
-    - debpanic: Looks for a .changes file on the command line, else looks
-      for one in the same manner as debi, and signs and places a .commands
-      file removing all files associated with that .changes file on a given
-      Debian FTP upload queue (usually in DEBPANIC_QUEUE). (Closes: #224523)
     - tagpending: Within a source directory, tags all bugs not already
       'pending' to be as such.
 
