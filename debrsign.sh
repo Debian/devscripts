@@ -151,11 +151,20 @@ case $# in
 	;;
 
     1)	remotehost="$1"
-	# We have to parse debian/changelog to find the current version
-	if [ ! -r debian/changelog ]; then
-	    echo "$PROGNAME: Must be run from top of source dir or a .changes file given as arg" >&2
-	    exit 1
-	fi
+	case "$1" in
+	*.changes)
+		echo "$PROGNAME: You must pass the address of the signing host as as the first argument" >&2
+		exit 1
+	;;
+	*)
+		# We have to parse debian/changelog to find the current version
+		if [ ! -r debian/changelog ]; then
+			echo "$PROGNAME: Must be run from top of source dir or a .changes file given as arg" >&2
+			exit 1
+		fi
+	;;
+	esac
+	
 
 	mustsetvar package "`dpkg-parsechangelog | sed -n 's/^Source: //p'`" \
 	    "source package"

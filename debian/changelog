@@ -15,8 +15,10 @@ devscripts (2.8.5) UNRELEASED; urgency=low
   * wnpp-alert: now correctly reports on orphaned packages as well
     (tweaked some sed scripts; don't know what was actually wrong :-/ )
     (closes: #268948)
+  * debrsign: Warn if you passed a changes file but omitted the remote
+    address.
 
- -- Julian Gilbey <jdg@debian.org>  Tue, 31 Aug 2004 23:08:03 +0100
+ -- Joshua Kwan <joshk@triplehelix.org>  Thu,  2 Sep 2004 23:25:49 -0700
 
 devscripts (2.8.4) unstable; urgency=medium
 

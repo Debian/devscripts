@@ -345,8 +345,8 @@ foreach (@dpkg_extra_opts) {
 }
 
 # Check @ARGV for debuild options.
-my @preserve_vars{qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
-		     GPG_TTY FAKEROOTKEY LANG)};
+my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
+		     GPG_TTY FAKEROOTKEY LANG);
 @save_vars{@preserve_vars} = (1) x scalar @preserve_vars;
 {
     no locale;
