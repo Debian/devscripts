@@ -57,6 +57,8 @@ Options:
          Append a new entry to the current changelog
   -v <version>, --newversion=<version>
          Add a new changelog entry with version number specified
+  -n, --nmu
+         Increment the Debian release number for a non-maintainer upload
   --closes nnnnn[,nnnnn,...]
          Add entries for closing these bug numbers,
          getting bug titles from the BTS (bug-tracking system, bugs.debian.org)
@@ -64,8 +66,6 @@ Options:
          [Don\'t] try contacting the BTS to get bug titles
   -d, --fromdirname
          Add a new changelog entry with version taken from the directory name
-  -n, --nmu
-         Increment the Debian release number for a non-maintainer upload
   -p, --preserve
          Preserve the directory name
   --no-preserve
