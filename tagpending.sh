@@ -83,4 +83,10 @@ src_packages=$(awk '/Package: / { printf $2 " "}' debian/control)
   done
 
   echo thanks
-) | mail -s 'Tag bugs pending' control@bugs.debian.org
+) | (
+if [ "$DRY" = 1 ]; then
+  cat
+else
+  mail -s 'Tag bugs pending' control@bugs.debian.org
+fi
+)

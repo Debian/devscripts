@@ -40,6 +40,7 @@ use lib '/usr/share/devscripts';
 use Devscripts::DB_File_Lock;
 use Fcntl qw(O_RDWR O_RDONLY O_CREAT F_SETFD);
 
+my $it = undef;
 my $lwp_broken = undef;
 sub have_lwp() {
     return $lwp_broken if defined $lwp_broken;
@@ -663,8 +664,11 @@ sub bts_cache {
 	mkdir($cachedir)
 	    or die "bts: couldn't mkdir $cachedir: $!";
     }
-
-    my $tocache=shift;
+    
+    my $tocache;
+    if ($#_ != -1) { $tocache=shift; }
+    else { $tocache=''; }
+    
     if (! length $tocache) {
 	$tocache=$ENV{'DEBEMAIL'} || $ENV{'EMAIL'};
 	if ($tocache =~ /^.*\s+<(.*)>$/) { $tocache = $1; }
@@ -796,12 +800,28 @@ sub bts_help {
 sub checkbug {
     my $bug=$_[0] or return "";
 
+    if ($bug eq 'it')
+    {
+      if ($it eq undef)
+      {
+        die "You specified 'it', but no previous bug number referenced!\n";
+      }
+      else
+      {
+        return $it;
+      }
+    }
+    
     $bug=~s/^[^-0-9]*//;
     if (! exists $clonedbugs{$bug} &&
 	(! length $bug || $bug !~ /^[0-9]+$/)) {
 	warn "\"$_[0]\" does not look like a bug number\n";
 	return "";
     }
+
+    # Valid, now set $it to this so that we can refer to it by 'it' later
+    $it = $bug;
+
     return $bug;
 }
 

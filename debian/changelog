@@ -25,16 +25,23 @@ devscripts (2.8) UNRELEASED; urgency=low
   * bts:
     - Recognize the 'l10n' tag for bts. (Closes: #227735)
     - bts.1: Fix extraneous indentation. (Closes: #236309)
+    - Allow 'it' as an alias to the previous bug referenced.
+      (Closes: #256051)
+    - cache: Fix uninitialized value warning by checking how many arguments
+      were passed. (Closes: #225317)
   * Devscripts::Versort:
     - Apply Roderick Schertler's patch to fix an infinite loop comparing
       identical non-Debian revisions. (Closes: #236344)
   * rc-alert:
     - rc-alert.1: Add SEE ALSO for popbugs(1). (Closes: #227078)
+  * uscan:
+    - uscan.pl, uscan.1: Add brief mention for --debug. (Closes: #238655)
+    - uscan.pl: remove HTTP GET data from downloaded file. (Closes: #247175)
   * New scripts by me:
     - tagpending: Within a source directory, tags all bugs not already
       'pending' to be as such.
 
- -- Joshua Kwan <joshk@triplehelix.org>  Fri, 30 Jul 2004 13:10:23 -0700
+ -- Joshua Kwan <joshk@triplehelix.org>  Fri, 30 Jul 2004 17:00:03 -0700
 
 devscripts (2.7.95.1) unstable; urgency=low
 

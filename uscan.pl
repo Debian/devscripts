@@ -60,6 +60,8 @@ Usage: $progname [options] [dir ...]
 Options:
     --report, --no-download
                    Only report on newer or absent versions, do not download
+    --debug        Dump the downloaded web pages to stdout for debugging
+                   your watch file. 
     --download     Report on newer and absent versions, and download (default)
     --pasv         Use PASV mode for FTP connections
     --no-pasv      Do not use PASV mode for FTP connections (default)
@@ -594,6 +596,11 @@ EOF
     }
 			
     my $newfile_base=basename($newfile);
+    # Remove HTTP header trash
+    if ($site =~ m%^http://%)
+    {
+        $newfile_base =~ s/\?.*$//;
+    }
     if (! $lastversion or $lastversion eq 'debian') {
 	$lastversion=$pkg_version;
     }
