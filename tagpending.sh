@@ -60,9 +60,10 @@ changelog_closes=$(echo "$parsed"| awk -F: '/^Closes: / { print $2 }' | xargs -n
 
 bts_pending=$(ldapsearch -h bugs.debian.org -p 10101 -x -b dc=current,dc=bugs,dc=debian,dc=org "(&(debbugsSourcePackage=$srcpkg)(!(debbugsState=done))(debbugsTag=pending))" | awk '/debbugsID: / { print $2 }' | xargs -n1 echo)
 
-# XXX if there's a bug not closed in the changelog, but only in the BTS,
-# it will get retagged
 to_be_tagged=$(printf '%s\n%s\n' "$changelog_closes" "$bts_pending" | sort | uniq -u)
+
+# Now remove the ones tagged in the BTS but no longer in the changelog.
+to_be_tagged=$(echo "$to_be_tagged" | fgrep -vF "$bts_pending")
 
 if [ -z "$to_be_tagged" ]; then
   echo "tagpending info: Nothing to do, exiting."
