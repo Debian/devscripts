@@ -9,7 +9,7 @@ Build-Depends: perl (>= 5.8), debhelper (>= 4.0.0), libtimedate-perl, libwww-per
 Package: devscripts
 Architecture: any
 Conflicts: debmake (<< 3.5), dupload (<< 2.1)
-Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), ${shlibs:Depends}, ${misc:Depends}
+Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), sed (>= 2.95), ${shlibs:Depends}, ${misc:Depends}
 Recommends: fakeroot
 Suggests: devscripts-el, build-essential, cvs-buildpackage, debian-keyring, dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, libdigest-md5-perl, libtimedate-perl, libwww-perl, lintian | linda, mailx, patch, patchutils, ssh, strace, wdiff, wget, www-browser
 Conflicts: suidmanager (<< 0.51)
