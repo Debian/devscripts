@@ -41,6 +41,9 @@ use Devscripts::DB_File_Lock;
 use Fcntl qw(O_RDWR O_RDONLY O_CREAT F_SETFD);
 use Getopt::Long;
 
+# Funny UTF-8 warning messages from HTML::Parse should be ignorable (#292671)
+$SIG{'__WARN__'} = sub { warn $_[0] unless $_[0] =~ /^Parsing of undecoded UTF-8 will give garbage when decoding entities/; };
+
 my $it = undef;
 my $lwp_broken = undef;
 my $ua;
