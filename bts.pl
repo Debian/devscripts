@@ -798,11 +798,14 @@ Two options affect the behaviour of the cache command.  The first is
 the setting of --cache-mode, which controls how much B<bts> downloads
 of the referenced links from the bug page, including boring bits such
 as the acknowledgement emails, emails to the control bot, and the mbox
-version of the bug report.  It can take three values: min (the minimum),
-mbox (download the minimum plus the mbox version of the bug report) or
-full (the whole works).  The second is --force-refresh, which forces the
-download, even if the cached bug report is up-to-date.  Both of these
-are configurable from the configuration file, as described below.
+version of the bug report.  It can take three values: min (the
+minimum), mbox (download the minimum plus the mbox version of the bug
+report) or full (the whole works).  The second is --force-refresh or
+-f, which forces the download, even if the cached bug report is
+up-to-date.  Both of these are configurable from the configuration
+file, as described below.  Please note that --force-refresh is
+required if --cache-mode=full is used on an already cached up-to-date
+bug report, otherwise the verbose stuff will not be downloaded.
 
 =cut
 
@@ -1152,6 +1155,16 @@ sub download {
 		print "(cache of HTML up-to-date, downloading mbox...";
 		download_mbox($thing);
 		print "done.)\n";
+	    }
+	} elsif ($manual and ($cachemode eq 'mbox' or $cachemode eq 'full')) {
+	    my $mboxfile=mboxfile($thing);
+	    if ($mboxfile and ! -r $mboxfile) {
+		print "(cache of HTML up-to-date, downloading mbox...";
+		download_mbox($thing);
+		print "done.)\n";
+	    }
+	    else {
+		print "(cache already up-to-date)\n";
 	    }
 	} else {
 	    print "(cache already up-to-date)\n";
