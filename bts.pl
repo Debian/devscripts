@@ -46,7 +46,7 @@ my $lwp_broken = undef;
 my $ua;
 
 sub have_lwp() {
-    return $lwp_broken if defined $lwp_broken;
+    return ($lwp_broken ? 0 : 1) if defined $lwp_broken;
     eval {
 	require LWP;
 	require LWP::UserAgent;
@@ -1112,6 +1112,7 @@ EOM
 sub download {
     my $thing=shift;
     my $manual=shift;  # true="bts cache", false="bts show/bug"
+    my $mboxing=shift;  # true="bts --mbox show/bugs", and only if $manual=0
     my $timestamp = 0;
     my $url;
 
@@ -1140,7 +1141,21 @@ sub download {
 	    set_timestamp($thing, make_manual($timestamp));
 	}
 
-	print "(cache already up-to-date)\n";
+	if (! $manual and $mboxing) {
+	    my $mboxfile=mboxfile($thing);
+	    die "bts: trying to download mbox with invalid bug number?\n"
+		if ! $mboxfile;
+	    if (-r $mboxfile) {
+		print "(cache already up-to-date)\n";
+	    } else {
+		print "(cache of HTML up-to-date, downloading mbox...";
+		download_mbox($thing);
+		print "done.)\n";
+	    }
+	} else {
+	    print "(cache already up-to-date)\n";
+	}
+
 	return "";
     }
     elsif ($ret == MIRROR_DOWNLOADED) {
@@ -1266,6 +1281,54 @@ sub download_attachments {
     }
 
     return \%bug2filename;
+}
+
+
+# Download the mailbox for a given bug, return mbox ($fh, filename) on success,
+# die on failure
+sub download_mbox {
+    my $thing = shift;
+    my $temp = shift;  # do we wish to store it in cache or in a temp file?
+    my $mboxfile = mboxfile($thing);
+
+    die "bts: trying to download mbox for illegal bug number $thing.\n"
+	unless $mboxfile;
+
+    if (! have_lwp()) {
+	die "bts: couldn't run bts --mbox: $lwp_broken\n";
+    }
+    init_agent() unless $ua;
+
+    my $request = HTTP::Request->new('GET', $btscgiurl . "bugreport.cgi?bug=$thing&mbox=yes");
+    my $response = $ua->request($request);
+    if ($response->is_success) {
+	my $content_length = defined $response->content ?
+	    length($response->content) : 0;
+	if ($content_length == 0) {
+	    die "bts: failed to download mbox.\n";
+	}
+
+	my ($fh, $filename);
+	if ($temp) {
+	    ($fh,$filename) = tempfile("btsXXXXXX",
+				       SUFFIX => ".mbox",
+				       DIR => File::Spec->tmpdir,
+				       UNLINK => 1);
+	    # Use filehandle for security
+	    open (OUT_MBOX, ">/dev/fd/" . fileno($fh))
+		or die "bts: writing to temporary file: $!";
+	} else {
+	    $filename = $mboxfile;
+	    open (OUT_MBOX, ">$mboxfile")
+		or die "bts: writing to mbox file $mboxfile: $!";
+	}
+	print OUT_MBOX $response->content;
+	close OUT_MBOX;
+	    
+	return ($fh, $filename);
+    } else {
+	die "bts: failed to download mbox.\n";
+    }
 }
 
 
@@ -1417,7 +1480,7 @@ sub browse {
     }
     # else we're in online mode
     elsif ($hascache && $caching && have_lwp() && $thing ne '') {
-	my $live=download($thing);
+	my $live=download($thing, 0, $mboxmode);
 	
 	if ($mboxmode) {
 	    runmailreader($mboxfile);
@@ -1445,36 +1508,10 @@ sub browse {
     else {
 	if ($mboxmode) {
 	    # we appear not to be caching; OK, we'll download to a
-	    # temporary file; yuck, yuck, yuck - we should really
-	    # push this out to another subroutine
+	    # temporary file
 	    warn "bts debug: downloading ${btscgiurl}bugreport.cgi?bug=$thing&mbox=yes\n" if $debug;
-	    if (! have_lwp()) {
-		die "Couldn't run bts --mbox: $lwp_broken\n";
-	    }
-	    init_agent() unless $ua;
-	    my $request = HTTP::Request->new('GET', $btscgiurl . "bugreport.cgi?bug=$thing&mbox=yes");
-	    my $response = $ua->request($request);
-	    if ($response->is_success) {
-		my $content_length = defined $response->content ?
-		    length($response->content) : 0;
-		if ($content_length == 0) {
-		    die "bts: failed to download mbox.\n";
-		}
-
-		my ($fh,$filename) = tempfile("btsXXXXXX",
-					      SUFFIX => ".mbox",
-					      DIR => File::Spec->tmpdir,
-					      UNLINK => 1);
-		# Use filehandle for security
-		open (OUT_MBOX, ">/dev/fd/" . fileno($fh))
-		    or die "bts: writing to temporary file: $!";
-
-		print OUT_MBOX $response->content;
-		# Must be seekable, so use filename
-		runmailreader($filename);
-	    } else {
-		die "bts: failed to download mbox.\n";
-	    }
+	    my ($fh, $fn) = download_mbox($thing, 1);
+	    runmailreader($fn);
 	} else {
 	    runbrowser($btsurl.$thing);
 	}

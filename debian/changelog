@@ -1,3 +1,10 @@
+devscripts (2.8.8) unstable; urgency=low
+
+  * bts: fix mbox handling in 2.8.7; this also obviates the need for
+    cleaning out the cache if upgrading from 2.8.6.
+
+ -- Julian Gilbey <jdg@debian.org>  Tue, 11 Jan 2005 09:58:38 +0000
+
 devscripts (2.8.7) unstable; urgency=low
 
   * bts: fix option handling, thanks to Tristan Seligmann (closes:
@@ -5,8 +12,7 @@ devscripts (2.8.7) unstable; urgency=low
   * bts: support reading downloaded mbox versions of bugs with mutt or
     alternative mail readers; also provide finer grained control over what
     gets cached in general.  NOTE that this has changed some incompatible
-    changes from those introduced in version 2.8.6; you may wish to run
-    bts cleancache ALL if you have used that version. (Closes: #251099)
+    changes from those introduced in version 2.8.6 (closes: #251099)
   * debclean: remove obsolete French translation of manpage
 
  -- Julian Gilbey <jdg@debian.org>  Mon, 10 Jan 2005 18:42:20 +0000
