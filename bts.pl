@@ -182,6 +182,11 @@ information on setting up a cache.
 Opposite of --online; overrides any configuration file directive to work
 offline.
 
+=item --cache, --no-cache
+
+Should we attempt to to cache new versions of BTS pages when
+performing show/bugs commands?  Default is to cache.
+
 =item --cache-mode={min|mbox|full}
 
 When running a B<bts cache> command, should we only mirror the basic
@@ -346,8 +351,10 @@ my @args;
 our @comment=('');
 my $ncommand = 0;
 my $iscommand = 1;
-foreach (@ARGV) {
+while (@ARGV) {
+    $_ = shift @ARGV;
     if ($_ =~ /^[\.,]$/) {
+	next if $iscommand;  # ". ." in command line - oops!
 	$ncommand++;
 	$iscommand = 1;
 	$comment[$ncommand] = '';
@@ -363,7 +370,7 @@ foreach (@ARGV) {
 	push @{$args[$ncommand]}, $_;
     }
 }
-push @command, '' if $iscommand;
+$ncommand-- if $iscommand;
 
 # Grub through the symbol table to find matching commands.
 my $subject = '';
@@ -386,32 +393,93 @@ exit 0;
 
 =head1 COMMANDS
 
-For full details about the commands, see the BTS documentation.
+For full details about the commands, see the L<bts(1)> manpage.
 
 =over 4
 
-=item show <bug>
+=item show [options] [<bug number> | <package> | <maintainer> | : ]
 
-Display a particular bug in a web browser using
-L<sensible-browser(1)>.  If either the -o or --offline option is used,
-or there is already an up-to-date copy in the local cache, the cached
-version will be used.
+=item show [options] [src:<package> | from:<submitter> | tag:<tag> ]
 
-Also, if caching has been enabled (that is, there exists a cache
-directory ~/.devscripts_cache/bts/), then any page requested by "bts
-show" will automatically be cached, and therefore available offline
-thereafter.  Pages which are automatically cached in this way will be
-deleted on subsequent "bts show|bugs|cache" invocations if they have
-not been accessed in 30 days.  This automatic caching can be disabled
-using the --no-cache option or explicitly enabled using the --cache
-option.
+This is a synonym for bts bugs.
+
+=cut
+
+sub bts_show {
+    goto &bts_bugs;
+}
+
+=item bugs [options] [<bug number> | <package> | <maintainer> | : ]
+
+=item bugs [options] [src:<package> | from:<submitter> | tag:<tag> ]
+
+Display the page listing the requested bugs in a web browser using
+L<sensible-browser(1)>.
+
+Options may be specified after the "bugs" command in addition to or
+instead of options at the start of the command line: recognised
+options at his point are: -o/--offline/--online, --mbox, --mailreader
+and --[no-]cache.  These are described earlier in this manpage.  If
+either the -o or --offline option is used, or there is already an
+up-to-date copy in the local cache, the cached version will be used.
+
+The meanings of the possible arguments are as follows:
+
+=over 8
+
+=item (none)
+
+If nothing is specified, bts bugs will display your bugs, assuming
+that either DEBEMAIL or EMAIL (examined in that order) is set to the
+appropriate email address.
+
+=item <bug number>
+
+Display bug number <bug number>.
+
+=item <package>
+
+Display the bugs for the package <package>.
+
+=item src:<package>
+
+Display the bugs for the source package <package>.
+
+=item <maintainer>
+
+Display the bugs for the maintainer email address <maintainer>.
+
+=item from:<submitter>
+
+Display the bugs for the submitter <submitter>.
+
+=item tag:<tag>
+
+Display the bugs which are tagged with <tag>.
+
+=item :
+
+Details of the bug tracking system itself, along with a bug-request
+page with more options than this script, can be found on
+http://bugs.debian.org/.  This page itself will be opened if the
+command 'bts bugs :' is used.
+
+=back
+
+If caching has been enabled (that is, there exists a cache directory
+~/.devscripts_cache/bts/), then any page requested by "bts show" will
+automatically be cached, and therefore available offline thereafter.
+Pages which are automatically cached in this way will be deleted on
+subsequent "bts show|bugs|cache" invocations if they have not been
+accessed in 30 days.  This automatic caching can be disabled using the
+--no-cache option or explicitly enabled using the --cache option.
 
 Any other B<bts> commands following this on the command line will be
 executed after the browser has been exited.
 
 The desired browser can be specified and configured by setting the
 BROWSER environment variable.  The conventions follow those defined by
-Eric Raymond at http://catb.org/~esr/BROWSER/; we here reproduce the
+Eric Raymond at http://www.catb.org/~esr/BROWSER/; we here reproduce the
 relevant part.
 
 The value of BROWSER may consist of a colon-separated series of
@@ -436,65 +504,37 @@ BROWSER='mozilla -raise -remote "openURL(%s,new-window)":links'
 
 =cut
 
-sub bts_show {
-    my $thing=shift or die "bts show: display what bug?\n";
-    browse($thing);
-}
-
-=item bugs [<package> | src:<package> | <maintainer> | from:<submitter>]
-
-=item bugs [tag:<tag> | <number> | : ]
-
-Display the page listing the requested bugs in a web browser.  The
-meanings of the possible arguments are as follows:
-
-=over 8
-
-=item (none)
-
-If nothing is specified, bts bugs will display your bugs, assuming
-that either DEBEMAIL or EMAIL (examined in that order) is set to the
-appropriate email address.
-
-=item <package>
-
-Display the bugs for the package <package>.
-
-=item src:<package>
-
-Display the bugs for the source package <package>.
-
-=item <maintainer>
-
-Display the bugs for the maintainer email address <maintainer>.
-
-=item from:<submitter>
-
-Display the bugs for the submitter <submitter>.
-
-=item tag:<tag>
-
-Display the bugs which are tagged with <tag>.
-
-=item <number>
-
-Display bug number <number>.
-
-=item :
-
-Details of the bug tracking system itself, along with a bug-request
-page with more options than this script, can be found on
-http://bugs.debian.org/.  This page itself will be opened if the
-command 'bts bugs :' is used.
-
-=back
-
-All of the other comments above about "bts show" apply equally to "bts
-bugs".
-
-=cut
-
 sub bts_bugs {
+    @ARGV = @_;
+    my ($sub_offlinemode, $sub_caching, $sub_mboxmode, $sub_mailreader);
+    GetOptions("o" => \$sub_offlinemode,
+	       "offline!" => \$sub_offlinemode,
+	       "online" => sub { $sub_offlinemode = 0; },
+	       "cache!" => \$sub_caching,
+	       "m|mbox" => \$sub_mboxmode,
+	       "mailreader|mail-reader=s" => \$sub_mailreader,
+	       )
+    or die "bts: unknown options for bugs command\n";
+    @_ = @ARGV; # whatever's left
+
+    if (defined $sub_offlinemode) {
+	($offlinemode, $sub_offlinemode) = ($sub_offlinemode, $offlinemode);
+    }
+    if (defined $sub_caching) {
+	($caching, $sub_caching) = ($sub_caching, $caching);
+    }
+    if (defined $sub_mboxmode) {
+	($mboxmode, $sub_mboxmode) = ($sub_mboxmode, $mboxmode);
+    }
+    if (defined $sub_mailreader) {
+	if ($sub_mailreader =~ /\%s/) {
+	    ($mailreader, $sub_mailreader) = ($sub_mailreader, $mailreader);
+	} else {
+	    warn "bts: ignoring invalid --mailreader $sub_mailreader option:\ninvalid mail command following it.\n";
+	    $sub_mailreader = undef;
+	}
+    }
+
     my $url = shift;
     if (! $url) {
 	if (defined $ENV{'DEBEMAIL'}) {
@@ -510,6 +550,20 @@ sub bts_bugs {
     if ($url =~ /^.*\s+<(.*)>$/) { $url = $1; }
     $url =~ s/^:$//;
     browse($url);
+
+    # revert options
+    if (defined $sub_offlinemode) {
+	$offlinemode = $sub_offlinemode;
+    }
+    if (defined $sub_caching) {
+	$caching = $sub_caching;
+    }
+    if (defined $sub_mboxmode) {
+	$mboxmode = $sub_mboxmode;
+    }
+    if (defined $sub_mailreader) {
+	$mailreader = $sub_mailreader;
+    }
 }
 
 =item clone <bug> [new IDs]
@@ -771,7 +825,7 @@ sub bts_noowner {
     mailbts("bug $bug has no owner", "noowner $bug");
 }
 
-=item cache [<maint email> | <pkg> | src:<pkg> | from:<submitter>]
+=item cache [options] [<maint email> | <pkg> | src:<pkg> | from:<submitter>]
 
 Generate or update a cache of bug reports for the given email address
 or package. By default it downloads all bugs belonging to the email
@@ -806,11 +860,32 @@ minimum), mbox (download the minimum plus the mbox version of the bug
 report) or full (the whole works).  The second is --force-refresh or
 -f, which forces the download, even if the cached bug report is
 up-to-date.  Both of these are configurable from the configuration
-file, as described below.
+file, as described below.  They may also be specified after the
+"cache" command as well as at the start of the command line.
 
 =cut
 
 sub bts_cache {
+    @ARGV = @_;
+    my ($sub_cachemode, $sub_refreshmode);
+    GetOptions("cache-mode|cachemode=s" => \$sub_cachemode,
+	       "f" => \$sub_refreshmode,
+	       "force-refresh!" => \$sub_refreshmode,
+	       )
+    or die "bts: unknown options for bugs command\n";
+    @_ = @ARGV; # whatever's left
+
+    if (defined $sub_refreshmode) {
+	($refreshmode, $sub_refreshmode) = ($sub_refreshmode, $refreshmode);
+    }
+    if (defined $sub_cachemode) {
+	if ($sub_cachemode =~ /^(min|mbox|full)$/) {
+	    ($cachemode, $sub_cachemode) = ($sub_cachemode, $cachemode);
+	} else {
+	    warn "bts: ignoring invalid --cache-mode $sub_cachemode;\nmust be one of min, mbox, full.\n";
+	}
+    }
+
     prunecache();
     if (! have_lwp()) {
 	die "Couldn't run bts cache: $lwp_broken\n";
@@ -863,6 +938,14 @@ sub bts_cache {
     # download bugs
     foreach my $bug (keys %bugs) {
 	download($bug, 1);
+    }
+
+    # revert options    
+    if (defined $sub_refreshmode) {
+	$refreshmode = $sub_refreshmode;
+    }
+    if (defined $sub_cachemode) {
+	$cachemode = $sub_cachemode;
     }
 }
 
@@ -1992,7 +2075,7 @@ information.
 =head1 COPYRIGHT
 
 This program is Copyright (C) 2001-2003 by Joey Hess <joeyh@debian.org>.
-Many modifications have been made, Copyright (C) 2002-2004 Julian
+Many modifications have been made, Copyright (C) 2002-2005 Julian
 Gilbey <jdg@debian.org>.
 
 It is licensed under the terms of the GPL, either version 2 of the
