@@ -774,9 +774,11 @@ sub BEGIN {
 }
 
 sub END {
-    unlink "$changelog_path.dch" or
-	warn "$progname warning: Could not remove $changelog_path.dch"
-	    if $tmpchk;
+    if ($tmpchk) {
+	unlink "$changelog_path.dch" or
+	    warn "$progname warning: Could not remove $changelog_path.dch";
+	unlink "$changelog_path.dch~";  # emacs backup file
+    }
 }
 
 sub fatal($) {
