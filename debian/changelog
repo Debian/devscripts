@@ -10,7 +10,9 @@ devscripts (2.8.12) UNRELEASED; urgency=low
   * uscan: now support DEHS-style output and --watchfile etc options
   * uscan: also state upstream URL for newer versions (closes: #230813)
   * uscan: handle funny upstream version numbers using multiple groups
-    (closes: #282255) and version-number mangling (closes: #266095)
+    (closes: #282255) and version-number mangling, both for upstream
+    version numbers (closes: #266095) and Debian version numbers (closes:
+    #261385)
   * uscan: support --rename option to rename file instead of symlinking it
     (closes: #227952)
   * uscan: call find with -follow option: this should not cause any

@@ -545,14 +545,20 @@ exit $found ? 0 : 1;
 # concatenated before mangling is performed, and that mangling will
 # only be performed on the basename version number, not any path version
 # numbers.)
-# opts=uversionmangle=s/^/0.0/ \\
+# opts=uversionmangle=s/^/0.0/ \
 #   ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/Wine-(.*)\.tar\.gz
+# 
+# Similarly, the upstream part of the Debian version number can be
+# mangled:
+# opts=dversionmangle=s/\.dfsg\.\d+$// \
+#   http://some.site.org/some/path/foobar-(.*)\.tar\.gz
 
 
 sub process_watchline ($$$$$$)
 {
     my ($line, $watch_version, $pkg_dir, $pkg, $pkg_version, $watchfile) = @_;
 
+    my $origline = $line;
     my ($base, $site, $dir, $filepattern, $pattern, $lastversion, $action);
     my %options = ();
 
@@ -592,9 +598,18 @@ sub process_watchline ($$$$$$)
 	$base =~ m%^(\w+://[^/]+)%;
 	$site = $1;
     } else {
-	# version 2 watchfile
-	if ($line =~ s/^opt(?:ion)?s=(\S+)\s+//) {
-	    my $opts=$1;
+	# version 2/3 watchfile
+	if ($line =~ s/^opt(?:ion)?s=//) {
+	    my $opts;
+	    if ($line =~ s/^"(.*?)"\s+//) {
+		$opts=$1;
+	    } elsif ($line =~ s/^(\S+)\s+//) {
+		$opts=$1;
+	    } else {
+		warn "$progname warning: malformed opts=... in watchfile, skipping line:\n$origline\n";
+		return 1;
+	    }
+
 	    my @opts = split /,/, $opts;
 	    foreach my $opt (@opts) {
 		if ($opt eq 'pasv' or $opt eq 'passive') {
@@ -604,8 +619,11 @@ sub process_watchline ($$$$$$)
 		       or $opt eq 'nopassive') {
 		    $options{'pasv'}=0;
 		}
-		elsif ($opt =~ /^uversionmangle=(.+)/) {
+		elsif ($opt =~ /^uversionmangle\s*=\s*(.+)/) {
 		    @{$options{'uversionmangle'}} = split /;/, $1;
+		}
+		elsif ($opt =~ /^dversionmangle\s*=\s*(.+)/) {
+		    @{$options{'dversionmangle'}} = split /;/, $1;
 		}
 		else {
 		    warn "$progname warning: unrecognised option $opt\n";
@@ -789,6 +807,11 @@ EOF
     if (! $lastversion or $lastversion eq 'debian') {
 	$lastversion=$pkg_version;
     }
+    # And mangle it if requested
+    my $mangled_lastversion = $lastversion;
+    foreach my $pat (@{$options{'dversionmangle'}}) {
+	eval "\$mangled_lastversion =~ $pat;";
+    }
 
     # So what have we got to report now?
     my $upstream_url;
@@ -813,15 +836,17 @@ EOF
     }
 
     $dehs_tags{'debian_uversion'} = $lastversion;
+    $dehs_tags{'debian_mangled_uversion'} = $mangled_lastversion;
     $dehs_tags{'upstream_version'} = $newversion;
     $dehs_tags{'upstream_url'} = $upstream_url;
 
-    print "Newest version on remote site is $newversion, local version is $lastversion\n"
+    print "Newest version on remote site is $newversion, local version is $lastversion\n" .
+	($mangled_lastversion eq $lastversion ? "" : " (mangled local version number $mangled_lastversion)\n")
 	if $verbose;
 
     # Can't just use $lastversion eq $newversion, as then 0.01 and 0.1
     # compare different, whereas they are treated as equal by dpkg
-    if (system("dpkg --compare-versions '$lastversion' eq '$newversion'") == 0) {
+    if (system("dpkg --compare-versions '$mangled_lastversion' eq '$newversion'") == 0) {
 	print " => Package is up to date\n" if $verbose;
 	$dehs_tags{'status'} = "up to date";
 	return 0;
@@ -829,7 +854,7 @@ EOF
 
     # We use dpkg's rules to determine whether our current version
     # is newer or older than the remote version.
-    if (system("dpkg --compare-versions '$lastversion' gt '$newversion'") == 0) {
+    if (system("dpkg --compare-versions '$mangled_lastversion' gt '$newversion'") == 0) {
         if ($verbose) {
 	    print " => remote site does not even have current version\n";
 	} elsif ($dehs) {
@@ -863,7 +888,9 @@ EOF
     } elsif ($dehs) {
 	$dehs_tags{'status'} = "Newer version available";
     } else {
-	print "$pkg: Newer version ($newversion) available on remote site:\n  $upstream_url\n  (local version is $lastversion)\n";
+	print "$pkg: Newer version ($newversion) available on remote site:\n  $upstream_url\n  (local version is $lastversion" .
+	    ($mangled_lastversion eq $lastversion ? "" : ", mangled local version number $mangled_lastversion") .
+	    ")\n";
     }
 
     return 0 unless $download;
@@ -1194,7 +1221,8 @@ sub dehs_output ()
     return unless $dehs;
     my $output = 0;
 
-    for my $tag (qw(package debian_uversion upstream_version upstream_url
+    for my $tag (qw(package debian_uversion debian_mangled_uversion
+		    upstream_version upstream_url
 		    status messages warnings errors)) {
 	if (exists $dehs_tags{$tag}) {
 	    if (! $output) {

@@ -68,8 +68,13 @@ http://www.site.com/pub/foobar/foobar_v(\d+)_(\d+)\\.tar\\.gz
 # concatenated before mangling is performed, and that mangling will
 # only be performed on the basename version number, not any path
 # version numbers.)
-opts=uversionmangle=s/^/0.0/ \\
+opts="uversionmangle=s/^/0.0/" \\
   ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/Wine-(.*)\\.tar\\.gz
+
+# Similarly, the upstream part of the Debian version number can be
+# mangled:
+opts=dversionmangle=s/\\.dfsg\\.\\d+$// \\
+  http://some.site.org/some/path/foobar-(.*)\\.tar\\.gz
 
 .fi
 .PP
@@ -121,14 +126,21 @@ described below.  Finally, the file versions are then compared to find
 the one with the greatest version number, as determined by \fBdpkg
 --compare-versions\fR.
 .PP
-The current version can be specified as the second parameter in the
-watchfile line.  If this is \fIdebian\fR or absent, then the current
-version (as determined by \fIdebian/changelog\fR) is used.  If the
-newest version available is newer than the current version, then it is
-downloaded into the parent directory, unless the \fB\-\-report\fR
-option has been used.  Once the file has been downloaded, then a
-symlink to the file is made from \fI<package>_<version>.orig.tar.gz\fR
-if the file has a \fI.tar.gz\fR or a \fI.tgz\fR suffix.
+The current (upstream) version can be specified as the second
+parameter in the watchfile line.  If this is \fIdebian\fR or absent,
+then the current Debian version (as determined by
+\fIdebian/changelog\fR) is used to determine the current upstream
+version.  The current upstream version may also be specified by the
+command-line option \fB\-\-uversion\fR, which specifies the upstream
+version number of the currently installed package (i.e., the Debian
+version number without epoch and Debian revision).  The upstream
+version number will then be mangled using the dversionmangle option if
+one is specified, as described below.  If the newest version available
+is newer than the current version, then it is downloaded into the
+parent directory, unless the \fB\-\-report\fR option has been used.
+Once the file has been downloaded, then a symlink to the file is made
+from \fI<package>_<version>.orig.tar.gz\fR if the file has a
+\fI.tar.gz\fR or a \fI.tgz\fR suffix.
 .PP
 Finally, if a third parameter is given in the watchfile line, this is
 taken as the name of a command, and the command
@@ -157,9 +169,11 @@ or relative to the base URL specified in the homepage itself with a
 <base href="..."> tag.  The third and fourth fields are the version
 number and action fields as before.
 .SH "PER-SITE OPTIONS"
-A watchfile line may be prefixed with "opts=\fIoptions\fR", where
-\fIoptions\fR is a comma-separated list of options.  The
-recognised options are as follows:
+A watchfile line may be prefixed with `opts=\fIoptions\fR', where
+\fIoptions\fR is a comma-separated list of options.  The whole
+\fIoptions\fR string may be enclosed in double quotes, which is
+necessary if \fIoptions\fR contains any spaces.  The recognised
+options are as follows:
 .TP
 \fBactive\fR and \fBpassive\fR (or \fBpasv\fR)
 If used on an FTP line, these override the choice of whether to use
@@ -167,17 +181,25 @@ PASV mode or not, and force the use of the specified mode for this
 site.
 .TP
 \fBuversionmangle=\fIrules\fR
-This is used to mangle the upstream version number as follows.  First,
-the \fIrules\fR string is split into multiple rules at every `;'.
-Then the upstream version number is mangled by executing the Perl
-command:
+This is used to mangle the upstream version number as matched by the
+ftp://... or http:// rules as follows.  First, the \fIrules\fR string
+is split into multiple rules at every `;'.  Then the upstream version
+number is mangled by executing the Perl command:
 .nf
     $version =~ \fIrule\fR;
 .fi
 for each rule.  Thus, suitable rules might be `s/^/0./' to prepend
 `0.' to the version number and `s/_/./' to change underscores into
-periods.  Note that the \fIrules\fR string may contain neither commas
-nor spaces; this should not be a problem.
+periods.  Note that the \fIrules\fR string may not contain commas;
+this should not be a problem.
+.TP
+\fBdversionmangle=\fIrules\fR
+This is used to mangle the upstream version number of the currently
+installed package in the same way as the \fBuversionmangle\fR option.
+Thus, a suitable rule might be `s/\\.dfsg\\.\\d+$//' to remove a
+`.dfsg.1' suffix from the Debian version number, or to handle `.pre6'
+type version numbers.  Again, the \fIrules\fR string may not contain
+commas; this should not be a problem.
 .SH "Directory name checking"
 Similarly to several other scripts in the \fBdevscripts\fR package,
 \fBuscan\fR explores the requested directory trees looking for
