@@ -32,6 +32,7 @@
 use 5.008;  # We're using PerlIO layers
 use strict;
 use open ':utf8';  # changelogs are written with UTF-8 encoding
+use filetest 'access';  # use access rather than stat for -w
 use Encode 'decode_utf8';  # for checking whether user names are valid
 use Getopt::Long;
 use File::Copy;

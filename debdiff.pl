@@ -532,7 +532,7 @@ if ($show_moved and $type ne 'deb') {
 exit 0 unless defined $singledeb[1] and defined $singledeb[2]
     and $compare_control;
 
-if (! -x "/usr/bin/wdiff") {
+unless (system ("command -v wdiff >/dev/null 2>&1") == 0) {
     warn "Can't compare control files; wdiff package not installed\n";
     exit 0;
 }
