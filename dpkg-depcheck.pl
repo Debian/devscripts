@@ -449,7 +449,8 @@ sub filterfiles (@)
 		    next;
 		}
 	    }
-	    elsif ($feature{"discard-sgml-catalogs"} and m%^/usr/share/sgml/.*\.cat%) {
+	    elsif ($feature{"discard-sgml-catalogs"} and
+		   m%^/usr/share/(sgml/.*\.cat|.*/catalog)%) {
 		next;
 	    }
 	    elsif ($feature{"catch-alternatives"} and m%^/etc/alternatives/%) {
