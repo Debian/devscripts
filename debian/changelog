@@ -6,8 +6,10 @@ devscripts (2.8.12) UNRELEASED; urgency=low
     (closes: #298659); also do same to debi and debuild
   * debdiff: don't hardcode wdiff path
   * uscan: now support DEHS-style output and --watchfile etc options
+  * uscan: handle funny version numbers using multiple groups (closes:
+    #282255)
 
- -- Julian Gilbey <jdg@debian.org>  Tue, 15 Mar 2005 13:12:29 +0000
+ -- Julian Gilbey <jdg@debian.org>  Tue, 15 Mar 2005 15:07:23 +0000
 
 devscripts (2.8.11) unstable; urgency=low
 

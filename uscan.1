@@ -58,6 +58,11 @@ http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-(.*)\\.tar\\.gz
 http://www.dataway.ch/~lukasl/amph/amph.html \\
   files/amphetamine-([\\d\\.]*).tar.bz2
 
+# This is the format for an HTTP site which has funny version numbers;
+# the parenthesised groups will be joined with dots to make a
+# sanitised version number
+http://www.site.com/pub/foobar/foobar_v(\d+)_(\d+)\\.tar\\.gz
+
 .fi
 .PP
 Comment lines may be introduced with a `#' character.  Continuation
@@ -96,12 +101,13 @@ so tight that it matches only the upstream software you are interested
 in and nothing else.  Also, the pattern will be anchored at the
 beginning and at the end, so it must match the full filename.  (Note
 that for HTTP URLs, the href may include the absolute path or full
-site and path and still be accepted.)  The pattern must contain a Perl
-group as explained in the next paragraph.
+site and path and still be accepted.)  The pattern must contain at
+least one Perl group as explained in the next paragraph.
 .PP
 Having got a list of `files' matching the pattern, their version
-numbers are extracted by treating the part matching the first Perl
-regexp group, demarcated by `(...)', as the version number of the
+numbers are extracted by treating the part matching the Perl
+regexp groups, demarcated by `(...)', joining them with `.' as a
+separator, and using the result as the version number of the
 file.  The file versions are then compared to find the one with the
 greatest version number, as determined by \fBdpkg
 --compare-versions\fR.

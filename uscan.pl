@@ -283,7 +283,7 @@ else { $passive = undef; }
 # to restore $ENV{'FTP_PASSIVE'} to what it was at this point
 
 my $user_agent = LWP::UserAgent->new(env_proxy => 1);
-$user_agent->timeout("7");
+$user_agent->timeout("20");
 
 if (defined $opt_watchfile) {
     die "Can't have directory arguments if using --watchfile" if @ARGV;
@@ -509,6 +509,12 @@ exit $found ? 0 : 1;
 # For ftp sites:
 #   ftp://site.name/dir/path/pattern-(.*)\.tar\.gz [version [action]]
 #
+# with regex special characters in the filename part:
+#   ftp://ftp.worldforge.org/pub/worldforge/libs/Atlas-C++/transitional/Atlas-C\+\+-(.*)\.tar\.gz
+# 
+# with directory pattern matching
+# ftp://ftp.nessus.org/pub/nessus/nessus-([\d\.]+)/src/nessus-core-([\d\.]+)\.tar\.gz
+# 
 # For http sites:
 #   http://site.name/dir/path/pattern-(.*)\.tar\.gz [version [action]]
 # or
@@ -519,6 +525,11 @@ exit $found ? 0 : 1;
 # Then the patterns matched will be checked to find the one with the
 # greatest version number (as determined by the (...) group), using the
 # Debian version number comparison algorithm described below.
+#
+# Furthermore, the pattern in each part may contain several (...) groups and
+# the version number is determined by joining all groups together
+# using "." as separator.  For example:
+#   ftp://site/dir/path/pattern-(\d+)_(\d+)_(\d+)\.tar\.gz
 
 sub process_watchline ($$$$$$)
 {
@@ -652,7 +663,8 @@ sub process_watchline ($$$$$$)
 	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi) {
 	    my $href = $2;
 	    if ($href =~ m&^$pattern$&) {
-		push @hrefs, [$1, $href];  # [ version, href ]
+		my $mangled_version = join(".", $href =~ m&^$pattern$&);
+		push @hrefs, [$mangled_version, $href];
 	    }
 	}
 	if (@hrefs) {
@@ -703,7 +715,9 @@ sub process_watchline ($$$$$$)
 	                        # space after it in a normal FTP listing
 	while ($content =~
 	           m&(?:<\s*a\s+[^>]*href\s*=\s*\"| )($pattern)(\"| )&gi) {
-	    push @files, [$2, $1];  # [ version, file ]
+	    my $file = $1;
+	    my $mangled_version = join(".", $file =~ m/^$pattern$/);
+	    push @files, [$mangled_version, $file];
 	}
 	if (@files) {
 	    if ($verbose) {
@@ -969,7 +983,8 @@ sub newest_dir ($$$$$) {
 	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi) {
 	    my $href = $2;
 	    if ($href =~ m&^$dirpattern/?$&) {
-		push @hrefs, [$1, $href];  # [ version, href ]
+		my $mangled_version = join(".", $href =~ m&^$dirpattern/?$&);
+		push @hrefs, [$mangled_version, $href];
 	    }
 	}
 	if (@hrefs) {
@@ -1020,7 +1035,9 @@ sub newest_dir ($$$$$) {
 	                        # space after it in a normal FTP listing
 	while ($content =~
 	       m/(?:<\s*a\s+[^>]*href\s*=\s*\"| )($pattern)(\"| )/gi) {
-	    push @dirs, [$2, $1];  # [ version, dir ]
+	    my $dir = $1;
+	    my $mangled_version = join(".", $dir =~ m/^$pattern$/);
+	    push @dirs, [$mangled_version, $dir];
 	}
 	if (@dirs) {
 	    if ($debug) {
