@@ -80,7 +80,7 @@ if [ -z "$to_be_tagged" ]; then
 fi
 
 # Could use dh_listpackages, but no guarantee that it's installed.
-src_packages=$(awk '/Package: / { printf $2 " "}' debian/control)
+src_packages=$(awk '/Package: / { printf $2 " "} /Source: / { printf $2 }' debian/control)
 
 IFS="
 "
