@@ -4,6 +4,7 @@ devscripts (2.8.5) unstable; urgency=low
 
   * bts: fix "bts bugs :" error
   * bts: rejuvenate the close command (closes: #245956)
+  * bts: fix typo (closes: #268608)
   * debchange: fixed pipe error (closes: #228749)
   * debchange: requires perl >= 5.8, so make this a Depends: in the
     control file (will be standard in sarge anyway, so it's not a

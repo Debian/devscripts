@@ -376,7 +376,7 @@ sub bts_bugs {
 
 The clone control command allows you to duplicate a bug report. It is useful
 in the case where a single report actually indicates that multiple distinct
-bugs have occured. "New IDs" are negative numbers, separated by spaces,
+bugs have occurred. "New IDs" are negative numbers, separated by spaces,
 which may be used in subsequent control commands to refer to the newly
 duplicated bugs.  A new report is generated for each new ID.
 
