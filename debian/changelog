@@ -1,3 +1,10 @@
+devscripts (2.9) UNRELEASED; urgency=HIGH
+
+  * debchange.pl: Don't check for -w 'debian/changelog', check whether
+    we're in debian/ first, to avoid false positives. (Closes: #264310)
+
+ -- Joshua Kwan <joshk@triplehelix.org>  Sun,  8 Aug 2004 00:56:34 -0700
+
 devscripts (2.8) unstable; urgency=low
 
   * Now comaintained by Joshua Kwan and Julian Gilbey.

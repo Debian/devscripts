@@ -249,12 +249,6 @@ if (defined $opt_level) {
 
 if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
 
-# Can't write, so stop now.
-if (! -w 'debian/changelog')
-{
-        die "$progname: debian/changelog is not writable!\n";
-}
-
 @closes = split(/,/, join(',', @closes));
 map { s/^\#//; } @closes;  # remove any leading # from bug numbers
 
@@ -272,6 +266,12 @@ until (-f 'debian/changelog') {
     if (cwd() eq '/') {
 	die "$progname: cannot find debian/changelog anywhere!\nAre you in the source code tree?\n";
     }
+}
+
+# Can't write, so stop now.
+if (! -w 'debian/changelog')
+{
+        die "$progname: debian/changelog is not writable!\n";
 }
 
 #####
