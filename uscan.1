@@ -131,15 +131,15 @@ parameter in the watchfile line.  If this is \fIdebian\fR or absent,
 then the current Debian version (as determined by
 \fIdebian/changelog\fR) is used to determine the current upstream
 version.  The current upstream version may also be specified by the
-command-line option \fB\-\-uversion\fR, which specifies the upstream
-version number of the currently installed package (i.e., the Debian
-version number without epoch and Debian revision).  The upstream
-version number will then be mangled using the dversionmangle option if
-one is specified, as described below.  If the newest version available
-is newer than the current version, then it is downloaded into the
-parent directory, unless the \fB\-\-report\fR option has been used.
-Once the file has been downloaded, then a symlink to the file is made
-from \fI<package>_<version>.orig.tar.gz\fR if the file has a
+command-line option \fB\-\-upstream-version\fR, which specifies the
+upstream version number of the currently installed package (i.e., the
+Debian version number without epoch and Debian revision).  The
+upstream version number will then be mangled using the dversionmangle
+option if one is specified, as described below.  If the newest version
+available is newer than the current version, then it is downloaded
+into the parent directory, unless the \fB\-\-report\fR option has been
+used.  Once the file has been downloaded, then a symlink to the file
+is made from \fI<package>_<version>.orig.tar.gz\fR if the file has a
 \fI.tar.gz\fR or a \fI.tgz\fR suffix.
 .PP
 Finally, if a third parameter is given in the watchfile line, this is
@@ -291,13 +291,13 @@ Use the traditional uscan output format.  (This is the default behaviour.)
 .TP
 \fB\-\-package\fR \fIpackage\fR
 Specify the name of the package to check for rather than examining
-\fIdebian/changelog\fR; this requires the \fB\-\-uversion\fR and
-\fB\-\-watchfile\fR options as well.  Furthermore, no directory
+\fIdebian/changelog\fR; this requires the \fB\-\-upstream-version\fR
+and \fB\-\-watchfile\fR options as well.  Furthermore, no directory
 scanning will be done and nothing will be downloaded.  This option is
 probably most useful in conjunction with the DEHS system (and
 \fB\-\-dehs\fR).
 .TP
-\fB\-\-uversion\fR \fIupstream-version\fR
+\fB\-\-upstream-version\fR \fIupstream-version\fR
 Specify the current upstream version rather than examine the watchfile
 or changelog to determine it.  This is ignored if a directory scan is
 being performed and more than one watchfile is found.

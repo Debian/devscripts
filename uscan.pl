@@ -93,14 +93,15 @@ Options:
     --watchfile FILE
                    Specify the watchfile rather than using debian/watch;
                    no directory traversing will be done in this case
-    --uversion VERSION
+    --upstream-version VERSION
                    Specify the current upstream version in use rather than
                    parsing debian/changelog to determine this
     --package PACKAGE
                    Specify the package name rather than examining
-                   debian/changelog; must use --uversion and --watchfile with
-                   this option, no directory traversing will be done, no
-                   actions (even downloading) will be carried out
+                   debian/changelog; must use --upstream-version and
+                   --watchfile with this option, no directory traversing
+                   will be performed, no actions (even downloading) will be
+                   carried out
     --no-dehs      Use traditional uscan output format (default)
     --dehs         Use DEHS style output (XML-type)
     --no-conf, --noconf
@@ -216,7 +217,7 @@ GetOptions("help" => \$opt_h,
 	   "symlink!" => sub { $opt_symlink = $_[1] ? 'symlink' : 'no'; },
 	   "rename" => sub { $opt_symlink = 'rename'; },
 	   "package=s" => \$opt_package,
-	   "uversion=s" => \$opt_uversion,
+	   "upstream-version=s" => \$opt_uversion,
 	   "watchfile=s" => \$opt_watchfile,
 	   "dehs!" => \$opt_dehs,
 	   "verbose!" => \$opt_verbose,
@@ -262,7 +263,7 @@ if (defined $opt_level) {
 $check_dirname_regex = $opt_regex if defined $opt_regex;
 
 if (defined $opt_package) {
-    die "$progname: --package requires the use of --uversion and --watchfile as well;\nrun $progname --help for more details\n"
+    die "$progname: --package requires the use of --upstream-version and --watchfile\nas well; run $progname --help for more details\n"
 	unless defined $opt_uversion and defined $opt_watchfile;
     $download = 0;
 }
