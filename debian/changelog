@@ -1,4 +1,4 @@
-devscripts (2.8.1) UNRELEASED; urgency=medium
+devscripts (2.8.1) unstable; urgency=medium
 
   * debchange.pl: Don't check for -w 'debian/changelog', check whether
     we're in debian/ first, to avoid false positives. (Closes: #264310)
@@ -6,7 +6,7 @@ devscripts (2.8.1) UNRELEASED; urgency=medium
     mail(1) to send the control email, but toss it all to bts.pl which will
     handle all the $DEBEMAIL and $EMAIL and such. (Closes: #264767)
 
- -- Joshua Kwan <joshk@triplehelix.org>  Tue, 10 Aug 2004 09:25:22 -0700
+ -- Joshua Kwan <joshk@triplehelix.org>  Tue, 10 Aug 2004 09:41:14 -0700
 
 devscripts (2.8) unstable; urgency=low
 
