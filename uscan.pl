@@ -374,7 +374,7 @@ if ($pid) {
     }
     close FIND;
 } else {
-    exec 'find', @ARGV, qw(-type d -name debian -print);
+    exec 'find', @ARGV, qw(-follow -type d -name debian -print);
     die "$progname: couldn't exec find: $!\n";
 }
 
