@@ -2,6 +2,7 @@ devscripts (2.8.12) UNRELEASED; urgency=low
 
   * bts: allow --mbox etc. options to appear after the show/bugs keyword
     as well as before, and similarly with the "cache" command
+  * bts: allow bug numbers to end with a ":" (closes: #300965)
   * debchange: use access rather than stat for checking file permissions
     (closes: #298659); also do same to debi and debuild
   * debdiff: don't hardcode wdiff path

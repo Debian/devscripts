@@ -1091,6 +1091,7 @@ sub checkbug {
     }
     
     $bug=~s/^[^-0-9]*//;
+    $bug=~s/:$//;
     if (! exists $clonedbugs{$bug} &&
 	(! length $bug || $bug !~ /^[0-9]+$/)) {
 	warn "\"$_[0]\" does not look like a bug number\n";
