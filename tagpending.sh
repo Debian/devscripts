@@ -63,7 +63,11 @@ bts_pending=$(ldapsearch -h bugs.debian.org -p 10101 -x -b dc=current,dc=bugs,dc
 to_be_tagged=$(printf '%s\n%s\n' "$changelog_closes" "$bts_pending" | sort | uniq -u)
 
 # Now remove the ones tagged in the BTS but no longer in the changelog.
-to_be_tagged=$(echo "$to_be_tagged" | fgrep -vF "$bts_pending")
+to_be_tagged=$(for bug in $to_be_tagged; do
+  if ! echo "$bts_pending" | grep -q "^${bug}$"; then
+    echo "$bug"
+  fi
+done)
 
 if [ -z "$to_be_tagged" ]; then
   echo "tagpending info: Nothing to do, exiting."
