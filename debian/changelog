@@ -2,10 +2,12 @@ devscripts (2.8.3) unstable; urgency=low
 
   * The "timely bug report" release.
   * uupdate.sh: [ $# ne 0 ] -> [ $# -ne 0 ]. Thanks Fumitoshi UKAI.
+    (Closes: #266221)
   * Run perl -c on all the Perl scripts and sh -n on all of the shell
     scripts, in foresight of future syntax errors.
+  * tagpending.sh: Add a space after the source package name.
 
- -- Joshua Kwan <joshk@triplehelix.org>  Mon, 16 Aug 2004 20:38:32 -0700
+ -- Joshua Kwan <joshk@triplehelix.org>  Wed, 18 Aug 2004 01:28:37 -0700
 
 devscripts (2.8.2) unstable; urgency=low
 
