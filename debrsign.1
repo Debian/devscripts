@@ -39,12 +39,23 @@ They affect the search for the \fI.changes\fR file.  They are provided
 to mimic the behaviour of \fBdpkg-buildpackage\fR when determining the
 name of the \fI.changes\fR file.
 .TP
+\fB\-\-path \fIremote-path\fR
+Specify a path to the GPG or PGP binary on the remote host.
+.TP
 \fB\-\-help\fR, \fB\-\-version\fR
 Show help message and version information respectively.
-.TP
 \fBOther options\fR
-All other options are passed on to \fBdebuild\fR on the remote
+All other options are passed on to \fBdebsign\fR on the remote
 machine.
+.SH "CONFIGURATION VARIABLES"
+The two configuration files \fI/etc/devscripts.conf\fR and
+\fI~/.devscripts\fR are sourced in that order to set configuration
+variables.  Command line options can be used to override configuration
+file settings.  Environment variable settings are ignored for this
+purpose.  The currently recognised variables are:
+.TP
+.B DEBRSIGN_PGP_PATH
+Equivalent to passing \fB\-\-path\fR on the command line (see above.)
 .SH "SEE ALSO"
 .BR debsign (1),
 .BR dpkg-architecture (1)

@@ -58,6 +58,7 @@ usage () {
     -S              Use changes file made for source-only upload
     -a<arch>        Use changes file made for Debian target architecture <arch>
     -t<target>      Use changes file made for GNU target architecture <target>
+    --path          Specify directory GPG/PGP binary is located on remote host
     --help          Show this message
     --version       Show version and copyright information
   If a changes or dscfile is specified, it is signed, otherwise
@@ -99,8 +100,16 @@ unset IFS
 PATH=/usr/local/bin:/usr/bin:/bin
 umask `perl -e 'printf "%03o\n", umask | 022'`
 
-# Don't need to read config files here, as nothing significant is set
-# by command line parameters.
+eval $(
+    set +e
+    for var in $VARS; do
+        eval "$var=\$DEFAULT_$var"
+    done
+    for file in /etc/devscripts.conf ~/.devscripts; do
+      [ -r $file ] && . $file
+    done
+
+    set | egrep '^DEBRSIGN_')
 
 signargs=
 while [ $# != 0 ]
@@ -113,6 +122,7 @@ do
 	--help)	usage; exit 0 ;;
 	--version)
 		version; exit 0 ;;
+        --path) DEBRSIGN_PGP_PATH="$value" ;;
 	-*)	signargs="$signargs '$1'" ;;
 	*)	break ;;
     esac
@@ -218,7 +228,7 @@ else
     fi
 
     withecho scp "$dsc" "$remotehost:\$HOME"
-    withecho ssh -t "$remotehost" "debsign $signargs $dscbase"
+    withecho ssh -t "$remotehost" "${DEBRSIGN_PGP_PATH}debsign $signargs $dscbase"
     withecho scp "$remotehost:\$HOME/$dscbase" "$dsc"
     withecho ssh "$remotehost" "rm -f $dscbase"
 

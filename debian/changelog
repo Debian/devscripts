@@ -18,6 +18,10 @@ devscripts (2.8) UNRELEASED; urgency=low
     - Change nonstandard head -1 to head -n 1. (Closes: #231130)
     - Add a versioned dependency on gnupg (>= 1.0.7), when
       --no-show-policy-url was added. (Closes: #228938)
+  * debrsign:
+    - Add --path option to specify full path to gnupg/pgp. (Closes: #243013)
+  * debuild:
+    - Preserve GPG_TTY so that gpg-agent is recognized. (Closes: #254112)
   * bts:
     - Recognize the 'l10n' tag for bts. (Closes: #227735)
     - bts.1: Fix extraneous indentation. (Closes: #236309)
@@ -30,7 +34,7 @@ devscripts (2.8) UNRELEASED; urgency=low
     - tagpending: Within a source directory, tags all bugs not already
       'pending' to be as such.
 
- -- Joshua Kwan <joshk@triplehelix.org>  Fri, 30 Jul 2004 01:06:11 -0700
+ -- Joshua Kwan <joshk@triplehelix.org>  Fri, 30 Jul 2004 13:10:23 -0700
 
 devscripts (2.7.95.1) unstable; urgency=low
 
