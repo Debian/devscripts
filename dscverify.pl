@@ -101,7 +101,7 @@ sub get_rings {
 sub check_signature {
     my ($file, @rings) = @_;
 
-    my $cmd = 'gpg --emulate-md-encode-bug --batch --no-options --no-default-keyring --always-trust';
+    my $cmd = 'gpg --batch --no-options --no-default-keyring --always-trust';
     foreach (@rings) { $cmd .= " --keyring $_"; }
     $cmd .= " <$file 2>&1 >/dev/null";
 
