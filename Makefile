@@ -18,7 +18,6 @@ SCRIPTS = $(PL_FILES:.pl=) $(SH_FILES:.sh=)
 EXAMPLES = conf.default
 
 MAN1S = $(SCRIPTS:=.1) debc.1 cvs-debc.1 devscripts.1
-MAN1S_FR = debclean.fr.1
 GEN_MAN1S = bts.1
 MAN5S = devscripts.conf.5
 
@@ -28,7 +27,6 @@ EXAMPLES_DIR = /usr/share/devscripts
 PERLMOD_DIR = /usr/share/devscripts
 BIN_LIBDIR = /usr/lib/devscripts
 MAN1DIR = /usr/share/man/man1
-MAN1_FR_DIR = /usr/share/man/fr/man1
 MAN5DIR = /usr/share/man/man5
 
 all: $(SCRIPTS) $(GEN_MAN1S) $(EXAMPLES) $(LIBS) $(CWRAPPERS)
@@ -83,10 +81,6 @@ install: all
 	cp debpkg-wrapper $(DESTDIR)$(BINDIR)/debpkg
 	mkdir -p $(DESTDIR)$(MAN1DIR)
 	cp $(MAN1S) $(DESTDIR)$(MAN1DIR)
-	mkdir -p $(DESTDIR)$(MAN1_FR_DIR)
-	for i in $(MAN1S_FR); do \
-	    cp $$i $(DESTDIR)$(MAN1_FR_DIR)/$${i%.fr.1}.1; \
-	done
 	mkdir -p $(DESTDIR)$(MAN5DIR)
 	cp $(MAN5S) $(DESTDIR)$(MAN5DIR)
 	cd $(DESTDIR)$(MAN1DIR) && ln -s debchange.1 dch.1
