@@ -175,7 +175,8 @@ command:
 .fi
 for each rule.  Thus, suitable rules might be `s/^/0./' to prepend
 `0.' to the version number and `s/_/./' to change underscores into
-periods.
+periods.  Note that the \fIrules\fR string may contain neither commas
+nor spaces; this should not be a problem.
 .SH "Directory name checking"
 Similarly to several other scripts in the \fBdevscripts\fR package,
 \fBuscan\fR explores the requested directory trees looking for
