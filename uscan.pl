@@ -830,11 +830,12 @@ EOF
     }
 
     if ($verbose) {
-	print " => Newer version available\n";
+	print " => Newer version available from\n";
+	print "    $upstream_url\n";
     } elsif ($dehs) {
 	$dehs_tags{'status'} = "Newer version available";
     } else {
-	print "$pkg: Newer version ($newversion) available on remote site\n  (local version is $lastversion)\n";
+	print "$pkg: Newer version ($newversion) available on remote site:\n  $upstream_url\n  (local version is $lastversion)\n";
     }
 
     return 0 unless $download;

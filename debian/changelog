@@ -6,6 +6,7 @@ devscripts (2.8.12) UNRELEASED; urgency=low
     (closes: #298659); also do same to debi and debuild
   * debdiff: don't hardcode wdiff path
   * uscan: now support DEHS-style output and --watchfile etc options
+  * uscan: also state upstream URL for newer versions (closes: #230813)
   * uscan: handle funny version numbers using multiple groups (closes:
     #282255)
 
