@@ -1,4 +1,4 @@
-devscripts (2.7.95.2) UNRELEASED; urgency=low
+devscripts (2.8) UNRELEASED; urgency=low
 
   * Now comaintained by Joshua Kwan and Julian Gilbey.
   * Build system:
@@ -26,8 +26,15 @@ devscripts (2.7.95.2) UNRELEASED; urgency=low
       identical non-Debian revisions. (Closes: #236344)
   * rc-alert:
     - rc-alert.1: Add SEE ALSO for popbugs(1). (Closes: #227078)
+  * New scripts by me:
+    - debpanic: Looks for a .changes file on the command line, else looks
+      for one in the same manner as debi, and signs and places a .commands
+      file removing all files associated with that .changes file on a given
+      Debian FTP upload queue (usually in DEBPANIC_QUEUE). (Closes: #224523)
+    - tagpending: Within a source directory, tags all bugs not already
+      'pending' to be as such.
 
- -- Joshua Kwan <joshk@triplehelix.org>  Fri, 30 Jul 2004 00:20:12 -0700
+ -- Joshua Kwan <joshk@triplehelix.org>  Fri, 30 Jul 2004 01:06:11 -0700
 
 devscripts (2.7.95.1) unstable; urgency=low
 
