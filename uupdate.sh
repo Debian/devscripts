@@ -396,8 +396,10 @@ if [ "$PATCH" ]; then
 	    echo "Success. The supplied diffs worked fine on the Debian sources."
 	else
 	    echo "$PROGNAME: the diffs supplied did not apply cleanly!" >&2
-	    X="`find . -name "*.rej"`"
-	    echo "Rejected diffs are in $X" >&2
+	    X=$(find . -name "*.rej")
+	    if [ -n "$X" ]; then
+		echo "Rejected diffs are in $X" >&2
+	    fi
 	    STATUS=1
 	fi
 	chmod a+x debian/rules
@@ -618,7 +620,9 @@ else
 	else
 	    echo "$PROGNAME: the diffs from version $VERSION did not apply cleanly!" >&2
 	    X=$(find . -name "*.rej")
-	    echo "Rejected diffs are in $X" >&2
+	    if [ -n "$X" ]; then
+		echo "Rejected diffs are in $X" >&2
+	    fi
 	    STATUS=1
 	fi
 
