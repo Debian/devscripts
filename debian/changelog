@@ -24,8 +24,11 @@ devscripts (2.8.5) unstable; urgency=medium
     - debrsign: Warn if you passed a changes file but omitted the remote
       address.
     - Update debchange and tagpending for new bts2ldap gateway.
+    - Remove ${perl:Depends} from control file, dh_perl is not guessing that
+      we do actually need 5.8, and so we end up with a perl (>= 5.8), perl
+      dependency, which is wrong.
 
- -- Joshua Kwan <joshk@triplehelix.org>  Sun, 26 Sep 2004 13:36:48 -0700
+ -- Joshua Kwan <joshk@triplehelix.org>  Sun, 26 Sep 2004 13:41:37 -0700
 
 devscripts (2.8.4) unstable; urgency=medium
 
