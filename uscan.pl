@@ -23,10 +23,11 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-use 5.006_000;  # uses 'our' variables
+use 5.008;  # uses 'our' variables and filetest
 use strict;
 use Cwd;
 use File::Basename;
+use filetest 'access';
 use Getopt::Long;
 use lib '/usr/share/devscripts';
 use Devscripts::Versort;
@@ -51,6 +52,12 @@ our $found = 0;
 
 sub process_watchline ($$$$$$);
 sub process_watchfile ($$$$);
+sub recursive_regex_dir ($$$);
+sub newest_dir ($$$$$);
+sub dehs_msg ($);
+sub dehs_warn ($);
+sub dehs_die ($);
+sub dehs_output ();
 
 sub usage {
     print <<"EOF";
@@ -63,6 +70,7 @@ Options:
     --debug        Dump the downloaded web pages to stdout for debugging
                    your watch file.
     --download     Report on newer and absent versions, and download (default)
+    --no-download  Report on newer and absent versions, but don\'t download
     --pasv         Use PASV mode for FTP connections
     --no-pasv      Do not use PASV mode for FTP connections (default)
     --symlink      Make an orig.tar.gz symlink to downloaded file (default)
@@ -79,6 +87,19 @@ Options:
                    a Perl regular expression; the string \`PACKAGE\' will
                    be replaced by the package name; see manpage for details
                    (default: 'PACKAGE(-.*)?')
+    --watchfile FILE
+                   Specify the watchfile rather than using debian/watch;
+                   no directory traversing will be done in this case
+    --uversion VERSION
+                   Specify the current upstream version in use rather than
+                   parsing debian/changelog to determine this
+    --package PACKAGE
+                   Specify the package name rather than examining
+                   debian/changelog; must use --uversion and --watchfile with
+                   this option, no directory traversing will be done, no
+                   actions (even downloading) will be carried out
+    --no-dehs      Use traditional uscan output format (default)
+    --dehs         Use DEHS style output (XML-type)
     --no-conf, --noconf
                    Don\'t read devscripts config files;
                    must be the first option given
@@ -112,6 +133,8 @@ my $symlink = 1;
 my $verbose = 0;
 my $check_dirname_level = 1;
 my $check_dirname_regex = 'PACKAGE(-.*)?';
+my $dehs = 0;
+my %dehs_tags;
 
 if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg = "  (no configuration files read)";
@@ -123,6 +146,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'USCAN_PASV' => 'default',
 		       'USCAN_SYMLINK' => 'yes',
 		       'USCAN_VERBOSE' => 'no',
+		       'USCAN_DEHS_OUTPUT' => 'no',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
 		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.*)?',
 		       );
@@ -149,6 +173,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'USCAN_SYMLINK'}='yes';
     $config_vars{'USCAN_VERBOSE'} =~ /^(yes|no)$/
 	or $config_vars{'USCAN_VERBOSE'}='no';
+    $config_vars{'USCAN_DEHS_OUTPUT'} =~ /^(yes|no)$/
+	or $config_vars{'USCAN_DEHS_OUTPUT'}='no';
     $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} =~ /^[012]$/
 	or $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'}=1;
 
@@ -165,6 +191,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	$config_vars{'USCAN_PASV'} eq 'no' ? 0 : 'default';
     $symlink = $config_vars{'USCAN_SYMLINK'} eq 'no' ? 0 : 1;
     $verbose = $config_vars{'USCAN_VERBOSE'} eq 'yes' ? 1 : 0;
+    $dehs = $config_vars{'USCAN_DEHS_OUTPUT'} eq 'yes' ? 1 : 0;
     $check_dirname_level = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'};
     $check_dirname_regex = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_REGEX'};
 }
@@ -173,6 +200,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 my $debug = 0;
 my ($opt_h, $opt_v, $opt_download, $opt_passive, $opt_symlink);
 my ($opt_verbose, $opt_ignore, $opt_level, $opt_regex, $opt_noconf);
+my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs);
 
 GetOptions("help" => \$opt_h,
 	   "version" => \$opt_v,
@@ -180,6 +208,10 @@ GetOptions("help" => \$opt_h,
 	   "report" => sub { $opt_download = 0; },
 	   "passive|pasv!" => \$opt_passive,
 	   "symlink!" => \$opt_symlink,
+	   "package=s" => \$opt_package,
+	   "uversion=s" => \$opt_uversion,
+	   "watchfile=s" => \$opt_watchfile,
+	   "dehs!" => \$opt_dehs,
 	   "verbose!" => \$opt_verbose,
 	   "debug" => \$debug,
 	   "ignore-dirname" => \$opt_ignore,
@@ -202,6 +234,11 @@ $download = $opt_download if defined $opt_download;
 $passive = $opt_passive if defined $opt_passive;
 $symlink = $opt_symlink if defined $opt_symlink;
 $verbose = $opt_verbose if defined $opt_verbose;
+$dehs = $opt_dehs if defined $opt_dehs;
+if ($dehs) {
+    $SIG{'__WARN__'} = \&dehs_warn;
+    $SIG{'__DIE__'} = \&dehs_die;
+}
 
 # dirname stuff
 if ($opt_ignore) {
@@ -217,6 +254,17 @@ if (defined $opt_level) {
 
 $check_dirname_regex = $opt_regex if defined $opt_regex;
 
+if (defined $opt_package) {
+    die "$progname: --package requires the use of --uversion and --watchfile as well;\nrun $progname --help for more details\n"
+	unless defined $opt_uversion and defined $opt_watchfile;
+    $download = 0;
+}
+
+die "$progname: Can't use --verbose if you're using --dehs!\n"
+    if $verbose and $dehs;
+
+warn "$progname: You're going to get strange (non-XML) output using --debug and --dehs together!\n"
+    if $debug and $dehs;
 
 # We'd better be verbose if we're debugging
 $verbose |= $debug;
@@ -235,9 +283,73 @@ else { $passive = undef; }
 # to restore $ENV{'FTP_PASSIVE'} to what it was at this point
 
 my $user_agent = LWP::UserAgent->new(env_proxy => 1);
+$user_agent->timeout("7");
 
+if (defined $opt_watchfile) {
+    die "Can't have directory arguments if using --watchfile" if @ARGV;
+
+    # no directory traversing then, and things are very simple
+    if (defined $opt_package) {
+	# no need to even look for a changelog!
+	process_watchfile(undef, $opt_package, $opt_uversion, $opt_watchfile);
+    } else {
+	# Check for debian/changelog file
+	if (-r 'debian/changelog') {
+	    # Figure out package info we need
+	    my $changelog = `dpkg-parsechangelog`;
+	    unless ($? == 0) {
+		die "$progname: Problems running dpkg-parsechangelog\n";
+	    }
+
+	    my ($package, $debversion, $version);
+	    $changelog =~ /^Source: (.*?)$/m and $package=$1;
+	    $changelog =~ /^Version: (.*?)$/m and $debversion=$1;
+	    if (! defined $package || ! defined $debversion) {
+		die "$progname: Problems determining package name and/or version from\n  debian/changelog\n";
+	    }
+	    
+	    # Check the directory is properly named for safety
+	    my $good_dirname = 1;
+	    if ($check_dirname_level ==  2 or
+		($check_dirname_level == 1 and cwd() ne $opwd)) {
+		# that second test is redundant here, but we'll leave it for
+		# safety
+		my $re = $check_dirname_regex;
+		$re =~ s/PACKAGE/\Q$package\E/g;
+		if ($re =~ m%/%) {
+		    $good_dirname = (cwd() =~ m%^$re$%);
+		} else {
+		    $good_dirname = (basename(cwd()) =~ m%^$re$%);
+		}
+	    }
+	    if (! $good_dirname) {
+		die "$progname: not processing watchfile because this directory does not match the package name\n" .
+		    "   or the settings of the--check-dirname-level and --check-dirname-regex options if any.\n";
+	    }
+
+	    # Get current upstream version number
+	    if (defined $opt_uversion) {
+		$version = $opt_uversion;
+	    } else {
+		$version = $debversion;
+		$version =~ s/-[^-]+$//;  # revision
+		$version =~ s/^\d+://;    # epoch
+	    }
+
+	    process_watchfile($opwd, $package, $version, $opt_watchfile);
+	}
+	else {
+	    die "Couldn't find/read debian/changelog file\n";
+	}
+    }
+
+    # Are there any warnings to give if we're using dehs?
+    dehs_output if $dehs;
+    exit 0;
+}
+
+# Otherwise we're scanning for watchfiles
 push @ARGV, '.' if ! @ARGV;
-
 print "-- Scanning for watchfiles in @ARGV\n" if $verbose;
 
 # Run find to find the directories.  We will handle filenames with spaces
@@ -316,7 +428,7 @@ for my $dir (@dirs) {
 	$version =~ s/-[^-]+$//;  # revision
 	$version =~ s/^\d+://;    # epoch
 
-	push @debdirs, [$debversion, $dir, $package, $version, $good_dirname];
+	push @debdirs, [$debversion, $dir, $package, $version];
     }
     elsif (-r 'debian/watch') {
 	warn "$progname warning: Found watchfile in $dir,\n  but couldn't find/read changelog; skipping\n";
@@ -343,7 +455,6 @@ for my $debdir (@debdirs) {
     my $parentdir = dirname($dir);
     my $package = $$debdir[1];
     my $version = $$debdir[2];
-    my $good_dirname = $$debdir[3];
 
     if (exists $donepkgs{$parentdir}{$package}) {
 	warn "$progname warning: Skipping $dir/debian/watch\n  as this package has already been scanned successfully\n";
@@ -359,9 +470,12 @@ for my $debdir (@debdirs) {
 	next;
     }
 
-    if (process_watchfile($dir, $package, $version, $good_dirname) == 0) {
+    if (process_watchfile($dir, $package, $version, "$dir/debian/watch")
+	== 0) {
 	$donepkgs{$parentdir}{$package} = 1;
     }
+    # Are there any warnings to give if we're using dehs?
+    dehs_output if $dehs;
 }
 
 print "-- Scan finished\n" if $verbose;
@@ -397,7 +511,7 @@ exit $found ? 0 : 1;
 
 sub process_watchline ($$$$$$)
 {
-    my ($line, $watch_version, $pkg_dir, $pkg, $pkg_version, $good_dirname) = @_;
+    my ($line, $watch_version, $pkg_dir, $pkg, $pkg_version, $watchfile) = @_;
 
     my ($base, $site, $dir, $filepattern, $pattern, $lastversion, $action);
     my %options = ();
@@ -407,11 +521,13 @@ sub process_watchline ($$$$$$)
     my $style='new';
     my $urlbase;
 
+    %dehs_tags = ('package' => $pkg);
+
     if ($watch_version == 1) {
 	($site, $dir, $pattern, $lastversion, $action) = split ' ', $line;
 
 	if (! defined $lastversion or $site =~ /\(.*\)/ or $dir =~ /\(.*\)/) {
-	    warn "$progname warning: there appears to be a version 2 format line in\n  the version 1 watchfile $pkg_dir/debian/watch;\n  Have you forgotten a 'version=2' line at the start, perhaps?\n  Skipping the line: $line\n";
+	    warn "$progname warning: there appears to be a version 2 format line in\n  the version 1 watchfile $watchfile;\n  Have you forgotten a 'version=2' line at the start, perhaps?\n  Skipping the line: $line\n";
 	    return 1;
 	}
 	if ($site !~ m%\w+://%) {
@@ -426,7 +542,7 @@ sub process_watchline ($$$$$$)
 		$pattern =~ s/\?/./g;
 		$pattern =~ s/\*/.*/g;
 		$style='old';
-		warn "$progname warning: Using very old style of filename pattern in $pkg_dir/debian/watch\n  (this might lead to incorrect results): $3\n";
+		warn "$progname warning: Using very old style of filename pattern in $watchfile\n  (this might lead to incorrect results): $3\n";
 	    }
 	}
 
@@ -467,12 +583,12 @@ sub process_watchline ($$$$$$)
 	if ($base =~ m%^(\w+://[^/]+)%) {
 	    $site = $1;
 	} else {
-	    warn "$progname warning: Can't determine protocol and site in\n  $pkg_dir/debian/watch, skipping:\n  $line\n";
+	    warn "$progname warning: Can't determine protocol and site in\n  $watchfile, skipping:\n  $line\n";
 	    return 1;
 	}
 
 	# Find the path with the greatest version number matching the regex
-	$base = recursive_regex_dir($base, \%options, $pkg_dir);
+	$base = recursive_regex_dir($base, \%options, $watchfile);
 	if ($base eq '') { return 1; }
 
 	# We're going to make the pattern
@@ -485,7 +601,7 @@ sub process_watchline ($$$$$$)
 
     # Check all's OK
     if ($pattern !~ /\(.*\)/) {
-	warn "$progname warning: Filename pattern missing version delimeters ()\n  in $pkg_dir/debian/watch, skipping:\n  $line\n";
+	warn "$progname warning: Filename pattern missing version delimeters ()\n  in $watchfile, skipping:\n  $line\n";
 	return 1;
     }
 
@@ -497,7 +613,7 @@ sub process_watchline ($$$$$$)
 	$request = HTTP::Request->new('GET', $base);
 	$response = $user_agent->request($request);
 	if (! $response->is_success) {
-	    warn "$progname warning: In watchfile $pkg_dir/debian/watch, reading webpage\n  $base failed: " . $response->status_line . "\n";
+	    warn "$progname warning: In watchfile $watchfile, reading webpage\n  $base failed: " . $response->status_line . "\n";
 	    return 1;
 	}
 
@@ -536,14 +652,14 @@ sub process_watchline ($$$$$$)
 	    @hrefs = Devscripts::Versort::versort(@hrefs);
 	    ($newversion, $newfile) = @{$hrefs[0]};
 	} else {
-	    warn "$progname warning: In $pkg_dir/debian/watch,\n  no matching hrefs for watch line\n  $line\n";
+	    warn "$progname warning: In $watchfile,\n  no matching hrefs for watch line\n  $line\n";
 	    return 1;
 	}
     }
     else {
 	# Better be an FTP site
 	if ($site !~ m%^ftp://%) {
-	    warn "$progname warning: Unknown protocol in $pkg_dir/debian/watch, skipping:\n  $site\n";
+	    warn "$progname warning: Unknown protocol in $watchfile, skipping:\n  $site\n";
 	    return 1;
 	}
 
@@ -558,7 +674,7 @@ sub process_watchline ($$$$$$)
 	    else { delete $ENV{'FTP_PASSIVE'}; }
 	}
 	if (! $response->is_success) {
-	    warn "$progname warning: In watchfile $pkg_dir/debian/watch, reading FTP directory\n  $base failed: " . $response->status_line . "\n";
+	    warn "$progname warning: In watchfile $watchfile, reading FTP directory\n  $base failed: " . $response->status_line . "\n";
 	    return 1;
 	}
 
@@ -586,7 +702,7 @@ sub process_watchline ($$$$$$)
 	    @files = Devscripts::Versort::versort(@files);
 	    ($newversion, $newfile) = @{$files[0]};
 	} else {
-	    warn "$progname warning: In $pkg_dir/debian/watch no matching files for watch line\n  $line\n";
+	    warn "$progname warning: In $watchfile no matching files for watch line\n  $line\n";
 	    return 1;
 	}
     }
@@ -602,7 +718,7 @@ sub process_watchline ($$$$$$)
 	    $newversion = $1;
 	} else {
 	    warn <<"EOF";
-$progname warning: In $pkg_dir/debian/watch, couldn\'t determine a
+$progname warning: In $watchfile, couldn\'t determine a
   pure numeric version number from the file name for watch line
   $line
   and file name $newfile
@@ -622,6 +738,32 @@ EOF
 	$lastversion=$pkg_version;
     }
 
+    # So what have we got to report now?
+    my $upstream_url;
+    # Upstream URL?  Copying code from below - ugh.
+    if ($site =~ m%^http://%) {
+	# absolute URL?
+	if ($newfile =~ m%^\w+://%) {
+	    $upstream_url = $newfile;
+	}
+	# absolute filename?
+	elsif ($newfile =~ m%^/%) {
+	    $upstream_url = "$site$newfile";
+	}
+	# relative filename, we hope
+	else {
+	    $upstream_url = "$urlbase$newfile";
+	}
+    }
+    else {
+	# FTP site
+	$upstream_url = "$base$newfile";
+    }
+
+    $dehs_tags{'debian_uversion'} = $lastversion;
+    $dehs_tags{'upstream_version'} = $newversion;
+    $dehs_tags{'upstream_url'} = $upstream_url;
+
     print "Newest version on remote site is $newversion, local version is $lastversion\n"
 	if $verbose;
 
@@ -629,6 +771,7 @@ EOF
     # compare different, whereas they are treated as equal by dpkg
     if (system("dpkg --compare-versions '$lastversion' eq '$newversion'") == 0) {
 	print " => Package is up to date\n" if $verbose;
+	$dehs_tags{'status'} = "up to date";
 	return 0;
     }
 
@@ -637,6 +780,8 @@ EOF
     if (system("dpkg --compare-versions '$lastversion' gt '$newversion'") == 0) {
         if ($verbose) {
 	    print " => remote site does not even have current version\n";
+	} elsif ($dehs) {
+	    $dehs_tags{'status'} = "Debian version newer than remote site";
 	} else {
 	    print "$pkg: remote site does not even have current version\n";
 	}
@@ -647,18 +792,22 @@ EOF
 	$found++;
     }
 
-    if (-f "../$newfile_base") {
-        print " => $newfile_base already in package directory\n"
-	    if $verbose;
-        return 0;
-    }
-    if (-f "../${pkg}_${newversion}.orig.tar.gz") {
-        warn "$progname warning: In directory $pkg_dir, found file\n  ${pkg}_${newversion}.orig.tar.gz but not $newfile_base,\n  which is the newest file available on remote site.  Skipping.\n";
-        return 0;
+    if (defined $pkg_dir) {
+	if (-f "../$newfile_base") {
+	    print " => $newfile_base already in package directory\n"
+		if $verbose;
+	    return 0;
+	}
+	if (-f "../${pkg}_${newversion}.orig.tar.gz") {
+	    warn "$progname warning: From directory $pkg_dir, found file\n  ../${pkg}_${newversion}.orig.tar.gz but not ../$newfile_base,\n  which is the newest file available on remote site.  Skipping.\n";
+	    return 0;
+	}
     }
 
     if ($verbose) {
 	print " => Newer version available\n";
+    } elsif ($dehs) {
+	$dehs_tags{'status'} = "Newer version available";
     } else {
 	print "$pkg: Newer version ($newversion) available on remote site\n  (local version is $lastversion)\n";
     }
@@ -667,36 +816,13 @@ EOF
 
     print "-- Downloading updated package $newfile_base\n" if $verbose;
     # Download newer package
-    if ($site =~ m%^http://%) {
-	# absolute URL?
-	if ($newfile =~ m%^\w+://%) {
-	    print STDERR "$progname debug: requesting URL $newfile\n" if $debug;
-	    $request = HTTP::Request->new('GET', $newfile);
-	    $response = $user_agent->request($request, "../$newfile_base");
-	    if (! $response->is_success) {
-		warn "$progname warning: In directory $pkg_dir, downloading\n  $newfile failed: " . $response->status_line . "\n";
-		return 1;
-	    }
-	}
-	# absolute filename?
-	elsif ($newfile =~ m%^/%) {
-	    print STDERR "$progname debug: requesting URL $site$newfile\n" if $debug;
-	    $request = HTTP::Request->new('GET', "$site$newfile");
-	    $response = $user_agent->request($request, "../$newfile_base");
-	    if (! $response->is_success) {
-		warn "$progname warning: In directory $pkg_dir, downloading\n  $site$newfile failed: " . $response->status_line . "\n";
-		return 1;
-	    }
-	}
-	# relative filename, we hope
-	else {
-	    print STDERR "$progname debug: requesting URL $urlbase$newfile\n" if $debug;
-	    $request = HTTP::Request->new('GET', "$urlbase$newfile");
-	    $response = $user_agent->request($request, "../$newfile_base");
-	    if (! $response->is_success) {
-		warn "$progname warning: In directory $pkg_dir, downloading\n  $urlbase$newfile failed: " . $response->status_line . "\n";
-		return 1;
-	    }
+    if ($upstream_url =~ m%^http://%) {
+	print STDERR "$progname debug: requesting URL $upstream_url\n" if $debug;
+	$request = HTTP::Request->new('GET', $upstream_url);
+	$response = $user_agent->request($request, "../$newfile_base");
+	if (! $response->is_success) {
+	    warn "$progname warning: In directory $pkg_dir, downloading\n  $upstream_url failed: " . $response->status_line . "\n";
+	    return 1;
 	}
     }
     else {
@@ -704,15 +830,15 @@ EOF
 	if (exists $options{'pasv'}) {
 	    $ENV{'FTP_PASSIVE'}=$options{'pasv'};
 	}
-	print STDERR "$progname debug: requesting URL $base$newfile\n" if $debug;
-	$request = HTTP::Request->new('GET', "$base$newfile");
+	print STDERR "$progname debug: requesting URL $upstream_url\n" if $debug;
+	$request = HTTP::Request->new('GET', "$upstream_url");
 	$response = $user_agent->request($request, "../$newfile_base");
 	if (exists $options{'pasv'}) {
 	    if (defined $passive) { $ENV{'FTP_PASSIVE'}=$passive; }
 	    else { delete $ENV{'FTP_PASSIVE'}; }
 	}
 	if (! $response->is_success) {
-	    warn "$progname warning: In directory $pkg_dir, downloading\n  $base$newfile failed: " . $response->status_line . "\n";
+	    warn "$progname warning: In directory $pkg_dir, downloading\n  $upstream_url failed: " . $response->status_line . "\n";
 	    return 1;
 	}
     }
@@ -726,6 +852,12 @@ EOF
 	if ($symlink and $newfile_base =~ /\.(tar\.gz|tgz)$/) {
 	    print "    and symlinked ${pkg}_${newversion}.orig.tar.gz to it\n";
 	}
+    } elsif ($dehs) {
+	my $msg = "Successfully downloaded updated package $newfile_base";
+	if ($symlink and $newfile_base =~ /\.(tar\.gz|tgz)$/) {
+	    $msg .= " and symlinked ${pkg}_${newversion}.orig.tar.gz to it";
+	}
+	dehs_msg($msg);
     } else {
 	print "$pkg: Successfully downloaded updated package $newfile_base\n";
 	if ($symlink and $newfile_base =~ /\.(tar\.gz|tgz)$/) {
@@ -740,10 +872,22 @@ EOF
 
 	if ($watch_version > 1) {
 	    print "-- Executing user specified script\n     $action --upstream-version $newversion $newfile_base" if $verbose;
-	    system("$action --upstream-version $newversion $usefile");
+	    if ($dehs) {
+		my $msg = "Executing user specified script: $action --upstream-version $newversion $newfile_base; output:\n";
+		$msg .= `$action --upstream-version $newversion $usefile 2>&1`;
+		dehs_msg($msg);
+	    } else {
+		system("$action --upstream-version $newversion $usefile");
+	    }
 	} else {
 	    print "-- Executing user specified script $action $newfile_base $newversion" if $verbose;
-	    system("$action $usefile $newversion");
+	    if ($dehs) {
+		my $msg = "Executing user specified script: $action $newfile_base $newversion; output:\n";
+		$msg .= `$action $usefile $newversion 2>&1`;
+		dehs_msg($msg);
+	    } else {
+		system("$action $usefile $newversion");
+	    }
 	}
     }
 
@@ -751,8 +895,8 @@ EOF
 }
 
 
-sub recursive_regex_dir($$$) {
-    my ($base, $optref, $pkg_dir)=@_;
+sub recursive_regex_dir ($$$) {
+    my ($base, $optref, $watchfile)=@_;
 
     $base =~ m%^(\w+://[^/]+)/(.*)$%;
     my $site = $1;
@@ -763,7 +907,8 @@ sub recursive_regex_dir($$$) {
 	if ($dirpattern =~ /\(.*\)/) {
 	    print STDERR "$progname debug: dir=>$dir  dirpattern=>$dirpattern\n"
 		if $debug;
-	    my $newest_dir=newest_dir($site, $dir, $dirpattern, $optref, $pkg_dir);
+	    my $newest_dir =
+		newest_dir($site, $dir, $dirpattern, $optref, $watchfile);
 	    print STDERR "$progname debug: newest_dir => '$newest_dir'\n"
 		if $debug;
 	    if ($newest_dir ne '') {
@@ -781,8 +926,8 @@ sub recursive_regex_dir($$$) {
 
 
 # very similar to code above
-sub newest_dir($$$$) {
-    my ($site, $dir, $pattern, $optref, $pkg_dir) = @_;
+sub newest_dir ($$$$$) {
+    my ($site, $dir, $pattern, $optref, $watchfile) = @_;
     my $base = $site.$dir;
     my ($request, $response);
 
@@ -791,7 +936,7 @@ sub newest_dir($$$$) {
 	$request = HTTP::Request->new('GET', $base);
 	$response = $user_agent->request($request);
 	if (! $response->is_success) {
-	    warn "$progname warning: In watchfile $pkg_dir/debian/watch, reading webpage\n  $base failed: " . $response->status_line . "\n";
+	    warn "$progname warning: In watchfile $watchfile, reading webpage\n  $base failed: " . $response->status_line . "\n";
 	    return 1;
 	}
 
@@ -825,7 +970,7 @@ sub newest_dir($$$$) {
 	    my ($newversion, $newdir) = @{$hrefs[0]};
 	    return $newdir;
 	} else {
-	    warn "$progname warning: In $pkg_dir/debian/watch,\n  no matching hrefs for pattern\n  $site$dir$pattern";
+	    warn "$progname warning: In $watchfile,\n  no matching hrefs for pattern\n  $site$dir$pattern";
 	    return 1;
 	}
     }
@@ -846,7 +991,7 @@ sub newest_dir($$$$) {
 	    else { delete $ENV{'FTP_PASSIVE'}; }
 	}
 	if (! $response->is_success) {
-	    warn "$progname warning: In watchfile $pkg_dir/debian/watch, reading webpage\n  $base failed: " . $response->status_line . "\n";
+	    warn "$progname warning: In watchfile $watchfile, reading webpage\n  $base failed: " . $response->status_line . "\n";
 	    return '';
 	}
 
@@ -875,7 +1020,7 @@ sub newest_dir($$$$) {
 	    my ($newversion, $newdir) = @{$dirs[0]};
 	    return $newdir;
 	} else {
-	    warn "$progname warning: In $pkg_dir/debian/watch no matching dirs for pattern\n  $site$base$pattern\n";
+	    warn "$progname warning: In $watchfile no matching dirs for pattern\n  $site$base$pattern\n";
 	    return '';
 	}
     }
@@ -885,12 +1030,13 @@ sub newest_dir($$$$) {
 # parameters are dir, package, upstream version, good dirname
 sub process_watchfile ($$$$)
 {
-    my ($dir, $package, $version, $good_dirname) = @_;
+    my ($dir, $package, $version, $watchfile) = @_;
     my $watch_version=0;
     my $status=0;
+    %dehs_tags = ();
 
-    unless (open WATCH, 'debian/watch') {
-	warn "$progname warning: could not open $dir/debian/watch: $!\n";
+    unless (open WATCH, $watchfile) {
+	warn "$progname warning: could not open $watchfile: $!\n";
 	return 1;
     }
 
@@ -903,7 +1049,7 @@ sub process_watchfile ($$$$)
 	chomp;
 	if (s/(?<!\\)\\$//) {
 	    if (eof(WATCH)) {
-		warn "$progname warning: $dir/debian/watch ended with \\; skipping last line\n";
+		warn "$progname warning: $watchfile ended with \\; skipping last line\n";
 		$status=1;
 		last;
 	    }
@@ -915,25 +1061,84 @@ sub process_watchfile ($$$$)
 	    if (/^version\s*=\s*(\d+)(\s|$)/) {
 		$watch_version=$1;
 		if ($watch_version < 2 or $watch_version > 2) {
-		    print STDERR "Error: $dir/debian/watch version number is unrecognised; skipping watchfile\n";
+		    warn "$progname ERROR: $watchfile version number is unrecognised; skipping watchfile\n";
 		    last;
 		}
 		next;
 	    } else {
-		warn "$progname warning: $dir/debian/watch is an obsolete version 1 watchfile;\n  please upgrade to a higher version\n  (see uscan(1) for details).\n";
+		warn "$progname warning: $watchfile is an obsolete version 1 watchfile;\n  please upgrade to a higher version\n  (see uscan(1) for details).\n";
 		$watch_version=1;
 	    }
 	}
 
+	# Are there any warnings from this part to give if we're using dehs?
+	dehs_output if $dehs;
+
 	# Handle shell \\ -> \
 	s/\\\\/\\/g if $watch_version==1;
-	print "-- In $dir/debian/watch, processing watchfile line:\n   $_\n" if $verbose;
+	print "-- In $watchfile, processing watchfile line:\n   $_\n" if $verbose;
 	$status +=
-	    process_watchline($_, $watch_version, $dir, $package, $version, $good_dirname);
+	    process_watchline($_, $watch_version, $dir, $package, $version,
+			      $watchfile);
+	dehs_output if $dehs;
     }
 
     close WATCH or
-	$status=1, warn "$progname warning: problems reading $dir/debian/watch\n";
+	$status=1, warn "$progname warning: problems reading $watchfile: $!\n";
 
     return $status;
+}
+
+
+# Collect up messages for dehs output into a tag
+sub dehs_msg ($)
+{
+    my $msg = $_[0];
+    $msg =~ s/\s*$//;
+    push @{$dehs_tags{'messages'}}, $msg;
+}
+
+sub dehs_warn ($)
+{
+    my $warning = $_[0];
+    $warning =~ s/\s*$//;
+    push @{$dehs_tags{'warnings'}}, $warning;
+}
+
+sub dehs_die ($)
+{
+    my $msg = $_[0];
+    $msg =~ s/\s*$//;
+    %dehs_tags = ('errors' => "$msg");
+    dehs_output;
+    exit 1;
+}
+
+sub dehs_output ()
+{
+    return unless $dehs;
+    my $output = 0;
+
+    for my $tag (qw(package debian_uversion upstream_version upstream_url
+		    status messages warnings errors)) {
+	if (exists $dehs_tags{$tag}) {
+	    if (! $output) {
+		print "<dehs>\n";
+		$output = 1;
+	    }
+	    if (ref $dehs_tags{$tag} eq "ARRAY") {
+		foreach my $entry (@{$dehs_tags{$tag}}) {
+		    print "<$tag>$entry</$tag>\n";
+		}
+	    } else {
+		print "<$tag>$dehs_tags{$tag}</$tag>\n";
+	    }
+	}
+    }
+    if ($output) {
+	print "</dehs>\n";
+    }
+
+    # Don't repeat output
+    %dehs_tags = ();
 }
