@@ -4,9 +4,11 @@ devscripts (2.8.11) UNRELEASED; urgency=low
     - Added a dependency on sed (>= 2.95) as wnpp uses the T command (thanks
       to Olafur Jens Sig for alerting me to this one)
     - bts: fix --cache-mode=mbox after --cache-mode=min bug (closes: #290487)
+    - debsign: check for gpg version for no-show-policy-url option
+      (closes: #293792)
   * Joshua Kwan
-    - Don't use --emulate-md-encode-bug in dscverify anymore, it's been
-      obsoleted with gnupg 1.4.0. (closes: #293791)
+    - dscverify: Don't use --emulate-md-encode-bug in dscverify anymore,
+      it's been obsoleted with gnupg 1.4.0. (closes: #293791)
 
  -- Joshua Kwan <joshk@triplehelix.org>  Sat,  5 Feb 2005 11:41:35 -0800
 

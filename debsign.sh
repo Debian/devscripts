@@ -107,13 +107,29 @@ mustsetvar () {
 signfile () {
     if [ $signinterface = gpg ]
     then
-	(cat "$1" ; echo "") | \
-	    $signcommand --local-user "$2" --clearsign --no-show-policy-url \
-		--armor --textmode --output - - > "$1.asc" || \
-	{ SAVESTAT=$?
-	  echo "$PROGNAME: gpg error occurred!  Aborting...." >&2
-	  exit $SAVESTAT
-	}
+	gpgversion=`gpg --version | head -1 | cut -d' ' -f3`
+	gpgmajorversion=`echo $gpgversion | cut -d. -f1`
+	gpgminorversion=`echo $gpgversion | cut -d. -f2`
+	if [ $gpgmajorversion -gt 1 -o $gpgminorversion -ge 4 ]
+	then
+		(cat "$1" ; echo "") | \
+		    $signcommand --local-user "$2" --clearsign \
+		    --list-options no-show-policy-urls \
+		    --armor --textmode --output - - > "$1.asc" || \
+		{ SAVESTAT=$?
+		  echo "$PROGNAME: gpg error occurred!  Aborting...." >&2
+		  exit $SAVESTAT
+		}
+	else
+		(cat "$1" ; echo "") | \
+		    $signcommand --local-user "$2" --clearsign \
+		        --no-show-policy-url \
+			--armor --textmode --output - - > "$1.asc" || \
+		{ SAVESTAT=$?
+		  echo "$PROGNAME: gpg error occurred!  Aborting...." >&2
+		  exit $SAVESTAT
+		}
+	fi
     else
 	$signcommand -u "$2" +clearsig=on -fast < "$1" > "$1.asc"
     fi
