@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Julian Gilbey <jdg@debian.org>
 Uploaders: Joshua Kwan <joshk@triplehelix.org>
 Standards-Version: 3.6.1
-Build-Depends: perl, debhelper (>= 4.0.0)
+Build-Depends: perl, debhelper (>= 4.0.0), libtimedate-perl, libwww-perl
 
 Package: devscripts
 Architecture: any
