@@ -218,6 +218,10 @@ sub _deb_vercmp {
     $lengtha = @$reva;
     $lengthb = @$revb;
 
+    if ($lengtha == 0 && $lengthb == 0) {
+        return 0;       # both lack Debian versions - #236344
+    }
+
     $i=0;
     for (;;) {
 	$nondiga = $reva->[$i];
