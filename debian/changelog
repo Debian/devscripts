@@ -4,6 +4,8 @@ devscripts (2.8.11) UNRELEASED; urgency=low
     - Added a dependency on sed (>= 2.95) as wnpp uses the T command (thanks
       to Olafur Jens Sig for alerting me to this one)
     - bts: fix --cache-mode=mbox after --cache-mode=min bug (closes: #290487)
+    - debchange: support --changelog and --news options for specifying
+      changelog (closes: #219135, #261878)
     - debsign: check for gpg version for no-show-policy-url option
       (closes: #293792)
   * Joshua Kwan

@@ -11,7 +11,8 @@ the Debian changelog in the current source tree.  This command must be
 run from within that tree.  If the text of the change is given on the
 commandline, \fBdebchange\fR will run in batch mode and simply add the
 text, with line breaks as necessary, at the appropriate place in
-\fIdebian/changelog\fR.  If no text is specified then \fBdebchange\fR
+\fIdebian/changelog\fR (or the changelog specified by options, as
+described below).  If no text is specified then \fBdebchange\fR
 will run the editor as determined by \fBsensible-editor\fR for you to
 edit the file.  (The environment variables \fBVISUAL\fR and
 \fBEDITOR\fR are used in this order to determine which editor to use.)
@@ -107,6 +108,10 @@ match the full directory name.  If \fIregex\fR contains the string
 determined from the changelog.  The default value for the regex is:
 \'PACKAGE(-.*)?', thus matching directory names such as PACKAGE and
 PACKAGE-version.
+.PP
+The default changelog to be edited is \fIdebian/changelog\fR; however,
+this can be changed using the \fB\-\-changelog\fR option or the
+CHANGELOG environment variable, as described below.
 .SH OPTIONS
 .TP
 .BR \-\-increment ", " \-i
@@ -160,6 +165,17 @@ instead of using the previous changelog entry's distribution.
 Use the specified urgency in the new changelog entry, if any,
 instead of using the default "low".
 .TP
+\fB\-\-changelog \fIchangelog\fR, \fB\-c \fIchangelog\fR
+This will edit \fIchangelog\fR instead of the standard
+\fIdebian/changelog\fR.  This option overrides any CHANGELOG
+environment variable setting.  Also, no directory traversing or
+checking will be performed when this option is used.
+.TP
+\fB\-\-news\fR
+This will edit \fIdebian/NEWS.Debian\fR instead of the regular
+changelog.  Directory searching will be performed.  Cannot be used
+together with \fB\-\-changelog\fR.
+.TP
 \fB\-\-check-dirname-level\fR \fIN\fR
 See the above section "Directory name checking" for an explanation of
 this option.
@@ -202,6 +218,12 @@ in \fBdevscripts.conf\fR(5).
 .TP
 .BR DEBEMAIL ", " EMAIL ", " DEBFULLNAME
 See the above description of the use of these environment variables.
+.TP
+.B CHANGELOG
+This variable specifies the changelog to edit in place of
+\fIdebian/changelog\fR.  No directory traversal or checking is
+performed when this variable is set.  This variable is overridden by
+the \fB\-\-changelog\fR command-line setting.
 .TP
 .BR VISUAL ", " EDITOR
 These environment variables (in this order) determine the editor used

@@ -1,25 +1,7 @@
 #! /usr/bin/perl -w
 
 # debchange: update the debian changelog using your favorite visual editor
-# Options:
-# -i           generates a new changelog section increasing the Debian
-#              release number
-# -a           Adds an entry to the current changelog section
-# -v version   generates a new changelog section with given version number
-# -d, --fromdirname
-#              Like -v, but takes version from directory name
-# -n, --nmu    Increments version, but for a NMU
-# -p           preserve directory name
-# --closes nnnnn,nnnnn,... Closes bug reports
-# --[no]query  Don't contact the BTS to find the bug report details
-# --check-dirname-level
-# --check-dirname-regex  Control how directory-name checking is performed
-# --no-conf, --noconf    Do not read any configuration files
-# Without any options, the package will look for an .upload file in the
-# parent directory to determine whether or not the version number should
-# be incremented or not.
-#
-# debchange --help (or -h) prints a usage message.
+# For options, see the usage message below.
 #
 # When creating a new changelog section, if either of the environment
 # variables DEBEMAIL or EMAIL is set, debchange will use this as the
@@ -92,6 +74,12 @@ Options:
          Use the specified distribution in the new changelog entry, if any
   -u, --urgency <urgency>
          Use the specified urgency in the new changelog entry, if any
+  -c, --changelog <changelog>
+         Specify the name of the changelog to use in place of debian/changelog
+         No directory traversal or checking is performed in this case.
+  --news
+         Specify that debian/NEWS.Debian is to be edited; cannot be used
+         with --changelog
   --check-dirname-level N
          How much to check directory names:
          N=0   never
@@ -187,7 +175,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # We use bundling so that the short option behaviour is the same as
 # with older debchange versions.
 my ($opt_help, $opt_version);
-my ($opt_i, $opt_a, $opt_v, $opt_d, $opt_D, $opt_u, $opt_n, @closes);
+my ($opt_i, $opt_a, $opt_v, $opt_d, $opt_D, $opt_u, $opt_n, $opt_c, @closes);
+my ($opt_news);
 my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 $opt_u = 'low';
 
@@ -205,6 +194,8 @@ GetOptions("help|h" => \$opt_help,
 	   "n|nmu" => \$opt_n,
 	   "query!" => \$opt_query,
 	   "closes=s" => \@closes,
+	   "c|changelog=s" => \$opt_c,
+	   "news" => \$opt_news,
 	   "ignore-dirname" => \$opt_ignore,
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
@@ -233,36 +224,58 @@ if (defined $opt_level) {
 
 if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
 
+fatal "Only one of -c/--changelog and --news is allowed; try $progname --help for more help"
+    if $opt_c and $opt_news;
+
+my $changelog_path = $opt_c || $ENV{'CHANGELOG'} || 'debian/changelog';
+if ($opt_news) { $changelog_path = "debian/NEWS.Debian"; }
+if ($changelog_path ne 'debian/changelog' and $changelog_path ne 'debian/NEWS.Debian') {
+    $check_dirname_level = 0;
+}
+
 @closes = split(/,/, join(',', @closes));
 map { s/^\#//; } @closes;  # remove any leading # from bug numbers
 
 # Only allow at most one non-help option
-fatal "Only one of -a, -i, -v, -d is allowed; try $progname -h for more help"
+fatal "Only one of -a, -i, -v, -d is allowed; try $progname --help for more help"
     if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_v?1:0) + ($opt_d?1:0) > 1;
 
 # We'll process the rest of the command line later.
 
-# Look for the debian changelog
+# Look for the changelog
 my $chdir = 0;
-until (-f 'debian/changelog') {
-    $chdir = 1;
-    chdir '..' or die "$progname: can't chdir ..: $!\n";
-    if (cwd() eq '/') {
-	die "$progname: cannot find debian/changelog anywhere!\nAre you in the source code tree?\n";
+if ($changelog_path eq 'debian/changelog') {
+    until (-f 'debian/changelog') {
+	$chdir = 1;
+	chdir '..' or die "$progname: can't chdir ..: $!\n";
+	if (cwd() eq '/') {
+	    die "$progname: cannot find debian/changelog anywhere!\nAre you in the source code tree?\n";
+	}
+    }
+
+    # Can't write, so stop now.
+    if (! -w 'debian/changelog')
+    {
+        die "$progname: debian/changelog is not writable!\n";
     }
 }
+else {
+    unless (-f $changelog_path) {
+	die "$progname: cannot find $changelog_path!\nAre you in the correct directory?\n";
+    }
 
-# Can't write, so stop now.
-if (! -w 'debian/changelog')
-{
-        die "$progname: debian/changelog is not writable!\n";
+    # Can't write, so stop now.
+    if (! -w $changelog_path)
+    {
+        die "$progname: $changelog_path is not writable!\n";
+    }
 }
 
 #####
 
 # Find the current version number etc.
 my %changelog;
-open PARSED, "dpkg-parsechangelog |"
+open PARSED, qq[dpkg-parsechangelog -l"$changelog_path" | ]
     or fatal "Cannot execute dpkg-parsechangelog: $!";
 my $last;
 while (<PARSED>) {
@@ -327,8 +340,8 @@ if (-f "debian/RELEASED") {
     unlink("debian/RELEASED");
 }
 
-if ( -e "debian/changelog.dch" ) {
-    fatal "The backup file debian/changelog.dch already exists --\n" .
+if ( -e "$changelog_path.dch" ) {
+    fatal "The backup file $changelog_path.dch already exists --\n" .
 		  "please move it before trying again";
 }
 
@@ -532,8 +545,8 @@ if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a) {
 
 
 # Open in anticipation....
-open S, "debian/changelog" or fatal "Cannot open changelog: $!";
-open O, ">debian/changelog.dch"
+open S, $changelog_path or fatal "Cannot open changelog: $!";
+open O, ">$changelog_path.dch"
     or fatal "Cannot write to temporary file: $!";
 # Turn off form feeds; taken from perlform
 select((select(O), $^L = "")[0]);
@@ -675,7 +688,7 @@ else { # $opt_a = 1
     print O <S>;
 }
 
-close S or fatal "Error closing debian/changelog: $!";
+close S or fatal "Error closing $changelog_path: $!";
 close O or fatal "Error closing temporary changelog: $!";
 
 if ($warnings) {
@@ -689,15 +702,15 @@ if ($warnings) {
 
 # Now Run the Editor; always run if doing "closes" to give a chance to check
 if (! $TEXT or @closes_text) {
-    my $mtime = (stat("debian/changelog.dch"))[9];
+    my $mtime = (stat("$changelog_path.dch"))[9];
     defined $mtime or fatal
 	"Error getting modification time of temporary changelog: $!";
 
-    system("sensible-editor +$line debian/changelog.dch") == 0 or
+    system("sensible-editor +$line $changelog_path.dch") == 0 or
     fatal "Error editing the changelog";
 
     if (! @closes_text) { # so must have a changelog added by hand
-	my $newmtime = (stat("debian/changelog.dch"))[9];
+	my $newmtime = (stat("$changelog_path.dch"))[9];
 	defined $newmtime or fatal
 	    "Error getting modification time of temporary changelog: $!";
 	if ($mtime == $newmtime) {
@@ -707,7 +720,7 @@ if (! $TEXT or @closes_text) {
     }
 }
 
-copy("debian/changelog.dch","debian/changelog") or
+copy("$changelog_path.dch","$changelog_path") or
     fatal "Couldn't replace changelog with new changelog: $!";
 
 # Now find out what the new package version number is if we need to
@@ -761,8 +774,8 @@ sub BEGIN {
 }
 
 sub END {
-    unlink "debian/changelog.dch" or
-	warn "$progname warning: Could not remove debian/changelog.dch"
+    unlink "$changelog_path.dch" or
+	warn "$progname warning: Could not remove $changelog_path.dch"
 	    if $tmpchk;
 }
 
