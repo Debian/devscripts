@@ -1,9 +1,12 @@
-devscripts (2.9) UNRELEASED; urgency=HIGH
+devscripts (2.8.1) UNRELEASED; urgency=medium
 
   * debchange.pl: Don't check for -w 'debian/changelog', check whether
     we're in debian/ first, to avoid false positives. (Closes: #264310)
+  * tagpending.sh: Steve Kowalik's personal email is s3kr1t, so don't use
+    mail(1) to send the control email, but toss it all to bts.pl which will
+    handle all the $DEBEMAIL and $EMAIL and such. (Closes: #264767)
 
- -- Joshua Kwan <joshk@triplehelix.org>  Sun,  8 Aug 2004 00:56:34 -0700
+ -- Joshua Kwan <joshk@triplehelix.org>  Tue, 10 Aug 2004 09:25:22 -0700
 
 devscripts (2.8) unstable; urgency=low
 

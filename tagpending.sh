@@ -77,20 +77,23 @@ fi
 # Could use dh_listpackages, but no guarantee that it's installed.
 src_packages=$(awk '/Package: / { printf $2 " "}' debian/control)
 
-( 
-  IFS="
+IFS="
 "
-  echo "package $src_packages"  
+
+if [ "$DRY" = 1 ]; then
+  echo -n "tagpending info: Would tag these bugs pending: "
 
   for bug in $to_be_tagged; do
-    echo "tag $bug + pending"
+    echo "$bug "
   done
 
-  echo thanks
-) | (
-if [ "$DRY" = 1 ]; then
-  cat
+  exit 0
 else
-  mail -s 'Tag bugs pending' control@bugs.debian.org
+  BTS_ARGS="package $src_packages"
+
+  for bug in $to_be_tagged; do
+    BTS_ARGS="$BTS_ARGS. tag $bug + pending "
+  done
+
+  eval bts ${BTS_ARGS}
 fi
-)
