@@ -27,7 +27,6 @@
 bts - developers' command line interface to the BTS
 
 =cut
-#'
 
 use 5.006_000;
 use strict;
@@ -293,7 +292,6 @@ For example, on most Linux systems a good thing to do would be:
 BROWSER='mozilla -raise -remote "openURL(%s,new-window)":links'
 
 =cut
-#'
 
 sub bts_show {
     my $thing=shift or die "bts show: display what bug?\n";
@@ -352,7 +350,6 @@ All of the other comments above about "bts show" apply equally to "bts
 bugs".
 
 =cut
-#'
 
 sub bts_bugs {
     my $url = shift;
@@ -443,7 +440,6 @@ Change the submitter address of a bug, with `!' meaning
 `use the address on the current email as the new submitter address'.
 
 =cut
-#'
 
 sub bts_submitter {
     my $bug=checkbug(shift) or die "bts submitter: change submitter of what bug?\n";
@@ -521,6 +517,11 @@ sub bts_tags {
 	$command .= " $flag";
 	shift;
     }
+    elsif ($_[0] =~ s/^([-+=])//) {
+	$flag = $1;
+	$command .= " $flag";
+    }
+
     if ($flag ne '=' && ! @_) {
 	die "bts tags: set what tag?\n";
     }
@@ -609,7 +610,6 @@ will receive all of the email corresponding to the bug instead of the
 usual maintainer.
 
 =cut
-#'
 
 sub bts_owner {
     my $bug=checkbug(shift) or die "bts owner: change owner of what bug?\n";
