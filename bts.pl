@@ -1042,6 +1042,11 @@ sub browse {
     prunecache();
     my $thing=shift;
     
+    if ($thing eq '') {
+	runbrowser($btsurl);
+	return;
+    }
+
     my $hascache=-d $cachedir;
     my $cachefile=cachefile($thing);
 
