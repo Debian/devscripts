@@ -55,10 +55,10 @@ wget -qN http://www.debian.org/devel/wnpp/orphaned
 # matching lines and then processing them, this attempts to sed
 # every line; those which succeed execute the 'p' command, those
 # which don't skip over it to the label 'd'
-sed -ne 's/<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:]*\): \([^<]*\)<\/a>.*/O \1 \2 -- \3/; T d; p; : d' orphaned > $WNPP
+sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:]*\): \([^<]*\)<\/a>.*/O \1 \2 -- \3/; T d; p; : d' orphaned > $WNPP
 
 wget -qN http://www.debian.org/devel/wnpp/rfa_bypackage
-sed -ne 's/<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:]*\): \([^<]*\)<\/a>.*/RFA \1 \2 -- \3/; T d; p; : d' rfa_bypackage >> $WNPP
+sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:]*\): \([^<]*\)<\/a>.*/RFA \1 \2 -- \3/; T d; p; : d' rfa_bypackage >> $WNPP
 
 cut -f3 -d' ' $WNPP | sort > $WNPP_PACKAGES
 
@@ -70,7 +70,7 @@ cut -f3 -d' ' $WNPP | sort > $WNPP_PACKAGES
 # (and should match Devscripts/Packages.pm)
 
 grep -B2 -A7 'Status: install ok installed' /var/lib/dpkg/status | \
-grep '\(Package\|Source\)' | \
+grep '^\(Package\|Source\):' | \
 cut -f2 -d' ' | \
 sort -u \
 > $INSTALLED
