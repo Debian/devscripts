@@ -5,9 +5,9 @@
 #export DH_VERBOSE=1
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
-CFLAGS := CFLAGS='-g -O0 -Wall'
+optimize := -O0
 else
-CFLAGS := CFLAGS='-g -O2 -Wall'
+optimize := -O2
 endif
 
 # Here we perform some checks to ensure that we haven't goofed or left
@@ -26,7 +26,7 @@ build-stamp-indep: test-stamp
 build-arch: build-stamp-arch
 build-stamp-arch: test-stamp
 	dh_testdir
-	$(MAKE) $(CFLAGS)
+	$(MAKE) CFLAGS='-g $(optimize) -Wall'
 	touch build-stamp-arch
 
 build: build-arch build-indep
