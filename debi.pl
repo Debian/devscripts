@@ -102,8 +102,6 @@ Usage: $progname [options] [.changes file]
     --no-conf or      Don\'t read devscripts config files;
       --noconf          must be the first option given
     -a<arch>          Search for changes file made for Debian build <arch>
-    -k<key>           The PGP/GPG key ID to use; overrides -m
-    -m<maintainer>    Sign using key of <maintainer>
     -t<target>        Search for changes file made for GNU <target> arch
     --check-dirname-level N
                       How much to check directory names:
@@ -137,8 +135,6 @@ This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of
 the GNU General Public License, version 2 or later.
 EOF
-
-my $message = '';
 
 # Start by setting default values
 my $check_dirname_level = 1;
@@ -187,14 +183,12 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 }
 
 # Command line options next
-my ($opt_help, $opt_version, $opt_a, $opt_t, $opt_m, $opt_k);
+my ($opt_help, $opt_version, $opt_a, $opt_t);
 my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 GetOptions("help" => \$opt_help,
 	   "version" => \$opt_version,
 	   "a=s" => \$opt_a,
 	   "t=s" => \$opt_t,
-           "m=s" => \$opt_m,
-           "k=s" => \$opt_k,
 	   "ignore-dirname" => \$opt_ignore,
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
@@ -318,29 +312,17 @@ while (<CHANGES>) {
     last if $infiles and /^[^ ]/;
     /^Files:/ and $infiles=1, next;
     next unless $infiles;
-    my 
-    if (/ [a-f0-9]{32} [0-9]+ \S+ \S+ (\S+)$/)
-    {
-        my $file = $1;
-        
-        if ($file =~ /\.deb$/)
-        {
-           (my $deb = $file) =~ /^([a-z0-9+\.-]+)_/ or
-                warn "unrecognised .deb name: $deb\n";
-           my $pkg = $1;
-           if (@ARGV)
-           {
-             if (exists $pkgs{$pkg})
-             {
-               push @debs, $deb;
-               $pkgs{$pkg}++;
-             }
-           }
-           else { push @debs, $deb; }
-        }
-        elsif ($progname eq 'debpanic')
-        {
-          $message .= " rm $file\n";
+    if (/ (\S*\.deb)$/) {
+        my $deb = $1;
+        $deb =~ /^([a-z0-9+\.-]+)_/ or warn "unrecognised .deb name: $deb\n";
+        my $pkg = $1;
+        if (@ARGV) {
+            if (exists $pkgs{$pkg}) {
+                push @debs, $deb;
+                $pkgs{$pkg}++;
+            }
+        } else {
+            push @debs, $deb;
         }
     }
 }
