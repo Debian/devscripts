@@ -1,3 +1,11 @@
+devscripts (2.8.10) unstable; urgency=low
+
+  * bts: better fix for option handling bug.  Options must all appear
+    before first action name (closes: #290253 again, and prevents other
+    similar problems with tag - tagname)
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 13 Jan 2005 10:57:15 +0000
+
 devscripts (2.8.9) unstable; urgency=medium
 
   * bts: fix option handling to allow '+' to go through again.

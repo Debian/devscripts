@@ -292,9 +292,7 @@ my ($opt_help, $opt_version, $opt_noconf);
 my ($opt_cachemode, $opt_mailreader);
 my $mboxmode = 0;
 
-# Don't let GetOptions choke on '+' (as in bts tags nn + blah)
-Getopt::Long::Configure("prefix_pattern=(--|-)");
-
+Getopt::Long::Configure('require_order');
 GetOptions("help|h" => \$opt_help,
 	   "version" => \$opt_version,
 	   "o" => \$offlinemode,
