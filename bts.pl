@@ -803,9 +803,7 @@ minimum), mbox (download the minimum plus the mbox version of the bug
 report) or full (the whole works).  The second is --force-refresh or
 -f, which forces the download, even if the cached bug report is
 up-to-date.  Both of these are configurable from the configuration
-file, as described below.  Please note that --force-refresh is
-required if --cache-mode=full is used on an already cached up-to-date
-bug report, otherwise the verbose stuff will not be downloaded.
+file, as described below.
 
 =cut
 
@@ -818,10 +816,10 @@ sub bts_cache {
     if (! -d $cachedir) {
 	if (! -d dirname($cachedir)) {
 	    mkdir(dirname($cachedir))
-		or die "bts: couldn't mkdir ".dirname($cachedir).": $!";
+		or die "bts: couldn't mkdir ".dirname($cachedir).": $!\n";
 	}
 	mkdir($cachedir)
-	    or die "bts: couldn't mkdir $cachedir: $!";
+	    or die "bts: couldn't mkdir $cachedir: $!\n";
     }
     
     my $tocache;
@@ -847,7 +845,7 @@ sub bts_cache {
     if (@oldbugs) {
 	tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	     O_RDWR()|O_CREAT(), 0600, $DB_HASH, "write")
-	    or die "bts: couldn't open DB file $timestampdb for writing: $!"
+	    or die "bts: couldn't open DB file $timestampdb for writing: $!\n"
 	    if ! tied %timestamp;
     }
 
@@ -897,7 +895,7 @@ sub bts_cleancache {
     # clean index
     tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	 O_RDWR()|O_CREAT(), 0600, $DB_HASH, "write")
-	or die "bts: couldn't open DB file $timestampdb for writing: $!"
+	or die "bts: couldn't open DB file $timestampdb for writing: $!\n"
 	if ! tied %timestamp;
 
     if ($toclean =~ /^\d+$/) {
@@ -1063,7 +1061,7 @@ sub mailbtsall {
 
 	my $pid = open(MAIL, "|-");
 	if (! defined $pid) {
-	    die "bts: Couldn't fork: $!";
+	    die "bts: Couldn't fork: $!\n";
 	}
 	if ($pid) {
 	    # parent
@@ -1077,16 +1075,16 @@ X-BTS-Version: $version
 # Automatically generated email from bts, devscripts version $version
 $body
 EOM
-	    close MAIL or die "bts: sendmail error: $!";
+	    close MAIL or die "bts: sendmail error: $!\n";
 	}
 	else {
 	    # child
 	    if ($debug) {
 		exec("/bin/cat")
-		    or die "bts: error running cat: $!";
+		    or die "bts: error running cat: $!\n";
 	    } else {
 		exec("/usr/sbin/sendmail", "-t")
-		    or die "bts: error running sendmail: $!";
+		    or die "bts: error running sendmail: $!\n";
 	    }
 	}
     }
@@ -1098,12 +1096,12 @@ EOM
 	if ($pid) {
 	    # parent
 	    print MAIL $body;
-	    close MAIL or die "bts: mail: $!";
+	    close MAIL or die "bts: mail: $!\n";
 	}
 	else {
 	    # child
 	    exec("mail", "-s$subject", $btsemail)
-		or die "bts: error running mail: $!";
+		or die "bts: error running mail: $!\n";
 	}
     }
 }
@@ -1124,10 +1122,10 @@ sub download {
     $url = "$btsurl$thing";
 
     if (! -d $cachedir) {
-	die "bts: download() called but no cachedir!";
+	die "bts: download() called but no cachedir!\n";
     }
 
-    chdir($cachedir) || die "bts: chdir $cachedir: $!";
+    chdir($cachedir) || die "bts: chdir $cachedir: $!\n";
 
     if (-f cachefile($thing)) {
 	$timestamp = get_timestamp($thing) || 0;
@@ -1135,9 +1133,24 @@ sub download {
 	if (is_manual($timestamp)) { $manual = 1; }
     }
 
+    # do we actually have to do more than we might have thought?
+    # yes, if we've caching with --cache-mode=mbox or full and the bug had
+    # previously been cached in a less thorough format
+    my $forcedownload = 0;
+    if ($thing =~ /^\d+$/ and ! $refreshmode and $cachemode ne 'min') {
+	if (! -r mboxfile($thing)) {
+	    $forcedownload = 1;
+	} elsif ($cachemode eq 'full' and -d $thing) {
+	    opendir DIR, $thing or die "bts: opendir $cachedir/$thing: $!\n";
+	    my @htmlfiles = grep { /^\d+\.html$/ } readdir(DIR);
+	    closedir DIR;
+	    $forcedownload = 1 unless @htmlfiles;
+	}
+    }
+
     print "Downloading $url ... ";
     IO::Handle::flush(\*STDOUT);
-    my ($ret, $msg, $livepage) = bts_mirror($url, $timestamp);
+    my ($ret, $msg, $livepage) = bts_mirror($url, $timestamp, $forcedownload);
     if ($ret == MIRROR_UP_TO_DATE) {
 	# we have an up-to-date version already, nothing to do
 	# and $timestamp is guaranteed to be well-defined
@@ -1145,31 +1158,7 @@ sub download {
 	    set_timestamp($thing, make_manual($timestamp));
 	}
 
-	if (! $manual and $mboxing) {
-	    my $mboxfile=mboxfile($thing);
-	    die "bts: trying to download mbox with invalid bug number?\n"
-		if ! $mboxfile;
-	    if (-r $mboxfile) {
-		print "(cache already up-to-date)\n";
-	    } else {
-		print "(cache of HTML up-to-date, downloading mbox...";
-		download_mbox($thing);
-		print "done.)\n";
-	    }
-	} elsif ($manual and ($cachemode eq 'mbox' or $cachemode eq 'full')) {
-	    my $mboxfile=mboxfile($thing);
-	    if ($mboxfile and ! -r $mboxfile) {
-		print "(cache of HTML up-to-date, downloading mbox...";
-		download_mbox($thing);
-		print "done.)\n";
-	    }
-	    else {
-		print "(cache already up-to-date)\n";
-	    }
-	} else {
-	    print "(cache already up-to-date)\n";
-	}
-
+	print "(cache already up-to-date)\n";
 	return "";
     }
     elsif ($ret == MIRROR_DOWNLOADED) {
@@ -1177,7 +1166,7 @@ sub download {
 	# we've successfully stashed the data away
 	$timestamp = time;
 
-	die "bts: empty page downloaded" unless length $livepage;
+	die "bts: empty page downloaded\n" unless length $livepage;
 
 	my $bug2filename = { };
 
@@ -1190,11 +1179,11 @@ sub download {
 
 	my $data = $livepage;  # work on a copy, not the original
 	my $cachefile=cachefile($thing);
-	open (OUT_CACHE, ">$cachefile") or die "bts: open $cachefile: $!";
+	open (OUT_CACHE, ">$cachefile") or die "bts: open $cachefile: $!\n";
 
 	$data = mangle_cache_file($data, $thing, $bug2filename, $timestamp);
 	print OUT_CACHE $data;
-	close OUT_CACHE or die "bts: problems writing to $cachefile: $!";
+	close OUT_CACHE or die "bts: problems writing to $cachefile: $!\n";
 
 	set_timestamp($thing,
 	    $manual ? make_manual($timestamp) : make_automatic($timestamp));
@@ -1285,7 +1274,7 @@ sub download_attachments {
 	    }
 	    mkpath(dirname $bug2filename{$msg});
 	    open OUT_CACHE, ">$bug2filename{$msg}"
-	        or die "bts: open cache $bug2filename{$msg}";
+	        or die "bts: open cache $bug2filename{$msg}\n";
 	    print OUT_CACHE $data;
 	    close OUT_CACHE;
 	} else {
@@ -1330,11 +1319,11 @@ sub download_mbox {
 				       UNLINK => 1);
 	    # Use filehandle for security
 	    open (OUT_MBOX, ">/dev/fd/" . fileno($fh))
-		or die "bts: writing to temporary file: $!";
+		or die "bts: writing to temporary file: $!\n";
 	} else {
 	    $filename = $mboxfile;
 	    open (OUT_MBOX, ">$mboxfile")
-		or die "bts: writing to mbox file $mboxfile: $!";
+		or die "bts: writing to mbox file $mboxfile: $!\n";
 	}
 	print OUT_MBOX $response->content;
 	close OUT_MBOX;
@@ -1394,7 +1383,7 @@ sub deletecache {
     my $thing=shift;
 
     if (! -d $cachedir) {
-	die "bts: deletecache() called but no cachedir!";
+	die "bts: deletecache() called but no cachedir!\n";
     }
 
     delete_timestamp($thing);
@@ -1408,7 +1397,7 @@ sub deletecache {
 # Given a thing, returns the filename for it in the cache.
 sub cachefile {
     my $thing=shift;
-    if ($thing eq '') { die "bts: cachefile given empty argument"; }
+    if ($thing eq '') { die "bts: cachefile given empty argument\n"; }
     $thing =~ s/^src:/src_/;
     $thing =~ s/^from:/from_/;
     $thing =~ s/^tag:/tag_/;
@@ -1424,7 +1413,7 @@ sub mboxfile {
 # Given a bug number, returns the dirname for it in the cache.
 sub cachebugdir {
     my $thing=shift;
-    if ($thing !~ /^\d+$/) { die "bts: cachebugdir given faulty argument: $thing"; }
+    if ($thing !~ /^\d+$/) { die "bts: cachebugdir given faulty argument: $thing\n"; }
     return $cachedir.$thing;
 }
 
@@ -1446,7 +1435,7 @@ sub bugs_from_thing {
 
     if (-f $cachefile) {
 	local $/;
-	open (IN, $cachefile) || die "bts: open $cachefile: $!";
+	open (IN, $cachefile) || die "bts: open $cachefile: $!\n";
 	my $data=<IN>;
 	close IN;
 
@@ -1507,7 +1496,7 @@ sub browse {
 
 		# Use filehandle for security
 		open (OUT_LIVE, ">/dev/fd/" . fileno($fh))
-		    or die "bts: writing to temporary file: $!";
+		    or die "bts: writing to temporary file: $!\n";
 		# Correct relative urls to point to the bts.
 		$live =~ s/(?!\/)(\w+\.cgi)/$btscgiurl$1/g;
 		print OUT_LIVE $live;
@@ -1541,12 +1530,12 @@ sub prunecache {
     return unless -d $cachedir;
     return if -f $prunestamp and -M _ < 1;
 
-    chdir($cachedir) || die "bts: chdir $cachedir: $!";
+    chdir($cachedir) || die "bts: chdir $cachedir: $!\n";
 
     # remove the now-defunct live-download file
     unlink "live_download.html";
 
-    opendir DIR, '.' or die "bts: opendir $cachedir: $!";
+    opendir DIR, '.' or die "bts: opendir $cachedir: $!\n";
     my @cachefiles = grep { ! /^\.\.?$/ } readdir(DIR);
     closedir DIR;
 
@@ -1580,7 +1569,7 @@ sub prunecache {
     # We now remove the oldfiles if they're automatically downloaded
     tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	 O_RDWR()|O_CREAT(), 0600, $DB_HASH, "write")
-	or die "bts: couldn't open DB file $timestampdb for writing: $!"
+	or die "bts: couldn't open DB file $timestampdb for writing: $!\n"
 	if ! tied %timestamp;
 
     my @unrecognised;
@@ -1599,7 +1588,7 @@ sub prunecache {
     untie %timestamp;
 
     if (! -e $prunestamp) {
-	open PRUNESTAMP, ">$prunestamp" || die "bts: prune timestamp: $!";
+	open PRUNESTAMP, ">$prunestamp" || die "bts: prune timestamp: $!\n";
 	close PRUNESTAMP;
     }
     utime time, time, $prunestamp;
@@ -1644,7 +1633,7 @@ sub get_timestamp {
     } else {
 	tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	     O_RDONLY(), 0600, $DB_HASH, "read")
-	    or die "bts: couldn't open DB file $timestampdb for reading: $!";
+	    or die "bts: couldn't open DB file $timestampdb for reading: $!\n";
 
 	$timestamp = abs($timestamp{$thing})
 	    if exists $timestamp{$thing};
@@ -1664,7 +1653,7 @@ sub set_timestamp {
     } else {
 	tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	     O_RDWR()|O_CREAT(), 0600, $DB_HASH, "write")
-	    or die "bts: couldn't open DB file $timestampdb for writing: $!";
+	    or die "bts: couldn't open DB file $timestampdb for writing: $!\n";
 
 	$timestamp{$thing} = $timestamp;
 
@@ -1680,7 +1669,7 @@ sub delete_timestamp {
     } else {
 	tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	     O_RDWR()|O_CREAT(), 0600, $DB_HASH, "write")
-	    or die "bts: couldn't open DB file $timestampdb for writing: $!";
+	    or die "bts: couldn't open DB file $timestampdb for writing: $!\n";
 
 	delete $timestamp{$thing};
 
@@ -1768,13 +1757,13 @@ Converting....
 
 EOW
 
-    chdir $oldcachedir or die "bts: chdir $oldcachedir: $!";
-    opendir DIR, $oldcachedir or die "bts: opendir $oldcachedir: $!";
+    chdir $oldcachedir or die "bts: chdir $oldcachedir: $!\n";
+    opendir DIR, $oldcachedir or die "bts: opendir $oldcachedir: $!\n";
     my @cachefiles = grep { -f $_ } readdir(DIR);
     closedir DIR;
 
-    chdir $oldorigdir or die "bts: chdir $oldorigdir: $!";
-    opendir DIR, $oldorigdir or die "bts: opendir $oldorigdir: $!";
+    chdir $oldorigdir or die "bts: chdir $oldorigdir: $!\n";
+    opendir DIR, $oldorigdir or die "bts: opendir $oldorigdir: $!\n";
     my @origfiles = grep { -f $_ } readdir(DIR);
     closedir DIR;
     my %manual = map { $_ => 1 } grep { s/\.manual$/.html/ } readdir (DIR);
@@ -1812,14 +1801,14 @@ EOW
     # to have a new one ;-)
     if (! -d dirname($cachedir)) {
 	mkdir(dirname($cachedir))
-	    or die "bts: couldn't mkdir ".dirname($cachedir).": $!";
+	    or die "bts: couldn't mkdir ".dirname($cachedir).": $!\n";
     }
     mkdir($cachedir)
-	or die "bts: couldn't mkdir $cachedir: $!";
+	or die "bts: couldn't mkdir $cachedir: $!\n";
 
     tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	 O_RDWR()|O_CREAT(), 0600, $DB_HASH, "write")
-	or die "bts: couldn't open DB file $timestampdb for writing: $!";
+	or die "bts: couldn't open DB file $timestampdb for writing: $!\n";
 
     foreach (keys %save_cache_stamps) {
 	my $thing = $_;
@@ -1875,10 +1864,10 @@ EOW
 #                       MIRROR_UP_TO_DATE   up-to-date
 
 sub bts_mirror {
-    my ($url, $timestamp) = @_;
+    my ($url, $timestamp, $force) = @_;
 
     init_agent() unless $ua;
-    if ($url =~ m%/\d+$% and not $refreshmode) {
+    if ($url =~ m%/\d+$% and ! $refreshmode and ! $force) {
 	# Single bug, worth doing timestamp checks
 	my $request = HTTP::Request->new('HEAD', $url);
 	my $response = $ua->request($request);

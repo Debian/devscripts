@@ -1,8 +1,6 @@
 devscripts (2.8.11) UNRELEASED; urgency=low
 
-  * bts: fix --cache-mode=mbox after --cache-mode=min bug; don't attempt
-    to handle --cache-mode=full in the same situation: it's just too
-    messy! (closes: #290487)
+  * bts: fix --cache-mode=mbox after --cache-mode=min bug (closes: #290487)
 
  -- Julian Gilbey <jdg@debian.org>  Sat, 15 Jan 2005 22:09:05 +0000
 
