@@ -74,12 +74,29 @@ EOF
 EOF
 	fi
 
-	if dpkg --compare-versions "$2" lt 2.8.6
+	if [ "$2" = "2.8.6" ]
 	then
 	# Added in devscripts 2.8.6:
 	    cat >> /etc/devscripts.conf <<EOF
 
-##### bts options added in version 2.8.6:
+##### bts options changes between version 2.8.6 and version 2.8.7:
+# 
+# The following option replaces the previous BTS_FULL_MIRROR option.
+# How much to mirror when caching?  The minimal amount (min), the mbox
+# version as well (mbox) or the whole works (full)?
+# BTS_CACHE_MODE=min
+# 
+# The following is a new option
+# How do we read an mbox?  This will be split on whitespace, then
+# %s is replaced by the mbox name and %% by a single %.
+# BTS_MAIL_READER='mutt -f %s'
+EOF
+	elif dpkg --compare-versions "$2" lt 2.8.7
+	then
+	# Added in devscripts 2.8.6 and 2.8.7:
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### bts options added in versions 2.8.6 and 2.8.7:
 # 
 # Default bts show/bugs to run in offline mode?
 # BTS_OFFLINE=no
@@ -88,13 +105,29 @@ EOF
 # for the first time?
 # BTS_CACHE=yes
 # 
-# Mirror all of the boring bits when caching?
-# BTS_FULL_MIRROR=no
+# How much to mirror when caching?  The minimal amount (min), the mbox
+# version as well (mbox) or the whole works (full)?
+# BTS_CACHE_MODE=min
 # 
 # Always refresh the cache, even if nothing's changed?
 # BTS_FORCE_REFRESH=no
+# 
+# How do we read an mbox?  This will be split on whitespace, then
+# %s is replaced by the mbox name and %% by a single %.
+# BTS_MAIL_READER='mutt -f %s'
 EOF
 	fi
+    fi
+
+    if [ "$2" = "2.8.6" ]; then
+	# Yuck, yuck, yuck...
+	echo "There has been a change in the unstable devscripts bts caching system" >&2
+	echo "in this version; please run a bts cleancache ALL if you wish to use the new" >&2
+	echo "--mbox option and then rebuild your cache as necessary; read the new manpage!" >&2
+	echo "(This message should only appear on upgrades from version = 2.8.6.)" >&2
+	echo "" >&2
+	echo "Press Return to continue...." >&2
+	read nonsense
     fi
 fi
 

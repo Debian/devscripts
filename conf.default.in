@@ -53,11 +53,16 @@
 # for the first time?
 # BTS_CACHE=yes
 # 
-# Mirror all of the boring bits when caching?
-# BTS_FULL_MIRROR=no
+# How much to mirror when caching?  The minimal amount (min), the mbox
+# version as well (mbox) or the whole works (full)?
+# BTS_CACHE_MODE=min
 # 
 # Always refresh the cache, even if nothing's changed?
 # BTS_FORCE_REFRESH=no
+# 
+# How do we read an mbox?  This will be split on whitespace, then
+# %s is replaced by the mbox name and %% by a single %.
+# BTS_MAIL_READER='mutt -f %s'
 
 ##### checkbashisms
 # 

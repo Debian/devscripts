@@ -39,6 +39,7 @@ use IO::Handle;
 use lib '/usr/share/devscripts';
 use Devscripts::DB_File_Lock;
 use Fcntl qw(O_RDWR O_RDONLY O_CREAT F_SETFD);
+use Getopt::Long;
 
 my $it = undef;
 my $lwp_broken = undef;
@@ -178,20 +179,30 @@ information on setting up a cache.
 Opposite of --online; overrides any configuration file directive to work
 offline.
 
-=item -m, --full-mirror
+=item --cache-mode={min|mbox|full}
 
-When running a B<bts cache> command, also mirror the boring
-attachments to the BTS bug pages, including the mbox version of the
-bug report and the acknowledgement emails.
+When running a B<bts cache> command, should we only mirror the basic
+bug (min), or should we also mirror the mbox version (mbox), or should
+we mirror the whole thing, including the mbox and the boring
+attachments to the BTS bug pages and the acknowledgement emails (full)?
+Default is min.
 
-=item --no-full-mirror
+=item --mbox
 
-Override --full-mirror.
+Open a mail reader to read the mbox corresponding to a given bug number
+for show and bugs commands.
+
+=item --mailreader=READER
+
+Specify the command to read the mbox.  Must contain a "%s" string, which
+will be replaced by the name of the mbox file.  The command will be split
+on white space and will not be passed to a shell.  Default is 'mutt -f %s'.
+(Also, %% will be substituted by a single % if this is needed.)
 
 =item -f, --force-refresh
 
 Download a bug report again, even if it does not appear to have
-changed since the last cache command.  Useful if a --full-mirror is
+changed since the last cache command.  Useful if a --cache-mode=full is
 requested for the first time (otherwise unchanged bug reports will not
 be downloaded again, even if the boring bits have not been
 downloaded).
@@ -212,9 +223,10 @@ first option given on the command-line.
 # Start by setting default values
 
 my $offlinemode=0;
-my $cachemode=1;
-my $fullmirrormode=0;
+my $caching=1;
+my $cachemode='min';
 my $refreshmode=0;
+my $mailreader='mutt -f %s';
 
 # Next, read read configuration files and then command line
 # The next stuff is boilerplate
@@ -227,15 +239,16 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     my %config_vars = (
 		       'BTS_OFFLINE' => 'no',
 		       'BTS_CACHE' => 'yes',
-		       'BTS_FULL_MIRROR' => 'no',
+		       'BTS_CACHE_MODE' => 'min',
 		       'BTS_FORCE_REFRESH' => 'no',
+		       'BTS_MAIL_READER' => 'mutt -f %s',
 		       );
     my %config_default = %config_vars;
     
     my $shell_cmd;
     # Set defaults
     foreach my $var (keys %config_vars) {
-	$shell_cmd .= "$var='$config_vars{$var}';\n";
+	$shell_cmd .= qq[$var="$config_vars{$var}";\n];
     }
     $shell_cmd .= 'for file in ' . join(" ",@config_files) . "; do\n";
     $shell_cmd .= '[ -f $file ] && . $file; done;' . "\n";
@@ -249,10 +262,12 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'BTS_OFFLINE'}='no';
     $config_vars{'BTS_CACHE'} =~ /^(yes|no)$/
 	or $config_vars{'BTS_CACHE'}='yes';
-    $config_vars{'BTS_FULL_MIRROR'} =~ /^(yes|no)$/
-	or $config_vars{'BTS_FULL_MIRROR'}='no';
+    $config_vars{'BTS_CACHE_MODE'} =~ /^(min|mbox|full)$/
+	or $config_vars{'BTS_CACHE_MODE'}='min';
     $config_vars{'BTS_FORCE_REFRESH'} =~ /^(yes|no)$/
 	or $config_vars{'BTS_FORCE_REFRESH'}='no';
+    $config_vars{'BTS_MAIL_READER'} =~ /\%s/
+	or $config_vars{'BTS_MAIL_READER'}='mutt -f %s';
 
     foreach my $var (sort keys %config_vars) {
 	if ($config_vars{$var} ne $config_default{$var}) {
@@ -263,65 +278,63 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     chomp $modified_conf_msg;
 
     $offlinemode = $config_vars{'BTS_OFFLINE'} eq 'yes' ? 1 : 0;
-    $cachemode = $config_vars{'BTS_CACHE'} eq 'no' ? 0 : 1;
-    $fullmirrormode = $config_vars{'BTS_FULL_MIRROR'} eq 'yes' ? 1 : 0;
+    $caching = $config_vars{'BTS_CACHE'} eq 'no' ? 0 : 1;
+    $cachemode = $config_vars{'BTS_CACHE_MODE'};
     $refreshmode = $config_vars{'BTS_FORCE_REFRESH'} eq 'yes' ? 1 : 0;
+    $mailreader = $config_vars{'BTS_MAIL_READER'};
 }
 
 if (exists $ENV{'BUGSOFFLINE'}) {
     warn "BUGSOFFLINE environment variable deprecated: please use ~/.devscripts\nor --offline/-o option instead!  (See bts(1) for details.)\n";
 }
 
-# For now, a very simple parser, instead of Getopt::Long since there are
-# so few options.
-while (@ARGV) {
-    my $arg=$ARGV[0];
-    if ($arg =~ /^--?(.*)/) {
-	my $option=$1;
-	shift @ARGV;
-	if ($option eq 'offline' || $option eq 'o') {
-	    $offlinemode=1;
-	}
-	elsif ($option eq 'online' || $option =~ /^no-?offline$/) {
-	    $offlinemode=0;
-	}
-	elsif ($option eq 'cache') {
-	    $cachemode=1;
-	}
-	elsif ($option =~ /^no-?cache$/) {
-	    $cachemode=0;
-	}
-	elsif ($option eq 'full-mirror' || $option eq 'm') {
-	    $fullmirrormode=1;
-	}
-	elsif ($option =~ /^no-?full-mirror$/) {
-	    $fullmirrormode=1;
-	}
-	elsif ($option eq 'force-refresh' || $option eq 'f') {
-	    $refreshmode=1;
-	}
-	elsif ($option =~ /^no-?force-refresh$/) {
-	    $refreshmode=1;
-	}
-	elsif ($option eq 'help' || $option eq 'h') {
-	    bts_help(); exit 0;
-	}
-	elsif ($option eq 'version' || $option eq 'v') {
-	    bts_version(); exit 0;
-	}
-	else {
-	    die "$progname: Unknown option, \"$arg\"\nRun $progname --help for more information\n";
-	}
-    }
-    else {
-	last; # end of options
+my ($opt_help, $opt_version, $opt_noconf);
+my ($opt_cachemode, $opt_mailreader);
+my $mboxmode = 0;
+
+GetOptions("help|h" => \$opt_help,
+	   "version" => \$opt_version,
+	   "o" => \$offlinemode,
+	   "offline!" => \$offlinemode,
+	   "online" => sub { $offlinemode = 0; },
+	   "cache!" => \$caching,
+	   "cache-mode|cachemode=s" => \$opt_cachemode,
+	   "m|mbox" => \$mboxmode,
+	   "mailreader|mail-reader=s" => \$opt_mailreader,
+	   "f" => \$refreshmode,
+	   "force-refresh!" => \$refreshmode,
+	   "noconf|no-conf" => \$opt_noconf,
+	   )
+    or die "Usage: bts [options]\nRun $progname --help for more details\n";
+
+if ($opt_noconf) {
+    die "$progname: --no-conf is only acceptable as the first command-line option!\n";
+}
+if ($opt_help) { bts_help(); exit 0; }
+if ($opt_version) { bts_version(); exit 0; }
+
+if ($opt_mailreader) {
+    if ($opt_mailreader =~ /\%s/) {
+	$mailreader=$opt_mailreader;
+    } else {
+	warn "bts: ignoring invalid --mailreader option: invalid mail command following it.\n";
     }
 }
+
+if ($opt_cachemode) {
+    if ($opt_cachemode =~ /^(min|mbox|full)$/) {
+	$cachemode=$opt_cachemode;
+    } else {
+	warn "bts: ignoring invalid --cache-mode; must be one of min, mbox, full.\n";
+    }
+}
+
 
 if (@ARGV == 0) {
     bts_help();
     exit 0;
 }
+
 
 # Otherwise, parse the arguments
 my @command;
@@ -781,11 +794,12 @@ item in the cache with what's on the server, and not re-download it
 every time.
 
 Two options affect the behaviour of the cache command.  The first is
---full-mirror, which forces B<bts> to download all of the referenced
-links from the bug page, including boring bits such as the
-acknowledgement emails, emails to the control bot, and the mbox
-version of the bug report.  This can be switched off using
---no-full-mirror.  The second is --force-refresh, which forces the
+the setting of --cache-mode, which controls how much B<bts> downloads
+of the referenced links from the bug page, including boring bits such
+as the acknowledgement emails, emails to the control bot, and the mbox
+version of the bug report.  It can take three values: min (the minimum),
+mbox (download the minimum plus the mbox version of the bug report) or
+full (the whole works).  The second is --force-refresh, which forces the
 download, even if the cached bug report is up-to-date.  Both of these
 are configurable from the configuration file, as described below.
 
@@ -941,8 +955,14 @@ Valid options are:
                           pages when performing show/bug commands
    --cache                Do attempt to cache new versions of BTS
                           pages when performing show/bug commands (default)
-   -m, --full-mirror      Download boring bits when running cache command
-   --no-full-mirror       Don\'t download the boring bits (default)
+   --cache-mode={min|mbox|full}
+                          How much to cache when we\'re caching: the sensible
+                          bare minimum (default), the mbox as well, or
+                          everything?
+   -m, --mbox             With show or bugs, open a mailreader to read the mbox
+                          version instead
+   --mailreader=CMD       Run CMD to read an mbox; default is 'mutt -f %s'
+                          (must contain %s, which is replaced by mbox name)
    -f, --force-refresh    Reload all bug reports being cached, even unchanged
                           ones
    --no-force-refresh     Don\'t do so (default)
@@ -1194,7 +1214,7 @@ sub download_attachments {
 	    # already downloaded?
 	    next if -f $bug2filename{$msg} and not $refreshmode;
 	}
-	elsif ($fullmirrormode and
+	elsif ($cachemode eq 'full' and
 	       m%<a href="(bugreport\.cgi\?bug=\d+&amp;msg=(\d+))">%) {
 	    $ref = $1;
 	    $msg = $2;
@@ -1202,11 +1222,11 @@ sub download_attachments {
             # already downloaded?
 	    next if -f $bug2filename{$msg} and not $refreshmode;
 	}
-	elsif ($fullmirrormode and
+	elsif (($cachemode eq 'full' or $cachemode eq 'mbox' or $mboxmode) and
 	       m%<a href="(bugreport\.cgi\?bug=\d+&amp;mbox=yes)">%) {
 	    $ref = $1;
 	    $msg = 'mbox';
-	    $bug2filename{$msg} = "$thing/$msg";
+	    $bug2filename{$msg} = "$thing.mbox";
 	    # This always needs refreshing, as it does change as the bug
 	    # changes
 	}
@@ -1231,7 +1251,7 @@ sub download_attachments {
 		$data =~ s%<HEAD>%<HEAD><BASE href="../">%;
 		$data = mangle_cache_file($data, $thing,
 				          { $msg => "$thing/$msg.html",
-					    'mbox' => "$thing/mbox", },
+					    'mbox' => "$thing.mbox", },
 					  $timestamp);
 	    }
 	    mkpath(dirname $bug2filename{$msg});
@@ -1304,6 +1324,7 @@ sub deletecache {
     unlink cachefile($thing);
     if ($thing =~ /^\d+$/) {
 	rmtree("$cachedir/$thing", 0, 1) if -d "$cachedir/$thing";
+	unlink("$cachedir/$thing.mbox") if -f "$cachedir/$thing.mbox";
     }
 }
 
@@ -1315,6 +1336,12 @@ sub cachefile {
     $thing =~ s/^from:/from_/;
     $thing =~ s/^tag:/tag_/;
     return $cachedir.$thing.".html";
+}
+
+# Given a thing, returns the filename for its mbox in the cache.
+sub mboxfile {
+    my $thing=shift;
+    return $thing =~ /^\d+$/ ? $cachedir.$thing.".mbox" : undef;
 }
 
 # Given a bug number, returns the dirname for it in the cache.
@@ -1362,6 +1389,10 @@ sub browse {
 
     my $hascache=-d $cachedir;
     my $cachefile=cachefile($thing);
+    my $mboxfile=mboxfile($thing);
+    if ($mboxmode and ! $mboxfile) {
+	die "bts: you can only request a mailbox for a single bug report.\n";
+    }
 
     # Check that if we're requesting a tag, that it's a valid tag
     if ($thing =~ /^tag:(.*)$/) {
@@ -1374,35 +1405,79 @@ sub browse {
 	if (! $hascache) {
 	    die "bts: Sorry, you are in offline mode and have no cache. Run \"bts cache\" to create one.\n";
 	}
-	elsif (! -e $cachefile) {
-	    die "bts: Sorry, you are in offline mode and that is not cached. Use \"bts cache\" to update the cache.\n";
+	elsif ((! $mboxmode and ! -r $cachefile) or
+	       ($mboxmode and ! -r $mboxfile)) {
+	    die "bts: Sorry, you are in offline mode and that is not cached.\nUse \"bts [--cache-mode=...] cache\" to update the cache.\n";
 	}
-	runbrowser($cachefile);
-    }
-    # else we're in online mode
-    elsif ($hascache && $cachemode && have_lwp() && $thing ne '') {
-	my $live=download($thing);
-	
-	if (length($live)) {
-	    my ($fh,$livefile) = tempfile("btsXXXXXX",
-					  SUFFIX => ".html",
-					  DIR => File::Spec->tmpdir,
-					  UNLINK => 1);
-
-	    # Use filehandle for security
-	    open (OUT_LIVE, ">/dev/fd/" . fileno($fh))
-		or die "bts: writing to temporary file: $!";
-	    # Correct relative urls to point to the bts.
-	    $live =~ s/(?!\/)(\w+\.cgi)/$btscgiurl$1/g;
-	    print OUT_LIVE $live;
-	    # Some browsers don't like unseekable filehandles, so use filename
-	    runbrowser($livefile);
+	if ($mboxmode) {
+	    runmailreader($mboxfile);
 	} else {
 	    runbrowser($cachefile);
 	}
     }
+    # else we're in online mode
+    elsif ($hascache && $caching && have_lwp() && $thing ne '') {
+	my $live=download($thing);
+	
+	if ($mboxmode) {
+	    runmailreader($mboxfile);
+	} else {
+	    if (length($live)) {
+		my ($fh,$livefile) = tempfile("btsXXXXXX",
+					      SUFFIX => ".html",
+					      DIR => File::Spec->tmpdir,
+					      UNLINK => 1);
+
+		# Use filehandle for security
+		open (OUT_LIVE, ">/dev/fd/" . fileno($fh))
+		    or die "bts: writing to temporary file: $!";
+		# Correct relative urls to point to the bts.
+		$live =~ s/(?!\/)(\w+\.cgi)/$btscgiurl$1/g;
+		print OUT_LIVE $live;
+		# Some browsers don't like unseekable filehandles,
+		# so use filename
+		runbrowser($livefile);
+	    } else {
+		runbrowser($cachefile);
+	    }
+	}
+    }
     else {
-	runbrowser($btsurl.$thing);
+	if ($mboxmode) {
+	    # we appear not to be caching; OK, we'll download to a
+	    # temporary file; yuck, yuck, yuck - we should really
+	    # push this out to another subroutine
+	    warn "bts debug: downloading ${btscgiurl}bugreport.cgi?bug=$thing&mbox=yes\n" if $debug;
+	    if (! have_lwp()) {
+		die "Couldn't run bts --mbox: $lwp_broken\n";
+	    }
+	    init_agent() unless $ua;
+	    my $request = HTTP::Request->new('GET', $btscgiurl . "bugreport.cgi?bug=$thing&mbox=yes");
+	    my $response = $ua->request($request);
+	    if ($response->is_success) {
+		my $content_length = defined $response->content ?
+		    length($response->content) : 0;
+		if ($content_length == 0) {
+		    die "bts: failed to download mbox.\n";
+		}
+
+		my ($fh,$filename) = tempfile("btsXXXXXX",
+					      SUFFIX => ".mbox",
+					      DIR => File::Spec->tmpdir,
+					      UNLINK => 1);
+		# Use filehandle for security
+		open (OUT_MBOX, ">/dev/fd/" . fileno($fh))
+		    or die "bts: writing to temporary file: $!";
+
+		print OUT_MBOX $response->content;
+		# Must be seekable, so use filename
+		runmailreader($filename);
+	    } else {
+		die "bts: failed to download mbox.\n";
+	    }
+	} else {
+	    runbrowser($btsurl.$thing);
+	}
     }
 }
 
@@ -1436,6 +1511,8 @@ sub prunecache {
     foreach (@cachefiles) {
 	if (/^(\d+)\.html$/) {
 	    delete $weirdfiles{$1} if exists $weirdfiles{$1} and -d $1;
+	    delete $weirdfiles{"$1.mbox"}
+	        if exists $weirdfiles{"$1.mbox"} and -f "$1.mbox";
 	}
     }
 
@@ -1483,6 +1560,21 @@ sub runbrowser {
     
     if (system('sensible-browser', $URL) >> 8 != 0) {
 	warn "Problem running sensible-browser: $!\n";
+    }
+}
+
+# Determines which mailreader to use
+sub runmailreader {
+    my $file = shift;
+    die "bts: could not read mbox file!\n" unless -r $file;
+
+    my @reader = split ' ', $mailreader;
+    foreach (@reader) {
+	s/\%([%s])/$1 eq '%' ? '%' : $file/eg;
+    }
+
+    if (system(@reader) >> 8 != 0) {
+	warn "Problem running mail reader: $!\n";
     }
 }
 
@@ -1837,16 +1929,17 @@ line parameter being used.  Only has an effect on the show and bug
 commands.  The default is I<yes>.  Again, see the show command above
 for more information.
 
-=item BTS_FULL_MIRROR
+=item BTS_CACHE_MODE={min,mbox,full}
 
-If this is set to I<yes>, then it is the same as the --full-mirror
-command line parameter being used.  Only has an effect on the cache
-command.  The default is I<no>.  See the cache command for more
+How much of the BTS should we mirror when we are asked to cache something?
+Just the minimum, or also the mbox or the whole thing?  The default is
+I<min>, and it has the same meaning as the --cache-mode command line
+parameter.  Only has an effect on the cache.  See the cache command for more
 information.
 
 =item BTS_FORCE_REFRESH
 
-If this is set to I<yes>, then it is the same as the --full-mirror
+If this is set to I<yes>, then it is the same as the --force-refresh
 command line parameter being used.  Only has an effect on the cache
 command.  The default is I<no>.  See the cache command for more
 information.
