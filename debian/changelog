@@ -4,7 +4,7 @@ devscripts (2.8.6) UNRELEASED; urgency=low
     - bts: download attachments when caching bug reports (closes: #254102)
     - debian/control: add Suggests: libwww-perl (closes: #277388)
     - debchange: switch from ldap to wget for searching BTS (for
-      efficiency)
+      efficiency) (closes: #284650)
     - tagpending: switch from ldap to wget for searching BTS (for
       efficiency)
     - uupdate: apply patch from Matthew Palmer to fix overwriting upstream

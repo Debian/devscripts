@@ -807,7 +807,7 @@ sub bts_cache {
     }
     
     my $tocache;
-    if ($#_ != -1) { $tocache=shift; }
+    if (@_ > 0) { $tocache=shift; }
     else { $tocache=''; }
     
     if (! length $tocache) {
