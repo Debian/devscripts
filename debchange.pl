@@ -245,6 +245,12 @@ if (defined $opt_level) {
 
 if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
 
+# Can't write, so stop now.
+if (! -w 'debian/changelog')
+{
+        die "$progname: debian/changelog is not writable!\n";
+}
+
 @closes = split(/,/, join(',', @closes));
 map { s/^\#//; } @closes;  # remove any leading # from bug numbers
 

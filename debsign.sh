@@ -119,7 +119,7 @@ signfile () {
     fi
     echo
     PRECIOUS_FILES=$(($PRECIOUS_FILES + 1))
-    mv -- "$1.asc" "$1"
+    mv -f -- "$1.asc" "$1"
 }
 
 withecho () {
