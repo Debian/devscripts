@@ -36,7 +36,12 @@ while [ -n "$1" ]; do
     -n) DRY=1; shift ;;
     --version | -v) version; exit 0 ;;
     --help | -h) usage; exit 0 ;;
-    *) echo "tagpending error: unrecognized option $1" >&2; echo; help; exit 1 ;;
+    *)
+      echo "tagpending error: unrecognized option $1" >&2
+      echo
+      usage
+      exit 1
+    ;;
   esac
 done
 

@@ -1,3 +1,10 @@
+devscripts (2.8.2) unstable; urgency=low
+
+  * tagpending.sh: s/help/usage/. Another buglet found by Steve Kowalik.
+    Sigh! (Closes: #265412)
+
+ -- Joshua Kwan <joshk@triplehelix.org>  Thu, 12 Aug 2004 19:12:04 -0700
+
 devscripts (2.8.1) unstable; urgency=medium
 
   * debchange.pl: Don't check for -w 'debian/changelog', check whether
