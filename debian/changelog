@@ -15,11 +15,14 @@ devscripts (2.8.11) UNRELEASED; urgency=low
     - uscan: change behaviour with respect to directory name checking: now
       only checks directories with matching names, rather than downloading
       newer versions regardless (closes: #260538)
+    - uscan: handle metacharacters in directory components (closes: #262489)
+    - uscan: allow directory name patterns (not quite recursive, but it's
+      pretty much what was requested) (closes: #143284)
   * Joshua Kwan
     - dscverify: Don't use --emulate-md-encode-bug in dscverify anymore,
       it's been obsoleted with gnupg 1.4.0. (closes: #293791)
 
- -- Joshua Kwan <joshk@triplehelix.org>  Sat,  5 Feb 2005 11:41:35 -0800
+ -- Julian Gilbey <jdg@debian.org>  Sun, 13 Mar 2005 13:51:29 +0000
 
 devscripts (2.8.10) unstable; urgency=low
 

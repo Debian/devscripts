@@ -21,6 +21,33 @@
 # whereas in deb_versort, "version" is assumed to be a Debian version
 # number, possibly including an epoch and/or a Debian revision.
 # 
+# The returned array has the greatest version as the 0th array element.
+
+package Devscripts::Versort;
+
+sub versort (@)
+{
+    my @namever_pairs = @_;
+
+    my @sorted = sort { _vercmp($$a[0], $$b[0]) } @namever_pairs;
+    return reverse @sorted;
+}
+
+sub _vercmp {
+    my ($v1, $v2) = @_;
+
+    return 0 if $v1 eq $v2;
+    # assume dpkg works - not really worth checking every single call here
+    return -1 if system("dpkg", "--compare-versions", $v1, "lt", $v2) == 0;
+    return 1;
+}
+
+1;
+
+__END__
+
+# This was the old version.  It didn't handle ~, incidentally
+
 # The sorting order of upstream version numbers is described in
 # chapter 4 of the Debian Policy Manual:
 #
@@ -62,33 +89,6 @@
 # lives easier by insisting that they do.  Thus we will always have an
 # array of the form ("\D*","\d+","\D+","\d+",...,"\d+","\D*"), that
 # is, it has odd length, always ending with a non-digit string.
-# 
-# The returned array has the greatest version as the 0th array element.
-
-package Devscripts::Versort;
-
-sub versort (@)
-{
-    my @namever_pairs = @_;
-
-    my @sorted = sort { _vercmp($$a[0], $$b[0]) } @namever_pairs;
-    return reverse @sorted;
-}
-
-sub _vercmp {
-    my ($v1, $v2) = @_;
-
-    return 0 if $v1 eq $v2;
-    # assume dpkg works - not really worth checking every single call here
-    return -1 if system("dpkg", "--compare-versions", $v1, "lt", $v2) == 0;
-    return 1;
-}
-
-1;
-
-__END__
-
-# This was the old version.  It didn't handle ~, incidentally
 
 no locale;
 

@@ -38,6 +38,13 @@ version=2
 ftp://ftp.tex.ac.uk/tex-archive/web/c_cpp/cweb/cweb-(.*)\\.tar\\.gz \\
   debian  uupdate
 
+# This is the format for an FTP site with regex special characters in
+# the filename part
+ftp://ftp.worldforge.org/pub/worldforge/libs/Atlas-C++/transitional/Atlas-C\\+\\+-(.*)\\.tar\\.gz
+
+# This is the format for an FTP site with directory pattern matching
+ftp://ftp.nessus.org/pub/nessus/nessus-([\\d\\.]+)/src/nessus-core-([\\d\\.]+)\\.tar\\.gz
+
 # This can be used if you want to override the PASV setting
 # for a specific site
 # opts=pasv ftp://.../...
@@ -75,12 +82,18 @@ the trailing slash will be downloaded and searched for hrefs (links of
 the form <a href=...>) to either the full URL pattern given, or to the
 absolute part (everything without the http://host.name/ part), or to
 the basename (just the part after the final `/').  Everything up to
-the final slash is taken as a verbatim URL.
+the final slash is taken as a verbatim URL, as long as there are no
+parentheses (`(' and ')') in this part of the URL: if it does, the
+directory name will be matched in the same way as the final component
+of the URL as described below.  (Note that regex metacharacters such
+as `+' are regarded literally unless they are in a path component
+containing parentheses; see the Atlas-C++ example above.  Also, the
+parentheses must match within each path component.)
 .PP
 The pattern (after the final slash) is a Perl regexp (see
 \fBperlre\fR(1) for details of these).  You need to make the pattern
 so tight that it matches only the upstream software you are interested
-in, and nothing else.  Also, the pattern will be anchored at the
+in and nothing else.  Also, the pattern will be anchored at the
 beginning and at the end, so it must match the full filename.  (Note
 that for HTTP URLs, the href may include the absolute path or full
 site and path and still be accepted.)  The pattern must contain a Perl

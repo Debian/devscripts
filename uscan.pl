@@ -61,7 +61,7 @@ Options:
     --report, --no-download
                    Only report on newer or absent versions, do not download
     --debug        Dump the downloaded web pages to stdout for debugging
-                   your watch file. 
+                   your watch file.
     --download     Report on newer and absent versions, and download (default)
     --pasv         Use PASV mode for FTP connections
     --no-pasv      Do not use PASV mode for FTP connections (default)
@@ -289,23 +289,23 @@ for my $dir (@dirs) {
 	    warn "$progname warning: Problems determining package name and/or version from\n  $dir/debian/changelog, skipping\n";
 	    next;
 	}
-	
+
 	# Check the directory is properly named for safety
 	my $good_dirname = 1;
 	if ($check_dirname_level ==  2 or
 	    ($check_dirname_level == 1 and cwd() ne $opwd)) {
 	    my $re = $check_dirname_regex;
 	    $re =~ s/PACKAGE/\Q$package\E/g;
-	    if ($re =~ m%/%) { 
+	    if ($re =~ m%/%) {
 		$good_dirname = (cwd() =~ m%^$re$%);
-	    } else { 
+	    } else {
 		$good_dirname = (basename(cwd()) =~ m%^$re$%);
 	    }
 	}
 	if ($good_dirname) {
 	    print "-- Found watchfile in $dir/debian\n" if $verbose;
 	} else {
-	    print "-- Skip watchfile in $dir/debian since it does not match the package name\n".
+	    print "-- Skip watchfile in $dir/debian since it does not match the package name\n" .
 	        "   (or the settings of the--check-dirname-level and --check-dirname-regex options if any).\n"
 	        if $verbose;
 	    next;
@@ -370,27 +370,27 @@ exit $found ? 0 : 1;
 
 
 # This is the heart of the code: Process a single watch item
-# 
+#
 # watch_version=1: Lines have up to 5 parameters which are:
-# 
+#
 # $1 = Remote site
 # $2 = Directory on site
 # $3 = Pattern to match, with (...) around version number part
 # $4 = Last version we have (or 'debian' for the current Debian version)
 # $5 = Actions to take on successful retrieval
-# 
-# watch_version=2: 
-# 
+#
+# watch_version=2:
+#
 # For ftp sites:
 #   ftp://site.name/dir/path/pattern-(.*)\.tar\.gz [version [action]]
-# 
+#
 # For http sites:
 #   http://site.name/dir/path/pattern-(.*)\.tar\.gz [version [action]]
 # or
 #   http://site.name/dir/path/base pattern-(.*)\.tar\.gz [version [action]]
-# 
+#
 # Lines can be prefixed with opts=<opts>.
-# 
+#
 # Then the patterns matched will be checked to find the one with the
 # greatest version number (as determined by the (...) group), using the
 # Debian version number comparison algorithm described below.
@@ -399,7 +399,7 @@ sub process_watchline ($$$$$$)
 {
     my ($line, $watch_version, $pkg_dir, $pkg, $pkg_version, $good_dirname) = @_;
 
-    my ($base, $site, $dir, $pattern, $lastversion, $action);
+    my ($base, $site, $dir, $filepattern, $pattern, $lastversion, $action);
     my %options = ();
 
     my ($request, $response);
@@ -411,7 +411,7 @@ sub process_watchline ($$$$$$)
 	($site, $dir, $pattern, $lastversion, $action) = split ' ', $line;
 
 	if (! defined $lastversion or $site =~ /\(.*\)/ or $dir =~ /\(.*\)/) {
-	    warn "$progname warning: there appears to be a version 2 format line in\n  the version 1 watchfile $dir/debian/watch;\n  Have you forgotten a 'version=2' line at the start, perhaps?\n  Skipping the line: $line\n";
+	    warn "$progname warning: there appears to be a version 2 format line in\n  the version 1 watchfile $pkg_dir/debian/watch;\n  Have you forgotten a 'version=2' line at the start, perhaps?\n  Skipping the line: $line\n";
 	    return 1;
 	}
 	if ($site !~ m%\w+://%) {
@@ -436,6 +436,7 @@ sub process_watchline ($$$$$$)
 	$base =~ m%^(\w+://[^/]+)%;
 	$site = $1;
     } else {
+	# version 2 watchfile
 	if ($line =~ s/^opt(?:ion)?s=(\S+)\s+//) {
 	    my $opts=$1;
 	    my @opts = split /,/, $opts;
@@ -452,17 +453,14 @@ sub process_watchline ($$$$$$)
 		}
 	    }
 	}
-	($base, $pattern, $lastversion, $action) = split ' ', $line;
-	if ($base =~ /\(.*\)/) {
+
+	($base, $filepattern, $lastversion, $action) = split ' ', $line;
+
+	if ($base =~ m%/([^/]*\([^/]*\)[^/]*)$%) {
 	    # only three fields
 	    $action = $lastversion;
 	    $lastversion = $pattern;
-	    # We're going to make the pattern
-	    # (?:(?:http://site.name)?/dir/path/)?base_pattern
-	    # It's fine even for ftp sites
-	    $pattern = $base;
-	    $pattern =~ s%^(\w+://[^/]+)%(?:$1)?%;
-	    $pattern =~ s%^(.*/)%(?:$1)?%;
+	    $filepattern = $1;
 	    $base =~ s%/[^/]+$%/%;
 	}
 
@@ -472,6 +470,17 @@ sub process_watchline ($$$$$$)
 	    warn "$progname warning: Can't determine protocol and site in\n  $pkg_dir/debian/watch, skipping:\n  $line\n";
 	    return 1;
 	}
+
+	# Find the path with the greatest version number matching the regex
+	$base = recursive_regex_dir($base, \%options, $pkg_dir);
+	if ($base eq '') { return 1; }
+
+	# We're going to make the pattern
+	# (?:(?:http://site.name)?/dir/path/)?base_pattern
+	# It's fine even for ftp sites
+	my $basedir = $base;
+	$basedir =~ s%^\w+://[^/]+/%/%;
+	$pattern = "(?:(?:$site)?" . quotemeta($basedir) . ")?$filepattern";
     }
 
     # Check all's OK
@@ -515,7 +524,7 @@ sub process_watchline ($$$$$$)
 	my @hrefs;
 	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi) {
 	    my $href = $2;
-	    if ($href =~ m/^$pattern$/) {
+	    if ($href =~ m&^$pattern$&) {
 		push @hrefs, [$1, $href];  # [ version, href ]
 	    }
 	}
@@ -566,7 +575,7 @@ sub process_watchline ($$$$$$)
 	$content =~ s/\n/ \n/g; # make every filename have an extra
 	                        # space after it in a normal FTP listing
 	while ($content =~
-	           m/(?:<\s*a\s+[^>]*href\s*=\s*\"| )($pattern)(\"| )/gi) {
+	           m&(?:<\s*a\s+[^>]*href\s*=\s*\"| )($pattern)(\"| )&gi) {
 	    push @files, [$2, $1];  # [ version, file ]
 	}
 	if (@files) {
@@ -602,7 +611,7 @@ EOF
 	    return 1;
 	}
     }
-			
+
     my $newfile_base=basename($newfile);
     # Remove HTTP header trash
     if ($site =~ m%^http://%)
@@ -740,6 +749,138 @@ EOF
 
     return 0;
 }
+
+
+sub recursive_regex_dir($$$) {
+    my ($base, $optref, $pkg_dir)=@_;
+
+    $base =~ m%^(\w+://[^/]+)/(.*)$%;
+    my $site = $1;
+    my @dirs = split '/', $2;
+    my $dir = "/";
+
+    foreach my $dirpattern (@dirs) {
+	if ($dirpattern =~ /\(.*\)/) {
+	    print STDERR "$progname debug: dir=>$dir  dirpattern=>$dirpattern\n"
+		if $debug;
+	    my $newest_dir=newest_dir($site, $dir, $dirpattern, $optref, $pkg_dir);
+	    print STDERR "$progname debug: newest_dir => '$newest_dir'\n"
+		if $debug;
+	    if ($newest_dir ne '') {
+		$dir .= "$newest_dir/";
+	    }
+	    else {
+		return '';
+	    }
+	} else {
+	    $dir .= "$dirpattern/";
+	}
+    }
+    return $site . $dir;
+}
+
+
+# very similar to code above
+sub newest_dir($$$$) {
+    my ($site, $dir, $pattern, $optref, $pkg_dir) = @_;
+    my $base = $site.$dir;
+    my ($request, $response);
+
+    if ($site =~ m%^http://%) {
+	print STDERR "$progname debug: requesting URL $base\n" if $debug;
+	$request = HTTP::Request->new('GET', $base);
+	$response = $user_agent->request($request);
+	if (! $response->is_success) {
+	    warn "$progname warning: In watchfile $pkg_dir/debian/watch, reading webpage\n  $base failed: " . $response->status_line . "\n";
+	    return 1;
+	}
+
+	my $content = $response->content;
+	print STDERR "$progname debug: received content:\n$content\[End of received content\]\n"
+	    if $debug;
+	# We need this horrid stuff to handle href=foo type
+	# links.  OK, bad HTML, but we have to handle it nonetheless.
+	# It's bug #89749.
+	$content =~ s/href\s*=\s*(?=[^\"\'])([^\s>]+)/href="$1"/ig;
+	# Strip comments
+	$content =~ s/<!-- .*?-->//sg;
+
+	my $dirpattern = "(?:(?:$site)?" . quotemeta($dir) . ")?$pattern";
+
+	print STDERR "$progname debug: matching pattern $dirpattern\n"
+	    if $debug;
+	my @hrefs;
+	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi) {
+	    my $href = $2;
+	    if ($href =~ m&^$dirpattern/?$&) {
+		push @hrefs, [$1, $href];  # [ version, href ]
+	    }
+	}
+	if (@hrefs) {
+	    if ($debug) {
+		print "-- Found the following matching hrefs:\n";
+		foreach my $href (@hrefs) { print "     $$href[1]\n"; }
+	    }
+	    @hrefs = Devscripts::Versort::versort(@hrefs);
+	    my ($newversion, $newdir) = @{$hrefs[0]};
+	    return $newdir;
+	} else {
+	    warn "$progname warning: In $pkg_dir/debian/watch,\n  no matching hrefs for pattern\n  $site$dir$pattern";
+	    return 1;
+	}
+    }
+    else {
+	# Better be an FTP site
+	if ($site !~ m%^ftp://%) {
+	    return 1;
+	}
+
+	if (exists $$optref{'pasv'}) {
+	    $ENV{'FTP_PASSIVE'}=$$optref{'pasv'};
+	}
+	print STDERR "$progname debug: requesting URL $base\n" if $debug;
+	$request = HTTP::Request->new('GET', $base);
+	$response = $user_agent->request($request);
+	if (exists $$optref{'pasv'}) {
+	    if (defined $passive) { $ENV{'FTP_PASSIVE'}=$passive; }
+	    else { delete $ENV{'FTP_PASSIVE'}; }
+	}
+	if (! $response->is_success) {
+	    warn "$progname warning: In watchfile $pkg_dir/debian/watch, reading webpage\n  $base failed: " . $response->status_line . "\n";
+	    return '';
+	}
+
+	my $content = $response->content;
+	print STDERR "$progname debug: received content:\n$content\[End of received content]\n"
+	    if $debug;
+
+	# FTP directory listings either look like:
+	# info info ... info filename [ -> linkname]
+	# or they're HTMLised (if they've been through an HTTP proxy)
+	# so we may have to look for <a href="filename"> type patterns
+	print STDERR "$progname debug: matching pattern $pattern\n" if $debug;
+	my (@dirs);
+	$content =~ s/\n/ \n/g; # make every filename have an extra
+	                        # space after it in a normal FTP listing
+	while ($content =~
+	       m/(?:<\s*a\s+[^>]*href\s*=\s*\"| )($pattern)(\"| )/gi) {
+	    push @dirs, [$2, $1];  # [ version, dir ]
+	}
+	if (@dirs) {
+	    if ($debug) {
+		print "-- Found the following matching dirs:\n";
+		foreach my $dir (@dirs) { print "     $$dir[1]\n"; }
+	    }
+	    @dirs = Devscripts::Versort::versort(@dirs);
+	    my ($newversion, $newdir) = @{$dirs[0]};
+	    return $newdir;
+	} else {
+	    warn "$progname warning: In $pkg_dir/debian/watch no matching dirs for pattern\n  $site$base$pattern\n";
+	    return '';
+	}
+    }
+}
+
 
 # parameters are dir, package, upstream version, good dirname
 sub process_watchfile ($$$$)
