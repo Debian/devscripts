@@ -1,9 +1,10 @@
 devscripts (2.7.95.2) UNRELEASED; urgency=low
 
   * Now comaintained by Joshua Kwan and Julian Gilbey.
-  * `pwd` -> $(CURDIR) in debian/rules.
+  * Build system:
+    - `pwd` -> $(CURDIR) in debian/rules.
+    - Remove $(CWRAPPERS) in Makefile's clean target.
   * debchange:
-    - Add a versioned dependency on perl (>= 5.8.0). (Closes: #241138)
     - Add -n / --nmu option for NMUs. (Closes: #184944)
     - Our BTS web parser is broken. Move to Net::LDAP and the
       more machine-friendly bts2ldap gateway.
@@ -14,14 +15,18 @@ devscripts (2.7.95.2) UNRELEASED; urgency=low
       parent dir owned by yourself) - force it and hope it works.
       (Closes: #249950)
     - Change nonstandard head -1 to head -n 1. (Closes: #231130)
+    - Add a versioned dependency on gnupg (>= 1.0.7), when
+      --no-show-policy-url was added. (Closes: #228938)
   * bts:
     - Recognize the 'l10n' tag for bts. (Closes: #227735)
     - bts.1: Fix extraneous indentation. (Closes: #236309)
   * Devscripts::Versort:
     - Apply Roderick Schertler's patch to fix an infinite loop comparing
       identical non-Debian revisions. (Closes: #236344)
+  * rc-alert:
+    - rc-alert.1: Add SEE ALSO for popbugs(1). (Closes: #227078)
 
- -- Joshua Kwan <joshk@triplehelix.org>  Thu, 29 Jul 2004 15:53:55 -0700
+ -- Joshua Kwan <joshk@triplehelix.org>  Thu, 29 Jul 2004 16:35:47 -0700
 
 devscripts (2.7.95.1) unstable; urgency=low
 

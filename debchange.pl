@@ -8,6 +8,7 @@
 # -v version   generates a new changelog section with given version number
 # -d, --fromdirname
 #              Like -v, but takes version from directory name
+# -n, --nmu    Increments version, but for a NMU
 # -p           preserve directory name
 # --closes nnnnn,nnnnn,... Closes bug reports
 # --[no]query  Don't contact the BTS to find the bug report details
@@ -97,6 +98,8 @@ Options:
          [Don\'t] try contacting the BTS to get bug titles
   -d, --fromdirname
          Add a new changelog entry with version taken from the directory name
+  -n, --nmu
+         Increment the Debian release number for a non-maintainer upload
   -p, --preserve
          Preserve the directory name
   --no-preserve
@@ -200,7 +203,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # We use bundling so that the short option behaviour is the same as
 # with older debchange versions.
 my ($opt_help, $opt_version);
-my ($opt_i, $opt_a, $opt_v, $opt_d, $opt_D, $opt_u, @closes);
+my ($opt_i, $opt_a, $opt_v, $opt_d, $opt_D, $opt_u, $opt_n, @closes);
 my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 $opt_u = 'low';
 
@@ -215,6 +218,7 @@ GetOptions("help|h" => \$opt_help,
 	   "preserve!" => \$opt_p,
            "D|distribution=s" => \$opt_D,
            "u|urgency=s" => \$opt_u,
+	   "n|nmu" => \$opt_n,
 	   "query!" => \$opt_query,
 	   "closes=s" => \@closes,
 	   "ignore-dirname" => \$opt_ignore,
@@ -421,46 +425,74 @@ if (@closes and $opt_query) { # and we have to query the BTS
 	$opt_query=0;
 	$warnings++;
 	# This will now go and execute the "if (@closes and ! $opt_query)" code
-    } else {
-	foreach my $close (@closes) {
-	    unless ($close =~ /^\d{3,}$/) {
-		warn "$progname warning: Bug number $close is invalid; ignoring\n";
-		$warnings++;
-		next;
-	    }
-	    my $report = get("http://bugs.debian.org/$close");
-	    if (! defined $report) {
-		warn "$progname warning: could not contact BTS about bug \#$close\n";
-		$warnings++;
-		push @closes_text, "Closes: \#$close: \n";
-	    } else {
-		# Parse the HTML.  Yuck.
-		my ($title, $pkg, $srcpkg);
-		if ($report =~ m%<H1>Debian Bug report logs.*?<BR>(.*?)</H1>%) {
-		    $title = unhtmlsanit($1);
-		} else { $title = ''; }
-		if ($report =~ m%Package: <a href="pkgreport.cgi\?pkg=(.*?)">%i) {
-		    $pkg = $1;
-		    if ($report =~ m%Source for $pkg is\s+<a href="pkgreport.cgi\?src=(.*?)">%s) {
-			$srcpkg = $1; }
-		    else { $srcpkg = '<NO SOURCE PACKAGE FOUND>'; }
+    }
+    else
+    {
+        my $filter;
+        if ($#closes == 0)
+        {
+                $filter = '(debbugsID=' . $closes[0] . ')';
+        }
+        else
+        {
+                $filter = '(|' . map { '(debbugsID=' . $_ . ')' } @closes . ')';
+        }
+        use Net::LDAP;
+        my $ldap = Net::LDAP->new('bugs.debian.org', port => 10101);
+        my $mesg = $ldap->search(base => 'dc=current,dc=bugs,dc=debian,dc=org',
+                        filter => $filter,
+                        attrs => ['debbugsPackage', 'debbugsSourcePackage', 'debbugsTitle', 'debbugsID']);
 
-		    if ($srcpkg eq $PACKAGE or $pkg eq 'wnpp') {
-			$title =~ s/^($pkg|$srcpkg): //;
-			push @closes_text, "Closes: \#$close: $title\n";
-		    } else {
-			warn "$progname warning: bug \#$close does not appear to belong to this package,\n  disabling closing changelog entry\n";
+        # Shamelessly plucked from the Net::LDAP::Entry POD
+        my $max = $mesg->count;
+        
+        for (my $i = 0; $i < $max; $i++)
+        {
+                my $title = '';
+                my $srcpkg = '<NO SOURCE PACKAGE FOUND>';
+                my $pkg = '';
+                my $close = '';
+        
+                my $entry = $mesg->entry($i);
+                foreach my $attr ($entry->attributes)
+                {
+                        if ($attr eq 'debbugsPackage') { $pkg = $entry->get_value($attr); }
+                        elsif ($attr eq 'debbugsSourcePackage') { $srcpkg = $entry->get_value($attr); }
+                        elsif ($attr eq 'debbugsTitle') { $title = $entry->get_value($attr); }
+                        elsif ($attr eq 'debbugsID') { $close = $entry->get_value($attr); }
+                }
+                
+                if ($pkg ne $PACKAGE)
+                {
+			warn "$progname warning: bug \#$close actually belongs to $pkg ($srcpkg),\n  disabling closing changelog entry\n";
 			$warnings++;
 			push @closes_text, "Closes?? \#$close: WRONG PACKAGE!! $title\n";
-		    }
-		} else {
+                }
+                elsif ($pkg eq '')
+                {
 		    warn "$progname warning: couldn't determine package for bug \#$close, so not checking\n";
 		    $warnings++;
 		    push @closes_text, "Closes: \#$close: $title\n";
-		}
-	    }
-	}
-    }
+                }
+                else
+                {
+                        if ($srcpkg eq $PACKAGE)
+                        {
+	                        $title =~ s/^($pkg|$srcpkg): //;
+        		        push @closes_text, "Closes: \#$close: $title\n";
+                        }
+                        elsif ($pkg eq $PACKAGE)
+                        {
+                                push @closes_text, "Closes: \#$close: $title\n";
+                        }
+                        elsif ($pkg eq 'wnpp')
+                        {
+	                        $title =~ s/^($pkg|$srcpkg): //;
+        		        push @closes_text, "Initial Release. (Closes: \#$close)\n";
+                 	}
+	        }
+        }
+   }
 }
 
 if (@closes and ! $opt_query) { # and we don't have to query the BTS
@@ -528,7 +560,7 @@ my $tmpchk=1;
 my ($NEW_VERSION, $NEW_SVERSION, $NEW_UVERSION);
 my $line;
 
-if ($opt_i || $opt_v || $opt_d) {
+if ($opt_i || $opt_n || $opt_v || $opt_d) {
     # Check that a given explicit version number is sensible.
     if ($opt_v || $opt_d) {
 	if($opt_v) {
@@ -586,8 +618,16 @@ if ($opt_i || $opt_v || $opt_d) {
 
     if (! $NEW_VERSION) {
 	if ($VERSION =~ /(.*?)([a-yA-Y][a-zA-Z]*|\d*)$/i) {
-	    my $end=$2; $end++;
-	    $NEW_VERSION = "$1$end";
+	    my $end=$2;
+            my $start=$1;
+            # If it's not already an NMU make it so
+            # otherwise we can be safe if we behave like dch -i
+	    if ($opt_n and not $start =~ /\.$/) {
+	    	$end += 0.1;
+            } else {
+                $end++;
+            }
+            $NEW_VERSION = "$start$end";
 	    ($NEW_SVERSION=$NEW_VERSION) =~ s/^\d+://;
 	    ($NEW_UVERSION=$NEW_SVERSION) =~ s/-[^-]*$//;
 	} else {
@@ -599,6 +639,10 @@ if ($opt_i || $opt_v || $opt_d) {
     print O "$PACKAGE ($NEW_VERSION) $distribution; ",
         "urgency=$opt_u\n\n";
 
+    if ($opt_n) {
+        print O "  * Non-maintainer upload.\n";
+        $line = 1;
+    }
     if (@closes_text or $TEXT) {
 	# format it nicely
 	foreach $CHGLINE (@closes_text) {
@@ -610,7 +654,7 @@ if ($opt_i || $opt_v || $opt_d) {
     } else {
 	print O "  * \n";
     }
-    $line = 3;
+    $line += 3;
     print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n\n";
 
     # Copy the old changelog file to the new one

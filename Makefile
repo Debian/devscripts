@@ -64,7 +64,7 @@ libvfork.so.0: libvfork.o
 
 clean:
 	rm -f version conf.default $(SCRIPTS) $(GEN_MAN1S) $(SCRIPT_LIBS) \
-	    libvfork.o libvfork.so.0
+	    $(CWRAPPERS) libvfork.o libvfork.so.0
 
 install: all
 	mkdir -p $(DESTDIR)$(BINDIR)
