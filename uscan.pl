@@ -27,6 +27,7 @@ use 5.008;  # uses 'our' variables and filetest
 use strict;
 use Cwd;
 use File::Basename;
+use File::Copy;
 use filetest 'access';
 use Getopt::Long;
 use lib '/usr/share/devscripts';
@@ -42,6 +43,7 @@ BEGIN {
 	}
     }
 }
+my $CURRENT_WATCHFILE_VERSION = 3;
 
 my $progname = basename($0);
 my $modified_conf_msg;
@@ -74,7 +76,8 @@ Options:
     --pasv         Use PASV mode for FTP connections
     --no-pasv      Do not use PASV mode for FTP connections (default)
     --symlink      Make an orig.tar.gz symlink to downloaded file (default)
-    --no-symlink   Don\'t make this symlink
+    --rename       Rename to orig.tar.gz instead of symlinking
+    --no-symlink   Don\'t make symlink or rename
     --verbose      Give verbose output
     --no-verbose   Don\'t give verbose output (default)
     --check-dirname-level N
@@ -129,7 +132,7 @@ our $passive = 'default';
 # The next stuff is boilerplate
 
 my $download = 1;
-my $symlink = 1;
+my $symlink = 'symlink';
 my $verbose = 0;
 my $check_dirname_level = 1;
 my $check_dirname_regex = 'PACKAGE(-.*)?';
@@ -144,7 +147,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     my %config_vars = (
 		       'USCAN_DOWNLOAD' => 'yes',
 		       'USCAN_PASV' => 'default',
-		       'USCAN_SYMLINK' => 'yes',
+		       'USCAN_SYMLINK' => 'symlink',
 		       'USCAN_VERBOSE' => 'no',
 		       'USCAN_DEHS_OUTPUT' => 'no',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
@@ -169,8 +172,11 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'USCAN_DOWNLOAD'}='yes';
     $config_vars{'USCAN_PASV'} =~ /^(yes|no|default)$/
 	or $config_vars{'USCAN_PASV'}='default';
-    $config_vars{'USCAN_SYMLINK'} =~ /^(yes|no)$/
+    $config_vars{'USCAN_SYMLINK'} =~ /^(yes|no|symlinks?|rename)$/
 	or $config_vars{'USCAN_SYMLINK'}='yes';
+    $config_vars{'USCAN_SYMLINK'}='symlink'
+	if $config_vars{'USCAN_SYMLINK'} eq 'yes' or
+	    $config_vars{'USCAN_SYMLINK'} eq 'symlinks';
     $config_vars{'USCAN_VERBOSE'} =~ /^(yes|no)$/
 	or $config_vars{'USCAN_VERBOSE'}='no';
     $config_vars{'USCAN_DEHS_OUTPUT'} =~ /^(yes|no)$/
@@ -189,7 +195,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $download = $config_vars{'USCAN_DOWNLOAD'} eq 'no' ? 0 : 1;
     $passive = $config_vars{'USCAN_PASV'} eq 'yes' ? 1 :
 	$config_vars{'USCAN_PASV'} eq 'no' ? 0 : 'default';
-    $symlink = $config_vars{'USCAN_SYMLINK'} eq 'no' ? 0 : 1;
+    $symlink = $config_vars{'USCAN_SYMLINK'};
     $verbose = $config_vars{'USCAN_VERBOSE'} eq 'yes' ? 1 : 0;
     $dehs = $config_vars{'USCAN_DEHS_OUTPUT'} eq 'yes' ? 1 : 0;
     $check_dirname_level = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'};
@@ -207,7 +213,8 @@ GetOptions("help" => \$opt_h,
 	   "download!" => \$opt_download,
 	   "report" => sub { $opt_download = 0; },
 	   "passive|pasv!" => \$opt_passive,
-	   "symlink!" => \$opt_symlink,
+	   "symlink!" => sub { $opt_symlink = $_[1] ? 'symlink' : 'no'; },
+	   "rename" => sub { $opt_symlink = 'rename'; },
 	   "package=s" => \$opt_package,
 	   "uversion=s" => \$opt_uversion,
 	   "watchfile=s" => \$opt_watchfile,
@@ -509,12 +516,6 @@ exit $found ? 0 : 1;
 # For ftp sites:
 #   ftp://site.name/dir/path/pattern-(.*)\.tar\.gz [version [action]]
 #
-# with regex special characters in the filename part:
-#   ftp://ftp.worldforge.org/pub/worldforge/libs/Atlas-C++/transitional/Atlas-C\+\+-(.*)\.tar\.gz
-# 
-# with directory pattern matching
-# ftp://ftp.nessus.org/pub/nessus/nessus-([\d\.]+)/src/nessus-core-([\d\.]+)\.tar\.gz
-# 
 # For http sites:
 #   http://site.name/dir/path/pattern-(.*)\.tar\.gz [version [action]]
 # or
@@ -526,10 +527,27 @@ exit $found ? 0 : 1;
 # greatest version number (as determined by the (...) group), using the
 # Debian version number comparison algorithm described below.
 #
-# Furthermore, the pattern in each part may contain several (...) groups and
+# watch_version=3:
+#
+# Correct handling of regex special characters in the path part:
+# ftp://ftp.worldforge.org/pub/worldforge/libs/Atlas-C++/transitional/Atlas-C\+\+-(.*)\.tar\.gz
+# 
+# Directory pattern matching:
+# ftp://ftp.nessus.org/pub/nessus/nessus-([\d\.]+)/src/nessus-core-([\d\.]+)\.tar\.gz
+# 
+# The pattern in each part may contain several (...) groups and
 # the version number is determined by joining all groups together
 # using "." as separator.  For example:
 #   ftp://site/dir/path/pattern-(\d+)_(\d+)_(\d+)\.tar\.gz
+# 
+# This is another way of handling site with funny version numbers,
+# this time using mangling.  (Note that multiple groups will be
+# concatenated before mangling is performed, and that mangling will
+# only be performed on the basename version number, not any path version
+# numbers.)
+# opts=uversionmangle=s/^/0.0/ \\
+#   ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/Wine-(.*)\.tar\.gz
+
 
 sub process_watchline ($$$$$$)
 {
@@ -833,7 +851,8 @@ EOF
 	    return 0;
 	}
 	if (-f "../${pkg}_${newversion}.orig.tar.gz") {
-	    warn "$progname warning: From directory $pkg_dir, found file\n  ../${pkg}_${newversion}.orig.tar.gz but not ../$newfile_base,\n  which is the newest file available on remote site.  Skipping.\n";
+	    print " => ${pkg}_${newversion}.orig.tar.gz already in package directory\n"
+		if $verbose;
 	    return 0;
 	}
     }
@@ -878,31 +897,48 @@ EOF
 	}
     }
 
-    if ($symlink and $newfile_base =~ /\.(tar\.gz|tgz)$/) {
-	symlink $newfile_base, "../${pkg}_${newversion}.orig.tar.gz";
+    if ($newfile_base =~ /\.(tar\.gz|tgz)$/) {
+	if ($symlink eq 'symlink') {
+	    symlink $newfile_base, "../${pkg}_${newversion}.orig.tar.gz";
+	} elsif ($symlink eq 'rename') {
+	    move "../$newfile_base", "../${pkg}_${newversion}.orig.tar.gz";
+	}
     }
 
     if ($verbose) {
 	print "-- Successfully downloaded updated package $newfile_base\n";
-	if ($symlink and $newfile_base =~ /\.(tar\.gz|tgz)$/) {
-	    print "    and symlinked ${pkg}_${newversion}.orig.tar.gz to it\n";
+	if ($newfile_base =~ /\.(tar\.gz|tgz)$/) {
+	    if ($symlink eq 'symlink') {
+		print "    and symlinked ${pkg}_${newversion}.orig.tar.gz to it\n";
+	    } elsif ($symlink eq 'rename') {
+		print "    and renamed it as ${pkg}_${newversion}.orig.tar.gz\n";
+	    }
 	}
     } elsif ($dehs) {
 	my $msg = "Successfully downloaded updated package $newfile_base";
-	if ($symlink and $newfile_base =~ /\.(tar\.gz|tgz)$/) {
-	    $msg .= " and symlinked ${pkg}_${newversion}.orig.tar.gz to it";
+	if ($newfile_base =~ /\.(tar\.gz|tgz)$/) {
+	    if ($symlink eq 'symlink') {
+		$msg .= " and symlinked ${pkg}_${newversion}.orig.tar.gz to it";
+	    } elsif ($symlink eq 'rename') {
+		$msg .= " and renamed it as ${pkg}_${newversion}.orig.tar.gz";
+	    }
 	}
 	dehs_msg($msg);
     } else {
 	print "$pkg: Successfully downloaded updated package $newfile_base\n";
-	if ($symlink and $newfile_base =~ /\.(tar\.gz|tgz)$/) {
-	    print "    and symlinked ${pkg}_${newversion}.orig.tar.gz to it\n";
+	if ($newfile_base =~ /\.(tar\.gz|tgz)$/) {
+	    if ($symlink eq 'symlink') {
+		print "    and symlinked ${pkg}_${newversion}.orig.tar.gz to it\n";
+	    } elsif ($symlink eq 'rename') {
+		print "    and renamed it as ${pkg}_${newversion}.orig.tar.gz\n";
+	    }
 	}
     }
 
     # Do whatever the user wishes to do
     if ($action) {
-	my $usefile = ($symlink and $newfile_base =~ /\.(tar\.gz|tgz)$/) ?
+	my $usefile = ($symlink =~ /^(symlink|rename)$/
+		       and $newfile_base =~ /\.(tar\.gz|tgz)$/) ?
 	    "../${pkg}_${newversion}.orig.tar.gz" : "../$newfile_base";
 
 	if ($watch_version > 1) {
@@ -1098,7 +1134,8 @@ sub process_watchfile ($$$$)
 	if (! $watch_version) {
 	    if (/^version\s*=\s*(\d+)(\s|$)/) {
 		$watch_version=$1;
-		if ($watch_version < 2 or $watch_version > 2) {
+		if ($watch_version < 2 or
+		    $watch_version > $CURRENT_WATCHFILE_VERSION) {
 		    warn "$progname ERROR: $watchfile version number is unrecognised; skipping watchfile\n";
 		    last;
 		}

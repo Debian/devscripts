@@ -28,8 +28,8 @@ package.
 
 .PP
 .nf
-# format version number, currently 2; this line is compulsory!
-version=2
+# format version number, currently 3; this line is compulsory!
+version=3
 
 # Line continuations are performed with \\
 
@@ -66,9 +66,10 @@ http://www.site.com/pub/foobar/foobar_v(\d+)_(\d+)\\.tar\\.gz
 # This is another way of handling site with funny version numbers,
 # this time using mangling.  (Note that multiple groups will be
 # concatenated before mangling is performed, and that mangling will
-# only be performed on the basename version, not any path versions.)
+# only be performed on the basename version number, not any path
+# version numbers.)
 opts=uversionmangle=s/^/0.0/ \\
-  ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/Wine-(.*)\.tar\.gz
+  ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/Wine-(.*)\\.tar\\.gz
 
 .fi
 .PP
@@ -76,7 +77,7 @@ Comment lines may be introduced with a `#' character.  Continuation
 lines may be indicated by terminating a line with a backslash
 character.
 .PP
-The first (non-comment) line of the file must begin `version=2'.  This
+The first (non-comment) line of the file must begin `version=3'.  This
 allows for future extensions without having to change the name of the
 file.
 .PP
@@ -137,7 +138,7 @@ taken as the name of a command, and the command
 is executed, using either the original file or the symlink name.  A
 common such command would be \fBuupdate\fR.  (Note that the calling
 syntax was slightly different when using watchfiles without a
-`version=2' line; there the command executed was `command filename
+`version=...' line; there the command executed was `command filename
 version'.)
 .PP
 The alternative version of the watchfile syntax for HTTP URLs is as
@@ -253,8 +254,12 @@ Do not use PASV mode for FTP connections.
 Make orig.tar.gz symlinks to any downloaded files if their extensions
 are \fI.tar.gz\fR or \fI.tgz\fR.  (This is the default behaviour.)
 .TP
+.B \-\-rename
+Rename the downloaded files to their Debian orig.tar.gz names if their
+extensions are \fI.tar.gz\fR or \fI.tgz\fR.
+.TP
 .B \-\-no\-symlink
-Don't make these symlinks.
+Don't make these symlinks and don't rename the files.
 .TP
 .B \-\-dehs
 Use an XML format for output, as required by the DEHS system.
@@ -329,8 +334,10 @@ the FTP_PASSIVE environment variable).
 .TP
 .B USCAN_SYMLINK
 If this is set to \fIno\fR, then a pkg_version.orig.tar.gz symlink
-will not be made.  This is equivalent to the \fB\-\-no\-symlink\fR
-option.
+will not be made (equivalent to the \fB\-\-no-symlink\fR option).  If
+it is set to \fIyes\fR or \fIsymlink\fR, then the symlinks will be
+made.  If it is set to \fIrename\fR, then the files are renamed
+(equivalent to the \fB\-\-rename\fR option).
 .TP
 .B USCAN_DEHS_OUTPUT
 If this is set to \fIyes\fR, then DEHS-style output will be used.
@@ -351,6 +358,23 @@ watchfile which was examined, a newer upstream version was located.
 1
 No newer upstream versions were located for any of the watchfiles
 examined.
+.SH HISTORY
+This section briefly describes the backwards-incompatible watchfile
+features which have been added in each watchfile version, and the
+first version of the \fBdevscripts\fR package which understood them.
+.TP
+.I Pre-version 2
+The watchfile syntax was significantly different in those days.  Don't
+use it.
+.TP
+.I Version 2
+devscripts version 2.6.90: The first incarnation of the current style
+of watchfiles.
+.TP
+.I Version 3
+devscripts version 2.8.12: Introduced the following: correct handling
+of regex special characters in the path part, directory/path pattern
+matching, version number in several parts, version number mangling.
 .SH "SEE ALSO"
 .BR dpkg (1),
 .BR perlre (1),

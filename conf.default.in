@@ -234,8 +234,9 @@
 # environment variable); 'yes' and 'no' override the default
 # USCAN_PASV=default
 # 
-# Should we create a symlink pkg_version.orig.tar.gz to the downloaded
-# file (if it is a tar.gz file)?
+# Should we create a symlink from the downloaded tar.gz file to
+# pkg_version.orig.tar.gz, rename it like this or do nothing?
+# Options are 'symlink'/'yes', 'rename' or 'no'
 # USCAN_SYMLINK=yes
 # 
 # Should we use DEHS style output (XML format)?
