@@ -73,6 +73,28 @@ EOF
 # DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.*)?'
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.8.6
+	then
+	# Added in devscripts 2.8.6:
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### bts options added in version 2.8.6:
+# 
+# Default bts show/bugs to run in offline mode?
+# BTS_OFFLINE=no
+# 
+# Cache all visited bug reports once a cache has been established
+# for the first time?
+# BTS_CACHE=yes
+# 
+# Mirror all of the boring bits when caching?
+# BTS_FULL_MIRROR=no
+# 
+# Always refresh the cache, even if nothing's changed?
+# BTS_FORCE_REFRESH=no
+EOF
+	fi
     fi
 fi
 

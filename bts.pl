@@ -32,6 +32,7 @@ use 5.006_000;
 use strict;
 use File::Basename;
 use File::Copy;
+use File::Path;
 use File::Spec;
 use File::Temp qw/tempfile/;
 use IO::Handle;
@@ -41,6 +42,8 @@ use Fcntl qw(O_RDWR O_RDONLY O_CREAT F_SETFD);
 
 my $it = undef;
 my $lwp_broken = undef;
+my $ua;
+
 sub have_lwp() {
     return $lwp_broken if defined $lwp_broken;
     eval {
@@ -68,6 +71,7 @@ sub MIRROR_UP_TO_DATE { 2; }
 
 
 my $progname = basename($0);
+my $modified_conf_msg;
 my $version='###VERSION###';
 my $debug = (exists $ENV{'DEBUG'} and $ENV{'DEBUG'}) ? 1 : 0;
 
@@ -157,33 +161,156 @@ consideration.
 
 =head1 OPTIONS
 
+B<bts> examines the B<devscripts> configuration files as described
+below.  Command line options override the configuration file settings,
+though.
+
 =over 4
 
 =item -o, --offline
 
 Make bts use cached bugs for the 'show' and 'bugs' commands, if a cache
 is available for the requested data. See the cache command, below for
-information on setting up a cache. Setting the BUGSOFFLINE environment
-variable has the same effect.
+information on setting up a cache.
+
+=item --online, --no-offline
+
+Opposite of --online; overrides any configuration file directive to work
+offline.
+
+=item -m, --full-mirror
+
+When running a B<bts cache> command, also mirror the boring
+attachments to the BTS bug pages, including the mbox version of the
+bug report and the acknowledgement emails.
+
+=item --no-full-mirror
+
+Override --full-mirror.
+
+=item -f, --force-refresh
+
+Download a bug report again, even if it does not appear to have
+changed since the last cache command.  Useful if a --full-mirror is
+requested for the first time (otherwise unchanged bug reports will not
+be downloaded again, even if the boring bits have not been
+downloaded).
+
+=item --no-force-refresh
+
+Suppress any configuration file --force-refresh option.
+
+=item --no-conf, --noconf
+
+Do not read any configuration files.  This can only be used as the
+first option given on the command-line.
 
 =back
 
 =cut
 
+# Start by setting default values
+
+my $offlinemode=0;
+my $cachemode=1;
+my $fullmirrormode=0;
+my $refreshmode=0;
+
+# Next, read read configuration files and then command line
+# The next stuff is boilerplate
+
+if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
+    $modified_conf_msg = "  (no configuration files read)";
+    shift;
+} else {
+    my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
+    my %config_vars = (
+		       'BTS_OFFLINE' => 'no',
+		       'BTS_CACHE' => 'yes',
+		       'BTS_FULL_MIRROR' => 'no',
+		       'BTS_FORCE_REFRESH' => 'no',
+		       );
+    my %config_default = %config_vars;
+    
+    my $shell_cmd;
+    # Set defaults
+    foreach my $var (keys %config_vars) {
+	$shell_cmd .= "$var='$config_vars{$var}';\n";
+    }
+    $shell_cmd .= 'for file in ' . join(" ",@config_files) . "; do\n";
+    $shell_cmd .= '[ -f $file ] && . $file; done;' . "\n";
+    # Read back values
+    foreach my $var (keys %config_vars) { $shell_cmd .= "echo \$$var;\n" }
+    my $shell_out = `/bin/bash -c '$shell_cmd'`;
+    @config_vars{keys %config_vars} = split /\n/, $shell_out, -1;
+
+    # Check validity
+    $config_vars{'BTS_OFFLINE'} =~ /^(yes|no)$/
+	or $config_vars{'BTS_OFFLINE'}='no';
+    $config_vars{'BTS_CACHE'} =~ /^(yes|no)$/
+	or $config_vars{'BTS_CACHE'}='yes';
+    $config_vars{'BTS_FULL_MIRROR'} =~ /^(yes|no)$/
+	or $config_vars{'BTS_FULL_MIRROR'}='no';
+    $config_vars{'BTS_FORCE_REFRESH'} =~ /^(yes|no)$/
+	or $config_vars{'BTS_FORCE_REFRESH'}='no';
+
+    foreach my $var (sort keys %config_vars) {
+	if ($config_vars{$var} ne $config_default{$var}) {
+	    $modified_conf_msg .= "  $var=$config_vars{$var}\n";
+	}
+    }
+    $modified_conf_msg ||= "  (none)\n";
+    chomp $modified_conf_msg;
+
+    $offlinemode = $config_vars{'BTS_OFFLINE'} eq 'yes' ? 1 : 0;
+    $cachemode = $config_vars{'BTS_CACHE'} eq 'no' ? 0 : 1;
+    $fullmirrormode = $config_vars{'BTS_FULL_MIRROR'} eq 'yes' ? 1 : 0;
+    $refreshmode = $config_vars{'BTS_FORCE_REFRESH'} eq 'yes' ? 1 : 0;
+}
+
+if (exists $ENV{'BUGSOFFLINE'}) {
+    warn "BUGSOFFLINE environment variable deprecated: please use ~/.devscripts\nor --offline/-o option instead!  (See bts(1) for details.)\n";
+}
+
 # For now, a very simple parser, instead of Getopt::Long since there are
 # so few options.
-my $offlinemode=(exists $ENV{'BUGSOFFLINE'});
-foreach (@ARGV) {
-    if (/^--(.*)/ || /^-(.*)/) {
+while (@ARGV) {
+    my $arg=$ARGV[0];
+    if ($arg =~ /^--?(.*)/) {
 	my $option=$1;
 	shift @ARGV;
 	if ($option eq 'offline' || $option eq 'o') {
 	    $offlinemode=1;
 	}
-	elsif ($option eq 'help') { bts_help(); exit 0; }
-	elsif ($option eq 'version') { bts_version(); exit 0; }
+	elsif ($option eq 'online' || $option =~ /^no-?offline$/) {
+	    $offlinemode=0;
+	}
+	if ($option eq 'cache') {
+	    $cachemode=1;
+	}
+	elsif ($option =~ /^no-?cache$/) {
+	    $cachemode=0;
+	}
+	elsif ($option eq 'full-mirror' || $option eq 'm') {
+	    $fullmirrormode=1;
+	}
+	elsif ($option =~ /^no-?full-mirror$/) {
+	    $fullmirrormode=1;
+	}
+	elsif ($option eq 'force-refresh' || $option eq 'f') {
+	    $refreshmode=1;
+	}
+	elsif ($option =~ /^no-?force-refresh$/) {
+	    $refreshmode=1;
+	}
+	elsif ($option eq 'help' || $option eq 'h') {
+	    bts_help(); exit 0;
+	}
+	elsif ($option eq 'version' || $option eq 'v') {
+	    bts_version(); exit 0;
+	}
 	else {
-	    die "$progname: Unknown option, \"$option\"\nRun $progname --help for more information\n";
+	    die "$progname: Unknown option, \"$arg\"\nRun $progname --help for more information\n";
 	}
     }
     else {
@@ -191,15 +318,11 @@ foreach (@ARGV) {
     }
 }
 
-# Command line parse.
 if (@ARGV == 0) {
     bts_help();
     exit 0;
 }
-if ($ARGV[0] eq '--version') {
-    bts_version();
-    exit 0;
-}
+
 # Otherwise, parse the arguments
 my @command;
 my @args;
@@ -262,7 +385,9 @@ directory ~/.devscripts_cache/bts/), then any page requested by "bts
 show" will automatically be cached, and therefore available offline
 thereafter.  Pages which are automatically cached in this way will be
 deleted on subsequent "bts show|bugs|cache" invocations if they have
-not been accessed in 30 days.
+not been accessed in 30 days.  This automatic caching can be disabled
+using the --no-cache option or explicitly enabled using the --cache
+option.
 
 Any other B<bts> commands following this on the command line will be
 executed after the browser has been exited.
@@ -644,8 +769,6 @@ switch. For example:
   bts -o bugs
   bts -o show 12345
 
-The BUGSOFFLINE variable can also be set to do the same thing.
-
 Also, once the cache is set up, bts will update the files in it in a
 piecemeal fashion as it downloads information from the bts. You might
 thus set up the cache, and update the whole thing once a week, while
@@ -656,6 +779,15 @@ A final benefit to using a cache is that it will speed download times
 for bugs in the cache even when you're online, as it can just compare the
 item in the cache with what's on the server, and not re-download it
 every time.
+
+Two options affect the behaviour of the cache command.  The first is
+--full-mirror, which forces B<bts> to download all of the referenced
+links from the bug page, including boring bits such as the
+acknowledgement emails, emails to the control bot, and the mbox
+version of the bug report.  This can be switched off using
+--no-full-mirror.  The second is --force-refresh, which forces the
+download, even if the cached bug report is up-to-date.  Both of these
+are configurable from the configuration file, as described below.
 
 =cut
 
@@ -778,8 +910,9 @@ sub bts_version {
     print <<"EOF";
 $progname version $version
 Copyright (C) 2001-2003 by Joey Hess <joeyh\@debian.org>.
-Modifications Copyright (C) 2002-2003 by Julian Gilbey <jdg\@debian.org>.
-It is licensed under the terms of the GPL.
+Modifications Copyright (C) 2002-2004 by Julian Gilbey <jdg\@debian.org>.
+It is licensed under the terms of the GPL, either version 2 of the
+License, or (at your option) any later version.
 EOF
 }
 
@@ -792,14 +925,42 @@ man page.
 
 # Other supporting subs
 
+# This must be the last bts_* sub
 sub bts_help {
+    my $inlist = 0;
     my $insublist = 0;
-    print "Usage: $progname [options] command [args] [#comment] [.|, command [args] [#comment]] ...\n";
+    print <<"EOF";
+Usage: $progname [options] command [args] [\#comment] [.|, command ... ]
+Valid options are:
+   --no-conf, --noconf    Don\'t read devscripts config files;
+                          must be the first option given
+   -o, --offline          Don\'t attempt to connect to BTS for show/bug
+                          commands: use cached copy
+   --online, --no-offline Attempt to connect (default)
+   --no-cache             Don\'t attempt to cache new versions of BTS
+                          pages when performing show/bug commands
+   --cache                Do attempt to cache new versions of BTS
+                          pages when performing show/bug commands (default)
+   -m, --full-mirror      Download boring bits when running cache command
+   --no-full-mirror       Don\'t download the boring bits (default)
+   -f, --force-refresh    Reload all bug reports being cached, even unchanged
+                          ones
+   --no-force-refresh     Don\'t do so (default)
+   --help, -h             Display this message
+   --version, -v          Display version and copyright info
+
+Default settings modified by devscripts configuration files:
+$modified_conf_msg
+
+Valid commands are:
+EOF
     seek DATA, 0, 0;
     while (<DATA>) {
+	$inlist = 1 if /^=over 4/;
+	next unless $inlist;
 	$insublist = 1 if /^=over [^4]/;
 	$insublist = 0 if /^=back/;
-	print "\t$1\n" if /^=item\s(.*)/ and ! $insublist;
+	print "\t$1\n" if /^=item\s([^\-].*)/ and ! $insublist;
 	last if defined $1 and $1 eq 'help';
     }
 }
@@ -931,7 +1092,7 @@ EOM
 sub download {
     my $thing=shift;
     my $manual=shift;  # true="bts cache", false="bts show/bug"
-    my $timestamp;
+    my $timestamp = 0;
     my $url;
 
     # What URL are we to download?
@@ -969,26 +1130,20 @@ sub download {
 
 	die "bts: empty page downloaded" unless length $livepage;
 
+	my $bug2filename = { };
+
 	if ($thing =~ /^\d+$/) {
 	    # we've downloaded an individual bug, and it's been updated,
 	    # so we need to also download all the attachments
+	    $bug2filename =
+		download_attachments($thing, $livepage, $timestamp);
 	}
+
 	my $data = $livepage;  # work on a copy, not the original
 	my $cachefile=cachefile($thing);
 	open (OUT_CACHE, ">$cachefile") or die "bts: open $cachefile: $!";
 
-	# Mangle downloaded file to work in the local cache, so
-	# selectively modify the links
-
-	# Undo unnecessary '+' encoding in URLs
-	while ($data =~ s!(href=\"[^\"]*)\%2b!$1+!ig) { };
-	my $time=localtime($timestamp);
-	$data =~ s%(<BODY.*>)%$1<p><em>[Locally cached on $time]</em></p>%i;
-	$data =~ s%<a href="[^\"]*(bugreport\.cgi(?:/[^\?]*)?\?bug=(\d+)&amp;msg=[^\"]*)">(.+?)</a>%$3 (<a href="http://bugs.debian.org/cgi-bin/$1">online</a>)%ig;
-	$data =~ s%<a href="[^\"]*(bugreport\.cgi\?bug=(\d+)(?!\d|&amp;msg=)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="http://bugs.debian.org/cgi-bin/$1">online</a>)%ig;
-	$data =~ s%<a href="[^\"]*(pkgreport\.cgi\?(?:pkg|maint)=([^\"&]+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="http://bugs.debian.org/cgi-bin/$1">online</a>)%ig;
-	$data =~ s%<a href="[^\"]*(pkgreport\.cgi\?src=([^\"&]+)[^\"]*)">(.+?)</a>%<a href="src_$2.html">$3</a> (<a href="http://bugs.debian.org/cgi-bin/$1">online</a>)%ig;
-	$data =~ s%<a href="[^\"]*(pkgreport\.cgi\?submitter=([^\"\&]+)[^\"]*)">(.+?)</a>%<a href="from_$2.html">$3</a> (<a href="http://bugs.debian.org/cgi-bin/$1">online</a>)%ig;
+	$data = mangle_cache_file($data, $thing, $bug2filename, $timestamp);
 	print OUT_CACHE $data;
 	close OUT_CACHE or die "bts: problems writing to $cachefile: $!";
 
@@ -1002,6 +1157,141 @@ sub download {
     }
 }
 
+sub download_attachments {
+    my ($thing, $toppage, $timestamp) = @_;
+    my %bug2filename;
+
+    # We search for appropriate strings in the toppage, and save the
+    # attachments in files with names as follows:
+    # - if the attachment specifies a filename, save as bug#/msg#-att#/filename
+    # - if not, save as bug#/msg#-att# with suffix .txt if plain/text and
+    #   .html if plain/html, no suffix otherwise (too much like hard work!)
+    # Since messages are never modified retrospectively, we don't download
+    # attachements which have already been downloaded
+    
+    for (split /\n/, $toppage) {
+	my ($ref, $msg);
+	if (m%\[<a href="(bugreport\.cgi[^\"]*)">.*?\(([^,]*), .*?\)\]%) {
+	    $ref = $1;
+	    my $mimetype = $2;
+	    $ref =~ s/&amp;/&/g;
+	    next unless $ref =~ /&msg=(\d+)&att=(\d+)/;
+	    $msg = "$1-$2";
+
+	    my $filename = '';
+	    my $fileext = '';
+	    if ($ref =~ m%^bugreport\.cgi/([^\?]*)\?%) {
+		$filename = basename($1);
+	    } else {
+		if ($mimetype eq 'text/plain') { $fileext = '.txt'; }
+		if ($mimetype eq 'text/html') { $fileext = '.html'; }
+	    }
+	    if (length ($filename)) {
+		$bug2filename{$msg} = "$thing/$msg/$filename";
+	    } else {
+		$bug2filename{$msg} = "$thing/$msg$fileext";
+	    }
+	    # already downloaded?
+	    next if -f $bug2filename{$msg} and not $refreshmode;
+	}
+	elsif ($fullmirrormode and
+	       m%<a href="(bugreport\.cgi\?bug=\d+&amp;msg=(\d+))">%) {
+	    $ref = $1;
+	    $msg = $2;
+	    $bug2filename{$msg} = "$thing/$msg.html";
+            # already downloaded?
+	    next if -f $bug2filename{$msg} and not $refreshmode;
+	}
+	elsif ($fullmirrormode and
+	       m%<a href="(bugreport\.cgi\?bug=\d+&amp;mbox=yes)">%) {
+	    $ref = $1;
+	    $msg = 'mbox';
+	    $bug2filename{$msg} = "$thing/$msg";
+	    # This always needs refreshing, as it does change as the bug
+	    # changes
+	}
+
+	next unless $ref;
+
+	warn "bts debug: downloading $btscgiurl$ref\n" if $debug;
+	init_agent() unless $ua;  # shouldn't be necessary, but do just in case
+	my $request = HTTP::Request->new('GET', $btscgiurl . $ref);
+	my $response = $ua->request($request);
+	if ($response->is_success) {
+	    my $content_length = defined $response->content ?
+		length($response->content) : 0;
+	    if ($content_length == 0) {
+		warn "bts: failed to download $ref, skipping\n";
+		next;
+	    }
+
+	    my $data = $response->content;
+
+	    if ($msg =~ /^\d+$/) { # we're dealing with a boring message
+		$data =~ s%<HEAD>%<HEAD><BASE href="../">%;
+		$data = mangle_cache_file($data, $thing,
+				          { $msg => "$thing/$msg.html",
+					    'mbox' => "$thing/mbox", },
+					  $timestamp);
+	    }
+	    mkpath(dirname $bug2filename{$msg});
+	    open OUT_CACHE, ">$bug2filename{$msg}"
+	        or die "bts: open cache $bug2filename{$msg}";
+	    print OUT_CACHE $data;
+	    close OUT_CACHE;
+	} else {
+	    warn "bts: failed to download $ref, skipping\n";
+	    next;
+	}
+    }
+
+    return \%bug2filename;
+}
+
+
+# Mangle downloaded file to work in the local cache, so
+# selectively modify the links
+sub mangle_cache_file {
+    my ($data, $thing, $bug2filename, $timestamp) = @_;
+
+    # Undo unnecessary '+' encoding in URLs
+    while ($data =~ s!(href=\"[^\"]*)\%2b!$1+!ig) { };
+    my $time=localtime($timestamp);
+    $data =~ s%(<BODY.*>)%$1<p><em>[Locally cached on $time]</em></p>%i;
+    my @data = split /\n/, $data;
+    for (@data) {
+	if (m%<a href="bugreport\.cgi[^\?]*\?bug=(\d+)([^\"]*)">%i) {
+	    if ($1 eq $thing) {
+		my $params = $2;
+		my $msg = '';
+		my $att = '';
+		if ($params =~ /&amp;msg=(\d+)&amp;att=(\d+)/) {
+		    $msg = "$1-$2";
+		} elsif ($params =~ /&amp;msg=(\d+)/) {
+		    $msg = $1;
+		} elsif ($params =~ /&amp;mbox=yes/) {
+		    $msg = 'mbox';
+		}
+		if (exists $$bug2filename{$msg}) {
+		    s%<a href="(bugreport\.cgi[^\"]*)">(.+?)</a>%<a href="$$bug2filename{$msg}">$2</a> (<a href="$btscgiurl$1">online</a>)%i;
+		} else {
+		    s%<a href="(bugreport\.cgi[^\"]*)">(.+?)</a>%$2 (<a href="$btscgiurl$1">online</a>)%i;
+		}
+	    } else {
+		s%<a href="(bugreport\.cgi[^\?]*\?bug=(\d+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%i;
+	    }
+	}
+	else {
+	    s%<a href="(pkgreport\.cgi\?(?:pkg|maint)=([^\"&]+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%ig;
+	    s%<a href="(pkgreport\.cgi\?src=([^\"&]+)[^\"]*)">(.+?)</a>%<a href="src_$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%ig;
+	    s%<a href="(pkgreport\.cgi\?submitter=([^\"&]+)[^\"]*)">(.+?)</a>%<a href="from_$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%ig;
+	}
+    }
+
+    return join("\n", @data) . "\n";
+}
+
+
 # Removes a specified thing from the cache
 sub deletecache {
     my $thing=shift;
@@ -1012,6 +1302,9 @@ sub deletecache {
 
     delete_timestamp($thing);
     unlink cachefile($thing);
+    if ($thing =~ /^\d+$/) {
+	rmtree("$cachedir/$thing", 0, 1) if -d "$cachedir/$thing";
+    }
 }
 
 # Given a thing, returns the filename for it in the cache.
@@ -1022,6 +1315,13 @@ sub cachefile {
     $thing =~ s/^from:/from_/;
     $thing =~ s/^tag:/tag_/;
     return $cachedir.$thing.".html";
+}
+
+# Given a bug number, returns the dirname for it in the cache.
+sub cachebugdir {
+    my $thing=shift;
+    if ($thing !~ /^\d+$/) { die "bts: cachebugdir given faulty argument: $thing"; }
+    return $cachedir.$thing;
 }
 
 # And the reverse: Given a filename in the cache, returns the corresponding
@@ -1080,7 +1380,7 @@ sub browse {
 	runbrowser($cachefile);
     }
     # else we're in online mode
-    elsif ($hascache && have_lwp() && $thing ne '') {
+    elsif ($hascache && $cachemode && have_lwp() && $thing ne '') {
 	my $live=download($thing);
 	
 	if (length($live)) {
@@ -1132,8 +1432,14 @@ sub prunecache {
     foreach (@known_files) {
 	delete $weirdfiles{$_} if exists $weirdfiles{$_};
     }
+    # and bug directories
+    foreach (@cachefiles) {
+	if (/^(\d+)\.html$/) {
+	    delete $weirdfiles{$1} if exists $weirdfiles{$1} and -d $1;
+	}
+    }
 
-    warn "bts: unexpected files in cache directory $cachedir:\n  " .
+    warn "bts: unexpected files/dirs in cache directory $cachedir:\n  " .
 	join("\n  ", keys %weirdfiles) . "\n"
 	if keys %weirdfiles;
 
@@ -1425,13 +1731,11 @@ EOW
 #                       MIRROR_DOWNLOADED   downloaded new version
 #                       MIRROR_UP_TO_DATE   up-to-date
 
-my $ua;
-
 sub bts_mirror {
     my ($url, $timestamp) = @_;
 
     init_agent() unless $ua;
-    if ($url =~ m%/^\d+$%) {
+    if ($url =~ m%/\d+$% and not $refreshmode) {
 	# Single bug, worth doing timestamp checks
 	my $request = HTTP::Request->new('HEAD', $url);
 	my $response = $ua->request($request);
@@ -1496,36 +1800,67 @@ If this is set, the From: line in the email will be set to use this email
 address instead of your normal email address (as would be determined by
 B<mail>).
 
-=back
-
-=over 4
-
 =item DEBFULLNAME
 
 If DEBEMAIL is set, DEBFULLNAME is examined to determine the full name
 to use; if this is not set, B<bts> attempts to determine a name from
 your passwd entry.
 
-=back
-
-=over 4
-
 =item BROWSER
 
 If set, it specifies the browser to use for the 'show' and 'bugs'
 options.  See the description above.
 
-=item BUGSOFFLINE
-
-If set and if cached data exists, it will be used for the 'show' and 'bugs'
-options. Equivilant to the -o switch.
-
 =back
+
+=head1 CONFIGURATION VARIABLES
+
+The two configuration files F</etc/devscripts.conf> and
+F<~/.devscripts> are sourced by a shell in that order to set
+configuration variables.  Command line options can be used to override
+configuration file settings.  Environment variable settings are
+ignored for this purpose.  The currently recognised variables are:
+
+=over 4
+
+=item BTS_OFFLINE
+
+If this is set to I<yes>, then it is the same as the --offline command
+line parameter being used.  Only has an effect on the show and bugs
+commands.  The default is I<no>.  See the description of the show
+command above for more information.
+
+=item BTS_CACHE
+
+If this is set to I<no>, then it is the same as the --no-cache command
+line parameter being used.  Only has an effect on the show and bug
+commands.  The default is I<yes>.  Again, see the show command above
+for more information.
+
+=item BTS_FULL_MIRROR
+
+If this is set to I<yes>, then it is the same as the --full-mirror
+command line parameter being used.  Only has an effect on the cache
+command.  The default is I<no>.  See the cache command for more
+information.
+
+=item BTS_FORCE_REFRESH
+
+If this is set to I<yes>, then it is the same as the --full-mirror
+command line parameter being used.  Only has an effect on the cache
+command.  The default is I<no>.  See the cache command for more
+information.
+
+=cut
 
 =head1 COPYRIGHT
 
-This program is Copyright (C) 2001 by Joey Hess <joeyh@debian.org>.
-It is licensed under the terms of the GPL.
+This program is Copyright (C) 2001-2003 by Joey Hess <joeyh@debian.org>.
+Many modifications have been made, Copyright (C) 2002-2004 Julian
+Gilbey <jdg@debian.org>.
+
+It is licensed under the terms of the GPL, either version 2 of the
+License, or (at your option) any later version.
 
 =cut
 

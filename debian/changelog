@@ -1,6 +1,7 @@
 devscripts (2.8.6) UNRELEASED; urgency=low
 
   * Julian Gilbey
+    - bts: download attachments when caching bug reports (closes: #254102)
     - debian/control: add Suggests: libwww-perl (closes: #277388)
     - debchange: switch from ldap to wget for searching BTS (for
       efficiency)

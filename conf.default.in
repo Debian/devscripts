@@ -46,7 +46,18 @@
 
 ##### bts
 # 
-# No variables currently
+# Default bts show/bugs to run in offline mode?
+# BTS_OFFLINE=no
+# 
+# Cache all visited bug reports once a cache has been established
+# for the first time?
+# BTS_CACHE=yes
+# 
+# Mirror all of the boring bits when caching?
+# BTS_FULL_MIRROR=no
+# 
+# Always refresh the cache, even if nothing's changed?
+# BTS_FORCE_REFRESH=no
 
 ##### checkbashisms
 # 
