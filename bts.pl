@@ -285,7 +285,7 @@ while (@ARGV) {
 	elsif ($option eq 'online' || $option =~ /^no-?offline$/) {
 	    $offlinemode=0;
 	}
-	if ($option eq 'cache') {
+	elsif ($option eq 'cache') {
 	    $cachemode=1;
 	}
 	elsif ($option =~ /^no-?cache$/) {
