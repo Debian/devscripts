@@ -735,7 +735,7 @@ if ((cwd() =~ m%/\Q$PACKAGE\E-\Q$UVERSION\E$%) && !$opt_p) {
     open PARSED, "dpkg-parsechangelog |"
 	or fatal "Cannot execute dpkg-parsechangelog: $!";
     while (<PARSED>) {
-	if (/^Version:\s(.+?)\s*$/) { $new_version=$1; last; }
+	if (/^Version:\s(.+?)\s*$/) { $new_version=$1; }
     }
 
     close PARSED
