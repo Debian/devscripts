@@ -8,13 +8,15 @@ devscripts (2.8.5) UNRELEASED; urgency=low
     control file (will be standard in sarge anyway, so it's not a
     particularly big deal) (closes: #241138)
   * debuild: correctly count the saved envvars (closes: #268985)
+  * tagpending: make ldap optional (closes: #269124)
+  * tagpending: fix -n output message (closes: #269125)
   * uscan: support version numbers with ~ (change Devscripts::Versort to
     simply call dpkg --compare-versions to do the work) (closes: #232286)
   * wnpp-alert: now correctly reports on orphaned packages as well
     (tweaked some sed scripts; don't know what was actually wrong :-/ )
     (closes: #268948)
 
- -- Julian Gilbey <jdg@debian.org>  Mon, 30 Aug 2004 10:15:28 +0100
+ -- Julian Gilbey <jdg@debian.org>  Tue, 31 Aug 2004 23:08:03 +0100
 
 devscripts (2.8.4) unstable; urgency=medium
 

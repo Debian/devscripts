@@ -10,6 +10,7 @@ Usage: tagpending [options]
   Options:
     -n                  Only simulate what would happen during this run, and
                         print the message that would get sent to the BTS.
+    -f                  Do not query the BTS for already tagged bugs (force).
     -h, --help          This usage screen.
     -v, --version       Display the version and copyright information
 
@@ -29,9 +30,13 @@ GNU General Public License, version 2 or later.
 EOF
 }
 
+# Defaults
+USE_LDAP=1
+
 while [ -n "$1" ]; do
   case "$1" in
     -n) DRY=1; shift ;;
+    -f) USE_LDAP=0; shift ;;
     --version | -v) version; exit 0 ;;
     --help | -h) usage; exit 0 ;;
     *)
@@ -43,7 +48,7 @@ while [ -n "$1" ]; do
   esac
 done
 
-if ! command -v ldapsearch >/dev/null 2>&1; then
+if [ "$USE_LDAP" = "1" ]  &&  ! command -v ldapsearch >/dev/null 2>&1; then
   echo "tagpending error: Sorry, this package needs ldap-utils installed to function." >&2
   exit 1
 fi
@@ -59,9 +64,15 @@ parsed=$(dpkg-parsechangelog)
 
 srcpkg=$(echo "$parsed" | awk '/^Source: / { print $2 }')
 
-changelog_closes=$(echo "$parsed"| awk -F: '/^Closes: / { print $2 }' | xargs -n1 echo)
+changelog_closes=$(echo "$parsed"| awk -F: '/^Closes: / { print $2 }' | \
+  xargs -n1 echo)
 
-bts_pending=$(ldapsearch -h bugs.debian.org -p 10101 -x -b dc=current,dc=bugs,dc=debian,dc=org "(&(debbugsSourcePackage=$srcpkg)(!(debbugsState=done))(debbugsTag=pending))" | awk '/debbugsID: / { print $2 }' | xargs -n1 echo)
+if [ "$USE_LDAP" = "1" ]; then
+  bts_pending=$(ldapsearch -h bugs.debian.org -p 10101 -x \
+    -b dc=current,dc=bugs,dc=debian,dc=org \
+    "(&(debbugsSourcePackage=$srcpkg)(!(debbugsState=done))(debbugsTag=pending))" | \
+    awk '/debbugsID: / { print $2 }' | xargs -n1 echo)
+fi
 
 to_be_tagged=$(printf '%s\n%s\n' "$changelog_closes" "$bts_pending" | sort | uniq -u)
 
@@ -84,11 +95,12 @@ IFS="
 "
 
 if [ "$DRY" = 1 ]; then
-  echo -n "tagpending info: Would tag these bugs pending: "
+  msg="tagpending info: Would tag these bugs pending:"
 
   for bug in $to_be_tagged; do
-    echo "$bug "
+    msg="$msg $bug"
   done
+  echo $msg | fold -w 78 -s
 
   exit 0
 else
