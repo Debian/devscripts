@@ -219,6 +219,12 @@ downloaded).
 
 Suppress any configuration file --force-refresh option.
 
+=item -q, --quiet
+
+When running bts cache, only display information about newly cached
+pages, not messages saying already cached.  If this option is
+specified twice, only output error messages (to stderr).
+
 =item --no-conf, --noconf
 
 Do not read any configuration files.  This can only be used as the
@@ -299,6 +305,7 @@ if (exists $ENV{'BUGSOFFLINE'}) {
 my ($opt_help, $opt_version, $opt_noconf);
 my ($opt_cachemode, $opt_mailreader);
 my $mboxmode = 0;
+my $quiet=0;
 
 Getopt::Long::Configure('require_order');
 GetOptions("help|h" => \$opt_help,
@@ -312,6 +319,7 @@ GetOptions("help|h" => \$opt_help,
 	   "mailreader|mail-reader=s" => \$opt_mailreader,
 	   "f" => \$refreshmode,
 	   "force-refresh!" => \$refreshmode,
+	   "q|quiet+" => \$quiet,
 	   "noconf|no-conf" => \$opt_noconf,
 	   )
     or die "Usage: bts [options]\nRun $progname --help for more details\n";
@@ -851,7 +859,7 @@ for bugs in the cache even when you're online, as it can just compare the
 item in the cache with what's on the server, and not re-download it
 every time.
 
-Two options affect the behaviour of the cache command.  The first is
+Some options affect the behaviour of the cache command.  The first is
 the setting of --cache-mode, which controls how much B<bts> downloads
 of the referenced links from the bug page, including boring bits such
 as the acknowledgement emails, emails to the control bot, and the mbox
@@ -863,14 +871,20 @@ up-to-date.  Both of these are configurable from the configuration
 file, as described below.  They may also be specified after the
 "cache" command as well as at the start of the command line.
 
+Finally, -q or --quiet will suppress messages about caches being
+up-to-date, and giving the option twice will suppress all cache
+messages (except for error messages).
+
 =cut
 
 sub bts_cache {
     @ARGV = @_;
     my ($sub_cachemode, $sub_refreshmode);
+    my $sub_quiet = $quiet;
     GetOptions("cache-mode|cachemode=s" => \$sub_cachemode,
 	       "f" => \$sub_refreshmode,
 	       "force-refresh!" => \$sub_refreshmode,
+	       "q|quiet+" => \$sub_quiet,
 	       )
     or die "bts: unknown options for bugs command\n";
     @_ = @ARGV; # whatever's left
@@ -885,6 +899,8 @@ sub bts_cache {
 	    warn "bts: ignoring invalid --cache-mode $sub_cachemode;\nmust be one of min, mbox, full.\n";
 	}
     }
+    # This may be a no-op, we don't mind
+    ($quiet, $sub_quiet) = ($sub_quiet, $quiet);
 
     prunecache();
     if (! have_lwp()) {
@@ -947,6 +963,7 @@ sub bts_cache {
     if (defined $sub_cachemode) {
 	$cachemode = $sub_cachemode;
     }
+    $quiet = $sub_quiet;
 }
 
 =item cleancache <package> | src:<package> | <maintainer>
@@ -1235,7 +1252,7 @@ sub download {
 	}
     }
 
-    print "Downloading $url ... ";
+    print "Downloading $url ... " if ! $quiet;
     IO::Handle::flush(\*STDOUT);
     my ($ret, $msg, $livepage) = bts_mirror($url, $timestamp, $forcedownload);
     if ($ret == MIRROR_UP_TO_DATE) {
@@ -1245,7 +1262,7 @@ sub download {
 	    set_timestamp($thing, make_manual($timestamp));
 	}
 
-	print "(cache already up-to-date)\n";
+	print "(cache already up-to-date)\n" if ! $quiet;
 	return "";
     }
     elsif ($ret == MIRROR_DOWNLOADED) {
@@ -1275,7 +1292,13 @@ sub download {
 	set_timestamp($thing,
 	    $manual ? make_manual($timestamp) : make_automatic($timestamp));
 
-	print "(cached new version)\n";
+	if ($quiet == 0) {
+	    print "(cached new version)\n";
+	} elsif ($quiet == 1) {
+	    print "Downloading $url ... (cached new version)\n";
+	} elsif ($quiet > 1) {
+	    # do nothing
+	}
 	return $livepage;
     } else {
 	die "bts: couldn't download $url:\n$msg\n";
