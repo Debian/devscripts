@@ -16,8 +16,7 @@ Usage: tagpending [options]
     -v, --version       Display the version and copyright information
 
   This script will read debian/changelog and tag all bugs not already tagged
-  pending as such, by using the LDAP interface to the bug tracking system.
-  Requires ldap-utils to be installed.
+  pending as such.  Requires wget to be installed to query BTS.
 EOF
 }
 
@@ -32,7 +31,7 @@ EOF
 }
 
 # Defaults
-USE_LDAP=1
+USE_WGET=1
 DRY=0
 SILENT=0
 
@@ -40,7 +39,7 @@ while [ -n "$1" ]; do
   case "$1" in
     -n) DRY=1; shift ;;
     -s) SILENT=1; shift ;;
-    -f) USE_LDAP=0; shift ;;
+    -f) USE_WGET=0; shift ;;
     --version) version; exit 0 ;;
     --help | -h) usage; exit 0 ;;
     *)
@@ -52,8 +51,8 @@ while [ -n "$1" ]; do
   esac
 done
 
-if [ "$USE_LDAP" = "1" ]  &&  ! command -v ldapsearch >/dev/null 2>&1; then
-  echo "tagpending error: Sorry, this package needs ldap-utils installed to function." >&2
+if [ "$USE_WGET" = "1" ]  &&  ! command -v wget >/dev/null 2>&1; then
+  echo "tagpending error: Sorry, either use the -f option or install the wget package." >&2
   exit 1
 fi
 
@@ -71,11 +70,9 @@ srcpkg=$(echo "$parsed" | awk '/^Source: / { print $2 }')
 changelog_closes=$(echo "$parsed"| awk -F: '/^Closes: / { print $2 }' | \
   xargs -n1 echo)
 
-if [ "$USE_LDAP" = "1" ]; then
-  bts_pending=$(ldapsearch -h bugs.debian.org -x \
-    -b dc=bugs,dc=debian,dc=org \
-    "(&(debbugsSourcePackage=$srcpkg)(!(debbugsState=done))(debbugsTag=pending))" | \
-    awk '/debbugsID: / { print $2 }' | xargs -n1 echo)
+if [ "$USE_WGET" = "1" ]; then
+    bts_pending=$(wget -q -O - "http://bugs.debian.org/cgi-bin/pkgreport.cgi?which=src&data=$srcpkg&archive=no&pend-exc=done&include=pending" | \
+	sed -ne 's/.*<a href="bugreport.cgi?bug=\([0-9]*\).*/\1/; T; p')
 fi
 
 to_be_tagged=$(printf '%s\n%s\n' "$changelog_closes" "$bts_pending" | sort | uniq -u)

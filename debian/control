@@ -11,7 +11,7 @@ Architecture: any
 Conflicts: debmake (<< 3.5), dupload (<< 2.1)
 Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), ${shlibs:Depends}, ${misc:Depends}
 Recommends: fakeroot
-Suggests: devscripts-el, build-essential, cvs-buildpackage, debian-keyring, dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, libdigest-md5-perl, libtimedate-perl, libwww-perl, libnet-ldap-perl, lintian | linda, mailx, patch, patchutils, ssh, strace, wdiff, www-browser, ldap-utils
+Suggests: devscripts-el, build-essential, cvs-buildpackage, debian-keyring, dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, libdigest-md5-perl, libtimedate-perl, libwww-perl, lintian | linda, mailx, patch, patchutils, ssh, strace, wdiff, wget, www-browser
 Conflicts: suidmanager (<< 0.51)
 Description: Scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
@@ -29,8 +29,7 @@ Description: Scripts to make the life of a Debian Package maintainer easier
       package building program [cvs-buildpackage, fakeroot, lintian | linda,
       gnupg]
   - debc: display the contents of just-built .debs
-  - debchange/dch: automagically add entries to debian/changelog files
-      [libnet-ldap-perl]
+  - debchange/dch: automagically add entries to debian/changelog files [wget]
   - debclean: purge a Debian source tree [fakeroot]
   - debdiff: compare two versions of a Debian package to check for
       added and removed files [wdiff, patchutils]
@@ -58,7 +57,7 @@ Description: Scripts to make the life of a Debian Package maintainer easier
   - rc-alert: list installed packages which have release-critical bugs [wget]
   - tagpending: shell script which runs from a Debian source tree and tags
       bugs that are to be closed in the latest changelog as pending.
-      [ldap-utils]
+      [wget]
   - uscan: scan upstream sites for new releases of packages [libwww-perl]
   - uupdate: integrate upstream changes into a source package [patch]
   - wnpp-alert: list installed packages which are orphaned or up for

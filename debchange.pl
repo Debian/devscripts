@@ -55,22 +55,6 @@ use Getopt::Long;
 use File::Copy;
 use File::Basename;
 use Cwd;
-my $ldap_broken = undef;
-sub have_ldap() {
-    return $ldap_broken if defined $ldap_broken;
-    eval { require Net::LDAP; import Net::LDAP (); };
-    if ($@) {
-	if ($@ =~ /^Can\'t locate Net\/LDAP\.pm/) {
-	    $ldap_broken="the libnet-ldap-perl package is not installed";
-	} else {
-	    $ldap_broken="couldn't load Net::LDAP: $@";
-	}
-	# Have to define the functions we're going to be using
-	eval 'sub search ($) {}';
-    }
-    else { $ldap_broken=''; }
-    return $ldap_broken ? 0 : 1;
-}
 
 # Predeclare functions
 sub fatal($);
@@ -420,76 +404,76 @@ else {
 my @closes_text = ();
 my $warnings = 0;
 if (@closes and $opt_query) { # and we have to query the BTS
-    if (! have_ldap()) {
-	warn "$progname warning: $ldap_broken\ncannot query the bug-tracking system\n";
+    if (system('command -v wget >/dev/null 2>&1') >> 8 != 0) {
+	warn "$progname warning: wget not installed, so cannot query the bug-tracking system\n";
 	$opt_query=0;
 	$warnings++;
 	# This will now go and execute the "if (@closes and ! $opt_query)" code
     }
     else
     {
-        my $filter;
-        if ($#closes == 0)
-        {
-                $filter = '(debbugsID=' . $closes[0] . ')';
-        }
-        else
-        {
-                $filter = '(|' . map { '(debbugsID=' . $_ . ')' } @closes . ')';
-        }
-        my $ldap = Net::LDAP->new('bugs.debian.org');
-        my $mesg = $ldap->search(base => 'dc=bugs,dc=debian,dc=org',
-                        filter => $filter,
-                        attrs => ['debbugsPackage', 'debbugsSourcePackage', 'debbugsTitle', 'debbugsID']);
+	my %bugs;
+	my $lastbug;
 
-        # Shamelessly plucked from the Net::LDAP::Entry POD
-        my $max = $mesg->count;
-        
-        for (my $i = 0; $i < $max; $i++)
-        {
-                my $title = '';
-                my $srcpkg = '<NO SOURCE PACKAGE FOUND>';
-                my $pkg = '';
-                my $close = '';
-        
-                my $entry = $mesg->entry($i);
-                foreach my $attr ($entry->attributes)
-                {
-                        if ($attr eq 'debbugsPackage') { $pkg = $entry->get_value($attr); }
-                        elsif ($attr eq 'debbugsSourcePackage') { $srcpkg = $entry->get_value($attr); }
-                        elsif ($attr eq 'debbugsTitle') { $title = $entry->get_value($attr); }
-                        elsif ($attr eq 'debbugsID') { $close = $entry->get_value($attr); }
-                }
-                
-                if ($pkg ne $PACKAGE)
-                {
-			warn "$progname warning: bug \#$close actually belongs to $pkg ($srcpkg),\n  disabling closing changelog entry\n";
-			$warnings++;
-			push @closes_text, "Closes?? \#$close: WRONG PACKAGE!! $title\n";
-                }
-                elsif ($pkg eq '')
-                {
-		    warn "$progname warning: couldn't determine package for bug \#$close, so not checking\n";
+	my $bugs = `wget -q -O - 'http://bugs.debian.org/cgi-bin/pkgreport.cgi?src=$PACKAGE'`;
+	if ($? >> 8 != 0) {
+	    warn "$progname warning: wget failed, so cannot query the bug-tracking system\n";
+	    $opt_query=0;
+	    $warnings++;
+	    # This will now go and execute the "if (@closes and ! $opt_query)" code
+	}
+
+	foreach (split /\n/, $bugs) {
+	    if (m%<a href=\"bugreport.cgi\?bug=([0-9]*).*?>\#\1: (.*?)</a>%) {
+		$bugs{$1} = [$2];
+		$lastbug=$1;
+	    }
+	    elsif (defined $lastbug and
+		   m%<a href=\"pkgreport.cgi\?pkg=([a-z0-9\+\-\.]*)%) {
+		push @{$bugs{$lastbug}}, $1
+		    if exists $bugs{$lastbug};
+		$lastbug = undef;
+	    }
+	}
+
+	foreach my $close (@closes) {
+	    if (exists $bugs{$close}) {
+		my ($title,$pkg) = @{$bugs{$close}};
+		$title =~ s/^($pkg|$PACKAGE): //;
+		push @closes_text, "Closes: \#$close: $title\n";
+	    }
+	    else { # not our package, or wnpp
+		my $bug = `wget -q -O - 'http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=$close'`;
+		if ($? >> 8 != 0) {
+		    warn "$progname warning: unknown bug \#$close does not belong to $PACKAGE,\n  disabling closing changelog entry\n";
 		    $warnings++;
-		    push @closes_text, "Closes: \#$close: $title\n";
-                }
-                else
-                {
-                        if ($srcpkg eq $PACKAGE)
-                        {
-	                        $title =~ s/^($pkg|$srcpkg): //;
-        		        push @closes_text, "Closes: \#$close: $title\n";
-                        }
-                        elsif ($pkg eq $PACKAGE)
-                        {
-                                push @closes_text, "Closes: \#$close: $title\n";
-                        }
-                        elsif ($pkg eq 'wnpp')
-                        {
-	                        $title =~ s/^($pkg|$srcpkg): //;
-        		        push @closes_text, "Initial Release. (Closes: \#$close)\n";
-                 	}
-	        }
+		    push @closes_text, "Closes?? \#$close: UNKNOWN BUG IN WRONG PACKAGE!!\n";
+                } else {
+		    my ($bugtitle) = ($bug =~ m%<TITLE>.*?\#$close - (.*?)</TITLE>%);
+		    my ($bugpkg) = ($bug =~ m%<a href=\"pkgreport.cgi\?pkg=([a-z0-9\+\-\.]*)%);
+		    $bugpkg ||= '?';
+		    my ($bugsrcpkg) = ($bug =~ m%<a href=\"pkgreport.cgi\?src=([a-z0-9\+\-\.]*)%);
+		    $bugsrcpkg ||= '?';
+		    if ($bugsrcpkg eq $PACKAGE) {
+			warn "$progname warning: bug \#$close appears to be already archived,\n  disabling closing changelog entry\n";
+			$warnings++;
+			push @closes_text, "Closes?? \#$close: ALREADY ARCHIVED?  $bugtitle!!\n";
+		    }
+		    elsif ($bugpkg eq 'wnpp') {
+			if ($bugtitle =~ /(^(O|RFA|ITA): )/) {
+			    push @closes_text, "New maintainer. (Closes: \#$close: $bugtitle)\n";
+			}
+			elsif  ($bugtitle =~ /(^(RFP|ITP): )/) {
+			    push @closes_text, "Initial release. (Closes: \#$close: $bugtitle)\n";
+			}
+		    }
+		    else {
+			warn "$progname warning: bug \#$close belongs to package $bugpkg (src $bugsrcpkg),\n  not to $PACKAGE: disabling closing changelog entry\n";
+			$warnings++;
+			push @closes_text, "Closes?? \#$close: WRONG PACKAGE!!  $bugtitle\n";
+		    }
+		}
+	    }
         }
    }
 }
