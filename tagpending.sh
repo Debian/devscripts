@@ -1,10 +1,8 @@
-#!/bin/sh
+#! /bin/bash -e
 # tagpending by Joshua Kwan
 # licensed under GPL v2
 #
 # Purpose: tag all bugs pending which are not so already
-
-set -e
 
 usage() {
   cat <<EOF
@@ -45,7 +43,7 @@ while [ -n "$1" ]; do
   esac
 done
 
-if ! which ldapsearch >/dev/null 2>&1; then
+if ! command -v ldapsearch >/dev/null 2>&1; then
   echo "tagpending error: Sorry, this package needs ldap-utils installed to function." >&2
   exit 1
 fi
