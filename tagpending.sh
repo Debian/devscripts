@@ -10,6 +10,7 @@ Usage: tagpending [options]
   Options:
     -n                  Only simulate what would happen during this run, and
                         print the message that would get sent to the BTS.
+    -s                  Silent mode
     -f                  Do not query the BTS for already tagged bugs (force).
     -h, --help          This usage screen.
     -v, --version       Display the version and copyright information
@@ -32,12 +33,15 @@ EOF
 
 # Defaults
 USE_LDAP=1
+DRY=0
+SILENT=0
 
 while [ -n "$1" ]; do
   case "$1" in
     -n) DRY=1; shift ;;
+    -s) SILENT=1; shift ;;
     -f) USE_LDAP=0; shift ;;
-    --version | -v) version; exit 0 ;;
+    --version) version; exit 0 ;;
     --help | -h) usage; exit 0 ;;
     *)
       echo "tagpending error: unrecognized option $1" >&2
@@ -84,7 +88,9 @@ to_be_tagged=$(for bug in $to_be_tagged; do
 done)
 
 if [ -z "$to_be_tagged" ]; then
-  echo "tagpending info: Nothing to do, exiting."
+  if [ "$SILENT" = 0 -o "$DRY" = 1 ]; then
+    echo "tagpending info: Nothing to do, exiting."
+  fi
   exit 0
 fi
 
@@ -104,6 +110,15 @@ if [ "$DRY" = 1 ]; then
 
   exit 0
 else
+  if [ "$SILENT" = 0 ]; then
+    msg="tagpending info: tagging these bugs pending:"
+
+    for bug in $to_be_tagged; do
+      msg="$msg $bug"
+    done
+    echo $msg | fold -w 78 -s
+  fi
+
   BTS_ARGS="package $src_packages"
 
   for bug in $to_be_tagged; do
@@ -112,3 +127,5 @@ else
 
   eval bts ${BTS_ARGS}
 fi
+
+exit 0

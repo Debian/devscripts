@@ -221,6 +221,10 @@ else
     fi
 fi
 
+if [ -n "$DEBSIGN_SIGNLIKE" ]; then
+    forcesigninterface="$DEBSIGN_SIGNLIKE"
+fi
+
 while [ $# != 0 ]
 do
     value="`echo x\"$1\" | sed -e 's/^x-.//'`"
