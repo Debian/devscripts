@@ -87,7 +87,7 @@ sub PackagesToFiles (@)
     if ($pid) {   # parent
 	while (<DPKG>) {
 	    chomp;
-	    next if /^package diverts others to: /;
+	    next if /^package diverts others to: / or -d $_;
 	    $files{$_} = 1;
 	}
 	close DPKG or croak("dpkg -L failed: $!");

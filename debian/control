@@ -4,12 +4,12 @@ Priority: optional
 Maintainer: Julian Gilbey <jdg@debian.org>
 Uploaders: Joshua Kwan <joshk@triplehelix.org>
 Standards-Version: 3.6.1
-Build-Depends: perl, debhelper (>= 4.0.0), libtimedate-perl, libwww-perl
+Build-Depends: perl (>= 5.8), debhelper (>= 4.0.0), libtimedate-perl, libwww-perl
 
 Package: devscripts
 Architecture: any
 Conflicts: debmake (<< 3.5), dupload (<< 2.1)
-Depends: dpkg-dev, debianutils (>= 2.0), ${perl:Depends}, ${shlibs:Depends}, ${misc:Depends}
+Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), ${perl:Depends}, ${shlibs:Depends}, ${misc:Depends}
 Recommends: fakeroot
 Suggests: devscripts-el, build-essential, cvs-buildpackage, debian-keyring, dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, libdigest-md5-perl, libtimedate-perl, libnet-ldap-perl, lintian | linda, mailx, patch, patchutils, ssh, strace, wdiff, www-browser, ldap-utils
 Conflicts: suidmanager (<< 0.51)

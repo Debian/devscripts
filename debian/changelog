@@ -1,9 +1,17 @@
 devscripts (2.8.5) unstable; urgency=low
 
-  * bts: fix bts bugs : error
-  * debchange: fixed pipe error (closes: #228749)
+  * NOT YET RELEASED
 
- -- Julian Gilbey <jdg@debian.org>  Tue, 24 Aug 2004 20:48:01 +0100
+  * bts: fix "bts bugs :" error
+  * bts: rejuvenate the close command (closes: #245956)
+  * debchange: fixed pipe error (closes: #228749)
+  * debchange: requires perl >= 5.8, so make this a Depends: in the
+    control file (will be standard in sarge anyway, so it's not a
+    particularly big deal) (closes: #241138)
+  * uscan: support version numbers with ~ (change Devscripts::Versort to
+    simply call dpkg --compare-versions to do the work) (closes: #232286)
+
+ -- Julian Gilbey <jdg@debian.org>  Wed, 25 Aug 2004 02:28:35 +0100
 
 devscripts (2.8.4) unstable; urgency=medium
 

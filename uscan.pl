@@ -322,7 +322,7 @@ for my $dir (@dirs) {
 
 # Now sort the list of directories, so that we process the most recent
 # directories first, as determined by the package version numbers
-@debdirs = Devscripts::Versort::deb_versort(@debdirs);
+@debdirs = Devscripts::Versort::versort(@debdirs);
 
 # Now process the watchfiles in order.  If a directory d has subdirectories
 # d/sd1/debian and d/sd2/debian, which each contain watchfiles corresponding

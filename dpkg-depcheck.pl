@@ -43,7 +43,8 @@ our $vforklib = "/usr/lib/devscripts/libvfork.so.0";
 
 # A list of files that do not belong to a Debian package but are known
 # to never create a dependency
-our @known_files = ($vforklib, "/etc/ld.so.cache", "/etc/dpkg/shlibs.default");
+our @known_files = ($vforklib, "/etc/ld.so.cache", "/etc/dpkg/shlibs.default",
+		    "/etc/dpkg/dpkg.cfg", "/etc/devscripts.conf");
 
 # This will be given information about features later on
 our (%feature, %default_feature);

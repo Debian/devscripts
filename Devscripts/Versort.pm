@@ -67,6 +67,29 @@
 
 package Devscripts::Versort;
 
+sub versort (@)
+{
+    my @namever_pairs = @_;
+
+    my @sorted = sort { _vercmp($$a[0], $$b[0]) } @namever_pairs;
+    return reverse @sorted;
+}
+
+sub _vercmp {
+    my ($v1, $v2) = @_;
+
+    return 0 if $v1 eq $v2;
+    # assume dpkg works - not really worth checking every single call here
+    return -1 if system("dpkg", "--compare-versions", $v1, "lt", $v2) == 0;
+    return 1;
+}
+
+1;
+
+__END__
+
+# This was the old version.  It didn't handle ~, incidentally
+
 no locale;
 
 sub versort (@)

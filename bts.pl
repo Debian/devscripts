@@ -398,8 +398,16 @@ sub bts_clone {
 # =cut
 
 sub bts_close {
-    my $bug = checkbug(shift) || 'nnnnn';
-    die "bts: The \"bts close\" command is deprecated!\nPlease email $bug-done\@bugs.debian.org with an informative mail instead.\n";
+    my $bug=checkbug(shift) or die "bts close: close what bug?\n";
+    mailbts("closing $bug", "close $bug");
+    warn <<"EOT";
+bts: Closing $bug as you requested.
+Please note that the "bts close" command is deprecated!
+It is usually better to email nnnnnn-done\@bugs.debian.org with
+an informative mail.
+Please remember to email $bug-submitter\@bugs.debian.org with
+an explanation of why you have closed this bug.  Thank you!
+EOT
 }
 
 =item reopen <bug> [<submitter>]
