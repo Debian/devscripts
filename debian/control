@@ -1,0 +1,63 @@
+Source: devscripts
+Section: devel
+Priority: optional
+Maintainer: Julian Gilbey <jdg@debian.org>
+Standards-Version: 3.6.1
+Build-Depends: perl, debhelper (>= 4.0.0)
+
+Package: devscripts
+Architecture: any
+Conflicts: debmake (<< 3.5), dupload (<< 2.1)
+Depends: dpkg-dev, debianutils (>= 2.0), ${perl:Depends}, ${shlibs:Depends}, ${misc:Depends}
+Recommends: fakeroot
+Suggests: devscripts-el, build-essential, cvs-buildpackage, debian-keyring, dupload (>=2.1) | dput, gnupg, gnuplot, libdigest-md5-perl, libtimedate-perl, libwww-perl, lintian | linda, mailx, patch, patchutils, ssh, strace, wdiff, www-browser
+Conflicts: suidmanager (<< 0.51)
+Description: Scripts to make the life of a Debian Package maintainer easier
+ Contains the following scripts, dependencies/recommendations shown in
+ brackets afterwards:
+  - bts: a command-line tool for manipulating the BTS [www-browser,
+      libwww-perl, mailx]
+  - checkbashisms: check whether a /bin/sh script contains any common
+      bash-specific contructs
+  - cvs-debi, cvs-debc: to call debi and debc from the CVS working directory
+      after running cvs-debuild or cvs-buildpackage [cvs-buildpackage]
+  - cvs-debrelease: to call debrelease from the CVS working directory
+      after running cvs-debuild or cvs-buildpackage [cvs-buildpackage,
+      dupload | dput, ssh]
+  - cvs-debuild: run cvs-buildpackage using debuild (see below) as the
+      package building program [cvs-buildpackage, fakeroot, lintian | linda,
+      gnupg]
+  - debc: display the contents of just-built .debs
+  - debchange/dch: automagically add entries to debian/changelog files
+      [libwww-perl]
+  - debclean: purge a Debian source tree [fakeroot]
+  - debdiff: compare two versions of a Debian package to check for
+      added and removed files [wdiff, patchutils]
+  - debi: install a just-built package
+  - debpkg: dpkg wrapper to be able to manage/test packages without su
+  - debrelease: wrapper around dupload or dput [dupload | dput, ssh]
+  - debsign, debrsign: sign a .changes/.dsc pair without needing any of
+      the rest of the package to be present; can sign the pair remotely
+      or fetch the pair from a remote machine for signing [gnupg,
+      debian-keyring, ssh]
+  - debuild: wrapper to build a package without having to su or worry
+      about how to invoke dpkg to build using fakeroot.  Also deals
+      with common environment problems, umask etc. [fakeroot,
+      lintian | linda, gnupg]
+  - dpkg-depcheck, dpkg-genbuilddeps: determine the packages used during
+      the build of a Debian package; useful for determining the Build-Depends
+      control field needed [build-essential, strace]
+  - dscverify: verify the integrity of a Debian package from the
+      .changes or .dsc files [gnupg, debian-keyring, libdigest-md5-perl]
+  - grep-excuses: grep the update_excuses.html file for your packages [wget]
+  - mergechanges: merge .changes files from a package built on different
+      architectures
+  - plotchangelog: view a nice plot of the data in a changelog file
+      [libtimedate-perl, gnuplot]
+  - rc-alert: list installed packages which have release-critical bugs [wget]
+  - uscan: scan upstream sites for new releases of packages [libwww-perl]
+  - uupdate: integrate upstream changes into a source package [patch]
+  - wnpp-alert: list installed packages which are orphaned or up for
+      adoption [wget]
+ Also included are a set of example mail filters for filtering mail
+ from Debian mailing lists using exim, procmail, etc.

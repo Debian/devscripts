@@ -1,0 +1,131 @@
+.TH DPKG-DEPCHECK "1" "March 2002" "dpkg-depcheck" DEBIAN
+.SH NAME
+dpkg-depcheck \- determine packages used to execute a command
+.SH SYNOPSIS
+\fBdpkg-depcheck\fR [\fIoptions\fR] \fIcommand\fR
+.SH DESCRIPTION
+This program runs the specified command under \fBstrace\fR and then
+determines and outputs the packages used in the process.  The list can
+be trimmed in various ways as described in the options below.  A good
+example of this program would be the command \fBdpkg-depcheck \-b
+debian/rules build\fR, which would give a good first approximation to
+the Build-Depends line needed by a Debian package.  Note, however,
+that this does \fInot\fR give any direct information on versions
+required or architecture-specific packages.
+.SH OPTIONS
+.TP
+.BR \-a ", " \-\-all
+Report all packages used to run \fIcommand\fR.  This is the default
+behaviour.  If used in conjuction with \fB\-b\fR, \fB\-d\fR or
+\fB\-m\fR, gives additional information on those packages skipped by
+these options.
+.TP
+.BR \-b ", " \-\-build-depends
+Do not report any build-essential or essential packages used, or any
+of their (direct or indirect) dependencies.
+.TP
+.BR \-d ", " \-\-ignore-dev-deps
+Do not show packages used which are direct dependencies of \fI\-dev\fR
+packages used.  This implies \fB\-b\fR.
+.TP
+.BR \-m ", " \-\-min-deps
+Output a minimal set of packages needed, taking into account direct
+dependencies.  Using \fB\-m\fR implies \fB\-d\fR and also \fB\-b\fR.
+.TP
+.BR \-C ", " \-\-C-locale
+Run \fIcommand\fR with the C locale.
+.TP
+.BR \-\-no-C-locale
+Don't change locale when running \fIcommand\fR.
+.TP
+.BR \-l ", " \-\-list-files
+Also report the list of files used in each package.
+.TP
+.BR \-\-no-list-files
+Do not report the files used in each package.  Cancels a \fB\-l\fR
+option.
+.TP
+\fB\-o\fR, \fB\-\-output=\fIFILE\fR
+Output the package diagnostics to \fIFILE\fR instead of stdout.
+.TP
+\fB\-O\fR, \fB\-\-strace-output=\fIFILE\fR
+Write the \fBstrace\fR output to \fIFILE\fR when tracing \fIcommand\fR
+instead of using a temporary file.
+.TP
+\fB\-I\fR, \fB\-\-strace-input=\fIFILE\fR
+Get \fBstrace\fR output from \fIFILE\fR instead of tracing
+\fIcommand\fR; \fBstrace\fR must have be run with the \fB\-f \-q\fR
+options for this to work.
+.TP
+\fB\-f\fR, \fB\-\-features=\fILIST\fR
+Enable or disabled features given in the comma-separated \fILIST\fR as
+follows.  A feature is enabled with \fI+feature\fR or just
+\fIfeature\fR and disabled with \fI\-feature\fR.  The currently
+recognised features are:
+.PD 0
+.RS
+.TP
+.B warn\-local
+Warn if files in \fI/usr/local\fR or \fI/var/local\fR are used.
+Enabled by default.
+.TP
+.B discard-check-version
+Discards \fIexecve\fR when only a \fI\-\-version\fR argument is given
+to the program; this works around some configure scripts that check
+for binaries they don't actually use.  Enabled by default.
+.TP
+.B trace-local
+Also try to identify files which are accessed in \fI/usr/local\fR and
+\fI/var/local\fR.  Not usually very useful, as Debian does not place
+files in these directories.  Disabled by default.
+.TP
+.B catch-alternatives
+Warn about access to files controlled by the Debian \fIalternatives\fR
+mechanism.  Enabled by default.
+.TP
+.B discard-sgml-catalogs
+Discards access to SGML catalogs; some SGML tools read all the registered
+catalogs at startup.  Files matching the regexp /usr/share/sgml/.*\\.cat are
+recognised  as catalogs.  Enabled by default.
+.PD
+.RE
+.TP
+\fB\-\-no-conf\fR, \fB\-\-noconf\fR
+Do not read any configuration files.  This can only be used as the
+first option given on the command-line.
+.TP
+.BR \-h ", " \-\-help
+Display usage information and exit.
+.TP
+.BR \-v ", " \-\-version
+Display version and copyright information and exit.
+.SH "CONFIGURATION VARIABLES"
+The two configuration files \fI/etc/devscripts.conf\fR and
+\fI~/.devscripts\fR are sourced in that order to set configuration
+variables.  Command line options can be used to override configuration
+file settings.  Environment variable settings are ignored for this
+purpose.  The currently recognised variable is:
+.TP
+.B DPKG_DEPCHECK_OPTIONS
+These are options which are parsed before the command-line options.
+For example,
+.IP
+DPKG_DEPCHECK_OPTIONS="-b -f-catch-alternatives"
+.IP
+which passes these options to \fBdpkg-depcheck\fR before any
+command-line options are processed.  You are advised not to try tricky
+quoting, because of the vagaries of shell quoting!
+.SH "SEE ALSO"
+.BR dpkg (1),
+.BR strace (1),
+.BR update-alternatives (8)
+and
+.BR devscripts.conf (5).
+.SH "COPYING"
+Copyright 2001 Bill Allombert <ballombe@debian.org>.
+Modifications copyright 2002,2003 Julian Gilbey <jdg@debian.org>.
+\fBdpkg-depcheck\fR is free software, covered by the GNU General
+Public License, version 2 or (at your option) any later version,
+and you are welcome to change it and/or distribute copies of it under
+certain conditions.  There is absolutely no warranty for
+\fBdpkg-depcheck\fR.

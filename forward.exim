@@ -1,0 +1,6 @@
+# Exim Filter  <<== do not edit or remove this line!
+# Assortment of debian lists
+if $header_resent-sender: matches "debian-(.*)-request@"
+then
+    save $home/mail/debian-$1
+endif

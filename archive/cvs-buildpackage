@@ -1,0 +1,654 @@
+#! /bin/bash
+#                               -*- Mode: Sh -*- 
+# deb-cvs --- 
+# Author           : Manoj Srivastava ( srivasta@tiamat.datasync.com ) 
+# Created On       : Mon May 26 14:23:17 1997
+# Created On Node  : tiamat.datasync.com
+# Last Modified By : Manoj Srivastava
+# Last Modified On : Thu Jul  3 13:23:48 2003
+# Last Machine Used: glaurung.green-gryphon.com
+# Update Count     : 154
+# Status           : Unknown, Use with caution!
+# HISTORY          : 
+# Description      : 
+# $Id: cvs-buildpackage,v 1.58 2003/08/22 17:24:29 srivasta Exp $
+# 
+
+# Make sure we abort on error
+set -e
+
+progname="`basename \"$0\"`"
+pversion='$Revision: 1.58 $'
+
+setq() {
+    # Variable Value Doc string
+    if [ "x$2" = "x" ]; then
+	echo >&2 "$progname: Unable to determine $3"
+	exit 1;
+    else
+	if [ ! "x$Verbose" = "x" ]; then
+	    echo "$progname: $3 is $2";
+	fi
+	eval "$1=\"\$2\"";
+    fi
+}
+
+withecho () {
+        echo " $@" >&2
+        "$@"
+}
+
+usageversion () {
+        cat >&2 <<END
+Debian GNU/Linux $progname $pversion.
+           Copyright (C) 1997 Manoj Srivastava.
+This is free software; see the Artistic Licence for copying
+conditions.  There is NO warranty.  
+
+Usage: $progname  [options]
+Options: 
+  -h           print this message
+  -M<module>   CVS module name.     }
+  -P<package>  Package name.        } Allow operation out of the
+  -V<version>  Package Version      } checked out source tree
+  -T<tag>      CVS Tag to use
+  -U<tag>      Upstream tag to use
+  -C<command>  The Build-package command to use, nominally dpkg-buildpackage
+  -G<method>   The command to execute that'll get the orig tarball in the 
+               current directory.
+  -R<root dir> Root directory.
+  -W<work dir> Working directory.
+  -F           Force a cvs tag -F before exporting (Only valid in a
+               CVS working dir)
+  -E           Force a full export when building, instead of unpacking the
+               orig.tar.gz and using cvs 'rdiff' to bring it up-to-date.
+  -d           Turn on Debugging
+  -n           "Dry-run" mode - No action taken, only print commands.
+  -op          The opposite of -E, unpacking the orig.tar.gz (o) and using 
+               cvs 'rdiff' (p) to bring it up-to-date.
+  -tC          Clean all non-upload files in workdir after a successful build.
+  -ctp         Include <package>_ at start of CVS tag.
+  -x<prefix>   CVS default module prefix.
+  -f<script>   A hook script to be called to fix up permission if nit using
+               the full export mechanism.
+  -H<script>   A hook script to be called from the checked out dir before 
+               calling dpkg-buildpackage
+ The rest are passed to dpkg-buildpackage, though we do pay attention
+ to the -r option. These are the options supported:
+    -r<gain-root-command>
+    -p<pgp-command>
+    -D            check build dependencies and conflicts
+    -k<keyid>     the key to use for signing
+    -sgpg         the sign-command is called like GPG
+    -spgp         the sign-command is called like PGP 
+    -us           unsigned source
+    -uc           unsigned changes
+    -a<arch>      architecture field of the changes _file_name_
+    -b            binary-only, do not build source } also passed to
+    -B            binary-only, no arch-indep files } dpkg-genchanges
+    -S            source only, no binary files     } 
+    -v<version>   changes since version <version>     
+    -m<maint>     maintainer for release is <maint>   
+    -e<maint>     maintainer for release is <maint>   
+    -si (default) src includes orig for rev. 0 or 1   
+    -sa           uploaded src always includes orig   
+    -sd           uploaded src is diff and .dsc only  
+    -ap           add pause before starting signature process
+    -i<regex>     ignore diffs of files matching regex
+    -I<filename>  filter out files when building tarballs
+END
+}
+
+#
+# Long term variables, which may be set in the config file or the
+# environment: 
+# DEBUG rootdir workdir (if all original sources are kept in one dir)
+#
+# 
+
+action='withecho'
+DEBUG=${DEBUG:-0}
+
+TEMPDIR=/tmp/$$
+mkdir $TEMPDIR || exit 1
+TEMPFILE=$TEMPDIR/cl-tmp
+
+cleansource=0
+TAGOPT=
+
+# Command line
+TEMP=$(getopt -a -s bash -o hC:EH:G:M:P:R:T:U:V:W:Ff:dcnr:x:Bp:Dk:a:Sv:m:e:i:I: --long ctp,help,tC,sgpg,spgp,us,uc,op,si,sa,sd,ap,sp,su,sk,sr,sA,sP,sU,sK,sR,ss,sn -n 'cvs-buildpackage' -- "$@")
+if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
+
+# Note the quotes around `$TEMP': they are essential!
+eval set -- "$TEMP"
+
+while true ; do
+    case "$1" in
+        -h)    usageversion; exit 0  ; shift   ;;
+	-C)    opt_buildpackage="$2" ; shift 2 ;;
+	-H)    opt_hook="$2"   	    ; shift 2 ;;
+	-f)    opt_fix="$2"   	    ; shift 2 ;;
+        -G)    opt_get_orig="$2"     ; shift 2 ;;
+	-M)    opt_cvsmodule="$2"    ; shift 2 ;;
+	-P)    opt_package="$2"      ; shift 2 ;;
+	-R)    opt_rootdir="$2"      ; shift 2 ;;
+	-T)    opt_tag="$2"          ; shift 2 ;;
+	-U)    opt_utag="$2"         ; shift 2 ;;
+	-V)    opt_version="$2"      ; shift 2 ;;
+	-W)    opt_workdir="$2"      ; shift 2 ;;
+	-F)    opt_forcetag=1        ; shift   ;;
+       --ctp)  opt_packageintag=1    ; shift   ;;
+	-n)    action='echo'         ; shift   ;;
+        -r)    opt_rootcommand="$2"  ; shift 2 ;;
+       --op)   opt_fullexport="NO"     ; shift   ;;
+       --tC)   cleansource=1         ; shift   ;;
+	-x)    opt_prefix="$2"       ; shift 2 ;;
+	-E)    opt_fullexport="YES"      ; shift   ;;
+	-d)    dpkg_options=("${dpkg_options[@]}" "$1")   ; shift   ;;
+        -B)    dpkg_options=("${dpkg_options[@]}" "$1")   ; shift   ;;
+        -b)    dpkg_options=("${dpkg_options[@]}" "$1")   ; shift   ;;
+        -S)    dpkg_options=("${dpkg_options[@]}" "$1")   ; shift   ;;
+        -p)    dpkg_options=("${dpkg_options[@]}" "$1$2") ; shift 2 ;;
+       --help) usageversion; dpkg --help;        exit 0  ; shift    ;;
+       --us)   dpkg_options=("${dpkg_options[@]}" "-us")  ; shift   ;;
+       --uc)   dpkg_options=("${dpkg_options[@]}" "-uc")  ; shift   ;;
+       --sgpg) dpkg_options=("${dpkg_options[@]}" "-sgpg"); shift   ;;
+       --spgp) dpkg_options=("${dpkg_options[@]}" "-spgp"); shift   ;;
+       --si)   dpkg_options=("${dpkg_options[@]}" "-si")  ; shift   ;;
+       --sd)   dpkg_options=("${dpkg_options[@]}" "-sd")  ; shift   ;;
+       --ap)   dpkg_options=("${dpkg_options[@]}" "-ap")  ; shift   ;;
+       --sa)   dpkg_options=("${dpkg_options[@]}" "-sa")  ; shift   ;;
+       --sp)   dpkg_options=("${dpkg_options[@]}" "-sp")  ; shift   ;;
+       --su)   dpkg_options=("${dpkg_options[@]}" "-su")  ; shift   ;;
+       --sk)   dpkg_options=("${dpkg_options[@]}" "-sk")  ; shift   ;;
+       --sr)   dpkg_options=("${dpkg_options[@]}" "-sr")  ; shift   ;;
+       --sA)   dpkg_options=("${dpkg_options[@]}" "-sA")  ; shift   ;;
+       --sP)   dpkg_options=("${dpkg_options[@]}" "-sP")  ; shift   ;;
+       --sU)   dpkg_options=("${dpkg_options[@]}" "-sU")  ; shift   ;;
+       --sK)   dpkg_options=("${dpkg_options[@]}" "-sK")  ; shift   ;;
+       --sR)   dpkg_options=("${dpkg_options[@]}" "-sR")  ; shift   ;;
+       --sn)   dpkg_options=("${dpkg_options[@]}" "-sn")  ; shift   ;;
+       --ss)   dpkg_options=("${dpkg_options[@]}" "-ss")  ; shift   ;;
+        -D)    dpkg_options=("${dpkg_options[@]}" "$1")   ; shift   ;;
+        -k)    dpkg_options=("${dpkg_options[@]}" "$1$2") ; shift 2 ;;
+        -a)    dpkg_options=("${dpkg_options[@]}" "$1$2") ; shift 2 ;;
+        -v)    dpkg_options=("${dpkg_options[@]}" "$1$2") ; shift 2 ;;
+        -m)    dpkg_options=("${dpkg_options[@]}" "$1$2") ; shift 2 ;;
+        -e)    dpkg_options=("${dpkg_options[@]}" "$1$2") ; shift 2 ;;
+        -i)    dpkg_options=("${dpkg_options[@]}" "$1$2") ; shift 2 ;;
+        -I)    dpkg_options=("${dpkg_options[@]}" "$1$2") ; shift 2 ;;
+        --)      shift ; break ;;
+        *) echo >&2 "Internal error!($1)"
+            usageversion; exit 1           ;;
+    esac
+done
+for arg in ${1+"$@"}; do
+    case "$arg" in
+	*)    opt_package="$arg" ;;
+    esac
+done
+
+if [ "x$opt_cvsmodule" = "x" -a "x$opt_package" = "x" -a \
+      ! -e 'debian/changelog' ] ; then
+    echo >&2 "$progname should be run in the top working directory of"
+    echo >&2 "a Debian Package, or an explicit package (or CVS module) name"
+    echo >&2 "should be given." 
+    exit 1
+fi
+
+if [ "x$opt_tag" != "x" ]; then
+    TAGOPT=-r$opt_tag
+fi
+
+# Command line, env variable, config file, or default
+# This anomalous position is in case we need to check out the changelog
+# below (anaomalous since we ahve not loaded the config file yet)
+if [ ! "x$opt_prefix" = "x" ]; then
+    prefix="$opt_prefix"
+elif [ ! "x$CVSDEB_PREFIX" = "x" ]; then
+    prefix="$CVSDEB_PREFIX"
+elif [ ! "x$conf_prefix" = "x" ]; then
+    prefix="$conf_prefix"
+else
+    prefix=""
+fi
+
+# put a slash at the end of the prefix
+if [ "X$prefix" != "X" ]; then
+    prefix="$prefix/";
+    prefix=`echo $prefix | sed 's://:/:g'`;
+fi
+
+if [ ! -f CVS/Root ]; then
+    if [ "X$CVSROOT" = "X" ]; then
+	echo "no CVS/Root file found, and CVSROOT var is empty" >&2
+	exit 1
+    fi
+else
+    CVSROOT=$(cat CVS/Root)
+    export CVSROOT
+fi
+
+if [ "x$opt_package" = "x" ]; then
+    # Get the official package name and version.
+    if [ -f debian/changelog ]; then
+	# Ok, changelog exists
+	 setq "package" \
+	    "`dpkg-parsechangelog | sed -n 's/^Source: //p'`" \
+		"source package"
+	setq "version" \
+	    "`dpkg-parsechangelog | sed -n 's/^Version: //p'`" \
+		"source version"
+    elif [ "x$opt_cvsmodule" != "x" ]; then
+	# Hmm. Well, see if we can checkout the changelog file
+	rm -f $TEMPFILE
+	cvs -q co -p $TAGOPT $opt_cvsmodule/debian/changelog > $TEMPFILE
+        setq "package" \
+	    "`dpkg-parsechangelog -l$TEMPFILE | sed -n 's/^Source: //p'`" \
+          "source package"
+        setq "version" \
+          "`dpkg-parsechangelog -l$TEMPFILE | sed -n 's/^Version: //p'`" \
+          "source version"
+        rm -f "$TEMPFILE"
+    else
+	# Well. We don't know what this package is.
+	echo >&2 " This does not appear be a Debian source tree, since"
+	echo >&2 " theres is no debian/changelog, and there was no"
+	echo >&2 " package name or cvs module given on the comand line"
+	echo >&2 " it is hard to figure out what the package name "
+	echo >&2 " should be. I give up."
+	exit 1
+    fi
+else
+    # The user knows best; package name is provided
+    setq "package" "$opt_package" "source package"
+
+    # Now, the version number
+    if [ "x$opt_version" != "x" ]; then
+	# All hail the user provided value
+	setq "version" "$opt_version" "source package"
+    elif [ -f debian/changelog ]; then
+	# Fine, see what the changelog says
+	setq "version" \
+	    "`dpkg-parsechangelog | sed -n 's/^Version: //p'`" \
+		"source version"
+    elif [ "x$opt_cvsmodule" != "x" ]; then
+	# Hmm. The CVS module name is known, so lets us try exporting changelog
+	rm -f $TEMPFILE
+	cvs -q co -p $TAGOPT $opt_cvsmodule/debian/changelog > $TEMPFILE
+        setq "version" \
+          "`dpkg-parsechangelog -l$TEMPFILE | sed -n 's/^Version: //p'`" \
+          "source version"
+        rm -f "$TEMPFILE"
+    else
+	# Ok, try exporting the package name
+	rm -f $TEMPFILE
+	cvsmodule="${prefix}$package"
+	cvs -q co -p $TAGOPT $cvsmodule/debian/changelog > $TEMPFILE
+        setq "version" \
+          "`dpkg-parsechangelog -l$TEMPFILE | sed -n 's/^Version: //p'`" \
+          "source version"
+        rm -f "$TEMPFILE"
+    fi
+fi
+
+rm -f $TEMPFILE
+rmdir $TEMPDIR
+
+
+non_epoch_version=$(echo -n "$version" | perl -pe 's/^\d+://')
+upstream_version=$(echo -n "$non_epoch_version" | sed  -e 's/-[^-]*$//')
+debian_version=$(echo -n $non_epoch_version |  perl -nle 'm/-([^-]*)$/ && print $1')
+
+# The default
+if [ "X$opt_rootdir" != "X" ]; then
+    rootdir="$opt_rootdir"
+else
+    rootdir='/usr/local/src/Packages'
+fi
+
+if [ "X$opt_workdir" != "X" ]; then
+    workdir="$opt_workdir"
+else
+    workdir="$rootdir/$package"
+fi
+
+sversion=$non_epoch_version
+uversion=$upstream_version
+tversion=$debian_version
+
+# Load site defaults and over rides.
+if [ -f /etc/cvsdeb.conf ]; then
+    . /etc/cvsdeb.conf
+fi
+
+# Load user defaults and over rides.
+if [ -f ~/.cvsdeb.conf ]; then
+    . ~/.cvsdeb.conf
+fi
+
+# Handle module prefixes
+if [ ! "x$opt_prefix" = "x" ]; then
+    prefix="$opt_prefix"
+elif [ ! "x$CVSDEB_PREFIX" = "x" ]; then
+    prefix="$CVSDEB_PREFIX"
+elif [ ! "x$conf_prefix" = "x" ]; then
+    prefix="$conf_prefix"
+else
+    prefix=""
+fi
+
+
+
+# put a slash at the end of the prefix
+if [ "X$prefix" != "X" ]; then
+    prefix="$prefix/";
+    prefix=`echo $prefix | sed 's://:/:g'`;
+fi
+
+
+# Command line, env variable, config file, or default
+if [ ! "x$opt_packageintag" = "x" ]; then
+    packageintag="$opt_packageintag"
+elif [ ! "x$CVSDEB_PACKAGEINTAG" = "x" ]; then
+    packageintag="$CVSDEB_PACKAGEINTAG"
+elif [ ! "x$conf_packageintag" = "x" ]; then
+    packageintag="$conf_packageintag"
+else
+    packageintag=""
+fi
+
+
+if [ "x$opt_tag" != "x" ]; then
+    cvstag="$opt_tag"
+else
+    cvstag=$(echo -n "debian_version_$non_epoch_version" | \
+	tr -c -- "-_a-zA-Z0-9" "_")
+fi
+
+if [ "X$opt_utag" != "X" ]; then
+    cvs_upstream_tag="$opt_utag"
+else
+    cvs_upstream_tag=$(echo -n "upstream_version_$upstream_version" | \
+	tr -c -- "-_a-zA-Z0-9" "_")
+fi
+
+if [ "x$packageintag" != x ]; then
+    cvstag=$(echo -n "${package}_$cvstag"|tr -c -- "-_a-zA-Z0-9" "_") 
+    cvs_upstream_tag=$(echo -n "${package}_$cvs_upstream_tag" | \
+	tr -c -- "-_a-zA-Z0-9" "_")
+fi
+
+if [ "x$opt_cvsmodule" != "x" ]; then
+  cvsmodule="$opt_cvsmodule"
+else
+  cvsmodule="${prefix}$package" 
+fi
+
+# conf_dpkg_options is where one may stash -us -uc or whatever
+if [ -n "${conf_dpkg_options[*]}" ]; then
+    dpkg_options=("${dpkg_options[@]}" "${conf_dpkg_options[@]}");
+elif [ "x$conf_dpkg_options" != "x" ] ; then
+    echo "conf_dpkg_options is now supposed to be an array variable"
+    echo "However, you seem to have it set to a simple variable, which"
+    echo "was the old way of doing things. Please set it to an array"
+    echo "variable, with a form similar to"
+    echo 'dpkg_options=("${dpkg_options[@]}" "value")';
+    exit 1;
+fi
+
+# If asked to debug on command line, that's what we get
+if [ ! "x$opt_DEBUG" = "x" ]; then
+    DEBUG="$opt_DEBUG"
+fi
+
+# Command line, env variable, config file, or default
+if [ ! "x$opt_rootdir" = "x" ]; then
+    rootdir="$opt_rootdir"
+elif [ ! "x$CVSDEB_ROOTDIR" = "x" ]; then
+    rootdir="$CVSDEB_ROOTDIR"
+elif [ ! "x$conf_rootdir" = "x" ]; then
+    rootdir="$conf_rootdir"
+fi
+
+# Command line, env variable, config file, or default
+if [ ! "x$opt_workdir" = "x" ]; then
+    workdir="$opt_workdir"
+elif [ ! "x$CVSDEB_WORKDIR" = "x" ]; then
+    workdir="$CVSDEB_WORKDIR"
+elif [ ! "x$conf_workdir" = "x" ]; then
+    workdir="$conf_workdir"
+else
+    workdir="$rootdir/$package"
+fi
+
+# Command line, env variable, config file, or default
+if [ ! "x$opt_forcetag" = "x" ]; then
+    forcetag="$opt_forcetag"
+elif [ ! "x$CVSDEB_FORCETAG" = "x" ]; then
+    forcetag="$CVSDEB_FORCETAG"
+elif [ ! "x$conf_forcetag" = "x" ]; then
+    forcetag="$conf_forcetag"
+else
+    forcetag=""
+fi
+
+# Command line, env variable, config file, or default
+if [ ! "x$opt_rootcommand" = "x" ]; then
+    rootcommand="$opt_rootcommand"
+elif [ ! "x$CVSDEB_ROOTCOMMAND" = "x" ]; then
+    rootcommand="$CVSDEB_ROOTCOMMAND"
+elif [ ! "x$conf_rootcommand" = "x" ]; then
+    rootcommand="$conf_rootcommand"
+else
+    rootcommand=""
+fi
+
+if [ "X$rootcommand" != "X" ]; then
+     dpkg_options=("${dpkg_options[@]}" "-r$rootcommand") ;
+fi
+
+
+# Command line, env variable, config file, or default
+if [ ! "x$opt_strict_check" = "x" ]; then
+    strict_check="$opt_strict_check"
+elif [ ! "x$CVSDEB_STRICT_CHECK" = "x" ]; then
+    strict_check="$CVSDEB_STRICT_CHECK"
+elif [ ! "x$conf_strict_check" = "x" ]; then
+    strict_check="$conf_strict_check"
+else
+    strict_check=""
+fi
+# Command line, env variable, config file, or default
+if [ ! "x$opt_buildpackage" = "x" ]; then
+    buildpackage="$opt_buildpackage"
+elif [ ! "x$CVSDEB_BUILDPACKAGE" = "x" ]; then
+    buildpackage="$CVSDEB_BUILDPACKAGE"
+elif [ ! "x$conf_buildpackage" = "x" ]; then
+    buildpackage="$conf_buildpackage"
+else
+    buildpackage="dpkg-buildpackage"
+fi
+
+# Command line, env variable, config file, or default
+if [ ! "x$opt_packageopts" = "x" ]; then
+    cvsdeb_packageopts="$opt_packageopts"
+elif [ ! "x$CVSDEB_PACKAGEOPTS" = "x" ]; then
+    cvsdeb_packageopts="$CVSDEB_PACKAGEOPTS"
+elif [ ! "x$conf_packageopts" = "x" ]; then
+    cvsdeb_packageopts="$conf_packageopts"
+else
+    cvsdeb_packageopts=""
+fi
+
+if [ "X$opt_hook" != "X" ]; then
+    hook_script="$opt_hook"
+elif [ "X$CVSDEB_HOOK" != "X" ]; then
+    hook_script="$CVSDEB_HOOK"
+elif [ ! "x$conf_hook_script" = "x" ]; then
+    hook_script="$conf_hook_script"
+else
+    hook_script=""
+fi
+
+if [ "X$opt_fix" != "X" ]; then
+    fix_script="$opt_fix"
+elif [ "X$CVSDEB_FIX" != "X" ]; then
+    fix_script="$CVSDEB_FIX"
+elif [ ! "x$conf_fix_script" = "x" ]; then
+    fix_script="$conf_fix_script"
+else
+    fix_script=""
+fi
+
+if [ "X$opt_get_orig" != "X" ]; then
+    get_orig_cmd="$opt_get_orig"
+elif [ "X$CVSDEB_GET_ORIG" != "X" ]; then
+    get_orig_cmd="$CVSDEB_GET_ORIG"
+elif [ ! "x$conf_get_orig" = "x" ]; then
+    get_orig_cmd="$conf_get_orig"
+else
+    get_orig_cmd=""
+fi
+
+# Command line, env variable, config file, or default
+if [ ! "x$opt_fullexport" = "x" ]; then
+    fullexport="$opt_fullexport"
+elif [ ! "x$CVSDEB_FULLEXPORT" = "x" ]; then
+    fullexport="$CVSDEB_FULLEXPORT"
+elif [ ! "x$conf_fullexport" = "x" ]; then
+    fullexport="$conf_fullexport"
+else
+    fullexport="YES"
+fi
+
+if [ ! -d "$workdir" ]; then
+    echo >&2 "The working directory, $workdir, does not exist. Aborting"
+    if [ ! -d "$rootdir" ]; then
+	echo >&2 "The root directory, $rootdir, does not exist either."
+    fi
+    exit 1;
+fi
+
+# No user defined changes here
+pkgdir="$workdir/$package-$upstream_version"
+oversion="$workdir/${package}_${upstream_version}.orig.tar.gz"
+
+if [ $DEBUG -gt 0 ]; then
+    echo >&2 ""
+    echo >&2 "============================================================"
+    echo >&2 ""
+    echo >&2 "Non Epoch Version = $non_epoch_version "
+    echo >&2 "Upstream Version  = $upstream_version "
+    echo >&2 "Debian Version    = $debian_version"
+    echo >&2 ""
+    echo >&2 "cvs tag           = $cvstag"
+    echo >&2 "cvs upstream tag  = $cvs_upstream_tag"
+    echo >&2 ""
+    echo >&2 "Working Directory = $workdir"
+    echo >&2 "Package Directory = $pkgdir"
+    echo >&2 ""
+    echo >&2 "Original="
+    echo >&2 "   $oversion"
+    echo >&2 ""
+    echo >&2 "============================================================"
+    echo >&2 ""
+fi
+export non_epoch_version upstream_version debian_version cvstag 
+export package cvs_upstream_tag 
+
+if [  -f debian/changelog  ]; then
+    # Checking for uncommitted changes
+    if [ "X$strict_check" != "X" ]; then
+	unknown_regexp='^(M|A) ';
+    else
+	unknown_regexp='^(M|A|\?) ';
+    fi
+    set +e
+    uncommitted=$(cvs -n update 2>/dev/null | egrep $unknown_regexp);
+    set -e
+    answer=""
+    if [ "X$uncommitted" != "X" ]; then
+	echo "There are uncommitted files."
+	echo "$uncommitted"
+	echo -n "Are you sure you wish to proceed?[y/N]: "
+	read answer
+	case $answer in
+	    [Yy]*) nop= ;;
+		*) exit 1
+		;;
+	esac
+    fi
+fi
+if [ ! -d $workdir ]; then
+    $action mkdir -p "$workdir"
+fi
+
+$action $rootcommand /bin/rm -rf "$pkgdir" "$pkgdir.orig"
+
+if [ -f debian/changelog -a "X$forcetag" != "X" ]; then
+    $action cvs rtag -d "$cvstag" "$cvsmodule"
+    $action cvs tag -F "$cvstag"
+fi
+
+if [ "x$debian_version" != "x" -a ! -e $oversion -a  "X$get_orig_cmd"  != "X" ]; then
+    $action cd $workdir
+    $action eval "$get_orig_cmd"
+fi
+
+$action cd "$(dirname "$pkgdir")"
+if [ \( "x$fullexport" = "xNO" -o "x$fullexport" = "xno" \) -a -e "$oversion" -a "x$debian_version" != "x" ]; then
+    $action tar zxvf "$oversion"
+    $action pushd "$(basename "$pkgdir")"
+    $action cvs -q rdiff -u -r "$cvs_upstream_tag" -r "$cvstag" "$cvsmodule" | patch -p2
+    $action chmod +x debian/rules
+    if [ "X$fix_script" != "X" ]; then
+	$action $fix_script "$package" "$version" 
+    fi
+    $action popd 
+else
+    if [ "x$WORKINGCVS" = "x" ]; then
+      $action cvs -q export -d $(basename $pkgdir) -r "$cvstag" "$cvsmodule"
+      if [ "x$debian_version" != "x" -a ! -e "$oversion"  ]; then
+	$action cvs -q export -d "$(basename $pkgdir).orig" -r "$cvs_upstream_tag" "$cvsmodule"
+      fi
+    else
+      $action cvs -q export -d $package-$upstream_version -r "$cvstag" "$cvsmodule"
+      if [ "x$debian_version" != "x"  -a ! -e "$oversion" ]; then
+	$action cvs -q export -d "$package-$upstream_version.orig" -r "$cvs_upstream_tag" "$cvsmodule"
+      fi
+    fi
+fi
+
+$action cd "$pkgdir"
+if [ "X$hook_script" != "X" ]; then
+    $action $hook_script "$package" "$version" 
+fi
+
+if [ "X$$cvsdeb_packageopts" != "X" ]; then
+	$action $buildpackage "${dpkg_options[@]}" $cvsdeb_packageopts
+else
+	$action $buildpackage "${dpkg_options[@]}"
+fi
+
+# Clean up if asked to do so
+if [ $cleansource -eq 1 ]; then
+    $action cd "$workdir"
+    $action $rootcommand /bin/rm -rf "$pkgdir" "$pkgdir.orig" 
+fi
+
+exit 0
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,219 @@
+.TH DEBCHANGE 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+debchange \- Tool for maintenance of the debian/changelog file in a source package
+.SH SYNOPSIS
+\fBdebchange\fR [\fIoptions\fR] [\fItext\fR ...]
+.br
+\fBdch\fR [\fIoptions\fR] [\fItext\fR ...]
+.SH DESCRIPTION
+\fBdebchange\fR or its alias \fBdch\fR will add a new comment line to
+the Debian changelog in the current source tree.  This command must be
+run from within that tree.  If the text of the change is given on the
+commandline, \fBdebchange\fR will run in batch mode and simply add the
+text, with line breaks as necessary, at the appropriate place in
+\fIdebian/changelog\fR.  If no text is specified then \fBdebchange\fR
+will run the editor as determined by \fBsensible-editor\fR for you to
+edit the file.  (The environment variables \fBVISUAL\fR and
+\fBEDITOR\fR are used in this order to determine which editor to use.)
+Editors which understand the \fI+n\fR option for starting the editing
+on a specified line will use this to move to the correct line of the
+file for editing.  If the editor is quit without modifying the
+temporary file, \fBdebchange\fR will exit without touching the
+existing changelog.  \fBNote that the changelog is assumed to be
+encoded with the UTF-8 encoding.  If it is not, problems may occur.\fR
+Please see the \fBiconv\fR(1) manpage to find out how to convert
+changelogs from legacy encodings.
+.PP
+\fBdebchange\fR also supports automatically producing bug-closing
+changelog entries, using the \fB\-\-closes\fR option.  This will
+usually query the BTS, the Debian Bug Tracking System (see
+http://bugs.debian.org/) to determine the title of the bug and the
+package in which it occurs.  This behaviour can be stopped by giving a
+\fB\-\-noquery\fR option or by setting the configuration variable
+\fBDEBCHANGE_QUERY_BTS\fR to \fIno\fR, as described below.  In either
+case, the editor (as described above) will always be invoked to give
+an opportunity to modify the entries, and the changelog will be
+accepted whether or not modifications are made.  An extra changelog
+entry can be given on the command line in addition to the closes
+entries.
+.PP
+At most one of \fB\-\-append\fR, \fB\-\-increment\fR and
+\fB\-\-newversion\fR may be specified as listed below.  If no options
+are specified, \fBdch\fR will look for an appropriate \fBdupload\fR(1)
+or \fBdput\fR(1) log file in the parent directory to determine whether
+this version of the package has been uploaded successfully.  It will
+behave as if \fB\-\-increment\fR had been specified if a successful
+upload has been logged and as if \fB\-\-append\fR had been specified
+otherwise.  A warning will be issued if the log file is found but a
+successful upload is not recorded.  This may be because the previous
+upload was performed with a version of \fBdupload\fR prior to 2.1 or
+because the upload failed.
+.PP
+If \fB\-\-increment\fR or \fB\-\-newversion\fR is used, the name and
+email for the new version will be determined as follows.  If the
+environment variable \fBDEBFULLNAME\fR is set, this will be used for
+the maintainer full name.  If the environment variable \fBDEBEMAIL\fR
+is set, this will be used for the email address.  If this variable has
+the form "name <email>", then the maintainer name will also be taken
+from here if \fBDEBFULLNAME\fR is not set.  If this variable is not
+set, the same test is performed on the environment variable
+\fBEMAIL\fR.  Next, if the full name has still not been determined,
+then use \fBgetpwuid\fR(3) to determine the name from the password
+file.  If this fails, use the previous changelog entry.  For the email
+address, if it has not been set from \fBDEBEMAIL\fR or \fBEMAIL\fR,
+then look in \fI/etc/mailname\fR, then attempt to build it from the
+username and FQDN, otherwise use the email address in the previous
+changelog entry.  In other words, it's a good idea to set
+\fBDEBEMAIL\fR and \fBDEBFULLNAME\fR when using this script.
+.PP
+If the directory name of the source tree has the form
+\fIpackage\fR-\fIversion\fR, then \fBdebchange\fR will also attempt to
+rename it if the (upstream) version number changes.  This can be
+prevented by using the \fB\-\-preserve\fR command line or
+configuration file option as described below.
+.SH "Directory name checking"
+In common with several other scripts in the \fBdevscripts\fR package,
+\fBdebchange\fR will climb the directory tree until it finds a
+\fIdebian/changelog\fR file.  As a safeguard against stray files
+causing potential problems, it will examine the name of the parent
+directory once it finds the \fIdebian/changelog\fR file, and check
+that the directory name corresponds to the package name.  Precisely
+how it does this is controlled by two configuration file variables
+DEVSCRIPTS_CHECK_DIRNAME_LEVEL and DEVSCRIPTS_CHECK_DIRNAME_REGEX, and
+their corresponding command-line options \fB\-\-check-dirname-level\fR
+and \fB\-\-check-dirname-regex\fR.
+.PP
+DEVSCRIPTS_CHECK_DIRNAME_LEVEL can take the following values:
+.TP
+.B 0
+Never check the directory name.
+.TP
+.B 1
+Only check the directory name if we have had to change directory in
+our search for \fIdebian/changelog\fR.  This is the default behaviour.
+.TP
+.B 2
+Always check the directory name.
+.PP
+The directory name is checked by testing whether the current directory
+name (as determined by \fBpwd\fR(1)) matches the regex given by the
+configuration file option DEVSCRIPTS_CHECK_DIRNAME_REGEX or by the
+command line option \fB\-\-check-dirname-regex\fR \fIregex\fR.  Here
+\fIregex\fR is a Perl regex (see \fBperlre\fR(3perl)), which will be
+anchored at the beginning and the end.  If \fIregex\fR contains a '/',
+then it must match the full directory path.  If not, then it must
+match the full directory name.  If \fIregex\fR contains the string
+\'PACKAGE', this will be replaced by the source package name, as
+determined from the changelog.  The default value for the regex is:
+\'PACKAGE(-.*)?', thus matching directory names such as PACKAGE and
+PACKAGE-version.
+.SH OPTIONS
+.TP
+.BR \-\-increment ", " \-i
+Increment either the Debian release number or, if this is a native
+Debian package, the version number.  This creates a new section at the
+beginning of the changelog with appropriate headers and footers.
+Also, if this is a new version of a native Debian package, the
+directory name is changed to reflect this.
+.TP
+.BR \-\-append ", " \-a
+Add a new changelog entry at the end of the current version's entries.
+.TP
+\fB\-\-newversion \fIversion\fR, \fB\-v \fIversion\fR
+This specifies the version number (including the Debian release part)
+explicitly and behaves as the \fB\-\-increment\fR option in other
+respects.  It will also change the directory name if the upstream
+version number has changed.
+.TP
+.BR \-\-fromdirname ", " \-d
+This will take the upstream version number from the directory name,
+which should be of the form \fIpackage\fR-\fIversion\fR.  If the
+upstream version number has increased from the most recent changelog
+entry, then a new entry will be made with version number
+\fIversion\fR-1 (or \fIversion\fR if the package is Debian native),
+with the same epoch as the previous package version.  If the upstream
+version number is the same, this option will behave in the same way as
+\fB\-i\fR.
+.TP
+.BI \-\-closes nnnnn,[nnnnn,...]
+Add changelog entries to close the specified bug numbers.  Also invoke
+the editor after adding these entries.  Will generate warnings if the
+BTS cannot be contacted (and \fB\-\-noquery\fR has not been
+specified), or if there are problems with the bug report located.
+.TP
+.B \-\-[no]query
+Should we attempt to query the BTS when generating closes entries?
+.TP
+.BR \-\-preserve ", " \-p
+Preserve the source tree directory name if the upstream version number
+(or the version number of a Debian native package) changes.  See also
+the configuration variables section below.
+.TP
+.B \-\-no\-preserve
+Do not preserve the source tree directory name (default).
+.TP
+\fB\-\-distribution \fIdist\fR, \fB\-D \fIdist\fR
+Use the specified distribution in the new changelog entry, if any,
+instead of using the previous changelog entry's distribution.
+.TP
+\fB\-\-urgency \fIurgency\fR, \fB\-u \fIurgency\fR
+Use the specified urgency in the new changelog entry, if any,
+instead of using the default "low".
+.TP
+\fB\-\-check-dirname-level\fR \fIN\fR
+See the above section "Directory name checking" for an explanation of
+this option.
+.TP
+\fB\-\-check-dirname-regex\fR \fIregex\fR
+See the above section "Directory name checking" for an explanation of
+this option.
+.TP
+\fB\-\-no-conf\fR, \fB\-\-noconf\fR
+Do not read any configuration files.  This can only be used as the
+first option given on the command-line.
+.TP
+.BR \-\-help ", " \-h
+Display a help message and exit successfully.
+.TP
+.B \-\-version
+Display version and copyright information and exit successfully.
+.SH "CONFIGURATION VARIABLES"
+The two configuration files \fI/etc/devscripts.conf\fR and
+\fI~/.devscripts\fR are sourced in that order to set configuration
+variables.  Command line options can be used to override configuration
+file settings.  Environment variable settings are ignored for this
+purpose.  The currently recognised variables are:
+.TP
+.B DEBCHANGE_PRESERVE
+If this is set to \fIyes\fR, then it is the same as the
+\fB\-\-preserve\fR command line parameter being used.
+.TP
+.B DEBCHANGE_QUERY_BTS
+If this is set to \fIno\fR, then it is the same as the
+\fB\-\-noquery\fR command line parameter being used.
+.TP
+.BR DEVSCRIPTS_CHECK_DIRNAME_LEVEL ", " DEVSCRIPTS_CHECK_DIRNAME_REGEX
+See the above section "Directory name checking" for an explanation of
+these variables.  Note that these are package-wide configuration
+variables, and will therefore affect all \fBdevscripts\fR scripts
+which check their value, as described in their respective manpages and
+in \fBdevscripts.conf\fR(5).
+.SH ENVIRONMENT
+.TP
+.BR DEBEMAIL ", " EMAIL ", " DEBFULLNAME
+See the above description of the use of these environment variables.
+.TP
+.BR VISUAL ", " EDITOR
+These environment variables (in this order) determine the editor used
+by \fBsensible-editor\fR.
+.SH "SEE ALSO"
+.BR debclean (1),
+.BR dupload (1),
+.BR dput (1),
+.BR debc (1)
+and
+.BR devscripts.conf (5).
+.SH AUTHOR
+The original author was Christoph Lameter <clameter@debian.org>. 
+Many substantial changes and improvements were made by Julian Gilbey
+<jdg@debian.org>.

@@ -1,0 +1,289 @@
+.TH USCAN 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+uscan \- scan upstream sources for new releases of software
+.SH SYNOPSIS
+\fBuscan\fR [\fIoptions\fR] [\fIpath-to-debian-source-packages\fR ...]
+.SH DESCRIPTION
+\fBuscan\fR scans the given directories (or the current directory if
+none are specified) and all of their subdirectories for packages
+containing a control file \fIdebian/watch\fR.  Parameters are then
+read from those control files and upstream ftp or http sites are
+inspected for newly available updates (as compared with the upstream
+version number retrieved from the \fIdebian/changelog\fR file in the
+same directory).  The newest updates are retrieved (as determined by
+their version numbers) and if specified in the watchfile, a program
+may then be executed on the newly downloaded source.
+.PP
+The traditional \fIdebian/watch\fR files can still be used, but the
+current format offers both simpler and more flexible services.  We do
+not describe the old format here; for their documentation, see the
+source code for \fRuscan\fR.
+
+.SH FORMAT of debian/watch files
+
+The following demonstrates the type of entries which can appear in a
+\fIdebian/watch\fR file.  Obviously, not all of these would appear in
+one such file; usually, one would have one line for the current
+package.
+
+.PP
+.nf
+# format version number, currently 2; this line is compulsory!
+version=2
+
+# Line continuations are performed with \\
+
+# This the format for an FTP site:
+# Full-site-with-pattern  [Version  [Action]]
+ftp://ftp.tex.ac.uk/tex-archive/web/c_cpp/cweb/cweb-(.*)\\.tar\\.gz \\
+  debian  uupdate
+
+# This can be used if you want to override the PASV setting
+# for a specific site
+# opts=pasv ftp://.../...
+
+# This is one format for an HTTP site, which is the same
+# as the FTP format
+http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-(.*)\\.tar\\.gz
+
+# This is a variant HTTP format with more possibilities:
+# Homepage  Pattern  [Version  [Action]]
+http://www.dataway.ch/~lukasl/amph/amph.html \\
+  files/amphetamine-([\\d\\.]*).tar.bz2
+
+.fi
+.PP
+Comment lines may be introduced with a `#' character.  Continuation
+lines may be indicated by terminating a line with a backslash
+character.
+.PP
+The first (non-comment) line of the file must begin `version=2'.  This
+allows for future extensions without having to change the name of the
+file.
+.PP
+There are two possibilities for the syntax of an HTTP watchfile line,
+and only one for an FTP line.  We begin with the common (and simpler)
+format.  We describe the optional opts=... first field below, and
+ignore it in what follows.
+.PP
+The first field gives the full pattern of URLs being searched for.  In
+the case of an FTP site, the directory listing for the requested
+directory will be requested and this will be scanned for files
+matching the basename (everything after the trailing `/').  In the
+case of an HTTP site, the URL obtained by stripping everything after
+the trailing slash will be downloaded and searched for hrefs (links of
+the form <a href=...>) to either the full URL pattern given, or to the
+absolute part (everything without the http://host.name/ part), or to
+the basename (just the part after the final `/').  Everything up to
+the final slash is taken as a verbatim URL.
+.PP
+The pattern (after the final slash) is a Perl regexp (see
+\fBperlre\fR(1) for details of these).  You need to make the pattern
+so tight that it matches only the upstream software you are interested
+in, and nothing else.  Also, the pattern will be anchored at the
+beginning and at the end, so it must match the full filename.  (Note
+that for HTTP URLs, the href may include the absolute path or full
+site and path and still be accepted.)  The pattern must contain a Perl
+group as explained in the next paragraph.
+.PP
+Having got a list of `files' matching the pattern, their version
+numbers are extracted by treating the part matching the first Perl
+regexp group, demarcated by `(...)', as the version number of the
+file.  The file versions are then compared to find the one with the
+greatest version number, as determined by \fBdpkg
+--compare-versions\fR.
+.PP
+The current version can be specified as the second parameter in the
+watchfile line.  If this is \fIdebian\fR or absent, then the current
+version (as determined by \fIdebian/changelog\fR) is used.  If the
+newest version available is newer than the current version, then it is
+downloaded into the parent directory, unless the \fB\-\-report\fR
+option has been used.  Once the file has been downloaded, then a
+symlink to the file is made from \fI<package>_<version>.orig.tar.gz\fR
+if the file has a \fI.tar.gz\fR or a \fI.tgz\fR suffix.
+.PP
+Finally, if a third parameter is given in the watchfile line, this is
+taken as the name of a command, and the command
+.nf
+    \fIcommand \fB\-\-upstream-version\fI version filename\fR
+.fi
+is executed, using either the original file or the symlink name.  A
+common such command would be \fBuupdate\fR.  (Note that the calling
+syntax was slightly different when using watchfiles without a
+`version=2' line; there the command executed was `command filename
+version'.)
+.PP
+The alternative version of the watchfile syntax for HTTP URLs is as
+follows.  The first field is a homepage which should be downloaded and
+then searched for hrefs matching the pattern given in the second
+field.  (Again, this pattern will be anchored at the beginning and the
+end, so it must match the whole href.  If you want to match just the
+basename of the href, you can use a pattern like
+".*/name-(.*)\\.tar\\.gz" if you know that there is a full URL, or
+better still: "(?:.*/)?name-(.*)\\.tar\\.gz" if there may or may not
+be.  Note the use of (?:...) to avoid making a backreference.)  If any
+of the hrefs in the homepage which match the (anchored) pattern are
+relative URLs, they will be taken as being relative to the base URL of
+the homepage (i.e., with everything after the trailing slash removed),
+or relative to the base URL specified in the homepage itself with a
+<base href="..."> tag.  The third and fourth fields are the version
+number and action fields as before.
+.SH "PER-SITE OPTIONS"
+A watchfile line may be prefixed with "opts=\fIoptions\fR", where
+\fIoptions\fR is a comma-separated list of options.  The only
+recognised options are currently \fIactive\fR and \fIpassive\fR (or
+\fIpasv\fR), which if used on an FTP line override the choice of
+whether to use PASV mode or not, and force the use of the specified
+mode for this site.
+.SH "Directory name checking"
+Similarly to several other scripts in the \fBdevscripts\fR package,
+\fBuscan\fR explores the requested directory trees looking for
+\fIdebian/changelog\fR and \fIdebian/watch\fR files.  As a safeguard
+against stray files causing potential problems, it will examine the name
+of the parent directory once it finds the \fIdebian/changelog\fR file,
+and check that the directory name corresponds to the package name.  It
+will attempt to download newer versions of the package in any case,
+but it will only perform any requested action if the directory name
+matches the package name.  Precisely how it does this is controlled by
+two configuration file variables DEVSCRIPTS_CHECK_DIRNAME_LEVEL and
+DEVSCRIPTS_CHECK_DIRNAME_REGEX, and their corresponding command-line
+options \fB\-\-check-dirname-level\fR and
+\fB\-\-check-dirname-regex\fR.
+.PP
+DEVSCRIPTS_CHECK_DIRNAME_LEVEL can take the following values:
+.TP
+.B 0
+Never check the directory name.
+.TP
+.B 1
+Only check the directory name if we have had to change directory in
+our search for \fIdebian/changelog\fR, that is, the directory
+containing \fIdebian/changelog\fR is not the directory from which
+\fBuscan\fR was invoked.  This is the default behaviour.
+.TP
+.B 2
+Always check the directory name.
+.PP
+The directory name is checked by testing whether the current directory
+name (as determined by \fBpwd\fR(1)) matches the regex given by the
+configuration file option DEVSCRIPTS_CHECK_DIRNAME_REGEX or by the
+command line option \fB\-\-check-dirname-regex\fR \fIregex\fR.  Here
+\fIregex\fR is a Perl regex (see \fBperlre\fR(3perl)), which will be
+anchored at the beginning and the end.  If \fIregex\fR contains a '/',
+then it must match the full directory path.  If not, then it must
+match the full directory name.  If \fIregex\fR contains the string
+\'PACKAGE', this will be replaced by the source package name, as
+determined from the changelog.  The default value for the regex is:
+\'PACKAGE(-.*)?', thus matching directory names such as PACKAGE and
+PACKAGE-version.
+.SH EXAMPLE
+This script will perform a fully automatic upstream update.
+
+.nf
+#!/bin/sh -e
+# called with '--upstream-version' <version> <file>
+uupdate "$@"
+package=`dpkg-parsechangelog | sed -n 's/^Source: //p'`
+cd ../$package-$2
+debuild
+.fi
+
+Note that we don't call \fBdupload\fR or \fBdput\fR automatically, as
+the maintainer should perform sanity checks on the software before
+uploading it to Debian.
+.SH OPTIONS
+.TP
+.B \-\-report, \-\-no\-download
+Only report about newer or absent versions but do not download
+anything.
+.TP
+.B \-\-download
+Report and download.  (This is the default behaviour.)
+.TP
+.B \-\-pasv
+Force PASV mode for FTP connections.
+.TP
+.B \-\-no\-pasv
+Do not use PASV mode for FTP connections.
+.TP
+.B \-\-symlink
+Make orig.tar.gz symlinks to any downloaded files if their extensions
+are \fI.tar.gz\fR or \fI.tgz\fR.  (This is the default behaviour.)
+.TP
+.B \-\-no\-symlink
+Don't make these symlinks.
+.TP
+.B \-\-verbose
+Give verbose output.
+.TP
+.B \-\-no\-verbose
+Don't give verbose output.  (This is the default behaviour.)
+.TP
+\fB\-\-check-dirname-level\fR \fIN\fR
+See the above section "Directory name checking" for an explanation of
+this option.
+.TP
+\fB\-\-check-dirname-regex\fR \fIregex\fR
+See the above section "Directory name checking" for an explanation of
+this option.
+.TP
+\fB\-\-no-conf\fR, \fB\-\-noconf\fR
+Do not read any configuration files.  This can only be used as the
+first option given on the command-line.
+.TP
+.B \-\-help
+Give brief usage information.
+.TP
+.B \-\-version
+Display version information.
+.SH "CONFIGURATION VARIABLES"
+The two configuration files \fI/etc/devscripts.conf\fR and
+\fI~/.devscripts\fR are sourced by a shell in that order to set
+configuration variables.  These may be overridden by command line
+options.  Environment variable settings are ignored for this purpose.
+If the first command line option given is \fB\-\-noconf\fR, then these
+files will not be read.  The currently recognised variables are:
+.TP
+.B USCAN_DOWNLOAD
+If this is set to \fIno\fR, then newer upstream files will not be
+downloaded; this is equivalent to the \fB\-\-report\fR or
+\fB\-\-no\-download\fR options.
+.TP
+.B USCAN_PASV
+If this is set to \fIyes\fR or \fIno\fR, this will force FTP
+connections to use PASV mode or not to, respectively.  If this is set
+to \fIdefault\fR, then Net::FTP(3) make the choice (primarily based on
+the FTP_PASSIVE environment variable).
+.TP
+.B USCAN_SYMLINK
+If this is set to \fIno\fR, then a pkg_version.orig.tar.gz symlink
+will not be made.  This is equivalent to the \fB\-\-no\-symlink\fR
+option.
+.TP
+.B USCAN_VERBOSE
+If this is set to \fIyes\fR, then verbose output will be given.  This
+is equivalent to the \fB\-\-verbose\fR option.
+.SH "EXIT STATUS"
+The exit status gives some indication of whether a newer version was
+found or not; one is advised to read the output to determine exactly
+what happened and whether there were any warnings to be noted.
+.TP
+0
+Either \fB\-\-help\fR or \fB\-\-version\fR was used, or for some
+watchfile which was examined, a newer upstream version was located.
+.TP
+1
+No newer upstream versions were located for any of the watchfiles
+examined.
+.SH "SEE ALSO"
+.BR dpkg (1),
+.BR perlre (1),
+.BR uupdate (1)
+and
+.BR devscripts.conf (5).
+.SH AUTHOR
+The original version of \fBuscan\fR was written by Christoph Lameter
+<clameter@debian.org>.  Significant improvements, changes and bugfixes
+were made by Julian Gilbey <jdg@debian.org>.  HTTP support was added
+by Piotr Roszatycki <dexter@debian.org>.  The program was rewritten
+in Perl by Julian Gilbey.

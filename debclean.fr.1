@@ -1,0 +1,39 @@
+.TH DEBCLEAN 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NOM
+debclean \- nettoie une arborescence de code source
+.SH SYNOPSIS
+\fBdebclean\fR [\fB\-\-cleandebs\fR|\fB\-\-nocleandebs\fR]
+.SH DESCRIPTION
+\fBdebclean\fR parcourt l'arborescence des répertoires en commençant par 
+l'arborescence du répertoire d'où elle a été appelée, et exécute
+.I debian/rules clean
+pour chaque répertoire source Debian rencontré.
+.PP
+En outre, si l'option \fB\-\-cleandebs\fR est donnée, alors dans chaque
+répertoire contenant une arborescence source Debian, tous les fichiers nommés *.deb,
+*.changes et *.dsc sont supprimés. Les fichiers .diff.gz et tar.gz 
+ne sont pas touchés de sorte que la version peut être reconstruite si nécessaire,
+et les fichiers .upload sont laissés de sorte que \fBdebchange\fR fonctionne
+correctement. L'option \fB\-\-nocleandebs\fR empêche ce comportement de nettoyage
+supplémentaire et l'option \fB\-\-cleandebs\fR le force. Ceci
+peut également être réalisé en plaçant dans le fichier de configuration l'option 
+\fBDEBCLEAN_CLEANDEBS\fR à \fIoui\fR. Le comportement par défaut est de ne pas nettoyer 
+ces fichiers.
+.PP
+\fBdebclean\fR utilises \fBdebuild\fR(1) pour nettoyer l'arborescence source.
+.SH "VARIABLES DE CONFIGURATION"
+Les deux fichiers de configuration \fI/etc/devscripts.conf\fR et
+\fI~/.devscripts\fR sont évalués dans cet ordre pour placer les variables 
+de configuration. Des options de ligne de commande peuvent être utilisées pour neutraliser les 
+paramètres des fichiers de configuration. Les paramètres des variables d'environnement sont ignorés 
+à cette fin. La variable actuellement identifiée est :
+.TP
+.B DEBCLEAN_CLEANDEBS
+Si elle est positionnée à «\ \fIyes\fR\ », alors c'est comme si le paramètre de ligne de commande 
+\fB\-\-cleandebs\fR était utilisé.
+.SH AUTEUR
+Christoph Lameter <clameter@debian.org>;
+modifications par Julian Gilbey <jdg@debian.org>.
+.SH TRADUCTION
+Laëtitia Groslong <lgr@tartine.org>. 
+
