@@ -703,7 +703,11 @@ sub process_watchline ($$$$$$)
 	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi) {
 	    my $href = $2;
 	    if ($href =~ m&^$pattern$&) {
-		my $mangled_version = join(".", $href =~ m&^$pattern$&);
+		# need the map { ... } here to handle cases of (...)?
+		# which may match but then return undef values
+		my $mangled_version =
+		    join(".", map { $_ if defined($_) }
+			       $href =~ m&^$pattern$&);
 		foreach my $pat (@{$options{'uversionmangle'}}) {
 		    eval "\$mangled_version =~ $pat;";
 		}
