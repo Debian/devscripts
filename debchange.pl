@@ -79,7 +79,7 @@ Options:
          Specify the name of the changelog to use in place of debian/changelog
          No directory traversal or checking is performed in this case.
   --news
-         Specify that debian/NEWS.Debian is to be edited; cannot be used
+         Specify that debian/NEWS is to be edited; cannot be used
          with --changelog
   --check-dirname-level N
          How much to check directory names:
@@ -229,8 +229,8 @@ fatal "Only one of -c/--changelog and --news is allowed; try $progname --help fo
     if $opt_c and $opt_news;
 
 my $changelog_path = $opt_c || $ENV{'CHANGELOG'} || 'debian/changelog';
-if ($opt_news) { $changelog_path = "debian/NEWS.Debian"; }
-if ($changelog_path ne 'debian/changelog' and $changelog_path ne 'debian/NEWS.Debian') {
+if ($opt_news) { $changelog_path = "debian/NEWS"; }
+if ($changelog_path ne 'debian/changelog' and $changelog_path ne 'debian/NEWS') {
     $check_dirname_level = 0;
 }
 
