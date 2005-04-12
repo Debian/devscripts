@@ -17,7 +17,7 @@ PROGNAME=`basename $0`
 CACHEDIR=~/.devscripts_cache
 
 usage () { echo \
-"Usage: $PROGNAME [--help|--version]
+"Usage: $PROGNAME [--help|-h|--version|-v]
   List all installed packages with RFA or Orphaned bugs against them,
   as determined from the WNPP website."
 }
@@ -29,8 +29,8 @@ Authors: Arthur Korn <arthur@korn.ch>
 Modifications: Julian Gilbey <jdg@debian.org>"
 }
 
-if [ "x$1" = "x--help" ]; then usage; exit 0; fi
-if [ "x$1" = "x--version" ]; then version; exit 0; fi
+if [ "x$1" = "x--help" -o "x$1" = "x-h" ]; then usage; exit 0; fi
+if [ "x$1" = "x--version" -o "x$1" = "x-v" ]; then version; exit 0; fi
 
 if ! command -v wget >/dev/null 2>&1; then
     echo "$PROGNAME: need the wget package installed to run this" >&2
