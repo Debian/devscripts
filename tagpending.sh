@@ -92,10 +92,7 @@ if [ -z "$to_be_tagged" ]; then
 fi
 
 # Could use dh_listpackages, but no guarantee that it's installed.
-src_packages=$(awk '/Package: / { printf $2 " "} /Source: / { printf $2 " " }' debian/control)
-
-IFS="
-"
+src_packages=$(awk '/Package: / { print $2 } /Source: / { print $2 }' debian/control | sort | uniq)
 
 if [ "$DRY" = 1 ]; then
   msg="tagpending info: Would tag these bugs pending:"
