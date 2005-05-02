@@ -358,30 +358,27 @@ elsif ($type eq 'dsc') {
     system("(interdiff --version) >/dev/null 2>&1");
     my $use_interdiff = ($?==0) ? 1 : 0;
 
-    if ($origs[1] eq $origs[2] and $use_interdiff) {
+    if ($origs[1] eq $origs[2] and defined $diffs[1] and defined $diffs[2]
+	and $use_interdiff) {
 	# same orig tar ball and interdiff exists
-	if (defined $diffs[1] and defined $diffs[2]) {
-	    my $rv = system('interdiff', '-z', $diffs[1], $diffs[2]);
-	    if ($rv) {
-		fatal "interdiff -z $diffs[1] $diffs[2] failed!";
-	    }
-	}
-	else {
-	    warn "Warning: no diffs and same tarball ($origs[1]),\nnot attempting to diff\n";
+	my $rv = system('interdiff', '-z', $diffs[1], $diffs[2]);
+	if ($rv) {
+	    fatal "interdiff -z $diffs[1] $diffs[2] failed!";
 	}
     } else {
-	if ($origs[1] eq $origs[2]) {
+	# Any other situation
+	if ($origs[1] eq $origs[2] and
+	    defined $diffs[1] and defined $diffs[2]) {
 	    warn "Warning: You do not seem to have interdiff (in the patchutils package)\ninstalled; this program would use it if it were available.\n";
 	}
-	# different orig tarball
+	# possibly different orig tarballs, or no interdiff installed
 	our ($sdir1, $sdir2);
 	mktmpdirs();
 	for my $i (1,2) {
 	    no strict 'refs';
 	    my $cmd = qq(cd ${"dir$i"} && dpkg-source -x $dscs[$i]);
 	    ${"sdir$i"} = `$cmd`;
-	    fatal qq(cd ${"dir$i"} && dpkg-source -x $dscs[$i] failed)
-		if $? != 0;
+	    fatal "$cmd failed" if $? != 0;
 	    ${"sdir$i"} =~ /([^\s]*)$/;
 	    ${"sdir$i"} = $1;
 	}

@@ -4,6 +4,8 @@ devscripts (2.8.15) UNRELEASED; urgency=low
     #301917)
   * debchange: debian/NEWS.Debian should have been debian/NEWS (closes:
     #303886)
+  * debdiff: handle debdiff on two identically-named native .dsc files
+    (closes: #307318)
   * uscan: handle annoying error message (closes: #303607)
   * wnpp-alert: accept -h and -v short options (closes: #304240)
 
