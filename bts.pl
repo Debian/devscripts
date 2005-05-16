@@ -1241,7 +1241,8 @@ sub download {
     # yes, if we've caching with --cache-mode=mbox or full and the bug had
     # previously been cached in a less thorough format
     my $forcedownload = 0;
-    if ($thing =~ /^\d+$/ and ! $refreshmode and $cachemode ne 'min') {
+    if ($thing =~ /^\d+$/ and ! $refreshmode and
+	($cachemode ne 'min' or $mboxing)) {
 	if (! -r mboxfile($thing)) {
 	    $forcedownload = 1;
 	} elsif ($cachemode eq 'full' and -d $thing) {
