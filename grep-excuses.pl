@@ -26,9 +26,12 @@ use File::Basename;
 my $progname = basename($0);
 my $modified_conf_msg;
 
-my $cachedir = $ENV{'HOME'}."/.devscripts_cache/";
 my $url='http://ftp-master.debian.org/testing/update_excuses.html.gz';
+
+# No longer use these - see bug#309802
+my $cachedir = $ENV{'HOME'}."/.devscripts_cache/";
 my $cachefile = $cachedir . basename($url);
+unlink $cachefile if -f $cachefile;
 
 sub usage {
     print <<"EOF";
@@ -129,19 +132,9 @@ if ($hostname =~ /^(auric|ftp-master)\.debian\.org$/) {
     if (system("command -v wget >/dev/null 2>&1") != 0) {
 	die "$progname: this program requires the wget package to be installed\n";
     }
-    if (! -d $cachedir) {
-	mkdir $cachedir
-	    or die "$progname: can't make cache directory $cachedir: $!\n";
-    }
-
-    chdir $cachedir or die "$progname: can't cd $cachedir: $!\n";
     
-    if (system("wget -qN $url") != 0) {
-	die "$progname: wget failed!\n";
-    }
-
-    open (EXCUSES, "zcat $cachefile |")
-	or die "$progname: cannot fork zcat: $!\n";
+    open EXCUSES, "wget -q -O - $url | zcat |" or
+	die "$progname: wget | zcat failed: $!\n";
 }
 
 my $item='';

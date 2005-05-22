@@ -38,8 +38,10 @@ if ! command -v wget >/dev/null 2>&1; then
 fi
 
 
-if [ ! -d "$CACHEDIR" ]; then
-    mkdir "$CACHEDIR"
+# Let's abandon this directory from now on, these files are so small
+# (see bug#309802)
+if [ -d "$CACHEDIR" ]; then
+    rm -f "$CACHEDIR"/orphaned "$CACHEDIR"/rfa_bypackage
 fi
 
 INSTALLED=`mktemp -t wnppalert-installed.XXXXXX`
@@ -47,18 +49,18 @@ trap "rm -f '$INSTALLED'" 0 1 2 3 7 10 13 15
 WNPP=`mktemp -t wnppalert-wnpp.XXXXXX`
 trap "rm -f '$INSTALLED' '$WNPP'" 0 1 2 3 7 10 13 15
 WNPP_PACKAGES=`mktemp -t wnppalert-wnpp_packages.XXXXXX`
-trap "rm -f '$INSTALLED' '$WNPP' '$WNPP_PACKAGES'" 0 1 2 3 7 10 13 15
+trap "rm -f '$INSTALLED' '$WNPP' '$WNPP_PACKAGES'" \
+  0 1 2 3 7 10 13 15
 
-cd "$CACHEDIR"
-wget -qN http://www.debian.org/devel/wnpp/orphaned
 # Here's a really sly sed script.  Rather than first grepping for
 # matching lines and then processing them, this attempts to sed
 # every line; those which succeed execute the 'p' command, those
 # which don't skip over it to the label 'd'
-sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:]*\): \([^<]*\)<\/a>.*/O \1 \2 -- \3/; T d; p; : d' orphaned > $WNPP
+wget -q -O - http://www.debian.org/devel/wnpp/orphaned | \
+  sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:]*\): \([^<]*\)<\/a>.*/O \1 \2 -- \3/; T d; p; : d' > $WNPP
 
-wget -qN http://www.debian.org/devel/wnpp/rfa_bypackage
-sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:]*\): \([^<]*\)<\/a>.*/RFA \1 \2 -- \3/; T d; p; : d' rfa_bypackage >> $WNPP
+wget -q -O - http://www.debian.org/devel/wnpp/rfa_bypackage | \
+  sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:]*\): \([^<]*\)<\/a>.*/RFA \1 \2 -- \3/; T d; p; : d' >> $WNPP
 
 cut -f3 -d' ' $WNPP | sort > $WNPP_PACKAGES
 

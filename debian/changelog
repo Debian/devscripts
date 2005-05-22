@@ -7,8 +7,12 @@ devscripts (2.8.15) UNRELEASED; urgency=low
     #303886)
   * debdiff: handle debdiff on two identically-named native .dsc files
     (closes: #307318)
+  * grep-excuses: no longer cache web page, as per bug#309802
+  * rc-alert: no longer automatically create cache directory, as per
+    bug#309802
   * uscan: handle annoying error message (closes: #303607)
   * wnpp-alert: accept -h and -v short options (closes: #304240)
+  * wnpp-alert: don't cache such small files (closes: #309802)
 
  -- Julian Gilbey <jdg@polya.uklinux.net>  Tue, 12 Apr 2005 11:46:36 +0100
 

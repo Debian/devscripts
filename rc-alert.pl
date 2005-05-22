@@ -22,21 +22,27 @@ use strict;
 use lib '/usr/share/devscripts';
 use Devscripts::Packages;
 use File::Basename;
+use Getopt::Long;
 
 sub print_if_relevant(%);
 sub human_flags($);
 sub unhtmlsanit($);
 
-my $cachedir = $ENV{'HOME'}."/.devscripts_cache/";
+my $cachedir = $ENV{'HOME'}."/.testing-devscripts_cache/";
 my $url = "http://bugs.debian.org/release-critical/other/all.html";
 my $cachefile = $cachedir . basename($url);
+my $forcecache = 0;
+my $usecache = 0;
 
 my $progname = basename($0);
 
 my $usage = <<"EOF";
-Usage: $progname [--help|--version]
+Usage: $progname [--help|--version|--cache]
   List all installed packages with release-critical bugs,
   as determined from the Debian release-critical bugs list.
+
+  Options:
+  --cache     Create ~/.devscripts_cache directory if it does not exist
 EOF
 
 my $version = <<"EOF";
@@ -51,9 +57,15 @@ EOF
 ##
 ## handle command-line options
 ##
-if (@ARGV and $ARGV[0] =~ /^(--help|-h)$/) { print $usage; exit 0; }
-if (@ARGV and $ARGV[0] =~ /^(--version|-v)$/) { print $version; exit 0; }
 
+my ($opt_help, $opt_version);
+GetOptions("help|h" => \$opt_help,
+	   "version|v" => \$opt_version,
+	   "cache" => \$forcecache,
+	   );
+
+if ($opt_help) { print $usage; exit 0; }
+if ($opt_version) { print $version; exit 0; }
 
 ## First download the RC bugs page
 
@@ -61,22 +73,29 @@ unless (system("command -v wget >/dev/null 2>&1") == 0) {
     die "$progname: this program requires the wget package to be installed\n";
 }
 
-if (! -d $cachedir) {
+
+if (! -d $cachedir and $forcecache) {
     mkdir $cachedir
 	or die "$progname: can't make cache directory $cachedir: $!\n";
 }
 
-chdir $cachedir or die "$progname: can't cd $cachedir: $!\n";
+if (-d $cachedir) {
+    chdir $cachedir or die "$progname: can't cd $cachedir: $!\n";
 
-if (system("wget -qN $url") != 0) {
-    die "$progname: wget failed!\n";
+    if (system("wget -qN $url") != 0) {
+	die "$progname: wget failed!\n";
+    }
+    open BUGS, $cachefile or die "$progname: could not read $cachefile: $!\n";
+}
+else {
+    open BUGS, "wget -q -O - $url |" or
+	die "$progname: could not run wget: $!\n";
 }
 
 ## Get list of installed packages (not source packages)
 my $package_list = InstalledPackages(0);
 
 ## Read the list of bugs
-open BUGS, $cachefile or die "$progname: could not read $cachefile: $!\n";
 
 my $found_bugs_start;
 my ($current_package, $comment);
