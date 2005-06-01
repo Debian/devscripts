@@ -1,5 +1,6 @@
 devscripts (2.8.15) UNRELEASED; urgency=low
 
+  [ Julian Gilbey ]
   * bts: fix bts --mbox show nnnn after bts show nnnn
   * debchange: use word "file" in manpage for --changelog option (closes:
     #301917)
@@ -14,8 +15,13 @@ devscripts (2.8.15) UNRELEASED; urgency=low
   * uscan: handle annoying error message (closes: #303607)
   * wnpp-alert: accept -h and -v short options (closes: #304240)
   * wnpp-alert: don't cache such small files (closes: #309802)
+  
+  [ Joshua Kwan ]
+  * Add a new script whodepends, written by Moshe Zadka, to check
+    which maintainers' packages depend on a particular package.
+    closes: #175832 (longstanding, huh?)
 
- -- Julian Gilbey <jdg@polya.uklinux.net>  Tue, 12 Apr 2005 11:46:36 +0100
+ -- Joshua Kwan <joshk@triplehelix.org>  Tue, 31 May 2005 21:32:56 -0700
 
 devscripts (2.8.14) unstable; urgency=low
 
