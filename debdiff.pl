@@ -210,15 +210,16 @@ if (! $type) {
     }
 
     if ($ARGV[0] =~ /\.deb$/) { $type = 'deb'; }
+    elsif ($ARGV[0] =~ /\.udeb$/) { $type = 'deb'; }
     elsif ($ARGV[0] =~ /\.changes$/) { $type = 'changes'; }
     elsif ($ARGV[0] =~ /\.dsc$/) { $type = 'dsc'; }
     elsif (`file $ARGV[0]` =~ /Debian/) { $type = 'deb'; }
     else {
-	fatal "Could not recognise files; the names should end .deb, .changes or .dsc";
+	fatal "Could not recognise files; the names should end .deb, .udeb, .changes or .dsc";
     }
     if ($ARGV[1] !~ /\.$type$/) {
 	unless ($type eq 'deb' and `file $ARGV[0]` =~ /Debian/) {
-	    fatal "The two filenames must have the same suffix, either .deb, .changes or .dsc";
+	    fatal "The two filenames must have the same suffix, either .deb, .udeb, .changes or .dsc";
 	}
     }
 }
@@ -271,8 +272,8 @@ elsif ($type eq 'changes' or $type eq 'debs') {
 		last if $infiles and /^[^ ]/;
 		/^Files:/ and $infiles=1, next;
 		next unless $infiles;
-		/ (\S*.deb)$/ and push @debs, $1;
-	    }
+		/ (\S*.(u|)deb)$/ and push @debs, $1;
+        }
 	    close CHANGES
 		or fatal "Problem reading $changes: $!";
 

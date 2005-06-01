@@ -15,13 +15,16 @@ devscripts (2.8.15) UNRELEASED; urgency=low
   * uscan: handle annoying error message (closes: #303607)
   * wnpp-alert: accept -h and -v short options (closes: #304240)
   * wnpp-alert: don't cache such small files (closes: #309802)
-  
+
   [ Joshua Kwan ]
   * Add a new script whodepends, written by Moshe Zadka, to check
     which maintainers' packages depend on a particular package.
     closes: #175832 (longstanding, huh?)
+  
+  [ Filippo Giunchedi ]
+  * debdiff: handle .udeb files if found in .changes (closes: #215477) 
 
- -- Joshua Kwan <joshk@triplehelix.org>  Tue, 31 May 2005 21:32:56 -0700
+ -- Filippo Giunchedi <filippo@debian.org>  Wed,  1 Jun 2005 18:08:54 +0200
 
 devscripts (2.8.14) unstable; urgency=low
 
