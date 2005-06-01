@@ -60,6 +60,7 @@ Description: Scripts to make the life of a Debian Package maintainer easier
       [wget]
   - uscan: scan upstream sites for new releases of packages [libwww-perl]
   - uupdate: integrate upstream changes into a source package [patch]
+  - whodepends: check which maintainers' packages depend on a package
   - wnpp-alert: list installed packages which are orphaned or up for
       adoption [wget]
  Also included are a set of example mail filters for filtering mail
