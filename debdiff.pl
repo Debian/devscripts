@@ -272,7 +272,7 @@ elsif ($type eq 'changes' or $type eq 'debs') {
 		last if $infiles and /^[^ ]/;
 		/^Files:/ and $infiles=1, next;
 		next unless $infiles;
-		/ (\S*.(u|)deb)$/ and push @debs, $1;
+		/ (\S*.u?deb)$/ and push @debs, $1;
         }
 	    close CHANGES
 		or fatal "Problem reading $changes: $!";
