@@ -58,6 +58,9 @@ Options:
          Append a new entry to the current changelog
   -v <version>, --newversion=<version>
          Add a new changelog entry with version number specified
+  -b, --force-bad-version
+         Force a version to be less than the current one (e.g. when
+         backporting)
   -n, --nmu
          Increment the Debian release number for a non-maintainer upload
   --closes nnnnn[,nnnnn,...]
@@ -176,7 +179,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # We use bundling so that the short option behaviour is the same as
 # with older debchange versions.
 my ($opt_help, $opt_version);
-my ($opt_i, $opt_a, $opt_v, $opt_d, $opt_D, $opt_u, $opt_n, $opt_c, @closes);
+my ($opt_i, $opt_a, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u, $opt_n, $opt_c, @closes);
 my ($opt_news);
 my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 $opt_u = 'low';
@@ -187,6 +190,7 @@ GetOptions("help|h" => \$opt_help,
 	   "i|increment" => \$opt_i,
 	   "a|append" => \$opt_a,
 	   "v|newversion=s" => \$opt_v,
+	   "b|force-bad-version" => \$opt_b,
 	   "d|fromdirname" => \$opt_d,
 	   "p" => \$opt_p,
 	   "preserve!" => \$opt_p,
@@ -599,8 +603,13 @@ if ($opt_i || $opt_n || $opt_v || $opt_d) {
 
 	if (system("dpkg --compare-versions $VERSION lt $NEW_VERSION" .
 		  " 2>/dev/null 1>&2")) {
+        if( $opt_b ){
+        warn "$progname warning: new version ($NEW_VERSION) is less than\n".
+            "the current version number ($VERSION).\n";
+        }else{
 	    fatal "New version specified ($NEW_VERSION) is less than\n" .
-		    "the current version number ($VERSION)!";
+		    "the current version number ($VERSION)! use -b to force.";
+        }    
 	}
 
 	($NEW_SVERSION=$NEW_VERSION) =~ s/^\d+://;

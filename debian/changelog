@@ -20,11 +20,13 @@ devscripts (2.8.15) UNRELEASED; urgency=low
   * Add a new script whodepends, written by Moshe Zadka, to check
     which maintainers' packages depend on a particular package.
     closes: #175832 (longstanding, huh?)
-  
-  [ Filippo Giunchedi ]
-  * debdiff: handle .udeb files if found in .changes (closes: #215477) 
 
- -- Filippo Giunchedi <filippo@debian.org>  Wed,  1 Jun 2005 18:08:54 +0200
+  [ Filippo Giunchedi ]
+  * debdiff: handle .udeb files if found in .changes (closes: #215477)
+  * debchange: add support for forcing a lower version
+    (-b/--force-bad-version) (closes: #251436, #183424) 
+
+ -- Filippo Giunchedi <filippo@debian.org>  Thu,  2 Jun 2005 12:39:34 +0200
 
 devscripts (2.8.14) unstable; urgency=low
 

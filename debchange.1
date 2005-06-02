@@ -72,6 +72,10 @@ If the directory name of the source tree has the form
 rename it if the (upstream) version number changes.  This can be
 prevented by using the \fB\-\-preserve\fR command line or
 configuration file option as described below.
+.PP
+If \fB\-\-force\-bad\-version\fR is used, debchange will not stop if
+the new version is less than the current one.  This is especially
+useful while doing backports. 
 .SH "Directory name checking"
 In common with several other scripts in the \fBdevscripts\fR package,
 \fBdebchange\fR will climb the directory tree until it finds a
