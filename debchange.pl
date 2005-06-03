@@ -603,13 +603,13 @@ if ($opt_i || $opt_n || $opt_v || $opt_d) {
 
 	if (system("dpkg --compare-versions $VERSION lt $NEW_VERSION" .
 		  " 2>/dev/null 1>&2")) {
-        if( $opt_b ){
-        warn "$progname warning: new version ($NEW_VERSION) is less than\n".
-            "the current version number ($VERSION).\n";
-        }else{
-	    fatal "New version specified ($NEW_VERSION) is less than\n" .
-		    "the current version number ($VERSION)! use -b to force.";
-        }    
+	    if ($opt_b) {
+		warn "$progname warning: new version ($NEW_VERSION) is less than\n" .
+		    "the current version number ($VERSION).\n";
+	    } else {
+		fatal "New version specified ($NEW_VERSION) is less than\n" .
+		    "the current version number ($VERSION)!  Use -b to force.";
+	    }
 	}
 
 	($NEW_SVERSION=$NEW_VERSION) =~ s/^\d+://;
