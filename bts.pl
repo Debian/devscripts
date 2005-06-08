@@ -86,7 +86,7 @@ our (@gTags, @valid_tags, %valid_tags);
            "potato", "woody", "sid", "help", "security", "upstream",
            "pending", "sarge", "sarge-ignore", "experimental", "d-i", 
            "confirmed", "ipv6", "lfs", "fixed-in-experimental",
-           "fixed-upstream", "l10n"
+           "fixed-upstream", "l10n", "etch", "etch-ignore"
          );
 
 *valid_tags = \@gTags;
