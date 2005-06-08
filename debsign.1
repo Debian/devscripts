@@ -2,7 +2,7 @@
 .SH NAME
 debsign \- sign a Debian changes and dsc file pair using GPG/PGP
 .SH SYNOPSIS
-\fBdebsign\fR [options] [\fIchanges-file\fR|\fIdsc-file\fR]
+\fBdebsign\fR [options] [\fIchanges-file\fR|\fIdsc-file\fR|\fIcommands-file\fR]
 .SH DESCRIPTION
 \fBdebsign\fR mimics the signing aspects (and bugs) of
 \fBdpkg-buildpackage\fR(1).  It takes either an unsigned \fI.dsc\fR
@@ -14,9 +14,14 @@ careful to calculate the size and MD5 sum of the newly signed
 \fI.dsc\fR file and replace the original values in the \fI.changes\fR
 file.
 .PP
-If a \fI.changes\fR or \fI.dsc\fR file is specified, it is signed,
-otherwise, \fIdebian/changelog\fR is parsed to determine the name of
-the \fI.changes\fR file to look for in the parent directory.
+If a \fI.changes\fR, \fI.dsc\fR or \fI.commands\fR file is specified,
+it is signed, otherwise, \fIdebian/changelog\fR is parsed to determine
+the name of the \fI.changes\fR file to look for in the parent
+directory.
+.PP
+If a \fI.commands\fR file is specified it is validated (see
+\fIftp://ftp-master.debian.org/pub/UploadQueue/README\fR), and the Uploader
+field is used for signing.
 .PP
 This utility is useful if a developer must build a package on one
 machine where it is unsafe to sign it; they need then only transfer

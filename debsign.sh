@@ -44,7 +44,7 @@ MODIFIED_CONF_MSG='Default settings modified by devscripts configuration files:'
 
 usage () {
     echo \
-"Usage: debsign [options] [changes or dsc file]
+"Usage: debsign [options] [changes, dsc or commands file]
   Options:
     -r [username@]remotehost
                     The machine on which the changes/dsc files live.
@@ -65,8 +65,8 @@ usage () {
                     must be the first option given
     --help          Show this message
     --version       Show version and copyright information
-  If a changes or dsc file is specified, it and any .dsc files in the
-  changes file are signed, otherwise debian/changelog is parsed to find
+  If a commands or dsc or changes file is specified, it and any .dsc files in
+  the changes file are signed, otherwise debian/changelog is parsed to find
   the changes file.
 
 $MODIFIED_CONF_MSG"
@@ -306,20 +306,27 @@ case $# in
 	    *.dsc)
 		changes=
 		dsc=$1
+        commands=
 		;;
 	    *.changes)
 		changes=$1
 		dsc=`echo $changes | \
 		    perl -pe 's/\.changes$/.dsc/; s/(.*)_(.*)_(.*)\.dsc/\1_\2.dsc/'`
+        commands=
 		;;
-	    *)	echo "$PROGNAME: Only a .changes or .dsc file is allowed as argument!" >&2
+        *.commands)
+        changes=
+        dsc=
+        commands=$1
+	    ;;
+        *)	echo "$PROGNAME: Only a .changes, .dsc or .commands file is allowed as argument!" >&2
 		exit 1 ;;
 	esac
 	;;
 
     0)	# We have to parse debian/changelog to find the current version
 	if [ -n "$remotehost" ]; then
-	    echo "$PROGNAME: Need to specify a .changes or .dsc file location with -r!" >&2
+	    echo "$PROGNAME: Need to specify a .changes, .dsc or .commands file location with -r!" >&2
 	    exit 1
 	fi
 	if [ ! -r debian/changelog ]; then
@@ -346,7 +353,7 @@ case $# in
 	changes="../$pva.changes"
 	;;
 
-    *)	echo "$PROGNAME: Only a single .changes or .dsc file is allowed as argument!" >&2
+    *)	echo "$PROGNAME: Only a single .changes, .dsc or .commands file is allowed as argument!" >&2
 	exit 1 ;;
 esac
 
@@ -358,12 +365,16 @@ then
     cd debsign.$$
     remotechanges=$changes
     remotedsc=$dsc
+    remotecommands=$commands
     remotedir="`perl -e 'chomp($_="'"$dsc"'"); m%/% && s%/[^/]*$%% && print'`"
     changes=`basename "$changes"`
     dsc=`basename "$dsc"`
+    commands=`basename "$commands"`
     if [ -n "$changes" ]
     then withecho scp "$remotehost:$remotechanges" "$changes"
-    else withecho scp "$remotehost:$remotedsc" "$dsc"
+    else if [ -n "$dsc" ]
+    then withecho scp "$remotehost:$remotedsc" "$dsc"
+    else withecho scp "$remotehost:$remotecommands" "$commands"
     fi
 fi
 
@@ -439,6 +450,50 @@ then
 
 	echo "Successfully signed changes file"
     fi
+elif [ -n "$commands" ] # sign .commands, should be trivial
+then
+    if [ ! -f "$commands" -o ! -r "$commands" ]
+    then
+	echo "$PROGNAME: Can't find or can't read commands file $commands!" >&2
+	exit 1
+    fi
+
+    check_already_signed "$commands" commands && {
+	echo "Leaving current signature unchanged." >&2
+	exit 0
+    }
+    
+    
+    # simple validator for .commands files see,
+    # ftp://ftp-master.debian.org/pub/UploadQueue/README
+    `cat $commands | perl -e 'while(<STDIN>){
+                                next if /^Uploader:/ ;
+                                if( /^Commands:/ ) { $incommands=1; next; }
+                                if( $incommands ){
+                                   exit 1 unless /^ (rm|mv) .*/;
+                                }else{ exit 1; } }' ` || { 
+    echo "$PROGNAME: .commands file invalid. see:
+ftp://ftp-master.debian.org/pub/UploadQueue/README
+for valid format"
+    exit 1
+    }
+
+    if [ -n "$maint" ]
+    then maintainer="$maint"
+    else 
+        maintainer=`sed -n 's/^Uploader: //p' $commands`
+        if [ -z "$maintainer" ]
+        then
+            echo "Unable to parse Uploader, .commands file invalid."
+            exit 1
+        fi
+    fi
+    
+    signas="${signkey:-$maintainer}"
+
+    withecho signfile "$commands" "$signas"
+
+    echo "Successfully signed commands file"
 else # only a dsc file to sign; much easier
     if [ ! -f "$dsc" -o ! -r "$dsc" ]
     then

@@ -25,9 +25,10 @@ devscripts (2.8.15) UNRELEASED; urgency=low
   [ Filippo Giunchedi ]
   * debdiff: handle .udeb files if found in .changes (closes: #215477)
   * debchange: add support for forcing a lower version
-    (-b/--force-bad-version) (closes: #251436, #183424) 
+    (-b/--force-bad-version) (closes: #251436, #183424)
+  * debsign: support for signing .commands files (Closes: #224523)
 
- -- Filippo Giunchedi <filippo@debian.org>  Thu,  2 Jun 2005 12:39:34 +0200
+ -- Filippo Giunchedi <filippo@debian.org>  Wed,  8 Jun 2005 21:09:14 +0200
 
 devscripts (2.8.14) unstable; urgency=low
 
