@@ -306,20 +306,20 @@ case $# in
 	    *.dsc)
 		changes=
 		dsc=$1
-        commands=
+		commands=
 		;;
 	    *.changes)
 		changes=$1
 		dsc=`echo $changes | \
 		    perl -pe 's/\.changes$/.dsc/; s/(.*)_(.*)_(.*)\.dsc/\1_\2.dsc/'`
-        commands=
+		commands=
 		;;
-        *.commands)
-        changes=
-        dsc=
-        commands=$1
-	    ;;
-        *)	echo "$PROGNAME: Only a .changes, .dsc or .commands file is allowed as argument!" >&2
+	    *.commands)
+		changes=
+		dsc=
+		commands=$1
+		;;
+	    *)	echo "$PROGNAME: Only a .changes, .dsc or .commands file is allowed as argument!" >&2
 		exit 1 ;;
 	esac
 	;;
@@ -363,6 +363,7 @@ then
     mkdir debsign.$$ || { echo "$PROGNAME: Can't mkdir!" >&2; exit 1; }
     trap "cleanup_tmpdir" 0 1 2 3 7 10 13 15
     cd debsign.$$
+
     remotechanges=$changes
     remotedsc=$dsc
     remotecommands=$commands
@@ -370,9 +371,10 @@ then
     changes=`basename "$changes"`
     dsc=`basename "$dsc"`
     commands=`basename "$commands"`
+
     if [ -n "$changes" ]
     then withecho scp "$remotehost:$remotechanges" "$changes"
-    else if [ -n "$dsc" ]
+    elif [ -n "$dsc" ]
     then withecho scp "$remotehost:$remotedsc" "$dsc"
     else withecho scp "$remotehost:$remotecommands" "$commands"
     fi
@@ -392,7 +394,7 @@ then
     }
     if [ -n "$maint" ]
     then maintainer="$maint"
-    # Try the new "Changed-By:" field first
+    # Try the "Changed-By:" field first
     else maintainer=`sed -n 's/^Changed-By: //p' $changes`
     fi
     if [ -z "$maintainer" ]
@@ -450,7 +452,7 @@ then
 
 	echo "Successfully signed changes file"
     fi
-elif [ -n "$commands" ] # sign .commands, should be trivial
+elif [ -n "$commands" ] # sign .commands file
 then
     if [ ! -f "$commands" -o ! -r "$commands" ]
     then
@@ -464,19 +466,37 @@ then
     }
     
     
-    # simple validator for .commands files see,
+    # simple validator for .commands files, see
     # ftp://ftp-master.debian.org/pub/UploadQueue/README
-    `cat $commands | perl -e 'while(<STDIN>){
-                                next if /^Uploader:/ ;
-                                if( /^Commands:/ ) { $incommands=1; next; }
-                                if( $incommands ){
-                                   exit 1 unless /^ (rm|mv) .*/;
-                                }else{ exit 1; } }' ` || { 
-    echo "$PROGNAME: .commands file invalid. see:
+    perl -ne 'BEGIN { $uploader = 0; $incommands = 0; }
+              END { exit $? if $?;
+                    if ($uploader && $incommands) { exit 0; }
+                    else { die ".commands file missing Uploader or Commands field\n"; }
+                  }
+              sub checkcommands {
+                  chomp($line=$_[0]);
+                  if ($line =~ m%^\s*mv(\s+[^\s/]+){2}\s*$%) { return 0; }
+                  if ($line =~ m%^\s*rm(\s+[^\s/]+)+\s*$%) { return 0; }
+                  if ($line eq "") { return 0; }
+                  die ".commands file has invalid Commands line: $line\n";
+              }
+              if (/^Uploader:/) {
+                  if ($uploader) { die ".commands file has too many Uploader fields!\n"; }
+                  $uploader++;
+              } elsif (! $incommands && s/^Commands:\s*//) {
+                  $incommands=1; checkcommands($_);
+              } elsif ($incommands == 1) {
+                 if (s/^\s+//) { checkcommands($_); }
+                 elsif (/./) { die ".commands file: extra stuff after Commands field!\n"; }
+                 else { $incommands = 2; }
+              } else {
+                 next if /^\s*$/;
+                 if (/./) { die ".commands file: extra stuff after Commands field!\n"; }
+              }' $commands || {
+	echo "$PROGNAME: .commands file appears to be invalid. see:
 ftp://ftp-master.debian.org/pub/UploadQueue/README
-for valid format"
-    exit 1
-    }
+for valid format" >&2;
+	exit 1; }
 
     if [ -n "$maint" ]
     then maintainer="$maint"
@@ -492,6 +512,12 @@ for valid format"
     signas="${signkey:-$maintainer}"
 
     withecho signfile "$commands" "$signas"
+
+    if [ -n "$remotehost" ]
+    then
+	withecho scp "$commands" "$remotehost:$remotecommands"
+	PRECIOUS_FILES=$(($PRECIOUS_FILES - 1))
+    fi
 
     echo "Successfully signed commands file"
 else # only a dsc file to sign; much easier
@@ -517,6 +543,12 @@ else # only a dsc file to sign; much easier
     signas="${signkey:-$maintainer}"
 
     withecho signfile "$dsc" "$signas"
+
+    if [ -n "$remotehost" ]
+    then
+	withecho scp "$dsc" "$remotehost:$remotedsc"
+	PRECIOUS_FILES=$(($PRECIOUS_FILES - 1))
+    fi
 
     echo "Successfully signed dsc file"
 fi
