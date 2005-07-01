@@ -67,6 +67,15 @@ username and FQDN, otherwise use the email address in the previous
 changelog entry.  In other words, it's a good idea to set
 \fBDEBEMAIL\fR and \fBDEBFULLNAME\fR when using this script.
 .PP
+Support is included for changelogs that record changes by multiple
+co-maintainers of a package. If an entry is appended to the current
+version's entries, and the maintainer is different from the maintainer who
+is listed as having done the previous entries, then lines will be added to
+the changelog to tell which maintainers made which changes. Currently only
+one of the several such styles of recording this information is supported,
+in which the name of the maintainer who made a set of changes appears
+before the changes, inside square brackets.
+.PP
 If the directory name of the source tree has the form
 \fIpackage\fR-\fIversion\fR, then \fBdebchange\fR will also attempt to
 rename it if the (upstream) version number changes.  This can be

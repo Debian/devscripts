@@ -30,7 +30,13 @@ devscripts (2.8.15) UNRELEASED; urgency=low
   * debsign: support for signing .commands files (Closes: #224523)
   * added annotate.sh and annotate.1
 
- -- Filippo Giunchedi <filippo@debian.org>  Thu, 16 Jun 2005 15:27:30 +0200
+  [ Joey Hess ]
+  * debchange: support generating multi-developer changelogs, currently only
+    supporting the format used in this changelog. If multiple developers are
+    detected it will automatically add [ Full Name ] lines to disambiguate who
+    did what.
+
+ -- Joey Hess <joeyh@debian.org>  Thu, 30 Jun 2005 20:15:23 -0400
 
 devscripts (2.8.14) unstable; urgency=low
 

@@ -669,12 +669,54 @@ if ($opt_i || $opt_n || $opt_v || $opt_d) {
 }
 else { # $opt_a = 1
     # This means we just have to generate a new * entry in changelog
+    # and if a multi-developer changelog is detected, add developer names.
     $NEW_VERSION=$VERSION;
     $NEW_SVERSION=$SVERSION;
     $NEW_UVERSION=$UVERSION;
 
+    # Read and discard maintainer line, and see who made the last entry.
+    my $lastmaint;
+    $line=-1;
+    while (<S>) {
+	$line++;
+	if (/^ --\s+([^<]+)\s+/) {
+		$lastmaint=$1;
+		last;
+	}
+    }
+
+    # Parse the changlog for multi-maintainer maintainer lines of
+    # the form [ Full Name ] and record the last of these.
+    my $lastmultimaint;
+
+    while ($CHANGES=~/.*\n^\s+\[\s+([^]]+)\s+]\s*$/mg) {
+	$lastmultimaint=$1;
+    }
+
+    my $multimaint=0;
+    if ((! defined $lastmultimaint && defined $lastmaint &&
+         $lastmaint ne $MAINTAINER)
+        ||
+	(defined $lastmultimaint && $lastmultimaint ne $MAINTAINER)
+       ) {
+	$multimaint=1;
+
+	if (! $lastmultimaint) {
+	    # Add a multi-maintainer header to the top of the existing
+	    # changelog.
+	    my $newchanges='';
+	    $CHANGES=~s/^(  .+)$/  [ $lastmaint ]\n$1/m;
+	}
+    }
+    
     # The first lines are as we have already found
     print O $CHANGES;
+
+    # Add a multi-maintainer header.
+    if ($multimaint) {
+	print O "\n  [ $MAINTAINER ]\n";
+	$line+=2;
+    }
 
     if (@closes_text or $TEXT) {
 	# format it nicely
@@ -691,8 +733,6 @@ else { # $opt_a = 1
     print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n";
 
     # Copy the rest of the changelog file to new one
-    $line=-1;
-    while (<S>) { $line++; last if /^ --/; }
     # Slurp the rest....
     local $/ = undef;
     print O <S>;
@@ -797,14 +837,6 @@ sub fatal($) {
     (my $msg = "$progname: fatal error at line $line:\n@_\n") =~ tr/\0//d;
     $msg =~ s/\n\n$/\n/;
     die $msg;
-}
-
-# Reverse of master.debian.org:/org/bugs.debian.org/cgi-bin/common.pl
-sub unhtmlsanit {
-    my %saniarray = ('lt','<', 'gt','>', 'amp','&', 'quot', '"');
-    my $in = shift || "";
-    $in =~ s/&(lt|gt|amp|quot);/$saniarray{$1}/g;
-    return $in;
 }
 
 # Is the environment variable valid or not?
