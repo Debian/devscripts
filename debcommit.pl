@@ -129,10 +129,11 @@ sub tag {
 		my $tagpath=`svnpath tags`;
 		chomp $tagpath;
 		
-		if (! action("svn", "copy", $svnpath, "$tagpath/$tag", "-m", "tagging version $tag") ||
-		    ! action("svn", "mkdir", $tagpath) || # make tag subdir
-		    ! action("svn", "copy", $svnpath, "$tagpath/$tag", "-m", "tagging version $tag")) {
-			die "failed tagging with $tag\n";
+		if (! action("svn", "copy", $svnpath, "$tagpath/$tag", "-m", "tagging version $tag")) {
+			if (! action("svn", "mkdir", $tagpath) || # make tag subdir
+			    ! action("svn", "copy", $svnpath, "$tagpath/$tag", "-m", "tagging version $tag")) {
+				die "failed tagging with $tag\n";
+			}
 		}
 	}
 	elsif ($prog eq 'cvs') {
