@@ -11,7 +11,7 @@ Architecture: any
 Conflicts: debmake (<< 3.5), dupload (<< 2.1)
 Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), sed (>= 2.95), ${shlibs:Depends}, ${misc:Depends}
 Recommends: fakeroot
-Suggests: devscripts-el, build-essential, cvs-buildpackage, debian-keyring, dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, libdigest-md5-perl, libtimedate-perl, libwww-perl, lintian | linda, mailx, patch, patchutils, ssh, strace, wdiff, wget, www-browser
+Suggests: devscripts-el, build-essential, cvs-buildpackage, cvs | svn, debian-keyring, dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, libdigest-md5-perl, libtimedate-perl, libwww-perl, lintian | linda, mailx, patch, patchutils, ssh, strace, wdiff, wget, www-browser
 Conflicts: suidmanager (<< 0.51)
 Description: Scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
@@ -33,6 +33,8 @@ Description: Scripts to make the life of a Debian Package maintainer easier
   - debc: display the contents of just-built .debs
   - debchange/dch: automagically add entries to debian/changelog files [wget]
   - debclean: purge a Debian source tree [fakeroot]
+  - debcommit: commit changes to cvs or svn, basing commit message on
+      changelog [cvs | svn]
   - debdiff: compare two versions of a Debian package to check for
       added and removed files [wdiff, patchutils]
   - debi: install a just-built package
@@ -57,6 +59,7 @@ Description: Scripts to make the life of a Debian Package maintainer easier
   - plotchangelog: view a nice plot of the data in a changelog file
       [libtimedate-perl, gnuplot]
   - rc-alert: list installed packages which have release-critical bugs [wget]
+  - svnpath: print svn repository paths [svn]
   - tagpending: shell script which runs from a Debian source tree and tags
       bugs that are to be closed in the latest changelog as pending.
       [wget]

@@ -37,8 +37,11 @@ devscripts (2.8.15) UNRELEASED; urgency=low
     did what.
   * debdiff: fix debdiff of dsc files to work with new dpkg-dev.
     Closes: #313293, #314811
+  * Add debcommit, a script to commit to svn (or cvs) based on the contents of
+    the changelog, and svnpath, which it uses to generate svn tags.
+    Closes: #316577
 
- -- Joey Hess <joeyh@debian.org>  Fri,  1 Jul 2005 13:53:33 -0400
+ -- Joey Hess <joeyh@debian.org>  Sat,  2 Jul 2005 12:07:54 -0400
 
 devscripts (2.8.14) unstable; urgency=low
 

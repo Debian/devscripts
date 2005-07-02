@@ -54,6 +54,10 @@ And now, in mostly alphabetical order, the scripts:
   the .diffs and original files, though, so that the binaries and
   other files can be rebuilt if necessary.
 
+- debcommit [cvs | svn]: Commits changes to cvs or svn, using new entries in
+  debian/changelog as the commit message. Also supports tagging Debian
+  package releases.
+
 - debdiff [wdiff, patchutils]: A program which examines two .deb files
   or two .changes files and reports on any difference found in their
   file lists.  Useful for ensuring that no files were inadvertantly
@@ -127,6 +131,11 @@ And now, in mostly alphabetical order, the scripts:
 - rc-alert [wget]: list installed packages which have release-critical
   bugs
 
+- svnpath [svn]: Prints the path to the suversion repository of a
+  subversion checkout. Also supports calculating the paths for branches and
+  tags in a repository independent fashion. Used by debcommit to generate
+  svn tags.
+
 - uscan [libwww-perl]: Automatically scan for and download upstream
   updates.  Uscan can also call a program such as uupdate to attempt
   to update the Debianised version based on the new update.  Whilst
@@ -155,6 +164,7 @@ Typical Maintenance cycle with devscripts
 2. Editing of files
 
 3. Log the changes with: dch -i "I changed this"
+   If desired, use debcommit to commit changes to cvs or svn.
 
 4. Run debuild to compile it.  If it fails, return to 2.  (You could
    also just test the compilation by running the appropriate part of
@@ -167,6 +177,9 @@ Typical Maintenance cycle with devscripts
    root, or you to be logged in as root or similar.)
 
 7. If all is ok release it by running debrelease.
+
+8. Optionally, use debcommit --release to commit and tag the release
+   in cvs or svn.
 
 
 Wrapper scripts

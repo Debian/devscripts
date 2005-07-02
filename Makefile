@@ -2,7 +2,8 @@
 
 PL_FILES = bts.pl checkbashisms.pl cvs-debuild.pl debchange.pl \
 	debdiff.pl debi.pl debpkg.pl debuild.pl dpkg-depcheck.pl \
-	dscverify.pl grep-excuses.pl plotchangelog.pl rc-alert.pl
+	dscverify.pl grep-excuses.pl plotchangelog.pl rc-alert.pl \
+	debcommit.pl svnpath.pl
 
 SH_FILES = cvs-debi.sh cvs-debrelease.sh debclean.sh debrelease.sh \
 	debrsign.sh debsign.sh dpkg-genbuilddeps.sh mergechanges.sh \
@@ -19,7 +20,7 @@ SCRIPTS = $(PL_FILES:.pl=) $(SH_FILES:.sh=)
 EXAMPLES = conf.default
 
 MAN1S = $(SCRIPTS:=.1) debc.1 cvs-debc.1 devscripts.1
-GEN_MAN1S = bts.1
+GEN_MAN1S = bts.1 svnpath.1 debcommit.1
 MAN5S = devscripts.conf.5
 
 BINDIR = /usr/bin
@@ -54,7 +55,7 @@ conf.default: conf.default.in version
 	VERSION=`cat version` && sed -e "s/###VERSION###/$$VERSION/" $< \
 	    > $@.tmp && mv $@.tmp $@
 
-bts.1: bts.pl
+%.1: %.pl
 	pod2man --center=" " --release="Debian Utilities" $< > $@
 
 libvfork.o: libvfork.c
