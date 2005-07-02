@@ -377,11 +377,16 @@ elsif ($type eq 'dsc') {
 	mktmpdirs();
 	for my $i (1,2) {
 	    no strict 'refs';
-	    my $cmd = qq(cd ${"dir$i"} && dpkg-source -x $dscs[$i]);
-	    ${"sdir$i"} = `$cmd`;
+	    my $cmd = qq(cd ${"dir$i"} && dpkg-source -x $dscs[$i] >/dev/null);
+	    system $cmd;
 	    fatal "$cmd failed" if $? != 0;
-	    ${"sdir$i"} =~ /([^\s]*)$/;
-	    ${"sdir$i"} = $1;
+	    opendir DIR,${"dir$i"};
+	    while ($_ = readdir(DIR)) {
+		    next if $_ eq '.' || $_ eq '..' || ! -d ${"dir$i"}."/$_";
+		    ${"sdir$i"} = $_;
+		    last;
+	    }
+	    closedir(DIR);
 	}
 	system ("diff", "-Nru", "$dir1/$sdir1", "$dir2/$sdir2");
     }
