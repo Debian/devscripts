@@ -232,6 +232,9 @@ if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
 fatal "Only one of -c/--changelog and --news is allowed; try $progname --help for more help"
     if $opt_c and $opt_news;
 
+fatal "--closes should not be used with --news; put bug numbers in the changelog not the NEWs file"
+    if $opt_news && @closes;
+    
 my $changelog_path = $opt_c || $ENV{'CHANGELOG'} || 'debian/changelog';
 if ($opt_news) { $changelog_path = "debian/NEWS"; }
 if ($changelog_path ne 'debian/changelog' and $changelog_path ne 'debian/NEWS') {
@@ -645,18 +648,15 @@ if ($opt_i || $opt_n || $opt_v || $opt_d) {
     print O "$PACKAGE ($NEW_VERSION) $distribution; ",
         "urgency=$opt_u\n\n";
 
-    if ($opt_n) {
+    if ($opt_n && ! $opt_news) {
         print O "  * Non-maintainer upload.\n";
         $line = 1;
     }
     if (@closes_text or $TEXT) {
-	# format it nicely
-	foreach $CHGLINE (@closes_text) {
-	    write O;
-	}
-	if ($CHGLINE = $TEXT) {
-	    write O;
-	}
+	format_line($_, 1) foreach @closes_text;
+	format_line($TEXT, 1) if length $TEXT;
+    } elsif ($opt_news) {
+	print O "  \n";
     } else {
 	print O "  * \n";
     }
@@ -674,38 +674,42 @@ else { # $opt_a = 1
     $NEW_SVERSION=$SVERSION;
     $NEW_UVERSION=$UVERSION;
 
-    # Read and discard maintainer line, and see who made the last entry.
-    my $lastmaint;
+    # Read and discard maintainer line, and see who made the
+    # last entry.
     $line=-1;
+    my $lastmaint;
     while (<S>) {
 	$line++;
 	if (/^ --\s+([^<]+)\s+/) {
-		$lastmaint=$1;
-		last;
+	    $lastmaint=$1;
+	    last;
 	}
     }
 
-    # Parse the changlog for multi-maintainer maintainer lines of
-    # the form [ Full Name ] and record the last of these.
-    my $lastmultimaint;
-
-    while ($CHANGES=~/.*\n^\s+\[\s+([^]]+)\s+]\s*$/mg) {
-	$lastmultimaint=$1;
-    }
-
+    # Munging of changelog for multimaintainer mode.
     my $multimaint=0;
-    if ((! defined $lastmultimaint && defined $lastmaint &&
-         $lastmaint ne $MAINTAINER)
-        ||
-	(defined $lastmultimaint && $lastmultimaint ne $MAINTAINER)
-       ) {
-	$multimaint=1;
+    if (! $opt_news) {
+	my $lastmultimaint;
+	
+	# Parse the changlog for multi-maintainer maintainer lines of
+	# the form [ Full Name ] and record the last of these.
+	while ($CHANGES=~/.*\n^\s+\[\s+([^]]+)\s+]\s*$/mg) {
+	    $lastmultimaint=$1;
+	}
 
-	if (! $lastmultimaint) {
-	    # Add a multi-maintainer header to the top of the existing
-	    # changelog.
-	    my $newchanges='';
-	    $CHANGES=~s/^(  .+)$/  [ $lastmaint ]\n$1/m;
+	if ((! defined $lastmultimaint && defined $lastmaint &&
+	     $lastmaint ne $MAINTAINER)
+	    ||
+	    (defined $lastmultimaint && $lastmultimaint ne $MAINTAINER)
+	   ) {
+	    $multimaint=1;
+	
+	    if (! $lastmultimaint) {
+	        # Add a multi-maintainer header to the top of the existing
+	        # changelog.
+	        my $newchanges='';
+	        $CHANGES=~s/^(  .+)$/  [ $lastmaint ]\n$1/m;
+	    }
 	}
     }
     
@@ -719,13 +723,11 @@ else { # $opt_a = 1
     }
 
     if (@closes_text or $TEXT) {
-	# format it nicely
-	foreach $CHGLINE (@closes_text) {
-	    write O;
-	}
-	if ($CHGLINE = $TEXT) {
-	    write O;
-	}
+	format_line($_, 0) foreach @closes_text;
+	format_line($TEXT, 0) if length $TEXT;
+    } elsif ($opt_news) {
+	print O "\n  \n";
+	$line++;
     } else {
 	print O "  * \n";
     }
@@ -811,12 +813,37 @@ exit 0;
 
 
 # Format for standard Debian changelogs
-format O =
+format CHANGELOG =
   * ^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     $CHGLINE
  ~~ ^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     $CHGLINE
 .
+# Format for NEWS files.
+format NEWS =
+  ^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    $CHGLINE
+~~^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    $CHGLINE
+.
+
+my $linecount=0;
+sub format_line {
+    $CHGLINE=shift;
+    my $newentry=shift;
+
+    print O "\n" if $opt_news && ! ($newentry || $linecount);
+    $linecount++;
+    my $f=select(O);
+    if ($opt_news) {
+        $~='NEWS';
+    }
+    else {
+        $~='CHANGELOG';
+    }
+    write O;
+    select $f;
+}
 
 sub BEGIN {
     # Initialise the variable

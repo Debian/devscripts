@@ -40,6 +40,12 @@ devscripts (2.8.15) UNRELEASED; urgency=low
   * Add debcommit, a script to commit to svn (or cvs) based on the contents of
     the changelog, and svnpath, which it uses to generate svn tags.
     Closes: #316577
+  * debchange: Don't allow --closes in --news mode.
+  * debchange: In --news mode, don't include "* Non-maintainer upload."
+    entries
+  * debchange: In --news mode, separate each new entry with a blank line
+    and do not add bullets, to encourage not writing NEWS files like changelog
+    files.
 
  -- Joey Hess <joeyh@debian.org>  Sat,  2 Jul 2005 12:07:54 -0400
 
