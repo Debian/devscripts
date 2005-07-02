@@ -96,6 +96,9 @@ Options:
          (default: 'PACKAGE(-.*)?')
   --no-conf, --noconf
          Don\'t read devscripts config files; must be the first option given
+  --release-heuristic log|changelog
+         Select heuristic used to determine if a package has been released.
+	 (default: log)
   --help, -h
          Display this help message and exit
   --version
@@ -125,6 +128,7 @@ my $check_dirname_level = 1;
 my $check_dirname_regex = 'PACKAGE(-.*)?';
 my $opt_p = 0;
 my $opt_query = 1;
+my $opt_release_heuristic = 'log';
 
 # Next, read configuration files and then command line
 # The next stuff is boilerplate
@@ -139,6 +143,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBCHANGE_QUERY_BTS' => 'yes',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
 		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.*)?',
+		       'DEBCHANGE_RELEASE_HEURISTIC' => 'log',
 		       );
     my %config_default = %config_vars;
     
@@ -161,6 +166,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'DEBCHANGE_QUERY_BTS'}='yes';
     $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} =~ /^[012]$/
 	or $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'}=1;
+    $config_vars{'DEBCHANGE_RELEASE_HEURISTIC'} =~ /^(log|changelog)$/
+	or $config_vars{'DEBCHANGE_RELEASE_HEURISTIC'}='log';
 
     foreach my $var (sort keys %config_vars) {
 	if ($config_vars{$var} ne $config_default{$var}) {
@@ -174,6 +181,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $opt_query = $config_vars{'DEBCHANGE_QUERY_BTS'} eq 'no' ? 0 : 1;
     $check_dirname_level = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'};
     $check_dirname_regex = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_REGEX'};
+    $opt_release_heuristic = $config_vars{'DEBCHANGE_RELEASE_HEURISTIC'};
 }
 
 # We use bundling so that the short option behaviour is the same as
@@ -206,6 +214,7 @@ GetOptions("help|h" => \$opt_help,
 	   "check-dirname-regex=s" => \$opt_regex,
 	   "noconf" => \$opt_noconf,
 	   "no-conf" => \$opt_noconf,
+	   "release-heuristic" => \$opt_release_heuristic,
 	   )
     or die "Usage: $progname [options] [changelog entry]\nRun $progname --help for more details\n";
 
@@ -524,33 +533,45 @@ chomp(my $DATE=`822-date`);
 # Are we going to have to figure things out for ourselves?
 if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a) {
     # Yes, we are
-    my @UPFILES = glob("../$PACKAGE\_$SVERSION\_*.upload");
-    if (@UPFILES > 1) {
-	fatal "Found more than one appropriate .upload file!\n" .
-		      "Please use an explicit -a, -i or -v option instead.";
-    }
-    elsif (@UPFILES == 0) { $opt_a = 1 }
-    else {
-	open UPFILE, "<${UPFILES[0]}"
-	    or fatal "Couldn't open .upload file for reading: $!\n" .
-			"Please use an explicit -a, -i or -v option instead.";
-	while (<UPFILE>) {
-	    if (m%^(s|Successfully uploaded) (/.*/)?\Q$PACKAGE\E\_\Q$SVERSION\E\_[\w\-]+\.changes %) {
-		$opt_i = 1;
-		last;
+    if ($opt_release_heuristic eq 'log') {
+        my @UPFILES = glob("../$PACKAGE\_$SVERSION\_*.upload");
+        if (@UPFILES > 1) {
+	    fatal "Found more than one appropriate .upload file!\n" .
+		          "Please use an explicit -a, -i or -v option instead.";
+        }
+        elsif (@UPFILES == 0) { $opt_a = 1 }
+        else {
+	    open UPFILE, "<${UPFILES[0]}"
+	        or fatal "Couldn't open .upload file for reading: $!\n" .
+			    "Please use an explicit -a, -i or -v option instead.";
+	    while (<UPFILE>) {
+	        if (m%^(s|Successfully uploaded) (/.*/)?\Q$PACKAGE\E\_\Q$SVERSION\E\_[\w\-]+\.changes %) {
+		   $opt_i = 1;
+		   last;
+	        }
 	    }
+	    close UPFILE
+	        or fatal "Problems experienced reading .upload file: $!\n" .
+			    "Please use an explicit -a, -i or -v option instead.";
+	    if (! $opt_i) {
+	        warn "$progname warning: A successful upload of the current version was not logged\n" .
+		    "in the upload log file; adding log entry to current version.";
+	        $opt_a = 1;
+	    }
+        }
+    }
+    elsif ($opt_release_heuristic eq 'changelog') {
+	if ($changelog{Distribution} eq 'UNRELEASED') {
+		$opt_a = 1;
 	}
-	close UPFILE
-	    or fatal "Problems experienced reading .upload file: $!\n" .
-			"Please use an explicit -a, -i or -v option instead.";
-	if (! $opt_i) {
-	    warn "$progname warning: A successful upload of the current version was not logged\n" .
-		"in the upload log file; adding log entry to current version.";
-	    $opt_a = 1;
+	else {
+		$opt_i = 1;
 	}
+    }
+    else {
+	fatal "bad release heuristic value";
     }
 }
-
 
 # Open in anticipation....
 open S, $changelog_path or fatal "Cannot open changelog: $!";
@@ -644,7 +665,7 @@ if ($opt_i || $opt_n || $opt_v || $opt_d) {
 	}
     }
 
-    my $distribution = $opt_D || $DISTRIBUTION;
+    my $distribution = $opt_D || ($opt_release_heuristic eq 'changelog') ? "UNRELEASED" : $DISTRIBUTION;
     print O "$PACKAGE ($NEW_VERSION) $distribution; ",
         "urgency=$opt_u\n\n";
 

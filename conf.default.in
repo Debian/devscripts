@@ -91,6 +91,11 @@
 # 
 # Query the BTS when --closes is being used?
 # DEBCHANGE_QUERY_BTS=yes
+#
+# Select a heuristic to use to determine whether the package has released.
+# See the debchange man page for details.
+# DEBCHANGE_RELEASE_HEURISTIC=log
+# DEBCHANGE_RELEASE_HEURISTIC=changelog
 
 ##### debclean
 # 

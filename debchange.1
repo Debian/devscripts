@@ -40,15 +40,23 @@ entries.
 .PP
 At most one of \fB\-\-append\fR, \fB\-\-increment\fR and
 \fB\-\-newversion\fR may be specified as listed below.  If no options
-are specified, \fBdebcange\fR will look for an appropriate \fBdupload\fR(1)
-or \fBdput\fR(1) log file in the parent directory to determine whether
-this version of the package has been uploaded successfully.  It will
-behave as if \fB\-\-increment\fR had been specified if a successful
-upload has been logged and as if \fB\-\-append\fR had been specified
-otherwise.  A warning will be issued if the log file is found but a
-successful upload is not recorded.  This may be because the previous
+are specified, \fBdebchange\fR will use heuristics to guess whether or not
+the package has been successfully released, and behave as if
+\fB\-\-increment\fR had been specified if the package has been released, or
+as if \fB\-\-append\fR has been specified otherwise. Two different sets of
+heuristics can be used, as controlled by the \fb\-\-release-heuristic\fR
+option or the \fB\fRDEBCHANGE_RELEASE_HEURISTIC\fR configuration variable.
+The default "log" heuristic determines if a package has been released
+by looking for an appropriate \fBdupload\fR(1) or \fBdput\fR(1) log file
+in the parent directory. A warning will be issued if the log file is found
+but a successful upload is not recorded.  This may be because the previous
 upload was performed with a version of \fBdupload\fR prior to 2.1 or
-because the upload failed.
+because the upload failed. The alternate "changelog" heuristic assumes the
+package has been released unless its changelog contains "UNRELEASED" in the
+distribution field. If this heuristic is enabled then the distribution will
+default to "UNRELEASED" in new changelog entries. This can be useful if a
+package can be released by different maintainers, or if you do not keep the
+upload logs.
 .PP
 If \fB\-\-increment\fR or \fB\-\-newversion\fR is used, the name and
 email for the new version will be determined as follows.  If the
@@ -206,6 +214,11 @@ this option.
 Do not read any configuration files.  This can only be used as the
 first option given on the command-line.
 .TP
+\fB\-\-release\-heuristic\fR \fIlog|changelog\fR
+Controls how \fBdebchange\fR determines if a package has been released,
+when deciding whether to create a new changelog entry or append to an
+existing changelog entry.
+.TP
 .BR \-\-help ", " \-h
 Display a help message and exit successfully.
 .TP
@@ -232,6 +245,11 @@ these variables.  Note that these are package-wide configuration
 variables, and will therefore affect all \fBdevscripts\fR scripts
 which check their value, as described in their respective manpages and
 in \fBdevscripts.conf\fR(5).
+.TP
+.BR DEBCHANGE_RELEASE_HEURISTIC
+Controls how \fBdebchange\fR determines if a package has been released,
+when deciding whether to create a new changelog entry or append to an
+existing changelog entry. Can be either "log" or "changelog".
 .SH ENVIRONMENT
 .TP
 .BR DEBEMAIL ", " EMAIL ", " DEBFULLNAME
