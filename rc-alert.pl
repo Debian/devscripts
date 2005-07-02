@@ -28,7 +28,7 @@ sub print_if_relevant(%);
 sub human_flags($);
 sub unhtmlsanit($);
 
-my $cachedir = $ENV{'HOME'}."/.testing-devscripts_cache/";
+my $cachedir = $ENV{'HOME'}."/.devscripts_cache/";
 my $url = "http://bugs.debian.org/release-critical/other/all.html";
 my $cachefile = $cachedir . basename($url);
 my $forcecache = 0;
