@@ -45,7 +45,7 @@ devscripts (2.8.15) UNRELEASED; urgency=low
     entries
   * debchange: In --news mode, separate each new entry with a blank line
     and do not add bullets, to encourage not writing NEWS files like changelog
-    files.
+    files. Closes: #316660
   * debchange: Add --release-heuristic and DEBCHANGE_RELEASE_HEURISTIC
     options to control how it tells if a package was released.
   * debchange: Add new "changelog" release heuristic, which looks
