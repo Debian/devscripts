@@ -116,7 +116,9 @@ EOF
 # %s is replaced by the mbox name and %% by a single %.
 # BTS_MAIL_READER='mutt -f %s'
 EOF
-	elif dpkg --compare-versions "$2" lt 2.8.12
+	fi
+
+	if dpkg --compare-versions "$2" lt 2.8.12
 	then
 	# Added in devscripts 2.8.12:
 	    cat >> /etc/devscripts.conf <<EOF
@@ -125,6 +127,21 @@ EOF
 # 
 # Should we use DEHS style output (XML format)?
 # USCAN_DEHS_OUTPUT=no
+# 
+EOF
+	fi
+
+	if dpkg --compare-versions "$2" lt 2.8.15
+	then
+	# Added in devscripts 2.8.12:
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### debchange option added in version 2.8.15:
+# 
+# Select a heuristic to use to determine whether the package has released.
+# See the debchange man page for details.
+# DEBCHANGE_RELEASE_HEURISTIC=log
+# DEBCHANGE_RELEASE_HEURISTIC=changelog
 # 
 EOF
 	fi
