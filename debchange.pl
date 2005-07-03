@@ -241,7 +241,7 @@ if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
 fatal "Only one of -c/--changelog and --news is allowed; try $progname --help for more help"
     if $opt_c and $opt_news;
 
-fatal "--closes should not be used with --news; put bug numbers in the changelog not the NEWs file"
+fatal "--closes should not be used with --news; put bug numbers in the changelog not the NEWS file"
     if $opt_news && @closes;
     
 my $changelog_path = $opt_c || $ENV{'CHANGELOG'} || 'debian/changelog';
