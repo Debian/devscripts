@@ -116,7 +116,10 @@ foreach my $package_name (@package_names) {
 
 foreach my $developer (sort_developers(keys %dict)) {
 	print "$developer\n";
-	foreach my $package (@{$dict{$developer}}) {
+	my %seen;
+	foreach my $package (sort @{$dict{$developer}}) {
+		next if $seen{$package};
+		$seen{$package}=1;
 		print "   $package\n";
 	}
 	print "\n";
