@@ -39,6 +39,8 @@ And now, in mostly alphabetical order, the scripts:
   wrapper for cvs-buildpackage to use debuild as its package building
   program.
 
+- dd-list: Given a list of packages, pretty-print it ordered by maintainer.
+
 - debc: List contents of current package.  Do this after a successful
   "debuild" to see if the package looks all right.
 

@@ -38,7 +38,7 @@ accepted whether or not modifications are made.  An extra changelog
 entry can be given on the command line in addition to the closes
 entries.
 .PP
-At most one of \fB\-\-append\fR, \fB\-\-increment\fR and
+At most one of \fB\-\-append\fR, \fB\-\-increment\fR, \fB--edit\fR, and
 \fB\-\-newversion\fR may be specified as listed below.  If no options
 are specified, \fBdebchange\fR will use heuristics to guess whether or not
 the package has been successfully released, and behave as if
@@ -144,6 +144,9 @@ Debian package, the directory name is changed to reflect this.
 .TP
 .BR \-\-append ", " \-a
 Add a new changelog entry at the end of the current version's entries.
+.TP
+.BR \-\-edit ", " \-e
+Update the changelog timestamp, and start an editor.
 .TP
 \fB\-\-newversion \fIversion\fR, \fB\-v \fIversion\fR
 This specifies the version number (including the Debian release part)

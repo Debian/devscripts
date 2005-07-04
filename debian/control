@@ -30,6 +30,7 @@ Description: Scripts to make the life of a Debian Package maintainer easier
   - cvs-debuild: run cvs-buildpackage using debuild (see below) as the
       package building program [cvs-buildpackage, fakeroot, lintian | linda,
       gnupg]
+  - dd-list: given a list of packages, pretty-print it ordered by maintainer
   - debc: display the contents of just-built .debs
   - debchange/dch: automagically add entries to debian/changelog files [wget]
   - debclean: purge a Debian source tree [fakeroot]

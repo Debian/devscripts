@@ -56,6 +56,9 @@ Options:
          Increase the Debian release number, adding a new changelog entry
   -a, --append
          Append a new entry to the current changelog
+  -e, --edit
+         Don't change version number or add a new changelog entry, just
+	 update the changelog's stamp and open up an editor
   -v <version>, --newversion=<version>
          Add a new changelog entry with version number specified
   -b, --force-bad-version
@@ -187,7 +190,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # We use bundling so that the short option behaviour is the same as
 # with older debchange versions.
 my ($opt_help, $opt_version);
-my ($opt_i, $opt_a, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u, $opt_n, $opt_c, @closes);
+my ($opt_i, $opt_a, $opt_e, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u, $opt_n, $opt_c, @closes);
 my ($opt_news);
 my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 $opt_u = 'low';
@@ -197,6 +200,7 @@ GetOptions("help|h" => \$opt_help,
 	   "version" => \$opt_version,
 	   "i|increment" => \$opt_i,
 	   "a|append" => \$opt_a,
+	   "e|edit" => \$opt_e,
 	   "v|newversion=s" => \$opt_v,
 	   "b|force-bad-version" => \$opt_b,
 	   "d|fromdirname" => \$opt_d,
@@ -254,8 +258,8 @@ if ($changelog_path ne 'debian/changelog' and $changelog_path ne 'debian/NEWS') 
 map { s/^\#//; } @closes;  # remove any leading # from bug numbers
 
 # Only allow at most one non-help option
-fatal "Only one of -a, -i, -v, -d is allowed; try $progname --help for more help"
-    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_v?1:0) + ($opt_d?1:0) > 1;
+fatal "Only one of -a, -i, -e, -v, -d is allowed; try $progname --help for more help"
+    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_v?1:0) + ($opt_d?1:0) > 1;
 
 # We'll process the rest of the command line later.
 
@@ -531,7 +535,7 @@ if (@ARGV and ! $TEXT) {
 chomp(my $DATE=`822-date`);
 
 # Are we going to have to figure things out for ourselves?
-if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a) {
+if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e) {
     # Yes, we are
     if ($opt_release_heuristic eq 'log') {
         my @UPFILES = glob("../$PACKAGE\_$SVERSION\_*.upload");
@@ -688,7 +692,7 @@ if ($opt_i || $opt_n || $opt_v || $opt_d) {
     local $/ = undef;
     print O <S>;
 }
-else { # $opt_a = 1
+elsif ($opt_a) {
     # This means we just have to generate a new * entry in changelog
     # and if a multi-developer changelog is detected, add developer names.
     $NEW_VERSION=$VERSION;
@@ -759,6 +763,24 @@ else { # $opt_a = 1
     # Slurp the rest....
     local $/ = undef;
     print O <S>;
+}
+else { # $opt_e
+    # We don't do any fancy stuff with respect to versions or adding
+    # entries, we just update the timestamp and open the editor
+    
+    print O $CHANGES;
+
+    print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n";
+
+    # Copy the rest of the changelog file to the new one
+    $line=-1;
+    while (<S>) { $line++; last if /^ --/; }
+    # Slurp the rest...
+    local $/ = undef;
+    print O <S>;
+
+    # Set the start-line to 1, as we don't know what they want to edit
+    $line=1;
 }
 
 close S or fatal "Error closing $changelog_path: $!";
