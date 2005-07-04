@@ -91,6 +91,8 @@ my @package_names;
 if ($use_stdin) {
 	while (<>) {
 		chomp;
+		s/^\s+//;
+		s/\s+$//;
 		push @package_names, $_;
 	}
 }
