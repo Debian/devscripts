@@ -58,9 +58,10 @@ http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-(.*)\\.tar\\.gz
 http://www.dataway.ch/~lukasl/amph/amph.html \\
   files/amphetamine-([\\d\\.]*).tar.bz2
 
-# If your package is located on sourceforge, use the qa.debian.org redirector
-# to avoid their difficult mirror system.
-http://qa.debian.org/watch/sf.php/aa-project/ aalib-(.*).tar.gz
+# If your package is located on sourceforge, use the following format
+# to automatically use the qa.debian.org redirector, avoiding SF's
+# difficult mirror system.
+http://sf.net/aa-project/aalib-(.*)\\.tar\\.gz
 
 # This is the format for a site which has funny version numbers;
 # the parenthesised groups will be joined with dots to make a

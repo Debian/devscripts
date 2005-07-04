@@ -265,7 +265,7 @@ $check_dirname_regex = $opt_regex if defined $opt_regex;
 if (defined $opt_package) {
     die "$progname: --package requires the use of --upstream-version and --watchfile\nas well; run $progname --help for more details\n"
 	unless defined $opt_uversion and defined $opt_watchfile;
-    $download = 0;
+    $download = -$download unless defined $opt_download;
 }
 
 die "$progname: Can't use --verbose if you're using --dehs!\n"
@@ -642,6 +642,8 @@ sub process_watchline ($$$$$$)
 	    $base =~ s%/[^/]+$%/%;
 	}
 
+	# Handle sf.net addresses specially
+	$base =~ s%^http://sf.net/%http://qa.debian.org/watch/sf.php/%;
 	if ($base =~ m%^(\w+://[^/]+)%) {
 	    $site = $1;
 	} else {
@@ -898,6 +900,15 @@ EOF
 	    ")\n";
     }
 
+    if ($download < 0) {
+	my $msg = "Not downloading as --package was used.  Use --download to force downloading.";
+	if ($dehs) {
+	    dehs_msg($msg);
+	} else {
+	    print "$msg\n";
+	}
+	return 0;
+    }
     return 0 unless $download;
 
     print "-- Downloading updated package $newfile_base\n" if $verbose;
