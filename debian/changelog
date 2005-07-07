@@ -17,6 +17,8 @@ devscripts (2.8.15) UNRELEASED; urgency=low
   * uscan: handle annoying error message (closes: #303607)
   * uscan: mangle http://sf.net/ to use Filippo's sf.php script and work
     (closes: #242884)
+  * uupdate: handle dpkg 1.13 source format allowing bz2-compressed files
+    and .debian.tar.gz files (closes: #317331)
   * wnpp-alert: accept -h and -v short options (closes: #304240)
   * wnpp-alert: don't cache such small files (closes: #309802)
 

@@ -34,7 +34,7 @@
 # number after the archive file name.  If both are given, the latter
 # takes precedence.
 #
-# The -u option requests that the new .orig.tar.gz archive be the
+# The -u option requests that the new .orig.tar.{gz|bz2} archive be the
 # pristine source, although this only makes sense when the original
 # archive itself is a tar.gz or tgz archive.
 #
@@ -57,10 +57,10 @@ Options are:
                       which command to be used to become root
                       for package-building
    --pristine, -u     Source is pristine upstream source and should be
-                      copied to <pkg>_<version>.orig.tar.gz; not valid
+                      copied to <pkg>_<version>.orig.tar.{gz|bz2}; not valid
                       for patches
-   --no-symlink       Copy new upstream .tar.gz archive to new location
-                      as <pkg>_<version>.orig.tar.gz instead of making a
+   --no-symlink       Copy new upstream archive to new location
+                      as <pkg>_<version>.orig.tar.{gz|bz2} instead of making a
                       symlink
    --no-conf, --noconf
                       Don't read devscripts config files;
@@ -333,8 +333,16 @@ if [ "$PATCH" ]; then
 	echo "Aborting...." >&2
 	exit 1
     fi
-    if [ ! -r "../${PACKAGE}_$UVERSION.orig.tar.gz" ]; then
-	echo "$PROGNAME: can't find/read ${PACKAGE}_$UVERSION.orig.tar.gz" >&2
+
+    # Is the old version a .tar.gz or .tar.bz2 file?
+    if [ -r "../${PACKAGE}_$UVERSION.orig.tar.gz" ]; then
+	OLDARCHIVE="${PACKAGE}_$UVERSION.orig.tar.gz"
+	OLDARCHIVETYPE=gz
+    elif [ -r "../${PACKAGE}_$UVERSION.orig.tar.bz2" ]; then
+	OLDARCHIVE="${PACKAGE}_$UVERSION.orig.tar.bz2"
+	OLDARCHIVETYPE=bz2
+    else
+	echo "$PROGNAME: can't find/read ${PACKAGE}_$UVERSION.orig.tar.{gz|bz2}" >&2
 	echo "in the parent directory!" >&2
 	echo "Aborting...." >&2
 	exit 1
@@ -366,11 +374,23 @@ if [ "$PATCH" ]; then
 	exit 1
     }
     cd $TEMP_DIR
-    tar zxf ../${PACKAGE}_$UVERSION.orig.tar.gz || {
-	echo "$PROGNAME: can't untar ${PACKAGE}_$UVERSION.orig.tar.gz;" >&2
-	echo "aborting..." >&2
+    if [ "$OLDARCHIVETYPE" = gz ]; then
+	tar zxf ../$OLDARCHIVE || {
+	    echo "$PROGNAME: can't untar $OLDARCHIVE;" >&2
+	    echo "aborting..." >&2
+	    exit 1
+	}
+    elif [ "$OLDARCHIVETYPE" = bz2 ]; then
+	tar --bzip2 -xf ../$OLDARCHIVE || {
+	    echo "$PROGNAME: can't untar $OLDARCHIVE;" >&2
+	    echo "aborting..." >&2
+	    exit 1
+	}
+    else
+	echo "$PROGNAME: internal error: unknown OLDARCHIVETYPE: $OLDARCHIVETYPE" >&2
 	exit 1
-    }
+    fi
+
     if [ `ls | wc -l` -eq 1 ] && [ -d "`ls`" ]; then
 	mv "`ls`" ../${PACKAGE}-$UVERSION.orig
     else
@@ -445,13 +465,15 @@ else
     # Figure out the type of archive
     X="${ARCHIVE##*/}"
     case "$X" in
-	*.orig.tar.gz)  X="${X%.orig.tar.gz}";  UNPACK="tar zxf" ;;
-	*.tar.gz)  X="${X%.tar.gz}";  UNPACK="tar zxf" ;;
-	*.tar.bz2) X="${X%.tar.bz2}"; UNPACK="tar --bzip2 -xf" ;;
-	*.tar.Z)   X="${X%.tar.Z}";   UNPACK="tar zxf" ;;
-	*.tgz)     X="${X%.tgz}";     UNPACK="tar zxf" ;;
-	*.tar)     X="${X%.tar}";     UNPACK="tar xf"  ;;
-	*.zip)     X="${X%.zip}";     UNPACK="unzip"   ;;
+	*.orig.tar.gz)  X="${X%.orig.tar.gz}";  UNPACK="tar zxf"; TYPE=gz ;;
+	*.orig.tar.bz2) X="${X%.orig.tar.bz2}"; UNPACK="tar --bzip -xf";
+	                TYPE=bz2;;
+	*.tar.gz)  X="${X%.tar.gz}";  UNPACK="tar zxf"; TYPE=gz ;;
+	*.tar.bz2) X="${X%.tar.bz2}"; UNPACK="tar --bzip2 -xf"; TYPE=bz2 ;;
+	*.tar.Z)   X="${X%.tar.Z}";   UNPACK="tar zxf"; TYPE="" ;;
+	*.tgz)     X="${X%.tgz}";     UNPACK="tar zxf"; TYPE=gz ;;
+	*.tar)     X="${X%.tar}";     UNPACK="tar xf";  TYPE="" ;;
+	*.zip)     X="${X%.zip}";     UNPACK="unzip";   TYPE="" ;;
 	*)
 	    echo "$PROGNAME: sorry: Unknown archive type" >&2
 	    exit 1
@@ -494,42 +516,54 @@ else
 	exit 1
     fi
 
-    # Sanity check
+    # Sanity checks
     if [ -e "../${PACKAGE}_$SNEW_VERSION.orig.tar.gz" ] && \
-	[ `md5sum "${ARCHIVE_PATH}" | cut -d" " -f1` != \
-	  `md5sum "../${PACKAGE}_$SNEW_VERSION.orig.tar.gz" | cut -d" " -f1` ]
+	[ "$(md5sum "${ARCHIVE_PATH}" | cut -d" " -f1)" != \
+	  "$(md5sum "../${PACKAGE}_$SNEW_VERSION.orig.tar.gz" | cut -d" " -f1)" ]
     then
 	echo "$PROGNAME: a different ${PACKAGE}_$SNEW_VERSION.orig.tar.gz" >&2
 	echo "already exists in the parent dir;" >&2
-	echo " please check on the situation before trying $PROGNAME again." >&2
+	echo "please check on the situation before trying $PROGNAME again." >&2
+	exit 1
+    elif [ -e "../${PACKAGE}_$SNEW_VERSION.orig.tar.bz2" ] && \
+	[ "$(md5sum "${ARCHIVE_PATH}" | cut -d" " -f1)" != \
+	  "$(md5sum "../${PACKAGE}_$SNEW_VERSION.orig.tar.bz2" | cut -d" " -f1)" ]
+    then
+	echo "$PROGNAME: a different ${PACKAGE}_$SNEW_VERSION.orig.tar.bz2" >&2
+	echo "already exists in the parent dir;" >&2
+	echo "please check on the situation before trying $PROGNAME again." >&2
 	exit 1
     fi
 
-    if [ $UUPDATE_PRISTINE = yes -a \
-	! -e "../${PACKAGE}_$SNEW_VERSION.orig.tar.gz" ]; then
+    if [ $UUPDATE_PRISTINE = yes -a -n "$TYPE" -a \
+	! -e "../${PACKAGE}_$SNEW_VERSION.orig.tar.gz" -a \
+	! -e "../${PACKAGE}_$SNEW_VERSION.orig.tar.bz2" ]; then
 	if [ "$UUPDATE_SYMLINK_ORIG" = yes ]; then
-	    echo "Symlinking to pristine source from ${PACKAGE}_$SNEW_VERSION.orig.tar.gz..."
+	    echo "Symlinking to pristine source from ${PACKAGE}_$SNEW_VERSION.orig.tar.$TYPE..."
 	else
-	    echo "Copying pristine source to ${PACKAGE}_$SNEW_VERSION.orig.tar.gz..."
+	    echo "Copying pristine source to ${PACKAGE}_$SNEW_VERSION.orig.tar.$TYPE..."
 	fi
 	case $ARCHIVE_PATH in
-	    /*.tar.gz|/*.tgz)
+	    /*)   LINKARCHIVE="$ARCHIVE" ;;
+	    ../*) LINKARCHIVE="${ARCHIVE#../}" ;;
+	esac
+	case "$TYPE" in
+	    gz)
 		if [ "$UUPDATE_SYMLINK_ORIG" = yes ]; then
-		    ln -s "$ARCHIVE" "../${PACKAGE}_$SNEW_VERSION.orig.tar.gz"
+		    ln -s "$LINKARCHIVE" "../${PACKAGE}_$SNEW_VERSION.orig.tar.gz"
 		else
-		    cp "$ARCHIVE" "../${PACKAGE}_$SNEW_VERSION.orig.tar.gz"
+		    cp "$LINKARCHIVE" "../${PACKAGE}_$SNEW_VERSION.orig.tar.gz"
 		fi
 		;;
-	    ../*.tar.gz|../*.tgz)
+	    bz2)
 		if [ "$UUPDATE_SYMLINK_ORIG" = yes ]; then
-		    ln -s "${ARCHIVE#../}" "../${PACKAGE}_$SNEW_VERSION.orig.tar.gz"
+		    ln -s "$LINKARCHIVE" "../${PACKAGE}_$SNEW_VERSION.orig.tar.bz2"
 		else
-		    cp "${ARCHIVE#../}" "../${PACKAGE}_$SNEW_VERSION.orig.tar.gz"
+		    cp "$LINKARCHIVE" "../${PACKAGE}_$SNEW_VERSION.orig.tar.bz2"
 		fi
 		;;
-		# no other ARCHIVE_PATH possibilities: either absolute or ../
 	    *)
-		echo "$PROGNAME: can't preserve pristine sources from non .tar.gz upstream archive!" >&2
+		echo "$PROGNAME: can't preserve pristine sources from non .tar.gz/.tar.bz2 upstream archive!" >&2
 		echo "Continuing anyway..." >&2
 		;;
 	esac
@@ -560,11 +594,29 @@ else
     rm -rf $TEMP_DIR
     cp -a $PACKAGE-$SNEW_VERSION $PACKAGE-$SNEW_VERSION.orig
     cd $PACKAGE-$SNEW_VERSION
-    if [ -r "../${PACKAGE}_$SVERSION.diff.gz" ];
-    then
+
+    if [ -r "../${PACKAGE}_$SVERSION.diff.gz" ]; then
+	DIFF="../${PACKAGE}_$SVERSION.diff.gz"
+	DIFFTYPE=diff
+	DIFFCAT=zcat
+    elif [ -r "../${PACKAGE}_$SVERSION.diff.bz2" ]; then
+	DIFF="../${PACKAGE}_$SVERSION.diff.bz2"
+	DIFFTYPE=diff
+	DIFFCAT=bzcat
+    elif [ -r "../${PACKAGE}_$SVERSION.debian.tar.gz" ]; then
+	DIFF="../${PACKAGE}_$SVERSION.debian.tar.gz"
+	DIFFTYPE=tar
+	DIFFUNPACK="tar zxf"
+    elif [ -r "../${PACKAGE}_$SVERSION.debian.tar.bz2" ]; then
+	DIFF="../${PACKAGE}_$SVERSION.debian.tar.bz2"
+	DIFFTYPE=tar
+	DIFFUNPACK="tar --bzip2 -xf"
+    fi
+
+    if [ "$DIFFTYPE" = diff ]; then
 	# Check that any files added in diff do not now exist in
 	# upstream version
-	FILES=$(zcat ../${PACKAGE}_$SVERSION.diff.gz |
+	FILES=$($DIFFCAT $DIFF |
 	        perl -nwe 'BEGIN { $status=""; }
 	                   chomp;
 	                   if (/^--- /) { $status = "-$."; }
@@ -633,6 +685,24 @@ else
 	    fi
 	done
 
+    elif [ "$DIFFTYPE" = tar ]; then
+	if [ -d debian ]; then
+	    echo "$PROGNAME warning: using a debian.tar.{gz|bz2} file in old Debian source," >&@
+	    echo "but upstream also contains a debian/ directory!" >&2
+	    if [ -e "debian.upstream" ]; then
+		echo "Please apply the diff by hand and take care with this." >&2
+		exit 1
+	    fi
+	    echo "This program will move the upstream directory out of the way" >&2
+	    echo "to debian.upstream/ and use the Debian version" >&2
+	    mv debian debian.upstream
+	fi
+	if $DIFFUNPACK $DIFF; then
+	    echo "Unpacking the debian/ directory from version $VERSION worked fine."
+	else 
+	    echo "$PROGNAME: failed to unpack the debian/ directory from version $VERSION!" >&2
+	    exit 1
+	fi
     else
 	echo "$PROGNAME: could not find diffs from version $VERSION to apply!" >&2
 	exit 1
