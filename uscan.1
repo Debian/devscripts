@@ -147,7 +147,9 @@ available is newer than the current version, then it is downloaded
 into the parent directory, unless the \fB\-\-report\fR option has been
 used.  Once the file has been downloaded, then a symlink to the file
 is made from \fI<package>_<version>.orig.tar.gz\fR if the file has a
-\fI.tar.gz\fR or a \fI.tgz\fR suffix.
+\fI.tar.gz\fR or a \fI.tgz\fR suffix and from
+\fI<package>_<version>.orig.tar.bz2\fR if the file has a \fI.tar.bz2\fR
+or a \fI.tbz\fR or \fI.tbz2\fR suffix.
 .PP
 Finally, if a third parameter is given in the watchfile line, this is
 taken as the name of a command, and the command
@@ -281,11 +283,14 @@ Do not use PASV mode for FTP connections.
 .TP
 .B \-\-symlink
 Make orig.tar.gz symlinks to any downloaded files if their extensions
-are \fI.tar.gz\fR or \fI.tgz\fR.  (This is the default behaviour.)
+are \fI.tar.gz\fR or \fI.tgz\fR, and similarly for to orig.tar.bz2 for
+the suffixes \fI.tar.gz\fR, \fI.tbz\fR and \fI.tbz2\fR.  (This is the
+default behaviour.)
 .TP
 .B \-\-rename
-Rename the downloaded files to their Debian orig.tar.gz names if their
-extensions are \fI.tar.gz\fR or \fI.tgz\fR.
+Instead of symlinking, rename the downloaded files to their Debian
+orig.tar.gz names if their extensions are \fI.tar.gz\fR or \fI.tgz\fR,
+and similarly for tar.bz2 files.
 .TP
 .B \-\-no\-symlink
 Don't make these symlinks and don't rename the files.
@@ -362,11 +367,11 @@ to \fIdefault\fR, then Net::FTP(3) make the choice (primarily based on
 the FTP_PASSIVE environment variable).
 .TP
 .B USCAN_SYMLINK
-If this is set to \fIno\fR, then a pkg_version.orig.tar.gz symlink
-will not be made (equivalent to the \fB\-\-no-symlink\fR option).  If
-it is set to \fIyes\fR or \fIsymlink\fR, then the symlinks will be
-made.  If it is set to \fIrename\fR, then the files are renamed
-(equivalent to the \fB\-\-rename\fR option).
+If this is set to \fIno\fR, then a pkg_version.orig.tar.{gz|bz2}
+symlink will not be made (equivalent to the \fB\-\-no-symlink\fR
+option).  If it is set to \fIyes\fR or \fIsymlink\fR, then the
+symlinks will be made.  If it is set to \fIrename\fR, then the files
+are renamed (equivalent to the \fB\-\-rename\fR option).
 .TP
 .B USCAN_DEHS_OUTPUT
 If this is set to \fIyes\fR, then DEHS-style output will be used.

@@ -77,6 +77,7 @@ Options:
     --no-pasv      Do not use PASV mode for FTP connections (default)
     --symlink      Make an orig.tar.gz symlink to downloaded file (default)
     --rename       Rename to orig.tar.gz instead of symlinking
+                   (Both will use orig.tar.bz2 if appropriate)
     --no-symlink   Don\'t make symlink or rename
     --verbose      Give verbose output
     --no-verbose   Don\'t give verbose output (default)
@@ -887,6 +888,11 @@ EOF
 		if $verbose;
 	    return 0;
 	}
+	elsif (-f "../${pkg}_${newversion}.orig.tar.bz2") {
+	    print " => ${pkg}_${newversion}.orig.tar.bz2 already in package directory\n"
+		if $verbose;
+	    return 0;
+	}
     }
 
     if ($verbose) {
@@ -947,6 +953,13 @@ EOF
 	    move "../$newfile_base", "../${pkg}_${newversion}.orig.tar.gz";
 	}
     }
+    elsif ($newfile_base =~ /\.(tar\.bz2|tbz2?)$/) {
+	if ($symlink eq 'symlink') {
+	    symlink $newfile_base, "../${pkg}_${newversion}.orig.tar.bz2";
+	} elsif ($symlink eq 'rename') {
+	    move "../$newfile_base", "../${pkg}_${newversion}.orig.tar.bz2";
+	}
+    }
 
     if ($verbose) {
 	print "-- Successfully downloaded updated package $newfile_base\n";
@@ -957,6 +970,13 @@ EOF
 		print "    and renamed it as ${pkg}_${newversion}.orig.tar.gz\n";
 	    }
 	}
+	elsif ($newfile_base =~ /\.(tar\.bz2|tbz2?)$/) {
+	    if ($symlink eq 'symlink') {
+		print "    and symlinked ${pkg}_${newversion}.orig.tar.bz2 to it\n";
+	    } elsif ($symlink eq 'rename') {
+		print "    and renamed it as ${pkg}_${newversion}.orig.tar.bz2\n";
+	    }
+	}
     } elsif ($dehs) {
 	my $msg = "Successfully downloaded updated package $newfile_base";
 	if ($newfile_base =~ /\.(tar\.gz|tgz)$/) {
@@ -964,6 +984,13 @@ EOF
 		$msg .= " and symlinked ${pkg}_${newversion}.orig.tar.gz to it";
 	    } elsif ($symlink eq 'rename') {
 		$msg .= " and renamed it as ${pkg}_${newversion}.orig.tar.gz";
+	    }
+	}
+	elsif ($newfile_base =~ /\.(tar\.bz2|tbz2?)$/) {
+	    if ($symlink eq 'symlink') {
+		$msg .= " and symlinked ${pkg}_${newversion}.orig.tar.bz2 to it";
+	    } elsif ($symlink eq 'rename') {
+		$msg .= " and renamed it as ${pkg}_${newversion}.orig.tar.bz2";
 	    }
 	}
 	dehs_msg($msg);
@@ -976,13 +1003,26 @@ EOF
 		print "    and renamed it as ${pkg}_${newversion}.orig.tar.gz\n";
 	    }
 	}
+	elsif ($newfile_base =~ /\.(tar\.bz2|tbz2?)$/) {
+	    if ($symlink eq 'symlink') {
+		print "    and symlinked ${pkg}_${newversion}.orig.tar.bz2 to it\n";
+	    } elsif ($symlink eq 'rename') {
+		print "    and renamed it as ${pkg}_${newversion}.orig.tar.bz2\n";
+	    }
+	}
     }
 
     # Do whatever the user wishes to do
     if ($action) {
-	my $usefile = ($symlink =~ /^(symlink|rename)$/
-		       and $newfile_base =~ /\.(tar\.gz|tgz)$/) ?
-	    "../${pkg}_${newversion}.orig.tar.gz" : "../$newfile_base";
+	my $usefile = "../$newfile_base";
+	if ($symlink =~ /^(symlink|rename)$/
+	    and $newfile_base =~ /\.(tar\.gz|tgz)$/) {
+	    $usefile = "../${pkg}_${newversion}.orig.tar.gz";
+	}
+	elsif ($symlink =~ /^(symlink|rename)$/
+	    and $newfile_base =~ /\.(tar\.bz2|tbz2)$/) {
+	    $usefile = "../${pkg}_${newversion}.orig.tar.bz2";
+	}
 
 	if ($watch_version > 1) {
 	    print "-- Executing user specified script\n     $action --upstream-version $newversion $newfile_base" if $verbose;
