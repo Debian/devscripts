@@ -138,6 +138,9 @@ And now, in mostly alphabetical order, the scripts:
   tags in a repository independent fashion. Used by debcommit to generate
   svn tags.
 
+- tagpending [wget]: shell script which runs from a Debian source tree and
+  tags bugs that are to be closed in the latest changelog as pending.
+
 - uscan [libwww-perl]: Automatically scan for and download upstream
   updates.  Uscan can also call a program such as uupdate to attempt
   to update the Debianised version based on the new update.  Whilst
