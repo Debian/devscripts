@@ -7,8 +7,8 @@ tagpending \- Tag all bugs not marked pending as such
 \fBtagpending\fR looks for and parses debian/changelog and debian/control
 to find out what bugs the impending release would close, and sends mail using
 \fBmail(1)\fR to \fBcontrol@bugs.debian.org\fR tagging the bugs as pending. It
-uses LDAP to look up the bugs marked as pending for that package and excludes
-those from being re-tagged in the email.
+queries the BTS to look up the bugs marked as pending for that package and
+excludes those from being re-tagged in the email.
 .SH OPTIONS
 .TP
 .B \-n
