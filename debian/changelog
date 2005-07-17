@@ -63,8 +63,10 @@ devscripts (2.8.15) UNRELEASED; urgency=low
     Closes: #316102
   * Ignore whitespace around package names in dd-list --stdin.
   * debchange: Add --release option.
+  * bts: update and apply Filippo's patch to add a progress display while
+    caching bugs. Closes: #237842
 
- -- Joey Hess <joeyh@debian.org>  Sun, 17 Jul 2005 14:53:30 +0300
+ -- Joey Hess <joeyh@debian.org>  Sun, 17 Jul 2005 15:11:21 +0300
 
 devscripts (2.8.14) unstable; urgency=low
 

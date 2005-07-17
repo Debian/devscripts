@@ -953,8 +953,11 @@ sub bts_cache {
     untie %timestamp;
     
     # download bugs
+    my $bugcount = 1;
+    my $bugtotal = scalar keys %bugs;
     foreach my $bug (keys %bugs) {
-	download($bug, 1);
+	download($bug, 1, 0, $bugcount, $bugtotal);
+	$bugcount++;
     }
 
     # revert options    
@@ -1220,6 +1223,8 @@ sub download {
     my $thing=shift;
     my $manual=shift;  # true="bts cache", false="bts show/bug"
     my $mboxing=shift;  # true="bts --mbox show/bugs", and only if $manual=0
+    my $bug_current=shift;  # current bug being downloaded if caching
+    my $bug_total=shift;    # total things to download if caching
     my $timestamp = 0;
     my $url;
 
@@ -1264,7 +1269,11 @@ sub download {
 	    set_timestamp($thing, make_manual($timestamp));
 	}
 
-	print "(cache already up-to-date)\n" if ! $quiet;
+	if (! $quiet) {
+		print "(cache already up-to-date) ";
+		print "$bug_current/$bug_total" if $bug_total;
+		print "\n";
+	}
 	return "";
     }
     elsif ($ret == MIRROR_DOWNLOADED) {
@@ -1295,11 +1304,15 @@ sub download {
 	    $manual ? make_manual($timestamp) : make_automatic($timestamp));
 
 	if ($quiet == 0) {
-	    print "(cached new version)\n";
+	    print "(cached new version) ";
 	} elsif ($quiet == 1) {
-	    print "Downloading $url ... (cached new version)\n";
+	    print "Downloading $url ... (cached new version) ";
 	} elsif ($quiet > 1) {
 	    # do nothing
+	}
+	if (! $quiet) {
+		print "$bug_current/$bug_total" if $bug_total;
+		print "\n";
 	}
 	return $livepage;
     } else {
