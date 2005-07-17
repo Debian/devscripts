@@ -38,27 +38,29 @@ accepted whether or not modifications are made.  An extra changelog
 entry can be given on the command line in addition to the closes
 entries.
 .PP
-At most one of \fB\-\-append\fR, \fB\-\-increment\fR, \fB--edit\fR, and
-\fB\-\-newversion\fR may be specified as listed below.  If no options
-are specified, \fBdebchange\fR will use heuristics to guess whether or not
-the package has been successfully released, and behave as if
-\fB\-\-increment\fR had been specified if the package has been released, or
-as if \fB\-\-append\fR has been specified otherwise. Two different sets of
-heuristics can be used, as controlled by the \fb\-\-release-heuristic\fR
-option or the \fB\fRDEBCHANGE_RELEASE_HEURISTIC\fR configuration variable.
-The default "log" heuristic determines if a package has been released
-by looking for an appropriate \fBdupload\fR(1) or \fBdput\fR(1) log file
-in the parent directory. A warning will be issued if the log file is found
-but a successful upload is not recorded.  This may be because the previous
-upload was performed with a version of \fBdupload\fR prior to 2.1 or
-because the upload failed. The alternate "changelog" heuristic assumes the
-package has been released unless its changelog contains "UNRELEASED" in the
+At most one of \fB\-\-append\fR, \fB\-\-increment\fR, \fB\-\-edit\fR,
+\fB\-\-release\fR, and \fB\-\-newversion\fR may be specified as listed
+below. If no options are specified, \fBdebchange\fR will use heuristics to
+guess whether or not the package has been successfully released, and behave
+as if \fB\-\-increment\fR had been specified if the package has been
+released, or otherwise as if \fB\-\-append\fR has been specified.
+.PP
+Two different sets of heuristics can be used, as controlled by the
+\fB\-\-release-heuristic\fR option or the
+\fB\fRDEBCHANGE_RELEASE_HEURISTIC\fR configuration variable. The default
+"log" heuristic determines if a package has been released by looking for an
+appropriate \fBdupload\fR(1) or \fBdput\fR(1) log file in the parent
+directory. A warning will be issued if the log file is found but a
+successful upload is not recorded. This may be because the previous upload
+was performed with a version of \fBdupload\fR prior to 2.1 or because the
+upload failed. The alternate "changelog" heuristic assumes the package has
+been released unless its changelog contains "UNRELEASED" in the
 distribution field. If this heuristic is enabled then the distribution will
 default to "UNRELEASED" in new changelog entries. This can be useful if a
 package can be released by different maintainers, or if you do not keep the
 upload logs.
 .PP
-If \fB\-\-increment\fR or \fB\-\-newversion\fR is used, the name and
+If \fB\-\-increment\fR or \fB\-\-newversion\fR are used, the name and
 email for the new version will be determined as follows.  If the
 environment variable \fBDEBFULLNAME\fR is set, this will be used for
 the maintainer full name.  If the environment variable \fBDEBEMAIL\fR
@@ -145,14 +147,19 @@ Debian package, the directory name is changed to reflect this.
 .BR \-\-append ", " \-a
 Add a new changelog entry at the end of the current version's entries.
 .TP
-.BR \-\-edit ", " \-e
-Update the changelog timestamp, and start an editor.
-.TP
 \fB\-\-newversion \fIversion\fR, \fB\-v \fIversion\fR
 This specifies the version number (including the Debian release part)
 explicitly and behaves as the \fB\-\-increment\fR option in other
 respects.  It will also change the directory name if the upstream
 version number has changed.
+.TP
+.BR \-\-edit ", " \-e
+Update the changelog timestamp, and start an editor.
+.TP
+.BR \-\-release ", " \-r
+Update the changelog timestamp. If the distribution is set to
+"UNRELEASED", change it to unstable (or another distribution as specified
+by \fB\-\-distribution\fR).
 .TP
 .BR \-\-nmu ", " \-n
 Increment the Debian release number for a non-maintainer upload by

@@ -59,6 +59,10 @@ Options:
   -e, --edit
          Don't change version number or add a new changelog entry, just
 	 update the changelog's stamp and open up an editor
+  -r, --release
+         Update the changelog timestamp. If the distribution is set to
+         "UNRELEASED", change it to unstable (or another distribution as
+	 specified by --distribution).
   -v <version>, --newversion=<version>
          Add a new changelog entry with version number specified
   -b, --force-bad-version
@@ -190,7 +194,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # We use bundling so that the short option behaviour is the same as
 # with older debchange versions.
 my ($opt_help, $opt_version);
-my ($opt_i, $opt_a, $opt_e, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u, $opt_n, $opt_c, @closes);
+my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u, $opt_n, $opt_c, @closes);
 my ($opt_news);
 my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 $opt_u = 'low';
@@ -201,6 +205,7 @@ GetOptions("help|h" => \$opt_help,
 	   "i|increment" => \$opt_i,
 	   "a|append" => \$opt_a,
 	   "e|edit" => \$opt_e,
+	   "r|release" => \$opt_r,
 	   "v|newversion=s" => \$opt_v,
 	   "b|force-bad-version" => \$opt_b,
 	   "d|fromdirname" => \$opt_d,
@@ -258,8 +263,8 @@ if ($changelog_path ne 'debian/changelog' and $changelog_path ne 'debian/NEWS') 
 map { s/^\#//; } @closes;  # remove any leading # from bug numbers
 
 # Only allow at most one non-help option
-fatal "Only one of -a, -i, -e, -v, -d is allowed; try $progname --help for more help"
-    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_v?1:0) + ($opt_d?1:0) > 1;
+fatal "Only one of -a, -i, -e, -r, -v, -d is allowed; try $progname --help for more help"
+    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) > 1;
 
 # We'll process the rest of the command line later.
 
@@ -535,7 +540,7 @@ if (@ARGV and ! $TEXT) {
 chomp(my $DATE=`822-date`);
 
 # Are we going to have to figure things out for ourselves?
-if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e) {
+if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r) {
     # Yes, we are
     if ($opt_release_heuristic eq 'log') {
         my @UPFILES = glob("../$PACKAGE\_$SVERSION\_*.upload");
@@ -764,7 +769,13 @@ elsif ($opt_a) {
     local $/ = undef;
     print O <S>;
 }
-else { # $opt_e
+else { # $opt_e or $opt_r
+    if ($opt_r) {
+        # Change the distribution from UNRELEASED for release.
+	my $distribution = $opt_D || "unstable";
+	$CHANGES=~s/(\([^)]+\)\s+)([^;]+);/$1$distribution;/;
+    }
+    
     # We don't do any fancy stuff with respect to versions or adding
     # entries, we just update the timestamp and open the editor
     
