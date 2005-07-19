@@ -133,7 +133,7 @@ In general, the command line interface is the same as what you would write
 in a mail to control@bugs.debian.org, just prefixed with "bts". For
 example:
 
- % bts close 85942
+ % bts close 85942 1.1
  % bts severity 69042 normal
  % bts merge 69042 43233
  % bts retitle 69042 blah blah
@@ -593,16 +593,20 @@ sub bts_clone {
 
 # Don't include this in the manpage - it's deprecated
 # 
-# =item close <bug>
+# =item close <bug> <version>
 # 
 # Close a bug. Remember that using this to close a bug is often bad manners,
 # sending an informative mail to nnnnn-done@bugs.debian.org is much better.
+# You should specify which version of the package closed the bug, if
+# possible.
 # 
 # =cut
 
 sub bts_close {
     my $bug=checkbug(shift) or die "bts close: close what bug?\n";
-    mailbts("closing $bug", "close $bug");
+    my $version=shift;
+    $version="" unless defined $version;
+    mailbts("closing $bug", "close $bug $version");
     warn <<"EOT";
 bts: Closing $bug as you requested.
 Please note that the "bts close" command is deprecated!
@@ -653,16 +657,30 @@ sub bts_submitter {
     mailbts("submitter $bug", "submitter $bug $submitter");
 }
 
-=item reassign <bug> <package>
+=item reassign <bug> <package> <version>
 
-Reassign a bug to a different package.
+Reassign a bug to a different package. The version field is optional.
 
 =cut
 
 sub bts_reassign {
     my $bug=checkbug(shift) or die "bts reassign: reassign what bug?\n";
     my $package=shift or die "bts reassign: reassign \#$bug to what package?\n";
-    mailbts("reassign $bug to $package", "reassign $bug $package");
+    my $version=shift;
+    $version="" unless defined $version;
+    mailbts("reassign $bug to $package", "reassign $bug $package $version");
+}
+
+=item found <bug> <version>
+
+Indicate that a bug was found to exist in a particular package version.
+
+=cut
+
+sub bts_found {
+    my $bug=checkbug(shift) or die "bts found: found what bug?\n";
+    my $version=shift or die "bts found: found \#$bug in what version?\n";
+    mailbts("found $bug in $version", "found $bug $version");
 }
 
 =item merge <bug> <bug> [<bug> ...]
