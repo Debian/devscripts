@@ -116,7 +116,7 @@ else
   BTS_ARGS="package $src_packages"
 
   for bug in $to_be_tagged; do
-    BTS_ARGS="$BTS_ARGS. tag $bug + pending "
+    BTS_ARGS="$BTS_ARGS . tag $bug + pending "
   done
 
   eval bts ${BTS_ARGS}
