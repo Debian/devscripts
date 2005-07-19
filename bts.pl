@@ -406,9 +406,9 @@ L<http://bugs.debian.org/server-control>
 
 =over 4
 
-=item show [options] [<bug number> | <package> | <maintainer> | : ]
+=item show [options] [<bug number> | <package> | <maintainer> | : ] [opt=val ..]
 
-=item show [options] [src:<package> | from:<submitter> | tag:<tag> ]
+=item show [options] [src:<package> | from:<submitter> | tag:<tag> ] [opt=val ..]
 
 This is a synonym for bts bugs.
 
@@ -418,9 +418,9 @@ sub bts_show {
     goto &bts_bugs;
 }
 
-=item bugs [options] [<bug number> | <package> | <maintainer> | : ]
+=item bugs [options] [<bug number> | <package> | <maintainer> | : ] [opt=val ..]
 
-=item bugs [options] [src:<package> | from:<submitter> | tag:<tag> ]
+=item bugs [options] [src:<package> | from:<submitter> | tag:<tag> ] [opt=val ..]
 
 Display the page listing the requested bugs in a web browser using
 L<sensible-browser(1)>.
@@ -474,6 +474,13 @@ http://bugs.debian.org/.  This page itself will be opened if the
 command 'bts bugs :' is used.
 
 =back
+
+After the argument specifying what to display, you can optionally
+specify options to use to format the page or change what it displayed.
+These are passed to the BTS in the URL downloaded. For example, pass
+dist=stable to see bugs affecting the stable version of a package,
+version=1.0 to see bugs affecting that version of a package, or reverse=yes
+to display newest messages first in a bug log.
 
 If caching has been enabled (that is, there exists a cache directory
 ~/.devscripts_cache/bts/), then any page requested by "bts show" will
@@ -558,7 +565,7 @@ sub bts_bugs {
     }
     if ($url =~ /^.*\s+<(.*)>$/) { $url = $1; }
     $url =~ s/^:$//;
-    browse($url);
+    browse(join("&", $url, @_));
 
     # revert options
     if (defined $sub_offlinemode) {
