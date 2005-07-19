@@ -594,6 +594,7 @@ duplicated bugs.  A new report is generated for each new ID.
 
 sub bts_clone {
     my $bug=checkbug(shift) or die "bts clone: clone what bug?\n";
+    opts_done(@_);
     @clonedbugs{@_} = (1) x @_;  # add these bug numbers to hash
     mailbts("cloning $bug", "clone $bug " . join(" ",@_));
 }
@@ -613,6 +614,7 @@ sub bts_close {
     my $bug=checkbug(shift) or die "bts close: close what bug?\n";
     my $version=shift;
     $version="" unless defined $version;
+    opts_done(@_);
     mailbts("closing $bug", "close $bug $version");
     warn <<"EOT";
 bts: Closing $bug as you requested.
@@ -633,6 +635,7 @@ Reopen a bug, with optional submitter.
 sub bts_reopen {
     my $bug=checkbug(shift) or die "bts reopen: reopen what bug?\n";
     my $submitter=shift || ''; # optional
+    opts_done(@_);
     mailbts("reopening $bug", "reopen $bug $submitter");
 }
 
@@ -648,6 +651,7 @@ sub bts_retitle {
     if (! length $title) {
 	die "bts retitle: set title of $bug to what?\n";
     }
+    opts_done(@_);
     mailbts("retitle $bug to $title", "retitle $bug $title");
 }
 
@@ -661,6 +665,7 @@ Change the submitter address of a bug, with `!' meaning
 sub bts_submitter {
     my $bug=checkbug(shift) or die "bts submitter: change submitter of what bug?\n";
     my $submitter=shift or die "bts submitter: change submitter to what?\n";
+    opts_done(@_);
     mailbts("submitter $bug", "submitter $bug $submitter");
 }
 
@@ -675,6 +680,7 @@ sub bts_reassign {
     my $package=shift or die "bts reassign: reassign \#$bug to what package?\n";
     my $version=shift;
     $version="" unless defined $version;
+    opts_done(@_);
     mailbts("reassign $bug to $package", "reassign $bug $package $version");
 }
 
@@ -687,6 +693,7 @@ Indicate that a bug was found to exist in a particular package version.
 sub bts_found {
     my $bug=checkbug(shift) or die "bts found: found what bug?\n";
     my $version=shift or die "bts found: found \#$bug in what version?\n";
+    opts_done(@_);
     mailbts("found $bug in $version", "found $bug $version");
 }
 
@@ -715,6 +722,7 @@ Unmerge a bug.
 
 sub bts_unmerge {
     my $bug=checkbug(shift) or die "bts unmerge: unmerge what bug?\n";
+    opts_done(@_);
     mailbts("unmerging $bug", "unmerge $bug");
 }
 
@@ -789,6 +797,7 @@ sub bts_severity {
     if (@matches != 1) {
 	die "bts severity: \"$severity\" is not a valid severity.\nChoose from: @valid_severities\n";
     }
+    opts_done(@_);
     mailbts("severity of $bug is $matches[0]", "severity $bug $matches[0]");
 }
 
@@ -804,6 +813,7 @@ sub bts_forwarded {
     if (! length $email) {
 	die "bts forwarded: mark bug $bug as forwarded to what email address?\n";
     }
+    opts_done(@_);
     mailbts("bug $bug is forwarded to $email", "forwarded $bug $email");
 }
 
@@ -815,6 +825,7 @@ Mark a bug as not forwarded.
 
 sub bts_notforwarded {
     my $bug=checkbug(shift) or die "bts notforwarded: what bug?\n";
+    opts_done(@_);
     mailbts("bug $bug is not forwarded", "notforwarded $bug");
 }
 
@@ -845,6 +856,7 @@ usual maintainer.
 sub bts_owner {
     my $bug=checkbug(shift) or die "bts owner: change owner of what bug?\n";
     my $owner=shift or die "bts owner: change owner to what?\n";
+    opts_done(@_);
     mailbts("owner $bug", "owner $bug $owner");
 }
 
@@ -856,6 +868,7 @@ Mark a bug as having no "owner".
 
 sub bts_noowner {
     my $bug=checkbug(shift) or die "bts noowner: what bug?\n";
+    opts_done(@_);
     mailbts("bug $bug has no owner", "noowner $bug");
 }
 
@@ -2068,6 +2081,12 @@ sub init_agent {
     $ua = new LWP::UserAgent;  # we create a global UserAgent object
     $ua->agent("LWP::UserAgent/Devscripts/$version");
     $ua->env_proxy;
+}
+
+sub opts_done {
+    if (@_) {
+         die "bts: unknown options: @_\n";
+    }
 }
 
 =back
