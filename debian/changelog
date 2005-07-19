@@ -1,4 +1,4 @@
-devscripts (2.8.15) UNRELEASED; urgency=low
+devscripts (2.9) UNRELEASED; urgency=low
 
   [ Julian Gilbey ]
   * bts: fix bts --mbox show nnnn after bts show nnnn
@@ -39,9 +39,9 @@ devscripts (2.8.15) UNRELEASED; urgency=low
 
   [ Joey Hess ]
   * debchange: support generating multi-developer changelogs, currently only
-    supporting the format used in this changelog. If multiple developers are
-    detected it will automatically add [ Full Name ] lines to disambiguate who
-    did what.
+    supporting the format used in this changelog entry. If multiple developers
+    are detected it will automatically add [ Full Name ] lines to disambiguate
+    who did what.
   * debdiff: fix debdiff of dsc files to work with new dpkg-dev.
     Closes: #313293, #314811
   * Add debcommit, a script to commit to svn (or cvs) based on the contents of
