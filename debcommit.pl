@@ -130,7 +130,7 @@ sub tag {
 		chomp $tagpath;
 		
 		if (! action("svn", "copy", $svnpath, "$tagpath/$tag", "-m", "tagging version $tag")) {
-			if (! action("svn", "mkdir", $tagpath) || # make tag subdir
+			if (! action("svn", "mkdir", $tagpath, "-m", "create tag directory") ||
 			    ! action("svn", "copy", $svnpath, "$tagpath/$tag", "-m", "tagging version $tag")) {
 				die "failed tagging with $tag\n";
 			}
