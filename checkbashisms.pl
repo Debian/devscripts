@@ -48,7 +48,7 @@ EOF
 ##
 ## handle command-line options
 ##
-if (@ARGV and $ARGV[0] =~ /^(--help|-h)$/) { print $usage; exit 0; }
+if (int(@ARGV) == 0 or $ARGV[0] =~ /^(--help|-h)$/) { print $usage; exit 0; }
 if (@ARGV and $ARGV[0] =~ /^(--version|-v)$/) { print $version; exit 0; }
 
 

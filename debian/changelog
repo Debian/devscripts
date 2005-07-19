@@ -29,6 +29,7 @@ devscripts (2.9) UNRELEASED; urgency=low
   * Add a new script whodepends, written by Moshe Zadka, to check
     which maintainers' packages depend on a particular package.
     closes: #175832 (longstanding, huh?)
+  * checkbashims: show usage if 0 arguments provided.
 
   [ Filippo Giunchedi ]
   * debdiff: handle .udeb files if found in .changes (closes: #215477)
@@ -73,7 +74,7 @@ devscripts (2.9) UNRELEASED; urgency=low
   * bts: add support for "bts show package dist=stable" and the like.
   * bts: check for additional options and die
 
- -- Joey Hess <joeyh@debian.org>  Tue, 19 Jul 2005 12:10:49 -0400
+ -- Joshua Kwan <joshk@triplehelix.org>  Tue, 19 Jul 2005 10:06:44 -0700
 
 devscripts (2.8.14) unstable; urgency=low
 
