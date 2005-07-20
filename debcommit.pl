@@ -126,7 +126,17 @@ sub commit {
 		}
 	}
 	elsif ($prog eq 'tla' || $prog eq 'baz') {
-		if (! action($prog, "commit", "-s", $message)) {
+		my $summary=$message;
+		$summary=~s/^((?:\* )?[^\n]{1,72})(?:(?:\s|\n).*|$)/$1/ms;
+		my @args;
+		if ($summary eq $message) {
+			$summary=~s/^\* //s;
+			@args=("-s", $summary);
+		} else {
+			$summary=~s/^\* //s;
+			@args=("-s", "$summary ...", "-L", $message);
+		}
+		if (! action($prog, "commit", @args)) {
 			die "commit failed\n";
 		}
 	}
