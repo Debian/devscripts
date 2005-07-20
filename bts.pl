@@ -85,7 +85,7 @@ our (@gTags, @valid_tags, %valid_tags);
 @gTags = ( "patch", "wontfix", "moreinfo", "unreproducible", "fixed",
            "potato", "woody", "sid", "help", "security", "upstream",
            "pending", "sarge", "sarge-ignore", "experimental", "d-i", 
-           "confirmed", "ipv6", "lfs", "fixed-in-experimental",
+           "confirmed", "ipv6", "lfs", "help",
            "fixed-upstream", "l10n", "etch", "etch-ignore"
          );
 
