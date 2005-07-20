@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-=head1 NAME debcommit
+=head1 NAME
 
 debcommit - commit changes to a package
 
@@ -11,8 +11,8 @@ debcommit [--release] [--message=text] [--noact]
 =head1 DESCRIPTION
 
 debcommit generates a commit message based on new text in debian/changelog,
-and commits the change to a package's cvs or svn repository. It must be run
-in a cvs or svn working copy for the package.
+and commits the change to a package's cvs, svn, or arch repository. It must
+be run in a cvs, svn, or arch working copy for the package.
 
 =head1 OPTIONS
 
@@ -21,7 +21,7 @@ in a cvs or svn working copy for the package.
 =item -r --release
 
 Commit a release of the package. The version number is determined from
-debian/changelog, and is used to tag the package in cvs or svn.
+debian/changelog, and is used to tag the package in cvs, svn, or arch.
 
 Note that svn tagging conventions vary, so debcommit uses
 L<svnpath(1)> to determine where the tag should be placed in the
@@ -90,6 +90,16 @@ sub getprog {
 	elsif (-d "CVS") {
 		return "CVS";
 	}
+	elsif (-d "{arch}") {
+		# I don't think we can tell just from the working copy
+		# whether to use tla or baz, so try baz if it's available,
+		# otherwise fall back to tla.
+		if (system ("baz --version >/dev/null 2>&1") == 0) {
+			return "baz";
+		} else {
+			return "tla";
+		}
+	}
 	else {
 		die "not in a cvs or subversion working copy\n";
 	}
@@ -112,6 +122,11 @@ sub commit {
 
 	if ($prog eq 'cvs' || $prog eq 'svn') {
 		if (! action($prog, "commit", "-m", $message)) {
+			die "commit failed\n";
+		}
+	}
+	elsif ($prog eq 'tla' || $prog eq 'baz') {
+		if (! action($prog, "commit", "-s", $message)) {
 			die "commit failed\n";
 		}
 	}
@@ -143,14 +158,37 @@ sub tag {
 			die "failed tagging with $tag\n";
 		}
 	}
+	elsif ($prog eq 'tla' || $prog eq 'baz') {
+		my $archpath=`archpath`;
+		chomp $archpath;
+		my $tagpath=`archpath releases--\Q$tag\E`;
+		chomp $tagpath;
+		my $subcommand;
+		if ($prog eq 'baz') {
+			$subcommand="branch";
+		} else {
+			$subcommand="tag";
+		}
+
+		if (! action($prog, $subcommand, $archpath, $tagpath)) {
+			die "failed tagging with $tag\n";
+		}
+	}
 }
 
 sub getmessage {
 	my $ret;
 
-	if ($prog eq 'cvs' || $prog eq 'svn') {
+	if ($prog eq 'cvs' || $prog eq 'svn' ||
+	    $prog eq 'tla' || $prog eq 'baz') {
 		$ret='';
-		foreach my $line (`$prog diff debian/changelog`) {
+		my $subcommand;
+		if ($prog eq 'cvs' || $prog eq 'svn') {
+			$subcommand = 'diff';
+		} else {
+			$subcommand = 'file-diff';
+		}
+		foreach my $line (`$prog $subcommand debian/changelog`) {
 			next unless $line=~/^\+  /;
 			$line=~s/^\+  //;
 			next if $line=~/^\s*\[.*\]\s*$/; # maintainer name
