@@ -3,7 +3,10 @@ devscripts (2.9.1) UNRELEASED; urgency=low
   [ Julian Gilbey ]
   * debcommit: Apply Colin Watson's arch patch (see #319072)
 
- -- Julian Gilbey <jdg@debian.org>  Wed, 20 Jul 2005 14:06:55 +0100
+  [ Joey Hess ]
+  * debchange: Fix parsing of --release-heuristic switch.
+
+ -- Joey Hess <joeyh@debian.org>  Wed, 20 Jul 2005 09:45:09 -0400
 
 devscripts (2.9) unstable; urgency=low
 

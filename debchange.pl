@@ -223,7 +223,7 @@ GetOptions("help|h" => \$opt_help,
 	   "check-dirname-regex=s" => \$opt_regex,
 	   "noconf" => \$opt_noconf,
 	   "no-conf" => \$opt_noconf,
-	   "release-heuristic" => \$opt_release_heuristic,
+	   "release-heuristic=s" => \$opt_release_heuristic,
 	   )
     or die "Usage: $progname [options] [changelog entry]\nRun $progname --help for more details\n";
 
