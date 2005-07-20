@@ -11,12 +11,13 @@ Architecture: any
 Conflicts: debmake (<< 3.5), dupload (<< 2.1), suidmanager (<< 0.51)
 Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), sed (>= 2.95), ${shlibs:Depends}, ${misc:Depends}
 Recommends: fakeroot
-Suggests: devscripts-el, build-essential, cvs-buildpackage, cvs | svn, debian-keyring, dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, libdigest-md5-perl, libtimedate-perl, libwww-perl, lintian | linda, mailx, patch, patchutils, ssh, strace, wdiff, wget, www-browser
+Suggests: devscripts-el, build-essential, cvs-buildpackage, cvs | svn, tla | bazaar, debian-keyring, dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, libdigest-md5-perl, libtimedate-perl, libwww-perl, lintian | linda, mailx, patch, patchutils, ssh, strace, wdiff, wget, www-browser
 Description: Scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
  brackets afterwards:
   - annotate: prepend time and stream (O for stdout E for sterr) for every
       line of output
+  - archpath: print tla/Bazaar package names [tla | bazaar]
   - bts: a command-line tool for manipulating the BTS [www-browser,
       libwww-perl, mailx]
   - checkbashisms: check whether a /bin/sh script contains any common

@@ -8,7 +8,7 @@ PL_FILES = bts.pl checkbashisms.pl cvs-debuild.pl debchange.pl \
 SH_FILES = cvs-debi.sh cvs-debrelease.sh debclean.sh debrelease.sh \
 	debrsign.sh debsign.sh dpkg-genbuilddeps.sh mergechanges.sh \
 	tagpending.sh uscan.sh uupdate.sh wnpp-alert.sh whodepends.sh \
-	annotate.sh
+	annotate.sh archpath.sh
 
 LIBS = libvfork.so.0
 
@@ -88,4 +88,6 @@ install: all
 	cd $(DESTDIR)$(MAN1DIR) && ln -s debchange.1 dch.1
 	mkdir -p $(DESTDIR)$(EXAMPLES_DIR)
 	cp $(EXAMPLES) $(DESTDIR)$(EXAMPLES_DIR)
+#	-find $(DESTDIR) -type d -name '.svn' -exec rm -r \{\} \;
+#	-find $(DESTDIR) -type d -name 'CVS' -exec rm -r \{\} \;
 

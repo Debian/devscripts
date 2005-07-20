@@ -1,4 +1,4 @@
-devscripts (2.9) UNRELEASED; urgency=low
+devscripts (2.9) unstable; urgency=low
 
   [ Julian Gilbey ]
   * bts: fix bts --mbox show nnnn after bts show nnnn
@@ -38,6 +38,9 @@ devscripts (2.9) UNRELEASED; urgency=low
     (-b/--force-bad-version) (closes: #251436, #183424)
   * debsign: support for signing .commands files (Closes: #224523)
   * added annotate.sh and annotate.1
+  * added archpath.sh and archpath.1, patch by Colin Watson (Closes: #319072)
+  * export DH_ALWAYS_EXCLUDE in debian/rules as we are not interested in
+    .svn/CVS directories 
 
   [ Joey Hess ]
   * debchange: support generating multi-developer changelogs, currently only
@@ -76,7 +79,7 @@ devscripts (2.9) UNRELEASED; urgency=low
   * bts: check for additional options and die
   * tagpending: add missing space after package limit when calling bts
 
- -- Joey Hess <joeyh@debian.org>  Tue, 19 Jul 2005 14:45:35 -0400
+ -- Filippo Giunchedi <filippo@debian.org>  Wed, 20 Jul 2005 14:33:05 +0200
 
 devscripts (2.8.14) unstable; urgency=low
 
