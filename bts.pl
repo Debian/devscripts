@@ -406,9 +406,9 @@ L<http://bugs.debian.org/server-control>
 
 =over 4
 
-=item show [options] [<bug number> | <package> | <maintainer> | : ] [opt=val ...]
+=item show [options] [<bug number> | <package> | <maintainer> | : ] [opt=val ..]
 
-=item show [options] [src:<package> | from:<submitter> | tag:<tag> ] [opt=val ...]
+=item show [options] [src:<package> | from:<submitter> | tag:<tag> ] [opt=val ..]
 
 This is a synonym for bts bugs.
 
@@ -1661,7 +1661,7 @@ sub browse {
 		open (OUT_LIVE, ">/dev/fd/" . fileno($fh))
 		    or die "bts: writing to temporary file: $!\n";
 		# Correct relative urls to point to the bts.
-		$live =~ s/(?!\/)(\w+\.cgi)/$btscgiurl$1/g;
+		$live =~ s/<a href="(\w+\.cgi)/<a href="$btscgiurl$1/g;
 		print OUT_LIVE $live;
 		# Some browsers don't like unseekable filehandles,
 		# so use filename
