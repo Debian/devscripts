@@ -651,7 +651,6 @@ sub bts_retitle {
     if (! length $title) {
 	die "bts retitle: set title of $bug to what?\n";
     }
-    opts_done(@_);
     mailbts("retitle $bug to $title", "retitle $bug $title");
 }
 
