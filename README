@@ -113,8 +113,8 @@ And now, in mostly alphabetical order, the scripts:
   Debuild will also run lintian to check that the package does not
   have any major policy violations.
 
-- deb-reversion [dpkg-dev]: Increases a binary package version number and
-  repacks the package, useful for porters and the like.
+- deb-reversion: Increases a binary package version number and repacks
+  the package, useful for porters and the like.
 
 - dpkg-depcheck, dpkg-genbuilddeps [build-essential, strace]: Runs a
   specified command (such as debian/rules build) or dpkg-buildpackage,

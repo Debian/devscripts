@@ -406,9 +406,9 @@ L<http://bugs.debian.org/server-control>
 
 =over 4
 
-=item show [options] [<bug number> | <package> | <maintainer> | : ] [opt=val ..]
+=item show [options] [<bug number> | <package> | <maintainer> | : ] [opt=val ...]
 
-=item show [options] [src:<package> | from:<submitter> | tag:<tag> ] [opt=val ..]
+=item show [options] [src:<package> | from:<submitter> | tag:<tag> ] [opt=val ...]
 
 This is a synonym for bts bugs.
 

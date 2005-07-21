@@ -59,8 +59,8 @@ conf.default: conf.default.in version
 	pod2man --center=" " --release="Debian Utilities" $< > $@
 
 %.1: %.dbk
-	xsltproc -''-nonet -o $@ \
-	  /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl $< 
+	xsltproc --nonet -o $@ \
+	  /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl $<
 
 libvfork.o: libvfork.c
 	$(CC) -fPIC -D_REENTRANT $(CFLAGS) -c $<
