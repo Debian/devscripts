@@ -164,6 +164,7 @@ sub tag {
 	elsif ($prog eq 'cvs') {
 		$tag=~s/^[0-9]+://; # strip epoch
 		$tag=~tr/./_/;      # mangle for cvs
+		$tag="debian_version_$tag";
 		if (! action("cvs", "tag", "-f", $tag)) {
 			die "failed tagging with $tag\n";
 		}
