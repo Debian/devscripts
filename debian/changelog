@@ -9,7 +9,12 @@ devscripts (2.9.2) unstable; urgency=low
   * bts: fix retitle command, broken by extra param change in 2.9.
     Closes: #319367
 
- -- Joey Hess <joeyh@debian.org>  Thu, 21 Jul 2005 12:57:47 -0400
+  [ Filippo Giunchedi ]
+  * added deb-reversion by martin f krafft (Closes: #284642)
+  * modified Makefile to handle docbook-generated manpages and build-depend on
+    xsltproc + docbook-xsl
+
+ -- Filippo Giunchedi <filippo@debian.org>  Thu, 21 Jul 2005 18:59:34 +0200
 
 devscripts (2.9.1) unstable; urgency=low
 

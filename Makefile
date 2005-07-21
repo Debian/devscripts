@@ -8,7 +8,7 @@ PL_FILES = bts.pl checkbashisms.pl cvs-debuild.pl debchange.pl \
 SH_FILES = cvs-debi.sh cvs-debrelease.sh debclean.sh debrelease.sh \
 	debrsign.sh debsign.sh dpkg-genbuilddeps.sh mergechanges.sh \
 	tagpending.sh uscan.sh uupdate.sh wnpp-alert.sh whodepends.sh \
-	annotate-output.sh archpath.sh
+	annotate-output.sh archpath.sh deb-reversion.sh
 
 LIBS = libvfork.so.0
 
@@ -20,7 +20,7 @@ SCRIPTS = $(PL_FILES:.pl=) $(SH_FILES:.sh=)
 EXAMPLES = conf.default
 
 MAN1S = $(SCRIPTS:=.1) debc.1 cvs-debc.1 devscripts.1
-GEN_MAN1S = bts.1 svnpath.1 debcommit.1
+GEN_MAN1S = bts.1 svnpath.1 debcommit.1 deb-reversion.1
 MAN5S = devscripts.conf.5
 
 BINDIR = /usr/bin
@@ -57,6 +57,10 @@ conf.default: conf.default.in version
 
 %.1: %.pl
 	pod2man --center=" " --release="Debian Utilities" $< > $@
+
+%.1: %.dbk
+	xsltproc -''-nonet -o $@ \
+	  /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl $< 
 
 libvfork.o: libvfork.c
 	$(CC) -fPIC -D_REENTRANT $(CFLAGS) -c $<

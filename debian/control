@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Julian Gilbey <jdg@debian.org>
 Uploaders: Joshua Kwan <joshk@triplehelix.org>, Filippo Giunchedi <filippo@debian.org>, Joey Hess <joeyh@debian.org>
 Standards-Version: 3.6.2
-Build-Depends: perl (>= 5.8), debhelper (>= 4.0.0), libtimedate-perl, libwww-perl
+Build-Depends: perl (>= 5.8), debhelper (>= 4.0.0), libtimedate-perl, libwww-perl, xsltproc, docbook-xsl
 
 Package: devscripts
 Architecture: any
@@ -49,6 +49,8 @@ Description: Scripts to make the life of a Debian Package maintainer easier
       about how to invoke dpkg to build using fakeroot.  Also deals
       with common environment problems, umask etc. [fakeroot,
       lintian | linda, gnupg]
+  - deb-reversion: increases a binary package version number and repacks the
+      archive
   - dpkg-depcheck, dpkg-genbuilddeps: determine the packages used during
       the build of a Debian package; useful for determining the Build-Depends
       control field needed [build-essential, strace]
