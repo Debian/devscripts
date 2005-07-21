@@ -1,11 +1,15 @@
 devscripts (2.9.2) UNRELEASED; urgency=low
 
+  [ Julian Gilbey ]
+  * debcommit: fix recognition of cvs trees
+
+  [ Joey Hess ]
   * bts: Fix over-broad cgi url mangling to avoid mangling urls that are part
     of bug reports.
   * bts: fix retitle command, broken by extra param change in 2.9.
     Closes: #319367
 
- -- Joey Hess <joeyh@debian.org>  Thu, 21 Jul 2005 12:36:49 -0400
+ -- Julian Gilbey <jdg@debian.org>  Thu, 21 Jul 2005 17:40:47 +0100
 
 devscripts (2.9.1) unstable; urgency=low
 

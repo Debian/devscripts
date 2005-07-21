@@ -88,7 +88,7 @@ sub getprog {
 		return "svn";
 	}
 	elsif (-d "CVS") {
-		return "CVS";
+		return "cvs";
 	}
 	elsif (-d "{arch}") {
 		# I don't think we can tell just from the working copy
