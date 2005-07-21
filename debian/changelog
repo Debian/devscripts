@@ -1,12 +1,14 @@
-devscripts (2.9.1) UNRELEASED; urgency=low
+devscripts (2.9.1) unstable; urgency=low
 
   [ Julian Gilbey ]
+  * annotate -> annotate-output renaming, removing package conflict
+    (closes: #319271, #319289)
   * debcommit: Apply Colin Watson's arch patch (see #319072)
 
   [ Joey Hess ]
   * debchange: Fix parsing of --release-heuristic switch.
 
- -- Joey Hess <joeyh@debian.org>  Wed, 20 Jul 2005 09:45:09 -0400
+ -- Julian Gilbey <jdg@debian.org>  Thu, 21 Jul 2005 09:51:17 +0100
 
 devscripts (2.9) unstable; urgency=low
 

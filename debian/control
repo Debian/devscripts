@@ -15,8 +15,8 @@ Suggests: devscripts-el, build-essential, cvs-buildpackage, cvs | svn, tla | baz
 Description: Scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
  brackets afterwards:
-  - annotate: prepend time and stream (O for stdout E for sterr) for every
-      line of output
+  - annotate-output: prepend time and stream (O for stdout E for sterr) for
+      every line of output
   - archpath: print tla/Bazaar package names [tla | bazaar]
   - bts: a command-line tool for manipulating the BTS [www-browser,
       libwww-perl, mailx]
