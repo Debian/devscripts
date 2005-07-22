@@ -79,13 +79,14 @@ my $modified_conf_msg;
 my $version='###VERSION###';
 my $debug = (exists $ENV{'DEBUG'} and $ENV{'DEBUG'}) ? 1 : 0;
 
-# The official list is found at master.debian.org:/etc/debbugs/config
+# The official list is mirrored
+# bugs-mirror.debian.org:/org/bugs.debian.org/etc/config
 # in the variable @gTags; we copy it verbatim here.
 our (@gTags, @valid_tags, %valid_tags);
 @gTags = ( "patch", "wontfix", "moreinfo", "unreproducible", "fixed",
            "potato", "woody", "sid", "help", "security", "upstream",
            "pending", "sarge", "sarge-ignore", "experimental", "d-i", 
-           "confirmed", "ipv6", "lfs", "help",
+           "confirmed", "ipv6", "lfs",
            "fixed-upstream", "l10n", "etch", "etch-ignore"
          );
 
