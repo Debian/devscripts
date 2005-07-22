@@ -5,7 +5,11 @@ devscripts (2.9.3) UNRELEASED; urgency=low
   * modified Makefile to handle docbook-generated manpages and build-depend on
     xsltproc + docbook-xsl
 
- -- Filippo Giunchedi <filippo@debian.org>  Thu, 21 Jul 2005 19:10:40 +0200
+  [ Joey Hess ]
+  * Fix suggests on subversion.
+  * Other cleanups to references to revision control programs.
+
+ -- Joey Hess <joeyh@debian.org>  Fri, 22 Jul 2005 09:45:57 -0400
 
 devscripts (2.9.2) unstable; urgency=low
 
