@@ -9,7 +9,10 @@ devscripts (2.9.3) UNRELEASED; urgency=low
   * Fix suggests on subversion.
   * Other cleanups to references to revision control programs.
 
- -- Joey Hess <joeyh@debian.org>  Fri, 22 Jul 2005 09:45:57 -0400
+  [ Joshua Kwan ]
+  * debchange: Fix dch -D behavior by adding some parentheses. closes: #319687
+
+ -- Joshua Kwan <joshk@triplehelix.org>  Sat, 23 Jul 2005 18:51:43 -0700
 
 devscripts (2.9.2) unstable; urgency=low
 

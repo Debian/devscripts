@@ -674,7 +674,7 @@ if ($opt_i || $opt_n || $opt_v || $opt_d) {
 	}
     }
 
-    my $distribution = $opt_D || ($opt_release_heuristic eq 'changelog') ? "UNRELEASED" : $DISTRIBUTION;
+    my $distribution = $opt_D || (($opt_release_heuristic eq 'changelog') ? "UNRELEASED" : $DISTRIBUTION);
     print O "$PACKAGE ($NEW_VERSION) $distribution; ",
         "urgency=$opt_u\n\n";
 
