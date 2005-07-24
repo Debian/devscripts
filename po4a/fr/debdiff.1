@@ -1,0 +1,165 @@
+.\" This file was generated with po4a. Translate the source file.
+.\" 
+.TH DEBDIFF 1 "Utilitaires Debian" DEBIAN \"
+.SH NOM
+debdiff \- compare la liste des fichiers de deux paquets Debian
+.SH SYNOPSIS
+\fBdebdiff\fP [\fIoptions\fP] ... \fIdeb1 deb2\fP
+.br
+\fBdebdiff\fP [\fIoptions\fP] ... \fIchanges1 changes2\fP
+.br
+\fBdebdiff\fP [\fIoptions\fP] ... \fB\-\-from\fP \fIdeb1a deb1b ...  \fP\fB\-\-to\fP \fIdeb2a 
+deb2b ...\fP
+.br
+\fBdebdiff\fP [\fIoptions\fP] ... \fIdsc1 dsc2\fP
+.SH DESCRIPTION
+\fBdebdiff\fP prend en argument le nom de deux paquets Debian (fichiers 
+\&\fI.deb\fP) et compare leur contenu (en comparant uniquement les fichiers du 
+paquet principal, sans les scripts de maintenance). Il affiche quels 
+fichiers ont été ajoutés ou retirés entre deux paquets. Il est de ce fait 
+utile pour pointer les fichiers perdus par inadvertance entre deux versions 
+d'un paquet. Il compare également le fichier control des deux paquets à 
+l'aide du programme \fBwdiff\fP.
+.PP
+\fBdebdiff\fP peut aussi gérer les changements entre des groupes de fichiers 
+\&\fI.deb\fP de deux façons. La première consiste à spécifier deux fichiers 
+\&\fI.changes\fP. Dans ce cas, les fichiers \fI.debs\fP listés dans le fichier 
+\&\fI.changes\fP seront comparés, en considérant ensemble le contenu de tous les 
+fichiers \fI.deb\fP. Il est supposé que les fichiers \fI.deb\fP se trouvent dans 
+le même répertoire que le fichier \fI.changes\fP. La deuxième façon consiste à 
+lister les fichiers \fI.deb\fP avec la syntaxe \fB\-\-from\fP ... (depuis) et 
+\fB\-\-to\fP ... (vers). On peut ainsi vérifier que, lorsqu'un paquet est découpé 
+en paquets plus petits, rien n'est perdu au passage. Dans ces deux cas, les 
+fichiers control sont comparés seulement s'il y a un seul \fI.deb\fP impliqué 
+de chaque côté de la comparaison.
+.PP
+\fBdebdiff\fP examine les fichiers de configuration de \fBdevscripts\fP comme 
+décrit ci\-dessous. Les options en lignes de commande permettent de remplacer 
+les paramètres des fichiers de configuration.
+.PP
+Si deux paquets source (fichiers \fI.dsc\fP) sont fournis à \fBdebdiff\fP, il 
+comparera le contenu des paquets source. Si les paquets source ne diffèrent 
+que par leur numéro de version Debian (c'est\-à\-dire que les fichiers 
+\&\fI.orig.tar.gz\fP sont identiques dans les deux fichiers \fI.dsc\fP), alors 
+\fBinterdiff\fP(1) sera utilisé pour comparer les deux fichiers de rustine si 
+ce programme est disponible sur le système, sinon, \fBdiff\fP sera utilisé sur 
+les deux arborescences des sources.
+.SH OPTIONS
+.TP
+\fB\-\-dirs\fP, \fB\-d\fP
+Le mode opératoire par défaut est d'ignorer les noms de répertoire qui 
+apparaissent dans la liste de fichiers, mais avec cette option, ils seront 
+également considérés.
+.TP
+\fB\-\-nodirs\fP
+Ignore les répertoires dont le nom apparaît dans la liste de fichiers. C'est 
+le comportement par défaut. Cette option permet de remplacer un paramètre 
+d'un fichier de configuration.
+.TP
+\fB\-\-move\fP \fIDEPUIS VERS\fP, \fB\-m\fP \fIDEPUIS VERS\fP
+Il arrive parfois que différents fichiers ou répertoires soient déplacés 
+entre deux versions. On peut gérer le problème en utilisant cette 
+option. Les deux arguments représentent les emplacements du répertoire ou du 
+fichier dans le premier et dans le second paquet. Quand les listes de 
+fichiers sont comparées, tous les fichiers de la première liste dont le nom 
+commence par le premier argument sont traités comme s'ils commencaient par 
+le second argument. Vous pouvez donner un nombre arbitraire d'arguments 
+\fB\-\-move\fP\ : ils sont interprétés dans l'ordre d'apparition.
+.TP
+\fB\-\-move\-regex\fP \fIDEPUIS VERS\fP
+Identique à \fB\-\-move\fP, mais \fIDEPUIS\fP est traité comme une expression 
+rationnelle et la commande de substitution \fBperl\fP \fIs/^DEPUIS/VERS/\fP est 
+appliquée aux fichiers. En particulier, VERS peut avoir des références 
+arrières telles que $1.
+.TP
+\fB\-\-nocontrol\fP
+Si \fBdebdiff\fP est appelé avec deux noms de fichier \fI.deb\fP alors il compare 
+les fichiers control respectifs avec \fBwdiff\fP(1). Cette option permet de 
+supprimer cette fonctionnalité.
+.TP
+\fB\-\-control\fP
+Compare les fichiers control respectifs, ce qui est le comportement par 
+défaut. Cette option permet de remplacer un paramètre d'un fichier de 
+configuration.
+.TP
+\fB\-\-wp\fP, \fB\-\-wl\fP, \fB\-\-wt\fP
+Passe respectivement les options \fB\-p\fP, \fB\-l\fP ou \fB\-t\fP à \fBwdiff\fP. (Ceci 
+affiche le \fBwdiff\fP complet, plutôt que juste les lignes modifiées).
+.TP
+\fB\-\-show\-moved\fP
+Si plusieurs fichiers \fI.deb\fP sont spécifiés sur la ligne de commande, que 
+la syntaxe utilisée soit des fichiers \fI.changes\fP ou la syntaxe 
+\fB\-\-from\fP/\fB\-\-to\fP, alors cette option affichera également les fichiers (s'il 
+y en a) qui ont été déplacés entre deux paquets. Les noms des paquets sont 
+simplement déterminés par les noms des fichiers \fI.deb\fP.
+.TP
+\fB\-\-noshow\-moved\fP
+Le comportement par défaut\ ; cette option permet de remplacer les 
+paramètres d'un fichier de configuration.
+.TP
+\fB\-\-renamed\fP \fIDEPUIS VERS\fP
+Si l'option \fB\-\-show\-moved\fP est utilisée et qu'un paquet a été renommé dans 
+le processus, cette commande indique à \fBdebdiff\fP de traiter le paquet de la 
+première liste appelé \fIDEPUIS\fP comme s'il s'appelait \fIVERS\fP. Cette option 
+peut être utilisée plusieurs fois.
+.TP
+\fB\-\-no\-conf\fP, \fB\-\-noconf\fP
+Ne lit aucun fichier de configuration. L'option ne peut être utilisée qu'en 
+première position de la ligne de commande.
+.TP
+\fB\-\-help\fP, \fB\-h\fP
+Affiche un résumé des options.
+.TP
+\fB\-\-version\fP, \fB\-v\fP
+Affiche la version et le copyright.
+.SH "VARIABLES DE CONFIGURATION"
+Les deux fichiers de configuration \fI/etc/devscripts.conf\fP et 
+\fI~/.devscripts\fP sont évalués dans cet ordre par un interpréteur de commande 
+(«\ shell\ ») pour placer les variables de configuration. Des options de ligne 
+de commande peuvent être utilisées pour neutraliser les paramètres des 
+fichiers de configuration. Les paramètres des variables d'environnement sont 
+ignorés à cette fin. Si la première option donnée en ligne de commande est 
+\fB\-\-noconf\fP, alors ces fichiers ne sont pas évalués. Les variables 
+actuellement identifiées sont\ :
+.TP
+\fBDEBDIFF_DIRS\fP
+Si elle est positionnée à \fIyes\fP, c'est comme si l'option \fB\-\-dirs\fP était 
+utilisée.
+.TP
+\fBDEBDIFF_CONTROL\fP
+Si elle est positionnée à \fIno\fP, c'est comme si l'option \fB\-\-nocontrol\fP 
+était utilisée. La valeur par défaut est \fIyes\fP
+.TP
+\fBDEBDIFF_SHOW_MOVED\fP
+Si elle est positionnée à \fIyes\fP, c'est comme si l'option \fB\-\-show\-moved\fP 
+était utilisée.
+.TP
+\fBDEBDIFF_WDIFF_OPT\fP
+Cette option est passée à \fBwdiff\fP\ ; les valeurs possibles sont \fB\-p\fP, 
+\fB\-l\fP ou \fB\-t\fP.
+.SH "VALEURS DE RETOUR"
+La valeur de retour normale est 0. Dans le cas d'une erreur fatale, la 
+valeur de retour n'est pas nulle.
+.SH "VOIR AUSSI"
+\fBdpkg\-deb\fP(1), \fBwdiff\fP(1), \fBinterdiff\fP(1) et \fBdevscripts.conf\fP(5).
+.SH AUTEUR
+\fBdebdiff\fP a été originellement écrit sous forme de script shell par Yann 
+Dirson <dirson@debian.org> et a été ré\-écrit en Perl avec beaucoup 
+plus de fonctionnalités par Julian Gilbey <jdg@debian.org>. C'est un 
+logiciel libre qui peut être redistribué suivant les termes de la licence 
+publique générale GNU, version 2.
+.SH TRADUCTION
+Ce document est une traduction, réalisée par Nicolas FRANÇOIS le
+21 janvier 2005.
+
+L'équipe de traduction a fait le maximum pour réaliser une adaptation
+française de qualité.
+
+La version anglaise la plus à jour de ce document est toujours consultable
+en ajoutant l'option «\ \-L\ C\ » à la commande \fBman\fR.
+
+N'hésitez pas à signaler à l'auteur ou à la liste de traduction
+.nh
+<\fIdebian\-l10\-french@lists.debian.org\fR>,
+.hy
+selon le cas, toute erreur dans cette page de manuel.

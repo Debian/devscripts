@@ -1,0 +1,59 @@
+.\" This file was generated with po4a. Translate the source file.
+.\" 
+.TH GREP\-EXCUSES 1 "Utilitaires Debian" DEBIAN \"
+.SH NOM
+grep\-excuses \- recherche les fichiers d'excuses pour testing d'un 
+responsable
+.SH SYNOPSIS
+\fBgrep\-excuses\fP [\fIoptions\fP] [\fIresponsable\fP|\fIpaquet\fP]
+.SH DESCRIPTION
+\fBgrep\-excuses\fP télécharge le fichier update_excuses.html et y recherche 
+(avec grep) un certain nom de responsable. Le paquet \fBlibwww\-perl\fP est 
+nécessaire pour ce script. Si aucun nom n'est fourni sur la ligne de 
+commande, la variable d'environnement \fBDEBFULLNAME\fP est utilisée si elle 
+est définie et sinon, la variable de configuration décrite plus bas est 
+utilisée.
+.SH OPTIONS
+.TP
+\fB\-\-no\-conf\fP, \fB\-\-noconf\fP
+Ne lit aucun fichier de configuration. L'option ne peut être utilisée qu'en 
+première position de la ligne de commande.
+.TP
+\fB\-\-help\fP
+Affiche un bref message d'aide.
+.TP
+\fB\-\-version\fP
+Affiche la version et le copyright.
+.SH "VARIABLES DE CONFIGURATION"
+Les deux fichiers de configuration \fI/etc/devscripts.conf\fP et 
+\fI~/.devscripts\fP sont évalués dans cet ordre par un interpréteur de commande 
+pour placer les variables de configuration. Des options de ligne de commande 
+peuvent être utilisées pour neutraliser les paramètres des fichiers de 
+configuration. Les paramètres des variables d'environnement sont ignorés à 
+cette fin. Si la première option donnée en ligne de commande est 
+\fB\-\-noconf\fP, alors ces fichiers ne sont pas évalués. Les variables 
+actuellement identifiées sont\ :
+.TP
+\fBGREP_EXCUSES_MAINTAINER\fP
+Le responsable, l'adresse électronique ou le paquet qui sera utilisé par 
+défaut si aucun n'est spécifié sur la ligne de commande.
+.SH "VOIR AUSSI"
+\fBdevscripts.conf\fP(5).
+.SH AUTEUR
+Joey Hess <joeyh@debian.org>\ ; modifications par Julian Gilbey 
+<jdg@debian.org>.
+.SH TRADUCTION
+Ce document est une traduction, réalisée par Nicolas FRANÇOIS le
+21 janvier 2005.
+
+L'équipe de traduction a fait le maximum pour réaliser une adaptation
+française de qualité.
+
+La version anglaise la plus à jour de ce document est toujours consultable
+en ajoutant l'option «\ \-L\ C\ » à la commande \fBman\fR.
+
+N'hésitez pas à signaler à l'auteur ou à la liste de traduction
+.nh
+<\fIdebian\-l10\-french@lists.debian.org\fR>,
+.hy
+selon le cas, toute erreur dans cette page de manuel.

@@ -1,0 +1,37 @@
+.\" This file was generated with po4a. Translate the source file.
+.\" 
+.TH MERGECHANGES 1 "Utilitaires Debian" DEBIAN \"
+.SH NOM
+mergechanges \- fusionne plusieurs fichiers changes
+.SH SYNOPSIS
+\fBmergechanges\fP [\fB\-f\fP] \fIfichier1 fichier2\fP [\fIfichier\fP...]
+.SH DESCRIPTION
+\fBmergechanges\fP fusionne deux fichiers \fI.changes\fP (ou plus), en fusionnant 
+les champs «\ Architecture\ » et «\ Files\ » des fichiers. Des vérifications de 
+base sont effectuées pour s'assurer que les fichiers «\ changes\ » proviennent 
+du même paquet source et de la même version. Le premier fichier «\ changes\ » 
+est utilisé comme base et les informations des fichiers suivants y sont 
+ajoutées.
+.PP
+La sortie est normalement dirigée vers la sortie standard (\fIstdout\fP). Si 
+l'option \fB\-f\fP est utilisée, la sortie est écrite dans 
+\fIpaquet\fP_\fIversion\fP_multi.changes, dans le même répertoire que le premier 
+fichier «\ changes\ ».
+.SH AUTEUR
+Gergely Nagy <algernon@debian.org>, modifications par Julian Gilbey 
+<jdg@debian.org>.
+.SH TRADUCTION
+Ce document est une traduction, réalisée par Nicolas FRANÇOIS le
+21 janvier 2005.
+
+L'équipe de traduction a fait le maximum pour réaliser une adaptation
+française de qualité.
+
+La version anglaise la plus à jour de ce document est toujours consultable
+en ajoutant l'option «\ \-L\ C\ » à la commande \fBman\fR.
+
+N'hésitez pas à signaler à l'auteur ou à la liste de traduction
+.nh
+<\fIdebian\-l10\-french@lists.debian.org\fR>,
+.hy
+selon le cas, toute erreur dans cette page de manuel.

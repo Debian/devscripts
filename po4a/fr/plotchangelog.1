@@ -1,0 +1,142 @@
+.\" This file was generated with po4a. Translate the source file.
+.\" 
+.TH PLOTCHANGELOG 1 "Utilitaires Debian" DEBIAN \"
+.SH NOM
+plotchangelog \- représente les changements sous forme de graphique
+.SH SYNOPSIS
+\fBplotchangelog\fP \fI[options] changelog ...\fP
+.SH DESCRIPTION
+\fBplotchangelog\fP est un outil qui aide à visualiser les informations d'un 
+fichier changelog. Ces informations sont affichées graphiquement avec 
+\fBgnuplot\fP(1), avec sur l'axe des abscisses la date des versions, et sur 
+l'axe des ordonnées le numéro de version Debian d'un paquet. Chaque version 
+individuelle d'un paquet est représentée par un point, dont la couleur 
+indique qui a fourni cette version. Le numéro de version amont peut 
+également être affiché sur le graphique.
+.PP
+L'axe des ordonnées peut également être configuré de manière à indiquer la 
+taille de l'entrée du fichier changelog pour chaque nouvelle version. Il 
+peut aussi être configuré de manière à indiquer approximativement combien de 
+bogues ont été corrigés par chaque nouvelle version.
+.PP
+Notez que s'il s'agit d'un paquet spécifique Debian, l'axe des Y utilisera 
+les versions du paquet. Cela ne fonctionne pas toujours très bien.
+.PP
+.SH "LECTURE DU GRAPHIQUE"
+La silhouette du graphique d'un paquet est en règle générale une série de 
+pics, démarrant à 1, allant jusqu'à n, et retournant à 1 juste après. Plus 
+un pic est important, plus le responsable a fourni de versions du paquet 
+pour une version amont. Pour un paquet uniquement pour Debian, son graphique 
+sera croissant sans jamais redescendre (même si un bogue du programme peut, 
+à cause d'une mauvaise interprétation, le faire redescendre, si la version 
+passe par exemple de 0.9 à 0.10).
+.PP
+Si le graphique plonge à une valeur inférieure à 1, cela signifie que 
+quelqu'un a fait un NMU pour le paquet en même temps qu'une mise à jour vers 
+une nouvelle version amont, ce qui place la version Debian à 0. En règle 
+générale les NMU apparaissent comme des nombres à virgule\ : 1.1, 2.1, 
+etc. Un NMU peut également être facilement détecté en regardant sur les 
+points quel responsable a téléchargé («\ uploadé\ ») le paquet\ : un point 
+isolé d'un type différent des points précédents et suivants est souvent le 
+signe d'un NMU.
+.PP
+Il est également facile de trouver quand un paquet a changé de responsable 
+en jetant un coup d'oeil aux points.
+.SH OPTIONS
+.TP
+\fB\-l\fP, \fB\-\-linecount\fP
+Au lieu d'utiliser le numéro de version Debian pour l'axe des ordonnées, 
+utilise le nombre de lignes de l'entrée du fichier changelog pour chaque 
+version. Cette option ne peut pas être utilisée en même temps que 
+\fB\-\-bugcount\fP.
+.TP
+\fB\-b\fP, \fB\-\-bugcount\fP
+Au lieu d'utiliser le numéro de version Debian pour l'axe des ordonnées, 
+Utilise le nombre de bogues fermés par chaque entrée du fichier 
+changelog. Notez que ce nombre de bogues est trouvé en recherchant «\ #dddd\ » 
+dans le fichier changelog, et peut donc être imprécis. Cette option ne peut 
+pas être utilisée avec \fB\-\-linecount\fP.
+.TP
+\fB\-c\fP, \fB\-\-cumulative\fP
+Lorsqu'elle est utilisée avec les options \fB\-\-bugcount\fP ou \fB\-\-linecount\fP, 
+fait un décompte incrémental plutôt qu'un décompte individuel pour chaque 
+entrée du fichier changelog.
+.TP
+\fB\-v\fP, \fB\-\-no\-version\fP
+N'affiche pas les versions amont, ce qui est utile lorsque le graphique est 
+trop chargé.
+.TP
+\fB\-m\fP, \fB\-\-no\-maint\fP
+Ne fait pas de différence entre les différents responsables du paquet.
+.TP
+\fB\-s\fP \fIfichier\fP, \fB\-\-save\fP=\fIfichier\fP
+Sauve le graphique dans le \fIfichier\fP au format PostScript, au lieu de 
+l'afficher immédiatement.
+.TP
+\fB\-u\fP, \fB\-\-urgency\fP
+Utilise des points plus gros pour les versions ayant un niveau d'urgence 
+plus important.
+.TP
+\fB\-\-verbose\fP
+Affiche le script qui est fourni à gnuplot (pour le debogage).
+.TP
+\fB\-g\fP\fIcommandes\fP, \fB\-\-gnuplot="\fP\fIcommandes\fP
+Ces options vous permettent d'insérer des commandes \fBgnuplot\fP(1) dans le 
+script gnuplot utilisé pour générer le graphique. Les commandes sont placées 
+après l'initialisation, mais avant la commande «\ plot\ » finale. Elles 
+peuvent être utilisées pour remplacer l'apparence par défaut fournie par ce 
+programme de façon arbitraire. Vous pouvez également utiliser quelque chose 
+comme «\ set terminal png color\ » pour modifier le type du fichier de sortie, 
+ce qui peut être utile avec l'option \-s.
+.TP
+\fB\-\-help\fP
+Affiche un résumé d'aide.
+.TP
+\fB\-\-version\fP
+Affiche la version, le nom de l'auteur, et le copyright.
+.TP
+\fB\-\-noconf\fP, \fB\-\-no\-conf\fP
+Ne lit aucun fichier de configuration (voir ci\-dessous)
+.TP
+\fBchangelog ...\fP
+Le fichier changelog dont on veut le graphique. Si plusieurs fichiers sont 
+spécifiés, ils seront affichés sur le même graphique. Les fichiers peuvent 
+être compressés avec gzip. Tout texte n'étant pas dans le format des 
+fichiers changelog de Debian sera ignoré.
+.SH "VARIABLES DE CONFIGURATION"
+Les deux fichiers de configuration \fI/etc/devscripts.conf\fP et 
+\fI~/.devscripts\fP sont évalués dans cet ordre par un interpréteur de commande 
+(«\ shell\ ») pour placer les variables de configuration. Des options de ligne 
+de commande peuvent être utilisées pour neutraliser les paramètres des 
+fichiers de configuration. Les paramètres des variables d'environnement sont 
+ignorés à cette fin. Si la première option donnée en ligne de commande est 
+\fB\-\-no\-conf\fP, alors ces fichiers ne sont pas évalués. Les variables 
+actuellement identifiées sont\ :
+.TP
+\fBPLOTCHANGELOG_OPTIONS\fP
+Liste d'options à toujours utiliser. Les options sont séparées par des 
+espaces. Par exemple, "\-l \-b". N'incluez pas les options "\-g" ou "\-\-gnuplot" 
+dans cette liste, elles seraient ignorées\ ; voyez plutôt l'option suivante.
+.TP
+\fBPLOTCHANGELOG_GNUPLOT\fP
+Ce sont les commandes \fBgnuplot\fP qui sont utilisées avant toute commande 
+gnuplot fournie sur la ligne de commande.
+.SH "VOIR AUSSI"
+\fBdevscripts.conf\fP(5).
+.SH AUTEUR
+Joey Hess <joey@kitenet.net>
+.SH TRADUCTION
+Ce document est une traduction, réalisée par Nicolas FRANÇOIS le
+21 janvier 2005.
+
+L'équipe de traduction a fait le maximum pour réaliser une adaptation
+française de qualité.
+
+La version anglaise la plus à jour de ce document est toujours consultable
+en ajoutant l'option «\ \-L\ C\ » à la commande \fBman\fR.
+
+N'hésitez pas à signaler à l'auteur ou à la liste de traduction
+.nh
+<\fIdebian\-l10\-french@lists.debian.org\fR>,
+.hy
+selon le cas, toute erreur dans cette page de manuel.

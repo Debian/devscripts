@@ -5,7 +5,7 @@ dpkg-genbuilddeps \- generate a list of packages used to build this package
 \fBdpkg-genbuilddeps\fR [\fIarg\fR ...]
 .SH DESCRIPTION
 This program is a wrapper around \fBdpkg-depcheck\fR(1).  It should be
- run from the top of a Debian build tree.  It calls
+run from the top of a Debian build tree.  It calls
 \fBdpkg-buildpackage\fR with any arguments given on the command line,
 and by tracing the execution of this, it determines which
 non-essential packages were used during the package building.  This

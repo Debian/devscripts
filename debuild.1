@@ -220,12 +220,14 @@ options.  Due to issues of shell quoting, if a word containing spaces
 is required as a single option, extra quotes will be required.  For
 example, the config file might contain the line:
 .IP
+.nf
 DEBUILD_DPKG_BUILDPACKAGE_OPTS="-k'Julian Gilbey <jdg@debian.org>' -sa"
+.fi
 .IP
 which gives precisely two options.  Without the extra single quotes,
 \fBdpkg-buildpackage\fR would reasonably complain that \fIGilbey\fR is
 an unrecognised option (it doesn't start with a `\-' sign).
-.PP
+.IP
 Also, if this option contains any \fB\-r\fR, \fB\-d\fR or \fB\-D\fR
 options, these will always be taken account of by \fBdebuild\fR.  Note
 that a \fB\-r\fR option in this variable will override the setting in

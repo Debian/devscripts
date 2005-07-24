@@ -1,0 +1,54 @@
+.\" This file was generated with po4a. Translate the source file.
+.\" 
+.TH CHECKBASHISMS 1 "Utilitaires Debian" DEBIAN \"
+.SH NOM
+checkbashisms \- recherche des constructions spécifiques à bash dans les 
+scripts /bin/sh
+.SH SYNOPSIS
+\fBcheckbashisms\fP \fIscript\fP ...
+.br
+\fBcheckbashisms \-\-help|\-\-version\fP
+.SH DESCRIPTION
+\fBcheckbashisms\fP se base sur l'un des tests de \fBlintian\fP pour effectuer des 
+tests simples sur des scripts de type \fI/bin/sh\fP pour détecter la présence 
+de possible construction spécifique à bash [\ NdT\ : bashism en anglais\ ]. Il prend en argument le nom des scripts et affiche des avertissements 
+lorsqu'une telle construction est détectée.
+.SH OPTIONS
+.TP
+\fB\-\-help\fP, \fB\-h\fP
+Affiche un résumé des options.
+.TP
+\fB\-\-version\fP, \fB\-v\fP
+Affiche la version et le copyright.
+.SH "VALEURS DE RETOUR"
+La valeur de retour sera 0 si aucune construction spécifique à bash ou autre 
+problème n'a été détecté. Sinon, la somme des erreurs est renvoyée. Les 
+erreurs sont pondérées de la façon suivante\ :
+.TP
+1
+Une probable construction spécifique à bash a été détectée.
+.TP
+2
+Un fichier a été ignoré, par exemple parce qu'il n'était pas lisible ou n'a 
+pas été trouvé. Le message d'erreur donnera des précisions.
+.SH "VOIR AUSSI"
+\fBlintian\fP(1).
+.SH AUTEUR
+\fBcheckbashisms\fP a été originellement écrit sous forme de script shell par 
+Yann Dirson <dirson@debian.org> et a été ré\-écrit en Perl avec 
+beaucoup plus de fonctionnalités par Julian Gilbey <jdg@debian.org>.
+.SH TRADUCTION
+Ce document est une traduction, réalisée par Nicolas FRANÇOIS le
+21 janvier 2005.
+
+L'équipe de traduction a fait le maximum pour réaliser une adaptation
+française de qualité.
+
+La version anglaise la plus à jour de ce document est toujours consultable
+en ajoutant l'option «\ \-L\ C\ » à la commande \fBman\fR.
+
+N'hésitez pas à signaler à l'auteur ou à la liste de traduction
+.nh
+<\fIdebian\-l10\-french@lists.debian.org\fR>,
+.hy
+selon le cas, toute erreur dans cette page de manuel.

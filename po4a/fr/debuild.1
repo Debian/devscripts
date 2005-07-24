@@ -1,0 +1,281 @@
+.\" This file was generated with po4a. Translate the source file.
+.\" 
+.TH DEBUILD 1 "Utilitaires Debian" DEBIAN \"
+.SH NOM
+debuild \- construit un paquet Debian
+.SH SYNOPSIS
+\fBdebuild\fP [\fIoptions_debuild\fP] [\fIoptions_dpkg\-buildpackage\fP] 
+[\fB\-\-lintian\-opts\fP \fIoptions_lintian\fP] [\fB\-\-linda\-opts\fP \fIoptions_linda\fP]
+.br
+\fBdebuild\fP [\fIoptions_debuild\fP] 
+\fBbinary\fP|\fBbinary\-arch\fP|\fBbinary\-indep\fP|\fBclean\fP ...
+.SH DESCRIPTION
+\fBdebuild\fP crée tous les fichiers nécessaires pour télécharger un paquet 
+vers l'archive Debian. Il exécute dans un premier temps 
+\fBdpkg\-buildpackage\fP, puis \fBlintian\fP et/ou \fBlinda\fP avec le fichier 
+\&\fI.changes\fP créé (en supposant que \fBlintian\fP et/ou \fBlinda\fP sont 
+installés), enfin il signe les fichiers \fI.changes\fP et/ou \fB.dsc\fP appropriés 
+(en utilisant \fBdebsign\fP(1) plutôt que \fBdpkg\-buildpackage\fP(1)\ ; toutes les 
+options relatives à la signature lui sont passées). Des paramètres peuvent 
+être fournis à \fBdpkg\-buildpackage\fP, \fBlintian\fP et \fBlinda\fP, en utilisant 
+respectivement les options \fB\-\-lintian\-opts\fP et \fB\-\-linda\-opts\fP pour ces 
+deux derniers. Les options \fB\-\-lintian\fP et \fB\-\-no\-lintian\fP permettent de 
+forcer ou d'empêcher l'exécution de \fBlintian\fP, tout comme les options 
+\fB\-\-linda\fP et \fB\-\-no\-linda\fP pour \fBlinda\fP. Par défaut, \fBlintian\fP est 
+exécuté, mais pas \fBlinda\fP. Il y a également d'autres options permettant de 
+positionner ou conserver des variables d'environnement, comme décrit dans la 
+section «\ VARIABLES D'ENVIRONNEMENT\ ». Cette façon d'exécuter \fBdebuild\fP 
+permet également d'obtenir un journal de la construction du paquet dans 
+\&\fI../<paquet>_<version>_<arch>.build\fP.
+.PP
+Une autre façon d'utiliser \fBdebuild\fP est d'utiliser un (ou plus) des 
+paramètres \fBbinary\fP, \fBbinary\-arch\fP, \fBbinary\-indep\fP et \fBclean\fP. Dans ce 
+cas, \fBdebuild\fP cherchera à obtenir les privilèges root et à exécuter 
+\fIdebian/rules\fP avec ce(s) paramètres(s). Les options 
+\fB\-rootcmd\fP=\fIcommande_pour_devenir_root\fP ou 
+\fB\-r\fP\fIcommande_pour_devenir_root\fP peuvent être utilisées. La 
+\fIcommande_pour_devenir_root\fP est en règle générale une de celles\-ci\ : 
+\fIfakeroot\fP, \fIsudo\fP ou \fIsuper\fP. Voyez ci\-dessous pour une discussion plus 
+approfondie sur ce point. Encore une fois, les options permettant de 
+préserver l'environnement peuvent être utilisées. Dans ce cas, \fBdebuild\fP 
+cherchera également à exécuter dans un premier temps 
+\fBdpkg\-checkbuilddeps\fP\ ; ceci peut être explicitement demandé ou empêché 
+avec les options \fB\-D\fP et \fB\-d\fP, respectivement. Notez également que si une 
+de ces options ou si l'option \fB\-r\fP est spécifiée dans la variable 
+DEBUILD_DPKG_BUILDPACKAGE_OPTS du fichier de configuration, elle sera 
+reconnue, même avec cette façon d'exécuter \fBdebuild\fP.
+.PP
+\fBdebuild\fP lit aussi les fichiers de configuration de \fBdevscripts\fP décrits 
+ci\-dessous. Ceci permet de fournir des options à utiliser par défaut.
+.SH "Vérification du nom du répertoire"
+Comme certains autres scripts du paquet \fBdevscripts\fP, \fBdebuild\fP parcourt 
+une arborescence de répertoires jusqu'à ce qu'il trouve un fichier 
+\fIdebian/changelog\fP avnt de construire le paquet. Pour éviter les problèmes 
+posés par les fichiers égarés, il examine le nom du répertoire parent une 
+fois qu'il a trouvé le fichier \fIdebian/changelog\fP, et vérifie que le nom du 
+répertoire correspond au nom du paquet La façon précise utilisée est 
+contrôlée par les deux variables du fichier de configuration 
+DEVSCRIPTS_CHECK_DIRNAME_LEVEL et DEVSCRIPTS_CHECK_DIRNAME_REGEX, et les 
+options en ligne de commande associées \fB\-\-check\-dirname\-level\fP et 
+\fB\-\-check\-dirname\-regex\fP.
+.PP
+DEVSCRIPTS_CHECK_DIRNAME_LEVEL peut prendre les valeurs suivantes\ :
+.TP
+\fB0\fP
+Ne vérifie jamais le nom du répertoire.
+.TP
+\fB1\fP
+Ne vérifie le nom du répertoire que s'il a fallu changer de répertoire pour 
+trouver le fichier \fIdebian/changelog\fP. C'est le comportement par défaut.
+.TP
+\fB2\fP
+Vérifie toujours le nom du répertoire.
+.PP
+Le nom du répertoire est vérifié en testant si le nom du répertoire courant 
+(donné par \fBpwd\fP(1)) correspond à l'expression rationnelle donnée par la 
+variable DEVSCRIPTS_CHECK_DIRNAME_REGEX du fichier de configuration ou par 
+l'option \fB\-\-check\-dirname\-regex\fP \fIregex\fP. Il s'agit d'une expression 
+rationnelle Perl (voir \fBperlre\fP(1)), qui sera ancrée à son début et sa 
+fin. Si elle contient un «\ /\ », alors elle doit correspondre au chemin 
+complet. Si elle contient la chaîne «\ PACKAGE\ », cette chaîne sera remplacée 
+par le nom du paquet source déterminé par le fichier changelog. La valeur 
+par défaut de cette expression rationnelle est «\ PACKAGE(\-.*)?\ », ce qui 
+correspond aux répertoires nommés PACKAGE ou PACKAGE\-version.
+.SH "VARIABLES D'ENVIRONNEMENT"
+Comme les variables d'environnement peuvent affecter la construction d'un 
+paquet, souvent de façon non volontaire, \fBdebuild\fP nettoie l'environnement 
+en enlevant toutes les variables d'environnement, à l'exception de TERM, 
+HOME, LOGNAME, GNUPGHOME, PGPPATH, GPG_AGENT_INFO, FAKEROOTKEY, DEB_* et les 
+paramètres régionaux LANG et LC_*. la variable TERM est positionnée à 
+«\ dumb\ », si elle n'est pas positionnée, et PATH est positionnée à 
+«\ /usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11\ ».
+.PP
+Si une variable d'environnement ne doit pas être modifiée pour la 
+construction d'un paquet, il est possible d'utiliser \fB\-\-preserve\-envvar\fP 
+\fIvar\fP (ou \fB\-e\fP \fIvar\fP). L'environnement peut aussi ne pas être modifié en 
+utilisant l'option \fB\-\-preserve\-env\fP. Cependant, même dans ce cas le PATH 
+est remis à la valeur précisée ci\-dessus. Le \fBseul\fP moyen d'empêcher le 
+PATH d'être remis à zéro est d'utiliser une option \fB\-\-preserve\-envvar 
+PATH\fP. Mais soyez conscient qu'utiliser des programmes d'un emplacement non 
+standard peut facilement résulter en un paquet cassé, puisqu'il ne sera pas 
+possible de la construire sur des systèmes standard.
+.PP
+Il est également possible d'éviter d'avoir à écrire quelque chose comme 
+\fITOTO\fP=\fItiti\fP \fBdebuild \-e\fP \fITOTO\fP en écrivant \fBdebuild \-e\fP 
+\fITOTO\fP=\fItiti\fP ou la forme longue \fBdebuild \-\-set\-envvar\fP \fITOTO\fP=\fItiti\fP.
+.SH "ACQUISITION DES PRIVILÈGES DU SUPERUTILISATEUR"
+\fBdebuild\fP doit être exécuté en tant que superutilisateur pour fonctionner 
+correctement. Il y a trois façons fondamentalement différentes de faire 
+cela. La première, et celle qui est conseillée, est d'utiliser une commande 
+permettant de devenir root. La meilleur d'entre elles est probablement 
+\fBfakeroot\fP(1), puisqu'elle ne nécessite pas d'accorder véritablement de 
+privilèges. \fBsuper\fP(1) et \fBsudo\fP(1) sont d'autres possibilités. Si aucune 
+option \fB\-r\fP (ou \fB\-\-rootcmd\fP) n'est donnée (rappelez\-vous que 
+\fBdpkg\-buildpackage\fP accepte également une option \fB\-r\fP) et qu'aucune des 
+méthodes suivantes n'est utilisée, alors \fB\-rfakeroot\fP sera supposé.
+.PP
+La deuxième méthode est d'utiliser une commande comme \fBsu\fP(1) pour devenir 
+root, et ensuite de réaliser toutes les opérations en tant que root. Notez 
+cependant que \fBlintian\fP s'arrêtera s'il est exécuté en tant que root ou 
+setuid root\ ; ceci peut être contourné en utilisant l'option \fB\-\-allow\-root\fP 
+de \fBlintian\fP si vous êtes sûr de vous.
+.PP
+La troisième méthode consiste à installer \fBdebuild\fP setuid root. Ce n'est 
+pas la méthode par défaut, et nécessitera l'installation en tant que tel par 
+l'administrateur système. Il faut aussi être conscient que toute personne 
+pouvant exécuter \fBdebuild\fP en tant que root ou setuid root a \fBun accès 
+complet au système\fP. Cette méthode n'est pas recommandée, mais 
+fonctionnera. \fBdebuild\fP peut être installé avec les permissions 4754, de 
+façon à ce que seul les membres de son groupe puissent 
+l'exécuter. L'inconvénient de cette méthode est que les autres utilisateurs 
+ne pourront plus alors utiliser ce programme. D'autres variantes consistent 
+à avoir plusieurs copies de \fBdebuild\fP ou d'utiliser des programmes comme 
+\fBsudo\fP ou \fBsuper\fP pour autoriser sélectivement des privilèges root à 
+certains utilisateurs. Si l'administrateur veut utiliser cette méthode, il 
+devra utiliser le programme \fBdpkg\-statoverride\fP pour modifier les 
+permissions de \fI/usr/bin/debuild\fP. Ceci permettra de conserver les 
+permissions après les mises à jour.
+.SH OPTIONS
+Pour plus de détails, voir ci\-dessus.
+.TP
+\fB\-\-no\-conf\fP, \fB\-\-noconf\fP
+Ne lit aucun fichier de configuration. L'option ne peut être utilisée qu'en 
+première position de la ligne de commande.
+.TP
+\fB\-\-rootcmd\fP=\fIcommande\-pour\-devenir\-root\fP, \fB\-r\fP\fIcommande\-pour\-devenir\-root\fP
+Commande pour obtenir (ou simuler) les privilèges root.
+.TP
+\fB\-\-preserve\-env\fP
+Ne nettoie pas l'environnement, à l'exception du PATH.
+.TP
+\fB\-\-preserve\-envvar\fP=\fIvar\fP, \fB\-e\fP\fIvar\fP
+Ne nettoie pas la variable d'environnement \fIvar\fP.
+.TP
+\fB\-\-set\-envvar\fP=\fIvar\fP=\fIvaleur\fP, \fB\-e\fP\fIvar\fP=\fIvaleur\fP
+Positionne la variable d'environnement \fIvar\fP à \fIvaleur\fP et ne l'enlève pas 
+de l'environnement.
+.TP
+\fB\-\-lintian\fP
+Exécute \fBlintian\fP après \fBdpkg\-buildpackage\fP. C'est le comportement par 
+défaut. Cette option permet de remplacer une directive contraire placée dans 
+un fichier de configuration.
+.TP
+\fB\-\-no\-lintian\fP
+N'exécute pas \fBlintian\fP après \fBdpkg\-buildpackage\fP.
+.TP
+\fB\-\-linda\fP
+Exécute \fBlinda\fP après \fBdpkg\-buildpackage\fP.
+.TP
+\fB\-\-no\-linda\fP
+N'exécute pas \fBlinda\fP après \fBdpkg\-buildpackage\fP, ce qui est le 
+comportement par défaut.
+.TP
+\fB\-\-check\-dirname\-level\fP \fIN\fP
+Veuillez consulter la section «\ Vérification du nom du répertoire\ » pour une 
+explication de cette option.
+.TP
+\fB\-\-check\-dirname\-regex\fP \fIregex\fP
+Veuillez consulter la section «\ Vérification du nom du répertoire\ » pour une 
+explication de cette option.
+.TP
+\fB\-d\fP
+N'exécute pas \fBdpkg\-checkbuilddeps\fP pour vérifier les dépendances de 
+construction du paquet («\ build dependencies\ »).
+.TP
+\fB\-D\fP
+Exécute \fBdpkg\-checkbuilddeps\fP pour vérifier les dépendances de 
+construction.
+.SH "VARIABLES DE CONFIGURATION"
+Les deux fichiers de configuration \fI/etc/devscripts.conf\fP et 
+\fI~/.devscripts\fP sont évalués dans cet ordre par un interpréteur de commande 
+(«\ shell\ ») pour placer les variables de configuration. Des options de ligne 
+de commande peuvent être utilisées pour neutraliser les paramètres des 
+fichiers de configuration. Les paramètres des variables d'environnement sont 
+ignorés à cette fin. Si la première option donnée en ligne de commande est 
+\fB\-\-noconf\fP, alors ces fichiers ne sont pas évalués. Les variables 
+actuellement identifiées sont\ :
+.TP
+\fBDEBUILD_PRESERVE_ENV\fP
+Si elle est positionnée à \fIyes\fP, alors c'est comme si l'option 
+\fB\-\-preserve\-env\fP était utilisée.
+.TP
+\fBDEBUILD_PRESERVE_ENVVARS\fP
+Définie les variables d'environnement à conserver. Elle est constituée d'une 
+liste de variables d'environnement séparées par des virgules. Ceci 
+correspond à utiliser plusieurs fois les options \fB\-\-preserve\-envvar\fP ou 
+\fB\-e\fP.
+.TP
+\fBDEBUILD_SET_ENVVAR_\fP\fIvar\fP=\fIvaleur\fP
+Équivaut à utiliser \fB\-\-set\-envvar\fP=\fIvar\fP=\fIvalue\fP.
+.TP
+\fBDEBUILD_ROOTCMD\fP
+Positionner cette variable à \fIprog\fP équivaut à utiliser \fB\-r\fP\fIprog\fP.
+.TP
+\fBDEBUILD_DPKG_BUILDPACKAGE_OPTS\fP
+Voici les options qui devraient être passées à l'invocation de 
+\fBdpkg\-buildpackage\fP. Elles sont données avant toute option en ligne de 
+commande. À cause des problèmes de guillemets avec les interpréteurs de 
+commandes, pour les paramètres contenant un espace, il sera nécessaire 
+d'ajouter des guillemets supplémentaires. Par exemple, le fichier de 
+configuration pourra contenir\ :
+.IP
+.nf
+DEBUILD_DPKG_BUILDPACKAGE_OPTS="\-k'Julian Gilbey <jdg@debian.org>' \-sa"
+.fi
+.IP
+ce qui fournit exactement deux options. Sans les guillemets supplémentaires, 
+\fBdpkg\-buildpackage\fP se serait plaint (à juste titre) que \fIGilbey\fP n'est 
+pas une option reconnue (elle ne commence pas par un signe «\ \-\ »).
+.IP
+Également, si ce paramètre contient une (ou plusieurs) des options \fB\-r\fP, 
+\fB\-d\fP ou \fB\-D\fP, elle sera toujours prise en compte par \fBdebuild\fP. Notez que 
+l'option \fB\-r\fP placée ici écrasera le paramètre DEBUILD_ROOTCMD.
+.TP
+\fBDEBUILD_LINTIAN\fP
+Si elle est positionnée à \fIno\fP, alors \fBlintian\fP ne sera pas exécuté.
+.TP
+\fBDEBUILD_LINTIAN_OPTS\fP
+Ce sont les options qui doivent être passées lors de l'invocation de 
+\fBlintian\fP. Elles sont données avant toute option en ligne de commande, et 
+l'utilisation de cette option est la même que celle décrite pour la variable 
+\fBDEBUILD_DPKG_BUILDPACKAGE_OPTS\fP.
+.TP
+\fBDEBUILD_LINDA\fP
+Si elle est positionnée à \fIyes\fP, alors \fBlinda\fP sera exécuté.
+.TP
+\fBDEBUILD_LINDA_OPTS\fP
+Ce sont les options qui doivent être passées lors de l'invocation de 
+\fBlinda\fP. Elles sont données avant toute option en ligne de commande, et 
+l'utilisation de cette option est la même que celle décrite pour la variable 
+\fBDEBUILD_DPKG_BUILDPACKAGE_OPTS\fP.
+.TP
+\fBDEVSCRIPTS_CHECK_DIRNAME_LEVEL\fP, \fBDEVSCRIPTS_CHECK_DIRNAME_REGEX\fP
+Veuillez consulter la section «\ Vérification du nom du répertoire\ » 
+ci\-dessus pour une explication de ces variables. Notez que ce sont des 
+variables de configuration pour tous les outils du paquet \fBdevscripts\fP\ ; 
+elles impacteront tous les scripts qui les utilisent, comme indiqué dans 
+leurs pages de manuel respectives et dans \fBdevscripts.conf\fP(5).
+.SH "VOIR AUSSI"
+\fBdpkg\-buildpackage\fP(1), \fBdpkg\-checkbuilddeps\fP(1), \fBdebsign\fP(1), 
+\fBfakeroot\fP(1), \fBlintian\fP(1), \fBlinda\fP(1), \fBchmod\fP(1), 
+\fBdpkg\-statoverride\fP(8), \fBsu\fP(1), \fBsudo\fP(1), \fBsuper\fP(1) et 
+\fBdevscripts.conf\fP(5).
+.SH AUTEUR
+Le programme \fBdebuild\fP a été écrit par Christoph Lameter 
+<clameter@debian.org>. La version actuelle a été écrite par Julian 
+Gilbey <jdg@debian.org>.
+.SH TRADUCTION
+Ce document est une traduction, réalisée par Nicolas FRANÇOIS le
+21 janvier 2005.
+
+L'équipe de traduction a fait le maximum pour réaliser une adaptation
+française de qualité.
+
+La version anglaise la plus à jour de ce document est toujours consultable
+en ajoutant l'option «\ \-L\ C\ » à la commande \fBman\fR.
+
+N'hésitez pas à signaler à l'auteur ou à la liste de traduction
+.nh
+<\fIdebian\-l10\-french@lists.debian.org\fR>,
+.hy
+selon le cas, toute erreur dans cette page de manuel.
