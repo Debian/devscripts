@@ -461,7 +461,7 @@ Display the bugs for the maintainer email address <maintainer>.
 
 =item from:<submitter>
 
-Display the bugs for the submitter <submitter>.
+Display the bugs for the submitter email address <submitter>.
 
 =item tag:<tag>
 
