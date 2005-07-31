@@ -697,6 +697,19 @@ sub bts_found {
     mailbts("found $bug in $version", "found $bug $version");
 }
 
+=item notfound <bug> <version>
+
+Remove the record that bug was encountered in the given version of the package to which it is assigned.
+
+=cut
+
+sub bts_notfound {
+    my $bug=checkbug(shift) or die "bts notfound: what bug?\n";
+    my $version=shift or die "bts notfound: remove record \#$bug from which version?\n";
+    opts_done(@_);
+    mailbts("notfound $bug in $version", "notfound $bug $version");
+}
+
 =item merge <bug> <bug> [<bug> ...]
 
 Merge a set of bugs together.
