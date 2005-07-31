@@ -1,0 +1,152 @@
+.\" This file was generated with po4a. Translate the source file.
+.\" 
+.TH DPKG\-DEPCHECK 1 "mars 2002" dpkg\-depcheck DEBIAN
+.SH NOM
+dpkg\-depcheck \- détermine le paquet utilisé pour exécuter une commande
+.SH SYNOPSIS
+\fBdpkg\-depcheck\fP [\fIoptions\fP] \fIcommande\fP
+.SH DESCRIPTION
+Ce programme exécute la commande spécifiée avec \fBstrace\fP puis détermine et 
+affiche la liste des paquets utilisés par ce processus. La liste est 
+affectée par les options décrites plus bas. Un bon exemple d'utilisation de 
+ce programme consiste à exécuter \fBdpkg\-depcheck \-b debian/rules build\fP, qui 
+donnera une première bonne approximation de la ligne des dépendances de 
+construction (Build\-Depends) du paquet Debian. Remarquez cependant que ça ne 
+donne \fIaucune\fP information sur les versions nécessaires ou sur les paquets 
+spécifiques à une architecture.
+.SH OPTIONS
+.TP
+\fB\-a\fP, \fB\-\-all\fP
+Signale les paquets utilisés pour exécuter la \fIcommande\fP, ce qui est le 
+comportement par défaut. Utilisées avec \fB\-b\fP, \fB\-d\fP ou \fB\-m\fP, elles 
+procurent davantage d'informations sur les paquets ignorés par ces options.
+.TP
+\fB\-b\fP, \fB\-\-build\-depends\fP
+Ne signale aucune dépendance envers un paquet essential (essentiel) ou 
+build\-essential (essentiel pour la construction des paquets).
+.TP
+\fB\-d\fP, \fB\-\-ignore\-dev\-deps\fP
+N'affiche pas les paquets qui sont des dépendances directes des paquets 
+\fI\-dev\fP utilisés, ce qui implique l'option \fB\-b\fP.
+.TP
+\fB\-m\fP, \fB\-\-min\-deps\fP
+Donne un ensemble minimaliste de paquets nécessaires, en prenant en compte 
+les dépendances directes. Utiliser \fB\-m\fP implique \fB\-d\fP et aussi \fB\-b\fP.
+.TP
+\fB\-C\fP, \fB\-\-C\-locale\fP
+Exécute la \fIcommande\fP avec les paramètres régionaux («\ locale\ ») C.
+.TP
+\fB\-\-no\-C\-locale\fP
+Ne change pas la locale lors de l'exécution de \fIcommande\fP.
+.TP
+\fB\-l\fP, \fB\-\-list\-files\fP
+Signale également la liste des fichiers utilisés dans chaque paquet.
+.TP
+\fB\-\-no\-list\-files\fP
+Ne signale pas la liste des fichiers utilisés dans chaque paquet. Cette 
+option annule l'option \fB\-l\fP.
+.TP
+\fB\-o\fP, \fB\-\-output\fP=\fIFICHIER\fP
+Dirige le diagnostic du paquet dans le \fIFICHIER\fP plutôt que sur la sortie 
+standard.
+.TP
+\fB\-O\fP, \fB\-\-strace\-output\fP=\fIFICHIER\fP
+Lorsque la \fIcommande\fP est «\ tracée\ », écrit la sortie de \fBstrace\fP dans 
+\fIFICHIER\fP plutôt que dans un fichier temporaire.
+.TP
+\fB\-I\fP, \fB\-\-strace\-input\fP=\fIFICHIER\fP
+Utilise la sortie \fBstrace\fP du \fIFICHIER\fP au lieu de tracer la 
+\fIcommande\fP. \fBstrace\fP doit avoir été exécuté avec les options \fB\-f \-q\fP pour 
+que cela fonctionne.
+.TP
+\fB\-f\fP, \fB\-\-features\fP=\fILISTE\fP
+Active ou désactive les fonctionnalités données dans la \fILISTE\fP. Les 
+fonctionnalités sont séparées par des virgules. Une fonctionnalité est 
+activée en précisant \fI+fonctionnalité\fP ou juste \fIfonctionnalité\fP\ ; elle 
+est désactivée en précisant \fI\-fonctionnalité\fP. La liste des fonctionnalités 
+reconnues actuellement est la suivante\ :
+.PD 0
+.RS
+.TP
+\fBwarn\-local\fP
+Avertit si des fichiers de \fI/usr/local\fP ou \fI/var/local\fP sont 
+utilisés. Cette option est activée par défaut.
+.TP
+\fBdiscard\-check\-version\fP
+N'utilise pas \fIexecve\fP lorsque seul un argument \fI\-\-version\fP est donné au 
+programme. C'est une astuce pour les scripts configure qui recherchent des 
+exécutables qu'il n'utilise en fait pas. Cette fonctionnalité est activée 
+par défaut.
+.TP
+\fBtrace\-local\fP
+Essaye également d'identifier les accès aux fichiers de \fI/usr/local\fP et 
+\fI/var/local\fP. Ce n'est généralement pas très utile, puisque qu'aucun 
+fichier n'y est placé par Debian. Cette fonctionnalité est désactivée par 
+défaut.
+.TP
+\fBcatch\-alternatives\fP
+Avertit à propos des accès aux fichiers contrôlés par le système 
+d'\fIalternatives\fP de Debian. Cette fonctionnalité est activée par défaut.
+.TP
+\fBdiscard\-sgml\-catalogs\fP
+Ne prend pas les accès aux catalogues SGML en considération. Certains outils 
+lisent tous les catalogues au démarrage. Les fichiers qui correspondent à 
+l'expression rationnelle /usr/share/sgml/.*\e.cat sont considérés comme des 
+catalogues. Cette fonctionnalité est activée par défaut.
+.PD
+.RE
+.TP
+\fB\-\-no\-conf\fP, \fB\-\-noconf\fP
+Ne lit aucun fichier de configuration. L'option ne peut être utilisée qu'en 
+première position de la ligne de commande.
+.TP
+\fB\-h\fP, \fB\-\-help\fP
+Affiche un message d'aide et quitte.
+.TP
+\fB\-v\fP, \fB\-\-version\fP
+Affiche la version et le copyright puis quitte.
+.SH "VARIABLES DE CONFIGURATION"
+Les deux fichiers de configuration \fI/etc/devscripts.conf\fP et 
+\fI~/.devscripts\fP sont évalués dans cet ordre par un interpréteur de commande 
+pour placer les variables de configuration. Des options de ligne de commande 
+peuvent être utilisées pour neutraliser les paramètres des fichiers de 
+configuration. Les paramètres des variables d'environnement sont ignorés à 
+cette fin. Si la première option donnée en ligne de commande est 
+\fB\-\-noconf\fP, alors ces fichiers ne sont pas évalués. Les variables 
+actuellement identifiées sont\ :
+.TP
+\fBDPKG_DEPCHECK_OPTIONS\fP
+Il s'agit des options qui sont analysées avant les options de la ligne de 
+commande. Par exemple\ :
+.IP
+DPKG_DEPCHECK_OPTIONS="\-b \-f\-catch\-alternatives"
+.IP
+qui permet de passer ces options à \fBdpkg\-depcheck\fP avant que les options de 
+la ligne de commande soient analysées. Il est conseillé de ne pas jouer au 
+plus fin avec les guillemets, car les interpréteurs de commandes sont assez 
+capricieux à ce sujet\ !
+.SH "VOIR AUSSI"
+\fBdpkg\fP(1), \fBstrace\fP(1), \fBupdate\-alternatives\fP(8) et 
+\fBdevscripts.conf\fP(5).
+.SH COPYRIGHT
+Copyright 2001 Bill Allombert <ballombe@debian.org>. Modifications 
+copyright 2002,2003 Julian Gilbey <jdg@debian.org>. \fBdpkg\-depcheck\fP 
+est un logiciel libre, sous la licence publique générale GNU, version 2 ou 
+(comme vous le souhaitez) ultérieure. Vous êtes encouragés à apporter des 
+modifications et/ou à distribuer des copies sous certaines 
+conditions. Absolument aucune garantie n'est donnée pour \fBdpkg\-depcheck\fP.
+.SH TRADUCTION
+Ce document est une traduction, réalisée par Nicolas FRANÇOIS le
+21 janvier 2005.
+
+L'équipe de traduction a fait le maximum pour réaliser une adaptation
+française de qualité.
+
+La version anglaise la plus à jour de ce document est toujours consultable
+en ajoutant l'option «\ \-L\ C\ » à la commande \fBman\fR.
+
+N'hésitez pas à signaler à l'auteur ou à la liste de traduction
+.nh
+<\fIdebian\-l10\-french@lists.debian.org\fR>,
+.hy
+selon le cas, toute erreur dans cette page de manuel.

@@ -1,0 +1,60 @@
+.TH DEVSCRIPTS.CONF 5 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+devscripts.conf \- configuration file for the devscripts package
+.SH DESCRIPTION
+The \fBdevscripts\fR package provides a collection of scripts which
+may be of use to Debian developers and others wishing to build Debian
+packages.  Many of these have options which can be configured on a
+system-wide and per-user basis.
+.PP
+Every script in the \fBdevscripts\fR package which makes use of values
+from these configuration files describes the specific settings
+recognised in its own manpage.  (For a list of the scripts, either see
+\fI/usr/share/doc/devscripts/README.gz\fR or look at the output of
+\fIdpkg -L devscripts | grep /usr/bin\fR.)
+.PP
+The two configuration files are \fI/etc/devscripts.conf\fR for
+system-wide defaults and \fI~/.devscripts\fR for per-user settings.
+They are written with \fBbash\fR(1) syntax, but should only have
+comments and simple variable assignments in them; they are both
+sourced (if present) by many of the \fBdevscripts\fR scripts.
+Variables corresponding to simple switches should have one of the
+values \fIyes\fR and \fIno\fR; any other setting is regarded as
+equivalent to the default setting.
+.PP
+All variable names are written in uppercase, and begin with the script
+name.  Package-wide variables begin with "DEVSCRIPTS", and are listed
+below, as well as in the relevant manpages.
+.PP
+For a list of all of the available options variables, along with their
+default settings, see the example configuration file
+\fI/usr/share/doc/devscripts/devscripts.conf.ex\fR.  This is copied to
+\fI/etc/devscripts.conf\fR when the \fBdevscripts\fR package is first
+installed.  Information about configuration options introduced in
+newer versions of the package will be appended to
+\fI/etc/devscripts.conf\fR when the package is upgraded.
+.PP
+Every script which reads the configuration files can be forced to
+ignore them by using \fB\-\-no-conf\fR as the \fIfirst\fR command-line
+option.
+.SH "PACKAGE-WIDE VARIABLES"
+The currently recognised package-wide variables are:
+.TP
+.BR DEVSCRIPTS_CHECK_DIRNAME_LEVEL ", " DEVSCRIPTS_CHECK_DIRNAME_REGEX
+These control scripts which change directory to find a
+\fIdebian/changelog\fR file or suchlike, and some other miscellaneous
+cases.  In order to prevent unwanted, even possibly dangerous,
+behaviour, these variables control when actions will be performed.
+The scripts which currently make use of these variables are:
+\fBdebc\fR, \fBdebchange\fR/\fBdch\fR, \fBdebclean\fR, \fBdebi\fR,
+\fBdebrelease\fR, \fBdebuild\fR and \fBuscan\fR, but this list may
+change with time (and I may not remember to update this manpage).
+Please see the manpages of individual scripts for details of the
+specific behaviour for each script.
+.SH "SEE ALSO"
+.BR devscripts (1)
+and
+.IR /usr/share/doc/devscripts/README.gz.
+.SH AUTHOR
+This manpage was written for the \fBdevscripts\fR package by the
+package maintainer Julian Gilbey <jdg@debian.org>.

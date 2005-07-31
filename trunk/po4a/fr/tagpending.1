@@ -1,0 +1,51 @@
+.\" This file was generated with po4a. Translate the source file.
+.\" 
+.TH TAG\-PENDING 1 "Utilitaires Debian" DEBIAN \"
+.SH NOM
+tagpending \- place l'étiquette «\ pending\ » sur tous les bogues non marqués 
+en tant que tel
+.SH SYNOPSIS
+\fBtagpending\fP [\fIoptions\fP]
+.SH DESCRIPTION
+\fBtagpending\fP recherche et analyse les fichiers debian/changelog et 
+debian/control afin de trouver quels bogues seront fermés par la version en 
+cours, puis envoie un courrier à \fBcontrol@bugs.debian.org\fP avec \fBmail\fP(1) 
+pour placer les étiquettes «\ pending\ » sur ces bogues. Il utilise LDAP pour 
+obtenir les bogues déjà marqués par une étiquette «\ pending\ » du paquet et 
+les exclut du courrier.
+.SH OPTIONS
+.TP
+\fB\-n\fP
+N'envoie pas le courrier, mais l'affiche sur la sortie standard.
+.TP
+\fB\-s\fP
+N'affiche pas les actions effectuées.
+.TP
+\fB\-f\fP
+N'interroge pas le BTS pour obtenir la liste des bogues déjà marqués, mais 
+force l'étiquette «\ pending\ » sur tous les bogues, même ceux qui l'ont déjà.
+.TP
+\fB\-\-help\fP, \fB\-h\fP
+Affiche un bref message d'aide.
+.TP
+\fB\-\-version\fP, \fB\-v\fP
+Affiche la version et le copyright.
+.SH "VOIR AUSSI"
+\fBldapsearch\fP(1), \fBmailx\fP(1), \fBdpkg\-parsechangelog\fP(1)
+.SH AUTEUR
+Joshua Kwan <joshk@triplehelix.org>
+.SH TRADUCTION
+Ce document est une traduction, réalisée par Nicolas FRANÇOIS le
+21 janvier 2005.
+
+L'équipe de traduction a fait le maximum pour réaliser une adaptation
+française de qualité.
+
+La version anglaise la plus à jour de ce document est toujours consultable
+en ajoutant l'option «\ \-L\ C\ » à la commande \fBman\fR.
+
+N'hésitez pas à signaler à l'auteur ou à la liste de traduction
+.nh
+<\fIdebian\-l10\-french@lists.debian.org\fR>,
+.hy
+selon le cas, toute erreur dans cette page de manuel.

@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+
+<!--
+
+Process this file with an XSLT processor: `xsltproc \
+-''-nonet /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/\
+manpages/docbook.xsl manpage.dbk'.  A manual page
+<package>.<section> will be generated.  You may view the
+manual page with: nroff -man <package>.<section> | less'.  A
+typical entry in a Makefile or Makefile.am is:
+
+DB2MAN=/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/\
+manpages/docbook.xsl
+XP=xsltproc -''-nonet
+
+manpage.1: manpage.dbk
+        $(XP) $(DB2MAN) $<
+    
+The xsltproc binary is found in the xsltproc package.  The
+XSL files are in docbook-xsl.  Please remember that if you
+create the nroff version in one of the debian/rules file
+targets (such as build), you will need to include xsltproc
+and docbook-xsl in your Build-Depends control field.
+
+-->
+
+  <!-- Fill in your name for FIRSTNAME and SURNAME. -->
+  <!ENTITY dhfirstname "<firstname>martin f.</firstname>">
+  <!ENTITY dhsurname   "<surname>krafft</surname>">
+  <!-- Please adjust the date whenever revising the manpage. -->
+  <!ENTITY dhdate      "<date>Dec 08, 2004</date>">
+  <!-- SECTION should be 1-8, maybe w/ subsection other parameters are
+       allowed: see man(7), man(1). -->
+  <!ENTITY dhsection   "<manvolnum>1</manvolnum>">
+  <!ENTITY dhemail     "<email>madduck@debian.org</email>">
+  <!ENTITY dhusername  "martin f. krafft">
+  <!ENTITY dhucpackage "<refentrytitle>deb-reversion</refentrytitle>">
+  <!ENTITY dhpackage   "deb-reversion">
+
+  <!ENTITY debian      "<productname>Debian</productname>">
+  <!ENTITY gnu         "<acronym>GNU</acronym>">
+  <!ENTITY gpl         "&gnu; <acronym>GPL</acronym>">
+]>
+
+<refentry>
+  <refentryinfo>
+    <address>
+      &dhemail;
+    </address>
+    &dhdate;
+  </refentryinfo>
+  <refmeta>
+    &dhucpackage;
+
+    &dhsection;
+  </refmeta>
+  <refnamediv>
+    <refname>&dhpackage;</refname>
+
+    <refpurpose>simple script to change the version of a DEB file.</refpurpose>
+  </refnamediv>
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>&dhpackage;</command>
+      <arg choice="opt">
+        -<option>vckDh</option>
+      </arg>
+      <replaceable> file</replaceable>
+      <arg choice="opt" rep="repeat">log message</arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+  <refsect1>
+    <title>DESCRIPTION</title>
+
+    <para>
+      &dhpackage; unpacks the specified DEB file, changes the version number
+      in the relevant locations, appends a Debian <filename>changelog</filename> entry
+      with the specified contents, and creates a new DEB file with the updated
+      version.
+    </para>
+
+    <para>
+      By default, the tool creates a new version number suitable for local
+      changes, such that the new package will be greater than the current one,
+      but lesser than any future, official Debian packages. With
+      <option>-v</option>, the version number can be specified directly.
+      Contrariwise, the <option>-c</option> simply calculates the new
+      version number but does not generate a new package.
+    </para>
+
+    <para>
+      With <option>-k</option>, a hook script may be specified, which is run
+      on the unpacked binary packages just before it is repacked. If you want
+      to write changelog entries from within the hook, use <command>dch -a --
+      your message</command>.
+    </para>
+
+    <para>
+      More information is available by calling &dhpackage; with the
+      <option>-h</option> command line switch.
+    </para>
+
+  </refsect1>
+  <refsect1>
+    <title>DISCLAIMER</title>
+    <para>
+      &dhpackage; is a tool intended to help porters (e.g. amd64) with
+      modifying packages for other architectures, and to augment deb-repack,
+      which creates modified packages with identical version numbers as the
+      official packages. Chaos will ensue! With &dhpackage;, a proper version
+      number can be selected, which does not obstruct the next official
+      release but can be specifically pinned with APT or held with dpkg.
+    </para>
+
+    <para>
+      Please take note that &dhpackage; does not come without problems. While
+      it works fine in most cases, it may just not in yours. Especially,
+      please consider that it changes binary packages (only!) and hence can
+      break strict versioned dependencies between binary packages generated
+      from the same source. </para>
+
+    <para>
+      You are using this tool at your own risk and I shall not shed a tear if
+      your gerbil goes up in flames, your microwave attacks the stereo, or the
+      angry slamming of your fist spills your coffee into the keyboard, which
+      sets of a chain reaction resulting in a vast amount of money transfered
+      from your account to mine.
+    </para>
+  </refsect1>
+
+  <refsect1>
+    <title>AUTHOR</title>
+
+    <para>&dhpackage; is (c) 2004-5 by &dhusername; </para>
+
+    <para>
+      Permission is granted to copy, distribute and/or modify this document
+      under the terms of the Artistic License:
+      <ulink>http://www.opensource.org/licenses/artistic-license.php</ulink>
+      On Debian systems, the complete text of the Artistic License can be
+      found
+      in <filename>/usr/share/common-licenses/Artistic</filename>.
+    </para>
+
+    <para>This manual page was written by &dhusername; &dhemail;.</para>
+
+  </refsect1>
+</refentry>

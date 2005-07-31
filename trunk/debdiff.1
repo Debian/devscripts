@@ -1,0 +1,151 @@
+.TH DEBDIFF 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+debdiff \- compare file lists in two Debian packages
+.SH SYNOPSIS
+\fBdebdiff\fR [\fIoptions\fR] ... \fIdeb1 deb2\fR
+.br
+\fBdebdiff\fR [\fIoptions\fR] ... \fIchanges1 changes2\fR
+.br
+\fBdebdiff\fR [\fIoptions\fR] ... \fB\-\-from \fIdeb1a deb1b ...
+\fB\-\-to \fIdeb2a deb2b ...\fR
+.br
+\fBdebdiff\fR [\fIoptions\fR] ... \fIdsc1 dsc2\fR
+.SH DESCRIPTION
+\fBdebdiff\fR takes the names of two Debian package files (\fI.deb\fRs
+or \fI.udeb\fRs) on the command line and compares their contents
+(considering only the files in the main package, not the maintenance
+scripts).  It shows which files have been introduced and which removed
+between the two package files, and is therefore useful for spotting
+files which may have been inadvertently lost between revisions of the
+package.  It also compares the control files of the two packages using
+the \fBwdiff\fR program.
+.PP
+\fBdebdiff\fR can also handle changes between groups of \fI.deb\fR
+files in two ways.  The first is to specify two \fI.changes\fR files.
+In this case, the \fI.deb\fR files listed in the \fI.changes\fR file
+will be compared, by taking the contents of all of the
+listed \fI.deb\fR files together.  (The \fI.deb\fR files listed are
+assumed to be in the same directory as the \fI.changes\fR file.)  The
+second way is to list the \fI.deb\fR files of interest specifically
+using the \fB\-\-from\fR ... \fB\-\-to\fR syntax.  These both help if
+a package is broken up into smaller packages and one wishes to ensure
+that nothing is lost in the interim.  The control files are compared
+in both of these cases only when there is only one \fI.deb\fR involved
+on each side of the comparison.
+.PP
+\fBdebdiff\fR examines the \fBdevscripts\fR configuration files as
+described below.  Command line options override the configuration file
+settings, though.
+.PP
+If \fBdebdiff\fR is passed two source packages (\fI.dsc\fR files) it
+will compare the contents of the source packages.  If the source
+packages differ only in Debian revision number (that is,
+the \fI.orig.tar.gz\fR files are the same in the two \fI.dsc\fR
+files), then \fBinterdiff\fR(1) will be used to compare the two patch
+files if this program is available on the system, otherwise a
+\fBdiff\fR will be performed between the two source trees.
+.SH OPTIONS
+.TP
+.BR \-\-dirs ", " \-d
+The default mode of operation is to ignore directory names which
+appear in the filelist, but they, too, will be considered if this
+option is given.
+.TP
+.B \-\-nodirs
+Ignore directory names which appear in the filelist.  This is the
+default and it can be used to override a configuration file setting.
+.TP
+.BI \-\-move " FROM TO" "\fR,\fP \-m" " FROM TO"
+It sometimes occurs that various files or directories are moved around
+between revisions.  This can be handled using this option.  There are
+two arguments, the first giving the location of the directory or file
+in the first package, and the second in the second.  Any files in the
+first listing whose names begin with the first argument are treated as
+having that substituted for the second argument when the file lists
+are compared.  Any number of \fB\-\-move\fR arguments may be given;
+they are processed in the order in which they appear.
+.TP
+.BI \-\-move\-regex " FROM TO"
+This is the same as \fB\-\-move\fR, except that \fIFROM\fR is treated
+as a regular expression and the \fBperl\fR substitution command
+\fIs/^FROM/TO/\fR is applied to the files.  In particular, TO can make
+use of backreferences such as $1.
+.TP
+.B \-\-nocontrol
+If \fBdebdiff\fR is called with two \fI.deb\fR files specified by
+name, then it will compare the respective control files using
+\fBwdiff\fR(1).  This option suppresses this part of the processing.
+.TP
+.B \-\-control
+Compare the respective control files; this is the default, and it can
+be used to override a configuration file setting.
+.TP
+.BR \-\-wp ", " \-\-wl ", " \-\-wt
+Pass a \fB\-p\fR, \fB\-l\fR or \fB\-t\fR option to \fBwdiff\fR
+respectively.  (This yields the whole \fBwdiff\fR output rather than
+just the lines with any changes.)
+.TP
+.B \-\-show-moved
+If multiple \fI.deb\fR files are specified on the command line, either
+using \fI.changes\fR files or the \fB\-\-from\fR/\fB\-\-to\fR syntax,
+then this option will also show which files (if any) have moved
+between packages.  (The package names are simply determined from the
+names of the \fI.deb\fR files.)
+.TP
+.B \-\-noshow-moved
+The default behaviour; can be used to override a configuration file
+setting.
+.TP
+.BI \-\-renamed " FROM TO"
+If \fB\-\-show-moved\fR is being used and a package has been renamed
+in the process, this command instructs \fBdebdiff\fR to treat the
+package in the first list called \fIFROM\fR as if it were called
+\fITO\fR.  Multiple uses of this option are permitted.
+.TP
+\fB\-\-no-conf\fR, \fB\-\-noconf\fR
+Do not read any configuration files.  This can only be used as the
+first option given on the command-line.
+.TP
+.BR \-\-help ", " \-h
+Show a summary of options.
+.TP
+.BR \-\-version ", " \-v
+Show version and copyright information.
+.SH "CONFIGURATION VARIABLES"
+The two configuration files \fI/etc/devscripts.conf\fR and
+\fI~/.devscripts\fR are sourced by a shell in that order to set
+configuration variables.  Command line options can be used to override
+configuration file settings.  Environment variable settings are
+ignored for this purpose.  The currently recognised variables are:
+.TP
+.B DEBDIFF_DIRS
+If this is set to \fIyes\fR, then it is the same as the
+\fB\-\-dirs\fR command line parameter being used.
+.TP
+.B DEBDIFF_CONTROL
+If this is set to \fIno\fR, then it is the same as the
+\fB\-\-nocontrol\fR command line parameter being used.  The default is
+\fIyes\fR.
+.TP
+.B DEBDIFF_SHOW_MOVED
+If this is set to \fIyes\fR, then it is the same as the
+\fB\-\-show\-moved\fR command line parameter being used.
+.TP
+.B DEBDIFF_WDIFF_OPT
+This option will be passed to \fBwdiff\fR; it should be one of
+\fB\-p\fR, \fB\-l\fR or \fB\-t\fR.
+.SH "EXIT VALUES"
+Normally the exit value will be 0.  If there is some fatal error, the
+exit code will be non-zero.
+.SH "SEE ALSO"
+.BR dpkg-deb (1),
+.BR wdiff (1),
+.BR interdiff (1)
+and
+.BR devscripts.conf (5).
+.SH AUTHOR
+\fBdebdiff\fR was originally written as a shell script by Yann Dirson
+<dirson@debian.org> and rewritten in Perl with many more features by
+Julian Gilbey <jdg@debian.org>.  The software may be freely
+redistributed under the terms and conditions of the GNU General Public
+Licence, version 2.

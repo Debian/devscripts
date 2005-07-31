@@ -1,0 +1,1569 @@
+devscripts (2.9.3) unstable; urgency=low
+
+  [ Filippo Giunchedi ]
+  * added deb-reversion by martin f krafft (Closes: #284642)
+  * modified Makefile to handle docbook-generated manpages and build-depend on
+    xsltproc + docbook-xsl
+
+  [ Joey Hess ]
+  * Fix suggests on subversion.
+  * Other cleanups to references to revision control programs.
+
+  [ Joshua Kwan ]
+  * debchange: Fix dch -D behavior by adding some parentheses. closes: #319687
+  * Add French manual pages, thanks to the French l10n team. closes: #292780
+
+  [ Julian Gilbey ]
+  * bts: support for notfound command (Closes: #320569)
+  * debchange: change --closes command output format to place "(Closes:
+    #nnnnn)" at end of changelog entry
+  * debchange: don't require changelog to be modified when -e or -r option
+    used
+
+ -- Julian Gilbey <jdg@debian.org>  Sun, 31 Jul 2005 14:50:10 +0100
+
+devscripts (2.9.2) unstable; urgency=low
+
+  [ Julian Gilbey ]
+  * debcommit: fix recognition of cvs trees
+
+  [ Joey Hess ]
+  * bts: Fix over-broad cgi url mangling to avoid mangling urls that are part
+    of bug reports.
+  * bts: fix retitle command, broken by extra param change in 2.9.
+    Closes: #319367
+
+ -- Joey Hess <joeyh@debian.org>  Thu, 21 Jul 2005 12:57:47 -0400
+
+devscripts (2.9.1) unstable; urgency=low
+
+  [ Julian Gilbey ]
+  * annotate -> annotate-output renaming, removing package conflict
+    (closes: #319271, #319289)
+  * debcommit: Apply Colin Watson's arch patch (see #319072)
+
+  [ Joey Hess ]
+  * debchange: Fix parsing of --release-heuristic switch.
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 21 Jul 2005 09:51:17 +0100
+
+devscripts (2.9) unstable; urgency=low
+
+  [ Julian Gilbey ]
+  * bts: fix bts --mbox show nnnn after bts show nnnn
+  * bts: add etch and etch-ignore tags (closes: #312493)
+  * bts: tags: remove "fixed-in-experimental" and add "help"
+  * debchange: use word "file" in manpage for --changelog option (closes:
+    #301917)
+  * debchange: debian/NEWS.Debian should have been debian/NEWS (closes:
+    #303886)
+  * debuild: correct manpage typo (closes: #309825)
+  * debdiff: handle debdiff on two identically-named native .dsc files
+    (closes: #307318)
+  * grep-excuses: no longer cache web page, as per bug#309802 (closes:
+    #225955)
+  * rc-alert: no longer automatically create cache directory, as per
+    bug#309802
+  * uscan: handle annoying error message (closes: #303607)
+  * uscan: mangle http://sf.net/ to use Filippo's sf.php script and work
+    (closes: #242884)
+  * uscan: handle tar.bz2 packages (related to #317331)
+  * uupdate: handle dpkg 1.13 source format allowing bz2-compressed files
+    and .debian.tar.gz files (closes: #317331)
+  * wnpp-alert: accept -h and -v short options (closes: #304240)
+  * wnpp-alert: don't cache such small files (closes: #309802)
+  * wnpp-alert: check help_requested file and handle packages with no
+    descriptions (closes: #318737)
+
+  [ Joshua Kwan ]
+  * Add a new script whodepends, written by Moshe Zadka, to check
+    which maintainers' packages depend on a particular package.
+    closes: #175832 (longstanding, huh?)
+  * checkbashims: show usage if 0 arguments provided.
+
+  [ Filippo Giunchedi ]
+  * debdiff: handle .udeb files if found in .changes (closes: #215477)
+  * debchange: add support for forcing a lower version
+    (-b/--force-bad-version) (closes: #251436, #183424)
+  * debsign: support for signing .commands files (Closes: #224523)
+  * added annotate.sh and annotate.1
+  * added archpath.sh and archpath.1, patch by Colin Watson (Closes: #319072)
+  * export DH_ALWAYS_EXCLUDE in debian/rules as we are not interested in
+    .svn/CVS directories 
+
+  [ Joey Hess ]
+  * debchange: support generating multi-developer changelogs, currently only
+    supporting the format used in this changelog entry. If multiple developers
+    are detected it will automatically add [ Full Name ] lines to disambiguate
+    who did what.
+  * debdiff: fix debdiff of dsc files to work with new dpkg-dev.
+    Closes: #313293, #314811
+  * Add debcommit, a script to commit to svn (or cvs) based on the contents of
+    the changelog, and svnpath, which it uses to generate svn tags.
+    Closes: #316577
+  * debchange: Don't allow --closes in --news mode.
+  * debchange: In --news mode, don't include "* Non-maintainer upload."
+    entries
+  * debchange: In --news mode, separate each new entry with a blank line
+    and do not add bullets, to encourage not writing NEWS files like changelog
+    files. Closes: #316660
+  * debchange: Add --release-heuristic and DEBCHANGE_RELEASE_HEURISTIC
+    options to control how it tells if a package was released.
+  * debchange: Add new "changelog" release heuristic, which looks
+    for a distribution of "UNRELEASED" in a changelog (and adds such a
+    distribution by default when making new entries). Useful for packages
+    maintained/released by multiple people.
+  * debchange: Patch from David B Harris to implement --edit option.
+    Closes: #234434
+  * Add dd-list, originally by Lars Wirzenius, rewritten in perl.
+    Closes: #316102
+  * Ignore whitespace around package names in dd-list --stdin.
+  * debchange: Add --release option.
+  * bts: update and apply Filippo's patch to add a progress display while
+    caching bugs. Closes: #237842
+  * tagpending.1: Remove obsolete note about it using LDAP.
+  * bts: add support for new version tracking extensions in the Debian BTS
+    control interface.
+  * bts: add support for "bts show package dist=stable" and the like.
+  * bts: check for additional options and die
+  * tagpending: add missing space after package limit when calling bts
+
+ -- Filippo Giunchedi <filippo@debian.org>  Wed, 20 Jul 2005 14:33:05 +0200
+
+devscripts (2.8.14) unstable; urgency=low
+
+  * uscan: fix second showstopper (broken URL parsing) (closes: #301169)
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 24 Mar 2005 14:33:05 +0000
+
+devscripts (2.8.13) unstable; urgency=low
+
+  * bts: provide --quiet option (closes: #299344)
+  * dpkg-depcheck: improve sgml catalog regexp (closes: #295845)
+  * uupdate: improve error message (closes: #267317)
+  * uscan: fix showstopper (closes: #301177)
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 24 Mar 2005 09:13:15 +0000
+
+devscripts (2.8.12) unstable; urgency=low
+
+  * bts: allow --mbox etc. options to appear after the show/bugs keyword
+    as well as before, and similarly with the "cache" command
+  * bts: allow bug numbers to end with a ":" (closes: #300965)
+  * debchange: use access rather than stat for checking file permissions
+    (closes: #298659); also do same to debi and debuild
+  * debdiff: don't hardcode wdiff path
+  * debsign: correct obsolete head syntax (closes: #300844)
+  * uscan: watch files are now version=3 (should have done this with
+    2.8.11, oops)
+  * uscan: now support DEHS-style output and --watchfile etc options
+  * uscan: also state upstream URL for newer versions (closes: #230813)
+  * uscan: handle funny upstream version numbers using multiple groups
+    (closes: #282255) and version-number mangling, both for upstream
+    version numbers (closes: #266095) and Debian version numbers (closes:
+    #261385)
+  * uscan: support --rename option to rename file instead of symlinking it
+    (closes: #227952)
+  * uscan: call find with -follow option: this should not cause any
+    problems (if it does, we can make it optional) (closes: #243758)
+
+ -- Julian Gilbey <jdg@debian.org>  Tue, 15 Mar 2005 18:41:25 +0000
+
+devscripts (2.8.11) unstable; urgency=low
+
+  * Julian Gilbey
+    - Added a dependency on sed (>= 2.95) as wnpp uses the T command (thanks
+      to Olafur Jens Sig for alerting me to this one)
+    - bts: fix --cache-mode=mbox after --cache-mode=min bug (closes: #290487)
+    - bts: quieten (hopefully) unnecessary warning from HTML::Parse for
+      funny characters (closes: #292671)
+    - debchange: support --changelog and --news options for specifying
+      changelog (closes: #219135, #261878)
+    - debchange: remove emacs backup file (closes: #297489)
+    - debchange: document --nmu in manpage (closes: #299234)
+    - debsign: check for gpg version for no-show-policy-url option
+      (closes: #293792)
+    - uscan: change behaviour with respect to directory name checking: now
+      only checks directories with matching names, rather than downloading
+      newer versions regardless (closes: #260538)
+    - uscan: handle metacharacters in directory components (closes: #262489)
+    - uscan: allow directory name patterns (not quite recursive, but it's
+      pretty much what was requested) (closes: #143284)
+  * Joshua Kwan
+    - dscverify: Don't use --emulate-md-encode-bug in dscverify anymore,
+      it's been obsoleted with gnupg 1.4.0. (closes: #293791)
+
+ -- Julian Gilbey <jdg@debian.org>  Sun, 13 Mar 2005 13:51:29 +0000
+
+devscripts (2.8.10) unstable; urgency=low
+
+  * bts: better fix for option handling bug.  Options must all appear
+    before first action name (closes: #290253 again, and prevents other
+    similar problems with tag - tagname)
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 13 Jan 2005 10:57:15 +0000
+
+devscripts (2.8.9) unstable; urgency=medium
+
+  * bts: fix option handling to allow '+' to go through again.
+    closes: #290253
+
+ -- Joshua Kwan <joshk@triplehelix.org>  Thu, 13 Jan 2005 01:17:39 -0800
+
+devscripts (2.8.8) unstable; urgency=low
+
+  * bts: fix mbox handling in 2.8.7; this also obviates the need for
+    cleaning out the cache if upgrading from 2.8.6.
+
+ -- Julian Gilbey <jdg@debian.org>  Tue, 11 Jan 2005 09:58:38 +0000
+
+devscripts (2.8.7) unstable; urgency=low
+
+  * bts: fix option handling, thanks to Tristan Seligmann (closes:
+    #289672)
+  * bts: support reading downloaded mbox versions of bugs with mutt or
+    alternative mail readers; also provide finer grained control over what
+    gets cached in general.  NOTE that this has changed some incompatible
+    changes from those introduced in version 2.8.6 (closes: #251099)
+  * debclean: remove obsolete French translation of manpage
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 10 Jan 2005 18:42:20 +0000
+
+devscripts (2.8.6) unstable; urgency=low
+
+  * Julian Gilbey
+    - bts: download attachments when caching bug reports (closes: #254102)
+    - debian/control: add Suggests: libwww-perl (closes: #277388)
+    - debchange: switch from ldap to wget for searching BTS (for
+      efficiency) (closes: #284650)
+    - tagpending: switch from ldap to wget for searching BTS (for
+      efficiency)
+    - uupdate: apply patch from Matthew Palmer to fix overwriting upstream
+      files (closes: #230090)
+
+ -- Joshua Kwan <joshk@triplehelix.org>  Tue, 28 Dec 2004 11:51:38 -0800
+
+devscripts (2.8.5) unstable; urgency=medium
+
+  * Julian Gilbey
+    - bts: fix "bts bugs :" error
+    - bts: accept "bts tags nnnnnn +tag" syntax
+    - bts: rejuvenate the close command (closes: #245956)
+    - bts: fix typo (closes: #268608)
+    - debchange: fixed pipe error (closes: #228749)
+    - debchange: requires perl >= 5.8, so make this a Depends: in the
+      control file (will be standard in sarge anyway, so it's not a
+      particularly big deal) (closes: #241138)
+    - debuild: correctly count the saved envvars (closes: #268985)
+    - debsign: correctly handle DEBSIGN_SIGNLIKE config option (closes:
+      #270262)
+    - tagpending: make ldap optional (closes: #269124)
+    - tagpending: fix -n output message (closes: #269125)
+    - tagpending: give progress output; introduce silent option
+    - uscan: support version numbers with ~ (change Devscripts::Versort to
+      simply call dpkg --compare-versions to do the work) (closes: #232286)
+    - wnpp-alert: now correctly reports on orphaned packages as well
+      (tweaked some sed scripts; don't know what was actually wrong :-/ )
+      (closes: #268948)
+  * Joshua Kwan
+    - debrsign: Warn if you passed a changes file but omitted the remote
+      address.
+    - Update debchange and tagpending for new bts2ldap gateway.
+    - Remove ${perl:Depends} from control file, dh_perl is not guessing that
+      we do actually need 5.8, and so we end up with a perl (>= 5.8), perl
+      dependency, which is wrong.
+
+ -- Joshua Kwan <joshk@triplehelix.org>  Sun, 26 Sep 2004 13:41:37 -0700
+
+devscripts (2.8.4) unstable; urgency=medium
+
+  * The Barbrady release ("Move along people, there's NOTHING TO SEE here..")
+  * Add build-depends on the perl packages that perl -c needs to do its thing.
+    Thanks Anibal Monsalve Salazar for pointing this out. Closes: #266847
+
+ -- Joshua Kwan <joshk@triplehelix.org>  Thu, 19 Aug 2004 09:13:14 -0700
+
+devscripts (2.8.3) unstable; urgency=medium
+
+  * The "timely bug report" release.
+  * uupdate.sh: [ $# ne 0 ] -> [ $# -ne 0 ]. Thanks Fumitoshi UKAI.
+    (Closes: #266221)
+  * Run perl -c on all the Perl scripts and sh -n on all of the shell
+    scripts, in foresight of future syntax errors.
+  * tagpending.sh: Add a space after the source package name. Thanks Guillem
+    Jover for pointing this out.
+  * Remove the last remnants of the abandoned debpanic script from debi.pl.
+  * bts.pl: Fix gooood crack in 'it' usage. ($it eq undef -> not defined $it.)
+    (Closes: #266717)
+
+ -- Joshua Kwan <joshk@triplehelix.org>  Wed, 18 Aug 2004 01:28:37 -0700
+
+devscripts (2.8.2) unstable; urgency=low
+
+  * tagpending.sh:
+      - s/help/usage/. Another buglet found by Steve Kowalik. Sigh!
+        (Closes: #265412)
+      - Include the source package name in the 'package' portion of
+        the generated message. (Closes: #265445)
+
+ -- Joshua Kwan <joshk@triplehelix.org>  Mon, 16 Aug 2004 13:23:10 -0700
+
+devscripts (2.8.1) unstable; urgency=medium
+
+  * debchange.pl: Don't check for -w 'debian/changelog', check whether
+    we're in debian/ first, to avoid false positives. (Closes: #264310)
+  * tagpending.sh: Steve Kowalik's personal email is s3kr1t, so don't use
+    mail(1) to send the control email, but toss it all to bts.pl which will
+    handle all the $DEBEMAIL and $EMAIL and such. (Closes: #264767)
+
+ -- Joshua Kwan <joshk@triplehelix.org>  Tue, 10 Aug 2004 09:41:14 -0700
+
+devscripts (2.8) unstable; urgency=low
+
+  * Now comaintained by Joshua Kwan and Julian Gilbey.
+  * Build system:
+    - `pwd` -> $(CURDIR) in debian/rules.
+    - Remove $(CWRAPPERS) in Makefile's clean target.
+  * archive/cvs-buildpackage: Remove.
+  * debchange:
+    - Add -n / --nmu option for NMUs. (Closes: #184944)
+    - Our BTS web parser is broken. Move to Net::LDAP and the
+      more machine-friendly bts2ldap gateway. Change the Suggests:
+      on libwww-perl to libnet-ldap-perl.
+    - Do not proceed with parsing versions and contacting the BTS if
+      debian/changelog is not writable. (Closes: #235485, #178080)
+  * debsign:
+    - Don't prompt to overwrite the dsc file (ie. may be owned by root,
+      parent dir owned by yourself) - force it and hope it works.
+      (Closes: #249950)
+    - Change nonstandard head -1 to head -n 1. (Closes: #231130)
+    - Add a versioned dependency on gnupg (>= 1.0.7), when
+      --no-show-policy-url was added. (Closes: #228938)
+  * debrsign:
+    - Add --path option to specify full path to gnupg/pgp. (Closes: #243013)
+  * debuild:
+    - Preserve GPG_TTY so that gpg-agent is recognized. (Closes: #254112)
+  * bts:
+    - Recognize the 'l10n' tag for bts. (Closes: #227735)
+    - bts.1: Fix extraneous indentation. (Closes: #236309)
+    - Allow 'it' as an alias to the previous bug referenced.
+      (Closes: #256051)
+    - cache: Fix uninitialized value warning by checking how many arguments
+      were passed. (Closes: #225317)
+  * Devscripts::Versort:
+    - Apply Roderick Schertler's patch to fix an infinite loop comparing
+      identical non-Debian revisions. (Closes: #236344)
+  * rc-alert:
+    - rc-alert.1: Add SEE ALSO for popbugs(1). (Closes: #227078)
+  * uscan:
+    - uscan.pl, uscan.1: Add brief mention for --debug. (Closes: #238655)
+    - uscan.pl: remove HTTP GET data from downloaded file. (Closes: #247175)
+  * New scripts by me:
+    - tagpending: Within a source directory, tags all bugs not already
+      'pending' to be as such. (associated: tagpending.1)
+
+ -- Joshua Kwan <joshk@triplehelix.org>  Fri,  6 Aug 2004 14:06:00 -0700
+
+devscripts (2.7.95.1) unstable; urgency=low
+
+  * bts: fixed some major blunders in bts show command: now shows
+    something in offline mode, and multiple instances of bts show work
+    concurrently
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 11 Dec 2003 18:47:25 +0000
+
+devscripts (2.7.95) unstable; urgency=low
+
+  * New script:
+    - cvs-debrelease: to complete the cvs-* scripts bundle, this one
+      replicates the debrelease behaviour
+  * bts: remove special tag:<tag> processing, as the BTS understands
+    tag:<tag> requests (thanks Colin!)
+  * cvs-deb{c,i}: call deb{c,i} directly
+  * debchange: don't give unnecessary UTF-8 warning notice (closes:
+    #222110)
+  * dscverify: fix ENOENT bug (closes: #222890)
+  * uscan: some minor cleanups
+
+ -- Julian Gilbey <jdg@debian.org>  Mon,  8 Dec 2003 23:14:49 +0000
+
+devscripts (2.7.94.3) unstable; urgency=low
+
+  * debi/debc: fix typo in determining .changes filename (closes: #221842)
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 20 Nov 2003 21:50:54 +0000
+
+devscripts (2.7.94.2) unstable; urgency=low
+
+  * Fix bts email From: line bug (closes: #221848)
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 20 Nov 2003 14:31:36 +0000
+
+devscripts (2.7.94.1) unstable; urgency=low
+
+  * And get rc-alert to work (closes: #221767)
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 20 Nov 2003 00:43:31 +0000
+
+devscripts (2.7.94) unstable; urgency=low
+
+  * Really include rc-alert (closes: #221550)
+  * debchange: fix UTF-8 problems (closes: #218785)
+
+ -- Julian Gilbey <jdg@debian.org>  Wed, 19 Nov 2003 15:26:25 +0000
+
+devscripts (2.7.93) unstable; urgency=low
+
+  * New scripts:
+    - cvs-debuild: wrapper for debuild to use cvs-buildpackage, or for
+                   cvs-buildpackage to use debuild (closes: #36344 at last!)
+    - cvs-debi, cvs-debc: wrapper for debi, debc to use in conjunction
+                   with cvs-debuild or cvs-buildpackage; function like
+                   debi and debc, but are run from the CVS working
+                   directory instead (also in #36344)
+    - rc-alert:    list all installed packages which appear in the
+                   list of packages with RC bugs
+    - wnpp-alert:  list all installed packages which appear in the WNPP
+                   orphaned or up-for-adoption lists (closes: #188246)
+  * lots of scripts: remove --ignore-dirname option and provide
+    --check-dirname-level and --check-dirname-regex along with
+    configuration file options to set the default directory name-checking
+    behaviour (closes: #218153)
+  * lots of scripts: provide --no-conf/--noconf option for all scripts
+    which read the devscripts configuration files, and provide useful
+    information when the --help option is used (closes: #218224)
+  * bts: identify itself in its automatic emails (closes: #199312)
+  * bts: dangerous "no-option" behaviour to cleancache changed
+  * bts: completely rewrite the caching system using LWP, based on an idea
+    gleaned from the original rc-alert together with knowledge of the BTS
+    internals ;-); this does give a couple of minor disadvantages, but
+    lots of major advantages too (the code is *much* cleaner now, and we
+    only need to store each page once!); there is still a slightly messy
+    converter to convert the old cache to the new format, but that shall
+    go away soonish (probably after 2-3 months or sarge release, whichever
+    is sooner), to be replaced with a simple warning
+  * bts: support "bts bugs tag:<tag>" (closes: #218494)
+  * bts: deprecate "bts close" command, following the lead of debbugs
+  * accept EMAIL as well as DEBEMAIL (closes: #219127)
+  * debi, debc: rewrote in Perl (there was so much Perl embedded, it
+    didn't make sense to leave it in shell script)
+  * debi, debc: provide --no-conf option
+  * debc/debi: support only listing/installing specified packages (closes:
+    #200372)
+  * debchange: improve regex to recognise more successful uploads (closes:
+    #218242)
+  * debchange: perform various UTF-8 checks (closes: #218785)
+  * debpkg: remove /usr/local components from PATH
+  * debsign: improve gpg/pgp selection heuristics (closes: #158614,
+    #211031)
+  * debsign: improve manpage
+  * debuild: fix command line parsing (uploaded this one as 2.7.92.1)
+    (closed #218108, #218234)
+  * debuild: more command-line parsing stuff (closes: #218379, #220900)
+  * debuild: pass -e<maint> option to debsign (oops!)
+  * debuild: deprecate -E option (dpkg-buildpackage now uses it); so only
+    -e and -r short options are left
+  * debuild: deprecate -L/--lintian option for indicating lintian options,
+    replace with --lintian-opts
+  * debuild: support linda (closes: #178456)
+  * debuild: now always recognises -d/-D options to skip/force use of
+    dpkg-checkbuilddeps (closes: #188216)
+  * grep-excuses: converted to use wget and caching instead of libwww-perl
+    (faster)
+  * plotchangelog: provided --cumulative option
+  * devscripts.conf.5: new manpage (closes: #217858)
+  * removed the dummy build, release and signchanges scripts (they were
+    renamed over four years ago)
+  * updated the devscripts.conf default file to add new programs to the
+    list
+  * note that it's really sourced by /bin/bash. not generic /bin/sh (and
+    modify the rest of the package accordingly); this cleans up a minor
+    inconsistency
+  * place symlink to the default config file in doc directory
+  * improved tempfile security in plotchangelogs, debdiff, grep-excuses
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 17 Nov 2003 22:40:29 +0000
+
+devscripts (2.7.92.1) unstable; urgency=low
+
+  * debuild: fix command line parsing (backported from 2.7.93pre2)
+    (closes: #218108, #218234)
+
+ -- Julian Gilbey <jdg@debian.org>  Fri, 31 Oct 2003 10:33:07 +0000
+
+devscripts (2.7.92) unstable; urgency=low
+
+  * Security fix: be a lot more careful when traversing directory trees
+    looking for debian/changelog files; only perform potentially harmful
+    actions if the directory name matches the package name (i.e., package
+    or package-<anything>).  Affects the following programs: debc,
+    debchange/dch, debclean, debuild, debi, debrelease, uscan, uupdate
+    (closes: #205471)
+  * bts: update tags list again (closes: #207260)
+  * bts: update BROWSER URL (closes: #207052)
+  * bts: handle '+' in package names when caching (closes: #215830)
+  * bts: provide online links instead of/as well as local ones
+  * bts: provide new commands package, owner, noowner
+  * bts: provide cleancache command
+  * bts: expire old automatically downloaded bugs from the cache
+  * bts: fix tag command for multiple tags (closes: #215986)
+  * debchange: fix off-by-one editor line error (closes: #204512)
+  * debchange: apply Matt Zimmerman's patch to support --distribution and
+    --urgency options (closes: #197106)
+  * debdiff: allow "--move-regex from to" to use $1, ... in "to" part
+    (closes: #204114)
+  * debdiff: fix syntax error (closes: #217715)
+  * debi: fix typo so only install .debs and not .udebs (closes: #207955)
+  * debsign: fix policy-url inclusion with gnupg (closes: #204685)
+  * dpkg-depcheck: check for build-essential being installed (closes:
+    #216809)
+  * dpkg-genbuilddeps: remove comment about strace bug (closes: #212277)
+  * grep-excuses: quote package name (closes: #212476)
+  * uupdate: correct syntax error when hunting reject files (closes: #206768)
+  * uupdate: *really* accept symlink options (closes: #212253)
+  * uupdate: correct symlink comment (closes: #213590)
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 27 Oct 2003 22:12:03 +0000
+
+devscripts (2.7.91) unstable; urgency=low
+
+  * debdiff: fix regex error with --move option (closes: #204113)
+  * debuild: close build log file before exiting (closes: #204076)
+  * mergechanges: use correct default filename when epochs are present
+    (closes: #195761)
+  * uupdate: fix Devscripts::Versort to not do infinite loops (closes:
+    #204192)
+  * uupdate: make -v work (closes: #204232)
+  * uupdate: handle new files introduced upstream better (closes: #197478)
+
+ -- Julian Gilbey <jdg@debian.org>  Wed,  6 Aug 2003 15:27:53 +0100
+
+devscripts (2.7.90) unstable; urgency=low
+
+  * Version number: this is heading towards 2.8.0; there are several more
+    contributed scripts to add first, though.
+  * bts: add comment on from:<submitter> and src:<package> options for bts
+    bugs (closes: #155658)
+  * bts: fix clone command (closes: #185524, #201088, #201090)
+  * bts: use sensible-browser instead of trying to parse BROWSER ourselves
+    (closes: #185827)
+  * bts: add caching capabilities (closes: #188229)
+  * bts: update list of valid tags (closes: #196751, #201149)
+  * bts: fix "sumitter" typo (closes: #203162)
+  * debchange: use new upstream version number found from changelog
+    (closes: #154144, #181974)
+  * debchange: provide --closes capability (closes: #153910)
+  * debclean: added French manpage (closes: #180224)
+  * debdiff: the --move <from> <to> should not regard the <from> as a
+    regex (closes: #183930); add --move-regex which accepts regexps
+  * debit: remove script, as debian-test has been removed from unstable
+  * debuild: fix --rootcmd bug (closes: #180862)
+  * debuild: add GPG_AGENT_INFO and remove PGPPASS to default preservation
+    list (closes: #186659)
+  * debuild: log build to log file (closes: #164585)
+  * dpkg-depcheck: give -a more functionality when used in combination
+    with -b, -d or -m (closes: #143306)
+  * dpkg-depcheck: add discard-sgml-catalogs feature (closes: #147369)
+  * plotchangelog: applied Joey's patch to add -d/--dump option (closes:
+    #182878)
+  * uupdate: added some more sanity and success checks (closes: #188711)
+  * uupdate: improved option handling (closes: #145711)
+  * uupdate: provided symlink/copy option (closes: #150845)
+  * uscan: sort directories into a sensible order before we begin and add
+    some intelligence to save some work in certain cases (closes: #156434)
+  * uscan: add some variation to the exit status (closes: #192786)
+  * uscan: clarify manpage (closes: #201278)
+  * README: added dependency information (closes: #183299)
+  * NEW SCRIPT: checkbashisms (closes: #163316)
+
+ -- Julian Gilbey <jdg@debian.org>  Fri,  1 Aug 2003 11:50:16 +0100
+
+devscripts (2.7.2) unstable; urgency=low
+
+  * bts: add sarge and experimental tags (closes: #170389)
+  * bts: add submitter command (closes: #172161)
+  * bts: reopen submitter name is optional (closes: #171046)
+  * debchange: handle upstream version numbers with : or - correctly
+    (closes: #174818)
+  * debpkg: Created a compiled debpkg wrapper so that suidperl is no
+    longer needed for debpkg to be suid root  
+  * debdiff: Quieten interdiff check when interdiff not installed and
+    sh=dash (from #168862, now reassigned to dash)
+  * debdiff: mention interdiff in control file
+  * grep_excuses: drop email grepping, as this no longer appears in
+    update_excuses output (closes: #174300)
+
+ -- Julian Gilbey <jdg@debian.org>  Wed,  1 Jan 2003 10:34:25 +0000
+
+devscripts (2.7.1) unstable; urgency=low
+
+  * The "bugfix time" release
+  * bts: support new "clone" command (closes: #141995)
+  * bts: shouldn't be noisy if no arguments received (closes: #147181)
+  * bts: browser selection code improvement (closes: #150751)
+  * debdiff: fix config file typo (closes: #149712)
+  * debpkg: untaint @ARGV to quieten perl
+  * debuild: add dpkg-checkbuilddeps command when given binary* option
+    (closes: #141159)
+  * debuild: "fakeroot :" test replaced with "fakeroot true" to work on
+    Hurd
+  * debuild: pass DEBSIGN_* environment variables (closes: #159848)
+  * debrelease: no longer collapse when a -t <host> option is given for
+    dupload
+  * debsign: remove PATH-cleaning code etc., as it actually provides no
+    security and is annoying (closes: #161509)
+  * dpkg-depcheck: Fix typo in help message (closes: #140923)
+  * dpkg-depcheck: Fix regexp (quote filename properly) (closes: #143298)
+  * uupdate: correct .orig.tar.gz handling (closes: #147657)
+  * uscan: fix to support weird dpkg version number handling
+    (closes: #159052)
+  * several perl scripts "use 5.6.0" -> "use 5.006_000" (closes: #154770)
+  * upgrade standards version (support new DEB_BUILD_OPTIONS)
+
+ -- Julian Gilbey <jdg@debian.org>  Tue,  1 Oct 2002 16:46:02 +0100
+
+devscripts (2.7.0) unstable; urgency=low
+
+  * debclean: don't remove .upload files (closes: #140161)
+  * I think it's ready enough to bump the version number!
+
+ -- Julian Gilbey <jdg@debian.org>  Sun, 31 Mar 2002 10:02:49 +0100
+
+devscripts (2.6.99) unstable; urgency=low
+
+  * debdiff: fix dsc handling on native packages (closes: #139776)
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 25 Mar 2002 08:52:34 +0000
+
+devscripts (2.6.98) unstable; urgency=low
+
+  * uscan: fix handling of HTTP-proxied FTP requests (closes: #138882)
+  * uscan: add --debug features
+
+ -- Julian Gilbey <jdg@debian.org>  Sun, 24 Mar 2002 22:51:03 +0000
+
+devscripts (2.6.97) unstable; urgency=low
+
+  * debdiff: add support for comparing source packages (closes: #94908)
+
+ -- Julian Gilbey <jdg@debian.org>  Sun, 17 Mar 2002 23:46:17 +0000
+
+devscripts (2.6.96) unstable; urgency=low
+
+  * uscan: typo in manpage (closes: #138486)
+  * uscan: allow per-site PASV/active selection (closes: #127646)
+  * add devscripts.1 manpage (closes: #138485)
+
+ -- Julian Gilbey <jdg@debian.org>  Sun, 17 Mar 2002 12:28:53 +0000
+
+devscripts (2.6.95) unstable; urgency=low
+
+  * debuild: don't die with -tc option (closes: #138478)
+
+ -- Julian Gilbey <jdg@debian.org>  Fri, 15 Mar 2002 17:14:53 +0000
+
+devscripts (2.6.94) unstable; urgency=low
+
+  * James' comment means that the procmail script can be even more
+    economical.
+  * Also correct the regexp (which would have failed in the past)
+
+ -- Julian Gilbey <jdg@debian.org>  Fri, 15 Mar 2002 16:58:53 +0000
+
+devscripts (2.6.93) unstable; urgency=low
+
+  * debuild: use lintian according to DEBUILD_LINTIAN ;-) (closes: #138445)
+  * procmail examples: update for ACCEPTED messages (closes: #138460)
+  
+ -- Julian Gilbey <jdg@debian.org>  Fri, 15 Mar 2002 16:01:31 +0000
+
+devscripts (2.6.92) unstable; urgency=low
+
+  * debdiff: fixed syntax error (closes: #138381)
+  * debdiff: and use proper logic for wdiff exit status (closes: #138383)
+
+ -- Julian Gilbey <jdg@debian.org>  Fri, 15 Mar 2002 11:17:07 +0000
+
+devscripts (2.6.91) unstable; urgency=low
+
+  * grep-excuses: fixed parsing problem (closes: #138227)
+  * uscan: fixed FTP regex
+  * uscan: chdir back to where we started between directories
+    (closes: #138232)
+  * uupdate: add (and document) bzip2 support (closes: #138247)
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 14 Mar 2002 10:06:35 +0000
+
+devscripts (2.6.90) unstable; urgency=low
+
+  * Simplified whole build process.
+  * Removed broken i18n support -- if it's wanted, we can reintroduce it
+    when Perl supports a --dump-po-strings type function (or we can write
+    it manually)
+  * devscripts now has a config file!  Yeah!  (closes: #40729)
+  * New scripts:
+    - dpkg-depcheck (from Bill Allombert <ballombe@debian.org>)
+    - grep-excuses (closes: #129444)
+    - mergechanges (closes: #130849)
+  * bts: document BROWSER in ENVIRONMENT VARIABLES section (closes:
+    #116417)
+  * bts: accepts 'tags' as a synonym for 'tag' (closes: #113262)
+  * bts: accepts --help and --version arguments
+  * debchange: allow it to understand both dupload and dput .upload
+    formats
+  * debchange: handle EMAIL='Full Name <email@address>' (closes: #133632)
+  * debchange: now uses config variable for --preserve option
+  * debchange: introduce -d/--fromdirname option (closes: #116352)
+  * debchange: clarify --newversion explanation in manpage (closes: #137392)
+  * debclean: introduced --cleandebs option and config variable: now only
+    removes .deb etc. files if specifically requested to
+  * debdiff: fixed dirs moving around among multiple packages (closes:
+    #113151)
+  * debdiff: use configuration file
+  * debrelease: can use dput or dupload (closes: #118071)
+  * debrelease: can now handle source-only uploads
+  * debrelease: use configuration file
+  * deb[r]sign: teach it about source-only .changes files
+  * debsign: don't delete signed files if the scp to transfer them back
+    failed (thanks to Joey Hess for patch) (closes: #126395)
+  * debsign: use configuration file
+  * debuild: teach it about source-only builds (closes: #114699) and
+    binary-only builds (closes: #115168)
+  * debuild: correct -E description in usage info (closes: #126171)
+  * debuild: correct -p option handling (closes: #122870)
+  * debuild: now uses configuration file (closes: #36793)
+  * debuild: check for existence of fakeroot (closes: #137605)
+  * dpkg-genbuilddeps: now a wrapper around dpkg-depcheck.  This latter
+    program can be used instead if there is a problem with strace hanging
+    on dpkg --build; simply only trace the build target.
+  * dscverify: now uses the same gpg command as katie for signature
+    verification, which has simplified the code significantly
+  * dscverify: now also check signature on .dsc file included in .changes
+    file
+  * dscverify: now uses configuration file
+  * uscan: rewrote in Perl to make handling other bugs simpler
+  * uscan: new, simpler, watch file format available, ironically also
+    allows handling of more complex http:// searches (closes: #126789)
+  * uscan: correct handling of absolute filenames (closes: #120416, #126768)
+  * uscan: verbose and non-verbose modes available (closes: #126705)
+  * uscan: report-only mode available (closes: #126705)
+  * uscan: allows choosing PASV or non-PASV (default) mode (closes: #127646)
+  * uscan: symlinks (by default) pkg_version.orig.tar.gz to downloaded
+    file (closes: #127580)
+  * uscan: now uses configuration file
+  * uupdate: correct match regexp (closes: #114798)
+  * uupdate: now uses pristine source by default (closes: #131448)
+  * debian.procmail: remove old quake list reference (closes: #136058)
+
+ -- Julian Gilbey <jdg@debian.org>  Mon,  4 Feb 2002 13:00:36 +0000
+
+devscripts (2.6.4) unstable; urgency=low
+
+  * Fix postscript typo (closes: #112437)
+  * bts: add missing tags (closes: #113240)
+  * bts: fix comment handling in bts control commands (closes: #113890)
+  * plotchangelog: add -b/--bugcount option to --help output (closes:
+    #112585)
+
+ -- Julian Gilbey <jdg@debian.org>  Mon,  1 Oct 2001 08:49:59 +0100
+
+devscripts (2.6.3) unstable; urgency=low
+
+  * bts: Fix typos (closes: #110519)
+  * bts: Implement esr's BROWSER spec (closes: #111061)
+  * bts: Multiple command caching, thanks to Colin Watson (closes:
+    #111066)
+  * bts: Recognise DEBEMAIL and fake From: line if it's set (closes:
+    #111148)
+
+ -- Julian Gilbey <jdg@debian.org>  Tue,  4 Sep 2001 15:24:53 +0100
+
+devscripts (2.6.2) unstable; urgency=low
+
+  * Get the build-indep -> build-arch change correct as well - D'Oh!
+    (closes: #110042)
+
+ -- Julian Gilbey <jdg@debian.org>  Sat, 25 Aug 2001 22:30:17 +0100
+
+devscripts (2.6.1) unstable; urgency=low
+
+  * Build-Depends-Indep -> Build-Depends (closes: #109746)
+  * bts doesn't automatically default to w3m (closes: #109699)
+
+ -- Julian Gilbey <jdg@debian.org>  Fri, 24 Aug 2001 01:53:37 +0100
+
+devscripts (2.6.0) unstable; urgency=low
+
+  * Added new "bts" script (closes: #104407)
+  * Added Ben Collins' dpkg-genbuilddeps program (note that this makes
+    this package "Architecture: any" rather than the previous
+    "Architecture: all"); unfortunately, it is currently disabled due to a
+    bug in strace (or perhaps it's in dpkg)
+  * Fix dscverify MD5 -> Digest::MD5 (required the old libmd5-perl package
+    to work correctly) (closes: #105814)
+  * Change "OK then, aborting." message in debsign (closes: #100654)
+  * Correct spelling priviledge -> privilege (closes: #101774)
+  * Improvement in uupdate tmp dir handling (thanks to Decklin Foster)
+    (closes: #106057)
+  * dscverify now accepts local keyrings (closes: #98431)
+  * Fixed plotchangelog bugs (closes: #102416, #102417)
+
+ -- Julian Gilbey <jdg@debian.org>  Tue, 21 Aug 2001 20:27:53 +0100
+
+devscripts (2.5.30) unstable; urgency=low
+
+  * Remove /etc/upload.sites if it still exists.
+  * Correct use of $! in perl scripts (closes: #97185)
+  * Add wdiff recommendation in control file for debdiff (closes: #94907)
+
+ -- Julian Gilbey <jdg@debian.org>  Wed,  6 Jun 2001 16:02:08 +0100
+
+devscripts (2.5.29) unstable; urgency=medium
+
+  * And do all of the other debian.procmail security regex's while we're
+    at it.
+
+ -- Julian Gilbey <jdg@debian.org>  Sat,  5 May 2001 22:51:04 +0100
+
+devscripts (2.5.28) unstable; urgency=medium
+
+  * Fix security hole in debian.procmail example: replace [^@] regex by
+    something more restrictive (reported by Shane Wegner <shane@debian.org>)
+
+ -- Julian Gilbey <jdg@debian.org>  Sat,  5 May 2001 22:28:20 +0100
+
+devscripts (2.5.27) unstable; urgency=low
+
+  * debdiff: compares control files in more situations (closes: #94562)
+
+ -- Julian Gilbey <jdg@debian.org>  Fri, 20 Apr 2001 17:30:43 +0100
+
+devscripts (2.5.26) unstable; urgency=low
+
+  * Fixed debdiff; added wdiff formatting options
+
+ -- Julian Gilbey <jdg@debian.org>  Tue, 17 Apr 2001 11:04:23 +0100
+
+devscripts (2.5.25) unstable; urgency=low
+
+  * Fixed plotchangelog bugs (closes: #93204, #93205)
+  * Enhanced debdiff (closes: #58459, #59827, #79952): can now diff
+    control files and see which files have moved between packages (not
+    perfect, but pretty good)
+  * dch aborts if the temporary changelog is not modified (mtime check) --
+    patch by Colin Watson <cjw44@flatline.org.uk> (closes: #72237)
+  * Improve forward.exim (master.procmail was already done) (closes: #78474)
+
+ -- Julian Gilbey <jdg@debian.org>  Tue, 17 Apr 2001 09:42:55 +0100
+
+devscripts (2.5.24) unstable; urgency=low
+
+  * Improve debpkg error handling with no options given
+  * debsign should exit with status 0 if signed file is not resigned
+    (closes: #92833)
+
+ -- Julian Gilbey <jdg@debian.org>  Wed,  4 Apr 2001 18:24:39 +0100
+
+devscripts (2.5.23) unstable; urgency=low
+
+  * Fix uscan to handle funny HTML hrefs (closes: #89749)
+
+ -- Julian Gilbey <jdg@debian.org>  Mon,  2 Apr 2001 01:01:26 +0100
+
+devscripts (2.5.22) unstable; urgency=low
+
+  * Remove dependency on gettext; there are no translations for this
+    package to date, and no easy ways of generating the needed message
+    files (closes: #92167)
+
+ -- Julian Gilbey <jdg@debian.org>  Fri, 30 Mar 2001 15:45:31 +0100
+
+devscripts (2.5.21) unstable; urgency=low
+
+  * Introduced --set-envvar option to debuild (might close #88586)
+
+ -- Julian Gilbey <jdg@debian.org>  Mon,  5 Mar 2001 15:58:59 +0000
+
+devscripts (2.5.20) unstable; urgency=low
+
+  * Modified README to refer to dpkg-statoverride instead of suidmanager
+  * debsign: Add -e option (closes: #85847)
+  * debsign: lots of improvements to bring it into line with current
+    dpkg-buildpackage
+  * Modified package description to list dependencies of each script
+  * Removed dependency on ftp (and ftp-ssl should Provide: ftp)
+    (closes: #86765)
+  * Updated for new Perl setup; changed source dependencies to cope
+  * Standards version 3.5.2
+
+ -- Julian Gilbey <jdg@debian.org>  Sun, 25 Feb 2001 14:21:01 +0000
+
+devscripts (2.5.19) unstable; urgency=low
+
+  * Quote package name in regexps (closes: #85566)
+
+ -- Julian Gilbey <jdg@debian.org>  Sun, 11 Feb 2001 22:49:28 +0000
+
+devscripts (2.5.18) unstable; urgency=low
+
+  * Correct /bin/sh -> /bin/bash in shell scripts; broke due to my
+    configure script using the shell variable BASH, which was /bin/sh when
+    /bin/sh was linked to bash.  Oops.  (closes: #85089)
+  * Correct debchange directory renaming behaviour (closes: #78468)
+  * Correct ~ -> $HOME in debrsign (closes: #81147)
+  * Changed tar I -> tar --bzip2 in uupdate (closes: #81507)
+  * Corrected uscan.1 (thanks to Jim Van Zandt) (closes: #83095)
+  * debchange: sets urgency to low automatically (closes: #83584)
+  * debclean: Correct directory changing (closes: #84309)
+  * Conflict with old suidmanager
+  * debchange: --help should never fail! (closes: #78383)
+
+ -- Julian Gilbey <jdg@debian.org>  Wed,  7 Feb 2001 10:47:28 +0000
+
+devscripts (2.5.17) unstable; urgency=low
+
+  * debuild: Allow through DEB_* and GNUPGHOME environment
+    variables. (Closes: #77822)
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 14 Dec 2000 12:03:56 +0000
+
+devscripts (2.5.16) unstable; urgency=low
+
+  * debdiff: Set locale to C before doing parsed dpkg-deb call
+    (closes: #68325 again)
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 11 Dec 2000 23:07:07 +0000
+
+devscripts (2.5.15) unstable; urgency=low
+
+  * Correct debsign typo -- oops! (closes: #79366)
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 11 Dec 2000 22:17:55 +0000
+
+devscripts (2.5.14) unstable; urgency=low
+
+  * master.procmail: add -oi option to sendmail invocation
+  * debdiff: attempt to fix hardlinks problem (closes: #68325)
+
+ -- Julian Gilbey <jdg@debian.org>  Sun, 10 Dec 2000 23:50:35 +0000
+
+devscripts (2.5.13) unstable; urgency=low
+
+  * debsign: Fix manpage (line beginning with dot disappeared)
+    (closes: #76984)
+  * debsign: Give explanatory warning message about RSA(REF) extensions if
+    gpg fails, due to silly/paranoid gpg exit values (closes: #75677)
+  * debsign: use new Changed-By field if it exists (closes: #77226)
+  * deb(r)sign: now allows signing of just a .dsc file (closes: #77822)
+  * dch: Use more intelligent way of determining name and email address
+    (thanks to Roderick Schertler, roderick@argon.org; closes: #63764)
+  * uscan: Use binary mode for ftp (closes: #67336)
+  * uscan: Use passive mode for ftp (closes: #68539)
+  * parsechangelog: put in check for libtimedate-perl package and issue
+    meaningful error message if not found (closes: #67710)
+  * master.procmail: prevent looping (closes: #65256)
+
+ -- Julian Gilbey <jdg@debian.org>  Sat,  9 Dec 2000 23:53:23 +0000
+
+devscripts (2.5.12) unstable; urgency=low
+
+  * dscverify: Correct test for --help, --version to be *after* test for
+    no arguments
+  * uupdate: allow .tar.bz2 archive files (but not yet for pristine
+    source; will do soon, once I've upgraded to woody and dpkg is ready
+    for it) (closes: #64113)
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 22 May 2000 13:55:38 +0100
+
+devscripts (2.5.11) unstable; urgency=low
+
+  * Fix checkgettext.pm so it actually works when liblocale-gettext-perl
+    is not installed (conflict with POSIX module)
+  * Modify dscverify to see the keyrings on ftp-master as well as on
+    master.
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 22 May 2000 10:27:26 +0100
+
+devscripts (2.5.10) unstable; urgency=low
+
+  * Fix debsign to check for $GNUPGHOME as well as ~/.gnupg (closes bug
+    reported by Gerfried Fuchs <alfie@innocent.com>)
+  * Fix debian-test script to work with new version of debian-test
+    (closes: #51527)
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 11 May 2000 12:04:29 +0100
+
+devscripts (2.5.9) unstable; urgency=low
+
+  * Change Getopt::Long::config back to Getopt::Long::Configure in dch as
+    this is a woody package, and I am not going to worry about slink
+    compliance any longer.
+  * debsign checks to see whether the .dsc file has already been signed
+    (closes: #54963)
+  * Fixed scp bug when changes file name is given relative to remote home
+    directory (closes: #61504)
+  * Corrected help message in debc (closes: #61541)
+  * Changed dupload recommends to suggests; all package maintainers will
+    have dupload installed anyone, one would presume (closes: #57847)
+  * Removed recommendations etc on netstd and perl(-suid) from the control
+    file as their replacements are already standard in potato.
+
+ -- Julian Gilbey <jdg@debian.org>  Tue,  4 Apr 2000 17:45:18 +0100
+
+devscripts (2.5.8) frozen unstable; urgency=low
+
+  * Correct debdiff to allow 2 *.changes files (closes: #58458)
+    (RM: this is an important bug)
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 13 Mar 2000 23:37:05 +0000
+
+devscripts (2.5.7) unstable; urgency=low
+
+  * Remove install-stamp from debian/rules
+  * Change Getopt::Long::Configure to Getopt::Long::config in dch to allow
+    the package to still work in slink (closes: #51442)
+
+ -- Julian Gilbey <jdg@debian.org>  Wed,  1 Dec 1999 00:50:44 +0000
+
+devscripts (2.5.6) unstable; urgency=low
+
+  * Correct debuild bug.  Again.  This regexp is getting silly ;)
+
+ -- Julian Gilbey <jdg@debian.org>  Wed, 24 Nov 1999 09:28:44 +0000
+
+devscripts (2.5.5) unstable; urgency=low
+
+  * Correct debuild to only pass -spgp and -sgpg options to debsign, not
+    -sa and suchlike (closes: #51065)
+
+ -- Julian Gilbey <jdg@debian.org>  Tue, 23 Nov 1999 12:18:47 +0000
+
+devscripts (2.5.4) unstable; urgency=low
+
+  * Added perl shebang test to debian-test suite
+  * Recompile to correct perl shebang line (closes: #51039 and all other
+    reports about the same thing!)
+  * Preserve DEB_BUILD_OPTIONS (request from Joseph Carter)
+
+ -- Julian Gilbey <jdg@debian.org>  Tue, 23 Nov 1999 11:19:12 +0000
+
+devscripts (2.5.3) unstable; urgency=low
+
+  * Correct uupdate syntax error (closes: #50881)
+  * Correct debsign regexp error again! (closes: #50877)
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 22 Nov 1999 18:24:00 +0000
+
+devscripts (2.5.2) unstable; urgency=low
+
+  * Fixed debrelease back in version 2.5.0 to pass on options to dupload,
+    but forgot to say so.
+  * All of the programs which look for a .changes file now accept the
+    dpkg-buildpackage/dpkg-architecture -a and -t options (again, done in
+    2.5.0)
+  * Correct 'eq' -> '-eq' in test command (and it's the third time I've
+    made that mistake in as many days...) (closes: #50549)
+  * Added a simple debian-test script to check that I get the version
+    numbering right....
+  * Added build dependecies (which wasn't really that hard...)
+  * Correct debdiff problem: forgot to chdir back after looking at first
+    changes file
+  * debit now runs debian-test *without* su nobody; I believe that it is
+    the responsibility of the test programs themselves to handle choosing
+    their userid
+  * Correct handling of .changes file entries when package is in
+    non-US/main/libs or suchlike (really closes: #50281)
+
+ -- Julian Gilbey <jdg@debian.org>  Fri, 19 Nov 1999 01:50:32 +0000
+
+devscripts (2.5.1) unstable; urgency=low
+
+  * Cleaned up Makefile.am
+  * Small correction to mustsetvar logic in uscan
+
+ -- Julian Gilbey <jdg@debian.org>  Tue, 16 Nov 1999 21:44:26 +0000
+
+devscripts (2.5.0) unstable; urgency=low
+
+  * Add -m option to deb(r)sign to parallel the behaviour of
+    dpkg-buildpackage; this is obviously desirable, and necessary to
+  * make sure that debuild pays attention to any -m, -k, -p or -s options
+    given to dpkg-buildpackage when calling debsign (should close #50281),
+    and
+  * make debsign sign the right .changes file!  (closes: #50134)
+  * Teach debdiff to fully handle potato version of dpkg -c output
+  * Make debdiff able to handle .changes files as well as just single .deb
+    files
+  * Make debdiff Perl more idiomatic
+  * Allow deb[ic] to handle multiple binary packages by parsing .changes
+    file (closes: #33699)
+  * Merged deb[ic] into one file, as their functionality is almost
+    identical
+  * Corrected a few more occurrences of manually parsing changelogs (which
+    I should have done when correcting bug #43082)
+  * Add Joey's plotchangelog program (closes: #50150)
+  * Added a README.i18n file
+  * Added James R. Van Zandt's debit script, merged into a single script
+    with debi.
+  
+ -- Julian Gilbey <jdg@debian.org>  Tue, 16 Nov 1999 02:41:57 +0000
+
+devscripts (2.4.6) unstable; urgency=low
+
+  * Rebuild with correct Perl paths
+
+ -- Julian Gilbey <jdg@debian.org>  Fri, 12 Nov 1999 02:26:42 +0000
+
+devscripts (2.4.5) unstable; urgency=low
+
+  * Remove references to libtricks package from descriptions (close:
+    #49937, even though I made the correction the day before the bug
+    report arrived!)
+  * Only suggest gnupg rather that recommend (closes: #49882)
+  * s/sprint/sprintf/ in dscverify (closes: #49721)
+  * Add --version and --help options to all programs (and this effectively
+    closes: #49554)
+  * Add long options to all programs except for deb(r)sign, as the options
+    there match those in dpkg-buildpackage (closes: #41850)
+  * No longer suggest PGP, as GNU Privacy Guard with the requisite
+    extensions should be sufficient
+  * Correct debdiff to take account of new format of dpkg-deb -c output
+    (and why did it change?)
+  * Make sure debian/rules clean really does that (error in Makefile.am)
+  * Rewrite of internals of debuild in several places, especially with
+    regard to -r handling.  Much nicer logic now.
+
+ -- Julian Gilbey <jdg@debian.org>  Fri, 12 Nov 1999 01:49:40 +0000
+
+devscripts (2.4.4) unstable; urgency=low
+
+  * Correct spurious debian/changelog.dch error message (closes: #49435)
+
+ -- Julian Gilbey <jdg@debian.org>  Sun,  7 Nov 1999 18:02:07 +0000
+
+devscripts (2.4.3) unstable; urgency=low
+
+  * Add ssh | ssh-nonfree suggest (forgot when adding remote signing
+    capabilities to deb(r)sign in 2.4.[01])
+
+ -- Julian Gilbey <jdg@debian.org>  Sun,  7 Nov 1999 02:37:17 +0000
+
+devscripts (2.4.2) unstable; urgency=low
+
+  * Change netstd dependency to netstd (<<3.07-8) | ftp dependency
+    (closes: #49322, #49331)
+
+ -- Julian Gilbey <jdg@debian.org>  Sun,  7 Nov 1999 02:24:43 +0000
+
+devscripts (2.4.1) unstable; urgency=low
+
+  * Added remote changes file functionality to debsign
+
+ -- Julian Gilbey <jdg@debian.org>  Thu,  4 Nov 1999 01:09:13 +0000
+
+devscripts (2.4.0) unstable; urgency=low
+
+  * Use Edward Betts' procmailrc examples files
+  * Suggest perl5-suid | perl-suid instead of perl-suid (closes: #42873)
+  * Corrected debchange to handle all sorts of version numbers, and to
+    use dpkg-parsechangelog for correctness (closes: #43082)
+  * Corrected dscverify: use POSIX and don't have barewords (closes: #45858)
+  * Renamed signchanges to debsign
+  * Allowed .changes name to be determined automatically by debsign
+  * Added debrsign program (closes: #44051)
+  * Cleaned up shebang lines
+  * Corrected uscan to allow absolute links (closes: #45672)
+  * Make ftp connections passive (closes: #46193)
+  * Corrected extraneous directory changing (closes: #46645)
+  * Use dpkg-parsechangelog to determine package name and version in
+    uupdate (closes: #47402)
+  * Make pgp/gpg choice of debsign behave in the same way as
+    dpkg-buildpackage.
+  * dscverify now uses GPG and will need an RSA extension to check PGP
+    signatures
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 28 Oct 1999 16:39:42 +0100
+
+devscripts (2.3.9) unstable; urgency=low
+
+  * Correct gpg signchanges patch (closes: #42188, thanks to Adam Heath)
+
+ -- Julian Gilbey <jdg@debian.org>  Sun,  8 Aug 1999 10:05:34 +0100
+
+devscripts (2.3.8) unstable; urgency=low
+
+  * Changed perl5 dependency to perl5 | perl (closes: #42329)
+
+ -- Julian Gilbey <jdg@debian.org>  Wed,  4 Aug 1999 10:32:39 +0100
+
+devscripts (2.3.7) unstable; urgency=low
+
+  * Correct html patch (closes: #41986)
+
+ -- Julian Gilbey <jdg@debian.org>  Wed, 28 Jul 1999 00:37:59 +0100
+
+devscripts (2.3.6) unstable; urgency=low
+
+  * Corrected Makefile.am bug which makes all Perl scripts begin #! @PERL@
+    -- ouch!!  (closes: #41846, part of #41850)
+
+ -- Julian Gilbey <jdg@debian.org>  Sun, 25 Jul 1999 02:12:37 +0100
+
+devscripts (2.3.5) unstable; urgency=low
+
+  * Change Suggests: libmd5-perl to libdigest-md5-perl
+  * Incorporated Joseph Carter's gpg patch to signchanges (closes: #40727)
+  * Incorporated Raphael Hertzog's patch to not depend on
+    liblocale-gettext-perl (closes: #40596)
+  * Applied Piotr Roszatycki's patch to allow uscan to use http://
+    prefixed locations (closes: #41272)
+
+ -- Julian Gilbey <jdg@debian.org>  Fri, 23 Jul 1999 09:24:53 +0100
+
+devscripts (2.3.4) unstable; urgency=low
+
+  * Change perl dependency to perl5 dependency
+
+ -- Julian Gilbey <jdg@debian.org>  Thu,  1 Jul 1999 23:02:33 +0100
+
+devscripts (2.3.3) unstable; urgency=low
+
+  * Corrected debpkg manpage (closes: #40279)
+  * Remove dependency on dupload (closes: #40382)
+  * Add -p (preserve directory name) option to dch (closes: #39385)
+
+ -- Julian Gilbey <jdg@debian.org>  Thu,  1 Jul 1999 02:54:24 +0100
+
+devscripts (2.3.2) unstable; urgency=low
+
+  * More corrections to uscan, with thanks to Thomas Quinot.  Closes:
+    #40227
+  * Added -e/-E options to debuild (closes: #40071)
+
+ -- Julian Gilbey <jdg@debian.org>  Sun, 27 Jun 1999 03:00:22 +0100
+
+devscripts (2.3.1) unstable; urgency=low
+
+  * Really fix bug#38798 this time: versort and uscan now work correctly
+    together
+
+ -- Julian Gilbey <jdg@debian.org>  Tue, 22 Jun 1999 00:45:52 +0100
+
+devscripts (2.3.0) unstable; urgency=low
+
+  * Reinstated the release script (renamed as debrelease) (closes #34122)
+  * dch can now determine (in conjunction with dupload 2.1) whether or not
+    to increment the version number without needing an explicit option
+    (closes #34130)
+  * Internationalisation of the package
+  * Correct the (internal) versort library file description (closes:
+    #38798)
+
+ -- Julian Gilbey <jdg@debian.org>  Tue, 22 Jun 1999 00:45:39 +0100
+
+devscripts (2.2.7) unstable; urgency=low
+
+  * signchanges now correctly handles signing binary-only changes files
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 31 May 1999 22:35:20 +0100
+
+devscripts (2.2.6) unstable; urgency=low
+
+  * Corrected silly dscverify bug so it now works with filenames with no
+    directory components -- duh!  (closes: #38065)
+  * Corrected perl regexp in signchanges so it now finds the dsc file
+    (closes: #38049)
+
+ -- Julian Gilbey <jdg@debian.org>  Sun, 23 May 1999 16:44:32 +0100
+
+devscripts (2.2.5) unstable; urgency=high
+
+  * Now only recommend fakeroot (and not libtricks) to alleviate grave
+    bug #37592 against dpkg
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 13 May 1999 01:45:02 +0100
+
+devscripts (2.2.4) unstable; urgency=low
+
+  * debchange/dch now looks for environment variable DEBEMAIL before
+    EMAIL (closes: #37199)
+
+ -- Julian Gilbey <jdg@debian.org>  Wed,  5 May 1999 23:55:15 +0100
+
+devscripts (2.2.3) unstable; urgency=low
+
+  * Correct debdiff Perl error and inconsistency
+
+ -- Julian Gilbey <jdg@debian.org>  Tue,  4 May 1999 05:01:17 +0100
+
+devscripts (2.2.2) unstable; urgency=low
+
+  * Fixed signchanges to die if PGP fails, rather than to wipe the
+    unsigned .changes file (closes: #36625)
+
+ -- Julian Gilbey <jdg@debian.org>  Tue, 27 Apr 1999 01:57:57 +0100
+
+devscripts (2.2.1) unstable; urgency=low
+
+  * Correct copyright notice in debdiff.1
+
+ -- Julian Gilbey <jdg@debian.org>  Wed, 21 Apr 1999 02:10:59 +0100
+
+devscripts (2.2.0) unstable; urgency=low
+
+  * Merged Yann's debdiff manpage with my attempt; bumping up the minor
+    number because of the new program
+  * Simplified debdiff's exit values
+  * debdiff is now licensed under version 2 of the GPL, rather than
+    version 2 or later
+  * Modified debchange/dch to always use the current date at the end of
+    the changelog section, even when adding an entry
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 19 Apr 1999 20:00:34 +0100
+
+devscripts (2.1.6) unstable; urgency=low
+
+  * Modify debdiff to ignore the destinations of symlinks
+
+ -- Julian Gilbey <jdg@debian.org>  Tue, 13 Apr 1999 23:44:47 +0100
+
+devscripts (2.1.5) unstable; urgency=low
+
+  * Now only Suggests: rather than Recommend: perl-suid (closes: #35635)
+  * Added Roderick's patch to dscverify, and added a change directory
+    feature of my own: a .changes file may be in any directory, and the
+    program will cd to that directory before trying to read any files
+    (closes: #34255)
+  * Added a rewritten, Perl version, of Yann Dirson's debdiff script
+    (closes: #34781)
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 12 Apr 1999 22:50:44 +0100
+
+devscripts (2.1.4) unstable; urgency=low
+
+  * Modify versort to be locale-independent, matching the corresponding
+    expected change in dpkg
+
+ -- Julian Gilbey <jdg@debian.org>  Wed,  3 Mar 1999 01:10:37 +0000
+
+devscripts (2.1.3) unstable; urgency=low
+
+  * Removed CVS files from .orig.tar.gz file!
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 25 Feb 1999 19:57:50 +0000
+
+devscripts (2.1.2) unstable; urgency=low
+
+  * Made debpkg pick up gid root as well as uid root
+
+ -- Julian Gilbey <jdg@debian.org>  Tue, 23 Feb 1999 18:08:23 +0000
+
+devscripts (2.1.1) unstable; urgency=low
+
+  * Moved package from utils to devel (closes: #33410)
+
+ -- Julian Gilbey <jdg@debian.org>  Sun, 21 Feb 1999 00:52:26 +0000
+
+devscripts (2.1.0) unstable; urgency=low
+
+  * Correct README to refer to libtricks package rather than fakeroot
+    package (closes: #32736)
+  * Modify uupdate to accept a -u argument to keep an Upstream pristine
+    source (closes: #32680, #12443); bump up the minor version number for
+    this
+  * A few other miscellaneous bug fixes to uupdate to be stricter about
+    seeming problems
+  * Added a new program: signchanges for signing a .changes/.dsc pair
+    without needing any of the rest of the source or binary files to be
+    present; this is useful for when a developer must build a package on
+    a machine other than the one on which he is signing
+
+ -- Julian Gilbey <jdg@debian.org>  Wed,  3 Feb 1999 02:31:15 +0000
+
+devscripts (2.0.6) unstable; urgency=low
+
+  * Updated man page for uupdate to reflect change in 2.0.5
+
+ -- Julian Gilbey <jdg@debian.org>  Wed, 20 Jan 1999 12:44:11 +0000
+
+devscripts (2.0.5) unstable; urgency=low
+
+  * Made test invocations POSIX compliant by removing -a connectives
+  * Uupdate now also accepts an absolute filename (closes: #31884)
+  * Allowed debuild to accept a space after the -r option
+  * More checks in uupdate to make it more robust
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 18 Jan 1999 16:51:16 +0000
+
+devscripts (2.0.4) unstable; urgency=low
+
+  * Changed control file to refer to package libtricks rather than old
+    name fakeroot (spotted by Edward Betts)
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 11 Jan 1999 00:24:02 +0000
+
+devscripts (2.0.3) unstable; urgency=medium
+
+  * Second attempt at correcting critical /tmp security bug (thanks to
+    Joey Hess!)
+
+ -- Julian Gilbey <jdg@debian.org>  Thu,  7 Jan 1999 22:46:01 +0000
+
+devscripts (2.0.2) unstable; urgency=low
+
+  * Disallow debchange and uupdate from being run by root or setuid; this
+    prevents possible /tmp exploits (Spotted by Joey Hess)
+  * Use the TMPDIR environment variable instead of /tmp if it is set
+    (requested by Zephaniah E, Hull)
+
+ -- Julian Gilbey <jdg@debian.org>  Thu,  7 Jan 1999 21:56:11 +0000
+
+devscripts (2.0.1) unstable; urgency=low
+
+  * Corrected silly LIBDIR bug in uscan
+  * Corrected missing newline characted in debchange
+
+ -- Julian Gilbey <jdg@debian.org>  Thu,  7 Jan 1999 18:24:58 +0000
+
+devscripts (2.0.0) unstable; urgency=low
+
+  * New maintainer
+  * Standards: 2.5.0.0
+  * New version numbering scheme: major.minor.patchlevel
+  * Changed the name of build to debuild.  build now just prints an error
+    message and will disappear completely in the near future.
+  * Correct handling of epochs in debc, debi and release (closes: #29855)
+  * Use environment variables EDITOR, then VISUAL, and failing that,
+    /usr/bin/editor in accordance with policy 5.3 (except that VISUAL is
+    not mentioned there)  (closes: #28605)
+  * Many modifications to uscan: it now compares version numbers
+    correctly, using a Perl script which works in a similar way to
+    dpkg --compare-versions, and it no longer has the extra 0 bug
+    (closes: #19235, #19467); it no longer uses ncftp but only ftp
+    (closes: #20968)
+  * uscan now expects the watch file to explicitly indicate how to deduce
+    the version number from the filename, by writing the filename as a
+    Perl regular expression and enclosing the version number part in (...)
+  * uupdate now allows a version number as an argument after the archive
+    filename, allowing it to work in harmony with uscan (closes: #20278)
+  * uupdate no longer tries to remove *.orig files, as the only ones which
+    are created by GNU patch are those where the patch failed, and we
+    probably _want_ to keep those (closes: #25774)
+  * build rewritten in Perl (now called debuild); has a nicer handling of
+    command line options (can accept a -r option with one of binary etc.,
+    and doesn't need an explicit -r option if there are other
+    dpkg-buildpackage options)  (closes: #27752)
+  * debpkg rewritten in Perl as well
+  * This package is now an Architecture: all package as there are no
+    binaries left
+  * debchange now uses the last distributions mentioned in the changelog
+    as the default for the new version (closes: #30204)
+  * debchange now uses the environment variables DEBFULLNAME and EMAIL as
+    the uploader's details if these are set
+  * release has been deprecated in favour of dupload, and now just prints
+    a message suggesting the use of dupload instead (Closes: #29826,
+    #29978)
+  * The debchange command line options have been changed.  debchange no
+    longer pays attention to the presence of a RELEASED file.  The -i
+    option is for Increasing the Debian release number; the -a option is
+    for Appending to the current version, and the -v option specifies a
+    specific version number.  One of these is mandatory
+  * Debchange now adds new changelog entries to the END of the current
+    section, rather than the beginning
+  * Improved logic of upgrading the Debian release number in debchange
+  * Debchange does not supply a release number if there is an explicit
+    version number provided
+  * Now debchange works on a version of the changelog in /tmp and only
+    overwrites the current changelog if everything is OK; this is much
+    safer than the original version.  Also, all system calls have their
+    return status checked
+  * release and build now print error messages suggesting their
+    replacements
+  * debuild now runs lintian by default if it is installed; there is an
+    override facility etc., as described in the manpage (Closes: #18254)
+  * Added Roderick Schertler's dscverify program to devscripts
+  * Rewrote many bits of many man pages
+  * debian/rules and Makefile modified to use debhelper
+
+ -- Julian Gilbey <jdg@debian.org>  Thu,  7 Jan 1999 02:46:04 +0000
+
+devscripts (1.7.1) frozen unstable; urgency=medium
+
+  * Corrected file permissions (Closes: #31447)
+
+ -- Julian Gilbey <jdg@debian.org>  Mon,  4 Jan 1999 10:29:19 +0000
+
+devscripts (1.7) frozen unstable; urgency=low
+
+  * Changed uupdate to be more choosy about the version numbers
+    automatically recognised  (Closes: #30838)
+  * New maintainer
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 24 Dec 1998 13:07:13 +0000
+
+devscripts (1.6) unstable; urgency=low
+
+  * #23098 build manpage update
+  * #23097 build: Preserve FAKEROOTKEY
+  * #19172 remove description for deblint
+  * #18564 depend on mailx
+  * #14314 release: epochs work now.
+  * #18498 conffiles are now absolute
+  * #24455 #24074 release: new scp requires -q option
+
+ -- Christoph Lameter <clameter@debian.org>  Sat, 11 Jul 1998 21:45:47 -0700
+
+devscripts (1.5) unstable; urgency=low
+
+  * #18235: build checks for executable bit on debian/rules and sets it if
+    not set before building package. build fails when debian/rules is not
+    present.
+
+ -- Christoph Lameter <clameter@debian.org>  Sun, 15 Feb 1998 20:01:09 -0800
+
+devscripts (1.4) unstable; urgency=low
+
+  * Upgrade to 2.4.0.0
+  * remove deblint from the package since there is now lintian which is much
+    better.
+
+ -- Christoph Lameter <clameter@debian.org>  Sat, 14 Feb 1998 14:37:42 -0800
+
+devscripts (1.3) unstable; urgency=low
+
+  * build: change default path. Remove sbin dirs add /usr/local/bin
+
+ -- Christoph Lameter <clameter@debian.org>  Wed,  4 Feb 1998 13:07:04 -0800
+
+devscripts (1.2) unstable; urgency=low
+
+  * Fix a problem with anonymous ftp upload of larger lists of files.
+  * Remove ftp.fuller.edu and lalug.org upload queue since they no longer exist.
+  * Add anonymous ftp type upload capability.
+  * Add third party site upload capability.
+  * Add debs.fuller.edu site information
+
+ -- Christoph Lameter <clameter@debian.org>  Tue,  2 Dec 1997 12:53:18 -0800
+
+devscripts (1.1) unstable; urgency=low
+
+  * Remove release fix for epochs introduced in 1.0 since it breaks lots of
+    things until I figure out what is wrong.
+  * Drop dependency on fileutils.
+
+ -- Christoph Lameter <clameter@debian.org>  Wed, 29 Oct 1997 17:14:26 -0800
+
+devscripts (1.0) unstable; urgency=low
+
+  * release: Make scp not ask anything so release does not hang when scp
+    wants a password.
+  * #13908 Try to fix release so that it handles epochs.
+  * #13681 Fix manpage for release to indicate that no annoucements will be
+    generated when dupload is used.
+  * #13777 no longer use printf in debchange (dch)
+  * #13846 Output Format of release changed
+  * Suggest fakeroot
+  * Split off from debmake
+  * Update documentation
+
+ -- Christoph Lameter <clameter@debian.org>  Mon, 20 Oct 1997 21:02:27 -0700

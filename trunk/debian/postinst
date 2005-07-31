@@ -1,0 +1,151 @@
+#! /bin/sh -e
+
+if [ "$1" = configure ]
+then
+    if dpkg --compare-versions "$2" lt 2.6.90 && [ ! -f /etc/devscripts.conf ]
+    then
+	cp /usr/share/devscripts/conf.default /etc/devscripts.conf
+    elif [ -f /etc/devscripts.conf ]
+    then
+	if dpkg --compare-versions "$2" lt 2.7.1
+	then
+	    # This is for bug #149712.  Oops.
+	    perl -i -pe 's/DEBDIFF_SHOWMOVED/DEBDIFF_SHOW_MOVED/g' \
+		/etc/devscripts.conf
+	fi
+
+	if dpkg --compare-versions "$2" lt 2.7.90
+	then
+	# Added in devscripts 2.7.90:
+	    cat >> /etc/devscripts.conf <<EOF
+
+# debchange/dch option added in version 2.7.90:
+# 
+# Query the BTS when --closes is being used?
+# DEBCHANGE_QUERY_BTS=yes
+# 
+# uupdate option added in version 2.7.90:
+# 
+# Should we symlink the .orig.tar.gz file to its new name or
+# copy it instead?  yes=symlink, no=copy
+# UUPDATE_SYMLINK_ORIG=yes
+EOF
+	fi
+
+	if dpkg --compare-versions "$2" lt 2.7.93
+	then
+	# Added in devscripts 2.7.93:
+	    cat >> /etc/devscripts.conf <<EOF
+
+# debuild options added in version 2.7.93:
+# 
+# Do we run linda at the end of a full run?
+# DEBUILD_LINDA=no
+# 
+# Extra options given to linda before any command-line options
+# specified.
+# DEBUILD_LINDA_OPTS=""
+
+##### Package-wide variables first introduced in version 2.7.93:
+# 
+# Lists of which scripts are affected by these package-wide variables
+# can be found in the devscripts.conf(5) manpage.
+# 
+# 
+# Directory Name Checking
+# 
+# Several programs check the directory name and refuse to function if
+# it does not match the name of the package being worked on.  (The
+# details are described in the individual manpages.)
+# These two variables control this behaviour, corresponding to the
+# --check-dirname-level and --check-dirname-regex command line options.
+# The possible values of DEVSCRIPTS_CHECK_DIRNAME_LEVEL are:
+#   0    never check the directory name
+#   1    check the directory name only if the program has changed directory
+#   2    always check the directory name
+# The variable DEVSCRIPTS_DIRNAME_REGEXP is a Perl regex which
+# defines what is considered a valid directory name for the source
+# package PACKAGE; if it includes a '/', then it must match the full
+# directory path, otherwise it must match the full directory name.
+# 
+# The default settings are:
+# DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1
+# DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.*)?'
+EOF
+	fi
+
+	if [ "$2" = "2.8.6" ]
+	then
+	# Added in devscripts 2.8.6:
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### bts options changes between version 2.8.6 and version 2.8.7:
+# 
+# The following option replaces the previous BTS_FULL_MIRROR option.
+# How much to mirror when caching?  The minimal amount (min), the mbox
+# version as well (mbox) or the whole works (full)?
+# BTS_CACHE_MODE=min
+# 
+# The following is a new option
+# How do we read an mbox?  This will be split on whitespace, then
+# %s is replaced by the mbox name and %% by a single %.
+# BTS_MAIL_READER='mutt -f %s'
+EOF
+	elif dpkg --compare-versions "$2" lt 2.8.7
+	then
+	# Added in devscripts 2.8.6 and 2.8.7:
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### bts options added in versions 2.8.6 and 2.8.7:
+# 
+# Default bts show/bugs to run in offline mode?
+# BTS_OFFLINE=no
+# 
+# Cache all visited bug reports once a cache has been established
+# for the first time?
+# BTS_CACHE=yes
+# 
+# How much to mirror when caching?  The minimal amount (min), the mbox
+# version as well (mbox) or the whole works (full)?
+# BTS_CACHE_MODE=min
+# 
+# Always refresh the cache, even if nothing's changed?
+# BTS_FORCE_REFRESH=no
+# 
+# How do we read an mbox?  This will be split on whitespace, then
+# %s is replaced by the mbox name and %% by a single %.
+# BTS_MAIL_READER='mutt -f %s'
+EOF
+	fi
+
+	if dpkg --compare-versions "$2" lt 2.8.12
+	then
+	# Added in devscripts 2.8.12:
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### uscan option added in version 2.8.12:
+# 
+# Should we use DEHS style output (XML format)?
+# USCAN_DEHS_OUTPUT=no
+# 
+EOF
+	fi
+
+	if dpkg --compare-versions "$2" lt 2.8.15
+	then
+	# Added in devscripts 2.8.12:
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### debchange option added in version 2.8.15:
+# 
+# Select a heuristic to use to determine whether the package has released.
+# See the debchange man page for details.
+# DEBCHANGE_RELEASE_HEURISTIC=log
+# DEBCHANGE_RELEASE_HEURISTIC=changelog
+# 
+EOF
+	fi
+    fi
+fi
+
+#DEBHELPER#

@@ -1,0 +1,130 @@
+.\" This file was generated with po4a. Translate the source file.
+.\" 
+.TH DEBSIGN 1 "Utilitaires Debian" DEBIAN \"
+.SH NOM
+debsign \- signe une paire de fichiers «\ changes\ » et «\ dsc\ » Debian avec GPG 
+ou PGP
+.SH SYNOPSIS
+\fBdebsign\fP [options] [\fIfichier\-changes\fP|\fIfichier\-dsc\fP]
+.SH DESCRIPTION
+\fBdebsign\fP copie les aspects (et les bogues) concernant la signature de 
+\fBdpkg\-buildpackage\fP(1). Il prend en argument soit un fichier \fI.dsc\fP non 
+signé, soit un fichier \fI.changes\fP non signé (avec le fichier \fI.dsc\fP 
+associé, qui est trouvé en remplaçant le nom de l'architecture et 
+l'extension \fI.changes\fP par \fI.dsc\fP s'il apparaît dans le fichier 
+\&\fI.changes\fP), et les signe en utilisant GNU Privacy Guard ou PGP. Il fait 
+attention à calculer la taille et la somme MD5 du nouveau fichier \fI.dsc\fP 
+signé et remplace les valeurs du fichier \fI.changes\fP.
+.PP
+Si un fichier \fI.changes\fP ou \fI.dsc\fP est spécifié, il est signé. Sinon, 
+\fIdebian/changelog\fP est analysé pour déterminer le nom du fichier 
+\&\fI.changes\fP à rechercher dans le répertoire parent.
+.PP
+Cet utilitaire permet à un développeur de construire un paquet sur une 
+machine où il serait dangereux (du point de vue de la sécurité) de réaliser 
+une signature. Il suffit de transférer les petits fichiers \fI.dsc\fP et 
+\&\fI.changes\fP sur une machine sûre et d'utiliser le programme \fBdebsign\fP pour 
+les signer avant de les renvoyer. Ce processus peut être automatisé de deux 
+façons. Si les fichiers à signer se trouvent sur la machine distante, 
+l'option \fB\-r\fP peut être utilisée pour les copier sur la machine locale où 
+ils seront signés puis de les recopier sur la machine distante. Si les 
+fichiers se trouvent sur la machine locale, ils peuvent être transférés sur 
+la machine distante pour être signés en utilisant \fBdebrsign\fP(1).
+.PP
+Ce programme peut utiliser des paramètres par défaut des fichiers de 
+configuration de \fBdevscripts\fP, comme décrit ci\-dessous.
+.SH OPTIONS
+.TP
+\fB\-r\fP [\fInom_utilisateur\fP@]\fIhôte_distant\fP
+Les fichiers \fI.changes\fP et \fI.dsc\fP se trouvent sur l'hôte distant 
+spécifié. Dans ce cas, un fichier \fI.changes\fP doit être explicitement nommé, 
+avec un nom de répertoire absolu ou relatif au répertoire personnel 
+distant. SSH sera utilisé pour le transfert. La syntaxe 
+[\fInom_utilisateur\fP@]\fIhôte_distant\fP:\fIfichier_changes\fP est également 
+permise.
+.TP
+\fB\-p\fP\fIprogramme\fP
+Le \fIprogramme\fP peut être \fBpgp\fP ou \fBgpg\fP. Il spécifie le programme utilisé 
+pour la signature. Par défaut, \fBgpg\fP est utilisé si \fI~/.gnupg/secring.gpg\fP 
+existe et \fBpgp\fP sinon.
+.TP
+\fB\-m\fP\fIresponsable\fP
+Spécifie le nom du responsable à utiliser pour la signature. Voir 
+\fBdpkg\-buildpackage\fP(1) pour plus d'informations concernant les différences 
+entre \fB\-m\fP, \fB\-e\fP et \fB\-k\fP lors de la construction des paquets\ ; \fBdebsign\fP 
+ne fait pas ces distinctions à l'exception qu'il respecte l'ordre de 
+priorité des différentes options. Ces différentes options sont fournies de 
+manière à ce que ce programme se comporte comme prévu lorsqu'il est appelé 
+par \fBdebuild\fP(1).
+.TP
+\fB\-e\fP\fIresponsable\fP
+Identique à \fB\-m\fP, mais a le dernier mot.
+.TP
+\fB\-k\fP\fIidentifiant_clef\fP
+Spécifie l'identifiant de la clef à utiliser pour la signature. Cette option 
+prévaut sur toute utilisation des options \fB\-m\fP et \fB\-e\fP.
+.TP
+\fB\-spgp\fP, \fB\-sgpg\fP
+Indique si le programme utilisé pour signer est appelé avec les arguments en 
+ligne de commande de \fBpgp\fP ou de \fBgpg\fP.
+.TP
+\fB\-S\fP
+Cherche un fichier \fI.changes\fP «\ source\-only\ » (source uniquement) plutôt 
+qu'un fichier «\ changes\ » correspondant à un paquet binaire.
+.TP
+\fB\-a\fP\fIarchitecture\-debian\fP, \fB\-t\fP\fItype\-de\-système\-GNU\fP
+Veuillez consulter \fBdpkg\-architecture\fP(1) pour une description de ces 
+options. Ces options affectent la recherche du fichier \fI.changes\fP. Elles 
+consistent à imiter le comportement de \fBdpkg\-buildpackage\fP lors de la 
+détermination du nom du fichier \fI.changes\fP. 
+.TP
+\fB\-\-no\-conf\fP, \fB\-\-noconf\fP
+Ne lit aucun fichier de configuration. L'option ne peut être utilisée qu'en 
+première position de la ligne de commande.
+.TP
+\fB\-\-help\fP, \fB\-h\fP
+Affiche un message d'aide et quitte avec succès.
+.TP
+\fB\-\-version\fP
+Affiche la version et le copyright, puis quitte avec succès.
+.SH "VARIABLES DE CONFIGURATION"
+Les deux fichiers de configuration \fI/etc/devscripts.conf\fP et 
+\fI~/.devscripts\fP sont évalués dans cet ordre pour placer les variables de 
+configuration. Des options de ligne de commande peuvent être utilisées pour 
+neutraliser les paramètres des fichiers de configuration. Les variables 
+d'environnement sont ignorées à cette fin. Les variables actuellement 
+identifiées sont\ :
+.TP
+\fBDEBSIGN_PROGRAM\fP
+Équivaut à fournir une option \fB\-p\fP.
+.TP
+\fBDEBSIGN_SIGNLIKE\fP
+Les valeurs autorisées sont \fIgpg\fP et \fIpgp\fP. Ce qui équivaut à utiliser 
+respectivement les options \fB\-sgpg\fP ou \fB\-spgp\fP.
+.TP
+\fBDEBSIGN_MAINT\fP
+Équivaut à utiliser l'option \fB\-m\fP.
+.TP
+\fBDEBSIGN_KEYID\fP
+Équivaut à utiliser l'option \fB\-k\fP.
+.SH "VOIR AUSSI"
+\fBdebrsign\fP(1), \fBdpkg\-buildpackage\fP(1), \fBdpkg\-architecture\fP(1), 
+\fBdebuild\fP(1), \fBmd5sum\fP(1), \fBgpg\fP(1), \fBpgp\fP(1) et \fBdevscripts.conf\fP(5).
+.SH AUTEUR
+Ce programme a été écrit par Julian Gilbey <jdg@debian.org> et est 
+distribué sous licence GPL, version 2 ou ultérieure.
+.SH TRADUCTION
+Ce document est une traduction, réalisée par Nicolas FRANÇOIS le
+21 janvier 2005.
+
+L'équipe de traduction a fait le maximum pour réaliser une adaptation
+française de qualité.
+
+La version anglaise la plus à jour de ce document est toujours consultable
+en ajoutant l'option «\ \-L\ C\ » à la commande \fBman\fR.
+
+N'hésitez pas à signaler à l'auteur ou à la liste de traduction
+.nh
+<\fIdebian\-l10\-french@lists.debian.org\fR>,
+.hy
+selon le cas, toute erreur dans cette page de manuel.

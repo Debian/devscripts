@@ -1,0 +1,105 @@
+.TH DEBC 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+debc \- view contents of a generated Debian package
+.SH SYNOPSIS
+\fBdebc\fP [\fIoptions\fR] [\fIchanges file\fR] [\fIpackage\fR ...]
+.SH DESCRIPTION
+\fBdebc\fR figures out the current version of a package and displays
+information about the .deb files which have been generated in the
+current build process.  If a \fI.changes\fR file is specified on the
+command line, the filename must end with \fI.changes\fR, as this is
+how the program distinguishes it from package names.  If not, then
+\fBdebc\fR has to be called from within the source code directory
+tree.  In this case, it will look for the \fI.changes\fR file
+corresponding to the current package version (by determining the name
+and version number from the changelog, and the architecture in the
+same way as \fBdpkg-buildpackage\fR(1) does).  It then runs
+\fBdpkg-deb \-I\fR and \fBdpkg-deb \-c\fR on every \fI.deb\fR archive
+listed in the \fI.changes\fR file to display information about the
+contents of the \fI.deb\fR files.  It precedes every \fI.deb\fR file
+with the name of the file.  It assumes that all of the \fI.deb\fR
+archives live in the same directory as the \fI.changes\fR file.  It is
+useful for ensuring that the expected files have ended up in the
+Debian package.
+.PP
+If a list of packages is given on the command line, then only those
+debs with names in this list of packages will be installed.
+.SH "Directory name checking"
+In common with several other scripts in the \fBdevscripts\fR package,
+\fBdebi\fR will climb the directory tree until it finds a
+\fIdebian/changelog\fR file.  As a safeguard against stray files
+causing potential problems, it will examine the name of the parent
+directory once it finds the \fIdebian/changelog\fR file, and check
+that the directory name corresponds to the package name.  Precisely
+how it does this is controlled by two configuration file variables
+DEVSCRIPTS_CHECK_DIRNAME_LEVEL and DEVSCRIPTS_CHECK_DIRNAME_REGEX, and
+their corresponding command-line options \fB\-\-check-dirname-level\fR
+and \fB\-\-check-dirname-regex\fR.
+.PP
+DEVSCRIPTS_CHECK_DIRNAME_LEVEL can take the following values:
+.TP
+.B 0
+Never check the directory name.
+.TP
+.B 1
+Only check the directory name if we have had to change directory in
+our search for \fIdebian/changelog\fR.  This is the default behaviour.
+.TP
+.B 2
+Always check the directory name.
+.PP
+The directory name is checked by testing whether the current directory
+name (as determined by \fBpwd\fR(1)) matches the regex given by the
+configuration file option DEVSCRIPTS_CHECK_DIRNAME_REGEX or by the
+command line option \fB\-\-check-dirname-regex\fR \fIregex\fR.  Here
+\fIregex\fR is a Perl regex (see \fBperlre\fR(3perl)), which will be
+anchored at the beginning and the end.  If \fIregex\fR contains a '/',
+then it must match the full directory path.  If not, then it must
+match the full directory name.  If \fIregex\fR contains the string
+\'PACKAGE', this will be replaced by the source package name, as
+determined from the changelog.  The default value for the regex is:
+\'PACKAGE(-.*)?', thus matching directory names such as PACKAGE and
+PACKAGE-version.
+.SH OPTIONS
+.TP
+\fB\-a\fIdebian-architecture\fR, \fB\-t\fIGNU-system-type\fR
+See \fBdpkg-architecture\fR(1) for a description of these options.
+They affect the search for the \fI.changes\fR file.  They are provided
+to mimic the behaviour of \fBdpkg-buildpackage\fR when determining the
+name of the \fI.changes\fR file.
+.TP
+\fB\-\-check-dirname-level\fR \fIN\fR
+See the above section "Directory name checking" for an explanation of
+this option.
+.TP
+\fB\-\-check-dirname-regex\fR \fIregex\fR
+See the above section "Directory name checking" for an explanation of
+this option.
+.TP
+\fB\-\-no-conf\fR, \fB\-\-noconf\fR
+Do not read any configuration files.  This can only be used as the
+first option given on the command-line.
+.TP
+\fB\-\-help\fR, \fB\-\-version\fR
+Show help message and version information respectively.
+.SH "CONFIGURATION VARIABLES"
+The two configuration files \fI/etc/devscripts.conf\fR and
+\fI~/.devscripts\fR are sourced in that order to set configuration
+variables.  Command line options can be used to override configuration
+file settings.  Environment variable settings are ignored for this
+purpose.  The currently recognised variables are:
+.TP
+.BR DEVSCRIPTS_CHECK_DIRNAME_LEVEL ", " DEVSCRIPTS_CHECK_DIRNAME_REGEX
+See the above section "Directory name checking" for an explanation of
+these variables.  Note that these are package-wide configuration
+variables, and will therefore affect all \fBdevscripts\fR scripts
+which check their value, as described in their respective manpages and
+in \fBdevscripts.conf\fR(5).
+.SH "SEE ALSO"
+.BR dpkg-deb (8),
+.BR debdiff (1)
+and
+.BR devscripts.conf (5).
+.SH AUTHOR
+Julian Gilbey <jdg@debian.org>, based on an original script by
+Christoph Lameter <clameter@debian.org>.

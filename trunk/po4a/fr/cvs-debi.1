@@ -1,0 +1,86 @@
+.\" This file was generated with po4a. Translate the source file.
+.\" 
+.TH CVS\-DEBI 1 "Utilitaires Debian" DEBIAN \"
+.SH NOM
+cvs\-debi \- installe un paquet généré par cvs\-buildpackage ou cvs\-debuild
+.SH SYNOPSIS
+\fBcvs\-debi\fP [\fIoptions\fP] [\fIpaquet\fP ...]
+.SH DESCRIPTION
+\fBcvs\-debi\fP est exécuté après \fBcvs\-buildpackage\fP ou \fBcvs\-debuild\fP depuis 
+le répertoire de travail CVS. Il utilise le système \fBcvs\-buildpackage\fP pour 
+trouver le fichier \fI.changes\fP généré au cours de cette exécution. Il 
+installe ensuite avec \fBdebpkg \-i\fP toutes les archives \fI.deb\fP listées dans 
+le fichier \fI.changes\fP, en supposant que toutes ces archives \fI.deb\fP se 
+trouvent dans le même répertoire que le fichier \fI.changes\fP. Notez que vous 
+ne voulez sûrement pas utiliser ce programme pour le fichier \fI.changes\fP 
+d'une autre architecture qui aurait été créé après avoir cross\-compilé le 
+paquet\ !
+.PP
+Si une liste de paquets est fournie sur la ligne de commande, alors seuls 
+les paquets Debian dont le nom est dans la liste seront installés.
+.PP
+Remarquez que, contrairement à \fBcvs\-buildpackage\fP, le nom du paquet source 
+ne peut être spécifié qu'avec l'option \fB\-P\fP\ ; vous ne pouvez pas utiliser 
+simplement le dernier argument de la ligne de commande.
+.PP
+Puisque l'installation d'un paquet nécessite les privilèges du 
+superutilisateur, \fBdebi\fP appelle \fBdebpkg\fP plutôt que \fBdpkg\fP. De ce fait, 
+\fBdebi\fP ne pourra être utile que s'il est exécuté avec ces privilèges ou si 
+\fBdebpkg\fP peut être exécuté en tant que superutilisateur. Veuillez consulter 
+\fBdebpkg\fP(1) pour plus de détails.
+.SH OPTIONS
+Toutes les options de \fBcvs\-buildpackage\fP sont acceptées sans 
+avertissement. Cependant, seules celles listées ci\-dessous ont un 
+effet. Pour plus de détails sur ces options, consultez la page de manuel de 
+\fBcvs\-buildpackage\fP(1).
+.TP
+\fB\-a\fP\fIarchitecture\-debian\fP, \fB\-t\fP\fItype\-de\-système\-GNU\fP
+Veuillez consulter \fBdpkg\-architecture\fP(1) pour une description de ces 
+options. Ces options affectent la recherche du fichier \fI.changes\fP. Elles 
+consistent à imiter le comportement de \fBdpkg\-buildpackage\fP lors de la 
+détermination du nom du fichier \fI.changes\fP. 
+.TP
+\fB\-M\fP<\fImodule\fP>
+Le nom du module CVS.
+.TP
+\fB\-P\fP<\fIpaquet\fP>
+Le nom du paquet.
+.TP
+\fB\-V\fP<\fIversion\fP>
+Le numéro de version du paquet.
+.TP
+\fB\-T\fP<\fIétiquette\fP>
+L'étiquette CVS utilisée pour exporter les sources.
+.TP
+\fB\-R\fP<\fIrépertoire_racine\fP>
+Racine de l'archive source originelle.
+.TP
+\fB\-W\fP<\fIespace_de_travail\fP>
+Le chemin complet de l'espace de travail pour cvs\-buildpackage.
+.TP
+\fB\-x\fP<\fIpréfixe\fP>
+Cette option fournit le préfixe par défaut des modules CVS.
+.TP
+\fB\-\-help\fP, \fB\-\-version\fP
+Affiche respectivement un message d'aide et la version.
+.SH "VOIR AUSSI"
+\fBcvs\-buildpackage\fP(1), \fBcvs\-debc\fP(1) \fBcvs\-debuild\fP(1) et \fBdebi\fP(1).
+.SH AUTEUR
+\fBcvs\-buildpackage\fP a été écrit par Manoj Srivastava, et la version actuelle 
+de \fBdebi\fP a été écrite par Julian Gilbey <jdg@debian.org>. Ils ont 
+été combinés pour donner ce programme par Julian Gilbey.
+.SH TRADUCTION
+Ce document est une traduction, réalisée par Nicolas FRANÇOIS le
+21 janvier 2005.
+
+L'équipe de traduction a fait le maximum pour réaliser une adaptation
+française de qualité.
+
+La version anglaise la plus à jour de ce document est toujours consultable
+en ajoutant l'option «\ \-L\ C\ » à la commande \fBman\fR.
+
+N'hésitez pas à signaler à l'auteur ou à la liste de traduction
+.nh
+<\fIdebian\-l10\-french@lists.debian.org\fR>,
+.hy
+selon le cas, toute erreur dans cette page de manuel.

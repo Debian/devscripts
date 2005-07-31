@@ -1,0 +1,240 @@
+.\" This file was generated with po4a. Translate the source file.
+.\" 
+.TH DEBCHANGE 1 "Utilitaires Debian" DEBIAN \"
+.SH NOM
+debchange \- outil pour la maintenance du fichier debian/changelog d'un 
+paquet source
+.SH SYNOPSIS
+\fBdebchange\fP [\fIoptions\fP] [\fItexte\fP ...]
+.br
+\fBdch\fP [\fIoptions\fP] [\fItexte\fP ...]
+.SH DESCRIPTION
+\fBdebchange\fP ou son alias \fBdch\fP ajoute une nouvelle ligne de commentaire au 
+fichier debian/changelog dans le répertoire des sources. Cette commande doit 
+être exécutée depuis ce répertoire. Si le texte décrivant le changement est 
+donné en ligne de commande, \fBdebchange\fP s'exécutera de façon automatique et 
+ajoutera simplement le texte, avec les passages à la ligne qui s'imposent et 
+à l'emplacement approprié, dans le fichier \fIdebian/changelog\fP. Si aucun 
+texte n'est spécifié, alors \fBdebchange\fP exécute un éditeur (déterminé par 
+\fBsensible\-editor\fP) pour que vous éditiez le fichier. (Les variables 
+d'environnement \fBVISUAL\fP et \fBEDITOR\fP sont utilisée dans cet ordre pour 
+déterminer l'éditeur à utiliser). Pour les éditeurs qui acceptent l'option 
+\fI+n\fP pour démarrer l'édition à une ligne spécifiée, cette option sera 
+utilisée pour positionner l'édition à la bonne ligne. Si l'éditeur est 
+quitté sans avoir modifié le fichier temporaire, \fBdebchange\fP quittera sans 
+modifier le fichier changelog. \fBNotez que les fichiers changelog sont 
+supposés être codés en UTF\-8. Dans le cas contraire, des problèmes peuvent 
+arriver\fP. Veuillez consulter la page de manuel de \fBiconv\fP(1) pour trouver 
+comment convertir les fichiers changelog codés autrement.
+.PP
+\fBdebchange\fP peut également créer des entrées de changelog permettant de 
+fermer des bogues, en utilisant l'option \fB\-\-closes\fP. Le BTS, ou Debian Bug 
+Tracking System (système de suivi de bogues Debian, 
+http://bugs.debian.org/), est interrogé pour déterminer le titre du bogue et 
+le paquet dans lequel il apparaît. Ce comportement peut être modifié en 
+utilisant l'option \fB\-\-noquery\fP ou en positionnant la variable de 
+configuration \fBDEBCHANGE_QUERY_BTS\fP à \fIno\fP, comme décrit ci\-dessous. Dans 
+tous les cas, l'éditeur (voir ci\-dessus) est toujours appelé pour permettre 
+une modification de l'entrée, mais le fichier changelog est créé que des 
+modifications aient été faites ou non. Une entrée supplémentaire peut être 
+fournie en ligne de commande en plus de l'entrée fermant le bogue.
+.PP
+Une seule des options \fB\-\-append\fP, \fB\-\-increment\fP et \fB\-\-newversion\fP peut 
+être spécifiée. Si aucune option n'est spécifiée, \fBdch\fP recherchera un 
+fichier journal de \fBdupload\fP(1) ou de \fBdput\fP(1) dans le répertoire parent 
+pour déterminer si cette version du paquet a été téléchargée («\ uploadée\ ») 
+avec succès. Il se comportera comme si l'option \fB\-\-increment\fP avait été 
+fournie quand le succès du téléchargement a été enregistré\ ; dans le cas 
+contraire il se comportera comme si l'option \fB\-\-append\fP avait été 
+spécifiée. Un avertissement est affiché si le fichier journal est trouvé, 
+mais que le succès du téléchargement n'a pas été enregistré. Ceci peut être 
+dû au fait que la version de \fBdupload\fP utilisée pour le précédent 
+téléchargement est antérieure à la version 2.1 ou parce que le 
+téléchargement a échoué.
+.PP
+Si les options \fB\-\-increment\fP ou \fB\-\-newversion\fP sont utilisées, le nom et 
+l'adresse électronique pour la nouvelle version sont déterminés de la façon 
+suivante. Si la variable d'environnement \fBDEBFULLNAME\fP est positionnée, sa 
+valeur est utilisée comme nom complet du responsable. Si la variable 
+d'environnement \fBDEBEMAIL\fP est positionnée, elle est utilisée comme adresse 
+électronique. Si cette variable est de la forme «\ nom <adresse>\ », 
+alors le nom est pris dans cette variable si la variable d'environnement 
+\fBDEBFULLNAME\fP n'est pas positionnée. Si cette variable d'environnement 
+n'est pas positionnée, le même test et réalisé sur \fBEMAIL\fP. Puis, si le nom 
+complet n'est toujours pas déterminé, \fBgetpwuid\fP(3) est utilisé pour 
+déterminer le nom grâce au fichier des mots de passe. En cas d'échec, 
+l'entrée précédente du fichier changelog est utilisée. Pour l'adresse 
+électronique, si elle n'a pas été déterminée avec \fBDEBEMAIL\fP ou \fBEMAIL\fP, 
+\fI/etc/mailname\fP est utilisé, puis il tente de la construire à partir du nom 
+d'utilisateur et du FQDN, sinon, l'adresse de l'entrée précédente du fichier 
+changelog est utilisée. Pour simplifier, il est préférable de positionner 
+les variables d'environnement \fBDEBEMAIL\fP et \fBDEBFULLNAME\fP lorsque ce 
+script est utilisé.
+.PP
+Si le nom du répertoire de l'arborescence des sources est sous la forme 
+\fIpaquet\fP\-\fIversion\fP, \fBdebchange\fP cherchera également à le renommer si le 
+numéro de version (amont) change. Ceci peut être empêché en utilisant 
+l'option \fB\-\-preserve\fP en ligne de commande ou avec un paramètre du fichier 
+de configuration, comme décrit ci\-dessous.
+.SH "Vérification du nom du répertoire"
+Comme certains autres scripts du paquet \fBdevscripts\fP, \fBdebchange\fP parcourt 
+une arborescence de répertoires jusqu'à ce qu'il trouve un fichier 
+\fIdebian/changelog\fP. Pour éviter les problèmes posés par les fichiers 
+égarés, il examine le nom du répertoire parent une fois qu'il a trouvé le 
+fichier \fIdebian/changelog\fP, et vérifie que le nom du répertoire correspond 
+au nom du paquet. La façon précise utilisée est contrôlée par les deux 
+variables du fichier de configuration DEVSCRIPTS_CHECK_DIRNAME_LEVEL et 
+DEVSCRIPTS_CHECK_DIRNAME_REGEX, et les options en ligne de commande 
+associées \fB\-\-check\-dirname\-level\fP et \fB\-\-check\-dirname\-regex\fP.
+.PP
+DEVSCRIPTS_CHECK_DIRNAME_LEVEL peut prendre les valeurs suivantes\ :
+.TP
+\fB0\fP
+Ne vérifie jamais le nom du répertoire.
+.TP
+\fB1\fP
+Ne vérifie le nom du répertoire que s'il a fallu changer de répertoire pour 
+trouver le fichier \fIdebian/changelog\fP. C'est le comportement par défaut.
+.TP
+\fB2\fP
+Vérifie toujours le nom du répertoire.
+.PP
+Le nom du répertoire est vérifié en testant si le nom du répertoire courant 
+(donné par \fBpwd\fP(1)) correspond à l'expression rationnelle donnée par la 
+variable DEVSCRIPTS_CHECK_DIRNAME_REGEX du fichier de configuration ou par 
+l'option \fB\-\-check\-dirname\-regex\fP \fIregex\fP. Il s'agit d'une expression 
+rationnelle Perl (voir \fBperlre\fP(1)), qui sera ancrée à son début et sa 
+fin. Si elle contient un «\ /\ », alors elle doit correspondre au chemin 
+complet. Si elle contient la chaîne «\ PACKAGE\ », cette chaîne sera remplacée 
+par le nom du paquet source déterminé par le fichier changelog. La valeur 
+par défaut de cette expression rationnelle est «\ PACKAGE(\-.*)?\ », ce qui 
+correspond aux répertoires nommés PACKAGE ou PACKAGE\-version.
+.SH OPTIONS
+.TP
+\fB\-\-increment\fP, \fB\-i\fP
+Incrémente le numéro de version Debian ou, dans le cas d'un paquet Debian 
+natif, le numéro de version. Cela crée une nouvelle section au début du 
+fichier changelog avec le bon en\-tête et la signature. De plus, dans le cas 
+d'une nouvelle version d'un paquet natif Debian, le nom du répertoire est 
+modifié de manière à refléter ce changement de version.
+.TP
+\fB\-\-append\fP, \fB\-a\fP
+Ajoute une nouvelle entrée au fichier changelog à la fin de l'entrée de la 
+version actuelle.
+.TP
+\fB\-\-newversion \fP\fIversion\fP, \fB\-v \fP\fIversion\fP
+Permet de spécifier explicitement le numéro de version (avec la partie 
+relative à la version Debian) et se comporte comme l'option \fB\-\-increment\fP 
+pour les autres aspects. Le nom du répertoire sera également modifié si le 
+numéro de version amont a changé.
+.TP
+\fB\-\-fromdirname\fP, \fB\-d\fP
+Le numéro de version amont sera déterminé en fonction du nom du répertoire, 
+qui devra être de la forme \fIpaquet\fP\-\fIversion\fP. Si le numéro de version 
+amont a augmenté depuis l'entrée la plus récente du fichier changelog, la 
+nouvelle entrée sera ajoutée avec pour numéro de version \fIversion\fP\-1 (ou 
+\fIversion\fP dans le cas d'un paquet Debian natif), avec le même temps absolu 
+(«\ epoch\ ») que le paquet précédent. Si le numéro de version amont est le 
+même, cette option se comporte de la même façon que \fB\-i\fP.
+.TP
+\fB\-\-closes\fP\fInnnnn,[nnnnn,...]\fP
+Ajoute une entrée au fichier changelog pour fermer les bogues spécifiés. Un 
+éditeur est également invoqué après avoir ajouté ces entrées. Il génèrera 
+des avertissements si le BTS ne peut pas être contacté (et que l'option 
+\fB\-\-noquery\fP n'a pas été spécifiée) ou s'il y a un problème avec un rapport 
+de bogue.
+.TP
+\fB\-\-[no]query\fP
+Spécifie si le BTS doit être interrogé lorsqu'une fermeture de bogue est 
+générée.
+.TP
+\fB\-\-preserve\fP, \fB\-p\fP
+Préserve le nom du répertoire de l'architecture source si le numéro de 
+version amont (ou le numéro de version d'un paquet Debian natif) 
+change. Veuillez également consulter la section des variables de 
+configuration ci\-dessous.
+.TP
+\fB\-\-no\-preserve\fP
+Ne préserve pas le nom du répertoire de l'arborescence des sources 
+(comportement par défaut).
+.TP
+\fB\-\-distribution \fP\fIdist\fP, \fB\-D \fP\fIdist\fP
+Utilise la distribution spécifiée dans la nouvelle entrée du fichier 
+changelog, s'il y en a une, au lieu d'utiliser la distribution de la 
+dernière entrée.
+.TP
+\fB\-\-urgency\fP \fIurgency\fP, \fB\-u\fP \fIurgency\fP
+Utilise le niveau d'urgence spécifié dans la nouvelle entrée du fichier 
+changelog, s'il y en a une, au lieu du niveau d'urgence bas («\ low\ ») par 
+défaut.
+.TP
+\fB\-\-check\-dirname\-level\fP \fIN\fP
+Veuillez consulter la section «\ Vérification du nom du répertoire\ » pour une 
+explication de cette option.
+.TP
+\fB\-\-check\-dirname\-regex\fP \fIregex\fP
+Veuillez consulter la section «\ Vérification du nom du répertoire\ » pour une 
+explication de cette option.
+.TP
+\fB\-\-no\-conf\fP, \fB\-\-noconf\fP
+Ne lit aucun fichier de configuration. L'option ne peut être utilisée qu'en 
+première position de la ligne de commande.
+.TP
+\fB\-\-help\fP, \fB\-h\fP
+Affiche un message d'aide et quitte avec succès.
+.TP
+\fB\-\-version\fP
+Affiche la version et le copyright, puis quitte avec succès.
+.SH "VARIABLES DE CONFIGURATION"
+Les deux fichiers de configuration \fI/etc/devscripts.conf\fP et 
+\fI~/.devscripts\fP sont évalués dans cet ordre pour placer les variables de 
+configuration. Des options de ligne de commande peuvent être utilisées pour 
+neutraliser les paramètres des fichiers de configuration. Les variables 
+d'environnement sont ignorées à cette fin. Les variables actuellement 
+identifiées sont\ :
+.TP
+\fBDEBCHANGE_PRESERVE\fP
+Si elle est positionnée à \fIyes\fP, c'est comme si l'option \fB\-\-preserve\fP 
+était utilisée.
+.TP
+\fBDEBCHANGE_QUERY_BTS\fP
+Si elle est positionnée à \fIno\fP, c'est comme si l'option \fB\-\-noquery\fP était 
+utilisée.
+.TP
+\fBDEVSCRIPTS_CHECK_DIRNAME_LEVEL\fP, \fBDEVSCRIPTS_CHECK_DIRNAME_REGEX\fP
+Veuillez consulter la section «\ Vérification du nom du répertoire\ » 
+ci\-dessus pour une explication de ces variables. Notez que ce sont des 
+variables de configuration pour tous les outils du paquet \fBdevscripts\fP\ ; 
+elles impacteront tous les scripts qui les utilisent, comme indiqué dans 
+leurs pages de manuel respectives et dans \fBdevscripts.conf\fP(5).
+.SH ENVIRONNEMENT
+.TP
+\fBDEBEMAIL\fP, \fBEMAIL\fP, \fBDEBFULLNAME\fP
+Reportez\-vous à la description précédente de l'utilisation de ces variables 
+d'environnement
+.TP
+\fBVISUAL\fP, \fBEDITOR\fP
+Ces variables d'environnement déterminent (dans cet ordre) quel sera 
+l'éditeur invoqué par \fBsensible\-editor\fP.
+.SH "VOIR AUSSI"
+\fBdebclean\fP(1), \fBdupload\fP(1), \fBdput\fP(1), \fBdebc\fP(1) et 
+\fBdevscripts.conf\fP(5).
+.SH AUTEUR
+L'auteur originel est Christoph Lameter 
+<clameter@debian.org>. Beaucoup de changements substantiels et 
+d'améliorations ont été apportés par Julian Gilbey <jdg@debian.org>.
+.SH TRADUCTION
+Ce document est une traduction, réalisée par Nicolas FRANÇOIS le
+21 janvier 2005.
+
+L'équipe de traduction a fait le maximum pour réaliser une adaptation
+française de qualité.
+
+La version anglaise la plus à jour de ce document est toujours consultable
+en ajoutant l'option «\ \-L\ C\ » à la commande \fBman\fR.
+
+N'hésitez pas à signaler à l'auteur ou à la liste de traduction
+.nh
+<\fIdebian\-l10\-french@lists.debian.org\fR>,
+.hy
+selon le cas, toute erreur dans cette page de manuel.

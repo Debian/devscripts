@@ -1,0 +1,308 @@
+.\" This file was generated with po4a. Translate the source file.
+.\" 
+.TH USCAN 1 "Utilitaires Debian" DEBIAN \"
+.SH NOM
+uscan \- teste la disponibilité d'une nouvelle version amont
+.SH SYNOPSIS
+\fBuscan\fP [\fIoptions\fP] [\fIchemin\-vers\-le\-paquet\-source\fP ...]
+.SH DESCRIPTION
+\fBuscan\fP parcours les répertoires donnés (ou le répertoire courant si aucun 
+n'est spécifié) et tous leurs sous\-répertoires à la recherche de paquets 
+contenant un fichier de contrôle \fIdebian/watch\fP. Les paramètres de ces 
+fichiers de contrôle sont ensuite analysés, et les sites ftp ou http amont 
+sont inspectés pour tester la présence de nouvelles mises à jour (qui sont 
+comparées aux numéros de version amont des fichiers \fIdebian/changelog\fP du 
+même répertoire). Les mises à jour les plus récentes (en fonction de leur 
+numéro de version) sont récupérées et un programme est exécuté sur les 
+sources téléchargées si c'est spécifié dans le fichier «\ watch\ ».
+.PP
+Les fichiers \fIdebian/watch\fP traditionnels peuvent encore être utilisés, 
+mais le format actuel est à la fois plus simple et offre des services plus 
+souples. L'ancien format n'est pas décrit ici. Pour la documentation de 
+l'ancien format, reportez\-vous au code source de uscan.
+
+.SH "FORMAT du fichier debian/watch"
+
+L'exemple suivant montre le type d'entrée que l'on peut trouver dans un 
+fichier \fIdebian/watch\fP. Bien sûr, toutes ces entrées n'apparaîtront 
+sûrement pas dans un seul fichier. Il y a d'habitude une seule ligne pour le 
+paquet courant.
+
+.PP
+.nf
+# numéro de version du format, actuellement 2.
+# Cette ligne est obligatoire!
+version=2
+
+# Les lignes peuvent être poursuivies à la ligne suivante avec un \e
+
+# Voici le format pour un site FTP :
+# Nom\-complet\-du\-site\-avec\-modèle [Version [Action]]
+ftp://ftp.tex.ac.uk/tex\-archive/web/c_cpp/cweb/cweb\-(.*)\e.tar\e.gz \e
+  debian  uupdate
+
+# Voici comment remplacer le paramètre PASV pour un site spécifique :
+# opts=pasv ftp://.../...
+
+# Le format pour un site HTTP est identique au format pour un site FTP :
+http://www.cpan.org/modules/by\-module/Text/Text\-CSV_XS\-(.*)\e.tar\e.gz
+
+# Voici un autre format pour les sites HTTP,
+# qui offre d'autres possibilités :
+# Page d'accueil  Modèle  [Version  [Action]]
+http://www.dataway.ch/~lukasl/amph/amph.html \e
+  files/amphetamine\-([\ed\e.]*).tar.bz2
+
+.fi
+.PP
+Des lignes de commentaire peuvent être ajoutées avec un caractère «\ #\ ». Les 
+lignes peuvent se poursuivre à la ligne suivante en les terminant par un 
+caractère backslash («\ \e\ »).
+.PP
+La première ligne (en ne prenant pas en compte les commentaires) doit 
+commencer par «\ version=2\ ». Ceci devrait permettre des extensions futures, 
+sans avoir à changer le nom du fichier.
+.PP
+Les fichiers «\ watch\ » acceptent deux syntaxes pour les sites HTTP, et une 
+seule pour les sites FTP. Voici la syntaxe la plus commune (et la plus 
+simple). Le premier champ optionnel opts=... est décrit plus bas et sera 
+ignoré dans ce qui suit.
+.PP
+Le premier champ donne le modèle complet des URL à rechercher. Dans le cas 
+d'un site ftp, la liste des fichiers du répertoire indiqué sera demandée et 
+il recherchera dans cette liste des fichiers dont le nom de base (ce qui 
+suit le «\ /\ » de fin) correspond. Dans le cas d'un site HTTP, il recherche 
+dans l'URL obtenue en enlevant tout ce qui suit le «\ /\ » de fin des 
+références href (liens de la forme <a href=...>) vers soit une URL 
+complète, un chemin absolu (l'ensemble de l'URL, sans la partie 
+http://nom.serveur/) ou encore vers un nom de base (la partie qui suit le 
+«\ /\ » final) qui correspond au modèle donné. L'ensemble, jusqu'au «\ /\ » 
+final est considéré comme l'URL complète.
+.PP
+Le modèle (la partie après le «\ /\ » final) est une expression rationnelle 
+Perl (voir \fBperlre\fP(1) pour plus de détails). Vous devez utiliser un modèle 
+suffisamment strict pour qu'il ne corresponde qu'au programme amont qui vous 
+intéresse, et à rien d'autre. Aussi, le modèle sera ancré au début et à la 
+fin pour qu'il corresponde au nom complet. (Notez que dans les URL HTTP, le 
+champ href peut contenir un chemin absolu ou le nom du site avec le chemin, 
+et être toujours accepté). Le modèle doit contenir un groupe Perl comme 
+décrit dans le prochain paragraphe.
+.PP
+Après avoir récupéré une liste de «\ fichiers\ » qui correspondent au modèle, 
+leur numéro de version sont extraits, considérant que le premier groupe de 
+l'expression rationnelle Perl, démarqué par «\ (...)\ », correspond au numéro 
+de version du fichier. Les versions des fichiers sont ensuite comparées pour 
+trouver celui qui a le plus grand numéro de version, qui est trouvé en 
+utilisant \fBdpkg \-\-compare\-versions\fP.
+.PP
+La version actuelle peut être fournie comme deuxième argument sur la ligne 
+du fichier «\ watch\ ». Si elle vaut \fIdebian\fP ou est absente, alors la 
+version actuelle (déterminée par le fichier \fIdebian/changelog\fP) est 
+utilisée. Si la version disponible la plus récente est plus récente que la 
+version actuelle, alors le fichier est téléchargé dans le répertoire parent, 
+à moins que l'option \fB\-\-report\fP ne soit utilisée. Une fois que le fichier a 
+été téléchargé, un lien symbolique du fichier est créé\ : 
+\fI<paquet>_<version>.orig.tar.gz\fP si le fichier a un suffixe 
+\&\fI.tar.gz\fP ou \fI.tgz\fP.
+.PP
+Finalement, si un troisième paramètre est donné sur la ligne du fichier 
+«\ watch\ », il est considéré comme le nom d'une commande, et la commande\ :
+.nf
+    \fIcommande\fP \fB\-\-upstream\-version\fP \fIversion nom_fichier\fP
+.fi
+est exécutée, en utilisant soit le fichier original, soit le nom du lien 
+symbolique. En règle générale, cette commande est \fBuupdate\fP. (Notez que la 
+syntaxe d'appel est légèrement différente de  celle des fichiers «\ watch\ » 
+sans la ligne «\ version=2\ »\ ; pour lesquels la commande exécutée était 
+«\ commande fichier version\ »).
+.PP
+L'autre syntaxe possible pour les URL HTTP est la suivante. Le premier champ 
+correspond à la page d'accueil qui doit être téléchargée et dans laquelle 
+doivent être recherchés les liens («\ href\ ») correspondant au modèle donné 
+dans le second champ. (Encore une fois, ce modèle sera ancré à son début et 
+à sa fin, de façon à ce qu'il corresponde au lien complet. Si vous chercher 
+à faire correspondre uniquement le nom de base du lien, vous pouvez utiliser 
+un modèle comme ".*/nom\-(.*)\e.tar\e.gz" si vous savez qu'il y a une URL 
+complète, ou encore mieux\ : "(?:.*/)?nom\-(.*)\e.tar\e.gz" si l'URL peut être 
+ou ne pas être complète. Notez l'utilisation de (?:...) qui évite de créer 
+une référence). Si un des liens de cette page est une URL relative, elle 
+sera considérée comme relative à l'URL de base de la page d'accueil (i.e., 
+en retirant tout ce qui suit le «\ /\ » final), ou relative à l'URL de base 
+spécifiée dans cette page avec une balise <base href="...">. Le 
+troisième et le quatrième champ sont les champs du numéro de version et de 
+la commande, comme précédemment.
+.SH "OPTIONS SPÉCIFIQUES À UN SITE"
+Une ligne du fichier «\ watch\ » peut être précédée de «\ opts=\fIoptions\fP\ », où 
+\fIoptions\fP est une liste d'options séparées par des virgules. Les seules 
+options reconnues actuellement sont \fIactive\fP et \fIpassive\fP (ou \fIpasv\fP), 
+qui sont utilisées pour forcer le choix d'utiliser ou non le mode passif 
+pour les sites FTP.
+.SH "Vérification du nom du répertoire"
+Comme plusieurs autres scripts du paquet \fBdevscripts\fP, \fBuscan\fP parcourt le 
+répertoire demandé à la recherche de fichiers \fIdebian/changelog\fP et 
+\fIdebian/watch\fP. Pour se protéger contre certains fichiers égarés qui 
+pourraient poser problème, il examine le nom du répertoire parent une fois 
+qu'il a trouvé le fichier \fIdebian/changelog\fP, et vérifie que le nom du 
+répertoire correspond au nom du paquet. Dans tous les cas, il cherchera à 
+télécharger les nouvelles versions d'un paquet, mais il n'effectuera 
+l'action demandée que si le nom du répertoire correspond au nom du 
+paquet. La façon précise utilisée est contrôlée par les deux variables du 
+fichier de configuration DEVSCRIPTS_CHECK_DIRNAME_LEVEL et 
+DEVSCRIPTS_CHECK_DIRNAME_REGEX, et les options en ligne de commande 
+associées \fB\-\-check\-dirname\-level\fP et \fB\-\-check\-dirname\-regex\fP.
+.PP
+DEVSCRIPTS_CHECK_DIRNAME_LEVEL peut prendre les valeurs suivantes\ :
+.TP
+\fB0\fP
+Ne vérifie jamais le nom du répertoire.
+.TP
+\fB1\fP
+Ne vérifie le nom du répertoire que s'il a fallu changer de répertoire pour 
+trouver le fichier \fIdebian/changelog\fP, c'est\-à\-dire que le répertoire qui 
+contient \fIdebian/changelog\fP n'est pas le répertoire dans le quel \fBuscan\fP a 
+été invoqué. C'est le comportement par défaut.
+.TP
+\fB2\fP
+Vérifie toujours le nom du répertoire.
+.PP
+Le nom du répertoire est vérifié en testant si le nom du répertoire courant 
+(donné par \fBpwd\fP(1)) correspond à l'expression rationnelle donnée par la 
+variable DEVSCRIPTS_CHECK_DIRNAME_REGEX du fichier de configuration ou par 
+l'option \fB\-\-check\-dirname\-regex\fP \fIregex\fP. Il s'agit d'une expression 
+rationnelle Perl (voir \fBperlre\fP(1)), qui sera ancrée à son début et sa 
+fin. Si elle contient un «\ /\ », alors elle doit correspondre au chemin 
+complet. Si elle contient la chaîne «\ PACKAGE\ », cette chaîne sera remplacée 
+par le nom du paquet source déterminé par le fichier changelog. La valeur 
+par défaut de cette expression rationnelle est «\ PACKAGE(\-.*)?\ », ce qui 
+correspond aux répertoires nommés PACKAGE ou PACKAGE\-version.
+.SH EXEMPLE
+Ce script va réaliser une mise à jour complètement automatique avec l'amont
+
+.nf
+#!/bin/sh \-e
+# appelé avec '\-\-upstream\-version' <version> <file>
+uupdate "$@"
+package=`dpkg\-parsechangelog | sed \-n 's/^Source: //p'`
+cd ../$package\-$2
+debuild
+.fi
+
+Remarquez que \fBdupload\fP et \fBdput\fP ne sont pas appelés automatiquement, 
+puisque le responsable doit réaliser des vérifications sur le logiciel avant 
+de le télécharger vers l'archive Debian.
+.SH OPTIONS
+.TP
+\fB\-\-report\fP, \fB\-\-no\-download\fP
+Ne fait qu'un rapport indiquant les nouvelles versions ou les versions 
+absentes, mais ne télécharge rien.
+.TP
+\fB\-\-debug\fP
+Affiche les pages web téléchargées sur la sortie standard afin de déboguer 
+votre fichier «\ watch\ ».
+.TP
+\fB\-\-download\fP
+Fait un rapport puis télécharge. (C'est le comportement par défaut).
+.TP
+\fB\-\-pasv\fP
+Force le mode passif («\ PASV\ ») pour les connexions FTP.
+.TP
+\fB\-\-no\-pasv\fP
+N'utilise pas le mode passif pour les connexions FTP.
+.TP
+\fB\-\-symlink\fP
+Utilise un lien symbolique pour orig.tar.gz lorsque les fichiers téléchargés 
+ont des extensions \fI.tar.gz\fP ou \fI.tgz\fP. (C'est le comportement par 
+défaut).
+.TP
+\fB\-\-no\-symlink\fP
+Ne fait pas ces liens symboliques.
+.TP
+\fB\-\-verbose\fP
+Donne une sortie bavarde.
+.TP
+\fB\-\-no\-verbose\fP
+Ne donne pas de sortie bavarde. (C'est le comportement par défaut).
+.TP
+\fB\-\-check\-dirname\-level\fP \fIN\fP
+Veuillez consulter la section «\ Vérification du nom du répertoire\ » pour une 
+explication de cette option.
+.TP
+\fB\-\-check\-dirname\-regex\fP \fIregex\fP
+Veuillez consulter la section «\ Vérification du nom du répertoire\ » pour une 
+explication de cette option.
+.TP
+\fB\-\-no\-conf\fP, \fB\-\-noconf\fP
+Ne lit aucun fichier de configuration. L'option ne peut être utilisée qu'en 
+première position de la ligne de commande.
+.TP
+\fB\-\-help\fP
+Affiche un bref message d'aide.
+.TP
+\fB\-\-version\fP
+affiche les informations sur la version.
+.SH "VARIABLES DE CONFIGURATION"
+Les deux fichiers de configuration \fI/etc/devscripts.conf\fP et 
+\fI~/.devscripts\fP sont évalués dans cet ordre par un interpréteur de commande 
+(«\ shell\ ») pour placer les variables de configuration. Des options de ligne 
+de commande peuvent être utilisées pour neutraliser les paramètres des 
+fichiers de configuration. Les paramètres des variables d'environnement sont 
+ignorés à cette fin. Si la première option donnée en ligne de commande est 
+\fB\-\-noconf\fP, alors ces fichiers ne sont pas évalués. Les variables 
+actuellement identifiées sont\ :
+.TP
+\fBUSCAN_DOWNLOAD\fP
+Si elle est positionnée à \fIno\fP, les nouveaux fichiers amonts ne seront pas 
+téléchargés, ce qui équivaut à utiliser les options \fB\-\-report\fP ou 
+\fB\-\-no\-download\fP.
+.TP
+\fBUSCAN_PASV\fP
+Si elle est positionnée à \fIyes\fP ou \fIno\fP, cela force respectivement a 
+utiliser ou ne pas utiliser le mode passif pour les connexions FTP. Si elle 
+est positionnée à \fIdefault\fP, alors Net::FTP(3) fera un choix (basé 
+principalement sur la variable d'environnement FTP_PASSIVE).
+.TP
+\fBUSCAN_SYMLINK\fP
+Si elle est positionnée à \fIno\fP, alors un lien symbolique 
+paquet_version.orig.atr.gz ne sera pas créé, comme si l'option 
+\fB\-\-no\-symlink\fP était utilisée.
+.TP
+\fBUSCAN_VERBOSE\fP
+Si elle est positionnée à \fIyes\fP, alors la sortie sera bavarde, comme si 
+l'option \fB\-\-verbose\fP était utilisée.
+.SH "VALEURS DE RETOUR"
+La valeur de retour indique si une nouvelle version a été trouvée\ ; il est 
+conseillé de lire la sortie pour déterminer exactement ce qu'il s'est passé 
+et pour voir s'il n'y a pas eu d'avertissement.
+.TP
+0
+Soit les options \fB\-\-help\fP ou \fB\-\-version\fP ont été utilisées, soit une 
+nouvelle version amont a été trouvée pour un des fichiers «\ watch\ » 
+examinés.
+.TP
+1
+Aucune nouvelle version amont n'a été trouvée pour les fichiers «\ watch\ » 
+examinés.
+.SH "VOIR AUSSI"
+\fBdpkg\fP(1), \fBperlre\fP(1), \fBuupdate\fP(1) et \fBdevscripts.conf\fP(5).
+.SH AUTEUR
+La version originelle de \fBuscan\fP a été écrite par Christoph Lameter 
+<clameter@debian.org>. Des améliorations significatives, d'autres 
+modifications et des corrections de bogues ont été apportées par Julian 
+Gilbey <jdg@debian.org>. Le support pour HTTP a été ajouté par Piotr 
+Roszatycki <dexter@debian.org>. Le programme a été ré\-écrit en Perl 
+par Julian Gilbey.
+.SH TRADUCTION
+Ce document est une traduction, réalisée par Nicolas FRANÇOIS le
+21 janvier 2005.
+
+L'équipe de traduction a fait le maximum pour réaliser une adaptation
+française de qualité.
+
+La version anglaise la plus à jour de ce document est toujours consultable
+en ajoutant l'option «\ \-L\ C\ » à la commande \fBman\fR.
+
+N'hésitez pas à signaler à l'auteur ou à la liste de traduction
+.nh
+<\fIdebian\-l10\-french@lists.debian.org\fR>,
+.hy
+selon le cas, toute erreur dans cette page de manuel.
