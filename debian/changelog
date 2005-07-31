@@ -17,8 +17,10 @@ devscripts (2.9.3) UNRELEASED; urgency=low
   * bts: support for notfound command (Closes: #320569)
   * debchange: change --closes command output format to place "(Closes:
     #nnnnn)" at end of changelog entry
+  * debchange: don't require changelog to be modified when -e or -r option
+    used
 
- -- Julian Gilbey <jdg@debian.org>  Sun, 31 Jul 2005 14:21:34 +0100
+ -- Julian Gilbey <jdg@debian.org>  Sun, 31 Jul 2005 14:49:13 +0100
 
 devscripts (2.9.2) unstable; urgency=low
 

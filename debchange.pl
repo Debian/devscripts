@@ -819,7 +819,7 @@ if (! $TEXT or @closes_text) {
 	my $newmtime = (stat("$changelog_path.dch"))[9];
 	defined $newmtime or fatal
 	    "Error getting modification time of temporary changelog: $!";
-	if ($mtime == $newmtime) {
+	if ($mtime == $newmtime && ! $opt_e && ! $opt_r) {
 	    warn "$progname: Changelog unmodified; exiting.\n";
 	    exit 0;
 	}
