@@ -14,7 +14,9 @@ devscripts (2.9.3) UNRELEASED; urgency=low
   * Add French manual pages, thanks to the French l10n team. closes: #292780
 
   [ Julian Gilbey ]
-  * bts: support for notfound command (closes: #320569)
+  * bts: support for notfound command (Closes: #320569)
+  * debchange: change --closes command output format to place "(Closes:
+    #nnnnn)" at end of changelog entry
 
  -- Julian Gilbey <jdg@debian.org>  Sun, 31 Jul 2005 14:21:34 +0100
 

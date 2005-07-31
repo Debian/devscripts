@@ -479,7 +479,7 @@ if (@closes and $opt_query) { # and we have to query the BTS
 	    if (exists $bugs{$close}) {
 		my ($title,$pkg) = @{$bugs{$close}};
 		$title =~ s/^($pkg|$PACKAGE): //;
-		push @closes_text, "Closes: \#$close: $title\n";
+		push @closes_text, "$title (Closes: \#$close)\n";
 	    }
 	    else { # not our package, or wnpp
 		my $bug = `wget -q -O - 'http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=$close'`;
