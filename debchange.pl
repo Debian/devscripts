@@ -479,6 +479,10 @@ if (@closes and $opt_query) { # and we have to query the BTS
 	    if (exists $bugs{$close}) {
 		my ($title,$pkg) = @{$bugs{$close}};
 		$title =~ s/^($pkg|$PACKAGE): //;
+		$title =~ s/&quot;/\"/g;
+		$title =~ s/&lt;/</g;
+		$title =~ s/&gt;/>/g;
+		$title =~ s/&amp;/&/g;
 		push @closes_text, "$title (Closes: \#$close)\n";
 	    }
 	    else { # not our package, or wnpp

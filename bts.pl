@@ -826,7 +826,6 @@ sub bts_forwarded {
     if (! length $email) {
 	die "bts forwarded: mark bug $bug as forwarded to what email address?\n";
     }
-    opts_done(@_);
     mailbts("bug $bug is forwarded to $email", "forwarded $bug $email");
 }
 
