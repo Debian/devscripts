@@ -35,7 +35,7 @@ Description: Scripts to make the life of a Debian Package maintainer easier
   - debchange/dch: automagically add entries to debian/changelog files [wget]
   - debclean: purge a Debian source tree [fakeroot]
   - debcommit: commit changes to cvs or svn, basing commit message on
-      changelog [cvs | svn]
+      changelog [cvs | subversion]
   - debdiff: compare two versions of a Debian package to check for
       added and removed files [wdiff, patchutils]
   - debi: install a just-built package
@@ -62,7 +62,7 @@ Description: Scripts to make the life of a Debian Package maintainer easier
   - plotchangelog: view a nice plot of the data in a changelog file
       [libtimedate-perl, gnuplot]
   - rc-alert: list installed packages which have release-critical bugs [wget]
-  - svnpath: print svn repository paths [svn]
+  - svnpath: print svn repository paths [subversion]
   - tagpending: shell script which runs from a Debian source tree and tags
       bugs that are to be closed in the latest changelog as pending.
       [wget]
