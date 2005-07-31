@@ -23,8 +23,8 @@ MAN1S = $(SCRIPTS:=.1) debc.1 cvs-debc.1 devscripts.1
 GEN_MAN1S = bts.1 svnpath.1 debcommit.1 deb-reversion.1
 MAN5S = devscripts.conf.5
 MANS_fr_DIR = po4a/fr
-MAN1S_fr = $(subst $(MANS_fr_DIR/),,$(wildcard $(MANS_fr_DIR)/*.1))
-MAN5S_fr = $(subst $(MANS_fr_DIR/),,$(wildcard $(MANS_fr_DIR)/*.5))
+MAN1S_fr = $(subst $(MANS_fr_DIR)/,,$(wildcard $(MANS_fr_DIR)/*.1))
+MAN5S_fr = $(subst $(MANS_fr_DIR)/,,$(wildcard $(MANS_fr_DIR)/*.5))
 
 BINDIR = /usr/bin
 LIBDIR = /usr/lib/devscripts
