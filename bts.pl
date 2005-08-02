@@ -710,6 +710,38 @@ sub bts_notfound {
     mailbts("notfound $bug in $version", "notfound $bug $version");
 }
 
+=item block <bug> by|with <bug> [<bug> ...]
+
+Note that a bug is blocked from being fixed by a set of other bugs.
+
+=cut
+
+sub bts_block {
+    my $bug=checkbug(shift) or die "bts block: what bug is blocked?\n";
+    my @blockers;
+    foreach (@_) {
+	my $blocker=checkbug($_) or die "bts block: some blocking bug number(s) not valid\n";
+	push @blockers, $blocker;
+    }
+    mailbts("block $bug with @blockers", "block $bug with @blockers");
+}
+
+=item unblock <bug> by|with <bug> [<bug> ...]
+
+Note that a bug is no longer blocked from being fixed by a set of other bugs.
+
+=cut
+
+sub bts_unblock {
+    my $bug=checkbug(shift) or die "bts unblock: what bug is blocked?\n";
+    my @blockers;
+    foreach (@_) {
+	my $blocker=checkbug($_) or die "bts unblock: some blocking bug number(s) not valid\n";
+	push @blockers, $blocker;
+    }
+    mailbts("unblock $bug with @blockers", "unblock $bug with @blockers");
+}
+
 =item merge <bug> <bug> [<bug> ...]
 
 Merge a set of bugs together.
