@@ -11,8 +11,8 @@ debcommit [--release] [--message=text] [--noact]
 =head1 DESCRIPTION
 
 debcommit generates a commit message based on new text in debian/changelog,
-and commits the change to a package's cvs, svn, or arch repository. It must
-be run in a cvs, svn, or arch working copy for the package.
+and commits the change to a package's cvs, svn, svk, or arch repository. It
+must be run in a cvs, svn, svk, or arch working copy for the package.
 
 =head1 OPTIONS
 
@@ -21,9 +21,9 @@ be run in a cvs, svn, or arch working copy for the package.
 =item -r --release
 
 Commit a release of the package. The version number is determined from
-debian/changelog, and is used to tag the package in cvs, svn, or arch.
+debian/changelog, and is used to tag the package in cvs, svn, svk, or arch.
 
-Note that svn tagging conventions vary, so debcommit uses
+Note that svn/svk tagging conventions vary, so debcommit uses
 L<svnpath(1)> to determine where the tag should be placed in the
 repository.
 
@@ -101,7 +101,13 @@ sub getprog {
 		}
 	}
 	else {
-		die "not in a cvs or subversion working copy\n";
+		# svk has no useful directories so try to run it.
+		my $svkpath=`svk info . 2>/dev/null| grep -i '^Depot Path:' | cut -d ' ' -f 2`;
+		if (length $svkpath) {
+			return "svk";
+		}
+		
+		die "not in a cvs, subversion, arch, or svk working copy\n";
 	}
 }
 
@@ -120,7 +126,7 @@ sub action {
 sub commit {
 	my $message=shift;
 
-	if ($prog eq 'cvs' || $prog eq 'svn') {
+	if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk') {
 		if (! action($prog, "commit", "-m", $message)) {
 			die "commit failed\n";
 		}
@@ -148,15 +154,15 @@ sub commit {
 sub tag {
 	my $tag=shift;
 
-	if ($prog eq 'svn') {
+	if ($prog eq 'svn' || $prog eq 'svk') {
 		my $svnpath=`svnpath`;
 		chomp $svnpath;
 		my $tagpath=`svnpath tags`;
 		chomp $tagpath;
 		
-		if (! action("svn", "copy", $svnpath, "$tagpath/$tag", "-m", "tagging version $tag")) {
-			if (! action("svn", "mkdir", $tagpath, "-m", "create tag directory") ||
-			    ! action("svn", "copy", $svnpath, "$tagpath/$tag", "-m", "tagging version $tag")) {
+		if (! action($prog, "copy", $svnpath, "$tagpath/$tag", "-m", "tagging version $tag")) {
+			if (! action($prog, "mkdir", $tagpath, "-m", "create tag directory") ||
+			    ! action($prog, "copy", $svnpath, "$tagpath/$tag", "-m", "tagging version $tag")) {
 				die "failed tagging with $tag\n";
 			}
 		}
@@ -190,11 +196,11 @@ sub tag {
 sub getmessage {
 	my $ret;
 
-	if ($prog eq 'cvs' || $prog eq 'svn' ||
+	if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk' ||
 	    $prog eq 'tla' || $prog eq 'baz') {
 		$ret='';
 		my $subcommand;
-		if ($prog eq 'cvs' || $prog eq 'svn') {
+		if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk') {
 			$subcommand = 'diff';
 		} else {
 			$subcommand = 'file-diff';
