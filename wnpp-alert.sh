@@ -63,7 +63,7 @@ wget -q -O - http://www.debian.org/devel/wnpp/rfa_bypackage | \
   sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/RFA \1 \2 -- \3/; T d; p; : d' >> $WNPP
 
 wget -q -O - http://www.debian.org/devel/wnpp/help_requested | \
-  sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/RFA \1 \2 -- \3/; T d; p; : d' >> $WNPP
+  sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/RFH \1 \2 -- \3/; T d; p; : d' >> $WNPP
 
 cut -f3 -d' ' $WNPP | sort > $WNPP_PACKAGES
 

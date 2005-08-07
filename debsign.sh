@@ -105,6 +105,7 @@ mustsetvar () {
 # of dpkg-buildpackage, because we do not know all of the necessary
 # information when this function is read first.
 signfile () {
+    local savestty=$(stty -g)
     if [ $signinterface = gpg ]
     then
 	gpgversion=`gpg --version | head -n 1 | cut -d' ' -f3`
@@ -118,6 +119,7 @@ signfile () {
 		    --armor --textmode --output - - > "$1.asc" || \
 		{ SAVESTAT=$?
 		  echo "$PROGNAME: gpg error occurred!  Aborting...." >&2
+		  stty $savestty
 		  exit $SAVESTAT
 		}
 	else
@@ -127,12 +129,14 @@ signfile () {
 			--armor --textmode --output - - > "$1.asc" || \
 		{ SAVESTAT=$?
 		  echo "$PROGNAME: gpg error occurred!  Aborting...." >&2
+		  stty $savestty
 		  exit $SAVESTAT
 		}
 	fi
     else
 	$signcommand -u "$2" +clearsig=on -fast < "$1" > "$1.asc"
     fi
+    stty $savestty
     echo
     PRECIOUS_FILES=$(($PRECIOUS_FILES + 1))
     mv -f -- "$1.asc" "$1"

@@ -595,7 +595,6 @@ duplicated bugs.  A new report is generated for each new ID.
 
 sub bts_clone {
     my $bug=checkbug(shift) or die "bts clone: clone what bug?\n";
-    opts_done(@_);
     @clonedbugs{@_} = (1) x @_;  # add these bug numbers to hash
     mailbts("cloning $bug", "clone $bug " . join(" ",@_));
 }

@@ -1,8 +1,15 @@
 devscripts (2.9.5) UNRELEASED; urgency=low
 
+  [ Joey Hess ]
   * debcommit: try to add support for svk
 
- -- Joey Hess <joeyh@debian.org>  Thu,  4 Aug 2005 13:24:43 -0400
+  [ Julian Gilbey ]
+  * bts: fix clone command (Closes: #321798)
+  * debsign: fix noecho behaviour for interrupted gpg call (Closes:
+    #321684)
+  * wnpp-alert: RFA -> RFH (Closes: #321707)
+
+ -- Julian Gilbey <jdg@debian.org>  Sun,  7 Aug 2005 22:12:25 +0100
 
 devscripts (2.9.4) unstable; urgency=low
 
