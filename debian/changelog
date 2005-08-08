@@ -5,11 +5,13 @@ devscripts (2.9.5) UNRELEASED; urgency=low
 
   [ Julian Gilbey ]
   * bts: fix clone command (Closes: #321798)
+  * debchange: add comment to manpage about building sponsored uploads
+    (Closes: #321960)
   * debsign: fix noecho behaviour for interrupted gpg call (Closes:
     #321684)
   * wnpp-alert: RFA -> RFH (Closes: #321707)
 
- -- Julian Gilbey <jdg@debian.org>  Sun,  7 Aug 2005 22:12:25 +0100
+ -- Julian Gilbey <jdg@debian.org>  Mon,  8 Aug 2005 23:38:36 +0100
 
 devscripts (2.9.4) unstable; urgency=low
 

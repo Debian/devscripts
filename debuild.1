@@ -218,7 +218,8 @@ These are options which should be passed to the invocation of
 \fBdpkg-buildpackage\fR.  They are given before any command-line
 options.  Due to issues of shell quoting, if a word containing spaces
 is required as a single option, extra quotes will be required.  For
-example, the config file might contain the line:
+example, to ensure that your own GPG key is always used, even for
+sponsored uploads, the config file might contain the line:
 .IP
 .nf
 DEBUILD_DPKG_BUILDPACKAGE_OPTS="-k'Julian Gilbey <jdg@debian.org>' -sa"
@@ -259,6 +260,22 @@ these variables.  Note that these are package-wide configuration
 variables, and will therefore affect all \fBdevscripts\fR scripts
 which check their value, as described in their respective manpages and
 in \fBdevscripts.conf\fR(5).
+.SH EXAMPLES
+To build a package for a sponsored upload, given
+\fIfoobar_1.0-1.dsc\fR and the respective source files, run something
+like the following commands:
+.IP
+.nf
+dpkg-source -x foobar_1.0-1.dsc
+cd foobar-1.0
+debuild -k0x12345678
+.fi
+.PP
+where 0x12345678 is replaced by your GPG key ID or other key
+identifier such as your email address.  You could also use the
+DEBUILD_DPKG_BUILDPACKAGE_OPTS configuration file option as described
+above to avoid having to type the \fB\-k\fR option each time you do a
+sponsored upload.
 .SH "SEE ALSO"
 .BR dpkg-buildpackage (1),
 .BR dpkg-checkbuilddeps (1),
