@@ -11,7 +11,11 @@ devscripts (2.9.5) UNRELEASED; urgency=low
     #321684)
   * wnpp-alert: RFA -> RFH (Closes: #321707)
 
- -- Julian Gilbey <jdg@debian.org>  Mon,  8 Aug 2005 23:38:36 +0100
+  [ Joey Hess ]
+  * bts: Make block command accept "by" or "with" after the blocked bug,
+    but do not make either mandatory.
+
+ -- Joey Hess <joeyh@debian.org>  Fri, 12 Aug 2005 16:59:27 -0400
 
 devscripts (2.9.4) unstable; urgency=low
 

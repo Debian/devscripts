@@ -698,7 +698,8 @@ sub bts_found {
 
 =item notfound <bug> <version>
 
-Remove the record that bug was encountered in the given version of the package to which it is assigned.
+Remove the record that bug was encountered in the given version of the
+package to which it is assigned.
 
 =cut
 
@@ -717,6 +718,10 @@ Note that a bug is blocked from being fixed by a set of other bugs.
 
 sub bts_block {
     my $bug=checkbug(shift) or die "bts block: what bug is blocked?\n";
+    my $word=shift;
+    if ($word ne 'by' && $word ne 'with') {
+	    unshift @_, $word;
+    }
     my @blockers;
     foreach (@_) {
 	my $blocker=checkbug($_) or die "bts block: some blocking bug number(s) not valid\n";
