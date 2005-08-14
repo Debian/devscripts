@@ -13,7 +13,7 @@
 # Originally by Christoph Lameter <clameter@debian.org>
 # Modified extensively by Julian Gilbey <jdg@debian.org>
 #
-# Copyright 1999-2003 by Julian Gilbey 
+# Copyright 1999-2005 by Julian Gilbey 
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -52,64 +52,72 @@ sub usage () {
     print <<"EOF";
 Usage: $progname [options] [changelog entry]
 Options:
-  -i, --increment
-         Increase the Debian release number, adding a new changelog entry
   -a, --append
-         Append a new entry to the current changelog
+	 Append a new entry to the current changelog
+  -i, --increment
+	 Increase the Debian release number, adding a new changelog entry
+  -v <version>, --newversion=<version>
+	 Add a new changelog entry with version number specified
   -e, --edit
-         Don't change version number or add a new changelog entry, just
+	 Don't change version number or add a new changelog entry, just
 	 update the changelog's stamp and open up an editor
   -r, --release
-         Update the changelog timestamp. If the distribution is set to
-         "UNRELEASED", change it to unstable (or another distribution as
+	 Update the changelog timestamp. If the distribution is set to
+	 "UNRELEASED", change it to unstable (or another distribution as
 	 specified by --distribution).
-  -v <version>, --newversion=<version>
-         Add a new changelog entry with version number specified
-  -b, --force-bad-version
-         Force a version to be less than the current one (e.g. when
-         backporting)
+  --create
+	 Create a new changelog (default) or NEWS file (with --news) and
+	 open for editing
+  --package <package>
+	 Specify the package name when using --create (optional)
   -n, --nmu
-         Increment the Debian release number for a non-maintainer upload
+	 Increment the Debian release number for a non-maintainer upload
+  -b, --force-bad-version
+	 Force a version to be less than the current one (e.g., when
+	 backporting)
   --closes nnnnn[,nnnnn,...]
-         Add entries for closing these bug numbers,
-         getting bug titles from the BTS (bug-tracking system, bugs.debian.org)
+	 Add entries for closing these bug numbers,
+	 getting bug titles from the BTS (bug-tracking system, bugs.debian.org)
   --[no]query
-         [Don\'t] try contacting the BTS to get bug titles
+	 [Don\'t] try contacting the BTS to get bug titles (default: do query)
   -d, --fromdirname
-         Add a new changelog entry with version taken from the directory name
+	 Add a new changelog entry with version taken from the directory name
   -p, --preserve
-         Preserve the directory name
+	 Preserve the directory name
   --no-preserve
-         Do not preserve the directory name (default)
+	 Do not preserve the directory name (default)
   -D, --distribution <dist>
-         Use the specified distribution in the new changelog entry, if any
+	 Use the specified distribution in the new changelog entry, if any
   -u, --urgency <urgency>
-         Use the specified urgency in the new changelog entry, if any
+	 Use the specified urgency in the new changelog entry, if any
   -c, --changelog <changelog>
-         Specify the name of the changelog to use in place of debian/changelog
-         No directory traversal or checking is performed in this case.
+	 Specify the name of the changelog to use in place of debian/changelog
+	 No directory traversal or checking is performed in this case.
   --news
-         Specify that debian/NEWS is to be edited; cannot be used
-         with --changelog
+	 Specify that debian/NEWS is to be edited; cannot be used
+	 with --changelog
+  --[no]multimaint
+         When appending an entry to a changelog section (-a), [do not]
+	 indicate if multiple maintainers are now involved (default: do so)
   --check-dirname-level N
-         How much to check directory names:
-         N=0   never
-         N=1   only if program changes directory (default)
-         N=2   always
+	 How much to check directory names:
+	 N=0   never
+	 N=1   only if program changes directory (default)
+	 N=2   always
   --check-dirname-regex REGEX
-         What constitutes a matching directory name; REGEX is
-         a Perl regular expression; the string \`PACKAGE\' will
-         be replaced by the package name; see manpage for details
-         (default: 'PACKAGE(-.*)?')
+	 What constitutes a matching directory name; REGEX is
+	 a Perl regular expression; the string \`PACKAGE\' will
+	 be replaced by the package name; see manpage for details
+	 (default: 'PACKAGE(-.*)?')
   --no-conf, --noconf
-         Don\'t read devscripts config files; must be the first option given
+	 Don\'t read devscripts config files; must be the first option given
   --release-heuristic log|changelog
-         Select heuristic used to determine if a package has been released.
+	 Select heuristic used to determine if a package has been released.
 	 (default: log)
   --help, -h
-         Display this help message and exit
+	 Display this help message and exit
   --version
-         Display version information
+	 Display version information
   At most one of -a, -i and -v (or their long equivalents) may be used.
   With no options, one of -i or -a is chosen by looking for a .upload
   file in the parent directory and checking its contents.
@@ -136,6 +144,7 @@ my $check_dirname_regex = 'PACKAGE(-.*)?';
 my $opt_p = 0;
 my $opt_query = 1;
 my $opt_release_heuristic = 'log';
+my $opt_multimaint = 1;
 
 # Next, read configuration files and then command line
 # The next stuff is boilerplate
@@ -151,6 +160,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
 		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.*)?',
 		       'DEBCHANGE_RELEASE_HEURISTIC' => 'log',
+		       'DEBCHANGE_MULTIMAINT' => 'yes',
 		       );
     my %config_default = %config_vars;
     
@@ -175,6 +185,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'}=1;
     $config_vars{'DEBCHANGE_RELEASE_HEURISTIC'} =~ /^(log|changelog)$/
 	or $config_vars{'DEBCHANGE_RELEASE_HEURISTIC'}='log';
+    $config_vars{'DEBCHANGE_MULTIMAINT'} =~ /^(yes|no)$/
+	or $config_vars{'DEBCHANGE_MULTIMAINT'}='yes';
 
     foreach my $var (sort keys %config_vars) {
 	if ($config_vars{$var} ne $config_default{$var}) {
@@ -189,12 +201,14 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $check_dirname_level = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'};
     $check_dirname_regex = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_REGEX'};
     $opt_release_heuristic = $config_vars{'DEBCHANGE_RELEASE_HEURISTIC'};
+    $opt_multimaint = $config_vars{'DEBCHANGE_MULTIMAINT'} eq 'no' ? 0 : 1;
 }
 
 # We use bundling so that the short option behaviour is the same as
 # with older debchange versions.
 my ($opt_help, $opt_version);
-my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u, $opt_n, $opt_c, @closes);
+my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u);
+my ($opt_n, $opt_c, $opt_create, $opt_package, @closes);
 my ($opt_news);
 my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 $opt_u = 'low';
@@ -206,18 +220,22 @@ GetOptions("help|h" => \$opt_help,
 	   "a|append" => \$opt_a,
 	   "e|edit" => \$opt_e,
 	   "r|release" => \$opt_r,
+	   "create" => \$opt_create,
+	   "package=s" => \$opt_package,
 	   "v|newversion=s" => \$opt_v,
 	   "b|force-bad-version" => \$opt_b,
 	   "d|fromdirname" => \$opt_d,
 	   "p" => \$opt_p,
 	   "preserve!" => \$opt_p,
-           "D|distribution=s" => \$opt_D,
-           "u|urgency=s" => \$opt_u,
+	   "D|distribution=s" => \$opt_D,
+	   "u|urgency=s" => \$opt_u,
 	   "n|nmu" => \$opt_n,
 	   "query!" => \$opt_query,
 	   "closes=s" => \@closes,
 	   "c|changelog=s" => \$opt_c,
 	   "news" => \$opt_news,
+	   "multimaint!" => \$opt_multimaint,
+	   "multi-maint!" => \$opt_multimaint,
 	   "ignore-dirname" => \$opt_ignore,
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
@@ -228,36 +246,53 @@ GetOptions("help|h" => \$opt_help,
     or die "Usage: $progname [options] [changelog entry]\nRun $progname --help for more details\n";
 
 if ($opt_noconf) {
-    die "$progname: --no-conf is only acceptable as the first command-line option!\n";
+    fatal "--no-conf is only acceptable as the first command-line option!";
 }
 if ($opt_help) { usage; exit 0; }
 if ($opt_version) { version; exit 0; }
 
 # dirname stuff
 if ($opt_ignore) {
-    die "$progname: --ignore-dirname has been replaced by --check-dirname-level and\n--check-dirname-regex; run $progname --help for more details\n";
+    fatal "--ignore-dirname has been replaced by --check-dirname-level and\n--check-dirname-regex; run $progname --help for more details";
 }
 
 if (defined $opt_level) {
     if ($opt_level =~ /^[012]$/) { $check_dirname_level = $opt_level; }
     else {
-	die "$progname: unrecognised --check-dirname-level value (allowed are 0,1,2)\n";
+	fatal "unrecognised --check-dirname-level value (allowed are 0,1,2)";
     }
 }
 
 if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
 
 fatal "Only one of -c/--changelog and --news is allowed; try $progname --help for more help"
-    if $opt_c and $opt_news;
+    if $opt_c && $opt_news;
 
 fatal "--closes should not be used with --news; put bug numbers in the changelog not the NEWS file"
     if $opt_news && @closes;
     
+fatal "--package can only be used with --create"
+    if $opt_package && ! $opt_create;
+
 my $changelog_path = $opt_c || $ENV{'CHANGELOG'} || 'debian/changelog';
 if ($opt_news) { $changelog_path = "debian/NEWS"; }
 if ($changelog_path ne 'debian/changelog' and $changelog_path ne 'debian/NEWS') {
     $check_dirname_level = 0;
 }
+
+# extra --create checks
+fatal "--package cannot be used when creating a debian/NEWS file"
+    if $opt_package && $changelog_path eq 'debian/NEWS';
+
+if ($opt_create) {
+    if ($opt_a || $opt_i || $opt_e || $opt_r || $opt_b || $opt_n) {
+	warn "$progname: ignoring -a/-i/-e/-r/-b/-n options with --create\n";
+    }
+    if ($opt_package && $opt_d) {
+	fatal "can only use one of --package and -d";
+    }
+}
+
 
 @closes = split(/,/, join(',', @closes));
 map { s/^\#//; } @closes;  # remove any leading # from bug numbers
@@ -270,30 +305,45 @@ fatal "Only one of -a, -i, -e, -r, -v, -d is allowed; try $progname --help for m
 
 # Look for the changelog
 my $chdir = 0;
-if ($changelog_path eq 'debian/changelog') {
-    until (-f 'debian/changelog') {
-	$chdir = 1;
-	chdir '..' or die "$progname: can't chdir ..: $!\n";
-	if (cwd() eq '/') {
-	    die "$progname: cannot find debian/changelog anywhere!\nAre you in the source code tree?\n";
+if (! $opt_create) {
+    if ($changelog_path eq 'debian/changelog'
+	or $changelog_path eq 'debian/NEWS') {
+	until (-f $changelog_path) {
+	    $chdir = 1;
+	    chdir '..' or fatal "can't chdir ..: $!";
+	    if (cwd() eq '/') {
+		fatal "cannot find $changelog_path anywhere!\nAre you in the source code tree?";
+	    }
+	}
+	
+	# Can't write, so stop now.
+	if (! -w $changelog_path) {
+	    fatal "$changelog_path is not writable!";
 	}
     }
+    else {
+	unless (-f $changelog_path) {
+	    fatal "cannot find $changelog_path!\nAre you in the correct directory?";
+	}
 
-    # Can't write, so stop now.
-    if (! -w 'debian/changelog')
-    {
-        die "$progname: debian/changelog is not writable!\n";
+	# Can't write, so stop now.
+	if (! -w $changelog_path) {
+	    fatal "$changelog_path is not writable!";
+	}
     }
 }
-else {
-    unless (-f $changelog_path) {
-	die "$progname: cannot find $changelog_path!\nAre you in the correct directory?\n";
+else {  # $opt_create
+    unless (-d dirname $changelog_path) {
+	fatal "cannot find " . (dirname $changelog_path) . " directory!\nAre you in the correct directory?";
     }
-
-    # Can't write, so stop now.
-    if (! -w $changelog_path)
-    {
-        die "$progname: $changelog_path is not writable!\n";
+    if (-f $changelog_path) {
+	fatal "file $changelog_path already exists!";
+    }
+    unless (-w dirname $changelog_path) {
+	fatal "cannot find " . (dirname $changelog_path) . " directory!\nAre you in the correct directory?";
+    }
+    if ($changelog_path eq 'debian/NEWS' && ! -f 'debian/changelog') {
+	fatal "I can't create debian/NEWS without debian/changelog present";
     }
 }
 
@@ -301,54 +351,70 @@ else {
 
 # Find the current version number etc.
 my %changelog;
-open PARSED, qq[dpkg-parsechangelog -l"$changelog_path" | ]
-    or fatal "Cannot execute dpkg-parsechangelog: $!";
-my $last;
-while (<PARSED>) {
-    chomp;
-    if (/^(\S+):\s(.+?)\s*$/) { $changelog{$1}=$2; $last=$1; }
-    elsif (/^(\S+):\s$/) { $changelog{$1}=''; $last=$1; }
-    elsif (/^\s\.$/) { $changelog{$last}.="\n"; }
-    elsif (/^\s(.+)$/) { $changelog{$last}.="$1\n"; }
-    else {
-	fatal "Don't understand dpkg-parsechangelog output: $_";
+my $PACKAGE = 'PACKAGE';
+my $VERSION = 'VERSION';
+my $MAINTAINER = 'MAINTAINER';
+my $EMAIL = 'EMAIL';
+my $DISTRIBUTION = 'UNRELEASED';
+my $CHANGES = '';
+
+if (! $opt_create || ($opt_create && $changelog_path eq 'debian/NEWS')) {
+    if (! $opt_create) {
+	open PARSED, qq[dpkg-parsechangelog -l"$changelog_path" | ]
+	    or fatal "Cannot execute dpkg-parsechangelog: $!";
+    } elsif ($opt_create && $changelog_path eq 'debian/NEWS') {
+	open PARSED, qq[dpkg-parsechangelog | ]
+	    or fatal "Cannot execute dpkg-parsechangelog: $!";
+    } else {
+	fatal "This can't happen: what am I parsing?";
     }
-}
 
-close PARSED
-    or fatal "Problem executing dpkg-parsechangelog: $!";
-if ($?) { fatal "dpkg-parsechangelog failed!" }
+    my $last;
+    while (<PARSED>) {
+	chomp;
+	if (/^(\S+):\s(.+?)\s*$/) { $changelog{$1}=$2; $last=$1; }
+	elsif (/^(\S+):\s$/) { $changelog{$1}=''; $last=$1; }
+	elsif (/^\s\.$/) { $changelog{$last}.="\n"; }
+	elsif (/^\s(.+)$/) { $changelog{$last}.="$1\n"; }
+	else {
+	    fatal "Don't understand dpkg-parsechangelog output: $_";
+	}
+    }
 
-# Now we've read the changelog, set some variables and then
-# let's check the directory name is sensible
-fatal "No package name in changelog!"
-    unless exists $changelog{'Source'};
-my $PACKAGE = $changelog{'Source'};
-fatal "No version number in changelog!"
-    unless exists $changelog{'Version'};
-my $VERSION=$changelog{'Version'};
-fatal "No maintainer in changelog!"
-    unless exists $changelog{'Maintainer'};
-my ($MAINTAINER,$EMAIL) = ($changelog{'Maintainer'} =~ /^([^<]+) <(.*)>/);
-fatal "No distribution in changelog!"
-    unless exists $changelog{'Distribution'};
-my $DISTRIBUTION=$changelog{'Distribution'};
-fatal "No changes in changelog!"
-    unless exists $changelog{'Changes'};
-my $CHANGES=$changelog{'Changes'};
+    close PARSED
+	or fatal "Problem executing dpkg-parsechangelog: $!";
+    if ($?) { fatal "dpkg-parsechangelog failed!"; }
 
-# Is the directory name acceptable?
-if ($check_dirname_level ==  2 or
-    ($check_dirname_level == 1 and $chdir)) {
-    my $re = $check_dirname_regex;
-    $re =~ s/PACKAGE/\\Q$PACKAGE\\E/g;
-    my $gooddir;
-    if ($re =~ m%/%) { $gooddir = eval "cwd() =~ /^$re\$/;"; }
-    else { $gooddir = eval "basename(cwd()) =~ /^$re\$/;"; }
-    
-    if (! $gooddir) {
-	my $pwd = cwd();
-	die <<"EOF";
+    # Now we've read the changelog, set some variables and then
+    # let's check the directory name is sensible
+    fatal "No package name in changelog!"
+	unless exists $changelog{'Source'};
+    $PACKAGE = $changelog{'Source'};
+    fatal "No version number in changelog!"
+	unless exists $changelog{'Version'};
+    $VERSION=$changelog{'Version'};
+    fatal "No maintainer in changelog!"
+	unless exists $changelog{'Maintainer'};
+    ($MAINTAINER,$EMAIL) = ($changelog{'Maintainer'} =~ /^([^<]+) <(.*)>/);
+    fatal "No distribution in changelog!"
+	unless exists $changelog{'Distribution'};
+    $DISTRIBUTION=$changelog{'Distribution'};
+    fatal "No changes in changelog!"
+	unless exists $changelog{'Changes'};
+    $CHANGES=$changelog{'Changes'};
+
+    # Is the directory name acceptable?
+    if ($check_dirname_level ==  2 or
+	($check_dirname_level == 1 and $chdir)) {
+	my $re = $check_dirname_regex;
+	$re =~ s/PACKAGE/\\Q$PACKAGE\\E/g;
+	my $gooddir;
+	if ($re =~ m%/%) { $gooddir = eval "cwd() =~ /^$re\$/;"; }
+	else { $gooddir = eval "basename(cwd()) =~ /^$re\$/;"; }
+	
+	if (! $gooddir) {
+	    my $pwd = cwd();
+	    fatal <<"EOF";
 $progname: found debian/changelog for package $PACKAGE in the directory
   $pwd
 but this directory name does not match the package name according to the
@@ -357,9 +423,37 @@ regex  $check_dirname_regex.
 To run $progname on this package, see the --check-dirname-level and
 --check-dirname-regex options; run $progname --help for more info.
 EOF
+	}
     }
-}
-
+} else {
+    # we're creating and we don't know much about our package
+    if ($opt_d) {
+	my $pwd = basename(cwd());
+	# The directory name should be <package>-<version>
+	my $version_chars = '0-9a-zA-Z+\.\-';
+	if ($pwd =~ m/^([a-z0-9][a-z0-9+\-\.]+)-([0-9][$version_chars]*)$/) {
+	    $PACKAGE=$1;
+	    $VERSION="$2-1";  # introduce a Debian version of -1
+	} elsif ($pwd =~ m/^[a-z0-9][a-z0-9+\-\.]+$/) {
+	    $PACKAGE=$pwd;
+	} else {
+	    # don't know anything
+	}
+    }
+    if ($opt_package) {
+	if ($opt_package =~ m/^[a-z0-9][a-z0-9+\-\.]+$/) {
+	    $PACKAGE=$opt_package;
+	} else {
+	    warn "$progname: illegal package name used with --package: $opt_package\n";
+	}
+    }
+    if ($opt_v) {
+	$VERSION=$opt_v;
+    }
+    if ($opt_d) {
+	$DISTRIBUTION=$opt_d;
+    }
+}    
 
 # Clean up after old versions of debchange
 if (-f "debian/RELEASED") {
@@ -442,6 +536,7 @@ else {
 
 my @closes_text = ();
 my $warnings = 0;
+my $initial_release = 0;
 if (@closes and $opt_query) { # and we have to query the BTS
     if (system('command -v wget >/dev/null 2>&1') >> 8 != 0) {
 	warn "$progname warning: wget not installed, so cannot query the bug-tracking system\n";
@@ -491,7 +586,7 @@ if (@closes and $opt_query) { # and we have to query the BTS
 		    warn "$progname warning: unknown bug \#$close does not belong to $PACKAGE,\n  disabling closing changelog entry\n";
 		    $warnings++;
 		    push @closes_text, "Closes?? \#$close: UNKNOWN BUG IN WRONG PACKAGE!!\n";
-                } else {
+		} else {
 		    my ($bugtitle) = ($bug =~ m%<TITLE>.*?\#$close - (.*?)</TITLE>%);
 		    my ($bugpkg) = ($bug =~ m%<a href=\"pkgreport.cgi\?pkg=([a-z0-9\+\-\.]*)%);
 		    $bugpkg ||= '?';
@@ -508,6 +603,7 @@ if (@closes and $opt_query) { # and we have to query the BTS
 			}
 			elsif  ($bugtitle =~ /(^(RFP|ITP): )/) {
 			    push @closes_text, "Initial release. (Closes: \#$close: $bugtitle)\n";
+			    $initial_release = 1;
 			}
 		    }
 		    else {
@@ -517,7 +613,7 @@ if (@closes and $opt_query) { # and we have to query the BTS
 		    }
 		}
 	    }
-        }
+	}
    }
 }
 
@@ -544,34 +640,35 @@ if (@ARGV and ! $TEXT) {
 chomp(my $DATE=`822-date`);
 
 # Are we going to have to figure things out for ourselves?
-if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r) {
+if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r &&
+    ! $opt_create) {
     # Yes, we are
     if ($opt_release_heuristic eq 'log') {
-        my @UPFILES = glob("../$PACKAGE\_$SVERSION\_*.upload");
-        if (@UPFILES > 1) {
+	my @UPFILES = glob("../$PACKAGE\_$SVERSION\_*.upload");
+	if (@UPFILES > 1) {
 	    fatal "Found more than one appropriate .upload file!\n" .
-		          "Please use an explicit -a, -i or -v option instead.";
-        }
-        elsif (@UPFILES == 0) { $opt_a = 1 }
-        else {
+	        "Please use an explicit -a, -i or -v option instead.";
+	}
+	elsif (@UPFILES == 0) { $opt_a = 1 }
+	else {
 	    open UPFILE, "<${UPFILES[0]}"
-	        or fatal "Couldn't open .upload file for reading: $!\n" .
-			    "Please use an explicit -a, -i or -v option instead.";
+		or fatal "Couldn't open .upload file for reading: $!\n" .
+		    "Please use an explicit -a, -i or -v option instead.";
 	    while (<UPFILE>) {
-	        if (m%^(s|Successfully uploaded) (/.*/)?\Q$PACKAGE\E\_\Q$SVERSION\E\_[\w\-]+\.changes %) {
+		if (m%^(s|Successfully uploaded) (/.*/)?\Q$PACKAGE\E\_\Q$SVERSION\E\_[\w\-]+\.changes %) {
 		   $opt_i = 1;
 		   last;
-	        }
+		}
 	    }
 	    close UPFILE
-	        or fatal "Problems experienced reading .upload file: $!\n" .
+		or fatal "Problems experienced reading .upload file: $!\n" .
 			    "Please use an explicit -a, -i or -v option instead.";
 	    if (! $opt_i) {
-	        warn "$progname warning: A successful upload of the current version was not logged\n" .
+		warn "$progname warning: A successful upload of the current version was not logged\n" .
 		    "in the upload log file; adding log entry to current version.";
-	        $opt_a = 1;
+		$opt_a = 1;
 	    }
-        }
+	}
     }
     elsif ($opt_release_heuristic eq 'changelog') {
 	if ($changelog{Distribution} eq 'UNRELEASED') {
@@ -587,7 +684,9 @@ if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r) {
 }
 
 # Open in anticipation....
-open S, $changelog_path or fatal "Cannot open changelog: $!";
+unless ($opt_create) {
+    open S, $changelog_path or fatal "Cannot open existing changelog: $!";
+}
 open O, ">$changelog_path.dch"
     or fatal "Cannot write to temporary file: $!";
 # Turn off form feeds; taken from perlform
@@ -598,18 +697,18 @@ my $tmpchk=1;
 my ($NEW_VERSION, $NEW_SVERSION, $NEW_UVERSION);
 my $line;
 
-if ($opt_i || $opt_n || $opt_v || $opt_d) {
+if (($opt_i || $opt_n || $opt_v || $opt_d) && ! $opt_create) {
     # Check that a given explicit version number is sensible.
     if ($opt_v || $opt_d) {
 	if($opt_v) {
 	    $NEW_VERSION=$opt_v;
 	} else {
-	    my $pwd = cwd();
+	    my $pwd = basename(cwd());
 	    # The directory name should be <package>-<version>
 	    my $version_chars = '0-9a-zA-Z+\.';
 	    $version_chars .= ':' if defined $EPOCH;
 	    $version_chars .= '\-' if $UVERSION ne $SVERSION;
-	    if ($pwd =~ m%.*/\Q$PACKAGE\E-([0-9][$version_chars]*)$%) {
+	    if ($pwd =~ m/^\Q$PACKAGE\E-([0-9][$version_chars]*)$/) {
 		$NEW_VERSION=$1;
 		if ($NEW_VERSION eq $UVERSION) {
 		    # So it's a Debian-native package
@@ -662,15 +761,15 @@ if ($opt_i || $opt_n || $opt_v || $opt_d) {
     if (! $NEW_VERSION) {
 	if ($VERSION =~ /(.*?)([a-yA-Y][a-zA-Z]*|\d+)$/i) {
 	    my $end=$2;
-            my $start=$1;
-            # If it's not already an NMU make it so
-            # otherwise we can be safe if we behave like dch -i
+	    my $start=$1;
+	    # If it's not already an NMU make it so
+	    # otherwise we can be safe if we behave like dch -i
 	    if ($opt_n and not $start =~ /\.$/) {
 	    	$end += 0.1;
-            } else {
-                $end++;
-            }
-            $NEW_VERSION = "$start$end";
+	    } else {
+		$end++;
+	    }
+	    $NEW_VERSION = "$start$end";
 	    ($NEW_SVERSION=$NEW_VERSION) =~ s/^\d+://;
 	    ($NEW_UVERSION=$NEW_SVERSION) =~ s/-[^-]*$//;
 	} else {
@@ -679,16 +778,15 @@ if ($opt_i || $opt_n || $opt_v || $opt_d) {
     }
 
     my $distribution = $opt_D || (($opt_release_heuristic eq 'changelog') ? "UNRELEASED" : $DISTRIBUTION);
-    print O "$PACKAGE ($NEW_VERSION) $distribution; ",
-        "urgency=$opt_u\n\n";
+    print O "$PACKAGE ($NEW_VERSION) $distribution; urgency=$opt_u\n\n";
 
     if ($opt_n && ! $opt_news) {
-        print O "  * Non-maintainer upload.\n";
-        $line = 1;
+	print O "  * Non-maintainer upload.\n";
+       $line = 1;
     }
     if (@closes_text or $TEXT) {
-	format_line($_, 1) foreach @closes_text;
-	format_line($TEXT, 1) if length $TEXT;
+	foreach (@closes_text) { format_line($_, 1); }
+	if (length $TEXT) { format_line($TEXT, 1); }
     } elsif ($opt_news) {
 	print O "  \n";
     } else {
@@ -701,7 +799,7 @@ if ($opt_i || $opt_n || $opt_v || $opt_d) {
     local $/ = undef;
     print O <S>;
 }
-elsif ($opt_a) {
+elsif ($opt_a && ! $opt_create) {
     # This means we just have to generate a new * entry in changelog
     # and if a multi-developer changelog is detected, add developer names.
     $NEW_VERSION=$VERSION;
@@ -725,24 +823,24 @@ elsif ($opt_a) {
     if (! $opt_news) {
 	my $lastmultimaint;
 	
-	# Parse the changlog for multi-maintainer maintainer lines of
+	# Parse the changelog for multi-maintainer maintainer lines of
 	# the form [ Full Name ] and record the last of these.
-	while ($CHANGES=~/.*\n^\s+\[\s+([^]]+)\s+]\s*$/mg) {
+	while ($CHANGES=~/.*\n^\s+\[\s+([^\]]+)\s+]\s*$/mg) {
 	    $lastmultimaint=$1;
 	}
 
 	if ((! defined $lastmultimaint && defined $lastmaint &&
-	     $lastmaint ne $MAINTAINER)
+	     $lastmaint ne $MAINTAINER && $opt_multimaint)
 	    ||
 	    (defined $lastmultimaint && $lastmultimaint ne $MAINTAINER)
 	   ) {
 	    $multimaint=1;
 	
 	    if (! $lastmultimaint) {
-	        # Add a multi-maintainer header to the top of the existing
-	        # changelog.
-	        my $newchanges='';
-	        $CHANGES=~s/^(  .+)$/  [ $lastmaint ]\n$1/m;
+		# Add a multi-maintainer header to the top of the existing
+		# changelog.
+		my $newchanges='';
+		$CHANGES=~s/^(  .+)$/  [ $lastmaint ]\n$1/m;
 	    }
 	}
     }
@@ -757,8 +855,8 @@ elsif ($opt_a) {
     }
 
     if (@closes_text or $TEXT) {
-	format_line($_, 0) foreach @closes_text;
-	format_line($TEXT, 0) if length $TEXT;
+	foreach (@closes_text) { format_line($_, 0); }
+	if (length $TEXT) { format_line($TEXT, 0); }
     } elsif ($opt_news) {
 	print O "\n  \n";
 	$line++;
@@ -773,11 +871,11 @@ elsif ($opt_a) {
     local $/ = undef;
     print O <S>;
 }
-else { # $opt_e or $opt_r
+elsif (($opt_e || $opt_r) && ! $opt_create) {
     if ($opt_r) {
-        # Change the distribution from UNRELEASED for release.
+	# Change the distribution from UNRELEASED for release.
 	my $distribution = $opt_D || "unstable";
-	$CHANGES=~s/(\([^)]+\)\s+)([^;]+);/$1$distribution;/;
+	$CHANGES=~s/(\([^\)]+\)\s+)([^;]+);/$1$distribution;/;
     }
     
     # We don't do any fancy stuff with respect to versions or adding
@@ -797,8 +895,33 @@ else { # $opt_e or $opt_r
     # Set the start-line to 1, as we don't know what they want to edit
     $line=1;
 }
+elsif ($opt_create) {
+    if (! $initial_release and ! $opt_news) {
+	push @closes_text, "Initial release. (Closes: \#XXXXXX)\n";
+    }
 
-close S or fatal "Error closing $changelog_path: $!";
+    print O "$PACKAGE ($VERSION) $DISTRIBUTION; urgency=$opt_u\n\n";
+
+    if (@closes_text or $TEXT) {
+	foreach (@closes_text) { format_line($_, 1); }
+	if (length $TEXT) { format_line($TEXT, 1); }
+    } elsif ($opt_news) {
+	print O "  \n";
+    } else { # this can't happen, but anyway...
+	print O "  * \n";
+    }
+
+    print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n";
+
+    $line = 1;
+}
+else {
+    fatal "unknown changelog processing options - help!";
+}
+
+if (! $opt_create) {
+    close S or fatal "Error closing $changelog_path: $!";
+}
 close O or fatal "Error closing temporary changelog: $!";
 
 if ($warnings) {
@@ -811,19 +934,19 @@ if ($warnings) {
 }
 
 # Now Run the Editor; always run if doing "closes" to give a chance to check
-if (! $TEXT or @closes_text) {
+if (! $TEXT or @closes_text or $opt_create) {
     my $mtime = (stat("$changelog_path.dch"))[9];
     defined $mtime or fatal
 	"Error getting modification time of temporary changelog: $!";
 
     system("sensible-editor +$line $changelog_path.dch") == 0 or
-    fatal "Error editing the changelog";
+	fatal "Error editing the changelog";
 
     if (! @closes_text) { # so must have a changelog added by hand
 	my $newmtime = (stat("$changelog_path.dch"))[9];
 	defined $newmtime or fatal
 	    "Error getting modification time of temporary changelog: $!";
-	if ($mtime == $newmtime && ! $opt_e && ! $opt_r) {
+	if ($mtime == $newmtime && ! $opt_e && ! $opt_r && ! $opt_create) {
 	    warn "$progname: Changelog unmodified; exiting.\n";
 	    exit 0;
 	}
@@ -836,7 +959,8 @@ copy("$changelog_path.dch","$changelog_path") or
 # Now find out what the new package version number is if we need to
 # rename the directory
 
-if ((cwd() =~ m%/\Q$PACKAGE\E-\Q$UVERSION\E$%) && !$opt_p) {
+if ((basename(cwd()) =~ m%^\Q$PACKAGE\E-\Q$UVERSION\E$%) &&
+    !$opt_p && !$opt_create) {
     # Find the current version number etc.
     my ($new_version, $new_sversion, $new_uversion);
     open PARSED, "dpkg-parsechangelog |"
@@ -894,10 +1018,10 @@ sub format_line {
     $linecount++;
     my $f=select(O);
     if ($opt_news) {
-        $~='NEWS';
+	$~='NEWS';
     }
     else {
-        $~='CHANGELOG';
+	$~='CHANGELOG';
     }
     write O;
     select $f;

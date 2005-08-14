@@ -145,6 +145,19 @@ EOF
 # 
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.9.5
+	then
+	# Added in devscripts 2.9.5:
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### debchange option added in version 2.9.5:
+# 
+# Introduce multiple-maintainer markers in changelog sections?
+# DEBCHANGE_MULTIMAINT=yes
+# 
+EOF
+	fi
     fi
 fi
 

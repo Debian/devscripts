@@ -1,21 +1,21 @@
 devscripts (2.9.5) UNRELEASED; urgency=low
 
   [ Joey Hess ]
+  * bts: Make block command accept "by" or "with" after the blocked bug,
+    but do not make either mandatory.
   * debcommit: try to add support for svk
 
   [ Julian Gilbey ]
   * bts: fix clone command (Closes: #321798)
   * debchange: add comment to manpage about building sponsored uploads
     (Closes: #321960)
+  * debchange: allow creation of changelogs / NEWS files (Closes: #220755,
+    #322716)
   * debsign: fix noecho behaviour for interrupted gpg call (Closes:
     #321684)
   * wnpp-alert: RFA -> RFH (Closes: #321707)
 
-  [ Joey Hess ]
-  * bts: Make block command accept "by" or "with" after the blocked bug,
-    but do not make either mandatory.
-
- -- Joey Hess <joeyh@debian.org>  Fri, 12 Aug 2005 16:59:27 -0400
+ -- Julian Gilbey <jdg@debian.org>  Sun, 14 Aug 2005 18:24:15 +0100
 
 devscripts (2.9.4) unstable; urgency=low
 

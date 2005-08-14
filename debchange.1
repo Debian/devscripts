@@ -23,7 +23,9 @@ temporary file, \fBdebchange\fR will exit without touching the
 existing changelog.  \fBNote that the changelog is assumed to be
 encoded with the UTF-8 encoding.  If it is not, problems may occur.\fR
 Please see the \fBiconv\fR(1) manpage to find out how to convert
-changelogs from legacy encodings.
+changelogs from legacy encodings.  Finally, a changelog or debian/NEWS
+file can be created from scratch using the \fB\-\-create\fR option
+described below.
 .PP
 \fBdebchange\fR also supports automatically producing bug-closing
 changelog entries, using the \fB\-\-closes\fR option.  This will
@@ -84,7 +86,11 @@ is listed as having done the previous entries, then lines will be added to
 the changelog to tell which maintainers made which changes. Currently only
 one of the several such styles of recording this information is supported,
 in which the name of the maintainer who made a set of changes appears
-on a line before the changes, inside square brackets.
+on a line before the changes, inside square brackets. This can be
+switched on and off using the \fB\-\-[no]multimaint\fR option or the
+DEBCHANGE_MULTIMAINT configuration file option; the default is to
+enable it.  Note that if an entry has already been marked in this way,
+then this option will be silently ignored.
 .PP
 If the directory name of the source tree has the form
 \fIpackage\fR-\fIversion\fR, then \fBdebchange\fR will also attempt to
@@ -137,15 +143,15 @@ this can be changed using the \fB\-\-changelog\fR or \fB\-\-news\fR
 options or the CHANGELOG environment variable, as described below.
 .SH OPTIONS
 .TP
+.BR \-\-append ", " \-a
+Add a new changelog entry at the end of the current version's entries.
+.TP
 .BR \-\-increment ", " \-i
 Increment either the final component of the Debian release number or,
 if this is a native Debian package, the version number.  This creates
 a new section at the beginning of the changelog with appropriate
 headers and footers.  Also, if this is a new version of a native
 Debian package, the directory name is changed to reflect this.
-.TP
-.BR \-\-append ", " \-a
-Add a new changelog entry at the end of the current version's entries.
 .TP
 \fB\-\-newversion \fIversion\fR, \fB\-v \fIversion\fR
 This specifies the version number (including the Debian release part)
@@ -161,10 +167,31 @@ Update the changelog timestamp. If the distribution is set to
 "UNRELEASED", change it to unstable (or another distribution as specified
 by \fB\-\-distribution\fR).
 .TP
+.BR \-\-create
+This will create a new \fIdebian/changelog\fR file (or
+\fIdebian/NEWS\fR if the \fB\-\-news\fR option is used).  You must be
+in the top-level directory to use this; no directory name checking
+will be performed.  The package name and version can either be
+specified using the \fB\-\-package\fR and \fB\-\-newversion\fR
+options, determined from the directory name using the
+\fB\-\-fromdirname\fR option or entered manually into the generated
+changelog file.  The maintainer name is determined from the
+environment if this is possible, and the distribution is specified
+either using the \fB\-\-distribution\fR option or in the generated
+changelog file.
+.TP
+\fB\-\-package\fR \fIpackage\fR
+This specifies the package name to be used in the new changelog; this
+may only be used in conjunction with the \fB\-\-create\fR option.
+.TP
 .BR \-\-nmu ", " \-n
 Increment the Debian release number for a non-maintainer upload by
 either appending a ".1" to a non-NMU version number or by incrementing
 an NMU version number.
+.TP
+.BR \-\-force\-bad\-version ", " \-b
+Force a version number to be less than the current one (e.g., when
+backporting).
 .TP
 .BR \-\-fromdirname ", " \-d
 This will take the upstream version number from the directory name,
@@ -176,7 +203,7 @@ with the same epoch as the previous package version.  If the upstream
 version number is the same, this option will behave in the same way as
 \fB\-i\fR.
 .TP
-.BI \-\-closes nnnnn,[nnnnn,...]
+.BI \-\-closes " nnnnn,[nnnnn,...]"
 Add changelog entries to close the specified bug numbers.  Also invoke
 the editor after adding these entries.  Will generate warnings if the
 BTS cannot be contacted (and \fB\-\-noquery\fR has not been
@@ -211,6 +238,11 @@ checking will be performed when this option is used.
 This will edit \fIdebian/NEWS\fR instead of the regular
 changelog.  Directory searching will be performed.  Cannot be used
 together with \fB\-\-changelog\fR.
+.TP
+\fB\-\-[no]multimaint\fR
+Should we indicate that parts of a changelog entry have been made by
+different maintainers?  Default is yes; see the discussion above and
+also the DEBCHANGE_MULTIMAINT configuration file option below.
 .TP
 \fB\-\-check-dirname-level\fR \fIN\fR
 See the above section "Directory name checking" for an explanation of
@@ -260,6 +292,11 @@ in \fBdevscripts.conf\fR(5).
 Controls how \fBdebchange\fR determines if a package has been released,
 when deciding whether to create a new changelog entry or append to an
 existing changelog entry. Can be either "log" or "changelog".
+.TP
+.BR DEBCHANGE_MULTIMAINT
+If set to "no", \fBdebchange\fR will not introduce multiple-maintainer
+distinctions when a different maintainer appends an entry to an
+existing changelog.  See the discussion above.  Default is "yes".
 .SH ENVIRONMENT
 .TP
 .BR DEBEMAIL ", " EMAIL ", " DEBFULLNAME
