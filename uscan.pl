@@ -850,12 +850,12 @@ EOF
 
     print "Newest version on remote site is $newversion, local version is $lastversion\n" .
 	($mangled_lastversion eq $lastversion ? "" : " (mangled local version number $mangled_lastversion)\n")
-	if $verbose;
+	if $verbose or $download == 0;
 
     # Can't just use $lastversion eq $newversion, as then 0.01 and 0.1
     # compare different, whereas they are treated as equal by dpkg
     if (system("dpkg --compare-versions '$mangled_lastversion' eq '$newversion'") == 0) {
-	print " => Package is up to date\n" if $verbose;
+	print " => Package is up to date\n" if $verbose or $download == 0;
 	$dehs_tags{'status'} = "up to date";
 	return 0;
     }
@@ -880,17 +880,17 @@ EOF
     if (defined $pkg_dir) {
 	if (-f "../$newfile_base") {
 	    print " => $newfile_base already in package directory\n"
-		if $verbose;
+		if $verbose or $download == 0;
 	    return 0;
 	}
 	if (-f "../${pkg}_${newversion}.orig.tar.gz") {
 	    print " => ${pkg}_${newversion}.orig.tar.gz already in package directory\n"
-		if $verbose;
+		if $verbose or $download == 0;
 	    return 0;
 	}
 	elsif (-f "../${pkg}_${newversion}.orig.tar.bz2") {
 	    print " => ${pkg}_${newversion}.orig.tar.bz2 already in package directory\n"
-		if $verbose;
+		if $verbose or $download == 0;
 	    return 0;
 	}
     }
