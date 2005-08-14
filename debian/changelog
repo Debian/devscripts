@@ -11,11 +11,13 @@ devscripts (2.9.5) UNRELEASED; urgency=low
     (Closes: #321960)
   * debchange: allow creation of changelogs / NEWS files (Closes: #220755,
     #322716)
+  * debchange: allow option (--nomultimaint) to not use this
+    multi-maintainer changelog format
   * debsign: fix noecho behaviour for interrupted gpg call (Closes:
     #321684)
   * wnpp-alert: RFA -> RFH (Closes: #321707)
 
- -- Julian Gilbey <jdg@debian.org>  Sun, 14 Aug 2005 18:24:15 +0100
+ -- Julian Gilbey <jdg@debian.org>  Sun, 14 Aug 2005 18:25:12 +0100
 
 devscripts (2.9.4) unstable; urgency=low
 
