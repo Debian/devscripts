@@ -9,8 +9,9 @@ devscripts (2.9.5) UNRELEASED; urgency=low
   * bts: fix clone command (Closes: #321798)
   * debchange: add comment to manpage about building sponsored uploads
     (Closes: #321960)
-  * debchange: allow creation of changelogs / NEWS files (Closes: #220755,
-    #322716)
+  * debchange: introduce --create option: allows creation of changelogs /
+    NEWS files (Closes: #220755, #322716), and inform user about this
+    option if changelog / NEWS file is not found (Closes: #316661)
   * debchange: allow option (--nomultimaint) to not use this
     multi-maintainer changelog format
   * debsign: fix noecho behaviour for interrupted gpg call (Closes:

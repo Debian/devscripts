@@ -259,7 +259,7 @@ if ($opt_ignore) {
 if (defined $opt_level) {
     if ($opt_level =~ /^[012]$/) { $check_dirname_level = $opt_level; }
     else {
-	fatal "unrecognised --check-dirname-level value (allowed are 0,1,2)";
+	fatal "Unrecognised --check-dirname-level value (allowed are 0,1,2)";
     }
 }
 
@@ -289,7 +289,7 @@ if ($opt_create) {
 	warn "$progname: ignoring -a/-i/-e/-r/-b/-n options with --create\n";
     }
     if ($opt_package && $opt_d) {
-	fatal "can only use one of --package and -d";
+	fatal "Can only use one of --package and -d";
     }
 }
 
@@ -310,9 +310,9 @@ if (! $opt_create) {
 	or $changelog_path eq 'debian/NEWS') {
 	until (-f $changelog_path) {
 	    $chdir = 1;
-	    chdir '..' or fatal "can't chdir ..: $!";
+	    chdir '..' or fatal "Can't chdir ..: $!";
 	    if (cwd() eq '/') {
-		fatal "cannot find $changelog_path anywhere!\nAre you in the source code tree?";
+		fatal "Cannot find $changelog_path anywhere!\nAre you in the source code tree?\n(You could use --create if you wish to create this file.)";
 	    }
 	}
 	
@@ -323,7 +323,7 @@ if (! $opt_create) {
     }
     else {
 	unless (-f $changelog_path) {
-	    fatal "cannot find $changelog_path!\nAre you in the correct directory?";
+	    fatal "Cannot find $changelog_path!\nAre you in the correct directory?\n(You could use --create if you wish to create this file.)";
 	}
 
 	# Can't write, so stop now.
@@ -334,13 +334,13 @@ if (! $opt_create) {
 }
 else {  # $opt_create
     unless (-d dirname $changelog_path) {
-	fatal "cannot find " . (dirname $changelog_path) . " directory!\nAre you in the correct directory?";
+	fatal "Cannot find " . (dirname $changelog_path) . " directory!\nAre you in the correct directory?";
     }
     if (-f $changelog_path) {
-	fatal "file $changelog_path already exists!";
+	fatal "File $changelog_path already exists!";
     }
     unless (-w dirname $changelog_path) {
-	fatal "cannot find " . (dirname $changelog_path) . " directory!\nAre you in the correct directory?";
+	fatal "Cannot find " . (dirname $changelog_path) . " directory!\nAre you in the correct directory?";
     }
     if ($changelog_path eq 'debian/NEWS' && ! -f 'debian/changelog') {
 	fatal "I can't create debian/NEWS without debian/changelog present";
@@ -415,7 +415,7 @@ if (! $opt_create || ($opt_create && $changelog_path eq 'debian/NEWS')) {
 	if (! $gooddir) {
 	    my $pwd = cwd();
 	    fatal <<"EOF";
-$progname: found debian/changelog for package $PACKAGE in the directory
+Found debian/changelog for package $PACKAGE in the directory
   $pwd
 but this directory name does not match the package name according to the
 regex  $check_dirname_regex.
@@ -679,7 +679,7 @@ if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r &&
 	}
     }
     else {
-	fatal "bad release heuristic value";
+	fatal "Bad release heuristic value";
     }
 }
 
@@ -916,7 +916,7 @@ elsif ($opt_create) {
     $line = 1;
 }
 else {
-    fatal "unknown changelog processing options - help!";
+    fatal "Unknown changelog processing options - help!";
 }
 
 if (! $opt_create) {
