@@ -1420,7 +1420,7 @@ sub download_attachments {
     
     for (split /\n/, $toppage) {
 	my ($ref, $msg);
-	if (m%\[<a href="(bugreport\.cgi[^\"]*)">.*?\(([^,]*), .*?\)\]%) {
+	if (m%\[href="(bugreport\.cgi[^\"]*)">.*?\(([^,]*), .*?\)\]%) {
 	    $ref = $1;
 	    my $mimetype = $2;
 	    $ref =~ s/&amp;/&/g;
@@ -1444,7 +1444,7 @@ sub download_attachments {
 	    next if -f $bug2filename{$msg} and not $refreshmode;
 	}
 	elsif ($cachemode eq 'full' and
-	       m%<a href="(bugreport\.cgi\?bug=\d+&amp;msg=(\d+))">%) {
+	       m%href="(bugreport\.cgi\?bug=\d+&amp;msg=(\d+))">%) {
 	    $ref = $1;
 	    $msg = $2;
 	    $bug2filename{$msg} = "$thing/$msg.html";
@@ -1452,7 +1452,7 @@ sub download_attachments {
 	    next if -f $bug2filename{$msg} and not $refreshmode;
 	}
 	elsif (($cachemode eq 'full' or $cachemode eq 'mbox' or $mboxmode) and
-	       m%<a href="(bugreport\.cgi\?bug=\d+&amp;mbox=yes)">%) {
+	       m%href="(bugreport\.cgi\?bug=\d+&amp;mbox=yes)">%) {
 	    $ref = $1;
 	    $msg = 'mbox';
 	    $bug2filename{$msg} = "$thing.mbox";
@@ -1709,7 +1709,7 @@ sub browse {
 		open (OUT_LIVE, ">/dev/fd/" . fileno($fh))
 		    or die "bts: writing to temporary file: $!\n";
 		# Correct relative urls to point to the bts.
-		$live =~ s/<a href="(\w+\.cgi)/<a href="$btscgiurl$1/g;
+		$live =~ s/\shref="(\w+\.cgi)/ href="$btscgiurl$1/g;
 		print OUT_LIVE $live;
 		# Some browsers don't like unseekable filehandles,
 		# so use filename
