@@ -582,8 +582,8 @@ sub process_watchline ($$$$$$)
 	    $site = "ftp://$site";
 	    if ($pattern !~ /\(.*\)/) {
 		# watch_version=1 and old style watchfile;
-		# pattern uses ? and * shell wildcards; everything from the first
-		# to last of these metachars is the pattern to match on.
+		# pattern uses ? and * shell wildcards; everything from the
+		# first to last of these metachars is the pattern to match on
 		$pattern =~ s/(\?|\*)/($1/;
 		$pattern =~ s/(\?|\*)([^\?\*]*)$/$1)$2/;
 		$pattern =~ s/\./\\./g;
@@ -1235,7 +1235,12 @@ sub process_watchfile ($$$$)
 
 	# Handle shell \\ -> \
 	s/\\\\/\\/g if $watch_version==1;
-	print "-- In $watchfile, processing watchfile line:\n   $_\n" if $verbose;
+	if ($verbose) {
+	    print "-- In $watchfile, processing watchfile line:\n   $_\n" if $verbose;
+	} elsif ($download == 0 and ! $dehs) {
+	    print "Processing watchfile line for package $package...\n";
+	}
+	    
 	$status +=
 	    process_watchline($_, $watch_version, $dir, $package, $version,
 			      $watchfile);
