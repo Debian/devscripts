@@ -102,9 +102,9 @@ foreach my $filename (@ARGV) {
 	    my $found = 0;
 	    my $match = '';
 	    my @bashism_regexs = (
-		'function \w+\(\s*\)',       # function is useless
-		                             # should be '.', not 'source'
+		'(?:^|\s+)function\s+\w+',     # function is useless
 		'(?:^|\s+)source\s+(?:\.\/|\/|\$)[^\s]+',
+		                             # should be '.', not 'source'
 		'(\[|test|-o|-a)\s*[^\s]+\s+==\s', # should be 'b = a'
 		'\s\|\&',                    # pipelining is not POSIX
 		'\$\[\w+\]',                 # arith not allowed

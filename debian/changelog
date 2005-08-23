@@ -2,10 +2,11 @@ devscripts (2.9.6) UNRELEASED; urgency=low
 
   * bts: tags: revert change in 2.9: reinstate "fixed-in-experimental" (it
     still appears to be in use) and don't need "help" twice
+  * checkbashisms: correctly detect "function" keyword (Closes: #324599)
   * uscan: report on package being scanned when --report is used (Closes:
     #324102)
 
- -- Julian Gilbey <jdg@debian.org>  Sat, 20 Aug 2005 23:20:05 +0100
+ -- Julian Gilbey <jdg@polya.uklinux.net>  Tue, 23 Aug 2005 20:33:00 +0100
 
 devscripts (2.9.5) unstable; urgency=low
 
