@@ -111,11 +111,6 @@ END {
     untie %timestamp;
 }
 
-# Can delete after sarge is released
-my $oldcachedir=$ENV{'HOME'}."/.bts_cache/";
-my $oldorigdir=$oldcachedir."orig/";
-# my $timestamp=$cachedir."orig/manual.timestamp";
-
 my %clonedbugs = ();
 
 =head1 SYNOPSIS
@@ -1002,7 +997,9 @@ sub bts_cache {
 	mkdir($cachedir)
 	    or die "bts: couldn't mkdir $cachedir: $!\n";
     }
-    
+
+    download("css/bugs.css");
+
     my $tocache;
     if (@_ > 0) { $tocache=shift; }
     else { $tocache=''; }
@@ -1555,6 +1552,7 @@ sub mangle_cache_file {
     while ($data =~ s!(href=\"[^\"]*)\%2b!$1+!ig) { };
     my $time=localtime($timestamp);
     $data =~ s%(<BODY.*>)%$1<p><em>[Locally cached on $time]</em></p>%i;
+    $data =~ s%href="/css/bugs.css"%href="bugs.css"%;
     my @data = split /\n/, $data;
     for (@data) {
 	if (m%<a href="bugreport\.cgi[^\?]*\?bug=(\d+)([^\"]*)">%i) {
@@ -1609,6 +1607,7 @@ sub deletecache {
 sub cachefile {
     my $thing=shift;
     if ($thing eq '') { die "bts: cachefile given empty argument\n"; }
+    if ($thing =~ /bugs.css$/) { return $cachedir."bugs.css" }
     $thing =~ s/^src:/src_/;
     $thing =~ s/^from:/from_/;
     $thing =~ s/^tag:/tag_/;
@@ -1737,7 +1736,6 @@ sub browse {
 # this at most once per day for efficiency.
 
 sub prunecache {
-    convertcache();
     return unless -d $cachedir;
     return if -f $prunestamp and -M _ < 1;
 
@@ -1754,7 +1752,7 @@ sub prunecache {
     my @known_files = map { basename($_) } ($timestampdb, $timestampdb.".lock",
 					    $prunestamp);
 
-    my %weirdfiles = map { $_ => 1 } grep { ! /\.html$/ } @cachefiles;
+    my %weirdfiles = map { $_ => 1 } grep { ! /\.(html|css)$/ } @cachefiles;
     foreach (@known_files) {
 	delete $weirdfiles{$_} if exists $weirdfiles{$_};
     }
@@ -1773,7 +1771,7 @@ sub prunecache {
 
     my @oldfiles;
     foreach (@cachefiles) {
-	next unless /\.html$/;
+	next unless /\.(html|css)$/;
 	push @oldfiles, $_ if -A $_ > 30;
     }
     
@@ -1902,165 +1900,6 @@ sub is_automatic {
 
 sub make_automatic {
     return abs($_[0]);
-}
-
-# This converts the old caching scheme into the new one
-# It can be dropped after sarge releases
-sub convertcache {
-    return unless -d $oldcachedir;
-
-    my $msg_cachedir = $cachedir;
-    $msg_cachedir =~ s%^$ENV{'HOME'}/%~/%;
-    my $msg_oldcachedir = $oldcachedir;
-    $msg_oldcachedir =~ s%^$ENV{'HOME'}/%~/%;
-    my $msg_oldorigdir = $oldorigdir;
-    $msg_oldorigdir =~ s%^$ENV{'HOME'}/%~/%;
-
-    if (-d $cachedir) {
-	warn <<"EOW";
-The old-format cache directory:
-  $msg_oldcachedir
-is still present, even though the new-format one
-  $msg_cachedir
-has already been created.  So I\'m going to ignore the old cache.
-(To prevent this message from appearing in future,
-remove or rename the old cache directory.)
-EOW
-	if (-t STDIN) {
-	    print STDERR "Hit <enter> to continue ";
-	    IO::Handle::flush(\*STDERR);
-	    my $answer = <STDIN>;
-	}
-	return;
-    }
-	
-    if (! -d $oldorigdir) {
-	warn <<"EOW";
-The old-format cache directory:
-  $msg_oldcachedir
-is still present, but the old-format download directory
-  $msg_oldorigdir
-is not.  So I\'m going to ignore the old cache entirely.
-(To prevent this message from appearing in future,
-remove or rename the old cache directory.)
-EOW
-	if (-t STDIN) {
-	    print STDERR "Hit <enter> to continue ";
-	    IO::Handle::flush(\*STDERR);
-	    my $answer = <STDIN>;
-	}
-	return;
-    }
-
-    # OK, so we've got an old cache which needs converting.  We
-    # won't be as careful with this as we were when actually using
-    # the old cache for real; if we can copy files across, great,
-    # otherwise, don't do so.
-    warn <<"EOW";
-I see that you have an old-format cache directory:
-  $msg_oldcachedir
-The location and format of the bts cache changed in
-devscripts version 2.7.93; the new cache directory is
-  $msg_cachedir
-so I\'m going to automatically convert your old cache
-into the new format.
-Converting....
-
-EOW
-
-    chdir $oldcachedir or die "bts: chdir $oldcachedir: $!\n";
-    opendir DIR, $oldcachedir or die "bts: opendir $oldcachedir: $!\n";
-    my @cachefiles = grep { -f $_ } readdir(DIR);
-    closedir DIR;
-
-    chdir $oldorigdir or die "bts: chdir $oldorigdir: $!\n";
-    opendir DIR, $oldorigdir or die "bts: opendir $oldorigdir: $!\n";
-    my @origfiles = grep { -f $_ } readdir(DIR);
-    closedir DIR;
-    my %manual = map { $_ => 1 } grep { s/\.manual$/.html/ } readdir (DIR);
-
-    my %save_cache_stamps;
-    foreach my $oldcache (@cachefiles) {
-	my $thingbase = $oldcache;
-	$thingbase =~ s/\.html$//;
-	my $thingtype = '';
-	if ($thingbase =~ /^\d+$/) { $thingtype = 'bug'; }
-	elsif ($thingbase =~ s/^src_//) { $thingtype = 'src'; }
-	elsif ($thingbase =~ s/^from_//) { $thingtype = 'submitter'; }
-	elsif ($thingbase =~ /\@/) { $thingtype = 'maint'; }
-	elsif ($thingbase =~ /^[a-z0-9+.-]{2,}$/) { $thingtype = 'pkg'; }
-	# mangle the name for '+' in package names :-|
-	$thingbase =~ s/\+/\%2b/g;
-
-	foreach my $file (@origfiles) {
-	    if ($file =~ /^\w+\.cgi\?$thingtype=$thingbase($|&)/) {
-		my $timestamp = (stat("$oldcachedir$oldcache"))[9];
-		next unless defined $timestamp;  # just skip errors
-		if (exists $save_cache_stamps{$oldcache}) {
-		    # Yuck - multiple files match; take the oldest timestamp
-		    $save_cache_stamps{$oldcache} = $timestamp
-			if $timestamp < $save_cache_stamps{$oldcache};
-		} else {
-		    $save_cache_stamps{$oldcache} = $timestamp;
-		}
-	    }
-	}
-    }
-
-    # Now we have a list of files to save, we can copy them across
-    # We assume that since the user had an old cache, they'll be happy
-    # to have a new one ;-)
-    if (! -d dirname($cachedir)) {
-	mkdir(dirname($cachedir))
-	    or die "bts: couldn't mkdir ".dirname($cachedir).": $!\n";
-    }
-    mkdir($cachedir)
-	or die "bts: couldn't mkdir $cachedir: $!\n";
-
-    tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
-	 O_RDWR()|O_CREAT(), 0600, $DB_HASH, "write")
-	or die "bts: couldn't open DB file $timestampdb for writing: $!\n";
-
-    foreach (keys %save_cache_stamps) {
-	my $thing = $_;
-	$thing =~ s/\.html$//;
-	$thing =~ s/^src_/src:/;
-	$thing =~ s/^from_/from:/;
-
-	if (copy "$oldcachedir$_", "$cachedir$_") {
-	    if (exists $manual{$_}) {
-		set_timestamp($thing, make_manual($save_cache_stamps{$_}));
-	    } else {
-		set_timestamp($thing, make_automatic($save_cache_stamps{$_}));
-	    }
-	}
-    }
-
-    untie %timestamp;
-
-    if (-t STDIN) {
-	print STDERR <<"EOW";
-Conversion successful.  Shall I remove your old cache directory
-($msg_oldcachedir)?
-(If you don\'t do so, you will get warnings in future.  You can say "no"
-here and then rename the directory later if you wish.)
-EOW
-	print STDERR "Remove old cache? (y/n) ";
-	IO::Handle::flush(\*STDERR);
-	my $answer = <STDIN>;
-	chomp($answer);
-	if ($answer =~ /^y(es)?$/i) {
-	    (system('/bin/rm', '-rf', $oldcachedir) == 0)
-		or warn "Problems deleting $oldcachedir - please handle manually\n";
-	} else {
-	    print STDERR "OK, leaving old cache.  Please handle it manually.\n";
-	}
-    } else {
-	print STDERR <<"EOW";
-Conversion successful.  Please now remove or rename the old cache
-directory ($msg_oldcachedir) or you will get warnings in future.
-EOW
-    }
 }
 
 # We would love to use LWP::Simple::mirror in this script.

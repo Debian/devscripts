@@ -1,12 +1,19 @@
 devscripts (2.9.6) UNRELEASED; urgency=low
 
+  [ Julian Gilbey ]
   * bts: tags: revert change in 2.9: reinstate "fixed-in-experimental" (it
     still appears to be in use) and don't need "help" twice
   * checkbashisms: correctly detect "function" keyword (Closes: #324599)
   * uscan: report on package being scanned when --report is used (Closes:
     #324102)
 
- -- Julian Gilbey <jdg@polya.uklinux.net>  Tue, 23 Aug 2005 20:33:00 +0100
+  [ Filippo Giunchedi ]
+  * uscan: fixed some repeated tags when used with --dehs
+  * uscan: expand some entities in dehs_output
+  * bts: download bugs.css and use it (Closes: #323781)
+  * bts: remove some old cache handling cruft since sarge is released
+
+ -- Filippo Giunchedi <filippo@debian.org>  Sun, 28 Aug 2005 17:10:37 +0200
 
 devscripts (2.9.5) unstable; urgency=low
 

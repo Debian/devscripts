@@ -140,6 +140,8 @@ my $check_dirname_level = 1;
 my $check_dirname_regex = 'PACKAGE(-.*)?';
 my $dehs = 0;
 my %dehs_tags;
+my $dehs_end_output=0;
+my $dehs_start_output=0;
 
 if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg = "  (no configuration files read)";
@@ -353,6 +355,7 @@ if (defined $opt_watchfile) {
     }
 
     # Are there any warnings to give if we're using dehs?
+    $dehs_end_output=1;
     dehs_output if $dehs;
     exit 0;
 }
@@ -1274,6 +1277,7 @@ sub dehs_die ($)
     my $msg = $_[0];
     $msg =~ s/\s*$//;
     %dehs_tags = ('errors' => "$msg");
+    our $dehs_end_output=1;
     dehs_output;
     exit 1;
 }
@@ -1281,26 +1285,33 @@ sub dehs_die ($)
 sub dehs_output ()
 {
     return unless $dehs;
-    my $output = 0;
+    our $dehs_start_output;
+
+	if (! $dehs_start_output) {
+		print "<dehs>\n";
+	    $dehs_start_output=1;
+    }
 
     for my $tag (qw(package debian-uversion debian-mangled-uversion
 		    upstream-version upstream-url
 		    status messages warnings errors)) {
 	if (exists $dehs_tags{$tag}) {
-	    if (! $output) {
-		print "<dehs>\n";
-		$output = 1;
-	    }
 	    if (ref $dehs_tags{$tag} eq "ARRAY") {
 		foreach my $entry (@{$dehs_tags{$tag}}) {
-		    print "<$tag>$entry</$tag>\n";
+            $entry =~ s/</&lt;/g;
+            $entry =~ s/>/&gt;/g;
+		    $entry =~ s/&/&amp;/g;
+            print "<$tag>$entry</$tag>\n";
 		}
 	    } else {
+            $dehs_tags{$tag} =~ s/</&lt;/g;
+            $dehs_tags{$tag} =~ s/>/&gt;/g;
+		    $dehs_tags{$tag} =~ s/&/&amp;/g;
 		print "<$tag>$dehs_tags{$tag}</$tag>\n";
 	    }
 	}
     }
-    if ($output) {
+    if ($dehs_end_output) {
 	print "</dehs>\n";
     }
 
