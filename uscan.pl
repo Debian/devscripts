@@ -1277,7 +1277,7 @@ sub dehs_die ($)
     my $msg = $_[0];
     $msg =~ s/\s*$//;
     %dehs_tags = ('errors' => "$msg");
-    our $dehs_end_output=1;
+    $dehs_end_output=1;
     dehs_output;
     exit 1;
 }
@@ -1285,11 +1285,10 @@ sub dehs_die ($)
 sub dehs_output ()
 {
     return unless $dehs;
-    our $dehs_start_output;
 
-	if (! $dehs_start_output) {
-		print "<dehs>\n";
-	    $dehs_start_output=1;
+    if (! $dehs_start_output) {
+	print "<dehs>\n";
+	$dehs_start_output=1;
     }
 
     for my $tag (qw(package debian-uversion debian-mangled-uversion
