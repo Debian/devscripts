@@ -144,12 +144,13 @@ Debian version number without epoch and Debian revision).  The
 upstream version number will then be mangled using the dversionmangle
 option if one is specified, as described below.  If the newest version
 available is newer than the current version, then it is downloaded
-into the parent directory, unless the \fB\-\-report\fR option has been
-used.  Once the file has been downloaded, then a symlink to the file
-is made from \fI<package>_<version>.orig.tar.gz\fR if the file has a
-\fI.tar.gz\fR or a \fI.tgz\fR suffix and from
-\fI<package>_<version>.orig.tar.bz2\fR if the file has a \fI.tar.bz2\fR
-or a \fI.tbz\fR or \fI.tbz2\fR suffix.
+into the parent directory, unless the \fB\-\-report\fR or
+\fR\-\-report-status\fR option has been used.  Once the file has been
+downloaded, then a symlink to the file is made from
+\fI<package>_<version>.orig.tar.gz\fR if the file has a \fI.tar.gz\fR
+or a \fI.tgz\fR suffix and from \fI<package>_<version>.orig.tar.bz2\fR
+if the file has a \fI.tar.bz2\fR or a \fI.tbz\fR or \fI.tbz2\fR
+suffix.
 .PP
 Finally, if a third parameter is given in the watchfile line, this is
 taken as the name of a command, and the command
@@ -269,7 +270,11 @@ uploading it to Debian.
 .SH OPTIONS
 .TP
 .B \-\-report, \-\-no\-download
-Only report about available versions but do not download anything.
+Only report about available newer versions but do not download anything.
+.TP
+.B \-\-report\-status
+Report on the status of all packages, even those which are up-to-date,
+but do not download anything.
 .TP
 .B \-\-download
 Report and download.  (This is the default behaviour.)

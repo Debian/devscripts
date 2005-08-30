@@ -6,6 +6,8 @@ devscripts (2.9.6) UNRELEASED; urgency=low
   * checkbashisms: correctly detect "function" keyword (Closes: #324599)
   * uscan: report on package being scanned when --report is used (Closes:
     #324102)
+  * uscan: provide --report-status option to distinguish from --report,
+    which is now quieter (Closes: #325097)
 
   [ Filippo Giunchedi ]
   * uscan: fixed some repeated tags when used with --dehs

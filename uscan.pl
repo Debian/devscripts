@@ -67,8 +67,9 @@ Usage: $progname [options] [dir ...]
   Process watchfiles in all .../debian/ subdirs of those listed (or the
   current directory if none listed) to check for upstream releases.
 Options:
-    --report, --no-download
-                   Only report on newer or absent versions, do not download
+    --report       Only report on newer or absent versions, do not download
+    --report-status
+                   Report status of packages, but do not download
     --debug        Dump the downloaded web pages to stdout for debugging
                    your watch file.
     --download     Report on newer and absent versions, and download (default)
@@ -134,14 +135,16 @@ our $passive = 'default';
 # The next stuff is boilerplate
 
 my $download = 1;
+my $report = 0; # report even on up-to-date packages?
 my $symlink = 'symlink';
 my $verbose = 0;
 my $check_dirname_level = 1;
 my $check_dirname_regex = 'PACKAGE(-.*)?';
 my $dehs = 0;
 my %dehs_tags;
-my $dehs_end_output=0;
-my $dehs_start_output=0;
+my $dehs_end_output = 0;
+my $dehs_start_output = 0;
+my $pkg_report_header = '';
 
 if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg = "  (no configuration files read)";
@@ -208,7 +211,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 
 # Now read the command line arguments
 my $debug = 0;
-my ($opt_h, $opt_v, $opt_download, $opt_passive, $opt_symlink);
+my ($opt_h, $opt_v, $opt_download, $opt_report, $opt_passive, $opt_symlink);
 my ($opt_verbose, $opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs);
 
@@ -216,6 +219,7 @@ GetOptions("help" => \$opt_h,
 	   "version" => \$opt_v,
 	   "download!" => \$opt_download,
 	   "report" => sub { $opt_download = 0; },
+	   "report-status" => sub { $opt_download = 0; $opt_report = 1; },
 	   "passive|pasv!" => \$opt_passive,
 	   "symlink!" => sub { $opt_symlink = $_[1] ? 'symlink' : 'no'; },
 	   "rename" => sub { $opt_symlink = 'rename'; },
@@ -242,6 +246,7 @@ if ($opt_v) { version(); exit 0; }
 # Now we can set the other variables according to the command line options
 
 $download = $opt_download if defined $opt_download;
+$report = $opt_report if defined $opt_report;
 $passive = $opt_passive if defined $opt_passive;
 $symlink = $opt_symlink if defined $opt_symlink;
 $verbose = $opt_verbose if defined $opt_verbose;
@@ -273,6 +278,12 @@ if (defined $opt_package) {
 
 die "$progname: Can't use --verbose if you're using --dehs!\n"
     if $verbose and $dehs;
+
+die "$progname: Can't use --report-status if you're using --dehs!\n"
+    if $verbose and $report;
+
+die "$progname: Can't use --report-status if you're using --download!\n"
+    if $download and $report;
 
 warn "$progname: You're going to get strange (non-XML) output using --debug and --dehs together!\n"
     if $debug and $dehs;
@@ -851,17 +862,26 @@ EOF
     $dehs_tags{'upstream-version'} = $newversion;
     $dehs_tags{'upstream-url'} = $upstream_url;
 
-    print "Newest version on remote site is $newversion, local version is $lastversion\n" .
-	($mangled_lastversion eq $lastversion ? "" : " (mangled local version number $mangled_lastversion)\n")
-	if $verbose or ($download == 0 and ! $dehs);
-
     # Can't just use $lastversion eq $newversion, as then 0.01 and 0.1
     # compare different, whereas they are treated as equal by dpkg
     if (system("dpkg --compare-versions '$mangled_lastversion' eq '$newversion'") == 0) {
-	print " => Package is up to date\n"
-	    if $verbose or ($download == 0 and ! $dehs);
+	if ($verbose or ($download == 0 and $report and ! $dehs)) {
+	    print $pkg_report_header;
+	    $pkg_report_header = '';
+	    print "Newest version on remote site is $newversion, local version is $lastversion\n" .
+		($mangled_lastversion eq $lastversion ? "" : " (mangled local version number $mangled_lastversion)\n");
+	    print " => Package is up to date\n";
+	}
 	$dehs_tags{'status'} = "up to date";
 	return 0;
+    }
+
+    # In all other cases, we'll want to report information even with --report
+    if ($verbose or ($download == 0 and ! $dehs)) {
+	print $pkg_report_header;
+	$pkg_report_header = '';
+	print "Newest version on remote site is $newversion, local version is $lastversion\n" .
+	    ($mangled_lastversion eq $lastversion ? "" : " (mangled local version number $mangled_lastversion)\n");
     }
 
     # We use dpkg's rules to determine whether our current version
@@ -1239,9 +1259,9 @@ sub process_watchfile ($$$$)
 	# Handle shell \\ -> \
 	s/\\\\/\\/g if $watch_version==1;
 	if ($verbose) {
-	    print "-- In $watchfile, processing watchfile line:\n   $_\n" if $verbose;
+	    print "-- In $watchfile, processing watchfile line:\n   $_\n";
 	} elsif ($download == 0 and ! $dehs) {
-	    print "Processing watchfile line for package $package...\n";
+	    $pkg_report_header = "Processing watchfile line for package $package...\n";
 	}
 	    
 	$status +=
