@@ -73,11 +73,18 @@ sub MIRROR_ERROR      { 0; }
 sub MIRROR_DOWNLOADED { 1; }
 sub MIRROR_UP_TO_DATE { 2; }
 
-
 my $progname = basename($0);
 my $modified_conf_msg;
-my $version='###VERSION###';
 my $debug = (exists $ENV{'DEBUG'} and $ENV{'DEBUG'}) ? 1 : 0;
+
+# Program version handling
+# The BTS changed its format :/  Pages downloaded using old versions
+# of bts won't look very good, so we force updating if the last cached
+# version was downloaded by a devscripts version less than
+# $new_cache_format_version
+my $version = '###VERSION###';
+$version = '2.9.5' if $version =~ /\#/;  # for testing unconfigured version
+my $new_cache_format_version = '2.9.6';
 
 # The official list is mirrored
 # bugs-mirror.debian.org:/org/bugs.debian.org/etc/config
@@ -1309,6 +1316,7 @@ sub download {
     my $bug_current=shift;  # current bug being downloaded if caching
     my $bug_total=shift;    # total things to download if caching
     my $timestamp = 0;
+    my $versionstamp = '';
     my $url;
 
     # What URL are we to download?
@@ -1321,7 +1329,9 @@ sub download {
     chdir($cachedir) || die "bts: chdir $cachedir: $!\n";
 
     if (-f cachefile($thing)) {
-	$timestamp = get_timestamp($thing) || 0;
+	($timestamp, $versionstamp) = get_timestamp($thing);
+	$timestamp ||= 0;
+	$versionstamp ||= 0;
 	# And ensure we preserve any manual setting
 	if (is_manual($timestamp)) { $manual = 1; }
     }
@@ -1330,15 +1340,18 @@ sub download {
     # yes, if we've caching with --cache-mode=mbox or full and the bug had
     # previously been cached in a less thorough format
     my $forcedownload = 0;
-    if ($thing =~ /^\d+$/ and ! $refreshmode and
-	($cachemode ne 'min' or $mboxing)) {
-	if (! -r mboxfile($thing)) {
+    if ($thing =~ /^\d+$/ and ! $refreshmode) {
+	if (old_cache_format_version($versionstamp)) {
 	    $forcedownload = 1;
-	} elsif ($cachemode eq 'full' and -d $thing) {
-	    opendir DIR, $thing or die "bts: opendir $cachedir/$thing: $!\n";
-	    my @htmlfiles = grep { /^\d+\.html$/ } readdir(DIR);
-	    closedir DIR;
-	    $forcedownload = 1 unless @htmlfiles;
+	} elsif ($cachemode ne 'min' or $mboxing) {
+	    if (! -r mboxfile($thing)) {
+		$forcedownload = 1;
+	    } elsif ($cachemode eq 'full' and -d $thing) {
+		opendir DIR, $thing or die "bts: opendir $cachedir/$thing: $!\n";
+		my @htmlfiles = grep { /^\d+\.html$/ } readdir(DIR);
+		closedir DIR;
+		$forcedownload = 1 unless @htmlfiles;
+	    }
 	}
     }
 
@@ -1349,7 +1362,7 @@ sub download {
 	# we have an up-to-date version already, nothing to do
 	# and $timestamp is guaranteed to be well-defined
 	if (is_automatic($timestamp) and $manual) {
-	    set_timestamp($thing, make_manual($timestamp));
+	    set_timestamp($thing, make_manual($timestamp), $versionstamp);
 	}
 
 	if (! $quiet) {
@@ -1384,7 +1397,8 @@ sub download {
 	close OUT_CACHE or die "bts: problems writing to $cachefile: $!\n";
 
 	set_timestamp($thing,
-	    $manual ? make_manual($timestamp) : make_automatic($timestamp));
+	    $manual ? make_manual($timestamp) : make_automatic($timestamp),
+	    $version);
 
 	if ($quiet == 0) {
 	    print "(cached new version) ";
@@ -1417,11 +1431,11 @@ sub download_attachments {
     
     for (split /\n/, $toppage) {
 	my ($ref, $msg);
-	if (m%\[href="(bugreport\.cgi[^\"]*)">.*?\(([^,]*), .*?\)\]%) {
+	if (m%\shref="(bugreport\.cgi[^\"]*)">.*?\(([^,]*), .*?\)%) {
 	    $ref = $1;
 	    my $mimetype = $2;
 	    $ref =~ s/&amp;/&/g;
-	    next unless $ref =~ /&msg=(\d+)&att=(\d+)/;
+	    next unless $ref =~ /(?:&|;)msg=(\d+)(?:&|;)att=(\d+)/;
 	    $msg = "$1-$2";
 
 	    my $filename = '';
@@ -1441,7 +1455,7 @@ sub download_attachments {
 	    next if -f $bug2filename{$msg} and not $refreshmode;
 	}
 	elsif ($cachemode eq 'full' and
-	       m%href="(bugreport\.cgi\?bug=\d+&amp;msg=(\d+))">%) {
+	       m%\shref="(bugreport\.cgi\?bug=\d+(?:&amp;|&|;)msg=(\d+))">%) {
 	    $ref = $1;
 	    $msg = $2;
 	    $bug2filename{$msg} = "$thing/$msg.html";
@@ -1449,7 +1463,7 @@ sub download_attachments {
 	    next if -f $bug2filename{$msg} and not $refreshmode;
 	}
 	elsif (($cachemode eq 'full' or $cachemode eq 'mbox' or $mboxmode) and
-	       m%href="(bugreport\.cgi\?bug=\d+&amp;mbox=yes)">%) {
+	       m%\shref="(bugreport\.cgi\?bug=\d+(?:&amp;|&|;)mbox=yes)">%) {
 	    $ref = $1;
 	    $msg = 'mbox';
 	    $bug2filename{$msg} = "$thing.mbox";
@@ -1510,7 +1524,7 @@ sub download_mbox {
     }
     init_agent() unless $ua;
 
-    my $request = HTTP::Request->new('GET', $btscgiurl . "bugreport.cgi?bug=$thing&mbox=yes");
+    my $request = HTTP::Request->new('GET', $btscgiurl . "bugreport.cgi?bug=$thing;mbox=yes");
     my $response = $ua->request($request);
     if ($response->is_success) {
 	my $content_length = defined $response->content ?
@@ -1550,7 +1564,7 @@ sub mangle_cache_file {
 
     # Undo unnecessary '+' encoding in URLs
     while ($data =~ s!(href=\"[^\"]*)\%2b!$1+!ig) { };
-    my $time=localtime($timestamp);
+    my $time=localtime(abs($timestamp));
     $data =~ s%(<BODY.*>)%$1<p><em>[Locally cached on $time]</em></p>%i;
     $data =~ s%href="/css/bugs.css"%href="bugs.css"%;
     my @data = split /\n/, $data;
@@ -1560,11 +1574,11 @@ sub mangle_cache_file {
 		my $params = $2;
 		my $msg = '';
 		my $att = '';
-		if ($params =~ /&amp;msg=(\d+)&amp;att=(\d+)/) {
+		if ($params =~ /(?:&amp;|&|;)msg=(\d+)(?:&amp;|&|;)att=(\d+)/) {
 		    $msg = "$1-$2";
-		} elsif ($params =~ /&amp;msg=(\d+)/) {
+		} elsif ($params =~ /(?:&amp;|&|;)msg=(\d+)/) {
 		    $msg = $1;
-		} elsif ($params =~ /&amp;mbox=yes/) {
+		} elsif ($params =~ /(?:&amp;|&|;)mbox=yes/) {
 		    $msg = 'mbox';
 		}
 		if (exists $$bug2filename{$msg}) {
@@ -1577,9 +1591,10 @@ sub mangle_cache_file {
 	    }
 	}
 	else {
-	    s%<a href="(pkgreport\.cgi\?(?:pkg|maint)=([^\"&]+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%ig;
-	    s%<a href="(pkgreport\.cgi\?src=([^\"&]+)[^\"]*)">(.+?)</a>%<a href="src_$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%ig;
-	    s%<a href="(pkgreport\.cgi\?submitter=([^\"&]+)[^\"]*)">(.+?)</a>%<a href="from_$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%ig;
+	    s%<a href="(pkgreport\.cgi\?(?:pkg|maint)=([^\"&;]+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%ig;
+	    s%<a href="(pkgreport\.cgi\?src=([^\"&;]+)[^\"]*)">(.+?)</a>%<a href="src_$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%ig;
+	    s%<a href="(pkgreport\.cgi\?submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a href="from_$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%ig;
+	    s%<a href="(?:/cgi-bin/)?(bugspam\.cgi[^\"]+)">%<a href="$btscgiurl$1">%ig;
 	}
     }
 
@@ -1708,7 +1723,7 @@ sub browse {
 		open (OUT_LIVE, ">/dev/fd/" . fileno($fh))
 		    or die "bts: writing to temporary file: $!\n";
 		# Correct relative urls to point to the bts.
-		$live =~ s/\shref="(\w+\.cgi)/ href="$btscgiurl$1/g;
+		$live =~ s%\shref="(?:/cgi-bin/)?(\w+\.cgi)% href="$btscgiurl$1%g;
 		print OUT_LIVE $live;
 		# Some browsers don't like unseekable filehandles,
 		# so use filename
@@ -1722,7 +1737,7 @@ sub browse {
 	if ($mboxmode) {
 	    # we appear not to be caching; OK, we'll download to a
 	    # temporary file
-	    warn "bts debug: downloading ${btscgiurl}bugreport.cgi?bug=$thing&mbox=yes\n" if $debug;
+	    warn "bts debug: downloading ${btscgiurl}bugreport.cgi?bug=$thing;mbox=yes\n" if $debug;
 	    my ($fh, $fn) = download_mbox($thing, 1);
 	    runmailreader($fn);
 	} else {
@@ -1835,36 +1850,38 @@ sub runmailreader {
 sub get_timestamp {
     my $thing = shift;
     my $timestamp = undef;
+    my $versionstamp = undef;
 
     if (tied %timestamp) {
-	$timestamp = abs($timestamp{$thing})
+	($timestamp, $versionstamp) = split /;/, $timestamp{$thing}
 	    if exists $timestamp{$thing};
     } else {
 	tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	     O_RDONLY(), 0600, $DB_HASH, "read")
 	    or die "bts: couldn't open DB file $timestampdb for reading: $!\n";
 
-	$timestamp = abs($timestamp{$thing})
+	($timestamp, $versionstamp) = split /;/, $timestamp{$thing}
 	    if exists $timestamp{$thing};
 
 	untie %timestamp;
     }
 
-    return $timestamp;
+    return wantarray ? ($timestamp, $versionstamp) : $timestamp;
 }
 
 sub set_timestamp {
     my $thing = shift;
     my $timestamp = shift;
+    my $versionstamp = shift || $version;
 
     if (tied %timestamp) {
-	$timestamp{$thing} = $timestamp;
+	$timestamp{$thing} = "$timestamp;$versionstamp";
     } else {
 	tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	     O_RDWR()|O_CREAT(), 0600, $DB_HASH, "write")
 	    or die "bts: couldn't open DB file $timestampdb for writing: $!\n";
 
-	$timestamp{$thing} = $timestamp;
+	$timestamp{$thing} = "$timestamp;$versionstamp";
 
 	untie %timestamp;
     }
@@ -1902,6 +1919,25 @@ sub make_automatic {
     return abs($_[0]);
 }
 
+# Returns true if current cached version is older than critical version
+# We're only using really simple version numbers here: a.b.c
+sub old_cache_format_version {
+    my $cacheversion = $_[0];
+
+    my @cache = split /\./, $cacheversion;
+    my @new = split /\./, $new_cache_format_version;
+
+    push @cache, 0, 0, 0, 0;
+    push @new, 0, 0;
+
+    return
+	($cache[0]<$new[0]) ||
+	($cache[0]==$new[0] && $cache[1]<$new[1]) ||
+	($cache[0]==$new[0] && $cache[1]==$new[1] && $cache[2]<$new[2]) ||
+	($cache[0]==$new[0] && $cache[1]==$new[1] && $cache[2]==$new[2] &&
+	 $cache[3]<$new[3]);
+}
+
 # We would love to use LWP::Simple::mirror in this script.
 # Unfortunately, bugs.debian.org does not respect the
 # If-Modified-Since header.  For single bug reports, however,
@@ -1924,7 +1960,7 @@ sub bts_mirror {
 
 	if ($response->is_success) {
 	    my $lm = $response->last_modified;
-	    if (defined $lm and $lm <= $timestamp) {
+	    if (defined $lm and $lm <= abs($timestamp)) {
 		return (MIRROR_UP_TO_DATE, $response->status_line);
 	    }
 	} else {
