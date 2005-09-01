@@ -66,13 +66,16 @@ sub sort_developers {
 
 sub help {
 	print <<"EOF"
-Usage: dd-list [-hiV] [--help] [--stdin] [--version] [package ...]
+Usage: dd-list [-hiV] [--help] [--stdin] [--dctrl] [--version] [package ...]
 
     -h, --help
         Print this help text.
         
     -i, --stdin
         Read package names from the standard input.
+
+    -d, --dctrl
+        Read Debian control data from standard input.
        
     -V, --version
         Print version (it's $version by the way).
@@ -80,40 +83,68 @@ EOF
 }
 
 my $use_stdin=0;
+my $use_dctrl=0;
 if (! GetOptions(
 	"help" => sub { help(); exit },
 	"stdin|i" => \$use_stdin,
+	"dctrl|d" => \$use_dctrl,
 	"version" => sub { print "dd-list version $version\n" })) {
 	exit(1);
 }
 
-my @package_names;
-if ($use_stdin) {
+my %dict;
+my $errors=0;
+
+if ($use_dctrl) {
+	$/="\n\n";
 	while (<>) {
-		chomp;
-		s/^\s+//;
-		s/\s+$//;
-		push @package_names, $_;
+		my ($package, $maintainer);
+
+		if (/^Package:\s+(.*)$/m) {
+			$package=$1;
+		}
+		if (/^Source:\s+(.*)$/m) {
+			$package=$1;
+		}
+		if (/^Maintainer:\s+(.*)$/m) {
+			$maintainer=$1;
+		}
+
+		if (defined $maintainer && defined $package) {
+			push @{$dict{$maintainer}}, $package;
+		}
+		else {
+			print STDERR "E: parse error in stanza $.\n";
+			$errors=1;
+		}
 	}
 }
 else {
-	@package_names=@ARGV;
-}
-
-my $errors=0;
-my %dict;
-
-foreach my $package_name (@package_names) {
-	my ($developer, $source_name)=get_developer_given_package($package_name);
-	if (defined $developer) {
-		push @{$dict{$developer}}, $source_name;
+	my @package_names;
+	if ($use_stdin) {
+		while (<>) {
+			chomp;
+			s/^\s+//;
+			s/\s+$//;
+			push @package_names, $_;
+		}
 	}
 	else {
-		print STDERR "E: Unknown package: $package_name\n";
-		$errors=1;
+		@package_names=@ARGV;
+	}
+
+	foreach my $package_name (@package_names) {
+		my ($developer, $source_name)=get_developer_given_package($package_name);
+		if (defined $developer) {
+			push @{$dict{$developer}}, $source_name;
+		}
+		else {
+			print STDERR "E: Unknown package: $package_name\n";
+			$errors=1;
+		}
 	}
 }
-
+	
 foreach my $developer (sort_developers(keys %dict)) {
 	print "$developer\n";
 	my %seen;

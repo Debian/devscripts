@@ -15,7 +15,10 @@ devscripts (2.9.6) UNRELEASED; urgency=low
   * bts: download bugs.css and use it (Closes: #323781)
   * bts: remove some old cache handling cruft since sarge is released
 
- -- Filippo Giunchedi <filippo@debian.org>  Sun, 28 Aug 2005 17:10:37 +0200
+  [ Joey Hess ]
+  * dd-list: add --dctrl option for quick reading from grep-dctrl.
+
+ -- Joey Hess <joeyh@debian.org>  Wed, 31 Aug 2005 21:59:05 -0400
 
 devscripts (2.9.5) unstable; urgency=low
 
