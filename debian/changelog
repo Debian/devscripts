@@ -18,6 +18,12 @@ PLEASE DON'T RELEASE ME YET - bts IS IN AN INCONSISTENT STATE!!
 
   [ Joey Hess ]
   * dd-list: add --dctrl option for quick reading from grep-dctrl.
+  * grep-excuses: remove special case for running locally on ftp-master,
+    which breaks every time ftp-master moves (or directories are reorganised),
+    and only saved some loopback traffic anyway.
+  * grep-excuses: fix non-robust html parsing that caused ugly messages
+    when it failed to find </ul> at the end of the excuses file due
+    to reformatting.
 
  -- Julian Gilbey <jdg@polya.uklinux.net>  Thu,  1 Sep 2005 07:17:00 +0100
 

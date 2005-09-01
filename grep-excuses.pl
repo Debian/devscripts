@@ -125,17 +125,12 @@ if (@ARGV) {
 my $hostname = `hostname --fqdn`;
 chomp $hostname;
 
-if ($hostname =~ /^(auric|ftp-master)\.debian\.org$/) {
-    open EXCUSES, '/org/ftp.debian.org/web/testing/update_excuses.html'
-	or die "$progname: cannot open update_excuses: $!\n";
-} else {
-    if (system("command -v wget >/dev/null 2>&1") != 0) {
-	die "$progname: this program requires the wget package to be installed\n";
-    }
-    
-    open EXCUSES, "wget -q -O - $url | zcat |" or
-	die "$progname: wget | zcat failed: $!\n";
+if (system("command -v wget >/dev/null 2>&1") != 0) {
+    die "$progname: this program requires the wget package to be installed\n";
 }
+    
+open EXCUSES, "wget -q -O - $url | zcat |" or
+    die "$progname: wget | zcat failed: $!\n";
 
 my $item='';
 my $mainlist=0;
@@ -148,10 +143,11 @@ while (<EXCUSES>) {
 	next;
     }
     # Have we reached the end?
-    if (! $sublist and m%\s*</ul>\s*$%) {
+    if (! $sublist and m%</ul>%) {
 	$mainlist=0;
 	next;
     }
+    next unless $mainlist;
     # Strip hyperlinks
     my $saveline=$_;
     s%<a\s[^>]*>%%g;
@@ -160,13 +156,13 @@ while (<EXCUSES>) {
     s%&lt;%<%g;
     # New item?
     if (! $sublist and /^\s*<li>/) {
-	s%^\s*<li>%%;
+	s%<li>%%;
 	$item = $_;
     }
     elsif (! $sublist and /^\s*<ul>/) {
 	$sublist=1;
     }
-    elsif ($sublist and m%^\s*</ul>%) {
+    elsif ($sublist and m%</ul>%) {
 	$sublist=0;
 	# Did the last item match?
 	if ($item=~/^-?\Q$string\E\s/ or
@@ -177,7 +173,7 @@ while (<EXCUSES>) {
 	}
     }
     elsif ($sublist and /^\s*<li>/) {
-	s%^\s*<li>%    %;
+	s%<li>%    %;
 	$item .= $_;
     }
     else {
