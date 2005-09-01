@@ -1,5 +1,6 @@
 devscripts (2.9.6) UNRELEASED; urgency=low
-
+PLEASE DON'T RELEASE ME YET - bts IS IN AN INCONSISTENT STATE!!
+  
   [ Julian Gilbey ]
   * bts: tags: revert change in 2.9: reinstate "fixed-in-experimental" (it
     still appears to be in use) and don't need "help" twice (Closes: #325480)
@@ -7,7 +8,7 @@ devscripts (2.9.6) UNRELEASED; urgency=low
   * uscan: report on package being scanned when --report is used (Closes:
     #324102)
   * uscan: provide --report-status option to distinguish from --report,
-    which is now quieter (Closes: #325097)
+    which is now quieter (Closes: #325097, #325980)
 
   [ Filippo Giunchedi ]
   * uscan: fixed some repeated tags when used with --dehs
@@ -18,7 +19,7 @@ devscripts (2.9.6) UNRELEASED; urgency=low
   [ Joey Hess ]
   * dd-list: add --dctrl option for quick reading from grep-dctrl.
 
- -- Joey Hess <joeyh@debian.org>  Wed, 31 Aug 2005 21:59:05 -0400
+ -- Julian Gilbey <jdg@polya.uklinux.net>  Thu,  1 Sep 2005 07:17:00 +0100
 
 devscripts (2.9.5) unstable; urgency=low
 
