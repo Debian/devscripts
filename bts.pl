@@ -83,7 +83,7 @@ my $debug = (exists $ENV{'DEBUG'} and $ENV{'DEBUG'}) ? 1 : 0;
 # version was downloaded by a devscripts version less than
 # $new_cache_format_version
 my $version = '###VERSION###';
-$version = '2.9.5' if $version =~ /\#/;  # for testing unconfigured version
+$version = '2.9.6' if $version =~ /\#/;  # for testing unconfigured version
 my $new_cache_format_version = '2.9.6';
 
 # The official list is mirrored
@@ -1355,7 +1355,8 @@ sub download {
 	}
     }
 
-    print "Downloading $url ... " if ! $quiet;
+    print "Downloading $url ... "
+	if ! $quiet and $manual and $thing ne "css/bugs.css";
     IO::Handle::flush(\*STDOUT);
     my ($ret, $msg, $livepage) = bts_mirror($url, $timestamp, $forcedownload);
     if ($ret == MIRROR_UP_TO_DATE) {
@@ -1365,10 +1366,10 @@ sub download {
 	    set_timestamp($thing, make_manual($timestamp), $versionstamp);
 	}
 
-	if (! $quiet) {
-		print "(cache already up-to-date) ";
-		print "$bug_current/$bug_total" if $bug_total;
-		print "\n";
+	if (! $quiet and $manual and $thing ne "css/bugs.css") {
+	    print "(cache already up-to-date) ";
+	    print "$bug_current/$bug_total" if $bug_total;
+	    print "\n";
 	}
 	return "";
     }
@@ -1400,17 +1401,16 @@ sub download {
 	    $manual ? make_manual($timestamp) : make_automatic($timestamp),
 	    $version);
 
-	if ($quiet == 0) {
+	if (! $quiet and $manual and $thing ne "css/bugs.css") {
 	    print "(cached new version) ";
-	} elsif ($quiet == 1) {
-	    print "Downloading $url ... (cached new version) ";
+	    print "$bug_current/$bug_total" if $bug_total;
+	    print "\n";
+	} elsif ($quiet == 1 and $manual and $thing ne "css/bugs.css") {
+	    print "Downloading $url ... (cached new version)\n";
 	} elsif ($quiet > 1) {
 	    # do nothing
 	}
-	if (! $quiet) {
-		print "$bug_current/$bug_total" if $bug_total;
-		print "\n";
-	}
+
 	return $livepage;
     } else {
 	die "bts: couldn't download $url:\n$msg\n";
@@ -1429,49 +1429,40 @@ sub download_attachments {
     # Since messages are never modified retrospectively, we don't download
     # attachements which have already been downloaded
     
-    for (split /\n/, $toppage) {
-	my ($ref, $msg);
-	if (m%\shref="(bugreport\.cgi[^\"]*)">.*?\(([^,]*), .*?\)%) {
-	    $ref = $1;
-	    my $mimetype = $2;
-	    $ref =~ s/&amp;/&/g;
-	    next unless $ref =~ /(?:&|;)msg=(\d+)(?:&|;)att=(\d+)/;
-	    $msg = "$1-$2";
+    # Yuck, yuck, yuck.  This regex splits the $data string at every
+    # occurrence of either "[<a " or plain "<a ", preserving any "[".
+    my @data = split /(?:(?=\[<[Aa]\s)|(?<!\[)(?=<[Aa]\s))/, $toppage;
+    foreach (@data) {
+	next unless m%<a href="(bugreport\.cgi[^\"]+)">%;
+	my $ref = $1;
+	my ($msg, $filename) = href_to_filename($_);
 
-	    my $filename = '';
-	    my $fileext = '';
-	    if ($ref =~ m%^bugreport\.cgi/([^\?]*)\?%) {
-		$filename = basename($1);
-	    } else {
-		if ($mimetype eq 'text/plain') { $fileext = '.txt'; }
-		if ($mimetype eq 'text/html') { $fileext = '.html'; }
-	    }
-	    if (length ($filename)) {
-		$bug2filename{$msg} = "$thing/$msg/$filename";
-	    } else {
-		$bug2filename{$msg} = "$thing/$msg$fileext";
-	    }
+	next unless defined $msg;
+
+	if ($msg =~ /^\d+-\d+$/) {
+	    # it's an attachment, must download
+	    $bug2filename{$msg} = $filename;
 	    # already downloaded?
 	    next if -f $bug2filename{$msg} and not $refreshmode;
 	}
-	elsif ($cachemode eq 'full' and
-	       m%\shref="(bugreport\.cgi\?bug=\d+(?:&amp;|&|;)msg=(\d+))">%) {
-	    $ref = $1;
-	    $msg = $2;
-	    $bug2filename{$msg} = "$thing/$msg.html";
+	elsif ($cachemode eq 'full' and $msg =~ /^\d+$/) {
+	    $bug2filename{$msg} = $filename;
+            # already downloaded?
+	    next if -f $bug2filename{$msg} and not $refreshmode;
+	}
+	elsif ($cachemode eq 'full' and $msg =~ /^\d+-mbox$/) {
+	    $bug2filename{$msg} = $filename;
             # already downloaded?
 	    next if -f $bug2filename{$msg} and not $refreshmode;
 	}
 	elsif (($cachemode eq 'full' or $cachemode eq 'mbox' or $mboxmode) and
-	       m%\shref="(bugreport\.cgi\?bug=\d+(?:&amp;|&|;)mbox=yes)">%) {
-	    $ref = $1;
-	    $msg = 'mbox';
-	    $bug2filename{$msg} = "$thing.mbox";
+	       $msg eq 'mbox') {
+	    $bug2filename{$msg} = $filename;
 	    # This always needs refreshing, as it does change as the bug
 	    # changes
 	}
 
-	next unless $ref;
+	next unless exists $bug2filename{$msg};
 
 	warn "bts debug: downloading $btscgiurl$ref\n" if $debug;
 	init_agent() unless $ua;  # shouldn't be necessary, but do just in case
@@ -1487,12 +1478,11 @@ sub download_attachments {
 
 	    my $data = $response->content;
 
-	    if ($msg =~ /^\d+$/) { # we're dealing with a boring message
+	    if ($msg =~ /^\d+$/) {
+                # we're dealing with a boring message, and so we must be
+		# in 'full' mode
 		$data =~ s%<HEAD>%<HEAD><BASE href="../">%;
-		$data = mangle_cache_file($data, $thing,
-				          { $msg => "$thing/$msg.html",
-					    'mbox' => "$thing.mbox", },
-					  $timestamp);
+		$data = mangle_cache_file($data, $thing, 'full', $timestamp);
 	    }
 	    mkpath(dirname $bug2filename{$msg});
 	    open OUT_CACHE, ">$bug2filename{$msg}"
@@ -1561,28 +1551,26 @@ sub download_mbox {
 # selectively modify the links
 sub mangle_cache_file {
     my ($data, $thing, $bug2filename, $timestamp) = @_;
+    my $fullmode = ! ref $bug2filename;
 
     # Undo unnecessary '+' encoding in URLs
     while ($data =~ s!(href=\"[^\"]*)\%2b!$1+!ig) { };
     my $time=localtime(abs($timestamp));
-    $data =~ s%(<BODY.*>)%$1<p><em>[Locally cached on $time]</em></p>%i;
+    $data =~ s%(<BODY.*>)%$1<p><em>[Locally cached on $time by devscripts version $version]</em></p>%i;
     $data =~ s%href="/css/bugs.css"%href="bugs.css"%;
-    my @data = split /\n/, $data;
-    for (@data) {
-	if (m%<a href="bugreport\.cgi[^\?]*\?bug=(\d+)([^\"]*)">%i) {
-	    if ($1 eq $thing) {
-		my $params = $2;
-		my $msg = '';
-		my $att = '';
-		if ($params =~ /(?:&amp;|&|;)msg=(\d+)(?:&amp;|&|;)att=(\d+)/) {
-		    $msg = "$1-$2";
-		} elsif ($params =~ /(?:&amp;|&|;)msg=(\d+)/) {
-		    $msg = $1;
-		} elsif ($params =~ /(?:&amp;|&|;)mbox=yes/) {
-		    $msg = 'mbox';
-		}
-		if (exists $$bug2filename{$msg}) {
-		    s%<a href="(bugreport\.cgi[^\"]*)">(.+?)</a>%<a href="$$bug2filename{$msg}">$2</a> (<a href="$btscgiurl$1">online</a>)%i;
+
+    # Yuck, yuck, yuck.  This regex splits the $data string at every
+    # occurrence of either "[<a " or plain "<a ", preserving any "[".
+    my @data = split /(?:(?=\[<[Aa]\s)|(?<!\[)(?=<[Aa]\s))/, $data;
+    foreach (@data) {
+	if (m%<a href=\"bugreport\.cgi[^\?]*\?bug=(\d+)%i) {
+	    my $bug = $1;
+	    my ($msg, $filename) = href_to_filename($_);
+
+	    if ($bug eq $thing and defined $msg) {
+		if ($fullmode or
+		    (! $fullmode and exists $$bug2filename{$msg})) {
+		    s%<a href="(bugreport\.cgi[^\"]*)">(.+?)</a>%<a href="$filename">$2</a> (<a href="$btscgiurl$1">online</a>)%i;
 		} else {
 		    s%<a href="(bugreport\.cgi[^\"]*)">(.+?)</a>%$2 (<a href="$btscgiurl$1">online</a>)%i;
 		}
@@ -1591,14 +1579,14 @@ sub mangle_cache_file {
 	    }
 	}
 	else {
-	    s%<a href="(pkgreport\.cgi\?(?:pkg|maint)=([^\"&;]+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%ig;
-	    s%<a href="(pkgreport\.cgi\?src=([^\"&;]+)[^\"]*)">(.+?)</a>%<a href="src_$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%ig;
-	    s%<a href="(pkgreport\.cgi\?submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a href="from_$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%ig;
-	    s%<a href="(?:/cgi-bin/)?(bugspam\.cgi[^\"]+)">%<a href="$btscgiurl$1">%ig;
+	    s%<a href="(pkgreport\.cgi\?(?:pkg|maint)=([^\"&;]+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%i;
+	    s%<a href="(pkgreport\.cgi\?src=([^\"&;]+)[^\"]*)">(.+?)</a>%<a href="src_$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%i;
+	    s%<a href="(pkgreport\.cgi\?submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a href="from_$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%i;
+	    s%<a href="(?:/cgi-bin/)?(bugspam\.cgi[^\"]+)">%<a href="$btscgiurl$1">%i;
 	}
     }
 
-    return join("\n", @data) . "\n";
+    return join("", @data);
 }
 
 
@@ -1666,6 +1654,71 @@ sub bugs_from_thing {
 
 	return $data =~ m!href="(\d+)\.html"!g;
     } else { return (); }
+}
+
+# Given an <a href="bugreport.cgi?...>...</a> string, return a
+# msg id and corresponding filename
+sub href_to_filename {
+    my $href = $_[0];
+    my ($msg, $filename);
+
+    if ($href =~ m%\[<a href="bugreport\.cgi([^\?]*)\?bug=(\d+)([^\"]*)">.*?\(([^,]*), .*?\)\]%) {
+	# this looks like an attachment; $1 should give the MIME-type
+	my $urlfilename = $1;
+	my $bug = $2;
+	my $ref = $3;
+	my $mimetype = $4;
+	$ref =~ s/&(?:amp;)?/;/g;  # normalise all hrefs
+
+	return undef unless $ref =~ /;msg=(\d+);att=(\d+)/;
+	$msg = "$1-$2";
+
+	my $fileext = '';
+	if ($urlfilename =~ m%^/%) {
+	    $filename = basename($urlfilename);
+	} else {
+	    $filename = '';
+	    if ($mimetype eq 'text/plain') { $fileext = '.txt'; }
+	    if ($mimetype eq 'text/html') { $fileext = '.html'; }
+	}
+	if (length ($filename)) {
+	    $filename = "$bug/$msg/$filename";
+	} else {
+	    $filename = "$bug/$msg$fileext";
+	}
+    }
+    elsif ($href =~ m%<a href="bugreport\.cgi([^\?]*)\?bug=(\d+)([^\"]*)">%) {
+	my $urlfilename = $1;
+	my $bug = $2;
+	my $ref = $3;
+	$ref =~ s/&(?:amp;)?/;/g;  # normalise all hrefs
+
+	if ($ref =~ /;msg=(\d+)$/) {
+	    $msg = $1;
+	    $filename = "$bug/$1.html";
+	}
+	elsif ($ref =~ /;msg=(\d+);mbox=yes$/) {
+	    $msg = "$1-mbox";
+	    $filename = "$bug/$1.mbox";
+	}
+	elsif ($ref =~ /^;mbox=yes$/) {
+	    $msg = 'mbox';
+	    $filename = "$bug.mbox";
+	}
+	elsif ($ref eq '') {
+	    return undef;
+	}
+	else {
+	    $href =~ s/>.*/>/s;
+	    warn "bts: in href_to_filename: unrecognised BTS URL type: $href\n";
+	    return undef;
+	}
+    }
+    else {
+	return undef;
+    }
+
+    return ($msg, $filename);
 }
 
 # Browses a given thing, with possible caching.

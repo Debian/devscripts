@@ -1,9 +1,13 @@
 devscripts (2.9.6) UNRELEASED; urgency=low
-PLEASE DON'T RELEASE ME YET - bts IS IN AN INCONSISTENT STATE!!
   
   [ Julian Gilbey ]
   * bts: tags: revert change in 2.9: reinstate "fixed-in-experimental" (it
     still appears to be in use) and don't need "help" twice (Closes: #325480)
+  * bts: show/cache: lots of changes to make compatible with new BTS HTML
+    pages (Closes: #325966)
+    Also store devscripts version with cached files, so that such changes
+    can be handled more smoothly in future.
+  * bts: small cleanups for output messages, minor bugfixes etc.
   * checkbashisms: correctly detect "function" keyword (Closes: #324599)
   * uscan: report on package being scanned when --report is used (Closes:
     #324102)
