@@ -106,6 +106,7 @@ my $browser;  # Will set if necessary
 my $btsurl='http://bugs.debian.org/';
 my $btscgiurl='http://bugs.debian.org/cgi-bin/';
 my $btscgibugurl='http://bugs.debian.org/cgi-bin/bugreport.cgi';
+my $btscgispamurl='http://bugs.debian.org/cgi-bin/bugspam.cgi';
 my $btsemail='control@bugs.debian.org';
 
 my $cachedir=$ENV{'HOME'}."/.devscripts_cache/bts/";
@@ -920,6 +921,28 @@ sub bts_noowner {
     my $bug=checkbug(shift) or die "bts noowner: what bug?\n";
     opts_done(@_);
     mailbts("bug $bug has no owner", "noowner $bug");
+}
+
+=item spam <bug>
+
+The spam command allows you to report a bug as containing spam in the report.
+It saves one from having to go to the bug web page to report it.
+
+=cut
+
+sub bts_spam {
+    my $bug=checkbug(shift) or die "bts clone: clone what bug?\n";
+    opts_done(@_);
+    if (! have_lwp()) {
+	die "Couldn't run bts spam: $lwp_broken\n";
+    }
+
+    init_agent() unless $ua;
+    my $request = HTTP::Request->new('GET', "$btscgispamurl?bug=$bug");
+    my $response = $ua->request($request);
+    if (! $response->is_success) {
+	warn "bts: failed to report $bug as containing spam: " . $response->status_line . "\n";
+    }
 }
 
 =item cache [options] [<maint email> | <pkg> | src:<pkg> | from:<submitter>]

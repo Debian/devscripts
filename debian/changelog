@@ -8,6 +8,7 @@ devscripts (2.9.6) UNRELEASED; urgency=low
     Also store devscripts version with cached files, so that such changes
     can be handled more smoothly in future.
   * bts: small cleanups for output messages, minor bugfixes etc.
+  * bts: introduce spam command to report spam in bug reports
   * checkbashisms: correctly detect "function" keyword (Closes: #324599)
   * uscan: report on package being scanned when --report is used (Closes:
     #324102)
