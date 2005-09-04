@@ -120,7 +120,6 @@ END {
 }
 
 my %clonedbugs = ();
-my $useremail;  # has the 'user' command been used?
 
 =head1 SYNOPSIS
 
@@ -390,15 +389,17 @@ my $subject = '';
 my $body = '';
 our $index;
 for $index (0 .. $ncommand) {
-    my @matches=grep /^bts_\Q$command[$index]\E$/, keys %::;
-    if (@matches == 0) {
-	@matches=grep /^bts_\Q$command[$index]\E/, keys %::;
-    }
-    if (@matches != 1) {
-	die "bts: Couldn't find a unique match for the command $command[$index]!\nRun $progname --help for a list of valid commands.\n";
-    }
     no strict 'refs';
-    $matches[0]->(@{$args[$index]});
+    if (exists $::{"bts_$command[$index]"}) {
+	"bts_$command[$index]"->(@{$args[$index]});
+    } else {
+	my @matches=grep /^bts_\Q$command[$index]\E/, keys %::;
+	if (@matches != 1) {
+	    die "bts: Couldn't find a unique match for the command $command[$index]!\nRun $progname --help for a list of valid commands.\n";
+	}
+
+	$matches[0]->(@{$args[$index]});
+    }
 }
 
 # Send all cached commands.
@@ -846,12 +847,12 @@ Specify a user email address before using the usertags command.
 =cut
 
 sub bts_user {
-    $useremail=shift or die "bts user: set user to what email address?\n";
-    if (! length $useremail) {
+    my $email=shift or die "bts user: set user to what email address?\n";
+    if (! length $email) {
 	die "bts user: set user to what email address?\n";
     }
     opts_done(@_);
-    mailbts("user $useremail", "user $useremail");
+    mailbts("user $email", "user $email");
 }
 
 =item usertag <bug> [+|-|=] tag [tag ..]
@@ -868,13 +869,9 @@ command
 
 will remove all user tags from the specified bug.
 
-You must use a user <email> command before specifying usertags.
-
 =cut
 
 sub bts_usertags {
-    defined $useremail
-	or die "bts usertags: must use a user <email> command first\n";
     my $bug=checkbug(shift) or die "bts usertags: tag what bug?\n";
     if (! @_) {
 	die "bts usertags: set what user tag?\n";
@@ -1387,8 +1384,13 @@ EOM
 	}
 	else {
 	    # child
-	    exec("mail", "-s$subject", $btsemail)
-		or die "bts: error running mail: $!\n";
+	    if ($debug) {
+		exec("/bin/cat")
+		    or die "bts: error running cat: $!\n";
+	    } else {
+		exec("mail", "-s$subject", $btsemail)
+		    or die "bts: error running mail: $!\n";
+	    }
 	}
     }
 }
