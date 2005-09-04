@@ -9,6 +9,7 @@ devscripts (2.9.6) UNRELEASED; urgency=low
     can be handled more smoothly in future.
   * bts: small cleanups for output messages, minor bugfixes etc.
   * bts: introduce spam command to report spam in bug reports
+  * bts: support new user/usertags commands (Closes: #326265)
   * checkbashisms: correctly detect "function" keyword (Closes: #324599)
   * uscan: report on package being scanned when --report is used (Closes:
     #324102)
@@ -30,7 +31,7 @@ devscripts (2.9.6) UNRELEASED; urgency=low
     when it failed to find </ul> at the end of the excuses file due
     to reformatting.
 
- -- Julian Gilbey <jdg@polya.uklinux.net>  Thu,  1 Sep 2005 07:17:00 +0100
+ -- Julian Gilbey <jdg@polya.uklinux.net>  Sun,  4 Sep 2005 01:08:47 +0100
 
 devscripts (2.9.5) unstable; urgency=low
 

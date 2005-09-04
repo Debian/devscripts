@@ -120,6 +120,7 @@ END {
 }
 
 my %clonedbugs = ();
+my $useremail;  # has the 'user' command been used?
 
 =head1 SYNOPSIS
 
@@ -329,7 +330,7 @@ GetOptions("help|h" => \$opt_help,
     or die "Usage: bts [options]\nRun $progname --help for more details\n";
 
 if ($opt_noconf) {
-    die "$progname: --no-conf is only acceptable as the first command-line option!\n";
+    die "bts: --no-conf is only acceptable as the first command-line option!\n";
 }
 if ($opt_help) { bts_help(); exit 0; }
 if ($opt_version) { bts_version(); exit 0; }
@@ -389,9 +390,12 @@ my $subject = '';
 my $body = '';
 our $index;
 for $index (0 .. $ncommand) {
-    my @matches=grep /^bts_\Q$command[$index]\E/, keys %::;
+    my @matches=grep /^bts_\Q$command[$index]\E$/, keys %::;
+    if (@matches == 0) {
+	@matches=grep /^bts_\Q$command[$index]\E/, keys %::;
+    }
     if (@matches != 1) {
-	die "$progname: Couldn't find a unique match for the command $command[$index]!\nRun $progname --help for a list of valid commands.\n";
+	die "bts: Couldn't find a unique match for the command $command[$index]!\nRun $progname --help for a list of valid commands.\n";
     }
     no strict 'refs';
     $matches[0]->(@{$args[$index]});
@@ -569,7 +573,7 @@ sub bts_bugs {
     }
     if ($url =~ /^.*\s+<(.*)>$/) { $url = $1; }
     $url =~ s/^:$//;
-    browse(join("&", $url, @_));
+    browse(join(";", $url, @_));
 
     # revert options
     if (defined $sub_offlinemode) {
@@ -835,6 +839,68 @@ sub bts_tags {
     mailbts("tagging $bug", $command);
 }
 
+=item user <email>
+
+Specify a user email address before using the usertags command.
+
+=cut
+
+sub bts_user {
+    $useremail=shift or die "bts user: set user to what email address?\n";
+    if (! length $useremail) {
+	die "bts user: set user to what email address?\n";
+    }
+    opts_done(@_);
+    mailbts("user $useremail", "user $useremail");
+}
+
+=item usertag <bug> [+|-|=] tag [tag ..]
+
+=item usertags <bug> [+|-|=] tag [tag ..]
+
+Set or unset a user tag on a bug. The tag must be the exact tag name wanted;
+there are no defaults or checking of tag names.  Multiple tags may be
+specified as well. The two commands (usertag and usertags) are identical.
+At least one tag must be specified, unless the '=' flag is used, where the
+command
+
+  bts usertags <bug> =
+
+will remove all user tags from the specified bug.
+
+You must use a user <email> command before specifying usertags.
+
+=cut
+
+sub bts_usertags {
+    defined $useremail
+	or die "bts usertags: must use a user <email> command first\n";
+    my $bug=checkbug(shift) or die "bts usertags: tag what bug?\n";
+    if (! @_) {
+	die "bts usertags: set what user tag?\n";
+    }
+    # Parse the rest of the command line.
+    my $command="usertags $bug";
+    my $flag="";
+    if ($_[0] =~ /^[-+=]$/) {
+	$flag = $_[0];
+	$command .= " $flag";
+	shift;
+    }
+    elsif ($_[0] =~ s/^([-+=])//) {
+	$flag = $1;
+	$command .= " $flag";
+    }
+
+    if ($flag ne '=' && ! @_) {
+	die "bts usertags: set what tag?\n";
+    }
+    
+    $command .= join(" ", @_);
+
+    mailbts("usertagging $bug", $command);
+}
+
 =item severity <bug> <severity>
 
 Change the severity of a bug. The severity may be abbreviated to any unique
@@ -923,18 +989,18 @@ sub bts_noowner {
     mailbts("bug $bug has no owner", "noowner $bug");
 }
 
-=item spam <bug>
+=item reportspam <bug>
 
-The spam command allows you to report a bug as containing spam in the report.
-It saves one from having to go to the bug web page to report it.
+The reportspam command allows you to report a bug report as containing spam.
+It saves one from having to go to the bug web page to do so.
 
 =cut
 
-sub bts_spam {
-    my $bug=checkbug(shift) or die "bts clone: clone what bug?\n";
+sub bts_reportspam {
+    my $bug=checkbug(shift) or die "bts reportspam: report what bug?\n";
     opts_done(@_);
     if (! have_lwp()) {
-	die "Couldn't run bts spam: $lwp_broken\n";
+	die "bts: Couldn't run bts spam: $lwp_broken\n";
     }
 
     init_agent() unless $ua;
@@ -1016,7 +1082,7 @@ sub bts_cache {
 
     prunecache();
     if (! have_lwp()) {
-	die "Couldn't run bts cache: $lwp_broken\n";
+	die "bts: Couldn't run bts cache: $lwp_broken\n";
     }
 
     if (! -d $cachedir) {
@@ -1216,7 +1282,7 @@ sub checkbug {
     {
       if (not defined $it)
       {
-        die "You specified 'it', but no previous bug number referenced!\n";
+        die "bts: You specified 'it', but no previous bug number referenced!\n";
       }
       else
       {
