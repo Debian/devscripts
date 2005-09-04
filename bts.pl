@@ -896,7 +896,7 @@ sub bts_usertags {
 	die "bts usertags: set what tag?\n";
     }
     
-    $command .= join(" ", @_);
+    $command .= " " . join(" ", @_);
 
     mailbts("usertagging $bug", $command);
 }
