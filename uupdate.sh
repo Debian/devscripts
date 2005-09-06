@@ -631,41 +631,39 @@ else
 	                       }
 	                   }')
 
-	# Note that debian/changelog is always in FILES, so FILES is non-null
-	# Check anyway!
-	if [ -z "$FILES" ]; then
-	    echo "$PROGNAME: FILES is empty - why?  Please file a bug report!" >&2
-	    echo "Aborting..." >&2
-	    exit 1
-	fi
-
-	for file in $FILES; do
-	    if [ -e "$file" ]; then
-		echo "$PROGNAME warning: file $file was added in old diff, but is now in the upstream source." >&2
-		echo "Please check that the diff is applied correctly." >&2
-		echo "(This program will use the pristine upstream version and save the old .diff.gz" >&2
-		echo "version as $file.debdiff .)" >&2
-
-		if [ -e "$file.upstream" -o -e "$file.debdiff" ]; then
-		    FILEEXISTERR=1
+	# Note that debian/changelog is usually in FILES, so FILES is
+	# usually non-null; however, if the upstream ships its own debian/
+	# directory, this may not be true, so must check for empty $FILES.
+	# Check anyway, even though it's not strictly necessary in bash.
+	if [ -n "$FILES" ]; then
+	    for file in $FILES; do
+		if [ -e "$file" ]; then
+		    echo "$PROGNAME warning: file $file was added in old diff, but is now in the upstream source." >&2
+		    echo "Please check that the diff is applied correctly." >&2
+		    echo "(This program will use the pristine upstream version and save the old .diff.gz" >&2
+		    echo "version as $file.debdiff .)" >&2
+		    
+		    if [ -e "$file.upstream" -o -e "$file.debdiff" ]; then
+			FILEEXISTERR=1
+		    fi
 		fi
-	    fi
-	done
+	    done
 
-	if [ -n "$FILEEXISTERR" ]; then
-	    echo "$PROGNAME: please apply the diff by hand and take care with this." >&2
-	    exit 1
+	    if [ -n "$FILEEXISTERR" ]; then
+		echo "$PROGNAME: please apply the diff by hand and take care with this." >&2
+		exit 1
+	    fi
+
+	    # Shift any files that are in the upstream tarball that are also in
+	    # the old diff out of the way so the diff is more likely to apply
+	    # cleanly, and remember the fact that we moved it
+	    for file in $FILES; do
+		if [ -e "$file" ]; then
+		    mv $file $file.upstream
+		    MOVEDFILES=("${MOVEDFILES[@]}" "$file")
+		fi
+	    done
 	fi
-
-	# Shift any files that are in the upstream tarball that are also in
-	# the old diff out of the way so the diff is more likely to apply
-	# cleanly, and remember the fact that we moved it
-	for file in $FILES; do
-	    if [ -e "$file" ]; then
-		mv $file $file.upstream
-		MOVEDFILES=("${MOVEDFILES[@]}" "$file")
-	    fi
-	done
 
 	if zcat ../${PACKAGE}_$SVERSION.diff.gz | patch -sNp1 ; then
 	    echo "Success!  The diffs from version $VERSION worked fine."
