@@ -720,15 +720,22 @@ sub process_watchline ($$$$$$)
 	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi) {
 	    my $href = $2;
 	    if ($href =~ m&^$pattern$&) {
-		# need the map { ... } here to handle cases of (...)?
-		# which may match but then return undef values
-		my $mangled_version =
-		    join(".", map { $_ if defined($_) }
-			       $href =~ m&^$pattern$&);
-		foreach my $pat (@{$options{'uversionmangle'}}) {
-		    eval "\$mangled_version =~ $pat;";
+		if ($watch_version == 2) {
+		    # watch_version 2 only recognised one group; the code
+		    # below will break version 2 watchfiles with a construction
+		    # such as file-([\d\.]+(-\d+)?) (bug #327258)
+		    push @hrefs, [$1, $href];
+		} else {
+		    # need the map { ... } here to handle cases of (...)?
+		    # which may match but then return undef values
+		    my $mangled_version =
+			join(".", map { $_ if defined($_) }
+			     $href =~ m&^$pattern$&);
+		    foreach my $pat (@{$options{'uversionmangle'}}) {
+			eval "\$mangled_version =~ $pat;";
+		    }
+		    push @hrefs, [$mangled_version, $href];
 		}
-		push @hrefs, [$mangled_version, $href];
 	    }
 	}
 	if (@hrefs) {

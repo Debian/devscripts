@@ -1,10 +1,12 @@
 devscripts (2.9.8) UNRELEASED; urgency=low
 
   * bts: don't require user for usertags (Closes: #326560)
+  * uscan: correctly handle version 2 watchfiles with multiple groups
+    (Closes: #327258)
   * uupdate: handle csae of debian/ directory in upstream sources (Closes:
     #320836)
 
- -- Julian Gilbey <jdg@polya.uklinux.net>  Tue,  6 Sep 2005 02:19:17 +0100
+ -- Julian Gilbey <jdg@polya.uklinux.net>  Sun, 11 Sep 2005 00:31:03 +0100
 
 devscripts (2.9.7) unstable; urgency=low
 
