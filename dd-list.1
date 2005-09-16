@@ -20,8 +20,8 @@
 dd\-list \- nicely list .deb packages and their maintainers
 .\" --------------------------------------------------------------------
 .SH SYNOPSIS
-.BR dd\-list " [" \-hiV "] [" \-\-help "] [" \-\-stdin "] ["
-.BR \-\-dctrl "] [" \-\-version "] [" package "...]"
+.BR dd\-list " [" \-hiuV "] [" \-\-help "] [" \-\-stdin "]"
+.BR "" "[" \-\-dctrl "] [" \-\-version "] [" \-\-uploaders "] [" package "...]"
 .\" --------------------------------------------------------------------
 .SH DESCRIPTION
 .B dd\-list
@@ -70,6 +70,11 @@ package control file. This includes the status file, or output of
 apt-cache. This is the fastest way to use dd-list, as it uses the
 maintainer information from the input instead of looking up the maintainer
 of each listed package.
+.TP
+.BR \-u , \-\-uploaders
+Also list developers who are named as uploaders of packages, not only
+the maintainers.  Uploaders are indicated with "(U)" appended to the
+package name.
 .TP
 .BR \-V , \-\-version
 Print the version.

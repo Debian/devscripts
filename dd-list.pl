@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 #
 # dd-list: Generate a list of maintainers of packages.
 #
@@ -20,29 +20,35 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-use warnings;
 use strict;
 use Getopt::Long;
 
 my $version='###VERSION###';
 
-sub get_developer_given_package {
+sub get_developers_given_package {
 	my $package_name=shift;
 	
 	my $developer;
 	my $source_name;
+	my $uploaders;
+	my @uploaders;
 	open (F, "apt-cache showsrc '$package_name' |");
 	while (<F>) {
 		chomp;
 		if (/^Maintainer: (.*)/) {
 			$developer=$1;
 		}
+		elsif (/^Uploaders: (.*)/) {
+			$uploaders=$1;
+			@uploaders = split /\s*,\s*/, $uploaders;
+			
+		}
 		elsif (/^Package: (.*)/) {
 			$source_name=$1;
 		}
 	}
 	close F;
-	return ($developer, $source_name);
+	return ($developer, \@uploaders, $source_name);
 }
 
 sub parse_developer {
@@ -66,7 +72,7 @@ sub sort_developers {
 
 sub help {
 	print <<"EOF"
-Usage: dd-list [-hiV] [--help] [--stdin] [--dctrl] [--version] [package ...]
+Usage: dd-list [options] [package ...]
 
     -h, --help
         Print this help text.
@@ -76,18 +82,23 @@ Usage: dd-list [-hiV] [--help] [--stdin] [--dctrl] [--version] [package ...]
 
     -d, --dctrl
         Read Debian control data from standard input.
-       
+
+    -u, --uploaders
+        Also list uploaders of packages, not only the listed maintainers
+
     -V, --version
-        Print version (it's $version by the way).
+        Print version (it\'s $version by the way).
 EOF
 }
 
 my $use_stdin=0;
 my $use_dctrl=0;
+my $show_uploaders=0;
 if (! GetOptions(
 	"help" => sub { help(); exit },
 	"stdin|i" => \$use_stdin,
 	"dctrl|d" => \$use_dctrl,
+	"uploaders|u" => \$show_uploaders,
 	"version" => sub { print "dd-list version $version\n" })) {
 	exit(1);
 }
@@ -96,9 +107,9 @@ my %dict;
 my $errors=0;
 
 if ($use_dctrl) {
-	$/="\n\n";
+	local $/="\n\n";
 	while (<>) {
-		my ($package, $maintainer);
+		my ($package, $maintainer, $uploaders, @uploaders);
 
 		if (/^Package:\s+(.*)$/m) {
 			$package=$1;
@@ -109,9 +120,18 @@ if ($use_dctrl) {
 		if (/^Maintainer:\s+(.*)$/m) {
 			$maintainer=$1;
 		}
+		if (/^Uploaders:\s+(.*)$/m) {
+			$uploaders=$1;
+			@uploaders = split /\s*,\s*/, $uploaders;
+		}
 
 		if (defined $maintainer && defined $package) {
 			push @{$dict{$maintainer}}, $package;
+			if ($show_uploaders && defined $uploaders) {
+				foreach my $uploader (@uploaders) {
+					push @{$dict{$uploader}}, "$package (U)";
+				}
+			}
 		}
 		else {
 			print STDERR "E: parse error in stanza $.\n";
@@ -134,9 +154,14 @@ else {
 	}
 
 	foreach my $package_name (@package_names) {
-		my ($developer, $source_name)=get_developer_given_package($package_name);
+		my ($developer, $uploaders, $source_name)=get_developers_given_package($package_name);
 		if (defined $developer) {
 			push @{$dict{$developer}}, $source_name;
+			if ($show_uploaders && @$uploaders) {
+				foreach my $uploader (@$uploaders) {
+					push @{$dict{$uploader}}, "$source_name (U)";
+				}
+			}
 		}
 		else {
 			print STDERR "E: Unknown package: $package_name\n";
