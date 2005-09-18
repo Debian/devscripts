@@ -1,6 +1,7 @@
 devscripts (2.9.8) UNRELEASED; urgency=low
 
   * bts: don't require user for usertags (Closes: #326560)
+  * bts: fix manpage typos (Closes: #328972, #328974)
   * dd-list: support displaying uploaders with new --uploaders/-u option
     (Closes: #328459)
   * uscan: correctly handle version 2 watchfiles with multiple groups
@@ -8,7 +9,7 @@ devscripts (2.9.8) UNRELEASED; urgency=low
   * uupdate: handle csae of debian/ directory in upstream sources (Closes:
     #320836)
 
- -- Julian Gilbey <jdg@polya.uklinux.net>  Fri, 16 Sep 2005 01:24:13 +0100
+ -- Julian Gilbey <jdg@polya.uklinux.net>  Sun, 18 Sep 2005 20:53:26 +0100
 
 devscripts (2.9.7) unstable; urgency=low
 

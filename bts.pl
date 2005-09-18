@@ -183,7 +183,7 @@ information on setting up a cache.
 
 =item --online, --no-offline
 
-Opposite of --online; overrides any configuration file directive to work
+Opposite of --offline; overrides any configuration file directive to work
 offline.
 
 =item --cache, --no-cache
@@ -676,7 +676,7 @@ sub bts_submitter {
     mailbts("submitter $bug", "submitter $bug $submitter");
 }
 
-=item reassign <bug> <package> <version>
+=item reassign <bug> <package> [<version>]
 
 Reassign a bug to a different package. The version field is optional.
 
