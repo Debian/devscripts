@@ -1947,7 +1947,7 @@ sub prunecache {
 	    push @unrecognised, $oldfile;
 	    next;
 	}
-	next if is_manual($timestamp{$thing});
+	next if is_manual(get_timestamp($thing));
 	
 	# Otherwise, it's automatic and we purge it
 	deletecache($thing);
