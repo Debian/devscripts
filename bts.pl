@@ -188,7 +188,7 @@ offline.
 
 =item --cache, --no-cache
 
-Should we attempt to to cache new versions of BTS pages when
+Should we attempt to cache new versions of BTS pages when
 performing show/bugs commands?  Default is to cache.
 
 =item --cache-mode={min|mbox|full}
