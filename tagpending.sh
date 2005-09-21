@@ -71,7 +71,7 @@ changelog_closes=$(echo "$parsed"| awk -F: '/^Closes: / { print $2 }' | \
   xargs -n1 echo)
 
 if [ "$USE_WGET" = "1" ]; then
-    bts_pending=$(wget -q -O - "http://bugs.debian.org/cgi-bin/pkgreport.cgi?which=src&data=$srcpkg&archive=no&pend-exc=done&include=pending" | \
+    bts_pending=$(wget -q -O - "http://bugs.debian.org/cgi-bin/pkgreport.cgi?which=src;data=$srcpkg;archive=no;pend-exc=done;include=pending" | \
 	sed -ne 's/.*<a href="bugreport.cgi?bug=\([0-9]*\).*/\1/; T; p')
 fi
 
