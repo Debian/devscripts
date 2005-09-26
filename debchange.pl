@@ -799,9 +799,9 @@ if (($opt_i || $opt_n || $opt_v || $opt_d) && ! $opt_create) {
     local $/ = undef;
     print O <S>;
 }
-elsif ($opt_a && ! $opt_create) {
-    # This means we just have to generate a new * entry in changelog
-    # and if a multi-developer changelog is detected, add developer names.
+elsif (($opt_e || $opt_r || $opt_a) && ! $opt_create) {
+    # Actuons that do not require creating a whole new changelog stanza.
+    
     $NEW_VERSION=$VERSION;
     $NEW_SVERSION=$SVERSION;
     $NEW_UVERSION=$UVERSION;
@@ -844,24 +844,35 @@ elsif ($opt_a && ! $opt_create) {
 	    }
 	}
     }
+	
+    
+    if ($opt_r) {
+	# Change the distribution from UNRELEASED for release.
+	my $distribution = $opt_D || "unstable";
+	$CHANGES=~s/(\([^\)]+\)\s+)([^;]+);/$1$distribution;/;
+	# Set the start-line to 1, as we don't know what they want to edit
+	$line=1;
+    }
     
     # The first lines are as we have already found
     print O $CHANGES;
 
-    # Add a multi-maintainer header.
-    if ($multimaint) {
-	print O "\n  [ $MAINTAINER ]\n";
-	$line+=2;
-    }
+    if (! $opt_r) {
+    	# Add a multi-maintainer header.
+	if ($multimaint) {
+	    print O "\n  [ $MAINTAINER ]\n";
+	    $line+=2;
+	}
 
-    if (@closes_text or $TEXT) {
-	foreach (@closes_text) { format_line($_, 0); }
-	if (length $TEXT) { format_line($TEXT, 0); }
-    } elsif ($opt_news) {
-	print O "\n  \n";
-	$line++;
-    } else {
-	print O "  * \n";
+	if (@closes_text or $TEXT) {
+	    foreach (@closes_text) { format_line($_, 0); }
+	    if (length $TEXT) { format_line($TEXT, 0); }
+	} elsif ($opt_news) {
+	    print O "\n  \n";
+	    $line++;
+	} else {
+	    print O "  * \n";
+	}
     }
 
     print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n";
@@ -870,30 +881,6 @@ elsif ($opt_a && ! $opt_create) {
     # Slurp the rest....
     local $/ = undef;
     print O <S>;
-}
-elsif (($opt_e || $opt_r) && ! $opt_create) {
-    if ($opt_r) {
-	# Change the distribution from UNRELEASED for release.
-	my $distribution = $opt_D || "unstable";
-	$CHANGES=~s/(\([^\)]+\)\s+)([^;]+);/$1$distribution;/;
-    }
-    
-    # We don't do any fancy stuff with respect to versions or adding
-    # entries, we just update the timestamp and open the editor
-    
-    print O $CHANGES;
-
-    print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n";
-
-    # Copy the rest of the changelog file to the new one
-    $line=-1;
-    while (<S>) { $line++; last if /^ --/; }
-    # Slurp the rest...
-    local $/ = undef;
-    print O <S>;
-
-    # Set the start-line to 1, as we don't know what they want to edit
-    $line=1;
 }
 elsif ($opt_create) {
     if (! $initial_release and ! $opt_news) {

@@ -1,5 +1,6 @@
 devscripts (2.9.8) UNRELEASED; urgency=low
 
+  [ Julian Gilbey ]
   * bts: don't require user for usertags (Closes: #326560)
   * bts: fix manpage typos (Closes: #328972, #328974, #328477)
   * bts: fix bug in getting timestamps
@@ -10,7 +11,12 @@ devscripts (2.9.8) UNRELEASED; urgency=low
   * uupdate: handle csae of debian/ directory in upstream sources (Closes:
     #320836)
 
- -- Julian Gilbey <jdg@debian.org>  Tue, 20 Sep 2005 22:30:18 +0100
+  [ Joey Hess ]
+  * debchange: -r needs to enable multi-maintainer markers when releasing a
+    package if the releaser is not the same as the only person who made any
+    changes.
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 26 Sep 2005 16:43:02 +0200
 
 devscripts (2.9.7) unstable; urgency=low
 
