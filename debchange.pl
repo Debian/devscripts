@@ -800,7 +800,7 @@ if (($opt_i || $opt_n || $opt_v || $opt_d) && ! $opt_create) {
     print O <S>;
 }
 elsif (($opt_e || $opt_r || $opt_a) && ! $opt_create) {
-    # Actuons that do not require creating a whole new changelog stanza.
+    # Actions that do not require creating a whole new changelog stanza.
     
     $NEW_VERSION=$VERSION;
     $NEW_SVERSION=$SVERSION;
