@@ -10,13 +10,14 @@ devscripts (2.9.8) UNRELEASED; urgency=low
     (Closes: #327258)
   * uupdate: handle csae of debian/ directory in upstream sources (Closes:
     #320836)
+  * don't allow non-bash scripts in the package (Closes: #331223)
 
   [ Joey Hess ]
   * debchange: -r needs to enable multi-maintainer markers when releasing a
     package if the releaser is not the same as the only person who made any
     changes.
 
- -- Joey Hess <joeyh@debian.org>  Mon, 26 Sep 2005 16:43:02 +0200
+ -- Julian Gilbey <jdg@debian.org>  Sun,  2 Oct 2005 16:59:07 +0100
 
 devscripts (2.9.7) unstable; urgency=low
 

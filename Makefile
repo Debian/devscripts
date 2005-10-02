@@ -44,10 +44,14 @@ version:
 	    > version
 
 %: %.sh version
+	if grep -q '^#! */bin/sh' $<; then \
+	  echo "$< is a /bin/sh script, not a bash script!" >&2; \
+	  exit 1; \
+	fi
 	rm -f $@ $@.tmp
 	VERSION=`cat version` && sed -e "s/###VERSION###/$$VERSION/" $< \
 	    > $@.tmp && chmod +x $@.tmp && mv $@.tmp $@
-	sh -n $@
+	bash -n $@
 
 %: %.pl version
 	rm -f $@ $@.tmp

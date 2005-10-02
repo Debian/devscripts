@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#! /bin/bash -e
 #
 # deb-reversion -- a script to bump a DEB file's version number.
 #
