@@ -4,12 +4,15 @@ devscripts (2.9.8) UNRELEASED; urgency=low
   * bts: don't require user for usertags (Closes: #326560)
   * bts: fix manpage typos (Closes: #328972, #328974, #328477)
   * bts: fix bug in getting timestamps
+  * debdiff: handle filenames with spaces (Closes: #334145)
+  * debdiff: compare symlinks more carefully (Closes: #327090)
   * dd-list: support displaying uploaders with new --uploaders/-u option
     (Closes: #328459)
   * uscan: correctly handle version 2 watchfiles with multiple groups
     (Closes: #327258)
   * uupdate: handle csae of debian/ directory in upstream sources (Closes:
     #320836)
+  * uupdate: fix --no-symlink option (Closes: #333390)
   * don't allow non-bash scripts in the package (Closes: #331223)
 
   [ Joey Hess ]
@@ -20,7 +23,7 @@ devscripts (2.9.8) UNRELEASED; urgency=low
   [ Joshua Kwan ]
   * Clarify annotate-output sub-description in control file.
 
- -- Joshua Kwan <joshk@triplehelix.org>  Thu,  6 Oct 2005 15:03:10 -0700
+ -- Julian Gilbey <jdg@debian.org>  Sun, 16 Oct 2005 13:07:30 +0100
 
 devscripts (2.9.7) unstable; urgency=low
 

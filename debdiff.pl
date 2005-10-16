@@ -591,7 +591,7 @@ sub process_debc($$)
     # Format of dpkg-deb -c output:
     # permissions owner/group size date time name ['->' link destination]
     # And remember the slink -> potato stuff
-    $data =~ s/^(\S+\s+){5}(\S+)( (->|link to) \S+)?\s*$/$2/mg;
+    $data =~ s/^(\S+\s+){5}//mg;
     $data =~ s,^\./,/,mg;
     $data =~ s,^([^/]),/$1,mg;
     @filelist = grep ! m|^/$|, split /\n/, $data; # don't bother keeping '/'

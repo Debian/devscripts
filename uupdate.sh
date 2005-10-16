@@ -540,26 +540,27 @@ else
 	! -e "../${PACKAGE}_$SNEW_VERSION.orig.tar.bz2" ]; then
 	if [ "$UUPDATE_SYMLINK_ORIG" = yes ]; then
 	    echo "Symlinking to pristine source from ${PACKAGE}_$SNEW_VERSION.orig.tar.$TYPE..."
+	    case $ARCHIVE_PATH in
+		/*)   LINKARCHIVE="$ARCHIVE" ;;
+		../*) LINKARCHIVE="${ARCHIVE#../}" ;;
+	    esac
 	else
 	    echo "Copying pristine source to ${PACKAGE}_$SNEW_VERSION.orig.tar.$TYPE..."
 	fi
-	case $ARCHIVE_PATH in
-	    /*)   LINKARCHIVE="$ARCHIVE" ;;
-	    ../*) LINKARCHIVE="${ARCHIVE#../}" ;;
-	esac
+
 	case "$TYPE" in
 	    gz)
 		if [ "$UUPDATE_SYMLINK_ORIG" = yes ]; then
 		    ln -s "$LINKARCHIVE" "../${PACKAGE}_$SNEW_VERSION.orig.tar.gz"
 		else
-		    cp "$LINKARCHIVE" "../${PACKAGE}_$SNEW_VERSION.orig.tar.gz"
+		    cp "$ARCHIVE_PATH" "../${PACKAGE}_$SNEW_VERSION.orig.tar.gz"
 		fi
 		;;
 	    bz2)
 		if [ "$UUPDATE_SYMLINK_ORIG" = yes ]; then
 		    ln -s "$LINKARCHIVE" "../${PACKAGE}_$SNEW_VERSION.orig.tar.bz2"
 		else
-		    cp "$LINKARCHIVE" "../${PACKAGE}_$SNEW_VERSION.orig.tar.bz2"
+		    cp "$ARCHIVE_PATH" "../${PACKAGE}_$SNEW_VERSION.orig.tar.bz2"
 		fi
 		;;
 	    *)
