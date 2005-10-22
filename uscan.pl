@@ -76,6 +76,8 @@ Options:
     --no-download  Report on newer and absent versions, but don\'t download
     --pasv         Use PASV mode for FTP connections
     --no-pasv      Do not use PASV mode for FTP connections (default)
+    --timeout N    Specifies how much time, in seconds, we give remote
+                   servers to respond (default 20 seconds)
     --symlink      Make an orig.tar.gz symlink to downloaded file (default)
     --rename       Rename to orig.tar.gz instead of symlinking
                    (Both will use orig.tar.bz2 if appropriate)
@@ -145,6 +147,7 @@ my %dehs_tags;
 my $dehs_end_output = 0;
 my $dehs_start_output = 0;
 my $pkg_report_header = '';
+my $timeout = 20;
 
 if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg = "  (no configuration files read)";
@@ -152,6 +155,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 } else {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
     my %config_vars = (
+               'USCAN_TIMEOUT' => 20,
 		       'USCAN_DOWNLOAD' => 'yes',
 		       'USCAN_PASV' => 'default',
 		       'USCAN_SYMLINK' => 'symlink',
@@ -179,6 +183,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'USCAN_DOWNLOAD'}='yes';
     $config_vars{'USCAN_PASV'} =~ /^(yes|no|default)$/
 	or $config_vars{'USCAN_PASV'}='default';
+    $config_vars{'USCAN_TIMEOUT'} =~ m/^\d+$/
+    or $config_vars{'USCAN_TIMEOUT'}=20;
     $config_vars{'USCAN_SYMLINK'} =~ /^(yes|no|symlinks?|rename)$/
 	or $config_vars{'USCAN_SYMLINK'}='yes';
     $config_vars{'USCAN_SYMLINK'}='symlink'
@@ -190,7 +196,6 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'USCAN_DEHS_OUTPUT'}='no';
     $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} =~ /^[012]$/
 	or $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'}=1;
-
     foreach my $var (sort keys %config_vars) {
 	if ($config_vars{$var} ne $config_default{$var}) {
 	    $modified_conf_msg .= "  $var=$config_vars{$var}\n";
@@ -202,6 +207,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $download = $config_vars{'USCAN_DOWNLOAD'} eq 'no' ? 0 : 1;
     $passive = $config_vars{'USCAN_PASV'} eq 'yes' ? 1 :
 	$config_vars{'USCAN_PASV'} eq 'no' ? 0 : 'default';
+    $timeout = $config_vars{'USCAN_TIMEOUT'};
     $symlink = $config_vars{'USCAN_SYMLINK'};
     $verbose = $config_vars{'USCAN_VERBOSE'} eq 'yes' ? 1 : 0;
     $dehs = $config_vars{'USCAN_DEHS_OUTPUT'} eq 'yes' ? 1 : 0;
@@ -213,7 +219,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 my $debug = 0;
 my ($opt_h, $opt_v, $opt_download, $opt_report, $opt_passive, $opt_symlink);
 my ($opt_verbose, $opt_ignore, $opt_level, $opt_regex, $opt_noconf);
-my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs);
+my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
 
 GetOptions("help" => \$opt_h,
 	   "version" => \$opt_v,
@@ -221,6 +227,7 @@ GetOptions("help" => \$opt_h,
 	   "report" => sub { $opt_download = 0; },
 	   "report-status" => sub { $opt_download = 0; $opt_report = 1; },
 	   "passive|pasv!" => \$opt_passive,
+       "timeout=i" => \$opt_timeout,
 	   "symlink!" => sub { $opt_symlink = $_[1] ? 'symlink' : 'no'; },
 	   "rename" => sub { $opt_symlink = 'rename'; },
 	   "package=s" => \$opt_package,
@@ -248,6 +255,7 @@ if ($opt_v) { version(); exit 0; }
 $download = $opt_download if defined $opt_download;
 $report = $opt_report if defined $opt_report;
 $passive = $opt_passive if defined $opt_passive;
+$timeout = $opt_timeout if defined $opt_timeout;
 $symlink = $opt_symlink if defined $opt_symlink;
 $verbose = $opt_verbose if defined $opt_verbose;
 $dehs = $opt_dehs if defined $opt_dehs;
@@ -305,7 +313,7 @@ else { $passive = undef; }
 # to restore $ENV{'FTP_PASSIVE'} to what it was at this point
 
 my $user_agent = LWP::UserAgent->new(env_proxy => 1);
-$user_agent->timeout("20");
+$user_agent->timeout($timeout);
 
 if (defined $opt_watchfile) {
     die "Can't have directory arguments if using --watchfile" if @ARGV;
