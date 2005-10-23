@@ -155,7 +155,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 } else {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
     my %config_vars = (
-               'USCAN_TIMEOUT' => 20,
+		       'USCAN_TIMEOUT' => 20,
 		       'USCAN_DOWNLOAD' => 'yes',
 		       'USCAN_PASV' => 'default',
 		       'USCAN_SYMLINK' => 'symlink',
@@ -184,7 +184,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $config_vars{'USCAN_PASV'} =~ /^(yes|no|default)$/
 	or $config_vars{'USCAN_PASV'}='default';
     $config_vars{'USCAN_TIMEOUT'} =~ m/^\d+$/
-    or $config_vars{'USCAN_TIMEOUT'}=20;
+	or $config_vars{'USCAN_TIMEOUT'}=20;
     $config_vars{'USCAN_SYMLINK'} =~ /^(yes|no|symlinks?|rename)$/
 	or $config_vars{'USCAN_SYMLINK'}='yes';
     $config_vars{'USCAN_SYMLINK'}='symlink'
@@ -196,6 +196,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'USCAN_DEHS_OUTPUT'}='no';
     $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} =~ /^[012]$/
 	or $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'}=1;
+
     foreach my $var (sort keys %config_vars) {
 	if ($config_vars{$var} ne $config_default{$var}) {
 	    $modified_conf_msg .= "  $var=$config_vars{$var}\n";
@@ -227,7 +228,7 @@ GetOptions("help" => \$opt_h,
 	   "report" => sub { $opt_download = 0; },
 	   "report-status" => sub { $opt_download = 0; $opt_report = 1; },
 	   "passive|pasv!" => \$opt_passive,
-       "timeout=i" => \$opt_timeout,
+	   "timeout=i" => \$opt_timeout,
 	   "symlink!" => sub { $opt_symlink = $_[1] ? 'symlink' : 'no'; },
 	   "rename" => sub { $opt_symlink = 'rename'; },
 	   "package=s" => \$opt_package,
@@ -256,6 +257,7 @@ $download = $opt_download if defined $opt_download;
 $report = $opt_report if defined $opt_report;
 $passive = $opt_passive if defined $opt_passive;
 $timeout = $opt_timeout if defined $opt_timeout;
+$timeout = 20 unless defined $timeout and $timeout > 0;
 $symlink = $opt_symlink if defined $opt_symlink;
 $verbose = $opt_verbose if defined $opt_verbose;
 $dehs = $opt_dehs if defined $opt_dehs;
