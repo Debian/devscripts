@@ -107,12 +107,15 @@ First usage method:
 Second usage method:
   $progname [<debuild options>] [<dpkg-buildpackage options>]
              [--lintian-opts <lintian options>] [--linda-opts <linda options>]
-    to run dpkg-buildpackage and then run lintian and/or linda on the resulting
-    .changes file.  Additional debuild option available in this case is:
-        --lintian                Run lintian (default)
-        --linda                  Run linda
-        --no-lintian             Do not run lintian
-        --no-linda               Do not run linda (default)
+    to run dpkg-buildpackage and then run lintian and/or linda on the
+    resulting .changes file.
+
+    Additional debuild options available in this case are:
+
+        --lintian         Run lintian (default)
+        --linda           Run linda
+        --no-lintian      Do not run lintian
+        --no-linda        Do not run linda (default)
 
     For available dpkg-buildpackage and lintian/linda options, see their
     respective manpages.
