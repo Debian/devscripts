@@ -71,7 +71,7 @@ if ($release) {
 	}
 	close C;
 
-	my $version=`dpkg-parsechangelog | grep Version: | cut -f 2 -d ' '`;
+	my $version=`dpkg-parsechangelog | grep '^Version:' | cut -f 2 -d ' '`;
 	chomp $version;
 
 	$message="releasing version $version" if ! defined $message;
