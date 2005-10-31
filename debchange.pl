@@ -799,8 +799,9 @@ if (($opt_i || $opt_n || $opt_v || $opt_d) && ! $opt_create) {
     local $/ = undef;
     print O <S>;
 }
-elsif (($opt_e || $opt_r || $opt_a) && ! $opt_create) {
-    # Actions that do not require creating a whole new changelog stanza.
+elsif (($opt_r || $opt_a) && ! $opt_create) {
+    # This means we just have to generate a new * entry in changelog
+    # and if a multi-developer changelog is detected, add developer names.
     
     $NEW_VERSION=$VERSION;
     $NEW_SVERSION=$SVERSION;
@@ -844,8 +845,7 @@ elsif (($opt_e || $opt_r || $opt_a) && ! $opt_create) {
 	    }
 	}
     }
-	
-    
+
     if ($opt_r) {
 	# Change the distribution from UNRELEASED for release.
 	my $distribution = $opt_D || "unstable";
@@ -881,6 +881,24 @@ elsif (($opt_e || $opt_r || $opt_a) && ! $opt_create) {
     # Slurp the rest....
     local $/ = undef;
     print O <S>;
+}
+elsif ($opt_e && ! $opt_create) {
+    # We don't do any fancy stuff with respect to versions or adding
+    # entries, we just update the timestamp and open the editor
+
+    print O $CHANGES;
+
+    print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n";
+
+    # Copy the rest of the changelog file to the new one
+    $line=-1;
+    while (<S>) { $line++; last if /^ --/; }
+    # Slurp the rest...
+    local $/ = undef;
+    print O <S>;
+
+    # Set the start-line to 0, as we don't know what they want to edit
+    $line=0;
 }
 elsif ($opt_create) {
     if (! $initial_release and ! $opt_news) {

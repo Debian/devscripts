@@ -5,10 +5,11 @@ devscripts (2.9.9) UNRELEASED; urgency=low
     (Closes: #335181)
 
   [ Julian Gilbey ]
+  * debchange: reapply --edit patch from bug#234434 (Closes: #336632)
   * debcommit: fix version grepping in changelog parsing (Closes: #336025)
   * debuild: improve grammar of usage message
 
- -- Julian Gilbey <jdg@debian.org>  Thu, 27 Oct 2005 18:34:23 +0100
+ -- Julian Gilbey <jdg@debian.org>  Mon, 31 Oct 2005 20:30:47 +0000
 
 devscripts (2.9.8) unstable; urgency=low
 
