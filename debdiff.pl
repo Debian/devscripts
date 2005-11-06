@@ -61,6 +61,8 @@ Valid options are:
    --renamed FROM TO      The package formerly called FROM has been
                             renamed TO; only of interest with --show-moved
                             (multiple permitted)
+   --verbose              Print additional info, even if no differences were
+                            found
 
 Default settings modified by devscripts configuration files:
 $modified_conf_msg
@@ -83,6 +85,8 @@ my $ignore_dirs = 1;
 my $compare_control = 1;
 my $show_moved = 0;
 my $wdiff_opt = '';
+
+my $verbose = 0;
 
 # Next, read read configuration files and then command line
 # The next stuff is boilerplate
@@ -180,6 +184,7 @@ while (@ARGV) {
     }
     elsif ($ARGV[0] =~ /^(--dirs|-d)$/) { $ignore_dirs = 0; shift; }
     elsif ($ARGV[0] eq '--nodirs') { $ignore_dirs = 1; shift; }
+    elsif ($ARGV[0] eq '--verbose') { $verbose = 1; shift; }
     elsif ($ARGV[0] =~ /^(--show-moved|-s)$/) { $show_moved = 1; shift; }
     elsif ($ARGV[0] eq '--noshow-moved') { $show_moved = 0; shift; }
     elsif ($ARGV[0] eq '--nocontrol') { $compare_control = 0; shift; }
@@ -489,7 +494,7 @@ if ($show_moved and $type ne 'deb') {
 	}
     }
 
-    if (! $changes) {
+    if ($verbose && ! $changes) {
 	print "File lists identical on package level (after any substitutions)\n";
     }
 } else {
@@ -500,7 +505,7 @@ if ($show_moved and $type ne 'deb') {
     my @losses = sort grep $files{$_} < 0, keys %files;
     my @gains = sort grep $files{$_} > 0, keys %files;
 
-    if (@losses == 0 && @gains == 0) {
+    if ($verbose && @losses == 0 && @gains == 0) {
 	print "File lists identical (after any substitutions)\n";
     }
 
@@ -554,11 +559,13 @@ for my $i (1,2) {
 
 use strict 'refs';
 
-print "\n";
 my $wdiff = `wdiff -n $wdiff_opt $dir1/control $dir2/control`;
 if ($? >> 8 == 0) {
-    print "No differences were encountered in the control files\n";
+    if ($verbose) {
+        print "\nNo differences were encountered in the control files\n";
+    }
 } elsif ($? >> 8 == 1) {
+    print "\n";
     if ($wdiff_opt) {
 	# Don't try messing with control codes
 	my $msg = "The following is the wdiff output between the control files:";
