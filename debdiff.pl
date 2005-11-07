@@ -61,8 +61,7 @@ Valid options are:
    --renamed FROM TO      The package formerly called FROM has been
                             renamed TO; only of interest with --show-moved
                             (multiple permitted)
-   --verbose              Print additional info, even if no differences were
-                            found
+   --quiet, -q            Be quiet if no differences were found
 
 Default settings modified by devscripts configuration files:
 $modified_conf_msg
@@ -86,7 +85,7 @@ my $compare_control = 1;
 my $show_moved = 0;
 my $wdiff_opt = '';
 
-my $verbose = 0;
+my $quiet = 0;
 
 # Next, read read configuration files and then command line
 # The next stuff is boilerplate
@@ -184,7 +183,7 @@ while (@ARGV) {
     }
     elsif ($ARGV[0] =~ /^(--dirs|-d)$/) { $ignore_dirs = 0; shift; }
     elsif ($ARGV[0] eq '--nodirs') { $ignore_dirs = 1; shift; }
-    elsif ($ARGV[0] eq '--verbose') { $verbose = 1; shift; }
+    elsif ($ARGV[0] =~ /^(--quiet|-q)$/) { $quiet = 1; shift; }
     elsif ($ARGV[0] =~ /^(--show-moved|-s)$/) { $show_moved = 1; shift; }
     elsif ($ARGV[0] eq '--noshow-moved') { $show_moved = 0; shift; }
     elsif ($ARGV[0] eq '--nocontrol') { $compare_control = 0; shift; }
@@ -494,7 +493,7 @@ if ($show_moved and $type ne 'deb') {
 	}
     }
 
-    if ($verbose && ! $changes) {
+    if (! $quiet && ! $changes) {
 	print "File lists identical on package level (after any substitutions)\n";
     }
 } else {
@@ -505,7 +504,7 @@ if ($show_moved and $type ne 'deb') {
     my @losses = sort grep $files{$_} < 0, keys %files;
     my @gains = sort grep $files{$_} > 0, keys %files;
 
-    if ($verbose && @losses == 0 && @gains == 0) {
+    if (! $quiet && @losses == 0 && @gains == 0) {
 	print "File lists identical (after any substitutions)\n";
     }
 
@@ -561,7 +560,7 @@ use strict 'refs';
 
 my $wdiff = `wdiff -n $wdiff_opt $dir1/control $dir2/control`;
 if ($? >> 8 == 0) {
-    if ($verbose) {
+    if (! $quiet) {
         print "\nNo differences were encountered in the control files\n";
     }
 } elsif ($? >> 8 == 1) {
