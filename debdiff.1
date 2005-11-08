@@ -138,8 +138,11 @@ If this is set to \fIyes\fR, then it is the same as the
 This option will be passed to \fBwdiff\fR; it should be one of
 \fB\-p\fR, \fB\-l\fR or \fB\-t\fR.
 .SH "EXIT VALUES"
-Normally the exit value will be 0.  If there is some fatal error, the
-exit code will be non-zero.
+Normally the exit value will be 0 if no differences are reported and 1
+if any are reported.  If there is some fatal error, the exit code will
+be non-zero, and will depend upon the type of error encountered: if it
+was an external error, then it will be the exit code of that program,
+else it should be 255.
 .SH "SEE ALSO"
 .BR dpkg-deb (1),
 .BR wdiff (1),

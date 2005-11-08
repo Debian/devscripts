@@ -27,6 +27,7 @@ sub fatal(@);
 
 my $progname = basename($0);
 my $modified_conf_msg;
+my $exit_status = 0;
 
 sub usage {
     print <<"EOF";
@@ -277,7 +278,7 @@ elsif ($type eq 'changes' or $type eq 'debs') {
 		/^Files:/ and $infiles=1, next;
 		next unless $infiles;
 		/ (\S*.u?deb)$/ and push @debs, $1;
-        }
+	    }
 	    close CHANGES
 		or fatal "Problem reading $changes: $!";
 
@@ -473,7 +474,7 @@ if ($show_moved and $type ne 'deb') {
     # This is not a very efficient way of doing things if there are
     # lots of debs involved, but since that is highly unlikely, it
     # shouldn't be much of an issue
-    my $changes = 0;
+    my $changed = 0;
 
     for my $deb1 (sort(keys %debs1), '-') {
 	next unless exists $changes{$deb1};
@@ -489,13 +490,14 @@ if ($show_moved and $type ne 'deb') {
 	    }
 	    print $msg, "\n", '-' x length $msg, "\n";
 	    print join("\n",@{$changes{$deb1}{$deb2}}), "\n\n";
-	    $changes = 1;
+	    $changed = 1;
 	}
     }
 
-    if (! $quiet && ! $changes) {
+    if (! $quiet && ! $changed) {
 	print "File lists identical on package level (after any substitutions)\n";
     }
+    $exit_status = 1 if $changed;
 } else {
     my %files;
     grep $files{$_}--, @D1;
@@ -518,6 +520,7 @@ if ($show_moved and $type ne 'deb') {
 	}
 	print $msg, "\n", '-' x length $msg, "\n";
 	print join("\n",@gains), "\n";
+	$exit_status = 1;
     }
 
     if (@losses) {
@@ -531,17 +534,18 @@ if ($show_moved and $type ne 'deb') {
 	}
 	print $msg, "\n", '-' x length $msg, "\n";
 	print join("\n",@losses), "\n";
+	$exit_status = 1;
     }
 }
 
 # We compare the control files (at least the dependency fields)
 # if we are examining precisely two .debs.
-exit 0 unless defined $singledeb[1] and defined $singledeb[2]
+exit $exit_status unless defined $singledeb[1] and defined $singledeb[2]
     and $compare_control;
 
 unless (system ("command -v wdiff >/dev/null 2>&1") == 0) {
     warn "Can't compare control files; wdiff package not installed\n";
-    exit 0;
+    exit $exit_status;
 }
 
 mktmpdirs();
@@ -578,12 +582,15 @@ if ($? >> 8 == 0) {
 	print $msg, "\n", '-' x length $msg, "\n";
 	print join("\n",@output), "\n";
     }
+    $exit_status = 1;
 } else {
     warn "wdiff failed (exit status " . ($? >> 8) .
 	(($? & 0x7f) ? " with signal " . ($? & 0x7f) : "") . ")\n";
 }
 # Clean up
 system ("rm", "-rf", $dir1, $dir2);
+
+exit $exit_status;
 
 ###### Subroutines
 
