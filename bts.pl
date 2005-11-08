@@ -105,6 +105,7 @@ my @valid_severities=qw(wishlist minor normal important
 my $browser;  # Will set if necessary
 my $btsurl='http://bugs.debian.org/';
 my $btscgiurl='http://bugs.debian.org/cgi-bin/';
+my $btscgipkgurl='http://bugs.debian.org/cgi-bin/pkgreport.cgi';
 my $btscgibugurl='http://bugs.debian.org/cgi-bin/bugreport.cgi';
 my $btscgispamurl='http://bugs.debian.org/cgi-bin/bugspam.cgi';
 my $btsemail='control@bugs.debian.org';
@@ -155,7 +156,8 @@ your shell does not strip out the comment in a command like
 "bts severity 30321 normal #inflated severity", then this program is smart
 enough to figure out where the comment is, and include it in the email.
 Note that most shells do strip out such comments before they get to the
-program, unless the comment is quoted.
+program, unless the comment is quoted.  (Note that something like "bts
+close #85942" will not be treated as a comment!)
 
 You can specify multiple commands by separating them with a single dot,
 rather like B<update-rc.d>; a single comma may also be used; all the
@@ -375,7 +377,7 @@ while (@ARGV) {
 	push @command, $_;
 	$iscommand = 0;
     }
-    elsif ($comment[$ncommand] or /^\#/) {
+    elsif ($comment[$ncommand] or (/^\#/ and not /^\#\d+$/)) {
 	$comment[$ncommand] .= " $_";
     }
     else {
@@ -574,7 +576,12 @@ sub bts_bugs {
     }
     if ($url =~ /^.*\s+<(.*)>$/) { $url = $1; }
     $url =~ s/^:$//;
-    browse(join(";", $url, @_));
+    if (@_) {
+	$url = join(";", $url, @_);
+	$url =~ s/:/=/g;
+	$url =~ s/;tag=/;include=/;
+    }
+    browse($url);
 
     # revert options
     if (defined $sub_offlinemode) {
@@ -1411,7 +1418,17 @@ sub download {
     my $url;
 
     # What URL are we to download?
-    $url = "$btsurl$thing";
+    if ($thing =~ /;/) {
+	# have to be intelligent here :/
+	if ($thing =~ /^\d+;/) {
+	    $url = "$btscgibugurl?bug=$thing";
+	} else {
+	    $url = "$btscgipkgurl?pkg=$thing";
+	}
+    } else {
+	# let the BTS be intelligent
+	$url = "$btsurl$thing";
+    }
 
     if (! -d $cachedir) {
 	die "bts: download() called but no cachedir!\n";
@@ -1830,7 +1847,7 @@ sub browse {
     }
 
     # Check that if we're requesting a tag, that it's a valid tag
-    if ($thing =~ /^tag:(.*)$/) {
+    if ($thing =~ /(?:^|;)tag[:=]([^;]*)/) {
 	unless (exists $valid_tags{$1}) {
 	    die "bts: invalid tag requested: $1\nRecognised tag names are: " . join(" ", @valid_tags) . "\n";
 	}
@@ -1885,7 +1902,17 @@ sub browse {
 	    my ($fh, $fn) = download_mbox($thing, 1);
 	    runmailreader($fn);
 	} else {
-	    runbrowser($btsurl.$thing);
+	    if ($thing =~ /;/) {
+		# have to be intelligent here :/
+		if ($thing =~ /^\d+;/) {
+		    runbrowser($btscgibugurl."?bug=".$thing);
+		} else {
+		    runbrowser($btscgipkgurl."?pkg=".$thing);
+		}
+	    } else {
+		# let the BTS be intelligent
+		runbrowser($btsurl.$thing);
+	    }
 	}
     }
 }

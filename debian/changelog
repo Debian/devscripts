@@ -5,13 +5,16 @@ devscripts (2.9.9) UNRELEASED; urgency=low
     (Closes: #335181)
 
   [ Julian Gilbey ]
+  * bts: fix handling of arguments to show command; translate "tag:..."
+    into "include=..." when given as a second argument (Closes: #338171)
+  * bts: don't treat something like "bts close #123456" as a comment
   * debchange: reapply --edit patch from bug#234434 (Closes: #336632)
   * debcommit: fix version grepping in changelog parsing (Closes: #336025)
   * debdiff: add --quiet switch and set exit status according to diff
     status (Closes: #337829)
   * debuild: improve grammar of usage message
 
- -- Julian Gilbey <jdg@debian.org>  Tue,  8 Nov 2005 20:53:56 +0000
+ -- Julian Gilbey <jdg@debian.org>  Tue,  8 Nov 2005 21:34:43 +0000
 
 devscripts (2.9.8) unstable; urgency=low
 
