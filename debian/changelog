@@ -14,7 +14,12 @@ devscripts (2.9.9) UNRELEASED; urgency=low
     status (Closes: #337829)
   * debuild: improve grammar of usage message
 
- -- Julian Gilbey <jdg@debian.org>  Tue,  8 Nov 2005 21:34:43 +0000
+  [ Joey Hess ]
+  * bts: sleep a default of 5 seconds between bts cache downloads
+    to avoid hammering the underprovisioned debian BTS/master archive server.
+  * bts: add --cache-delay parameter to tune this
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 21 Nov 2005 10:39:45 -0500
 
 devscripts (2.9.8) unstable; urgency=low
 

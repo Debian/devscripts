@@ -201,6 +201,11 @@ we mirror the whole thing, including the mbox and the boring
 attachments to the BTS bug pages and the acknowledgement emails (full)?
 Default is min.
 
+=item --cache-delay=seconds
+
+Time in seconds to delay between each download, to avoid hammering the BTS
+web server. Default is 5 seconds.
+
 =item --mbox
 
 Open a mail reader to read the mbox corresponding to a given bug number
@@ -310,6 +315,7 @@ if (exists $ENV{'BUGSOFFLINE'}) {
 
 my ($opt_help, $opt_version, $opt_noconf);
 my ($opt_cachemode, $opt_mailreader);
+my $opt_cachedelay=5;
 my $mboxmode = 0;
 my $quiet=0;
 
@@ -321,6 +327,7 @@ GetOptions("help|h" => \$opt_help,
 	   "online" => sub { $offlinemode = 0; },
 	   "cache!" => \$caching,
 	   "cache-mode|cachemode=s" => \$opt_cachemode,
+	   "cache-delay=i" => \$opt_cachedelay,
 	   "m|mbox" => \$mboxmode,
 	   "mailreader|mail-reader=s" => \$opt_mailreader,
 	   "f" => \$refreshmode,
@@ -1140,6 +1147,7 @@ sub bts_cache {
     my $bugtotal = scalar keys %bugs;
     foreach my $bug (keys %bugs) {
 	download($bug, 1, 0, $bugcount, $bugtotal);
+        sleep $opt_cachedelay;
 	$bugcount++;
     }
 
@@ -1251,6 +1259,7 @@ Valid options are:
                           How much to cache when we\'re caching: the sensible
                           bare minimum (default), the mbox as well, or
                           everything?
+   --cache-delay=seconds  Time to sleep between each download when caching.
    -m, --mbox             With show or bugs, open a mailreader to read the mbox
                           version instead
    --mailreader=CMD       Run CMD to read an mbox; default is 'mutt -f %s'
