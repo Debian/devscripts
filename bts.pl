@@ -40,6 +40,7 @@ use lib '/usr/share/devscripts';
 use Devscripts::DB_File_Lock;
 use Fcntl qw(O_RDWR O_RDONLY O_CREAT F_SETFD);
 use Getopt::Long;
+use Encode;
 
 # Funny UTF-8 warning messages from HTML::Parse should be ignorable (#292671)
 $SIG{'__WARN__'} = sub { warn $_[0] unless $_[0] =~ /^Parsing of undecoded UTF-8 will give garbage when decoding entities/; };
@@ -72,6 +73,7 @@ sub have_lwp() {
 sub MIRROR_ERROR      { 0; }
 sub MIRROR_DOWNLOADED { 1; }
 sub MIRROR_UP_TO_DATE { 2; }
+my $NONPRINT = "\\x00-\\x1F\\x7F-\\xFF"; # we need this later for MIME stuff
 
 my $progname = basename($0);
 my $modified_conf_msg;
@@ -1356,6 +1358,11 @@ sub mailbtsall {
 	    $name =~ s/,.*//;
 	}
 	my $from = $name ? "$name <$email>" : $email;
+	my $charset = `locale charmap`;
+	chomp $charset;
+	$charset =~ s/^ANSI_X3\.4-19(68|86)$/US-ASCII/;
+	my $fromline = fold_from_header("From: " .
+			MIME_encode_mimewords($from, 'Charset' => $charset));
 	my $date = `822-date`;
 	chomp $date;
 
@@ -1366,7 +1373,7 @@ sub mailbtsall {
 	if ($pid) {
 	    # parent
 	    print MAIL <<"EOM";
-From: $from
+$fromline
 To: $btsemail
 Subject: $subject
 Date: $date
@@ -1409,6 +1416,114 @@ EOM
 	    }
 	}
     }
+}
+
+# The following routines are taken from a patched version of MIME::Words
+# posted at http://mail.nl.linux.org/linux-utf8/2002-01/msg00242.html
+# by Richard =?utf-8?B?xIxlcGFz?= (Chepas) <rch@richard.eu.org>
+
+sub MIME_encode_B {
+    my $str = shift;
+    require MIME::Base64;
+    encode_base64($str, '');
+}
+
+sub MIME_encode_Q {
+    my $str = shift;
+    $str =~ s{([_\?\=\015\012\t $NONPRINT])}{$1 eq ' ' ? '_' : sprintf("=%02X", ord($1))}eog;  # RFC-2047, Q rule 3
+    $str;
+}
+
+sub MIME_encode_mimeword {
+    my $word = shift;
+    my $encoding = uc(shift || 'Q');
+    my $charset  = uc(shift || 'ISO-8859-1');
+    my $encfunc  = (($encoding eq 'Q') ? \&MIME_encode_Q : \&MIME_encode_B);
+    "=?$charset?$encoding?" . &$encfunc($word) . "?=";
+}
+
+sub MIME_encode_mimewords {
+    my ($rawstr, %params) = @_;
+    # check if we have something to encode
+    $rawstr !~ /[$NONPRINT]/o and $rawstr !~ /\=\?/o and return $rawstr;
+    my $charset  = $params{Charset} || 'ISO-8859-1';
+    # if there is 1/3 unsafe bytes, the Q encoded string will be 1.66 times
+    # longer and B encoded string will be 1.33 times longer than original one
+    my $encoding = lc($params{Encoding} ||
+       (length($rawstr) > 3*($rawstr =~ tr/[\x00-\x1F\x7F-\xFF]//) ? 'q':'b'));
+
+    # Encode any "words" with unsafe bytes.
+    my ($last_token, $last_word_encoded, $token) = ('', 0);
+    $rawstr =~ s{([^\015\012\t ]+|[\015\012\t ]+)}{     # get next "word"
+	$token = $1;
+	if ($token =~ /[\015\012\t ]+/) {  # white-space
+	    $last_token = $token;
+	} else {
+	    if ($token !~ /[$NONPRINT]/o and $token !~ /\=\?/o) { 
+		# no unsafe bytes, leave as it is
+		$last_word_encoded = 0;
+		$last_token = $token;
+	    } else {
+		# has unsafe bytes, encode to one or more encoded words
+		# white-space between two encoded words is skipped on
+		# decoding, so we should encode space in that case
+		$_ = $last_token =~ /[\015\012\t ]+/ && $last_word_encoded ? $last_token.$token : $token;
+		# We limit such words to about 18 bytes, to guarantee that the 
+		# worst-case encoding give us no more than 54 + ~10 < 75 bytes
+		s{(.{1,15}[\x80-\xBF]{0,4})}{
+		    # don't split multibyte characters - this regexp should
+		    # work for UTF-8 characters
+		    MIME_encode_mimeword($1, $encoding, $charset).' ';
+		}sxeg;
+		$_ = substr($_, 0, -1); # remove trailing space
+		$last_word_encoded = 1;
+		$last_token = $token;
+		$_;
+	    }
+	}
+    }sxeg;
+    $rawstr;
+}
+
+# This is a stripped-down version of Mail::Header::_fold_line, but is
+# not as general-purpose as the original, so take care if using it elsewhere!
+# The heuristics are changed to prevent splitting in the middle of an
+# encoded word; we should not have any commas or semicolons!
+sub fold_from_header {
+    my $header = shift;
+    chomp $header;  # We assume there wasn't a newline anyhow
+
+    my $maxlen = 76;
+    my $max = int($maxlen - 5);         # 4 for leading spcs + 1 for [\,\;]
+
+    if(length($header) > $maxlen) {
+	# Split the line up:
+	# first split at a whitespace,
+	# else we are looking at a single word and we won't try to split
+	# it, even though we really ought to
+	# But this could only happen if someone deliberately uses a really
+	# long name with no spaces in it.
+	my @x;
+	
+	push @x, $1
+	    while($header =~ s/^\s*
+		  ([^\"]{1,$max}\s
+		   |[^\s\"]*(?:\"[^\"]*\"[ \t]?[^\s\"]*)+\s
+		   |[^\s\"]+\s
+		   )
+		  //x);
+	push @x, $header;
+	map { s/\s*$// } @x;
+	if (@x > 1 and length($x[-1]) + length($x[-2]) < $max) {
+	    $x[-2] .= " $x[-1]";
+	    pop @x;
+	}
+	$x[0] =~ s/^\s*//;
+	$header = join("\n  ", @x);
+    }
+
+    $header =~ s/^(\S+)\n\s*(?=\S)/$1 /so;
+    return $header;
 }
 
 ##########  Browsing and caching subroutines
