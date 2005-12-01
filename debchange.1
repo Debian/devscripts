@@ -244,6 +244,14 @@ Should we indicate that parts of a changelog entry have been made by
 different maintainers?  Default is yes; see the discussion above and
 also the DEBCHANGE_MULTIMAINT configuration file option below.
 .TP
+.BR \-\-maintmaint ", " \-m
+Do not modify the maintainer details previously listed in the changelog. 
+This is useful particularly for sponsors wanting to automatically add a
+sponsorship message without disrupting the other changelog details.
+Note that there may be some interesting interactions if
+multi-maintainer mode is in use; you will probably wish to check the
+changelog manually before uploading it in such cases.
+.TP
 \fB\-\-check-dirname-level\fR \fIN\fR
 See the above section "Directory name checking" for an explanation of
 this option.

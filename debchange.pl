@@ -99,6 +99,8 @@ Options:
   --[no]multimaint
          When appending an entry to a changelog section (-a), [do not]
 	 indicate if multiple maintainers are now involved (default: do so)
+  -m, --maintmaint
+         Don\'t change (maintain) the maintainer details in the changelog entry
   --check-dirname-level N
 	 How much to check directory names:
 	 N=0   never
@@ -208,7 +210,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # with older debchange versions.
 my ($opt_help, $opt_version);
 my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u);
-my ($opt_n, $opt_c, $opt_create, $opt_package, @closes);
+my ($opt_n, $opt_c, $opt_m, $opt_create, $opt_package, @closes);
 my ($opt_news);
 my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 $opt_u = 'low';
@@ -236,6 +238,7 @@ GetOptions("help|h" => \$opt_help,
 	   "news" => \$opt_news,
 	   "multimaint!" => \$opt_multimaint,
 	   "multi-maint!" => \$opt_multimaint,
+	   "m|maintmaint" => \$opt_m,
 	   "ignore-dirname" => \$opt_ignore,
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
@@ -489,46 +492,49 @@ if (! exists $env{'DEBEMAIL'} or ! exists $env{'DEBFULLNAME'}) {
 }
 
 # Now use the gleaned values to detemine our MAINTAINER and EMAIL values
-if (exists $env{'DEBFULLNAME'}) {
-    $MAINTAINER = $env{'DEBFULLNAME'};
-} else {
-    my @pw = getpwuid $<;
-    if (defined($pw[6])) {
-	if (my $pw = decode_utf8($pw[6])) {
-	    $pw =~ s/,.*//;
-	    $MAINTAINER = $pw;
-	} else {
-	    warn "$progname warning: passwd full name field for uid $<\nis not UTF-8 encoded; ignoring\n";
+if (! $opt_m) {
+    if (exists $env{'DEBFULLNAME'}) {
+	$MAINTAINER = $env{'DEBFULLNAME'};
+    } else {
+	my @pw = getpwuid $<;
+	if (defined($pw[6])) {
+	    if (my $pw = decode_utf8($pw[6])) {
+		$pw =~ s/,.*//;
+		$MAINTAINER = $pw;
+	    } else {
+		warn "$progname warning: passwd full name field for uid $<\nis not UTF-8 encoded; ignoring\n";
+	    }
 	}
     }
-}
-# Otherwise, $MAINTAINER retains its default value of the last changelog entry
+    # Otherwise, $MAINTAINER retains its default value of the last
+    # changelog entry
 
-# Email is easier
-if (exists $env{'DEBEMAIL'}) { $EMAIL = $env{'DEBEMAIL'}; }
-elsif (exists $env{'EMAIL'}) { $EMAIL = $env{'EMAIL'}; }
-else {
-    my $addr;
-    if (open MAILNAME, '/etc/mailname') {
-	chomp($addr = <MAILNAME>);
-	close MAILNAME;
-    }
-    if (!$addr) {
-	chomp($addr = `hostname --fqdn 2>/dev/null`);
-	$addr = undef if $?;
-    }
-    if ($addr) {
-	my $user = getpwuid $<;
-	if (!$user) {
-	    $addr = undef;
+    # Email is easier
+    if (exists $env{'DEBEMAIL'}) { $EMAIL = $env{'DEBEMAIL'}; }
+    elsif (exists $env{'EMAIL'}) { $EMAIL = $env{'EMAIL'}; }
+    else {
+	my $addr;
+	if (open MAILNAME, '/etc/mailname') {
+	    chomp($addr = <MAILNAME>);
+	    close MAILNAME;
 	}
-	else {
-	    $addr = "$user\@$addr";
+	if (!$addr) {
+	    chomp($addr = `hostname --fqdn 2>/dev/null`);
+	    $addr = undef if $?;
 	}
+	if ($addr) {
+	    my $user = getpwuid $<;
+	    if (!$user) {
+		$addr = undef;
+	    }
+	    else {
+		$addr = "$user\@$addr";
+	    }
+	}
+	$EMAIL = $addr if $addr;
     }
-    $EMAIL = $addr if $addr;
-}
-# Otherwise, $EMAIL retains its default value of the last changelog entry
+    # Otherwise, $EMAIL retains its default value of the last changelog entry
+} # if (! $opt_m)
 
 #####
 
