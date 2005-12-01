@@ -505,7 +505,7 @@ sub NextSymlink ($)
 	    my $link = readlink($filestart);
 	    my $parent = dirname $filestart;
 	    if ($link =~ m%^/%) { # absolute symlink
-		return ($link . $fileend, $parent);
+		return $link . $fileend;
 	    }
 	    while ($link =~ s%^\./%%) { }
 	    # The following is not actually correct: if we have
@@ -523,14 +523,14 @@ sub NextSymlink ($)
 	    # people shouldn't be having evil symlinks like that on their
 	    # system!!
 	    while ($link =~ s%^\.\./%%) { $parent = dirname $parent; }
-	    return ($parent . '/' . $link . $fileend, $parent);
+	    return $parent . '/' . $link . $fileend;
 	}
 	else {
 	    $fileend = '/' . basename($filestart) . $fileend;
 	    $filestart = dirname($filestart);
 	}
     }
-    return ($file, '');
+    return undef;
 }
 
 
@@ -545,11 +545,9 @@ sub ListSymlinks ($$)
 
     my @fn = ($file);
 
-    do {
-	($file,$path) = NextSymlink($file);
+    while ($file = NextSymlink($file)) {
 	push @fn, $file;
-    } until ($path eq '');
+    }
 
     return @fn;
 }
-
