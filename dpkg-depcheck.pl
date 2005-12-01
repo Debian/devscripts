@@ -1,7 +1,7 @@
 #! /usr/bin/perl -w
 
 # Copyright Bill Allombert <ballombe@debian.org> 2001.
-# Modifications copyright 2002, 2003 Julian Gilbey <jdg@debian.org>
+# Modifications copyright 2002-2005 Julian Gilbey <jdg@debian.org>
 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@ use Getopt::Long;
 use lib '/usr/share/devscripts';
 use Devscripts::Set;
 use Devscripts::Packages;
-use Devscripts::Symlinks;
 use Devscripts::PackageDeps;
 
 # Function prototypes
@@ -237,7 +236,7 @@ if ($opts{"o"}) {
 }
 
 # Get each file once only, and drop any we are not interested in.
-# Also, expand all symlinks so we get the real file accessed.
+# Also, expand all symlinks so we get full pathnames of the real file accessed.
 @usedfiles = filterfiles(@usedfiles);
 
 # Forget about the few files we are expecting to see but can ignore
@@ -477,3 +476,80 @@ sub filterfiles (@)
 
     return keys %files;
 }
+
+
+
+# The purpose here is to find out all the symlinks crossed by a file access.
+# We work from the end of the filename (basename) back towards the root of
+# the filename (solving bug#246006 where /usr is a symlink to another
+# filesystem), repeating this process until we end up with an absolute
+# filename with no symlinks in it.  We return a list of all of the
+# full filenames encountered.
+# For example, if /usr -> /moved/usr, then
+# /usr/bin/X11/xapp would yield:
+# /usr/bin/X11/xapp, /usr/X11R6/bin/xapp, /moved/usr/X11R6/bin/xapp
+
+# input: file, pwd
+# output: if symlink found: (readlink-replaced file, prefix)
+#         if not: (file, '')
+
+sub NextSymlink ($)
+{
+    my $file = shift;
+
+    my $filestart = $file;
+    my $fileend = '';
+
+    while ($filestart ne '/') {
+	if (-l $filestart) {
+	    my $link = readlink($filestart);
+	    my $parent = dirname $filestart;
+	    if ($link =~ m%^/%) { # absolute symlink
+		return ($link . $fileend, $parent);
+	    }
+	    while ($link =~ s%^\./%%) { }
+	    # The following is not actually correct: if we have
+	    # /usr -> /moved/usr and /usr/mylib -> ../mylibdir, then
+	    # /usr/mylib should resolve to /moved/mylibdir, not /mylibdir
+	    # But if we try to take this into account, we would need to
+	    # use something like Cwd(), which would immediately resolve
+	    # /usr -> /moved/usr, losing us the opportunity of recognising
+	    # the filename we want.  This is a bug we'll probably have to
+	    # cope with.
+	    # One way of doing this correctly would be to have a function
+	    # resolvelink which would recursively resolve any initial ../ in
+	    # symlinks, but no more than that.  But I don't really want to
+	    # implement this unless it really proves to be necessary:
+	    # people shouldn't be having evil symlinks like that on their
+	    # system!!
+	    while ($link =~ s%^\.\./%%) { $parent = dirname $parent; }
+	    return ($parent . '/' . $link . $fileend, $parent);
+	}
+	else {
+	    $fileend = '/' . basename($filestart) . $fileend;
+	    $filestart = dirname($filestart);
+	}
+    }
+    return ($file, '');
+}
+
+
+# input: file, pwd
+# output: list of full filenames encountered en route
+
+sub ListSymlinks ($$)
+{
+    my ($file, $path) = @_;
+
+    if ($file !~ m%^/%) { $file = "$path/$file"; }
+
+    my @fn = ($file);
+
+    do {
+	($file,$path) = NextSymlink($file);
+	push @fn, $file;
+    } until ($path eq '');
+
+    return @fn;
+}
+
