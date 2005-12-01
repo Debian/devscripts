@@ -265,6 +265,29 @@ To build your own package, simply run \fBdebuild\fR from inside the
 source tree.  \fBdpkg-buildpackage\fR options may be given on the
 command line.
 .PP
+The typical command line options to build only the binary package(s)
+without signing the .changes file (or the non-existent .dsc file):
+.IP
+.nf
+debuild -i -us -uc -b
+.fi
+.PP
+Change the "-b" to "-S" to build only a source package.
+.PP
+An example using both \fBlintian\fR and \fBlinda\fR to check the
+resulting packages, and also passing options to them both:
+.IP
+.nf
+debuild --linda -i -tc --lintian-opts -i --linda-opts -i
+.fi
+.PP
+Note the order of options here: the \fBdebuild\fR options come first,
+then the \fBdpkg-buildpackage\fR ones, then finally the checker
+options.  (And \fBlintian\fR is called by default.)  If you find
+yourself using the same \fBdpkg-buildpackage\fR options repeatedly,
+consider using the DEBUILD_DPKG_BUILDPACKAGE_OPTS configuration file
+option as described above.
+.PP
 To build a package for a sponsored upload, given
 \fIfoobar_1.0-1.dsc\fR and the respective source files, run something
 like the following commands:
@@ -276,7 +299,7 @@ debuild -k0x12345678
 .fi
 .PP
 where 0x12345678 is replaced by your GPG key ID or other key
-identifier such as your email address.  You could also use the
+identifier such as your email address.  Again, you could also use the
 DEBUILD_DPKG_BUILDPACKAGE_OPTS configuration file option as described
 above to avoid having to type the \fB\-k\fR option each time you do a
 sponsored upload.
