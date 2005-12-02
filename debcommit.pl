@@ -54,183 +54,183 @@ my $release=0;
 my $message;
 my $noact=0;
 if (! GetOptions(
-	"release" => \$release,
-	"message=s" => \$message,
-	"noact" => \$noact,
-)) {
-	die "Usage: debcommit [--release] [--message=text] [--noact]\n";
+		 "release" => \$release,
+		 "message=s" => \$message,
+		 "noact" => \$noact,
+		 )) {
+    die "Usage: debcommit [--release] [--message=text] [--noact]\n";
 }
 
 my $prog=getprog();
 if (! -e "debian/changelog") {
-	die "cannot find debian/changelog\n";
+    die "cannot find debian/changelog\n";
 }
 
 if ($release) {
-	open (C, "<debian/changelog") || die "cannot read debian/changelog: $!";
-	my $top=<C>;
-	if ($top=~/UNRELEASED/) {
-		die "debian/changelog says it's UNRELEASED\n";
-	}
-	close C;
+    open (C, "<debian/changelog") || die "cannot read debian/changelog: $!";
+    my $top=<C>;
+    if ($top=~/UNRELEASED/) {
+	die "debian/changelog says it's UNRELEASED\n";
+    }
+    close C;
+    
+    my $version=`dpkg-parsechangelog | grep '^Version:' | cut -f 2 -d ' '`;
+    chomp $version;
 
-	my $version=`dpkg-parsechangelog | grep '^Version:' | cut -f 2 -d ' '`;
-	chomp $version;
-
-	$message="releasing version $version" if ! defined $message;
-	commit($message);
-	tag($version);
+    $message="releasing version $version" if ! defined $message;
+    commit($message);
+    tag($version);
 }
 else {
-	$message=getmessage() if ! defined $message;
-	commit($message);
+    $message=getmessage() if ! defined $message;
+    commit($message);
 }
 
 sub getprog {
-	if (-d ".svn") {
-		return "svn";
+    if (-d ".svn") {
+	return "svn";
+    }
+    elsif (-d "CVS") {
+	return "cvs";
+    }
+    elsif (-d "{arch}") {
+	# I don't think we can tell just from the working copy
+	# whether to use tla or baz, so try baz if it's available,
+	# otherwise fall back to tla.
+	if (system ("baz --version >/dev/null 2>&1") == 0) {
+	    return "baz";
+	} else {
+	    return "tla";
 	}
-	elsif (-d "CVS") {
-		return "cvs";
+    }
+    elsif (-d ".bzr") {
+	return "bzr";
+    }
+    else {
+	# svk has no useful directories so try to run it.
+	my $svkpath=`svk info . 2>/dev/null| grep -i '^Depot Path:' | cut -d ' ' -f 2`;
+	if (length $svkpath) {
+	    return "svk";
 	}
-	elsif (-d "{arch}") {
-		# I don't think we can tell just from the working copy
-		# whether to use tla or baz, so try baz if it's available,
-		# otherwise fall back to tla.
-		if (system ("baz --version >/dev/null 2>&1") == 0) {
-			return "baz";
-		} else {
-			return "tla";
-		}
-	}
-	elsif (-d ".bzr") {
-		return "bzr";
-	}
-	else {
-		# svk has no useful directories so try to run it.
-		my $svkpath=`svk info . 2>/dev/null| grep -i '^Depot Path:' | cut -d ' ' -f 2`;
-		if (length $svkpath) {
-			return "svk";
-		}
-		
-		die "not in a cvs, subversion, arch, bzr, or svk working copy\n";
-	}
+	
+	die "not in a cvs, subversion, arch, bzr, or svk working copy\n";
+    }
 }
 
 sub action {
-	my $prog=shift;
-	print $prog." ".join(" ", map { if (/[^-A-Za-z0-9]/) { "'$_'" } else { $_ } } @_)."\n";
-	return 1 if $noact;
-	if (system($prog, @_) != 0) {
-		return 0;
-	}
-	else {
-		return 1;
-	}
+    my $prog=shift;
+    print $prog, " ",
+      join(" ", map { if (/[^-A-Za-z0-9]/) { "'$_'" } else { $_ } } @_), "\n";
+    return 1 if $noact;
+    return (system($prog, @_) != 0) ? 0 : 1;
 }
 
 sub commit {
-	my $message=shift;
-
-	if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk' || $prog eq 'bzr') {
-		if (! action($prog, "commit", "-m", $message)) {
-			die "commit failed\n";
-		}
+    my $message=shift;
+    
+    if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk' || $prog eq 'bzr') {
+	if (! action($prog, "commit", "-m", $message)) {
+	    die "commit failed\n";
 	}
-	elsif ($prog eq 'tla' || $prog eq 'baz') {
-		my $summary=$message;
-		$summary=~s/^((?:\* )?[^\n]{1,72})(?:(?:\s|\n).*|$)/$1/ms;
-		my @args;
-		if ($summary eq $message) {
-			$summary=~s/^\* //s;
-			@args=("-s", $summary);
-		} else {
-			$summary=~s/^\* //s;
-			@args=("-s", "$summary ...", "-L", $message);
-		}
-		if (! action($prog, "commit", @args)) {
-			die "commit failed\n";
-		}
+    }
+    elsif ($prog eq 'tla' || $prog eq 'baz') {
+	my $summary=$message;
+	$summary=~s/^((?:\* )?[^\n]{1,72})(?:(?:\s|\n).*|$)/$1/ms;
+	my @args;
+	if ($summary eq $message) {
+	    $summary=~s/^\* //s;
+	    @args=("-s", $summary);
+	} else {
+	    $summary=~s/^\* //s;
+	    @args=("-s", "$summary ...", "-L", $message);
 	}
-	else {
-		die "unknown program $prog";
+	if (! action($prog, "commit", @args)) {
+	    die "commit failed\n";
 	}
+    }
+    else {
+	die "unknown program $prog";
+    }
 }
 
 sub tag {
-	my $tag=shift;
-
-	if ($prog eq 'svn' || $prog eq 'svk') {
-		my $svnpath=`svnpath`;
-		chomp $svnpath;
-		my $tagpath=`svnpath tags`;
-		chomp $tagpath;
-		
-		if (! action($prog, "copy", $svnpath, "$tagpath/$tag", "-m", "tagging version $tag")) {
-			if (! action($prog, "mkdir", $tagpath, "-m", "create tag directory") ||
-			    ! action($prog, "copy", $svnpath, "$tagpath/$tag", "-m", "tagging version $tag")) {
-				die "failed tagging with $tag\n";
-			}
-		}
+    my $tag=shift;
+    
+    if ($prog eq 'svn' || $prog eq 'svk') {
+	my $svnpath=`svnpath`;
+	chomp $svnpath;
+	my $tagpath=`svnpath tags`;
+	chomp $tagpath;
+	
+	if (! action($prog, "copy", $svnpath, "$tagpath/$tag",
+		     "-m", "tagging version $tag")) {
+	    if (! action($prog, "mkdir", $tagpath,
+			 "-m", "create tag directory") ||
+		! action($prog, "copy", $svnpath, "$tagpath/$tag",
+			 "-m", "tagging version $tag")) {
+		die "failed tagging with $tag\n";
+	    }
 	}
-	elsif ($prog eq 'cvs') {
-		$tag=~s/^[0-9]+://; # strip epoch
-		$tag=~tr/./_/;      # mangle for cvs
-		$tag="debian_version_$tag";
-		if (! action("cvs", "tag", "-f", $tag)) {
-			die "failed tagging with $tag\n";
-		}
+    }
+    elsif ($prog eq 'cvs') {
+	$tag=~s/^[0-9]+://; # strip epoch
+	$tag=~tr/./_/;      # mangle for cvs
+	$tag="debian_version_$tag";
+	if (! action("cvs", "tag", "-f", $tag)) {
+	    die "failed tagging with $tag\n";
 	}
-	elsif ($prog eq 'tla' || $prog eq 'baz') {
-		my $archpath=`archpath`;
-		chomp $archpath;
-		my $tagpath=`archpath releases--\Q$tag\E`;
-		chomp $tagpath;
-		my $subcommand;
-		if ($prog eq 'baz') {
-			$subcommand="branch";
-		} else {
-			$subcommand="tag";
-		}
-
-		if (! action($prog, $subcommand, $archpath, $tagpath)) {
-			die "failed tagging with $tag\n";
-		}
+    }
+    elsif ($prog eq 'tla' || $prog eq 'baz') {
+	my $archpath=`archpath`;
+	chomp $archpath;
+	my $tagpath=`archpath releases--\Q$tag\E`;
+	chomp $tagpath;
+	my $subcommand;
+	if ($prog eq 'baz') {
+	    $subcommand="branch";
+	} else {
+	    $subcommand="tag";
 	}
-	elsif ($prog eq 'bzr') {
-		warn "No support for symbolic tags in bzr yet.\n";
+	
+	if (! action($prog, $subcommand, $archpath, $tagpath)) {
+	    die "failed tagging with $tag\n";
 	}
+    }
+    elsif ($prog eq 'bzr') {
+	warn "No support for symbolic tags in bzr yet.\n";
+    }
 }
 
 sub getmessage {
-	my $ret;
+    my $ret;
 
+    if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk' ||
+	$prog eq 'tla' || $prog eq 'baz' || $prog eq 'bzr') {
+	$ret='';
+	my $subcommand;
 	if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk' ||
-	    $prog eq 'tla' || $prog eq 'baz' || $prog eq 'bzr') {
-		$ret='';
-		my $subcommand;
-		if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk' || $prog eq 'bzr') {
-			$subcommand = 'diff';
-		} else {
-			$subcommand = 'file-diff';
-		}
-		foreach my $line (`$prog $subcommand debian/changelog`) {
-			next unless $line=~/^\+  /;
-			$line=~s/^\+  //;
-			next if $line=~/^\s*\[.*\]\s*$/; # maintainer name
-			$ret.=$line;
-		}
-		
-		if (! length $ret) {
-			die "Unable to determine commit message using $prog\nTry using the -m flag.\n";
-		}
+	    $prog eq 'bzr') {
+	    $subcommand = 'diff';
+	} else {
+	    $subcommand = 'file-diff';
 	}
-	else {
-		die "unknown program $prog";
+	foreach my $line (`$prog $subcommand debian/changelog`) {
+	    next unless $line=~/^\+  /;
+	    $line=~s/^\+  //;
+	    next if $line=~/^\s*\[.*\]\s*$/; # maintainer name
+	    $ret.=$line;
 	}
+	
+	if (! length $ret) {
+	    die "Unable to determine commit message using $prog\nTry using the -m flag.\n";
+	}
+    }
+    else {
+	die "unknown program $prog";
+    }
 
-	chomp $ret;
-	return $ret;
+    chomp $ret;
+    return $ret;
 }
 
 =head1 LICENSE
