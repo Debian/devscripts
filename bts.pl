@@ -168,6 +168,11 @@ necessary so that B<bts> sees the comment):
 
  % bts severity 95672 normal , merge 95672 95673 \#they\'re the same!
 
+The abbreviation "it" may be used to refer to the last mentioned bug
+number, so you could write:
+
+ % bts severity 95672 wishlist, retitle it "bts: please add a --foo option"
+
 Please use this program responsibly, and do take our users into
 consideration.
 
@@ -678,33 +683,51 @@ sub bts_retitle {
     mailbts("retitle $bug to $title", "retitle $bug $title");
 }
 
-=item submitter <bug> <submitter-email>
+=item submitter <bug> [<bug> ...] <submitter-email>
 
-Change the submitter address of a bug, with `!' meaning
+Change the submitter address of a bug or a number of bugs, with `!' meaning
 `use the address on the current email as the new submitter address'.
 
 =cut
 
 sub bts_submitter {
-    my $bug=checkbug(shift) or die "bts submitter: change submitter of what bug?\n";
-    my $submitter=shift or die "bts submitter: change submitter to what?\n";
-    opts_done(@_);
-    mailbts("submitter $bug", "submitter $bug $submitter");
+    @_ or die "bts submitter: change submitter of what bug?\n";
+    my $submitter=pop;
+    if ($submitter !~ /\@/) {
+	die "bts submitter: change submitter to what?\n";
+    }
+    foreach (@_) {
+	my $bug=checkbug($_) or die "bts submitter: $_ is not a bug number\n";
+	mailbts("submitter $bug", "submitter $bug $submitter");
+    }
 }
 
-=item reassign <bug> <package> [<version>]
+=item reassign <bug> [<bug> ...] <package> [<version>]
 
-Reassign a bug to a different package. The version field is optional.
+Reassign a bug or a number of bugs to a different package.
+The version field is optional; see the explanation at
+L<http://www.debian.org/Bugs/server-control>.
 
 =cut
 
 sub bts_reassign {
-    my $bug=checkbug(shift) or die "bts reassign: reassign what bug?\n";
-    my $package=shift or die "bts reassign: reassign \#$bug to what package?\n";
+    my ($bug, @bugs);
+    while ($_ = shift) {
+	$bug=checkbug($_, 1) or last;
+	push @bugs, $bug;
+    }
+    @bugs or die "bts reassign: reassign what bug(s)?\n";
+    my $package=$_ or die "bts reassign: reassign bug(s) to what package?\n";
     my $version=shift;
     $version="" unless defined $version;
+    if (length $version and $version !~ /\d/) {
+	die "bts reassign: version number $version contains no digits!\n";
+    }
     opts_done(@_);
-    mailbts("reassign $bug to $package", "reassign $bug $package $version");
+
+    foreach $bug (@bugs) {
+	mailbts("reassign $bug to $package", "reassign $bug $package $version");
+    }
 }
 
 =item found <bug> <version>
@@ -1292,24 +1315,22 @@ EOF
 # for things like "#74041" and "Bug#94921"
 sub checkbug {
     my $bug=$_[0] or return "";
+    my $quiet=$_[1] || 0;  # used when we don't want warnings from checkbug
 
-    if ($bug eq 'it')
-    {
-      if (not defined $it)
-      {
-        die "bts: You specified 'it', but no previous bug number referenced!\n";
-      }
-      else
-      {
-        return $it;
-      }
+    if ($bug eq 'it') {
+	if (not defined $it) {
+	    die "bts: You specified 'it', but no previous bug number referenced!\n";
+	}
+	else {
+	    return $it;
+	}
     }
     
     $bug=~s/^[^-0-9]*//;
     $bug=~s/:$//;
     if (! exists $clonedbugs{$bug} &&
 	(! length $bug || $bug !~ /^[0-9]+$/)) {
-	warn "\"$_[0]\" does not look like a bug number\n";
+	warn "\"$_[0]\" does not look like a bug number\n" unless $quiet;
 	return "";
     }
 
