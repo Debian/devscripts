@@ -11,8 +11,9 @@ debcommit [--release] [--message=text] [--noact]
 =head1 DESCRIPTION
 
 debcommit generates a commit message based on new text in debian/changelog,
-and commits the change to a package's cvs, svn, svk, or arch repository. It
-must be run in a cvs, svn, svk, or arch working copy for the package.
+and commits the change to a package's cvs, svn, svk, arch, or bzr
+repository. It must be run in a cvs, svn, svk, arch, or bzr working copy for
+the package.
 
 =head1 OPTIONS
 
@@ -22,6 +23,8 @@ must be run in a cvs, svn, svk, or arch working copy for the package.
 
 Commit a release of the package. The version number is determined from
 debian/changelog, and is used to tag the package in cvs, svn, svk, or arch.
+bzr does not yet support symbolic tags, so you will only get a normal
+commit.
 
 Note that svn/svk tagging conventions vary, so debcommit uses
 L<svnpath(1)> to determine where the tag should be placed in the
@@ -100,6 +103,9 @@ sub getprog {
 			return "tla";
 		}
 	}
+	elsif (-d ".bzr") {
+		return "bzr";
+	}
 	else {
 		# svk has no useful directories so try to run it.
 		my $svkpath=`svk info . 2>/dev/null| grep -i '^Depot Path:' | cut -d ' ' -f 2`;
@@ -107,7 +113,7 @@ sub getprog {
 			return "svk";
 		}
 		
-		die "not in a cvs, subversion, arch, or svk working copy\n";
+		die "not in a cvs, subversion, arch, bzr, or svk working copy\n";
 	}
 }
 
@@ -126,7 +132,7 @@ sub action {
 sub commit {
 	my $message=shift;
 
-	if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk') {
+	if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk' || $prog eq 'bzr') {
 		if (! action($prog, "commit", "-m", $message)) {
 			die "commit failed\n";
 		}
@@ -191,16 +197,19 @@ sub tag {
 			die "failed tagging with $tag\n";
 		}
 	}
+	elsif ($prog eq 'bzr') {
+		warn "No support for symbolic tags in bzr yet.\n";
+	}
 }
 
 sub getmessage {
 	my $ret;
 
 	if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk' ||
-	    $prog eq 'tla' || $prog eq 'baz') {
+	    $prog eq 'tla' || $prog eq 'baz' || $prog eq 'bzr') {
 		$ret='';
 		my $subcommand;
-		if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk') {
+		if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk' || $prog eq 'bzr') {
 			$subcommand = 'diff';
 		} else {
 			$subcommand = 'file-diff';

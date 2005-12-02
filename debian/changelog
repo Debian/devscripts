@@ -8,11 +8,12 @@ devscripts (2.9.10) UNRELEASED; urgency=low
   * debchange: provide -m/--maintmaint switch to use the maintainer name
     from the most recent changelog entry rather than using the environment
     variables (Closes: #232000)
+  * debcommit: add support for bzr (Closes: #340301)
   * debuild: improve examples in manpage (Closes: #326881)
   * dpkg-depcheck: completely rewrite symlink handling code to fix bug
     where /usr was a symlink (Closes: #246006)
 
- -- Julian Gilbey <jdg@debian.org>  Fri,  2 Dec 2005 00:23:02 +0000
+ -- Julian Gilbey <jdg@debian.org>  Fri,  2 Dec 2005 00:29:15 +0000
 
 devscripts (2.9.9) unstable; urgency=low
 
