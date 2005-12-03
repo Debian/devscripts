@@ -1,4 +1,4 @@
-devscripts (2.9.10) UNRELEASED; urgency=low
+devscripts (2.9.10) unstable; urgency=low
 
   * bts: handle 8-bit encodings in DEBFULLNAME for "From:" field of emails
     sent (Closes: #339657)
@@ -13,7 +13,7 @@ devscripts (2.9.10) UNRELEASED; urgency=low
   * dpkg-depcheck: completely rewrite symlink handling code to fix bug
     where /usr was a symlink (Closes: #246006)
 
- -- Julian Gilbey <jdg@debian.org>  Fri,  2 Dec 2005 00:29:15 +0000
+ -- Julian Gilbey <jdg@debian.org>  Sat,  3 Dec 2005 20:24:38 +0000
 
 devscripts (2.9.9) unstable; urgency=low
 
