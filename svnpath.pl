@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-=head1 NAME svnpath
+=head1 NAME
 
 svnpath - output svn url with support for tags and branches
 
