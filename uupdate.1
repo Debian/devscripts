@@ -8,7 +8,7 @@ uupdate \- upgrade a source code package from an upstream revision
 .SH DESCRIPTION
 \fBuupdate\fR modifies an existing Debian source code archive to
 reflect an upstream update supplied as a patch or from a wholly new
-sourcecode archive.  The utility needs to be invoked from the top
+source code archive.  The utility needs to be invoked from the top
 directory of the old source code directory, and if a relative name is
 given for the new archive or patch file, it will be looked for first
 relative to the execution directory and then relative to the parent of
@@ -36,7 +36,7 @@ the latter is so that \fBuupdate\fR can be called directly from
 \fBuscan\fR.)
 .PP
 Since \fBuupdate\fR uses \fBdebuild\fR to clean the current archive
-before trying to apply a patchfile, it accepts a \fB\-\-rootcmd\fR or
+before trying to apply a patch file, it accepts a \fB\-\-rootcmd\fR or
 \fB\-r\fR option allowing the user to specify a gain-root command to be
 used.  The default is to use \fBfakeroot\fR.
 .PP
@@ -128,7 +128,7 @@ files created by \fBpatch\fR are deleted.
 .B Changelog update
 A changelog entry with the new version number is generated with the
 text "New upstream release".
-.SH "ACTIONS TAKEN ON A PATCHFILE"
+.SH "ACTIONS TAKEN ON A PATCH FILE"
 .TP
 .B Figure out new version number
 Unless an explicit version number is provided, the patch file name is

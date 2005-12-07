@@ -15,9 +15,9 @@ of the package is represented by a point, and the points are color coded to
 indicate who released that version of the package. The upstream version
 number of the package can also be labeled on the graph.
 .PP
-Alternativly, the Y axis can be configured to display the size of the 
+Alternatively, the Y axis can be configured to display the size of the 
 changelog entry for each new version. Or it can be configured to display
-approximatly how many bugs were fixed for each new version.
+approximately how many bugs were fixed for each new version.
 .PP
 Note that if the package is a debian-specific package, the entire package
 version will be used for the Y axis. This does not always work perfectly.
@@ -52,7 +52,7 @@ together with
 Instead of using the debian version number as the Y axis, use the number of
 bugs that were closed by each changelog entry. Note that this number is
 obtained by searching for "#dddd" in the changelog, and so it may be
-innacturate.  Cannot be used together with
+inaccurate.  Cannot be used together with
 .BR \-\-linecount .
 .TP
 .B \-c, \-\-cumulative
@@ -70,11 +70,11 @@ Do not show upstream version labels. Useful if the graph gets too crowded.
 Do not differentiate between different maintainers of the package.
 .TP
 .B \-s file, \-\-save=file
-Save the graph to "file" in postscript format instead of immediatly
+Save the graph to "file" in postscript format instead of immediately
 displaying it.
 .TP
 .B \-u, \-\-urgency
-Use larger points when displaing higher-urgency package uploads.
+Use larger points when displaying higher-urgency package uploads.
 .TP
 .B \-\-verbose
 Output the gnuplot script that is fed into gnuplot (for debugging purposes).
@@ -83,11 +83,11 @@ Output the gnuplot script that is fed into gnuplot (for debugging purposes).
 This allows you to insert
 .BR gnuplot (1)
 commands into the gnuplot script that is used to generate the graph. The
-commands are placed after all initaliazation but before the final "plot"
+commands are placed after all initialization but before the final "plot"
 command. This can be used to override the default look provided by this
 program in arbitrary ways. You can also use things like 
 "set terminal png color"
-to change the output filetype, which is useful in conjunction with
+to change the output file type, which is useful in conjunction with
 the -s option.
 .TP
 .B \-\-help
