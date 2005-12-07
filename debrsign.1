@@ -39,6 +39,12 @@ They affect the search for the \fI.changes\fR file.  They are provided
 to mimic the behaviour of \fBdpkg-buildpackage\fR when determining the
 name of the \fI.changes\fR file.
 .TP
+\fB\-\-multi\fR
+Multiarch changes mode: This signifies that \fBdebrsign\fR should
+use the most recent file with the name pattern
+\fIpackage_version_*+*.changes\fR as the changes file, allowing for the
+changes files produced by \fBdpkg-cross\fR.
+.TP
 \fB\-\-path \fIremote-path\fR
 Specify a path to the GPG or PGP binary on the remote host.
 .TP

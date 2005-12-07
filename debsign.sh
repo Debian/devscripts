@@ -12,6 +12,7 @@
 #  -S          Source-only .changes file
 #  -a<arch>    Debian architecture
 #  -t<type>    GNU machine type
+#  --multi     Search for multiarch .changes files
 #  -r [username@]remotehost  The changes (and dsc) files live on remotehost
 #  --no-conf, --noconf  Don't read configuration files
 #  --help, --version
@@ -60,6 +61,7 @@ usage () {
     -S              Use changes file made for source-only upload
     -a<arch>        Use changes file made for Debian target architecture <arch>
     -t<target>      Use changes file made for GNU target architecture <target>
+    --multi         Use most recent multiarch .changes file found
     --no-conf, --noconf
                     Don't read devscripts config files;
                     must be the first option given
@@ -258,6 +260,7 @@ do
 	-S)	sourceonly="true" ;;
 	-a*)	targetarch="$value" ;;
 	-t*)	targetgnusystem="$value" ;;
+	--multi) multiarch="true" ;;
 	-r*)	if [ -n "$value" ]; then remotehost=$value;
 		elif [ $# -lt 1 ]; then
 		    echo "$PROGNAME: -r option missing argument!" >&2
@@ -355,6 +358,23 @@ case $# in
 	pva="${package}_${sversion}_${arch}"
 	dsc="../$pv.dsc"
 	changes="../$pva.changes"
+	if [ -n "$multiarch" -o ! -r $changes ]; then
+	    changes=$(ls "../${package}_${sversion}_*+*.changes" "../${package}_${sversion}_multi.changes" 2>/dev/null | head -1)
+	    if [ -z "$multiarch" ]; then
+		if [ -n "$changes" ]; then
+		    echo "$PROGNAME: could not find normal .changes file but found multiarch file:" >&2
+		    echo "  $changes" >&2
+		    echo "Using this changes file instead." >&2
+		else 
+		    echo "$PROGNAME: Can't find or can't read changes file $changes!" >&2
+		    exit 1
+		fi
+	    elif [ -n "$multiarch" -a -z "$changes" ]; then
+		echo "$PROGNAME: could not find any multiarch .changes file with name" >&2
+		echo "../${package}_${sversion}_*.changes" >&2
+		exit 1
+	    fi
+	fi
 	;;
 
     *)	echo "$PROGNAME: Only a single .changes, .dsc or .commands file is allowed as argument!" >&2

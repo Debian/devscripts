@@ -73,6 +73,12 @@ name of the \fI.changes\fR file.  If a plain \fB\-t\fR is given, it is
 taken to be the \fBdupload\fR host-specifying option, and therefore
 signifies the end of the \fBdebrelease\fR-specific options.
 .TP
+\fB\-\-multi\fR
+Multiarch changes mode: This signifies that \fBdebrelease\fR should
+use the most recent file with the name pattern
+\fIpackage_version_*+*.changes\fR as the changes file, allowing for the
+changes files produced by \fBdpkg-cross\fR.
+.TP
 \fB\-\-check-dirname-level\fR \fIN\fR
 See the above section "Directory name checking" for an explanation of
 this option.

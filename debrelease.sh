@@ -37,6 +37,7 @@ usage () {
     -a<arch>          Search for .changes file made for Debian build <arch>
     -t<target>        Search for .changes file made for GNU <target> arch
     -S                Search for source-only .changes file instead of arch one
+    --multi           Search for multiarch .changes file made by dpkg-cross
     --check-dirname-level N
                       How much to check directory names before cleaning trees:
                       N=0   never
@@ -141,6 +142,7 @@ CHECK_DIRNAME_REGEX="$DEVSCRIPTS_CHECK_DIRNAME_REGEX"
 
 
 sourceonly=
+multiarch=
 
 while [ $# -gt 0 ]
 do
@@ -150,6 +152,7 @@ do
 	 # dupload has a -t option
 	 if [ -z "$targetgnusystem" ]; then break; fi ;;
     -S) sourceonly=source ;;
+    --multi) multiarch=yes ;;
     --dupload) DEBRELEASE_UPLOADER=dupload ;;
     --dput) DEBRELEASE_UPLOADER=dput ;;
     --check-dirname-level=*)
@@ -252,17 +255,40 @@ pva="${package}_${sversion}_${arch}"
 pvs="${package}_${sversion}_source"
 changes="../$pva.changes"
 schanges="../$pvs.changes"
+mchanges=$(ls "../${package}_${sversion}_*+*.changes" "../${package}_${sversion}_multi.changes" 2>/dev/null | head -1)
 
-if [ ! -r "$changes" ]; then
-    if [ "$arch" != source ]; then
+if [ -n "$multiarch" ]; then
+    if [ -z "$mchanges" -o ! -r "$mchanges" ]; then
+	echo "$PROGNAME: could not find/read any multiarch .changes file with name" >&2
+	echo "../${package}_${sversion}_*.changes" >&2
+	exit 1
+    fi
+    changes=$mchanges
+elif [ "$arch" = source ]; then
 	if [ -r "$schanges" ]; then
 	    changes=$schanges
 	else
-	    echo "$PROGNAME: could not read changes file $changes!" 2>&1
+	    echo "$PROGNAME: could not find/read changes file $schanges!" >&2
+	    exit 1
+	fi
+else
+    if [ ! -r "$changes" ]; then
+	if [ -r "$mchanges" ]; then
+	    changes=$mchanges
+	    echo "$PROGNAME: could only find a multiarch changes file:" >&2
+	    echo "  $mchanges" >&2
+	    echo -n "Should I upload this file? (y/n) " >&2
+	    read ans
+	    case ans in
+		y*) ;;
+		n*) exit 1 ;;
+	    esac
+	else
+	    echo "$PROGNAME: could not read changes file $changes!" >&2
 	    exit 1
 	fi
     else
-	echo "$PROGNAME: could not read changes file $changes!" 2>&1
+	echo "$PROGNAME: could not read changes file $changes!" >&2
 	exit 1
     fi
 fi

@@ -753,7 +753,6 @@ if ($command_version eq 'dpkg') {
 
     ($sversion=$version) =~ s/^\d+://;
     $dsc="${pkg}_$sversion.dsc";
-    $changes="${pkg}_${sversion}_${arch}.changes";
     $build="${pkg}_${sversion}_${arch}.build";
     open BUILD, "| tee ../$build" or fatal "couldn't open pipe to tee: $!";
     $logging=1;
@@ -768,6 +767,19 @@ if ($command_version eq 'dpkg') {
     system('dpkg-buildpackage', @dpkg_opts) == 0
 	or fatal "dpkg-buildpackage failed!";
     chdir '..' or fatal "can't chdir: $!";
+
+    # If we're using dpkg-cross, we could now have foo_1.2_i386+sparc.changes
+    # so can't just set $changes = "${pkg}_${sversion}_${arch}.changes"
+    my @changes = glob("${pkg}_${sversion}_*.changes");
+    if (@changes == 0) {
+	fatal "couldn't find a .changes file!";
+    } elsif (@changes == 1) {
+	$changes = $changes[0];
+    } else {
+	# put newest first
+	@changes = sort { -M $a <=> -M $b } @changes;
+	$changes = $changes[0];
+    }
 
     if ($run_lintian && $lintian_exists) {
 	$<=$>=$uid;  # Give up on root privileges if we can

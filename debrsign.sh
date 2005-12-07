@@ -20,6 +20,7 @@
 #  -S          Source-only .changes file
 #  -a<arch>    Debian architecture
 #  -t<type>    GNU machine type
+#  --multi     Search for multiarch .changes files
 #  --help, --version
 
 # Debian GNU/Linux debrsign.
@@ -58,6 +59,7 @@ usage () {
     -S              Use changes file made for source-only upload
     -a<arch>        Use changes file made for Debian target architecture <arch>
     -t<target>      Use changes file made for GNU target architecture <target>
+    --multi         Use most recent multiarch .changes file found
     --path          Specify directory GPG/PGP binary is located on remote host
     --help          Show this message
     --version       Show version and copyright information
@@ -119,6 +121,7 @@ do
 	-S)	sourceonly="true" ;;
 	-a*)	targetarch="$value" ;;
 	-t*)	targetgnusystem="$value" ;;
+	--multi) multiarch="true" ;;
 	--help)	usage; exit 0 ;;
 	--version)
 		version; exit 0 ;;
@@ -183,6 +186,23 @@ case $# in
 	pva="${package}_${sversion}${arch:+_${arch}}"
 	dsc="../$pv.dsc"
 	changes="../$pva.changes"
+	if [ -n "$multiarch" -o ! -r $changes ]; then
+	    changes=$(ls "../${package}_${sversion}_*+*.changes" "../${package}_${sversion}_multi.changes" 2>/dev/null | head -1)
+	    if [ -z "$multiarch" ]; then
+		if [ -n "$changes" ]; then
+		    echo "$PROGNAME: could not find normal .changes file but found multiarch file:" >&2
+		    echo "  $changes" >&2
+		    echo "Using this changes file instead." >&2
+		else 
+		    echo "$PROGNAME: Can't find or can't read changes file $changes!" >&2
+		    exit 1
+		fi
+	    elif [ -n "$multiarch" -a -z "$changes" ]; then
+		echo "$PROGNAME: could not find any multiarch .changes file with name" >&2
+		echo "../${package}_${sversion}_*.changes" >&2
+		exit 1
+	    fi
+	fi
 	;;
 
     *)	echo "Usage: $PROGNAME [options] [user@]remotehost [.changes or .dsc file]" >&2

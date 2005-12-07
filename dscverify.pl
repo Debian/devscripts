@@ -84,7 +84,7 @@ sub xdie {
 
 # We retain the reference to Guy's directory on master even though
 # it won't be of use other than on master.  In this way, this program
-# may be installed on master without any changes being necessary,
+# may be installed on merkel without any changes being necessary,
 # and it is hardly likely to cause any ill effects elsewhere.
 sub get_rings {
     my @rings = @_;

@@ -661,7 +661,7 @@ if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r &&
 		or fatal "Couldn't open .upload file for reading: $!\n" .
 		    "Please use an explicit -a, -i or -v option instead.";
 	    while (<UPFILE>) {
-		if (m%^(s|Successfully uploaded) (/.*/)?\Q$PACKAGE\E\_\Q$SVERSION\E\_[\w\-]+\.changes %) {
+		if (m%^(s|Successfully uploaded) (/.*/)?\Q$PACKAGE\E\_\Q$SVERSION\E\_[\w\-\+]+\.changes %) {
 		   $opt_i = 1;
 		   last;
 		}
