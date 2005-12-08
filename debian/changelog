@@ -1,5 +1,6 @@
 devscripts (2.9.11) UNRELEASED; urgency=low
 
+  * bts: allow found to take only one argument (Closes: #342515)
   * svnpath: fix .SH NAME line in manpage (Closes: #342059)
   * manpage typos: thanks to A Costa for these (Closes: #342295, #342296,
     #342297, #342298, #342299, #342300, #342301, #342302); I have not
@@ -8,7 +9,7 @@ devscripts (2.9.11) UNRELEASED; urgency=low
   * debchange, debuild, debrelease, debsign, debrsign: handle multiarch
     changes files (Closes: #322926, #217546)
 
- -- Julian Gilbey <jdg@debian.org>  Wed,  7 Dec 2005 21:15:52 +0000
+ -- Julian Gilbey <jdg@debian.org>  Thu,  8 Dec 2005 18:10:29 +0000
 
 devscripts (2.9.10) unstable; urgency=low
 

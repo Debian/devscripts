@@ -730,7 +730,7 @@ sub bts_reassign {
     }
 }
 
-=item found <bug> <version>
+=item found <bug> [<version>]
 
 Indicate that a bug was found to exist in a particular package version.
 
@@ -738,7 +738,11 @@ Indicate that a bug was found to exist in a particular package version.
 
 sub bts_found {
     my $bug=checkbug(shift) or die "bts found: found what bug?\n";
-    my $version=shift or die "bts found: found \#$bug in what version?\n";
+    my $version=shift;
+    if (! defined $version) {
+	warn "bts: found has no version number, but sending to the BTS anyway\n";
+	$version="" unless 
+    }
     opts_done(@_);
     mailbts("found $bug in $version", "found $bug $version");
 }
