@@ -59,8 +59,8 @@ And now, in mostly alphabetical order, the scripts:
   the .diffs and original files, though, so that the binaries and
   other files can be rebuilt if necessary.
 
-- debcommit [cvs | subversion | tla | bazaar ]: Commits changes to 
-  cvs, svn, or arch, using new entries in debian/changelog as the
+- debcommit [cvs | subversion | tla | bazaar | git]: Commits changes to 
+  cvs, svn, arch or git, using new entries in debian/changelog as the
   commit message. Also supports tagging Debian package releases.
 
 - debdiff [wdiff, patchutils]: A program which examines two .deb files
@@ -175,7 +175,7 @@ Typical Maintenance cycle with devscripts
 2. Editing of files
 
 3. Log the changes with: dch -i "I changed this"
-   If desired, use debcommit to commit changes to cvs, svn, or arch.
+   If desired, use debcommit to commit changes to cvs, svn, arch or git.
 
 4. Run debuild to compile it.  If it fails, return to 2.  (You could
    also just test the compilation by running the appropriate part of

@@ -1,5 +1,6 @@
 devscripts (2.9.11) UNRELEASED; urgency=low
 
+  [ Julian Gilbey ]
   * bts: allow found to take only one argument (Closes: #342515)
   * svnpath: fix .SH NAME line in manpage (Closes: #342059)
   * manpage typos: thanks to A Costa and Niko Tyni for these (Closes:
@@ -9,7 +10,11 @@ devscripts (2.9.11) UNRELEASED; urgency=low
   * debchange, debuild, debrelease, debsign, debrsign: handle multiarch
     changes files (Closes: #322926, #217546)
 
- -- Julian Gilbey <jdg@debian.org>  Sat, 10 Dec 2005 20:49:25 +0000
+  [ Joey Hess ]
+  * debcommit: add support for git, thanks to Panagiotis Issaris.
+    Closes: #343694
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 26 Dec 2005 21:04:40 -0500
 
 devscripts (2.9.10) unstable; urgency=low
 

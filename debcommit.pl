@@ -11,8 +11,8 @@ debcommit [--release] [--message=text] [--noact]
 =head1 DESCRIPTION
 
 debcommit generates a commit message based on new text in debian/changelog,
-and commits the change to a package's cvs, svn, svk, arch, or bzr
-repository. It must be run in a cvs, svn, svk, arch, or bzr working copy for
+and commits the change to a package's cvs, svn, svk, arch, bzr or git
+repository. It must be run in a cvs, svn, svk, arch, bzr or git working copy for
 the package.
 
 =head1 OPTIONS
@@ -22,7 +22,7 @@ the package.
 =item -r --release
 
 Commit a release of the package. The version number is determined from
-debian/changelog, and is used to tag the package in cvs, svn, svk, or arch.
+debian/changelog, and is used to tag the package in cvs, svn, svk, arch or git.
 bzr does not yet support symbolic tags, so you will only get a normal
 commit.
 
@@ -106,6 +106,9 @@ sub getprog {
     elsif (-d ".bzr") {
 	return "bzr";
     }
+    elsif (-d ".git") {
+	return "git";
+    }
     else {
 	# svk has no useful directories so try to run it.
 	my $svkpath=`svk info . 2>/dev/null| grep -i '^Depot Path:' | cut -d ' ' -f 2`;
@@ -130,6 +133,11 @@ sub commit {
     
     if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk' || $prog eq 'bzr') {
 	if (! action($prog, "commit", "-m", $message)) {
+	    die "commit failed\n";
+	}
+    }
+    elsif ($prog eq 'git') {
+	if (! action($prog, "commit", "-a", "-m", $message)) {
 	    die "commit failed\n";
 	}
     }
@@ -199,17 +207,24 @@ sub tag {
     elsif ($prog eq 'bzr') {
 	warn "No support for symbolic tags in bzr yet.\n";
     }
+    elsif ($prog eq 'git') {
+	    $tag=~s/^[0-9]+://; # strip epoch
+	    $tag="debian_version_$tag";
+    	if (! action($prog, "tag", $tag)) {
+	        die "failed tagging with $tag\n";
+    	}
+    }
 }
 
 sub getmessage {
     my $ret;
 
     if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk' ||
-	$prog eq 'tla' || $prog eq 'baz' || $prog eq 'bzr') {
+	$prog eq 'tla' || $prog eq 'baz' || $prog eq 'bzr' || $prog eq 'git') {
 	$ret='';
 	my $subcommand;
 	if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk' ||
-	    $prog eq 'bzr') {
+	    $prog eq 'bzr' || $prog eq 'git' ) {
 	    $subcommand = 'diff';
 	} else {
 	    $subcommand = 'file-diff';
