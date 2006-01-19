@@ -1,0 +1,19 @@
+.TH NMUDIFF 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+nmudiff \- email an NMU diff to the Debian BTS
+.SH SYNOPSIS
+\fBnmudiff\fR
+.SH DESCRIPTION
+\fBnmudiff\fR should be run in the source tree of the package being NMUed,
+after the NMU is built. It assumes that the source for the previous version
+of the package as well as the newly built version are in the directory
+below, and uses \fBdebdiff\fR to generate a NMU diff. It then runs an editor
+so that the diff can be examined and modified; once you exit the editor the
+diff will be mailed to the Debian BTS.
+.SH "SEE ALSO"
+.BR debdiff (1)
+.SH AUTHOR
+\fBnmudiff\fR was written by Steinar H. Gunderson.
+The software may be freely
+redistributed under the terms and conditions of the GNU General Public
+Licence, version 2.
