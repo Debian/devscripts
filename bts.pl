@@ -741,7 +741,7 @@ sub bts_found {
     my $version=shift;
     if (! defined $version) {
 	warn "bts: found has no version number, but sending to the BTS anyway\n";
-	$version="" unless 
+	$version="";
     }
     opts_done(@_);
     mailbts("found $bug in $version", "found $bug $version");
