@@ -6,7 +6,7 @@ set -e
 
 SOURCE=$( dpkg-parsechangelog | grep ^Source: | cut -d" " -f2 )
 VERSION=$( dpkg-parsechangelog | grep ^Version: | cut -d" " -f2 )
-OLDVERSION=$(grep '^[-a-z0-9+]' debian/changelog |head -2|tail -1 | sed 's/.*(\(.*\)).*/\1/')
+OLDVERSION=$( dpkg-parsechangelog -v~ | sed -n "s/^ [^ .][^ ]* (\(.*\)).*$/\1/p" | head -2 | tail -1 )
 
 debdiff ../${SOURCE}_$OLDVERSION.dsc ../${SOURCE}_$VERSION.dsc > ../${SOURCE}-$VERSION-nmu.diff
 sensible-editor ../${SOURCE}-$VERSION-nmu.diff
