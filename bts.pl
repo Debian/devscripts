@@ -1690,7 +1690,7 @@ sub download_attachments {
     # occurrence of either "[<a " or plain "<a ", preserving any "[".
     my @data = split /(?:(?=\[<[Aa]\s)|(?<!\[)(?=<[Aa]\s))/, $toppage;
     foreach (@data) {
-	next unless m%<a href="(bugreport\.cgi[^\"]+)">%;
+	next unless m%<a(?: class=\".*?\")? href="(bugreport\.cgi[^\"]+)">%i;
 	my $ref = $1;
 	my ($msg, $filename) = href_to_filename($_);
 
@@ -1820,26 +1820,26 @@ sub mangle_cache_file {
     # occurrence of either "[<a " or plain "<a ", preserving any "[".
     my @data = split /(?:(?=\[<[Aa]\s)|(?<!\[)(?=<[Aa]\s))/, $data;
     foreach (@data) {
-	if (m%<a href=\"bugreport\.cgi[^\?]*\?bug=(\d+)%i) {
+	if (m%<a(?: class=\".*?\")? href=\"bugreport\.cgi[^\?]*\?bug=(\d+)%i) {
 	    my $bug = $1;
 	    my ($msg, $filename) = href_to_filename($_);
 
 	    if ($bug eq $thing and defined $msg) {
 		if ($fullmode or
 		    (! $fullmode and exists $$bug2filename{$msg})) {
-		    s%<a href="(bugreport\.cgi[^\"]*)">(.+?)</a>%<a href="$filename">$2</a> (<a href="$btscgiurl$1">online</a>)%i;
+		    s%<a( class=\".*?\")? href="(bugreport\.cgi[^\"]*)">(.+?)</a>%<a$1 href="$filename">$3</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
 		} else {
-		    s%<a href="(bugreport\.cgi[^\"]*)">(.+?)</a>%$2 (<a href="$btscgiurl$1">online</a>)%i;
+		    s%<a( class=\".*?\")? href="(bugreport\.cgi[^\"]*)">(.+?)</a>%$3 (<a$1 href="$btscgiurl$2">online</a>)%i;
 		}
 	    } else {
-		s%<a href="(bugreport\.cgi[^\?]*\?bug=(\d+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%i;
+		s%<a( class=\".*?\")? href="(bugreport\.cgi[^\?]*\?bug=(\d+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
 	    }
 	}
 	else {
-	    s%<a href="(pkgreport\.cgi\?(?:pkg|maint)=([^\"&;]+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%i;
-	    s%<a href="(pkgreport\.cgi\?src=([^\"&;]+)[^\"]*)">(.+?)</a>%<a href="src_$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%i;
-	    s%<a href="(pkgreport\.cgi\?submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a href="from_$2.html">$3</a> (<a href="$btscgiurl$1">online</a>)%i;
-	    s%<a href="(?:/cgi-bin/)?(bugspam\.cgi[^\"]+)">%<a href="$btscgiurl$1">%i;
+	    s%<a( class=\".*?\")? href="(pkgreport\.cgi\?(?:pkg|maint)=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+	    s%<a( class=\".*?\")? href="(pkgreport\.cgi\?src=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="src_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+	    s%<a( class=\".*?\")? href="(pkgreport\.cgi\?submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="from_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+	    s%<a( class=\".*?\")? href="(?:/cgi-bin/)?(bugspam\.cgi[^\"]+)">%<a$1 href="$btscgiurl$2">%i;
 	}
     }
 
@@ -1919,7 +1919,7 @@ sub href_to_filename {
     my $href = $_[0];
     my ($msg, $filename);
 
-    if ($href =~ m%\[<a href="bugreport\.cgi([^\?]*)\?bug=(\d+)([^\"]*)">.*?\(([^,]*), .*?\)\]%) {
+    if ($href =~ m%\[<a(?: class=\".*?\")? href="bugreport\.cgi([^\?]*)\?bug=(\d+)([^\"]*)">.*?\(([^,]*), .*?\)\]%) {
 	# this looks like an attachment; $1 should give the MIME-type
 	my $urlfilename = $1;
 	my $bug = $2;
@@ -1944,7 +1944,7 @@ sub href_to_filename {
 	    $filename = "$bug/$msg$fileext";
 	}
     }
-    elsif ($href =~ m%<a href="bugreport\.cgi([^\?]*)\?bug=(\d+)([^\"]*)">%) {
+    elsif ($href =~ m%<a(?: class=\".*?\")? href="bugreport\.cgi([^\?]*)\?bug=(\d+)([^\"]*)">%) {
 	my $urlfilename = $1;
 	my $bug = $2;
 	my $ref = $3;

@@ -1,8 +1,14 @@
 devscripts (2.9.12) UNRELEASED; urgency=low
 
+  [ Joey Hess ]
   * nmudiff: improved old version code from Steinar uses dpkg-parsechangelog
 
- -- Joey Hess <joeyh@debian.org>  Fri, 20 Jan 2006 20:49:33 -0500
+  [ Julian Gilbey ]
+  * bts: update to recognise new URL formats in BTS pages (based on bug
+    #349259)
+  * dch: update to recognise new URL formats in BTS pages (Closes: #349259)
+
+ -- Julian Gilbey <jdg@debian.org>  Sun, 22 Jan 2006 02:06:57 +0000
 
 devscripts (2.9.11) unstable; urgency=low
 
