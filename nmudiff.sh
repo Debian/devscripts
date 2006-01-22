@@ -1,8 +1,11 @@
-#! /bin/sh
+#! /bin/bash -e
 # Copyright 2006 by Steinar H. Gunderson
 # Licensed under the GPL version 2.
 
-set -e
+if ! command -v mutt >/dev/null 2>&1; then
+    echo "nmudiff: requires mutt to be installed to run!" >&2
+    exit 1
+fi
 
 SOURCE=$( dpkg-parsechangelog | grep ^Source: | cut -d" " -f2 )
 VERSION=$( dpkg-parsechangelog | grep ^Version: | cut -d" " -f2 )
@@ -25,3 +28,4 @@ EOF
 
 mutt -s "diff for $VERSION NMU" -i $TMPNAM -a ../${SOURCE}-$VERSION-nmu.diff submit@bugs.debian.org
 rm $TMPNAM
+

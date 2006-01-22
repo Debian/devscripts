@@ -8,7 +8,7 @@ PL_FILES = bts.pl checkbashisms.pl cvs-debuild.pl debchange.pl \
 SH_FILES = cvs-debi.sh cvs-debrelease.sh debclean.sh debrelease.sh \
 	debrsign.sh debsign.sh dpkg-genbuilddeps.sh mergechanges.sh \
 	tagpending.sh uscan.sh uupdate.sh wnpp-alert.sh whodepends.sh \
-	annotate-output.sh archpath.sh deb-reversion.sh
+	annotate-output.sh archpath.sh deb-reversion.sh nmudiff.sh
 
 LIBS = libvfork.so.0
 
