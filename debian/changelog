@@ -6,13 +6,14 @@ devscripts (2.9.12) UNRELEASED; urgency=low
   [ Julian Gilbey ]
   * bts: update to recognise new URL formats in BTS pages (based on bug
     #349259)
+  * bts: accept "submitter nnnnn !" format (Closes: #348349)
   * debchange: update to recognise new URL formats in BTS pages (Closes:
     #349259)
   * debchange: quitting the editor with -e option and no changes no longer
     modifies the changelog (Closes: #349091)
   * nmudiff: include in package (Closes: #349337)
 
- -- Julian Gilbey <jdg@debian.org>  Sun, 22 Jan 2006 20:56:47 +0000
+ -- Julian Gilbey <jdg@debian.org>  Tue, 24 Jan 2006 19:24:21 +0000
 
 devscripts (2.9.11) unstable; urgency=low
 

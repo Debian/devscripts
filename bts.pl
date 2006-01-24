@@ -693,7 +693,7 @@ Change the submitter address of a bug or a number of bugs, with `!' meaning
 sub bts_submitter {
     @_ or die "bts submitter: change submitter of what bug?\n";
     my $submitter=pop;
-    if ($submitter !~ /\@/) {
+    if ($submitter !~ /\@/ and $submitter ne '!') {
 	die "bts submitter: change submitter to what?\n";
     }
     foreach (@_) {
