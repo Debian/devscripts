@@ -433,7 +433,9 @@ L<http://bugs.debian.org/server-control>
 
 =item show [options] [<bug number> | <package> | <maintainer> | : ] [opt=val ...]
 
-=item show [options] [src:<package> | from:<submitter> | tag:<tag> ] [opt=val ...]
+=item show [options] [src:<package> | from:<submitter>] [opt=val ...]
+
+=item show [options] [tag:<tag> | usertag:<tag> ] [opt=val ...]
 
 This is a synonym for bts bugs.
 
@@ -445,7 +447,9 @@ sub bts_show {
 
 =item bugs [options] [<bug number> | <package> | <maintainer> | : ] [opt=val ..]
 
-=item bugs [options] [src:<package> | from:<submitter> | tag:<tag> ] [opt=val ..]
+=item bugs [options] [src:<package> | from:<submitter>] [opt=val ..]
+
+=item bugs [options] [tag:<tag> | usertag:<tag> ] [opt=val ..]
 
 Display the page listing the requested bugs in a web browser using
 L<sensible-browser(1)>.
@@ -490,6 +494,12 @@ Display the bugs for the submitter email address <submitter>.
 =item tag:<tag>
 
 Display the bugs which are tagged with <tag>.
+
+=item usertag:<tag>
+
+Display the bugs which are tagged with usertag <tag>.  See the BTS
+documentation for more information on usertags.  This will require the
+use of a user=<email> option.
 
 =item :
 
@@ -546,7 +556,7 @@ BROWSER='mozilla -raise -remote "openURL(%s,new-window)":links'
 =cut
 
 sub bts_bugs {
-    @ARGV = @_;
+    @ARGV = @_; # needed for GetOptions
     my ($sub_offlinemode, $sub_caching, $sub_mboxmode, $sub_mailreader);
     GetOptions("o" => \$sub_offlinemode,
 	       "offline!" => \$sub_offlinemode,
@@ -590,12 +600,16 @@ sub bts_bugs {
     }
     if ($url =~ /^.*\s+<(.*)>$/) { $url = $1; }
     $url =~ s/^:$//;
-    if (@_) {
-	$url = join(";", $url, @_);
-	$url =~ s/:/=/g;
-	$url =~ s/;tag=/;include=/;
+
+    # Are there any options?
+    my $urlopts = '';
+    if (@_) { 
+	$urlopts = join(";", '', @_); # so it'll be ";opt1=val1;opt2=val2"
+	$urlopts =~ s/:/=/g;
+	$urlopts =~ s/;tag=/;include=/;
     }
-    browse($url);
+    
+    browse($url, $urlopts);
 
     # revert options
     if (defined $sub_offlinemode) {
@@ -1192,7 +1206,7 @@ sub bts_cache {
 
 =item cleancache <package> | src:<package> | <maintainer>
 
-=item cleancache from:<submitter> | tag:<tag> | <number> | ALL
+=item cleancache from:<submitter> | tag:<tag> | usertag:<tag> | <number> | ALL
 
 Clean the cache for the specified package, maintainer, etc., as
 described above for the "bugs" command, or clean the entire cache if
@@ -1558,6 +1572,7 @@ sub fold_from_header {
 # live thing as a (non-empty) string
 sub download {
     my $thing=shift;
+    my $thgopts=shift;
     my $manual=shift;  # true="bts cache", false="bts show/bug"
     my $mboxing=shift;  # true="bts --mbox show/bugs", and only if $manual=0
     my $bug_current=shift;  # current bug being downloaded if caching
@@ -1567,13 +1582,9 @@ sub download {
     my $url;
 
     # What URL are we to download?
-    if ($thing =~ /;/) {
+    if ($thgopts ne '') {
 	# have to be intelligent here :/
-	if ($thing =~ /^\d+;/) {
-	    $url = "$btscgibugurl?bug=$thing";
-	} else {
-	    $url = "$btscgipkgurl?pkg=$thing";
-	}
+	$url = thing_to_url($thing) . $thgopts;
     } else {
 	# let the BTS be intelligent
 	$url = "$btsurl$thing";
@@ -1585,8 +1596,8 @@ sub download {
 
     chdir($cachedir) || die "bts: chdir $cachedir: $!\n";
 
-    if (-f cachefile($thing)) {
-	($timestamp, $versionstamp) = get_timestamp($thing);
+    if (-f cachefile($thing, $thgopts)) {
+	($timestamp, $versionstamp) = get_timestamp($thing, $thgopts);
 	$timestamp ||= 0;
 	$versionstamp ||= 0;
 	# And ensure we preserve any manual setting
@@ -1620,7 +1631,7 @@ sub download {
 	# we have an up-to-date version already, nothing to do
 	# and $timestamp is guaranteed to be well-defined
 	if (is_automatic($timestamp) and $manual) {
-	    set_timestamp($thing, make_manual($timestamp), $versionstamp);
+	    set_timestamp($thing, $thgopts, make_manual($timestamp), $versionstamp);
 	}
 
 	if (! $quiet and $manual and $thing ne "css/bugs.css") {
@@ -1647,14 +1658,14 @@ sub download {
 	}
 
 	my $data = $livepage;  # work on a copy, not the original
-	my $cachefile=cachefile($thing);
+	my $cachefile=cachefile($thing,$thgopts);
 	open (OUT_CACHE, ">$cachefile") or die "bts: open $cachefile: $!\n";
 
 	$data = mangle_cache_file($data, $thing, $bug2filename, $timestamp);
 	print OUT_CACHE $data;
 	close OUT_CACHE or die "bts: problems writing to $cachefile: $!\n";
 
-	set_timestamp($thing,
+	set_timestamp($thing, $thgopts,
 	    $manual ? make_manual($timestamp) : make_automatic($timestamp),
 	    $version);
 
@@ -1827,19 +1838,19 @@ sub mangle_cache_file {
 	    if ($bug eq $thing and defined $msg) {
 		if ($fullmode or
 		    (! $fullmode and exists $$bug2filename{$msg})) {
-		    s%<a( class=\".*?\")? href="(bugreport\.cgi[^\"]*)">(.+?)</a>%<a$1 href="$filename">$3</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+		    s%<a((?: class=\".*?\")?) href="(bugreport\.cgi[^\"]*)">(.+?)</a>%<a$1 href="$filename">$3</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
 		} else {
-		    s%<a( class=\".*?\")? href="(bugreport\.cgi[^\"]*)">(.+?)</a>%$3 (<a$1 href="$btscgiurl$2">online</a>)%i;
+		    s%<a((?: class=\".*?\")?) href="(bugreport\.cgi[^\"]*)">(.+?)</a>%$3 (<a$1 href="$btscgiurl$2">online</a>)%i;
 		}
 	    } else {
-		s%<a( class=\".*?\")? href="(bugreport\.cgi[^\?]*\?bug=(\d+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+		s%<a((?: class=\".*?\")?) href="(bugreport\.cgi[^\?]*\?bug=(\d+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
 	    }
 	}
 	else {
-	    s%<a( class=\".*?\")? href="(pkgreport\.cgi\?(?:pkg|maint)=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
-	    s%<a( class=\".*?\")? href="(pkgreport\.cgi\?src=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="src_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
-	    s%<a( class=\".*?\")? href="(pkgreport\.cgi\?submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="from_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
-	    s%<a( class=\".*?\")? href="(?:/cgi-bin/)?(bugspam\.cgi[^\"]+)">%<a$1 href="$btscgiurl$2">%i;
+	    s%<a((?: class=\".*?\")?) href="(pkgreport\.cgi\?(?:pkg|maint)=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+	    s%<a((?: class=\".*?\")?) href="(pkgreport\.cgi\?src=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="src_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+	    s%<a((?: class=\".*?\")?) href="(pkgreport\.cgi\?submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="from_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+	    s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(bugspam\.cgi[^\"]+)">%<a$1 href="$btscgiurl$2">%i;
 	}
     }
 
@@ -1850,13 +1861,14 @@ sub mangle_cache_file {
 # Removes a specified thing from the cache
 sub deletecache {
     my $thing=shift;
+    my $thgopts=shift;
 
     if (! -d $cachedir) {
 	die "bts: deletecache() called but no cachedir!\n";
     }
 
-    delete_timestamp($thing);
-    unlink cachefile($thing);
+    delete_timestamp($thing,$thgopts);
+    unlink cachefile($thing,$thgopts);
     if ($thing =~ /^\d+$/) {
 	rmtree("$cachedir/$thing", 0, 1) if -d "$cachedir/$thing";
 	unlink("$cachedir/$thing.mbox") if -f "$cachedir/$thing.mbox";
@@ -1866,12 +1878,16 @@ sub deletecache {
 # Given a thing, returns the filename for it in the cache.
 sub cachefile {
     my $thing=shift;
+    my $thgopts=shift;
     if ($thing eq '') { die "bts: cachefile given empty argument\n"; }
     if ($thing =~ /bugs.css$/) { return $cachedir."bugs.css" }
     $thing =~ s/^src:/src_/;
     $thing =~ s/^from:/from_/;
     $thing =~ s/^tag:/tag_/;
-    return $cachedir.$thing.".html";
+    $thing =~ s/^usertag:/usertag_/;
+    $thgopts =~ s/;/_3B/g;
+    $thgopts =~ s/=/_3D/g;
+    return $cachedir.$thing.$thgopts.".html";
 }
 
 # Given a thing, returns the filename for its mbox in the cache.
@@ -1891,17 +1907,53 @@ sub cachebugdir {
 # "thing".
 sub cachefile_to_thing {
     my $thing=basename(shift, '.html');
+    my $thgopts='';
     $thing =~ s/^src_/src:/;
     $thing =~ s/^from_/from:/;
     $thing =~ s/^tag_/tag:/;
-    return $thing;
+    $thing =~ s/^usertag_/usertag:/;
+    $thing =~ s/_3B/;/g;
+    $thing =~ s/_3D/=/g;
+    $thing =~ /^(.*?)((?:;.*)?)$/;
+    ($thing, $thgopts) = ($1, $2);
+    return ($thing, $thgopts);
+}
+
+# Given a thing, gives the official BTS cgi page for it
+sub thing_to_url {
+    my $thing = shift;
+    my $thingurl;
+
+    # have to be intelligent here :/
+    if ($thing =~ /^\d+$/) {
+	$thingurl = $btscgibugurl."?bug=".$thing;
+    } elsif ($thing =~ /^from:/) {
+	($thingurl = $thing) =~ s/^from:/submitter=/;
+	$thingurl = $btscgipkgurl.'?'.$thingurl;
+    } elsif ($thing =~ /^src:/) {
+	($thingurl = $thing) =~ s/^src:/src=/;
+	$thingurl = $btscgipkgurl.'?'.$thingurl;
+    } elsif ($thing =~ /^tag:/) {
+	($thingurl = $thing) =~ s/^tag:/tag=/;
+	$thingurl = $btscgipkgurl.'?'.$thingurl;
+    } elsif ($thing =~ /^usertag:/) {
+	($thingurl = $thing) =~ s/^usertag:/usertag=/;
+	$thingurl = $btscgipkgurl.'?'.$thingurl;
+    } elsif ($thing =~ /\@/) { # so presume it's a maint request
+	$thingurl = $btscgipkgurl.'?maint='.$thing;
+    } else { # it's a package, or had better be...
+	$thingurl = $btscgipkgurl.'?pkg='.$thing;
+    }
+
+    return $thingurl;
 }
 
 # Given a thing, reads all links to bugs from the corresponding cache file
 # if there is one, and returns a list of them.
 sub bugs_from_thing {
     my $thing=shift;
-    my $cachefile=cachefile($thing);
+    my $thgopts=shift;
+    my $cachefile=cachefile($thing,$thgopts);
 
     if (-f $cachefile) {
 	local $/;
@@ -1978,25 +2030,30 @@ sub href_to_filename {
     return ($msg, $filename);
 }
 
-# Browses a given thing, with possible caching.
+# Browses a given thing, with preprocessed list of URL options such as
+# ";opt1=val1;opt2=val2" with possible caching if there are no options
 sub browse {
     prunecache();
     my $thing=shift;
+    my $thgopts=shift;
     
     if ($thing eq '') {
+	if ($thgopts ne '') {
+	    die "bts: you can only give options for a BTS page if you specify a bug/maint/... .\n";
+	}
 	runbrowser($btsurl);
 	return;
     }
 
     my $hascache=-d $cachedir;
-    my $cachefile=cachefile($thing);
+    my $cachefile=cachefile($thing,$thgopts);
     my $mboxfile=mboxfile($thing);
     if ($mboxmode and ! $mboxfile) {
 	die "bts: you can only request a mailbox for a single bug report.\n";
     }
 
     # Check that if we're requesting a tag, that it's a valid tag
-    if ($thing =~ /(?:^|;)tag[:=]([^;]*)/) {
+    if (($thing.$thgopts) =~ /(?:^|;)(?:tag|include|exclude)[:=]([^;]*)/) {
 	unless (exists $valid_tags{$1}) {
 	    die "bts: invalid tag requested: $1\nRecognised tag names are: " . join(" ", @valid_tags) . "\n";
 	}
@@ -2018,7 +2075,7 @@ sub browse {
     }
     # else we're in online mode
     elsif ($hascache && $caching && have_lwp() && $thing ne '') {
-	my $live=download($thing, 0, $mboxmode);
+	my $live=download($thing, $thgopts, 0, $mboxmode);
 	
 	if ($mboxmode) {
 	    runmailreader($mboxfile);
@@ -2051,13 +2108,9 @@ sub browse {
 	    my ($fh, $fn) = download_mbox($thing, 1);
 	    runmailreader($fn);
 	} else {
-	    if ($thing =~ /;/) {
-		# have to be intelligent here :/
-		if ($thing =~ /^\d+;/) {
-		    runbrowser($btscgibugurl."?bug=".$thing);
-		} else {
-		    runbrowser($btscgipkgurl."?pkg=".$thing);
-		}
+	    if ($thgopts ne '') {
+		my $thingurl = thing_to_url($thing);		
+		runbrowser($thingurl.$thgopts);
 	    } else {
 		# let the BTS be intelligent
 		runbrowser($btsurl.$thing);
@@ -2118,15 +2171,15 @@ sub prunecache {
 
     my @unrecognised;
     foreach my $oldfile (@oldfiles) {
-	my $thing=cachefile_to_thing($oldfile);
-	unless (exists $timestamp{$thing}) {
+	my ($thing, $thgopts) = cachefile_to_thing($oldfile);
+	unless (defined get_timestamp($thing, $thgopts)) {
 	    push @unrecognised, $oldfile;
 	    next;
 	}
-	next if is_manual(get_timestamp($thing));
+	next if is_manual(get_timestamp($thing, $thgopts));
 	
 	# Otherwise, it's automatic and we purge it
-	deletecache($thing);
+	deletecache($thing, $thgopts);
     }
 
     untie %timestamp;
@@ -2169,19 +2222,20 @@ sub runmailreader {
 
 sub get_timestamp {
     my $thing = shift;
+    my $thgopts = shift;
     my $timestamp = undef;
     my $versionstamp = undef;
 
     if (tied %timestamp) {
-	($timestamp, $versionstamp) = split /;/, $timestamp{$thing}
-	    if exists $timestamp{$thing};
+	($timestamp, $versionstamp) = split /;/, $timestamp{$thing.$thgopts}
+	    if exists $timestamp{$thing.$thgopts};
     } else {
 	tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	     O_RDONLY(), 0600, $DB_HASH, "read")
 	    or die "bts: couldn't open DB file $timestampdb for reading: $!\n";
 
-	($timestamp, $versionstamp) = split /;/, $timestamp{$thing}
-	    if exists $timestamp{$thing};
+	($timestamp, $versionstamp) = split /;/, $timestamp{$thing.$thgopts}
+	    if exists $timestamp{$thing.$thgopts};
 
 	untie %timestamp;
     }
@@ -2191,17 +2245,18 @@ sub get_timestamp {
 
 sub set_timestamp {
     my $thing = shift;
+    my $thgopts = shift;
     my $timestamp = shift;
     my $versionstamp = shift || $version;
 
     if (tied %timestamp) {
-	$timestamp{$thing} = "$timestamp;$versionstamp";
+	$timestamp{$thing.$thgopts} = "$timestamp;$versionstamp";
     } else {
 	tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	     O_RDWR()|O_CREAT(), 0600, $DB_HASH, "write")
 	    or die "bts: couldn't open DB file $timestampdb for writing: $!\n";
 
-	$timestamp{$thing} = "$timestamp;$versionstamp";
+	$timestamp{$thing.$thgopts} = "$timestamp;$versionstamp";
 
 	untie %timestamp;
     }
@@ -2209,15 +2264,16 @@ sub set_timestamp {
 
 sub delete_timestamp {
     my $thing = shift;
+    my $thgopts = shift;
 
     if (tied %timestamp) {
-	delete $timestamp{$thing};
+	delete $timestamp{$thing.$thgopts};
     } else {
 	tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	     O_RDWR()|O_CREAT(), 0600, $DB_HASH, "write")
 	    or die "bts: couldn't open DB file $timestampdb for writing: $!\n";
 
-	delete $timestamp{$thing};
+	delete $timestamp{$thing.$thgopts};
 
 	untie %timestamp;
     }
