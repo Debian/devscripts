@@ -51,6 +51,7 @@ Description: Scripts to make the life of a Debian Package maintainer easier
       lintian | linda, gnupg]
   - deb-reversion: increases a binary package version number and repacks the
       archive
+  - dget: downloads Debian source and binary packages [wget]
   - dpkg-depcheck, dpkg-genbuilddeps: determine the packages used during
       the build of a Debian package; useful for determining the Build-Depends
       control field needed [build-essential, strace]
@@ -64,7 +65,7 @@ Description: Scripts to make the life of a Debian Package maintainer easier
   - plotchangelog: view a nice plot of the data in a changelog file
       [libtimedate-perl, gnuplot]
   - rc-alert: list installed packages which have release-critical bugs [wget]
-  - rmadison: Remotely query the Debian archive database about packages [wget]
+  - rmadison: remotely query the Debian archive database about packages [wget]
   - svnpath: print svn repository paths [subversion]
   - tagpending: shell script which runs from a Debian source tree and tags
       bugs that are to be closed in the latest changelog as pending.

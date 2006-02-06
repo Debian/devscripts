@@ -116,6 +116,10 @@ And now, in mostly alphabetical order, the scripts:
 - deb-reversion: Increases a binary package version number and repacks
   the package, useful for porters and the like.
 
+- dget: Downloads Debian source and binary packages. Point at a .changes
+  or .dsc to download all references files. Specify a package name to
+  download it from the configured apt repository.
+
 - dpkg-depcheck, dpkg-genbuilddeps [build-essential, strace]: Runs a
   specified command (such as debian/rules build) or dpkg-buildpackage,
   respectively, to determine the packages used during the build
