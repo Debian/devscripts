@@ -63,6 +63,7 @@ Valid options are:
                             renamed TO; only of interest with --show-moved
                             (multiple permitted)
    --quiet, -q            Be quiet if no differences were found
+   --exclude PATTERN      Exclude files that match PATTERN
 
 Default settings modified by devscripts configuration files:
 $modified_conf_msg
@@ -140,6 +141,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 
 # Are they a pair of debs, changes or dsc files, or a list of debs?
 my $type = '';
+my @excludes = ();
 my @move = ();
 my %renamed = ();
 
@@ -181,6 +183,14 @@ while (@ARGV) {
 	my $from = shift;
 	my $to   = shift;
 	$renamed{$from} = $to;
+    }
+    elsif ($ARGV[0] eq '--exclude') {
+	fatal "Malformed command-line options; run $progname --help for more info"
+	    unless @ARGV >= 2;
+	shift @ARGV;
+
+	my $exclude = shift;
+	push @excludes, $exclude;
     }
     elsif ($ARGV[0] =~ /^(--dirs|-d)$/) { $ignore_dirs = 0; shift; }
     elsif ($ARGV[0] eq '--nodirs') { $ignore_dirs = 1; shift; }
@@ -365,7 +375,7 @@ elsif ($type eq 'dsc') {
     my $use_interdiff = ($?==0) ? 1 : 0;
 
     if ($origs[1] eq $origs[2] and defined $diffs[1] and defined $diffs[2]
-	and $use_interdiff) {
+	and scalar(@excludes) == 0 and $use_interdiff) {
 	# same orig tar ball and interdiff exists
 	my $rv = system('interdiff', '-z', $diffs[1], $diffs[2]);
 	if ($rv) {
@@ -374,7 +384,8 @@ elsif ($type eq 'dsc') {
     } else {
 	# Any other situation
 	if ($origs[1] eq $origs[2] and
-	    defined $diffs[1] and defined $diffs[2]) {
+	    defined $diffs[1] and defined $diffs[2] and
+	    scalar(@excludes) == 0) {
 	    warn "Warning: You do not seem to have interdiff (in the patchutils package)\ninstalled; this program would use it if it were available.\n";
 	}
 	# possibly different orig tarballs, or no interdiff installed
@@ -393,7 +404,12 @@ elsif ($type eq 'dsc') {
 	    }
 	    closedir(DIR);
 	}
-	system ("diff", "-Nru", "$dir1/$sdir1", "$dir2/$sdir2");
+	my @command = ("diff", "-Nru");
+	for my $exclude (@excludes) {
+	    push @command, ("--exclude", $exclude);
+	}
+	push @command, ("$dir1/$sdir1", "$dir2/$sdir2");
+	system @command;
     }
 
     exit 0;

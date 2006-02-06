@@ -41,8 +41,9 @@ devscripts (2.9.12) UNRELEASED; urgency=low
   [ Joey Hess ]
   * Add build dep on po4a to support above changes.
   * Add dget program by Christoph Berg. Closes: #332286
+  * Patch from Matt Kraai to add --exclude support to debdiff. Closes: #328382
 
- -- Joey Hess <joeyh@debian.org>  Sun,  5 Feb 2006 20:40:06 -0500
+ -- Joey Hess <joeyh@debian.org>  Sun,  5 Feb 2006 20:42:07 -0500
 
 devscripts (2.9.11) unstable; urgency=low
 
