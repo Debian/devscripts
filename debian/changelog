@@ -42,8 +42,10 @@ devscripts (2.9.12) UNRELEASED; urgency=low
   * Add build dep on po4a to support above changes.
   * Add dget program by Christoph Berg. Closes: #332286
   * Patch from Matt Kraai to add --exclude support to debdiff. Closes: #328382
+  * debsign: don't abort or complain if stty fails, as might happen
+    if run w/o a controlling terminal. Closes: #345636
 
- -- Joey Hess <joeyh@debian.org>  Sun,  5 Feb 2006 20:42:07 -0500
+ -- Joey Hess <joeyh@debian.org>  Sun,  5 Feb 2006 20:56:41 -0500
 
 devscripts (2.9.11) unstable; urgency=low
 
