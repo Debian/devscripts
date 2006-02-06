@@ -20,7 +20,28 @@ devscripts (2.9.12) UNRELEASED; urgency=low
   [ Joey Hess ]
   * Add rmadison program by Christoph Berg. Closes: #350335
 
- -- Joey Hess <joeyh@debian.org>  Sun,  5 Feb 2006 20:17:58 -0500
+  [ Nicolas François ]
+  * Makefile
+    build the man pages in the `all' rule
+    remove the translated manpages and update the POT/POs in `clean'
+  * po4a/add_fr/translator_french.add moved to po4a/fr/translator_man.add
+    The addendum is moved to the language directory.
+    It was renamed because a pod and dbk addendum will be added latter
+  * po4a/devscripts.fr.po moved to po4a/po/fr.po, and updated
+    This is important for the l10n robot used to find the POs that need to
+    be updated
+  * po4a/devscripts.pot moved to po4a/po/devscripts.pot
+  * po4a/devscripts-po4a.conf
+    update due to the new file hierarchy
+  * po4a/fr/*.[15]
+    The translated man pages were removed. They are generated at build
+    time.
+  Closes: #347671
+
+  [ Joey Hess ]
+  * Add build dep on po4a to support above changes.
+
+ -- Joey Hess <joeyh@debian.org>  Sun,  5 Feb 2006 20:29:10 -0500
 
 devscripts (2.9.11) unstable; urgency=low
 

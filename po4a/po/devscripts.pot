@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2005-01-29 19:39+0100\n"
+"POT-Creation-Date: 2006-01-09  1:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,28 +14,25 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: ENCODING"
 
+#.  -*- nroff -*-
 # type: TH
 #: ../debrsign.1:1
 #, no-wrap
 msgid "DEBRSIGN"
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../debrsign.1:1 ../debi.1:1 ../debchange.1:1 ../cvs-debi.1:1 ../debdiff.1:1 ../debsign.1:1 ../debuild.1:1 ../devscripts.conf.5:1 ../debclean.1:1 ../cvs-debrelease.1:1 ../wnpp-alert.1:1 ../uscan.1:1 ../grep-excuses.1:1 ../tagpending.1:1 ../dscverify.1:1 ../debrelease.1:1 ../debc.1:1 ../checkbashisms.1:1 ../uupdate.1:1 ../rc-alert.1:1 ../dpkg-genbuilddeps.1:1 ../cvs-debc.1:1 ../debpkg.1:1 ../cvs-debuild.1:1 ../plotchangelog.1:1 ../mergechanges.1:1 ../devscripts.1:1
 #, no-wrap
 msgid "Debian Utilities"
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../debrsign.1:1 ../debi.1:1 ../debchange.1:1 ../cvs-debi.1:1 ../debdiff.1:1 ../debsign.1:1 ../debuild.1:1 ../devscripts.conf.5:1 ../debclean.1:1 ../cvs-debrelease.1:1 ../wnpp-alert.1:1 ../uscan.1:1 ../grep-excuses.1:1 ../tagpending.1:1 ../dscverify.1:1 ../debrelease.1:1 ../debc.1:1 ../checkbashisms.1:1 ../uupdate.1:1 ../rc-alert.1:1 ../dpkg-depcheck.1:1 ../dpkg-genbuilddeps.1:1 ../cvs-debc.1:1 ../debpkg.1:1 ../cvs-debuild.1:1 ../plotchangelog.1:1 ../mergechanges.1:1 ../devscripts.1:1
 #, no-wrap
 msgid "DEBIAN"
-msgstr ""
-
-# type: TH
-#: ../debrsign.1:1 ../debi.1:1 ../debchange.1:1 ../cvs-debi.1:1 ../debdiff.1:1 ../debsign.1:1 ../debuild.1:1 ../devscripts.conf.5:1 ../debclean.1:1 ../cvs-debrelease.1:1 ../wnpp-alert.1:1 ../uscan.1:1 ../grep-excuses.1:1 ../tagpending.1:1 ../dscverify.1:1 ../debrelease.1:1 ../debc.1:1 ../checkbashisms.1:1 ../uupdate.1:1 ../rc-alert.1:1 ../dpkg-genbuilddeps.1:1 ../cvs-debc.1:1 ../debpkg.1:1 ../cvs-debuild.1:1 ../plotchangelog.1:1 ../mergechanges.1:1 ../devscripts.1:1
-#, no-wrap
-msgid "\\\""
 msgstr ""
 
 # type: SH
@@ -78,7 +75,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../debrsign.1:19 ../debsign.1:20
+#: ../debrsign.1:19
 msgid ""
 "If a I<.changes> or I<.dsc> file is specified, it is signed, otherwise, "
 "I<debian/changelog> is parsed to determine the name of the I<.changes> file "
@@ -104,32 +101,32 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../debrsign.1:30 ../debi.1:65 ../debchange.1:110 ../cvs-debi.1:28 ../debdiff.1:47 ../debsign.1:34 ../debuild.1:143 ../debclean.1:60 ../cvs-debrelease.1:21 ../wnpp-alert.1:12 ../uscan.1:194 ../grep-excuses.1:13 ../tagpending.1:12 ../dscverify.1:15 ../debrelease.1:56 ../debc.1:63 ../checkbashisms.1:14 ../uupdate.1:49 ../rc-alert.1:12 ../dpkg-depcheck.1:15 ../cvs-debc.1:24 ../cvs-debuild.1:33 ../plotchangelog.1:43
+#: ../debrsign.1:30 ../debi.1:65 ../debchange.1:144 ../cvs-debi.1:28 ../debdiff.1:47 ../debsign.1:39 ../debuild.1:143 ../debclean.1:60 ../cvs-debrelease.1:21 ../wnpp-alert.1:12 ../uscan.1:270 ../grep-excuses.1:13 ../tagpending.1:12 ../dscverify.1:15 ../debrelease.1:56 ../debc.1:63 ../checkbashisms.1:14 ../uupdate.1:49 ../rc-alert.1:17 ../dpkg-depcheck.1:15 ../cvs-debc.1:24 ../cvs-debuild.1:33 ../plotchangelog.1:43
 #, no-wrap
 msgid "OPTIONS"
 msgstr ""
 
 # type: TP
-#: ../debrsign.1:31 ../debsign.1:68 ../debrelease.1:61
+#: ../debrsign.1:31 ../debsign.1:73 ../debrelease.1:61
 #, no-wrap
 msgid "B<-S>"
 msgstr ""
 
 # type: Plain text
-#: ../debrsign.1:35 ../debsign.1:72
+#: ../debrsign.1:35 ../debsign.1:77
 msgid ""
 "Look for a source-only I<.changes> file instead of a binary-build changes "
 "file."
 msgstr ""
 
 # type: TP
-#: ../debrsign.1:35 ../debi.1:66 ../cvs-debi.1:32 ../debsign.1:72 ../cvs-debrelease.1:30 ../debrelease.1:67 ../debc.1:64 ../cvs-debc.1:28
+#: ../debrsign.1:35 ../debi.1:66 ../cvs-debi.1:32 ../debsign.1:77 ../cvs-debrelease.1:30 ../debrelease.1:67 ../debc.1:64 ../cvs-debc.1:28
 #, no-wrap
 msgid "B<-a>I<debian-architecture>, B<-t>I<GNU-system-type>"
 msgstr ""
 
 # type: Plain text
-#: ../debrsign.1:41 ../debi.1:72 ../cvs-debi.1:38 ../debsign.1:78 ../cvs-debrelease.1:36 ../debc.1:70 ../cvs-debc.1:34
+#: ../debrsign.1:41 ../debi.1:72 ../cvs-debi.1:38 ../debsign.1:83 ../cvs-debrelease.1:36 ../debc.1:70 ../cvs-debc.1:34
 msgid ""
 "See B<dpkg-architecture>(1) for a description of these options.  They affect "
 "the search for the I<.changes> file.  They are provided to mimic the "
@@ -171,13 +168,13 @@ msgid "All other options are passed on to B<debsign> on the remote machine."
 msgstr ""
 
 # type: SH
-#: ../debrsign.1:51 ../debi.1:87 ../debchange.1:180 ../debdiff.1:114 ../debsign.1:88 ../debuild.1:191 ../debclean.1:87 ../uscan.1:242 ../grep-excuses.1:24 ../dscverify.1:29 ../debrelease.1:93 ../debc.1:85 ../uupdate.1:85 ../dpkg-depcheck.1:102 ../plotchangelog.1:106
+#: ../debrsign.1:51 ../debi.1:87 ../debchange.1:277 ../debdiff.1:117 ../debsign.1:93 ../debuild.1:191 ../debclean.1:87 ../uscan.1:357 ../grep-excuses.1:24 ../dscverify.1:29 ../debrelease.1:93 ../debc.1:85 ../uupdate.1:85 ../dpkg-depcheck.1:102 ../plotchangelog.1:106
 #, no-wrap
 msgid "CONFIGURATION VARIABLES"
 msgstr ""
 
 # type: Plain text
-#: ../debrsign.1:57 ../debi.1:93 ../debchange.1:186 ../debsign.1:94 ../debclean.1:93 ../debrelease.1:99 ../debc.1:91 ../uupdate.1:91
+#: ../debrsign.1:57 ../debi.1:93 ../debchange.1:283 ../debsign.1:99 ../debclean.1:93 ../debrelease.1:99 ../debc.1:91 ../uupdate.1:91
 msgid ""
 "The two configuration files I</etc/devscripts.conf> and I<~/.devscripts> are "
 "sourced in that order to set configuration variables.  Command line options "
@@ -198,7 +195,7 @@ msgid "Equivalent to passing B<--path> on the command line (see above.)"
 msgstr ""
 
 # type: SH
-#: ../debrsign.1:60 ../debi.1:100 ../debchange.1:209 ../cvs-debi.1:62 ../debdiff.1:140 ../debsign.1:107 ../debuild.1:262 ../devscripts.conf.5:54 ../debclean.1:104 ../cvs-debrelease.1:64 ../uscan.1:281 ../grep-excuses.1:34 ../tagpending.1:29 ../dscverify.1:40 ../debrelease.1:111 ../debc.1:98 ../checkbashisms.1:32 ../uupdate.1:159 ../rc-alert.1:19 ../dpkg-depcheck.1:118 ../dpkg-genbuilddeps.1:30 ../cvs-debc.1:58 ../cvs-debuild.1:56 ../plotchangelog.1:124
+#: ../debrsign.1:60 ../debi.1:100 ../debchange.1:322 ../cvs-debi.1:62 ../debdiff.1:146 ../debsign.1:112 ../debuild.1:306 ../devscripts.conf.5:54 ../debclean.1:104 ../cvs-debrelease.1:64 ../uscan.1:419 ../grep-excuses.1:34 ../tagpending.1:29 ../dscverify.1:40 ../debrelease.1:111 ../debc.1:98 ../checkbashisms.1:32 ../uupdate.1:159 ../rc-alert.1:27 ../dpkg-depcheck.1:118 ../dpkg-genbuilddeps.1:30 ../cvs-debc.1:58 ../cvs-debuild.1:56 ../plotchangelog.1:124
 #, no-wrap
 msgid "SEE ALSO"
 msgstr ""
@@ -209,18 +206,19 @@ msgid "B<debsign>(1), B<dpkg-architecture>(1)  and B<ssh>(1)."
 msgstr ""
 
 # type: SH
-#: ../debrsign.1:65 ../debi.1:104 ../debchange.1:216 ../cvs-debi.1:68 ../debdiff.1:146 ../debsign.1:117 ../debuild.1:276 ../devscripts.conf.5:58 ../debclean.1:108 ../cvs-debrelease.1:69 ../wnpp-alert.1:19 ../uscan.1:287 ../grep-excuses.1:36 ../tagpending.1:33 ../dscverify.1:44 ../debrelease.1:116 ../debc.1:103 ../checkbashisms.1:34 ../uupdate.1:166 ../rc-alert.1:21 ../dpkg-genbuilddeps.1:36 ../cvs-debc.1:64 ../debpkg.1:23 ../cvs-debuild.1:63 ../plotchangelog.1:126 ../mergechanges.1:17
+#: ../debrsign.1:65 ../debi.1:104 ../debchange.1:329 ../cvs-debi.1:68 ../debdiff.1:152 ../debsign.1:122 ../debuild.1:320 ../devscripts.conf.5:58 ../debclean.1:108 ../cvs-debrelease.1:69 ../wnpp-alert.1:19 ../uscan.1:425 ../grep-excuses.1:36 ../tagpending.1:33 ../dscverify.1:44 ../debrelease.1:116 ../debc.1:103 ../checkbashisms.1:34 ../uupdate.1:166 ../rc-alert.1:29 ../dpkg-genbuilddeps.1:36 ../cvs-debc.1:64 ../debpkg.1:23 ../cvs-debuild.1:63 ../plotchangelog.1:126 ../mergechanges.1:17
 #, no-wrap
 msgid "AUTHOR"
 msgstr ""
 
 # type: Plain text
-#: ../debrsign.1:67 ../debsign.1:119
+#: ../debrsign.1:67 ../debsign.1:124
 msgid ""
 "This program was written by Julian Gilbey E<lt>jdg@debian.orgE<gt> and is "
 "copyright under the GPL, version 2 or later."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../debi.1:1
 #, no-wrap
@@ -271,7 +269,7 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../debi.1:29 ../debchange.1:74 ../debuild.1:51 ../debclean.1:24 ../uscan.1:138 ../debrelease.1:20 ../debc.1:27
+#: ../debi.1:29 ../debchange.1:104 ../debuild.1:51 ../debclean.1:24 ../uscan.1:213 ../debrelease.1:20 ../debc.1:27
 #, no-wrap
 msgid "Directory name checking"
 msgstr ""
@@ -291,47 +289,47 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../debi.1:42 ../debchange.1:87 ../debuild.1:65 ../debclean.1:37 ../uscan.1:154 ../debrelease.1:33 ../debc.1:40
+#: ../debi.1:42 ../debchange.1:117 ../debuild.1:65 ../debclean.1:37 ../uscan.1:230 ../debrelease.1:33 ../debc.1:40
 msgid "DEVSCRIPTS_CHECK_DIRNAME_LEVEL can take the following values:"
 msgstr ""
 
 # type: TP
-#: ../debi.1:42 ../debchange.1:87 ../debuild.1:65 ../debclean.1:37 ../uscan.1:154 ../debrelease.1:33 ../debc.1:40
+#: ../debi.1:42 ../debchange.1:117 ../debuild.1:65 ../debclean.1:37 ../uscan.1:230 ../debrelease.1:33 ../debc.1:40
 #, no-wrap
 msgid "B<0>"
 msgstr ""
 
 # type: Plain text
-#: ../debi.1:45 ../debchange.1:90 ../debuild.1:68 ../debclean.1:40 ../uscan.1:157 ../debrelease.1:36 ../debc.1:43
+#: ../debi.1:45 ../debchange.1:120 ../debuild.1:68 ../debclean.1:40 ../uscan.1:233 ../debrelease.1:36 ../debc.1:43
 msgid "Never check the directory name."
 msgstr ""
 
 # type: TP
-#: ../debi.1:45 ../debchange.1:90 ../debuild.1:68 ../debclean.1:40 ../uscan.1:157 ../debrelease.1:36 ../debc.1:43
+#: ../debi.1:45 ../debchange.1:120 ../debuild.1:68 ../debclean.1:40 ../uscan.1:233 ../debrelease.1:36 ../debc.1:43
 #, no-wrap
 msgid "B<1>"
 msgstr ""
 
 # type: Plain text
-#: ../debi.1:49 ../debchange.1:94 ../debuild.1:72 ../debclean.1:44 ../debrelease.1:40 ../debc.1:47
+#: ../debi.1:49 ../debchange.1:124 ../debuild.1:72 ../debclean.1:44 ../debrelease.1:40 ../debc.1:47
 msgid ""
 "Only check the directory name if we have had to change directory in our "
 "search for I<debian/changelog>.  This is the default behaviour."
 msgstr ""
 
 # type: TP
-#: ../debi.1:49 ../debchange.1:94 ../debuild.1:72 ../debclean.1:44 ../uscan.1:163 ../debrelease.1:40 ../debc.1:47
+#: ../debi.1:49 ../debchange.1:124 ../debuild.1:72 ../debclean.1:44 ../uscan.1:239 ../debrelease.1:40 ../debc.1:47
 #, no-wrap
 msgid "B<2>"
 msgstr ""
 
 # type: Plain text
-#: ../debi.1:52 ../debchange.1:97 ../debuild.1:75 ../debclean.1:47 ../uscan.1:166 ../debrelease.1:43 ../debc.1:50
+#: ../debi.1:52 ../debchange.1:127 ../debuild.1:75 ../debclean.1:47 ../uscan.1:242 ../debrelease.1:43 ../debc.1:50
 msgid "Always check the directory name."
 msgstr ""
 
 # type: Plain text
-#: ../debi.1:65 ../debchange.1:110 ../debuild.1:88 ../debclean.1:60 ../uscan.1:179 ../debrelease.1:56 ../debc.1:63
+#: ../debi.1:65 ../debchange.1:140 ../debuild.1:88 ../debclean.1:60 ../uscan.1:255 ../debrelease.1:56 ../debc.1:63
 msgid ""
 "The directory name is checked by testing whether the current directory name "
 "(as determined by B<pwd>(1)) matches the regex given by the configuration "
@@ -347,45 +345,45 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../debi.1:72 ../debchange.1:162 ../debuild.1:177 ../debclean.1:69 ../uscan.1:224 ../debrelease.1:75 ../debc.1:70
+#: ../debi.1:72 ../debchange.1:254 ../debuild.1:177 ../debclean.1:69 ../uscan.1:339 ../debrelease.1:75 ../debc.1:70
 #, no-wrap
 msgid "B<--check-dirname-level> I<N>"
 msgstr ""
 
 # type: Plain text
-#: ../debi.1:76 ../debi.1:80 ../debchange.1:166 ../debchange.1:170 ../debuild.1:181 ../debuild.1:185 ../debclean.1:73 ../debclean.1:77 ../uscan.1:228 ../uscan.1:232 ../debrelease.1:79 ../debrelease.1:83 ../debc.1:74 ../debc.1:78
+#: ../debi.1:76 ../debi.1:80 ../debchange.1:258 ../debchange.1:262 ../debuild.1:181 ../debuild.1:185 ../debclean.1:73 ../debclean.1:77 ../uscan.1:343 ../uscan.1:347 ../debrelease.1:79 ../debrelease.1:83 ../debc.1:74 ../debc.1:78
 msgid ""
 "See the above section \"Directory name checking\" for an explanation of this "
 "option."
 msgstr ""
 
 # type: TP
-#: ../debi.1:76 ../debchange.1:166 ../debuild.1:181 ../debclean.1:73 ../uscan.1:228 ../debrelease.1:79 ../debc.1:74
+#: ../debi.1:76 ../debchange.1:258 ../debuild.1:181 ../debclean.1:73 ../uscan.1:343 ../debrelease.1:79 ../debc.1:74
 #, no-wrap
 msgid "B<--check-dirname-regex> I<regex>"
 msgstr ""
 
 # type: TP
-#: ../debi.1:80 ../debchange.1:170 ../debdiff.1:104 ../debsign.1:78 ../debclean.1:77 ../cvs-debrelease.1:57 ../uscan.1:232 ../grep-excuses.1:14 ../dscverify.1:19 ../debrelease.1:83 ../debc.1:78 ../uupdate.1:75 ../dpkg-depcheck.1:92
+#: ../debi.1:80 ../debchange.1:262 ../debdiff.1:104 ../debsign.1:83 ../debclean.1:77 ../cvs-debrelease.1:57 ../uscan.1:347 ../grep-excuses.1:14 ../dscverify.1:19 ../debrelease.1:83 ../debc.1:78 ../uupdate.1:75 ../dpkg-depcheck.1:92
 #, no-wrap
 msgid "B<--no-conf>, B<--noconf>"
 msgstr ""
 
 # type: Plain text
-#: ../debi.1:84 ../debchange.1:174 ../debdiff.1:108 ../debsign.1:82 ../debuild.1:149 ../debclean.1:81 ../cvs-debrelease.1:61 ../uscan.1:236 ../grep-excuses.1:18 ../dscverify.1:23 ../debrelease.1:87 ../debc.1:82 ../uupdate.1:79 ../dpkg-depcheck.1:96
+#: ../debi.1:84 ../debchange.1:266 ../debdiff.1:108 ../debsign.1:87 ../debuild.1:149 ../debclean.1:81 ../cvs-debrelease.1:61 ../uscan.1:351 ../grep-excuses.1:18 ../dscverify.1:23 ../debrelease.1:87 ../debc.1:82 ../uupdate.1:79 ../dpkg-depcheck.1:96
 msgid ""
 "Do not read any configuration files.  This can only be used as the first "
 "option given on the command-line."
 msgstr ""
 
 # type: TP
-#: ../debi.1:93 ../debchange.1:194 ../debuild.1:255 ../devscripts.conf.5:42 ../debclean.1:97 ../debrelease.1:104 ../debc.1:91
+#: ../debi.1:93 ../debchange.1:291 ../debuild.1:256 ../devscripts.conf.5:42 ../debclean.1:97 ../debrelease.1:104 ../debc.1:91
 #, no-wrap
 msgid "B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL>, B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>"
 msgstr ""
 
 # type: Plain text
-#: ../debi.1:100 ../debchange.1:201 ../debuild.1:262 ../debclean.1:104 ../debrelease.1:111 ../debc.1:98
+#: ../debi.1:100 ../debchange.1:298 ../debuild.1:263 ../debclean.1:104 ../debrelease.1:111 ../debc.1:98
 msgid ""
 "See the above section \"Directory name checking\" for an explanation of "
 "these variables.  Note that these are package-wide configuration variables, "
@@ -408,6 +406,7 @@ msgid ""
 "extensively modified by Julian Gilbey E<lt>jdg@debian.orgE<gt>."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../debchange.1:1
 #, no-wrap
@@ -432,14 +431,15 @@ msgid "B<dch> [I<options>] [I<text> ...]"
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:26
+#: ../debchange.1:29
 msgid ""
 "B<debchange> or its alias B<dch> will add a new comment line to the Debian "
 "changelog in the current source tree.  This command must be run from within "
 "that tree.  If the text of the change is given on the commandline, "
 "B<debchange> will run in batch mode and simply add the text, with line "
-"breaks as necessary, at the appropriate place in I<debian/changelog>.  If no "
-"text is specified then B<debchange> will run the editor as determined by "
+"breaks as necessary, at the appropriate place in I<debian/changelog> (or the "
+"changelog specified by options, as described below).  If no text is "
+"specified then B<debchange> will run the editor as determined by "
 "B<sensible-editor> for you to edit the file.  (The environment variables "
 "B<VISUAL> and B<EDITOR> are used in this order to determine which editor to "
 "use.)  Editors which understand the I<+n> option for starting the editing on "
@@ -448,11 +448,13 @@ msgid ""
 "B<debchange> will exit without touching the existing changelog.  B<Note that "
 "the changelog is assumed to be encoded with the UTF-8 encoding.  If it is "
 "not, problems may occur.> Please see the B<iconv>(1) manpage to find out how "
-"to convert changelogs from legacy encodings."
+"to convert changelogs from legacy encodings.  Finally, a changelog or "
+"debian/NEWS file can be created from scratch using the B<--create> option "
+"described below."
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:39
+#: ../debchange.1:42
 msgid ""
 "B<debchange> also supports automatically producing bug-closing changelog "
 "entries, using the B<--closes> option.  This will usually query the BTS, the "
@@ -467,25 +469,39 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:51
+#: ../debchange.1:49
 msgid ""
-"At most one of B<--append>, B<--increment> and B<--newversion> may be "
-"specified as listed below.  If no options are specified, B<dch> will look "
-"for an appropriate B<dupload>(1)  or B<dput>(1) log file in the parent "
-"directory to determine whether this version of the package has been uploaded "
-"successfully.  It will behave as if B<--increment> had been specified if a "
-"successful upload has been logged and as if B<--append> had been specified "
-"otherwise.  A warning will be issued if the log file is found but a "
-"successful upload is not recorded.  This may be because the previous upload "
-"was performed with a version of B<dupload> prior to 2.1 or because the "
-"upload failed."
+"At most one of B<--append>, B<--increment>, B<--edit>, B<--release>, and "
+"B<--newversion> may be specified as listed below. If no options are "
+"specified, B<debchange> will use heuristics to guess whether or not the "
+"package has been successfully released, and behave as if B<--increment> had "
+"been specified if the package has been released, or otherwise as if "
+"B<--append> has been specified."
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:68
+#: ../debchange.1:64
 msgid ""
-"If B<--increment> or B<--newversion> is used, the name and email for the new "
-"version will be determined as follows.  If the environment variable "
+"Two different sets of heuristics can be used, as controlled by the "
+"B<--release-heuristic> option or the DEBCHANGE_RELEASE_HEURISTIC "
+"configuration variable. The default \"log\" heuristic determines if a "
+"package has been released by looking for an appropriate B<dupload>(1) or "
+"B<dput>(1) log file in the parent directory. A warning will be issued if the "
+"log file is found but a successful upload is not recorded. This may be "
+"because the previous upload was performed with a version of B<dupload> prior "
+"to 2.1 or because the upload failed. The alternate \"changelog\" heuristic "
+"assumes the package has been released unless its changelog contains "
+"\"UNRELEASED\" in the distribution field. If this heuristic is enabled then "
+"the distribution will default to \"UNRELEASED\" in new changelog "
+"entries. This can be useful if a package can be released by different "
+"maintainers, or if you do not keep the upload logs."
+msgstr ""
+
+# type: Plain text
+#: ../debchange.1:81
+msgid ""
+"If either B<--increment> or B<--newversion> is used, the name and email for "
+"the new version will be determined as follows.  If the environment variable "
 "B<DEBFULLNAME> is set, this will be used for the maintainer full name.  If "
 "the environment variable B<DEBEMAIL> is set, this will be used for the email "
 "address.  If this variable has the form \"name E<lt>emailE<gt>\", then the "
@@ -502,7 +518,24 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:74
+#: ../debchange.1:94
+msgid ""
+"Support is included for changelogs that record changes by multiple "
+"co-maintainers of a package. If an entry is appended to the current "
+"version's entries, and the maintainer is different from the maintainer who "
+"is listed as having done the previous entries, then lines will be added to "
+"the changelog to tell which maintainers made which changes. Currently only "
+"one of the several such styles of recording this information is supported, "
+"in which the name of the maintainer who made a set of changes appears on a "
+"line before the changes, inside square brackets. This can be switched on and "
+"off using the B<--[no]multimaint> option or the DEBCHANGE_MULTIMAINT "
+"configuration file option; the default is to enable it.  Note that if an "
+"entry has already been marked in this way, then this option will be silently "
+"ignored."
+msgstr ""
+
+# type: Plain text
+#: ../debchange.1:100
 msgid ""
 "If the directory name of the source tree has the form I<package>-I<version>, "
 "then B<debchange> will also attempt to rename it if the (upstream) version "
@@ -511,7 +544,15 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:85
+#: ../debchange.1:104
+msgid ""
+"If B<--force-bad-version> is used, debchange will not stop if the new "
+"version is less than the current one.  This is especially useful while doing "
+"backports."
+msgstr ""
+
+# type: Plain text
+#: ../debchange.1:115
 msgid ""
 "In common with several other scripts in the B<devscripts> package, "
 "B<debchange> will climb the directory tree until it finds a "
@@ -524,41 +565,49 @@ msgid ""
 "B<--check-dirname-level> and B<--check-dirname-regex>."
 msgstr ""
 
-# type: TP
-#: ../debchange.1:111
-#, no-wrap
-msgid "B<--increment>, B<-i>"
-msgstr ""
-
 # type: Plain text
-#: ../debchange.1:118
+#: ../debchange.1:144
 msgid ""
-"Increment either the Debian release number or, if this is a native Debian "
-"package, the version number.  This creates a new section at the beginning of "
-"the changelog with appropriate headers and footers.  Also, if this is a new "
-"version of a native Debian package, the directory name is changed to reflect "
-"this."
+"The default changelog to be edited is I<debian/changelog>; however, this can "
+"be changed using the B<--changelog> or B<--news> options or the CHANGELOG "
+"environment variable, as described below."
 msgstr ""
 
 # type: TP
-#: ../debchange.1:118
+#: ../debchange.1:145
 #, no-wrap
 msgid "B<--append>, B<-a>"
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:121
+#: ../debchange.1:148
 msgid "Add a new changelog entry at the end of the current version's entries."
 msgstr ""
 
 # type: TP
-#: ../debchange.1:121
+#: ../debchange.1:148
+#, no-wrap
+msgid "B<--increment>, B<-i>"
+msgstr ""
+
+# type: Plain text
+#: ../debchange.1:155
+msgid ""
+"Increment either the final component of the Debian release number or, if "
+"this is a native Debian package, the version number.  This creates a new "
+"section at the beginning of the changelog with appropriate headers and "
+"footers.  Also, if this is a new version of a native Debian package, the "
+"directory name is changed to reflect this."
+msgstr ""
+
+# type: TP
+#: ../debchange.1:155
 #, no-wrap
 msgid "B<--newversion >I<version>, B<-v >I<version>"
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:127
+#: ../debchange.1:161
 msgid ""
 "This specifies the version number (including the Debian release part)  "
 "explicitly and behaves as the B<--increment> option in other respects.  It "
@@ -567,13 +616,98 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../debchange.1:127
+#: ../debchange.1:161
+#, no-wrap
+msgid "B<--edit>, B<-e>"
+msgstr ""
+
+# type: Plain text
+#: ../debchange.1:164
+msgid "Update the changelog timestamp, and start an editor."
+msgstr ""
+
+# type: TP
+#: ../debchange.1:164
+#, no-wrap
+msgid "B<--release>, B<-r>"
+msgstr ""
+
+# type: Plain text
+#: ../debchange.1:169
+msgid ""
+"Update the changelog timestamp. If the distribution is set to "
+"\"UNRELEASED\", change it to unstable (or another distribution as specified "
+"by B<--distribution>)."
+msgstr ""
+
+# type: TP
+#: ../debchange.1:169
+#, no-wrap
+msgid "B<--create>"
+msgstr ""
+
+# type: Plain text
+#: ../debchange.1:182
+msgid ""
+"This will create a new I<debian/changelog> file (or I<debian/NEWS> if the "
+"B<--news> option is used).  You must be in the top-level directory to use "
+"this; no directory name checking will be performed.  The package name and "
+"version can either be specified using the B<--package> and B<--newversion> "
+"options, determined from the directory name using the B<--fromdirname> "
+"option or entered manually into the generated changelog file.  The "
+"maintainer name is determined from the environment if this is possible, and "
+"the distribution is specified either using the B<--distribution> option or "
+"in the generated changelog file."
+msgstr ""
+
+# type: TP
+#: ../debchange.1:182 ../uscan.1:310
+#, no-wrap
+msgid "B<--package> I<package>"
+msgstr ""
+
+# type: Plain text
+#: ../debchange.1:186
+msgid ""
+"This specifies the package name to be used in the new changelog; this may "
+"only be used in conjunction with the B<--create> option."
+msgstr ""
+
+# type: TP
+#: ../debchange.1:186
+#, no-wrap
+msgid "B<--nmu>, B<-n>"
+msgstr ""
+
+# type: Plain text
+#: ../debchange.1:191
+msgid ""
+"Increment the Debian release number for a non-maintainer upload by either "
+"appending a \".1\" to a non-NMU version number or by incrementing an NMU "
+"version number."
+msgstr ""
+
+# type: TP
+#: ../debchange.1:191
+#, no-wrap
+msgid "B<--force-bad-version>, B<-b>"
+msgstr ""
+
+# type: Plain text
+#: ../debchange.1:195
+msgid ""
+"Force a version number to be less than the current one (e.g., when "
+"backporting)."
+msgstr ""
+
+# type: TP
+#: ../debchange.1:195
 #, no-wrap
 msgid "B<--fromdirname>, B<-d>"
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:137
+#: ../debchange.1:205
 msgid ""
 "This will take the upstream version number from the directory name, which "
 "should be of the form I<package>-I<version>.  If the upstream version number "
@@ -585,13 +719,13 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../debchange.1:137
+#: ../debchange.1:205
 #, no-wrap
-msgid "B<--closes>I<nnnnn,[nnnnn,...]>"
+msgid "B<--closes>I< nnnnn,[nnnnn,...]>"
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:143
+#: ../debchange.1:211
 msgid ""
 "Add changelog entries to close the specified bug numbers.  Also invoke the "
 "editor after adding these entries.  Will generate warnings if the BTS cannot "
@@ -600,24 +734,24 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../debchange.1:143
+#: ../debchange.1:211
 #, no-wrap
 msgid "B<--[no]query>"
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:146
+#: ../debchange.1:214
 msgid "Should we attempt to query the BTS when generating closes entries?"
 msgstr ""
 
 # type: TP
-#: ../debchange.1:146
+#: ../debchange.1:214
 #, no-wrap
 msgid "B<--preserve>, B<-p>"
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:151
+#: ../debchange.1:219
 msgid ""
 "Preserve the source tree directory name if the upstream version number (or "
 "the version number of a Debian native package) changes.  See also the "
@@ -625,135 +759,252 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../debchange.1:151
+#: ../debchange.1:219
 #, no-wrap
 msgid "B<--no-preserve>"
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:154
+#: ../debchange.1:222
 msgid "Do not preserve the source tree directory name (default)."
 msgstr ""
 
 # type: TP
-#: ../debchange.1:154
+#: ../debchange.1:222
 #, no-wrap
 msgid "B<--distribution >I<dist>, B<-D >I<dist>"
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:158
+#: ../debchange.1:226
 msgid ""
 "Use the specified distribution in the new changelog entry, if any, instead "
 "of using the previous changelog entry's distribution."
 msgstr ""
 
 # type: TP
-#: ../debchange.1:158
+#: ../debchange.1:226
 #, no-wrap
 msgid "B<--urgency >I<urgency>, B<-u >I<urgency>"
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:162
+#: ../debchange.1:230
 msgid ""
 "Use the specified urgency in the new changelog entry, if any, instead of "
 "using the default \"low\"."
 msgstr ""
 
 # type: TP
-#: ../debchange.1:174 ../debdiff.1:108 ../debsign.1:82 ../wnpp-alert.1:13 ../dscverify.1:23 ../debrelease.1:87 ../checkbashisms.1:15 ../uupdate.1:79 ../rc-alert.1:13
+#: ../debchange.1:230
+#, no-wrap
+msgid "B<--changelog >I<file>, B<-c >I<file>"
+msgstr ""
+
+# type: Plain text
+#: ../debchange.1:236
+msgid ""
+"This will edit the changelog I<file> instead of the standard "
+"I<debian/changelog>.  This option overrides any CHANGELOG environment "
+"variable setting.  Also, no directory traversing or checking will be "
+"performed when this option is used."
+msgstr ""
+
+# type: TP
+#: ../debchange.1:236
+#, no-wrap
+msgid "B<--news>"
+msgstr ""
+
+# type: Plain text
+#: ../debchange.1:241
+msgid ""
+"This will edit I<debian/NEWS> instead of the regular changelog.  Directory "
+"searching will be performed.  Cannot be used together with B<--changelog>."
+msgstr ""
+
+# type: TP
+#: ../debchange.1:241
+#, no-wrap
+msgid "B<--[no]multimaint>"
+msgstr ""
+
+# type: Plain text
+#: ../debchange.1:246
+msgid ""
+"Should we indicate that parts of a changelog entry have been made by "
+"different maintainers? Default is yes; see the discussion above and also the "
+"DEBCHANGE_MULTIMAINT configuration file option below."
+msgstr ""
+
+# type: TP
+#: ../debchange.1:246
+#, no-wrap
+msgid "B<--maintmaint>, B<-m>"
+msgstr ""
+
+# type: Plain text
+#: ../debchange.1:254
+msgid ""
+"Do not modify the maintainer details previously listed in the changelog.  "
+"This is useful particularly for sponsors wanting to automatically add a "
+"sponsorship message without disrupting the other changelog details.  Note "
+"that there may be some interesting interactions if multi-maintainer mode is "
+"in use; you will probably wish to check the changelog manually before "
+"uploading it in such cases."
+msgstr ""
+
+# type: TP
+#: ../debchange.1:266
+#, no-wrap
+msgid "B<--release-heuristic> I<log|changelog>"
+msgstr ""
+
+# type: Plain text
+#: ../debchange.1:271
+msgid ""
+"Controls how B<debchange> determines if a package has been released, when "
+"deciding whether to create a new changelog entry or append to an existing "
+"changelog entry."
+msgstr ""
+
+# type: TP
+#: ../debchange.1:271 ../debdiff.1:108 ../debsign.1:87 ../wnpp-alert.1:13 ../dscverify.1:23 ../debrelease.1:87 ../checkbashisms.1:15 ../uupdate.1:79 ../rc-alert.1:21
 #, no-wrap
 msgid "B<--help>, B<-h>"
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:177 ../debsign.1:85 ../debclean.1:84 ../dscverify.1:26 ../debrelease.1:90 ../uupdate.1:82
+#: ../debchange.1:274 ../debsign.1:90 ../debclean.1:84 ../dscverify.1:26 ../debrelease.1:90 ../uupdate.1:82
 msgid "Display a help message and exit successfully."
 msgstr ""
 
 # type: TP
-#: ../debchange.1:177 ../debsign.1:85 ../debclean.1:84 ../uscan.1:239 ../grep-excuses.1:21 ../dscverify.1:26 ../debrelease.1:90 ../uupdate.1:82 ../plotchangelog.1:95
+#: ../debchange.1:274 ../debsign.1:90 ../debclean.1:84 ../uscan.1:354 ../grep-excuses.1:21 ../dscverify.1:26 ../debrelease.1:90 ../uupdate.1:82 ../plotchangelog.1:95
 #, no-wrap
 msgid "B<--version>"
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:180 ../debsign.1:88 ../debclean.1:87 ../dscverify.1:29 ../debrelease.1:93 ../uupdate.1:85
+#: ../debchange.1:277 ../debsign.1:93 ../debclean.1:87 ../dscverify.1:29 ../debrelease.1:93 ../uupdate.1:85
 msgid "Display version and copyright information and exit successfully."
 msgstr ""
 
 # type: TP
-#: ../debchange.1:186
+#: ../debchange.1:283
 #, no-wrap
 msgid "B<DEBCHANGE_PRESERVE>"
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:190
+#: ../debchange.1:287
 msgid ""
 "If this is set to I<yes>, then it is the same as the B<--preserve> command "
 "line parameter being used."
 msgstr ""
 
 # type: TP
-#: ../debchange.1:190
+#: ../debchange.1:287
 #, no-wrap
 msgid "B<DEBCHANGE_QUERY_BTS>"
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:194
+#: ../debchange.1:291
 msgid ""
 "If this is set to I<no>, then it is the same as the B<--noquery> command "
 "line parameter being used."
 msgstr ""
 
+# type: TP
+#: ../debchange.1:298
+#, no-wrap
+msgid "B<DEBCHANGE_RELEASE_HEURISTIC>"
+msgstr ""
+
+# type: Plain text
+#: ../debchange.1:303
+msgid ""
+"Controls how B<debchange> determines if a package has been released, when "
+"deciding whether to create a new changelog entry or append to an existing "
+"changelog entry. Can be either \"log\" or \"changelog\"."
+msgstr ""
+
+# type: TP
+#: ../debchange.1:303
+#, no-wrap
+msgid "B<DEBCHANGE_MULTIMAINT>"
+msgstr ""
+
+# type: Plain text
+#: ../debchange.1:308
+msgid ""
+"If set to \"no\", B<debchange> will not introduce multiple-maintainer "
+"distinctions when a different maintainer appends an entry to an existing "
+"changelog.  See the discussion above.  Default is \"yes\"."
+msgstr ""
+
 # type: SH
-#: ../debchange.1:201
+#: ../debchange.1:308
 #, no-wrap
 msgid "ENVIRONMENT"
 msgstr ""
 
 # type: TP
-#: ../debchange.1:202
+#: ../debchange.1:309
 #, no-wrap
 msgid "B<DEBEMAIL>, B<EMAIL>, B<DEBFULLNAME>"
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:205
+#: ../debchange.1:312
 msgid "See the above description of the use of these environment variables."
 msgstr ""
 
 # type: TP
-#: ../debchange.1:205
+#: ../debchange.1:312
+#, no-wrap
+msgid "B<CHANGELOG>"
+msgstr ""
+
+# type: Plain text
+#: ../debchange.1:318
+msgid ""
+"This variable specifies the changelog to edit in place of "
+"I<debian/changelog>.  No directory traversal or checking is performed when "
+"this variable is set.  This variable is overridden by the B<--changelog> "
+"command-line setting."
+msgstr ""
+
+# type: TP
+#: ../debchange.1:318
 #, no-wrap
 msgid "B<VISUAL>, B<EDITOR>"
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:209
+#: ../debchange.1:322
 msgid ""
 "These environment variables (in this order) determine the editor used by "
 "B<sensible-editor>."
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:216
+#: ../debchange.1:329
 msgid ""
 "B<debclean>(1), B<dupload>(1), B<dput>(1), B<debc>(1)  and "
 "B<devscripts.conf>(5)."
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:219
+#: ../debchange.1:332
 msgid ""
 "The original author was Christoph Lameter E<lt>clameter@debian.orgE<gt>.  "
 "Many substantial changes and improvements were made by Julian Gilbey "
 "E<lt>jdg@debian.orgE<gt>."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../cvs-debi.1:1
 #, no-wrap
@@ -846,7 +1097,7 @@ msgstr ""
 # type: TP
 #: ../cvs-debi.1:50 ../cvs-debrelease.1:48 ../cvs-debc.1:46
 #, no-wrap
-msgid "B<-RE<lt>root directoryE<gt>>"
+msgid "B<-RE<lt>root\\ directoryE<gt>>"
 msgstr ""
 
 # type: Plain text
@@ -889,6 +1140,7 @@ msgid ""
 "been combined into this program by Julian Gilbey."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../debdiff.1:1
 #, no-wrap
@@ -925,13 +1177,13 @@ msgstr ""
 # type: Plain text
 #: ../debdiff.1:22
 msgid ""
-"B<debdiff> takes the names of two Debian package files (I<.deb>s) on the "
-"command line and compares their contents (considering only the files in the "
-"main package, not the maintenance scripts).  It shows which files have been "
-"introduced and which removed between the two package files, and is therefore "
-"useful for spotting files which may have been inadvertently lost between "
-"revisions of the package.  It also compares the control files of the two "
-"packages using the B<wdiff> program."
+"B<debdiff> takes the names of two Debian package files (I<.deb>s or "
+"I<.udeb>s) on the command line and compares their contents (considering only "
+"the files in the main package, not the maintenance scripts).  It shows which "
+"files have been introduced and which removed between the two package files, "
+"and is therefore useful for spotting files which may have been inadvertently "
+"lost between revisions of the package.  It also compares the control files "
+"of the two packages using the B<wdiff> program."
 msgstr ""
 
 # type: Plain text
@@ -1109,23 +1361,34 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../debdiff.1:111 ../wnpp-alert.1:16 ../checkbashisms.1:18 ../rc-alert.1:16
+#: ../debdiff.1:111 ../wnpp-alert.1:16 ../checkbashisms.1:18 ../rc-alert.1:24
 msgid "Show a summary of options."
 msgstr ""
 
 # type: TP
-#: ../debdiff.1:111 ../wnpp-alert.1:16 ../checkbashisms.1:18 ../rc-alert.1:16
+#: ../debdiff.1:111 ../wnpp-alert.1:16 ../checkbashisms.1:18 ../rc-alert.1:24
 #, no-wrap
 msgid "B<--version>, B<-v>"
 msgstr ""
 
 # type: Plain text
-#: ../debdiff.1:114 ../wnpp-alert.1:19 ../grep-excuses.1:24 ../tagpending.1:29 ../checkbashisms.1:21 ../rc-alert.1:19
+#: ../debdiff.1:114 ../wnpp-alert.1:19 ../grep-excuses.1:24 ../tagpending.1:29 ../checkbashisms.1:21 ../rc-alert.1:27
 msgid "Show version and copyright information."
 msgstr ""
 
+# type: TP
+#: ../debdiff.1:114
+#, no-wrap
+msgid "B<--quiet>, B<-q>"
+msgstr ""
+
 # type: Plain text
-#: ../debdiff.1:120
+#: ../debdiff.1:117
+msgid "Be quiet if no differences were found."
+msgstr ""
+
+# type: Plain text
+#: ../debdiff.1:123
 msgid ""
 "The two configuration files I</etc/devscripts.conf> and I<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  Command "
@@ -1135,77 +1398,80 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../debdiff.1:120
+#: ../debdiff.1:123
 #, no-wrap
 msgid "B<DEBDIFF_DIRS>"
 msgstr ""
 
 # type: Plain text
-#: ../debdiff.1:124
+#: ../debdiff.1:127
 msgid ""
 "If this is set to I<yes>, then it is the same as the B<--dirs> command line "
 "parameter being used."
 msgstr ""
 
 # type: TP
-#: ../debdiff.1:124
+#: ../debdiff.1:127
 #, no-wrap
 msgid "B<DEBDIFF_CONTROL>"
 msgstr ""
 
 # type: Plain text
-#: ../debdiff.1:129
+#: ../debdiff.1:132
 msgid ""
 "If this is set to I<no>, then it is the same as the B<--nocontrol> command "
 "line parameter being used.  The default is I<yes>."
 msgstr ""
 
 # type: TP
-#: ../debdiff.1:129
+#: ../debdiff.1:132
 #, no-wrap
 msgid "B<DEBDIFF_SHOW_MOVED>"
 msgstr ""
 
 # type: Plain text
-#: ../debdiff.1:133
+#: ../debdiff.1:136
 msgid ""
 "If this is set to I<yes>, then it is the same as the B<--show-moved> command "
 "line parameter being used."
 msgstr ""
 
 # type: TP
-#: ../debdiff.1:133
+#: ../debdiff.1:136
 #, no-wrap
 msgid "B<DEBDIFF_WDIFF_OPT>"
 msgstr ""
 
 # type: Plain text
-#: ../debdiff.1:137
+#: ../debdiff.1:140
 msgid ""
 "This option will be passed to B<wdiff>; it should be one of B<-p>, B<-l> or "
 "B<-t>."
 msgstr ""
 
 # type: SH
-#: ../debdiff.1:137 ../checkbashisms.1:21
+#: ../debdiff.1:140 ../checkbashisms.1:21
 #, no-wrap
 msgid "EXIT VALUES"
 msgstr ""
 
 # type: Plain text
-#: ../debdiff.1:140
+#: ../debdiff.1:146
 msgid ""
-"Normally the exit value will be 0.  If there is some fatal error, the exit "
-"code will be non-zero."
+"Normally the exit value will be 0 if no differences are reported and 1 if "
+"any are reported.  If there is some fatal error, the exit code will be "
+"non-zero, and will depend upon the type of error encountered: if it was an "
+"external error, then it will be the exit code of that program, else it "
+"should be 255."
 msgstr ""
 
 # type: Plain text
-#: ../debdiff.1:146
+#: ../debdiff.1:152
 msgid "B<dpkg-deb>(1), B<wdiff>(1), B<interdiff>(1)  and B<devscripts.conf>(5)."
 msgstr ""
 
 # type: Plain text
-#: ../debdiff.1:151
+#: ../debdiff.1:157
 msgid ""
 "B<debdiff> was originally written as a shell script by Yann Dirson "
 "E<lt>dirson@debian.orgE<gt> and rewritten in Perl with many more features by "
@@ -1214,6 +1480,7 @@ msgid ""
 "Licence, version 2."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../debsign.1:1
 #, no-wrap
@@ -1227,7 +1494,7 @@ msgstr ""
 
 # type: Plain text
 #: ../debsign.1:6
-msgid "B<debsign> [options] [I<changes-file>|I<dsc-file>]"
+msgid "B<debsign> [options] [I<changes-file>|I<dsc-file>|I<commands-file>]"
 msgstr ""
 
 # type: Plain text
@@ -1243,7 +1510,23 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../debsign.1:31
+#: ../debsign.1:21
+msgid ""
+"If a I<.changes>, I<.dsc> or I<.commands> file is specified, it is signed, "
+"otherwise, I<debian/changelog> is parsed to determine the name of the "
+"I<.changes> file to look for in the parent directory."
+msgstr ""
+
+# type: Plain text
+#: ../debsign.1:25
+msgid ""
+"If a I<.commands> file is specified it is first validated (see the details "
+"at I<ftp://ftp-master.debian.org/pub/UploadQueue/README>), and the name "
+"specified in the Uploader field is used for signing."
+msgstr ""
+
+# type: Plain text
+#: ../debsign.1:36
 msgid ""
 "This utility is useful if a developer must build a package on one machine "
 "where it is unsafe to sign it; they need then only transfer the small "
@@ -1256,20 +1539,20 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../debsign.1:34
+#: ../debsign.1:39
 msgid ""
 "This program can take default settings from the B<devscripts> configuration "
 "files, as described below."
 msgstr ""
 
 # type: TP
-#: ../debsign.1:35
+#: ../debsign.1:40
 #, no-wrap
 msgid "B<-r >[I<username>B<@>]I<remotehost>"
 msgstr ""
 
 # type: Plain text
-#: ../debsign.1:43
+#: ../debsign.1:48
 msgid ""
 "The I<.changes> and I<.dsc> files live on the specified remote host.  In "
 "this case, a I<.changes> file must be explicitly named, with an absolute "
@@ -1279,13 +1562,13 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../debsign.1:43
+#: ../debsign.1:48
 #, no-wrap
 msgid "B<-p>I<progname>"
 msgstr ""
 
 # type: Plain text
-#: ../debsign.1:48
+#: ../debsign.1:53
 msgid ""
 "I<progname> is one of B<pgp> or B<gpg>, and specifies which signing program "
 "is to be called.  The default is B<gpg> if I<~/.gnupg/secring.gpg> exists "
@@ -1293,13 +1576,13 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../debsign.1:48
+#: ../debsign.1:53
 #, no-wrap
 msgid "B<-m>I<maintainer>"
 msgstr ""
 
 # type: Plain text
-#: ../debsign.1:57
+#: ../debsign.1:62
 msgid ""
 "Specify the maintainer name to be used for signing.  (See "
 "B<dpkg-buildpackage>(1) for more information about the differences between "
@@ -1310,96 +1593,97 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../debsign.1:57
+#: ../debsign.1:62
 #, no-wrap
 msgid "B<-e>I<maintainer>"
 msgstr ""
 
 # type: Plain text
-#: ../debsign.1:60
+#: ../debsign.1:65
 msgid "Same as B<-m> but takes precedence over it."
 msgstr ""
 
 # type: TP
-#: ../debsign.1:60
+#: ../debsign.1:65
 #, no-wrap
 msgid "B<-k>I<keyid>"
 msgstr ""
 
 # type: Plain text
-#: ../debsign.1:64
+#: ../debsign.1:69
 msgid ""
 "Specify the key ID to be used for signing; overrides any B<-m> and B<-e> "
 "options."
 msgstr ""
 
 # type: TP
-#: ../debsign.1:64
+#: ../debsign.1:69
 #, no-wrap
 msgid "B<-spgp>, B<-sgpg>"
 msgstr ""
 
 # type: Plain text
-#: ../debsign.1:68
+#: ../debsign.1:73
 msgid ""
 "Whether the signing program is to be called with command line arguments like "
 "those of B<pgp> or B<gpg>."
 msgstr ""
 
 # type: TP
-#: ../debsign.1:94
+#: ../debsign.1:99
 #, no-wrap
 msgid "B<DEBSIGN_PROGRAM>"
 msgstr ""
 
 # type: Plain text
-#: ../debsign.1:97
+#: ../debsign.1:102
 msgid "Setting this is equivalent to giving a B<-p> option."
 msgstr ""
 
 # type: TP
-#: ../debsign.1:97
+#: ../debsign.1:102
 #, no-wrap
 msgid "B<DEBSIGN_SIGNLIKE>"
 msgstr ""
 
 # type: Plain text
-#: ../debsign.1:101
+#: ../debsign.1:106
 msgid ""
 "This must be I<gpg> or I<pgp> and is equivalent to using either B<-sgpg> or "
 "B<-spgp> respectively."
 msgstr ""
 
 # type: TP
-#: ../debsign.1:101
+#: ../debsign.1:106
 #, no-wrap
 msgid "B<DEBSIGN_MAINT>"
 msgstr ""
 
 # type: Plain text
-#: ../debsign.1:104
+#: ../debsign.1:109
 msgid "This is the B<-m> option."
 msgstr ""
 
 # type: TP
-#: ../debsign.1:104
+#: ../debsign.1:109
 #, no-wrap
 msgid "B<DEBSIGN_KEYID>"
 msgstr ""
 
 # type: Plain text
-#: ../debsign.1:107
+#: ../debsign.1:112
 msgid "And this is the B<-k> option."
 msgstr ""
 
 # type: Plain text
-#: ../debsign.1:117
+#: ../debsign.1:122
 msgid ""
 "B<debrsign>(1), B<dpkg-buildpackage>(1), B<dpkg-architecture>(1), "
 "B<debuild>(1), B<md5sum>(1), B<gpg>(1), B<pgp>(1)  and "
 "B<devscripts.conf>(5)."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../debuild.1:1
 #, no-wrap
@@ -1454,7 +1738,7 @@ msgid ""
 "parameters B<binary>, B<binary-arch>, B<binary-indep> and B<clean>, in which "
 "case B<debuild> will attempt to gain root privileges and then run "
 "I<debian/rules> with the given parameters.  A "
-"B<-rootcmd=>I<gain-root-command> or B<-r>I<gain-root-command> option may be "
+"B<--rootcmd=>I<gain-root-command> or B<-r>I<gain-root-command> option may be "
 "used to specify a method of gaining root privileges.  The "
 "I<gain-root-command> is likely to be one of I<fakeroot>, I<sudo> or "
 "I<super>.  See below for further discussion of this point.  Again, the "
@@ -1768,17 +2052,18 @@ msgid "B<DEBUILD_DPKG_BUILDPACKAGE_OPTS>"
 msgstr ""
 
 # type: Plain text
-#: ../debuild.1:222
+#: ../debuild.1:223
 msgid ""
 "These are options which should be passed to the invocation of "
 "B<dpkg-buildpackage>.  They are given before any command-line options.  Due "
 "to issues of shell quoting, if a word containing spaces is required as a "
-"single option, extra quotes will be required.  For example, the config file "
+"single option, extra quotes will be required.  For example, to ensure that "
+"your own GPG key is always used, even for sponsored uploads, the config file "
 "might contain the line:"
 msgstr ""
 
 # type: Plain text
-#: ../debuild.1:225
+#: ../debuild.1:226
 #, no-wrap
 msgid ""
 "DEBUILD_DPKG_BUILDPACKAGE_OPTS=\"-k'Julian Gilbey E<lt>jdg@debian.orgE<gt>' "
@@ -1786,7 +2071,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../debuild.1:230
+#: ../debuild.1:231
 msgid ""
 "which gives precisely two options.  Without the extra single quotes, "
 "B<dpkg-buildpackage> would reasonably complain that I<Gilbey> is an "
@@ -1794,7 +2079,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../debuild.1:235
+#: ../debuild.1:236
 msgid ""
 "Also, if this option contains any B<-r>, B<-d> or B<-D> options, these will "
 "always be taken account of by B<debuild>.  Note that a B<-r> option in this "
@@ -1802,26 +2087,26 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../debuild.1:235
+#: ../debuild.1:236
 #, no-wrap
 msgid "B<DEBUILD_LINTIAN>"
 msgstr ""
 
 # type: Plain text
-#: ../debuild.1:239
+#: ../debuild.1:240
 msgid ""
 "Should we run B<lintian>? If this is set to I<no>, then B<lintian> will not "
 "be run."
 msgstr ""
 
 # type: TP
-#: ../debuild.1:239
+#: ../debuild.1:240
 #, no-wrap
 msgid "B<DEBUILD_LINTIAN_OPTS>"
 msgstr ""
 
 # type: Plain text
-#: ../debuild.1:245
+#: ../debuild.1:246
 msgid ""
 "These are options which should be passed to the invocation of B<lintian>.  "
 "They are given before any command-line options, and the usage of this "
@@ -1829,32 +2114,112 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../debuild.1:245
+#: ../debuild.1:246
 #, no-wrap
 msgid "B<DEBUILD_LINDA>"
 msgstr ""
 
 # type: Plain text
-#: ../debuild.1:249
+#: ../debuild.1:250
 msgid "Should we run B<linda>? If this is set to I<yes>, then B<linda> will be run."
 msgstr ""
 
 # type: TP
-#: ../debuild.1:249
+#: ../debuild.1:250
 #, no-wrap
 msgid "B<DEBUILD_LINDA_OPTS>"
 msgstr ""
 
 # type: Plain text
-#: ../debuild.1:255
+#: ../debuild.1:256
 msgid ""
 "These are options which should be passed to the invocation of B<linda>.  "
 "They are given before any command-line options, and the usage of this "
 "variable is as described for the B<DEBUILD_DPKG_BUILDPACKAGE_OPTS> variable."
 msgstr ""
 
+# type: SH
+#: ../debuild.1:263
+#, no-wrap
+msgid "EXAMPLES"
+msgstr ""
+
+# type: Plain text
+#: ../debuild.1:267
+msgid ""
+"To build your own package, simply run B<debuild> from inside the source "
+"tree.  B<dpkg-buildpackage> options may be given on the command line."
+msgstr ""
+
+# type: Plain text
+#: ../debuild.1:270
+msgid ""
+"The typical command line options to build only the binary package(s)  "
+"without signing the .changes file (or the non-existent .dsc file):"
+msgstr ""
+
+# type: Plain text
+#: ../debuild.1:273
+#, no-wrap
+msgid "debuild -i -us -uc -b\n"
+msgstr ""
+
 # type: Plain text
 #: ../debuild.1:276
+msgid "Change the \"-b\" to \"-S\" to build only a source package."
+msgstr ""
+
+# type: Plain text
+#: ../debuild.1:279
+msgid ""
+"An example using both B<lintian> and B<linda> to check the resulting "
+"packages, and also passing options to them both:"
+msgstr ""
+
+# type: Plain text
+#: ../debuild.1:282
+#, no-wrap
+msgid "debuild --linda -i -tc --lintian-opts -i --linda-opts -i\n"
+msgstr ""
+
+# type: Plain text
+#: ../debuild.1:290
+msgid ""
+"Note the order of options here: the B<debuild> options come first, then the "
+"B<dpkg-buildpackage> ones, then finally the checker options.  (And "
+"B<lintian> is called by default.)  If you find yourself using the same "
+"B<dpkg-buildpackage> options repeatedly, consider using the "
+"DEBUILD_DPKG_BUILDPACKAGE_OPTS configuration file option as described above."
+msgstr ""
+
+# type: Plain text
+#: ../debuild.1:294
+msgid ""
+"To build a package for a sponsored upload, given I<foobar_1.0-1.dsc> and the "
+"respective source files, run something like the following commands:"
+msgstr ""
+
+# type: Plain text
+#: ../debuild.1:299
+#, no-wrap
+msgid ""
+"dpkg-source -x foobar_1.0-1.dsc\n"
+"cd foobar-1.0\n"
+"debuild -k0x12345678\n"
+msgstr ""
+
+# type: Plain text
+#: ../debuild.1:306
+msgid ""
+"where 0x12345678 is replaced by your GPG key ID or other key identifier such "
+"as your email address.  Again, you could also use the "
+"DEBUILD_DPKG_BUILDPACKAGE_OPTS configuration file option as described above "
+"to avoid having to type the B<-k> option each time you do a sponsored "
+"upload."
+msgstr ""
+
+# type: Plain text
+#: ../debuild.1:320
 msgid ""
 "B<dpkg-buildpackage>(1), B<dpkg-checkbuilddeps>(1), B<debsign>(1), "
 "B<fakeroot>(1), B<lintian>(1), B<linda>(1), B<chmod>(1), "
@@ -1863,13 +2228,14 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../debuild.1:279
+#: ../debuild.1:323
 msgid ""
 "The original B<debuild> program was written by Christoph Lameter "
 "E<lt>clameter@debian.orgE<gt>.  The current version has been written by "
 "Julian Gilbey E<lt>jdg@debian.orgE<gt>."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../devscripts.conf.5:1
 #, no-wrap
@@ -1975,6 +2341,7 @@ msgid ""
 "maintainer Julian Gilbey E<lt>jdg@debian.orgE<gt>."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../debclean.1:1
 #, no-wrap
@@ -2057,7 +2424,7 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../debclean.1:81 ../uscan.1:236 ../grep-excuses.1:18 ../plotchangelog.1:92
+#: ../debclean.1:81 ../uscan.1:351 ../grep-excuses.1:18 ../plotchangelog.1:92
 #, no-wrap
 msgid "B<--help>"
 msgstr ""
@@ -2087,6 +2454,7 @@ msgid ""
 "Gilbey E<lt>jdg@debian.orgE<gt>."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../cvs-debrelease.1:1 ../cvs-debc.1:1
 #, no-wrap
@@ -2151,6 +2519,7 @@ msgid ""
 "They have been combined into this program by Julian Gilbey."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../wnpp-alert.1:1
 #, no-wrap
@@ -2188,6 +2557,7 @@ msgid ""
 "package.  It is in the public domain."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../uscan.1:1
 #, no-wrap
@@ -2243,8 +2613,8 @@ msgstr ""
 #: ../uscan.1:33
 #, no-wrap
 msgid ""
-"# format version number, currently 2; this line is compulsory!\n"
-"version=2\n"
+"# format version number, currently 3; this line is compulsory!\n"
+"version=3\n"
 msgstr ""
 
 # type: Plain text
@@ -2267,13 +2637,30 @@ msgstr ""
 #: ../uscan.1:44
 #, no-wrap
 msgid ""
+"# This is the format for an FTP site with regex special characters in\n"
+"# the filename part\n"
+"ftp://ftp.worldforge.org/pub/worldforge/libs/Atlas-C++/transitional/Atlas-C\\e+\\e+-(.*)\\e.tar\\e.gz\n"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:47
+#, no-wrap
+msgid ""
+"# This is the format for an FTP site with directory pattern matching\n"
+"ftp://ftp.nessus.org/pub/nessus/nessus-([\\ed\\e.]+)/src/nessus-core-([\\ed\\e.]+)\\e.tar\\e.gz\n"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:51
+#, no-wrap
+msgid ""
 "# This can be used if you want to override the PASV setting\n"
 "# for a specific site\n"
 "# opts=pasv ftp://.../...\n"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:48
+#: ../uscan.1:55
 #, no-wrap
 msgid ""
 "# This is one format for an HTTP site, which is the same\n"
@@ -2282,7 +2669,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:53
+#: ../uscan.1:60
 #, no-wrap
 msgid ""
 "# This is a variant HTTP format with more possibilities:\n"
@@ -2292,21 +2679,65 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:59
+#: ../uscan.1:65
+#, no-wrap
+msgid ""
+"# If your package is located on sourceforge, use the following format\n"
+"# to automatically use the qa.debian.org redirector, avoiding SF's\n"
+"# difficult mirror system.\n"
+"http://sf.net/aa-project/aalib-(.*)\\e.tar\\e.gz\n"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:70
+#, no-wrap
+msgid ""
+"# This is the format for a site which has funny version numbers;\n"
+"# the parenthesised groups will be joined with dots to make a\n"
+"# sanitised version number\n"
+"http://www.site.com/pub/foobar/foobar_v(\\d+)_(\\d+)\\e.tar\\e.gz\n"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:78
+#, no-wrap
+msgid ""
+"# This is another way of handling site with funny version numbers,\n"
+"# this time using mangling.  (Note that multiple groups will be\n"
+"# concatenated before mangling is performed, and that mangling will\n"
+"# only be performed on the basename version number, not any path\n"
+"# version numbers.)\n"
+"opts=\"uversionmangle=s/^/0.0/\" \\e\n"
+"  "
+"ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/Wine-(.*)\\e.tar\\e.gz\n"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:83
+#, no-wrap
+msgid ""
+"# Similarly, the upstream part of the Debian version number can be\n"
+"# mangled:\n"
+"opts=dversionmangle=s/\\e.dfsg\\e.\\ed+$// \\e\n"
+"  http://some.site.org/some/path/foobar-(.*)\\e.tar\\e.gz\n"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:89
 msgid ""
 "Comment lines may be introduced with a `#' character.  Continuation lines "
 "may be indicated by terminating a line with a backslash character."
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:63
+#: ../uscan.1:93
 msgid ""
-"The first (non-comment) line of the file must begin `version=2'.  This "
+"The first (non-comment) line of the file must begin `version=3'.  This "
 "allows for future extensions without having to change the name of the file."
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:68
+#: ../uscan.1:98
 msgid ""
 "There are two possibilities for the syntax of an HTTP watchfile line, and "
 "only one for an FTP line.  We begin with the common (and simpler)  format.  "
@@ -2315,7 +2746,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:79
+#: ../uscan.1:115
 msgid ""
 "The first field gives the full pattern of URLs being searched for.  In the "
 "case of an FTP site, the directory listing for the requested directory will "
@@ -2325,68 +2756,86 @@ msgid ""
 "and searched for hrefs (links of the form E<lt>a href=...E<gt>) to either "
 "the full URL pattern given, or to the absolute part (everything without the "
 "http://host.name/ part), or to the basename (just the part after the final "
-"`/').  Everything up to the final slash is taken as a verbatim URL."
+"`/').  Everything up to the final slash is taken as a verbatim URL, as long "
+"as there are no parentheses (`(' and ')') in this part of the URL: if it "
+"does, the directory name will be matched in the same way as the final "
+"component of the URL as described below.  (Note that regex metacharacters "
+"such as `+' are regarded literally unless they are in a path component "
+"containing parentheses; see the Atlas-C++ example above.  Also, the "
+"parentheses must match within each path component.)"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:88
+#: ../uscan.1:124
 msgid ""
 "The pattern (after the final slash) is a Perl regexp (see B<perlre>(1) for "
 "details of these).  You need to make the pattern so tight that it matches "
-"only the upstream software you are interested in, and nothing else.  Also, "
+"only the upstream software you are interested in and nothing else.  Also, "
 "the pattern will be anchored at the beginning and at the end, so it must "
 "match the full filename.  (Note that for HTTP URLs, the href may include the "
 "absolute path or full site and path and still be accepted.)  The pattern "
-"must contain a Perl group as explained in the next paragraph."
+"must contain at least one Perl group as explained in the next paragraph."
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:95
+#: ../uscan.1:135
 msgid ""
 "Having got a list of `files' matching the pattern, their version numbers are "
-"extracted by treating the part matching the first Perl regexp group, "
-"demarcated by `(...)', as the version number of the file.  The file versions "
-"are then compared to find the one with the greatest version number, as "
-"determined by B<dpkg --compare-versions>."
+"extracted by treating the part matching the Perl regexp groups, demarcated "
+"by `(...)', joining them with `.' as a separator, and using the result as "
+"the version number of the file.  The version number will then be mangled if "
+"required by the uversionmangle option described below.  Finally, the file "
+"versions are then compared to find the one with the greatest version number, "
+"as determined by B<dpkg --compare-versions>.  Note that if you need Perl "
+"groups which are not to be used in the version number, either use `(?:...)' "
+"or use the uversionmangle option to clean up the mess!"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:104
+#: ../uscan.1:154
 msgid ""
-"The current version can be specified as the second parameter in the "
-"watchfile line.  If this is I<debian> or absent, then the current version "
-"(as determined by I<debian/changelog>) is used.  If the newest version "
-"available is newer than the current version, then it is downloaded into the "
-"parent directory, unless the B<--report> option has been used.  Once the "
+"The current (upstream) version can be specified as the second parameter in "
+"the watchfile line.  If this is I<debian> or absent, then the current Debian "
+"version (as determined by I<debian/changelog>) is used to determine the "
+"current upstream version.  The current upstream version may also be "
+"specified by the command-line option B<--upstream-version>, which specifies "
+"the upstream version number of the currently installed package (i.e., the "
+"Debian version number without epoch and Debian revision).  The upstream "
+"version number will then be mangled using the dversionmangle option if one "
+"is specified, as described below.  If the newest version available is newer "
+"than the current version, then it is downloaded into the parent directory, "
+"unless the B<--report> or --report-status option has been used.  Once the "
 "file has been downloaded, then a symlink to the file is made from "
 "I<E<lt>packageE<gt>_E<lt>versionE<gt>.orig.tar.gz> if the file has a "
-"I<.tar.gz> or a I<.tgz> suffix."
+"I<.tar.gz> or a I<.tgz> suffix and from "
+"I<E<lt>packageE<gt>_E<lt>versionE<gt>.orig.tar.bz2> if the file has a "
+"I<.tar.bz2> or a I<.tbz> or I<.tbz2> suffix."
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:107
+#: ../uscan.1:157
 msgid ""
 "Finally, if a third parameter is given in the watchfile line, this is taken "
 "as the name of a command, and the command"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:109
+#: ../uscan.1:159
 #, no-wrap
 msgid "    I<command >B<--upstream-version>I< version filename>\n"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:115
+#: ../uscan.1:165
 msgid ""
 "is executed, using either the original file or the symlink name.  A common "
 "such command would be B<uupdate>.  (Note that the calling syntax was "
-"slightly different when using watchfiles without a `version=2' line; there "
+"slightly different when using watchfiles without a `version=...' line; there "
 "the command executed was `command filename version'.)"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:131
+#: ../uscan.1:181
 msgid ""
 "The alternative version of the watchfile syntax for HTTP URLs is as "
 "follows.  The first field is a homepage which should be downloaded and then "
@@ -2405,39 +2854,99 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../uscan.1:131
+#: ../uscan.1:181
 #, no-wrap
 msgid "PER-SITE OPTIONS"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:138
+#: ../uscan.1:187
 msgid ""
-"A watchfile line may be prefixed with \"opts=I<options>\", where I<options> "
-"is a comma-separated list of options.  The only recognised options are "
-"currently I<active> and I<passive> (or I<pasv>), which if used on an FTP "
-"line override the choice of whether to use PASV mode or not, and force the "
-"use of the specified mode for this site."
+"A watchfile line may be prefixed with `opts=I<options>', where I<options> is "
+"a comma-separated list of options.  The whole I<options> string may be "
+"enclosed in double quotes, which is necessary if I<options> contains any "
+"spaces.  The recognised options are as follows:"
+msgstr ""
+
+# type: TP
+#: ../uscan.1:187
+#, no-wrap
+msgid "B<active> and B<passive> (or B<pasv>)"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:152
+#: ../uscan.1:192
+msgid ""
+"If used on an FTP line, these override the choice of whether to use PASV "
+"mode or not, and force the use of the specified mode for this site."
+msgstr ""
+
+# type: TP
+#: ../uscan.1:192
+#, no-wrap
+msgid "B<uversionmangle=>I<rules>"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:198
+msgid ""
+"This is used to mangle the upstream version number as matched by the "
+"ftp://... or http:// rules as follows.  First, the I<rules> string is split "
+"into multiple rules at every `;'.  Then the upstream version number is "
+"mangled by executing the Perl command:"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:200
+#, no-wrap
+msgid "    $version =~ I<rule>;\n"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:205
+msgid ""
+"for each rule.  Thus, suitable rules might be `s/^/0./' to prepend `0.' to "
+"the version number and `s/_/./' to change underscores into periods.  Note "
+"that the I<rules> string may not contain commas; this should not be a "
+"problem."
+msgstr ""
+
+# type: TP
+#: ../uscan.1:205
+#, no-wrap
+msgid "B<dversionmangle=>I<rules>"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:213
+msgid ""
+"This is used to mangle the upstream version number of the currently "
+"installed package in the same way as the B<uversionmangle> option.  Thus, a "
+"suitable rule might be `s/\\e.dfsg\\e.\\ed+$//' to remove a `.dfsg.1' suffix "
+"from the Debian version number, or to handle `.pre6' type version numbers.  "
+"Again, the I<rules> string may not contain commas; this should not be a "
+"problem."
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:228
 msgid ""
 "Similarly to several other scripts in the B<devscripts> package, B<uscan> "
 "explores the requested directory trees looking for I<debian/changelog> and "
 "I<debian/watch> files.  As a safeguard against stray files causing potential "
-"problems, it will examine the name of the parent directory once it finds the "
-"I<debian/changelog> file, and check that the directory name corresponds to "
-"the package name.  It will attempt to download newer versions of the package "
-"in any case, but it will only perform any requested action if the directory "
-"name matches the package name.  Precisely how it does this is controlled by "
-"two configuration file variables DEVSCRIPTS_CHECK_DIRNAME_LEVEL and "
-"DEVSCRIPTS_CHECK_DIRNAME_REGEX, and their corresponding command-line options "
-"B<--check-dirname-level> and B<--check-dirname-regex>."
+"problems, and in order to promote efficiency, it will examine the name of "
+"the parent directory once it finds the I<debian/changelog> file, and check "
+"that the directory name corresponds to the package name.  It will only "
+"attempt to download newer versions of the package and then perform any "
+"requested action if the directory name matches the package name.  Precisely "
+"how it does this is controlled by two configuration file variables "
+"DEVSCRIPTS_CHECK_DIRNAME_LEVEL and DEVSCRIPTS_CHECK_DIRNAME_REGEX, and their "
+"corresponding command-line options B<--check-dirname-level> and "
+"B<--check-dirname-regex>."
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:163
+#: ../uscan.1:239
 msgid ""
 "Only check the directory name if we have had to change directory in our "
 "search for I<debian/changelog>, that is, the directory containing "
@@ -2446,18 +2955,18 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../uscan.1:179
+#: ../uscan.1:255
 #, no-wrap
 msgid "EXAMPLE"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:181
+#: ../uscan.1:257
 msgid "This script will perform a fully automatic upstream update."
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:189
+#: ../uscan.1:265
 #, no-wrap
 msgid ""
 "#!/bin/sh -e\n"
@@ -2469,7 +2978,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:194
+#: ../uscan.1:270
 msgid ""
 "Note that we don't call B<dupload> or B<dput> automatically, as the "
 "maintainer should perform sanity checks on the software before uploading it "
@@ -2477,118 +2986,218 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uscan.1:195
+#: ../uscan.1:271
 #, no-wrap
 msgid "B<--report, --no-download>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:199
-msgid "Only report about newer or absent versions but do not download anything."
+#: ../uscan.1:274
+msgid "Only report about available newer versions but do not download anything."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:199
+#: ../uscan.1:274
 #, no-wrap
-msgid "B<--debug>"
+msgid "B<--report-status>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:202
-msgid "Dump the downloaded web pages to stdout for debugging your watch file."
+#: ../uscan.1:278
+msgid ""
+"Report on the status of all packages, even those which are up-to-date, but "
+"do not download anything."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:202
+#: ../uscan.1:278
 #, no-wrap
 msgid "B<--download>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:205
+#: ../uscan.1:281
 msgid "Report and download.  (This is the default behaviour.)"
 msgstr ""
 
 # type: TP
-#: ../uscan.1:205
+#: ../uscan.1:281
 #, no-wrap
 msgid "B<--pasv>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:208
+#: ../uscan.1:284
 msgid "Force PASV mode for FTP connections."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:208
+#: ../uscan.1:284
 #, no-wrap
 msgid "B<--no-pasv>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:211
+#: ../uscan.1:287
 msgid "Do not use PASV mode for FTP connections."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:211
+#: ../uscan.1:287
+#, no-wrap
+msgid "B<--timeout> I<N>"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:290
+msgid "Set timeout to N seconds (default 20 seconds)."
+msgstr ""
+
+# type: TP
+#: ../uscan.1:290
 #, no-wrap
 msgid "B<--symlink>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:215
+#: ../uscan.1:296
 msgid ""
 "Make orig.tar.gz symlinks to any downloaded files if their extensions are "
-"I<.tar.gz> or I<.tgz>.  (This is the default behaviour.)"
+"I<.tar.gz> or I<.tgz>, and similarly for to orig.tar.bz2 for the suffixes "
+"I<.tar.gz>, I<.tbz> and I<.tbz2>.  (This is the default behaviour.)"
 msgstr ""
 
 # type: TP
-#: ../uscan.1:215 ../uupdate.1:71
+#: ../uscan.1:296
+#, no-wrap
+msgid "B<--rename>"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:301
+msgid ""
+"Instead of symlinking, rename the downloaded files to their Debian "
+"orig.tar.gz names if their extensions are I<.tar.gz> or I<.tgz>, and "
+"similarly for tar.bz2 files."
+msgstr ""
+
+# type: TP
+#: ../uscan.1:301 ../uupdate.1:71
 #, no-wrap
 msgid "B<--no-symlink>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:218
-msgid "Don't make these symlinks."
+#: ../uscan.1:304
+msgid "Don't make these symlinks and don't rename the files."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:218 ../plotchangelog.1:78
+#: ../uscan.1:304
+#, no-wrap
+msgid "B<--dehs>"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:307
+msgid "Use an XML format for output, as required by the DEHS system."
+msgstr ""
+
+# type: TP
+#: ../uscan.1:307
+#, no-wrap
+msgid "B<--no-dehs>"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:310
+msgid "Use the traditional uscan output format.  (This is the default behaviour.)"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:318
+msgid ""
+"Specify the name of the package to check for rather than examining "
+"I<debian/changelog>; this requires the B<--upstream-version> and "
+"B<--watchfile> options as well.  Furthermore, no directory scanning will be "
+"done and nothing will be downloaded.  This option is probably most useful in "
+"conjunction with the DEHS system (and B<--dehs>)."
+msgstr ""
+
+# type: TP
+#: ../uscan.1:318
+#, no-wrap
+msgid "B<--upstream-version> I<upstream-version>"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:323
+msgid ""
+"Specify the current upstream version rather than examine the watchfile or "
+"changelog to determine it.  This is ignored if a directory scan is being "
+"performed and more than one watchfile is found."
+msgstr ""
+
+# type: TP
+#: ../uscan.1:323
+#, no-wrap
+msgid "B<--watchfile> I<watchfile>"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:330
+msgid ""
+"Specify the watchfile rather than perform a directory scan to determine it.  "
+"If this option is used without B<--package>, then B<uscan> must be called "
+"from within the Debian package source tree (so that I<debian/changelog> can "
+"be found simply by stepping up through the tree)."
+msgstr ""
+
+# type: TP
+#: ../uscan.1:330 ../plotchangelog.1:78
 #, no-wrap
 msgid "B<--verbose>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:221
+#: ../uscan.1:333
 msgid "Give verbose output."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:221
+#: ../uscan.1:333
 #, no-wrap
 msgid "B<--no-verbose>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:224
+#: ../uscan.1:336
 msgid "Don't give verbose output.  (This is the default behaviour.)"
 msgstr ""
 
+# type: TP
+#: ../uscan.1:336
+#, no-wrap
+msgid "B<--debug>"
+msgstr ""
+
 # type: Plain text
-#: ../uscan.1:239
+#: ../uscan.1:339
+msgid "Dump the downloaded web pages to stdout for debugging your watch file."
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:354
 msgid "Give brief usage information."
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:242
+#: ../uscan.1:357
 msgid "Display version information."
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:249
+#: ../uscan.1:364
 msgid ""
 "The two configuration files I</etc/devscripts.conf> and I<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  These may "
@@ -2599,26 +3208,26 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uscan.1:249
+#: ../uscan.1:364
 #, no-wrap
 msgid "B<USCAN_DOWNLOAD>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:254
+#: ../uscan.1:369
 msgid ""
 "If this is set to I<no>, then newer upstream files will not be downloaded; "
 "this is equivalent to the B<--report> or B<--no-download> options."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:254
+#: ../uscan.1:369
 #, no-wrap
 msgid "B<USCAN_PASV>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:260
+#: ../uscan.1:375
 msgid ""
 "If this is set to I<yes> or I<no>, this will force FTP connections to use "
 "PASV mode or not to, respectively.  If this is set to I<default>, then "
@@ -2627,39 +3236,55 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uscan.1:260
+#: ../uscan.1:375
 #, no-wrap
 msgid "B<USCAN_SYMLINK>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:265
+#: ../uscan.1:382
 msgid ""
-"If this is set to I<no>, then a pkg_version.orig.tar.gz symlink will not be "
-"made.  This is equivalent to the B<--no-symlink> option."
+"If this is set to I<no>, then a pkg_version.orig.tar.{gz|bz2} symlink will "
+"not be made (equivalent to the B<--no-symlink> option).  If it is set to "
+"I<yes> or I<symlink>, then the symlinks will be made.  If it is set to "
+"I<rename>, then the files are renamed (equivalent to the B<--rename> "
+"option)."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:265
+#: ../uscan.1:382
+#, no-wrap
+msgid "B<USCAN_DEHS_OUTPUT>"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:386
+msgid ""
+"If this is set to I<yes>, then DEHS-style output will be used.  This is "
+"equivalent to the B<--dehs> option."
+msgstr ""
+
+# type: TP
+#: ../uscan.1:386
 #, no-wrap
 msgid "B<USCAN_VERBOSE>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:269
+#: ../uscan.1:390
 msgid ""
 "If this is set to I<yes>, then verbose output will be given.  This is "
 "equivalent to the B<--verbose> option."
 msgstr ""
 
 # type: SH
-#: ../uscan.1:269
+#: ../uscan.1:390
 #, no-wrap
 msgid "EXIT STATUS"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:273
+#: ../uscan.1:394
 msgid ""
 "The exit status gives some indication of whether a newer version was found "
 "or not; one is advised to read the output to determine exactly what happened "
@@ -2667,36 +3292,90 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uscan.1:273
+#: ../uscan.1:394
 #, no-wrap
 msgid "0"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:277
+#: ../uscan.1:398
 msgid ""
 "Either B<--help> or B<--version> was used, or for some watchfile which was "
 "examined, a newer upstream version was located."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:277 ../checkbashisms.1:25
+#: ../uscan.1:398 ../checkbashisms.1:25
 #, no-wrap
 msgid "1"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:281
+#: ../uscan.1:402
 msgid "No newer upstream versions were located for any of the watchfiles examined."
 msgstr ""
 
+# type: SH
+#: ../uscan.1:402
+#, no-wrap
+msgid "HISTORY"
+msgstr ""
+
 # type: Plain text
-#: ../uscan.1:287
+#: ../uscan.1:406
+msgid ""
+"This section briefly describes the backwards-incompatible watchfile features "
+"which have been added in each watchfile version, and the first version of "
+"the B<devscripts> package which understood them."
+msgstr ""
+
+# type: TP
+#: ../uscan.1:406
+#, no-wrap
+msgid "I<Pre-version 2>"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:410
+msgid ""
+"The watchfile syntax was significantly different in those days.  Don't use "
+"it."
+msgstr ""
+
+# type: TP
+#: ../uscan.1:410
+#, no-wrap
+msgid "I<Version 2>"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:414
+msgid ""
+"devscripts version 2.6.90: The first incarnation of the current style of "
+"watchfiles."
+msgstr ""
+
+# type: TP
+#: ../uscan.1:414
+#, no-wrap
+msgid "I<Version 3>"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:419
+msgid ""
+"devscripts version 2.8.12: Introduced the following: correct handling of "
+"regex special characters in the path part, directory/path pattern matching, "
+"version number in several parts, version number mangling."
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:425
 msgid "B<dpkg>(1), B<perlre>(1), B<uupdate>(1)  and B<devscripts.conf>(5)."
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:292
+#: ../uscan.1:430
 msgid ""
 "The original version of B<uscan> was written by Christoph Lameter "
 "E<lt>clameter@debian.orgE<gt>.  Significant improvements, changes and "
@@ -2705,6 +3384,7 @@ msgid ""
 "rewritten in Perl by Julian Gilbey."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../grep-excuses.1:1
 #, no-wrap
@@ -2771,6 +3451,7 @@ msgid ""
 "E<lt>jdg@debian.orgE<gt>."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../tagpending.1:1
 #, no-wrap
@@ -2793,7 +3474,7 @@ msgid ""
 "B<tagpending> looks for and parses debian/changelog and debian/control to "
 "find out what bugs the impending release would close, and sends mail using "
 "B<mail(1)> to B<control@bugs.debian.org> tagging the bugs as pending. It "
-"uses LDAP to look up the bugs marked as pending for that package and "
+"queries the BTS to look up the bugs marked as pending for that package and "
 "excludes those from being re-tagged in the email."
 msgstr ""
 
@@ -2854,6 +3535,7 @@ msgstr ""
 msgid "Joshua Kwan E<lt>joshk@triplehelix.orgE<gt>"
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../dscverify.1:1
 #, no-wrap
@@ -2929,6 +3611,7 @@ msgid ""
 "modifications by Julian Gilbey E<lt>jdg@debian.orgE<gt>."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../debrelease.1:1
 #, no-wrap
@@ -3024,6 +3707,7 @@ msgid ""
 "script by Christoph Lameter E<lt>clameter@debian.orgE<gt>."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../debc.1:1
 #, no-wrap
@@ -3072,6 +3756,7 @@ msgid ""
 "Christoph Lameter E<lt>clameter@debian.orgE<gt>."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../checkbashisms.1:1
 #, no-wrap
@@ -3140,6 +3825,7 @@ msgid ""
 "Julian Gilbey E<lt>jdg@debian.orgE<gt>."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../uupdate.1:1
 #, no-wrap
@@ -3468,6 +4154,7 @@ msgid ""
 "made by Julian Gilbey E<lt>jdg@debian.orgE<gt>."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../rc-alert.1:1
 #, no-wrap
@@ -3498,12 +4185,31 @@ msgid ""
 msgstr ""
 
 # type: Plain text
+#: ../rc-alert.1:17
+msgid ""
+"If the directory I<~/.devscripts_cache> exists or the B<--cache> option is "
+"given, then the (sizable) downloaded list will be cached, and will only be "
+"downloaded again on a second invocation if it has changed."
+msgstr ""
+
+# type: TP
+#: ../rc-alert.1:18
+#, no-wrap
+msgid "B<--cache>"
+msgstr ""
+
+# type: Plain text
 #: ../rc-alert.1:21
+msgid "Force the creation of the I<~/.devscripts_cache> cache directory."
+msgstr ""
+
+# type: Plain text
+#: ../rc-alert.1:29
 msgid "B<popbugs(1)>"
 msgstr ""
 
 # type: Plain text
-#: ../rc-alert.1:23
+#: ../rc-alert.1:31
 msgid ""
 "B<rc-alert> was written by Anthony DeRobertis and modified by Julian Gilbey "
 "E<lt>jdg@debian.orgE<gt> for the devscripts package."
@@ -3837,6 +4543,7 @@ msgid ""
 "conditions.  There is absolutely no warranty for B<dpkg-depcheck>."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../dpkg-genbuilddeps.1:1
 #, no-wrap
@@ -3938,6 +4645,7 @@ msgstr ""
 msgid "B<cvs-buildpackage>(1), B<cvs-debi>(1), B<cvs-debuild>(1)  and B<debc>(1)."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../debpkg.1:1
 #, no-wrap
@@ -3996,6 +4704,7 @@ msgid ""
 "Julian Gilbey E<lt>jdg@debian.orgE<gt>."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../cvs-debuild.1:1
 #, no-wrap
@@ -4097,6 +4806,7 @@ msgstr ""
 msgid "This program was written by Julian Gilbey E<lt>jdg@debian.orgE<gt>."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../plotchangelog.1:1
 #, no-wrap
@@ -4363,6 +5073,7 @@ msgstr ""
 msgid "Joey Hess E<lt>joey@kitenet.netE<gt>"
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../mergechanges.1:1
 #, no-wrap
@@ -4404,6 +5115,7 @@ msgid ""
 "E<lt>jdg@debian.orgE<gt>."
 msgstr ""
 
+#.  -*- nroff -*-
 # type: TH
 #: ../devscripts.1:1
 #, no-wrap

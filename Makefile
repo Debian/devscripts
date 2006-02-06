@@ -36,7 +36,7 @@ MAN5DIR = /usr/share/man/man5
 MAN1DIR_fr = /usr/share/man/fr/man1
 MAN5DIR_fr = /usr/share/man/fr/man5
 
-all: $(SCRIPTS) $(GEN_MAN1S) $(EXAMPLES) $(LIBS) $(CWRAPPERS)
+all: $(SCRIPTS) $(GEN_MAN1S) $(EXAMPLES) $(LIBS) $(CWRAPPERS) translated_manpages
 
 version:
 	rm -f version
@@ -71,13 +71,20 @@ conf.default: conf.default.in version
 	xsltproc --nonet -o $@ \
 	  /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl $<
 
+translated_manpages:
+	cd po4a && po4a --no-backups devscripts-po4a.conf
+
+clean_translated_manpages:
+	# Update the POT/POs and remove the translated man pages
+	cd po4a && po4a --rm-translations --no-backups devscripts-po4a.conf
+
 libvfork.o: libvfork.c
 	$(CC) -fPIC -D_REENTRANT $(CFLAGS) -c $<
 
 libvfork.so.0: libvfork.o
 	$(CC) -shared $< -ldl -lc -Wl,-soname -Wl,libvfork.so.0 -o $@
 
-clean:
+clean: clean_translated_manpages
 	rm -f version conf.default $(SCRIPTS) $(GEN_MAN1S) $(SCRIPT_LIBS) \
 	    $(CWRAPPERS) libvfork.o libvfork.so.0
 
