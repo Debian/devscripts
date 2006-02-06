@@ -3,7 +3,7 @@
 PL_FILES = bts.pl checkbashisms.pl cvs-debuild.pl debchange.pl \
 	debdiff.pl debi.pl debpkg.pl debuild.pl dpkg-depcheck.pl \
 	dscverify.pl grep-excuses.pl plotchangelog.pl rc-alert.pl \
-	debcommit.pl svnpath.pl dd-list.pl
+	debcommit.pl svnpath.pl dd-list.pl rmadison.pl
 
 SH_FILES = cvs-debi.sh cvs-debrelease.sh debclean.sh debrelease.sh \
 	debrsign.sh debsign.sh dpkg-genbuilddeps.sh mergechanges.sh \
