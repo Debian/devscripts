@@ -3,7 +3,7 @@
 PL_FILES = bts.pl checkbashisms.pl cvs-debuild.pl debchange.pl \
 	debdiff.pl debi.pl debpkg.pl debuild.pl dpkg-depcheck.pl \
 	dscverify.pl grep-excuses.pl plotchangelog.pl rc-alert.pl \
-	debcommit.pl svnpath.pl dd-list.pl rmadison.pl
+	debcommit.pl svnpath.pl dd-list.pl rmadison.pl dget.pl
 
 SH_FILES = cvs-debi.sh cvs-debrelease.sh debclean.sh debrelease.sh \
 	debrsign.sh debsign.sh dpkg-genbuilddeps.sh mergechanges.sh \
@@ -19,8 +19,8 @@ CWRAPPERS = debpkg-wrapper
 SCRIPTS = $(PL_FILES:.pl=) $(SH_FILES:.sh=)
 EXAMPLES = conf.default
 
-MAN1S = $(SCRIPTS:=.1) debc.1 cvs-debc.1 devscripts.1 rmadison.1
-GEN_MAN1S = bts.1 svnpath.1 debcommit.1 deb-reversion.1
+MAN1S = $(SCRIPTS:=.1) debc.1 cvs-debc.1 devscripts.1
+GEN_MAN1S = bts.1 svnpath.1 debcommit.1 deb-reversion.1 rmadison.1 dget.1
 MAN5S = devscripts.conf.5
 MANS_fr_DIR = po4a/fr
 MAN1S_fr = $(subst $(MANS_fr_DIR)/,,$(wildcard $(MANS_fr_DIR)/*.1))
