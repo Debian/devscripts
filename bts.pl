@@ -1382,7 +1382,13 @@ sub mailbtsall {
 	# We need to fake the From: line
 	my ($email, $name);
 	if (exists $ENV{'DEBFULLNAME'}) { $name = $ENV{'DEBFULLNAME'}; }
-	if (exists $ENV{'DEBEMAIL'}) { $email = $ENV{'DEBEMAIL'}; }
+	if (exists $ENV{'DEBEMAIL'}) {
+	    $email = $ENV{'DEBEMAIL'};
+	    if ($email =~ /^(.*)\s+<(.*)>$/) {
+		$name ||= $1;
+		$email = $2;
+	    }
+	}
 	if (exists $ENV{'EMAIL'}) {
 	    if ($ENV{'EMAIL'} =~ /^(.*)\s+<(.*)>$/) {
 		$name ||= $1;
