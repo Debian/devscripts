@@ -222,18 +222,24 @@ sub getmessage {
     if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk' ||
 	$prog eq 'tla' || $prog eq 'baz' || $prog eq 'bzr' || $prog eq 'git') {
 	$ret='';
-	my $subcommand;
-	if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk' ||
-	    $prog eq 'bzr' || $prog eq 'git' ) {
-	    $subcommand = 'diff';
+	my @diffcmd;
+
+	if ($prog eq 'tla' || $prog eq 'baz') {
+	    @diffcmd = ($prog, 'file-diff');
+	} elsif ($prog eq 'git') {
+	    @diffcmd = ('git-diff', '--cached');
 	} else {
-	    $subcommand = 'file-diff';
+	    @diffcmd = ($prog, 'diff');
 	}
-	foreach my $line (`$prog $subcommand debian/changelog`) {
-	    next unless $line=~/^\+  /;
-	    $line=~s/^\+  //;
-	    next if $line=~/^\s*\[.*\]\s*$/; # maintainer name
-	    $ret.=$line;
+
+	open CHLOG, '-|', @diffcmd, 'debian/changelog'
+	    or die "Cannot run $diffcmd[0]: $!\n";
+
+	foreach (<CHLOG>) {
+	    next unless /^\+  /;
+	    s/^\+  //;
+	    next if /^\s*\[.*\]\s*$/; # maintainer name
+	    $ret .= $_;
 	}
 	
 	if (! length $ret) {

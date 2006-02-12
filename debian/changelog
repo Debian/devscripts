@@ -3,8 +3,10 @@ devscripts (2.9.13) UNRELEASED; urgency=low
   * Don't include .svn directory in md5sums (Closes: #352273)
   * bts: fix new caching code (thanks to Frank Lichtenheld for this one)
     (Closes: #352476)
+  * debcommit: handle commit messages for git-based setups (Closes:
+    #352004)
 
- -- Julian Gilbey <jdg@debian.org>  Sun, 12 Feb 2006 09:25:22 +0000
+ -- Julian Gilbey <jdg@debian.org>  Sun, 12 Feb 2006 12:24:48 +0000
 
 devscripts (2.9.12) unstable; urgency=low
 
