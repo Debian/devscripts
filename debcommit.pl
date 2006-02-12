@@ -116,7 +116,7 @@ sub getprog {
 	    return "svk";
 	}
 	
-	die "not in a cvs, subversion, arch, bzr, or svk working copy\n";
+	die "not in a cvs, subversion, arch, bzr, git or svk working copy\n";
     }
 }
 
