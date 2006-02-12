@@ -987,6 +987,15 @@ EOF
 	}
     }
 
+    if ($newfile_base =~ /\.(tar\.gz|tgz|tar\.bz2|tbz2?)$/) {
+	my $filetype = `file ../$newfile_base`;
+	$filetype =~ s%^\.\./\Q$newfile_base\E: %%;
+	unless ($filetype =~ /compressed data/) {
+	    warn "$progname warning: ../$newfile_base does not appear to be a compressed file;\nthe file command says: $filetype\nNot processing this file any further!\n";
+	    return 1;
+	}
+    }
+
     if ($newfile_base =~ /\.(tar\.gz|tgz)$/) {
 	if ($symlink eq 'symlink') {
 	    symlink $newfile_base, "../${pkg}_${newversion}.orig.tar.gz";
