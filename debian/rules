@@ -5,7 +5,7 @@
 #export DH_VERBOSE=1
 
 # Clean CVS and .svn dirs when building packages.
-DH_ALWAYS_EXCLUDE=CVS:\.svn
+DH_ALWAYS_EXCLUDE=CVS:.svn
 export DH_ALWAYS_EXCLUDE
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))

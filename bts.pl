@@ -1165,7 +1165,7 @@ sub bts_cache {
     my @oldbugs = bugs_from_thing($tocache);
     
     # download index
-    download($tocache, 1);
+    download($tocache, '', 1);
 
     my %bugs = map { $_ => 1 } bugs_from_thing($tocache);
 
@@ -1189,7 +1189,7 @@ sub bts_cache {
     my $bugcount = 1;
     my $bugtotal = scalar keys %bugs;
     foreach my $bug (keys %bugs) {
-	download($bug, 1, 0, $bugcount, $bugtotal);
+	download($bug, '', 1, 0, $bugcount, $bugtotal);
         sleep $opt_cachedelay;
 	$bugcount++;
     }
@@ -1572,7 +1572,7 @@ sub fold_from_header {
 # live thing as a (non-empty) string
 sub download {
     my $thing=shift;
-    my $thgopts=shift;
+    my $thgopts=shift ||'';
     my $manual=shift;  # true="bts cache", false="bts show/bug"
     my $mboxing=shift;  # true="bts --mbox show/bugs", and only if $manual=0
     my $bug_current=shift;  # current bug being downloaded if caching
@@ -1878,7 +1878,7 @@ sub deletecache {
 # Given a thing, returns the filename for it in the cache.
 sub cachefile {
     my $thing=shift;
-    my $thgopts=shift;
+    my $thgopts=shift ||'';
     if ($thing eq '') { die "bts: cachefile given empty argument\n"; }
     if ($thing =~ /bugs.css$/) { return $cachedir."bugs.css" }
     $thing =~ s/^src:/src_/;
