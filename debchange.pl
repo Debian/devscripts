@@ -6,7 +6,7 @@
 # When creating a new changelog section, if either of the environment
 # variables DEBEMAIL or EMAIL is set, debchange will use this as the
 # uploader's email address (with the former taking precedence), and if
-# DEBFULLNAME is set, it will use this as the uploader's full name.
+# DEBFULLNAME or NAME is set, it will use this as the uploader's full name.
 # Otherwise, it will take the standard values for the current user or,
 # failing that, just copy the values from the previous changelog entry.
 #
@@ -477,6 +477,7 @@ if ( -e "$changelog_path.dch" ) {
 
 # Check, sanitise and decode these environment variables
 check_env_utf8('DEBFULLNAME');
+check_env_utf8('NAME');
 check_env_utf8('DEBEMAIL');
 check_env_utf8('EMAIL');
 
@@ -495,6 +496,8 @@ if (! exists $env{'DEBEMAIL'} or ! exists $env{'DEBFULLNAME'}) {
 if (! $opt_m) {
     if (exists $env{'DEBFULLNAME'}) {
 	$MAINTAINER = $env{'DEBFULLNAME'};
+    } elsif (exists $env{'NAME'}) {
+	$MAINTAINER = $env{'NAME'};
     } else {
 	my @pw = getpwuid $<;
 	if (defined($pw[6])) {

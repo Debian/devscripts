@@ -65,19 +65,20 @@ upload logs.
 If either \fB\-\-increment\fR or \fB\-\-newversion\fR is used, the
 name and email for the new version will be determined as follows.  If
 the environment variable \fBDEBFULLNAME\fR is set, this will be used
-for the maintainer full name.  If the environment variable
-\fBDEBEMAIL\fR is set, this will be used for the email address.  If
-this variable has the form "name <email>", then the maintainer name
-will also be taken from here if \fBDEBFULLNAME\fR is not set.  If this
-variable is not set, the same test is performed on the environment
-variable \fBEMAIL\fR.  Next, if the full name has still not been
-determined, then use \fBgetpwuid\fR(3) to determine the name from the
-password file.  If this fails, use the previous changelog entry.  For
-the email address, if it has not been set from \fBDEBEMAIL\fR or
-\fBEMAIL\fR, then look in \fI/etc/mailname\fR, then attempt to build
-it from the username and FQDN, otherwise use the email address in the
-previous changelog entry.  In other words, it's a good idea to set
-\fBDEBEMAIL\fR and \fBDEBFULLNAME\fR when using this script.
+for the maintainer full name; if not, then \fBNAME\fR will be checked.
+If the environment variable \fBDEBEMAIL\fR is set, this will be used
+for the email address.  If this variable has the form "name <email>",
+then the maintainer name will also be taken from here if neither
+\fBDEBFULLNAME\fR nor \fBNAME\fR is set.  If this variable is not set,
+the same test is performed on the environment variable \fBEMAIL\fR.
+Next, if the full name has still not been determined, then use
+\fBgetpwuid\fR(3) to determine the name from the password file.  If
+this fails, use the previous changelog entry.  For the email address,
+if it has not been set from \fBDEBEMAIL\fR or \fBEMAIL\fR, then look
+in \fI/etc/mailname\fR, then attempt to build it from the username and
+FQDN, otherwise use the email address in the previous changelog entry.
+In other words, it's a good idea to set \fBDEBEMAIL\fR and
+\fBDEBFULLNAME\fR when using this script.
 .PP
 Support is included for changelogs that record changes by multiple
 co-maintainers of a package. If an entry is appended to the current

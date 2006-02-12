@@ -1,3 +1,10 @@
+devscripts (2.9.14) UNRELEASED; urgency=low
+
+  * debchange: fall back on NAME envvar if DEBFULLNAME is not defined
+    (Closes: #340292)
+
+ -- Julian Gilbey <jdg@debian.org>  Sun, 12 Feb 2006 16:20:08 +0000
+
 devscripts (2.9.13) unstable; urgency=low
 
   * Don't include .svn directory in md5sums (Closes: #352273)
