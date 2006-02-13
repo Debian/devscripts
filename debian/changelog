@@ -2,6 +2,7 @@ devscripts (2.9.14) UNRELEASED; urgency=low
 
   * deb-reversion: correctly handle multiword hooks (Closes: #351250)
   * deb-reversion: die if not being run as root or using fakeroot
+  * deb-reversion: major improvements to manpage
   * debchange: fall back on NAME envvar if DEBFULLNAME is not defined
     (Closes: #340292)
   * uscan: always pass --no-symlink to uupdate as uscan does the

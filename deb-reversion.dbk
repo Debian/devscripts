@@ -29,15 +29,20 @@ and docbook-xsl in your Build-Depends control field.
   <!-- Fill in your name for FIRSTNAME and SURNAME. -->
   <!ENTITY dhfirstname "<firstname>martin f.</firstname>">
   <!ENTITY dhsurname   "<surname>krafft</surname>">
+  <!ENTITY dhmaintfirstname "<firstname>Julian</firstname>">
+  <!ENTITY dhmaintsurname   "<surname>Gilbey</surname>">
   <!-- Please adjust the date whenever revising the manpage. -->
-  <!ENTITY dhdate      "<date>Dec 08, 2004</date>">
+  <!ENTITY dhdate      "<date>Feb 13, 2006</date>">
   <!-- SECTION should be 1-8, maybe w/ subsection other parameters are
        allowed: see man(7), man(1). -->
   <!ENTITY dhsection   "<manvolnum>1</manvolnum>">
   <!ENTITY dhemail     "<email>madduck@debian.org</email>">
+  <!ENTITY dhmaintemail "<email>jdg@debian.org</email>">
   <!ENTITY dhusername  "martin f. krafft">
+  <!ENTITY dhmaintusername  "Julian Gilbey">
   <!ENTITY dhucpackage "<refentrytitle>deb-reversion</refentrytitle>">
   <!ENTITY dhpackage   "deb-reversion">
+  <!ENTITY dhcommand   "deb-reversion">
 
   <!ENTITY debian      "<productname>Debian</productname>">
   <!ENTITY gnu         "<acronym>GNU</acronym>">
@@ -57,52 +62,167 @@ and docbook-xsl in your Build-Depends control field.
     &dhsection;
   </refmeta>
   <refnamediv>
-    <refname>&dhpackage;</refname>
+    <refname>&dhcommand;</refname>
 
     <refpurpose>simple script to change the version of a DEB file.</refpurpose>
   </refnamediv>
+
   <refsynopsisdiv>
     <cmdsynopsis>
-      <command>&dhpackage;</command>
+      <command>&dhcommand;</command>
       <arg choice="opt">
         -<option>vckDh</option>
       </arg>
-      <replaceable> file</replaceable>
+      <replaceable> DEB-file</replaceable>
       <arg choice="opt" rep="repeat">log message</arg>
     </cmdsynopsis>
   </refsynopsisdiv>
+
   <refsect1>
     <title>DESCRIPTION</title>
 
     <para>
-      &dhpackage; unpacks the specified DEB file, changes the version number
-      in the relevant locations, appends a Debian <filename>changelog</filename> entry
-      with the specified contents, and creates a new DEB file with the updated
-      version.
+      &dhcommand; unpacks the specified DEB file, changes the version
+      number in the relevant locations, appends a Debian
+      <filename>changelog</filename> entry with the specified
+      contents, and creates a new DEB file with the updated version.
     </para>
 
     <para>
-      By default, the tool creates a new version number suitable for local
-      changes, such that the new package will be greater than the current one,
-      but lesser than any future, official Debian packages. With
-      <option>-v</option>, the version number can be specified directly.
-      Contrariwise, the <option>-c</option> simply calculates the new
-      version number but does not generate a new package.
+      By default, the tool creates a new version number suitable for
+      local changes, such that the new package will be greater than
+      the current one, but lesser than any future, official Debian
+      packages.  With <option>-v <replaceable
+      class="parameter">version</replaceable></option>, the version
+      number can be specified directly.  On the other hand, the
+      <option>-c</option> simply calculates the new version number but
+      does not generate a new package.
     </para>
 
     <para>
-      With <option>-k</option>, a hook script may be specified, which is run
-      on the unpacked binary packages just before it is repacked. If you want
-      to write changelog entries from within the hook, use <command>dch -a --
-      your message</command>.
+      When building a DEB file, root privileges are required in order
+      to have the correct permissions and ownerships in the resulting
+      DEB file.  This can be achieved either by running
+      <command>&dhcommand;</command> as root or running under
+      <citerefentry><refentrytitle>fakeroot</refentrytitle>
+	<manvolnum>1</manvolnum></citerefentry>, as 'fakeroot
+      &dhcommand; foo.deb'.
     </para>
 
     <para>
-      More information is available by calling &dhpackage; with the
-      <option>-h</option> command line switch.
+      With <option>-k <replaceable
+      class="parameter">hook</replaceable></option>, a hook script may
+      be specified, which is run on the unpacked binary packages just
+      before it is repacked. If you want to write changelog entries
+      from within the hook, use '<command>dch -a -- <replaceable
+      class="parameter">your message</replaceable></command>'.
+      (Alternatively, do not give a changelog entry on the
+      <command>&dhcommand;</command> command line and
+      <command>dch</command> will be called automatically.)  The hook
+      command must be placed in quotes if it has more than one word;
+      it is called via <command>sh -c</command>.
     </para>
-
   </refsect1>
+
+  <refsect1>
+    <title>OPTIONS</title>
+    <variablelist>
+      <varlistentry>
+	<term>-v <replaceable class="parameter">new-version</replaceable></term>
+	<term>--new-version <replaceable class="parameter">new-version</replaceable></term>
+	<listitem>
+	  <para>
+            Specifies the version number to be used for the new
+            version.  Passed to <citerefentry>
+	      <refentrytitle>dch</refentrytitle>
+	      <manvolnum>1</manvolnum>
+	    </citerefentry>.
+          </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>-c</term>
+	<term>--calculate-only</term>
+	<listitem>
+	  <para>
+            Only calculate and display the new version number which
+            would be used; do not build a new DEB file.  Cannot be
+            used in conjunction with <option>-v</option>.
+          </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>-k <replaceable class="parameter">hook-command</replaceable></term>
+	<term>--hook <replaceable class="parameter">hook-command</replaceable></term>
+	<listitem>
+	  <para>
+            A hook command to run after unpacking the old DEB file and
+            modifying the changelog, and before packing up the new DEB
+            file.  Must be in quotes if it is more than one (shell)
+            word.  Only one hook command may be specified; if you want
+            to perform more than this, you could specify 'bash' as the
+            hook command, and you will then be given a shell to work
+            in.
+          </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>-D</term>
+	<term>--debug</term>
+	<listitem>
+	  <para>
+            Pass <option>--debug</option> to
+            <citerefentry>
+	      <refentrytitle>dpkg-deb</refentrytitle>
+	      <manvolnum>1</manvolnum>
+	    </citerefentry>.
+          </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>-h</term>
+	<term>--help</term>
+	<listitem>
+	  <para>
+            Display usage information.
+          </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>-V</term>
+	<term>--version</term>
+	<listitem>
+	  <para>
+            Display version information.
+          </para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+
+  <refsect1>
+    <title>SEE ALSO</title>
+    <para>
+      <citerefentry>
+	<refentrytitle>dch</refentrytitle>
+	<manvolnum>1</manvolnum>
+      </citerefentry>,
+      <citerefentry>
+	<refentrytitle>fakeroot</refentrytitle>
+	<manvolnum>1</manvolnum>
+      </citerefentry>,
+      <citerefentry>
+	<refentrytitle>dpkg-deb</refentrytitle>
+	<manvolnum>1</manvolnum>
+      </citerefentry>.
+    </para>
+  </refsect1>
+
   <refsect1>
     <title>DISCLAIMER</title>
     <para>
@@ -133,7 +253,10 @@ and docbook-xsl in your Build-Depends control field.
   <refsect1>
     <title>AUTHOR</title>
 
-    <para>&dhpackage; is (c) 2004-5 by &dhusername; </para>
+    <para>
+      &dhpackage; is Copyright 2004-5 by &dhusername; and
+      modifications are Copyright 2006 by &dhmaintusername;.
+    </para>
 
     <para>
       Permission is granted to copy, distribute and/or modify this document
@@ -144,7 +267,16 @@ and docbook-xsl in your Build-Depends control field.
       in <filename>/usr/share/common-licenses/Artistic</filename>.
     </para>
 
-    <para>This manual page was written by &dhusername; &dhemail;.</para>
+    <para>
+      This manual page was written by &dhusername; &dhemail; and
+      modified by &dhmaintusername; &dhmaintemail;.
+    </para>
 
   </refsect1>
 </refentry>
+
+<!--
+  Local Variables: 
+  mode: xml
+  End: 
+-->
