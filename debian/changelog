@@ -5,11 +5,13 @@ devscripts (2.9.14) unstable; urgency=low
   * deb-reversion: major improvements to manpage
   * debchange: fall back on NAME envvar if DEBFULLNAME is not defined
     (Closes: #340292)
+  * debrelease: allow it to run in normal situations again (broken when
+    fixing #322926, #217546)
   * uscan: always pass --no-symlink to uupdate as uscan does the
     symlinking itself (Closes: #345874)
   * uscan: handle multi-word actions
 
- -- Julian Gilbey <jdg@debian.org>  Mon, 13 Feb 2006 11:10:30 +0000
+ -- Julian Gilbey <jdg@debian.org>  Mon, 13 Feb 2006 11:33:47 +0000
 
 devscripts (2.9.13) unstable; urgency=low
 

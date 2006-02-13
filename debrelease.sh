@@ -265,12 +265,12 @@ if [ -n "$multiarch" ]; then
     fi
     changes=$mchanges
 elif [ "$arch" = source ]; then
-	if [ -r "$schanges" ]; then
-	    changes=$schanges
-	else
-	    echo "$PROGNAME: could not find/read changes file $schanges!" >&2
-	    exit 1
-	fi
+    if [ -r "$schanges" ]; then
+	changes=$schanges
+    else
+	echo "$PROGNAME: could not find/read changes file $schanges!" >&2
+	exit 1
+    fi
 else
     if [ ! -r "$changes" ]; then
 	if [ -r "$mchanges" ]; then
@@ -287,9 +287,6 @@ else
 	    echo "$PROGNAME: could not read changes file $changes!" >&2
 	    exit 1
 	fi
-    else
-	echo "$PROGNAME: could not read changes file $changes!" >&2
-	exit 1
     fi
 fi
 
