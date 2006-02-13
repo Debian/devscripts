@@ -64,7 +64,7 @@ and docbook-xsl in your Build-Depends control field.
   <refnamediv>
     <refname>&dhcommand;</refname>
 
-    <refpurpose>simple script to change the version of a DEB file.</refpurpose>
+    <refpurpose>simple script to change the version of a .deb file.</refpurpose>
   </refnamediv>
 
   <refsynopsisdiv>
@@ -73,7 +73,7 @@ and docbook-xsl in your Build-Depends control field.
       <arg choice="opt">
         -<option>vckDh</option>
       </arg>
-      <replaceable> DEB-file</replaceable>
+      <replaceable> .deb-file</replaceable>
       <arg choice="opt" rep="repeat">log message</arg>
     </cmdsynopsis>
   </refsynopsisdiv>
@@ -82,10 +82,10 @@ and docbook-xsl in your Build-Depends control field.
     <title>DESCRIPTION</title>
 
     <para>
-      &dhcommand; unpacks the specified DEB file, changes the version
+      &dhcommand; unpacks the specified .deb file, changes the version
       number in the relevant locations, appends a Debian
       <filename>changelog</filename> entry with the specified
-      contents, and creates a new DEB file with the updated version.
+      contents, and creates a new .deb file with the updated version.
     </para>
 
     <para>
@@ -100,9 +100,9 @@ and docbook-xsl in your Build-Depends control field.
     </para>
 
     <para>
-      When building a DEB file, root privileges are required in order
+      When building a .deb file, root privileges are required in order
       to have the correct permissions and ownerships in the resulting
-      DEB file.  This can be achieved either by running
+      .deb file.  This can be achieved either by running
       <command>&dhcommand;</command> as root or running under
       <citerefentry><refentrytitle>fakeroot</refentrytitle>
 	<manvolnum>1</manvolnum></citerefentry>, as 'fakeroot
@@ -147,7 +147,7 @@ and docbook-xsl in your Build-Depends control field.
 	<listitem>
 	  <para>
             Only calculate and display the new version number which
-            would be used; do not build a new DEB file.  Cannot be
+            would be used; do not build a new .deb file.  Cannot be
             used in conjunction with <option>-v</option>.
           </para>
 	</listitem>
@@ -158,8 +158,8 @@ and docbook-xsl in your Build-Depends control field.
 	<term>--hook <replaceable class="parameter">hook-command</replaceable></term>
 	<listitem>
 	  <para>
-            A hook command to run after unpacking the old DEB file and
-            modifying the changelog, and before packing up the new DEB
+            A hook command to run after unpacking the old .deb file and
+            modifying the changelog, and before packing up the new .deb
             file.  Must be in quotes if it is more than one (shell)
             word.  Only one hook command may be specified; if you want
             to perform more than this, you could specify 'bash' as the

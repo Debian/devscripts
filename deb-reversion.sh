@@ -1,6 +1,6 @@
 #! /bin/bash -e
 #
-# deb-reversion -- a script to bump a DEB file's version number.
+# deb-reversion -- a script to bump a .deb file's version number.
 #
 # The programme has been published under the terms of the Artistic Licence.
 # Please see http://www.opensource.org/licenses/artistic-license.php for more
@@ -22,7 +22,7 @@ PROGVERSION=0.1.19
 blurb()
 {
   cat <<EOF
-$PROGNAME version $PROGVERSION -- a script to bump a DEB file's version number.
+$PROGNAME version $PROGVERSION -- a script to bump a .deb file's version number.
 EOF
 }
 
@@ -52,11 +52,11 @@ usage()
 Usage:
   $PROGNAME [options] file [log message]
 
-  The script will increase the DEB file's version number, noting the change in
+  The script will increase the .deb file's version number, noting the change in
   the package's changelog file. The message written to the changelog may be
   customised. Unless a new version is provided, the script automatically
   calculates one that fits in well with the Debian versioning rules. The new
-  DEB file will be placed in the current directory.
+  .deb file will be placed in the current directory.
 
   The following options may be specified, using standard conventions:
 
@@ -110,7 +110,7 @@ while [ $# -gt 0 ]; do
     case $opt in
       /*.deb) DEB=$opt;;
        *.deb) DEB=${DIR}/$opt;;
-       *) echo "$PROGNAME error: no DEB file has been specified." >&2
+       *) echo "$PROGNAME error: no .deb file has been specified." >&2
           usage
           exit -1;;
     esac
@@ -122,11 +122,11 @@ done
 
 
 if [ -z "$DEB" ]; then
-  echo "$PROGNAME error: no DEB file has been specified." >&2
+  echo "$PROGNAME error: no .deb file has been specified." >&2
   usage
   exit -1
 elif [ ! -f $DEB ]; then
-  echo "$PROGNAME error: $DEB does not exist." >&2
+  echo "$PROGNAME error: $.deb does not exist." >&2
   exit -2
 fi
 
