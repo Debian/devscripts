@@ -4,11 +4,11 @@
 # Copyright 1998,1999 Yann Dirson <dirson@debian.org>
 # Perl version:
 # Copyright 1999,2000,2001 by Julian Gilbey <jdg@debian.org>
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License, version 2 ONLY,
 # as published by the Free Software Foundation.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -104,7 +104,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBDIFF_WDIFF_OPT' => '',
 		       );
     my %config_default = %config_vars;
-    
+
     my $shell_cmd;
     # Set defaults
     foreach my $var (keys %config_vars) {
@@ -243,8 +243,9 @@ if (! $type) {
 # %deb1 and %deb2, each key of which is a .deb name and each value is
 # a list ref.  Note we need to use our, not my, as we will be symbolically
 # referencing these variables
+my @CommonDebs = ();
 my @singledeb;
-our (%debs1, %debs2, %files1, %files2, @D1, @D2, $dir1, $dir2);
+our (%debs1, %debs2, %files1, %files2, @D1, @D2, $dir1, $dir2, %DebPaths1, %DebPaths2);
 
 if ($type eq 'deb') {
     no strict 'refs';
@@ -287,7 +288,7 @@ elsif ($type eq 'changes' or $type eq 'debs') {
 		last if $infiles and /^[^ ]/;
 		/^Files:/ and $infiles=1, next;
 		next unless $infiles;
-		/ (\S*.u?deb)$/ and push @debs, $1;
+		/ (\S*.u?deb)$/ and push @debs, dirname($changes) . '/' . $1;
 	    }
 	    close CHANGES
 		or fatal "Problem reading $changes: $!";
@@ -297,7 +298,7 @@ elsif ($type eq 'changes' or $type eq 'debs') {
 
 	    # Is there only one .deb listed?
 	    if (@debs == 1) {
-		$singledeb[$i] = dirname($changes) . '/' . $debs[0];
+		$singledeb[$i] = $debs[0];
 	    }
 	}
 
@@ -307,6 +308,7 @@ elsif ($type eq 'changes' or $type eq 'debs') {
 	    fatal "Can't read file: $deb" unless -r $deb;
 	    my $debc = `env LC_ALL=C dpkg-deb -c $deb`;
 	    $? == 0 or fatal "dpkg-deb -c $deb failed!";
+	    my $debpath = $deb;
 	    # get package name itself
 	    $deb =~ s,.*/,,; $deb =~ s/_.*//;
 	    $deb = $renamed{$deb} if $i == 1 and exists $renamed{$deb};
@@ -315,6 +317,7 @@ elsif ($type eq 'changes' or $type eq 'debs') {
 	    } else {
 		${"debs$i"}{$deb} = 1;
 	    }
+	    ${"DebPaths$i"}{$deb} = $debpath;
 	    foreach my $file (@{process_debc($debc,$i)}) {
 		${"files$i"}{$file} .= "$deb:";
 		${"D$i"}{$file} = 1;
@@ -430,6 +433,7 @@ if ($show_moved and $type ne 'deb') {
 
     my @losses = sort grep $debs{$_} < 0, keys %debs;
     my @gains  = sort grep $debs{$_} > 0, keys %debs;
+    @CommonDebs= sort grep $debs{$_} == 0, keys %debs;
 
     if (@gains) {
 	my $msg = "Warning: these package names were in the second list but not in the first:";
@@ -555,9 +559,14 @@ if ($show_moved and $type ne 'deb') {
 }
 
 # We compare the control files (at least the dependency fields)
-# if we are examining precisely two .debs.
-exit $exit_status unless defined $singledeb[1] and defined $singledeb[2]
-    and $compare_control;
+my $dummyname = "---DUMMY---";
+if (defined $singledeb[1] and defined $singledeb[2]) {
+	@CommonDebs = ( $dummyname );
+	$DebPaths1{$dummyname} = $singledeb[1];
+	$DebPaths2{$dummyname} = $singledeb[2];
+}
+
+exit $exit_status unless ($#CommonDebs > -1) and $compare_control;
 
 unless (system ("command -v wdiff >/dev/null 2>&1") == 0) {
     warn "Can't compare control files; wdiff package not installed\n";
@@ -566,45 +575,49 @@ unless (system ("command -v wdiff >/dev/null 2>&1") == 0) {
 
 mktmpdirs();
 
-no strict 'refs';
+for my $debname (@CommonDebs) {
 
-for my $i (1,2) {
-    if (system('dpkg-deb', '-e', "$singledeb[$i]", ${"dir$i"})) {
-	my $msg = "dpkg-deb -e $singledeb[$i] failed!";
+	no strict 'refs';
+
+	for my $i (1,2) {
+	    if (system('dpkg-deb', '-e', "${\"DebPaths$i\"}{$debname}", ${"dir$i"})) {
+		my $msg = "dpkg-deb -e ${\"DebPaths$i\"}{$debname} failed!";
+		system ("rm", "-rf", $dir1, $dir2);
+		fatal $msg;
+	    }
+	}
+
+	use strict 'refs';
+
+	my $wdiff = `wdiff -n $wdiff_opt $dir1/control $dir2/control`;
+	my $usepkgname = $debname eq $dummyname ? "" : " of package $debname";
+	if ($? >> 8 == 0) {
+	    if (! $quiet) {
+		print "\nNo differences were encountered between the control files$usepkgname\n";
+	    }
+	} elsif ($? >> 8 == 1) {
+	    print "\n";
+	    if ($wdiff_opt) {
+		# Don't try messing with control codes
+		my $msg = "Control files$usepkgname: wdiff output";
+		print $msg, "\n", '-' x length $msg, "\n";
+		print $wdiff;
+	    } else {
+		my @output;
+		@output = split /\n/, $wdiff;
+		@output = grep /(\[-|\{\+)/, @output;
+		my $msg = "Control files$usepkgname: lines which differ (wdiff format)";
+		print $msg, "\n", '-' x length $msg, "\n";
+		print join("\n",@output), "\n";
+	    }
+	    $exit_status = 1;
+	} else {
+	    warn "wdiff failed (exit status " . ($? >> 8) .
+		(($? & 0x7f) ? " with signal " . ($? & 0x7f) : "") . ")\n";
+	}
+	# Clean up
 	system ("rm", "-rf", $dir1, $dir2);
-	fatal $msg;
-    }
 }
-
-use strict 'refs';
-
-my $wdiff = `wdiff -n $wdiff_opt $dir1/control $dir2/control`;
-if ($? >> 8 == 0) {
-    if (! $quiet) {
-        print "\nNo differences were encountered in the control files\n";
-    }
-} elsif ($? >> 8 == 1) {
-    print "\n";
-    if ($wdiff_opt) {
-	# Don't try messing with control codes
-	my $msg = "The following is the wdiff output between the control files:";
-	print $msg, "\n", '-' x length $msg, "\n";
-	print $wdiff;
-    } else {
-	my @output;
-	@output = split /\n/, $wdiff;
-	@output = grep /(\[-|\{\+)/, @output;
-	my $msg = "The following lines in the control files differ (wdiff output format):";
-	print $msg, "\n", '-' x length $msg, "\n";
-	print join("\n",@output), "\n";
-    }
-    $exit_status = 1;
-} else {
-    warn "wdiff failed (exit status " . ($? >> 8) .
-	(($? & 0x7f) ? " with signal " . ($? & 0x7f) : "") . ")\n";
-}
-# Clean up
-system ("rm", "-rf", $dir1, $dir2);
 
 exit $exit_status;
 
@@ -637,7 +650,7 @@ sub process_debc($$)
 	    my $from  = $$move[1];
 	    my $to    = $$move[2];
 	    map { if ($regex) { eval "\$_ =~ s:^$from:$to:"; }
-	          else { $_ =~ s/^\Q$from\E/$to/; } } @filelist;
+		  else { $_ =~ s/^\Q$from\E/$to/; } } @filelist;
 	}
     }
 

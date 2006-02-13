@@ -1,3 +1,11 @@
+devscripts (2.9.15) unstable; urgency=low
+
+  * debdiff: handle multi-binary packages and allow comparison of control
+    files from each corresponding pair of binary packages - thanks to
+    Robert Luberda <robert@debian.org> for the patch (Closes: #174858)
+
+ -- Julian Gilbey <jdg@debian.org>  Mon, 13 Feb 2006 22:25:37 +0000
+
 devscripts (2.9.14) unstable; urgency=low
 
   * deb-reversion: correctly handle multiword hooks (Closes: #351250)
