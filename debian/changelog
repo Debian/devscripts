@@ -1,12 +1,14 @@
 devscripts (2.9.14) UNRELEASED; urgency=low
 
+  * deb-reversion: correctly handle multiword hooks (Closes: #351250)
+  * deb-reversion: die if not being run as root or using fakeroot
   * debchange: fall back on NAME envvar if DEBFULLNAME is not defined
     (Closes: #340292)
   * uscan: always pass --no-symlink to uupdate as uscan does the
     symlinking itself (Closes: #345874)
   * uscan: handle multi-word actions
 
- -- Julian Gilbey <jdg@debian.org>  Mon, 13 Feb 2006 00:36:12 +0000
+ -- Julian Gilbey <jdg@debian.org>  Mon, 13 Feb 2006 01:51:35 +0000
 
 devscripts (2.9.13) unstable; urgency=low
 

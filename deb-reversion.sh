@@ -22,7 +22,7 @@ PROGVERSION=0.1.19
 blurb()
 {
   cat <<EOF
-$PROGNAME $PROGVERSION -- a script to bump a DEB file's version number.
+$PROGNAME version $PROGVERSION -- a script to bump a DEB file's version number.
 EOF
 }
 
@@ -48,9 +48,7 @@ about()
 
 usage()
 {
-  blurb
   cat <<EOF
-
 Usage:
   $PROGNAME [options] file [log message]
 
@@ -69,64 +67,71 @@ Usage:
     -D | --debug                Debug mode (passed to dpkg-deb)
     -V | --version              Display version information
     -h | --help                 Display this help text
-
 EOF
-  copyright
 }
 
 DIR=$(pwd)
 SHORTOPTS=hVv:ck:D
 LONGOPTS=help,version,new-version:,calculate-only,hook:,debug
-for opt in $(getopt -o $SHORTOPTS -l $LONGOPTS --n $PROGNAME -- $@); do
-  opt=${opt//\'/}
+# mode will track whether we are reading options, a deb-name or the changelog
+# entry
+mode=opts
+# Need to use eval to handle multiword hooks
+eval set x $(getopt -s bash -o $SHORTOPTS -l $LONGOPTS --n $PROGNAME -- "$@")
+shift
+while [ $# -gt 0 ]; do
+  opt=$1
+  shift
 
-  case $opt in
-    -*) unset OPT_STATE;;
-    *)
-      case $OPT_STATE in
-        SET_VERSION)
-          VERSION=$opt
-          continue;;
-        SET_HOOK)
-          HOOK=$opt
-          continue;;
-      esac
-  esac
-  
-  case $opt in
-    -h|--help) usage >&2; exit 0;;
-    -v|--new-version) OPT_STATE=SET_VERSION;;
-    -c|--calculate-only) CALCULATE=1;;
-    -k|--hook) OPT_STATE=SET_HOOK;;
-    -D|--debug) DPKGDEB_DEBUG=--debug;;
-    -V|--version) about >&2; exit 0;;
-    --) continue;;
-    *.deb)
-      if [[ -n $DEB ]]; then
-        echo "E: unknown argument: $opt (DEB file already given)." >&2
-        usage
-        exit -1
-      fi
-      case $opt in
-        /*) DEB=$opt;;
-        *) DEB=${DIR}/$opt;;
-      esac;;
-    *)
-      LOG=${LOG:+$LOG }$opt;;
-  esac
+  if [ "$mode" = opts ]; then
+    case $opt in
+      -*) unset OPT_STATE;;
+      *)
+        case $OPT_STATE in
+          SET_VERSION)
+            VERSION=$opt
+            continue;;
+          SET_HOOK)
+            HOOK=$opt
+            continue;;
+        esac
+    esac
+    
+    case $opt in
+      -h|--help) usage >&2; exit 0;;
+      -v|--new-version) OPT_STATE=SET_VERSION;;
+      -c|--calculate-only) CALCULATE=1;;
+      -k|--hook) OPT_STATE=SET_HOOK;;
+      -D|--debug) DPKGDEB_DEBUG=--debug;;
+      -V|--version) about >&2; exit 0;;
+      --) mode=debfile; continue;;
+    esac
+  elif [ "$mode" = debfile ]; then
+    case $opt in
+      /*.deb) DEB=$opt;;
+       *.deb) DEB=${DIR}/$opt;;
+       *) echo "$PROGNAME error: no DEB file has been specified." >&2
+          usage
+          exit -1;;
+    esac
+    mode=log
+  else
+    LOG="${LOG:+$LOG }$opt"
+  fi    
 done
 
-if [[ -z $DEB ]]; then
-  echo "E: no DEB file has been specified." >&2
+
+if [ -z "$DEB" ]; then
+  echo "$PROGNAME error: no DEB file has been specified." >&2
   usage
   exit -1
-elif [[ ! -f $DEB ]]; then
-  echo "E: $DEB does not exist." >&2
+elif [ ! -f $DEB ]; then
+  echo "$PROGNAME error: $DEB does not exist." >&2
   exit -2
 fi
 
-if [[ -n $VERSION ]] && [[ -n $CALCULATE ]]; then
-  echo "E: the options -v and -c cannot be used together" >&2
+if [ -n "$VERSION" -a -n "$CALCULATE" ]; then
+  echo "$PROGNAME error: the options -v and -c cannot be used together" >&2
   usage
   exit -1
 fi
@@ -142,7 +147,6 @@ make_temp_dir()
 extract_deb_file()
 {
   dpkg-deb $DPKGDEB_DEBUG --extract $1 .
-  mkdir -p DEBIAN
   dpkg-deb $DPKGDEB_DEBUG --control $1 DEBIAN
 }
 
@@ -176,10 +180,10 @@ change_version()
   PACKAGE=$(sed -ne 's,^Package: ,,p' DEBIAN/control)
   VERSION=$1
   for i in changelog{,.Debian}.gz; do
-    [[ -f usr/share/doc/${PACKAGE}/$i ]] \
+    [ -f usr/share/doc/${PACKAGE}/$i ] \
       && LOGFILE=usr/share/doc/${PACKAGE}/$i
   done
-  [[ -z $LOGFILE ]] && return 1
+  [ -z "$LOGFILE" ] && return 1
   mkdir -p debian
   zcat $LOGFILE > debian/changelog
   shift
@@ -197,11 +201,16 @@ repack_file()
   dpkg-name package.deb | sed -e 's,.*to `\(.*\).,\1,'
 }
 
-[[ -z $VERSION ]] && VERSION=$(bump_version $(get_version $DEB))
+[ -z "$VERSION" ] && VERSION=$(bump_version $(get_version $DEB))
 
-if [[ -n $CALCULATE ]]; then
+if [ -n "$CALCULATE" ]; then
   echo $VERSION
   exit 0
+fi
+
+if [ `id -u` -ne 0 ]; then
+  echo "$PROGNAME error: need to run me as root or using fakeroot!" >&2
+  exit -3
 fi
 
 make_temp_dir
@@ -211,7 +220,7 @@ extract_deb_file $DEB
 change_version $VERSION $LOG
 FILE=$(repack_file)
 
-if [[ -f $DIR/$FILE ]]; then
+if [ -f $DIR/$FILE ]; then
     echo $DIR/$FILE exists, moving to $DIR/$FILE.orig . >&2
     mv -i $DIR/$FILE $DIR/$FILE.orig
 fi
