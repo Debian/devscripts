@@ -152,16 +152,19 @@ or a \fI.tgz\fR suffix and from \fI<package>_<version>.orig.tar.bz2\fR
 if the file has a \fI.tar.bz2\fR or a \fI.tbz\fR or \fI.tbz2\fR
 suffix.
 .PP
-Finally, if a third parameter is given in the watchfile line, this is
-taken as the name of a command, and the command
+Finally, if a third parameter (an action) is given in the watchfile
+line, this is taken as the name of a command, and the command
 .nf
     \fIcommand \fB\-\-upstream-version\fI version filename\fR
 .fi
 is executed, using either the original file or the symlink name.  A
-common such command would be \fBuupdate\fR.  (Note that the calling
+common such command would be \fBuupdate\fR(1).  (Note that the calling
 syntax was slightly different when using watchfiles without a
 `version=...' line; there the command executed was `command filename
-version'.)
+version'.)  If the command is \fBuupdate\fR, then the
+\fB\-\-no\-symlink\fR option is given to \fBuupdate\fR as a first
+option, since any requested symlinking will already be done by
+\fBuscan\fR.
 .PP
 The alternative version of the watchfile syntax for HTTP URLs is as
 follows.  The first field is a homepage which should be downloaded and
@@ -375,7 +378,7 @@ the FTP_PASSIVE environment variable).
 .TP
 .B USCAN_SYMLINK
 If this is set to \fIno\fR, then a pkg_version.orig.tar.{gz|bz2}
-symlink will not be made (equivalent to the \fB\-\-no-symlink\fR
+symlink will not be made (equivalent to the \fB\-\-no\-symlink\fR
 option).  If it is set to \fIyes\fR or \fIsymlink\fR, then the
 symlinks will be made.  If it is set to \fIrename\fR, then the files
 are renamed (equivalent to the \fB\-\-rename\fR option).

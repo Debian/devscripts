@@ -189,7 +189,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'USCAN_SYMLINK'}='yes';
     $config_vars{'USCAN_SYMLINK'}='symlink'
 	if $config_vars{'USCAN_SYMLINK'} eq 'yes' or
-	    $config_vars{'USCAN_SYMLINK'} eq 'symlinks';
+	    $config_vars{'USCAN_SYMLINK'} =~ /^symlinks?$/;
     $config_vars{'USCAN_VERBOSE'} =~ /^(yes|no)$/
 	or $config_vars{'USCAN_VERBOSE'}='no';
     $config_vars{'USCAN_DEHS_OUTPUT'} =~ /^(yes|no)$/
@@ -596,7 +596,7 @@ sub process_watchline ($$$$$$)
     %dehs_tags = ('package' => $pkg);
 
     if ($watch_version == 1) {
-	($site, $dir, $pattern, $lastversion, $action) = split ' ', $line;
+	($site, $dir, $pattern, $lastversion, $action) = split ' ', $line, 5;
 
 	if (! defined $lastversion or $site =~ /\(.*\)/ or $dir =~ /\(.*\)/) {
 	    warn "$progname warning: there appears to be a version 2 format line in\n  the version 1 watchfile $watchfile;\n  Have you forgotten a 'version=2' line at the start, perhaps?\n  Skipping the line: $line\n";
@@ -657,12 +657,12 @@ sub process_watchline ($$$$$$)
 	    }
 	}
 
-	($base, $filepattern, $lastversion, $action) = split ' ', $line;
+	($base, $filepattern, $lastversion, $action) = split ' ', $line, 4;
 
 	if ($base =~ m%/([^/]*\([^/]*\)[^/]*)$%) {
 	    # only three fields
-	    $action = $lastversion;
-	    $lastversion = $pattern;
+	    $action = "$lastversion $action";
+	    $lastversion = $filepattern;
 	    $filepattern = $1;
 	    $base =~ s%/[^/]+$%/%;
 	}
@@ -1072,6 +1072,11 @@ EOF
 	elsif ($symlink =~ /^(symlink|rename)$/
 	    and $newfile_base =~ /\.(tar\.bz2|tbz2)$/) {
 	    $usefile = "../${pkg}_${newversion}.orig.tar.bz2";
+	}
+
+	# Any symlink requests are already handled by uscan
+	if ($action =~ /^uupdate(\s|$)/) {
+	    $action =~ s/^uupdate/uupdate --no-symlink/;
 	}
 
 	if ($watch_version > 1) {
