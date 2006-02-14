@@ -6,8 +6,10 @@ devscripts (2.9.15) UNRELEASED; urgency=low
     files from each corresponding pair of binary packages - thanks to
     Robert Luberda <robert@debian.org> for the patch (Closes: #174858)
   * general: improve getopt handling
+  * pkg-subscribe: new script to subscribe to the PTS for a limited time
+    period (Closes: #202866)
 
- -- Julian Gilbey <jdg@debian.org>  Tue, 14 Feb 2006 00:50:11 +0000
+ -- Julian Gilbey <jdg@debian.org>  Tue, 14 Feb 2006 01:49:46 +0000
 
 devscripts (2.9.14) unstable; urgency=low
 

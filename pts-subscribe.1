@@ -1,0 +1,56 @@
+.TH PTS-SUBSCRIBE 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+pts-subscribe \- time-limited subscription to the PTS
+.SH SYNOPSIS
+\fBpts-subscribe\fR [options] \fIpackage\fR
+.SH DESCRIPTION
+\fBpts-subscribe\fR sends a subscription request for the package
+\fIpackage\fR to the Package Tracking System at pts@qa.debian.org, and
+schedules an unsubscription request for a future date using
+\fBat\fR(1), by default in 30 days' time.  This can be changed either
+using the configuration files (see below) or command-line options.
+.PP
+This utility is useful if a developer has made an NMU and wants to
+track the package thereafter for a limited period of time.
+.SH OPTIONS
+.TP
+\fB\-\-until \fItime\fR, \fB\-u\fR \fItime\fR
+When \fBat\fR(1) should send the unsubscription request, using
+\fBat\fR's syntax.  Default is 'now + 30 days'.  This option will
+probably require quoting!  \fB\-\-until forever\fR is equivalent to
+using the \fB\-\-forever\fR option.
+.TP
+.B \-\-forever
+Don't send an automatic unsubscribe request.
+.TP
+.BR \-\-help ", " \-h
+Display a help message and exit successfully.
+.TP
+.B \-\-version
+Display version and copyright information and exit successfully.
+.SH "ENVIRONMENT VARIABLES"
+.TP
+.BR DEBEMAIL ", " EMAIL
+If one of these is set (with preference give to DEBEMAIL), then this
+will be used for the subscription address.  If neither is set, then
+the email will be sent without a specified subscription address, and
+the email's From: line will be used to determine the sender's
+address.  This will be determined by \fBmail\fR(1).
+.SH "CONFIGURATION VARIABLES"
+The two configuration files \fI/etc/devscripts.conf\fR and
+\fI~/.devscripts\fR are sourced in that order to set configuration
+variables.  Command line options can be used to override configuration
+file settings.  Environment variable settings are ignored for this
+purpose.  The currently recognised variables are:
+.TP
+.B PTS_UNTIL
+Setting this is equivalent to giving a \fB\-\-until\fR option.
+.SH "SEE ALSO"
+.BR at (1),
+information about the Package Tracking System in the Developer's
+Reference at
+http://www.debian.org/doc/developers-reference/ch-resources#s-pkg-tracking-system
+.SH AUTHOR
+This program was written by Julian Gilbey <jdg@debian.org> based on a
+public domain prototype by Raphaël Hertzog <hertzog@debian.org> and is
+copyright under the GPL, version 2 or later.

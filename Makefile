@@ -1,14 +1,14 @@
 # Simplified Makefile for devscripts
 
-PL_FILES = bts.pl checkbashisms.pl cvs-debuild.pl debchange.pl \
-	debdiff.pl debi.pl debpkg.pl debuild.pl dpkg-depcheck.pl \
-	dscverify.pl grep-excuses.pl plotchangelog.pl rc-alert.pl \
-	debcommit.pl svnpath.pl dd-list.pl rmadison.pl dget.pl
+PL_FILES = bts.pl checkbashisms.pl cvs-debuild.pl dd-list.pl debchange.pl \
+	debcommit.pl debdiff.pl debi.pl debpkg.pl debuild.pl dget.pl \
+	dpkg-depcheck.pl dscverify.pl grep-excuses.pl plotchangelog.pl \
+	rc-alert.pl rmadison.pl svnpath.pl
 
-SH_FILES = cvs-debi.sh cvs-debrelease.sh debclean.sh debrelease.sh \
-	debrsign.sh debsign.sh dpkg-genbuilddeps.sh mergechanges.sh \
-	tagpending.sh uscan.sh uupdate.sh wnpp-alert.sh whodepends.sh \
-	annotate-output.sh archpath.sh deb-reversion.sh nmudiff.sh
+SH_FILES = annotate-output.sh archpath.sh cvs-debi.sh cvs-debrelease.sh \
+	deb-reversion.sh debclean.sh debrelease.sh debrsign.sh debsign.sh \
+	dpkg-genbuilddeps.sh mergechanges.sh nmudiff.sh pts-subscribe.sh \
+	tagpending.sh uscan.sh uupdate.sh whodepends.sh wnpp-alert.sh
 
 LIBS = libvfork.so.0
 

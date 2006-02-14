@@ -64,6 +64,8 @@ Description: Scripts to make the life of a Debian Package maintainer easier
       to the BTS to assist in tracking NMUs [mutt]
   - plotchangelog: view a nice plot of the data in a changelog file
       [libtimedate-perl, gnuplot]
+  - pts-subscribe: subscribe to the PTS for a limited period of time
+      [mailx | mailutils]
   - rc-alert: list installed packages which have release-critical bugs [wget]
   - rmadison: remotely query the Debian archive database about packages [wget]
   - svnpath: print svn repository paths [subversion]

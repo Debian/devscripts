@@ -142,7 +142,6 @@ EOF
 # See the debchange man page for details.
 # DEBCHANGE_RELEASE_HEURISTIC=log
 # DEBCHANGE_RELEASE_HEURISTIC=changelog
-# 
 EOF
 	fi
 
@@ -155,7 +154,36 @@ EOF
 # 
 # Introduce multiple-maintainer markers in changelog sections?
 # DEBCHANGE_MULTIMAINT=yes
+EOF
+	fi
+
+	if dpkg --compare-versions "$2" lt 2.9.15
+	then
+	# Added in devscripts 2.9.15:
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### dpkg-sig options added in version 2.9.15
 # 
+# dpkg-sig is not a part of devscripts, but shares this configuration file.
+# It pays attention to the values of DEBSIGN_MAINT and DEBSIGN_KEY in
+# addition to the following.
+#
+# This key ID takes precedence over the rest
+# DPKGSIG_KEYID=
+# 
+# Do we sign the .changes and .dsc files?  See the manpage for more
+# info.  Valid options are no, auto, yes, full and force_full.
+# DPKGSIG_SIGN_CHANGES=auto
+# 
+# Do we cache the gpg passphrase by default?  This can be dangerous!
+# DPKGSIG_CACHE_PASS=no
+
+##### pts-subscribe added in version 2.9.15
+# 
+# How long will we subscribe for by default?  The default is 30 days.
+# Setting this to 'forever' means that no unsubscription request will
+# be scheduled.
+# PTS_UNTIL='now + 30 days'
 EOF
 	fi
     fi

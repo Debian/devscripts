@@ -44,6 +44,14 @@
 # DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1
 # DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.*)?'
 
+##### annotate-output
+# 
+# No variables currently
+
+##### archpath
+# 
+# No variables currently
+
 ##### bts
 # 
 # Default bts show/bugs to run in offline mode?
@@ -76,11 +84,23 @@
 # 
 # No variables currently
 
+##### cvs-debrelease
+# 
+# No variables currently
+
 ##### cvs-debuild
 # 
 # No variables currently
 
+##### dd-list
+# 
+# No variables currently
+
 ##### debc
+# 
+# No variables currently
+
+##### deb-reversion
 # 
 # No variables currently
 
@@ -104,6 +124,10 @@
 # 
 # Remove .deb, .changes, .dsc and .upload files?
 # DEBCLEAN_CLEANDEBS=no
+
+##### debcommit
+# 
+# No variables currently
 
 ##### debdiff
 # 
@@ -193,6 +217,10 @@
 # specified.
 # DEBUILD_LINDA_OPTS=""
 
+##### dget
+# 
+# No variables currently
+
 ##### dpkg-depcheck
 # 
 # Extra options given to dpkg-depcheck before any command-line
@@ -202,6 +230,22 @@
 ##### dpkg-genbuilddeps
 # 
 # No variables currently
+
+##### dpkg-sig
+# 
+# dpkg-sig is not a part of devscripts, but shares this configuration file.
+# It pays attention to the values of DEBSIGN_MAINT and DEBSIGN_KEY in
+# addition to the following.
+#
+# This key ID takes precedence over the rest
+# DPKGSIG_KEYID=
+# 
+# Do we sign the .changes and .dsc files?  See the manpage for more
+# info.  Valid options are no, auto, yes, full and force_full.
+# DPKGSIG_SIGN_CHANGES=auto
+# 
+# Do we cache the gpg passphrase by default?  This can be dangerous!
+# DPKGSIG_CACHE_PASS=no
 
 ##### dscverify
 # 
@@ -221,6 +265,10 @@
 # 
 # No variables currently
 
+##### nmudiff
+# 
+# No variables currently
+
 ##### plotchangelog
 # 
 # Command line options to use (space separated).  None of the options
@@ -231,6 +279,29 @@
 # Here we can give gnuplot options.  Any command line --gnuplot
 # commands will be appended to these.
 # PLOTCHANGELOG_GNUPLOT=""
+
+##### pts-subscribe
+# 
+# How long will we subscribe for by default?  The default is 30 days.
+# Setting this to 'forever' means that no unsubscription request will
+# be scheduled.
+# PTS_UNTIL='now + 30 days'
+
+##### rc-alert
+# 
+# No variables currently
+
+##### rmadison
+# 
+# No variables currently
+
+##### svnpath
+# 
+# No variables currently
+
+##### tagpending
+# 
+# No variables currently
 
 ##### uscan
 # 
@@ -267,3 +338,10 @@
 # the debuild setting will be used.
 # UUPDATE_ROOTCMD=''
 
+##### whodepends
+# 
+# No variables currently
+
+##### wnpp-alert
+# 
+# No variables currently
