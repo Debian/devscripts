@@ -123,6 +123,7 @@ while [ $# -gt 0 ]; do
     shift
 done
 
+# This will bomb out if there is an unrecognised option
 TEMP=$(getopt -a -s bash \
        -o hC:EH:G:M:P:R:T:U:V:W:Ff:dcnr:x:Bp:Dk:a:Sv:m:e:i:I:t: \
        --long help,version,ctp,tC,sgpg,spgp,us,uc,op \
@@ -130,10 +131,8 @@ TEMP=$(getopt -a -s bash \
        --long dupload,dput,no-conf,noconf \
        --long check-dirname-level:,check-dirname-regex: \
        -n "$PROGNAME" -- "${cvsopts[@]}")
-if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
 
-# Note the quotes around `$TEMP': they are essential!
-eval set -- "$TEMP"
+eval set -- $TEMP
 
 while true ; do
     case "$1" in

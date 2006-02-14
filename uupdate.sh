@@ -167,11 +167,9 @@ TEMP=$(getopt -s bash -o v:p:r:ubs \
 	--long symlink,no-symlink,nosymlink \
 	--long no-conf,noconf \
 	--long help,version -n "$PROGNAME" -- "$@")
+if [ $? != 0 ] ; then exit 1 ; fi
 
-if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
-
-# Note the quotes around `$TEMP': they are essential!
-eval set -- "$TEMP"
+eval set -- $TEMP
 
 # Process Parameters
 while [ "$1" ]; do

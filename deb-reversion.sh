@@ -76,9 +76,11 @@ LONGOPTS=help,version,new-version:,calculate-only,hook:,debug
 # mode will track whether we are reading options, a deb-name or the changelog
 # entry
 mode=opts
+
 # Need to use eval to handle multiword hooks
-eval set x $(getopt -s bash -o $SHORTOPTS -l $LONGOPTS --n $PROGNAME -- "$@")
-shift
+TEMP=$(getopt -s bash -o $SHORTOPTS -l $LONGOPTS --n $PROGNAME -- "$@")
+eval set -- $TEMP
+
 while [ $# -gt 0 ]; do
   opt=$1
   shift

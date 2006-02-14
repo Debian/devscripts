@@ -1,10 +1,13 @@
-devscripts (2.9.15) unstable; urgency=low
+devscripts (2.9.15) UNRELEASED; urgency=low
 
+  * bts: handle bts show pkg archive=yes more gracefully
+  * bts: require mailx | mailutils (mailutils provides mailx anyhow)
   * debdiff: handle multi-binary packages and allow comparison of control
     files from each corresponding pair of binary packages - thanks to
     Robert Luberda <robert@debian.org> for the patch (Closes: #174858)
+  * general: improve getopt handling
 
- -- Julian Gilbey <jdg@debian.org>  Mon, 13 Feb 2006 22:25:37 +0000
+ -- Julian Gilbey <jdg@debian.org>  Tue, 14 Feb 2006 00:50:11 +0000
 
 devscripts (2.9.14) unstable; urgency=low
 

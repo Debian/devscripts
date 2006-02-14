@@ -34,9 +34,6 @@ usage () {
 
     --version      Display version information
 
-  Do not read configuration files if --no-conf is specified as the first
-  command-line option.
-
 $MODIFIED_CONF_MSG"
 }
 
@@ -118,11 +115,9 @@ TEMP=$(getopt -s bash -o "" \
 	--long no-conf,noconf \
 	--long check-dirname-level:,check-dirname-regex: \
 	--long help,version -n "$PROGNAME" -- "$@")
+if [ $? != 0 ] ; then exit 1 ; fi
 
-if [ $? != 0 ] ; then echo "$PROGNAME: terminating..." >&2 ; exit 1 ; fi
-
-# Note the quotes around `$TEMP': they are essential!
-eval set -- "$TEMP"
+eval set -- $TEMP
 
 # Process Parameters
 while [ "$1" ]; do

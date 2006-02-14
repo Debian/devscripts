@@ -130,16 +130,13 @@ trap "rm -f $TEMPFILE; rmdir $TEMPDIR" 0 1 2 3 7 10 13 15
 
 TAGOPT=
 
-# Command line
+# Command line; will bomb out if unrecognised options
 TEMP=$(getopt -a -s bash \
        -o hC:EH:G:M:P:R:T:U:V:W:Ff:dcnr:x:Bp:Dk:a:Sv:m:e:i:I:t: \
        --long help,version,ctp,tC,sgpg,spgp,us,uc,op \
        --long si,sa,sd,ap,sp,su,sk,sr,sA,sP,sU,sK,sR,ss,sn \
        -n "$PROGNAME" -- "$@")
-if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
-
-# Note the quotes around `$TEMP': they are essential!
-eval set -- "$TEMP"
+eval set -- $TEMP
 
 while true ; do
     case "$1" in

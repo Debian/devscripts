@@ -598,7 +598,7 @@ sub bts_bugs {
 	    }
 	}
     }
-    if ($url =~ /^.*\s+<(.*)>$/) { $url = $1; }
+    if ($url =~ /^.*\s<(.*)>\s*$/) { $url = $1; }
     $url =~ s/^:$//;
 
     # Are there any options?
@@ -1156,7 +1156,7 @@ sub bts_cache {
     
     if (! length $tocache) {
 	$tocache=$ENV{'DEBEMAIL'} || $ENV{'EMAIL'};
-	if ($tocache =~ /^.*\s+<(.*)>$/) { $tocache = $1; }
+	if ($tocache =~ /^.*\s<(.*)>\s*$/) { $tocache = $1; }
     }
     if (! length $tocache) {
 	die "bts cache: cache what?\n";
@@ -1384,13 +1384,13 @@ sub mailbtsall {
 	if (exists $ENV{'DEBFULLNAME'}) { $name = $ENV{'DEBFULLNAME'}; }
 	if (exists $ENV{'DEBEMAIL'}) {
 	    $email = $ENV{'DEBEMAIL'};
-	    if ($email =~ /^(.*)\s+<(.*)>$/) {
+	    if ($email =~ /^(.*?)\s+<(.*)>\s*$/) {
 		$name ||= $1;
 		$email = $2;
 	    }
 	}
 	if (exists $ENV{'EMAIL'}) {
-	    if ($ENV{'EMAIL'} =~ /^(.*)\s+<(.*)>$/) {
+	    if ($ENV{'EMAIL'} =~ /^(.*?)\s+<(.*)>\s*$/) {
 		$name ||= $1;
 		$email ||= $2;
 	    } else {
@@ -2007,6 +2007,7 @@ sub href_to_filename {
 	my $bug = $2;
 	my $ref = $3;
 	$ref =~ s/&(?:amp;)?/;/g;  # normalise all hrefs
+	$ref =~ s/;archive=(yes|no)\b//;
 
 	if ($ref =~ /;msg=(\d+)$/) {
 	    $msg = $1;
