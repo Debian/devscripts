@@ -162,6 +162,11 @@ EOF
 	# Added in devscripts 2.9.15:
 	    cat >> /etc/devscripts.conf <<EOF
 
+##### bts option added in version 2.9.15
+# 
+# What sendmail command do we use?  This will be split on whitespace.
+# BTS_SENDMAIL_COMMAND='/usr/sbin/sendmail'
+
 ##### dpkg-sig options added in version 2.9.15
 # 
 # dpkg-sig is not a part of devscripts, but shares this configuration file.

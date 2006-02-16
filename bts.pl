@@ -105,6 +105,7 @@ my @valid_severities=qw(wishlist minor normal important
 			serious grave critical);
 
 my $browser;  # Will set if necessary
+my $btsserver='bugs.debian.org';
 my $btsurl='http://bugs.debian.org/';
 my $btscgiurl='http://bugs.debian.org/cgi-bin/';
 my $btscgipkgurl='http://bugs.debian.org/cgi-bin/pkgreport.cgi';
@@ -225,6 +226,11 @@ will be replaced by the name of the mbox file.  The command will be split
 on white space and will not be passed to a shell.  Default is 'mutt -f %s'.
 (Also, %% will be substituted by a single % if this is needed.)
 
+=item --sendmail=SENDMAILCMD
+
+Specify the sendmail command.  The command will be split on white
+space and will not be passed to a shell.  Default is '/usr/sbin/sendmail'.
+
 =item -f, --force-refresh
 
 Download a bug report again, even if it does not appear to have
@@ -259,6 +265,7 @@ my $caching=1;
 my $cachemode='min';
 my $refreshmode=0;
 my $mailreader='mutt -f %s';
+my $sendmailprogram='/usr/sbin/sendmail';
 
 # Next, read read configuration files and then command line
 # The next stuff is boilerplate
@@ -274,6 +281,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'BTS_CACHE_MODE' => 'min',
 		       'BTS_FORCE_REFRESH' => 'no',
 		       'BTS_MAIL_READER' => 'mutt -f %s',
+		       'BTS_SENDMAIL_COMMAND' => '/usr/sbin/sendmail',
 		       );
     my %config_default = %config_vars;
     
@@ -300,6 +308,19 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'BTS_FORCE_REFRESH'}='no';
     $config_vars{'BTS_MAIL_READER'} =~ /\%s/
 	or $config_vars{'BTS_MAIL_READER'}='mutt -f %s';
+    $config_vars{'BTS_MAIL_READER'} =~ /./
+	or $config_vars{'BTS_SENDMAIL_COMMAND'}='/usr/sbin/sendmail';
+
+    if ($config_vars{'BTS_SENDMAIL_COMMAND'} ne '/usr/sbin/sendmail') {
+	my $sendmailcmd = (split ' ', $config_vars{'BTS_SENDMAIL_COMMAND'})[0];
+	unless ($sendmailcmd =~ /^[A-Za-z_\-\+\./]*$/) {
+	    warn "BTS_SENDMAIL_COMMAND contained funny characters: $sendmailcmd\nReverting to default value /usr/sbin/sendmail\n";
+	    $config_vars{'BTS_SENDMAIL_COMMAND'}='/usr/sbin/sendmail';
+	} elsif (system("command -v $cmd >/dev/null 2>&1") != 0) {
+	    warn "BTS_SENDMAIL_COMMAND $sendmailcmd could not be executed.\nReverting to default value /usr/sbin/sendmail\n";
+	    $config_vars{'BTS_SENDMAIL_COMMAND'}='/usr/sbin/sendmail';
+	}
+    }
 
     foreach my $var (sort keys %config_vars) {
 	if ($config_vars{$var} ne $config_default{$var}) {
@@ -314,6 +335,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $cachemode = $config_vars{'BTS_CACHE_MODE'};
     $refreshmode = $config_vars{'BTS_FORCE_REFRESH'} eq 'yes' ? 1 : 0;
     $mailreader = $config_vars{'BTS_MAIL_READER'};
+    $sendmailprogram = $config_vars{'BTS_SENDMAIL_COMMAND'};
 }
 
 if (exists $ENV{'BUGSOFFLINE'}) {
@@ -1054,6 +1076,57 @@ sub bts_noowner {
     mailbts("bug $bug has no owner", "noowner $bug");
 }
 
+=item subscribe <bug> <email>
+
+Subscribe the given email address to the specified bug report.  If no email
+address is specified, the environment variable DEBEMAIL or EMAIL (in that
+order) is used.  If those are not set, or `!' is given as email address,
+your default address will be used.
+
+After executing this command, you will be sent a subscription confirmation to
+which you have to reply.  When subscribed to a bug report, you receive all
+relevant emails and notifications.  Use the unsubscribe command to unsubscribe.
+
+=cut
+
+sub bts_subscribe {
+    my $bug=checkbug(shift) or die "bts subscribe: subscribe to what bug?\n";
+    my $email=lc(shift);
+    if (defined $email and $email eq '!') { $email = undef; }
+    else {
+	$email ||= $ENV{'DEBEMAIL'};
+	$email ||= $ENV{'EMAIL'};
+    }
+    opts_done(@_);
+    mailto('subscription request for bug #' . $bug, '',
+	   $bug . '-subscribe@' . $btsserver, $email);
+}
+
+=item unsubscribe <bug> <email>
+
+Unsubscribe the given email address from the specified bug report.  As with
+subscribe above, if no email address is specified, the environment variables
+DEBEMAIL or EMAIL (in that order) is used.  If those are not set, or `!' is
+given as email address, your default address will be used.
+
+After executing this command, you will be sent an unsubscription confirmation
+to which you have to reply. Use the subscribe command to, well, subscribe.
+
+=cut
+
+sub bts_unsubscribe {
+    my $bug=checkbug(shift) or die "bts unsubscribe: unsubscribe from what bug?\n";
+    my $email=lc(shift);
+    if (defined $email and $email eq '!') { $email = undef; }
+    else {
+	$email ||= $ENV{'DEBEMAIL'};
+	$email ||= $ENV{'EMAIL'};
+    }
+    opts_done(@_);
+    mailto('unsubscription request for bug #' . $bug, '',
+	   $bug . '-unsubscribe@' . $btsserver, $email);
+}
+
 =item reportspam <bug>
 
 The reportspam command allows you to report a bug report as containing spam.
@@ -1465,14 +1538,14 @@ EOM
 		exec("/bin/cat")
 		    or die "bts: error running cat: $!\n";
 	    } else {
-		exec("/usr/sbin/sendmail", "-t")
+		exec(split(' ', $sendmailprogram), "-t")
 		    or die "bts: error running sendmail: $!\n";
 	    }
 	}
     }
     else {  # No DEBEMAIL
 	unless (system("command -v mail >/dev/null 2>&1") == 0) {
-	    die "bts: You need to either set DEBEMAIL or have the mailx package to do this!\n";
+	    die "bts: You need to either set DEBEMAIL or have the mailx/mailutils package\ninstalled to send mail!\n";
 	}
 	my $pid = open(MAIL, "|-");
 	if ($pid) {
@@ -1486,7 +1559,68 @@ EOM
 		exec("/bin/cat")
 		    or die "bts: error running cat: $!\n";
 	    } else {
-		exec("mail", "-s$subject", $btsemail)
+		exec("mail", "-s", $subject, $btsemail)
+		    or die "bts: error running mail: $!\n";
+	    }
+	}
+    }
+}
+
+# A simplified version of mailbtsall which sends one message only to
+# a specified address using the specified email From: header
+sub mailto {
+    my ($subject, $body, $to, $from) = @_;
+
+    if (defined $from) {
+	my $date = `822-date`;
+	chomp $date;
+
+	my $pid = open(MAIL, "|-");
+	if (! defined $pid) {
+	    die "bts: Couldn't fork: $!\n";
+	}
+	if ($pid) {
+	    # parent
+	    print MAIL <<"EOM";
+From: $from
+To: $to
+Subject: $subject
+Date: $date
+X-BTS-Version: $version
+
+# Automatically generated email from bts, devscripts version $version
+$body
+EOM
+	    close MAIL or die "bts: sendmail error: $!\n";
+	}
+	else {
+	    # child
+	    if ($debug) {
+		exec("/bin/cat")
+		    or die "bts: error running cat: $!\n";
+	    } else {
+		exec(split(' ', $sendmailprogram), "-t")
+		    or die "bts: error running sendmail: $!\n";
+	    }
+	}
+    }
+    else {  # No $from
+	unless (system("command -v mail >/dev/null 2>&1") == 0) {
+	    die "bts: You need to either specify an email address (say using DEBEMAIL)\n or have the mailx/mailutils package installed to send mail!\n";
+	}
+	my $pid = open(MAIL, "|-");
+	if ($pid) {
+	    # parent
+	    print MAIL $body;
+	    close MAIL or die "bts: mail: $!\n";
+	}
+	else {
+	    # child
+	    if ($debug) {
+		exec("/bin/cat")
+		    or die "bts: error running cat: $!\n";
+	    } else {
+		exec("mail", "-s", $subject, $to)
 		    or die "bts: error running mail: $!\n";
 	    }
 	}
@@ -2517,6 +2651,16 @@ If this is set to I<yes>, then it is the same as the --force-refresh
 command line parameter being used.  Only has an effect on the cache
 command.  The default is I<no>.  See the cache command for more
 information.
+
+=item BTS_MAIL_READER
+
+If this is set, specifies a mail reader to use instead of mutt.  Same as
+the --mailreader command line option.
+
+=item BTS_SENDMAIL_COMMAND
+
+If this is set, specifies a sendmail command to use instead of
+/usr/sbin/sendmail.  Same as the --sendmail command line option.
 
 =cut
 

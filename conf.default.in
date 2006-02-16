@@ -71,6 +71,9 @@
 # How do we read an mbox?  This will be split on whitespace, then
 # %s is replaced by the mbox name and %% by a single %.
 # BTS_MAIL_READER='mutt -f %s'
+# 
+# What sendmail command do we use?  This will be split on whitespace.
+# BTS_SENDMAIL_COMMAND='/usr/sbin/sendmail'
 
 ##### checkbashisms
 # 
