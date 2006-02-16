@@ -313,10 +313,10 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 
     if ($config_vars{'BTS_SENDMAIL_COMMAND'} ne '/usr/sbin/sendmail') {
 	my $sendmailcmd = (split ' ', $config_vars{'BTS_SENDMAIL_COMMAND'})[0];
-	unless ($sendmailcmd =~ /^[A-Za-z_\-\+\./]*$/) {
+	unless ($sendmailcmd =~ /^[A-Za-z_\-\+\.\/]*$/) {
 	    warn "BTS_SENDMAIL_COMMAND contained funny characters: $sendmailcmd\nReverting to default value /usr/sbin/sendmail\n";
 	    $config_vars{'BTS_SENDMAIL_COMMAND'}='/usr/sbin/sendmail';
-	} elsif (system("command -v $cmd >/dev/null 2>&1") != 0) {
+	} elsif (system("command -v $sendmailcmd >/dev/null 2>&1") != 0) {
 	    warn "BTS_SENDMAIL_COMMAND $sendmailcmd could not be executed.\nReverting to default value /usr/sbin/sendmail\n";
 	    $config_vars{'BTS_SENDMAIL_COMMAND'}='/usr/sbin/sendmail';
 	}
