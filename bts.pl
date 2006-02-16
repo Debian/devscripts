@@ -265,7 +265,7 @@ my $caching=1;
 my $cachemode='min';
 my $refreshmode=0;
 my $mailreader='mutt -f %s';
-my $sendmailprogram='/usr/sbin/sendmail';
+my $sendmailcmd='/usr/sbin/sendmail';
 
 # Next, read read configuration files and then command line
 # The next stuff is boilerplate
@@ -312,12 +312,12 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'BTS_SENDMAIL_COMMAND'}='/usr/sbin/sendmail';
 
     if ($config_vars{'BTS_SENDMAIL_COMMAND'} ne '/usr/sbin/sendmail') {
-	my $sendmailcmd = (split ' ', $config_vars{'BTS_SENDMAIL_COMMAND'})[0];
-	unless ($sendmailcmd =~ /^[A-Za-z_\-\+\.\/]*$/) {
-	    warn "BTS_SENDMAIL_COMMAND contained funny characters: $sendmailcmd\nReverting to default value /usr/sbin/sendmail\n";
+	my $cmd = (split ' ', $config_vars{'BTS_SENDMAIL_COMMAND'})[0];
+	unless ($cmd =~ /^[A-Za-z_\-\+\.\/]*$/) {
+	    warn "BTS_SENDMAIL_COMMAND contained funny characters: $cmd\nReverting to default value /usr/sbin/sendmail\n";
 	    $config_vars{'BTS_SENDMAIL_COMMAND'}='/usr/sbin/sendmail';
-	} elsif (system("command -v $sendmailcmd >/dev/null 2>&1") != 0) {
-	    warn "BTS_SENDMAIL_COMMAND $sendmailcmd could not be executed.\nReverting to default value /usr/sbin/sendmail\n";
+	} elsif (system("command -v $cmd >/dev/null 2>&1") != 0) {
+	    warn "BTS_SENDMAIL_COMMAND $cmd could not be executed.\nReverting to default value /usr/sbin/sendmail\n";
 	    $config_vars{'BTS_SENDMAIL_COMMAND'}='/usr/sbin/sendmail';
 	}
     }
@@ -335,7 +335,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $cachemode = $config_vars{'BTS_CACHE_MODE'};
     $refreshmode = $config_vars{'BTS_FORCE_REFRESH'} eq 'yes' ? 1 : 0;
     $mailreader = $config_vars{'BTS_MAIL_READER'};
-    $sendmailprogram = $config_vars{'BTS_SENDMAIL_COMMAND'};
+    $sendmailcmd = $config_vars{'BTS_SENDMAIL_COMMAND'};
 }
 
 if (exists $ENV{'BUGSOFFLINE'}) {
@@ -1538,7 +1538,7 @@ EOM
 		exec("/bin/cat")
 		    or die "bts: error running cat: $!\n";
 	    } else {
-		exec(split(' ', $sendmailprogram), "-t")
+		exec(split(' ', $sendmailcmd), "-t")
 		    or die "bts: error running sendmail: $!\n";
 	    }
 	}
@@ -1599,7 +1599,7 @@ EOM
 		exec("/bin/cat")
 		    or die "bts: error running cat: $!\n";
 	    } else {
-		exec(split(' ', $sendmailprogram), "-t")
+		exec(split(' ', $sendmailcmd), "-t")
 		    or die "bts: error running sendmail: $!\n";
 	    }
 	}
