@@ -437,6 +437,8 @@ L<http://bugs.debian.org/server-control>
 
 =item show [options] [tag:<tag> | usertag:<tag> ] [opt=val ...]
 
+=item show [release-critical | release-critical/... | RC]
+
 This is a synonym for bts bugs.
 
 =cut
@@ -450,6 +452,8 @@ sub bts_show {
 =item bugs [options] [src:<package> | from:<submitter>] [opt=val ..]
 
 =item bugs [options] [tag:<tag> | usertag:<tag> ] [opt=val ..]
+
+=item bugs [release-critical | release-critical/... | RC]
 
 Display the page listing the requested bugs in a web browser using
 L<sensible-browser(1)>.
@@ -507,6 +511,13 @@ Details of the bug tracking system itself, along with a bug-request
 page with more options than this script, can be found on
 http://bugs.debian.org/.  This page itself will be opened if the
 command 'bts bugs :' is used.
+
+=item release-critical, RC
+
+Display the front page of the release-critical pages on the BTS.  This
+is a synonym for http://bugs.debian.org/release-critical/index.html.
+It is also possible to say release-critical/debian/main.html and the like.
+RC is a synonym for release-critical/other/all.html.
 
 =back
 
@@ -1067,6 +1078,8 @@ sub bts_reportspam {
 
 =item cache [options] [<maint email> | <pkg> | src:<pkg> | from:<submitter>]
 
+=item cache [options] [release-critical | release-critical/... | RC]
+
 Generate or update a cache of bug reports for the given email address
 or package. By default it downloads all bugs belonging to the email
 address in the DEBEMAIL environment variable (or the EMAIL environment
@@ -1106,6 +1119,10 @@ file, as described below.  They may also be specified after the
 Finally, -q or --quiet will suppress messages about caches being
 up-to-date, and giving the option twice will suppress all cache
 messages (except for error messages).
+
+Beware of caching RC, though: it will take a LONG time!  (With 1000+
+RC bugs and a delay of 5 seconds between bugs, you're looking at a
+minimum of 1.5 hours, and probably significantly more than that.)
 
 =cut
 
@@ -1330,11 +1347,14 @@ EOF
 }
 
 # Strips any leading # or Bug# and trailing : from a thing if what's left is
-# a pure positive number
+# a pure positive number;
+# also RC is a synonym for release-critical/other/all.html
 sub sanitizething {
     my $bug = $_[0];
     defined $bug or return undef;
 
+    return 'release-critical/other/all.html' if $bug eq 'RC';
+    return 'release-critical/index.html' if $bug eq 'release-critical';
     $bug =~ s/^(?:(?:Bug)?\#)?(\d+):?$/$1/;
     return $bug;
 }
@@ -1705,13 +1725,13 @@ sub download_attachments {
     my ($thing, $toppage, $timestamp) = @_;
     my %bug2filename;
 
-    # We search for appropriate strings in the toppage, and save the
+    # We search for appropriate strings in the top page, and save the
     # attachments in files with names as follows:
     # - if the attachment specifies a filename, save as bug#/msg#-att#/filename
     # - if not, save as bug#/msg#-att# with suffix .txt if plain/text and
     #   .html if plain/html, no suffix otherwise (too much like hard work!)
     # Since messages are never modified retrospectively, we don't download
-    # attachements which have already been downloaded
+    # attachments which have already been downloaded
     
     # Yuck, yuck, yuck.  This regex splits the $data string at every
     # occurrence of either "[<a " or plain "<a ", preserving any "[".
@@ -1843,30 +1863,51 @@ sub mangle_cache_file {
     $data =~ s%(<BODY.*>)%$1<p><em>[Locally cached on $time by devscripts version $version]</em></p>%i;
     $data =~ s%href="/css/bugs.css"%href="bugs.css"%;
 
-    # Yuck, yuck, yuck.  This regex splits the $data string at every
-    # occurrence of either "[<a " or plain "<a ", preserving any "[".
-    my @data = split /(?:(?=\[<[Aa]\s)|(?<!\[)(?=<[Aa]\s))/, $data;
-    foreach (@data) {
-	if (m%<a(?: class=\".*?\")? href=\"bugreport\.cgi[^\?]*\?bug=(\d+)%i) {
-	    my $bug = $1;
-	    my ($msg, $filename) = href_to_filename($_);
-
-	    if ($bug eq $thing and defined $msg) {
-		if ($fullmode or
-		    (! $fullmode and exists $$bug2filename{$msg})) {
-		    s%<a((?: class=\".*?\")?) href="(bugreport\.cgi[^\"]*)">(.+?)</a>%<a$1 href="$filename">$3</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
-		} else {
-		    s%<a((?: class=\".*?\")?) href="(bugreport\.cgi[^\"]*)">(.+?)</a>%$3 (<a$1 href="$btscgiurl$2">online</a>)%i;
-		}
-	    } else {
-		s%<a((?: class=\".*?\")?) href="(bugreport\.cgi[^\?]*\?bug=(\d+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+    my @data;
+    # We have to distinguish between release-critical pages and normal BTS
+    # pages as they have a different structure
+    if ($thing =~ /^release-critical/) {
+	@data = split /(?=<[Aa])/, $data;
+	foreach (@data) {
+	    s%<a href="(http://bugs.debian.org/cgi-bin/bugreport\.cgi.*bug=(\d+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$1">online</a>)%i;
+	    s%<a href="(http://bugs.debian.org/cgi-bin/pkgreport\.cgi.*pkg=([^\"&;]+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$1">online</a>)%i;
+	    # References to other bug lists on bugs.d.o/release-critical
+	    if (m%<a href="((?:debian|other)[-a-z/]+\.html)"%i) {
+		my $ref = 'release-critical/'.$1;
+		$ref =~ s%/%_%g;
+		s%<a href="((?:debian|other)[-a-z/]+\.html)">(.+?)</a>%<a href="$ref">$2</a> (<a href="${btsurl}release-critical/$1">online</a>)%i;
 	    }
+	    # Maintainer email address - YUCK!!
+	    s%<a href="(http://bugs.debian.org/([^\"?]*\@[^\"?]*))">(.+?)</a>&gt;%<a href="$2.html">$3</a>&gt; (<a href="$1">online</a>)%i;
+	    # Graph - we don't download
+	    s%<img src="graph.png" alt="Graph of RC bugs">%<img src="${btsurl}release-critical/graph.png" alt="Graph of RC bugs (online)">%
 	}
-	else {
-	    s%<a((?: class=\".*?\")?) href="(pkgreport\.cgi\?(?:pkg|maint)=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
-	    s%<a((?: class=\".*?\")?) href="(pkgreport\.cgi\?src=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="src_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
-	    s%<a((?: class=\".*?\")?) href="(pkgreport\.cgi\?submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="from_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
-	    s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(bugspam\.cgi[^\"]+)">%<a$1 href="$btscgiurl$2">%i;
+    } else {
+	# Yuck, yuck, yuck.  This regex splits the $data string at every
+	# occurrence of either "[<a " or plain "<a ", preserving any "[".
+	@data = split /(?:(?=\[<[Aa]\s)|(?<!\[)(?=<[Aa]\s))/, $data;
+	foreach (@data) {
+	    if (m%<a(?: class=\".*?\")? href=\"bugreport\.cgi[^\?]*\?bug=(\d+)%i) {
+		my $bug = $1;
+		my ($msg, $filename) = href_to_filename($_);
+
+		if ($bug eq $thing and defined $msg) {
+		    if ($fullmode or
+			(! $fullmode and exists $$bug2filename{$msg})) {
+			s%<a((?: class=\".*?\")?) href="(bugreport\.cgi[^\"]*)">(.+?)</a>%<a$1 href="$filename">$3</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+		    } else {
+			s%<a((?: class=\".*?\")?) href="(bugreport\.cgi[^\"]*)">(.+?)</a>%$3 (<a$1 href="$btscgiurl$2">online</a>)%i;
+		    }
+		} else {
+		    s%<a((?: class=\".*?\")?) href="(bugreport\.cgi[^\?]*\?bug=(\d+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+		}
+	    }
+	    else {
+		s%<a((?: class=\".*?\")?) href="(pkgreport\.cgi\?(?:pkg|maint)=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+		s%<a((?: class=\".*?\")?) href="(pkgreport\.cgi\?src=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="src_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+		s%<a((?: class=\".*?\")?) href="(pkgreport\.cgi\?submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="from_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(bugspam\.cgi[^\"]+)">%<a$1 href="$btscgiurl$2">%i;
+	    }
 	}
     }
 
@@ -1901,9 +1942,11 @@ sub cachefile {
     $thing =~ s/^from:/from_/;
     $thing =~ s/^tag:/tag_/;
     $thing =~ s/^usertag:/usertag_/;
+    $thing =~ s%^release-critical/index\.html$%release-critical.html%;
+    $thing =~ s%/%_%g;
     $thgopts =~ s/;/_3B/g;
     $thgopts =~ s/=/_3D/g;
-    return $cachedir.$thing.$thgopts.".html";
+    return $cachedir.$thing.$thgopts.($thing =~ /\.html$/ ? "" : ".html");
 }
 
 # Given a thing, returns the filename for its mbox in the cache.
@@ -1928,6 +1971,8 @@ sub cachefile_to_thing {
     $thing =~ s/^from_/from:/;
     $thing =~ s/^tag_/tag:/;
     $thing =~ s/^usertag_/usertag:/;
+    $thing =~ s%^release-critical\.html$%release-critical/index\.html%;
+    $thing =~ s%_%/%g;
     $thing =~ s/_3B/;/g;
     $thing =~ s/_3D/=/g;
     $thing =~ /^(.*?)((?:;.*)?)$/;
@@ -1955,6 +2000,10 @@ sub thing_to_url {
     } elsif ($thing =~ /^usertag:/) {
 	($thingurl = $thing) =~ s/^usertag:/usertag=/;
 	$thingurl = $btscgipkgurl.'?'.$thingurl;
+    } elsif ($thing =~ m%^release-critical(\.html|/(index\.html)?)?$%) {
+	$thingurl = $btsurl . 'release-critical/index.html';
+    } elsif ($thing =~ m%^release-critical/%) {
+	$thingurl = $btsurl . $thing;
     } elsif ($thing =~ /\@/) { # so presume it's a maint request
 	$thingurl = $btscgipkgurl.'?maint='.$thing;
     } else { # it's a package, or had better be...

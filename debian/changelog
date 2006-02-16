@@ -4,6 +4,7 @@ devscripts (2.9.15) UNRELEASED; urgency=low
   * bts: require mailx | mailutils (mailutils provides mailx anyhow)
   * bts: always allow Bug#NNNNNN: or #NNNNN etc. in commands (Closes:
     #353049)
+  * bts: support caching RC bug pages (why?!) (Closes: #236312)
   * debdiff: handle multi-binary packages and allow comparison of control
     files from each corresponding pair of binary packages - thanks to
     Robert Luberda <robert@debian.org> for the patch (Closes: #174858)
@@ -11,7 +12,7 @@ devscripts (2.9.15) UNRELEASED; urgency=low
   * pkg-subscribe: new script to subscribe to the PTS for a limited time
     period (Closes: #202866)
 
- -- Julian Gilbey <jdg@debian.org>  Thu, 16 Feb 2006 10:51:29 +0000
+ -- Julian Gilbey <jdg@debian.org>  Thu, 16 Feb 2006 14:55:20 +0000
 
 devscripts (2.9.14) unstable; urgency=low
 
