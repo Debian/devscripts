@@ -4,7 +4,7 @@ devscripts (2.9.15) UNRELEASED; urgency=low
   * bts: require mailx | mailutils (mailutils provides mailx anyhow)
   * bts: always allow Bug#NNNNNN: or #NNNNN etc. in commands (Closes:
     #353049)
-  * bts: support caching RC bug pages (why?!) (Closes: #236312)
+  * bts: support caching RC bug pages (Closes: #236312)
   * bts: support subscribe/unsubscribe commands (Closes: #339661)
   * bts: support alternative sendmail command (Closes: #343752)
   * debdiff: handle multi-binary packages and allow comparison of control
