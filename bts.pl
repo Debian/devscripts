@@ -586,7 +586,7 @@ sub bts_bugs {
 	}
     }
 
-    my $url = shift;
+    my $url = sanitizething(shift);
     if (! $url) {
 	if (defined $ENV{'DEBEMAIL'}) {
 	    $url=$ENV{'DEBEMAIL'};
@@ -1151,7 +1151,7 @@ sub bts_cache {
     download("css/bugs.css");
 
     my $tocache;
-    if (@_ > 0) { $tocache=shift; }
+    if (@_ > 0) { $tocache=sanitizething(shift); }
     else { $tocache=''; }
     
     if (! length $tocache) {
@@ -1219,7 +1219,7 @@ value of DEBEMAIL or EMAIL.
 
 sub bts_cleancache {
     prunecache();
-    my $toclean=shift;
+    my $toclean=sanitizething(shift);
     if (! defined $toclean) {
 	die "bts cleancache: clean what?\n";
     }
@@ -1327,6 +1327,16 @@ EOF
 	print "\t$1\n" if /^=item\s([^\-].*)/ and ! $insublist;
 	last if defined $1 and $1 eq 'help';
     }
+}
+
+# Strips any leading # or Bug# and trailing : from a thing if what's left is
+# a pure positive number
+sub sanitizething {
+    my $bug = $_[0];
+    defined $bug or return undef;
+
+    $bug =~ s/^(?:(?:Bug)?\#)?(\d+):?$/$1/;
+    return $bug;
 }
 
 # Validate a bug number. Strips out extraneous leading junk, allowing

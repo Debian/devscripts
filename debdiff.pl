@@ -566,7 +566,7 @@ if (defined $singledeb[1] and defined $singledeb[2]) {
 	$DebPaths2{$dummyname} = $singledeb[2];
 }
 
-exit $exit_status unless ($#CommonDebs > -1) and $compare_control;
+exit $exit_status unless (@CommonDebs > 0) and $compare_control;
 
 unless (system ("command -v wdiff >/dev/null 2>&1") == 0) {
     warn "Can't compare control files; wdiff package not installed\n";
