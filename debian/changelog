@@ -1,3 +1,10 @@
+devscripts (2.9.16) unstable; urgency=low
+
+  * Fix 2.9.15 changelog to refer to pts-subscribe, not pkg-subscribe
+    (Closes: #353413)
+
+ -- Julian Gilbey <jdg@debian.org>  Sun, 19 Feb 2006 02:18:29 +0000
+
 devscripts (2.9.15) unstable; urgency=low
 
   * bts: handle bts show pkg archive=yes more gracefully
@@ -11,7 +18,7 @@ devscripts (2.9.15) unstable; urgency=low
     files from each corresponding pair of binary packages - thanks to
     Robert Luberda <robert@debian.org> for the patch (Closes: #174858)
   * general: improve getopt handling
-  * pkg-subscribe: new script to subscribe to the PTS for a limited time
+  * pts-subscribe: new script to subscribe to the PTS for a limited time
     period (Closes: #202866)
 
  -- Julian Gilbey <jdg@debian.org>  Thu, 16 Feb 2006 16:17:15 +0000
