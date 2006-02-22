@@ -3,8 +3,9 @@ devscripts (2.9.16) UNRELEASED; urgency=low
   * Fix 2.9.15 changelog to refer to pts-subscribe, not pkg-subscribe
     (Closes: #353413)
   * pts-subscribe: Depends on the "at" package (Closes: #353502)
+  * debian/rules: remove mention of DH_ALWAYS_EXCLUDE (see Bug#352626)
 
- -- Julian Gilbey <jdg@debian.org>  Mon, 20 Feb 2006 00:12:51 +0000
+ -- Julian Gilbey <jdg@debian.org>  Wed, 22 Feb 2006 09:22:58 +0000
 
 devscripts (2.9.15) unstable; urgency=low
 
