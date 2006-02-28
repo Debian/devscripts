@@ -461,21 +461,26 @@ else
     esac
 
     # Figure out the type of archive
-    X="${ARCHIVE##*/}"
-    case "$X" in
-	*.orig.tar.gz)  X="${X%.orig.tar.gz}";  UNPACK="tar zxf"; TYPE=gz ;;
-	*.orig.tar.bz2) X="${X%.orig.tar.bz2}"; UNPACK="tar --bzip -xf";
-	                TYPE=bz2;;
-	*.tar.gz)  X="${X%.tar.gz}";  UNPACK="tar zxf"; TYPE=gz ;;
-	*.tar.bz2) X="${X%.tar.bz2}"; UNPACK="tar --bzip2 -xf"; TYPE=bz2 ;;
-	*.tar.Z)   X="${X%.tar.Z}";   UNPACK="tar zxf"; TYPE="" ;;
-	*.tgz)     X="${X%.tgz}";     UNPACK="tar zxf"; TYPE=gz ;;
-	*.tar)     X="${X%.tar}";     UNPACK="tar xf";  TYPE="" ;;
-	*.zip)     X="${X%.zip}";     UNPACK="unzip";   TYPE="" ;;
-	*)
-	    echo "$PROGNAME: sorry: Unknown archive type" >&2
-	    exit 1
-    esac
+    X="${ARCHIVE%%/}"
+    X="${X##*/}"
+    if [ ! -d "$ARCHIVE_PATH" ]; then
+	case "$X" in
+	    *.orig.tar.gz)  X="${X%.orig.tar.gz}";  UNPACK="tar zxf";
+	                    TYPE=gz ;;
+	    *.orig.tar.bz2) X="${X%.orig.tar.bz2}"; UNPACK="tar --bzip -xf";
+	                    TYPE=bz2 ;;
+	    *.tar.gz)  X="${X%.tar.gz}";  UNPACK="tar zxf"; TYPE=gz ;;
+	    *.tar.bz2) X="${X%.tar.bz2}"; UNPACK="tar --bzip -xf"; TYPE=bz2 ;;
+	    *.tar.Z)   X="${X%.tar.Z}";   UNPACK="tar zxf"; TYPE="" ;;
+	    *.tgz)     X="${X%.tgz}";     UNPACK="tar zxf"; TYPE=gz ;;
+	    *.tar)     X="${X%.tar}";     UNPACK="tar xf";  TYPE="" ;;
+	    *.zip)     X="${X%.zip}";     UNPACK="unzip";   TYPE="" ;;
+	    *)
+		echo "$PROGNAME: sorry: Unknown archive type" >&2
+		exit 1
+	esac
+    fi
+
     if [ "$NEW_VERSION" = "" ]; then
 	# Figure out the new version
 	NEW_VERSION=`echo "$X" | perl -ne "/$MPATTERN/"' && print $1'`
@@ -575,12 +580,21 @@ else
 	exit 1
     }
     cd $TEMP_DIR
-    echo "-- Untarring the new sourcecode archive $ARCHIVE"
-    $UNPACK "$ARCHIVE_PATH" || {
-	echo "$PROGNAME: can't unpack: $UNPACK $ARCHIVE_PATH failed;" >&2
-	echo "aborting..." >&2
-	exit 1
-    }
+    if [ ! -d "$ARCHIVE_PATH" ]; then
+	echo "-- Untarring the new sourcecode archive $ARCHIVE"
+	$UNPACK "$ARCHIVE_PATH" || {
+	    echo "$PROGNAME: can't unpack: $UNPACK $ARCHIVE_PATH failed;" >&2
+	    echo "aborting..." >&2
+	    exit 1
+	}
+    else
+	tar -C "$ARCHIVE_PATH/../" -c $X | tar x || {
+	    echo "$PROGNAME: tar -C \"$ARCHIVE_PATH/../\" -c $X | tar x failed;" >&2
+	    echo "aborting..." >&2
+	    exit 1
+	}
+    fi
+
     cd ..
     if [ `ls $TEMP_DIR | wc -l` -eq 1 ]; then
 	# The files are stored in the archive under a top directory, we presume
