@@ -141,14 +141,15 @@ In general, the command line interface is the same as what you would write
 in a mail to control@bugs.debian.org, just prefixed with "bts". For
 example:
 
- % bts close 85942 1.1
  % bts severity 69042 normal
  % bts merge 69042 43233
  % bts retitle 69042 blah blah
 
 A few additional commands have been added for your convenience, and this
 program is less strict about what constitutes a valid bug number. For example,
-"close Bug#85942" is understood, as is "close #85942".
+"severity Bug#85942 normal" is understood, as is "severity #85942 normal".
+(Of course, your shell may regard "#" as a comment character though, so you
+may need to quote it!)
 
 Also, for your convenience, this program allows you to abbreviate commands
 to the shortest unique substring (similar to how cvs lets you abbreviate
@@ -159,8 +160,8 @@ your shell does not strip out the comment in a command like
 "bts severity 30321 normal #inflated severity", then this program is smart
 enough to figure out where the comment is, and include it in the email.
 Note that most shells do strip out such comments before they get to the
-program, unless the comment is quoted.  (Note that something like "bts
-close #85942" will not be treated as a comment!)
+program, unless the comment is quoted.  (Something like "bts
+severity #85942 normal" will not be treated as a comment!)
 
 You can specify multiple commands by separating them with a single dot,
 rather like B<update-rc.d>; a single comma may also be used; all the
