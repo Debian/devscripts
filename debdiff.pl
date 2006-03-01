@@ -145,9 +145,8 @@ my @excludes = ();
 my @move = ();
 my %renamed = ();
 
-##
-## handle command-line options
-##
+
+# handle command-line options
 
 while (@ARGV) {
     if ($ARGV[0] =~ /^(--help|-h)$/) { usage(); exit 0; }
@@ -371,7 +370,7 @@ elsif ($type eq 'dsc') {
     }
 
     # Do we have interdiff?
-    system("(interdiff --version) >/dev/null 2>&1");
+    system("command -v interdiff >/dev/null 2>&1");
     my $use_interdiff = ($?==0) ? 1 : 0;
 
     if ($origs[1] eq $origs[2] and defined $diffs[1] and defined $diffs[2]
@@ -418,31 +417,34 @@ else {
     fatal "Internal error: \$type = $type unrecognised";
 }
 
-##
-## Compare
-##
 
-if ($show_moved and $type ne 'deb') {
-    # We first check the list of .debs
+# Compare
+# Start by a piece of common code to set up the @CommonDebs list and the like
+
+my (@deblosses, @debgains);
+
+{
     my %debs;
     grep $debs{$_}--, keys %debs1;
     grep $debs{$_}++, keys %debs2;
 
-    my @losses = sort grep $debs{$_} < 0, keys %debs;
-    my @gains  = sort grep $debs{$_} > 0, keys %debs;
+    my @deblosses = sort grep $debs{$_} < 0, keys %debs;
+    my @debgains  = sort grep $debs{$_} > 0, keys %debs;
     @CommonDebs= sort grep $debs{$_} == 0, keys %debs;
+}
 
-    if (@gains) {
+if ($show_moved and $type ne 'deb') {
+    if (@debgains) {
 	my $msg = "Warning: these package names were in the second list but not in the first:";
 	print $msg, "\n", '-' x length $msg, "\n";
-	print join("\n",@gains), "\n\n";
+	print join("\n",@debgains), "\n\n";
     }
 
-    if (@losses) {
-	print "\n" if @gains;
+    if (@deblosses) {
+	print "\n" if @debgains;
 	my $msg = "Warning: these package names were in the first list but not in the second:";
 	print $msg, "\n", '-' x length $msg, "\n";
-	print join("\n",@losses), "\n\n";
+	print join("\n",@deblosses), "\n\n";
     }
 
     # We run through all of the files in the first set of debs one by
@@ -570,11 +572,10 @@ unless (system ("command -v wdiff >/dev/null 2>&1") == 0) {
     exit $exit_status;
 }
 
-mktmpdirs();
-
 for my $debname (@CommonDebs) {
 
 	no strict 'refs';
+	mktmpdirs();
 
 	for my $i (1,2) {
 	    if (system('dpkg-deb', '-e', "${\"DebPaths$i\"}{$debname}", ${"dir$i"})) {
