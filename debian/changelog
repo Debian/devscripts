@@ -2,11 +2,12 @@ devscripts (2.9.16) UNRELEASED; urgency=low
 
   * Fix 2.9.15 changelog to refer to pts-subscribe, not pkg-subscribe
     (Closes: #353413)
+  * debdiff: fix unnecessary chdir (Closes: #354862)
   * pts-subscribe: Depends on the "at" package (Closes: #353502)
   * uupdate: handle already-unpacked source code archives (Closes: #286253)
   * debian/rules: remove mention of DH_ALWAYS_EXCLUDE (see Bug#352626)
 
- -- Julian Gilbey <jdg@debian.org>  Tue, 28 Feb 2006 19:13:43 +0000
+ -- Julian Gilbey <jdg@debian.org>  Wed,  1 Mar 2006 18:20:45 +0000
 
 devscripts (2.9.15) unstable; urgency=low
 

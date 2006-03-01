@@ -293,9 +293,6 @@ elsif ($type eq 'changes' or $type eq 'debs') {
 	    close CHANGES
 		or fatal "Problem reading $changes: $!";
 
-	    chdir dirname($changes)
-		or fatal "Couldn't chdir ", dirname($changes), ": $!";
-
 	    # Is there only one .deb listed?
 	    if (@debs == 1) {
 		$singledeb[$i] = $debs[0];
