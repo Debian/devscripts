@@ -63,14 +63,14 @@ if (! GetOptions(
 
 my $prog=getprog();
 if (! -e "debian/changelog") {
-    die "cannot find debian/changelog\n";
+    die "debcommit: cannot find debian/changelog\n";
 }
 
 if ($release) {
-    open (C, "<debian/changelog") || die "cannot read debian/changelog: $!";
+    open (C, "<debian/changelog") || die "debcommit: cannot read debian/changelog: $!";
     my $top=<C>;
     if ($top=~/UNRELEASED/) {
-	die "debian/changelog says it's UNRELEASED\n";
+	die "debcommit: debian/changelog says it's UNRELEASED\n";
     }
     close C;
     
@@ -116,7 +116,7 @@ sub getprog {
 	    return "svk";
 	}
 	
-	die "not in a cvs, subversion, arch, bzr, git or svk working copy\n";
+	die "debcommit: not in a cvs, subversion, arch, bzr, git or svk working copy\n";
     }
 }
 
@@ -133,12 +133,12 @@ sub commit {
     
     if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk' || $prog eq 'bzr') {
 	if (! action($prog, "commit", "-m", $message)) {
-	    die "commit failed\n";
+	    die "debcommit: commit failed\n";
 	}
     }
     elsif ($prog eq 'git') {
 	if (! action($prog, "commit", "-a", "-m", $message)) {
-	    die "commit failed\n";
+	    die "debcommit: commit failed\n";
 	}
     }
     elsif ($prog eq 'tla' || $prog eq 'baz') {
@@ -153,11 +153,11 @@ sub commit {
 	    @args=("-s", "$summary ...", "-L", $message);
 	}
 	if (! action($prog, "commit", @args)) {
-	    die "commit failed\n";
+	    die "debcommit: commit failed\n";
 	}
     }
     else {
-	die "unknown program $prog";
+	die "debcommit: unknown program $prog";
     }
 }
 
@@ -176,7 +176,7 @@ sub tag {
 			 "-m", "create tag directory") ||
 		! action($prog, "copy", $svnpath, "$tagpath/$tag",
 			 "-m", "tagging version $tag")) {
-		die "failed tagging with $tag\n";
+		die "debcommit: failed tagging with $tag\n";
 	    }
 	}
     }
@@ -185,7 +185,7 @@ sub tag {
 	$tag=~tr/./_/;      # mangle for cvs
 	$tag="debian_version_$tag";
 	if (! action("cvs", "tag", "-f", $tag)) {
-	    die "failed tagging with $tag\n";
+	    die "debcommit: failed tagging with $tag\n";
 	}
     }
     elsif ($prog eq 'tla' || $prog eq 'baz') {
@@ -201,7 +201,7 @@ sub tag {
 	}
 	
 	if (! action($prog, $subcommand, $archpath, $tagpath)) {
-	    die "failed tagging with $tag\n";
+	    die "debcommit: failed tagging with $tag\n";
 	}
     }
     elsif ($prog eq 'bzr') {
@@ -211,7 +211,7 @@ sub tag {
 	    $tag=~s/^[0-9]+://; # strip epoch
 	    $tag="debian_version_$tag";
     	if (! action($prog, "tag", $tag)) {
-	        die "failed tagging with $tag\n";
+	        die "debcommit: failed tagging with $tag\n";
     	}
     }
 }
@@ -233,7 +233,7 @@ sub getmessage {
 	}
 
 	open CHLOG, '-|', @diffcmd, 'debian/changelog'
-	    or die "Cannot run $diffcmd[0]: $!\n";
+	    or die "debcommit: cannot run $diffcmd[0]: $!\n";
 
 	foreach (<CHLOG>) {
 	    next unless /^\+  /;
@@ -243,11 +243,11 @@ sub getmessage {
 	}
 	
 	if (! length $ret) {
-	    die "Unable to determine commit message using $prog\nTry using the -m flag.\n";
+	    die "debcommit: unable to determine commit message using $prog\nTry using the -m flag.\n";
 	}
     }
     else {
-	die "unknown program $prog";
+	die "debcommit: unknown program $prog";
     }
 
     chomp $ret;

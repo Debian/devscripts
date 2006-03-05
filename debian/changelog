@@ -1,5 +1,6 @@
 devscripts (2.9.16) UNRELEASED; urgency=low
 
+  [ Julian Gilbey ]
   * Fix 2.9.15 changelog to refer to pts-subscribe, not pkg-subscribe
     (Closes: #353413)
   * debdiff: fix unnecessary chdir (Closes: #354862)
@@ -9,7 +10,10 @@ devscripts (2.9.16) UNRELEASED; urgency=low
   * uupdate: handle already-unpacked source code archives (Closes: #286253)
   * debian/rules: remove mention of DH_ALWAYS_EXCLUDE (see Bug#352626)
 
- -- Julian Gilbey <jdg@debian.org>  Wed,  1 Mar 2006 23:22:12 +0000
+  [ Joey Hess ]
+  * debcommit: Add program name to all error messages.
+
+ -- Joey Hess <joeyh@debian.org>  Sat,  4 Mar 2006 20:03:03 -0500
 
 devscripts (2.9.15) unstable; urgency=low
 
