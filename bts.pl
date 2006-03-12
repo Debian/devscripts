@@ -1448,7 +1448,7 @@ sub checkbug {
 	}
     }
     
-    $bug=~s/^[^-0-9]*//;
+    $bug=~s/^((bug)?\#)?//i;
     $bug=~s/:$//;
     if (! exists $clonedbugs{$bug} &&
 	(! length $bug || $bug !~ /^[0-9]+$/)) {
