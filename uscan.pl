@@ -660,8 +660,8 @@ sub process_watchline ($$$$$$)
 	($base, $filepattern, $lastversion, $action) = split ' ', $line, 4;
 
 	if ($base =~ m%/([^/]*\([^/]*\)[^/]*)$%) {
-	    # only three fields
-	    $action = "$lastversion $action";
+	    # only three fields; action might be multiword, though
+	    $action = $lastversion . (defined $action ? " $action" : "");
 	    $lastversion = $filepattern;
 	    $filepattern = $1;
 	    $base =~ s%/[^/]+$%/%;

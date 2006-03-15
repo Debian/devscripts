@@ -9,6 +9,7 @@ devscripts (2.9.16) UNRELEASED; urgency=low
     just a coding problem, and could have been done for ages (Closes: #354868)
   * pts-subscribe: Depends on the "at" package (Closes: #353502)
   * uupdate: handle already-unpacked source code archives (Closes: #286253)
+  * uscan: avoid warnings on one-word actions (Closes: #356959)
   * debian/rules: remove mention of DH_ALWAYS_EXCLUDE (see Bug#352626)
 
   [ Joey Hess ]
