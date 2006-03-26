@@ -1150,6 +1150,16 @@ sub bts_reportspam {
     }
 }
 
+=item spamreport <bug>
+
+spamreport is a synonym for reportspam.
+
+=cut
+
+sub bts_spamreport {
+    goto &bts_reportspam;
+}
+
 =item cache [options] [<maint email> | <pkg> | src:<pkg> | from:<submitter>]
 
 =item cache [options] [release-critical | release-critical/... | RC]

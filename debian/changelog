@@ -4,6 +4,7 @@ devscripts (2.9.16) UNRELEASED; urgency=low
   * Fix 2.9.15 changelog to refer to pts-subscribe, not pkg-subscribe
     (Closes: #353413)
   * bts: be stricter about bug number cruft (Closes: #356318)
+  * bts: add spamreport as a synonym for reportspam
   * debdiff: fix unnecessary chdir (Closes: #354862)
   * debdiff: compare control files in multi-deb binary packages - this was
     just a coding problem, and could have been done for ages (Closes: #354868)
