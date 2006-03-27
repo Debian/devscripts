@@ -11,12 +11,13 @@ devscripts (2.9.16) UNRELEASED; urgency=low
   * pts-subscribe: Depends on the "at" package (Closes: #353502)
   * uupdate: handle already-unpacked source code archives (Closes: #286253)
   * uscan: avoid warnings on one-word actions (Closes: #356959)
+  * uscan: clarify manpage regarding spaces in URLs (Closes: #359190)
   * debian/rules: remove mention of DH_ALWAYS_EXCLUDE (see Bug#352626)
 
   [ Joey Hess ]
   * debcommit: Add program name to all error messages.
 
- -- Joey Hess <joeyh@debian.org>  Sat,  4 Mar 2006 20:03:03 -0500
+ -- Julian Gilbey <jdg@debian.org>  Mon, 27 Mar 2006 10:15:54 +0100
 
 devscripts (2.9.15) unstable; urgency=low
 

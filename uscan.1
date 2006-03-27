@@ -50,18 +50,23 @@ ftp://ftp.nessus.org/pub/nessus/nessus-([\\d\\.]+)/src/nessus-core-([\\d\\.]+)\\
 # opts=pasv ftp://.../...
 
 # This is one format for an HTTP site, which is the same
-# as the FTP format
+# as the FTP format.  uscan starts by downloading the homepage,
+# obtained by removing the last component of the URL; in this case,
+# http://www.cpan.org/modules/by-module/Text/
 http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-(.*)\\.tar\\.gz
 
-# This is a variant HTTP format with more possibilities:
+# This is a variant HTTP format which allows direct specification of
+# the homepage:
 # Homepage  Pattern  [Version  [Action]]
 http://www.dataway.ch/~lukasl/amph/amph.html \\
   files/amphetamine-([\\d\\.]*).tar.bz2
 
-# If your package is located on sourceforge, use the following format
-# to automatically use the qa.debian.org redirector, avoiding SF's
-# difficult mirror system.
+# If your package is located on sourceforge, use one of the following
+# formats to automatically use the qa.debian.org redirector, avoiding
+# SF's difficult mirror system.
 http://sf.net/aa-project/aalib-(.*)\\.tar\\.gz
+
+http://sf.net/aa-project/ aalib-(.*)\\.tar\\.gz
 
 # This is the format for a site which has funny version numbers;
 # the parenthesised groups will be joined with dots to make a
