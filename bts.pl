@@ -1458,8 +1458,7 @@ sub checkbug {
 	}
     }
     
-    $bug=~s/^((bug)?\#)?//i;
-    $bug=~s/:$//;
+    $bug=~s/^(?:(?:bug)?\#)?(-?\d+):?$/$1/i;
     if (! exists $clonedbugs{$bug} &&
 	(! length $bug || $bug !~ /^[0-9]+$/)) {
 	warn "\"$_[0]\" does not look like a bug number\n" unless $quiet;
