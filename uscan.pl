@@ -668,7 +668,7 @@ sub process_watchline ($$$$$$)
 	}
 
 	# Handle sf.net addresses specially
-	$base =~ s%^http://sf.net/%http://qa.debian.org/watch/sf.php/%;
+	$base =~ s%^http://sf\.net/%http://qa.debian.org/watch/sf.php/%;
 	if ($base =~ m%^(\w+://[^/]+)%) {
 	    $site = $1;
 	} else {
