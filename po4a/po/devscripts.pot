@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2006-02-13  9:19+0000\n"
+"POT-Creation-Date: 2006-03-29 16:20+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -101,7 +101,7 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../debrsign.1:30 ../debi.1:65 ../debchange.1:145 ../cvs-debi.1:28 ../debdiff.1:47 ../debsign.1:39 ../debuild.1:143 ../debclean.1:60 ../cvs-debrelease.1:21 ../wnpp-alert.1:12 ../uscan.1:273 ../grep-excuses.1:13 ../tagpending.1:12 ../dscverify.1:15 ../debrelease.1:56 ../debc.1:63 ../checkbashisms.1:14 ../uupdate.1:49 ../rc-alert.1:17 ../dpkg-depcheck.1:15 ../cvs-debc.1:24 ../cvs-debuild.1:33 ../plotchangelog.1:43
+#: ../debrsign.1:30 ../debi.1:65 ../debchange.1:145 ../cvs-debi.1:28 ../debdiff.1:47 ../debsign.1:39 ../debuild.1:143 ../debclean.1:60 ../cvs-debrelease.1:21 ../wnpp-alert.1:12 ../uscan.1:278 ../grep-excuses.1:13 ../tagpending.1:12 ../dscverify.1:15 ../debrelease.1:56 ../debc.1:63 ../checkbashisms.1:14 ../uupdate.1:50 ../rc-alert.1:17 ../dpkg-depcheck.1:15 ../cvs-debc.1:24 ../cvs-debuild.1:33 ../plotchangelog.1:43
 #, no-wrap
 msgid "OPTIONS"
 msgstr ""
@@ -182,13 +182,13 @@ msgid "All other options are passed on to B<debsign> on the remote machine."
 msgstr ""
 
 # type: SH
-#: ../debrsign.1:57 ../debi.1:87 ../debchange.1:278 ../debdiff.1:121 ../debsign.1:99 ../debuild.1:191 ../debclean.1:87 ../uscan.1:360 ../grep-excuses.1:24 ../dscverify.1:29 ../debrelease.1:99 ../debc.1:85 ../uupdate.1:85 ../dpkg-depcheck.1:102 ../plotchangelog.1:106
+#: ../debrsign.1:57 ../debi.1:87 ../debchange.1:278 ../debdiff.1:121 ../debsign.1:99 ../debuild.1:191 ../debclean.1:87 ../uscan.1:365 ../grep-excuses.1:24 ../dscverify.1:29 ../debrelease.1:99 ../debc.1:85 ../uupdate.1:86 ../dpkg-depcheck.1:102 ../plotchangelog.1:106
 #, no-wrap
 msgid "CONFIGURATION VARIABLES"
 msgstr ""
 
 # type: Plain text
-#: ../debrsign.1:63 ../debi.1:93 ../debchange.1:284 ../debsign.1:105 ../debclean.1:93 ../debrelease.1:105 ../debc.1:91 ../uupdate.1:91
+#: ../debrsign.1:63 ../debi.1:93 ../debchange.1:284 ../debsign.1:105 ../debclean.1:93 ../debrelease.1:105 ../debc.1:91 ../uupdate.1:92
 msgid ""
 "The two configuration files I</etc/devscripts.conf> and I<~/.devscripts> are "
 "sourced in that order to set configuration variables.  Command line options "
@@ -209,7 +209,7 @@ msgid "Equivalent to passing B<--path> on the command line (see above.)"
 msgstr ""
 
 # type: SH
-#: ../debrsign.1:66 ../debi.1:100 ../debchange.1:323 ../cvs-debi.1:62 ../debdiff.1:150 ../debsign.1:118 ../debuild.1:306 ../devscripts.conf.5:54 ../debclean.1:104 ../cvs-debrelease.1:64 ../uscan.1:422 ../grep-excuses.1:34 ../tagpending.1:29 ../dscverify.1:40 ../debrelease.1:117 ../debc.1:98 ../checkbashisms.1:32 ../uupdate.1:159 ../rc-alert.1:27 ../dpkg-depcheck.1:118 ../dpkg-genbuilddeps.1:30 ../cvs-debc.1:58 ../cvs-debuild.1:56 ../plotchangelog.1:124
+#: ../debrsign.1:66 ../debi.1:100 ../debchange.1:323 ../cvs-debi.1:62 ../debdiff.1:150 ../debsign.1:118 ../debuild.1:306 ../devscripts.conf.5:54 ../debclean.1:104 ../cvs-debrelease.1:64 ../uscan.1:427 ../grep-excuses.1:34 ../tagpending.1:29 ../dscverify.1:40 ../debrelease.1:117 ../debc.1:98 ../checkbashisms.1:32 ../uupdate.1:160 ../rc-alert.1:27 ../dpkg-depcheck.1:118 ../dpkg-genbuilddeps.1:30 ../cvs-debc.1:58 ../cvs-debuild.1:56 ../plotchangelog.1:124
 #, no-wrap
 msgid "SEE ALSO"
 msgstr ""
@@ -220,7 +220,7 @@ msgid "B<debsign>(1), B<dpkg-architecture>(1)  and B<ssh>(1)."
 msgstr ""
 
 # type: SH
-#: ../debrsign.1:71 ../debi.1:104 ../debchange.1:330 ../cvs-debi.1:68 ../debdiff.1:156 ../debsign.1:128 ../debuild.1:320 ../devscripts.conf.5:58 ../debclean.1:108 ../cvs-debrelease.1:69 ../wnpp-alert.1:19 ../uscan.1:428 ../grep-excuses.1:36 ../tagpending.1:33 ../dscverify.1:44 ../debrelease.1:122 ../debc.1:103 ../checkbashisms.1:34 ../uupdate.1:166 ../rc-alert.1:29 ../dpkg-genbuilddeps.1:36 ../cvs-debc.1:64 ../debpkg.1:23 ../cvs-debuild.1:63 ../plotchangelog.1:126 ../mergechanges.1:17
+#: ../debrsign.1:71 ../debi.1:104 ../debchange.1:330 ../cvs-debi.1:68 ../debdiff.1:156 ../debsign.1:128 ../debuild.1:320 ../devscripts.conf.5:58 ../debclean.1:108 ../cvs-debrelease.1:69 ../wnpp-alert.1:19 ../uscan.1:433 ../grep-excuses.1:36 ../tagpending.1:33 ../dscverify.1:44 ../debrelease.1:122 ../debc.1:103 ../checkbashisms.1:34 ../uupdate.1:167 ../rc-alert.1:29 ../dpkg-genbuilddeps.1:36 ../cvs-debc.1:64 ../debpkg.1:23 ../cvs-debuild.1:63 ../plotchangelog.1:126 ../mergechanges.1:17
 #, no-wrap
 msgid "AUTHOR"
 msgstr ""
@@ -283,7 +283,7 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../debi.1:29 ../debchange.1:105 ../debuild.1:51 ../debclean.1:24 ../uscan.1:216 ../debrelease.1:20 ../debc.1:27
+#: ../debi.1:29 ../debchange.1:105 ../debuild.1:51 ../debclean.1:24 ../uscan.1:221 ../debrelease.1:20 ../debc.1:27
 #, no-wrap
 msgid "Directory name checking"
 msgstr ""
@@ -303,23 +303,23 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../debi.1:42 ../debchange.1:118 ../debuild.1:65 ../debclean.1:37 ../uscan.1:233 ../debrelease.1:33 ../debc.1:40
+#: ../debi.1:42 ../debchange.1:118 ../debuild.1:65 ../debclean.1:37 ../uscan.1:238 ../debrelease.1:33 ../debc.1:40
 msgid "DEVSCRIPTS_CHECK_DIRNAME_LEVEL can take the following values:"
 msgstr ""
 
 # type: TP
-#: ../debi.1:42 ../debchange.1:118 ../debuild.1:65 ../debclean.1:37 ../uscan.1:233 ../debrelease.1:33 ../debc.1:40
+#: ../debi.1:42 ../debchange.1:118 ../debuild.1:65 ../debclean.1:37 ../uscan.1:238 ../debrelease.1:33 ../debc.1:40
 #, no-wrap
 msgid "B<0>"
 msgstr ""
 
 # type: Plain text
-#: ../debi.1:45 ../debchange.1:121 ../debuild.1:68 ../debclean.1:40 ../uscan.1:236 ../debrelease.1:36 ../debc.1:43
+#: ../debi.1:45 ../debchange.1:121 ../debuild.1:68 ../debclean.1:40 ../uscan.1:241 ../debrelease.1:36 ../debc.1:43
 msgid "Never check the directory name."
 msgstr ""
 
 # type: TP
-#: ../debi.1:45 ../debchange.1:121 ../debuild.1:68 ../debclean.1:40 ../uscan.1:236 ../debrelease.1:36 ../debc.1:43
+#: ../debi.1:45 ../debchange.1:121 ../debuild.1:68 ../debclean.1:40 ../uscan.1:241 ../debrelease.1:36 ../debc.1:43
 #, no-wrap
 msgid "B<1>"
 msgstr ""
@@ -332,18 +332,18 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../debi.1:49 ../debchange.1:125 ../debuild.1:72 ../debclean.1:44 ../uscan.1:242 ../debrelease.1:40 ../debc.1:47
+#: ../debi.1:49 ../debchange.1:125 ../debuild.1:72 ../debclean.1:44 ../uscan.1:247 ../debrelease.1:40 ../debc.1:47
 #, no-wrap
 msgid "B<2>"
 msgstr ""
 
 # type: Plain text
-#: ../debi.1:52 ../debchange.1:128 ../debuild.1:75 ../debclean.1:47 ../uscan.1:245 ../debrelease.1:43 ../debc.1:50
+#: ../debi.1:52 ../debchange.1:128 ../debuild.1:75 ../debclean.1:47 ../uscan.1:250 ../debrelease.1:43 ../debc.1:50
 msgid "Always check the directory name."
 msgstr ""
 
 # type: Plain text
-#: ../debi.1:65 ../debchange.1:141 ../debuild.1:88 ../debclean.1:60 ../uscan.1:258 ../debrelease.1:56 ../debc.1:63
+#: ../debi.1:65 ../debchange.1:141 ../debuild.1:88 ../debclean.1:60 ../uscan.1:263 ../debrelease.1:56 ../debc.1:63
 msgid ""
 "The directory name is checked by testing whether the current directory name "
 "(as determined by B<pwd>(1)) matches the regex given by the configuration "
@@ -359,32 +359,32 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../debi.1:72 ../debchange.1:255 ../debuild.1:177 ../debclean.1:69 ../uscan.1:342 ../debrelease.1:81 ../debc.1:70
+#: ../debi.1:72 ../debchange.1:255 ../debuild.1:177 ../debclean.1:69 ../uscan.1:347 ../debrelease.1:81 ../debc.1:70
 #, no-wrap
 msgid "B<--check-dirname-level> I<N>"
 msgstr ""
 
 # type: Plain text
-#: ../debi.1:76 ../debi.1:80 ../debchange.1:259 ../debchange.1:263 ../debuild.1:181 ../debuild.1:185 ../debclean.1:73 ../debclean.1:77 ../uscan.1:346 ../uscan.1:350 ../debrelease.1:85 ../debrelease.1:89 ../debc.1:74 ../debc.1:78
+#: ../debi.1:76 ../debi.1:80 ../debchange.1:259 ../debchange.1:263 ../debuild.1:181 ../debuild.1:185 ../debclean.1:73 ../debclean.1:77 ../uscan.1:351 ../uscan.1:355 ../debrelease.1:85 ../debrelease.1:89 ../debc.1:74 ../debc.1:78
 msgid ""
 "See the above section \"Directory name checking\" for an explanation of this "
 "option."
 msgstr ""
 
 # type: TP
-#: ../debi.1:76 ../debchange.1:259 ../debuild.1:181 ../debclean.1:73 ../uscan.1:346 ../debrelease.1:85 ../debc.1:74
+#: ../debi.1:76 ../debchange.1:259 ../debuild.1:181 ../debclean.1:73 ../uscan.1:351 ../debrelease.1:85 ../debc.1:74
 #, no-wrap
 msgid "B<--check-dirname-regex> I<regex>"
 msgstr ""
 
 # type: TP
-#: ../debi.1:80 ../debchange.1:263 ../debdiff.1:108 ../debsign.1:89 ../debclean.1:77 ../cvs-debrelease.1:57 ../uscan.1:350 ../grep-excuses.1:14 ../dscverify.1:19 ../debrelease.1:89 ../debc.1:78 ../uupdate.1:75 ../dpkg-depcheck.1:92
+#: ../debi.1:80 ../debchange.1:263 ../debdiff.1:108 ../debsign.1:89 ../debclean.1:77 ../cvs-debrelease.1:57 ../uscan.1:355 ../grep-excuses.1:14 ../dscverify.1:19 ../debrelease.1:89 ../debc.1:78 ../uupdate.1:76 ../dpkg-depcheck.1:92
 #, no-wrap
 msgid "B<--no-conf>, B<--noconf>"
 msgstr ""
 
 # type: Plain text
-#: ../debi.1:84 ../debchange.1:267 ../debdiff.1:112 ../debsign.1:93 ../debuild.1:149 ../debclean.1:81 ../cvs-debrelease.1:61 ../uscan.1:354 ../grep-excuses.1:18 ../dscverify.1:23 ../debrelease.1:93 ../debc.1:82 ../uupdate.1:79 ../dpkg-depcheck.1:96
+#: ../debi.1:84 ../debchange.1:267 ../debdiff.1:112 ../debsign.1:93 ../debuild.1:149 ../debclean.1:81 ../cvs-debrelease.1:61 ../uscan.1:359 ../grep-excuses.1:18 ../dscverify.1:23 ../debrelease.1:93 ../debc.1:82 ../uupdate.1:80 ../dpkg-depcheck.1:96
 msgid ""
 "Do not read any configuration files.  This can only be used as the first "
 "option given on the command-line."
@@ -675,7 +675,7 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../debchange.1:183 ../uscan.1:313
+#: ../debchange.1:183 ../uscan.1:318
 #, no-wrap
 msgid "B<--package> I<package>"
 msgstr ""
@@ -883,24 +883,24 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../debchange.1:272 ../debdiff.1:112 ../debsign.1:93 ../wnpp-alert.1:13 ../dscverify.1:23 ../debrelease.1:93 ../checkbashisms.1:15 ../uupdate.1:79 ../rc-alert.1:21
+#: ../debchange.1:272 ../debdiff.1:112 ../debsign.1:93 ../wnpp-alert.1:13 ../dscverify.1:23 ../debrelease.1:93 ../checkbashisms.1:15 ../uupdate.1:80 ../rc-alert.1:21
 #, no-wrap
 msgid "B<--help>, B<-h>"
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:275 ../debsign.1:96 ../debclean.1:84 ../dscverify.1:26 ../debrelease.1:96 ../uupdate.1:82
+#: ../debchange.1:275 ../debsign.1:96 ../debclean.1:84 ../dscverify.1:26 ../debrelease.1:96 ../uupdate.1:83
 msgid "Display a help message and exit successfully."
 msgstr ""
 
 # type: TP
-#: ../debchange.1:275 ../debsign.1:96 ../debclean.1:84 ../uscan.1:357 ../grep-excuses.1:21 ../dscverify.1:26 ../debrelease.1:96 ../uupdate.1:82 ../plotchangelog.1:95
+#: ../debchange.1:275 ../debsign.1:96 ../debclean.1:84 ../uscan.1:362 ../grep-excuses.1:21 ../dscverify.1:26 ../debrelease.1:96 ../uupdate.1:83 ../plotchangelog.1:95
 #, no-wrap
 msgid "B<--version>"
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:278 ../debsign.1:99 ../debclean.1:87 ../dscverify.1:29 ../debrelease.1:99 ../uupdate.1:85
+#: ../debchange.1:278 ../debsign.1:99 ../debclean.1:87 ../dscverify.1:29 ../debrelease.1:99 ../uupdate.1:86
 msgid "Display version and copyright information and exit successfully."
 msgstr ""
 
@@ -2451,7 +2451,7 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../debclean.1:81 ../uscan.1:354 ../grep-excuses.1:18 ../plotchangelog.1:92
+#: ../debclean.1:81 ../uscan.1:359 ../grep-excuses.1:18 ../plotchangelog.1:92
 #, no-wrap
 msgid "B<--help>"
 msgstr ""
@@ -2687,36 +2687,45 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:55
+#: ../uscan.1:57
 #, no-wrap
 msgid ""
 "# This is one format for an HTTP site, which is the same\n"
-"# as the FTP format\n"
+"# as the FTP format.  uscan starts by downloading the homepage,\n"
+"# obtained by removing the last component of the URL; in this case,\n"
+"# http://www.cpan.org/modules/by-module/Text/\n"
 "http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-(.*)\\e.tar\\e.gz\n"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:60
+#: ../uscan.1:63
 #, no-wrap
 msgid ""
-"# This is a variant HTTP format with more possibilities:\n"
+"# This is a variant HTTP format which allows direct specification of\n"
+"# the homepage:\n"
 "# Homepage  Pattern  [Version  [Action]]\n"
 "http://www.dataway.ch/~lukasl/amph/amph.html \\e\n"
 "  files/amphetamine-([\\ed\\e.]*).tar.bz2\n"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:65
+#: ../uscan.1:68
 #, no-wrap
 msgid ""
-"# If your package is located on sourceforge, use the following format\n"
-"# to automatically use the qa.debian.org redirector, avoiding SF's\n"
-"# difficult mirror system.\n"
+"# If your package is located on sourceforge, use one of the following\n"
+"# formats to automatically use the qa.debian.org redirector, avoiding\n"
+"# SF's difficult mirror system.\n"
 "http://sf.net/aa-project/aalib-(.*)\\e.tar\\e.gz\n"
 msgstr ""
 
 # type: Plain text
 #: ../uscan.1:70
+#, no-wrap
+msgid "http://sf.net/aa-project/ aalib-(.*)\\e.tar\\e.gz\n"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:75
 #, no-wrap
 msgid ""
 "# This is the format for a site which has funny version numbers;\n"
@@ -2726,7 +2735,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:78
+#: ../uscan.1:83
 #, no-wrap
 msgid ""
 "# This is another way of handling site with funny version numbers,\n"
@@ -2740,7 +2749,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:83
+#: ../uscan.1:88
 #, no-wrap
 msgid ""
 "# Similarly, the upstream part of the Debian version number can be\n"
@@ -2750,21 +2759,21 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:89
+#: ../uscan.1:94
 msgid ""
 "Comment lines may be introduced with a `#' character.  Continuation lines "
 "may be indicated by terminating a line with a backslash character."
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:93
+#: ../uscan.1:98
 msgid ""
 "The first (non-comment) line of the file must begin `version=3'.  This "
 "allows for future extensions without having to change the name of the file."
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:98
+#: ../uscan.1:103
 msgid ""
 "There are two possibilities for the syntax of an HTTP watchfile line, and "
 "only one for an FTP line.  We begin with the common (and simpler)  format.  "
@@ -2773,7 +2782,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:115
+#: ../uscan.1:120
 msgid ""
 "The first field gives the full pattern of URLs being searched for.  In the "
 "case of an FTP site, the directory listing for the requested directory will "
@@ -2793,7 +2802,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:124
+#: ../uscan.1:129
 msgid ""
 "The pattern (after the final slash) is a Perl regexp (see B<perlre>(1) for "
 "details of these).  You need to make the pattern so tight that it matches "
@@ -2805,7 +2814,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:135
+#: ../uscan.1:140
 msgid ""
 "Having got a list of `files' matching the pattern, their version numbers are "
 "extracted by treating the part matching the Perl regexp groups, demarcated "
@@ -2819,7 +2828,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:154
+#: ../uscan.1:159
 msgid ""
 "The current (upstream) version can be specified as the second parameter in "
 "the watchfile line.  If this is I<debian> or absent, then the current Debian "
@@ -2840,20 +2849,20 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:157
+#: ../uscan.1:162
 msgid ""
 "Finally, if a third parameter (an action) is given in the watchfile line, "
 "this is taken as the name of a command, and the command"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:159
+#: ../uscan.1:164
 #, no-wrap
 msgid "    I<command >B<--upstream-version>I< version filename>\n"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:168
+#: ../uscan.1:173
 msgid ""
 "is executed, using either the original file or the symlink name.  A common "
 "such command would be B<uupdate>(1).  (Note that the calling syntax was "
@@ -2865,7 +2874,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:184
+#: ../uscan.1:189
 msgid ""
 "The alternative version of the watchfile syntax for HTTP URLs is as "
 "follows.  The first field is a homepage which should be downloaded and then "
@@ -2884,13 +2893,13 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../uscan.1:184
+#: ../uscan.1:189
 #, no-wrap
 msgid "PER-SITE OPTIONS"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:190
+#: ../uscan.1:195
 msgid ""
 "A watchfile line may be prefixed with `opts=I<options>', where I<options> is "
 "a comma-separated list of options.  The whole I<options> string may be "
@@ -2899,26 +2908,26 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uscan.1:190
+#: ../uscan.1:195
 #, no-wrap
 msgid "B<active> and B<passive> (or B<pasv>)"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:195
+#: ../uscan.1:200
 msgid ""
 "If used on an FTP line, these override the choice of whether to use PASV "
 "mode or not, and force the use of the specified mode for this site."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:195
+#: ../uscan.1:200
 #, no-wrap
 msgid "B<uversionmangle=>I<rules>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:201
+#: ../uscan.1:206
 msgid ""
 "This is used to mangle the upstream version number as matched by the "
 "ftp://... or http:// rules as follows.  First, the I<rules> string is split "
@@ -2927,13 +2936,13 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:203
+#: ../uscan.1:208
 #, no-wrap
 msgid "    $version =~ I<rule>;\n"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:208
+#: ../uscan.1:213
 msgid ""
 "for each rule.  Thus, suitable rules might be `s/^/0./' to prepend `0.' to "
 "the version number and `s/_/./' to change underscores into periods.  Note "
@@ -2942,13 +2951,13 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uscan.1:208
+#: ../uscan.1:213
 #, no-wrap
 msgid "B<dversionmangle=>I<rules>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:216
+#: ../uscan.1:221
 msgid ""
 "This is used to mangle the upstream version number of the currently "
 "installed package in the same way as the B<uversionmangle> option.  Thus, a "
@@ -2959,7 +2968,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:231
+#: ../uscan.1:236
 msgid ""
 "Similarly to several other scripts in the B<devscripts> package, B<uscan> "
 "explores the requested directory trees looking for I<debian/changelog> and "
@@ -2976,7 +2985,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:242
+#: ../uscan.1:247
 msgid ""
 "Only check the directory name if we have had to change directory in our "
 "search for I<debian/changelog>, that is, the directory containing "
@@ -2985,18 +2994,18 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../uscan.1:258
+#: ../uscan.1:263
 #, no-wrap
 msgid "EXAMPLE"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:260
+#: ../uscan.1:265
 msgid "This script will perform a fully automatic upstream update."
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:268
+#: ../uscan.1:273
 #, no-wrap
 msgid ""
 "#!/bin/sh -e\n"
@@ -3008,7 +3017,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:273
+#: ../uscan.1:278
 msgid ""
 "Note that we don't call B<dupload> or B<dput> automatically, as the "
 "maintainer should perform sanity checks on the software before uploading it "
@@ -3016,81 +3025,81 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uscan.1:274
+#: ../uscan.1:279
 #, no-wrap
 msgid "B<--report, --no-download>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:277
+#: ../uscan.1:282
 msgid "Only report about available newer versions but do not download anything."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:277
+#: ../uscan.1:282
 #, no-wrap
 msgid "B<--report-status>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:281
+#: ../uscan.1:286
 msgid ""
 "Report on the status of all packages, even those which are up-to-date, but "
 "do not download anything."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:281
+#: ../uscan.1:286
 #, no-wrap
 msgid "B<--download>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:284
+#: ../uscan.1:289
 msgid "Report and download.  (This is the default behaviour.)"
 msgstr ""
 
 # type: TP
-#: ../uscan.1:284
+#: ../uscan.1:289
 #, no-wrap
 msgid "B<--pasv>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:287
+#: ../uscan.1:292
 msgid "Force PASV mode for FTP connections."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:287
+#: ../uscan.1:292
 #, no-wrap
 msgid "B<--no-pasv>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:290
+#: ../uscan.1:295
 msgid "Do not use PASV mode for FTP connections."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:290
+#: ../uscan.1:295
 #, no-wrap
 msgid "B<--timeout> I<N>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:293
+#: ../uscan.1:298
 msgid "Set timeout to N seconds (default 20 seconds)."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:293
+#: ../uscan.1:298
 #, no-wrap
 msgid "B<--symlink>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:299
+#: ../uscan.1:304
 msgid ""
 "Make orig.tar.gz symlinks to any downloaded files if their extensions are "
 "I<.tar.gz> or I<.tgz>, and similarly for to orig.tar.bz2 for the suffixes "
@@ -3098,13 +3107,13 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uscan.1:299
+#: ../uscan.1:304
 #, no-wrap
 msgid "B<--rename>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:304
+#: ../uscan.1:309
 msgid ""
 "Instead of symlinking, rename the downloaded files to their Debian "
 "orig.tar.gz names if their extensions are I<.tar.gz> or I<.tgz>, and "
@@ -3112,40 +3121,40 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uscan.1:304 ../uupdate.1:71
+#: ../uscan.1:309 ../uupdate.1:72
 #, no-wrap
 msgid "B<--no-symlink>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:307
+#: ../uscan.1:312
 msgid "Don't make these symlinks and don't rename the files."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:307
+#: ../uscan.1:312
 #, no-wrap
 msgid "B<--dehs>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:310
+#: ../uscan.1:315
 msgid "Use an XML format for output, as required by the DEHS system."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:310
+#: ../uscan.1:315
 #, no-wrap
 msgid "B<--no-dehs>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:313
+#: ../uscan.1:318
 msgid "Use the traditional uscan output format.  (This is the default behaviour.)"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:321
+#: ../uscan.1:326
 msgid ""
 "Specify the name of the package to check for rather than examining "
 "I<debian/changelog>; this requires the B<--upstream-version> and "
@@ -3155,13 +3164,13 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uscan.1:321
+#: ../uscan.1:326
 #, no-wrap
 msgid "B<--upstream-version> I<upstream-version>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:326
+#: ../uscan.1:331
 msgid ""
 "Specify the current upstream version rather than examine the watchfile or "
 "changelog to determine it.  This is ignored if a directory scan is being "
@@ -3169,13 +3178,13 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uscan.1:326
+#: ../uscan.1:331
 #, no-wrap
 msgid "B<--watchfile> I<watchfile>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:333
+#: ../uscan.1:338
 msgid ""
 "Specify the watchfile rather than perform a directory scan to determine it.  "
 "If this option is used without B<--package>, then B<uscan> must be called "
@@ -3184,50 +3193,50 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uscan.1:333 ../plotchangelog.1:78
+#: ../uscan.1:338 ../plotchangelog.1:78
 #, no-wrap
 msgid "B<--verbose>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:336
+#: ../uscan.1:341
 msgid "Give verbose output."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:336
+#: ../uscan.1:341
 #, no-wrap
 msgid "B<--no-verbose>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:339
+#: ../uscan.1:344
 msgid "Don't give verbose output.  (This is the default behaviour.)"
 msgstr ""
 
 # type: TP
-#: ../uscan.1:339
+#: ../uscan.1:344
 #, no-wrap
 msgid "B<--debug>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:342
+#: ../uscan.1:347
 msgid "Dump the downloaded web pages to stdout for debugging your watch file."
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:357
+#: ../uscan.1:362
 msgid "Give brief usage information."
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:360
+#: ../uscan.1:365
 msgid "Display version information."
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:367
+#: ../uscan.1:372
 msgid ""
 "The two configuration files I</etc/devscripts.conf> and I<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  These may "
@@ -3238,26 +3247,26 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uscan.1:367
+#: ../uscan.1:372
 #, no-wrap
 msgid "B<USCAN_DOWNLOAD>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:372
+#: ../uscan.1:377
 msgid ""
 "If this is set to I<no>, then newer upstream files will not be downloaded; "
 "this is equivalent to the B<--report> or B<--no-download> options."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:372
+#: ../uscan.1:377
 #, no-wrap
 msgid "B<USCAN_PASV>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:378
+#: ../uscan.1:383
 msgid ""
 "If this is set to I<yes> or I<no>, this will force FTP connections to use "
 "PASV mode or not to, respectively.  If this is set to I<default>, then "
@@ -3266,13 +3275,13 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uscan.1:378
+#: ../uscan.1:383
 #, no-wrap
 msgid "B<USCAN_SYMLINK>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:385
+#: ../uscan.1:390
 msgid ""
 "If this is set to I<no>, then a pkg_version.orig.tar.{gz|bz2} symlink will "
 "not be made (equivalent to the B<--no-symlink> option).  If it is set to "
@@ -3282,39 +3291,39 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uscan.1:385
+#: ../uscan.1:390
 #, no-wrap
 msgid "B<USCAN_DEHS_OUTPUT>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:389
+#: ../uscan.1:394
 msgid ""
 "If this is set to I<yes>, then DEHS-style output will be used.  This is "
 "equivalent to the B<--dehs> option."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:389
+#: ../uscan.1:394
 #, no-wrap
 msgid "B<USCAN_VERBOSE>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:393
+#: ../uscan.1:398
 msgid ""
 "If this is set to I<yes>, then verbose output will be given.  This is "
 "equivalent to the B<--verbose> option."
 msgstr ""
 
 # type: SH
-#: ../uscan.1:393
+#: ../uscan.1:398
 #, no-wrap
 msgid "EXIT STATUS"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:397
+#: ../uscan.1:402
 msgid ""
 "The exit status gives some indication of whether a newer version was found "
 "or not; one is advised to read the output to determine exactly what happened "
@@ -3322,37 +3331,37 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uscan.1:397
+#: ../uscan.1:402
 #, no-wrap
 msgid "0"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:401
+#: ../uscan.1:406
 msgid ""
 "Either B<--help> or B<--version> was used, or for some watchfile which was "
 "examined, a newer upstream version was located."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:401 ../checkbashisms.1:25
+#: ../uscan.1:406 ../checkbashisms.1:25
 #, no-wrap
 msgid "1"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:405
+#: ../uscan.1:410
 msgid "No newer upstream versions were located for any of the watchfiles examined."
 msgstr ""
 
 # type: SH
-#: ../uscan.1:405
+#: ../uscan.1:410
 #, no-wrap
 msgid "HISTORY"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:409
+#: ../uscan.1:414
 msgid ""
 "This section briefly describes the backwards-incompatible watchfile features "
 "which have been added in each watchfile version, and the first version of "
@@ -3360,39 +3369,39 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uscan.1:409
+#: ../uscan.1:414
 #, no-wrap
 msgid "I<Pre-version 2>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:413
+#: ../uscan.1:418
 msgid ""
 "The watchfile syntax was significantly different in those days.  Don't use "
 "it."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:413
+#: ../uscan.1:418
 #, no-wrap
 msgid "I<Version 2>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:417
+#: ../uscan.1:422
 msgid ""
 "devscripts version 2.6.90: The first incarnation of the current style of "
 "watchfiles."
 msgstr ""
 
 # type: TP
-#: ../uscan.1:417
+#: ../uscan.1:422
 #, no-wrap
 msgid "I<Version 3>"
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:422
+#: ../uscan.1:427
 msgid ""
 "devscripts version 2.8.12: Introduced the following: correct handling of "
 "regex special characters in the path part, directory/path pattern matching, "
@@ -3400,12 +3409,12 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:428
+#: ../uscan.1:433
 msgid "B<dpkg>(1), B<perlre>(1), B<uupdate>(1)  and B<devscripts.conf>(5)."
 msgstr ""
 
 # type: Plain text
-#: ../uscan.1:433
+#: ../uscan.1:438
 msgid ""
 "The original version of B<uscan> was written by Christoph Lameter "
 "E<lt>clameter@debian.orgE<gt>.  Significant improvements, changes and "
@@ -3902,17 +3911,18 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:27
+#: ../uupdate.1:28
 msgid ""
 "Currently supported source code file types are I<.tar.gz>, I<.tar.bz2>, "
-"I<.tar.Z>, I<.tgz>, I<.tar> and I<.zip> archives.  Supported patch file "
-"types are B<gzip>-compressed, B<bzip2>-compressed and uncompressed patch "
-"files.  The file types are identified by the file names, so they must use "
-"the standard suffixes."
+"I<.tar.Z>, I<.tgz>, I<.tar> and I<.zip> archives.  Also supported are "
+"already unpacked source code archives; simply give the path of the source "
+"code directory.  Supported patch file types are B<gzip>-compressed, "
+"B<bzip2>-compressed and uncompressed patch files.  The file types are "
+"identified by the file names, so they must use the standard suffixes."
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:37
+#: ../uupdate.1:38
 msgid ""
 "Usually B<uupdate> will be able to deduce the version number from the source "
 "archive name (as long as it only contains digits and periods).  If that "
@@ -3924,7 +3934,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:42
+#: ../uupdate.1:43
 msgid ""
 "Since B<uupdate> uses B<debuild> to clean the current archive before trying "
 "to apply a patch file, it accepts a B<--rootcmd> or B<-r> option allowing "
@@ -3933,7 +3943,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:49
+#: ../uupdate.1:50
 msgid ""
 "If an archive is being built, the pristine upstream source should be used to "
 "create the I<.orig.tar.gz> file wherever possible.  This means that MD5 sums "
@@ -3943,42 +3953,42 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:51
+#: ../uupdate.1:52
 msgid "This is a summary of what was explained above."
 msgstr ""
 
 # type: TP
-#: ../uupdate.1:51
+#: ../uupdate.1:52
 #, no-wrap
 msgid "B<--upstream-version >I<version>, B<-v >I<version>"
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:54
+#: ../uupdate.1:55
 msgid "Specify the version number of the upstream package explicitly."
 msgstr ""
 
 # type: TP
-#: ../uupdate.1:54
+#: ../uupdate.1:55
 #, no-wrap
 msgid "B<--rootcmd >I<gain-root-command>, B<-r >I<gain-root-command>"
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:58
+#: ../uupdate.1:59
 msgid ""
 "Specify the command to be used to become root to build the package and is "
 "passed onto B<debuild>(1) if it is specified."
 msgstr ""
 
 # type: TP
-#: ../uupdate.1:58
+#: ../uupdate.1:59
 #, no-wrap
 msgid "B<--pristine>, B<-u>"
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:63
+#: ../uupdate.1:64
 msgid ""
 "Treat the source as pristine upstream source and symlink to it from "
 "I<E<lt>packageE<gt>_E<lt>versionE<gt>.orig.tar.gz> whenever possible.  This "
@@ -3986,26 +3996,26 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uupdate.1:63
+#: ../uupdate.1:64
 #, no-wrap
 msgid "B<--no-pristine>"
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:66
+#: ../uupdate.1:67
 msgid ""
 "Do not attempt to make a I<E<lt>packageE<gt>_E<lt>versionE<gt>.orig.tar.gz> "
 "symlink."
 msgstr ""
 
 # type: TP
-#: ../uupdate.1:66
+#: ../uupdate.1:67
 #, no-wrap
 msgid "B<--symlink>, B<-s>"
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:71
+#: ../uupdate.1:72
 msgid ""
 "Simply create a symlink when moving a new upstream I<.tar.gz> archive to the "
 "new I<E<lt>packageE<gt>_E<lt>versionE<gt>.orig.tar.gz> location.  This is "
@@ -4013,63 +4023,63 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:75
+#: ../uupdate.1:76
 msgid ""
 "Copy the upstream I<.tar.gz> to the new location instead of making a "
 "symlink."
 msgstr ""
 
 # type: TP
-#: ../uupdate.1:91
+#: ../uupdate.1:92
 #, no-wrap
 msgid "B<UUPDATE_PRISTINE>"
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:95
+#: ../uupdate.1:96
 msgid ""
 "If this is set to I<no>, then it is the same as the B<--no-pristine> command "
 "line parameter being used."
 msgstr ""
 
 # type: TP
-#: ../uupdate.1:95
+#: ../uupdate.1:96
 #, no-wrap
 msgid "B<UUPDATE_SYMLINK_ORIG>"
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:99
+#: ../uupdate.1:100
 msgid ""
 "If this is set to I<no>, then it is the same as the B<--no-symlink> command "
 "line parameter being used."
 msgstr ""
 
 # type: TP
-#: ../uupdate.1:99
+#: ../uupdate.1:100
 #, no-wrap
 msgid "B<UUPDATE_ROOTCMD>"
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:102
+#: ../uupdate.1:103
 msgid "This is equivalent to the B<--rootcmd> option."
 msgstr ""
 
 # type: SH
-#: ../uupdate.1:102
+#: ../uupdate.1:103
 #, no-wrap
 msgid "ACTIONS TAKEN ON AN ARCHIVE"
 msgstr ""
 
 # type: TP
-#: ../uupdate.1:103 ../uupdate.1:132
+#: ../uupdate.1:104 ../uupdate.1:133
 #, no-wrap
 msgid "B<Figure out new version number>"
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:109
+#: ../uupdate.1:110
 msgid ""
 "Unless an explicit version number is provided, the archive name is analyzed "
 "for a sequence of digits separated by dots.  If something like that is "
@@ -4078,13 +4088,13 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uupdate.1:109
+#: ../uupdate.1:110
 #, no-wrap
 msgid "B<Create the .orig.tar.gz archive>"
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:114
+#: ../uupdate.1:115
 msgid ""
 "If the B<--pristine> or B<-u> option is specified and the upstream archive "
 "is a I<.tar.gz> or I<.tgz> archive, then this will be copied directly to "
@@ -4092,13 +4102,13 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uupdate.1:114
+#: ../uupdate.1:115
 #, no-wrap
 msgid "B<Unpacking>"
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:119
+#: ../uupdate.1:120
 msgid ""
 "The archive is unpacked and placed in a directory with the correct name "
 "according to Debian policy: package-upstream_version.orig.  Processing is "
@@ -4106,13 +4116,13 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uupdate.1:119 ../uupdate.1:143
+#: ../uupdate.1:120 ../uupdate.1:144
 #, no-wrap
 msgid "B<Patching>"
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:127
+#: ../uupdate.1:128
 msgid ""
 "The I<.diffs.gz> from the current version are applied to the unpackaged "
 "archive.  A non-zero exit status and warning message will occur if the "
@@ -4122,26 +4132,26 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uupdate.1:127 ../uupdate.1:155
+#: ../uupdate.1:128 ../uupdate.1:156
 #, no-wrap
 msgid "B<Changelog update>"
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:131 ../uupdate.1:159
+#: ../uupdate.1:132 ../uupdate.1:160
 msgid ""
 "A changelog entry with the new version number is generated with the text "
 "\"New upstream release\"."
 msgstr ""
 
 # type: SH
-#: ../uupdate.1:131
+#: ../uupdate.1:132
 #, no-wrap
 msgid "ACTIONS TAKEN ON A PATCH FILE"
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:138
+#: ../uupdate.1:139
 msgid ""
 "Unless an explicit version number is provided, the patch file name is "
 "analyzed for a sequence of digits separated by dots.  If something like that "
@@ -4150,13 +4160,13 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../uupdate.1:138
+#: ../uupdate.1:139
 #, no-wrap
 msgid "B<Clean the current source tree>"
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:143
+#: ../uupdate.1:144
 msgid ""
 "The command B<debuild clean> is executed within the current Debian source "
 "archive to clean it.  If a B<-r> option is given to B<uupdate>, it is passed "
@@ -4164,7 +4174,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:155
+#: ../uupdate.1:156
 msgid ""
 "The current source archive (I<.orig.tar.gz>) is unpacked and the patch "
 "applied to the original sources.  If this is successful, then the I<.orig> "
@@ -4178,14 +4188,14 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:166
+#: ../uupdate.1:167
 msgid ""
 "B<debuild>(1), B<fakeroot>(1), B<patch>(1), I<The Debian Policy Manual> and "
 "B<devscripts.conf>(5)."
 msgstr ""
 
 # type: Plain text
-#: ../uupdate.1:169
+#: ../uupdate.1:170
 msgid ""
 "The original version of B<uupdate> was written by Christoph Lameter "
 "E<lt>clameter@debian.orgE<gt>.  Several changes and improvements have been "
