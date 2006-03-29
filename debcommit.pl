@@ -12,8 +12,8 @@ debcommit [--release] [--message=text] [--noact]
 
 debcommit generates a commit message based on new text in debian/changelog,
 and commits the change to a package's cvs, svn, svk, arch, bzr or git
-repository. It must be run in a cvs, svn, svk, arch, bzr or git working copy for
-the package.
+repository. It must be run in a cvs, svn, svk, arch, bzr or git working copy
+for the package.
 
 =head1 OPTIONS
 
@@ -49,6 +49,34 @@ Do not actually do anything, but do print the commands that would be run.
 use warnings;
 use strict;
 use Getopt::Long;
+use File::Basename;
+my $progname = basename($0);
+
+sub usage {
+    print <<"EOT";
+Usage: $progname [--release] [--message=text] [--noact] [--help ] [--version]
+
+Generates a commit message based on new text in debian/changelog,
+and commit the change to a package\'s repository.
+
+   --release       Commit a release of the package.
+   --message=text  Specify a commit message
+   --noact         Dry run, no actual commits
+   --help          This message
+   --version       Version information
+EOT
+}
+
+sub version {
+    print <<"EOF";
+This is $progname, from the Debian devscripts package, version ###VERSION###
+This code is copyright by Joey Hess <joeyh\@debian.org>, all rights reserved.
+This program comes with ABSOLUTELY NO WARRANTY.
+You are free to redistribute this code under the terms of the
+GNU General Public License, version 2 or later.
+EOF
+}
+
 
 my $release=0;
 my $message;
@@ -57,6 +85,8 @@ if (! GetOptions(
 		 "release" => \$release,
 		 "message=s" => \$message,
 		 "noact" => \$noact,
+		 "help" => sub { usage(); exit 0; },
+		 "version" => sub { version(); exit 0; },
 		 )) {
     die "Usage: debcommit [--release] [--message=text] [--noact]\n";
 }
@@ -70,7 +100,7 @@ if ($release) {
     open (C, "<debian/changelog") || die "debcommit: cannot read debian/changelog: $!";
     my $top=<C>;
     if ($top=~/UNRELEASED/) {
-	die "debcommit: debian/changelog says it's UNRELEASED\n";
+	die "debcommit: debian/changelog says it's UNRELEASED\nTry running dch --release first\n";
     }
     close C;
     

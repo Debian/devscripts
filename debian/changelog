@@ -1,10 +1,11 @@
-devscripts (2.9.16) UNRELEASED; urgency=low
+devscripts (2.9.16) unstable; urgency=low
 
   [ Julian Gilbey ]
   * Fix 2.9.15 changelog to refer to pts-subscribe, not pkg-subscribe
     (Closes: #353413)
   * bts: be stricter about bug number cruft (Closes: #356318)
   * bts: add spamreport as a synonym for reportspam
+  * debcommit: add --help, --version
   * debdiff: fix unnecessary chdir (Closes: #354862)
   * debdiff: compare control files in multi-deb binary packages - this was
     just a coding problem, and could have been done for ages (Closes: #354868)
@@ -17,7 +18,7 @@ devscripts (2.9.16) UNRELEASED; urgency=low
   [ Joey Hess ]
   * debcommit: Add program name to all error messages.
 
- -- Julian Gilbey <jdg@debian.org>  Mon, 27 Mar 2006 10:15:54 +0100
+ -- Julian Gilbey <jdg@debian.org>  Wed, 29 Mar 2006 16:20:17 +0100
 
 devscripts (2.9.15) unstable; urgency=low
 
