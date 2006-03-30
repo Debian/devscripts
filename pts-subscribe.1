@@ -4,24 +4,22 @@ pts-subscribe \- time-limited subscription to the PTS
 .SH SYNOPSIS
 \fBpts-subscribe\fR [options] \fIpackage\fR
 .SH DESCRIPTION
-\fBpts-subscribe\fR sends a subscription request for the package
-\fIpackage\fR to the Package Tracking System at pts@qa.debian.org, and
-schedules an unsubscription request for a future date using
-\fBat\fR(1), by default in 30 days' time.  This can be changed either
-using the configuration files (see below) or command-line options.
+\fBpts-subscribe\fR sends a subscription request for \fIpackage\fR to
+the Package Tracking System at pts@qa.debian.org, and cancels the
+subscription 30 days later.
 .PP
 This utility is useful if a developer has made an NMU and wants to
-track the package thereafter for a limited period of time.
+track the package for a limited period of time.
 .SH OPTIONS
 .TP
 \fB\-\-until \fItime\fR, \fB\-u\fR \fItime\fR
-When \fBat\fR(1) should send the unsubscription request, using
-\fBat\fR's syntax.  Default is 'now + 30 days'.  This option will
-probably require quoting!  \fB\-\-until forever\fR is equivalent to
-using the \fB\-\-forever\fR option.
+When \fBat\fR(1) should cancel the subscription.  \fItime\fR must be
+specified using \fBat\fR's syntax.  Default is 'now + 30 days'.  This
+option will probably require quoting!
 .TP
 .B \-\-forever
-Don't send an automatic unsubscribe request.
+Don't cancel the subscription automatically.  This can also be
+specified as \fB\-\-until forever\fR.
 .TP
 .BR \-\-help ", " \-h
 Display a help message and exit successfully.
