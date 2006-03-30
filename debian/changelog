@@ -1,8 +1,10 @@
 devscripts (2.9.17) UNRELEASED; urgency=low
 
-  * Added mass-bug. Closes: #355505
+  * bts: actually support the --sendmail option rather than just say we
+    do!
+  * mass-bug: new script (Closes: #355505)
 
- -- Joey Hess <joeyh@debian.org>  Thu, 30 Mar 2006 15:25:35 -0500
+ -- Julian Gilbey <jdg@debian.org>  Thu, 30 Mar 2006 21:29:52 +0100
 
 devscripts (2.9.16) unstable; urgency=low
 

@@ -309,12 +309,12 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'BTS_FORCE_REFRESH'}='no';
     $config_vars{'BTS_MAIL_READER'} =~ /\%s/
 	or $config_vars{'BTS_MAIL_READER'}='mutt -f %s';
-    $config_vars{'BTS_MAIL_READER'} =~ /./
+    $config_vars{'BTS_SENDMAIL_COMMAND'} =~ /./
 	or $config_vars{'BTS_SENDMAIL_COMMAND'}='/usr/sbin/sendmail';
 
     if ($config_vars{'BTS_SENDMAIL_COMMAND'} ne '/usr/sbin/sendmail') {
 	my $cmd = (split ' ', $config_vars{'BTS_SENDMAIL_COMMAND'})[0];
-	unless ($cmd =~ /^[A-Za-z_\-\+\.\/]*$/) {
+	unless ($cmd =~ /^[A-Za-z0-9_\-\+\.\/]*$/) {
 	    warn "BTS_SENDMAIL_COMMAND contained funny characters: $cmd\nReverting to default value /usr/sbin/sendmail\n";
 	    $config_vars{'BTS_SENDMAIL_COMMAND'}='/usr/sbin/sendmail';
 	} elsif (system("command -v $cmd >/dev/null 2>&1") != 0) {
@@ -344,7 +344,7 @@ if (exists $ENV{'BUGSOFFLINE'}) {
 }
 
 my ($opt_help, $opt_version, $opt_noconf);
-my ($opt_cachemode, $opt_mailreader);
+my ($opt_cachemode, $opt_mailreader, $opt_sendmail);
 my $opt_cachedelay=5;
 my $mboxmode = 0;
 my $quiet=0;
@@ -360,6 +360,7 @@ GetOptions("help|h" => \$opt_help,
 	   "cache-delay=i" => \$opt_cachedelay,
 	   "m|mbox" => \$mboxmode,
 	   "mailreader|mail-reader=s" => \$opt_mailreader,
+	   "sendmail=s" => \$opt_sendmail,
 	   "f" => \$refreshmode,
 	   "force-refresh!" => \$refreshmode,
 	   "q|quiet+" => \$quiet,
@@ -380,6 +381,21 @@ if ($opt_mailreader) {
 	warn "bts: ignoring invalid --mailreader option: invalid mail command following it.\n";
     }
 }
+
+if ($opt_sendmail) {
+    if ($opt_sendmail ne '/usr/sbin/sendmail'
+	and $opt_sendmail ne $sendmailcmd) {
+	my $cmd = (split ' ', $opt_sendmail)[0];
+	unless ($cmd =~ /^[A-Za-z0-9_\-\+\.\/]*$/) {
+	    warn "--sendmail command contained funny characters: $cmd\nReverting to default value $sendmailcmd\n";
+	    unset $opt_sendmail;
+	} elsif (system("command -v $cmd >/dev/null 2>&1") != 0) {
+	    warn "--sendmail command $cmd could not be executed.\nReverting to default value $sendmailcmd\n";
+	    unset $opt_sendmail;
+	}
+    }
+}
+$sendmailcmd = $opt_sendmail if $opt_sendmail;
 
 if ($opt_cachemode) {
     if ($opt_cachemode =~ /^(min|mbox|full)$/) {
@@ -1411,6 +1427,7 @@ Valid options are:
    -f, --force-refresh    Reload all bug reports being cached, even unchanged
                           ones
    --no-force-refresh     Don\'t do so (default)
+   --sendmail=cmd         Sendmail command to use (default /usr/sbin/sendmail)
    --help, -h             Display this message
    --version, -v          Display version and copyright info
 
