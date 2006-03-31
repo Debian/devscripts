@@ -101,7 +101,8 @@
 
 ##### debc
 # 
-# No variables currently
+# debc recognises the DEBRELEASE_DEBS_DIR variable; see debrelease
+# below for more information.
 
 ##### deb-reversion
 # 
@@ -148,7 +149,8 @@
 
 ##### debi
 # 
-# No variables currently
+# debc recognises the DEBRELEASE_DEBS_DIR variable; see debrelease
+# below for more information.
 
 ##### debpkg
 # 
@@ -160,6 +162,11 @@
 # the recognised values are "dupload" (default) and "dput".  Check the
 # debrelease(1) manpage for any recent changes to this variable
 # DEBRELEASE_UPLOADER=dupload
+# 
+# This specifies the directory, relative to the top of the source
+# tree, in which the .changes and .debs files are to be found.  Note
+# that this also affects debc and debi.
+# DEBRELEASE_DEBS_DIR=..
 
 ##### debrsign
 # 

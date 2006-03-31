@@ -38,6 +38,8 @@ usage () {
     -t<target>        Search for .changes file made for GNU <target> arch
     -S                Search for source-only .changes file instead of arch one
     --multi           Search for multiarch .changes file made by dpkg-cross
+    --debs-dir DIR    Look for the changes and debs files in DIR instead of
+                      the parent of the current package directory
     --check-dirname-level N
                       How much to check directory names before cleaning trees:
                       N=0   never
@@ -80,9 +82,10 @@ mustsetvar () {
 
 # Boilerplate: set config variables
 DEFAULT_DEBRELEASE_UPLOADER=dupload
+DEFAULT_DEBRELEASE_DEBS_DIR=..
 DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1
 DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.*)?'
-VARS="DEBRELEASE_UPLOADER DEVSCRIPTS_CHECK_DIRNAME_LEVEL DEVSCRIPTS_CHECK_DIRNAME_REGEX"
+VARS="DEBRELEASE_UPLOADER DEBRELEASE_DEBS_DIR DEVSCRIPTS_CHECK_DIRNAME_LEVEL DEVSCRIPTS_CHECK_DIRNAME_REGEX"
 
 if [ "$1" = "--no-conf" -o "$1" = "--noconf" ]; then
     shift
@@ -114,6 +117,14 @@ else
 	dupload|dput) ;;
 	*) DEBRELEASE_UPLOADER=dupload ;;
     esac
+
+    # We do not replace this with a default directory to avoid accidentally
+    # uploading a broken package
+    DEBRELEASE_DEBS_DIR="`echo \"$DEBRELEASE_DEBS_DIR\" | sed -e 's%/\+%/%g; s%\(.\)/$%\1%;'`"
+    if ! [ -d "$DEBRELEASE_DEBS_DIR" ]; then
+	debsdir_warning="config file specified DEBRELEASE_DEBS_DIR directory $DEBRELEASE_DEBS_DIR does not exist!"
+    fi
+
     case "$DEVSCRIPTS_CHECK_DIRNAME_LEVEL" in
 	0|1|2) ;;
 	*) DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1 ;;
@@ -143,6 +154,7 @@ CHECK_DIRNAME_REGEX="$DEVSCRIPTS_CHECK_DIRNAME_REGEX"
 
 sourceonly=
 multiarch=
+debsdir="$DEBRELEASE_DEBS_DIR"
 
 while [ $# -gt 0 ]
 do
@@ -155,6 +167,21 @@ do
     --multi) multiarch=yes ;;
     --dupload) DEBRELEASE_UPLOADER=dupload ;;
     --dput) DEBRELEASE_UPLOADER=dput ;;
+    --debs-dir=*)
+	debsdir="`echo \"$1\" | sed -e 's/^--debs-dir=//; s%/\+%/%g; s%\(.\)/$%\1%;'`"
+	if ! [ -d "$debsdir" ]; then
+	    echo "$PROGNAME: directory $debsdir does not exist!" >&2
+	    exit 1
+	fi
+	;;
+    --debs-dir)
+	shift
+	debsdir="`echo \"$1\" | sed -e 's%/\+%/%g; s%\(.\)/$%\1%;'`"
+	if ! [ -d "$debsdir" ]; then
+	    echo "$PROGNAME: directory $debsdir does not exist!" >&2
+	    exit 1
+	fi
+	;;
     --check-dirname-level=*)
 	level="`echo \"$1\" | sed -e 's/^--check-dirname-level=//'`"
         case "$level" in
@@ -204,6 +231,16 @@ do
     shift
 done
 
+# check sanity of debdir
+if ! [ -d "$debsdir" ]; then
+    if [ -n "$debsdir_warning" ]; then
+	echo "$PROGNAME: $debsdir_warning" >&2
+	exit 1
+    else
+	echo "$PROGNAME: could not find directory $debsdir!" >&2
+	exit 1
+    fi
+fi
 
 # Look for .changes file via debian/changelog
 CHDIR=
@@ -253,14 +290,14 @@ fi
 sversion=`echo "$version" | perl -pe 's/^\d+://'`
 pva="${package}_${sversion}_${arch}"
 pvs="${package}_${sversion}_source"
-changes="../$pva.changes"
-schanges="../$pvs.changes"
-mchanges=$(ls "../${package}_${sversion}_*+*.changes" "../${package}_${sversion}_multi.changes" 2>/dev/null | head -1)
+changes="$debsdir/$pva.changes"
+schanges="$debsdir/$pvs.changes"
+mchanges=$(ls "$debsdir/${package}_${sversion}_*+*.changes" "$debsdir/${package}_${sversion}_multi.changes" 2>/dev/null | head -1)
 
 if [ -n "$multiarch" ]; then
     if [ -z "$mchanges" -o ! -r "$mchanges" ]; then
 	echo "$PROGNAME: could not find/read any multiarch .changes file with name" >&2
-	echo "../${package}_${sversion}_*.changes" >&2
+	echo "$debsdir/${package}_${sversion}_*.changes" >&2
 	exit 1
     fi
     changes=$mchanges

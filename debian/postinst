@@ -191,6 +191,21 @@ EOF
 # PTS_UNTIL='now + 30 days'
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.9.17
+	then
+	# Added in devscripts 2.9.17:
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### debrelease/debc/debi option added in version 2.9.17
+# 
+# This specifies the directory, relative to the top of the source
+# tree, in which the .changes and .debs files are to be found.  Note
+# that this option affects all of debrelease, debc and debi.
+# DEBRELEASE_DEBS_DIR=..
+EOF
+	fi
+
     fi
 fi
 

@@ -45,6 +45,8 @@ Usage: $progname [options] [.changes file] [package ...]
       --noconf          must be the first option given
     -a<arch>          Search for .changes file made for Debian build <arch>
     -t<target>        Search for .changes file made for GNU <target> arch
+    --debs-dir DIR    Look for the changes and debs files in DIR instead of
+                      the parent of the current package directory
     --check-dirname-level N
                       How much to check directory names:
                       N=0   never
@@ -74,6 +76,8 @@ Usage: $progname [options] [.changes file] [package ...]
       --noconf          must be the first option given
     -a<arch>          Search for changes file made for Debian build <arch>
     -t<target>        Search for changes file made for GNU <target> arch
+    --debs-dir DIR    Look for the changes and debs files in DIR instead of
+                      the parent of the current package directory
     --check-dirname-level N
                       How much to check directory names:
                       N=0   never
@@ -107,6 +111,8 @@ the GNU General Public License, version 2 or later.
 EOF
 
 # Start by setting default values
+my $debsdir = '..';
+my $debsdir_warning;
 my $check_dirname_level = 1;
 my $check_dirname_regex = 'PACKAGE(-.*)?';
 
@@ -119,6 +125,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 } else {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
     my %config_vars = (
+		       'DEBRELEASE_DEBS_DIR' => '..',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
 		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.*)?',
 		       );
@@ -139,6 +146,13 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     # Check validity
     $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} =~ /^[012]$/
 	or $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'}=1;
+    # We do not replace this with a default directory to avoid accidentally
+    # installing a broken package
+    $config_vars{'DEBRELEASE_DEBS_DIR'} =~ s%/+%/%;
+    $config_vars{'DEBRELEASE_DEBS_DIR'} =~ s%(.)/$%$1%;
+    if (! -d $config_vars{'DEBRELEASE_DEBS_DIR'}) {
+	$debsdir_warning = "config file specified DEBRELEASE_DEBS_DIR directory $config_vars{'DEBRELEASE_DEBS_DIR'} does not exist!";
+    }
 
     foreach my $var (sort keys %config_vars) {
 	if ($config_vars{$var} ne $config_default{$var}) {
@@ -148,17 +162,19 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg ||= "  (none)\n";
     chomp $modified_conf_msg;
 
+    $debsdir = $config_vars{'DEBRELEASE_DEBS_DIR'};
     $check_dirname_level = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'};
     $check_dirname_regex = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_REGEX'};
 }
 
 # Command line options next
-my ($opt_help, $opt_version, $opt_a, $opt_t);
+my ($opt_help, $opt_version, $opt_a, $opt_t, $opt_debsdir);
 my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 GetOptions("help" => \$opt_help,
 	   "version" => \$opt_version,
 	   "a=s" => \$opt_a,
 	   "t=s" => \$opt_t,
+	   "debs-dir=s" => \$opt_debsdir,
 	   "ignore-dirname" => \$opt_ignore,
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
@@ -176,6 +192,19 @@ if ($opt_noconf) {
 my ($targetarch, $targetgnusystem);
 $targetarch = $opt_a ? "-a$opt_a" : "";
 $targetgnusystem = $opt_t ? "-t$opt_t" : "";
+
+if ($opt_debsdir) {
+    $opt_debsdir =~ s%/+%/%;
+    $opt_debsdir =~ s%(.)/$%$1%;
+    if (! -d $opt_debsdir) {
+	$debsdir_warning = "--debs-dir directory $opt_debsdir does not exist!";
+    }
+    $debsdir = $opt_debsdir;
+}
+
+if ($debsdir_warning) {
+    die "$progname: $debsdir_warning\n";
+}
 
 # dirname stuff
 if ($opt_ignore) {
@@ -203,7 +232,7 @@ if (! defined $changes) {
     # Look for .changes file via debian/changelog
     until (-r 'debian/changelog') {
 	$chdir = 1;
-	chdir '..' or die "$progname: can't chdir ..: $!\n";
+	chdir .. or die "$progname: can't chdir ..: $!\n";
 	if (cwd() eq '/') {
 	    die "$progname: cannot find readable debian/changelog anywhere!\nAre you in the source code tree?\n";
 	}
@@ -263,7 +292,7 @@ EOF
     my $sversion = $changelog{'Version'};
     $sversion =~ s/^\d+://;
     my $pva="$changelog{'Source'}_${sversion}_${arch}";
-    $changes="../$pva.changes";
+    $changes="$debsdir/$pva.changes";
 }
 
 chdir dirname($changes)

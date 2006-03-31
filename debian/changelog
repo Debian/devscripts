@@ -2,10 +2,15 @@ devscripts (2.9.17) UNRELEASED; urgency=low
 
   * bts: actually support the --sendmail option rather than just say we
     do!
+  * debrelease, debc, debi: support searching for .changes and .debs in a
+    directory other than the parent of the currnent source directory with
+    --debs-dir command line and DEBRELEASE_DEBS_DIR configuration file
+    options (Closes: #309362)
   * mass-bug: new script (Closes: #355505)
   * pts-subscribe.1: improve the wording of the manpage (Closes: #360027)
+  * uscan: *really* fix the uninitialized value bug (Closes: #356959)
 
- -- Julian Gilbey <jdg@debian.org>  Thu, 30 Mar 2006 22:58:28 +0100
+ -- Julian Gilbey <jdg@debian.org>  Fri, 31 Mar 2006 10:19:43 +0100
 
 devscripts (2.9.16) unstable; urgency=low
 
