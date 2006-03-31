@@ -11,8 +11,10 @@ devscripts (2.9.17) UNRELEASED; urgency=low
   * uscan: *really* fix the uninitialized value bug (Closes: #356959)
   * uscan: provide filenamemangle option to mangle the filename before
     attempting to save the download (Closes: #327404)
+  * who-uploads: new script to determine most recent uploaders of a
+    package to the Debian archive (Closes: #347809)
 
- -- Julian Gilbey <jdg@debian.org>  Fri, 31 Mar 2006 13:52:41 +0100
+ -- Julian Gilbey <jdg@debian.org>  Fri, 31 Mar 2006 18:27:53 +0100
 
 devscripts (2.9.16) unstable; urgency=low
 

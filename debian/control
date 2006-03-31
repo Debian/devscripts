@@ -9,7 +9,7 @@ Build-Depends: perl (>= 5.8), debhelper (>= 4.0.0), libtimedate-perl, libwww-per
 Package: devscripts
 Architecture: any
 Conflicts: debmake (<< 3.5), dupload (<< 2.1), suidmanager (<< 0.51)
-Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), sed (>= 2.95), ${shlibs:Depends}, ${misc:Depends}
+Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), sed (>= 2.95), awk, ${shlibs:Depends}, ${misc:Depends}
 Recommends: fakeroot
 Suggests: devscripts-el, at, build-essential, cvs-buildpackage, cvs | subversion | tla | bazaar, debian-keyring, dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, libdigest-md5-perl, libtimedate-perl, libwww-perl, lintian | linda, mailx | mailutils, mutt, patch, patchutils, ssh, strace, wdiff, wget, www-browser
 Description: Scripts to make the life of a Debian Package maintainer easier
@@ -76,6 +76,8 @@ Description: Scripts to make the life of a Debian Package maintainer easier
   - uscan: scan upstream sites for new releases of packages [libwww-perl]
   - uupdate: integrate upstream changes into a source package [patch]
   - whodepends: check which maintainers' packages depend on a package
+  - who-uploads [gnupg, debian-keyring, wget]: determine the most recent
+      uploaders of a package to the Debian archive
   - wnpp-alert: list installed packages which are orphaned or up for
       adoption [wget]
  Also included are a set of example mail filters for filtering mail

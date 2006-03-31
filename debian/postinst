@@ -203,6 +203,14 @@ EOF
 # tree, in which the .changes and .debs files are to be found.  Note
 # that this option affects all of debrelease, debc and debi.
 # DEBRELEASE_DEBS_DIR=..
+
+##### who-uploads options added in version 2.9.17
+# 
+# Maximum number of uploads to display per package
+# WHOUPLOADS_MAXUPLOADS=3
+# 
+# Colon-separated list of keyrings to examine by default
+# WHOUPLOADS_KEYRINGS=/usr/share/keyrings/debian-keyring.gpg:/usr/share/keyrings/debian-keyring.pgp
 EOF
 	fi
 
