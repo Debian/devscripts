@@ -232,7 +232,7 @@ if (! defined $changes) {
     # Look for .changes file via debian/changelog
     until (-r 'debian/changelog') {
 	$chdir = 1;
-	chdir .. or die "$progname: can't chdir ..: $!\n";
+	chdir '..' or die "$progname: can't chdir ..: $!\n";
 	if (cwd() eq '/') {
 	    die "$progname: cannot find readable debian/changelog anywhere!\nAre you in the source code tree?\n";
 	}
