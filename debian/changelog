@@ -9,8 +9,10 @@ devscripts (2.9.17) UNRELEASED; urgency=low
   * mass-bug: new script (Closes: #355505)
   * pts-subscribe.1: improve the wording of the manpage (Closes: #360027)
   * uscan: *really* fix the uninitialized value bug (Closes: #356959)
+  * uscan: provide filenamemangle option to mangle the filename before
+    attempting to save the download (Closes: #327404)
 
- -- Julian Gilbey <jdg@debian.org>  Fri, 31 Mar 2006 10:19:43 +0100
+ -- Julian Gilbey <jdg@debian.org>  Fri, 31 Mar 2006 13:52:41 +0100
 
 devscripts (2.9.16) unstable; urgency=low
 

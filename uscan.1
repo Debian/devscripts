@@ -78,13 +78,24 @@ http://www.site.com/pub/foobar/foobar_v(\\d+)_(\\d+)\\.tar\\.gz
 # concatenated before mangling is performed, and that mangling will
 # only be performed on the basename version number, not any path
 # version numbers.)
-opts="uversionmangle=s/^/0.0/" \\
+opts="uversionmangle=s/^/0.0./" \\
   ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/Wine-(.*)\\.tar\\.gz
 
 # Similarly, the upstream part of the Debian version number can be
 # mangled:
 opts=dversionmangle=s/\\.dfsg\\.\\d+$// \\
   http://some.site.org/some/path/foobar-(.*)\\.tar\\.gz
+
+# Handling cases where the URL would not make a usable filename
+# <A href="http://foo.bar.org/download/?path=&amp;download=foo-0.1.1.tar.gz">
+# could be handled as:
+# opts=filenamemangle=s/.*=(.*)/$1/ \
+#     http://foo.bar.org/download/\?path=&amp;download=foo-(.*)\.tar\.gz
+# 
+# <A href="http://foo.bar.org/download/?path=&amp;download_version=0.1.1">
+# could be handled as:
+# opts=filenamemangle=s/.*=(.*)/foo-$1\.tar\.gz/ \
+#    http://foo.bar.org/download/\?path=&amp;download_version=(.*)
 
 .fi
 .PP
@@ -218,6 +229,12 @@ Thus, a suitable rule might be `s/\\.dfsg\\.\\d+$//' to remove a
 `.dfsg.1' suffix from the Debian version number, or to handle `.pre6'
 type version numbers.  Again, the \fIrules\fR string may not contain
 commas; this should not be a problem.
+.TP
+\fBfilenamemangle=\fIrules\fR
+This is used to mangle the filename with which the downloaded file
+will be saved, and is parsed in the same way as the
+\fBuversionmangle\fR option.  Examples of its use are given in the
+examples above.
 .SH "Directory name checking"
 Similarly to several other scripts in the \fBdevscripts\fR package,
 \fBuscan\fR explores the requested directory trees looking for

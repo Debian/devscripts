@@ -571,14 +571,25 @@ exit $found ? 0 : 1;
 # concatenated before mangling is performed, and that mangling will
 # only be performed on the basename version number, not any path version
 # numbers.)
-# opts=uversionmangle=s/^/0.0/ \
+# opts=uversionmangle=s/^/0.0./ \
 #   ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/Wine-(.*)\.tar\.gz
 # 
 # Similarly, the upstream part of the Debian version number can be
 # mangled:
 # opts=dversionmangle=s/\.dfsg\.\d+$// \
 #   http://some.site.org/some/path/foobar-(.*)\.tar\.gz
-
+# 
+# The option filenamemangle can be used to mangle the name under which
+# the downloaded file will be saved:
+#   href="http://foo.bar.org/download/?path=&amp;download=foo-0.1.1.tar.gz"
+# could be handled as:
+# opts=filenamemangle=s/.*=(.*)/$1/ \
+#     http://foo.bar.org/download/\?path=&amp;download=foo-(.*)\.tar\.gz
+# and
+#   href="http://foo.bar.org/download/?path=&amp;download_version=0.1.1"
+# as:
+# opts=filenamemangle=s/.*=(.*)/foo-$1\.tar\.gz/ \
+#    http://foo.bar.org/download/\?path=&amp;download_version=(.*)
 
 sub process_watchline ($$$$$$)
 {
@@ -650,6 +661,9 @@ sub process_watchline ($$$$$$)
 		}
 		elsif ($opt =~ /^dversionmangle\s*=\s*(.+)/) {
 		    @{$options{'dversionmangle'}} = split /;/, $1;
+		}
+		elsif ($opt =~ /^filenamemangle\s*=\s*(.+)/) {
+		    @{$options{'filenamemangle'}} = split /;/, $1;
 		}
 		else {
 		    warn "$progname warning: unrecognised option $opt\n";
@@ -842,6 +856,13 @@ EOF
     }
 
     my $newfile_base=basename($newfile);
+    if (exists $options{'filenamemangle'})
+    {
+        $newfile_base=$newfile;
+    }
+    foreach my $pat (@{$options{'filenamemangle'}}) {
+	eval "\$newfile_base =~ $pat;";
+    }
     # Remove HTTP header trash
     if ($site =~ m%^http://%)
     {
@@ -965,6 +986,9 @@ EOF
     print "-- Downloading updated package $newfile_base\n" if $verbose;
     # Download newer package
     if ($upstream_url =~ m%^http://%) {
+	# substitute HTML entities
+	# Is anything else than "&amp;" required?  I doubt it.
+	$upstream_url =~ s/&amp;/&/g;
 	print STDERR "$progname debug: requesting URL $upstream_url\n" if $debug;
 	$request = HTTP::Request->new('GET', $upstream_url);
 	$response = $user_agent->request($request, "../$newfile_base");
