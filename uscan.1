@@ -86,7 +86,9 @@ opts="uversionmangle=s/^/0.0./" \\
 opts=dversionmangle=s/\\.dfsg\\.\\d+$// \\
   http://some.site.org/some/path/foobar-(.*)\\.tar\\.gz
 
-# Handling cases where the URL would not make a usable filename
+# The filename is found by taking the last component of the URL and
+# removing everything after any '?'.  If this would not make a usable
+# filename, use filenamemangle.  For example,
 # <A href="http://foo.bar.org/download/?path=&amp;download=foo-0.1.1.tar.gz">
 # could be handled as:
 # opts=filenamemangle=s/.*=(.*)/$1/ \
@@ -96,6 +98,14 @@ opts=dversionmangle=s/\\.dfsg\\.\\d+$// \\
 # could be handled as:
 # opts=filenamemangle=s/.*=(.*)/foo-$1\.tar\.gz/ \
 #    http://foo.bar.org/download/\?path=&amp;download_version=(.*)
+
+# The option downloadurlmangle can be used to mangle the URL of the file
+# to download.  This can only be used with http:// URLs.  This may be
+# necessary if the link given on the webpage needs to be transformed in
+# some way into one which will work automatically, for example:
+# opts=downloadurlmangle=s/prdownload/download/ \
+#   http://developer.berlios.de/project/showfiles.php?group_id=2051 \
+#   http://prdownload.berlios.de/softdevice/vdr-softdevice-(.*).tgz
 
 .fi
 .PP
@@ -234,7 +244,15 @@ commas; this should not be a problem.
 This is used to mangle the filename with which the downloaded file
 will be saved, and is parsed in the same way as the
 \fBuversionmangle\fR option.  Examples of its use are given in the
-examples above.
+examples section above.
+.TP
+\fBdownloadurlmangle=\fIrules\fR
+This is used to mangle the URL to be used for the download.  The URL
+is first computed based on the homepage downloaded and the pattern
+matched, then the version number is determined from this URL.
+Finally, any rules given by this option are applied before the actual
+download attempt is made. An example of its use is given in the
+examples section above.
 .SH "Directory name checking"
 Similarly to several other scripts in the \fBdevscripts\fR package,
 \fBuscan\fR explores the requested directory trees looking for

@@ -6,8 +6,7 @@
 # Originally written by Christoph Lameter <clameter@debian.org> (I believe)
 # Modified by Julian Gilbey <jdg@debian.org>
 # HTTP support added by Piotr Roszatycki <dexter@debian.org>
-# Copyright 1999, Julian Gilbey
-# Rewritten in Perl, Copyright 2002, Julian Gilbey
+# Rewritten in Perl, Copyright 2002-2006, Julian Gilbey
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -122,7 +121,7 @@ EOF
 sub version {
     print <<"EOF";
 This is $progname, from the Debian devscripts package, version ###VERSION###
-This code is copyright 1999 by Julian Gilbey, all rights reserved.
+This code is copyright 1999-2006 by Julian Gilbey, all rights reserved.
 Original code by Christoph Lameter.
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the
@@ -590,6 +589,15 @@ exit $found ? 0 : 1;
 # as:
 # opts=filenamemangle=s/.*=(.*)/foo-$1\.tar\.gz/ \
 #    http://foo.bar.org/download/\?path=&amp;download_version=(.*)
+# 
+# The option downloadurlmangle can be used to mangle the URL of the file
+# to download.  This can only be used with http:// URLs.  This may be
+# necessary if the link given on the webpage needs to be transformed in
+# some way into one which will work automatically, for example:
+# opts=downloadurlmangle=s/prdownload/download/ \
+#   http://developer.berlios.de/project/showfiles.php?group_id=2051 \
+#   http://prdownload.berlios.de/softdevice/vdr-softdevice-(.*).tgz
+
 
 sub process_watchline ($$$$$$)
 {
@@ -665,6 +673,9 @@ sub process_watchline ($$$$$$)
 		elsif ($opt =~ /^filenamemangle\s*=\s*(.+)/) {
 		    @{$options{'filenamemangle'}} = split /;/, $1;
 		}
+		elsif ($opt =~ /^downloadurlmangle\s*=\s*(.+)/) {
+		    @{$options{'downloadurlmangle'}} = split /;/, $1;
+		}
 		else {
 		    warn "$progname warning: unrecognised option $opt\n";
 		}
@@ -683,6 +694,11 @@ sub process_watchline ($$$$$$)
 	    }
 	    $filepattern = $1;
 	    $base =~ s%/[^/]+$%/%;
+	}
+
+	# Check validity of options
+	if ($base =~ /^ftp:/ and exists $options{'downloadurlmangle'}) {
+	    warn "$progname warning: downloadurlmangle option invalid for ftp sites,\n  ignoring in $watchfile:\n  $line\n";
 	}
 
 	# Handle sf.net addresses specially
@@ -856,17 +872,19 @@ EOF
     }
 
     my $newfile_base=basename($newfile);
-    if (exists $options{'filenamemangle'})
-    {
+    if (exists $options{'filenamemangle'}) {
         $newfile_base=$newfile;
     }
     foreach my $pat (@{$options{'filenamemangle'}}) {
 	eval "\$newfile_base =~ $pat;";
     }
     # Remove HTTP header trash
-    if ($site =~ m%^http://%)
-    {
+    if ($site =~ m%^http://%) {
         $newfile_base =~ s/\?.*$//;
+	# just in case this leaves us with nothing
+	if ($newfile_base eq '') {
+	    $newfile_base = "$pkg-$newversion.download";
+	}
     }
     if (! $lastversion or $lastversion eq 'debian') {
 	$lastversion=$pkg_version;
@@ -892,6 +910,14 @@ EOF
 	# relative filename, we hope
 	else {
 	    $upstream_url = "$urlbase$newfile";
+	}
+
+	# mangle if necessary
+	$upstream_url =~ s/&amp;/&/g;
+	if (exists $options{'downloadurlmangle'}) {
+	    foreach my $pat (@{$options{'downloadurlmangle'}}) {
+		eval "\$upstream_url =~ $pat;";
+	    }
 	}
     }
     else {
@@ -988,7 +1014,6 @@ EOF
     if ($upstream_url =~ m%^http://%) {
 	# substitute HTML entities
 	# Is anything else than "&amp;" required?  I doubt it.
-	$upstream_url =~ s/&amp;/&/g;
 	print STDERR "$progname debug: requesting URL $upstream_url\n" if $debug;
 	$request = HTTP::Request->new('GET', $upstream_url);
 	$response = $user_agent->request($request, "../$newfile_base");
@@ -1376,15 +1401,15 @@ sub dehs_output ()
 	if (exists $dehs_tags{$tag}) {
 	    if (ref $dehs_tags{$tag} eq "ARRAY") {
 		foreach my $entry (@{$dehs_tags{$tag}}) {
-            $entry =~ s/</&lt;/g;
-            $entry =~ s/>/&gt;/g;
+		    $entry =~ s/</&lt;/g;
+		    $entry =~ s/>/&gt;/g;
 		    $entry =~ s/&/&amp;/g;
-            print "<$tag>$entry</$tag>\n";
+		    print "<$tag>$entry</$tag>\n";
 		}
 	    } else {
-            $dehs_tags{$tag} =~ s/</&lt;/g;
-            $dehs_tags{$tag} =~ s/>/&gt;/g;
-		    $dehs_tags{$tag} =~ s/&/&amp;/g;
+		$dehs_tags{$tag} =~ s/</&lt;/g;
+		$dehs_tags{$tag} =~ s/>/&gt;/g;
+		$dehs_tags{$tag} =~ s/&/&amp;/g;
 		print "<$tag>$dehs_tags{$tag}</$tag>\n";
 	    }
 	}
