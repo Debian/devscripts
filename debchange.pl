@@ -53,74 +53,77 @@ sub usage () {
 Usage: $progname [options] [changelog entry]
 Options:
   -a, --append
-	 Append a new entry to the current changelog
+         Append a new entry to the current changelog
   -i, --increment
-	 Increase the Debian release number, adding a new changelog entry
+         Increase the Debian release number, adding a new changelog entry
   -v <version>, --newversion=<version>
-	 Add a new changelog entry with version number specified
+         Add a new changelog entry with version number specified
   -e, --edit
-	 Don't change version number or add a new changelog entry, just
-	 update the changelog's stamp and open up an editor
+         Don't change version number or add a new changelog entry, just
+         update the changelog's stamp and open up an editor
   -r, --release
-	 Update the changelog timestamp. If the distribution is set to
-	 "UNRELEASED", change it to unstable (or another distribution as
-	 specified by --distribution).
+         Update the changelog timestamp. If the distribution is set to
+         "UNRELEASED", change it to unstable (or another distribution as
+         specified by --distribution).
   --create
-	 Create a new changelog (default) or NEWS file (with --news) and
-	 open for editing
+         Create a new changelog (default) or NEWS file (with --news) and
+         open for editing
   --package <package>
-	 Specify the package name when using --create (optional)
+         Specify the package name when using --create (optional)
   -n, --nmu
-	 Increment the Debian release number for a non-maintainer upload
+         Increment the Debian release number for a non-maintainer upload
+  --qa
+         Increment the Debian release number for a Debian QA Team upload
   -b, --force-bad-version
-	 Force a version to be less than the current one (e.g., when
-	 backporting)
+         Force a version to be less than the current one (e.g., when
+         backporting)
   --closes nnnnn[,nnnnn,...]
-	 Add entries for closing these bug numbers,
-	 getting bug titles from the BTS (bug-tracking system, bugs.debian.org)
+         Add entries for closing these bug numbers,
+         getting bug titles from the BTS (bug-tracking system, bugs.debian.org)
   --[no]query
-	 [Don\'t] try contacting the BTS to get bug titles (default: do query)
+         [Don\'t] try contacting the BTS to get bug titles (default: do query)
   -d, --fromdirname
-	 Add a new changelog entry with version taken from the directory name
+         Add a new changelog entry with version taken from the directory name
   -p, --preserve
-	 Preserve the directory name
+         Preserve the directory name
   --no-preserve
-	 Do not preserve the directory name (default)
+         Do not preserve the directory name (default)
   -D, --distribution <dist>
-	 Use the specified distribution in the new changelog entry, if any
+         Use the specified distribution in the new changelog entry, if any
   -u, --urgency <urgency>
-	 Use the specified urgency in the new changelog entry, if any
+         Use the specified urgency in the new changelog entry, if any
   -c, --changelog <changelog>
-	 Specify the name of the changelog to use in place of debian/changelog
-	 No directory traversal or checking is performed in this case.
+         Specify the name of the changelog to use in place of debian/changelog
+         No directory traversal or checking is performed in this case.
   --news
-	 Specify that debian/NEWS is to be edited; cannot be used
-	 with --changelog
+         Specify that debian/NEWS is to be edited; cannot be used
+         with --changelog
   --[no]multimaint
          When appending an entry to a changelog section (-a), [do not]
-	 indicate if multiple maintainers are now involved (default: do so)
+         indicate if multiple maintainers are now involved (default: do so)
   -m, --maintmaint
          Don\'t change (maintain) the maintainer details in the changelog entry
   --check-dirname-level N
-	 How much to check directory names:
-	 N=0   never
-	 N=1   only if program changes directory (default)
-	 N=2   always
+         How much to check directory names:
+         N=0   never
+         N=1   only if program changes directory (default)
+         N=2   always
   --check-dirname-regex REGEX
-	 What constitutes a matching directory name; REGEX is
-	 a Perl regular expression; the string \`PACKAGE\' will
-	 be replaced by the package name; see manpage for details
-	 (default: 'PACKAGE(-.*)?')
+         What constitutes a matching directory name; REGEX is
+         a Perl regular expression; the string \`PACKAGE\' will
+         be replaced by the package name; see manpage for details
+         (default: 'PACKAGE(-.*)?')
   --no-conf, --noconf
-	 Don\'t read devscripts config files; must be the first option given
+         Don\'t read devscripts config files; must be the first option given
   --release-heuristic log|changelog
-	 Select heuristic used to determine if a package has been released.
-	 (default: log)
+         Select heuristic used to determine if a package has been released.
+         (default: log)
   --help, -h
-	 Display this help message and exit
+         Display this help message and exit
   --version
-	 Display version information
-  At most one of -a, -i and -v (or their long equivalents) may be used.
+         Display version information
+  At most one of -a, -i, -e, -r, -v, -d, -n, --qa (or their long equivalents)
+  may be used.
   With no options, one of -i or -a is chosen by looking for a .upload
   file in the parent directory and checking its contents.
 
@@ -210,7 +213,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # with older debchange versions.
 my ($opt_help, $opt_version);
 my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u);
-my ($opt_n, $opt_c, $opt_m, $opt_create, $opt_package, @closes);
+my ($opt_n, $opt_qa, $opt_c, $opt_m, $opt_create, $opt_package, @closes);
 my ($opt_news);
 my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 $opt_u = 'low';
@@ -232,6 +235,7 @@ GetOptions("help|h" => \$opt_help,
 	   "D|distribution=s" => \$opt_D,
 	   "u|urgency=s" => \$opt_u,
 	   "n|nmu" => \$opt_n,
+	   "qa" => \$opt_qa,
 	   "query!" => \$opt_query,
 	   "closes=s" => \@closes,
 	   "c|changelog=s" => \$opt_c,
@@ -271,6 +275,9 @@ if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
 fatal "Only one of -c/--changelog and --news is allowed; try $progname --help for more help"
     if $opt_c && $opt_news;
 
+fatal "Only one of -n/--nmu and --qa is allowed; try $progname --help for more help"
+    if $opt_n && $opt_qa;
+
 fatal "--closes should not be used with --news; put bug numbers in the changelog not the NEWS file"
     if $opt_news && @closes;
     
@@ -288,8 +295,8 @@ fatal "--package cannot be used when creating a debian/NEWS file"
     if $opt_package && $changelog_path eq 'debian/NEWS';
 
 if ($opt_create) {
-    if ($opt_a || $opt_i || $opt_e || $opt_r || $opt_b || $opt_n) {
-	warn "$progname: ignoring -a/-i/-e/-r/-b/-n options with --create\n";
+    if ($opt_a || $opt_i || $opt_e || $opt_r || $opt_b || $opt_n || $opt_qa) {
+	warn "$progname: ignoring -a/-i/-e/-r/-b/-n/--qa options with --create\n";
     }
     if ($opt_package && $opt_d) {
 	fatal "Can only use one of --package and -d";
@@ -301,8 +308,8 @@ if ($opt_create) {
 map { s/^\#//; } @closes;  # remove any leading # from bug numbers
 
 # Only allow at most one non-help option
-fatal "Only one of -a, -i, -e, -r, -v, -d is allowed; try $progname --help for more help"
-    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) > 1;
+fatal "Only one of -a, -i, -e, -r, -v, -d, -n/--nmu, --qa is allowed;\ntry $progname --help for more help"
+    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) + ($opt_n?1:0) + ($opt_qa?1:0) > 1;
 
 # We'll process the rest of the command line later.
 
@@ -706,7 +713,7 @@ my $tmpchk=1;
 my ($NEW_VERSION, $NEW_SVERSION, $NEW_UVERSION);
 my $line;
 
-if (($opt_i || $opt_n || $opt_v || $opt_d) && ! $opt_create) {
+if (($opt_i || $opt_n || $opt_qa || $opt_v || $opt_d) && ! $opt_create) {
     # Check that a given explicit version number is sensible.
     if ($opt_v || $opt_d) {
 	if($opt_v) {
@@ -791,7 +798,10 @@ if (($opt_i || $opt_n || $opt_v || $opt_d) && ! $opt_create) {
 
     if ($opt_n && ! $opt_news) {
 	print O "  * Non-maintainer upload.\n";
-       $line = 1;
+	$line = 1;
+    } elsif ($opt_qa && ! $opt_news) {
+	print O "  * QA upload.\n";
+	$line = 1;
     }
     if (@closes_text or $TEXT) {
 	foreach (@closes_text) { format_line($_, 1); }
