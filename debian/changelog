@@ -2,6 +2,8 @@ devscripts (2.9.17) UNRELEASED; urgency=low
 
   * bts: actually support the --sendmail option rather than just say we
     do!
+  * debdiff: check file permissions and new/deleted control files (Closes:
+    #203781, #230702)
   * debrelease, debc, debi: support searching for .changes and .debs in a
     directory other than the parent of the currnent source directory with
     --debs-dir command line and DEBRELEASE_DEBS_DIR configuration file
@@ -15,7 +17,7 @@ devscripts (2.9.17) UNRELEASED; urgency=low
   * who-uploads: new script to determine most recent uploaders of a
     package to the Debian archive (Closes: #347809)
 
- -- Julian Gilbey <jdg@debian.org>  Sun,  2 Apr 2006 10:42:14 +0100
+ -- Julian Gilbey <jdg@debian.org>  Tue,  4 Apr 2006 15:01:07 +0100
 
 devscripts (2.9.16) unstable; urgency=low
 

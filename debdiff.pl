@@ -22,6 +22,7 @@ use File::Temp qw/ tempdir /;
 
 # Predeclare functions
 sub process_debc($$);
+sub process_debI($);
 sub mktmpdirs();
 sub fatal(@);
 
@@ -304,6 +305,8 @@ elsif ($type eq 'changes' or $type eq 'debs') {
 	    fatal "Can't read file: $deb" unless -r $deb;
 	    my $debc = `env LC_ALL=C dpkg-deb -c $deb`;
 	    $? == 0 or fatal "dpkg-deb -c $deb failed!";
+	    my $debI = `env LC_ALL=C dpkg-deb -I $deb`;
+	    $? == 0 or fatal "dpkg-deb -I $deb failed!";
 	    my $debpath = $deb;
 	    # get package name itself
 	    $deb =~ s,.*/,,; $deb =~ s/_.*//;
@@ -315,8 +318,14 @@ elsif ($type eq 'changes' or $type eq 'debs') {
 	    }
 	    ${"DebPaths$i"}{$deb} = $debpath;
 	    foreach my $file (@{process_debc($debc,$i)}) {
+		${"files$i"}{$file} ||= ":";
 		${"files$i"}{$file} .= "$deb:";
 		${"D$i"}{$file} = 1;
+	    }
+	    foreach my $control (@{process_debI($debI)}) {
+		${"files$i"}{$control} ||= ":";
+		${"files$i"}{$control} .= "$deb:";
+		${"D$i"}{$control} = 1;
 	    }
 	}
 	no strict 'refs';
@@ -463,8 +472,10 @@ if ($show_moved and $type ne 'deb') {
 	    my @firstdebs = split /:/, $files1{$file};
 	    my @seconddebs = split /:/, $files2{$file};
 	    foreach my $firstdeb (@firstdebs) {
+		# skip this deb if it's in the same deb in the second set
+		next if $files2{$file} =~ /:\Q$firstdeb\E:/;
+		# otherwise list it for all the second set debs
 		foreach my $seconddeb (@seconddebs) {
-		    next if $firstdeb eq $seconddeb;
 		    push @{$changes{$firstdeb}{$seconddeb}}, $file;
 		}
 	    }
@@ -500,6 +511,9 @@ if ($show_moved and $type ne 'deb') {
 	for my $deb2 ('-', sort keys %debs2) {
 	    next unless exists $changes{$deb1}{$deb2};
 	    my $msg;
+	    if (! $changed) {
+		print "[The following lists of changes regard files as different if they have\ndifferent names, permissions or owners.]\n\n";
+	    }
 	    if ($deb1 eq '-') {
 		$msg = "New files in second set of .debs, found in package $deb2";
 	    } elsif ($deb2 eq '-') {
@@ -525,8 +539,11 @@ if ($show_moved and $type ne 'deb') {
     my @losses = sort grep $files{$_} < 0, keys %files;
     my @gains = sort grep $files{$_} > 0, keys %files;
 
-    if (! $quiet && @losses == 0 && @gains == 0) {
-	print "File lists identical (after any substitutions)\n";
+    if (@losses == 0 && @gains == 0) {
+	print "File lists identical (after any substitutions)\n"
+	    unless $quiet;
+    } else {
+	print "[The following lists of changes regard files as different if they have\ndifferent names, permissions or owners.]\n\n";
     }
 
     if (@gains) {
@@ -630,10 +647,8 @@ sub process_debc($$)
 
     # Format of dpkg-deb -c output:
     # permissions owner/group size date time name ['->' link destination]
-    # And remember the slink -> potato stuff
-    $data =~ s/^(\S+\s+){5}//mg;
-    $data =~ s,^\./,/,mg;
-    $data =~ s,^([^/]),/$1,mg;
+    $data =~ s/^(\S+)\s+(\S+)\s+(\S+\s+){3}/$1  $2   /mg;
+    $data =~ s, \./, /,mg;
     @filelist = grep ! m|^/$|, split /\n/, $data; # don't bother keeping '/'
 
     # Are we keeping directory names in our filelists?
@@ -650,6 +665,29 @@ sub process_debc($$)
 	    map { if ($regex) { eval "\$_ =~ s:^$from:$to:"; }
 		  else { $_ =~ s/^\Q$from\E/$to/; } } @filelist;
 	}
+    }
+
+    return \@filelist;
+}
+
+# This does the same for dpkg-deb -I
+sub process_debI($)
+{
+    my ($data) = @_;
+    my (@filelist);
+
+    # Format of dpkg-deb -c output:
+    # 2 (always?) header lines
+    #   nnnn bytes,    nnn lines   [*]  filename    [interpreter]
+    # Package: ...
+    # rest of control file
+
+    foreach (split /\n/, $data) {
+	last if /^Package:/;
+	next unless /^\s+\d+\s+bytes,\s+\d+\s+lines\s+(\*)?\s+([\-\w]+)/;
+	my $control = $2;
+	my $perms = ($1 ? "-rwxr-xr-x" : "-rw-r--r--");
+	push @filelist, "$perms  root/root   DEBIAN/$control";
     }
 
     return \@filelist;

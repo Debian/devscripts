@@ -17,8 +17,8 @@ or \fI.udeb\fRs) on the command line and compares their contents
 scripts).  It shows which files have been introduced and which removed
 between the two package files, and is therefore useful for spotting
 files which may have been inadvertently lost between revisions of the
-package.  It also compares the control files of the two packages using
-the \fBwdiff\fR program.
+package.  It also checks the file owners and permissions, and compares
+the control files of the two packages using the \fBwdiff\fR program.
 .PP
 \fBdebdiff\fR can also handle changes between groups of \fI.deb\fR
 files in two ways.  The first is to specify two \fI.changes\fR files.
