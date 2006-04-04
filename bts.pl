@@ -466,7 +466,7 @@ exit 0;
 =head1 COMMANDS
 
 For full details about the commands, see the BTS documentation.
-L<http://bugs.debian.org/server-control>
+L<http://www.debian.org/Bugs/server-control>
 
 =over 4
 
