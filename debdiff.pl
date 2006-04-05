@@ -272,11 +272,14 @@ if ($type eq 'deb') {
 	my $deb = shift;
 	my $debc = `env LC_ALL=C dpkg-deb -c $deb`;
 	$? == 0 or fatal "dpkg-deb -c $deb failed!";
+	my $debI = `env LC_ALL=C dpkg-deb -I $deb`;
+	$? == 0 or fatal "dpkg-deb -I $deb failed!";
 	# Store the name for later
 	$singledeb[$i] = $deb;
 	# get package name itself
 	$deb =~ s,.*/,,; $deb =~ s/_.*//;
 	@{"D$i"} = @{process_debc($debc,$i)};
+	push @{"D$i"}, @{process_debI($debI)};
     }
 }
 elsif ($type eq 'changes' or $type eq 'debs') {
@@ -318,7 +321,6 @@ elsif ($type eq 'changes' or $type eq 'debs') {
 	    }
 	}
 
-	my %D = ();
 	foreach my $deb (@debs) {
 	    no strict 'refs';
 	    fatal "Can't read file: $deb" unless -r $deb;
@@ -339,16 +341,14 @@ elsif ($type eq 'changes' or $type eq 'debs') {
 	    foreach my $file (@{process_debc($debc,$i)}) {
 		${"files$i"}{$file} ||= ":";
 		${"files$i"}{$file} .= "$deb:";
-		${"D$i"}{$file} = 1;
 	    }
 	    foreach my $control (@{process_debI($debI)}) {
 		${"files$i"}{$control} ||= ":";
 		${"files$i"}{$control} .= "$deb:";
-		${"D$i"}{$control} = 1;
 	    }
 	}
 	no strict 'refs';
-	@{"D$i"} = keys %{"D$i"};
+	@{"D$i"} = keys %{"files$i"};
 	# Go back again
 	chdir $pwd or fatal "Couldn't chdir $pwd: $!";
     }
@@ -475,48 +475,55 @@ if ($show_moved and $type ne 'deb') {
 	print join("\n",@deblosses), "\n\n";
     }
 
-    # We run through all of the files in the first set of debs one by
-    # one, then pick up any which are new in the second set of debs
-    # We store any changed files in a hash of hashes %changes, where
-    # $changes{$from}{$to} is an array of files which have moved
-    # from package $from to package $to; $from or $to is '-' if
-    # the files have appeared or disappeared
-    my %changes;
-    foreach my $file (@D1) {
-	if (exists $files2{$file}) {
-	    next if $files1{$file} eq $files2{$file};
-	    # Ah, they're not the same.  We'll put a note in every
-	    # pair where the file is in the deb in the first set but not
-	    # in the deb in the second set
-	    my @firstdebs = split /:/, $files1{$file};
-	    my @seconddebs = split /:/, $files2{$file};
-	    foreach my $firstdeb (@firstdebs) {
-		# skip this deb if it's in the same deb in the second set
-		next if $files2{$file} =~ /:\Q$firstdeb\E:/;
-		# otherwise list it for all the second set debs
-		foreach my $seconddeb (@seconddebs) {
-		    push @{$changes{$firstdeb}{$seconddeb}}, $file;
-		}
-	    }
-	}
-	else {
-	    my @firstdebs = split /:/, $files1{$file};
-	    foreach my $firstdeb (@firstdebs) {
-		push @{$changes{$firstdeb}{'-'}}, $file;
-	    }
-	}
-    }
-
+    # We start by determining which files are in the first set of debs, the 
+    # second set of debs or both.
     my %files;
     grep $files{$_}--, @D1;
     grep $files{$_}++, @D2;
 
+    my @old = sort grep $files{$_} < 0, keys %files;
     my @new = sort grep $files{$_} > 0, keys %files;
+    my @same = sort grep $files{$_} == 0, keys %files;
+
+    # We store any changed files in a hash of hashes %changes, where
+    # $changes{$from}{$to} is an array of files which have moved
+    # from package $from to package $to; $from or $to is '-' if
+    # the files have appeared or disappeared
+
+    my %changes;
+
+    foreach my $file (@old) {
+	my @firstdebs = split /:/, $files1{$file};
+	foreach my $firstdeb (@firstdebs) {
+	    push @{$changes{$firstdeb}{'-'}}, $file;
+	}
+    }
 
     foreach my $file (@new) {
 	my @seconddebs = split /:/, $files2{$file};
 	foreach my $seconddeb (@seconddebs) {
 	    push @{$changes{'-'}{$seconddeb}}, $file;
+	}
+    }
+
+    foreach my $file (@same) {
+	# Are they identical?
+	next if $files1{$file} eq $files2{$file};
+
+	# Ah, they're not the same.  We'll put a note in every
+	# pair where the file is in the deb in the first set but not
+	# in the deb in the second set or vice versa
+	my %fdebs;
+	grep $fdebs{$_}--, split (/:/, $files1{$file});
+	grep $fdebs{$_}++, split (/:/, $files2{$file});
+	
+	my @firstdebs = sort grep $fdebs{$_} < 0, keys %fdebs;
+	my @seconddebs = sort grep $fdebs{$_} > 0, keys %fdebs;
+
+	foreach my $firstdeb (@firstdebs) {
+	    foreach my $seconddeb (@seconddebs) {
+		push @{$changes{$firstdeb}{$seconddeb}}, $file;
+	    }
 	}
     }
 
