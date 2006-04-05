@@ -197,6 +197,13 @@ EOF
 	# Added in devscripts 2.9.17:
 	    cat >> /etc/devscripts.conf <<EOF
 
+##### debdiff option added in version 2.9.17
+# 
+# Which control files to compare?  A comma-separated list, with
+# possibilities such as postinst, config and so on; ALL means compare
+# all control files.
+# DEBDIFF_CONTROLFILES=control
+
 ##### debrelease/debc/debi option added in version 2.9.17
 # 
 # This specifies the directory, relative to the top of the source

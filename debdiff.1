@@ -29,9 +29,7 @@ assumed to be in the same directory as the \fI.changes\fR file.)  The
 second way is to list the \fI.deb\fR files of interest specifically
 using the \fB\-\-from\fR ... \fB\-\-to\fR syntax.  These both help if
 a package is broken up into smaller packages and one wishes to ensure
-that nothing is lost in the interim.  The control files are compared
-in both of these cases only when there is only one \fI.deb\fR involved
-on each side of the comparison.
+that nothing is lost in the interim.
 .PP
 \fBdebdiff\fR examines the \fBdevscripts\fR configuration files as
 described below.  Command line options override the configuration file
@@ -72,13 +70,21 @@ as a regular expression and the \fBperl\fR substitution command
 use of backreferences such as $1.
 .TP
 .B \-\-nocontrol
-If \fBdebdiff\fR is called with two \fI.deb\fR files specified by
-name, then it will compare the respective control files using
-\fBwdiff\fR(1).  This option suppresses this part of the processing.
+\fBdebdiff\fR will usually compare the respective control files of the
+packages using \fBwdiff\fR(1).  This option suppresses this part of
+the processing.
 .TP
 .B \-\-control
 Compare the respective control files; this is the default, and it can
 be used to override a configuration file setting.
+.TP
+.BI \-\-controlfiles " FILE,FILE,..."
+Specify which control files to compare; by default this is just
+\fIcontrol\fR, but could include \fIpostinst\fR, \fIconfig\fR and so
+on.  Files will only be compared if they are present in both
+\fI.debs\fR being compared.  The special value \fIALL\fR compares all
+control files present in both packages, except for md5sums.  This
+option can be used to override a configuration file setting.
 .TP
 .BR \-\-wp ", " \-\-wl ", " \-\-wt
 Pass a \fB\-p\fR, \fB\-l\fR or \fB\-t\fR option to \fBwdiff\fR
@@ -133,6 +139,11 @@ If this is set to \fIyes\fR, then it is the same as the
 If this is set to \fIno\fR, then it is the same as the
 \fB\-\-nocontrol\fR command line parameter being used.  The default is
 \fIyes\fR.
+.TP
+.B DEBDIFF_CONTROLFILES
+Which control files to compare, corresponding to the
+\fB\-\-controlfiles\fR command line option.  The default is
+\fIcontrol\fR.
 .TP
 .B DEBDIFF_SHOW_MOVED
 If this is set to \fIyes\fR, then it is the same as the

@@ -6,6 +6,8 @@ devscripts (2.9.17) UNRELEASED; urgency=low
   * debchange: add --qa option (Closes: #358278)
   * debdiff: check file permissions and new/deleted control files (Closes:
     #203781, #230702)
+  * debdiff: option --controlfiles to allow comparing postinst
+    etc. (Closes: #218222)
   * debrelease, debc, debi: support searching for .changes and .debs in a
     directory other than the parent of the currnent source directory with
     --debs-dir command line and DEBRELEASE_DEBS_DIR configuration file
@@ -21,7 +23,7 @@ devscripts (2.9.17) UNRELEASED; urgency=low
   * who-uploads: new script to determine most recent uploaders of a
     package to the Debian archive (Closes: #347809)
 
- -- Julian Gilbey <jdg@debian.org>  Wed,  5 Apr 2006 09:59:01 +0100
+ -- Julian Gilbey <jdg@debian.org>  Wed,  5 Apr 2006 11:06:56 +0100
 
 devscripts (2.9.16) unstable; urgency=low
 

@@ -138,8 +138,13 @@
 # Show directory names which appear in the filelist?
 # DEBDIFF_DIRS=no
 # 
-# Compare control files of two .debs?
+# Compare control files?
 # DEBDIFF_CONTROL=yes
+# 
+# Which control files to compare?  A comma-separated list, with
+# possibilities such as postinst, config and so on; ALL means compare
+# all control files.
+# DEBDIFF_CONTROLFILES=control
 # 
 # Show files which have moved between .debs?
 # DEBDIFF_SHOW_MOVED=no

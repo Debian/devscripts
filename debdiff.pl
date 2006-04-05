@@ -50,10 +50,12 @@ Valid options are:
                             (multiple permitted), using regexp substitution
    --dirs, -d             Note changes in directories as well as files
    --nodirs               Do not note changes in directories (default)
-   --nocontrol            Skip comparing control files when comparing
-                            two .debs
-   --control              Do compare control files when comparing
-                            two .debs (default)
+   --nocontrol            Skip comparing control files
+   --control              Do compare control files
+   --controlfiles FILE,FILE,...
+                          Which control files to compare; default is just
+                            control; could include preinst, etc, config or
+                            ALL to compare all control files present
    --wp, --wl, --wt       Pass the option -p, -l, -t respectively to wdiff
                             (only one should be used)
    --show-moved           Indicate also all files which have moved
@@ -85,6 +87,7 @@ EOF
 
 my $ignore_dirs = 1;
 my $compare_control = 1;
+my $controlfiles = 'control';
 my $show_moved = 0;
 my $wdiff_opt = '';
 
@@ -101,6 +104,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     my %config_vars = (
 		       'DEBDIFF_DIRS' => 'no',
 		       'DEBDIFF_CONTROL' => 'yes',
+		       'DEBDIFF_CONTROLFILES' => 'control',
 		       'DEBDIFF_SHOW_MOVED' => 'no',
 		       'DEBDIFF_WDIFF_OPT' => '',
 		       );
@@ -136,6 +140,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 
     $ignore_dirs = $config_vars{'DEBDIFF_DIRS'} eq 'yes' ? 0 : 1;
     $compare_control = $config_vars{'DEBDIFF_CONTROL'} eq 'no' ? 0 : 1;
+    $controlfiles = $config_vars{'DEBDIFF_CONTROLFILES'};
     $show_moved = $config_vars{'DEBDIFF_SHOW_MOVED'} eq 'yes' ? 1 : 0;
     $wdiff_opt = $config_vars{'DEBDIFF_WDIFF_OPT'} =~ /^-([plt])$/ ? $1 : '';
 }
@@ -153,7 +158,7 @@ while (@ARGV) {
     if ($ARGV[0] =~ /^(--help|-h)$/) { usage(); exit 0; }
     if ($ARGV[0] =~ /^(--version|-v)$/) { print $version; exit 0; }
     if ($ARGV[0] =~ /^(--move(-regex)?|-m)$/) {
-	fatal "Malformed command-line options; run $progname --help for more info"
+	fatal "Malformed command-line option $ARGV[0]; run $progname --help for more info"
 	    unless @ARGV >= 3;
 
 	my $regex = $ARGV[0] eq '--move-regex' ? 1 : 0;
@@ -176,7 +181,7 @@ while (@ARGV) {
 	push @move, [$regex, $from, $to];
     }
     elsif ($ARGV[0] eq '--renamed') {
-	fatal "Malformed command-line options; run $progname --help for more info"
+	fatal "Malformed command-line option $ARGV[0]; run $progname --help for more info"
 	    unless @ARGV >= 3;
 	shift @ARGV;
 
@@ -185,12 +190,26 @@ while (@ARGV) {
 	$renamed{$from} = $to;
     }
     elsif ($ARGV[0] eq '--exclude') {
-	fatal "Malformed command-line options; run $progname --help for more info"
+	fatal "Malformed command-line option $ARGV[0]; run $progname --help for more info"
 	    unless @ARGV >= 2;
 	shift @ARGV;
 
 	my $exclude = shift;
 	push @excludes, $exclude;
+    }
+    elsif ($ARGV[0] =~ s/^--exclude=//) {
+	my $exclude = shift;
+	push @excludes, $exclude;
+    }
+    elsif ($ARGV[0] eq '--controlfiles') {
+	fatal "Malformed command-line option $ARGV[0]; run $progname --help for more info"
+	    unless @ARGV >= 2;
+	shift @ARGV;
+
+	$controlfiles = shift;
+    }
+    elsif ($ARGV[0] =~ s/^--controlfiles=//) {
+	$controlfiles = shift;
     }
     elsif ($ARGV[0] =~ /^(--dirs|-d)$/) { $ignore_dirs = 0; shift; }
     elsif ($ARGV[0] eq '--nodirs') { $ignore_dirs = 1; shift; }
@@ -590,38 +609,48 @@ unless (system ("command -v wdiff >/dev/null 2>&1") == 0) {
 }
 
 for my $debname (@CommonDebs) {
+    no strict 'refs';
+    mktmpdirs();
 
-	no strict 'refs';
-	mktmpdirs();
-
-	for my $i (1,2) {
-	    if (system('dpkg-deb', '-e', "${\"DebPaths$i\"}{$debname}", ${"dir$i"})) {
-		my $msg = "dpkg-deb -e ${\"DebPaths$i\"}{$debname} failed!";
-		system ("rm", "-rf", $dir1, $dir2);
-		fatal $msg;
-	    }
+    for my $i (1,2) {
+	if (system('dpkg-deb', '-e', "${\"DebPaths$i\"}{$debname}", ${"dir$i"})) {
+	    my $msg = "dpkg-deb -e ${\"DebPaths$i\"}{$debname} failed!";
+	    system ("rm", "-rf", $dir1, $dir2);
+	    fatal $msg;
 	}
+    }
 
-	use strict 'refs';
+    use strict 'refs';
 
-	my $wdiff = `wdiff -n $wdiff_opt $dir1/control $dir2/control`;
+    my @cf;
+    if ($controlfiles eq 'ALL') {
+	# only need to list one directory as we are only comparing control
+	# files in both packages
+	@cf = grep { ! /md5sums/ } map { basename($_); } glob("$dir1/*");
+    } else {
+	@cf = split /,/, $controlfiles;
+    }
+
+    foreach my $cf (@cf) {
+	next unless -f "$dir1/$cf" and -f "$dir2/$cf";
+	my $wdiff = `wdiff -n $wdiff_opt $dir1/$cf $dir2/$cf`;
 	my $usepkgname = $debname eq $dummyname ? "" : " of package $debname";
 	if ($? >> 8 == 0) {
 	    if (! $quiet) {
-		print "\nNo differences were encountered between the control files$usepkgname\n";
+		print "\nNo differences were encountered between the $cf files$usepkgname\n";
 	    }
 	} elsif ($? >> 8 == 1) {
 	    print "\n";
 	    if ($wdiff_opt) {
 		# Don't try messing with control codes
-		my $msg = "Control files$usepkgname: wdiff output";
+		my $msg = ucfirst($cf) . " files$usepkgname: wdiff output";
 		print $msg, "\n", '-' x length $msg, "\n";
 		print $wdiff;
 	    } else {
 		my @output;
 		@output = split /\n/, $wdiff;
 		@output = grep /(\[-|\{\+)/, @output;
-		my $msg = "Control files$usepkgname: lines which differ (wdiff format)";
+		my $msg = ucfirst($cf) . " files$usepkgname: lines which differ (wdiff format)";
 		print $msg, "\n", '-' x length $msg, "\n";
 		print join("\n",@output), "\n";
 	    }
@@ -630,8 +659,9 @@ for my $debname (@CommonDebs) {
 	    warn "wdiff failed (exit status " . ($? >> 8) .
 		(($? & 0x7f) ? " with signal " . ($? & 0x7f) : "") . ")\n";
 	}
-	# Clean up
-	system ("rm", "-rf", $dir1, $dir2);
+    }
+    # Clean up
+    system ("rm", "-rf", $dir1, $dir2);
 }
 
 exit $exit_status;
