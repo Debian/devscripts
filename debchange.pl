@@ -275,8 +275,9 @@ if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
 fatal "Only one of -c/--changelog and --news is allowed; try $progname --help for more help"
     if $opt_c && $opt_news;
 
-fatal "Only one of -n/--nmu and --qa is allowed; try $progname --help for more help"
-    if $opt_n && $opt_qa;
+# Only allow at most one non-help option
+fatal "Only one of -a, -i, -e, -r, -v, -d, -n/--nmu, --qa is allowed;\ntry $progname --help for more help"
+    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) + ($opt_n?1:0) + ($opt_qa?1:0) > 1;
 
 fatal "--closes should not be used with --news; put bug numbers in the changelog not the NEWS file"
     if $opt_news && @closes;
@@ -306,10 +307,6 @@ if ($opt_create) {
 
 @closes = split(/,/, join(',', @closes));
 map { s/^\#//; } @closes;  # remove any leading # from bug numbers
-
-# Only allow at most one non-help option
-fatal "Only one of -a, -i, -e, -r, -v, -d, -n/--nmu, --qa is allowed;\ntry $progname --help for more help"
-    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) + ($opt_n?1:0) + ($opt_qa?1:0) > 1;
 
 # We'll process the rest of the command line later.
 
