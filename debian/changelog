@@ -11,6 +11,8 @@ devscripts (2.9.17) UNRELEASED; urgency=low
     --debs-dir command line and DEBRELEASE_DEBS_DIR configuration file
     options (Closes: #309362)
   * mass-bug: new script (Closes: #355505)
+  * pts-subscribe: fix config boilerplate to actually set default timeout
+    (Closes: #360857)
   * pts-subscribe.1: improve the wording of the manpage (Closes: #360027)
   * uscan: *really* fix the uninitialized value bug (Closes: #356959)
   * uscan: provide downloadurlmangle and filenamemangle options to mangle
@@ -19,7 +21,7 @@ devscripts (2.9.17) UNRELEASED; urgency=low
   * who-uploads: new script to determine most recent uploaders of a
     package to the Debian archive (Closes: #347809)
 
- -- Julian Gilbey <jdg@debian.org>  Wed,  5 Apr 2006 00:41:57 +0100
+ -- Julian Gilbey <jdg@debian.org>  Wed,  5 Apr 2006 09:59:01 +0100
 
 devscripts (2.9.16) unstable; urgency=low
 

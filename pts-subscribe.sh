@@ -56,7 +56,7 @@ if ! command -v at >/dev/null 2>&1; then
 fi
 
 # Boilerplate: set config variables
-PTS_UNTIL='now + 30 days'
+DEFAULT_PTS_UNTIL='now + 30 days'
 VARS="PTS_UNTIL"
 
 if [ "$1" = "--no-conf" -o "$1" = "--noconf" ]; then
