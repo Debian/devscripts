@@ -200,7 +200,7 @@ while [ "$1" ]; do
 done
 
 if [ -n "$PATCH" ]; then
-    if [ $# ne 0 ]; then
+    if [ $# -ne 0 ]; then
         echo "$PROGNAME: additional archive name/version number is not allowed with --patch" >&2
 	echo "Run $PROGNAME --help for usage information" >&2
         exit 1
