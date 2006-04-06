@@ -853,6 +853,10 @@ Note that a bug is no longer blocked from being fixed by a set of other bugs.
 
 sub bts_unblock {
     my $bug=checkbug(shift) or die "bts unblock: what bug is blocked?\n";
+    my $word=shift;
+    if ($word ne 'by' && $word ne 'with') {
+	    unshift @_, $word;
+    }
     my @blockers;
     foreach (@_) {
 	my $blocker=checkbug($_) or die "bts unblock: some blocking bug number(s) not valid\n";
