@@ -208,6 +208,10 @@
 # FOO=bar.
 # DEBUILD_SET_ENVVAR_FOO=bar
 # 
+# Do we check for the existence of the .orig.tar.gz before calling
+# dpkg-buildpackage?
+# DEBUILD_TGZ_CHECK=yes
+# 
 # Corresponds to the dpkg-buildpackage -r option.
 # DEBUILD_ROOTCMD=fakeroot
 # 
@@ -231,6 +235,17 @@
 # Extra options given to linda before any command-line options
 # specified.
 # DEBUILD_LINDA_OPTS=""
+# 
+# Hooks; see the manpage for details of these
+# DEBUILD_DPKG_BUILDPACKAGE_HOOK=""
+# DEBUILD_CLEAN_HOOK=""
+# DEBUILD_DPKG_SOURCE_HOOK=""
+# DEBUILD_BUILD_HOOK=""
+# DEBUILD_BINARY_HOOK=""
+# DEBUILD_FINAL_CLEAN_HOOK=""
+# DEBUILD_LINTIAN_HOOK=""
+# DEBUILD_SIGNING_HOOK=""
+# DEBUILD_POST_DPKG_BUILDPACKAGE_HOOK=""
 
 ##### dget
 # 

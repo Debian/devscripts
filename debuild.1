@@ -321,6 +321,10 @@ options, these will always be taken account of by \fBdebuild\fR.  Note
 that a \fB\-r\fR option in this variable will override the setting in
 DEBUILD_ROOTCMD.
 .TP
+\fBDEBUILD_\fIFOO\fB_HOOK
+The hook variable for the \fIfoo\fR hook.  See the section on hooks
+above for more details.  By default, this is empty.
+.TP
 .B DEBUILD_LINTIAN
 Should we run \fBlintian\fR?  If this is set to \fIno\fR, then
 \fBlintian\fR will not be run.

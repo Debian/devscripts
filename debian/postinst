@@ -211,6 +211,23 @@ EOF
 # that this option affects all of debrelease, debc and debi.
 # DEBRELEASE_DEBS_DIR=..
 
+##### debuild options added in version 2.9.17
+# 
+# Do we check for the existence of the .orig.tar.gz before calling
+# dpkg-buildpackage?
+# DEBUILD_TGZ_CHECK=yes
+# 
+# Hooks; see the manpage for details of these
+# DEBUILD_DPKG_BUILDPACKAGE_HOOK=""
+# DEBUILD_CLEAN_HOOK=""
+# DEBUILD_DPKG_SOURCE_HOOK=""
+# DEBUILD_BUILD_HOOK=""
+# DEBUILD_BINARY_HOOK=""
+# DEBUILD_FINAL_CLEAN_HOOK=""
+# DEBUILD_LINTIAN_HOOK=""
+# DEBUILD_SIGNING_HOOK=""
+# DEBUILD_POST_DPKG_BUILDPACKAGE_HOOK=""
+
 ##### who-uploads options added in version 2.9.17
 # 
 # Maximum number of uploads to display per package
