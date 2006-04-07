@@ -140,6 +140,71 @@ users selectively.  If the sysadmin wishes to do this, she should use
 the \fBdpkg-statoverride\fR program to change the permissions of
 \fI/usr/bin/debuild\fR.  This will ensure that these permissions are
 preserved across upgrades.
+.SH HOOKS
+\fBdebuild\fR supports a number of hooks when running
+\fBdpkg\-buildpackage\fR.  The available hooks are as follows:
+.TP
+dpkg-buildpackage-hook
+Run before dpkg-buildpackage begins by calling dpkg-checkbuilddeps.
+.TP
+clean-hook
+Run before dpkg-buildpackage runs debian/rules clean to clean the
+source tree.  (Run even if the tree is not being cleaned because -nc
+is used.)
+.TP
+dpkg-source-hook
+Run after cleaning the tree and before running dpkg-source.  (Run even
+if dpkg-source is not being called because -b or -B is used.)
+.TP
+dpkg-build-hook
+Run after dpkg-source and before calling debian/rules build.  (Run
+even if this is a source-only build, so debian/rules build is not
+being called.)
+.TP
+dpkg-binary-hook
+Run between debian/rules build and debian/rules binary(-arch).  Run
+ONLY if a binary package is being built.
+.TP
+dpkg-genchanges-hook
+Run after the binary package is built and before calling
+dpkg-genchanges.
+.TP
+final-clean-hook
+Run after dpkg-genchanges and before the final debian/rules clean.
+(Run even if we are not cleaning the tree post-build, which is the
+default.)
+.TP
+lintian-hook
+Run (once) before calling lintian and/or linda.  (Run even if we are
+not calling either.)
+.TP
+signing-hook
+Run after calling lintian and/or linda before any signing takes place.
+(Run even if we are not signing anything.)
+.TP
+post-dpkg-buildpackage-hook
+Run after everything has finished.
+.PP
+A hook command can be specified either in the configuration file as,
+for example, DEBUILD_SIGNING_HOOK='foo' (note the hyphens change into
+underscores!) or as a command line option \fB\-\-signing\-hook-foo\fR.
+The command will have certain percent substitutions made on it: %%
+will be replaced by a single % sign, %p will be replaced by the
+package name, %v by the package version number, %a will be 1 if the
+immediately following action is to be performed and 0 if not (for
+example, in the dpkg-source hook, %a will become 1 if dpkg-source is
+to be run and 0 if not).  Then it will be handed to the shell to deal
+with, so it can include redirections and stuff.
+.PP
+\fBPlease take care with hooks\fR, as misuse of them can lead to
+packages which FTBFS (fail to build from source).  They can be useful
+for taking snapshots of things or the like.
+.PP
+Finally, only dpkg-buildpackage-hook and the hooks from lintian-hook
+onwards can be used if \fBdpkg-cross\fR is installed.  (This is
+because internally, \fBdebuild\fR reimplements
+\fBdpkg\-buildpackage\fR, but it does not attempt to reimplement the
+\fBdpkg\-cross\fR replacement of this script.)
 .SH "OPTIONS"
 For details, see above.
 .TP
@@ -174,6 +239,24 @@ Run \fBlinda\fR after \fBdpkg-buildpackage\fR.
 .B \-\-no\-linda
 Do not run \fBlinda\fR after \fBdpkg-buildpackage\fR.  This is the
 default behaviour.
+.TP
+.B \-\-no\-tgz\-check
+Even if we're running \fBdpkg-buildpackage\fR and the version number
+has a Debian revision, do not check that the .orig.tar.gz file exists
+before starting the build.
+.TP
+.B \-\-tgz\-check
+If we're running \fBdpkg-buildpackage\fR and the version number has a
+Debian revision, check that the .orig.tar.gz file exists before
+starting the build.  This is the default behaviour.
+.TP
+\fB\-\-\fIfoo\fB\-hook\fR=\fIhook\fR
+Set a hook as described above.  If \fIhook\fR is blank, this unsets
+the hook.
+.TP
+\fB\-\-clear\-hooks\fR
+Clears all hooks.  They may be reinstated by later command line
+options.
 .TP
 \fB\-\-check-dirname-level\fR \fIN\fR
 See the above section "Directory name checking" for an explanation of
@@ -212,6 +295,10 @@ This corresponds to \fB\-\-set\-envvar=\fIvar\fB=\fIvalue\fR.
 .B DEBUILD_ROOTCMD
 Setting this variable to \fIprog\fR is the equivalent of
 \fB\-r\fIprog\fR.
+.TP
+.B DEBUILD_TGZ_CHECK
+Setting this variable to \fIno\fR is the same as the
+\fB\-\-no\-tgz\-check\fR command line option.
 .TP
 .B DEBUILD_DPKG_BUILDPACKAGE_OPTS
 These are options which should be passed to the invocation of

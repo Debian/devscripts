@@ -64,6 +64,7 @@ my @warnings;
 
 # Predeclare functions
 sub system_withecho(@);
+sub run_hook ($$);
 sub fileomitted (\@$);
 sub fatal($);
 
@@ -135,6 +136,7 @@ Second usage method:
                             dpkg-buildpackage run.  For details, see the
                             debuild manpage.  They default to nothing, and
                             can be reset to nothing with --foo-hook=''
+	--clear-hooks       Clear all hooks
 
     For available dpkg-buildpackage and lintian/linda options, see their
     respective manpages.
@@ -184,6 +186,8 @@ my $check_dirname_regex = 'PACKAGE(-.*)?';
 my $logging=0;
 my $tgz_check=1;
 my %hook;
+my @hooks = (qw(dpkg-buildpackage clean dpkg-source build binary final-clean
+		lintian signing post-dpkg-buildpackage));
 
 
 # First handle private options from cvs-debuild
@@ -314,19 +318,10 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $tgz_check = $config_vars{'DEBUILD_TGZ_CHECK'} eq 'yes' ? 1 : 0;
     $check_dirname_level = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'};
     $check_dirname_regex = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_REGEX'};
-    for my $hookname (qw(dpkg-buildpackage
-			 clean
-			 dpkg-source
-			 build
-			 binary
-			 final-clean
-			 lintian
-			 signing
-			 post-dpkg-buildpackage
-			 )) {
+    for my $hookname (@hooks) {
 	my $config_name = uc "debuild_${hookname}_hook";
 	$config_name =~ tr/-/_/;
-	$hook{$hookname} = $config_vars{$config_name)};
+	$hook{$hookname} = $config_vars{$config_name};
     }
 
     # Now parse the opts lists
@@ -502,6 +497,8 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
 	    $root_command=$opt;
 	    next;
 	}
+	$arg eq '--tgz-check' and $tgz_check=1, next;
+	$arg =~ /^--no-?tgz-check$/ and $tgz_check=0, next;
 	$arg =~ /^-r(.*)/ and $root_command=$1, next;
 	if ($arg eq '--ignore-dirname') {
 	    fatal "--ignore-dirname has been replaced by --check-dirname-level and\n--check-dirname-regex; run $progname --help for more details";
@@ -561,6 +558,8 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
 	    $hook{$argkey} = $opt;
 	    next;
 	}
+
+	if ($arg eq '--clear-hooks') { $hook{@hooks} = ('') x @hooks; next; }
 
 	# Not a debuild option, so give up.
 	unshift @ARGV, $arg;
@@ -925,8 +924,8 @@ if ($command_version eq 'dpkg') {
     ($sversion=$version) =~ s/^\d+://;
     ($uversion=$sversion) =~ s/-[a-z0-9+\.]+$//i;
     $dsc="${pkg}_${sversion}.dsc";
-    $origtgz="${pkg}_${uversion}.orig.tar.gz";
-    if ($tgzcheck and $uversion != $sversion and ! -f "../$origtgz") {
+    my $origtgz="${pkg}_${uversion}.orig.tar.gz";
+    if ($tgz_check and $uversion ne $sversion and ! -f "../$origtgz") {
 	warn "This package has a Debian revision number but there does not seem to be\nan appropriate .orig.tar.gz in the parent directory; continue anyway? (y/n) ";
 	my $ans = <STDIN>;
 	exit 1 unless $ans =~ /^y/i;
@@ -943,14 +942,7 @@ if ($command_version eq 'dpkg') {
     open STDOUT, ">&BUILD" or fatal "can't reopen stdout: $!";
     open STDERR, ">&BUILD" or fatal "can't reopen stderr: $!";
 
-
-    if ($hook{'dpkg-buildpackage'}) {
-	system($hook{'dpkg-buildpackage'});
-	if ($?>>8) {
-	    warn "$progname: dpkg-buildpackage-hook failed\n";
-	    exit ($?>>8);
-	}
-    }
+    run_hook('dpkg-buildpackage', 1);
 
     if ($dpkg_cross) {
 	unshift @dpkg_opts, ($checkbuilddep ? "-D" : "-d");
@@ -1000,13 +992,7 @@ if ($command_version eq 'dpkg') {
 	    }
 	}
 
-	if ($hook{'clean'}) {
-	    system($hook{'clean'});
-	    if ($?>>8) {
-		warn "$progname: clean-hook failed\n";
-		exit ($?>>8);
-	    }
-	}
+	run_hook('clean', ! $noclean);
 
 	# Next dpkg-buildpackage action: clean
 	unless ($noclean) {
@@ -1021,13 +1007,7 @@ if ($command_version eq 'dpkg') {
 	    }
 	}
 
-	if ($hook{'dpkg-source'}) {
-	    system($hook{'dpkg-source'});
-	    if ($?>>8) {
-		warn "$progname: dpkg-source-hook failed\n";
-		exit ($?>>8);
-	    }
-	}
+	run_hook('dpkg-source', ! $binaryonly);
 
 	# Next dpkg-buildpackage action: dpkg-source
 	if (! $binaryonly) {
@@ -1046,13 +1026,7 @@ if ($command_version eq 'dpkg') {
 	    chdir $dirn or fatal "can't chdir $dirn: $!";
 	}
 
-	if ($hook{'build'}) {
-	    system($hook{'build'});
-	    if ($?>>8) {
-		warn "$progname: build-hook failed\n";
-		exit ($?>>8);
-	    }
-	}
+	run_hook('build', ! $sourceonly);
 
 	# Next dpkg-buildpackage action: build and binary targets
 	if (! $sourceonly) {
@@ -1062,13 +1036,7 @@ if ($command_version eq 'dpkg') {
 		exit ($?>>8);
 	    }
 	
-	    if ($hook{'binary'}) {
-		system($hook{'binary'});
-		if ($?>>8) {
-		    warn "$progname: binary-hook failed\n";
-		    exit ($?>>8);
-		}
-	    }
+	    run_hook('binary', 1);
 
 	    if ($< == 0) {
 		system_withecho('debian/rules', $binarytarget);
@@ -1080,19 +1048,13 @@ if ($command_version eq 'dpkg') {
 		exit ($?>>8);
 	    }
 	} elsif ($hook{'binary'}) {
-	    push @warnings, "$progname: not running binary hook $hook{'binary'} as -S option used\n";
+	    push @warnings, "$progname: not running binary hook '$hook{'binary'}' as -S option used\n";
 	}
 
 	# We defer the signing the .dsc file until after dpkg-genchanges has
 	# been run
 
-	if ($hook{'dpkg-genchanges'}) {
-	    system($hook{'dpkg-genchanges'});
-	    if ($?>>8) {
-		warn "$progname: dpkg-genchanges-hook failed\n";
-		exit ($?>>8);
-	    }
-	}
+	run_hook('dpkg-genchanges', 1);
 
 	# Because of our messing around with STDOUT and wanting to pass
 	# arguments safely to dpkg-genchanges means that we're gonna have to
@@ -1118,13 +1080,7 @@ if ($command_version eq 'dpkg') {
 	close CHANGES
 	    or fatal "problem writing to ../$changes: $!";
 
-	if ($hook{'final-clean'}) {
-	    system($hook{'final-clean'});
-	    if ($?>>8) {
-		warn "$progname: final-clean-hook failed\n";
-		exit ($?>>8);
-	    }
-	}
+	run_hook('final-clean', $cleansource);
 
 	# Final dpkg-buildpackage action: clean target again
 	if ($cleansource) {
@@ -1181,14 +1137,9 @@ if ($command_version eq 'dpkg') {
 	chdir '..' or fatal "can't chdir: $!";
     } # end of debuild dpkg-buildpackage emulation
 
-    if ($hook{'lintian'}) {
-	system($hook{'lintian'});
-	if ($?>>8) {
-	    warn "$progname: lintian-hook failed\n";
-	    exit ($?>>8);
-	}
-    }
-
+    run_hook('lintian', (($run_lintian && $lintian_exists) ||
+			 ($run_linda && $linda_exists)) );
+    
     if ($run_lintian && $lintian_exists) {
 	$<=$>=$uid;  # Give up on root privileges if we can
 	$(=$)=$gid;
@@ -1212,13 +1163,7 @@ if ($command_version eq 'dpkg') {
 	<STDIN>;
     }
 
-    if ($hook{'signing'}) {
-	system($hook{'signing'});
-	if ($?>>8) {
-	    warn "$progname: signing-hook failed\n";
-	    exit ($?>>8);
-	}
-    }
+    run_hook('signing', ($signchanges || (! $sourceonly and $signsource)) );
 
     if ($signchanges) {
 	print "Now signing changes and any dsc files...\n";
@@ -1231,13 +1176,7 @@ if ($command_version eq 'dpkg') {
 	    or fatal "running debsign failed";
     }
 
-    if ($hook{'post-dpkg-buildpackage'}) {
-	system($hook{'post-dpkg-buildpackage'});
-	if ($?>>8) {
-	    warn "$progname: post-dpkg-buildpackage-hook failed\n";
-	    exit ($?>>8);
-	}
-    }
+    run_hook('post-dpkg-buildpackage', 1);
 
     # Any warnings?
     if (@warnings) {
@@ -1246,7 +1185,7 @@ if ($command_version eq 'dpkg') {
 	IO::Handle::flush(\*STDOUT);
 
 	my $warns = @warnings > 1 ? "S" : "";
-	warn "\nWARNING$warns generated by debuild:\n" .
+	warn "\nWARNING$warns generated by $progname:\n" .
 	    join("\n", @warnings) . "\n";
     }
     # close the logging process
@@ -1307,6 +1246,25 @@ sub system_withecho(@) {
 sub fileomitted (\@$) {
     my ($files, $pat) = @_;
     return (scalar(grep { /$pat$/ } @$files) == 0);
+}
+
+sub run_hook ($$) {
+    my ($hook, $act) = @_;
+    return unless $hook{$hook};
+
+    print STDERR " Running $hook-hook\n";
+    my $hookcmd = $hook{$hook};
+    $act = $act ? 1 : 0;
+    my %per=("%"=>"%", "p"=>$pkg, "v"=>$version, "a"=>$act);
+    $hookcmd =~ s/\%(.)/exists $per{$1} ? $per{$1} :
+	(warn ("Unrecognised \% substitution in hook: \%$1\n"), "\%$1")/eg;
+
+    system_withecho($hookcmd);
+
+    if ($?>>8) {
+	warn "$progname: $hook-hook failed\n";
+	exit ($?>>8);
+    }
 }
 
 sub fatal($) {
