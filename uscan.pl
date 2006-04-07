@@ -388,20 +388,14 @@ print "-- Scanning for watchfiles in @ARGV\n" if $verbose;
 # correctly, which makes this code a little messier than it would be
 # otherwise.
 my @dirs;
-my $pid = open FIND, '-|';
-if (! defined $pid) {
-    die "$progname: couldn't fork: $!\n";
+open FIND, '-|', 'find', @ARGV, qw(-follow -type d -name debian -print)
+    or die "$progname: couldn't exec find: $!\n";
+
+while (<FIND>) {
+    chomp;
+    push @dirs, $_;
 }
-if ($pid) {
-    while (<FIND>) {
-	chomp;
-	push @dirs, $_;
-    }
-    close FIND;
-} else {
-    exec 'find', @ARGV, qw(-follow -type d -name debian -print);
-    die "$progname: couldn't exec find: $!\n";
-}
+close FIND;
 
 die "$progname: No debian directories found\n" unless @dirs;
 

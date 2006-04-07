@@ -1,5 +1,7 @@
 devscripts (2.9.17) UNRELEASED; urgency=low
 
+  * several Perl scripts: make sure we set the SIGPIPE handler before
+    doing an open '-|'
   * bts: actually support the --sendmail option rather than just say we
     do!
   * bts: fix URI in manpage (Closes: #360783)
@@ -25,7 +27,7 @@ devscripts (2.9.17) UNRELEASED; urgency=low
   * who-uploads: new script to determine most recent uploaders of a
     package to the Debian archive (Closes: #347809)
 
- -- Julian Gilbey <jdg@debian.org>  Thu,  6 Apr 2006 12:39:09 +0100
+ -- Julian Gilbey <jdg@debian.org>  Fri,  7 Apr 2006 01:39:15 +0100
 
 devscripts (2.9.16) unstable; urgency=low
 
