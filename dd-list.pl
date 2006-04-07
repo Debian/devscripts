@@ -146,7 +146,7 @@ else {
 			chomp;
 			s/^\s+//;
 			s/\s+$//;
-			push @package_names, $_;
+			push @package_names, split ' ', $_;
 		}
 	}
 	else {

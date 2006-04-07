@@ -1,5 +1,6 @@
 devscripts (2.9.17) UNRELEASED; urgency=low
 
+  [ Julian Gilbey ]
   * several Perl scripts: make sure we set the SIGPIPE handler before
     doing an open '-|'
   * bts: actually support the --sendmail option rather than just say we
@@ -32,7 +33,11 @@ devscripts (2.9.17) UNRELEASED; urgency=low
   * who-uploads: new script to determine most recent uploaders of a
     package to the Debian archive (Closes: #347809)
 
- -- Julian Gilbey <jdg@debian.org>  Fri,  7 Apr 2006 12:01:26 +0100
+  [ Joey Hess ]
+  * dd-list: actually support white-space separate pages names from stdin,
+    as documented on man page.
+
+ -- Joey Hess <joeyh@debian.org>  Fri,  7 Apr 2006 14:05:38 -0400
 
 devscripts (2.9.16) unstable; urgency=low
 
