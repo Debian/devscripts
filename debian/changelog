@@ -3,7 +3,7 @@ devscripts (2.9.17) UNRELEASED; urgency=low
   * several Perl scripts: make sure we set the SIGPIPE handler before
     doing an open '-|'
   * bts: actually support the --sendmail option rather than just say we
-    do!
+    do! (Closes: #293715)
   * bts: fix URI in manpage (Closes: #360783)
   * bts: fix unblock NNNNN by|with NNNNN handling (Closes: #361029)
   * debchange: add --qa option (Closes: #358278)
@@ -15,6 +15,11 @@ devscripts (2.9.17) UNRELEASED; urgency=low
     directory other than the parent of the currnent source directory with
     --debs-dir command line and DEBRELEASE_DEBS_DIR configuration file
     options (Closes: #309362)
+  * debuild: emulate dpkg-buildpackage rather than call it (unless
+    dpkg-cross is installed); this provides a hook facility (Closes:
+    #226947)
+  * debuild: complains if debian revision in native version (Closes:
+    #262525)
   * mass-bug: new script (Closes: #355505)
   * pts-subscribe: fix config boilerplate to actually set default timeout
     (Closes: #360857)
@@ -27,7 +32,7 @@ devscripts (2.9.17) UNRELEASED; urgency=low
   * who-uploads: new script to determine most recent uploaders of a
     package to the Debian archive (Closes: #347809)
 
- -- Julian Gilbey <jdg@debian.org>  Fri,  7 Apr 2006 01:39:15 +0100
+ -- Julian Gilbey <jdg@debian.org>  Fri,  7 Apr 2006 12:01:26 +0100
 
 devscripts (2.9.16) unstable; urgency=low
 

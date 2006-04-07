@@ -114,10 +114,27 @@ Second usage method:
 
     Additional debuild options available in this case are:
 
-        --lintian         Run lintian (default)
-        --linda           Run linda
-        --no-lintian      Do not run lintian
-        --no-linda        Do not run linda (default)
+        --lintian           Run lintian (default)
+        --linda             Run linda
+        --no-lintian        Do not run lintian
+        --no-linda          Do not run linda (default)
+        --[no-]tgz-check    Do [not] check for an .orig.tar.gz before running
+                            dpkg-buildpackage if we have a Debian revision
+                            (Default: check) 
+
+        --dpkg-buildpackage-hook=HOOK
+        --clean-hook=HOOK
+        --dpkg-source-hook=HOOK
+        --build-hook=HOOK
+        --binary-hook=HOOK
+        --final-clean-hook=HOOK
+        --lintian-hook=HOOK
+        --signing-hook=HOOK
+        --post-dpkg-buildpackage-hook=HOOK
+                            These hooks run at the various stages of the
+                            dpkg-buildpackage run.  For details, see the
+                            debuild manpage.  They default to nothing, and
+                            can be reset to nothing with --foo-hook=''
 
     For available dpkg-buildpackage and lintian/linda options, see their
     respective manpages.
@@ -165,6 +182,8 @@ my $checkbuilddep=1;
 my $check_dirname_level = 1;
 my $check_dirname_regex = 'PACKAGE(-.*)?';
 my $logging=0;
+my $tgz_check=1;
+my %hook;
 
 
 # First handle private options from cvs-debuild
@@ -218,6 +237,16 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBUILD_LINTIAN' => 'yes',
 		       'DEBUILD_LINDA' => 'no',
 		       'DEBUILD_ROOTCMD' => 'fakeroot',
+		       'DEBUILD_TGZ_CHECK' => 'yes',
+		       'DEBUILD_DPKG_BUILDPACKAGE_HOOK' => '',
+		       'DEBUILD_CLEAN_HOOK' => '',
+		       'DEBUILD_DPKG_SOURCE_HOOK' => '',
+		       'DEBUILD_BUILD_HOOK' => '',
+		       'DEBUILD_BINARY_HOOK' => '',
+		       'DEBUILD_FINAL_CLEAN_HOOK' => '',
+		       'DEBUILD_LINTIAN_HOOK' => '',
+		       'DEBUILD_SIGNING_HOOK' => '',
+		       'DEBUILD_POST_DPKG_BUILDPACKAGE_HOOK' => '',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
 		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.*)?',
 		       );
@@ -263,6 +292,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'DEBUILD_LINDA'}='no';
     $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} =~ /^[012]$/
 	or $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'}=1;
+    $config_vars{'DEBUILD_TGZ_CHECK'} =~ /^(yes|no)$/
+	or $config_vars{'DEBUILD_TGZ_CHECK'}='yes';
 
     foreach my $var (sort keys %config_vars) {
 	if ($config_vars{$var} ne $config_default{$var}) {
@@ -280,8 +311,23 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $run_lintian = $config_vars{'DEBUILD_LINTIAN'} eq 'no' ? 0 : 1;
     $run_linda = $config_vars{'DEBUILD_LINDA'} eq 'yes' ? 1 : 0;
     $root_command = $config_vars{'DEBUILD_ROOTCMD'};
+    $tgz_check = $config_vars{'DEBUILD_TGZ_CHECK'} eq 'yes' ? 1 : 0;
     $check_dirname_level = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'};
     $check_dirname_regex = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_REGEX'};
+    for my $hookname (qw(dpkg-buildpackage
+			 clean
+			 dpkg-source
+			 build
+			 binary
+			 final-clean
+			 lintian
+			 signing
+			 post-dpkg-buildpackage
+			 )) {
+	my $config_name = uc "debuild_${hookname}_hook";
+	$config_name =~ tr/-/_/;
+	$hook{$hookname} = $config_vars{$config_name)};
+    }
 
     # Now parse the opts lists
     if (shift @othervars ne ">>> $dpkg_opts_var BEGIN <<<") {
@@ -490,6 +536,32 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
 	}
 	$arg eq '-d' and $checkbuilddep=0, next;
 	$arg eq '-D' and $checkbuilddep=1, next;
+
+	# hooks...
+	if ($arg =~ /^--(.*)-hook$/) {
+	    my $argkey = $1;
+	    unless (exists $hook{$argkey}) {
+		fatal "unknown hook $arg,\nrun $progname --help for usage information";
+	    }
+	    unless (defined ($opt = shift)) {
+		fatal "$arg requires an argument,\nrun $progname --help for usage information";
+	    }
+	    $hook{$argkey} = $opt;
+	    next;
+	}
+
+	if ($arg =~ /^--(.*?)-hook=(.*)/) {
+	    my $argkey = $1;
+	    my $opt = $2;
+
+	    unless (exists $hook{$argkey}) {
+		fatal "unknown hook option $arg,\nrun $progname --help for usage information";
+	    }
+
+	    $hook{$argkey} = $opt;
+	    next;
+	}
+
 	# Not a debuild option, so give up.
 	unshift @ARGV, $arg;
 	last;
@@ -623,6 +695,22 @@ if ($command_version eq 'dpkg') {
     # which is actually dpkg-cross's version.  We lose the facility for
     # hooks in this case, but we're not going to emulate dpkg-cross as well!
 
+    my $dpkg_cross = (-x '/usr/bin/dpkg-cross' ? 1 : 0);
+    if ($dpkg_cross) {
+	# check hooks
+	my @skip_hooks = ();
+	for my $hookname (qw(clean dpkg-source build binary dpkg-genchanges
+			     final-clean)) {
+	    if ($hook{$hookname}) { push @skip_hooks, $hookname; }
+	}
+	if (@skip_hooks) {
+	    warn "$progname: dpkg-cross appears to be present on your system, and you have\nset up some hooks which will not be run (" .
+		join(", ", @skip_hooks) . ");\ndo you wish to continue? (y/n) ";
+	    my $ans = <STDIN>;
+	    exit 1 unless $ans =~ /^y/i;
+	}
+    }
+
     # Our first task is to parse the command line options.
 
     # And before we get too excited, does lintian/linda even exist?
@@ -646,7 +734,9 @@ if ($command_version eq 'dpkg') {
     my $desc='';
     my $noclean=0;
     my $usepause=0;
-    my $warnable_error=0;
+    my $warnable_error=0;  # OK, dpkg-buildpackage defines this but doesn't
+                           # use it.  We'll keep it around just in case it
+                           # does one day...
     my @passopts=();
 
     # extra dpkg-buildpackage variables not initialised there
@@ -701,6 +791,8 @@ if ($command_version eq 'dpkg') {
 	    push(@dpkg_opts, $_), next;
 	$_ eq '-E' and $warnable_error=0, push(@passopts, $_),
 	    push(@dpkg_opts, $_), next;
+	# dpkg-cross specific option
+	if (/^-M/ and $dpkg_cross) { push(@dpkg_opts, $_), next; }
 	fatal "unknown dpkg-buildpackage option in configuration file: $_";
     }
 
@@ -739,6 +831,8 @@ if ($command_version eq 'dpkg') {
 	    push(@dpkg_opts, $_), next;
 	$_ eq '-E' and $warnable_error=0, push(@passopts, $_),
 	    push(@dpkg_opts, $_), next;
+	# dpkg-cross specific option
+	if (/^-M/ and $dpkg_cross) { push(@dpkg_opts, $_), next; }
 
 	# these non-dpkg-buildpackage options make us stop
 	if ($_ eq '-L' or $_ eq '--lintian' or /^--(lintian|linda)-opts$/) {
@@ -818,7 +912,7 @@ if ($command_version eq 'dpkg') {
 
     # We need to do the arch, sversion, pv, pva stuff to figure out
     # what the changes file will be called,
-    my ($sversion, $dsc, $changes, $build);
+    my ($sversion, $uversion, $dsc, $changes, $build);
     my $arch;
     if ($sourceonly) {
 	$arch = 'source';
@@ -829,7 +923,15 @@ if ($command_version eq 'dpkg') {
     }
 
     ($sversion=$version) =~ s/^\d+://;
+    ($uversion=$sversion) =~ s/-[a-z0-9+\.]+$//i;
     $dsc="${pkg}_${sversion}.dsc";
+    $origtgz="${pkg}_${uversion}.orig.tar.gz";
+    if ($tgzcheck and $uversion != $sversion and ! -f "../$origtgz") {
+	warn "This package has a Debian revision number but there does not seem to be\nan appropriate .orig.tar.gz in the parent directory; continue anyway? (y/n) ";
+	my $ans = <STDIN>;
+	exit 1 unless $ans =~ /^y/i;
+    }
+
     # We'll need to be a bit cleverer to determine the changes file name;
     # see below
     $build="${pkg}_${sversion}_${arch}.build";
@@ -842,7 +944,15 @@ if ($command_version eq 'dpkg') {
     open STDERR, ">&BUILD" or fatal "can't reopen stderr: $!";
 
 
-    if (-x '/usr/bin/dpkg-cross') {
+    if ($hook{'dpkg-buildpackage'}) {
+	system($hook{'dpkg-buildpackage'});
+	if ($?>>8) {
+	    warn "$progname: dpkg-buildpackage-hook failed\n";
+	    exit ($?>>8);
+	}
+    }
+
+    if ($dpkg_cross) {
 	unshift @dpkg_opts, ($checkbuilddep ? "-D" : "-d");
 	unshift @dpkg_opts, "-r$root_command" if $root_command;
 	system_withecho('dpkg-buildpackage', @dpkg_opts);
@@ -877,16 +987,23 @@ if ($command_version eq 'dpkg') {
 		system('dpkg-checkbuilddeps');
 	    }
 	    if ($?>>8) {
-		/`/;  # start of horrible emacs hack
-		warn <<"EOT";
-You do not appear to have all build dependencies properly met, aborting.
-(Use -d flag to override.)
-If you have the pbuilder package installed you can run
-/usr/lib/pbuilder/pbuilder-satisfydepends as root to install the
-required packages, or you can do it manually using dpkg or apt using
-the error messages just above this message.
-EOT
-		/`/;  # end of horrible emacs hack
+		# Horrible non-Perlish formatting here, but emacs formatting
+		# dies miserably if this paragraph is done as a here-document.
+		# And even the documented hack doesn't work here :(
+		warn "You do not appear to have all build dependencies properly met, aborting.\n" .
+		    "(Use -d flag to override.)\n" .
+		    "If you have the pbuilder package installed you can run\n" .
+		    "/usr/lib/pbuilder/pbuilder-satisfydepends as root to install the\n" .
+		    "required packages, or you can do it manually using dpkg or apt using\n" .
+		    "the error messages just above this message.\n";
+		exit ($?>>8);
+	    }
+	}
+
+	if ($hook{'clean'}) {
+	    system($hook{'clean'});
+	    if ($?>>8) {
+		warn "$progname: clean-hook failed\n";
 		exit ($?>>8);
 	    }
 	}
@@ -900,6 +1017,14 @@ EOT
 	    }
 	    if ($?>>8) {
 		warn "$progname: debian/rules clean failed!\n";
+		exit ($?>>8);
+	    }
+	}
+
+	if ($hook{'dpkg-source'}) {
+	    system($hook{'dpkg-source'});
+	    if ($?>>8) {
+		warn "$progname: dpkg-source-hook failed\n";
 		exit ($?>>8);
 	    }
 	}
@@ -921,6 +1046,14 @@ EOT
 	    chdir $dirn or fatal "can't chdir $dirn: $!";
 	}
 
+	if ($hook{'build'}) {
+	    system($hook{'build'});
+	    if ($?>>8) {
+		warn "$progname: build-hook failed\n";
+		exit ($?>>8);
+	    }
+	}
+
 	# Next dpkg-buildpackage action: build and binary targets
 	if (! $sourceonly) {
 	    system_withecho('debian/rules', 'build');
@@ -929,6 +1062,14 @@ EOT
 		exit ($?>>8);
 	    }
 	
+	    if ($hook{'binary'}) {
+		system($hook{'binary'});
+		if ($?>>8) {
+		    warn "$progname: binary-hook failed\n";
+		    exit ($?>>8);
+		}
+	    }
+
 	    if ($< == 0) {
 		system_withecho('debian/rules', $binarytarget);
 	    } else {
@@ -938,10 +1079,20 @@ EOT
 		warn "$progname: debian/rules $binarytarget failed!\n";
 		exit ($?>>8);
 	    }
+	} elsif ($hook{'binary'}) {
+	    push @warnings, "$progname: not running binary hook $hook{'binary'} as -S option used\n";
 	}
 
 	# We defer the signing the .dsc file until after dpkg-genchanges has
 	# been run
+
+	if ($hook{'dpkg-genchanges'}) {
+	    system($hook{'dpkg-genchanges'});
+	    if ($?>>8) {
+		warn "$progname: dpkg-genchanges-hook failed\n";
+		exit ($?>>8);
+	    }
+	}
 
 	# Because of our messing around with STDOUT and wanting to pass
 	# arguments safely to dpkg-genchanges means that we're gonna have to
@@ -966,6 +1117,14 @@ EOT
 	print CHANGES @changefilecontents;
 	close CHANGES
 	    or fatal "problem writing to ../$changes: $!";
+
+	if ($hook{'final-clean'}) {
+	    system($hook{'final-clean'});
+	    if ($?>>8) {
+		warn "$progname: final-clean-hook failed\n";
+		exit ($?>>8);
+	    }
+	}
 
 	# Final dpkg-buildpackage action: clean target again
 	if ($cleansource) {
@@ -1022,6 +1181,13 @@ EOT
 	chdir '..' or fatal "can't chdir: $!";
     } # end of debuild dpkg-buildpackage emulation
 
+    if ($hook{'lintian'}) {
+	system($hook{'lintian'});
+	if ($?>>8) {
+	    warn "$progname: lintian-hook failed\n";
+	    exit ($?>>8);
+	}
+    }
 
     if ($run_lintian && $lintian_exists) {
 	$<=$>=$uid;  # Give up on root privileges if we can
@@ -1046,6 +1212,14 @@ EOT
 	<STDIN>;
     }
 
+    if ($hook{'signing'}) {
+	system($hook{'signing'});
+	if ($?>>8) {
+	    warn "$progname: signing-hook failed\n";
+	    exit ($?>>8);
+	}
+    }
+
     if ($signchanges) {
 	print "Now signing changes and any dsc files...\n";
 	system('debsign', @debsign_opts, $changes) == 0
@@ -1055,6 +1229,14 @@ EOT
 	print "Now signing dsc file...\n";
 	system('debsign', @debsign_opts, $dsc) == 0
 	    or fatal "running debsign failed";
+    }
+
+    if ($hook{'post-dpkg-buildpackage'}) {
+	system($hook{'post-dpkg-buildpackage'});
+	if ($?>>8) {
+	    warn "$progname: post-dpkg-buildpackage-hook failed\n";
+	    exit ($?>>8);
+	}
     }
 
     # Any warnings?
