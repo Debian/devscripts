@@ -106,7 +106,7 @@ push @args, "S" if $params->{'source-and-binary'};
 
 my @cmd = -x "/usr/bin/curl" ? qw/curl/ : qw/wget -q -O -/;
 system @cmd, "http://qa.debian.org/madison.php?package=" .
-    join("+", @ARGV) . "&text=on&" . join ("&", @args);
+    join("+", map { s/\+/%2B/g; $_ } @ARGV) . "&text=on&" . join ("&", @args);
 
 =pod
 
