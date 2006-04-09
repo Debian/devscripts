@@ -185,9 +185,10 @@ my $check_dirname_level = 1;
 my $check_dirname_regex = 'PACKAGE(-.*)?';
 my $logging=0;
 my $tgz_check=1;
-my %hook;
 my @hooks = (qw(dpkg-buildpackage clean dpkg-source build binary final-clean
 		lintian signing post-dpkg-buildpackage));
+my %hook;
+$hook{@hooks} = ('') x @hooks;
 
 
 # First handle private options from cvs-debuild

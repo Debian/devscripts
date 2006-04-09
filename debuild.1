@@ -194,7 +194,9 @@ package name, %v by the package version number, %a will be 1 if the
 immediately following action is to be performed and 0 if not (for
 example, in the dpkg-source hook, %a will become 1 if dpkg-source is
 to be run and 0 if not).  Then it will be handed to the shell to deal
-with, so it can include redirections and stuff.
+with, so it can include redirections and stuff.  For example, to only
+run the dpkg-source hook if dpkg-source is to be run, the hook could
+be something like: "if [ %a -eq 1 ]; then ...; fi".
 .PP
 \fBPlease take care with hooks\fR, as misuse of them can lead to
 packages which FTBFS (fail to build from source).  They can be useful
