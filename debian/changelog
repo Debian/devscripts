@@ -25,7 +25,8 @@ devscripts (2.9.17) UNRELEASED; urgency=low
   * pts-subscribe: fix config boilerplate to actually set default timeout
     (Closes: #360857)
   * pts-subscribe.1: improve the wording of the manpage (Closes: #360027)
-  * uscan: *really* fix the uninitialized value bug (Closes: #356959)
+  * uscan: *really* fix the uninitialized value bug (Closes: #356959,
+    #361319)
   * uscan: provide downloadurlmangle and filenamemangle options to mangle
     the URL and filename before attempting to perform and save the
     download respectively (Closes: #327404)
