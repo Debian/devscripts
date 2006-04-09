@@ -949,10 +949,6 @@ if ($command_version eq 'dpkg') {
 	unshift @dpkg_opts, ($checkbuilddep ? "-D" : "-d");
 	unshift @dpkg_opts, "-r$root_command" if $root_command;
 	system_withecho('dpkg-buildpackage', @dpkg_opts);
-	if ($?>>8) {
-	    warn "$progname: dpkg-buildpackage failed!\n";
-	    exit ($?>>8);
-	}
 
 	chdir '..' or fatal "can't chdir: $!";
 	# We're using dpkg-cross, we could now have foo_1.2_i386+sparc.changes
@@ -983,13 +979,12 @@ if ($command_version eq 'dpkg') {
 		# Horrible non-Perlish formatting here, but emacs formatting
 		# dies miserably if this paragraph is done as a here-document.
 		# And even the documented hack doesn't work here :(
-		warn "You do not appear to have all build dependencies properly met, aborting.\n" .
+		fatal "You do not appear to have all build dependencies properly met, aborting.\n" .
 		    "(Use -d flag to override.)\n" .
 		    "If you have the pbuilder package installed you can run\n" .
 		    "/usr/lib/pbuilder/pbuilder-satisfydepends as root to install the\n" .
 		    "required packages, or you can do it manually using dpkg or apt using\n" .
 		    "the error messages just above this message.\n";
-		exit ($?>>8);
 	    }
 	}
 
@@ -1001,10 +996,6 @@ if ($command_version eq 'dpkg') {
 		system_withecho('debian/rules', 'clean');
 	    } else {
 		system_withecho($root_command, 'debian/rules', 'clean');
-	    }
-	    if ($?>>8) {
-		warn "$progname: debian/rules clean failed!\n";
-		exit ($?>>8);
 	    }
 	}
 
@@ -1020,10 +1011,6 @@ if ($command_version eq 'dpkg') {
 	    push @cmd, "-b", $dirn;
 	    chdir '..' or fatal "can't chdir ..: $!";
 	    system_withecho(@cmd);	
-	    if ($?>>8) {
-		warn "$progname: dpkg-source failed!\n";
-		exit ($?>>8);
-	    }
 	    chdir $dirn or fatal "can't chdir $dirn: $!";
 	}
 
@@ -1032,10 +1019,6 @@ if ($command_version eq 'dpkg') {
 	# Next dpkg-buildpackage action: build and binary targets
 	if (! $sourceonly) {
 	    system_withecho('debian/rules', 'build');
-	    if ($?>>8) {
-		warn "$progname: debian/rules build failed!\n";
-		exit ($?>>8);
-	    }
 	
 	    run_hook('binary', 1);
 
@@ -1043,10 +1026,6 @@ if ($command_version eq 'dpkg') {
 		system_withecho('debian/rules', $binarytarget);
 	    } else {
 		system_withecho($root_command, 'debian/rules', $binarytarget);
-	    }
-	    if ($?>>8) {
-		warn "$progname: debian/rules $binarytarget failed!\n";
-		exit ($?>>8);
 	    }
 	} elsif ($hook{'binary'}) {
 	    push @warnings, "$progname: not running binary hook '$hook{'binary'}' as -S option used\n";
@@ -1089,10 +1068,6 @@ if ($command_version eq 'dpkg') {
 		system_withecho('debian/rules', 'clean');
 	    } else {
 		system_withecho($root_command, 'debian/rules', 'clean');
-	    }
-	    if ($?>>8) {
-		warn "$progname: debian/rules clean failed!\n";
-		exit ($?>>8);
 	    }
 	}
 
@@ -1206,14 +1181,13 @@ else {
 	    system('dpkg-checkbuilddeps');
 	}
 	if ($?>>8) {
-	    warn <<"EOT";
+	    fatal <<"EOT";
 You do not appear to have all build dependencies properly met.
 If you have the pbuilder package installed, you can run
 /usr/lib/pbuilder/pbuilder-satisfydepends as root to install the
 required packages, or you can do it manually using dpkg or apt using
 the error messages just above this message.
 EOT
-	    exit ($?>>8);
 	}
     }
 
@@ -1242,6 +1216,9 @@ EOT
 sub system_withecho(@) {
     print STDERR " ", join(" ", @_), "\n";
     system(@_);
+    if ($?>>8) {
+	fatal "@_ failed";
+    }
 }
 
 sub fileomitted (\@$) {
