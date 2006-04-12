@@ -21,10 +21,12 @@ devscripts (2.9.17) UNRELEASED; urgency=low
     #226947)
   * debuild: complains if debian revision in native version (Closes:
     #262525)
+  * dget: fix manpage type (Closes: #361877)
   * mass-bug: new script (Closes: #355505)
   * pts-subscribe: fix config boilerplate to actually set default timeout
     (Closes: #360857)
   * pts-subscribe.1: improve the wording of the manpage (Closes: #360027)
+  * svnpath: fix svk info error (Closes: #361979)
   * uscan: *really* fix the uninitialized value bug (Closes: #356959,
     #361319)
   * uscan: provide downloadurlmangle and filenamemangle options to mangle
@@ -39,7 +41,7 @@ devscripts (2.9.17) UNRELEASED; urgency=low
     as documented on man page.
   * rmadison: escape "+" in package names in http query string
 
- -- Joey Hess <joeyh@debian.org>  Sun,  9 Apr 2006 13:34:07 -0400
+ -- Julian Gilbey <jdg@debian.org>  Wed, 12 Apr 2006 19:22:21 +0100
 
 devscripts (2.9.16) unstable; urgency=low
 

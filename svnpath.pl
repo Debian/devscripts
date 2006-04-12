@@ -72,7 +72,7 @@ if (-d ".svn") {
 }
 else {
 	# Try svk instead.
-	$url = `svk info .| grep -i '^Depot Path:' | cut -d ' ' -f 2`;
+	$url = `svk info .| grep -i '^Depot Path:' | cut -d ' ' -f 3`;
 }
 
 if (! length $url) {

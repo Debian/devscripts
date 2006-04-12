@@ -268,7 +268,7 @@ dget -- Download Debian source and binary packages
 
 =head1 DESCRIPTION
 
-B<dget> downloads Debian packages. In the first form, B<dget> acts as an source
+B<dget> downloads Debian packages. In the first form, B<dget> acts as a source
 package-aware form of wget; it fetches the given URL and recursively any files
 referenced, if the URL points to a .dsc or .changes file. When the B<-x> option
 is given, the downloaded source is unpacked by B<dpkg-source>.
