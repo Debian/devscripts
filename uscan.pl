@@ -572,6 +572,9 @@ exit $found ? 0 : 1;
 # opts=dversionmangle=s/\.dfsg\.\d+$// \
 #   http://some.site.org/some/path/foobar-(.*)\.tar\.gz
 # 
+# The versionmangle=... option is a shorthand for saying uversionmangle=...
+# and dversionmangle=... and applies to both upstream and Debian versions.
+# 
 # The option filenamemangle can be used to mangle the name under which
 # the downloaded file will be saved:
 #   href="http://foo.bar.org/download/?path=&amp;download=foo-0.1.1.tar.gz"
@@ -662,6 +665,10 @@ sub process_watchline ($$$$$$)
 		    @{$options{'uversionmangle'}} = split /;/, $1;
 		}
 		elsif ($opt =~ /^dversionmangle\s*=\s*(.+)/) {
+		    @{$options{'dversionmangle'}} = split /;/, $1;
+		}
+		elsif ($opt =~ /^versionmangle\s*=\s*(.+)/) {
+		    @{$options{'uversionmangle'}} = split /;/, $1;
 		    @{$options{'dversionmangle'}} = split /;/, $1;
 		}
 		elsif ($opt =~ /^filenamemangle\s*=\s*(.+)/) {

@@ -240,6 +240,11 @@ Thus, a suitable rule might be `s/\\.dfsg\\.\\d+$//' to remove a
 type version numbers.  Again, the \fIrules\fR string may not contain
 commas; this should not be a problem.
 .TP
+\fBversionmangle=\fIrules\fR
+This is a syntactic shorthand for
+\fBuversionmangle=\fIrules\fB,dversionmangle=\fIrules\fB, applying the
+same rules to both the upstream and Debian version numbers.
+.TP
 \fBfilenamemangle=\fIrules\fR
 This is used to mangle the filename with which the downloaded file
 will be saved, and is parsed in the same way as the
