@@ -685,16 +685,12 @@ sub process_watchline ($$$$$$)
 
 	($base, $filepattern, $lastversion, $action) = split ' ', $line, 4;
 
-	if ($base =~ m%/([^/]*\([^/]*\)[^/]*)$%) {
-	    # at most three fields; action might be multiword, though
-	    if (defined $lastversion) {
-		$action = $lastversion . (defined $action ? " $action" : "");
-	    }
-	    if (defined $filepattern) {
-		$lastversion = $filepattern;
-	    }
+	if ($base =~ s%/([^/]*\([^/]*\)[^/]*)$%%) {
+	    # Last component of $base has a pair of parentheses, so no
+	    # separate filepattern field; we remove the filepattern from the
+	    # end of $base and rescan the rest of the line
 	    $filepattern = $1;
-	    $base =~ s%/[^/]+$%/%;
+	    (undef, $lastversion, $action) = split ' ', $line, 3;
 	}
 
 	# Check validity of options
