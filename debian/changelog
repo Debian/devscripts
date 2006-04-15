@@ -33,6 +33,7 @@ devscripts (2.9.17) UNRELEASED; urgency=low
   * uscan: provide downloadurlmangle and filenamemangle options to mangle
     the URL and filename before attempting to perform and save the
     download respectively (Closes: #327404)
+  * uscan: fix manpage typo (dversionmangle) (Closes: #362202)
   * uupdate: correct syntax error (Closes: #360995)
   * who-uploads: new script to determine most recent uploaders of a
     package to the Debian archive (Closes: #347809)
@@ -42,7 +43,7 @@ devscripts (2.9.17) UNRELEASED; urgency=low
     as documented on man page.
   * rmadison: escape "+" in package names in http query string
 
- -- Julian Gilbey <jdg@debian.org>  Sat, 15 Apr 2006 23:28:58 +0100
+ -- Julian Gilbey <jdg@debian.org>  Sat, 15 Apr 2006 23:37:19 +0100
 
 devscripts (2.9.16) unstable; urgency=low
 
