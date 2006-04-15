@@ -1276,7 +1276,7 @@ sub bts_cache {
     else { $tocache=''; }
     
     if (! length $tocache) {
-	$tocache=$ENV{'DEBEMAIL'} || $ENV{'EMAIL'};
+	$tocache=$ENV{'DEBEMAIL'} || $ENV{'EMAIL'} || '';
 	if ($tocache =~ /^.*\s<(.*)>\s*$/) { $tocache = $1; }
     }
     if (! length $tocache) {
@@ -2093,7 +2093,7 @@ sub mangle_cache_file {
 # Removes a specified thing from the cache
 sub deletecache {
     my $thing=shift;
-    my $thgopts=shift;
+    my $thgopts=shift || '';
 
     if (! -d $cachedir) {
 	die "bts: deletecache() called but no cachedir!\n";
@@ -2110,7 +2110,7 @@ sub deletecache {
 # Given a thing, returns the filename for it in the cache.
 sub cachefile {
     my $thing=shift;
-    my $thgopts=shift ||'';
+    my $thgopts=shift || '';
     if ($thing eq '') { die "bts: cachefile given empty argument\n"; }
     if ($thing =~ /bugs.css$/) { return $cachedir."bugs.css" }
     $thing =~ s/^src:/src_/;
@@ -2192,7 +2192,7 @@ sub thing_to_url {
 # if there is one, and returns a list of them.
 sub bugs_from_thing {
     my $thing=shift;
-    my $thgopts=shift;
+    my $thgopts=shift || '';
     my $cachefile=cachefile($thing,$thgopts);
 
     if (-f $cachefile) {
@@ -2202,7 +2202,9 @@ sub bugs_from_thing {
 	close IN;
 
 	return $data =~ m!href="(\d+)\.html"!g;
-    } else { return (); }
+    } else {
+	return ();
+    }
 }
 
 # Given an <a href="bugreport.cgi?...>...</a> string, return a
@@ -2276,7 +2278,7 @@ sub href_to_filename {
 sub browse {
     prunecache();
     my $thing=shift;
-    my $thgopts=shift;
+    my $thgopts=shift || '';
     
     if ($thing eq '') {
 	if ($thgopts ne '') {
@@ -2463,7 +2465,7 @@ sub runmailreader {
 
 sub get_timestamp {
     my $thing = shift;
-    my $thgopts = shift;
+    my $thgopts = shift || '';
     my $timestamp = undef;
     my $versionstamp = undef;
 
@@ -2486,7 +2488,7 @@ sub get_timestamp {
 
 sub set_timestamp {
     my $thing = shift;
-    my $thgopts = shift;
+    my $thgopts = shift || '';
     my $timestamp = shift;
     my $versionstamp = shift || $version;
 
@@ -2505,7 +2507,7 @@ sub set_timestamp {
 
 sub delete_timestamp {
     my $thing = shift;
-    my $thgopts = shift;
+    my $thgopts = shift || '';
 
     if (tied %timestamp) {
 	delete $timestamp{$thing.$thgopts};

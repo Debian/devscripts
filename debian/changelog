@@ -7,6 +7,7 @@ devscripts (2.9.17) UNRELEASED; urgency=low
     do! (Closes: #293715)
   * bts: fix URI in manpage (Closes: #360783)
   * bts: fix unblock NNNNN by|with NNNNN handling (Closes: #361029)
+  * bts: fix uninitialized value bugs (Closes: #362187)
   * debchange: add --qa option (Closes: #358278)
   * debdiff: check file permissions and new/deleted control files (Closes:
     #203781, #230702)
@@ -41,7 +42,7 @@ devscripts (2.9.17) UNRELEASED; urgency=low
     as documented on man page.
   * rmadison: escape "+" in package names in http query string
 
- -- Julian Gilbey <jdg@debian.org>  Wed, 12 Apr 2006 19:22:21 +0100
+ -- Julian Gilbey <jdg@debian.org>  Sat, 15 Apr 2006 23:28:58 +0100
 
 devscripts (2.9.16) unstable; urgency=low
 
