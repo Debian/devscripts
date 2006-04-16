@@ -91,20 +91,20 @@ opts=dversionmangle=s/\\.dfsg\\.\\d+$// \\
 # filename, use filenamemangle.  For example,
 # <A href="http://foo.bar.org/download/?path=&amp;download=foo-0.1.1.tar.gz">
 # could be handled as:
-# opts=filenamemangle=s/.*=(.*)/$1/ \
-#     http://foo.bar.org/download/\?path=&amp;download=foo-(.*)\.tar\.gz
+# opts=filenamemangle=s/.*=(.*)/$1/ \\
+#     http://foo.bar.org/download/\\?path=&amp;download=foo-(.*)\\.tar\\.gz
 # 
 # <A href="http://foo.bar.org/download/?path=&amp;download_version=0.1.1">
 # could be handled as:
-# opts=filenamemangle=s/.*=(.*)/foo-$1\.tar\.gz/ \
-#    http://foo.bar.org/download/\?path=&amp;download_version=(.*)
+# opts=filenamemangle=s/.*=(.*)/foo-$1\\.tar\\.gz/ \\
+#    http://foo.bar.org/download/\\?path=&amp;download_version=(.*)
 
 # The option downloadurlmangle can be used to mangle the URL of the file
 # to download.  This can only be used with http:// URLs.  This may be
 # necessary if the link given on the webpage needs to be transformed in
 # some way into one which will work automatically, for example:
-# opts=downloadurlmangle=s/prdownload/download/ \
-#   http://developer.berlios.de/project/showfiles.php?group_id=2051 \
+# opts=downloadurlmangle=s/prdownload/download/ \\
+#   http://developer.berlios.de/project/showfiles.php?group_id=2051 \\
 #   http://prdownload.berlios.de/softdevice/vdr-softdevice-(.*).tgz
 
 .fi
