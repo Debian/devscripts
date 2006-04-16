@@ -1,0 +1,61 @@
+.TH WHO-UPLOADS 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+who-uploads \- identify the uploaders of Debian source packages
+.SH SYNOPSIS
+\fBwho\-uploads\fR [\fIoptions\fR] \fIsource_package\fR [...]
+.SH DESCRIPTION
+\fBwho\-uploads\fR uses the Package Tracking System (PTS) to identify
+the uploaders of the three most recent versions of the given source
+packages.  Note that the uploaders are identified using their
+\fBgpg\fR(1) keys; installing a recent version of the
+\fIdebian-keyring\fR package should provide most of the required keys.
+.PP
+Note that because the PTS uses source packages, you must give the
+source package names, not the binary package names.
+.SH OPTIONS
+.TP
+\fB\-\-max\-uploads=\fIN\fR
+Specify the maximum number of uploads to display for each package; the
+default is 3.  Note that you may not see this many uploads if there
+are not this many recorded in the PTS.
+.TP
+\fB\-\-keyring \fIkeyring\fR
+Add \fIkeyring\fR to the list of keyrings to be searched for the
+uploader's GPG key.
+.TP
+\fB\-\-no\-default\-keyrings\fR
+By default, \fBwho\-uploads\fR uses the two Debian keyrings
+\fI/usr/share/keyrings/debian-keyring.{gpg,pgp}\fR (although this
+default can be changed in the configuration file, see below).
+Specifying this option means that the default keyrings will not be
+examined.  The \fB\-\-keyring\fR option overrides this one.
+.TP
+\fB\-\-no-conf\fR, \fB\-\-noconf\fR
+Do not read any configuration files.  This can only be used as the
+first option given on the command-line.
+.TP
+.BR \-\-help ", " \-h
+Display a help message and exit successfully.
+.TP
+.B \-\-version
+Display version and copyright information and exit successfully.
+.SH "CONFIGURATION VARIABLES"
+The two configuration files \fI/etc/devscripts.conf\fR and
+\fI~/.devscripts\fR are sourced in that order to set configuration
+variables.  Command line options can be used to override configuration
+file settings.  Environment variable settings are ignored for this
+purpose.  The currently recognised variables are:
+.TP
+.B WHOUPLOADS_MAXUPLOADS
+The maximum number of uploads to display for each package.  By
+default, this is 3.
+.TP
+.B WHOUPLOADS_KEYRINGS
+This is a colon-separated list of the default keyrings to be used.  By
+default, it is the two Debian keyrings
+\fI/usr/share/keyrings/debian-keyring.gpg\fR and
+\fI/usr/share/keyrings/debian-keyring.pgp\fR.
+.SH AUTHOR
+The original version of \fBwho-uploads\fR was written by Adeodato Sim\['o]
+<dato@net.com.org.es>.  The current version is by Julian Gilbey
+<jdg@debian.org>.

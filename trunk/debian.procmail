@@ -1,0 +1,101 @@
+#   debian.procmail - Debian mailing list sorting procmail file.
+#   Copyright (C) 1999  Edward Betts <edward@debian.org>
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+# On Debian GNU/Linux systems, the complete text of the GNU General
+# Public License can be found in `/usr/share/common-licenses/GPL'.
+
+# Instructions
+
+# To use this file either copy it to ~/.procmailrc or use INCLUDERC to load it.
+# Read the procmail, procmailrc, procmailex and procmailsc for more
+# information.
+
+# Configuration
+
+# This files assumes that you are using standard mailbox file format to save
+# your mail. You may change the directories that these variables point to, but
+# the directories exist for this rcfile to function correctly.
+
+#MAILDIR=~/Mail				# Uncomment if in needed
+DEBIAN=debian				# Directory for debian mailing lists
+DC_INSTALLER=$DEBIAN/installer		# New Debian Packages directory
+DC_DIR=$DEBIAN/changes-other		# Directory for debian-changes
+DDC_DIR=$DEBIAN/devel-changes-other	# Directory for debian-devel-changes
+
+# These variables are used to control the sorting of the debian-changes and
+# debian-devel-changes list. It is likely that you will want to change them.
+
+ARCHS=alpha|arm|m68k|powerpc|sparc	# Archs that do not interest me
+PACKAGES=colortail|esh|vh|x2vnc|sniffit	# Packages on other archs of interest
+
+# The Debian changes and Debian development changes mailing lists are special
+# cases. Architectures that are not of any real interest, specified using the
+# $ARCHS variable are separated out into mailboxes named after the
+# architectures. They are stored in the directory specified by $DC_DIR for the
+# Debian changes mailing lists and $DDC_DIR for the Debian development changes
+# mailing lists.
+#
+# However the uploads and installs of some packages on all architectures may
+# be of interest. These pacakges can be specified using the $PACAKGES
+# variable. I use it for the packages I maintain so I can see when they have
+# been built on other architectures.
+#
+# Note: See the master.procmail script if you are short of bandwidth and do
+# not want these messages to even reach your machine. If master.procmail is in
+# use the recipes should never be true, unless the $PACKAGES and $ARCHS
+# variables are different on master than locally.
+
+:0
+* ^X-Mailing-List: <debian-changes@lists.debian.org>
+* $^Subject: Accepted .+ \(($ARCHS )*($ARCHS)\) to .+
+* !$^Subject: Accepted ($PACKAGES) .+
+* ^Subject: Accepted .+ \(\/[-a-zA-Z0-9]+
+$DC_DIR/$MATCH
+
+:0
+* ^X-Mailing-List: <debian-devel-changes@lists.debian.org>
+* $^Subject: Accepted .+ \(($ARCHS )*($ARCHS)\) to .+
+* !$^Subject: Accepted ($PACKAGES) .+
+* ^Subject: Accepted .+ \(\/[-a-zA-Z0-9]+
+$DDC_DIR/$MATCH
+
+# Sort debian mailing lists into mailboxes under $DEBIANDIR. This dynamic
+# style means when subscribing to new Debian mailing lists no changes need be
+# made to this file. Even as yet none existant mailing lists are catered for.
+
+:0:
+* ^X-Mailing-List: <debian-.+@lists.debian.org>
+* ^X-Mailing-List: <debian-\/[-a-zA-Z0-9]+
+$DEBIAN/$MATCH
+
+# There are a few Debian related mailing lists which do not appear on
+# lists.debian.org, those that I subscribe to are listed here. I suggest you
+# leave them, even if you do not currently subscibe to them.
+
+# Debian UK list
+:0:
+* ^Sender: debian-.+-admin@chiark.greenend.org.uk
+* ^Sender: debian-\/[a-zA-Z0-9]+
+$DEBIAN/$MATCH
+
+# Debian events-de list
+:0:
+* ^Sender: owner-debian-.+@Infodrom.North.DE
+* ^Sender: owner-debian-\/[-a-zA-Z0-9]+
+$DEBIAN/$MATCH
+
+# vim:ft=procmail:ts

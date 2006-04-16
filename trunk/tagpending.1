@@ -1,0 +1,34 @@
+.TH TAG-PENDING 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+tagpending \- Tag all bugs not marked pending as such
+.SH SYNOPSIS
+\fBtagpending\fR [\fIoptions\fR] 
+.SH DESCRIPTION
+\fBtagpending\fR looks for and parses debian/changelog and debian/control
+to find out what bugs the impending release would close, and sends mail using
+\fBmail(1)\fR to \fBcontrol@bugs.debian.org\fR tagging the bugs as pending. It
+queries the BTS to look up the bugs marked as pending for that package and
+excludes those from being re-tagged in the email.
+.SH OPTIONS
+.TP
+.B \-n
+Do not actually send an email, but print it to stdout.
+.TP
+.B \-s
+Don't print actions taken.
+.TP
+.B \-f
+Do not query the BTS for already tagged bugs, that is, force all bugs to
+be tagged as pending even if they already are.
+.TP
+.B \-\-help, \-h
+Show a brief usage message.
+.TP
+.B \-\-version, \-v
+Show version and copyright information.
+.SH "SEE ALSO"
+.BR ldapsearch(1),
+.BR mailx(1),
+.BR dpkg-parsechangelog(1)
+.SH AUTHOR
+Joshua Kwan <joshk@triplehelix.org>

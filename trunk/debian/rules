@@ -1,0 +1,80 @@
+#!/usr/bin/make -f
+# debian/rules for devscripts, based on the example file rules.indep.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+optimize := -O0
+else
+optimize := -O2
+endif
+
+# Here we perform some checks to ensure that we haven't goofed or left
+# debugging code around or ... before we build the package
+test: test-stamp
+test-stamp:
+	# debugging info in bts?
+	if grep -q '\$$debug *= *1' bts.pl; then exit 1; else exit 0; fi
+	touch test-stamp
+
+build-indep: build-stamp-indep
+build-stamp-indep: test-stamp
+	dh_testdir
+	touch build-stamp-indep
+
+build-arch: build-stamp-arch
+build-stamp-arch: test-stamp
+	dh_testdir
+	$(MAKE) CFLAGS='-g $(optimize) -Wall'
+	touch build-stamp-arch
+
+build: build-arch build-indep
+
+clean:
+	dh_testdir
+	dh_testroot
+	-$(MAKE) clean
+	rm -f build-stamp* test-stamp
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+	$(MAKE) DESTDIR=$(CURDIR)/debian/devscripts install
+
+# Build architecture-independent files here.
+binary-indep: build-indep
+# We have nothing to do
+
+# Build architecture-dependent files here.
+binary-arch: build-arch install
+	dh_testdir
+	dh_testroot
+	dh_installdocs README
+	dh_installexamples
+#	This is now done by the make install command above
+#	dh_installman
+	dh_link /usr/share/devscripts/conf.default \
+		/usr/share/doc/devscripts/devscripts.conf.ex
+	dh_installchangelogs
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_perl
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary: binary-indep binary-arch
+
+.PHONY: build-arch build-indep build clean binary-indep binary-arch binary \
+	install
+
+# Local variables:
+# mode: makefile
+# End:
