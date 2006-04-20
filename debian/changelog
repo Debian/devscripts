@@ -1,3 +1,9 @@
+devscripts (2.9.19) unstable; urgency=low
+
+  * debuild: fix -I and -i option handling (Closes: #363368)
+
+ -- Julian Gilbey <jdg@debian.org>  Thu, 20 Apr 2006 21:41:51 +0100
+
 devscripts (2.9.18) unstable; urgency=low
 
   * uscan: fix parsing howler: uscan would never work like this - oops!

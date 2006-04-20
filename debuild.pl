@@ -770,8 +770,8 @@ if ($command_version eq 'dpkg') {
 	/^-a(.*)/ and $targetarch=$1, push(@dpkg_opts, $_), next;
 	    # Explained below; no implied -d here, as already done
 	/^-s[iad]$/ and $sourcestyle=$_, push(@dpkg_opts, $_), next;
-	/^-i(.*)/ and $diffignore=$1, push(@dpkg_opts, $_), next;
-	/^-I(.*)/ and push(@tarignore, $1), push(@dpkg_opts, $_), next;
+	/^-i/ and $diffignore=$_, push(@dpkg_opts, $_), next;
+	/^-I/ and push(@tarignore, $_), push(@dpkg_opts, $_), next;
 	$_ eq '-tc' and $cleansource=1, push(@dpkg_opts, $_), next;
 	/^-t(.*)/ and $targetgnusystem=$1, push(@dpkg_opts, $_), next; # Ditto	
 	$_ eq '-nc' and $noclean=1, $binaryonly ||= '-b', push(@dpkg_opts, $_),
@@ -810,8 +810,8 @@ if ($command_version eq 'dpkg') {
 	/^-a(.*)/ and $targetarch=$1, $checkbuilddep=0, push(@dpkg_opts, $_),
 	    next;
 	/^-s[iad]$/ and $sourcestyle=$_, push(@dpkg_opts, $_), next;
-	/^-i(.*)/ and $diffignore=$1, push(@dpkg_opts, $_), next;
-	/^-I(.*)/ and push(@tarignore, $1), push(@dpkg_opts, $_), next;
+	/^-i/ and $diffignore=$_, push(@dpkg_opts, $_), next;
+	/^-I/ and push(@tarignore, $_), push(@dpkg_opts, $_), next;
 	$_ eq '-tc' and $cleansource=1, push(@dpkg_opts, $_), next;
 	/^-t(.*)/ and $targetgnusystem=$1, $checkbuilddep=0, next;
 	$_ eq '-nc' and $noclean=1, $binaryonly ||= '-b', push(@dpkg_opts, $_),
