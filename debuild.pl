@@ -912,7 +912,7 @@ if ($command_version eq 'dpkg') {
     # Call to dpkg-architecture to set DEB_{BUILD,HOST}_* environment
     # variables
     foreach (split /\n/, `dpkg-architecture -a${targetarch} -t${targetgnusystem} -f`) {
-	/^(.*)=(.*)$/ && $ENV{$1} = $2;
+	/^(.*)=(.*)$/ and $ENV{$1} = $2;
     }
 
     # We need to do the arch, sversion, pv, pva stuff to figure out
