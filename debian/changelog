@@ -1,3 +1,10 @@
+devscripts (2.9.20) unstable; urgency=low
+
+  * debuild: set DEB_{BUILD,HOST}_* variables as dpkg-buildpackage does
+    (Closes: #364256)
+
+ -- Julian Gilbey <jdg@debian.org>  Sat, 22 Apr 2006 22:40:22 +0100
+
 devscripts (2.9.19) unstable; urgency=low
 
   * debuild: fix -I and -i option handling (Closes: #363368)

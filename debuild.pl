@@ -909,6 +909,11 @@ if ($command_version eq 'dpkg') {
     # results $pkg and $version
     # mustsetvar maintainer is only needed for signing, so we leave that
     # to debsign or dpkg-sig
+    # Call to dpkg-architecture to set DEB_{BUILD,HOST}_* environment
+    # variables
+    foreach (split /\n/, `dpkg-architecture -a${targetarch} -t${targetgnusystem} -f`) {
+	/^(.*)=(.*)$/ && $ENV{$1} = $2;
+    }
 
     # We need to do the arch, sversion, pv, pva stuff to figure out
     # what the changes file will be called,
