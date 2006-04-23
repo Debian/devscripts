@@ -932,7 +932,7 @@ if ($command_version eq 'dpkg') {
     $dsc="${pkg}_${sversion}.dsc";
     my $origtgz="${pkg}_${uversion}.orig.tar.gz";
     if ($tgz_check and $uversion ne $sversion and ! -f "../$origtgz") {
-	warn "This package has a Debian revision number but there does not seem to be\nan appropriate .orig.tar.gz in the parent directory; continue anyway? (y/n) ";
+	print STDERR "This package has a Debian revision number but there does not seem to be\nan appropriate original tar file in the parent directory;\n(expected $origtgz)\ncontinue anyway? (y/n) ";
 	my $ans = <STDIN>;
 	exit 1 unless $ans =~ /^y/i;
     }
