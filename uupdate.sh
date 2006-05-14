@@ -233,7 +233,7 @@ mustsetvar VERSION "`dpkg-parsechangelog | sed -n 's/^Version: //p'`" \
 # Get epoch and upstream version
 eval `echo "$VERSION" | perl -ne '/^(?:(\d+):)?(.*)/; print "SVERSION=$2\nEPOCH=$1\n";'`
 
-UVERSION=`expr "$SVERSION" : '\(.*\)-[0-9a-z.+]*$'` ||
+UVERSION=`expr "$SVERSION" : '\(.*\)-[0-9a-zA-Z.+]*$'` ||
 {
     echo "$PROGNAME: a native Debian package cannot take upstream updates" >&2
     exit 1
