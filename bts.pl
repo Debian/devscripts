@@ -1148,7 +1148,7 @@ sub bts_unsubscribe {
 	   $bug . '-unsubscribe@' . $btsserver, $email);
 }
 
-=item reportspam <bug>
+=item reportspam <bug> ...
 
 The reportspam command allows you to report a bug report as containing spam.
 It saves one from having to go to the bug web page to do so.
@@ -1156,21 +1156,30 @@ It saves one from having to go to the bug web page to do so.
 =cut
 
 sub bts_reportspam {
-    my $bug=checkbug(shift) or die "bts reportspam: report what bug?\n";
-    opts_done(@_);
+    my @bugs;
+
     if (! have_lwp()) {
-	die "bts: Couldn't run bts spam: $lwp_broken\n";
+	die "bts: Couldn't run bts reportspam: $lwp_broken\n";
     }
 
+    foreach (@_) {
+	my $bug=checkbug($_) or die "bts reportspam: some bug number(s) not valid\n";
+	push @bugs, $bug;
+    }
+    @bugs > 1 or
+	die "bts reportspam: at least one bug number must be specified\n";
+
     init_agent() unless $ua;
-    my $request = HTTP::Request->new('GET', "$btscgispamurl?bug=$bug");
-    my $response = $ua->request($request);
-    if (! $response->is_success) {
-	warn "bts: failed to report $bug as containing spam: " . $response->status_line . "\n";
+    foreach my $bug (@bugs) {
+	my $request = HTTP::Request->new('GET', "$btscgispamurl?bug=$bug");
+	my $response = $ua->request($request);
+	if (! $response->is_success) {
+	    warn "bts: failed to report $bug as containing spam: " . $response->status_line . "\n";
+	}
     }
 }
 
-=item spamreport <bug>
+=item spamreport <bug> ...
 
 spamreport is a synonym for reportspam.
 
