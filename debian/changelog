@@ -1,12 +1,12 @@
-devscripts (2.9.20) UNRELEASED; urgency=low
+devscripts (2.9.20) unstable; urgency=low
 
   * debuild: set DEB_{BUILD,HOST}_* variables as dpkg-buildpackage does
     (Closes: #364256)
   * debuild: improve missing .orig.tar.gz warning
   * uscan: mention upgrading points in the manpage.
-  * uupdate: allow upstream version numbers to use A-Z (Closes:#367055) 
+  * uupdate: allow upstream version numbers to use A-Z (Closes:#367055)
 
- -- Julian Gilbey <jdg@debian.org>  Sun, 14 May 2006 13:16:27 +0100
+ -- Julian Gilbey <jdg@debian.org>  Wed, 17 May 2006 07:27:17 +0100
 
 devscripts (2.9.19) unstable; urgency=low
 
