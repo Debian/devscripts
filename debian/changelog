@@ -1,8 +1,11 @@
 devscripts (2.9.21) UNRELEASED; urgency=low
 
   * bts: reportspam/spamreport can now take multiple bug numbers
+  * bts: add support for forcemerge (Closes: #369050)
+  * debchange: clarified name of changelog file in more error/warning
+    messages (see bug#368961)
 
- -- Julian Gilbey <jdg@debian.org>  Wed, 17 May 2006 18:46:30 +0100
+ -- Julian Gilbey <jdg@debian.org>  Sun, 28 May 2006 09:39:29 +0100
 
 devscripts (2.9.20) unstable; urgency=low
 

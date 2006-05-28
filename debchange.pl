@@ -684,7 +684,7 @@ if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r &&
 	}
     }
     elsif ($opt_release_heuristic eq 'changelog') {
-	if ($changelog{Distribution} eq 'UNRELEASED') {
+	if ($changelog{'Distribution'} eq 'UNRELEASED') {
 		$opt_a = 1;
 	}
 	else {
@@ -698,7 +698,7 @@ if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r &&
 
 # Open in anticipation....
 unless ($opt_create) {
-    open S, $changelog_path or fatal "Cannot open existing changelog: $!";
+    open S, $changelog_path or fatal "Cannot open existing $changelog_path: $!";
 }
 open O, ">$changelog_path.dch"
     or fatal "Cannot write to temporary file: $!";
@@ -937,13 +937,13 @@ elsif ($opt_create) {
     $line = 1;
 }
 else {
-    fatal "Unknown changelog processing options - help!";
+    fatal "Unknown changelog processing command line options - help!";
 }
 
 if (! $opt_create) {
     close S or fatal "Error closing $changelog_path: $!";
 }
-close O or fatal "Error closing temporary changelog: $!";
+close O or fatal "Error closing temporary $changelog_path: $!";
 
 if ($warnings) {
     if ($warnings>1) {
@@ -958,24 +958,24 @@ if ($warnings) {
 if (! $TEXT or @closes_text or $opt_create) {
     my $mtime = (stat("$changelog_path.dch"))[9];
     defined $mtime or fatal
-	"Error getting modification time of temporary changelog: $!";
+	"Error getting modification time of temporary $changelog_path: $!";
 
     system("sensible-editor +$line $changelog_path.dch") == 0 or
-	fatal "Error editing the changelog";
+	fatal "Error editing $changelog_path";
 
     if (! @closes_text) { # so must have a changelog added by hand
 	my $newmtime = (stat("$changelog_path.dch"))[9];
 	defined $newmtime or fatal
-	    "Error getting modification time of temporary changelog: $!";
+	    "Error getting modification time of temporary $changelog_path: $!";
 	if ($mtime == $newmtime && ! $opt_r && ! $opt_create) {
-	    warn "$progname: Changelog unmodified; exiting.\n";
+	    warn "$progname: $changelog_path unmodified; exiting.\n";
 	    exit 0;
 	}
     }
 }
 
 copy("$changelog_path.dch","$changelog_path") or
-    fatal "Couldn't replace changelog with new changelog: $!";
+    fatal "Couldn't replace $changelog_path with new version: $!";
 
 # Now find out what the new package version number is if we need to
 # rename the directory
@@ -994,7 +994,7 @@ if ((basename(cwd()) =~ m%^\Q$PACKAGE\E-\Q$UVERSION\E$%) &&
 	or fatal "Problem executing dpkg-parsechangelog: $!";
     if ($?) { fatal "dpkg-parsechangelog failed!" }
 
-    fatal "No version number in changelog!"
+    fatal "No version number in debian/changelog!"
 	unless defined $new_version;
 
     # Is this a native Debian package, i.e., does it have a - in the

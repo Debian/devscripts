@@ -882,6 +882,24 @@ sub bts_merge {
     mailbts("merging @bugs", "merge @bugs");
 }
 
+=item forcemerge <bug> <bug> [<bug> ...]
+
+Forcibly merge a set of bugs together.
+
+=cut
+
+sub bts_forcemerge {
+    my @bugs;
+    foreach (@_) {
+	my $bug=checkbug($_) or die "bts forcemerge: some bug number(s) not valid\n";
+	push @bugs, $bug;
+    }
+    @bugs > 1 or
+	die "bts forcemerge: at least two bug numbers to be merged must be specified\n";
+    mailbts("forcibly merging @bugs", "forcemerge @bugs");
+}
+
+
 =item unmerge <bug>
 
 Unmerge a bug.
