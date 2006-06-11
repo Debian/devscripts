@@ -1184,7 +1184,7 @@ sub bts_reportspam {
 	my $bug=checkbug($_) or die "bts reportspam: some bug number(s) not valid\n";
 	push @bugs, $bug;
     }
-    @bugs > 1 or
+    @bugs >= 1 or
 	die "bts reportspam: at least one bug number must be specified\n";
 
     init_agent() unless $ua;
