@@ -54,8 +54,8 @@ sub get_developers_given_package {
 sub parse_developer {
 	my $developer=shift;
 
-	my ($name, $domain)=$developer=~/^(.*)\s+<.*@(.*)>\s*$/i;
-	if (defined $domain && $domain ne 'lists.debian.org') {
+	my ($name, $domain) = $developer=~/^(.*)\s+<.*@(.*)>\s*$/i;
+	if (defined $domain && $domain !~ /^lists(\.alioth)?\.debian\.org$/) {
 		return join " ", reverse split " ", $name;
 	}
 	elsif (defined $name) {

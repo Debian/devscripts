@@ -2,10 +2,12 @@ devscripts (2.9.21) UNRELEASED; urgency=low
 
   * bts: reportspam/spamreport can now take multiple bug numbers
   * bts: add support for forcemerge (Closes: #369050)
+  * dd-list: treat lists.alioth.debian.org like lists.debian.org (Closes:
+    #373809)
   * debchange: clarified name of changelog file in more error/warning
     messages (see bug#368961)
 
- -- Julian Gilbey <jdg@debian.org>  Sun, 28 May 2006 09:39:29 +0100
+ -- Julian Gilbey <jdg@debian.org>  Thu, 15 Jun 2006 19:21:41 +0100
 
 devscripts (2.9.20) unstable; urgency=low
 
