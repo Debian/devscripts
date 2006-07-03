@@ -435,7 +435,7 @@ while (@ARGV) {
     }
     elsif (/^\#/ and not /^\#\d+$/) {
 	$comment[$ncommand] = $_;
-    else {
+    } else {
 	push @{$args[$ncommand]}, $_;
     }
 }
