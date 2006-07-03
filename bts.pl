@@ -1625,7 +1625,7 @@ EOM
 		exec("/bin/cat")
 		    or die "bts: error running cat: $!\n";
 	    } else {
-		exec("mail", "-s", $subject, $btsemail)
+		exec("mail", "-s", $subject, "-a", "X-BTS-Version: $version", $btsemail)
 		    or die "bts: error running mail: $!\n";
 	    }
 	}
