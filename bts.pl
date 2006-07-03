@@ -430,9 +430,11 @@ while (@ARGV) {
 	push @command, $_;
 	$iscommand = 0;
     }
-    elsif ($comment[$ncommand] or (/^\#/ and not /^\#\d+$/)) {
+    elsif ($comment[$ncommand]) {
 	$comment[$ncommand] .= " $_";
     }
+    elsif (/^\#/ and not /^\#\d+$/) {
+	$comment[$ncommand] = $_;
     else {
 	push @{$args[$ncommand]}, $_;
     }
@@ -1613,6 +1615,7 @@ EOM
 	$SIG{'PIPE'} = sub { die "bts: pipe for mail broke\n"; };
 	if ($pid) {
 	    # parent
+	    print MAIL "# Automatically generated email from bts, devscripts version $version\n";
 	    print MAIL $body;
 	    close MAIL or die "bts: mail: $!\n";
 	}
