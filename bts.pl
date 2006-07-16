@@ -35,6 +35,7 @@ use File::Copy;
 use File::Path;
 use File::Spec;
 use File::Temp qw/tempfile/;
+use Cwd;
 use IO::Handle;
 use lib '/usr/share/devscripts';
 use Devscripts::DB_File_Lock;
@@ -1822,6 +1823,8 @@ sub download {
     my $versionstamp = '';
     my $url;
 
+    my $oldcwd = getcwd;
+
     # What URL are we to download?
     if ($thgopts ne '') {
 	# have to be intelligent here :/
@@ -1880,6 +1883,7 @@ sub download {
 	    print "$bug_current/$bug_total" if $bug_total;
 	    print "\n";
 	}
+	chdir $oldcwd or die "bts: chdir $oldcwd failed: $!\n";
 	return "";
     }
     elsif ($ret == MIRROR_DOWNLOADED) {
@@ -1921,6 +1925,7 @@ sub download {
 	}
 
 	return $livepage;
+	chdir $oldcwd or die "bts: chdir $oldcwd failed: $!\n";
     } else {
 	die "bts: couldn't download $url:\n$msg\n";
     }
