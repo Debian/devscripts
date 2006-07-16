@@ -16,23 +16,21 @@ EOF
 	    exit 1
 	    ;;
 	-v|--version)
-	    echo "dpkg-genbuilddeps wrapper for dpkg-depcheck:"
+	    echo "$PROGNAME wrapper for dpkg-depcheck:"
 	    dpkg-depcheck --version
 	    exit 1
 	    ;;
     esac
 fi
 
-if [ -d debian -a -x debian/rules ]; then
-    :
-else
-    echo "dpkg-genbuilddeps must be run in the source package directory" >&2
+if ! [ -x debian/rules ]; then
+    echo "$PROGNAME must be run in the source package directory" >&2
     exit 1
 fi
 
 if ! dpkg -L build-essential >/dev/null 2>&1
 then
-    echo "You must have the build-essential package installed to use dpkg-genbuilddeps" >&2
+    echo "You must have the build-essential package installed to use $PROGNAME" >&2
     echo "You can try running the dpkg-depcheck program directly as:" >&2
     echo "dpkg-depcheck --all dpkg-buildpackage -us -uc -b -rfakeroot $*" >&2
     exit 1
