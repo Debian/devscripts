@@ -6,6 +6,8 @@ devscripts (2.9.21) UNRELEASED; urgency=low
     to Justin Pryzby for spotting this)
   * bts: chdir back to original directory after downloading files (Closes:
     #372546)
+  * checkbashisms: check for $((cnt+1)), echo -n/-e, exec -c/-l/-a, let
+    and $RANDOM (Closes: #369851, #377195, #378406, #383613)
   * dd-list: treat lists.alioth.debian.org like lists.debian.org (Closes:
     #373809)
   * debchange: clarified name of changelog file in more error/warning

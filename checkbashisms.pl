@@ -113,7 +113,12 @@ foreach my $filename (@ARGV) {
 		'[^\\\]\{([^\s]+?,)+[^\\\}\s]+\}',     # brace expansion
 		'(?:^|\s+)\w+\[\d+\]=',      # bash arrays, H[0]
 		'\$\{\#?\w+\[[0-9\*\@]+\]\}',   # bash arrays, ${name[0|*|@]}
-		'(?:^|\s+)(read\s*(?:;|$))'  # read without variable
+		'(?:^|\s+)(read\s*(?:;|$))', # read without variable
+		'\$\(\([A-Za-z]',            # cnt=$((cnt + 1))
+		'echo\s+-[ne]',              # echo -n/-e
+		'exec\s+-[acl]',             # exec -c/-l/-a name
+		'\blet\s',                   # let ...
+		'\$RANDOM\b',                # $RANDOM
 	    );
 
 	    for my $re (@bashism_regexs) {
