@@ -23,7 +23,7 @@ temporary file, \fBdebchange\fR will exit without touching the
 existing changelog.  \fBNote that the changelog is assumed to be
 encoded with the UTF-8 encoding.  If it is not, problems may occur.\fR
 Please see the \fBiconv\fR(1) manpage to find out how to convert
-changelogs from legacy encodings.  Finally, a changelog or debian/NEWS
+changelogs from legacy encodings.  Finally, a changelog or NEWS
 file can be created from scratch using the \fB\-\-create\fR option
 described below.
 .PP
@@ -169,17 +169,16 @@ Update the changelog timestamp. If the distribution is set to
 by \fB\-\-distribution\fR).
 .TP
 .BR \-\-create
-This will create a new \fIdebian/changelog\fR file (or
-\fIdebian/NEWS\fR if the \fB\-\-news\fR option is used).  You must be
-in the top-level directory to use this; no directory name checking
-will be performed.  The package name and version can either be
-specified using the \fB\-\-package\fR and \fB\-\-newversion\fR
-options, determined from the directory name using the
-\fB\-\-fromdirname\fR option or entered manually into the generated
-changelog file.  The maintainer name is determined from the
-environment if this is possible, and the distribution is specified
-either using the \fB\-\-distribution\fR option or in the generated
-changelog file.
+This will create a new \fIdebian/changelog\fR file (or \fINEWS\fR if
+the \fB\-\-news\fR option is used).  You must be in the top-level
+directory to use this; no directory name checking will be performed.
+The package name and version can either be specified using the
+\fB\-\-package\fR and \fB\-\-newversion\fR options, determined from
+the directory name using the \fB\-\-fromdirname\fR option or entered
+manually into the generated changelog file.  The maintainer name is
+determined from the environment if this is possible, and the
+distribution is specified either using the \fB\-\-distribution\fR
+option or in the generated changelog file.
 .TP
 \fB\-\-package\fR \fIpackage\fR
 This specifies the package name to be used in the new changelog; this
@@ -239,10 +238,10 @@ This will edit the changelog \fIfile\fR instead of the standard
 environment variable setting.  Also, no directory traversing or
 checking will be performed when this option is used.
 .TP
-\fB\-\-news\fR
-This will edit \fIdebian/NEWS\fR instead of the regular
-changelog.  Directory searching will be performed.  Cannot be used
-together with \fB\-\-changelog\fR.
+\fB\-\-news\fR [\fInewsfile\fR]
+This will edit \fInewsfile\fR (by default, \fIdebian/NEWS\fR) instead
+of the regular changelog.  Directory searching will be performed.
+Cannot be used together with \fB\-\-changelog\fR.
 .TP
 \fB\-\-[no]multimaint\fR
 Should we indicate that parts of a changelog entry have been made by

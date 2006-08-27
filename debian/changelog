@@ -10,10 +10,12 @@ devscripts (2.9.21) UNRELEASED; urgency=low
     #373809)
   * debchange: clarified name of changelog file in more error/warning
     messages (see bug#368961)
+  * debchange: can specify a NEWS file to edit (still defaults to
+    debian/NEWS) (Closes: #384676)
   * dpkg-genbuilddeps: clean up if statement (Closes: #365372)
   * who-depends: convert output into locale charset (Closes: #384835)
 
- -- Julian Gilbey <jdg@debian.org>  Sun, 27 Aug 2006 21:22:03 +0100
+ -- Julian Gilbey <jdg@debian.org>  Sun, 27 Aug 2006 21:31:40 +0100
 
 devscripts (2.9.20) unstable; urgency=low
 

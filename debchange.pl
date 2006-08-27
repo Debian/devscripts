@@ -95,9 +95,9 @@ Options:
   -c, --changelog <changelog>
          Specify the name of the changelog to use in place of debian/changelog
          No directory traversal or checking is performed in this case.
-  --news
-         Specify that debian/NEWS is to be edited; cannot be used
-         with --changelog
+  --news <newsfile>
+         Specify that the newsfile (default debian/NEWS) is to be edited;
+         cannot be used with --changelog
   --[no]multimaint
          When appending an entry to a changelog section (-a), [do not]
          indicate if multiple maintainers are now involved (default: do so)
@@ -239,7 +239,7 @@ GetOptions("help|h" => \$opt_help,
 	   "query!" => \$opt_query,
 	   "closes=s" => \@closes,
 	   "c|changelog=s" => \$opt_c,
-	   "news" => \$opt_news,
+	   "news:s" => \$opt_news,
 	   "multimaint!" => \$opt_multimaint,
 	   "multi-maint!" => \$opt_multimaint,
 	   "m|maintmaint" => \$opt_m,
@@ -251,6 +251,8 @@ GetOptions("help|h" => \$opt_help,
 	   "release-heuristic=s" => \$opt_release_heuristic,
 	   )
     or die "Usage: $progname [options] [changelog entry]\nRun $progname --help for more details\n";
+
+$opt_news = 'debian/NEWS' if defined $opt_news and $opt_news eq '';
 
 if ($opt_noconf) {
     fatal "--no-conf is only acceptable as the first command-line option!";
@@ -286,14 +288,14 @@ fatal "--package can only be used with --create"
     if $opt_package && ! $opt_create;
 
 my $changelog_path = $opt_c || $ENV{'CHANGELOG'} || 'debian/changelog';
-if ($opt_news) { $changelog_path = "debian/NEWS"; }
-if ($changelog_path ne 'debian/changelog' and $changelog_path ne 'debian/NEWS') {
+if ($opt_news) { $changelog_path = $opt_news; }
+if ($changelog_path ne 'debian/changelog' and not $opt_news) {
     $check_dirname_level = 0;
 }
 
 # extra --create checks
-fatal "--package cannot be used when creating a debian/NEWS file"
-    if $opt_package && $changelog_path eq 'debian/NEWS';
+fatal "--package cannot be used when creating a NEWS file"
+    if $opt_package && $opt_news;
 
 if ($opt_create) {
     if ($opt_a || $opt_i || $opt_e || $opt_r || $opt_b || $opt_n || $opt_qa) {
@@ -313,8 +315,7 @@ map { s/^\#//; } @closes;  # remove any leading # from bug numbers
 # Look for the changelog
 my $chdir = 0;
 if (! $opt_create) {
-    if ($changelog_path eq 'debian/changelog'
-	or $changelog_path eq 'debian/NEWS') {
+    if ($changelog_path eq 'debian/changelog' or $opt_news) {
 	until (-f $changelog_path) {
 	    $chdir = 1;
 	    chdir '..' or fatal "Can't chdir ..: $!";
@@ -349,8 +350,8 @@ else {  # $opt_create
     unless (-w dirname $changelog_path) {
 	fatal "Cannot find " . (dirname $changelog_path) . " directory!\nAre you in the correct directory?";
     }
-    if ($changelog_path eq 'debian/NEWS' && ! -f 'debian/changelog') {
-	fatal "I can't create debian/NEWS without debian/changelog present";
+    if ($opt_news && ! -f 'debian/changelog') {
+	fatal "I can't create $opt_news without debian/changelog present";
     }
 }
 
@@ -365,11 +366,11 @@ my $EMAIL = 'EMAIL';
 my $DISTRIBUTION = 'UNRELEASED';
 my $CHANGES = '';
 
-if (! $opt_create || ($opt_create && $changelog_path eq 'debian/NEWS')) {
+if (! $opt_create || ($opt_create && $opt_news)) {
     if (! $opt_create) {
 	open PARSED, qq[dpkg-parsechangelog -l"$changelog_path" | ]
 	    or fatal "Cannot execute dpkg-parsechangelog: $!";
-    } elsif ($opt_create && $changelog_path eq 'debian/NEWS') {
+    } elsif ($opt_create && $opt_news) {
 	open PARSED, qq[dpkg-parsechangelog | ]
 	    or fatal "Cannot execute dpkg-parsechangelog: $!";
     } else {
