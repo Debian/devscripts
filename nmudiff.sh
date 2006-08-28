@@ -9,8 +9,8 @@ fi
 
 SOURCE=$( dpkg-parsechangelog | grep ^Source: | cut -d" " -f2 )
 VERSION=$( dpkg-parsechangelog | grep ^Version: | cut -d" " -f2 )
-OLDVERSION=$( dpkg-parsechangelog -v~ \
-  | sed -n "s/^ [^ .][^ ]* (\(.*\)).*$/\1/p" | head -2 | tail -1 )
+OLDVERSION=$( sed -n "s/^[^ .][^ ]* (\(.*\)).*$/\1/p" debian/changelog | \
+  head -2 | tail -1 )
 
 VERSION_NO_EPOCH=$( echo "$VERSION" | sed "s/^[0-9]\+://" )
 OLDVERSION_NO_EPOCH=$( echo "$OLDVERSION" | sed "s/^[0-9]\+://" )
