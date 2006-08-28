@@ -8,6 +8,7 @@ devscripts (2.9.21) UNRELEASED; urgency=low
     #372546)
   * bts: don't automatically use a -t option unless we are using
     /usr/sbin/sendmail or /usr/sbin/exim* (Closes: #373664)
+  * bts: allow mailreader setting to contain spaces (Closes: #370208)
   * checkbashisms: check for $((cnt+1)), echo -n/-e, exec -c/-l/-a, let
     and $RANDOM (Closes: #369851, #377195, #378406, #383613)
   * dd-list: treat lists.alioth.debian.org like lists.debian.org (Closes:

@@ -223,10 +223,11 @@ for show and bugs commands.
 
 =item --mailreader=READER
 
-Specify the command to read the mbox.  Must contain a "%s" string, which
-will be replaced by the name of the mbox file.  The command will be split
-on white space and will not be passed to a shell.  Default is 'mutt -f %s'.
-(Also, %% will be substituted by a single % if this is needed.)
+Specify the command to read the mbox.  Must contain a "%s" string
+(unquoted!), which will be replaced by the name of the mbox file.  The
+command will be split on white space and will not be passed to a
+shell.  Default is 'mutt -f %s'.  (Also, %% will be substituted by a
+single % if this is needed.)
 
 =item --sendmail=SENDMAILCMD
 
@@ -2491,14 +2492,17 @@ sub runbrowser {
 # Determines which mailreader to use
 sub runmailreader {
     my $file = shift;
+    my $quotedfile;
     die "bts: could not read mbox file!\n" unless -r $file;
 
-    my @reader = split ' ', $mailreader;
-    foreach (@reader) {
-	s/\%([%s])/$1 eq '%' ? '%' : $file/eg;
-    }
+    if ($file !~ /\'/) { $quotedfile = qq['$file']; }
+    elsif ($file !~ /[\"\\\$\'\!]/) { $quotedfile = qq["$file"]; }
+    else { die "bts: could not figure out how to quote the mbox filename \"$file\"\n"; }
 
-    if (system(@reader) >> 8 != 0) {
+    my $reader = $mailreader;
+    $reader =~ s/\%([%s])/$1 eq '%' ? '%' : $quotedfile/eg;
+
+    if (system($reader) >> 8 != 0) {
 	warn "Problem running mail reader: $!\n";
     }
 }
