@@ -165,8 +165,7 @@ while (@ARGV) {
 	shift @ARGV;
 
 	# Ensure from and to values all begin with a slash
-	# From potato onward, dpkg -c gives filenames such as:
-	#  ./usr/lib/filename
+	# dpkg -c produces filenames such as ./usr/lib/filename
 	my $from = shift;
 	my $to   = shift;
 	$from =~ s%^\./%/%;
@@ -685,8 +684,8 @@ sub process_debc($$)
     # Format of dpkg-deb -c output:
     # permissions owner/group size date time name ['->' link destination]
     $data =~ s/^(\S+)\s+(\S+)\s+(\S+\s+){3}/$1  $2   /mg;
-    $data =~ s, \./, /,mg;
-    @filelist = grep ! m|^/$|, split /\n/, $data; # don't bother keeping '/'
+    $data =~ s,   \./,   /,mg;
+    @filelist = grep ! m|   /$|, split /\n/, $data; # don't bother keeping '/'
 
     # Are we keeping directory names in our filelists?
     if ($ignore_dirs) {
@@ -694,14 +693,17 @@ sub process_debc($$)
     }
 
     # Do the "move" substitutions in the order received for the first debs
-    if ($number == 1) {
+    if ($number == 1 and @move) {
+	my @split_filelist = map { m/^(\S+)  (\S+)   (.*)/ && [$1, $2, $3] }
+	    @filelist;
 	for my $move (@move) {
 	    my $regex = $$move[0];
 	    my $from  = $$move[1];
 	    my $to    = $$move[2];
-	    map { if ($regex) { eval "\$_ =~ s:^$from:$to:"; }
-		  else { $_ =~ s/^\Q$from\E/$to/; } } @filelist;
+	    map { if ($regex) { eval "\$\$_[2] =~ s:$from:$to:g"; }
+		  else { $$_[2] =~ s/\Q$from\E/$to/; } } @split_filelist;
 	}
+	@filelist = map { "$$_[0]  $$_[1]   $$_[2]" } @split_filelist;
     }
 
     return \@filelist;

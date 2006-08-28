@@ -17,13 +17,15 @@ devscripts (2.9.21) UNRELEASED; urgency=low
     messages (see bug#368961)
   * debchange: can specify a NEWS file to edit (still defaults to
     debian/NEWS) (Closes: #384676)
+  * debdiff: fixed --move(-regex) options (broken by #203781 and #230702
+    fix in 2.9.17) (Closes: #370388)
   * dpkg-genbuilddeps: clean up if statement (Closes: #365372)
   * nmudiff: stop using dpkg-parsechangelog to avoid barfing over broken
     changelogs (Closes: #374773)
   * uscan: fix handling of recursive http URLs (Closes: #377518)
   * who-depends: convert output into locale charset (Closes: #384835)
 
- -- Julian Gilbey <jdg@debian.org>  Mon, 28 Aug 2006 14:39:16 +0100
+ -- Julian Gilbey <jdg@debian.org>  Mon, 28 Aug 2006 15:29:30 +0100
 
 devscripts (2.9.20) unstable; urgency=low
 
