@@ -111,8 +111,10 @@ while (defined(my $line = <BUGS>)) {
 	$comment = '';
     } elsif ($line =~ m%^\[%) {
 	$comment .= $line;
-    } elsif ($line =~ m%^<a name="(\d+)">\s*<a href="[^\"]+">\d+</a> (\[[^\]]+\])( \[[^\]]+\])? (.+)$%i) {
-	print_if_relevant(pkg => $current_package, num => $1, tags => $2, dists => $3, name => $4, comment => $comment);
+    } elsif ($line =~ m%<a name="(\d+)">\s*<a href="[^\"]+">\d+</a> (\[[^\]]+\])( \[[^\]]+\])? ([^<]+)%i) {
+	my ($num, $tags, $dists, $name) = ($1, $2, $3, $4);
+	chomp $name;
+	print_if_relevant(pkg => $current_package, num => $num, tags => $tags, dists => $dists, name => $name, comment => $comment);
     }
 }
 
@@ -145,6 +147,7 @@ sub human_flags($) {
     $mrf =~ /^\[....R/ and push(@hrf, "unreproducible");
     $mrf =~ /^\[.....S/ and push(@hrf, "security");
     $mrf =~ /^\[......U/ and push(@hrf, "upstream");
+    $mrf =~ /^\[.......I/ and push(@hrf, "etch-ignore");
 
     if (@hrf) {
 	return "$mrf (" . join(", ", @hrf) . ')';
