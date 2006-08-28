@@ -61,6 +61,13 @@ http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-(.*)\\.tar\\.gz
 http://www.dataway.ch/~lukasl/amph/amph.html \\
   files/amphetamine-([\\d\\.]*).tar.bz2
 
+# This one shows that recursive directory scanning works, in either of
+# two forms, as long as the website can handle requests of the form
+# http://site/inter/mediate/dir/
+http://tmrc.mit.edu/mirror/twisted/Twisted/(\d\.\d)/ \\
+  Twisted-([\d\.]*)\.tar\.bz2
+http://tmrc.mit.edu/mirror/twisted/Twisted/(\d\.\d)/Twisted-([\d\.]*)\.tar\.bz2
+
 # If your package is located on sourceforge, use one of the following
 # formats to automatically use the qa.debian.org redirector, avoiding
 # SF's difficult mirror system.
@@ -89,15 +96,15 @@ opts=dversionmangle=s/\\.dfsg\\.\\d+$// \\
 # The filename is found by taking the last component of the URL and
 # removing everything after any '?'.  If this would not make a usable
 # filename, use filenamemangle.  For example,
-# <A href="http://foo.bar.org/download/?path=&amp;download=foo-0.1.1.tar.gz">
+# <A href="http://foo.bar.org/download/?path=&download=foo-0.1.1.tar.gz">
 # could be handled as:
 # opts=filenamemangle=s/.*=(.*)/$1/ \\
-#     http://foo.bar.org/download/\\?path=&amp;download=foo-(.*)\\.tar\\.gz
+#     http://foo.bar.org/download/\\?path=&download=foo-(.*)\\.tar\\.gz
 # 
-# <A href="http://foo.bar.org/download/?path=&amp;download_version=0.1.1">
+# <A href="http://foo.bar.org/download/?path=&download_version=0.1.1">
 # could be handled as:
 # opts=filenamemangle=s/.*=(.*)/foo-$1\\.tar\\.gz/ \\
-#    http://foo.bar.org/download/\\?path=&amp;download_version=(.*)
+#    http://foo.bar.org/download/\\?path=&download_version=(.*)
 
 # The option downloadurlmangle can be used to mangle the URL of the file
 # to download.  This can only be used with http:// URLs.  This may be

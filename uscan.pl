@@ -1171,7 +1171,7 @@ sub recursive_regex_dir ($$$) {
 	    print STDERR "$progname debug: newest_dir => '$newest_dir'\n"
 		if $debug;
 	    if ($newest_dir ne '') {
-		$dir .= "$newest_dir/";
+		$dir .= "$newest_dir";
 	    }
 	    else {
 		return '';
@@ -1222,12 +1222,15 @@ sub newest_dir ($$$$$) {
 	    }
 	}
 	if (@hrefs) {
+	    @hrefs = Devscripts::Versort::versort(@hrefs);
 	    if ($debug) {
-		print "-- Found the following matching hrefs:\n";
+		print "-- Found the following matching hrefs (newest first):\n";
 		foreach my $href (@hrefs) { print "     $$href[1]\n"; }
 	    }
-	    @hrefs = Devscripts::Versort::versort(@hrefs);
-	    my ($newversion, $newdir) = @{$hrefs[0]};
+	    my $newdir = $hrefs[0][1];
+	    # just give the final directory component
+	    $newdir =~ s%/$%%;
+	    $newdir =~ s%^.*/%%;
 	    return $newdir;
 	} else {
 	    warn "$progname warning: In $watchfile,\n  no matching hrefs for pattern\n  $site$dir$pattern";
