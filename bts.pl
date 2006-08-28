@@ -231,7 +231,11 @@ on white space and will not be passed to a shell.  Default is 'mutt -f %s'.
 =item --sendmail=SENDMAILCMD
 
 Specify the sendmail command.  The command will be split on white
-space and will not be passed to a shell.  Default is '/usr/sbin/sendmail'.
+space and will not be passed to a shell.  Default is
+'/usr/sbin/sendmail'.  The -t option will be automatically added if
+the command is /usr/sbin/sendmail or /usr/sbin/exim*.  For other
+mailers, if they require a -t option, this must be included in the
+SENDMAILCMD, for example: --sendmail="/usr/sbin/mymailer -t"
 
 =item -f, --force-refresh
 
@@ -268,6 +272,8 @@ my $cachemode='min';
 my $refreshmode=0;
 my $mailreader='mutt -f %s';
 my $sendmailcmd='/usr/sbin/sendmail';
+# regexp for mailers which require a -t option
+my $sendmail_t='^/usr/sbin/sendmail$|^/usr/sbin/exim';
 
 # Next, read read configuration files and then command line
 # The next stuff is boilerplate
@@ -1600,7 +1606,9 @@ EOM
 		exec("/bin/cat")
 		    or die "bts: error running cat: $!\n";
 	    } else {
-		exec(split(' ', $sendmailcmd), "-t")
+		my @mailcmd = split ' ', $sendmailcmd;
+		push @mailcmd, "-t" if $sendmailcmd =~ /$sendmail_t/;
+		exec @mailcmd
 		    or die "bts: error running sendmail: $!\n";
 	    }
 	}
@@ -1667,7 +1675,9 @@ EOM
 		exec("/bin/cat")
 		    or die "bts: error running cat: $!\n";
 	    } else {
-		exec(split(' ', $sendmailcmd), "-t")
+		my @mailcmd = split ' ', $sendmailcmd;
+		push @mailcmd, "-t" if $sendmailcmd =~ /$sendmail_t/;
+		exec @mailcmd
 		    or die "bts: error running sendmail: $!\n";
 	    }
 	}

@@ -6,6 +6,8 @@ devscripts (2.9.21) UNRELEASED; urgency=low
     to Justin Pryzby for spotting this)
   * bts: chdir back to original directory after downloading files (Closes:
     #372546)
+  * bts: don't automatically use a -t option unless we are using
+    /usr/sbin/sendmail or /usr/sbin/exim* (Closes: #373664)
   * checkbashisms: check for $((cnt+1)), echo -n/-e, exec -c/-l/-a, let
     and $RANDOM (Closes: #369851, #377195, #378406, #383613)
   * dd-list: treat lists.alioth.debian.org like lists.debian.org (Closes:
@@ -17,7 +19,7 @@ devscripts (2.9.21) UNRELEASED; urgency=low
   * dpkg-genbuilddeps: clean up if statement (Closes: #365372)
   * who-depends: convert output into locale charset (Closes: #384835)
 
- -- Julian Gilbey <jdg@debian.org>  Sun, 27 Aug 2006 21:31:40 +0100
+ -- Julian Gilbey <jdg@debian.org>  Mon, 28 Aug 2006 13:58:23 +0100
 
 devscripts (2.9.20) unstable; urgency=low
 
