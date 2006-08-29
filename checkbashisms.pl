@@ -83,8 +83,10 @@ foreach my $filename (@ARGV) {
 	}
 
 	next if m,^\s*\#,;  # skip comment lines
-	s/(?<!\\)\#.*$//;   # eat comments
 	chomp;
+	my $orig_line = $_;
+
+	s/(?<!\\)\#.*$//;   # eat comments
 
 	if (m/(?:^|\s+)cat\s*\<\<\s*(\w+)/) {
 	    $cat_string = $1;
@@ -101,30 +103,35 @@ foreach my $filename (@ARGV) {
 	if ($cat_string eq "" and !$within_another_shell) {
 	    my $found = 0;
 	    my $match = '';
-	    my @bashism_regexs = (
-		'(?:^|\s+)function\s+\w+',     # function is useless
-		'(?:^|\s+)source\s+(?:\.\/|\/|\$)[^\s]+',
-		                             # should be '.', not 'source'
-		'(\[|test|-o|-a)\s*[^\s]+\s+==\s', # should be 'b = a'
-		'\s\|\&',                    # pipelining is not POSIX
-		'\$\[\w+\]',                 # arith not allowed
-		'\$\{\w+\:\d+(?::\d+)?\}',   # ${foo:3[:1]}
-		'\$\{\w+(/.+?){1,2}\}',      # ${parm/?/pat[/str]}
-		'[^\\\]\{([^\s]+?,)+[^\\\}\s]+\}',     # brace expansion
-		'(?:^|\s+)\w+\[\d+\]=',      # bash arrays, H[0]
-		'\$\{\#?\w+\[[0-9\*\@]+\]\}',   # bash arrays, ${name[0|*|@]}
-		'(?:^|\s+)(read\s*(?:;|$))', # read without variable
-		'\$\(\([A-Za-z]',            # cnt=$((cnt + 1))
-		'echo\s+-[ne]',              # echo -n/-e
-		'exec\s+-[acl]',             # exec -c/-l/-a name
-		'\blet\s',                   # let ...
-		'\$RANDOM\b',                # $RANDOM
+	    my $explanation = '';
+	    my %bashisms = (
+		'(?:^|\s+)function\s+\w+' =>   q<'function' is useless>,
+		'(?:^|\s+)source\s+(?:\.\/|\/|\$)[^\s]+' =>
+		                               q<should be '.', not 'source'>,
+		'(\[|test|-o|-a)\s*[^\s]+\s+==\s' =>
+		                               q<should be 'b = a'>,
+		'\s\|\&' =>                    q<pipelining is not POSIX>,
+		'\$\[\w+\]' =>                 q<arith not allowed>,
+		'\$\{\w+\:\d+(?::\d+)?\}' =>   q<${foo:3[:1]}>,
+		'\$\{\w+(/.+?){1,2}\}' =>      q<${parm/?/pat[/str]}>,
+		'[^\\\]\{([^\s]+?,)+[^\\\}\s]+\}' =>
+		                               q<brace expansion>,
+		'(?:^|\s+)\w+\[\d+\]=' =>      q<bash arrays, H[0]>,
+		'\$\{\#?\w+\[[0-9\*\@]+\]\}' => q<bash arrays, ${name[0|*|@]}>,
+		'(?:^|\s+)(read\s*(?:;|$))' => q<read without variable>,
+		'\$\(\([A-Za-z]' => q<cnt=$((cnt + 1)) does not work in dash>,
+		'echo\s+-[ne]' =>              q<echo -n/-e>,
+		'exec\s+-[acl]' =>             q<exec -c/-l/-a name>,
+		'\blet\s' =>                   q<let ...>,
+		'\$RANDOM\b' =>                q<$RANDOM>,
+		'(?<!\$)\(\(' =>               q<'((' should be '$(('>,
 	    );
 
-	    for my $re (@bashism_regexs) {
+	    while (my ($re,$expl) = each %bashisms) {
 		if (m/($re)/) {
 		    $found = 1;
 		    $match = $1;
+		    $explanation = $expl;
 		    last;
 		}
 	    }
@@ -140,7 +147,7 @@ foreach my $filename (@ARGV) {
 		}
 	    }
 	    unless ($found == 0) {
-		warn "possible bashism in $filename line $.: \'$match\'\n";
+		warn "possible bashism in $filename line $. ($explanation):\n$orig_line\n";
 		$status |= 1;
 	    }
 	}

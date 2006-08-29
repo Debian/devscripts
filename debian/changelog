@@ -1,9 +1,11 @@
 devscripts (2.9.22) unstable; urgency=low
 
+  * checkbashisms: make reasons for concern explicit, and show whole line
+    of original script, not just matched fragment
   * rmadison: make curl quiet (important when piping the output of
     rmadison)
 
- -- Julian Gilbey <jdg@debian.org>  Tue, 29 Aug 2006 22:11:34 +0100
+ -- Julian Gilbey <jdg@debian.org>  Tue, 29 Aug 2006 22:31:34 +0100
 
 devscripts (2.9.21) unstable; urgency=low
 
