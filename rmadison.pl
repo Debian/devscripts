@@ -104,7 +104,7 @@ push @args, "G" if $params->{'greaterthan'};
 push @args, "s=$params->{'suite'}" if $params->{'suite'};
 push @args, "S" if $params->{'source-and-binary'};
 
-my @cmd = -x "/usr/bin/curl" ? qw/curl/ : qw/wget -q -O -/;
+my @cmd = -x "/usr/bin/curl" ? qw/curl -s/ : qw/wget -q -O -/;
 system @cmd, "http://qa.debian.org/madison.php?package=" .
     join("+", map { s/\+/%2B/g; $_ } @ARGV) . "&text=on&" . join ("&", @args);
 
