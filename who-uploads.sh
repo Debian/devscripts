@@ -205,8 +205,7 @@ for package; do
 	           awk  -F: '/@debian\.org>/ { a = $10; exit} /^pub/ { a = $10 } END { print a }' )
 	if [ -z "$UPLOADER" ]; then UPLOADER="<unrecognised public key>"; fi
 
-	echo "$VERSION to $DISTRO: $UPLOADER" | \
-	    iconv -c -f UTF-8 -t $(locale charmap)
+	echo "$VERSION to $DISTRO: $UPLOADER" | iconv -c -f UTF-8
 
 	count=$(($count + 1))
 	[ $count -eq $MAXUPLOADS ] && break
