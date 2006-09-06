@@ -1,11 +1,15 @@
 devscripts (2.9.22) unstable; urgency=low
 
+  [ Julian Gilbey ]
   * checkbashisms: make reasons for concern explicit, and show whole line
     of original script, not just matched fragment
   * iconv: don't bother with -t option; it's the default behaviour anyway
     (see Bug#384835)
   * rmadison: make curl quiet (important when piping the output of
     rmadison)
+
+  [ Joshua Kwan ]
+  * Remove myself from Uploaders. -ENOTIME :(
 
  -- Julian Gilbey <jdg@debian.org>  Thu, 31 Aug 2006 18:42:43 +0100
 
