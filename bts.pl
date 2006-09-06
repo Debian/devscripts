@@ -552,7 +552,7 @@ Display the bugs which are tagged with <tag>.
 
 Display the bugs which are tagged with usertag <tag>.  See the BTS
 documentation for more information on usertags.  This will require the
-use of a user=<email> option.
+use of a users=<email> option.
 
 =item :
 

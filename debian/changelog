@@ -1,6 +1,7 @@
-devscripts (2.9.22) unstable; urgency=low
+devscripts (2.9.22) UNRELEASED; urgency=low
 
   [ Julian Gilbey ]
+  * bts: documentation for show usertag=...: s/user=/users=/
   * checkbashisms: make reasons for concern explicit, and show whole line
     of original script, not just matched fragment
   * iconv: don't bother with -t option; it's the default behaviour anyway
@@ -11,7 +12,7 @@ devscripts (2.9.22) unstable; urgency=low
   [ Joshua Kwan ]
   * Remove myself from Uploaders. -ENOTIME :(
 
- -- Julian Gilbey <jdg@debian.org>  Thu, 31 Aug 2006 18:42:43 +0100
+ -- Julian Gilbey <jdg@debian.org>  Wed,  6 Sep 2006 22:53:13 +0100
 
 devscripts (2.9.21) unstable; urgency=low
 
