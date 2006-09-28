@@ -1,6 +1,10 @@
 devscripts (2.9.22) UNRELEASED; urgency=low
 
   [ Julian Gilbey ]
+  * Makefile: remove -ldl flag in libvfork linker line (from checklib
+    output, see http://rerun.lefant.net/checklib)
+  * control: make list render nicely with new aptitude list-handling
+    facility (Closes: #388856)
   * bts: documentation for show usertag=...: s/user=/users=/
   * checkbashisms: make reasons for concern explicit, and show whole line
     of original script, not just matched fragment
@@ -12,7 +16,7 @@ devscripts (2.9.22) UNRELEASED; urgency=low
   [ Joshua Kwan ]
   * Remove myself from Uploaders. -ENOTIME :(
 
- -- Julian Gilbey <jdg@debian.org>  Wed,  6 Sep 2006 22:53:13 +0100
+ -- Julian Gilbey <jdg@debian.org>  Thu, 28 Sep 2006 06:32:56 +0100
 
 devscripts (2.9.21) unstable; urgency=low
 

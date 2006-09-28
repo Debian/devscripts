@@ -84,7 +84,7 @@ libvfork.o: libvfork.c
 	$(CC) -fPIC -D_REENTRANT $(CFLAGS) -c $<
 
 libvfork.so.0: libvfork.o
-	$(CC) -shared $< -ldl -lc -Wl,-soname -Wl,libvfork.so.0 -o $@
+	$(CC) -shared $< -lc -Wl,-soname -Wl,libvfork.so.0 -o $@
 
 clean: clean_translated_manpages
 	rm -f version conf.default $(SCRIPTS) $(GEN_MAN1S) $(SCRIPT_LIBS) \
