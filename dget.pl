@@ -240,7 +240,7 @@ for my $arg (@ARGV) {
     } elsif ($arg =~ /^[a-z0-9.+-]{2,}$/) {
 	apt_get($arg);
 
-    } elsif ($arg =~ /^([a-z0-9.+-]{2,})=([a-zA-Z0-9.:+-]+)$/) {
+    } elsif ($arg =~ /^([a-z0-9.+-]{2,})=([a-zA-Z0-9.:~+-]+)$/) {
 	apt_get($1, $2);
 
     } else {

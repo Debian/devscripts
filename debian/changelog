@@ -8,15 +8,16 @@ devscripts (2.9.22) UNRELEASED; urgency=low
   * bts: documentation for show usertag=...: s/user=/users=/
   * checkbashisms: make reasons for concern explicit, and show whole line
     of original script, not just matched fragment
-  * iconv: don't bother with -t option; it's the default behaviour anyway
-    (see Bug#384835)
+  * dget: support ~ in package version numbers (Closes: #389482)
   * rmadison: make curl quiet (important when piping the output of
     rmadison)
+  * who-uploads: don't bother with iconv -t option; it's the default
+    behaviour anyway (see Bug#384835)
 
   [ Joshua Kwan ]
   * Remove myself from Uploaders. -ENOTIME :(
 
- -- Julian Gilbey <jdg@debian.org>  Thu, 28 Sep 2006 06:32:56 +0100
+ -- Julian Gilbey <jdg@debian.org>  Sun,  1 Oct 2006 01:30:15 +0100
 
 devscripts (2.9.21) unstable; urgency=low
 
