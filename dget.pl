@@ -45,6 +45,7 @@ sub wget {
     my ($file, $url) = @_;
     my @cmd = ($wget);
     push @cmd, ($wget eq "wget" ? "-q" : "-s") if $opt->{quiet};
+    push @cmd, ($wget eq "wget" ? "--no-check-certificate" : "--insecure") if $opt->{insecure};
     push @cmd, ($wget eq "wget" ? "-O" : "-o");
     system @cmd, $file, $url;
     return $? >> 8;
@@ -222,6 +223,7 @@ unless (GetOptions(
     '--quiet'	=>  \$opt->{'quiet'},
     '-x'	=>  \$opt->{'unpack_source'},
     '--extract'	=>  \$opt->{'unpack_source'},
+    '--insecure'	=> \$opt->{'insecure'},
 )) {
     usage();
 }
@@ -295,6 +297,8 @@ B<-b> move files that would be overwritten to B<./backup>.
 B<-q> suppress wget/curl output.
 
 B<-x> run B<dpkg-source -x> on the downloaded source package.
+
+B<--insecure> allow ssl connections to untrusted hosts.
 
 =head1 BUGS
 
