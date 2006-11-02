@@ -1,9 +1,11 @@
 devscripts (2.9.23) unstable; urgency=low
 
+  * debuild: check for either .orig.tar.gz or a .orig directory, as
+    dpkg-source does (Closes: #366286)
   * dget: introduce --insecure option for allowing downloading from site
     with self-signed certificate (Closes: #393942)
 
- -- Julian Gilbey <jdg@debian.org>  Thu,  2 Nov 2006 14:28:12 +0000
+ -- Julian Gilbey <jdg@debian.org>  Thu,  2 Nov 2006 22:57:53 +0000
 
 devscripts (2.9.22) unstable; urgency=low
 

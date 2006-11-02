@@ -929,10 +929,12 @@ if ($command_version eq 'dpkg') {
 
     ($sversion=$version) =~ s/^\d+://;
     ($uversion=$sversion) =~ s/-[a-z0-9+\.]+$//i;
-    $dsc="${pkg}_${sversion}.dsc";
-    my $origtgz="${pkg}_${uversion}.orig.tar.gz";
-    if ($tgz_check and $uversion ne $sversion and ! -f "../$origtgz") {
-	print STDERR "This package has a Debian revision number but there does not seem to be\nan appropriate original tar file in the parent directory;\n(expected $origtgz)\ncontinue anyway? (y/n) ";
+    $dsc = "${pkg}_${sversion}.dsc";
+    my $origtgz = "${pkg}_${uversion}.orig.tar.gz";
+    my $origdir = basename(cwd()) . ".orig";
+    if ($tgz_check and $uversion ne $sversion and ! -f "../$origtgz"
+	and ! -d "../$origdir") {
+	print STDERR "This package has a Debian revision number but there does not seem to be\nan appropriate original tar file or .orig directory in the parent directory;\n(expected $origtgz or $origdir)\ncontinue anyway? (y/n) ";
 	my $ans = <STDIN>;
 	exit 1 unless $ans =~ /^y/i;
     }

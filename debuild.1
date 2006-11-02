@@ -244,13 +244,13 @@ default behaviour.
 .TP
 .B \-\-no\-tgz\-check
 Even if we're running \fBdpkg-buildpackage\fR and the version number
-has a Debian revision, do not check that the .orig.tar.gz file exists
-before starting the build.
+has a Debian revision, do not check that the .orig.tar.gz file or .orig
+directory exists before starting the build.
 .TP
 .B \-\-tgz\-check
 If we're running \fBdpkg-buildpackage\fR and the version number has a
-Debian revision, check that the .orig.tar.gz file exists before
-starting the build.  This is the default behaviour.
+Debian revision, check that the .orig.tar.gz file or .orig directory
+exists before starting the build.  This is the default behaviour.
 .TP
 \fB\-\-\fIfoo\fB\-hook\fR=\fIhook\fR
 Set a hook as described above.  If \fIhook\fR is blank, this unsets
