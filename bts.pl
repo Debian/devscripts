@@ -577,13 +577,12 @@ dist=stable to see bugs affecting the stable version of a package,
 version=1.0 to see bugs affecting that version of a package, or reverse=yes
 to display newest messages first in a bug log.
 
-If caching has been enabled (that is, there exists a cache directory
-~/.devscripts_cache/bts/), then any page requested by "bts show" will
-automatically be cached, and therefore available offline thereafter.
-Pages which are automatically cached in this way will be deleted on
-subsequent "bts show|bugs|cache" invocations if they have not been
-accessed in 30 days.  This automatic caching can be disabled using the
---no-cache option or explicitly enabled using the --cache option.
+If caching has been enabled (that is, --no-cache has not been used,
+and BTS_CACHE has not been set to "no"), then any page requested by
+"bts show" will automatically be cached, and be available offline
+thereafter.  Pages which are automatically cached in this way will be
+deleted on subsequent "bts show|bugs|cache" invocations if they have
+not been accessed in 30 days.
 
 Any other B<bts> commands following this on the command line will be
 executed after the browser has been exited.
@@ -1228,22 +1227,16 @@ variable if DEBEMAIL is unset). This command may be repeated to cache
 bugs belonging to several people or packages. The cached bugs are
 stored in ~/.devscripts_cache/bts/
 
-Once you have set up a cache, you can ask for it to be used with the -o
-switch. For example:
+You can use the cached bugs with the -o switch. For example:
 
   bts -o bugs
   bts -o show 12345
 
-Also, once the cache is set up, bts will update the files in it in a
-piecemeal fashion as it downloads information from the bts. You might
+Also, bts will update the files in it in a piecemeal fashion as it
+downloads information from the BTS using the 'show' command. You might
 thus set up the cache, and update the whole thing once a week, while
 letting the automatic cache updates update the bugs you frequently
 refer to during the week.
-
-A final benefit to using a cache is that it will speed download times
-for bugs in the cache even when you're online, as it can just compare the
-item in the cache with what's on the server, and not re-download it
-every time.
 
 Some options affect the behaviour of the cache command.  The first is
 the setting of --cache-mode, which controls how much B<bts> downloads
@@ -2348,9 +2341,11 @@ sub browse {
 	}
     }
 
+    my $livedownload = 1;
     if ($offlinemode) {
+	$livedownload = 0;
 	if (! $hascache) {
-	    die "bts: Sorry, you are in offline mode and have no cache. Run \"bts cache\" to create one.\n";
+	    die "bts: Sorry, you are in offline mode and have no cache.\nRun \"bts cache\" or \"bts show\" to create one.\n";
 	}
 	elsif ((! $mboxmode and ! -r $cachefile) or
 	       ($mboxmode and ! -r $mboxfile)) {
@@ -2363,7 +2358,21 @@ sub browse {
 	}
     }
     # else we're in online mode
-    elsif ($hascache && $caching && have_lwp() && $thing ne '') {
+    elsif ($caching && have_lwp() && $thing ne '') {
+	if (! $hascache) {
+	    if (! -d dirname($cachedir)) {
+		unless (mkdir(dirname($cachedir))) {
+		    warn "bts: couldn't mkdir ".dirname($cachedir).": $!\n";
+		    goto LIVE;
+		}
+	    }
+	    unless (mkdir($cachedir)) {
+		warn "bts: couldn't mkdir $cachedir: $!\n";
+		goto LIVE;
+	    }
+	}
+
+	$livedownload = 0;
 	my $live=download($thing, $thgopts, 0, $mboxmode);
 	
 	if ($mboxmode) {
@@ -2389,7 +2398,9 @@ sub browse {
 	    }
 	}
     }
-    else {
+
+ LIVE: # we are not caching; just show it live
+    if ($livedownload) {
 	if ($mboxmode) {
 	    # we appear not to be caching; OK, we'll download to a
 	    # temporary file
