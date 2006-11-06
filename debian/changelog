@@ -6,9 +6,11 @@ devscripts (2.9.23) UNRELEASED; urgency=low
     dpkg-source does (Closes: #366286)
   * dget: introduce --insecure option for allowing downloading from site
     with self-signed certificate (Closes: #393942)
+  * uscan: fix handling of ftp directory listings with number-only
+    directory names (Closes: #372609)
   * uupdate: handle ~ in version numbers (Closes: #397100)
 
- -- Julian Gilbey <jdg@debian.org>  Sun,  5 Nov 2006 16:42:02 +0000
+ -- Julian Gilbey <jdg@debian.org>  Mon,  6 Nov 2006 02:35:55 +0000
 
 devscripts (2.9.22) unstable; urgency=low
 

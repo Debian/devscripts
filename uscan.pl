@@ -823,17 +823,32 @@ sub process_watchline ($$$$$$)
 	# so we may have to look for <a href="filename"> type patterns
 	print STDERR "$progname debug: matching pattern $pattern\n" if $debug;
 	my (@files);
-	$content =~ s/\n/ \n/g; # make every filename have an extra
-	                        # space after it in a normal FTP listing
-	while ($content =~
-	           m&(?:<\s*a\s+[^>]*href\s*=\s*\"| )($pattern)(\"| )&gi) {
-	    my $file = $1;
-	    my $mangled_version = join(".", $file =~ m/^$pattern$/);
-	    foreach my $pat (@{$options{'uversionmangle'}}) {
-		eval "\$mangled_version =~ $pat;";
+
+	# We separate out HTMLised listings from standard listings, so
+	# that we can target our search correctly
+	if (/<\s*a\s+[^>]*href/i) {
+	    while ($content =~ 
+		m/(?:<\s*a\s+[^>]*href\s*=\s*\")($pattern)\"/gi) {
+		my $file = $1;
+		my $mangled_version = join(".", $file =~ m/^$pattern$/);
+		foreach my $pat (@{$options{'uversionmangle'}}) {
+		    eval "\$mangled_version =~ $pat;";
+		}
+		push @files, [$mangled_version, $file];
 	    }
-	    push @files, [$mangled_version, $file];
-	}
+	} else {
+	    # they all look like:
+	    # info info ... info filename [ -> linkname]
+	    while ($content =~ m/($filepattern)(\s+->\s+\S+)?$/mgi) {
+		my $file = $1;
+		my $mangled_version = join(".", $file =~ m/^$filepattern$/);
+		foreach my $pat (@{$options{'uversionmangle'}}) {
+		    eval "\$mangled_version =~ $pat;";
+		}
+		push @files, [$mangled_version, $file];
+	    }
+	}	    
+
 	if (@files) {
 	    if ($verbose) {
 		print "-- Found the following matching files:\n";
@@ -1268,18 +1283,29 @@ sub newest_dir ($$$$$) {
 	# so we may have to look for <a href="filename"> type patterns
 	print STDERR "$progname debug: matching pattern $pattern\n" if $debug;
 	my (@dirs);
-	$content =~ s/\n/ \n/g; # make every filename have an extra
-	                        # space after it in a normal FTP listing
-	while ($content =~
-	       m/(?:<\s*a\s+[^>]*href\s*=\s*\"| )($pattern)(\"| )/gi) {
-	    my $dir = $1;
-	    my $mangled_version = join(".", $dir =~ m/^$pattern$/);
-	    push @dirs, [$mangled_version, $dir];
-	}
+
+	# We separate out HTMLised listings from standard listings, so
+	# that we can target our search correctly
+	if (/<\s*a\s+[^>]*href/i) {
+	    while ($content =~ 
+		m/(?:<\s*a\s+[^>]*href\s*=\s*\")($pattern)\"/gi) {
+		my $dir = $1;
+		my $mangled_version = join(".", $dir =~ m/^$pattern$/);
+		push @dirs, [$mangled_version, $dir];
+	    }
+	} else {
+	    # they all look like:
+	    # info info ... info filename [ -> linkname]
+	    while ($content =~ m/($pattern)(\s+->\s+\S+)?$/mgi) {
+		my $dir = $1;
+		my $mangled_version = join(".", $dir =~ m/^$pattern$/);
+		push @dirs, [$mangled_version, $dir];
+	    }
+	}	    
 	if (@dirs) {
 	    if ($debug) {
-		print "-- Found the following matching dirs:\n";
-		foreach my $dir (@dirs) { print "     $$dir[1]\n"; }
+		print STDERR "-- Found the following matching dirs:\n";
+		foreach my $dir (@dirs) { print STDERR "     $$dir[1]\n"; }
 	    }
 	    @dirs = Devscripts::Versort::versort(@dirs);
 	    my ($newversion, $newdir) = @{$dirs[0]};
