@@ -203,7 +203,7 @@ for package; do
 	           "${GPG_DEFAULT_KEYRINGS[@]}" "${GPG_KEYRINGS[@]}" \
 	           --list-key --with-colons $GPG_ID 2>/dev/null |
 	           awk  -F: '/@debian\.org>/ { a = $10; exit} /^pub/ { a = $10 } END { print a }' )
-	if [ -z "$UPLOADER" ]; then UPLOADER="<unrecognised public key>"; fi
+	if [ -z "$UPLOADER" ]; then UPLOADER="<unrecognised public key ($GPG_ID)>"; fi
 
 	echo "$VERSION to $DISTRO: $UPLOADER" | iconv -c -f UTF-8
 
