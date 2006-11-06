@@ -139,9 +139,9 @@ And now, in mostly alphabetical order, the scripts:
 - mergechanges: merge .changes files from the same release but built
   on different architectures.
 
-- nmudiff [mutt]: prepare a diff of this version (presumably an NMU
-  against the previously released version (as per the changelog) and
-  submit the diff to the BTS.
+- nmudiff [patchutils]: prepare a diff of this version (presumably an
+  NMU against the previously released version (as per the changelog)
+  and submit the diff to the BTS.
 
 - plotchangelog [libtimedate-perl, gnuplot]: display information from
   a changelog graphically using gnuplot.
