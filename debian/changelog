@@ -10,9 +10,11 @@ devscripts (2.9.23) UNRELEASED; urgency=low
     with self-signed certificate (Closes: #393942)
   * uscan: fix handling of ftp directory listings with number-only
     directory names (Closes: #372609)
+  * uscan: warn if no parentheses in one-term version 2/3 watchfile
+    (Closes: #375557)
   * uupdate: handle ~ in version numbers (Closes: #397100)
 
- -- Julian Gilbey <jdg@debian.org>  Mon,  6 Nov 2006 03:23:42 +0000
+ -- Julian Gilbey <jdg@debian.org>  Mon,  6 Nov 2006 03:32:51 +0000
 
 devscripts (2.9.22) unstable; urgency=low
 

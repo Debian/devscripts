@@ -693,6 +693,12 @@ sub process_watchline ($$$$$$)
 	    (undef, $lastversion, $action) = split ' ', $line, 3;
 	}
 
+	# Check all's OK
+	if ($filepattern !~ /\(.*\)/) {
+	    warn "$progname warning: Filename pattern missing version delimiters ()\n  in $watchfile, skipping:\n  $line\n";
+	    return 1;
+	}
+
 	# Check validity of options
 	if ($base =~ /^ftp:/ and exists $options{'downloadurlmangle'}) {
 	    warn "$progname warning: downloadurlmangle option invalid for ftp sites,\n  ignoring in $watchfile:\n  $line\n";
