@@ -89,9 +89,9 @@ Options:
   --no-preserve
          Do not preserve the directory name (default)
   -D, --distribution <dist>
-         Use the specified distribution in the new changelog entry, if any
+         Use the specified distribution in the changelog entry being edited
   -u, --urgency <urgency>
-         Use the specified urgency in the new changelog entry, if any
+         Use the specified urgency in the changelog entry being edited
   -c, --changelog <changelog>
          Specify the name of the changelog to use in place of debian/changelog
          No directory traversal or checking is performed in this case.
@@ -216,7 +216,6 @@ my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u);
 my ($opt_n, $opt_qa, $opt_c, $opt_m, $opt_create, $opt_package, @closes);
 my ($opt_news);
 my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
-$opt_u = 'low';
 
 Getopt::Long::Configure('bundling');
 GetOptions("help|h" => \$opt_help,
@@ -280,6 +279,15 @@ fatal "Only one of -c/--changelog and --news is allowed; try $progname --help fo
 # Only allow at most one non-help option
 fatal "Only one of -a, -i, -e, -r, -v, -d, -n/--nmu, --qa is allowed;\ntry $progname --help for more help"
     if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) + ($opt_n?1:0) + ($opt_qa?1:0) > 1;
+
+if (defined $opt_u) {
+    fatal "Urgency can only be one of: low, medium, high, critical, emergency"
+	unless $opt_u =~ /^(low|medium|high|critical|emergency)$/;
+}
+if (defined $opt_D) {
+    fatal "Distribution can only be one of: unstable, testing, stable, experimental,\nUNRELEASED or a security upload"
+	unless $opt_D =~ /^(unstable|(stable|testing)(-security)?|oldstable-security|experimental|UNRELEASED)$/;
+}
 
 fatal "--closes should not be used with --news; put bug numbers in the changelog not the NEWS file"
     if $opt_news && @closes;
@@ -458,8 +466,8 @@ EOF
     if ($opt_v) {
 	$VERSION=$opt_v;
     }
-    if ($opt_d) {
-	$DISTRIBUTION=$opt_d;
+    if ($opt_D) {
+	$DISTRIBUTION=$opt_D;
     }
 }    
 
@@ -792,7 +800,8 @@ if (($opt_i || $opt_n || $opt_qa || $opt_v || $opt_d) && ! $opt_create) {
     }
 
     my $distribution = $opt_D || (($opt_release_heuristic eq 'changelog') ? "UNRELEASED" : $DISTRIBUTION);
-    print O "$PACKAGE ($NEW_VERSION) $distribution; urgency=$opt_u\n\n";
+    my $urgency = $opt_u || 'low';
+    print O "$PACKAGE ($NEW_VERSION) $distribution; urgency=$urgency\n\n";
 
     if ($opt_n && ! $opt_news) {
 	print O "  * Non-maintainer upload.\n";
@@ -863,14 +872,25 @@ elsif (($opt_r || $opt_a) && ! $opt_create) {
 	}
     }
 
-    if ($opt_r) {
-	# Change the distribution from UNRELEASED for release.
-	my $distribution = $opt_D || "unstable";
-	$CHANGES=~s/(\([^\)]+\)\s+)([^;]+);/$1$distribution;/;
-	# Set the start-line to 1, as we don't know what they want to edit
-	$line=1;
+    # based on /usr/lib/dpkg/parsechangelog/debian
+    if ($CHANGES =~ m/^\w[-+0-9a-z.]* \([^\(\) \t]+\)((?:\s+[-+0-9a-z.]+)+)\;\s+urgency=(\w+)/i) {
+	my $distribution = $1;
+	my $urgency = $2;
+	$distribution =~ s/^\s+//;
+	if ($opt_r) {
+	    # Change the distribution from UNRELEASED for release.
+	    $distribution = $opt_D || "unstable";
+	    # Set the start-line to 1, as we don't know what they want to edit
+	    $line=1;
+	}
+	$distribution = $opt_D if $opt_D;
+	$urgency = $opt_u if $opt_u;
+	$CHANGES =~ s/^(\w[-+0-9a-z.]* \([^\(\) \t]+\))(?:\s+[-+0-9a-z.]+)+\;\s+urgency=\w+/$1 $distribution; urgency=$urgency/i;
+    } else {
+	warn "$progname: couldn't parse first changelog line, not touching it\n";
+	$warnings++;
     }
-    
+
     # The first lines are as we have already found
     print O $CHANGES;
 
@@ -922,7 +942,8 @@ elsif ($opt_create) {
 	push @closes_text, "Initial release. (Closes: \#XXXXXX)\n";
     }
 
-    print O "$PACKAGE ($VERSION) $DISTRIBUTION; urgency=$opt_u\n\n";
+    my $urgency = $opt_u || 'low';
+    print O "$PACKAGE ($VERSION) $DISTRIBUTION; urgency=$urgency\n\n";
 
     if (@closes_text or $TEXT) {
 	foreach (@closes_text) { format_line($_, 1); }

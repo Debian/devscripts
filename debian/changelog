@@ -2,6 +2,8 @@ devscripts (2.9.23) UNRELEASED; urgency=low
 
   * bts: automatically create cache directory when bts show is used
     (Closes: #370205)
+  * debchange: can change urgency and distro using -D and -u flags
+    (Closes: #373271)
   * debuild: check for either .orig.tar.gz or a .orig directory, as
     dpkg-source does (Closes: #366286)
   * dget: introduce --insecure option for allowing downloading from site
@@ -10,7 +12,7 @@ devscripts (2.9.23) UNRELEASED; urgency=low
     directory names (Closes: #372609)
   * uupdate: handle ~ in version numbers (Closes: #397100)
 
- -- Julian Gilbey <jdg@debian.org>  Mon,  6 Nov 2006 02:35:55 +0000
+ -- Julian Gilbey <jdg@debian.org>  Mon,  6 Nov 2006 03:23:42 +0000
 
 devscripts (2.9.22) unstable; urgency=low
 
