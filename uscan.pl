@@ -315,6 +315,7 @@ else { $passive = undef; }
 
 my $user_agent = LWP::UserAgent->new(env_proxy => 1);
 $user_agent->timeout($timeout);
+$user_agent->agent('Debian uscan ###VERSION###');
 
 if (defined $opt_watchfile) {
     die "Can't have directory arguments if using --watchfile" if @ARGV;
