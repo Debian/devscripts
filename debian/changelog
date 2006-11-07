@@ -1,8 +1,10 @@
 devscripts (2.9.24) UNRELEASED; urgency=low
 
+  * debdiff: handle files moving between multiple packages correctly
+    (Closes: #392977)
   * uscan: set HTTP user agent name (Closes: #397354)
 
- -- Julian Gilbey <jdg@debian.org>  Tue,  7 Nov 2006 00:39:40 +0000
+ -- Julian Gilbey <jdg@debian.org>  Tue,  7 Nov 2006 05:36:20 +0000
 
 devscripts (2.9.23) unstable; urgency=low
 

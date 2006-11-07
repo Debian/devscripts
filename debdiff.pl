@@ -338,11 +338,11 @@ elsif ($type eq 'changes' or $type eq 'debs') {
 	    }
 	    ${"DebPaths$i"}{$deb} = $debpath;
 	    foreach my $file (@{process_debc($debc,$i)}) {
-		${"files$i"}{$file} ||= ":";
+		${"files$i"}{$file} ||= "";
 		${"files$i"}{$file} .= "$deb:";
 	    }
 	    foreach my $control (@{process_debI($debI)}) {
-		${"files$i"}{$control} ||= ":";
+		${"files$i"}{$control} ||= "";
 		${"files$i"}{$control} .= "$deb:";
 	    }
 	}
@@ -490,6 +490,7 @@ if ($show_moved and $type ne 'deb') {
     # the files have appeared or disappeared
 
     my %changes;
+    my @funny;  # for storing changed files which appear in multiple debs
 
     foreach my $file (@old) {
 	my @firstdebs = split /:/, $files1{$file};
@@ -509,20 +510,18 @@ if ($show_moved and $type ne 'deb') {
 	# Are they identical?
 	next if $files1{$file} eq $files2{$file};
 
-	# Ah, they're not the same.  We'll put a note in every
-	# pair where the file is in the deb in the first set but not
-	# in the deb in the second set or vice versa
-	my %fdebs;
-	grep $fdebs{$_}--, split (/:/, $files1{$file});
-	grep $fdebs{$_}++, split (/:/, $files2{$file});
+	# Ah, they're not the same.  If the file has moved from one deb
+	# to another, we'll put a note in that pair.  But if the file
+	# was in more than one deb or ends up in more than one deb, we'll
+	# list it separately.
+	my @fdebs1 = split (/:/, $files1{$file});
+	my @fdebs2 = split (/:/, $files2{$file});
 	
-	my @firstdebs = sort grep $fdebs{$_} < 0, keys %fdebs;
-	my @seconddebs = sort grep $fdebs{$_} > 0, keys %fdebs;
-
-	foreach my $firstdeb (@firstdebs) {
-	    foreach my $seconddeb (@seconddebs) {
-		push @{$changes{$firstdeb}{$seconddeb}}, $file;
-	    }
+	if (@fdebs1 == 1 && @fdebs2 == 1) {
+	    push @{$changes{$fdebs1[0]}{$fdebs2[0]}}, $file;
+	} else {
+	    # two packages to one or vice versa, or something like that
+	    push @funny, [$file, \@fdebs1, \@fdebs2];
 	}
     }
 
@@ -544,12 +543,25 @@ if ($show_moved and $type ne 'deb') {
 	    } elsif ($deb2 eq '-') {
 		$msg = "Files only in first set of .debs, found in package $deb1";
 	    } else {
-		$msg = "Files moved or copied from package $deb1 to package $deb2";
+		$msg = "Files moved from package $deb1 to package $deb2";
 	    }
 	    print $msg, "\n", '-' x length $msg, "\n";
 	    print join("\n",@{$changes{$deb1}{$deb2}}), "\n\n";
 	    $changed = 1;
 	}
+    }
+
+    if (@funny) {
+	my $msg = "Files moved or copied from at least TWO packages or to at least TWO packages";
+	print $msg, "\n", '-' x length $msg, "\n";
+	for my $funny (@funny) {
+	    print $$funny[0], "\n"; # filename and details
+	    print "From package", (@{$$funny[1]} > 1 ? "s" : ""), ": ";
+	    print join(", ", @{$$funny[1]}), "\n";
+	    print "To package", (@{$$funny[2]} > 1 ? "s" : ""), ": ";
+	    print join(", ", @{$$funny[2]}), "\n";
+	}
+	$changed = 1;
     }
 
     if (! $quiet && ! $changed) {
