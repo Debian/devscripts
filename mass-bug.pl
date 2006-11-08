@@ -128,11 +128,11 @@ my $sendmailcmd='/usr/sbin/sendmail';
 my $modified_conf_msg;
 
 sub usageerror {
-	die "Usage: $progname [options] --subject=\"bug subject\" <template> <package-list>\n";
+    die "Usage: $progname [options] --subject=\"bug subject\" <template> <package-list>\n";
 }
 
 sub usage {
-	print <<"EOT";
+    print <<"EOT";
 Usage:
   $progname [options] --subject="bug subject" <template> <package-list>
 
@@ -161,7 +161,7 @@ EOT
 }
 
 sub version () {
-	print <<"EOF";
+    print <<"EOF";
 This is $progname, from the Debian devscripts package, version ###VERSION###
 This code is copyright 2006 by Joey Hess, all rights reserved.
 This program comes with ABSOLUTELY NO WARRANTY.
@@ -224,40 +224,40 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 
 
 sub gen_subject {
-	my $subject=shift;
-	my $package=shift;
-	
-	return "$package\: $subject";
+    my $subject=shift;
+    my $package=shift;
+
+    return "$package\: $subject";
 }
 
 sub gen_bug {
-	my $template_text=shift;
-	my $package=shift;
+    my $template_text=shift;
+    my $package=shift;
 
-	$template_text=~s/#PACKAGE#/$package/g;
-	$template_text=fill("", "", $template_text);
-	return "Package: $package\n\n$template_text";
+    $template_text=~s/#PACKAGE#/$package/g;
+    $template_text=fill("", "", $template_text);
+    return "Package: $package\n\n$template_text";
 }
 		
 sub div {
-	print +("-" x 79)."\n";
+    print +("-" x 79)."\n";
 }
 
 sub mailbts {
-	my ($subject, $body, $to, $from) = @_;
+    my ($subject, $body, $to, $from) = @_;
 
-	if (defined $from) {
-		my $date = `822-date`;
-		chomp $date;
-
-		my $pid = open(MAIL, "|-");
-		if (! defined $pid) {
-			die "$progname: Couldn't fork: $!\n";
-		}
-		$SIG{'PIPE'} = sub { die "bts: pipe for $sendmailcmd broke\n"; };
-		if ($pid) {
-			# parent
-			print MAIL <<"EOM";
+    if (defined $from) {
+	my $date = `822-date`;
+	chomp $date;
+	
+	my $pid = open(MAIL, "|-");
+	if (! defined $pid) {
+	    die "$progname: Couldn't fork: $!\n";
+	}
+	$SIG{'PIPE'} = sub { die "bts: pipe for $sendmailcmd broke\n"; };
+	if ($pid) {
+	    # parent
+	    print MAIL <<"EOM";
 From: $from
 To: $to
 Subject: $subject
@@ -266,34 +266,34 @@ X-Generator: mass-bug from devscripts ###VERSION###
 
 $body
 EOM
-			close MAIL or die "$progname: sendmail error: $!\n";
-		}
-		else {
-			# child
-			exec(split(' ', $sendmailcmd), "-t")
-				or die "$progname: error running sendmail: $!\n";
-		}
+	    close MAIL or die "$progname: sendmail error: $!\n";
 	}
-	else { # No $from
-		unless (system("command -v mail >/dev/null 2>&1") == 0) {
-			die "$progname: You need to either specify an email address (say using DEBEMAIL)\n or have the mailx/mailutils package installed to send mail!\n";
-		}
-		my $pid = open(MAIL, "|-");
-		if (! defined $pid) {
-		    die "bts: Couldn't fork: $!\n";
-		}
-		$SIG{'PIPE'} = sub { die "bts: pipe for mail broke\n"; };
-		if ($pid) {
-			# parent
-			print MAIL $body;
-			close MAIL or die "$progname: error running mail: $!\n";
-		}
-		else {
-			# child
-			exec("mail", "-s", $subject, $to)
-				or die "$progname: error running mail: $!\n";
-		}
+	else {
+	    # child
+	    exec(split(' ', $sendmailcmd), "-t")
+		or die "$progname: error running sendmail: $!\n";
 	}
+    }
+    else { # No $from
+	unless (system("command -v mail >/dev/null 2>&1") == 0) {
+	    die "$progname: You need to either specify an email address (say using DEBEMAIL)\n or have the mailx/mailutils package installed to send mail!\n";
+	}
+	my $pid = open(MAIL, "|-");
+	if (! defined $pid) {
+	    die "bts: Couldn't fork: $!\n";
+	}
+	$SIG{'PIPE'} = sub { die "bts: pipe for mail broke\n"; };
+	if ($pid) {
+	    # parent
+	    print MAIL $body;
+	    close MAIL or die "$progname: error running mail: $!\n";
+	}
+	else {
+	    # child
+	    exec("mail", "-s", $subject, $to)
+		or die "$progname: error running mail: $!\n";
+	}
+    }
 }
 
 my $mode="display";
@@ -307,16 +307,16 @@ if (! GetOptions(
 		 "help" => sub { usage(); exit 0; },
 		 "version" => sub { version(); exit 0; },
 		 )) {
-	usageerror();
+    usageerror();
 }
 
 if (! defined $subject || ! length $subject) {
-	print STDERR "$progname: You must specify a subject for the bug reports.\n";
-	usageerror();
+    print STDERR "$progname: You must specify a subject for the bug reports.\n";
+    usageerror();
 }
 
 if (@ARGV != 2) {
-	usageerror();
+    usageerror();
 }
 
 if ($opt_sendmail) {
@@ -341,68 +341,68 @@ my $package_list=shift;
 my $template_text;
 open (T, "$template") || die "$progname: error reading $template: $!\n";
 {
-	local $/=undef;
-	$template_text=<T>;
+    local $/=undef;
+    $template_text=<T>;
 }
 close T;
 if (! length $template_text) {
-	die "$progname: empty template\n";
+    die "$progname: empty template\n";
 }
 
 my @packages;
 open (L, "$package_list") || die "$progname: error reading $package_list: $!\n";
 while (<L>) {
-	chomp;
-	if (! /^[-+\.a-z0-9]+$/) {
-		die "\"$_\" does not look like the name of a Debian package\n";
-	}
-	push @packages, $_;
+    chomp;
+    if (! /^[-+\.a-z0-9]+$/) {
+	die "\"$_\" does not look like the name of a Debian package\n";
+    }
+    push @packages, $_;
 }
 close L;
 
 # Uses variables from above.
 sub showsample {
-	my $package=shift;
+    my $package=shift;
 
-	print "To: $submission_email\n";
-	print "Subject: ".gen_subject($subject, $package)."\n";
-	print "\n";
-	print gen_bug($template_text, $package)."\n";
+    print "To: $submission_email\n";
+    print "Subject: ".gen_subject($subject, $package)."\n";
+    print "\n";
+    print gen_bug($template_text, $package)."\n";
 }
 
 if ($mode eq 'display') {
-	print "Displaying all ".scalar(@packages)." bug reports..\n";
-	print "Run again with --send switch to send the bug reports.\n";
+    print "Displaying all ".scalar(@packages)." bug reports..\n";
+    print "Run again with --send switch to send the bug reports.\n";
+    div();
+    foreach my $package (@packages) {
+	showsample($package);
 	div();
-	foreach my $package (@packages) {
-		showsample($package);
-		div();
-	}
+    }
 }
 elsif ($mode eq 'send') {
-	my $from;
-	$from ||= $ENV{'DEBEMAIL'};
-	$from ||= $ENV{'EMAIL'};
-	
-	print "Preparing to send ".scalar(@packages)." bug reports like this one:\n";
-	div();
-	showsample($packages[0]);
-	div();
-	$|=1;
-	print "Are you sure that you have read the Developer's Reference on mass-filing\nbug reports, have checked this case out on debian-devel, and really want to\nsend out these ".scalar(@packages)." bug reports? [yes/no] ";
-	my $ans = <STDIN>;
-	unless ($ans =~ /^yes$/i) {
-	    print "OK, aborting.\n";
-	    exit 0;
-	}
-	print "OK, going ahead then...\n";
-	foreach my $package (@packages) {
-		print "Sending bug for $package ...\n";
-		mailbts(gen_subject($subject, $package),
-			gen_bug($template_text, $package),
-			$submission_email, $from);
-	}
-	print "All bugs sent.\n";
+    my $from;
+    $from ||= $ENV{'DEBEMAIL'};
+    $from ||= $ENV{'EMAIL'};
+    
+    print "Preparing to send ".scalar(@packages)." bug reports like this one:\n";
+    div();
+    showsample($packages[0]);
+    div();
+    $|=1;
+    print "Are you sure that you have read the Developer's Reference on mass-filing\nbug reports, have checked this case out on debian-devel, and really want to\nsend out these ".scalar(@packages)." bug reports? [yes/no] ";
+    my $ans = <STDIN>;
+    unless ($ans =~ /^yes$/i) {
+	print "OK, aborting.\n";
+	exit 0;
+    }
+    print "OK, going ahead then...\n";
+    foreach my $package (@packages) {
+	print "Sending bug for $package ...\n";
+	mailbts(gen_subject($subject, $package),
+		gen_bug($template_text, $package),
+		$submission_email, $from);
+    }
+    print "All bugs sent.\n";
 }
 
 =head1 COPYRIGHT
