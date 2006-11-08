@@ -110,11 +110,12 @@ install: all
 	cp $(MAN5S) $(DESTDIR)$(MAN5DIR)
 	cd $(DESTDIR)$(MAN1DIR) && ln -s debchange.1 dch.1
 	mkdir -p $(DESTDIR)$(MAN1DIR_fr)
-	cd $(MANS_fr_DIR) && cp $(MAN1S_fr) $(DESTDIR)$(MAN1DIR_fr)
-	cp $(GEN_MAN1S_fr) $(DESTDIR)$(MAN1DIR_fr)
+	-cd $(MANS_fr_DIR) && cp $(MAN1S_fr) $(DESTDIR)$(MAN1DIR_fr)
+	-cp $(GEN_MAN1S_fr) $(DESTDIR)$(MAN1DIR_fr)
 	mkdir -p $(DESTDIR)$(MAN5DIR_fr)
-	cd $(MANS_fr_DIR) && cp $(MAN5S_fr) $(DESTDIR)$(MAN5DIR_fr)
-	cd $(DESTDIR)$(MAN1DIR_fr) && ln -s debchange.1 dch.1
+	-cd $(MANS_fr_DIR) && cp $(MAN5S_fr) $(DESTDIR)$(MAN5DIR_fr)
+	cd $(DESTDIR)$(MAN1DIR_fr) && \
+	    if [ -f debchange.1 ]; then ln -s debchange.1 dch.1; fi
 	mkdir -p $(DESTDIR)$(EXAMPLES_DIR)
 	cp $(EXAMPLES) $(DESTDIR)$(EXAMPLES_DIR)
 #	-find $(DESTDIR) -type d -name '.svn' -exec rm -r \{\} \;
