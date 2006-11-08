@@ -266,10 +266,15 @@ EOF
 
 cat ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff >> "$TMPNAM"
 sensible-editor "$TMPNAM"
+if [ $? -ne 0 ]; then
+    echo "nmudiff: sensible-editor exited with error, aborting." >&2
+    rm -f ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff "$TMPNAM"
+    exit 1
+fi
 
 if [ "$(head -1 $TMPNAM)" != "$ABORT_MSG" ]; then
     echo "$PROGNAME: Aborting as requested." >&2
-    rm -f "$TMPNAM"
+    rm -f ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff "$TMPNAM"
     exit 1
 fi
 
@@ -282,4 +287,4 @@ esac
 
 # Get rid of the "abort" line before sending!
 tail -n +2 "$TMPNAM" | $BTS_SENDMAIL_COMMAND
-rm -f "$TMPNAM"
+rm -f ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff "$TMPNAM"
