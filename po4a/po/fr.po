@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts.fr.corrected\n"
-"POT-Creation-Date: 2006-11-08 18:57+0000\n"
+"POT-Creation-Date: 2006-11-08 20:40+0000\n"
 "PO-Revision-Date: 2005-11-18 14:34+0100\n"
 "Last-Translator: Thomas Huriaux <thomas.huriaux@gmail.com>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -250,7 +250,7 @@ msgstr ""
 #: ../debpkg.1:23 ../debrelease.1:137 ../deb-reversion.dbk:254
 #: ../debrsign.1:71 ../debsign.1:128 ../debuild.1:413 ../dget.pl:370
 #: ../dpkg-genbuilddeps.1:36 ../dscverify.1:44 ../grep-excuses.1:36
-#: ../mass-bug.pl:421 ../mergechanges.1:17 ../nmudiff.1:63
+#: ../mass-bug.pl:421 ../mergechanges.1:17 ../nmudiff.1:79
 #: ../plotchangelog.1:126 ../pts-subscribe.1:51 ../rc-alert.1:29
 #: ../rmadison.pl:188 ../svnpath.pl:97 ../tagpending.1:37 ../uscan.1:488
 #: ../uupdate.1:167 ../whodepends.1:19 ../who-uploads.1:58 ../wnpp-alert.1:19
@@ -759,7 +759,7 @@ msgstr "--no-conf, --noconf"
 #: ../bts.pl:261 ../cvs-debrelease.1:61 ../debc.1:88 ../debchange.1:272
 #: ../debclean.1:81 ../debdiff.1:118 ../debi.1:90 ../debrelease.1:99
 #: ../debsign.1:93 ../debuild.1:216 ../dpkg-depcheck.1:96 ../dscverify.1:23
-#: ../grep-excuses.1:18 ../mass-bug.pl:81 ../nmudiff.1:42 ../uscan.1:406
+#: ../grep-excuses.1:18 ../mass-bug.pl:81 ../nmudiff.1:53 ../uscan.1:406
 #: ../uupdate.1:80 ../who-uploads.1:36
 msgid ""
 "Do not read any configuration files.  This can only be used as the first "
@@ -1756,7 +1756,7 @@ msgstr ""
 #: ../bts.pl:2719 ../debc.1:91 ../debchange.1:283 ../debclean.1:87
 #: ../debdiff.1:127 ../debi.1:93 ../debrelease.1:105 ../debrsign.1:57
 #: ../debsign.1:99 ../debuild.1:276 ../dpkg-depcheck.1:102 ../dscverify.1:29
-#: ../grep-excuses.1:24 ../mass-bug.pl:101 ../nmudiff.1:48
+#: ../grep-excuses.1:24 ../mass-bug.pl:101 ../nmudiff.1:59
 #: ../plotchangelog.1:106 ../pts-subscribe.1:37 ../uscan.1:412 ../uupdate.1:86
 #: ../who-uploads.1:42
 #, no-wrap
@@ -1872,7 +1872,7 @@ msgid "BTS_SENDMAIL_COMMAND"
 msgstr "BTS_SENDMAIL_COMMAND"
 
 # type: textblock
-#: ../bts.pl:2765 ../mass-bug.pl:113 ../nmudiff.1:58
+#: ../bts.pl:2765 ../mass-bug.pl:113 ../nmudiff.1:74
 msgid ""
 "If this is set, specifies a sendmail command to use instead of /usr/sbin/"
 "sendmail.  Same as the --sendmail command line option."
@@ -2016,7 +2016,7 @@ msgstr ""
 #: ../debclean.1:104 ../debdiff.1:161 ../debi.1:116 ../debrelease.1:132
 #: ../deb-reversion.dbk:209 ../debrsign.1:66 ../debsign.1:118 ../debuild.1:399
 #: ../dget.pl:378 ../dpkg-depcheck.1:118 ../dpkg-genbuilddeps.1:30
-#: ../dscverify.1:40 ../grep-excuses.1:34 ../nmudiff.1:58
+#: ../dscverify.1:40 ../grep-excuses.1:34 ../nmudiff.1:74
 #: ../plotchangelog.1:124 ../pts-subscribe.1:46 ../rc-alert.1:27
 #: ../rmadison.pl:184 ../tagpending.1:32 ../uscan.1:482 ../uupdate.1:160
 #: ../devscripts.conf.5:54
@@ -2374,7 +2374,7 @@ msgstr ""
 #: ../cvs-debrelease.1:57 ../debc.1:84 ../debchange.1:268 ../debclean.1:77
 #: ../debdiff.1:114 ../debi.1:86 ../debrelease.1:95 ../debsign.1:89
 #: ../dpkg-depcheck.1:92 ../dscverify.1:19 ../grep-excuses.1:14
-#: ../nmudiff.1:38 ../uscan.1:402 ../uupdate.1:76 ../who-uploads.1:32
+#: ../nmudiff.1:49 ../uscan.1:402 ../uupdate.1:76 ../who-uploads.1:32
 #, no-wrap
 msgid "B<--no-conf>, B<--noconf>"
 msgstr "B<--no-conf>, B<--noconf>"
@@ -2945,7 +2945,7 @@ msgstr "B<--check-dirname-regex> I<regex>"
 # NOTE: et --noconf ?
 # type: Plain text
 #: ../debc.1:97 ../debchange.1:289 ../debclean.1:93 ../debi.1:99
-#: ../debrelease.1:111 ../debrsign.1:63 ../debsign.1:105 ../nmudiff.1:54
+#: ../debrelease.1:111 ../debrsign.1:63 ../debsign.1:105 ../nmudiff.1:65
 #: ../pts-subscribe.1:43 ../uupdate.1:92 ../who-uploads.1:48
 msgid ""
 "The two configuration files I</etc/devscripts.conf> and I<~/.devscripts> are "
@@ -3693,14 +3693,14 @@ msgstr ""
 
 # type: Plain text
 #: ../debchange.1:280 ../debclean.1:84 ../debrelease.1:102 ../debsign.1:96
-#: ../dscverify.1:26 ../nmudiff.1:45 ../pts-subscribe.1:26 ../uupdate.1:83
+#: ../dscverify.1:26 ../nmudiff.1:56 ../pts-subscribe.1:26 ../uupdate.1:83
 #: ../who-uploads.1:39
 msgid "Display a help message and exit successfully."
 msgstr "Affiche un message d'aide et quitte avec succès."
 
 # type: TP
 #: ../debchange.1:280 ../debclean.1:84 ../debrelease.1:102 ../debsign.1:96
-#: ../dscverify.1:26 ../grep-excuses.1:21 ../nmudiff.1:45
+#: ../dscverify.1:26 ../grep-excuses.1:21 ../nmudiff.1:56
 #: ../plotchangelog.1:95 ../pts-subscribe.1:26 ../rmadison.pl:175
 #: ../uscan.1:409 ../uupdate.1:83 ../who-uploads.1:39
 #, no-wrap
@@ -3709,7 +3709,7 @@ msgstr "B<--version>"
 
 # type: Plain text
 #: ../debchange.1:283 ../debclean.1:87 ../debrelease.1:105 ../debsign.1:99
-#: ../dscverify.1:29 ../nmudiff.1:48 ../pts-subscribe.1:29 ../uupdate.1:86
+#: ../dscverify.1:29 ../nmudiff.1:59 ../pts-subscribe.1:29 ../uupdate.1:86
 #: ../who-uploads.1:42
 msgid "Display version and copyright information and exit successfully."
 msgstr "Affiche la version et le copyright, puis quitte avec succès."
@@ -3963,7 +3963,7 @@ msgstr ""
 "C'est le comportement par défaut."
 
 # type: TP
-#: ../debclean.1:81 ../grep-excuses.1:18 ../nmudiff.1:42 ../plotchangelog.1:92
+#: ../debclean.1:81 ../grep-excuses.1:18 ../nmudiff.1:53 ../plotchangelog.1:92
 #: ../uscan.1:406
 #, no-wrap
 msgid "B<--help>"
@@ -7810,9 +7810,10 @@ msgid ""
 "the .dsc and any corresponding tar and diff files) for both the previous "
 "version of the package and the newly built NMU version are in the parent "
 "directory. It then uses B<debdiff> to generate a diff between the previous "
-"version and the current NMU, and runs an editor (using B<sensible-editor>) "
-"so that the mail message (including the diff) can be examined and modified; "
-"once you exit the editor the diff will be mailed to the Debian BTS."
+"version and the current NMU, and either runs mutt or an editor (using "
+"B<sensible-editor>) so that the mail message (including the diff) can be "
+"examined and modified; once you exit the editor the diff will be mailed to "
+"the Debian BTS."
 msgstr ""
 "B<nmudiff> devrait être lancé dans l'arbre des sources du paquet devant être "
 "NMU-é, après que le NMU a été construit. Cela suppose que le source pour la "
@@ -7836,14 +7837,42 @@ msgid ""
 "bug report is submitted directly to the BTS."
 msgstr ""
 
-# type: =item
+# type: TP
 #: ../nmudiff.1:21
+#, fuzzy, no-wrap
+msgid "B<--mutt>"
+msgstr "B<--multi>"
+
+# type: Plain text
+#: ../nmudiff.1:26
+msgid ""
+"Use B<mutt>(1) for editing and sending the message to the BTS (default "
+"behaviour).  This can be controlled using a configuration file option (see "
+"below)."
+msgstr ""
+
+# type: TP
+#: ../nmudiff.1:26
+#, fuzzy, no-wrap
+msgid "B<--no-mutt>"
+msgstr "B<--multi>"
+
+# type: Plain text
+#: ../nmudiff.1:31
+msgid ""
+"Use B<sensible-editor>(1) to edit the message and then mail it directly "
+"using I</usr/bin/sendmail>.  This can be controlled using a configuration "
+"file option (see below)."
+msgstr ""
+
+# type: =item
+#: ../nmudiff.1:31
 #, fuzzy, no-wrap
 msgid "B<--sendmail> I<SENDMAILCMD>"
 msgstr "--sendmail=COMMANDE_D_ENVOI_DE_MAIL"
 
 # type: Plain text
-#: ../nmudiff.1:31
+#: ../nmudiff.1:41
 msgid ""
 "Specify the sendmail command.  The command will be split on white space and "
 "will be interpreted by the shell.  Default is I</usr/sbin/sendmail>.  The I<-"
@@ -7855,34 +7884,48 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../nmudiff.1:31
+#: ../nmudiff.1:41
 #, no-wrap
 msgid "B<--from> I<EMAIL>"
 msgstr ""
 
 # type: Plain text
-#: ../nmudiff.1:38
+#: ../nmudiff.1:49
 msgid ""
-"The email to the BTS will be sent using the name and address in the "
-"environment variable DEBEMAIL.  If this is not set, then the variable EMAIL "
-"will be used instead.  These can be overridden using the B<--from> option.  "
-"The program will not work if an email address cannot be determined."
+"If using the sendmail (B<--no-mutt) option, then the email to the BTS will "
+"be sent using the name and address in the environment variable DEBEMAIL.  If "
+"this is not set, then the variable EMAIL will be used instead.  These can be "
+"overridden using the --from> option.  The program will not work in this case "
+"if an email address cannot be determined."
+msgstr ""
+
+# type: TH
+#: ../nmudiff.1:65
+#, fuzzy, no-wrap
+msgid "B<NMUDIFF_MUTT>"
+msgstr "NMUDIFF"
+
+# type: Plain text
+#: ../nmudiff.1:70
+msgid ""
+"Can be \"yes\" (default) or \"no\", and specifies whether to use B<mutt> to "
+"compose and send the message or not, as described above."
 msgstr ""
 
 # type: =item
-#: ../nmudiff.1:54
+#: ../nmudiff.1:70
 #, fuzzy, no-wrap
 msgid "B<BTS_SENDMAIL_COMMAND>"
 msgstr "BTS_SENDMAIL_COMMAND"
 
 # type: Plain text
-#: ../nmudiff.1:63
+#: ../nmudiff.1:79
 #, fuzzy
 msgid "B<debdiff>(1), B<sensible-editor>(1)  and B<devscripts.conf>(5)."
 msgstr "B<dpkg-deb>(8), B<debdiff>(1) et B<devscripts.conf>(5)."
 
 # type: Plain text
-#: ../nmudiff.1:67
+#: ../nmudiff.1:83
 #, fuzzy
 msgid ""
 "B<nmudiff> was written and is copyright 2006 by Steinar H. Gunderson and "
