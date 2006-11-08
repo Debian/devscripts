@@ -76,7 +76,11 @@ conf.default: conf.default.in version
 
 translated_manpages:
 	cd po4a && po4a --no-backups devscripts-po4a.conf
-	-$(MAKE) $(GEN_MAN1S_fr)
+	# These may or may not have been successfully made; we don't stop
+	# building the rest of the package in such a case
+	for i in $(GEN_MAN1S_fr); do \
+	    $(MAKE) $$i || true; \
+	done
 
 clean_translated_manpages:
 	# Update the POT/POs and remove the translated man pages
