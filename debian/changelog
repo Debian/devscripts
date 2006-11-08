@@ -1,5 +1,6 @@
 devscripts (2.9.24) UNRELEASED; urgency=low
 
+  * debc/debi: handle multi-arch .changes files (Closes: #385673)
   * debchange: allow non-official distributions (Closes: #397546)
   * debdiff: handle files moving between multiple packages correctly
     (Closes: #392977)
@@ -13,7 +14,7 @@ devscripts (2.9.24) UNRELEASED; urgency=low
   * uscan: set HTTP user agent name (Closes: #397354)
   * wnpp-alert: check return status of wget calls (Closes: #364479)
   
- -- Julian Gilbey <jdg@debian.org>  Wed,  8 Nov 2006 18:01:18 +0000
+ -- Julian Gilbey <jdg@debian.org>  Wed,  8 Nov 2006 18:26:38 +0000
 
 devscripts (2.9.23) unstable; urgency=low
 

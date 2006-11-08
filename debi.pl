@@ -47,6 +47,7 @@ Usage: $progname [options] [.changes file] [package ...]
     -t<target>        Search for .changes file made for GNU <target> arch
     --debs-dir DIR    Look for the changes and debs files in DIR instead of
                       the parent of the current package directory
+    --multi           Search for multiarch .changes file made by dpkg-cross
     --check-dirname-level N
                       How much to check directory names:
                       N=0   never
@@ -78,6 +79,7 @@ Usage: $progname [options] [.changes file] [package ...]
     -t<target>        Search for changes file made for GNU <target> arch
     --debs-dir DIR    Look for the changes and debs files in DIR instead of
                       the parent of the current package directory
+    --multi           Search for multiarch .changes file made by dpkg-cross
     --check-dirname-level N
                       How much to check directory names:
                       N=0   never
@@ -168,13 +170,14 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 }
 
 # Command line options next
-my ($opt_help, $opt_version, $opt_a, $opt_t, $opt_debsdir);
+my ($opt_help, $opt_version, $opt_a, $opt_t, $opt_debsdir, $opt_multi);
 my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 GetOptions("help" => \$opt_help,
 	   "version" => \$opt_version,
 	   "a=s" => \$opt_a,
 	   "t=s" => \$opt_t,
 	   "debs-dir=s" => \$opt_debsdir,
+	   "multi" => \$opt_multi,
 	   "ignore-dirname" => \$opt_ignore,
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
@@ -221,7 +224,7 @@ if (defined $opt_level) {
 if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
 
 # Is a .changes file listed on the command line?
-my $changes;
+my ($changes, $mchanges, $arch);
 if (@ARGV and $ARGV[0] =~ /\.changes$/) {
     $changes = shift;
 }
@@ -256,7 +259,7 @@ if (! defined $changes) {
 
     die "$progname: no package name in changelog!\n"
 	unless exists $changelog{'Source'};
-    die "$progname: no package name in changelog!\n"
+    die "$progname: no package version in changelog!\n"
 	unless exists $changelog{'Version'};
 
     # Is the directory name acceptable?
@@ -282,7 +285,7 @@ EOF
 	}
     }
 
-    my $arch =
+    $arch =
 	`dpkg-architecture $targetarch $targetgnusystem -qDEB_HOST_ARCH`;
     if ($? != 0 or ! $arch) {
 	die "$progname: unable to determine build architecture.\n";
@@ -291,17 +294,35 @@ EOF
 
     my $sversion = $changelog{'Version'};
     $sversion =~ s/^\d+://;
-    my $pva="$changelog{'Source'}_${sversion}_${arch}";
+    my $package = $changelog{'Source'};
+    my $pva="${package}_${sversion}_${arch}";
     $changes="$debsdir/$pva.changes";
+    if ($opt_multi) {
+	my @mchanges = glob("$debsdir/${package}_${sversion}_*+*.changes");
+	@mchanges = grep { /[_+]$arch[\.+]/ } @mchanges;
+	$mchanges = $mchanges[0] || '';
+	$mchanges ||= "$debsdir/${package}_${sversion}_multi.changes"
+	    if -f "$debsdir/${package}_${sversion}_multi.changes";
+    }
 }
 
 chdir dirname($changes)
     or die "$progname: can't chdir to $changes directory: $!\n";
 $changes = basename($changes);
+$mchanges = basename($mchanges) if $opt_multi;
 
-if (! -r $changes) {
-    die "$progname: can't read $changes!\n";
+if (! -r $changes or $opt_multi and $mchanges and ! -r $mchanges) {
+    die "$progname: can't read $changes" .
+	(($opt_multi and $mchanges) ? " or $mchanges" : "") . "!\n";
 }
+
+if (! -r $changes and $opt_multi) {
+    $changes = $mchanges;
+} else {
+    $opt_multi = 0;
+}
+# $opt_multi now tells us whether we're actually using a multi-arch .changes
+# file
 
 my @debs = ();
 my %pkgs = map { $_ => 0 } @ARGV;
@@ -314,6 +335,7 @@ while (<CHANGES>) {
     if (/ (\S*\.deb)$/) {
         my $deb = $1;
         $deb =~ /^([a-z0-9+\.-]+)_/ or warn "unrecognised .deb name: $deb\n";
+	next unless $deb =~ /[_+]$arch[\.+]/;  # don't want other archs' .debs
         my $pkg = $1;
         if (@ARGV) {
             if (exists $pkgs{$pkg}) {
@@ -326,6 +348,10 @@ while (<CHANGES>) {
     }
 }
 close CHANGES;
+
+if (! @debs) {
+    die "$progname: no appropriate .debs found in the changes file $changes!\n";
+}
 
 if ($progname eq 'debi') {
     system('debpkg', '-i', @debs) == 0
