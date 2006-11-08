@@ -81,10 +81,12 @@ translated_manpages:
 	for i in $(GEN_MAN1S_fr); do \
 	    $(MAKE) $$i || true; \
 	done
+	touch translated_manpages
 
 clean_translated_manpages:
 	# Update the POT/POs and remove the translated man pages
 	cd po4a && po4a --rm-translations --no-backups devscripts-po4a.conf
+	rm -f translated_manpages
 
 libvfork.o: libvfork.c
 	$(CC) -fPIC -D_REENTRANT $(CFLAGS) -c $<
