@@ -1,8 +1,8 @@
 #!/usr/bin/perl -w
-# vim:sw=4:sta:
 
 #   dget - Download Debian source and binary packages
 #   Copyright (C) 2005 Christoph Berg <myon@debian.org>
+#   Modifications Copyright (C) 2005-06 Julian Gilbey <jdg@debian.org>
 #
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
@@ -21,30 +21,69 @@
 # 2005-10-04 cb: initial release
 # 2005-12-11 cb: -x option, update documentation
 # 2005-12-31 cb: -b, -q options, use getopt
+# Later modifications: see debian/changelog
 
 use strict;
 use IO::File;
 use Digest::MD5;
 use Getopt::Long;
+use File::Basename;
 
 # global variables
 
+my $progname = basename($0,'.pl');  # the '.pl' is for when we're debugging
 my $found_dsc;
-# use curl if installed, wget otherwise
-my $wget = -e "/usr/bin/curl" ? "curl" : "wget";
+my $wget;
 my $opt;
 my $backup_dir = "backup";
+
+# use curl if installed, wget otherwise
+if (system("command -v curl >/dev/null 2>&1") == 0) {
+    $wget = "curl";
+} elsif (system("command -v wget >/dev/null 2>&1") == 0) {
+    $wget = "wget";
+} else {
+    die "$progname: can't find either curl or wget; you need at least one of these\ninstalled to run me!\n";
+}
 
 # functions
 
 sub usage {
-    die "usage: $0 [-bqx] package-url.dsc/changes package package=version ...\n";
+    print <<"EOT";
+Usage: $progname [options] URL
+       $progname [options] package[=version]
+
+Downloads Debian packages, either from the specified URL (first form),
+or using the mirror configured in /etc/apt/sources.list (second form).
+   
+   -b, --backup    Move files that would be overwritten to ./backup
+   -q, --quiet     Suppress wget/curl output
+   -x, --extract   Run dpkg-source -x on downloaded source (first form only)
+   --insecure      Don\'t check SSL certificates when downloading
+   --help          This message
+   --version       Version information
+EOT
 }
+
+sub version {
+    print <<"EOF";
+This is $progname, from the Debian devscripts package, version ###VERSION###
+This code is copyright 2005 by Christoph Berg <myon\@debian.org>, modifications
+copyright 2005-06 by Julian Gilbey <jdg\@debian.org>, all rights reserved.
+This program comes with ABSOLUTELY NO WARRANTY.
+You are free to redistribute this code under the terms of the
+GNU General Public License, version 2 or later.
+EOF
+}
+
 
 sub wget {
     my ($file, $url) = @_;
     my @cmd = ($wget);
-    push @cmd, ($wget eq "wget" ? "-q" : "-s") if $opt->{quiet};
+    # curl does not follow document moved headers, and does not exit
+    # with a non-zero error code by default if a document is not found
+    push @cmd, "-f", "-L" if $wget eq "curl";
+    push @cmd, ($wget eq "wget" ? "-nv" : ("-s", "-S")) if $opt->{quiet};
     push @cmd, ($wget eq "wget" ? "--no-check-certificate" : "--insecure") if $opt->{insecure};
     push @cmd, ($wget eq "wget" ? "-O" : "-o");
     system @cmd, $file, $url;
@@ -80,17 +119,17 @@ sub get_file {
 	my $md5sum_new = Digest::MD5->new->addfile($fh5)->hexdigest();
 	close $fh5;
 	if (not $md5sum or ($md5sum_new eq $md5sum)) {
-	    print "$0: using existing $file\n";
+	    print "$progname: using existing $file\n";
 	} else {
-	    print "$0: md5sum for $file does not match\n";
+	    print "$progname: md5sum for $file does not match\n";
 	    backup_or_unlink($file);
 	}
     }
 
     unless (-e $file) {
-	print "$0: retrieving $dir/$file\n";
+	print "$progname: retrieving $dir/$file\n";
 	if (wget($file, "$dir/$file")) {
-	    warn "$0: $wget $file $dir/$file failed\n";
+	    warn "$progname: $wget $file $dir/$file failed\n";
 	    unlink $file;
 	    return 0;
 	}
@@ -114,7 +153,7 @@ sub parse_file {
     open $fh, $file or die "$file: $!";
     while (<$fh>) {
 	if (/^ ([0-9a-f]{32}) (?:\S+ )*(\S+)$/) {
-	    get_file($dir, $2, $1) or return;;
+	    get_file($dir, $2, $1) or return;
 	}
     }
     close $fh;
@@ -144,10 +183,10 @@ sub apt_get {
     }
     close $apt;
     unless ($version) {
-	die "$0: $package has no installation candidate\n";
+	die "$progname: $package has no installation candidate\n";
     }
     unless (@hosts) {
-	die "$0: no hostnames in apt-cache policy $package for $version found\n";
+	die "$progname: no hostnames in apt-cache policy $package for $version found\n";
     }
 
     $qversion =~ s/^([^:]+:)/($1)?/;
@@ -182,7 +221,7 @@ sub apt_get {
     close $apt;
 
     unless ($filename) {
-	die "$0: no filename for $package ($version) found\n";
+	die "$progname: no filename for $package ($version) found\n";
     }
 
     # find deb lines matching the hosts in the policy output
@@ -213,28 +252,29 @@ sub apt_get {
 
 # main program
 
-Getopt::Long::config('bundling');
-unless (GetOptions(
-    '-h'	=>  \$opt->{'help'},
-    '--help'	=>  \$opt->{'help'},
-    '-b'	=>  \$opt->{'backup'},
-    '--backup'	=>  \$opt->{'backup'},
-    '-q'	=>  \$opt->{'quiet'},
-    '--quiet'	=>  \$opt->{'quiet'},
-    '-x'	=>  \$opt->{'unpack_source'},
-    '--extract'	=>  \$opt->{'unpack_source'},
-    '--insecure'	=> \$opt->{'insecure'},
-)) {
-    usage();
+Getopt::Long::Configure('bundling');
+GetOptions(
+    "b|backup"   =>  \$opt->{'backup'},
+    "q|quiet"    =>  \$opt->{'quiet'},
+    "x|extract"  =>  \$opt->{'unpack_source'},
+    "insecure"   =>  \$opt->{'insecure'},
+    "h|help"     =>  \$opt->{'help'},
+    "V|version"  =>  \$opt->{'version'},
+)
+    or die "Usage: $progname [options] URL|package[=version]\nRun $progname --help for more details.\n";
+
+if (! @ARGV) {
+    die "Usage: $progname [options] URL|package[=version]\nRun $progname --help for more details.\n";
 }
 
-usage() if !@ARGV or $opt->{help};
+if ($opt->{'help'}) { usage(); exit 0; }
+if ($opt->{'version'}) { version(); exit 0; }
 
 for my $arg (@ARGV) {
     $found_dsc = "";
 
     if ($arg =~ /^((?:copy|file|ftp|http|rsh|rsync|ssh|www).*)\/([^\/]+\.\w+)$/) {
-	get_file($1, $2, "unlink");
+	get_file($1, $2, "unlink") or exit 1;
 	if ($found_dsc and $opt->{unpack_source}) {
 	    system 'dpkg-source', '-x', $found_dsc;
 	}
@@ -260,31 +300,32 @@ dget -- Download Debian source and binary packages
 
 =over
 
-=item B<dget> [B<-bqx>] I<URL>
+=item B<dget> [I<options>] I<URL>
 
-=item B<dget> [B<-bq>] I<package>
-
-=item B<dget> [B<-bq>] I<package>=I<version>
+=item B<dget> [I<options>] I<package>[=I<version>]
 
 =back
 
 =head1 DESCRIPTION
 
-B<dget> downloads Debian packages.  In the first form, if the URL
-points to a .dsc or .changes file, then B<dget> acts as a
-source-package aware form of B<wget>: it fetches the given URL and
-recursively any files referenced.  When the B<-x> option is given, the
-downloaded source is also unpacked by B<dpkg-source>.
+B<dget> downloads Debian packages.  In the first form, B<dget> fetches
+the requested URL.  If this is a .dsc or .changes file, then B<dget>
+acts as a source-package aware form of B<wget>: it also fetches any
+files referenced in the .dsc/.changes file.  When the B<-x> option is
+given, the downloaded source is also unpacked by B<dpkg-source>.
 
-In the second and third forms, B<dget> downloads a binary package from
-the Debian mirror configured in /etc/apt/sources.list.  Unlike
-B<apt-get install -d>, it does not require root privileges, writes to
-the current directory, and does not download dependencies.
+In the second form, B<dget> downloads a I<binary> package (i.e., a
+I<.deb> file) from the Debian mirror configured in
+/etc/apt/sources.list.  Unlike B<apt-get install -d>, it does not
+require root privileges, writes to the current directory, and does not
+download dependencies.  If a version number is specified, this version
+of the package is requested.
 
-Before downloading referenced files in .dsc and .changes files, and
-before downloading binary packages, if any of the files already exist,
-md5sums are compared to avoid wasting bandwidth.  Download backends
-used are B<curl> and B<wget>, looked for in that order.
+Before downloading files listed in .dsc and .changes files, and before
+downloading binary packages, B<dget> checks to see whether any of
+these files already exist.  If they do, then their md5sums are
+compared to avoid downloading them again unnecessarily.  Download
+backends used are B<curl> and B<wget>, looked for in that order.
 
 B<dget> was written to make it easier to retrieve source packages from
 the web for sponsor uploads.  For checking the package with
@@ -293,13 +334,34 @@ I<package>, the last source version via B<apt-get source> I<package>.
 
 =head1 OPTIONS
 
-B<-b> move files that would be overwritten to B<./backup>.
+=over 4
 
-B<-q> suppress wget/curl output.
+=item B<-b>, B<--backup>
 
-B<-x> run B<dpkg-source -x> on the downloaded source package.
+Move files that would be overwritten to I<./backup>.
 
-B<--insecure> allow ssl connections to untrusted hosts.
+=item B<-q>, B<--quiet>
+
+Suppress B<wget>/B<curl> non-error output.
+
+=item B<-x>, B<--extract>
+
+Run B<dpkg-source -x> on the downloaded source package.  This can only
+be used with the first method of calling B<dget>.
+
+=item B<--insecure>
+
+Allow SSL connections to untrusted hosts.
+
+=item B<-h>, B<--help>
+
+Show a help message.
+
+=item B<-V>, B<--version>
+
+Show version information.
+
+=back
 
 =head1 BUGS
 
@@ -307,13 +369,12 @@ B<dget> I<package> should be implemented in B<apt-get install -d>.
 
 =head1 AUTHOR
 
-=over
+This program is Copyright (C) 2005 by Christoph Berg <myon@debian.org>.
+Modifications are Copyright (C) 2005-06 by Julian Gilbey <jdg@debian.org>.
 
-=item Christoph Berg <myon@debian.org>
-
-=back
+This program is licensed under the terms of the GPL, either version 2
+of the License, or (at your option) any later version.
 
 =head1 SEE ALSO
 
-apt-get(1), debdiff(1), dpkg-source(1), curl(1), wget(1).
-
+B<apt-get>(1), B<debdiff>(1), B<dpkg-source>(1), B<curl>(1), B<wget>(1).
