@@ -1,19 +1,35 @@
 #! /bin/bash -e
 # tagpending by Joshua Kwan
-# licensed under GPL v2
-#
 # Purpose: tag all bugs pending which are not so already
+# 
+# Copyright 2004 Joshua Kwan <joshk@triplehelix.org>
+# Changes copyright 2004-06 by their respective authors.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of version 2 (only) of the GNU General Public
+# License as published by the Free Software Foundation.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 usage() {
   cat <<EOF
 Usage: tagpending [options]
   Options:
-    -n                  Only simulate what would happen during this run, and
+    -n, --noact         Only simulate what would happen during this run, and
                         print the message that would get sent to the BTS.
-    -s                  Silent mode
-    -f                  Do not query the BTS for already tagged bugs (force).
+    -s, --silent        Silent mode
+    -v, --verbose       Verbose mode: List bugs checked/tagged. 
+                        NOTE: Verbose and silent mode can't be used together.
+    -f, --force         Do not query the BTS for already tagged bugs (force).
     -h, --help          This usage screen.
-    -v, --version       Display the version and copyright information
+    -V, --version       Display the version and copyright information
 
   This script will read debian/changelog and tag all bugs not already tagged
   pending as such.  Requires wget to be installed to query BTS.
@@ -34,13 +50,15 @@ EOF
 USE_WGET=1
 DRY=0
 SILENT=0
+VERBOSE=0
 
 while [ -n "$1" ]; do
   case "$1" in
-    -n) DRY=1; shift ;;
-    -s) SILENT=1; shift ;;
-    -f) USE_WGET=0; shift ;;
-    --version) version; exit 0 ;;
+    -n|--noact) DRY=1; shift ;;
+    -s|--silent) SILENT=1; shift ;;
+    -f|--force) USE_WGET=0; shift ;;
+    -V|--version) version; exit 0 ;;
+    -v|--verbose) VERBOSE=1; shift ;;
     --help | -h) usage; exit 0 ;;
     *)
       echo "tagpending error: unrecognized option $1" >&2
@@ -50,6 +68,13 @@ while [ -n "$1" ]; do
     ;;
   esac
 done
+
+if [ "$VERBOSE" = "1" ] && [ "$SILENT" = "1" ]; then
+    echo "tagpending error: --silent and --verbose contradict each other" >&2
+    echo
+    usage
+    exit 1
+fi
 
 if [ "$USE_WGET" = "1" ]  &&  ! command -v wget >/dev/null 2>&1; then
   echo "tagpending error: Sorry, either use the -f option or install the wget package." >&2
@@ -75,14 +100,25 @@ if [ "$USE_WGET" = "1" ]; then
 	sed -ne 's/.*<a href="bugreport.cgi?bug=\([0-9]*\).*/\1/; T; p')
 fi
 
-to_be_tagged=$(printf '%s\n%s\n' "$changelog_closes" "$bts_pending" | sort | uniq -u)
+to_be_checked=$(printf '%s\n%s\n' "$changelog_closes" "$bts_pending" | sort | uniq -u)
 
 # Now remove the ones tagged in the BTS but no longer in the changelog.
-to_be_tagged=$(for bug in $to_be_tagged; do
-  if ! echo "$bts_pending" | grep -q "^${bug}$"; then
-    echo "$bug"
+to_be_tagged=""
+for bug in $to_be_checked; do
+  if [ "$VERBOSE" = "1" ]; then
+  	echo -n "Checking bug #$bug: "
   fi
-done)
+  if ! echo "$bts_pending" | grep -q "^${bug}$"; then
+    if [ "$VERBOSE" = "1" ]; then
+    	echo "needs tag"
+    fi
+    to_be_tagged="$to_be_tagged $bug"
+  else
+    if [ "$VERBOSE" = "1" ]; then
+    	echo "already marked pending"
+    fi
+  fi
+done
 
 if [ -z "$to_be_tagged" ]; then
   if [ "$SILENT" = 0 -o "$DRY" = 1 ]; then

@@ -11,24 +11,29 @@ queries the BTS to look up the bugs marked as pending for that package and
 excludes those from being re-tagged in the email.
 .SH OPTIONS
 .TP
-.B \-n
+.BR \-n ", " \-\-noact
 Do not actually send an email, but print it to stdout.
 .TP
-.B \-s
+.BR \-s ", " \-\-silent
 Don't print actions taken.
 .TP
-.B \-f
+.BR \-v ", " \-\-verbose
+List every bug checked.
+.TP
+.BR \-f ", " \-\-force
 Do not query the BTS for already tagged bugs, that is, force all bugs to
 be tagged as pending even if they already are.
 .TP
-.B \-\-help, \-h
+.BR \-h ", " \-\-help
 Show a brief usage message.
 .TP
-.B \-\-version, \-v
+.BR \-V ", " \-\-version
 Show version and copyright information.
 .SH "SEE ALSO"
-.BR ldapsearch(1),
-.BR mailx(1),
-.BR dpkg-parsechangelog(1)
+.BR ldapsearch (1),
+.BR mailx (1)
+and
+.BR dpkg-parsechangelog (1)
 .SH AUTHOR
-Joshua Kwan <joshk@triplehelix.org>
+Joshua Kwan <joshk@triplehelix.org>.  This manpage and the associated
+programme are licensed under the terms of the GPL, version 2.
