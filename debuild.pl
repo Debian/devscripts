@@ -776,7 +776,8 @@ if ($command_version eq 'dpkg') {
 	/^-t(.*)/ and $targetgnusystem=$1, push(@dpkg_opts, $_), next; # Ditto	
 	$_ eq '-nc' and $noclean=1, $binaryonly ||= '-b', push(@dpkg_opts, $_),
 	    next;
-	$_ eq '-b' and $binaryonly=$_, push(@dpkg_opts, $_), next;
+	$_ eq '-b' and $binaryonly=$_, $binarytarget='binary',
+	    push(@dpkg_opts, $_), next;
 	$_ eq '-B' and $binaryonly=$_, $binarytarget='binary-arch',
 	    push(@dpkg_opts, $_), next;
 	$_ eq '-S' and $sourceonly=$_, push(@dpkg_opts, $_), next;
@@ -816,7 +817,8 @@ if ($command_version eq 'dpkg') {
 	/^-t(.*)/ and $targetgnusystem=$1, $checkbuilddep=0, next;
 	$_ eq '-nc' and $noclean=1, $binaryonly ||= '-b', push(@dpkg_opts, $_),
 	    next;
-	$_ eq '-b' and $binaryonly=$_, push(@dpkg_opts, $_), next;
+	$_ eq '-b' and $binaryonly=$_, $binarytarget='binary',
+	    push(@dpkg_opts, $_), next;
 	$_ eq '-B' and $binaryonly=$_, $binarytarget='binary-arch',
 	    push(@dpkg_opts, $_), next;
 	$_ eq '-S' and $sourceonly=$_, $checkbuilddep=0, push(@dpkg_opts, $_),
