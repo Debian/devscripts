@@ -5,6 +5,8 @@ devscripts (2.9.24) UNRELEASED; urgency=low
   * debdiff: handle files moving between multiple packages correctly
     (Closes: #392977)
   * debuild: make -B -b work sensibly (Closes: #396232)
+  * debuild: don't check for .orig.tar.gz if we're doing a binary-only
+    build (Closes: #394627)
   * dget: improve manpage (Closes: #376237)
   * dget: warn and exit with error if URL cannot be downloaded (Closes:
     #376932)
@@ -15,7 +17,7 @@ devscripts (2.9.24) UNRELEASED; urgency=low
   * uscan: set HTTP user agent name (Closes: #397354)
   * wnpp-alert: check return status of wget calls (Closes: #364479)
   
- -- Julian Gilbey <jdg@debian.org>  Wed,  8 Nov 2006 18:41:35 +0000
+ -- Julian Gilbey <jdg@debian.org>  Wed,  8 Nov 2006 18:45:50 +0000
 
 devscripts (2.9.23) unstable; urgency=low
 
