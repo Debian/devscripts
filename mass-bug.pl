@@ -45,8 +45,9 @@ The template file is the body of the message that will be sent for each bug
 report, excluding the BTS pseudo-headers. In the template, #PACKAGE# is
 replaced with the name of the package.
 
-Note that text in the template will be automatically word-wrapped to 70
-columns.
+Note that text in the template will be automatically word-wrapped to
+70 columns, up to the start of a signature (indicated by S<'-- '> at
+the start of a line on its own).
 
 =head1 OPTIONS
 
@@ -235,7 +236,12 @@ sub gen_bug {
     my $package=shift;
 
     $template_text=~s/#PACKAGE#/$package/g;
-    $template_text=fill("", "", $template_text);
+    if ($template_text =~ /\A(.*?)(^-- $.*)/m) { # there's a sig involved
+	my ($presig, $sig) = ($1, $2);
+	$template_text=fill("", "", $presig) . $sig;
+    } else {
+	$template_text=fill("", "", $template_text);
+    }
     return "Package: $package\n\n$template_text";
 }
 		
