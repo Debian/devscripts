@@ -41,6 +41,7 @@ use Cwd;
 
 # Predeclare functions
 sub fatal($);
+my $warnings = 0;
 
 # And global variables
 my $progname = basename($0);
@@ -285,8 +286,10 @@ if (defined $opt_u) {
 	unless $opt_u =~ /^(low|medium|high|critical|emergency)$/;
 }
 if (defined $opt_D) {
-    fatal "Distribution can only be one of: unstable, testing, stable, experimental,\nUNRELEASED or a security upload"
-	unless $opt_D =~ /^(unstable|(stable|testing)(-security)?|oldstable-security|experimental|UNRELEASED)$/;
+    unless ($opt_D =~ /^(unstable|(stable|testing)(-security)?|oldstable-security|experimental|UNRELEASED)$/) {
+	warn "$progname warning: Recognised distributions are: unstable, testing, stable,\nexperimental, UNRELEASED and {testing,stable,oldstable}-security.\nUsing your one anyway.\n";
+	$warnings++;
+    }
 }
 
 fatal "--closes should not be used with --news; put bug numbers in the changelog not the NEWS file"
@@ -307,7 +310,8 @@ fatal "--package cannot be used when creating a NEWS file"
 
 if ($opt_create) {
     if ($opt_a || $opt_i || $opt_e || $opt_r || $opt_b || $opt_n || $opt_qa) {
-	warn "$progname: ignoring -a/-i/-e/-r/-b/-n/--qa options with --create\n";
+	warn "$progname warning: ignoring -a/-i/-e/-r/-b/-n/--qa options with --create\n";
+	$warnings++;
     }
     if ($opt_package && $opt_d) {
 	fatal "Can only use one of --package and -d";
@@ -460,7 +464,8 @@ EOF
 	if ($opt_package =~ m/^[a-z0-9][a-z0-9+\-\.]+$/) {
 	    $PACKAGE=$opt_package;
 	} else {
-	    warn "$progname: illegal package name used with --package: $opt_package\n";
+	    warn "$progname warning: illegal package name used with --package: $opt_package\n";
+	    $warnings++;
 	}
     }
     if ($opt_v) {
@@ -519,6 +524,7 @@ if (! $opt_m) {
 		$MAINTAINER = $pw;
 	    } else {
 		warn "$progname warning: passwd full name field for uid $<\nis not UTF-8 encoded; ignoring\n";
+		$warnings++;
 	    }
 	}
     }
@@ -557,7 +563,6 @@ if (! $opt_m) {
 # Do we need to generate "closes" entries?
 
 my @closes_text = ();
-my $warnings = 0;
 my $initial_release = 0;
 if (@closes and $opt_query) { # and we have to query the BTS
     if (system('command -v wget >/dev/null 2>&1') >> 8 != 0) {

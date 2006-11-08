@@ -1,10 +1,11 @@
-devscripts (2.9.24) UNRELEASED; urgency=low
+devscripts (2.9.24) unofficial; urgency=low
 
+  * debchange: allow non-official distributions (Closes: #397546)
   * debdiff: handle files moving between multiple packages correctly
     (Closes: #392977)
   * uscan: set HTTP user agent name (Closes: #397354)
 
- -- Julian Gilbey <jdg@debian.org>  Tue,  7 Nov 2006 05:36:20 +0000
+ -- Julian Gilbey <jdg@debian.org>  Wed,  8 Nov 2006 15:24:55 +0000
 
 devscripts (2.9.23) unstable; urgency=low
 
