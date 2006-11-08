@@ -270,25 +270,26 @@ dget -- Download Debian source and binary packages
 
 =head1 DESCRIPTION
 
-B<dget> downloads Debian packages. In the first form, B<dget> acts as a source
-package-aware form of wget; it fetches the given URL and recursively any files
-referenced, if the URL points to a .dsc or .changes file. When the B<-x> option
-is given, the downloaded source is unpacked by B<dpkg-source>.
+B<dget> downloads Debian packages.  In the first form, if the URL
+points to a .dsc or .changes file, then B<dget> acts as a
+source-package aware form of B<wget>: it fetches the given URL and
+recursively any files referenced.  When the B<-x> option is given, the
+downloaded source is also unpacked by B<dpkg-source>.
 
-In the second and third form, B<dget> downloads a binary package from the
-Debian mirror configured in /etc/apt/sources.list. Unlike B<apt-get install
--d>, it does not require root privileges, writes to the current directory, and
-does not download dependencies.
+In the second and third forms, B<dget> downloads a binary package from
+the Debian mirror configured in /etc/apt/sources.list.  Unlike
+B<apt-get install -d>, it does not require root privileges, writes to
+the current directory, and does not download dependencies.
 
-Before downloading referenced files in .dsc and .changes files, and before
-downloading binary packages, if any of the files already exist, md5sums are
-compared to avoid wasting bandwidth. Download backends used are B<curl> and
-B<wget>, looked for in that order.
+Before downloading referenced files in .dsc and .changes files, and
+before downloading binary packages, if any of the files already exist,
+md5sums are compared to avoid wasting bandwidth.  Download backends
+used are B<curl> and B<wget>, looked for in that order.
 
-B<dget> was written to make it easier to retrieve source packages from the web
-for sponsor uploads. For checking the package with B<debdiff>, the last binary
-version is available via B<dget> I<package>, the last source version via
-B<apt-get source> I<package>.
+B<dget> was written to make it easier to retrieve source packages from
+the web for sponsor uploads.  For checking the package with
+B<debdiff>, the last binary version is available via B<dget>
+I<package>, the last source version via B<apt-get source> I<package>.
 
 =head1 OPTIONS
 
