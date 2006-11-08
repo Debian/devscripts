@@ -8,8 +8,9 @@ devscripts (2.9.24) UNRELEASED; urgency=low
   * tagpending: make -v mean verbose; add long option names (Closes:
     #387293)
   * uscan: set HTTP user agent name (Closes: #397354)
-
- -- Julian Gilbey <jdg@debian.org>  Wed,  8 Nov 2006 16:27:00 +0000
+  * wnpp-alert: check return status of wget calls (Closes: #364479)
+  
+ -- Julian Gilbey <jdg@debian.org>  Wed,  8 Nov 2006 16:38:13 +0000
 
 devscripts (2.9.23) unstable; urgency=low
 

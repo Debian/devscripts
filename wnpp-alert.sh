@@ -8,8 +8,8 @@
 # Arthur Korn <arthur@korn.ch>
 
 # Arthur wrote:
-# Get a list of packages with bugnumbers. I tried with LDAP, but this is _much_
-# faster.
+# Get a list of packages with bugnumbers. I tried with LDAP, but this
+# is _much_ faster.
 # And I (Julian) tried it with Perl's LWP, but this is _much_ faster
 # (startup time is huge).  And even Perl with wget is slower by 50%....
 
@@ -47,23 +47,27 @@ fi
 INSTALLED=`mktemp -t wnppalert-installed.XXXXXX`
 trap "rm -f '$INSTALLED'" 0 1 2 3 7 10 13 15
 WNPP=`mktemp -t wnppalert-wnpp.XXXXXX`
-trap "rm -f '$INSTALLED' '$WNPP'" 0 1 2 3 7 10 13 15
+WNPPTMP=`mktemp -t wnppalert-wnpp.XXXXXX`
+trap "rm -f '$INSTALLED' '$WNPP' '$WNPPTMP'" 0 1 2 3 7 10 13 15
 WNPP_PACKAGES=`mktemp -t wnppalert-wnpp_packages.XXXXXX`
-trap "rm -f '$INSTALLED' '$WNPP' '$WNPP_PACKAGES'" \
+trap "rm -f '$INSTALLED' '$WNPP' '$WNPPTMP' '$WNPP_PACKAGES'" \
   0 1 2 3 7 10 13 15
 
 # Here's a really sly sed script.  Rather than first grepping for
 # matching lines and then processing them, this attempts to sed
 # every line; those which succeed execute the 'p' command, those
 # which don't skip over it to the label 'd'
-wget -q -O - http://www.debian.org/devel/wnpp/orphaned | \
-  sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/O \1 \2 -- \3/; T d; p; : d' > $WNPP
+wget -q -O $WNPPTMP http://www.debian.org/devel/wnpp/orphaned || \
+    { echo "wnpp-alert: wget http://www.debian.org/devel/wnpp/orphaned failed" >&2; exit 1; }
+sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/O \1 \2 -- \3/; T d; p; : d' $WNPPTMP > $WNPP
 
-wget -q -O - http://www.debian.org/devel/wnpp/rfa_bypackage | \
-  sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/RFA \1 \2 -- \3/; T d; p; : d' >> $WNPP
+wget -q -O $WNPPTMP http://www.debian.org/devel/wnpp/rfa_bypackage || \
+    { echo "wnpp-alert: wget http://www.debian.org/devel/wnpp/rfa_bypackage" >&2; exit 1; }
+sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/RFA \1 \2 -- \3/; T d; p; : d' $WNPPTMP >> $WNPP
 
-wget -q -O - http://www.debian.org/devel/wnpp/help_requested | \
-  sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/RFH \1 \2 -- \3/; T d; p; : d' >> $WNPP
+wget -q -O $WNPPTMP http://www.debian.org/devel/wnpp/help_requested || \
+    { echo "wnpp-alert: wget http://www.debian.org/devel/wnpp/help_requested" >&2; exit 1; }
+sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/RFH \1 \2 -- \3/; T d; p; : d' $WNPPTMP >> $WNPP
 
 cut -f3 -d' ' $WNPP | sort > $WNPP_PACKAGES
 
