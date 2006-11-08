@@ -76,6 +76,7 @@ conf.default: conf.default.in version
 
 translated_manpages:
 	cd po4a && po4a --no-backups devscripts-po4a.conf
+	-$(MAKE) $(GEN_MAN1S_fr)
 
 clean_translated_manpages:
 	# Update the POT/POs and remove the translated man pages
