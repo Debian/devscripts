@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2006-11-06 18:09+0000\n"
+"POT-Creation-Date: 2006-11-08 18:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,7 +98,7 @@ msgid "B<--version>, B<-v>"
 msgstr ""
 
 # type: Plain text
-#: ../checkbashisms.1:21 ../debdiff.1:124 ../grep-excuses.1:24 ../rc-alert.1:27 ../tagpending.1:29 ../wnpp-alert.1:19
+#: ../checkbashisms.1:21 ../debdiff.1:124 ../grep-excuses.1:24 ../rc-alert.1:27 ../tagpending.1:32 ../wnpp-alert.1:19
 msgid "Show version and copyright information."
 msgstr ""
 
@@ -140,7 +140,7 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../checkbashisms.1:32 ../cvs-debc.1:58 ../cvs-debi.1:62 ../cvs-debrelease.1:64 ../cvs-debuild.1:56 ../debc.1:114 ../debchange.1:328 ../debclean.1:104 ../debdiff.1:161 ../debi.1:116 ../debrelease.1:132 ../debrsign.1:66 ../debsign.1:118 ../debuild.1:399 ../devscripts.conf.5:54 ../dpkg-depcheck.1:118 ../dpkg-genbuilddeps.1:30 ../dscverify.1:40 ../grep-excuses.1:34 ../plotchangelog.1:124 ../rc-alert.1:27 ../tagpending.1:29 ../uscan.1:482 ../uupdate.1:160
+#: ../checkbashisms.1:32 ../cvs-debc.1:58 ../cvs-debi.1:62 ../cvs-debrelease.1:64 ../cvs-debuild.1:56 ../debc.1:114 ../debchange.1:328 ../debclean.1:104 ../debdiff.1:161 ../debi.1:116 ../debrelease.1:132 ../debrsign.1:66 ../debsign.1:118 ../debuild.1:399 ../devscripts.conf.5:54 ../dpkg-depcheck.1:118 ../dpkg-genbuilddeps.1:30 ../dscverify.1:40 ../grep-excuses.1:34 ../plotchangelog.1:124 ../rc-alert.1:27 ../tagpending.1:32 ../uscan.1:482 ../uupdate.1:160
 #, no-wrap
 msgid "SEE ALSO"
 msgstr ""
@@ -151,7 +151,7 @@ msgid "B<lintian>(1)."
 msgstr ""
 
 # type: SH
-#: ../checkbashisms.1:34 ../cvs-debc.1:64 ../cvs-debi.1:68 ../cvs-debrelease.1:69 ../cvs-debuild.1:63 ../debc.1:119 ../debchange.1:335 ../debclean.1:108 ../debdiff.1:167 ../debi.1:120 ../debpkg.1:23 ../debrelease.1:137 ../debrsign.1:71 ../debsign.1:128 ../debuild.1:413 ../devscripts.conf.5:58 ../dpkg-genbuilddeps.1:36 ../dscverify.1:44 ../grep-excuses.1:36 ../mergechanges.1:17 ../plotchangelog.1:126 ../rc-alert.1:29 ../tagpending.1:33 ../uscan.1:488 ../uupdate.1:167 ../wnpp-alert.1:19
+#: ../checkbashisms.1:34 ../cvs-debc.1:64 ../cvs-debi.1:68 ../cvs-debrelease.1:69 ../cvs-debuild.1:63 ../debc.1:119 ../debchange.1:335 ../debclean.1:108 ../debdiff.1:167 ../debi.1:120 ../debpkg.1:23 ../debrelease.1:137 ../debrsign.1:71 ../debsign.1:128 ../debuild.1:413 ../devscripts.conf.5:58 ../dpkg-genbuilddeps.1:36 ../dscverify.1:44 ../grep-excuses.1:36 ../mergechanges.1:17 ../plotchangelog.1:126 ../rc-alert.1:29 ../tagpending.1:37 ../uscan.1:488 ../uupdate.1:167 ../wnpp-alert.1:19
 #, no-wrap
 msgid "AUTHOR"
 msgstr ""
@@ -3565,7 +3565,7 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../dpkg-depcheck.1:96
+#: ../dpkg-depcheck.1:96 ../tagpending.1:26
 #, no-wrap
 msgid "B<-h>, B<--help>"
 msgstr ""
@@ -3821,7 +3821,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../grep-excuses.1:21 ../tagpending.1:26
+#: ../grep-excuses.1:21 ../tagpending.1:29
 msgid "Show a brief usage message."
 msgstr ""
 
@@ -4252,7 +4252,7 @@ msgstr ""
 # type: TP
 #: ../tagpending.1:13
 #, no-wrap
-msgid "B<-n>"
+msgid "B<-n>, B<--noact>"
 msgstr ""
 
 # type: Plain text
@@ -4263,7 +4263,7 @@ msgstr ""
 # type: TP
 #: ../tagpending.1:16
 #, no-wrap
-msgid "B<-s>"
+msgid "B<-s>, B<--silent>"
 msgstr ""
 
 # type: Plain text
@@ -4274,36 +4274,43 @@ msgstr ""
 # type: TP
 #: ../tagpending.1:19
 #, no-wrap
-msgid "B<-f>"
+msgid "B<-v>, B<--verbose>"
 msgstr ""
 
 # type: Plain text
-#: ../tagpending.1:23
+#: ../tagpending.1:22
+msgid "List every bug checked."
+msgstr ""
+
+# type: TP
+#: ../tagpending.1:22
+#, no-wrap
+msgid "B<-f>, B<--force>"
+msgstr ""
+
+# type: Plain text
+#: ../tagpending.1:26
 msgid ""
 "Do not query the BTS for already tagged bugs, that is, force all bugs to be "
 "tagged as pending even if they already are."
 msgstr ""
 
 # type: TP
-#: ../tagpending.1:23
+#: ../tagpending.1:29
 #, no-wrap
-msgid "B<--help, -h>"
-msgstr ""
-
-# type: TP
-#: ../tagpending.1:26
-#, no-wrap
-msgid "B<--version, -v>"
+msgid "B<-V>, B<--version>"
 msgstr ""
 
 # type: Plain text
-#: ../tagpending.1:33
-msgid "B<ldapsearch(1),> B<mailx(1),> B<dpkg-parsechangelog(1)>"
+#: ../tagpending.1:37
+msgid "B<ldapsearch>(1), B<mailx>(1)  and B<dpkg-parsechangelog>(1)"
 msgstr ""
 
 # type: Plain text
-#: ../tagpending.1:34
-msgid "Joshua Kwan E<lt>joshk@triplehelix.orgE<gt>"
+#: ../tagpending.1:39
+msgid ""
+"Joshua Kwan E<lt>joshk@triplehelix.orgE<gt>.  This manpage and the "
+"associated programme are licensed under the terms of the GPL, version 2."
 msgstr ""
 
 # type: TH
