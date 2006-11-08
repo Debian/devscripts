@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2006-11-08 18:47+0000\n"
+"POT-Creation-Date: 2006-11-08 18:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,38 +15,1448 @@ msgstr ""
 "Content-Transfer-Encoding: ENCODING"
 
 # type: TH
-#: ../checkbashisms.1:1
+#: ../annotate-output.1:1
 #, no-wrap
-msgid "CHECKBASHISMS"
+msgid "ANNOTATE-OUTPUT"
 msgstr ""
 
 # type: TH
-#: ../checkbashisms.1:1 ../cvs-debc.1:1 ../cvs-debi.1:1 ../cvs-debrelease.1:1 ../cvs-debuild.1:1 ../debc.1:1 ../debchange.1:1 ../debclean.1:1 ../debdiff.1:1 ../debi.1:1 ../debpkg.1:1 ../debrelease.1:1 ../debrsign.1:1 ../debsign.1:1 ../debuild.1:1 ../devscripts.1:1 ../devscripts.conf.5:1 ../dpkg-genbuilddeps.1:1 ../dscverify.1:1 ../grep-excuses.1:1 ../mergechanges.1:1 ../plotchangelog.1:1 ../rc-alert.1:1 ../tagpending.1:1 ../uscan.1:1 ../uupdate.1:1 ../wnpp-alert.1:1
+#: ../annotate-output.1:1 ../archpath.1:1 ../checkbashisms.1:1 ../cvs-debc.1:1 ../cvs-debi.1:1 ../cvs-debrelease.1:1 ../cvs-debuild.1:1 ../debc.1:1 ../debchange.1:1 ../debclean.1:1 ../debdiff.1:1 ../debi.1:1 ../debpkg.1:1 ../debrelease.1:1 ../debrsign.1:1 ../debsign.1:1 ../debuild.1:1 ../devscripts.1:1 ../dpkg-genbuilddeps.1:1 ../dscverify.1:1 ../grep-excuses.1:1 ../mergechanges.1:1 ../nmudiff.1:1 ../plotchangelog.1:1 ../pts-subscribe.1:1 ../rc-alert.1:1 ../tagpending.1:1 ../uscan.1:1 ../uupdate.1:1 ../whodepends.1:1 ../who-uploads.1:1 ../wnpp-alert.1:1 ../devscripts.conf.5:1
 #, no-wrap
 msgid "Debian Utilities"
 msgstr ""
 
 # type: TH
-#: ../checkbashisms.1:1 ../cvs-debc.1:1 ../cvs-debi.1:1 ../cvs-debrelease.1:1 ../cvs-debuild.1:1 ../debc.1:1 ../debchange.1:1 ../debclean.1:1 ../debdiff.1:1 ../debi.1:1 ../debpkg.1:1 ../debrelease.1:1 ../debrsign.1:1 ../debsign.1:1 ../debuild.1:1 ../devscripts.1:1 ../devscripts.conf.5:1 ../dpkg-depcheck.1:1 ../dpkg-genbuilddeps.1:1 ../dscverify.1:1 ../grep-excuses.1:1 ../mergechanges.1:1 ../plotchangelog.1:1 ../rc-alert.1:1 ../tagpending.1:1 ../uscan.1:1 ../uupdate.1:1 ../wnpp-alert.1:1
+#: ../annotate-output.1:1 ../archpath.1:1 ../checkbashisms.1:1 ../cvs-debc.1:1 ../cvs-debi.1:1 ../cvs-debrelease.1:1 ../cvs-debuild.1:1 ../debc.1:1 ../debchange.1:1 ../debclean.1:1 ../debdiff.1:1 ../debi.1:1 ../debpkg.1:1 ../debrelease.1:1 ../debrsign.1:1 ../debsign.1:1 ../debuild.1:1 ../devscripts.1:1 ../dpkg-depcheck.1:1 ../dpkg-genbuilddeps.1:1 ../dscverify.1:1 ../grep-excuses.1:1 ../mergechanges.1:1 ../nmudiff.1:1 ../plotchangelog.1:1 ../pts-subscribe.1:1 ../rc-alert.1:1 ../tagpending.1:1 ../uscan.1:1 ../uupdate.1:1 ../whodepends.1:1 ../who-uploads.1:1 ../wnpp-alert.1:1 ../devscripts.conf.5:1
 #, no-wrap
 msgid "DEBIAN"
 msgstr ""
 
 # type: SH
-#: ../checkbashisms.1:2 ../cvs-debc.1:2 ../cvs-debi.1:2 ../cvs-debrelease.1:2 ../cvs-debuild.1:2 ../debc.1:2 ../debchange.1:2 ../debclean.1:2 ../debdiff.1:2 ../debi.1:2 ../debpkg.1:2 ../debrelease.1:2 ../debrsign.1:2 ../debsign.1:2 ../debuild.1:2 ../devscripts.1:2 ../devscripts.conf.5:2 ../dpkg-depcheck.1:2 ../dpkg-genbuilddeps.1:2 ../dscverify.1:2 ../grep-excuses.1:2 ../mergechanges.1:2 ../plotchangelog.1:2 ../rc-alert.1:2 ../tagpending.1:2 ../uscan.1:2 ../uupdate.1:2 ../wnpp-alert.1:2
+#: ../annotate-output.1:2 ../archpath.1:2 ../bts.pl:25 ../checkbashisms.1:2 ../cvs-debc.1:2 ../cvs-debi.1:2 ../cvs-debrelease.1:2 ../cvs-debuild.1:2 ../dd-list.1:19 ../debc.1:2 ../debchange.1:2 ../debclean.1:2 ../debcommit.pl:3 ../debdiff.1:2 ../debi.1:2 ../debpkg.1:2 ../debrelease.1:2 ../debrsign.1:2 ../debsign.1:2 ../debuild.1:2 ../devscripts.1:2 ../dget.pl:295 ../dpkg-depcheck.1:2 ../dpkg-genbuilddeps.1:2 ../dscverify.1:2 ../grep-excuses.1:2 ../mass-bug.pl:22 ../mergechanges.1:2 ../nmudiff.1:2 ../plotchangelog.1:2 ../pts-subscribe.1:2 ../rc-alert.1:2 ../rmadison.pl:113 ../svnpath.pl:3 ../tagpending.1:2 ../uscan.1:2 ../uupdate.1:2 ../whodepends.1:2 ../who-uploads.1:2 ../wnpp-alert.1:2 ../devscripts.conf.5:2
 #, no-wrap
 msgid "NAME"
 msgstr ""
 
 # type: Plain text
-#: ../checkbashisms.1:4
-msgid "checkbashisms - check for bashisms in /bin/sh scripts"
+#: ../annotate-output.1:4
+msgid "annotate-output - annotate program output with time and stream"
 msgstr ""
 
 # type: SH
-#: ../checkbashisms.1:4 ../cvs-debc.1:4 ../cvs-debi.1:4 ../cvs-debrelease.1:4 ../cvs-debuild.1:4 ../debc.1:4 ../debchange.1:4 ../debclean.1:4 ../debdiff.1:4 ../debi.1:4 ../debpkg.1:4 ../debrelease.1:4 ../debrsign.1:4 ../debsign.1:4 ../debuild.1:4 ../dpkg-depcheck.1:4 ../dpkg-genbuilddeps.1:4 ../dscverify.1:4 ../grep-excuses.1:4 ../mergechanges.1:4 ../plotchangelog.1:4 ../rc-alert.1:4 ../tagpending.1:4 ../uscan.1:4 ../uupdate.1:4 ../wnpp-alert.1:4
+#: ../annotate-output.1:4 ../archpath.1:4 ../bts.pl:129 ../checkbashisms.1:4 ../cvs-debc.1:4 ../cvs-debi.1:4 ../cvs-debrelease.1:4 ../cvs-debuild.1:4 ../dd-list.1:22 ../debc.1:4 ../debchange.1:4 ../debclean.1:4 ../debcommit.pl:7 ../debdiff.1:4 ../debi.1:4 ../debpkg.1:4 ../debrelease.1:4 ../debrsign.1:4 ../debsign.1:4 ../debuild.1:4 ../dget.pl:299 ../dpkg-depcheck.1:4 ../dpkg-genbuilddeps.1:4 ../dscverify.1:4 ../grep-excuses.1:4 ../mass-bug.pl:26 ../mergechanges.1:4 ../nmudiff.1:4 ../plotchangelog.1:4 ../pts-subscribe.1:4 ../rc-alert.1:4 ../rmadison.pl:117 ../svnpath.pl:7 ../tagpending.1:4 ../uscan.1:4 ../uupdate.1:4 ../whodepends.1:4 ../who-uploads.1:4 ../wnpp-alert.1:4
 #, no-wrap
 msgid "SYNOPSIS"
+msgstr ""
+
+# type: Plain text
+#: ../annotate-output.1:6
+msgid "B<annotate-output> I<program> [I<args> ...]"
+msgstr ""
+
+# type: SH
+#: ../annotate-output.1:6 ../archpath.1:12 ../bts.pl:133 ../checkbashisms.1:8 ../cvs-debc.1:6 ../cvs-debi.1:6 ../cvs-debrelease.1:7 ../cvs-debuild.1:8 ../dd-list.1:26 ../debc.1:6 ../debchange.1:8 ../debclean.1:6 ../debcommit.pl:11 ../debdiff.1:13 ../debi.1:6 ../debpkg.1:6 ../debrelease.1:6 ../deb-reversion.dbk:82 ../debrsign.1:7 ../debsign.1:6 ../debuild.1:11 ../devscripts.1:4 ../dget.pl:309 ../dpkg-depcheck.1:6 ../dpkg-genbuilddeps.1:6 ../dscverify.1:6 ../grep-excuses.1:6 ../mass-bug.pl:30 ../mergechanges.1:6 ../nmudiff.1:6 ../plotchangelog.1:7 ../pts-subscribe.1:6 ../rc-alert.1:8 ../rmadison.pl:125 ../svnpath.pl:17 ../tagpending.1:6 ../uscan.1:6 ../uupdate.1:8 ../whodepends.1:6 ../who-uploads.1:6 ../wnpp-alert.1:8 ../devscripts.conf.5:4
+#, no-wrap
+msgid "DESCRIPTION"
+msgstr ""
+
+# type: Plain text
+#: ../annotate-output.1:10
+msgid ""
+"B<annotate-output> will execute the specified program, while prepending "
+"every line with the current time and O for stdout and E for stderr."
+msgstr ""
+
+# type: SH
+#: ../annotate-output.1:11 ../uscan.1:310
+#, no-wrap
+msgid "EXAMPLE"
+msgstr ""
+
+# type: Plain text
+#: ../annotate-output.1:21
+#, no-wrap
+msgid ""
+"$ annotate-output make\n"
+"21:41:21 I: Started make\n"
+"21:41:21 O: gcc -Wall program.c\n"
+"21:43:18 E: program.c: Couldn't compile, and took me ages to find out\n"
+"21:43:19 E: collect2: ld returned 1 exit status\n"
+"21:43:19 E: make: *** [all] Error 1\n"
+"21:43:19 I: Finished with exitcode 2\n"
+msgstr ""
+
+# type: SH
+#: ../annotate-output.1:23 ../dget.pl:366 ../whodepends.1:17
+#, no-wrap
+msgid "BUGS"
+msgstr ""
+
+# type: Plain text
+#: ../annotate-output.1:27
+msgid ""
+"Since stdout and stderr are processed in parallel, it can happen that some "
+"lines received on stdout will show up before later-printed stderr lines (and "
+"vice-versa)."
+msgstr ""
+
+# type: Plain text
+#: ../annotate-output.1:32
+msgid ""
+"This is unfortunately very hard to fix with the current annotation "
+"strategy.  A fix would involve switching to PTRACE'ing the process.  Giving "
+"nice a (much) higher priority over the executed program could however cause "
+"this behaviour to show up less frequently."
+msgstr ""
+
+# type: Plain text
+#: ../annotate-output.1:37
+msgid ""
+"The program does not work as well when the output is not linewise.  In "
+"particular, when an interactive program asks for input, the question might "
+"not be shown until after you have answered it.  This will give the "
+"impression that the annotated program has hung, while it has not."
+msgstr ""
+
+# type: Plain text
+#: ../annotate-output.1:41
+msgid ""
+"B<annotate-output> does not currently accept any command-line options, so "
+"--help, --version, and that kind of stuff do not currently work (unless you "
+"install /usr/bin/--help ;) )."
+msgstr ""
+
+# type: SH
+#: ../annotate-output.1:42
+#, no-wrap
+msgid "TODO"
+msgstr ""
+
+# type: Plain text
+#: ../annotate-output.1:44
+msgid "Accept --help, --version command-line options."
+msgstr ""
+
+# type: Plain text
+#: ../annotate-output.1:46
+msgid "Get rich with this very sophisticated piece of bash."
+msgstr ""
+
+# type: SH
+#: ../annotate-output.1:47
+#, no-wrap
+msgid "WEBSITE/SUPPORT"
+msgstr ""
+
+# type: Plain text
+#: ../annotate-output.1:50
+msgid ""
+"The most recent version of this utility is on "
+"http://jeroen.A-Eskwadraat.nl/sw/annotate"
+msgstr ""
+
+# type: Plain text
+#: ../annotate-output.1:54
+msgid ""
+"This program is community-supported (meaning: you'll need to fix it "
+"yourself).  Patches are however appreciated, as is any feedback (positive or "
+"negative)."
+msgstr ""
+
+# type: SH
+#: ../annotate-output.1:55 ../archpath.1:54 ../checkbashisms.1:34 ../cvs-debc.1:64 ../cvs-debi.1:68 ../cvs-debrelease.1:69 ../cvs-debuild.1:63 ../dd-list.1:82 ../debc.1:119 ../debchange.1:335 ../debclean.1:108 ../debcommit.pl:291 ../debdiff.1:167 ../debi.1:120 ../debpkg.1:23 ../debrelease.1:137 ../deb-reversion.dbk:254 ../debrsign.1:71 ../debsign.1:128 ../debuild.1:413 ../dget.pl:370 ../dpkg-genbuilddeps.1:36 ../dscverify.1:44 ../grep-excuses.1:36 ../mass-bug.pl:421 ../mergechanges.1:17 ../nmudiff.1:63 ../plotchangelog.1:126 ../pts-subscribe.1:51 ../rc-alert.1:29 ../rmadison.pl:188 ../svnpath.pl:97 ../tagpending.1:37 ../uscan.1:488 ../uupdate.1:167 ../whodepends.1:19 ../who-uploads.1:58 ../wnpp-alert.1:19 ../devscripts.conf.5:58
+#, no-wrap
+msgid "AUTHOR"
+msgstr ""
+
+# type: Plain text
+#: ../annotate-output.1:59
+msgid ""
+"B<annotate-output> was written by Jeroen van Wolffelaar "
+"E<lt>jeroen@wolffelaar.nlE<gt> This manpage comes under the same copyright "
+"as annotate-output itself, read /usr/bin/annotate-output (or wherever you "
+"install it) for the details."
+msgstr ""
+
+# type: TH
+#: ../archpath.1:1
+#, no-wrap
+msgid "ARCHPATH"
+msgstr ""
+
+# type: Plain text
+#: ../archpath.1:4
+msgid "archpath - output arch (tla/Bazaar) archive names, with support for branches"
+msgstr ""
+
+# type: Plain text
+#: ../archpath.1:6
+msgid "B<archpath>"
+msgstr ""
+
+# type: Plain text
+#: ../archpath.1:9
+msgid "B<archpath> I<branch>"
+msgstr ""
+
+# type: Plain text
+#: ../archpath.1:12
+msgid "B<archpath> I<branch>--I<version>"
+msgstr ""
+
+# type: Plain text
+#: ../archpath.1:15
+msgid "B<archpath> is intended to be run in an arch (tla or Bazaar) working copy."
+msgstr ""
+
+# type: Plain text
+#: ../archpath.1:20
+msgid ""
+"In its simplest usage, B<archpath> with no parameters outputs the package "
+"name (archive/category--branch--version) associated with the working copy."
+msgstr ""
+
+# type: Plain text
+#: ../archpath.1:28
+msgid ""
+"If a parameter is given, it may either be a branch--version, in which case "
+"B<archpath> will output a corresponding package name in the current archive "
+"and category, or a plain branch name (without \\(oq--\"), in which case "
+"B<archpath> will output a corresponding package name in the current archive "
+"and category and with the same version as the current working copy."
+msgstr ""
+
+# type: Plain text
+#: ../archpath.1:32
+msgid ""
+"This is useful for branching.  For example, if you're using Bazaar and you "
+"want to create a branch for a new feature, you might use a command like "
+"this:"
+msgstr ""
+
+# type: Plain text
+#: ../archpath.1:37
+#, no-wrap
+msgid "CW<baz branch $(archpath) $(archpath new-feature)>\n"
+msgstr ""
+
+# type: Plain text
+#: ../archpath.1:43
+msgid ""
+"Or if you want to tag your current code onto a \\(oqreleases\\(cq branch as "
+"version 1.0, you might use a command like this:"
+msgstr ""
+
+# type: Plain text
+#: ../archpath.1:48
+#, no-wrap
+msgid "CW<baz branch $(archpath) $(archpath releases--1.0)>\n"
+msgstr ""
+
+# type: Plain text
+#: ../archpath.1:54
+msgid ""
+"That's much easier than using \\(oqbaz tree-version\\(cq to look up the "
+"package name and manually modifying the result."
+msgstr ""
+
+# type: Plain text
+#: ../archpath.1:57
+msgid "B<archpath> was written by"
+msgstr ""
+
+# type: Plain text
+#: ../archpath.1:59
+msgid "Colin Watson E<lt>cjwatson@debian.orgE<gt>."
+msgstr ""
+
+# type: Plain text
+#: ../archpath.1:63
+msgid ""
+"Like B<archpath>, this manual page is released under the GNU General Public "
+"License, version 2 or later."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:27
+msgid "bts - developers' command line interface to the BTS"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:131
+msgid ""
+"B<bts> [options] command [args] [#comment] [.|, command [args] [#comment]] "
+"..."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:135
+msgid ""
+"This is a command line interface to the bug tracking system, intended mainly "
+"for use by developers. It lets the BTS be manipulated using simple commands "
+"that can be run at the prompt or in a script, does various sanity checks on "
+"the input, and constructs and sends a mail to the BTS control address for "
+"you."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:141
+msgid ""
+"In general, the command line interface is the same as what you would write "
+"in a mail to control@bugs.debian.org, just prefixed with \"bts\". For "
+"example:"
+msgstr ""
+
+# type: verbatim
+#: ../bts.pl:145
+#, no-wrap
+msgid ""
+" % bts severity 69042 normal\n"
+" % bts merge 69042 43233\n"
+" % bts retitle 69042 blah blah\n"
+"\n"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:149
+msgid ""
+"A few additional commands have been added for your convenience, and this "
+"program is less strict about what constitutes a valid bug number. For "
+"example, \"severity Bug#85942 normal\" is understood, as is \"severity "
+"#85942 normal\".  (Of course, your shell may regard \"#\" as a comment "
+"character though, so you may need to quote it!)"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:155
+msgid ""
+"Also, for your convenience, this program allows you to abbreviate commands "
+"to the shortest unique substring (similar to how cvs lets you abbreviate "
+"commands). So it understands things like \"bts cl 85942\"."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:159
+msgid ""
+"It is also possible to include a comment in the mail sent to the BTS. If "
+"your shell does not strip out the comment in a command like \"bts severity "
+"30321 normal #inflated severity\", then this program is smart enough to "
+"figure out where the comment is, and include it in the email.  Note that "
+"most shells do strip out such comments before they get to the program, "
+"unless the comment is quoted.  (Something like \"bts severity #85942 "
+"normal\" will not be treated as a comment!)"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:167
+msgid ""
+"You can specify multiple commands by separating them with a single dot, "
+"rather like B<update-rc.d>; a single comma may also be used; all the "
+"commands will then be sent in a single mail. For example (quoting where "
+"necessary so that B<bts> sees the comment):"
+msgstr ""
+
+# type: verbatim
+#: ../bts.pl:172
+#, no-wrap
+msgid ""
+" % bts severity 95672 normal , merge 95672 95673 \\#they\\'re the same!\n"
+"\n"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:174
+msgid ""
+"The abbreviation \"it\" may be used to refer to the last mentioned bug "
+"number, so you could write:"
+msgstr ""
+
+# type: verbatim
+#: ../bts.pl:177
+#, no-wrap
+msgid ""
+" % bts severity 95672 wishlist, retitle it \"bts: please add a --foo "
+"option\"\n"
+"\n"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:179
+msgid ""
+"Please use this program responsibly, and do take our users into "
+"consideration."
+msgstr ""
+
+# type: SH
+#: ../bts.pl:182 ../checkbashisms.1:14 ../cvs-debc.1:24 ../cvs-debi.1:28 ../cvs-debrelease.1:21 ../cvs-debuild.1:33 ../dd-list.1:58 ../debc.1:63 ../debchange.1:145 ../debclean.1:60 ../debcommit.pl:18 ../debdiff.1:45 ../debi.1:65 ../debrelease.1:56 ../deb-reversion.dbk:128 ../debrsign.1:30 ../debsign.1:39 ../debuild.1:210 ../dget.pl:335 ../dpkg-depcheck.1:15 ../dscverify.1:15 ../grep-excuses.1:13 ../mass-bug.pl:52 ../nmudiff.1:16 ../plotchangelog.1:43 ../pts-subscribe.1:13 ../rc-alert.1:17 ../rmadison.pl:134 ../tagpending.1:12 ../uscan.1:325 ../uupdate.1:50 ../whodepends.1:10 ../who-uploads.1:15 ../wnpp-alert.1:12
+#, no-wrap
+msgid "OPTIONS"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:184
+msgid ""
+"B<bts> examines the B<devscripts> configuration files as described below.  "
+"Command line options override the configuration file settings, though."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:190
+msgid "-o, --offline"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:192
+msgid ""
+"Make bts use cached bugs for the 'show' and 'bugs' commands, if a cache is "
+"available for the requested data. See the cache command, below for "
+"information on setting up a cache."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:196
+msgid "--online, --no-offline"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:198
+msgid ""
+"Opposite of --offline; overrides any configuration file directive to work "
+"offline."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:201
+msgid "--cache, --no-cache"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:203
+msgid ""
+"Should we attempt to cache new versions of BTS pages when performing "
+"show/bugs commands? Default is to cache."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:206
+msgid "--cache-mode={min|mbox|full}"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:208
+msgid ""
+"When running a B<bts cache> command, should we only mirror the basic bug "
+"(min), or should we also mirror the mbox version (mbox), or should we mirror "
+"the whole thing, including the mbox and the boring attachments to the BTS "
+"bug pages and the acknowledgement emails (full)? Default is min."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:214
+msgid "--cache-delay=seconds"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:216
+msgid ""
+"Time in seconds to delay between each download, to avoid hammering the BTS "
+"web server. Default is 5 seconds."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:219
+msgid "--mbox"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:221
+msgid ""
+"Open a mail reader to read the mbox corresponding to a given bug number for "
+"show and bugs commands."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:224
+msgid "--mailreader=READER"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:226
+msgid ""
+"Specify the command to read the mbox.  Must contain a \"%s\" string "
+"(unquoted!), which will be replaced by the name of the mbox file.  The "
+"command will be split on white space and will not be passed to a shell.  "
+"Default is 'mutt -f %s'.  (Also, %% will be substituted by a single % if "
+"this is needed.)"
+msgstr ""
+
+# type: =item
+#: ../bts.pl:232 ../mass-bug.pl:74
+msgid "--sendmail=SENDMAILCMD"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:234
+msgid ""
+"Specify the sendmail command.  The command will be split on white space and "
+"will not be passed to a shell.  Default is '/usr/sbin/sendmail'.  The -t "
+"option will be automatically added if the command is /usr/sbin/sendmail or "
+"/usr/sbin/exim*.  For other mailers, if they require a -t option, this must "
+"be included in the SENDMAILCMD, for example: --sendmail=\"/usr/sbin/mymailer "
+"-t\""
+msgstr ""
+
+# type: =item
+#: ../bts.pl:241
+msgid "-f, --force-refresh"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:243
+msgid ""
+"Download a bug report again, even if it does not appear to have changed "
+"since the last cache command.  Useful if a --cache-mode=full is requested "
+"for the first time (otherwise unchanged bug reports will not be downloaded "
+"again, even if the boring bits have not been downloaded)."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:249
+msgid "--no-force-refresh"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:251
+msgid "Suppress any configuration file --force-refresh option."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:253
+msgid "-q, --quiet"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:255
+msgid ""
+"When running bts cache, only display information about newly cached pages, "
+"not messages saying already cached.  If this option is specified twice, only "
+"output error messages (to stderr)."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:259 ../mass-bug.pl:79
+msgid "--no-conf, --noconf"
+msgstr ""
+
+# type: Plain text
+#: ../bts.pl:261 ../cvs-debrelease.1:61 ../debc.1:88 ../debchange.1:272 ../debclean.1:81 ../debdiff.1:118 ../debi.1:90 ../debrelease.1:99 ../debsign.1:93 ../debuild.1:216 ../dpkg-depcheck.1:96 ../dscverify.1:23 ../grep-excuses.1:18 ../mass-bug.pl:81 ../nmudiff.1:42 ../uscan.1:406 ../uupdate.1:80 ../who-uploads.1:36
+msgid ""
+"Do not read any configuration files.  This can only be used as the first "
+"option given on the command-line."
+msgstr ""
+
+# type: =head1
+#: ../bts.pl:476
+msgid "COMMANDS"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:478
+msgid ""
+"For full details about the commands, see the BTS documentation.  "
+"L<http://www.debian.org/Bugs/server-control>"
+msgstr ""
+
+# type: =item
+#: ../bts.pl:483
+msgid "show [options] [<bug number> | <package> | <maintainer> | : ] [opt=val ...]"
+msgstr ""
+
+# type: =item
+#: ../bts.pl:485
+msgid "show [options] [src:<package> | from:<submitter>] [opt=val ...]"
+msgstr ""
+
+# type: =item
+#: ../bts.pl:487
+msgid "show [options] [tag:<tag> | usertag:<tag> ] [opt=val ...]"
+msgstr ""
+
+# type: =item
+#: ../bts.pl:489
+msgid "show [release-critical | release-critical/... | RC]"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:491
+msgid "This is a synonym for bts bugs."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:499
+msgid "bugs [options] [<bug number> | <package> | <maintainer> | : ] [opt=val ..]"
+msgstr ""
+
+# type: =item
+#: ../bts.pl:501
+msgid "bugs [options] [src:<package> | from:<submitter>] [opt=val ..]"
+msgstr ""
+
+# type: =item
+#: ../bts.pl:503
+msgid "bugs [options] [tag:<tag> | usertag:<tag> ] [opt=val ..]"
+msgstr ""
+
+# type: =item
+#: ../bts.pl:505
+msgid "bugs [release-critical | release-critical/... | RC]"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:507
+msgid ""
+"Display the page listing the requested bugs in a web browser using "
+"L<sensible-browser(1)>."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:510
+msgid ""
+"Options may be specified after the \"bugs\" command in addition to or "
+"instead of options at the start of the command line: recognised options at "
+"his point are: -o/--offline/--online, --mbox, --mailreader and "
+"--[no-]cache.  These are described earlier in this manpage.  If either the "
+"-o or --offline option is used, or there is already an up-to-date copy in "
+"the local cache, the cached version will be used."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:517
+msgid "The meanings of the possible arguments are as follows:"
+msgstr ""
+
+# type: =item
+#: ../bts.pl:521
+msgid "(none)"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:523
+msgid ""
+"If nothing is specified, bts bugs will display your bugs, assuming that "
+"either DEBEMAIL or EMAIL (examined in that order) is set to the appropriate "
+"email address."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:527
+msgid "<bug number>"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:529
+msgid "Display bug number <bug number>."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:531
+msgid "<package>"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:533
+msgid "Display the bugs for the package <package>."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:535
+msgid "src:<package>"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:537
+msgid "Display the bugs for the source package <package>."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:539
+msgid "<maintainer>"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:541
+msgid "Display the bugs for the maintainer email address <maintainer>."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:543
+msgid "from:<submitter>"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:545
+msgid "Display the bugs for the submitter email address <submitter>."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:547
+msgid "tag:<tag>"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:549
+msgid "Display the bugs which are tagged with <tag>."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:551
+msgid "usertag:<tag>"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:553
+msgid ""
+"Display the bugs which are tagged with usertag <tag>.  See the BTS "
+"documentation for more information on usertags.  This will require the use "
+"of a users=<email> option."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:557
+msgid ":"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:559
+msgid ""
+"Details of the bug tracking system itself, along with a bug-request page "
+"with more options than this script, can be found on "
+"http://bugs.debian.org/.  This page itself will be opened if the command "
+"'bts bugs :' is used."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:564
+msgid "release-critical, RC"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:566
+msgid ""
+"Display the front page of the release-critical pages on the BTS.  This is a "
+"synonym for http://bugs.debian.org/release-critical/index.html.  It is also "
+"possible to say release-critical/debian/main.html and the like.  RC is a "
+"synonym for release-critical/other/all.html."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:573
+msgid ""
+"After the argument specifying what to display, you can optionally specify "
+"options to use to format the page or change what it displayed.  These are "
+"passed to the BTS in the URL downloaded. For example, pass dist=stable to "
+"see bugs affecting the stable version of a package, version=1.0 to see bugs "
+"affecting that version of a package, or reverse=yes to display newest "
+"messages first in a bug log."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:580
+msgid ""
+"If caching has been enabled (that is, --no-cache has not been used, and "
+"BTS_CACHE has not been set to \"no\"), then any page requested by \"bts "
+"show\" will automatically be cached, and be available offline thereafter.  "
+"Pages which are automatically cached in this way will be deleted on "
+"subsequent \"bts show|bugs|cache\" invocations if they have not been "
+"accessed in 30 days."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:587
+msgid ""
+"Any other B<bts> commands following this on the command line will be "
+"executed after the browser has been exited."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:590
+msgid ""
+"The desired browser can be specified and configured by setting the BROWSER "
+"environment variable.  The conventions follow those defined by Eric Raymond "
+"at http://www.catb.org/~esr/BROWSER/; we here reproduce the relevant part."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:595
+msgid ""
+"The value of BROWSER may consist of a colon-separated series of browser "
+"command parts. These should be tried in order until one succeeds. Each "
+"command part may optionally contain the string \"%s\"; if it does, the URL "
+"to be viewed is substituted there. If a command part does not contain %s, "
+"the browser is to be launched as if the URL had been supplied as its first "
+"argument. The string %% must be substituted as a single %."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:603
+msgid ""
+"Rationale: We need to be able to specify multiple browser commands so "
+"programs obeying this convention can do the right thing in either X or "
+"console environments, trying X first. Specifying multiple commands may also "
+"be useful for people who share files like .profile across multiple "
+"systems. We need %s because some popular browsers have remote-invocation "
+"syntax that requires it. Unless %% reduces to %, it won't be possible to "
+"have a literal %s in the string."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:611
+msgid "For example, on most Linux systems a good thing to do would be:"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:613
+msgid "BROWSER='mozilla -raise -remote \"openURL(%s,new-window)\":links'"
+msgstr ""
+
+# type: =item
+#: ../bts.pl:688
+msgid "clone <bug> [new IDs]"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:690
+msgid ""
+"The clone control command allows you to duplicate a bug report. It is useful "
+"in the case where a single report actually indicates that multiple distinct "
+"bugs have occurred. \"New IDs\" are negative numbers, separated by spaces, "
+"which may be used in subsequent control commands to refer to the newly "
+"duplicated bugs.  A new report is generated for each new ID."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:731
+msgid "reopen <bug> [<submitter>]"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:733
+msgid "Reopen a bug, with optional submitter."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:744
+msgid "retitle <bug> <title>"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:746
+msgid "Change the title of the bug."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:759
+msgid "submitter <bug> [<bug> ...] <submitter-email>"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:761
+msgid ""
+"Change the submitter address of a bug or a number of bugs, with `!' meaning "
+"`use the address on the current email as the new submitter address'."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:778
+msgid "reassign <bug> [<bug> ...] <package> [<version>]"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:780
+msgid ""
+"Reassign a bug or a number of bugs to a different package.  The version "
+"field is optional; see the explanation at "
+"L<http://www.debian.org/Bugs/server-control>."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:806
+msgid "found <bug> [<version>]"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:808
+msgid "Indicate that a bug was found to exist in a particular package version."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:823
+msgid "notfound <bug> <version>"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:825
+msgid ""
+"Remove the record that bug was encountered in the given version of the "
+"package to which it is assigned."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:837
+msgid "block <bug> by|with <bug> [<bug> ...]"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:839
+msgid "Note that a bug is blocked from being fixed by a set of other bugs."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:857
+msgid "unblock <bug> by|with <bug> [<bug> ...]"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:859
+msgid ""
+"Note that a bug is no longer blocked from being fixed by a set of other "
+"bugs."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:877
+msgid "merge <bug> <bug> [<bug> ...]"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:879
+msgid "Merge a set of bugs together."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:894
+msgid "forcemerge <bug> <bug> [<bug> ...]"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:896
+msgid "Forcibly merge a set of bugs together."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:912
+msgid "unmerge <bug>"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:914
+msgid "Unmerge a bug."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:924
+msgid "tag <bug> [+|-|=] tag [tag ..]"
+msgstr ""
+
+# type: =item
+#: ../bts.pl:926
+msgid "tags <bug> [+|-|=] tag [tag ..]"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:928
+msgid ""
+"Set or unset a tag on a bug. The tag may either be the exact tag name or it "
+"may be abbreviated to any unique tag substring. (So using \"fixed\" will set "
+"the tag \"fixed\", not \"fixed-upstream\", for example, but \"fix\" would "
+"not be acceptable.) Multiple tags may be specified as well. The two commands "
+"(tag and tags) are identical. At least one tag must be specified, unless the "
+"'=' flag is used, where the command"
+msgstr ""
+
+# type: verbatim
+#: ../bts.pl:935
+#, no-wrap
+msgid ""
+"  bts tags <bug> =\n"
+"\n"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:937
+msgid "will remove all tags from the specified bug."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:981
+msgid "user <email>"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:983
+msgid "Specify a user email address before using the usertags command."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:996
+msgid "usertag <bug> [+|-|=] tag [tag ..]"
+msgstr ""
+
+# type: =item
+#: ../bts.pl:998
+msgid "usertags <bug> [+|-|=] tag [tag ..]"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1000
+msgid ""
+"Set or unset a user tag on a bug. The tag must be the exact tag name wanted; "
+"there are no defaults or checking of tag names.  Multiple tags may be "
+"specified as well. The two commands (usertag and usertags) are identical.  "
+"At least one tag must be specified, unless the '=' flag is used, where the "
+"command"
+msgstr ""
+
+# type: verbatim
+#: ../bts.pl:1006
+#, no-wrap
+msgid ""
+"  bts usertags <bug> =\n"
+"\n"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1008
+msgid "will remove all user tags from the specified bug."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:1039
+msgid "severity <bug> <severity>"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1041
+msgid ""
+"Change the severity of a bug. The severity may be abbreviated to any unique "
+"substring."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:1057
+msgid "forwarded <bug> <email>"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1059
+msgid "Mark the bug as forwarded to the given email address."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:1072
+msgid "notforwarded <bug>"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1074
+msgid "Mark a bug as not forwarded."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:1084
+msgid "package [ <package> ... ]"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1086
+msgid ""
+"The following commands will only apply to bugs against the listed packages; "
+"this acts as a safety mechanism for the BTS.  If no packages are listed, "
+"this check is turned off again."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:1097
+msgid "owner <bug> <owner-email>"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1099
+msgid ""
+"Change the \"owner\" address of a bug, with `!' meaning `use the address on "
+"the current email as the new owner address'."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1102
+msgid ""
+"The owner of a bug accepts the responsibility of dealing with it, and will "
+"receive all of the email corresponding to the bug instead of the usual "
+"maintainer."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:1115
+msgid "noowner <bug>"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1117
+msgid "Mark a bug as having no \"owner\"."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:1127
+msgid "subscribe <bug> <email>"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1129
+msgid ""
+"Subscribe the given email address to the specified bug report.  If no email "
+"address is specified, the environment variable DEBEMAIL or EMAIL (in that "
+"order) is used.  If those are not set, or `!' is given as email address, "
+"your default address will be used."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1134
+msgid ""
+"After executing this command, you will be sent a subscription confirmation "
+"to which you have to reply.  When subscribed to a bug report, you receive "
+"all relevant emails and notifications.  Use the unsubscribe command to "
+"unsubscribe."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:1153
+msgid "unsubscribe <bug> <email>"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1155
+msgid ""
+"Unsubscribe the given email address from the specified bug report.  As with "
+"subscribe above, if no email address is specified, the environment variables "
+"DEBEMAIL or EMAIL (in that order) is used.  If those are not set, or `!' is "
+"given as email address, your default address will be used."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1160
+msgid ""
+"After executing this command, you will be sent an unsubscription "
+"confirmation to which you have to reply. Use the subscribe command to, well, "
+"subscribe."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:1178
+msgid "reportspam <bug> ..."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1180
+msgid ""
+"The reportspam command allows you to report a bug report as containing "
+"spam.  It saves one from having to go to the bug web page to do so."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:1209
+msgid "spamreport <bug> ..."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1211
+msgid "spamreport is a synonym for reportspam."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:1219
+msgid "cache [options] [<maint email> | <pkg> | src:<pkg> | from:<submitter>]"
+msgstr ""
+
+# type: =item
+#: ../bts.pl:1221
+msgid "cache [options] [release-critical | release-critical/... | RC]"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1223
+msgid ""
+"Generate or update a cache of bug reports for the given email address or "
+"package. By default it downloads all bugs belonging to the email address in "
+"the DEBEMAIL environment variable (or the EMAIL environment variable if "
+"DEBEMAIL is unset). This command may be repeated to cache bugs belonging to "
+"several people or packages. The cached bugs are stored in "
+"~/.devscripts_cache/bts/"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1230
+msgid "You can use the cached bugs with the -o switch. For example:"
+msgstr ""
+
+# type: verbatim
+#: ../bts.pl:1232
+#, no-wrap
+msgid ""
+"  bts -o bugs\n"
+"  bts -o show 12345\n"
+"\n"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1235
+msgid ""
+"Also, bts will update the files in it in a piecemeal fashion as it downloads "
+"information from the BTS using the 'show' command. You might thus set up the "
+"cache, and update the whole thing once a week, while letting the automatic "
+"cache updates update the bugs you frequently refer to during the week."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1241
+msgid ""
+"Some options affect the behaviour of the cache command.  The first is the "
+"setting of --cache-mode, which controls how much B<bts> downloads of the "
+"referenced links from the bug page, including boring bits such as the "
+"acknowledgement emails, emails to the control bot, and the mbox version of "
+"the bug report.  It can take three values: min (the minimum), mbox (download "
+"the minimum plus the mbox version of the bug report) or full (the whole "
+"works).  The second is --force-refresh or -f, which forces the download, "
+"even if the cached bug report is up-to-date.  Both of these are configurable "
+"from the configuration file, as described below.  They may also be specified "
+"after the \"cache\" command as well as at the start of the command line."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1253
+msgid ""
+"Finally, -q or --quiet will suppress messages about caches being up-to-date, "
+"and giving the option twice will suppress all cache messages (except for "
+"error messages)."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1257
+msgid ""
+"Beware of caching RC, though: it will take a LONG time! (With 1000+ RC bugs "
+"and a delay of 5 seconds between bugs, you're looking at a minimum of 1.5 "
+"hours, and probably significantly more than that.)"
+msgstr ""
+
+# type: =item
+#: ../bts.pl:1358
+msgid "cleancache <package> | src:<package> | <maintainer>"
+msgstr ""
+
+# type: =item
+#: ../bts.pl:1360
+msgid "cleancache from:<submitter> | tag:<tag> | usertag:<tag> | <number> | ALL"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1362
+msgid ""
+"Clean the cache for the specified package, maintainer, etc., as described "
+"above for the \"bugs\" command, or clean the entire cache if \"ALL\" is "
+"specified. This is useful if you are going to have permanent network access "
+"or if the database has become corrupted for some reason.  Note that for "
+"safety, this command does not default to the value of DEBEMAIL or EMAIL."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:1411
+msgid "version"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1413
+msgid "Display version and copyright information."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:1427
+msgid "help"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:1429
+msgid ""
+"Display a short summary of commands, suspiciously similar to parts of this "
+"man page."
+msgstr ""
+
+# type: SH
+#: ../bts.pl:2696 ../debuild.1:88 ../pts-subscribe.1:29
+#, no-wrap
+msgid "ENVIRONMENT VARIABLES"
+msgstr ""
+
+# type: =item
+#: ../bts.pl:2700
+msgid "DEBEMAIL"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:2702
+msgid ""
+"If this is set, the From: line in the email will be set to use this email "
+"address instead of your normal email address (as would be determined by "
+"B<mail>)."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:2706
+msgid "DEBFULLNAME"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:2708
+msgid ""
+"If DEBEMAIL is set, DEBFULLNAME is examined to determine the full name to "
+"use; if this is not set, B<bts> attempts to determine a name from your "
+"passwd entry."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:2712
+msgid "BROWSER"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:2714
+msgid ""
+"If set, it specifies the browser to use for the 'show' and 'bugs' options.  "
+"See the description above."
+msgstr ""
+
+# type: SH
+#: ../bts.pl:2719 ../debc.1:91 ../debchange.1:283 ../debclean.1:87 ../debdiff.1:127 ../debi.1:93 ../debrelease.1:105 ../debrsign.1:57 ../debsign.1:99 ../debuild.1:276 ../dpkg-depcheck.1:102 ../dscverify.1:29 ../grep-excuses.1:24 ../mass-bug.pl:101 ../nmudiff.1:48 ../plotchangelog.1:106 ../pts-subscribe.1:37 ../uscan.1:412 ../uupdate.1:86 ../who-uploads.1:42
+#, no-wrap
+msgid "CONFIGURATION VARIABLES"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:2721 ../mass-bug.pl:103
+msgid ""
+"The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
+"sourced by a shell in that order to set configuration variables.  Command "
+"line options can be used to override configuration file settings.  "
+"Environment variable settings are ignored for this purpose.  The currently "
+"recognised variables are:"
+msgstr ""
+
+# type: =item
+#: ../bts.pl:2729
+msgid "BTS_OFFLINE"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:2731
+msgid ""
+"If this is set to I<yes>, then it is the same as the --offline command line "
+"parameter being used.  Only has an effect on the show and bugs commands.  "
+"The default is I<no>.  See the description of the show command above for "
+"more information."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:2736
+msgid "BTS_CACHE"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:2738
+msgid ""
+"If this is set to I<no>, then it is the same as the --no-cache command line "
+"parameter being used.  Only has an effect on the show and bug commands.  The "
+"default is I<yes>.  Again, see the show command above for more information."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:2743
+msgid "BTS_CACHE_MODE={min,mbox,full}"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:2745
+msgid ""
+"How much of the BTS should we mirror when we are asked to cache something? "
+"Just the minimum, or also the mbox or the whole thing? The default is "
+"I<min>, and it has the same meaning as the --cache-mode command line "
+"parameter.  Only has an effect on the cache.  See the cache command for more "
+"information."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:2751
+msgid "BTS_FORCE_REFRESH"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:2753
+msgid ""
+"If this is set to I<yes>, then it is the same as the --force-refresh command "
+"line parameter being used.  Only has an effect on the cache command.  The "
+"default is I<no>.  See the cache command for more information."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:2758
+msgid "BTS_MAIL_READER"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:2760
+msgid ""
+"If this is set, specifies a mail reader to use instead of mutt.  Same as the "
+"--mailreader command line option."
+msgstr ""
+
+# type: =item
+#: ../bts.pl:2763 ../mass-bug.pl:111
+msgid "BTS_SENDMAIL_COMMAND"
+msgstr ""
+
+# type: Plain text
+#: ../bts.pl:2765 ../mass-bug.pl:113 ../nmudiff.1:58
+msgid ""
+"If this is set, specifies a sendmail command to use instead of "
+"/usr/sbin/sendmail.  Same as the --sendmail command line option."
+msgstr ""
+
+# type: =head1
+#: ../bts.pl:2770 ../mass-bug.pl:414
+msgid "COPYRIGHT"
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:2772
+msgid ""
+"This program is Copyright (C) 2001-2003 by Joey Hess <joeyh@debian.org>.  "
+"Many modifications have been made, Copyright (C) 2002-2005 Julian Gilbey "
+"<jdg@debian.org>."
+msgstr ""
+
+# type: textblock
+#: ../bts.pl:2776 ../mass-bug.pl:418
+msgid ""
+"It is licensed under the terms of the GPL, either version 2 of the License, "
+"or (at your option) any later version."
+msgstr ""
+
+# type: TH
+#: ../checkbashisms.1:1
+#, no-wrap
+msgid "CHECKBASHISMS"
+msgstr ""
+
+# type: Plain text
+#: ../checkbashisms.1:4
+msgid "checkbashisms - check for bashisms in /bin/sh scripts"
 msgstr ""
 
 # type: Plain text
@@ -59,12 +1469,6 @@ msgstr ""
 msgid "B<checkbashisms --help|--version>"
 msgstr ""
 
-# type: SH
-#: ../checkbashisms.1:8 ../cvs-debc.1:6 ../cvs-debi.1:6 ../cvs-debrelease.1:7 ../cvs-debuild.1:8 ../debc.1:6 ../debchange.1:8 ../debclean.1:6 ../debdiff.1:13 ../debi.1:6 ../debpkg.1:6 ../debrelease.1:6 ../debrsign.1:7 ../debsign.1:6 ../debuild.1:11 ../devscripts.1:4 ../devscripts.conf.5:4 ../dpkg-depcheck.1:6 ../dpkg-genbuilddeps.1:6 ../dscverify.1:6 ../grep-excuses.1:6 ../mergechanges.1:6 ../plotchangelog.1:7 ../rc-alert.1:8 ../tagpending.1:6 ../uscan.1:6 ../uupdate.1:8 ../wnpp-alert.1:8
-#, no-wrap
-msgid "DESCRIPTION"
-msgstr ""
-
 # type: Plain text
 #: ../checkbashisms.1:14
 msgid ""
@@ -74,14 +1478,8 @@ msgid ""
 "and outputs warnings if possible bashisms are detected."
 msgstr ""
 
-# type: SH
-#: ../checkbashisms.1:14 ../cvs-debc.1:24 ../cvs-debi.1:28 ../cvs-debrelease.1:21 ../cvs-debuild.1:33 ../debc.1:63 ../debchange.1:145 ../debclean.1:60 ../debdiff.1:45 ../debi.1:65 ../debrelease.1:56 ../debrsign.1:30 ../debsign.1:39 ../debuild.1:210 ../dpkg-depcheck.1:15 ../dscverify.1:15 ../grep-excuses.1:13 ../plotchangelog.1:43 ../rc-alert.1:17 ../tagpending.1:12 ../uscan.1:325 ../uupdate.1:50 ../wnpp-alert.1:12
-#, no-wrap
-msgid "OPTIONS"
-msgstr ""
-
 # type: TP
-#: ../checkbashisms.1:15 ../debchange.1:277 ../debdiff.1:118 ../debrelease.1:99 ../debsign.1:93 ../dscverify.1:23 ../rc-alert.1:21 ../uupdate.1:80 ../wnpp-alert.1:13
+#: ../checkbashisms.1:15 ../debchange.1:277 ../debdiff.1:118 ../debrelease.1:99 ../debsign.1:93 ../dscverify.1:23 ../pts-subscribe.1:23 ../rc-alert.1:21 ../uupdate.1:80 ../who-uploads.1:36 ../wnpp-alert.1:13
 #, no-wrap
 msgid "B<--help>, B<-h>"
 msgstr ""
@@ -98,7 +1496,7 @@ msgid "B<--version>, B<-v>"
 msgstr ""
 
 # type: Plain text
-#: ../checkbashisms.1:21 ../debdiff.1:124 ../grep-excuses.1:24 ../rc-alert.1:27 ../tagpending.1:32 ../wnpp-alert.1:19
+#: ../checkbashisms.1:21 ../debdiff.1:124 ../grep-excuses.1:24 ../rc-alert.1:27 ../tagpending.1:32 ../whodepends.1:17 ../wnpp-alert.1:19
 msgid "Show version and copyright information."
 msgstr ""
 
@@ -140,7 +1538,7 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../checkbashisms.1:32 ../cvs-debc.1:58 ../cvs-debi.1:62 ../cvs-debrelease.1:64 ../cvs-debuild.1:56 ../debc.1:114 ../debchange.1:328 ../debclean.1:104 ../debdiff.1:161 ../debi.1:116 ../debrelease.1:132 ../debrsign.1:66 ../debsign.1:118 ../debuild.1:399 ../devscripts.conf.5:54 ../dpkg-depcheck.1:118 ../dpkg-genbuilddeps.1:30 ../dscverify.1:40 ../grep-excuses.1:34 ../plotchangelog.1:124 ../rc-alert.1:27 ../tagpending.1:32 ../uscan.1:482 ../uupdate.1:160
+#: ../checkbashisms.1:32 ../cvs-debc.1:58 ../cvs-debi.1:62 ../cvs-debrelease.1:64 ../cvs-debuild.1:56 ../debc.1:114 ../debchange.1:328 ../debclean.1:104 ../debdiff.1:161 ../debi.1:116 ../debrelease.1:132 ../deb-reversion.dbk:209 ../debrsign.1:66 ../debsign.1:118 ../debuild.1:399 ../dget.pl:378 ../dpkg-depcheck.1:118 ../dpkg-genbuilddeps.1:30 ../dscverify.1:40 ../grep-excuses.1:34 ../nmudiff.1:58 ../plotchangelog.1:124 ../pts-subscribe.1:46 ../rc-alert.1:27 ../rmadison.pl:184 ../tagpending.1:32 ../uscan.1:482 ../uupdate.1:160 ../devscripts.conf.5:54
 #, no-wrap
 msgid "SEE ALSO"
 msgstr ""
@@ -148,12 +1546,6 @@ msgstr ""
 # type: Plain text
 #: ../checkbashisms.1:34
 msgid "B<lintian>(1)."
-msgstr ""
-
-# type: SH
-#: ../checkbashisms.1:34 ../cvs-debc.1:64 ../cvs-debi.1:68 ../cvs-debrelease.1:69 ../cvs-debuild.1:63 ../debc.1:119 ../debchange.1:335 ../debclean.1:108 ../debdiff.1:167 ../debi.1:120 ../debpkg.1:23 ../debrelease.1:137 ../debrsign.1:71 ../debsign.1:128 ../debuild.1:413 ../devscripts.conf.5:58 ../dpkg-genbuilddeps.1:36 ../dscverify.1:44 ../grep-excuses.1:36 ../mergechanges.1:17 ../plotchangelog.1:126 ../rc-alert.1:29 ../tagpending.1:37 ../uscan.1:488 ../uupdate.1:167 ../wnpp-alert.1:19
-#, no-wrap
-msgid "AUTHOR"
 msgstr ""
 
 # type: Plain text
@@ -421,16 +1813,9 @@ msgid "This specifies which uploader program to use; the default is B<dupload>."
 msgstr ""
 
 # type: TP
-#: ../cvs-debrelease.1:57 ../debc.1:84 ../debchange.1:268 ../debclean.1:77 ../debdiff.1:114 ../debi.1:86 ../debrelease.1:95 ../debsign.1:89 ../dpkg-depcheck.1:92 ../dscverify.1:19 ../grep-excuses.1:14 ../uscan.1:402 ../uupdate.1:76
+#: ../cvs-debrelease.1:57 ../debc.1:84 ../debchange.1:268 ../debclean.1:77 ../debdiff.1:114 ../debi.1:86 ../debrelease.1:95 ../debsign.1:89 ../dpkg-depcheck.1:92 ../dscverify.1:19 ../grep-excuses.1:14 ../nmudiff.1:38 ../uscan.1:402 ../uupdate.1:76 ../who-uploads.1:32
 #, no-wrap
 msgid "B<--no-conf>, B<--noconf>"
-msgstr ""
-
-# type: Plain text
-#: ../cvs-debrelease.1:61 ../debc.1:88 ../debchange.1:272 ../debclean.1:81 ../debdiff.1:118 ../debi.1:90 ../debrelease.1:99 ../debsign.1:93 ../debuild.1:216 ../dpkg-depcheck.1:96 ../dscverify.1:23 ../grep-excuses.1:18 ../uscan.1:406 ../uupdate.1:80
-msgid ""
-"Do not read any configuration files.  This can only be used as the first "
-"option given on the command-line."
 msgstr ""
 
 # type: Plain text
@@ -578,6 +1963,166 @@ msgid "This program was written by Julian Gilbey E<lt>jdg@debian.orgE<gt>."
 msgstr ""
 
 # type: TH
+#: ../dd-list.1:17
+#, no-wrap
+msgid "DD-LIST"
+msgstr ""
+
+# type: TH
+#: ../dd-list.1:17
+#, no-wrap
+msgid "2005-06-28"
+msgstr ""
+
+# type: TH
+#: ../dd-list.1:17
+#, no-wrap
+msgid "Debian"
+msgstr ""
+
+#.  --------------------------------------------------------------------
+# type: Plain text
+#: ../dd-list.1:22
+msgid "dd-list - nicely list .deb packages and their maintainers"
+msgstr ""
+
+#.  --------------------------------------------------------------------
+# type: Plain text
+#: ../dd-list.1:26
+msgid ""
+"B<dd-list> [B<-hiuV>] [B<--help>] [B<--stdin>] [B<--dctrl>] [B<--version>] "
+"[B<--uploaders>] [B<package>...]"
+msgstr ""
+
+# type: Plain text
+#: ../dd-list.1:30
+msgid ""
+"B<dd-list> produces nicely formatted lists of Debian (.deb) packages and "
+"their maintainers."
+msgstr ""
+
+# type: Plain text
+#: ../dd-list.1:37
+msgid ""
+"Input is a list of source or binary package names on the command line (or "
+"the standard input if B<--stdin> is given).  Output is a list of the "
+"following format, where package names are source packages:"
+msgstr ""
+
+# type: Plain text
+#: ../dd-list.1:41
+#, no-wrap
+msgid "J. Random Developer E<lt>jrandom@debian.orgE<gt>\n"
+msgstr ""
+
+# type: Plain text
+#: ../dd-list.1:44
+#, no-wrap
+msgid ""
+"j-random-package\n"
+"j-random-other\n"
+msgstr ""
+
+# type: Plain text
+#: ../dd-list.1:47
+#, no-wrap
+msgid "Diana Hacker E<lt>diana@example.orgE<gt>\n"
+msgstr ""
+
+# type: Plain text
+#: ../dd-list.1:50
+#, no-wrap
+msgid ""
+"fun-package\n"
+"more-fun-package\n"
+msgstr ""
+
+#.  --------------------------------------------------------------------
+# type: Plain text
+#: ../dd-list.1:58
+msgid ""
+"This is useful when you want, for example, to produce a list of packages "
+"that need to attention from their maintainers, e.g., to be rebuilt when a "
+"library version transition happens."
+msgstr ""
+
+# type: TP
+#: ../dd-list.1:59
+#, no-wrap
+msgid "B<-h>,B<--help>"
+msgstr ""
+
+# type: Plain text
+#: ../dd-list.1:62
+msgid "Print brief help message."
+msgstr ""
+
+# type: TP
+#: ../dd-list.1:62
+#, no-wrap
+msgid "B<-i>,B<--stdin>"
+msgstr ""
+
+# type: Plain text
+#: ../dd-list.1:66
+msgid ""
+"Read package names from the standard input, instead of taking them from the "
+"command line. Package names are whitespace delimited."
+msgstr ""
+
+# type: TP
+#: ../dd-list.1:66
+#, no-wrap
+msgid "B<-d>,B<--dctrl>"
+msgstr ""
+
+# type: Plain text
+#: ../dd-list.1:73
+msgid ""
+"Read package information from standard input in the format of a Debian "
+"package control file. This includes the status file, or output of "
+"apt-cache. This is the fastest way to use dd-list, as it uses the maintainer "
+"information from the input instead of looking up the maintainer of each "
+"listed package."
+msgstr ""
+
+# type: TP
+#: ../dd-list.1:73
+#, no-wrap
+msgid "B<-u>,B<--uploaders>"
+msgstr ""
+
+# type: Plain text
+#: ../dd-list.1:78
+msgid ""
+"Also list developers who are named as uploaders of packages, not only the "
+"maintainers.  Uploaders are indicated with \"(U)\" appended to the package "
+"name."
+msgstr ""
+
+# type: TP
+#: ../dd-list.1:78
+#, no-wrap
+msgid "B<-V>,B<--version>"
+msgstr ""
+
+#.  --------------------------------------------------------------------
+# type: Plain text
+#: ../dd-list.1:82
+msgid "Print the version."
+msgstr ""
+
+# type: Plain text
+#: ../dd-list.1:84
+msgid "Lars Wirzenius E<lt>liw@iki.fiE<gt>"
+msgstr ""
+
+# type: Plain text
+#: ../dd-list.1:85
+msgid "Joey Hess E<lt>joeyh@debian.orgE<gt>"
+msgstr ""
+
+# type: TH
 #: ../debc.1:1
 #, no-wrap
 msgid "DEBC"
@@ -722,14 +2267,8 @@ msgstr ""
 msgid "B<--check-dirname-regex> I<regex>"
 msgstr ""
 
-# type: SH
-#: ../debc.1:91 ../debchange.1:283 ../debclean.1:87 ../debdiff.1:127 ../debi.1:93 ../debrelease.1:105 ../debrsign.1:57 ../debsign.1:99 ../debuild.1:276 ../dpkg-depcheck.1:102 ../dscverify.1:29 ../grep-excuses.1:24 ../plotchangelog.1:106 ../uscan.1:412 ../uupdate.1:86
-#, no-wrap
-msgid "CONFIGURATION VARIABLES"
-msgstr ""
-
 # type: Plain text
-#: ../debc.1:97 ../debchange.1:289 ../debclean.1:93 ../debi.1:99 ../debrelease.1:111 ../debrsign.1:63 ../debsign.1:105 ../uupdate.1:92
+#: ../debc.1:97 ../debchange.1:289 ../debclean.1:93 ../debi.1:99 ../debrelease.1:111 ../debrsign.1:63 ../debsign.1:105 ../nmudiff.1:54 ../pts-subscribe.1:43 ../uupdate.1:92 ../who-uploads.1:48
 msgid ""
 "The two configuration files I</etc/devscripts.conf> and I<~/.devscripts> are "
 "sourced in that order to set configuration variables.  Command line options "
@@ -1260,18 +2799,18 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:280 ../debclean.1:84 ../debrelease.1:102 ../debsign.1:96 ../dscverify.1:26 ../uupdate.1:83
+#: ../debchange.1:280 ../debclean.1:84 ../debrelease.1:102 ../debsign.1:96 ../dscverify.1:26 ../nmudiff.1:45 ../pts-subscribe.1:26 ../uupdate.1:83 ../who-uploads.1:39
 msgid "Display a help message and exit successfully."
 msgstr ""
 
 # type: TP
-#: ../debchange.1:280 ../debclean.1:84 ../debrelease.1:102 ../debsign.1:96 ../dscverify.1:26 ../grep-excuses.1:21 ../plotchangelog.1:95 ../uscan.1:409 ../uupdate.1:83
+#: ../debchange.1:280 ../debclean.1:84 ../debrelease.1:102 ../debsign.1:96 ../dscverify.1:26 ../grep-excuses.1:21 ../nmudiff.1:45 ../plotchangelog.1:95 ../pts-subscribe.1:26 ../rmadison.pl:175 ../uscan.1:409 ../uupdate.1:83 ../who-uploads.1:39
 #, no-wrap
 msgid "B<--version>"
 msgstr ""
 
 # type: Plain text
-#: ../debchange.1:283 ../debclean.1:87 ../debrelease.1:105 ../debsign.1:99 ../dscverify.1:29 ../uupdate.1:86
+#: ../debchange.1:283 ../debclean.1:87 ../debrelease.1:105 ../debsign.1:99 ../dscverify.1:29 ../nmudiff.1:48 ../pts-subscribe.1:29 ../uupdate.1:86 ../who-uploads.1:42
 msgid "Display version and copyright information and exit successfully."
 msgstr ""
 
@@ -1329,8 +2868,8 @@ msgid ""
 "changelog.  See the discussion above.  Default is \"yes\"."
 msgstr ""
 
-# type: SH
-#: ../debchange.1:314
+# type: =head1
+#: ../debchange.1:314 ../mass-bug.pl:96
 #, no-wrap
 msgid "ENVIRONMENT"
 msgstr ""
@@ -1471,7 +3010,7 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../debclean.1:81 ../grep-excuses.1:18 ../plotchangelog.1:92 ../uscan.1:406
+#: ../debclean.1:81 ../grep-excuses.1:18 ../nmudiff.1:42 ../plotchangelog.1:92 ../uscan.1:406
 #, no-wrap
 msgid "B<--help>"
 msgstr ""
@@ -1499,6 +3038,84 @@ msgstr ""
 msgid ""
 "Christoph Lameter E<lt>clameter@debian.orgE<gt>; modifications by Julian "
 "Gilbey E<lt>jdg@debian.orgE<gt>."
+msgstr ""
+
+# type: textblock
+#: ../debcommit.pl:5
+msgid "debcommit - commit changes to a package"
+msgstr ""
+
+# type: textblock
+#: ../debcommit.pl:9
+msgid "debcommit [--release] [--message=text] [--noact]"
+msgstr ""
+
+# type: textblock
+#: ../debcommit.pl:13
+msgid ""
+"debcommit generates a commit message based on new text in debian/changelog, "
+"and commits the change to a package's cvs, svn, svk, arch, bzr or git "
+"repository. It must be run in a cvs, svn, svk, arch, bzr or git working copy "
+"for the package."
+msgstr ""
+
+# type: =item
+#: ../debcommit.pl:22
+msgid "-r --release"
+msgstr ""
+
+# type: textblock
+#: ../debcommit.pl:24
+msgid ""
+"Commit a release of the package. The version number is determined from "
+"debian/changelog, and is used to tag the package in cvs, svn, svk, arch or "
+"git.  bzr does not yet support symbolic tags, so you will only get a normal "
+"commit."
+msgstr ""
+
+# type: textblock
+#: ../debcommit.pl:29
+msgid ""
+"Note that svn/svk tagging conventions vary, so debcommit uses L<svnpath(1)> "
+"to determine where the tag should be placed in the repository."
+msgstr ""
+
+# type: =item
+#: ../debcommit.pl:33
+msgid "-m text --message test"
+msgstr ""
+
+# type: textblock
+#: ../debcommit.pl:35
+msgid ""
+"Specify a commit message to use. Useful if the program cannot determine a "
+"commit message on its own based on debian/changelog, or if you want to "
+"override the default message."
+msgstr ""
+
+# type: =item
+#: ../debcommit.pl:39
+msgid "-n --noact"
+msgstr ""
+
+# type: textblock
+#: ../debcommit.pl:41
+msgid "Do not actually do anything, but do print the commands that would be run."
+msgstr ""
+
+# type: =head1
+#: ../debcommit.pl:287 ../svnpath.pl:93
+msgid "LICENSE"
+msgstr ""
+
+# type: textblock
+#: ../debcommit.pl:289 ../svnpath.pl:95
+msgid "GPL"
+msgstr ""
+
+# type: textblock
+#: ../debcommit.pl:293 ../mass-bug.pl:423
+msgid "Joey Hess <joeyh@debian.org>"
 msgstr ""
 
 # type: TH
@@ -2091,6 +3708,362 @@ msgid ""
 "script by Christoph Lameter E<lt>clameter@debian.orgE<gt>."
 msgstr ""
 
+# type: Content of the dhfirstname entity
+#: ../deb-reversion.dbk:30
+msgid "<firstname>martin f.</firstname>"
+msgstr ""
+
+# type: Content of the dhsurname entity
+#: ../deb-reversion.dbk:31
+msgid "<surname>krafft</surname>"
+msgstr ""
+
+# type: Content of the dhmaintfirstname entity
+#: ../deb-reversion.dbk:32
+msgid "<firstname>Julian</firstname>"
+msgstr ""
+
+# type: Content of the dhmaintsurname entity
+#: ../deb-reversion.dbk:33
+msgid "<surname>Gilbey</surname>"
+msgstr ""
+
+# type: Content of the dhdate entity
+#: ../deb-reversion.dbk:35
+msgid "<date>Feb 13, 2006</date>"
+msgstr ""
+
+# type: Content of the dhsection entity
+#: ../deb-reversion.dbk:38
+msgid "<manvolnum>1</manvolnum>"
+msgstr ""
+
+# type: Content of the dhemail entity
+#: ../deb-reversion.dbk:39
+msgid "<email>madduck@debian.org</email>"
+msgstr ""
+
+# type: Content of the dhmaintemail entity
+#: ../deb-reversion.dbk:40
+msgid "<email>jdg@debian.org</email>"
+msgstr ""
+
+# type: Content of the dhusername entity
+#: ../deb-reversion.dbk:41
+msgid "martin f. krafft"
+msgstr ""
+
+# type: Content of the dhmaintusername entity
+#: ../deb-reversion.dbk:42
+msgid "Julian Gilbey"
+msgstr ""
+
+# type: Content of the dhucpackage entity
+#: ../deb-reversion.dbk:43
+msgid "<refentrytitle>deb-reversion</refentrytitle>"
+msgstr ""
+
+# type: Content of the dhcommand entity
+#: ../deb-reversion.dbk:44 ../deb-reversion.dbk:45
+msgid "deb-reversion"
+msgstr ""
+
+# type: Content of the debian entity
+#: ../deb-reversion.dbk:47
+msgid "<productname>Debian</productname>"
+msgstr ""
+
+# type: Content of the gnu entity
+#: ../deb-reversion.dbk:48
+msgid "<acronym>GNU</acronym>"
+msgstr ""
+
+# type: Content of the gpl entity
+#: ../deb-reversion.dbk:49
+msgid "&gnu; <acronym>GPL</acronym>"
+msgstr ""
+
+# type: Content of: <refentry><refnamediv><refname>
+#: ../deb-reversion.dbk:65
+msgid "&dhcommand;"
+msgstr ""
+
+# type: Content of: <refentry><refnamediv><refpurpose>
+#: ../deb-reversion.dbk:67
+msgid "simple script to change the version of a .deb file."
+msgstr ""
+
+# type: Content of: <refentry><refsynopsisdiv><cmdsynopsis><arg>
+#: ../deb-reversion.dbk:72
+msgid "<command>&dhcommand;</command> <arg choice=\"opt\"> -"
+msgstr ""
+
+# type: Content of: <refentry><refsynopsisdiv><cmdsynopsis><arg><option>
+#: ../deb-reversion.dbk:74
+msgid "vckDh"
+msgstr ""
+
+# type: Content of: <refentry><refsynopsisdiv><cmdsynopsis>
+#: ../deb-reversion.dbk:75
+msgid ""
+"</arg> <replaceable> .deb-file</replaceable> <arg choice=\"opt\" "
+"rep=\"repeat\">log message</arg>"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><para>
+#: ../deb-reversion.dbk:85
+msgid ""
+"&dhcommand; unpacks the specified .deb file, changes the version number in "
+"the relevant locations, appends a Debian <filename>changelog</filename> "
+"entry with the specified contents, and creates a new .deb file with the "
+"updated version."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><para>
+#: ../deb-reversion.dbk:92
+msgid ""
+"By default, the tool creates a new version number suitable for local "
+"changes, such that the new package will be greater than the current one, but "
+"lesser than any future, official Debian packages.  With"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><para><option>
+#: ../deb-reversion.dbk:95
+msgid "-v <replaceable class=\"parameter\">version</replaceable>"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><para>
+#: ../deb-reversion.dbk:96
+msgid ", the version number can be specified directly.  On the other hand, the"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: ../deb-reversion.dbk:98 ../deb-reversion.dbk:145
+msgid "-c"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><para>
+#: ../deb-reversion.dbk:98
+msgid ""
+"simply calculates the new version number but does not generate a new "
+"package."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><para>
+#: ../deb-reversion.dbk:103
+msgid ""
+"When building a .deb file, root privileges are required in order to have the "
+"correct permissions and ownerships in the resulting .deb file.  This can be "
+"achieved either by running <command>&dhcommand;</command> as root or running "
+"under <citerefentry><refentrytitle>fakeroot</refentrytitle> "
+"<manvolnum>1</manvolnum></citerefentry>, as 'fakeroot &dhcommand; foo.deb'."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><para>
+#: ../deb-reversion.dbk:113
+msgid "With"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><para><option>
+#: ../deb-reversion.dbk:113
+msgid "-k <replaceable class=\"parameter\">hook</replaceable>"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><para>
+#: ../deb-reversion.dbk:114
+msgid ""
+", a hook script may be specified, which is run on the unpacked binary "
+"packages just before it is repacked. If you want to write changelog entries "
+"from within the hook, use '<command>dch -a -- <replaceable "
+"class=\"parameter\">your message</replaceable></command>'.  (Alternatively, "
+"do not give a changelog entry on the <command>&dhcommand;</command> command "
+"line and <command>dch</command> will be called automatically.)  The hook "
+"command must be placed in quotes if it has more than one word; it is called "
+"via <command>sh -c</command>."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: ../deb-reversion.dbk:131
+msgid "-v <replaceable class=\"parameter\">new-version</replaceable>"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: ../deb-reversion.dbk:132
+msgid "--new-version <replaceable class=\"parameter\">new-version</replaceable>"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../deb-reversion.dbk:135
+msgid ""
+"Specifies the version number to be used for the new version.  Passed to "
+"<citerefentry> <refentrytitle>dch</refentrytitle> <manvolnum>1</manvolnum> "
+"</citerefentry>."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: ../deb-reversion.dbk:146
+msgid "--calculate-only"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../deb-reversion.dbk:149
+msgid ""
+"Only calculate and display the new version number which would be used; do "
+"not build a new .deb file.  Cannot be used in conjunction with"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><option>
+#: ../deb-reversion.dbk:151
+msgid "-v"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../deb-reversion.dbk:151
+msgid "."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: ../deb-reversion.dbk:157
+msgid "-k <replaceable class=\"parameter\">hook-command</replaceable>"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: ../deb-reversion.dbk:158
+msgid "--hook <replaceable class=\"parameter\">hook-command</replaceable>"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../deb-reversion.dbk:161
+msgid ""
+"A hook command to run after unpacking the old .deb file and modifying the "
+"changelog, and before packing up the new .deb file.  Must be in quotes if it "
+"is more than one (shell)  word.  Only one hook command may be specified; if "
+"you want to perform more than this, you could specify 'bash' as the hook "
+"command, and you will then be given a shell to work in."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: ../deb-reversion.dbk:173
+msgid "-D"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><option>
+#: ../deb-reversion.dbk:174 ../deb-reversion.dbk:177
+msgid "--debug"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../deb-reversion.dbk:177
+msgid "Pass"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../deb-reversion.dbk:177
+msgid ""
+"to <citerefentry> <refentrytitle>dpkg-deb</refentrytitle> "
+"<manvolnum>1</manvolnum> </citerefentry>."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: ../deb-reversion.dbk:187
+msgid "-h"
+msgstr ""
+
+# type: =item
+#: ../deb-reversion.dbk:188 ../mass-bug.pl:84
+msgid "--help"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../deb-reversion.dbk:191
+msgid "Display usage information."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: ../deb-reversion.dbk:197
+msgid "-V"
+msgstr ""
+
+# type: =item
+#: ../deb-reversion.dbk:198 ../mass-bug.pl:88
+msgid "--version"
+msgstr ""
+
+# type: Plain text
+#: ../deb-reversion.dbk:201 ../mass-bug.pl:90 ../uscan.1:412
+msgid "Display version information."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><para>
+#: ../deb-reversion.dbk:211
+msgid ""
+"<citerefentry> <refentrytitle>dch</refentrytitle> <manvolnum>1</manvolnum> "
+"</citerefentry>, <citerefentry> <refentrytitle>fakeroot</refentrytitle> "
+"<manvolnum>1</manvolnum> </citerefentry>, <citerefentry> "
+"<refentrytitle>dpkg-deb</refentrytitle> <manvolnum>1</manvolnum> "
+"</citerefentry>."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><title>
+#: ../deb-reversion.dbk:227
+msgid "DISCLAIMER"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><para>
+#: ../deb-reversion.dbk:229
+msgid ""
+"&dhpackage; is a tool intended to help porters (e.g. amd64) with modifying "
+"packages for other architectures, and to augment deb-repack, which creates "
+"modified packages with identical version numbers as the official "
+"packages. Chaos will ensue! With &dhpackage;, a proper version number can be "
+"selected, which does not obstruct the next official release but can be "
+"specifically pinned with APT or held with dpkg."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><para>
+#: ../deb-reversion.dbk:238
+msgid ""
+"Please take note that &dhpackage; does not come without problems. While it "
+"works fine in most cases, it may just not in yours. Especially, please "
+"consider that it changes binary packages (only!) and hence can break strict "
+"versioned dependencies between binary packages generated from the same "
+"source."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><para>
+#: ../deb-reversion.dbk:245
+msgid ""
+"You are using this tool at your own risk and I shall not shed a tear if your "
+"gerbil goes up in flames, your microwave attacks the stereo, or the angry "
+"slamming of your fist spills your coffee into the keyboard, which sets off a "
+"chain reaction resulting in a vast amount of money transfered from your "
+"account to mine."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><para>
+#: ../deb-reversion.dbk:257
+msgid ""
+"&dhpackage; is Copyright 2004-5 by &dhusername; and modifications are "
+"Copyright 2006 by &dhmaintusername;."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><para>
+#: ../deb-reversion.dbk:262
+msgid ""
+"Permission is granted to copy, distribute and/or modify this document under "
+"the terms of the Artistic License: "
+"<ulink>http://www.opensource.org/licenses/artistic-license.php</ulink> On "
+"Debian systems, the complete text of the Artistic License can be found in "
+"<filename>/usr/share/common-licenses/Artistic</filename>."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><para>
+#: ../deb-reversion.dbk:271
+msgid ""
+"This manual page was written by &dhusername; &dhemail; and modified by "
+"&dhmaintusername; &dhmaintemail;."
+msgstr ""
+
 # type: TH
 #: ../debrsign.1:1
 #, no-wrap
@@ -2492,12 +4465,6 @@ msgid ""
 "DEVSCRIPTS_CHECK_DIRNAME_LEVEL and DEVSCRIPTS_CHECK_DIRNAME_REGEX, and their "
 "corresponding command-line options B<--check-dirname-level> and "
 "B<--check-dirname-regex>."
-msgstr ""
-
-# type: SH
-#: ../debuild.1:88
-#, no-wrap
-msgid "ENVIRONMENT VARIABLES"
 msgstr ""
 
 # type: Plain text
@@ -3203,109 +5170,146 @@ msgid ""
 "mailing lists."
 msgstr ""
 
-# type: TH
-#: ../devscripts.conf.5:1
+# type: textblock
+#: ../dget.pl:297
+msgid "dget -- Download Debian source and binary packages"
+msgstr ""
+
+# type: =item
+#: ../dget.pl:303
+msgid "B<dget> [I<options>] I<URL>"
+msgstr ""
+
+# type: =item
+#: ../dget.pl:305
+msgid "B<dget> [I<options>] I<package>[=I<version>]"
+msgstr ""
+
+# type: textblock
+#: ../dget.pl:311
+msgid ""
+"B<dget> downloads Debian packages.  In the first form, B<dget> fetches the "
+"requested URL.  If this is a .dsc or .changes file, then B<dget> acts as a "
+"source-package aware form of B<wget>: it also fetches any files referenced "
+"in the .dsc/.changes file.  When the B<-x> option is given, the downloaded "
+"source is also unpacked by B<dpkg-source>."
+msgstr ""
+
+# type: textblock
+#: ../dget.pl:317
+msgid ""
+"In the second form, B<dget> downloads a I<binary> package (i.e., a I<.deb> "
+"file) from the Debian mirror configured in /etc/apt/sources.list.  Unlike "
+"B<apt-get install -d>, it does not require root privileges, writes to the "
+"current directory, and does not download dependencies.  If a version number "
+"is specified, this version of the package is requested."
+msgstr ""
+
+# type: textblock
+#: ../dget.pl:324
+msgid ""
+"Before downloading files listed in .dsc and .changes files, and before "
+"downloading binary packages, B<dget> checks to see whether any of these "
+"files already exist.  If they do, then their md5sums are compared to avoid "
+"downloading them again unnecessarily.  Download backends used are B<curl> "
+"and B<wget>, looked for in that order."
+msgstr ""
+
+# type: textblock
+#: ../dget.pl:330
+msgid ""
+"B<dget> was written to make it easier to retrieve source packages from the "
+"web for sponsor uploads.  For checking the package with B<debdiff>, the last "
+"binary version is available via B<dget> I<package>, the last source version "
+"via B<apt-get source> I<package>."
+msgstr ""
+
+# type: =item
+#: ../dget.pl:339
+msgid "B<-b>, B<--backup>"
+msgstr ""
+
+# type: textblock
+#: ../dget.pl:341
+msgid "Move files that would be overwritten to I<./backup>."
+msgstr ""
+
+# type: =item
+#: ../dget.pl:343
+msgid "B<-q>, B<--quiet>"
+msgstr ""
+
+# type: textblock
+#: ../dget.pl:345
+msgid "Suppress B<wget>/B<curl> non-error output."
+msgstr ""
+
+# type: =item
+#: ../dget.pl:347
+msgid "B<-x>, B<--extract>"
+msgstr ""
+
+# type: textblock
+#: ../dget.pl:349
+msgid ""
+"Run B<dpkg-source -x> on the downloaded source package.  This can only be "
+"used with the first method of calling B<dget>."
+msgstr ""
+
+# type: =item
+#: ../dget.pl:352
+msgid "B<--insecure>"
+msgstr ""
+
+# type: textblock
+#: ../dget.pl:354
+msgid "Allow SSL connections to untrusted hosts."
+msgstr ""
+
+# type: TP
+#: ../dget.pl:356 ../dpkg-depcheck.1:96 ../rmadison.pl:158 ../tagpending.1:26
 #, no-wrap
-msgid "DEVSCRIPTS.CONF"
+msgid "B<-h>, B<--help>"
 msgstr ""
 
-# type: Plain text
-#: ../devscripts.conf.5:4
-msgid "devscripts.conf - configuration file for the devscripts package"
+# type: textblock
+#: ../dget.pl:358
+msgid "Show a help message."
 msgstr ""
 
-# type: Plain text
-#: ../devscripts.conf.5:9
-msgid ""
-"The B<devscripts> package provides a collection of scripts which may be of "
-"use to Debian developers and others wishing to build Debian packages.  Many "
-"of these have options which can be configured on a system-wide and per-user "
-"basis."
-msgstr ""
-
-# type: Plain text
-#: ../devscripts.conf.5:15
-msgid ""
-"Every script in the B<devscripts> package which makes use of values from "
-"these configuration files describes the specific settings recognised in its "
-"own manpage.  (For a list of the scripts, either see "
-"I</usr/share/doc/devscripts/README.gz> or look at the output of I<dpkg -L "
-"devscripts | grep /usr/bin>.)"
-msgstr ""
-
-# type: Plain text
-#: ../devscripts.conf.5:24
-msgid ""
-"The two configuration files are I</etc/devscripts.conf> for system-wide "
-"defaults and I<~/.devscripts> for per-user settings.  They are written with "
-"B<bash>(1) syntax, but should only have comments and simple variable "
-"assignments in them; they are both sourced (if present) by many of the "
-"B<devscripts> scripts.  Variables corresponding to simple switches should "
-"have one of the values I<yes> and I<no>; any other setting is regarded as "
-"equivalent to the default setting."
-msgstr ""
-
-# type: Plain text
-#: ../devscripts.conf.5:28
-msgid ""
-"All variable names are written in uppercase, and begin with the script "
-"name.  Package-wide variables begin with \"DEVSCRIPTS\", and are listed "
-"below, as well as in the relevant manpages."
-msgstr ""
-
-# type: Plain text
-#: ../devscripts.conf.5:36
-msgid ""
-"For a list of all of the available options variables, along with their "
-"default settings, see the example configuration file "
-"I</usr/share/doc/devscripts/devscripts.conf.ex>.  This is copied to "
-"I</etc/devscripts.conf> when the B<devscripts> package is first installed.  "
-"Information about configuration options introduced in newer versions of the "
-"package will be appended to I</etc/devscripts.conf> when the package is "
-"upgraded."
-msgstr ""
-
-# type: Plain text
-#: ../devscripts.conf.5:40
-msgid ""
-"Every script which reads the configuration files can be forced to ignore "
-"them by using B<--no-conf> as the I<first> command-line option."
-msgstr ""
-
-# type: SH
-#: ../devscripts.conf.5:40
+# type: TP
+#: ../dget.pl:360 ../tagpending.1:29
 #, no-wrap
-msgid "PACKAGE-WIDE VARIABLES"
+msgid "B<-V>, B<--version>"
 msgstr ""
 
-# type: Plain text
-#: ../devscripts.conf.5:42
-msgid "The currently recognised package-wide variables are:"
+# type: textblock
+#: ../dget.pl:362
+msgid "Show version information."
 msgstr ""
 
-# type: Plain text
-#: ../devscripts.conf.5:54
+# type: textblock
+#: ../dget.pl:368
+msgid "B<dget> I<package> should be implemented in B<apt-get install -d>."
+msgstr ""
+
+# type: textblock
+#: ../dget.pl:372
 msgid ""
-"These control scripts which change directory to find a I<debian/changelog> "
-"file or suchlike, and some other miscellaneous cases.  In order to prevent "
-"unwanted, even possibly dangerous, behaviour, these variables control when "
-"actions will be performed.  The scripts which currently make use of these "
-"variables are: B<debc>, B<debchange>/B<dch>, B<debclean>, B<debi>, "
-"B<debrelease>, B<debuild> and B<uscan>, but this list may change with time "
-"(and I may not remember to update this manpage).  Please see the manpages of "
-"individual scripts for details of the specific behaviour for each script."
+"This program is Copyright (C) 2005 by Christoph Berg <myon@debian.org>.  "
+"Modifications are Copyright (C) 2005-06 by Julian Gilbey <jdg@debian.org>."
 msgstr ""
 
-# type: Plain text
-#: ../devscripts.conf.5:58
-msgid "B<devscripts>(1)  and I</usr/share/doc/devscripts/README.gz.>"
-msgstr ""
-
-# type: Plain text
-#: ../devscripts.conf.5:60
+# type: textblock
+#: ../dget.pl:375
 msgid ""
-"This manpage was written for the B<devscripts> package by the package "
-"maintainer Julian Gilbey E<lt>jdg@debian.orgE<gt>."
+"This program is licensed under the terms of the GPL, either version 2 of the "
+"License, or (at your option) any later version."
+msgstr ""
+
+# type: textblock
+#: ../dget.pl:380
+msgid "B<apt-get>(1), B<debdiff>(1), B<dpkg-source>(1), B<curl>(1), B<wget>(1)."
 msgstr ""
 
 # type: TH
@@ -3564,12 +5568,6 @@ msgid ""
 "are recognised as catalogs.  Enabled by default."
 msgstr ""
 
-# type: TP
-#: ../dpkg-depcheck.1:96 ../tagpending.1:26
-#, no-wrap
-msgid "B<-h>, B<--help>"
-msgstr ""
-
 # type: Plain text
 #: ../dpkg-depcheck.1:99
 msgid "Display usage information and exit."
@@ -3821,7 +5819,7 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../grep-excuses.1:21 ../tagpending.1:29
+#: ../grep-excuses.1:21 ../tagpending.1:29 ../whodepends.1:14
 msgid "Show a brief usage message."
 msgstr ""
 
@@ -3848,6 +5846,121 @@ msgstr ""
 msgid ""
 "Joey Hess E<lt>joeyh@debian.orgE<gt>; modifications by Julian Gilbey "
 "E<lt>jdg@debian.orgE<gt>."
+msgstr ""
+
+# type: textblock
+#: ../mass-bug.pl:24
+msgid "mass-bug - mass-file a bug report against a list of packages"
+msgstr ""
+
+# type: textblock
+#: ../mass-bug.pl:28
+msgid "mass-bug [options] --subject=\"bug subject\" template package-list"
+msgstr ""
+
+# type: textblock
+#: ../mass-bug.pl:32
+msgid ""
+"mass-bug assists in filing a mass bug report in the Debian BTS on a set of "
+"packages. For each package in the package-list file (which should list one "
+"package per line), it fills out the template, adds BTS pseudo-headers, and "
+"either displays or sends the bug report."
+msgstr ""
+
+# type: textblock
+#: ../mass-bug.pl:37
+msgid ""
+"Warning: Some care has been taken to avoid unpleasant and common mistakes, "
+"but this is still a power tool that can generate massive amounts of bug "
+"report mails. Use it with care, and read the documentation in the "
+"Developer's Reference about mass filing of bug reports first."
+msgstr ""
+
+# type: =head1
+#: ../mass-bug.pl:42
+msgid "TEMPLATE"
+msgstr ""
+
+# type: textblock
+#: ../mass-bug.pl:44
+msgid ""
+"The template file is the body of the message that will be sent for each bug "
+"report, excluding the BTS pseudo-headers. In the template, #PACKAGE# is "
+"replaced with the name of the package."
+msgstr ""
+
+# type: textblock
+#: ../mass-bug.pl:48
+msgid ""
+"Note that text in the template will be automatically word-wrapped to 70 "
+"columns, up to the start of a signature (indicated by S<'-- '> at the start "
+"of a line on its own)."
+msgstr ""
+
+# type: textblock
+#: ../mass-bug.pl:54
+msgid ""
+"B<mass-bug> examines the B<devscripts> configuration files as described "
+"below.  Command line options override the configuration file settings, "
+"though."
+msgstr ""
+
+# type: =item
+#: ../mass-bug.pl:60
+msgid "--display"
+msgstr ""
+
+# type: textblock
+#: ../mass-bug.pl:62
+msgid ""
+"Fill out the templates for each package and display them all for "
+"verification. This is the default behavior."
+msgstr ""
+
+# type: =item
+#: ../mass-bug.pl:65
+msgid "--send"
+msgstr ""
+
+# type: textblock
+#: ../mass-bug.pl:67
+msgid "Actually send the bug reports."
+msgstr ""
+
+# type: =item
+#: ../mass-bug.pl:69
+msgid "--subject=\"bug subject\""
+msgstr ""
+
+# type: textblock
+#: ../mass-bug.pl:71
+msgid ""
+"Specify the subject of the bug report. The subject will be automatically "
+"prefixed with the name of the package that the bug is filed against."
+msgstr ""
+
+# type: textblock
+#: ../mass-bug.pl:76
+msgid ""
+"Specify the sendmail command.  The command will be split on white space and "
+"will not be passed to a shell.  Default is '/usr/sbin/sendmail'."
+msgstr ""
+
+# type: textblock
+#: ../mass-bug.pl:86
+msgid "Provide a usage message."
+msgstr ""
+
+# type: textblock
+#: ../mass-bug.pl:98
+msgid ""
+"DEBEMAIL and EMAIL can be set in the environment to control the email "
+"address that the bugs are sent from."
+msgstr ""
+
+# type: textblock
+#: ../mass-bug.pl:416
+msgid "This program is Copyright (C) 2006 by Joey Hess <joeyh@debian.org>."
 msgstr ""
 
 # type: TH
@@ -3889,6 +6002,101 @@ msgstr ""
 msgid ""
 "Gergely Nagy E<lt>algernon@debian.orgE<gt>, modifications by Julian Gilbey "
 "E<lt>jdg@debian.orgE<gt>."
+msgstr ""
+
+# type: TH
+#: ../nmudiff.1:1
+#, no-wrap
+msgid "NMUDIFF"
+msgstr ""
+
+# type: Plain text
+#: ../nmudiff.1:4
+msgid "nmudiff - email an NMU diff to the Debian BTS"
+msgstr ""
+
+# type: Plain text
+#: ../nmudiff.1:6
+msgid "B<nmudiff> [I<options>]"
+msgstr ""
+
+# type: Plain text
+#: ../nmudiff.1:16
+msgid ""
+"B<nmudiff> should be run in the source tree of the package being NMUed, "
+"after the NMU is built. It assumes that the source packages (specifically, "
+"the .dsc and any corresponding tar and diff files) for both the previous "
+"version of the package and the newly built NMU version are in the parent "
+"directory. It then uses B<debdiff> to generate a diff between the previous "
+"version and the current NMU, and runs an editor (using B<sensible-editor>) "
+"so that the mail message (including the diff) can be examined and modified; "
+"once you exit the editor the diff will be mailed to the Debian BTS."
+msgstr ""
+
+# type: TP
+#: ../nmudiff.1:17
+#, no-wrap
+msgid "B<--new>"
+msgstr ""
+
+# type: Plain text
+#: ../nmudiff.1:21
+msgid ""
+"Instead of mailing the bug reports which are to be closed by this NMU, a new "
+"bug report is submitted directly to the BTS."
+msgstr ""
+
+# type: TP
+#: ../nmudiff.1:21
+#, no-wrap
+msgid "B<--sendmail> I<SENDMAILCMD>"
+msgstr ""
+
+# type: Plain text
+#: ../nmudiff.1:31
+msgid ""
+"Specify the sendmail command.  The command will be split on white space and "
+"will be interpreted by the shell.  Default is I</usr/sbin/sendmail>.  The "
+"I<-t> option will be automatically added if the command is "
+"I</usr/sbin/sendmail> or I</usr/sbin/exim*>.  For other mailers, if they "
+"require a I<-t> option, this must be included in the I<SENDMAILCMD>, for "
+"example: --sendmail=\"/usr/sbin/mymailer -t\".  This can also be set using "
+"the devscripts configuration files; see below."
+msgstr ""
+
+# type: TP
+#: ../nmudiff.1:31
+#, no-wrap
+msgid "B<--from> I<EMAIL>"
+msgstr ""
+
+# type: Plain text
+#: ../nmudiff.1:38
+msgid ""
+"The email to the BTS will be sent using the name and address in the "
+"environment variable DEBEMAIL.  If this is not set, then the variable EMAIL "
+"will be used instead.  These can be overridden using the B<--from> option.  "
+"The program will not work if an email address cannot be determined."
+msgstr ""
+
+# type: TP
+#: ../nmudiff.1:54
+#, no-wrap
+msgid "B<BTS_SENDMAIL_COMMAND>"
+msgstr ""
+
+# type: Plain text
+#: ../nmudiff.1:63
+msgid "B<debdiff>(1), B<sensible-editor>(1)  and B<devscripts.conf>(5)."
+msgstr ""
+
+# type: Plain text
+#: ../nmudiff.1:67
+msgid ""
+"B<nmudiff> was written and is copyright 2006 by Steinar H. Gunderson and "
+"modified by Julian Gilbey E<lt>jdg@debian.orgE<gt>.  The software may be "
+"freely redistributed under the terms and conditions of the GNU General "
+"Public Licence, version 2."
 msgstr ""
 
 # type: TH
@@ -4164,6 +6372,107 @@ msgid "Joey Hess E<lt>joey@kitenet.netE<gt>"
 msgstr ""
 
 # type: TH
+#: ../pts-subscribe.1:1
+#, no-wrap
+msgid "PTS-SUBSCRIBE"
+msgstr ""
+
+# type: Plain text
+#: ../pts-subscribe.1:4
+msgid "pts-subscribe - time-limited subscription to the PTS"
+msgstr ""
+
+# type: Plain text
+#: ../pts-subscribe.1:6
+msgid "B<pts-subscribe> [options] I<package>"
+msgstr ""
+
+# type: Plain text
+#: ../pts-subscribe.1:10
+msgid ""
+"B<pts-subscribe> sends a subscription request for I<package> to the Package "
+"Tracking System at pts@qa.debian.org, and cancels the subscription 30 days "
+"later."
+msgstr ""
+
+# type: Plain text
+#: ../pts-subscribe.1:13
+msgid ""
+"This utility is useful if a developer has made an NMU and wants to track the "
+"package for a limited period of time."
+msgstr ""
+
+# type: TP
+#: ../pts-subscribe.1:14
+#, no-wrap
+msgid "B<--until >I<time>, B<-u> I<time>"
+msgstr ""
+
+# type: Plain text
+#: ../pts-subscribe.1:19
+msgid ""
+"When B<at>(1) should cancel the subscription.  I<time> must be specified "
+"using B<at>'s syntax.  Default is 'now + 30 days'.  This option will "
+"probably require quoting!"
+msgstr ""
+
+# type: TP
+#: ../pts-subscribe.1:19
+#, no-wrap
+msgid "B<--forever>"
+msgstr ""
+
+# type: Plain text
+#: ../pts-subscribe.1:23
+msgid ""
+"Don't cancel the subscription automatically.  This can also be specified as "
+"B<--until forever>."
+msgstr ""
+
+# type: TP
+#: ../pts-subscribe.1:30
+#, no-wrap
+msgid "B<DEBEMAIL>, B<EMAIL>"
+msgstr ""
+
+# type: Plain text
+#: ../pts-subscribe.1:37
+msgid ""
+"If one of these is set (with preference give to DEBEMAIL), then this will be "
+"used for the subscription address.  If neither is set, then the email will "
+"be sent without a specified subscription address, and the email's From: line "
+"will be used to determine the sender's address.  This will be determined by "
+"B<mail>(1)."
+msgstr ""
+
+# type: TP
+#: ../pts-subscribe.1:43
+#, no-wrap
+msgid "B<PTS_UNTIL>"
+msgstr ""
+
+# type: Plain text
+#: ../pts-subscribe.1:46
+msgid "Setting this is equivalent to giving a B<--until> option."
+msgstr ""
+
+# type: Plain text
+#: ../pts-subscribe.1:51
+msgid ""
+"B<at>(1), information about the Package Tracking System in the Developer's "
+"Reference at "
+"http://www.debian.org/doc/developers-reference/ch-resources#s-pkg-tracking-system"
+msgstr ""
+
+# type: Plain text
+#: ../pts-subscribe.1:54
+msgid ""
+"This program was written by Julian Gilbey E<lt>jdg@debian.orgE<gt> based on "
+"a public domain prototype by Raphael Hertzog E<lt>hertzog@debian.orgE<gt> "
+"and is copyright under the GPL, version 2 or later."
+msgstr ""
+
+# type: TH
 #: ../rc-alert.1:1
 #, no-wrap
 msgid "RC-ALERT"
@@ -4221,6 +6530,259 @@ msgstr ""
 msgid ""
 "B<rc-alert> was written by Anthony DeRobertis and modified by Julian Gilbey "
 "E<lt>jdg@debian.orgE<gt> for the devscripts package."
+msgstr ""
+
+# type: textblock
+#: ../rmadison.pl:115
+msgid "rmadison -- Remotely query the Debian archive database about packages"
+msgstr ""
+
+# type: =item
+#: ../rmadison.pl:121
+msgid "B<rmadison> [I<options>] I<package> ..."
+msgstr ""
+
+# type: textblock
+#: ../rmadison.pl:127
+msgid ""
+"The B<madison> tool queries the Debian archive database (\"projectb\") and "
+"displays which package version is registered per "
+"architecture/component/suite.  The CGI at "
+"B<http://qa.debian.org/madison.php> provides that service without requiring "
+"ssh access to ftp-master.debian.org or the mirror on merkel.debian.org. This "
+"script, B<rmadison>, is a command line frontend to this CGI."
+msgstr ""
+
+# type: =item
+#: ../rmadison.pl:138
+msgid "B<-a>, B<--architecture=ARCH>"
+msgstr ""
+
+# type: textblock
+#: ../rmadison.pl:140
+msgid "only show info for ARCH(s)"
+msgstr ""
+
+# type: =item
+#: ../rmadison.pl:142
+msgid "B<-b>, B<--binary-type=TYPE>"
+msgstr ""
+
+# type: textblock
+#: ../rmadison.pl:144
+msgid "only show info for binary TYPE"
+msgstr ""
+
+# type: =item
+#: ../rmadison.pl:146
+msgid "B<-c>, B<--component=COMPONENT>"
+msgstr ""
+
+# type: textblock
+#: ../rmadison.pl:148
+msgid "only show info for COMPONENT(s)"
+msgstr ""
+
+# type: =item
+#: ../rmadison.pl:150
+msgid "B<-g>, B<--greaterorequal>"
+msgstr ""
+
+# type: textblock
+#: ../rmadison.pl:152
+msgid "show buildd 'dep-wait pkg >= {highest version}' info"
+msgstr ""
+
+# type: =item
+#: ../rmadison.pl:154
+msgid "B<-G>, B<--greaterthan>"
+msgstr ""
+
+# type: textblock
+#: ../rmadison.pl:156
+msgid "show buildd 'dep-wait pkg >> {highest version}' info"
+msgstr ""
+
+# type: textblock
+#: ../rmadison.pl:160
+msgid "show this help and exit"
+msgstr ""
+
+# type: =item
+#: ../rmadison.pl:162
+msgid "B<-r>, B<--regex>"
+msgstr ""
+
+# type: textblock
+#: ../rmadison.pl:164
+msgid ""
+"treat PACKAGE as a regex. Since that can easily DoS the database (\"-r .\"), "
+"this option is not supported by the CGI and rmadison."
+msgstr ""
+
+# type: =item
+#: ../rmadison.pl:167
+msgid "B<-s>, B<--suite=SUITE>"
+msgstr ""
+
+# type: textblock
+#: ../rmadison.pl:169
+msgid "only show info for this suite"
+msgstr ""
+
+# type: =item
+#: ../rmadison.pl:171
+msgid "B<-S>, B<--source-and-binary>"
+msgstr ""
+
+# type: textblock
+#: ../rmadison.pl:173
+msgid "show info for the binary children of source pkgs"
+msgstr ""
+
+# type: textblock
+#: ../rmadison.pl:177
+msgid "show version and exit"
+msgstr ""
+
+# type: textblock
+#: ../rmadison.pl:181
+msgid ""
+"ARCH, COMPONENT and SUITE can be comma (or space) separated lists, e.g.  "
+"--architecture=m68k,i386"
+msgstr ""
+
+# type: textblock
+#: ../rmadison.pl:186
+msgid "madison-lite(1), madison(1)."
+msgstr ""
+
+# type: textblock
+#: ../rmadison.pl:190
+msgid ""
+"rmadison and http://qa.debian.org/madison.php were written by Christoph Berg "
+"<myon@debian.org>. madison itself is part of dak, written by James Troup "
+"<james@nocrew.org>, Anthony Towns <ajt@debian.org>, and others."
+msgstr ""
+
+# type: textblock
+#: ../svnpath.pl:5
+msgid "svnpath - output svn url with support for tags and branches"
+msgstr ""
+
+# type: textblock
+#: ../svnpath.pl:9
+msgid "svnpath"
+msgstr ""
+
+# type: textblock
+#: ../svnpath.pl:11
+msgid "svnpath tags"
+msgstr ""
+
+# type: textblock
+#: ../svnpath.pl:13
+msgid "svnpath branches"
+msgstr ""
+
+# type: textblock
+#: ../svnpath.pl:15
+msgid "svnpath trunk"
+msgstr ""
+
+# type: textblock
+#: ../svnpath.pl:19
+msgid "svnpath is intended to be run in a subversion working copy."
+msgstr ""
+
+# type: textblock
+#: ../svnpath.pl:21
+msgid ""
+"In its simplest usage, svnpath with no parameters outputs the svn url for "
+"the repository associated with the working copy."
+msgstr ""
+
+# type: textblock
+#: ../svnpath.pl:24
+msgid ""
+"If a parameter is given, svnpath attempts to instead output the url that "
+"would be used for the tags, branches, or trunk. This will only work if it's "
+"run in the top-level directory that is subject to tagging or branching."
+msgstr ""
+
+# type: textblock
+#: ../svnpath.pl:28
+msgid ""
+"For example, if you want to tag what's checked into subversion as version "
+"1.0, you could use a command like this:"
+msgstr ""
+
+# type: verbatim
+#: ../svnpath.pl:31
+#, no-wrap
+msgid ""
+"  svn cp $(svnpath) $(svnpath tags)/1.0\n"
+"\n"
+msgstr ""
+
+# type: textblock
+#: ../svnpath.pl:33
+msgid ""
+"That's much easier than using svn info to look up the repository url and "
+"manually modifying it to derive the url to use for the tag, and typing in "
+"something like this:"
+msgstr ""
+
+# type: verbatim
+#: ../svnpath.pl:37
+#, no-wrap
+msgid ""
+"  svn cp svn+ssh://my.server.example/svn/project/trunk "
+"svn+ssh://my.server.example/svn/project/tags/1.0\n"
+"\n"
+msgstr ""
+
+# type: textblock
+#: ../svnpath.pl:39
+msgid ""
+"svnpath uses a simple heuristic to convert between the trunk, tags, and "
+"branches paths. It replaes the first occurance of \"trunk\", \"tags\", or "
+"\"branches\" with the name of what you're looking for. This will work ok for "
+"most typical subversion repository layouts."
+msgstr ""
+
+# type: textblock
+#: ../svnpath.pl:44
+msgid ""
+"If you have an atypical layout and it does not work, you can add a "
+"~/.svnpath file. This file is perl code, which can modify the path in $url.  "
+"For example, the author uses this file:"
+msgstr ""
+
+# type: verbatim
+#: ../svnpath.pl:48
+#, no-wrap
+msgid ""
+" #!/usr/bin/perl\n"
+" # svnpath personal override file\n"
+"\n"
+msgstr ""
+
+# type: verbatim
+#: ../svnpath.pl:51
+#, no-wrap
+msgid ""
+" # For d-i I sometimes work from a full d-i tree branch. Remove that from\n"
+" # the path to get regular tags or branches directories.\n"
+" $url=~s!d-i/(rc|beta)[0-9]+/!!;\n"
+" $url=~s!d-i/sarge/!!;\n"
+" 1\n"
+"\n"
+msgstr ""
+
+# type: textblock
+#: ../svnpath.pl:99
+msgid "Joey Hess <joey@kitenet.net>"
 msgstr ""
 
 # type: TH
@@ -4293,12 +6855,6 @@ msgstr ""
 msgid ""
 "Do not query the BTS for already tagged bugs, that is, force all bugs to be "
 "tagged as pending even if they already are."
-msgstr ""
-
-# type: TP
-#: ../tagpending.1:29
-#, no-wrap
-msgid "B<-V>, B<--version>"
 msgstr ""
 
 # type: Plain text
@@ -4809,12 +7365,6 @@ msgid ""
 "This is the default behaviour."
 msgstr ""
 
-# type: SH
-#: ../uscan.1:310
-#, no-wrap
-msgid "EXAMPLE"
-msgstr ""
-
 # type: Plain text
 #: ../uscan.1:312
 msgid "This script will perform a fully automatic upstream update."
@@ -5038,11 +7588,6 @@ msgstr ""
 # type: Plain text
 #: ../uscan.1:409
 msgid "Give brief usage information."
-msgstr ""
-
-# type: Plain text
-#: ../uscan.1:412
-msgid "Display version information."
 msgstr ""
 
 # type: Plain text
@@ -5569,6 +8114,164 @@ msgid ""
 msgstr ""
 
 # type: TH
+#: ../whodepends.1:1
+#, no-wrap
+msgid "WHODEPENDS"
+msgstr ""
+
+# type: Plain text
+#: ../whodepends.1:4
+msgid "whodepends - check which maintainers' packages depend on a package"
+msgstr ""
+
+# type: Plain text
+#: ../whodepends.1:6
+msgid "B<whodepends> [I<package>] [options]"
+msgstr ""
+
+# type: Plain text
+#: ../whodepends.1:10
+msgid ""
+"B<whodepends> gives the names, e-mail addresses and the packages they "
+"maintain which depend on the given packages of all maintainers who have "
+"packages depending on the given package."
+msgstr ""
+
+# type: TP
+#: ../whodepends.1:11
+#, no-wrap
+msgid "B<--help, -h>"
+msgstr ""
+
+# type: TP
+#: ../whodepends.1:14
+#, no-wrap
+msgid "B<--version, -v>"
+msgstr ""
+
+# type: Plain text
+#: ../whodepends.1:19
+msgid "B<whodepends> is not very efficient."
+msgstr ""
+
+# type: Plain text
+#: ../whodepends.1:20
+msgid "B<whodepends> has been written by Moshe Zadka E<lt>moshez@debian.orgE<gt>."
+msgstr ""
+
+# type: TH
+#: ../who-uploads.1:1
+#, no-wrap
+msgid "WHO-UPLOADS"
+msgstr ""
+
+# type: Plain text
+#: ../who-uploads.1:4
+msgid "who-uploads - identify the uploaders of Debian source packages"
+msgstr ""
+
+# type: Plain text
+#: ../who-uploads.1:6
+msgid "B<who-uploads> [I<options>] I<source_package> [...]"
+msgstr ""
+
+# type: Plain text
+#: ../who-uploads.1:12
+msgid ""
+"B<who-uploads> uses the Package Tracking System (PTS) to identify the "
+"uploaders of the three most recent versions of the given source packages.  "
+"Note that the uploaders are identified using their B<gpg>(1) keys; "
+"installing a recent version of the I<debian-keyring> package should provide "
+"most of the required keys."
+msgstr ""
+
+# type: Plain text
+#: ../who-uploads.1:15
+msgid ""
+"Note that because the PTS uses source packages, you must give the source "
+"package names, not the binary package names."
+msgstr ""
+
+# type: TP
+#: ../who-uploads.1:16
+#, no-wrap
+msgid "B<--max-uploads=>I<N>"
+msgstr ""
+
+# type: Plain text
+#: ../who-uploads.1:21
+msgid ""
+"Specify the maximum number of uploads to display for each package; the "
+"default is 3.  Note that you may not see this many uploads if there are not "
+"this many recorded in the PTS."
+msgstr ""
+
+# type: TP
+#: ../who-uploads.1:21
+#, no-wrap
+msgid "B<--keyring >I<keyring>"
+msgstr ""
+
+# type: Plain text
+#: ../who-uploads.1:25
+msgid ""
+"Add I<keyring> to the list of keyrings to be searched for the uploader's GPG "
+"key."
+msgstr ""
+
+# type: TP
+#: ../who-uploads.1:25
+#, no-wrap
+msgid "B<--no-default-keyrings>"
+msgstr ""
+
+# type: Plain text
+#: ../who-uploads.1:32
+msgid ""
+"By default, B<who-uploads> uses the two Debian keyrings "
+"I</usr/share/keyrings/debian-keyring.{gpg,pgp}> (although this default can "
+"be changed in the configuration file, see below).  Specifying this option "
+"means that the default keyrings will not be examined.  The B<--keyring> "
+"option overrides this one."
+msgstr ""
+
+# type: TP
+#: ../who-uploads.1:48
+#, no-wrap
+msgid "B<WHOUPLOADS_MAXUPLOADS>"
+msgstr ""
+
+# type: Plain text
+#: ../who-uploads.1:52
+msgid ""
+"The maximum number of uploads to display for each package.  By default, this "
+"is 3."
+msgstr ""
+
+# type: TP
+#: ../who-uploads.1:52
+#, no-wrap
+msgid "B<WHOUPLOADS_KEYRINGS>"
+msgstr ""
+
+# type: Plain text
+#: ../who-uploads.1:58
+msgid ""
+"This is a colon-separated list of the default keyrings to be used.  By "
+"default, it is the two Debian keyrings "
+"I</usr/share/keyrings/debian-keyring.gpg> and "
+"I</usr/share/keyrings/debian-keyring.pgp>."
+msgstr ""
+
+# type: Plain text
+#: ../who-uploads.1:61
+msgid ""
+"The original version of B<who-uploads> was written by Adeodato Sim\\['o] "
+"E<lt>dato@net.com.org.esE<gt>.  The current version is by Julian Gilbey "
+"E<lt>jdg@debian.orgE<gt>."
+msgstr ""
+
+# type: TH
 #: ../wnpp-alert.1:1
 #, no-wrap
 msgid "WNPP-ALERT"
@@ -5603,4 +8306,109 @@ msgid ""
 "B<wnpp-alert> was written by Arthur Korn E<lt>arthur@korn.chE<gt> and "
 "modified by Julian Gilbey E<lt>jdg@debian.orgE<gt> for the devscripts "
 "package.  It is in the public domain."
+msgstr ""
+
+# type: TH
+#: ../devscripts.conf.5:1
+#, no-wrap
+msgid "DEVSCRIPTS.CONF"
+msgstr ""
+
+# type: Plain text
+#: ../devscripts.conf.5:4
+msgid "devscripts.conf - configuration file for the devscripts package"
+msgstr ""
+
+# type: Plain text
+#: ../devscripts.conf.5:9
+msgid ""
+"The B<devscripts> package provides a collection of scripts which may be of "
+"use to Debian developers and others wishing to build Debian packages.  Many "
+"of these have options which can be configured on a system-wide and per-user "
+"basis."
+msgstr ""
+
+# type: Plain text
+#: ../devscripts.conf.5:15
+msgid ""
+"Every script in the B<devscripts> package which makes use of values from "
+"these configuration files describes the specific settings recognised in its "
+"own manpage.  (For a list of the scripts, either see "
+"I</usr/share/doc/devscripts/README.gz> or look at the output of I<dpkg -L "
+"devscripts | grep /usr/bin>.)"
+msgstr ""
+
+# type: Plain text
+#: ../devscripts.conf.5:24
+msgid ""
+"The two configuration files are I</etc/devscripts.conf> for system-wide "
+"defaults and I<~/.devscripts> for per-user settings.  They are written with "
+"B<bash>(1) syntax, but should only have comments and simple variable "
+"assignments in them; they are both sourced (if present) by many of the "
+"B<devscripts> scripts.  Variables corresponding to simple switches should "
+"have one of the values I<yes> and I<no>; any other setting is regarded as "
+"equivalent to the default setting."
+msgstr ""
+
+# type: Plain text
+#: ../devscripts.conf.5:28
+msgid ""
+"All variable names are written in uppercase, and begin with the script "
+"name.  Package-wide variables begin with \"DEVSCRIPTS\", and are listed "
+"below, as well as in the relevant manpages."
+msgstr ""
+
+# type: Plain text
+#: ../devscripts.conf.5:36
+msgid ""
+"For a list of all of the available options variables, along with their "
+"default settings, see the example configuration file "
+"I</usr/share/doc/devscripts/devscripts.conf.ex>.  This is copied to "
+"I</etc/devscripts.conf> when the B<devscripts> package is first installed.  "
+"Information about configuration options introduced in newer versions of the "
+"package will be appended to I</etc/devscripts.conf> when the package is "
+"upgraded."
+msgstr ""
+
+# type: Plain text
+#: ../devscripts.conf.5:40
+msgid ""
+"Every script which reads the configuration files can be forced to ignore "
+"them by using B<--no-conf> as the I<first> command-line option."
+msgstr ""
+
+# type: SH
+#: ../devscripts.conf.5:40
+#, no-wrap
+msgid "PACKAGE-WIDE VARIABLES"
+msgstr ""
+
+# type: Plain text
+#: ../devscripts.conf.5:42
+msgid "The currently recognised package-wide variables are:"
+msgstr ""
+
+# type: Plain text
+#: ../devscripts.conf.5:54
+msgid ""
+"These control scripts which change directory to find a I<debian/changelog> "
+"file or suchlike, and some other miscellaneous cases.  In order to prevent "
+"unwanted, even possibly dangerous, behaviour, these variables control when "
+"actions will be performed.  The scripts which currently make use of these "
+"variables are: B<debc>, B<debchange>/B<dch>, B<debclean>, B<debi>, "
+"B<debrelease>, B<debuild> and B<uscan>, but this list may change with time "
+"(and I may not remember to update this manpage).  Please see the manpages of "
+"individual scripts for details of the specific behaviour for each script."
+msgstr ""
+
+# type: Plain text
+#: ../devscripts.conf.5:58
+msgid "B<devscripts>(1)  and I</usr/share/doc/devscripts/README.gz.>"
+msgstr ""
+
+# type: Plain text
+#: ../devscripts.conf.5:60
+msgid ""
+"This manpage was written for the B<devscripts> package by the package "
+"maintainer Julian Gilbey E<lt>jdg@debian.orgE<gt>."
 msgstr ""

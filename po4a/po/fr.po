@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts.fr.corrected\n"
-"POT-Creation-Date: 2006-07-08 22:59+0200\n"
+"POT-Creation-Date: 2006-11-08 18:57+0000\n"
 "PO-Revision-Date: 2005-11-18 14:34+0100\n"
 "Last-Translator: Thomas Huriaux <thomas.huriaux@gmail.com>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -56,7 +56,7 @@ msgstr "DEBIAN"
 #: ../dd-list.1:19 ../debc.1:2 ../debchange.1:2 ../debclean.1:2
 #: ../debcommit.pl:3 ../debdiff.1:2 ../debi.1:2 ../debpkg.1:2
 #: ../debrelease.1:2 ../debrsign.1:2 ../debsign.1:2 ../debuild.1:2
-#: ../devscripts.1:2 ../dget.pl:253 ../dpkg-depcheck.1:2
+#: ../devscripts.1:2 ../dget.pl:295 ../dpkg-depcheck.1:2
 #: ../dpkg-genbuilddeps.1:2 ../dscverify.1:2 ../grep-excuses.1:2
 #: ../mass-bug.pl:22 ../mergechanges.1:2 ../nmudiff.1:2 ../plotchangelog.1:2
 #: ../pts-subscribe.1:2 ../rc-alert.1:2 ../rmadison.pl:113 ../svnpath.pl:3
@@ -73,12 +73,12 @@ msgstr ""
 "annotate-output - Annoter la sortie d'un programme avec la date et les flux"
 
 # type: SH
-#: ../annotate-output.1:4 ../archpath.1:4 ../bts.pl:128 ../checkbashisms.1:4
+#: ../annotate-output.1:4 ../archpath.1:4 ../bts.pl:129 ../checkbashisms.1:4
 #: ../cvs-debc.1:4 ../cvs-debi.1:4 ../cvs-debrelease.1:4 ../cvs-debuild.1:4
 #: ../dd-list.1:22 ../debc.1:4 ../debchange.1:4 ../debclean.1:4
 #: ../debcommit.pl:7 ../debdiff.1:4 ../debi.1:4 ../debpkg.1:4
 #: ../debrelease.1:4 ../debrsign.1:4 ../debsign.1:4 ../debuild.1:4
-#: ../dget.pl:257 ../dpkg-depcheck.1:4 ../dpkg-genbuilddeps.1:4
+#: ../dget.pl:299 ../dpkg-depcheck.1:4 ../dpkg-genbuilddeps.1:4
 #: ../dscverify.1:4 ../grep-excuses.1:4 ../mass-bug.pl:26 ../mergechanges.1:4
 #: ../nmudiff.1:4 ../plotchangelog.1:4 ../pts-subscribe.1:4 ../rc-alert.1:4
 #: ../rmadison.pl:117 ../svnpath.pl:7 ../tagpending.1:4 ../uscan.1:4
@@ -93,12 +93,12 @@ msgid "B<annotate-output> I<program> [I<args> ...]"
 msgstr "B<annotate-output> I<programme> [I<paramètres> ...]"
 
 # type: SH
-#: ../annotate-output.1:6 ../archpath.1:12 ../bts.pl:132 ../checkbashisms.1:8
+#: ../annotate-output.1:6 ../archpath.1:12 ../bts.pl:133 ../checkbashisms.1:8
 #: ../cvs-debc.1:6 ../cvs-debi.1:6 ../cvs-debrelease.1:7 ../cvs-debuild.1:8
 #: ../dd-list.1:26 ../debc.1:6 ../debchange.1:8 ../debclean.1:6
 #: ../debcommit.pl:11 ../debdiff.1:13 ../debi.1:6 ../debpkg.1:6
 #: ../debrelease.1:6 ../deb-reversion.dbk:82 ../debrsign.1:7 ../debsign.1:6
-#: ../debuild.1:11 ../devscripts.1:4 ../dget.pl:269 ../dpkg-depcheck.1:6
+#: ../debuild.1:11 ../devscripts.1:4 ../dget.pl:309 ../dpkg-depcheck.1:6
 #: ../dpkg-genbuilddeps.1:6 ../dscverify.1:6 ../grep-excuses.1:6
 #: ../mass-bug.pl:30 ../mergechanges.1:6 ../nmudiff.1:6 ../plotchangelog.1:7
 #: ../pts-subscribe.1:6 ../rc-alert.1:8 ../rmadison.pl:125 ../svnpath.pl:17
@@ -119,7 +119,7 @@ msgstr ""
 "(« stdout ») et un E pour la sortie d'erreur (« stderr »)."
 
 # type: SH
-#: ../annotate-output.1:11 ../uscan.1:303
+#: ../annotate-output.1:11 ../uscan.1:310
 #, no-wrap
 msgid "EXAMPLE"
 msgstr "EXEMPLE"
@@ -145,7 +145,7 @@ msgstr ""
 "21:43:19 I: terminé avec un code de sortie 2\n"
 
 # type: =head1
-#: ../annotate-output.1:23 ../dget.pl:299 ../nmudiff.1:16 ../whodepends.1:17
+#: ../annotate-output.1:23 ../dget.pl:366 ../whodepends.1:17
 #, no-wrap
 msgid "BUGS"
 msgstr "BOGUES"
@@ -245,14 +245,14 @@ msgstr ""
 # type: SH
 #: ../annotate-output.1:55 ../archpath.1:54 ../checkbashisms.1:34
 #: ../cvs-debc.1:64 ../cvs-debi.1:68 ../cvs-debrelease.1:69
-#: ../cvs-debuild.1:63 ../dd-list.1:82 ../debc.1:119 ../debchange.1:334
+#: ../cvs-debuild.1:63 ../dd-list.1:82 ../debc.1:119 ../debchange.1:335
 #: ../debclean.1:108 ../debcommit.pl:291 ../debdiff.1:167 ../debi.1:120
 #: ../debpkg.1:23 ../debrelease.1:137 ../deb-reversion.dbk:254
-#: ../debrsign.1:71 ../debsign.1:128 ../debuild.1:413 ../dget.pl:303
+#: ../debrsign.1:71 ../debsign.1:128 ../debuild.1:413 ../dget.pl:370
 #: ../dpkg-genbuilddeps.1:36 ../dscverify.1:44 ../grep-excuses.1:36
-#: ../mass-bug.pl:415 ../mergechanges.1:17 ../nmudiff.1:21
+#: ../mass-bug.pl:421 ../mergechanges.1:17 ../nmudiff.1:63
 #: ../plotchangelog.1:126 ../pts-subscribe.1:51 ../rc-alert.1:29
-#: ../rmadison.pl:188 ../svnpath.pl:97 ../tagpending.1:33 ../uscan.1:481
+#: ../rmadison.pl:188 ../svnpath.pl:97 ../tagpending.1:37 ../uscan.1:488
 #: ../uupdate.1:167 ../whodepends.1:19 ../who-uploads.1:58 ../wnpp-alert.1:19
 #: ../devscripts.conf.5:58
 #, no-wrap
@@ -399,7 +399,7 @@ msgstr ""
 "bts - Interface en ligne de commande pour le BTS, pour les développeurs"
 
 # type: textblock
-#: ../bts.pl:130
+#: ../bts.pl:131
 msgid ""
 "B<bts> [options] command [args] [#comment] [.|, command [args] "
 "[#comment]] ..."
@@ -408,7 +408,7 @@ msgstr ""
 "[paramètres] [#commentaire]] ..."
 
 # type: textblock
-#: ../bts.pl:134
+#: ../bts.pl:135
 msgid ""
 "This is a command line interface to the bug tracking system, intended mainly "
 "for use by developers. It lets the BTS be manipulated using simple commands "
@@ -424,7 +424,7 @@ msgstr ""
 "courriel à l'adresse de contrôle du BTS."
 
 # type: textblock
-#: ../bts.pl:140
+#: ../bts.pl:141
 msgid ""
 "In general, the command line interface is the same as what you would write "
 "in a mail to control@bugs.debian.org, just prefixed with \"bts\". For "
@@ -435,7 +435,7 @@ msgstr ""
 "« bts ». Par exemple :"
 
 # type: verbatim
-#: ../bts.pl:144
+#: ../bts.pl:145
 #, no-wrap
 msgid ""
 " % bts severity 69042 normal\n"
@@ -449,7 +449,7 @@ msgstr ""
 "\n"
 
 # type: textblock
-#: ../bts.pl:148
+#: ../bts.pl:149
 msgid ""
 "A few additional commands have been added for your convenience, and this "
 "program is less strict about what constitutes a valid bug number. For "
@@ -465,7 +465,7 @@ msgstr ""
 "mettre entre guillemets.)"
 
 # type: textblock
-#: ../bts.pl:154
+#: ../bts.pl:155
 msgid ""
 "Also, for your convenience, this program allows you to abbreviate commands "
 "to the shortest unique substring (similar to how cvs lets you abbreviate "
@@ -476,7 +476,7 @@ msgstr ""
 "celle de cvs). Ainsi des choses comme « bts cl 85942 » sont comprises."
 
 # type: textblock
-#: ../bts.pl:158
+#: ../bts.pl:159
 msgid ""
 "It is also possible to include a comment in the mail sent to the BTS. If "
 "your shell does not strip out the comment in a command like \"bts severity "
@@ -497,7 +497,7 @@ msgstr ""
 "un commentaire.)"
 
 # type: textblock
-#: ../bts.pl:166
+#: ../bts.pl:167
 msgid ""
 "You can specify multiple commands by separating them with a single dot, "
 "rather like B<update-rc.d>; a single comma may also be used; all the "
@@ -511,7 +511,7 @@ msgstr ""
 "commentaire correctement) :"
 
 # type: verbatim
-#: ../bts.pl:171
+#: ../bts.pl:172
 #, no-wrap
 msgid ""
 " % bts severity 95672 normal , merge 95672 95673 \\#they\\'re the same!\n"
@@ -521,7 +521,7 @@ msgstr ""
 "\n"
 
 # type: textblock
-#: ../bts.pl:173
+#: ../bts.pl:174
 msgid ""
 "The abbreviation \"it\" may be used to refer to the last mentioned bug "
 "number, so you could write:"
@@ -530,7 +530,7 @@ msgstr ""
 "bogue mentionné, donc vous pouvez écrire :"
 
 # type: verbatim
-#: ../bts.pl:176
+#: ../bts.pl:177
 #, no-wrap
 msgid ""
 " % bts severity 95672 wishlist, retitle it \"bts: please add a --foo option\"\n"
@@ -540,7 +540,7 @@ msgstr ""
 "\n"
 
 # type: textblock
-#: ../bts.pl:178
+#: ../bts.pl:179
 msgid ""
 "Please use this program responsibly, and do take our users into "
 "consideration."
@@ -549,21 +549,21 @@ msgstr ""
 "utilisateurs en considération."
 
 # type: SH
-#: ../bts.pl:181 ../checkbashisms.1:14 ../cvs-debc.1:24 ../cvs-debi.1:28
+#: ../bts.pl:182 ../checkbashisms.1:14 ../cvs-debc.1:24 ../cvs-debi.1:28
 #: ../cvs-debrelease.1:21 ../cvs-debuild.1:33 ../dd-list.1:58 ../debc.1:63
 #: ../debchange.1:145 ../debclean.1:60 ../debcommit.pl:18 ../debdiff.1:45
 #: ../debi.1:65 ../debrelease.1:56 ../deb-reversion.dbk:128 ../debrsign.1:30
-#: ../debsign.1:39 ../debuild.1:210 ../dget.pl:291 ../dpkg-depcheck.1:15
-#: ../dscverify.1:15 ../grep-excuses.1:13 ../mass-bug.pl:51
+#: ../debsign.1:39 ../debuild.1:210 ../dget.pl:335 ../dpkg-depcheck.1:15
+#: ../dscverify.1:15 ../grep-excuses.1:13 ../mass-bug.pl:52 ../nmudiff.1:16
 #: ../plotchangelog.1:43 ../pts-subscribe.1:13 ../rc-alert.1:17
-#: ../rmadison.pl:134 ../tagpending.1:12 ../uscan.1:318 ../uupdate.1:50
+#: ../rmadison.pl:134 ../tagpending.1:12 ../uscan.1:325 ../uupdate.1:50
 #: ../whodepends.1:10 ../who-uploads.1:15 ../wnpp-alert.1:12
 #, no-wrap
 msgid "OPTIONS"
 msgstr "OPTIONS"
 
 # type: Plain text
-#: ../bts.pl:183
+#: ../bts.pl:184
 msgid ""
 "B<bts> examines the B<devscripts> configuration files as described below.  "
 "Command line options override the configuration file settings, though."
@@ -573,12 +573,12 @@ msgstr ""
 "paramètres des fichiers de configuration."
 
 # type: =item
-#: ../bts.pl:189
+#: ../bts.pl:190
 msgid "-o, --offline"
 msgstr "-o, --offline"
 
 # type: textblock
-#: ../bts.pl:191
+#: ../bts.pl:192
 msgid ""
 "Make bts use cached bugs for the 'show' and 'bugs' commands, if a cache is "
 "available for the requested data. See the cache command, below for "
@@ -590,12 +590,12 @@ msgstr ""
 "plus d'informations sur la mise en place d'un cache."
 
 # type: TP
-#: ../bts.pl:195
+#: ../bts.pl:196
 msgid "--online, --no-offline"
 msgstr "--online, --no-offline"
 
 # type: textblock
-#: ../bts.pl:197
+#: ../bts.pl:198
 msgid ""
 "Opposite of --offline; overrides any configuration file directive to work "
 "offline."
@@ -604,12 +604,12 @@ msgstr ""
 "de configuration afin de travailler hors ligne."
 
 # type: =item
-#: ../bts.pl:200
+#: ../bts.pl:201
 msgid "--cache, --no-cache"
 msgstr "--cache, --no-cache"
 
 # type: textblock
-#: ../bts.pl:202
+#: ../bts.pl:203
 msgid ""
 "Should we attempt to cache new versions of BTS pages when performing show/"
 "bugs commands? Default is to cache."
@@ -619,12 +619,12 @@ msgstr ""
 "cache est activée."
 
 # type: =item
-#: ../bts.pl:205
+#: ../bts.pl:206
 msgid "--cache-mode={min|mbox|full}"
 msgstr "--cache-mode={min|mbox|full}"
 
 # type: textblock
-#: ../bts.pl:207
+#: ../bts.pl:208
 msgid ""
 "When running a B<bts cache> command, should we only mirror the basic bug "
 "(min), or should we also mirror the mbox version (mbox), or should we mirror "
@@ -638,12 +638,12 @@ msgstr ""
 "« min » est utilisé."
 
 # type: =item
-#: ../bts.pl:213
+#: ../bts.pl:214
 msgid "--cache-delay=seconds"
 msgstr "--cache-delay=secondes"
 
 # type: textblock
-#: ../bts.pl:215
+#: ../bts.pl:216
 msgid ""
 "Time in seconds to delay between each download, to avoid hammering the BTS "
 "web server. Default is 5 seconds."
@@ -652,12 +652,12 @@ msgstr ""
 "le serveur web du BTS. Il est de 5 secondes par défaut."
 
 # type: =item
-#: ../bts.pl:218
+#: ../bts.pl:219
 msgid "--mbox"
 msgstr "--mbox"
 
 # type: textblock
-#: ../bts.pl:220
+#: ../bts.pl:221
 msgid ""
 "Open a mail reader to read the mbox corresponding to a given bug number for "
 "show and bugs commands."
@@ -666,17 +666,19 @@ msgstr ""
 "correspondant à un numéro de bogue donné, pour les commandes show et bugs."
 
 # type: =item
-#: ../bts.pl:223
+#: ../bts.pl:224
 msgid "--mailreader=READER"
 msgstr "--mailreader=CLIENT_MAIL"
 
 # type: textblock
-#: ../bts.pl:225
+#: ../bts.pl:226
+#, fuzzy
 msgid ""
-"Specify the command to read the mbox.  Must contain a \"%s\" string, which "
-"will be replaced by the name of the mbox file.  The command will be split on "
-"white space and will not be passed to a shell.  Default is 'mutt -f %s'.  "
-"(Also, %% will be substituted by a single % if this is needed.)"
+"Specify the command to read the mbox.  Must contain a \"%s\" string "
+"(unquoted!), which will be replaced by the name of the mbox file.  The "
+"command will be split on white space and will not be passed to a shell.  "
+"Default is 'mutt -f %s'.  (Also, %% will be substituted by a single % if "
+"this is needed.)"
 msgstr ""
 "Spécifier la commande pour lire la boîte de courriel (« mbox »). Doit "
 "contenir une chaîne « %s », qui sera remplacée par le nom du fichier mbox. "
@@ -685,27 +687,28 @@ msgstr ""
 "utilisé. (De même %% sera remplacé par un simple % si ceci est nécessaire.)"
 
 # type: =item
-#: ../bts.pl:230 ../mass-bug.pl:73
+#: ../bts.pl:232 ../mass-bug.pl:74
 msgid "--sendmail=SENDMAILCMD"
 msgstr "--sendmail=COMMANDE_D_ENVOI_DE_MAIL"
 
 # type: textblock
-#: ../bts.pl:232 ../mass-bug.pl:75
+#: ../bts.pl:234
 msgid ""
 "Specify the sendmail command.  The command will be split on white space and "
-"will not be passed to a shell.  Default is '/usr/sbin/sendmail'."
+"will not be passed to a shell.  Default is '/usr/sbin/sendmail'.  The -t "
+"option will be automatically added if the command is /usr/sbin/sendmail or /"
+"usr/sbin/exim*.  For other mailers, if they require a -t option, this must "
+"be included in the SENDMAILCMD, for example: --sendmail=\"/usr/sbin/mymailer "
+"-t\""
 msgstr ""
-"Spécifier la commande utilisée pour envoyer le courriel. La commande sera "
-"découpée en fonction des espaces et ne sera pas passée à un interpréteur de "
-"commandes. Par défaut, c'est « /usr/sbin/sendmail » qui est utilisé."
 
 # type: =item
-#: ../bts.pl:235
+#: ../bts.pl:241
 msgid "-f, --force-refresh"
 msgstr "-f, --force-refresh"
 
 # type: textblock
-#: ../bts.pl:237
+#: ../bts.pl:243
 msgid ""
 "Download a bug report again, even if it does not appear to have changed "
 "since the last cache command.  Useful if a --cache-mode=full is requested "
@@ -719,24 +722,24 @@ msgstr ""
 "inintéressantes n'ont pas été téléchargées)."
 
 # type: =item
-#: ../bts.pl:243
+#: ../bts.pl:249
 msgid "--no-force-refresh"
 msgstr "--no-force-refresh"
 
 # type: Plain text
-#: ../bts.pl:245
+#: ../bts.pl:251
 msgid "Suppress any configuration file --force-refresh option."
 msgstr ""
 "Ne tenir compte d'aucune option --force-refresh venant d'un fichier de "
 "configuration."
 
 # type: =item
-#: ../bts.pl:247
+#: ../bts.pl:253
 msgid "-q, --quiet"
 msgstr "-q, --quiet"
 
 # type: textblock
-#: ../bts.pl:249
+#: ../bts.pl:255
 msgid ""
 "When running bts cache, only display information about newly cached pages, "
 "not messages saying already cached.  If this option is specified twice, only "
@@ -748,16 +751,16 @@ msgstr ""
 "messages d'erreur, vers la sortie d'erreur (« stderr »)."
 
 # type: TP
-#: ../bts.pl:253 ../mass-bug.pl:78
+#: ../bts.pl:259 ../mass-bug.pl:79
 msgid "--no-conf, --noconf"
 msgstr "--no-conf, --noconf"
 
 # type: Plain text
-#: ../bts.pl:255 ../cvs-debrelease.1:61 ../debc.1:88 ../debchange.1:271
+#: ../bts.pl:261 ../cvs-debrelease.1:61 ../debc.1:88 ../debchange.1:272
 #: ../debclean.1:81 ../debdiff.1:118 ../debi.1:90 ../debrelease.1:99
 #: ../debsign.1:93 ../debuild.1:216 ../dpkg-depcheck.1:96 ../dscverify.1:23
-#: ../grep-excuses.1:18 ../mass-bug.pl:80 ../uscan.1:399 ../uupdate.1:80
-#: ../who-uploads.1:36
+#: ../grep-excuses.1:18 ../mass-bug.pl:81 ../nmudiff.1:42 ../uscan.1:406
+#: ../uupdate.1:80 ../who-uploads.1:36
 msgid ""
 "Do not read any configuration files.  This can only be used as the first "
 "option given on the command-line."
@@ -766,12 +769,12 @@ msgstr ""
 "première position de la ligne de commande."
 
 # type: =head1
-#: ../bts.pl:466
+#: ../bts.pl:476
 msgid "COMMANDS"
 msgstr "COMMANDES"
 
 # type: textblock
-#: ../bts.pl:468
+#: ../bts.pl:478
 msgid ""
 "For full details about the commands, see the BTS documentation.  L<http://"
 "www.debian.org/Bugs/server-control>"
@@ -780,7 +783,7 @@ msgstr ""
 "du BTS. L<http://bugs.debian.org/Bugs/server-control>"
 
 # type: =item
-#: ../bts.pl:473
+#: ../bts.pl:483
 msgid ""
 "show [options] [<bug number> | <package> | <maintainer> | : ] [opt=val ...]"
 msgstr ""
@@ -788,27 +791,27 @@ msgstr ""
 "[opt=val ...]"
 
 # type: =item
-#: ../bts.pl:475
+#: ../bts.pl:485
 msgid "show [options] [src:<package> | from:<submitter>] [opt=val ...]"
 msgstr "show [options] [src:<paquet> | from:<rapporteur>] [opt=val ...]"
 
 # type: =item
-#: ../bts.pl:477
+#: ../bts.pl:487
 msgid "show [options] [tag:<tag> | usertag:<tag> ] [opt=val ...]"
 msgstr "show [options] [tag:<tag> | usertag:<tag> ] [opt=val ...]"
 
 # type: =item
-#: ../bts.pl:479
+#: ../bts.pl:489
 msgid "show [release-critical | release-critical/... | RC]"
 msgstr "show [release-critical | release-critical/... | RC]"
 
 # type: textblock
-#: ../bts.pl:481
+#: ../bts.pl:491
 msgid "This is a synonym for bts bugs."
 msgstr "Ceci est un synonyme pour « bts bugs »."
 
 # type: =item
-#: ../bts.pl:489
+#: ../bts.pl:499
 msgid ""
 "bugs [options] [<bug number> | <package> | <maintainer> | : ] [opt=val ..]"
 msgstr ""
@@ -816,22 +819,22 @@ msgstr ""
 "[opt=val ..]"
 
 # type: =item
-#: ../bts.pl:491
+#: ../bts.pl:501
 msgid "bugs [options] [src:<package> | from:<submitter>] [opt=val ..]"
 msgstr "bugs [options] [src:<paquet> | from:<rapporteur>] [opt=val ..]"
 
 # type: =item
-#: ../bts.pl:493
+#: ../bts.pl:503
 msgid "bugs [options] [tag:<tag> | usertag:<tag> ] [opt=val ..]"
 msgstr "bugs [options] [tag:<tag> | usertag:<tag> ] [opt=val ..]"
 
 # type: =item
-#: ../bts.pl:495
+#: ../bts.pl:505
 msgid "bugs [release-critical | release-critical/... | RC]"
 msgstr "bugs [release-critical | release-critical/... | RC]"
 
 # type: textblock
-#: ../bts.pl:497
+#: ../bts.pl:507
 msgid ""
 "Display the page listing the requested bugs in a web browser using "
 "L<sensible-browser(1)>."
@@ -840,7 +843,7 @@ msgstr ""
 "utilisant L<sensible-browser>(1)."
 
 # type: textblock
-#: ../bts.pl:500
+#: ../bts.pl:510
 msgid ""
 "Options may be specified after the \"bugs\" command in addition to or "
 "instead of options at the start of the command line: recognised options at "
@@ -857,17 +860,17 @@ msgstr ""
 "local, les versions mises en cache vont être utilisées."
 
 # type: textblock
-#: ../bts.pl:507
+#: ../bts.pl:517
 msgid "The meanings of the possible arguments are as follows:"
 msgstr "Les significations des arguments possibles sont les suivantes :"
 
 # type: =item
-#: ../bts.pl:511
+#: ../bts.pl:521
 msgid "(none)"
 msgstr "(aucune)"
 
 # type: textblock
-#: ../bts.pl:513
+#: ../bts.pl:523
 msgid ""
 "If nothing is specified, bts bugs will display your bugs, assuming that "
 "either DEBEMAIL or EMAIL (examined in that order) is set to the appropriate "
@@ -878,92 +881,93 @@ msgstr ""
 "l'adresse de courriel désirée."
 
 # type: =item
-#: ../bts.pl:517
+#: ../bts.pl:527
 msgid "<bug number>"
 msgstr "<numéro de bogue>"
 
 # type: textblock
-#: ../bts.pl:519
+#: ../bts.pl:529
 msgid "Display bug number <bug number>."
 msgstr "Afficher le bogue de numéro <numéro de bogue>."
 
 # type: TP
-#: ../bts.pl:521
+#: ../bts.pl:531
 msgid "<package>"
 msgstr "<paquet>"
 
 # type: textblock
-#: ../bts.pl:523
+#: ../bts.pl:533
 msgid "Display the bugs for the package <package>."
 msgstr "Afficher les bogues du paquet <paquet>."
 
 # type: =item
-#: ../bts.pl:525
+#: ../bts.pl:535
 msgid "src:<package>"
 msgstr "src:<paquet>"
 
 # type: textblock
-#: ../bts.pl:527
+#: ../bts.pl:537
 msgid "Display the bugs for the source package <package>."
 msgstr "Afficher les bogues du paquet source <paquet>."
 
 # type: TP
-#: ../bts.pl:529
+#: ../bts.pl:539
 msgid "<maintainer>"
 msgstr "<responsable>"
 
 # type: textblock
-#: ../bts.pl:531
+#: ../bts.pl:541
 msgid "Display the bugs for the maintainer email address <maintainer>."
 msgstr ""
 "Afficher les bogues dont le responsable a pour adresse de courriel "
 "<responsable>."
 
 # type: =item
-#: ../bts.pl:533
+#: ../bts.pl:543
 msgid "from:<submitter>"
 msgstr "from:<rapporteur>"
 
 # type: textblock
-#: ../bts.pl:535
+#: ../bts.pl:545
 msgid "Display the bugs for the submitter email address <submitter>."
 msgstr ""
 "Afficher les bogues dont le rapporteur a pour adresse de "
 "courriel<rapporteur>."
 
 # type: =item
-#: ../bts.pl:537
+#: ../bts.pl:547
 msgid "tag:<tag>"
 msgstr "tag:<tag>"
 
 # type: textblock
-#: ../bts.pl:539
+#: ../bts.pl:549
 msgid "Display the bugs which are tagged with <tag>."
 msgstr "Afficher les bogues tagués avec <tag>."
 
 # type: =item
-#: ../bts.pl:541
+#: ../bts.pl:551
 msgid "usertag:<tag>"
 msgstr "usertag:<tag>"
 
 # type: textblock
-#: ../bts.pl:543
+#: ../bts.pl:553
+#, fuzzy
 msgid ""
 "Display the bugs which are tagged with usertag <tag>.  See the BTS "
 "documentation for more information on usertags.  This will require the use "
-"of a user=<email> option."
+"of a users=<email> option."
 msgstr ""
 "Afficher les bogues tagués avec le tag utilisateur <tag>. Veuillez consulter "
 "la documentation du BTS pour plus d'informations sur les tags utilisateur. "
 "Ceci nécessite d'utiliser une option « user=<courriel>. »"
 
 # type: =item
-#: ../bts.pl:547
+#: ../bts.pl:557
 msgid ":"
 msgstr ":"
 
 # type: textblock
-#: ../bts.pl:549
+#: ../bts.pl:559
 msgid ""
 "Details of the bug tracking system itself, along with a bug-request page "
 "with more options than this script, can be found on http://bugs.debian."
@@ -975,12 +979,12 @@ msgstr ""
 "commande « bts bugs : »."
 
 # type: =item
-#: ../bts.pl:554
+#: ../bts.pl:564
 msgid "release-critical, RC"
 msgstr "release-critical, RC"
 
 # type: textblock
-#: ../bts.pl:556
+#: ../bts.pl:566
 msgid ""
 "Display the front page of the release-critical pages on the BTS.  This is a "
 "synonym for http://bugs.debian.org/release-critical/index.html.  It is also "
@@ -994,7 +998,7 @@ msgstr ""
 "release-critical/other/all.html."
 
 # type: textblock
-#: ../bts.pl:563
+#: ../bts.pl:573
 msgid ""
 "After the argument specifying what to display, you can optionally specify "
 "options to use to format the page or change what it displayed.  These are "
@@ -1012,15 +1016,15 @@ msgstr ""
 "récents dans le fichier de log des bogues."
 
 # type: textblock
-#: ../bts.pl:570
+#: ../bts.pl:580
+#, fuzzy
 msgid ""
-"If caching has been enabled (that is, there exists a cache directory ~/."
-"devscripts_cache/bts/), then any page requested by \"bts show\" will "
-"automatically be cached, and therefore available offline thereafter.  Pages "
+"If caching has been enabled (that is, --no-cache has not been used, and "
+"BTS_CACHE has not been set to \"no\"), then any page requested by \"bts show"
+"\" will automatically be cached, and be available offline thereafter.  Pages "
 "which are automatically cached in this way will be deleted on subsequent "
 "\"bts show|bugs|cache\" invocations if they have not been accessed in 30 "
-"days.  This automatic caching can be disabled using the --no-cache option or "
-"explicitly enabled using the --cache option."
+"days."
 msgstr ""
 "Si la mise en cache a été activée (c'est-à-dire, s'il existe un répertoire "
 "de cache ~/.descripts_cache/bts/), alors toute page demandée via « bts "
@@ -1033,7 +1037,7 @@ msgstr ""
 "--cache."
 
 # type: textblock
-#: ../bts.pl:578
+#: ../bts.pl:587
 msgid ""
 "Any other B<bts> commands following this on the command line will be "
 "executed after the browser has been exited."
@@ -1042,7 +1046,7 @@ msgstr ""
 "exécutée après que le navigateur aura quitté."
 
 # type: textblock
-#: ../bts.pl:581
+#: ../bts.pl:590
 msgid ""
 "The desired browser can be specified and configured by setting the BROWSER "
 "environment variable.  The conventions follow those defined by Eric Raymond "
@@ -1054,7 +1058,7 @@ msgstr ""
 "reproduisons ici les informations pertinentes."
 
 # type: textblock
-#: ../bts.pl:586
+#: ../bts.pl:595
 msgid ""
 "The value of BROWSER may consist of a colon-separated series of browser "
 "command parts. These should be tried in order until one succeeds. Each "
@@ -1072,7 +1076,7 @@ msgstr ""
 "La chaîne « %% » doit être remplacée par un simple « % »."
 
 # type: textblock
-#: ../bts.pl:594
+#: ../bts.pl:603
 msgid ""
 "Rationale: We need to be able to specify multiple browser commands so "
 "programs obeying this convention can do the right thing in either X or "
@@ -1092,24 +1096,24 @@ msgstr ""
 "en %, sinon il ne serait pas possible d'avoir un %s littéral dans la chaîne."
 
 # type: textblock
-#: ../bts.pl:602
+#: ../bts.pl:611
 msgid "For example, on most Linux systems a good thing to do would be:"
 msgstr ""
 "Par exemple, sur la plupart des systèmes Linux, une bonne chose à faire "
 "serait :"
 
 # type: textblock
-#: ../bts.pl:604
+#: ../bts.pl:613
 msgid "BROWSER='mozilla -raise -remote \"openURL(%s,new-window)\":links'"
 msgstr "BROWSER='mozilla -raise -remote \"openURL(%s,new-window)\":links'"
 
 # type: =item
-#: ../bts.pl:679
+#: ../bts.pl:688
 msgid "clone <bug> [new IDs]"
 msgstr "clone <bogue> [nouveaux IDs]"
 
 # type: textblock
-#: ../bts.pl:681
+#: ../bts.pl:690
 msgid ""
 "The clone control command allows you to duplicate a bug report. It is useful "
 "in the case where a single report actually indicates that multiple distinct "
@@ -1126,32 +1130,32 @@ msgstr ""
 "chaque nouvel identifiant."
 
 # type: =item
-#: ../bts.pl:722
+#: ../bts.pl:731
 msgid "reopen <bug> [<submitter>]"
 msgstr "reopen <bogue> [<rapporteur>]"
 
 # type: textblock
-#: ../bts.pl:724
+#: ../bts.pl:733
 msgid "Reopen a bug, with optional submitter."
 msgstr "Réouvrir un bogue, avec rapporteur optionnel."
 
 # type: =item
-#: ../bts.pl:735
+#: ../bts.pl:744
 msgid "retitle <bug> <title>"
 msgstr "retitle <bogue> <titre>"
 
 # type: textblock
-#: ../bts.pl:737
+#: ../bts.pl:746
 msgid "Change the title of the bug."
 msgstr "Changer le titre du bogue."
 
 # type: =item
-#: ../bts.pl:750
+#: ../bts.pl:759
 msgid "submitter <bug> [<bug> ...] <submitter-email>"
 msgstr "submitter <bogue> [<bogue> ...] <courriel-du-rapporteur>"
 
 # type: textblock
-#: ../bts.pl:752
+#: ../bts.pl:761
 msgid ""
 "Change the submitter address of a bug or a number of bugs, with `!' meaning "
 "`use the address on the current email as the new submitter address'."
@@ -1161,12 +1165,12 @@ msgstr ""
 "adresse du rapporteur »."
 
 # type: =item
-#: ../bts.pl:769
+#: ../bts.pl:778
 msgid "reassign <bug> [<bug> ...] <package> [<version>]"
 msgstr "reassign <bogue> [<bogue> ...] <paquet> [<version>]"
 
 # type: textblock
-#: ../bts.pl:771
+#: ../bts.pl:780
 msgid ""
 "Reassign a bug or a number of bugs to a different package.  The version "
 "field is optional; see the explanation at L<http://www.debian.org/Bugs/"
@@ -1177,24 +1181,24 @@ msgstr ""
 "debian.org/Bugs/server-control>."
 
 # type: =item
-#: ../bts.pl:797
+#: ../bts.pl:806
 msgid "found <bug> [<version>]"
 msgstr "found <bogue> [<version>]"
 
 # type: textblock
-#: ../bts.pl:799
+#: ../bts.pl:808
 msgid "Indicate that a bug was found to exist in a particular package version."
 msgstr ""
 "Indiquer qu'un bogue a été découvert dans une version particulière d'un "
 "paquet."
 
 # type: =item
-#: ../bts.pl:814
+#: ../bts.pl:823
 msgid "notfound <bug> <version>"
 msgstr "notfound <bogue> <version>"
 
 # type: textblock
-#: ../bts.pl:816
+#: ../bts.pl:825
 msgid ""
 "Remove the record that bug was encountered in the given version of the "
 "package to which it is assigned."
@@ -1203,24 +1207,24 @@ msgstr ""
 "découvert."
 
 # type: =item
-#: ../bts.pl:828
+#: ../bts.pl:837
 msgid "block <bug> by|with <bug> [<bug> ...]"
 msgstr "block <bogue> by|with <bogue> [<bogue> ...]"
 
 # type: textblock
-#: ../bts.pl:830
+#: ../bts.pl:839
 msgid "Note that a bug is blocked from being fixed by a set of other bugs."
 msgstr ""
 "Enregistrer que la résolution d'un bogue est bloquée par un ensemble "
 "d'autres bogues."
 
 # type: =item
-#: ../bts.pl:848
+#: ../bts.pl:857
 msgid "unblock <bug> by|with <bug> [<bug> ...]"
 msgstr "unblock <bogue> by|with <bogue> [<bogue> ...]"
 
 # type: textblock
-#: ../bts.pl:850
+#: ../bts.pl:859
 msgid ""
 "Note that a bug is no longer blocked from being fixed by a set of other bugs."
 msgstr ""
@@ -1228,37 +1232,49 @@ msgstr ""
 "d'autres bogues."
 
 # type: =item
-#: ../bts.pl:868
+#: ../bts.pl:877
 msgid "merge <bug> <bug> [<bug> ...]"
 msgstr "merge <bogue> <bogue> [<bogue> ...]"
 
 # type: textblock
-#: ../bts.pl:870
+#: ../bts.pl:879
 msgid "Merge a set of bugs together."
 msgstr "Fusionner plusieurs bogues."
 
 # type: =item
-#: ../bts.pl:885
+#: ../bts.pl:894
+#, fuzzy
+msgid "forcemerge <bug> <bug> [<bug> ...]"
+msgstr "merge <bogue> <bogue> [<bogue> ...]"
+
+# type: textblock
+#: ../bts.pl:896
+#, fuzzy
+msgid "Forcibly merge a set of bugs together."
+msgstr "Fusionner plusieurs bogues."
+
+# type: =item
+#: ../bts.pl:912
 msgid "unmerge <bug>"
 msgstr "unmerge <bogue>"
 
 # type: textblock
-#: ../bts.pl:887
+#: ../bts.pl:914
 msgid "Unmerge a bug."
 msgstr "Annuler la fusion de plusieurs bogues."
 
 # type: =item
-#: ../bts.pl:897
+#: ../bts.pl:924
 msgid "tag <bug> [+|-|=] tag [tag ..]"
 msgstr "tag <bogue> [+|-|=] tag [tag ..]"
 
 # type: =item
-#: ../bts.pl:899
+#: ../bts.pl:926
 msgid "tags <bug> [+|-|=] tag [tag ..]"
 msgstr "tags <bogue> [+|-|=] tag [tag ..]"
 
 # type: textblock
-#: ../bts.pl:901
+#: ../bts.pl:928
 msgid ""
 "Set or unset a tag on a bug. The tag may either be the exact tag name or it "
 "may be abbreviated to any unique tag substring. (So using \"fixed\" will set "
@@ -1276,7 +1292,7 @@ msgstr ""
 "que le drapeau « = » ne soit utilisé ; la commande"
 
 # type: verbatim
-#: ../bts.pl:908
+#: ../bts.pl:935
 #, no-wrap
 msgid ""
 "  bts tags <bug> =\n"
@@ -1286,34 +1302,34 @@ msgstr ""
 "\n"
 
 # type: textblock
-#: ../bts.pl:910
+#: ../bts.pl:937
 msgid "will remove all tags from the specified bug."
 msgstr "va supprimer toutes les étiquettes du bogue spécifié."
 
 # type: =item
-#: ../bts.pl:954
+#: ../bts.pl:981
 msgid "user <email>"
 msgstr "user <courriel>"
 
 # type: textblock
-#: ../bts.pl:956
+#: ../bts.pl:983
 msgid "Specify a user email address before using the usertags command."
 msgstr ""
 "Spécifier l'adresse de courriel d'un utilisateur avant d'utiliser la "
 "commande usertags."
 
 # type: =item
-#: ../bts.pl:969
+#: ../bts.pl:996
 msgid "usertag <bug> [+|-|=] tag [tag ..]"
 msgstr "usertag <bogue> [+|-|=] tag [tag ..]"
 
 # type: =item
-#: ../bts.pl:971
+#: ../bts.pl:998
 msgid "usertags <bug> [+|-|=] tag [tag ..]"
 msgstr "usertags <bogue> [+|-|=] tag [tag ..]"
 
 # type: textblock
-#: ../bts.pl:973
+#: ../bts.pl:1000
 msgid ""
 "Set or unset a user tag on a bug. The tag must be the exact tag name wanted; "
 "there are no defaults or checking of tag names.  Multiple tags may be "
@@ -1329,7 +1345,7 @@ msgstr ""
 "utilisateur, à moins que le drapeau « = » ne soit utilisé ; la commande"
 
 # type: verbatim
-#: ../bts.pl:979
+#: ../bts.pl:1006
 #, no-wrap
 msgid ""
 "  bts usertags <bug> =\n"
@@ -1339,17 +1355,17 @@ msgstr ""
 "\n"
 
 # type: textblock
-#: ../bts.pl:981
+#: ../bts.pl:1008
 msgid "will remove all user tags from the specified bug."
 msgstr "va supprimer toutes les étiquettes utilisateur du bogue spécifié."
 
 # type: =item
-#: ../bts.pl:1012
+#: ../bts.pl:1039
 msgid "severity <bug> <severity>"
 msgstr "severity <bogue> <sévérité>"
 
 # type: textblock
-#: ../bts.pl:1014
+#: ../bts.pl:1041
 msgid ""
 "Change the severity of a bug. The severity may be abbreviated to any unique "
 "substring."
@@ -1358,32 +1374,32 @@ msgstr ""
 "courte sous-chaîne unique."
 
 # type: =item
-#: ../bts.pl:1030
+#: ../bts.pl:1057
 msgid "forwarded <bug> <email>"
 msgstr "forwarded <bogue> <courriel>"
 
 # type: textblock
-#: ../bts.pl:1032
+#: ../bts.pl:1059
 msgid "Mark the bug as forwarded to the given email address."
 msgstr "Marquer le bogue comme transmis à l'adresse de courriel donnée."
 
 # type: =item
-#: ../bts.pl:1045
+#: ../bts.pl:1072
 msgid "notforwarded <bug>"
 msgstr "notforwarded <bogue>"
 
 # type: textblock
-#: ../bts.pl:1047
+#: ../bts.pl:1074
 msgid "Mark a bug as not forwarded."
 msgstr "Marquer le bogue comme n'ayant pas été transmis."
 
 # type: TP
-#: ../bts.pl:1057
+#: ../bts.pl:1084
 msgid "package [ <package> ... ]"
 msgstr "package [ <paquet> ... ]"
 
 # type: textblock
-#: ../bts.pl:1059
+#: ../bts.pl:1086
 msgid ""
 "The following commands will only apply to bugs against the listed packages; "
 "this acts as a safety mechanism for the BTS.  If no packages are listed, "
@@ -1394,12 +1410,12 @@ msgstr ""
 "paquet n'est listé, cette vérification est désactivée à nouveau."
 
 # type: =item
-#: ../bts.pl:1070
+#: ../bts.pl:1097
 msgid "owner <bug> <owner-email>"
 msgstr "owner <bogue> <courriel-du-propriétaire>"
 
 # type: textblock
-#: ../bts.pl:1072
+#: ../bts.pl:1099
 msgid ""
 "Change the \"owner\" address of a bug, with `!' meaning `use the address on "
 "the current email as the new owner address'."
@@ -1409,7 +1425,7 @@ msgstr ""
 "propriétaire »."
 
 # type: textblock
-#: ../bts.pl:1075
+#: ../bts.pl:1102
 msgid ""
 "The owner of a bug accepts the responsibility of dealing with it, and will "
 "receive all of the email corresponding to the bug instead of the usual "
@@ -1420,22 +1436,22 @@ msgstr ""
 "responsable habituel."
 
 # type: =item
-#: ../bts.pl:1088
+#: ../bts.pl:1115
 msgid "noowner <bug>"
 msgstr "noowner <bogue>"
 
 # type: textblock
-#: ../bts.pl:1090
+#: ../bts.pl:1117
 msgid "Mark a bug as having no \"owner\"."
 msgstr "Marquer un bogue comme n'ayant pas de « propriétaire »."
 
 # type: =item
-#: ../bts.pl:1100
+#: ../bts.pl:1127
 msgid "subscribe <bug> <email>"
 msgstr "subscribe <bogue> <courriel>"
 
 # type: textblock
-#: ../bts.pl:1102
+#: ../bts.pl:1129
 msgid ""
 "Subscribe the given email address to the specified bug report.  If no email "
 "address is specified, the environment variable DEBEMAIL or EMAIL (in that "
@@ -1448,7 +1464,7 @@ msgstr ""
 "donné comme adresse de courriel, votre adresse par défaut va être utilisée."
 
 # type: textblock
-#: ../bts.pl:1107
+#: ../bts.pl:1134
 msgid ""
 "After executing this command, you will be sent a subscription confirmation "
 "to which you have to reply.  When subscribed to a bug report, you receive "
@@ -1461,12 +1477,12 @@ msgstr ""
 "Utilisez la commande unsubscribe pour vous désabonner."
 
 # type: =item
-#: ../bts.pl:1126
+#: ../bts.pl:1153
 msgid "unsubscribe <bug> <email>"
 msgstr "unsubscribe <bogue> <courriel>"
 
 # type: textblock
-#: ../bts.pl:1128
+#: ../bts.pl:1155
 msgid ""
 "Unsubscribe the given email address from the specified bug report.  As with "
 "subscribe above, if no email address is specified, the environment variables "
@@ -1480,7 +1496,7 @@ msgstr ""
 "comme adresse de courriel, votre adresse par défaut va être utilisée."
 
 # type: textblock
-#: ../bts.pl:1133
+#: ../bts.pl:1160
 msgid ""
 "After executing this command, you will be sent an unsubscription "
 "confirmation to which you have to reply. Use the subscribe command to, well, "
@@ -1491,12 +1507,13 @@ msgstr ""
 "subscribe, évidemment, pour vous abonner."
 
 # type: =item
-#: ../bts.pl:1151
-msgid "reportspam <bug>"
+#: ../bts.pl:1178
+#, fuzzy
+msgid "reportspam <bug> ..."
 msgstr "reportspam <bogue>"
 
 # type: textblock
-#: ../bts.pl:1153
+#: ../bts.pl:1180
 msgid ""
 "The reportspam command allows you to report a bug report as containing "
 "spam.  It saves one from having to go to the bug web page to do so."
@@ -1506,28 +1523,29 @@ msgstr ""
 "bogue pour ce faire."
 
 # type: =item
-#: ../bts.pl:1173
-msgid "spamreport <bug>"
+#: ../bts.pl:1209
+#, fuzzy
+msgid "spamreport <bug> ..."
 msgstr "spamreport <bogue>"
 
 # type: textblock
-#: ../bts.pl:1175
+#: ../bts.pl:1211
 msgid "spamreport is a synonym for reportspam."
 msgstr "spamreport est synonyme de reportspam."
 
 # type: =item
-#: ../bts.pl:1183
+#: ../bts.pl:1219
 msgid "cache [options] [<maint email> | <pkg> | src:<pkg> | from:<submitter>]"
 msgstr ""
 "cache [options] [<courriel resp.>] | <pkg> | src:<pkg> | from:<rapporteur>]"
 
 # type: =item
-#: ../bts.pl:1185
+#: ../bts.pl:1221
 msgid "cache [options] [release-critical | release-critical/... | RC]"
 msgstr "cache [options] [release-critical | release-critical/... | RC]"
 
 # type: textblock
-#: ../bts.pl:1187
+#: ../bts.pl:1223
 msgid ""
 "Generate or update a cache of bug reports for the given email address or "
 "package. By default it downloads all bugs belonging to the email address in "
@@ -1545,16 +1563,15 @@ msgstr ""
 "bogues mis en cache sont stockés dans ~/.devscripts_cache/bts/"
 
 # type: textblock
-#: ../bts.pl:1194
-msgid ""
-"Once you have set up a cache, you can ask for it to be used with the -o "
-"switch. For example:"
+#: ../bts.pl:1230
+#, fuzzy
+msgid "You can use the cached bugs with the -o switch. For example:"
 msgstr ""
 "Une fois que vous avez mis en place un cache, vous pouvez l'utiliser grâce à "
 "l'option -o. Par exemple :"
 
 # type: verbatim
-#: ../bts.pl:1197
+#: ../bts.pl:1232
 #, no-wrap
 msgid ""
 "  bts -o bugs\n"
@@ -1566,13 +1583,13 @@ msgstr ""
 "\n"
 
 # type: textblock
-#: ../bts.pl:1200
+#: ../bts.pl:1235
+#, fuzzy
 msgid ""
-"Also, once the cache is set up, bts will update the files in it in a "
-"piecemeal fashion as it downloads information from the bts. You might thus "
-"set up the cache, and update the whole thing once a week, while letting the "
-"automatic cache updates update the bugs you frequently refer to during the "
-"week."
+"Also, bts will update the files in it in a piecemeal fashion as it downloads "
+"information from the BTS using the 'show' command. You might thus set up the "
+"cache, and update the whole thing once a week, while letting the automatic "
+"cache updates update the bugs you frequently refer to during the week."
 msgstr ""
 "Ainsi, une fois que le cache est mis en place, bts va mettre à jour les "
 "fichiers contenu dans celui-ci au coup par coup quand il télécharge des "
@@ -1582,19 +1599,7 @@ msgstr ""
 "fréquemment pendant la semaine."
 
 # type: textblock
-#: ../bts.pl:1206
-msgid ""
-"A final benefit to using a cache is that it will speed download times for "
-"bugs in the cache even when you're online, as it can just compare the item "
-"in the cache with what's on the server, and not re-download it every time."
-msgstr ""
-"Un dernier avantage de l'utilisation d'un cache est que cela va accélérer "
-"les temps de téléchargement des rapports de bogue, même lorsque vous êtes en "
-"ligne, puisqu'il compare les éléments en cache avec les éléments présents "
-"sur le serveur, et ne les télécharge pas à nouveau chaque fois."
-
-# type: textblock
-#: ../bts.pl:1211
+#: ../bts.pl:1241
 msgid ""
 "Some options affect the behaviour of the cache command.  The first is the "
 "setting of --cache-mode, which controls how much B<bts> downloads of the "
@@ -1621,7 +1626,7 @@ msgstr ""
 "début de la ligne de commande."
 
 # type: textblock
-#: ../bts.pl:1223
+#: ../bts.pl:1253
 msgid ""
 "Finally, -q or --quiet will suppress messages about caches being up-to-date, "
 "and giving the option twice will suppress all cache messages (except for "
@@ -1632,7 +1637,7 @@ msgstr ""
 "du cache (excepté les messages d'erreur)."
 
 # type: textblock
-#: ../bts.pl:1227
+#: ../bts.pl:1257
 msgid ""
 "Beware of caching RC, though: it will take a LONG time! (With 1000+ RC bugs "
 "and a delay of 5 seconds between bugs, you're looking at a minimum of 1.5 "
@@ -1644,19 +1649,19 @@ msgstr ""
 "que ça.)"
 
 # type: =item
-#: ../bts.pl:1328
+#: ../bts.pl:1358
 msgid "cleancache <package> | src:<package> | <maintainer>"
 msgstr "cleancache <paquet> | src:<paquet> | <responsable>"
 
 # type: =item
-#: ../bts.pl:1330
+#: ../bts.pl:1360
 msgid ""
 "cleancache from:<submitter> | tag:<tag> | usertag:<tag> | <number> | ALL"
 msgstr ""
 "cleancache from:<rapporteur> | tag:<tag> | usertag:<tag> | <numéro> | ALL"
 
 # type: textblock
-#: ../bts.pl:1332
+#: ../bts.pl:1362
 msgid ""
 "Clean the cache for the specified package, maintainer, etc., as described "
 "above for the \"bugs\" command, or clean the entire cache if \"ALL\" is "
@@ -1672,22 +1677,22 @@ msgstr ""
 "défaut."
 
 # type: TP
-#: ../bts.pl:1381
+#: ../bts.pl:1411
 msgid "version"
 msgstr "version"
 
 # type: Plain text
-#: ../bts.pl:1383
+#: ../bts.pl:1413
 msgid "Display version and copyright information."
 msgstr "Affiche la version et le copyright."
 
 # type: TP
-#: ../bts.pl:1397
+#: ../bts.pl:1427
 msgid "help"
 msgstr "help"
 
 # type: textblock
-#: ../bts.pl:1399
+#: ../bts.pl:1429
 msgid ""
 "Display a short summary of commands, suspiciously similar to parts of this "
 "man page."
@@ -1696,18 +1701,18 @@ msgstr ""
 "parties de cette page de manuel."
 
 # type: SH
-#: ../bts.pl:2636 ../debuild.1:88 ../pts-subscribe.1:29
+#: ../bts.pl:2696 ../debuild.1:88 ../pts-subscribe.1:29
 #, no-wrap
 msgid "ENVIRONMENT VARIABLES"
 msgstr "VARIABLES D'ENVIRONNEMENT"
 
 # type: TH
-#: ../bts.pl:2640
+#: ../bts.pl:2700
 msgid "DEBEMAIL"
 msgstr "DEBEMAIL"
 
 # type: textblock
-#: ../bts.pl:2642
+#: ../bts.pl:2702
 msgid ""
 "If this is set, the From: line in the email will be set to use this email "
 "address instead of your normal email address (as would be determined by "
@@ -1718,12 +1723,12 @@ msgstr ""
 "serait déterminée par B<mail>)."
 
 # type: =item
-#: ../bts.pl:2646
+#: ../bts.pl:2706
 msgid "DEBFULLNAME"
 msgstr "DEBFULLNAME"
 
 # type: textblock
-#: ../bts.pl:2648
+#: ../bts.pl:2708
 msgid ""
 "If DEBEMAIL is set, DEBFULLNAME is examined to determine the full name to "
 "use; if this is not set, B<bts> attempts to determine a name from your "
@@ -1734,12 +1739,12 @@ msgstr ""
 "votre entrée passwd."
 
 # type: =item
-#: ../bts.pl:2652
+#: ../bts.pl:2712
 msgid "BROWSER"
 msgstr "BROWSER"
 
 # type: textblock
-#: ../bts.pl:2654
+#: ../bts.pl:2714
 msgid ""
 "If set, it specifies the browser to use for the 'show' and 'bugs' options.  "
 "See the description above."
@@ -1748,18 +1753,19 @@ msgstr ""
 "« show » et « bugs ». Voir la description plus haut."
 
 # type: SH
-#: ../bts.pl:2659 ../debc.1:91 ../debchange.1:282 ../debclean.1:87
+#: ../bts.pl:2719 ../debc.1:91 ../debchange.1:283 ../debclean.1:87
 #: ../debdiff.1:127 ../debi.1:93 ../debrelease.1:105 ../debrsign.1:57
 #: ../debsign.1:99 ../debuild.1:276 ../dpkg-depcheck.1:102 ../dscverify.1:29
-#: ../grep-excuses.1:24 ../mass-bug.pl:100 ../plotchangelog.1:106
-#: ../pts-subscribe.1:37 ../uscan.1:405 ../uupdate.1:86 ../who-uploads.1:42
+#: ../grep-excuses.1:24 ../mass-bug.pl:101 ../nmudiff.1:48
+#: ../plotchangelog.1:106 ../pts-subscribe.1:37 ../uscan.1:412 ../uupdate.1:86
+#: ../who-uploads.1:42
 #, no-wrap
 msgid "CONFIGURATION VARIABLES"
 msgstr "VARIABLES DE CONFIGURATION"
 
 # NOTE: presque identique
 # type: Plain text
-#: ../bts.pl:2661 ../mass-bug.pl:102
+#: ../bts.pl:2721 ../mass-bug.pl:103
 msgid ""
 "The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  Command "
@@ -1775,12 +1781,12 @@ msgstr ""
 "cette fin. Les variables actuellement reconnues sont :"
 
 # type: =item
-#: ../bts.pl:2669
+#: ../bts.pl:2729
 msgid "BTS_OFFLINE"
 msgstr "BTS_OFFLINE"
 
 # type: Plain text
-#: ../bts.pl:2671
+#: ../bts.pl:2731
 msgid ""
 "If this is set to I<yes>, then it is the same as the --offline command line "
 "parameter being used.  Only has an effect on the show and bugs commands.  "
@@ -1793,12 +1799,12 @@ msgstr ""
 "commande show ci-dessus pour plus d'informations."
 
 # type: =item
-#: ../bts.pl:2676
+#: ../bts.pl:2736
 msgid "BTS_CACHE"
 msgstr "BTS_CACHE"
 
 # type: Plain text
-#: ../bts.pl:2678
+#: ../bts.pl:2738
 msgid ""
 "If this is set to I<no>, then it is the same as the --no-cache command line "
 "parameter being used.  Only has an effect on the show and bug commands.  The "
@@ -1810,12 +1816,12 @@ msgstr ""
 "ci-dessus pour plus d'informations."
 
 # type: =item
-#: ../bts.pl:2683
+#: ../bts.pl:2743
 msgid "BTS_CACHE_MODE={min,mbox,full}"
 msgstr "BTS_CACHE_MODE={min,mbox,full}"
 
 # type: textblock
-#: ../bts.pl:2685
+#: ../bts.pl:2745
 msgid ""
 "How much of the BTS should we mirror when we are asked to cache something? "
 "Just the minimum, or also the mbox or the whole thing? The default is "
@@ -1830,12 +1836,12 @@ msgstr ""
 "documentation de la commande cache pour plus d'informations."
 
 # type: =item
-#: ../bts.pl:2691
+#: ../bts.pl:2751
 msgid "BTS_FORCE_REFRESH"
 msgstr "BTS_FORCE_REFRESH"
 
 # type: Plain text
-#: ../bts.pl:2693
+#: ../bts.pl:2753
 msgid ""
 "If this is set to I<yes>, then it is the same as the --force-refresh command "
 "line parameter being used.  Only has an effect on the cache command.  The "
@@ -1847,12 +1853,12 @@ msgstr ""
 "d'informations."
 
 # type: =item
-#: ../bts.pl:2698
+#: ../bts.pl:2758
 msgid "BTS_MAIL_READER"
 msgstr "BTS_MAIL_READER"
 
 # type: Plain text
-#: ../bts.pl:2700
+#: ../bts.pl:2760
 msgid ""
 "If this is set, specifies a mail reader to use instead of mutt.  Same as the "
 "--mailreader command line option."
@@ -1861,12 +1867,12 @@ msgstr ""
 "place de mutt. Équivalent à l'option de ligne de commande --mailreader."
 
 # type: =item
-#: ../bts.pl:2703 ../mass-bug.pl:110
+#: ../bts.pl:2763 ../mass-bug.pl:111
 msgid "BTS_SENDMAIL_COMMAND"
 msgstr "BTS_SENDMAIL_COMMAND"
 
 # type: textblock
-#: ../bts.pl:2705 ../mass-bug.pl:112
+#: ../bts.pl:2765 ../mass-bug.pl:113 ../nmudiff.1:58
 msgid ""
 "If this is set, specifies a sendmail command to use instead of /usr/sbin/"
 "sendmail.  Same as the --sendmail command line option."
@@ -1876,12 +1882,12 @@ msgstr ""
 "commande --sendmail."
 
 # type: SH
-#: ../bts.pl:2710 ../mass-bug.pl:408
+#: ../bts.pl:2770 ../mass-bug.pl:414
 msgid "COPYRIGHT"
 msgstr "COPYRIGHT"
 
 # type: textblock
-#: ../bts.pl:2712
+#: ../bts.pl:2772
 msgid ""
 "This program is Copyright (C) 2001-2003 by Joey Hess <joeyh@debian.org>.  "
 "Many modifications have been made, Copyright (C) 2002-2005 Julian Gilbey "
@@ -1892,7 +1898,7 @@ msgstr ""
 "Gilbey <jdg@debian.org>."
 
 # type: textblock
-#: ../bts.pl:2716 ../mass-bug.pl:412
+#: ../bts.pl:2776 ../mass-bug.pl:418
 msgid ""
 "It is licensed under the terms of the GPL, either version 2 of the License, "
 "or (at your option) any later version."
@@ -1938,7 +1944,7 @@ msgstr ""
 "lorsqu'une telle construction est détectée."
 
 # type: TP
-#: ../checkbashisms.1:15 ../debchange.1:276 ../debdiff.1:118
+#: ../checkbashisms.1:15 ../debchange.1:277 ../debdiff.1:118
 #: ../debrelease.1:99 ../debsign.1:93 ../dscverify.1:23 ../pts-subscribe.1:23
 #: ../rc-alert.1:21 ../uupdate.1:80 ../who-uploads.1:36 ../wnpp-alert.1:13
 #, no-wrap
@@ -1958,7 +1964,7 @@ msgstr "B<--version>, B<-v>"
 
 # type: Plain text
 #: ../checkbashisms.1:21 ../debdiff.1:124 ../grep-excuses.1:24
-#: ../rc-alert.1:27 ../tagpending.1:29 ../whodepends.1:17 ../wnpp-alert.1:19
+#: ../rc-alert.1:27 ../tagpending.1:32 ../whodepends.1:17 ../wnpp-alert.1:19
 msgid "Show version and copyright information."
 msgstr "Affiche la version et le copyright."
 
@@ -1979,7 +1985,7 @@ msgstr ""
 "erreurs sont pondérées de la façon suivante :"
 
 # type: TP
-#: ../checkbashisms.1:25 ../uscan.1:446
+#: ../checkbashisms.1:25 ../uscan.1:453
 #, no-wrap
 msgid "1"
 msgstr "1"
@@ -2006,13 +2012,13 @@ msgstr ""
 
 # type: SH
 #: ../checkbashisms.1:32 ../cvs-debc.1:58 ../cvs-debi.1:62
-#: ../cvs-debrelease.1:64 ../cvs-debuild.1:56 ../debc.1:114 ../debchange.1:327
+#: ../cvs-debrelease.1:64 ../cvs-debuild.1:56 ../debc.1:114 ../debchange.1:328
 #: ../debclean.1:104 ../debdiff.1:161 ../debi.1:116 ../debrelease.1:132
 #: ../deb-reversion.dbk:209 ../debrsign.1:66 ../debsign.1:118 ../debuild.1:399
-#: ../dget.pl:311 ../dpkg-depcheck.1:118 ../dpkg-genbuilddeps.1:30
-#: ../dscverify.1:40 ../grep-excuses.1:34 ../nmudiff.1:14
+#: ../dget.pl:378 ../dpkg-depcheck.1:118 ../dpkg-genbuilddeps.1:30
+#: ../dscverify.1:40 ../grep-excuses.1:34 ../nmudiff.1:58
 #: ../plotchangelog.1:124 ../pts-subscribe.1:46 ../rc-alert.1:27
-#: ../rmadison.pl:184 ../tagpending.1:29 ../uscan.1:475 ../uupdate.1:160
+#: ../rmadison.pl:184 ../tagpending.1:32 ../uscan.1:482 ../uupdate.1:160
 #: ../devscripts.conf.5:54
 #, no-wrap
 msgid "SEE ALSO"
@@ -2365,10 +2371,10 @@ msgstr ""
 "Par défaut, B<dupload> est utilisé."
 
 # type: TP
-#: ../cvs-debrelease.1:57 ../debc.1:84 ../debchange.1:267 ../debclean.1:77
+#: ../cvs-debrelease.1:57 ../debc.1:84 ../debchange.1:268 ../debclean.1:77
 #: ../debdiff.1:114 ../debi.1:86 ../debrelease.1:95 ../debsign.1:89
-#: ../dpkg-depcheck.1:92 ../dscverify.1:19 ../grep-excuses.1:14 ../uscan.1:395
-#: ../uupdate.1:76 ../who-uploads.1:32
+#: ../dpkg-depcheck.1:92 ../dscverify.1:19 ../grep-excuses.1:14
+#: ../nmudiff.1:38 ../uscan.1:402 ../uupdate.1:76 ../who-uploads.1:32
 #, no-wrap
 msgid "B<--no-conf>, B<--noconf>"
 msgstr "B<--no-conf>, B<--noconf>"
@@ -2789,7 +2795,7 @@ msgstr ""
 
 # type: SH
 #: ../debc.1:27 ../debchange.1:105 ../debclean.1:24 ../debi.1:29
-#: ../debrelease.1:20 ../debuild.1:51 ../uscan.1:261
+#: ../debrelease.1:20 ../debuild.1:51 ../uscan.1:268
 #, no-wrap
 msgid "Directory name checking"
 msgstr "Vérification du nom du répertoire"
@@ -2820,26 +2826,26 @@ msgstr ""
 
 # type: Plain text
 #: ../debc.1:40 ../debchange.1:118 ../debclean.1:37 ../debi.1:42
-#: ../debrelease.1:33 ../debuild.1:65 ../uscan.1:278
+#: ../debrelease.1:33 ../debuild.1:65 ../uscan.1:285
 msgid "DEVSCRIPTS_CHECK_DIRNAME_LEVEL can take the following values:"
 msgstr "DEVSCRIPTS_CHECK_DIRNAME_LEVEL peut prendre les valeurs suivantes :"
 
 # type: TP
 #: ../debc.1:40 ../debchange.1:118 ../debclean.1:37 ../debi.1:42
-#: ../debrelease.1:33 ../debuild.1:65 ../uscan.1:278
+#: ../debrelease.1:33 ../debuild.1:65 ../uscan.1:285
 #, no-wrap
 msgid "B<0>"
 msgstr "B<0>"
 
 # type: Plain text
 #: ../debc.1:43 ../debchange.1:121 ../debclean.1:40 ../debi.1:45
-#: ../debrelease.1:36 ../debuild.1:68 ../uscan.1:281
+#: ../debrelease.1:36 ../debuild.1:68 ../uscan.1:288
 msgid "Never check the directory name."
 msgstr "Ne vérifie jamais le nom du répertoire."
 
 # type: TP
 #: ../debc.1:43 ../debchange.1:121 ../debclean.1:40 ../debi.1:45
-#: ../debrelease.1:36 ../debuild.1:68 ../uscan.1:281
+#: ../debrelease.1:36 ../debuild.1:68 ../uscan.1:288
 #, no-wrap
 msgid "B<1>"
 msgstr "B<1>"
@@ -2856,20 +2862,20 @@ msgstr ""
 
 # type: TP
 #: ../debc.1:47 ../debchange.1:125 ../debclean.1:44 ../debi.1:49
-#: ../debrelease.1:40 ../debuild.1:72 ../uscan.1:287
+#: ../debrelease.1:40 ../debuild.1:72 ../uscan.1:294
 #, no-wrap
 msgid "B<2>"
 msgstr "B<2>"
 
 # type: Plain text
 #: ../debc.1:50 ../debchange.1:128 ../debclean.1:47 ../debi.1:52
-#: ../debrelease.1:43 ../debuild.1:75 ../uscan.1:290
+#: ../debrelease.1:43 ../debuild.1:75 ../uscan.1:297
 msgid "Always check the directory name."
 msgstr "Vérifie toujours le nom du répertoire."
 
 # type: Plain text
 #: ../debc.1:63 ../debchange.1:141 ../debclean.1:60 ../debi.1:65
-#: ../debrelease.1:56 ../debuild.1:88 ../uscan.1:303
+#: ../debrelease.1:56 ../debuild.1:88 ../uscan.1:310
 msgid ""
 "The directory name is checked by testing whether the current directory name "
 "(as determined by B<pwd>(1)) matches the regex given by the configuration "
@@ -2911,17 +2917,17 @@ msgstr ""
 "chemin absolu, soit un chemin relatif à la racine du répertoire source."
 
 # type: TP
-#: ../debc.1:76 ../debchange.1:259 ../debclean.1:69 ../debi.1:78
-#: ../debrelease.1:87 ../debuild.1:262 ../uscan.1:387
+#: ../debc.1:76 ../debchange.1:260 ../debclean.1:69 ../debi.1:78
+#: ../debrelease.1:87 ../debuild.1:262 ../uscan.1:394
 #, no-wrap
 msgid "B<--check-dirname-level> I<N>"
 msgstr "B<--check-dirname-level> I<N>"
 
 # type: Plain text
-#: ../debc.1:80 ../debc.1:84 ../debchange.1:263 ../debchange.1:267
+#: ../debc.1:80 ../debc.1:84 ../debchange.1:264 ../debchange.1:268
 #: ../debclean.1:73 ../debclean.1:77 ../debi.1:82 ../debi.1:86
 #: ../debrelease.1:91 ../debrelease.1:95 ../debuild.1:266 ../debuild.1:270
-#: ../uscan.1:391 ../uscan.1:395
+#: ../uscan.1:398 ../uscan.1:402
 msgid ""
 "See the above section \"Directory name checking\" for an explanation of this "
 "option."
@@ -2930,17 +2936,17 @@ msgstr ""
 "répertoire » pour une explication de cette option."
 
 # type: TP
-#: ../debc.1:80 ../debchange.1:263 ../debclean.1:73 ../debi.1:82
-#: ../debrelease.1:91 ../debuild.1:266 ../uscan.1:391
+#: ../debc.1:80 ../debchange.1:264 ../debclean.1:73 ../debi.1:82
+#: ../debrelease.1:91 ../debuild.1:266 ../uscan.1:398
 #, no-wrap
 msgid "B<--check-dirname-regex> I<regex>"
 msgstr "B<--check-dirname-regex> I<regex>"
 
 # NOTE: et --noconf ?
 # type: Plain text
-#: ../debc.1:97 ../debchange.1:288 ../debclean.1:93 ../debi.1:99
-#: ../debrelease.1:111 ../debrsign.1:63 ../debsign.1:105 ../pts-subscribe.1:43
-#: ../uupdate.1:92 ../who-uploads.1:48
+#: ../debc.1:97 ../debchange.1:289 ../debclean.1:93 ../debi.1:99
+#: ../debrelease.1:111 ../debrsign.1:63 ../debsign.1:105 ../nmudiff.1:54
+#: ../pts-subscribe.1:43 ../uupdate.1:92 ../who-uploads.1:48
 msgid ""
 "The two configuration files I</etc/devscripts.conf> and I<~/.devscripts> are "
 "sourced in that order to set configuration variables.  Command line options "
@@ -2980,14 +2986,14 @@ msgstr ""
 "le nom étrange de l'option."
 
 # type: TP
-#: ../debc.1:107 ../debchange.1:296 ../debclean.1:97 ../debi.1:109
+#: ../debc.1:107 ../debchange.1:297 ../debclean.1:97 ../debi.1:109
 #: ../debrelease.1:125 ../debuild.1:349 ../devscripts.conf.5:42
 #, no-wrap
 msgid "B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL>, B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>"
 msgstr "B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL>, B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>"
 
 # type: Plain text
-#: ../debc.1:114 ../debchange.1:303 ../debclean.1:104 ../debi.1:116
+#: ../debc.1:114 ../debchange.1:304 ../debclean.1:104 ../debi.1:116
 #: ../debrelease.1:132 ../debuild.1:356
 msgid ""
 "See the above section \"Directory name checking\" for an explanation of "
@@ -3042,6 +3048,7 @@ msgstr "B<dch> [I<options>] [I<texte> ...]"
 
 # type: Plain text
 #: ../debchange.1:29
+#, fuzzy
 msgid ""
 "B<debchange> or its alias B<dch> will add a new comment line to the Debian "
 "changelog in the current source tree.  This command must be run from within "
@@ -3058,8 +3065,8 @@ msgid ""
 "exit without touching the existing changelog.  B<Note that the changelog is "
 "assumed to be encoded with the UTF-8 encoding.  If it is not, problems may "
 "occur.> Please see the B<iconv>(1) manpage to find out how to convert "
-"changelogs from legacy encodings.  Finally, a changelog or debian/NEWS file "
-"can be created from scratch using the B<--create> option described below."
+"changelogs from legacy encodings.  Finally, a changelog or NEWS file can be "
+"created from scratch using the B<--create> option described below."
 msgstr ""
 "B<debchange> ou son alias B<dch> ajoute une nouvelle ligne de commentaire au "
 "fichier debian/changelog dans le répertoire des sources. Cette commande doit "
@@ -3375,17 +3382,18 @@ msgid "B<--create>"
 msgstr "B<--create>"
 
 # type: Plain text
-#: ../debchange.1:183
+#: ../debchange.1:182
+#, fuzzy
 msgid ""
-"This will create a new I<debian/changelog> file (or I<debian/NEWS> if the "
-"B<--news> option is used).  You must be in the top-level directory to use "
-"this; no directory name checking will be performed.  The package name and "
-"version can either be specified using the B<--package> and B<--newversion> "
-"options, determined from the directory name using the B<--fromdirname> "
-"option or entered manually into the generated changelog file.  The "
-"maintainer name is determined from the environment if this is possible, and "
-"the distribution is specified either using the B<--distribution> option or "
-"in the generated changelog file."
+"This will create a new I<debian/changelog> file (or I<NEWS> if the B<--news> "
+"option is used).  You must be in the top-level directory to use this; no "
+"directory name checking will be performed.  The package name and version can "
+"either be specified using the B<--package> and B<--newversion> options, "
+"determined from the directory name using the B<--fromdirname> option or "
+"entered manually into the generated changelog file.  The maintainer name is "
+"determined from the environment if this is possible, and the distribution is "
+"specified either using the B<--distribution> option or in the generated "
+"changelog file."
 msgstr ""
 "Ceci créera un nouveau fichier I<debian/changelog> (ou I<debian/NEWS> si "
 "l'option B<--news> est utilisée). Vous devez être dans le répertoire de plus "
@@ -3399,13 +3407,13 @@ msgstr ""
 "soit dans le journal des modifications généré."
 
 # type: TP
-#: ../debchange.1:183 ../uscan.1:358
+#: ../debchange.1:182 ../uscan.1:365
 #, no-wrap
 msgid "B<--package> I<package>"
 msgstr "B<--package> I<paquet>"
 
 # type: Plain text
-#: ../debchange.1:187
+#: ../debchange.1:186
 msgid ""
 "This specifies the package name to be used in the new changelog; this may "
 "only be used in conjunction with the B<--create> option."
@@ -3415,13 +3423,13 @@ msgstr ""
 "create>."
 
 # type: TP
-#: ../debchange.1:187
+#: ../debchange.1:186
 #, no-wrap
 msgid "B<--nmu>, B<-n>"
 msgstr "B<--nmu>, B<-n>"
 
 # type: Plain text
-#: ../debchange.1:192
+#: ../debchange.1:191
 msgid ""
 "Increment the Debian release number for a non-maintainer upload by either "
 "appending a \".1\" to a non-NMU version number or by incrementing an NMU "
@@ -3432,13 +3440,13 @@ msgstr ""
 "de NMU."
 
 # type: TP
-#: ../debchange.1:192
+#: ../debchange.1:191
 #, no-wrap
 msgid "B<--qa>"
 msgstr "B<--qa>"
 
 # type: Plain text
-#: ../debchange.1:196
+#: ../debchange.1:195
 msgid ""
 "Increment the Debian release number for a Debian QA Team upload, and add a "
 "QA upload changelog comment."
@@ -3447,13 +3455,13 @@ msgstr ""
 "de Debian, et ajout un commentaire « QA upload » dans le changelog."
 
 # type: TP
-#: ../debchange.1:196
+#: ../debchange.1:195
 #, no-wrap
 msgid "B<--force-bad-version>, B<-b>"
 msgstr "B<--force-bad-version>, B<-b>"
 
 # type: Plain text
-#: ../debchange.1:200
+#: ../debchange.1:199
 msgid ""
 "Force a version number to be less than the current one (e.g., when "
 "backporting)."
@@ -3462,13 +3470,13 @@ msgstr ""
 "courant (comme c'est le cas par exemple dans le cas d'un rétroportage)."
 
 # type: TP
-#: ../debchange.1:200
+#: ../debchange.1:199
 #, no-wrap
 msgid "B<--fromdirname>, B<-d>"
 msgstr "B<--fromdirname>, B<-d>"
 
 # type: Plain text
-#: ../debchange.1:210
+#: ../debchange.1:209
 msgid ""
 "This will take the upstream version number from the directory name, which "
 "should be of the form I<package>-I<version>.  If the upstream version number "
@@ -3487,13 +3495,13 @@ msgstr ""
 "même, cette option se comporte de la même façon que B<-i>."
 
 # type: TP
-#: ../debchange.1:210
+#: ../debchange.1:209
 #, no-wrap
 msgid "B<--closes>I< nnnnn,[nnnnn,...]>"
 msgstr "B<--closes> I<nnnnn,[nnnnn,...]>"
 
 # type: Plain text
-#: ../debchange.1:216
+#: ../debchange.1:215
 msgid ""
 "Add changelog entries to close the specified bug numbers.  Also invoke the "
 "editor after adding these entries.  Will generate warnings if the BTS cannot "
@@ -3507,26 +3515,26 @@ msgstr ""
 "bogue."
 
 # type: TP
-#: ../debchange.1:216
+#: ../debchange.1:215
 #, no-wrap
 msgid "B<--[no]query>"
 msgstr "B<--[no]query>"
 
 # type: Plain text
-#: ../debchange.1:219
+#: ../debchange.1:218
 msgid "Should we attempt to query the BTS when generating closes entries?"
 msgstr ""
 "Spécifie si le BTS doit être interrogé lorsqu'une fermeture de bogue est "
 "générée."
 
 # type: TP
-#: ../debchange.1:219
+#: ../debchange.1:218
 #, no-wrap
 msgid "B<--preserve>, B<-p>"
 msgstr "B<--preserve>, B<-p>"
 
 # type: Plain text
-#: ../debchange.1:224
+#: ../debchange.1:223
 msgid ""
 "Preserve the source tree directory name if the upstream version number (or "
 "the version number of a Debian native package) changes.  See also the "
@@ -3538,29 +3546,31 @@ msgstr ""
 "dessous."
 
 # type: TP
-#: ../debchange.1:224
+#: ../debchange.1:223
 #, no-wrap
 msgid "B<--no-preserve>"
 msgstr "B<--no-preserve>"
 
 # type: Plain text
-#: ../debchange.1:227
+#: ../debchange.1:226
 msgid "Do not preserve the source tree directory name (default)."
 msgstr ""
 "Ne préserve pas le nom du répertoire de l'arborescence des sources "
 "(comportement par défaut)."
 
 # type: TP
-#: ../debchange.1:227
+#: ../debchange.1:226
 #, no-wrap
 msgid "B<--distribution >I<dist>, B<-D >I<dist>"
 msgstr "B<--distribution >I<dist>, B<-D >I<dist>"
 
 # type: Plain text
 #: ../debchange.1:231
+#, fuzzy
 msgid ""
-"Use the specified distribution in the new changelog entry, if any, instead "
-"of using the previous changelog entry's distribution."
+"Use the specified distribution in the changelog entry being edited, instead "
+"of using the previous changelog entry's distribution for new entries or the "
+"existing value for existing entries."
 msgstr ""
 "Utilise la distribution spécifiée dans la nouvelle entrée du fichier "
 "changelog, s'il y en a une, au lieu d'utiliser la distribution de la "
@@ -3573,23 +3583,25 @@ msgid "B<--urgency >I<urgency>, B<-u >I<urgency>"
 msgstr "B<--urgency> I<urgency>, B<-u> I<urgency>"
 
 # type: Plain text
-#: ../debchange.1:235
+#: ../debchange.1:236
+#, fuzzy
 msgid ""
-"Use the specified urgency in the new changelog entry, if any, instead of "
-"using the default \"low\"."
+"Use the specified urgency in the changelog entry being edited, instead of "
+"using the default \"low\" for new entries or the existing value for existing "
+"entries."
 msgstr ""
 "Utilise le niveau d'urgence spécifié dans la nouvelle entrée du fichier "
 "changelog, s'il y en a une, au lieu du niveau d'urgence bas (« low ») par "
 "défaut."
 
 # type: TP
-#: ../debchange.1:235
+#: ../debchange.1:236
 #, no-wrap
 msgid "B<--changelog >I<file>, B<-c >I<file>"
 msgstr "B<--changelog >I<fichier>, B<-c >I<fichier>"
 
 # type: Plain text
-#: ../debchange.1:241
+#: ../debchange.1:242
 msgid ""
 "This will edit the changelog I<file> instead of the standard I<debian/"
 "changelog>.  This option overrides any CHANGELOG environment variable "
@@ -3602,29 +3614,31 @@ msgstr ""
 "répertoire ne sera fait quand cette option est utilisée."
 
 # type: TP
-#: ../debchange.1:241
-#, no-wrap
-msgid "B<--news>"
-msgstr "B<--news>"
+#: ../debchange.1:242
+#, fuzzy, no-wrap
+msgid "B<--news> [I<newsfile>]"
+msgstr "B<--watchfile> I<watchfile>"
 
 # type: Plain text
-#: ../debchange.1:246
+#: ../debchange.1:247
+#, fuzzy
 msgid ""
-"This will edit I<debian/NEWS> instead of the regular changelog.  Directory "
-"searching will be performed.  Cannot be used together with B<--changelog>."
+"This will edit I<newsfile> (by default, I<debian/NEWS>) instead of the "
+"regular changelog.  Directory searching will be performed.  Cannot be used "
+"together with B<--changelog>."
 msgstr ""
 "Ceci éditera I<debian/NEWS> au lieu du journal des modifications. Une "
 "recherche sur le répertoire sera faite. Ne doit pas être utilisée avec B<--"
 "changelog>."
 
 # type: TP
-#: ../debchange.1:246
+#: ../debchange.1:247
 #, no-wrap
 msgid "B<--[no]multimaint>"
 msgstr "B<--[no]multimaint>"
 
 # type: Plain text
-#: ../debchange.1:251
+#: ../debchange.1:252
 msgid ""
 "Should we indicate that parts of a changelog entry have been made by "
 "different maintainers? Default is yes; see the discussion above and also the "
@@ -3637,13 +3651,13 @@ msgstr ""
 "fichier de configuration."
 
 # type: TP
-#: ../debchange.1:251
+#: ../debchange.1:252
 #, no-wrap
 msgid "B<--maintmaint>, B<-m>"
 msgstr "B<--maintmaint>, B<-m>"
 
 # type: Plain text
-#: ../debchange.1:259
+#: ../debchange.1:260
 msgid ""
 "Do not modify the maintainer details previously listed in the changelog.  "
 "This is useful particularly for sponsors wanting to automatically add a "
@@ -3661,13 +3675,13 @@ msgstr ""
 "d'envoyer le paquet à l'archive dans ces cas."
 
 # type: TP
-#: ../debchange.1:271
+#: ../debchange.1:272
 #, no-wrap
 msgid "B<--release-heuristic> I<log|changelog>"
 msgstr "B<--release-heuristic> I<log|changelog>"
 
 # type: Plain text
-#: ../debchange.1:276
+#: ../debchange.1:277
 msgid ""
 "Controls how B<debchange> determines if a package has been released, when "
 "deciding whether to create a new changelog entry or append to an existing "
@@ -3678,34 +3692,36 @@ msgstr ""
 "existante du journal des modifications."
 
 # type: Plain text
-#: ../debchange.1:279 ../debclean.1:84 ../debrelease.1:102 ../debsign.1:96
-#: ../dscverify.1:26 ../pts-subscribe.1:26 ../uupdate.1:83 ../who-uploads.1:39
+#: ../debchange.1:280 ../debclean.1:84 ../debrelease.1:102 ../debsign.1:96
+#: ../dscverify.1:26 ../nmudiff.1:45 ../pts-subscribe.1:26 ../uupdate.1:83
+#: ../who-uploads.1:39
 msgid "Display a help message and exit successfully."
 msgstr "Affiche un message d'aide et quitte avec succès."
 
 # type: TP
-#: ../debchange.1:279 ../debclean.1:84 ../debrelease.1:102 ../debsign.1:96
-#: ../dscverify.1:26 ../grep-excuses.1:21 ../plotchangelog.1:95
-#: ../pts-subscribe.1:26 ../rmadison.pl:175 ../uscan.1:402 ../uupdate.1:83
-#: ../who-uploads.1:39
+#: ../debchange.1:280 ../debclean.1:84 ../debrelease.1:102 ../debsign.1:96
+#: ../dscverify.1:26 ../grep-excuses.1:21 ../nmudiff.1:45
+#: ../plotchangelog.1:95 ../pts-subscribe.1:26 ../rmadison.pl:175
+#: ../uscan.1:409 ../uupdate.1:83 ../who-uploads.1:39
 #, no-wrap
 msgid "B<--version>"
 msgstr "B<--version>"
 
 # type: Plain text
-#: ../debchange.1:282 ../debclean.1:87 ../debrelease.1:105 ../debsign.1:99
-#: ../dscverify.1:29 ../pts-subscribe.1:29 ../uupdate.1:86 ../who-uploads.1:42
+#: ../debchange.1:283 ../debclean.1:87 ../debrelease.1:105 ../debsign.1:99
+#: ../dscverify.1:29 ../nmudiff.1:48 ../pts-subscribe.1:29 ../uupdate.1:86
+#: ../who-uploads.1:42
 msgid "Display version and copyright information and exit successfully."
 msgstr "Affiche la version et le copyright, puis quitte avec succès."
 
 # type: TP
-#: ../debchange.1:288
+#: ../debchange.1:289
 #, no-wrap
 msgid "B<DEBCHANGE_PRESERVE>"
 msgstr "B<DEBCHANGE_PRESERVE>"
 
 # type: Plain text
-#: ../debchange.1:292
+#: ../debchange.1:293
 msgid ""
 "If this is set to I<yes>, then it is the same as the B<--preserve> command "
 "line parameter being used."
@@ -3713,13 +3729,13 @@ msgstr ""
 "Si elle est positionnée à I<yes>, équivaut à utiliser l'option B<--preserve>."
 
 # type: TP
-#: ../debchange.1:292
+#: ../debchange.1:293
 #, no-wrap
 msgid "B<DEBCHANGE_QUERY_BTS>"
 msgstr "B<DEBCHANGE_QUERY_BTS>"
 
 # type: Plain text
-#: ../debchange.1:296
+#: ../debchange.1:297
 msgid ""
 "If this is set to I<no>, then it is the same as the B<--noquery> command "
 "line parameter being used."
@@ -3727,13 +3743,13 @@ msgstr ""
 "Si elle est positionnée à I<no>, équivaut à utiliser l'option B<--noquery>."
 
 # type: TP
-#: ../debchange.1:303
+#: ../debchange.1:304
 #, no-wrap
 msgid "B<DEBCHANGE_RELEASE_HEURISTIC>"
 msgstr "B<DEBCHANGE_RELEASE_HEURISTIC>"
 
 # type: Plain text
-#: ../debchange.1:308
+#: ../debchange.1:309
 msgid ""
 "Controls how B<debchange> determines if a package has been released, when "
 "deciding whether to create a new changelog entry or append to an existing "
@@ -3745,13 +3761,13 @@ msgstr ""
 "« changelog »."
 
 # type: TP
-#: ../debchange.1:308
+#: ../debchange.1:309
 #, no-wrap
 msgid "B<DEBCHANGE_MULTIMAINT>"
 msgstr "B<DEBCHANGE_MULTIMAINT>"
 
 # type: Plain text
-#: ../debchange.1:313
+#: ../debchange.1:314
 msgid ""
 "If set to \"no\", B<debchange> will not introduce multiple-maintainer "
 "distinctions when a different maintainer appends an entry to an existing "
@@ -3763,32 +3779,32 @@ msgstr ""
 "valeur par défaut est « yes »."
 
 # type: SH
-#: ../debchange.1:313 ../mass-bug.pl:95
+#: ../debchange.1:314 ../mass-bug.pl:96
 #, no-wrap
 msgid "ENVIRONMENT"
 msgstr "ENVIRONNEMENT"
 
 # type: TP
-#: ../debchange.1:314
+#: ../debchange.1:315
 #, no-wrap
 msgid "B<DEBEMAIL>, B<EMAIL>, B<DEBFULLNAME>, B<NAME>"
 msgstr "B<DEBEMAIL>, B<EMAIL>, B<DEBFULLNAME>, B<NAME>"
 
 # type: Plain text
-#: ../debchange.1:317
+#: ../debchange.1:318
 msgid "See the above description of the use of these environment variables."
 msgstr ""
 "Reportez-vous à la description précédente de l'utilisation de ces variables "
 "d'environnement"
 
 # type: TH
-#: ../debchange.1:317
+#: ../debchange.1:318
 #, no-wrap
 msgid "B<CHANGELOG>"
 msgstr "B<CHANGELOG>"
 
 # type: Plain text
-#: ../debchange.1:323
+#: ../debchange.1:324
 msgid ""
 "This variable specifies the changelog to edit in place of I<debian/"
 "changelog>.  No directory traversal or checking is performed when this "
@@ -3801,13 +3817,13 @@ msgstr ""
 "l'option de la ligne de commande B<--changelog>."
 
 # type: TP
-#: ../debchange.1:323
+#: ../debchange.1:324
 #, no-wrap
 msgid "B<VISUAL>, B<EDITOR>"
 msgstr "B<VISUAL>, B<EDITOR>"
 
 # type: Plain text
-#: ../debchange.1:327
+#: ../debchange.1:328
 msgid ""
 "These environment variables (in this order) determine the editor used by "
 "B<sensible-editor>."
@@ -3816,7 +3832,7 @@ msgstr ""
 "l'éditeur invoqué par B<sensible-editor>."
 
 # type: Plain text
-#: ../debchange.1:334
+#: ../debchange.1:335
 msgid ""
 "B<debclean>(1), B<dupload>(1), B<dput>(1), B<debc>(1)  and B<devscripts.conf>"
 "(5)."
@@ -3825,7 +3841,7 @@ msgstr ""
 "(5)."
 
 # type: Plain text
-#: ../debchange.1:337
+#: ../debchange.1:338
 msgid ""
 "The original author was Christoph Lameter E<lt>clameter@debian.orgE<gt>.  "
 "Many substantial changes and improvements were made by Julian Gilbey "
@@ -3947,7 +3963,8 @@ msgstr ""
 "C'est le comportement par défaut."
 
 # type: TP
-#: ../debclean.1:81 ../grep-excuses.1:18 ../plotchangelog.1:92 ../uscan.1:399
+#: ../debclean.1:81 ../grep-excuses.1:18 ../nmudiff.1:42 ../plotchangelog.1:92
+#: ../uscan.1:406
 #, no-wrap
 msgid "B<--help>"
 msgstr "B<--help>"
@@ -4070,7 +4087,7 @@ msgid "GPL"
 msgstr "GPL"
 
 # type: Plain text
-#: ../debcommit.pl:293 ../mass-bug.pl:417
+#: ../debcommit.pl:293 ../mass-bug.pl:423
 msgid "Joey Hess <joeyh@debian.org>"
 msgstr "Joey Hess <joeyh@debian.org>"
 
@@ -5156,7 +5173,7 @@ msgid "-h"
 msgstr "-h"
 
 # type: TP
-#: ../deb-reversion.dbk:188 ../mass-bug.pl:83
+#: ../deb-reversion.dbk:188 ../mass-bug.pl:84
 msgid "--help"
 msgstr "--help"
 
@@ -5171,12 +5188,12 @@ msgid "-V"
 msgstr "-V"
 
 # type: TP
-#: ../deb-reversion.dbk:198 ../mass-bug.pl:87
+#: ../deb-reversion.dbk:198 ../mass-bug.pl:88
 msgid "--version"
 msgstr "--version"
 
 # type: Plain text
-#: ../deb-reversion.dbk:201 ../mass-bug.pl:89 ../uscan.1:405
+#: ../deb-reversion.dbk:201 ../mass-bug.pl:90 ../uscan.1:412
 msgid "Display version information."
 msgstr "Affiche les informations sur la version."
 
@@ -6245,10 +6262,11 @@ msgstr "B<--no-tgz-check>"
 
 # type: Plain text
 #: ../debuild.1:249
+#, fuzzy
 msgid ""
 "Even if we're running B<dpkg-buildpackage> and the version number has a "
-"Debian revision, do not check that the .orig.tar.gz file exists before "
-"starting the build."
+"Debian revision, do not check that the .orig.tar.gz file or .orig directory "
+"exists before starting the build."
 msgstr ""
 "Même si B<dpkg-buildpackage> est exécuté et que le numéro de version possède "
 "une révision pour Debian, ne vérifie pas que le fichier .orig.tar.gz existe "
@@ -6262,10 +6280,11 @@ msgstr "B<--tgz-check>"
 
 # type: Plain text
 #: ../debuild.1:254
+#, fuzzy
 msgid ""
 "If we're running B<dpkg-buildpackage> and the version number has a Debian "
-"revision, check that the .orig.tar.gz file exists before starting the "
-"build.  This is the default behaviour."
+"revision, check that the .orig.tar.gz file or .orig directory exists before "
+"starting the build.  This is the default behaviour."
 msgstr ""
 "Si B<dpkg-buildpackage> est exécuté et que le numéro de version possède une "
 "révision pour Debian, vérifie que le fichier .orig.tar.gz existe avant de "
@@ -6711,32 +6730,31 @@ msgstr ""
 "courriels arrivant aux listes de diffusion Debian."
 
 # type: textblock
-#: ../dget.pl:255
+#: ../dget.pl:297
 msgid "dget -- Download Debian source and binary packages"
 msgstr "dget -- Télécharger des paquets Debian source et binaire"
 
 # type: =item
-#: ../dget.pl:261
-msgid "B<dget> [B<-bqx>] I<URL>"
+#: ../dget.pl:303
+#, fuzzy
+msgid "B<dget> [I<options>] I<URL>"
 msgstr "B<dget> [B<-bqx>] I<URL>"
 
-# type: TP
-#: ../dget.pl:263
-msgid "B<dget> [B<-bq>] I<package>"
-msgstr "B<dget> [B<-bq>] I<paquet>"
-
 # type: =item
-#: ../dget.pl:265
-msgid "B<dget> [B<-bq>] I<package>=I<version>"
+#: ../dget.pl:305
+#, fuzzy
+msgid "B<dget> [I<options>] I<package>[=I<version>]"
 msgstr "B<dget> [B<-bq>] I<paquet>=I<version>"
 
 # type: textblock
-#: ../dget.pl:271
+#: ../dget.pl:311
+#, fuzzy
 msgid ""
-"B<dget> downloads Debian packages. In the first form, B<dget> acts as a "
-"source package-aware form of wget; it fetches the given URL and recursively "
-"any files referenced, if the URL points to a .dsc or .changes file. When the "
-"B<-x> option is given, the downloaded source is unpacked by B<dpkg-source>."
+"B<dget> downloads Debian packages.  In the first form, B<dget> fetches the "
+"requested URL.  If this is a .dsc or .changes file, then B<dget> acts as a "
+"source-package aware form of B<wget>: it also fetches any files referenced "
+"in the .dsc/.changes file.  When the B<-x> option is given, the downloaded "
+"source is also unpacked by B<dpkg-source>."
 msgstr ""
 "B<dget> télécharge des paquets Debian. Avec la première forme, B<dget> agit "
 "comme une forme de wget adaptée au système de paquets source ; il télécharge "
@@ -6745,12 +6763,14 @@ msgstr ""
 "le paquet source téléchargé est dépaqueté avec B<dpkg-source>."
 
 # type: textblock
-#: ../dget.pl:276
+#: ../dget.pl:317
+#, fuzzy
 msgid ""
-"In the second and third form, B<dget> downloads a binary package from the "
-"Debian mirror configured in /etc/apt/sources.list. Unlike B<apt-get install -"
-"d>, it does not require root privileges, writes to the current directory, "
-"and does not download dependencies."
+"In the second form, B<dget> downloads a I<binary> package (i.e., a I<.deb> "
+"file) from the Debian mirror configured in /etc/apt/sources.list.  Unlike "
+"B<apt-get install -d>, it does not require root privileges, writes to the "
+"current directory, and does not download dependencies.  If a version number "
+"is specified, this version of the package is requested."
 msgstr ""
 "Avec les seconde et troisième formes, B<dget> télécharge un paquet binaire "
 "depuis le miroir Debian configuré dans /etc/apt/sources.lists. À la "
@@ -6759,12 +6779,14 @@ msgstr ""
 "dépendances."
 
 # type: textblock
-#: ../dget.pl:281
+#: ../dget.pl:324
+#, fuzzy
 msgid ""
-"Before downloading referenced files in .dsc and .changes files, and before "
-"downloading binary packages, if any of the files already exist, md5sums are "
-"compared to avoid wasting bandwidth. Download backends used are B<curl> and "
-"B<wget>, looked for in that order."
+"Before downloading files listed in .dsc and .changes files, and before "
+"downloading binary packages, B<dget> checks to see whether any of these "
+"files already exist.  If they do, then their md5sums are compared to avoid "
+"downloading them again unnecessarily.  Download backends used are B<curl> "
+"and B<wget>, looked for in that order."
 msgstr ""
 "Avant de télécharger les fichiers référencés dans les fichiers .dsc et ."
 "changes, et avant de télécharger des paquets binaires, si un des fichiers "
@@ -6773,10 +6795,11 @@ msgstr ""
 "B<wget>, recherchés dans cet ordre."
 
 # type: textblock
-#: ../dget.pl:286
+#: ../dget.pl:330
+#, fuzzy
 msgid ""
 "B<dget> was written to make it easier to retrieve source packages from the "
-"web for sponsor uploads. For checking the package with B<debdiff>, the last "
+"web for sponsor uploads.  For checking the package with B<debdiff>, the last "
 "binary version is available via B<dget> I<package>, the last source version "
 "via B<apt-get source> I<package>."
 msgstr ""
@@ -6785,35 +6808,110 @@ msgstr ""
 "la dernière version binaire est disponible via B<dget> I<package>, la "
 "dernière version source via B<apt-get source> I<package>."
 
+# type: TP
+#: ../dget.pl:339
+#, fuzzy
+msgid "B<-b>, B<--backup>"
+msgstr "B<-a>, B<--all>"
+
 # type: textblock
-#: ../dget.pl:293
-msgid "B<-b> move files that would be overwritten to B<./backup>."
+#: ../dget.pl:341
+#, fuzzy
+msgid "Move files that would be overwritten to I<./backup>."
 msgstr ""
 "B<-b> déplace les fichiers qui devraient être écrasés dans B<./backup>."
 
+# type: =item
+#: ../dget.pl:343
+#, fuzzy
+msgid "B<-q>, B<--quiet>"
+msgstr "-q, --quiet"
+
 # type: textblock
-#: ../dget.pl:295
-msgid "B<-q> suppress wget/curl output."
+#: ../dget.pl:345
+#, fuzzy
+msgid "Suppress B<wget>/B<curl> non-error output."
 msgstr "B<-q> supprime la sortie de wget/curl."
 
-# type: textblock
-#: ../dget.pl:297
-msgid "B<-x> run B<dpkg-source -x> on the downloaded source package."
-msgstr "B<-x> lance B<dpkg-source -x> sur le paquet source téléchargé."
+# type: TP
+#: ../dget.pl:347
+#, fuzzy
+msgid "B<-x>, B<--extract>"
+msgstr "B<-r>, B<--regex>"
 
 # type: textblock
-#: ../dget.pl:301
+#: ../dget.pl:349
+msgid ""
+"Run B<dpkg-source -x> on the downloaded source package.  This can only be "
+"used with the first method of calling B<dget>."
+msgstr ""
+
+# type: TP
+#: ../dget.pl:352
+#, fuzzy
+msgid "B<--insecure>"
+msgstr "B<--no-preserve>"
+
+# type: textblock
+#: ../dget.pl:354
+msgid "Allow SSL connections to untrusted hosts."
+msgstr ""
+
+# type: TP
+#: ../dget.pl:356 ../dpkg-depcheck.1:96 ../rmadison.pl:158 ../tagpending.1:26
+#, no-wrap
+msgid "B<-h>, B<--help>"
+msgstr "B<-h>, B<--help>"
+
+# type: Plain text
+#: ../dget.pl:358
+#, fuzzy
+msgid "Show a help message."
+msgstr "Affiche un bref message d'aide."
+
+# type: TP
+#: ../dget.pl:360 ../tagpending.1:29
+#, fuzzy, no-wrap
+msgid "B<-V>, B<--version>"
+msgstr "B<-V>, B<--version>"
+
+# type: Plain text
+#: ../dget.pl:362
+#, fuzzy
+msgid "Show version information."
+msgstr "Affiche les informations sur la version."
+
+# type: textblock
+#: ../dget.pl:368
 msgid "B<dget> I<package> should be implemented in B<apt-get install -d>."
 msgstr "B<dget> I<package> devrait être implémenté dans B<apt-get install -d>."
 
-# type: =item
-#: ../dget.pl:307
-msgid "Christoph Berg <myon@debian.org>"
-msgstr "Christoph Berg <myon@debian.org>"
+# type: textblock
+#: ../dget.pl:372
+#, fuzzy
+msgid ""
+"This program is Copyright (C) 2005 by Christoph Berg <myon@debian.org>.  "
+"Modifications are Copyright (C) 2005-06 by Julian Gilbey <jdg@debian.org>."
+msgstr ""
+"Ce programme est Copyright (C) 2001-2003 by Joey Hess <joeyh@debian.org>. De "
+"nombreuses modifications ont été effectuées, Copyright (C) 2002-2005 Julian "
+"Gilbey <jdg@debian.org>."
 
 # type: textblock
-#: ../dget.pl:313
-msgid "apt-get(1), debdiff(1), dpkg-source(1), curl(1), wget(1)."
+#: ../dget.pl:375
+#, fuzzy
+msgid ""
+"This program is licensed under the terms of the GPL, either version 2 of the "
+"License, or (at your option) any later version."
+msgstr ""
+"Il est publié sous les termes de la Licence Publique Générale (GPL) version "
+"2 ou toute version ultérieure (à votre discrétion)."
+
+# type: textblock
+#: ../dget.pl:380
+#, fuzzy
+msgid ""
+"B<apt-get>(1), B<debdiff>(1), B<dpkg-source>(1), B<curl>(1), B<wget>(1)."
 msgstr "apt-get(1), debdiff(1), dpkg-source(1), curl(1), wget(1)."
 
 # type: TH
@@ -7119,12 +7217,6 @@ msgstr ""
 "lisent tous les catalogues au démarrage. Les fichiers qui correspondent à "
 "l'expression rationnelle /usr/share/sgml/.*\\e.cat sont considérés comme des "
 "catalogues. Cette fonctionnalité est activée par défaut."
-
-# type: TP
-#: ../dpkg-depcheck.1:96 ../rmadison.pl:158
-#, no-wrap
-msgid "B<-h>, B<--help>"
-msgstr "B<-h>, B<--help>"
 
 # type: Plain text
 #: ../dpkg-depcheck.1:99
@@ -7458,7 +7550,7 @@ msgstr ""
 "et sinon, la variable de configuration décrite plus bas est utilisée."
 
 # type: Plain text
-#: ../grep-excuses.1:21 ../tagpending.1:26 ../whodepends.1:14
+#: ../grep-excuses.1:21 ../tagpending.1:29 ../whodepends.1:14
 msgid "Show a brief usage message."
 msgstr "Affiche un bref message d'aide."
 
@@ -7549,15 +7641,17 @@ msgstr ""
 
 # type: textblock
 #: ../mass-bug.pl:48
+#, fuzzy
 msgid ""
 "Note that text in the template will be automatically word-wrapped to 70 "
-"columns."
+"columns, up to the start of a signature (indicated by S<'-- '> at the start "
+"of a line on its own)."
 msgstr ""
 "Notez que le texte dans le modèle sera automatiquement ajusté à 70 colonnes "
 "par ligne."
 
 # type: Plain text
-#: ../mass-bug.pl:53
+#: ../mass-bug.pl:54
 msgid ""
 "B<mass-bug> examines the B<devscripts> configuration files as described "
 "below.  Command line options override the configuration file settings, "
@@ -7568,12 +7662,12 @@ msgstr ""
 "les paramètres des fichiers de configuration."
 
 # type: =item
-#: ../mass-bug.pl:59
+#: ../mass-bug.pl:60
 msgid "--display"
 msgstr "--display"
 
 # type: textblock
-#: ../mass-bug.pl:61
+#: ../mass-bug.pl:62
 msgid ""
 "Fill out the templates for each package and display them all for "
 "verification. This is the default behavior."
@@ -7582,22 +7676,22 @@ msgstr ""
 "vérifiés. C'est le comportement par défaut."
 
 # type: =item
-#: ../mass-bug.pl:64
+#: ../mass-bug.pl:65
 msgid "--send"
 msgstr "--send"
 
 # type: textblock
-#: ../mass-bug.pl:66
+#: ../mass-bug.pl:67
 msgid "Actually send the bug reports."
 msgstr "Envoie réellement les rapports de bogue."
 
 # type: =item
-#: ../mass-bug.pl:68
+#: ../mass-bug.pl:69
 msgid "--subject=\"bug subject\""
 msgstr "--subject=\"sujet du bogue\""
 
 # type: textblock
-#: ../mass-bug.pl:70
+#: ../mass-bug.pl:71
 msgid ""
 "Specify the subject of the bug report. The subject will be automatically "
 "prefixed with the name of the package that the bug is filed against."
@@ -7605,13 +7699,23 @@ msgstr ""
 "Spécifie le sujet du rapport de bogue. Le sujet sera automatiquement préfixé "
 "par le nom du paquet contre lequel le bogue est soumis."
 
+# type: textblock
+#: ../mass-bug.pl:76
+msgid ""
+"Specify the sendmail command.  The command will be split on white space and "
+"will not be passed to a shell.  Default is '/usr/sbin/sendmail'."
+msgstr ""
+"Spécifier la commande utilisée pour envoyer le courriel. La commande sera "
+"découpée en fonction des espaces et ne sera pas passée à un interpréteur de "
+"commandes. Par défaut, c'est « /usr/sbin/sendmail » qui est utilisé."
+
 # type: Plain text
-#: ../mass-bug.pl:85
+#: ../mass-bug.pl:86
 msgid "Provide a usage message."
 msgstr "Affiche un message sur l'utilisation."
 
 # type: textblock
-#: ../mass-bug.pl:97
+#: ../mass-bug.pl:98
 msgid ""
 "DEBEMAIL and EMAIL can be set in the environment to control the email "
 "address that the bugs are sent from."
@@ -7620,7 +7724,7 @@ msgstr ""
 "l'adresse électronique utilisée pour envoyer les bogues."
 
 # type: Plain text
-#: ../mass-bug.pl:410
+#: ../mass-bug.pl:416
 msgid "This program is Copyright (C) 2006 by Joey Hess <joeyh@debian.org>."
 msgstr ""
 "Ce programme a été écrit par Joey Hess <joeyh@debian.org>, Copyright (C) "
@@ -7693,18 +7797,22 @@ msgstr ""
 
 # type: Plain text
 #: ../nmudiff.1:6
-msgid "B<nmudiff>"
-msgstr "B<nmudiff>"
+#, fuzzy
+msgid "B<nmudiff> [I<options>]"
+msgstr "B<tagpending> [I<options>]"
 
 # type: Plain text
-#: ../nmudiff.1:14
+#: ../nmudiff.1:16
+#, fuzzy
 msgid ""
 "B<nmudiff> should be run in the source tree of the package being NMUed, "
-"after the NMU is built. It assumes that the source for the previous version "
-"of the package as well as the newly built version are in the directory "
-"below, and uses B<debdiff> to generate a NMU diff. It then runs B<mutt> to "
-"call an editor so that the diff can be examined and modified; once you exit "
-"the editor the diff will be mailed to the Debian BTS."
+"after the NMU is built. It assumes that the source packages (specifically, "
+"the .dsc and any corresponding tar and diff files) for both the previous "
+"version of the package and the newly built NMU version are in the parent "
+"directory. It then uses B<debdiff> to generate a diff between the previous "
+"version and the current NMU, and runs an editor (using B<sensible-editor>) "
+"so that the mail message (including the diff) can be examined and modified; "
+"once you exit the editor the diff will be mailed to the Debian BTS."
 msgstr ""
 "B<nmudiff> devrait être lancé dans l'arbre des sources du paquet devant être "
 "NMU-é, après que le NMU a été construit. Cela suppose que le source pour la "
@@ -7715,30 +7823,72 @@ msgstr ""
 "vous avez quitté l'éditeur, le diff est envoyé par mail au système de "
 "gestion de bogues (« BTS ») Debian."
 
-# type: Plain text
-#: ../nmudiff.1:16
-msgid "B<debdiff>(1)"
-msgstr "B<debdiff>(1)"
+# type: TP
+#: ../nmudiff.1:17
+#, fuzzy, no-wrap
+msgid "B<--new>"
+msgstr "B<--news>"
 
 # type: Plain text
 #: ../nmudiff.1:21
 msgid ""
-"This script should give the user a choice of how to edit and mail the diff.  "
-"It should also offer the option of sending to a specified bug number, "
-"possibly offering a menu of such things.  Finally, it should support the --"
-"help and --version options."
+"Instead of mailing the bug reports which are to be closed by this NMU, a new "
+"bug report is submitted directly to the BTS."
 msgstr ""
-"Ce script devrait donner à l'utilisateur le choix de la méthode pour éditer "
-"et envoyer le diff par mail. Il devrait aussi proposer une option pour "
-"spécifier un numéro de bogue, et si possible proposer un menu pour de telles "
-"choses. Enfin, il devrait supporter les options --help et --version."
+
+# type: =item
+#: ../nmudiff.1:21
+#, fuzzy, no-wrap
+msgid "B<--sendmail> I<SENDMAILCMD>"
+msgstr "--sendmail=COMMANDE_D_ENVOI_DE_MAIL"
 
 # type: Plain text
-#: ../nmudiff.1:25
+#: ../nmudiff.1:31
 msgid ""
-"B<nmudiff> was written by Steinar H. Gunderson.  The software may be freely "
-"redistributed under the terms and conditions of the GNU General Public "
-"Licence, version 2."
+"Specify the sendmail command.  The command will be split on white space and "
+"will be interpreted by the shell.  Default is I</usr/sbin/sendmail>.  The I<-"
+"t> option will be automatically added if the command is I</usr/sbin/"
+"sendmail> or I</usr/sbin/exim*>.  For other mailers, if they require a I<-t> "
+"option, this must be included in the I<SENDMAILCMD>, for example: --sendmail="
+"\"/usr/sbin/mymailer -t\".  This can also be set using the devscripts "
+"configuration files; see below."
+msgstr ""
+
+# type: TP
+#: ../nmudiff.1:31
+#, no-wrap
+msgid "B<--from> I<EMAIL>"
+msgstr ""
+
+# type: Plain text
+#: ../nmudiff.1:38
+msgid ""
+"The email to the BTS will be sent using the name and address in the "
+"environment variable DEBEMAIL.  If this is not set, then the variable EMAIL "
+"will be used instead.  These can be overridden using the B<--from> option.  "
+"The program will not work if an email address cannot be determined."
+msgstr ""
+
+# type: =item
+#: ../nmudiff.1:54
+#, fuzzy, no-wrap
+msgid "B<BTS_SENDMAIL_COMMAND>"
+msgstr "BTS_SENDMAIL_COMMAND"
+
+# type: Plain text
+#: ../nmudiff.1:63
+#, fuzzy
+msgid "B<debdiff>(1), B<sensible-editor>(1)  and B<devscripts.conf>(5)."
+msgstr "B<dpkg-deb>(8), B<debdiff>(1) et B<devscripts.conf>(5)."
+
+# type: Plain text
+#: ../nmudiff.1:67
+#, fuzzy
+msgid ""
+"B<nmudiff> was written and is copyright 2006 by Steinar H. Gunderson and "
+"modified by Julian Gilbey E<lt>jdg@debian.orgE<gt>.  The software may be "
+"freely redistributed under the terms and conditions of the GNU General "
+"Public Licence, version 2."
 msgstr ""
 "B<nmudiff> a été écrit par Steinar H. Gunderson. C'est un logiciel libre qui "
 "peut être redistribué suivant les termes de la licence publique générale "
@@ -7960,7 +8110,7 @@ msgstr ""
 "plus important."
 
 # type: TP
-#: ../plotchangelog.1:78 ../uscan.1:378
+#: ../plotchangelog.1:78 ../uscan.1:385
 #, no-wrap
 msgid "B<--verbose>"
 msgstr "B<--verbose>"
@@ -8628,9 +8778,9 @@ msgstr ""
 
 # type: TP
 #: ../tagpending.1:13
-#, no-wrap
-msgid "B<-n>"
-msgstr "B<-n>"
+#, fuzzy, no-wrap
+msgid "B<-n>, B<--noact>"
+msgstr "B<--nmu>, B<-n>"
 
 # type: Plain text
 #: ../tagpending.1:16
@@ -8639,9 +8789,9 @@ msgstr "N'envoie pas le courrier, mais l'affiche sur la sortie standard."
 
 # type: TP
 #: ../tagpending.1:16
-#, no-wrap
-msgid "B<-s>"
-msgstr "B<-s>"
+#, fuzzy, no-wrap
+msgid "B<-s>, B<--silent>"
+msgstr "B<-i>,B<--stdin>"
 
 # type: Plain text
 #: ../tagpending.1:19
@@ -8650,12 +8800,23 @@ msgstr "N'affiche pas les actions effectuées."
 
 # type: TP
 #: ../tagpending.1:19
-#, no-wrap
-msgid "B<-f>"
-msgstr "B<-f>"
+#, fuzzy, no-wrap
+msgid "B<-v>, B<--verbose>"
+msgstr "B<-v>, B<--version>"
 
 # type: Plain text
-#: ../tagpending.1:23
+#: ../tagpending.1:22
+msgid "List every bug checked."
+msgstr ""
+
+# type: TP
+#: ../tagpending.1:22
+#, fuzzy, no-wrap
+msgid "B<-f>, B<--force>"
+msgstr "B<-r>, B<--regex>"
+
+# type: Plain text
+#: ../tagpending.1:26
 msgid ""
 "Do not query the BTS for already tagged bugs, that is, force all bugs to be "
 "tagged as pending even if they already are."
@@ -8663,27 +8824,18 @@ msgstr ""
 "N'interroge pas le BTS pour obtenir la liste des bogues déjà marqués, mais "
 "force l'étiquette « pending » sur tous les bogues, même ceux qui l'ont déjà."
 
-# type: TP
-#: ../tagpending.1:23 ../whodepends.1:11
-#, no-wrap
-msgid "B<--help, -h>"
-msgstr "B<--help>, B<-h>"
-
-# type: TP
-#: ../tagpending.1:26 ../whodepends.1:14
-#, no-wrap
-msgid "B<--version, -v>"
-msgstr "B<--version>, B<-v>"
-
 # type: Plain text
-#: ../tagpending.1:33
-msgid "B<ldapsearch(1),> B<mailx(1),> B<dpkg-parsechangelog(1)>"
+#: ../tagpending.1:37
+#, fuzzy
+msgid "B<ldapsearch>(1), B<mailx>(1)  and B<dpkg-parsechangelog>(1)"
 msgstr "B<ldapsearch>(1), B<mailx>(1), B<dpkg-parsechangelog>(1)"
 
 # type: Plain text
-#: ../tagpending.1:34
-msgid "Joshua Kwan E<lt>joshk@triplehelix.orgE<gt>"
-msgstr "Joshua Kwan E<lt>joshk@triplehelix.orgE<gt>"
+#: ../tagpending.1:39
+msgid ""
+"Joshua Kwan E<lt>joshk@triplehelix.orgE<gt>.  This manpage and the "
+"associated programme are licensed under the terms of the GPL, version 2."
+msgstr ""
 
 # type: TH
 #: ../uscan.1:1
@@ -8850,7 +9002,19 @@ msgstr ""
 "  files/amphetamine-([\\ed\\e.]*).tar.bz2\n"
 
 # type: Plain text
-#: ../uscan.1:68
+#: ../uscan.1:70
+#, no-wrap
+msgid ""
+"# This one shows that recursive directory scanning works, in either of\n"
+"# two forms, as long as the website can handle requests of the form\n"
+"# http://site/inter/mediate/dir/\n"
+"http://tmrc.mit.edu/mirror/twisted/Twisted/(\\d.\\d)/ \\e\n"
+"  Twisted-([\\d.]*).tar.bz2\n"
+"http://tmrc.mit.edu/mirror/twisted/Twisted/(\\d.\\d)/Twisted-([\\d.]*).tar.bz2\n"
+msgstr ""
+
+# type: Plain text
+#: ../uscan.1:75
 #, no-wrap
 msgid ""
 "# If your package is located on sourceforge, use one of the following\n"
@@ -8864,13 +9028,13 @@ msgstr ""
 "http://sf.net/aa-project/aalib-(.*)\\e.tar\\e.gz\n"
 
 # type: Plain text
-#: ../uscan.1:70
+#: ../uscan.1:77
 #, no-wrap
 msgid "http://sf.net/aa-project/ aalib-(.*)\\e.tar\\e.gz\n"
 msgstr "http://sf.net/aa-project/ aalib-(.*)\\e.tar\\e.gz\n"
 
 # type: Plain text
-#: ../uscan.1:75
+#: ../uscan.1:82
 #, no-wrap
 msgid ""
 "# This is the format for a site which has funny version numbers;\n"
@@ -8885,7 +9049,7 @@ msgstr ""
 
 # NOTE: Ca reste encore cryptique
 # type: Plain text
-#: ../uscan.1:83
+#: ../uscan.1:90
 #, no-wrap
 msgid ""
 "# This is another way of handling site with funny version numbers,\n"
@@ -8905,7 +9069,7 @@ msgstr ""
 "  ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/Wine-(.*)\\e.tar\\e.gz\n"
 
 # type: Plain text
-#: ../uscan.1:88
+#: ../uscan.1:95
 #, no-wrap
 msgid ""
 "# Similarly, the upstream part of the Debian version number can be\n"
@@ -8919,21 +9083,21 @@ msgstr ""
 "  http://un.site.org/un/chemin/toto-(.*)\\e.tar\\e.gz\n"
 
 # type: Plain text
-#: ../uscan.1:101
-#, no-wrap
+#: ../uscan.1:108
+#, fuzzy, no-wrap
 msgid ""
 "# The filename is found by taking the last component of the URL and\n"
 "# removing everything after any '?'.  If this would not make a usable\n"
 "# filename, use filenamemangle.  For example,\n"
-"# E<lt>A href=\"http://foo.bar.org/download/?path=&amp;download=foo-0.1.1.tar.gz\"E<gt>\n"
+"# E<lt>A href=\"http://foo.bar.org/download/?path=&download=foo-0.1.1.tar.gz\"E<gt>\n"
 "# could be handled as:\n"
 "# opts=filenamemangle=s/.*=(.*)/$1/ \\e\n"
-"#     http://foo.bar.org/download/\\e?path=&amp;download=foo-(.*)\\e.tar\\e.gz\n"
+"#     http://foo.bar.org/download/\\e?path=&download=foo-(.*)\\e.tar\\e.gz\n"
 "# \n"
-"# E<lt>A href=\"http://foo.bar.org/download/?path=&amp;download_version=0.1.1\"E<gt>\n"
+"# E<lt>A href=\"http://foo.bar.org/download/?path=&download_version=0.1.1\"E<gt>\n"
 "# could be handled as:\n"
 "# opts=filenamemangle=s/.*=(.*)/foo-$1\\e.tar\\e.gz/ \\e\n"
-"#    http://foo.bar.org/download/\\e?path=&amp;download_version=(.*)\n"
+"#    http://foo.bar.org/download/\\e?path=&download_version=(.*)\n"
 msgstr ""
 "# Le nom de fichier est déterminé en prenant le dernier composant de\n"
 "# l'URL et en retirant tout ce qui se trouve après chaque « ? ».\n"
@@ -8950,7 +9114,7 @@ msgstr ""
 "#    http://toto.titi.org/download/\\e?path=&amp;download_version=(.*)\n"
 
 # type: Plain text
-#: ../uscan.1:109
+#: ../uscan.1:116
 #, no-wrap
 msgid ""
 "# The option downloadurlmangle can be used to mangle the URL of the file\n"
@@ -8971,7 +9135,7 @@ msgstr ""
 "#   http://prdownload.berlios.de/softdevice/vdr-softdevice-(.*).tgz\n"
 
 # type: Plain text
-#: ../uscan.1:115
+#: ../uscan.1:122
 msgid ""
 "Comment lines may be introduced with a `#' character.  Continuation lines "
 "may be indicated by terminating a line with a backslash character."
@@ -8981,7 +9145,7 @@ msgstr ""
 "caractère backslash (« \\e »)."
 
 # type: Plain text
-#: ../uscan.1:119
+#: ../uscan.1:126
 msgid ""
 "The first (non-comment) line of the file must begin `version=3'.  This "
 "allows for future extensions without having to change the name of the file."
@@ -8991,7 +9155,7 @@ msgstr ""
 "sans avoir à changer le nom du fichier."
 
 # type: Plain text
-#: ../uscan.1:124
+#: ../uscan.1:131
 msgid ""
 "There are two possibilities for the syntax of an HTTP watchfile line, and "
 "only one for an FTP line.  We begin with the common (and simpler)  format.  "
@@ -9004,7 +9168,7 @@ msgstr ""
 "ignoré dans ce qui suit."
 
 # type: Plain text
-#: ../uscan.1:141
+#: ../uscan.1:148
 msgid ""
 "The first field gives the full pattern of URLs being searched for.  In the "
 "case of an FTP site, the directory listing for the requested directory will "
@@ -9042,7 +9206,7 @@ msgstr ""
 
 # NOTE: ancré: ^...$
 # type: Plain text
-#: ../uscan.1:150
+#: ../uscan.1:157
 msgid ""
 "The pattern (after the final slash) is a Perl regexp (see B<perlre>(1) for "
 "details of these).  You need to make the pattern so tight that it matches "
@@ -9062,7 +9226,7 @@ msgstr ""
 "groupe Perl comme décrit dans le prochain paragraphe."
 
 # type: Plain text
-#: ../uscan.1:161
+#: ../uscan.1:168
 msgid ""
 "Having got a list of `files' matching the pattern, their version numbers are "
 "extracted by treating the part matching the Perl regexp groups, demarcated "
@@ -9087,7 +9251,7 @@ msgstr ""
 "pour nettoyer la version par la suite."
 
 # type: Plain text
-#: ../uscan.1:180
+#: ../uscan.1:187
 msgid ""
 "The current (upstream) version can be specified as the second parameter in "
 "the watchfile line.  If this is I<debian> or absent, then the current Debian "
@@ -9124,7 +9288,7 @@ msgstr ""
 "suffixe I<.tar.bz2>, I<.tbz> ou I<.tbz2>."
 
 # type: Plain text
-#: ../uscan.1:183
+#: ../uscan.1:190
 msgid ""
 "Finally, if a third parameter (an action) is given in the watchfile line, "
 "this is taken as the name of a command, and the command"
@@ -9133,13 +9297,13 @@ msgstr ""
 "« watch », il est considéré comme le nom d'une commande, et la commande :"
 
 # type: Plain text
-#: ../uscan.1:185
+#: ../uscan.1:192
 #, no-wrap
 msgid "    I<command >B<--upstream-version>I< version filename>\n"
 msgstr "    I<commande> B<--upstream-version> I<version nom_fichier>\n"
 
 # type: Plain text
-#: ../uscan.1:194
+#: ../uscan.1:201
 msgid ""
 "is executed, using either the original file or the symlink name.  A common "
 "such command would be B<uupdate>(1).  (Note that the calling syntax was "
@@ -9156,7 +9320,7 @@ msgstr ""
 "« commande fichier version ».)"
 
 # type: Plain text
-#: ../uscan.1:210
+#: ../uscan.1:217
 msgid ""
 "The alternative version of the watchfile syntax for HTTP URLs is as "
 "follows.  The first field is a homepage which should be downloaded and then "
@@ -9190,13 +9354,13 @@ msgstr ""
 "numéro de version et de la commande, comme précédemment."
 
 # type: SH
-#: ../uscan.1:210
+#: ../uscan.1:217
 #, no-wrap
 msgid "PER-SITE OPTIONS"
 msgstr "OPTIONS SPÉCIFIQUES À UN SITE"
 
 # type: Plain text
-#: ../uscan.1:216
+#: ../uscan.1:223
 msgid ""
 "A watchfile line may be prefixed with `opts=I<options>', where I<options> is "
 "a comma-separated list of options.  The whole I<options> string may be "
@@ -9209,13 +9373,13 @@ msgstr ""
 "nécessaire si I<options> contient des espaces. Les options reconnues sont :"
 
 # type: TP
-#: ../uscan.1:216
+#: ../uscan.1:223
 #, no-wrap
 msgid "B<active> and B<passive> (or B<pasv>)"
 msgstr "B<active> et B<passive> (ou B<pasv>)"
 
 # type: Plain text
-#: ../uscan.1:221
+#: ../uscan.1:228
 msgid ""
 "If used on an FTP line, these override the choice of whether to use PASV "
 "mode or not, and force the use of the specified mode for this site."
@@ -9224,13 +9388,13 @@ msgstr ""
 "(PASV) ou actif pour ce site."
 
 # type: TP
-#: ../uscan.1:221
+#: ../uscan.1:228
 #, no-wrap
 msgid "B<uversionmangle=>I<rules>"
 msgstr "B<uversionmangle=>I<règles>"
 
 # type: Plain text
-#: ../uscan.1:227
+#: ../uscan.1:234
 msgid ""
 "This is used to mangle the upstream version number as matched by the "
 "ftp://... or http:// rules as follows.  First, the I<rules> string is split "
@@ -9244,13 +9408,13 @@ msgstr ""
 "commande Perl suivante :"
 
 # type: Plain text
-#: ../uscan.1:229
+#: ../uscan.1:236
 #, no-wrap
 msgid "    $version =~ I<rule>;\n"
 msgstr "    $version =~ I<règle>;\n"
 
 # type: Plain text
-#: ../uscan.1:234
+#: ../uscan.1:241
 msgid ""
 "for each rule.  Thus, suitable rules might be `s/^/0./' to prepend `0.' to "
 "the version number and `s/_/./' to change underscores into periods.  Note "
@@ -9263,13 +9427,13 @@ msgstr ""
 "ceci ne devrait pas être un problème."
 
 # type: TP
-#: ../uscan.1:234
+#: ../uscan.1:241
 #, no-wrap
 msgid "B<dversionmangle=>I<rules>"
 msgstr "B<dversionmangle=>I<règles>"
 
 # type: Plain text
-#: ../uscan.1:242
+#: ../uscan.1:249
 msgid ""
 "This is used to mangle the Debian version number of the currently installed "
 "package in the same way as the B<uversionmangle> option.  Thus, a suitable "
@@ -9285,13 +9449,13 @@ msgstr ""
 "doit pas contenir de virgule ; ceci ne devrait pas être un problème."
 
 # type: TP
-#: ../uscan.1:242
+#: ../uscan.1:249
 #, no-wrap
 msgid "B<versionmangle=>I<rules>"
 msgstr "B<versionmangle=>I<règles>"
 
 # type: Plain text
-#: ../uscan.1:247
+#: ../uscan.1:254
 msgid ""
 "This is a syntactic shorthand for B<uversionmangle=>I<rules>B<,"
 "dversionmangle=>I<rules>B<, applying the same rules to both the upstream and "
@@ -9302,13 +9466,13 @@ msgstr ""
 "numéros de version Debian et amont."
 
 # type: TP
-#: ../uscan.1:247
+#: ../uscan.1:254
 #, no-wrap
 msgid "B<filenamemangle=>I<rules>"
 msgstr "B<filenamemangle=>I<règles>"
 
 # type: Plain text
-#: ../uscan.1:253
+#: ../uscan.1:260
 msgid ""
 "This is used to mangle the filename with which the downloaded file will be "
 "saved, and is parsed in the same way as the B<uversionmangle> option.  "
@@ -9320,13 +9484,13 @@ msgstr ""
 "section ci-dessus."
 
 # type: TP
-#: ../uscan.1:253
+#: ../uscan.1:260
 #, no-wrap
 msgid "B<downloadurlmangle=>I<rules>"
 msgstr "B<downloadurlmangle=>I<règles>"
 
 # type: Plain text
-#: ../uscan.1:261
+#: ../uscan.1:268
 msgid ""
 "This is used to mangle the URL to be used for the download.  The URL is "
 "first computed based on the homepage downloaded and the pattern matched, "
@@ -9343,7 +9507,7 @@ msgstr ""
 
 # NOTE: "and in order to promote efficiency" ?
 # type: Plain text
-#: ../uscan.1:276
+#: ../uscan.1:283
 msgid ""
 "Similarly to several other scripts in the B<devscripts> package, B<uscan> "
 "explores the requested directory trees looking for I<debian/changelog> and "
@@ -9372,7 +9536,7 @@ msgstr ""
 "dirname-regex>."
 
 # type: Plain text
-#: ../uscan.1:287
+#: ../uscan.1:294
 msgid ""
 "Only check the directory name if we have had to change directory in our "
 "search for I<debian/changelog>, that is, the directory containing I<debian/"
@@ -9385,13 +9549,13 @@ msgstr ""
 "été invoqué. C'est le comportement par défaut."
 
 # type: Plain text
-#: ../uscan.1:305
+#: ../uscan.1:312
 msgid "This script will perform a fully automatic upstream update."
 msgstr ""
 "Ce script va réaliser une mise à jour complètement automatique avec l'amont."
 
 # type: Plain text
-#: ../uscan.1:313
+#: ../uscan.1:320
 #, no-wrap
 msgid ""
 "#!/bin/sh -e\n"
@@ -9409,7 +9573,7 @@ msgstr ""
 "debuild\n"
 
 # type: Plain text
-#: ../uscan.1:318
+#: ../uscan.1:325
 msgid ""
 "Note that we don't call B<dupload> or B<dput> automatically, as the "
 "maintainer should perform sanity checks on the software before uploading it "
@@ -9420,13 +9584,13 @@ msgstr ""
 "de l'envoyer à l'archive Debian."
 
 # type: TP
-#: ../uscan.1:319
+#: ../uscan.1:326
 #, no-wrap
 msgid "B<--report, --no-download>"
 msgstr "B<--report>, B<--no-download>"
 
 # type: Plain text
-#: ../uscan.1:322
+#: ../uscan.1:329
 msgid ""
 "Only report about available newer versions but do not download anything."
 msgstr ""
@@ -9434,13 +9598,13 @@ msgstr ""
 "télécharge rien."
 
 # type: TP
-#: ../uscan.1:322
+#: ../uscan.1:329
 #, no-wrap
 msgid "B<--report-status>"
 msgstr "B<--report-status>"
 
 # type: Plain text
-#: ../uscan.1:326
+#: ../uscan.1:333
 msgid ""
 "Report on the status of all packages, even those which are up-to-date, but "
 "do not download anything."
@@ -9449,58 +9613,58 @@ msgstr ""
 "télécharge rien du tout."
 
 # type: TP
-#: ../uscan.1:326
+#: ../uscan.1:333
 #, no-wrap
 msgid "B<--download>"
 msgstr "B<--download>"
 
 # type: Plain text
-#: ../uscan.1:329
+#: ../uscan.1:336
 msgid "Report and download.  (This is the default behaviour.)"
 msgstr ""
 "Fournit un rapport puis télécharge. (C'est le comportement par défaut.)"
 
 # type: TP
-#: ../uscan.1:329
+#: ../uscan.1:336
 #, no-wrap
 msgid "B<--pasv>"
 msgstr "B<--pasv>"
 
 # type: Plain text
-#: ../uscan.1:332
+#: ../uscan.1:339
 msgid "Force PASV mode for FTP connections."
 msgstr "Force le mode passif (« PASV ») pour les connexions FTP."
 
 # type: TP
-#: ../uscan.1:332
+#: ../uscan.1:339
 #, no-wrap
 msgid "B<--no-pasv>"
 msgstr "B<--no-pasv>"
 
 # type: Plain text
-#: ../uscan.1:335
+#: ../uscan.1:342
 msgid "Do not use PASV mode for FTP connections."
 msgstr "N'utilise pas le mode passif pour les connexions FTP."
 
 # type: TP
-#: ../uscan.1:335
+#: ../uscan.1:342
 #, no-wrap
 msgid "B<--timeout> I<N>"
 msgstr "B<--timeout> I<N>"
 
 # type: Plain text
-#: ../uscan.1:338
+#: ../uscan.1:345
 msgid "Set timeout to N seconds (default 20 seconds)."
 msgstr "Défini le temps d'attente à N secondes (20 secondes par défaut)."
 
 # type: TP
-#: ../uscan.1:338
+#: ../uscan.1:345
 #, no-wrap
 msgid "B<--symlink>"
 msgstr "B<--symlink>"
 
 # type: Plain text
-#: ../uscan.1:344
+#: ../uscan.1:351
 msgid ""
 "Make orig.tar.gz symlinks to any downloaded files if their extensions are I<."
 "tar.gz> or I<.tgz>, and similarly for to orig.tar.bz2 for the suffixes I<."
@@ -9512,13 +9676,13 @@ msgstr ""
 "par défaut.)"
 
 # type: TP
-#: ../uscan.1:344
+#: ../uscan.1:351
 #, no-wrap
 msgid "B<--rename>"
 msgstr "B<--rename>"
 
 # type: Plain text
-#: ../uscan.1:349
+#: ../uscan.1:356
 msgid ""
 "Instead of symlinking, rename the downloaded files to their Debian orig.tar."
 "gz names if their extensions are I<.tar.gz> or I<.tgz>, and similarly for "
@@ -9529,35 +9693,35 @@ msgstr ""
 "tgz> et de manière semblable pour les fichiers d'extension tar.bz2."
 
 # type: TP
-#: ../uscan.1:349 ../uupdate.1:72
+#: ../uscan.1:356 ../uupdate.1:72
 #, no-wrap
 msgid "B<--no-symlink>"
 msgstr "B<--no-symlink>"
 
 # type: Plain text
-#: ../uscan.1:352
+#: ../uscan.1:359
 msgid "Don't make these symlinks and don't rename the files."
 msgstr "Ne crée pas ces liens symboliques et ne renomme pas les fichiers."
 
 # type: TP
-#: ../uscan.1:352
+#: ../uscan.1:359
 #, no-wrap
 msgid "B<--dehs>"
 msgstr "B<--dehs>"
 
 # type: Plain text
-#: ../uscan.1:355
+#: ../uscan.1:362
 msgid "Use an XML format for output, as required by the DEHS system."
 msgstr "Utilise le format XML pour la sortie, requis par le système DEHS."
 
 # type: TP
-#: ../uscan.1:355
+#: ../uscan.1:362
 #, no-wrap
 msgid "B<--no-dehs>"
 msgstr "B<--no-dehs>"
 
 # type: Plain text
-#: ../uscan.1:358
+#: ../uscan.1:365
 msgid ""
 "Use the traditional uscan output format.  (This is the default behaviour.)"
 msgstr ""
@@ -9565,7 +9729,7 @@ msgstr ""
 "par défaut.)"
 
 # type: Plain text
-#: ../uscan.1:366
+#: ../uscan.1:373
 msgid ""
 "Specify the name of the package to check for rather than examining I<debian/"
 "changelog>; this requires the B<--upstream-version> and B<--watchfile> "
@@ -9580,13 +9744,13 @@ msgstr ""
 "le système DEHS (et B<--dehs>)."
 
 # type: TP
-#: ../uscan.1:366
+#: ../uscan.1:373
 #, no-wrap
 msgid "B<--upstream-version> I<upstream-version>"
 msgstr "B<--upstream-version> I<version-amont>"
 
 # type: Plain text
-#: ../uscan.1:371
+#: ../uscan.1:378
 msgid ""
 "Specify the current upstream version rather than examine the watchfile or "
 "changelog to determine it.  This is ignored if a directory scan is being "
@@ -9598,13 +9762,13 @@ msgstr ""
 "watchfile est trouvé."
 
 # type: TP
-#: ../uscan.1:371
+#: ../uscan.1:378
 #, no-wrap
 msgid "B<--watchfile> I<watchfile>"
 msgstr "B<--watchfile> I<watchfile>"
 
 # type: Plain text
-#: ../uscan.1:378
+#: ../uscan.1:385
 msgid ""
 "Specify the watchfile rather than perform a directory scan to determine it.  "
 "If this option is used without B<--package>, then B<uscan> must be called "
@@ -9618,42 +9782,42 @@ msgstr ""
 "l'arborescence)."
 
 # type: Plain text
-#: ../uscan.1:381
+#: ../uscan.1:388
 msgid "Give verbose output."
 msgstr "Donne une sortie bavarde."
 
 # type: TP
-#: ../uscan.1:381
+#: ../uscan.1:388
 #, no-wrap
 msgid "B<--no-verbose>"
 msgstr "B<--no-verbose>"
 
 # type: Plain text
-#: ../uscan.1:384
+#: ../uscan.1:391
 msgid "Don't give verbose output.  (This is the default behaviour.)"
 msgstr "Ne donne pas de sortie bavarde. (C'est le comportement par défaut.)"
 
 # type: TP
-#: ../uscan.1:384
+#: ../uscan.1:391
 #, no-wrap
 msgid "B<--debug>"
 msgstr "B<--debug>"
 
 # type: Plain text
-#: ../uscan.1:387
+#: ../uscan.1:394
 msgid "Dump the downloaded web pages to stdout for debugging your watch file."
 msgstr ""
 "Affiche les pages web téléchargées sur la sortie standard afin de déboguer "
 "votre fichier « watch »."
 
 # type: Plain text
-#: ../uscan.1:402
+#: ../uscan.1:409
 msgid "Give brief usage information."
 msgstr "Affiche un bref message d'aide."
 
 # NOTE: presque identique à un autre ?
 # type: Plain text
-#: ../uscan.1:412
+#: ../uscan.1:419
 msgid ""
 "The two configuration files I</etc/devscripts.conf> and I<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  These may "
@@ -9672,13 +9836,13 @@ msgstr ""
 "actuellement identifiées sont :"
 
 # type: TP
-#: ../uscan.1:412
+#: ../uscan.1:419
 #, no-wrap
 msgid "B<USCAN_DOWNLOAD>"
 msgstr "B<USCAN_DOWNLOAD>"
 
 # type: Plain text
-#: ../uscan.1:417
+#: ../uscan.1:424
 msgid ""
 "If this is set to I<no>, then newer upstream files will not be downloaded; "
 "this is equivalent to the B<--report> or B<--no-download> options."
@@ -9688,13 +9852,13 @@ msgstr ""
 "download>."
 
 # type: TP
-#: ../uscan.1:417
+#: ../uscan.1:424
 #, no-wrap
 msgid "B<USCAN_PASV>"
 msgstr "B<USCAN_PASV>"
 
 # type: Plain text
-#: ../uscan.1:423
+#: ../uscan.1:430
 msgid ""
 "If this is set to I<yes> or I<no>, this will force FTP connections to use "
 "PASV mode or not to, respectively.  If this is set to I<default>, then Net::"
@@ -9707,13 +9871,13 @@ msgstr ""
 "principalement sur la variable d'environnement FTP_PASSIVE)."
 
 # type: TP
-#: ../uscan.1:423
+#: ../uscan.1:430
 #, no-wrap
 msgid "B<USCAN_SYMLINK>"
 msgstr "B<USCAN_SYMLINK>"
 
 # type: Plain text
-#: ../uscan.1:430
+#: ../uscan.1:437
 msgid ""
 "If this is set to I<no>, then a pkg_version.orig.tar.{gz|bz2} symlink will "
 "not be made (equivalent to the B<--no-symlink> option).  If it is set to "
@@ -9727,13 +9891,13 @@ msgstr ""
 "rename>)."
 
 # type: TP
-#: ../uscan.1:430
+#: ../uscan.1:437
 #, no-wrap
 msgid "B<USCAN_DEHS_OUTPUT>"
 msgstr "B<USCAN_DEHS_OUTPUT>"
 
 # type: Plain text
-#: ../uscan.1:434
+#: ../uscan.1:441
 msgid ""
 "If this is set to I<yes>, then DEHS-style output will be used.  This is "
 "equivalent to the B<--dehs> option."
@@ -9742,13 +9906,13 @@ msgstr ""
 "l'option B<--dehs> était utilisée."
 
 # type: TP
-#: ../uscan.1:434
+#: ../uscan.1:441
 #, no-wrap
 msgid "B<USCAN_VERBOSE>"
 msgstr "B<USCAN_VERBOSE>"
 
 # type: Plain text
-#: ../uscan.1:438
+#: ../uscan.1:445
 msgid ""
 "If this is set to I<yes>, then verbose output will be given.  This is "
 "equivalent to the B<--verbose> option."
@@ -9757,13 +9921,13 @@ msgstr ""
 "l'option B<--verbose> était utilisée."
 
 # type: SH
-#: ../uscan.1:438
+#: ../uscan.1:445
 #, no-wrap
 msgid "EXIT STATUS"
 msgstr "VALEURS DE RETOUR"
 
 # type: Plain text
-#: ../uscan.1:442
+#: ../uscan.1:449
 msgid ""
 "The exit status gives some indication of whether a newer version was found "
 "or not; one is advised to read the output to determine exactly what happened "
@@ -9774,13 +9938,13 @@ msgstr ""
 "et pour voir s'il n'y a pas eu d'avertissement."
 
 # type: TP
-#: ../uscan.1:442
+#: ../uscan.1:449
 #, no-wrap
 msgid "0"
 msgstr "0"
 
 # type: Plain text
-#: ../uscan.1:446
+#: ../uscan.1:453
 msgid ""
 "Either B<--help> or B<--version> was used, or for some watchfile which was "
 "examined, a newer upstream version was located."
@@ -9789,7 +9953,7 @@ msgstr ""
 "nouvelle version amont a été trouvée pour un des fichiers « watch » examinés."
 
 # type: Plain text
-#: ../uscan.1:450
+#: ../uscan.1:457
 msgid ""
 "No newer upstream versions were located for any of the watchfiles examined."
 msgstr ""
@@ -9797,13 +9961,13 @@ msgstr ""
 "examinés."
 
 # type: SH
-#: ../uscan.1:450
+#: ../uscan.1:457
 #, no-wrap
 msgid "HISTORY AND UPGRADING"
 msgstr "HISTORIQUE ET MISE À NIVEAU"
 
 # type: Plain text
-#: ../uscan.1:454
+#: ../uscan.1:461
 msgid ""
 "This section briefly describes the backwards-incompatible watchfile features "
 "which have been added in each watchfile version, and the first version of "
@@ -9815,13 +9979,13 @@ msgstr ""
 "comprenait."
 
 # type: TP
-#: ../uscan.1:454
+#: ../uscan.1:461
 #, no-wrap
 msgid "I<Pre-version 2>"
 msgstr "I<Versions antérieures à 2>"
 
 # type: Plain text
-#: ../uscan.1:459
+#: ../uscan.1:466
 msgid ""
 "The watchfile syntax was significantly different in those days.  Don't use "
 "it.  If you are upgrading from a pre-version 2 watchfile, you are advised to "
@@ -9833,13 +9997,13 @@ msgstr ""
 "recommencer à zéro."
 
 # type: TP
-#: ../uscan.1:459
+#: ../uscan.1:466
 #, no-wrap
 msgid "I<Version 2>"
 msgstr "I<Version 2>"
 
 # type: Plain text
-#: ../uscan.1:463
+#: ../uscan.1:470
 msgid ""
 "devscripts version 2.6.90: The first incarnation of the current style of "
 "watchfiles."
@@ -9848,13 +10012,13 @@ msgstr ""
 "watchfile."
 
 # type: TP
-#: ../uscan.1:463
+#: ../uscan.1:470
 #, no-wrap
 msgid "I<Version 3>"
 msgstr "I<Version 3>"
 
 # type: Plain text
-#: ../uscan.1:469
+#: ../uscan.1:476
 msgid ""
 "devscripts version 2.8.12: Introduced the following: correct handling of "
 "regex special characters in the path part, directory/path pattern matching, "
@@ -9868,7 +10032,7 @@ msgstr ""
 "modification des liens."
 
 # type: Plain text
-#: ../uscan.1:475
+#: ../uscan.1:482
 msgid ""
 "If you are upgrading from version 2, the key incompatibility is if you have "
 "multiple groups in the pattern part; whereas only the first one would be "
@@ -9884,12 +10048,12 @@ msgstr ""
 "groupe ordinaire (...)."
 
 # type: Plain text
-#: ../uscan.1:481
+#: ../uscan.1:488
 msgid "B<dpkg>(1), B<perlre>(1), B<uupdate>(1)  and B<devscripts.conf>(5)."
 msgstr "B<dpkg>(1), B<perlre>(1), B<uupdate>(1) et B<devscripts.conf>(5)."
 
 # type: Plain text
-#: ../uscan.1:486
+#: ../uscan.1:493
 msgid ""
 "The original version of B<uscan> was written by Christoph Lameter "
 "E<lt>clameter@debian.orgE<gt>.  Significant improvements, changes and "
@@ -10354,6 +10518,18 @@ msgstr ""
 "dépend d'un paquet donné, ainsi que leurs adresses email et le nom des "
 "paquets concernés."
 
+# type: TP
+#: ../whodepends.1:11
+#, no-wrap
+msgid "B<--help, -h>"
+msgstr "B<--help>, B<-h>"
+
+# type: TP
+#: ../whodepends.1:14
+#, no-wrap
+msgid "B<--version, -v>"
+msgstr "B<--version>, B<-v>"
+
 # type: Plain text
 #: ../whodepends.1:19
 msgid "B<whodepends> is not very efficient."
@@ -10694,3 +10870,64 @@ msgid ""
 msgstr ""
 "Cette page de manuel a été écrite pour le paquet B<devscripts> par le "
 "responsable du paquet, Julian Gilbey E<lt>jdg@debian.orgE<gt>."
+
+# type: textblock
+#~ msgid ""
+#~ "A final benefit to using a cache is that it will speed download times for "
+#~ "bugs in the cache even when you're online, as it can just compare the "
+#~ "item in the cache with what's on the server, and not re-download it every "
+#~ "time."
+#~ msgstr ""
+#~ "Un dernier avantage de l'utilisation d'un cache est que cela va accélérer "
+#~ "les temps de téléchargement des rapports de bogue, même lorsque vous êtes "
+#~ "en ligne, puisqu'il compare les éléments en cache avec les éléments "
+#~ "présents sur le serveur, et ne les télécharge pas à nouveau chaque fois."
+
+# type: TP
+#~ msgid "B<dget> [B<-bq>] I<package>"
+#~ msgstr "B<dget> [B<-bq>] I<paquet>"
+
+# type: textblock
+#~ msgid "B<-x> run B<dpkg-source -x> on the downloaded source package."
+#~ msgstr "B<-x> lance B<dpkg-source -x> sur le paquet source téléchargé."
+
+# type: =item
+#~ msgid "Christoph Berg <myon@debian.org>"
+#~ msgstr "Christoph Berg <myon@debian.org>"
+
+# type: Plain text
+#~ msgid "B<nmudiff>"
+#~ msgstr "B<nmudiff>"
+
+# type: Plain text
+#~ msgid "B<debdiff>(1)"
+#~ msgstr "B<debdiff>(1)"
+
+# type: Plain text
+#~ msgid ""
+#~ "This script should give the user a choice of how to edit and mail the "
+#~ "diff.  It should also offer the option of sending to a specified bug "
+#~ "number, possibly offering a menu of such things.  Finally, it should "
+#~ "support the --help and --version options."
+#~ msgstr ""
+#~ "Ce script devrait donner à l'utilisateur le choix de la méthode pour "
+#~ "éditer et envoyer le diff par mail. Il devrait aussi proposer une option "
+#~ "pour spécifier un numéro de bogue, et si possible proposer un menu pour "
+#~ "de telles choses. Enfin, il devrait supporter les options --help et --"
+#~ "version."
+
+# type: TP
+#~ msgid "B<-n>"
+#~ msgstr "B<-n>"
+
+# type: TP
+#~ msgid "B<-s>"
+#~ msgstr "B<-s>"
+
+# type: TP
+#~ msgid "B<-f>"
+#~ msgstr "B<-f>"
+
+# type: Plain text
+#~ msgid "Joshua Kwan E<lt>joshk@triplehelix.orgE<gt>"
+#~ msgstr "Joshua Kwan E<lt>joshk@triplehelix.orgE<gt>"
