@@ -39,7 +39,7 @@ MAN5DIR = /usr/share/man/man5
 MAN1DIR_fr = /usr/share/man/fr/man1
 MAN5DIR_fr = /usr/share/man/fr/man5
 
-all: $(SCRIPTS) $(GEN_MAN1S) $(EXAMPLES) $(LIBS) $(CWRAPPERS) translated_manpages $(GEN_MAN1S_fr)
+all: $(SCRIPTS) $(GEN_MAN1S) $(EXAMPLES) $(LIBS) $(CWRAPPERS) translated_manpages
 
 version:
 	rm -f version
