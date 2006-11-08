@@ -25,6 +25,7 @@ GEN_MAN1S = bts.1 debcommit.1 deb-reversion.1 dget.1 mass-bug.1 \
 	rmadison.1 svnpath.1
 MAN5S = devscripts.conf.5
 MANS_fr_DIR = po4a/fr
+GEN_MAN1S_fr = $(patsubst %,$(MANS_fr_DIR)/%,$(GEN_MAN1S))
 MAN1S_fr = $(subst $(MANS_fr_DIR)/,,$(wildcard $(MANS_fr_DIR)/*.1))
 MAN5S_fr = $(subst $(MANS_fr_DIR)/,,$(wildcard $(MANS_fr_DIR)/*.5))
 
@@ -38,7 +39,7 @@ MAN5DIR = /usr/share/man/man5
 MAN1DIR_fr = /usr/share/man/fr/man1
 MAN5DIR_fr = /usr/share/man/fr/man5
 
-all: $(SCRIPTS) $(GEN_MAN1S) $(EXAMPLES) $(LIBS) $(CWRAPPERS) translated_manpages
+all: $(SCRIPTS) $(GEN_MAN1S) $(EXAMPLES) $(LIBS) $(CWRAPPERS) translated_manpages $(GEN_MAN1S_fr)
 
 version:
 	rm -f version
@@ -88,7 +89,7 @@ libvfork.so.0: libvfork.o
 
 clean: clean_translated_manpages
 	rm -f version conf.default $(SCRIPTS) $(GEN_MAN1S) $(SCRIPT_LIBS) \
-	    $(CWRAPPERS) libvfork.o libvfork.so.0
+	    $(GEN_MAN1S_fr) $(CWRAPPERS) libvfork.o libvfork.so.0
 
 install: all
 	mkdir -p $(DESTDIR)$(BINDIR)
@@ -110,6 +111,7 @@ install: all
 	cd $(DESTDIR)$(MAN1DIR) && ln -s debchange.1 dch.1
 	mkdir -p $(DESTDIR)$(MAN1DIR_fr)
 	cd $(MANS_fr_DIR) && cp $(MAN1S_fr) $(DESTDIR)$(MAN1DIR_fr)
+	cp $(GEN_MAN1S_fr) $(DESTDIR)$(MAN1DIR_fr)
 	mkdir -p $(DESTDIR)$(MAN5DIR_fr)
 	cd $(MANS_fr_DIR) && cp $(MAN5S_fr) $(DESTDIR)$(MAN5DIR_fr)
 	cd $(DESTDIR)$(MAN1DIR_fr) && ln -s debchange.1 dch.1
