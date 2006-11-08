@@ -318,7 +318,7 @@ else
 	    read ans
 	    case ans in
 		y*) ;;
-		n*) exit 1 ;;
+		*) exit 1 ;;
 	    esac
 	else
 	    echo "$PROGNAME: could not read changes file $changes!" >&2

@@ -26,6 +26,8 @@ usage () {
                       to the fixed bugs
     --sendmail=SENDMAILCMD
                       Use SENDMAILCMD instead of \"/usr/sbin/sendmail -t\"
+    --mutt            Use mutt to mail the message (default)
+    --no-mutt         Mail the message directly, don\' use mutt
     --from=EMAIL      Use EMAIL address for message to BTS; defaults to
                       value of DEBEMAIL or EMAIL
     --no-conf, --noconf
@@ -48,8 +50,9 @@ EOF
 }
 
 # Boilerplate: set config variables
+DEFAULT_NMUDIFF_MUTT="yes"
 DEFAULT_BTS_SENDMAIL_COMMAND="/usr/sbin/sendmail"
-VARS="BTS_SENDMAIL_COMMAND"
+VARS="NMUDIFF_MUTT BTS_SENDMAIL_COMMAND"
 # Don't think it's worth including this stuff
 # DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1
 # DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.*)?'
@@ -85,6 +88,10 @@ else
 	"") BTS_SENDMAIL_COMMAND=/usr/sbin/sendmail ;;
 	*) ;;
     esac
+    case "$NMUDIFF_MUTT" in
+	yes|no) ;;
+	*) NMUDIFF_MUTT=yes ;;
+    esac
 #    case "$DEVSCRIPTS_CHECK_DIRNAME_LEVEL" in
 #	0|1|2) ;;
 #	*) DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1 ;;
@@ -113,7 +120,7 @@ fi
 # Need -o option to getopt or else it doesn't work
 # Removed: --long check-dirname-level:,check-dirname-regex: \
 TEMP=$(getopt -s bash -o "h" \
-	--long sendmail:,from:,new \
+	--long sendmail:,from:,new,mutt,no-mutt,nomutt \
 	--long no-conf,noconf \
 	--long help,version -n "$PROGNAME" -- "$@")
 if [ $? != 0 ] ; then exit 1 ; fi
@@ -133,14 +140,18 @@ while [ "$1" ]; do
 # 	;;
 #     --check-dirname-regex)
 # 	shift; 	CHECK_DIRNAME_REGEX="$1" ;;
+    --mutt)
+	NMUDIFF_MUTT=yes ;;
+    --nomutt|--no-mutt)
+	NMUDIFF_MUTT=no ;;
     --new)
 	submit_new_bug=yes ;;
     --sendmail)
 	shift
 	case "$1" in
-	"") echo "$PROGNAME: SENDMAIL command cannot be empty, using default" >&2
-	    ;;
-	*) BTS_SENDMAIL_COMMAND="$1" ;;
+	    "") echo "$PROGNAME: SENDMAIL command cannot be empty, using default" >&2
+		;;
+	    *) BTS_SENDMAIL_COMMAND="$1" ;;
         esac
         ;;
     --from)
@@ -165,12 +176,19 @@ if [ $# -gt 0 ]; then
     exit 1
 fi
 
-: ${FROM:="$DEBEMAIL"}
-: ${FROM:="$EMAIL"}
-if [ -z "$FROM" ]; then
-    echo "$PROGNAME: must set email address either with DEBEMAIL environment variable" >&2
-    echo "or EMAIL environment variable or using --from command line option." >&2
-    exit 1
+if [ "$NMUDIFF_MUTT" = yes ] && ! command -v mutt > /dev/null 2>&1; then
+    echo "$PROGNAME: can't find mutt, falling back to sendmail instead" >&2
+    NMUDIFF_MUTT=no
+fi
+
+if [ "$NMUDIFF_MUTT" = no ]; then
+    : ${FROM:="$DEBEMAIL"}
+    : ${FROM:="$EMAIL"}
+    if [ -z "$FROM" ]; then
+	echo "$PROGNAME: must set email address either with DEBEMAIL environment variable" >&2
+	echo "or EMAIL environment variable or using --from command line option." >&2
+	exit 1
+    fi
 fi
 
 if ! [ -f debian/changelog ]; then
@@ -221,37 +239,41 @@ if [ $? -ne 0 ]; then
 fi
 
 if [ -n "$submit_new_bug" -o -z "$CLOSES" ]; then
-    TO_ADDRESSES=submit@bugs.debian.org
-    BCC_ADDRESS=""
+    TO_ADDRESSES_SENDMAIL=submit@bugs.debian.org
+    TO_ADDRESSES_MUTT=submit@bugs.debian.org
+    BCC_ADDRESS_SENDMAIL=""
+    BCC_ADDRESS_MUTT=""
     TAGS="Package: $SOURCE
 Version: $OLDVERSION
 Severity: normal
 Tags: patch"
 else
-    TO_ADDRESSES=""
-    BCC_ADDRESS=control@bugs.debian.org
+    TO_ADDRESSES_SENDMAIL=""
+    TO_ADDRESSES_MUTT=""
+    BCC_ADDRESS_SENDMAIL=control@bugs.debian.org
+    BCC_ADDRESS_MUTT="-b control@bugs.debian.org"
     TAGS=""
     for b in $CLOSES; do
-	TO_ADDRESSES="$TO_ADDRESSES,
+	TO_ADDRESSES_SENDMAIL="$TO_ADDRESSES_SENDMAIL,
   $b@bugs.debian.org"
+	TO_ADDRESSES_MUTT="$TO_ADDRESSES_MUTT $b@bugs.debian.org"
 	TAGS="$TAGS
 tags $b + patch"
     done
-    TO_ADDRESSES=$(echo "$TO_ADDRESSES" | tail -n +2)
+    TO_ADDRESSES_SENDMAIL=$(echo "$TO_ADDRESSES" | tail -n +2)
     TAGS=$(echo "$TAGS" | tail -n +2)
     TAGS="$TAGS
 thanks"
 fi
 
-ABORT_MSG="(DO NOT MODIFY THIS LINE. DELETE IT TO ABORT.)"
 TMPNAM="$( tempfile )"
 
-cat <<EOF > "$TMPNAM"
-$ABORT_MSG
+if [ "$NMUDIFF_MUTT" = no ]; then
+    cat <<EOF > "$TMPNAM"
 From: $FROM
-To: $TO_ADDRESSES
+To: $TO_ADDRESSES_SENDMAIL
 Cc: 
-Bcc: $BCC_ADDRESS
+Bcc: $BCC_ADDRESS_SENDMAIL
 Subject: $SOURCE: diff for NMU version $VERSION
 Date: `822-date`
 X-NMUDIFF-Version: ###VERSION###
@@ -264,27 +286,46 @@ The following is the diff for my $SOURCE $VERSION NMU.
 
 EOF
 
-cat ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff >> "$TMPNAM"
-sensible-editor "$TMPNAM"
-if [ $? -ne 0 ]; then
-    echo "nmudiff: sensible-editor exited with error, aborting." >&2
-    rm -f ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff "$TMPNAM"
-    exit 1
+    cat ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff >> "$TMPNAM"
+    sensible-editor "$TMPNAM"
+    if [ $? -ne 0 ]; then
+	echo "nmudiff: sensible-editor exited with error, aborting." >&2
+	rm -f ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff "$TMPNAM"
+	exit 1
+    fi
+
+    echo -n "Do you want to go ahead and submit the bug report now? (y/n) "
+    read response
+    case "$response" in
+	y*) ;;
+	*)  echo "OK, then, aborting." >&2
+	    rm -f ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff "$TMPNAM"
+	    exit 1
+	    ;;
+    esac
+
+    case "$BTS_SENDMAIL_COMMAND" in
+	/usr/sbin/sendmail*|/usr/sbin/exim*)
+	    BTS_SENDMAIL_COMMAND="$BTS_SENDMAIL_COMMAND -t" ;;
+	*)  ;;
+    esac
+
+    $BTS_SENDMAIL_COMMAND < "$TMPNAM"
+
+else # NMUDIFF_MUTT=yes
+    cat <<EOF > "$TMPNAM"
+$TAGS
+
+Hi,
+
+Attached is the diff for my $SOURCE $VERSION NMU.
+EOF
+
+    mutt -s "$SOURCE: diff for NMU version $VERSION" -i "$TMPNAM" \
+	-a ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff \
+	-e "my_hdr X-NMUDIFF-Version: ###VERSION###" \
+	$BCC_ADDRESS_MUTT $TO_ADDRESSES_MUTT
+
 fi
 
-if [ "$(head -1 $TMPNAM)" != "$ABORT_MSG" ]; then
-    echo "$PROGNAME: Aborting as requested." >&2
-    rm -f ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff "$TMPNAM"
-    exit 1
-fi
-
-
-case "$BTS_SENDMAIL_COMMAND" in
-/usr/sbin/sendmail*|/usr/sbin/exim*)
-    BTS_SENDMAIL_COMMAND="$BTS_SENDMAIL_COMMAND -t" ;;
-*)  ;;
-esac
-
-# Get rid of the "abort" line before sending!
-tail -n +2 "$TMPNAM" | $BTS_SENDMAIL_COMMAND
 rm -f ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff "$TMPNAM"

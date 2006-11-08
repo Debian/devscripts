@@ -1,3 +1,10 @@
+devscripts (2.9.25) unstable; urgency=low
+
+  * nmudiff: reinstall mutt as mailer of choice, but now provide the
+    option to use it or not (Closes: #397641)
+
+ -- Julian Gilbey <jdg@debian.org>  Wed,  8 Nov 2006 20:39:24 +0000
+
 devscripts (2.9.24) unstable; urgency=low
 
   * debc/debi: handle multi-arch .changes files (Closes: #385673)

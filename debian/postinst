@@ -238,6 +238,21 @@ EOF
 EOF
 	fi
 
+	if dpkg --compare-versions "$2" lt 2.9.17
+	then
+	# Added in devscripts 2.9.25:
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### nmudiff option added in version 2.9.25
+# 
+# Should we use mutt to edit and send the message or just a plain old
+# editor?
+# NMUDIFF_MUTT=yes
+# 
+# nmudiff also uses the value of BTS_SENDMAIL_COMMAND if NMUDIFF_MUTT=no
+EOF
+	fi
+
     fi
 fi
 

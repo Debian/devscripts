@@ -10,14 +10,24 @@ NMUed, after the NMU is built. It assumes that the source packages
 both the previous version of the package and the newly built NMU
 version are in the parent directory. It then uses \fBdebdiff\fR to
 generate a diff between the previous version and the current NMU, and
-runs an editor (using \fBsensible\-editor\fR) so that the mail message
-(including the diff) can be examined and modified; once you exit the
-editor the diff will be mailed to the Debian BTS.
+either runs mutt or an editor (using \fBsensible\-editor\fR) so that
+the mail message (including the diff) can be examined and modified;
+once you exit the editor the diff will be mailed to the Debian BTS.
 .SH OPTIONS
 .TP
 .B \-\-new
 Instead of mailing the bug reports which are to be closed by this NMU,
 a new bug report is submitted directly to the BTS.
+.TP
+\fB\-\-mutt\fR
+Use \fBmutt\fR(1) for editing and sending the message to the BTS
+(default behaviour).  This can be controlled using a configuration
+file option (see below).
+.TP
+\fB\-\-no\-mutt\fR
+Use \fBsensible\-editor\fR(1) to edit the message and then mail it
+directly using \fI/usr/bin/sendmail\fR.  This can be controlled using
+a configuration file option (see below).
 .TP
 \fB\-\-sendmail\fR \fISENDMAILCMD\fR
 Specify the sendmail command.  The command will be split on white
@@ -30,13 +40,14 @@ option, this must be included in the \fISENDMAILCMD\fR, for example:
 devscripts configuration files; see below.
 .TP
 \fB\-\-from\fR \fIEMAIL\fR
-The email to the BTS will be sent using the name and address in the
-environment variable DEBEMAIL.  If this is not set, then the variable
-EMAIL will be used instead.  These can be overridden using the
-\fB\-\-from\fR option.  The program will not work if an email address
+If using the sendmail (\fB\-\-no\-mutt) option, then the email to the
+BTS will be sent using the name and address in the environment
+variable DEBEMAIL.  If this is not set, then the variable EMAIL will
+be used instead.  These can be overridden using the \fB\-\-from\fR
+option.  The program will not work in this case if an email address
 cannot be determined.
 .TP
-\fB\-\-no-conf\fR, \fB\-\-noconf\fR
+\fB\-\-no\-conf\fR, \fB\-\-noconf\fR
 Do not read any configuration files.  This can only be used as the
 first option given on the command-line.
 .TP
@@ -51,6 +62,11 @@ The two configuration files \fI/etc/devscripts.conf\fR and
 variables.  Command line options can be used to override configuration
 file settings.  Environment variable settings are ignored for this
 purpose.  The currently recognised variables are:
+.TP
+.B NMUDIFF_MUTT
+Can be "yes" (default) or "no", and specifies whether to use
+\fBmutt\fR to compose and send the message or not, as described
+above.
 .TP
 .B BTS_SENDMAIL_COMMAND
 If this is set, specifies a sendmail command to use instead of

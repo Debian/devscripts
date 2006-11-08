@@ -301,7 +301,11 @@
 
 ##### nmudiff
 # 
-# No variables currently
+# Should we use mutt to edit and send the message or just a plain old
+# editor?
+# NMUDIFF_MUTT=yes
+# 
+# nmudiff also uses the value of BTS_SENDMAIL_COMMAND if NMUDIFF_MUTT=no
 
 ##### plotchangelog
 # 
