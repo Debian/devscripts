@@ -128,8 +128,8 @@ and docbook-xsl in your Build-Depends control field.
     <title>OPTIONS</title>
     <variablelist>
       <varlistentry>
-	<term>-v <replaceable class="parameter">new-version</replaceable></term>
-	<term>--new-version <replaceable class="parameter">new-version</replaceable></term>
+	<term><option>-v</option> <replaceable class="parameter">new-version</replaceable></term>
+	<term><option>--new-version</option> <replaceable class="parameter">new-version</replaceable></term>
 	<listitem>
 	  <para>
             Specifies the version number to be used for the new
@@ -142,8 +142,8 @@ and docbook-xsl in your Build-Depends control field.
       </varlistentry>
 
       <varlistentry>
-	<term>-o <replaceable class="parameter">old-version</replaceable></term>
-	<term>--old-version <replaceable class="parameter">old-version</replaceable></term>
+	<term><option>-o</option> <replaceable class="parameter">old-version</replaceable></term>
+	<term><option>--old-version</option> <replaceable class="parameter">old-version</replaceable></term>
 	<listitem>
 	  <para>
             Specifies the version number to be used as the old
@@ -154,8 +154,8 @@ and docbook-xsl in your Build-Depends control field.
       </varlistentry>
 
       <varlistentry>
-	<term>-c</term>
-	<term>--calculate-only</term>
+	<term><option>-c</option></term>
+	<term><option>--calculate-only</option></term>
 	<listitem>
 	  <para>
             Only calculate and display the new version number which
@@ -166,8 +166,8 @@ and docbook-xsl in your Build-Depends control field.
       </varlistentry>
 
       <varlistentry>
-	<term>-s <replaceable class="parameter">string</replaceable></term>
-	<term>--string <replaceable class="parameter">string</replaceable></term>
+	<term><option>-s</option> <replaceable class="parameter">string</replaceable></term>
+	<term><option>--string</option> <replaceable class="parameter">string</replaceable></term>
 	<listitem>
 	  <para>
             Instead of using 'LOCAL.' as the version string to append
@@ -178,8 +178,8 @@ and docbook-xsl in your Build-Depends control field.
       </varlistentry>
 
       <varlistentry>
-	<term>-k <replaceable class="parameter">hook-command</replaceable></term>
-	<term>--hook <replaceable class="parameter">hook-command</replaceable></term>
+	<term><option>-k</option> <replaceable class="parameter">hook-command</replaceable></term>
+	<term><option>--hook</option> <replaceable class="parameter">hook-command</replaceable></term>
 	<listitem>
 	  <para>
             A hook command to run after unpacking the old .deb file and
@@ -194,8 +194,8 @@ and docbook-xsl in your Build-Depends control field.
       </varlistentry>
 
       <varlistentry>
-	<term>-D</term>
-	<term>--debug</term>
+	<term><option>-D</option></term>
+	<term><option>--debug</option></term>
 	<listitem>
 	  <para>
             Pass <option>--debug</option> to
@@ -208,8 +208,8 @@ and docbook-xsl in your Build-Depends control field.
       </varlistentry>
 
       <varlistentry>
-	<term>-h</term>
-	<term>--help</term>
+	<term><option>-h</option></term>
+	<term><option>--help</option></term>
 	<listitem>
 	  <para>
             Display usage information.
@@ -218,8 +218,8 @@ and docbook-xsl in your Build-Depends control field.
       </varlistentry>
 
       <varlistentry>
-	<term>-V</term>
-	<term>--version</term>
+	<term><option>-V</option></term>
+	<term><option>--version</option></term>
 	<listitem>
 	  <para>
             Display version information.
@@ -278,8 +278,8 @@ and docbook-xsl in your Build-Depends control field.
     <title>AUTHOR</title>
 
     <para>
-      &dhpackage; is Copyright 2004-5 by &dhusername; and
-      modifications are Copyright 2006 by &dhmaintusername;.
+      &dhpackage; is Copyright 2004-5 by &dhusername; &dhemail; and
+      modifications are Copyright 2006 by &dhmaintusername; &dhmaintemail;.
     </para>
 
     <para>
