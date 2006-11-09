@@ -71,7 +71,7 @@ and docbook-xsl in your Build-Depends control field.
     <cmdsynopsis>
       <command>&dhcommand;</command>
       <arg choice="opt">
-        -<option>vckDh</option>
+        <replaceable>options</replaceable>
       </arg>
       <replaceable> .deb-file</replaceable>
       <arg choice="opt" rep="repeat">log message</arg>
@@ -142,6 +142,18 @@ and docbook-xsl in your Build-Depends control field.
       </varlistentry>
 
       <varlistentry>
+	<term>-o <replaceable class="parameter">old-version</replaceable></term>
+	<term>--old-version <replaceable class="parameter">old-version</replaceable></term>
+	<listitem>
+	  <para>
+            Specifies the version number to be used as the old
+            version instead of the version stored in the .deb's
+            control file.
+          </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
 	<term>-c</term>
 	<term>--calculate-only</term>
 	<listitem>
@@ -149,6 +161,18 @@ and docbook-xsl in your Build-Depends control field.
             Only calculate and display the new version number which
             would be used; do not build a new .deb file.  Cannot be
             used in conjunction with <option>-v</option>.
+          </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>-s <replaceable class="parameter">string</replaceable></term>
+	<term>--string <replaceable class="parameter">string</replaceable></term>
+	<listitem>
+	  <para>
+            Instead of using 'LOCAL.' as the version string to append
+            to the old version number, use <replaceable
+            class="parameter">string</replaceable> instead.
           </para>
 	</listitem>
       </varlistentry>
