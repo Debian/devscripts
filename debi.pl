@@ -229,6 +229,14 @@ if (@ARGV and $ARGV[0] =~ /\.changes$/) {
     $changes = shift;
 }
 
+# Need to determine $arch in any event
+$arch = `dpkg-architecture $targetarch $targetgnusystem -qDEB_HOST_ARCH`;
+if ($? != 0 or ! $arch) {
+    die "$progname: unable to determine target architecture.\n";
+}
+chomp $arch;
+
+
 my $chdir = 0;
 
 if (! defined $changes) {
@@ -284,13 +292,6 @@ To run $progname on this package, see the --check-dirname-level and
 EOF
 	}
     }
-
-    $arch =
-	`dpkg-architecture $targetarch $targetgnusystem -qDEB_HOST_ARCH`;
-    if ($? != 0 or ! $arch) {
-	die "$progname: unable to determine build architecture.\n";
-    }
-    chomp $arch;
 
     my $sversion = $changelog{'Version'};
     $sversion =~ s/^\d+://;
