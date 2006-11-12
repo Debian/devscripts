@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2006-11-08 20:40+0000\n"
+"POT-Creation-Date: 2006-11-12 11:09+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -164,7 +164,7 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../annotate-output.1:55 ../archpath.1:54 ../checkbashisms.1:34 ../cvs-debc.1:64 ../cvs-debi.1:68 ../cvs-debrelease.1:69 ../cvs-debuild.1:63 ../dd-list.1:82 ../debc.1:119 ../debchange.1:335 ../debclean.1:108 ../debcommit.pl:291 ../debdiff.1:167 ../debi.1:120 ../debpkg.1:23 ../debrelease.1:137 ../deb-reversion.dbk:254 ../debrsign.1:71 ../debsign.1:128 ../debuild.1:413 ../dget.pl:370 ../dpkg-genbuilddeps.1:36 ../dscverify.1:44 ../grep-excuses.1:36 ../mass-bug.pl:421 ../mergechanges.1:17 ../nmudiff.1:79 ../plotchangelog.1:126 ../pts-subscribe.1:51 ../rc-alert.1:29 ../rmadison.pl:188 ../svnpath.pl:97 ../tagpending.1:37 ../uscan.1:488 ../uupdate.1:167 ../whodepends.1:19 ../who-uploads.1:58 ../wnpp-alert.1:19 ../devscripts.conf.5:58
+#: ../annotate-output.1:55 ../archpath.1:54 ../checkbashisms.1:34 ../cvs-debc.1:64 ../cvs-debi.1:68 ../cvs-debrelease.1:69 ../cvs-debuild.1:63 ../dd-list.1:82 ../debc.1:119 ../debchange.1:335 ../debclean.1:108 ../debcommit.pl:291 ../debdiff.1:167 ../debi.1:120 ../debpkg.1:23 ../debrelease.1:137 ../deb-reversion.dbk:278 ../debrsign.1:71 ../debsign.1:128 ../debuild.1:413 ../dget.pl:370 ../dpkg-genbuilddeps.1:36 ../dscverify.1:44 ../grep-excuses.1:36 ../mass-bug.pl:421 ../mergechanges.1:17 ../nmudiff.1:79 ../plotchangelog.1:126 ../pts-subscribe.1:51 ../rc-alert.1:29 ../rmadison.pl:188 ../svnpath.pl:97 ../tagpending.1:37 ../uscan.1:488 ../uupdate.1:167 ../whodepends.1:19 ../who-uploads.1:58 ../wnpp-alert.1:19 ../devscripts.conf.5:58
 #, no-wrap
 msgid "AUTHOR"
 msgstr ""
@@ -1538,7 +1538,7 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../checkbashisms.1:32 ../cvs-debc.1:58 ../cvs-debi.1:62 ../cvs-debrelease.1:64 ../cvs-debuild.1:56 ../debc.1:114 ../debchange.1:328 ../debclean.1:104 ../debdiff.1:161 ../debi.1:116 ../debrelease.1:132 ../deb-reversion.dbk:209 ../debrsign.1:66 ../debsign.1:118 ../debuild.1:399 ../dget.pl:378 ../dpkg-depcheck.1:118 ../dpkg-genbuilddeps.1:30 ../dscverify.1:40 ../grep-excuses.1:34 ../nmudiff.1:74 ../plotchangelog.1:124 ../pts-subscribe.1:46 ../rc-alert.1:27 ../rmadison.pl:184 ../tagpending.1:32 ../uscan.1:482 ../uupdate.1:160 ../devscripts.conf.5:54
+#: ../checkbashisms.1:32 ../cvs-debc.1:58 ../cvs-debi.1:62 ../cvs-debrelease.1:64 ../cvs-debuild.1:56 ../debc.1:114 ../debchange.1:328 ../debclean.1:104 ../debdiff.1:161 ../debi.1:116 ../debrelease.1:132 ../deb-reversion.dbk:233 ../debrsign.1:66 ../debsign.1:118 ../debuild.1:399 ../dget.pl:378 ../dpkg-depcheck.1:118 ../dpkg-genbuilddeps.1:30 ../dscverify.1:40 ../grep-excuses.1:34 ../nmudiff.1:74 ../plotchangelog.1:124 ../pts-subscribe.1:46 ../rc-alert.1:27 ../rmadison.pl:184 ../tagpending.1:32 ../uscan.1:482 ../uupdate.1:160 ../devscripts.conf.5:54
 #, no-wrap
 msgid "SEE ALSO"
 msgstr ""
@@ -3793,21 +3793,12 @@ msgstr ""
 msgid "simple script to change the version of a .deb file."
 msgstr ""
 
-# type: Content of: <refentry><refsynopsisdiv><cmdsynopsis><arg>
-#: ../deb-reversion.dbk:72
-msgid "<command>&dhcommand;</command> <arg choice=\"opt\"> -"
-msgstr ""
-
-# type: Content of: <refentry><refsynopsisdiv><cmdsynopsis><arg><option>
-#: ../deb-reversion.dbk:74
-msgid "vckDh"
-msgstr ""
-
 # type: Content of: <refentry><refsynopsisdiv><cmdsynopsis>
-#: ../deb-reversion.dbk:75
+#: ../deb-reversion.dbk:72
 msgid ""
-"</arg> <replaceable> .deb-file</replaceable> <arg choice=\"opt\" "
-"rep=\"repeat\">log message</arg>"
+"<command>&dhcommand;</command> <arg choice=\"opt\"> "
+"<replaceable>options</replaceable> </arg> <replaceable> "
+".deb-file</replaceable> <arg choice=\"opt\" rep=\"repeat\">log message</arg>"
 msgstr ""
 
 # type: Content of: <refentry><refsect1><para>
@@ -3837,8 +3828,8 @@ msgstr ""
 msgid ", the version number can be specified directly.  On the other hand, the"
 msgstr ""
 
-# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: ../deb-reversion.dbk:98 ../deb-reversion.dbk:145
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../deb-reversion.dbk:98 ../deb-reversion.dbk:157
 msgid "-c"
 msgstr ""
 
@@ -3882,14 +3873,19 @@ msgid ""
 "via <command>sh -c</command>."
 msgstr ""
 
-# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: ../deb-reversion.dbk:131
-msgid "-v <replaceable class=\"parameter\">new-version</replaceable>"
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><option>
+#: ../deb-reversion.dbk:131 ../deb-reversion.dbk:163
+msgid "-v"
 msgstr ""
 
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: ../deb-reversion.dbk:131 ../deb-reversion.dbk:132
+msgid "<replaceable class=\"parameter\">new-version</replaceable>"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
 #: ../deb-reversion.dbk:132
-msgid "--new-version <replaceable class=\"parameter\">new-version</replaceable>"
+msgid "--new-version"
 msgstr ""
 
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
@@ -3900,40 +3896,84 @@ msgid ""
 "</citerefentry>."
 msgstr ""
 
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../deb-reversion.dbk:145
+msgid "-o"
+msgstr ""
+
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: ../deb-reversion.dbk:145 ../deb-reversion.dbk:146
+msgid "<replaceable class=\"parameter\">old-version</replaceable>"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
 #: ../deb-reversion.dbk:146
-msgid "--calculate-only"
+msgid "--old-version"
 msgstr ""
 
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: ../deb-reversion.dbk:149
 msgid ""
-"Only calculate and display the new version number which would be used; do "
-"not build a new .deb file.  Cannot be used in conjunction with"
+"Specifies the version number to be used as the old version instead of the "
+"version stored in the .deb's control file."
 msgstr ""
 
-# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><option>
-#: ../deb-reversion.dbk:151
-msgid "-v"
-msgstr ""
-
-# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: ../deb-reversion.dbk:151
-msgid "."
-msgstr ""
-
-# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: ../deb-reversion.dbk:157
-msgid "-k <replaceable class=\"parameter\">hook-command</replaceable>"
-msgstr ""
-
-# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
 #: ../deb-reversion.dbk:158
-msgid "--hook <replaceable class=\"parameter\">hook-command</replaceable>"
+msgid "--calculate-only"
 msgstr ""
 
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: ../deb-reversion.dbk:161
+msgid ""
+"Only calculate and display the new version number which would be used; do "
+"not build a new .deb file.  Cannot be used in conjunction with"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../deb-reversion.dbk:163
+msgid "."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../deb-reversion.dbk:169
+msgid "-s"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: ../deb-reversion.dbk:169 ../deb-reversion.dbk:170
+msgid "<replaceable class=\"parameter\">string</replaceable>"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../deb-reversion.dbk:170
+msgid "--string"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../deb-reversion.dbk:173
+msgid ""
+"Instead of using 'LOCAL.' as the version string to append to the old version "
+"number, use <replaceable class=\"parameter\">string</replaceable> instead."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../deb-reversion.dbk:181
+msgid "-k"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: ../deb-reversion.dbk:181 ../deb-reversion.dbk:182
+msgid "<replaceable class=\"parameter\">hook-command</replaceable>"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../deb-reversion.dbk:182
+msgid "--hook"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../deb-reversion.dbk:185
 msgid ""
 "A hook command to run after unpacking the old .deb file and modifying the "
 "changelog, and before packing up the new .deb file.  Must be in quotes if it "
@@ -3942,60 +3982,60 @@ msgid ""
 "command, and you will then be given a shell to work in."
 msgstr ""
 
-# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: ../deb-reversion.dbk:173
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../deb-reversion.dbk:197
 msgid "-D"
 msgstr ""
 
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><option>
-#: ../deb-reversion.dbk:174 ../deb-reversion.dbk:177
+#: ../deb-reversion.dbk:198 ../deb-reversion.dbk:201
 msgid "--debug"
 msgstr ""
 
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: ../deb-reversion.dbk:177
+#: ../deb-reversion.dbk:201
 msgid "Pass"
 msgstr ""
 
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: ../deb-reversion.dbk:177
+#: ../deb-reversion.dbk:201
 msgid ""
 "to <citerefentry> <refentrytitle>dpkg-deb</refentrytitle> "
 "<manvolnum>1</manvolnum> </citerefentry>."
 msgstr ""
 
-# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: ../deb-reversion.dbk:187
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../deb-reversion.dbk:211
 msgid "-h"
 msgstr ""
 
 # type: =item
-#: ../deb-reversion.dbk:188 ../mass-bug.pl:84
+#: ../deb-reversion.dbk:212 ../mass-bug.pl:84
 msgid "--help"
 msgstr ""
 
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: ../deb-reversion.dbk:191
+#: ../deb-reversion.dbk:215
 msgid "Display usage information."
 msgstr ""
 
-# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: ../deb-reversion.dbk:197
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../deb-reversion.dbk:221
 msgid "-V"
 msgstr ""
 
 # type: =item
-#: ../deb-reversion.dbk:198 ../mass-bug.pl:88
+#: ../deb-reversion.dbk:222 ../mass-bug.pl:88
 msgid "--version"
 msgstr ""
 
 # type: Plain text
-#: ../deb-reversion.dbk:201 ../mass-bug.pl:90 ../uscan.1:412
+#: ../deb-reversion.dbk:225 ../mass-bug.pl:90 ../uscan.1:412
 msgid "Display version information."
 msgstr ""
 
 # type: Content of: <refentry><refsect1><para>
-#: ../deb-reversion.dbk:211
+#: ../deb-reversion.dbk:235
 msgid ""
 "<citerefentry> <refentrytitle>dch</refentrytitle> <manvolnum>1</manvolnum> "
 "</citerefentry>, <citerefentry> <refentrytitle>fakeroot</refentrytitle> "
@@ -4005,12 +4045,12 @@ msgid ""
 msgstr ""
 
 # type: Content of: <refentry><refsect1><title>
-#: ../deb-reversion.dbk:227
+#: ../deb-reversion.dbk:251
 msgid "DISCLAIMER"
 msgstr ""
 
 # type: Content of: <refentry><refsect1><para>
-#: ../deb-reversion.dbk:229
+#: ../deb-reversion.dbk:253
 msgid ""
 "&dhpackage; is a tool intended to help porters (e.g. amd64) with modifying "
 "packages for other architectures, and to augment deb-repack, which creates "
@@ -4021,7 +4061,7 @@ msgid ""
 msgstr ""
 
 # type: Content of: <refentry><refsect1><para>
-#: ../deb-reversion.dbk:238
+#: ../deb-reversion.dbk:262
 msgid ""
 "Please take note that &dhpackage; does not come without problems. While it "
 "works fine in most cases, it may just not in yours. Especially, please "
@@ -4031,7 +4071,7 @@ msgid ""
 msgstr ""
 
 # type: Content of: <refentry><refsect1><para>
-#: ../deb-reversion.dbk:245
+#: ../deb-reversion.dbk:269
 msgid ""
 "You are using this tool at your own risk and I shall not shed a tear if your "
 "gerbil goes up in flames, your microwave attacks the stereo, or the angry "
@@ -4041,14 +4081,14 @@ msgid ""
 msgstr ""
 
 # type: Content of: <refentry><refsect1><para>
-#: ../deb-reversion.dbk:257
+#: ../deb-reversion.dbk:281
 msgid ""
-"&dhpackage; is Copyright 2004-5 by &dhusername; and modifications are "
-"Copyright 2006 by &dhmaintusername;."
+"&dhpackage; is Copyright 2004-5 by &dhusername; &dhemail; and modifications "
+"are Copyright 2006 by &dhmaintusername; &dhmaintemail;."
 msgstr ""
 
 # type: Content of: <refentry><refsect1><para>
-#: ../deb-reversion.dbk:262
+#: ../deb-reversion.dbk:286
 msgid ""
 "Permission is granted to copy, distribute and/or modify this document under "
 "the terms of the Artistic License: "
@@ -4058,7 +4098,7 @@ msgid ""
 msgstr ""
 
 # type: Content of: <refentry><refsect1><para>
-#: ../deb-reversion.dbk:271
+#: ../deb-reversion.dbk:295
 msgid ""
 "This manual page was written by &dhusername; &dhemail; and modified by "
 "&dhmaintusername; &dhmaintemail;."
