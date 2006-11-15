@@ -1037,7 +1037,11 @@ EOF
 	$request = HTTP::Request->new('GET', $upstream_url);
 	$response = $user_agent->request($request, "../$newfile_base");
 	if (! $response->is_success) {
-	    warn "$progname warning: In directory $pkg_dir, downloading\n  $upstream_url failed: " . $response->status_line . "\n";
+	    if (defined $pkg_dir) {
+		warn "$progname warning: In directory $pkg_dir, downloading\n  $upstream_url failed: " . $response->status_line . "\n";
+	    } else {
+		warn "$progname warning: Downloading\n $upstream_url failed:\n" . $response->status_line . "\n";
+	    }
 	    return 1;
 	}
     }
@@ -1054,7 +1058,11 @@ EOF
 	    else { delete $ENV{'FTP_PASSIVE'}; }
 	}
 	if (! $response->is_success) {
-	    warn "$progname warning: In directory $pkg_dir, downloading\n  $upstream_url failed: " . $response->status_line . "\n";
+	    if (defined $pkg_dir) {
+		warn "$progname warning: In directory $pkg_dir, downloading\n  $upstream_url failed: " . $response->status_line . "\n";
+	    } else {
+		warn "$progname warning: Downloading\n $upstream_url failed:\n" . $response->status_line . "\n";
+	    }
 	    return 1;
 	}
     }
