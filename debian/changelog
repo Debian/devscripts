@@ -5,9 +5,13 @@ devscripts (2.9.26) UNRELEASED; urgency=low
     (Closes: #398152)
   * debc/debi: handle arch all packages correctly (oops!) (Closes:
     #398597)
+  * dget: new upstream version, supports looking in other places for
+    files, new binnmu version scheme, --no-cache, file:// and copy:// and
+    fixed bug that --help/--version required other arguments (Closes:
+    #385954, #356208)
   * uscan: avoid spurious undefined warning if --package is used
 
- -- Julian Gilbey <jdg@debian.org>  Thu, 16 Nov 2006 10:26:14 +0000
+ -- Julian Gilbey <jdg@debian.org>  Thu, 16 Nov 2006 14:50:15 +0000
 
 devscripts (2.9.25) unstable; urgency=low
 

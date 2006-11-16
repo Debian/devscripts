@@ -1,7 +1,8 @@
 #!/usr/bin/perl -w
+# vim:sw=4:sta:
 
 #   dget - Download Debian source and binary packages
-#   Copyright (C) 2005 Christoph Berg <myon@debian.org>
+#   Copyright (C) 2005-06 Christoph Berg <myon@debian.org>
 #   Modifications Copyright (C) 2005-06 Julian Gilbey <jdg@debian.org>
 #
 #   This program is free software; you can redistribute it and/or modify
@@ -21,6 +22,8 @@
 # 2005-10-04 cb: initial release
 # 2005-12-11 cb: -x option, update documentation
 # 2005-12-31 cb: -b, -q options, use getopt
+# 2006-01-10 cb: support new binnmu version scheme
+# 2006-11-12 cb: also look in other places in the local filesystem (e.g. pbuilder result dir)
 # Later modifications: see debian/changelog
 
 use strict;
@@ -36,6 +39,8 @@ my $found_dsc;
 my $wget;
 my $opt;
 my $backup_dir = "backup";
+my @dget_path = ("/var/cache/apt/archives");
+my $modified_conf_msg;
 
 # use curl if installed, wget otherwise
 if (system("command -v curl >/dev/null 2>&1") == 0) {
@@ -55,21 +60,31 @@ Usage: $progname [options] URL
 
 Downloads Debian packages, either from the specified URL (first form),
 or using the mirror configured in /etc/apt/sources.list (second form).
-   
+
    -b, --backup    Move files that would be overwritten to ./backup
    -q, --quiet     Suppress wget/curl output
    -x, --extract   Run dpkg-source -x on downloaded source (first form only)
-   --insecure      Don\'t check SSL certificates when downloading
-   --help          This message
-   --version       Version information
+   --path DIR      Check these directories in addition to the apt archive;
+                   if DIR='' then clear current list (may be used multiple
+                   times)
+   --insecure      Do not check SSL certificates when downloading
+   --no-cache      Disable server-side HTTP cache
+   --no-conf       Don\'t read devscripts config files;
+                   must be the first option given
+   -h, --help      This message
+   -V, --version   Version information
+
+Default settings modified by devscripts configuration files:
+$modified_conf_msg
 EOT
 }
 
 sub version {
     print <<"EOF";
 This is $progname, from the Debian devscripts package, version ###VERSION###
-This code is copyright 2005 by Christoph Berg <myon\@debian.org>, modifications
-copyright 2005-06 by Julian Gilbey <jdg\@debian.org>, all rights reserved.
+This code is copyright 2005-06 by Christoph Berg <myon\@debian.org>.
+Modifications copyright 2005-06 by Julian Gilbey <jdg\@debian.org>.
+All rights reserved.
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the
 GNU General Public License, version 2 or later.
@@ -79,12 +94,23 @@ EOF
 
 sub wget {
     my ($file, $url) = @_;
+
+    # schemes not supported by all backends
+    if ($url =~ m!^(file|copy)://(/.+)!) {
+	if ($1 eq "copy" or not link($2, $file)) {
+	    system "cp -a $2 $file";
+	    return $? >> 8;
+	}
+	return;
+    }
+
     my @cmd = ($wget);
     # curl does not follow document moved headers, and does not exit
     # with a non-zero error code by default if a document is not found
     push @cmd, "-f", "-L" if $wget eq "curl";
-    push @cmd, ($wget eq "wget" ? "-nv" : ("-s", "-S")) if $opt->{quiet};
-    push @cmd, ($wget eq "wget" ? "--no-check-certificate" : "--insecure") if $opt->{insecure};
+    push @cmd, ($wget eq "wget" ? "-nv" : ("-s", "-S")) if $opt->{'quiet'};
+    push @cmd, ($wget eq "wget" ? "--no-check-certificate" : "--insecure") if $opt->{'insecure'};
+    push @cmd, ($wget eq "wget" ? "--no-chache" : ("--header", "Pragma: no-cache")) if $opt->{'no-cache'};
     push @cmd, ($wget eq "wget" ? "-O" : "-o");
     system @cmd, $file, $url;
     return $? >> 8;
@@ -93,7 +119,7 @@ sub wget {
 sub backup_or_unlink {
     my $file = shift;
     return unless -e $file;
-    if ($opt->{backup}) {
+    if ($opt->{'backup'}) {
 	unless (-d $backup_dir) {
 	    mkdir $backup_dir or die "mkdir $backup_dir: $!";
 	}
@@ -113,6 +139,7 @@ sub get_file {
 	backup_or_unlink($file);
     }
 
+    # check the existing file's md5sum
     if (-e $file) {
 	my $md5 = Digest::MD5->new;
 	my $fh5 = new IO::File($file) or die "$file: $!";
@@ -121,11 +148,34 @@ sub get_file {
 	if (not $md5sum or ($md5sum_new eq $md5sum)) {
 	    print "$progname: using existing $file\n";
 	} else {
-	    print "$progname: md5sum for $file does not match\n";
+	    print "$progname: removing $file (md5sum does not match)\n";
 	    backup_or_unlink($file);
 	}
     }
 
+    # look for the file in other local directories
+    unless (-e $file) {
+	foreach my $path (@dget_path) {
+	    next unless -e "$path/$file";
+
+	    my $md5 = Digest::MD5->new;
+	    my $fh5 = new IO::File("$path/$file") or die "$path/$file: $!";
+	    my $md5sum_new = Digest::MD5->new->addfile($fh5)->hexdigest();
+	    close $fh5;
+
+	    if ($md5sum_new eq $md5sum) {
+		if (link "$path/$file", $file) {
+		    print "$progname: using $path/$file (hardlink)\n";
+		} else {
+		    print "$progname: using $path/$file (copy)\n";
+		    system "cp -a $path/$file $file";
+		}
+		last;
+	    }
+	}
+    }
+
+    # finally get it from the web
     unless (-e $file) {
 	print "$progname: retrieving $dir/$file\n";
 	if (wget($file, "$dir/$file")) {
@@ -159,24 +209,33 @@ sub parse_file {
     close $fh;
 }
 
+sub quote_version {
+    my $version = shift;
+    $version = quotemeta($version);
+    $version =~ s/^([^:]+:)/(?:$1)?/; # Epochs are not part of the filename
+    $version =~ s/-([^.-]+)$/-$1(?:\\+b\\d+|\.0\.\\d+)?/; # BinNMU: -x -> -x.0.1 -x+by
+    $version =~ s/-([^.-]+\.[^.-]+)$/-$1(?:\\+b\\d+|\.\\d+)?/; # -x.y -> -x.y.1 -x.y+bz
+    return $version;
+}
+
 # we reinvent "apt-get -d install" here, without requiring root
 # (and we do not download dependencies)
 sub apt_get {
     my ($package, $version) = @_;
 
     my $qpackage = quotemeta($package);
-    my $qversion = quotemeta($version) if $version;
+    my $qversion = quote_version($version) if $version;
     my @hosts;
 
     my $apt = new IO::File("LC_ALL=C apt-cache policy $package |") or die "$!";
     OUTER: while (<$apt>) {
 	if (not $version and /^  Candidate: (.+)/) {
 	    $version = $1;
-	    $qversion = quotemeta($version);
+	    $qversion = quote_version($version);
 	}
 	if ($qversion and /^ [ *]{3} ($qversion) 0/) {
 	    while (<$apt>) {
-		last OUTER unless /^        (?:\d+) (\S+)/;
+		last OUTER unless /^  *(?:\d+) (\S+)/;
 		push @hosts, $1;
 	    }
 	}
@@ -188,10 +247,6 @@ sub apt_get {
     unless (@hosts) {
 	die "$progname: no hostnames in apt-cache policy $package for $version found\n";
     }
-
-    $qversion =~ s/^([^:]+:)/($1)?/;
-    $qversion =~ s/-([^.-]+)$/-$1(\.0\.\\d+)?\$/; # BinNMU: -x -> -x.0.1
-    $qversion =~ s/-([^.-]+\.[^.-]+)$/-$1(\.\\d+)?\$/; # -x.y -> -x.y.1
 
     $apt = new IO::File("LC_ALL=C apt-cache show $package |") or die "$!";
     my ($v, $p, $filename, $md5sum);
@@ -252,30 +307,83 @@ sub apt_get {
 
 # main program
 
+# Now start by reading configuration files and then command line
+# The next stuff is boilerplate
+
+my $dget_path;
+
+if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
+    $modified_conf_msg = "  (no configuration files read)";
+    shift;
+} else {
+    my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
+    my %config_vars = (
+		       'DGET_PATH' => '',
+		       );
+    my %config_default = %config_vars;
+
+    my $shell_cmd;
+    # Set defaults
+    foreach my $var (keys %config_vars) {
+	$shell_cmd .= "$var='$config_vars{$var}';\n";
+    }
+    $shell_cmd .= 'for file in ' . join(" ",@config_files) . "; do\n";
+    $shell_cmd .= '[ -f $file ] && . $file; done;' . "\n";
+    # Read back values
+    foreach my $var (keys %config_vars) { $shell_cmd .= "echo \$$var;\n" }
+    my $shell_out = `/bin/bash -c '$shell_cmd'`;
+    @config_vars{keys %config_vars} = split /\n/, $shell_out, -1;
+
+    foreach my $var (sort keys %config_vars) {
+	if ($config_vars{$var} ne $config_default{$var}) {
+	    $modified_conf_msg .= "  $var=$config_vars{$var}\n";
+	}
+    }
+    $modified_conf_msg ||= "  (none)\n";
+    chomp $modified_conf_msg;
+
+    $dget_path = $config_vars{'DGET_PATH'};
+}
+
+# handle options
 Getopt::Long::Configure('bundling');
 GetOptions(
     "b|backup"   =>  \$opt->{'backup'},
     "q|quiet"    =>  \$opt->{'quiet'},
     "x|extract"  =>  \$opt->{'unpack_source'},
     "insecure"   =>  \$opt->{'insecure'},
+    "no-cache"   =>  \$opt->{'no-cache'},
+    "noconf|no-conf"   =>  \$opt->{'no-conf'},
+    "path=s"     =>  sub {
+	if ($2 eq '') { $dget_path=''; } else { $dget_path .= ":$2"; } },
     "h|help"     =>  \$opt->{'help'},
     "V|version"  =>  \$opt->{'version'},
 )
-    or die "Usage: $progname [options] URL|package[=version]\nRun $progname --help for more details.\n";
+    or die "$progname: unrecognised option. Run $progname --help for more details.\n";
+
+if ($opt->{'help'}) { usage(); exit 0; }
+if ($opt->{'version'}) { version(); exit 0; }
+if ($opt->{'no-conf'}) {
+    die "$progname: --no-conf is only acceptable as the first command-line option!\n";
+}
+
+if ($dget_path) {
+    foreach my $p (split /:/, $dget_path) {
+	push @dget_path, $p if -d $p;
+    }
+}
 
 if (! @ARGV) {
     die "Usage: $progname [options] URL|package[=version]\nRun $progname --help for more details.\n";
 }
 
-if ($opt->{'help'}) { usage(); exit 0; }
-if ($opt->{'version'}) { version(); exit 0; }
-
+# handle arguments
 for my $arg (@ARGV) {
     $found_dsc = "";
 
     if ($arg =~ /^((?:copy|file|ftp|http|rsh|rsync|ssh|www).*)\/([^\/]+\.\w+)$/) {
 	get_file($1, $2, "unlink") or exit 1;
-	if ($found_dsc and $opt->{unpack_source}) {
+	if ($found_dsc and $opt->{'unpack_source'}) {
 	    system 'dpkg-source', '-x', $found_dsc;
 	}
 
@@ -324,8 +432,11 @@ of the package is requested.
 Before downloading files listed in .dsc and .changes files, and before
 downloading binary packages, B<dget> checks to see whether any of
 these files already exist.  If they do, then their md5sums are
-compared to avoid downloading them again unnecessarily.  Download
-backends used are B<curl> and B<wget>, looked for in that order.
+compared to avoid downloading them again unnecessarily.  B<dget> also
+looks for matching files in B</var/cache/apt/archives> and directories
+given by the B<--path> option or specified in the configuration files
+(see below).  Download backends used are B<curl> and B<wget>, looked
+for in that order.
 
 B<dget> was written to make it easier to retrieve source packages from
 the web for sponsor uploads.  For checking the package with
@@ -349,9 +460,26 @@ Suppress B<wget>/B<curl> non-error output.
 Run B<dpkg-source -x> on the downloaded source package.  This can only
 be used with the first method of calling B<dget>.
 
+=item B<--path> DIR[:DIR...]
+
+In addition to I</var/cache/apt/archives>, B<dget> uses the
+colon-separated list given as argument to B<--path> to find files with
+a matching md5sum.  For example: "--path
+/srv/pbuilder/result:/home/cb/UploadQueue".  If DIR is empty (i.e.,
+"S<--path ''>" is specified), then any previously listed directories
+or directories specified in the configuration files will be ignored.
+This option may be specified multiple times, and all of the
+directories listed will be searched; hence, the above example could
+have been written as: "--path /srv/pbuilder/result --path
+/home/cb/UploadQueue".
+
 =item B<--insecure>
 
 Allow SSL connections to untrusted hosts.
+
+=item B<--no-cache>
+
+Bypass server-side HTTP caches by sending a B<Pragma: no-cache> header.
 
 =item B<-h>, B<--help>
 
@@ -363,13 +491,32 @@ Show version information.
 
 =back
 
+=head1 CONFIGURATION VARIABLES
+
+The two configuration files F</etc/devscripts.conf> and
+F<~/.devscripts> are sourced by a shell in that order to set
+configuration variables.  Command line options can be used to override
+configuration file settings.  Environment variable settings are
+ignored for this purpose.  The currently recognised variable is:
+
+=over 4
+
+=item DGET_PATH
+
+This can be set to a colon-separated list of directories in which to
+search for files in addition to the default
+I</var/cache/apt/archives>.  It has the same effect as the B<--path>
+command line option.  It is not set by default.
+
+=cut
+
 =head1 BUGS
 
 B<dget> I<package> should be implemented in B<apt-get install -d>.
 
 =head1 AUTHOR
 
-This program is Copyright (C) 2005 by Christoph Berg <myon@debian.org>.
+This program is Copyright (C) 2005-06 by Christoph Berg <myon@debian.org>.
 Modifications are Copyright (C) 2005-06 by Julian Gilbey <jdg@debian.org>.
 
 This program is licensed under the terms of the GPL, either version 2

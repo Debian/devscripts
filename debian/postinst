@@ -7,17 +7,20 @@ then
 	cp /usr/share/devscripts/conf.default /etc/devscripts.conf
     elif [ -f /etc/devscripts.conf ]
     then
-	if dpkg --compare-versions "$2" lt 2.7.1
+	# Are we dealing with an upgrade from pre-sarge?
+	if dpkg --compare-versions "$2" lt 2.8.14
 	then
-	    # This is for bug #149712.  Oops.
-	    perl -i -pe 's/DEBDIFF_SHOWMOVED/DEBDIFF_SHOW_MOVED/g' \
-		/etc/devscripts.conf
-	fi
+	    if dpkg --compare-versions "$2" lt 2.7.1
+	    then
+		# This is for bug #149712.  Oops.
+		perl -i -pe 's/DEBDIFF_SHOWMOVED/DEBDIFF_SHOW_MOVED/g' \
+		    /etc/devscripts.conf
+	    fi
 
-	if dpkg --compare-versions "$2" lt 2.7.90
-	then
-	# Added in devscripts 2.7.90:
-	    cat >> /etc/devscripts.conf <<EOF
+	    if dpkg --compare-versions "$2" lt 2.7.90
+	    then
+		# Added in devscripts 2.7.90:
+		cat >> /etc/devscripts.conf <<EOF
 
 # debchange/dch option added in version 2.7.90:
 # 
@@ -30,12 +33,12 @@ then
 # copy it instead?  yes=symlink, no=copy
 # UUPDATE_SYMLINK_ORIG=yes
 EOF
-	fi
+	    fi
 
-	if dpkg --compare-versions "$2" lt 2.7.93
-	then
-	# Added in devscripts 2.7.93:
-	    cat >> /etc/devscripts.conf <<EOF
+	    if dpkg --compare-versions "$2" lt 2.7.93
+	    then
+		# Added in devscripts 2.7.93:
+		cat >> /etc/devscripts.conf <<EOF
 
 # debuild options added in version 2.7.93:
 # 
@@ -72,12 +75,12 @@ EOF
 # DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1
 # DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.*)?'
 EOF
-	fi
+	    fi
 
-	if [ "$2" = "2.8.6" ]
-	then
-	# Added in devscripts 2.8.6:
-	    cat >> /etc/devscripts.conf <<EOF
+	    if [ "$2" = "2.8.6" ]
+	    then
+		# Added in devscripts 2.8.6:
+		cat >> /etc/devscripts.conf <<EOF
 
 ##### bts options changes between version 2.8.6 and version 2.8.7:
 # 
@@ -91,10 +94,10 @@ EOF
 # %s is replaced by the mbox name and %% by a single %.
 # BTS_MAIL_READER='mutt -f %s'
 EOF
-	elif dpkg --compare-versions "$2" lt 2.8.7
-	then
-	# Added in devscripts 2.8.6 and 2.8.7:
-	    cat >> /etc/devscripts.conf <<EOF
+	    elif dpkg --compare-versions "$2" lt 2.8.7
+	    then
+		# Added in devscripts 2.8.6 and 2.8.7:
+		cat >> /etc/devscripts.conf <<EOF
 
 ##### bts options added in versions 2.8.6 and 2.8.7:
 # 
@@ -116,12 +119,12 @@ EOF
 # %s is replaced by the mbox name and %% by a single %.
 # BTS_MAIL_READER='mutt -f %s'
 EOF
-	fi
+	    fi
 
-	if dpkg --compare-versions "$2" lt 2.8.12
-	then
-	# Added in devscripts 2.8.12:
-	    cat >> /etc/devscripts.conf <<EOF
+	    if dpkg --compare-versions "$2" lt 2.8.12
+	    then
+		# Added in devscripts 2.8.12:
+		cat >> /etc/devscripts.conf <<EOF
 
 ##### uscan option added in version 2.8.12:
 # 
@@ -129,11 +132,13 @@ EOF
 # USCAN_DEHS_OUTPUT=no
 # 
 EOF
+	    fi
 	fi
 
+	# The next section is all post-sarge updates
 	if dpkg --compare-versions "$2" lt 2.8.15
 	then
-	# Added in devscripts 2.8.12:
+	# Added in devscripts 2.8.15:
 	    cat >> /etc/devscripts.conf <<EOF
 
 ##### debchange option added in version 2.8.15:
@@ -238,9 +243,10 @@ EOF
 EOF
 	fi
 
-	if dpkg --compare-versions "$2" lt 2.9.17
+	if dpkg --compare-versions "$2" lt 2.9.26
 	then
-	# Added in devscripts 2.9.25:
+	    # Added in devscripts 2.9.25/26, but version comparison test was
+	    # incorrect in version 2.9.25:
 	    cat >> /etc/devscripts.conf <<EOF
 
 ##### nmudiff option added in version 2.9.25
@@ -250,7 +256,15 @@ EOF
 # NMUDIFF_MUTT=yes
 # 
 # nmudiff also uses the value of BTS_SENDMAIL_COMMAND if NMUDIFF_MUTT=no
+
+##### dget option added in version 2.9.26
+# 
+# Extra directories to search for files in addition to
+# /var/cache/apt/archives.  This is a colon-separated list of directories.
+# DGET_PATH=""
+# 
 EOF
+
 	fi
 
     fi
