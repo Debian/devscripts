@@ -336,7 +336,8 @@ while (<CHANGES>) {
     if (/ (\S*\.deb)$/) {
         my $deb = $1;
         $deb =~ /^([a-z0-9+\.-]+)_/ or warn "unrecognised .deb name: $deb\n";
-	next unless $deb =~ /[_+]$arch[\.+]/;  # don't want other archs' .debs
+	# don't want other archs' .debs:
+	next unless $deb =~ /[_+]($arch|all)[\.+]/;
         my $pkg = $1;
         if (@ARGV) {
             if (exists $pkgs{$pkg}) {

@@ -3,9 +3,11 @@ devscripts (2.9.26) UNRELEASED; urgency=low
   * deb-reversion: update to new upstream version (Closes: #329374)
   * debc/debi: handle specifying changes file on command line again
     (Closes: #398152)
+  * debc/debi: handle arch all packages correctly (oops!) (Closes:
+    #398597)
   * uscan: avoid spurious undefined warning if --package is used
 
- -- Julian Gilbey <jdg@debian.org>  Wed, 15 Nov 2006 00:48:12 +0000
+ -- Julian Gilbey <jdg@debian.org>  Thu, 16 Nov 2006 10:26:14 +0000
 
 devscripts (2.9.25) unstable; urgency=low
 
