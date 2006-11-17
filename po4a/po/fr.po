@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts.fr.corrected\n"
-"POT-Creation-Date: 2006-11-12 11:09+0000\n"
+"POT-Creation-Date: 2006-11-17 13:03+0000\n"
 "PO-Revision-Date: 2005-11-18 14:34+0100\n"
 "Last-Translator: Thomas Huriaux <thomas.huriaux@gmail.com>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -56,7 +56,7 @@ msgstr "DEBIAN"
 #: ../dd-list.1:19 ../debc.1:2 ../debchange.1:2 ../debclean.1:2
 #: ../debcommit.pl:3 ../debdiff.1:2 ../debi.1:2 ../debpkg.1:2
 #: ../debrelease.1:2 ../debrsign.1:2 ../debsign.1:2 ../debuild.1:2
-#: ../devscripts.1:2 ../dget.pl:295 ../dpkg-depcheck.1:2
+#: ../devscripts.1:2 ../dget.pl:403 ../dpkg-depcheck.1:2
 #: ../dpkg-genbuilddeps.1:2 ../dscverify.1:2 ../grep-excuses.1:2
 #: ../mass-bug.pl:22 ../mergechanges.1:2 ../nmudiff.1:2 ../plotchangelog.1:2
 #: ../pts-subscribe.1:2 ../rc-alert.1:2 ../rmadison.pl:113 ../svnpath.pl:3
@@ -78,7 +78,7 @@ msgstr ""
 #: ../dd-list.1:22 ../debc.1:4 ../debchange.1:4 ../debclean.1:4
 #: ../debcommit.pl:7 ../debdiff.1:4 ../debi.1:4 ../debpkg.1:4
 #: ../debrelease.1:4 ../debrsign.1:4 ../debsign.1:4 ../debuild.1:4
-#: ../dget.pl:299 ../dpkg-depcheck.1:4 ../dpkg-genbuilddeps.1:4
+#: ../dget.pl:407 ../dpkg-depcheck.1:4 ../dpkg-genbuilddeps.1:4
 #: ../dscverify.1:4 ../grep-excuses.1:4 ../mass-bug.pl:26 ../mergechanges.1:4
 #: ../nmudiff.1:4 ../plotchangelog.1:4 ../pts-subscribe.1:4 ../rc-alert.1:4
 #: ../rmadison.pl:117 ../svnpath.pl:7 ../tagpending.1:4 ../uscan.1:4
@@ -98,7 +98,7 @@ msgstr "B<annotate-output> I<programme> [I<paramètres> ...]"
 #: ../dd-list.1:26 ../debc.1:6 ../debchange.1:8 ../debclean.1:6
 #: ../debcommit.pl:11 ../debdiff.1:13 ../debi.1:6 ../debpkg.1:6
 #: ../debrelease.1:6 ../deb-reversion.dbk:82 ../debrsign.1:7 ../debsign.1:6
-#: ../debuild.1:11 ../devscripts.1:4 ../dget.pl:309 ../dpkg-depcheck.1:6
+#: ../debuild.1:11 ../devscripts.1:4 ../dget.pl:417 ../dpkg-depcheck.1:6
 #: ../dpkg-genbuilddeps.1:6 ../dscverify.1:6 ../grep-excuses.1:6
 #: ../mass-bug.pl:30 ../mergechanges.1:6 ../nmudiff.1:6 ../plotchangelog.1:7
 #: ../pts-subscribe.1:6 ../rc-alert.1:8 ../rmadison.pl:125 ../svnpath.pl:17
@@ -145,7 +145,7 @@ msgstr ""
 "21:43:19 I: terminé avec un code de sortie 2\n"
 
 # type: =head1
-#: ../annotate-output.1:23 ../dget.pl:366 ../whodepends.1:17
+#: ../annotate-output.1:23 ../dget.pl:513 ../whodepends.1:17
 #, no-wrap
 msgid "BUGS"
 msgstr "BOGUES"
@@ -248,9 +248,9 @@ msgstr ""
 #: ../cvs-debuild.1:63 ../dd-list.1:82 ../debc.1:119 ../debchange.1:335
 #: ../debclean.1:108 ../debcommit.pl:291 ../debdiff.1:167 ../debi.1:120
 #: ../debpkg.1:23 ../debrelease.1:137 ../deb-reversion.dbk:278
-#: ../debrsign.1:71 ../debsign.1:128 ../debuild.1:413 ../dget.pl:370
+#: ../debrsign.1:71 ../debsign.1:128 ../debuild.1:413 ../dget.pl:517
 #: ../dpkg-genbuilddeps.1:36 ../dscverify.1:44 ../grep-excuses.1:36
-#: ../mass-bug.pl:421 ../mergechanges.1:17 ../nmudiff.1:79
+#: ../mass-bug.pl:421 ../mergechanges.1:17 ../nmudiff.1:97
 #: ../plotchangelog.1:126 ../pts-subscribe.1:51 ../rc-alert.1:29
 #: ../rmadison.pl:188 ../svnpath.pl:97 ../tagpending.1:37 ../uscan.1:488
 #: ../uupdate.1:167 ../whodepends.1:19 ../who-uploads.1:58 ../wnpp-alert.1:19
@@ -553,8 +553,8 @@ msgstr ""
 #: ../cvs-debrelease.1:21 ../cvs-debuild.1:33 ../dd-list.1:58 ../debc.1:63
 #: ../debchange.1:145 ../debclean.1:60 ../debcommit.pl:18 ../debdiff.1:45
 #: ../debi.1:65 ../debrelease.1:56 ../deb-reversion.dbk:128 ../debrsign.1:30
-#: ../debsign.1:39 ../debuild.1:210 ../dget.pl:335 ../dpkg-depcheck.1:15
-#: ../dscverify.1:15 ../grep-excuses.1:13 ../mass-bug.pl:52 ../nmudiff.1:16
+#: ../debsign.1:39 ../debuild.1:210 ../dget.pl:446 ../dpkg-depcheck.1:15
+#: ../dscverify.1:15 ../grep-excuses.1:13 ../mass-bug.pl:52 ../nmudiff.1:21
 #: ../plotchangelog.1:43 ../pts-subscribe.1:13 ../rc-alert.1:17
 #: ../rmadison.pl:134 ../tagpending.1:12 ../uscan.1:325 ../uupdate.1:50
 #: ../whodepends.1:10 ../who-uploads.1:15 ../wnpp-alert.1:12
@@ -759,7 +759,7 @@ msgstr "--no-conf, --noconf"
 #: ../bts.pl:261 ../cvs-debrelease.1:61 ../debc.1:88 ../debchange.1:272
 #: ../debclean.1:81 ../debdiff.1:118 ../debi.1:90 ../debrelease.1:99
 #: ../debsign.1:93 ../debuild.1:216 ../dpkg-depcheck.1:96 ../dscverify.1:23
-#: ../grep-excuses.1:18 ../mass-bug.pl:81 ../nmudiff.1:53 ../uscan.1:406
+#: ../grep-excuses.1:18 ../mass-bug.pl:81 ../nmudiff.1:63 ../uscan.1:406
 #: ../uupdate.1:80 ../who-uploads.1:36
 msgid ""
 "Do not read any configuration files.  This can only be used as the first "
@@ -1755,8 +1755,8 @@ msgstr ""
 # type: SH
 #: ../bts.pl:2719 ../debc.1:91 ../debchange.1:283 ../debclean.1:87
 #: ../debdiff.1:127 ../debi.1:93 ../debrelease.1:105 ../debrsign.1:57
-#: ../debsign.1:99 ../debuild.1:276 ../dpkg-depcheck.1:102 ../dscverify.1:29
-#: ../grep-excuses.1:24 ../mass-bug.pl:101 ../nmudiff.1:59
+#: ../debsign.1:99 ../debuild.1:276 ../dget.pl:494 ../dpkg-depcheck.1:102
+#: ../dscverify.1:29 ../grep-excuses.1:24 ../mass-bug.pl:101 ../nmudiff.1:69
 #: ../plotchangelog.1:106 ../pts-subscribe.1:37 ../uscan.1:412 ../uupdate.1:86
 #: ../who-uploads.1:42
 #, no-wrap
@@ -1872,7 +1872,7 @@ msgid "BTS_SENDMAIL_COMMAND"
 msgstr "BTS_SENDMAIL_COMMAND"
 
 # type: textblock
-#: ../bts.pl:2765 ../mass-bug.pl:113 ../nmudiff.1:74
+#: ../bts.pl:2765 ../mass-bug.pl:113 ../nmudiff.1:92
 msgid ""
 "If this is set, specifies a sendmail command to use instead of /usr/sbin/"
 "sendmail.  Same as the --sendmail command line option."
@@ -2015,8 +2015,8 @@ msgstr ""
 #: ../cvs-debrelease.1:64 ../cvs-debuild.1:56 ../debc.1:114 ../debchange.1:328
 #: ../debclean.1:104 ../debdiff.1:161 ../debi.1:116 ../debrelease.1:132
 #: ../deb-reversion.dbk:233 ../debrsign.1:66 ../debsign.1:118 ../debuild.1:399
-#: ../dget.pl:378 ../dpkg-depcheck.1:118 ../dpkg-genbuilddeps.1:30
-#: ../dscverify.1:40 ../grep-excuses.1:34 ../nmudiff.1:74
+#: ../dget.pl:525 ../dpkg-depcheck.1:118 ../dpkg-genbuilddeps.1:30
+#: ../dscverify.1:40 ../grep-excuses.1:34 ../nmudiff.1:92
 #: ../plotchangelog.1:124 ../pts-subscribe.1:46 ../rc-alert.1:27
 #: ../rmadison.pl:184 ../tagpending.1:32 ../uscan.1:482 ../uupdate.1:160
 #: ../devscripts.conf.5:54
@@ -2374,7 +2374,7 @@ msgstr ""
 #: ../cvs-debrelease.1:57 ../debc.1:84 ../debchange.1:268 ../debclean.1:77
 #: ../debdiff.1:114 ../debi.1:86 ../debrelease.1:95 ../debsign.1:89
 #: ../dpkg-depcheck.1:92 ../dscverify.1:19 ../grep-excuses.1:14
-#: ../nmudiff.1:49 ../uscan.1:402 ../uupdate.1:76 ../who-uploads.1:32
+#: ../nmudiff.1:59 ../uscan.1:402 ../uupdate.1:76 ../who-uploads.1:32
 #, no-wrap
 msgid "B<--no-conf>, B<--noconf>"
 msgstr "B<--no-conf>, B<--noconf>"
@@ -2945,7 +2945,7 @@ msgstr "B<--check-dirname-regex> I<regex>"
 # NOTE: et --noconf ?
 # type: Plain text
 #: ../debc.1:97 ../debchange.1:289 ../debclean.1:93 ../debi.1:99
-#: ../debrelease.1:111 ../debrsign.1:63 ../debsign.1:105 ../nmudiff.1:65
+#: ../debrelease.1:111 ../debrsign.1:63 ../debsign.1:105 ../nmudiff.1:75
 #: ../pts-subscribe.1:43 ../uupdate.1:92 ../who-uploads.1:48
 msgid ""
 "The two configuration files I</etc/devscripts.conf> and I<~/.devscripts> are "
@@ -3693,14 +3693,14 @@ msgstr ""
 
 # type: Plain text
 #: ../debchange.1:280 ../debclean.1:84 ../debrelease.1:102 ../debsign.1:96
-#: ../dscverify.1:26 ../nmudiff.1:56 ../pts-subscribe.1:26 ../uupdate.1:83
+#: ../dscverify.1:26 ../nmudiff.1:66 ../pts-subscribe.1:26 ../uupdate.1:83
 #: ../who-uploads.1:39
 msgid "Display a help message and exit successfully."
 msgstr "Affiche un message d'aide et quitte avec succès."
 
 # type: TP
 #: ../debchange.1:280 ../debclean.1:84 ../debrelease.1:102 ../debsign.1:96
-#: ../dscverify.1:26 ../grep-excuses.1:21 ../nmudiff.1:56
+#: ../dscverify.1:26 ../grep-excuses.1:21 ../nmudiff.1:66
 #: ../plotchangelog.1:95 ../pts-subscribe.1:26 ../rmadison.pl:175
 #: ../uscan.1:409 ../uupdate.1:83 ../who-uploads.1:39
 #, no-wrap
@@ -3709,7 +3709,7 @@ msgstr "B<--version>"
 
 # type: Plain text
 #: ../debchange.1:283 ../debclean.1:87 ../debrelease.1:105 ../debsign.1:99
-#: ../dscverify.1:29 ../nmudiff.1:59 ../pts-subscribe.1:29 ../uupdate.1:86
+#: ../dscverify.1:29 ../nmudiff.1:69 ../pts-subscribe.1:29 ../uupdate.1:86
 #: ../who-uploads.1:42
 msgid "Display version and copyright information and exit successfully."
 msgstr "Affiche la version et le copyright, puis quitte avec succès."
@@ -3963,7 +3963,7 @@ msgstr ""
 "C'est le comportement par défaut."
 
 # type: TP
-#: ../debclean.1:81 ../grep-excuses.1:18 ../nmudiff.1:53 ../plotchangelog.1:92
+#: ../debclean.1:81 ../grep-excuses.1:18 ../nmudiff.1:63 ../plotchangelog.1:92
 #: ../uscan.1:406
 #, no-wrap
 msgid "B<--help>"
@@ -6777,24 +6777,24 @@ msgstr ""
 "courriels arrivant aux listes de diffusion Debian."
 
 # type: textblock
-#: ../dget.pl:297
+#: ../dget.pl:405
 msgid "dget -- Download Debian source and binary packages"
 msgstr "dget -- Télécharger des paquets Debian source et binaire"
 
 # type: =item
-#: ../dget.pl:303
+#: ../dget.pl:411
 #, fuzzy
 msgid "B<dget> [I<options>] I<URL>"
 msgstr "B<dget> [B<-bqx>] I<URL>"
 
 # type: =item
-#: ../dget.pl:305
+#: ../dget.pl:413
 #, fuzzy
 msgid "B<dget> [I<options>] I<package>[=I<version>]"
 msgstr "B<dget> [B<-bq>] I<paquet>=I<version>"
 
 # type: textblock
-#: ../dget.pl:311
+#: ../dget.pl:419
 #, fuzzy
 msgid ""
 "B<dget> downloads Debian packages.  In the first form, B<dget> fetches the "
@@ -6810,7 +6810,7 @@ msgstr ""
 "le paquet source téléchargé est dépaqueté avec B<dpkg-source>."
 
 # type: textblock
-#: ../dget.pl:317
+#: ../dget.pl:425
 #, fuzzy
 msgid ""
 "In the second form, B<dget> downloads a I<binary> package (i.e., a I<.deb> "
@@ -6826,14 +6826,16 @@ msgstr ""
 "dépendances."
 
 # type: textblock
-#: ../dget.pl:324
+#: ../dget.pl:432
 #, fuzzy
 msgid ""
 "Before downloading files listed in .dsc and .changes files, and before "
 "downloading binary packages, B<dget> checks to see whether any of these "
 "files already exist.  If they do, then their md5sums are compared to avoid "
-"downloading them again unnecessarily.  Download backends used are B<curl> "
-"and B<wget>, looked for in that order."
+"downloading them again unnecessarily.  B<dget> also looks for matching files "
+"in B</var/cache/apt/archives> and directories given by the B<--path> option "
+"or specified in the configuration files (see below).  Download backends used "
+"are B<curl> and B<wget>, looked for in that order."
 msgstr ""
 "Avant de télécharger les fichiers référencés dans les fichiers .dsc et ."
 "changes, et avant de télécharger des paquets binaires, si un des fichiers "
@@ -6842,7 +6844,7 @@ msgstr ""
 "B<wget>, recherchés dans cet ordre."
 
 # type: textblock
-#: ../dget.pl:330
+#: ../dget.pl:441
 #, fuzzy
 msgid ""
 "B<dget> was written to make it easier to retrieve source packages from the "
@@ -6856,88 +6858,148 @@ msgstr ""
 "dernière version source via B<apt-get source> I<package>."
 
 # type: TP
-#: ../dget.pl:339
+#: ../dget.pl:450
 #, fuzzy
 msgid "B<-b>, B<--backup>"
 msgstr "B<-a>, B<--all>"
 
 # type: textblock
-#: ../dget.pl:341
+#: ../dget.pl:452
 #, fuzzy
 msgid "Move files that would be overwritten to I<./backup>."
 msgstr ""
 "B<-b> déplace les fichiers qui devraient être écrasés dans B<./backup>."
 
 # type: =item
-#: ../dget.pl:343
+#: ../dget.pl:454
 #, fuzzy
 msgid "B<-q>, B<--quiet>"
 msgstr "-q, --quiet"
 
 # type: textblock
-#: ../dget.pl:345
+#: ../dget.pl:456
 #, fuzzy
 msgid "Suppress B<wget>/B<curl> non-error output."
 msgstr "B<-q> supprime la sortie de wget/curl."
 
 # type: TP
-#: ../dget.pl:347
+#: ../dget.pl:458
 #, fuzzy
 msgid "B<-x>, B<--extract>"
 msgstr "B<-r>, B<--regex>"
 
 # type: textblock
-#: ../dget.pl:349
+#: ../dget.pl:460
 msgid ""
 "Run B<dpkg-source -x> on the downloaded source package.  This can only be "
 "used with the first method of calling B<dget>."
 msgstr ""
 
+# type: =item
+#: ../dget.pl:463
+msgid "B<--path> DIR[:DIR...]"
+msgstr ""
+
+# type: textblock
+#: ../dget.pl:465
+msgid ""
+"In addition to I</var/cache/apt/archives>, B<dget> uses the colon-separated "
+"list given as argument to B<--path> to find files with a matching md5sum.  "
+"For example: \"--path /srv/pbuilder/result:/home/cb/UploadQueue\".  If DIR "
+"is empty (i.e., \"S<--path ''>\" is specified), then any previously listed "
+"directories or directories specified in the configuration files will be "
+"ignored.  This option may be specified multiple times, and all of the "
+"directories listed will be searched; hence, the above example could have "
+"been written as: \"--path /srv/pbuilder/result --path /home/cb/UploadQueue\"."
+msgstr ""
+
 # type: TP
-#: ../dget.pl:352
+#: ../dget.pl:476
 #, fuzzy
 msgid "B<--insecure>"
 msgstr "B<--no-preserve>"
 
 # type: textblock
-#: ../dget.pl:354
+#: ../dget.pl:478
 msgid "Allow SSL connections to untrusted hosts."
 msgstr ""
 
 # type: TP
-#: ../dget.pl:356 ../dpkg-depcheck.1:96 ../rmadison.pl:158 ../tagpending.1:26
+#: ../dget.pl:480
+#, fuzzy
+msgid "B<--no-cache>"
+msgstr "B<--cache>"
+
+# type: textblock
+#: ../dget.pl:482
+msgid "Bypass server-side HTTP caches by sending a B<Pragma: no-cache> header."
+msgstr ""
+
+# type: TP
+#: ../dget.pl:484 ../dpkg-depcheck.1:96 ../rmadison.pl:158 ../tagpending.1:26
 #, no-wrap
 msgid "B<-h>, B<--help>"
 msgstr "B<-h>, B<--help>"
 
 # type: Plain text
-#: ../dget.pl:358
+#: ../dget.pl:486
 #, fuzzy
 msgid "Show a help message."
 msgstr "Affiche un bref message d'aide."
 
 # type: TP
-#: ../dget.pl:360 ../tagpending.1:29
+#: ../dget.pl:488 ../tagpending.1:29
 #, fuzzy, no-wrap
 msgid "B<-V>, B<--version>"
 msgstr "B<-V>, B<--version>"
 
 # type: Plain text
-#: ../dget.pl:362
+#: ../dget.pl:490
 #, fuzzy
 msgid "Show version information."
 msgstr "Affiche les informations sur la version."
 
+# NOTE: presque identique
+# type: Plain text
+#: ../dget.pl:496
+#, fuzzy
+msgid ""
+"The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
+"sourced by a shell in that order to set configuration variables.  Command "
+"line options can be used to override configuration file settings.  "
+"Environment variable settings are ignored for this purpose.  The currently "
+"recognised variable is:"
+msgstr ""
+"Les deux fichiers de configuration I</etc/devscripts.conf> et I<~/."
+"devscripts> sont chargés dans cet ordre par un interpréteur de commandes "
+"pour positionner les variables de configuration. Des options de ligne de "
+"commande peuvent être utilisées pour écraser les paramètres des fichiers de "
+"configuration. Les paramètres des variables d'environnement sont ignorés à "
+"cette fin. Les variables actuellement reconnues sont :"
+
+# type: =item
+#: ../dget.pl:504
+msgid "DGET_PATH"
+msgstr ""
+
 # type: textblock
-#: ../dget.pl:368
+#: ../dget.pl:506
+msgid ""
+"This can be set to a colon-separated list of directories in which to search "
+"for files in addition to the default I</var/cache/apt/archives>.  It has the "
+"same effect as the B<--path> command line option.  It is not set by default."
+msgstr ""
+
+# type: textblock
+#: ../dget.pl:515
 msgid "B<dget> I<package> should be implemented in B<apt-get install -d>."
 msgstr "B<dget> I<package> devrait être implémenté dans B<apt-get install -d>."
 
 # type: textblock
-#: ../dget.pl:372
+#: ../dget.pl:519
 #, fuzzy
 msgid ""
-"This program is Copyright (C) 2005 by Christoph Berg <myon@debian.org>.  "
+"This program is Copyright (C) 2005-06 by Christoph Berg <myon@debian.org>.  "
 "Modifications are Copyright (C) 2005-06 by Julian Gilbey <jdg@debian.org>."
 msgstr ""
 "Ce programme est Copyright (C) 2001-2003 by Joey Hess <joeyh@debian.org>. De "
@@ -6945,7 +7007,7 @@ msgstr ""
 "Gilbey <jdg@debian.org>."
 
 # type: textblock
-#: ../dget.pl:375
+#: ../dget.pl:522
 #, fuzzy
 msgid ""
 "This program is licensed under the terms of the GPL, either version 2 of the "
@@ -6955,7 +7017,7 @@ msgstr ""
 "2 ou toute version ultérieure (à votre discrétion)."
 
 # type: textblock
-#: ../dget.pl:380
+#: ../dget.pl:527
 #, fuzzy
 msgid ""
 "B<apt-get>(1), B<debdiff>(1), B<dpkg-source>(1), B<curl>(1), B<wget>(1)."
@@ -7871,27 +7933,50 @@ msgstr ""
 "vous avez quitté l'éditeur, le diff est envoyé par mail au système de "
 "gestion de bogues (« BTS ») Debian."
 
+# type: Plain text
+#: ../nmudiff.1:21
+msgid ""
+"The default behaviour is that if exactly one bug is closed by this NMU, then "
+"that bug will be mailed, otherwise a new bug will be submitted.  This "
+"behaviour may be changed by command line options and configuration file "
+"options."
+msgstr ""
+
 # type: TP
-#: ../nmudiff.1:17
+#: ../nmudiff.1:22
 #, fuzzy, no-wrap
 msgid "B<--new>"
 msgstr "B<--news>"
 
 # type: Plain text
-#: ../nmudiff.1:21
+#: ../nmudiff.1:26
 msgid ""
 "Instead of mailing the bug reports which are to be closed by this NMU, a new "
 "bug report is submitted directly to the BTS."
 msgstr ""
 
 # type: TP
-#: ../nmudiff.1:21
+#: ../nmudiff.1:26
+#, fuzzy, no-wrap
+msgid "B<--old>"
+msgstr "B<--linda>"
+
+# type: Plain text
+#: ../nmudiff.1:31
+msgid ""
+"Send the bug report to all of the bugs which are being closed by this NMU, "
+"rather than opening a new bug report.  This option has no effect if no bugs "
+"are being closed by this NMU."
+msgstr ""
+
+# type: TP
+#: ../nmudiff.1:31
 #, fuzzy, no-wrap
 msgid "B<--mutt>"
 msgstr "B<--multi>"
 
 # type: Plain text
-#: ../nmudiff.1:26
+#: ../nmudiff.1:36
 msgid ""
 "Use B<mutt>(1) for editing and sending the message to the BTS (default "
 "behaviour).  This can be controlled using a configuration file option (see "
@@ -7899,13 +7984,13 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../nmudiff.1:26
+#: ../nmudiff.1:36
 #, fuzzy, no-wrap
 msgid "B<--no-mutt>"
 msgstr "B<--multi>"
 
 # type: Plain text
-#: ../nmudiff.1:31
+#: ../nmudiff.1:41
 msgid ""
 "Use B<sensible-editor>(1) to edit the message and then mail it directly "
 "using I</usr/bin/sendmail>.  This can be controlled using a configuration "
@@ -7913,13 +7998,13 @@ msgid ""
 msgstr ""
 
 # type: =item
-#: ../nmudiff.1:31
+#: ../nmudiff.1:41
 #, fuzzy, no-wrap
 msgid "B<--sendmail> I<SENDMAILCMD>"
 msgstr "--sendmail=COMMANDE_D_ENVOI_DE_MAIL"
 
 # type: Plain text
-#: ../nmudiff.1:41
+#: ../nmudiff.1:51
 msgid ""
 "Specify the sendmail command.  The command will be split on white space and "
 "will be interpreted by the shell.  Default is I</usr/sbin/sendmail>.  The I<-"
@@ -7931,13 +8016,13 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../nmudiff.1:41
+#: ../nmudiff.1:51
 #, no-wrap
 msgid "B<--from> I<EMAIL>"
 msgstr ""
 
 # type: Plain text
-#: ../nmudiff.1:49
+#: ../nmudiff.1:59
 msgid ""
 "If using the sendmail (B<--no-mutt) option, then the email to the BTS will "
 "be sent using the name and address in the environment variable DEBEMAIL.  If "
@@ -7947,32 +8032,49 @@ msgid ""
 msgstr ""
 
 # type: TH
-#: ../nmudiff.1:65
+#: ../nmudiff.1:75
 #, fuzzy, no-wrap
 msgid "B<NMUDIFF_MUTT>"
 msgstr "NMUDIFF"
 
 # type: Plain text
-#: ../nmudiff.1:70
+#: ../nmudiff.1:80
 msgid ""
 "Can be \"yes\" (default) or \"no\", and specifies whether to use B<mutt> to "
 "compose and send the message or not, as described above."
 msgstr ""
 
+# type: TH
+#: ../nmudiff.1:80
+#, fuzzy, no-wrap
+msgid "B<NMUDIFF_NEWREPORT>"
+msgstr "NMUDIFF"
+
+# type: Plain text
+#: ../nmudiff.1:88
+msgid ""
+"This option controls whether a new bug report is made, or whether the diff "
+"is sent to the bugs closed by this NMU.  Can be \"maybe\" (default), which "
+"sends to the existing bug reports if exactly one bug is being closed; \"yes"
+"\", which always creates a new report, or \"no\", which always sends to the "
+"reports of the bugs being closed (unless no bugs are being closed, in which "
+"case a new report is always made)."
+msgstr ""
+
 # type: =item
-#: ../nmudiff.1:70
+#: ../nmudiff.1:88
 #, fuzzy, no-wrap
 msgid "B<BTS_SENDMAIL_COMMAND>"
 msgstr "BTS_SENDMAIL_COMMAND"
 
 # type: Plain text
-#: ../nmudiff.1:79
+#: ../nmudiff.1:97
 #, fuzzy
 msgid "B<debdiff>(1), B<sensible-editor>(1)  and B<devscripts.conf>(5)."
 msgstr "B<dpkg-deb>(8), B<debdiff>(1) et B<devscripts.conf>(5)."
 
 # type: Plain text
-#: ../nmudiff.1:83
+#: ../nmudiff.1:101
 #, fuzzy
 msgid ""
 "B<nmudiff> was written and is copyright 2006 by Steinar H. Gunderson and "
