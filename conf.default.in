@@ -307,6 +307,11 @@
 # editor?
 # NMUDIFF_MUTT=yes
 # 
+# Should we always submit a new report (yes), always send to the bugs
+# which are being closed (no), or send to the bug being closed if
+# there is only one of them, otherwise send a new report (maybe)?
+# NMUDIFF_NEWREPORT=maybe
+# 
 # nmudiff also uses the value of BTS_SENDMAIL_COMMAND if NMUDIFF_MUTT=no
 
 ##### plotchangelog

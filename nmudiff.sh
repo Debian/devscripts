@@ -23,7 +23,11 @@ usage () {
   Generate a diff for an NMU and mail it to the BTS.
   $PROGNAME options:
     --new             Submit a new bug report rather than sending messages
-                      to the fixed bugs
+                      to the fixed bugs (default if more than one bug being
+                      closed or no bugs being closed)
+    --old             Send reports to the bugs which are being closed rather
+                      than submit a new bug (default if only one bug being
+                      closed)
     --sendmail=SENDMAILCMD
                       Use SENDMAILCMD instead of \"/usr/sbin/sendmail -t\"
     --mutt            Use mutt to mail the message (default)
@@ -51,8 +55,9 @@ EOF
 
 # Boilerplate: set config variables
 DEFAULT_NMUDIFF_MUTT="yes"
+DEFAULT_NMUDIFF_NEWREPORT="maybe"
 DEFAULT_BTS_SENDMAIL_COMMAND="/usr/sbin/sendmail"
-VARS="NMUDIFF_MUTT BTS_SENDMAIL_COMMAND"
+VARS="NMUDIFF_MUTT NMUDIFF_NEWREPORT BTS_SENDMAIL_COMMAND"
 # Don't think it's worth including this stuff
 # DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1
 # DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.*)?'
@@ -92,6 +97,10 @@ else
 	yes|no) ;;
 	*) NMUDIFF_MUTT=yes ;;
     esac
+    case "$NMUDIFF_NEWREPORT" in
+	yes|no|maybe) ;;
+	*) NMUDIFF_NEWREPORT=maybe ;;
+    esac
 #    case "$DEVSCRIPTS_CHECK_DIRNAME_LEVEL" in
 #	0|1|2) ;;
 #	*) DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1 ;;
@@ -120,7 +129,7 @@ fi
 # Need -o option to getopt or else it doesn't work
 # Removed: --long check-dirname-level:,check-dirname-regex: \
 TEMP=$(getopt -s bash -o "h" \
-	--long sendmail:,from:,new,mutt,no-mutt,nomutt \
+	--long sendmail:,from:,new,old,mutt,no-mutt,nomutt \
 	--long no-conf,noconf \
 	--long help,version -n "$PROGNAME" -- "$@")
 if [ $? != 0 ] ; then exit 1 ; fi
@@ -145,7 +154,9 @@ while [ "$1" ]; do
     --nomutt|--no-mutt)
 	NMUDIFF_MUTT=no ;;
     --new)
-	submit_new_bug=yes ;;
+	NMUDIFF_NEWREPORT=yes ;;
+    --old)
+	NMUDIFF_NEWREPORT=no ;;
     --sendmail)
 	shift
 	case "$1" in
@@ -210,6 +221,20 @@ fi
 
 CLOSES=$( dpkg-parsechangelog | grep ^Closes: | cut -d" " -f2- )
 
+if [ -z "$CLOSES" ]; then
+    # no bug reports, so make a new report in any event
+    NMUDIFF_NEWREPORT=yes
+fi
+
+if [ "$NMUDIFF_NEWREPORT" = "maybe" ]; then
+    if $(expr match "$CLOSES" ".* " > /dev/null); then
+	# multiple bug reports, so make a new report
+	NMUDIFF_NEWREPORT=yes
+    else
+	NMUDIFF_NEWREPORT=no
+    fi
+fi
+
 OLDVERSION=$( sed -n "s/^[^ .][^ ]* (\(.*\)).*$/\1/p" debian/changelog | \
   head -2 | tail -1 )
 if [ -z "$OLDVERSION" ]; then
@@ -238,9 +263,9 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-if [ -n "$submit_new_bug" -o -z "$CLOSES" ]; then
-    TO_ADDRESSES_SENDMAIL=submit@bugs.debian.org
-    TO_ADDRESSES_MUTT=submit@bugs.debian.org
+if [ "$NMUDIFF_NEWREPORT" = "yes" ]; then
+    TO_ADDRESSES_SENDMAIL="submit@bugs.debian.org"
+    TO_ADDRESSES_MUTT="submit@bugs.debian.org"
     BCC_ADDRESS_SENDMAIL=""
     BCC_ADDRESS_MUTT=""
     TAGS="Package: $SOURCE
@@ -250,7 +275,7 @@ Tags: patch"
 else
     TO_ADDRESSES_SENDMAIL=""
     TO_ADDRESSES_MUTT=""
-    BCC_ADDRESS_SENDMAIL=control@bugs.debian.org
+    BCC_ADDRESS_SENDMAIL="control@bugs.debian.org"
     BCC_ADDRESS_MUTT="-b control@bugs.debian.org"
     TAGS=""
     for b in $CLOSES; do

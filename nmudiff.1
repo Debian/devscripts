@@ -13,11 +13,21 @@ generate a diff between the previous version and the current NMU, and
 either runs mutt or an editor (using \fBsensible\-editor\fR) so that
 the mail message (including the diff) can be examined and modified;
 once you exit the editor the diff will be mailed to the Debian BTS.
+.PP
+The default behaviour is that if exactly one bug is closed by this NMU,
+then that bug will be mailed, otherwise a new bug will be submitted.
+This behaviour may be changed by command line options and
+configuration file options.
 .SH OPTIONS
 .TP
 .B \-\-new
 Instead of mailing the bug reports which are to be closed by this NMU,
 a new bug report is submitted directly to the BTS.
+.TP
+.B \-\-old
+Send the bug report to all of the bugs which are being closed by this
+NMU, rather than opening a new bug report.  This option has no effect
+if no bugs are being closed by this NMU.
 .TP
 \fB\-\-mutt\fR
 Use \fBmutt\fR(1) for editing and sending the message to the BTS
@@ -67,6 +77,14 @@ purpose.  The currently recognised variables are:
 Can be "yes" (default) or "no", and specifies whether to use
 \fBmutt\fR to compose and send the message or not, as described
 above.
+.TP
+.B NMUDIFF_NEWREPORT
+This option controls whether a new bug report is made, or whether the
+diff is sent to the bugs closed by this NMU.  Can be "maybe"
+(default), which sends to the existing bug reports if exactly one bug
+is being closed; "yes", which always creates a new report, or "no",
+which always sends to the reports of the bugs being closed (unless no
+bugs are being closed, in which case a new report is always made).
 .TP
 .B BTS_SENDMAIL_COMMAND
 If this is set, specifies a sendmail command to use instead of

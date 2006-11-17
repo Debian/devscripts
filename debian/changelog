@@ -1,4 +1,4 @@
-devscripts (2.9.26) UNRELEASED; urgency=low
+devscripts (2.9.26) unstable; urgency=low
 
   * deb-reversion: update to new upstream version (Closes: #329374)
   * debc/debi: handle specifying changes file on command line again
@@ -9,9 +9,11 @@ devscripts (2.9.26) UNRELEASED; urgency=low
     files, new binnmu version scheme, --no-cache, file:// and copy:// and
     fixed bug that --help/--version required other arguments (Closes:
     #385954, #356208)
+  * nmudiff: allow configuration of whether to send report to existing
+    bugs or create a new bug (Closes: #397912)
   * uscan: avoid spurious undefined warning if --package is used
 
- -- Julian Gilbey <jdg@debian.org>  Thu, 16 Nov 2006 14:50:15 +0000
+ -- Julian Gilbey <jdg@debian.org>  Fri, 17 Nov 2006 13:03:03 +0000
 
 devscripts (2.9.25) unstable; urgency=low
 

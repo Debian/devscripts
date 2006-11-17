@@ -249,11 +249,16 @@ EOF
 	    # incorrect in version 2.9.25:
 	    cat >> /etc/devscripts.conf <<EOF
 
-##### nmudiff option added in version 2.9.25
+##### nmudiff options added in versions 2.9.25 and 2.9.26
 # 
 # Should we use mutt to edit and send the message or just a plain old
 # editor?
 # NMUDIFF_MUTT=yes
+# 
+# Should we always submit a new report (yes), always send to the bugs
+# which are being closed (no), or send to the bug being closed if
+# there is only one of them, otherwise send a new report (maybe)?
+# NMUDIFF_NEWREPORT=maybe
 # 
 # nmudiff also uses the value of BTS_SENDMAIL_COMMAND if NMUDIFF_MUTT=no
 
