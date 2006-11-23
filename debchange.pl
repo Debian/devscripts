@@ -285,10 +285,29 @@ if (defined $opt_u) {
     fatal "Urgency can only be one of: low, medium, high, critical, emergency"
 	unless $opt_u =~ /^(low|medium|high|critical|emergency)$/;
 }
+
+# Check the distro name given.
 if (defined $opt_D) {
-    unless ($opt_D =~ /^(unstable|(stable|testing)(-security)?|oldstable-security|experimental|UNRELEASED)$/) {
-	warn "$progname warning: Recognised distributions are: unstable, testing, stable,\nexperimental, UNRELEASED and {testing,stable,oldstable}-security.\nUsing your one anyway.\n";
-	$warnings++;
+    # See if we're Debian, Ubuntu or someone else, if we can
+    my $distributor;
+    if (system('command -v lsb_release >/dev/null 2>&1') >> 8 == 0) {
+	$distributor = `lsb_release -is 2>/dev/null`;
+	chomp $distributor;
+    }
+    $distributor ||= 'Debian';
+
+    if ($distributor eq 'Debian') {
+	unless ($opt_D =~ /^(unstable|(stable|testing)(-security)?|oldstable-security|experimental|UNRELEASED)$/) {
+	    warn "$progname warning: Recognised distributions are: unstable, testing, stable,\nexperimental, UNRELEASED and {testing,stable,oldstable}-security.\nUsing your request anyway.\n";
+	    $warnings++;
+	}
+    } elsif ($distributor eq 'Ubuntu') {
+	unless ($opt_D =~ /^{warty,hoary,breezy,dapper,edgy,feisty}{,-updates,-security,-proposed}$/) {
+	    warn "$progname warning: Recognised distributions are:\n{warty,hoary,breezy,dapper,edgy,feisty}{,-updates,-security,-proposed}.\nUsing your request anyway.\n";
+	    $warnings++;
+	}
+    } else {
+	# Unknown distributor, skip check
     }
 }
 
