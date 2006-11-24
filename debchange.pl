@@ -752,7 +752,7 @@ if (($opt_i || $opt_n || $opt_qa || $opt_v || $opt_d) && ! $opt_create) {
 	} else {
 	    my $pwd = basename(cwd());
 	    # The directory name should be <package>-<version>
-	    my $version_chars = '0-9a-zA-Z+\.';
+	    my $version_chars = '0-9a-zA-Z+\.~';
 	    $version_chars .= ':' if defined $EPOCH;
 	    $version_chars .= '\-' if $UVERSION ne $SVERSION;
 	    if ($pwd =~ m/^\Q$PACKAGE\E-([0-9][$version_chars]*)$/) {
