@@ -106,12 +106,13 @@ foreach my $filename (@ARGV) {
 	    my $explanation = '';
 	    my %bashisms = (
 		'(?:^|\s+)function\s+\w+' =>   q<'function' is useless>,
+		'(?:^|\s+)select\s+\w+' =>     q<'select' is not POSIX>,
 		'(?:^|\s+)source\s+(?:\.\/|\/|\$)[^\s]+' =>
 		                               q<should be '.', not 'source'>,
 		'(\[|test|-o|-a)\s*[^\s]+\s+==\s' =>
 		                               q<should be 'b = a'>,
 		'\s\|\&' =>                    q<pipelining is not POSIX>,
-		'\$\[\w+\]' =>                 q<arith not allowed>,
+		'\$\[\w+\]' =>                 q<arithmetic not allowed>,
 		'\$\{\w+\:\d+(?::\d+)?\}' =>   q<${foo:3[:1]}>,
 		'\$\{\w+(/.+?){1,2}\}' =>      q<${parm/?/pat[/str]}>,
 		'[^\\\]\{([^\s]+?,)+[^\\\}\s]+\}' =>
