@@ -32,7 +32,8 @@ my $exit_status = 0;
 
 sub usage {
     print <<"EOF";
-Usage: $progname [option] ... deb1 deb2
+Usage: $progname [option]
+   or: $progname [option] ... deb1 deb2
    or: $progname [option] ... changes1 changes2
    or: $progname [option] ... dsc1 dsc2
    or: $progname [option] ... --from deb1a deb1b ... --to deb2a deb2b ...
@@ -231,6 +232,23 @@ while (@ARGV) {
 	# End of command line options
 	last;
     }
+}
+
+my $guessed_version = 0;
+
+# If no file is given, assume that we are in a source directory
+# and try to create a diff with the previous version
+if(@ARGV == 0) {
+    fatal "Can't read file: debian/changelog" unless -r "debian/changelog";
+    open CHL, "debian/changelog";
+    while(<CHL>) {
+	if(/^(.+)\s\((\d+:)?(.+)\)\s(\w+)\;\surgency=.+$/) {
+	    unshift @ARGV, "../".$1."_".$3.".dsc";
+	    $guessed_version++;
+	}
+	last if $guessed_version > 1;
+    }
+    close CHL;
 }
 
 if (! $type) {

@@ -1,8 +1,16 @@
 devscripts (2.9.28) UNRELEASED; urgency=low
 
+  [ Julian Gilbey ]
   * debchange: fix Ubuntu's distro codename check (bash regexp!)
 
- -- Julian Gilbey <jdg@debian.org>  Tue, 19 Dec 2006 20:44:33 +0000
+  [ Mohammed Adnène Trojette ]
+  * Add myself to Uploaders.
+  * Update French manpage translation (Closes: #400568)
+     + Patch from Julien Cristau.
+  * Allow to use debdiff with no argument (Closes: #369691)
+     + Patch from Julien Danjou.
+
+ -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Tue, 20 Feb 2007 20:26:52 +0100
 
 devscripts (2.9.27) unstable; urgency=low
 

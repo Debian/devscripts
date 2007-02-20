@@ -2,6 +2,8 @@
 .SH NAME
 debdiff \- compare file lists in two Debian packages
 .SH SYNOPSIS
+\fBdebdiff\fR [\fIoptions\fR] \fR
+.br
 \fBdebdiff\fR [\fIoptions\fR] ... \fIdeb1 deb2\fR
 .br
 \fBdebdiff\fR [\fIoptions\fR] ... \fIchanges1 changes2\fR
@@ -19,6 +21,9 @@ between the two package files, and is therefore useful for spotting
 files which may have been inadvertently lost between revisions of the
 package.  It also checks the file owners and permissions, and compares
 the control files of the two packages using the \fBwdiff\fR program.
+.PP
+If no arguments are given, \fBdebdiff\fR tries to compare the content
+of the current source directory with the last version of the package.
 .PP
 \fBdebdiff\fR can also handle changes between groups of \fI.deb\fR
 files in two ways.  The first is to specify two \fI.changes\fR files.
