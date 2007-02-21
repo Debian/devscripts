@@ -2,7 +2,7 @@
 # vim:sw=4:sta:
 
 #   dget - Download Debian source and binary packages
-#   Copyright (C) 2005-06 Christoph Berg <myon@debian.org>
+#   Copyright (C) 2005-07 Christoph Berg <myon@debian.org>
 #   Modifications Copyright (C) 2005-06 Julian Gilbey <jdg@debian.org>
 #
 #   This program is free software; you can redistribute it and/or modify
@@ -82,7 +82,7 @@ EOT
 sub version {
     print <<"EOF";
 This is $progname, from the Debian devscripts package, version ###VERSION###
-This code is copyright 2005-06 by Christoph Berg <myon\@debian.org>.
+This code is copyright 2005-07 by Christoph Berg <myon\@debian.org>.
 Modifications copyright 2005-06 by Julian Gilbey <jdg\@debian.org>.
 All rights reserved.
 This program comes with ABSOLUTELY NO WARRANTY.
@@ -181,8 +181,27 @@ sub get_file {
 	if (wget($file, "$dir/$file")) {
 	    warn "$progname: $wget $file $dir/$file failed\n";
 	    unlink $file;
-	    return 0;
 	}
+    }
+
+    # try apt-get if it is still not there
+    if (not -e $file and $file =~ m!^([a-z0-9.+-]{2,})_[^/]+\.(?:diff\.gz|tar\.gz)$!) {
+	my $cmd = "apt-get source --print-uris $1";
+	my $apt = new IO::File("$cmd |") or die "$cmd: $!";
+	while(<$apt>) {
+	    if (/'(\S+)'\s+\S+\s+\d+\s+([\da-f]+)/i and $2 eq $md5sum) {
+		if (wget($file, $1)) {
+		    warn "$progname: $wget $file $1 failed\n";
+		    unlink $file;
+		}
+	    }
+	}
+	close $apt;
+    }
+
+    # still not there, return
+    unless (-e $file) {
+	return 0;
     }
 
     if ($file =~ /\.(?:changes|dsc)$/) {
@@ -433,10 +452,11 @@ Before downloading files listed in .dsc and .changes files, and before
 downloading binary packages, B<dget> checks to see whether any of
 these files already exist.  If they do, then their md5sums are
 compared to avoid downloading them again unnecessarily.  B<dget> also
-looks for matching files in B</var/cache/apt/archives> and directories
+looks for matching files in I</var/cache/apt/archives> and directories
 given by the B<--path> option or specified in the configuration files
-(see below).  Download backends used are B<curl> and B<wget>, looked
-for in that order.
+(see below).  Finally, if downloading (.orig).tar.gz or .diff.gz files
+fails, dget consults B<apt-get source --print-uris>.  Download backends
+used are B<curl> and B<wget>, looked for in that order.
 
 B<dget> was written to make it easier to retrieve source packages from
 the web for sponsor uploads.  For checking the package with
@@ -516,7 +536,7 @@ B<dget> I<package> should be implemented in B<apt-get install -d>.
 
 =head1 AUTHOR
 
-This program is Copyright (C) 2005-06 by Christoph Berg <myon@debian.org>.
+This program is Copyright (C) 2005-07 by Christoph Berg <myon@debian.org>.
 Modifications are Copyright (C) 2005-06 by Julian Gilbey <jdg@debian.org>.
 
 This program is licensed under the terms of the GPL, either version 2
