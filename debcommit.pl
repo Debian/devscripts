@@ -257,7 +257,7 @@ sub getmessage {
 	if ($prog eq 'tla' || $prog eq 'baz') {
 	    @diffcmd = ($prog, 'file-diff');
 	} elsif ($prog eq 'git') {
-	    @diffcmd = ('git-diff', '--cached');
+	    @diffcmd = ('git-diff', 'HEAD');
 	} else {
 	    @diffcmd = ($prog, 'diff');
 	}

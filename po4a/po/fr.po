@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2006-11-08 20:40+0000\n"
-"PO-Revision-Date: 2006-11-27 09:30+0100"
+"POT-Creation-Date: 2007-02-20 21:59+0100\n"
+"PO-Revision-Date: 2006-11-27 09:30+0100\n"
 "Last-Translator: Julien Cristau <julien.cristau@ens-lyon.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "MIME-Version: 1.0\n"
@@ -57,7 +57,7 @@ msgstr "DEBIAN"
 #: ../dd-list.1:19 ../debc.1:2 ../debchange.1:2 ../debclean.1:2
 #: ../debcommit.pl:3 ../debdiff.1:2 ../debi.1:2 ../debpkg.1:2
 #: ../debrelease.1:2 ../debrsign.1:2 ../debsign.1:2 ../debuild.1:2
-#: ../devscripts.1:2 ../dget.pl:295 ../dpkg-depcheck.1:2
+#: ../devscripts.1:2 ../dget.pl:403 ../dpkg-depcheck.1:2
 #: ../dpkg-genbuilddeps.1:2 ../dscverify.1:2 ../grep-excuses.1:2
 #: ../mass-bug.pl:22 ../mergechanges.1:2 ../nmudiff.1:2 ../plotchangelog.1:2
 #: ../pts-subscribe.1:2 ../rc-alert.1:2 ../rmadison.pl:113 ../svnpath.pl:3
@@ -79,7 +79,7 @@ msgstr ""
 #: ../dd-list.1:22 ../debc.1:4 ../debchange.1:4 ../debclean.1:4
 #: ../debcommit.pl:7 ../debdiff.1:4 ../debi.1:4 ../debpkg.1:4
 #: ../debrelease.1:4 ../debrsign.1:4 ../debsign.1:4 ../debuild.1:4
-#: ../dget.pl:299 ../dpkg-depcheck.1:4 ../dpkg-genbuilddeps.1:4
+#: ../dget.pl:407 ../dpkg-depcheck.1:4 ../dpkg-genbuilddeps.1:4
 #: ../dscverify.1:4 ../grep-excuses.1:4 ../mass-bug.pl:26 ../mergechanges.1:4
 #: ../nmudiff.1:4 ../plotchangelog.1:4 ../pts-subscribe.1:4 ../rc-alert.1:4
 #: ../rmadison.pl:117 ../svnpath.pl:7 ../tagpending.1:4 ../uscan.1:4
@@ -97,9 +97,9 @@ msgstr "B<annotate-output> I<programme> [I<paramètres> ...]"
 #: ../annotate-output.1:6 ../archpath.1:12 ../bts.pl:133 ../checkbashisms.1:8
 #: ../cvs-debc.1:6 ../cvs-debi.1:6 ../cvs-debrelease.1:7 ../cvs-debuild.1:8
 #: ../dd-list.1:26 ../debc.1:6 ../debchange.1:8 ../debclean.1:6
-#: ../debcommit.pl:11 ../debdiff.1:13 ../debi.1:6 ../debpkg.1:6
+#: ../debcommit.pl:11 ../debdiff.1:15 ../debi.1:6 ../debpkg.1:6
 #: ../debrelease.1:6 ../deb-reversion.dbk:82 ../debrsign.1:7 ../debsign.1:6
-#: ../debuild.1:11 ../devscripts.1:4 ../dget.pl:309 ../dpkg-depcheck.1:6
+#: ../debuild.1:11 ../devscripts.1:4 ../dget.pl:417 ../dpkg-depcheck.1:6
 #: ../dpkg-genbuilddeps.1:6 ../dscverify.1:6 ../grep-excuses.1:6
 #: ../mass-bug.pl:30 ../mergechanges.1:6 ../nmudiff.1:6 ../plotchangelog.1:7
 #: ../pts-subscribe.1:6 ../rc-alert.1:8 ../rmadison.pl:125 ../svnpath.pl:17
@@ -146,7 +146,7 @@ msgstr ""
 "21:43:19 I: terminé avec un code de sortie 2\n"
 
 # type: =head1
-#: ../annotate-output.1:23 ../dget.pl:366 ../whodepends.1:17
+#: ../annotate-output.1:23 ../dget.pl:513 ../whodepends.1:17
 #, no-wrap
 msgid "BUGS"
 msgstr "BOGUES"
@@ -247,11 +247,11 @@ msgstr ""
 #: ../annotate-output.1:55 ../archpath.1:54 ../checkbashisms.1:34
 #: ../cvs-debc.1:64 ../cvs-debi.1:68 ../cvs-debrelease.1:69
 #: ../cvs-debuild.1:63 ../dd-list.1:82 ../debc.1:119 ../debchange.1:335
-#: ../debclean.1:108 ../debcommit.pl:291 ../debdiff.1:167 ../debi.1:120
-#: ../debpkg.1:23 ../debrelease.1:137 ../deb-reversion.dbk:254
-#: ../debrsign.1:71 ../debsign.1:128 ../debuild.1:413 ../dget.pl:370
+#: ../debclean.1:108 ../debcommit.pl:291 ../debdiff.1:172 ../debi.1:120
+#: ../debpkg.1:23 ../debrelease.1:137 ../deb-reversion.dbk:278
+#: ../debrsign.1:71 ../debsign.1:128 ../debuild.1:413 ../dget.pl:517
 #: ../dpkg-genbuilddeps.1:36 ../dscverify.1:44 ../grep-excuses.1:36
-#: ../mass-bug.pl:421 ../mergechanges.1:17 ../nmudiff.1:79
+#: ../mass-bug.pl:421 ../mergechanges.1:17 ../nmudiff.1:97
 #: ../plotchangelog.1:126 ../pts-subscribe.1:51 ../rc-alert.1:29
 #: ../rmadison.pl:188 ../svnpath.pl:97 ../tagpending.1:37 ../uscan.1:488
 #: ../uupdate.1:167 ../whodepends.1:19 ../who-uploads.1:58 ../wnpp-alert.1:19
@@ -552,10 +552,10 @@ msgstr ""
 # type: SH
 #: ../bts.pl:182 ../checkbashisms.1:14 ../cvs-debc.1:24 ../cvs-debi.1:28
 #: ../cvs-debrelease.1:21 ../cvs-debuild.1:33 ../dd-list.1:58 ../debc.1:63
-#: ../debchange.1:145 ../debclean.1:60 ../debcommit.pl:18 ../debdiff.1:45
+#: ../debchange.1:145 ../debclean.1:60 ../debcommit.pl:18 ../debdiff.1:50
 #: ../debi.1:65 ../debrelease.1:56 ../deb-reversion.dbk:128 ../debrsign.1:30
-#: ../debsign.1:39 ../debuild.1:210 ../dget.pl:335 ../dpkg-depcheck.1:15
-#: ../dscverify.1:15 ../grep-excuses.1:13 ../mass-bug.pl:52 ../nmudiff.1:16
+#: ../debsign.1:39 ../debuild.1:210 ../dget.pl:446 ../dpkg-depcheck.1:15
+#: ../dscverify.1:15 ../grep-excuses.1:13 ../mass-bug.pl:52 ../nmudiff.1:21
 #: ../plotchangelog.1:43 ../pts-subscribe.1:13 ../rc-alert.1:17
 #: ../rmadison.pl:134 ../tagpending.1:12 ../uscan.1:325 ../uupdate.1:50
 #: ../whodepends.1:10 ../who-uploads.1:15 ../wnpp-alert.1:12
@@ -764,9 +764,9 @@ msgstr "--no-conf, --noconf"
 
 # type: Plain text
 #: ../bts.pl:261 ../cvs-debrelease.1:61 ../debc.1:88 ../debchange.1:272
-#: ../debclean.1:81 ../debdiff.1:118 ../debi.1:90 ../debrelease.1:99
+#: ../debclean.1:81 ../debdiff.1:123 ../debi.1:90 ../debrelease.1:99
 #: ../debsign.1:93 ../debuild.1:216 ../dpkg-depcheck.1:96 ../dscverify.1:23
-#: ../grep-excuses.1:18 ../mass-bug.pl:81 ../nmudiff.1:53 ../uscan.1:406
+#: ../grep-excuses.1:18 ../mass-bug.pl:81 ../nmudiff.1:63 ../uscan.1:406
 #: ../uupdate.1:80 ../who-uploads.1:36
 msgid ""
 "Do not read any configuration files.  This can only be used as the first "
@@ -1553,8 +1553,8 @@ msgid ""
 "several people or packages. The cached bugs are stored in ~/."
 "devscripts_cache/bts/"
 msgstr ""
-"Générer ou mettre en cache des rapports de bogue pour l'adresse de "
-"courriel ou le paquet spécifié. Par défaut, ceci télécharge tous les bogues "
+"Générer ou mettre en cache des rapports de bogue pour l'adresse de courriel "
+"ou le paquet spécifié. Par défaut, ceci télécharge tous les bogues "
 "appartenant à l'adresse de courriel stockée dans la variable d'environnement "
 "DEBEMAIL (ou dans la variable d'environnement EMAIL si DEBEMAIL n'est pas "
 "positionnée). Cette commande peut être répétée pour mettre en cache des "
@@ -1749,9 +1749,9 @@ msgstr ""
 
 # type: SH
 #: ../bts.pl:2719 ../debc.1:91 ../debchange.1:283 ../debclean.1:87
-#: ../debdiff.1:127 ../debi.1:93 ../debrelease.1:105 ../debrsign.1:57
-#: ../debsign.1:99 ../debuild.1:276 ../dpkg-depcheck.1:102 ../dscverify.1:29
-#: ../grep-excuses.1:24 ../mass-bug.pl:101 ../nmudiff.1:59
+#: ../debdiff.1:132 ../debi.1:93 ../debrelease.1:105 ../debrsign.1:57
+#: ../debsign.1:99 ../debuild.1:276 ../dget.pl:494 ../dpkg-depcheck.1:102
+#: ../dscverify.1:29 ../grep-excuses.1:24 ../mass-bug.pl:101 ../nmudiff.1:69
 #: ../plotchangelog.1:106 ../pts-subscribe.1:37 ../uscan.1:412 ../uupdate.1:86
 #: ../who-uploads.1:42
 #, no-wrap
@@ -1867,7 +1867,7 @@ msgid "BTS_SENDMAIL_COMMAND"
 msgstr "BTS_SENDMAIL_COMMAND"
 
 # type: textblock
-#: ../bts.pl:2765 ../mass-bug.pl:113 ../nmudiff.1:74
+#: ../bts.pl:2765 ../mass-bug.pl:113 ../nmudiff.1:92
 msgid ""
 "If this is set, specifies a sendmail command to use instead of /usr/sbin/"
 "sendmail.  Same as the --sendmail command line option."
@@ -1939,7 +1939,7 @@ msgstr ""
 "lorsqu'une telle construction est détectée."
 
 # type: TP
-#: ../checkbashisms.1:15 ../debchange.1:277 ../debdiff.1:118
+#: ../checkbashisms.1:15 ../debchange.1:277 ../debdiff.1:123
 #: ../debrelease.1:99 ../debsign.1:93 ../dscverify.1:23 ../pts-subscribe.1:23
 #: ../rc-alert.1:21 ../uupdate.1:80 ../who-uploads.1:36 ../wnpp-alert.1:13
 #, no-wrap
@@ -1947,24 +1947,24 @@ msgid "B<--help>, B<-h>"
 msgstr "B<--help>, B<-h>"
 
 # type: Plain text
-#: ../checkbashisms.1:18 ../debdiff.1:121 ../rc-alert.1:24 ../wnpp-alert.1:16
+#: ../checkbashisms.1:18 ../debdiff.1:126 ../rc-alert.1:24 ../wnpp-alert.1:16
 msgid "Show a summary of options."
 msgstr "Affiche un résumé des options."
 
 # type: TP
-#: ../checkbashisms.1:18 ../debdiff.1:121 ../rc-alert.1:24 ../wnpp-alert.1:16
+#: ../checkbashisms.1:18 ../debdiff.1:126 ../rc-alert.1:24 ../wnpp-alert.1:16
 #, no-wrap
 msgid "B<--version>, B<-v>"
 msgstr "B<--version>, B<-v>"
 
 # type: Plain text
-#: ../checkbashisms.1:21 ../debdiff.1:124 ../grep-excuses.1:24
+#: ../checkbashisms.1:21 ../debdiff.1:129 ../grep-excuses.1:24
 #: ../rc-alert.1:27 ../tagpending.1:32 ../whodepends.1:17 ../wnpp-alert.1:19
 msgid "Show version and copyright information."
 msgstr "Affiche la version et le copyright."
 
 # type: SH
-#: ../checkbashisms.1:21 ../debdiff.1:155
+#: ../checkbashisms.1:21 ../debdiff.1:160
 #, no-wrap
 msgid "EXIT VALUES"
 msgstr "VALEURS DE RETOUR"
@@ -2008,10 +2008,10 @@ msgstr ""
 # type: SH
 #: ../checkbashisms.1:32 ../cvs-debc.1:58 ../cvs-debi.1:62
 #: ../cvs-debrelease.1:64 ../cvs-debuild.1:56 ../debc.1:114 ../debchange.1:328
-#: ../debclean.1:104 ../debdiff.1:161 ../debi.1:116 ../debrelease.1:132
-#: ../deb-reversion.dbk:209 ../debrsign.1:66 ../debsign.1:118 ../debuild.1:399
-#: ../dget.pl:378 ../dpkg-depcheck.1:118 ../dpkg-genbuilddeps.1:30
-#: ../dscverify.1:40 ../grep-excuses.1:34 ../nmudiff.1:74
+#: ../debclean.1:104 ../debdiff.1:166 ../debi.1:116 ../debrelease.1:132
+#: ../deb-reversion.dbk:233 ../debrsign.1:66 ../debsign.1:118 ../debuild.1:399
+#: ../dget.pl:525 ../dpkg-depcheck.1:118 ../dpkg-genbuilddeps.1:30
+#: ../dscverify.1:40 ../grep-excuses.1:34 ../nmudiff.1:92
 #: ../plotchangelog.1:124 ../pts-subscribe.1:46 ../rc-alert.1:27
 #: ../rmadison.pl:184 ../tagpending.1:32 ../uscan.1:482 ../uupdate.1:160
 #: ../devscripts.conf.5:54
@@ -2367,9 +2367,9 @@ msgstr ""
 
 # type: TP
 #: ../cvs-debrelease.1:57 ../debc.1:84 ../debchange.1:268 ../debclean.1:77
-#: ../debdiff.1:114 ../debi.1:86 ../debrelease.1:95 ../debsign.1:89
+#: ../debdiff.1:119 ../debi.1:86 ../debrelease.1:95 ../debsign.1:89
 #: ../dpkg-depcheck.1:92 ../dscverify.1:19 ../grep-excuses.1:14
-#: ../nmudiff.1:49 ../uscan.1:402 ../uupdate.1:76 ../who-uploads.1:32
+#: ../nmudiff.1:59 ../uscan.1:402 ../uupdate.1:76 ../who-uploads.1:32
 #, no-wrap
 msgid "B<--no-conf>, B<--noconf>"
 msgstr "B<--no-conf>, B<--noconf>"
@@ -2940,7 +2940,7 @@ msgstr "B<--check-dirname-regex> I<regex>"
 # NOTE: et --noconf ?
 # type: Plain text
 #: ../debc.1:97 ../debchange.1:289 ../debclean.1:93 ../debi.1:99
-#: ../debrelease.1:111 ../debrsign.1:63 ../debsign.1:105 ../nmudiff.1:65
+#: ../debrelease.1:111 ../debrsign.1:63 ../debsign.1:105 ../nmudiff.1:75
 #: ../pts-subscribe.1:43 ../uupdate.1:92 ../who-uploads.1:48
 msgid ""
 "The two configuration files I</etc/devscripts.conf> and I<~/.devscripts> are "
@@ -3683,14 +3683,14 @@ msgstr ""
 
 # type: Plain text
 #: ../debchange.1:280 ../debclean.1:84 ../debrelease.1:102 ../debsign.1:96
-#: ../dscverify.1:26 ../nmudiff.1:56 ../pts-subscribe.1:26 ../uupdate.1:83
+#: ../dscverify.1:26 ../nmudiff.1:66 ../pts-subscribe.1:26 ../uupdate.1:83
 #: ../who-uploads.1:39
 msgid "Display a help message and exit successfully."
 msgstr "Affiche un message d'aide et quitte avec succès."
 
 # type: TP
 #: ../debchange.1:280 ../debclean.1:84 ../debrelease.1:102 ../debsign.1:96
-#: ../dscverify.1:26 ../grep-excuses.1:21 ../nmudiff.1:56
+#: ../dscverify.1:26 ../grep-excuses.1:21 ../nmudiff.1:66
 #: ../plotchangelog.1:95 ../pts-subscribe.1:26 ../rmadison.pl:175
 #: ../uscan.1:409 ../uupdate.1:83 ../who-uploads.1:39
 #, no-wrap
@@ -3699,7 +3699,7 @@ msgstr "B<--version>"
 
 # type: Plain text
 #: ../debchange.1:283 ../debclean.1:87 ../debrelease.1:105 ../debsign.1:99
-#: ../dscverify.1:29 ../nmudiff.1:59 ../pts-subscribe.1:29 ../uupdate.1:86
+#: ../dscverify.1:29 ../nmudiff.1:69 ../pts-subscribe.1:29 ../uupdate.1:86
 #: ../who-uploads.1:42
 msgid "Display version and copyright information and exit successfully."
 msgstr "Affiche la version et le copyright, puis quitte avec succès."
@@ -3953,7 +3953,7 @@ msgstr ""
 "C'est le comportement par défaut."
 
 # type: TP
-#: ../debclean.1:81 ../grep-excuses.1:18 ../nmudiff.1:53 ../plotchangelog.1:92
+#: ../debclean.1:81 ../grep-excuses.1:18 ../nmudiff.1:63 ../plotchangelog.1:92
 #: ../uscan.1:406
 #, no-wrap
 msgid "B<--help>"
@@ -4094,16 +4094,22 @@ msgstr "debdiff - Comparer la liste des fichiers de deux paquets Debian"
 
 # type: Plain text
 #: ../debdiff.1:6
+#, fuzzy
+msgid "B<debdiff> [I<options>]"
+msgstr "B<nmudiff> [I<options>]"
+
+# type: Plain text
+#: ../debdiff.1:8
 msgid "B<debdiff> [I<options>] ... I<deb1 deb2>"
 msgstr "B<debdiff> [I<options>] ... I<deb1 deb2>"
 
 # type: Plain text
-#: ../debdiff.1:8
+#: ../debdiff.1:10
 msgid "B<debdiff> [I<options>] ... I<changes1 changes2>"
 msgstr "B<debdiff> [I<options>] ... I<changes1 changes2>"
 
 # type: Plain text
-#: ../debdiff.1:11
+#: ../debdiff.1:13
 msgid ""
 "B<debdiff> [I<options>] ... B<--from >I<deb1a deb1b ...  >B<--to >I<deb2a "
 "deb2b ...>"
@@ -4112,12 +4118,12 @@ msgstr ""
 "deb2b ...>"
 
 # type: Plain text
-#: ../debdiff.1:13
+#: ../debdiff.1:15
 msgid "B<debdiff> [I<options>] ... I<dsc1 dsc2>"
 msgstr "B<debdiff> [I<options>] ... I<dsc1 dsc2>"
 
 # type: Plain text
-#: ../debdiff.1:22
+#: ../debdiff.1:24
 msgid ""
 "B<debdiff> takes the names of two Debian package files (I<.deb>s or I<."
 "udeb>s) on the command line and compares their contents (considering only "
@@ -4138,7 +4144,14 @@ msgstr ""
 "B<wdiff>."
 
 # type: Plain text
-#: ../debdiff.1:33
+#: ../debdiff.1:27
+msgid ""
+"If no arguments are given, B<debdiff> tries to compare the content of the "
+"current source directory with the last version of the package."
+msgstr ""
+
+# type: Plain text
+#: ../debdiff.1:38
 msgid ""
 "B<debdiff> can also handle changes between groups of I<.deb> files in two "
 "ways.  The first is to specify two I<.changes> files.  In this case, the I<."
@@ -4161,7 +4174,7 @@ msgstr ""
 "paquets plus petits, rien n'est perdu au passage."
 
 # type: Plain text
-#: ../debdiff.1:37
+#: ../debdiff.1:42
 msgid ""
 "B<debdiff> examines the B<devscripts> configuration files as described "
 "below.  Command line options override the configuration file settings, "
@@ -4172,7 +4185,7 @@ msgstr ""
 "les paramètres des fichiers de configuration."
 
 # type: Plain text
-#: ../debdiff.1:45
+#: ../debdiff.1:50
 msgid ""
 "If B<debdiff> is passed two source packages (I<.dsc> files) it will compare "
 "the contents of the source packages.  If the source packages differ only in "
@@ -4190,13 +4203,13 @@ msgstr ""
 "arborescences des sources."
 
 # type: TP
-#: ../debdiff.1:46
+#: ../debdiff.1:51
 #, no-wrap
 msgid "B<--dirs>, B<-d>"
 msgstr "B<--dirs>, B<-d>"
 
 # type: Plain text
-#: ../debdiff.1:51
+#: ../debdiff.1:56
 msgid ""
 "The default mode of operation is to ignore directory names which appear in "
 "the file list, but they, too, will be considered if this option is given."
@@ -4206,13 +4219,13 @@ msgstr ""
 "pris en compte."
 
 # type: TP
-#: ../debdiff.1:51
+#: ../debdiff.1:56
 #, no-wrap
 msgid "B<--nodirs>"
 msgstr "B<--nodirs>"
 
 # type: Plain text
-#: ../debdiff.1:55
+#: ../debdiff.1:60
 msgid ""
 "Ignore directory names which appear in the file list.  This is the default "
 "and it can be used to override a configuration file setting."
@@ -4222,13 +4235,13 @@ msgstr ""
 "paramètre d'un fichier de configuration."
 
 # type: TP
-#: ../debdiff.1:55
+#: ../debdiff.1:60
 #, no-wrap
 msgid "B<--move>I< FROM TO>,B< -m>I< FROM TO>"
 msgstr "B<--move> I<DEPUIS VERS>, B<-m> I<DEPUIS VERS>"
 
 # type: Plain text
-#: ../debdiff.1:65
+#: ../debdiff.1:70
 msgid ""
 "It sometimes occurs that various files or directories are moved around "
 "between revisions.  This can be handled using this option.  There are two "
@@ -4249,13 +4262,13 @@ msgstr ""
 "ils sont interprétés dans l'ordre d'apparition."
 
 # type: TP
-#: ../debdiff.1:65
+#: ../debdiff.1:70
 #, no-wrap
 msgid "B<--move-regex>I< FROM TO>"
 msgstr "B<--move-regex> I<DEPUIS VERS>"
 
 # type: Plain text
-#: ../debdiff.1:71
+#: ../debdiff.1:76
 msgid ""
 "This is the same as B<--move>, except that I<FROM> is treated as a regular "
 "expression and the B<perl> substitution command I<s/^FROM/TO/> is applied to "
@@ -4267,13 +4280,13 @@ msgstr ""
 "arrières telles que $1."
 
 # type: TP
-#: ../debdiff.1:71
+#: ../debdiff.1:76
 #, no-wrap
 msgid "B<--nocontrol>"
 msgstr "B<--nocontrol>"
 
 # type: Plain text
-#: ../debdiff.1:76
+#: ../debdiff.1:81
 msgid ""
 "B<debdiff> will usually compare the respective control files of the packages "
 "using B<wdiff>(1).  This option suppresses this part of the processing."
@@ -4282,13 +4295,13 @@ msgstr ""
 "B<wdiff>(1). Cette option permet de désactiver cette fonctionnalité."
 
 # type: TP
-#: ../debdiff.1:76
+#: ../debdiff.1:81
 #, no-wrap
 msgid "B<--control>"
 msgstr "B<--control>"
 
 # type: Plain text
-#: ../debdiff.1:80
+#: ../debdiff.1:85
 msgid ""
 "Compare the respective control files; this is the default, and it can be "
 "used to override a configuration file setting."
@@ -4298,13 +4311,13 @@ msgstr ""
 "configuration."
 
 # type: TP
-#: ../debdiff.1:80
+#: ../debdiff.1:85
 #, no-wrap
 msgid "B<--controlfiles>I< FILE,FILE,...>"
 msgstr "B<--controlfiles> I<FICHIER,FICHIER,...>"
 
 # type: Plain text
-#: ../debdiff.1:88
+#: ../debdiff.1:93
 msgid ""
 "Specify which control files to compare; by default this is just I<control>, "
 "but could include I<postinst>, I<config> and so on.  Files will only be "
@@ -4320,13 +4333,13 @@ msgstr ""
 "pour remplacer les paramètres du fichier de configuration."
 
 # type: TP
-#: ../debdiff.1:88
+#: ../debdiff.1:93
 #, no-wrap
 msgid "B<--wp>, B<--wl>, B<--wt>"
 msgstr "B<--wp>, B<--wl>, B<--wt>"
 
 # type: Plain text
-#: ../debdiff.1:93
+#: ../debdiff.1:98
 msgid ""
 "Pass a B<-p>, B<-l> or B<-t> option to B<wdiff> respectively.  (This yields "
 "the whole B<wdiff> output rather than just the lines with any changes.)"
@@ -4335,13 +4348,13 @@ msgstr ""
 "affiche le B<wdiff> complet, plutôt que juste les lignes modifiées.)"
 
 # type: TP
-#: ../debdiff.1:93
+#: ../debdiff.1:98
 #, no-wrap
 msgid "B<--show-moved>"
 msgstr "B<--show-moved>"
 
 # type: Plain text
-#: ../debdiff.1:100
+#: ../debdiff.1:105
 msgid ""
 "If multiple I<.deb> files are specified on the command line, either using I<."
 "changes> files or the B<--from>/B<--to> syntax, then this option will also "
@@ -4355,13 +4368,13 @@ msgstr ""
 "déterminés par les noms des fichiers I<.deb>."
 
 # type: TP
-#: ../debdiff.1:100
+#: ../debdiff.1:105
 #, no-wrap
 msgid "B<--noshow-moved>"
 msgstr "B<--noshow-moved>"
 
 # type: Plain text
-#: ../debdiff.1:104
+#: ../debdiff.1:109
 msgid ""
 "The default behaviour; can be used to override a configuration file setting."
 msgstr ""
@@ -4369,13 +4382,13 @@ msgstr ""
 "d'un fichier de configuration."
 
 # type: TP
-#: ../debdiff.1:104
+#: ../debdiff.1:109
 #, no-wrap
 msgid "B<--renamed>I< FROM TO>"
 msgstr "B<--renamed> I<DEPUIS VERS>"
 
 # type: Plain text
-#: ../debdiff.1:110
+#: ../debdiff.1:115
 msgid ""
 "If B<--show-moved> is being used and a package has been renamed in the "
 "process, this command instructs B<debdiff> to treat the package in the first "
@@ -4388,13 +4401,13 @@ msgstr ""
 "option peut être utilisée plusieurs fois."
 
 # type: TP
-#: ../debdiff.1:110
+#: ../debdiff.1:115
 #, no-wrap
 msgid "B<--exclude>I< PATTERN>"
 msgstr "B<--exclude> I<MOTIF>"
 
 # type: Plain text
-#: ../debdiff.1:114
+#: ../debdiff.1:119
 msgid ""
 "Exclude files that match I<PATTERN>.  Multiple uses of this option are "
 "permitted."
@@ -4403,19 +4416,19 @@ msgstr ""
 "cette option est possible."
 
 # type: TP
-#: ../debdiff.1:124
+#: ../debdiff.1:129
 #, no-wrap
 msgid "B<--quiet>, B<-q>"
 msgstr "B<--quiet>, B<-q>"
 
 # type: Plain text
-#: ../debdiff.1:127
+#: ../debdiff.1:132
 msgid "Be quiet if no differences were found."
 msgstr "Reste silencieux si aucune différence n'est trouvée."
 
 # NOTE: presque identique
 # type: Plain text
-#: ../debdiff.1:133
+#: ../debdiff.1:138
 msgid ""
 "The two configuration files I</etc/devscripts.conf> and I<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  Command "
@@ -4433,13 +4446,13 @@ msgstr ""
 "actuellement identifiées sont :"
 
 # type: TP
-#: ../debdiff.1:133
+#: ../debdiff.1:138
 #, no-wrap
 msgid "B<DEBDIFF_DIRS>"
 msgstr "B<DEBDIFF_DIRS>"
 
 # type: Plain text
-#: ../debdiff.1:137
+#: ../debdiff.1:142
 msgid ""
 "If this is set to I<yes>, then it is the same as the B<--dirs> command line "
 "parameter being used."
@@ -4447,13 +4460,13 @@ msgstr ""
 "Si elle est positionnée à I<yes>, équivaut à utiliser l'option B<--dirs>."
 
 # type: TP
-#: ../debdiff.1:137
+#: ../debdiff.1:142
 #, no-wrap
 msgid "B<DEBDIFF_CONTROL>"
 msgstr "B<DEBDIFF_CONTROL>"
 
 # type: Plain text
-#: ../debdiff.1:142
+#: ../debdiff.1:147
 msgid ""
 "If this is set to I<no>, then it is the same as the B<--nocontrol> command "
 "line parameter being used.  The default is I<yes>."
@@ -4462,13 +4475,13 @@ msgstr ""
 "nocontrol>. La valeur par défaut est I<yes>."
 
 # type: TP
-#: ../debdiff.1:142
+#: ../debdiff.1:147
 #, no-wrap
 msgid "B<DEBDIFF_CONTROLFILES>"
 msgstr "B<DEBDIFF_CONTROLFILES>"
 
 # type: Plain text
-#: ../debdiff.1:147
+#: ../debdiff.1:152
 msgid ""
 "Which control files to compare, corresponding to the B<--controlfiles> "
 "command line option.  The default is I<control>."
@@ -4477,13 +4490,13 @@ msgstr ""
 "de commande B<--controlfiles>. La valeur par défaut est I<control>."
 
 # type: TP
-#: ../debdiff.1:147
+#: ../debdiff.1:152
 #, no-wrap
 msgid "B<DEBDIFF_SHOW_MOVED>"
 msgstr "B<DEBDIFF_SHOW_MOVED>"
 
 # type: Plain text
-#: ../debdiff.1:151
+#: ../debdiff.1:156
 msgid ""
 "If this is set to I<yes>, then it is the same as the B<--show-moved> command "
 "line parameter being used."
@@ -4492,13 +4505,13 @@ msgstr ""
 "moved>."
 
 # type: TP
-#: ../debdiff.1:151
+#: ../debdiff.1:156
 #, no-wrap
 msgid "B<DEBDIFF_WDIFF_OPT>"
 msgstr "B<DEBDIFF_WDIFF_OPT>"
 
 # type: Plain text
-#: ../debdiff.1:155
+#: ../debdiff.1:160
 msgid ""
 "This option will be passed to B<wdiff>; it should be one of B<-p>, B<-l> or "
 "B<-t>."
@@ -4507,7 +4520,7 @@ msgstr ""
 "ou B<-t>."
 
 # type: Plain text
-#: ../debdiff.1:161
+#: ../debdiff.1:166
 msgid ""
 "Normally the exit value will be 0 if no differences are reported and 1 if "
 "any are reported.  If there is some fatal error, the exit code will be non-"
@@ -4522,13 +4535,13 @@ msgstr ""
 "sera 255."
 
 # type: Plain text
-#: ../debdiff.1:167
+#: ../debdiff.1:172
 msgid ""
 "B<dpkg-deb>(1), B<wdiff>(1), B<interdiff>(1)  and B<devscripts.conf>(5)."
 msgstr "B<dpkg-deb>(1), B<wdiff>(1), B<interdiff>(1) et B<devscripts.conf>(5)."
 
 # type: Plain text
-#: ../debdiff.1:172
+#: ../debdiff.1:177
 msgid ""
 "B<debdiff> was originally written as a shell script by Yann Dirson "
 "E<lt>dirson@debian.orgE<gt> and rewritten in Perl with many more features by "
@@ -4941,21 +4954,13 @@ msgstr "&dhcommand;"
 msgid "simple script to change the version of a .deb file."
 msgstr "script pour changer la version d'un fichier .deb"
 
-# type: Content of: <refentry><refsynopsisdiv><cmdsynopsis><arg>
-#: ../deb-reversion.dbk:72
-msgid "<command>&dhcommand;</command> <arg choice=\"opt\"> -"
-msgstr "<command>&dhcommand;</command> <arg choice=\"opt\"> -"
-
-# type: Content of: <refentry><refsynopsisdiv><cmdsynopsis><arg><option>
-#: ../deb-reversion.dbk:74
-msgid "vckDh"
-msgstr "vckDh"
-
 # type: Content of: <refentry><refsynopsisdiv><cmdsynopsis>
-#: ../deb-reversion.dbk:75
+#: ../deb-reversion.dbk:72
+#, fuzzy
 msgid ""
-"</arg> <replaceable> .deb-file</replaceable> <arg choice=\"opt\" rep=\"repeat"
-"\">log message</arg>"
+"<command>&dhcommand;</command> <arg choice=\"opt\"> <replaceable>options</"
+"replaceable> </arg> <replaceable> .deb-file</replaceable> <arg choice=\"opt"
+"\" rep=\"repeat\">log message</arg>"
 msgstr ""
 "</arg> <replaceable> .deb-file</replaceable> <arg choice=\"opt\" rep=\"repeat"
 "\">message de journalisation</arg>"
@@ -4998,7 +5003,7 @@ msgstr ""
 "l'option"
 
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: ../deb-reversion.dbk:98 ../deb-reversion.dbk:145
+#: ../deb-reversion.dbk:98 ../deb-reversion.dbk:157
 msgid "-c"
 msgstr "-c"
 
@@ -5058,17 +5063,22 @@ msgstr ""
 "commande crochet doit être placée entre guillemets s'il y a plus d'un mot ; "
 "elle est appelée avec la commande <command>sh -c</command>."
 
-# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: ../deb-reversion.dbk:131
-msgid "-v <replaceable class=\"parameter\">new-version</replaceable>"
-msgstr "-v <replaceable class=\"parameter\">nouvelle-version</replaceable>"
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><option>
+#: ../deb-reversion.dbk:131 ../deb-reversion.dbk:163
+msgid "-v"
+msgstr "-v"
 
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: ../deb-reversion.dbk:131 ../deb-reversion.dbk:132
+#, fuzzy
+msgid "<replaceable class=\"parameter\">new-version</replaceable>"
+msgstr "-v <replaceable class=\"parameter\">nouvelle-version</replaceable>"
+
+# type: TP
 #: ../deb-reversion.dbk:132
-msgid ""
-"--new-version <replaceable class=\"parameter\">new-version</replaceable>"
-msgstr ""
-"--new-version <replaceable class=\"parameter\">nouvelle-version</replaceable>"
+#, fuzzy
+msgid "--new-version"
+msgstr "--version"
 
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: ../deb-reversion.dbk:135
@@ -5081,13 +5091,37 @@ msgstr ""
 "<citerefentry> <refentrytitle>dch</refentrytitle> <manvolnum>1</manvolnum> </"
 "citerefentry>."
 
-# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../deb-reversion.dbk:145
+msgid "-o"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><para><option>
+#: ../deb-reversion.dbk:145 ../deb-reversion.dbk:146
+#, fuzzy
+msgid "<replaceable class=\"parameter\">old-version</replaceable>"
+msgstr "-v <replaceable class=\"parameter\">version</replaceable>"
+
+# type: TP
 #: ../deb-reversion.dbk:146
+#, fuzzy
+msgid "--old-version"
+msgstr "--version"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../deb-reversion.dbk:149
+msgid ""
+"Specifies the version number to be used as the old version instead of the "
+"version stored in the .deb's control file."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: ../deb-reversion.dbk:158
 msgid "--calculate-only"
 msgstr "--calculate-only"
 
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: ../deb-reversion.dbk:149
+#: ../deb-reversion.dbk:161
 msgid ""
 "Only calculate and display the new version number which would be used; do "
 "not build a new .deb file.  Cannot be used in conjunction with"
@@ -5096,28 +5130,53 @@ msgstr ""
 "serait utilisé ; ne pas construire de nouveau paquet .deb. Ne peut pas être "
 "utilisé en même temps que"
 
-# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para><option>
-#: ../deb-reversion.dbk:151
-msgid "-v"
-msgstr "-v"
-
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: ../deb-reversion.dbk:151
+#: ../deb-reversion.dbk:163
 msgid "."
 msgstr "."
 
-# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: ../deb-reversion.dbk:157
-msgid "-k <replaceable class=\"parameter\">hook-command</replaceable>"
-msgstr "-k <replaceable class=\"parameter\">commande-crochet</replaceable>"
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../deb-reversion.dbk:169
+msgid "-s"
+msgstr ""
 
-# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: ../deb-reversion.dbk:158
-msgid "--hook <replaceable class=\"parameter\">hook-command</replaceable>"
-msgstr "--hook <replaceable class=\"parameter\">commande-crochet</replaceable>"
+# type: Content of: <refentry><refsect1><para><option>
+#: ../deb-reversion.dbk:169 ../deb-reversion.dbk:170
+#, fuzzy
+msgid "<replaceable class=\"parameter\">string</replaceable>"
+msgstr "-v <replaceable class=\"parameter\">version</replaceable>"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../deb-reversion.dbk:170
+msgid "--string"
+msgstr ""
 
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: ../deb-reversion.dbk:161
+#: ../deb-reversion.dbk:173
+msgid ""
+"Instead of using 'LOCAL.' as the version string to append to the old version "
+"number, use <replaceable class=\"parameter\">string</replaceable> instead."
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term><option>
+#: ../deb-reversion.dbk:181
+msgid "-k"
+msgstr ""
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#: ../deb-reversion.dbk:181 ../deb-reversion.dbk:182
+#, fuzzy
+msgid "<replaceable class=\"parameter\">hook-command</replaceable>"
+msgstr "-k <replaceable class=\"parameter\">commande-crochet</replaceable>"
+
+# type: TP
+#: ../deb-reversion.dbk:182
+#, fuzzy
+msgid "--hook"
+msgstr "clean-hook"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
+#: ../deb-reversion.dbk:185
 msgid ""
 "A hook command to run after unpacking the old .deb file and modifying the "
 "changelog, and before packing up the new .deb file.  Must be in quotes if it "
@@ -5134,22 +5193,22 @@ msgstr ""
 "travailler."
 
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: ../deb-reversion.dbk:173
+#: ../deb-reversion.dbk:197
 msgid "-D"
 msgstr "-D"
 
 # type: TP
-#: ../deb-reversion.dbk:174 ../deb-reversion.dbk:177
+#: ../deb-reversion.dbk:198 ../deb-reversion.dbk:201
 msgid "--debug"
 msgstr "--debug"
 
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: ../deb-reversion.dbk:177
+#: ../deb-reversion.dbk:201
 msgid "Pass"
 msgstr "Passer"
 
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
-#: ../deb-reversion.dbk:177
+#: ../deb-reversion.dbk:201
 msgid ""
 "to <citerefentry> <refentrytitle>dpkg-deb</refentrytitle> <manvolnum>1</"
 "manvolnum> </citerefentry>."
@@ -5158,37 +5217,37 @@ msgstr ""
 "manvolnum> </citerefentry>."
 
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: ../deb-reversion.dbk:187
+#: ../deb-reversion.dbk:211
 msgid "-h"
 msgstr "-h"
 
 # type: TP
-#: ../deb-reversion.dbk:188 ../mass-bug.pl:84
+#: ../deb-reversion.dbk:212 ../mass-bug.pl:84
 msgid "--help"
 msgstr "--help"
 
 # type: Plain text
-#: ../deb-reversion.dbk:191
+#: ../deb-reversion.dbk:215
 msgid "Display usage information."
 msgstr "Affiche les informations d'utilisation."
 
 # type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
-#: ../deb-reversion.dbk:197
+#: ../deb-reversion.dbk:221
 msgid "-V"
 msgstr "-V"
 
 # type: TP
-#: ../deb-reversion.dbk:198 ../mass-bug.pl:88
+#: ../deb-reversion.dbk:222 ../mass-bug.pl:88
 msgid "--version"
 msgstr "--version"
 
 # type: Plain text
-#: ../deb-reversion.dbk:201 ../mass-bug.pl:90 ../uscan.1:412
+#: ../deb-reversion.dbk:225 ../mass-bug.pl:90 ../uscan.1:412
 msgid "Display version information."
 msgstr "Affiche les informations sur la version."
 
 # type: Content of: <refentry><refsect1><para>
-#: ../deb-reversion.dbk:211
+#: ../deb-reversion.dbk:235
 msgid ""
 "<citerefentry> <refentrytitle>dch</refentrytitle> <manvolnum>1</manvolnum> </"
 "citerefentry>, <citerefentry> <refentrytitle>fakeroot</refentrytitle> "
@@ -5201,12 +5260,12 @@ msgstr ""
 "deb</refentrytitle> <manvolnum>1</manvolnum> </citerefentry>."
 
 # type: Content of: <refentry><refsect1><title>
-#: ../deb-reversion.dbk:227
+#: ../deb-reversion.dbk:251
 msgid "DISCLAIMER"
 msgstr "AVERTISSEMENT"
 
 # type: Content of: <refentry><refsect1><para>
-#: ../deb-reversion.dbk:229
+#: ../deb-reversion.dbk:253
 msgid ""
 "&dhpackage; is a tool intended to help porters (e.g. amd64) with modifying "
 "packages for other architectures, and to augment deb-repack, which creates "
@@ -5223,7 +5282,7 @@ msgstr ""
 "officielle, mais qui peut être ajouté avec APT ou gelé avec dpkg."
 
 # type: Content of: <refentry><refsect1><para>
-#: ../deb-reversion.dbk:238
+#: ../deb-reversion.dbk:262
 msgid ""
 "Please take note that &dhpackage; does not come without problems. While it "
 "works fine in most cases, it may just not in yours. Especially, please "
@@ -5238,7 +5297,7 @@ msgstr ""
 "depuis la même source."
 
 # type: Content of: <refentry><refsect1><para>
-#: ../deb-reversion.dbk:245
+#: ../deb-reversion.dbk:269
 msgid ""
 "You are using this tool at your own risk and I shall not shed a tear if your "
 "gerbil goes up in flames, your microwave attacks the stereo, or the angry "
@@ -5253,16 +5312,17 @@ msgstr ""
 "transfert bancaire conséquent de votre compte au mien."
 
 # type: Content of: <refentry><refsect1><para>
-#: ../deb-reversion.dbk:257
+#: ../deb-reversion.dbk:281
+#, fuzzy
 msgid ""
-"&dhpackage; is Copyright 2004-5 by &dhusername; and modifications are "
-"Copyright 2006 by &dhmaintusername;."
+"&dhpackage; is Copyright 2004-5 by &dhusername; &dhemail; and modifications "
+"are Copyright 2006 by &dhmaintusername; &dhmaintemail;."
 msgstr ""
 "&dhpackage; a été écrit par &dhusername;, Copyright 2004-2005 ; les "
 "modifications sont de &dhmaintusername;, Copyright 2006."
 
 # type: Content of: <refentry><refsect1><para>
-#: ../deb-reversion.dbk:262
+#: ../deb-reversion.dbk:286
 msgid ""
 "Permission is granted to copy, distribute and/or modify this document under "
 "the terms of the Artistic License: <ulink>http://www.opensource.org/licenses/"
@@ -5277,7 +5337,7 @@ msgstr ""
 "licenses/Artistic</filename>."
 
 # type: Content of: <refentry><refsect1><para>
-#: ../deb-reversion.dbk:271
+#: ../deb-reversion.dbk:295
 msgid ""
 "This manual page was written by &dhusername; &dhemail; and modified by "
 "&dhmaintusername; &dhmaintemail;."
@@ -6718,22 +6778,22 @@ msgstr ""
 "courriels arrivant aux listes de diffusion Debian."
 
 # type: textblock
-#: ../dget.pl:297
+#: ../dget.pl:405
 msgid "dget -- Download Debian source and binary packages"
 msgstr "dget -- Télécharger des paquets Debian source et binaire"
 
 # type: =item
-#: ../dget.pl:303
+#: ../dget.pl:411
 msgid "B<dget> [I<options>] I<URL>"
 msgstr "B<dget> [I<options>] I<URL>"
 
 # type: =item
-#: ../dget.pl:305
+#: ../dget.pl:413
 msgid "B<dget> [I<options>] I<package>[=I<version>]"
 msgstr "B<dget> [I<options>] I<paquet>=I<version>"
 
 # type: textblock
-#: ../dget.pl:311
+#: ../dget.pl:419
 msgid ""
 "B<dget> downloads Debian packages.  In the first form, B<dget> fetches the "
 "requested URL.  If this is a .dsc or .changes file, then B<dget> acts as a "
@@ -6749,7 +6809,7 @@ msgstr ""
 "téléchargé est dépaqueté avec B<dpkg-source>."
 
 # type: textblock
-#: ../dget.pl:317
+#: ../dget.pl:425
 msgid ""
 "In the second form, B<dget> downloads a I<binary> package (i.e., a I<.deb> "
 "file) from the Debian mirror configured in /etc/apt/sources.list.  Unlike "
@@ -6765,13 +6825,16 @@ msgstr ""
 "version du paquet est téléchargée."
 
 # type: textblock
-#: ../dget.pl:324
+#: ../dget.pl:432
+#, fuzzy
 msgid ""
 "Before downloading files listed in .dsc and .changes files, and before "
 "downloading binary packages, B<dget> checks to see whether any of these "
 "files already exist.  If they do, then their md5sums are compared to avoid "
-"downloading them again unnecessarily.  Download backends used are B<curl> "
-"and B<wget>, looked for in that order."
+"downloading them again unnecessarily.  B<dget> also looks for matching files "
+"in B</var/cache/apt/archives> and directories given by the B<--path> option "
+"or specified in the configuration files (see below).  Download backends used "
+"are B<curl> and B<wget>, looked for in that order."
 msgstr ""
 "Avant de télécharger les fichiers référencés dans les fichiers .dsc et ."
 "changes, et avant de télécharger des paquets binaires, B<dget> vérifie si "
@@ -6780,7 +6843,7 @@ msgstr ""
 "téléchargement utilisés sont B<curl> et B<wget>, recherchés dans cet ordre."
 
 # type: textblock
-#: ../dget.pl:330
+#: ../dget.pl:441
 msgid ""
 "B<dget> was written to make it easier to retrieve source packages from the "
 "web for sponsor uploads.  For checking the package with B<debdiff>, the last "
@@ -6793,32 +6856,32 @@ msgstr ""
 "dernière version source via B<apt-get source> I<package>."
 
 # type: TP
-#: ../dget.pl:339
+#: ../dget.pl:450
 msgid "B<-b>, B<--backup>"
 msgstr "B<-b>, B<--backup>"
 
 # type: textblock
-#: ../dget.pl:341
+#: ../dget.pl:452
 msgid "Move files that would be overwritten to I<./backup>."
 msgstr "Déplace les fichiers qui devraient être écrasés dans I<./backup>."
 
 # type: =item
-#: ../dget.pl:343
+#: ../dget.pl:454
 msgid "B<-q>, B<--quiet>"
 msgstr "B<-q>, B<--quiet>"
 
 # type: textblock
-#: ../dget.pl:345
+#: ../dget.pl:456
 msgid "Suppress B<wget>/B<curl> non-error output."
 msgstr "Supprime la sortie de B<wget>/B<curl> (sauf les erreurs)."
 
 # type: TP
-#: ../dget.pl:347
+#: ../dget.pl:458
 msgid "B<-x>, B<--extract>"
 msgstr "B<-x>, B<--extract>"
 
 # type: textblock
-#: ../dget.pl:349
+#: ../dget.pl:460
 msgid ""
 "Run B<dpkg-source -x> on the downloaded source package.  This can only be "
 "used with the first method of calling B<dget>."
@@ -6826,56 +6889,117 @@ msgstr ""
 "Exécuter B<dpkg-source -x> sur le paquet source téléchargé. Cette option ne "
 "peut être utilisée qu'avec la première méthode d'invocation de B<dget>."
 
+# type: =item
+#: ../dget.pl:463
+msgid "B<--path> DIR[:DIR...]"
+msgstr ""
+
+# type: textblock
+#: ../dget.pl:465
+msgid ""
+"In addition to I</var/cache/apt/archives>, B<dget> uses the colon-separated "
+"list given as argument to B<--path> to find files with a matching md5sum.  "
+"For example: \"--path /srv/pbuilder/result:/home/cb/UploadQueue\".  If DIR "
+"is empty (i.e., \"S<--path ''>\" is specified), then any previously listed "
+"directories or directories specified in the configuration files will be "
+"ignored.  This option may be specified multiple times, and all of the "
+"directories listed will be searched; hence, the above example could have "
+"been written as: \"--path /srv/pbuilder/result --path /home/cb/UploadQueue\"."
+msgstr ""
+
 # type: TP
-#: ../dget.pl:352
+#: ../dget.pl:476
 msgid "B<--insecure>"
 msgstr "B<--insecure>"
 
 # type: textblock
-#: ../dget.pl:354
+#: ../dget.pl:478
 msgid "Allow SSL connections to untrusted hosts."
 msgstr ""
 "Autoriser les connexions SSL vers des hôtes dont l'authenticité n'est pas "
 "certifiée."
 
 # type: TP
-#: ../dget.pl:356 ../dpkg-depcheck.1:96 ../rmadison.pl:158 ../tagpending.1:26
+#: ../dget.pl:480
+#, fuzzy
+msgid "B<--no-cache>"
+msgstr "B<--cache>"
+
+# type: textblock
+#: ../dget.pl:482
+msgid "Bypass server-side HTTP caches by sending a B<Pragma: no-cache> header."
+msgstr ""
+
+# type: TP
+#: ../dget.pl:484 ../dpkg-depcheck.1:96 ../rmadison.pl:158 ../tagpending.1:26
 #, no-wrap
 msgid "B<-h>, B<--help>"
 msgstr "B<-h>, B<--help>"
 
 # type: Plain text
-#: ../dget.pl:358
+#: ../dget.pl:486
 msgid "Show a help message."
 msgstr "Affiche un message d'aide."
 
 # type: TP
-#: ../dget.pl:360 ../tagpending.1:29
+#: ../dget.pl:488 ../tagpending.1:29
 #, no-wrap
 msgid "B<-V>, B<--version>"
 msgstr "B<-V>, B<--version>"
 
 # type: Plain text
-#: ../dget.pl:362
+#: ../dget.pl:490
 msgid "Show version information."
 msgstr "Affiche les informations sur la version."
 
+# NOTE: presque identique
+# type: Plain text
+#: ../dget.pl:496
+#, fuzzy
+msgid ""
+"The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
+"sourced by a shell in that order to set configuration variables.  Command "
+"line options can be used to override configuration file settings.  "
+"Environment variable settings are ignored for this purpose.  The currently "
+"recognised variable is:"
+msgstr ""
+"Les deux fichiers de configuration I</etc/devscripts.conf> et I<~/."
+"devscripts> sont chargés dans cet ordre par un interpréteur de commandes "
+"pour positionner les variables de configuration. Des options de ligne de "
+"commande peuvent être utilisées pour écraser les paramètres des fichiers de "
+"configuration. Les paramètres des variables d'environnement sont ignorés à "
+"cette fin. Les variables actuellement reconnues sont :"
+
+# type: =item
+#: ../dget.pl:504
+msgid "DGET_PATH"
+msgstr ""
+
 # type: textblock
-#: ../dget.pl:368
+#: ../dget.pl:506
+msgid ""
+"This can be set to a colon-separated list of directories in which to search "
+"for files in addition to the default I</var/cache/apt/archives>.  It has the "
+"same effect as the B<--path> command line option.  It is not set by default."
+msgstr ""
+
+# type: textblock
+#: ../dget.pl:515
 msgid "B<dget> I<package> should be implemented in B<apt-get install -d>."
 msgstr "B<dget> I<package> devrait être implémenté dans B<apt-get install -d>."
 
 # type: textblock
-#: ../dget.pl:372
+#: ../dget.pl:519
+#, fuzzy
 msgid ""
-"This program is Copyright (C) 2005 by Christoph Berg <myon@debian.org>.  "
+"This program is Copyright (C) 2005-06 by Christoph Berg <myon@debian.org>.  "
 "Modifications are Copyright (C) 2005-06 by Julian Gilbey <jdg@debian.org>."
 msgstr ""
 "Ce programme est Copyright \\(co 2005 Christoph Berg <myon@debian.org>. Les "
 "modifications sont Copyright \\(co 2005-2006 Julian Gilbey <jdg@debian.org>."
 
 # type: textblock
-#: ../dget.pl:375
+#: ../dget.pl:522
 msgid ""
 "This program is licensed under the terms of the GPL, either version 2 of the "
 "License, or (at your option) any later version."
@@ -6884,7 +7008,7 @@ msgstr ""
 "(GPL) version 2 ou toute version ultérieure (à votre discrétion)."
 
 # type: textblock
-#: ../dget.pl:380
+#: ../dget.pl:527
 msgid ""
 "B<apt-get>(1), B<debdiff>(1), B<dpkg-source>(1), B<curl>(1), B<wget>(1)."
 msgstr ""
@@ -7800,14 +7924,23 @@ msgstr ""
 "que vous avez quitté l'éditeur, le diff est envoyé par mail au système de "
 "gestion de bogues (« BTS ») Debian."
 
+# type: Plain text
+#: ../nmudiff.1:21
+msgid ""
+"The default behaviour is that if exactly one bug is closed by this NMU, then "
+"that bug will be mailed, otherwise a new bug will be submitted.  This "
+"behaviour may be changed by command line options and configuration file "
+"options."
+msgstr ""
+
 # type: TP
-#: ../nmudiff.1:17
+#: ../nmudiff.1:22
 #, no-wrap
 msgid "B<--new>"
 msgstr "B<--new>"
 
 # type: Plain text
-#: ../nmudiff.1:21
+#: ../nmudiff.1:26
 msgid ""
 "Instead of mailing the bug reports which are to be closed by this NMU, a new "
 "bug report is submitted directly to the BTS."
@@ -7816,13 +7949,27 @@ msgstr ""
 "bogues corrigés par le NMU."
 
 # type: TP
-#: ../nmudiff.1:21
+#: ../nmudiff.1:26
+#, fuzzy, no-wrap
+msgid "B<--old>"
+msgstr "B<--linda>"
+
+# type: Plain text
+#: ../nmudiff.1:31
+msgid ""
+"Send the bug report to all of the bugs which are being closed by this NMU, "
+"rather than opening a new bug report.  This option has no effect if no bugs "
+"are being closed by this NMU."
+msgstr ""
+
+# type: TP
+#: ../nmudiff.1:31
 #, no-wrap
 msgid "B<--mutt>"
 msgstr "B<--mutt>"
 
 # type: Plain text
-#: ../nmudiff.1:26
+#: ../nmudiff.1:36
 msgid ""
 "Use B<mutt>(1) for editing and sending the message to the BTS (default "
 "behaviour).  This can be controlled using a configuration file option (see "
@@ -7833,13 +7980,13 @@ msgstr ""
 "configuration (voir plus bas)."
 
 # type: TP
-#: ../nmudiff.1:26
+#: ../nmudiff.1:36
 #, no-wrap
 msgid "B<--no-mutt>"
 msgstr "B<--no-mutt>"
 
 # type: Plain text
-#: ../nmudiff.1:31
+#: ../nmudiff.1:41
 msgid ""
 "Use B<sensible-editor>(1) to edit the message and then mail it directly "
 "using I</usr/bin/sendmail>.  This can be controlled using a configuration "
@@ -7850,13 +7997,13 @@ msgstr ""
 "du fichier de configuration (voir plus bas)."
 
 # type: =item
-#: ../nmudiff.1:31
+#: ../nmudiff.1:41
 #, no-wrap
 msgid "B<--sendmail> I<SENDMAILCMD>"
 msgstr "B<--sendmail> I<COMMANDE_D_ENVOI_DE_MAIL>"
 
 # type: Plain text
-#: ../nmudiff.1:41
+#: ../nmudiff.1:51
 msgid ""
 "Specify the sendmail command.  The command will be split on white space and "
 "will be interpreted by the shell.  Default is I</usr/sbin/sendmail>.  The I<-"
@@ -7876,13 +8023,13 @@ msgstr ""
 "les fichiers de configuration de devscripts ; voir ci-dessous."
 
 # type: TP
-#: ../nmudiff.1:41
+#: ../nmudiff.1:51
 #, no-wrap
 msgid "B<--from> I<EMAIL>"
 msgstr "B<--from> I<EMAIL>"
 
 # type: Plain text
-#: ../nmudiff.1:49
+#: ../nmudiff.1:59
 msgid ""
 "If using the sendmail (B<--no-mutt) option, then the email to the BTS will "
 "be sent using the name and address in the environment variable DEBEMAIL.  If "
@@ -7898,13 +8045,13 @@ msgstr ""
 "email."
 
 # type: TH
-#: ../nmudiff.1:65
+#: ../nmudiff.1:75
 #, no-wrap
 msgid "B<NMUDIFF_MUTT>"
 msgstr "B<NMUDIFF_MUTT>"
 
 # type: Plain text
-#: ../nmudiff.1:70
+#: ../nmudiff.1:80
 msgid ""
 "Can be \"yes\" (default) or \"no\", and specifies whether to use B<mutt> to "
 "compose and send the message or not, as described above."
@@ -7912,19 +8059,36 @@ msgstr ""
 "Peut être « yes » (par défaut) ou « no », et indique s'il faut utiliser "
 "B<mutt> pour écrire et envoyer le mail, tel que décrit ci-dessus."
 
+# type: TH
+#: ../nmudiff.1:80
+#, fuzzy, no-wrap
+msgid "B<NMUDIFF_NEWREPORT>"
+msgstr "B<NMUDIFF_MUTT>"
+
+# type: Plain text
+#: ../nmudiff.1:88
+msgid ""
+"This option controls whether a new bug report is made, or whether the diff "
+"is sent to the bugs closed by this NMU.  Can be \"maybe\" (default), which "
+"sends to the existing bug reports if exactly one bug is being closed; \"yes"
+"\", which always creates a new report, or \"no\", which always sends to the "
+"reports of the bugs being closed (unless no bugs are being closed, in which "
+"case a new report is always made)."
+msgstr ""
+
 # type: =item
-#: ../nmudiff.1:70
+#: ../nmudiff.1:88
 #, no-wrap
 msgid "B<BTS_SENDMAIL_COMMAND>"
 msgstr "B<BTS_SENDMAIL_COMMAND>"
 
 # type: Plain text
-#: ../nmudiff.1:79
+#: ../nmudiff.1:97
 msgid "B<debdiff>(1), B<sensible-editor>(1)  and B<devscripts.conf>(5)."
 msgstr "B<debdiff>(1), B<sensible-editor>(1) et B<devscripts.conf>(5)."
 
 # type: Plain text
-#: ../nmudiff.1:83
+#: ../nmudiff.1:101
 msgid ""
 "B<nmudiff> was written and is copyright 2006 by Steinar H. Gunderson and "
 "modified by Julian Gilbey E<lt>jdg@debian.orgE<gt>.  The software may be "
@@ -9386,21 +9550,21 @@ msgid ""
 "href=\"...\"E<gt> tag.  The third and fourth fields are the version number "
 "and action fields as before."
 msgstr ""
-"L'autre syntaxe possible pour les URL HTTP est la suivante. Le premier "
-"champ correspond à la page d'accueil qui doit être téléchargée et dans "
-"laquelle doivent être recherchés les liens (« href ») correspondant au "
-"modèle donné dans le second champ. (Encore une fois, ce modèle sera ancré à "
-"son début et à sa fin, de façon à ce qu'il corresponde au lien complet. Si "
-"vous chercher à faire correspondre uniquement le nom de base du lien, vous "
-"pouvez utiliser un modèle comme « .*/nom-(.*)\\e.tar\\e.gz » si vous savez "
-"qu'il y a une URL complète, ou encore mieux : « (?:.*/)?nom-(.*)\\e.tar\\e."
-"gz » si l'URL peut être ou ne pas être complète. Notez l'utilisation de "
-"« (?:...) » qui évite de créer une référence.) Si un des liens de cette page "
-"est une URL relative, elle sera considérée comme relative à l'URL de base de "
-"la page d'accueil (i.e., en retirant tout ce qui suit le « / » final), ou "
-"relative à l'URL de base spécifiée dans cette page avec une balise E<lt>base "
-"href=\"...\"E<gt>. Les troisième et quatrième champs sont les champs du "
-"numéro de version et de la commande, comme précédemment."
+"L'autre syntaxe possible pour les URL HTTP est la suivante. Le premier champ "
+"correspond à la page d'accueil qui doit être téléchargée et dans laquelle "
+"doivent être recherchés les liens (« href ») correspondant au modèle donné "
+"dans le second champ. (Encore une fois, ce modèle sera ancré à son début et "
+"à sa fin, de façon à ce qu'il corresponde au lien complet. Si vous chercher "
+"à faire correspondre uniquement le nom de base du lien, vous pouvez utiliser "
+"un modèle comme « .*/nom-(.*)\\e.tar\\e.gz » si vous savez qu'il y a une URL "
+"complète, ou encore mieux : « (?:.*/)?nom-(.*)\\e.tar\\e.gz » si l'URL peut "
+"être ou ne pas être complète. Notez l'utilisation de « (?:...) » qui évite "
+"de créer une référence.) Si un des liens de cette page est une URL relative, "
+"elle sera considérée comme relative à l'URL de base de la page d'accueil (i."
+"e., en retirant tout ce qui suit le « / » final), ou relative à l'URL de "
+"base spécifiée dans cette page avec une balise E<lt>base href=\"...\"E<gt>. "
+"Les troisième et quatrième champs sont les champs du numéro de version et de "
+"la commande, comme précédemment."
 
 # type: SH
 #: ../uscan.1:217
@@ -10919,6 +11083,26 @@ msgid ""
 msgstr ""
 "Cette page de manuel a été écrite pour le paquet B<devscripts> par le "
 "responsable du paquet, Julian Gilbey E<lt>jdg@debian.orgE<gt>."
+
+# type: Content of: <refentry><refsynopsisdiv><cmdsynopsis><arg>
+#~ msgid "<command>&dhcommand;</command> <arg choice=\"opt\"> -"
+#~ msgstr "<command>&dhcommand;</command> <arg choice=\"opt\"> -"
+
+# type: Content of: <refentry><refsynopsisdiv><cmdsynopsis><arg><option>
+#~ msgid "vckDh"
+#~ msgstr "vckDh"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#~ msgid ""
+#~ "--new-version <replaceable class=\"parameter\">new-version</replaceable>"
+#~ msgstr ""
+#~ "--new-version <replaceable class=\"parameter\">nouvelle-version</"
+#~ "replaceable>"
+
+# type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
+#~ msgid "--hook <replaceable class=\"parameter\">hook-command</replaceable>"
+#~ msgstr ""
+#~ "--hook <replaceable class=\"parameter\">commande-crochet</replaceable>"
 
 # type: textblock
 #~ msgid ""

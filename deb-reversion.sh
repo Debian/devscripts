@@ -1,13 +1,10 @@
-#! /bin/bash
+#!/bin/bash
 #
 # deb-reversion -- a script to bump a .deb file's version number.
 #
-# The programme has been published under the terms of the Artistic Licence.
-# Please see http://www.opensource.org/licenses/artistic-license.php for more
-# information.
-#
-# deb-reversion (c) 2004-6 by martin f. krafft <madduck@debian.org>
-# contributors: Goswin von Brederlow, Filippo Giunchedi
+# Copyright © martin f. krafft <madduck@madduck.net>
+# with contributions by: Goswin von Brederlow, Filippo Giunchedi
+# Released under the terms of the Artistic Licence 2.0
 #
 # TODO: 
 #   - add debugging output.
@@ -16,12 +13,12 @@
 set -eu
 
 PROGNAME=${0##*/}
-PROGVERSION=0.9
+PROGVERSION=0.9.1
 VERSTR='LOCAL.'
 
 versioninfo() {
   echo "$PROGNAME $PROGVERSION"
-  echo "$PROGNAME is copyright 2004-06 martin f. krafft"
+  echo "$PROGNAME is copyright © martin f. krafft"
   echo "Released under the terms of the Artistic Licence 2.0"
   echo "This programme is part of devscripts ###VERSION###."
 }
