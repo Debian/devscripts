@@ -22,8 +22,13 @@ devscripts (2.9.28) UNRELEASED; urgency=low
   * debian/control
     - added myself as an uploader
     - added XS-Vcs-Browser field
+    - bumped debhelper dependencies to >> 5
   * added debian/svn-deblayout pointint to the default tags dir (used by
     svn-buildpackage)
+  * debian/compat
+    - bumped to debhelper 5
+  * debian/examples
+    - moved examples under examples/, install examples/* as examples
 
  -- Stefano Zacchiroli <zack@debian.org>  Thu, 22 Feb 2007 10:49:16 +0100
 
