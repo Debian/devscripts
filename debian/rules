@@ -43,6 +43,7 @@ install: build
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
+	dh_install
 	$(MAKE) DESTDIR=$(CURDIR)/debian/devscripts install
 
 # Build architecture-independent files here.
@@ -55,10 +56,8 @@ binary-arch: build-arch install
 	dh_testroot
 	dh_installdocs README
 	dh_installexamples
-#	This is now done by the make install command above
-#	dh_installman
-	dh_link /usr/share/devscripts/conf.default \
-		/usr/share/doc/devscripts/devscripts.conf.ex
+	dh_installman
+	dh_link
 	dh_installchangelogs
 	dh_strip
 	dh_compress

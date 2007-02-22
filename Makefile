@@ -20,24 +20,17 @@ CWRAPPERS = debpkg-wrapper
 SCRIPTS = $(PL_FILES:.pl=) $(SH_FILES:.sh=)
 EXAMPLES = conf.default
 
-MAN1S = $(SCRIPTS:=.1) debc.1 cvs-debc.1 devscripts.1
 GEN_MAN1S = bts.1 debcommit.1 deb-reversion.1 dget.1 mass-bug.1 \
 	rmadison.1 svnpath.1
-MAN5S = devscripts.conf.5
 MANS_fr_DIR = po4a/fr
 GEN_MAN1S_fr = $(patsubst %,$(MANS_fr_DIR)/%,$(GEN_MAN1S))
 MAN1S_fr = $(subst $(MANS_fr_DIR)/,,$(wildcard $(MANS_fr_DIR)/*.1))
-MAN5S_fr = $(subst $(MANS_fr_DIR)/,,$(wildcard $(MANS_fr_DIR)/*.5))
 
 BINDIR = /usr/bin
 LIBDIR = /usr/lib/devscripts
 EXAMPLES_DIR = /usr/share/devscripts
 PERLMOD_DIR = /usr/share/devscripts
 BIN_LIBDIR = /usr/lib/devscripts
-MAN1DIR = /usr/share/man/man1
-MAN5DIR = /usr/share/man/man5
-MAN1DIR_fr = /usr/share/man/fr/man1
-MAN5DIR_fr = /usr/share/man/fr/man5
 
 all: $(SCRIPTS) $(GEN_MAN1S) $(EXAMPLES) $(LIBS) $(CWRAPPERS) translated_manpages
 
@@ -75,7 +68,7 @@ conf.default: conf.default.in version
 	  /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl $<
 
 translated_manpages:
-	cd po4a && po4a --no-backups devscripts-po4a.conf
+	$(MAKE) -C po4a/
 	# These may or may not have been successfully made; we don't stop
 	# building the rest of the package in such a case
 	for i in $(GEN_MAN1S_fr); do \
@@ -85,7 +78,7 @@ translated_manpages:
 
 clean_translated_manpages:
 	# Update the POT/POs and remove the translated man pages
-	cd po4a && po4a --rm-translations --no-backups devscripts-po4a.conf
+	$(MAKE) -C po4a/ clean
 	rm -f translated_manpages
 
 libvfork.o: libvfork.c
@@ -105,15 +98,6 @@ install: all
 	# Special treatment for debpkg
 	mv $(DESTDIR)$(BINDIR)/debpkg $(DESTDIR)$(PERLMOD_DIR)
 	cp debpkg-wrapper $(DESTDIR)$(BINDIR)/debpkg
-	mkdir -p $(DESTDIR)$(MAN1DIR)
-	cp $(MAN1S) $(DESTDIR)$(MAN1DIR)
-	mkdir -p $(DESTDIR)$(MAN5DIR)
-	cp $(MAN5S) $(DESTDIR)$(MAN5DIR)
-	mkdir -p $(DESTDIR)$(MAN1DIR_fr)
-	-cd $(MANS_fr_DIR) && cp $(MAN1S_fr) $(DESTDIR)$(MAN1DIR_fr)
-	-cp $(GEN_MAN1S_fr) $(DESTDIR)$(MAN1DIR_fr)
-	mkdir -p $(DESTDIR)$(MAN5DIR_fr)
-	-cd $(MANS_fr_DIR) && cp $(MAN5S_fr) $(DESTDIR)$(MAN5DIR_fr)
 	cp $(EXAMPLES) $(DESTDIR)$(EXAMPLES_DIR)
 #	-find $(DESTDIR) -type d -name '.svn' -exec rm -r \{\} \;
 #	-find $(DESTDIR) -type d -name 'CVS' -exec rm -r \{\} \;
