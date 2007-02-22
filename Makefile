@@ -99,14 +99,8 @@ clean: clean_translated_manpages
 	    $(GEN_MAN1S_fr) $(CWRAPPERS) libvfork.o libvfork.so.0
 
 install: all
-	mkdir -p $(DESTDIR)$(BINDIR)
 	cp $(SCRIPTS) $(DESTDIR)$(BINDIR)
-	cd $(DESTDIR)$(BINDIR) && ln -s debchange dch
-	cd $(DESTDIR)$(BINDIR) && ln -s debi debc
-	cd $(DESTDIR)$(BINDIR) && ln -s cvs-debi cvs-debc
-	mkdir -p $(DESTDIR)$(LIBDIR)
 	cp $(LIBS) $(DESTDIR)$(LIBDIR)
-	mkdir -p $(DESTDIR)$(PERLMOD_DIR)
 	cp -a $(PERL_MODULES) $(DESTDIR)$(PERLMOD_DIR)
 	# Special treatment for debpkg
 	mv $(DESTDIR)$(BINDIR)/debpkg $(DESTDIR)$(PERLMOD_DIR)
@@ -115,15 +109,11 @@ install: all
 	cp $(MAN1S) $(DESTDIR)$(MAN1DIR)
 	mkdir -p $(DESTDIR)$(MAN5DIR)
 	cp $(MAN5S) $(DESTDIR)$(MAN5DIR)
-	cd $(DESTDIR)$(MAN1DIR) && ln -s debchange.1 dch.1
 	mkdir -p $(DESTDIR)$(MAN1DIR_fr)
 	-cd $(MANS_fr_DIR) && cp $(MAN1S_fr) $(DESTDIR)$(MAN1DIR_fr)
 	-cp $(GEN_MAN1S_fr) $(DESTDIR)$(MAN1DIR_fr)
 	mkdir -p $(DESTDIR)$(MAN5DIR_fr)
 	-cd $(MANS_fr_DIR) && cp $(MAN5S_fr) $(DESTDIR)$(MAN5DIR_fr)
-	cd $(DESTDIR)$(MAN1DIR_fr) && \
-	    if [ -f debchange.1 ]; then ln -s debchange.1 dch.1; fi
-	mkdir -p $(DESTDIR)$(EXAMPLES_DIR)
 	cp $(EXAMPLES) $(DESTDIR)$(EXAMPLES_DIR)
 #	-find $(DESTDIR) -type d -name '.svn' -exec rm -r \{\} \;
 #	-find $(DESTDIR) -type d -name 'CVS' -exec rm -r \{\} \;
