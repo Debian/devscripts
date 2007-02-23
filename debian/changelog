@@ -2,7 +2,7 @@ devscripts (2.9.28) UNRELEASED; urgency=low
 
   [ Julian Gilbey ]
   * debchange: fix Ubuntu's distro codename check (bash regexp!)
-  * control: change maintainer name to mailing list
+  * control: change maintainer name to mailing list (Closes: #411591)
 
   [ Mohammed Adnène Trojette ]
   * Add myself to Uploaders.
@@ -13,17 +13,17 @@ devscripts (2.9.28) UNRELEASED; urgency=low
   * deb-reversion: change license to Artistic 2.0. (Closes: #381731)
 
   [ Christoph Berg ]
-  * Also joining the team.
-  * dget: consult apt-get source for missing files. (Closes: #394809)
+  * Also joining the team
+  * dget: consult apt-get source for missing files (Closes: #394809)
   * rmadison: new upstream version, supports querying other archives
-    (specifically backports.org).
+    (specifically backports.org)
 
   [ Stefano Zacchiroli ]
   * debian/control
     - added myself as an uploader
     - added XS-Vcs-Browser field
     - bumped debhelper dependencies to >> 5
-  * added debian/svn-deblayout pointint to the default tags dir (used by
+  * added debian/svn-deblayout pointing to the default tags dir (used by
     svn-buildpackage)
   * bumped debhelper compatibility level to 5
   * moved examples under examples/, install examples/* as examples
