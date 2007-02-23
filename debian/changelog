@@ -25,17 +25,15 @@ devscripts (2.9.28) UNRELEASED; urgency=low
     - bumped debhelper dependencies to >> 5
   * added debian/svn-deblayout pointint to the default tags dir (used by
     svn-buildpackage)
-  * debian/compat
-    - bumped to debhelper 5
-  * debian/examples
-    - moved examples under examples/, install examples/* as examples
-  * debian/dirs, debian/links
-    - delegated (some of) directory and symlink creation to debhelpers
-  * debian/manpages
-    - delegated installation of (original and translated) manpages to
+  * bumped debhelper compatibility level to 5
+  * moved examples under examples/, install examples/* as examples
+  * debian/{dirs,links}: delegated (some of) directory and symlink creation to
     debhelpers
+  * debian/manpages: delegated installation of (original and translated)
+    manpages to debhelpers
+  * moved scripts under scripts/, created subordinated Makefile there
 
- -- Stefano Zacchiroli <zack@debian.org>  Thu, 22 Feb 2007 13:59:47 +0100
+ -- Stefano Zacchiroli <zack@debian.org>  Fri, 23 Feb 2007 11:21:15 +0100
 
 devscripts (2.9.27) unstable; urgency=low
 

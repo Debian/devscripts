@@ -4,7 +4,7 @@ List of things to do when adding a new script to devscripts package:
 2. Add an entry in README
 3. Add an entry in debian/control
 4. Add any necessary entries to the Suggests: line in debian/control
-5. Add a Makefile entry (SH_FILES or PL_FILES)
+5. Add a scripts/Makefile entry (SH_FILES or PL_FILES)
 6. Modify conf.default.in and debian/postinst if necessary
 7. Add a changelog entry
 
