@@ -26,10 +26,10 @@ use Getopt::Long;
 my $version='###VERSION###';
 
 sub get_developers_given_package {
-	my $package_name=shift;
+	my ($package_name,$print_binary) = @_;
 	
 	my $developer;
-	my $source_name;
+	my $print_name;
 	my $uploaders;
 	my @uploaders;
 	open (F, "apt-cache showsrc '$package_name' |");
@@ -44,11 +44,11 @@ sub get_developers_given_package {
 			
 		}
 		elsif (/^Package: (.*)/) {
-			$source_name=$1;
+			$print_name = $print_binary ? $package_name : $1 ;
 		}
 	}
 	close F;
-	return ($developer, \@uploaders, $source_name);
+	return ($developer, \@uploaders, $print_name);
 }
 
 sub parse_developer {
@@ -86,6 +86,10 @@ Usage: dd-list [options] [package ...]
     -u, --uploaders
         Also list uploaders of packages, not only the listed maintainers
 
+    -b, --print-binary
+        If binary package names are given as input, print these names 
+	in the output instead of corresponding source packages.
+
     -V, --version
         Print version (it\'s $version by the way).
 EOF
@@ -94,11 +98,13 @@ EOF
 my $use_stdin=0;
 my $use_dctrl=0;
 my $show_uploaders=0;
+my $print_binary=0;
 if (! GetOptions(
 	"help" => sub { help(); exit },
 	"stdin|i" => \$use_stdin,
 	"dctrl|d" => \$use_dctrl,
 	"uploaders|u" => \$show_uploaders,
+	"print-binary|b" => \$print_binary,
 	"version" => sub { print "dd-list version $version\n" })) {
 	exit(1);
 }
@@ -114,7 +120,7 @@ if ($use_dctrl) {
 		if (/^Package:\s+(.*)$/m) {
 			$package=$1;
 		}
-		if (/^Source:\s+(.*)$/m) {
+		if (/^Source:\s+(.*)$/m && ! $print_binary ) {
 			$package=$1;
 		}
 		if (/^Maintainer:\s+(.*)$/m) {
@@ -154,12 +160,12 @@ else {
 	}
 
 	foreach my $package_name (@package_names) {
-		my ($developer, $uploaders, $source_name)=get_developers_given_package($package_name);
+		my ($developer, $uploaders, $print_name)=get_developers_given_package($package_name,$print_binary);
 		if (defined $developer) {
-			push @{$dict{$developer}}, $source_name;
+			push @{$dict{$developer}}, $print_name;
 			if ($show_uploaders && @$uploaders) {
 				foreach my $uploader (@$uploaders) {
-					push @{$dict{$uploader}}, "$source_name (U)";
+					push @{$dict{$uploader}}, "$print_name (U)";
 				}
 			}
 		}

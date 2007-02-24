@@ -19,20 +19,19 @@ devscripts (2.9.28) UNRELEASED; urgency=low
     (specifically backports.org)
 
   [ Stefano Zacchiroli ]
-  * debian/control
-    - added myself as an uploader
-    - added XS-Vcs-Browser field
-    - bumped debhelper dependencies to >> 5
-  * added debian/svn-deblayout pointing to the default tags dir (used by
-    svn-buildpackage)
-  * bumped debhelper compatibility level to 5
-  * moved examples under examples/, install examples/* as examples
-  * debian/{dirs,links}: delegated (some of) directory and symlink creation to
-    debhelpers
-  * debian/manpages: delegated installation of (original and translated)
-    manpages to debhelpers
-  * moved scripts under scripts/, created subordinated Makefile there
-  * scripts/Makefile: removed the need of explicitly listing scripts
+  * package maintenance changes
+    + debian/control:
+      - added myself as an uploader
+      - added XS-Vcs-Browser field
+      - bumped debhelper deps to >> 5 (changed debian/compat accordingly)
+    + added debian/svn-deblayout with the default tags dir
+    + moved examples under examples/ (changed debian/examples accordingly)
+    + moved scripts under scripts/, created subordinated Makefile there
+    + debian/{dirs,links}: delegated directory/symlink creation to dh_link
+    + debian/manpages: delegated manpage installation to dh_installman
+    + scripts/Makefile: removed the need of explicitly listing scripts
+  * dd-list: enable output of binary package names, patch from Frank Küster
+    (Closes: #403207)
 
  -- Stefano Zacchiroli <zack@debian.org>  Sat, 24 Feb 2007 12:13:56 +0100
 

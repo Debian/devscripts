@@ -33,7 +33,7 @@ Input is a list of source or binary package names on the command line
 .B --stdin 
 is given). 
 Output is a list of the following format, where package names are source
-packages:
+packages by default:
 .PP
 .nf
 .RS
@@ -70,11 +70,19 @@ package control file. This includes the status file, or output of
 apt-cache. This is the fastest way to use dd-list, as it uses the
 maintainer information from the input instead of looking up the maintainer
 of each listed package.
+.IP
+If no \fISource:\fP line is given, the \fIPackage:\fP name is used for
+output, which might be a binary package name.
 .TP
 .BR \-u , \-\-uploaders
 Also list developers who are named as uploaders of packages, not only
 the maintainers.  Uploaders are indicated with "(U)" appended to the
 package name.
+.TP
+.BR \-b , \-\-print\-binary
+Use binary package names in the output instead of source package names
+(has no effect with \fB--dctrl\fP if the \fIPackage:\fP line contains
+source package names).
 .TP
 .BR \-V , \-\-version
 Print the version.
