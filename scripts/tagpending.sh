@@ -28,6 +28,7 @@ Usage: tagpending [options]
     -v, --verbose       Verbose mode: List bugs checked/tagged. 
                         NOTE: Verbose and silent mode can't be used together.
     -f, --force         Do not query the BTS for already tagged bugs (force).
+    -c, --confirm       Tag bugs as confirmed as well as pending
     -h, --help          This usage screen.
     -V, --version       Display the version and copyright information
 
@@ -51,6 +52,7 @@ USE_WGET=1
 DRY=0
 SILENT=0
 VERBOSE=0
+CONFIRM=0
 
 while [ -n "$1" ]; do
   case "$1" in
@@ -59,6 +61,7 @@ while [ -n "$1" ]; do
     -f|--force) USE_WGET=0; shift ;;
     -V|--version) version; exit 0 ;;
     -v|--verbose) VERBOSE=1; shift ;;
+    -c|--confirm) CONFIRM=1; shift ;;
     --help | -h) usage; exit 0 ;;
     *)
       echo "tagpending error: unrecognized option $1" >&2
@@ -130,29 +133,36 @@ fi
 # Could use dh_listpackages, but no guarantee that it's installed.
 src_packages=$(awk '/Package: / { print $2 } /Source: / { print $2 }' debian/control | sort | uniq)
 
-if [ "$DRY" = 1 ]; then
-  msg="tagpending info: Would tag these bugs pending:"
+bugs_info() {
+  msg="tagpending info: Would tag these bugs pending"
+  if [ "$CONFIRM" = 1 ]; then
+    msg="$msg and confirmed"
+  fi
+  msg="$msg:"
 
   for bug in $to_be_tagged; do
     msg="$msg $bug"
   done
   echo $msg | fold -w 78 -s
+}
+
+if [ "$DRY" = 1 ]; then
+  bugs_info
 
   exit 0
 else
   if [ "$SILENT" = 0 ]; then
-    msg="tagpending info: tagging these bugs pending:"
-
-    for bug in $to_be_tagged; do
-      msg="$msg $bug"
-    done
-    echo $msg | fold -w 78 -s
+    bugs_info
   fi
 
   BTS_ARGS="package $src_packages"
 
   for bug in $to_be_tagged; do
     BTS_ARGS="$BTS_ARGS . tag $bug + pending "
+
+    if [ "$CONFIRM" = 1 ]; then
+      BTS_ARGS="$BTS_ARGS confirmed"
+    fi
   done
 
   eval bts ${BTS_ARGS}
