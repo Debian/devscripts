@@ -149,7 +149,7 @@ Valid options are:
                           Text for email subject line (will be prefixed
                           with "package: ")
    --severity=(wishlist|minor|normal|important|serious|grave|critical)
-			  Specify the severity of the bugs to be filed
+                          Specify the severity of the bugs to be filed
                           (default "normal")
    --sendmail=cmd         Sendmail command to use (default /usr/sbin/sendmail)
    --no-conf, --noconf    Don\'t read devscripts config files;
