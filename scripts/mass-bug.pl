@@ -57,6 +57,11 @@ though.
 
 =over 4
 
+=item --severity=(wishlist|minor|normal|important|serious|grave|critical)
+
+Specify the severity with which bugs should be filed. Default
+is 'normal'.
+
 =item --display
 
 Fill out the templates for each package and display them all for
@@ -143,6 +148,9 @@ Valid options are:
    --subject="bug subject"
                           Text for email subject line (will be prefixed
                           with "package: ")
+   --severity=(wishlist|minor|normal|important|serious|grave|critical)
+			  Specify the severity of the bugs to be filed
+                          (default "normal")
    --sendmail=cmd         Sendmail command to use (default /usr/sbin/sendmail)
    --no-conf, --noconf    Don\'t read devscripts config files;
                           must be the first option given
@@ -234,6 +242,7 @@ sub gen_subject {
 sub gen_bug {
     my $template_text=shift;
     my $package=shift;
+    my $severity=shift;
 
     $template_text=~s/#PACKAGE#/$package/g;
     if ($template_text =~ /\A(.*?)(^-- $.*)/m) { # there's a sig involved
@@ -242,7 +251,7 @@ sub gen_bug {
     } else {
 	$template_text=fill("", "", $template_text);
     }
-    return "Package: $package\n\n$template_text";
+    return "Package: $package\nSeverity: $severity\n\n$template_text";
 }
 		
 sub div {
@@ -304,11 +313,13 @@ EOM
 
 my $mode="display";
 my $subject;
+my $severity="normal";
 my $opt_sendmail;
 if (! GetOptions(
 		 "display" => sub { $mode="display" },
 		 "send" => sub { $mode="send" },
 		 "subject=s" => \$subject,
+		 "severity=s" => \$severity,
 		 "sendmail=s" => \$opt_sendmail,
 		 "help" => sub { usage(); exit 0; },
 		 "version" => sub { version(); exit 0; },
@@ -318,6 +329,11 @@ if (! GetOptions(
 
 if (! defined $subject || ! length $subject) {
     print STDERR "$progname: You must specify a subject for the bug reports.\n";
+    usageerror();
+}
+
+unless ($severity =~ /^(wishlist|minor|normal|important|serious|grave|critical)$/) {
+    print STDERR "$progname: Severity must be one of wishlist, minor, normal, important, serious, grave or critical.\n";
     usageerror();
 }
 
@@ -373,7 +389,7 @@ sub showsample {
     print "To: $submission_email\n";
     print "Subject: ".gen_subject($subject, $package)."\n";
     print "\n";
-    print gen_bug($template_text, $package)."\n";
+    print gen_bug($template_text, $package, $severity)."\n";
 }
 
 if ($mode eq 'display') {
@@ -405,7 +421,7 @@ elsif ($mode eq 'send') {
     foreach my $package (@packages) {
 	print "Sending bug for $package ...\n";
 	mailbts(gen_subject($subject, $package),
-		gen_bug($template_text, $package),
+		gen_bug($template_text, $package, $severity),
 		$submission_email, $from);
     }
     print "All bugs sent.\n";
