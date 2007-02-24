@@ -1,24 +1,15 @@
 
 include ../Makefile.common
-
 DESTDIR =
 
-PL_FILES = bts.pl checkbashisms.pl cvs-debuild.pl dd-list.pl debchange.pl \
-	debcommit.pl debdiff.pl debi.pl debpkg.pl debuild.pl dget.pl \
-	dpkg-depcheck.pl dscverify.pl grep-excuses.pl mass-bug.pl \
-	plotchangelog.pl rc-alert.pl rmadison.pl svnpath.pl
+VERSION_FILE = ../version
+VERSION := $(shell cat $(VERSION_FILE))
 
-SH_FILES = annotate-output.sh archpath.sh cvs-debi.sh cvs-debrelease.sh \
-	deb-reversion.sh debclean.sh debrelease.sh debrsign.sh debsign.sh \
-	dpkg-genbuilddeps.sh mergechanges.sh nmudiff.sh pts-subscribe.sh \
-	tagpending.sh uscan.sh uupdate.sh whodepends.sh who-uploads.sh \
-	wnpp-alert.sh
-
+PL_FILES := $(wildcard *.pl)
+SH_FILES = $(wildcard *.sh)
 LIBS = libvfork.so.0
-
 CWRAPPERS = debpkg-wrapper
-
-SCRIPTS = $(PL_FILES:.pl=) $(SH_FILES:.sh=)
+SCRIPTS = $(patsubst %.pl,%,$(PL_FILES)) $(patsubst %.sh,%,$(SH_FILES))
 
 GEN_MAN1S = bts.1 debcommit.1 deb-reversion.1 dget.1 mass-bug.1 \
 	rmadison.1 svnpath.1
@@ -29,37 +20,30 @@ BIN_LIBDIR = /usr/lib/devscripts
 
 all: $(SCRIPTS) $(GEN_MAN1S) $(LIBS) $(CWRAPPERS)
 
-%: %.sh ../version
-	if grep -q '^#! */bin/sh' $<; then \
-	  echo "$< is a /bin/sh script, not a bash script!" >&2; \
-	  exit 1; \
-	fi
-	rm -f $@ $@.tmp
-	VERSION=`cat ../version` && sed -e "s/###VERSION###/$$VERSION/" $< \
-	    > $@.tmp && chmod +x $@.tmp && mv $@.tmp $@
+%.tmp: %.sh $(VERSION_FILE)
+	sed -e "s/###VERSION###/$(VERSION)/" $<  > $@
 	bash -n $@
-
-%: %.pl ../version
-	rm -f $@ $@.tmp
-	VERSION=`cat ../version` && sed -e "s/###VERSION###/$$VERSION/" $< \
-	    > $@.tmp && chmod +x $@.tmp && mv $@.tmp $@
+%.tmp: %.pl $(VERSION_FILE)
+	sed -e "s/###VERSION###/$(VERSION)/" $<  > $@
 	perl -c $@
+%: %.tmp
+	cp $< $@
+	chmod +x $@
 
 %.1: %.pl
 	pod2man --center=" " --release="Debian Utilities" $< > $@
-
 %.1: %.dbk
 	xsltproc --nonet -o $@ \
 	  /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl $<
 
 libvfork.o: libvfork.c
 	$(CC) -fPIC -D_REENTRANT $(CFLAGS) -c $<
-
 libvfork.so.0: libvfork.o
 	$(CC) -shared $< -lc -Wl,-soname -Wl,libvfork.so.0 -o $@
 
 clean:
-	rm -f $(SCRIPTS) $(GEN_MAN1S) $(SCRIPT_LIBS) $(CWRAPPERS) \
+	rm -f $(SCRIPTS) $(patsubst %,%.tmp,$(SCRIPTS)) \
+		$(GEN_MAN1S) $(SCRIPT_LIBS) $(CWRAPPERS) \
 		libvfork.o libvfork.so.0
 
 install: all

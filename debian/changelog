@@ -32,8 +32,9 @@ devscripts (2.9.28) UNRELEASED; urgency=low
   * debian/manpages: delegated installation of (original and translated)
     manpages to debhelpers
   * moved scripts under scripts/, created subordinated Makefile there
+  * scripts/Makefile: removed the need of explicitly listing scripts
 
- -- Stefano Zacchiroli <zack@debian.org>  Fri, 23 Feb 2007 11:21:15 +0100
+ -- Stefano Zacchiroli <zack@debian.org>  Sat, 24 Feb 2007 12:13:56 +0100
 
 devscripts (2.9.27) unstable; urgency=low
 
