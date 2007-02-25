@@ -1038,8 +1038,9 @@ sub bts_usertags {
 
 =item severity <bug> <severity>
 
-Change the severity of a bug. The severity may be abbreviated to any unique
-substring.
+Change the severity of a bug. Available severities are: wishlist, minor, normal,
+important, serious, grave, critical. The severity may be abbreviated to any
+unique substring.
 
 =cut
 
