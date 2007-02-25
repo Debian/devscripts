@@ -30,22 +30,22 @@ devscripts (2.9.28) UNRELEASED; urgency=low
     + debian/{dirs,links}: delegated directory/symlink creation to dh_link
     + debian/manpages: delegated manpage installation to dh_installman
     + scripts/Makefile: removed the need of explicitly listing scripts
+  * bts: list the available severities in the manpage (Closes: #412186)
+  * checkbashisms: add detection of "${!prefix"-like bashisms, patch from Adam
+    D. Barratt (Closes: #409028)
   * dd-list: enable (-b cmdline flag) output of binary package names, patch
     from Frank Küster (Closes: #403207)
+  * debcommit: added support for specifying the list of files to commit on
+    cmdline, patch from Damyan Ivanov (Closes: #381152)
+  * mass-bug: enable (--severity cmdline flag) the specification of the
+    severity of the reported bugs, based on a patch from Adam D. Barratt
+    (Closes: #386124)
   * tagpending: enable (-c cmdline flag) tagging bugs as confirmed in addition
     to tagging them as pending, based on a patch from Adam D. Barratt
     (Closes: #382884)
   * tagpending: factorized some code for delivering info to the user
-  * mass-bug: enable (--severity cmdline flag) the specification of the
-    severity of the reported bugs, based on a patch from Adam D. Barratt
-    (Closes: #386124)
-  * checkbashisms: add detection of "${!prefix"-like bashisms, patch from Adam
-    D. Barratt (Closes: #409028)
-  * bts: list the available severities in the manpage (Closes: #412186)
   * uscan: added --force-download to force download when changelog is in sync
     with upstream version, based on a patch from Ian Wienand (Closes: #364116)
-  * debcommit: added support for specifying the list of files to commit on
-    cmdline, patch from Damyan Ivanov (Closes: #381152)
 
  -- Stefano Zacchiroli <zack@debian.org>  Sun, 25 Feb 2007 16:17:41 +0100
 
