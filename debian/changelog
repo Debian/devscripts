@@ -39,8 +39,10 @@ devscripts (2.9.28) UNRELEASED; urgency=low
   * mass-bug: enable (--severity cmdline flag) the specification of the
     severity of the reported bugs, based on a patch from Adam D. Barratt
     (Closes: #386124)
+  * checkbashisms: add detection of "${!prefix"-like bashisms, patch from Adam
+    D. Barratt (Closes: #409028)
 
- -- Stefano Zacchiroli <zack@debian.org>  Sat, 24 Feb 2007 13:02:21 +0100
+ -- Stefano Zacchiroli <zack@debian.org>  Sun, 25 Feb 2007 12:44:54 +0100
 
 devscripts (2.9.27) unstable; urgency=low
 

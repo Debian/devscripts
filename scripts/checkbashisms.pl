@@ -114,6 +114,8 @@ foreach my $filename (@ARGV) {
 		'\s\|\&' =>                    q<pipelining is not POSIX>,
 		'\$\[\w+\]' =>                 q<arithmetic not allowed>,
 		'\$\{\w+\:\d+(?::\d+)?\}' =>   q<${foo:3[:1]}>,
+		'\$\{!\w+[@*]\}' =>            q<${!prefix[*|@]>,
+		'\$\{!\w+\}' =>                q<${!name}>,
 		'\$\{\w+(/.+?){1,2}\}' =>      q<${parm/?/pat[/str]}>,
 		'[^\\\]\{([^\s]+?,)+[^\\\}\s]+\}' =>
 		                               q<brace expansion>,
