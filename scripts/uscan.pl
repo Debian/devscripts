@@ -72,6 +72,8 @@ Options:
     --debug        Dump the downloaded web pages to stdout for debugging
                    your watch file.
     --download     Report on newer and absent versions, and download (default)
+    --force-download
+                   Always download the upstream release, even if up to date
     --no-download  Report on newer and absent versions, but don\'t download
     --pasv         Use PASV mode for FTP connections
     --no-pasv      Do not use PASV mode for FTP connections (default)
@@ -136,6 +138,7 @@ our $passive = 'default';
 # The next stuff is boilerplate
 
 my $download = 1;
+my $force_download = 0;
 my $report = 0; # report even on up-to-date packages?
 my $symlink = 'symlink';
 my $verbose = 0;
@@ -217,13 +220,14 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 
 # Now read the command line arguments
 my $debug = 0;
-my ($opt_h, $opt_v, $opt_download, $opt_report, $opt_passive, $opt_symlink);
+my ($opt_h, $opt_v, $opt_download, $opt_force_download, $opt_report, $opt_passive, $opt_symlink);
 my ($opt_verbose, $opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
 
 GetOptions("help" => \$opt_h,
 	   "version" => \$opt_v,
 	   "download!" => \$opt_download,
+	   "force-download" => \$opt_force_download,
 	   "report" => sub { $opt_download = 0; },
 	   "report-status" => sub { $opt_download = 0; $opt_report = 1; },
 	   "passive|pasv!" => \$opt_passive,
@@ -253,6 +257,7 @@ if ($opt_v) { version(); exit 0; }
 # Now we can set the other variables according to the command line options
 
 $download = $opt_download if defined $opt_download;
+$force_download = $opt_force_download if defined $opt_force_download;
 $report = $opt_report if defined $opt_report;
 $passive = $opt_passive if defined $opt_passive;
 $timeout = $opt_timeout if defined $opt_timeout;
@@ -960,7 +965,11 @@ EOF
 	    print " => Package is up to date\n";
 	}
 	$dehs_tags{'status'} = "up to date";
-	return 0;
+	if (! $force_download) {
+	    return 0;
+	} else {
+	    $download = 1;
+	}
     }
 
     # In all other cases, we'll want to report information even with --report
@@ -1006,13 +1015,17 @@ EOF
 	}
     }
 
-    if ($verbose) {
+    if ($force_download and $verbose) {
+	print " => Forcing download as requested\n";
+    } elsif ($verbose) {
 	print " => Newer version available from\n";
 	print "    $upstream_url\n";
     } elsif ($dehs) {
 	$dehs_tags{'status'} = "Newer version available";
     } else {
-	print "$pkg: Newer version ($newversion) available on remote site:\n  $upstream_url\n  (local version is $lastversion" .
+	my $msg_header = "$pkg: ";
+	$msg_header .= $force_download ? "Version" : "Newer version";
+	print "$msg_header ($newversion) available on remote site:\n  $upstream_url\n  (local version is $lastversion" .
 	    ($mangled_lastversion eq $lastversion ? "" : ", mangled local version number $mangled_lastversion") .
 	    ")\n";
     }

@@ -42,8 +42,10 @@ devscripts (2.9.28) UNRELEASED; urgency=low
   * checkbashisms: add detection of "${!prefix"-like bashisms, patch from Adam
     D. Barratt (Closes: #409028)
   * bts: list the available severities in the manpage (Closes: #412186)
+  * uscan: added --force-download to force download when changelog is in sync
+    with upstream version, based on a patch from Ian Wienand (Closes: #364116)
 
- -- Stefano Zacchiroli <zack@debian.org>  Sun, 25 Feb 2007 13:08:56 +0100
+ -- Stefano Zacchiroli <zack@debian.org>  Sun, 25 Feb 2007 16:09:31 +0100
 
 devscripts (2.9.27) unstable; urgency=low
 
