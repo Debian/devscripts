@@ -6,7 +6,7 @@ debcommit - commit changes to a package
 
 =head1 SYNOPSIS
 
-debcommit [--release] [--message=text] [--noact]
+debcommit [--release] [--message=text] [--noact] [files to commit]
 
 =head1 DESCRIPTION
 
@@ -40,6 +40,10 @@ override the default message.
 
 Do not actually do anything, but do print the commands that would be run.
 
+=item files to commit
+
+Specify which files to commit. Commits all files if not used.
+
 =over 4
 
 =back
@@ -54,11 +58,14 @@ my $progname = basename($0);
 
 sub usage {
     print <<"EOT";
-Usage: $progname [--release] [--message=text] [--noact] [--help ] [--version]
+Usage: $progname [options] [files to commit]
+       $progname --version
+       $progname --help
 
 Generates a commit message based on new text in debian/changelog,
 and commit the change to a package\'s repository.
 
+Options:
    --release       Commit a release of the package.
    --message=text  Specify a commit message
    --noact         Dry run, no actual commits
@@ -88,8 +95,10 @@ if (! GetOptions(
 		 "help" => sub { usage(); exit 0; },
 		 "version" => sub { version(); exit 0; },
 		 )) {
-    die "Usage: debcommit [--release] [--message=text] [--noact]\n";
+    die "Usage: debcommit [--release] [--message=text] [--noact] [files to commit]\n";
 }
+
+my @files_to_commit = @ARGV;
 
 my $prog=getprog();
 if (! -e "debian/changelog") {
@@ -162,12 +171,12 @@ sub commit {
     my $message=shift;
     
     if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk' || $prog eq 'bzr') {
-	if (! action($prog, "commit", "-m", $message)) {
+	if (! action($prog, "commit", "-m", $message, @files_to_commit)) {
 	    die "debcommit: commit failed\n";
 	}
     }
     elsif ($prog eq 'git') {
-	if (! action($prog, "commit", "-a", "-m", $message)) {
+	if (! action($prog, "commit", "-a", "-m", $message, @files_to_commit)) {
 	    die "debcommit: commit failed\n";
 	}
     }
@@ -182,6 +191,12 @@ sub commit {
 	    $summary=~s/^\* //s;
 	    @args=("-s", "$summary ...", "-L", $message);
 	}
+        push(
+            @args,
+            (($prog eq 'tla') ? '--' : ()),
+            @files_to_commit,
+        ) if @files_to_commit;
+
 	if (! action($prog, "commit", @args)) {
 	    die "debcommit: commit failed\n";
 	}
