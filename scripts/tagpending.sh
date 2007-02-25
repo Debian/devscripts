@@ -3,7 +3,7 @@
 # Purpose: tag all bugs pending which are not so already
 # 
 # Copyright 2004 Joshua Kwan <joshk@triplehelix.org>
-# Changes copyright 2004-06 by their respective authors.
+# Changes copyright 2004-07 by their respective authors.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of version 2 (only) of the GNU General Public
@@ -27,7 +27,7 @@ Usage: tagpending [options]
     -s, --silent        Silent mode
     -v, --verbose       Verbose mode: List bugs checked/tagged. 
                         NOTE: Verbose and silent mode can't be used together.
-    -f, --force         Do not query the BTS for already tagged bugs (force).
+    -f, --force         Do not query the BTS, (re-)tag all bug reports (force).
     -c, --confirm       Tag bugs as confirmed as well as pending
     -h, --help          This usage screen.
     -V, --version       Display the version and copyright information
@@ -53,6 +53,8 @@ DRY=0
 SILENT=0
 VERBOSE=0
 CONFIRM=0
+
+BTS_BASE_URL="http://bugs.debian.org/cgi-bin/pkgreport.cgi"
 
 while [ -n "$1" ]; do
   case "$1" in
@@ -99,7 +101,9 @@ changelog_closes=$(echo "$parsed"| awk -F: '/^Closes: / { print $2 }' | \
   xargs -n1 echo)
 
 if [ "$USE_WGET" = "1" ]; then
-    bts_pending=$(wget -q -O - "http://bugs.debian.org/cgi-bin/pkgreport.cgi?which=src;data=$srcpkg;archive=no;pend-exc=done;include=pending" | \
+    bts_pending=$(wget -q -O - "$BTS_BASE_URL?which=src;data=$srcpkg;archive=no;pend-exc=done;include=pending" | \
+	sed -ne 's/.*<a href="bugreport.cgi?bug=\([0-9]*\).*/\1/; T; p')
+    bts_open=$(wget -q -O - "$BTS_BASE_URL?which=src;data=$srcpkg;archive=no;pend-exc=done" | \
 	sed -ne 's/.*<a href="bugreport.cgi?bug=\([0-9]*\).*/\1/; T; p')
 fi
 
@@ -112,10 +116,19 @@ for bug in $to_be_checked; do
   	echo -n "Checking bug #$bug: "
   fi
   if ! echo "$bts_pending" | grep -q "^${bug}$"; then
-    if [ "$VERBOSE" = "1" ]; then
-    	echo "needs tag"
+    if echo "$bts_open" | grep -q "^${bug}$" || [ "$USE_WGET" = "0" ] ; then
+      if [ "$VERBOSE" = "1" ]; then
+	  echo "needs tag"
+      fi
+      to_be_tagged="$to_be_tagged $bug"
+    else
+      msg="does not belong to this package (check bug no. or force)"
+      if [ "$VERBOSE" = "1" ]; then
+	echo "$msg"
+      else
+	echo "Warning: #$bug $msg."
+      fi
     fi
-    to_be_tagged="$to_be_tagged $bug"
   else
     if [ "$VERBOSE" = "1" ]; then
     	echo "already marked pending"
