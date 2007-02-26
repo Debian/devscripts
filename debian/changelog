@@ -49,7 +49,12 @@ devscripts (2.9.28) UNRELEASED; urgency=low
   * uscan: added --force-download to force download when changelog is in sync
     with upstream version, based on a patch from Ian Wienand (Closes: #364116)
 
- -- Stefano Zacchiroli <zack@debian.org>  Mon, 26 Feb 2007 00:43:21 +0100
+  [ Adam D. Barratt ]
+  * Joining the team
+  * tagpending: modify bug list display code to indicate whether --noact was
+    used
+
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Mon, 26 Feb 2007 15:13:09 +0000
 
 devscripts (2.9.27) unstable; urgency=low
 

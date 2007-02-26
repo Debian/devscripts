@@ -147,7 +147,16 @@ fi
 src_packages=$(awk '/Package: / { print $2 } /Source: / { print $2 }' debian/control | sort | uniq)
 
 bugs_info() {
-  msg="tagpending info: Would tag these bugs pending"
+  msg="tagpending info: "
+
+  if [ "$DRY" = 1 ]; then
+    msg="$msg would tag"
+  else
+    msg="$msg tagging"
+  fi
+
+  msg="$msg these bugs pending"
+
   if [ "$CONFIRM" = 1 ]; then
     msg="$msg and confirmed"
   fi
