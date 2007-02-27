@@ -45,7 +45,7 @@ devscripts (2.9.28) UNRELEASED; urgency=low
     (Closes: #382884)
   * tagpending: factorized some code for delivering info to the user
   * tagpending: added an extra check to ensure that bugs to be tagged belong
-    to the current package, also avoids tagging of wnpp bugs (Closes: #398178)
+    to the current package
   * uscan: added --force-download to force download when changelog is in sync
     with upstream version, based on a patch from Ian Wienand (Closes: #364116)
 
@@ -53,8 +53,9 @@ devscripts (2.9.28) UNRELEASED; urgency=low
   * Joining the team
   * tagpending: modify bug list display code to indicate whether --noact was
     used
+  * tagpending: support marking wnpp bugs as pending (Closes: #398178)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Mon, 26 Feb 2007 15:13:09 +0000
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Mon, 26 Feb 2007 19:03:06 +0000
 
 devscripts (2.9.27) unstable; urgency=low
 

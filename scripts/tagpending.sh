@@ -55,6 +55,8 @@ VERBOSE=0
 CONFIRM=0
 
 BTS_BASE_URL="http://bugs.debian.org/cgi-bin/pkgreport.cgi"
+TAGS="<h3>Tags:"
+WNPP_MATCH="Package: <a href=\"pkgreport.cgi?pkg=wnpp\">wnpp<\/a>;"
 
 while [ -n "$1" ]; do
   case "$1" in
@@ -111,6 +113,7 @@ to_be_checked=$(printf '%s\n%s\n' "$changelog_closes" "$bts_pending" | sort | un
 
 # Now remove the ones tagged in the BTS but no longer in the changelog.
 to_be_tagged=""
+wnpp_to_be_tagged=""
 for bug in $to_be_checked; do
   if [ "$VERBOSE" = "1" ]; then
   	echo -n "Checking bug #$bug: "
@@ -122,11 +125,27 @@ for bug in $to_be_checked; do
       fi
       to_be_tagged="$to_be_tagged $bug"
     else
-      msg="does not belong to this package (check bug no. or force)"
-      if [ "$VERBOSE" = "1" ]; then
-	echo "$msg"
+      wnpp_tags=$( (wget -q -O- http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=$bug; \
+        echo $TAGS) | sed -ne "/$WNPP_MATCH/,/^$TAGS/ {/^$TAGS/p}" )
+
+      if [ -n "$wnpp_tags" ]; then
+        if ! echo "$wnpp_tags" | grep -q "pending"; then
+          if [ "$VERBOSE" = "1" ]; then
+            echo "wnpp needs tag"
+          fi
+          wnpp_to_be_tagged="$wnpp_to_be_tagged $bug"
+        else
+          if [ "$VERBOSE" = "1" ]; then
+            echo "wnpp already marked pending"
+          fi
+        fi
       else
-	echo "Warning: #$bug $msg."
+        msg="does not belong to this package (check bug no. or force)"
+        if [ "$VERBOSE" = "1" ]; then
+	  echo "$msg"
+        else
+	  echo "Warning: #$bug $msg."
+        fi
       fi
     fi
   else
@@ -136,7 +155,7 @@ for bug in $to_be_checked; do
   fi
 done
 
-if [ -z "$to_be_tagged" ]; then
+if [ -z "$to_be_tagged" ] && [ -z "$wnpp_to_be_tagged" ]; then
   if [ "$SILENT" = 0 -o "$DRY" = 1 ]; then
     echo "tagpending info: Nothing to do, exiting."
   fi
@@ -147,6 +166,15 @@ fi
 src_packages=$(awk '/Package: / { print $2 } /Source: / { print $2 }' debian/control | sort | uniq)
 
 bugs_info() {
+  if [ "$1" = "wnpp" ]; then
+    bugs=$wnpp_to_be_tagged
+    if [ -z "$bugs" ]; then
+      return
+    fi
+  else
+    bugs=$to_be_tagged
+  fi
+
   msg="tagpending info: "
 
   if [ "$DRY" = 1 ]; then
@@ -155,14 +183,20 @@ bugs_info() {
     msg="$msg tagging"
   fi
 
-  msg="$msg these bugs pending"
+  msg="$msg these"
 
-  if [ "$CONFIRM" = 1 ]; then
+  if [ "$1" = "wnpp" ]; then
+    msg="$msg wnpp"
+  fi
+
+  msg="$msg bugs pending"
+
+  if [ "$CONFIRM" = 1 ] && [ "$1" != "wnpp" ]; then
     msg="$msg and confirmed"
   fi
   msg="$msg:"
 
-  for bug in $to_be_tagged; do
+  for bug in $bugs; do
     msg="$msg $bug"
   done
   echo $msg | fold -w 78 -s
@@ -170,22 +204,37 @@ bugs_info() {
 
 if [ "$DRY" = 1 ]; then
   bugs_info
+  bugs_info wnpp
 
   exit 0
 else
   if [ "$SILENT" = 0 ]; then
     bugs_info
+    bugs_info wnpp
   fi
 
-  BTS_ARGS="package $src_packages"
+  if [ -n "$to_be_tagged" ]; then
+    BTS_ARGS="package $src_packages"
 
-  for bug in $to_be_tagged; do
-    BTS_ARGS="$BTS_ARGS . tag $bug + pending "
+    for bug in $to_be_tagged; do
+      BTS_ARGS="$BTS_ARGS . tag $bug + pending"
 
-    if [ "$CONFIRM" = 1 ]; then
-      BTS_ARGS="$BTS_ARGS confirmed"
+      if [ "$CONFIRM" = 1 ]; then
+        BTS_ARGS="$BTS_ARGS confirmed"
+      fi
+    done
+  fi
+
+  if [ -n "$wnpp_to_be_tagged" ]; then
+    if [ -n "$BTS_ARGS" ]; then
+      BTS_ARGS="$BTS_ARGS ."
     fi
-  done
+    BTS_ARGS="$BTS_ARGS package wnpp"
+
+    for bug in $wnpp_to_be_tagged; do
+      BTS_ARGS="$BTS_ARGS . tag $bug + pending"
+    done
+  fi
 
   eval bts ${BTS_ARGS}
 fi
