@@ -1100,9 +1100,9 @@ sub bts_package {
 Change the "owner" address of a bug, with `!' meaning
 `use the address on the current email as the new owner address'.
 
-The owner of a bug accepts the responsibility of dealing with it. Note that the
-"owner" of a bug does not receive automatically all of the email corresponding
-to the bug; use "subscribe" to achieve that.
+The owner of a bug accepts responsibility for dealing with it. Note that 
+the "owner" of a bug does not automatically receive all of the email 
+corresponding to it; use "subscribe" to achieve that.
 
 =cut
 
