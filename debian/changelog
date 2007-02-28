@@ -31,6 +31,7 @@ devscripts (2.9.28) UNRELEASED; urgency=low
     + debian/manpages: delegated manpage installation to dh_installman
     + scripts/Makefile: removed the need of explicitly listing scripts
   * bts: list the available severities in the manpage (Closes: #412186)
+  * bts: clarified the meaning of "owner" in the docs (Closes: #403859)
   * checkbashisms: add detection of "${!prefix"-like bashisms, patch from Adam
     D. Barratt (Closes: #409028)
   * dd-list: enable (-b cmdline flag) output of binary package names, patch
@@ -55,7 +56,7 @@ devscripts (2.9.28) UNRELEASED; urgency=low
     used
   * tagpending: support marking wnpp bugs as pending (Closes: #398178)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Mon, 26 Feb 2007 19:03:06 +0000
+ -- Stefano Zacchiroli <zack@debian.org>  Wed, 28 Feb 2007 10:20:31 +0100
 
 devscripts (2.9.27) unstable; urgency=low
 
