@@ -55,8 +55,10 @@ devscripts (2.9.28) UNRELEASED; urgency=low
   * tagpending: modify bug list display code to indicate whether --noact was
     used
   * tagpending: support marking wnpp bugs as pending (Closes: #398178)
+  * debc.1: Fix reference to debi (thanks, Frans Pop)
+  * {cvs-,}debc.1: Fix reference to installing packages (thanks, Frans Pop)
 
- -- Stefano Zacchiroli <zack@debian.org>  Wed, 28 Feb 2007 10:20:31 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed,  7 Mar 2007 10:36:06 +0000
 
 devscripts (2.9.27) unstable; urgency=low
 

@@ -23,10 +23,10 @@ useful for ensuring that the expected files have ended up in the
 Debian package.
 .PP
 If a list of packages is given on the command line, then only those
-debs with names in this list of packages will be installed.
+debs with names in this list of packages will be processed.
 .SH "Directory name checking"
 In common with several other scripts in the \fBdevscripts\fR package,
-\fBdebi\fR will climb the directory tree until it finds a
+\fBdebc\fR will climb the directory tree until it finds a
 \fIdebian/changelog\fR file.  As a safeguard against stray files
 causing potential problems, it will examine the name of the parent
 directory once it finds the \fIdebian/changelog\fR file, and check
