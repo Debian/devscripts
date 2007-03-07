@@ -56,7 +56,7 @@ CONFIRM=0
 
 BTS_BASE_URL="http://bugs.debian.org/cgi-bin/pkgreport.cgi"
 TAGS="<h3>Tags:"
-WNPP_MATCH="Package: <a href=\"pkgreport.cgi?pkg=wnpp\">wnpp<\/a>;"
+WNPP_MATCH="Package: <a [^>]*href=\"pkgreport.cgi?pkg=wnpp\">wnpp<\/a>;"
 
 while [ -n "$1" ]; do
   case "$1" in
