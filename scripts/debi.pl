@@ -69,7 +69,7 @@ EOF
 sub usage_c {
     print <<"EOF";
 Usage: $progname [options] [.changes file] [package ...]
-  Display the contents of the .deb file(s) just created, as listed
+  Display the contents of the .deb or .udeb file(s) just created, as listed
   in the generated .changes file or the .changes file specified.
   If packages are listed, only display those specified packages
   from the .changes file.  Options:
@@ -333,7 +333,10 @@ while (<CHANGES>) {
     last if $infiles and /^[^ ]/;
     /^Files:/ and $infiles=1, next;
     next unless $infiles;
-    if (/ (\S*\.deb)$/) {
+
+    # udebs are only supported for debc
+    if ((($progname eq 'debi') && (/ (\S*\.deb)$/)) ||
+        (($progname eq 'debc') && (/ (\S*\.u?deb)$/))) {
         my $deb = $1;
         $deb =~ /^([a-z0-9+\.-]+)_/ or warn "unrecognised .deb name: $deb\n";
 	# don't want other archs' .debs:
