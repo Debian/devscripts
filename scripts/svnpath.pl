@@ -92,7 +92,7 @@ print $url;
 
 =head1 LICENSE
 
-GPL
+GPL version 2 or later
 
 =head1 AUTHOR
 
