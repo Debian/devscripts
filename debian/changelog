@@ -53,6 +53,9 @@ devscripts (2.9.28) UNRELEASED; urgency=low
   [ Adam D. Barratt ]
   * Joining the team
   * COPYING: update FSF postal address
+  * debian/copyright:
+    - annotate-output is GPLv2 only
+    - whodepends is in the public domain
   * tagpending: modify bug list display code to indicate whether --noact was
     used
   * tagpending: support marking wnpp bugs as pending (Closes: #398178)
@@ -61,7 +64,7 @@ devscripts (2.9.28) UNRELEASED; urgency=low
   * debc: Add support for udebs, based on a patch from Frans Pop
     (Closes: #404952)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed,  7 Mar 2007 21:40:51 +0000
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Thu,  8 Mar 2007 20:29:17 +0000
 
 devscripts (2.9.27) unstable; urgency=low
 
