@@ -5,7 +5,10 @@ devscripts (2.9.28) UNRELEASED; urgency=low
   * control: change maintainer name to mailing list (Closes: #411591)
 
   [ Mohammed Adnène Trojette ]
-  * Add myself to Uploaders.
+  * debian/control:
+     + add myself to Uploaders.
+     + suggest bzr, not bazaar (deprecated). (Closes: #414051)
+     + suggest git.
   * po4a/po/fr.po: update French manpage translation (Closes: #400568)
      + Patch from Julien Cristau.
   * debdiff: allow use with no argument (Closes: #369691)
@@ -69,7 +72,7 @@ devscripts (2.9.28) UNRELEASED; urgency=low
     - use bugs.d.o/mbox:NNNN to download the mbox
     - download version graphs in "full caching" mode
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Sat, 10 Mar 2007 01:25:25 +0000
+ -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Sat, 10 Mar 2007 12:47:13 +0100
 
 devscripts (2.9.27) unstable; urgency=low
 
