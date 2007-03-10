@@ -1952,8 +1952,9 @@ sub download_attachments {
     # occurrence of either "[<a " or plain "<a ", preserving any "[".
     my @data = split /(?:(?=\[<[Aa]\s)|(?<!\[)(?=<[Aa]\s))/, $toppage;
     foreach (@data) {
-	next unless m%<a(?: class=\".*?\")? href="((bugreport|version)\.cgi[^\"]+)">%i;
-	my $ref = $1;
+	next unless m%<a(?: class=\".*?\")? href="((bugreport\.cgi[^\"]+)">|(version\.cgi[^\"]+)">(<img[^>]+>)?)%i;
+	my $ref = $2;
+	$ref = $3 if not defined $ref;
 	my ($msg, $filename) = href_to_filename($_);
 
 	next unless defined $msg;
@@ -1985,7 +1986,7 @@ sub download_attachments {
 	    # Always need refreshing, as they could change each time the
 	    # bug does
 	}
-	elsif ($cachemode eq 'full' and $msg eq 'versions') {
+	elsif ($cachemode eq 'full' and $msg =~ /^versions(coll)?$/) {
 	    $bug2filename{$msg} = $filename;
 	    # already downloaded?
 	    next if -f $bug2filename{$msg} and not $refreshmode;
@@ -2133,6 +2134,7 @@ sub mangle_cache_file {
 		s%<a((?: class=\".*?\")?) href="(pkgreport\.cgi\?submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="from_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
 		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(bugspam\.cgi[^\"]+)">%<a$1 href="$btscgiurl$2">%i;
 		s%<a((?: class=\".*?\")?) href="(version\.cgi\?package=(?:[^;]+);found=([^\%]+)\%2F([^\";]+))(?:;[^\"]+)?">(.*?)</a>%<a$1 href="$3.$4.png">$5</a>%;
+		s%<img((?: class=\".*?\")?) src="(version\.cgi\?package=(?:[^;]+);found=([^\%]+)\%2F([^;]+);width=([^;]+);height=([^;\"]+)(?:[^\"]*));collapse=1">%<img$1 src="$3.$4.collapsed.png" width="25\%" height="25\%">%;
 		s%<img((?: class=\".*?\")?) src="(version\.cgi\?package=(?:[^;]+);found=([^\%]+)\%2F([^;]+);width=([^;]+);height=([^;\"]+)(?:[^\"]*))">%<img$1 src="$3.$4.png" width="25\%" height="25\%">%;
 	    }
 	}
@@ -2326,6 +2328,13 @@ sub href_to_filename {
 	    warn "bts: in href_to_filename: unrecognised BTS URL type: $href\n";
 	    return undef;
 	}
+    }
+    elsif ($href =~ m%<a href=\"version\.cgi[^>]+><img src=\"version\.cgi\?package=[^;]+;found=([^\%]+)\%2F([^;]+);[^\"]*collapse=1\">%) {
+	my $package = $1;
+	my $version = $2;
+
+	$msg = 'versionscoll';
+	$filename = "$package.$version.collapsed.png";
     }
     elsif ($href =~ m%<a href=\"version\.cgi\?package=[^;]+;found=([^\%]+)\%2F([^\"]+)\">%) {
 	my $package = $1;
