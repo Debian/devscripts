@@ -1980,6 +1980,11 @@ sub download_attachments {
 	    # This always needs refreshing, as it does change as the bug
 	    # changes
 	}
+	elsif ($cachemode eq 'full' and $msg =~ /^(status|maint)mbox$/) {
+	    $bug2filename{$msg} = $filename;
+	    # Always need refreshing, as they could change each time the
+	    # bug does
+	}
 
 	next unless exists $bug2filename{$msg};
 
@@ -2033,7 +2038,7 @@ sub download_mbox {
     }
     init_agent() unless $ua;
 
-    my $request = HTTP::Request->new('GET', $btscgiurl . "bugreport.cgi?bug=$thing;mbox=yes");
+    my $request = HTTP::Request->new('GET', $btsurl . "mbox:$thing");
     my $response = $ua->request($request);
     if ($response->is_success) {
 	my $content_length = defined $response->content ?
@@ -2284,6 +2289,10 @@ sub href_to_filename {
 	my $ref = $3;
 	$ref =~ s/&(?:amp;)?/;/g;  # normalise all hrefs
 	$ref =~ s/;archive=(yes|no)\b//;
+	$ref =~ s/%3D/=/g;
+	# 20070310 ADB Work-around a BTS bug. We should probably remove
+	# this if the BTS gets fixed
+	$ref =~ s/=mbox/;mbox=yes/g;
 
 	if ($ref =~ /;msg=(\d+)$/) {
 	    $msg = $1;
@@ -2296,6 +2305,14 @@ sub href_to_filename {
 	elsif ($ref =~ /^;mbox=yes$/) {
 	    $msg = 'mbox';
 	    $filename = "$bug.mbox";
+	}
+	elsif ($ref =~ /^;mbox=yes;mboxstatus=yes$/) {
+	    $msg = 'statusmbox';
+	    $filename = "$bug.status.mbox";
+	}
+	elsif ($ref =~ /^;mboxmaint=yes;mbox=yes$/) {
+	    $msg = 'maintmbox';
+	    $filename = "$bug.maint.mbox";
 	}
 	elsif ($ref eq '') {
 	    return undef;
