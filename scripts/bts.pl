@@ -2297,9 +2297,6 @@ sub href_to_filename {
 	$ref =~ s/&(?:amp;)?/;/g;  # normalise all hrefs
 	$ref =~ s/;archive=(yes|no)\b//;
 	$ref =~ s/%3D/=/g;
-	# 20070310 ADB Work-around a BTS bug. We should probably remove
-	# this if the BTS gets fixed
-	$ref =~ s/=mbox/;mbox=yes/g;
 
 	if ($ref =~ /;msg=(\d+)$/) {
 	    $msg = $1;
