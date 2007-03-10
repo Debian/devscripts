@@ -1952,7 +1952,7 @@ sub download_attachments {
     # occurrence of either "[<a " or plain "<a ", preserving any "[".
     my @data = split /(?:(?=\[<[Aa]\s)|(?<!\[)(?=<[Aa]\s))/, $toppage;
     foreach (@data) {
-	next unless m%<a(?: class=\".*?\")? href="(bugreport\.cgi[^\"]+)">%i;
+	next unless m%<a(?: class=\".*?\")? href="((bugreport|version)\.cgi[^\"]+)">%i;
 	my $ref = $1;
 	my ($msg, $filename) = href_to_filename($_);
 
@@ -1984,6 +1984,11 @@ sub download_attachments {
 	    $bug2filename{$msg} = $filename;
 	    # Always need refreshing, as they could change each time the
 	    # bug does
+	}
+	elsif ($cachemode eq 'full' and $msg eq 'versions') {
+	    $bug2filename{$msg} = $filename;
+	    # already downloaded?
+	    next if -f $bug2filename{$msg} and not $refreshmode;
 	}
 
 	next unless exists $bug2filename{$msg};
@@ -2127,6 +2132,8 @@ sub mangle_cache_file {
 		s%<a((?: class=\".*?\")?) href="(pkgreport\.cgi\?src=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="src_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
 		s%<a((?: class=\".*?\")?) href="(pkgreport\.cgi\?submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="from_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
 		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(bugspam\.cgi[^\"]+)">%<a$1 href="$btscgiurl$2">%i;
+		s%<a((?: class=\".*?\")?) href="(version\.cgi\?package=(?:[^;]+);found=([^\%]+)\%2F([^\";]+))(?:;[^\"]+)?\">(.*?)</a>%<a$1 href=\"$3.$4.png\">$5</a>%;
+		s%<img((?: class=\".*?\")?) src="(version\.cgi\?package=(?:[^;]+);found=([^\%]+)\%2F([^;]+);width=([^;]+);height=([^;\"]+)(?:[^\"]*))\">%<img$1 src=\"$3.$4.png\" width=\"25\%\" height=\"25\%\">%;
 	    }
 	}
     }
@@ -2322,6 +2329,13 @@ sub href_to_filename {
 	    warn "bts: in href_to_filename: unrecognised BTS URL type: $href\n";
 	    return undef;
 	}
+    }
+    elsif ($href =~ m%<a href=\"version\.cgi\?package=[^;]+;found=([^\%]+)\%2F([^\"]+)\">%) {
+	my $package = $1;
+	my $version = $2;
+
+	$msg = 'versions';
+	$filename = "$package.$version.png";
     }
     else {
 	return undef;

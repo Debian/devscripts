@@ -66,9 +66,10 @@ devscripts (2.9.28) UNRELEASED; urgency=low
   * svnpath: is GPLv2 or later
   * bts:
     - handle new status / maintainer mbox links when downloading bugs
-    - use bugs.d.o/mbox:NNNN to download the mbox  
+    - use bugs.d.o/mbox:NNNN to download the mbox
+    - download version graphs in "full caching" mode
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Sat, 10 Mar 2007 01:12:38 +0000
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Sat, 10 Mar 2007 01:25:25 +0000
 
 devscripts (2.9.27) unstable; urgency=low
 
