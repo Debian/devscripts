@@ -69,8 +69,9 @@ devscripts (2.9.28) UNRELEASED; urgency=low
   * svnpath: is GPLv2 or later
   * bts:
     - handle new status / maintainer mbox links when downloading bugs
+      (Closes: #414200)
     - use bugs.d.o/mbox:NNNN to download the mbox
-    - download version graphs in "full caching" mode
+    - attempt to download version graphs in "full caching" mode
 
  -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Sat, 10 Mar 2007 12:47:13 +0100
 
