@@ -2132,7 +2132,7 @@ sub mangle_cache_file {
 		s%<a((?: class=\".*?\")?) href="(pkgreport\.cgi\?src=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="src_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
 		s%<a((?: class=\".*?\")?) href="(pkgreport\.cgi\?submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="from_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
 		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(bugspam\.cgi[^\"]+)">%<a$1 href="$btscgiurl$2">%i;
-		s%<a((?: class=\".*?\")?) href="(version\.cgi\?package=(?:[^;]+);found=([^\%]+)\%2F([^\";]+))(?:;[^\"]+)?\">(.*?)</a>%<a$1 href=\"$3.$4.png\">$5</a>%;
+		s%<a((?: class=\".*?\")?) href="(version\.cgi\?package=(?:[^;]+);found=([^\%]+)\%2F([^\";]+))(?:;[^\"]+)?">(.*?)</a>%<a$1 href=\"$3.$4.png\">$5</a>%;
 		s%<img((?: class=\".*?\")?) src="(version\.cgi\?package=(?:[^;]+);found=([^\%]+)\%2F([^;]+);width=([^;]+);height=([^;\"]+)(?:[^\"]*))\">%<img$1 src=\"$3.$4.png\" width=\"25\%\" height=\"25\%\">%;
 	    }
 	}
