@@ -73,7 +73,14 @@ devscripts (2.9.28) UNRELEASED; urgency=low
     - use bugs.d.o/mbox:NNNN to download the mbox
     - attempt to download version graphs in "full caching" mode
 
- -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Sat, 10 Mar 2007 12:47:13 +0100
+  [ James Vega ]
+  * debian/control: Add myself to the Uploaders list.
+  * bts: chdir back to the invoking directory before leaving prunecache()
+    (Closes: #413793)
+  * scripts/Makefile: Specify an include directory when running Perl in order
+    to handle the source restructuring.
+
+ -- James Vega <jamessan@debian.org>  Mon, 12 Mar 2007 14:18:32 -0400
 
 devscripts (2.9.27) unstable; urgency=low
 

@@ -2492,6 +2492,8 @@ sub prunecache {
     return unless -d $cachedir;
     return if -f $prunestamp and -M _ < 1;
 
+    my $oldcwd = getcwd;
+
     chdir($cachedir) || die "bts: chdir $cachedir: $!\n";
 
     # remove the now-defunct live-download file
@@ -2553,6 +2555,7 @@ sub prunecache {
 	open PRUNESTAMP, ">$prunestamp" || die "bts: prune timestamp: $!\n";
 	close PRUNESTAMP;
     }
+    chdir $oldcwd || die "bts: chdir $oldcwd: $!\n";
     utime time, time, $prunestamp;
 }
 

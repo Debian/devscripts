@@ -25,7 +25,7 @@ all: $(SCRIPTS) $(GEN_MAN1S) $(LIBS) $(CWRAPPERS)
 	bash -n $@
 %.tmp: %.pl $(VERSION_FILE)
 	sed -e "s/###VERSION###/$(VERSION)/" $<  > $@
-	perl -c $@
+	perl -I.. -c $@
 %: %.tmp
 	cp $< $@
 	chmod +x $@
