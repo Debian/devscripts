@@ -293,7 +293,7 @@ if (defined $opt_package) {
 die "$progname: Can't use --verbose if you're using --dehs!\n"
     if $verbose and $dehs;
 
-die "$progname: Can't use --report-status if you're using --dehs!\n"
+die "$progname: Can't use --report-status if you're using --verbose!\n"
     if $verbose and $report;
 
 die "$progname: Can't use --report-status if you're using --download!\n"
