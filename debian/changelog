@@ -72,6 +72,7 @@ devscripts (2.9.28) UNRELEASED; urgency=low
       (Closes: #414200)
     - use bugs.d.o/mbox:NNNN to download the mbox
     - attempt to download version graphs in "full caching" mode
+  * dscverify: Add --nosigcheck (Closes: #397720)
 
   [ James Vega ]
   * debian/control: Add myself to the Uploaders list.
@@ -80,7 +81,7 @@ devscripts (2.9.28) UNRELEASED; urgency=low
   * scripts/Makefile: Specify an include directory when running Perl in order
     to handle the source restructuring.
 
- -- James Vega <jamessan@debian.org>  Mon, 12 Mar 2007 14:18:32 -0400
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Mon, 12 Mar 2007 21:10:36 +0000
 
 devscripts (2.9.27) unstable; urgency=low
 

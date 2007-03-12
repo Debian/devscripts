@@ -42,6 +42,7 @@ my $progname = basename $0;
 my $modified_conf_msg;
 my $Exit = 0;
 my $start_dir = cwd;
+my $verify_sigs = 1;
 
 sub usage {
     print <<"EOF";
@@ -50,6 +51,8 @@ Usage: $progname [options] dsc-or-changes-file ...
            --version   Display version and copyright information
            --keyring <keyring>
                        Add <keyring> to the list of keyrings used
+           --nosigcheck, --no-sig-check
+                       Do not verify the GPG signature
            --no-conf, --noconf
                        Do not read the devscripts config file
 
@@ -113,6 +116,7 @@ sub check_signature {
 sub process_file {
     my ($file, @rings) = @_;
     my ($filedir, $filebase);
+    my $sigcheck;
 
     print "$file:\n";
 
@@ -139,12 +143,14 @@ sub process_file {
 	return;
     }
 
-    my $sigcheck = check_signature $filebase, @rings;
-    if ($sigcheck) {
-	xwarn "$file failed signature check:\n$sigcheck";
-	return;
-    } else {
-	print "      Good signature found\n";
+    if ($verify_sigs == 1) {
+	$sigcheck = check_signature $filebase, @rings;
+	if ($sigcheck) {
+	    xwarn "$file failed signature check:\n$sigcheck";
+	    return;
+	} else {
+	    print "      Good signature found\n";
+	}
     }
 
     my @spec = map { split /\n/ } $out =~ /^Files:\s*\n((?:[ \t]+.*\n)+)/mg;
@@ -197,7 +203,7 @@ sub process_file {
 
 	close FILE;
 
-	if ($filename =~ /\.dsc$/) {
+	if ($filename =~ /\.dsc$/ && $verify_sigs == 1) {
 	    $sigcheck = check_signature $filename, @rings;
 	    if ($sigcheck) {
 		xwarn "$filename failed signature check:\n$sigcheck";
@@ -258,6 +264,7 @@ sub main {
     while (@ARGV > 0) {
 	if ($ARGV[0] eq '--help') { usage; exit 0; }
 	if ($ARGV[0] eq '--version') { print $version; exit 0; }
+	if ($ARGV[0] =~ /^--no(sig|-sig-)check$/) { $verify_sigs = 0; shift @ARGV; }
 	if ($ARGV[0] =~ /^--no-?conf$/) {
 	    xdie "$ARGV[0] is only acceptable as the first command-line option!\n";
 	}
@@ -294,7 +301,7 @@ sub main {
 
     @ARGV or xdie "no .changes or .dsc files specified\n";
 
-    @rings = get_rings @rings;
+    @rings = get_rings @rings unless $verify_sigs == 0;
 
     for my $file (@ARGV) {
 	process_file $file, @rings;
