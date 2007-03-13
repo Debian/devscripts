@@ -70,7 +70,8 @@ devscripts (2.9.28) UNRELEASED; urgency=low
   * bts:
     - handle new status / maintainer mbox links when downloading bugs
       (Closes: #414200)
-    - use bugs.d.o/mbox:NNNN to download the mbox
+    - use the maintainer mbox as the default mbox (i.e. for --mbox and
+      cached as $bug.mbox). The "raw" mboxes are now saved as $bug.raw.mbox
     - attempt to download version graphs in "full caching" mode
   * dscverify: Add --nosigcheck (Closes: #397720)
   * uscan: Fix typo in error message when combining --report-status and
@@ -83,7 +84,7 @@ devscripts (2.9.28) UNRELEASED; urgency=low
   * scripts/Makefile: Specify an include directory when running Perl in order
     to handle the source restructuring.
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Mon, 12 Mar 2007 21:27:38 +0000
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 13 Mar 2007 16:28:09 +0000
 
 devscripts (2.9.27) unstable; urgency=low
 

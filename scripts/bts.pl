@@ -1983,7 +1983,7 @@ sub download_attachments {
 	    # This always needs refreshing, as it does change as the bug
 	    # changes
 	}
-	elsif ($cachemode eq 'full' and $msg =~ /^(status|maint)mbox$/) {
+	elsif ($cachemode eq 'full' and $msg =~ /^(status|raw)mbox$/) {
 	    $bug2filename{$msg} = $filename;
 	    # Always need refreshing, as they could change each time the
 	    # bug does
@@ -2046,7 +2046,7 @@ sub download_mbox {
     }
     init_agent() unless $ua;
 
-    my $request = HTTP::Request->new('GET', $btsurl . "mbox:$thing");
+    my $request = HTTP::Request->new('GET', $btscgiurl . "bugreport.cgi?bug=$thing;mboxmaint=yes");
     my $response = $ua->request($request);
     if ($response->is_success) {
 	my $content_length = defined $response->content ?
@@ -2316,16 +2316,16 @@ sub href_to_filename {
 	    $filename = "$bug/$1.mbox";
 	}
 	elsif ($ref =~ /^;mbox=yes$/) {
-	    $msg = 'mbox';
-	    $filename = "$bug.mbox";
+	    $msg = 'rawmbox';
+	    $filename = "$bug.raw.mbox";
 	}
 	elsif ($ref =~ /^;mbox=yes;mboxstatus=yes$/) {
 	    $msg = 'statusmbox';
 	    $filename = "$bug.status.mbox";
 	}
-	elsif ($ref =~ /^;mboxmaint=yes;mbox=yes$/) {
-	    $msg = 'maintmbox';
-	    $filename = "$bug.maint.mbox";
+	elsif ($ref =~ /mboxmaint=yes/) {
+	    $msg = 'mbox';
+	    $filename = "$bug.mbox";
 	}
 	elsif ($ref eq '') {
 	    return undef;
