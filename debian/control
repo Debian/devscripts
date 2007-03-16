@@ -13,7 +13,7 @@ Architecture: any
 Conflicts: debmake (<< 3.5), dupload (<< 2.1), suidmanager (<< 0.51)
 Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), sed (>= 2.95), ${shlibs:Depends}, ${misc:Depends}
 Recommends: fakeroot
-Suggests: devscripts-el, at, build-essential, cvs-buildpackage, cvs | subversion | tla | bzr | git, debian-keyring, dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, libdigest-md5-perl, libtimedate-perl, libwww-perl, lintian | linda, mailx | mailutils, mutt, patch, patchutils, ssh, strace, wdiff, wget, www-browser
+Suggests: devscripts-el, at, build-essential, cvs-buildpackage, cvs | subversion | tla | bzr | git, debian-keyring, dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, libdigest-md5-perl, libtimedate-perl, libwww-perl, lintian | linda, mailx | mailutils, man-db, mutt, patch, patchutils, ssh, strace, wdiff, wget, www-browser
 Description: Scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
  brackets afterwards:
@@ -61,6 +61,7 @@ Description: Scripts to make the life of a Debian Package maintainer easier
   - dscverify: verify the integrity of a Debian package from the
     .changes or .dsc files [gnupg, debian-keyring, libdigest-md5-perl]
   - grep-excuses: grep the update_excuses.html file for your packages [wget]
+  - manpage-alert: locate binaries without corresponding manpages [man-db]
   - mass-bug: mass-file bug reports [mailx | mailutils]
   - mergechanges: merge .changes files from a package built on different
     architectures
