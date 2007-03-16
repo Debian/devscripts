@@ -2319,7 +2319,7 @@ sub href_to_filename {
 	    $msg = 'rawmbox';
 	    $filename = "$bug.raw.mbox";
 	}
-	elsif ($ref =~ /^;mbox=yes;mboxstatus=yes$/) {
+	elsif ($ref =~ /^;mbox=yes;mboxstat(us)?=yes$/) {
 	    $msg = 'statusmbox';
 	    $filename = "$bug.status.mbox";
 	}
