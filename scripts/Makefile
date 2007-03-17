@@ -20,6 +20,8 @@ BIN_LIBDIR = /usr/lib/devscripts
 
 all: $(SCRIPTS) $(GEN_MAN1S) $(LIBS) $(CWRAPPERS)
 
+%: %.sh
+
 %.tmp: %.sh $(VERSION_FILE)
 	sed -e "s/###VERSION###/$(VERSION)/" $<  > $@
 	bash -n $@
