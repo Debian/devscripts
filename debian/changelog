@@ -1,10 +1,15 @@
 devscripts (2.10.2) UNRELEASED; urgency=low
 
+  [ Adam D. Barratt ]
   * scripts/Makefile: Override make's default .sh rule so that the package
     version string actually gets written to the scripts
   * Fix encoding of French manpages (Closes: #415240)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Sat, 17 Mar 2007 20:13:00 +0000
+  [ Martin Zobel-Helas ]
+  * Adding myself to Uploaders
+  * tagpending should not use pend-excl=done (Closes: #415309)
+
+ -- Martin Zobel-Helas <zobel@debian.org>  Sun, 18 Mar 2007 09:31:51 +0100
 
 devscripts (2.10.1) unstable; urgency=low
 
