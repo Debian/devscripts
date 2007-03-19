@@ -2507,7 +2507,7 @@ sub prunecache {
     my @known_files = map { basename($_) } ($timestampdb, $timestampdb.".lock",
 					    $prunestamp);
 
-    my %weirdfiles = map { $_ => 1 } grep { ! /\.(html|css)$/ } @cachefiles;
+    my %weirdfiles = map { $_ => 1 } grep { ! /\.(html|css|png)$/ } @cachefiles;
     foreach (@known_files) {
 	delete $weirdfiles{$_} if exists $weirdfiles{$_};
     }
@@ -2517,6 +2517,10 @@ sub prunecache {
 	    delete $weirdfiles{$1} if exists $weirdfiles{$1} and -d $1;
 	    delete $weirdfiles{"$1.mbox"}
 	        if exists $weirdfiles{"$1.mbox"} and -f "$1.mbox";
+	    delete $weirdfiles{"$1.raw.mbox"}
+	        if exists $weirdfiles{"$1.raw.mbox"} and -f "$1.raw.mbox";
+	    delete $weirdfiles{"$1.status.mbox"}
+	        if exists $weirdfiles{"$1.status.mbox"} and -f "$1.status.mbox";
 	}
     }
 

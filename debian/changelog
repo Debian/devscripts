@@ -4,12 +4,14 @@ devscripts (2.10.2) UNRELEASED; urgency=low
   * scripts/Makefile: Override make's default .sh rule so that the package
     version string actually gets written to the scripts
   * Fix encoding of French manpages (Closes: #415240)
+  * bts
+    - Update prunecache() for maintainer / status mboxes and version graphs
 
   [ Martin Zobel-Helas ]
   * Adding myself to Uploaders
   * tagpending should not use pend-excl=done (Closes: #415309)
 
- -- Martin Zobel-Helas <zobel@debian.org>  Sun, 18 Mar 2007 09:31:51 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Mon, 19 Mar 2007 19:04:28 +0000
 
 devscripts (2.10.1) unstable; urgency=low
 
