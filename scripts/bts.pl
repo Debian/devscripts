@@ -1952,7 +1952,8 @@ sub download_attachments {
     # occurrence of either "[<a " or plain "<a ", preserving any "[".
     my @data = split /(?:(?=\[<[Aa]\s)|(?<!\[)(?=<[Aa]\s))/, $toppage;
     foreach (@data) {
-	next unless m%<a(?: class=\".*?\")? href="((bugreport\.cgi[^\"]+)">|(version\.cgi[^\"]+)"><img src="([^\"]+)">|(version.cgi[^\"]+)">)%i;
+	next unless m%<a(?: class=\".*?\")? href="((bugreport\.cgi[^\"]+)">|(version\.cgi[^\"]+)"><img[^>]* src="([^\"]+)">|(version\.cgi[^\"]+)">)%i;
+
 	my $ref = $5;
 	$ref = $4 if not defined $ref;
 	$ref = $2 if not defined $ref;
@@ -1988,7 +1989,7 @@ sub download_attachments {
 	    # Always need refreshing, as they could change each time the
 	    # bug does
 	}
-	elsif ($cachemode eq 'full' and $msg =~ /^versions(fixed)?(coll)?$/) {
+	elsif ($cachemode eq 'full' and $msg eq 'versions') {
 	    $bug2filename{$msg} = $filename;
 	    # already downloaded?
 	    next if -f $bug2filename{$msg} and not $refreshmode;
@@ -2135,14 +2136,21 @@ sub mangle_cache_file {
 		s%<a((?: class=\".*?\")?) href="(pkgreport\.cgi\?src=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="src_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
 		s%<a((?: class=\".*?\")?) href="(pkgreport\.cgi\?submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="from_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
 		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(bugspam\.cgi[^\"]+)">%<a$1 href="$btscgiurl$2">%i;
-		s%<a((?: class=\".*?\")?) href="(version\.cgi\?package=(?:[^;]+);found=([^\%]+)\%2F([^;]+);fixed=([^\%]+)\%2F([^\";]+))(?:;[^\"]+)?">(.*?)</a>%<a$1 href="$3.$4.$5.$6.png">$7</a>%;
-		s%<a((?: class=\".*?\")?) href="(version\.cgi\?package=(?:[^;]+);found=([^\%]+)\%2F([^\";]+))(?:;[^\"]+)?">(.*?)</a>%<a$1 href="$3.$4.png">$5</a>%;
-		s%<a((?: class=\".*?\")?) href="(version\.cgi\?package=([^;]+);found=([^\";]+))(?:;[^\"]+)?">(.*?)</a>%<a$1 href="$3.$4.png">$5</a>%;
-		s%<img((?: class=\".*?\")?) src="(version\.cgi\?package=(?:[^;]+);found=([^\%]+)\%2F([^;]+);fixed=([^\%]+)\%2F([^;]+);width=([^;]+);height=([^;\"]+)(?:[^\"]*));collapse=1">%<img$1 src="$3.$4.$5.$6.collapsed.png" width="25\%" height="25\%">%;
-		s%<img((?: class=\".*?\")?) src="(version\.cgi\?package=(?:[^;]+);found=([^\%]+)\%2F([^;]+);fixed=([^\%]+)\%2F([^;]+);width=([^;]+);height=([^;\"]+)(?:[^\"]*))">%<img$1 src="$3.$4.$5.$6.png" width="25\%" height="25\%">%;
-		s%<img((?: class=\".*?\")?) src="(version\.cgi\?package=(?:[^;]+);found=([^\%]+)\%2F([^;]+);width=([^;]+);height=([^;\"]+)(?:[^\"]*));collapse=1">%<img$1 src="$3.$4.collapsed.png" width="25\%" height="25\%">%;
-		s%<img((?: class=\".*?\")?) src="(version\.cgi\?package=([^;]+);found=([^;]+);width=([^;]+);height=([^;\"]+)(?:[^\"]*));collapse=1">%<img$1 src="$3.$4.collapsed.png" width="25\%" height="25\%">%;
-		s%<img((?: class=\".*?\")?) src="(version\.cgi\?package=(?:[^;]+);found=([^\%]+)\%2F([^;]+);width=([^;]+);height=([^;\"]+)(?:[^\"]*))">%<img$1 src="$3.$4.png" width="25\%" height="25\%">%;
+
+		# Version graphs
+		# - remove 'package='
+		s%((?:<img[^>]* src=\"|<a[^>]* href=\")version\.cgi\?)package=([^;]+)(;[^\"]+)\">%$1$2$3">%gi;
+		# - replace ';found=' with '.f.' and ';fixed=' with '.fx.'
+		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")version\.cgi\?[^;]*);found=([^\"]+)\">%$1.f.$2">%gi;
+		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")version\.cgi\?[^;]*);fixed=([^\"]+)\">%$1.fx.$2">%gi;
+		# - replace '%2F' or '%2C' (a URL-encoded / or ,) with '.'
+		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")version\.cgi\?[^\%]*)\%2[FC]([^\"]+)\">%$1.$2">%gi;
+		# - display collapsed graph images at 25%
+		s%(<img[^>]* src=\"[^\"]+);width=[^;]+;height=[^;]+;collapse=1\">%$1.co" width="25\%" height="25\%">%gi;
+		# - remove any +s (encoded spaces)
+		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")version\.cgi\?[^\+]*)\+([^\"]+)\">%$1$2">%gi;
+		# - final reference should be $package.$versions[.co].png
+		s%(<img[^>]* src=\"|<a[^>]* href=\")version\.cgi\?([^\"]+)(\"[^>]*)>%$1$2.png$3>%gi;
 	    }
 	}
     }
@@ -2336,39 +2344,19 @@ sub href_to_filename {
 	    return undef;
 	}
     }
-    elsif ($href =~ m%<a href=\"version\.cgi[^>]+><img src=\"version\.cgi\?package=[^;]+;found=([^\%]+)\%2F([^;]+);fixed=([^\%]+)\%2F([^;]+);[^\"]*collapse=1\">%) {
-	my $foundpackage = $1;
-	my $foundversion = $2;
-	my $fixedpackage = $3;
-	my $fixedversion = $4;
+    elsif ($href =~ m%<a[^>]* href=\"version\.cgi([^>]+><img[^>]* src=\"version\.cgi)?\?([^\"]+)\">%i) {
+	my $refs = $2;
+	$refs = $1 if not defined $refs;
 
-	$msg = 'versionsfixedcoll';
-	$filename = "$foundpackage.$foundversion.$fixedpackage.$fixedversion.collapsed.png";
-    }
-    elsif ($href =~ m%<a href=\"version\.cgi[^>]+><img src=\"version\.cgi\?package=([^;]+);found=(([^\%]+)\%2F)?([^;]+);[^\"]*collapse=1\">%) {
-	my $package = $1;
-	my $version = $4;
-	$version = $2 if not defined $version;
-
-	$msg = 'versionscoll';
-	$filename = "$package.$version.collapsed.png";
-    }
-    elsif ($href =~ m%<a href=\"version\.cgi\?package=[^;]+;found=([^\%]+)\%2F([^;]+);fixed=([^\%]+)\%2F([^\"]+)\">%) {
-	my $foundpackage = $1;
-	my $foundversion = $2;
-	my $fixedpackage = $3;
-	my $fixedversion = $4;
-
-	$msg = 'versionsfixed';
-	$filename = "$foundpackage.$foundversion.$fixedpackage.$fixedversion.png";
-    }
-    elsif ($href =~ m%<a href=\"version\.cgi\?package=([^;]+);found=(([^\%]+)\%2F)?([^\"]+)\">%) {
-	my $package = $1;
-	my $version = $4;
-	$version = $2 if not defined $version;
+	$refs =~ s/package=//;
+	$refs =~ s/;found=/.f./g;
+	$refs =~ s/;fixed=/.fx./g;
+	$refs =~ s/%2[FC]/./g;
+	$refs =~ s/\+//g;
+	$refs =~ s/;width=[^;]+;height=[^;]+;collapse=1/.co/;
 
 	$msg = 'versions';
-	$filename = "$package.$version.png";
+	$filename = "$refs.png";
     }
     else {
 	return undef;
