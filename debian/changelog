@@ -5,15 +5,21 @@ devscripts (2.10.2) UNRELEASED; urgency=low
     version string actually gets written to the scripts
   * Fix encoding of French manpages (Closes: #415240)
   * bts
-    - Update prunecache() for maintainer / status mboxes and version graphs
-    - Simplify version graph handling code (should now handle all graphs
+    + Update prunecache() for maintainer / status mboxes and version graphs
+    + Simplify version graph handling code (should now handle all graphs
       correctly)
+  * Documentation fixes, based on suggestions from Adeodato Simó
+    + debian/control: update description of debcommit
+    + README: replace reference to bazaar with bzr
+    + nmudiff.1: add missing unbold after an option
+    + dscverify.pl: remove obsolete comment
+    (Closes: #415486)
 
   [ Martin Zobel-Helas ]
   * Adding myself to Uploaders
   * tagpending should not use pend-excl=done (Closes: #415309)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Mon, 19 Mar 2007 21:39:41 +0000
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Mon, 19 Mar 2007 23:50:29 +0000
 
 devscripts (2.10.1) unstable; urgency=low
 

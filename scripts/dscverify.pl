@@ -85,10 +85,6 @@ sub xdie {
     die xwarndie_mess @_;
 }
 
-# We retain the reference to Guy's directory on master even though
-# it won't be of use other than on master.  In this way, this program
-# may be installed on merkel without any changes being necessary,
-# and it is hardly likely to cause any ill effects elsewhere.
 sub get_rings {
     my @rings = @_;
     for (qw(/org/keyring.debian.org/keyrings/debian-keyring.gpg

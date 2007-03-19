@@ -37,8 +37,8 @@ Description: Scripts to make the life of a Debian Package maintainer easier
   - debc: display the contents of just-built .debs
   - debchange/dch: automagically add entries to debian/changelog files [wget]
   - debclean: purge a Debian source tree [fakeroot]
-  - debcommit: commit changes to cvs or svn, basing commit message on
-    changelog [cvs | subversion]
+  - debcommit: commit changes to cvs, svn, arch or git, basing commit
+    message on changelog [cvs | subversion | tla | bzr | git]
   - debdiff: compare two versions of a Debian package to check for
     added and removed files [wdiff, patchutils]
   - debi: install a just-built package
