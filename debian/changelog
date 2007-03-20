@@ -21,7 +21,12 @@ devscripts (2.10.2) UNRELEASED; urgency=low
   * Adding myself to Uploaders
   * tagpending should not use pend-excl=done (Closes: #415309)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 20 Mar 2007 16:04:45 +0000
+  [ Christoph Berg ]
+  * debcommit: support hg/mercurial and revamp manpage a bit.
+  * debian/control: suggest mercurial and svk, wrap some fields for easier
+    readability.
+
+ -- Christoph Berg <myon@debian.org>  Tue, 20 Mar 2007 23:45:05 +0100
 
 devscripts (2.10.1) unstable; urgency=low
 

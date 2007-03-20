@@ -6,23 +6,24 @@ debcommit - commit changes to a package
 
 =head1 SYNOPSIS
 
-debcommit [--release] [--message=text] [--noact] [files to commit]
+B<debcommit> [B<--release>] [B<--message=>I<text>] [B<--noact>] [I<files to commit>]
 
 =head1 DESCRIPTION
 
-debcommit generates a commit message based on new text in debian/changelog,
-and commits the change to a package's cvs, svn, svk, arch, bzr or git
-repository. It must be run in a cvs, svn, svk, arch, bzr or git working copy
-for the package.
+B<debcommit> generates a commit message based on new text in B<debian/changelog>,
+and commits the change to a package's repository. It must be run in a working
+copy for the package. Supported version control systems are:
+B<cvs>, B<git>, B<hg> (mercurial), B<svk>, B<svn> (subversion),
+B<baz>, B<bzr>, B<tla> (arch).
 
 =head1 OPTIONS
 
 =over 4
 
-=item -r --release
+=item B<-r> B<--release>
 
 Commit a release of the package. The version number is determined from
-debian/changelog, and is used to tag the package in cvs, svn, svk, arch or git.
+debian/changelog, and is used to tag the package in the repository.
 bzr does not yet support symbolic tags, so you will only get a normal
 commit.
 
@@ -30,17 +31,17 @@ Note that svn/svk tagging conventions vary, so debcommit uses
 L<svnpath(1)> to determine where the tag should be placed in the
 repository.
 
-=item -m text --message test
+=item B<-m> I<text> B<--message> I<test>
 
 Specify a commit message to use. Useful if the program cannot determine
 a commit message on its own based on debian/changelog, or if you want to
 override the default message.
 
-=item -n --noact
+=item B<-n> B<--noact>
 
 Do not actually do anything, but do print the commands that would be run.
 
-=item files to commit
+=item I<files to commit>
 
 Specify which files to commit. Commits all files if not used.
 
@@ -66,11 +67,11 @@ Generates a commit message based on new text in debian/changelog,
 and commit the change to a package\'s repository.
 
 Options:
-   --release       Commit a release of the package.
-   --message=text  Specify a commit message
-   --noact         Dry run, no actual commits
-   --help          This message
-   --version       Version information
+   -r --release       Commit a release of the package and create a tag
+   -m --message=text  Specify a commit message
+   -n --noact         Dry run, no actual commits
+   -h --help          This message
+   -v --version       Version information
 EOT
 }
 
@@ -148,6 +149,9 @@ sub getprog {
     elsif (-d ".git") {
 	return "git";
     }
+    elsif (-d ".hg") {
+	return "hg";
+    }
     else {
 	# svk has no useful directories so try to run it.
 	my $svkpath=`svk info . 2>/dev/null| grep -i '^Depot Path:' | cut -d ' ' -f 2`;
@@ -155,7 +159,7 @@ sub getprog {
 	    return "svk";
 	}
 	
-	die "debcommit: not in a cvs, subversion, arch, bzr, git or svk working copy\n";
+	die "debcommit: not in a cvs, subversion, baz, bzr, git, hg, or svk working copy\n";
     }
 }
 
@@ -170,7 +174,7 @@ sub action {
 sub commit {
     my $message=shift;
     
-    if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk' || $prog eq 'bzr') {
+    if ($prog =~ /^(cvs|svn|svk|bzr|hg)$/) {
 	if (! action($prog, "commit", "-m", $message, @files_to_commit)) {
 	    die "debcommit: commit failed\n";
 	}
@@ -259,13 +263,21 @@ sub tag {
 	        die "debcommit: failed tagging with $tag\n";
     	}
     }
+    elsif ($prog eq 'hg') {
+	    $tag="debian-$tag";
+    	if (! action($prog, "tag", "-m", "tagging version $tag", $tag)) {
+	        die "debcommit: failed tagging with $tag\n";
+    	}
+    }
+    else {
+	die "debcommit: unknown program $prog";
+    }
 }
 
 sub getmessage {
     my $ret;
 
-    if ($prog eq 'cvs' || $prog eq 'svn' || $prog eq 'svk' ||
-	$prog eq 'tla' || $prog eq 'baz' || $prog eq 'bzr' || $prog eq 'git') {
+    if ($prog =~ /^(cvs|svn|svk|tla|baz|bzr|git|hg)$/) {
 	$ret='';
 	my @diffcmd;
 
@@ -301,10 +313,17 @@ sub getmessage {
 
 =head1 LICENSE
 
-GPL
+This code is copyright by Joey Hess <joeyh@debian.org>, all rights reserved.
+This program comes with ABSOLUTELY NO WARRANTY.
+You are free to redistribute this code under the terms of the
+GNU General Public License, version 2 or later.
 
 =head1 AUTHOR
 
 Joey Hess <joeyh@debian.org>
+
+=head1 SEE ALSO
+
+L<svnpath(1)>.
 
 =cut

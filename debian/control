@@ -4,16 +4,23 @@ Priority: optional
 Maintainer: Devscripts Devel Team <pkg-devscripts@teams.debian.net>
 Uploaders: Julian Gilbey <jdg@debian.org>, Filippo Giunchedi <filippo@debian.org>, Joey Hess <joeyh@debian.org>, Mohammed Adnène Trojette <adn+deb@diwi.org>, Christoph Berg <myon@debian.org>, Stefano Zacchiroli <zack@debian.org>, James Vega <jamessan@debian.org>, Martin Zobel-Helas <zobel@debian.org>
 Standards-Version: 3.7.2
-Build-Depends: perl (>= 5.8), debhelper (>= 5.0.0), libtimedate-perl, libwww-perl, xsltproc, docbook-xsl, po4a (>= 0.26)
+Build-Depends: perl (>= 5.8), debhelper (>= 5.0.0), libtimedate-perl, libwww-perl,
+ xsltproc, docbook-xsl, po4a (>= 0.26)
 XS-Vcs-Browser: http://svn.debian.org/wsvn/devscripts/trunk/
 XS-Vcs-Svn: svn://svn.debian.org/devscripts/trunk
 
 Package: devscripts
 Architecture: any
 Conflicts: debmake (<< 3.5), dupload (<< 2.1), suidmanager (<< 0.51)
-Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), sed (>= 2.95), ${shlibs:Depends}, ${misc:Depends}
+Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), sed (>= 2.95),
+ ${shlibs:Depends}, ${misc:Depends}
 Recommends: fakeroot
-Suggests: devscripts-el, at, build-essential, cvs-buildpackage, cvs | subversion | tla | bzr | git, debian-keyring, dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, libdigest-md5-perl, libtimedate-perl, libwww-perl, lintian | linda, mailx | mailutils, man-db, mutt, patch, patchutils, ssh, strace, wdiff, wget, www-browser
+Suggests: devscripts-el, at, build-essential, cvs-buildpackage,
+ cvs | subversion | svk | tla | bzr | git | mercurial, debian-keyring,
+ dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot,
+ libdigest-md5-perl, libtimedate-perl, libwww-perl, lintian | linda,
+ mailx | mailutils, man-db, mutt, patch, patchutils, ssh, strace, wdiff,
+ wget, www-browser
 Description: Scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
  brackets afterwards:
@@ -37,8 +44,9 @@ Description: Scripts to make the life of a Debian Package maintainer easier
   - debc: display the contents of just-built .debs
   - debchange/dch: automagically add entries to debian/changelog files [wget]
   - debclean: purge a Debian source tree [fakeroot]
-  - debcommit: commit changes to cvs, svn, arch or git, basing commit
-    message on changelog [cvs | subversion | tla | bzr | git]
+  - debcommit: commit changes to cvs, svn, svk, tla, bzr, git, or hg, basing
+    commit message on changelog
+    [cvs | subversion | svk | tla | bzr | git | mercurial]
   - debdiff: compare two versions of a Debian package to check for
     added and removed files [wdiff, patchutils]
   - debi: install a just-built package
