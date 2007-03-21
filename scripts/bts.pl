@@ -833,6 +833,36 @@ sub bts_notfound {
     opts_done(@_);
     mailbts("notfound $bug in $version", "notfound $bug $version");
 }
+=item fixed <bug> <version>
+
+Indicate that a bug was fixed in a particular package version, without
+affecting the bug's open/closed status.
+
+=cut
+
+sub bts_fixed {
+    my $bug=checkbug(shift) or die "bts fixed: what bug?\n";
+    my $version=shift or die "bts fixed: \#$bug fixed in which version?\n";
+    opts_done(@_);
+    mailbts("fixed $bug in $version", "fixed $bug $version");
+}
+
+=item notfixed <bug> <version>
+
+Remove the record that a bug was fixed in the given version of the
+package to which it is assigned.
+
+This is equivalent to the sequence of commands "found <bug> <version>",
+"notfound <bug> <version>".
+
+=cut
+
+sub bts_notfixed {
+    my $bug=checkbug(shift) or die "bts notfixed: what bug?\n";
+    my $version=shift or die "bts notfixed: remove record \#$bug from which version?\n";
+    opts_done(@_);
+    mailbts("notfixed $bug in $version", "notfixed $bug $version");
+}
 
 =item block <bug> by|with <bug> [<bug> ...]
 

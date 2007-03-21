@@ -10,6 +10,7 @@ devscripts (2.10.2) UNRELEASED; urgency=low
     + Update prunecache() for maintainer / status mboxes and version graphs
     + Simplify version graph handling code (should now handle all graphs
       correctly)
+    + Add support for fixed / notfixed (Closes: #340838)
   * Documentation fixes, based on suggestions from Adeodato Simó
     + debian/control: update description of debcommit
     + README: replace reference to bazaar with bzr
@@ -26,7 +27,7 @@ devscripts (2.10.2) UNRELEASED; urgency=low
   * debian/control: suggest mercurial and svk, wrap some fields for easier
     readability.
 
- -- Christoph Berg <myon@debian.org>  Tue, 20 Mar 2007 23:45:05 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed, 21 Mar 2007 19:56:50 +0000
 
 devscripts (2.10.1) unstable; urgency=low
 
