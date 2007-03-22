@@ -262,7 +262,7 @@ sub mailbts {
     my ($subject, $body, $to, $from) = @_;
 
     if (defined $from) {
-	my $date = `822-date`;
+	my $date = `date -R`;
 	chomp $date;
 	
 	my $pid = open(MAIL, "|-");

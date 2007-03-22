@@ -26,8 +26,10 @@ devscripts (2.10.2) UNRELEASED; urgency=low
   * debcommit: support hg/mercurial and revamp manpage a bit.
   * debian/control: suggest mercurial and svk, wrap some fields for easier
     readability.
+  * dpkg 1.14.0 will obsolete 822-date, apply patch by Guillem Jover to use
+    `date -R` (Closes: #415794)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed, 21 Mar 2007 19:56:50 +0000
+ -- Christoph Berg <myon@debian.org>  Thu, 22 Mar 2007 14:14:14 +0100
 
 devscripts (2.10.1) unstable; urgency=low
 

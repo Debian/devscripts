@@ -684,7 +684,7 @@ if (@ARGV and ! $TEXT) {
 }
 
 # Get the date
-chomp(my $DATE=`822-date`);
+chomp(my $DATE=`date -R`);
 
 # Are we going to have to figure things out for ourselves?
 if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r &&

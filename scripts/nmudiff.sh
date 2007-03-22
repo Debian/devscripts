@@ -300,7 +300,7 @@ To: $TO_ADDRESSES_SENDMAIL
 Cc: 
 Bcc: $BCC_ADDRESS_SENDMAIL
 Subject: $SOURCE: diff for NMU version $VERSION
-Date: `822-date`
+Date: `date -R`
 X-NMUDIFF-Version: ###VERSION###
 
 $TAGS

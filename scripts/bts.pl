@@ -1603,7 +1603,7 @@ sub mailbtsall {
 	$charset =~ s/^ANSI_X3\.4-19(68|86)$/US-ASCII/;
 	my $fromline = fold_from_header("From: " .
 			MIME_encode_mimewords($from, 'Charset' => $charset));
-	my $date = `822-date`;
+	my $date = `date -R`;
 	chomp $date;
 
 	my $pid = open(MAIL, "|-");
@@ -1672,7 +1672,7 @@ sub mailto {
     my ($subject, $body, $to, $from) = @_;
 
     if (defined $from) {
-	my $date = `822-date`;
+	my $date = `date -R`;
 	chomp $date;
 
 	my $pid = open(MAIL, "|-");
