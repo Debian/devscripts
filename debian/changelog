@@ -16,13 +16,14 @@ devscripts (2.10.2) UNRELEASED; urgency=low
     + README: replace reference to bazaar with bzr
     + nmudiff.1: add missing unbold after an option
     + dscverify.pl: remove obsolete comment
-    (Closes: #415486)
+      (Closes: #415486)
 
   [ Martin Zobel-Helas ]
   * Adding myself to Uploaders
-  * add option to only get bugs never downloaded before (Closes: #366925)
-  * dont forward bugs within the bts (Closes: #406632)
-  * include sample procmail script for autosubscribing to bugs 
+  * bts
+    + add option to only get bugs never downloaded before (Closes: #366925)
+    + dont forward bugs within the bts (Closes: #406632)
+  * include sample procmail script for autosubscribing to bugs
     (Closes: #353048)
 
   [ Christoph Berg ]
