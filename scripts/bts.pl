@@ -250,6 +250,11 @@ downloaded).
 
 Suppress any configuration file --force-refresh option.
 
+=item --only-new
+
+Download only new bugs when caching. Don't check for updates in
+bugs we already have.
+
 =item -q, --quiet
 
 When running bts cache, only display information about newly cached
@@ -271,6 +276,7 @@ my $offlinemode=0;
 my $caching=1;
 my $cachemode='min';
 my $refreshmode=0;
+my $updatemode=0;
 my $mailreader='mutt -f %s';
 my $sendmailcmd='/usr/sbin/sendmail';
 # regexp for mailers which require a -t option
@@ -289,6 +295,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'BTS_CACHE' => 'yes',
 		       'BTS_CACHE_MODE' => 'min',
 		       'BTS_FORCE_REFRESH' => 'no',
+		       'BTS_ONLY_NEW' => 'no',
 		       'BTS_MAIL_READER' => 'mutt -f %s',
 		       'BTS_SENDMAIL_COMMAND' => '/usr/sbin/sendmail',
 		       );
@@ -315,6 +322,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'BTS_CACHE_MODE'}='min';
     $config_vars{'BTS_FORCE_REFRESH'} =~ /^(yes|no)$/
 	or $config_vars{'BTS_FORCE_REFRESH'}='no';
+    $config_vars{'BTS_ONLY_NEW'} =~ /^(yes|no)$/
+	or $config_vars{'BTS_ONLY_NEW'}='no';
     $config_vars{'BTS_MAIL_READER'} =~ /\%s/
 	or $config_vars{'BTS_MAIL_READER'}='mutt -f %s';
     $config_vars{'BTS_SENDMAIL_COMMAND'} =~ /./
@@ -343,6 +352,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $caching = $config_vars{'BTS_CACHE'} eq 'no' ? 0 : 1;
     $cachemode = $config_vars{'BTS_CACHE_MODE'};
     $refreshmode = $config_vars{'BTS_FORCE_REFRESH'} eq 'yes' ? 1 : 0;
+    $updatemode = $config_vars{'BTS_ONLY_NEW'} eq 'yes' ? 1 : 0;
     $mailreader = $config_vars{'BTS_MAIL_READER'};
     $sendmailcmd = $config_vars{'BTS_SENDMAIL_COMMAND'};
 }
@@ -371,6 +381,7 @@ GetOptions("help|h" => \$opt_help,
 	   "sendmail=s" => \$opt_sendmail,
 	   "f" => \$refreshmode,
 	   "force-refresh!" => \$refreshmode,
+	   "only-new!" => \$updatemode,
 	   "q|quiet+" => \$quiet,
 	   "noconf|no-conf" => \$opt_noconf,
 	   )
@@ -1293,11 +1304,12 @@ minimum of 1.5 hours, and probably significantly more than that.)
 
 sub bts_cache {
     @ARGV = @_;
-    my ($sub_cachemode, $sub_refreshmode);
+    my ($sub_cachemode, $sub_refreshmode, $sub_updatemode);
     my $sub_quiet = $quiet;
     GetOptions("cache-mode|cachemode=s" => \$sub_cachemode,
 	       "f" => \$sub_refreshmode,
 	       "force-refresh!" => \$sub_refreshmode,
+	       "only-new!" => \$sub_updatemode,
 	       "q|quiet+" => \$sub_quiet,
 	       )
     or die "bts: unknown options for bugs command\n";
@@ -1305,6 +1317,9 @@ sub bts_cache {
 
     if (defined $sub_refreshmode) {
 	($refreshmode, $sub_refreshmode) = ($sub_refreshmode, $refreshmode);
+    }
+    if (defined $sub_updatemode) {
+	($updatemode, $sub_updatemode) = ($sub_updatemode, $updatemode);
     }
     if (defined $sub_cachemode) {
 	if ($sub_cachemode =~ /^(min|mbox|full)$/) {
@@ -1371,6 +1386,12 @@ sub bts_cache {
     my $bugcount = 1;
     my $bugtotal = scalar keys %bugs;
     foreach my $bug (keys %bugs) {
+	if (-f cachefile($bug, '') and $updatemode) {
+	    print "Skipping $bug as requested ... $bugcount/$bugtotal\n"
+		if !$quiet;
+	    $bugcount++;
+	    next;
+	}
 	download($bug, '', 1, 0, $bugcount, $bugtotal);
         sleep $opt_cachedelay;
 	$bugcount++;
@@ -1379,6 +1400,9 @@ sub bts_cache {
     # revert options    
     if (defined $sub_refreshmode) {
 	$refreshmode = $sub_refreshmode;
+    }
+    if (defined $sub_updatemode) {
+	$updatemode = $sub_updatemode;
     }
     if (defined $sub_cachemode) {
 	$cachemode = $sub_cachemode;
