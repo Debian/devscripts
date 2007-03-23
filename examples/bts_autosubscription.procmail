@@ -1,0 +1,32 @@
+# This handles initial submissions ("Thank you for the problem
+# report...") and also followups ("Thank you for the additional
+# information...").
+:0
+* ^To: Justin Pryzby <justinpryzby@users\.sourceforge\.net>$
+* ^From: owner@bugs\.debian\.org \(Debian Bug Tracking System\)$
+* ^Subject: Bug#\/[0-9]*
+|echo |mail "$MATCH-subscribe@bugs.debian.org"
+
+# This handles bug reports on which I've had an effect via the control
+# bot.  The 'To:' condition is necessary, otherwise I'd occasionally
+# be subscribed to a massive number of bugs when Don reassigns from
+# debbugs to bugs.d.o, or Eric from mozilla-firefox to firefox, and
+# I'm already subscribed to those packages anyway..
+:0
+* ^To: Justin Pryzby <justinpryzby@users\.sourceforge\.net>$
+* ^From: owner@bugs\.debian\.org \(Debian Bug Tracking System\)$
+* ^Subject: Processed:
+|grep -Eo '^Bug#[0-9]+:' |sed -e 's/^Bug#//' -e 's/:$/-subscribe@bugs.debian.org/ ' |tr '\n' ',' |sed -e 's/^/To: /' -e 's/,$/\n/' |sendmail -t
+
+:0
+* ^From: [0-9]+-subhelp@bugs\.debian\.org$
+* ^Subject: Please confirm subscription to [0-9]+@bugs.debian.org
+* ^Reply-To: \/.*@bugs\.debian\.org$
+|echo |mail "$MATCH"
+
+:0
+* ^From: [0-9]+-subhelp@bugs\.debian\.org$
+* ^Subject: Subscription to [0-9]+@bugs.debian.org successful$
+Mail/bug_subscription_success
+
+# vim:ft=procmail:ts
