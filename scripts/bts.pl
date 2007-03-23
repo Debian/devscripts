@@ -1105,6 +1105,9 @@ Mark the bug as forwarded to the given email address.
 sub bts_forwarded {
     my $bug=checkbug(shift) or die "bts forwarded: mark what bug as forwarded?\n";
     my $email=join(' ', @_);
+    if ($email =~ /$btsserver/) {
+	die "bts forwarded: We don't forward bugs within $btsserver, use bts reasign instead\n";
+    }
     if (! length $email) {
 	die "bts forwarded: mark bug $bug as forwarded to what email address?\n";
     }
