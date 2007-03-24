@@ -1,4 +1,6 @@
-devscripts (2.10.2) UNRELEASED; urgency=low
+devscripts (2.10.2) unstable; urgency=low
+
+  * The "zobel's birthday" upload.
 
   [ Adam D. Barratt ]
   * scripts/Makefile: Override make's default .sh rule so that the package
@@ -39,7 +41,7 @@ devscripts (2.10.2) UNRELEASED; urgency=low
   * debian/control: Suggest liburi-perl and add to list of packages used by
     debchange, rmadison, and tagpending.
 
- -- James Vega <jamessan@debian.org>  Fri, 23 Mar 2007 23:07:53 -0400
+ -- Martin Zobel-Helas <zobel@debian.org>  Sat, 24 Mar 2007 10:21:02 +0100
 
 devscripts (2.10.1) unstable; urgency=low
 
