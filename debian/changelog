@@ -33,7 +33,13 @@ devscripts (2.10.2) UNRELEASED; urgency=low
   * dpkg 1.14.0 will obsolete 822-date, apply patch by Guillem Jover to use
     `date -R` (Closes: #415794)
 
- -- Martin Zobel-Helas <zobel@debian.org>  Fri, 23 Mar 2007 18:01:07 +0100
+  [ James Vega ]
+  * Update debchange, rmadison, and tagpending to uri escape package names
+    given to wget.  (Closes: #416004)
+  * debian/control: Suggest liburi-perl and add to list of packages used by
+    debchange, rmadison, and tagpending.
+
+ -- James Vega <jamessan@debian.org>  Fri, 23 Mar 2007 23:07:53 -0400
 
 devscripts (2.10.1) unstable; urgency=low
 

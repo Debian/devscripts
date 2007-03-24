@@ -19,6 +19,7 @@
 
 use strict;
 use Getopt::Long;
+use URI::Escape;
 
 my $VERSION = '0.2';
 
@@ -116,7 +117,7 @@ my %url_map = (
 $url = $url_map{$url} if $url_map{$url};
 
 my @cmd = -x "/usr/bin/curl" ? qw/curl -s -S/ : qw/wget -q -O -/;
-system @cmd, $url . "?package=" . join("+", @ARGV) . "&text=on&" . join ("&", @args);
+system @cmd, $url . "?package=" . join("+", map { uri_escape($_) } @ARGV) . "&text=on&" . join ("&", @args);
 
 =pod
 

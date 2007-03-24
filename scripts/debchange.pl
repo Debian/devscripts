@@ -38,6 +38,7 @@ use Getopt::Long;
 use File::Copy;
 use File::Basename;
 use Cwd;
+use URI::Escape;
 
 # Predeclare functions
 sub fatal($);
@@ -595,7 +596,8 @@ if (@closes and $opt_query) { # and we have to query the BTS
 	my %bugs;
 	my $lastbug;
 
-	my $bugs = `wget -q -O - 'http://bugs.debian.org/cgi-bin/pkgreport.cgi?src=$PACKAGE'`;
+	my $uripkg = uri_escape($PACKAGE);
+	my $bugs = `wget -q -O - 'http://bugs.debian.org/cgi-bin/pkgreport.cgi?src=$uripkg'`;
 	if ($? >> 8 != 0) {
 	    warn "$progname warning: wget failed, so cannot query the bug-tracking system\n";
 	    $opt_query=0;

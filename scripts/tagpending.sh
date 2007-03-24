@@ -97,7 +97,7 @@ done
 
 parsed=$(dpkg-parsechangelog)
 
-srcpkg=$(echo "$parsed" | awk '/^Source: / { print $2 }')
+srcpkg=$(echo "$parsed" | awk '/^Source: / { print $2 }' | perl -ne 'use URI::Escape; chomp; print uri_escape($_);')
 
 changelog_closes=$(echo "$parsed"| awk -F: '/^Closes: / { print $2 }' | \
   xargs -n1 echo)
