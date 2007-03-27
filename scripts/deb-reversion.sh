@@ -4,7 +4,7 @@
 #
 # Copyright © martin f. krafft <madduck@madduck.net>
 # with contributions by: Goswin von Brederlow, Filippo Giunchedi
-# Released under the terms of the Artistic Licence 2.0
+# Released under the terms of the Artistic License 2.0
 #
 # TODO: 
 #   - add debugging output.
