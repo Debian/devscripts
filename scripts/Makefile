@@ -11,8 +11,8 @@ LIBS = libvfork.so.0
 CWRAPPERS = debpkg-wrapper
 SCRIPTS = $(patsubst %.pl,%,$(PL_FILES)) $(patsubst %.sh,%,$(SH_FILES))
 
-GEN_MAN1S = bts.1 debcommit.1 deb-reversion.1 dget.1 mass-bug.1 \
-	rmadison.1 svnpath.1
+GEN_MAN1S = bts.1 debcommit.1 deb-reversion.1 dget.1 licensecheck.1 \
+	mass-bug.1 rmadison.1 svnpath.1
 
 BINDIR = /usr/bin
 LIBDIR = /usr/lib/devscripts

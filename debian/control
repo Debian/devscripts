@@ -70,6 +70,7 @@ Description: Scripts to make the life of a Debian Package maintainer easier
   - dscverify: verify the integrity of a Debian package from the
     .changes or .dsc files [gnupg, debian-keyring, libdigest-md5-perl]
   - grep-excuses: grep the update_excuses.html file for your packages [wget]
+  - licensecheck: attempt to determine the license of source files
   - manpage-alert: locate binaries without corresponding manpages [man-db]
   - mass-bug: mass-file bug reports [mailx | mailutils]
   - mergechanges: merge .changes files from a package built on different
