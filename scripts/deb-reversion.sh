@@ -19,7 +19,7 @@ VERSTR='LOCAL.'
 versioninfo() {
   echo "$PROGNAME $PROGVERSION"
   echo "$PROGNAME is copyright © martin f. krafft"
-  echo "Released under the terms of the Artistic Licence 2.0"
+  echo "Released under the terms of the Artistic License 2.0"
   echo "This programme is part of devscripts ###VERSION###."
 }
 

@@ -49,7 +49,7 @@ This is $PROGNAME, from the Debian devscripts package, version ###VERSION###
 This code is copyright 2006 by Steinar H. Gunderson, with modifications
 copyright 2006 by Julian Gilbey <jdg@debian.org>.
 The software may be freely redistributed under the terms and conditions
-of the GNU General Public Licence, version 2.
+of the GNU General Public License, version 2.
 EOF
 }
 
