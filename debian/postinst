@@ -272,6 +272,22 @@ EOF
 
 	fi
 
+  	if dpkg --compare-versions "$2" lt 2.10.3
+        then
+            # Added in devscripts 2.10.3
+            cat >> /etc/devscripts.conf <<EOF
+
+##### licensecheck options added in version 2.10.3
+#
+# Print the file header being parsed before the corresponding license
+# information?
+# LICENSECHECK_VERBOSE=no
+#
+# How many lines of each file should be parsed for license information?
+# LICENSECHECK_PARSELINES=60
+#
+EOF
+	fi
     fi
 fi
 

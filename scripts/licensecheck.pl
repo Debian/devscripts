@@ -27,7 +27,7 @@ licensecheck - simple license checker for source files
 
 B<licensecheck> B<--help|--version>
 
-B<licensecheck> [B<--verbose>] I<list of files to check>
+B<licensecheck> [B<--verbose>] [B<-l|--lines=N>] I<list of files to check>
 
 =head1 DESCRIPTION
 
@@ -39,12 +39,41 @@ various licenses.
 
 =over 4
 
-=item B<--verbose>
+=item B<--verbose> B<--no-verbose>
 
-For each file, output the text being processed before the corresponding license
-information.
+Specify whether to output the text being processed from each file before
+the corresponding license information.
+
+Default is to be quiet.
+
+=item B<-l=N> B<--lines=N>
+
+Specify the number of lines of each file's header which should be parsed 
+for license information. (Default is 60).
+
+=back
+
+=head1 CONFIGURATION VARIABLES
+
+The two configuration files F</etc/devscripts.conf> and
+F<~/.devscripts> are sourced by a shell in that order to set
+configuration variables.  Command line options can be used to override
+configuration file settings.  Environment variable settings are
+ignored for this purpose.  The currently recognised variables are:
 
 =over 4
+
+=item B<LICENSECHECK_VERBOSE>
+
+If this is set to I<yes>, then it is the same as the --verbose command
+line parameter being used. The default is I<no>.
+
+=item B<LICENSECHECK_PARSELINES>
+
+If this is set to a positive number then the specified number of lines
+at the start of each file will be read whilst attempting to determine
+the license(s) in use.  This is equivalent to the --lines command line
+option.
 
 =back
 
@@ -67,22 +96,81 @@ use strict;
 use Getopt::Long;
 use File::Basename;
 
+sub fatal($);
+sub parselicense($);
+
 my $progname = basename($0);
 
-my $opt_verbose;
-my $opt_help;
-my $opt_version;
+my $modified_conf_msg;
+
+my ($opt_verbose, $opt_lines, $opt_noconf);
+my ($opt_help, $opt_version);
+my $def_lines = 60;
+
+# Read configuration files and then command line
+# This is boilerplate
+
+if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
+    $modified_conf_msg = "  (no configuration files read)";
+    shift;
+} else {
+    my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
+    my %config_vars = (
+		       'LICENSECHECK_VERBOSE' => 'no',
+		       'LICENSECHECK_PARSELINES' => $def_lines,
+		      );
+    my %config_default = %config_vars;
+
+    my $shell_cmd;
+    # Set defaults
+    foreach my $var (keys %config_vars) {
+	$shell_cmd .= qq[$var="$config_vars{$var}";\n];
+    }
+    $shell_cmd .= 'for file in ' . join(" ", @config_files) . "; do\n";
+    $shell_cmd .= '[ -f $file ] && . $file; done;' . "\n";
+    # Read back values
+    foreach my $var (keys %config_vars) { $shell_cmd .= "echo \$$var;\n" }
+    my $shell_out = `/bin/bash -c '$shell_cmd'`;
+    @config_vars{keys %config_vars} = split /\n/, $shell_out, -1;
+
+    # Check validity
+    $config_vars{'LICENSECHECK_VERBOSE'} =~ /^(yes|no)$/
+	or $config_vars{'LICENSECHECK_VERBOSE'} = 'no';
+    $config_vars{'LICENSECHECK_PARSELINES'} =~ /^[1-9][0-9]*$/
+	or $config_vars{'LICENSECHECK_PARSELINES'} = $def_lines;
+
+    foreach my $var (sort keys %config_vars) {
+	if ($config_vars{$var} ne $config_default{$var}) {
+	    $modified_conf_msg .= "  $var=$config_vars{$var}\n";
+	}
+    }
+    $modified_conf_msg ||= "  (none)\n";
+    chomp $modified_conf_msg;
+
+    $opt_verbose = $config_vars{'LICENSECHECK_VERBOSE'} eq 'yes' ? 1 : 0;
+    $opt_lines = $config_vars{'LICENSECHECK_PARSELINES'};
+}
 
 GetOptions("help|h" => \$opt_help,
 	   "version|v" => \$opt_version,
-	   "verbose" => \$opt_verbose,
+	   "verbose!" => \$opt_verbose,
+	   "lines|l=i" => \$opt_lines,
+	   "noconf" => \$opt_noconf,
+	   "no-conf" => \$opt_noconf,
 	   )
     or die "Usage: $progname [options] filelist\nRun $progname --help for more details\n";
 
+$opt_lines =~ /^[1-9][0-9]*$/ or $opt_lines = $def_lines;
+
+if ($opt_noconf) {
+    fatal "--no-conf is only acceptable as the first command-line option!";
+}
 if ($opt_help) { help(); exit 0; }
 if ($opt_version) { version(); exit 0; }
 
 die "Usage: $progname [options] filelist\nRun $progname --help for more details\n" unless @ARGV;
+
+$opt_lines = $def_lines if not defined $opt_lines;
 
 while (@ARGV) {
     my $file = shift @ARGV;
@@ -90,7 +178,7 @@ while (@ARGV) {
     my $content = '';
     open (F, "<$file") or die "Unable to access $file\n";
     while (<F>) {
-        last if ($. > 60);
+        last if ($. > $opt_lines);
         $content .= $_;
     }
     close(F);
@@ -113,6 +201,12 @@ Valid options are:
    --version, -v          Display version and copyright info
    --verbose              Display the header of each file before its
                             license information
+   --lines, -l            Specify how many lines of the file header
+                            should be parsed for license information
+                            (Default: $def_lines)
+
+Default settings modified by devscripts configuration files:
+$modified_conf_msg
 EOF
 }
 
@@ -129,7 +223,7 @@ later version.
 EOF
 }
 
-sub parselicense {
+sub parselicense($) {
     my ($licensetext) = @_;
 
     my $gplver = "";
@@ -211,4 +305,12 @@ sub parselicense {
     }
 
     return $license;
+}
+
+sub fatal($) {
+    my ($pack,$file,$line);
+    ($pack,$file,$line) = caller();
+    (my $msg = "$progname: fatal error at line $line:\n@_\n") =~ tr/\0//d;
+    $msg =~ s/\n\n$/\n/;
+    die $msg;
 }
