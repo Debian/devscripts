@@ -1093,7 +1093,7 @@ sub bts_claim {
     my $claim;
     $claim=shift or $claim=$debemail or $claim=$user;
     bts_user("bugsquash\@qa.debian.org");
-    bts_usertags("$bug", " - $claim");
+    bts_usertags("$bug", " + $claim");
 }
 
 =item unclaim <bug> [<claim>]
