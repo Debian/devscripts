@@ -1077,6 +1077,44 @@ sub bts_usertags {
     mailbts("usertagging $bug", $command);
 }
 
+=item claim <bug> [<claim>]
+
+Record that you have claimed a bug (e.g. for a bug squashing party).
+
+If no claim is specified, the environment variable DEBEMAIL
+or USER (in that order) are used.
+
+=cut
+
+sub bts_claim {
+    my $bug=checkbug(shift) or die "bts claim: claim what bug?\n";
+    my $debemail = $ENV{'DEBEMAIL'} if (defined $ENV{'DEBEMAIL'});
+    my $user = $ENV{'USER'} if (defined $ENV{'USER'});
+    my $claim;
+    $claim=shift or $claim=$debemail or $claim=$user;
+    bts_user("bugsquash\@qa.debian.org");
+    bts_usertags("$bug", " - $claim");
+}
+
+=item unclaim <bug> [<claim>]
+
+Remove the record that you have claimed a bug.
+
+If no claim is specified, the environment variable DEBEMAIL
+or USER (in that order) are used.
+
+=cut
+
+sub bts_unclaim {
+    my $bug=checkbug(shift) or die "bts unclaim: unclaim what bug?\n";
+    my $debemail = $ENV{'DEBEMAIL'} if (defined $ENV{'DEBEMAIL'});
+    my $user = $ENV{'USER'} if (defined $ENV{'USER'});
+    my $claim;
+    $claim=shift or $claim=$debemail or $claim=$user;
+    bts_user("bugsquash\@qa.debian.org");
+    bts_usertags("$bug", " - $claim");
+}
+
 =item severity <bug> <severity>
 
 Change the severity of a bug. Available severities are: wishlist, minor, normal,
