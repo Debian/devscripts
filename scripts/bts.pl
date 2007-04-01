@@ -231,8 +231,8 @@ single % if this is needed.)
 
 =item --cc-addr=CC_EMAIL_ADDRESS
 
-Send carbon copies to list of users. cc-addr should be a comma separated
-list of emails.
+Send carbon copies to a list of users. CC_EMAIL_ADDRESS should be a 
+comma-separated list of emails.
 
 =item --sendmail=SENDMAILCMD
 
