@@ -27,8 +27,10 @@ usage () {
                    (default: 'PACKAGE(-.*)?')
 
     --no-conf, --noconf
-                   Don't read devscripts config files;
+                   Do not read devscripts config files;
                    must be the first option given
+
+    -d             Do not run dpkg-checkbuilddeps to check build dependencies
 
     --help         Display this help message and exit
 
@@ -110,7 +112,7 @@ CHECK_DIRNAME_LEVEL="$DEVSCRIPTS_CHECK_DIRNAME_LEVEL"
 CHECK_DIRNAME_REGEX="$DEVSCRIPTS_CHECK_DIRNAME_REGEX"
 
 # Need -o option to getopt or else it doesn't work
-TEMP=$(getopt -s bash -o "" \
+TEMP=$(getopt -s bash -o "" -o d \
 	--long cleandebs,nocleandebs,no-cleandebs \
 	--long no-conf,noconf \
 	--long check-dirname-level:,check-dirname-regex: \
@@ -132,6 +134,8 @@ while [ "$1" ]; do
 	   exit 1 ;;
         esac
 	;;
+    -d)
+    	CHECKBUILDDEP="-d" ;;
     --check-dirname-regex)
 	shift; 	CHECK_DIRNAME_REGEX="$1" ;;
     --no-conf|--noconf)
@@ -190,7 +194,7 @@ for i in `find . -type d -name "debian"`; do
     fi
 
     # We now know we're OK and debuild won't complain about the dirname
-    debuild clean
+    debuild $CHECKBUILDDEP clean
 
     # Clean up the package related files
     if [ "$DEBCLEAN_CLEANDEBS" = yes ]; then
