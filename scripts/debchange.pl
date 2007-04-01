@@ -815,6 +815,13 @@ if (($opt_i || $opt_n || $opt_qa || $opt_v || $opt_d) && ! $opt_create) {
 	    # otherwise we can be safe if we behave like dch -i
 	    if ($opt_n and not $start =~ /\.$/) {
 	    	$end += 0.1;
+	    } elsif ($opt_qa and $start =~/(.*?)-(\d+)\.$/) {
+		    # Drop NMU revision when doing a QA upload
+		    my $upstream_version = $1;
+		    my $debian_revision = $2;
+		    $debian_revision++;
+		    $start = "$upstream_version-$debian_revision";
+		    $end = "";
 	    } else {
 		$end++;
 	    }
