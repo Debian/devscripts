@@ -229,6 +229,11 @@ command will be split on white space and will not be passed to a
 shell.  Default is 'mutt -f %s'.  (Also, %% will be substituted by a
 single % if this is needed.)
 
+=item --cc-addr=CC_EMAIL_ADDRESS
+
+Send carbon copies to list of users. cc-addr should be a comma separated
+list of emails.
+
 =item --sendmail=SENDMAILCMD
 
 Specify the sendmail command.  The command will be split on white
@@ -366,6 +371,7 @@ my ($opt_cachemode, $opt_mailreader, $opt_sendmail);
 my $opt_cachedelay=5;
 my $mboxmode = 0;
 my $quiet=0;
+my $ccemail="";
 
 Getopt::Long::Configure('require_order');
 GetOptions("help|h" => \$opt_help,
@@ -378,6 +384,7 @@ GetOptions("help|h" => \$opt_help,
 	   "cache-delay=i" => \$opt_cachedelay,
 	   "m|mbox" => \$mboxmode,
 	   "mailreader|mail-reader=s" => \$opt_mailreader,
+	   "cc-addr=s" => \$ccemail,
 	   "sendmail=s" => \$opt_sendmail,
 	   "f" => \$refreshmode,
 	   "force-refresh!" => \$refreshmode,
@@ -1681,6 +1688,7 @@ sub mailbtsall {
 	    print MAIL <<"EOM";
 $fromline
 To: $btsemail
+Cc: $ccemail
 Subject: $subject
 Date: $date
 X-BTS-Version: $version
@@ -1724,7 +1732,7 @@ EOM
 		exec("/bin/cat")
 		    or die "bts: error running cat: $!\n";
 	    } else {
-		exec("mail", "-s", $subject, "-a", "X-BTS-Version: $version", $btsemail)
+		exec("mail", "-s", $subject, "-a", "X-BTS-Version: $version", $btsemail, "-c", $ccemail)
 		    or die "bts: error running mail: $!\n";
 	    }
 	}

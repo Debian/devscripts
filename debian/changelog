@@ -1,11 +1,16 @@
 devscripts (2.10.3) UNRELEASED; urgency=low
 
+  [ Adam D. Barratt ]
   * licensecheck: New script to determine which license(s) source files
     are under (Closes: #382148)
   * bts: Add claim / unclaim support, based on a patch by zobel
     (Closes: #385957)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Thu, 29 Mar 2007 22:30:06 +0100
+  [ Mohammed Adnène Trojette ]
+  * bts: add an --cc-addr to allow sending carbon copies of emails sent
+    to control@bugs.debian.org. (Closes: #333371)
+
+ -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Sun, 01 Apr 2007 16:23:07 +0200
 
 devscripts (2.10.2) unstable; urgency=low
 
