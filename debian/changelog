@@ -13,7 +13,10 @@ devscripts (2.10.3) UNRELEASED; urgency=low
   * debclean: add a -d option to skip build dependencies check.
     (Closes: #370066)
 
- -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Sun, 01 Apr 2007 20:22:39 +0200
+  [ Martin Zobel-Helas ]
+  * debchange: make changelog entries UTC (Closes: #417261)
+
+ -- Martin Zobel-Helas <zobel@ftbfs.de>  Mon,  2 Apr 2007 10:06:28 +0200
 
 devscripts (2.10.2) unstable; urgency=low
 
