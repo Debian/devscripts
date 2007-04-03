@@ -5,6 +5,8 @@ devscripts (2.10.3) UNRELEASED; urgency=low
     are under (Closes: #382148)
   * bts: Add claim / unclaim support, based on a patch by zobel
     (Closes: #385957)
+  * debchange: don't add duplicate maintainer blocks in multi-maintainer
+    mode (Closes: #383542)
 
   [ Mohammed Adnène Trojette ]
   * bts: add an --cc-addr to allow sending carbon copies of emails sent
@@ -16,7 +18,7 @@ devscripts (2.10.3) UNRELEASED; urgency=low
   [ Martin Zobel-Helas ]
   * debchange: make changelog entries UTC (Closes: #417261)
 
- -- Martin Zobel-Helas <zobel@ftbfs.de>  Mon,  2 Apr 2007 10:06:28 +0200
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 03 Apr 2007 20:42:04 +0100
 
 devscripts (2.10.2) unstable; urgency=low
 

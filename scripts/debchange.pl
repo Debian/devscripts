@@ -867,15 +867,32 @@ elsif (($opt_r || $opt_a) && ! $opt_create) {
     $NEW_SVERSION=$SVERSION;
     $NEW_UVERSION=$UVERSION;
 
-    # Read and discard maintainer line, and see who made the
-    # last entry.
+    # Read and discard maintainer line, see who made the
+    # last entry, and determine whether there are existing
+    # multi-developer changes by the current maintainer.
     $line=-1;
-    my $lastmaint;
+    my ($lastmaint, $nextmaint, $maintline, $count);
     while (<S>) {
 	$line++;
+	# Start of existing changes by the current maintainer
+	if (/^  \[ $MAINTAINER \]$/) {
+	    # If there's more than one such block,
+	    # we only care about the first
+	    $maintline ||= $line;
+	}
+	elsif (/^  \[ (.*) \]$/ && defined $maintline) {
+	    # Start of existing changes following those by the current
+	    # maintainer
+	    $nextmaint ||= $1;
+	}
+
 	if (/^ --\s+([^<]+)\s+/) {
 	    $lastmaint=$1;
 	    last;
+	}
+
+	if (defined $maintline && !defined $nextmaint) {
+	    $maintline++;
 	}
     }
 
@@ -894,6 +911,8 @@ elsif (($opt_r || $opt_a) && ! $opt_create) {
 	     $lastmaint ne $MAINTAINER && $opt_multimaint)
 	    ||
 	    (defined $lastmultimaint && $lastmultimaint ne $MAINTAINER)
+	    ||
+	    (defined $nextmaint)
 	   ) {
 	    $multimaint=1;
 	
@@ -925,14 +944,28 @@ elsif (($opt_r || $opt_a) && ! $opt_create) {
 	$warnings++;
     }
 
-    # The first lines are as we have already found
-    print O $CHANGES;
+    if (defined $maintline && defined $nextmaint) {
+	# Output the lines up to the end of the current maintainer block
+	$count=1;
+	$line=$maintline;
+	foreach (split /\n/, $CHANGES) {
+	    print O $_ . "\n";
+	    $count++;
+	    last if $count==$maintline;
+	}
+    } else {
+	# The first lines are as we have already found
+	print O $CHANGES;
+    };
 
     if (! $opt_r) {
-    	# Add a multi-maintainer header.
+    	# Add a multi-maintainer header...
 	if ($multimaint) {
-	    print O "\n  [ $MAINTAINER ]\n";
-	    $line+=2;
+	    # ...unless there already is one for this maintainer.
+	    if (!defined $maintline) {
+		print O "\n  [ $MAINTAINER ]\n";
+		$line+=2;
+	    }
 	}
 
 	if (@closes_text or $TEXT) {
@@ -943,6 +976,16 @@ elsif (($opt_r || $opt_a) && ! $opt_create) {
 	    $line++;
 	} else {
 	    print O "  * \n";
+	}
+    }
+
+    if (defined $count) {
+	# Output the remainder of the changes
+	$count=1;
+	foreach (split /\n/, $CHANGES) {
+	    $count++;
+	    next unless $count>$maintline;
+	    print O $_ . "\n";
 	}
     }
 
