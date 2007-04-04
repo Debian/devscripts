@@ -19,7 +19,11 @@ devscripts (2.10.3) UNRELEASED; urgency=low
   [ Martin Zobel-Helas ]
   * debchange: make changelog entries UTC (Closes: #417261)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 03 Apr 2007 22:54:05 +0000
+  [ Julian Gilbey ]
+  * debchange: load URI::Escape module carefully to give a meaningful
+    warning message if the liburi-perl package is not installed
+
+ -- Julian Gilbey <jdg@debian.org>  Wed, 04 Apr 2007 21:26:15 +0000
 
 devscripts (2.10.2) unstable; urgency=low
 

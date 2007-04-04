@@ -38,7 +38,18 @@ use Getopt::Long;
 use File::Copy;
 use File::Basename;
 use Cwd;
-use URI::Escape;
+
+BEGIN {
+    # Load the URI::Escape module safely
+    eval { require URI::Escape; };
+    if ($@) {
+	my $progname = basename $0;
+	if ($@ =~ /^Can\'t locate URI\/Escape\.pm/) {
+	    die "$progname: you must have the liburi-perl package installed\nto use this script\n";
+	}
+	die "$progname: problem loading the URI::Escape module:\n  $@\nHave you installed the liburi-perl package?\n";
+    }
+}
 
 # Predeclare functions
 sub fatal($);
@@ -1147,12 +1158,12 @@ sub format_line {
     select $f;
 }
 
-sub BEGIN {
+BEGIN {
     # Initialise the variable
     $tmpchk=0;
 }
 
-sub END {
+END {
     if ($tmpchk) {
 	unlink "$changelog_path.dch" or
 	    warn "$progname warning: Could not remove $changelog_path.dch";
