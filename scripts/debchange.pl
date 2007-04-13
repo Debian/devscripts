@@ -51,6 +51,8 @@ BEGIN {
     }
 }
 
+use URI::Escape;
+
 # Predeclare functions
 sub fatal($);
 my $warnings = 0;
