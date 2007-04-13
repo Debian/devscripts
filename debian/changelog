@@ -20,9 +20,6 @@ devscripts (2.10.3) UNRELEASED; urgency=low
   * debclean: add a -d option to skip build dependencies check.
     (Closes: #370066)
 
-  [ Martin Zobel-Helas ]
-  * debchange: make changelog entries UTC (Closes: #417261)
-
   [ Julian Gilbey ]
   * debchange: load URI::Escape module carefully to give a meaningful
     warning message if the liburi-perl package is not installed
