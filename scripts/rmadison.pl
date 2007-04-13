@@ -18,7 +18,21 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 
 use strict;
+use File::Basename;
 use Getopt::Long;
+
+BEGIN {
+    # Load the URI::Escape module safely
+    eval { require URI::Escape; };
+    if ($@) {
+       my $progname = basename $0;
+       if ($@ =~ /^Can\'t locate URI\/Escape\.pm/) {
+           die "$progname: you must have the liburi-perl package installed\nto use this script\n";
+       }
+       die "$progname: problem loading the URI::Escape module:\n  $@\nHave you installed the liburi-perl package?\n";
+    }
+}
+
 use URI::Escape;
 
 my $VERSION = '0.2';

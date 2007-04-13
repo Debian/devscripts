@@ -11,6 +11,7 @@ devscripts (2.10.3) UNRELEASED; urgency=low
   * tagpending
     + Make the wnpp check introduced in 2.10.0 optional as it can be very expensive
     + Improve error message for skipped bugs (Closes: #418884)
+  * rmadison: handle missing liburi-perl more gracefully
 
   [ Mohammed Adnène Trojette ]
   * bts: add an --cc-addr to allow sending carbon copies of emails sent
@@ -26,7 +27,7 @@ devscripts (2.10.3) UNRELEASED; urgency=low
   * debchange: load URI::Escape module carefully to give a meaningful
     warning message if the liburi-perl package is not installed
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Fri, 13 Apr 2007 17:21:44 +0000
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Fri, 13 Apr 2007 17:53:19 +0000
 
 devscripts (2.10.2) unstable; urgency=low
 
