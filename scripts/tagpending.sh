@@ -32,8 +32,8 @@ Usage: tagpending [options]
     -h, --help          This usage screen.
     -V, --version       Display the version and copyright information
 
-  This script will read debian/changelog and tag all bugs not already tagged
-  pending as such.  Requires wget to be installed to query BTS.
+  This script will read debian/changelog and tag all open bugs not already
+  tagged pending as such.  Requires wget to be installed to query BTS.
 EOF
 }
 
@@ -53,6 +53,7 @@ DRY=0
 SILENT=0
 VERBOSE=0
 CONFIRM=0
+WNPP=0
 
 BTS_BASE_URL="http://bugs.debian.org/cgi-bin/pkgreport.cgi"
 TAGS="<h3>Tags:"
@@ -66,6 +67,7 @@ while [ -n "$1" ]; do
     -V|--version) version; exit 0 ;;
     -v|--verbose) VERBOSE=1; shift ;;
     -c|--confirm) CONFIRM=1; shift ;;
+    -w|--wnpp) WNPP=1; shift ;;
     --help | -h) usage; exit 0 ;;
     *)
       echo "tagpending error: unrecognized option $1" >&2
@@ -120,36 +122,45 @@ for bug in $to_be_checked; do
   fi
   if ! echo "$bts_pending" | grep -q "^${bug}$"; then
     if echo "$bts_open" | grep -q "^${bug}$" || [ "$USE_WGET" = "0" ] ; then
-      if [ "$VERBOSE" = "1" ]; then
+     if [ "$VERBOSE" = "1" ]; then
 	  echo "needs tag"
       fi
       to_be_tagged="$to_be_tagged $bug"
     else
-      wnpp_tags=$( (wget -q -O- http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=$bug; \
-        echo $TAGS) | sed -ne "/$WNPP_MATCH/,/^$TAGS/ {/^$TAGS/p}" )
+      if [ "$WNPP" = "1" ]; then
+        wnpp_tags=$( (wget -q -O- http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=$bug; \
+          echo $TAGS) | sed -ne "/$WNPP_MATCH/,/^$TAGS/ {/^$TAGS/p}" )
 
-      if [ -n "$wnpp_tags" ]; then
-        if ! echo "$wnpp_tags" | grep -q "pending"; then
-          if [ "$VERBOSE" = "1" ]; then
-            echo "wnpp needs tag"
+        if [ -n "$wnpp_tags" ]; then
+          if ! echo "$wnpp_tags" | grep -q "pending"; then
+            if [ "$VERBOSE" = "1" ]; then
+              echo "wnpp needs tag"
+            fi
+            wnpp_to_be_tagged="$wnpp_to_be_tagged $bug"
+          else
+            if [ "$VERBOSE" = "1" ]; then
+              echo "wnpp already marked pending"
+            fi
           fi
-          wnpp_to_be_tagged="$wnpp_to_be_tagged $bug"
         else
+          msg="is closed or does not belong to this package (check bug no. or force)"
           if [ "$VERBOSE" = "1" ]; then
-            echo "wnpp already marked pending"
+            echo "$msg"
+          else
+            echo "Warning: #$bug $msg."
           fi
         fi
       else
-        msg="does not belong to this package (check bug no. or force)"
+        msg="is closed or does not belong to this package (check bug no. or force)"
         if [ "$VERBOSE" = "1" ]; then
-	  echo "$msg"
+          echo "$msg"
         else
 	  echo "Warning: #$bug $msg."
         fi
       fi
     fi
-  else
-    if [ "$VERBOSE" = "1" ]; then
+    else
+      if [ "$VERBOSE" = "1" ]; then
     	echo "already marked pending"
     fi
   fi
@@ -210,7 +221,9 @@ if [ "$DRY" = 1 ]; then
 else
   if [ "$SILENT" = 0 ]; then
     bugs_info
-    bugs_info wnpp
+    if [ "$WNPP" = 1 ]; then    
+      bugs_info wnpp
+    fi
   fi
 
   if [ -n "$to_be_tagged" ]; then
