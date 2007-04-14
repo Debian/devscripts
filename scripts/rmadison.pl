@@ -33,8 +33,6 @@ BEGIN {
     }
 }
 
-use URI::Escape;
-
 my $VERSION = '0.2';
 
 sub version($) {
