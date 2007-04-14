@@ -49,6 +49,7 @@ BEGIN {
 	}
 	die "$progname: problem loading the URI::Escape module:\n  $@\nHave you installed the liburi-perl package?\n";
     }
+    import URI::Escape;
 }
 
 # Predeclare functions
