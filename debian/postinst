@@ -267,7 +267,6 @@ EOF
 # Extra directories to search for files in addition to
 # /var/cache/apt/archives.  This is a colon-separated list of directories.
 # DGET_PATH=""
-# 
 EOF
 
 	fi
@@ -285,7 +284,11 @@ EOF
 #
 # How many lines of each file should be parsed for license information?
 # LICENSECHECK_PARSELINES=60
+
+##### debchange option added in version 2.10.3
 #
+# Use a fixed timezone in changelog entries?
+# DEBCHANGE_TZ=UTC
 EOF
 	fi
     fi
