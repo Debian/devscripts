@@ -24,7 +24,11 @@ devscripts (2.10.3) UNRELEASED; urgency=low
   * debchange: load URI::Escape module carefully to give a meaningful
     warning message if the liburi-perl package is not installed
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Fri, 13 Apr 2007 17:53:19 +0000
+  [ Christoph Berg ]
+  * uscan: use a different project in the example for the sf.net redirector.
+    (Closes: #418978)
+
+ -- Christoph Berg <myon@debian.org>  Mon, 16 Apr 2007 11:48:18 +0000
 
 devscripts (2.10.2) unstable; urgency=low
 
