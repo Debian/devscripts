@@ -164,6 +164,7 @@ my $opt_p = 0;
 my $opt_query = 1;
 my $opt_release_heuristic = 'log';
 my $opt_multimaint = 1;
+my $opt_tz = undef;
 
 # Next, read configuration files and then command line
 # The next stuff is boilerplate
@@ -180,6 +181,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.*)?',
 		       'DEBCHANGE_RELEASE_HEURISTIC' => 'log',
 		       'DEBCHANGE_MULTIMAINT' => 'yes',
+		       'DEBCHANGE_TZ' => $ENV{TZ}, # undef if TZ unset
 		       );
     my %config_default = %config_vars;
     
@@ -221,6 +223,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $check_dirname_regex = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_REGEX'};
     $opt_release_heuristic = $config_vars{'DEBCHANGE_RELEASE_HEURISTIC'};
     $opt_multimaint = $config_vars{'DEBCHANGE_MULTIMAINT'} eq 'no' ? 0 : 1;
+    $opt_tz = $config_vars{'DEBCHANGE_TZ'};
 }
 
 # We use bundling so that the short option behaviour is the same as
@@ -698,7 +701,8 @@ if (@ARGV and ! $TEXT) {
 }
 
 # Get the date
-chomp(my $DATE=`date -R`);
+my $date_cmd = ($opt_tz ? "TZ=$opt_tz " : "") . "date -R";
+chomp(my $DATE=`$date_cmd`);
 
 # Are we going to have to figure things out for ourselves?
 if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r &&

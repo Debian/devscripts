@@ -27,8 +27,10 @@ devscripts (2.10.3) UNRELEASED; urgency=low
   [ Christoph Berg ]
   * uscan: use a different project in the example for the sf.net redirector.
     (Closes: #418978)
+  * debchange: optionally set changelog timezone from DEBCHANGE_TZ.
+    (Closes: #417261)
 
- -- Christoph Berg <myon@debian.org>  Mon, 16 Apr 2007 11:48:18 +0000
+ -- Christoph Berg <myon@debian.org>  Mon, 16 Apr 2007 14:34:28 +0200
 
 devscripts (2.10.2) unstable; urgency=low
 

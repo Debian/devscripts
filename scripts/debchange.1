@@ -311,6 +311,10 @@ existing changelog entry. Can be either "log" or "changelog".
 If set to "no", \fBdebchange\fR will not introduce multiple-maintainer
 distinctions when a different maintainer appends an entry to an
 existing changelog.  See the discussion above.  Default is "yes".
+.TP
+.BR DEBCHANGE_TZ
+Use this timezone for changelog entries.  Default is the user/system
+timezone as shown by `date -R`.
 .SH ENVIRONMENT
 .TP
 .BR DEBEMAIL ", " EMAIL ", " DEBFULLNAME ", " NAME

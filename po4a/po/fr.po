@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2007-04-16 13:47+0200\n"
+"POT-Creation-Date: 2007-04-16 14:39+0200\n"
 "PO-Revision-Date: 2006-11-27 09:30+0100\n"
 "Last-Translator: Julien Cristau <julien.cristau@ens-lyon.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -278,7 +278,7 @@ msgstr ""
 #: ../scripts/checkbashisms.1:34 ../scripts/cvs-debc.1:64
 #: ../scripts/cvs-debi.1:68 ../scripts/cvs-debrelease.1:69
 #: ../scripts/cvs-debuild.1:63 ../scripts/dd-list.1:90 ../scripts/debc.1:120
-#: ../scripts/debchange.1:335 ../scripts/debclean.1:111
+#: ../scripts/debchange.1:339 ../scripts/debclean.1:111
 #: ../scripts/debcommit.pl:321 ../scripts/debdiff.1:172 ../scripts/debi.1:120
 #: ../scripts/debpkg.1:23 ../scripts/debrelease.1:137
 #: ../scripts/deb-reversion.dbk:278 ../scripts/debrsign.1:71
@@ -2142,7 +2142,7 @@ msgstr ""
 #: ../scripts/checkbashisms.1:32 ../scripts/cvs-debc.1:58
 #: ../scripts/cvs-debi.1:62 ../scripts/cvs-debrelease.1:64
 #: ../scripts/cvs-debuild.1:56 ../scripts/debc.1:115
-#: ../scripts/debchange.1:328 ../scripts/debclean.1:107
+#: ../scripts/debchange.1:332 ../scripts/debclean.1:107
 #: ../scripts/debcommit.pl:325 ../scripts/debdiff.1:166 ../scripts/debi.1:116
 #: ../scripts/debrelease.1:132 ../scripts/deb-reversion.dbk:233
 #: ../scripts/debrsign.1:66 ../scripts/debsign.1:118 ../scripts/debuild.1:399
@@ -3996,33 +3996,46 @@ msgstr ""
 "journal des modifications existant. Regardez la discussion ci-dessus. La "
 "valeur par défaut est « yes »."
 
+# type: TP
+#: ../scripts/debchange.1:314
+#, fuzzy, no-wrap
+msgid "B<DEBCHANGE_TZ>"
+msgstr "B<DEBCHANGE_QUERY_BTS>"
+
+# type: Plain text
+#: ../scripts/debchange.1:318
+msgid ""
+"Use this timezone for changelog entries.  Default is the user/system "
+"timezone as shown by `date -R`."
+msgstr ""
+
 # type: SH
-#: ../scripts/debchange.1:314 ../scripts/mass-bug.pl:101
+#: ../scripts/debchange.1:318 ../scripts/mass-bug.pl:101
 #, no-wrap
 msgid "ENVIRONMENT"
 msgstr "ENVIRONNEMENT"
 
 # type: TP
-#: ../scripts/debchange.1:315
+#: ../scripts/debchange.1:319
 #, no-wrap
 msgid "B<DEBEMAIL>, B<EMAIL>, B<DEBFULLNAME>, B<NAME>"
 msgstr "B<DEBEMAIL>, B<EMAIL>, B<DEBFULLNAME>, B<NAME>"
 
 # type: Plain text
-#: ../scripts/debchange.1:318
+#: ../scripts/debchange.1:322
 msgid "See the above description of the use of these environment variables."
 msgstr ""
 "Reportez-vous à la description précédente de l'utilisation de ces variables "
 "d'environnement"
 
 # type: TH
-#: ../scripts/debchange.1:318
+#: ../scripts/debchange.1:322
 #, no-wrap
 msgid "B<CHANGELOG>"
 msgstr "B<CHANGELOG>"
 
 # type: Plain text
-#: ../scripts/debchange.1:324
+#: ../scripts/debchange.1:328
 msgid ""
 "This variable specifies the changelog to edit in place of I<debian/"
 "changelog>.  No directory traversal or checking is performed when this "
@@ -4035,13 +4048,13 @@ msgstr ""
 "l'option de la ligne de commande B<--changelog>."
 
 # type: TP
-#: ../scripts/debchange.1:324
+#: ../scripts/debchange.1:328
 #, no-wrap
 msgid "B<VISUAL>, B<EDITOR>"
 msgstr "B<VISUAL>, B<EDITOR>"
 
 # type: Plain text
-#: ../scripts/debchange.1:328
+#: ../scripts/debchange.1:332
 msgid ""
 "These environment variables (in this order) determine the editor used by "
 "B<sensible-editor>."
@@ -4050,7 +4063,7 @@ msgstr ""
 "l'éditeur invoqué par B<sensible-editor>."
 
 # type: Plain text
-#: ../scripts/debchange.1:335
+#: ../scripts/debchange.1:339
 msgid ""
 "B<debclean>(1), B<dupload>(1), B<dput>(1), B<debc>(1)  and B<devscripts.conf>"
 "(5)."
@@ -4059,7 +4072,7 @@ msgstr ""
 "(5)."
 
 # type: Plain text
-#: ../scripts/debchange.1:338
+#: ../scripts/debchange.1:342
 msgid ""
 "The original author was Christoph Lameter E<lt>clameter@debian.orgE<gt>.  "
 "Many substantial changes and improvements were made by Julian Gilbey "
