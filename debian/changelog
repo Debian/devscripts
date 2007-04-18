@@ -1,9 +1,13 @@
 devscripts (2.10.4) UNRELEASED; urgency=low
 
+  [ Adam D. Barratt ]
   * grep-excuses: make the maintainer regex more restrictive to avoid accidental
     matches (Closes: #419462)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 17 Apr 2007 21:22:04 +0100
+  [ Luk Claes ]
+  * debchange: If ENV{TZ} is undef, use /etc/timezone (Closes: #419863)
+
+ -- Luk Claes <luk@debian.org>  Wed, 18 Apr 2007 19:05:44 +0200
 
 devscripts (2.10.3) unstable; urgency=low
 
