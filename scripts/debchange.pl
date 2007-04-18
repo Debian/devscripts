@@ -194,7 +194,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     my $shell_cmd;
     # Set defaults
     foreach my $var (keys %config_vars) {
-	$shell_cmd .= qq[$var="$config_vars{$var}";\n];
+	$shell_cmd .= qq[$var="$config_vars{$var}";\n]
+	    if defined $config_vars{$var};
     }
     $shell_cmd .= 'for file in ' . join(" ",@config_files) . "; do\n";
     $shell_cmd .= '[ -f $file ] && . $file; done;' . "\n";
@@ -218,7 +219,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'DEBCHANGE_MULTIMAINT_MERGE'}='no';
 
     foreach my $var (sort keys %config_vars) {
-	if ($config_vars{$var} ne $config_default{$var}) {
+	if (defined $config_default{$var} and 
+	    ($config_vars{$var} ne $config_default{$var})) {
 	    $modified_conf_msg .= "  $var=$config_vars{$var}\n";
 	}
     }

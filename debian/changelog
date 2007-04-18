@@ -3,13 +3,16 @@ devscripts (2.10.4) UNRELEASED; urgency=low
   [ Adam D. Barratt ]
   * grep-excuses: make the maintainer regex more restrictive to avoid accidental
     matches (Closes: #419462)
-  * debchange: make adding multiple changelog blocks for a single maintainer optional
-    (Closes: #419880)
+  * debchange
+    + Make adding multiple changelog blocks for a single maintainer optional
+      (Closes: #419880)
+    + Check whether variables have been initialized before attempting to use them
+      when parsing the configuration file
 
   [ Luk Claes ]
   * debchange: If ENV{TZ} is undef, use /etc/timezone (Closes: #419863)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed, 18 Apr 2007 19:47:17 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed, 18 Apr 2007 20:22:03 +0100
 
 devscripts (2.10.3) unstable; urgency=low
 
