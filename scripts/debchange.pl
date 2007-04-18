@@ -194,8 +194,11 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     my $shell_cmd;
     # Set defaults
     foreach my $var (keys %config_vars) {
-	$shell_cmd .= qq[$var="$config_vars{$var}";\n]
-	    if defined $config_vars{$var};
+	if (defined $config_vars{$var}) {
+	    $shell_cmd .= qq[$var="$config_vars{$var}";\n];
+	} else {
+	    $shell_cmd .= qq[$var="";\n];
+	}
     }
     $shell_cmd .= 'for file in ' . join(" ",@config_files) . "; do\n";
     $shell_cmd .= '[ -f $file ] && . $file; done;' . "\n";
