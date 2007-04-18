@@ -185,10 +185,10 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBCHANGE_TZ' => $ENV{TZ}, # undef if TZ unset
 		       'DEBCHANGE_MULTIMAINT_MERGE' => 'no',
 		       );
-     if (!$ENV{TZ} && open TIMEZONE, "/etc/timezone") {
-     	chomp(my $timezone = <TIMEZONE>);
-     	$config_vars{'DEBCHANGE_TZ'} = $timezone;
-     }
+    if (!$ENV{TZ} && open TIMEZONE, "/etc/timezone") {
+	chomp(my $timezone = <TIMEZONE>);
+	$config_vars{'DEBCHANGE_TZ'} = $timezone;
+    }
     my %config_default = %config_vars;
     
     my $shell_cmd;
