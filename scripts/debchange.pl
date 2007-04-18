@@ -164,6 +164,7 @@ my $opt_p = 0;
 my $opt_query = 1;
 my $opt_release_heuristic = 'log';
 my $opt_multimaint = 1;
+my $opt_multimaint_merge = 0;
 my $opt_tz = undef;
 
 # Next, read configuration files and then command line
@@ -182,6 +183,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBCHANGE_RELEASE_HEURISTIC' => 'log',
 		       'DEBCHANGE_MULTIMAINT' => 'yes',
 		       'DEBCHANGE_TZ' => $ENV{TZ}, # undef if TZ unset
+		       'DEBCHANGE_MULTIMAINT_MERGE' => 'no',
 		       );
      if (!$ENV{TZ} && open TIMEZONE, "/etc/timezone") {
      	chomp(my $timezone = <TIMEZONE>);
@@ -212,6 +214,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'DEBCHANGE_RELEASE_HEURISTIC'}='log';
     $config_vars{'DEBCHANGE_MULTIMAINT'} =~ /^(yes|no)$/
 	or $config_vars{'DEBCHANGE_MULTIMAINT'}='yes';
+    $config_vars{'DEBCHANGE_MULTIMAINT_MERGE'} =~ /^(yes|no)$/
+	or $config_vars{'DEBCHANGE_MULTIMAINT_MERGE'}='no';
 
     foreach my $var (sort keys %config_vars) {
 	if ($config_vars{$var} ne $config_default{$var}) {
@@ -228,6 +232,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $opt_release_heuristic = $config_vars{'DEBCHANGE_RELEASE_HEURISTIC'};
     $opt_multimaint = $config_vars{'DEBCHANGE_MULTIMAINT'} eq 'no' ? 0 : 1;
     $opt_tz = $config_vars{'DEBCHANGE_TZ'};
+    $opt_multimaint_merge = $config_vars{'DEBCHANGE_MULTIMAINT_MERGE'} eq 'no' ? 0 : 1;
 }
 
 # We use bundling so that the short option behaviour is the same as
@@ -895,7 +900,7 @@ elsif (($opt_r || $opt_a) && ! $opt_create) {
     while (<S>) {
 	$line++;
 	# Start of existing changes by the current maintainer
-	if (/^  \[ $MAINTAINER \]$/) {
+	if (/^  \[ $MAINTAINER \]$/ && $opt_multimaint_merge) {
 	    # If there's more than one such block,
 	    # we only care about the first
 	    $maintline ||= $line;

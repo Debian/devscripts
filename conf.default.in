@@ -123,6 +123,11 @@
 # 
 # Introduce multiple-maintainer markers in changelog sections?
 # DEBCHANGE_MULTIMAINT=yes
+#
+# When appending to a multiple-maintainer changelog, if there are
+# existing changes made by the current maintainer, should new
+# changelog entries be appended to the existing entries?
+# DEBCHANGE_MULTIMAINT_MERGE=no
 # 
 # Use a fixed timezone in changelog entries?
 # DEBCHANGE_TZ=UTC

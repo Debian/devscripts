@@ -291,6 +291,20 @@ EOF
 # DEBCHANGE_TZ=UTC
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.4
+	then
+	    # Added in devscripts 2.10.4
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### debchange option added in version 2.10.4
+#
+# When appending to a multiple-maintainer changelog, if there are
+# existing changes made by the current maintainer, should new
+# changelog entries be appended to the existing entries?
+# DEBCHANGE_MULTIMAINT_MERGE=no
+EOF
+	fi
     fi
 fi
 
