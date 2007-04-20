@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 # This script was originally based on the script of the same name from
-# the KDE SDK
+# the KDE SDK (by dfaure@kde.org)
 #
 # This version is
 #   Copyright (C) 2007 Adam D. Barratt
@@ -81,7 +81,7 @@ option.
 
 This code is copyright by Adam D. Barratt <adam@adam-barratt.org.uk>, 
 all rights reserved; based on a script of the same name from the KDE 
-SDK.
+SDK, which is copyright by <dfaure@kde.org>.
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the GNU 
 General Public License, version 2 or later.
@@ -214,7 +214,7 @@ sub version {
     print <<"EOF";
 This is $progname, from the Debian devscripts package, version ###VERSION###
 Copyright (C) 2007 by Adam D. Barratt <adam\@adam-barratt.org.uk>; based 
-on a script of the same name from the KDE SDK.
+on a script of the same name from the KDE SDK by <dfaure@kde.org>.
 
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the
