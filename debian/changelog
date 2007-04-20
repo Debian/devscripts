@@ -5,11 +5,13 @@ devscripts (2.10.4) UNRELEASED; urgency=low
     matches (Closes: #419462)
   * debchange: make adding multiple changelog blocks for a single maintainer optional
     (Closes: #419880)
+  * Conflict / Replace versions of kdesdk-scripts which shipped /usr/bin/licensecheck
+    (Closes: #419754)
 
   [ Luk Claes ]
   * debchange: If ENV{TZ} is undef, use /etc/timezone (Closes: #419863)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Thu, 19 Apr 2007 08:28:47 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Fri, 20 Apr 2007 08:37:54 +0100
 
 devscripts (2.10.3) unstable; urgency=low
 
