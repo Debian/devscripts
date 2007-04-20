@@ -189,16 +189,14 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	chomp(my $timezone = <TIMEZONE>);
 	$config_vars{'DEBCHANGE_TZ'} = $timezone;
     }
+    # If it's *still* not set...
+    $config_vars{'DEBCHANGE_TZ'} ||= '';
     my %config_default = %config_vars;
     
     my $shell_cmd;
     # Set defaults
     foreach my $var (keys %config_vars) {
-	if (defined $config_vars{$var}) {
-	    $shell_cmd .= qq[$var="$config_vars{$var}";\n];
-	} else {
-	    $shell_cmd .= qq[$var="";\n];
-	}
+	$shell_cmd .= qq[$var="$config_vars{$var}";\n];
     }
     $shell_cmd .= 'for file in ' . join(" ",@config_files) . "; do\n";
     $shell_cmd .= '[ -f $file ] && . $file; done;' . "\n";
@@ -222,8 +220,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'DEBCHANGE_MULTIMAINT_MERGE'}='no';
 
     foreach my $var (sort keys %config_vars) {
-	if (defined $config_default{$var} and 
-	    ($config_vars{$var} ne $config_default{$var})) {
+	if ($config_vars{$var} ne $config_default{$var}) {
 	    $modified_conf_msg .= "  $var=$config_vars{$var}\n";
 	}
     }
