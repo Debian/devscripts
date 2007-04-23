@@ -324,8 +324,8 @@ if (defined $opt_D) {
 	    $warnings++;
 	}
     } elsif ($distributor eq 'Ubuntu') {
-	unless ($opt_D =~ /^(warty|hoary|breezy|dapper|edgy|feisty)(-updates|-security|-proposed)?$/) {
-	    warn "$progname warning: Recognised distributions are:\n{warty,hoary,breezy,dapper,edgy,feisty}{,-updates,-security,-proposed}.\nUsing your request anyway.\n";
+	unless ($opt_D =~ /^(warty|hoary|breezy|dapper|edgy|feisty|gutsy)(-updates|-security|-proposed)?$/) {
+	    warn "$progname warning: Recognised distributions are:\n{warty,hoary,breezy,dapper,edgy,feisty,gutsy}{,-updates,-security,-proposed}.\nUsing your request anyway.\n";
 	    $warnings++;
 	}
     } else {
