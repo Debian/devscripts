@@ -341,7 +341,7 @@ while (<CHANGES>) {
         $deb =~ /^([a-z0-9+\.-]+)_/ or warn "unrecognised .deb name: $deb\n";
 	# don't want other archs' .debs:
 	next unless $deb =~ /[_+]($arch|all)[\.+]/;
-        my $pkg = $1;
+        my $pkg = $deb;
         if (@ARGV) {
             if (exists $pkgs{$pkg}) {
                 push @debs, $deb;
