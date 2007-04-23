@@ -1,7 +1,7 @@
 devscripts (2.10.5) UNRELEASED; urgency=low
 
   [ Luk Claes ]
-  * Make reporting on a single deb work again (Closes: #419487).
+  * debc: Make reporting on a single deb work again (Closes: #419487).
 
   [ Adam D. Barratt ]
   * debchange: Add gutsy (gibbon) to the list of recognised Ubuntu distributions
@@ -24,8 +24,8 @@ devscripts (2.10.4) unstable; urgency=low
   * bts: update tags list to include lenny
 
   [ Luk Claes ]
-  * Add myself to Uploaders
-  * Escape @kde in licensecheck otherwise build fails
+  * debian/control: Add myself to Uploaders
+  * licensecheck: Escape @kde otherwise build fails
 
  -- Luk Claes <luk@debian.org>  Mon, 23 Apr 2007 20:22:58 +0200
 
