@@ -214,7 +214,7 @@ sub version {
     print <<"EOF";
 This is $progname, from the Debian devscripts package, version ###VERSION###
 Copyright (C) 2007 by Adam D. Barratt <adam\@adam-barratt.org.uk>; based 
-on a script of the same name from the KDE SDK by <dfaure@kde.org>.
+on a script of the same name from the KDE SDK by <dfaure\@kde.org>.
 
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the
