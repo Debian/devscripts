@@ -7,14 +7,12 @@ devscripts (2.10.4) UNRELEASED; urgency=low
     (Closes: #419880)
   * Conflict with versions of kdesdk-scripts which shipped /usr/bin/licensecheck
     (Closes: #419754)
-
-  [ Luk Claes ]
-  * debchange: If ENV{TZ} is undef, use /etc/timezone (Closes: #419863)
+  * Ensure DEBCHANGE_TZ is always set (Closes: #419863)
 
   [ Julian Gilbey ]
   * bts: update tags list to include lenny
 
- -- Julian Gilbey <jdg@debian.org>  Sun, 22 Apr 2007 15:45:50 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Mon, 23 Apr 2007 18:53:33 +0100
 
 devscripts (2.10.3) unstable; urgency=low
 
