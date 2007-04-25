@@ -101,17 +101,15 @@ my $found_bugs_start;
 my ($current_package, $comment);
 
 while (defined(my $line = <BUGS>)) {
-    if ($line =~ /^<pre>$/) {
+    if( $line =~ /^<div class="package">/) {
 	$found_bugs_start = 1;
+    }
+    if( ! defined($found_bugs_start)) {
 	next;
-    } elsif (! defined($found_bugs_start)) {
-	next;
-    } elsif ($line =~ m%^<a name="([^\"]+)"><strong>Package:</strong> <a href="[^\"]+">%i) {
+    } elsif ($line =~ m%<a name="([^\"]+)"><strong>Package:</strong></a> <a href="[^\"]+">%i) {
 	$current_package = $1;
 	$comment = '';
-    } elsif ($line =~ m%^\[%) {
-	$comment .= $line;
-    } elsif ($line =~ m%<a name="(\d+)">\s*<a href="[^\"]+">\d+</a> (\[[^\]]+\])( \[[^\]]+\])? ([^<]+)%i) {
+    } elsif ($line =~ m%<a name="(\d+)"></a>\s*<a href="[^\"]+">\d+</a> (\[[^\]]+\])( \[[^\]]+\])? ([^<]+)%i) {
 	my ($num, $tags, $dists, $name) = ($1, $2, $3, $4);
 	chomp $name;
 	print_if_relevant(pkg => $current_package, num => $num, tags => $tags, dists => $dists, name => $name, comment => $comment);
