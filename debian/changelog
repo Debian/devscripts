@@ -8,12 +8,13 @@ devscripts (2.10.5) UNRELEASED; urgency=low
     Ubuntu distributions
   * rc-alert
     + Update HTML parsing to support the new structure of the RC bug page
+    + The "I" tag can now also mean "lenny-ingore"
 
   [ Martin Zobel-Helas ]
   * debchange: Add volatile to the list of recognised Debian distributions
   * debchange: Add backports to the list of recognised Debian distributions
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed, 25 Apr 2007 21:03:29 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed, 25 Apr 2007 21:13:10 +0100
 
 devscripts (2.10.4) unstable; urgency=low
 

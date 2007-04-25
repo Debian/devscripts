@@ -145,7 +145,7 @@ sub human_flags($) {
     $mrf =~ /^\[....R/ and push(@hrf, "unreproducible");
     $mrf =~ /^\[.....S/ and push(@hrf, "security");
     $mrf =~ /^\[......U/ and push(@hrf, "upstream");
-    $mrf =~ /^\[.......I/ and push(@hrf, "etch-ignore");
+    $mrf =~ /^\[.......I/ and push(@hrf, "etch-ignore or lenny-ignore");
 
     if (@hrf) {
 	return "$mrf (" . join(", ", @hrf) . ')';
