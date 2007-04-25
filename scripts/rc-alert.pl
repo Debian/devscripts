@@ -162,7 +162,7 @@ sub human_dists($) {
     $mrf =~ /S/ and push(@hrf, "stable");
     $mrf =~ /T/ and push(@hrf, "testing");
     $mrf =~ /U/ and push(@hrf, "unstable");
-    $mrf =~ /X/ and push(@hrf, "not in testing");
+    $mrf =~ /E/ and push(@hrf, "experimental");
     
     if (@hrf) {
 	return "$mrf (" . join(", ", @hrf) . ')';
