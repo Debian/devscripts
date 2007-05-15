@@ -305,6 +305,20 @@ EOF
 # DEBCHANGE_MULTIMAINT_MERGE=no
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.5
+	then
+	    # Added in devscripts 2.10.5
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### bts option added in version 2.10.5
+#
+# Which SMTP host should be used?  Note that if both an SMTP host and
+# sendmail command are specified in the configuration file(s), the SMTP
+# host will be used unless overridden by --sendmail on the command line
+# BTS_SMTP_HOST=bugs.debian.org
+EOF
+	fi
     fi
 fi
 

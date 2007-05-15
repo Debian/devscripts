@@ -5,8 +5,10 @@
 #
 # Written by Joey Hess <joeyh@debian.org>
 # Modifications by Julian Gilbey <jdg@debian.org>
+# Modifications by Josh Triplett <josh@freedesktop.org>
 # Copyright 2001-2003 Joey Hess <joeyh@debian.org>
 # Modifications Copyright 2001-2003 Julian Gilbey <jdg@debian.org>
+# Modifications Copyright 2007 Josh Triplett <josh@freedesktop.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -35,6 +37,7 @@ use File::Copy;
 use File::Path;
 use File::Spec;
 use File::Temp qw/tempfile/;
+use Net::SMTP;
 use Cwd;
 use IO::Handle;
 use lib '/usr/share/devscripts';
@@ -244,6 +247,15 @@ the command is /usr/sbin/sendmail or /usr/sbin/exim*.  For other
 mailers, if they require a -t option, this must be included in the
 SENDMAILCMD, for example: --sendmail="/usr/sbin/mymailer -t"
 
+=item --smtp-host=SMTPHOST
+
+Specify an SMTP host.  If given, bts will send mail by talking directly to
+this SMTP host rather than by invoking a sendmail command.
+
+Note that when sending directly via an SMTP host, specifying addresses in
+--cc-addr that the SMTP host will not relay will cause the SMTP host to reject
+the entire mail.
+
 =item -f, --force-refresh
 
 Download a bug report again, even if it does not appear to have
@@ -285,6 +297,7 @@ my $refreshmode=0;
 my $updatemode=0;
 my $mailreader='mutt -f %s';
 my $sendmailcmd='/usr/sbin/sendmail';
+my $smtphost='';
 # regexp for mailers which require a -t option
 my $sendmail_t='^/usr/sbin/sendmail$|^/usr/sbin/exim';
 
@@ -304,6 +317,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'BTS_ONLY_NEW' => 'no',
 		       'BTS_MAIL_READER' => 'mutt -f %s',
 		       'BTS_SENDMAIL_COMMAND' => '/usr/sbin/sendmail',
+		       'BTS_SMTP_HOST' => '',
 		       );
     my %config_default = %config_vars;
     
@@ -335,7 +349,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $config_vars{'BTS_SENDMAIL_COMMAND'} =~ /./
 	or $config_vars{'BTS_SENDMAIL_COMMAND'}='/usr/sbin/sendmail';
 
-    if ($config_vars{'BTS_SENDMAIL_COMMAND'} ne '/usr/sbin/sendmail') {
+    if (!length $config_vars{'BTS_SMTP_HOST'}
+        and $config_vars{'BTS_SENDMAIL_COMMAND'} ne '/usr/sbin/sendmail') {
 	my $cmd = (split ' ', $config_vars{'BTS_SENDMAIL_COMMAND'})[0];
 	unless ($cmd =~ /^[A-Za-z0-9_\-\+\.\/]*$/) {
 	    warn "BTS_SENDMAIL_COMMAND contained funny characters: $cmd\nReverting to default value /usr/sbin/sendmail\n";
@@ -361,6 +376,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $updatemode = $config_vars{'BTS_ONLY_NEW'} eq 'yes' ? 1 : 0;
     $mailreader = $config_vars{'BTS_MAIL_READER'};
     $sendmailcmd = $config_vars{'BTS_SENDMAIL_COMMAND'};
+    $smtphost = $config_vars{'BTS_SMTP_HOST'};
 }
 
 if (exists $ENV{'BUGSOFFLINE'}) {
@@ -368,7 +384,7 @@ if (exists $ENV{'BUGSOFFLINE'}) {
 }
 
 my ($opt_help, $opt_version, $opt_noconf);
-my ($opt_cachemode, $opt_mailreader, $opt_sendmail);
+my ($opt_cachemode, $opt_mailreader, $opt_sendmail, $opt_smtphost);
 my $opt_cachedelay=5;
 my $mboxmode = 0;
 my $quiet=0;
@@ -387,6 +403,7 @@ GetOptions("help|h" => \$opt_help,
 	   "mailreader|mail-reader=s" => \$opt_mailreader,
 	   "cc-addr=s" => \$ccemail,
 	   "sendmail=s" => \$opt_sendmail,
+	   "smtp-host|smtphost=s" => \$opt_smtphost,
 	   "f" => \$refreshmode,
 	   "force-refresh!" => \$refreshmode,
 	   "only-new!" => \$updatemode,
@@ -409,6 +426,12 @@ if ($opt_mailreader) {
     }
 }
 
+if ($opt_sendmail and $opt_smtphost) {
+    die 'bts: --sendmail and --smtp-host mutually exclusive';
+}
+
+$smtphost = $opt_smtphost if $opt_smtphost;
+
 if ($opt_sendmail) {
     if ($opt_sendmail ne '/usr/sbin/sendmail'
 	and $opt_sendmail ne $sendmailcmd) {
@@ -422,7 +445,11 @@ if ($opt_sendmail) {
 	}
     }
 }
-$sendmailcmd = $opt_sendmail if $opt_sendmail;
+
+if ($opt_sendmail) {
+    $sendmailcmd = $opt_sendmail;
+    $smtphost = '';
+}
 
 if ($opt_cachemode) {
     if ($opt_cachemode =~ /^(min|mbox|full)$/) {
@@ -1517,6 +1544,7 @@ sub bts_version {
 $progname version $version
 Copyright (C) 2001-2003 by Joey Hess <joeyh\@debian.org>.
 Modifications Copyright (C) 2002-2004 by Julian Gilbey <jdg\@debian.org>.
+Modifications Copyright (C) 2007 by Josh Triplett <josh\@freedesktop.org>.
 It is licensed under the terms of the GPL, either version 2 of the
 License, or (at your option) any later version.
 EOF
@@ -1560,6 +1588,7 @@ Valid options are:
                           ones
    --no-force-refresh     Don\'t do so (default)
    --sendmail=cmd         Sendmail command to use (default /usr/sbin/sendmail)
+   --smtp-host=host       SMTP host to use
    --help, -h             Display this message
    --version, -v          Display version and copyright info
 
@@ -1635,6 +1664,84 @@ sub mailbts {
     $body .= "$_[1]\n";
 }
 
+# Extract an array of email addresses from a string
+sub extract_addresses {
+        my $s = shift;
+        my @addresses;
+
+        # Original regular expression from git-send-email, slightly modified
+        while ($s =~ /([^,<>"\s\@]+\@[^.,<>"\s@]+(?:\.[^.,<>"\s\@]+)+)(.*)/) {
+            push @addresses, $1;
+            $s = $2;
+        }
+        return @addresses;
+}
+
+# Send one full mail message using the smtphost or sendmail.
+sub send_mail {
+    my ($from, $to, $cc, $subject, $body) = @_;
+
+    my @fromaddresses = extract_addresses($from);
+    my $fromaddress = $fromaddresses[0];
+    # Message-ID algorithm from git-send-email
+    my $msgid = sprintf("%s-%s", time(), int(rand(4200)))."-bts-$fromaddress";
+    my $date = `date -R`;
+    chomp $date;
+
+    my $message = fold_from_header("From: $from") . "\n";
+    $message   .= "To: $to\n" if length $to;
+    $message   .= "Cc: $cc\n" if length $cc;
+    $message   .= "Subject: $subject\n"
+	       .  "Date: $date\n"
+               .  "X-BTS-Version: $version\n"
+               .  "Message-ID: <$msgid>\n"
+               .  "\n"
+               .  "# Automatically generated email from bts,"
+                  . " devscripts version $version\n"
+               .  "$body\n";
+
+    if (length $smtphost) {
+        my $smtp = Net::SMTP->new($smtphost)
+            or die "bts: failed to open SMTP connection to $smtphost";
+        $smtp->mail($fromaddress)
+            or die "bts: failed to set SMTP from address $fromaddress";
+        my @addresses = extract_addresses($to);
+        push @addresses, extract_addresses($cc);
+        foreach my $address (@addresses) {
+            $smtp->recipient($address)
+                or die "bts: failed to set SMTP recipient $address";
+        }
+        $smtp->data($message)
+            or die "bts: failed to send message as SMTP DATA";
+        $smtp->quit
+            or die "bts: failed to quit SMTP connection";
+    }
+    else {
+        my $pid = open(MAIL, "|-");
+        if (! defined $pid) {
+            die "bts: Couldn't fork: $!\n";
+        }
+        $SIG{'PIPE'} = sub { die "bts: pipe for $sendmailcmd broke\n"; };
+        if ($pid) {
+            # parent
+            print MAIL $message;
+            close MAIL or die "bts: sendmail error: $!\n";
+        }
+        else {
+            # child
+            if ($debug) {
+                exec("/bin/cat")
+                    or die "bts: error running cat: $!\n";
+            } else {
+                my @mailcmd = split ' ', $sendmailcmd;
+                push @mailcmd, "-t" if $sendmailcmd =~ /$sendmail_t/;
+                exec @mailcmd
+                    or die "bts: error running sendmail: $!\n";
+            }
+        }
+    }
+}
+
 # Sends all cached mail to the bts (duh).
 sub mailbtsall {
     my $subject=shift;
@@ -1668,43 +1775,9 @@ sub mailbtsall {
 	my $charset = `locale charmap`;
 	chomp $charset;
 	$charset =~ s/^ANSI_X3\.4-19(68|86)$/US-ASCII/;
-	my $fromline = fold_from_header("From: " .
-			MIME_encode_mimewords($from, 'Charset' => $charset));
-	my $date = `date -R`;
-	chomp $date;
+        $from = MIME_encode_mimewords($from, 'Charset' => $charset);
 
-	my $pid = open(MAIL, "|-");
-	if (! defined $pid) {
-	    die "bts: Couldn't fork: $!\n";
-	}
-	$SIG{'PIPE'} = sub { die "bts: pipe for $sendmailcmd broke\n"; };
-	if ($pid) {
-	    # parent
-	    print MAIL <<"EOM";
-$fromline
-To: $btsemail
-Cc: $ccemail
-Subject: $subject
-Date: $date
-X-BTS-Version: $version
-
-# Automatically generated email from bts, devscripts version $version
-$body
-EOM
-	    close MAIL or die "bts: sendmail error: $!\n";
-	}
-	else {
-	    # child
-	    if ($debug) {
-		exec("/bin/cat")
-		    or die "bts: error running cat: $!\n";
-	    } else {
-		my @mailcmd = split ' ', $sendmailcmd;
-		push @mailcmd, "-t" if $sendmailcmd =~ /$sendmail_t/;
-		exec @mailcmd
-		    or die "bts: error running sendmail: $!\n";
-	    }
-	}
+        send_mail($from, $btsemail, $ccemail, $subject, $body);
     }
     else {  # No DEBEMAIL
 	unless (system("command -v mail >/dev/null 2>&1") == 0) {
@@ -1740,40 +1813,7 @@ sub mailto {
     my ($subject, $body, $to, $from) = @_;
 
     if (defined $from) {
-	my $date = `date -R`;
-	chomp $date;
-
-	my $pid = open(MAIL, "|-");
-	if (! defined $pid) {
-	    die "bts: Couldn't fork: $!\n";
-	}
-	$SIG{'PIPE'} = sub { die "bts: pipe for $sendmailcmd broke\n"; };
-	if ($pid) {
-	    # parent
-	    print MAIL <<"EOM";
-From: $from
-To: $to
-Subject: $subject
-Date: $date
-X-BTS-Version: $version
-
-# Automatically generated email from bts, devscripts version $version
-$body
-EOM
-	    close MAIL or die "bts: sendmail error: $!\n";
-	}
-	else {
-	    # child
-	    if ($debug) {
-		exec("/bin/cat")
-		    or die "bts: error running cat: $!\n";
-	    } else {
-		my @mailcmd = split ' ', $sendmailcmd;
-		push @mailcmd, "-t" if $sendmailcmd =~ /$sendmail_t/;
-		exec @mailcmd
-		    or die "bts: error running sendmail: $!\n";
-	    }
-	}
+        send_mail($from, $to, '', $subject, $body);
     }
     else {  # No $from
 	unless (system("command -v mail >/dev/null 2>&1") == 0) {
@@ -2929,7 +2969,8 @@ If this is set, specifies a sendmail command to use instead of
 
 This program is Copyright (C) 2001-2003 by Joey Hess <joeyh@debian.org>.
 Many modifications have been made, Copyright (C) 2002-2005 Julian
-Gilbey <jdg@debian.org>.
+Gilbey <jdg@debian.org> and Copyright (C) 2007 Josh Triplett
+<josh@freedesktop.org>.
 
 It is licensed under the terms of the GPL, either version 2 of the
 License, or (at your option) any later version.
