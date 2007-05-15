@@ -2963,6 +2963,15 @@ the --mailreader command line option.
 If this is set, specifies a sendmail command to use instead of
 /usr/sbin/sendmail.  Same as the --sendmail command line option.
 
+=item BTS_SMTP_HOST
+
+If this is set, specifies an SMTP host to use for sending mail rather
+than using the sendmail command.  Same as the --smtp-host command line
+option.
+
+Note that this option takes priority over BTS_SENDMAIL_COMMAND if both are
+set, unless the --sendmail option is used.
+
 =cut
 
 =head1 COPYRIGHT
