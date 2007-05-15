@@ -438,10 +438,10 @@ if ($opt_sendmail) {
 	my $cmd = (split ' ', $opt_sendmail)[0];
 	unless ($cmd =~ /^[A-Za-z0-9_\-\+\.\/]*$/) {
 	    warn "--sendmail command contained funny characters: $cmd\nReverting to default value $sendmailcmd\n";
-	    unset $opt_sendmail;
+	    undef $opt_sendmail;
 	} elsif (system("command -v $cmd >/dev/null 2>&1") != 0) {
 	    warn "--sendmail command $cmd could not be executed.\nReverting to default value $sendmailcmd\n";
-	    unset $opt_sendmail;
+	    undef $opt_sendmail;
 	}
     }
 }
