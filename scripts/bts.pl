@@ -427,7 +427,7 @@ if ($opt_mailreader) {
 }
 
 if ($opt_sendmail and $opt_smtphost) {
-    die 'bts: --sendmail and --smtp-host mutually exclusive';
+    die "bts: --sendmail and --smtp-host mutually exclusive\n";
 }
 
 $smtphost = $opt_smtphost if $opt_smtphost;
@@ -1702,19 +1702,19 @@ sub send_mail {
 
     if (length $smtphost) {
         my $smtp = Net::SMTP->new($smtphost)
-            or die "bts: failed to open SMTP connection to $smtphost";
+            or die "bts: failed to open SMTP connection to $smtphost\n";
         $smtp->mail($fromaddress)
-            or die "bts: failed to set SMTP from address $fromaddress";
+            or die "bts: failed to set SMTP from address $fromaddress\n";
         my @addresses = extract_addresses($to);
         push @addresses, extract_addresses($cc);
         foreach my $address (@addresses) {
             $smtp->recipient($address)
-                or die "bts: failed to set SMTP recipient $address";
+                or die "bts: failed to set SMTP recipient $address\n";
         }
         $smtp->data($message)
-            or die "bts: failed to send message as SMTP DATA";
+            or die "bts: failed to send message as SMTP DATA\n";
         $smtp->quit
-            or die "bts: failed to quit SMTP connection";
+            or die "bts: failed to quit SMTP connection\n";
     }
     else {
         my $pid = open(MAIL, "|-");
