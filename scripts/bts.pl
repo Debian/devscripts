@@ -1123,7 +1123,7 @@ or EMAIL (checked in that order) is used.
 
 sub bts_claim {
     my $bug=checkbug(shift) or die "bts claim: claim what bug?\n";
-    my $claim=shift || $ENV{'DEBEMAIL'} || ENV{'EMAIL'};
+    my $claim=shift || $ENV{'DEBEMAIL'} || $ENV{'EMAIL'};
     bts_user("bugsquash\@qa.debian.org");
     bts_usertags("$bug" , " + $claim");
 }
