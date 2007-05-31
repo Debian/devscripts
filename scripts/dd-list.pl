@@ -55,7 +55,7 @@ sub parse_developer {
 	my $developer=shift;
 
 	my ($name, $domain) = $developer=~/^(.*)\s+<.*@(.*)>\s*$/i;
-	if (defined $domain && $domain !~ /^lists(\.alioth)?\.debian\.org$/) {
+	if (defined $domain && $domain !~ /^(lists(\.alioth)?\.debian\.org|teams\.debian\.net)$/) {
 		return join " ", reverse split " ", $name;
 	}
 	elsif (defined $name) {

@@ -16,12 +16,14 @@ devscripts (2.10.5) UNRELEASED; urgency=low
       the patch (Closes: #420847)
     + Fix syntax error when reverting to default SENDMAILCMD
   * mass-bug: Fix syntax error when reverting to default SENDMAILCMD
+  * dd-list: Treat teams.debian.net addresses as mailing lists rather
+    than individuals
 
   [ Martin Zobel-Helas ]
   * debchange: Add volatile to the list of recognised Debian distributions
   * debchange: Add backports to the list of recognised Debian distributions
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 15 May 2007 22:44:21 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Thu, 31 May 2007 13:14:32 +0100
 
 devscripts (2.10.4) unstable; urgency=low
 
