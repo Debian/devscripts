@@ -879,6 +879,7 @@ sub bts_notfound {
     opts_done(@_);
     mailbts("notfound $bug in $version", "notfound $bug $version");
 }
+
 =item fixed <bug> <version>
 
 Indicate that a bug was fixed in a particular package version, without

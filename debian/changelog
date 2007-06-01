@@ -16,6 +16,8 @@ devscripts (2.10.5) UNRELEASED; urgency=low
       the patch (Closes: #420847)
     + Fix syntax error when reverting to default SENDMAILCMD
     + When cleaning up a bug's cache entries, also remove {raw,status}.mbox
+    + Fix pod formatting so that the description of the "fixed" command
+      actually appears in the manpage.
   * mass-bug: Fix syntax error when reverting to default SENDMAILCMD
   * dd-list: Treat teams.debian.net addresses as mailing lists rather
     than individuals
@@ -24,7 +26,7 @@ devscripts (2.10.5) UNRELEASED; urgency=low
   * debchange: Add volatile to the list of recognised Debian distributions
   * debchange: Add backports to the list of recognised Debian distributions
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Thu, 31 May 2007 21:15:22 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Fri, 01 Jun 2007 16:52:39 +0100
 
 devscripts (2.10.4) unstable; urgency=low
 
