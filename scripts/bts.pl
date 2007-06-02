@@ -1404,7 +1404,7 @@ sub bts_cache {
 	       "q|quiet+" => \$sub_quiet,
 	       "include-resolved!" => \$sub_includeresolved,
 	       )
-    or die "bts: unknown options for bugs command\n";
+    or die "bts: unknown options for cache command\n";
     @_ = @ARGV; # whatever's left
 
     if (defined $sub_refreshmode) {
