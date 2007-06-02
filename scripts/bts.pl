@@ -2994,6 +2994,11 @@ the --mailreader command line option.
 If this is set, specifies a sendmail command to use instead of
 /usr/sbin/sendmail.  Same as the --sendmail command line option.
 
+=item BTS_ONLY_NEW
+
+Download only new bugs when caching. Don't check for updates in
+bugs we already have.
+
 =item BTS_SMTP_HOST
 
 If this is set, specifies an SMTP host to use for sending mail rather

@@ -75,6 +75,10 @@
 # What sendmail command do we use?  This will be split on whitespace.
 # BTS_SENDMAIL_COMMAND='/usr/sbin/sendmail'
 #
+# Download only new bugs when caching?  If set to yes, don't check for
+# updates in bugs we already have.
+# BTS_ONLY_NEW=no
+#
 # Which SMTP host should be used?  Note that if both an SMTP host and
 # sendmail command are specified in the configuration file(s), the SMTP
 # host will be used unless overridden by --sendmail on the command line
