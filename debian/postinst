@@ -317,6 +317,9 @@ EOF
 # sendmail command are specified in the configuration file(s), the SMTP
 # host will be used unless overridden by --sendmail on the command line
 # BTS_SMTP_HOST=bugs.debian.org
+#
+# Include resolved bugs when caching?
+# BTS_INCLUDE_RESOLVED=yes
 EOF
 	fi
     fi

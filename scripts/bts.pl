@@ -273,6 +273,16 @@ Suppress any configuration file --force-refresh option.
 Download only new bugs when caching. Don't check for updates in
 bugs we already have.
 
+=item --include-resolved
+
+When caching bug reports, include those that are marked as resolved.  This
+is the default behaviour.
+
+=item --no-include-resolved
+
+Reverse the behaviour of the previous option.  That is, do not cache bugs
+that are marked as resolved.
+
 =item -q, --quiet
 
 When running bts cache, only display information about newly cached
@@ -300,6 +310,7 @@ my $sendmailcmd='/usr/sbin/sendmail';
 my $smtphost='';
 # regexp for mailers which require a -t option
 my $sendmail_t='^/usr/sbin/sendmail$|^/usr/sbin/exim';
+my $includeresolved=1;
 
 # Next, read read configuration files and then command line
 # The next stuff is boilerplate
@@ -317,6 +328,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'BTS_ONLY_NEW' => 'no',
 		       'BTS_MAIL_READER' => 'mutt -f %s',
 		       'BTS_SENDMAIL_COMMAND' => '/usr/sbin/sendmail',
+		       'BTS_INCLUDE_RESOLVED' => 'yes',
 		       'BTS_SMTP_HOST' => '',
 		       );
     my %config_default = %config_vars;
@@ -348,6 +360,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'BTS_MAIL_READER'}='mutt -f %s';
     $config_vars{'BTS_SENDMAIL_COMMAND'} =~ /./
 	or $config_vars{'BTS_SENDMAIL_COMMAND'}='/usr/sbin/sendmail';
+    $config_vars{'BTS_INCLUDE_RESOLVED'} =~ /^(yes|no)$/
+	or $config_vars{'BTS_INCLUDE_RESOLVED'} = 'yes';
 
     if (!length $config_vars{'BTS_SMTP_HOST'}
         and $config_vars{'BTS_SENDMAIL_COMMAND'} ne '/usr/sbin/sendmail') {
@@ -377,6 +391,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $mailreader = $config_vars{'BTS_MAIL_READER'};
     $sendmailcmd = $config_vars{'BTS_SENDMAIL_COMMAND'};
     $smtphost = $config_vars{'BTS_SMTP_HOST'};
+    $includeresolved = $config_vars{'BTS_INCLUDE_RESOLVED'} eq 'yes' ? 1 : 0;
 }
 
 if (exists $ENV{'BUGSOFFLINE'}) {
@@ -409,6 +424,7 @@ GetOptions("help|h" => \$opt_help,
 	   "only-new!" => \$updatemode,
 	   "q|quiet+" => \$quiet,
 	   "noconf|no-conf" => \$opt_noconf,
+	   "include-resolved!" => \$includeresolved,
 	   )
     or die "Usage: bts [options]\nRun $progname --help for more details\n";
 
@@ -1359,7 +1375,10 @@ version of the bug report.  It can take three values: min (the
 minimum), mbox (download the minimum plus the mbox version of the bug
 report) or full (the whole works).  The second is --force-refresh or
 -f, which forces the download, even if the cached bug report is
-up-to-date.  Both of these are configurable from the configuration
+up-to-date.  The --include-resolved option indicates whether bug
+reports marked as resolved should be downloaded during caching.
+
+Each of these is configurable from the configuration
 file, as described below.  They may also be specified after the
 "cache" command as well as at the start of the command line.
 
@@ -1377,11 +1396,13 @@ sub bts_cache {
     @ARGV = @_;
     my ($sub_cachemode, $sub_refreshmode, $sub_updatemode);
     my $sub_quiet = $quiet;
+    my $sub_includeresolved = $includeresolved;
     GetOptions("cache-mode|cachemode=s" => \$sub_cachemode,
 	       "f" => \$sub_refreshmode,
 	       "force-refresh!" => \$sub_refreshmode,
 	       "only-new!" => \$sub_updatemode,
 	       "q|quiet+" => \$sub_quiet,
+	       "include-resolved!" => \$sub_includeresolved,
 	       )
     or die "bts: unknown options for bugs command\n";
     @_ = @ARGV; # whatever's left
@@ -1401,6 +1422,7 @@ sub bts_cache {
     }
     # This may be a no-op, we don't mind
     ($quiet, $sub_quiet) = ($sub_quiet, $quiet);
+    ($includeresolved, $sub_includeresolved) = ($sub_includeresolved, $includeresolved);
 
     prunecache();
     if (! have_lwp()) {
@@ -1430,12 +1452,15 @@ sub bts_cache {
 	die "bts cache: cache what?\n";
     }
 
-    my @oldbugs = bugs_from_thing($tocache);
+    my $sub_thgopts = '';
+    $sub_thgopts = ';pend-exc=done'
+	if (! $includeresolved && $tocache !~ /^release-critical/);
+    my @oldbugs = bugs_from_thing($tocache, $sub_thgopts);
     
     # download index
-    download($tocache, '', 1);
+    download($tocache, $sub_thgopts, 1);
 
-    my %bugs = map { $_ => 1 } bugs_from_thing($tocache);
+    my %bugs = map { $_ => 1 } bugs_from_thing($tocache, $sub_thgopts);
 
     # remove old bugs from cache
     if (@oldbugs) {
@@ -1479,6 +1504,7 @@ sub bts_cache {
 	$cachemode = $sub_cachemode;
     }
     $quiet = $sub_quiet;
+    $includeresolved = $sub_includeresolved;
 }
 
 =item cleancache <package> | src:<package> | <maintainer>
@@ -1590,6 +1616,8 @@ Valid options are:
    --no-force-refresh     Don\'t do so (default)
    --sendmail=cmd         Sendmail command to use (default /usr/sbin/sendmail)
    --smtp-host=host       SMTP host to use
+   --no-include-resolved  Don\'t cache bugs marked as resolved
+   --include-resolved     Cache bugs marked as resolved (default)
    --help, -h             Display this message
    --version, -v          Display version and copyright info
 
@@ -2974,6 +3002,13 @@ option.
 
 Note that this option takes priority over BTS_SENDMAIL_COMMAND if both are
 set, unless the --sendmail option is used.
+
+=item BTS_INCLUDE_RESOLVED
+
+If this is set to I<no>, then it is the same as the --no-include-resolved
+command line parameter being used.  Only has an effect on the cache
+command.  The default is I<yes>.  See the cache command for more
+information.
 
 =cut
 
