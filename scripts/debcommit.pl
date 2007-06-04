@@ -31,7 +31,7 @@ Note that svn/svk tagging conventions vary, so debcommit uses
 L<svnpath(1)> to determine where the tag should be placed in the
 repository.
 
-=item B<-m> I<text> B<--message> I<test>
+=item B<-m> I<text> B<--message> I<text>
 
 Specify a commit message to use. Useful if the program cannot determine
 a commit message on its own based on debian/changelog, or if you want to
