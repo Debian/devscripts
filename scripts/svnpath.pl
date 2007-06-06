@@ -74,7 +74,8 @@ else {
 	# Try svk instead.
 	my $svkroot;
 	$svkroot=$ENV{'SVKROOT'} || $ENV{'HOME'}."/.svk";
-	if (-d "$svkroot") {
+	$svkroot .= "/local";
+	if (-e "$svkroot") {
 	    $url = `svk info .| grep -i '^Depot Path:' | cut -d ' ' -f 3`;
 	}
 }
