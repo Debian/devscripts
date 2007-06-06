@@ -156,7 +156,7 @@ sub getprog {
 	my ($svkpath, $svkroot);
 	$svkroot=$ENV{'SVKROOT'} || $ENV{'HOME'}."/.svk";
 	$svkroot .= "/local";
-	if (-e "$svkroot") {
+	if (-d "$svkroot") {
 	    $svkpath=`svk info . 2>/dev/null| grep -i '^Depot Path:' | cut -d ' ' -f 3`;
 	    if (length $svkpath) {
 		return "svk";
