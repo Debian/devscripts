@@ -153,10 +153,14 @@ sub getprog {
 	return "hg";
     }
     else {
-	# svk has no useful directories so try to run it.
-	my $svkpath=`svk info . 2>/dev/null| grep -i '^Depot Path:' | cut -d ' ' -f 2`;
-	if (length $svkpath) {
-	    return "svk";
+	my ($svkpath, $svkroot);
+	$svkroot=$ENV{'SVKROOT'} || $ENV{'HOME'}."/.svk";
+	$svkroot .= "/local";
+	if (-e "$svkroot") {
+	    $svkpath=`svk info . 2>/dev/null| grep -i '^Depot Path:' | cut -d ' ' -f 2`;
+	    if (length $svkpath) {
+		return "svk";
+	    }
 	}
 	
 	die "debcommit: not in a cvs, subversion, baz, bzr, git, hg, or svk working copy\n";
