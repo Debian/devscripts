@@ -523,6 +523,8 @@ for my $debdir (@debdirs) {
 
 print "-- Scan finished\n" if $verbose;
 
+$dehs_end_output=1;
+dehs_output if $dehs;
 exit $found ? 0 : 1;
 
 
