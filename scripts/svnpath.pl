@@ -72,12 +72,7 @@ if (-d ".svn") {
 }
 else {
 	# Try svk instead.
-	my $svkroot;
-	$svkroot=$ENV{'SVKROOT'} || $ENV{'HOME'}."/.svk";
-	$svkroot .= "/local";
-	if (-d "$svkroot") {
-	    $url = `svk info .| grep -i '^Depot Path:' | cut -d ' ' -f 3`;
-	}
+	$url = `svk info .| grep -i '^Depot Path:' | cut -d ' ' -f 3`;
 }
 
 if (! length $url) {

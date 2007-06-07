@@ -23,15 +23,13 @@ devscripts (2.10.5) UNRELEASED; urgency=low
   * dd-list: Treat teams.debian.net addresses as mailing lists rather
     than individuals
   * tagpending: Update license statement to GPL >= 2
-  * debcommit: Improve svk detection to avoid hanging (Closes: #420899)
-  * svnpath: Improve svk detection
   * uscan: Ensure --dehs generates well formed XML (Closes: #426996)
 
   [ Martin Zobel-Helas ]
   * debchange: Add volatile to the list of recognised Debian distributions
   * debchange: Add backports to the list of recognised Debian distributions
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Thu, 07 Jun 2007 12:47:16 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Thu, 07 Jun 2007 22:45:12 +0100
 
 devscripts (2.10.4) unstable; urgency=low
 
