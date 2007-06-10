@@ -34,11 +34,11 @@ BEGIN {
     import URI::Escape;
 }
 
-my $VERSION = '0.2';
+my $VERSION = '0.3';
 
 sub version($) {
     my ($fd) = @_;
-    print $fd "rmadison $VERSION (C) 2006, 2007 Christoph Berg <myon\@debian.org>\n";
+    print $fd "rmadison $VERSION (devscripts ###VERSION###) (C) 2006, 2007 Christoph Berg <myon\@debian.org>\n";
 }
 
 sub usage($$) {
@@ -55,6 +55,7 @@ Display information about PACKAGE(s).
   -h, --help                 show this help and exit
   -s, --suite=SUITE          only show info for this suite
   -S, --source-and-binary    show info for the binary children of source pkgs
+  -t, --time                 show projectb snapshot date
   -u, --url=URL              use URL instead of http://qa.debian.org/madison.php
 
 ARCH, COMPONENT and SUITE can be comma (or space) separated lists, e.g.
@@ -84,6 +85,8 @@ unless (GetOptions(
     '--suite=s'           =>  \$params->{'suite'},
     '-S'                  =>  \$params->{'source-and-binary'},
     '--source-and-binary' =>  \$params->{'source-and-binary'},
+    '-t'                  =>  \$params->{'time'},
+    '--time'              =>  \$params->{'time'},
     '-u=s'                =>  \$params->{'url'},
     '--url=s'             =>  \$params->{'url'},
     '--version'           =>  \$params->{'version'},
@@ -120,6 +123,7 @@ push @args, "g" if $params->{'greaterorequal'};
 push @args, "G" if $params->{'greaterthan'};
 push @args, "s=$params->{'suite'}" if $params->{'suite'};
 push @args, "S" if $params->{'source-and-binary'};
+push @args, "t" if $params->{'time'};
 
 my $url = $params->{'url'} ? $params->{'url'} : "qa";
 my %url_map = (
@@ -191,6 +195,10 @@ only show info for this suite
 
 show info for the binary children of source pkgs
 
+=item B<-t>, B<--time>
+
+show projectb snapshot and reload time (not supported by all archives)
+
 =item B<-u>, B<--url=>I<URL>
 
 use I<URL> for the query. Supported shorthands are
@@ -215,7 +223,7 @@ CGI and rmadison.
 B<dak ls> was formerly called B<madison>.
 
 The protocol used by rmadison is fairly simple, the CGI accepts query the
-parameters a, b, c, g, G, s, S, and package. The parameter text is passed to
+parameters a, b, c, g, G, s, S, t, and package. The parameter text is passed to
 enable plain-text output.
 
 =head1 SEE ALSO
