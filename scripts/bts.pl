@@ -2283,10 +2283,9 @@ sub mangle_cache_file {
 	# occurrence of either "[<a " or plain "<a ", preserving any "[".
 	@data = split /(?:(?=\[<[Aa]\s)|(?<!\[)(?=<[Aa]\s))/, $data;
 	foreach (@data) {
-	    if (m%<a(?: class=\".*?\")? href=\"bugreport\.cgi[^\?]*\?bug=(\d+)%i) {
+	    if (m%<a(?: class=\".*?\")? href=\"bugreport\.cgi[^\?]*\?.*?;?bug=(\d+)%i) {
 		my $bug = $1;
 		my ($msg, $filename) = href_to_filename($_);
-
 		if ($bug eq $thing and defined $msg) {
 		    if ($fullmode or
 			(! $fullmode and exists $$bug2filename{$msg})) {
@@ -2295,7 +2294,7 @@ sub mangle_cache_file {
 			s%<a((?: class=\".*?\")?) href="(bugreport\.cgi[^\"]*)">(.+?)</a>%$3 (<a$1 href="$btscgiurl$2">online</a>)%i;
 		    }
 		} else {
-		    s%<a((?: class=\".*?\")?) href="(bugreport\.cgi[^\?]*\?bug=(\d+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+		    s%<a((?: class=\".*?\")?) href="(bugreport\.cgi[^\?]*\?.*?bug=(\d+))">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
 		}
 	    }
 	    else {
@@ -2451,15 +2450,15 @@ sub href_to_filename {
     my $href = $_[0];
     my ($msg, $filename);
 
-    if ($href =~ m%\[<a(?: class=\".*?\")? href="bugreport\.cgi([^\?]*)\?bug=(\d+)([^\"]*)">.*?\(([^,]*), .*?\)\]%) {
+    if ($href =~ m%\[<a(?: class=\".*?\")? href="bugreport\.cgi([^\?]*)\?([^\"]*);bug=(\d+)">.*?\(([^,]*), .*?\)\]%) {
 	# this looks like an attachment; $1 should give the MIME-type
 	my $urlfilename = $1;
-	my $bug = $2;
-	my $ref = $3;
+	my $ref = $2;
+	my $bug = $3;
 	my $mimetype = $4;
 	$ref =~ s/&(?:amp;)?/;/g;  # normalise all hrefs
 
-	return undef unless $ref =~ /;msg=(\d+);att=(\d+)/;
+	return undef unless $ref =~ /msg=(\d+);att=(\d+)/;
 	$msg = "$1-$2";
 
 	my $fileext = '';
@@ -2476,27 +2475,27 @@ sub href_to_filename {
 	    $filename = "$bug/$msg$fileext";
 	}
     }
-    elsif ($href =~ m%<a(?: class=\".*?\")? href="bugreport\.cgi([^\?]*)\?bug=(\d+)([^\"]*)">%) {
+    elsif ($href =~ m%<a(?: class=\".*?\")? href="bugreport\.cgi([^\?]*)\?([^"]*);?bug=(\d+)">%) {
 	my $urlfilename = $1;
-	my $bug = $2;
-	my $ref = $3;
+	my $ref = $2;
+	my $bug = $3;
 	$ref =~ s/&(?:amp;)?/;/g;  # normalise all hrefs
 	$ref =~ s/;archive=(yes|no)\b//;
 	$ref =~ s/%3D/=/g;
 
-	if ($ref =~ /;msg=(\d+)$/) {
+	if ($ref =~ /msg=(\d+);$/) {
 	    $msg = $1;
 	    $filename = "$bug/$1.html";
 	}
-	elsif ($ref =~ /;msg=(\d+);mbox=yes$/) {
+	elsif ($ref =~ /msg=(\d+);mbox=yes;$/) {
 	    $msg = "$1-mbox";
 	    $filename = "$bug/$1.mbox";
 	}
-	elsif ($ref =~ /^;mbox=yes$/) {
+	elsif ($ref =~ /^mbox=yes;$/) {
 	    $msg = 'rawmbox';
 	    $filename = "$bug.raw.mbox";
 	}
-	elsif ($ref =~ /^;mbox=yes;mboxstat(us)?=yes$/) {
+	elsif ($ref =~ /mboxstat(us)?=yes/) {
 	    $msg = 'statusmbox';
 	    $filename = "$bug.status.mbox";
 	}

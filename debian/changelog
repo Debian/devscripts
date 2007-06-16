@@ -19,6 +19,7 @@ devscripts (2.10.5) UNRELEASED; urgency=low
     + Fix pod formatting so that the description of the "fixed" command
       actually appears in the manpage.
     + Add an option to not cache resolved bugs (Closes: #340259, #378342)
+    + Fix URL parsing to account for recent HTML changes (Closes: #429236)
   * mass-bug: Fix syntax error when reverting to default SENDMAILCMD
   * dd-list: Treat teams.debian.net addresses as mailing lists rather
     than individuals
@@ -32,7 +33,7 @@ devscripts (2.10.5) UNRELEASED; urgency=low
   [ Christoph Berg ]
   * rmadison: -t, --time: show projectb snapshot date
 
- -- Christoph Berg <myon@debian.org>  Sun, 10 Jun 2007 12:01:54 +0200
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Sat, 16 Jun 2007 19:49:35 +0100
 
 devscripts (2.10.4) unstable; urgency=low
 
