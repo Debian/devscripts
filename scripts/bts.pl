@@ -2158,6 +2158,7 @@ sub download_attachments {
 	}
 	elsif ($cachemode eq 'full' and $msg eq 'versions') {
 	    $bug2filename{$msg} = $filename;
+	    $ref =~ s%;info=1%;info=0%;
 	    # already downloaded?
 	    next if -f $bug2filename{$msg} and not $refreshmode;
 	}
@@ -2313,6 +2314,8 @@ sub mangle_cache_file {
 		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")version\.cgi\?[^\%]*)\%2[FC]([^\"]+)\">%$1.$2">%gi;
 		# - display collapsed graph images at 25%
 		s%(<img[^>]* src=\"[^\"]+);width=[^;]+;height=[^;]+;collapse=1\">%$1.co" width="25\%" height="25\%">%gi;
+		# - remove ;info=1
+		s%(<a[^>]* href=\"version\.cgi\?[^\"]+);info=1">%$1">%i;
 		# - remove any +s (encoded spaces)
 		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")version\.cgi\?[^\+]*)\+([^\"]+)\">%$1$2">%gi;
 		# - final reference should be $package.$versions[.co].png
@@ -2517,6 +2520,7 @@ sub href_to_filename {
 	$refs = $1 if not defined $refs;
 
 	$refs =~ s/package=//;
+	$refs =~ s/;info=1//;
 	$refs =~ s/;found=/.f./g;
 	$refs =~ s/;fixed=/.fx./g;
 	$refs =~ s/%2[FC]/./g;
