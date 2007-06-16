@@ -2461,8 +2461,8 @@ sub href_to_filename {
 	my $mimetype = $4;
 	$ref =~ s/&(?:amp;)?/;/g;  # normalise all hrefs
 
-	return undef unless $ref =~ /msg=(\d+);att=(\d+)/;
-	$msg = "$1-$2";
+	return undef unless $ref =~ /msg=(\d+);(filename=[^;]*;)?att=(\d+)/;
+	$msg = "$1-$3";
 
 	my $fileext = '';
 	if ($urlfilename =~ m%^/%) {

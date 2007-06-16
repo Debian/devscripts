@@ -21,6 +21,7 @@ devscripts (2.10.5) UNRELEASED; urgency=low
     + Add an option to not cache resolved bugs (Closes: #340259, #378342)
     + Fix URL parsing to account for recent HTML changes (Closes: #429236)
     + Always download version graphs rather than the new "options page"
+    + Fix attachment parsing code to handle "filename="
   * mass-bug: Fix syntax error when reverting to default SENDMAILCMD
   * dd-list: Treat teams.debian.net addresses as mailing lists rather
     than individuals
@@ -34,7 +35,7 @@ devscripts (2.10.5) UNRELEASED; urgency=low
   [ Christoph Berg ]
   * rmadison: -t, --time: show projectb snapshot date
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Sat, 16 Jun 2007 21:41:04 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Sat, 16 Jun 2007 21:52:13 +0100
 
 devscripts (2.10.4) unstable; urgency=low
 
