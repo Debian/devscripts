@@ -109,6 +109,9 @@ our (@gTags, @valid_tags, %valid_tags);
 my @valid_severities=qw(wishlist minor normal important
 			serious grave critical);
 
+my @no_cc_commands=qw(subscribe unsubscribe reportspam
+			spamreport usertags);
+
 my $browser;  # Will set if necessary
 my $btsserver='bugs.debian.org';
 my $btsurl='http://bugs.debian.org/';
@@ -129,6 +132,7 @@ END {
 }
 
 my %clonedbugs = ();
+my %ccbugs = ();
 
 =head1 SYNOPSIS
 
@@ -167,6 +171,9 @@ enough to figure out where the comment is, and include it in the email.
 Note that most shells do strip out such comments before they get to the
 program, unless the comment is quoted.  (Something like "bts
 severity #85942 normal" will not be treated as a comment!)
+
+In most cases, adding a comment will cause the generated mail to be CCed
+to the bug report, in addition to control@bugs.debian.org.
 
 You can specify multiple commands by separating them with a single dot,
 rather like B<update-rc.d>; a single comma may also be used; all the
@@ -524,6 +531,10 @@ for $index (0 .. $ncommand) {
 	if (@matches != 1) {
 	    die "bts: Couldn't find a unique match for the command $command[$index]!\nRun $progname --help for a list of valid commands.\n";
 	}
+
+	# Replace the abbreviated command with its expanded equivalent
+	$command[$index] = $matches[0];
+	$command[$index] =~ s/^bts_//;
 
 	$matches[0]->(@{$args[$index]});
     }
@@ -1661,6 +1672,8 @@ sub checkbug {
 	    die "bts: You specified 'it', but no previous bug number referenced!\n";
 	}
 	else {
+	    $ccbugs{$it} = 1 if ! exists $clonedbugs{$it} &&
+		! (grep /^\Q$command[$index]\E/, @no_cc_commands);
 	    return $it;
 	}
     }
@@ -1674,6 +1687,9 @@ sub checkbug {
 
     # Valid, now set $it to this so that we can refer to it by 'it' later
     $it = $bug;
+
+    $ccbugs{$it} = 1 if ! exists $clonedbugs{$it} &&
+	! (grep /^\Q$command[$index]\E/, @no_cc_commands);
 
     return $bug;
 }
@@ -1776,6 +1792,11 @@ sub mailbtsall {
     my $subject=shift;
     my $body=shift;
 
+    # If there were comments, we CC each of the bugs
+    if (keys %ccbugs && length(join('', @comment))) {
+	$ccemail .= ", " if length $ccemail;
+	$ccemail .= join("\@$btsserver, ", sort (keys %ccbugs)) . "\@$btsserver";
+    }
     if ($ENV{'DEBEMAIL'} || $ENV{'EMAIL'}) {
 	# We need to fake the From: line
 	my ($email, $name);
