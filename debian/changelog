@@ -1,4 +1,4 @@
-devscripts (2.10.5) UNRELEASED; urgency=low
+devscripts (2.10.5) unstable; urgency=low
 
   [ Luk Claes ]
   * debc: Make reporting on a single deb work again (Closes: #419487).
@@ -35,7 +35,7 @@ devscripts (2.10.5) UNRELEASED; urgency=low
   [ Christoph Berg ]
   * rmadison: -t, --time: show projectb snapshot date
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Sat, 16 Jun 2007 21:52:13 +0100
+ -- James Vega <jamessan@debian.org>  Tue, 19 Jun 2007 13:57:22 +0100
 
 devscripts (2.10.4) unstable; urgency=low
 
@@ -651,7 +651,7 @@ devscripts (2.9.7) unstable; urgency=low
  -- Julian Gilbey <jdg@polya.uklinux.net>  Sun,  4 Sep 2005 01:51:24 +0100
 
 devscripts (2.9.6) unstable; urgency=low
-  
+
   [ Julian Gilbey ]
   * bts: tags: revert change in 2.9: reinstate "fixed-in-experimental" (it
     still appears to be in use) and don't need "help" twice (Closes: #325480)
@@ -813,7 +813,7 @@ devscripts (2.9) unstable; urgency=low
   * added annotate.sh and annotate.1
   * added archpath.sh and archpath.1, patch by Colin Watson (Closes: #319072)
   * export DH_ALWAYS_EXCLUDE in debian/rules as we are not interested in
-    .svn/CVS directories 
+    .svn/CVS directories
 
   [ Joey Hess ]
   * debchange: support generating multi-developer changelogs, currently only
@@ -1310,7 +1310,7 @@ devscripts (2.7.2) unstable; urgency=low
   * debchange: handle upstream version numbers with : or - correctly
     (closes: #174818)
   * debpkg: Created a compiled debpkg wrapper so that suidperl is no
-    longer needed for debpkg to be suid root  
+    longer needed for debpkg to be suid root
   * debdiff: Quieten interdiff check when interdiff not installed and
     sh=dash (from #168862, now reassigned to dash)
   * debdiff: mention interdiff in control file
@@ -1398,7 +1398,7 @@ devscripts (2.6.93) unstable; urgency=low
 
   * debuild: use lintian according to DEBUILD_LINTIAN ;-) (closes: #138445)
   * procmail examples: update for ACCEPTED messages (closes: #138460)
-  
+
  -- Julian Gilbey <jdg@debian.org>  Fri, 15 Mar 2002 16:01:31 +0000
 
 devscripts (2.6.92) unstable; urgency=low
@@ -1829,7 +1829,7 @@ devscripts (2.5.0) unstable; urgency=low
   * Added a README.i18n file
   * Added James R. Van Zandt's debit script, merged into a single script
     with debi.
-  
+
  -- Julian Gilbey <jdg@debian.org>  Tue, 16 Nov 1999 02:41:57 +0000
 
 devscripts (2.4.6) unstable; urgency=low
