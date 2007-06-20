@@ -1,9 +1,14 @@
 devscripts (2.10.6) UNRELEASED; urgency=low
 
-  * bts: Cc bug reports if the control message contains a comment (Closes: #429649)
+  * bts
+    + Cc bug reports if the control message contains a comment
+      (Closes: #429649)
+    + Support passing multiple packages / addresses to "bts cache"
+      (Closes: #416548)
   * Fix changelog typos (Closes: #429774)
+ 
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed, 20 Jun 2007 10:09:37 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed, 20 Jun 2007 20:33:03 +0100
 
 devscripts (2.10.5) unstable; urgency=low
 

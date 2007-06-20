@@ -1364,8 +1364,10 @@ Generate or update a cache of bug reports for the given email address
 or package. By default it downloads all bugs belonging to the email
 address in the DEBEMAIL environment variable (or the EMAIL environment
 variable if DEBEMAIL is unset). This command may be repeated to cache
-bugs belonging to several people or packages. The cached bugs are
-stored in ~/.devscripts_cache/bts/
+bugs belonging to several people or packages. If multiple packages or
+addresses are supplied, bugs belonging to any of the arguments will be
+cached; those belonging to more than one of the arguments will only be
+downloaded once. The cached bugs are stored in ~/.devscripts_cache/bts/
 
 You can use the cached bugs with the -o switch. For example:
 
@@ -1466,22 +1468,30 @@ sub bts_cache {
     my $sub_thgopts = '';
     $sub_thgopts = ';pend-exc=done'
 	if (! $includeresolved && $tocache !~ /^release-critical/);
-    my @oldbugs = bugs_from_thing($tocache, $sub_thgopts);
-    
-    # download index
-    download($tocache, $sub_thgopts, 1);
 
-    my %bugs = map { $_ => 1 } bugs_from_thing($tocache, $sub_thgopts);
+    my %bugs = ();
+    my %oldbugs = ();
+
+    do {
+	%oldbugs = (%oldbugs, map { $_ => 1 } bugs_from_thing($tocache, $sub_thgopts));
+
+	# download index
+	download($tocache, $sub_thgopts, 1);
+
+	%bugs = (%bugs, map { $_ => 1 } bugs_from_thing($tocache, $sub_thgopts));
+
+	$tocache = sanitizething(shift);
+    } while (defined $tocache);
 
     # remove old bugs from cache
-    if (@oldbugs) {
+    if (keys %oldbugs) {
 	tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	     O_RDWR()|O_CREAT(), 0600, $DB_HASH, "write")
 	    or die "bts: couldn't open DB file $timestampdb for writing: $!\n"
 	    if ! tied %timestamp;
     }
 
-    foreach my $bug (@oldbugs) {
+    foreach my $bug (keys %oldbugs) {
 	if (! $bugs{$bug}) {
 	    deletecache($bug);
 	}
