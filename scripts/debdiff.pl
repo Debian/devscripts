@@ -669,6 +669,23 @@ for my $debname (@CommonDebs) {
 
     foreach my $cf (@cf) {
 	next unless -f "$dir1/$cf" and -f "$dir2/$cf";
+	if ($cf eq 'control' or $cf eq 'conffiles') {
+	    for my $file ("$dir1/$cf", "$dir2/$cf") {
+		my ($fd, @hdrs);
+		open $fd, '<', $file or fatal "Cannot read $file: $!";
+		while (<$fd>) {
+		    if (/^\s/ and @hdrs > 0) {
+			$hdrs[$#hdrs] .= $_;
+		    } else {
+			push @hdrs, $_;
+		    }
+		}
+		close $fd;
+		open $fd, '>', $file or fatal "Cannot write $file: $!";
+		print $fd sort @hdrs;
+		close $fd;
+	    }
+	}
 	my $wdiff = `wdiff -n $wdiff_opt $dir1/$cf $dir2/$cf`;
 	my $usepkgname = $debname eq $dummyname ? "" : " of package $debname";
 	if ($? >> 8 == 0) {
