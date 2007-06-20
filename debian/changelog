@@ -3,7 +3,7 @@ devscripts (2.10.6) UNRELEASED; urgency=low
   * bts: Cc bug reports if the control message contains a comment (Closes: #429649)
   * Fix changelog typos (Closes: #429774)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed, 20 Jun 2007 06:34:23 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed, 20 Jun 2007 10:09:37 +0100
 
 devscripts (2.10.5) unstable; urgency=low
 
@@ -19,7 +19,7 @@ devscripts (2.10.5) unstable; urgency=low
     + Add "[E]xperimental" to the distribution list, and remove "X"
       ("not in testing")
   * bts
-    + Allow the use of SMTP instead of sendmail. Thanks to Josh Tripplett for
+    + Allow the use of SMTP instead of sendmail. Thanks to Josh Triplett for
       the patch (Closes: #420847)
     + Fix syntax error when reverting to default SENDMAILCMD
     + When cleaning up a bug's cache entries, also remove {raw,status}.mbox
