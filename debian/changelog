@@ -1,8 +1,9 @@
 devscripts (2.10.6) UNRELEASED; urgency=low
 
   * bts: Cc bug reports if the control message contains a comment (Closes: #429649)
+  * Fix changelog typos (Closes: #429774)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 19 Jun 2007 22:02:51 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed, 20 Jun 2007 06:34:23 +0100
 
 devscripts (2.10.5) unstable; urgency=low
 
@@ -14,11 +15,11 @@ devscripts (2.10.5) unstable; urgency=low
     Ubuntu distributions
   * rc-alert
     + Update HTML parsing to support the new structure of the RC bug page
-    + The "I" tag can now also mean "lenny-ingore"
+    + The "I" tag can now also mean "lenny-ignore"
     + Add "[E]xperimental" to the distribution list, and remove "X"
       ("not in testing")
   * bts
-    + Allow the use of SMTP instead of sendmail. Thanks to Josh Tripplet for
+    + Allow the use of SMTP instead of sendmail. Thanks to Josh Tripplett for
       the patch (Closes: #420847)
     + Fix syntax error when reverting to default SENDMAILCMD
     + When cleaning up a bug's cache entries, also remove {raw,status}.mbox
@@ -32,7 +33,7 @@ devscripts (2.10.5) unstable; urgency=low
   * dd-list: Treat teams.debian.net addresses as mailing lists rather
     than individuals
   * tagpending: Update license statement to GPL >= 2
-  * uscan: Ensure --dehs generates well formed XML (Closes: #426996)
+  * uscan: Ensure --dehs generates well-formed XML (Closes: #426996)
 
   [ Martin Zobel-Helas ]
   * debchange: Add volatile to the list of recognised Debian distributions
