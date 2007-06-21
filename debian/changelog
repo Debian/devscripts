@@ -14,8 +14,13 @@ devscripts (2.10.6) UNRELEASED; urgency=low
   * uupdate:
     + When displaying patch reject files, show the path to the new upstream
       directory where they're contained. (Closes: #419133)
+  * uscan:
+    + Support https URLs.  This requires installing libcrypt-ssleay-perl.
+      (Closes: #423669)
+  * debian/control:
+    + Add libcrypt-ssleay-perl to Suggests and description for uscan.
 
- -- James Vega <jamessan@debian.org>  Thu, 21 Jun 2007 17:50:12 +0100
+ -- James Vega <jamessan@debian.org>  Thu, 21 Jun 2007 22:40:32 +0100
 
 devscripts (2.10.5) unstable; urgency=low
 

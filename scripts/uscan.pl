@@ -48,6 +48,12 @@ my $progname = basename($0);
 my $modified_conf_msg;
 my $opwd = cwd();
 
+my $haveSSL = 1;
+eval { require Crypt::SSLeay; };
+if ($@) {
+    $haveSSL = 0;
+}
+
 # Did we find any new upstream versions on our wanderings?
 our $found = 0;
 
@@ -742,7 +748,8 @@ sub process_watchline ($$$$$$)
     # What is the most recent file, based on the filenames?
     # We first have to find the candidates, then we sort them using
     # Devscripts::Versort::versort
-    if ($site =~ m%^http://%) {
+    if ($site =~ m%^https?://%) {
+	die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n" if !$haveSSL;
 	print STDERR "$progname debug: requesting URL $base\n" if $debug;
 	$request = HTTP::Request->new('GET', $base);
 	$response = $user_agent->request($request);
