@@ -748,8 +748,10 @@ sub process_watchline ($$$$$$)
     # What is the most recent file, based on the filenames?
     # We first have to find the candidates, then we sort them using
     # Devscripts::Versort::versort
-    if ($site =~ m%^https?://%) {
-	die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n" if !$haveSSL;
+    if ($site =~ m%^http(s)?://%) {
+	if (defined($1) and !$haveSSL) {
+	    die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n";
+	}
 	print STDERR "$progname debug: requesting URL $base\n" if $debug;
 	$request = HTTP::Request->new('GET', $base);
 	$response = $user_agent->request($request);
