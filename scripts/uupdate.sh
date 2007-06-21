@@ -414,7 +414,7 @@ if [ "$PATCH" ]; then
 	    echo "Success. The supplied diffs worked fine on the Debian sources."
 	else
 	    echo "$PROGNAME: the diffs supplied did not apply cleanly!" >&2
-	    X=$(find . -name "*.rej")
+	    X=$(find . -name "*.rej" -printf "../$PACKAGE-$SNEW_VERSION/%P\n")
 	    if [ -n "$X" ]; then
 		echo "Rejected diffs are in $X" >&2
 	    fi
