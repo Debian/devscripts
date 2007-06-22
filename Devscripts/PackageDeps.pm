@@ -233,7 +233,7 @@ sub min_dependencies ($@)
 		    foreach my $dep_pkg (keys %{$reverse_deps{$pkg}}) {
 			# take the first mentioned package for the
 			# recorded list of depended-upon packages
-			$dep_pkgs{$pkg} |= $dep_pkg;
+			$dep_pkgs{$pkg} ||= $dep_pkg;
 			delete $forward_deps{$dep_pkg}{$pkg};
 		    }
 		} else {
@@ -260,7 +260,7 @@ sub min_dependencies ($@)
 	    foreach my $dep_pkg (keys %{$reverse_deps{$pkg}}) {
 		# take the first mentioned package for the
 		# recorded list of depended-upon packages
-		$dep_pkgs{$pkg} |= $dep_pkg;
+		$dep_pkgs{$pkg} ||= $dep_pkg;
 		delete $forward_deps{$dep_pkg}{$pkg};
 	    }
 

@@ -22,6 +22,10 @@ devscripts (2.10.6) UNRELEASED; urgency=low
   * wnpp:
     + Update the manpage and help output to document what RFA, RFH, and O
       mean.  Also add a pointer to the WNPP website. (Closes: #421872)
+  * PackageDeps:
+    + Use ||= instead of |= to set the package name in %dep_pkgs.  It is the
+      correct way to do things and |= causes odd results on at least amd64.
+      (Closes: #410924)
 
  -- James Vega <jamessan@debian.org>  Fri, 22 Jun 2007 10:50:46 +0100
 
