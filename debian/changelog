@@ -25,9 +25,9 @@ devscripts (2.10.6) UNRELEASED; urgency=low
   * PackageDeps:
     + Use ||= instead of |= to set the package name in %dep_pkgs.  It is the
       correct way to do things and |= causes odd results on at least amd64.
-      (Closes: #410924)
+      (Closes: #419024)
 
- -- James Vega <jamessan@debian.org>  Fri, 22 Jun 2007 10:50:46 +0100
+ -- James Vega <jamessan@debian.org>  Fri, 22 Jun 2007 21:37:15 +0100
 
 devscripts (2.10.5) unstable; urgency=low
 
