@@ -18,8 +18,10 @@ CACHEDIR=~/.devscripts_cache
 
 usage () { echo \
 "Usage: $PROGNAME [--help|-h|--version|-v]
-  List all installed packages with RFA or Orphaned bugs against them,
-  as determined from the WNPP website."
+  List all installed packages with Request for Adoption (RFA),
+  Request for Help (RHF), or Orphaned (O) bugs against them,
+  as determined from the WNPP website.
+  http://www.debian.org/devel/wnpp"
 }
 
 version () { echo \

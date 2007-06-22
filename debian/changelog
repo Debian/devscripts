@@ -19,8 +19,11 @@ devscripts (2.10.6) UNRELEASED; urgency=low
       (Closes: #423669)
   * debian/control:
     + Add libcrypt-ssleay-perl to Suggests and description for uscan.
+  * wnpp:
+    + Update the manpage and help output to document what RFA, RFH, and O
+      mean.  Also add a pointer to the WNPP website. (Closes: #421872)
 
- -- James Vega <jamessan@debian.org>  Thu, 21 Jun 2007 22:40:32 +0100
+ -- James Vega <jamessan@debian.org>  Fri, 22 Jun 2007 10:50:46 +0100
 
 devscripts (2.10.5) unstable; urgency=low
 
