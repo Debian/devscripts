@@ -1681,27 +1681,22 @@ sub checkbug {
 	if (not defined $it) {
 	    die "bts: You specified 'it', but no previous bug number referenced!\n";
 	}
-	else {
-	    $ccbugs{$it} = 1 if ! exists $clonedbugs{$it} &&
-		! (grep /^\Q$command[$index]\E/, @no_cc_commands);
-	    return $it;
-	}
-    }
-    
-    $bug=~s/^(?:(?:bug)?\#)?(-?\d+):?$/$1/i;
-    if (! exists $clonedbugs{$bug} &&
-	(! length $bug || $bug !~ /^[0-9]+$/)) {
-	warn "\"$_[0]\" does not look like a bug number\n" unless $quiet;
-	return "";
-    }
+    } else {    
+	$bug=~s/^(?:(?:bug)?\#)?(-?\d+):?$/$1/i;
+	if (! exists $clonedbugs{$bug} &&
+	   (! length $bug || $bug !~ /^[0-9]+$/)) {
+	    warn "\"$_[0]\" does not look like a bug number\n" unless $quiet;
+	    return "";
+    	}
 
-    # Valid, now set $it to this so that we can refer to it by 'it' later
-    $it = $bug;
+	# Valid, now set $it to this so that we can refer to it by 'it' later
+    	$it = $bug;
+    }
 
     $ccbugs{$it} = 1 if ! exists $clonedbugs{$it} &&
 	! (grep /^\Q$command[$index]\E/, @no_cc_commands);
 
-    return $bug;
+    return $it;
 }
 
 # Stores up some extra information for a mail to the bts.
