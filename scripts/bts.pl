@@ -814,6 +814,32 @@ sub bts_reopen {
     mailbts("reopening $bug", "reopen $bug $submitter");
 }
 
+=item archive <bug>
+
+Archive a bug that has previously been archived but is currently not.
+The bug must fulfil all of the requirements for archiving with the
+exception of those that are time-based.
+
+=cut
+
+sub bts_archive {
+    my $bug=checkbug(shift) or die "bts archive: archive what bug?\n";
+    opts_done(@_);
+    mailbts("archiving $bug", "archive $bug");
+}
+
+=item unarchive <bug>
+
+Unarchive a bug that is currently archived.
+
+=cut
+
+sub bts_unarchive {
+    my $bug=checkbug(shift) or die "bts unarchive: unarchive what bug?\n";
+    opts_done(@_);
+    mailbts("unarchiving $bug", "unarchive $bug");
+}
+
 =item retitle <bug> <title>
 
 Change the title of the bug.
