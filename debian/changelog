@@ -7,6 +7,7 @@ devscripts (2.10.6) UNRELEASED; urgency=low
     + Support passing multiple packages / addresses to "bts cache"
       (Closes: #416548)
     + Add archive / unarchive support
+    + Make caching of "status mboxes" work again
   * Fix changelog typos (Closes: #429774)
   * debdiff: Sort conffiles and control before comparing them. Thanks to Peter
     Samuelson for the patch (Closes: #421781)
@@ -28,7 +29,7 @@ devscripts (2.10.6) UNRELEASED; urgency=low
       correct way to do things and |= causes odd results on at least amd64.
       (Closes: #419024)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 26 Jun 2007 20:01:16 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 26 Jun 2007 22:53:42 +0100
 
 devscripts (2.10.5) unstable; urgency=low
 
