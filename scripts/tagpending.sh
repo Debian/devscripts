@@ -106,7 +106,7 @@ changelog_closes=$(echo "$parsed"| awk -F: '/^Closes: / { print $2 }' | \
   xargs -n1 echo)
 
 if [ "$USE_WGET" = "1" ]; then
-    bts_pending=$(wget -q -O - "$BTS_BASE_URL?which=src;data=$srcpkg;archive=no;pend-exc=done;include=pending" | \
+    bts_pending=$(wget -q -O - "$BTS_BASE_URL?which=src;data=$srcpkg;archive=no;pend-exc=done;tag=pending" | \
 	sed -ne 's/.*<a href="bugreport.cgi?bug=\([0-9]*\).*/\1/; T; p')
     bts_open=$(wget -q -O - "$BTS_BASE_URL?which=src;data=$srcpkg;archive=no;pend-exc=done" | \
 	sed -ne 's/.*<a href="bugreport.cgi?bug=\([0-9]*\).*/\1/; T; p')

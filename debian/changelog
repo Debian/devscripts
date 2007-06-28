@@ -11,6 +11,8 @@ devscripts (2.10.6) UNRELEASED; urgency=low
   * Fix changelog typos (Closes: #429774)
   * debdiff: Sort conffiles and control before comparing them. Thanks to Peter
     Samuelson for the patch (Closes: #421781)
+  * tagpending
+    + Use tag=pending rather than include=pending (Closes: #430786)
 
   [ James Vega ]
   * uupdate:
@@ -29,7 +31,7 @@ devscripts (2.10.6) UNRELEASED; urgency=low
       correct way to do things and |= causes odd results on at least amd64.
       (Closes: #419024)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 26 Jun 2007 22:53:42 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Thu, 28 Jun 2007 08:47:59 +0100
 
 devscripts (2.10.5) unstable; urgency=low
 
