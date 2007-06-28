@@ -112,7 +112,7 @@ if [ "$USE_WGET" = "1" ]; then
 	sed -ne 's/.*<a href="bugreport.cgi?bug=\([0-9]*\).*/\1/; T; p')
 fi
 
-to_be_checked=$(printf '%s\n%s\n' "$changelog_closes" "$bts_pending" | sort | uniq -u)
+to_be_checked=$(printf '%s\n%s\n' "$changelog_closes" "$bts_pending" | sort -g | uniq)
 
 # Now remove the ones tagged in the BTS but no longer in the changelog.
 to_be_tagged=""
