@@ -1,9 +1,14 @@
 devscripts (2.10.7) unstable; urgency=low
 
+  [ Adam D. Barratt ]
   * README: Add libcrypt-ssleay-perl to the description of uscan
   * debchange: Fix NMU versioning for Debian native packages
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 03 Jul 2007 23:59:08 +0100
+  [ Christoph Berg ]
+  * rmadison: Support ubuntu and querying multiple archives, suggested by
+    Loïc Minier. (Closes: #431303)
+
+ -- Christoph Berg <myon@debian.org>  Fri, 06 Jul 2007 21:27:23 +0200
 
 devscripts (2.10.6) unstable; urgency=low
 

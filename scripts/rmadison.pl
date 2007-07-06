@@ -125,16 +125,23 @@ push @args, "s=$params->{'suite'}" if $params->{'suite'};
 push @args, "S" if $params->{'source-and-binary'};
 push @args, "t" if $params->{'time'};
 
-my $url = $params->{'url'} ? $params->{'url'} : "qa";
+my $url = $params->{'url'} ? $params->{'url'} : "debian";
 my %url_map = (
+    'debian' => "http://qa.debian.org/madison.php",
     'qa' => "http://qa.debian.org/madison.php",
     'myon' => "http://qa.debian.org/~myon/madison.php",
     'bpo' => "http://www.backports.org/cgi-bin/madison.cgi",
+    'ubuntu' => "http://people.ubuntu.com/~ubuntu-archive/madison.cgi",
 );
-$url = $url_map{$url} if $url_map{$url};
 
-my @cmd = -x "/usr/bin/curl" ? qw/curl -s -S/ : qw/wget -q -O -/;
-system @cmd, $url . "?package=" . join("+", map { uri_escape($_) } @ARGV) . "&text=on&" . join ("&", @args);
+my @url = split /,/, $url;
+
+foreach my $url (@url) {
+    print "$url:\n" if @url > 1;
+    $url = $url_map{$url} if $url_map{$url};
+    my @cmd = -x "/usr/bin/curl" ? qw/curl -s -S/ : qw/wget -q -O -/;
+    system @cmd, $url . "?package=" . join("+", map { uri_escape($_) } @ARGV) . "&text=on&" . join ("&", @args);
+}
 
 =pod
 
@@ -199,11 +206,12 @@ show info for the binary children of source pkgs
 
 show projectb snapshot and reload time (not supported by all archives)
 
-=item B<-u>, B<--url=>I<URL>
+=item B<-u>, B<--url=>I<URL>[B<,>I<URL...>]
 
 use I<URL> for the query. Supported shorthands are
- B<qa> http://qa.debian.org/madison.php (the default)
+ B<debian> or B<qa> http://qa.debian.org/madison.php (the default)
  B<bpo> http://www.backports.org/cgi-bin/madison.cgi
+ B<ubuntu> http://people.ubuntu.com/~ubuntu-archive/madison.cgi
 
 =item B<--version>
 
