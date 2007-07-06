@@ -319,7 +319,7 @@ sub apt_get {
 	    ($dir, $file) = ("$repository/$1", $2);
 	}
 
-	get_file($dir, $file, $md5sum) and exit 0;
+	get_file($dir, $file, $md5sum) and return;
     }
     exit 1;
 }
