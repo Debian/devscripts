@@ -67,7 +67,7 @@ sub parse_developer {
 }
 
 sub sort_developers {
-	sort { parse_developer($a) cmp parse_developer($b) } @_;
+	sort { uc(parse_developer($a)) cmp uc(parse_developer($b)) } @_;
 }
 
 sub help {
