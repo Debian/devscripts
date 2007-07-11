@@ -84,7 +84,7 @@ Usage: dd-list [options] [package ...]
         Read Debian control data from standard input.
 
     -u, --uploaders
-        Also list Uploaders of packages, not only the listed maintainers
+        Also list Uploaders of packages, not only the listed Maintainers
         (this is the default behaviour, use --nouploaders to prevent this).
 
     -nou, --nouploaders
