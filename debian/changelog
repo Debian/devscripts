@@ -1,4 +1,4 @@
-devscripts (2.10.7) unstable; urgency=low
+devscripts (2.10.7) UNRELEASED; urgency=low
 
   [ Adam D. Barratt ]
   * README: Add libcrypt-ssleay-perl to the description of uscan
@@ -11,7 +11,11 @@ devscripts (2.10.7) unstable; urgency=low
     Loïc Minier. (Closes: #431303)
   * dget: Downloading multiple binaries was broken. (Closes: #428827)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Sat, 07 Jul 2007 11:10:28 +0100
+  [ Stefano Zacchiroli ]
+  * dd-list: list Uploaders per default, added --nouploaders option to
+    force the old behaviour
+
+ -- Stefano Zacchiroli <zack@debian.org>  Wed, 11 Jul 2007 12:41:01 +0200
 
 devscripts (2.10.6) unstable; urgency=low
 

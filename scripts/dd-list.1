@@ -76,8 +76,11 @@ output, which might be a binary package name.
 .TP
 .BR \-u , \-\-uploaders
 Also list developers who are named as uploaders of packages, not only
-the maintainers.  Uploaders are indicated with "(U)" appended to the
-package name.
+the maintainers; this is the default behaviour, use --nouploaders to
+prevent it. Uploaders are indicated with "(U)" appended to the package name.
+.TP
+.BR \-nou , \-\-nouploaders
+Only list package Maintainers, do not list Uploaders.
 .TP
 .BR \-b , \-\-print\-binary
 Use binary package names in the output instead of source package names

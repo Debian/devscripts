@@ -84,7 +84,11 @@ Usage: dd-list [options] [package ...]
         Read Debian control data from standard input.
 
     -u, --uploaders
-        Also list uploaders of packages, not only the listed maintainers
+        Also list Uploaders of packages, not only the listed maintainers
+        (this is the default behaviour, use --nouploaders to prevent this).
+
+    -nou, --nouploaders
+        Only list package Maintainers, do not list Uploaders.
 
     -b, --print-binary
         If binary package names are given as input, print these names 
@@ -97,13 +101,13 @@ EOF
 
 my $use_stdin=0;
 my $use_dctrl=0;
-my $show_uploaders=0;
+my $show_uploaders=1;
 my $print_binary=0;
 if (! GetOptions(
 	"help" => sub { help(); exit },
 	"stdin|i" => \$use_stdin,
 	"dctrl|d" => \$use_dctrl,
-	"uploaders|u" => \$show_uploaders,
+	"uploaders|u!" => \$show_uploaders,
 	"print-binary|b" => \$print_binary,
 	"version" => sub { print "dd-list version $version\n" })) {
 	exit(1);
