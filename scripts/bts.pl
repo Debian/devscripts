@@ -63,7 +63,7 @@ sub have_lwp() {
     };
 
     if ($@) {
-	if ($@ =~ m%^Can\'t locate LWP/%) {
+	if ($@ =~ m%^Can\'t locate LWP%) {
 	    $lwp_broken="the libwww-perl package is not installed";
 	} else {
 	    $lwp_broken="couldn't load LWP::UserAgent: $@";
