@@ -1881,8 +1881,10 @@ sub mailbtsall {
 		exec("/bin/cat")
 		    or die "bts: error running cat: $!\n";
 	    } else {
-		exec("mail", "-s", $subject, "-a", "X-BTS-Version: $version", $btsemail, "-c", $ccemail)
-		    or die "bts: error running mail: $!\n";
+		my @args;
+		@args = ("-s", $subject, "-a", "X-BTS-Version: $version", $btsemail);
+		push(@args, "-c", "$ccemail") if $ccemail;
+		exec("mail", @args) or die "bts: error running mail: $!\n";
 	    }
 	}
     }

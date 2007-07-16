@@ -5,7 +5,10 @@ devscripts (2.10.7) UNRELEASED; urgency=low
   * debchange: Fix NMU versioning for Debian native packages
   * dd-list: Sort developer names case-insensitively. Thanks to Steinar H.
     Gunderson for the suggestion
-  * bts: Fix test for libwww-perl not being installed
+  * bts
+    + Fix test for libwww-perl not being installed
+    + Only pass -c to mail(1) if there are Cc: addresses
+      (Closes: #433385)
 
   [ Christoph Berg ]
   * rmadison: Support ubuntu and querying multiple archives, suggested by
