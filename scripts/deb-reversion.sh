@@ -69,10 +69,10 @@ DPKGDEB_DEBUG=
 DEB=
 for opt in $@; do
   case "${OPT_STATE:-}" in
-    SET_OLD_VERSION) OLD_VERSION="$opt";;
-    SET_NEW_VERSION) NEW_VERSION="$opt";;
-    SET_STRING) VERSTR="$opt";;
-    SET_HOOK) HOOK="$opt";;
+    SET_OLD_VERSION) eval OLD_VERSION="$opt";;
+    SET_NEW_VERSION) eval NEW_VERSION="$opt";;
+    SET_STRING) eval VERSTR="$opt";;
+    SET_HOOK) eval HOOK="$opt";;
     *) :;;
   esac
   [ -n "${OPT_STATE:-}" ] && unset OPT_STATE && continue
@@ -189,7 +189,7 @@ repack_file()
 }
 
 [ -z "${OLD_VERSION:-}" ] && OLD_VERSION="$(get_version $DEB)"
-NEW_VERSION="$(bump_version $OLD_VERSION)"
+[ -z "${NEW_VERSION:-}" ] && NEW_VERSION="$(bump_version $OLD_VERSION)"
 
 if [ $CALCULATE -eq 1 ]; then
   eval echo $NEW_VERSION

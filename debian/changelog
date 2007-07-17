@@ -17,6 +17,8 @@ devscripts (2.10.7) UNRELEASED; urgency=low
     + Add support for selecting bug lists via the SOAP interface. This
       requires libsoap-lite-perl. Thanks to Don Armstrong for the patch
       (Closes: #433169)
+  * deb-reversion: Apply patch from Adeodato Simó to ensure -v is
+    honoured (Closes: #433492)
 
   [ Christoph Berg ]
   * rmadison: Support ubuntu and querying multiple archives, suggested by
@@ -27,7 +29,7 @@ devscripts (2.10.7) UNRELEASED; urgency=low
   * dd-list: list Uploaders per default, added --nouploaders option to
     force the old behaviour
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 17 Jul 2007 09:09:08 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 17 Jul 2007 19:00:56 +0100
 
 devscripts (2.10.6) unstable; urgency=low
 
