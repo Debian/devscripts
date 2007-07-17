@@ -841,7 +841,7 @@ Whether to search archived bugs or normal bugs; defaults to 'false'
 For example, to select the set of bugs submitted by 
 jrandomdeveloper@example.com and tagged wontfix, one would use
 
-bts select submitter:jrandomdeveloper@example.comy tag:wontfix
+bts select submitter:jrandomdeveloper@example.com tag:wontfix
 
 =cut
 
