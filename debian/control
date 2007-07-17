@@ -19,9 +19,9 @@ Recommends: fakeroot
 Suggests: devscripts-el, at, build-essential, cvs-buildpackage,
  cvs | subversion | svk | tla | bzr | git | mercurial, debian-keyring,
  dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, libcrypt-ssleay-perl,
- libdigest-md5-perl, libtimedate-perl, liburi-perl, libwww-perl,
- lintian | linda, mailx | mailutils, man-db, mutt, patch, patchutils, ssh,
- strace, wdiff, wget, www-browser
+ libdigest-md5-perl, libsoap-lite-perl, libtimedate-perl, liburi-perl,
+ libwww-perl, lintian | linda, mailx | mailutils, man-db, mutt, patch,
+ patchutils, ssh, strace, wdiff, wget, www-browser
 Description: Scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
  brackets afterwards:
@@ -30,7 +30,7 @@ Description: Scripts to make the life of a Debian Package maintainer easier
     E for stderr) for every line of output
   - archpath: print tla/Bazaar package names [tla | bazaar]
   - bts: a command-line tool for manipulating the BTS [www-browser,
-    libwww-perl, mailx | mailutils]
+    libsoap-lite-perl, libwww-perl, mailx | mailutils]
   - checkbashisms: check whether a /bin/sh script contains any common
     bash-specific contructs
   - cvs-debi, cvs-debc: to call debi and debc from the CVS working directory

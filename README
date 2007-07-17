@@ -23,9 +23,10 @@ And now, in mostly alphabetical order, the scripts:
 - archpath: Prints arch (tla/Bazaar) package names. Also supports
   calculating the package names for other branches.
 
-- bts [www-browser, libwww-perl, mailx | mailutils]: A command-line
-  tool for accessing the BTS, both to send mails to
-  control@bts.debian.org and to access the web pages of the BTS.
+- bts [www-browser, libsoap-lite-perl, libwww-perl, mailx | mailutils]:
+  A command-line tool for accessing the BTS, both to send mails to
+  control@bts.debian.org and to access the web pages and SOAP interface
+  of the BTS.
 
 - checkbashisms: checks whether a /bin/sh script uses any common
   bash-specific features

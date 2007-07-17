@@ -73,6 +73,26 @@ sub have_lwp() {
     return $lwp_broken ? 0 : 1;
 }
 
+my $soap_broken;
+sub have_soap {
+     return ($soap_broken ? 0 : 1) if defined $soap_broken;
+     eval {
+	  require SOAP::Lite;
+     };
+
+     if ($@) {
+	  if ($@ =~ m%^Can't locate SOAP/%) {
+	       $soap_broken="the libsoap-lite-perl package is not installed";
+	  } else {
+	       $soap_broken="couldn't load SOAP::Lite: $@";
+	  }
+     }
+     else {
+	  $soap_broken = 0;
+     }
+     return ($soap_broken ? 0 : 1);
+}
+
 # Constants
 sub MIRROR_ERROR      { 0; }
 sub MIRROR_DOWNLOADED { 1; }
@@ -120,6 +140,8 @@ my $btscgipkgurl='http://bugs.debian.org/cgi-bin/pkgreport.cgi';
 my $btscgibugurl='http://bugs.debian.org/cgi-bin/bugreport.cgi';
 my $btscgispamurl='http://bugs.debian.org/cgi-bin/bugspam.cgi';
 my $btsemail='control@bugs.debian.org';
+my $soapurl='Debbugs/SOAP/1';
+my $soapproxyurl='http://bugs.debian.org/cgi-bin/soap.cgi';
 
 my $cachedir=$ENV{'HOME'}."/.devscripts_cache/bts/";
 my $timestampdb=$cachedir."bts_timestamps.db";
@@ -756,6 +778,120 @@ sub bts_bugs {
     if (defined $sub_mailreader) {
 	$mailreader = $sub_mailreader;
     }
+}
+
+=item select [key:value  ...]
+
+Uses the SOAP interface to output a list of bugs which match the given
+selection requirements.
+
+The following keys are allowed, and may be given multiple times.
+
+=over 8
+
+=item package
+
+Binary package name.
+
+=item source
+
+Source package name.
+
+=item maintainer
+
+E-mail address of the maintainer.
+
+=item submitter
+
+E-mail address of the submitter.
+
+=item severity
+
+Bug severity.
+
+=item status
+
+Status of the bug.
+
+=item tag
+
+Tags applied to the bug. If I<users> is specified, may include 
+usertags in addition to the standard tags.
+
+=item owner
+
+Bug's owner.
+
+=item bugs
+
+List of bugs to search within.
+
+=item users
+
+Users to use when looking up usertags.
+
+=item archive
+
+Whether to search archived bugs or normal bugs; defaults to 'false' 
+(i.e. only search normal bugs). As a special case, if archive is 
+'both', both archived and unarchived bugs are returned.
+
+=back
+
+For example, to select the set of bugs submitted by 
+jrandomdeveloper@example.com and tagged wontfix, one would use
+
+bts select submitter:jrandomdeveloper@example.comy tag:wontfix
+
+=cut
+
+sub bts_select {
+     die "bts: Couldn't run bts select: $soap_broken\n" unless have_soap();
+     my @args = @_;
+     my %valid_keys = (package => 'package',
+		       pkg     => 'package',
+		       src     => 'src',
+		       source  => 'src',
+		       maint   => 'maint',
+		       maintainer => 'maint',
+		       submitter => 'submitter',
+		       status    => 'status',
+		       tag       => 'tag',
+		       owner     => 'owner',
+		       dist      => 'dist',
+		       distribution => 'dist',
+		       bugs       => 'bugs',
+		       archive    => 'archive',
+		      );
+     my %users;
+     my %search_parameters;
+     my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+     for my $arg (@args) {
+	  my ($key,$value) = split /:/, $arg, 2;
+	  if (exists $valid_keys{$key}) {
+	       push @{$search_parameters{$valid_keys{$key}}},
+		    $value;
+	  }
+	  elsif ($key =~/users?/) {
+	       $users{$value} = 1;
+	  }
+     }
+     my %usertags;
+     for my $user (keys %users) {
+	  my $ut = $soap->get_usertag($user)->result();
+	  next unless defined $ut;
+	  for my $tag (keys %{$ut}) {
+	       push @{$usertags{$tag}},
+		    @{$ut->{$tag}};
+	  }
+     }
+     my $bugs = $soap->get_bugs(%search_parameters,
+				(keys %usertags)?(usertags=>\%usertags):()
+			       )->result();
+     if (not defined $bugs) {
+	  die "Error while retrieving bugs from SOAP server";
+     }
+     print map {qq($_\n)} @{$bugs};
 }
 
 =item clone <bug> [new IDs]
