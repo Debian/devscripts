@@ -832,7 +832,7 @@ Users to use when looking up usertags.
 
 =item archive
 
-Whether to search archived bugs or normal bugs; defaults to 'false' 
+Whether to search archived bugs or normal bugs; defaults to 0 
 (i.e. only search normal bugs). As a special case, if archive is 
 'both', both archived and unarchived bugs are returned.
 
