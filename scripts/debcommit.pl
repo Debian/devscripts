@@ -6,7 +6,7 @@ debcommit - commit changes to a package
 
 =head1 SYNOPSIS
 
-B<debcommit> [B<--release>] [B<--message=>I<text>] [B<--noact>] [I<files to commit>]
+B<debcommit> [B<--release>] [B<--message=>I<text>] [B<--noact>] [B<--all> | I<files to commit>]
 
 =head1 DESCRIPTION
 
@@ -41,9 +41,14 @@ override the default message.
 
 Do not actually do anything, but do print the commands that would be run.
 
+=item B<-a> B<--all>
+
+Commit all files. This is the default operation when using a VCS other 
+than git.
+
 =item I<files to commit>
 
-Specify which files to commit. Commits all files if not used.
+Specify which files to commit. 
 
 =over 4
 
@@ -70,6 +75,7 @@ Options:
    -r --release       Commit a release of the package and create a tag
    -m --message=text  Specify a commit message
    -n --noact         Dry run, no actual commits
+   -a --all           Commit all files (default except for git)
    -h --help          This message
    -v --version       Version information
 EOT
@@ -89,14 +95,16 @@ EOF
 my $release=0;
 my $message;
 my $noact=0;
+my $all=0;
 if (! GetOptions(
 		 "release" => \$release,
 		 "message=s" => \$message,
 		 "noact" => \$noact,
+		 "all" => \$all,
 		 "help" => sub { usage(); exit 0; },
 		 "version" => sub { version(); exit 0; },
 		 )) {
-    die "Usage: debcommit [--release] [--message=text] [--noact] [files to commit]\n";
+    die "Usage: debcommit [--release] [--message=text] [--noact] [--all] [files to commit]\n";
 }
 
 my @files_to_commit = @ARGV;
@@ -174,13 +182,19 @@ sub action {
 sub commit {
     my $message=shift;
     
+    die "debcommit: can't specify a list of files to commit when using --all\n"
+	if (@files_to_commit and $all);
+
     if ($prog =~ /^(cvs|svn|svk|bzr|hg)$/) {
 	if (! action($prog, "commit", "-m", $message, @files_to_commit)) {
 	    die "debcommit: commit failed\n";
 	}
     }
     elsif ($prog eq 'git') {
-	if (! action($prog, "commit", "-a", "-m", $message, @files_to_commit)) {
+	if ($all) {
+	    @files_to_commit=("-a")
+	}
+	if (! action($prog, "commit", "-m", $message, @files_to_commit)) {
 	    die "debcommit: commit failed\n";
 	}
     }
@@ -284,7 +298,11 @@ sub getmessage {
 	if ($prog eq 'tla' || $prog eq 'baz') {
 	    @diffcmd = ($prog, 'file-diff');
 	} elsif ($prog eq 'git') {
-	    @diffcmd = ('git-diff', '--cached');
+	    if ($all) {
+		@diffcmd = ('git-diff');
+	    } else {
+		@diffcmd = ('git-diff', '--cached');
+	    }
 	} else {
 	    @diffcmd = ($prog, 'diff');
 	}
@@ -300,7 +318,11 @@ sub getmessage {
 	}
 	
 	if (! length $ret) {
-	    die "debcommit: unable to determine commit message using $prog\nTry using the -m flag.\n";
+	    my $info='';
+	    if ($prog eq 'git') {
+		$info = ' (do you mean "debcommit -a" or did you forget to run "git add"?)';
+	    }
+	    die "debcommit: unable to determine commit message using $prog$info\nTry using the -m flag.\n";
 	}
     }
     else {

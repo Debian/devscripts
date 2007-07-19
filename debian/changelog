@@ -19,6 +19,9 @@ devscripts (2.10.7) UNRELEASED; urgency=low
       (Closes: #433169)
   * deb-reversion: Apply patch from Adeodato Simó to ensure -v is
     honoured (Closes: #433492)
+  * debcommit: When using git, allow either all files or only those in
+    the index to be committed. Thanks to Martin F Kraft and Junichi
+    Uekawa for the patch. (Closes: #402539, #427429, #433081)
 
   [ Christoph Berg ]
   * rmadison: Support ubuntu and querying multiple archives, suggested by
@@ -29,7 +32,7 @@ devscripts (2.10.7) UNRELEASED; urgency=low
   * dd-list: list Uploaders per default, added --nouploaders option to
     force the old behaviour
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 17 Jul 2007 19:00:56 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Thu, 19 Jul 2007 18:47:00 +0100
 
 devscripts (2.10.6) unstable; urgency=low
 
