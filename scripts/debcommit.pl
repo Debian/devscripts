@@ -104,7 +104,7 @@ if (! GetOptions(
 		 "help" => sub { usage(); exit 0; },
 		 "version" => sub { version(); exit 0; },
 		 )) {
-    die "Usage: debcommit [--release] [--message=text] [--noact] ([--all | files to commit])\n";
+    die "Usage: debcommit [--release] [--message=text] [--noact] [--all | files to commit]\n";
 }
 
 my @files_to_commit = @ARGV;
