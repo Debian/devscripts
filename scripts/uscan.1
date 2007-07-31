@@ -403,6 +403,9 @@ this option.
 See the above section "Directory name checking" for an explanation of
 this option.
 .TP
+\fB\-\-user-agent\fR, \fB\-\-useragent\fR
+Override the default user agent header.
+.TP
 \fB\-\-no-conf\fR, \fB\-\-noconf\fR
 Do not read any configuration files.  This can only be used as the
 first option given on the command-line.
@@ -445,6 +448,10 @@ This is equivalent to the \fB\-\-dehs\fR option.
 .B USCAN_VERBOSE
 If this is set to \fIyes\fR, then verbose output will be given.  This
 is equivalent to the \fB\-\-verbose\fR option.
+.TP
+.B USCAN_USER_AGENT
+If set, the specified user agent string will be used in place of the
+default.  This is equivalent to the \fB\-\-user-agent\fR option.
 .SH "EXIT STATUS"
 The exit status gives some indication of whether a newer version was
 found or not; one is advised to read the output to determine exactly

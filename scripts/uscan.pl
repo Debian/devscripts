@@ -115,6 +115,8 @@ Options:
                    carried out
     --no-dehs      Use traditional uscan output format (default)
     --dehs         Use DEHS style output (XML-type)
+    --user-agent, --useragent
+                   Override the default user agent
     --no-conf, --noconf
                    Don\'t read devscripts config files;
                    must be the first option given
@@ -156,6 +158,7 @@ my $dehs_end_output = 0;
 my $dehs_start_output = 0;
 my $pkg_report_header = '';
 my $timeout = 20;
+my $user_agent_string = 'Debian uscan ###VERSION###';
 
 if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg = "  (no configuration files read)";
@@ -169,6 +172,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'USCAN_SYMLINK' => 'symlink',
 		       'USCAN_VERBOSE' => 'no',
 		       'USCAN_DEHS_OUTPUT' => 'no',
+		       'USCAN_USER_AGENT' => '',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
 		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.*)?',
 		       );
@@ -222,6 +226,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $dehs = $config_vars{'USCAN_DEHS_OUTPUT'} eq 'yes' ? 1 : 0;
     $check_dirname_level = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'};
     $check_dirname_regex = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_REGEX'};
+    $user_agent_string = $config_vars{'USCAN_USER_AGENT'}
+	if defined $config_vars{'USCAN_USER_AGENT'};
 }
 
 # Now read the command line arguments
@@ -229,6 +235,7 @@ my $debug = 0;
 my ($opt_h, $opt_v, $opt_download, $opt_force_download, $opt_report, $opt_passive, $opt_symlink);
 my ($opt_verbose, $opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
+my $opt_user_agent;
 
 GetOptions("help" => \$opt_h,
 	   "version" => \$opt_v,
@@ -249,6 +256,8 @@ GetOptions("help" => \$opt_h,
 	   "ignore-dirname" => \$opt_ignore,
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
+	   "user-agent=s" => \$opt_user_agent,
+	   "useragent=s" => \$opt_user_agent,
 	   "noconf" => \$opt_noconf,
 	   "no-conf" => \$opt_noconf,
 	   )
@@ -271,6 +280,7 @@ $timeout = 20 unless defined $timeout and $timeout > 0;
 $symlink = $opt_symlink if defined $opt_symlink;
 $verbose = $opt_verbose if defined $opt_verbose;
 $dehs = $opt_dehs if defined $opt_dehs;
+$user_agent_string = $opt_user_agent if defined $opt_user_agent;
 if ($dehs) {
     $SIG{'__WARN__'} = \&dehs_warn;
     $SIG{'__DIE__'} = \&dehs_die;
@@ -326,7 +336,7 @@ else { $passive = undef; }
 
 my $user_agent = LWP::UserAgent->new(env_proxy => 1);
 $user_agent->timeout($timeout);
-$user_agent->agent('Debian uscan ###VERSION###');
+$user_agent->agent($user_agent_string);
 
 if (defined $opt_watchfile) {
     die "Can't have directory arguments if using --watchfile" if @ARGV;
