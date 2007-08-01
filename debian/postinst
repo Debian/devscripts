@@ -330,12 +330,12 @@ EOF
 EOF
 	fi
 
-	if dpkg --compare-versions "$2" lt 2.10.6
+	if dpkg --compare-versions "$2" lt 2.10.7
 	then
-	    # Added in devscripts 2.10.6
+	    # Added in devscripts 2.10.7
 	    cat >> /etc/devscripts.conf <<EOF
 
-##### uscan option added in version 2.10.6
+##### uscan option added in version 2.10.7
 #
 # What user agent string should we send with requests?
 # (Default is 'Debian uscan X.Y.Z')
