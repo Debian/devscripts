@@ -924,7 +924,7 @@ EOF
 	eval "\$newfile_base =~ $pat;";
     }
     # Remove HTTP header trash
-    if ($site =~ m%^http://%) {
+    if ($site =~ m%^https?://%) {
         $newfile_base =~ s/\?.*$//;
 	# just in case this leaves us with nothing
 	if ($newfile_base eq '') {
@@ -943,7 +943,7 @@ EOF
     # So what have we got to report now?
     my $upstream_url;
     # Upstream URL?  Copying code from below - ugh.
-    if ($site =~ m%^http://%) {
+    if ($site =~ m%^https?://%) {
 	# absolute URL?
 	if ($newfile =~ m%^\w+://%) {
 	    $upstream_url = $newfile;
@@ -1064,7 +1064,10 @@ EOF
 
     print "-- Downloading updated package $newfile_base\n" if $verbose;
     # Download newer package
-    if ($upstream_url =~ m%^http://%) {
+    if ($upstream_url =~ m%^http(s)?://%) {
+	if (defined($1) and !$haveSSL) {
+	    die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n";
+	}
 	# substitute HTML entities
 	# Is anything else than "&amp;" required?  I doubt it.
 	print STDERR "$progname debug: requesting URL $upstream_url\n" if $debug;
@@ -1254,7 +1257,10 @@ sub newest_dir ($$$$$) {
     my $base = $site.$dir;
     my ($request, $response);
 
-    if ($site =~ m%^http://%) {
+    if ($site =~ m%^http(s)?://%) {
+	if (defined($1) and !$haveSSL) {
+	    die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n";
+	}
 	print STDERR "$progname debug: requesting URL $base\n" if $debug;
 	$request = HTTP::Request->new('GET', $base);
 	$response = $user_agent->request($request);

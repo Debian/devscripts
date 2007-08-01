@@ -22,7 +22,9 @@ devscripts (2.10.7) UNRELEASED; urgency=low
   * debcommit: When using git, allow either all files or only those in
     the index to be committed. Thanks to Martin F Krafft and Junichi
     Uekawa for the patch. (Closes: #402539, #427429, #433081)
-  * uscan: Allow a user agent string to be specified (Closes: #433419)
+  * uscan
+    + Allow a user agent string to be specified (Closes: #433419)
+    + Fix https support (Closes: #423669)
 
   [ Christoph Berg ]
   * rmadison: Support ubuntu and querying multiple archives, suggested by
@@ -33,7 +35,7 @@ devscripts (2.10.7) UNRELEASED; urgency=low
   * dd-list: list Uploaders per default, added --nouploaders option to
     force the old behaviour
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 31 Jul 2007 20:41:25 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed, 01 Aug 2007 19:27:46 +0100
 
 devscripts (2.10.6) unstable; urgency=low
 
