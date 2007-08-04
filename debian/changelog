@@ -45,8 +45,10 @@ devscripts (2.10.7) UNRELEASED; urgency=low
   * checkbashims: add a -n/--newline option (disabled by default) to
     also check "echo -n" as Debian Policy 10.4 requires /bin/sh to support
     it. (Closes: #426584)
+  * tagpending: add a -t/--to option that adds a -v option to the
+    dpkg-parsechangelog call. (Closes: #434145)
 
- -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Sat, 04 Aug 2007 22:54:23 +0200
+ -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Sat, 04 Aug 2007 23:17:47 +0200
 
 devscripts (2.10.6) unstable; urgency=low
 

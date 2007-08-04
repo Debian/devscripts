@@ -30,6 +30,11 @@ Usage: tagpending [options]
                         NOTE: Verbose and silent mode can't be used together.
     -f, --force         Do not query the BTS, (re-)tag all bug reports (force).
     -c, --confirm       Tag bugs as confirmed as well as pending
+    -t, --to <version>	Use changelog information from all versions strictly
+                        later than <version> (mimics dpkg-parsechangelog's -v option.)
+    -w, --wnpp		For each potentially not owned bug, check whether it is filed
+    			against wnpp and, if so, tag it. This allows e.g. ITA or ITPs
+			to be tagged.
     -h, --help          This usage screen.
     -V, --version       Display the version and copyright information
 
@@ -68,6 +73,7 @@ while [ -n "$1" ]; do
     -V|--version) version; exit 0 ;;
     -v|--verbose) VERBOSE=1; shift ;;
     -c|--confirm) CONFIRM=1; shift ;;
+    -t|--to) shift; TO="-v$1"; shift;;
     -w|--wnpp) WNPP=1; shift ;;
     --help | -h) usage; exit 0 ;;
     *)
@@ -98,7 +104,7 @@ for file in debian/changelog debian/control; do
   fi
 done
 
-parsed=$(dpkg-parsechangelog)
+parsed=$(dpkg-parsechangelog $TO)
 
 srcpkg=$(echo "$parsed" | awk '/^Source: / { print $2 }' | perl -ne 'use URI::Escape; chomp; print uri_escape($_);')
 
