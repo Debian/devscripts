@@ -48,7 +48,8 @@ than git.
 
 =item I<files to commit>
 
-Specify which files to commit. 
+Specify which files to commit (debian/changelog is added to the list
+automatically).
 
 =over 4
 
@@ -108,6 +109,7 @@ if (! GetOptions(
 }
 
 my @files_to_commit = @ARGV;
+push @files_to_commit, 'debian/changelog' if @files_to_commit;
 
 my $prog=getprog();
 if (! -e "debian/changelog") {

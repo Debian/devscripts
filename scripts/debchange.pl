@@ -89,8 +89,8 @@ Options:
   --qa
          Increment the Debian release number for a Debian QA Team upload
   --bpo
-         Increment the Debian release number for a Backports.org upload.
-	 The value "etch-backports" will override the argument of -D
+         Increment the Debian release number for a Backports.org upload
+	 to "etch-backports"
   -b, --force-bad-version
          Force a version to be less than the current one (e.g., when
          backporting)

@@ -39,8 +39,10 @@ devscripts (2.10.7) UNRELEASED; urgency=low
   * debi: add svn-buildpackage support. Thanks to Raphaël Hertzog for
     the patch. (Closes: #315409, #417609)
   * dch: add --bpo support. (Closes: #434183)
+  * debcommit: add debian/changelog to the list of files to commit. Thanks
+    Damyan Ivanov for the patch. (Closes: #419657)
 
- -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Sat, 04 Aug 2007 15:46:09 +0200
+ -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Sat, 04 Aug 2007 17:24:03 +0200
 
 devscripts (2.10.6) unstable; urgency=low
 
