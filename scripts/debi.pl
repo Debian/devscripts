@@ -249,6 +249,19 @@ if (! defined $changes) {
 	}
     }
 
+    if (-e ".svn/deb-layout") {
+	# Cope with format of svn-buildpackage tree
+	my $fh;
+	open($fh, "<", ".svn/deb-layout") || die "Can't open .svn/deb-layout: $!\n";
+	my($build_area) = grep /^buildArea=/, <$fh>;
+	close($fh);
+	if (defined($build_area)) {
+	    chomp($build_area);
+	    $build_area =~ s/^buildArea=//;
+	    $debsdir = $build_area if -d $build_area;
+	}
+    }
+
     # Find the source package name and version number
     my %changelog;
     open PARSED, q[dpkg-parsechangelog | grep '^\(Source\|Version\):' |]
@@ -298,6 +311,13 @@ EOF
     my $package = $changelog{'Source'};
     my $pva="${package}_${sversion}_${arch}";
     $changes="$debsdir/$pva.changes";
+
+    if (! -e $changes and -d ".svn" and -d "../build-area") {
+	# Try out default svn-buildpackage structure in case
+	# we were going to fail anyway...
+	$changes = "../build-area/$pva.changes";
+    }
+
     if ($opt_multi) {
 	my @mchanges = glob("$debsdir/${package}_${sversion}_*+*.changes");
 	@mchanges = grep { /[_+]$arch[\.+]/ } @mchanges;
