@@ -49,7 +49,7 @@ than git.
 =item I<files to commit>
 
 Specify which files to commit (debian/changelog is added to the list
-automatically).
+automatically.)
 
 =over 4
 

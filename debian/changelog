@@ -42,8 +42,11 @@ devscripts (2.10.7) UNRELEASED; urgency=low
   * debcommit: add debian/changelog to the list of files to commit. Thanks
     Damyan Ivanov for the patch. (Closes: #419657)
   * bts: add file:// to local urls. (Closes: #435011)
+  * checkbashims: add a -n/--newline option (disabled by default) to
+    also check "echo -n" as Debian Policy 10.4 requires /bin/sh to support
+    it. (Closes: #426584)
 
- -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Sat, 04 Aug 2007 19:03:20 +0200
+ -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Sat, 04 Aug 2007 22:54:23 +0200
 
 devscripts (2.10.6) unstable; urgency=low
 

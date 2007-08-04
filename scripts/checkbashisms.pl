@@ -28,7 +28,7 @@ use strict;
 (my $progname = $0) =~ s|.*/||;
 
 my $usage = <<"EOF";
-Usage: $progname script ...
+Usage: $progname [-n] script ...
    or: $progname --help
    or: $progname --version
 This script performs basic checks for the presence of bashisms
@@ -45,16 +45,22 @@ You are free to redistribute this code under the terms of the
 GNU General Public License, version 2, or (at your option) any later version.
 EOF
 
+my $opt_echo = 0;
+
 ##
 ## handle command-line options
 ##
 if (int(@ARGV) == 0 or $ARGV[0] =~ /^(--help|-h)$/) { print $usage; exit 0; }
 if (@ARGV and $ARGV[0] =~ /^(--version|-v)$/) { print $version; exit 0; }
+if (@ARGV and $ARGV[0] =~ /^(--newline|-n)$/) { $opt_echo = 1; }
 
 
 my $status = 0;
 
 foreach my $filename (@ARGV) {
+    if ($filename eq '-n' or $filename eq '--newline') {
+	next;
+    }
     unless (open C, "$filename") {
 	warn "cannot open script $filename for reading: $!\n";
 	$status |= 2;
@@ -123,12 +129,16 @@ foreach my $filename (@ARGV) {
 		'\$\{\#?\w+\[[0-9\*\@]+\]\}' => q<bash arrays, ${name[0|*|@]}>,
 		'(?:^|\s+)(read\s*(?:;|$))' => q<read without variable>,
 		'\$\(\([A-Za-z]' => q<cnt=$((cnt + 1)) does not work in dash>,
-		'echo\s+-[ne]' =>              q<echo -n/-e>,
+		'echo\s+-[e]' =>               q<echo -e>,
 		'exec\s+-[acl]' =>             q<exec -c/-l/-a name>,
 		'\blet\s' =>                   q<let ...>,
 		'\$RANDOM\b' =>                q<$RANDOM>,
 		'(?<!\$)\(\(' =>               q<'((' should be '$(('>,
 	    );
+
+	    if ($opt_echo) {
+		$bashisms{'echo\s+-[n]'} = 'q<echo -n>';
+	    }
 
 	    while (my ($re,$expl) = each %bashisms) {
 		if (m/($re)/) {
