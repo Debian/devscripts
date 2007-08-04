@@ -2771,7 +2771,7 @@ sub browse {
 	if ($mboxmode) {
 	    runmailreader($mboxfile);
 	} else {
-	    runbrowser($cachefile);
+	    runbrowser("file://$cachefile");
 	}
     }
     # else we're in online mode
