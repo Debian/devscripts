@@ -25,6 +25,7 @@ devscripts (2.10.7) UNRELEASED; urgency=low
   * uscan
     + Allow a user agent string to be specified (Closes: #433419)
     + Fix https support (Closes: #423669)
+    + Correctly set exit status after downloading (Closes: #431840)
 
   [ Christoph Berg ]
   * rmadison: Support ubuntu and querying multiple archives, suggested by
@@ -48,7 +49,7 @@ devscripts (2.10.7) UNRELEASED; urgency=low
   * tagpending: add a -t/--to option that adds a -v option to the
     dpkg-parsechangelog call. (Closes: #434145)
 
- -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Sat, 04 Aug 2007 23:17:47 +0200
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Sat, 04 Aug 2007 22:43:52 +0100
 
 devscripts (2.10.6) unstable; urgency=low
 

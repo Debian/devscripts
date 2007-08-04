@@ -541,7 +541,7 @@ print "-- Scan finished\n" if $verbose;
 
 $dehs_end_output=1;
 dehs_output if $dehs;
-exit $found ? 0 : 1;
+exit ($found ? 0 : 1);
 
 
 # This is the heart of the code: Process a single watch item
