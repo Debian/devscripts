@@ -2811,7 +2811,7 @@ sub browse {
 		# so use filename
 		runbrowser($livefile);
 	    } else {
-		runbrowser($cachefile);
+		runbrowser("file://$cachefile");
 	    }
 	}
     }
