@@ -2809,7 +2809,7 @@ sub browse {
 		print OUT_LIVE $live;
 		# Some browsers don't like unseekable filehandles,
 		# so use filename
-		runbrowser($livefile);
+		runbrowser("file://$livefile");
 	    } else {
 		runbrowser("file://$cachefile");
 	    }
