@@ -259,12 +259,27 @@ while (@files) {
     my $file = shift @files;
     my $content = '';
     my $copyright = '';
+    my $match;
     open (F, "<$file") or die "Unable to access $file\n";
     while (<F>) {
         last if ($. > $opt_lines);
         $content .= $_;
 	if (m%copyright (.*)$%i) {
-	    $copyright .= " " . $1 . " ";
+	    $match = $1;
+	    # Ignore lines matching "see foo for copyright information"
+	    if ($match !~ m%^\s*info(rmation)?\.?\s*$%i) {
+		# De-cruft
+		$match =~ s/([,.])?\s*$//;
+		$match =~ s/\(C\)//;
+		$match =~ s/^\s+//;
+		$match =~ s/\s{2,}/ /g;
+
+		# Don't add duplicate entries
+		if ($copyright !~ m%$match%i) {
+		    $copyright .= " / " if $copyright;
+		    $copyright .= $match;
+		}
+	    }
 	}
     }
     close(F);
@@ -275,13 +290,11 @@ while (@files) {
     $content =~ tr/\t\r\n/ /;
     $content =~ tr% A-Za-z.,@;0-9\(\)\n\r/-%%cd;
     $content =~ tr/ //s;
-    $copyright =~ s/\s+$//;
-    $copyright =~ s/^\s+//;
-    $copyright =~ s/\s{2,}/ /g;
 
     print "$file: " . parselicense($content) . "\n";
-    print "  [Copyright: " . $copyright . "]\n\n"
+    print "  [Copyright: " . $copyright . "]\n"
       if $copyright and $opt_copyright;
+    print "\n" if $opt_copyright;
 }
 
 sub help {
