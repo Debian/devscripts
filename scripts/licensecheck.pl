@@ -28,7 +28,8 @@ licensecheck - simple license checker for source files
 B<licensecheck> B<--help|--version>
 
 B<licensecheck> [B<--verbose>] [B<-l|--lines=N>] [B<-i|--ignore=regex>] 
-[B<--(no-)recursive>] I<list of files and directories to check>
+[B<-c|--check=regex>] [B<--(no-)recursive>] I<list of files and 
+directories to check>
 
 =head1 DESCRIPTION
 
@@ -65,6 +66,13 @@ should not be considered (e.g. backup files, VCS metadata).
 
 Specify that the contents of directories should be added 
 recursively.
+
+=item B<-c=regex> B<--check=regex>
+
+Specify a pattern against which filenames will be matched in order to 
+decide which files to check the license of.
+
+The default includes common source files.
 
 =back
 
@@ -137,9 +145,11 @@ my $default_ignore_regex = '
 $default_ignore_regex =~ s/^#.*$//mg;
 $default_ignore_regex =~ s/\n//sg;
 
+my $default_check_regex = '\.(c(c|pp)?|h(h|pp)?|p(l|m)|sh|php|py|rb|java|el)$';
+
 my $modified_conf_msg;
 
-my ($opt_verbose, $opt_lines, $opt_noconf, $opt_ignore_regex);
+my ($opt_verbose, $opt_lines, $opt_noconf, $opt_ignore_regex, $opt_check_regex);
 my $opt_recursive = 0;
 my ($opt_help, $opt_version);
 my $def_lines = 60;
@@ -194,6 +204,7 @@ GetOptions("help|h" => \$opt_help,
 	   "lines|l=i" => \$opt_lines,
 	   "ignore|i=s" => \$opt_ignore_regex,
 	   "recursive" => \$opt_recursive,
+	   "check|c=s" => \$opt_check_regex,
 	   "noconf" => \$opt_noconf,
 	   "no-conf" => \$opt_noconf,
 	   )
@@ -201,6 +212,7 @@ GetOptions("help|h" => \$opt_help,
 
 $opt_lines =~ /^[1-9][0-9]*$/ or $opt_lines = $def_lines;
 $opt_ignore_regex = $default_ignore_regex if !$opt_ignore_regex;
+$opt_check_regex = $default_check_regex if !$opt_check_regex;
 
 if ($opt_noconf) {
     fatal "--no-conf is only acceptable as the first command-line option!";
@@ -227,10 +239,12 @@ while (@ARGV) {
 
 	while (<FIND>) {
 	    chomp;
+	    next unless m%$opt_check_regex%;
 	    push @files, $_ unless m%$opt_ignore_regex%;
 	}
 	close FIND;
     } else {
+	next unless $file =~ m%$opt_check_regex%;
 	push @files, $file unless $file =~ m%$opt_ignore_regex%;
     }
 }
@@ -266,7 +280,10 @@ Valid options are:
    --lines, -l            Specify how many lines of the file header
                             should be parsed for license information
                             (Default: $def_lines)
-   --ignore, i		  Specify that files / directories matching the
+   --check, -c            Specify a pattern indicating which files should
+                             be checked
+                             (Default: '$default_check_regex')
+   --ignore, -i		  Specify that files / directories matching the
                             regular expression should be ignored when
                             checking files
                             (Default: '$default_ignore_regex')
