@@ -283,6 +283,7 @@ Valid options are:
    --check, -c            Specify a pattern indicating which files should
                              be checked
                              (Default: '$default_check_regex')
+   --recursive, -r        Add the contents of directories recursively
    --ignore, -i		  Specify that files / directories matching the
                             regular expression should be ignored when
                             checking files
