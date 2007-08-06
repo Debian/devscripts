@@ -28,7 +28,7 @@ licensecheck - simple license checker for source files
 B<licensecheck> B<--help|--version>
 
 B<licensecheck> [B<--verbose>] [B<-l|--lines=N>] [B<-i|--ignore=regex>] 
-I<list of files and directories to check>
+[B<--(no-)recursive>] I<list of files and directories to check>
 
 =head1 DESCRIPTION
 
@@ -60,6 +60,11 @@ for license information. (Default is 60).
 When processing the list of files and directories, the regular 
 expression specified by this option will be used to indicate those which 
 should not be considered (e.g. backup files, VCS metadata). 
+
+=item B<--recursive>
+
+Specify that the contents of directories should be added 
+recursively.
 
 =back
 
@@ -135,6 +140,7 @@ $default_ignore_regex =~ s/\n//sg;
 my $modified_conf_msg;
 
 my ($opt_verbose, $opt_lines, $opt_noconf, $opt_ignore_regex);
+my $opt_recursive = 0;
 my ($opt_help, $opt_version);
 my $def_lines = 60;
 
@@ -187,6 +193,7 @@ GetOptions("help|h" => \$opt_help,
 	   "verbose!" => \$opt_verbose,
 	   "lines|l=i" => \$opt_lines,
 	   "ignore|i=s" => \$opt_ignore_regex,
+	   "recursive" => \$opt_recursive,
 	   "noconf" => \$opt_noconf,
 	   "no-conf" => \$opt_noconf,
 	   )
@@ -206,12 +213,16 @@ die "Usage: $progname [options] filelist\nRun $progname --help for more details\
 $opt_lines = $def_lines if not defined $opt_lines;
 
 my @files = ();
+my @find_args = ();
+
+push @find_args, qw(-maxdepth 1) unless $opt_recursive;
+push @find_args, qw(-follow -type f -print);
 
 while (@ARGV) {
     my $file = shift @ARGV;
 
     if (-d $file) {
-	open FIND, '-|', 'find', $file, qw(-follow -type f -print)
+	open FIND, '-|', 'find', $file, @find_args
 	    or die "$progname: couldn't exec find: $!\n";
 
 	while (<FIND>) {
