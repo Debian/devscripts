@@ -28,7 +28,7 @@ licensecheck - simple license checker for source files
 B<licensecheck> B<--help|--version>
 
 B<licensecheck> [B<--verbose>] [B<-l|--lines=N>] [B<-i|--ignore=regex>] 
-[B<-c|--check=regex>] [B<--(no-)recursive>] I<list of files and 
+[B<-c|--check=regex>] [B<-r|--recursive>] I<list of files and 
 directories to check>
 
 =head1 DESCRIPTION
@@ -62,7 +62,7 @@ When processing the list of files and directories, the regular
 expression specified by this option will be used to indicate those which 
 should not be considered (e.g. backup files, VCS metadata). 
 
-=item B<--recursive>
+=item B<-r> B<--recursive>
 
 Specify that the contents of directories should be added 
 recursively.
@@ -203,7 +203,7 @@ GetOptions("help|h" => \$opt_help,
 	   "verbose!" => \$opt_verbose,
 	   "lines|l=i" => \$opt_lines,
 	   "ignore|i=s" => \$opt_ignore_regex,
-	   "recursive" => \$opt_recursive,
+	   "recursive|r" => \$opt_recursive,
 	   "check|c=s" => \$opt_check_regex,
 	   "noconf" => \$opt_noconf,
 	   "no-conf" => \$opt_noconf,
