@@ -172,9 +172,27 @@ die "Usage: $progname [options] filelist\nRun $progname --help for more details\
 
 $opt_lines = $def_lines if not defined $opt_lines;
 
+my @files = ();
+
 while (@ARGV) {
     my $file = shift @ARGV;
 
+    if (-d $file) {
+	open FIND, '-|', 'find', $file, qw(-follow -type f -print)
+	    or die "$progname: couldn't exec find: $!\n";
+
+	while (<FIND>) {
+	    chomp;
+	    push @files, $_;
+	}
+	close FIND;
+    } else {
+	push @files, $file;
+    }
+}
+
+while (@files) {
+    my $file = shift @files;
     my $content = '';
     open (F, "<$file") or die "Unable to access $file\n";
     while (<F>) {
