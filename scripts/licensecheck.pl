@@ -27,13 +27,17 @@ licensecheck - simple license checker for source files
 
 B<licensecheck> B<--help|--version>
 
-B<licensecheck> [B<--verbose>] [B<-l|--lines=N>] I<list of files to check>
+B<licensecheck> [B<--verbose>] [B<-l|--lines=N>] [B<-i|--ignore=regex>] 
+I<list of files and directories to check>
 
 =head1 DESCRIPTION
 
 B<licensecheck> attempts to determine the license that applies to each file
 passed to it, by searching the start of the file for text belonging to
 various licenses.
+
+If any of the arguments passed are directories, B<licensecheck> will add
+the files contained within to the list of files to process.
 
 =head1 OPTIONS
 
@@ -50,6 +54,12 @@ Default is to be quiet.
 
 Specify the number of lines of each file's header which should be parsed 
 for license information. (Default is 60).
+
+=item B<-i=regex> B<--ignore=regex>
+
+When processing the list of files and directories, the regular 
+expression specified by this option will be used to indicate those which 
+should not be considered (e.g. backup files, VCS metadata). 
 
 =back
 
@@ -101,9 +111,30 @@ sub parselicense($);
 
 my $progname = basename($0);
 
+# From dpkg-source
+my $default_ignore_regex = '
+# Ignore general backup files
+(?:^|/).*~$|
+# Ignore emacs recovery files
+(?:^|/)\.#.*$|
+# Ignore vi swap files
+(?:^|/)\..*\.swp$|
+# Ignore baz-style junk files or directories
+(?:^|/),,.*(?:$|/.*$)|
+# File-names that should be ignored (never directories)
+(?:^|/)(?:DEADJOE|\.cvsignore|\.arch-inventory|\.bzrignore|\.gitignore)$|
+# File or directory names that should be ignored
+(?:^|/)(?:CVS|RCS|\.deps|\{arch\}|\.arch-ids|\.svn|\.hg|_darcs|\.git|
+\.shelf|\.bzr(?:\.backup|tags)?)(?:$|/.*$)
+';
+
+# Take out comments and newlines
+$default_ignore_regex =~ s/^#.*$//mg;
+$default_ignore_regex =~ s/\n//sg;
+
 my $modified_conf_msg;
 
-my ($opt_verbose, $opt_lines, $opt_noconf);
+my ($opt_verbose, $opt_lines, $opt_noconf, $opt_ignore_regex);
 my ($opt_help, $opt_version);
 my $def_lines = 60;
 
@@ -155,12 +186,14 @@ GetOptions("help|h" => \$opt_help,
 	   "version|v" => \$opt_version,
 	   "verbose!" => \$opt_verbose,
 	   "lines|l=i" => \$opt_lines,
+	   "ignore|i=s" => \$opt_ignore_regex,
 	   "noconf" => \$opt_noconf,
 	   "no-conf" => \$opt_noconf,
 	   )
     or die "Usage: $progname [options] filelist\nRun $progname --help for more details\n";
 
 $opt_lines =~ /^[1-9][0-9]*$/ or $opt_lines = $def_lines;
+$opt_ignore_regex = $default_ignore_regex if !$opt_ignore_regex;
 
 if ($opt_noconf) {
     fatal "--no-conf is only acceptable as the first command-line option!";
@@ -183,11 +216,11 @@ while (@ARGV) {
 
 	while (<FIND>) {
 	    chomp;
-	    push @files, $_;
+	    push @files, $_ unless m%$opt_ignore_regex%;
 	}
 	close FIND;
     } else {
-	push @files, $file;
+	push @files, $file unless $file =~ m%$opt_ignore_regex%;
     }
 }
 
@@ -222,6 +255,10 @@ Valid options are:
    --lines, -l            Specify how many lines of the file header
                             should be parsed for license information
                             (Default: $def_lines)
+   --ignore, i		  Specify that files / directories matching the
+                            regular expression should be ignored when
+                            checking files
+                            (Default: '$default_ignore_regex')
 
 Default settings modified by devscripts configuration files:
 $modified_conf_msg
