@@ -26,6 +26,13 @@ devscripts (2.10.7) UNRELEASED; urgency=low
     + Allow a user agent string to be specified (Closes: #433419)
     + Fix https support (Closes: #423669)
     + Correctly set exit status after downloading (Closes: #431840)
+  * licensecheck
+    + Allow directories to be passed as arguments
+    + Allow a pattern to be specified indicating files / directories
+      which should be excluded from checking. The default is the same
+      as dpkg-source's -i option
+    + Allow the set of files to be checked to be specified via a
+      regular expression
 
   [ Christoph Berg ]
   * rmadison: Support ubuntu and querying multiple archives, suggested by
@@ -49,7 +56,7 @@ devscripts (2.10.7) UNRELEASED; urgency=low
   * tagpending: add a -t/--to option that adds a -v option to the
     dpkg-parsechangelog call. (Closes: #434145)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Sat, 04 Aug 2007 22:43:52 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Mon, 06 Aug 2007 20:18:29 +0100
 
 devscripts (2.10.6) unstable; urgency=low
 
