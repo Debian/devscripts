@@ -27,9 +27,9 @@ licensecheck - simple license checker for source files
 
 B<licensecheck> B<--help|--version>
 
-B<licensecheck> [B<--verbose>] [B<-l|--lines=N>] [B<-i|--ignore=regex>] 
-[B<-c|--check=regex>] [B<-r|--recursive>] I<list of files and 
-directories to check>
+B<licensecheck> [B<--verbose>] [B<--copyright>] [B<-l|--lines=N>] 
+[B<-i|--ignore=regex>] [B<-c|--check=regex>] [B<-r|--recursive>]
+I<list of files and directories to check>
 
 =head1 DESCRIPTION
 
@@ -73,6 +73,10 @@ Specify a pattern against which filenames will be matched in order to
 decide which files to check the license of.
 
 The default includes common source files.
+
+=item B<--copyright>
+
+Also display copyright text found within the file
 
 =back
 
@@ -151,6 +155,7 @@ my $modified_conf_msg;
 
 my ($opt_verbose, $opt_lines, $opt_noconf, $opt_ignore_regex, $opt_check_regex);
 my $opt_recursive = 0;
+my $opt_copyright = 0;
 my ($opt_help, $opt_version);
 my $def_lines = 60;
 
@@ -205,6 +210,7 @@ GetOptions("help|h" => \$opt_help,
 	   "ignore|i=s" => \$opt_ignore_regex,
 	   "recursive|r" => \$opt_recursive,
 	   "check|c=s" => \$opt_check_regex,
+	   "copyright" => \$opt_copyright,
 	   "noconf" => \$opt_noconf,
 	   "no-conf" => \$opt_noconf,
 	   )
@@ -252,10 +258,14 @@ while (@ARGV) {
 while (@files) {
     my $file = shift @files;
     my $content = '';
+    my $copyright = '';
     open (F, "<$file") or die "Unable to access $file\n";
     while (<F>) {
         last if ($. > $opt_lines);
         $content .= $_;
+	if (m%copyright (.*)$%i) {
+	    $copyright .= " " . $1 . " ";
+	}
     }
     close(F);
 
@@ -265,8 +275,13 @@ while (@files) {
     $content =~ tr/\t\r\n/ /;
     $content =~ tr% A-Za-z.,@;0-9\(\)\n\r/-%%cd;
     $content =~ tr/ //s;
+    $copyright =~ s/\s+$//;
+    $copyright =~ s/^\s+//;
+    $copyright =~ s/\s{2,}/ /g;
 
     print "$file: " . parselicense($content) . "\n";
+    print "  [Copyright: " . $copyright . "]\n\n"
+      if $copyright and $opt_copyright;
 }
 
 sub help {
@@ -284,6 +299,7 @@ Valid options are:
                              be checked
                              (Default: '$default_check_regex')
    --recursive, -r        Add the contents of directories recursively
+   --copyright            Also display the file's copyright
    --ignore, -i		  Specify that files / directories matching the
                             regular expression should be ignored when
                             checking files

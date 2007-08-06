@@ -33,6 +33,7 @@ devscripts (2.10.7) UNRELEASED; urgency=low
       as dpkg-source's -i option
     + Allow the set of files to be checked to be specified via a
       regular expression
+    + Optionally attempt to find copyright statements
 
   [ Christoph Berg ]
   * rmadison: Support ubuntu and querying multiple archives, suggested by
@@ -56,7 +57,7 @@ devscripts (2.10.7) UNRELEASED; urgency=low
   * tagpending: add a -t/--to option that adds a -v option to the
     dpkg-parsechangelog call. (Closes: #434145)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Mon, 06 Aug 2007 20:18:29 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Mon, 06 Aug 2007 20:53:14 +0100
 
 devscripts (2.10.6) unstable; urgency=low
 
