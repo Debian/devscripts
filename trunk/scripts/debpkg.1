@@ -1,0 +1,25 @@
+.TH DEBPKG 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+debpkg \- wrapper for dpkg
+.SH SYNOPSIS
+\fBdebpkg\fP \fIdpkg-options\fP
+.SH DESCRIPTION
+\fBdebpkg\fR simply invokes \fBdpkg\fP(8) but first becomes superuser
+so that \fBdpkg\fP is able to install and remove packages.  It also
+cleans the environment and resets PATH to a sane default:
+"/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11" so that local versions of
+programs are not run by accident.
+.SH REQUIREMENTS
+\fBdebpkg\fP must be given superuser privileges in some way to
+function properly.  \fBAccess to debpkg with those privileges is the
+same as having superuser access to your machine.\fP  \fBdebpkg\fP will
+abort if it finds that it neither being run by root nor setuid root.
+.PP
+The \fBdevscripts\fR package has been designed to allow \fBdebpkg\fR
+to be made setuid root.  This works by using a compiled wrapper
+script, which means that \fBsuidperl\fR is not required.  See
+\fBdpkg-statoverride\fR(8) if you wish to make this program setuid
+root.  \fBsudo\fR or \fBsuper\fR could also conceivably be used.
+.SH AUTHOR
+Christoph Lameter <clameter@debian.org>; minor modifications made by
+Julian Gilbey <jdg@debian.org>.

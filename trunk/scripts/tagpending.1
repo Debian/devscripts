@@ -1,0 +1,51 @@
+.TH TAG-PENDING 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+tagpending \- Tag all bugs not marked pending as such
+.SH SYNOPSIS
+\fBtagpending\fR [\fIoptions\fR] 
+.SH DESCRIPTION
+\fBtagpending\fR looks for and parses debian/changelog and debian/control
+to find out what bugs the impending release would close, and sends mail using
+\fBmail(1)\fR to \fBcontrol@bugs.debian.org\fR tagging the bugs as pending. It
+queries the BTS to look up the bugs marked as pending for that package and
+excludes those from being re-tagged in the email.
+.SH OPTIONS
+.TP
+.BR \-n ", " \-\-noact
+Do not actually send an email, but print it to stdout.
+.TP
+.BR \-s ", " \-\-silent
+Don't print actions taken.
+.TP
+.BR \-v ", " \-\-verbose
+List every bug checked.
+.TP
+.BR \-f ", " \-\-force
+Do not query the BTS for already tagged or not owned bugs, that is, force all
+bugs to be tagged, even if they are already tagged or (worse still) belong to
+another source package.
+.TP
+.BR \-c ", " \-\-confirm
+For each bug tagged as pending, also tag it as confirmed.
+.TP
+.BR \-t ", " \-\-to " " \fIversion
+Use changelog information from all versions strictly later than
+\fIversion\fR (mimics dpkg-parsechangelog's -v option.)
+.TP
+.BR \-w ", " \-\-wnpp
+For each potentially not owned bug, check whether it is filed against wnpp
+and, if so, tag it. This allows e.g. ITA or ITPs to be tagged.
+.TP
+.BR \-h ", " \-\-help
+Show a brief usage message.
+.TP
+.BR \-V ", " \-\-version
+Show version and copyright information.
+.SH "SEE ALSO"
+.BR ldapsearch (1),
+.BR mailx (1)
+and
+.BR dpkg-parsechangelog (1)
+.SH AUTHOR
+Joshua Kwan <joshk@triplehelix.org>.  This manpage and the associated
+programme are licensed under the terms of the GPL, version 2.

@@ -1,0 +1,348 @@
+#! /bin/sh -e
+
+if [ "$1" = configure ]
+then
+    if dpkg --compare-versions "$2" lt 2.6.90 && [ ! -f /etc/devscripts.conf ]
+    then
+	cp /usr/share/devscripts/conf.default /etc/devscripts.conf
+    elif [ -f /etc/devscripts.conf ]
+    then
+	# Are we dealing with an upgrade from pre-sarge?
+	if dpkg --compare-versions "$2" lt 2.8.14
+	then
+	    if dpkg --compare-versions "$2" lt 2.7.1
+	    then
+		# This is for bug #149712.  Oops.
+		perl -i -pe 's/DEBDIFF_SHOWMOVED/DEBDIFF_SHOW_MOVED/g' \
+		    /etc/devscripts.conf
+	    fi
+
+	    if dpkg --compare-versions "$2" lt 2.7.90
+	    then
+		# Added in devscripts 2.7.90:
+		cat >> /etc/devscripts.conf <<EOF
+
+# debchange/dch option added in version 2.7.90:
+# 
+# Query the BTS when --closes is being used?
+# DEBCHANGE_QUERY_BTS=yes
+# 
+# uupdate option added in version 2.7.90:
+# 
+# Should we symlink the .orig.tar.gz file to its new name or
+# copy it instead?  yes=symlink, no=copy
+# UUPDATE_SYMLINK_ORIG=yes
+EOF
+	    fi
+
+	    if dpkg --compare-versions "$2" lt 2.7.93
+	    then
+		# Added in devscripts 2.7.93:
+		cat >> /etc/devscripts.conf <<EOF
+
+# debuild options added in version 2.7.93:
+# 
+# Do we run linda at the end of a full run?
+# DEBUILD_LINDA=no
+# 
+# Extra options given to linda before any command-line options
+# specified.
+# DEBUILD_LINDA_OPTS=""
+
+##### Package-wide variables first introduced in version 2.7.93:
+# 
+# Lists of which scripts are affected by these package-wide variables
+# can be found in the devscripts.conf(5) manpage.
+# 
+# 
+# Directory Name Checking
+# 
+# Several programs check the directory name and refuse to function if
+# it does not match the name of the package being worked on.  (The
+# details are described in the individual manpages.)
+# These two variables control this behaviour, corresponding to the
+# --check-dirname-level and --check-dirname-regex command line options.
+# The possible values of DEVSCRIPTS_CHECK_DIRNAME_LEVEL are:
+#   0    never check the directory name
+#   1    check the directory name only if the program has changed directory
+#   2    always check the directory name
+# The variable DEVSCRIPTS_DIRNAME_REGEXP is a Perl regex which
+# defines what is considered a valid directory name for the source
+# package PACKAGE; if it includes a '/', then it must match the full
+# directory path, otherwise it must match the full directory name.
+# 
+# The default settings are:
+# DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1
+# DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.*)?'
+EOF
+	    fi
+
+	    if [ "$2" = "2.8.6" ]
+	    then
+		# Added in devscripts 2.8.6:
+		cat >> /etc/devscripts.conf <<EOF
+
+##### bts options changes between version 2.8.6 and version 2.8.7:
+# 
+# The following option replaces the previous BTS_FULL_MIRROR option.
+# How much to mirror when caching?  The minimal amount (min), the mbox
+# version as well (mbox) or the whole works (full)?
+# BTS_CACHE_MODE=min
+# 
+# The following is a new option
+# How do we read an mbox?  This will be split on whitespace, then
+# %s is replaced by the mbox name and %% by a single %.
+# BTS_MAIL_READER='mutt -f %s'
+EOF
+	    elif dpkg --compare-versions "$2" lt 2.8.7
+	    then
+		# Added in devscripts 2.8.6 and 2.8.7:
+		cat >> /etc/devscripts.conf <<EOF
+
+##### bts options added in versions 2.8.6 and 2.8.7:
+# 
+# Default bts show/bugs to run in offline mode?
+# BTS_OFFLINE=no
+# 
+# Cache all visited bug reports once a cache has been established
+# for the first time?
+# BTS_CACHE=yes
+# 
+# How much to mirror when caching?  The minimal amount (min), the mbox
+# version as well (mbox) or the whole works (full)?
+# BTS_CACHE_MODE=min
+# 
+# Always refresh the cache, even if nothing's changed?
+# BTS_FORCE_REFRESH=no
+# 
+# How do we read an mbox?  This will be split on whitespace, then
+# %s is replaced by the mbox name and %% by a single %.
+# BTS_MAIL_READER='mutt -f %s'
+EOF
+	    fi
+
+	    if dpkg --compare-versions "$2" lt 2.8.12
+	    then
+		# Added in devscripts 2.8.12:
+		cat >> /etc/devscripts.conf <<EOF
+
+##### uscan option added in version 2.8.12:
+# 
+# Should we use DEHS style output (XML format)?
+# USCAN_DEHS_OUTPUT=no
+# 
+EOF
+	    fi
+	fi
+
+	# The next section is all post-sarge updates
+	if dpkg --compare-versions "$2" lt 2.8.15
+	then
+	# Added in devscripts 2.8.15:
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### debchange option added in version 2.8.15:
+# 
+# Select a heuristic to use to determine whether the package has released.
+# See the debchange man page for details.
+# DEBCHANGE_RELEASE_HEURISTIC=log
+# DEBCHANGE_RELEASE_HEURISTIC=changelog
+EOF
+	fi
+
+	if dpkg --compare-versions "$2" lt 2.9.5
+	then
+	# Added in devscripts 2.9.5:
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### debchange option added in version 2.9.5:
+# 
+# Introduce multiple-maintainer markers in changelog sections?
+# DEBCHANGE_MULTIMAINT=yes
+EOF
+	fi
+
+	if dpkg --compare-versions "$2" lt 2.9.15
+	then
+	# Added in devscripts 2.9.15:
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### bts option added in version 2.9.15
+# 
+# What sendmail command do we use?  This will be split on whitespace.
+# BTS_SENDMAIL_COMMAND='/usr/sbin/sendmail'
+
+##### dpkg-sig options added in version 2.9.15
+# 
+# dpkg-sig is not a part of devscripts, but shares this configuration file.
+# It pays attention to the values of DEBSIGN_MAINT and DEBSIGN_KEY in
+# addition to the following.
+#
+# This key ID takes precedence over the rest
+# DPKGSIG_KEYID=
+# 
+# Do we sign the .changes and .dsc files?  See the manpage for more
+# info.  Valid options are no, auto, yes, full and force_full.
+# DPKGSIG_SIGN_CHANGES=auto
+# 
+# Do we cache the gpg passphrase by default?  This can be dangerous!
+# DPKGSIG_CACHE_PASS=no
+
+##### pts-subscribe added in version 2.9.15
+# 
+# How long will we subscribe for by default?  The default is 30 days.
+# Setting this to 'forever' means that no unsubscription request will
+# be scheduled.
+# PTS_UNTIL='now + 30 days'
+EOF
+	fi
+
+	if dpkg --compare-versions "$2" lt 2.9.17
+	then
+	# Added in devscripts 2.9.17:
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### debdiff option added in version 2.9.17
+# 
+# Which control files to compare?  A comma-separated list, with
+# possibilities such as postinst, config and so on; ALL means compare
+# all control files.
+# DEBDIFF_CONTROLFILES=control
+
+##### debrelease/debc/debi option added in version 2.9.17
+# 
+# This specifies the directory, relative to the top of the source
+# tree, in which the .changes and .debs files are to be found.  Note
+# that this option affects all of debrelease, debc and debi.
+# DEBRELEASE_DEBS_DIR=..
+
+##### debuild options added in version 2.9.17
+# 
+# Do we check for the existence of the .orig.tar.gz before calling
+# dpkg-buildpackage?
+# DEBUILD_TGZ_CHECK=yes
+# 
+# Hooks; see the manpage for details of these
+# DEBUILD_DPKG_BUILDPACKAGE_HOOK=""
+# DEBUILD_CLEAN_HOOK=""
+# DEBUILD_DPKG_SOURCE_HOOK=""
+# DEBUILD_BUILD_HOOK=""
+# DEBUILD_BINARY_HOOK=""
+# DEBUILD_FINAL_CLEAN_HOOK=""
+# DEBUILD_LINTIAN_HOOK=""
+# DEBUILD_SIGNING_HOOK=""
+# DEBUILD_POST_DPKG_BUILDPACKAGE_HOOK=""
+
+##### who-uploads options added in version 2.9.17
+# 
+# Maximum number of uploads to display per package
+# WHOUPLOADS_MAXUPLOADS=3
+# 
+# Colon-separated list of keyrings to examine by default
+# WHOUPLOADS_KEYRINGS=/usr/share/keyrings/debian-keyring.gpg:/usr/share/keyrings/debian-keyring.pgp
+EOF
+	fi
+
+	if dpkg --compare-versions "$2" lt 2.9.26
+	then
+	    # Added in devscripts 2.9.25/26, but version comparison test was
+	    # incorrect in version 2.9.25:
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### nmudiff options added in versions 2.9.25 and 2.9.26
+# 
+# Should we use mutt to edit and send the message or just a plain old
+# editor?
+# NMUDIFF_MUTT=yes
+# 
+# Should we always submit a new report (yes), always send to the bugs
+# which are being closed (no), or send to the bug being closed if
+# there is only one of them, otherwise send a new report (maybe)?
+# NMUDIFF_NEWREPORT=maybe
+# 
+# nmudiff also uses the value of BTS_SENDMAIL_COMMAND if NMUDIFF_MUTT=no
+
+##### dget option added in version 2.9.26
+# 
+# Extra directories to search for files in addition to
+# /var/cache/apt/archives.  This is a colon-separated list of directories.
+# DGET_PATH=""
+EOF
+
+	fi
+
+  	if dpkg --compare-versions "$2" lt 2.10.3
+        then
+            # Added in devscripts 2.10.3
+            cat >> /etc/devscripts.conf <<EOF
+
+##### licensecheck options added in version 2.10.3
+#
+# Print the file header being parsed before the corresponding license
+# information?
+# LICENSECHECK_VERBOSE=no
+#
+# How many lines of each file should be parsed for license information?
+# LICENSECHECK_PARSELINES=60
+
+##### debchange option added in version 2.10.3
+#
+# Use a fixed timezone in changelog entries?
+# DEBCHANGE_TZ=UTC
+EOF
+	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.4
+	then
+	    # Added in devscripts 2.10.4
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### debchange option added in version 2.10.4
+#
+# When appending to a multiple-maintainer changelog, if there are
+# existing changes made by the current maintainer, should new
+# changelog entries be appended to the existing entries?
+# DEBCHANGE_MULTIMAINT_MERGE=no
+EOF
+	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.5
+	then
+	    # Added in devscripts 2.10.5
+	    # BTS_ONLY_NEW was added in 2.10.2 but not added to the
+	    # configuration files
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### bts option added in version 2.10.2
+# Download only new bugs when caching?  If set to yes, don't check for
+# updates in bugs we already have.
+# BTS_ONLY_NEW=no
+
+##### bts options added in version 2.10.5
+#
+# Which SMTP host should be used?  Note that if both an SMTP host and
+# sendmail command are specified in the configuration file(s), the SMTP
+# host will be used unless overridden by --sendmail on the command line
+# BTS_SMTP_HOST=bugs.debian.org
+#
+# Include resolved bugs when caching?
+# BTS_INCLUDE_RESOLVED=yes
+EOF
+	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.7
+	then
+	    # Added in devscripts 2.10.7
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### uscan option added in version 2.10.7
+#
+# What user agent string should we send with requests?
+# (Default is 'Debian uscan X.Y.Z')
+# USCAN_USER_AGENT=''
+EOF
+	fi
+    fi
+fi
+
+#DEBHELPER#

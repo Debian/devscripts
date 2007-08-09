@@ -1,0 +1,437 @@
+# This configuration file gives defaults for the scripts in
+# the devscripts package, as documented in the individual manpages.
+# Variables defined here may be overridden by a per-user ~/.devscripts
+# configuration file, which has exactly the same syntax as this file.
+# 
+# This file is sourced by /bin/bash, and should only contain
+# comment lines (beginning with a '#'), and lines of the form
+# VARIABLE=value
+# The value must be quoted if there are spaces in it.
+# Variables corresponding to switches (on/off; yes/no) must take
+# one of the values 'yes' or 'no'.
+# The variable names are all of the form PROGNAME_VARNAME,
+# or DEVSCRIPTS_VARNAME if they are more generally applicable.
+# 
+# As new variables are introduced into the devscripts program, their
+# descriptions and default values will be appended as comments
+# to this file.
+
+# Variables recognised as of devscripts version ###VERSION###:
+
+##### Package-wide variables
+# 
+# Lists of which scripts are affected by these package-wide variables
+# can be found in the devscripts.conf(5) manpage.
+# 
+# 
+# Directory Name Checking
+# 
+# Several programs check the directory name and refuse to function if
+# it does not match the name of the package being worked on.  (The
+# details are described in the individual manpages.)
+# These two variables control this behaviour, corresponding to the
+# --check-dirname-level and --check-dirname-regex command line options.
+# The possible values of DEVSCRIPTS_CHECK_DIRNAME_LEVEL are:
+#   0    never check the directory name
+#   1    check the directory name only if the program has changed directory
+#   2    always check the directory name
+# The variable DEVSCRIPTS_DIRNAME_REGEXP is a Perl regex which
+# defines what is considered a valid directory name for the source
+# package PACKAGE; if it includes a '/', then it must match the full
+# directory path, otherwise it must match the full directory name.
+# 
+# The default settings are:
+# DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1
+# DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.*)?'
+
+##### annotate-output
+# 
+# No variables currently
+
+##### archpath
+# 
+# No variables currently
+
+##### bts
+# 
+# Default bts show/bugs to run in offline mode?
+# BTS_OFFLINE=no
+# 
+# Cache all visited bug reports once a cache has been established
+# for the first time?
+# BTS_CACHE=yes
+# 
+# How much to mirror when caching?  The minimal amount (min), the mbox
+# version as well (mbox) or the whole works (full)?
+# BTS_CACHE_MODE=min
+# 
+# Always refresh the cache, even if nothing's changed?
+# BTS_FORCE_REFRESH=no
+# 
+# How do we read an mbox?  This will be split on whitespace, then
+# %s is replaced by the mbox name and %% by a single %.
+# BTS_MAIL_READER='mutt -f %s'
+# 
+# What sendmail command do we use?  This will be split on whitespace.
+# BTS_SENDMAIL_COMMAND='/usr/sbin/sendmail'
+#
+# Download only new bugs when caching?  If set to yes, don't check for
+# updates in bugs we already have.
+# BTS_ONLY_NEW=no
+#
+# Which SMTP host should be used?  Note that if both an SMTP host and
+# sendmail command are specified in the configuration file(s), the SMTP
+# host will be used unless overridden by --sendmail on the command line
+# BTS_SMTP_HOST=bugs.debian.org
+#
+# Include resolved bugs when caching?
+# BTS_INCLUDE_RESOLVED=yes
+
+##### checkbashisms
+# 
+# No variables currently
+
+##### cvs-debc
+# 
+# No variables currently
+
+##### cvs-debi
+# 
+# No variables currently
+
+##### cvs-debrelease
+# 
+# No variables currently
+
+##### cvs-debuild
+# 
+# No variables currently
+
+##### dd-list
+# 
+# No variables currently
+
+##### debc
+# 
+# debc recognises the DEBRELEASE_DEBS_DIR variable; see debrelease
+# below for more information.
+
+##### deb-reversion
+# 
+# No variables currently
+
+##### debchange/dch
+# 
+# Preserve the source tree dirname if the upstream version changes?
+# DEBCHANGE_PRESERVE=no
+# 
+# Query the BTS when --closes is being used?
+# DEBCHANGE_QUERY_BTS=yes
+#
+# Select a heuristic to use to determine whether the package has released.
+# See the debchange man page for details.
+# DEBCHANGE_RELEASE_HEURISTIC=log
+# DEBCHANGE_RELEASE_HEURISTIC=changelog
+# 
+# Introduce multiple-maintainer markers in changelog sections?
+# DEBCHANGE_MULTIMAINT=yes
+#
+# When appending to a multiple-maintainer changelog, if there are
+# existing changes made by the current maintainer, should new
+# changelog entries be appended to the existing entries?
+# DEBCHANGE_MULTIMAINT_MERGE=no
+# 
+# Use a fixed timezone in changelog entries?
+# DEBCHANGE_TZ=UTC
+
+##### debclean
+# 
+# Remove .deb, .changes, .dsc and .upload files?
+# DEBCLEAN_CLEANDEBS=no
+
+##### debcommit
+# 
+# No variables currently
+
+##### debdiff
+# 
+# Show directory names which appear in the filelist?
+# DEBDIFF_DIRS=no
+# 
+# Compare control files?
+# DEBDIFF_CONTROL=yes
+# 
+# Which control files to compare?  A comma-separated list, with
+# possibilities such as postinst, config and so on; ALL means compare
+# all control files.
+# DEBDIFF_CONTROLFILES=control
+# 
+# Show files which have moved between .debs?
+# DEBDIFF_SHOW_MOVED=no
+# 
+# Option to pass to wdiff
+# DEBDIFF_WDIFF_OPT=
+
+##### debi
+# 
+# debc recognises the DEBRELEASE_DEBS_DIR variable; see debrelease
+# below for more information.
+
+##### debpkg
+# 
+# No variables currently
+
+##### debrelease
+# 
+# This specifies which uploader program to use.  As of devscripts ###VERSION###
+# the recognised values are "dupload" (default) and "dput".  Check the
+# debrelease(1) manpage for any recent changes to this variable
+# DEBRELEASE_UPLOADER=dupload
+# 
+# This specifies the directory, relative to the top of the source
+# tree, in which the .changes and .debs files are to be found.  Note
+# that this also affects debc and debi.
+# DEBRELEASE_DEBS_DIR=..
+
+##### debrsign
+# 
+# No variables currently
+
+##### debsign
+# 
+# Which signing program to use?  gpg and pgp are the usual values; the
+# default is determined as described in the manpage.
+# Corresponds to -p option
+# DEBSIGN_PROGRAM=
+# 
+# How the signing program works; must be either gpg or pgp as of
+# devscripts version ###VERSION###.  The default is described in the
+# manpage.  Corresponds to -sgpg and -spgp.
+# DEBSIGN_SIGNLIKE=
+# 
+# Maintainer name (only used to determine GPG keyid; -m option)
+# DEBSIGN_MAINT=
+# 
+# GPG keyid to use (-k option)
+# DEBSIGN_KEYID=
+
+##### debuild
+# 
+# Do we preserve the whole environment except for PATH?
+# DEBUILD_PRESERVE_ENV=no
+# 
+# Are there any environment variables we should preserve?  This should
+# be a comma-separated list.
+# DEBUILD_PRESERVE_ENVVARS=""
+# 
+# How to set a preserved environment variable, in this case to set
+# FOO=bar.
+# DEBUILD_SET_ENVVAR_FOO=bar
+# 
+# Do we check for the existence of the .orig.tar.gz before calling
+# dpkg-buildpackage?
+# DEBUILD_TGZ_CHECK=yes
+# 
+# Corresponds to the dpkg-buildpackage -r option.
+# DEBUILD_ROOTCMD=fakeroot
+# 
+# Extra options given to dpkg-buildpackage before any command-line
+# options specified.  Single options containing spaces should be
+# quoted, for example "-m'Julian Gilbey <jdg@debian.org>' -us -uc"
+# If this contains a -r, -d or -D option, this will also be recognised
+# when running debuild binary|binary-arch|...
+# DEBUILD_DPKG_BUILDPACKAGE_OPTS=""
+# 
+# Do we run lintian at the end of a full run?
+# DEBUILD_LINTIAN=yes
+# 
+# Do we run linda at the end of a full run?
+# DEBUILD_LINDA=no
+# 
+# Extra options given to lintian before any command-line options
+# specified.
+# DEBUILD_LINTIAN_OPTS=""
+# 
+# Extra options given to linda before any command-line options
+# specified.
+# DEBUILD_LINDA_OPTS=""
+# 
+# Hooks; see the manpage for details of these
+# DEBUILD_DPKG_BUILDPACKAGE_HOOK=""
+# DEBUILD_CLEAN_HOOK=""
+# DEBUILD_DPKG_SOURCE_HOOK=""
+# DEBUILD_BUILD_HOOK=""
+# DEBUILD_BINARY_HOOK=""
+# DEBUILD_FINAL_CLEAN_HOOK=""
+# DEBUILD_LINTIAN_HOOK=""
+# DEBUILD_SIGNING_HOOK=""
+# DEBUILD_POST_DPKG_BUILDPACKAGE_HOOK=""
+
+##### dget
+# 
+# Extra directories to search for files in addition to
+# /var/cache/apt/archives.  This is a colon-separated list of directories.
+# DGET_PATH=""
+
+##### dpkg-depcheck
+# 
+# Extra options given to dpkg-depcheck before any command-line
+# options specified.  For example: "-b --features=-catch-alternatives"
+# DPKG_DEPCHECK_OPTIONS=""
+
+##### dpkg-genbuilddeps
+# 
+# No variables currently
+
+##### dpkg-sig
+# 
+# dpkg-sig is not a part of devscripts, but shares this configuration file.
+# It pays attention to the values of DEBSIGN_MAINT and DEBSIGN_KEY in
+# addition to the following.
+#
+# This key ID takes precedence over the rest
+# DPKGSIG_KEYID=
+# 
+# Do we sign the .changes and .dsc files?  See the manpage for more
+# info.  Valid options are no, auto, yes, full and force_full.
+# DPKGSIG_SIGN_CHANGES=auto
+# 
+# Do we cache the gpg passphrase by default?  This can be dangerous!
+# DPKGSIG_CACHE_PASS=no
+
+##### dscverify
+# 
+# A colon separated list of extra keyrings to read.
+# DSCVERIFY_KEYRINGS=""
+
+##### grep-excuses
+# 
+# This specifies a default maintainer name or email to hunt for
+# GREP_EXCUSES_MAINTAINER=""
+# 
+# Is this running on ftp-master.debian.org?  If so, we use the local
+# excuses file
+# GREP_EXCUSES_FTP_MASTER=no
+
+##### licensecheck
+#
+# Print the file header being parsed before the corresponding license
+# information?
+# LICENSECHECK_VERBOSE=no
+#
+# How many lines of each file should be parsed for license information?
+# LICENSECHECK_PARSELINES=60
+
+##### mergechanges
+# 
+# No variables currently
+
+##### manpage-alert
+#
+# No variables currently
+
+##### mass-bug
+# 
+# No variables currently
+
+##### nmudiff
+# 
+# Should we use mutt to edit and send the message or just a plain old
+# editor?
+# NMUDIFF_MUTT=yes
+# 
+# Should we always submit a new report (yes), always send to the bugs
+# which are being closed (no), or send to the bug being closed if
+# there is only one of them, otherwise send a new report (maybe)?
+# NMUDIFF_NEWREPORT=maybe
+# 
+# nmudiff also uses the value of BTS_SENDMAIL_COMMAND if NMUDIFF_MUTT=no
+
+##### plotchangelog
+# 
+# Command line options to use (space separated).  None of the options
+# should contain spaces.  Use the PLOTCHANGELOG_GNUPLOT variable for
+# the --gnuplot command line option.
+# PLOTCHANGELOG_OPTIONS=""
+# 
+# Here we can give gnuplot options.  Any command line --gnuplot
+# commands will be appended to these.
+# PLOTCHANGELOG_GNUPLOT=""
+
+##### pts-subscribe
+# 
+# How long will we subscribe for by default?  The default is 30 days.
+# Setting this to 'forever' means that no unsubscription request will
+# be scheduled.
+# PTS_UNTIL='now + 30 days'
+
+##### rc-alert
+# 
+# No variables currently
+
+##### rmadison
+# 
+# No variables currently
+
+##### svnpath
+# 
+# No variables currently
+
+##### tagpending
+# 
+# No variables currently
+
+##### uscan
+# 
+# Should we download newer upstream files we come across?
+# USCAN_DOWNLOAD=yes
+# 
+# Should we use FTP PASV mode for ftp:// links?  'default' means let
+# Net::FTP(3) make the choice (primarily based on the FTP_PASSIVE
+# environment variable); 'yes' and 'no' override the default
+# USCAN_PASV=default
+# 
+# Should we create a symlink from the downloaded tar.gz file to
+# pkg_version.orig.tar.gz, rename it like this or do nothing?
+# Options are 'symlink'/'yes', 'rename' or 'no'
+# USCAN_SYMLINK=yes
+# 
+# Should we use DEHS style output (XML format)?
+# USCAN_DEHS_OUTPUT=no
+# 
+# Should we give verbose output?
+# USCAN_VERBOSE=no
+#
+# What user agent string should we send with requests?
+# (Default is 'Debian uscan X.Y.Z')
+# USCAN_USER_AGENT=''
+
+##### uupdate
+# 
+# Should we retain the pristine upstream source wherever possible?
+# UUPDATE_PRISTINE=yes
+# 
+# Should we symlink the .orig.tar.gz file to its new name or
+# copy it instead?  yes=symlink, no=copy
+# UUPDATE_SYMLINK_ORIG=yes
+# 
+# Corresonds to the dpkg-buildpackage -r option and debuild
+# DEBUILD_ROOTCMD option.  Normally, this can be left empty, as then
+# the debuild setting will be used.
+# UUPDATE_ROOTCMD=''
+
+##### whodepends
+# 
+# No variables currently
+
+##### who-uploads
+# 
+# Maximum number of uploads to display per package
+# WHOUPLOADS_MAXUPLOADS=3
+# 
+# Colon-separated list of keyrings to examine by default
+# WHOUPLOADS_KEYRINGS=/usr/share/keyrings/debian-keyring.gpg:/usr/share/keyrings/debian-keyring.pgp
+
+##### wnpp-alert
+# 
+# No variables currently

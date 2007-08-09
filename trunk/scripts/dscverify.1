@@ -1,0 +1,51 @@
+.TH DSCVERIFY 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+dscverify \- verify the validity of a Debian package
+.SH SYNOPSIS
+\fBdscverify\fR [\fB\-\-keyring \fIkeyring\fR] ... \fIchanges_or_dsc_filename\fR ...
+.SH DESCRIPTION
+\fBdscverify\fR checks that the GPG or PGP signatures on the given
+\fI.changes\fR or \fI.dsc\fR files are good signatures made by keys in
+the current Debian keyrings, found in the \fIdebian-keyring\fR
+package.  (Additional keyrings can be specified using the
+\fB--keyring\fR option any number of times.)  It then checks that the
+other files listed in the \fI.changes\fR or \fI.dsc\fR files have the
+correct sizes and MD5 sums.  The exit status is 0 if there are no
+problems and non-zero otherwise.
+.SH OPTIONS
+.TP
+.BI \-\-keyring keyring
+Add \fIkeyring\fR to the list of keyrings to be used.
+.TP
+\fB\-\-no-conf\fR, \fB\-\-noconf\fR
+Do not read any configuration files.  This can only be used as the
+first option given on the command-line.
+.TP
+\fB\-\-nosigcheck\fR, \fB\-\-no\-sig\-check\fR
+Skip the signature verification step. That is, only verify the sizes and 
+MD5 sums of the files listed in the \fI.changes\fR or \fI.dsc\fR files.
+.TP
+.BR \-\-help ", " \-h
+Display a help message and exit successfully.
+.TP
+.B \-\-version
+Display version and copyright information and exit successfully.
+.SH "CONFIGURATION VARIABLES"
+The two configuration files \fI/etc/devscripts.conf\fR and
+\fI~/.devscripts\fR are sourced by a shell in that order to set
+configuration variables.  Environment variable settings are ignored
+for this purpose.  If the first command line option given is
+\fB\-\-noconf\fR or \fB\-\-no-conf\fR, then these files will not be
+read.  The currently recognised variable is:
+.TP
+.B DSCVERIFY_KEYRINGS
+This is a colon-separated list of extra keyrings to use in addition to
+any specified on the command line.
+.SH "SEE ALSO"
+.BR gpg (1)
+and
+.BR devscripts.conf (5).
+.SH AUTHOR
+\fBdscverify\fR was written by Roderick Schertler <roderick@argon.org>
+and posted on the debian-devel@lists.debian.org mailing list,
+with several modifications by Julian Gilbey <jdg@debian.org>.

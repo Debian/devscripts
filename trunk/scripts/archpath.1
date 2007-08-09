@@ -1,0 +1,63 @@
+.TH ARCHPATH 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+archpath \- output arch (tla/Bazaar) archive names, with support for branches
+.SH SYNOPSIS
+.B archpath
+.br
+.B archpath
+.I branch
+.br
+.B archpath
+.IR branch -- version
+.SH DESCRIPTION
+.B archpath
+is intended to be run in an arch (tla or Bazaar) working copy.
+.PP
+In its simplest usage,
+.B archpath
+with no parameters outputs the package name
+(archive/category--branch--version) associated with the working copy.
+.PP
+If a parameter is given, it may either be a branch--version, in which case
+.B archpath
+will output a corresponding package name in the current archive and
+category, or a plain branch name (without \(oq--\(dq), in which case
+.B archpath
+will output a corresponding package name in the current archive and
+category and with the same version as the current working copy.
+.PP
+This is useful for branching.
+For example, if you're using Bazaar and you want to create a branch for a
+new feature, you might use a command like this:
+.PP
+.RS
+.nf
+.ft CW
+baz branch $(archpath) $(archpath new-feature)
+.ft R
+.fi
+.RE
+.PP
+Or if you want to tag your current code onto a \(oqreleases\(cq branch as
+version 1.0, you might use a command like this:
+.PP
+.RS
+.nf
+.ft CW
+baz branch $(archpath) $(archpath releases--1.0)
+.ft R
+.fi
+.RE
+.PP
+That's much easier than using \(oqbaz tree-version\(cq to look up the
+package name and manually modifying the result.
+.SH AUTHOR
+.B archpath
+was written by
+.na
+Colin Watson <cjwatson@debian.org>.
+.ad
+Like
+.BR archpath ,
+this manual page is released under the GNU General Public License,
+version 2 or later.

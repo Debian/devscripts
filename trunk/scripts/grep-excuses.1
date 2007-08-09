@@ -1,0 +1,38 @@
+.TH GREP-EXCUSES 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+grep-excuses \- search the testing excuses files for a specific maintainer
+.SH SYNOPSIS
+\fBgrep-excuses\fR [\fIoptions\fR] [\fImaintainer\fR|\fIpackage\fR]
+.SH DESCRIPTION
+\fBgrep-excuses\fR downloads the update_excuses.html file and greps it
+for the specified maintainer name.  The \fBlibwww-perl\fR package is
+required for this script.  If no name is given on the command line,
+first the environment variable \fBDEBFULLNAME\fR is used if it is
+defined, and failing that, the configuration variable described below
+is used.
+.SH OPTIONS
+.TP
+\fB\-\-no-conf\fR, \fB\-\-noconf\fR
+Do not read any configuration files.  This can only be used as the
+first option given on the command-line.
+.TP
+.B \-\-help
+Show a brief usage message.
+.TP
+.B \-\-version
+Show version and copyright information.
+.SH "CONFIGURATION VARIABLES"
+The two configuration files \fI/etc/devscripts.conf\fR and
+\fI~/.devscripts\fR are sourced in that order to set configuration
+variables.  Command line options can be used to override configuration
+file settings.  Environment variable settings are ignored for this
+purpose.  The currently recognised variable is:
+.TP
+.B GREP_EXCUSES_MAINTAINER
+The default maintainer, email or package to grep for if none is
+specified on the command line.
+.SH "SEE ALSO"
+.BR devscripts.conf (5).
+.SH AUTHOR
+Joey Hess <joeyh@debian.org>;
+modifications by Julian Gilbey <jdg@debian.org>.

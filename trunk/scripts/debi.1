@@ -1,0 +1,125 @@
+.TH DEBI 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+debi \- install current version of generated Debian package
+.SH SYNOPSIS
+\fBdebi\fP [\fIoptions\fR] [\fIchanges file\fR] [\fIpackage\fR ...]
+.SH DESCRIPTION
+\fBdebi\fR figures out the current version of a package and installs
+it.  If a \fI.changes\fR file is specified on the command line, the
+filename must end with \fI.changes\fR, as this is how the program
+distinguishes it from package names.  If not, then \fBdebi\fR has to
+be called from within the source code directory tree.  In this case,
+it will look for the \fI.changes\fR file corresponding to the current
+package version (by determining the name and version number from the
+changelog, and the architecture in the same way as
+\fBdpkg-buildpackage\fR(1) does).  It then runs \fBdebpkg -i\fR on
+every \fI.deb\fR archive listed in the \fI.changes\fR file to install
+them, assuming that all of the \fI.deb\fR archives live in the same
+directory as the \fI.changes\fR file.  Note that you probably don't
+want to run this program on a \fI.changes\fR file relating to a
+different architecture after cross-compiling the package!
+.PP
+If a list of packages is given on the command line, then only those
+debs with names in this list of packages will be installed.
+.PP
+Since installing a package requires root privileges, \fBdebi\fR calls
+\fBdebpkg\fR rather than \fBdpkg\fR directly.  Thus \fBdebi\fR will
+only be useful if it is either being run as root or \fBdebpkg\fR can
+be run as root.  See \fBdebpkg\fR(1) for more details.
+.SH "Directory name checking"
+In common with several other scripts in the \fBdevscripts\fR package,
+\fBdebi\fR will climb the directory tree until it finds a
+\fIdebian/changelog\fR file.  As a safeguard against stray files
+causing potential problems, it will examine the name of the parent
+directory once it finds the \fIdebian/changelog\fR file, and check
+that the directory name corresponds to the package name.  Precisely
+how it does this is controlled by two configuration file variables
+DEVSCRIPTS_CHECK_DIRNAME_LEVEL and DEVSCRIPTS_CHECK_DIRNAME_REGEX, and
+their corresponding command-line options \fB\-\-check-dirname-level\fR
+and \fB\-\-check-dirname-regex\fR.
+.PP
+DEVSCRIPTS_CHECK_DIRNAME_LEVEL can take the following values:
+.TP
+.B 0
+Never check the directory name.
+.TP
+.B 1
+Only check the directory name if we have had to change directory in
+our search for \fIdebian/changelog\fR.  This is the default behaviour.
+.TP
+.B 2
+Always check the directory name.
+.PP
+The directory name is checked by testing whether the current directory
+name (as determined by \fBpwd\fR(1)) matches the regex given by the
+configuration file option DEVSCRIPTS_CHECK_DIRNAME_REGEX or by the
+command line option \fB\-\-check-dirname-regex\fR \fIregex\fR.  Here
+\fIregex\fR is a Perl regex (see \fBperlre\fR(3perl)), which will be
+anchored at the beginning and the end.  If \fIregex\fR contains a '/',
+then it must match the full directory path.  If not, then it must
+match the full directory name.  If \fIregex\fR contains the string
+\'PACKAGE', this will be replaced by the source package name, as
+determined from the changelog.  The default value for the regex is:
+\'PACKAGE(-.*)?', thus matching directory names such as PACKAGE and
+PACKAGE-version.
+.SH OPTIONS
+.TP
+\fB\-a\fIdebian-architecture\fR, \fB\-t\fIGNU-system-type\fR
+See \fBdpkg-architecture\fR(1) for a description of these options.
+They affect the search for the \fI.changes\fR file.  They are provided
+to mimic the behaviour of \fBdpkg-buildpackage\fR when determining the
+name of the \fI.changes\fR file.
+.TP
+\fB\-\-debs\-dir\fR \fIDIR\fR
+Look for the \fI.changes\fR and \fI.deb\fR files in directory
+\fIDIR\fR instead of the parent of the source directory.  This should
+either be an absolute path or relative to the top of the source
+directory.
+.TP
+\fB\-\-check-dirname-level\fR \fIN\fR
+See the above section "Directory name checking" for an explanation of
+this option.
+.TP
+\fB\-\-check-dirname-regex\fR \fIregex\fR
+See the above section "Directory name checking" for an explanation of
+this option.
+.TP
+\fB\-\-no-conf\fR, \fB\-\-noconf\fR
+Do not read any configuration files.  This can only be used as the
+first option given on the command-line.
+.TP
+\fB\-\-help\fR, \fB\-\-version\fR
+Show help message and version information respectively.
+.SH "CONFIGURATION VARIABLES"
+The two configuration files \fI/etc/devscripts.conf\fR and
+\fI~/.devscripts\fR are sourced in that order to set configuration
+variables.  Command line options can be used to override configuration
+file settings.  Environment variable settings are ignored for this
+purpose.  The currently recognised variables are:
+.TP
+.B DEBRELEASE_DEBS_DIR
+This specifies the directory in which to look for the \fI.changes\fR
+and \fI.deb\fR files, and is either an absolute path or relative to
+the top of the source tree.  This corresponds to the
+\fB\-\-debs\-dir\fR command line option.  This directive could be
+used, for example, if you always use \fBpbuilder\fR or
+\fBsvn-buildpackage\fR to build your packages.  Note that it also
+affects \fBdebrelease\fR(1) in the same way, hence the strange name of
+the option.
+.TP
+.BR DEVSCRIPTS_CHECK_DIRNAME_LEVEL ", " DEVSCRIPTS_CHECK_DIRNAME_REGEX
+See the above section "Directory name checking" for an explanation of
+these variables.  Note that these are package-wide configuration
+variables, and will therefore affect all \fBdevscripts\fR scripts
+which check their value, as described in their respective manpages and
+in \fBdevscripts.conf\fR(5).
+.SH "SEE ALSO"
+.BR debpkg (1)
+and
+.BR devscripts.conf (5).
+.SH AUTHOR
+\fBdebi\fR was originally written by Christoph Lameter
+<clameter@debian.org>.  The now-defunct script \fBdebit\fR was
+originally written by James R. Van Zandt <jrv@vanzandt.mv.com>.  They
+have been moulded into one script together with \fBdebc\fR(1) and
+parts extensively modified by Julian Gilbey <jdg@debian.org>.

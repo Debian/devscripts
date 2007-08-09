@@ -1,0 +1,139 @@
+.TH DEBRELEASE 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+debrelease \- a wrapper around dupload or dput
+.SH SYNOPSIS
+\fBdebrelease\fR [\fIdebrelease options\fR] [\fIdupload/dput options\fR]
+.SH DESCRIPTION
+\fBdebrelease\fR is a simple wrapper around \fBdupload\fR or
+\fBdput\fR.  It is called from within the source code tree of a
+package, and figures out the current version of a package.  It then
+looks for the corresponding \fI.changes\fR file (which lists the files
+needed to upload in order to release the package) in the parent
+directory of the source code tree and calls \fBdupload\fR or
+\fBdput\fR with the \fI.changes\fR file as parameter in order to
+perform the actual uploading.
+.PP
+Options may be given to \fBdebrelease\fR; except for the ones listed
+below, they are passed on unchanged to \fBdupload\fR or \fBdput\fR.
+The \fBdevscripts\fR configuration files are also read by
+\fBdebrelease\fR as described below.
+.SH "Directory name checking"
+In common with several other scripts in the \fBdevscripts\fR package,
+\fBdebrelease\fR will climb the directory tree until it finds a
+\fIdebian/changelog\fR file.  As a safeguard against stray files
+causing potential problems, it will examine the name of the parent
+directory once it finds the \fIdebian/changelog\fR file, and check
+that the directory name corresponds to the package name.  Precisely
+how it does this is controlled by two configuration file variables
+DEVSCRIPTS_CHECK_DIRNAME_LEVEL and DEVSCRIPTS_CHECK_DIRNAME_REGEX, and
+their corresponding command-line options \fB\-\-check-dirname-level\fR
+and \fB\-\-check-dirname-regex\fR.
+.PP
+DEVSCRIPTS_CHECK_DIRNAME_LEVEL can take the following values:
+.TP
+.B 0
+Never check the directory name.
+.TP
+.B 1
+Only check the directory name if we have had to change directory in
+our search for \fIdebian/changelog\fR.  This is the default behaviour.
+.TP
+.B 2
+Always check the directory name.
+.PP
+The directory name is checked by testing whether the current directory
+name (as determined by \fBpwd\fR(1)) matches the regex given by the
+configuration file option DEVSCRIPTS_CHECK_DIRNAME_REGEX or by the
+command line option \fB\-\-check-dirname-regex\fR \fIregex\fR.  Here
+\fIregex\fR is a Perl regex (see \fBperlre\fR(3perl)), which will be
+anchored at the beginning and the end.  If \fIregex\fR contains a '/',
+then it must match the full directory path.  If not, then it must
+match the full directory name.  If \fIregex\fR contains the string
+\'PACKAGE', this will be replaced by the source package name, as
+determined from the changelog.  The default value for the regex is:
+\'PACKAGE(-.*)?', thus matching directory names such as PACKAGE and
+PACKAGE-version.
+.SH OPTIONS
+.TP
+\fB\-\-dupload\fR, \fB\-\-dput\fR
+This specifies which uploader program to use; the default is
+\fBdupload\fR.
+.TP
+\fB\-S\fR
+If this option is used, or the default \fI.changes\fR file is
+not found but a source-only \fI.changes\fR file is present, then this
+source-only \fI.changes\fR file will be uploaded instead of an
+arch-specific one.
+.TP
+\fB\-a\fIdebian-architecture\fR, \fB\-t\fIGNU-system-type\fR
+See \fBdpkg-architecture\fR(1) for a description of these options.
+They affect the search for the \fI.changes\fR file.  They are provided
+to mimic the behaviour of \fBdpkg-buildpackage\fR when determining the
+name of the \fI.changes\fR file.  If a plain \fB\-t\fR is given, it is
+taken to be the \fBdupload\fR host-specifying option, and therefore
+signifies the end of the \fBdebrelease\fR-specific options.
+.TP
+\fB\-\-multi\fR
+Multiarch changes mode: This signifies that \fBdebrelease\fR should
+use the most recent file with the name pattern
+\fIpackage_version_*+*.changes\fR as the changes file, allowing for the
+changes files produced by \fBdpkg-cross\fR.
+.TP
+\fB\-\-debs\-dir\fR \fIDIR\fR
+Look for the \fI.changes\fR and \fI.deb\fR files in directory
+\fIDIR\fR instead of the parent of the source directory.  This should
+either be an absolute path or relative to the top of the source
+directory.
+.TP
+\fB\-\-check-dirname-level\fR \fIN\fR
+See the above section "Directory name checking" for an explanation of
+this option.
+.TP
+\fB\-\-check-dirname-regex\fR \fIregex\fR
+See the above section "Directory name checking" for an explanation of
+this option.
+.TP
+\fB\-\-no-conf\fR, \fB\-\-noconf\fR
+Do not read any configuration files.  This can only be used as the
+first option given on the command-line.
+.TP
+.BR \-\-help ", " \-h
+Display a help message and exit successfully.
+.TP
+.B \-\-version
+Display version and copyright information and exit successfully.
+.SH "CONFIGURATION VARIABLES"
+The two configuration files \fI/etc/devscripts.conf\fR and
+\fI~/.devscripts\fR are sourced in that order to set configuration
+variables.  Command line options can be used to override configuration
+file settings.  Environment variable settings are ignored for this
+purpose.  The currently recognised variables are:
+.TP
+.B DEBRELEASE_UPLOADER
+The currently recognised values are \fIdupload\fR and \fIdput\fR, and
+it specifies which uploader program should be used.  It corresponds to
+the \fB\-\-dupload\fR and \fB\-\-dput\fR command line options.
+.TP
+.B DEBRELEASE_DEBS_DIR
+This specifies the directory in which to look for the \fI.changes\fR
+and \fI.deb\fR files, and is either an absolute path or relative to
+the top of the source tree.  This corresponds to the
+\fB\-\-debs\-dir\fR command line option.  This directive could be
+used, for example, if you always use \fBpbuilder\fR or
+\fBsvn-buildpackage\fR to build your packages.  Note that it also
+affects \fBdebc\fR(1) and \fBdebi\fR(1).
+.TP
+.BR DEVSCRIPTS_CHECK_DIRNAME_LEVEL ", " DEVSCRIPTS_CHECK_DIRNAME_REGEX
+See the above section "Directory name checking" for an explanation of
+these variables.  Note that these are package-wide configuration
+variables, and will therefore affect all \fBdevscripts\fR scripts
+which check their value, as described in their respective manpages and
+in \fBdevscripts.conf\fR(5).
+.SH "SEE ALSO"
+.BR dupload (1),
+.BR dput (1)
+and
+.BR devscripts.conf (5).
+.SH AUTHOR
+Julian Gilbey <jdg@debian.org>, based on the original \fBrelease\fR
+script by Christoph Lameter <clameter@debian.org>.

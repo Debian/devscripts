@@ -1,0 +1,96 @@
+.\" Copyright 2005 Lars Wirzenius
+.\"
+.\" This program is free software; you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation; either version 2 of the License, or
+.\" (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program; if not, write to the Free Software
+.\" Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+.\"
+.TH DD\-LIST 1 2005-06-28 "Debian"
+.\" --------------------------------------------------------------------
+.SH NAME
+dd\-list \- nicely list .deb packages and their maintainers
+.\" --------------------------------------------------------------------
+.SH SYNOPSIS
+.BR dd\-list " [" \-hiuV "] [" \-\-help "] [" \-\-stdin "]"
+.BR "" "[" \-\-dctrl "] [" \-\-version "] [" \-\-uploaders "] [" package "...]"
+.\" --------------------------------------------------------------------
+.SH DESCRIPTION
+.B dd\-list
+produces nicely formatted lists of Debian (.deb) packages and their
+maintainers.
+.PP
+Input is a list of source or binary package names on the command line
+(or the standard input if 
+.B --stdin 
+is given). 
+Output is a list of the following format, where package names are source
+packages by default:
+.PP
+.nf
+.RS
+J. Random Developer <jrandom@debian.org>
+.RS
+j-random-package
+j-random-other
+.RE
+.PP
+Diana Hacker <diana@example.org>
+.RS
+fun-package
+more-fun-package
+.RE
+.RE
+.fi
+.PP
+This is useful when you want, for example, to produce a list of packages
+that need to attention from their maintainers, e.g., to be rebuilt when
+a library version transition happens.
+.\" --------------------------------------------------------------------
+.SH OPTIONS
+.TP
+.BR \-h , \-\-help
+Print brief help message.
+.TP
+.BR \-i , \-\-stdin
+Read package names from the standard input, instead of taking them
+from the command line. Package names are whitespace delimited.
+.TP
+.BR \-d , \-\-dctrl
+Read package information from standard input in the format of a Debian
+package control file. This includes the status file, or output of
+apt-cache. This is the fastest way to use dd-list, as it uses the
+maintainer information from the input instead of looking up the maintainer
+of each listed package.
+.IP
+If no \fISource:\fP line is given, the \fIPackage:\fP name is used for
+output, which might be a binary package name.
+.TP
+.BR \-u , \-\-uploaders
+Also list developers who are named as uploaders of packages, not only
+the maintainers; this is the default behaviour, use --nouploaders to
+prevent it. Uploaders are indicated with "(U)" appended to the package name.
+.TP
+.BR \-nou , \-\-nouploaders
+Only list package Maintainers, do not list Uploaders.
+.TP
+.BR \-b , \-\-print\-binary
+Use binary package names in the output instead of source package names
+(has no effect with \fB--dctrl\fP if the \fIPackage:\fP line contains
+source package names).
+.TP
+.BR \-V , \-\-version
+Print the version.
+.\" --------------------------------------------------------------------
+.SH AUTHOR
+Lars Wirzenius <liw@iki.fi>
+.P
+Joey Hess <joeyh@debian.org>

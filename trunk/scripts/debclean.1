@@ -1,0 +1,113 @@
+.TH DEBCLEAN 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+debclean \- clean up a sourcecode tree
+.SH SYNOPSIS
+\fBdebclean\fR [\fIoptions\fR]
+.SH DESCRIPTION
+\fBdebclean\fR walks through the directory tree starting at the
+directory tree in which it was invoked, and executes
+.I debian/rules clean
+for each Debian source directory encountered.  These directories are
+recognised by containing a debian/changelog file for a package whose
+name matches that of the directory.  Name matching is described below.
+.PP
+Also, if the \fB\-\-cleandebs\fR option is given, then in every
+directory containing a Debian source tree, all files named *.deb,
+*.changes and *.build are removed.  The .dsc, .diff.gz and
+the (.orig).tar.gz files are not touched so that the release can be
+reconstructed if necessary, and the .upload files are left so that
+\fBdebchange\fR functions correctly.  The \fB\-\-nocleandebs\fR option
+prevents this extra cleaning behaviour and the \fB\-\-cleandebs\fR
+option forces it.  The default is not to clean these files.
+.PP
+\fBdebclean\fR uses \fBdebuild\fR(1) to clean the source tree.
+.SH "Directory name checking"
+In common with several other scripts in the \fBdevscripts\fR package,
+\fBdebclean\fR will walk through the directory tree searching for
+\fIdebian/changelog\fR files.  As a safeguard against stray files
+causing potential problems, it will examine the name of the parent
+directory once it finds a \fIdebian/changelog\fR file, and check
+that the directory name corresponds to the package name.  Precisely
+how it does this is controlled by two configuration file variables
+DEVSCRIPTS_CHECK_DIRNAME_LEVEL and DEVSCRIPTS_CHECK_DIRNAME_REGEX, and
+their corresponding command-line options \fB\-\-check-dirname-level\fR
+and \fB\-\-check-dirname-regex\fR.
+.PP
+DEVSCRIPTS_CHECK_DIRNAME_LEVEL can take the following values:
+.TP
+.B 0
+Never check the directory name.
+.TP
+.B 1
+Only check the directory name if we have had to change directory in
+our search for \fIdebian/changelog\fR.  This is the default behaviour.
+.TP
+.B 2
+Always check the directory name.
+.PP
+The directory name is checked by testing whether the current directory
+name (as determined by \fBpwd\fR(1)) matches the regex given by the
+configuration file option DEVSCRIPTS_CHECK_DIRNAME_REGEX or by the
+command line option \fB\-\-check-dirname-regex\fR \fIregex\fR.  Here
+\fIregex\fR is a Perl regex (see \fBperlre\fR(3perl)), which will be
+anchored at the beginning and the end.  If \fIregex\fR contains a '/',
+then it must match the full directory path.  If not, then it must
+match the full directory name.  If \fIregex\fR contains the string
+\'PACKAGE', this will be replaced by the source package name, as
+determined from the changelog.  The default value for the regex is:
+\'PACKAGE(-.*)?', thus matching directory names such as PACKAGE and
+PACKAGE-version.
+.SH OPTIONS
+.TP
+.B \-\-cleandebs
+Also remove all .deb, .changes and .build files from the parent
+directory.
+.TP
+.B \-\-nocleandebs
+Do not remove the .deb, .changes and .build files from the parent
+directory; this is the default behaviour.
+.TP
+\fB\-\-check-dirname-level\fR \fIN\fR
+See the above section "Directory name checking" for an explanation of
+this option.
+.TP
+\fB\-\-check-dirname-regex\fR \fIregex\fR
+See the above section "Directory name checking" for an explanation of
+this option.
+.TP
+\fB\-\-no-conf\fR, \fB\-\-noconf\fR
+Do not read any configuration files.  This can only be used as the
+first option given on the command-line.
+.TP
+.B \-d
+Do not run dpkg-checkbuilddeps to check build dependencies.
+.TP
+.B \-\-help
+Display a help message and exit successfully.
+.TP
+.B \-\-version
+Display version and copyright information and exit successfully.
+.SH "CONFIGURATION VARIABLES"
+The two configuration files \fI/etc/devscripts.conf\fR and
+\fI~/.devscripts\fR are sourced in that order to set configuration
+variables.  Command line options can be used to override configuration
+file settings.  Environment variable settings are ignored for this
+purpose.  The currently recognised variables are:
+.TP
+.B DEBCLEAN_CLEANDEBS
+If this is set to \fIyes\fR, then it is the same as the
+\fB\-\-cleandebs\fR command line parameter being used.
+.TP
+.BR DEVSCRIPTS_CHECK_DIRNAME_LEVEL ", " DEVSCRIPTS_CHECK_DIRNAME_REGEX
+See the above section "Directory name checking" for an explanation of
+these variables.  Note that these are package-wide configuration
+variables, and will therefore affect all \fBdevscripts\fR scripts
+which check their value, as described in their respective manpages and
+in \fBdevscripts.conf\fR(5).
+.SH "SEE ALSO"
+.BR debuild (1)
+and
+.BR devscripts.conf (5).
+.SH AUTHOR
+Christoph Lameter <clameter@debian.org>;
+modifications by Julian Gilbey <jdg@debian.org>.

@@ -1,0 +1,101 @@
+.TH NMUDIFF 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+nmudiff \- email an NMU diff to the Debian BTS
+.SH SYNOPSIS
+\fBnmudiff\fR [\fIoptions\fR]
+.SH DESCRIPTION
+\fBnmudiff\fR should be run in the source tree of the package being
+NMUed, after the NMU is built. It assumes that the source packages
+(specifically, the .dsc and any corresponding tar and diff files) for
+both the previous version of the package and the newly built NMU
+version are in the parent directory. It then uses \fBdebdiff\fR to
+generate a diff between the previous version and the current NMU, and
+either runs mutt or an editor (using \fBsensible\-editor\fR) so that
+the mail message (including the diff) can be examined and modified;
+once you exit the editor the diff will be mailed to the Debian BTS.
+.PP
+The default behaviour is that if exactly one bug is closed by this NMU,
+then that bug will be mailed, otherwise a new bug will be submitted.
+This behaviour may be changed by command line options and
+configuration file options.
+.SH OPTIONS
+.TP
+.B \-\-new
+Instead of mailing the bug reports which are to be closed by this NMU,
+a new bug report is submitted directly to the BTS.
+.TP
+.B \-\-old
+Send the bug report to all of the bugs which are being closed by this
+NMU, rather than opening a new bug report.  This option has no effect
+if no bugs are being closed by this NMU.
+.TP
+\fB\-\-mutt\fR
+Use \fBmutt\fR(1) for editing and sending the message to the BTS
+(default behaviour).  This can be controlled using a configuration
+file option (see below).
+.TP
+\fB\-\-no\-mutt\fR
+Use \fBsensible\-editor\fR(1) to edit the message and then mail it
+directly using \fI/usr/bin/sendmail\fR.  This can be controlled using
+a configuration file option (see below).
+.TP
+\fB\-\-sendmail\fR \fISENDMAILCMD\fR
+Specify the sendmail command.  The command will be split on white
+space and will be interpreted by the shell.  Default is
+\fI/usr/sbin/sendmail\fR.  The \fI\-t\fR option will be automatically
+added if the command is \fI/usr/sbin/sendmail\fR or
+\fI/usr/sbin/exim*\fR.  For other mailers, if they require a \fI\-t\fR
+option, this must be included in the \fISENDMAILCMD\fR, for example:
+\-\-sendmail="/usr/sbin/mymailer -t".  This can also be set using the
+devscripts configuration files; see below.
+.TP
+\fB\-\-from\fR \fIEMAIL\fR
+If using the sendmail (\fB\-\-no\-mutt\fR) option, then the email to the
+BTS will be sent using the name and address in the environment
+variable DEBEMAIL.  If this is not set, then the variable EMAIL will
+be used instead.  These can be overridden using the \fB\-\-from\fR
+option.  The program will not work in this case if an email address
+cannot be determined.
+.TP
+\fB\-\-no\-conf\fR, \fB\-\-noconf\fR
+Do not read any configuration files.  This can only be used as the
+first option given on the command-line.
+.TP
+.B \-\-help
+Display a help message and exit successfully.
+.TP
+.B \-\-version
+Display version and copyright information and exit successfully.
+.SH "CONFIGURATION VARIABLES"
+The two configuration files \fI/etc/devscripts.conf\fR and
+\fI~/.devscripts\fR are sourced in that order to set configuration
+variables.  Command line options can be used to override configuration
+file settings.  Environment variable settings are ignored for this
+purpose.  The currently recognised variables are:
+.TP
+.B NMUDIFF_MUTT
+Can be "yes" (default) or "no", and specifies whether to use
+\fBmutt\fR to compose and send the message or not, as described
+above.
+.TP
+.B NMUDIFF_NEWREPORT
+This option controls whether a new bug report is made, or whether the
+diff is sent to the bugs closed by this NMU.  Can be "maybe"
+(default), which sends to the existing bug reports if exactly one bug
+is being closed; "yes", which always creates a new report, or "no",
+which always sends to the reports of the bugs being closed (unless no
+bugs are being closed, in which case a new report is always made).
+.TP
+.B BTS_SENDMAIL_COMMAND
+If this is set, specifies a sendmail command to use instead of
+/usr/sbin/sendmail.  Same as the --sendmail command line option.
+.SH "SEE ALSO"
+.BR debdiff (1),
+.BR sensible-editor (1)
+and
+.BR devscripts.conf (5).
+.SH AUTHOR
+\fBnmudiff\fR was written and is copyright 2006 by Steinar
+H. Gunderson and modified by Julian Gilbey <jdg@debian.org>.  The
+software may be freely redistributed under the terms and conditions of
+the GNU General Public License, version 2.
