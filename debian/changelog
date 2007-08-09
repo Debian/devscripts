@@ -56,8 +56,10 @@ devscripts (2.10.7) unstable; urgency=low
     it. (Closes: #426584)
   * tagpending: add a -t/--to option that adds a -v option to the
     dpkg-parsechangelog call. (Closes: #434145)
+  * debian/rules: use [ ! -f Makefile ] || $(MAKE) clean instead of -$(MAKE)
+    clean.
 
- -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Fri, 10 Aug 2007 00:08:54 +0200
+ -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Fri, 10 Aug 2007 00:35:06 +0200
 
 devscripts (2.10.6) unstable; urgency=low
 

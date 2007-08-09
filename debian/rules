@@ -34,7 +34,7 @@ build: build-arch build-indep
 clean:
 	dh_testdir
 	dh_testroot
-	-$(MAKE) clean
+	[ ! -f Makefile ] || $(MAKE) clean
 	rm -f build-stamp* test-stamp
 	dh_clean
 
