@@ -6,7 +6,7 @@ debcommit - commit changes to a package
 
 =head1 SYNOPSIS
 
-B<debcommit> [B<--release>] [B<--message=>I<text>] [B<--noact>] [B<--all> | I<files to commit>]
+B<debcommit> [B<--release>] [B<--message=>I<text>] [B<--noact>] [B<--changelog>] [B<--all> | I<files to commit>]
 
 =head1 DESCRIPTION
 
@@ -19,6 +19,11 @@ B<baz>, B<bzr>, B<tla> (arch).
 =head1 OPTIONS
 
 =over 4
+
+=item B<-c> B<--changelog>
+
+Specify an alternate location for the changelog. By default debian/changelog is
+used.
 
 =item B<-r> B<--release>
 
@@ -73,6 +78,7 @@ Generates a commit message based on new text in debian/changelog,
 and commit the change to a package\'s repository.
 
 Options:
+   -c --changelog     Specify the location of the changelog                 
    -r --release       Commit a release of the package and create a tag
    -m --message=text  Specify a commit message
    -n --noact         Dry run, no actual commits
@@ -97,11 +103,13 @@ my $release=0;
 my $message;
 my $noact=0;
 my $all=0;
+my $changelog="debian/changelog";
 if (! GetOptions(
 		 "release" => \$release,
 		 "message=s" => \$message,
 		 "noact" => \$noact,
 		 "all" => \$all,
+		 "changelog=s" => \$changelog,
 		 "help" => sub { usage(); exit 0; },
 		 "version" => sub { version(); exit 0; },
 		 )) {
@@ -109,18 +117,18 @@ if (! GetOptions(
 }
 
 my @files_to_commit = @ARGV;
-push @files_to_commit, 'debian/changelog' if @files_to_commit;
+push @files_to_commit, $changelog if @files_to_commit;
 
 my $prog=getprog();
-if (! -e "debian/changelog") {
-    die "debcommit: cannot find debian/changelog\n";
+if (! -e $changelog) {
+    die "debcommit: cannot find $changelog\n";
 }
 
 if ($release) {
-    open (C, "<debian/changelog") || die "debcommit: cannot read debian/changelog: $!";
+    open (C, "<$changelog" ) || die "debcommit: cannot read $changelog: $!";
     my $top=<C>;
     if ($top=~/UNRELEASED/) {
-	die "debcommit: debian/changelog says it's UNRELEASED\nTry running dch --release first\n";
+	die "debcommit: $changelog says it's UNRELEASED\nTry running dch --release first\n";
     }
     close C;
     
@@ -309,7 +317,7 @@ sub getmessage {
 	    @diffcmd = ($prog, 'diff');
 	}
 
-	open CHLOG, '-|', @diffcmd, 'debian/changelog'
+	open CHLOG, '-|', @diffcmd, $changelog
 	    or die "debcommit: cannot run $diffcmd[0]: $!\n";
 
 	foreach (<CHLOG>) {
