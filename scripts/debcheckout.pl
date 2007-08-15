@@ -20,6 +20,14 @@
 # Created: Tue, 14 Aug 2007 10:20:55 +0200
 # Last-Modified: $Date$ 
 
+# TODO issue for svn repository (but probably generalizable). DDs can't commit
+#      checked out repositories even if they have the permissions, since the
+#      svn:// URL is used. Think about an URL mapping or some
+#      parameter/configuration which can be used to solve this. Idea: if the
+#      user is a DD we can reuse some $DEB* envvar to find out the login name;
+#      then, if the URL is an alioth one, we can build the committable URL for
+#      the checkout from the svn:// URL
+
 =head1 NAME
 
 debcheckout - checkout the development repository of a Debian package
