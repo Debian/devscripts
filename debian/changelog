@@ -1,10 +1,15 @@
 devscripts (2.10.8) UNRELEASED; urgency=low
 
+  [ Mohammed Adnène Trojette ]
   * debcommit: allow an alternate location for the changelog. By default
-               debian/changelog is used. Thanks Sjoerd Simons for the
-               patch. (Closes: #437387)
+    debian/changelog is used. Thanks Sjoerd Simons for the patch.
+    (Closes: #437387)
 
- -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Sun, 12 Aug 2007 13:16:10 +0200
+  [ Stefano Zacchiroli ]
+  * debcheckout: new script to checkout the version control system repository
+    of a package
+
+ -- Stefano Zacchiroli <zack@debian.org>  Wed, 15 Aug 2007 15:30:31 +0200
 
 devscripts (2.10.7) unstable; urgency=low
 

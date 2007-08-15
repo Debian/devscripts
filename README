@@ -53,6 +53,8 @@ And now, in mostly alphabetical order, the scripts:
   either increment the version number or add an entry for the current
   version, depending upon the options given to it.
 
+- debcheckout: checkout the development repository of a debian package
+
 - debclean [fakeroot]: Clean a Debian source tree.  Debclean will
   clean all Debian source trees below the current directory, and if
   requested, also remove all files that were generated from these
