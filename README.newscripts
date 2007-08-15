@@ -3,6 +3,8 @@ List of things to do when adding a new script to devscripts package:
 1. Add the script under scripts/
    - the script should have .sh or .pl extension, otherwise have a look at
      scripts/Makefile and patch it
+   - if the script is perl and uses embedded POD for documentation, add an
+     entry to the GEN_MAN1S variable in scripts/Makefile
 2. Add an entry in README
 3. Add an entry in debian/control
 4. Add any necessary entries to the Suggests: line in debian/control
