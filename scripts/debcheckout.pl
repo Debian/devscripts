@@ -39,8 +39,8 @@ debcheckout - checkout the development repository of a Debian package
 =head1 DESCRIPTION
 
 B<debcheckout> retrieves the information about the Version Control System used
-to maintain a given Debian package, and then checks out the latest (working)
-version of the package from its repository.
+to maintain a given Debian package, and then checks out the latest
+(potentially unreleased) version of the package from its repository.
 
 The information about where the repository is available is expected to be found
 in B<Vcs-*> fields available in the source package record. For example, the vim
@@ -110,8 +110,8 @@ sub find_repo($) {
   return @repo;
 }
 
-sub checkout_repo($$) {
-  my ($repo_type, $repo_url) = @_;
+sub checkout_repo($$$) {
+  my ($repo_type, $repo_url, $pkg) = @_;
   my @cmd;
 
   switch ($repo_type) {
@@ -122,7 +122,10 @@ sub checkout_repo($$) {
     case "darcs"  { @cmd = ("darcs", "get", $repo_url); }
     case "git"    { @cmd = ("git", "clone", $repo_url); }
     case "hg"     { @cmd = ("hg", "clone", $repo_url); }
-    case "svn"    { @cmd = ("svn", "co", $repo_url); }
+    case "svn"    { 
+                    @cmd = length $pkg ? ("svn", "co", $repo_url, $pkg)
+		                       : ("svn", "co", $repo_url);
+                  }
     else          { die "unsupported version control system '$repo_type'.\n"; }
   }
   
@@ -172,7 +175,7 @@ EOF
 
   print_repo($repo_type, $repo_url) if $print_only;
   print "declared $repo_type repository at $repo_url\n" if $pkg;
-  my $rc = checkout_repo($repo_type, $repo_url);
+  my $rc = checkout_repo($repo_type, $repo_url, $pkg);
   if ($rc != 0) {
     print STDERR
       "checkout failed (the command shown above returned non-zero exit code)\n";

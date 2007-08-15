@@ -9,7 +9,11 @@ devscripts (2.10.8) UNRELEASED; urgency=low
   * debcheckout: new script to checkout the version control system repository
     of a package
 
- -- Stefano Zacchiroli <zack@debian.org>  Wed, 15 Aug 2007 15:30:31 +0200
+  [ Joey Hess ]
+  * debcheckout: when checking out svn repos, check them out into a directory
+    named for the package, to avoid checking out into ie, a trunk directory.
+
+ -- Joey Hess <joeyh@debian.org>  Wed, 15 Aug 2007 12:59:30 -0400
 
 devscripts (2.10.7) unstable; urgency=low
 
