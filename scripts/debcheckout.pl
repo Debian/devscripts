@@ -154,7 +154,7 @@ sub main() {
       "type|t=s" => \$repo_type,
       "help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); })
     or pod2usage({-exitval => 3});
-  pod2usage({-exitval => 3}) if ($#ARGV != 1);
+  pod2usage({-exitval => 3}) if ($#ARGV != 0);
 
   if (is_repo($ARGV[0])) {  # repo-url passed on the command line
     $repo_url = $ARGV[0];
