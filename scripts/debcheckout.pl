@@ -20,12 +20,6 @@
 # Created: Tue, 14 Aug 2007 10:20:55 +0200
 # Last-Modified: $Date$ 
 
-# TODO add a couple of options -a/-l. The former will make debcheckout work in
-#      "authenticated mode"; for repositories with known prefixes (basically:
-#      alioth's) that would rewrite the checkout URL so that commits are
-#      possible. The latter implies the former, but also permits to specify the
-#      alioth login name to be used for authenticated actions.
-
 =head1 NAME
 
 debcheckout - checkout the development repository of a Debian package
@@ -66,6 +60,15 @@ hg, svn.
 
 =over
 
+=item B<-a>, B<--auth>
+
+work in authenticated mode; this means that for known repositories (mainly those
+hosted on S<http://alioth.debian.org>) URL rewriting is attempted before
+checking out, to ensure that the repository can be committed to. For example,
+for subversion repositories hosted on alioth this means that
+S<svn+ssh://svn.debian.org/...> will be used instead of
+S<svn://svn.debian.org/...>
+
 =item B<-h>, B<--help>
 
 print a detailed help message and exit
@@ -81,12 +84,18 @@ URL
 set the repository type (defaults to "svn"), should be one of the currently
 supported repository types
 
+=item B<-u> I<USERNAME>, B<--user> I<USERNAME>
+
+specify the login name to be used in authenticated mode (see B<-a>). This option
+implies B<-a>: you don't need to specify both
+
 =back
 
 =head1 SEE ALSO
 
-apt-cache(8), Section 4.10.4 of the Debian Developer's Reference (for more
-information about Vcs-* fields)
+apt-cache(8), Section 4.10.4 of the Debian Developer's Reference and/or
+Bug#391023 in the Debian Bug Tracking System (for more information about Vcs-*
+fields)
 
 =head1 AUTHOR
 
@@ -100,12 +109,16 @@ use Switch;
 use Getopt::Long;
 use Pod::Usage;
 
+# Find the repository URL (and type) for a given package name, parsing Vcs-*
+# fields.
 sub find_repo($) {
   my ($pkg) = @_;
   my @repo = (0, "");
+  my $found = 0;
 
   open(APT, "apt-cache showsrc $pkg |");
   while (my $line = <APT>) {
+    $found = 1;
     chomp($line);
     if ($line =~ /^(x-)?vcs-(\w+):\s*(.*)$/i) {
       next if lc($2) eq "browser";
@@ -114,10 +127,12 @@ sub find_repo($) {
     }
   }
   close(APT);
-
+  die "unknown package '$pkg'\n" unless $found;
   return @repo;
 }
 
+# Patch the cmdline invocation of a VCS to ensure the repository is checkout to
+# a given target directory.
 sub set_destdir(@$$) {
   my ($repo_type, $destdir, @cmd) = @_;
 
@@ -128,11 +143,27 @@ sub set_destdir(@$$) {
     case "git"    { push @cmd, $destdir; }
     case "hg"     { push @cmd, $destdir; }
     case "svn"    { push @cmd, $destdir; }
-    else          { die "sorry, but I don't know how to set the destination directory for '$repo_type' repositories\n"; }
+    else { die "sorry, don't know how to set the destination directory for $repo_type repositories (patches welcome!)\n"; }
   }
   return @cmd;
 }
 
+# Patch a given repository URL to ensure that the checkoud out repository can be
+# committed to. Only works for well known repositories (mainly Alioth's).
+sub set_auth($$$) {
+  my ($repo_type, $url, $user) = @_;
+
+  $user .= "@" if length $user;
+  switch ($repo_type) {
+    case "bzr"	  { $url =~ s|^\w+://(bzr\.debian\.org)/(.*)|sftp://$user$1/srv/$1/bzr/$2|; }
+    case "git"    { $url =~ s|^\w+://(git\.debian\.org/.*)|git+ssh://$user$1|; }
+    case "svn"	  { $url =~ s|^\w+://(svn\.debian\.org)/(.*)|svn+ssh://$user$1/svn/$2|; }
+    else { die "sorry, don't know how to enable authentication for $repo_type repositories (patches welcome!)\n"; }
+  }
+  return $url;
+}
+
+# Checkout a given repository in a given destination directory.
 sub checkout_repo($$$) {
   my ($repo_type, $repo_url, $destdir) = @_;
   my @cmd;
@@ -146,7 +177,7 @@ sub checkout_repo($$$) {
     case "git"    { @cmd = ("git", "clone", $repo_url); }
     case "hg"     { @cmd = ("hg", "clone", $repo_url); }
     case "svn"    { @cmd = ("svn", "co", $repo_url); }
-    else          { die "unsupported version control system '$repo_type'.\n"; }
+    else { die "unsupported version control system '$repo_type'.\n"; }
   }
   @cmd = set_destdir($repo_type, $destdir, @cmd) if $destdir;
   print "@cmd ...\n";
@@ -154,6 +185,7 @@ sub checkout_repo($$$) {
   return ($? >> 8);
 }
 
+# Print information about a repository and quit.
 sub print_repo($$) {
   my ($repo_type, $repo_url) = @_;
 
@@ -161,41 +193,49 @@ sub print_repo($$) {
   exit(0);
 }
 
-sub is_repo($) {
+# Does a given string match the lexical rules for package names?
+sub is_package($) {
   my ($arg) = @_;
 
-  return ($arg !~ /^[a-z0-9.+-]+$/);  # lexical rule for package names
+  return ($arg =~ /^[a-z0-9.+-]+$/);  # lexical rule for package names
 }
 
 sub main() {
-  my $print_only = 0;
+  my $auth = 0;		  # authenticated mode
+  my $destdir = "";	  # destination directory
+  my $pkg = "";		  # package name
+  my $print_only = 0;	  # print only mode
   my $repo_type = "svn";  # default repo typo, overridden by '-t'
-  my $repo_url = "";
-  my $pkg = "";
-  my $destdir = "";
+  my $repo_url = "";	  # repository URL
+  my $user = "";	  # login name (authenticated mode only)
   GetOptions(
+      "auth|a" => \$auth,
+      "help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },
       "print|p" => \$print_only,
       "type|t=s" => \$repo_type,
-      "help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); })
-    or pod2usage({-exitval => 3});
+      "user|u=s" => \$user,
+    ) or pod2usage({-exitval => 3});
   pod2usage({-exitval => 3}) if ($#ARGV < 0 or $#ARGV > 1);
 
   $destdir = $ARGV[1] if $#ARGV > 0;
-  if (is_repo($ARGV[0])) {  # repo-url passed on the command line
+  if (not is_package($ARGV[0])) {  # repo-url passed on the command line
     $repo_url = $ARGV[0];
   } else {  # package name passed on the command line
     $pkg = $ARGV[0];
     ($repo_type, $repo_url) = find_repo($pkg);
     unless ($repo_type) {
       print <<EOF;
-No repository found for package '$pkg', a Vcs-* field is missing in its source record.
-If you know that the package is maintained via a Version Control System consider asking the maintainer to expose such information.
+No repository found for package '$pkg', a Vcs-* field is missing in its source
+record (see Debian Developer's Reference 4.10.4 and/or Bug#391023).
+If you know that the package is maintained via a Version Control System consider
+asking the maintainer to expose such information.
 EOF
       exit(1);
     }
   }
 
-  print_repo($repo_type, $repo_url) if $print_only;
+  $repo_url = set_auth($repo_type, $repo_url, $user) if $auth;
+  print_repo($repo_type, $repo_url) if $print_only; # ... then quit
   if (length $pkg) {
     print "declared $repo_type repository at $repo_url\n";
     $destdir = $pkg unless length $destdir;
