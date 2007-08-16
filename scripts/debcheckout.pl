@@ -20,13 +20,15 @@
 # Created: Tue, 14 Aug 2007 10:20:55 +0200
 # Last-Modified: $Date$ 
 
-# TODO issue for svn repository (but probably generalizable). DDs can't commit
-#      checked out repositories even if they have the permissions, since the
-#      svn:// URL is used. Think about an URL mapping or some
-#      parameter/configuration which can be used to solve this. Idea: if the
-#      user is a DD we can reuse some $DEB* envvar to find out the login name;
-#      then, if the URL is an alioth one, we can build the committable URL for
-#      the checkout from the svn:// URL
+# TODO add an option for specifying the target checkout directory (first need to
+#      check if that is possible in all VCS cmdline interfaces)
+# TODO defaults to checking out in a directory named as the package being
+#      checked out (i.e. generalize svn-specific patch by Joey)
+# TODO add a couple of options -a/-l. The former will make debcheckout work in
+#      "authenticated mode"; for repositories with known prefixes (basically:
+#      alioth's) that would rewrite the checkout URL so that commits are
+#      possible. The latter implies the former, but also permits to specify the
+#      alioth login name to be used for authenticated actions.
 
 =head1 NAME
 
