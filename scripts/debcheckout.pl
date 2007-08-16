@@ -153,13 +153,17 @@ sub set_destdir(@$$) {
 sub set_auth($$$) {
   my ($repo_type, $url, $user) = @_;
 
+  my $old_url = $url;
   $user .= "@" if length $user;
   switch ($repo_type) {
-    case "bzr"	  { $url =~ s|^\w+://(bzr\.debian\.org)/(.*)|sftp://$user$1/srv/$1/bzr/$2|; }
+    case "bzr"	  { $url =~ s|^\w+://(bzr\.debian\.org)/(.*)|sftp://$user$1/bzr/$2|; }
     case "git"    { $url =~ s|^\w+://(git\.debian\.org/.*)|git+ssh://$user$1|; }
+    case "hg"     { $url =~ s|^\w+://(hg\.debian\.org/.*)|ssh://$user$1|; }
     case "svn"	  { $url =~ s|^\w+://(svn\.debian\.org)/(.*)|svn+ssh://$user$1/svn/$2|; }
     else { die "sorry, don't know how to enable authentication for $repo_type repositories (patches welcome!)\n"; }
   }
+  die "can't use authenticated mode on repository '$url' since it is not a known repository (e.g. alioth)\n"
+    if $url eq $old_url;
   return $url;
 }
 
