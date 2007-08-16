@@ -20,10 +20,6 @@
 # Created: Tue, 14 Aug 2007 10:20:55 +0200
 # Last-Modified: $Date$ 
 
-# TODO add an option for specifying the target checkout directory (first need to
-#      check if that is possible in all VCS cmdline interfaces)
-# TODO defaults to checking out in a directory named as the package being
-#      checked out (i.e. generalize svn-specific patch by Joey)
 # TODO add a couple of options -a/-l. The former will make debcheckout work in
 #      "authenticated mode"; for repositories with known prefixes (basically:
 #      alioth's) that would rewrite the checkout URL so that commits are
@@ -38,9 +34,9 @@ debcheckout - checkout the development repository of a Debian package
 
 =over
 
-=item B<debcheckout> [B<-p>] I<PACKAGE>
+=item B<debcheckout> [I<OPTIONS>] I<PACKAGE> [I<DESTDIR>]
 
-=item B<debcheckout> [B<-t> I<REPOSITORY_TYPE>] I<REPOSITORY_URL>
+=item B<debcheckout> [I<OPTIONS>] I<REPOSITORY_URL> [I<DESTDIR>]
 
 =item B<debcheckout> B<--help>
 
@@ -49,8 +45,10 @@ debcheckout - checkout the development repository of a Debian package
 =head1 DESCRIPTION
 
 B<debcheckout> retrieves the information about the Version Control System used
-to maintain a given Debian package, and then checks out the latest
-(potentially unreleased) version of the package from its repository.
+to maintain a given Debian package (the I<PACKAGE> argument), and then checks
+out the latest (potentially unreleased) version of the package from its
+repository.  By default the repository is checked out to the I<PACKAGE>
+directory; it can be overridden providing the I<DESTDIR> argument.
 
 The information about where the repository is available is expected to be found
 in B<Vcs-*> fields available in the source package record. For example, the vim
@@ -68,6 +66,10 @@ hg, svn.
 
 =over
 
+=item B<-h>, B<--help>
+
+print a detailed help message and exit
+
 =item B<-p>, B<--print>
 
 only print information about the package repository, without checking it out;
@@ -78,10 +80,6 @@ URL
 
 set the repository type (defaults to "svn"), should be one of the currently
 supported repository types
-
-=item B<-h>, B<--help>
-
-print a detailed help message and exit
 
 =back
 
@@ -120,8 +118,23 @@ sub find_repo($) {
   return @repo;
 }
 
+sub set_destdir(@$$) {
+  my ($repo_type, $destdir, @cmd) = @_;
+
+  switch ($repo_type) {
+    case "bzr"    { push @cmd, $destdir; }
+    case "cvs"    { my $module = pop @cmd; push @cmd, ("-d", $destdir, $module); }
+    case "darcs"  { push @cmd, $destdir; }
+    case "git"    { push @cmd, $destdir; }
+    case "hg"     { push @cmd, $destdir; }
+    case "svn"    { push @cmd, $destdir; }
+    else          { die "sorry, but I don't know how to set the destination directory for '$repo_type' repositories\n"; }
+  }
+  return @cmd;
+}
+
 sub checkout_repo($$$) {
-  my ($repo_type, $repo_url, $pkg) = @_;
+  my ($repo_type, $repo_url, $destdir) = @_;
   my @cmd;
 
   switch ($repo_type) {
@@ -132,13 +145,10 @@ sub checkout_repo($$$) {
     case "darcs"  { @cmd = ("darcs", "get", $repo_url); }
     case "git"    { @cmd = ("git", "clone", $repo_url); }
     case "hg"     { @cmd = ("hg", "clone", $repo_url); }
-    case "svn"    { 
-                    @cmd = length $pkg ? ("svn", "co", $repo_url, $pkg)
-		                       : ("svn", "co", $repo_url);
-                  }
+    case "svn"    { @cmd = ("svn", "co", $repo_url); }
     else          { die "unsupported version control system '$repo_type'.\n"; }
   }
-  
+  @cmd = set_destdir($repo_type, $destdir, @cmd) if $destdir;
   print "@cmd ...\n";
   system @cmd;
   return ($? >> 8);
@@ -162,13 +172,15 @@ sub main() {
   my $repo_type = "svn";  # default repo typo, overridden by '-t'
   my $repo_url = "";
   my $pkg = "";
+  my $destdir = "";
   GetOptions(
       "print|p" => \$print_only,
       "type|t=s" => \$repo_type,
       "help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); })
     or pod2usage({-exitval => 3});
-  pod2usage({-exitval => 3}) if ($#ARGV != 0);
+  pod2usage({-exitval => 3}) if ($#ARGV < 0 or $#ARGV > 1);
 
+  $destdir = $ARGV[1] if $#ARGV > 0;
   if (is_repo($ARGV[0])) {  # repo-url passed on the command line
     $repo_url = $ARGV[0];
   } else {  # package name passed on the command line
@@ -184,8 +196,11 @@ EOF
   }
 
   print_repo($repo_type, $repo_url) if $print_only;
-  print "declared $repo_type repository at $repo_url\n" if $pkg;
-  my $rc = checkout_repo($repo_type, $repo_url, $pkg);
+  if (length $pkg) {
+    print "declared $repo_type repository at $repo_url\n";
+    $destdir = $pkg unless length $destdir;
+  }
+  my $rc = checkout_repo($repo_type, $repo_url, $destdir);
   if ($rc != 0) {
     print STDERR
       "checkout failed (the command shown above returned non-zero exit code)\n";
