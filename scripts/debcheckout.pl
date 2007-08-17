@@ -137,12 +137,9 @@ sub set_destdir(@$$) {
   my ($repo_type, $destdir, @cmd) = @_;
 
   switch ($repo_type) {
-    case "bzr"    { push @cmd, $destdir; }
-    case "cvs"    { my $module = pop @cmd; push @cmd, ("-d", $destdir, $module); }
-    case "darcs"  { push @cmd, $destdir; }
-    case "git"    { push @cmd, $destdir; }
-    case "hg"     { push @cmd, $destdir; }
-    case "svn"    { push @cmd, $destdir; }
+    case "cvs"	{ my $module = pop @cmd; push @cmd, ("-d", $destdir, $module); }
+    case /^bzr|darcs|git|hg|svn$/
+		{ push @cmd, $destdir; }
     else { die "sorry, don't know how to set the destination directory for $repo_type repositories (patches welcome!)\n"; }
   }
   return @cmd;
