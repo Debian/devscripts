@@ -138,7 +138,7 @@ sub set_destdir(@$$) {
 
   switch ($repo_type) {
     case "cvs"	{ my $module = pop @cmd; push @cmd, ("-d", $destdir, $module); }
-    case /^bzr|darcs|git|hg|svn$/
+    case /^(bzr|darcs|git|hg|svn)$/
 		{ push @cmd, $destdir; }
     else { die "sorry, don't know how to set the destination directory for $repo_type repositories (patches welcome!)\n"; }
   }
