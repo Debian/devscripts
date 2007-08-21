@@ -288,7 +288,7 @@ while (@files) {
 	if $opt_verbose;
 
     $content =~ tr/\t\r\n/ /;
-    $content =~ tr% A-Za-z.,@;0-9\(\)\n\r/-%%cd;
+    $content =~ tr% A-Za-z.,@;0-9\(\)/-%%cd;
     $content =~ s#//##g;
     $content =~ tr/ //s;
 

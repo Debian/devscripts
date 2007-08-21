@@ -4,7 +4,7 @@ devscripts (2.10.8) UNRELEASED; urgency=low
   * debcommit: allow an alternate location for the changelog. By default
     debian/changelog is used. Thanks Sjoerd Simons for the patch.
     (Closes: #437387)
-  * debuild: 
+  * debuild:
      + keep DISPLAY, XAUTHORITY and GNOME_KEYRING_SOCKET environment
        variables around for safe keeping before we destroy the
        environment, and re-set them before running debsign; thanks Steve
@@ -20,7 +20,10 @@ devscripts (2.10.8) UNRELEASED; urgency=low
   * debcheckout: when checking out svn repos, check them out into a directory
     named for the package, to avoid checking out into ie, a trunk directory.
 
- -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Tue, 21 Aug 2007 22:00:24 +0200
+  [ Adam D. Barratt ]
+  * licensecheck: tidy up the pre-check regexes
+
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 21 Aug 2007 23:25:12 +0100
 
 devscripts (2.10.7) unstable; urgency=low
 
