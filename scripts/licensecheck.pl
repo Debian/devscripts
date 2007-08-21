@@ -120,6 +120,7 @@ Adam D. Barratt <adam@adam-barratt.org.uk>
 =cut
 
 use strict;
+use warnings;
 use Getopt::Long;
 use File::Basename;
 
@@ -273,6 +274,7 @@ while (@files) {
 		$match =~ s/\(C\)//;
 		$match =~ s/^\s+//;
 		$match =~ s/\s{2,}/ /g;
+		$match =~ s/\\@/@/g;
 
 		# Don't add duplicate entries
 		if ($copyright !~ m%$match%i) {

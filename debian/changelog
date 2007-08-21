@@ -21,9 +21,11 @@ devscripts (2.10.8) UNRELEASED; urgency=low
     named for the package, to avoid checking out into ie, a trunk directory.
 
   [ Adam D. Barratt ]
-  * licensecheck: tidy up the pre-check regexes
-
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 21 Aug 2007 23:25:12 +0100
+  * licensecheck
+    + tidy up the pre-check regexes
+    + unescape "\@"s in copyright statements
+ 
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 21 Aug 2007 23:34:58 +0100
 
 devscripts (2.10.7) unstable; urgency=low
 
