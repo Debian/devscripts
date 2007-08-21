@@ -289,6 +289,7 @@ while (@files) {
 
     $content =~ tr/\t\r\n/ /;
     $content =~ tr% A-Za-z.,@;0-9\(\)\n\r/-%%cd;
+    $content =~ s#//##g;
     $content =~ tr/ //s;
 
     print "$file: " . parselicense($content) . "\n";

@@ -10,6 +10,7 @@ devscripts (2.10.8) UNRELEASED; urgency=low
        environment, and re-set them before running debsign; thanks Steve
        Kovalik for the patch. (Closes: #322208)
      + also keep GPG_AGENT_INFO and SSH_AUTH_SOCK.
+  * licensecheck: decruft // comments.
 
   [ Stefano Zacchiroli ]
   * debcheckout: new script to checkout the version control system repository
