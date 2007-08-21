@@ -581,7 +581,7 @@ $ENV{'TERM'}='dumb' unless exists $ENV{'TERM'};
 
 # Store a few variables for safe keeping.
 my %store_vars;
-foreach my $var (('DISPLAY', 'GNOME_KEYRING_SOCKET', 'XAUTHORITY')) {
+foreach my $var (('DISPLAY', 'GNOME_KEYRING_SOCKET', 'GPG_AGENT_INFO', 'SSH_AUTH_SOCK', 'XAUTHORITY')) {
     $store_vars{$var} = $ENV{$var} if defined $ENV{$var};
 }
 
