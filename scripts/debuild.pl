@@ -579,6 +579,12 @@ if ($save_vars{'PATH'}) {
 $save_vars{'PATH'}=1;
 $ENV{'TERM'}='dumb' unless exists $ENV{'TERM'};
 
+# Store a few variables for safe keeping.
+my %store_vars;
+foreach my $var (('DISPLAY', 'GNOME_KEYRING_SOCKET', 'XAUTHORITY')) {
+    $store_vars{$var} = $ENV{$var} if defined $ENV{$var};
+}
+
 unless ($preserve_env) {
     foreach my $var (keys %ENV) {
 	delete $ENV{$var} unless
@@ -1151,6 +1157,9 @@ if ($command_version eq 'dpkg') {
     run_hook('signing', ($signchanges || (! $sourceonly and $signsource)) );
 
     if ($signchanges) {
+    foreach my $var (keys %store_vars) {
+        $ENV{$var} = $store_vars{$var};
+    }  
 	print "Now signing changes and any dsc files...\n";
 	system('debsign', @debsign_opts, $changes) == 0
 	    or fatal "running debsign failed";
