@@ -46,7 +46,7 @@ override the default message.
 
 Do not actually do anything, but do print the commands that would be run.
 
-=item B<-c> B<--confirm>
+=item B<-C> B<--confirm>
 
 Display the generated commit message and ask for confirmation before committing
 it.
