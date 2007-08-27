@@ -6,7 +6,7 @@ debcommit - commit changes to a package
 
 =head1 SYNOPSIS
 
-B<debcommit> [B<--release>] [B<--message=>I<text>] [B<--noact>] [B<--changelog>] [B<--all> | I<files to commit>]
+B<debcommit> [B<--release>] [B<--message=>I<text>] [B<--noact>] [B<--confirm>] [B<--changelog=>I<path>] [B<--all> | I<files to commit>]
 
 =head1 DESCRIPTION
 
@@ -20,7 +20,7 @@ B<baz>, B<bzr>, B<tla> (arch).
 
 =over 4
 
-=item B<-c> B<--changelog>
+=item B<-c> B<--changelog> I<path>
 
 Specify an alternate location for the changelog. By default debian/changelog is
 used.
@@ -45,6 +45,11 @@ override the default message.
 =item B<-n> B<--noact>
 
 Do not actually do anything, but do print the commands that would be run.
+
+=item B<-c> B<--confirm>
+
+Display the generated commit message and ask for confirmation before committing
+it.
 
 =item B<-a> B<--all>
 
@@ -78,13 +83,14 @@ Generates a commit message based on new text in debian/changelog,
 and commit the change to a package\'s repository.
 
 Options:
-   -c --changelog     Specify the location of the changelog                 
-   -r --release       Commit a release of the package and create a tag
-   -m --message=text  Specify a commit message
-   -n --noact         Dry run, no actual commits
-   -a --all           Commit all files (default except for git)
-   -h --help          This message
-   -v --version       Version information
+   -c --changelog=path Specify the location of the changelog                 
+   -r --release        Commit a release of the package and create a tag
+   -m --message=text   Specify a commit message
+   -n --noact          Dry run, no actual commits
+   -C --confirm        Ask for confirmation of the message before commit
+   -a --all            Commit all files (default except for git)
+   -h --help           This message
+   -v --version        Version information
 EOT
 }
 
@@ -102,18 +108,21 @@ EOF
 my $release=0;
 my $message;
 my $noact=0;
+my $confirm=0;
 my $all=0;
 my $changelog="debian/changelog";
+Getopt::Long::Configure("bundling");
 if (! GetOptions(
-		 "release" => \$release,
-		 "message=s" => \$message,
-		 "noact" => \$noact,
-		 "all" => \$all,
-		 "changelog=s" => \$changelog,
-		 "help" => sub { usage(); exit 0; },
-		 "version" => sub { version(); exit 0; },
+		 "r|release" => \$release,
+		 "m|message=s" => \$message,
+		 "n|noact" => \$noact,
+		 "C|confirm" => \$confirm,
+		 "a|all" => \$all,
+		 "c|changelog=s" => \$changelog,
+		 "h|help" => sub { usage(); exit 0; },
+		 "v|version" => sub { version(); exit 0; },
 		 )) {
-    die "Usage: debcommit [--release] [--message=text] [--noact] [--all | files to commit]\n";
+    die "Usage: debcommit [--release] [--message=text] [--noact] [--confirm] [--changelog=path] [--all | files to commit]\n";
 }
 
 my @files_to_commit = @ARGV;
@@ -141,7 +150,7 @@ if ($release) {
 }
 else {
     $message=getmessage() if ! defined $message;
-    commit($message);
+    commit($message) if not $confirm or confirm($message);
 }
 
 sub getprog {
@@ -341,6 +350,17 @@ sub getmessage {
 
     chomp $ret;
     return $ret;
+}
+
+sub confirm {
+    my $message=shift;
+    print $message, "\n--\n";
+    while(1) {
+        print "OK to commit? [Y/n] ";
+        $_ = <STDIN>;
+        return 0 if /^n/i;
+        return 1 if /^(y|$)/i;
+    }
 }
 
 =head1 LICENSE
