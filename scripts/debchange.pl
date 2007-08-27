@@ -857,7 +857,7 @@ if (($opt_i || $opt_n || $opt_qa || $opt_bpo || $opt_v || $opt_d) && ! $opt_crea
 	    } elsif ($opt_bpo and not $start =~ /~bpo\.$/) {
 		# If it's not already a backport make it so
 		# otherwise we can be safe if we behave like dch -i
-		$end .= "~bpo.1";
+		$end .= "~bpo40+1";
 	    } else {
 		$end++;
 	    }
