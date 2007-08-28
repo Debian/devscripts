@@ -68,6 +68,7 @@ Valid options are:
                             (multiple permitted)
    --quiet, -q            Be quiet if no differences were found
    --exclude PATTERN      Exclude files that match PATTERN
+   --ignore-space, -w     Ignore whitespace in diffs
 
 Default settings modified by devscripts configuration files:
 $modified_conf_msg
@@ -91,6 +92,7 @@ my $compare_control = 1;
 my $controlfiles = 'control';
 my $show_moved = 0;
 my $wdiff_opt = '';
+my @diff_opts = ();
 
 my $quiet = 0;
 
@@ -220,6 +222,10 @@ while (@ARGV) {
     elsif ($ARGV[0] eq '--control') { $compare_control = 1; shift; }
     elsif ($ARGV[0] eq '--from') { $type = 'debs'; last; }
     elsif ($ARGV[0] =~ /^--w([plt])$/) { $wdiff_opt = "-$1"; shift; }
+    elsif ($ARGV[0] =~ /^(--ignore-space|-w)$/) {
+	push @diff_opts, "-w"; 
+	shift;
+    }
     elsif ($ARGV[0] =~ /^--no-?conf$/) {
 	fatal "--no-conf is only acceptable as the first command-line option!";
     }
@@ -421,7 +427,12 @@ elsif ($type eq 'dsc') {
     if ($origs[1] eq $origs[2] and defined $diffs[1] and defined $diffs[2]
 	and scalar(@excludes) == 0 and $use_interdiff) {
 	# same orig tar ball and interdiff exists
-	my $rv = system('interdiff', '-z', $diffs[1], $diffs[2]);
+	my @cmd = ('interdiff', '-z');
+	for my $diff_opt (@diff_opts) {
+	    push @cmd, $diff_opt;
+	}
+	push @cmd, ($diffs[1], $diffs[2]);
+	my $rv = system(@cmd);
 	if ($rv) {
 	    fatal "interdiff -z $diffs[1] $diffs[2] failed!";
 	}
@@ -449,6 +460,9 @@ elsif ($type eq 'dsc') {
 	    closedir(DIR);
 	}
 	my @command = ("diff", "-Nru");
+	for my $diff_opt (@diff_opts) {
+	    push @command, $diff_opt;
+	}
 	for my $exclude (@excludes) {
 	    push @command, ("--exclude", $exclude);
 	}
