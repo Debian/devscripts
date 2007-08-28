@@ -427,12 +427,7 @@ elsif ($type eq 'dsc') {
     if ($origs[1] eq $origs[2] and defined $diffs[1] and defined $diffs[2]
 	and scalar(@excludes) == 0 and $use_interdiff) {
 	# same orig tar ball and interdiff exists
-	my @cmd = ('interdiff', '-z');
-	for my $diff_opt (@diff_opts) {
-	    push @cmd, $diff_opt;
-	}
-	push @cmd, ($diffs[1], $diffs[2]);
-	my $rv = system(@cmd);
+	my $rv = system('interdiff', '-z', @diff_opts, $diffs[1], $diffs[2]);
 	if ($rv) {
 	    fatal "interdiff -z $diffs[1] $diffs[2] failed!";
 	}
