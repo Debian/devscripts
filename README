@@ -62,9 +62,10 @@ And now, in mostly alphabetical order, the scripts:
   the .diffs and original files, though, so that the binaries and
   other files can be rebuilt if necessary.
 
-- debcommit [cvs | subversion | tla | bzr | git | mercurial]: Commits changes
-  to cvs, svn, arch, git, or hg, using new entries in debian/changelog as the
-  commit message. Also supports tagging Debian package releases.
+- debcommit [cvs | subversion | tla | bzr | git-core | mercurial]:
+  Commits changes to cvs, svn, arch, git, or hg, using new entries in
+  debian/changelog as the commit message. Also supports tagging Debian
+  package releases.
 
 - debdiff [wdiff, patchutils]: A program which examines two .deb files
   or two .changes files and reports on any difference found in their

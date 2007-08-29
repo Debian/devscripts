@@ -31,7 +31,11 @@ devscripts (2.10.8) UNRELEASED; urgency=low
     + decruft © as well as (C)
   * debdiff: allow whitespace to be ignored in diffs (Closes: #439163)
 
- -- Adam D. Barratt <adam@adsl.funky-badger.org>  Tue, 28 Aug 2007 11:22:14 +0100
+  [ Julian Gilbey ]
+  * The package should suggest git-core, not git (Closes: #440018)
+  * debchange: update for new BTS layout (pkgreport.cgi syntax changed)
+
+ -- Julian Gilbey <jdg@debian.org>  Wed, 29 Aug 2007 12:56:59 +0100
 
 devscripts (2.10.7) unstable; urgency=low
 

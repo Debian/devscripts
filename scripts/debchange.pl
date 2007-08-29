@@ -637,7 +637,7 @@ if (@closes and $opt_query) { # and we have to query the BTS
 		$lastbug=$1;
 	    }
 	    elsif (defined $lastbug and
-		   m%<a(?: class=\".*?\")? href=\"pkgreport.cgi\?pkg=([a-z0-9\+\-\.]*)%i) {
+		   m%<a(?: class=\".*?\")? href=\"pkgreport.cgi\?(?:[^\"]*?;)(?:(pkg|package))=([a-z0-9\+\-\.]*)%i) {
 		push @{$bugs{$lastbug}}, $1
 		    if exists $bugs{$lastbug};
 		$lastbug = undef;

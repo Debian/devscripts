@@ -17,7 +17,7 @@ Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), sed (>= 2.95),
  ${shlibs:Depends}, ${misc:Depends}
 Recommends: fakeroot
 Suggests: devscripts-el, at, build-essential, cvs-buildpackage,
- cvs | subversion | svk | tla | bzr | git | mercurial, debian-keyring,
+ cvs | subversion | svk | tla | bzr | git-core | mercurial, debian-keyring,
  dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, libcrypt-ssleay-perl,
  libdigest-md5-perl, libsoap-lite-perl, libtimedate-perl, liburi-perl,
  libwww-perl, lintian | linda, mailx | mailutils, man-db, mutt, patch,
@@ -49,7 +49,7 @@ Description: Scripts to make the life of a Debian Package maintainer easier
   - debclean: purge a Debian source tree [fakeroot]
   - debcommit: commit changes to cvs, svn, svk, tla, bzr, git, or hg, basing
     commit message on changelog
-    [cvs | subversion | svk | tla | bzr | git | mercurial]
+    [cvs | subversion | svk | tla | bzr | git-core | mercurial]
   - debdiff: compare two versions of a Debian package to check for
     added and removed files [wdiff, patchutils]
   - debi: install a just-built package
