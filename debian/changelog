@@ -30,14 +30,17 @@ devscripts (2.10.8) UNRELEASED; urgency=low
     + unescape "\@"s in copyright statements
     + decruft © as well as (C)
   * debdiff: allow whitespace to be ignored in diffs (Closes: #439163)
-  * debcommit: Allow changes to only debian/changelog to be committed.
-    Thanks to Martin F Krafft for the patch. (Closes: #439992)
+  * debcommit
+    + Allow changes to only debian/changelog to be committed.
+      Thanks to Martin F Krafft for the patch. (Closes: #439992)
+    + Allow the leading "* " to be stripped from commit messages
+      (Closes: #440013)
 
   [ Julian Gilbey ]
   * The package should suggest git-core, not git (Closes: #440018)
   * debchange: update for new BTS layout (pkgreport.cgi syntax changed)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed, 29 Aug 2007 13:09:22 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed, 29 Aug 2007 19:46:55 +0100
 
 devscripts (2.10.7) unstable; urgency=low
 
