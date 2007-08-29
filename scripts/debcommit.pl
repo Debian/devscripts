@@ -126,7 +126,9 @@ if (! GetOptions(
 }
 
 my @files_to_commit = @ARGV;
-push @files_to_commit, $changelog if @files_to_commit;
+if (@files_to_commit && !grep($changelog, @files_to_commit)) {
+    push @files_to_commit, $changelog;
+}
 
 my $prog=getprog();
 if (! -e $changelog) {
