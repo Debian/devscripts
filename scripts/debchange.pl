@@ -663,7 +663,7 @@ if (@closes and $opt_query) { # and we have to query the BTS
 		} else {
 		    my ($bugtitle) = ($bug =~ m%<TITLE>.*?\#$close - (.*?)</TITLE>%);
 		    $bugtitle ||= '';
-		    my ($bugpkg) = ($bug =~ m%<a(?: class=\".*?\")? href=\"pkgreport.cgi\?pkg=([a-z0-9\+\-\.]*)%i);
+		    my ($bugpkg) = ($bug =~ m%<a(?: class=\".*?\")? href=\"pkgreport.cgi\?(?:[^\"]*?;)(?:(pkg|package))=([a-z0-9\+\-\.]*)%i);
 		    $bugpkg ||= '?';
 		    my ($bugsrcpkg) = ($bug =~ m%<a(?: class=\".*?\")? href=\"pkgreport.cgi\?src=([a-z0-9\+\-\.]*)%i);
 		    $bugsrcpkg ||= '?';
