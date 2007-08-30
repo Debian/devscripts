@@ -2286,8 +2286,8 @@ sub download {
 	    # do nothing
 	}
 
-	return $livepage;
 	chdir $oldcwd or die "bts: chdir $oldcwd failed: $!\n";
+	return $livepage;
     } else {
 	die "bts: couldn't download $url:\n$msg\n";
     }
