@@ -32,7 +32,7 @@ devscripts (2.10.8) UNRELEASED; urgency=low
   * debdiff: allow whitespace to be ignored in diffs (Closes: #439163)
   * debcommit
     + Allow changes to only debian/changelog to be committed.
-      Thanks to Martin F Krafft for the patch. (Closes: #439992)
+      Thanks to martin f krafft for the patch. (Closes: #439992)
     + Allow the leading "* " to be stripped from commit messages
       (Closes: #440013)
   * bts: Change working directory back to its original location before
