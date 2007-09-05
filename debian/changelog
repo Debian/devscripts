@@ -37,12 +37,14 @@ devscripts (2.10.8) UNRELEASED; urgency=low
       (Closes: #440013)
   * bts: Change working directory back to its original location before
     running the browser (Closes: #436095)
+  * checkbashisms: Catch the use of test/[ with a unary -a operator. Thanks to
+    Matthew Wilcox for the suggestion.
 
   [ Julian Gilbey ]
   * The package should suggest git-core, not git (Closes: #440018)
   * debchange: update for new BTS layout (pkgreport.cgi syntax changed)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Thu, 30 Aug 2007 20:07:40 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed, 05 Sep 2007 22:58:38 +0100
 
 devscripts (2.10.7) unstable; urgency=low
 

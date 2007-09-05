@@ -134,6 +134,7 @@ foreach my $filename (@ARGV) {
 		'\blet\s' =>                   q<let ...>,
 		'\$RANDOM\b' =>                q<$RANDOM>,
 		'(?<!\$)\(\(' =>               q<'((' should be '$(('>,
+		'(\[|test)\s+-a' =>            q<test with unary -a (should be -e)>,
 	    );
 
 	    if ($opt_echo) {
