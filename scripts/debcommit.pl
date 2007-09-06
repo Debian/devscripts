@@ -29,8 +29,6 @@ used.
 
 Commit a release of the package. The version number is determined from
 debian/changelog, and is used to tag the package in the repository.
-bzr does not yet support symbolic tags, so you will only get a normal
-commit.
 
 Note that svn/svk tagging conventions vary, so debcommit uses
 L<svnpath(1)> to determine where the tag should be placed in the
@@ -369,7 +367,13 @@ sub tag {
 	}
     }
     elsif ($prog eq 'bzr') {
-	warn "No support for symbolic tags in bzr yet.\n";
+	if (action("$prog tags >/dev/null 2>&1")) {
+	    if (! action($prog, "tag", $tag)) {
+		die "debcommit: failed tagging with $tag\n";
+	    }
+        } else {
+		die "debcommit: bazaar or branch version too old to support tags\n";
+        }
     }
     elsif ($prog eq 'git') {
 	    $tag=~s/^[0-9]+://; # strip epoch

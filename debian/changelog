@@ -7,6 +7,7 @@ devscripts (2.10.8) UNRELEASED; urgency=low
        for the patches. (Closes: #437387)
      + add a -C/--confirm option to confirm the commit message. Thanks Laurent
        Bigonville for forwardporting the patch from Ubuntu. (Closes: #439054)
+     + allow tagging with bazaar. (Closes: #441105)
   * debuild:
      + keep DISPLAY, XAUTHORITY and GNOME_KEYRING_SOCKET environment
        variables around for safe keeping before we destroy the
