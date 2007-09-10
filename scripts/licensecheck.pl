@@ -278,13 +278,13 @@ while (@files) {
 		$match =~ s/\s{2,}/ /g;
 		$match =~ s/\\@/@/g;
 
-		$copyrights{"$match"} = "1";
+		$copyrights{lc("$match")} = "$match";
 	    }
 	}
     }
     close(F);
 
-    $copyright = join(" / ", keys %copyrights);
+    $copyright = join(" / ", values %copyrights);
 
     print qq(----- $file header -----\n$content----- end header -----\n\n)
 	if $opt_verbose;
