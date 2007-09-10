@@ -45,7 +45,10 @@ devscripts (2.10.8) UNRELEASED; urgency=low
   * The package should suggest git-core, not git (Closes: #440018)
   * debchange: update for new BTS layout (pkgreport.cgi syntax changed)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed, 05 Sep 2007 22:58:38 +0100
+  [ Joey Hess ]
+  * Add list-unreleased, by Frans Pop.
+
+ -- Joey Hess <joeyh@debian.org>  Mon, 10 Sep 2007 14:35:18 -0400
 
 devscripts (2.10.7) unstable; urgency=low
 

@@ -1,0 +1,23 @@
+.TH LIST-UNRELEASED 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+list-unreleased \- display UNRELEASED packages
+.SH SYNOPSIS
+\fBlist-unreleased\fR [\fIarg\fR ...] [\fIpath\fR ...]
+.SH DESCRIPTION
+Searches for packages whose changelogs indicate there are pending changes
+(UNRELEASED) and either lists them or displays the relevant changelog entry.
+.PP
+By default it searches for packages under the current directory. If a path
+is specified it will look for packages under that directory instead.
+.SH OPTIONS
+.TP
+.B -c
+Display pending changes.
+.TP
+.B -R
+Don't recurse into subdirectories looking for packages.
+.SH "SEE ALSO"
+.BR debchange (1)
+.SH AUTHOR
+\fBlist-unreleased\fR was written by Frans Pop <elendil@planet.nl>.
+This manual page was written by Joey Hess <joeyh@debian.org>.
