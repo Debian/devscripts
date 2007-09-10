@@ -30,6 +30,8 @@ devscripts (2.10.8) UNRELEASED; urgency=low
     + tidy up the pre-check regexes
     + unescape "\@"s in copyright statements
     + decruft © as well as (C)
+    + make the copyright regex more flexible
+    + correctly handle metacharacters found in potential copyright statements
   * debdiff: allow whitespace to be ignored in diffs (Closes: #439163)
   * debcommit
     + Allow changes to only debian/changelog to be committed.
@@ -48,7 +50,7 @@ devscripts (2.10.8) UNRELEASED; urgency=low
   [ Joey Hess ]
   * Add list-unreleased, by Frans Pop.
 
- -- Joey Hess <joeyh@debian.org>  Mon, 10 Sep 2007 14:35:18 -0400
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Mon, 10 Sep 2007 20:30:18 +0100
 
 devscripts (2.10.7) unstable; urgency=low
 

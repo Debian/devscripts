@@ -260,12 +260,14 @@ while (@files) {
     my $file = shift @files;
     my $content = '';
     my $copyright = '';
+    my %copyrights;
     my $match;
+
     open (F, "<$file") or die "Unable to access $file\n";
     while (<F>) {
         last if ($. > $opt_lines);
         $content .= $_;
-	if (m%copyright (.*)$%i) {
+	if (m%copyright(?::\s*|\s+)(\S.*)$%i) {
 	    $match = $1;
 	    # Ignore lines matching "see foo for copyright information"
 	    if ($match !~ m%^\s*info(rmation)?\.?\s*$%i) {
@@ -276,15 +278,13 @@ while (@files) {
 		$match =~ s/\s{2,}/ /g;
 		$match =~ s/\\@/@/g;
 
-		# Don't add duplicate entries
-		if ($copyright !~ m%$match%i) {
-		    $copyright .= " / " if $copyright;
-		    $copyright .= $match;
-		}
+		$copyrights{"$match"} = "1";
 	    }
 	}
     }
     close(F);
+
+    $copyright = join(" / ", keys %copyrights);
 
     print qq(----- $file header -----\n$content----- end header -----\n\n)
 	if $opt_verbose;
