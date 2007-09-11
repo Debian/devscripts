@@ -1,10 +1,15 @@
 devscripts (2.10.9) UNRELEASED; urgency=low
 
+  [ Mohammed Adnène Trojette ]
   * uscan: allow the path for downloaded files to be specified. Thanks Steffen
            Moeller for the patch. (Closes: #439060)
   * debsign: work in $TMPDIR (if set) or /tmp. (Closes: #420472)
 
- -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Tue, 11 Sep 2007 17:59:35 +0200
+  [ Adam D. Barratt ]
+  * debchange: Add an option to not modify the trailer line when editing or
+    appending changelog entries (Closes: #435980)
+
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 11 Sep 2007 21:01:39 +0100
 
 devscripts (2.10.8) unstable; urgency=low
 

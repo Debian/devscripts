@@ -120,6 +120,9 @@ Options:
          indicate if multiple maintainers are now involved (default: do so)
   -m, --maintmaint
          Don\'t change (maintain) the maintainer details in the changelog entry
+  -t, --mainttrailer
+         Don\'t change (maintain) the trailer line in the changelog entry; i.e.
+         maintain the maintainer and date/time details
   --check-dirname-level N
          How much to check directory names:
          N=0   never
@@ -169,6 +172,7 @@ my $opt_release_heuristic = 'log';
 my $opt_multimaint = 1;
 my $opt_multimaint_merge = 0;
 my $opt_tz = undef;
+my $opt_mainttrailer = 0;
 
 # Next, read configuration files and then command line
 # The next stuff is boilerplate
@@ -238,7 +242,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # We use bundling so that the short option behaviour is the same as
 # with older debchange versions.
 my ($opt_help, $opt_version);
-my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u);
+my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u, $opt_t);
 my ($opt_n, $opt_qa, $opt_bpo, $opt_c, $opt_m, $opt_create, $opt_package, @closes);
 my ($opt_news);
 my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
@@ -269,6 +273,7 @@ GetOptions("help|h" => \$opt_help,
 	   "multimaint!" => \$opt_multimaint,
 	   "multi-maint!" => \$opt_multimaint,
 	   "m|maintmaint" => \$opt_m,
+	   "t|mainttrailer" => \$opt_t,
 	   "ignore-dirname" => \$opt_ignore,
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
@@ -1032,7 +1037,11 @@ elsif (($opt_r || $opt_a) && ! $opt_create) {
 	}
     }
 
-    print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n";
+    if ($opt_t && $opt_a) {
+	print O "\n -- $changelog{'Maintainer'}  $changelog{'Date'}\n";
+    } else {
+	print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n";
+    }
 
     # Copy the rest of the changelog file to new one
     # Slurp the rest....
@@ -1045,7 +1054,11 @@ elsif ($opt_e && ! $opt_create) {
 
     print O $CHANGES;
 
-    print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n";
+    if ($opt_t) {
+	print O "\n -- $changelog{'Maintainer'}  $changelog{'Date'}\n";
+    } else {
+	print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n";
+    }
 
     # Copy the rest of the changelog file to the new one
     $line=-1;
