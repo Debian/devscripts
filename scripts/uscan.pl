@@ -77,6 +77,7 @@ Options:
                    Report status of packages, but do not download
     --debug        Dump the downloaded web pages to stdout for debugging
                    your watch file.
+    --destdir      Path of directory to which to download.
     --download     Report on newer and absent versions, and download (default)
     --force-download
                    Always download the upstream release, even if up to date
@@ -145,6 +146,7 @@ our $passive = 'default';
 # Now start by reading configuration files and then command line
 # The next stuff is boilerplate
 
+my $destdir = "..";
 my $download = 1;
 my $force_download = 0;
 my $report = 0; # report even on up-to-date packages?
@@ -167,6 +169,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
     my %config_vars = (
 		       'USCAN_TIMEOUT' => 20,
+		       'USCAN_DESTDIR' => '..',
 		       'USCAN_DOWNLOAD' => 'yes',
 		       'USCAN_PASV' => 'default',
 		       'USCAN_SYMLINK' => 'symlink',
@@ -191,6 +194,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     @config_vars{keys %config_vars} = split /\n/, $shell_out, -1;
 
     # Check validity
+    $config_vars{'USCAN_DESTDIR'} =~ /^\s*(\S+)\s*$/
+	or $config_vars{'USCAN_DESTDIR'}='..';
     $config_vars{'USCAN_DOWNLOAD'} =~ /^(yes|no)$/
 	or $config_vars{'USCAN_DOWNLOAD'}='yes';
     $config_vars{'USCAN_PASV'} =~ /^(yes|no|default)$/
@@ -217,6 +222,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg ||= "  (none)\n";
     chomp $modified_conf_msg;
 
+    $destdir = $config_vars{'USCAN_DESTDIR'}
+    	if defined $config_vars{'USCAN_DESTDIR'};
     $download = $config_vars{'USCAN_DOWNLOAD'} eq 'no' ? 0 : 1;
     $passive = $config_vars{'USCAN_PASV'} eq 'yes' ? 1 :
 	$config_vars{'USCAN_PASV'} eq 'no' ? 0 : 'default';
@@ -232,13 +239,15 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 
 # Now read the command line arguments
 my $debug = 0;
-my ($opt_h, $opt_v, $opt_download, $opt_force_download, $opt_report, $opt_passive, $opt_symlink);
+my ($opt_h, $opt_v, $opt_destdir, $opt_download, $opt_force_download,
+    $opt_report, $opt_passive, $opt_symlink);
 my ($opt_verbose, $opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
 my $opt_user_agent;
 
 GetOptions("help" => \$opt_h,
 	   "version" => \$opt_v,
+	   "destdir=s" => \$opt_destdir,
 	   "download!" => \$opt_download,
 	   "force-download" => \$opt_force_download,
 	   "report" => sub { $opt_download = 0; },
@@ -271,6 +280,7 @@ if ($opt_v) { version(); exit 0; }
 
 # Now we can set the other variables according to the command line options
 
+$destdir = $opt_destdir if defined $opt_destdir;
 $download = $opt_download if defined $opt_download;
 $force_download = $opt_force_download if defined $opt_force_download;
 $report = $opt_report if defined $opt_report;
@@ -1019,18 +1029,22 @@ EOF
     }
 
     if (defined $pkg_dir) {
-	if (-f "../$newfile_base") {
+    	if (! -d "$destdir") {
+	    print "Package directory '$destdir to store downloaded file is not existing\n";
+	    return 1;
+	}
+	if (-f "$destdir/$newfile_base") {
 	    print " => $newfile_base already in package directory\n"
 		if $verbose or ($download == 0 and ! $dehs);
 	    return 0;
 	}
-	if (-f "../${pkg}_${newversion}.orig.tar.gz") {
-	    print " => ${pkg}_${newversion}.orig.tar.gz already in package directory\n"
+	if (-f "$destdir/${pkg}_${newversion}.orig.tar.gz") {
+	    print " => ${pkg}_${newversion}.orig.tar.gz already in package directory '$destdir'\n"
 		if $verbose or ($download == 0 and ! $dehs);
 	    return 0;
 	}
-	elsif (-f "../${pkg}_${newversion}.orig.tar.bz2") {
-	    print " => ${pkg}_${newversion}.orig.tar.bz2 already in package directory\n"
+	elsif (-f "$destdir/${pkg}_${newversion}.orig.tar.bz2") {
+	    print " => ${pkg}_${newversion}.orig.tar.bz2 already in package directory '$destdir'\n"
 		if $verbose or ($download == 0 and ! $dehs);
 	    return 0;
 	}
@@ -1063,6 +1077,10 @@ EOF
     return 0 unless $download;
 
     print "-- Downloading updated package $newfile_base\n" if $verbose;
+    if (! -d "$destdir") {
+        print "Package directory '$destdir to store downloaded file is not existing\n";
+        return 1;
+    }
     # Download newer package
     if ($upstream_url =~ m%^http(s)?://%) {
 	if (defined($1) and !$haveSSL) {
@@ -1072,7 +1090,7 @@ EOF
 	# Is anything else than "&amp;" required?  I doubt it.
 	print STDERR "$progname debug: requesting URL $upstream_url\n" if $debug;
 	$request = HTTP::Request->new('GET', $upstream_url);
-	$response = $user_agent->request($request, "../$newfile_base");
+	$response = $user_agent->request($request, "$destdir/$newfile_base");
 	if (! $response->is_success) {
 	    if (defined $pkg_dir) {
 		warn "$progname warning: In directory $pkg_dir, downloading\n  $upstream_url failed: " . $response->status_line . "\n";
@@ -1089,7 +1107,7 @@ EOF
 	}
 	print STDERR "$progname debug: requesting URL $upstream_url\n" if $debug;
 	$request = HTTP::Request->new('GET', "$upstream_url");
-	$response = $user_agent->request($request, "../$newfile_base");
+	$response = $user_agent->request($request, "$destdir/$newfile_base");
 	if (exists $options{'pasv'}) {
 	    if (defined $passive) { $ENV{'FTP_PASSIVE'}=$passive; }
 	    else { delete $ENV{'FTP_PASSIVE'}; }
@@ -1105,26 +1123,26 @@ EOF
     }
 
     if ($newfile_base =~ /\.(tar\.gz|tgz|tar\.bz2|tbz2?)$/) {
-	my $filetype = `file ../$newfile_base`;
+	my $filetype = `file $destdir/$newfile_base`;
 	$filetype =~ s%^\.\./\Q$newfile_base\E: %%;
 	unless ($filetype =~ /compressed data/) {
-	    warn "$progname warning: ../$newfile_base does not appear to be a compressed file;\nthe file command says: $filetype\nNot processing this file any further!\n";
+	    warn "$progname warning: $destdir/$newfile_base does not appear to be a compressed file;\nthe file command says: $filetype\nNot processing this file any further!\n";
 	    return 1;
 	}
     }
 
     if ($newfile_base =~ /\.(tar\.gz|tgz)$/) {
 	if ($symlink eq 'symlink') {
-	    symlink $newfile_base, "../${pkg}_${newversion}.orig.tar.gz";
+	    symlink $newfile_base, "$destdir/${pkg}_${newversion}.orig.tar.gz";
 	} elsif ($symlink eq 'rename') {
-	    move "../$newfile_base", "../${pkg}_${newversion}.orig.tar.gz";
+	    move "$destdir/$newfile_base", "$destdir/${pkg}_${newversion}.orig.tar.gz";
 	}
     }
     elsif ($newfile_base =~ /\.(tar\.bz2|tbz2?)$/) {
 	if ($symlink eq 'symlink') {
-	    symlink $newfile_base, "../${pkg}_${newversion}.orig.tar.bz2";
+	    symlink $newfile_base, "$destdir/${pkg}_${newversion}.orig.tar.bz2";
 	} elsif ($symlink eq 'rename') {
-	    move "../$newfile_base", "../${pkg}_${newversion}.orig.tar.bz2";
+	    move "$destdir/$newfile_base", "$destdir/${pkg}_${newversion}.orig.tar.bz2";
 	}
     }
 
@@ -1181,14 +1199,14 @@ EOF
 
     # Do whatever the user wishes to do
     if ($action) {
-	my $usefile = "../$newfile_base";
+	my $usefile = "$destdir/$newfile_base";
 	if ($symlink =~ /^(symlink|rename)$/
 	    and $newfile_base =~ /\.(tar\.gz|tgz)$/) {
-	    $usefile = "../${pkg}_${newversion}.orig.tar.gz";
+	    $usefile = "$destdir/${pkg}_${newversion}.orig.tar.gz";
 	}
 	elsif ($symlink =~ /^(symlink|rename)$/
 	    and $newfile_base =~ /\.(tar\.bz2|tbz2)$/) {
-	    $usefile = "../${pkg}_${newversion}.orig.tar.bz2";
+	    $usefile = "$destdir/${pkg}_${newversion}.orig.tar.bz2";
 	}
 
 	# Any symlink requests are already handled by uscan
