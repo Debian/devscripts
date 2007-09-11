@@ -384,6 +384,7 @@ esac
 # Do we have to download the changes file?
 if [ -n "$remotehost" ]
 then
+    cd /tmp
     mkdir debsign.$$ || { echo "$PROGNAME: Can't mkdir!" >&2; exit 1; }
     trap "cleanup_tmpdir" 0 1 2 3 7 10 13 15
     cd debsign.$$
