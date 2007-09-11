@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2007-08-05 17:51+0200\n"
+"POT-Creation-Date: 2007-09-11 16:46+0200\n"
 "PO-Revision-Date: 2006-11-27 09:30+0100\n"
 "Last-Translator: Julien Cristau <julien.cristau@ens-lyon.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -279,7 +279,7 @@ msgstr ""
 #: ../scripts/cvs-debi.1:68 ../scripts/cvs-debrelease.1:69
 #: ../scripts/cvs-debuild.1:63 ../scripts/dd-list.1:93 ../scripts/debc.1:120
 #: ../scripts/debchange.1:349 ../scripts/debclean.1:111
-#: ../scripts/debcommit.pl:345 ../scripts/debdiff.1:172 ../scripts/debi.1:120
+#: ../scripts/debcommit.pl:466 ../scripts/debdiff.1:175 ../scripts/debi.1:120
 #: ../scripts/debpkg.1:23 ../scripts/debrelease.1:137
 #: ../scripts/deb-reversion.dbk:278 ../scripts/debrsign.1:71
 #: ../scripts/debsign.1:128 ../scripts/debuild.1:413 ../scripts/dget.pl:537
@@ -2126,21 +2126,22 @@ msgstr ""
 
 # type: SH
 #: ../scripts/bts.pl:3143 ../scripts/debc.1:92 ../scripts/debchange.1:287
-#: ../scripts/debclean.1:90 ../scripts/debdiff.1:132 ../scripts/debi.1:93
-#: ../scripts/debrelease.1:105 ../scripts/debrsign.1:57
-#: ../scripts/debsign.1:99 ../scripts/debuild.1:276 ../scripts/dget.pl:514
-#: ../scripts/dpkg-depcheck.1:102 ../scripts/dscverify.1:33
-#: ../scripts/grep-excuses.1:24 ../scripts/mass-bug.pl:106
-#: ../scripts/nmudiff.1:69 ../scripts/plotchangelog.1:106
-#: ../scripts/pts-subscribe.1:37 ../scripts/uscan.1:418
-#: ../scripts/uupdate.1:86 ../scripts/who-uploads.1:42
+#: ../scripts/debclean.1:90 ../scripts/debcommit.pl:75
+#: ../scripts/debdiff.1:135 ../scripts/debi.1:93 ../scripts/debrelease.1:105
+#: ../scripts/debrsign.1:57 ../scripts/debsign.1:99 ../scripts/debuild.1:276
+#: ../scripts/dget.pl:514 ../scripts/dpkg-depcheck.1:102
+#: ../scripts/dscverify.1:33 ../scripts/grep-excuses.1:24
+#: ../scripts/mass-bug.pl:106 ../scripts/nmudiff.1:69
+#: ../scripts/plotchangelog.1:106 ../scripts/pts-subscribe.1:37
+#: ../scripts/uscan.1:418 ../scripts/uupdate.1:86 ../scripts/who-uploads.1:42
 #, no-wrap
 msgid "CONFIGURATION VARIABLES"
 msgstr "VARIABLES DE CONFIGURATION"
 
 # NOTE: presque identique
 # type: Plain text
-#: ../scripts/bts.pl:3145 ../scripts/mass-bug.pl:108
+#: ../scripts/bts.pl:3145 ../scripts/debcommit.pl:77
+#: ../scripts/mass-bug.pl:108
 msgid ""
 "The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  Command "
@@ -2410,7 +2411,7 @@ msgid "Show version and copyright information."
 msgstr "Affiche la version et le copyright."
 
 # type: SH
-#: ../scripts/checkbashisms.1:25 ../scripts/debdiff.1:160
+#: ../scripts/checkbashisms.1:25 ../scripts/debdiff.1:163
 #, no-wrap
 msgid "EXIT VALUES"
 msgstr "VALEURS DE RETOUR"
@@ -2456,7 +2457,7 @@ msgstr ""
 #: ../scripts/cvs-debi.1:62 ../scripts/cvs-debrelease.1:64
 #: ../scripts/cvs-debuild.1:56 ../scripts/debc.1:115
 #: ../scripts/debchange.1:342 ../scripts/debclean.1:107
-#: ../scripts/debcommit.pl:349 ../scripts/debdiff.1:166 ../scripts/debi.1:116
+#: ../scripts/debcommit.pl:470 ../scripts/debdiff.1:169 ../scripts/debi.1:116
 #: ../scripts/debrelease.1:132 ../scripts/deb-reversion.dbk:233
 #: ../scripts/debrsign.1:66 ../scripts/debsign.1:118 ../scripts/debuild.1:399
 #: ../scripts/dget.pl:545 ../scripts/dpkg-depcheck.1:118
@@ -4609,8 +4610,8 @@ msgstr "debcommit - Soumettre les changements d'un paquet"
 #: ../scripts/debcommit.pl:9
 #, fuzzy
 msgid ""
-"B<debcommit> [B<--release>] [B<--message=>I<text>] [B<--noact>] [B<--all> | "
-"I<files to commit>]"
+"B<debcommit> [B<--release>] [B<--message=>I<text>] [B<--noact>] [B<--"
+"confirm>] [B<--changelog=>I<path>] [B<--all> | I<files to commit>]"
 msgstr "debcommit [--release] [--message=texte] [--noact]"
 
 # type: textblock
@@ -4628,19 +4629,31 @@ msgstr ""
 "cvs, svn, svk, arch, bzr ou git. Il doit être lancé dans une copie de "
 "travail d'un de ces types de dépôt."
 
-# type: =item
+# type: TP
 #: ../scripts/debcommit.pl:23
+#, fuzzy
+msgid "B<-c> B<--changelog> I<path>"
+msgstr "B<Mise à jour du fichier changelog>"
+
+# type: textblock
+#: ../scripts/debcommit.pl:25
+msgid ""
+"Specify an alternate location for the changelog. By default debian/changelog "
+"is used."
+msgstr ""
+
+# type: =item
+#: ../scripts/debcommit.pl:28
 #, fuzzy
 msgid "B<-r> B<--release>"
 msgstr "-r --release"
 
 # type: textblock
-#: ../scripts/debcommit.pl:25
+#: ../scripts/debcommit.pl:30
 #, fuzzy
 msgid ""
 "Commit a release of the package. The version number is determined from "
-"debian/changelog, and is used to tag the package in the repository.  bzr "
-"does not yet support symbolic tags, so you will only get a normal commit."
+"debian/changelog, and is used to tag the package in the repository."
 msgstr ""
 "Commiter une distribution (« release ») du paquet. Le numéro de version est "
 "déterminé d'après le fichier debian/changelog et est utilisé pour taguer le "
@@ -4648,7 +4661,7 @@ msgstr ""
 "symboliques pour l'instant, donc vous n'obtiendrez qu'un commit normal."
 
 # type: textblock
-#: ../scripts/debcommit.pl:30
+#: ../scripts/debcommit.pl:33
 msgid ""
 "Note that svn/svk tagging conventions vary, so debcommit uses L<svnpath(1)> "
 "to determine where the tag should be placed in the repository."
@@ -4658,13 +4671,13 @@ msgstr ""
 "être placé dans le dépôt."
 
 # type: =item
-#: ../scripts/debcommit.pl:34
+#: ../scripts/debcommit.pl:37
 #, fuzzy
 msgid "B<-m> I<text> B<--message> I<text>"
 msgstr "-m texte --message test"
 
 # type: textblock
-#: ../scripts/debcommit.pl:36
+#: ../scripts/debcommit.pl:39
 msgid ""
 "Specify a commit message to use. Useful if the program cannot determine a "
 "commit message on its own based on debian/changelog, or if you want to "
@@ -4675,49 +4688,97 @@ msgstr ""
 "changelog ou si vous voulez remplacer le message par défaut."
 
 # type: TP
-#: ../scripts/debcommit.pl:40
+#: ../scripts/debcommit.pl:43
 #, fuzzy
 msgid "B<-n> B<--noact>"
 msgstr "B<-n>, B<--noact>"
 
 # type: Plain text
-#: ../scripts/debcommit.pl:42
+#: ../scripts/debcommit.pl:45
 msgid ""
 "Do not actually do anything, but do print the commands that would be run."
 msgstr "Ne fait rien, mais affiche les commandes qui seraient exécutées."
 
 # type: TP
-#: ../scripts/debcommit.pl:44
+#: ../scripts/debcommit.pl:47
+#, fuzzy
+msgid "B<-C> B<--confirm>"
+msgstr "B<--no-conf>, B<--noconf>"
+
+# type: textblock
+#: ../scripts/debcommit.pl:49
+msgid ""
+"Display the generated commit message and ask for confirmation before "
+"committing it."
+msgstr ""
+
+# type: TP
+#: ../scripts/debcommit.pl:52
 #, fuzzy
 msgid "B<-a> B<--all>"
 msgstr "B<-a>, B<--all>"
 
 # type: textblock
-#: ../scripts/debcommit.pl:46
+#: ../scripts/debcommit.pl:54
 msgid ""
 "Commit all files. This is the default operation when using a VCS other than "
 "git."
 msgstr ""
 
 # type: =item
-#: ../scripts/debcommit.pl:49
+#: ../scripts/debcommit.pl:57
 msgid "I<files to commit>"
 msgstr ""
 
 # type: textblock
-#: ../scripts/debcommit.pl:51
+#: ../scripts/debcommit.pl:59
 msgid ""
 "Specify which files to commit (debian/changelog is added to the list "
 "automatically.)"
 msgstr ""
 
+# type: =item
+#: ../scripts/debcommit.pl:62
+msgid "B<-s> B<--strip-message>, B<--no-strip-message>"
+msgstr ""
+
+# type: textblock
+#: ../scripts/debcommit.pl:64
+msgid ""
+"If this option is set and the commit message has been derived from the "
+"changelog, the characters \"* \" will be stripped from the beginning of the "
+"message."
+msgstr ""
+
+# type: textblock
+#: ../scripts/debcommit.pl:68
+msgid ""
+"This option is ignored if more than one line of the message begins with \"* "
+"\"."
+msgstr ""
+
+# type: =item
+#: ../scripts/debcommit.pl:85
+msgid "B<DEBCOMMIT_STRIP_MESSAGE>"
+msgstr ""
+
+# type: Plain text
+#: ../scripts/debcommit.pl:87
+#, fuzzy
+msgid ""
+"If this is set to I<yes>, then it is the same as the --strip-message command "
+"line parameter being used. The default is I<no>."
+msgstr ""
+"Si elle est positionnée à I<no>, équivaut à utiliser l'option B<--"
+"nocontrol>. La valeur par défaut est I<yes>."
+
 # type: =head1
-#: ../scripts/debcommit.pl:338 ../scripts/svnpath.pl:93
+#: ../scripts/debcommit.pl:459 ../scripts/svnpath.pl:93
 msgid "LICENSE"
 msgstr "LICENCE"
 
 # type: textblock
-#: ../scripts/debcommit.pl:340
+#: ../scripts/debcommit.pl:461
 msgid ""
 "This code is copyright by Joey Hess <joeyh@debian.org>, all rights "
 "reserved.  This program comes with ABSOLUTELY NO WARRANTY.  You are free to "
@@ -4726,12 +4787,12 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../scripts/debcommit.pl:347 ../scripts/mass-bug.pl:439
+#: ../scripts/debcommit.pl:468 ../scripts/mass-bug.pl:439
 msgid "Joey Hess <joeyh@debian.org>"
 msgstr "Joey Hess <joeyh@debian.org>"
 
 # type: textblock
-#: ../scripts/debcommit.pl:351
+#: ../scripts/debcommit.pl:472
 #, fuzzy
 msgid "L<svnpath(1)>."
 msgstr "svnpath"
@@ -5081,9 +5142,20 @@ msgstr "B<--quiet>, B<-q>"
 msgid "Be quiet if no differences were found."
 msgstr "Reste silencieux si aucune différence n'est trouvée."
 
+# type: TP
+#: ../scripts/debdiff.1:132
+#, fuzzy, no-wrap
+msgid "B<--ignore-space>, B<-w>"
+msgstr "B<--increment>, B<-i>"
+
+# type: Plain text
+#: ../scripts/debdiff.1:135
+msgid "Ignore whitespace in diffs."
+msgstr ""
+
 # NOTE: presque identique
 # type: Plain text
-#: ../scripts/debdiff.1:138
+#: ../scripts/debdiff.1:141
 msgid ""
 "The two configuration files I</etc/devscripts.conf> and I<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  Command "
@@ -5101,13 +5173,13 @@ msgstr ""
 "actuellement identifiées sont :"
 
 # type: TP
-#: ../scripts/debdiff.1:138
+#: ../scripts/debdiff.1:141
 #, no-wrap
 msgid "B<DEBDIFF_DIRS>"
 msgstr "B<DEBDIFF_DIRS>"
 
 # type: Plain text
-#: ../scripts/debdiff.1:142
+#: ../scripts/debdiff.1:145
 msgid ""
 "If this is set to I<yes>, then it is the same as the B<--dirs> command line "
 "parameter being used."
@@ -5115,13 +5187,13 @@ msgstr ""
 "Si elle est positionnée à I<yes>, équivaut à utiliser l'option B<--dirs>."
 
 # type: TP
-#: ../scripts/debdiff.1:142
+#: ../scripts/debdiff.1:145
 #, no-wrap
 msgid "B<DEBDIFF_CONTROL>"
 msgstr "B<DEBDIFF_CONTROL>"
 
 # type: Plain text
-#: ../scripts/debdiff.1:147
+#: ../scripts/debdiff.1:150
 msgid ""
 "If this is set to I<no>, then it is the same as the B<--nocontrol> command "
 "line parameter being used.  The default is I<yes>."
@@ -5130,13 +5202,13 @@ msgstr ""
 "nocontrol>. La valeur par défaut est I<yes>."
 
 # type: TP
-#: ../scripts/debdiff.1:147
+#: ../scripts/debdiff.1:150
 #, no-wrap
 msgid "B<DEBDIFF_CONTROLFILES>"
 msgstr "B<DEBDIFF_CONTROLFILES>"
 
 # type: Plain text
-#: ../scripts/debdiff.1:152
+#: ../scripts/debdiff.1:155
 msgid ""
 "Which control files to compare, corresponding to the B<--controlfiles> "
 "command line option.  The default is I<control>."
@@ -5145,13 +5217,13 @@ msgstr ""
 "de commande B<--controlfiles>. La valeur par défaut est I<control>."
 
 # type: TP
-#: ../scripts/debdiff.1:152
+#: ../scripts/debdiff.1:155
 #, no-wrap
 msgid "B<DEBDIFF_SHOW_MOVED>"
 msgstr "B<DEBDIFF_SHOW_MOVED>"
 
 # type: Plain text
-#: ../scripts/debdiff.1:156
+#: ../scripts/debdiff.1:159
 msgid ""
 "If this is set to I<yes>, then it is the same as the B<--show-moved> command "
 "line parameter being used."
@@ -5160,13 +5232,13 @@ msgstr ""
 "moved>."
 
 # type: TP
-#: ../scripts/debdiff.1:156
+#: ../scripts/debdiff.1:159
 #, no-wrap
 msgid "B<DEBDIFF_WDIFF_OPT>"
 msgstr "B<DEBDIFF_WDIFF_OPT>"
 
 # type: Plain text
-#: ../scripts/debdiff.1:160
+#: ../scripts/debdiff.1:163
 msgid ""
 "This option will be passed to B<wdiff>; it should be one of B<-p>, B<-l> or "
 "B<-t>."
@@ -5175,7 +5247,7 @@ msgstr ""
 "ou B<-t>."
 
 # type: Plain text
-#: ../scripts/debdiff.1:166
+#: ../scripts/debdiff.1:169
 msgid ""
 "Normally the exit value will be 0 if no differences are reported and 1 if "
 "any are reported.  If there is some fatal error, the exit code will be non-"
@@ -5190,13 +5262,13 @@ msgstr ""
 "sera 255."
 
 # type: Plain text
-#: ../scripts/debdiff.1:172
+#: ../scripts/debdiff.1:175
 msgid ""
 "B<dpkg-deb>(1), B<wdiff>(1), B<interdiff>(1)  and B<devscripts.conf>(5)."
 msgstr "B<dpkg-deb>(1), B<wdiff>(1), B<interdiff>(1) et B<devscripts.conf>(5)."
 
 # type: Plain text
-#: ../scripts/debdiff.1:177
+#: ../scripts/debdiff.1:180
 #, fuzzy
 msgid ""
 "B<debdiff> was originally written as a shell script by Yann Dirson "
