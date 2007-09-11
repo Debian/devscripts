@@ -165,8 +165,10 @@ Update the changelog timestamp, and start an editor.
 .TP
 .BR \-\-release ", " \-r
 Update the changelog timestamp. If the distribution is set to
-"UNRELEASED", change it to unstable (or another distribution as specified
-by \fB\-\-distribution\fR).
+"UNRELEASED", change it to the distribution from the previous changelog entry 
+(or another distribution as specified by \fB\-\-distribution\fR).  If there are 
+no previous changelog entries and an explicit distribution has not been 
+specified, "unstable" will be used.
 .TP
 .BR \-\-create
 This will create a new \fIdebian/changelog\fR file (or \fINEWS\fR if

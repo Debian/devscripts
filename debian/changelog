@@ -6,10 +6,13 @@ devscripts (2.10.9) UNRELEASED; urgency=low
   * debsign: work in $TMPDIR (if set) or /tmp. (Closes: #420472)
 
   [ Adam D. Barratt ]
-  * debchange: Add an option to not modify the trailer line when editing or
-    appending changelog entries (Closes: #435980)
+  * debchange:
+    + Add an option to not modify the trailer line when editing or
+     appending changelog entries (Closes: #435980)
+    + Make -r use the distribution specified in the previous changelog entry by
+      default (Closes: #364510) 
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 11 Sep 2007 21:01:39 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 11 Sep 2007 22:43:54 +0100
 
 devscripts (2.10.8) unstable; urgency=low
 

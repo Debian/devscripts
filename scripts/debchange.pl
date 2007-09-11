@@ -919,7 +919,7 @@ elsif (($opt_r || $opt_a) && ! $opt_create) {
     # last entry, and determine whether there are existing
     # multi-developer changes by the current maintainer.
     $line=-1;
-    my ($lastmaint, $nextmaint, $maintline, $count);
+    my ($lastmaint, $nextmaint, $maintline, $count, $lastheader, $lastdist);
     while (<S>) {
 	$line++;
 	# Start of existing changes by the current maintainer
@@ -933,10 +933,17 @@ elsif (($opt_r || $opt_a) && ! $opt_create) {
 	    # maintainer
 	    $nextmaint ||= $1;
 	}
-
-	if (/^ --\s+([^<]+)\s+/) {
+	elsif (defined $lastmaint) {
+	    if (m/^\w[-+0-9a-z.]* \([^\(\) \t]+\)((?:\s+[-+0-9a-z.]+)+)\;\s+urgency=(\w+)/i) {
+		$lastheader = $_;
+		$lastdist = $1;
+		$lastdist =~ s/^\s+//;
+		undef $lastdist if $lastdist == "UNRELEASED";
+		last;
+	    }
+	}	
+	elsif (/^ --\s+([^<]+)\s+/) {
 	    $lastmaint=$1;
-	    last;
 	}
 
 	if (defined $maintline && !defined $nextmaint) {
@@ -980,7 +987,7 @@ elsif (($opt_r || $opt_a) && ! $opt_create) {
 	$distribution =~ s/^\s+//;
 	if ($opt_r) {
 	    # Change the distribution from UNRELEASED for release.
-	    $distribution = $opt_D || "unstable";
+	    $distribution = $opt_D || $lastdist || "unstable";
 	    # Set the start-line to 1, as we don't know what they want to edit
 	    $line=1;
 	}
@@ -1041,6 +1048,10 @@ elsif (($opt_r || $opt_a) && ! $opt_create) {
 	print O "\n -- $changelog{'Maintainer'}  $changelog{'Date'}\n";
     } else {
 	print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n";
+    }
+
+    if ($lastheader) {
+	print O "\n$lastheader";
     }
 
     # Copy the rest of the changelog file to new one
