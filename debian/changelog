@@ -10,9 +10,11 @@ devscripts (2.10.9) UNRELEASED; urgency=low
     + Add an option to not modify the trailer line when editing or
      appending changelog entries (Closes: #435980)
     + Make -r use the distribution specified in the previous changelog entry by
-      default (Closes: #364510) 
+      default (Closes: #364510)
+    + Use the package changelog to determine version information for the NEWS
+      file by default (Closes: #316662) 
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 11 Sep 2007 22:43:54 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed, 12 Sep 2007 19:42:07 +0100
 
 devscripts (2.10.8) unstable; urgency=low
 

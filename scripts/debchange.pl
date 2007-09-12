@@ -113,8 +113,7 @@ Options:
          Specify the name of the changelog to use in place of debian/changelog
          No directory traversal or checking is performed in this case.
   --news <newsfile>
-         Specify that the newsfile (default debian/NEWS) is to be edited;
-         cannot be used with --changelog
+         Specify that the newsfile (default debian/NEWS) is to be edited
   --[no]multimaint
          When appending an entry to a changelog section (-a), [do not]
          indicate if multiple maintainers are now involved (default: do so)
@@ -305,9 +304,6 @@ if (defined $opt_level) {
 
 if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
 
-fatal "Only one of -c/--changelog and --news is allowed; try $progname --help for more help"
-    if $opt_c && $opt_news;
-
 # Only allow at most one non-help option
 fatal "Only one of -a, -i, -e, -r, -v, -d, -n/--nmu, --qa, --bpo is allowed;\ntry $progname --help for more help"
     if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) + ($opt_n?1:0) + ($opt_qa?1:0) + ($opt_bpo?1:0) > 1;
@@ -349,6 +345,7 @@ fatal "--package can only be used with --create"
     if $opt_package && ! $opt_create;
 
 my $changelog_path = $opt_c || $ENV{'CHANGELOG'} || 'debian/changelog';
+my $real_changelog_path = $changelog_path;
 if ($opt_news) { $changelog_path = $opt_news; }
 if ($changelog_path ne 'debian/changelog' and not $opt_news) {
     $check_dirname_level = 0;
@@ -473,6 +470,22 @@ if (! $opt_create || ($opt_create && $opt_news)) {
     fatal "No changes in changelog!"
 	unless exists $changelog{'Changes'};
     $CHANGES=$changelog{'Changes'};
+
+    # Find the current package version
+    if ($opt_news) {
+	open PARSED, qq[dpkg-parsechangelog -l"$real_changelog_path" | ]
+	    or fatal "Cannot execute dpkg-parsechangelog: $!";
+	while (<PARSED>) {
+	    chomp;
+	    if (m%^Version:\s+(\S+)$%) {
+		$VERSION = $1;
+		last;
+	    }
+	}
+	close PARSED
+	    or fatal "Problem executing dpkg-parsechangelog: $!";
+	if ($?) { fatal "dpkg-parsechangelog failed!"; }
+    }
 
     # Is the directory name acceptable?
     if ($check_dirname_level ==  2 or
@@ -778,7 +791,9 @@ my $tmpchk=1;
 my ($NEW_VERSION, $NEW_SVERSION, $NEW_UVERSION);
 my $line;
 
-if (($opt_i || $opt_n || $opt_qa || $opt_bpo || $opt_v || $opt_d) && ! $opt_create) {
+if (($opt_i || $opt_n || $opt_qa || $opt_bpo || $opt_v || $opt_d ||
+    ($opt_news && $VERSION ne $changelog{'Version'})) && ! $opt_create) {
+
     # Check that a given explicit version number is sensible.
     if ($opt_v || $opt_d) {
 	if($opt_v) {
@@ -863,7 +878,9 @@ if (($opt_i || $opt_n || $opt_qa || $opt_bpo || $opt_v || $opt_d) && ! $opt_crea
 		# If it's not already a backport make it so
 		# otherwise we can be safe if we behave like dch -i
 		$end .= "~bpo40+1";
-	    } else {
+	    } elsif (!$opt_news) {
+		# Don't bump the version of a NEWS file in this case as we're
+		# using the version from the changelog
 		$end++;
 	    }
 	    $NEW_VERSION = "$start$end";
@@ -920,6 +937,7 @@ elsif (($opt_r || $opt_a) && ! $opt_create) {
     # multi-developer changes by the current maintainer.
     $line=-1;
     my ($lastmaint, $nextmaint, $maintline, $count, $lastheader, $lastdist);
+    my $savedline = $line;;
     while (<S>) {
 	$line++;
 	# Start of existing changes by the current maintainer
@@ -938,12 +956,16 @@ elsif (($opt_r || $opt_a) && ! $opt_create) {
 		$lastheader = $_;
 		$lastdist = $1;
 		$lastdist =~ s/^\s+//;
-		undef $lastdist if $lastdist == "UNRELEASED";
+		undef $lastdist if $lastdist eq "UNRELEASED";
+		# Revert to our previously saved position
+		$line = $savedline;
 		last;
 	    }
 	}	
 	elsif (/^ --\s+([^<]+)\s+/) {
 	    $lastmaint=$1;
+	    # Remember where we are so we can skip back afterwards
+	    $savedline = $line;
 	}
 
 	if (defined $maintline && !defined $nextmaint) {
