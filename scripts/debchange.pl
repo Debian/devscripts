@@ -721,12 +721,18 @@ if (@closes and ! $opt_query) { # and we don't have to query the BTS
     }
 }
 
-
 # Get a possible changelog entry from the command line
-my $TEXT=decode_utf8(join(' ', @ARGV));
+my $ARGS=join(' ', @ARGV);
+my $TEXT=decode_utf8($ARGS);
+my $EMPTY_TEXT=0;
+
 if (@ARGV and ! $TEXT) {
-    warn "$progname warning: command-line changelog entry not UTF-8 encoded; ignoring\n";
-    $TEXT='';
+    if ($ARGS) {
+	warn "$progname warning: command-line changelog entry not UTF-8 encoded; ignoring\n";
+	$TEXT='';
+    } else {
+	$EMPTY_TEXT = 1;
+    }
 }
 
 # Get the date
@@ -1051,7 +1057,7 @@ elsif (($opt_r || $opt_a) && ! $opt_create) {
 	} elsif ($opt_news) {
 	    print O "\n  \n";
 	    $line++;
-	} else {
+	} elsif (!$EMPTY_TEXT) {
 	    print O "  * \n";
 	}
     }
@@ -1143,7 +1149,7 @@ if ($warnings) {
 }
 
 # Now Run the Editor; always run if doing "closes" to give a chance to check
-if (! $TEXT or @closes_text or $opt_create) {
+if ((!$TEXT and !$EMPTY_TEXT) or @closes_text or $opt_create) {
     my $mtime = (stat("$changelog_path.dch"))[9];
     defined $mtime or fatal
 	"Error getting modification time of temporary $changelog_path: $!";

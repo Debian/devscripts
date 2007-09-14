@@ -12,9 +12,12 @@ devscripts (2.10.9) UNRELEASED; urgency=low
     + Make -r use the distribution specified in the previous changelog entry by
       default (Closes: #364510)
     + Use the package changelog to determine version information for the NEWS
-      file by default (Closes: #316662) 
+      file by default (Closes: #316662)
+    + Allow an explicit empty changelog entry to be passed on the command line
+      to allow non-interactive changes to the distribution and urgency without
+      adding a changelog entry (Closes: #442267)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Wed, 12 Sep 2007 19:42:07 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Fri, 14 Sep 2007 20:22:55 +0100
 
 devscripts (2.10.8) unstable; urgency=low
 
