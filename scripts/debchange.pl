@@ -1066,7 +1066,7 @@ elsif (($opt_r || $opt_a) && ! $opt_create) {
 	}
     }
 
-    if ($opt_t && $opt_a) {
+    if ($opt_t {
 	print O "\n -- $changelog{'Maintainer'}  $changelog{'Date'}\n";
     } else {
 	print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n";
