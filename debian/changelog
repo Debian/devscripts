@@ -8,7 +8,7 @@ devscripts (2.10.9) UNRELEASED; urgency=low
   [ Adam D. Barratt ]
   * debchange:
     + Add an option to not modify the trailer line when editing or
-     appending changelog entries (Closes: #435980)
+      appending changelog entries (Closes: #435980)
     + Make -r use the distribution specified in the previous changelog entry by
       default (Closes: #364510)
     + Use the package changelog to determine version information for the NEWS
@@ -16,8 +16,10 @@ devscripts (2.10.9) UNRELEASED; urgency=low
     + Allow an explicit empty changelog entry to be passed on the command line
       to allow non-interactive changes to the distribution and urgency without
       adding a changelog entry (Closes: #442267)
+  * licensecheck: Attempt to distinguish between versions of the BSD license
+    (Closes: #442630)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Fri, 14 Sep 2007 20:22:55 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Mon, 17 Sep 2007 20:53:26 +0100
 
 devscripts (2.10.8) unstable; urgency=low
 
