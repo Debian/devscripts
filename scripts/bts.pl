@@ -1159,7 +1159,9 @@ sub bts_merge {
 
 =item forcemerge <bug> <bug> [<bug> ...]
 
-Forcibly merge a set of bugs together.
+Forcibly merge a set of bugs together. The first bug listed is the master bug, 
+and its settings (those which must be equal in a normal merge) are assigned to 
+the bugs listed next.
 
 =cut
 
