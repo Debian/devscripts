@@ -16,10 +16,12 @@ devscripts (2.10.9) UNRELEASED; urgency=low
     + Allow an explicit empty changelog entry to be passed on the command line
       to allow non-interactive changes to the distribution and urgency without
       adding a changelog entry (Closes: #442267)
+    + Make -r only change the distribution if it was previously UNRELEASED
+      (Closes: #443081)
   * licensecheck: Attempt to distinguish between versions of the BSD license
     (Closes: #442630)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Mon, 17 Sep 2007 20:53:26 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Tue, 18 Sep 2007 16:41:47 +0100
 
 devscripts (2.10.8) unstable; urgency=low
 

@@ -1015,7 +1015,8 @@ elsif (($opt_r || $opt_a) && ! $opt_create) {
 	$distribution =~ s/^\s+//;
 	if ($opt_r) {
 	    # Change the distribution from UNRELEASED for release.
-	    $distribution = $opt_D || $lastdist || "unstable";
+	    $distribution = $opt_D || $lastdist || "unstable"
+		if $distribution eq "UNRELEASED";
 	    # Set the start-line to 1, as we don't know what they want to edit
 	    $line=1;
 	}
