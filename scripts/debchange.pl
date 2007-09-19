@@ -1014,9 +1014,10 @@ elsif (($opt_r || $opt_a) && ! $opt_create) {
 	my $urgency = $2;
 	$distribution =~ s/^\s+//;
 	if ($opt_r) {
-	    # Change the distribution from UNRELEASED for release.
+	    # Change the distribution from UNRELEASED for release or if
+	    # given an explicit --distribution/-D option
 	    $distribution = $opt_D || $lastdist || "unstable"
-		if $distribution eq "UNRELEASED";
+		if defined $opt_D or $distribution eq "UNRELEASED";
 	    # Set the start-line to 1, as we don't know what they want to edit
 	    $line=1;
 	}
