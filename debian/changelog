@@ -23,7 +23,11 @@ devscripts (2.10.9) UNRELEASED; urgency=low
   * bts: Improve the documentation of forcemerge. Thanks to dann frazier.
     (Closes: #442930)
 
- -- Julian Gilbey <jdg@debian.org>  Wed, 19 Sep 2007 07:16:31 +0100
+  [ Stefano Zacchiroli ]
+  * uscan: add a --repack option to repack .tar.bz2 archives to .tar.gz
+    archives upon request
+
+ -- Stefano Zacchiroli <zack@debian.org>  Sat, 29 Sep 2007 13:37:57 +0200
 
 devscripts (2.10.8) unstable; urgency=low
 

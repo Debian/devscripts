@@ -360,6 +360,12 @@ Instead of symlinking, rename the downloaded files to their Debian
 orig.tar.gz names if their extensions are \fI.tar.gz\fR or \fI.tgz\fR,
 and similarly for tar.bz2 files.
 .TP
+.B \-\-repack
+After having downloaded a bzip tar archive, repack it to a gzip tar archive,
+which is still currently required as a member of a Debian source package. Does
+nothing if the downloaded archive is not a bzip tar archive (i.e. it doesn't
+match a .tbz, .tbz2, or .tar.bz2 extension)
+.TP
 .B \-\-no\-symlink
 Don't make these symlinks and don't rename the files.
 .TP

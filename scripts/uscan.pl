@@ -89,6 +89,8 @@ Options:
     --symlink      Make an orig.tar.gz symlink to downloaded file (default)
     --rename       Rename to orig.tar.gz instead of symlinking
                    (Both will use orig.tar.bz2 if appropriate)
+    --repack       Repack downloaded archives from orig.tar.bz2 to orig.tar.gz
+                   (does nothing if downloaded archive orig.tar.gz)
     --no-symlink   Don\'t make symlink or rename
     --verbose      Give verbose output
     --no-verbose   Don\'t give verbose output (default)
@@ -150,6 +152,7 @@ my $destdir = "..";
 my $download = 1;
 my $force_download = 0;
 my $report = 0; # report even on up-to-date packages?
+my $repack = 0; # repack .tar.bz2 to .tar.gz
 my $symlink = 'symlink';
 my $verbose = 0;
 my $check_dirname_level = 1;
@@ -240,7 +243,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # Now read the command line arguments
 my $debug = 0;
 my ($opt_h, $opt_v, $opt_destdir, $opt_download, $opt_force_download,
-    $opt_report, $opt_passive, $opt_symlink);
+    $opt_report, $opt_passive, $opt_symlink, $opt_repack);
 my ($opt_verbose, $opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
 my $opt_user_agent;
@@ -256,6 +259,7 @@ GetOptions("help" => \$opt_h,
 	   "timeout=i" => \$opt_timeout,
 	   "symlink!" => sub { $opt_symlink = $_[1] ? 'symlink' : 'no'; },
 	   "rename" => sub { $opt_symlink = 'rename'; },
+	   "repack" => sub { $opt_repack = 1; },
 	   "package=s" => \$opt_package,
 	   "upstream-version=s" => \$opt_uversion,
 	   "watchfile=s" => \$opt_watchfile,
@@ -284,6 +288,7 @@ $destdir = $opt_destdir if defined $opt_destdir;
 $download = $opt_download if defined $opt_download;
 $force_download = $opt_force_download if defined $opt_force_download;
 $report = $opt_report if defined $opt_report;
+$repack = $opt_repack if defined $opt_repack;
 $passive = $opt_passive if defined $opt_passive;
 $timeout = $opt_timeout if defined $opt_timeout;
 $timeout = 20 unless defined $timeout and $timeout > 0;
@@ -1120,6 +1125,15 @@ EOF
 	    }
 	    return 1;
 	}
+    }
+
+    if ($repack and $newfile_base =~ /^(.*)\.(tar\.bz2|tbz2?)$/) {
+	print "-- Repacking from bzip2 to gzip\n" if $verbose;
+	my $newfile_base_gz = "$1.tar.gz";
+	system("bunzip2 -c $destdir/$newfile_base | gzip > $destdir/$newfile_base_gz") == 0
+	  or die "repacking from bzip2 to gzip failed\n";
+	unlink "$destdir/$newfile_base";
+	$newfile_base = $newfile_base_gz;
     }
 
     if ($newfile_base =~ /\.(tar\.gz|tgz|tar\.bz2|tbz2?)$/) {
