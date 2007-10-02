@@ -1014,14 +1014,17 @@ elsif (($opt_r || $opt_a) && ! $opt_create) {
 	my $urgency = $2;
 	$distribution =~ s/^\s+//;
 	if ($opt_r) {
-	    # Change the distribution from UNRELEASED for release or if
-	    # given an explicit --distribution/-D option
-	    $distribution = $opt_D || $lastdist || "unstable"
-		if defined $opt_D or $distribution eq "UNRELEASED";
+	    # Change the distribution from UNRELEASED for release
+	    if ($distribution eq "UNRELEASED") {
+		$distribution = $opt_D || $lastdist || "unstable";
+	    } elsif ($opt_D) {
+		warn "$progname warning: ignoring distribution passed to --release as changelog has already been released\n";
+	    }
 	    # Set the start-line to 1, as we don't know what they want to edit
 	    $line=1;
+	} else {
+	    $distribution = $opt_D if $opt_D;
 	}
-	$distribution = $opt_D if $opt_D;
 	$urgency = $opt_u if $opt_u;
 	$CHANGES =~ s/^(\w[-+0-9a-z.]* \([^\(\) \t]+\))(?:\s+[-+0-9a-z.]+)+\;\s+urgency=\w+/$1 $distribution; urgency=$urgency/i;
     } else {
