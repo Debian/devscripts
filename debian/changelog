@@ -18,7 +18,7 @@ devscripts (2.10.9) UNRELEASED; urgency=low
       adding a changelog entry (Closes: #442267)
     + Make -r only change the distribution if it was previously UNRELEASED.
       Combining -r and -D on a changelog that's not UNRELEASED now
-      causes a warning but is otherwise ignored (Closes: #443081)
+      causes a warning and does not change the distribution (Closes: #443081)
   * licensecheck: Attempt to distinguish between versions of the BSD license
     (Closes: #442630)
   * bts: Improve the documentation of forcemerge. Thanks to dann frazier.
