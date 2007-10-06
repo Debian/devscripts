@@ -1502,7 +1502,7 @@ sub bts_reportspam {
 
     init_agent() unless $ua;
     foreach my $bug (@bugs) {
-	my $request = HTTP::Request->new('GET', "$btscgispamurl?bug=$bug");
+	my $request = HTTP::Request->new('GET', "$btscgispamurl?bug=$bug;ok=ok");
 	my $response = $ua->request($request);
 	if (! $response->is_success) {
 	    warn "bts: failed to report $bug as containing spam: " . $response->status_line . "\n";
