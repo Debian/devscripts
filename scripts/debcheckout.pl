@@ -218,6 +218,9 @@ sub main() {
     ) or pod2usage({-exitval => 3});
   pod2usage({-exitval => 3}) if ($#ARGV < 0 or $#ARGV > 1);
 
+  # -u|--user implies -a|--auth
+  $auth = 1 if $user;
+
   $destdir = $ARGV[1] if $#ARGV > 0;
   if (not is_package($ARGV[0])) {  # repo-url passed on the command line
     $repo_url = $ARGV[0];

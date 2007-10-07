@@ -1,9 +1,14 @@
 devscripts (2.10.10) UNRELEASED; urgency=low
 
+  [ Adam D. Barratt ]
   * licensecheck: Better detect 3-clause BSD licenses (Closes: #442630)
   * bts: Update for new bugspam.cgi syntax (Closes: #445557)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Sat, 06 Oct 2007 23:23:23 +0100
+  [ James Vega ]
+  * debcheckout: -u should imply -a, as documented.  Thanks Luca Capello for
+    the patch.  (Closes: #445706)
+
+ -- James Vega <jamessan@debian.org>  Sun, 07 Oct 2007 19:23:44 -0400
 
 devscripts (2.10.9) unstable; urgency=low
 
