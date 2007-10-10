@@ -6,8 +6,8 @@ Uploaders: Julian Gilbey <jdg@debian.org>, Filippo Giunchedi <filippo@debian.org
 Standards-Version: 3.7.2
 Build-Depends: perl (>= 5.8), debhelper (>= 5.0.0), libtimedate-perl, libwww-perl,
  xsltproc, docbook-xsl, po4a (>= 0.26)
-XS-Vcs-Browser: http://svn.debian.org/wsvn/devscripts/trunk/
-XS-Vcs-Svn: svn://svn.debian.org/devscripts/trunk
+Vcs-Browser: http://svn.debian.org/wsvn/devscripts/trunk/
+Vcs-Svn: svn://svn.debian.org/devscripts/trunk
 
 Package: devscripts
 Architecture: any
