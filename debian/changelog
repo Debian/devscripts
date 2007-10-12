@@ -11,8 +11,12 @@ devscripts (2.10.10) UNRELEASED; urgency=low
   [ Joey Hess ]
   * debcommit: Support creating signed tags using git. Controlled by the
     DEBCOMMIT_SIGN_TAGS setting, not enabled by default.
+  * debcommit: When run in a clean git repo with -r -a, git-commit would
+    exit nonzero as there was nothing to commit. Instead, check if
+    the repo is clean; don't run git commit in this case, and proceed with
+    tagging.
 
- -- Joey Hess <joeyh@debian.org>  Fri, 12 Oct 2007 14:22:15 -0400
+ -- Joey Hess <joeyh@debian.org>  Fri, 12 Oct 2007 14:23:34 -0400
 
 devscripts (2.10.9) unstable; urgency=low
 

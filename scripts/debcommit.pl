@@ -319,6 +319,15 @@ sub commit {
 	}
     }
     elsif ($prog eq 'git') {
+	if (! @files_to_commit && $all) {
+	    # check to see if the WC is clean. git-commit would exit
+	    # nonzero, so don't run it.
+	    my $status=`LANG=C git status`;
+	    if ($status=~/nothing to commit \(working directory clean\)/) {
+		    print $status;
+		    return;
+	    }
+	}
 	if ($all) {
 	    @files_to_commit=("-a")
 	}
