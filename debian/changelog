@@ -8,7 +8,11 @@ devscripts (2.10.10) UNRELEASED; urgency=low
   * debcheckout: -u should imply -a, as documented.  Thanks Luca Capello for
     the patch.  (Closes: #445706)
 
- -- James Vega <jamessan@debian.org>  Sun, 07 Oct 2007 19:23:44 -0400
+  [ Joey Hess ]
+  * debcommit: Support creating signed tags using git. Controlled by the
+    DEBCOMMIT_SIGN_TAGS setting, not enabled by default.
+
+ -- Joey Hess <joeyh@debian.org>  Fri, 12 Oct 2007 14:22:15 -0400
 
 devscripts (2.10.9) unstable; urgency=low
 

@@ -68,6 +68,11 @@ the message.
 This option is ignored if more than one line of the message 
 begins with "* ".
 
+=item B<--sign-tags>, B<--no-sign-tags>
+
+If this option is set, then tags that debcommit creates will be signed
+using gnupg. Currently this is only supported by git.
+
 =over 4
 
 =back
@@ -86,6 +91,16 @@ ignored for this purpose.  The currently recognised variables are:
 
 If this is set to I<yes>, then it is the same as the --strip-message 
 command line parameter being used. The default is I<no>.
+
+=item B<DEBCOMMIT_SIGN_TAGS>
+
+If this is set to I<yes>, then it is the same as the --sign-tags command
+line parameter being used. The default is I<no>.
+
+=item B<DEBSIGN_KEYID>
+
+This is the key id used for signing tags. If not set, a default will be
+chosen by the revision control system.
 
 =cut
 
@@ -115,6 +130,8 @@ Options:
    -a --all            Commit all files (default except for git)
    -s --strip-message  Strip the leading '* ' from the commit message
    --no-strip-message  Do not strip a leading '* ' (default)
+   --sign-tags         Enable signing of tags (git only)
+   --no-sign-tags      Do not sign tags (default)
    -h --help           This message
    -v --version        Version information
 
@@ -144,7 +161,9 @@ my $noact=0;
 my $confirm=0;
 my $all=0;
 my $stripmessage=0;
+my $signtags=0;
 my $changelog="debian/changelog";
+my $keyid;
 
 # Now start by reading configuration files and then command line
 # The next stuff is boilerplate
@@ -156,6 +175,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
     my %config_vars = (
 		       'DEBCOMMIT_STRIP_MESSAGE' => 'no',
+		       'DEBCOMMIT_SIGN_TAGS' => 'no',
+		       'DEBSIGN_KEYID' => '',
 		      );
     my %config_default = %config_vars;
 
@@ -174,6 +195,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     # Check validity
     $config_vars{'DEBCOMMIT_STRIP_MESSAGE'} =~ /^(yes|no)$/
 	or $config_vars{'DEBCOMMIT_STRIP_MESSAGE'}='no';
+    $config_vars{'DEBCOMMIT_SIGN_TAGS'} =~ /^(yes|no)$/
+	or $config_vars{'DEBCOMMIT_SIGN_TAGS'}='no';
 
     foreach my $var (sort keys %config_vars) {
         if ($config_vars{$var} ne $config_default{$var}) {
@@ -184,6 +207,11 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     chomp $modified_conf_msg;
 
     $stripmessage = $config_vars{'DEBCOMMIT_STRIP_MESSAGE'} eq 'no' ? 0 : 1;
+    $signtags = $config_vars{'DEBCOMMIT_SIGN_TAGS'} eq 'no' ? 0 : 1;
+    if (exists $config_vars{'DEBSIGN_KEYID'} &&
+	length $config_vars{'DEBSIGN_KEYID'}) {
+	$keyid=$config_vars{'DEBSIGN_KEYID'};
+    }
 }
 
 # Now read the command line arguments
@@ -197,6 +225,7 @@ if (! GetOptions(
 		 "a|all" => \$all,
 		 "c|changelog=s" => \$changelog,
 		 "s|strip-message!" => \$stripmessage,
+		 "sign-tags!" => \$signtags,
 		 "h|help" => sub { usage(); exit 0; },
 		 "v|version" => sub { version(); exit 0; },
 		 )) {
@@ -376,9 +405,24 @@ sub tag {
         }
     }
     elsif ($prog eq 'git') {
-	    $tag=~s/^[0-9]+://; # strip epoch
-	    $tag="debian_version_$tag";
-    	if (! action($prog, "tag", $tag)) {
+	$tag=~s/^[0-9]+://; # strip epoch
+	$tag="debian_version_$tag";
+
+	if ($signtags) {
+		if (defined $keyid) {
+			if (! action($prog, "tag", "-u", $keyid, "-m",
+			             "tagging version $tag", $tag)) {
+	        		die "debcommit: failed tagging with $tag\n";
+			}
+		}
+		else {
+			if (! action($prog, "tag", "-s", "-m",
+			             "tagging version $tag", $tag)) {
+	        		die "debcommit: failed tagging with $tag\n";
+			}
+		}
+	}
+	elsif (! action($prog, "tag", $tag)) {
 	        die "debcommit: failed tagging with $tag\n";
     	}
     }
