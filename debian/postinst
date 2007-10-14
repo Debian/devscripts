@@ -354,6 +354,18 @@ EOF
 # DEBCOMMIT_STRIP_MESSAGE=no
 EOF
 	fi
+	
+	if dpkg --compare-versions "$2" lt 2.10.10
+	then
+	    # Added in devscripts 2.10.10
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### debcommit option added in version 2.10.10
+#
+# Sign created tags using gnupg?
+# DEBCOMMIT_SIGN_TAGS=no
+EOF
+	fi
     fi
 fi
 
