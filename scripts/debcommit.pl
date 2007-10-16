@@ -415,7 +415,6 @@ sub tag {
     }
     elsif ($prog eq 'git') {
 	$tag=~s/^[0-9]+://; # strip epoch
-	$tag="debian_version_$tag";
 
 	if ($signtags) {
 		if (defined $keyid) {
