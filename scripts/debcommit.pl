@@ -415,6 +415,10 @@ sub tag {
     }
     elsif ($prog eq 'git') {
 	$tag=~s/^[0-9]+://; # strip epoch
+	if ($tag=~/-/) {
+		# not a native package, so tag as a debian release
+		$tag="debian/$tag";
+	}
 
 	if ($signtags) {
 		if (defined $keyid) {

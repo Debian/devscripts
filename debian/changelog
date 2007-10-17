@@ -15,8 +15,8 @@ devscripts (2.10.10) UNRELEASED; urgency=low
     exit nonzero as there was nothing to commit. Instead, check if
     the repo is clean; don't run git commit in this case, and proceed with
     tagging.
-  * debcommit: Name git tags with just the debian package version number,
-    not prefixed with "debian_version_". Closes: #446699
+  * debcommit: Name git tags "debian/$version" or just with the package
+    version number for native version numbers. Closes: #446699
 
  -- Joey Hess <joeyh@debian.org>  Tue, 16 Oct 2007 16:33:07 -0400
 
