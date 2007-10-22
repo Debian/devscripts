@@ -15,6 +15,7 @@
 
 PROGNAME=`basename $0`
 CACHEDIR=~/.devscripts_cache
+CACHEDDIFF="${CACHEDIR}/wnpp-diff"
 
 usage () { echo \
 "Usage: $PROGNAME [--help|-h|--version|-v]
@@ -29,6 +30,23 @@ version () { echo \
 This script is in the PUBLIC DOMAIN.
 Authors: Arthur Korn <arthur@korn.ch>
 Modifications: Julian Gilbey <jdg@debian.org>"
+}
+
+wnppdiff () {
+    if [ ! -f "$CACHEDDIFF" ]; then
+        # First use
+        comm -12 $WNPP_PACKAGES $INSTALLED | sed -e 's/+/\\+/g' | \
+          xargs -i egrep '^[A-Z]+ [0-9]+ {} ' $WNPP | \
+          tee $CACHEDDIFF
+    else
+        comm -12 $WNPP_PACKAGES $INSTALLED | sed -e 's/+/\\+/g' | \
+          xargs -i egrep '^[A-Z]+ [0-9]+ {} ' $WNPP > $WNPP_DIFF
+        sort -o $CACHEDDIFF $CACHEDDIFF
+        sort -o $WNPP_DIFF $WNPP_DIFF
+        comm -3 $CACHEDDIFF $WNPP_DIFF | \
+          sed -e 's/\t/\+/g' -e 's/^\([^+]\)/-\1/g'
+        mv $WNPP_DIFF $CACHEDDIFF
+    fi
 }
 
 if [ "x$1" = "x--help" -o "x$1" = "x-h" ]; then usage; exit 0; fi
@@ -54,6 +72,12 @@ trap "rm -f '$INSTALLED' '$WNPP' '$WNPPTMP'" 0 1 2 3 7 10 13 15
 WNPP_PACKAGES=`mktemp -t wnppalert-wnpp_packages.XXXXXX`
 trap "rm -f '$INSTALLED' '$WNPP' '$WNPPTMP' '$WNPP_PACKAGES'" \
   0 1 2 3 7 10 13 15
+
+if [ "x$1" = "x--diff" ] || [ "x$1" = "x-d" ]; then
+    WNPP_DIFF=`mktemp -t wnppalert-wnpp_diff.XXXXXX`
+    trap "rm -f '$INSTALLED' '$WNPP' '$WNPPTMP' '$WNPP_PACKAGES' '$WNPP_DIFF'" \
+      0 1 2 3 7 10 13 15
+fi
 
 # Here's a really sly sed script.  Rather than first grepping for
 # matching lines and then processing them, this attempts to sed
@@ -85,6 +109,15 @@ grep '^\(Package\|Source\):' | \
 cut -f2 -d' ' | \
 sort -u \
 > $INSTALLED
+
+if [ "x$1" = "x--diff" -o "x$1" = "x-d" ]; then 
+    if [ -d "$CACHEDIR" ]; then
+        wnppdiff
+        exit 0
+    else
+        echo "$PROGNAME: Unable to create diff; displaying full output" 
+    fi
+fi
 
 comm -12 $WNPP_PACKAGES $INSTALLED | sed -e 's/+/\\+/g' | \
 xargs -i egrep '^[A-Z]+ [0-9]+ {} ' $WNPP
