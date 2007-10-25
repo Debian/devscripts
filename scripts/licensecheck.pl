@@ -233,6 +233,7 @@ $opt_lines = $def_lines if not defined $opt_lines;
 
 my @files = ();
 my @find_args = ();
+my $files_count = @ARGV;
 
 push @find_args, qw(-maxdepth 1) unless $opt_recursive;
 push @find_args, qw(-follow -type f -print);
@@ -251,7 +252,7 @@ while (@ARGV) {
 	}
 	close FIND;
     } else {
-	next unless $file =~ m%$opt_check_regex%;
+	next unless ($files_count == 1) or $file =~ m%$opt_check_regex%;
 	push @files, $file unless $file =~ m%$opt_ignore_regex%;
     }
 }
