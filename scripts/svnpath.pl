@@ -37,7 +37,7 @@ something like this:
   svn cp svn+ssh://my.server.example/svn/project/trunk svn+ssh://my.server.example/svn/project/tags/1.0
 
 svnpath uses a simple heuristic to convert between the trunk, tags, and
-branches paths. It replaes the first occurance of "trunk", "tags", or
+branches paths. It replaces the first occurrence of "trunk", "tags", or
 "branches" with the name of what you're looking for. This will work ok for
 most typical subversion repository layouts.
 

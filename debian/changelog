@@ -11,6 +11,7 @@ devscripts (2.10.10) UNRELEASED; urgency=low
   * wnpp-alert: Add an option to display the changes since the last
     invocation. Based on a patch by Luca Bedogni; thanks.
     (Closes: #446910)
+  * svnpath: Fix a couple of typoes (Closes: #448167)
 
   [ James Vega ]
   * debcheckout: -u should imply -a, as documented.  Thanks Luca Capello for
@@ -26,7 +27,7 @@ devscripts (2.10.10) UNRELEASED; urgency=low
   * debcommit: Name git tags "debian/$version" or just with the package
     version number for native version numbers. Closes: #446699
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Thu, 25 Oct 2007 20:47:05 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Fri, 26 Oct 2007 18:22:43 +0100
 
 devscripts (2.10.9) unstable; urgency=low
 
