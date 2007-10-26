@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2007-10-03 00:54+0200\n"
+"POT-Creation-Date: 2007-10-26 18:25+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -165,7 +165,7 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../scripts/annotate-output.1:55 ../scripts/archpath.1:54 ../scripts/checkbashisms.1:38 ../scripts/cvs-debc.1:64 ../scripts/cvs-debi.1:68 ../scripts/cvs-debrelease.1:69 ../scripts/cvs-debuild.1:63 ../scripts/dd-list.1:93 ../scripts/debc.1:120 ../scripts/debchange.1:360 ../scripts/debclean.1:111 ../scripts/debcommit.pl:466 ../scripts/debdiff.1:175 ../scripts/debi.1:120 ../scripts/debpkg.1:23 ../scripts/debrelease.1:137 ../scripts/deb-reversion.dbk:278 ../scripts/debrsign.1:71 ../scripts/debsign.1:128 ../scripts/debuild.1:413 ../scripts/dget.pl:537 ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscverify.1:48 ../scripts/grep-excuses.1:36 ../scripts/mass-bug.pl:437 ../scripts/mergechanges.1:17 ../scripts/nmudiff.1:97 ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:29 ../scripts/rmadison.pl:241 ../scripts/svnpath.pl:97 ../scripts/tagpending.1:49 ../scripts/uscan.1:507 ../scripts/uupdate.1:167 ../scripts/whodepends.1:19 ../scripts/who-uploads.1:58 ../scripts/wnpp-alert.1:22 ../scripts/devscripts.conf.5:58
+#: ../scripts/annotate-output.1:55 ../scripts/archpath.1:54 ../scripts/checkbashisms.1:38 ../scripts/cvs-debc.1:64 ../scripts/cvs-debi.1:68 ../scripts/cvs-debrelease.1:69 ../scripts/cvs-debuild.1:63 ../scripts/dd-list.1:93 ../scripts/debc.1:120 ../scripts/debchange.1:360 ../scripts/debclean.1:111 ../scripts/debcommit.pl:522 ../scripts/debdiff.1:175 ../scripts/debi.1:120 ../scripts/debpkg.1:23 ../scripts/debrelease.1:137 ../scripts/deb-reversion.dbk:278 ../scripts/debrsign.1:71 ../scripts/debsign.1:128 ../scripts/debuild.1:413 ../scripts/dget.pl:537 ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscverify.1:48 ../scripts/grep-excuses.1:36 ../scripts/mass-bug.pl:437 ../scripts/mergechanges.1:17 ../scripts/nmudiff.1:97 ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:29 ../scripts/rmadison.pl:241 ../scripts/svnpath.pl:97 ../scripts/tagpending.1:49 ../scripts/uscan.1:507 ../scripts/uupdate.1:167 ../scripts/whodepends.1:19 ../scripts/who-uploads.1:58 ../scripts/wnpp-alert.1:27 ../scripts/devscripts.conf.5:58
 #, no-wrap
 msgid "AUTHOR"
 msgstr ""
@@ -1649,13 +1649,13 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../scripts/bts.pl:3145 ../scripts/debc.1:92 ../scripts/debchange.1:298 ../scripts/debclean.1:90 ../scripts/debcommit.pl:75 ../scripts/debdiff.1:135 ../scripts/debi.1:93 ../scripts/debrelease.1:105 ../scripts/debrsign.1:57 ../scripts/debsign.1:99 ../scripts/debuild.1:276 ../scripts/dget.pl:514 ../scripts/dpkg-depcheck.1:102 ../scripts/dscverify.1:33 ../scripts/grep-excuses.1:24 ../scripts/mass-bug.pl:106 ../scripts/nmudiff.1:69 ../scripts/plotchangelog.1:106 ../scripts/pts-subscribe.1:37 ../scripts/uscan.1:427 ../scripts/uupdate.1:86 ../scripts/who-uploads.1:42
+#: ../scripts/bts.pl:3145 ../scripts/debc.1:92 ../scripts/debchange.1:298 ../scripts/debclean.1:90 ../scripts/debcommit.pl:80 ../scripts/debdiff.1:135 ../scripts/debi.1:93 ../scripts/debrelease.1:105 ../scripts/debrsign.1:57 ../scripts/debsign.1:99 ../scripts/debuild.1:276 ../scripts/dget.pl:514 ../scripts/dpkg-depcheck.1:102 ../scripts/dscverify.1:33 ../scripts/grep-excuses.1:24 ../scripts/mass-bug.pl:106 ../scripts/nmudiff.1:69 ../scripts/plotchangelog.1:106 ../scripts/pts-subscribe.1:37 ../scripts/uscan.1:427 ../scripts/uupdate.1:86 ../scripts/who-uploads.1:42
 #, no-wrap
 msgid "CONFIGURATION VARIABLES"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3147 ../scripts/debcommit.pl:77 ../scripts/mass-bug.pl:108
+#: ../scripts/bts.pl:3147 ../scripts/debcommit.pl:82 ../scripts/mass-bug.pl:108
 msgid ""
 "The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  Command "
@@ -1833,13 +1833,13 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../scripts/checkbashisms.1:15 ../scripts/debchange.1:292 ../scripts/debdiff.1:123 ../scripts/debrelease.1:99 ../scripts/debsign.1:93 ../scripts/dscverify.1:27 ../scripts/pts-subscribe.1:23 ../scripts/rc-alert.1:21 ../scripts/uupdate.1:80 ../scripts/who-uploads.1:36 ../scripts/wnpp-alert.1:14
+#: ../scripts/checkbashisms.1:15 ../scripts/debchange.1:292 ../scripts/debdiff.1:123 ../scripts/debrelease.1:99 ../scripts/debsign.1:93 ../scripts/dscverify.1:27 ../scripts/pts-subscribe.1:23 ../scripts/rc-alert.1:21 ../scripts/uupdate.1:80 ../scripts/who-uploads.1:36 ../scripts/wnpp-alert.1:19
 #, no-wrap
 msgid "B<--help>, B<-h>"
 msgstr ""
 
 # type: Plain text
-#: ../scripts/checkbashisms.1:18 ../scripts/debdiff.1:126 ../scripts/rc-alert.1:24 ../scripts/wnpp-alert.1:17
+#: ../scripts/checkbashisms.1:18 ../scripts/debdiff.1:126 ../scripts/rc-alert.1:24 ../scripts/wnpp-alert.1:22
 msgid "Show a summary of options."
 msgstr ""
 
@@ -1855,13 +1855,13 @@ msgid "Check for \"echo -n\" usage (non POSIX but required by Debian Policy 10.4
 msgstr ""
 
 # type: TP
-#: ../scripts/checkbashisms.1:22 ../scripts/debdiff.1:126 ../scripts/rc-alert.1:24 ../scripts/wnpp-alert.1:17
+#: ../scripts/checkbashisms.1:22 ../scripts/debdiff.1:126 ../scripts/rc-alert.1:24 ../scripts/wnpp-alert.1:22
 #, no-wrap
 msgid "B<--version>, B<-v>"
 msgstr ""
 
 # type: Plain text
-#: ../scripts/checkbashisms.1:25 ../scripts/debdiff.1:129 ../scripts/grep-excuses.1:24 ../scripts/rc-alert.1:27 ../scripts/tagpending.1:44 ../scripts/whodepends.1:17 ../scripts/wnpp-alert.1:20
+#: ../scripts/checkbashisms.1:25 ../scripts/debdiff.1:129 ../scripts/grep-excuses.1:24 ../scripts/rc-alert.1:27 ../scripts/tagpending.1:44 ../scripts/whodepends.1:17 ../scripts/wnpp-alert.1:25
 msgid "Show version and copyright information."
 msgstr ""
 
@@ -1903,7 +1903,7 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../scripts/checkbashisms.1:36 ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62 ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:56 ../scripts/debc.1:115 ../scripts/debchange.1:353 ../scripts/debclean.1:107 ../scripts/debcommit.pl:470 ../scripts/debdiff.1:169 ../scripts/debi.1:116 ../scripts/debrelease.1:132 ../scripts/deb-reversion.dbk:233 ../scripts/debrsign.1:66 ../scripts/debsign.1:118 ../scripts/debuild.1:399 ../scripts/dget.pl:545 ../scripts/dpkg-depcheck.1:118 ../scripts/dpkg-genbuilddeps.1:30 ../scripts/dscverify.1:44 ../scripts/grep-excuses.1:34 ../scripts/nmudiff.1:92 ../scripts/plotchangelog.1:124 ../scripts/pts-subscribe.1:46 ../scripts/rc-alert.1:27 ../scripts/rmadison.pl:237 ../scripts/tagpending.1:44 ../scripts/uscan.1:501 ../scripts/uupdate.1:160 ../scripts/wnpp-alert.1:20 ../scripts/devscripts.conf.5:54
+#: ../scripts/checkbashisms.1:36 ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62 ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:56 ../scripts/debc.1:115 ../scripts/debchange.1:353 ../scripts/debclean.1:107 ../scripts/debcommit.pl:526 ../scripts/debdiff.1:169 ../scripts/debi.1:116 ../scripts/debrelease.1:132 ../scripts/deb-reversion.dbk:233 ../scripts/debrsign.1:66 ../scripts/debsign.1:118 ../scripts/debuild.1:399 ../scripts/dget.pl:545 ../scripts/dpkg-depcheck.1:118 ../scripts/dpkg-genbuilddeps.1:30 ../scripts/dscverify.1:44 ../scripts/grep-excuses.1:34 ../scripts/nmudiff.1:92 ../scripts/plotchangelog.1:124 ../scripts/pts-subscribe.1:46 ../scripts/rc-alert.1:27 ../scripts/rmadison.pl:237 ../scripts/tagpending.1:44 ../scripts/uscan.1:501 ../scripts/uupdate.1:160 ../scripts/wnpp-alert.1:25 ../scripts/devscripts.conf.5:54
 #, no-wrap
 msgid "SEE ALSO"
 msgstr ""
@@ -3656,24 +3656,61 @@ msgid ""
 msgstr ""
 
 # type: =item
-#: ../scripts/debcommit.pl:85
+#: ../scripts/debcommit.pl:71
+msgid "B<--sign-tags>, B<--no-sign-tags>"
+msgstr ""
+
+# type: textblock
+#: ../scripts/debcommit.pl:73
+msgid ""
+"If this option is set, then tags that debcommit creates will be signed using "
+"gnupg. Currently this is only supported by git."
+msgstr ""
+
+# type: =item
+#: ../scripts/debcommit.pl:90
 msgid "B<DEBCOMMIT_STRIP_MESSAGE>"
 msgstr ""
 
 # type: textblock
-#: ../scripts/debcommit.pl:87
+#: ../scripts/debcommit.pl:92
 msgid ""
 "If this is set to I<yes>, then it is the same as the --strip-message command "
 "line parameter being used. The default is I<no>."
 msgstr ""
 
+# type: =item
+#: ../scripts/debcommit.pl:95
+msgid "B<DEBCOMMIT_SIGN_TAGS>"
+msgstr ""
+
+# type: textblock
+#: ../scripts/debcommit.pl:97
+msgid ""
+"If this is set to I<yes>, then it is the same as the --sign-tags command "
+"line parameter being used. The default is I<no>."
+msgstr ""
+
+# type: TP
+#: ../scripts/debcommit.pl:100 ../scripts/debsign.1:115
+#, no-wrap
+msgid "B<DEBSIGN_KEYID>"
+msgstr ""
+
+# type: textblock
+#: ../scripts/debcommit.pl:102
+msgid ""
+"This is the key id used for signing tags. If not set, a default will be "
+"chosen by the revision control system."
+msgstr ""
+
 # type: =head1
-#: ../scripts/debcommit.pl:459 ../scripts/svnpath.pl:93
+#: ../scripts/debcommit.pl:515 ../scripts/svnpath.pl:93
 msgid "LICENSE"
 msgstr ""
 
 # type: textblock
-#: ../scripts/debcommit.pl:461
+#: ../scripts/debcommit.pl:517
 msgid ""
 "This code is copyright by Joey Hess <joeyh@debian.org>, all rights "
 "reserved.  This program comes with ABSOLUTELY NO WARRANTY.  You are free to "
@@ -3682,12 +3719,12 @@ msgid ""
 msgstr ""
 
 # type: textblock
-#: ../scripts/debcommit.pl:468 ../scripts/mass-bug.pl:439
+#: ../scripts/debcommit.pl:524 ../scripts/mass-bug.pl:439
 msgid "Joey Hess <joeyh@debian.org>"
 msgstr ""
 
 # type: textblock
-#: ../scripts/debcommit.pl:472
+#: ../scripts/debcommit.pl:528
 msgid "L<svnpath(1)>."
 msgstr ""
 
@@ -5027,12 +5064,6 @@ msgstr ""
 # type: Plain text
 #: ../scripts/debsign.1:115
 msgid "This is the B<-m> option."
-msgstr ""
-
-# type: TP
-#: ../scripts/debsign.1:115
-#, no-wrap
-msgid "B<DEBSIGN_KEYID>"
 msgstr ""
 
 # type: Plain text
@@ -7611,7 +7642,7 @@ msgstr ""
 #: ../scripts/svnpath.pl:39
 msgid ""
 "svnpath uses a simple heuristic to convert between the trunk, tags, and "
-"branches paths. It replaes the first occurance of \"trunk\", \"tags\", or "
+"branches paths. It replaces the first occurrence of \"trunk\", \"tags\", or "
 "\"branches\" with the name of what you're looking for. This will work ok for "
 "most typical subversion repository layouts."
 msgstr ""
@@ -9260,7 +9291,7 @@ msgstr ""
 
 # type: Plain text
 #: ../scripts/wnpp-alert.1:8
-msgid "B<wnpp-alert --help|--version>"
+msgid "B<wnpp-alert --help|--version|--diff>"
 msgstr ""
 
 # type: Plain text
@@ -9272,13 +9303,27 @@ msgid ""
 "system which are in those lists."
 msgstr ""
 
+# type: TP
+#: ../scripts/wnpp-alert.1:14
+#, no-wrap
+msgid "B<--diff>, B<-d>"
+msgstr ""
+
 # type: Plain text
-#: ../scripts/wnpp-alert.1:22
+#: ../scripts/wnpp-alert.1:19
+msgid ""
+"If the I<~/.devscripts_cache> directory exists, compare the output of "
+"B<wnpp-alert> to the previous output (cached in the file I<wnpp-diff>) and "
+"output the differences."
+msgstr ""
+
+# type: Plain text
+#: ../scripts/wnpp-alert.1:27
 msgid "http://www.debian.org/devel/wnpp"
 msgstr ""
 
 # type: Plain text
-#: ../scripts/wnpp-alert.1:25
+#: ../scripts/wnpp-alert.1:30
 msgid ""
 "B<wnpp-alert> was written by Arthur Korn E<lt>arthur@korn.chE<gt> and "
 "modified by Julian Gilbey E<lt>jdg@debian.orgE<gt> for the devscripts "
