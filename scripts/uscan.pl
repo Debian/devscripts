@@ -874,7 +874,7 @@ sub process_watchline ($$$$$$)
 
 	# We separate out HTMLised listings from standard listings, so
 	# that we can target our search correctly
-	if (/<\s*a\s+[^>]*href/i) {
+	if ($content =~ /<\s*a\s+[^>]*href/i) {
 	    while ($content =~ 
 		m/(?:<\s*a\s+[^>]*href\s*=\s*\")($pattern)\"/gi) {
 		my $file = $1;
