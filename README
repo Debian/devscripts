@@ -120,6 +120,9 @@ And now, in mostly alphabetical order, the scripts:
 - deb-reversion: Increases a binary package version number and repacks
   the package, useful for porters and the like.
 
+- desktop2menu: given a freedesktop.org desktop file, generate a skeleton
+  for a menu file
+
 - dget: Downloads Debian source and binary packages. Point at a .changes
   or .dsc to download all references files. Specify a package name to
   download it from the configured apt repository.

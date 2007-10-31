@@ -19,9 +19,9 @@ Recommends: fakeroot
 Suggests: devscripts-el, at, build-essential, cvs-buildpackage,
  cvs | subversion | svk | tla | bzr | git-core | mercurial, debian-keyring,
  dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, libcrypt-ssleay-perl,
- libdigest-md5-perl, libsoap-lite-perl, libtimedate-perl, liburi-perl,
- libwww-perl, lintian | linda, mailx | mailutils, man-db, mutt, patch,
- patchutils, ssh, strace, wdiff, wget, www-browser
+ libdigest-md5-perl, libfile-desktopentry-perl, libsoap-lite-perl,
+ libtimedate-perl, liburi-perl, libwww-perl, lintian | linda, mailx | mailutils,
+ man-db, mutt, patch, patchutils, ssh, strace, wdiff, wget, www-browser
 Description: Scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
  brackets afterwards:
@@ -65,6 +65,8 @@ Description: Scripts to make the life of a Debian Package maintainer easier
     lintian | linda, gnupg]
   - deb-reversion: increases a binary package version number and repacks the
     archive
+  - desktop2menu: produce a skeleton menu file from a freedesktop.org
+    desktop file [libfile-desktopentry-perl]
   - dget: downloads Debian source and binary packages [wget]
   - dpkg-depcheck, dpkg-genbuilddeps: determine the packages used during
     the build of a Debian package; useful for determining the Build-Depends
