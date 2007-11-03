@@ -445,12 +445,32 @@ elsif ($type eq 'dsc') {
 	    no strict 'refs';
 	    my $cmd = qq(cd ${"dir$i"} && dpkg-source -x $dscs[$i] >/dev/null);
 	    system $cmd;
-	    fatal "$cmd failed" if $? != 0;
+	    if ($? != 0) {
+	    	    my $dir = dirname $dscs[1] if $i == 2;
+	    	    $dir = dirname $dscs[2] if $i == 1;
+	    	    my $cmdx = qq(cp $dir/$origs[$i] ${"dir$i"} >/dev/null);
+		    system $cmdx;
+		    fatal "$cmd failed" if $? != 0;
+		    my $dscx = basename $dscs[$i];
+		    $cmdx = qq(cp $diffs[$i] ${"dir$i"} && cp $dscs[$i] ${"dir$i"} && cd ${"dir$i"} && dpkg-source -x $dscx > /dev/null);
+		    system $cmdx;
+		    fatal "$cmd failed" if $? != 0;
+	    }
 	    opendir DIR,${"dir$i"};
 	    while ($_ = readdir(DIR)) {
 		    next if $_ eq '.' || $_ eq '..' || ! -d ${"dir$i"}."/$_";
 		    ${"sdir$i"} = $_;
 		    last;
+	    }
+	    closedir(DIR);
+	    opendir DIR,${"dir$i"}.'/'.${"sdir$i"};
+	    while ($_ = readdir(DIR)) {
+		    if ($_ =~ /tar.gz$/) {
+		        system qq(cd ${"dir$i"}/${"sdir$i"} && tar zxf $_ >/dev/null); 
+		    }
+		    if ($_ =~ /tar.bz$/) {
+		        system qq(cd ${"dir$i"}/${"sdir$i"} && tar jxf $_ >/dev/null);
+		    }
 	    }
 	    closedir(DIR);
 	}
