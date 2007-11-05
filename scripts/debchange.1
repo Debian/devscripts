@@ -58,9 +58,10 @@ was performed with a version of \fBdupload\fR prior to 2.1 or because the
 upload failed. The alternate "changelog" heuristic assumes the package has
 been released unless its changelog contains "UNRELEASED" in the
 distribution field. If this heuristic is enabled then the distribution will
-default to "UNRELEASED" in new changelog entries. This can be useful if a
-package can be released by different maintainers, or if you do not keep the
-upload logs.
+default to "UNRELEASED" in new changelog entries, and the
+\fB\-\-mainttrailer\fR option described below will be automatically
+enabled. This can be useful if a package can be released by different
+maintainers, or if you do not keep the upload logs.
 .PP
 If either \fB\-\-increment\fR or \fB\-\-newversion\fR is used, the
 name and email for the new version will be determined as follows.  If
@@ -161,9 +162,10 @@ respects.  It will also change the directory name if the upstream
 version number has changed.
 .TP
 .BR \-\-edit ", " \-e
-Update the changelog timestamp, and start an editor.
+Edit the changelog in an editor.
 .TP
 .BR \-\-release ", " \-r
+Finalize the changelog for a release.
 Update the changelog timestamp. If the distribution is set to
 "UNRELEASED", change it to the distribution from the previous changelog entry 
 (or another distribution as specified by \fB\-\-distribution\fR).  If there are 
@@ -265,13 +267,14 @@ Note that there may be some interesting interactions if
 multi-maintainer mode is in use; you will probably wish to check the
 changelog manually before uploading it in such cases.
 .TP
-.BR \-\-mainttrailer ", " \-t
-Do not modify the existing changelog trailer line (i.e. the maintainer and 
-date-stamp details).  This option differs from \fB\-\-maintmaint\fR in that it 
-will use multi-maintainer mode if appropriate, with the exception of editing 
-the trailer.  This option will be ignored if combined with options that require 
-the trailer to be modified (e.g. \fB\-\-create\fR, \fB\-\-release\fR, 
-\fB\-i\fR, \fB\-\-qa\fR, etc.)
+.BR \-\-[no]mainttrailer ", " \-t
+If mainttrailer is set, it will avoid modifying the existing changelog
+trailer line (i.e. the maintainer and date-stamp details), unless
+used with options that require the trailer to be modified
+(e.g. \fB\-\-create\fR, \fB\-\-release\fR, \fB\-i\fR, \fB\-\-qa\fR, etc.)
+This option differs from \fB\-\-maintmaint\fR in that it will use
+multi-maintainer mode if appropriate, with the exception of editing the
+trailer.  
 .TP
 \fB\-\-check-dirname-level\fR \fIN\fR
 See the above section "Directory name checking" for an explanation of

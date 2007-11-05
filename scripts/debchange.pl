@@ -272,7 +272,7 @@ GetOptions("help|h" => \$opt_help,
 	   "multimaint!" => \$opt_multimaint,
 	   "multi-maint!" => \$opt_multimaint,
 	   "m|maintmaint" => \$opt_m,
-	   "t|mainttrailer" => \$opt_t,
+	   "t|mainttrailer!" => \$opt_t,
 	   "ignore-dirname" => \$opt_ignore,
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
@@ -283,6 +283,10 @@ GetOptions("help|h" => \$opt_help,
     or die "Usage: $progname [options] [changelog entry]\nRun $progname --help for more details\n";
 
 $opt_news = 'debian/NEWS' if defined $opt_news and $opt_news eq '';
+
+if (! defined $opt_t && $opt_release_heuristic eq 'changelog') {
+    $opt_t = 1;
+}
 
 if ($opt_noconf) {
     fatal "--no-conf is only acceptable as the first command-line option!";
