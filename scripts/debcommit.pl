@@ -233,7 +233,7 @@ if (! GetOptions(
 }
 
 my @files_to_commit = @ARGV;
-if (@files_to_commit && !grep($changelog, @files_to_commit)) {
+if (@files_to_commit && !grep(/$changelog/,@files_to_commit)) {
     push @files_to_commit, $changelog;
 }
 
