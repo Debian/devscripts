@@ -107,6 +107,7 @@ chosen by the revision control system.
 use warnings;
 use strict;
 use Getopt::Long;
+use Cwd;
 use File::Basename;
 my $progname = basename($0);
 
@@ -266,10 +267,10 @@ sub getprog {
     if (-d ".svn") {
 	return "svn";
     }
-    elsif (-d "CVS") {
+    if (-d "CVS") {
 	return "cvs";
     }
-    elsif (-d "{arch}") {
+    if (-d "{arch}") {
 	# I don't think we can tell just from the working copy
 	# whether to use tla or baz, so try baz if it's available,
 	# otherwise fall back to tla.
@@ -279,24 +280,34 @@ sub getprog {
 	    return "tla";
 	}
     }
-    elsif (-d ".bzr") {
+    if (-d ".bzr") {
 	return "bzr";
     }
-    elsif (-d ".git") {
+    if (-d ".git") {
 	return "git";
     }
-    elsif (-d ".hg") {
+    if (-d ".hg") {
 	return "hg";
     }
-    else {
-	# svk has no useful directories so try to run it.
-	my $svkpath=`svk info . 2>/dev/null| grep -i '^Depot Path:' | cut -d ' ' -f 2`;
+    if (-d "$ENV{HOME}/.svk") {
+    	# Apart from ~/.svk, svk svk has no useful directories so try
+	# to run it. Avoid interactive prompting!
+	my $svkpath=`echo n | svk info . 2>/dev/null| grep -i '^Depot Path:' | cut -d ' ' -f 2`;
 	if (length $svkpath) {
 	    return "svk";
 	}
-	
-	die "debcommit: not in a cvs, subversion, baz, bzr, git, hg, or svk working copy\n";
     }
+
+    # .git may be in a parent directory, rather than the current
+    # directory, if multiple packages are kept in one git repository.
+    my $dir=getcwd();
+    while ($dir=~s/[^\/]*\/?$// && length $dir) {
+    	if (-d "$dir/.git") {
+    		return "git";
+    	}
+    }
+
+    die "debcommit: not in a cvs, subversion, baz, bzr, git, hg, or svk working copy\n";
 }
 
 sub action {
