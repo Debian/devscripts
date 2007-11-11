@@ -17,11 +17,12 @@ Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), sed (>= 2.95),
  ${shlibs:Depends}, ${misc:Depends}
 Recommends: fakeroot
 Suggests: devscripts-el, at, build-essential, cvs-buildpackage,
- cvs | subversion | svk | tla | bzr | git-core | mercurial, debian-keyring,
- dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, libcrypt-ssleay-perl,
- libdigest-md5-perl, libfile-desktopentry-perl, libsoap-lite-perl,
- libtimedate-perl, liburi-perl, libwww-perl, lintian | linda, mailx | mailutils,
- man-db, mutt, patch, patchutils, ssh, strace, wdiff, wget, www-browser
+ cvs | subversion | svk | tla | bzr | git-core | mercurial, dctrl-tools,
+ debian-keyring, dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, 
+ libcrypt-ssleay-perl, libdigest-md5-perl, libfile-desktopentry-perl, 
+ libsoap-lite-perl, libtimedate-perl, liburi-perl, libwww-perl, 
+ lintian | linda, mailx | mailutils, man-db, mutt, patch, patchutils, ssh, 
+ strace, wdiff, wget, www-browser
 Description: Scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
  brackets afterwards:
@@ -31,6 +32,7 @@ Description: Scripts to make the life of a Debian Package maintainer easier
   - archpath: print tla/Bazaar package names [tla | bazaar]
   - bts: a command-line tool for manipulating the BTS [www-browser,
     libsoap-lite-perl, libwww-perl, mailx | mailutils]
+  - chdist: tool to easily play with several distributions [dctrl-tools]
   - checkbashisms: check whether a /bin/sh script contains any common
     bash-specific contructs
   - cvs-debi, cvs-debc: to call debi and debc from the CVS working directory

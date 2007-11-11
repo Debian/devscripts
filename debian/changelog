@@ -13,6 +13,8 @@ devscripts (2.10.11) UNRELEASED; urgency=low
   [ Luk Claes ]
   * debdiff: Support tarball in tarball (Closes: #439667).
   * debdiff: Support p-u-new use case (Closes: #439666).
+  * chdist: New script to easily play with several distributions.
+    Closes: #438971
 
   [ Joey Hess ]
   * debcommit: Avoid svk hang by feeding "n" into svk info call.
@@ -21,7 +23,7 @@ devscripts (2.10.11) UNRELEASED; urgency=low
   * debcommit: Try harder to see if the package is in git. Look for
     .git in parent directories too.
 
- -- Joey Hess <joeyh@debian.org>  Sat, 10 Nov 2007 18:10:11 -0500
+ -- Luk Claes <luk@debian.org>  Sun, 11 Nov 2007 12:20:31 +0100
 
 devscripts (2.10.10) unstable; urgency=low
 
