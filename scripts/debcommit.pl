@@ -292,7 +292,7 @@ sub getprog {
     if (-d "$ENV{HOME}/.svk") {
     	# Apart from ~/.svk, svk svk has no useful directories so try
 	# to run it. Avoid interactive prompting!
-	my $svkpath=`echo n | svk info . 2>/dev/null| grep -i '^Depot Path:' | cut -d ' ' -f 2`;
+	my $svkpath=`echo n | svk info . 2>/dev/null| grep -i '^Depot Path:' | cut -d ' ' -f 3`;
 	if (length $svkpath) {
 	    return "svk";
 	}

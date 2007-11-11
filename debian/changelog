@@ -9,6 +9,7 @@ devscripts (2.10.11) UNRELEASED; urgency=low
     heuristic. Thanks to Joey Hess for the patch (Closes: #448795)
   * debcommit: Automatically include the changelog in the list of files to be
     committed (Closes: #419657, again)
+  * debcommit: Correctly pull the depot path from the output of svk info
 
   [ Luk Claes ]
   * debdiff: Support tarball in tarball (Closes: #439667).
@@ -23,7 +24,7 @@ devscripts (2.10.11) UNRELEASED; urgency=low
   * debcommit: Try harder to see if the package is in git. Look for
     .git in parent directories too.
 
- -- Luk Claes <luk@debian.org>  Sun, 11 Nov 2007 12:20:31 +0100
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Sun, 11 Nov 2007 14:00:38 +0000
 
 devscripts (2.10.10) unstable; urgency=low
 
