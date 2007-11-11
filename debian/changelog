@@ -18,9 +18,8 @@ devscripts (2.10.11) UNRELEASED; urgency=low
     Closes: #438971
 
   [ Joey Hess ]
-  * debcommit: Avoid svk hang by feeding "n" into svk info call.
+  * debcommit: Avoid svk hang by only running svk if ~/.svk/local exists.
     Closes: #420899
-  * debcommit: Also, if there's no ~/.svk, don't try svk at all.
   * debcommit: Try harder to see if the package is in git. Look for
     .git in parent directories too.
 
