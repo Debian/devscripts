@@ -4,7 +4,7 @@ devscripts (2.10.11) unstable; urgency=low
   * uscan: Correctly parse HTMLised FTP directory listings. Thanks to
     Vaclav Ovsik for the patch (Closes: #448636)
   * desktop2menu: New script to generate skeleton menu files from
-    freedesktop.org .desktop files. Thanks to Sune Vuorelae (Closes: #448730)
+    freedesktop.org .desktop files. Thanks to Sune Vuorela (Closes: #448730)
   * debchange: Default to using -t / --mainttrailer when using the "changelog"
     heuristic. Thanks to Joey Hess for the patch (Closes: #448795)
   * debcommit: Automatically include the changelog in the list of files to be
@@ -16,6 +16,8 @@ devscripts (2.10.11) unstable; urgency=low
   * debdiff: Support p-u-new use case (Closes: #439666).
   * chdist: New script to easily play with several distributions.
     Closes: #438971
+  * debian/control: Add build dependency on libfile-desktopentry-perl and
+    liburi-perl so perl -c won't fail for desktop2menu and rmadison.
 
   [ Joey Hess ]
   * debcommit: Avoid svk hang by only running svk if ~/.svk/local exists.
@@ -23,7 +25,7 @@ devscripts (2.10.11) unstable; urgency=low
   * debcommit: Try harder to see if the package is in git. Look for
     .git in parent directories too.
 
- -- Luk Claes <luk@debian.org>  Wed, 14 Nov 2007 22:31:08 +0100
+ -- Luk Claes <luk@debian.org>  Wed, 14 Nov 2007 22:53:22 +0100
 
 devscripts (2.10.10) unstable; urgency=low
 

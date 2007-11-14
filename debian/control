@@ -5,7 +5,7 @@ Maintainer: Devscripts Devel Team <pkg-devscripts@teams.debian.net>
 Uploaders: Julian Gilbey <jdg@debian.org>, Filippo Giunchedi <filippo@debian.org>, Joey Hess <joeyh@debian.org>, Mohammed Adnène Trojette <adn+deb@diwi.org>, Christoph Berg <myon@debian.org>, Stefano Zacchiroli <zack@debian.org>, James Vega <jamessan@debian.org>, Martin Zobel-Helas <zobel@debian.org>, Adam D. Barratt <adam@adam-barratt.org.uk>, Luk Claes <luk@debian.org>
 Standards-Version: 3.7.2
 Build-Depends: perl (>= 5.8), debhelper (>= 5.0.0), libtimedate-perl, libwww-perl,
- xsltproc, docbook-xsl, po4a (>= 0.26)
+ xsltproc, docbook-xsl, po4a (>= 0.26), libfile-desktopentry-perl, liburi-perl
 Vcs-Browser: http://svn.debian.org/wsvn/devscripts/trunk/
 Vcs-Svn: svn://svn.debian.org/devscripts/trunk
 

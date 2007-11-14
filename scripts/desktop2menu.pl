@@ -3,9 +3,9 @@
 # desktop2menu: This program generates a skeleton menu file from a
 # freedesktop.org desktop file
 # 
-# Written by Sune Vuorelae <debian@pusling.com>
+# Written by Sune Vuorela <debian@pusling.com>
 # Modifications by Adam D. Barratt <adam@adam-barratt.org.uk>
-# Copyright 2007 Sune Vuorelae <debian@pusling.com>
+# Copyright 2007 Sune Vuorela <debian@pusling.com>
 # Modifications Copyright 2007 Adam D. Barratt <adam@adam-barratt.org.uk>
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
