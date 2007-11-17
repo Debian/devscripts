@@ -153,7 +153,8 @@ sub set_auth($$$) {
   my $old_url = $url;
   $user .= "@" if length $user;
   switch ($repo_type) {
-    case "bzr"	  { $url =~ s|^\w+://(bzr\.debian\.org)/(.*)|sftp://$user$1/bzr/$2|; }
+    case "bzr"	  { $url =~ s|^\w+://(bzr\.debian\.org)/(.*)|sftp://$user$1/bzr/$2|;
+		    $url =~ s[^\w+://(?:bazaar|code)(\.launchpad\.net/.*)][bzr+ssh://${user}bazaar$1]; }
     case "git"    { $url =~ s|^\w+://(git\.debian\.org/.*)|git+ssh://$user$1|; }
     case "hg"     { $url =~ s|^\w+://(hg\.debian\.org/.*)|ssh://$user$1|; }
     case "svn"	  { $url =~ s|^\w+://(svn\.debian\.org)/(.*)|svn+ssh://$user$1/svn/$2|; }
