@@ -155,6 +155,19 @@ sub set_auth($$$) {
   switch ($repo_type) {
     case "bzr"	  { $url =~ s|^\w+://(bzr\.debian\.org)/(.*)|sftp://$user$1/bzr/$2|;
 		    $url =~ s[^\w+://(?:bazaar|code)(\.launchpad\.net/.*)][bzr+ssh://${user}bazaar$1]; }
+    case "darcs"  {
+       if ($url =~ m|(~)|) {
+           my $user_local = $user;
+           $user_local =~ s|(.*)(@)|$1|;
+           my $user_url = $url;
+           $user_url =~ s|^\w+://(darcs\.debian\.org)/(~)(.*)/.*|$3|;
+           die "the local user '$user_local' doesn't own the personal repository '$url'\n"
+               if $user_local ne $user_url;
+           $url =~ s|^\w+://(darcs\.debian\.org)/(~)(.*)/(.*)|$user$1:~/public_darcs/$4|;
+       } else {
+           $url =~ s|^\w+://(darcs\.debian\.org)/(.*)|$user$1:/darcs/$2|;
+        }
+    }
     case "git"    { $url =~ s|^\w+://(git\.debian\.org/.*)|git+ssh://$user$1|; }
     case "hg"     { $url =~ s|^\w+://(hg\.debian\.org/.*)|ssh://$user$1|; }
     case "svn"	  { $url =~ s|^\w+://(svn\.debian\.org)/(.*)|svn+ssh://$user$1/svn/$2|; }

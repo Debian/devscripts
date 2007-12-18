@@ -129,6 +129,9 @@ And now, in mostly alphabetical order, the scripts:
   or .dsc to download all references files. Specify a package name to
   download it from the configured apt repository.
 
+- diff2patches: Extracts patches from a .diff.gz file placing them under
+  debian/ or, if present, debian/patches.
+
 - dpkg-depcheck, dpkg-genbuilddeps [build-essential, strace]: Runs a
   specified command (such as debian/rules build) or dpkg-buildpackage,
   respectively, to determine the packages used during the build

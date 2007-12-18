@@ -4,7 +4,14 @@ devscripts (2.10.12) UNRELEASED; urgency=low
   * debcheckout: add auth support for *.launchpad.net. Thanks to Colin Watson
     for the patch (Closes: #451672)
 
- -- Stefano Zacchiroli <zack@debian.org>  Sat, 17 Nov 2007 20:39:51 +0100
+  [ Mohammed Adnène Trojette ]
+  * diff2patches: new patch written by Raphael Geissert <atomo64@gmail.com>.
+    Extracts patches from a .diff.gz file placing them under debian/ or,
+    if present, debian/patches. (Closes: #456626)
+  * debcheckout: add support for authentication mode with darcs.
+    Thanks Luca Capello for the patch. (Closes: #445714)
+
+ -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Tue, 18 Dec 2007 00:04:12 +0100
 
 devscripts (2.10.11) unstable; urgency=low
 

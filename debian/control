@@ -73,6 +73,8 @@ Description: Scripts to make the life of a Debian Package maintainer easier
   - dpkg-depcheck, dpkg-genbuilddeps: determine the packages used during
     the build of a Debian package; useful for determining the Build-Depends
     control field needed [build-essential, strace]
+  - diff2patches: extract patches from a .diff.gz file placing them 
+    under debian/ or, if present, debian/patches
   - dscverify: verify the integrity of a Debian package from the
     .changes or .dsc files [gnupg, debian-keyring, libdigest-md5-perl]
   - grep-excuses: grep the update_excuses.html file for your packages [wget]
