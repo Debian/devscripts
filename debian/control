@@ -18,11 +18,11 @@ Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), sed (>= 2.95),
 Recommends: fakeroot
 Suggests: devscripts-el, at, build-essential, cvs-buildpackage,
  cvs | subversion | svk | tla | bzr | git-core | mercurial, dctrl-tools,
- debian-keyring, dupload (>=2.1) | dput, gnupg (>= 1.0.7), gnuplot, 
- libcrypt-ssleay-perl, libdigest-md5-perl, libfile-desktopentry-perl, 
- libsoap-lite-perl, libtimedate-perl, liburi-perl, libwww-perl, 
- lintian | linda, mailx | mailutils, man-db, mutt, patch, patchutils, ssh, 
- strace, wdiff, wget, www-browser
+ debian-keyring, debian-maintainers, dupload (>=2.1) | dput,
+ gnupg (>= 1.0.7), gnuplot, libcrypt-ssleay-perl, libdigest-md5-perl,
+ libfile-desktopentry-perl, libsoap-lite-perl, libtimedate-perl, liburi-perl,
+ libwww-perl, lintian | linda, mailx | mailutils, man-db, mutt, patch,
+ patchutils, ssh, strace, wdiff, wget, www-browser
 Description: Scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
  brackets afterwards:
@@ -101,8 +101,8 @@ Description: Scripts to make the life of a Debian Package maintainer easier
     [libcrypt-ssleay-perl, libwww-perl]
   - uupdate: integrate upstream changes into a source package [patch]
   - whodepends: check which maintainers' packages depend on a package
-  - who-uploads [gnupg, debian-keyring, wget]: determine the most recent
-    uploaders of a package to the Debian archive
+  - who-uploads [gnupg, debian-keyring, debian-maintainers, wget]:
+    determine the most recent uploaders of a package to the Debian archive
   - wnpp-alert: list installed packages which are orphaned or up for
     adoption [wget]
  .

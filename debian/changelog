@@ -15,8 +15,12 @@ devscripts (2.10.12) UNRELEASED; urgency=low
   * who-uploads: Actually check debian-keyring.pgp by default rather
     than .gpg twice. Thanks to Philipp Kern for pointing the issue out
     (Closes: #456209)
+  * who-uploads: Check debian-maintainers.gpg by default. Thanks to
+    Philipp Kern for the suggestion (Closes: #456208)
+  * debian/control, README: Add debian-maintainers to the suggested
+    package list
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Thu, 20 Dec 2007 12:11:45 +0000
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Thu, 20 Dec 2007 12:21:08 +0000
 
 devscripts (2.10.11) unstable; urgency=low
 
