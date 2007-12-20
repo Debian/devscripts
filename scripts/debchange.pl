@@ -781,7 +781,9 @@ if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r &&
 	if ($changelog{'Distribution'} eq 'UNRELEASED') {
 		$opt_a = 1;
 	}
-	else {
+	elsif ($EMPTY_TEXT==1) {
+		$opt_a = 1;
+	} else {
 		$opt_i = 1;
 	}
     }
