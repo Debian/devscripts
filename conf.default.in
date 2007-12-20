@@ -145,6 +145,10 @@
 # changelog entries be appended to the existing entries?
 # DEBCHANGE_MULTIMAINT_MERGE=no
 # 
+# When appending entries to the changelog, should the trailer line
+# be maintained as-is?
+# DEBCHANGE_MAINTTRAILER=yes
+#
 # Use a fixed timezone in changelog entries?
 # DEBCHANGE_TZ=UTC
 

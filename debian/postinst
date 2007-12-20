@@ -366,6 +366,18 @@ EOF
 # DEBCOMMIT_SIGN_TAGS=no
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.12
+	then
+	    # Added in devscripts 2.10.12
+	    cat >> /etc/devscripts.conf <<EOF
+##### debchange option added in version 2.10.12
+#
+# When appending entries to the changelog, should the trailer line
+# be maintained as-is?
+# DEBCHANGE_MAINTTRAILER=yes
+EOF
+	fi
     fi
 fi
 

@@ -171,7 +171,7 @@ my $opt_release_heuristic = 'log';
 my $opt_multimaint = 1;
 my $opt_multimaint_merge = 0;
 my $opt_tz = undef;
-my $opt_mainttrailer = 0;
+my $opt_t = undef;
 
 # Next, read configuration files and then command line
 # The next stuff is boilerplate
@@ -190,6 +190,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBCHANGE_MULTIMAINT' => 'yes',
 		       'DEBCHANGE_TZ' => $ENV{TZ}, # undef if TZ unset
 		       'DEBCHANGE_MULTIMAINT_MERGE' => 'no',
+		       'DEBCHANGE_MAINTTRAILER' => undef,
 		       );
     $config_vars{'DEBCHANGE_TZ'} ||= '';
     my %config_default = %config_vars;
@@ -236,12 +237,14 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $opt_multimaint = $config_vars{'DEBCHANGE_MULTIMAINT'} eq 'no' ? 0 : 1;
     $opt_tz = $config_vars{'DEBCHANGE_TZ'};
     $opt_multimaint_merge = $config_vars{'DEBCHANGE_MULTIMAINT_MERGE'} eq 'no' ? 0 : 1;
+    $opt_t = $config_vars{'DEBCHANGE_MAINTTRAILER'} eq 'no' ? 0 : 1
+	if defined $config_vars{'DEBCHANGE_MAINTTRAILER'};
 }
 
 # We use bundling so that the short option behaviour is the same as
 # with older debchange versions.
 my ($opt_help, $opt_version);
-my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u, $opt_t);
+my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u);
 my ($opt_n, $opt_qa, $opt_bpo, $opt_c, $opt_m, $opt_create, $opt_package, @closes);
 my ($opt_news);
 my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);

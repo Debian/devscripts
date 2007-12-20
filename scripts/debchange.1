@@ -274,7 +274,8 @@ used with options that require the trailer to be modified
 (e.g. \fB\-\-create\fR, \fB\-\-release\fR, \fB\-i\fR, \fB\-\-qa\fR, etc.)
 This option differs from \fB\-\-maintmaint\fR in that it will use
 multi-maintainer mode if appropriate, with the exception of editing the
-trailer.  
+trailer. See also the DEBCHANGE_MAINTTRAILER configuration file option 
+below.
 .TP
 \fB\-\-check-dirname-level\fR \fIN\fR
 See the above section "Directory name checking" for an explanation of
@@ -335,6 +336,10 @@ If set to "yes", when adding changes in multiple-maintainer mode
 \fBdebchange\fR will check whether previous changes by the current
 maintainer exist and add the new changes to the existing block
 rather than creating a new block.  Default is "no".
+.TP
+.BR DEBCHANGE_MAINTTRAILER
+If this is set to \fIno\fR, then it is the same as the
+\fB\-\-no\-mainttrailer\fR command line parameter being used.
 .TP
 .BR DEBCHANGE_TZ
 Use this timezone for changelog entries.  Default is the user/system
