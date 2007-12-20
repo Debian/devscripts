@@ -11,7 +11,12 @@ devscripts (2.10.12) UNRELEASED; urgency=low
   * debcheckout: add support for authentication mode with darcs.
     Thanks Luca Capello for the patch. (Closes: #445714)
 
- -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Tue, 18 Dec 2007 00:04:12 +0100
+  [ Adam D. Barratt ]
+  * who-uploads: Actually check debian-keyring.pgp by default rather
+    than .gpg twice. Thanks to Philipp Kern for pointing the issue out
+    (Closes: #456209)
+
+ -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Thu, 20 Dec 2007 12:11:45 +0000
 
 devscripts (2.10.11) unstable; urgency=low
 
