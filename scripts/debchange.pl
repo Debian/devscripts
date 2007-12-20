@@ -171,7 +171,7 @@ my $opt_release_heuristic = 'log';
 my $opt_multimaint = 1;
 my $opt_multimaint_merge = 0;
 my $opt_tz = undef;
-my $opt_t = undef;
+my $opt_t = '';
 
 # Next, read configuration files and then command line
 # The next stuff is boilerplate
@@ -190,7 +190,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBCHANGE_MULTIMAINT' => 'yes',
 		       'DEBCHANGE_TZ' => $ENV{TZ}, # undef if TZ unset
 		       'DEBCHANGE_MULTIMAINT_MERGE' => 'no',
-		       'DEBCHANGE_MAINTTRAILER' => undef,
+		       'DEBCHANGE_MAINTTRAILER' => '',
 		       );
     $config_vars{'DEBCHANGE_TZ'} ||= '';
     my %config_default = %config_vars;
@@ -237,8 +237,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $opt_multimaint = $config_vars{'DEBCHANGE_MULTIMAINT'} eq 'no' ? 0 : 1;
     $opt_tz = $config_vars{'DEBCHANGE_TZ'};
     $opt_multimaint_merge = $config_vars{'DEBCHANGE_MULTIMAINT_MERGE'} eq 'no' ? 0 : 1;
-    $opt_t = $config_vars{'DEBCHANGE_MAINTTRAILER'} eq 'no' ? 0 : 1
-	if defined $config_vars{'DEBCHANGE_MAINTTRAILER'};
+    $opt_t = ($config_vars{'DEBCHANGE_MAINTTRAILER'} eq 'no' ? 0 : 1)
+	if $config_vars{'DEBCHANGE_MAINTTRAILER'};
 }
 
 # We use bundling so that the short option behaviour is the same as
@@ -287,7 +287,7 @@ GetOptions("help|h" => \$opt_help,
 
 $opt_news = 'debian/NEWS' if defined $opt_news and $opt_news eq '';
 
-if (! defined $opt_t && $opt_release_heuristic eq 'changelog') {
+if ($opt_t eq '' && $opt_release_heuristic eq 'changelog') {
     $opt_t = 1;
 }
 
