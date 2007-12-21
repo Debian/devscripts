@@ -10,6 +10,7 @@ devscripts (2.10.12) UNRELEASED; urgency=low
     if present, debian/patches. (Closes: #456626)
   * debcheckout: add support for authentication mode with darcs.
     Thanks Luca Capello for the patch. (Closes: #445714)
+  * Bump Standards-Version to 2.7.3.
 
   [ Adam D. Barratt ]
   * who-uploads: Actually check debian-keyring.pgp by default rather
@@ -25,7 +26,7 @@ devscripts (2.10.12) UNRELEASED; urgency=low
     the distribution to UNRELEASED when using the changelog heuristic
     (Closes: #453690)
 
- -- Adam D. Barratt <debian-bts@adam-barratt.org.uk>  Thu, 20 Dec 2007 19:12:22 +0000
+ -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Fri, 21 Dec 2007 20:26:15 +0100
 
 devscripts (2.10.11) unstable; urgency=low
 
