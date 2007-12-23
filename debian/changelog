@@ -13,6 +13,9 @@ devscripts (2.10.12) UNRELEASED; urgency=low
   * debian/control:
      + bump Standards-Version to 3.7.3.
      + suggest lsb-release.
+  * grep-excuses: permit requests to http://bjorn.haxx.se/debian/
+    with --wipnity, -w option. Idea and implementation courtesy from
+    Julian Mehnle <julian@mehnle.net>. (Closes: #448279)
 
   [ Adam D. Barratt ]
   * who-uploads: Actually check debian-keyring.pgp by default rather
@@ -28,7 +31,7 @@ devscripts (2.10.12) UNRELEASED; urgency=low
     the distribution to UNRELEASED when using the changelog heuristic
     (Closes: #453690)
 
- -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Fri, 21 Dec 2007 20:26:15 +0100
+ -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Sun, 23 Dec 2007 19:35:20 +0100
 
 devscripts (2.10.11) unstable; urgency=low
 

@@ -23,6 +23,9 @@ use 5.006;
 use strict;
 use File::Basename;
 
+# Needed for --wipnity option
+use Term::Size;
+
 my $progname = basename($0);
 my $modified_conf_msg;
 
@@ -43,6 +46,7 @@ Usage: $progname [options] [<maintainer>|<package>]
 Options:
   --no-conf, --noconf Don\'t read devscripts config files;
                       must be the first option given
+  --wipnity, -w       Get informations from <http://bjorn.haxx.se/debian/>
   --help              Show this help
   --version           Give version information
 
@@ -60,6 +64,16 @@ You are free to redistribute this code under the terms of the
 GNU General Public License, version 2 or later.
 EOF
 
+sub wipnity {
+my $columns = Term::Size::chars();
+
+while( my $package=shift ) {
+    my $dump = `w3m -dump -cols $columns "http://bjorn.haxx.se/debian/testing.pl?package=$package"`;
+    $dump =~ s/^.*?(?=Checking)//s;
+    $dump =~ s/^\[.*//ms;
+    print($dump);
+    }
+}
 
 # Now start by reading configuration files and then command line
 # The next stuff is boilerplate
@@ -104,6 +118,18 @@ if (! $string and exists $ENV{'DEBFULLNAME'}) {
 }
 
 while (@ARGV and $ARGV[0] =~ /^-/) {
+    if ($ARGV[0] eq '--wipnity' or $ARGV[0] eq '-w') {
+	if (@ARGV) {
+            shift;
+            $string=shift;
+        }
+	if (! $string or $string eq '') {
+            die "$progname: no maintainer or package specified!\nTry $progname --help for help.\n";
+        }
+        if (@ARGV) {
+            die "$progname: too many arguments!  Try $progname --help for help.\n";
+        } else { wipnity($string); exit 0; }
+    }
     if ($ARGV[0] eq '--help') { usage(); exit 0; }
     if ($ARGV[0] eq '--version') { print $version; exit 0; }
     if ($ARGV[0] =~ /^--no-?conf$/) {
