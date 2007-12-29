@@ -10,6 +10,8 @@ SH_FILES = $(wildcard *.sh)
 LIBS = libvfork.so.0
 CWRAPPERS = debpkg-wrapper
 SCRIPTS = $(patsubst %.pl,%,$(PL_FILES)) $(patsubst %.sh,%,$(SH_FILES))
+COMPL_FILES := $(wildcard *.bash_completion)
+COMPLETION = $(patsubst %.bash_completion,devscripts.%,$(COMPL_FILES))
 
 GEN_MAN1S = bts.1 debcommit.1 deb-reversion.1 dget.1 licensecheck.1 \
 	mass-bug.1 rmadison.1 svnpath.1 debcheckout.1 desktop2menu.1
@@ -18,7 +20,7 @@ BINDIR = /usr/bin
 LIBDIR = /usr/lib/devscripts
 BIN_LIBDIR = /usr/lib/devscripts
 
-all: $(SCRIPTS) $(GEN_MAN1S) $(LIBS) $(CWRAPPERS)
+all: $(SCRIPTS) $(GEN_MAN1S) $(LIBS) $(CWRAPPERS) $(COMPLETION)
 
 %: %.sh
 
@@ -38,6 +40,9 @@ all: $(SCRIPTS) $(GEN_MAN1S) $(LIBS) $(CWRAPPERS)
 	xsltproc --nonet -o $@ \
 	  /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl $<
 
+devscripts.%: %.bash_completion
+	cp $< $@
+
 libvfork.o: libvfork.c
 	$(CC) -fPIC -D_REENTRANT $(CFLAGS) -c $<
 libvfork.so.0: libvfork.o
@@ -46,11 +51,12 @@ libvfork.so.0: libvfork.o
 clean:
 	rm -f $(SCRIPTS) $(patsubst %,%.tmp,$(SCRIPTS)) \
 		$(GEN_MAN1S) $(SCRIPT_LIBS) $(CWRAPPERS) \
-		libvfork.o libvfork.so.0
+		libvfork.o libvfork.so.0 $(COMPLETION)
 
 install: all
 	cp $(SCRIPTS) $(DESTDIR)$(BINDIR)
 	cp $(LIBS) $(DESTDIR)$(LIBDIR)
+	cp $(COMPLETION) $(DESTDIR)/etc/bash_completion.d
 	# Special treatment for debpkg
 	mv $(DESTDIR)$(BINDIR)/debpkg $(DESTDIR)$(PERLMOD_DIR)
 	cp debpkg-wrapper $(DESTDIR)$(BINDIR)/debpkg
