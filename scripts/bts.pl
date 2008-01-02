@@ -3227,7 +3227,7 @@ information.
 
 Please see L<http://www.debian.org/Bugs/server-control> for
 more details on how to control the BTS using emails and
-L<http://www.debian.org/Bugs/> for more informations about the BTS.
+L<http://www.debian.org/Bugs/> for more information about the BTS.
 
 reportbug(1), querybts(1)
 
