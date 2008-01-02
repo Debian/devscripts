@@ -16,6 +16,81 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+=head1 NAME
+
+chdist - script to easily play with several distributions
+
+=head1 SYNOPSIS
+
+B<chdist> [options] [command] [command parameters]
+
+=head1 DESCRIPTION
+
+B<chdist> is a rewrite of what used to be known as 'MultiDistroTools'
+(or mdt). Its use is to create 'APT trees' for several distributions,
+making it easy to query the status of packages in other distribution
+without using chroots, for instance.
+
+=head1 OPTIONS
+
+=over 4
+
+=item -h, --help
+
+Provide a usage message.
+
+=item -d, --data-dir DIR
+
+Choose data directory (default: $HOME/.chdist/).
+
+=item -a, --arch ARCH
+
+Choose architecture (default: `dpkg --print-architecture`)
+
+=item --version
+
+Display version information.
+
+=head1 COMMANDS
+
+=item create DIST : prepare a new tree named DIST
+
+=item apt-get DIST (update|source|...) : run apt-get inside DIST
+
+=item apt-cache DIST (show|showsrc|...) : run apt-cache inside DIST
+
+=item apt-rdepends DIST [...] : run apt-rdepends inside DIST
+
+=item src2bin DIST PKG : get binary packages for a source package in DIST
+
+=item bin2src DIST PKG : get source package for a binary package in DIST
+
+=item compare-packages DIST1 DIST2 [DIST3, ...] : list versions of packages in several DISTributions
+
+=item compare-bin-packages DIST1 DIST2 [DIST3, ...]
+
+=item compare-versions DIST1 DIST2 : same as compare-packages, but also run dpkg --compare-versions and display where the package is newer.
+
+=item compare-bin-versions DIST1 DIST2
+
+=item grep-dctrl-packages DIST [...] : run grep-dctrl on *_Packages inside DIST
+
+=item grep-dctrl-sources DIST [...] : run grep-dctrl on *_Sources inside DIST
+
+=item list : list available DISTs
+
+=head1 COPYRIGHT
+
+This program is copyright 2007 by Lucas Nussbaum and Luk Claes. This
+program comes with ABSOLUTELY NO WARRANTY.
+
+It is licensed under the terms of the GPL, either version 2 of the
+License, or (at your option) any later version.
+
+=back
+
+=cut
+
 use Getopt::Long;
 
 my $datadir = $ENV{'HOME'} . '/.chdist';
@@ -26,8 +101,9 @@ Usage: chdist [options] [command] [command parameters]
 
 Options:
     -h, --help                       Show this help
-    -d, --data-dir DIR               Choose data directory (default: \$HOME/.chdist/
+    -d, --data-dir DIR               Choose data directory (default: \$HOME/.chdist/)
     -a, --arch ARCH                  Choose architecture (default: `dpkg --print-architecture`)
+    -v, --version                    Display version and copyright information
 
 Commands:
   create DIST : prepare a new tree named DIST
@@ -51,14 +127,30 @@ EOF
 # specify the options we accept and initialize
 # the option parser
 my $help     = '';
+
+my $version = '';
+my $versioninfo = <<"EOF";
+This is $progname, from the Debian devscripts package, version
+###VERSION### This code is copyright 2007 by Lucas Nussbaum and Luk
+Claes. This program comes with ABSOLUTELY NO WARRANTY. You are free
+to redistribute this code under the terms of the GNU General Public
+License, version 2 or (at your option) any later version.
+EOF
+
 GetOptions(
   "help"       => \$help,
   "data-dir=s" => \$datadir,
   "arch=s"     => \$arch,
+  "version"    => \$version,
 );
 
 if ($help) {
   print usage(0);
+  exit;
+}
+
+if ($version) {
+  print $versioninfo;
   exit;
 }
 
