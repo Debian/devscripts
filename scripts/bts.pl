@@ -3223,6 +3223,16 @@ information.
 
 =cut
 
+=head1 SEE ALSO
+
+Please see L<http://www.debian.org/Bugs/server-control> for
+more details on how to control the BTS using emails and
+L<http://www.debian.org/Bugs/> for more informations about the BTS.
+
+reportbug(1), querybts(1)
+
+=cut
+
 =head1 COPYRIGHT
 
 This program is Copyright (C) 2001-2003 by Joey Hess <joeyh@debian.org>.
