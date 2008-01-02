@@ -7,7 +7,7 @@ devscripts (2.10.12) UNRELEASED; urgency=low
   [ Mohammed Adnène Trojette ]
   * debian/control:
      + bump Standards-Version to 3.7.3.
-     + suggest libterm-size-perl.
+     + buil-depend on and suggest libterm-size-perl.
   * debian/dirs: create /etc
   * diff2patches: new patch written by Raphael Geissert <atomo64@gmail.com>.
     Extracts patches from a .diff.gz file placing them under debian/ or,
