@@ -256,6 +256,8 @@ sub gen_bug {
     my $template_text=shift;
     my $package=shift;
     my $severity=shift;
+    my $user=shift;
+    my $usertags=shift;
 
     $template_text=~s/#PACKAGE#/$package/g;
     if ($template_text =~ /\A(.*?)(^-- $.*)/m) { # there's a sig involved
@@ -414,7 +416,7 @@ sub showsample {
     print "To: $submission_email\n";
     print "Subject: ".gen_subject($subject, $package)."\n";
     print "\n";
-    print gen_bug($template_text, $package, $severity)."\n";
+    print gen_bug($template_text, $package, $severity, $user, $usertags)."\n";
 }
 
 if ($mode eq 'display') {
@@ -446,7 +448,7 @@ elsif ($mode eq 'send') {
     foreach my $package (@packages) {
 	print "Sending bug for $package ...\n";
 	mailbts(gen_subject($subject, $package),
-		gen_bug($template_text, $package, $severity),
+		gen_bug($template_text, $package, $severity, $user, $usertags),
 		$submission_email, $from);
     }
     print "All bugs sent.\n";

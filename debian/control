@@ -16,13 +16,14 @@ Conflicts: debmake (<< 3.5), dupload (<< 2.1), suidmanager (<< 0.51),
 Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), sed (>= 2.95),
  ${shlibs:Depends}, ${misc:Depends}
 Recommends: fakeroot
-Suggests: devscripts-el, at, build-essential, cvs-buildpackage,
+Suggests: devscripts-el, at, build-essential, curl | wget, cvs-buildpackage,
  cvs | subversion | svk | tla | bzr | git-core | mercurial, dctrl-tools,
  debian-keyring, debian-maintainers, dupload (>=2.1) | dput,
  gnupg (>= 1.0.7), gnuplot, libcrypt-ssleay-perl, libdigest-md5-perl,
- libfile-desktopentry-perl, libsoap-lite-perl, libtimedate-perl, liburi-perl,
- libwww-perl, lintian | linda, lsb-release, mailx | mailutils, man-db, mutt, patch,
- patchutils, ssh, strace, wdiff, wget | curl, www-browser
+ libfile-desktopentry-perl, libsoap-lite-perl, libterm-size-perl,
+ libtimedate-perl, liburi-perl, libwww-perl, lintian | linda, lsb-release,
+ mailx | mailutils, man-db, mutt, patch, patchutils, ssh, strace,
+ wdiff, www-browser
 Description: Scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
  brackets afterwards:
