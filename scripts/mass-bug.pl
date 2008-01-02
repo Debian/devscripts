@@ -45,9 +45,10 @@ The template file is the body of the message that will be sent for each bug
 report, excluding the BTS pseudo-headers. In the template, #PACKAGE# is
 replaced with the name of the package.
 
-Note that text in the template will be automatically word-wrapped to
-70 columns, up to the start of a signature (indicated by S<'-- '> at
-the start of a line on its own).
+Note that text in the template will be automatically word-wrapped to 70
+columns, up to the start of a signature (indicated by S<'-- '> at the
+start of a line on its own). This is another reason to avoid including
+BTS pseudo-headers in your template.
 
 =head1 OPTIONS
 
@@ -75,6 +76,14 @@ Actually send the bug reports.
 
 Specify the subject of the bug report. The subject will be automatically
 prefixed with the name of the package that the bug is filed against.
+
+=item --user
+
+Set the BTS pseudo-header for a usertags' user.
+
+=item --usertags
+
+Set the BTS pseudo-header for usertags.
 
 =item --sendmail=SENDMAILCMD
 
@@ -151,6 +160,10 @@ Valid options are:
    --severity=(wishlist|minor|normal|important|serious|grave|critical)
                           Specify the severity of the bugs to be filed
                           (default "normal")
+   --user=user
+                          Set the BTS pseudo-header for a usertags' user
+   --usertags=usertags
+                          Set the BTS pseudo-header for usertags
    --sendmail=cmd         Sendmail command to use (default /usr/sbin/sendmail)
    --no-conf, --noconf    Don\'t read devscripts config files;
                           must be the first option given
@@ -251,7 +264,7 @@ sub gen_bug {
     } else {
 	$template_text=fill("", "", $template_text);
     }
-    return "Package: $package\nSeverity: $severity\n\n$template_text";
+    return "Package: $package\nSeverity: $severity\n$user\n$usertags\n\n$template_text";
 }
 		
 sub div {
@@ -314,15 +327,19 @@ EOM
 my $mode="display";
 my $subject;
 my $severity="normal";
+my $user="";
+my $usertags="";
 my $opt_sendmail;
 if (! GetOptions(
-		 "display" => sub { $mode="display" },
-		 "send" => sub { $mode="send" },
-		 "subject=s" => \$subject,
+		 "display"    => sub { $mode="display" },
+		 "send"       => sub { $mode="send" },
+		 "subject=s"  => \$subject,
 		 "severity=s" => \$severity,
+		 "user=s"     => \$user,
+		 "usertags=s" => \$usertags,
 		 "sendmail=s" => \$opt_sendmail,
-		 "help" => sub { usage(); exit 0; },
-		 "version" => sub { version(); exit 0; },
+		 "help"       => sub { usage(); exit 0; },
+		 "version"    => sub { version(); exit 0; },
 		 )) {
     usageerror();
 }
@@ -339,6 +356,14 @@ unless ($severity =~ /^(wishlist|minor|normal|important|serious|grave|critical)$
 
 if (@ARGV != 2) {
     usageerror();
+}
+
+if ($user) {
+    $user = "User: $user";
+}
+
+if ($usertags) {
+    $usertags = "Usertags: $usertags";
 }
 
 if ($opt_sendmail) {
