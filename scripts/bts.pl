@@ -231,6 +231,10 @@ information on setting up a cache.
 Opposite of --offline; overrides any configuration file directive to work
 offline.
 
+=item -n, --noaction
+
+Do not send emails but print them to standard output.
+
 =item --cache, --no-cache
 
 Should we attempt to cache new versions of BTS pages when
@@ -337,6 +341,7 @@ my $updatemode=0;
 my $mailreader='mutt -f %s';
 my $sendmailcmd='/usr/sbin/sendmail';
 my $smtphost='';
+my $noaction=0;
 # regexp for mailers which require a -t option
 my $sendmail_t='^/usr/sbin/sendmail$|^/usr/sbin/exim';
 my $includeresolved=1;
@@ -451,6 +456,7 @@ GetOptions("help|h" => \$opt_help,
 	   "f" => \$refreshmode,
 	   "force-refresh!" => \$refreshmode,
 	   "only-new!" => \$updatemode,
+	   "n|no-action" => \$noaction,
 	   "q|quiet+" => \$quiet,
 	   "noconf|no-conf" => \$opt_noconf,
 	   "include-resolved!" => \$includeresolved,
@@ -1914,7 +1920,10 @@ sub send_mail {
                   . " devscripts version $version\n"
                .  "$body\n";
 
-    if (length $smtphost) {
+    if ($noaction) {
+        print "$message\n";
+    }
+    elsif (length $smtphost) {
         my $smtp = Net::SMTP->new($smtphost)
             or die "bts: failed to open SMTP connection to $smtphost\n";
         $smtp->mail($fromaddress)

@@ -16,6 +16,8 @@ devscripts (2.10.12) UNRELEASED; urgency=low
   * grep-excuses: permit requests to http://bjorn.haxx.se/debian/
     with --wipnity, -w option. Idea and implementation courtesy from
     Julian Mehnle <julian@mehnle.net>. (Closes: #448279)
+  * bts: add a -n/--no-action option printing emails to stdout instead
+    of sending them. (Closes: #458603)
 
   [ Adam D. Barratt ]
   * who-uploads: Actually check debian-keyring.pgp by default rather
