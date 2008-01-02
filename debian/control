@@ -22,7 +22,7 @@ Suggests: devscripts-el, at, build-essential, cvs-buildpackage,
  gnupg (>= 1.0.7), gnuplot, libcrypt-ssleay-perl, libdigest-md5-perl,
  libfile-desktopentry-perl, libsoap-lite-perl, libtimedate-perl, liburi-perl,
  libwww-perl, lintian | linda, lsb-release, mailx | mailutils, man-db, mutt, patch,
- patchutils, ssh, strace, wdiff, wget, www-browser
+ patchutils, ssh, strace, wdiff, wget | curl, www-browser
 Description: Scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
  brackets afterwards:
@@ -69,7 +69,7 @@ Description: Scripts to make the life of a Debian Package maintainer easier
     archive
   - desktop2menu: produce a skeleton menu file from a freedesktop.org
     desktop file [libfile-desktopentry-perl]
-  - dget: downloads Debian source and binary packages [wget]
+  - dget: downloads Debian source and binary packages [wget | curl]
   - dpkg-depcheck, dpkg-genbuilddeps: determine the packages used during
     the build of a Debian package; useful for determining the Build-Depends
     control field needed [build-essential, strace]
@@ -91,8 +91,8 @@ Description: Scripts to make the life of a Debian Package maintainer easier
   - pts-subscribe: subscribe to the PTS for a limited period of time
     [mailx | mailutils, at]
   - rc-alert: list installed packages which have release-critical bugs [wget]
-  - rmadison: remotely query the Debian archive database about packages [wget,
-    liburi-perl]
+  - rmadison: remotely query the Debian archive database about packages
+    [wget | curl, liburi-perl]
   - svnpath: print svn repository paths [subversion]
   - tagpending: shell script which runs from a Debian source tree and tags
     bugs that are to be closed in the latest changelog as pending.

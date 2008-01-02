@@ -12,7 +12,6 @@ devscripts (2.10.12) UNRELEASED; urgency=low
     Thanks Luca Capello for the patch. (Closes: #445714)
   * debian/control:
      + bump Standards-Version to 3.7.3.
-     + suggest lsb-release.
   * grep-excuses: permit requests to http://bjorn.haxx.se/debian/
     with --wipnity, -w option. Idea and implementation courtesy from
     Julian Mehnle <julian@mehnle.net>. (Closes: #448279)
@@ -22,11 +21,16 @@ devscripts (2.10.12) UNRELEASED; urgency=low
      + add a "SEE ALSO" section in manual page. (Closes: #458296)
   * dch:
      + add a --bin-nmu option for binNMUs. (Closes: #458496)
-     + add a -s/--security option for Security Team uploads.
+     + add a -s/--security option for Security Team uploads inspired by
+       Ubuntu's.
   * debdiff: make diff output p1-compatible (for native packages or when
     interdiff is not available). Thanks dAniel hAhler for the patch.
     (Closes: #456223)
-  * debuild: preserve DEBEMAIL environment variable.
+  * Changes pulled from Ubuntu's diff:
+     + debian/control:
+        - suggest wget|curl instead of wget
+        - suggest lsb-release
+     + debuild: preserve DEBEMAIL environment variable.
 
   [ Adam D. Barratt ]
   * who-uploads: Actually check debian-keyring.pgp by default rather
@@ -47,7 +51,7 @@ devscripts (2.10.12) UNRELEASED; urgency=low
   * chdist: Added improvements and fixed bugs. Thanks to Raphaël Pinson
     (Closes: #457841)
 
- -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Wed, 02 Jan 2008 04:03:29 +0100
+ -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Wed, 02 Jan 2008 04:06:09 +0100
 
 devscripts (2.10.11) unstable; urgency=low
 
