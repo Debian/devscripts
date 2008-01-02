@@ -18,6 +18,7 @@ devscripts (2.10.12) UNRELEASED; urgency=low
     Julian Mehnle <julian@mehnle.net>. (Closes: #448279)
   * bts: add a -n/--no-action option printing emails to stdout instead
     of sending them. (Closes: #458603)
+  * dch: add a --bin-nmu option for binNMUs. (Closes: #458496)
 
   [ Adam D. Barratt ]
   * who-uploads: Actually check debian-keyring.pgp by default rather
@@ -38,7 +39,7 @@ devscripts (2.10.12) UNRELEASED; urgency=low
   * chdist: Added improvements and fixed bugs. Thanks to Raphaël Pinson
     (Closes: #457841)
 
- -- Luk Claes <luk@debian.org>  Sat, 29 Dec 2007 15:47:13 +0100
+ -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Wed, 02 Jan 2008 03:22:51 +0100
 
 devscripts (2.10.11) unstable; urgency=low
 

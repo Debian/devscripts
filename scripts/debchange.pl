@@ -86,6 +86,11 @@ Options:
          Specify the package name when using --create (optional)
   -n, --nmu
          Increment the Debian release number for a non-maintainer upload
+  --bin-nmu
+         Increment the Debian release number for a binary non-maintainer
+         upload by ether appending a "+b1" to a non-binNMU version
+         number or by incrementing a binNMU version number, and add a
+         binNMU changelog comment.
   --qa
          Increment the Debian release number for a Debian QA Team upload
   --bpo
@@ -141,7 +146,7 @@ Options:
          Display this help message and exit
   --version
          Display version information
-  At most one of -a, -i, -e, -r, -v, -d, -n, --qa, --bpo (or their long equivalents)
+  At most one of -a, -i, -e, -r, -v, -d, -n, --bin-nmu, --qa, --bpo (or their long equivalents)
   may be used.
   With no options, one of -i or -a is chosen by looking for a .upload
   file in the parent directory and checking its contents.
@@ -245,7 +250,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # with older debchange versions.
 my ($opt_help, $opt_version);
 my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u);
-my ($opt_n, $opt_qa, $opt_bpo, $opt_c, $opt_m, $opt_create, $opt_package, @closes);
+my ($opt_n, $opt_bn, $opt_qa, $opt_bpo, $opt_c, $opt_m, $opt_create, $opt_package, @closes);
 my ($opt_news);
 my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 
@@ -266,6 +271,7 @@ GetOptions("help|h" => \$opt_help,
 	   "D|distribution=s" => \$opt_D,
 	   "u|urgency=s" => \$opt_u,
 	   "n|nmu" => \$opt_n,
+	   "bin-nmu" => \$opt_bn,
 	   "qa" => \$opt_qa,
 	   "bpo" => \$opt_bpo,
 	   "query!" => \$opt_query,
@@ -312,8 +318,8 @@ if (defined $opt_level) {
 if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
 
 # Only allow at most one non-help option
-fatal "Only one of -a, -i, -e, -r, -v, -d, -n/--nmu, --qa, --bpo is allowed;\ntry $progname --help for more help"
-    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) + ($opt_n?1:0) + ($opt_qa?1:0) + ($opt_bpo?1:0) > 1;
+fatal "Only one of -a, -i, -e, -r, -v, -d, -n/--nmu, --bin-nmu, --qa, --bpo is allowed;\ntry $progname --help for more help"
+    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) + ($opt_n?1:0) + ($opt_bn?1:0) + ($opt_qa?1:0) + ($opt_bpo?1:0) > 1;
 
 if (defined $opt_u) {
     fatal "Urgency can only be one of: low, medium, high, critical, emergency"
@@ -363,8 +369,8 @@ fatal "--package cannot be used when creating a NEWS file"
     if $opt_package && $opt_news;
 
 if ($opt_create) {
-    if ($opt_a || $opt_i || $opt_e || $opt_r || $opt_b || $opt_n || $opt_qa || $opt_bpo) {
-	warn "$progname warning: ignoring -a/-i/-e/-r/-b/-n/--qa/--bpo options with --create\n";
+    if ($opt_a || $opt_i || $opt_e || $opt_r || $opt_b || $opt_n || $opt_bn || $opt_qa || $opt_bpo) {
+	warn "$progname warning: ignoring -a/-i/-e/-r/-b/-n/--bin-nmu/--qa/--bpo options with --create\n";
 	$warnings++;
     }
     if ($opt_package && $opt_d) {
@@ -806,7 +812,7 @@ my $tmpchk=1;
 my ($NEW_VERSION, $NEW_SVERSION, $NEW_UVERSION);
 my $line;
 
-if (($opt_i || $opt_n || $opt_qa || $opt_bpo || $opt_v || $opt_d ||
+if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_bpo || $opt_v || $opt_d ||
     ($opt_news && $VERSION ne $changelog{'Version'})) && ! $opt_create) {
 
     # Check that a given explicit version number is sensible.
@@ -882,13 +888,15 @@ if (($opt_i || $opt_n || $opt_qa || $opt_bpo || $opt_v || $opt_d ||
 		} else {
 	    	    $end += 0.1;
 		}
+            } elsif ($opt_bn and not $start =~ /\+b/) {
+                $end .= "+b1";
 	    } elsif ($opt_qa and $start =~/(.*?)-(\d+)\.$/) {
-		    # Drop NMU revision when doing a QA upload
-		    my $upstream_version = $1;
-		    my $debian_revision = $2;
-		    $debian_revision++;
-		    $start = "$upstream_version-$debian_revision";
-		    $end = "";
+                # Drop NMU revision when doing a QA upload
+                my $upstream_version = $1;
+                my $debian_revision = $2;
+                $debian_revision++;
+                $start = "$upstream_version-$debian_revision";
+                $end = "";
 	    } elsif ($opt_bpo and not $start =~ /~bpo\.$/) {
 		# If it's not already a backport make it so
 		# otherwise we can be safe if we behave like dch -i
@@ -916,6 +924,10 @@ if (($opt_i || $opt_n || $opt_qa || $opt_bpo || $opt_v || $opt_d ||
 
     if ($opt_n && ! $opt_news) {
 	print O "  * Non-maintainer upload.\n";
+	$line = 1;
+    } elsif ($opt_bn && ! $opt_news) {
+        my $arch = qx/dpkg-architecture -qDEB_BUILD_ARCH/; chomp ($arch);
+        print O "  * Binary-only non-maintainer upload for $arch; no source changes.\n";
 	$line = 1;
     } elsif ($opt_qa && ! $opt_news) {
 	print O "  * QA upload.\n";
