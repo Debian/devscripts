@@ -23,6 +23,9 @@ devscripts (2.10.12) UNRELEASED; urgency=low
   * dch:
      + add a --bin-nmu option for binNMUs. (Closes: #458496)
      + add a -s/--security option for Security Team uploads.
+  * debdiff: make diff output p1-compatible (for native packages or when
+    interdiff is not available). Thanks dAniel hAhler for the patch.
+    (Closes: #456223)
 
   [ Adam D. Barratt ]
   * who-uploads: Actually check debian-keyring.pgp by default rather
@@ -43,7 +46,7 @@ devscripts (2.10.12) UNRELEASED; urgency=low
   * chdist: Added improvements and fixed bugs. Thanks to Raphaël Pinson
     (Closes: #457841)
 
- -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Wed, 02 Jan 2008 03:52:15 +0100
+ -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Wed, 02 Jan 2008 03:58:32 +0100
 
 devscripts (2.10.11) unstable; urgency=low
 

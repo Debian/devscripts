@@ -474,15 +474,28 @@ elsif ($type eq 'dsc') {
 	    }
 	    closedir(DIR);
 	}
-	my @command = ("diff", "-Nru");
-	for my $diff_opt (@diff_opts) {
-	    push @command, $diff_opt;
-	}
+	my @command = ("diff", "-Nru", @diff_opts);
 	for my $exclude (@excludes) {
 	    push @command, ("--exclude", $exclude);
 	}
 	push @command, ("$dir1/$sdir1", "$dir2/$sdir2");
-	system @command;
+
+	# Execute diff and remove the common prefixes $dir1/$dir2, so the patch can be used with -p1,
+	# as if when interdiff would have been used:
+	open( DIFF, '-|', @command ) || fatal "Failed to execute @command!";
+
+	# replace in first line:
+	my $first = <DIFF>;
+	$first =~ s/ $dir1\/$sdir1/ $sdir1/;
+	$first =~ s/ $dir2\/$sdir2/ $sdir2/;
+	print $first;
+
+	while(<DIFF>) {
+		s/^--- $dir1\//--- /;
+		s/^\+\+\+ $dir2\//+++ /;
+		print;
+ 	}
+	close DIFF;
     }
 
     exit 0;
