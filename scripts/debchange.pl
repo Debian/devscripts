@@ -90,11 +90,13 @@ Options:
          Increment the Debian release number for a binary non-maintainer upload
   --qa
          Increment the Debian release number for a Debian QA Team upload
-  -s,--security
+  -s, --security
          Increment the Debian release number for a Debian Security Team upload
   --bpo
          Increment the Debian release number for a Backports.org upload
 	 to "etch-backports"
+  -l, --local <suffix>
+         Add a suffix to the Debian version number for a local build
   -b, --force-bad-version
          Force a version to be less than the current one (e.g., when
          backporting)
@@ -145,8 +147,8 @@ Options:
          Display this help message and exit
   --version
          Display version information
-  At most one of -a, -i, -e, -r, -v, -d, -n/--nmu, --bin-nmu, --qa, -s/--security,--bpo (or their long equivalents)
-  may be used.
+  At most one of -a, -i, -e, -r, -v, -d, -n, --bin-nmu, --qa, -s, --bpo, -l
+  (or their long equivalents) may be used.
   With no options, one of -i or -a is chosen by looking for a .upload
   file in the parent directory and checking its contents.
 
@@ -249,7 +251,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # with older debchange versions.
 my ($opt_help, $opt_version);
 my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u);
-my ($opt_n, $opt_bn, $opt_qa, $opt_s, $opt_bpo, $opt_c, $opt_m, $opt_create, $opt_package, @closes);
+my ($opt_n, $opt_bn, $opt_qa, $opt_s, $opt_bpo, $opt_l, $opt_c, $opt_m, $opt_create, $opt_package, @closes);
 my ($opt_news);
 my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 
@@ -274,6 +276,7 @@ GetOptions("help|h" => \$opt_help,
 	   "qa" => \$opt_qa,
 	   "s|security" => \$opt_s,
 	   "bpo" => \$opt_bpo,
+	   "l|local=s" => \$opt_l,
 	   "query!" => \$opt_query,
 	   "closes=s" => \@closes,
 	   "c|changelog=s" => \$opt_c,
@@ -318,8 +321,8 @@ if (defined $opt_level) {
 if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
 
 # Only allow at most one non-help option
-fatal "Only one of -a, -i, -e, -r, -v, -d, -n/--nmu, --bin-nmu, --qa, -s/--security,--bpo is allowed;\ntry $progname --help for more help"
-    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) + ($opt_n?1:0) + ($opt_bn?1:0) + ($opt_qa?1:0) + ($opt_s?1:0) + ($opt_bpo?1:0) > 1;
+fatal "Only one of -a, -i, -e, -r, -v, -d, -n/--nmu, --bin-nmu, --qa, -s/--security, --bpo, -l/--local is allowed;\ntry $progname --help for more help"
+    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) + ($opt_n?1:0) + ($opt_bn?1:0) + ($opt_qa?1:0) + ($opt_s?1:0) + ($opt_bpo?1:0) + ($opt_l?1:0) > 1;
 
 if ($opt_s) {
     $opt_u = "high";
@@ -374,8 +377,8 @@ fatal "--package cannot be used when creating a NEWS file"
 
 if ($opt_create) {
     if ($opt_a || $opt_i || $opt_e || $opt_r || $opt_b || $opt_n || $opt_bn ||
-	    $opt_qa || $opt_s || $opt_bpo) {
-	warn "$progname warning: ignoring -a/-i/-e/-r/-b/-n/--bin-nmu/--qa/-s/--bpo options with --create\n";
+	    $opt_qa || $opt_s || $opt_bpo || $opt_l) {
+	warn "$progname warning: ignoring -a/-i/-e/-r/-b/-n/--bin-nmu/--qa/-s/--bpo/-l options with --create\n";
 	$warnings++;
     }
     if ($opt_package && $opt_d) {
@@ -817,7 +820,7 @@ my $tmpchk=1;
 my ($NEW_VERSION, $NEW_SVERSION, $NEW_UVERSION);
 my $line;
 
-if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_v || $opt_d ||
+if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $opt_v || $opt_d ||
     ($opt_news && $VERSION ne $changelog{'Version'})) && ! $opt_create) {
 
     # Check that a given explicit version number is sensible.
@@ -906,6 +909,10 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_v || $
 		# If it's not already a backport make it so
 		# otherwise we can be safe if we behave like dch -i
 		$end .= "~bpo40+1";
+	    } elsif ($opt_l and not $start =~ /$opt_l/) {
+		# If it's not already a local package make it so
+		# otherwise we can be safe if we behave like dch -i
+		$end .= $opt_l."1";
 	    } elsif (!$opt_news) {
 		# Don't bump the version of a NEWS file in this case as we're
 		# using the version from the changelog

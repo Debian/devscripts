@@ -20,6 +20,8 @@ devscripts (2.10.12) UNRELEASED; urgency=low
      + add a --bin-nmu option for binNMUs. (Closes: #458496)
      + add a -s/--security option for Security Team uploads inspired by
        Ubuntu's.
+     + add a -l/--local option to allow adding suffixes to a Debian version
+       number. (Closes: #284658)
   * debc/debi: don't mess up --debs-dir option's argument when
     debian/svn-deblayout is present. (Closes: #446414)
   * debcheckout: add support for authentication mode with darcs.
