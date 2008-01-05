@@ -2011,11 +2011,11 @@ sub mailbtsall {
         $from = MIME_encode_mimewords($from, 'Charset' => $charset);
 
 	if ($ccsecurity) {
-	    my $coma = "";
+	    my $comma = "";
             if ($ccemail) {
-		    $coma = ", ";
+		    $comma = ", ";
             }
-	    $ccemail = "$ccemail$coma$ccsecurity";
+	    $ccemail = "$ccemail$comma$ccsecurity";
 	}
 
         send_mail($from, $btsemail, $ccemail, $subject, $body);
