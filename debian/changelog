@@ -21,6 +21,8 @@ devscripts (2.10.12) UNRELEASED; urgency=low
      + add a -n/--no-action option printing emails to stdout instead
        of sending them. (Closes: #458603)
      + add a "SEE ALSO" section in manual page. (Closes: #458296)
+     + automatically Cc: team@security.debian.org when (un)tagging a bug
+       security. (Closes: #458840)
   * dch:
      + add a --bin-nmu option for binNMUs. (Closes: #458496)
      + add a -s/--security option for Security Team uploads inspired by

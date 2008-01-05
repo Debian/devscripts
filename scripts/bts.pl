@@ -202,7 +202,7 @@ rather like B<update-rc.d>; a single comma may also be used; all the
 commands will then be sent in a single mail. For example (quoting where
 necessary so that B<bts> sees the comment):
 
- % bts severity 95672 normal , merge 95672 95673 \#they\'re the same!
+ % bts severity 95672 normal , merge 95672 95673 \#they are the same!
 
 The abbreviation "it" may be used to refer to the last mentioned bug
 number, so you could write:
@@ -231,7 +231,7 @@ information on setting up a cache.
 Opposite of --offline; overrides any configuration file directive to work
 offline.
 
-=item -n, --noaction
+=item -n, --no-action
 
 Do not send emails but print them to standard output.
 
@@ -303,7 +303,7 @@ Suppress any configuration file --force-refresh option.
 
 =item --only-new
 
-Download only new bugs when caching. Don't check for updates in
+Download only new bugs when caching. Do not check for updates in
 bugs we already have.
 
 =item --include-resolved
@@ -438,6 +438,7 @@ my $opt_cachedelay=5;
 my $mboxmode = 0;
 my $quiet=0;
 my $ccemail="";
+my $ccsecurity="";
 
 Getopt::Long::Configure('require_order');
 GetOptions("help|h" => \$opt_help,
@@ -916,7 +917,7 @@ sub bts_clone {
     mailbts("cloning $bug", "clone $bug " . join(" ",@_));
 }
 
-# Don't include this in the manpage - it's deprecated
+# Do not include this in the manpage - it's deprecated
 # 
 # =item close <bug> <version>
 # 
@@ -1237,6 +1238,9 @@ sub bts_tags {
     foreach my $tag (@_) {
 	if (exists $valid_tags{$tag}) {
 	    $command .= " $tag";
+	    if ($tag eq "security") {
+		    $ccsecurity = "team\@security.debian.org";
+	    }
 	} else {
 	    # Try prefixes
 	    my @matches = grep /^\Q$tag\E/, @valid_tags;
@@ -1784,17 +1788,18 @@ sub bts_help {
     print <<"EOF";
 Usage: $progname [options] command [args] [\#comment] [.|, command ... ]
 Valid options are:
-   --no-conf, --noconf    Don\'t read devscripts config files;
+   --no-conf, --noconf    Do not read devscripts config files;
                           must be the first option given
-   -o, --offline          Don\'t attempt to connect to BTS for show/bug
+   -o, --offline          Do not attempt to connect to BTS for show/bug
                           commands: use cached copy
    --online, --no-offline Attempt to connect (default)
-   --no-cache             Don\'t attempt to cache new versions of BTS
+   -n, --no-action        Do not send emails but print them to standard output.
+   --no-cache             Do not attempt to cache new versions of BTS
                           pages when performing show/bug commands
    --cache                Do attempt to cache new versions of BTS
                           pages when performing show/bug commands (default)
    --cache-mode={min|mbox|full}
-                          How much to cache when we\'re caching: the sensible
+                          How much to cache when we are caching: the sensible
                           bare minimum (default), the mbox as well, or
                           everything?
    --cache-delay=seconds  Time to sleep between each download when caching.
@@ -1804,10 +1809,10 @@ Valid options are:
                           (must contain %s, which is replaced by mbox name)
    -f, --force-refresh    Reload all bug reports being cached, even unchanged
                           ones
-   --no-force-refresh     Don\'t do so (default)
+   --no-force-refresh     Do not do so (default)
    --sendmail=cmd         Sendmail command to use (default /usr/sbin/sendmail)
    --smtp-host=host       SMTP host to use
-   --no-include-resolved  Don\'t cache bugs marked as resolved
+   --no-include-resolved  Do not cache bugs marked as resolved
    --include-resolved     Cache bugs marked as resolved (default)
    --help, -h             Display this message
    --version, -v          Display version and copyright info
@@ -2005,6 +2010,14 @@ sub mailbtsall {
 	$charset =~ s/^ANSI_X3\.4-19(68|86)$/US-ASCII/;
         $from = MIME_encode_mimewords($from, 'Charset' => $charset);
 
+	if ($ccsecurity) {
+	    my $coma = "";
+            if ($ccemail) {
+		    $coma = ", ";
+            }
+	    $ccemail = "$ccemail$coma$ccsecurity";
+	}
+
         send_mail($from, $btsemail, $ccemail, $subject, $body);
     }
     else {  # No DEBEMAIL
@@ -2031,6 +2044,7 @@ sub mailbtsall {
 		my @args;
 		@args = ("-s", $subject, "-a", "X-BTS-Version: $version", $btsemail);
 		push(@args, "-c", "$ccemail") if $ccemail;
+		push(@args, "-c", "$ccsecurity") if $ccsecurity;
 		exec("mail", @args) or die "bts: error running mail: $!\n";
 	    }
 	}
@@ -3202,7 +3216,7 @@ If this is set, specifies a sendmail command to use instead of
 
 =item BTS_ONLY_NEW
 
-Download only new bugs when caching. Don't check for updates in
+Download only new bugs when caching. Do not check for updates in
 bugs we already have.
 
 =item BTS_SMTP_HOST
