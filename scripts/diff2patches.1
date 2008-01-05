@@ -1,0 +1,33 @@
+.TH "diff2patches" "1" "" "Raphael Geissert <atomo64@gmail.com>" ""
+.SH "NAME"
+.LP 
+diff2patches \- Extract non\-debian/ patches from .diff.gz files
+.SH "SYNTAX"
+.LP 
+diff2patches \fI<filename>\fP
+.br 
+diff2patches \fI\-\-help\fP|\fI\-\-version\fP
+.SH "DESCRIPTION"
+.LP 
+Extracts patches from .diff.gz which apply to files outside the debian/ directory scope.
+.SH "OPTIONS"
+.LP 
+.TP 
+\fB\fIfilename\fP\fR
+Extract patches from \fB\fIfilename\fP\fR which apply outside the debian/ directory.
+.TP 
+\fB\-\-help\fR 
+Output help information and exit.
+.TP 
+\fB\-\-version\fR
+Output version information and exit.
+.SH "FILES"
+.LP 
+\fIdebian/control\fP 
+Existence of this file is tested before any patch is extracted.
+.br 
+\fIdebian/patches\fP 
+When present and is a directory, patches are extracted in that directory.
+.SH "AUTHORS"
+.LP 
+Raphael Geissert <atomo64@gmail.com>

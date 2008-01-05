@@ -15,19 +15,44 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this file  If not, see <http://www.gnu.org/licenses/>.
+#
+#    On Debian systems, the complete text of the GNU General
+#    Public License 3 can be found in '/usr/share/common-licenses/GPL-3'.
 ####################
 
 set -e
 
-if [ -z "$1" ]; then
-	echo "Usage: $0 FILE.diff.gz"
-	echo "debian/control must exist on the current path"
-	echo "If debian/patches exists and is a directory, patches are extracted there"
-	exit 1
-fi
+usage () {
+    echo \
+"Usage: diff2patches [options] FILE.diff.gz
+  Options:
+    --help          Show this message
+    --version       Show version and copyright information
+  debian/control must exist on the current path for this script to work
+  If debian/patches exists and is a directory, patches are extracted there,
+  otherwise they are extracted under debian/."
+}
 
-if [ ! -f "$1" ]; then
-	echo "Couldn't find $1!"
+version () {
+    echo \
+"This is diff2patches, from the Debian devscripts package, version 2.10.11
+This code is copyright 2007 by Raphael Geissert, all rights reserved.
+This program comes with ABSOLUTELY NO WARRANTY.
+You are free to redistribute this code under the terms of the
+GNU General Public License, version 3 or later."
+}
+
+case "$1" in
+	--help) usage; exit 0 ;;
+	--version) version; exit 0 ;;
+	*) break ;;
+esac
+
+diffgz=$1
+
+if [ ! -f "$diffgz" ]; then
+	[ -z "$diffgz" ] && diffgz="an unspecified .diff.gz"
+	echo "Couldn't find $diffgz, aborting!"
 	exit 1
 fi
 
@@ -41,13 +66,14 @@ DEB_PATCHES=debian
 [ -d debian/patches ] && DEB_PATCHES=debian/patches
 echo "Patches will be extracted under $DEB_PATCHES/"
 
-FILES=`zcat "$1" | lsdiff --strip 1 | egrep -v ^debian/`
+FILES=$(zcat "$diffgz" | lsdiff --strip 1 | egrep -v ^debian/) || \
+	echo $(basename "$diffgz")" doesn't contain any patch outside debian/"
 
-for f in $FILES; do
-	[ ! -z "$f" ] || continue
-	echo -n "Extracting $f..."
-	NF="$DEB_PATCHES/`echo "$f" | sed 's#/#___#g'`.patch"
-	zcat "$1" | filterdiff -i "$f" -p1 > $NF
+for file in $FILES; do
+	[ ! -z "$file" ] || continue
+	echo -n "Extracting $file..."
+	newFileName="$DEB_PATCHES/`echo "$file" | sed 's#/#___#g'`.patch"
+	zcat "$diffgz" | filterdiff -i "$file" -p1 > $newFileName
 	echo "done"
 done
 
