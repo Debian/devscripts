@@ -255,7 +255,7 @@ if (! defined $changes) {
 	open($fh, "<", ".svn/deb-layout") || die "Can't open .svn/deb-layout: $!\n";
 	my($build_area) = grep /^buildArea=/, <$fh>;
 	close($fh);
-	if (defined($build_area)) {
+	if (defined($build_area) and not $opt_debsdir) {
 	    chomp($build_area);
 	    $build_area =~ s/^buildArea=//;
 	    $debsdir = $build_area if -d $build_area;

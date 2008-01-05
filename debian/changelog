@@ -9,30 +9,32 @@ devscripts (2.10.12) UNRELEASED; urgency=low
      + bump Standards-Version to 3.7.3.
      + build-depend on and suggest libterm-size-perl.
   * debian/dirs: create /etc
-  * diff2patches: new patch written by Raphael Geissert <atomo64@gmail.com>.
-    Extracts patches from a .diff.gz file placing them under debian/ or,
-    if present, debian/patches. (Closes: #456626)
-  * debcheckout: add support for authentication mode with darcs.
-    Thanks Luca Capello for the patch. (Closes: #445714)
-  * grep-excuses: permit requests to http://bjorn.haxx.se/debian/
-    with --wipnity, -w option. Idea and implementation courtesy from
-    Julian Mehnle <julian@mehnle.net>. (Closes: #448279)
   * bts:
      + add a -n/--no-action option printing emails to stdout instead
        of sending them. (Closes: #458603)
      + add a "SEE ALSO" section in manual page. (Closes: #458296)
      + automatically Cc: team@security.debian.org when (un)tagging a bug
        security. (Closes: #458840)
+  * chdist: generate a manual page from source.
   * dch:
      + add a --bin-nmu option for binNMUs. (Closes: #458496)
      + add a -s/--security option for Security Team uploads inspired by
        Ubuntu's.
+  * debc/debi: don't mess up --debs-dir option's argument when
+    debian/svn-deblayout is present. (Closes: #446414)
+  * debcheckout: add support for authentication mode with darcs.
+    Thanks Luca Capello for the patch. (Closes: #445714)
   * debdiff: make diff output p1-compatible (for native packages or when
     interdiff is not available). Thanks dAniel hAhler for the patch.
     (Closes: #456223)
+  * diff2patches: new patch written by Raphael Geissert <atomo64@gmail.com>.
+    Extracts patches from a .diff.gz file placing them under debian/ or,
+    if present, debian/patches. (Closes: #456626)
+  * grep-excuses: permit requests to http://bjorn.haxx.se/debian/
+    with --wipnity, -w option. Idea and implementation courtesy from
+    Julian Mehnle <julian@mehnle.net>. (Closes: #448279)
   * mass-bug: add --user and --usertags options to avoid their wrapping.
     (Closes: #429479)
-  * chdist: generate a manual page from source.
   * Changes pulled from Ubuntu's diff:
      + debian/control:
         - suggest wget|curl instead of wget
