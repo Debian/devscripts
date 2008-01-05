@@ -468,7 +468,7 @@ elsif ($type eq 'dsc') {
 		    if ($_ =~ /tar.gz$/) {
 		        system qq(cd ${"dir$i"}/${"sdir$i"} && tar zxf $_ >/dev/null); 
 		    }
-		    if ($_ =~ /tar.bz$/) {
+		    if ($_ =~ /tar.bz$/ || $_ =~ /tar.bz2$/) {
 		        system qq(cd ${"dir$i"}/${"sdir$i"} && tar jxf $_ >/dev/null);
 		    }
 	    }
