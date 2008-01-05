@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash -e
 
 ####################
 #    Copyright (C) 2007 by Raphael Geissert <atomo64@gmail.com>
@@ -20,11 +20,11 @@
 #    Public License 3 can be found in '/usr/share/common-licenses/GPL-3'.
 ####################
 
-set -e
+PROGNAME=`basename $0`
 
 usage () {
     echo \
-"Usage: diff2patches [options] FILE.diff.gz
+"Usage: $PROGNAME [options] FILE.diff.gz
   Options:
     --help          Show this message
     --version       Show version and copyright information
@@ -35,7 +35,7 @@ usage () {
 
 version () {
     echo \
-"This is diff2patches, from the Debian devscripts package, version 2.10.11
+"This is $PROGNAME, from the Debian devscripts package, version ###VERSION###
 This code is copyright 2007 by Raphael Geissert, all rights reserved.
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the
