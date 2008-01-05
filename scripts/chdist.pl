@@ -73,6 +73,10 @@ Display version information.
 
 =item compare-bin-versions DIST1 DIST2
 
+=item compare-src-bin-packages DIST : compare sources and binaries for DIST
+
+=item compare-src-bin-versions DIST : same as compare-src-bin-versions, but also run dpkg --compare-versions and display where the package is newer
+
 =item grep-dctrl-packages DIST [...] : run grep-dctrl on *_Packages inside DIST
 
 =item grep-dctrl-sources DIST [...] : run grep-dctrl on *_Sources inside DIST
@@ -91,7 +95,7 @@ License, or (at your option) any later version.
 
 =cut
 
-use Getopt::Long;
+use Getopt::Long qw(:config require_order);
 
 my $datadir = $ENV{'HOME'} . '/.chdist';
 
@@ -118,6 +122,9 @@ Commands:
   compare-versions DIST1 DIST2 : same as compare-packages, but also run
       dpkg --compare-versions and display where the package is newer
   compare-bin-versions DIST1 DIST2
+  compare-src-bin-packages DIST : compare sources and binaries for DIST
+  compare-src-bin-versions DIST : same as compare-src-bin-versions, but also
+      run dpkg --compare-versions and display where the package is newer
   grep-dctrl-packages DIST [...] : run grep-dctrl on *_Packages inside DIST
   grep-dctrl-sources DIST [...] : run grep-dctrl on *_Sources inside DIST
   list : list available DISTs
@@ -186,7 +193,7 @@ sub type_check {
 sub aptopts {
   # Build apt options
   my ($dist) = @_;
-  my $opts = "-o Dir=$datadir/$dist -o Dir::State::status=$datadir/$dist/var/lib/dpkg/status";
+  my $opts = "";
   if ($arch) {
      print "W: Forcing arch $arch for this command only.\n";
      $opts .= " -o Apt::Architecture=$arch";
@@ -270,6 +277,18 @@ sub src2bin {
 }
 
 
+sub recurs_mkdir {
+  my ($dir) = @_;
+  my @temp = split /\//, $dir;
+  my $createdir = "";
+  foreach $piece (@temp) {
+     $createdir .= "/$piece";
+     if (! -d $createdir) {
+        mkdir($createdir);
+     }
+  }
+}
+
 sub dist_create {
   my ($dist, $method, $version, @sections) = @_;
   my $dir  = $datadir . '/' . $dist;
@@ -284,12 +303,7 @@ sub dist_create {
   }
   mkdir($dir);
   foreach $d (('/etc/apt', '/var/lib/apt/lists/partial', '/var/lib/dpkg', '/var/cache/apt/archives/partial')) {
-    my @temp = split /\//, $d;
-    my $tres = $dir;
-    foreach my $piece (@temp) {
-      $tres .= "/$piece";
-      mkdir($tres);
-    }
+     recurs_mkdir("$dir/$d");
   }
 
   # Create sources.list
@@ -320,16 +334,19 @@ EOF
   # Create dpkg status
   open(FH, ">$dir/var/lib/dpkg/status");
   close FH; #empty file
-  if ($arch) {
-     # Create apt.conf if arch option given
-     open(FH, ">$dir/etc/apt/apt.conf");
-     print FH <<EOF;
+  # Create apt.conf
+  $arch ||= `dpkg --print-architecture`;
+  chomp $arch;
+  open(FH, ">$dir/etc/apt/apt.conf");
+  print FH <<EOF;
 Apt {
    Architecture "$arch";
 }
+
+Dir "$dir";
+Dir::State::status "$dir/var/lib/dpkg/status";
 EOF
   close FH;
-  }
   print "Now edit $dir/etc/apt/sources.list\n";
   print "Then run chdist apt-get $dist update\n";
   print "And enjoy.\n";
@@ -380,7 +397,7 @@ sub dist_compare(\@;$;$) {
         my $parsed_file = parseFile($file);
         foreach my $package ( keys(%{$parsed_file}) ) {
            if ( $packages{$dist}{$package} ) {
-              warn "Package $package is alread listed for $dist. Not overriding.\n";
+              warn "W: Package $package is already listed for $dist. Not overriding.\n";
            } else {
               $packages{$dist}{$package} = $parsed_file->{$package};
            }
@@ -443,6 +460,107 @@ sub dist_compare(\@;$;$) {
 }
 
 
+sub compare_src_bin {
+   my ($dist, $do_compare) = @_;
+
+   $do_compare = 0 if $do_compare eq 'false';
+
+   dist_check($dist);
+
+
+   # Get all packages
+   my %packages;
+   my @parse_types = ('Sources', 'Packages');
+   my @comp_types  = ('Sources_Bin', 'Packages');
+
+   foreach my $type (@parse_types) {
+      my $files = get_distfiles($dist, $type);
+      my @files = @$files;
+      foreach my $file ( @files ) {
+         my $parsed_file = parseFile($file);
+         foreach my $package ( keys(%{$parsed_file}) ) {
+            if ( $packages{$dist}{$package} ) {
+               warn "W: Package $package is already listed for $dist. Not overriding.\n";
+            } else {
+               $packages{$type}{$package} = $parsed_file->{$package};
+            }
+         }
+      }
+   }
+
+   # Build 'Sources_Bin' hash
+   foreach my $package ( keys( %{$packages{Sources}} ) ) {
+      my $package_h = \%{$packages{Sources}{$package}};
+      if ( $package_h->{'Binary'} ) {
+         my @binaries = split(", ", $package_h->{'Binary'});
+         my $version  = $package_h->{'Version'};
+         foreach my $binary (@binaries) {
+            if ( $packages{Sources_Bin}{$binary} ) {
+               # TODO: replace if new version is newer (use dpkg --compare-version?)
+               warn "There is already a version for binary $binary. Not replacing.\n";
+            } else {
+               $packages{Sources_Bin}{$binary}{Version} = $version;
+            }
+         }
+      } else {
+         warn "Source $package has no binaries!\n";
+      }
+   }
+
+   # Get entire list of packages
+   my @all_packages = uniq sort ( map { keys(%{$packages{$_}}) } @comp_types );
+
+  foreach my $package (@all_packages) {
+     my $line = "$package ";
+     my $status = "";
+     my $details;
+
+     foreach my $type (@comp_types) {
+        if ( $packages{$type}{$package} ) {
+           $line .= "$packages{$type}{$package}{'Version'} ";
+        } else {
+           $line .= "UNAVAIL ";
+           $status = "not_in_$type";
+        }
+     }
+
+     my @versions = map { $packages{$_}{$package}{'Version'} } @comp_types;
+     # Escaped versions
+     my @esc_vers = @versions;
+     foreach my $vers (@esc_vers) {
+        $vers =~ s|\+|\\\+|;
+     }
+
+     # Do compare
+     if ($do_compare) {
+        if ($#comp_types != 1) {
+           die "E: Can only compare versions if there are two types.\n";
+        }
+        if (!$status) {
+          if ($versions[0] eq $versions[1]) {
+            $status = "same_version";
+          } else {
+            $test = compare_versions($versions[0], $versions[1]);
+            if ($test eq 'true') {
+               $status = "newer_in_$comp_types[1]";
+               if ( $versions[1] =~ m|^$esc_vers[0]| ) {
+                  $details = " local_changes_in_$comp_types[1]";
+               }
+            } else {
+               $status = "newer_in_$comp_types[0]";
+               if ( $versions[0] =~ m|^$esc_vers[1]| ) {
+                  $details = " local_changes_in_$comp_types[0]";
+               }
+            }
+          }
+        }
+        $line .= " $status $details";
+     }
+
+     print "$line\n";
+  }
+}
+
 sub grep_file {
   my (@argv, $file) = @_;
   $dist = shift @argv;
@@ -455,7 +573,7 @@ sub grep_file {
 sub list {
   opendir(DIR, $datadir) or die "can't open dir $datadir: $!";
   while (defined($file = readdir(DIR))) {
-     if ( (-d "$datadir/$file") && ($file =~ m|^\w+$|) ) {
+     if ( (-d "$datadir/$file") && ($file =~ m|^\w+|) ) {
         print "$file\n";
      }
   }
@@ -488,7 +606,7 @@ sub parseFile {
 	    # Reset %tmp
 	    %tmp = ();
 	 } else {
-            warn "No Package field found. Not committing data.\n";
+            warn "W: No Package field found. Not committing data.\n";
 	 }
       } elsif ( $line =~ m|^[a-zA-Z]| ) {
          # Gather data
@@ -546,6 +664,12 @@ elsif ($command eq 'grep-dctrl-packages') {
 }
 elsif ($command eq 'grep-dctrl-sources') {
   grep_file(@ARGV, 'Sources');
+}
+elsif ($command eq 'compare-src-bin-packages') {
+  compare_src_bin(@ARGV, 0);
+}
+elsif ($command eq 'compare-src-bin-versions') {
+  compare_src_bin(@ARGV, 1);
 }
 elsif ($command eq 'list') {
   list;
