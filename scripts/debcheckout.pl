@@ -243,11 +243,11 @@ sub main() {
     ($repo_type, $repo_url) = find_repo($pkg);
     unless ($repo_type) {
       print <<EOF;
-No repository found for package '$pkg', a Vcs-* field is missing in
-its source record (see Debian Developer's Reference 4.10.4 and/or
-Bug#391023). If you know that the package is maintained via a
-Version Control System consider asking the maintainer to expose such
-information.
+No repository found for package $pkg.
+A Vcs-* field is missing in its source record (see Debian Developer's
+Reference 4.10.4 and/or Bug#391023).  If you know that the package is
+maintained via a Version Control System consider asking the maintainer
+to expose such information.
 EOF
       exit(1);
     }
