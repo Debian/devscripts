@@ -79,7 +79,8 @@ Description: Scripts to make the life of a Debian Package maintainer easier
     placing them  under debian/ or, if present, debian/patches
   - dscverify: verify the integrity of a Debian package from the
     .changes or .dsc files [gnupg, debian-keyring, libdigest-md5-perl]
-  - grep-excuses: grep the update_excuses.html file for your packages [wget]
+  - grep-excuses: grep the update_excuses.html file for your packages
+    [libterm-size-perl, wget]
   - licensecheck: attempt to determine the license of source files
   - list-unreleased: searches for unreleased packages
   - manpage-alert: locate binaries without corresponding manpages [man-db]

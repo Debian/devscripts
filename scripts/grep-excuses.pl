@@ -24,6 +24,20 @@ use strict;
 use File::Basename;
 
 # Needed for --wipnity option
+
+BEGIN {
+    # Load the Term::Size module safely
+    eval { require Term::Size; };
+    if ($@) {
+        my $progname = basename $0;
+        if ($@ =~ /^Can\'t locate Term\/Size\.pm/) {
+            die "$progname: you must have the libterm-size-perl package installed\nto use this script\n";
+        }
+        die "$progname: problem loading the Term::Size module:\n  $@\nHave you installed the libterm-size-perl package?\n";
+    }
+    import Term::Size;
+}
+
 use Term::Size;
 
 my $progname = basename($0);
