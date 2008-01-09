@@ -12,7 +12,17 @@ devscripts (2.10.13) UNRELEASED; urgency=low
     (Closes: #459586)
   * README: Add libterm-size-perl to the description of grep-excuses
 
- -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Sun, 06 Jan 2008 01:53:44 +0100
+  [ James Vega ]
+  * tagpending: Handle new-style links to individual bug reports which are
+    simply the bug-numer.
+  * bts: Handle both relative and absolute links on BTS webpages.
+  * debchange:
+    + Handle both relative and absolute links when parsing BTS webpages.
+      (Closes: #459947)
+    + Do not include "Debian Bug report logs" in the changelog entry when
+      using --closes.
+
+ -- James Vega <jamessan@debian.org>  Wed, 09 Jan 2008 16:02:30 -0500
 
 devscripts (2.10.12) unstable; urgency=low
 

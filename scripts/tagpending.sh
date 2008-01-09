@@ -63,7 +63,7 @@ WNPP=0
 
 BTS_BASE_URL="http://bugs.debian.org/cgi-bin/pkgreport.cgi"
 TAGS="<h3>Tags:"
-WNPP_MATCH="Package: <a [^>]*href=\"pkgreport.cgi?pkg=wnpp\">wnpp<\/a>;"
+WNPP_MATCH="Package: <a [^>]*href=\"\\(\\/cgi-bin\\/\\)\\?pkgreport.cgi?pkg=wnpp\">wnpp<\/a>;"
 
 while [ -n "$1" ]; do
   case "$1" in
@@ -113,9 +113,9 @@ changelog_closes=$(echo "$parsed"| awk -F: '/^Closes: / { print $2 }' | \
 
 if [ "$USE_WGET" = "1" ]; then
     bts_pending=$(wget -q -O - "$BTS_BASE_URL?which=src;data=$srcpkg;archive=no;pend-exc=done;tag=pending" | \
-	sed -ne 's/.*<a href="bugreport.cgi?bug=\([0-9]*\).*/\1/; T; p')
+	sed -ne 's/.*<a href="\(\(\/cgi-bin\/\)\?bugreport.cgi?bug=\|\/\)\([0-9]*\).*/\3/; T; p')
     bts_open=$(wget -q -O - "$BTS_BASE_URL?which=src;data=$srcpkg;archive=no;pend-exc=done" | \
-	sed -ne 's/.*<a href="bugreport.cgi?bug=\([0-9]*\).*/\1/; T; p')
+	sed -ne 's/.*<a href="\(\(\/cgi-bin\/\)\?bugreport.cgi?bug=\|\/\)\([0-9]*\).*/\3/; T; p')
 fi
 
 to_be_checked=$(printf '%s\n%s\n' "$changelog_closes" "$bts_pending" | sort -g | uniq)

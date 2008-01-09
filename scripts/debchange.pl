@@ -671,12 +671,12 @@ if (@closes and $opt_query) { # and we have to query the BTS
 	}
 
 	foreach (split /\n/, $bugs) {
-	    if (m%<a(?: class=\".*?\")? href=\"bugreport.cgi\?bug=([0-9]*).*?>\#\1: (.*?)</a>%i) {
+	    if (m%<a(?: class=\".*?\")? href=\"(?:/cgi-bin/)?bugreport.cgi\?bug=([0-9]*).*?>\#\1: (.*?)</a>%i) {
 		$bugs{$1} = [$2];
 		$lastbug=$1;
 	    }
 	    elsif (defined $lastbug and
-		   m%<a(?: class=\".*?\")? href=\"pkgreport.cgi\?(?:[^\"]*?;)(?:(pkg|package))=([a-z0-9\+\-\.]*)%i) {
+		   m%<a(?: class=\".*?\")? href=\"(?:/cgi-bin/)?pkgreport.cgi\?(?:[^\"]*?;)(?:(pkg|package))=([a-z0-9\+\-\.]*)%i) {
 		push @{$bugs{$lastbug}}, $1
 		    if exists $bugs{$lastbug};
 		$lastbug = undef;
@@ -700,11 +700,11 @@ if (@closes and $opt_query) { # and we have to query the BTS
 		    $warnings++;
 		    push @closes_text, "Closes?? \#$close: UNKNOWN BUG IN WRONG PACKAGE!!\n";
 		} else {
-		    my ($bugtitle) = ($bug =~ m%<TITLE>.*?\#$close - (.*?)</TITLE>%);
+		    my ($bugtitle) = ($bug =~ m%<TITLE>.*?\#$close - (.*?) - [^-]*? report logs</TITLE>%);
 		    $bugtitle ||= '';
-		    my ($bugpkg) = ($bug =~ m%<a(?: class=\".*?\")? href=\"pkgreport.cgi\?(?:[^\"]*?;)(?:(pkg|package))=([a-z0-9\+\-\.]*)%i);
+		    my ($bugpkg) = ($bug =~ m%<a(?: class=\".*?\")? href=\"(?:/cgi-bin/)?pkgreport.cgi\?(?:[^\"]*?;)?(?:pkg|package)=([a-z0-9\+\-\.]*)%i);
 		    $bugpkg ||= '?';
-		    my ($bugsrcpkg) = ($bug =~ m%<a(?: class=\".*?\")? href=\"pkgreport.cgi\?src=([a-z0-9\+\-\.]*)%i);
+		    my ($bugsrcpkg) = ($bug =~ m%<a(?: class=\".*?\")? href=\"(?:/cgi-bin/)?pkgreport.cgi\?src=([a-z0-9\+\-\.]*)%i);
 		    $bugsrcpkg ||= '?';
 		    if ($bugsrcpkg eq $PACKAGE) {
 			warn "$progname warning: bug \#$close appears to be already archived,\n  disabling closing changelog entry\n";
