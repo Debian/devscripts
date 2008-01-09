@@ -25,20 +25,24 @@ use File::Basename;
 
 # Needed for --wipnity option
 
-BEGIN {
+my $term_size_broken;
+
+sub have_term_size {
+    return ($term_size_broken ? 0 : 1) if defined $term_size_broken;
     # Load the Term::Size module safely
     eval { require Term::Size; };
     if ($@) {
-        my $progname = basename $0;
         if ($@ =~ /^Can\'t locate Term\/Size\.pm/) {
-            die "$progname: you must have the libterm-size-perl package installed\nto use this script\n";
-        }
-        die "$progname: problem loading the Term::Size module:\n  $@\nHave you installed the libterm-size-perl package?\n";
+	    $term_size_broken="the libterm-size-perl package is not installed";
+        } else {
+	    $term_size_broken="couldn't load Term::Size: $@";
+	}
+    } else {
+	$term_size_broken = 0;
     }
-    import Term::Size;
-}
 
-use Term::Size;
+    return ($term_size_broken ? 0 : 1);
+}
 
 my $progname = basename($0);
 my $modified_conf_msg;
@@ -79,6 +83,8 @@ GNU General Public License, version 2 or later.
 EOF
 
 sub wipnity {
+die "$progname: Couldn't run wipnity: $term_size_broken\n" unless have_term_size();
+
 my $columns = Term::Size::chars();
 
 while( my $package=shift ) {

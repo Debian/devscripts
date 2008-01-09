@@ -4,8 +4,10 @@ devscripts (2.10.13) UNRELEASED; urgency=low
   * debcheckout: wrap error message. (Closes: #459372)
 
   [ Adam D. Barratt ]
-  * grep-excuses: Improve the error message when libterm-size-perl isn't
-    installed.
+  * grep-excuses:
+    + Only check for the presence of libterm-size-perl if -w / --wipnity
+      is being used.
+    + Improve the error message when libterm-size-perl isn't installed.
   * debian/control: Add libterm-size-perl to the description of grep-excuses
     (Closes: #459586)
   * README: Add libterm-size-perl to the description of grep-excuses
