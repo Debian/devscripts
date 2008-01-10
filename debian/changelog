@@ -22,7 +22,11 @@ devscripts (2.10.13) UNRELEASED; urgency=low
     + Do not include "Debian Bug report logs" in the changelog entry when
       using --closes.
 
- -- James Vega <jamessan@debian.org>  Wed, 09 Jan 2008 16:02:30 -0500
+  [ Luk Claes ]
+  * whodepends: Support showing source packages instead of binary ones thanks
+    to Otavio Salvador.
+
+ -- Luk Claes <luk@debian.org>  Thu, 10 Jan 2008 19:08:16 +0100
 
 devscripts (2.10.12) unstable; urgency=low
 
