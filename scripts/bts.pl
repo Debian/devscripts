@@ -2526,7 +2526,7 @@ sub mangle_cache_file {
 		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(pkgreport\.cgi\?.*?;?archive=([^\"&;]+);submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="from_$4_3Barchive_3D$3.html">$5</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
 		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(pkgreport\.cgi\?.*?;?package=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
 		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(bugspam\.cgi[^\"]+)">%<a$1 href="$btscgiurl$2">%i;
-		s%<a((?: class=\".*?\")?) href="/([0-9]+?)"%<a$1 href="$2.html"%i;
+		s%<a((?: class=\".*?\")?) href="/([0-9]+?)">(.+?)</a>%<a$1 href="$2.html">$3</a> (<a$1 href="$btsurl$2">online</a>)%i;
 
 		# Version graphs
 		# - remove 'package='
