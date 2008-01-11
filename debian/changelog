@@ -26,6 +26,10 @@ devscripts (2.10.13) UNRELEASED; urgency=low
   * whodepends: Support showing source packages instead of binary ones thanks
     to Otavio Salvador.
 
+  [ Joey Hess ]
+  * bts: Add a <base> tag to the page sent to the browser so that unqualified
+    urls work.
+
  -- Luk Claes <luk@debian.org>  Thu, 10 Jan 2008 19:08:16 +0100
 
 devscripts (2.10.12) unstable; urgency=low

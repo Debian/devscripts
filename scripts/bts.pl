@@ -2311,6 +2311,12 @@ sub download {
 	    # do nothing
 	}
 
+	# Add a <base> tag to the live page content, so that relative urls
+	# in it work when it's passed to the web browser.
+	my $base=$url;
+	$base=~s%/[^/]*$%%;
+	$livepage=~s%<head>%<head><base href="$base">%i;
+
 	chdir $oldcwd or die "bts: chdir $oldcwd failed: $!\n";
 	return $livepage;
     } else {
@@ -3123,6 +3129,7 @@ sub bts_mirror {
 	    }
 	    # else OK
 	}
+
 	return (MIRROR_DOWNLOADED, $response->status_line, $response->content);
     } else {
 	return (MIRROR_ERROR, $response->status_line);
