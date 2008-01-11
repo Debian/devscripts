@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2008-01-05 15:24+0100\n"
+"POT-Creation-Date: 2008-01-11 17:44+0100\n"
 "PO-Revision-Date: 2006-11-27 09:30+0100\n"
 "Last-Translator: Julien Cristau <julien.cristau@ens-lyon.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -407,8 +407,8 @@ msgid ""
 "That's much easier than using \\(oqbaz tree-version\\(cq to look up the "
 "package name and manually modifying the result."
 msgstr ""
-"C'est bien plus commode que d'utiliser « baz tree-version » pour récupérer le "
-"nom du paquet puis modifier le résultat manuellement."
+"C'est bien plus commode que d'utiliser « baz tree-version » pour récupérer "
+"le nom du paquet puis modifier le résultat manuellement."
 
 # type: Plain text
 #: ../scripts/archpath.1:57
@@ -742,8 +742,8 @@ msgid ""
 "this is needed.)"
 msgstr ""
 "Spécifier la commande pour lire la boîte de courriel (« mbox »). Doit "
-"contenir une chaîne « %s », qui sera remplacée par le nom du fichier mbox. La "
-"commande sera découpée en fonction des espaces et ne sera pas passée à un "
+"contenir une chaîne « %s », qui sera remplacée par le nom du fichier mbox. "
+"La commande sera découpée en fonction des espaces et ne sera pas passée à un "
 "interpréteur de commandes (« shell »). Par défaut, « mutt -f %s » sera "
 "utilisé. (Par ailleurs %% sera remplacé par un simple % si ceci est "
 "nécessaire.)"
@@ -777,8 +777,8 @@ msgid ""
 msgstr ""
 "Indiquer la commande d'envoi de mail à utiliser. La commande sera séparée à "
 "chaque espace, et non passée à l'interpréteur de commandes. La valeur par "
-"défaut est « /usr/sbin/sendmail ». L'option -t est ajoutée automatiquement si "
-"la commande est /usr/sbin/sendmail ou /usr/sbin/exim*. Pour les autres "
+"défaut est « /usr/sbin/sendmail ». L'option -t est ajoutée automatiquement "
+"si la commande est /usr/sbin/sendmail ou /usr/sbin/exim*. Pour les autres "
 "logiciels, l'option -t doit être incluse dans COMMANDE_D_ENVOI_DE_MAIL si "
 "nécessaire, par exemple : --sendmail=\"/usr/sbin/mymailer -t\""
 
@@ -839,7 +839,7 @@ msgid "--only-new"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:306 ../scripts/bts.pl:3219
+#: ../scripts/bts.pl:306 ../scripts/bts.pl:3227
 msgid ""
 "Download only new bugs when caching. Do not check for updates in bugs we "
 "already have."
@@ -1149,8 +1149,8 @@ msgstr ""
 "options facultatives pour formater la page ou changer ce qui doit être "
 "affiché. Celles-ci sont passées au BTS via l'URL demandée. Par exemple, "
 "passez « dist=stable » pour afficher les bogues touchant la version stable "
-"d'un paquet, « version=1.0 » pour voir les bogues touchant cette version d'un "
-"paquet, ou « reverse=yes » pour afficher d'abord les messages les plus "
+"d'un paquet, « version=1.0 » pour voir les bogues touchant cette version "
+"d'un paquet, ou « reverse=yes » pour afficher d'abord les messages les plus "
 "récents dans le fichier journal des bogues."
 
 # type: textblock
@@ -1799,8 +1799,8 @@ msgid ""
 "Change the \"owner\" address of a bug, with `!' meaning `use the address on "
 "the current email as the new owner address'."
 msgstr ""
-"Changer l'adresse de courriel du « propriétaire » du bogue, où « ! » signifie "
-"« utiliser l'adresse du courriel courant comme nouvelle adresse de "
+"Changer l'adresse de courriel du « propriétaire » du bogue, où « ! » "
+"signifie « utiliser l'adresse du courriel courant comme nouvelle adresse de "
 "propriétaire »."
 
 # type: textblock
@@ -1872,8 +1872,8 @@ msgstr ""
 "Désabonner l'adresse de courriel utilisée du rapport de bogue spécifié. "
 "Comme pour la commande subscribe décrite ci-dessus, si aucune adresse n'a "
 "été spécifiée, la variable d'environnement DEBEMAIL ou EMAIL (dans cet "
-"ordre) est utilisée. Si aucune n'est positionnée, ou si « ! » est donné comme "
-"adresse de courriel, votre adresse par défaut va être utilisée."
+"ordre) est utilisée. Si aucune n'est positionnée, ou si « ! » est donné "
+"comme adresse de courriel, votre adresse par défaut va être utilisée."
 
 # type: textblock
 #: ../scripts/bts.pl:1474
@@ -1970,10 +1970,10 @@ msgid ""
 msgstr ""
 "Ainsi, une fois que le cache est mis en place, bts va mettre à jour les "
 "fichiers contenu dans celui-ci au coup par coup quand il télécharge des "
-"informations depuis le BTS avec la commande « show ». Il est donc possible de "
-"mettre en place un cache, et de le mettre à jour une fois par semaine, tout "
-"en laissant les mises à jour automatiques se faire pour les bogues auxquels "
-"vous accédez fréquemment pendant la semaine."
+"informations depuis le BTS avec la commande « show ». Il est donc possible "
+"de mettre en place un cache, et de le mettre à jour une fois par semaine, "
+"tout en laissant les mises à jour automatiques se faire pour les bogues "
+"auxquels vous accédez fréquemment pendant la semaine."
 
 # type: textblock
 #: ../scripts/bts.pl:1557
@@ -1995,8 +1995,8 @@ msgstr ""
 "liens référencés depuis la page du bogue, ce qui inclut des choses pénibles "
 "comme les courriels d'ACK, les courriels au robot de contrôle, et la version "
 "« mbox » du rapport de bogue. Trois valeurs sont acceptées : « min » (le "
-"minimum), « mbox » (télécharger le minimum plus la version mbox du rapport de "
-"bogue) ou « full ». La seconde option qui modifie le comportement de la "
+"minimum), « mbox » (télécharger le minimum plus la version mbox du rapport "
+"de bogue) ou « full ». La seconde option qui modifie le comportement de la "
 "commande cache est --force-refresh ou -f, qui force le téléchargement, même "
 "si le rapport de bogue mis en cache est à jour. Ces deux options sont "
 "configurables via le fichier de configuration, comme décrit ci-dessous. "
@@ -2087,19 +2087,19 @@ msgstr ""
 "parties de cette page de manuel."
 
 # type: SH
-#: ../scripts/bts.pl:3145 ../scripts/debuild.1:88
+#: ../scripts/bts.pl:3153 ../scripts/debuild.1:88
 #: ../scripts/pts-subscribe.1:29
 #, no-wrap
 msgid "ENVIRONMENT VARIABLES"
 msgstr "VARIABLES D'ENVIRONNEMENT"
 
 # type: TH
-#: ../scripts/bts.pl:3149
+#: ../scripts/bts.pl:3157
 msgid "DEBEMAIL"
 msgstr "DEBEMAIL"
 
 # type: textblock
-#: ../scripts/bts.pl:3151
+#: ../scripts/bts.pl:3159
 msgid ""
 "If this is set, the From: line in the email will be set to use this email "
 "address instead of your normal email address (as would be determined by "
@@ -2110,12 +2110,12 @@ msgstr ""
 "serait déterminée par B<mail>)."
 
 # type: =item
-#: ../scripts/bts.pl:3155
+#: ../scripts/bts.pl:3163
 msgid "DEBFULLNAME"
 msgstr "DEBFULLNAME"
 
 # type: textblock
-#: ../scripts/bts.pl:3157
+#: ../scripts/bts.pl:3165
 msgid ""
 "If DEBEMAIL is set, DEBFULLNAME is examined to determine the full name to "
 "use; if this is not set, B<bts> attempts to determine a name from your "
@@ -2126,12 +2126,12 @@ msgstr ""
 "votre entrée passwd."
 
 # type: =item
-#: ../scripts/bts.pl:3161
+#: ../scripts/bts.pl:3169
 msgid "BROWSER"
 msgstr "BROWSER"
 
 # type: textblock
-#: ../scripts/bts.pl:3163
+#: ../scripts/bts.pl:3171
 msgid ""
 "If set, it specifies the browser to use for the 'show' and 'bugs' options.  "
 "See the description above."
@@ -2140,7 +2140,7 @@ msgstr ""
 "« show » et « bugs ». Voir la description plus haut."
 
 # type: SH
-#: ../scripts/bts.pl:3168 ../scripts/debc.1:92 ../scripts/debchange.1:314
+#: ../scripts/bts.pl:3176 ../scripts/debc.1:92 ../scripts/debchange.1:314
 #: ../scripts/debclean.1:90 ../scripts/debcommit.pl:80
 #: ../scripts/debdiff.1:135 ../scripts/debi.1:93 ../scripts/debrelease.1:105
 #: ../scripts/debrsign.1:57 ../scripts/debsign.1:99 ../scripts/debuild.1:276
@@ -2155,7 +2155,7 @@ msgstr "VARIABLES DE CONFIGURATION"
 
 # NOTE: presque identique
 # type: Plain text
-#: ../scripts/bts.pl:3170 ../scripts/debcommit.pl:82
+#: ../scripts/bts.pl:3178 ../scripts/debcommit.pl:82
 #: ../scripts/mass-bug.pl:117
 msgid ""
 "The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
@@ -2172,12 +2172,12 @@ msgstr ""
 "cette fin. Les variables actuellement reconnues sont :"
 
 # type: =item
-#: ../scripts/bts.pl:3178
+#: ../scripts/bts.pl:3186
 msgid "BTS_OFFLINE"
 msgstr "BTS_OFFLINE"
 
 # type: Plain text
-#: ../scripts/bts.pl:3180
+#: ../scripts/bts.pl:3188
 msgid ""
 "If this is set to I<yes>, then it is the same as the --offline command line "
 "parameter being used.  Only has an effect on the show and bugs commands.  "
@@ -2190,12 +2190,12 @@ msgstr ""
 "commande show ci-dessus pour plus d'informations."
 
 # type: =item
-#: ../scripts/bts.pl:3185
+#: ../scripts/bts.pl:3193
 msgid "BTS_CACHE"
 msgstr "BTS_CACHE"
 
 # type: Plain text
-#: ../scripts/bts.pl:3187
+#: ../scripts/bts.pl:3195
 msgid ""
 "If this is set to I<no>, then it is the same as the --no-cache command line "
 "parameter being used.  Only has an effect on the show and bug commands.  The "
@@ -2207,12 +2207,12 @@ msgstr ""
 "ci-dessus pour plus d'informations."
 
 # type: =item
-#: ../scripts/bts.pl:3192
+#: ../scripts/bts.pl:3200
 msgid "BTS_CACHE_MODE={min,mbox,full}"
 msgstr "BTS_CACHE_MODE={min,mbox,full}"
 
 # type: textblock
-#: ../scripts/bts.pl:3194
+#: ../scripts/bts.pl:3202
 msgid ""
 "How much of the BTS should we mirror when we are asked to cache something? "
 "Just the minimum, or also the mbox or the whole thing? The default is "
@@ -2227,12 +2227,12 @@ msgstr ""
 "documentation de la commande cache pour plus d'informations."
 
 # type: =item
-#: ../scripts/bts.pl:3200
+#: ../scripts/bts.pl:3208
 msgid "BTS_FORCE_REFRESH"
 msgstr "BTS_FORCE_REFRESH"
 
 # type: Plain text
-#: ../scripts/bts.pl:3202
+#: ../scripts/bts.pl:3210
 msgid ""
 "If this is set to I<yes>, then it is the same as the --force-refresh command "
 "line parameter being used.  Only has an effect on the cache command.  The "
@@ -2244,12 +2244,12 @@ msgstr ""
 "d'informations."
 
 # type: =item
-#: ../scripts/bts.pl:3207
+#: ../scripts/bts.pl:3215
 msgid "BTS_MAIL_READER"
 msgstr "BTS_MAIL_READER"
 
 # type: Plain text
-#: ../scripts/bts.pl:3209
+#: ../scripts/bts.pl:3217
 msgid ""
 "If this is set, specifies a mail reader to use instead of mutt.  Same as the "
 "--mailreader command line option."
@@ -2258,12 +2258,12 @@ msgstr ""
 "place de mutt. Équivalent à l'option de ligne de commande --mailreader."
 
 # type: =item
-#: ../scripts/bts.pl:3212 ../scripts/mass-bug.pl:125
+#: ../scripts/bts.pl:3220 ../scripts/mass-bug.pl:125
 msgid "BTS_SENDMAIL_COMMAND"
 msgstr "BTS_SENDMAIL_COMMAND"
 
 # type: textblock
-#: ../scripts/bts.pl:3214 ../scripts/mass-bug.pl:127 ../scripts/nmudiff.1:92
+#: ../scripts/bts.pl:3222 ../scripts/mass-bug.pl:127 ../scripts/nmudiff.1:92
 msgid ""
 "If this is set, specifies a sendmail command to use instead of /usr/sbin/"
 "sendmail.  Same as the --sendmail command line option."
@@ -2273,18 +2273,18 @@ msgstr ""
 "commande --sendmail."
 
 # type: =item
-#: ../scripts/bts.pl:3217
+#: ../scripts/bts.pl:3225
 #, fuzzy
 msgid "BTS_ONLY_NEW"
 msgstr "BTS_OFFLINE"
 
 # type: =item
-#: ../scripts/bts.pl:3222
+#: ../scripts/bts.pl:3230
 msgid "BTS_SMTP_HOST"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3224
+#: ../scripts/bts.pl:3232
 #, fuzzy
 msgid ""
 "If this is set, specifies an SMTP host to use for sending mail rather than "
@@ -2295,19 +2295,19 @@ msgstr ""
 "commande --sendmail."
 
 # type: textblock
-#: ../scripts/bts.pl:3228
+#: ../scripts/bts.pl:3236
 msgid ""
 "Note that this option takes priority over BTS_SENDMAIL_COMMAND if both are "
 "set, unless the --sendmail option is used."
 msgstr ""
 
 # type: =item
-#: ../scripts/bts.pl:3231
+#: ../scripts/bts.pl:3239
 msgid "BTS_INCLUDE_RESOLVED"
 msgstr ""
 
 # type: Plain text
-#: ../scripts/bts.pl:3233
+#: ../scripts/bts.pl:3241
 #, fuzzy
 msgid ""
 "If this is set to I<no>, then it is the same as the --no-include-resolved "
@@ -2320,7 +2320,7 @@ msgstr ""
 "d'informations."
 
 # type: SH
-#: ../scripts/bts.pl:3240 ../scripts/checkbashisms.1:36
+#: ../scripts/bts.pl:3248 ../scripts/checkbashisms.1:36
 #: ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62
 #: ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:56
 #: ../scripts/debc.1:115 ../scripts/debchange.1:373 ../scripts/debclean.1:107
@@ -2339,7 +2339,7 @@ msgid "SEE ALSO"
 msgstr "VOIR AUSSI"
 
 # type: textblock
-#: ../scripts/bts.pl:3242
+#: ../scripts/bts.pl:3250
 msgid ""
 "Please see L<http://www.debian.org/Bugs/server-control> for more details on "
 "how to control the BTS using emails and L<http://www.debian.org/Bugs/> for "
@@ -2347,17 +2347,17 @@ msgid ""
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3246
+#: ../scripts/bts.pl:3254
 msgid "reportbug(1), querybts(1)"
 msgstr ""
 
 # type: SH
-#: ../scripts/bts.pl:3250 ../scripts/mass-bug.pl:457
+#: ../scripts/bts.pl:3258 ../scripts/mass-bug.pl:457
 msgid "COPYRIGHT"
 msgstr "COPYRIGHT"
 
 # type: textblock
-#: ../scripts/bts.pl:3252
+#: ../scripts/bts.pl:3260
 #, fuzzy
 msgid ""
 "This program is Copyright (C) 2001-2003 by Joey Hess <joeyh@debian.org>.  "
@@ -2369,7 +2369,7 @@ msgstr ""
 "Gilbey <jdg@debian.org>."
 
 # type: textblock
-#: ../scripts/bts.pl:3257 ../scripts/mass-bug.pl:461
+#: ../scripts/bts.pl:3265 ../scripts/mass-bug.pl:461
 msgid ""
 "It is licensed under the terms of the GPL, either version 2 of the License, "
 "or (at your option) any later version."
@@ -3497,8 +3497,8 @@ msgid ""
 "See the above section \"Directory name checking\" for an explanation of this "
 "option."
 msgstr ""
-"Veuillez consulter la section ci-dessus « Vérification du nom du répertoire » "
-"pour une explication de cette option."
+"Veuillez consulter la section ci-dessus « Vérification du nom du "
+"répertoire » pour une explication de cette option."
 
 # type: TP
 #: ../scripts/debc.1:81 ../scripts/debchange.1:295 ../scripts/debclean.1:73
@@ -3572,11 +3572,11 @@ msgid ""
 "and will therefore affect all B<devscripts> scripts which check their value, "
 "as described in their respective manpages and in B<devscripts.conf>(5)."
 msgstr ""
-"Veuillez consulter la section « Vérification du nom du répertoire » ci-dessus "
-"pour une explication de ces variables. Notez que ce sont des variables de "
-"configuration pour tous les outils du paquet B<devscripts> ; elles "
-"impacteront tous les scripts qui les utilisent, comme indiqué dans leurs "
-"pages de manuel respectives et dans B<devscripts.conf>(5)."
+"Veuillez consulter la section « Vérification du nom du répertoire » ci-"
+"dessus pour une explication de ces variables. Notez que ce sont des "
+"variables de configuration pour tous les outils du paquet B<devscripts> ; "
+"elles impacteront tous les scripts qui les utilisent, comme indiqué dans "
+"leurs pages de manuel respectives et dans B<devscripts.conf>(5)."
 
 # type: Plain text
 #: ../scripts/debc.1:120
@@ -5991,9 +5991,9 @@ msgid ""
 "be placed in quotes if it has more than one word; it is called via "
 "<command>sh -c</command>."
 msgstr ""
-", un script crochet (« hook ») peut être précisé, alors lancé sur les paquets "
-"binaires dépaquetés juste avant d'être réempaqueté. Si vous voulez écrire "
-"les entrées du fichier changelog avec ce script, utilisez la commande "
+", un script crochet (« hook ») peut être précisé, alors lancé sur les "
+"paquets binaires dépaquetés juste avant d'être réempaqueté. Si vous voulez "
+"écrire les entrées du fichier changelog avec ce script, utilisez la commande "
 "« <command>dch -a -- <replaceable class=\"parameter\">votre message</"
 "replaceable></command> ». (Alternativement, vous pouvez ne pas spécifier "
 "l'entrée du changelog dans la ligne de commande <command>&dhcommand;</"
@@ -6441,8 +6441,8 @@ msgstr "DEBSIGN"
 #: ../scripts/debsign.1:4
 msgid "debsign - sign a Debian changes and dsc file pair using GPG/PGP"
 msgstr ""
-"debsign - Signer une paire de fichiers « changes » et « dsc » Debian avec GPG "
-"ou PGP"
+"debsign - Signer une paire de fichiers « changes » et « dsc » Debian avec "
+"GPG ou PGP"
 
 # type: Plain text
 #: ../scripts/debsign.1:6
@@ -8022,9 +8022,9 @@ msgid ""
 "Do not report any build-essential or essential packages used, or any of "
 "their (direct or indirect) dependencies."
 msgstr ""
-"Ne signale aucune utilisation d'un paquet « essential » (essentiel) ou « build-"
-"essential » (essentiel pour la construction des paquets), ou d'une de leurs "
-"dépendances (directe ou indirecte)."
+"Ne signale aucune utilisation d'un paquet « essential » (essentiel) ou "
+"« build-essential » (essentiel pour la construction des paquets), ou d'une "
+"de leurs dépendances (directe ou indirecte)."
 
 # type: TP
 #: ../scripts/dpkg-depcheck.1:26
@@ -9338,8 +9338,8 @@ msgid ""
 msgstr ""
 "Ces options vous permettent d'insérer des commandes B<gnuplot>(1) dans le "
 "script gnuplot utilisé pour générer le graphique. Les commandes sont placées "
-"après l'initialisation, mais avant la commande « plot » finale. Elles peuvent "
-"être utilisées pour remplacer l'apparence par défaut fournie par ce "
+"après l'initialisation, mais avant la commande « plot » finale. Elles "
+"peuvent être utilisées pour remplacer l'apparence par défaut fournie par ce "
 "programme de façon arbitraire. Vous pouvez également utiliser quelque chose "
 "comme « set terminal png color » pour modifier le type du fichier de sortie, "
 "ce qui peut être utile avec l'option -s."
@@ -10540,15 +10540,15 @@ msgid ""
 msgstr ""
 "Après avoir récupéré une liste de « fichiers » qui correspondent au modèle, "
 "leur numéro de version sont extraits en concaténant l'ensemble des groupes "
-"de l'expression rationnelle Perl (démarqués par « (...) ») et en les séparant "
-"par un « . ». Ce numéro est considéré comme le numéro de version du fichier. "
-"Les numéros de version sont ensuite modifiés si l'option B<uversionmangle>, "
-"décrite ci-dessous, a été précisée. Enfin, les versions des fichiers sont "
-"ensuite comparées pour trouver celui qui a le plus grand numéro de version, "
-"qui est trouvé en utilisant B<dpkg --compare-versions>. Note : si vous avez "
-"besoin de groupes qui ne sont pas utilisés dans le numéro de version, "
-"utilisez soit « (?:...) » soit l'option B<uversionmangle> pour nettoyer la "
-"version par la suite."
+"de l'expression rationnelle Perl (démarqués par « (...) ») et en les "
+"séparant par un « . ». Ce numéro est considéré comme le numéro de version du "
+"fichier. Les numéros de version sont ensuite modifiés si l'option "
+"B<uversionmangle>, décrite ci-dessous, a été précisée. Enfin, les versions "
+"des fichiers sont ensuite comparées pour trouver celui qui a le plus grand "
+"numéro de version, qui est trouvé en utilisant B<dpkg --compare-versions>. "
+"Note : si vous avez besoin de groupes qui ne sont pas utilisés dans le "
+"numéro de version, utilisez soit « (?:...) » soit l'option B<uversionmangle> "
+"pour nettoyer la version par la suite."
 
 # type: Plain text
 #: ../scripts/uscan.1:187
@@ -10645,13 +10645,13 @@ msgstr ""
 "à faire correspondre uniquement le nom de base du lien, vous pouvez utiliser "
 "un modèle comme « .*/nom-(.*)\\e.tar\\e.gz » si vous savez qu'il y a une URL "
 "complète, ou encore mieux : « (?:.*/)?nom-(.*)\\e.tar\\e.gz » si l'URL peut "
-"être ou ne pas être complète. Notez l'utilisation de « (?:...) » qui évite de "
-"créer une référence.) Si un des liens de cette page est une URL relative, "
+"être ou ne pas être complète. Notez l'utilisation de « (?:...) » qui évite "
+"de créer une référence.) Si un des liens de cette page est une URL relative, "
 "elle sera considérée comme relative à l'URL de base de la page d'accueil (i."
-"e., en retirant tout ce qui suit le « / » final), ou relative à l'URL de base "
-"spécifiée dans cette page avec une balise E<lt>base href=\"...\"E<gt>. Les "
-"troisième et quatrième champs sont les champs du numéro de version et de la "
-"commande, comme précédemment."
+"e., en retirant tout ce qui suit le « / » final), ou relative à l'URL de "
+"base spécifiée dans cette page avec une balise E<lt>base href=\"...\"E<gt>. "
+"Les troisième et quatrième champs sont les champs du numéro de version et de "
+"la commande, comme précédemment."
 
 # type: SH
 #: ../scripts/uscan.1:217

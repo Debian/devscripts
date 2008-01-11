@@ -1,18 +1,17 @@
 # SOME DESCRIPTIVE TITLE
 # Copyright (C) YEAR Free Software Foundation, Inc.
-# This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-01-05 15:24+0100\n"
+"POT-Creation-Date: 2008-01-11 17:44+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: ENCODING"
 
 # type: TH
@@ -586,7 +585,7 @@ msgid "--only-new"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:306 ../scripts/bts.pl:3219
+#: ../scripts/bts.pl:306 ../scripts/bts.pl:3227
 msgid ""
 "Download only new bugs when caching. Do not check for updates in bugs we "
 "already have."
@@ -1615,18 +1614,18 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../scripts/bts.pl:3145 ../scripts/debuild.1:88 ../scripts/pts-subscribe.1:29
+#: ../scripts/bts.pl:3153 ../scripts/debuild.1:88 ../scripts/pts-subscribe.1:29
 #, no-wrap
 msgid "ENVIRONMENT VARIABLES"
 msgstr ""
 
 # type: =item
-#: ../scripts/bts.pl:3149
+#: ../scripts/bts.pl:3157
 msgid "DEBEMAIL"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3151
+#: ../scripts/bts.pl:3159
 msgid ""
 "If this is set, the From: line in the email will be set to use this email "
 "address instead of your normal email address (as would be determined by "
@@ -1634,12 +1633,12 @@ msgid ""
 msgstr ""
 
 # type: =item
-#: ../scripts/bts.pl:3155
+#: ../scripts/bts.pl:3163
 msgid "DEBFULLNAME"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3157
+#: ../scripts/bts.pl:3165
 msgid ""
 "If DEBEMAIL is set, DEBFULLNAME is examined to determine the full name to "
 "use; if this is not set, B<bts> attempts to determine a name from your "
@@ -1647,25 +1646,25 @@ msgid ""
 msgstr ""
 
 # type: =item
-#: ../scripts/bts.pl:3161
+#: ../scripts/bts.pl:3169
 msgid "BROWSER"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3163
+#: ../scripts/bts.pl:3171
 msgid ""
 "If set, it specifies the browser to use for the 'show' and 'bugs' options.  "
 "See the description above."
 msgstr ""
 
 # type: SH
-#: ../scripts/bts.pl:3168 ../scripts/debc.1:92 ../scripts/debchange.1:314 ../scripts/debclean.1:90 ../scripts/debcommit.pl:80 ../scripts/debdiff.1:135 ../scripts/debi.1:93 ../scripts/debrelease.1:105 ../scripts/debrsign.1:57 ../scripts/debsign.1:99 ../scripts/debuild.1:276 ../scripts/dget.pl:514 ../scripts/dpkg-depcheck.1:102 ../scripts/dscverify.1:33 ../scripts/grep-excuses.1:27 ../scripts/mass-bug.pl:115 ../scripts/nmudiff.1:69 ../scripts/plotchangelog.1:106 ../scripts/pts-subscribe.1:37 ../scripts/uscan.1:427 ../scripts/uupdate.1:86 ../scripts/who-uploads.1:43
+#: ../scripts/bts.pl:3176 ../scripts/debc.1:92 ../scripts/debchange.1:314 ../scripts/debclean.1:90 ../scripts/debcommit.pl:80 ../scripts/debdiff.1:135 ../scripts/debi.1:93 ../scripts/debrelease.1:105 ../scripts/debrsign.1:57 ../scripts/debsign.1:99 ../scripts/debuild.1:276 ../scripts/dget.pl:514 ../scripts/dpkg-depcheck.1:102 ../scripts/dscverify.1:33 ../scripts/grep-excuses.1:27 ../scripts/mass-bug.pl:115 ../scripts/nmudiff.1:69 ../scripts/plotchangelog.1:106 ../scripts/pts-subscribe.1:37 ../scripts/uscan.1:427 ../scripts/uupdate.1:86 ../scripts/who-uploads.1:43
 #, no-wrap
 msgid "CONFIGURATION VARIABLES"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3170 ../scripts/debcommit.pl:82 ../scripts/mass-bug.pl:117
+#: ../scripts/bts.pl:3178 ../scripts/debcommit.pl:82 ../scripts/mass-bug.pl:117
 msgid ""
 "The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  Command "
@@ -1675,12 +1674,12 @@ msgid ""
 msgstr ""
 
 # type: =item
-#: ../scripts/bts.pl:3178
+#: ../scripts/bts.pl:3186
 msgid "BTS_OFFLINE"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3180
+#: ../scripts/bts.pl:3188
 msgid ""
 "If this is set to I<yes>, then it is the same as the --offline command line "
 "parameter being used.  Only has an effect on the show and bugs commands.  "
@@ -1689,12 +1688,12 @@ msgid ""
 msgstr ""
 
 # type: =item
-#: ../scripts/bts.pl:3185
+#: ../scripts/bts.pl:3193
 msgid "BTS_CACHE"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3187
+#: ../scripts/bts.pl:3195
 msgid ""
 "If this is set to I<no>, then it is the same as the --no-cache command line "
 "parameter being used.  Only has an effect on the show and bug commands.  The "
@@ -1702,12 +1701,12 @@ msgid ""
 msgstr ""
 
 # type: =item
-#: ../scripts/bts.pl:3192
+#: ../scripts/bts.pl:3200
 msgid "BTS_CACHE_MODE={min,mbox,full}"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3194
+#: ../scripts/bts.pl:3202
 msgid ""
 "How much of the BTS should we mirror when we are asked to cache something? "
 "Just the minimum, or also the mbox or the whole thing? The default is "
@@ -1717,12 +1716,12 @@ msgid ""
 msgstr ""
 
 # type: =item
-#: ../scripts/bts.pl:3200
+#: ../scripts/bts.pl:3208
 msgid "BTS_FORCE_REFRESH"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3202
+#: ../scripts/bts.pl:3210
 msgid ""
 "If this is set to I<yes>, then it is the same as the --force-refresh command "
 "line parameter being used.  Only has an effect on the cache command.  The "
@@ -1730,60 +1729,60 @@ msgid ""
 msgstr ""
 
 # type: =item
-#: ../scripts/bts.pl:3207
+#: ../scripts/bts.pl:3215
 msgid "BTS_MAIL_READER"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3209
+#: ../scripts/bts.pl:3217
 msgid ""
 "If this is set, specifies a mail reader to use instead of mutt.  Same as the "
 "--mailreader command line option."
 msgstr ""
 
 # type: =item
-#: ../scripts/bts.pl:3212 ../scripts/mass-bug.pl:125
+#: ../scripts/bts.pl:3220 ../scripts/mass-bug.pl:125
 msgid "BTS_SENDMAIL_COMMAND"
 msgstr ""
 
 # type: Plain text
-#: ../scripts/bts.pl:3214 ../scripts/mass-bug.pl:127 ../scripts/nmudiff.1:92
+#: ../scripts/bts.pl:3222 ../scripts/mass-bug.pl:127 ../scripts/nmudiff.1:92
 msgid ""
 "If this is set, specifies a sendmail command to use instead of "
 "/usr/sbin/sendmail.  Same as the --sendmail command line option."
 msgstr ""
 
 # type: =item
-#: ../scripts/bts.pl:3217
+#: ../scripts/bts.pl:3225
 msgid "BTS_ONLY_NEW"
 msgstr ""
 
 # type: =item
-#: ../scripts/bts.pl:3222
+#: ../scripts/bts.pl:3230
 msgid "BTS_SMTP_HOST"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3224
+#: ../scripts/bts.pl:3232
 msgid ""
 "If this is set, specifies an SMTP host to use for sending mail rather than "
 "using the sendmail command.  Same as the --smtp-host command line option."
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3228
+#: ../scripts/bts.pl:3236
 msgid ""
 "Note that this option takes priority over BTS_SENDMAIL_COMMAND if both are "
 "set, unless the --sendmail option is used."
 msgstr ""
 
 # type: =item
-#: ../scripts/bts.pl:3231
+#: ../scripts/bts.pl:3239
 msgid "BTS_INCLUDE_RESOLVED"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3233
+#: ../scripts/bts.pl:3241
 msgid ""
 "If this is set to I<no>, then it is the same as the --no-include-resolved "
 "command line parameter being used.  Only has an effect on the cache "
@@ -1792,13 +1791,13 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../scripts/bts.pl:3240 ../scripts/checkbashisms.1:36 ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62 ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:56 ../scripts/debc.1:115 ../scripts/debchange.1:373 ../scripts/debclean.1:107 ../scripts/debcommit.pl:538 ../scripts/debdiff.1:169 ../scripts/debi.1:116 ../scripts/debrelease.1:132 ../scripts/deb-reversion.dbk:233 ../scripts/debrsign.1:66 ../scripts/debsign.1:118 ../scripts/debuild.1:399 ../scripts/dget.pl:545 ../scripts/dpkg-depcheck.1:118 ../scripts/dpkg-genbuilddeps.1:30 ../scripts/dscverify.1:44 ../scripts/grep-excuses.1:37 ../scripts/nmudiff.1:92 ../scripts/plotchangelog.1:124 ../scripts/pts-subscribe.1:46 ../scripts/rc-alert.1:27 ../scripts/rmadison.pl:237 ../scripts/tagpending.1:44 ../scripts/uscan.1:501 ../scripts/uupdate.1:160 ../scripts/wnpp-alert.1:25 ../scripts/devscripts.conf.5:54
+#: ../scripts/bts.pl:3248 ../scripts/checkbashisms.1:36 ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62 ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:56 ../scripts/debc.1:115 ../scripts/debchange.1:373 ../scripts/debclean.1:107 ../scripts/debcommit.pl:538 ../scripts/debdiff.1:169 ../scripts/debi.1:116 ../scripts/debrelease.1:132 ../scripts/deb-reversion.dbk:233 ../scripts/debrsign.1:66 ../scripts/debsign.1:118 ../scripts/debuild.1:399 ../scripts/dget.pl:545 ../scripts/dpkg-depcheck.1:118 ../scripts/dpkg-genbuilddeps.1:30 ../scripts/dscverify.1:44 ../scripts/grep-excuses.1:37 ../scripts/nmudiff.1:92 ../scripts/plotchangelog.1:124 ../scripts/pts-subscribe.1:46 ../scripts/rc-alert.1:27 ../scripts/rmadison.pl:237 ../scripts/tagpending.1:44 ../scripts/uscan.1:501 ../scripts/uupdate.1:160 ../scripts/wnpp-alert.1:25 ../scripts/devscripts.conf.5:54
 #, no-wrap
 msgid "SEE ALSO"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3242
+#: ../scripts/bts.pl:3250
 msgid ""
 "Please see L<http://www.debian.org/Bugs/server-control> for more details on "
 "how to control the BTS using emails and L<http://www.debian.org/Bugs/> for "
@@ -1806,17 +1805,17 @@ msgid ""
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3246
+#: ../scripts/bts.pl:3254
 msgid "reportbug(1), querybts(1)"
 msgstr ""
 
 # type: =head1
-#: ../scripts/bts.pl:3250 ../scripts/mass-bug.pl:457
+#: ../scripts/bts.pl:3258 ../scripts/mass-bug.pl:457
 msgid "COPYRIGHT"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3252
+#: ../scripts/bts.pl:3260
 msgid ""
 "This program is Copyright (C) 2001-2003 by Joey Hess <joeyh@debian.org>.  "
 "Many modifications have been made, Copyright (C) 2002-2005 Julian Gilbey "
@@ -1825,7 +1824,7 @@ msgid ""
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3257 ../scripts/mass-bug.pl:461
+#: ../scripts/bts.pl:3265 ../scripts/mass-bug.pl:461
 msgid ""
 "It is licensed under the terms of the GPL, either version 2 of the License, "
 "or (at your option) any later version."
