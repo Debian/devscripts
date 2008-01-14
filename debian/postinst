@@ -378,6 +378,17 @@ EOF
 # DEBCHANGE_MAINTTRAILER=yes
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.13
+	then
+	    # Actually added in devscrips 2.10.9
+	    # but not added to the configuration file
+	    cat >> /etc/devscripts.conf <<EOF
+##### uscan option added in version 2.10.9
+#
+# Where should downloaded files be placed?
+# USCAN_DESTDIR=..
+EOF
     fi
 fi
 
