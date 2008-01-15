@@ -2678,7 +2678,7 @@ sub href_to_filename {
     my ($msg, $filename);
 
     if ($href =~ m%\[<a(?: class=\".*?\")? href="(?:/cgi-bin/)?bugreport\.cgi([^\?]*)\?([^\"]*);bug=(\d+)">.*?\(([^,]*), .*?\)\]%) {
-	# this looks like an attachment; $1 should give the MIME-type
+	# this looks like an attachment; $4 should give the MIME-type
 	my $urlfilename = $1;
 	my $ref = $2;
 	my $bug = $3;
@@ -2687,9 +2687,14 @@ sub href_to_filename {
 
 	return undef unless $ref =~ /msg=(\d+);(filename=[^;]*;)?att=(\d+)/;
 	$msg = "$1-$3";
+	$urlfilename ||= "$2" if defined $2;
+	$urlfilename ||= "";
 
 	my $fileext = '';
 	if ($urlfilename =~ m%^/%) {
+	    $filename = basename($urlfilename);
+	} elsif ($urlfilename =~ m%^filename=([^;]*?);%) {
+	    $urlfilename = $1;
 	    $filename = basename($urlfilename);
 	} else {
 	    $filename = '';
