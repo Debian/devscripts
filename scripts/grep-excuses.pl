@@ -88,7 +88,7 @@ die "$progname: Couldn't run wipnity: $term_size_broken\n" unless have_term_size
 my $columns = Term::Size::chars();
 
 while( my $package=shift ) {
-    my $dump = `w3m -dump -cols $columns "http://bjorn.haxx.se/debian/testing.pl?package=$package"`;
+    my $dump = `w3m -dump -cols $columns "http://release.debian.org/migration/testing.pl?package=$package"`;
     $dump =~ s/^.*?(?=Checking)//s;
     $dump =~ s/^\[.*//ms;
     print($dump);
