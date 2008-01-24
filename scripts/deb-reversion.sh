@@ -43,6 +43,7 @@ usage()
 	                    & calculate new version number
 	-k script|--hook=script & call this script before repacking
 	-D|--debug & call dpkg-deb in debug mode
+	-b|--force-bad-version & passed through to dch
 	-h|--help & show this output
 	-V|--version & show version information
 	_eooptions
@@ -60,13 +61,14 @@ err()
 }
 
 CURDIR="$(pwd)"
-SHORTOPTS=hVo:v:ck:Ds:
-LONGOPTS=help,version,old-version:new-version:,calculate-only,hook:,debug,string:
+SHORTOPTS=hVo:v:ck:Ds:b
+LONGOPTS=help,version,old-version:new-version:,calculate-only,hook:,debug,string:,force-bad-version
 set -- $(getopt -s bash -o $SHORTOPTS -l $LONGOPTS --n $PROGNAME -- "$@")
 
 CALCULATE=0
 DPKGDEB_DEBUG=
 DEB=
+DCH_OPTIONS=
 for opt in $@; do
   case "${OPT_STATE:-}" in
     SET_OLD_VERSION) eval OLD_VERSION="$opt";;
@@ -84,6 +86,7 @@ for opt in $@; do
     -s|--string) OPT_STATE=SET_STRING;;
     -k|--hook) OPT_STATE=SET_HOOK;;
     -D|--debug) DPKGDEB_DEBUG=--debug;;
+    -b|--force-bad-version) DCH_OPTIONS="${DCH_OPTIONS} -b";;
     -h|--help) usage; exit 0;;
     -V|--version) versioninfo; exit 0;;
     --) :;;
@@ -174,7 +177,7 @@ change_version()
   mkdir -p debian
   zcat $LOGFILE > debian/changelog
   shift
-  dch -v $VERSION -- $@
+  dch $DCH_OPTIONS -v $VERSION -- $@
   call_hook
   gzip -9 -c debian/changelog >| $LOGFILE
   sed -i -e "s,^Version: .*,Version: $VERSION," DEBIAN/control

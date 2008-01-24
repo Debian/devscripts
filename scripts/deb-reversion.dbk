@@ -208,6 +208,20 @@ and docbook-xsl in your Build-Depends control field.
       </varlistentry>
 
       <varlistentry>
+	<term><option>-b</option></term>
+	<term><option>--force-bad-version</option></term>
+	<listitem>
+	  <para>
+	    Pass <option>--force-bad-version</option> to
+	    <citerefentry>
+	      <refentrytitle>dch</refentrytitle>
+	      <manvolnum>1</manvolnum>
+	    </citerefentry>
+	  </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
 	<term><option>-h</option></term>
 	<term><option>--help</option></term>
 	<listitem>
