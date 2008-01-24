@@ -390,6 +390,16 @@ EOF
 # USCAN_DESTDIR=..
 EOF
     fi
+
+	if dpkg --compare-versions "$2" lt 2.10.14
+	then
+	    # Added in devscripts 2.10.14
+	    cat >> /etc/devscripts.conf <<EOF
+##### bts option added in version 2.10.14
+# Suppress BTS acknowledgment e-mails (ignored by the control bot)
+# BTS_SUPPRESS_ACKS=no
+EOF
+	fi
 fi
 
 #DEBHELPER#

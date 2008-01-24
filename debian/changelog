@@ -2,7 +2,9 @@ devscripts (2.10.14) UNRELEASED; urgency=low
 
   * uscan: Document the USCAN_DESTDIR configuration variable
     (Closes: #460717)
-  * bts: Fix downloading of named attachments (Closes: #460850)
+  * bts:
+    + Fix downloading of named attachments (Closes: #460850)
+    + Add support for setting X-Debbugs-No-Ack (Closes: #458973)
   * grep-excuses: Update wipnity functionality in line with the move of
     testing.pl to release.d.o
   * checkbashisms: Warn about the use of >& and &> (Closes: #461653)

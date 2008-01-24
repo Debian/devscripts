@@ -316,6 +316,16 @@ is the default behaviour.
 Reverse the behaviour of the previous option.  That is, do not cache bugs
 that are marked as resolved.
 
+=item --no-ack
+
+Suppress acknowledgment mails from the BTS.  Note that this will only 
+affect the copies of messages CCed to bugs, not those sent to the 
+control bot.
+
+=item --ack
+
+Do not suppress acknowledgement mails.  This is the default behaviour.
+
 =item -q, --quiet
 
 When running bts cache, only display information about newly cached
@@ -345,6 +355,7 @@ my $noaction=0;
 # regexp for mailers which require a -t option
 my $sendmail_t='^/usr/sbin/sendmail$|^/usr/sbin/exim';
 my $includeresolved=1;
+my $requestack=1;
 
 # Next, read read configuration files and then command line
 # The next stuff is boilerplate
@@ -364,6 +375,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'BTS_SENDMAIL_COMMAND' => '/usr/sbin/sendmail',
 		       'BTS_INCLUDE_RESOLVED' => 'yes',
 		       'BTS_SMTP_HOST' => '',
+		       'BTS_SUPPRESS_ACKS' => 'no',
 		       );
     my %config_default = %config_vars;
     
@@ -396,6 +408,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'BTS_SENDMAIL_COMMAND'}='/usr/sbin/sendmail';
     $config_vars{'BTS_INCLUDE_RESOLVED'} =~ /^(yes|no)$/
 	or $config_vars{'BTS_INCLUDE_RESOLVED'} = 'yes';
+    $config_vars{'BTS_SUPPRESS_ACKS'} =~ /^(yes|no)$/
+	or $config_vars{'BTS_SUPPRESS_ACKS'} = 'no';
 
     if (!length $config_vars{'BTS_SMTP_HOST'}
         and $config_vars{'BTS_SENDMAIL_COMMAND'} ne '/usr/sbin/sendmail') {
@@ -426,6 +440,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $sendmailcmd = $config_vars{'BTS_SENDMAIL_COMMAND'};
     $smtphost = $config_vars{'BTS_SMTP_HOST'};
     $includeresolved = $config_vars{'BTS_INCLUDE_RESOLVED'} eq 'yes' ? 1 : 0;
+    $requestack = $config_vars{'BTS_SUPPRESS_ACKS'} eq 'no' ? 1 : 0;
 }
 
 if (exists $ENV{'BUGSOFFLINE'}) {
@@ -461,6 +476,8 @@ GetOptions("help|h" => \$opt_help,
 	   "q|quiet+" => \$quiet,
 	   "noconf|no-conf" => \$opt_noconf,
 	   "include-resolved!" => \$includeresolved,
+	   "ack!" => \$requestack,
+	   "no-ack" => sub { $requestack = 0; },
 	   )
     or die "Usage: bts [options]\nRun $progname --help for more details\n";
 
@@ -1814,6 +1831,8 @@ Valid options are:
    --smtp-host=host       SMTP host to use
    --no-include-resolved  Do not cache bugs marked as resolved
    --include-resolved     Cache bugs marked as resolved (default)
+   --no-ack               Suppress BTS acknowledgment mails
+   --ack                  Do not do so (default)
    --help, -h             Display this message
    --version, -v          Display version and copyright info
 
@@ -1916,6 +1935,7 @@ sub send_mail {
     my $message = fold_from_header("From: $from") . "\n";
     $message   .= "To: $to\n" if length $to;
     $message   .= "Cc: $cc\n" if length $cc;
+    $message   .= "X-Debbugs-No-Ack: Yes\n" if $requestack==0;
     $message   .= "Subject: $subject\n"
 	       .  "Date: $date\n"
                .  "X-BTS-Version: $version\n"
@@ -2045,6 +2065,8 @@ sub mailbtsall {
 		@args = ("-s", $subject, "-a", "X-BTS-Version: $version", $btsemail);
 		push(@args, "-c", "$ccemail") if $ccemail;
 		push(@args, "-c", "$ccsecurity") if $ccsecurity;
+		push(@args, "-a", "X-Debbugs-No-Ack: Yes")
+		    if $requestack==0;
 		exec("mail", @args) or die "bts: error running mail: $!\n";
 	    }
 	}
@@ -3247,6 +3269,11 @@ If this is set to I<no>, then it is the same as the --no-include-resolved
 command line parameter being used.  Only has an effect on the cache
 command.  The default is I<yes>.  See the cache command for more
 information.
+
+=item BTS_SUPPRESS_ACKS
+
+If this is set to I<yes>, then it is the same as the --no-acks command 
+line parameter being used.  The default is I<no>.
 
 =cut
 
