@@ -135,6 +135,7 @@ foreach my $filename (@ARGV) {
 		'\$RANDOM\b' =>                q<$RANDOM>,
 		'(?<!\$)\(\(' =>               q<'((' should be '$(('>,
 		'(\[|test)\s+-a' =>            q<test with unary -a (should be -e)>,
+		'\D+(>&|&>)\w+' =>	               q<should be \>word 2\>&1>,
 	    );
 
 	    if ($opt_echo) {
