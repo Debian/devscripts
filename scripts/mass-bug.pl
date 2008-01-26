@@ -77,6 +77,10 @@ Actually send the bug reports.
 Specify the subject of the bug report. The subject will be automatically
 prefixed with the name of the package that the bug is filed against.
 
+=item --tags
+
+Set the BTS pseudo-header for tags.
+
 =item --user
 
 Set the BTS pseudo-header for a usertags' user.
@@ -160,10 +164,11 @@ Valid options are:
    --severity=(wishlist|minor|normal|important|serious|grave|critical)
                           Specify the severity of the bugs to be filed
                           (default "normal")
-   --user=user
-                          Set the BTS pseudo-header for a usertags' user
-   --usertags=usertags
-                          Set the BTS pseudo-header for usertags
+
+   --tags=tags            Set the BTS pseudo-header for tags.
+   --user=user            Set the BTS pseudo-header for a usertags' user
+   --usertags=usertags    Set the BTS pseudo-header for usertags
+
    --sendmail=cmd         Sendmail command to use (default /usr/sbin/sendmail)
    --no-conf, --noconf    Don\'t read devscripts config files;
                           must be the first option given
@@ -256,6 +261,7 @@ sub gen_bug {
     my $template_text=shift;
     my $package=shift;
     my $severity=shift;
+    my $tags=shift;
     my $user=shift;
     my $usertags=shift;
 
@@ -266,7 +272,7 @@ sub gen_bug {
     } else {
 	$template_text=fill("", "", $template_text);
     }
-    return "Package: $package\nSeverity: $severity\n$user\n$usertags\n\n$template_text";
+    return "Package: $package\nSeverity: $severity\n$tags$user$usertags\n$template_text";
 }
 		
 sub div {
@@ -329,6 +335,7 @@ EOM
 my $mode="display";
 my $subject;
 my $severity="normal";
+my $tags="";
 my $user="";
 my $usertags="";
 my $opt_sendmail;
@@ -337,6 +344,7 @@ if (! GetOptions(
 		 "send"       => sub { $mode="send" },
 		 "subject=s"  => \$subject,
 		 "severity=s" => \$severity,
+                 "tags=s"     => \$tags,
 		 "user=s"     => \$user,
 		 "usertags=s" => \$usertags,
 		 "sendmail=s" => \$opt_sendmail,
@@ -360,12 +368,16 @@ if (@ARGV != 2) {
     usageerror();
 }
 
+if ($tags) {
+    $tags = "Tags: $tags\n";
+}
+
 if ($user) {
-    $user = "User: $user";
+    $user = "User: $user\n";
 }
 
 if ($usertags) {
-    $usertags = "Usertags: $usertags";
+    $usertags = "Usertags: $usertags\n";
 }
 
 if ($opt_sendmail) {
@@ -416,7 +428,7 @@ sub showsample {
     print "To: $submission_email\n";
     print "Subject: ".gen_subject($subject, $package)."\n";
     print "\n";
-    print gen_bug($template_text, $package, $severity, $user, $usertags)."\n";
+    print gen_bug($template_text, $package, $severity, $tags, $user, $usertags)."\n";
 }
 
 if ($mode eq 'display') {
@@ -448,7 +460,7 @@ elsif ($mode eq 'send') {
     foreach my $package (@packages) {
 	print "Sending bug for $package ...\n";
 	mailbts(gen_subject($subject, $package),
-		gen_bug($template_text, $package, $severity, $user, $usertags),
+		gen_bug($template_text, $package, $severity, $tags, $user, $usertags),
 		$submission_email, $from);
     }
     print "All bugs sent.\n";
