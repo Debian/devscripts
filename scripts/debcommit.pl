@@ -484,8 +484,7 @@ sub getmessage {
 	    or die "debcommit: cannot run $diffcmd[0]: $!\n";
 
 	foreach (<CHLOG>) {
-	    next unless /^\+  /;
-	    s/^\+  //;
+	    next unless s/^\+(  |\t)//;
 	    next if /^\s*\[.*\]\s*$/; # maintainer name
 	    $ret .= $_;
 	}

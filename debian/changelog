@@ -17,7 +17,10 @@ devscripts (2.10.14) UNRELEASED; urgency=low
   [ Mohammed Adnène Trojette ]
   * debcheckout: remove "-d" from Vcs-Cvs: field if a maintainer puts it.
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sat, 26 Jan 2008 15:45:32 +0000
+  [ Christoph Berg ]
+  * debcommit: also look for \t in the diff for GNU-style changelogs.
+
+ -- Christoph Berg <myon@debian.org>  Sun, 27 Jan 2008 13:26:30 +0100
 
 devscripts (2.10.13) unstable; urgency=low
 
