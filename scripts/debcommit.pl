@@ -6,7 +6,7 @@ debcommit - commit changes to a package
 
 =head1 SYNOPSIS
 
-B<debcommit> [B<--release>] [B<--message=>I<text>] [B<--noact>] [B<--confirm>] [B<--changelog=>I<path>] [B<--all> | I<files to commit>]
+B<debcommit> [B<--release>] [B<--message=>I<text>] [B<--noact>] [B<--confirm>] [B<--edit>] [B<--changelog=>I<path>] [B<--all> | I<files to commit>]
 
 =head1 DESCRIPTION
 
@@ -47,6 +47,11 @@ Do not actually do anything, but do print the commands that would be run.
 =item B<-C> B<--confirm>
 
 Display the generated commit message and ask for confirmation before committing
+it.
+
+=item B<-e> B<--edit>
+
+Edit the generated commit message in your favorite editor before committing
 it.
 
 =item B<-a> B<--all>
@@ -109,6 +114,7 @@ use strict;
 use Getopt::Long;
 use Cwd;
 use File::Basename;
+use File::Temp;
 my $progname = basename($0);
 
 my $modified_conf_msg;
@@ -123,11 +129,12 @@ Generates a commit message based on new text in debian/changelog,
 and commit the change to a package\'s repository.
 
 Options:
-   -c --changelog=path Specify the location of the changelog                 
+   -c --changelog=path Specify the location of the changelog
    -r --release        Commit a release of the package and create a tag
    -m --message=text   Specify a commit message
    -n --noact          Dry run, no actual commits
    -C --confirm        Ask for confirmation of the message before commit
+   -e --edit           Edit the message in EDITOR before commit
    -a --all            Commit all files (default except for git)
    -s --strip-message  Strip the leading '* ' from the commit message
    --no-strip-message  Do not strip a leading '* ' (default)
@@ -160,6 +167,7 @@ my $release=0;
 my $message;
 my $noact=0;
 my $confirm=0;
+my $edit=0;
 my $all=0;
 my $stripmessage=0;
 my $signtags=0;
@@ -223,6 +231,7 @@ if (! GetOptions(
 		 "m|message=s" => \$message,
 		 "n|noact" => \$noact,
 		 "C|confirm" => \$confirm,
+		 "e|edit" => \$edit,
 		 "a|all" => \$all,
 		 "c|changelog=s" => \$changelog,
 		 "s|strip-message!" => \$stripmessage,
@@ -230,7 +239,7 @@ if (! GetOptions(
 		 "h|help" => sub { usage(); exit 0; },
 		 "v|version" => sub { version(); exit 0; },
 		 )) {
-    die "Usage: debcommit [--release] [--message=text] [--noact] [--confirm] [--changelog=path] [--all | files to commit]\n";
+    die "Usage: debcommit [--release] [--message=text] [--noact] [--confirm] [--edit] [--changelog=path] [--all | files to commit]\n";
 }
 
 my @files_to_commit = @ARGV;
@@ -260,6 +269,10 @@ if ($release) {
 }
 else {
     $message=getmessage() if ! defined $message;
+
+    if ($edit) {
+	$message = edit($message);
+    }
     commit($message) if not $confirm or confirm($message);
 }
 
@@ -523,6 +536,22 @@ sub confirm {
     }
 }
 
+sub edit {
+    my $message=shift;
+    my $tempfile=".commit-tmp";
+    open(FH, ">$tempfile") || die "debcommit: unable to create a temporary file.\n";
+    print FH $message;
+    close FH;
+    system("sensible-editor $tempfile");
+    open(FH, "<$tempfile") || die "debcommit: unable to open temporary file for reading\n";
+    $message = "";
+    while(<FH>) {
+	$message .= $_;
+    }
+    close FH;
+    unlink($tempfile);
+    return $message;
+}
 =head1 LICENSE
 
 This code is copyright by Joey Hess <joeyh@debian.org>, all rights reserved.
