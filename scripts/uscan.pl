@@ -237,7 +237,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $check_dirname_level = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'};
     $check_dirname_regex = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_REGEX'};
     $user_agent_string = $config_vars{'USCAN_USER_AGENT'}
-	if defined $config_vars{'USCAN_USER_AGENT'};
+	if $config_vars{'USCAN_USER_AGENT'};
 }
 
 # Now read the command line arguments
