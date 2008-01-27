@@ -1,8 +1,9 @@
 devscripts (2.10.14) UNRELEASED; urgency=low
 
   [ Adam D. Barratt ]
-  * uscan: Document the USCAN_DESTDIR configuration variable
-    (Closes: #460717)
+  * uscan:
+    + Document the USCAN_DESTDIR configuration variable (Closes: #460717)
+    + uscan: Correctly set the default User-Agent header (Closes: #462770)
   * bts:
     + Fix downloading of named attachments (Closes: #460850)
     + Add support for setting X-Debbugs-No-Ack (Closes: #458973)
@@ -13,7 +14,6 @@ devscripts (2.10.14) UNRELEASED; urgency=low
     (Closes: #461557)
   * mass-bug: Allow setting of tags. Thanks to Pierre Habouzit for the
     patch (Closes: #462649)
-  * uscan: Correctly set the default User-Agent header (Closes: #462770)
   * debcommit: Allow the commit message to be edited before passing it
     to the VCS. Thanks to Patrick Schoenfeld for the patch (Closes: #462758,
     #425459, #448798)
