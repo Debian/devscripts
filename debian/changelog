@@ -17,7 +17,7 @@ devscripts (2.10.14) UNRELEASED; urgency=low
   * debcommit: Allow the commit message to be edited before passing it
     to the VCS. Thanks to Patrick Schoenfeld for the patch (Closes: #462758,
     #425459, #448798)
-  * debuild: Pass -j through to dpkg-buildpackage (Closes: #461239)
+  * debuild: Pass -j through to dpkg-buildpackage (Closes: #461239, #457235)
 
   [ Mohammed Adnène Trojette ]
   * debcheckout: remove "-d" from Vcs-Cvs: field if a maintainer puts it.
