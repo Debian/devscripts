@@ -374,7 +374,7 @@ GetOptions(
     "no-cache"   =>  \$opt->{'no-cache'},
     "noconf|no-conf"   =>  \$opt->{'no-conf'},
     "path=s"     =>  sub {
-	if ($2 eq '') { $dget_path=''; } else { $dget_path .= ":$2"; } },
+	if ($_[1] eq '') { $dget_path=''; } else { $dget_path .= ":$_[1]"; } },
     "h|help"     =>  \$opt->{'help'},
     "V|version"  =>  \$opt->{'version'},
 )
