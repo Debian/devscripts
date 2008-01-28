@@ -17,6 +17,7 @@ devscripts (2.10.14) UNRELEASED; urgency=low
   * debcommit: Allow the commit message to be edited before passing it
     to the VCS. Thanks to Patrick Schoenfeld for the patch (Closes: #462758,
     #425459, #448798)
+  * debuild: Pass -j through to dpkg-buildpackage (Closes: #461239)
 
   [ Mohammed Adnène Trojette ]
   * debcheckout: remove "-d" from Vcs-Cvs: field if a maintainer puts it.
@@ -24,7 +25,7 @@ devscripts (2.10.14) UNRELEASED; urgency=low
   [ Christoph Berg ]
   * debcommit: also look for \t in the diff for GNU-style changelogs.
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sun, 27 Jan 2008 22:54:27 +0000
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 28 Jan 2008 20:13:06 +0000
 
 devscripts (2.10.13) unstable; urgency=low
 

@@ -794,6 +794,7 @@ if ($command_version eq 'dpkg') {
 	/^-e(.*)/ and $changedby=$1, push(@debsign_opts, $_),
 	    push(@dpkg_opts, $_), next;
 	/^-C(.*)/ and $desc=$1, push(@dpkg_opts, $_), next;
+	/^-j(.*)/, push(@dpkg_opts, $_), next;
 	$_ eq '-W' and $warnable_error=1, push(@passopts, $_),
 	    push(@dpkg_opts, $_), next;
 	$_ eq '-E' and $warnable_error=0, push(@passopts, $_),
