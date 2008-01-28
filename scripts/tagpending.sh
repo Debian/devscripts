@@ -39,7 +39,7 @@ Usage: tagpending [options]
     -V, --version       Display the version and copyright information
 
   This script will read debian/changelog and tag all open bugs not already
-  tagged pending as such.  Requires wget to be installed to query BTS.
+  tagged pending as such.  Requires wget to check against wnpp.
 EOF
 }
 
@@ -54,7 +54,7 @@ EOF
 }
 
 # Defaults
-USE_WGET=1
+ONLINE=1
 DRY=0
 SILENT=0
 VERBOSE=0
@@ -69,7 +69,7 @@ while [ -n "$1" ]; do
   case "$1" in
     -n|--noact) DRY=1; shift ;;
     -s|--silent) SILENT=1; shift ;;
-    -f|--force) USE_WGET=0; shift ;;
+    -f|--force) ONLINE=0; shift ;;
     -V|--version) version; exit 0 ;;
     -v|--verbose) VERBOSE=1; shift ;;
     -c|--confirm) CONFIRM=1; shift ;;
@@ -92,7 +92,7 @@ if [ "$VERBOSE" = "1" ] && [ "$SILENT" = "1" ]; then
     exit 1
 fi
 
-if [ "$USE_WGET" = "1" ]  &&  ! command -v wget >/dev/null 2>&1; then
+if [ "$ONLINE" = "1" ]  && [ "$WNPP" = "1" ] &&  ! command -v wget >/dev/null 2>&1; then
   echo "tagpending error: Sorry, either use the -f option or install the wget package." >&2
   exit 1
 fi
@@ -111,11 +111,9 @@ srcpkg=$(echo "$parsed" | awk '/^Source: / { print $2 }' | perl -ne 'use URI::Es
 changelog_closes=$(echo "$parsed"| awk -F: '/^Closes: / { print $2 }' | \
   xargs -n1 echo)
 
-if [ "$USE_WGET" = "1" ]; then
-    bts_pending=$(wget -q -O - "$BTS_BASE_URL?which=src;data=$srcpkg;archive=no;pend-exc=done;tag=pending" | \
-	sed -ne 's/.*<a href="\(\(\/cgi-bin\/\)\?bugreport.cgi?bug=\|\/\)\([0-9]*\).*/\3/; T; p')
-    bts_open=$(wget -q -O - "$BTS_BASE_URL?which=src;data=$srcpkg;archive=no;pend-exc=done" | \
-	sed -ne 's/.*<a href="\(\(\/cgi-bin\/\)\?bugreport.cgi?bug=\|\/\)\([0-9]*\).*/\3/; T; p')
+if [ "$ONLINE" = "1" ]; then
+  bts_pending=$(bts select src:$srcpkg status:open tag:pending)
+  bts_open=$(bts select src:$srcpkg status:open)
 fi
 
 to_be_checked=$(printf '%s\n%s\n' "$changelog_closes" "$bts_pending" | sort -g | uniq)
@@ -128,7 +126,7 @@ for bug in $to_be_checked; do
   	echo -n "Checking bug #$bug: "
   fi
   if ! echo "$bts_pending" | grep -q "^${bug}$"; then
-    if echo "$bts_open" | grep -q "^${bug}$" || [ "$USE_WGET" = "0" ] ; then
+    if echo "$bts_open" | grep -q "^${bug}$" || [ "$ONLINE" = "0" ] ; then
      if [ "$VERBOSE" = "1" ]; then
 	  echo "needs tag"
       fi
