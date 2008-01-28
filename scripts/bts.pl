@@ -477,7 +477,6 @@ GetOptions("help|h" => \$opt_help,
 	   "noconf|no-conf" => \$opt_noconf,
 	   "include-resolved!" => \$includeresolved,
 	   "ack!" => \$requestack,
-	   "no-ack" => sub { $requestack = 0; },
 	   )
     or die "Usage: bts [options]\nRun $progname --help for more details\n";
 
