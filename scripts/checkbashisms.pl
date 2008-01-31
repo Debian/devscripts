@@ -149,10 +149,10 @@ foreach my $filename (@ARGV) {
 		$bashisms{'echo\s+-[n]'} = 'q<echo -n>';
 	    }
 
-            # Ignore anything inside single quotes; it could be an
-            # argument to grep or the like.
-            my $line = $_;
-            $line =~ s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
+	    # Ignore anything inside single quotes; it could be an
+	    # argument to grep or the like.
+	    my $line = $_;
+	    $line =~ s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
 
 	    while (my ($re,$expl) = each %string_bashisms) {
 		if ($line =~ m/($re)/) {
