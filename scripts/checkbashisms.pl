@@ -60,6 +60,9 @@ my $status = 0;
 foreach my $filename (@ARGV) {
     if ($filename eq '-n' or $filename eq '--newline') {
 	next;
+    } elsif (script_is_evil_and_wrong($filename)) {
+	warn "script $filename does not appear to be a /bin/sh script; skipping\n";
+	next;
     }
     unless (open C, "$filename") {
 	warn "cannot open script $filename for reading: $!\n";
@@ -79,6 +82,7 @@ foreach my $filename (@ARGV) {
 		    last;  # end this file
 		}
 		elsif ($interpreter !~ m,/(sh|ash|dash)$,) {
+### ksh/zsh?
 		    warn "script $filename does not appear to be a /bin/sh script; skipping\n";
 		    $status |= 2;
 		    last;
@@ -94,10 +98,7 @@ foreach my $filename (@ARGV) {
 
 	s/(?<!\\)\#.*$//;   # eat comments
 
-	if (m/(?:^|\s+)cat\s*\<\<\s*(\w+)/) {
-	    $cat_string = $1;
-	}
-	elsif ($cat_string ne "" and m/^$cat_string/) {
+	if ($cat_string ne "" and m/^$cat_string/) {
 	    $cat_string = "";
 	}
 	my $within_another_shell = 0;
@@ -118,15 +119,9 @@ foreach my $filename (@ARGV) {
 		'(\[|test|-o|-a)\s*[^\s]+\s+==\s' =>
 		                               q<should be 'b = a'>,
 		'\s\|\&' =>                    q<pipelining is not POSIX>,
-		'\$\[\w+\]' =>                 q<arithmetic not allowed>,
-		'\$\{\w+\:\d+(?::\d+)?\}' =>   q<${foo:3[:1]}>,
-		'\$\{!\w+[@*]\}' =>            q<${!prefix[*|@]>,
-		'\$\{!\w+\}' =>                q<${!name}>,
-		'\$\{\w+(/.+?){1,2}\}' =>      q<${parm/?/pat[/str]}>,
 		'[^\\\]\{([^\s]+?,)+[^\\\}\s]+\}' =>
 		                               q<brace expansion>,
 		'(?:^|\s+)\w+\[\d+\]=' =>      q<bash arrays, H[0]>,
-		'\$\{\#?\w+\[[0-9\*\@]+\]\}' => q<bash arrays, ${name[0|*|@]}>,
 		'(?:^|\s+)(read\s*(?:;|$))' => q<read without variable>,
 		'\$\(\([A-Za-z]' => q<cnt=$((cnt + 1)) does not work in dash>,
 		'echo\s+-[e]' =>               q<echo -e>,
@@ -136,14 +131,31 @@ foreach my $filename (@ARGV) {
 		'(?<!\$)\(\(' =>               q<'((' should be '$(('>,
 		'(\[|test)\s+-a' =>            q<test with unary -a (should be -e)>,
 		'\D+(>&|&>)\w+' =>	               q<should be \>word 2\>&1>,
+		'(?:^|\s+)kill\s+-[^sl]\w*' => q<kill -[0-9] or -[A-Z]>,
+		'(?:^|\s+)trap\s+["\']?.*["\']?\s+.*[1-9]' => q<trap with signal numbers>
+		'\[\[(?!:)' => q<alternative test command ([[ foo ]] should be [ foo ])>
+	    );
+
+	    my %string_bashisms = (
+		'\$\[\w+\]' =>                 q<arithmetic not allowed>,
+		'\$\{\w+\:\d+(?::\d+)?\}' =>   q<${foo:3[:1]}>,
+		'\$\{!\w+[@*]\}' =>            q<${!prefix[*|@]>,
+		'\$\{!\w+\}' =>                q<${!name}>,
+		'\$\{\w+(/.+?){1,2}\}' =>      q<${parm/?/pat[/str]}>,
+		'\$\{\#?\w+\[[0-9\*\@]+\]\}' => q<bash arrays, ${name[0|*|@]}>,
 	    );
 
 	    if ($opt_echo) {
 		$bashisms{'echo\s+-[n]'} = 'q<echo -n>';
 	    }
 
-	    while (my ($re,$expl) = each %bashisms) {
-		if (m/($re)/) {
+            # Ignore anything inside single quotes; it could be an
+            # argument to grep or the like.
+            my $line = $_;
+            $line =~ s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
+
+	    while (my ($re,$expl) = each %string_bashisms) {
+		if ($line =~ m/($re)/) {
 		    $found = 1;
 		    $match = $1;
 		    $explanation = $expl;
@@ -161,9 +173,30 @@ foreach my $filename (@ARGV) {
 		    $match = $1;
 		}
 	    }
+
+	    # We've checked for all the things we still want to notice in
+	    # double-quoted strings, so now remove those strings as well.
+	    unless ($found) {
+		$line =~ s/(^|[^\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
+		while (my ($re,$expl) = each %bashisms) {
+		    if ($line =~ m/($re)/) {
+			$found = 1;
+			$match = $1;
+			$explanation = $expl;
+			last;
+		    }
+		}
+	    }
+
 	    unless ($found == 0) {
 		warn "possible bashism in $filename line $. ($explanation):\n$orig_line\n";
 		$status |= 1;
+	    }
+
+	    # Only look for the beginning of a heredoc here, after we've
+	    # stripped out quoted material, to avoid false positives.
+	    if (m/\<\<\s*[\'\"]?(\w+)[\'\"]?/) {
+		$cat_string = $1;
 	    }
 	}
     }
@@ -172,3 +205,27 @@ foreach my $filename (@ARGV) {
 }
 
 exit $status;
+
+# Returns non-zero if the given file is not actually a shell script,
+# just looks like one.
+sub script_is_evil_and_wrong {
+    my ($filename) = @_;
+    my $ret = 0;
+    open (IN, '<', $filename) or fail("cannot open $filename: $!");
+    my $i = 0;
+    local $_;
+    while (<IN>) {
+        chomp;
+        next if /^#/o;
+        next if /^$/o;
+        last if (++$i > 20);
+
+        if (/(^\s*|\beval\s*\'|;)exec\s*.+\s*.?\$0.?\s*(--\s*)?(\${1:?\+)?.?\$(@|\*)/o) {
+            $ret = 1;
+            last;
+        }
+    }
+    close IN;
+    return $ret;
+}
+
