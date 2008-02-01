@@ -135,7 +135,7 @@ sub find_repo($) {
 # a given target directory.
 sub set_destdir(@$$) {
   my ($repo_type, $destdir, @cmd) = @_;
-  $dest_dir =~ s|^-d||;
+  my $dest_dir =~ s|^-d||;
 
   switch ($repo_type) {
     case "cvs"	{ my $module = pop @cmd; push @cmd, ("-d", $destdir, $module); }
