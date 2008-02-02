@@ -1,0 +1,222 @@
+#!/usr/bin/perl
+
+=head1 NAME
+
+build-rdeps - find packages that depend on a specific package to build (reverse build depends)
+
+=head1 SYNOPSIS
+
+B<build-rdeps> I<package>
+
+=head1 DESCRIPTION
+
+B<build-rdeps> searches for all packages that build-depend on the specified package.
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<-u> B<--update>
+
+Run apt-get update before searching for build-depends.
+
+=item B<-s> B<--sudo>
+
+Use sudo when running apt-get update. Has no effect if -u is ommitted.
+
+=item B<-m> B<--print-maintainer>
+
+Print the maintainer information for each package. This feature is currently
+experimental, because it prints wrong information under some circumstances.
+Don't use it if you want to rely on it.
+
+=item B<-d> B<--debug>
+
+Run the debug mode
+
+=item B<--help>
+
+Show the usage information.
+
+=item B<--version>
+
+Show the version information.
+
+=over 4
+
+=back
+
+=cut
+
+use warnings;
+use strict;
+use File::Basename;
+use File::Find;
+use Getopt::Long;
+use Pod::Usage;
+my $progname = basename($0);
+my $version = 0.1;
+my $dctrl = "/usr/bin/grep-dctrl";
+my $sources_path = "/var/lib/apt/lists/";
+my $source_pattern = ".*_dists_unstable_.*Sources";
+my @source_files;
+my $sources_count=0;
+my $opt_debug;
+my $opt_update;
+my $opt_sudo;
+my $opt_maintainer;
+my $opt_mainonly;
+
+if (!(-x $dctrl)) {
+	die "$progname: Fatal error. grep-dctrl is not available.\nPlease install the 'dctrl-tools' package.\n";
+}
+
+sub version {
+	print <<"EOT";
+This is $progname v. $version, a tool to find packages that depend on a specific package.
+It has been written for the devscripts collection by Patrick Schoenfeld.
+EOT
+exit (0);
+}
+
+sub usage {
+	print <<"EOT";
+usage: $progname packagename
+       $progname --help
+       $progname --version
+
+Searches for all packages that build-depend on the specified package.
+
+Options:
+   -u, --update            Run apt-get update before searching for build-depends.
+                           (needs root privileges)
+   -s, --sudo              Use sudo when running apt-get update
+                           (has no effect when -u is ommitted)
+   -d, --debug             Enable the debug mode
+   -m, --print-maintainer  Print the maintainer information (experimental)
+   --only-main             Ignore contrib and non-free
+
+EOT
+version;
+}
+
+sub findsources {
+	if ( /$source_pattern/ and $sources_count <= 3 ) {
+		unless ($opt_mainonly and /(contrib|non-free)/) {
+			push(@source_files, $_);
+			$sources_count+=1;
+			print STDERR "DEBUG: Added source file: $_ (#$sources_count)\n" if ($opt_debug);
+		}
+	}
+}
+
+sub findreversebuilddeps {
+	my ($package, $source_file) = @_;
+	my @packages;
+	open(PACKAGES, "$dctrl -F Build-Depends $package -s Package $source_file|");
+	my $count=0;
+	my $builddeps;
+	my $maintainer;
+	my $maintainer_info='';
+
+	while(<PACKAGES>) {
+		if ( /Package: .*$/ ) {
+			/Package: (.*)$/;
+			my $depending_package = $1;
+			$builddeps = `$dctrl -F Package $depending_package -s Build-Depends $source_file`;
+
+			if ( $builddeps =~ /\s$package[\s,]{1}/ ) {
+				$count += 1;
+				if ($opt_maintainer) {
+					$_ = `$dctrl -F Package $depending_package -s Maintainer $source_file`;
+					chomp;
+					s/Maintainer: (.*)//g;
+					$maintainer = $1;
+					$maintainer_info = "($maintainer)";
+				}
+				print "$depending_package $maintainer_info\n";
+			}
+		}
+	}
+
+	if ( $count == 0 ) {
+		print "No reverse build-depends found.\n\n"
+	}
+	else {
+		print "\nFound a total of $count reverse build-depend(s)\n\n";
+	}
+}
+
+if ( $#ARGV < 0 ) { usage; exit(0); }
+
+
+Getopt::Long::Configure('bundling');
+GetOptions(
+	"u|update" => \$opt_update,
+	"s|sudo" => \$opt_sudo,
+	"m|print-maintainer" => \$opt_maintainer,
+	"only-main" => \$opt_mainonly,
+	"d|debug" => \$opt_debug,
+	"h|help" => sub { usage; },
+	"v|version" => sub { version; }
+);
+
+my $package = shift;
+
+if (!$package) {
+	die "$progname: missing argument. expecting packagename\n";
+}
+
+print STDERR "DEBUG: Package => $package\n" if ($opt_debug);
+
+if ($opt_update) {
+	print STDERR "DEBUG: Updating apt-cache before search\n" if ($opt_debug);
+	my @cmd;
+	if ($opt_sudo) {
+		print STDERR "DEBUG: Using sudo to become root\n" if ($opt_debug);
+		push(@cmd, 'sudo');
+	}
+	push(@cmd, 'apt-get', 'update');
+	system @cmd;
+}
+
+# Find sources files
+find(\&findsources, $sources_path);
+
+if ( ($#source_files+1) <= 0 ) {
+	die "$progname: unable to find sources files.\nDid you forget to run apt-get update (or add --update to this command)?";
+}
+
+foreach my $source_file (@source_files) {
+	if ($source_file =~ /main/) {
+		print "Reverse Build-depends in main:\n";
+		print "------------------------------\n\n";
+		findreversebuilddeps($package, "$sources_path/$source_file");
+	}
+
+	if ($source_file =~ /contrib/) {
+		print "Reverse Build-depends in contrib:\n";
+		print "---------------------------------\n\n";
+		findreversebuilddeps($package, "$sources_path/$source_file");
+	}
+
+	if ($source_file =~ /non-free/) {
+		print "Reverse Build-depends in non-free:\n";
+		print "----------------------------------\n\n";
+		findreversebuilddeps($package, "$sources_path/$source_file");
+	}
+}
+
+=head1 LICENSE
+
+This code is copyright by Patrick Schoenfeld
+<schoenfeld@in-medias-res.com>, all rights reserved.
+This program comes with ABSOLUTELEY NO WARRANTY.
+You are free to redistribute this code under the terms of the
+GNU General Public License, version 2 or later.
+
+=head1 AUTHOR
+
+Patrick Schoenfeld <schoenfeld@in-medias-res.com>
+
+=cut
