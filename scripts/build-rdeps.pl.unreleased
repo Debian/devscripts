@@ -54,6 +54,7 @@ use File::Basename;
 use File::Find;
 use Getopt::Long;
 use Pod::Usage;
+use Data::Dumper;
 my $progname = basename($0);
 my $version = 0.1;
 my $dctrl = "/usr/bin/grep-dctrl";
@@ -112,31 +113,49 @@ sub findsources {
 
 sub findreversebuilddeps {
 	my ($package, $source_file) = @_;
-	my @packages;
-	open(PACKAGES, "$dctrl -F Build-Depends $package -s Package $source_file|");
+	my %packages;
+	my $depending_package;
 	my $count=0;
-	my $builddeps;
-	my $maintainer;
 	my $maintainer_info='';
 
-	while(<PACKAGES>) {
-		if ( /Package: .*$/ ) {
-			/Package: (.*)$/;
-			my $depending_package = $1;
-			$builddeps = `$dctrl -F Package $depending_package -s Build-Depends $source_file`;
+	open(PACKAGES, "$dctrl -F Build-Depends $package -s Package,Build-Depends,Maintainer $source_file|");
 
-			if ( $builddeps =~ /\s$package[\s,]{1}/ ) {
-				$count += 1;
-				if ($opt_maintainer) {
-					$_ = `$dctrl -F Package $depending_package -s Maintainer $source_file`;
-					chomp;
-					s/Maintainer: (.*)//g;
-					$maintainer = $1;
-					$maintainer_info = "($maintainer)";
-				}
-				print "$depending_package $maintainer_info\n";
+	while(<PACKAGES>) {
+		chomp;
+		print STDERR "$_\n" if ($opt_debug);
+		if (/Package: (.*)$/) {
+			$depending_package = $1;
+		}
+
+		if (/Maintainer: (.*)$/) {
+			if ($depending_package) {
+				$packages{$depending_package}->{'Maintainer'} = $1;
 			}
 		}
+
+		if (/Build-Depends: (.*)$/) {
+			if ($depending_package) {
+				print STDERR "$1\n";
+				if ($1 =~ /.*\s{0,1}$package[\s,]{0,1}.*$/ ) {
+					$packages{$depending_package}->{'Build-Depends'} = $1;
+				}
+				else {
+					print STDERR "Ignoring package $depending_package because its not really depending on $package\n";
+					undef($depending_package);
+				}
+			}
+
+		}
+	}
+
+	while($depending_package = each(%packages)) {
+		if ($opt_maintainer) {
+			$maintainer_info = "(Maintainer: $packages{$depending_package}->{'Maintainer'})";
+		}
+
+		$count+=1;
+		print "$depending_package $maintainer_info \n";
+
 	}
 
 	if ( $count == 0 ) {
