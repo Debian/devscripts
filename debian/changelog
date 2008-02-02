@@ -12,10 +12,13 @@ devscripts (2.10.14) UNRELEASED; urgency=low
   * checkbashisms:
     + Warn about the use of >& and &> (Closes: #461653)
     + Bring the script largely back in to sync with lintian's checks/scripts:
-      - don't check scripts that appear to be shell scripts but aren't (Closes: #463257)
+      - don't check scripts that appear to be shell scripts but aren't
+        (Closes: #463257)
       - don't flag potential issues if they occur inside single quotes
-      - separate out those issues that should only be flagged if they occur inside quoted strings
-      - catch the use of kill -[0-9] or -[A-Z], trap with signal numbers and [[ foo ]]
+      - separate out those issues that should only be flagged if they occur
+        inside quoted strings
+      - catch the use of kill -[0-9] or -[A-Z], trap with signal numbers
+        and [[ foo ]]
   * deb-reversion: Support passing -b / --force-bad-version to dch
     (Closes: #461557)
   * mass-bug: Allow setting of tags. Thanks to Pierre Habouzit for the
