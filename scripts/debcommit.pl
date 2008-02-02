@@ -529,16 +529,18 @@ sub getmessage {
 }
 
 sub confirm {
-    my $message=shift;
-    print $message, "\n--\n";
+    my $confirmmessage=shift;
+    print $confirmmessage, "\n--\n";
     while(1) {
         print "OK to commit? [Y/n/e] ";
         $_ = <STDIN>;
         return 0 if /^n/i;
-        return 1 if /^(y|$)/i;
-	if (/^e/i) {
-	    $message = edit($message);
-	    print "\n", $message, "\n--\n";
+	if (/^(y|$)/i) {
+	    $message = $confirmmessage;
+            return 1;
+	} elsif (/^e/i) {
+	    $confirmmessage = edit($confirmmessage);
+	    print "\n", $confirmmessage, "\n--\n";
 	}
     }
 }
