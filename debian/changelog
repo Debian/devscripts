@@ -25,6 +25,7 @@ devscripts (2.10.14) UNRELEASED; urgency=low
   * debuild: Pass -j through to dpkg-buildpackage (Closes: #461239)
   * tagpending: Use "bts select" instead of wget where possible
   * dget: Correctly parse arguments to --path (Closes: #460970)
+  * Update to debhelper v6
 
   [ Mohammed Adnène Trojette ]
   * debcheckout: remove "-d" from Vcs-Cvs: field if a maintainer puts it.
@@ -38,7 +39,7 @@ devscripts (2.10.14) UNRELEASED; urgency=low
     svn/svk or when the always color configuration of git is set
     (Closes: #462686)
 
- -- Patrick Schoenfeld <schoenfeld@in-medias-res.com>  Sat, 02 Feb 2008 11:21:05 +0100
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sat, 02 Feb 2008 11:01:30 +0000
 
 devscripts (2.10.13) unstable; urgency=low
 
