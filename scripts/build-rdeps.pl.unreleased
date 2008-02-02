@@ -26,9 +26,7 @@ Use sudo when running apt-get update. Has no effect if -u is ommitted.
 
 =item B<-m> B<--print-maintainer>
 
-Print the maintainer information for each package. This feature is currently
-experimental, because it prints wrong information under some circumstances.
-Don't use it if you want to rely on it.
+Print the value of the maintainer field for each package.
 
 =item B<-d> B<--debug>
 
