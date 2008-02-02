@@ -47,7 +47,8 @@ Do not actually do anything, but do print the commands that would be run.
 =item B<-C> B<--confirm>
 
 Display the generated commit message and ask for confirmation before committing
-it.
+it. It is also possible to edit the message at this stage; in this case, the
+confirmation prompt will be re-displayed after the editing has been performed.
 
 =item B<-e> B<--edit>
 
@@ -490,7 +491,7 @@ sub getmessage {
 		@diffcmd = ('git-diff', '--cached', '--no-color');
 	    }
 	} elsif ($prog eq 'svn' || $prog eq 'svk') {
-		@diffcmd = ($prog, 'diff', '--diff-cmd', '/usr/bin/diff');
+	    @diffcmd = ($prog, 'diff', '--diff-cmd', '/usr/bin/diff');
 	} else {
 	    @diffcmd = ($prog, 'diff');
 	}
@@ -531,10 +532,14 @@ sub confirm {
     my $message=shift;
     print $message, "\n--\n";
     while(1) {
-        print "OK to commit? [Y/n] ";
+        print "OK to commit? [Y/n/e] ";
         $_ = <STDIN>;
         return 0 if /^n/i;
         return 1 if /^(y|$)/i;
+	if (/^e/i) {
+	    $message = edit($message);
+	    print "\n", $message, "\n--\n";
+	}
     }
 }
 
