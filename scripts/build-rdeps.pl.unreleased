@@ -151,7 +151,7 @@ sub findreversebuilddeps {
 			next;
 		}
 		if ($opt_maintainer) {
-			$maintainer_info = "(Maintainer: $packages{$depending_package}->{'Maintainer'})";
+			$maintainer_info = "($packages{$depending_package}->{'Maintainer'})";
 		}
 
 		$count+=1;
