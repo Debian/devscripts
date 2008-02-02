@@ -532,12 +532,12 @@ sub confirm {
     my $confirmmessage=shift;
     print $confirmmessage, "\n--\n";
     while(1) {
-        print "OK to commit? [Y/n/e] ";
-        $_ = <STDIN>;
-        return 0 if /^n/i;
+	print "OK to commit? [Y/n/e] ";
+	$_ = <STDIN>;
+	return 0 if /^n/i;
 	if (/^(y|$)/i) {
 	    $message = $confirmmessage;
-            return 1;
+	    return 1;
 	} elsif (/^e/i) {
 	    $confirmmessage = edit($confirmmessage);
 	    print "\n", $confirmmessage, "\n--\n";
