@@ -100,7 +100,7 @@ version;
 }
 
 sub findsources {
-	if ( /$source_pattern/ and $sources_count <= 3 ) {
+	if (/$source_pattern/ and $sources_count <= 3) {
 		unless ($opt_mainonly and /(contrib|non-free)/) {
 			push(@source_files, $_);
 			$sources_count+=1;
@@ -201,7 +201,7 @@ if ($opt_update) {
 # Find sources files
 find(\&findsources, $sources_path);
 
-if ( ($#source_files+1) <= 0 ) {
+if (($#source_files+1) <= 0) {
 	die "$progname: unable to find sources files.\nDid you forget to run apt-get update (or add --update to this command)?";
 }
 
