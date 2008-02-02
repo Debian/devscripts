@@ -34,8 +34,10 @@ devscripts (2.10.14) UNRELEASED; urgency=low
 
   [ Patrick Schoenfeld ]
   * Joining the team
+  * Work around problems when colordiff is used as diff-cmd for svn/svk or
+    when the always color configuration of git is set (Closes: #462686)
 
- -- Patrick Schoenfeld <schoenfeld@in-medias-res.com>  Fri,  1 Feb 2008 15:49:50 +0100
+ -- Patrick Schoenfeld <schoenfeld@in-medias-res.com>  Sat, 02 Feb 2008 11:21:05 +0100
 
 devscripts (2.10.13) unstable; urgency=low
 
