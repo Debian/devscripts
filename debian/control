@@ -34,6 +34,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
     E for stderr) for every line of output
   - archpath: print tla/Bazaar package names [tla | bazaar]
   - bts: a command-line tool for manipulating the BTS [www-browser,
+  - build-rdeps: Searches for all packages that build-depend on a
+    given package.
     libsoap-lite-perl, libwww-perl, mailx | mailutils]
   - chdist: tool to easily play with several distributions [dctrl-tools]
   - checkbashisms: check whether a /bin/sh script contains any common

@@ -137,7 +137,7 @@ sub findreversebuilddeps {
 		if (/Build-Depends: (.*)$/ or /Build-Depends-Indep: (.*)$/) {
 			if ($depending_package) {
 				print STDERR "$1\n" if ($opt_debug);
-				if ($1 =~ /^(.*\s)?$package[\s,]/ or $1 =~ /$package\$/) {
+				if ($1 =~ /^(.*\s)?$package([\s,]|$)/) {
 					$packages{$depending_package}->{'Build-Depends'} = 1;
 				}
 			}

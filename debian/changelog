@@ -31,7 +31,7 @@ devscripts (2.10.14) UNRELEASED; urgency=low
   * Packaging changes
     + Update to debhelper v6
     + Decapitalise the short description to match the Developer's References
-      recommendations 
+      recommendations
 
   [ Mohammed Adnène Trojette ]
   * debcheckout: remove "-d" from Vcs-Cvs: field if a maintainer puts it.
@@ -44,8 +44,10 @@ devscripts (2.10.14) UNRELEASED; urgency=low
   * debcommit: Work around problems when colordiff is used as diff-cmd for
     svn/svk or when the always color configuration of git is set
     (Closes: #462686)
+  * Added new script 'build-rdeps', a utility to find all packages that
+    reverse depend on a given package (Closes: #326966)
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sat, 02 Feb 2008 12:32:48 +0000
+ -- Patrick Schoenfeld <schoenfeld@in-medias-res.com>  Sat, 02 Feb 2008 19:34:19 +0100
 
 devscripts (2.10.13) unstable; urgency=low
 
