@@ -212,7 +212,7 @@ exit $status;
 sub script_is_evil_and_wrong {
     my ($filename) = @_;
     my $ret = 0;
-    open (IN, '<', $filename) or fail("cannot open $filename: $!");
+    open (IN, '<', $filename) or die("cannot open $filename: $!");
     my $i = 0;
     local $_;
     while (<IN>) {

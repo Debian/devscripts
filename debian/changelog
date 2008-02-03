@@ -4,7 +4,10 @@ devscripts (2.10.15) UNRELEASED; urgency=low
   * checkbashisms: Add a check for the $(<) bashism (which is catting a file)
     (Closes: #463743)
 
- -- Patrick Schoenfeld <schoenfeld@in-medias-res.com>  Sun, 03 Feb 2008 15:54:41 +0100
+  [ Adam D. Barratt ]
+  * checkbashisms: Replace use of non-existent fail() with die()
+
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sun, 03 Feb 2008 15:13:02 +0000
 
 devscripts (2.10.14) unstable; urgency=low
 
