@@ -5,9 +5,12 @@ devscripts (2.10.15) UNRELEASED; urgency=low
     (Closes: #463743)
 
   [ Adam D. Barratt ]
-  * checkbashisms: Replace use of non-existent fail() with die()
+  * checkbashisms:
+    + Replace use of non-existent fail() with die()
+    + Correct the fix for #461653. >& is permitted by POSIX, &> isn't. Thanks
+      to Sven Joachim.
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sun, 03 Feb 2008 15:13:02 +0000
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sun, 03 Feb 2008 23:18:33 +0000
 
 devscripts (2.10.14) unstable; urgency=low
 
