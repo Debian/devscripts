@@ -139,11 +139,11 @@ foreach my $filename (@ARGV) {
 	    my %string_bashisms = (
 		'\$\[\w+\]' =>                 q<arithmetic not allowed>,
 		'\$\{\w+\:\d+(?::\d+)?\}' =>   q<${foo:3[:1]}>,
-		'\$\{!\w+[@*]\}' =>            q<${!prefix[*|@]>,
+		'\$\{!\w+[\@*]\}' =>           q<${!prefix[*|@]>,
 		'\$\{!\w+\}' =>                q<${!name}>,
 		'\$\{\w+(/.+?){1,2}\}' =>      q<${parm/?/pat[/str]}>,
 		'\$\{\#?\w+\[[0-9\*\@]+\]\}' => q<bash arrays, ${name[0|*|@]}>,
-		'\$\(\s{0,1}\<\s[^)]*\)' => q<'$(\< foo)' should be '$(cat foo)'>
+		'(\$\(|\`)\s*\<\s*.+(\)|\`)' => q<'$(\< foo)' should be '$(cat foo)'>
 	    );
 
 	    if ($opt_echo) {
@@ -221,7 +221,7 @@ sub script_is_evil_and_wrong {
         next if /^$/o;
         last if (++$i > 20);
 
-        if (/(^\s*|\beval\s*\'|;)exec\s*.+\s*.?\$0.?\s*(--\s*)?(\${1:?\+)?.?\$(@|\*)/o) {
+        if (/(^\s*|\beval\s*\'|;)exec\s*.+\s*.?\$0.?\s*(--\s*)?(\${1:?\+)?.?\$(\@|\*)/o) {
             $ret = 1;
             last;
         }
