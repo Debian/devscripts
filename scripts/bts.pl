@@ -326,6 +326,15 @@ control bot.
 
 Do not suppress acknowledgement mails.  This is the default behaviour.
 
+=item -i, --interactive
+
+Before sending an e-mail to the control bot, display the content and
+allow it to be edited, or the sending cancelled.
+
+=item --no-interactive
+
+Send control e-mails without confirmation.  This is the default behaviour.
+
 =item -q, --quiet
 
 When running bts cache, only display information about newly cached
@@ -454,6 +463,7 @@ my $mboxmode = 0;
 my $quiet=0;
 my $ccemail="";
 my $ccsecurity="";
+my $interactive=0;
 
 Getopt::Long::Configure('require_order');
 GetOptions("help|h" => \$opt_help,
@@ -477,6 +487,7 @@ GetOptions("help|h" => \$opt_help,
 	   "noconf|no-conf" => \$opt_noconf,
 	   "include-resolved!" => \$includeresolved,
 	   "ack!" => \$requestack,
+	   "i|interactive!" => \$interactive,
 	   )
     or die "Usage: bts [options]\nRun $progname --help for more details\n";
 
@@ -1832,6 +1843,8 @@ Valid options are:
    --include-resolved     Cache bugs marked as resolved (default)
    --no-ack               Suppress BTS acknowledgment mails
    --ack                  Do not do so (default)
+   --interactive, -i      Prompt for confirmation before sending e-mail
+   --no-interactive       Do not do so (default)
    --help, -h             Display this message
    --version, -v          Display version and copyright info
 
@@ -1929,6 +1942,7 @@ sub send_mail {
     # Message-ID algorithm from git-send-email
     my $msgid = sprintf("%s-%s", time(), int(rand(4200)))."-bts-$fromaddress";
     my $date = `date -R`;
+    my $abortsend = 0;
     chomp $date;
 
     my $message = fold_from_header("From: $from") . "\n";
@@ -1941,8 +1955,27 @@ sub send_mail {
                .  "Message-ID: <$msgid>\n"
                .  "\n"
                .  "# Automatically generated email from bts,"
-                  . " devscripts version $version\n"
-               .  "$body\n";
+                  . " devscripts version $version\n";
+
+    if ($interactive) {
+	while(1) {
+	    print "\n", $message, "\n", $body, "\n---\n";	
+	    print "OK to send? [Y/n/e] ";
+	    $_ = <STDIN>;
+	    if (/^n/i) {
+		$abortsend = 1;
+		last;
+	    } elsif (/^(y|$)/i) {
+		last;
+	    } elsif (/^e/i) {
+		$body = edit($body);
+	    }
+        }
+    }
+
+    return if $abortsend;
+
+    $message .= $body;
 
     if ($noaction) {
         print "$message\n";
@@ -3172,6 +3205,28 @@ sub opts_done {
     if (@_) {
          die "bts: unknown options: @_\n";
     }
+}
+
+sub edit {
+    my $message = shift;
+    my ($fh, $filename);
+    ($fh, $filename) = tempfile("btsXXXX",
+				  SUFFIX => ".mail",
+				  DIR => File::Spec->tmpdir);
+    open(OUT_MAIL, ">$filename")
+	or die "bts: writing to temporary file: $!\n";
+    print OUT_MAIL $message;
+    close OUT_MAIL;
+    system("sensible-editor $filename");
+    open(OUT_MAIL, "<$filename")
+	or die "bts: reading from temporary file: $!\n";
+    $message = "";
+    while(<OUT_MAIL>) {
+        $message .= $_;
+    }
+    close OUT_MAIL;
+    unlink($filename);
+    return $message;
 }
 
 =back
