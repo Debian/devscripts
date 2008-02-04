@@ -410,7 +410,7 @@ for my $arg (@ARGV) {
 			if ( /^dpkg-source: extracting .* in .*/ ) {
 				/^dpkg-source: extracting .* in (.*)$/;
 				chdir $1;
-				system 'dpkg-buildpackage', '-b', '-us';
+				system 'dpkg-buildpackage', '-b', '-uc';
 			}
 		}
 	}
