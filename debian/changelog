@@ -3,6 +3,8 @@ devscripts (2.10.15) UNRELEASED; urgency=low
   [ Patrick Schoenfeld ]
   * checkbashisms: Add a check for the $(<) bashism (which is catting a file)
     (Closes: #463743)
+  * dget: Implemented a '--build' parameter which builds a package with
+    dpkg-buildpackage after its download (Closes: #457977)
 
   [ Adam D. Barratt ]
   * checkbashisms:
@@ -10,7 +12,7 @@ devscripts (2.10.15) UNRELEASED; urgency=low
     + Correct the fix for #461653. >& is permitted by POSIX, &> isn't. Thanks
       to Sven Joachim.
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sun, 03 Feb 2008 23:18:33 +0000
+ -- Patrick Schoenfeld <schoenfeld@in-medias-res.com>  Mon, 04 Feb 2008 16:33:49 +0100
 
 devscripts (2.10.14) unstable; urgency=low
 

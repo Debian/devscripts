@@ -64,6 +64,7 @@ or using the mirror configured in /etc/apt/sources.list (second form).
    -b, --backup    Move files that would be overwritten to ./backup
    -q, --quiet     Suppress wget/curl output
    -x, --extract   Run dpkg-source -x on downloaded source (first form only)
+   --build         Build package with dpkg-buildpackage after download
    --path DIR      Check these directories in addition to the apt archive;
                    if DIR='' then clear current list (may be used multiple
                    times)
@@ -369,6 +370,7 @@ Getopt::Long::Configure('bundling');
 GetOptions(
     "b|backup"   =>  \$opt->{'backup'},
     "q|quiet"    =>  \$opt->{'quiet'},
+    "build"      =>  \$opt->{'build'},
     "x|extract"  =>  \$opt->{'unpack_source'},
     "insecure"   =>  \$opt->{'insecure'},
     "no-cache"   =>  \$opt->{'no-cache'},
@@ -402,7 +404,17 @@ for my $arg (@ARGV) {
 
     if ($arg =~ /^((?:copy|file|ftp|http|rsh|rsync|ssh|www).*)\/([^\/]+\.\w+)$/) {
 	get_file($1, $2, "unlink") or exit 1;
-	if ($found_dsc and $opt->{'unpack_source'}) {
+	if ($found_dsc and $opt->{'build'}) {
+		my @output = `dpkg-source -x $found_dsc`;
+		foreach (@output) {
+			if ( /^dpkg-source: extracting .* in .*/ ) {
+				/^dpkg-source: extracting .* in (.*)$/;
+				chdir $1;
+				system 'dpkg-buildpackage', '-b', '-us';
+			}
+		}
+	}
+	elsif ($found_dsc and $opt->{'unpack_source'}) {
 	    system 'dpkg-source', '-x', $found_dsc;
 	}
 
@@ -479,6 +491,10 @@ Suppress B<wget>/B<curl> non-error output.
 
 Run B<dpkg-source -x> on the downloaded source package.  This can only
 be used with the first method of calling B<dget>.
+
+=item B<--build>
+
+Run B<dpkg-buildpackage -b -uc> on the downloaded source package.
 
 =item B<--path> DIR[:DIR...]
 
