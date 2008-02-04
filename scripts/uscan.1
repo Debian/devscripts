@@ -64,9 +64,9 @@ http://www.dataway.ch/~lukasl/amph/amph.html \\
 # This one shows that recursive directory scanning works, in either of
 # two forms, as long as the website can handle requests of the form
 # http://site/inter/mediate/dir/
-http://tmrc.mit.edu/mirror/twisted/Twisted/(\d\.\d)/ \\
-  Twisted-([\d\.]*)\.tar\.bz2
-http://tmrc.mit.edu/mirror/twisted/Twisted/(\d\.\d)/Twisted-([\d\.]*)\.tar\.bz2
+http://tmrc.mit.edu/mirror/twisted/Twisted/(\\d\\.\\d)/ \\
+  Twisted-([\\d\\.]*)\\.tar\\.bz2
+http://tmrc.mit.edu/mirror/twisted/Twisted/(\\d\.\\d)/Twisted-(\\[\\d\\.]*)\\.tar\\.bz2
 
 # If your package is located on sourceforge, use one of the following
 # formats to automatically use the qa.debian.org redirector, avoiding
