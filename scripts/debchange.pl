@@ -100,6 +100,9 @@ Options:
   -b, --force-bad-version
          Force a version to be less than the current one (e.g., when
          backporting)
+  --force-distribution
+         Force the provided distribution to be used, even if it doesn't match
+         the list of known distributions
   --closes nnnnn[,nnnnn,...]
          Add entries for closing these bug numbers,
          getting bug titles from the BTS (bug-tracking system, bugs.debian.org)
@@ -250,7 +253,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # We use bundling so that the short option behaviour is the same as
 # with older debchange versions.
 my ($opt_help, $opt_version);
-my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u);
+my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u, $opt_force_dist);
 my ($opt_n, $opt_bn, $opt_qa, $opt_s, $opt_bpo, $opt_l, $opt_c, $opt_m, $opt_create, $opt_package, @closes);
 my ($opt_news);
 my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
@@ -266,6 +269,7 @@ GetOptions("help|h" => \$opt_help,
 	   "package=s" => \$opt_package,
 	   "v|newversion=s" => \$opt_v,
 	   "b|force-bad-version" => \$opt_b,
+	   "force-distribution" => \$opt_force_dist,
 	   "d|fromdirname" => \$opt_d,
 	   "p" => \$opt_p,
 	   "preserve!" => \$opt_p,
@@ -346,12 +350,12 @@ if (defined $opt_D) {
     if ($distributor eq 'Debian') {
 	unless ($opt_D =~ /^(unstable|(stable|testing)(-security)?|oldstable-security|experimental|UNRELEASED|(sarge|etch)(-volatile|-backports)?)$/) {
 	    warn "$progname warning: Recognised distributions are: unstable, testing, stable,\nexperimental, UNRELEASED, {sarge,etch}-{volatile,backports} and {testing,stable,oldstable}-security.\nUsing your request anyway.\n";
-	    $warnings++;
+	    $warnings++ if not $opt_force_dist;
 	}
     } elsif ($distributor eq 'Ubuntu') {
 	unless ($opt_D =~ /^((warty|hoary|breezy|dapper|edgy|feisty|gutsy)(-updates|-security|-proposed)?|UNRELEASED)$/) {
 	    warn "$progname warning: Recognised distributions are:\n{warty,hoary,breezy,dapper,edgy,feisty,gutsy}{,-updates,-security,-proposed} and UNRELEASED.\nUsing your request anyway.\n";
-	    $warnings++;
+	    $warnings++ if not $opt_force_dist;
 	}
     } else {
 	# Unknown distributor, skip check

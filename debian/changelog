@@ -11,6 +11,8 @@ devscripts (2.10.15) UNRELEASED; urgency=low
     + Replace use of non-existent fail() with die()
     + Correct the fix for #461653. >& is permitted by POSIX, &> isn't. Thanks
       to Sven Joachim.
+  * debchange: Allow the use of an unknown / unofficial distribution to be
+    forced (Closes: #463449)
 
  -- Patrick Schoenfeld <schoenfeld@in-medias-res.com>  Mon, 04 Feb 2008 16:33:49 +0100
 
