@@ -133,7 +133,7 @@ foreach my $filename (@ARGV) {
 		'\&>' =>	               q<should be \>word 2\>&1>,
 		'(?:^|\s+)kill\s+-[^sl]\w*' => q<kill -[0-9] or -[A-Z]>,
 		'(?:^|\s+)trap\s+["\']?.*["\']?\s+.*[1-9]' => q<trap with signal numbers>,
-		'\[\[(?!:)' => q<alternative test command ([[ foo ]] should be [ foo ])>
+		'\[\[(?!:)' => q<alternative test command ([[ foo ]] should be [ foo ])>,
 	    );
 
 	    my %string_bashisms = (
@@ -143,7 +143,7 @@ foreach my $filename (@ARGV) {
 		'\$\{!\w+\}' =>                q<${!name}>,
 		'\$\{\w+(/.+?){1,2}\}' =>      q<${parm/?/pat[/str]}>,
 		'\$\{\#?\w+\[[0-9\*\@]+\]\}' => q<bash arrays, ${name[0|*|@]}>,
-		'(\$\(|\`)\s*\<\s*.+(\)|\`)' => q<'$(\< foo)' should be '$(cat foo)'>
+		'(\$\(|\`)\s*\<\s*\S.+(\)|\`)' => q<'$(\< foo)' should be '$(cat foo)'>,
 	    );
 
 	    if ($opt_echo) {
