@@ -32,6 +32,10 @@ devscripts (2.10.15) UNRELEASED; urgency=low
     to handle situations where the upstream source and packaging are managed
     through different VCSes (Closes: #384230)
   * mergechanges: Fix a typo in the man page
+  * tagpending(1):
+    + Remove ldapsearch(1) from SEE ALSO, as the script hasn't used LDAP for
+      some time
+    + Fix the script's name in the title block
 
  -- Patrick Schoenfeld <schoenfeld@in-medias-res.com>  Tue, 05 Feb 2008 21:35:37 +0100
 
