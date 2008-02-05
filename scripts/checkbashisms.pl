@@ -212,7 +212,11 @@ exit $status;
 sub script_is_evil_and_wrong {
     my ($filename) = @_;
     my $ret = 0;
-    open (IN, '<', $filename) or die("cannot open $filename: $!");
+    # lintian's version of this function aborts if the file
+    # can't be opened, but we simply return as the next
+    # test in the calling code handles reporting the error
+    # itself
+    open (IN, '<', $filename) or return;
     my $i = 0;
     local $_;
     while (<IN>) {

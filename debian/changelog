@@ -10,7 +10,6 @@ devscripts (2.10.15) UNRELEASED; urgency=low
 
   [ Adam D. Barratt ]
   * checkbashisms:
-    + Replace use of non-existent fail() with die()
     + Correct the fix for #461653. >& is permitted by POSIX, &> isn't. Thanks
       to Sven Joachim.
     + Modify the "echo -e", "exec -[acl]" and "let" tests to require
