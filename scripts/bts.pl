@@ -2406,7 +2406,14 @@ sub download_attachments {
 
 	if ($msg =~ /^\d+-\d+$/) {
 	    # it's an attachment, must download
-	    $bug2filename{$msg} = $filename;
+
+	    if (-f dirname($filename)) {
+		warn "bts: found file where directory expected; using existing file (" . dirname($filename) . ")\n";
+		$bug2filename{$msg} = dirname($filename);
+	    } else {
+	        $bug2filename{$msg} = $filename;
+	    }
+
 	    # already downloaded?
 	    next if -f $bug2filename{$msg} and not $refreshmode;
 	}
