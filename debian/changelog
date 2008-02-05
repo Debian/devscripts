@@ -27,6 +27,9 @@ devscripts (2.10.15) UNRELEASED; urgency=low
       (Closes: #409128)
   * debuild: Recognise -j as a valid option when it's passed on the command line
     as well as in the configuration file (Really closes: #457235)
+  * debcommit: Check the debian directory for indications of version control
+    to handle situations where the upstream source and packaging are managed
+    through different VCSes (Closes: #384230)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 05 Feb 2008 19:51:44 +0000
 

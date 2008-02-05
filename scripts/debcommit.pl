@@ -278,6 +278,22 @@ else {
 }
 
 sub getprog {
+    if (-d "debian") {
+	if (-d "debian/.svn") {
+	    return "svn";
+	} elsif (-d "debian/CVS") {
+	    return "cvs";
+	} elsif (-d "debian/{arch}") {
+	    # I don't think we can tell just from the working copy
+	    # whether to use tla or baz, so try baz if it's available,
+	    # otherwise fall back to tla.
+	    if (system ("baz --version >/dev/null 2>&1") == 0) {
+		return "baz";
+	    } else {
+		return "tla";
+	    }
+	}
+    }
     if (-d ".svn") {
 	return "svn";
     }
