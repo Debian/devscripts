@@ -505,6 +505,8 @@ for my $dir (@dirs) {
     }
 }
 
+warn "$progname: no watch file found\n" if (@debdirs == 0 and $report);
+
 # Was there a --uversion option?
 if (defined $opt_uversion) {
     if (@debdirs == 1) {
