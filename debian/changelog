@@ -5,6 +5,8 @@ devscripts (2.10.15) UNRELEASED; urgency=low
     (Closes: #463743)
   * dget: Implemented a '--build' parameter which builds a package with
     dpkg-buildpackage after its download (Closes: #457977)
+  * build-rdeps: Add a license header so that licensecheck does recognize
+    the license and copyright
 
   [ Adam D. Barratt ]
   * checkbashisms:
@@ -31,7 +33,7 @@ devscripts (2.10.15) UNRELEASED; urgency=low
     to handle situations where the upstream source and packaging are managed
     through different VCSes (Closes: #384230)
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 05 Feb 2008 19:51:44 +0000
+ -- Patrick Schoenfeld <schoenfeld@in-medias-res.com>  Tue, 05 Feb 2008 21:35:37 +0100
 
 devscripts (2.10.14) unstable; urgency=low
 
