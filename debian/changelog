@@ -26,8 +26,8 @@ devscripts (2.10.15) UNRELEASED; urgency=low
     + Fix quoting of a manpage example (Closes: #452934)
     + Output a message if --report-status was used but no watch file was found
       (Closes: #409128)
-  * debuild: Recognise -j as a valid option when it's passed on the command line
-    as well as in the configuration file (Really closes: #457235)
+  * debuild: Recognise -j as a valid option when it's passed on the command
+    line as well as in the configuration file (Really closes: #457235)
   * debcommit: Check the debian directory for indications of version control
     to handle situations where the upstream source and packaging are managed
     through different VCSes (Closes: #384230)
@@ -37,6 +37,8 @@ devscripts (2.10.15) UNRELEASED; urgency=low
       some time
     + Fix the script's name in the title block
   * whodepends: Remove duplicated wording from the manpage
+  * whouploads: Reduce the length of a line in the manpage to fix warnings
+    from man
 
  -- Patrick Schoenfeld <schoenfeld@in-medias-res.com>  Tue, 05 Feb 2008 21:35:37 +0100
 
