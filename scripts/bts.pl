@@ -1975,7 +1975,7 @@ sub send_mail {
 
     return if $abortsend;
 
-    $message .= $body;
+    $message .= "$body\n";
 
     if ($noaction) {
         print "$message\n";
