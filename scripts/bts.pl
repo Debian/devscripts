@@ -1843,7 +1843,7 @@ Valid options are:
    --include-resolved     Cache bugs marked as resolved (default)
    --no-ack               Suppress BTS acknowledgment mails
    --ack                  Do not do so (default)
-   --interactive, -i      Prompt for confirmation before sending e-mail
+   -i. --interactive      Prompt for confirmation before sending e-mail
    --no-interactive       Do not do so (default)
    --help, -h             Display this message
    --version, -v          Display version and copyright info
