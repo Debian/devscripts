@@ -1845,8 +1845,8 @@ Valid options are:
    --ack                  Do not do so (default)
    -i. --interactive      Prompt for confirmation before sending e-mail
    --no-interactive       Do not do so (default)
-   --help, -h             Display this message
-   --version, -v          Display version and copyright info
+   -h. --help             Display this message
+   -v, --version          Display version and copyright info
 
 Default settings modified by devscripts configuration files:
 $modified_conf_msg
