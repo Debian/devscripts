@@ -1,6 +1,10 @@
 devscripts (2.10.16) UNRELEASED; urgency=low
 
   * checkbashisms: Correct the $(<) check to not flag $(<foo grep bar)
+  * debbugs.pm: New module to encapsulate some of the common BTS functionality
+    used by various scripts. Currently contains initial support for some
+    SOAP methods.
+  * bts: Use debbugs.pm for select()
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Thu, 07 Feb 2008 10:42:20 +0000
 
