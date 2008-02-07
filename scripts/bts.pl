@@ -42,6 +42,7 @@ use Cwd;
 use IO::Handle;
 use lib '/usr/share/devscripts';
 use Devscripts::DB_File_Lock;
+use Devscripts::Debbugs;
 use Fcntl qw(O_RDWR O_RDONLY O_CREAT F_SETFD);
 use Getopt::Long;
 use Encode;
@@ -71,26 +72,6 @@ sub have_lwp() {
     }
     else { $lwp_broken=''; }
     return $lwp_broken ? 0 : 1;
-}
-
-my $soap_broken;
-sub have_soap {
-     return ($soap_broken ? 0 : 1) if defined $soap_broken;
-     eval {
-	  require SOAP::Lite;
-     };
-
-     if ($@) {
-	  if ($@ =~ m%^Can't locate SOAP/%) {
-	       $soap_broken="the libsoap-lite-perl package is not installed";
-	  } else {
-	       $soap_broken="couldn't load SOAP::Lite: $@";
-	  }
-     }
-     else {
-	  $soap_broken = 0;
-     }
-     return ($soap_broken ? 0 : 1);
 }
 
 # Constants
@@ -140,8 +121,6 @@ my $btscgipkgurl='http://bugs.debian.org/cgi-bin/pkgreport.cgi';
 my $btscgibugurl='http://bugs.debian.org/cgi-bin/bugreport.cgi';
 my $btscgispamurl='http://bugs.debian.org/cgi-bin/bugspam.cgi';
 my $btsemail='control@bugs.debian.org';
-my $soapurl='Debbugs/SOAP/1';
-my $soapproxyurl='http://bugs.debian.org/cgi-bin/soap.cgi';
 
 my $cachedir=$ENV{'HOME'}."/.devscripts_cache/bts/";
 my $timestampdb=$cachedir."bts_timestamps.db";
@@ -880,52 +859,12 @@ bts select submitter:jrandomdeveloper@example.com tag:wontfix
 =cut
 
 sub bts_select {
-     die "bts: Couldn't run bts select: $soap_broken\n" unless have_soap();
-     my @args = @_;
-     my %valid_keys = (package => 'package',
-		       pkg     => 'package',
-		       src     => 'src',
-		       source  => 'src',
-		       maint   => 'maint',
-		       maintainer => 'maint',
-		       submitter => 'submitter',
-		       status    => 'status',
-		       tag       => 'tag',
-		       owner     => 'owner',
-		       dist      => 'dist',
-		       distribution => 'dist',
-		       bugs       => 'bugs',
-		       archive    => 'archive',
-		      );
-     my %users;
-     my %search_parameters;
-     my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
-     for my $arg (@args) {
-	  my ($key,$value) = split /:/, $arg, 2;
-	  if (exists $valid_keys{$key}) {
-	       push @{$search_parameters{$valid_keys{$key}}},
-		    $value;
-	  }
-	  elsif ($key =~/users?/) {
-	       $users{$value} = 1;
-	  }
-     }
-     my %usertags;
-     for my $user (keys %users) {
-	  my $ut = $soap->get_usertag($user)->result();
-	  next unless defined $ut;
-	  for my $tag (keys %{$ut}) {
-	       push @{$usertags{$tag}},
-		    @{$ut->{$tag}};
-	  }
-     }
-     my $bugs = $soap->get_bugs(%search_parameters,
-				(keys %usertags)?(usertags=>\%usertags):()
-			       )->result();
-     if (not defined $bugs) {
-	  die "Error while retrieving bugs from SOAP server";
-     }
-     print map {qq($_\n)} @{$bugs};
+    my @args = @_;
+    my $bugs = Devscripts::Debbugs::select(@args);
+    if (not defined $bugs) {
+	die "Error while retrieving bugs from SOAP server";
+    }
+    print map {qq($_\n)} @{$bugs};
 }
 
 =item clone <bug> [new IDs]

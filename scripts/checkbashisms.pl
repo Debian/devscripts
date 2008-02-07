@@ -143,7 +143,7 @@ foreach my $filename (@ARGV) {
 		'\$\{!\w+\}' =>                q<${!name}>,
 		'\$\{\w+(/.+?){1,2}\}' =>      q<${parm/?/pat[/str]}>,
 		'\$\{\#?\w+\[[0-9\*\@]+\]\}' => q<bash arrays, ${name[0|*|@]}>,
-		'(\$\(|\`)\s*\<\s*\S.+(\)|\`)' => q<'$(\< foo)' should be '$(cat foo)'>,
+		'(\$\(|\`)\s*\<\s*\S+\s*(\)|\`)' => q<'$(\< foo)' should be '$(cat foo)'>,
 	    );
 
 	    if ($opt_echo) {

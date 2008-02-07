@@ -1,3 +1,9 @@
+devscripts (2.10.16) UNRELEASED; urgency=low
+
+  * checkbashisms: Correct the $(<) check to not flag $(<foo grep bar)
+
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Thu, 07 Feb 2008 10:42:20 +0000
+
 devscripts (2.10.15) unstable; urgency=low
 
   [ Patrick Schoenfeld ]
