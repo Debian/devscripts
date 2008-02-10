@@ -172,6 +172,7 @@ foreach my $filename (@ARGV) {
 		} else {
 		    $found = 1;
 		    $match = $1;
+		    $explanation = "sourced script with arguments";
 		}
 	    }
 

@@ -4,6 +4,7 @@ devscripts (2.10.16) UNRELEASED; urgency=low
     + Correct the $(<) check to not flag $(<foo grep bar) (Closes: #464522)
     + Tighten the $(( / (( regex
     + Modify the ". foo bar" check to allow ". `foo bar`" (Closes: #464984)
+    + Ensure that an explanation is provided for the ". foo bar" check
     + Fix the "shell wrapper" regex to allow a space after ; and before exec
       (Closes: #464976)
   * debbugs.pm: New module to encapsulate some of the common BTS functionality
