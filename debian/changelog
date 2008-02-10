@@ -3,6 +3,7 @@ devscripts (2.10.16) UNRELEASED; urgency=low
   * checkbashisms:
     + Correct the $(<) check to not flag $(<foo grep bar) (Closes: #464522)
     + Tighten the $(( / (( regex
+    + Modify the ". foo bar" check to allow ". `foo bar`" (Closes: #464984)
   * debbugs.pm: New module to encapsulate some of the common BTS functionality
     used by various scripts. Currently contains initial support for some
     SOAP methods.
