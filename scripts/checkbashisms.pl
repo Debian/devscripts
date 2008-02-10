@@ -81,7 +81,7 @@ foreach my $filename (@ARGV) {
 		    $status |= 2;
 		    last;  # end this file
 		}
-		elsif ($interpreter !~ m,/(sh|ash|dash)$,) {
+		elsif ($interpreter !~ m,/(sh|ash|dash|posh)$,) {
 ### ksh/zsh?
 		    warn "script $filename does not appear to be a /bin/sh script; skipping\n";
 		    $status |= 2;
