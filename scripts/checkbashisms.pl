@@ -181,6 +181,7 @@ foreach my $filename (@ARGV) {
 		$line =~ s/(^|[^\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
 		while (my ($re,$expl) = each %bashisms) {
 		    if ($line =~ m/($re)/) {
+print "$re\n";
 			$found = 1;
 			$match = $1;
 			$explanation = $expl;

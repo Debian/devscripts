@@ -112,8 +112,8 @@ changelog_closes=$(echo "$parsed"| awk -F: '/^Closes: / { print $2 }' | \
   xargs -n1 echo)
 
 if [ "$ONLINE" = "1" ]; then
-  bts_pending="$(bts select src:$srcpkg status:open tag:pending)"
-  bts_open="$(bts select src:$srcpkg status:open)"
+  bts_pending="$(bts select src:$srcpkg status:open status:forwarded tag:pending)"
+  bts_open="$(bts select src:$srcpkg status:open status:forwarded)"
 fi
 
 to_be_checked=$(printf '%s\n%s\n' "$changelog_closes" "$bts_pending" | sort -g | uniq)
