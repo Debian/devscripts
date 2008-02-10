@@ -15,6 +15,8 @@ devscripts (2.10.16) UNRELEASED; urgency=low
   * bts: Use debbugs.pm for select()
   * tagpending: Fix the bts select call to also handle forwarded bugs
     (Closes: #464787)
+  * debchange: Warn if the package appears to be switched from Debian native
+    to non-native or vice versa (Closes: #440957)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Thu, 07 Feb 2008 10:42:20 +0000
 
