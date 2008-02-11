@@ -1,5 +1,7 @@
 devscripts (2.10.16) UNRELEASED; urgency=low
 
+  The "storm before the calm" release
+
   * checkbashisms:
     + Correct the $(<) check to not flag $(<foo grep bar) (Closes: #464522)
     + Tighten the $(( / (( regex
