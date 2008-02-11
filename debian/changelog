@@ -9,6 +9,8 @@ devscripts (2.10.16) UNRELEASED; urgency=low
       (Closes: #464976)
     + Add posh to the list of supported interpreters. Thanks to Raphael
       Geissert.
+    + Warn about use of >& and <& redirecting to a file (POSIX specifies
+      behaviour for - and file descriptors only) (Really closes: #461653)
   * debbugs.pm: New module to encapsulate some of the common BTS functionality
     used by various scripts. Currently contains initial support for some
     SOAP methods.

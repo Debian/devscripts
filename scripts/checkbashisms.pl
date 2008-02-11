@@ -131,6 +131,8 @@ foreach my $filename (@ARGV) {
 		'(?<!\$)\(\(.*\)\)' =>         q<'((' should be '$(('>,
 		'(\[|test)\s+-a' =>            q<test with unary -a (should be -e)>,
 		'\&>' =>	               q<should be \>word 2\>&1>,
+		'(<\&|>\&)\s*(-[^\s;|]|\d+[^\s;|]|[^-\d\s;|])' =>
+					       q<should be \>word 2\>&1>,
 		'(?:^|\s+)kill\s+-[^sl]\w*' => q<kill -[0-9] or -[A-Z]>,
 		'(?:^|\s+)trap\s+["\']?.*["\']?\s+.*[1-9]' => q<trap with signal numbers>,
 		'\[\[(?!:)' => q<alternative test command ([[ foo ]] should be [ foo ])>,
