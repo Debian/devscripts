@@ -1782,9 +1782,9 @@ Valid options are:
    --include-resolved     Cache bugs marked as resolved (default)
    --no-ack               Suppress BTS acknowledgment mails
    --ack                  Do not do so (default)
-   -i. --interactive      Prompt for confirmation before sending e-mail
+   -i, --interactive      Prompt for confirmation before sending e-mail
    --no-interactive       Do not do so (default)
-   -h. --help             Display this message
+   -h, --help             Display this message
    -v, --version          Display version and copyright info
 
 Default settings modified by devscripts configuration files:
