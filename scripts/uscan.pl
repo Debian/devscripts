@@ -316,8 +316,8 @@ if (defined $opt_level) {
 $check_dirname_regex = $opt_regex if defined $opt_regex;
 
 if (defined $opt_package) {
-    die "$progname: --package requires the use of --upstream-version and --watchfile\nas well; run $progname --help for more details\n"
-	unless defined $opt_uversion and defined $opt_watchfile;
+    die "$progname: --package requires the use of --watchfile\nas well; run $progname --help for more details\n"
+	unless defined $opt_watchfile;
     $download = -$download unless defined $opt_download;
 }
 
@@ -734,6 +734,11 @@ sub process_watchline ($$$$$$)
 	    (undef, $lastversion, $action) = split ' ', $line, 3;
 	}
 
+	if ((!$lastversion or $lastversion eq 'debian') and !$pkg_version) {
+	    warn "$progname warning: Unable to determine current version\n  in $watchfile, skipping:\n  $line\n";
+	    return 1;
+	}
+
 	# Check all's OK
 	if ($filepattern !~ /\(.*\)/) {
 	    warn "$progname warning: Filename pattern missing version delimiters ()\n  in $watchfile, skipping:\n  $line\n";
@@ -949,7 +954,12 @@ EOF
 	}
     }
     if (! $lastversion or $lastversion eq 'debian') {
-	$lastversion=$pkg_version;
+	if ($pkg_version) {
+	    $lastversion=$pkg_version;
+	} else {
+	    warn "$progname warning: Unable to determine current version\n  in $watchfile, skipping:\n  $line\n";
+	    return 1;
+	}
     }
     # And mangle it if requested
     my $mangled_lastversion = $lastversion;
