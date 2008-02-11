@@ -21,7 +21,7 @@ devscripts (2.10.16) UNRELEASED; urgency=low
     to non-native or vice versa (Closes: #440957)
   * uscan: Don't insist on an upstream version being supplied on the command
     line if one is present in the watch file (Closes: #350307)
-  * Really fix debuild -j, so that --lintian-opts works again
+  * debuild: Really fix -j, so that --lintian-opts works again
     (Closes: #465264)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Thu, 07 Feb 2008 10:42:20 +0000
