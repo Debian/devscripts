@@ -128,7 +128,7 @@ foreach my $filename (@ARGV) {
 		'(?:^|\s+)exec\s+-[acl]' =>    q<exec -c/-l/-a name>,
 		'(?:^|\s+)let\s' =>            q<let ...>,
 		'\$RANDOM\b' =>                q<$RANDOM>,
-		'(?<!\$)\(\(.*\)\)' =>         q<'((' should be '$(('>,
+		'(?<!\$)\(\(+.*\)\)' =>         q<'((' should be '$(('>,
 		'(\[|test)\s+-a' =>            q<test with unary -a (should be -e)>,
 		'\&>' =>	               q<should be \>word 2\>&1>,
 		'(<\&|>\&)\s*(-[^\s;|]|\d+[^\s;|]|[^-\d\s;|])' =>

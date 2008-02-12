@@ -141,6 +141,21 @@ sub select {
     return $bugs;
 }
 
+sub status {
+    die "Couldn't run select: $soap_broken\n" unless have_soap();
+    my @args = @_;
+
+    my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+
+    my $bugs = $soap->get_status(@args)->result();
+
+    if (not defined $bugs) {
+	die "Error while retrieving bug statuses from SOAP server";
+    }
+
+    return $bugs;
+}
+
 1;
 
 __END__
