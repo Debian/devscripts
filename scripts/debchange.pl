@@ -38,10 +38,6 @@ use Getopt::Long;
 use File::Copy;
 use File::Basename;
 use Cwd;
-use lib '/usr/share/devscripts';
-use Devscripts::Debbugs;
-
-use Data::Dumper;
 
 BEGIN {
     # Load the URI::Escape module safely
@@ -666,22 +662,34 @@ if (@closes and $opt_query) { # and we have to query the BTS
     }
     else
     {
+	my %bugs;
+	my $lastbug;
+
 	my $uripkg = uri_escape($PACKAGE);
-#	my $bugs = `wget -q -O - 'http://bugs.debian.org/cgi-bin/pkgreport.cgi?src=$uripkg'`;
-	my $bugs = Devscripts::Debbugs::select( "src:" . $uripkg );
-	my $statuses = Devscripts::Debbugs::status( @{$bugs} );
-#print Dumper($statuses);
-	if (not defined $bugs) {
+	my $bugs = `wget -q -O - 'http://bugs.debian.org/cgi-bin/pkgreport.cgi?src=$uripkg'`;
+	if ($? >> 8 != 0) {
 	    warn "$progname warning: wget failed, so cannot query the bug-tracking system\n";
 	    $opt_query=0;
 	    $warnings++;
 	    # This will now go and execute the "if (@closes and ! $opt_query)" code
 	}
 
+	foreach (split /\n/, $bugs) {
+	    if (m%<a(?: class=\".*?\")? href=\"(?:/cgi-bin/)?(?:bugreport.cgi\?bug=|/)([0-9]*).*?>\#\1: (.*?)</a>%i) {
+		$bugs{$1} = [$2];
+		$lastbug=$1;
+	    }
+	    elsif (defined $lastbug and
+		   m%<a(?: class=\".*?\")? href=\"(?:/cgi-bin/)?pkgreport.cgi\?(?:[^\"]*?;)(?:pkg|package)=([a-z0-9\+\-\.]*)%i) {
+		push @{$bugs{$lastbug}}, $1
+		    if exists $bugs{$lastbug};
+		$lastbug = undef;
+	    }
+	}
+
 	foreach my $close (@closes) {
-	    if (exists $statuses->{$close}) {
-		my $title = $statuses->{$close}->{subject};
-		my $pkg = $statuses->{$close}->{package};
+	    if (exists $bugs{$close}) {
+		my ($title,$pkg) = @{$bugs{$close}};
 		$title =~ s/^($pkg|$PACKAGE): //;
 		$title =~ s/&quot;/\"/g;
 		$title =~ s/&lt;/</g;
@@ -690,19 +698,17 @@ if (@closes and $opt_query) { # and we have to query the BTS
 		push @closes_text, "$title (Closes: \#$close)\n";
 	    }
 	    else { # not our package, or wnpp
-#		my $bug = `wget -q -O - 'http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=$close'`;
-		my $bug = Devscripts::Debbugs::status( $close );
-		if (not defined $bug) {
+		my $bug = `wget -q -O - 'http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=$close'`;
+		if ($? >> 8 != 0) {
 		    warn "$progname warning: unknown bug \#$close does not belong to $PACKAGE,\n  disabling closing changelog entry\n";
 		    $warnings++;
 		    push @closes_text, "Closes?? \#$close: UNKNOWN BUG IN WRONG PACKAGE!!\n";
 		} else {
-		    my $bugtitle = $bug->{$close}->{subject};		    
+		    my ($bugtitle) = ($bug =~ m%<TITLE>.*?\#$close - (.*?) - [^-]*? report logs</TITLE>%);
 		    $bugtitle ||= '';
-		    my $bugpkg = $bug->{$close}->{package};
+		    my ($bugpkg) = ($bug =~ m%<a(?: class=\".*?\")? href=\"(?:/cgi-bin/)?pkgreport.cgi\?(?:[^\"]*?;)?(?:pkg|package)=([a-z0-9\+\-\.]*)%i);
 		    $bugpkg ||= '?';
-#		    my ($bugsrcpkg) = ($bug =~ m%<a(?: class=\".*?\")? href=\"(?:/cgi-bin/)?pkgreport.cgi\?src=([a-z0-9\+\-\.]*)%i);
-		    my $bugsrcpkg;
+		    my ($bugsrcpkg) = ($bug =~ m%<a(?: class=\".*?\")? href=\"(?:/cgi-bin/)?pkgreport.cgi\?src=([a-z0-9\+\-\.]*)%i);
 		    $bugsrcpkg ||= '?';
 		    if ($bugsrcpkg eq $PACKAGE) {
 			warn "$progname warning: bug \#$close appears to be already archived,\n  disabling closing changelog entry\n";
