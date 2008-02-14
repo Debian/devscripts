@@ -100,9 +100,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - rmadison: remotely query the Debian archive database about packages
     [wget | curl, liburi-perl]
   - svnpath: print svn repository paths [subversion]
-  - tagpending: shell script which runs from a Debian source tree and tags
-    bugs that are to be closed in the latest changelog as pending.
-    [wget, liburi-perl]
+  - tagpending: runs from a Debian source tree and tags bugs that are to 
+    be closed in the latest changelog as pending. [libsoap-lite-perl]
   - uscan: scan upstream sites for new releases of packages
     [libcrypt-ssleay-perl, libwww-perl]
   - uupdate: integrate upstream changes into a source package [patch]

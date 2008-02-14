@@ -2,6 +2,8 @@ devscripts (2.10.17) UNRELEASED; urgency=low
 
   * checkbashisms: Fix a false positive in the $(( test (Closes: #465364)
   * Debbugs.pm: Add status()
+  * tagpending: Rewrite in perl using Debbugs.pm
+  * README, debian/control: Update description of tagpending
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 12 Feb 2008 08:50:01 +0000
 
