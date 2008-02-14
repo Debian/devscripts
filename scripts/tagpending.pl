@@ -68,7 +68,7 @@ if ($opt_help) {
 }
 
 if ($opt_verbose and $opt_silent) {
-    die "$0 error: --silent and --verbose contradict each other\n";
+    die "$progname error: --silent and --verbose contradict each other\n";
 }
 
 =head1 SYNOPSIS
