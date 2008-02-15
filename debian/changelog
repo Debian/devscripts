@@ -4,6 +4,11 @@ devscripts (2.10.17) UNRELEASED; urgency=low
   * Debbugs.pm: Add status()
   * tagpending: Rewrite in perl using Debbugs.pm
   * README, debian/control: Update description of tagpending
+  * debcheckout:
+    + Handle spaces between -d and the root for cvs repositories
+      (Closes: #465849)
+    + Fix a warning about uninitialised values when a module name is not
+      supplied for a cvs repository
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 12 Feb 2008 08:50:01 +0000
 

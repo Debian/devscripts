@@ -135,7 +135,7 @@ sub find_repo($) {
 # a given target directory.
 sub set_destdir(@$$) {
   my ($repo_type, $destdir, @cmd) = @_;
-  $destdir =~ s|^-d||;
+  $destdir =~ s|^-d\s*||;
 
   switch ($repo_type) {
     case "cvs"	{ my $module = pop @cmd; push @cmd, ("-d", $destdir, $module); }
@@ -187,8 +187,9 @@ sub checkout_repo($$$) {
   switch ($repo_type) {
     case "arch"	  { @cmd = ("tla", "grab", $repo_url); }  # XXX ???
     case "bzr"    { @cmd = ("bzr", "branch", $repo_url); }
-    case "cvs"    { $repo_url =~ s|^-d||;
+    case "cvs"    { $repo_url =~ s|^-d\s*||;
                     my ($root, $module) = split /\s+/, $repo_url;
+		    $module ||= '';
                     @cmd = ("cvs", "-d", $root, "checkout", $module); }
     case "darcs"  { @cmd = ("darcs", "get", $repo_url); }
     case "git"    { @cmd = ("git", "clone", $repo_url); }
