@@ -234,7 +234,7 @@ if ($opt_noact) {
 	push(@bts_args, "package", join " ", keys(%packages));
 
 	foreach my $bug (@to_tag) {
-	    push(@bts_args, ".", "tag", $bug, "+ pending");
+	    push(@bts_args, ".", "tag", $bug, "+", "pending");
 	    push(@bts_args, "confirmed") if $opt_confirm;
 	}
     }
@@ -242,7 +242,7 @@ if ($opt_noact) {
 	push(@bts_args, ".") if scalar @bts_args > 1;
 	push(@bts_args, "package wnpp");
 	foreach my $wnpp_bug (@wnpp_to_tag) {
-	    push(@bts_args, ".", "tag", $wnpp_bug, "+ pending");
+	    push(@bts_args, ".", "tag", $wnpp_bug, "+", "pending");
 	}
     }
 
