@@ -9,6 +9,8 @@ devscripts (2.10.17) UNRELEASED; urgency=low
       (Closes: #465849)
     + Fix a warning about uninitialised values when a module name is not
       supplied for a cvs repository
+  * uscan: Add support for repacking .zip archives, based on a patch
+    from Antonio Terceiro (Closes: #456587)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 12 Feb 2008 08:50:01 +0000
 

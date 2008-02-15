@@ -27,6 +27,7 @@ use strict;
 use Cwd;
 use File::Basename;
 use File::Copy;
+use File::Temp qw/tempdir/;
 use filetest 'access';
 use Getopt::Long;
 use lib '/usr/share/devscripts';
@@ -89,7 +90,8 @@ Options:
     --symlink      Make an orig.tar.gz symlink to downloaded file (default)
     --rename       Rename to orig.tar.gz instead of symlinking
                    (Both will use orig.tar.bz2 if appropriate)
-    --repack       Repack downloaded archives from orig.tar.bz2 to orig.tar.gz
+    --repack       Repack downloaded archives from orig.tar.bz2 or orig.zip to
+                   orig.tar.gz
                    (does nothing if downloaded archive orig.tar.gz)
     --no-symlink   Don\'t make symlink or rename
     --verbose      Give verbose output
@@ -152,7 +154,7 @@ my $destdir = "..";
 my $download = 1;
 my $force_download = 0;
 my $report = 0; # report even on up-to-date packages?
-my $repack = 0; # repack .tar.bz2 to .tar.gz
+my $repack = 0; # repack .tar.bz2 or .zip to .tar.gz
 my $symlink = 'symlink';
 my $verbose = 0;
 my $check_dirname_level = 1;
@@ -1144,6 +1146,20 @@ EOF
 	my $newfile_base_gz = "$1.tar.gz";
 	system("bunzip2 -c $destdir/$newfile_base | gzip > $destdir/$newfile_base_gz") == 0
 	  or die "repacking from bzip2 to gzip failed\n";
+	unlink "$destdir/$newfile_base";
+	$newfile_base = $newfile_base_gz;
+    }
+
+    if ($repack and $newfile_base =~ /^(.*)\.zip$/) {
+	print "-- Repacking from zip to .tar.gz\n" if $verbose;
+
+	system('command -v unzip >/dev/null 2>&1') >> 8 == 0
+	  or die("unzip binary not found. You need to install the package unzip to be able to repack .zip upstream archives.\n");
+
+	my $newfile_base_gz = "$1.tar.gz";
+	my $tempdir = tempdir ( "uscanXXXX", TMPDIR => 1, CLEANUP => 1 );
+	system("unzip -q -d $tempdir $destdir/$newfile_base; tar -C $tempdir -czf $destdir/$newfile_base_gz .") == 0 
+	  or die("Repacking from zip to tar.gz failed\n");
 	unlink "$destdir/$newfile_base";
 	$newfile_base = $newfile_base_gz;
     }
