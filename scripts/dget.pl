@@ -134,7 +134,7 @@ sub backup_or_unlink {
 my %seen;
 sub get_file {
     my ($dir, $file, $md5sum) = @_;
-    return if $seen{$file};
+    return 1 if $seen{$file};
 
     if ($md5sum eq "unlink") {
 	backup_or_unlink($file);
