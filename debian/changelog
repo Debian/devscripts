@@ -3,7 +3,6 @@ devscripts (2.10.17) UNRELEASED; urgency=low
   * checkbashisms: Fix a false positive in the $(( test (Closes: #465364)
   * Debbugs.pm: Add status()
   * tagpending: Rewrite in perl using Debbugs.pm
-  * README, debian/control: Update description of tagpending
   * debcheckout:
     + Handle spaces between -d and the root for cvs repositories
       (Closes: #465849)
@@ -11,6 +10,11 @@ devscripts (2.10.17) UNRELEASED; urgency=low
       supplied for a cvs repository
   * uscan: Add support for repacking .zip archives, based on a patch
     from Antonio Terceiro (Closes: #456587)
+  * Packaging changes:
+    + README: Update description of tagpending
+    + debian/control:
+      - Add unzip(1) to Suggests for uscan's zip repacking
+      - Update description of tagpending
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 12 Feb 2008 08:50:01 +0000
 
