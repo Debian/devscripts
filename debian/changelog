@@ -15,6 +15,7 @@ devscripts (2.10.17) UNRELEASED; urgency=low
     + debian/control:
       - Add unzip(1) to Suggests for uscan's zip repacking
       - Update description of tagpending
+  * debcommit: Use "git diff" instead of "git-diff" (Closes: #466158)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 12 Feb 2008 08:50:01 +0000
 

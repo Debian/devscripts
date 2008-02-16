@@ -502,9 +502,9 @@ sub getmessage {
 	    @diffcmd = ($prog, 'file-diff');
 	} elsif ($prog eq 'git') {
 	    if ($all) {
-		@diffcmd = ('git-diff', '--no-color');
+		@diffcmd = ('git', 'diff', '--no-color');
 	    } else {
-		@diffcmd = ('git-diff', '--cached', '--no-color');
+		@diffcmd = ('git', 'diff', '--cached', '--no-color');
 	    }
 	} elsif ($prog eq 'svn' || $prog eq 'svk') {
 	    @diffcmd = ($prog, 'diff', '--diff-cmd', '/usr/bin/diff');
