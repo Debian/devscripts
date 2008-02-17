@@ -1,5 +1,6 @@
 devscripts (2.10.17) UNRELEASED; urgency=low
 
+  [ Adam D. Barratt ]
   * checkbashisms: Fix a false positive in the $(( test (Closes: #465364)
   * Debbugs.pm: Add status()
   * tagpending: Rewrite in perl using Debbugs.pm
@@ -19,7 +20,14 @@ devscripts (2.10.17) UNRELEASED; urgency=low
   * dget: Correctly handle the processing of a file that we've already
     retrieved (Closes: #445546)
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 12 Feb 2008 08:50:01 +0000
+  [ Christoph Berg ]
+  * dget:
+    + Make unpacking downloaded source packages the default, use -d for the
+      old behaviour.
+    + Check signature of source packages using dscverify, use -u to disable.
+      (Closes: #434521)
+
+ -- Christoph Berg <myon@debian.org>  Sun, 17 Feb 2008 15:31:44 +0100
 
 devscripts (2.10.16) unstable; urgency=low
 

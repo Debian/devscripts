@@ -2,7 +2,7 @@
 # vim:sw=4:sta:
 
 #   dget - Download Debian source and binary packages
-#   Copyright (C) 2005-07 Christoph Berg <myon@debian.org>
+#   Copyright (C) 2005-08 Christoph Berg <myon@debian.org>
 #   Modifications Copyright (C) 2005-06 Julian Gilbey <jdg@debian.org>
 #
 #   This program is free software; you can redistribute it and/or modify
@@ -58,12 +58,16 @@ sub usage {
 Usage: $progname [options] URL
        $progname [options] package[=version]
 
-Downloads Debian packages, either from the specified URL (first form),
+Downloads Debian packages (source and binary) from the specified URL (first form),
 or using the mirror configured in /etc/apt/sources.list (second form).
 
    -b, --backup    Move files that would be overwritten to ./backup
    -q, --quiet     Suppress wget/curl output
-   -x, --extract   Run dpkg-source -x on downloaded source (first form only)
+   -d, --download-only
+                   Do not extract downloaded source
+   -x, --extract   Unpack downloaded source (default)
+   -u, --allow-unauthenticated
+                   Do no attempt to verify source package signature
    --build         Build package with dpkg-buildpackage after download
    --path DIR      Check these directories in addition to the apt archive;
                    if DIR='' then clear current list (may be used multiple
@@ -83,7 +87,7 @@ EOT
 sub version {
     print <<"EOF";
 This is $progname, from the Debian devscripts package, version ###VERSION###
-This code is copyright 2005-07 by Christoph Berg <myon\@debian.org>.
+This code is copyright 2005-08 by Christoph Berg <myon\@debian.org>.
 Modifications copyright 2005-06 by Julian Gilbey <jdg\@debian.org>.
 All rights reserved.
 This program comes with ABSOLUTELY NO WARRANTY.
@@ -330,7 +334,7 @@ sub apt_get {
 # Now start by reading configuration files and then command line
 # The next stuff is boilerplate
 
-my $dget_path;
+my ($dget_path, $dget_unpack, $dget_verify);
 
 if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg = "  (no configuration files read)";
@@ -339,6 +343,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
     my %config_vars = (
 		       'DGET_PATH' => '',
+		       'DGET_UNPACK' => 'yes',
+		       'DGET_VERIFY' => 'yes',
 		       );
     my %config_default = %config_vars;
 
@@ -363,6 +369,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     chomp $modified_conf_msg;
 
     $dget_path = $config_vars{'DGET_PATH'};
+    $dget_unpack = $config_vars{'DGET_UNPACK'} =~ /^y/i;
+    $dget_verify = $config_vars{'DGET_VERIFY'} =~ /^y/i;
 }
 
 # handle options
@@ -371,7 +379,11 @@ GetOptions(
     "b|backup"   =>  \$opt->{'backup'},
     "q|quiet"    =>  \$opt->{'quiet'},
     "build"      =>  \$opt->{'build'},
-    "x|extract"  =>  \$opt->{'unpack_source'},
+    "d|download-only"
+                 =>  sub { $dget_unpack = 0 },
+    "x|extract"  =>  sub { $dget_unpack = 1 },
+    "u|allow-unauthenticated"
+                 =>  sub { $dget_verify = 0 },
     "insecure"   =>  \$opt->{'insecure'},
     "no-cache"   =>  \$opt->{'no-cache'},
     "noconf|no-conf"   =>  \$opt->{'no-conf'},
@@ -402,25 +414,36 @@ if (! @ARGV) {
 for my $arg (@ARGV) {
     $found_dsc = "";
 
+    # case 1: URL
     if ($arg =~ /^((?:copy|file|ftp|http|rsh|rsync|ssh|www).*)\/([^\/]+\.\w+)$/) {
 	get_file($1, $2, "unlink") or exit 1;
-	if ($found_dsc and $opt->{'build'}) {
-		my @output = `dpkg-source -x $found_dsc`;
+	if ($found_dsc) {
+	    if ($dget_verify) { # We are duplicating work here a bit as
+		# dpkg-source -x will also verify signatures. Still, we
+		# also want to barf with -d, and on unsigned packages.
+		system 'dscverify', $found_dsc;
+		exit $? >> 8 if $? >> 8 != 0;
+	    }
+	    if ($opt->{'build'}) {
+		my @output = `dpkg-source -x $found_dsc`; # FIXME: this will break when dpkg-source output is localized
+		print @output;
 		foreach (@output) {
-			if ( /^dpkg-source: extracting .* in .*/ ) {
-				/^dpkg-source: extracting .* in (.*)$/;
-				chdir $1;
-				system 'dpkg-buildpackage', '-b', '-uc';
-			}
+		    if ( /^dpkg-source: extracting .* in (.*)/ ) {
+			chdir $1;
+			system 'dpkg-buildpackage', '-b', '-uc';
+			last;
+		    }
 		}
-	}
-	elsif ($found_dsc and $opt->{'unpack_source'}) {
-	    system 'dpkg-source', '-x', $found_dsc;
+	    } elsif ($dget_unpack) {
+		system 'dpkg-source', '-x', $found_dsc;
+	    }
 	}
 
+    # case 2a: package
     } elsif ($arg =~ /^[a-z0-9.+-]{2,}$/) {
 	apt_get($arg);
 
+    # case 2b: package=version
     } elsif ($arg =~ /^([a-z0-9.+-]{2,})=([a-zA-Z0-9.:~+-]+)$/) {
 	apt_get($1, $2);
 
@@ -450,8 +473,8 @@ dget -- Download Debian source and binary packages
 B<dget> downloads Debian packages.  In the first form, B<dget> fetches
 the requested URL.  If this is a .dsc or .changes file, then B<dget>
 acts as a source-package aware form of B<wget>: it also fetches any
-files referenced in the .dsc/.changes file.  When the B<-x> option is
-given, the downloaded source is also unpacked by B<dpkg-source>.
+files referenced in the .dsc/.changes file.  The downloaded source is
+then unpacked by B<dpkg-source>.
 
 In the second form, B<dget> downloads a I<binary> package (i.e., a
 I<.deb> file) from the Debian mirror configured in
@@ -487,10 +510,21 @@ Move files that would be overwritten to I<./backup>.
 
 Suppress B<wget>/B<curl> non-error output.
 
+=item B<-d>, B<--download-only>
+
+Do not run B<dpkg-source -x> on the downloaded source package.  This can
+only be used with the first method of calling B<dget>.
+
 =item B<-x>, B<--extract>
 
-Run B<dpkg-source -x> on the downloaded source package.  This can only
-be used with the first method of calling B<dget>.
+Run B<dpkg-source -x> on the downloaded source package to unpack it.
+This option is the default and can only be used with the first method of
+calling B<dget>.
+
+=item B<-u>, B<--allow-unauthenticated>
+
+Do not attempt to verify the integrity of downloaded source packages
+using B<dscverify>.
 
 =item B<--build>
 
@@ -544,15 +578,28 @@ search for files in addition to the default
 I</var/cache/apt/archives>.  It has the same effect as the B<--path>
 command line option.  It is not set by default.
 
+=item DGET_UNPACK
+
+Set to 'no' to disable extracting downloaded source packages.  Default
+is 'yes'.
+
+=item DGET_VERIFY
+
+Set to 'no' to disable checking signatures of downloaded source
+packages.  Default is 'yes'.
+
 =cut
 
-=head1 BUGS
+=head1 BUGS AND COMPATIBILITY
 
 B<dget> I<package> should be implemented in B<apt-get install -d>.
 
+Before devscripts version 2.10.17, the default was not to extract the
+downloaded source. Set DGET_UNPACK=no to revert to the old behaviour.
+
 =head1 AUTHOR
 
-This program is Copyright (C) 2005-07 by Christoph Berg <myon@debian.org>.
+This program is Copyright (C) 2005-08 by Christoph Berg <myon@debian.org>.
 Modifications are Copyright (C) 2005-06 by Julian Gilbey <jdg@debian.org>.
 
 This program is licensed under the terms of the GPL, either version 2

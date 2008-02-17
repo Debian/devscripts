@@ -399,6 +399,20 @@ EOF
 # BTS_SUPPRESS_ACKS=no
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.17
+	then
+	    # Added in devscripts 2.10.17
+	    cat >> /etc/devscripts.conf <<EOF
+
+##### dget options added in version 2.10.17
+#
+# Unpack downloaded source packages
+# DGET_UNPACK=yes
+# Verify source package signatures using dscverify
+# DGET_VERIFY=yes
+EOF
+	fi
     fi
 fi
 
