@@ -291,6 +291,12 @@
 # Extra directories to search for files in addition to
 # /var/cache/apt/archives.  This is a colon-separated list of directories.
 # DGET_PATH=""
+#
+# Unpack downloaded source packages
+# DGET_UNPACK=yes
+#
+# Verify source package signatures using dscverify
+# DGET_VERIFY=yes
 
 ##### diff2patches
 #
