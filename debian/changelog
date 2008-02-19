@@ -20,7 +20,7 @@ devscripts (2.10.17) UNRELEASED; urgency=low
   * dget: Correctly handle the processing of a file that we've already
     retrieved (Closes: #445546)
   * wnpp-alert: Note in the manpage that the results are source package
-    based (Closes: #466456)
+    based
 
   [ Christoph Berg ]
   * dget:
@@ -29,7 +29,7 @@ devscripts (2.10.17) UNRELEASED; urgency=low
     + Check signature of source packages using dscverify, use -u to disable.
       (Closes: #434521)
 
- -- Christoph Berg <myon@debian.org>  Sun, 17 Feb 2008 15:31:44 +0100
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 19 Feb 2008 06:53:31 +0000
 
 devscripts (2.10.16) unstable; urgency=low
 
