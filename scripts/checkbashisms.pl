@@ -167,8 +167,8 @@ foreach my $filename (@ARGV) {
 	    }
 	    # since this test is ugly, I have to do it by itself
 	    # detect source (.) trying to pass args to the command it runs
-	    if (not $found and m/^\s*(\.\s+[^\s;]+\s+([^\s]+))/) {
-		if ($2 =~ /^(\&|\||\d?>|<|[^`]+`|;)/) {
+	    if (not $found and m/^\s*(\.\s+[^\s;\`]+\s+([^\s;]+))/) {
+		if ($2 =~ /^(\&|\||\d?>|<)/) {
 		    # everything is ok
 		    ;
 		} else {
