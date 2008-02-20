@@ -265,7 +265,7 @@ if (@to_tag or @wnpp_to_tag) {
 	    }
 	}
 
-	$comments = " " . $header . "\n \n" . $comments
+	$comments = " \n " . $header . "\n \n" . $comments . " \n"
 	    if $comments;
     }
 }
