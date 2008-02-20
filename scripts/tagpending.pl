@@ -208,7 +208,7 @@ foreach $bug (keys %bugs) {
 	    if ($opt_wnpp) {
 		my $status = Devscripts::Debbugs::status($bug);
 		if ($status->{$bug}->{package} eq 'wnpp') {
-		    if (!$status->{$bug}->{tags} =~ /pending/) {
+		    if ($status->{$bug}->{tags} !~ /pending/) {
 			print "wnpp needs tag\n" if $opt_verbose;
 			push (@wnpp_to_tag, $bug);
 		    } else {
