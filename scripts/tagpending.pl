@@ -252,7 +252,7 @@ if (@to_tag or @wnpp_to_tag) {
 		}
 
 		foreach my $bug (@thiscloses) {
-		    if ($bug and grep /^$bug$/, @to_tag) {
+		    if ($bug and grep /^$bug$/, @to_tag or grep /^$bug$/, @wnpp_to_tag) {
 			$comments .= $thischange;
 			last;
 		    }
