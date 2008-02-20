@@ -3,7 +3,11 @@ devscripts (2.10.17) UNRELEASED; urgency=low
   [ Adam D. Barratt ]
   * checkbashisms: Fix a false positive in the $(( test (Closes: #465364)
   * Debbugs.pm: Add status()
-  * tagpending: Rewrite in perl using Debbugs.pm
+  * tagpending:
+    + Rewrite in perl using Debbugs.pm
+    + Optionally (and by default) include the changelog header line and
+      any relevant changelog entries as comments in the generated mail
+      (Closes: #439688)
   * debcheckout:
     + Handle spaces between -d and the root for cvs repositories
       (Closes: #465849)

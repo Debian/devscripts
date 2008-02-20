@@ -36,7 +36,7 @@ sub bugs_info;
 my $progname = basename($0);
 
 my ($opt_help, $opt_version, $opt_verbose, $opt_noact, $opt_silent);
-my ($opt_online, $opt_confirm, $opt_to, $opt_wnpp);
+my ($opt_online, $opt_confirm, $opt_to, $opt_wnpp, $opt_comments);
 
 # Default options
 $opt_silent = 0;
@@ -46,11 +46,13 @@ $opt_noact = 0;
 $opt_confirm = 0;
 $opt_wnpp = 0;
 $opt_to = '';
+$opt_comments = 1;
 
 GetOptions("help|h" => \$opt_help,
 	   "version" => \$opt_version,
 	   "verbose|v!" => \$opt_verbose,
 	   "noact|n" => \$opt_noact,
+	   "comments!" => \$opt_comments,
 	   "silent|s" => \$opt_silent,
 	   "force|f" => sub { $opt_online = 0; },
 	   "confirm|c" => \$opt_confirm,
@@ -101,6 +103,18 @@ List each bug checked and tagged in turn.
 
 Do not query the BTS, but (re)tag all bugs closed in the changelog.
 
+=item --comments
+
+Include the changelog header line and the entries relating to the tagged 
+bugs as comments in the generated mail.  This is the default.
+
+Note that when used in combination with --to, the header line output 
+will always be that of the most recent version.
+
+=item --no-comments
+
+Do not include changelog entries in the generated mail.
+
 =item -c, --confirm
 
 Tag bugs as both confirmed and pending.
@@ -127,6 +141,9 @@ B<bts>(1) and B<dpkg-parsechangelog>(1)
 
 my $source;
 my @closes;
+my $in_changes=0;
+my $changes='';
+my $header='';
 
 foreach my $file ("debian/control", "debian/changelog") {
     if (! -f $file) {
@@ -141,10 +158,24 @@ while (<PARSED>) {
 	$source = $1;
     } elsif (/^Closes: (.*)$/) {
 	@closes = split ' ', $1;
+    } elsif (/^Changes: /) {
+	$in_changes = 1;
+    } elsif ($in_changes) {
+	if ($header) {
+	    next unless /^ {3}[^[]/;
+	    $changes .= "\n" if $changes;
+	    $changes .= $_;
+	} else {
+	    $header = $_;
+	}
     }
 }
 
 close PARSED;
+
+# Add a fake entry to the end of the recorded changes
+# This makes the parsing of the changes simpler
+$changes .= "   *";
 
 my $pending;
 my $open;
@@ -206,6 +237,39 @@ if (!@to_tag and !@wnpp_to_tag) {
 }
 
 my @sourcepkgs = ();
+my @thiscloses = ();
+my $thischange = '';
+my $comments = '';
+
+if (@to_tag or @wnpp_to_tag) {
+    if ($opt_comments) {
+	foreach my $change (split /\n/, $changes) {
+            if ($change =~ /^ {3}\*(.*)/) {
+		# Adapted from dpkg-parsechangelog / Changelog.pm
+        	while ($thischange && ($thischange =~
+		  /closes:\s*(?:bug)?\#?\s?\d+(?:,\s*(?:bug)?\#?\s?\d+)*/sig)) {
+		    push(@thiscloses, $& =~ /\#?\s?(\d+)/g);
+		}
+
+		foreach my $bug (@thiscloses) {
+		    if ($bug and grep /^$bug$/, @to_tag) {
+			$comments .= $thischange;
+			last;
+		    }
+		}
+
+		@thiscloses = ();
+		$thischange = $change;
+	    } else {
+		$thischange .= $change . "\n";
+	    }
+	}
+
+	$comments = " " . $header . "\n \n" . $comments
+	    if $comments;
+    }
+}
+
 if (@to_tag) {
     open CONTROL, "debian/control";
 
@@ -233,6 +297,15 @@ if ($opt_noact) {
     if (@to_tag) {
 	push(@bts_args, "package", join " ", keys(%packages));
 
+	if ($comments) {
+	    $comments =~ s/\n\n/\n/sg;
+	    $comments =~ s/^ /#/mg;
+	    push(@bts_args, $comments);
+	    # We don't want to add comments twice if there are
+            # both package and wnpp bugs
+	    $comments = '';
+	}
+
 	foreach my $bug (@to_tag) {
 	    push(@bts_args, ".", "tag", $bug, "+", "pending");
 	    push(@bts_args, "confirmed") if $opt_confirm;
@@ -241,6 +314,13 @@ if ($opt_noact) {
     if (@wnpp_to_tag) {
 	push(@bts_args, ".") if scalar @bts_args > 1;
 	push(@bts_args, "package wnpp");
+
+	if ($comments) {
+	    $comments =~ s/\n\n/\n/sg;
+	    $comments =~ s/^ /#/mg;
+	    push(@bts_args, $comments);
+	}
+
 	foreach my $wnpp_bug (@wnpp_to_tag) {
 	    push(@bts_args, ".", "tag", $wnpp_bug, "+", "pending");
 	}
@@ -297,6 +377,10 @@ Valid options are:
     -v, --verbose       Verbose mode: List bugs checked/tagged.
                         NOTE: Verbose and silent mode can't be used together.
     -f, --force         Do not query the BTS; (re-)tag all bug reports.
+        --comments	Add the changelog header line and entries relating
+                        to the bugs to be tagged to the generated mail.
+                        (Default)
+        --no-comments   Do not add changelog entries to the mail
     -c, --confirm       Tag bugs as confirmed as well as pending
     -t, --to <version>  Use changelog information from all versions strictly
 			later than <version> (mimics dpkg-parsechangelog's
