@@ -16,15 +16,18 @@ devscripts (2.10.17) UNRELEASED; urgency=low
   * uscan: Add support for repacking .zip archives, based on a patch
     from Antonio Terceiro (Closes: #456587)
   * Packaging changes:
-    + README: Update description of tagpending
+    + README: Update descriptions of tagpending and debchange
     + debian/control:
       - Add unzip(1) to Suggests for uscan's zip repacking
-      - Update description of tagpending
+      - Update descriptions of tagpending and debchange
   * debcommit: Use "git diff" instead of "git-diff" (Closes: #466158)
   * dget: Correctly handle the processing of a file that we've already
     retrieved (Closes: #445546)
   * wnpp-alert: Note in the manpage that the results are source package
     based
+  * debchange:
+    - Modify --closes to use SOAP / Debbugs.pm
+    - Add hardy (heron) to the list of supported Ubuntu distributions
 
   [ Christoph Berg ]
   * dget:

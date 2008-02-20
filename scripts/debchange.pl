@@ -38,19 +38,8 @@ use Getopt::Long;
 use File::Copy;
 use File::Basename;
 use Cwd;
-
-BEGIN {
-    # Load the URI::Escape module safely
-    eval { require URI::Escape; };
-    if ($@) {
-	my $progname = basename $0;
-	if ($@ =~ /^Can\'t locate URI\/Escape\.pm/) {
-	    die "$progname: you must have the liburi-perl package installed\nto use this script\n";
-	}
-	die "$progname: problem loading the URI::Escape module:\n  $@\nHave you installed the liburi-perl package?\n";
-    }
-    import URI::Escape;
-}
+use lib '/usr/share/devscripts';
+use Devscripts::Debbugs;
 
 # Predeclare functions
 sub fatal($);
@@ -353,8 +342,8 @@ if (defined $opt_D) {
 	    $warnings++ if not $opt_force_dist;
 	}
     } elsif ($distributor eq 'Ubuntu') {
-	unless ($opt_D =~ /^((warty|hoary|breezy|dapper|edgy|feisty|gutsy)(-updates|-security|-proposed)?|UNRELEASED)$/) {
-	    warn "$progname warning: Recognised distributions are:\n{warty,hoary,breezy,dapper,edgy,feisty,gutsy}{,-updates,-security,-proposed} and UNRELEASED.\nUsing your request anyway.\n";
+	unless ($opt_D =~ /^((warty|hoary|breezy|dapper|edgy|feisty|gutsy|hardy)(-updates|-security|-proposed)?|UNRELEASED)$/) {
+	    warn "$progname warning: Recognised distributions are:\n{warty,hoary,breezy,dapper,edgy,feisty,gutsy,hardy}{,-updates,-security,-proposed} and UNRELEASED.\nUsing your request anyway.\n";
 	    $warnings++ if not $opt_force_dist;
 	}
     } else {
@@ -654,61 +643,43 @@ if (! $opt_m) {
 my @closes_text = ();
 my $initial_release = 0;
 if (@closes and $opt_query) { # and we have to query the BTS
-    if (system('command -v wget >/dev/null 2>&1') >> 8 != 0) {
-	warn "$progname warning: wget not installed, so cannot query the bug-tracking system\n";
+    if (!Devscripts::Debbugs::have_soap) {
+	warn "$progname warning: libsoap-lite-perl not installed, so cannot query the bug-tracking system\n";
 	$opt_query=0;
 	$warnings++;
 	# This will now go and execute the "if (@closes and ! $opt_query)" code
     }
     else
     {
-	my %bugs;
-	my $lastbug;
-
-	my $uripkg = uri_escape($PACKAGE);
-	my $bugs = `wget -q -O - 'http://bugs.debian.org/cgi-bin/pkgreport.cgi?src=$uripkg'`;
-	if ($? >> 8 != 0) {
-	    warn "$progname warning: wget failed, so cannot query the bug-tracking system\n";
+	my $bugs = Devscripts::Debbugs::select( "src:" . $PACKAGE );
+	my $statuses = Devscripts::Debbugs::status(
+	    map {[bug => $_, indicatesource => 1]} @{$bugs} );
+	if (not defined $bugs) {
+	    warn "$progname warning: Debbugs::status failed, so cannot query the bug-tracking system\n";
 	    $opt_query=0;
 	    $warnings++;
 	    # This will now go and execute the "if (@closes and ! $opt_query)" code
 	}
-
-	foreach (split /\n/, $bugs) {
-	    if (m%<a(?: class=\".*?\")? href=\"(?:/cgi-bin/)?(?:bugreport.cgi\?bug=|/)([0-9]*).*?>\#\1: (.*?)</a>%i) {
-		$bugs{$1} = [$2];
-		$lastbug=$1;
-	    }
-	    elsif (defined $lastbug and
-		   m%<a(?: class=\".*?\")? href=\"(?:/cgi-bin/)?pkgreport.cgi\?(?:[^\"]*?;)(?:pkg|package)=([a-z0-9\+\-\.]*)%i) {
-		push @{$bugs{$lastbug}}, $1
-		    if exists $bugs{$lastbug};
-		$lastbug = undef;
-	    }
-	}
-
 	foreach my $close (@closes) {
-	    if (exists $bugs{$close}) {
-		my ($title,$pkg) = @{$bugs{$close}};
+	    if (exists $statuses->{$close}) {
+		my $title = $statuses->{$close}->{subject};
+		my $pkg = $statuses->{$close}->{package};
 		$title =~ s/^($pkg|$PACKAGE): //;
-		$title =~ s/&quot;/\"/g;
-		$title =~ s/&lt;/</g;
-		$title =~ s/&gt;/>/g;
-		$title =~ s/&amp;/&/g;
 		push @closes_text, "$title (Closes: \#$close)\n";
 	    }
 	    else { # not our package, or wnpp
-		my $bug = `wget -q -O - 'http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=$close'`;
-		if ($? >> 8 != 0) {
+		my $bug = Devscripts::Debbugs::status(
+		    [bug => $close, indicatesource => 1] );
+		if (not defined $bug) {
 		    warn "$progname warning: unknown bug \#$close does not belong to $PACKAGE,\n  disabling closing changelog entry\n";
 		    $warnings++;
 		    push @closes_text, "Closes?? \#$close: UNKNOWN BUG IN WRONG PACKAGE!!\n";
 		} else {
-		    my ($bugtitle) = ($bug =~ m%<TITLE>.*?\#$close - (.*?) - [^-]*? report logs</TITLE>%);
+		    my $bugtitle = $bug->{$close}->{subject};
 		    $bugtitle ||= '';
-		    my ($bugpkg) = ($bug =~ m%<a(?: class=\".*?\")? href=\"(?:/cgi-bin/)?pkgreport.cgi\?(?:[^\"]*?;)?(?:pkg|package)=([a-z0-9\+\-\.]*)%i);
+		    my $bugpkg = $bug->{$close}->{package};
 		    $bugpkg ||= '?';
-		    my ($bugsrcpkg) = ($bug =~ m%<a(?: class=\".*?\")? href=\"(?:/cgi-bin/)?pkgreport.cgi\?src=([a-z0-9\+\-\.]*)%i);
+		    my $bugsrcpkg = $bug->{$close}->{source};
 		    $bugsrcpkg ||= '?';
 		    if ($bugsrcpkg eq $PACKAGE) {
 			warn "$progname warning: bug \#$close appears to be already archived,\n  disabling closing changelog entry\n";
