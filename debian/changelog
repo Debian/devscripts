@@ -19,6 +19,7 @@ devscripts (2.10.17) UNRELEASED; urgency=low
     + Mention an alternative form of sourceforge URL to the manpage that
       allows checking for new versions when the qa.d.o redirector doesn't
       work (Closes: #433408)
+    + Fix an escaping error in one of the manpage's examples for twisted
   * Packaging changes:
     + README: Update descriptions of tagpending and debchange
     + debian/control:
