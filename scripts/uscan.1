@@ -75,6 +75,13 @@ http://sf.net/audacity/audacity-src-(.+)\\.tar\\.gz
 
 http://sf.net/audacity/ audacity-src-(.+)\\.tar\\.gz
 
+# If the qa.debian.org redirector does not produce any results for
+# your sourceforge-hosted project, you can use the following format
+# to check for new versions.  Note that it does not seem to be
+# possible to download the files via this method.
+ftp://upload.sourceforge.net/pub/sourceforge/a/au/audacity/ \\
+  audacity-src-([\\d\\.]+)\\.tar\\.(gz|bz2)
+
 # This is the format for a site which has funny version numbers;
 # the parenthesised groups will be joined with dots to make a
 # sanitised version number
