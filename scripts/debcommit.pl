@@ -500,16 +500,18 @@ sub getmessage {
 
 	if ($prog eq 'tla' || $prog eq 'baz') {
 	    @diffcmd = ($prog, 'file-diff');
+	} elsif ($prog eq 'bzr') {
+	    @diffcmd = ($prog, 'diff', '--using', '/usr/bin/diff', '--diff-options', '-w');
 	} elsif ($prog eq 'git') {
 	    if ($all) {
-		@diffcmd = ('git', 'diff', '--no-color');
+		@diffcmd = ('git', 'diff', '-w', '--no-color');
 	    } else {
-		@diffcmd = ('git', 'diff', '--cached', '--no-color');
+		@diffcmd = ('git', 'diff', '-w', '--cached', '--no-color');
 	    }
 	} elsif ($prog eq 'svn' || $prog eq 'svk') {
-	    @diffcmd = ($prog, 'diff', '--diff-cmd', '/usr/bin/diff');
+	    @diffcmd = ($prog, 'diff', '--diff-cmd', '/usr/bin/diff', '--extensions', '-wu');
 	} else {
-	    @diffcmd = ($prog, 'diff');
+	    @diffcmd = ($prog, 'diff', '-w');
 	}
 
 	open CHLOG, '-|', @diffcmd, $changelog

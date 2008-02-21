@@ -25,7 +25,9 @@ devscripts (2.10.17) UNRELEASED; urgency=low
     + debian/control:
       - Add unzip(1) to Suggests for uscan's zip repacking
       - Update descriptions of tagpending and debchange
-  * debcommit: Use "git diff" instead of "git-diff" (Closes: #466158)
+  * debcommit:
+    + Use "git diff" instead of "git-diff" (Closes: #466158)
+    + Ignore whitespace changes in diffs
   * dget: Correctly handle the processing of a file that we've already
     retrieved (Closes: #445546)
   * wnpp-alert: Note in the manpage that the results are source package
