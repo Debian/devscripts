@@ -499,7 +499,7 @@ sub getmessage {
 	my @diffcmd;
 
 	if ($prog eq 'tla') {
-	    @diffcmd = ($prog, 'diff', '--', '-D', '-w');
+	    @diffcmd = ($prog, 'diff', '-D', '-w', '--');
 	} elsif ($prog eq 'baz') {
 	    @diffcmd = ($prog, 'file-diff');
 	} elsif ($prog eq 'bzr') {
