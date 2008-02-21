@@ -498,7 +498,9 @@ sub getmessage {
 	$ret='';
 	my @diffcmd;
 
-	if ($prog eq 'tla' || $prog eq 'baz') {
+	if ($prog eq 'tla') {
+	    @diffcmd = ($prog, 'diff', '--', '-D', '-w');
+	} elsif ($prog eq 'baz') {
 	    @diffcmd = ($prog, 'file-diff');
 	} elsif ($prog eq 'bzr') {
 	    @diffcmd = ($prog, 'diff', '--using', '/usr/bin/diff', '--diff-options', '-w');
