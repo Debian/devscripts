@@ -35,6 +35,9 @@ devscripts (2.10.17) UNRELEASED; urgency=low
   * debchange:
     - Modify --closes to use SOAP / Debbugs.pm
     - Add hardy (heron) to the list of supported Ubuntu distributions
+    - Use existing changelog data directly rather than re-using
+      dpkg-parsechangelog's Changes: field and therefore don't apply any
+      reformatting (Closes: #452806)
 
   [ Christoph Berg ]
   * dget:

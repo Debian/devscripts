@@ -483,7 +483,6 @@ if (! $opt_create || ($opt_create && $opt_news)) {
     $DISTRIBUTION=$changelog{'Distribution'};
     fatal "No changes in changelog!"
 	unless exists $changelog{'Changes'};
-    $CHANGES=$changelog{'Changes'};
 
     # Find the current package version
     if ($opt_news) {
@@ -784,6 +783,20 @@ if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r &&
 # Open in anticipation....
 unless ($opt_create) {
     open S, $changelog_path or fatal "Cannot open existing $changelog_path: $!";
+
+    # Read the first stanza from the changelog file
+    # We do this directly rather than reusing $changelog{'Changes'}
+    # so that we have the verbatim changes rather than a (albeit very
+    # slightly) reformatted version. See Debian bug #452806
+
+    while(<S>) {
+	last if /^ --/;
+
+	$CHANGES .= $_;
+    }
+
+    # Reset file pointer
+    seek(S, 0, 0);
 }
 open O, ">$changelog_path.dch"
     or fatal "Cannot write to temporary file: $!";
