@@ -142,7 +142,7 @@ sub select {
 }
 
 sub status {
-    die "Couldn't run select: $soap_broken\n" unless have_soap();
+    die "Couldn't run status: $soap_broken\n" unless have_soap();
     my @args = @_;
 
     my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
