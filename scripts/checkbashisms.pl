@@ -127,7 +127,7 @@ foreach my $filename (@ARGV) {
 		'(?:^|\s+)echo\s+-[e]' =>      q<echo -e>,
 		'(?:^|\s+)exec\s+-[acl]' =>    q<exec -c/-l/-a name>,
 		'(?:^|\s+)let\s' =>            q<let ...>,
-		'\$RANDOM\b' =>                q<$RANDOM>,
+		'\$RANDOM(\b|$)' =>            q<$RANDOM>,
 		'(?<![\$\(])\(\(.*\)\)' =>     q<'((' should be '$(('>,
 		'(\[|test)\s+-a' =>            q<test with unary -a (should be -e)>,
 		'\&>' =>	               q<should be \>word 2\>&1>,
@@ -136,6 +136,11 @@ foreach my $filename (@ARGV) {
 		'(?:^|\s+)kill\s+-[^sl]\w*' => q<kill -[0-9] or -[A-Z]>,
 		'(?:^|\s+)trap\s+["\']?.*["\']?\s+.*[1-9]' => q<trap with signal numbers>,
 		'\[\[(?!:)' => q<alternative test command ([[ foo ]] should be [ foo ])>,
+		'<<<'                       => q<\<\<\< here string>,
+		'\$(OS|MACH)TYPE(\b|$)'     => q<$(OS|MACH)TYPE>,
+		'\$HOST(TYPE|NAME)(\b|$)'   => q<$HOST(TYPE|NAME)>,
+		'\$DIRSTACK(\b|$)'          => q<$DIRSTACK>,
+		'\$EUID(\b|$)'		    => q<$EUID should be "id -u">,
 	    );
 
 	    my %string_bashisms = (
@@ -199,7 +204,7 @@ foreach my $filename (@ARGV) {
 
 	    # Only look for the beginning of a heredoc here, after we've
 	    # stripped out quoted material, to avoid false positives.
-	    if (m/\<\<\s*[\'\"]?(\w+)[\'\"]?/) {
+	    if (m/(^|[^\<])\<\<\s*[\'\"]?(\w+)[\'\"]?/) {
 		$cat_string = $1;
 	    }
 	}
