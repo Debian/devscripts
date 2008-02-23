@@ -411,6 +411,16 @@ EOF
 # DGET_UNPACK=yes
 # Verify source package signatures using dscverify
 # DGET_VERIFY=yes
+#
+##### bts options added in version 2.10.17
+#
+# Allow the generated message to be edited and, if necessary, abandoned
+# before sending it to the control bot?
+#
+# If set to yes, prompt for confirmation / edit / abandonment.          
+# If set to force, spawn an editor and then proceed as if set to yes
+# BTS_INTERACTIVE=no 
+
 EOF
 	fi
     fi

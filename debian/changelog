@@ -38,6 +38,12 @@ devscripts (2.10.17) UNRELEASED; urgency=low
     - Use existing changelog data directly rather than re-using
       dpkg-parsechangelog's Changes: field and therefore don't apply any
       reformatting (Closes: #452806)
+  * bts:
+    - Add a --force-interactive option which is similar to --interactive
+      but spawns an editor for the message before prompting for sending
+      confirmation (Closes: #467134)
+    - Allow the use of --{force-,}interactive to be specified in the
+      configuration file (Closes: #467131)
 
   [ Christoph Berg ]
   * dget:

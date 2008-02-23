@@ -89,6 +89,13 @@
 #
 # Suppress BTS acknowledgment e-mails (ignored by the control bot)
 # BTS_SUPPRESS_ACKS=no
+#
+# Allow the generated message to be edited and, if necessary, abandoned
+# before sending it to the control bot?
+#
+# If set to yes, prompt for confirmation / edit / abandonment.
+# If set to force, spawn an editor and then proceed as if set to yes
+# BTS_INTERACTIVE=no
 
 ##### chdist
 #

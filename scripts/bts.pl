@@ -310,6 +310,11 @@ Do not suppress acknowledgement mails.  This is the default behaviour.
 Before sending an e-mail to the control bot, display the content and
 allow it to be edited, or the sending cancelled.
 
+=item --force-interactive
+
+Similar to --interactive, with the exception that an editor is spawned 
+before prompting for confirmation of the message to be sent.
+
 =item --no-interactive
 
 Send control e-mails without confirmation.  This is the default behaviour.
@@ -344,6 +349,8 @@ my $noaction=0;
 my $sendmail_t='^/usr/sbin/sendmail$|^/usr/sbin/exim';
 my $includeresolved=1;
 my $requestack=1;
+my $interactive=0;
+my $forceinteractive=0;
 
 # Next, read read configuration files and then command line
 # The next stuff is boilerplate
@@ -364,6 +371,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'BTS_INCLUDE_RESOLVED' => 'yes',
 		       'BTS_SMTP_HOST' => '',
 		       'BTS_SUPPRESS_ACKS' => 'no',
+		       'BTS_INTERACTIVE' => 'no',
 		       );
     my %config_default = %config_vars;
     
@@ -398,6 +406,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'BTS_INCLUDE_RESOLVED'} = 'yes';
     $config_vars{'BTS_SUPPRESS_ACKS'} =~ /^(yes|no)$/
 	or $config_vars{'BTS_SUPPRESS_ACKS'} = 'no';
+    $config_vars{'BTS_INTERACTIVE'} =~ /^(yes|no|force)$/
+	or $config_vars{'BTS_INTERACTIVE'} = 'no';
 
     if (!length $config_vars{'BTS_SMTP_HOST'}
         and $config_vars{'BTS_SENDMAIL_COMMAND'} ne '/usr/sbin/sendmail') {
@@ -429,6 +439,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $smtphost = $config_vars{'BTS_SMTP_HOST'};
     $includeresolved = $config_vars{'BTS_INCLUDE_RESOLVED'} eq 'yes' ? 1 : 0;
     $requestack = $config_vars{'BTS_SUPPRESS_ACKS'} eq 'no' ? 1 : 0;
+    $interactive = $config_vars{'BTS_INTERACTIVE'} eq 'no' ? 0 : 1;
+    $forceinteractive = $config_vars{'BTS_INTERACTIVE'} eq 'force' ? 1 : 0;
 }
 
 if (exists $ENV{'BUGSOFFLINE'}) {
@@ -442,7 +454,6 @@ my $mboxmode = 0;
 my $quiet=0;
 my $ccemail="";
 my $ccsecurity="";
-my $interactive=0;
 
 Getopt::Long::Configure('require_order');
 GetOptions("help|h" => \$opt_help,
@@ -466,7 +477,9 @@ GetOptions("help|h" => \$opt_help,
 	   "noconf|no-conf" => \$opt_noconf,
 	   "include-resolved!" => \$includeresolved,
 	   "ack!" => \$requestack,
-	   "i|interactive!" => \$interactive,
+	   "i|interactive" => \$interactive,
+	   "no-interactive" => sub { $interactive = 0; $forceinteractive = 0; },
+	   "force-interactive" => sub { $interactive = 1; $forceinteractive = 1; },
 	   )
     or die "Usage: bts [options]\nRun $progname --help for more details\n";
 
@@ -1783,6 +1796,8 @@ Valid options are:
    --no-ack               Suppress BTS acknowledgment mails
    --ack                  Do not do so (default)
    -i, --interactive      Prompt for confirmation before sending e-mail
+   --force-interactive    Same as --interactive, with the exception that an
+                          editor is spawned before confirmation is requested
    --no-interactive       Do not do so (default)
    -h, --help             Display this message
    -v, --version          Display version and copyright info
@@ -1896,6 +1911,7 @@ sub send_mail {
                .  "# Automatically generated email from bts,"
                   . " devscripts version $version\n";
 
+    $body = edit($body) if $forceinteractive;
     if ($interactive) {
 	while(1) {
 	    print "\n", $message, "\n", $body, "\n---\n";	
@@ -3274,6 +3290,12 @@ information.
 
 If this is set to I<yes>, then it is the same as the --no-acks command 
 line parameter being used.  The default is I<no>.
+
+=item BTS_INTERACTIVE
+
+If this is set to I<yes> or I<force>, then it is the same as the 
+--interactive or --force-interactive command line parameter being used.  
+The default is I<no>.
 
 =cut
 
