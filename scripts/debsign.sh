@@ -305,32 +305,209 @@ if [ "$signinterface" != gpg -a "$signinterface" != pgp ]; then
     exit 1
 fi
 
+dosigning() {
+    # Do we have to download the changes file?
+    if [ -n "$remotehost" ]
+    then
+	cd ${TMPDIR:-/tmp}
+	mkdir debsign.$$ || { echo "$PROGNAME: Can't mkdir!" >&2; exit 1; }
+	trap "cleanup_tmpdir" 0 1 2 3 7 10 13 15
+	cd debsign.$$
+
+	remotechanges=$changes
+	remotedsc=$dsc
+	remotecommands=$commands
+	remotedir="`perl -e 'chomp($_="'"$dsc"'"); m%/% && s%/[^/]*$%% && print'`"
+	changes=`basename "$changes"`
+	dsc=`basename "$dsc"`
+	commands=`basename "$commands"`
+
+	if [ -n "$changes" ]
+	then withecho scp "$remotehost:$remotechanges" "$changes"
+	elif [ -n "$dsc" ]
+	then withecho scp "$remotehost:$remotedsc" "$dsc"
+	else withecho scp "$remotehost:$remotecommands" "$commands"
+	fi
+    fi
+
+    if [ -n "$changes" ]
+    then
+	if [ ! -f "$changes" -o ! -r "$changes" ]
+	then
+	    echo "$PROGNAME: Can't find or can't read changes file $changes!" >&2
+	    exit 1
+	fi
+
+	check_already_signed "$changes" "changes" && {
+	   echo "Leaving current signature unchanged." >&2
+	    exit 0
+	}
+	if [ -n "$maint" ]
+	then maintainer="$maint"
+	# Try the "Changed-By:" field first
+	else maintainer=`sed -n 's/^Changed-By: //p' $changes`
+	fi
+	if [ -z "$maintainer" ]
+	then maintainer=`sed -n 's/^Maintainer: //p' $changes`
+	fi
+
+	signas="${signkey:-$maintainer}"
+
+	# Is there a dsc file listed in the changes file?
+	if grep -q `basename "$dsc"` "$changes"
+	then
+	    if [ -n "$remotehost" ]
+	    then
+		withecho scp "$remotehost:$remotedsc" "$dsc"
+	    fi
+
+	    if [ ! -f "$dsc" -o ! -r "$dsc" ]
+	    then
+		echo "$PROGNAME: Can't find or can't read dsc file $dsc!" >&2
+		exit 1
+	    fi
+	    check_already_signed "$dsc" "dsc" || withecho signfile "$dsc" "$signas"
+	    dsc_md5=`md5sum $dsc | cut -d' ' -f1`
+
+	    perl -i -pe 'BEGIN {
+		'" \$dsc_file=\"$dsc\"; \$dsc_md5=\"$dsc_md5\"; "'
+		$dsc_size=(-s $dsc_file); ($dsc_base=$dsc_file) =~ s|.*/||;
+		$infiles=0;
+		}
+		/^Files:/ && ($infiles=1);
+		/^\s*$/ && ($infiles=0);
+		if ($infiles &&
+		    /^ (\S+) (\d+) (\S+) (\S+) \Q$dsc_base\E\s*$/) {
+		    $_ = " $dsc_md5 $dsc_size $3 $4 $dsc_base\n";
+		    $infiles=0;
+		}' "$changes"
+	    
+	    withecho signfile "$changes" "$signas"
+	
+	    if [ -n "$remotehost" ]
+	    then
+		withecho scp "$changes" "$dsc" "$remotehost:$remotedir"
+		PRECIOUS_FILES=$(($PRECIOUS_FILES - 2))
+	    fi
+
+	    echo "Successfully signed dsc and changes files"
+	else
+	    withecho signfile "$changes" "$signas"
+
+	    if [ -n "$remotehost" ]
+	    then
+		withecho scp "$changes" "$remotehost:$remotechanges"
+		PRECIOUS_FILES=$(($PRECIOUS_FILES - 1))
+	    fi
+
+	    echo "Successfully signed changes file"
+	fi
+    elif [ -n "$commands" ] # sign .commands file
+    then
+	if [ ! -f "$commands" -o ! -r "$commands" ]
+	then
+	    echo "$PROGNAME: Can't find or can't read commands file $commands!" >&2
+	    exit 1
+	fi
+
+	check_already_signed "$commands" commands && {
+	    echo "Leaving current signature unchanged." >&2
+	    exit 0
+	}
+    
+    
+	# simple validator for .commands files, see
+	# ftp://ftp-master.debian.org/pub/UploadQueue/README
+	perl -ne 'BEGIN { $uploader = 0; $incommands = 0; }
+              END { exit $? if $?;
+                    if ($uploader && $incommands) { exit 0; }
+                    else { die ".commands file missing Uploader or Commands field\n"; }
+                  }
+              sub checkcommands {
+                  chomp($line=$_[0]);
+                  if ($line =~ m%^\s*mv(\s+[^\s/]+){2}\s*$%) { return 0; }
+                  if ($line =~ m%^\s*rm(\s+[^\s/]+)+\s*$%) { return 0; }
+                  if ($line eq "") { return 0; }
+                  die ".commands file has invalid Commands line: $line\n";
+              }
+              if (/^Uploader:/) {
+                  if ($uploader) { die ".commands file has too many Uploader fields!\n"; }
+                  $uploader++;
+              } elsif (! $incommands && s/^Commands:\s*//) {
+                  $incommands=1; checkcommands($_);
+              } elsif ($incommands == 1) {
+                 if (s/^\s+//) { checkcommands($_); }
+                 elsif (/./) { die ".commands file: extra stuff after Commands field!\n"; }
+                 else { $incommands = 2; }
+              } else {
+                 next if /^\s*$/;
+                 if (/./) { die ".commands file: extra stuff after Commands field!\n"; }
+              }' $commands || {
+	echo "$PROGNAME: .commands file appears to be invalid. see:
+ftp://ftp-master.debian.org/pub/UploadQueue/README
+for valid format" >&2;
+	exit 1; }
+
+	if [ -n "$maint" ]
+	then maintainer="$maint"
+	else 
+            maintainer=`sed -n 's/^Uploader: //p' $commands`
+            if [ -z "$maintainer" ]
+            then
+		echo "Unable to parse Uploader, .commands file invalid."
+		exit 1
+            fi
+	fi
+    
+	signas="${signkey:-$maintainer}"
+
+	withecho signfile "$commands" "$signas"
+
+	if [ -n "$remotehost" ]
+	then
+	    withecho scp "$commands" "$remotehost:$remotecommands"
+	    PRECIOUS_FILES=$(($PRECIOUS_FILES - 1))
+	fi
+
+	echo "Successfully signed commands file"
+    else # only a dsc file to sign; much easier
+	if [ ! -f "$dsc" -o ! -r "$dsc" ]
+	then
+	    echo "$PROGNAME: Can't find or can't read dsc file $dsc!" >&2
+	    exit 1
+	fi
+
+	check_already_signed "$dsc" dsc && {
+	    echo "Leaving current signature unchanged." >&2
+	    exit 0
+	}
+	if [ -n "$maint" ]
+	then maintainer="$maint"
+	# Try the new "Changed-By:" field first
+	else maintainer=`sed -n 's/^Changed-By: //p' $dsc`
+	fi
+	if [ -z "$maint" ]
+	then maintainer=`sed -n 's/^Maintainer: //p' $dsc`
+	 fi
+
+	signas="${signkey:-$maintainer}"
+
+	withecho signfile "$dsc" "$signas"
+
+	if [ -n "$remotehost" ]
+	then
+	    withecho scp "$dsc" "$remotehost:$remotedsc"
+	    PRECIOUS_FILES=$(($PRECIOUS_FILES - 1))
+	fi
+
+	echo "Successfully signed dsc file"
+    fi
+}
+
 # If there is a command-line parameter, it is the name of a .changes file
 # If not, we must be at the top level of a source tree and will figure
 # out its name from debian/changelog
 case $# in
-    1)	case "$1" in
-	    *.dsc)
-		changes=
-		dsc=$1
-		commands=
-		;;
-	    *.changes)
-		changes=$1
-		dsc=`echo $changes | \
-		    perl -pe 's/\.changes$/.dsc/; s/(.*)_(.*)_(.*)\.dsc/\1_\2.dsc/'`
-		commands=
-		;;
-	    *.commands)
-		changes=
-		dsc=
-		commands=$1
-		;;
-	    *)	echo "$PROGNAME: Only a .changes, .dsc or .commands file is allowed as argument!" >&2
-		exit 1 ;;
-	esac
-	;;
-
     0)	# We have to parse debian/changelog to find the current version
 	if [ -n "$remotehost" ]; then
 	    echo "$PROGNAME: Need to specify a .changes, .dsc or .commands file location with -r!" >&2
@@ -377,205 +554,32 @@ case $# in
 	fi
 	;;
 
-    *)	echo "$PROGNAME: Only a single .changes, .dsc or .commands file is allowed as argument!" >&2
-	exit 1 ;;
+    *)	while [ $# -gt 0 ]; do
+	    case "$1" in
+		*.dsc)
+		    changes=
+		    dsc=$1
+		    commands=
+		    ;;
+	        *.changes)
+		    changes=$1
+		    dsc=`echo $changes | \
+			perl -pe 's/\.changes$/.dsc/; s/(.*)_(.*)_(.*)\.dsc/\1_\2.dsc/'`
+		    commands=
+		    ;;
+		*.commands)
+		    changes=
+		    dsc=
+		    commands=$1
+		    ;;
+		*)
+		    echo "$PROGNAME: Only a .changes, .dsc or .commands file is allowed as argument!" >&2
+		    exit 1 ;;
+	    esac
+	    dosigning
+	    shift
+	done
+	;;
 esac
-
-# Do we have to download the changes file?
-if [ -n "$remotehost" ]
-then
-    cd ${TMPDIR:-/tmp}
-    mkdir debsign.$$ || { echo "$PROGNAME: Can't mkdir!" >&2; exit 1; }
-    trap "cleanup_tmpdir" 0 1 2 3 7 10 13 15
-    cd debsign.$$
-
-    remotechanges=$changes
-    remotedsc=$dsc
-    remotecommands=$commands
-    remotedir="`perl -e 'chomp($_="'"$dsc"'"); m%/% && s%/[^/]*$%% && print'`"
-    changes=`basename "$changes"`
-    dsc=`basename "$dsc"`
-    commands=`basename "$commands"`
-
-    if [ -n "$changes" ]
-    then withecho scp "$remotehost:$remotechanges" "$changes"
-    elif [ -n "$dsc" ]
-    then withecho scp "$remotehost:$remotedsc" "$dsc"
-    else withecho scp "$remotehost:$remotecommands" "$commands"
-    fi
-fi
-
-if [ -n "$changes" ]
-then
-    if [ ! -f "$changes" -o ! -r "$changes" ]
-    then
-	echo "$PROGNAME: Can't find or can't read changes file $changes!" >&2
-	exit 1
-    fi
-
-    check_already_signed "$changes" "changes" && {
-	echo "Leaving current signature unchanged." >&2
-	exit 0
-    }
-    if [ -n "$maint" ]
-    then maintainer="$maint"
-    # Try the "Changed-By:" field first
-    else maintainer=`sed -n 's/^Changed-By: //p' $changes`
-    fi
-    if [ -z "$maintainer" ]
-    then maintainer=`sed -n 's/^Maintainer: //p' $changes`
-    fi
-
-    signas="${signkey:-$maintainer}"
-
-    # Is there a dsc file listed in the changes file?
-    if grep -q `basename "$dsc"` "$changes"
-    then
-	if [ -n "$remotehost" ]
-	then
-	    withecho scp "$remotehost:$remotedsc" "$dsc"
-	fi
-
-	if [ ! -f "$dsc" -o ! -r "$dsc" ]
-	then
-	    echo "$PROGNAME: Can't find or can't read dsc file $dsc!" >&2
-	    exit 1
-	fi
-	check_already_signed "$dsc" "dsc" || withecho signfile "$dsc" "$signas"
-	dsc_md5=`md5sum $dsc | cut -d' ' -f1`
-
-	perl -i -pe 'BEGIN {
-	    '" \$dsc_file=\"$dsc\"; \$dsc_md5=\"$dsc_md5\"; "'
-	    $dsc_size=(-s $dsc_file); ($dsc_base=$dsc_file) =~ s|.*/||;
-	    $infiles=0;
-	    }
-	    /^Files:/ && ($infiles=1);
-	    /^\s*$/ && ($infiles=0);
-	    if ($infiles &&
-		/^ (\S+) (\d+) (\S+) (\S+) \Q$dsc_base\E\s*$/) {
-		$_ = " $dsc_md5 $dsc_size $3 $4 $dsc_base\n";
-		$infiles=0;
-	    }' "$changes"
-	    
-	withecho signfile "$changes" "$signas"
-	
-	if [ -n "$remotehost" ]
-	then
-	    withecho scp "$changes" "$dsc" "$remotehost:$remotedir"
-	    PRECIOUS_FILES=$(($PRECIOUS_FILES - 2))
-	fi
-
-	echo "Successfully signed dsc and changes files"
-    else
-	withecho signfile "$changes" "$signas"
-
-	if [ -n "$remotehost" ]
-	then
-	    withecho scp "$changes" "$remotehost:$remotechanges"
-	    PRECIOUS_FILES=$(($PRECIOUS_FILES - 1))
-	fi
-
-	echo "Successfully signed changes file"
-    fi
-elif [ -n "$commands" ] # sign .commands file
-then
-    if [ ! -f "$commands" -o ! -r "$commands" ]
-    then
-	echo "$PROGNAME: Can't find or can't read commands file $commands!" >&2
-	exit 1
-    fi
-
-    check_already_signed "$commands" commands && {
-	echo "Leaving current signature unchanged." >&2
-	exit 0
-    }
-    
-    
-    # simple validator for .commands files, see
-    # ftp://ftp-master.debian.org/pub/UploadQueue/README
-    perl -ne 'BEGIN { $uploader = 0; $incommands = 0; }
-              END { exit $? if $?;
-                    if ($uploader && $incommands) { exit 0; }
-                    else { die ".commands file missing Uploader or Commands field\n"; }
-                  }
-              sub checkcommands {
-                  chomp($line=$_[0]);
-                  if ($line =~ m%^\s*mv(\s+[^\s/]+){2}\s*$%) { return 0; }
-                  if ($line =~ m%^\s*rm(\s+[^\s/]+)+\s*$%) { return 0; }
-                  if ($line eq "") { return 0; }
-                  die ".commands file has invalid Commands line: $line\n";
-              }
-              if (/^Uploader:/) {
-                  if ($uploader) { die ".commands file has too many Uploader fields!\n"; }
-                  $uploader++;
-              } elsif (! $incommands && s/^Commands:\s*//) {
-                  $incommands=1; checkcommands($_);
-              } elsif ($incommands == 1) {
-                 if (s/^\s+//) { checkcommands($_); }
-                 elsif (/./) { die ".commands file: extra stuff after Commands field!\n"; }
-                 else { $incommands = 2; }
-              } else {
-                 next if /^\s*$/;
-                 if (/./) { die ".commands file: extra stuff after Commands field!\n"; }
-              }' $commands || {
-	echo "$PROGNAME: .commands file appears to be invalid. see:
-ftp://ftp-master.debian.org/pub/UploadQueue/README
-for valid format" >&2;
-	exit 1; }
-
-    if [ -n "$maint" ]
-    then maintainer="$maint"
-    else 
-        maintainer=`sed -n 's/^Uploader: //p' $commands`
-        if [ -z "$maintainer" ]
-        then
-            echo "Unable to parse Uploader, .commands file invalid."
-            exit 1
-        fi
-    fi
-    
-    signas="${signkey:-$maintainer}"
-
-    withecho signfile "$commands" "$signas"
-
-    if [ -n "$remotehost" ]
-    then
-	withecho scp "$commands" "$remotehost:$remotecommands"
-	PRECIOUS_FILES=$(($PRECIOUS_FILES - 1))
-    fi
-
-    echo "Successfully signed commands file"
-else # only a dsc file to sign; much easier
-    if [ ! -f "$dsc" -o ! -r "$dsc" ]
-    then
-	echo "$PROGNAME: Can't find or can't read dsc file $dsc!" >&2
-	exit 1
-    fi
-
-    check_already_signed "$dsc" dsc && {
-	echo "Leaving current signature unchanged." >&2
-	exit 0
-    }
-    if [ -n "$maint" ]
-    then maintainer="$maint"
-    # Try the new "Changed-By:" field first
-    else maintainer=`sed -n 's/^Changed-By: //p' $dsc`
-    fi
-    if [ -z "$maint" ]
-    then maintainer=`sed -n 's/^Maintainer: //p' $dsc`
-    fi
-
-    signas="${signkey:-$maintainer}"
-
-    withecho signfile "$dsc" "$signas"
-
-    if [ -n "$remotehost" ]
-    then
-	withecho scp "$dsc" "$remotehost:$remotedsc"
-	PRECIOUS_FILES=$(($PRECIOUS_FILES - 1))
-    fi
-
-    echo "Successfully signed dsc file"
-fi
 
 exit 0

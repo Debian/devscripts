@@ -48,6 +48,8 @@ devscripts (2.10.17) UNRELEASED; urgency=low
       confirmation (Closes: #467134)
     - Allow the use of --{force-,}interactive to be specified in the
       configuration file (Closes: #467131)
+  * debsign: Allow multiple files to be signed in a single invocation
+    (Closes: #457355)
 
   [ Christoph Berg ]
   * dget:
