@@ -571,7 +571,7 @@ msgstr ""
 
 # type: verbatim
 #: ../scripts/bts.pl:184
-#, fuzzy, no-wrap
+#, no-wrap
 msgid ""
 " % bts severity 95672 normal , merge 95672 95673 \\#they are the same!\n"
 "\n"
@@ -673,15 +673,13 @@ msgstr ""
 
 # type: =item
 #: ../scripts/bts.pl:213
-#, fuzzy
 msgid "-n, --no-action"
-msgstr "-n --noact"
+msgstr "-n --no-action"
 
 # type: Plain text
 #: ../scripts/bts.pl:215
-#, fuzzy
 msgid "Do not send emails but print them to standard output."
-msgstr "N'envoie pas le courrier, mais l'affiche sur la sortie standard."
+msgstr "N'envoie pas les courriers, mais les affiche sur la sortie standard."
 
 # type: =item
 #: ../scripts/bts.pl:217
@@ -889,9 +887,8 @@ msgstr ""
 
 # type: TP
 #: ../scripts/bts.pl:298
-#, fuzzy
 msgid "--no-ack"
-msgstr "B<--cache>"
+msgstr "--no-ack"
 
 # type: textblock
 #: ../scripts/bts.pl:300
@@ -902,9 +899,8 @@ msgstr ""
 
 # type: TP
 #: ../scripts/bts.pl:304
-#, fuzzy
 msgid "--ack"
-msgstr "B<--create>"
+msgstr "--ack"
 
 # type: Plain text
 #: ../scripts/bts.pl:306
@@ -915,9 +911,8 @@ msgstr ""
 
 # type: =item
 #: ../scripts/bts.pl:308
-#, fuzzy
 msgid "-i, --interactive"
-msgstr "-n --noact"
+msgstr "-i, --interactive"
 
 # type: textblock
 #: ../scripts/bts.pl:310
@@ -928,9 +923,8 @@ msgstr ""
 
 # type: =item
 #: ../scripts/bts.pl:313
-#, fuzzy
 msgid "--force-interactive"
-msgstr "-n --noact"
+msgstr "--force-interactive"
 
 # type: textblock
 #: ../scripts/bts.pl:315
@@ -1345,9 +1339,8 @@ msgstr ""
 
 # type: TP
 #: ../scripts/bts.pl:818
-#, fuzzy
 msgid "package"
-msgstr "<paquet>"
+msgstr "paquet"
 
 # type: textblock
 #: ../scripts/bts.pl:820
@@ -1366,9 +1359,8 @@ msgstr ""
 
 # type: TP
 #: ../scripts/bts.pl:826
-#, fuzzy
 msgid "maintainer"
-msgstr "<responsable>"
+msgstr "responsable"
 
 # type: textblock
 #: ../scripts/bts.pl:828
@@ -1377,9 +1369,8 @@ msgstr ""
 
 # type: =item
 #: ../scripts/bts.pl:830
-#, fuzzy
 msgid "submitter"
-msgstr "from:<rapporteur>"
+msgstr "rapporteur"
 
 # type: textblock
 #: ../scripts/bts.pl:832
@@ -1451,9 +1442,8 @@ msgstr ""
 
 # type: =item
 #: ../scripts/bts.pl:859
-#, fuzzy
 msgid "archive"
-msgstr "unmerge <bogue>"
+msgstr "archive"
 
 # type: textblock
 #: ../scripts/bts.pl:861
@@ -1509,9 +1499,8 @@ msgstr "Réouvrir un bogue, avec rapporteur optionnel."
 
 # type: =item
 #: ../scripts/bts.pl:939
-#, fuzzy
 msgid "archive <bug>"
-msgstr "unmerge <bogue>"
+msgstr "archive <bogue>"
 
 # type: textblock
 #: ../scripts/bts.pl:941
@@ -1523,9 +1512,8 @@ msgstr ""
 
 # type: =item
 #: ../scripts/bts.pl:953
-#, fuzzy
 msgid "unarchive <bug>"
-msgstr "unmerge <bogue>"
+msgstr "unarchive <bogue>"
 
 # type: textblock
 #: ../scripts/bts.pl:955
@@ -1601,9 +1589,8 @@ msgstr ""
 
 # type: =item
 #: ../scripts/bts.pl:1058
-#, fuzzy
 msgid "fixed <bug> <version>"
-msgstr "notfound <bogue> <version>"
+msgstr "fixed <bogue> <version>"
 
 # type: textblock
 #: ../scripts/bts.pl:1060
@@ -1617,9 +1604,8 @@ msgstr ""
 
 # type: =item
 #: ../scripts/bts.pl:1072
-#, fuzzy
 msgid "notfixed <bug> <version>"
-msgstr "notfound <bogue> <version>"
+msgstr "notfixed <bogue> <version>"
 
 # type: textblock
 #: ../scripts/bts.pl:1074
@@ -1813,7 +1799,7 @@ msgstr ""
 #: ../scripts/bts.pl:1312
 #, fuzzy
 msgid "unclaim <bug> [<claim>]"
-msgstr "unsubscribe <bogue> <courriel>"
+msgstr "unclaim <bogue> [<courriel>]"
 
 # type: textblock
 #: ../scripts/bts.pl:1314
@@ -2359,9 +2345,8 @@ msgstr ""
 
 # type: =item
 #: ../scripts/bts.pl:3268
-#, fuzzy
 msgid "BTS_ONLY_NEW"
-msgstr "BTS_OFFLINE"
+msgstr "BTS_ONLY_NEW"
 
 # type: =item
 #: ../scripts/bts.pl:3273
@@ -2411,29 +2396,27 @@ msgstr ""
 
 # type: Plain text
 #: ../scripts/bts.pl:3291
-#, fuzzy
 msgid ""
 "If this is set to I<yes>, then it is the same as the --no-acks command line "
 "parameter being used.  The default is I<no>."
 msgstr ""
-"Si elle est positionnée à I<no>, équivaut à utiliser l'option B<--"
-"nocontrol>. La valeur par défaut est I<yes>."
+"Si elle est positionnée à I<yes>, équivaut à utiliser l'option --"
+"no-acks. La valeur par défaut est I<no>."
 
 # type: =item
 #: ../scripts/bts.pl:3294
 msgid "BTS_INTERACTIVE"
-msgstr ""
+msgstr "BTS_INTERACTIVE"
 
 # type: Plain text
 #: ../scripts/bts.pl:3296
-#, fuzzy
 msgid ""
 "If this is set to I<yes> or I<force>, then it is the same as the --"
 "interactive or --force-interactive command line parameter being used.  The "
 "default is I<no>."
 msgstr ""
-"Si elle est positionnée à I<no>, équivaut à utiliser l'option B<--"
-"nocontrol>. La valeur par défaut est I<yes>."
+"Si elle est positionnée à I<yes>, équivaut à utiliser l'option --"
+"interactive ou --force-interactive. La valeur par défaut est I<no>."
 
 # type: SH
 #: ../scripts/bts.pl:3302 ../scripts/checkbashisms.1:36
@@ -2477,7 +2460,6 @@ msgstr "COPYRIGHT"
 
 # type: textblock
 #: ../scripts/bts.pl:3314
-#, fuzzy
 msgid ""
 "This program is Copyright (C) 2001-2003 by Joey Hess <joeyh@debian.org>.  "
 "Many modifications have been made, Copyright (C) 2002-2005 Julian Gilbey "
@@ -2485,7 +2467,7 @@ msgid ""
 msgstr ""
 "Ce programme est Copyright (C) 2001-2003 by Joey Hess <joeyh@debian.org>. De "
 "nombreuses modifications ont été effectuées, Copyright (C) 2002-2005 Julian "
-"Gilbey <jdg@debian.org>."
+"Gilbey <jdg@debian.org> et Copyright (C) 2007 Josh Triplett <josh@freedesktop.org>."
 
 # type: textblock
 #: ../scripts/bts.pl:3319 ../scripts/chdist.pl:91 ../scripts/mass-bug.pl:473
@@ -2507,7 +2489,7 @@ msgstr ""
 #: ../scripts/build-rdeps.pl:24
 #, fuzzy
 msgid "B<build-rdeps> I<package>"
-msgstr "B<--package> I<paquet>"
+msgstr "B<dépendances inverses de construction> I<paquet>"
 
 # type: textblock
 #: ../scripts/build-rdeps.pl:28
@@ -2518,9 +2500,8 @@ msgstr ""
 
 # type: TP
 #: ../scripts/build-rdeps.pl:34
-#, fuzzy
 msgid "B<-u> B<--update>"
-msgstr "B<-u>, B<--uploaders>"
+msgstr "B<-u>, B<--update>"
 
 # type: textblock
 #: ../scripts/build-rdeps.pl:36
@@ -2529,9 +2510,8 @@ msgstr ""
 
 # type: =item
 #: ../scripts/build-rdeps.pl:38
-#, fuzzy
 msgid "B<-s> B<--sudo>"
-msgstr "B<-q>, B<--quiet>"
+msgstr "B<-s> B<--sudo>"
 
 # type: textblock
 #: ../scripts/build-rdeps.pl:40
@@ -2540,9 +2520,8 @@ msgstr ""
 
 # type: TP
 #: ../scripts/build-rdeps.pl:42
-#, fuzzy
 msgid "B<-m> B<--print-maintainer>"
-msgstr "B<-S>, B<--source-and-binary>"
+msgstr "B<-m> B<--print-maintainer>"
 
 # type: textblock
 #: ../scripts/build-rdeps.pl:44
@@ -2551,14 +2530,14 @@ msgstr ""
 
 # type: TP
 #: ../scripts/build-rdeps.pl:46
-#, fuzzy
 msgid "B<-d> B<--debug>"
-msgstr "B<--debug>"
+msgstr "B<-d> B<--debug>"
 
 # type: textblock
 #: ../scripts/build-rdeps.pl:48
+#, fuzzy
 msgid "Run the debug mode"
-msgstr ""
+msgstr "Lancer le mode déboguage"
 
 # type: TP
 #: ../scripts/build-rdeps.pl:50 ../scripts/debclean.1:84
@@ -2570,9 +2549,8 @@ msgstr "B<--help>"
 
 # type: Plain text
 #: ../scripts/build-rdeps.pl:52
-#, fuzzy
 msgid "Show the usage information."
-msgstr "Affiche les informations sur la version."
+msgstr "Affiche les informations sur l'utilisation."
 
 # type: TP
 #: ../scripts/build-rdeps.pl:54 ../scripts/debchange.1:315
@@ -2588,7 +2566,6 @@ msgstr "B<--version>"
 
 # type: Plain text
 #: ../scripts/build-rdeps.pl:56
-#, fuzzy
 msgid "Show the version information."
 msgstr "Affiche les informations sur la version."
 
@@ -2610,7 +2587,7 @@ msgstr ""
 # type: textblock
 #: ../scripts/build-rdeps.pl:255
 msgid "Patrick Schoenfeld <schoenfeld@in-medias-res.com>"
-msgstr ""
+msgstr "Patrick Schoenfeld <schoenfeld@in-medias-res.com>"
 
 # type: textblock
 #: ../scripts/chdist.pl:21
@@ -2619,11 +2596,9 @@ msgstr ""
 
 # type: textblock
 #: ../scripts/chdist.pl:25
-#, fuzzy
 msgid "B<chdist> [options] [command] [command parameters]"
 msgstr ""
-"B<bts> [options] commande [paramètres] [#commentaire] [.|, commande "
-"[paramètres] [#commentaire]] ..."
+"B<chdist> [options] [commande] [paramètres]"
 
 # type: textblock
 #: ../scripts/chdist.pl:29
@@ -2636,9 +2611,8 @@ msgstr ""
 
 # type: TP
 #: ../scripts/chdist.pl:38
-#, fuzzy
 msgid "-h, --help"
-msgstr "B<-h>, B<--help>"
+msgstr "-h, --help"
 
 # type: Plain text
 #: ../scripts/chdist.pl:40 ../scripts/mass-bug.pl:104
@@ -2821,9 +2795,9 @@ msgstr "Affiche un résumé des options."
 
 # type: TP
 #: ../scripts/checkbashisms.1:18
-#, fuzzy, no-wrap
+#, no-wrap
 msgid "B<--newline>, B<-n>"
-msgstr "B<--nmu>, B<-n>"
+msgstr "B<--newline>, B<-n>"
 
 # type: Plain text
 #: ../scripts/checkbashisms.1:21
@@ -3628,9 +3602,9 @@ msgstr ""
 
 # type: TP
 #: ../scripts/dd-list.1:81
-#, fuzzy, no-wrap
+#, no-wrap
 msgid "B<-nou>,B<--nouploaders>"
-msgstr "B<-u>, B<--uploaders>"
+msgstr "B<-nou>,B<--nouploaders>"
 
 # type: Plain text
 #: ../scripts/dd-list.1:84
@@ -3639,9 +3613,9 @@ msgstr ""
 
 # type: TP
 #: ../scripts/dd-list.1:84
-#, fuzzy, no-wrap
+#, no-wrap
 msgid "B<-b>,B<--print-binary>"
-msgstr "B<-S>, B<--source-and-binary>"
+msgstr "B<-b>,B<--print-binary>"
 
 # type: Plain text
 #: ../scripts/dd-list.1:89
@@ -3727,13 +3701,12 @@ msgstr ""
 
 # type: Plain text
 #: ../scripts/debc.1:28
-#, fuzzy
 msgid ""
 "If a list of packages is given on the command line, then only those debs or "
 "udebs with names in this list of packages will be processed."
 msgstr ""
 "Si une liste de paquets est fournie en ligne de commande, alors seuls les "
-"paquets Debian dont les noms sont dans la liste seront installés."
+"paquets Debian ou les udebs dont les noms sont dans la liste seront installés."
 
 # type: SH
 #: ../scripts/debc.1:28 ../scripts/debchange.1:106 ../scripts/debclean.1:24
@@ -3858,15 +3831,15 @@ msgstr "B<--debs-dir> I<RÉP>"
 
 # type: Plain text
 #: ../scripts/debc.1:77
-#, fuzzy
 msgid ""
 "Look for the I<.changes>, I<.deb> and I<.udeb> files in directory I<DIR> "
 "instead of the parent of the source directory.  This should either be an "
 "absolute path or relative to the top of the source directory."
 msgstr ""
-"Cherche les fichiers I<.changes> et I<.deb> dans le répertoire I<RÉP> au "
-"lieu du répertoire parent du répertoire source. Cela doit être soit un "
-"chemin absolu, soit un chemin relatif à la racine du répertoire source."
+"Cherche les fichiers I<.changes>, I<.deb> et I<.udeb> dans le répertoire "
+"I<RÉP> au lieu du répertoire parent du répertoire source. Cela doit être "
+"soit un chemin absolu, soit un chemin relatif à la racine du répertoire "
+"source."
 
 # type: TP
 #: ../scripts/debc.1:77 ../scripts/debchange.1:295 ../scripts/debclean.1:69
@@ -4406,9 +4379,9 @@ msgstr ""
 
 # type: TP
 #: ../scripts/debchange.1:195
-#, fuzzy, no-wrap
+#, no-wrap
 msgid "B<--bin-nmu>"
-msgstr "B<--no-mutt>"
+msgstr "B<--bin-nmu>"
 
 # type: Plain text
 #: ../scripts/debchange.1:200
@@ -4441,7 +4414,7 @@ msgstr ""
 #: ../scripts/debchange.1:204
 #, fuzzy, no-wrap
 msgid "B<--security ,  -s>"
-msgstr "B<--insecure>"
+msgstr "B<--security ,  -s>"
 
 # type: Plain text
 #: ../scripts/debchange.1:208
@@ -4455,9 +4428,9 @@ msgstr ""
 
 # type: TP
 #: ../scripts/debchange.1:208
-#, fuzzy, no-wrap
+#, no-wrap
 msgid "B<--bpo>"
-msgstr "B<--linda>"
+msgstr "B<--bpo>"
 
 # type: Plain text
 #: ../scripts/debchange.1:212
@@ -4498,9 +4471,9 @@ msgstr ""
 
 # type: TP
 #: ../scripts/debchange.1:219
-#, fuzzy, no-wrap
+#, no-wrap
 msgid "B<--force-distribution>"
-msgstr "B<--download>"
+msgstr "B<--force-distribution>"
 
 # type: Plain text
 #: ../scripts/debchange.1:223
@@ -4714,9 +4687,9 @@ msgstr ""
 
 # type: TP
 #: ../scripts/debchange.1:285
-#, fuzzy, no-wrap
+#, no-wrap
 msgid "B<--[no]mainttrailer>, B<-t>"
-msgstr "B<--maintmaint>, B<-m>"
+msgstr "B<--[no]mainttrailer>, B<-t>"
 
 # type: Plain text
 #: ../scripts/debchange.1:295
@@ -4831,9 +4804,9 @@ msgstr ""
 
 # type: TP
 #: ../scripts/debchange.1:349
-#, fuzzy, no-wrap
+#, no-wrap
 msgid "B<DEBCHANGE_MULTIMAINT_MERGE>"
-msgstr "B<DEBCHANGE_MULTIMAINT>"
+msgstr "B<DEBCHANGE_MULTIMAINT_MERGE>"
 
 # type: Plain text
 #: ../scripts/debchange.1:355
@@ -4846,9 +4819,9 @@ msgstr ""
 
 # type: TP
 #: ../scripts/debchange.1:355
-#, fuzzy, no-wrap
+#, no-wrap
 msgid "B<DEBCHANGE_MAINTTRAILER>"
-msgstr "B<DEBCHANGE_MULTIMAINT>"
+msgstr "B<DEBCHANGE_MAINTTRAILER>"
 
 # type: Plain text
 #: ../scripts/debchange.1:359
@@ -4862,9 +4835,9 @@ msgstr ""
 
 # type: TP
 #: ../scripts/debchange.1:359
-#, fuzzy, no-wrap
+#, no-wrap
 msgid "B<DEBCHANGE_TZ>"
-msgstr "B<DEBCHANGE_QUERY_BTS>"
+msgstr "B<DEBCHANGE_TZ>"
 
 # type: Plain text
 #: ../scripts/debchange.1:363
@@ -4954,9 +4927,8 @@ msgstr "dscverify - Vérifier la validité d'un paquet Debian"
 
 # type: Plain text
 #: ../scripts/debcheckout.pl:31
-#, fuzzy
 msgid "B<debcheckout> [I<OPTIONS>] I<PACKAGE> [I<DESTDIR>]"
-msgstr "B<rmadison> [I<options>] I<paquet> ..."
+msgstr "B<debcheckout> [I<options>] I<paquet> [I<DESTINATION>]"
 
 # type: =item
 #: ../scripts/debcheckout.pl:33
@@ -4965,9 +4937,8 @@ msgstr ""
 
 # type: TP
 #: ../scripts/debcheckout.pl:35
-#, fuzzy
 msgid "B<debcheckout> B<--help>"
-msgstr "B<-h>, B<--help>"
+msgstr "B<debcheckout> B<--help>"
 
 # type: textblock
 #: ../scripts/debcheckout.pl:41
@@ -5006,9 +4977,8 @@ msgstr ""
 
 # type: TP
 #: ../scripts/debcheckout.pl:63
-#, fuzzy
 msgid "B<-a>, B<--auth>"
-msgstr "B<-a>, B<--all>"
+msgstr "B<-a>, B<--auth>"
 
 # type: textblock
 #: ../scripts/debcheckout.pl:65
@@ -5036,9 +5006,8 @@ msgstr "Affiche un bref message d'aide."
 
 # type: TP
 #: ../scripts/debcheckout.pl:76
-#, fuzzy
 msgid "B<-p>, B<--print>"
-msgstr "B<-V>, B<--version>"
+msgstr "B<-p>, B<--print>"
 
 # type: textblock
 #: ../scripts/debcheckout.pl:78
@@ -5050,9 +5019,8 @@ msgstr ""
 
 # type: TP
 #: ../scripts/debcheckout.pl:82
-#, fuzzy
 msgid "B<-t> I<TYPE>, B<--type> I<TYPE>"
-msgstr "B<-b>, B<--binary-type=TYPE>"
+msgstr "B<-t> I<TYPE>, B<--type> I<TYPE>"
 
 # type: textblock
 #: ../scripts/debcheckout.pl:84
@@ -5249,16 +5217,17 @@ msgstr "debcommit - Soumettre les changements d'un paquet"
 
 # type: textblock
 #: ../scripts/debcommit.pl:9
-#, fuzzy
 msgid ""
 "B<debcommit> [B<--release>] [B<--message=>I<text>] [B<--noact>] [B<--"
 "confirm>] [B<--edit>] [B<--changelog=>I<path>] [B<--all> | I<files to "
 "commit>]"
-msgstr "debcommit [--release] [--message=texte] [--noact]"
+msgstr ""
+"B<debcommit> [B<--release>] [B<--message=>I<texte>] [B<--noact>] [B<--"
+"confirm>] [B<--edit>] [B<--changelog=>I<chemin>] [B<--all> | I<fichiers "
+"à commiter>]"
 
 # type: textblock
 #: ../scripts/debcommit.pl:13
-#, fuzzy
 msgid ""
 "B<debcommit> generates a commit message based on new text in B<debian/"
 "changelog>, and commits the change to a package's repository. It must be run "
@@ -5267,15 +5236,14 @@ msgid ""
 "B<bzr>, B<tla> (arch)."
 msgstr ""
 "debcommit génère un message de commit basé sur le nouveau texte dans le "
-"fichier debian/changelog, et commite le changement d'un paquet dans un dépôt "
-"cvs, svn, svk, arch, bzr ou git. Il doit être lancé dans une copie de "
-"travail d'un de ces types de dépôt."
+"fichier B<debian/changelog>, et commite le changement d'un paquet dans un dépôt "
+"B<cvs>, B<git>, B<hg> (mercurial), B<svk>, B<svn> (subversion), B<baz>, B<bzr>, "
+"B<tla> (arch)."
 
 # type: TP
 #: ../scripts/debcommit.pl:23
-#, fuzzy
 msgid "B<-c> B<--changelog> I<path>"
-msgstr "B<Mise à jour du fichier changelog>"
+msgstr "B<-c> B<--changelog> I<chemin>"
 
 # type: textblock
 #: ../scripts/debcommit.pl:25
@@ -5286,9 +5254,8 @@ msgstr ""
 
 # type: =item
 #: ../scripts/debcommit.pl:28
-#, fuzzy
 msgid "B<-r> B<--release>"
-msgstr "-r --release"
+msgstr "B<-r> B<--release>"
 
 # type: textblock
 #: ../scripts/debcommit.pl:30
@@ -5314,9 +5281,8 @@ msgstr ""
 
 # type: =item
 #: ../scripts/debcommit.pl:37
-#, fuzzy
 msgid "B<-m> I<text> B<--message> I<text>"
-msgstr "-m texte --message test"
+msgstr "B<-m> I<texte> B<--message> I<texte>"
 
 # type: textblock
 #: ../scripts/debcommit.pl:39
@@ -5331,7 +5297,6 @@ msgstr ""
 
 # type: TP
 #: ../scripts/debcommit.pl:43
-#, fuzzy
 msgid "B<-n> B<--noact>"
 msgstr "B<-n>, B<--noact>"
 
@@ -5343,9 +5308,8 @@ msgstr "Ne fait rien, mais affiche les commandes qui seraient exécutées."
 
 # type: TP
 #: ../scripts/debcommit.pl:47
-#, fuzzy
 msgid "B<-C> B<--confirm>"
-msgstr "B<--no-conf>, B<--noconf>"
+msgstr "B<-C> B<--confirm>"
 
 # type: textblock
 #: ../scripts/debcommit.pl:49
@@ -5358,9 +5322,8 @@ msgstr ""
 
 # type: =item
 #: ../scripts/debcommit.pl:53
-#, fuzzy
 msgid "B<-e> B<--edit>"
-msgstr "B<-q>, B<--quiet>"
+msgstr "B<-e> B<--edit>"
 
 # type: textblock
 #: ../scripts/debcommit.pl:55
@@ -5371,7 +5334,6 @@ msgstr ""
 
 # type: TP
 #: ../scripts/debcommit.pl:58
-#, fuzzy
 msgid "B<-a> B<--all>"
 msgstr "B<-a>, B<--all>"
 
@@ -5385,7 +5347,7 @@ msgstr ""
 # type: =item
 #: ../scripts/debcommit.pl:63
 msgid "I<files to commit>"
-msgstr ""
+msgstr "I<fichiers à commiter>"
 
 # type: textblock
 #: ../scripts/debcommit.pl:65
@@ -5397,7 +5359,7 @@ msgstr ""
 # type: =item
 #: ../scripts/debcommit.pl:68
 msgid "B<-s> B<--strip-message>, B<--no-strip-message>"
-msgstr ""
+msgstr "B<-s> B<--strip-message>, B<--no-strip-message>"
 
 # type: textblock
 #: ../scripts/debcommit.pl:70
@@ -5416,9 +5378,8 @@ msgstr ""
 
 # type: TP
 #: ../scripts/debcommit.pl:77
-#, fuzzy
 msgid "B<--sign-tags>, B<--no-sign-tags>"
-msgstr "B<--lintian>, B<--no-lintian>"
+msgstr "B<--sign-tags>, B<--no-sign-tags>"
 
 # type: textblock
 #: ../scripts/debcommit.pl:79
@@ -5439,24 +5400,22 @@ msgid ""
 "If this is set to I<yes>, then it is the same as the --strip-message command "
 "line parameter being used. The default is I<no>."
 msgstr ""
-"Si elle est positionnée à I<no>, équivaut à utiliser l'option B<--"
-"nocontrol>. La valeur par défaut est I<yes>."
+"Si elle est positionnée à I<yes>, équivaut à utiliser l'option "
+"--strip-message. La valeur par défaut est I<no>."
 
 # type: TP
 #: ../scripts/debcommit.pl:101
-#, fuzzy
 msgid "B<DEBCOMMIT_SIGN_TAGS>"
-msgstr "B<DEBSIGN_MAINT>"
+msgstr "B<DEBCOMMIT_SIGN_TAGS>"
 
 # type: Plain text
 #: ../scripts/debcommit.pl:103
-#, fuzzy
 msgid ""
 "If this is set to I<yes>, then it is the same as the --sign-tags command "
 "line parameter being used. The default is I<no>."
 msgstr ""
-"Si elle est positionnée à I<no>, équivaut à utiliser l'option B<--"
-"nocontrol>. La valeur par défaut est I<yes>."
+"Si elle est positionnée à I<yes>, équivaut à utiliser l'option --"
+"--sign-tags. La valeur par défaut est I<no>."
 
 # type: TP
 #: ../scripts/debcommit.pl:106 ../scripts/debsign.1:115
@@ -5478,9 +5437,8 @@ msgstr "Joey Hess <joeyh@debian.org>"
 
 # type: textblock
 #: ../scripts/debcommit.pl:597
-#, fuzzy
 msgid "L<svnpath(1)>."
-msgstr "svnpath"
+msgstr "L<svnpath(1)>."
 
 # type: TH
 #: ../scripts/debdiff.1:1
@@ -5495,9 +5453,8 @@ msgstr "debdiff - Comparer la liste des fichiers de deux paquets Debian"
 
 # type: Plain text
 #: ../scripts/debdiff.1:6
-#, fuzzy
 msgid "B<debdiff> [I<options>]"
-msgstr "B<nmudiff> [I<options>]"
+msgstr "B<debdiff> [I<options>]"
 
 # type: Plain text
 #: ../scripts/debdiff.1:8
