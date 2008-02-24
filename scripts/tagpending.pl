@@ -73,6 +73,10 @@ if ($opt_verbose and $opt_silent) {
     die "$progname error: --silent and --verbose contradict each other\n";
 }
 
+=head1 NAME
+
+tagpending - tags bugs that are to be closed in the latest changelog as pending
+
 =head1 SYNOPSIS
 
 B<tagpending> [options]
