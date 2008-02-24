@@ -127,7 +127,6 @@ foreach my $filename (@ARGV) {
 		'(?:^|\s+)echo\s+-[e]' =>      q<echo -e>,
 		'(?:^|\s+)exec\s+-[acl]' =>    q<exec -c/-l/-a name>,
 		'(?:^|\s+)let\s' =>            q<let ...>,
-		'\$RANDOM(\b|$)' =>            q<$RANDOM>,
 		'(?<![\$\(])\(\(.*\)\)' =>     q<'((' should be '$(('>,
 		'(\[|test)\s+-a' =>            q<test with unary -a (should be -e)>,
 		'\&>' =>	               q<should be \>word 2\>&1>,
@@ -137,10 +136,6 @@ foreach my $filename (@ARGV) {
 		'(?:^|\s+)trap\s+["\']?.*["\']?\s+.*[1-9]' => q<trap with signal numbers>,
 		'\[\[(?!:)' => q<alternative test command ([[ foo ]] should be [ foo ])>,
 		'<<<'                       => q<\<\<\< here string>,
-		'\$(OS|MACH)TYPE(\b|$)'     => q<$(OS|MACH)TYPE>,
-		'\$HOST(TYPE|NAME)(\b|$)'   => q<$HOST(TYPE|NAME)>,
-		'\$DIRSTACK(\b|$)'          => q<$DIRSTACK>,
-		'\$EUID(\b|$)'		    => q<$EUID should be "id -u">,
 	    );
 
 	    my %string_bashisms = (
@@ -151,6 +146,11 @@ foreach my $filename (@ARGV) {
 		'\$\{\w+(/.+?){1,2}\}' =>      q<${parm/?/pat[/str]}>,
 		'\$\{\#?\w+\[[0-9\*\@]+\]\}' => q<bash arrays, ${name[0|*|@]}>,
 		'(\$\(|\`)\s*\<\s*\S+\s*(\)|\`)' => q<'$(\< foo)' should be '$(cat foo)'>,
+		'\$RANDOM\b' =>                q<$RANDOM>,
+		'\$(OS|MACH)TYPE\b'         => q<$(OS|MACH)TYPE>,
+		'\$HOST(TYPE|NAME)\b'       => q<$HOST(TYPE|NAME)>,
+		'\$DIRSTACK\b'              => q<$DIRSTACK>,
+		'\$EUID\b'		    => q<$EUID should be "id -u">,
 	    );
 
 	    if ($opt_echo) {
