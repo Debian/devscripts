@@ -1,3 +1,8 @@
 #!/bin/sh
 
+echo "--- /etc/devscripts.conf ---" >&3
 egrep '^[^#]' /etc/devscripts.conf >&3
+
+echo
+echo "--- ~/.devscripts ---" >&3
+egrep '^[^#]' $HOME/.devscripts >&3
