@@ -61,7 +61,13 @@ devscripts (2.10.17) UNRELEASED; urgency=low
   [ Patrick Schoenfeld ]
   * licensecheck: Support a less common form of MIT license usage
 
- -- Patrick Schoenfeld <schoenfeld@in-medias-res.com>  Wed, 20 Feb 2008 11:24:10 +0100
+  [ Mohammed Adnène Trojette ]
+  * debian/bug:
+    + make reportbug add configuration data in bug reports.
+    + print a message to sensitise users about our "Suggests vs Depends"
+      policy.
+
+ -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Sun, 24 Feb 2008 01:35:09 +0100
 
 devscripts (2.10.16) unstable; urgency=low
 
