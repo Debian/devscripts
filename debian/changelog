@@ -67,6 +67,10 @@ devscripts (2.10.17) UNRELEASED; urgency=low
     + print a message to sensitise users about our "Suggests vs Depends"
       policy.
 
+  [ Stefano Zacchiroli ]
+  * debcommit: add support for a new --diff option which dumps changes on
+    standard output instead of committing them
+
  -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Sun, 24 Feb 2008 01:35:09 +0100
 
 devscripts (2.10.16) unstable; urgency=low

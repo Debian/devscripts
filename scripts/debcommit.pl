@@ -6,7 +6,7 @@ debcommit - commit changes to a package
 
 =head1 SYNOPSIS
 
-B<debcommit> [B<--release>] [B<--message=>I<text>] [B<--noact>] [B<--confirm>] [B<--edit>] [B<--changelog=>I<path>] [B<--all> | I<files to commit>]
+B<debcommit> [B<--release>] [B<--message=>I<text>] [B<--noact>] [B<--diff>] [B<--confirm>] [B<--edit>] [B<--changelog=>I<path>] [B<--all> | I<files to commit>]
 
 =head1 DESCRIPTION
 
@@ -43,6 +43,13 @@ override the default message.
 =item B<-n> B<--noact>
 
 Do not actually do anything, but do print the commands that would be run.
+
+=item B<-d> B<--diff>
+
+Instead of commiting, do print the diff of what would have been committed if
+this option were not given. A typical usage scenario of this option is the
+generation of patches against the current working copy (e.g. when you don't have
+commit access right).
 
 =item B<-C> B<--confirm>
 
@@ -134,6 +141,7 @@ Options:
    -r --release        Commit a release of the package and create a tag
    -m --message=text   Specify a commit message
    -n --noact          Dry run, no actual commits
+   -d --diff           Print diff on standard output instead of committing
    -C --confirm        Ask for confirmation of the message before commit
    -e --edit           Edit the message in EDITOR before commit
    -a --all            Commit all files (default except for git)
@@ -167,6 +175,7 @@ EOF
 my $release=0;
 my $message;
 my $noact=0;
+my $diffmode=0;
 my $confirm=0;
 my $edit=0;
 my $all=0;
@@ -231,6 +240,7 @@ if (! GetOptions(
 		 "r|release" => \$release,
 		 "m|message=s" => \$message,
 		 "n|noact" => \$noact,
+		 "d|diff" => \$diffmode,
 		 "C|confirm" => \$confirm,
 		 "e|edit" => \$edit,
 		 "a|all" => \$all,
@@ -240,7 +250,7 @@ if (! GetOptions(
 		 "h|help" => sub { usage(); exit 0; },
 		 "v|version" => sub { version(); exit 0; },
 		 )) {
-    die "Usage: debcommit [--release] [--message=text] [--noact] [--confirm] [--edit] [--changelog=path] [--all | files to commit]\n";
+    die "Usage: debcommit [--release] [--message=text] [--noact] [--diff] [--confirm] [--edit] [--changelog=path] [--all | files to commit]\n";
 }
 
 my @files_to_commit = @ARGV;
@@ -355,10 +365,11 @@ sub commit {
     die "debcommit: can't specify a list of files to commit when using --all\n"
 	if (@files_to_commit and $all);
 
+    my $action_rc;  # return code of external command
     if ($prog =~ /^(cvs|svn|svk|bzr|hg)$/) {
-	if (! action($prog, "commit", "-m", $message, @files_to_commit)) {
-	    die "debcommit: commit failed\n";
-	}
+        $action_rc = $diffmode
+	    ? action($prog, "diff", @files_to_commit)
+	    : action($prog, "commit", "-m", $message, @files_to_commit);
     }
     elsif ($prog eq 'git') {
 	if (! @files_to_commit && $all) {
@@ -370,37 +381,39 @@ sub commit {
 		    return;
 	    }
 	}
-	if ($all) {
-	    @files_to_commit=("-a")
-	}
-	if (! action($prog, "commit", "-m", $message, @files_to_commit)) {
-	    die "debcommit: commit failed\n";
+	if ($diffmode) {
+	    $action_rc = action($prog, "diff", @files_to_commit);
+	} else {
+	    if ($all) {
+	        @files_to_commit=("-a")
+	    }
+	    $action_rc = action($prog, "commit", "-m", $message, @files_to_commit);
 	}
     }
     elsif ($prog eq 'tla' || $prog eq 'baz') {
 	my $summary=$message;
 	$summary=~s/^((?:\* )?[^\n]{1,72})(?:(?:\s|\n).*|$)/$1/ms;
 	my @args;
-	if ($summary eq $message) {
-	    $summary=~s/^\* //s;
-	    @args=("-s", $summary);
-	} else {
-	    $summary=~s/^\* //s;
-	    @args=("-s", "$summary ...", "-L", $message);
+	if (! $diffmode) {
+	    if ($summary eq $message) {
+		$summary=~s/^\* //s;
+		@args=("-s", $summary);
+	    } else {
+		$summary=~s/^\* //s;
+		@args=("-s", "$summary ...", "-L", $message);
+	    }
 	}
         push(
             @args,
             (($prog eq 'tla') ? '--' : ()),
             @files_to_commit,
         ) if @files_to_commit;
-
-	if (! action($prog, "commit", @args)) {
-	    die "debcommit: commit failed\n";
-	}
+	$action_rc = action($prog, $diffmode ? "diff" : "commit", @args);
     }
     else {
 	die "debcommit: unknown program $prog";
     }
+    die "debcommit: commit failed\n" if (! $action_rc);
 }
 
 sub tag {
