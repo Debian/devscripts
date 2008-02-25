@@ -266,9 +266,9 @@ sub gen_bug {
     my $usertags=shift;
 
     $template_text=~s/#PACKAGE#/$package/g;
-    if ($template_text =~ /\A(.*?)(^-- $.*)/m) { # there's a sig involved
-	my ($presig, $sig) = ($1, $2);
-	$template_text=fill("", "", $presig) . $sig;
+    if ($template_text =~ /\A(.*?)(^-- $)(.*)/ms) { # there's a sig involved
+	my ($presig, $sig) = ($1, $2 . $3);
+	$template_text=fill("", "", $presig) . "\n" . $sig;
     } else {
 	$template_text=fill("", "", $template_text);
     }
