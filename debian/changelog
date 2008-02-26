@@ -17,6 +17,7 @@ devscripts (2.10.17) UNRELEASED; urgency=low
       (Closes: #465849)
     + Fix a warning about uninitialised values when a module name is not
       supplied for a cvs repository
+    + In auth mode, set push_location for bzr branches (Closes: #453447)
   * uscan:
     + Add support for repacking .zip archives, based on a patch
       from Antonio Terceiro (Closes: #456587)

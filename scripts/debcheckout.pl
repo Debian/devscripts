@@ -267,6 +267,14 @@ EOF
     print STDERR
       "checkout failed (the command shown above returned non-zero exit code)\n";
   }
+  if ($repo_type eq 'bzr' and $auth) {
+    if (open B, '>>', "$destdir/.bzr/branch/branch.conf") {
+      print B "\npush_location = $repo_url";
+      close B;
+    } else {
+      print STDERR "failed to open branch.conf to add push_location: $@\n";
+    }
+  }
   exit($rc);
 }
 
