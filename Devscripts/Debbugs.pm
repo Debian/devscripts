@@ -109,6 +109,17 @@ sub have_soap {
      return ($soap_broken ? 0 : 1);
 }
 
+sub usertags {
+    die "Couldn't run usertags: $soap_broken\n" unless have_soap();
+
+    my @args = @_;
+
+    my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+    my $usertags = $soap->get_usertag(@_)->result();
+
+    return $usertags;    
+}
+
 sub select {
      die "Couldn't run select: $soap_broken\n" unless have_soap();
      my @args = @_;
@@ -143,7 +154,7 @@ sub select {
      }
      my %usertags;
      for my $user (keys %users) {
-          my $ut = $soap->get_usertag($user)->result();
+          my $ut = usertags($user);
           next unless defined $ut;
           for my $tag (keys %{$ut}) {
                push @{$usertags{$tag}},
