@@ -156,6 +156,64 @@ sub status {
     return $bugs;
 }
 
+sub versions {
+    die "Couldn't run versions: $soap_broken\n" unless have_soap();
+
+    my @args = @_;
+    my %valid_keys = (package => 'package',
+		      pkg     => 'package',
+		      src => 'source',
+		      source => 'source',
+		      time => 'time',
+		      binary => 'no_source_arch',
+		      notsource => 'no_source_arch',
+		      archs => 'return_archs',
+		      displayarch => 'return_archs',
+                      );
+
+    my %search_parameters;
+    my @archs = ();
+    my @dists = ();
+
+    for my $arg (@args) {
+        my ($key,$value) = split /:/, $arg, 2;
+	$value ||= "1";
+	if ($key =~ /^arch(itecture)?$/) {
+	    push @archs, $value;
+	} elsif ($key =~ /^dist(ribution)?$/) {
+	    push @dists, $value;
+	} elsif (exists $valid_keys{$key}) {
+	    $search_parameters{$valid_keys{$key}} = $value;
+	}
+    }
+
+    $search_parameters{arch} = \@archs if @archs;
+    $search_parameters{dist} = \@dists if @dists;
+
+    my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+
+    my $versions = $soap->get_versions(%search_parameters)->result();
+
+    if (not defined $versions) {
+	die "Error while retrieivng package versions from SOAP server: $@";
+    }
+
+    return $versions;
+}
+
+sub versions_with_arch {
+    die "Couldn't run versions_with_arch: $soap_broken\n" unless have_soap();
+    my @args = @_;
+
+    my $versions = versions(@args, 'displayarch:1');
+
+    if (not defined $versions) {
+	die "Error while retrieivng package versions from SOAP server: $@";
+    }
+
+    return $versions;
+}
+
 1;
 
 __END__
