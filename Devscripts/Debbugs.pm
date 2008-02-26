@@ -244,6 +244,85 @@ sub versions_with_arch {
     return $versions;
 }
 
+sub newest_bugs {
+    die "Couldn't run newest_bugs: $soap_broken\n" unless have_soap();
+    my $count = shift || '';
+
+    return if $count !~ /^\d+$/;
+
+    my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+
+    my $bugs = $soap->newest_bugs($count)->result();
+
+    if (not defined $bugs) {
+	die "Error while retrieving newest bug list from SOAP server: $@";
+    }
+
+    return $bugs;
+}
+
+# debbugs currently ignores the $msg_num parameter
+# but eventually it might not, so we support passing it
+
+sub bug_log {
+    die "Couldn't run bug_log: $soap_broken\n" unless have_soap();
+
+    my $bug = shift || '';
+    my $message = shift;
+
+    return if $bug !~ /^\d+$/;
+
+    my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+    my $log = $soap->get_bug_log($bug, $message)->result();
+
+    if (not defined $log) {
+	die "Error while retrieving bug log from SOAP server: $@";
+    }
+
+    return $log;
+}
+
+sub binary_to_source {
+    die "Couldn't run binary_to_source: $soap_broken\n"
+	unless have_soap();
+
+    my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+
+    my $binpkg = shift || '';
+    my $binver = shift || '';
+    my $arch = shift || '';
+
+    return if not $binpkg or not $binver;
+
+    my $mapping = $soap->binary_to_source($binpkg, $binver, $arch)->result();
+
+    if (not defined $mapping) {
+	die "Error while retrieving binary to source mapping from SOAP server: $@";
+    }
+
+    return $mapping;
+}
+
+sub source_to_binary {
+    die "Couldn't run source_to_binary: $soap_broken\n"
+	unless have_soap();
+
+    my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+
+    my $srcpkg = shift || '';
+    my $srcver = shift || '';
+
+    return if not $srcpkg or not $srcver;
+
+    my $mapping = $soap->source_to_binary($srcpkg, $srcver)->result();
+
+    if (not defined $mapping) {
+	die "Error while retrieving source to binary mapping from SOAP server: $@";
+    }
+
+    return $mapping;
+}
+
 1;
 
 __END__
