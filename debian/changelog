@@ -50,8 +50,11 @@ devscripts (2.10.17) UNRELEASED; urgency=low
       configuration file (Closes: #467131)
   * debsign: Allow multiple files to be signed in a single invocation
     (Closes: #457355)
-  * mass-bug: Correctly detect the start of a signature in the template
-    file (Closes: #467496)
+  * mass-bug:
+    + Correctly detect the start of a signature in the template file 
+      (Closes: #467496)
+    + Allow package versions to be specified in the package list file
+      as package_version (Closes: #467581)
 
   [ Christoph Berg ]
   * dget:

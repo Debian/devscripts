@@ -31,8 +31,9 @@ mass-bug [options] --subject="bug subject" template package-list
 
 mass-bug assists in filing a mass bug report in the Debian BTS on a set of
 packages. For each package in the package-list file (which should list one
-package per line), it fills out the template, adds BTS pseudo-headers, and
-either displays or sends the bug report.
+package per line together with an optional version number separated 
+from the package name by an underscore), it fills out the template, adds 
+BTS pseudo-headers, and either displays or sends the bug report.
 
 Warning: Some care has been taken to avoid unpleasant and common mistakes,
 but this is still a power tool that can generate massive amounts of bug
@@ -43,7 +44,8 @@ Developer's Reference about mass filing of bug reports first.
 
 The template file is the body of the message that will be sent for each bug
 report, excluding the BTS pseudo-headers. In the template, #PACKAGE# is
-replaced with the name of the package.
+replaced with the name of the package. If a version was specified for 
+the package, #VERSION# will be replaced by that version.
 
 Note that text in the template will be automatically word-wrapped to 70
 columns, up to the start of a signature (indicated by S<'-- '> at the
@@ -145,6 +147,7 @@ $Text::Wrap::columns=70;
 my $submission_email="maintonly\@bugs.debian.org";
 my $sendmailcmd='/usr/sbin/sendmail';
 my $modified_conf_msg;
+my %versions;
 
 sub usageerror {
     die "Usage: $progname [options] --subject=\"bug subject\" <template> <package-list>\n";
@@ -176,8 +179,11 @@ Valid options are:
    --version              Display version and copyright info
 
    <template>             File containing email template; #PACKAGE# will
-                          be replaced by the package name
+                          be replaced by the package name and #VERSION#
+			  with the corresponding version (or a blank
+			  string if the version was not specified)
    <package-list>         File containing list of packages, one per line
+			  in the format package(_version)
 
   Ensure that you read the Developer\'s Reference on mass-filing bugs before
   using this script!
@@ -264,15 +270,24 @@ sub gen_bug {
     my $tags=shift;
     my $user=shift;
     my $usertags=shift;
+    my $version="";
+    my $bugtext;
+
+    $version = $versions{$package} || "";
 
     $template_text=~s/#PACKAGE#/$package/g;
+    $template_text=~s/#VERSION#/$version/g;
+
+    $version = "Version: $version\n" if $version;
+
     if ($template_text =~ /\A(.*?)(^-- $)(.*)/ms) { # there's a sig involved
 	my ($presig, $sig) = ($1, $2 . $3);
 	$template_text=fill("", "", $presig) . "\n" . $sig;
     } else {
 	$template_text=fill("", "", $template_text);
     }
-    return "Package: $package\nSeverity: $severity\n$tags$user$usertags\n$template_text";
+    $bugtext = "Package: $package\n$version" . "Severity: $severity\n$tags$user$usertags\n$template_text";
+    return $bugtext;
 }
 		
 sub div {
@@ -414,10 +429,11 @@ my @packages;
 open (L, "$package_list") || die "$progname: error reading $package_list: $!\n";
 while (<L>) {
     chomp;
-    if (! /^[-+\.a-z0-9]+$/) {
+    if (! /^([-+\.a-z0-9]+)(?:_(.*))?$/) {
 	die "\"$_\" does not look like the name of a Debian package\n";
     }
-    push @packages, $_;
+    push @packages, $1;
+    $versions{$1} = $2 if $2;
 }
 close L;
 
