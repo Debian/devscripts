@@ -942,7 +942,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
         print O "  * Non-maintainer upload by the Security Team.\n";
 	$line = 1;
     } elsif ($opt_bpo && ! $opt_news) {
-	print O "  * Rebuild for Etch backports.\n";
+	print O "  * Rebuild for etch-backports.\n";
         $line = 1;
     }
     if (@closes_text or $TEXT) {

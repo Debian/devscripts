@@ -37,21 +37,23 @@ devscripts (2.10.17) UNRELEASED; urgency=low
   * wnpp-alert: Note in the manpage that the results are source package
     based
   * debchange:
-    - Modify --closes to use SOAP / Debbugs.pm
-    - Add hardy (heron) to the list of supported Ubuntu distributions
-    - Use existing changelog data directly rather than re-using
+    + Modify --closes to use SOAP / Debbugs.pm
+    + Add hardy (heron) to the list of supported Ubuntu distributions
+    + Use existing changelog data directly rather than re-using
       dpkg-parsechangelog's Changes: field and therefore don't apply any
       reformatting (Closes: #452806)
+    + Use "etch-backports" instead of "Etch backports" in bpo changelog
+      entries (Closes: #467582)
   * bts:
-    - Add a --force-interactive option which is similar to --interactive
+    + Add a --force-interactive option which is similar to --interactive
       but spawns an editor for the message before prompting for sending
       confirmation (Closes: #467134)
-    - Allow the use of --{force-,}interactive to be specified in the
+    + Allow the use of --{force-,}interactive to be specified in the
       configuration file (Closes: #467131)
   * debsign: Allow multiple files to be signed in a single invocation
     (Closes: #457355)
   * mass-bug:
-    + Correctly detect the start of a signature in the template file 
+    + Correctly detect the start of a signature in the template file
       (Closes: #467496)
     + Allow package versions to be specified in the package list file
       as package_version (Closes: #467581)
