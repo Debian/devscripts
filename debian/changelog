@@ -3,8 +3,8 @@ devscripts (2.10.17) UNRELEASED; urgency=low
   [ Adam D. Barratt ]
   * checkbashisms:
     + Fix a false positive in the $(( test (Closes: #465364)
-    + Add detection for <<<, $(OS|MACH)TYPE, $HOST(TYPE|NAME), $EUID and
-      $DIRSTACK (Closes: #465386)
+    + Add detection for <<<, $(OS|MACH)TYPE, $HOST(TYPE|NAME), $EUID, 
+      $DIRSTACK, $SECONDS and /dev/(tcp|udp) (Closes: #465386)
     + Enhance heredoc detection to not trigger on <<<
   * Debbugs.pm: Add status()
   * tagpending:

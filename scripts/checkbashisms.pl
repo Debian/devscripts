@@ -136,6 +136,7 @@ foreach my $filename (@ARGV) {
 		'(?:^|\s+)trap\s+["\']?.*["\']?\s+.*[1-9]' => q<trap with signal numbers>,
 		'\[\[(?!:)' => q<alternative test command ([[ foo ]] should be [ foo ])>,
 		'<<<'                       => q<\<\<\< here string>,
+		'/dev/(tcp|udp)'	    => q</dev/(tcp|udp)>,
 	    );
 
 	    my %string_bashisms = (
@@ -151,6 +152,7 @@ foreach my $filename (@ARGV) {
 		'\$HOST(TYPE|NAME)\b'       => q<$HOST(TYPE|NAME)>,
 		'\$DIRSTACK\b'              => q<$DIRSTACK>,
 		'\$EUID\b'		    => q<$EUID should be "id -u">,
+		'\$SECONDS\b'		    => q<$SECONDS>,
 	    );
 
 	    if ($opt_echo) {
