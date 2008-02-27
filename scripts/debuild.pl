@@ -311,6 +311,15 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     if ($config_vars{'DEBUILD_PRESERVE_ENVVARS'} ne '') {
 	my @preserve_vars = split /\s*,\s*/,
 	    $config_vars{'DEBUILD_PRESERVE_ENVVARS'};
+	foreach my $index (0 .. $#preserve_vars) {
+	    my $var = $preserve_vars[$index];
+	    if ($var =~ /\*$/) {
+		$var =~ s/([^.])\*$/$1.\*/;
+		my @vars = grep /^$var$/, keys %ENV;
+		push @preserve_vars, @vars;
+		delete $preserve_vars[$index];
+	    }
+	}		
 	@save_vars{@preserve_vars} = (1) x scalar @preserve_vars;
     }
     $run_lintian = $config_vars{'DEBUILD_LINTIAN'} eq 'no' ? 0 : 1;
@@ -436,10 +445,10 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
 		fatal "-e requires an argument,\nrun $progname --help for usage information";
 	    }
 	    $savearg .= " $opt";
-	    if ($opt =~ /^\w+$/) { $arg = '--preserve-envvar'; }
+	    if ($opt =~ /^\w+\*?$/) { $arg = '--preserve-envvar'; }
 	    else { $arg = '--set-envvar'; }
 	}
-	elsif ($arg =~ /^-e(\w+)$/) {
+	elsif ($arg =~ /^-e(\w+\*?)$/) {
 	    $arg = '--preserve-envvar';
 	    $opt = $1;
 	}
@@ -456,6 +465,10 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
 	if ($arg eq '--preserve-envvar') {
 	    if ($opt =~ /^\w+$/) {
 		$save_vars{$opt}=1;
+	    } elsif ($opt =~ /^\w+\*$/) {
+		$opt =~ s/([^.])\*$/$1.\*/;
+		my @vars = grep /^$opt$/, keys %ENV;
+		@save_vars{@vars} = (1) x scalar @vars;
 	    } else {
 		push @warnings,
 		    "Ignoring unrecognised/malformed option: $savearg";

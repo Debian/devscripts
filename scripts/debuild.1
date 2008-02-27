@@ -222,6 +222,10 @@ Do not clean the environment, except for PATH.
 .TP
 .BI \-\-preserve\-envvar= "var, " \-e var
 Do not clean the \fIvar\fR variable from the environment.
+.IP
+If \fIvar\fR ends in an asterisk ("*") then all variables with names 
+that match the portion of \fIvar\fR before the asterisk will be 
+preserved.
 .TP
 .BI \-\-set\-envvar= var = "value, " \-e var = value
 Set the environment variable \fIvar\fR to \fIvalue\fR and do not

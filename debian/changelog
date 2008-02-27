@@ -61,8 +61,10 @@ devscripts (2.10.17) UNRELEASED; urgency=low
     + Allow package versions to be specified in the package list file
       as package_version (Closes: #467581)
   * mergechanges: Merge the Description: fields from each of the supplied
-     changes files. Thanks to Vincent Danjean for the patch
-     (Closes: #442972)
+    changes files. Thanks to Vincent Danjean for the patch
+    (Closes: #442972)
+  * debuild: Allow preserve-envvars to contain wildcard entries (of the
+    form STEM*) (Closes: #405440)
 
   [ Christoph Berg ]
   * dget:
