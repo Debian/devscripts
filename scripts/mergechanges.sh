@@ -96,6 +96,8 @@ SVERSION=$(echo "$VERSION" | perl -pe 's/^\d+://')
 SOURCE=$(grep -h "^Source: " "$@" | sed -e "s,^Source: ,," | sort -u)
 # Extract & merge the files from all files
 FILES=$(egrep -h "^ [0-9a-f]{32} [0-9]+" "$@" | sort -u)
+# Extract & merge the description from all files
+DESCRIPTIONS=$(sed '/^Description:/,/^[^ ]/{/^ /p;d};d' "$@" | sort -u)
 
 # Sanity check #2: Versions must match
 if test $(echo "${VERSION}" | wc -l) -ne 1; then
@@ -111,6 +113,13 @@ if test $(echo "${SOURCE}" | wc -l) -ne 1; then
     exit 1
 fi
 
+# Sanity check #4: Description for same binary must match
+if test $(echo "${DESCRIPTIONS}" | sed -e 's/ \+- .*$//' | uniq -d | wc -l) -ne 0; then
+    echo "Error: Descriptions do not match:"
+    echo "${DESCRIPTIONS}"
+    exit 1
+fi
+
 if test ${FILE} = 1; then
     DIR=`dirname "$1"`
     REDIR1="> '${DIR}/${SOURCE}_${SVERSION}_multi.changes'"
@@ -119,7 +128,13 @@ fi
 
 # Temporary output
 OUTPUT=`tempfile`
-trap "rm -f '${OUTPUT}'" 0 1 2 3 7 10 13 15
+DESCFILE=`tempfile`
+trap "rm -f '${OUTPUT}' '${DESCFILE}'" 0 1 2 3 7 10 13 15
+
+if test $(echo "${DESCRIPTIONS}" | wc -l) -ne 0; then
+    echo "Description:" > "${DESCFILE}"
+    echo "${DESCRIPTIONS}" >> "${DESCFILE}"
+fi
 
 # Copy one of the files to ${OUTPUT}, nuking any PGP signature
 if $(grep -q "BEGIN PGP SIGNED MESSAGE" "$1"); then
@@ -128,8 +143,11 @@ else
     cp "$1" ${OUTPUT}
 fi
 
-# Replace the Architecture: field, and nuke the value of Files:
+# Replace the Architecture: field, nuke the value of Files:, and insert
+# the Description: field before the Changes: field
 eval "sed -e 's,^Architecture: .*,Architecture: ${ARCHS},; /^Files: /q' \
+    -e '/^Description:/,/^[^ ]/{/^Description:/d;/^[ ]/d}' \
+    -e '/^Changes:/{r '${DESCFILE} -e ';aChanges:' -e ';d}' \
     ${OUTPUT} ${REDIR1}"
 
 # Voodoo magic to get the merged filelist into the output

@@ -60,6 +60,9 @@ devscripts (2.10.17) UNRELEASED; urgency=low
       (Closes: #467496)
     + Allow package versions to be specified in the package list file
       as package_version (Closes: #467581)
+  * mergechanges: Merge the Description: fields from each of the supplied
+     changes files. Thanks to Vincent Danjean for the patch
+     (Closes: #442972)
 
   [ Christoph Berg ]
   * dget:

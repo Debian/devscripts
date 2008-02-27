@@ -288,11 +288,11 @@ sub binary_to_source {
 
     my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
 
-    my $binpkg = shift || '';
-    my $binver = shift || '';
-    my $arch = shift || '';
+    my $binpkg = shift;
+    my $binver = shift;
+    my $arch = shift;
 
-    return if not $binpkg or not $binver;
+    return if not defined $binpkg or not defined $binver;
 
     my $mapping = $soap->binary_to_source($binpkg, $binver, $arch)->result();
 
@@ -309,10 +309,10 @@ sub source_to_binary {
 
     my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
 
-    my $srcpkg = shift || '';
-    my $srcver = shift || '';
+    my $srcpkg = shift;
+    my $srcver = shift;
 
-    return if not $srcpkg or not $srcver;
+    return if not defined $srcpkg or not defined $srcver;
 
     my $mapping = $soap->source_to_binary($srcpkg, $srcver)->result();
 
