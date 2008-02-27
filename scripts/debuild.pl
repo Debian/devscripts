@@ -319,7 +319,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		push @preserve_vars, @vars;
 		delete $preserve_vars[$index];
 	    }
-	}		
+	}
+	@preserve_vars = map {$_ if defined $_} @preserve_vars;
 	@save_vars{@preserve_vars} = (1) x scalar @preserve_vars;
     }
     $run_lintian = $config_vars{'DEBUILD_LINTIAN'} eq 'no' ? 0 : 1;
