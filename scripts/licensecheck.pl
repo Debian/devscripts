@@ -351,8 +351,7 @@ sub parselicense($) {
 	$licensetext =~ /GNU General Public License as published by the Free Software Foundation; version ([^ ]+) /i) {
 
 	$gplver = " (v$1)";
-    }
-    elsif ($licensetext =~ /either version ([^ ]+) of the License, or \(at your option\) any later version/) {
+    } elsif ($licensetext =~ /either version ([^ ]+) of the License, or \(at your option\) any later version/) {
 	$gplver = " (v$1 or later)";
     }
 
@@ -382,8 +381,7 @@ sub parselicense($) {
 
     if ($licensetext =~ /This file is part of the .*Qt GUI Toolkit. This file may be distributed under the terms of the Q Public License as defined/) {
 	$license = "QPL (part of Qt) $license";
-    }
-    elsif ($licensetext =~ /may be distributed under the terms of the Q Public License as defined/) {
+    } elsif ($licensetext =~ /may be distributed under the terms of the Q Public License as defined/) {
 	$license = "QPL $license";
     }
 
