@@ -376,7 +376,7 @@ sub parselicense($) {
 	$license = "GPL$gplver$extrainfo $license";
     }
 
-	if ($licensetext =~ /is distributed.*terms.*GPL$/) {
+	if ($licensetext =~ /is distributed.*terms.*GPL/) {
 	$license = "GPL (unversioned/unknown version)";
 	}
 
