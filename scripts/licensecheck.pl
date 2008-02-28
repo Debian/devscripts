@@ -376,9 +376,9 @@ sub parselicense($) {
 	$license = "GPL$gplver$extrainfo $license";
     }
 
-	if ($licensetext =~ /is distributed.*terms.*GPL/) {
-	$license = "GPL (unversioned/unknown version)";
-	}
+    if ($licensetext =~ /is distributed.*terms.*GPL/) {
+    $license = "GPL (unversioned/unknown version)";
+    }
 
     if ($licensetext =~ /This file is part of the .*Qt GUI Toolkit. This file may be distributed under the terms of the Q Public License as defined/) {
 	$license = "QPL (part of Qt) $license";
