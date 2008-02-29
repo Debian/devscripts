@@ -7,6 +7,8 @@ devscripts (2.10.18) UNRELEASED; urgency=low
   * checkbashisms: Fix a couple of brown paper bag issues with the >&file
     and herestring checks added in the last release. Thanks to Raphael
     Geissert for spotting the breakage so quickly.
+  * debchange: Fix an off-by-one in the fix for #452806 that caused an
+    extra blank line to be added before the trailer line
 
  -- Patrick Schoenfeld <schoenfeld@in-medias-res.com>  Thu, 28 Feb 2008 20:34:18 +0100
 

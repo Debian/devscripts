@@ -792,7 +792,18 @@ unless ($opt_create) {
     while(<S>) {
 	last if /^ --/;
 
-	$CHANGES .= $_;
+	if (/^\s*$/) {
+	    my $first = $_;
+	    my $next = <S>;
+	    if ($next !~ /^ --/) {
+		$CHANGES .= $first;
+	    } else {
+		last;
+	    }
+	    $CHANGES .= $next;
+	} else {
+	     $CHANGES .= $_;
+	}
     }
 
     # Reset file pointer
