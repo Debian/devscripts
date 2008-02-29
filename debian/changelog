@@ -1,6 +1,12 @@
 devscripts (2.10.18) UNRELEASED; urgency=low
 
+  [ Patrick Schoenfeld ]
   * licensecheck: Detect a less common form of GPL usage
+
+  [ Adam D. Barratt ]
+  * checkbashisms: Fix a couple of brown paper bag issues with the >&file
+    and herestring checks added in the last release. Thanks to Raphael
+    Geissert for spotting the breakage so quickly.
 
  -- Patrick Schoenfeld <schoenfeld@in-medias-res.com>  Thu, 28 Feb 2008 20:34:18 +0100
 
