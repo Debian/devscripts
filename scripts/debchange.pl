@@ -792,19 +792,10 @@ unless ($opt_create) {
     while(<S>) {
 	last if /^ --/;
 
-	if (/^\s*$/) {
-	    my $first = $_;
-	    my $next = <S>;
-	    if ($next !~ /^ --/) {
-		$CHANGES .= $first;
-	    } else {
-		last;
-	    }
-	    $CHANGES .= $next;
-	} else {
-	     $CHANGES .= $_;
-	}
+	$CHANGES .= $_;
     }
+
+    chomp $CHANGES;
 
     # Reset file pointer
     seek(S, 0, 0);
