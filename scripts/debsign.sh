@@ -552,6 +552,7 @@ case $# in
 		exit 1
 	    fi
 	fi
+	dosigning;
 	;;
 
     *)	while [ $# -gt 0 ]; do
