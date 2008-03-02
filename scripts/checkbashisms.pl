@@ -24,6 +24,7 @@
 # MA 02111-1307, USA.
 
 use strict;
+use Getopt::Long;
 
 (my $progname = $0) =~ s|.*/||;
 
@@ -46,21 +47,24 @@ GNU General Public License, version 2, or (at your option) any later version.
 EOF
 
 my $opt_echo = 0;
+my ($opt_help, $opt_version);
 
 ##
 ## handle command-line options
 ##
-if (int(@ARGV) == 0 or $ARGV[0] =~ /^(--help|-h)$/) { print $usage; exit 0; }
-if (@ARGV and $ARGV[0] =~ /^(--version|-v)$/) { print $version; exit 0; }
-if (@ARGV and $ARGV[0] =~ /^(--newline|-n)$/) { $opt_echo = 1; }
+GetOptions("help|h" => \$opt_help,
+	   "version|v" => \$opt_version,
+	   "newline|n" => \$opt_echo,
+           )
+    or die "Usage: $progname [options] filelist\nRun $progname --help for more details\n";
 
+if (int(@ARGV) == 0 or $opt_help) { print $usage; exit 0; }
+if ($opt_version) { print $version; exit 0; }
 
 my $status = 0;
 
 foreach my $filename (@ARGV) {
-    if ($filename eq '-n' or $filename eq '--newline') {
-	next;
-    } elsif (script_is_evil_and_wrong($filename)) {
+    if (script_is_evil_and_wrong($filename)) {
 	warn "script $filename does not appear to be a /bin/sh script; skipping\n";
 	next;
     }
