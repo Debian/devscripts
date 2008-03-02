@@ -29,7 +29,7 @@ use Getopt::Long;
 (my $progname = $0) =~ s|.*/||;
 
 my $usage = <<"EOF";
-Usage: $progname [-n] script ...
+Usage: $progname [-n] [-f] script ...
    or: $progname --help
    or: $progname --version
 This script performs basic checks for the presence of bashisms
@@ -46,7 +46,7 @@ You are free to redistribute this code under the terms of the
 GNU General Public License, version 2, or (at your option) any later version.
 EOF
 
-my $opt_echo = 0;
+my ($opt_echo, $opt_force);
 my ($opt_help, $opt_version);
 
 ##
@@ -55,6 +55,7 @@ my ($opt_help, $opt_version);
 GetOptions("help|h" => \$opt_help,
 	   "version|v" => \$opt_version,
 	   "newline|n" => \$opt_echo,
+	   "force|f" => \$opt_force,
            )
     or die "Usage: $progname [options] filelist\nRun $progname --help for more details\n";
 
@@ -64,7 +65,7 @@ if ($opt_version) { print $version; exit 0; }
 my $status = 0;
 
 foreach my $filename (@ARGV) {
-    if (script_is_evil_and_wrong($filename)) {
+    if (!opt_force and script_is_evil_and_wrong($filename)) {
 	warn "script $filename does not appear to be a /bin/sh script; skipping\n";
 	next;
     }
@@ -79,6 +80,7 @@ foreach my $filename (@ARGV) {
     while (<C>) {
 	if ($. == 1) { # This should be an interpreter line
 	    if (m,^\#!\s*(\S+),) {
+		next if $opt_force;
 		my $interpreter = $1;
 		if ($interpreter =~ m,/bash$,) {
 		    warn "script $filename is already a bash script; skipping\n";
