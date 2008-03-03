@@ -166,13 +166,13 @@ foreach my $filename (@ARGV) {
 		'\$\{\w+(/.+?){1,2}\}' =>      q<${parm/?/pat[/str]}>,
 		'\$\{\#?\w+\[[0-9\*\@]+\]\}' => q<bash arrays, ${name[0|*|@]}>,
 		'(\$\(|\`)\s*\<\s*\S+\s*(\)|\`)' => q<'$(\< foo)' should be '$(cat foo)'>,
-		'\$RANDOM\b' =>                q<$RANDOM>,
-		'\$(OS|MACH)TYPE\b'         => q<$(OS|MACH)TYPE>,
-		'\$HOST(TYPE|NAME)\b'       => q<$HOST(TYPE|NAME)>,
-		'\$DIRSTACK\b'              => q<$DIRSTACK>,
-		'\$EUID\b'		    => q<$EUID should be "id -u">,
-		'\$SECONDS\b'		    => q<$SECONDS>,
-		'\$BASH(_[A-Z]+)?\b'        => q<$BASH(_SOMETHING)>,
+		'\$\{?RANDOM\}?\b' =>          q<$RANDOM>,
+		'\$\{?(OS|MACH)TYPE\}?\b'   => q<$(OS|MACH)TYPE>,
+		'\$\{?HOST(TYPE|NAME)\}?\b' => q<$HOST(TYPE|NAME)>,
+		'\$\{?DIRSTACK\}?\b'        => q<$DIRSTACK>,
+		'\$\{?EUID\}?\b'	    => q<$EUID should be "id -u">,
+		'\$\{?SECONDS\}?\b'	    => q<$SECONDS>,
+		'\$\{?BASH(_[A-Z]+)?\}?\b'   => q<$BASH(_SOMETHING)>,
 	    );
 
 	    if ($opt_echo) {
