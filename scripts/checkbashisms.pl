@@ -143,6 +143,19 @@ foreach my $filename (@ARGV) {
 		'\[\[(?!:)' => q<alternative test command ([[ foo ]] should be [ foo ])>,
 		'<<<'                       => q<\<\<\< here string>,
 		'/dev/(tcp|udp)'	    => q</dev/(tcp|udp)>,
+		'(?:^|\s+)suspend\s' =>        q<suspend>,
+		'(?:^|\s+)caller\s' =>         q<caller>,
+		'(?:^|\s+)complete\s' =>       q<complete>,
+		'(?:^|\s+)compgen\s' =>        q<compgen>,
+		'(?:^|\s+)declare\s' =>        q<declare>,
+		'(?:^|\s+)typeset\s' =>        q<typeset>,
+		'(?:^|\s+)disown\s' =>         q<disown>,
+		'(?:^|\s+)builtin\s' =>        q<builtin>,
+		'(?:^|\s+)set\s+-[BHT]+' =>    q<set -[BHT]>,
+		'(?:^|\s+)alias\s+-p' =>       q<alias -p>,
+		'(?:^|\s+)unalias\s+-a' =>     q<unalias -a>,
+		'(?:^|\s+)local\s+-[a-zA-Z]+' => q<local -opt>,
+		'(?:^|\s+)local\s+\w+=' =>     q<local foo=bar>,
 	    );
 
 	    my %string_bashisms = (
@@ -159,6 +172,7 @@ foreach my $filename (@ARGV) {
 		'\$DIRSTACK\b'              => q<$DIRSTACK>,
 		'\$EUID\b'		    => q<$EUID should be "id -u">,
 		'\$SECONDS\b'		    => q<$SECONDS>,
+		'\$BASH(_[A-Z]+)?\b'        => q<$BASH(_SOMETHING)>,
 	    );
 
 	    if ($opt_echo) {
