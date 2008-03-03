@@ -65,7 +65,7 @@ if ($opt_version) { print $version; exit 0; }
 my $status = 0;
 
 foreach my $filename (@ARGV) {
-    if (!opt_force and script_is_evil_and_wrong($filename)) {
+    if (!$opt_force and script_is_evil_and_wrong($filename)) {
 	warn "script $filename does not appear to be a /bin/sh script; skipping\n";
 	next;
     }
