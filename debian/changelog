@@ -16,6 +16,7 @@ devscripts (2.10.19) UNRELEASED; urgency=low
       Geissert for the patch (Closes: #469050)
     + Modify each of the simple shell variable tests (e.g. $RANDOM) to
       also match ${variable}
+    + Identify and ignore multi-line quoted text (Closes: #464641)
   * bts: Allow the sendmail command to begin with a ~ (Closes: #469207)
   * debcommit: Set $SVKDIFF before calling "svk diff" (Closes: #469238)
 

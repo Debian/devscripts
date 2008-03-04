@@ -76,6 +76,7 @@ foreach my $filename (@ARGV) {
     }
 
     my $cat_string = "";
+    my $quote_string = "";
 
     while (<C>) {
 	if ($. == 1) { # This should be an interpreter line
@@ -179,9 +180,33 @@ foreach my $filename (@ARGV) {
 		$bashisms{'echo\s+-[n]'} = 'q<echo -n>';
 	    }
 
+	    my $line = $_;
+
+	    if ($quote_string ne "") {
+		# Inside a quoted block
+		if ($line =~ /^.*?[^\\]$quote_string(.*)$/) {
+		    # Quoted block ends on this line
+		    # Ignore everything before the closing quote
+		    $line = $1;
+		    $quote_string = "";
+		} else {
+		    # Still inside the quoted block, skip this line
+		    next;
+		}
+	    } elsif ($line =~ /[^\\]([\"\'])\s*$/) {
+		# Possible start of a quoted block
+		my $temp = $1;
+		my $count = () = $line =~ /[^\\]$temp/g;
+
+		# If there's an odd number of non-escaped
+		# quotes in the line and the line ends with
+		# one, it's almost certainly the start of
+		# a quoted block.
+		$quote_string = $temp if ($count % 2 == 1)
+	    }
+
 	    # Ignore anything inside single quotes; it could be an
 	    # argument to grep or the like.
-	    my $line = $_;
 	    $line =~ s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
 
 	    while (my ($re,$expl) = each %string_bashisms) {
