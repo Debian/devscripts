@@ -523,8 +523,11 @@ sub getmessage {
 	    } else {
 		@diffcmd = ('git', 'diff', '-w', '--cached', '--no-color');
 	    }
-	} elsif ($prog eq 'svn' || $prog eq 'svk') {
+	} elsif ($prog eq 'svn') {
 	    @diffcmd = ($prog, 'diff', '--diff-cmd', '/usr/bin/diff', '--extensions', '-wu');
+	} elsif ($prog eq 'svk') {
+	    @diffcmd = ($prog, 'diff');
+	}
 	} else {
 	    @diffcmd = ($prog, 'diff', '-w');
 	}
