@@ -17,6 +17,8 @@ devscripts (2.10.19) UNRELEASED; urgency=low
     + Modify each of the simple shell variable tests (e.g. $RANDOM) to
       also match ${variable}
     + Identify and ignore multi-line quoted text (Closes: #464641)
+    + Reorder a couple of checks so that ". foo $HOSTNAME" is detected as
+      source passing arguments rather than misuse of $HOSTNAME
   * bts: Allow the sendmail command to begin with a ~ (Closes: #469207)
   * debcommit: Set $SVKDIFF before calling "svk diff" (Closes: #469238)
 

@@ -205,18 +205,6 @@ foreach my $filename (@ARGV) {
 		$quote_string = $temp if ($count % 2 == 1)
 	    }
 
-	    # Ignore anything inside single quotes; it could be an
-	    # argument to grep or the like.
-	    $line =~ s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
-
-	    while (my ($re,$expl) = each %string_bashisms) {
-		if ($line =~ m/($re)/) {
-		    $found = 1;
-		    $match = $1;
-		    $explanation = $expl;
-		    last;
-		}
-	    }
 	    # since this test is ugly, I have to do it by itself
 	    # detect source (.) trying to pass args to the command it runs
 	    if (not $found and m/^\s*(\.\s+[^\s;\`]+\s+([^\s;]+))/) {
@@ -227,6 +215,19 @@ foreach my $filename (@ARGV) {
 		    $found = 1;
 		    $match = $1;
 		    $explanation = "sourced script with arguments";
+		}
+	    }
+
+	    # Ignore anything inside single quotes; it could be an
+	    # argument to grep or the like.
+	    $line =~ s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
+
+	    while (!$found and my ($re,$expl) = each %string_bashisms) {
+		if ($line =~ m/($re)/) {
+		    $found = 1;
+		    $match = $1;
+		    $explanation = $expl;
+		    last;
 		}
 	    }
 
