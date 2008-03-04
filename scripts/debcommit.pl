@@ -526,8 +526,8 @@ sub getmessage {
 	} elsif ($prog eq 'svn') {
 	    @diffcmd = ($prog, 'diff', '--diff-cmd', '/usr/bin/diff', '--extensions', '-wu');
 	} elsif ($prog eq 'svk') {
+	    $ENV{'SVKDIFF'} = '/usr/bin/diff -w -u';
 	    @diffcmd = ($prog, 'diff');
-	}
 	} else {
 	    @diffcmd = ($prog, 'diff', '-w');
 	}
