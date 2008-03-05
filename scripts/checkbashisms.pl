@@ -184,25 +184,31 @@ foreach my $filename (@ARGV) {
 
 	    if ($quote_string ne "") {
 		# Inside a quoted block
-		if ($line =~ /^.*?[^\\]$quote_string(.*)$/) {
-		    # Quoted block ends on this line
-		    # Ignore everything before the closing quote
-		    $line = $1;
-		    $quote_string = "";
+		if ($line =~ /^(?:.*?[^\\])?$quote_string(.*)$/) {
+		    my $rest = $1;
+		    my $count = () = $line =~ /(^|[^\\])?$quote_string/g;
+		    if ($count % 2 == 1) {
+			# Quoted block ends on this line
+			# Ignore everything before the closing quote
+			$line = $rest || '';
+			$quote_string = "";
+		    } else {
+			next;
+		    }
 		} else {
 		    # Still inside the quoted block, skip this line
 		    next;
 		}
-	    } elsif ($line =~ /[^\\]([\"\'])\s*$/) {
+	    } elsif ($line =~ /(?:^|[^\\])([\"\'])\s*\{?\s*$/) {
 		# Possible start of a quoted block
 		my $temp = $1;
-		my $count = () = $line =~ /[^\\]$temp/g;
+		my $count = () = $line =~ /(^|[^\\])$temp/g;
 
 		# If there's an odd number of non-escaped
 		# quotes in the line and the line ends with
 		# one, it's almost certainly the start of
 		# a quoted block.
-		$quote_string = $temp if ($count % 2 == 1)
+		$quote_string = $temp if ($count % 2 == 1);
 	    }
 
 	    # since this test is ugly, I have to do it by itself
@@ -218,16 +224,18 @@ foreach my $filename (@ARGV) {
 		}
 	    }
 
-	    # Ignore anything inside single quotes; it could be an
-	    # argument to grep or the like.
-	    $line =~ s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
+	    unless ($found) {
+		# Ignore anything inside single quotes; it could be an
+		# argument to grep or the like.
+		$line =~ s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
 
-	    while (!$found and my ($re,$expl) = each %string_bashisms) {
-		if ($line =~ m/($re)/) {
-		    $found = 1;
-		    $match = $1;
-		    $explanation = $expl;
-		    last;
+		while (my ($re,$expl) = each %string_bashisms) {
+		    if ($line =~ m/($re)/) {
+			$found = 1;
+			$match = $1;
+		 	$explanation = $expl;
+		 	last;
+		    }
 		}
 	    }
 
