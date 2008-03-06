@@ -919,7 +919,8 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
     if ($NEW_VERSION eq $NEW_UVERSION and $VERSION ne $UVERSION) {
 	warn "$progname warning: New package version is Debian native whilst previous version was not\n";
     } elsif ($NEW_VERSION ne $NEW_UVERSION and $VERSION eq $UVERSION) {
-	warn "$progname warning: Previous package version was Debian native whilst new version is not\n";
+	warn "$progname warning: Previous package version was Debian native whilst new version is not\n"
+	    unless $opt_n or $opt_s;
     }
 
     if ($opt_bpo) {

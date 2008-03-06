@@ -2,8 +2,11 @@ devscripts (2.10.19) UNRELEASED; urgency=low
 
   * debsign: Correctly handle signing an automatically located .changes
     file if none was passed on the command line (Closes: #468761)
-  * debchange: Apply a more elegant fix for the bugfix in 2.10.18.
-    Thanks to gregor herrmann for pointing the obvious solution out.
+  * debchange:
+    + Apply a more elegant fix for the bugfix in 2.10.18.
+      Thanks to gregor herrmann for pointing the obvious solution out.
+    + Don't complain about the package version changing from native to
+      non-native if --nmu or --security was used
   * checkbashisms:
     + Use Getopt::Long for option parsing
     + Add an option to force checking of scripts that would normally be
