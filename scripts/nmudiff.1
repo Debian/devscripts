@@ -46,7 +46,7 @@ space and will be interpreted by the shell.  Default is
 added if the command is \fI/usr/sbin/sendmail\fR or
 \fI/usr/sbin/exim*\fR.  For other mailers, if they require a \fI\-t\fR
 option, this must be included in the \fISENDMAILCMD\fR, for example:
-\-\-sendmail="/usr/sbin/mymailer -t".  This can also be set using the
+\-\-sendmail="/usr/sbin/mymailer \-t".  This can also be set using the
 devscripts configuration files; see below.
 .TP
 \fB\-\-from\fR \fIEMAIL\fR
@@ -88,7 +88,7 @@ bugs are being closed, in which case a new report is always made).
 .TP
 .B BTS_SENDMAIL_COMMAND
 If this is set, specifies a sendmail command to use instead of
-/usr/sbin/sendmail.  Same as the --sendmail command line option.
+/usr/sbin/sendmail.  Same as the \-\-sendmail command line option.
 .SH "SEE ALSO"
 .BR debdiff (1),
 .BR sensible-editor (1)

@@ -12,7 +12,7 @@ be called from within the source code directory tree.  In this case,
 it will look for the \fI.changes\fR file corresponding to the current
 package version (by determining the name and version number from the
 changelog, and the architecture in the same way as
-\fBdpkg-buildpackage\fR(1) does).  It then runs \fBdebpkg -i\fR on
+\fBdpkg-buildpackage\fR(1) does).  It then runs \fBdebpkg \-i\fR on
 every \fI.deb\fR archive listed in the \fI.changes\fR file to install
 them, assuming that all of the \fI.deb\fR archives live in the same
 directory as the \fI.changes\fR file.  Note that you probably don't

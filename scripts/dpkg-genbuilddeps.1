@@ -15,17 +15,17 @@ for the arch independent parts of the build and which for the arch
 dependent parts, not does it attempt to determine which versions of
 packages are required.  It should be able to run under \fBfakeroot\fR
 rather than being run as root, as \fBfakeroot dpkg-genbuilddeps\fR, or
-\fBdpkg-genbuilddeps -rfakeroot\fR.
+\fBdpkg-genbuilddeps \-rfakeroot\fR.
 .PP
 This program requires the build-essential package to be installed.  If
 it is not, please use \fBdpkg-depcheck\fR directly, with a command
 such as
 .nf
-  dpkg-depcheck --all dpkg-buildpackage -us -uc -b -rfakeroot ...
+  dpkg-depcheck \-\-all dpkg-buildpackage \-us \-uc \-b \-rfakeroot ...
 .fi
 All this program itself does is essentially to run the command:
 .nf
-  dpkg-depcheck -b dpkg-buildpackage -us -uc -b -rfakeroot [arg ...]
+  dpkg-depcheck \-b dpkg-buildpackage \-us \-uc \-b \-rfakeroot [arg ...]
 .fi
 .SH "SEE ALSO"
 .B The Debian Policy Manual,

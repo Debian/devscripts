@@ -105,8 +105,8 @@ programs from non-standard locations can easily result in the package
 being broken, as it will not be able to be built on standard systems.
 .PP
 It is also possible to avoid having to type something like
-\fIFOO\fB=\fIbar \fBdebuild -e \fIFOO\fR by writing \fBdebuild -e
-\fIFOO\fB=\fIbar\fR or the long form \fBdebuild --set-envvar
+\fIFOO\fB=\fIbar \fBdebuild \-e \fIFOO\fR by writing \fBdebuild \-e
+\fIFOO\fB=\fIbar\fR or the long form \fBdebuild \-\-set\-envvar
 \fIFOO\fB=\fIbar\fR.
 .SH "SUPERUSER REQUIREMENTS"
 \fBdebuild\fR needs to be run as superuser to function properly.
@@ -149,12 +149,12 @@ Run before dpkg-buildpackage begins by calling dpkg-checkbuilddeps.
 .TP
 clean-hook
 Run before dpkg-buildpackage runs debian/rules clean to clean the
-source tree.  (Run even if the tree is not being cleaned because -nc
+source tree.  (Run even if the tree is not being cleaned because \-nc
 is used.)
 .TP
 dpkg-source-hook
 Run after cleaning the tree and before running dpkg-source.  (Run even
-if dpkg-source is not being called because -b or -B is used.)
+if dpkg-source is not being called because \-b or \-B is used.)
 .TP
 dpkg-build-hook
 Run after dpkg-source and before calling debian/rules build.  (Run
@@ -196,7 +196,7 @@ example, in the dpkg-source hook, %a will become 1 if dpkg-source is
 to be run and 0 if not).  Then it will be handed to the shell to deal
 with, so it can include redirections and stuff.  For example, to only
 run the dpkg-source hook if dpkg-source is to be run, the hook could
-be something like: "if [ %a -eq 1 ]; then ...; fi".
+be something like: "if [ %a \-eq 1 ]; then ...; fi".
 .PP
 \fBPlease take care with hooks\fR, as misuse of them can lead to
 packages which FTBFS (fail to build from source).  They can be useful
@@ -315,7 +315,7 @@ example, to ensure that your own GPG key is always used, even for
 sponsored uploads, the config file might contain the line:
 .IP
 .nf
-DEBUILD_DPKG_BUILDPACKAGE_OPTS="-k'Julian Gilbey <jdg@debian.org>' -sa"
+DEBUILD_DPKG_BUILDPACKAGE_OPTS="-k'Julian Gilbey <jdg@debian.org>' \-sa"
 .fi
 .IP
 which gives precisely two options.  Without the extra single quotes,
@@ -366,16 +366,16 @@ The typical command line options to build only the binary package(s)
 without signing the .changes file (or the non-existent .dsc file):
 .IP
 .nf
-debuild -i -us -uc -b
+debuild \-i \-us \-uc \-b
 .fi
 .PP
-Change the "-b" to "-S" to build only a source package.
+Change the "\-b" to "\-S" to build only a source package.
 .PP
 An example using both \fBlintian\fR and \fBlinda\fR to check the
 resulting packages, and also passing options to them both:
 .IP
 .nf
-debuild --linda -i -tc --lintian-opts -i --linda-opts -i
+debuild \-\-linda \-i \-tc \-\-lintian-opts \-i \-\-linda-opts \-i
 .fi
 .PP
 Note the order of options here: the \fBdebuild\fR options come first,
@@ -390,9 +390,9 @@ To build a package for a sponsored upload, given
 like the following commands:
 .IP
 .nf
-dpkg-source -x foobar_1.0-1.dsc
+dpkg-source \-x foobar_1.0-1.dsc
 cd foobar-1.0
-debuild -k0x12345678
+debuild \-k0x12345678
 .fi
 .PP
 where 0x12345678 is replaced by your GPG key ID or other key

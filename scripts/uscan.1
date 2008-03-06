@@ -169,7 +169,7 @@ and using the result as the version number of the file.  The version
 number will then be mangled if required by the uversionmangle option
 described below.  Finally, the file versions are then compared to find
 the one with the greatest version number, as determined by \fBdpkg
---compare-versions\fR.  Note that if you need Perl groups which are
+\-\-compare-versions\fR.  Note that if you need Perl groups which are
 not to be used in the version number, either use `(?:...)' or use the
 uversionmangle option to clean up the mess!
 .PP
@@ -318,10 +318,10 @@ PACKAGE-version.
 This script will perform a fully automatic upstream update.
 
 .nf
-#!/bin/sh -e
-# called with '--upstream-version' <version> <file>
+#!/bin/sh \-e
+# called with '\-\-upstream-version' <version> <file>
 uupdate "$@"
-package=`dpkg-parsechangelog | sed -n 's/^Source: //p'`
+package=`dpkg\-parsechangelog | sed \-n 's/^Source: //p'`
 cd ../$package-$2
 debuild
 .fi
