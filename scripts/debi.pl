@@ -362,10 +362,15 @@ while (<CHANGES>) {
 	# don't want other archs' .debs:
 	next unless $deb =~ /[_+]($arch|all)[\.+]/;
         my $pkg = $deb;
+	$pkg =~ s/_.*$//;
+
         if (@ARGV) {
             if (exists $pkgs{$pkg}) {
                 push @debs, $deb;
                 $pkgs{$pkg}++;
+	    } elsif (exists $pkgs{$deb}) {
+		push @debs, $deb;
+		$pkgs{$deb}++;
             }
         } else {
             push @debs, $deb;
