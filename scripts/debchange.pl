@@ -957,7 +957,28 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 	print O "  * \n";
     }
     $line += 3;
-    print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n\n";
+
+    if ($opt_release_heuristic eq "changelog" and $changelog{'Distribution'}
+	eq  "UNRELEASED" and $distribution eq "UNRELEASED") {
+
+	# Strip the current header line
+	$CHANGES =~ s/^(\w[-+0-9a-z.]* \([^\(\) \t]+\))(?:\s+[-+0-9a-z.]+)+\;\s+urgency=\w+//i;
+	$CHANGES =~ s/^\n*//gs;
+
+	# Include the changes from the previous UNRELEASED version
+	print O $CHANGES;
+	print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n\n";
+	
+	# and skip them in the original changelog
+	my $last = "";
+
+	while (<S>) {
+	    last if $last =~ /^ --/;
+	    $last = $_;
+	}
+    } else {
+	 print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n\n";
+    }
 
     # Copy the old changelog file to the new one
     local $/ = undef;

@@ -8,6 +8,10 @@ devscripts (2.10.19) UNRELEASED; urgency=low
     + Don't complain about the package version changing from native to
       non-native if --nmu or --security was used
     + Fix an unescaped hyphen in the manpage
+    + If starting a changelog stanza for a new UNRELEASED version, check
+      whether the previous stanza is also UNRELEASED and, if so, merge
+      them (assuming the "changelog" release heuristic is in use)
+      (Closes: #458130)
   * checkbashisms:
     + Use Getopt::Long for option parsing
     + Add an option to force checking of scripts that would normally be
