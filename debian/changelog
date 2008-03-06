@@ -23,6 +23,7 @@ devscripts (2.10.19) UNRELEASED; urgency=low
     + Reorder a couple of checks so that ". foo $HOSTNAME" is detected as
       source passing arguments rather than misuse of $HOSTNAME
     + Fix a potential false positive on "2>& 1"
+    + Fix an unescaped hyphen in the manpage
   * bts: Allow the sendmail command to begin with a ~ (Closes: #469207)
   * debcommit: Set $SVKDIFF before calling "svk diff" (Closes: #469238)
   * deb[ci]: Allow either package names or filenames to be passed on the
