@@ -162,7 +162,7 @@ even if this is a source-only build, so debian/rules build is not
 being called.)
 .TP
 dpkg-binary-hook
-Run between debian/rules build and debian/rules binary(-arch).  Run
+Run between debian/rules build and debian/rules binary(\-arch).  Run
 ONLY if a binary package is being built.
 .TP
 dpkg-genchanges-hook
@@ -315,7 +315,7 @@ example, to ensure that your own GPG key is always used, even for
 sponsored uploads, the config file might contain the line:
 .IP
 .nf
-DEBUILD_DPKG_BUILDPACKAGE_OPTS="-k'Julian Gilbey <jdg@debian.org>' \-sa"
+DEBUILD_DPKG_BUILDPACKAGE_OPTS="\-k'Julian Gilbey <jdg@debian.org>' \-sa"
 .fi
 .IP
 which gives precisely two options.  Without the extra single quotes,
