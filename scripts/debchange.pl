@@ -809,9 +809,13 @@ select((select(O), $^L = "")[0]);
 my $tmpchk=1;
 my ($NEW_VERSION, $NEW_SVERSION, $NEW_UVERSION);
 my $line;
+my $optionsok=0;
+my $merge=0;
 
 if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $opt_v || $opt_d ||
     ($opt_news && $VERSION ne $changelog{'Version'})) && ! $opt_create) {
+
+    $optionsok=1;
 
     # Check that a given explicit version number is sensible.
     if ($opt_v || $opt_d) {
@@ -929,68 +933,57 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
     my $distribution = $opt_D || $bpo_dist || (($opt_release_heuristic eq 'changelog') ? "UNRELEASED" : $DISTRIBUTION);
     
     my $urgency = $opt_u || 'low';
-    print O "$PACKAGE ($NEW_VERSION) $distribution; urgency=$urgency\n\n";
 
-    if ($opt_n && ! $opt_news) {
-	print O "  * Non-maintainer upload.\n";
-	$line = 1;
-    } elsif ($opt_bn && ! $opt_news) {
-        my $arch = qx/dpkg-architecture -qDEB_BUILD_ARCH/; chomp ($arch);
-        print O "  * Binary-only non-maintainer upload for $arch; no source changes.\n";
-	$line = 1;
-    } elsif ($opt_qa && ! $opt_news) {
-	print O "  * QA upload.\n";
-	$line = 1;
-    } elsif ($opt_s && ! $opt_news) {
-        print O "  * Non-maintainer upload by the Security Team.\n";
-	$line = 1;
-    } elsif ($opt_bpo && ! $opt_news) {
-	print O "  * Rebuild for etch-backports.\n";
-        $line = 1;
-    }
-    if (@closes_text or $TEXT) {
-	foreach (@closes_text) { format_line($_, 1); }
-	if (length $TEXT) { format_line($TEXT, 1); }
-    } elsif ($opt_news) {
-	print O "  \n";
+    if (($opt_v or ($opt_i and not ($opt_n or $opt_bn or $opt_s or $opt_qa)))
+	and $opt_release_heuristic eq "changelog" and
+	$changelog{'Distribution'} eq "UNRELEASED" and
+	$distribution eq "UNRELEASED") {
+
+	$merge = 1;
     } else {
-	print O "  * \n";
-    }
-    $line += 3;
-
-    if ($opt_release_heuristic eq "changelog" and $changelog{'Distribution'}
-	eq  "UNRELEASED" and $distribution eq "UNRELEASED") {
-
-	# Strip the current header line
-	$CHANGES =~ s/^(\w[-+0-9a-z.]* \([^\(\) \t]+\))(?:\s+[-+0-9a-z.]+)+\;\s+urgency=\w+//i;
-	$CHANGES =~ s/^\n*//gs;
-
-	# Include the changes from the previous UNRELEASED version
-	print O $CHANGES;
-	print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n\n";
-	
-	# and skip them in the original changelog
-	my $last = "";
-
-	while (<S>) {
-	    last if $last =~ /^ --/;
-	    $last = $_;
+	print O "$PACKAGE ($NEW_VERSION) $distribution; urgency=$urgency\n\n";
+	if ($opt_n && ! $opt_news) {
+            print O "  * Non-maintainer upload.\n";
+	    $line = 1;
+	} elsif ($opt_bn && ! $opt_news) {
+            my $arch = qx/dpkg-architecture -qDEB_BUILD_ARCH/; chomp ($arch);
+            print O "  * Binary-only non-maintainer upload for $arch; no source changes.\n";
+            $line = 1;
+	} elsif ($opt_qa && ! $opt_news) {
+            print O "  * QA upload.\n";
+            $line = 1;
+	} elsif ($opt_s && ! $opt_news) {
+            print O "  * Non-maintainer upload by the Security Team.\n";
+            $line = 1;
+	} elsif ($opt_bpo && ! $opt_news) {
+            print O "  * Rebuild for etch-backports.\n";
+            $line = 1;
 	}
-    } else {
-	 print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n\n";
-    }
+	if (@closes_text or $TEXT) {
+            foreach (@closes_text) { format_line($_, 1); }
+            if (length $TEXT) { format_line($TEXT, 1); }
+	} elsif ($opt_news) {
+            print O "  \n";
+	} else {
+            print O "  * \n";
+	}
+	$line += 3;
+	print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n\n";
 
-    # Copy the old changelog file to the new one
-    local $/ = undef;
-    print O <S>;
+	# Copy the old changelog file to the new one
+	local $/ = undef;
+	print O <S>;
+
+	$opt_a = 0;
+    }
 }
-elsif (($opt_r || $opt_a) && ! $opt_create) {
+if (($opt_r || $opt_a || $merge) && ! $opt_create) {
     # This means we just have to generate a new * entry in changelog
     # and if a multi-developer changelog is detected, add developer names.
     
-    $NEW_VERSION=$VERSION;
-    $NEW_SVERSION=$SVERSION;
-    $NEW_UVERSION=$UVERSION;
+    $NEW_VERSION=$VERSION unless $NEW_VERSION;
+    $NEW_SVERSION=$SVERSION unless $NEW_SVERSION;
+    $NEW_UVERSION=$UVERSION unless $NEW_UVERSION;
 
     # Read and discard maintainer line, see who made the
     # last entry, and determine whether there are existing
@@ -1080,7 +1073,7 @@ elsif (($opt_r || $opt_a) && ! $opt_create) {
 	    $distribution = $opt_D if $opt_D;
 	}
 	$urgency = $opt_u if $opt_u;
-	$CHANGES =~ s/^(\w[-+0-9a-z.]* \([^\(\) \t]+\))(?:\s+[-+0-9a-z.]+)+\;\s+urgency=\w+/$1 $distribution; urgency=$urgency/i;
+	$CHANGES =~ s/^(\w[-+0-9a-z.]* \([^\(\) \t]+\))(?:\s+[-+0-9a-z.]+)+\;\s+urgency=\w+/$PACKAGE ($NEW_VERSION) $distribution; urgency=$urgency/i;
     } else {
 	warn "$progname: couldn't parse first changelog line, not touching it\n";
 	$warnings++;
@@ -1189,7 +1182,7 @@ elsif ($opt_create) {
 
     $line = 1;
 }
-else {
+elsif (!$optionsok) {
     fatal "Unknown changelog processing command line options - help!";
 }
 
