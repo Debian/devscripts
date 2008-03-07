@@ -8,10 +8,10 @@ devscripts (2.10.19) UNRELEASED; urgency=low
     + Don't complain about the package version changing from native to
       non-native if --nmu or --security was used
     + Fix an unescaped hyphen in the manpage
-    + If starting a changelog stanza for a new UNRELEASED version, check
-      whether the previous stanza is also UNRELEASED and, if so, merge
-      them (assuming the "changelog" release heuristic is in use)
-      (Closes: #458130)
+    + If starting a changelog stanza for a new maintainer upload with
+      the distribution set to UNRELEASED, check whether the previous
+      stanza is also UNRELEASED and, if so, merge them (assuming the 
+      "changelog" release heuristic is in use) (Closes: #458130)
     + Add non-maintainer uploads (including security and QA uploads),
       backports and the use of local version strings to the list of
       cases where debchange doesn't have to guess the user's intentions
