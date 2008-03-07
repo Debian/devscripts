@@ -12,6 +12,9 @@ devscripts (2.10.19) UNRELEASED; urgency=low
       whether the previous stanza is also UNRELEASED and, if so, merge
       them (assuming the "changelog" release heuristic is in use)
       (Closes: #458130)
+    + Add non-maintainer uploads (including security and QA uploads),
+      backports and the use of local version strings to the list of
+      cases where debchange doesn't have to guess the user's intentions
   * checkbashisms:
     + Use Getopt::Long for option parsing
     + Add an option to force checking of scripts that would normally be

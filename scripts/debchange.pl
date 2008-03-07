@@ -736,7 +736,8 @@ chomp(my $DATE=`$date_cmd`);
 
 # Are we going to have to figure things out for ourselves?
 if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r &&
-    ! $opt_create) {
+    ! $opt_n && ! $opt_bn && ! $opt_qa && ! $opt_s && ! $opt_bpo &&
+    ! $opt_l && ! $opt_create) {
     # Yes, we are
     if ($opt_release_heuristic eq 'log') {
 	my @UPFILES = glob("../$PACKAGE\_$SVERSION\_*.upload");
@@ -934,8 +935,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
     
     my $urgency = $opt_u || 'low';
 
-    if (($opt_v or ($opt_i and not ($opt_n or $opt_bn or $opt_s or $opt_qa)))
-	and $opt_release_heuristic eq "changelog" and
+    if (($opt_v or $opt_i or $opt_l) and $opt_release_heuristic eq "changelog" and
 	$changelog{'Distribution'} eq "UNRELEASED" and
 	$distribution eq "UNRELEASED") {
 
@@ -973,8 +973,6 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 	# Copy the old changelog file to the new one
 	local $/ = undef;
 	print O <S>;
-
-	$opt_a = 0;
     }
 }
 if (($opt_r || $opt_a || $merge) && ! $opt_create) {
