@@ -41,6 +41,7 @@ devscripts (2.10.19) UNRELEASED; urgency=low
   * annotate-output.1, cvs-debi.1, dd-list.1, debuild.1, dpkg-depcheck.1, 
     dpkg-genbuilddeps.1, nmudiff.1, plotchangelog.1, uscan.1,
     devscripts.conf.5: Fix unescaped hyphens
+  * bts: Don't treat "userblah" as an alias for "users" in "select"
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sat, 01 Mar 2008 11:42:02 +0000
 

@@ -148,7 +148,7 @@ sub select {
                push @{$search_parameters{$valid_keys{$key}}},
                     $value;
           }
-          elsif ($key =~/users?/) {
+          elsif ($key =~/users?$/) {
                $users{$value} = 1;
           }
      }
