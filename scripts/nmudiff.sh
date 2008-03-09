@@ -285,7 +285,7 @@ else
 	TAGS="$TAGS
 tags $b + patch"
     done
-    TO_ADDRESSES_SENDMAIL=$(echo "$TO_ADDRESSES" | tail -n +2)
+    TO_ADDRESSES_SENDMAIL=$(echo "$TO_ADDRESSES_SENDMAIL" | tail -n +2)
     TAGS=$(echo "$TAGS" | tail -n +2)
     TAGS="$TAGS
 thanks"
