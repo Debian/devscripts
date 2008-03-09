@@ -86,6 +86,9 @@ select("submitter:jrandomdeveloper@example.com", "tag:wontfix")
 
 =cut
 
+use strict;
+use warnings;
+
 my $soapurl='Debbugs/SOAP/1';
 my $soapproxyurl='http://bugs.debian.org/cgi-bin/soap.cgi';
 
@@ -117,7 +120,7 @@ sub usertags {
     my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
     my $usertags = $soap->get_usertag(@_)->result();
 
-    return $usertags;    
+    return $usertags;
 }
 
 sub select {
@@ -145,20 +148,24 @@ sub select {
      my %users;
      my %search_parameters;
      my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+     my $soapfault;
+     $soap->on_fault(sub { $soapfault = $_; });
      for my $arg (@args) {
           my ($key,$value) = split /:/, $arg, 2;
+          next unless $key;
           if (exists $valid_keys{$key}) {
                push @{$search_parameters{$valid_keys{$key}}},
-                    $value;
-          }
-          elsif ($key =~/users?$/) {
+                    $value if $value;
+          } elsif ($key =~/users?$/) {
                $users{$value} = 1;
+          } else {
+               warn "select(): Unrecognised key: $key\n";
           }
      }
      my %usertags;
      for my $user (keys %users) {
           my $ut = usertags($user);
-          next unless defined $ut;
+          next unless defined $ut and $ut ne "";
           for my $tag (keys %{$ut}) {
                push @{$usertags{$tag}},
                     @{$ut->{$tag}};
@@ -168,7 +175,8 @@ sub select {
                                 (keys %usertags)?(usertags=>\%usertags):()
                                )->result();
      if (not defined $bugs) {
-          die "Error while retrieving bugs from SOAP server";
+         die "Error while retrieving bugs from SOAP server: $soapfault"
+             if $soapfault;
      }
 
     return $bugs;
@@ -179,11 +187,14 @@ sub status {
     my @args = @_;
 
     my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+    my $soapfault;
+    $soap->on_fault(sub { $soapfault = $_; });
 
     my $bugs = $soap->get_status(@args)->result();
 
     if (not defined $bugs) {
-	die "Error while retrieving bug statuses from SOAP server";
+	die "Error while retrieving bug statuses from SOAP server: $soapfault"
+	    if $soapfault;
     }
 
     return $bugs;
@@ -224,11 +235,14 @@ sub versions {
     $search_parameters{dist} = \@dists if @dists;
 
     my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+    my $soapfault;
+    $soap->on_fault(sub { $soapfault = $_; });
 
     my $versions = $soap->get_versions(%search_parameters)->result();
 
     if (not defined $versions) {
-	die "Error while retrieivng package versions from SOAP server: $@";
+	die "Error while retrieivng package versions from SOAP server: $soapfault"
+	    if $soapfault;
     }
 
     return $versions;
@@ -254,11 +268,14 @@ sub newest_bugs {
     return if $count !~ /^\d+$/;
 
     my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+    my $soapfault;
+    $soap->on_fault(sub { $soapfault = $_; });
 
     my $bugs = $soap->newest_bugs($count)->result();
 
     if (not defined $bugs) {
-	die "Error while retrieving newest bug list from SOAP server: $@";
+	die "Error while retrieving newest bug list from SOAP server: $soapfault"
+	    if $soapfault;
     }
 
     return $bugs;
@@ -276,10 +293,14 @@ sub bug_log {
     return if $bug !~ /^\d+$/;
 
     my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+    my $soapfault;
+    $soap->on_fault(sub { $soapfault = $_; });
+
     my $log = $soap->get_bug_log($bug, $message)->result();
 
     if (not defined $log) {
-	die "Error while retrieving bug log from SOAP server: $@";
+	die "Error while retrieving bug log from SOAP server: $soapfault"
+	    if $soapfault;
     }
 
     return $log;
@@ -290,6 +311,8 @@ sub binary_to_source {
 	unless have_soap();
 
     my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+    my $soapfault;
+    $soap->on_fault(sub { $soapfault = $_; });
 
     my $binpkg = shift;
     my $binver = shift;
@@ -300,7 +323,8 @@ sub binary_to_source {
     my $mapping = $soap->binary_to_source($binpkg, $binver, $arch)->result();
 
     if (not defined $mapping) {
-	die "Error while retrieving binary to source mapping from SOAP server: $@";
+	die "Error while retrieving binary to source mapping from SOAP server: $soapfault"
+	    if $soapfault;
     }
 
     return $mapping;
@@ -311,6 +335,8 @@ sub source_to_binary {
 	unless have_soap();
 
     my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+    my $soapfault;
+    $soap->on_fault(sub { $soapfault = $_; });
 
     my $srcpkg = shift;
     my $srcver = shift;
@@ -320,7 +346,8 @@ sub source_to_binary {
     my $mapping = $soap->source_to_binary($srcpkg, $srcver)->result();
 
     if (not defined $mapping) {
-	die "Error while retrieving source to binary mapping from SOAP server: $@";
+	die "Error while retrieving source to binary mapping from SOAP server: $soapfault"
+	    if $soapfault;
     }
 
     return $mapping;
