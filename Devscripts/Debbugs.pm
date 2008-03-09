@@ -157,7 +157,7 @@ sub select {
                push @{$search_parameters{$valid_keys{$key}}},
                     $value if $value;
           } elsif ($key =~/users?$/) {
-               $users{$value} = 1;
+               $users{$value} = 1 if $value;
           } else {
                warn "select(): Unrecognised key: $key\n";
           }
