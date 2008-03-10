@@ -34,7 +34,9 @@ devscripts (2.10.19) UNRELEASED; urgency=low
     + Fix an unescaped hyphen in the manpage
     + Add a check for function names containing characters other than
       alphanumerics and underscore
-  * bts: Allow the sendmail command to begin with a ~ (Closes: #469207)
+  * bts:
+    + Allow the sendmail command to begin with a ~ (Closes: #469207)
+    + Don't treat "userblah" as an alias for "users" in "select"
   * debcommit: Set $SVKDIFF before calling "svk diff" (Closes: #469238)
   * deb[ci]:
     + Allow either package names or filenames to be passed on the
@@ -43,7 +45,6 @@ devscripts (2.10.19) UNRELEASED; urgency=low
   * annotate-output.1, cvs-debi.1, dd-list.1, debuild.1, dpkg-depcheck.1, 
     dpkg-genbuilddeps.1, nmudiff.1, plotchangelog.1, uscan.1,
     devscripts.conf.5: Fix unescaped hyphens
-  * bts: Don't treat "userblah" as an alias for "users" in "select"
   * nmudiff: Fix --nomutt's To: handling. Thanks Thomas Viehmann
     (Closes: #470069)
   * Debbugs.pm:
