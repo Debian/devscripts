@@ -752,6 +752,7 @@ if ($command_version eq 'dpkg') {
     my $since='';
     my $maint='';
     my $desc='';
+    my $parallel='';
     my $noclean=0;
     my $usepause=0;
     my $warnable_error=0;  # OK, dpkg-buildpackage defines this but doesn't
@@ -808,7 +809,7 @@ if ($command_version eq 'dpkg') {
 	/^-e(.*)/ and $changedby=$1, push(@debsign_opts, $_),
 	    push(@dpkg_opts, $_), next;
 	/^-C(.*)/ and $desc=$1, push(@dpkg_opts, $_), next;
-	/^-j(.*)/ and push(@dpkg_opts, $_), next;
+	/^-j(\d*)$/ and $parallel=($1 || '-1'), push(@dpkg_opts, $_), next;
 	$_ eq '-W' and $warnable_error=1, push(@passopts, $_),
 	    push(@dpkg_opts, $_), next;
 	$_ eq '-E' and $warnable_error=0, push(@passopts, $_),
@@ -850,7 +851,7 @@ if ($command_version eq 'dpkg') {
 	/^-e(.*)/ and $changedby=$1, push(@debsign_opts, $_),
 	    push(@dpkg_opts, $_), next;
 	/^-C(.*)/ and $desc=$1, push(@dpkg_opts, $_), next;
-	/^-j(.*)/ and push(@dpkg_opts, $_), next;
+	/^-j(\d*)$/ and $parallel=($1 || '-1'), push(@dpkg_opts, $_), next;
 	$_ eq '-W' and $warnable_error=1, push(@passopts, $_),
 	    push(@dpkg_opts, $_), next;
 	$_ eq '-E' and $warnable_error=0, push(@passopts, $_),
@@ -997,7 +998,7 @@ if ($command_version eq 'dpkg') {
     } else {
 	# Not using dpkg-cross, so we emulate dpkg-buildpackage ourselves
 	# We emulate the version found in dpkg-buildpackage-snapshot in
-	# the source package
+	# the source package with the addition of -j support
 
 	# First dpkg-buildpackage action: run dpkg-checkbuilddeps
 	if ($checkbuilddep) {
@@ -1046,6 +1047,24 @@ if ($command_version eq 'dpkg') {
 	}
 
 	run_hook('build', ! $sourceonly);
+
+	# From dpkg-buildpackage 1.14.15
+	if ($parallel) {
+	    my $build_opts = parsebuildopts();
+
+	    $parallel = $build_opts->{parallel}
+		if (defined $build_opts->{parallel});
+	    $ENV{MAKEFLAGS} ||= '';
+
+	    if ($parallel eq '-1') {
+		$ENV{MAKEFLAGS} .= " -j";
+	    } else {
+		$ENV{MAKEFLAGS} .= " -j$parallel";
+	    }
+
+	    $build_opts->{parallel} = $parallel;
+	    setbuildopts($build_opts);
+	}
 
 	# Next dpkg-buildpackage action: build and binary targets
 	if (! $sourceonly) {
@@ -1293,4 +1312,54 @@ sub fatal($) {
 	open STDERR, ">&OLDERR";
     }
     die $msg;
+}
+
+# Dpkg::BuildOptions::parse and ::set
+sub parsebuildopts {
+    my ($env) = @_;
+
+    $env ||= $ENV{DEB_BUILD_OPTIONS};
+
+    unless ($env) { return {}; }
+
+    my %opts;
+
+    foreach (split(/[\s,]+/, $env)) {
+        # FIXME: This is pending resolution of Debian bug #430649
+        /^([a-z][a-z0-9_-]*)(=(\w*))?$/;
+
+        my ($k, $v) = ($1, $3 || '');
+
+        # Sanity checks
+        if (!$k) {
+            next;
+        } elsif ($k =~ /^(noopt|nostrip|nocheck)$/ && length($v)) {
+            $v = '';
+        } elsif ($k eq 'parallel' && $v !~ /^-?\d+$/) {
+            next;
+        }
+
+        $opts{$k} = $v;
+    }
+
+    return \%opts;
+}
+
+sub setbuildopts {
+    my ($opts, $overwrite) = @_;
+    $overwrite = 1 if not defined($overwrite);
+
+    my $env = $overwrite ? '' : $ENV{DEB_BUILD_OPTIONS}||'';
+    if ($env) { $env .= ',' }
+
+    while (my ($k, $v) = each %$opts) {
+        if ($v) {
+            $env .= "$k=$v,";
+        } else {
+            $env .= "$k,";
+        }
+    }
+
+    $ENV{DEB_BUILD_OPTIONS} = $env if $env;
+    return $env;
 }
