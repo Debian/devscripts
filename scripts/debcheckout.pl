@@ -155,7 +155,7 @@ sub set_auth($$$) {
   $user .= "@" if length $user;
   switch ($repo_type) {
     case "bzr"	  { $url =~ s|^\w+://(bzr\.debian\.org)/(.*)|sftp://$user$1/bzr/$2|;
-		    $url =~ s[^\w+://(?:(bazaar|code)\.)?(launchpad\.net/.*)][bzr+ssh://${user}bazaar.$1];}
+		    $url =~ s[^\w+://(?:(bazaar|code)\.)?(launchpad\.net/.*)][bzr+ssh://${user}bazaar.$2];}
     case "darcs"  {
        if ($url =~ m|(~)|) {
            my $user_local = $user;
