@@ -23,7 +23,7 @@ Suggests: devscripts-el, at, build-essential, curl | wget, cvs-buildpackage,
  debian-keyring, debian-maintainers, dupload (>=2.1) | dput,
  gnupg (>= 1.0.7), gnuplot, libcrypt-ssleay-perl, libdigest-md5-perl,
  libfile-desktopentry-perl, libsoap-lite-perl, libterm-size-perl,
- libtimedate-perl, liburi-perl, libwww-perl, lintian | linda, lsb-release,
+ libtimedate-perl, liburi-perl, libwww-perl, lintian, lsb-release,
  mailx | mailutils, man-db, mutt, patch, patchutils, ssh, strace,
  unzip, wdiff, www-browser
 Description: scripts to make the life of a Debian Package maintainer easier
@@ -46,8 +46,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
     after running cvs-debuild or cvs-buildpackage [cvs-buildpackage,
     dupload | dput, ssh]
   - cvs-debuild: run cvs-buildpackage using debuild (see below) as the
-    package building program [cvs-buildpackage, fakeroot, lintian | linda,
-    gnupg]
+    package building program [cvs-buildpackage, fakeroot, lintian, gnupg]
   - dd-list: given a list of packages, pretty-print it ordered by maintainer
   - debc: display the contents of just-built .debs
   - debchange/dch: automagically add entries to debian/changelog files
@@ -69,7 +68,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - debuild: wrapper to build a package without having to su or worry
     about how to invoke dpkg to build using fakeroot.  Also deals
     with common environment problems, umask etc. [fakeroot,
-    lintian | linda, gnupg]
+    lintian, gnupg]
   - deb-reversion: increases a binary package version number and repacks the
     archive
   - desktop2menu: produce a skeleton menu file from a freedesktop.org

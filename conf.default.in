@@ -271,16 +271,9 @@
 # Do we run lintian at the end of a full run?
 # DEBUILD_LINTIAN=yes
 # 
-# Do we run linda at the end of a full run?
-# DEBUILD_LINDA=no
-# 
 # Extra options given to lintian before any command-line options
 # specified.
 # DEBUILD_LINTIAN_OPTS=""
-# 
-# Extra options given to linda before any command-line options
-# specified.
-# DEBUILD_LINDA_OPTS=""
 # 
 # Hooks; see the manpage for details of these
 # DEBUILD_DPKG_BUILDPACKAGE_HOOK=""

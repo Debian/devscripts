@@ -44,7 +44,7 @@ And now, in mostly alphabetical order, the scripts:
   around debrelease which allows it to be called from the CVS working
   directory.
 
-- cvs-debuild [cvs-buildpackage, fakeroot, lintian | linda, gnupg]: A
+- cvs-debuild [cvs-buildpackage, fakeroot, lintian, gnupg]: A
   wrapper for cvs-buildpackage to use debuild as its package building
   program.
 
@@ -111,7 +111,7 @@ And now, in mostly alphabetical order, the scripts:
   This script is capable of automatically downloading the .changes and
   .dsc files from a remote machine.
 
-- debuild [fakeroot, lintian | linda, gnupg]: A wrapper for building a
+- debuild [fakeroot, lintian, gnupg]: A wrapper for building a
   package (i.e., dpkg-buildpackage) to avoid problems with
   insufficient permissions and wrong paths etc.  Debuild will set up
   the proper environment for building a package.  Debuild will use the

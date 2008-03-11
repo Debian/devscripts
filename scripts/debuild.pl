@@ -26,16 +26,15 @@
 #   debuild [<debuild options>] binary|binary-arch|binary-indep|clean ...
 # or
 #   debuild [<debuild options>] [<dpkg-buildpackage options>]
-#            [--lintian-opts <lintian options>] [--linda-opts <linda options>]
+#            [--lintian-opts <lintian options>]
 #
 # In the first case, debuild will simply run debian/rules with the
 # given parameter.  Available options are listed in usage() below.
 #
 # In the second case, the behaviour is to run dpkg-buildpackage and
-# then to run lintian and/or linda on the resulting .changes file.
-# (Running lintian only is the default.)  Lintian and linda options
-# may be specified after --lintian-opts and --linda-opts respectively;
-# all following options will be passed only to lintian/linda.
+# then to run lintian on the resulting .changes file.
+# Lintian options may be specified after --lintian-opts; all following
+# options will be passed only to lintian.
 # 
 # As this may be running setuid, we make sure to clean out the
 # environment before we perform the build, subject to any -e etc.
@@ -109,16 +108,14 @@ First usage method:
 
 Second usage method:
   $progname [<debuild options>] [<dpkg-buildpackage options>]
-             [--lintian-opts <lintian options>] [--linda-opts <linda options>]
-    to run dpkg-buildpackage and then run lintian and/or linda on the
-    resulting .changes file.
+             [--lintian-opts <lintian options>]
+    to run dpkg-buildpackage and then run lintian on the resulting
+    .changes file.
 
     Additional debuild options available in this case are:
 
         --lintian           Run lintian (default)
-        --linda             Run linda
         --no-lintian        Do not run lintian
-        --no-linda          Do not run linda (default)
         --[no-]tgz-check    Do [not] check for an .orig.tar.gz before running
                             dpkg-buildpackage if we have a Debian revision
                             (Default: check) 
@@ -138,7 +135,7 @@ Second usage method:
                             can be reset to nothing with --foo-hook=''
 	--clear-hooks       Clear all hooks
 
-    For available dpkg-buildpackage and lintian/linda options, see their
+    For available dpkg-buildpackage and lintian options, see their
     respective manpages.
 
 Default settings modified by devscripts configuration files:
@@ -172,14 +169,10 @@ my $preserve_env=0;
 my %save_vars;
 my $root_command='';
 my $run_lintian=1;
-my $run_linda=0;
 my $lintian_exists=0;
-my $linda_exists=0;
 my @dpkg_extra_opts=();
 my @lintian_extra_opts=();
 my @lintian_opts=();
-my @linda_extra_opts=();
-my @linda_opts;
 my $checkbuilddep=1;
 my $check_dirname_level = 1;
 my $check_dirname_regex = 'PACKAGE(-.*)?';
@@ -240,7 +233,6 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBUILD_PRESERVE_ENV' => 'no',
 		       'DEBUILD_PRESERVE_ENVVARS' => '',
 		       'DEBUILD_LINTIAN' => 'yes',
-		       'DEBUILD_LINDA' => 'no',
 		       'DEBUILD_ROOTCMD' => 'fakeroot',
 		       'DEBUILD_TGZ_CHECK' => 'yes',
 		       'DEBUILD_DPKG_BUILDPACKAGE_HOOK' => '',
@@ -258,7 +250,6 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     my %config_default = %config_vars;
     my $dpkg_opts_var = 'DEBUILD_DPKG_BUILDPACKAGE_OPTS';
     my $lintian_opts_var = 'DEBUILD_LINTIAN_OPTS';
-    my $linda_opts_var = 'DEBUILD_LINDA_OPTS';
 
     my $shell_cmd;
     # Set defaults
@@ -266,14 +257,14 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     foreach my $var (keys %config_vars) {
 	$shell_cmd .= qq[$var="$config_vars{$var}";\n];
     }
-    foreach my $var ($dpkg_opts_var, $lintian_opts_var, $linda_opts_var) {
+    foreach my $var ($dpkg_opts_var, $lintian_opts_var) {
 	$shell_cmd .= "$var='';\n";
     }
     $shell_cmd .= 'for file in ' . join(" ",@config_files) . "; do\n";
     $shell_cmd .= '[ -f $file ] && . $file; done;' . "\n";
     # Read back values
     foreach my $var (keys %config_vars) { $shell_cmd .= "echo \$$var;\n" }
-    foreach my $var ($dpkg_opts_var, $lintian_opts_var, $linda_opts_var) {
+    foreach my $var ($dpkg_opts_var, $lintian_opts_var) {
 	$shell_cmd .= "eval set -- \$$var;\n";
 	$shell_cmd .= "echo \">>> $var BEGIN <<<\";\n";
 	$shell_cmd .= 'while [ $# -gt 0 ]; do echo $1; shift; done;' . "\n";
@@ -293,8 +284,6 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'DEBUILD_PRESERVE_ENV'}='no';
     $config_vars{'DEBUILD_LINTIAN'} =~ /^(yes|no)$/
 	or $config_vars{'DEBUILD_LINTIAN'}='yes';
-    $config_vars{'DEBUILD_LINDA'} =~ /^(yes|no)$/
-	or $config_vars{'DEBUILD_LINDA'}='no';
     $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} =~ /^[012]$/
 	or $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'}=1;
     $config_vars{'DEBUILD_TGZ_CHECK'} =~ /^(yes|no)$/
@@ -324,7 +313,6 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	@save_vars{@preserve_vars} = (1) x scalar @preserve_vars;
     }
     $run_lintian = $config_vars{'DEBUILD_LINTIAN'} eq 'no' ? 0 : 1;
-    $run_linda = $config_vars{'DEBUILD_LINDA'} eq 'yes' ? 1 : 0;
     $root_command = $config_vars{'DEBUILD_ROOTCMD'};
     $tgz_check = $config_vars{'DEBUILD_TGZ_CHECK'} eq 'yes' ? 1 : 0;
     $check_dirname_level = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'};
@@ -362,20 +350,6 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     }
     if (@lintian_extra_opts) {
 	$modified_conf_msg .= "  $lintian_opts_var='" . join(" ", @lintian_extra_opts) . "'\n";
-    }
-
-    if (shift @othervars ne ">>> $linda_opts_var BEGIN <<<") {
-	fatal "internal error: linda opts list missing proper header";
-    }
-    while (($_ = shift @othervars) ne ">>> $linda_opts_var END <<<"
-	   and @othervars) {
-	push @linda_extra_opts, $_;
-    }
-    if (! @othervars) {
-	fatal "internal error: linda opts list missing proper trailer";
-    }
-    if (@linda_extra_opts) {
-	$modified_conf_msg .= "  $linda_opts_var='" . join(" ", @linda_extra_opts) . "'\n";
     }
 
     # And what is left should be any ENV settings
@@ -496,8 +470,6 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
 	}
 	$arg eq '--no-lintian' and $run_lintian=0, next;
 	$arg eq '--lintian' and $run_lintian=1, next;
-	$arg eq '--no-linda' and $run_linda=0, next;
-	$arg eq '--linda' and $run_linda=1, next;
 	if ($arg eq '--rootcmd') {
 	    unless (defined ($root_command = shift)) {
 		fatal "--rootcmd requires an argument,\nrun $progname --help for usage information";
@@ -708,7 +680,7 @@ else {
 }
 
 if ($command_version eq 'dpkg') {
-    # We're going to emulate dpkg-buildpackage and possibly lintian/linda.
+    # We're going to emulate dpkg-buildpackage and possibly lintian.
     # This will allow us to run hooks.
     # However, if dpkg-cross is installed (as evidenced by the presence
     # of /usr/bin/dpkg-cross), then we call the "real" dpkg-buildpackage,
@@ -733,14 +705,10 @@ if ($command_version eq 'dpkg') {
 
     # Our first task is to parse the command line options.
 
-    # And before we get too excited, does lintian/linda even exist?
+    # And before we get too excited, does lintian even exist?
     if ($run_lintian) {
 	system("command -v lintian >/dev/null 2>&1") == 0
 	    and $lintian_exists=1;
-    }
-    if ($run_linda) {
-	system("command -v linda >/dev/null 2>&1") == 0
-	    and $linda_exists=1;
     }
 
     # dpkg-buildpackage variables explicitly initialised in dpkg-buildpackage
@@ -860,7 +828,7 @@ if ($command_version eq 'dpkg') {
 	if (/^-M/ and $dpkg_cross) { push(@dpkg_opts, $_), next; }
 
 	# these non-dpkg-buildpackage options make us stop
-	if ($_ eq '-L' or $_ eq '--lintian' or /^--(lintian|linda)-opts$/) {
+	if ($_ eq '-L' or $_ eq '--lintian' or /^--lintian-opts$/) {
 	    unshift @ARGV, $_;
 	    last;
 	}
@@ -871,8 +839,8 @@ if ($command_version eq 'dpkg') {
 	fatal "cannot combine dpkg-buildpackage options $sourceonly and $binaryonly";
     }
 
-    # Pick up lintian/linda options if necessary
-    if (($run_lintian || $run_linda) && @ARGV) {
+    # Pick up lintian options if necessary
+    if ($run_lintian && @ARGV) {
 	# Check that option is sensible
     LIN_OPTS:
 	while (@ARGV) {
@@ -888,24 +856,11 @@ if ($command_version eq 'dpkg') {
 		        "$whichlin option given but not running lintian!";
 		}
 		while ($_=shift) {
-		    if (/^--(lintian|linda)-opts$/) {
+		    if (/^--lintian-opts$/) {
 			unshift @ARGV, $_;
 			next LIN_OPTS;
 		    }
 		    push @lintian_opts, $_;
-		}
-	    }
-	    elsif ($whichlin eq '--linda-opts') {
-		if (! $run_linda) {
-		    push @warnings,
-		        "$whichlin option given but not running linda!";
-		}
-		while ($_=shift) {
-		    if (/^--(lintian|linda)-opts$/) {
-			unshift @ARGV, $_;
-			next LIN_OPTS;
-		    }
-		    push @linda_opts, $_;
 		}
 	    }
 	}
@@ -1163,8 +1118,7 @@ if ($command_version eq 'dpkg') {
 	chdir '..' or fatal "can't chdir: $!";
     } # end of debuild dpkg-buildpackage emulation
 
-    run_hook('lintian', (($run_lintian && $lintian_exists) ||
-			 ($run_linda && $linda_exists)) );
+    run_hook('lintian', $run_lintian && $lintian_exists);
     
     if ($run_lintian && $lintian_exists) {
 	$<=$>=$uid;  # Give up on root privileges if we can
@@ -1173,14 +1127,6 @@ if ($command_version eq 'dpkg') {
 	# The remaining items in @ARGV, if any, are lintian options
 	system('lintian', @lintian_extra_opts, @lintian_opts, $changes);
 	print "Finished running lintian.\n";
-    }
-    if ($run_linda && $linda_exists) {
-	$<=$>=$uid;  # Give up on root privileges if we can
-	$(=$)=$gid;
-	print "Now running linda...\n";
-	# The remaining items in @ARGV, if any, are linda options
-	system('linda', @linda_extra_opts, @linda_opts, $changes);
-	print "Finished running linda.\n";
     }
 
     # They've insisted.  Who knows why?!

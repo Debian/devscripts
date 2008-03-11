@@ -24,7 +24,7 @@
 # program is:
 #
 # cvs-debuild [<debuild options>] [<cvs-buildpackage options>]
-#           [--lintian-opts <lintian options>] [--linda-opts <linda options>]
+#           [--lintian-opts <lintian options>]
 # 
 # cvs-debuild will run cvs-buildpackage, using debuild as the
 # package-building program, passing the debuild and lintian options to
@@ -47,13 +47,12 @@ sub usage
 {
     print <<"EOF";
   $progname [<debuild options>] [<cvs-buildpackage options>]
-             [--lintian-opts <lintian options>] [--linda-opts <linda options>]
+             [--lintian-opts <lintian options>]
   to run cvs-buildpackage using debuild as the package building program
 
   Accepted debuild options, see debuild(1) or debuild --help for more info:
     --no-conf, --noconf
     --lintian, --no-lintian
-    --linda, --no-linda
     --rootcmd=<gain-root-command>, -r<gain-root-command>
     --preserve-envvar=<envvar>, -e<envvar>
     --set-envvar=<envvar>=<value>, -e<envvar>=<value>
@@ -63,7 +62,7 @@ sub usage
 
     --help            display this message
     --version         show version and copyright information
-  All cvs-buildpackage options are accepted, as are all lintian/linda options
+  All cvs-buildpackage options are accepted, as are all lintian options.
 
   Note that any cvs-buildpackage options (command line or configuration file)
   for setting a root command will override any debuild configuration file
@@ -94,7 +93,7 @@ unless (system("command -v cvs-buildpackage >/dev/null 2>&1") == 0) {
 }
 
 # We start by parsing the command line to collect debuild and
-# {lintian,linda} options.  We stash them away in temporary files,
+# lintian options.  We stash them away in temporary files,
 # which we will pass to debuild.
 
 my (@debuild_opts, @cvs_opts, @lin_opts);
@@ -117,7 +116,7 @@ my (@debuild_opts, @cvs_opts, @lin_opts);
 	}
 
 	# other debuild options are stashed
-	if ($arg =~ /^--(no-?conf|(no-?)?(lintian|linda))$/) {
+	if ($arg =~ /^--(no-?conf|(no-?)?lintian)$/) {
 	    push @debuild_opts, $arg;
 	    next;
 	}
