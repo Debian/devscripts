@@ -129,7 +129,7 @@ foreach my $filename (@ARGV) {
 		'[^\\\]\{([^\s]+?,)+[^\\\}\s]+\}' =>
 		                               q<brace expansion>,
 		'(?:^|\s+)\w+\[\d+\]=' =>      q<bash arrays, H[0]>,
-		'(?:^|\s+)(read\s*(?:;|$))' => q<read without variable>,
+		'(?:^|\s+)(read\s*(-[^r])?(?:;|$))' => q<should be read [-r] variable>,
 		'\$\(\([A-Za-z]' => q<cnt=$((cnt + 1)) does not work in dash>,
 		'(?:^|\s+)echo\s+-[e]' =>      q<echo -e>,
 		'(?:^|\s+)exec\s+-[acl]' =>    q<exec -c/-l/-a name>,
