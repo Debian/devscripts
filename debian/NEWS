@@ -1,0 +1,10 @@
+devscripts (2.10.19) unstable; urgency=low
+
+    In devscripts 2.10.17, dget was modified to unpack source packages by
+    default.  The new -d switch or the DGET_UNPACK configuration file option
+    may be used to indicate that the unpacking should not occur.
+
+    As linda has been removed from both unstable and testing, support for
+    it has been removed from debuild and cvs-debuild.
+
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Thu, 13 Mar 2008 19:33:38 +0000
