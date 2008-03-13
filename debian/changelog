@@ -39,7 +39,12 @@ devscripts (2.10.19) UNRELEASED; urgency=low
   * bts:
     + Allow the sendmail command to begin with a ~ (Closes: #469207)
     + Don't treat "userblah" as an alias for "users" in "select"
-  * debcommit: Set $SVKDIFF before calling "svk diff" (Closes: #469238)
+  * debcommit:
+    + Set $SVKDIFF before calling "svk diff" (Closes: #469238)
+    + If there are uncommitted changes to the changelog when --release is
+      used, use them as the commit message. Otherwise use the message passed
+      with --message or "releasing version X.Y" as currently
+      (Closes: #470366)
   * deb[ci]:
     + Allow either package names or filenames to be passed on the
       command line (Closes: #469663)

@@ -263,6 +263,8 @@ if (! -e $changelog) {
     die "debcommit: cannot find $changelog\n";
 }
 
+$message=getmessage() if ! defined $message;
+
 if ($release) {
     open (C, "<$changelog" ) || die "debcommit: cannot read $changelog: $!";
     my $top=<C>;
@@ -279,8 +281,6 @@ if ($release) {
     tag($version);
 }
 else {
-    $message=getmessage() if ! defined $message;
-
     if ($edit) {
 	$message = edit($message);
     }
@@ -542,11 +542,15 @@ sub getmessage {
 	}
 	
 	if (! length $ret) {
-	    my $info='';
-	    if ($prog eq 'git') {
-		$info = ' (do you mean "debcommit -a" or did you forget to run "git add"?)';
+	    if ($release) {
+		return;
+	    } else {
+		my $info='';
+		if ($prog eq 'git') {
+		    $info = ' (do you mean "debcommit -a" or did you forget to run "git add"?)';
+		}
+		die "debcommit: unable to determine commit message using $prog$info\nTry using the -m flag.\n";
 	    }
-	    die "debcommit: unable to determine commit message using $prog$info\nTry using the -m flag.\n";
 	} else {
 	    if ($stripmessage) {
 		my $count = () = $ret =~ /^\* /mg;
