@@ -45,10 +45,10 @@ devscripts (2.10.19) UNRELEASED; urgency=low
       used, use them as the commit message. Otherwise use the message passed
       with --message or "releasing version X.Y" as currently
       (Closes: #470366)
-    +  Format commit messages in a more useful manner for git and hg. The
-       first change found is unfolded and used as the summary line. If more
-       than one change was found then an editor is spawned so that the message
-       can be fine-tuned if required (Closes: #402531)
+    + Format commit messages in a more useful manner for git and hg. The
+      first change found is unfolded and used as the summary line. If more
+      than one change was found then an editor is spawned so that the message
+      can be fine-tuned if required (Closes: #402531)
   * deb[ci]:
     + Allow either package names or filenames to be passed on the
       command line (Closes: #469663)
