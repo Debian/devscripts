@@ -64,7 +64,7 @@ Usage: $progname [options] [<maintainer>|<package>]
 Options:
   --no-conf, --noconf Don\'t read devscripts config files;
                       must be the first option given
-  --wipnity, -w       Get information from <http://bjorn.haxx.se/debian/>
+  --wipnity, -w       Check <http://release.debian.org/migration/>
   --help              Show this help
   --version           Give version information
 
