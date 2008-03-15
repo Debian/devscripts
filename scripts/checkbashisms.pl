@@ -46,7 +46,7 @@ You are free to redistribute this code under the terms of the
 GNU General Public License, version 2, or (at your option) any later version.
 EOF
 
-my ($opt_echo, $opt_force);
+my ($opt_echo, $opt_force, $opt_extra);
 my ($opt_help, $opt_version);
 
 ##
@@ -56,6 +56,7 @@ GetOptions("help|h" => \$opt_help,
 	   "version|v" => \$opt_version,
 	   "newline|n" => \$opt_echo,
 	   "force|f" => \$opt_force,
+	   "extra|x" => \$opt_extra,
            )
     or die "Usage: $progname [options] filelist\nRun $progname --help for more details\n";
 
@@ -186,11 +187,21 @@ foreach my $filename (@ARGV) {
 		'\$\{?DIRSTACK\}?\b'        => q<$DIRSTACK>,
 		'\$\{?EUID\}?\b'	    => q<$EUID should be "id -u">,
 		'\$\{?SECONDS\}?\b'	    => q<$SECONDS>,
-		'\$\{?BASH(_[A-Z]+)?\}?\b'   => q<$BASH(_SOMETHING)>,
+		'\$\{?BASH_[A-Z]+\}?\b'     => q<$BASH_SOMETHING>,
 	    );
 
 	    if ($opt_echo) {
 		$bashisms{'echo\s+-[n]'} = 'q<echo -n>';
+	    }
+
+	    if ($opt_extra) {
+		$string_bashisms{'\$\{?BASH\}?\b'} = 'q<$BASH>';
+		$string_bashisms{'(?:^|\s+)RANDOM='} = 'q<RANDOM=>';
+		$string_bashisms{'(?:^|\s+)(OS|MACH)TYPE='} = 'q<(OS|MACH)TYPE=>';
+		$string_bashisms{'(?:^|\s+)HOST(TYPE|NAME)='} = 'q<HOST(TYPE|NAME)=>';
+		$string_bashisms{'(?:^|\s+)DIRSTACK='} = 'q<DIRSTACK=>';
+		$string_bashisms{'(?:^|\s+)EUID='} = 'q<EUID=>';
+		$string_bashisms{'(?:^|\s+)BASH(_[A-Z]+)?='} = 'q<BASH(_SOMETHING)=>';
 	    }
 
 	    my $line = $_;
