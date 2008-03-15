@@ -169,7 +169,7 @@ foreach my $filename (@ARGV) {
 		'(?:^|\s+)unalias\s+-a' =>     q<unalias -a>,
 		'(?:^|\s+)local\s+-[a-zA-Z]+' => q<local -opt>,
 		'(?:^|\s+)local\s+\w+=' =>     q<local foo=bar>,
-		'(?:^|\s+)\s*\w*[^a-zA-Z0-9_\s]+.*?\(\)' => q<function names should only contain [a-z0-9_]>,
+		'(?:^|\s+)\s*\w*[^\w\s]+.*?\(\)' => q<function names should only contain [a-z0-9_]>,
 	    );
 
 	    my %string_bashisms = (
