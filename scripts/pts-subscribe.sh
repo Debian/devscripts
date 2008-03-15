@@ -41,20 +41,6 @@ You are free to redistribute this code under the terms of the
 GNU General Public License, version 2 or later."
 }
 
-# Check for a "mail" command
-if ! command -v mail >/dev/null 2>&1; then
-    echo "$PROGNAME: Could not find the \"mail\" command; you must have the" >&2
-    echo "mailx or mailutils package installed to run this script." >&2
-    exit 1
-fi
-
-# Check for an "at" command
-if ! command -v at >/dev/null 2>&1; then
-    echo "$PROGNAME: Could not find the \"at\" command; you must have the" >&2
-    echo "\"at\" package installed to run this script." >&2
-    exit 1
-fi
-
 # Boilerplate: set config variables
 DEFAULT_PTS_UNTIL='now + 30 days'
 VARS="PTS_UNTIL"
@@ -134,6 +120,20 @@ done
 if [ $# -ne 1 ]; then
     echo "$PROGNAME takes precisely one non-option argument: the package name;" >&2
     echo "try $PROGNAME --help for usage information" >&2
+    exit 1
+fi
+
+# Check for a "mail" command
+if ! command -v mail >/dev/null 2>&1; then
+    echo "$PROGNAME: Could not find the \"mail\" command; you must have the" >&2
+    echo "mailx or mailutils package installed to run this script." >&2
+    exit 1
+fi
+
+# Check for an "at" command
+if ! command -v at >/dev/null 2>&1; then
+    echo "$PROGNAME: Could not find the \"at\" command; you must have the" >&2
+    echo "\"at\" package installed to run this script." >&2
     exit 1
 fi
 
