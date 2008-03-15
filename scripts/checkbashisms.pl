@@ -192,17 +192,17 @@ foreach my $filename (@ARGV) {
 	    );
 
 	    if ($opt_echo) {
-		$bashisms{'echo\s+-[n]'} = 'q<echo -n>';
+		$bashisms{'echo\s+-[n]'} = q<echo -n>;
 	    }
 
 	    if ($opt_extra) {
-		$string_bashisms{'\$\{?BASH\}?\b'} = 'q<$BASH>';
-		$string_bashisms{'(?:^|\s+)RANDOM='} = 'q<RANDOM=>';
-		$string_bashisms{'(?:^|\s+)(OS|MACH)TYPE='} = 'q<(OS|MACH)TYPE=>';
-		$string_bashisms{'(?:^|\s+)HOST(TYPE|NAME)='} = 'q<HOST(TYPE|NAME)=>';
-		$string_bashisms{'(?:^|\s+)DIRSTACK='} = 'q<DIRSTACK=>';
-		$string_bashisms{'(?:^|\s+)EUID='} = 'q<EUID=>';
-		$string_bashisms{'(?:^|\s+)BASH(_[A-Z]+)?='} = 'q<BASH(_SOMETHING)=>';
+		$string_bashisms{'\$\{?BASH\}?\b'} = q<$BASH>;
+		$string_bashisms{'(?:^|\s+)RANDOM='} = q<RANDOM=>;
+		$string_bashisms{'(?:^|\s+)(OS|MACH)TYPE='} = q<(OS|MACH)TYPE=>;
+		$string_bashisms{'(?:^|\s+)HOST(TYPE|NAME)='} = q<HOST(TYPE|NAME)=>;
+		$string_bashisms{'(?:^|\s+)DIRSTACK='} = q<DIRSTACK=>;
+		$string_bashisms{'(?:^|\s+)EUID='} = q<EUID=>;
+		$string_bashisms{'(?:^|\s+)BASH(_[A-Z]+)?='} = q<BASH(_SOMETHING)=>;
 	    }
 
 	    my $line = $_;
