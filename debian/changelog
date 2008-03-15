@@ -15,6 +15,10 @@ devscripts (2.10.19) UNRELEASED; urgency=low
     + Add non-maintainer uploads (including security and QA uploads),
       backports and the use of local version strings to the list of
       cases where debchange doesn't have to guess the user's intentions
+    + Add an --allow-lower-version option which is similar to
+      --force-bad-version but allows a regular expression to be specified
+      which the new version must match. Based on a patch by Frank Küster
+      (Closes: #381159)
   * checkbashisms:
     + Use Getopt::Long for option parsing
     + Add an option to force checking of scripts that would normally be

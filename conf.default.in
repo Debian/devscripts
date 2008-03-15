@@ -161,6 +161,10 @@
 #
 # Use a fixed timezone in changelog entries?
 # DEBCHANGE_TZ=UTC
+#
+# Allow a new version to be lower than the current package version
+# if the new version matches the specified regular expression
+# DEBCHANGE_LOWER_VERSION_PATTERN=bpo
 
 ##### debcheckout
 #

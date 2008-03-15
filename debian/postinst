@@ -423,6 +423,17 @@ EOF
 
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.19
+	then
+	    # Added in devscripts 2.10.19
+	    cat >> /etc/devscripts.conf <<EOF
+# Allow a new version to be lower than the current package version
+# if the new version matches the specified regular expression
+# DEBCHANGE_LOWER_VERSION_PATTERN=bpo
+
+EOF
+	fi
     fi
 fi
 

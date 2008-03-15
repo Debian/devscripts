@@ -89,6 +89,9 @@ Options:
   -b, --force-bad-version
          Force a version to be less than the current one (e.g., when
          backporting)
+  --allow-lower-version
+         Allow a version to be less than the current one (e.g., when
+         backporting) if it matches a specified pattern
   --force-distribution
          Force the provided distribution to be used, even if it doesn't match
          the list of known distributions
@@ -170,6 +173,7 @@ my $opt_multimaint = 1;
 my $opt_multimaint_merge = 0;
 my $opt_tz = undef;
 my $opt_t = '';
+my $opt_allow_lower = '';
 
 # Next, read configuration files and then command line
 # The next stuff is boilerplate
@@ -189,6 +193,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBCHANGE_TZ' => $ENV{TZ}, # undef if TZ unset
 		       'DEBCHANGE_MULTIMAINT_MERGE' => 'no',
 		       'DEBCHANGE_MAINTTRAILER' => '',
+		       'DEBCHANGE_LOWER_VERSION_PATTERN' => '',
 		       );
     $config_vars{'DEBCHANGE_TZ'} ||= '';
     my %config_default = %config_vars;
@@ -237,6 +242,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $opt_multimaint_merge = $config_vars{'DEBCHANGE_MULTIMAINT_MERGE'} eq 'no' ? 0 : 1;
     $opt_t = ($config_vars{'DEBCHANGE_MAINTTRAILER'} eq 'no' ? 0 : 1)
 	if $config_vars{'DEBCHANGE_MAINTTRAILER'};
+    $opt_allow_lower = $config_vars{'DEBCHANGE_LOWER_VERSION_PATTERN'};
 }
 
 # We use bundling so that the short option behaviour is the same as
@@ -258,6 +264,7 @@ GetOptions("help|h" => \$opt_help,
 	   "package=s" => \$opt_package,
 	   "v|newversion=s" => \$opt_v,
 	   "b|force-bad-version" => \$opt_b,
+	   "allow-lower-version" => \$opt_allow_lower,
 	   "force-distribution" => \$opt_force_dist,
 	   "d|fromdirname" => \$opt_d,
 	   "p" => \$opt_p,
@@ -370,8 +377,8 @@ fatal "--package cannot be used when creating a NEWS file"
 
 if ($opt_create) {
     if ($opt_a || $opt_i || $opt_e || $opt_r || $opt_b || $opt_n || $opt_bn ||
-	    $opt_qa || $opt_s || $opt_bpo || $opt_l) {
-	warn "$progname warning: ignoring -a/-i/-e/-r/-b/-n/--bin-nmu/--qa/-s/--bpo/-l options with --create\n";
+	    $opt_qa || $opt_s || $opt_bpo || $opt_l || $opt_allow_lower) {
+	warn "$progname warning: ignoring -a/-i/-e/-r/-b/--allow-lower-version/-n/--bin-nmu/--qa/-s/--bpo/-l options with --create\n";
 	$warnings++;
     }
     if ($opt_package && $opt_d) {
@@ -859,7 +866,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 
 	if (system("dpkg --compare-versions $VERSION lt $NEW_VERSION" .
 		  " 2>/dev/null 1>&2")) {
-	    if ($opt_b) {
+	    if ($opt_b or ($opt_allow_lower and $NEW_VERSION =~ /$opt_allow_lower/)) {
 		warn "$progname warning: new version ($NEW_VERSION) is less than\n" .
 		    "the current version number ($VERSION).\n";
 	    } else {
