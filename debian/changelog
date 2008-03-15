@@ -19,6 +19,8 @@ devscripts (2.10.19) UNRELEASED; urgency=low
       --force-bad-version but allows a regular expression to be specified
       which the new version must match. Based on a patch by Frank Küster
       (Closes: #381159)
+    + Modify the version-handling code to generate NMU versions of the
+      for X+nmu1 for Debian-native packages
   * checkbashisms:
     + Use Getopt::Long for option parsing
     + Add an option to force checking of scripts that would normally be

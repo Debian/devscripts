@@ -891,10 +891,18 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 	    my $start=$1;
 	    # If it's not already an NMU make it so
 	    # otherwise we can be safe if we behave like dch -i
-	    if (($opt_n or $opt_s) and (not $start =~ /\.$/ or $VERSION eq $UVERSION)) {
+
+	    if (($opt_n or $opt_s) and (
+		($VERSION eq $UVERSION and not $start =~ /\+nmu/)
+		or ($VERSION ne $UVERSION and not $start =~ /\.$/))) {
+
 		if ($VERSION eq $UVERSION) {
 		    # First NMU of a Debian native package
-		    $end .= "-0.1";
+		    if ($opt_n) {
+			$end .= "+nmu1";
+		    } else {
+			$end .= "-0.1";
+		    }
 		} else {
 	    	    $end += 0.1;
 		}
