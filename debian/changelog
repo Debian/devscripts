@@ -61,7 +61,8 @@ devscripts (2.10.19) UNRELEASED; urgency=low
   * deb[ci]:
     + Allow either package names or filenames to be passed on the
       command line (Closes: #469663)
-    + Fix an unescaped hyphen in the manpage
+    + Fix reference to dpkg-deb(8) (should be section 1) and an unescaped
+      hyphen in the manpage
   * annotate-output.1, cvs-debi.1, dd-list.1, debuild.1, dpkg-depcheck.1, 
     dpkg-genbuilddeps.1, nmudiff.1, plotchangelog.1, uscan.1,
     devscripts.conf.5: Fix unescaped hyphens
