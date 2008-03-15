@@ -40,6 +40,7 @@ devscripts (2.10.19) UNRELEASED; urgency=low
       but which may contain other useful information - for example, checking
       whether $BASH is set before using bashisms or $RANDOM being used as a
       local variable rather than the bash built-in variable (Closes: #470999)
+    + Add a check for "VAR+=foo" (Closes: #471001)
   * bts:
     + Allow the sendmail command to begin with a ~ (Closes: #469207)
     + Don't treat "userblah" as an alias for "users" in "select"

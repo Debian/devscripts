@@ -141,6 +141,7 @@ foreach my $filename (@ARGV) {
 		'\s\|\&' =>                    q<pipelining is not POSIX>,
 		'[^\\\]\{([^\s]+?,)+[^\\\}\s]+\}' =>
 		                               q<brace expansion>,
+		'(?:^|\s+)\w+\+=' =>           q<should be VAR="$VAR foo">,
 		'(?:^|\s+)\w+\[\d+\]=' =>      q<bash arrays, H[0]>,
 		'(?:^|\s+)(read\s*(-[^r])?(?:;|$))' => q<should be read [-r] variable>,
 		'\$\(\([A-Za-z]' => q<cnt=$((cnt + 1)) does not work in dash>,
