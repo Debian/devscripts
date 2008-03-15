@@ -103,7 +103,19 @@ foreach my $filename (@ARGV) {
 	chomp;
 	my $orig_line = $_;
 
-	s/(?<!\\)\#.*$//;   # eat comments
+	# We want to remove end-of-line comments, so need to skip
+	# comments in the "quoted" part of a line that starts
+	# in a quoted block or that appear inside balanced pairs
+	# of single or double quotes
+	s/^(?:.*?[^\\])?$quote_string(.*)$/$1/ if $quote_string ne "";
+	s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
+	s/(^|[^\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
+	if (m/(?<!\\)(\#.*$)/) {
+	    $_ = $orig_line;
+	    $_ =~ s/\Q$1\E//;  # eat comments
+	} else {
+	    $_ = $orig_line;
+	}
 
 	if ($cat_string ne "" and m/^$cat_string/) {
 	    $cat_string = "";
@@ -200,16 +212,26 @@ foreach my $filename (@ARGV) {
 		    # Still inside the quoted block, skip this line
 		    next;
 		}
-	    } elsif ($line =~ /(?:^|[^\\])([\"\'])\s*\{?\s*$/) {
+	    } else {
 		# Possible start of a quoted block
-		my $temp = $1;
-		my $count = () = $line =~ /(^|[^\\])$temp/g;
-
-		# If there's an odd number of non-escaped
-		# quotes in the line and the line ends with
-		# one, it's almost certainly the start of
-		# a quoted block.
-		$quote_string = $temp if ($count % 2 == 1);
+		for my $quote ("\"", "\'") {
+		    my $templine = $line;
+		    my $otherquote = ($quote eq "\"" ? "\'" : "\"");
+		    # Remove "" / '' as they clearly aren't quoted strings
+		    # and not considering them makes the matching easier
+		    $templine =~ s/([^\\])($quote$quote)/$1/g;
+		    # Don't flag quotes that are themselves quoted
+		    $templine =~ s/$otherquote.*?$quote.*?$otherquote//g;
+		    my $count = () = $templine =~ /(^|[^\\])$quote/g;
+		    # If there's an odd number of non-escaped
+		    # quotes in the line it's almost certainly the
+		    # start of a quoted block.
+		    if ($count % 2 == 1) {
+			$quote_string = $quote;
+			$line =~ s/^(.*)$quote.*$/$1/;
+			last;
+		    }
+		}
 	    }
 
 	    # since this test is ugly, I have to do it by itself
