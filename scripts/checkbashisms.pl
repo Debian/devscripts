@@ -52,6 +52,8 @@ my ($opt_help, $opt_version);
 ##
 ## handle command-line options
 ##
+$opt_help = 1 if int(@ARGV) == 0;
+
 GetOptions("help|h" => \$opt_help,
 	   "version|v" => \$opt_version,
 	   "newline|n" => \$opt_echo,
@@ -60,7 +62,7 @@ GetOptions("help|h" => \$opt_help,
            )
     or die "Usage: $progname [options] filelist\nRun $progname --help for more details\n";
 
-if (int(@ARGV) == 0 or $opt_help) { print $usage; exit 0; }
+if ($opt_help) { print $usage; exit 0; }
 if ($opt_version) { print $version; exit 0; }
 
 my $status = 0;
@@ -141,7 +143,7 @@ foreach my $filename (@ARGV) {
 		'\s\|\&' =>                    q<pipelining is not POSIX>,
 		'[^\\\]\{([^\s]+?,)+[^\\\}\s]+\}' =>
 		                               q<brace expansion>,
-		'(?:^|\s+)\w+\+=' =>           q<should be VAR="$VAR foo">,
+		'(?:^|\s+)\w+\+=' =>           q<should be VAR="${VAR}foo">,
 		'(?:^|\s+)\w+\[\d+\]=' =>      q<bash arrays, H[0]>,
 		'(?:^|\s+)(read\s*(-[^r])?(?:;|$))' => q<should be read [-r] variable>,
 		'\$\(\([A-Za-z]' => q<cnt=$((cnt + 1)) does not work in dash>,

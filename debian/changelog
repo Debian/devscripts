@@ -1,3 +1,11 @@
+devscripts (2.10.20) UNRELEASED; urgency=low
+
+  * checkbashisms:
+    + Make --version actually produce version information
+    + Fix explanation of VAR+=foo
+
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sun, 16 Mar 2008 19:40:40 +0000
+
 devscripts (2.10.19) unstable; urgency=low
 
   * debsign: Correctly handle signing an automatically located .changes
