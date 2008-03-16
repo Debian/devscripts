@@ -428,6 +428,8 @@ EOF
 	then
 	    # Added in devscripts 2.10.19
 	    cat >> /etc/devscripts.conf <<EOF
+##### debchange option added in version 2.10.19
+#
 # Allow a new version to be lower than the current package version
 # if the new version matches the specified regular expression
 # DEBCHANGE_LOWER_VERSION_PATTERN=bpo
