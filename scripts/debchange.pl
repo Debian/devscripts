@@ -898,11 +898,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 
 		if ($VERSION eq $UVERSION) {
 		    # First NMU of a Debian native package
-		    if ($opt_n) {
-			$end .= "+nmu1";
-		    } else {
-			$end .= "-0.1";
-		    }
+		    $end .= "+nmu1";
 		} else {
 	    	    $end += 0.1;
 		}
