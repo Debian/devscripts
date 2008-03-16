@@ -29,7 +29,7 @@ use Getopt::Long;
 (my $progname = $0) =~ s|.*/||;
 
 my $usage = <<"EOF";
-Usage: $progname [-n] [-f] script ...
+Usage: $progname [-n] [-f] [-x] script ...
    or: $progname --help
    or: $progname --version
 This script performs basic checks for the presence of bashisms
