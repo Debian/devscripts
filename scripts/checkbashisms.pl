@@ -156,7 +156,6 @@ foreach my $filename (@ARGV) {
 		'(?:^|\s+)kill\s+-[^sl]\w*' => q<kill -[0-9] or -[A-Z]>,
 		'(?:^|\s+)trap\s+["\']?.*["\']?\s+.*[1-9]' => q<trap with signal numbers>,
 		'\[\[(?!:)' => q<alternative test command ([[ foo ]] should be [ foo ])>,
-		'<<<'                       => q<\<\<\< here string>,
 		'/dev/(tcp|udp)'	    => q</dev/(tcp|udp)>,
 		'(?:^|\s+)suspend\s' =>        q<suspend>,
 		'(?:^|\s+)caller\s' =>         q<caller>,
@@ -189,6 +188,7 @@ foreach my $filename (@ARGV) {
 		'\$\{?EUID\}?\b'	    => q<$EUID should be "id -u">,
 		'\$\{?SECONDS\}?\b'	    => q<$SECONDS>,
 		'\$\{?BASH_[A-Z]+\}?\b'     => q<$BASH_SOMETHING>,
+		'<<<'                       => q<\<\<\< here string>,
 	    );
 
 	    if ($opt_echo) {
