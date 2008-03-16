@@ -48,6 +48,7 @@ devscripts (2.10.19) UNRELEASED; urgency=low
       local variable rather than the bash built-in variable (Closes: #470999)
     + Add a check for "VAR+=foo" (Closes: #471001)
     + Also detect <<< inside a quoted string (Closes: #471059)
+    + Improve comment detection and removal to not remove "s/#/foo/"
   * bts:
     + Allow the sendmail command to begin with a ~ (Closes: #469207)
     + Don't treat "userblah" as an alias for "users" in "select"
