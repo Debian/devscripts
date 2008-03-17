@@ -486,8 +486,8 @@ elsif ($type eq 'dsc') {
 
 	# replace in first line:
 	my $first = <DIFF>;
-	$first =~ s/ $dir1\/$sdir1/ $sdir1/;
-	$first =~ s/ $dir2\/$sdir2/ $sdir2/;
+	$first =~ s/ $dir1\/\Q$sdir1\E/ $sdir1/;
+	$first =~ s/ $dir2\/\Q$sdir2\E/ $sdir2/;
 	print $first;
 
 	while(<DIFF>) {
