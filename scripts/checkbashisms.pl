@@ -233,7 +233,7 @@ foreach my $filename (@ARGV) {
 		    my $otherquote = ($quote eq "\"" ? "\'" : "\"");
 		    # Remove "" / '' as they clearly aren't quoted strings
 		    # and not considering them makes the matching easier
-		    $templine =~ s/([^\\])($quote$quote)/$1/g;
+		    $templine =~ s/(^|[^\\])($quote$quote)/$1/g;
 		    # Don't flag quotes that are themselves quoted
 		    $templine =~ s/$otherquote.*?$quote.*?$otherquote//g;
 		    my $count = () = $templine =~ /(^|[^\\])$quote/g;
