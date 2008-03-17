@@ -211,10 +211,24 @@ foreach my $filename (@ARGV) {
 
 	    if ($quote_string ne "") {
 		# Inside a quoted block
-		if ($line =~ /^(?:.*?[^\\])?$quote_string(.*)$/) {
+		if ($line =~ /(?:^|^.*?[^\\])$quote_string(.*)$/) {
 		    my $rest = $1;
-		    my $count = () = $line =~ /(^|[^\\])?$quote_string/g;
-		    if ($count % 2 == 1) {
+		    my $templine = $line;
+		    my $otherquote = ($quote_string eq "\"" ? "\'" : "\"");
+
+		    # Remove quoted strings delimited with $otherquote
+		    $templine =~ s/$otherquote[^$quote_string]*?$otherquote//g;
+		    # Remove quotes that are themselves quoted
+		    $templine =~ s/$otherquote.*?$quote_string.*?$otherquote//g;
+		    # Remove "" or ''
+		    $templine =~ s/(^|[^\\])$quote_string$quote_string/$1/g;
+
+		    # After all that, were there still any quotes left?
+		    my $count = () = $templine =~ /(^|[^\\])$quote_string/g;
+		    next if $count == 0;
+
+		    $count = () = $rest =~ /(^|[^\\])$quote_string/g;
+		    if ($count % 2 == 1 or $count == 0) {
 			# Quoted block ends on this line
 			# Ignore everything before the closing quote
 			$line = $rest || '';
@@ -226,17 +240,25 @@ foreach my $filename (@ARGV) {
 		    # Still inside the quoted block, skip this line
 		    next;
 		}
-	    } else {
+	    }
+	    if ($quote_string eq "") {
 		# Possible start of a quoted block
 		for my $quote ("\"", "\'") {
 		    my $templine = $line;
 		    my $otherquote = ($quote eq "\"" ? "\'" : "\"");
+
+		    # Remove balanced quotes and their content
+		    $templine =~ s/(^|[^\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
+		    $templine =~ s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
+
 		    # Remove "" / '' as they clearly aren't quoted strings
 		    # and not considering them makes the matching easier
 		    $templine =~ s/(^|[^\\])($quote$quote)/$1/g;
+
 		    # Don't flag quotes that are themselves quoted
 		    $templine =~ s/$otherquote.*?$quote.*?$otherquote//g;
 		    my $count = () = $templine =~ /(^|[^\\])$quote/g;
+
 		    # If there's an odd number of non-escaped
 		    # quotes in the line it's almost certainly the
 		    # start of a quoted block.
