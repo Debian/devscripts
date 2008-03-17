@@ -1,5 +1,7 @@
 devscripts (2.10.20) UNRELEASED; urgency=low
 
+  * bts: Only append a single ellipsis to the mail subject once it becomes
+    too long, rather than for each extra command (Closes: #471304)
   * checkbashisms:
     + Make --version actually produce version information
     + Fix explanation of VAR+=foo

@@ -1867,7 +1867,7 @@ sub mailbts {
     elsif (length($subject) + length($_[0]) < 100) {
 	$subject .= ", $_[0]";
     }
-    else {
+    elsif ($subject !~ / ...$/) {
 	$subject .= " ...";
     }
     $body .= "$comment[$index]\n" if $comment[$index];
