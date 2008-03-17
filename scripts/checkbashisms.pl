@@ -326,7 +326,7 @@ sub script_is_evil_and_wrong {
         next if /^$/o;
         last if (++$i > 20);
 
-        if (/(^\s*|\beval\s*\'|;\s*)exec\s*.+\s*.?\$0.?\s*(--\s*)?(\${1:?\+)?.?\$(\@|\*)/o) {
+        if (/(^\s*|\beval\s*\'|;\s*)exec\s*.+\s*.?\$0.?\s*(--\s*)?.?(\${1:?\+)?\$(\@|\*)/o) {
             $ret = 1;
             last;
         }
