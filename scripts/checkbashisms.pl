@@ -341,17 +341,19 @@ sub script_is_evil_and_wrong {
     # itself
     open (IN, '<', $filename) or return;
     my $i = 0;
+    my $var = "0";
     local $_;
     while (<IN>) {
         chomp;
         next if /^#/o;
         next if /^$/o;
-        last if (++$i > 20);
-
-        if (/(^\s*|\beval\s*\'|;\s*)exec\s*.+\s*.?\$0.?\s*(--\s*)?.?(\${1:?\+)?\$(\@|\*)/o) {
+        last if (++$i > 55);
+        if ((/^\s*|\beval\s*[\'\"]|;\s*)exec\s*.+\s*.?\$$var.?\s*(--\s*)?.?(\${1:?\+)?\$(\@|\*)/) {
             $ret = 1;
             last;
-        }
+        } elsif (/^\s*(\w+)=\$0;/) {
+	    $var = $1;
+	}
     }
     close IN;
     return $ret;

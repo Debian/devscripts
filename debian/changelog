@@ -10,7 +10,9 @@ devscripts (2.10.20) UNRELEASED; urgency=low
       before the function name
     + Don't treat '' at the beginning of a line as the start of a quoted block
     + Allow a heredoc marker to begin with a backslash
-    + Enhance quoted block detection to handle escaped quotes better 
+    + Enhance quoted block detection to handle escaped quotes better
+    + Enhance "shell script wrapper" detection to catch more ways of
+      disguising a non shell script as one
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sun, 16 Mar 2008 19:40:40 +0000
 
