@@ -113,6 +113,10 @@ foreach my $filename (@ARGV) {
 	s/^(?:.*?[^\\])?$quote_string(.*)$/$1/ if $quote_string ne "";
 	s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
 	s/(^|[^\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
+
+	# If the remaining string contains what looks like a comment,
+	# eat it. In either case, swap the unmodified script line
+	# back in for processing.
 	if (m/(?<!\\)(\#.*$)/) {
 	    $_ = $orig_line;
 	    $_ =~ s/\Q$1\E//;  # eat comments
