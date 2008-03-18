@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+7#! /usr/bin/perl -w
 
 # This script is essentially copied from /usr/share/lintian/checks/scripts,
 # which is:
@@ -245,6 +245,10 @@ foreach my $filename (@ARGV) {
 		    next;
 		}
 	    }
+
+	    # Check even if we removed the end of a quoted block
+	    # in the previous check, as a single line can end one
+	    # block and begin another
 	    if ($quote_string eq "") {
 		# Possible start of a quoted block
 		for my $quote ("\"", "\'") {
