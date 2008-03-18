@@ -15,6 +15,8 @@ devscripts (2.10.20) UNRELEASED; urgency=low
       disguising a non shell script as one
   * debdiff: Escape package names when normalising path names
     (Closes: #471282)
+  * uscan: Correctly handle an explicit upstream-version of 0
+    (Closes: #471503)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sun, 16 Mar 2008 19:40:40 +0000
 

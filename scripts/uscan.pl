@@ -736,7 +736,7 @@ sub process_watchline ($$$$$$)
 	    (undef, $lastversion, $action) = split ' ', $line, 3;
 	}
 
-	if ((!$lastversion or $lastversion eq 'debian') and !$pkg_version) {
+	if ((!$lastversion or $lastversion eq 'debian') and not defined $pkg_version) {
 	    warn "$progname warning: Unable to determine current version\n  in $watchfile, skipping:\n  $line\n";
 	    return 1;
 	}
@@ -956,7 +956,7 @@ EOF
 	}
     }
     if (! $lastversion or $lastversion eq 'debian') {
-	if ($pkg_version) {
+	if (defined $pkg_version) {
 	    $lastversion=$pkg_version;
 	} else {
 	    warn "$progname warning: Unable to determine current version\n  in $watchfile, skipping:\n  $line\n";
