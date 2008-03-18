@@ -288,6 +288,13 @@ foreach my $filename (@ARGV) {
 	    }
 
 	    unless ($found) {
+		# Remove "quoted quotes". They're likely to be inside
+		# another pair of quotes; we're not interested in
+		# them for their own sake and removing them makes finding
+		# the limits of the outer pair far easier.
+		$line =~ s/(^|[^\\\'\"])\"\'\"/$1/g;
+		$line =~ s/(^|[^\\\'\"])\'\"\'/$1/g;
+
 		# Ignore anything inside single quotes; it could be an
 		# argument to grep or the like.
 		$line =~ s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
