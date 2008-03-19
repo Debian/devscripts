@@ -436,6 +436,20 @@ EOF
 
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.20
+	then
+	    # Added in devscripts 2.10.20
+	    cat >> /etc/devscripts.conf <<EOF
+##### debcommit option added in version 2.10.20
+#
+# Take any uncommitted changes in the changelog in
+# to account when determining the commit message
+# for a release?
+# DEBCOMMIT_RELEASE_USE_CHANGELOG=no
+
+EOF
+	fi
     fi
 fi
 

@@ -1,3 +1,17 @@
+devscripts (2.10.20) unstable; urgency=low
+
+    devscripts 2.10.19 modified debcommit's --release option to use the
+    uncommitted changes (if any) in the changelog to derive the commit
+    message.
+
+    This behaviour is now optional and can be enabled using the -R /
+    --release-use-changelog command line option or by setting the
+    DEBCOMMIT_RELEASE_USE_CHANGELOG configuration option to "yes".
+
+    The default is to use the previous (i.e. pre-2.10.19) behaviour.
+
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 19 Mar 2008 20:31:20 +0000
+
 devscripts (2.10.19) unstable; urgency=low
 
     In devscripts 2.10.17, dget was modified to unpack source packages by

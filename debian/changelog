@@ -13,6 +13,12 @@ devscripts (2.10.20) UNRELEASED; urgency=low
     + Enhance quoted block detection to handle escaped quotes better
     + Enhance "shell script wrapper" detection to catch more ways of
       disguising a non shell script as one
+  * debcommit: Make the change to --release's behaviour introduced in the
+    last upload optional. If -R / --release-use-changelog is used then
+    the changelog will be checked for uncommitted changes when determining
+    the commit message. The default is not to do so and use the message
+    passed with --message (if any) or "releasing version X.Y.Z" as before.
+    (Closes: #471723)
   * debdiff: Escape package names when normalising path names
     (Closes: #471282)
   * uscan: Correctly handle an explicit upstream-version of 0

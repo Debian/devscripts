@@ -6,7 +6,7 @@ debcommit - commit changes to a package
 
 =head1 SYNOPSIS
 
-B<debcommit> [B<--release>] [B<--message=>I<text>] [B<--noact>] [B<--diff>] [B<--confirm>] [B<--edit>] [B<--changelog=>I<path>] [B<--all> | I<files to commit>]
+B<debcommit> [B<--release>] [B<--release-use-changelog>] [B<--message=>I<text>] [B<--noact>] [B<--diff>] [B<--confirm>] [B<--edit>] [B<--changelog=>I<path>] [B<--all> | I<files to commit>]
 
 =head1 DESCRIPTION
 
@@ -33,6 +33,12 @@ debian/changelog, and is used to tag the package in the repository.
 Note that svn/svk tagging conventions vary, so debcommit uses
 L<svnpath(1)> to determine where the tag should be placed in the
 repository.
+
+=item B<-R> B<--release-use-changelog>
+
+When used in conjunction with --release, if there are uncommited
+changes to the changelog then derive the commit message from those
+changes rather than using the default message.
 
 =item B<-m> I<text> B<--message> I<text>
 
@@ -110,6 +116,11 @@ command line parameter being used. The default is I<no>.
 If this is set to I<yes>, then it is the same as the --sign-tags command
 line parameter being used. The default is I<no>.
 
+=item B<DEBCOMMIT_RELEASE_USE_CHANGELOG>
+
+If this is set to I<yes>, then it is the same as the --release-use-changelog
+command line parameter being used. The default is I<no>.
+
 =item B<DEBSIGN_KEYID>
 
 This is the key id used for signing tags. If not set, a default will be
@@ -139,6 +150,10 @@ and commit the change to a package\'s repository.
 Options:
    -c --changelog=path Specify the location of the changelog
    -r --release        Commit a release of the package and create a tag
+   -R --release-use-changelog
+                       Take any uncommitted changes in the changelog in
+                       to account when determining the commit message
+                       for a release
    -m --message=text   Specify a commit message
    -n --noact          Dry run, no actual commits
    -d --diff           Print diff on standard output instead of committing
@@ -174,6 +189,7 @@ EOF
 
 my $release=0;
 my $message;
+my $release_use_changelog=0;
 my $noact=0;
 my $diffmode=0;
 my $confirm=0;
@@ -195,6 +211,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     my %config_vars = (
 		       'DEBCOMMIT_STRIP_MESSAGE' => 'no',
 		       'DEBCOMMIT_SIGN_TAGS' => 'no',
+		       'DEBCOMMIT_RELEASE_USE_CHANGELOG' => 'no',
 		       'DEBSIGN_KEYID' => '',
 		      );
     my %config_default = %config_vars;
@@ -216,6 +233,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'DEBCOMMIT_STRIP_MESSAGE'}='no';
     $config_vars{'DEBCOMMIT_SIGN_TAGS'} =~ /^(yes|no)$/
 	or $config_vars{'DEBCOMMIT_SIGN_TAGS'}='no';
+    $config_vars{'DEBCOMMIT_RELEASE_USE_CHANGELOG'} =~ /^(yes|no)$/
+	or $config_vars{'DEBCOMMIT_RELEASE_USE_CHANGELOG'}='no';
 
     foreach my $var (sort keys %config_vars) {
         if ($config_vars{$var} ne $config_default{$var}) {
@@ -227,6 +246,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 
     $stripmessage = $config_vars{'DEBCOMMIT_STRIP_MESSAGE'} eq 'no' ? 0 : 1;
     $signtags = $config_vars{'DEBCOMMIT_SIGN_TAGS'} eq 'no' ? 0 : 1;
+    $release_use_changelog = $config_vars{'DEBCOMMIT_RELEASE_USE_CHANGELOG'} eq 'no' ? 0 : 1;
     if (exists $config_vars{'DEBSIGN_KEYID'} &&
 	length $config_vars{'DEBSIGN_KEYID'}) {
 	$keyid=$config_vars{'DEBSIGN_KEYID'};
@@ -247,10 +267,11 @@ if (! GetOptions(
 		 "c|changelog=s" => \$changelog,
 		 "s|strip-message!" => \$stripmessage,
 		 "sign-tags!" => \$signtags,
+		 "R|release-use-changelog!" => \$release_use_changelog,
 		 "h|help" => sub { usage(); exit 0; },
 		 "v|version" => sub { version(); exit 0; },
 		 )) {
-    die "Usage: debcommit [--release] [--message=text] [--noact] [--diff] [--confirm] [--edit] [--changelog=path] [--all | files to commit]\n";
+    die "Usage: debcommit [--release] [--release-use-changelog] [--message=text] [--noact] [--diff] [--confirm] [--edit] [--changelog=path] [--all | files to commit]\n";
 }
 
 my @files_to_commit = @ARGV;
@@ -263,7 +284,7 @@ if (! -e $changelog) {
     die "debcommit: cannot find $changelog\n";
 }
 
-$message=getmessage() if ! defined $message;
+$message=getmessage() if ! defined $message and (not $release or $release_use_changelog);
 
 if ($release) {
     open (C, "<$changelog" ) || die "debcommit: cannot read $changelog: $!";

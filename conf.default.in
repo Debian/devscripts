@@ -182,6 +182,11 @@
 #
 # Sign created tags using gnupg?
 # DEBCOMMIT_SIGN_TAGS=no
+#
+# Take any uncommitted changes in the changelog in
+# to account when determining the commit message
+# for a release?
+# DEBCOMMIT_RELEASE_USE_CHANGELOG=no
 
 ##### debdiff
 # 
