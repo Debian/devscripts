@@ -92,8 +92,6 @@ begins with "* ".
 If this option is set, then tags that debcommit creates will be signed
 using gnupg. Currently this is only supported by git.
 
-=over 4
-
 =back
 
 =head1 CONFIGURATION VARIABLES
@@ -125,6 +123,37 @@ command line parameter being used. The default is I<no>.
 
 This is the key id used for signing tags. If not set, a default will be
 chosen by the revision control system.
+
+=back
+
+=head1 VCS SPECIFIC FEATURES
+
+Each of the features described below is applicable only if the commit message
+has been automatically determined from the changelog.
+
+=over 4
+
+=item B<git>
+
+If only a single change is detected in the changelog, B<debcommit> will unfold
+it to a single line and behave as if I<--strip-message> was used.
+
+Otherwise, the first change will be unfolded and stripped to form a summary line
+and a commit message formed using the summary line followed by a blank line and
+the changes as extracted from the changelog. B<debcommit> will then spawn an
+editor so that the message may be fine-tuned before committing.
+
+=item B<hg>
+
+The first change detected in the changelog will be unfolded to form a single line
+summary. If multiple changes were detected then an editor will be spawned to
+allow the message to be fine-tuned.
+
+=item B<tla> / B<baz>
+
+If the commit message contains more than 72 characters, a summary will
+be created containing as many full words from the message as will fit within
+72 characters, followed by an ellipsis.
 
 =cut
 

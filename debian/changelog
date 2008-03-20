@@ -23,6 +23,7 @@ devscripts (2.10.20) UNRELEASED; urgency=low
     + When creating summary lines for git and hg, ignore any subchanges
       (i.e. lines indented by more than two spaces and starting with *, +
       or -)
+    + Add documentation to the manpage of the current VCS-specific features
   * debdiff: Escape package names when normalising path names
     (Closes: #471282)
   * uscan: Correctly handle an explicit upstream-version of 0
