@@ -136,7 +136,7 @@ has been automatically determined from the changelog.
 =item B<git>
 
 If only a single change is detected in the changelog, B<debcommit> will unfold
-it to a single line and behave as if I<--strip-message> was used.
+it to a single line and behave as if --strip-message was used.
 
 Otherwise, the first change will be unfolded and stripped to form a summary line
 and a commit message formed using the summary line followed by a blank line and
