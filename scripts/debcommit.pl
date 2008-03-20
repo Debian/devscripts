@@ -573,9 +573,10 @@ sub getmessage {
 		die "debcommit: unable to determine commit message using $prog$info\nTry using the -m flag.\n";
 	    }
 	} else {
-	    my $count = () = $ret =~ /^\* /mg;
 
 	    if ($prog =~ /^(git|hg)$/) {
+		my $count = () = $ret =~ /^\s*[\*\+-] /mg;
+
 		if ($count == 1) {
 		    # Unfold
 		    $ret =~ s/\n\s+/ /mg;
@@ -588,7 +589,7 @@ sub getmessage {
 
 		    $summary = $ret;
 		    # Strip off the second and subsequent changes
-		    $summary =~ s/(^\* .*?)^\* .*/$1/ms;
+		    $summary =~ s/(^\* .*?)^\s*[\*\+-] .*/$1/ms;
 		    # Unfold
 		    $summary =~ s/\n\s+/ /mg;
 		    $summary =~ s/^\* // if $prog eq 'git' or $stripmessage;
@@ -598,13 +599,14 @@ sub getmessage {
 		    } else {
 			# Strip off the first change so that we can prepend
 			# the unfolded version
-			$ret =~ s/^\* .*?(^\* .*)/$1/msg;
+			$ret =~ s/^\* .*?(^\s*[\*\+-] .*)/$1/msg;
 			$ret = $summary . $ret;
 		    }
 		}
 	    }
 
 	    if ($stripmessage or $prog eq 'git') {
+		my $count = () = $ret =~ /^\* /mg;
 		if ($count == 1) {
 		    $ret =~ s/^\* //;
 		}
