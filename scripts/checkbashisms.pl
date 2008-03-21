@@ -288,48 +288,40 @@ foreach my $filename (@ARGV) {
 		    $found = 1;
 		    $match = $1;
 		    $explanation = "sourced script with arguments";
+		    output_explanation($filename, $orig_line, $explanation);
 		}
 	    }
 
-	    unless ($found) {
-		# Remove "quoted quotes". They're likely to be inside
-		# another pair of quotes; we're not interested in
-		# them for their own sake and removing them makes finding
-		# the limits of the outer pair far easier.
-		$line =~ s/(^|[^\\\'\"])\"\'\"/$1/g;
-		$line =~ s/(^|[^\\\'\"])\'\"\'/$1/g;
+	    # Remove "quoted quotes". They're likely to be inside
+	    # another pair of quotes; we're not interested in
+	    # them for their own sake and removing them makes finding
+	    # the limits of the outer pair far easier.
+	    $line =~ s/(^|[^\\\'\"])\"\'\"/$1/g;
+	    $line =~ s/(^|[^\\\'\"])\'\"\'/$1/g;
 
-		# Ignore anything inside single quotes; it could be an
-		# argument to grep or the like.
-		$line =~ s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
+	    # Ignore anything inside single quotes; it could be an
+	    # argument to grep or the like.
+	    $line =~ s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
 
-		while (my ($re,$expl) = each %string_bashisms) {
-		    if ($line =~ m/($re)/) {
-			$found = 1;
-			$match = $1;
-		 	$explanation = $expl;
-		 	last;
-		    }
+	    while (my ($re,$expl) = each %string_bashisms) {
+		if ($line =~ m/($re)/) {
+		    $found = 1;
+		    $match = $1;
+		    $explanation = $expl;
+		    output_explanation($filename, $orig_line, $explanation);
 		}
 	    }
 
 	    # We've checked for all the things we still want to notice in
 	    # double-quoted strings, so now remove those strings as well.
-	    unless ($found) {
-		$line =~ s/(^|[^\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
-		while (my ($re,$expl) = each %bashisms) {
-		    if ($line =~ m/($re)/) {
-			$found = 1;
-			$match = $1;
-			$explanation = $expl;
-			last;
-		    }
+	    $line =~ s/(^|[^\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
+	    while (my ($re,$expl) = each %bashisms) {
+	        if ($line =~ m/($re)/) {
+		    $found = 1;
+		    $match = $1;
+		    $explanation = $expl;
+		    output_explanation($filename, $orig_line, $explanation);
 		}
-	    }
-
-	    unless ($found == 0) {
-		warn "possible bashism in $filename line $. ($explanation):\n$orig_line\n";
-		$status |= 1;
 	    }
 
 	    # Only look for the beginning of a heredoc here, after we've
@@ -344,6 +336,13 @@ foreach my $filename (@ARGV) {
 }
 
 exit $status;
+
+sub output_explanation {
+    my ($filename, $line, $explanation) = @_;
+
+    warn "possible bashism in $filename line $. ($explanation):\n$line\n";
+    $status |= 1;
+}
 
 # Returns non-zero if the given file is not actually a shell script,
 # just looks like one.

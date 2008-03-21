@@ -13,6 +13,8 @@ devscripts (2.10.20) UNRELEASED; urgency=low
     + Enhance quoted block detection to handle escaped quotes better
     + Enhance "shell script wrapper" detection to catch more ways of
       disguising a non shell script as one
+    + If more than one issue was found within a single line, output each
+      rather than just the first
   * debcommit:
     + Make the change to --release's behaviour introduced in the last
       upload optional. If -R / --release-use-changelog is used then
