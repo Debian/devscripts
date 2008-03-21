@@ -24,6 +24,8 @@ devscripts (2.10.20) UNRELEASED; urgency=low
       (i.e. lines indented by more than two spaces and starting with *, +
       or -)
     + Add documentation to the manpage of the current VCS-specific features
+    + Make --strip-message also strip leading spaces from continuation lines
+    + Strip single change commit messages by default
   * debdiff: Escape package names when normalising path names
     (Closes: #471282)
   * uscan: Correctly handle an explicit upstream-version of 0

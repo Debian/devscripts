@@ -84,8 +84,8 @@ If this option is set and the commit message has been derived from the
 changelog, the characters "* " will be stripped from the beginning of 
 the message.
 
-This option is ignored if more than one line of the message 
-begins with "* ".
+This option is set by default and ignored if more than one line of
+the message begins with "* ".
 
 =item B<--sign-tags>, B<--no-sign-tags>
 
@@ -106,8 +106,8 @@ ignored for this purpose.  The currently recognised variables are:
 
 =item B<DEBCOMMIT_STRIP_MESSAGE>
 
-If this is set to I<yes>, then it is the same as the --strip-message 
-command line parameter being used. The default is I<no>.
+If this is set to I<no>, then it is the same as the --no-strip-message 
+command line parameter being used. The default is I<yes>.
 
 =item B<DEBCOMMIT_SIGN_TAGS>
 
@@ -224,7 +224,7 @@ my $diffmode=0;
 my $confirm=0;
 my $edit=0;
 my $all=0;
-my $stripmessage=0;
+my $stripmessage=1;
 my $signtags=0;
 my $changelog="debian/changelog";
 my $keyid;
@@ -238,7 +238,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 } else {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
     my %config_vars = (
-		       'DEBCOMMIT_STRIP_MESSAGE' => 'no',
+		       'DEBCOMMIT_STRIP_MESSAGE' => 'yes',
 		       'DEBCOMMIT_SIGN_TAGS' => 'no',
 		       'DEBCOMMIT_RELEASE_USE_CHANGELOG' => 'no',
 		       'DEBSIGN_KEYID' => '',
@@ -259,7 +259,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 
     # Check validity
     $config_vars{'DEBCOMMIT_STRIP_MESSAGE'} =~ /^(yes|no)$/
-	or $config_vars{'DEBCOMMIT_STRIP_MESSAGE'}='no';
+	or $config_vars{'DEBCOMMIT_STRIP_MESSAGE'}='yes';
     $config_vars{'DEBCOMMIT_SIGN_TAGS'} =~ /^(yes|no)$/
 	or $config_vars{'DEBCOMMIT_SIGN_TAGS'}='no';
     $config_vars{'DEBCOMMIT_RELEASE_USE_CHANGELOG'} =~ /^(yes|no)$/
@@ -638,6 +638,7 @@ sub getmessage {
 		my $count = () = $ret =~ /^\* /mg;
 		if ($count == 1) {
 		    $ret =~ s/^\* //;
+		    $ret =~ s/^\s+//mg;
 		}
 	    }
 	}
