@@ -621,9 +621,9 @@ sub getmessage {
 		    $summary =~ s/(^\* .*?)^\s*[\*\+-] .*/$1/ms;
 		    # Unfold
 		    $summary =~ s/\n\s+/ /mg;
-		    $summary =~ s/^\* // if $prog eq 'git' or $stripmessage;
 
 		    if ($prog eq 'git') {
+			$summary =~ s/^\* //;
 			$ret = $summary . "\n" . $ret;
 		    } else {
 			# Strip off the first change so that we can prepend
