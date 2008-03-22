@@ -15,6 +15,8 @@ devscripts (2.10.20) UNRELEASED; urgency=low
       disguising a non shell script as one
     + If more than one issue was found within a single line, output each
       rather than just the first
+  * debcheckout: Allow specific files from the repository to be retrieved
+    rather than checking out the repository (Closes: #469242)
   * debcommit:
     + Make the change to --release's behaviour introduced in the last
       upload optional. If -R / --release-use-changelog is used then

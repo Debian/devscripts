@@ -89,6 +89,12 @@ supported repository types
 specify the login name to be used in authenticated mode (see B<-a>). This option
 implies B<-a>: you don't need to specify both
 
+=item B<-f>, B<--file>
+
+Specify that the named file should be extracted from the repository and placed
+in the destionation directory. May be used more than once to extract mutliple
+files.
+
 =back
 
 =head1 SEE ALSO
@@ -108,6 +114,53 @@ use strict;
 use Switch;
 use Getopt::Long;
 use Pod::Usage;
+use File::Basename;
+use File::Copy qw/copy/;
+use File::Temp qw/tempdir/;
+use Cwd;
+
+my @files = ();	  # files to checkout
+
+my $lwp_broken;
+my $ua;
+
+sub have_lwp() {
+  return ($lwp_broken ? 0 : 1) if defined $lwp_broken;
+  eval {
+    require LWP;
+    require LWP::UserAgent;
+  };
+
+  if ($@) {
+    if ($@ =~ m%^Can\'t locate LWP%) {
+      $lwp_broken="the libwww-perl package is not installed";
+    } else {
+      $lwp_broken="couldn't load LWP::UserAgent: $@";
+    }
+  }
+  else { $lwp_broken=''; }
+  return $lwp_broken ? 0 : 1;
+}
+
+sub init_agent {
+  $ua = new LWP::UserAgent;  # we create a global UserAgent object
+  $ua->agent("LWP::UserAgent/Devscripts");
+  $ua->env_proxy;
+}
+
+sub recurs_mkdir {
+  my ($dir) = @_;
+  my @temp = split /\//, $dir;
+  my $createdir = "";
+  foreach my $piece (@temp) {
+     $createdir .= "/" if $createdir;
+     $createdir .= "$piece";
+     if (! -d $createdir) {
+        mkdir($createdir) or return 0;
+     }
+  }
+  return 1;
+}
 
 # Find the repository URL (and type) for a given package name, parsing Vcs-*
 # fields.
@@ -129,6 +182,28 @@ sub find_repo($) {
   close(APT);
   die "unknown package '$pkg'\n" unless $found;
   return @repo;
+}
+
+# Find the browse URL for a given package name, parsing Vcs-* fields.
+sub find_browse($) {
+  my ($pkg) = @_;
+  my $browse = "";
+  my $found = 0;
+
+  open(APT, "apt-cache showsrc $pkg |");
+  while (my $line = <APT>) {
+    $found = 1;
+    chomp($line);
+    if ($line =~ /^(x-)?vcs-(\w+):\s*(.*)$/i) {
+      if (lc($2) eq "browser") {
+        $browse = $3;
+        last;
+      }
+    }
+  }
+  close(APT);
+  die "unknown package '$pkg'\n" unless $found;
+  return $browse;
 }
 
 # Patch the cmdline invocation of a VCS to ensure the repository is checkout to
@@ -203,6 +278,227 @@ sub checkout_repo($$$) {
   return ($? >> 8);
 }
 
+# Checkout a given set of files from a given repository in a given
+# destination directory.
+sub checkout_files($$$$) {
+  my ($repo_type, $repo_url, $destdir, $browse_url) = @_;
+  my @cmd;
+  my $tempdir;
+  my $fetched = 0;
+
+  foreach my $file (@files) {
+    # Cheap'n'dirty escaping
+    # We should possibly depend on URI::Escape, but this should do...
+    my $escaped_file = $file;
+    $escaped_file =~ s|\+|%2B|g;
+
+    my $dir = "$destdir/" || "./";
+    $dir .= dirname($file);
+
+    if (! recurs_mkdir($dir)) {
+      print STDERR "Failed to create directory $dir\n";
+      return 1;
+    }
+
+    switch ($repo_type) {
+      case "arch" {
+        # If we've already retrieved a copy of the repository,
+        # reuse it
+        if (!$tempdir) {
+          if (!($tempdir = tempdir( "debcheckoutXXXX", TMPDIR => 1, CLEANUP => 1 ))) {
+            print STDERR "Failed to create temporary directory . $!\n";
+            return 1;
+          }
+
+          my $oldcwd = getcwd();
+          chdir $tempdir;
+          @cmd = ("tla", "grab", $repo_url);
+          print "@cmd ...\n";
+          my $rc = system(@cmd);
+          chdir $oldcwd;
+          return ($rc >> 8) if $rc != 0;
+        }
+
+        if (!copy("$tempdir/$file", $dir)) {
+          print STDERR "Failed to copy $file to $dir: $!\n";
+          return 1;
+        }
+      }
+      case "cvs" {
+        if (!$tempdir) {
+          if (!($tempdir = tempdir( "debcheckoutXXXX", TMPDIR => 1, CLEANUP => 1 ))) {
+            print STDERR "Failed to create temporary directory . $!\n";
+            return 1;
+          }
+        }
+        $repo_url =~ s|^-d\s*||;
+        my ($root, $module) = split /\s+/, $repo_url;
+        # If an explicit module name isn't present, use the last
+        # component of the URL
+        if (!$module) {
+          $module = $repo_url;
+          $module =~ s%^.*/(.*?)$%$1%;
+        }
+        $module .= "/$file";
+        $module =~ s%//%/%g;
+
+        my $oldcwd = getcwd();
+        chdir $tempdir;
+        @cmd = ("cvs", "-d", $root, "export", "-r", "HEAD", "-f", $module);
+        print "\n@cmd ...\n";
+        system @cmd;
+        if (($? >> 8) != 0) {
+          chdir $oldcwd;
+          return ($? >> 8);
+        } else {
+          chdir $oldcwd; 
+          if (copy("$tempdir/$module", $dir)) {
+            print "Copied to $destdir/$file\n";
+          } else {
+            print STDERR "Failed to copy $file to $dir: $!\n";
+            return 1;
+          }
+        }
+      }
+      case /(svn|bzr)/ {
+        @cmd = ($repo_type, "cat", "$repo_url/$file");
+        print "@cmd > $dir/" . basename($file) . " ... \n";
+        if (! open CAT, '-|', @cmd) {
+          print STDERR "Failed to execute @cmd $!\n";
+          return 1;
+        }
+        local $/;
+        my $content = <CAT>;
+        close CAT;
+        if (! open OUTPUT, ">", $dir . "/" . basename($file)) {
+          print STDERR "Failed to create output file " . basename($file) ." $!\n";
+          return 1;
+        }
+        print OUTPUT $content;
+        close OUTPUT;
+      }
+      case /(darcs|hg)/ {
+        # Subtly different but close enough
+        if (have_lwp) {
+          print "Attempting to retrieve $file via HTTP ...\n";
+
+          my $file_url = $repo_type eq "darcs" ? "$repo_url/$escaped_file" :
+            "$repo_url/raw-file/tip/$file";
+          init_agent() unless $ua;
+          my $request = HTTP::Request->new('GET', "$file_url");
+          my $response = $ua->request($request);
+          if ($response->is_success) {
+            if (! open OUTPUT, ">", $dir . "/" . basename($file)) {
+              print STDERR "Failed to create output file " . basename($file) . " $!\n";
+              return 1;
+            }
+            print "Writing to $dir/" . basename($file) . " ... \n";
+            print OUTPUT $response->content;
+            close OUTPUT;
+            $fetched = 1;
+          }
+        }
+        if ($fetched == 0) {
+          # If we've already retrieved a copy of the repository,
+          # reuse it
+          if (!$tempdir) {
+            if (!($tempdir = tempdir( "debcheckoutXXXX", TMPDIR => 1, CLEANUP => 1 ))) {
+              print STDERR "Failed to create temporary directory . $!\n";
+              return 1;
+            }
+
+            # Can't get / clone in to a directory that already exists...
+            $tempdir .= "/repo";
+            if ($repo_type eq "darcs") {
+              @cmd = ("darcs", "get", $repo_url, $tempdir);
+            } else {
+              @cmd = ("hg", "clone", $repo_url, $tempdir);
+            }
+            print "@cmd ...\n";
+            my $rc = system(@cmd);
+            return ($rc >> 8) if $rc != 0;
+            print "\n";
+          }
+        }
+        if (copy "$tempdir/$file", $dir) {
+          print "Copied $file to $dir\n";
+        } else {
+          print STDERR "Failed to copy $file to $dir: $!\n";
+          return 1;
+        }
+      }
+      case "git" {
+        if (have_lwp and $browse_url =~ /^http/) {
+          $escaped_file =~ s|/|%2F|g;
+
+          print "Attempting to retrieve $file via HTTP ...\n";
+
+          init_agent() unless $ua;
+          my $fileurl = "$browse_url;a=blob_plain;f=$escaped_file;hb=HEAD";
+          my $request = HTTP::Request->new('GET', $fileurl);
+          my $response = $ua->request($request);
+          if (!$response->is_success) {
+            print "Error retrieving file: " . $response->status_line . "\n";
+          } else {
+            if (! open OUTPUT, ">", $dir . "/" . basename($file)) {
+              print STDERR "Failed to create output file " . basename($file) . " $!\n";
+              return 1;
+            }
+            print "Writing to $dir/" . basename($file) . " ... \n";
+            print OUTPUT $response->content;
+            close OUTPUT;
+            $fetched = 1;
+          }
+        }
+        if ($fetched ==0) {
+          # If we've already retrieved a copy of the repository,
+          # reuse it
+          if (!$tempdir) {
+            if (!($tempdir = tempdir( "debcheckoutXXXX", TMPDIR => 1, CLEANUP => 1 ))) {
+              print STDERR "Failed to create temporary directory . $!\n";
+              return 1;
+            }
+            # Since git won't clone in to a directory that already exists...
+            $tempdir .= "/repo";
+            # Can't shallow clone from an http:: URL
+            $repo_url =~ s/^http/git/;
+            @cmd = ("git", "clone", "--depth", "1", $repo_url, "$tempdir");
+            print "@cmd ...\n\n";
+            my $rc = system(@cmd);
+            return ($rc >> 8) if $rc != 0;
+            print "\n";
+          }
+
+          my $oldcwd = getcwd();
+          chdir $tempdir;
+          
+          @cmd = ($repo_type, "show", "HEAD:$file");
+          print "@cmd ... > $dir/" . basename($file) . "\n";
+          if (! open CAT, '-|', @cmd) {
+            print STDERR "Failed to execute @cmd $!\n";
+            chdir $oldcwd;
+            return 1;
+          }
+          chdir $oldcwd;
+          local $/;
+          my $content = <CAT>;
+          close CAT;
+          if (! open OUTPUT, ">", $dir . "/" . basename($file)) {
+            print STDERR "Failed to create output file " . basename($file) ." $!\n";
+            return 1;
+          }
+          print OUTPUT $content;
+          close OUTPUT;
+        }
+      }
+      else { die "unsupported version control system '$repo_type'.\n"; }
+    }
+  }
+
+  # If we've got this far, all the files were retrieved successfully
+  return 0;
+}
+
 # Print information about a repository and quit.
 sub print_repo($$) {
   my ($repo_type, $repo_url) = @_;
@@ -226,12 +522,14 @@ sub main() {
   my $repo_type = "svn";  # default repo typo, overridden by '-t'
   my $repo_url = "";	  # repository URL
   my $user = "";	  # login name (authenticated mode only)
+  my $browse_url = "";    # online browsable repository URL
   GetOptions(
       "auth|a" => \$auth,
       "help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },
       "print|p" => \$print_only,
       "type|t=s" => \$repo_type,
       "user|u=s" => \$user,
+      "file|f=s" => sub { push(@files, $_[1]); },
     ) or pod2usage({-exitval => 3});
   pod2usage({-exitval => 3}) if ($#ARGV < 0 or $#ARGV > 1);
 
@@ -254,15 +552,21 @@ to expose such information.
 EOF
       exit(1);
     }
+    $browse_url = find_browse($pkg) if @files;
   }
 
-  $repo_url = set_auth($repo_type, $repo_url, $user) if $auth;
+  $repo_url = set_auth($repo_type, $repo_url, $user) if $auth and not @files;
   print_repo($repo_type, $repo_url) if $print_only; # ... then quit
   if (length $pkg) {
     print "declared $repo_type repository at $repo_url\n";
     $destdir = $pkg unless length $destdir;
   }
-  my $rc = checkout_repo($repo_type, $repo_url, $destdir);
+  my $rc;
+  if (@files) {
+    $rc = checkout_files($repo_type, $repo_url, $destdir, $browse_url);
+  } else {    
+    $rc = checkout_repo($repo_type, $repo_url, $destdir);
+  }
   if ($rc != 0) {
     print STDERR
       "checkout failed (the command shown above returned non-zero exit code)\n";
