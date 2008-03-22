@@ -284,9 +284,10 @@ sub checkout_files($$$$) {
   my ($repo_type, $repo_url, $destdir, $browse_url) = @_;
   my @cmd;
   my $tempdir;
-  my $fetched = 0;
 
   foreach my $file (@files) {
+    my $fetched = 0;
+
     # Cheap'n'dirty escaping
     # We should possibly depend on URI::Escape, but this should do...
     my $escaped_file = $file;
