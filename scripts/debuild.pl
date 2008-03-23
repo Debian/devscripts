@@ -121,6 +121,8 @@ Second usage method:
         --[no-]tgz-check    Do [not] check for an .orig.tar.gz before running
                             dpkg-buildpackage if we have a Debian revision
                             (Default: check) 
+        --username          Run debrsign instead of debsign, using the
+                            supplied credentials
 
         --dpkg-buildpackage-hook=HOOK
         --clean-hook=HOOK
@@ -181,6 +183,7 @@ my $check_dirname_regex = 'PACKAGE(-.*)?';
 my $logging=0;
 my $tgz_check=1;
 my $prepend_path='';
+my $username='';
 my @hooks = (qw(dpkg-buildpackage clean dpkg-source build binary final-clean
 		lintian signing post-dpkg-buildpackage));
 my %hook;
@@ -246,8 +249,9 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBUILD_FINAL_CLEAN_HOOK' => '',
 		       'DEBUILD_LINTIAN_HOOK' => '',
 		       'DEBUILD_SIGNING_HOOK' => '',
-                       'DEBUILD_PREPEND_PATH' => '',
+		       'DEBUILD_PREPEND_PATH' => '',
 		       'DEBUILD_POST_DPKG_BUILDPACKAGE_HOOK' => '',
+		       'DEBUILD_SIGNING_USERNAME' => '',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
 		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.*)?',
 		       );
@@ -320,6 +324,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $root_command = $config_vars{'DEBUILD_ROOTCMD'};
     $tgz_check = $config_vars{'DEBUILD_TGZ_CHECK'} eq 'yes' ? 1 : 0;
     $prepend_path = $config_vars{'DEBUILD_PREPEND_PATH'};
+    $username = $config_vars{'DEBUILD_SIGNING_USERNAME'};
     $check_dirname_level = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'};
     $check_dirname_regex = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_REGEX'};
     for my $hookname (@hooks) {
@@ -530,6 +535,18 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
 	}
 	if ($arg =~ /^--prepend-path=(.*)$/) {
 	    $prepend_path = $1;
+	    next;
+	}
+
+ 	if ($arg eq '--username') {
+	    unless (defined ($opt = shift)) {
+		fatal "--username requires an argument,\nrun $progname --help for usage information";
+	    }
+	    $username = $opt;
+	    next;
+	}
+	if ($arg =~ /^--username=(.*)$/) {
+	    $username = $1;
 	    next;
 	}
 
@@ -1161,13 +1178,23 @@ if ($command_version eq 'dpkg') {
         $ENV{$var} = $store_vars{$var};
     }  
 	print "Now signing changes and any dsc files...\n";
-	system('debsign', @debsign_opts, $changes) == 0
-	    or fatal "running debsign failed";
+	if ($username) {
+	    system('debrsign', $username, @debsign_opts, $changes) == 0
+		or fatal "running debrsign failed";
+	} else {
+	    system('debsign', @debsign_opts, $changes) == 0
+		or fatal "running debsign failed";
+        }
     }
     elsif (! $sourceonly and $signsource) {
 	print "Now signing dsc file...\n";
-	system('debsign', @debsign_opts, $dsc) == 0
-	    or fatal "running debsign failed";
+	if ($username) {
+	    system('debrsign', $username, @debsign_opts, $dsc) == 0
+		or fatal "running debrsign failed";
+	} else {
+	    system('debsign', @debsign_opts, $dsc) == 0
+		or fatal "running debsign failed";
+	}
     }
 
     run_hook('post-dpkg-buildpackage', 1);

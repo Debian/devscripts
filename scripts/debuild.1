@@ -255,6 +255,10 @@ If we're running \fBdpkg-buildpackage\fR and the version number has a
 Debian revision, check that the .orig.tar.gz file or .orig directory
 exists before starting the build.  This is the default behaviour.
 .TP
+\fB\-\-username\fR \fIusername\fR
+When signing, use \fBdebrsign\fR instead of \fBdebsign\fR.
+\fIusername\fR specifies the credentials to be used.
+.TP
 \fB\-\-\fIfoo\fB\-hook\fR=\fIhook\fR
 Set a hook as described above.  If \fIhook\fR is blank, this unsets
 the hook.
@@ -307,6 +311,10 @@ Setting this variable to \fIprog\fR is the equivalent of
 .B DEBUILD_TGZ_CHECK
 Setting this variable to \fIno\fR is the same as the
 \fB\-\-no\-tgz\-check\fR command line option.
+.TP
+.B DEBUILD_SIGNING_USERNAME
+Setting this variable is the same as using the \-\-username
+command line option.
 .TP
 .B DEBUILD_DPKG_BUILDPACKAGE_OPTS
 These are options which should be passed to the invocation of
