@@ -520,6 +520,19 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
 	    $check_dirname_regex = $1;
 	    next;
 	}
+
+	if ($arg eq '--prepend-path') {
+	    unless (defined ($opt = shift)) {
+		fatal "--prepend-path requires an argument,\nrun $progname --help for usage information";
+	    }
+	    $prepend_path = $opt;
+	    next;
+	}
+	if ($arg =~ /^--prepend-path=(.*)$/) {
+	    $prepend_path = $1;
+	    next;
+	}
+
 	if ($arg =~ /^--no-?conf$/) {
 	    fatal "$arg is only acceptable as the first command-line option!";
 	}
@@ -565,7 +578,7 @@ if ($save_vars{'PATH'}) {
     $ENV{'PATH'} =~ /^(.*)$/;
     $ENV{'PATH'} = $1;
 } else {
-    $ENV{'PATH'} = "/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11"
+    $ENV{'PATH'} = "/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11";
     $ENV{'PATH'} = join(':', $prepend_path, $ENV{'PATH'}) if $prepend_path;
 }
 $save_vars{'PATH'}=1;
