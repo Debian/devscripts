@@ -87,6 +87,8 @@ First usage method:
         --set-envvar=<envvar>=<value>, -e<envvar>=<value>
                                  Set environment variable <envvar> to <value>
 
+        --prepend-path=<value>   Prepend <value> to the sanitised PATH
+
         -d                       Skip checking of build dependencies
         -D                       Force checking of build dependencies (default)
 
@@ -178,6 +180,7 @@ my $check_dirname_level = 1;
 my $check_dirname_regex = 'PACKAGE(-.*)?';
 my $logging=0;
 my $tgz_check=1;
+my $prepend_path='';
 my @hooks = (qw(dpkg-buildpackage clean dpkg-source build binary final-clean
 		lintian signing post-dpkg-buildpackage));
 my %hook;
@@ -243,6 +246,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBUILD_FINAL_CLEAN_HOOK' => '',
 		       'DEBUILD_LINTIAN_HOOK' => '',
 		       'DEBUILD_SIGNING_HOOK' => '',
+                       'DEBUILD_PREPEND_PATH' => '',
 		       'DEBUILD_POST_DPKG_BUILDPACKAGE_HOOK' => '',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
 		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.*)?',
@@ -315,6 +319,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $run_lintian = $config_vars{'DEBUILD_LINTIAN'} eq 'no' ? 0 : 1;
     $root_command = $config_vars{'DEBUILD_ROOTCMD'};
     $tgz_check = $config_vars{'DEBUILD_TGZ_CHECK'} eq 'yes' ? 1 : 0;
+    $prepend_path = $config_vars{'DEBUILD_PREPEND_PATH'};
     $check_dirname_level = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'};
     $check_dirname_regex = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_REGEX'};
     for my $hookname (@hooks) {
@@ -561,6 +566,7 @@ if ($save_vars{'PATH'}) {
     $ENV{'PATH'} = $1;
 } else {
     $ENV{'PATH'} = "/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11"
+    $ENV{'PATH'} = join(':', $prepend_path, $ENV{'PATH'}) if $prepend_path;
 }
 $save_vars{'PATH'}=1;
 $ENV{'TERM'}='dumb' unless exists $ENV{'TERM'};

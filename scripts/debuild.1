@@ -102,6 +102,10 @@ case, the PATH will be set to the sane value described above.  The
 programs from non-standard locations can easily result in the package
 being broken, as it will not be able to be built on standard systems.
 .PP
+Note that one may add directories to the beginning of the sanitised
+PATH, using the \fB\-\-prepend\-path\fR option. This is useful when
+one wishes to use tools such as ccache or distcc for building.
+.PP
 It is also possible to avoid having to type something like
 \fIFOO\fB=\fIbar \fBdebuild \-e \fIFOO\fR by writing \fBdebuild \-e
 \fIFOO\fB=\fIbar\fR or the long form \fBdebuild \-\-set\-envvar
@@ -229,6 +233,10 @@ preserved.
 Set the environment variable \fIvar\fR to \fIvalue\fR and do not
 remove it from the environment.
 .TP
+.BI \-\-prepend\-path= "value "
+Once the normalized PATH has been set, prepend \fIvalue\fR
+to it.
+.TP
 .B \-\-lintian
 Run \fBlintian\fR after \fBdpkg-buildpackage\fR.  This is the default
 behaviour, and it overrides any configuration file directive to the
@@ -288,6 +296,9 @@ multiple \fB\-\-preserve\-envvar\fR or \fB\-e\fR options.
 .TP
 .BI DEBUILD_SET_ENVVAR_ var = value
 This corresponds to \fB\-\-set\-envvar=\fIvar\fB=\fIvalue\fR.
+.TP
+.B DEBUILD_PREPEND_PATH
+This corresponds to \fB\-\-prepend\-path\fR.
 .TP
 .B DEBUILD_ROOTCMD
 Setting this variable to \fIprog\fR is the equivalent of
