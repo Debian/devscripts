@@ -448,6 +448,16 @@ EOF
 # for a release?
 # DEBCOMMIT_RELEASE_USE_CHANGELOG=no
 
+##### debuild options added in version 2.10.20
+#
+# Colon-separated list of options to be added to the beginning
+# of PATH once it has been sanitised                  
+# DEBUILD_PREPEND_PATH="/usr/lib/ccache"
+#
+# Credentials to pass to debrsign when signing dsc / changes files
+# Setting this option to a non-blank string implies using debrsign
+# DEBUILD_SIGNING_USERNAME="user@host"
+
 EOF
 	fi
     fi

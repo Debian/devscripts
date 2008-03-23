@@ -283,6 +283,14 @@
 # Extra options given to lintian before any command-line options
 # specified.
 # DEBUILD_LINTIAN_OPTS=""
+#
+# Colon-separated list of options to be added to the beginning
+# of PATH once it has been sanitised
+# DEBUILD_PREPEND_PATH="/usr/lib/ccache"
+#
+# Credentials to pass to debrsign when signing dsc / changes files
+# Setting this option to a non-blank string implies using debrsign
+# DEBUILD_SIGNING_USERNAME="user@host"
 # 
 # Hooks; see the manpage for details of these
 # DEBUILD_DPKG_BUILDPACKAGE_HOOK=""
