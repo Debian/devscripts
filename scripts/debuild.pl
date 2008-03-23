@@ -1179,7 +1179,7 @@ if ($command_version eq 'dpkg') {
     }  
 	print "Now signing changes and any dsc files...\n";
 	if ($username) {
-	    system('debrsign', $username, @debsign_opts, $changes) == 0
+	    system('debrsign', @debsign_opts, $username, $changes) == 0
 		or fatal "running debrsign failed";
 	} else {
 	    system('debsign', @debsign_opts, $changes) == 0
@@ -1189,7 +1189,7 @@ if ($command_version eq 'dpkg') {
     elsif (! $sourceonly and $signsource) {
 	print "Now signing dsc file...\n";
 	if ($username) {
-	    system('debrsign', $username, @debsign_opts, $dsc) == 0
+	    system('debrsign', @debsign_opts, $username, $dsc) == 0
 		or fatal "running debrsign failed";
 	} else {
 	    system('debsign', @debsign_opts, $dsc) == 0
