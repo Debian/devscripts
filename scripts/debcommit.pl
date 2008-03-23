@@ -128,6 +128,16 @@ chosen by the revision control system.
 
 =head1 VCS SPECIFIC FEATURES
 
+=over 4
+
+=item B<tla> / B<baz>
+
+If the commit message contains more than 72 characters, a summary will
+be created containing as many full words from the message as will fit within
+72 characters, followed by an ellipsis.
+
+=back
+
 Each of the features described below is applicable only if the commit message
 has been automatically determined from the changelog.
 
@@ -148,12 +158,6 @@ editor so that the message may be fine-tuned before committing.
 The first change detected in the changelog will be unfolded to form a single line
 summary. If multiple changes were detected then an editor will be spawned to
 allow the message to be fine-tuned.
-
-=item B<tla> / B<baz>
-
-If the commit message contains more than 72 characters, a summary will
-be created containing as many full words from the message as will fit within
-72 characters, followed by an ellipsis.
 
 =cut
 
