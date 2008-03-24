@@ -4,7 +4,7 @@ devscripts (2.10.20) UNRELEASED; urgency=low
     + Only append a single ellipsis to the mail subject once it becomes
       too long, rather than for each extra command (Closes: #471304)
     + Make --no-action and --(force-)interactive work if neither DEBEMAIL
-      nor EMAIL are set
+      nor EMAIL are set (Closes: #467066)
   * checkbashisms:
     + Make --version actually produce version information
     + Fix explanation of VAR+=foo
