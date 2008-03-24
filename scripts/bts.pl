@@ -1896,7 +1896,6 @@ sub send_mail {
     # Message-ID algorithm from git-send-email
     my $msgid = sprintf("%s-%s", time(), int(rand(4200)))."-bts-$fromaddress";
     my $date = `date -R`;
-    my $abortsend = 0;
     chomp $date;
 
     my $message = fold_from_header("From: $from") . "\n";
@@ -1911,24 +1910,9 @@ sub send_mail {
                .  "# Automatically generated email from bts,"
                   . " devscripts version $version\n";
 
-    $body = edit($body) if $forceinteractive;
-    if ($interactive) {
-	while(1) {
-	    print "\n", $message, "\n", $body, "\n---\n";	
-	    print "OK to send? [Y/n/e] ";
-	    $_ = <STDIN>;
-	    if (/^n/i) {
-		$abortsend = 1;
-		last;
-	    } elsif (/^(y|$)/i) {
-		last;
-	    } elsif (/^e/i) {
-		$body = edit($body);
-	    }
-        }
-    }
+    $body = confirmmail($message, $body);
 
-    return if $abortsend;
+    return if not defined $body;
 
     $message .= "$body\n";
 
@@ -1987,6 +1971,13 @@ sub mailbtsall {
 	$ccemail .= ", " if length $ccemail;
 	$ccemail .= join("\@$btsserver, ", sort (keys %ccbugs)) . "\@$btsserver";
     }
+    if ($ccsecurity) {
+	my $comma = "";
+        if ($ccemail) {
+	    $comma = ", ";
+        }
+	$ccemail = "$ccemail$comma$ccsecurity";
+    }
     if ($ENV{'DEBEMAIL'} || $ENV{'EMAIL'}) {
 	# We need to fake the From: line
 	my ($email, $name);
@@ -2017,17 +2008,29 @@ sub mailbtsall {
 	$charset =~ s/^ANSI_X3\.4-19(68|86)$/US-ASCII/;
         $from = MIME_encode_mimewords($from, 'Charset' => $charset);
 
-	if ($ccsecurity) {
-	    my $comma = "";
-            if ($ccemail) {
-		    $comma = ", ";
-            }
-	    $ccemail = "$ccemail$comma$ccsecurity";
-	}
-
         send_mail($from, $btsemail, $ccemail, $subject, $body);
     }
     else {  # No DEBEMAIL
+	my $header = "";
+
+	$header    = "To: $btsemail\n";
+	$header   .= "Cc: $ccemail\n" if length $ccemail;
+	$header   .= "X-Debbugs-No-Ack: Yes\n" if $requestack==0;
+	$header   .= "Subject: $subject\n"
+		  .  "X-BTS-Version: $version\n"
+		  .  "\n"
+		  .  "# Automatically generated email from bts,"
+		  . " devscripts version $version\n";
+
+	$body = confirmmail($header, $body);
+
+	return if not defined $body;
+
+	if ($noaction) {
+	    print "$header\n$body\n";
+	    return;
+	}
+
 	unless (system("command -v mail >/dev/null 2>&1") == 0) {
 	    die "bts: You need to either set DEBEMAIL or have the mailx/mailutils package\ninstalled to send mail!\n";
 	}
@@ -2051,13 +2054,35 @@ sub mailbtsall {
 		my @args;
 		@args = ("-s", $subject, "-a", "X-BTS-Version: $version", $btsemail);
 		push(@args, "-c", "$ccemail") if $ccemail;
-		push(@args, "-c", "$ccsecurity") if $ccsecurity;
 		push(@args, "-a", "X-Debbugs-No-Ack: Yes")
 		    if $requestack==0;
 		exec("mail", @args) or die "bts: error running mail: $!\n";
 	    }
 	}
     }
+}
+
+sub confirmmail {
+    my ($header, $body) = @_;
+
+    $body = edit($body) if $forceinteractive;
+    if ($interactive) {
+	while(1) {
+	    print "\n", $header, "\n", $body, "\n---\n";
+	    print "OK to send? [Y/n/e] ";
+	    $_ = <STDIN>;
+	    if (/^n/i) {
+		$body = undef;
+		last;
+	    } elsif (/^(y|$)/i) {
+		last;
+	    } elsif (/^e/i) {
+		$body = edit($body);
+	    }
+	}
+    }
+
+    return $body;
 }
 
 # A simplified version of mailbtsall which sends one message only to
