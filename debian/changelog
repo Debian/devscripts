@@ -52,6 +52,8 @@ devscripts (2.10.20) UNRELEASED; urgency=low
   * uscan:
     + Correctly handle an explicit upstream-version of 0 (Closes: #471503)
     + Add "watch" to the manpage's summary line (Closes: #452930)
+  * debian/copyright: Explicitly indicate that diff2patches is GPL >= 3
+    rather than the package's standard >= 2.
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sun, 16 Mar 2008 19:40:40 +0000
 
