@@ -27,6 +27,7 @@
 # Later modifications: see debian/changelog
 
 use strict;
+use IO::Dir;
 use IO::File;
 use Digest::MD5;
 use Getopt::Long;
@@ -59,7 +60,7 @@ Usage: $progname [options] URL
        $progname [options] package[=version]
 
 Downloads Debian packages (source and binary) from the specified URL (first form),
-or using the mirror configured in /etc/apt/sources.list (second form).
+or using the mirror configured in /etc/apt/sources.list(.d) (second form).
 
    -b, --backup    Move files that would be overwritten to ./backup
    -q, --quiet     Suppress wget/curl output
@@ -304,17 +305,32 @@ sub apt_get {
     }
 
     # find deb lines matching the hosts in the policy output
-    $apt = new IO::File("/etc/apt/sources.list") or die "/etc/apt/sources.list: $!";
     my @repositories;
     my $host_re = '(?:' . (join '|', map { quotemeta; } @hosts) . ')';
-    while (<$apt>) {
-	if (/^\s*deb\s*($host_re\S+)/) {
-	    push @repositories, $1;
+    if (-f "/etc/apt/sources.list") {
+	$apt = new IO::File("/etc/apt/sources.list") or die "/etc/apt/sources.list: $!";
+	while (<$apt>) {
+	    if (/^\s*deb\s*($host_re\S+)/) {
+		push @repositories, $1;
+	    }
 	}
+	close $apt;
     }
-    close $apt;
+    my %dir;
+    tie %dir, "IO::Dir", "/etc/apt/sources.list.d";
+    foreach (keys %dir) {
+	next unless /\.list$/;
+	$_ = "/etc/apt/sources.list.d/$_";
+	$apt = new IO::File("$_") or die "$_: $!";
+	while (<$apt>) {
+	    if (/^\s*deb\s*($host_re\S+)/) {
+		push @repositories, $1;
+	    }
+	}
+	close $apt;
+    }
     unless (@repositories) {
-	die "no repository found in /etc/apt/sources.list";
+	die "no repository found in /etc/apt/sources.list or sources.list.d";
     }
 
     # try each repository in turn
@@ -478,7 +494,7 @@ then unpacked by B<dpkg-source>.
 
 In the second form, B<dget> downloads a I<binary> package (i.e., a
 I<.deb> file) from the Debian mirror configured in
-/etc/apt/sources.list.  Unlike B<apt-get install -d>, it does not
+/etc/apt/sources.list(.d).  Unlike B<apt-get install -d>, it does not
 require root privileges, writes to the current directory, and does not
 download dependencies.  If a version number is specified, this version
 of the package is requested.

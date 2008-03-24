@@ -41,6 +41,7 @@ devscripts (2.10.20) UNRELEASED; urgency=low
       Based on a patch by Matt T. Proud (Closes: #460719)
     + Add a --username option to allow debrsign to be used instead of debsign
       (Closes: #262253)
+  * dget: Support /etc/apt/sources.list.d (Closes: #471672)
   * uscan:
     + Correctly handle an explicit upstream-version of 0 (Closes: #471503)
     + Add "watch" to the manpage's summary line (Closes: #452930)
