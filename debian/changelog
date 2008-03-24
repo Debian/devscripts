@@ -33,8 +33,12 @@ devscripts (2.10.20) UNRELEASED; urgency=low
     + Add documentation to the manpage of the current VCS-specific features
     + Make --strip-message also strip leading spaces from continuation lines
     + Strip single change commit messages by default
-  * debdiff: Escape package names when normalising path names
-    (Closes: #471282)
+  * debdiff:
+    + Escape package names when normalising path names (Closes: #471282)
+    + Make tarball-in-tarball support more intelligent. If a sub-tarball
+      named foo.tar.gz unpacks to a directory named foo, the directory is
+      renamed to =unpacked-tarN= so that the directory names match across
+      the unpacked packages (Closes: #459294)
   * debuild:
     + Add a --prepend-path option allowing $PATH to have directories added
       to it once it has been sanitised, for example to add /usr/lib/ccache.

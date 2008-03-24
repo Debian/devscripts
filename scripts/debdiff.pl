@@ -464,12 +464,20 @@ elsif ($type eq 'dsc') {
 	    }
 	    closedir(DIR);
 	    opendir DIR,${"dir$i"}.'/'.${"sdir$i"};
+
+	    my $tarballs = 1;
 	    while ($_ = readdir(DIR)) {
+		    my $unpacked = "=unpacked-tar" . $tarballs . "=";
+		    my $filename = $_;
 		    if ($_ =~ /tar.gz$/) {
-		        system qq(cd ${"dir$i"}/${"sdir$i"} && tar zxf $_ >/dev/null); 
+			$filename =~ s%(.*)\.tar\.gz$%$1%;
+			$tarballs++;
+		        system qq(cd ${"dir$i"}/${"sdir$i"} && tar zxf $_ >/dev/null && test -d $filename && mv $filename $unpacked); 
 		    }
 		    if ($_ =~ /tar.bz$/ || $_ =~ /tar.bz2$/) {
-		        system qq(cd ${"dir$i"}/${"sdir$i"} && tar jxf $_ >/dev/null);
+			$filename =~ s%(.*)\.tar\.bz2?$%$1%;
+			$tarballs++;
+		        system qq(cd ${"dir$i"}/${"sdir$i"} && tar jxf $_ >/dev/null && test -d $filename && mv $filename $unpacked);
 		    }
 	    }
 	    closedir(DIR);
