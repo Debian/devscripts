@@ -1786,6 +1786,9 @@ Valid options are:
                           version instead
    --mailreader=CMD       Run CMD to read an mbox; default is 'mutt -f %s'
                           (must contain %s, which is replaced by mbox name)
+   --cc-addr=CC_EMAIL_ADDRESS
+                          Send carbon copies to a list of users. CC_EMAIL_ADDRESS
+                          should be a comma-separated list of emails.
    -f, --force-refresh    Reload all bug reports being cached, even unchanged
                           ones
    --no-force-refresh     Do not do so (default)

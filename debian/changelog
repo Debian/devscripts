@@ -5,6 +5,7 @@ devscripts (2.10.20) UNRELEASED; urgency=low
       too long, rather than for each extra command (Closes: #471304)
     + Make --no-action and --(force-)interactive work if neither DEBEMAIL
       nor EMAIL are set (Closes: #467066)
+    + Add --cc-addr to --help output
   * checkbashisms:
     + Make --version actually produce version information
     + Fix explanation of VAR+=foo
