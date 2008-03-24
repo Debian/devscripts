@@ -1,0 +1,38 @@
+.TH DCMD 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+dcmd \- expand file lists of .dsc/.changes files in the command line
+.SH SYNOPSIS
+\fBdcmd\fR [command] [\fIchanges-file\fR|\fIdsc-file\fR] [...]
+.SH DESCRIPTION
+\fBdcmd\fR replaces any reference to a .dsc or .changes file in the
+command line with the list of files in its 'Files' section, plus the
+file itself.  It allows easy manipulation of all the files involved in
+an upload (for changes files) or a source package (for dsc files).
+.SH "EXAMPLES"
+Copy the result of a build to another machine:
+
+.nf
+$ dcmd scp rcs_5.7-23_amd64.changes elegiac:/tmp
+rcs_5.7-23.dsc                  100%  490     0.5KB/s   00:00
+rcs_5.7-23.diff.gz              100%   12KB  11.7KB/s   00:00
+rcs_5.7-23_amd64.deb            100%  363KB 362.7KB/s   00:00
+rcs_5.7-23_amd64.changes        100% 1095     1.1KB/s   00:00
+$
+.fi
+
+Check the contents of a source package:
+
+.nf
+$ dcmd md5sum rcs_5.7-23.dsc 
+8fd09ea9654cda128f8d5c337d3b8de7  rcs_5.7.orig.tar.gz
+f0ceeae96603e823eacba6721a30b5c7  rcs_5.7-23.diff.gz
+5241db1e231b1f43ae5514b63d2523f8  rcs_5.7-23.dsc
+$
+.fi
+
+.SH "SEE ALSO"
+.BR dpkg-source (1),
+.BR dpkg-genchanges (1).
+.SH AUTHOR
+This program was written by Romain Francoise <rfrancoise@debian.org> and
+is released under the GPL, version 2 or later.

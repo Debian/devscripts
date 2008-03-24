@@ -18,6 +18,9 @@ devscripts (2.10.20) UNRELEASED; urgency=low
       disguising a non shell script as one
     + If more than one issue was found within a single line, output each
       rather than just the first
+  * dcmd: New script from Romain Francoise to run a given command replacing
+    the name of a .changes or .dsc file with each of the files referenced
+    therein (Closes: #472492)
   * debcheckout: Allow specific files from the repository to be retrieved
     rather than checking out the repository (Closes: #469242)
   * debcommit:
