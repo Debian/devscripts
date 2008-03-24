@@ -2051,6 +2051,7 @@ sub mailbtsall {
 		exec("/bin/cat")
 		    or die "bts: error running cat: $!\n";
 	    } else {
+		$ccemail =~ s/ //g;
 		my @args;
 		@args = ("-s", $subject, "-a", "X-BTS-Version: $version", $btsemail);
 		push(@args, "-c", "$ccemail") if $ccemail;
