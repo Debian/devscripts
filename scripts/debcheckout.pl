@@ -429,6 +429,14 @@ sub checkout_files($$$$) {
         }
       }
       case "git" {
+	# If there isn't a browse URL (either because the package
+	# doesn't ship one, or because we were called with a URL,
+	# try a common pattern for gitweb
+	if (!$browse_url) {
+	    if ($repo_url =~ m%^\w+://([^/]+)/(?:git/)?(.*)$%) {
+		$browse_url = "http://$1/?p=$2";
+	    }
+	}
         if (have_lwp and $browse_url =~ /^http/) {
           $escaped_file =~ s|/|%2F|g;
 

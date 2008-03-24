@@ -19,6 +19,7 @@ use strict;
 use Cwd;
 use File::Basename;
 use File::Temp qw/ tempdir /;
+use File::Copy qw/ move /;
 
 # Predeclare functions
 sub process_debc($$);
@@ -466,10 +467,14 @@ elsif ($type eq 'dsc') {
 	    opendir DIR,${"dir$i"}.'/'.${"sdir$i"};
 	    while ($_ = readdir(DIR)) {
 		    if ($_ =~ /tar.gz$/) {
-		        system qq(cd ${"dir$i"}/${"sdir$i"} && tar zxf $_ >/dev/null); 
+			my $filename = $_;
+			$filename =~ s%(.*)\.tar\.gz%$1%;
+		        system qq(cd ${"dir$i"}/${"sdir$i"} && tar zxf $_ >/dev/null && mv $filename =unpacked-tar-gz=); 
 		    }
 		    if ($_ =~ /tar.bz$/ || $_ =~ /tar.bz2$/) {
-		        system qq(cd ${"dir$i"}/${"sdir$i"} && tar jxf $_ >/dev/null);
+			my $filename = $_;
+			$filename =~ s%(.*)\.tar\.bz2?%$1%;
+		        system qq(cd ${"dir$i"}/${"sdir$i"} && tar jxf $_ >/dev/null && mv $filename =unpacked-tar-bz=);
 		    }
 	    }
 	    closedir(DIR);
@@ -826,7 +831,7 @@ sub mktmpdirs ()
     no strict 'refs';
 
     for my $i (1,2) {
-	${"dir$i"}=tempdir( CLEANUP => 1 );
+	${"dir$i"}=tempdir( CLEANUP => 0 );
 	fatal "Couldn't create temp directory"
 	    if not defined ${"dir$i"};
     }
