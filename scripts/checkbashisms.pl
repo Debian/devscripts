@@ -102,7 +102,6 @@ foreach my $filename (@ARGV) {
 	    }
 	}
 
-	next if m,^\s*\#,;  # skip comment lines
 	chomp;
 	my $orig_line = $_;
 
@@ -111,6 +110,9 @@ foreach my $filename (@ARGV) {
 	# in a quoted block or that appear inside balanced pairs
 	# of single or double quotes
 	s/^(?:.*?[^\\])?$quote_string(.*)$/$1/ if $quote_string ne "";
+
+	next if m,^\s*\#,;  # skip comment lines
+
 	s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
 	s/(^|[^\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
 
