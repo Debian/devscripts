@@ -223,8 +223,8 @@ sub set_destdir(@$$) {
 
 # Patch a given repository URL to ensure that the checkoud out repository can be
 # committed to. Only works for well known repositories (mainly Alioth's).
-sub set_auth($$$) {
-  my ($repo_type, $url, $user) = @_;
+sub set_auth($$$$) {
+  my ($repo_type, $url, $user, $print_only) = @_;
 
   my $old_url = $url;
   $user .= "@" if length $user;
@@ -238,7 +238,7 @@ sub set_auth($$$) {
            my $user_url = $url;
            $user_url =~ s|^\w+://(darcs\.debian\.org)/(~)(.*?)/.*|$3|;
            die "the local user '$user_local' doesn't own the personal repository '$url'\n"
-               if $user_local ne $user_url;
+               if $user_local ne $user_url and !$print_only;
            $url =~ s|^\w+://(darcs\.debian\.org)/(~)(.*?)/(.*)|$user$1:~/public_darcs/$4|;
        } else {
            $url =~ s|^\w+://(darcs\.debian\.org)/(.*)|$user$1:/darcs/$2|;
@@ -564,7 +564,8 @@ EOF
     $browse_url = find_browse($pkg) if @files;
   }
 
-  $repo_url = set_auth($repo_type, $repo_url, $user) if $auth and not @files;
+  $repo_url = set_auth($repo_type, $repo_url, $user, $print_only)
+    if $auth and not @files;
   print_repo($repo_type, $repo_url) if $print_only; # ... then quit
   if (length $pkg) {
     print "declared $repo_type repository at $repo_url\n";
