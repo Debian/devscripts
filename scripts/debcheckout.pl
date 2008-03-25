@@ -236,10 +236,10 @@ sub set_auth($$$) {
            my $user_local = $user;
            $user_local =~ s|(.*)(@)|$1|;
            my $user_url = $url;
-           $user_url =~ s|^\w+://(darcs\.debian\.org)/(~)(.*)/.*|$3|;
+           $user_url =~ s|^\w+://(darcs\.debian\.org)/(~)(.*?)/.*|$3|;
            die "the local user '$user_local' doesn't own the personal repository '$url'\n"
                if $user_local ne $user_url;
-           $url =~ s|^\w+://(darcs\.debian\.org)/(~)(.*)/(.*)|$user$1:~/public_darcs/$4|;
+           $url =~ s|^\w+://(darcs\.debian\.org)/(~)(.*?)/(.*)|$user$1:~/public_darcs/$4|;
        } else {
            $url =~ s|^\w+://(darcs\.debian\.org)/(.*)|$user$1:/darcs/$2|;
         }

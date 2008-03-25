@@ -5,6 +5,9 @@ devscripts (2.10.21) UNRELEASED; urgency=low
       deciding whether it's a comment line and skipping it
     + Fix heredoc detection to match '<< \EOT ... EOT' but not
       '<< "\EOT" ... EOT'
+  * debcheckout:
+    + Tighten the "repository owner" regex for darcs.d.o to correctly check
+      http://darcs.d.o/~foo/bar/baz against user foo
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 25 Mar 2008 18:51:59 +0000
 
