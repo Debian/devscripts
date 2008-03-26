@@ -273,7 +273,8 @@ sub apt_get {
 	die "$progname: no hostnames in apt-cache policy $package for $version found\n";
     }
 
-    $apt = new IO::File("LC_ALL=C apt-cache show $package |") or die "$!";
+    $apt = new IO::File("LC_ALL=C apt-cache --all-versions show $package |")
+	or die "$!";
     my ($v, $p, $filename, $md5sum);
     while (<$apt>) {
 	if (/^Package: $qpackage$/) {

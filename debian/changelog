@@ -9,6 +9,9 @@ devscripts (2.10.21) UNRELEASED; urgency=low
     + Tighten the "repository owner" regex for darcs.d.o to correctly check
       http://darcs.d.o/~foo/bar/baz against user foo
     + Ignore a repository owner mismatch in "print mode"
+  * dget: Pass --all-versions to apt-cache show in case the user has
+    configured it to only show the candidate version. Thanks Håkon Stordahl
+    (Closes: #472747)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 25 Mar 2008 18:51:59 +0000
 
