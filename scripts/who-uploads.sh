@@ -34,10 +34,11 @@ usage () {
   Options:
     --max-uploads=N   Display at most the N most recent uploads (default: 3)
     --keyring KEYRING Add KEYRING as a GPG keyring for Debian Developers'
-                      keys in addition to /usr/share/keyrings/debian-keyring.*;
+                      keys in addition to /usr/share/keyrings/debian-keyring.*
+                      and /usr/share/keyrings/debian-maintainers.gpg;
                       this option may be given multiple times
     --no-default-keyrings
-                      Do not use /usr/share/keyrings/debian-keyring.*
+                      Do not use the default keyrings
     --no-conf, --noconf
                       Don't read devscripts config files;
                       must be the first option given
