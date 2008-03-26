@@ -1,5 +1,7 @@
 devscripts (2.10.21) UNRELEASED; urgency=low
 
+  * bug/script: Don't produce an error if either of the configuration files
+    doesn't exist (Closes: #472748)
   * checkbashisms:
     + Strip off the quoted portion of a line that ends a "quoted block" before
       deciding whether it's a comment line and skipping it

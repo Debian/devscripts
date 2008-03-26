@@ -1,8 +1,17 @@
 #!/bin/sh
 
-echo "--- /etc/devscripts.conf ---" >&3
-egrep '^[^#]' /etc/devscripts.conf >&3
+printf "\n--- /etc/devscripts.conf ---\n" >&3
 
-echo
-echo "--- ~/.devscripts ---" >&3
-egrep '^[^#]' $HOME/.devscripts >&3
+if [ -f /etc/devscripts.conf ]; then
+    egrep '^[^#]' /etc/devscripts.conf >&3
+else
+    echo "Not present" >&3
+fi
+
+printf "\n--- ~/.devscripts ---\n" >&3
+
+if [ -f ~/.devscripts ]; then
+    egrep '^[^#]' ~/.devscripts >&3
+else
+    echo "Not present" >&3
+fi
