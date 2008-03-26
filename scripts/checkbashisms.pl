@@ -147,7 +147,7 @@ foreach my $filename (@ARGV) {
 		'(\[|test|-o|-a)\s*[^\s]+\s+==\s' =>
 		                               q<should be 'b = a'>,
 		'\s\|\&' =>                    q<pipelining is not POSIX>,
-		'[^\\\]\{([^\s]+?,)+[^\\\}\s]+\}' =>
+		'[^\\\]\{([^\s\\\}]+?,)+[^\\\}\s]+\}' =>
 		                               q<brace expansion>,
 		'(?:^|\s+)\w+\+=' =>           q<should be VAR="${VAR}foo">,
 		'(?:^|\s+)\w+\[\d+\]=' =>      q<bash arrays, H[0]>,

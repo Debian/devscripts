@@ -8,6 +8,7 @@ devscripts (2.10.21) UNRELEASED; urgency=low
     + Fix heredoc detection to match '<< \EOT ... EOT' but not
       '<< "\EOT" ... EOT'
     + Improve the invalid function name test to not trigger on IFS="()"
+    + Modify the brace expansion test to allow "${foo},${bar}"
   * debcheckout:
     + Tighten the "repository owner" regex for darcs.d.o to correctly check
       http://darcs.d.o/~foo/bar/baz against user foo
