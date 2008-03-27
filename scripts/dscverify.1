@@ -7,7 +7,8 @@ dscverify \- verify the validity of a Debian package
 \fBdscverify\fR checks that the GPG or PGP signatures on the given
 \fI.changes\fR or \fI.dsc\fR files are good signatures made by keys in
 the current Debian keyrings, found in the \fIdebian-keyring\fR
-package.  (Additional keyrings can be specified using the
+and \fIdebian-maintainers\fR
+packages.  (Additional keyrings can be specified using the
 \fB--keyring\fR option any number of times.)  It then checks that the
 other files listed in the \fI.changes\fR or \fI.dsc\fR files have the
 correct sizes and MD5 sums.  The exit status is 0 if there are no
@@ -16,6 +17,9 @@ problems and non-zero otherwise.
 .TP
 .BI \-\-keyring " " \fIkeyring\fR
 Add \fIkeyring\fR to the list of keyrings to be used.
+.TP
+\fB\-\-no-default-keyrings\fR
+Do not use the default set of keyrings.
 .TP
 \fB\-\-no-conf\fR, \fB\-\-noconf\fR
 Do not read any configuration files.  This can only be used as the

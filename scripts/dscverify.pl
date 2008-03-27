@@ -43,6 +43,7 @@ my $modified_conf_msg;
 my $Exit = 0;
 my $start_dir = cwd;
 my $verify_sigs = 1;
+my $use_default_keyrings = 1;
 
 sub usage {
     print <<"EOF";
@@ -51,6 +52,8 @@ Usage: $progname [options] dsc-or-changes-file ...
            --version   Display version and copyright information
            --keyring <keyring>
                        Add <keyring> to the list of keyrings used
+           --no-default-keyrings
+                       Do not check against the default keyrings
            --nosigcheck, --no-sig-check
                        Do not verify the GPG signature
            --no-conf, --noconf
@@ -90,7 +93,8 @@ sub get_rings {
     for (qw(/org/keyring.debian.org/keyrings/debian-keyring.gpg
 	    /usr/share/keyrings/debian-keyring.gpg
 	    /org/keyring.debian.org/keyrings/debian-keyring.pgp
-	    /usr/share/keyrings/debian-keyring.pgp)) {
+	    /usr/share/keyrings/debian-keyring.pgp
+	    /usr/share/keyrings/debian-maintainers.gpg)) {
 	push @rings, $_ if -r;
     }
     return @rings if @rings;
@@ -264,6 +268,10 @@ sub main {
 	if ($ARGV[0] =~ /^--no-?conf$/) {
 	    xdie "$ARGV[0] is only acceptable as the first command-line option!\n";
 	}
+	if ($ARGV[0] eq '--no-default-keyrings') {
+	    $use_default_keyrings = 0;
+	    shift @ARGV;
+	}
 	if ($ARGV[0] eq '--keyring') {
 	    shift @ARGV;
 	    if (@ARGV > 0) {
@@ -297,7 +305,7 @@ sub main {
 
     @ARGV or xdie "no .changes or .dsc files specified\n";
 
-    @rings = get_rings @rings unless $verify_sigs == 0;
+    @rings = get_rings @rings if $use_default_keyrings and $verify_sigs;
 
     for my $file (@ARGV) {
 	process_file $file, @rings;
