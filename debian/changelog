@@ -13,7 +13,8 @@ devscripts (2.10.21) UNRELEASED; urgency=low
     + Temporarily disable the check for "complete" as it's too prone to false
       positives
     + Add checks for pushd and popd
-    + Remove check for $((var+1)) as dash now supports the syntax
+    + Remove check for $((var+1)) as dash now supports the syntax (the syntax
+      is POSIX compliant but was not supported properly by dash)
   * debcheckout:
     + Tighten the "repository owner" regex for darcs.d.o to correctly check
       http://darcs.d.o/~foo/bar/baz against user foo
