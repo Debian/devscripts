@@ -9,6 +9,7 @@ devscripts (2.10.21) UNRELEASED; urgency=low
       '<< "\EOT" ... EOT'
     + Improve the invalid function name test to not trigger on IFS="()"
     + Modify the brace expansion test to allow "${foo},${bar}"
+    + Add another variation on the theme of shell wrapper detection (${1+"$@"})
   * debcheckout:
     + Tighten the "repository owner" regex for darcs.d.o to correctly check
       http://darcs.d.o/~foo/bar/baz against user foo
