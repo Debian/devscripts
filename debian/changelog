@@ -15,6 +15,7 @@ devscripts (2.10.21) UNRELEASED; urgency=low
     + Add checks for pushd and popd
     + Remove check for $((var+1)) as dash now supports the syntax (the syntax
       is POSIX compliant but was not supported properly by dash)
+  * dcmd: Apply patch from Romain to correctly match the x11 section
   * debcheckout:
     + Tighten the "repository owner" regex for darcs.d.o to correctly check
       http://darcs.d.o/~foo/bar/baz against user foo
