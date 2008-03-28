@@ -12,6 +12,7 @@ devscripts (2.10.21) UNRELEASED; urgency=low
     + Add another variation on the theme of shell wrapper detection (${1+"$@"})
     + Temporarily disable the check for "complete" as it's too prone to false
       positives
+    + Add checks for pushd and popd
   * debcheckout:
     + Tighten the "repository owner" regex for darcs.d.o to correctly check
       http://darcs.d.o/~foo/bar/baz against user foo
