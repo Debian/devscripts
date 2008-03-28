@@ -10,6 +10,8 @@ devscripts (2.10.21) UNRELEASED; urgency=low
     + Improve the invalid function name test to not trigger on IFS="()"
     + Modify the brace expansion test to allow "${foo},${bar}"
     + Add another variation on the theme of shell wrapper detection (${1+"$@"})
+    + Temporarily disable the check for "complete" as it's too prone to false
+      positives
   * debcheckout:
     + Tighten the "repository owner" regex for darcs.d.o to correctly check
       http://darcs.d.o/~foo/bar/baz against user foo

@@ -167,7 +167,7 @@ foreach my $filename (@ARGV) {
 		'/dev/(tcp|udp)'	    => q</dev/(tcp|udp)>,
 		'(?:^|\s+)suspend\s' =>        q<suspend>,
 		'(?:^|\s+)caller\s' =>         q<caller>,
-		'(?:^|\s+)complete\s' =>       q<complete>,
+#		'(?:^|\s+)complete\s' =>       q<complete>,
 		'(?:^|\s+)compgen\s' =>        q<compgen>,
 		'(?:^|\s+)declare\s' =>        q<declare>,
 		'(?:^|\s+)typeset\s' =>        q<typeset>,
