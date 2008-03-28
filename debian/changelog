@@ -5,8 +5,7 @@ devscripts (2.10.21) UNRELEASED; urgency=low
   * checkbashisms:
     + Strip off the quoted portion of a line that ends a "quoted block" before
       deciding whether it's a comment line and skipping it
-    + Fix heredoc detection to match '<< \EOT ... EOT' but not
-      '<< "\EOT" ... EOT'
+    + Fix heredoc detection to match '<< \EOT ... EOT'
     + Improve the invalid function name test to not trigger on IFS="()"
     + Modify the brace expansion test to allow "${foo},${bar}"
     + Add another variation on the theme of shell wrapper detection (${1+"$@"})
