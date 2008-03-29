@@ -216,11 +216,11 @@ foreach my $filename (@ARGV) {
 	    my $line = $_;
 
 	    if ($quote_string ne "") {
+		my $otherquote = ($quote_string eq "\"" ? "\'" : "\"");
 		# Inside a quoted block
-		if ($line =~ /(?:^|^.*?[^\\])$quote_string(.*)$/) {
+		if ($line =~ /(?:^|^.*?[^\\$otherquote])$quote_string(.*)$/) {
 		    my $rest = $1;
 		    my $templine = $line;
-		    my $otherquote = ($quote_string eq "\"" ? "\'" : "\"");
 
 		    # Remove quoted strings delimited with $otherquote
 		    $templine =~ s/$otherquote[^$quote_string]*?$otherquote//g;
