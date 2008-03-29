@@ -364,7 +364,7 @@ sub script_is_evil_and_wrong {
         next if /^#/o;
         next if /^$/o;
         last if (++$i > 55);
-        if (/(^\s*|\beval\s*[\'\"]|;\s*)exec\s*.+\s*.?\$$var.?\s*(--\s*)?.?(\${1:?\+.?)?\$(\@|\*)/) {
+        if (/(^\s*|\beval\s*[\'\"]|;\s*|&&\s*)exec\s*.+\s*.?\$$var.?\s*(--\s*)?.?(\${1:?\+.?)?\$(\@|\*)/) {
             $ret = 1;
             last;
         } elsif (/^\s*(\w+)=\$0;/) {

@@ -8,7 +8,8 @@ devscripts (2.10.21) UNRELEASED; urgency=low
     + Fix heredoc detection to match '<< \EOT ... EOT'
     + Improve the invalid function name test to not trigger on IFS="()"
     + Modify the brace expansion test to allow "${foo},${bar}"
-    + Add another variation on the theme of shell wrapper detection (${1+"$@"})
+    + Add another couple of variations on the theme of shell wrapper detection
+      (${1+"$@"} and "foo && exec bar")
     + Temporarily disable the check for "complete" as it's too prone to false
       positives
     + Add checks for pushd and popd
