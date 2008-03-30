@@ -23,10 +23,10 @@ And now, in mostly alphabetical order, the scripts:
 - archpath: Prints arch (tla/Bazaar) package names. Also supports
   calculating the package names for other branches.
 
-- bts [www-browser, libsoap-lite-perl, libwww-perl, mailx | mailutils]:
-  A command-line tool for accessing the BTS, both to send mails to
-  control@bts.debian.org and to access the web pages and SOAP interface
-  of the BTS.
+- bts [www-browser, libauthen-sasl-perl, libsoap-lite-perl, libwww-perl,
+  mailx | mailutils]: A command-line tool for accessing the BTS, both to
+  send mails to control@bts.debian.org and to access the web pages and
+  SOAP interface of the BTS.
 
 - build-rdeps [dctrl-tools]:
   Searches for all packages that build-depend on a given package.

@@ -84,6 +84,13 @@
 # host will be used unless overridden by --sendmail on the command line
 # BTS_SMTP_HOST=bugs.debian.org
 #
+# If the SMTP host specified above requires authentication, the following
+# options may be used to specify the username and password to use.
+# If only a username is provided then the password will be prompted for
+# before sending the e-mail
+# BTS_SMTP_AUTH_USERNAME=user
+# BTS_SMTP_AUTH_PASSWORD=pass
+#
 # Include resolved bugs when caching?
 # BTS_INCLUDE_RESOLVED=yes
 #

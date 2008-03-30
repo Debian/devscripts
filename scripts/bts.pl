@@ -261,12 +261,21 @@ SENDMAILCMD, for example: --sendmail="/usr/sbin/mymailer -t"
 
 =item --smtp-host=SMTPHOST
 
-Specify an SMTP host.  If given, bts will send mail by talking directly to
+Specify an SMTP host.  If given, B<bts> will send mail by talking directly to
 this SMTP host rather than by invoking a sendmail command.
 
 Note that when sending directly via an SMTP host, specifying addresses in
 --cc-addr that the SMTP host will not relay will cause the SMTP host to reject
 the entire mail.
+
+=item --smtp-username=USERNAME, --smtp-password=PASSWORD
+
+Specify the credentials to use when connecting to the SMTP server
+specified by --smtp-host.  If the server does not require authentication
+then these options should not be used.
+
+If a username is specified but not a password, B<bts> will prompt for
+the password before sending the mail.
 
 =item -f, --force-refresh
 
@@ -344,6 +353,8 @@ my $updatemode=0;
 my $mailreader='mutt -f %s';
 my $sendmailcmd='/usr/sbin/sendmail';
 my $smtphost='';
+my $smtpuser='';
+my $smtppass='';
 my $noaction=0;
 # regexp for mailers which require a -t option
 my $sendmail_t='^/usr/sbin/sendmail$|^/usr/sbin/exim';
@@ -370,6 +381,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'BTS_SENDMAIL_COMMAND' => '/usr/sbin/sendmail',
 		       'BTS_INCLUDE_RESOLVED' => 'yes',
 		       'BTS_SMTP_HOST' => '',
+		       'BTS_SMTP_AUTH_USERNAME' => '',
+		       'BTS_SMTP_AUTH_PASSWORD' => '',
 		       'BTS_SUPPRESS_ACKS' => 'no',
 		       'BTS_INTERACTIVE' => 'no',
 		       );
@@ -437,6 +450,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $mailreader = $config_vars{'BTS_MAIL_READER'};
     $sendmailcmd = $config_vars{'BTS_SENDMAIL_COMMAND'};
     $smtphost = $config_vars{'BTS_SMTP_HOST'};
+    $smtpuser = $config_vars{'BTS_AUTH_SMTP_USER'};
+    $smtppass = $config_vars{'BTS_AUTH_SMTP_PASS'};
     $includeresolved = $config_vars{'BTS_INCLUDE_RESOLVED'} eq 'yes' ? 1 : 0;
     $requestack = $config_vars{'BTS_SUPPRESS_ACKS'} eq 'no' ? 1 : 0;
     $interactive = $config_vars{'BTS_INTERACTIVE'} eq 'no' ? 0 : 1;
@@ -449,6 +464,7 @@ if (exists $ENV{'BUGSOFFLINE'}) {
 
 my ($opt_help, $opt_version, $opt_noconf);
 my ($opt_cachemode, $opt_mailreader, $opt_sendmail, $opt_smtphost);
+my ($opt_smtpuser, $opt_smtppass);
 my $opt_cachedelay=5;
 my $mboxmode = 0;
 my $quiet=0;
@@ -469,6 +485,8 @@ GetOptions("help|h" => \$opt_help,
 	   "cc-addr=s" => \$ccemail,
 	   "sendmail=s" => \$opt_sendmail,
 	   "smtp-host|smtphost=s" => \$opt_smtphost,
+	   "smtp-user|smtp-username=s" => \$opt_smtpuser,
+	   "smtp-pass|smtp-password=s" => \$opt_smtppass,
 	   "f" => \$refreshmode,
 	   "force-refresh!" => \$refreshmode,
 	   "only-new!" => \$updatemode,
@@ -502,6 +520,8 @@ if ($opt_sendmail and $opt_smtphost) {
 }
 
 $smtphost = $opt_smtphost if $opt_smtphost;
+$smtpuser = $opt_smtpuser if $opt_smtpuser;
+$smtppass = $opt_smtppass if $opt_smtppass;
 
 if ($opt_sendmail) {
     if ($opt_sendmail ne '/usr/sbin/sendmail'
@@ -1794,6 +1814,8 @@ Valid options are:
    --no-force-refresh     Do not do so (default)
    --sendmail=cmd         Sendmail command to use (default /usr/sbin/sendmail)
    --smtp-host=host       SMTP host to use
+   --smtp-user=username   Credentials to use when connecting to an SMTP
+   --smtp-pass=password   server which requires authentication
    --no-include-resolved  Do not cache bugs marked as resolved
    --include-resolved     Cache bugs marked as resolved (default)
    --no-ack               Suppress BTS acknowledgment mails
@@ -1918,13 +1940,17 @@ sub send_mail {
     return if not defined $body;
 
     $message .= "$body\n";
-
     if ($noaction) {
         print "$message\n";
     }
     elsif (length $smtphost) {
         my $smtp = Net::SMTP->new($smtphost)
             or die "bts: failed to open SMTP connection to $smtphost\n";
+	if ($smtpuser) {
+	    $smtppass = getpass() if not $smtppass;
+	    $smtp->auth($smtpuser, $smtppass)
+		or die "bts: failed to authenticate to $smtphost\n";
+	}
         $smtp->mail($fromaddress)
             or die "bts: failed to set SMTP from address $fromaddress\n";
         my @addresses = extract_addresses($to);
@@ -2087,6 +2113,20 @@ sub confirmmail {
     }
 
     return $body;
+}
+
+sub getpass() {
+    system "stty -echo cbreak </dev/tty";
+    die "bts: error disabling stty echo\n" if $?;
+    print "\a${smtpuser}";
+    print "\@$smtphost" if $smtpuser !~ /\@/;
+    print "'s SMTP password: ";
+    $_ = <STDIN>;
+    chomp;
+    print "\n";
+    system "stty echo -cbreak </dev/tty";
+    die "bts: error enabling stty echo\n" if $?;
+    return $_;
 }
 
 # A simplified version of mailbtsall which sends one message only to
@@ -3307,6 +3347,11 @@ option.
 
 Note that this option takes priority over BTS_SENDMAIL_COMMAND if both are
 set, unless the --sendmail option is used.
+
+=item BTS_SMTP_AUTH_USERNAME, BTS_SMTP_AUTH_PASSWORD
+
+If these options are set, then it is the same as the --smtp-username and
+--smtp-password options being used.
 
 =item BTS_INCLUDE_RESOLVED
 

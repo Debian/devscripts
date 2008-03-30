@@ -21,10 +21,10 @@ Recommends: fakeroot
 Suggests: devscripts-el, at, build-essential, curl | wget, cvs-buildpackage,
  cvs | subversion | svk | tla | bzr | git-core | mercurial, dctrl-tools,
  debian-keyring, debian-maintainers, dupload (>=2.1) | dput,
- gnupg (>= 1.0.7), gnuplot, libcrypt-ssleay-perl, libdigest-md5-perl,
- libfile-desktopentry-perl, libsoap-lite-perl, libterm-size-perl,
- libtimedate-perl, liburi-perl, libwww-perl, lintian, lsb-release,
- mailx | mailutils, man-db, mutt, patch, patchutils, ssh, strace,
+ gnupg (>= 1.0.7), gnuplot, libauthen-sasl-perl, libcrypt-ssleay-perl,
+ libdigest-md5-perl, libfile-desktopentry-perl, libsoap-lite-perl,
+ libterm-size-perl, libtimedate-perl, liburi-perl, libwww-perl, lintian,
+ lsb-release, mailx | mailutils, man-db, mutt, patch, patchutils, ssh, strace,
  unzip, wdiff, www-browser
 Description: scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
@@ -34,7 +34,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
     E for stderr) for every line of output
   - archpath: print tla/Bazaar package names [tla | bazaar]
   - bts: a command-line tool for manipulating the BTS [www-browser,
-    libsoap-lite-perl, libwww-perl, mailx | mailutils]
+    libauthen-sasl-perl, libsoap-lite-perl, libwww-perl, mailx | mailutils]
   - build-rdeps: Searches for all packages that build-depend on a
     given package [dctrl-tools]
   - chdist: tool to easily play with several distributions [dctrl-tools]
