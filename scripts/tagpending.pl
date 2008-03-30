@@ -37,6 +37,7 @@ my $progname = basename($0);
 
 my ($opt_help, $opt_version, $opt_verbose, $opt_noact, $opt_silent);
 my ($opt_online, $opt_confirm, $opt_to, $opt_wnpp, $opt_comments);
+my $opt_interactive;
 
 # Default options
 $opt_silent = 0;
@@ -47,6 +48,7 @@ $opt_confirm = 0;
 $opt_wnpp = 0;
 $opt_to = '';
 $opt_comments = 1;
+$opt_interactive = 0;
 
 GetOptions("help|h" => \$opt_help,
 	   "version" => \$opt_version,
@@ -58,6 +60,7 @@ GetOptions("help|h" => \$opt_help,
 	   "confirm|c" => \$opt_confirm,
 	   "to|t=s" => \$opt_to,
 	   "wnpp|w" => \$opt_wnpp,
+	   "interactive|i" => \$opt_interactive,
            )
     or die "Usage: $progname [options]\nRun $progname --help for more details\n";
 
@@ -128,6 +131,11 @@ Tag bugs as both confirmed and pending.
 Parse changelogs for all versions strictly greater than <version>.
 
 Equivalent to dpkg-parsechangelog's -v option.
+
+=item -i, --interactive
+
+Display the message which would be sent to the BTS and, except when
+--noact was used, prompt for confirmation before sending it.
 
 =item -w, --wnpp
 
@@ -289,13 +297,22 @@ if (@to_tag) {
 my %packages = map { $_ => 1 } @sourcepkgs;
 my @bts_args = ("bts");
 
-if ($opt_noact) {
+if ($opt_noact and not $opt_interactive) {
     bugs_info;
     bugs_info "wnpp" if $opt_wnpp;
 } else {
     if (!$opt_silent) {
 	bugs_info;
 	bugs_info "wnpp" if $opt_wnpp;
+    }
+
+    if ($opt_interactive) {
+	if ($opt_noact) {
+	    push(@bts_args, "-n");
+	    print "\nWould send this BTS mail:\n\n";
+	} else {
+	    push(@bts_args, "-i");
+	}
     }
 
     if (@to_tag) {
@@ -389,6 +406,9 @@ Valid options are:
     -t, --to <version>  Use changelog information from all versions strictly
 			later than <version> (mimics dpkg-parsechangelog's
 			-v option.)
+    -i, --interactive   Display the message which would be sent to the BTS
+			and, except if --noact was used, prompt for
+			confirmation ebfore sending it.
     -w, --wnpp          For each potentially not owned bug, check whether
 			it is filed against wnpp and, if so, tag it. This
 			allows e.g. ITA or ITPs to be tagged.

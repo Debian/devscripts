@@ -27,6 +27,8 @@ devscripts (2.10.21) UNRELEASED; urgency=low
   * dscverify:
     + Add debian-maintainers to the default set of keyrings
     + Add a --no-default-keyrings option to override the default keyrings
+  * tagpending: Allow the mail sent to the BTS to be displayed and (assuming
+    --noact is not in effect) confirmed before sending
   * who-uploads: Mention the debian-maintainers keyring in --help
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 25 Mar 2008 18:51:59 +0000
