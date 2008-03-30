@@ -1,8 +1,10 @@
 devscripts (2.10.21) UNRELEASED; urgency=low
 
   * bts: Allow SMTP authentication to be used when sending e-mails
-  * bug/script: Don't produce an error if either of the configuration files
-    doesn't exist (Closes: #472748)
+  * bug/script:
+    + Don't produce an error if either of the configuration files doesn't
+      exist (Closes: #472748)
+    + Don't include the BTS_SMTP_AUTH_* options
   * checkbashisms:
     + Strip off the quoted portion of a line that ends a "quoted block" before
       deciding whether it's a comment line and skipping it
