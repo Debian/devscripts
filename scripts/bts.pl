@@ -1814,8 +1814,8 @@ Valid options are:
    --no-force-refresh     Do not do so (default)
    --sendmail=cmd         Sendmail command to use (default /usr/sbin/sendmail)
    --smtp-host=host       SMTP host to use
-   --smtp-user=username   Credentials to use when connecting to an SMTP
-   --smtp-pass=password   server which requires authentication
+   --smtp-username=user   Credentials to use when connecting to an SMTP
+   --smtp-password=pass   server which requires authentication
    --no-include-resolved  Do not cache bugs marked as resolved
    --include-resolved     Cache bugs marked as resolved (default)
    --no-ack               Suppress BTS acknowledgment mails
