@@ -548,7 +548,8 @@ sub tag {
     	}
     }
     elsif ($prog eq 'hg') {
-	    $tag="debian-$tag";
+	$tag=~s/^[0-9]+://; # strip epoch
+	$tag="debian-$tag";
     	if (! action($prog, "tag", "-m", "tagging version $tag", $tag)) {
 	        die "debcommit: failed tagging with $tag\n";
     	}
