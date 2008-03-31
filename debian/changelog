@@ -24,6 +24,9 @@ devscripts (2.10.21) UNRELEASED; urgency=low
     + Tighten the "repository owner" regex for darcs.d.o to correctly check
       http://darcs.d.o/~foo/bar/baz against user foo
     + Ignore a repository owner mismatch in "print mode"
+    + In authenticated mode, ensure that a checked-out personal git.d.o
+      respository will be writable by the user passed on the command line
+      (Closes: #447791)
   * debcommit: Strip epochs from hg tags (Closes: #473593)
   * dget: Pass --all-versions to apt-cache show in case the user has
     configured it to only show the candidate version. Thanks Håkon Stordahl

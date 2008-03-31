@@ -227,15 +227,17 @@ sub set_auth($$$$) {
   my ($repo_type, $url, $user, $print_only) = @_;
 
   my $old_url = $url;
+
   $user .= "@" if length $user;
+  my $user_local = $user;
+  $user_local =~ s|(.*)(@)|$1|;
+  my $user_url = $url;
+
   switch ($repo_type) {
     case "bzr"	  { $url =~ s|^\w+://(bzr\.debian\.org)/(.*)|sftp://$user$1/bzr/$2|;
 		    $url =~ s[^\w+://(?:(bazaar|code)\.)?(launchpad\.net/.*)][bzr+ssh://${user}bazaar.$2];}
     case "darcs"  {
        if ($url =~ m|(~)|) {
-           my $user_local = $user;
-           $user_local =~ s|(.*)(@)|$1|;
-           my $user_url = $url;
            $user_url =~ s|^\w+://(darcs\.debian\.org)/(~)(.*?)/.*|$3|;
            die "the local user '$user_local' doesn't own the personal repository '$url'\n"
                if $user_local ne $user_url and !$print_only;
@@ -244,7 +246,19 @@ sub set_auth($$$$) {
            $url =~ s|^\w+://(darcs\.debian\.org)/(.*)|$user$1:/darcs/$2|;
         }
     }
-    case "git"    { $url =~ s|^\w+://(git\.debian\.org/.*)|git+ssh://$user$1|; }
+    case "git"    {
+      if ($url =~ m%(/users/|~)%) {
+        $user_url =~ s|^\w+://(git\.debian\.org)/git/users/(.*?)/.*|$2|;
+        $user_url =~ s|^\w+://(git\.debian\.org)/~(.*?)/.*|$2|;
+
+        die "the local user '$user_local' doesn't own the personal repository '$url'\n"
+          if $user_local ne $user_url and !$print_only;
+        $url =~ s|^\w+://(git\.debian\.org)/git/users/.*?/(.*)|git+ssh://$user$1/~/public_git/$2|;
+        $url =~ s|^\w+://(git\.debian\.org)/~.*?/(.*)|git+ssh://$user$1/~/public_git/$2|;
+      } else {
+        $url =~ s|^\w+://(git\.debian\.org/.*)|git+ssh://$user$1|;
+      }
+    }
     case "hg"     { $url =~ s|^\w+://(hg\.debian\.org/.*)|ssh://$user$1|; }
     case "svn"	  { $url =~ s|^\w+://(svn\.debian\.org)/(.*)|svn+ssh://$user$1/svn/$2|; }
     else { die "sorry, don't know how to enable authentication for $repo_type repositories (patches welcome!)\n"; }
