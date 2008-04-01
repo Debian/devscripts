@@ -474,6 +474,10 @@ EOF
 # BTS_SMTP_AUTH_USERNAME=user    
 # BTS_SMTP_AUTH_PASSWORD=pass
 
+##### debdiff option added in version 2.10.21
+# Include the output of diffstat?
+# DEBDIFF_SHOW_DIFFSTAT=no
+
 EOF
 	fi
     fi

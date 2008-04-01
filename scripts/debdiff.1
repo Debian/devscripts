@@ -117,6 +117,13 @@ package in the first list called \fIFROM\fR as if it were called
 Exclude files that match \fIPATTERN\fR.  Multiple uses of this option
 are permitted.
 .TP
+.B \-\-diffstat
+Include the result of \fBdiffstat\fR before the generated diff.
+.TP
+.B \-\-no-diffstat
+The default behaviour; can be used to override a configuration file
+setting.
+.TP
 \fB\-\-no-conf\fR, \fB\-\-noconf\fR
 Do not read any configuration files.  This can only be used as the
 first option given on the command-line.
@@ -160,6 +167,10 @@ If this is set to \fIyes\fR, then it is the same as the
 .B DEBDIFF_WDIFF_OPT
 This option will be passed to \fBwdiff\fR; it should be one of
 \fB\-p\fR, \fB\-l\fR or \fB\-t\fR.
+.TP
+.B DEBDIFF_SHOW_DIFFSTAT
+If this is set to \fIyes\fR, then it is the same as the
+\fB\-\-diffstat\fR command line parameter being used.
 .SH "EXIT VALUES"
 Normally the exit value will be 0 if no differences are reported and 1
 if any are reported.  If there is some fatal error, the exit code will
@@ -170,6 +181,7 @@ else it should be 255.
 .BR dpkg-deb (1),
 .BR wdiff (1),
 .BR interdiff (1)
+.BR diffstat (1)
 and
 .BR devscripts.conf (5).
 .SH AUTHOR

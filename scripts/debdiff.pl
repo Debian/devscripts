@@ -18,7 +18,7 @@ use 5.006_000;
 use strict;
 use Cwd;
 use File::Basename;
-use File::Temp qw/ tempdir /;
+use File::Temp qw/ tempdir tempfile /;
 
 # Predeclare functions
 sub process_debc($$);
@@ -93,6 +93,7 @@ my $controlfiles = 'control';
 my $show_moved = 0;
 my $wdiff_opt = '';
 my @diff_opts = ();
+my $show_diffstat = 0;
 
 my $quiet = 0;
 
@@ -110,6 +111,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBDIFF_CONTROLFILES' => 'control',
 		       'DEBDIFF_SHOW_MOVED' => 'no',
 		       'DEBDIFF_WDIFF_OPT' => '',
+		       'DEBDIFF_SHOW_DIFFSTAT' => '',
 		       );
     my %config_default = %config_vars;
 
@@ -132,6 +134,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'DEBDIFF_CONTROL'}='yes';
     $config_vars{'DEBDIFF_SHOW_MOVED'} =~ /^(yes|no)$/
 	or $config_vars{'DEBDIFF_SHOW_MOVED'}='no';
+    $config_vars{'DEBDIFF_SHOW_DIFFSTAT'} =~ /^(yes|no)$/
+	or $config_vars{'DEBDIFF_SHOW_DIFFSTAT'}='no';
 
     foreach my $var (sort keys %config_vars) {
 	if ($config_vars{$var} ne $config_default{$var}) {
@@ -146,6 +150,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $controlfiles = $config_vars{'DEBDIFF_CONTROLFILES'};
     $show_moved = $config_vars{'DEBDIFF_SHOW_MOVED'} eq 'yes' ? 1 : 0;
     $wdiff_opt = $config_vars{'DEBDIFF_WDIFF_OPT'} =~ /^-([plt])$/ ? $1 : '';
+    $show_diffstat = $config_vars{'DEBDIFF_SHOW_DIFFSTAT'} eq 'yes' ? 1 : 0;
 }
 
 # Are they a pair of debs, changes or dsc files, or a list of debs?
@@ -226,6 +231,8 @@ while (@ARGV) {
 	push @diff_opts, "-w"; 
 	shift;
     }
+    elsif ($ARGV[0] eq '--diffstat') { $show_diffstat = 1; shift; }
+    elsif ($ARGV[0] =~ /^--no-?diffstat$/) { $show_diffstat = 0; shift; }
     elsif ($ARGV[0] =~ /^--no-?conf$/) {
 	fatal "--no-conf is only acceptable as the first command-line option!";
     }
@@ -423,13 +430,34 @@ elsif ($type eq 'dsc') {
     # Do we have interdiff?
     system("command -v interdiff >/dev/null 2>&1");
     my $use_interdiff = ($?==0) ? 1 : 0;
+    system("command -v diffstat >/dev/null 2>&1");
+    my $have_diffstat = ($?==0) ? 1 : 0;
+
+    my ($fh, $filename) = tempfile("debdiffXXXXXX",
+				SUFFIX => ".diff",
+				DIR => File::Spec->tmpdir,
+				UNLINK => 1);
 
     if ($origs[1] eq $origs[2] and defined $diffs[1] and defined $diffs[2]
 	and scalar(@excludes) == 0 and $use_interdiff) {
 	# same orig tar ball and interdiff exists
-	my $rv = system('interdiff', '-z', @diff_opts, $diffs[1], $diffs[2]);
+
+	my $command = join( " ", ("interdiff", "-z", @diff_opts, $diffs[1],
+	    $diffs[2], ">", $filename) );
+	my $rv = system($command);
 	if ($rv) {
 	    fatal "interdiff -z $diffs[1] $diffs[2] failed!";
+	} else {
+	    if ($have_diffstat and $show_diffstat) {
+		print "diffstat for $diffs[1] $diffs[2]\n\n";
+		system("diffstat $filename");
+		print "\n";
+	    }
+	    open( INTERDIFF, '<', $filename );
+	    while( <INTERDIFF> ) {
+		print $_;
+	    }
+	    close INTERDIFF;
 	}
     } else {
 	# Any other situation
@@ -482,15 +510,25 @@ elsif ($type eq 'dsc') {
 	    }
 	    closedir(DIR);
 	}
+
 	my @command = ("diff", "-Nru", @diff_opts);
 	for my $exclude (@excludes) {
 	    push @command, ("--exclude", $exclude);
 	}
 	push @command, ("$dir1/$sdir1", "$dir2/$sdir2");
+	push @command, (">", $filename);
 
 	# Execute diff and remove the common prefixes $dir1/$dir2, so the patch can be used with -p1,
 	# as if when interdiff would have been used:
-	open( DIFF, '-|', @command ) || fatal "Failed to execute @command!";
+	system(join(" ", @command)) || fatal "Failed to execute @command!";
+
+	if ($have_diffstat and $show_diffstat) {
+	    print "diffstat for $sdir1 $sdir2\n\n";
+	    system("diffstat $filename");
+	    print "\n";
+	}
+
+	open( DIFF, '<', $filename );
 
 	# replace in first line:
 	my $first = <DIFF>;
