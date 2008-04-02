@@ -15,7 +15,7 @@ devscripts (2.10.21) UNRELEASED; urgency=low
       ("foo && exec bar")
     + Temporarily disable the check for "complete" as it's too prone to false
       positives
-    + Add checks for pushd and popd
+    + Add checks for pushd, popd, ulimit and shopt
     + Remove check for $((var+1)) as dash now supports the syntax (the syntax
       is POSIX compliant but was not supported properly by dash)
     + Improve quoted string handling to cope with "'foo'"
