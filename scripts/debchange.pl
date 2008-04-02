@@ -1290,6 +1290,13 @@ sub format_line {
     $CHGLINE=shift;
     my $newentry=shift;
 
+    # Work around the fact that write() with formats
+    # seems to assume that character == byte
+    # See http://rt.perl.org/rt3/Public/Bug/Display.html?id=33832
+    # and Debian bug #473769
+    my $count = () = $CHGLINE =~ /[\x80-\xFF]/mg;
+    $CHGLINE .= " " x $count;
+
     print O "\n" if $opt_news && ! ($newentry || $linecount);
     $linecount++;
     my $f=select(O);

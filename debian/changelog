@@ -22,6 +22,8 @@ devscripts (2.10.21) UNRELEASED; urgency=low
     + Add a test for export being passed options other than -p
       (Closes: #473700)
   * dcmd: Apply patch from Romain to correctly match the x11 section
+  * debchange: Fix spurious output when adding a changelog entry containing
+    non-ASCII characters (Closes: #473769)
   * debcheckout:
     + Tighten the "repository owner" regex for darcs.d.o to correctly check
       http://darcs.d.o/~foo/bar/baz against user foo
