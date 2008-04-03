@@ -199,6 +199,7 @@ foreach my $filename (@ARGV) {
 		'\$\{?EUID\}?\b'	    => q<$EUID should be "id -u">,
 		'\$\{?SECONDS\}?\b'	    => q<$SECONDS>,
 		'\$\{?BASH_[A-Z]+\}?\b'     => q<$BASH_SOMETHING>,
+		'\$\{?SHELLOPTS\}?\b'       => q<$SHELLOPTS>,
 		'<<<'                       => q<\<\<\< here string>,
 	    );
 
@@ -214,6 +215,7 @@ foreach my $filename (@ARGV) {
 		$string_bashisms{'(?:^|\s+)DIRSTACK='} = q<DIRSTACK=>;
 		$string_bashisms{'(?:^|\s+)EUID='} = q<EUID=>;
 		$string_bashisms{'(?:^|\s+)BASH(_[A-Z]+)?='} = q<BASH(_SOMETHING)=>;
+		$string_bashisms{'(?:^|\s+)SHELLOPTS='} = q<SHELLOPTS=>;
 	    }
 
 	    my $line = $_;
