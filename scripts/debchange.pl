@@ -1294,7 +1294,7 @@ sub format_line {
     # seems to assume that character == byte
     # See http://rt.perl.org/rt3/Public/Bug/Display.html?id=33832
     # and Debian bug #473769
-    my $count = () = $CHGLINE =~ /[\x80-\xFF]/mg;
+    my $count = () = $CHGLINE =~ /[^\x00-\x7F]/mg;
     $CHGLINE .= " " x $count;
 
     print O "\n" if $opt_news && ! ($newentry || $linecount);
