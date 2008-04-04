@@ -1935,6 +1935,7 @@ sub send_mail {
                .  "# Automatically generated email from bts,"
                   . " devscripts version $version\n";
 
+    $body = addfooter($body);
     $body = confirmmail($message, $body);
 
     return if not defined $body;
@@ -2051,6 +2052,7 @@ sub mailbtsall {
 		  .  "# Automatically generated email from bts,"
 		  . " devscripts version $version\n";
 
+	$body = addfooter($body);
 	$body = confirmmail($header, $body);
 
 	return if not defined $body;
@@ -2108,6 +2110,25 @@ sub confirmmail {
 		last;
 	    } elsif (/^e/i) {
 		$body = edit($body);
+	    }
+	}
+    }
+
+    return $body;
+}
+
+sub addfooter() {
+    my $body = shift;
+
+    if ($forceinteractive) {	
+	$body .= "thanks\n";
+	if (-r $ENV{'HOME'} . "/.signature") {
+	    if (open SIG, "<", $ENV{'HOME'} . "/.signature") {
+		$body .= "-- \n";
+		while(<SIG>) {
+		    $body .= $_;
+		}
+		close SIG;
 	    }
 	}
     }

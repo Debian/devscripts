@@ -1,6 +1,9 @@
 devscripts (2.10.21) UNRELEASED; urgency=low
 
-  * bts: Allow SMTP authentication to be used when sending e-mails
+  * bts:
+    + Allow SMTP authentication to be used when sending e-mails
+    + Automatically append "thanks" and the contents of ~/.signature
+      (if present) when --force-interactive was used (Closes: #474205)
   * bug/script:
     + Don't produce an error if either of the configuration files doesn't
       exist (Closes: #472748)
