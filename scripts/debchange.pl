@@ -40,6 +40,7 @@ use File::Basename;
 use Cwd;
 use lib '/usr/share/devscripts';
 use Devscripts::Debbugs;
+use Parse::DebControl;
 
 # Predeclare functions
 sub fatal($);
@@ -77,7 +78,7 @@ Options:
          Increment the Debian release number for a non-maintainer upload
   --bin-nmu
          Increment the Debian release number for a binary non-maintainer upload
-  --qa
+  -q, --qa
          Increment the Debian release number for a Debian QA Team upload
   -s, --security
          Increment the Debian release number for a Debian Security Team upload
@@ -142,7 +143,7 @@ Options:
          Display this help message and exit
   --version
          Display version information
-  At most one of -a, -i, -e, -r, -v, -d, -n, --bin-nmu, --qa, -s, --bpo, -l
+  At most one of -a, -i, -e, -r, -v, -d, -n, --bin-nmu, -q, --qa, -s, --bpo, -l
   (or their long equivalents) may be used.
   With no options, one of -i or -a is chosen by looking for a .upload
   file in the parent directory and checking its contents.
@@ -273,7 +274,7 @@ GetOptions("help|h" => \$opt_help,
 	   "u|urgency=s" => \$opt_u,
 	   "n|nmu" => \$opt_n,
 	   "bin-nmu" => \$opt_bn,
-	   "qa" => \$opt_qa,
+	   "q|qa" => \$opt_qa,
 	   "s|security" => \$opt_s,
 	   "bpo" => \$opt_bpo,
 	   "l|local=s" => \$opt_l,
@@ -321,7 +322,7 @@ if (defined $opt_level) {
 if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
 
 # Only allow at most one non-help option
-fatal "Only one of -a, -i, -e, -r, -v, -d, -n/--nmu, --bin-nmu, --qa, -s/--security, --bpo, -l/--local is allowed;\ntry $progname --help for more help"
+fatal "Only one of -a, -i, -e, -r, -v, -d, -n/--nmu, --bin-nmu, -q/--qa, -s/--security, --bpo, -l/--local is allowed;\ntry $progname --help for more help"
     if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) + ($opt_n?1:0) + ($opt_bn?1:0) + ($opt_qa?1:0) + ($opt_s?1:0) + ($opt_bpo?1:0) + ($opt_l?1:0) > 1;
 
 if ($opt_s) {
@@ -378,7 +379,7 @@ fatal "--package cannot be used when creating a NEWS file"
 if ($opt_create) {
     if ($opt_a || $opt_i || $opt_e || $opt_r || $opt_b || $opt_n || $opt_bn ||
 	    $opt_qa || $opt_s || $opt_bpo || $opt_l || $opt_allow_lower) {
-	warn "$progname warning: ignoring -a/-i/-e/-r/-b/--allow-lower-version/-n/--bin-nmu/--qa/-s/--bpo/-l options with --create\n";
+	warn "$progname warning: ignoring -a/-i/-e/-r/-b/--allow-lower-version/-n/--bin-nmu/-q/--qa/-s/--bpo/-l options with --create\n";
 	$warnings++;
     }
     if ($opt_package && $opt_d) {
@@ -642,6 +643,27 @@ if (! $opt_m) {
     # Otherwise, $EMAIL retains its default value of the last changelog entry
 } # if (! $opt_m)
 
+#####
+
+if (! $opt_v) {
+
+    if (-f 'debian/control') {
+	my $parser = new Parse::DebControl;
+	my $deb822 = $parser->parse_file('debian/control', { });
+	my $uploader = $deb822->[0]->{'Uploaders'};
+	my $maintainer = $deb822->[0]->{'Maintainer'};
+	my @uploaders = split(/,\s+/, $uploader);
+
+	my $packager = "$MAINTAINER <$EMAIL>";
+
+	if (! grep { $_ eq $packager } ($maintainer, @uploaders)) {
+	    $opt_n=1;
+	}
+
+    } else {
+	fatal "Missing file debian/control";
+    }
+}
 #####
 
 # Do we need to generate "closes" entries?

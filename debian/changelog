@@ -55,9 +55,12 @@ devscripts (2.10.21) UNRELEASED; urgency=low
 
   [ Martin Zobel-Helas ]
   * debchange
-    + set urgency=high if NMU and no other urgency set (Closes: #474391)
+    + Set urgency=high if NMU and no other urgency set (Closes: #474391)
+    + Set to NMU if packager is neither in Uploaders nor Maintainer 
+      (Closes: #474399)
+    + Add abbreviation -q for --qa (Closes: #474434)
 
- -- Martin Zobel-Helas <zobel@debian.org>  Sat, 05 Apr 2008 15:16:58 +0200
+ -- Martin Zobel-Helas <zobel@debian.org>  Sat, 05 Apr 2008 18:13:28 +0200
 
 devscripts (2.10.20) unstable; urgency=low
 
