@@ -250,6 +250,17 @@ single % if this is needed.)
 Send carbon copies to a list of users. CC_EMAIL_ADDRESS should be a 
 comma-separated list of emails.
 
+=item --use-default-cc
+
+Add the addresses specified in the configuation file option
+BTS_DEFAULT_CC to the list specified using --cc-addr.  This is the
+default.
+
+=item --no-use-default-cc
+
+Do not add addresses specified in BTS_DEFAULT_CC to the carbon copy
+list.
+
 =item --sendmail=SENDMAILCMD
 
 Specify the sendmail command.  The command will be split on white
@@ -265,8 +276,8 @@ Specify an SMTP host.  If given, B<bts> will send mail by talking directly to
 this SMTP host rather than by invoking a sendmail command.
 
 Note that when sending directly via an SMTP host, specifying addresses in
---cc-addr that the SMTP host will not relay will cause the SMTP host to reject
-the entire mail.
+--cc-addr or BTS_DEFAULT_CC that the SMTP host will not relay will cause the
+SMTP host to reject the entire mail.
 
 =item --smtp-username=USERNAME, --smtp-password=PASSWORD
 
@@ -362,6 +373,7 @@ my $includeresolved=1;
 my $requestack=1;
 my $interactive=0;
 my $forceinteractive=0;
+my $ccemail="";
 
 # Next, read read configuration files and then command line
 # The next stuff is boilerplate
@@ -385,6 +397,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'BTS_SMTP_AUTH_PASSWORD' => '',
 		       'BTS_SUPPRESS_ACKS' => 'no',
 		       'BTS_INTERACTIVE' => 'no',
+		       'BTS_DEFAULT_CC' => '',
 		       );
     my %config_default = %config_vars;
     
@@ -456,6 +469,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $requestack = $config_vars{'BTS_SUPPRESS_ACKS'} eq 'no' ? 1 : 0;
     $interactive = $config_vars{'BTS_INTERACTIVE'} eq 'no' ? 0 : 1;
     $forceinteractive = $config_vars{'BTS_INTERACTIVE'} eq 'force' ? 1 : 0;
+    $ccemail = $config_vars{'BTS_DEFAULT_CC'};
 }
 
 if (exists $ENV{'BUGSOFFLINE'}) {
@@ -468,7 +482,8 @@ my ($opt_smtpuser, $opt_smtppass);
 my $opt_cachedelay=5;
 my $mboxmode = 0;
 my $quiet=0;
-my $ccemail="";
+my $opt_ccemail = "";
+my $use_default_cc = 1;
 my $ccsecurity="";
 
 Getopt::Long::Configure('require_order');
@@ -482,7 +497,7 @@ GetOptions("help|h" => \$opt_help,
 	   "cache-delay=i" => \$opt_cachedelay,
 	   "m|mbox" => \$mboxmode,
 	   "mailreader|mail-reader=s" => \$opt_mailreader,
-	   "cc-addr=s" => \$ccemail,
+	   "cc-addr=s" => \$opt_ccemail,
 	   "sendmail=s" => \$opt_sendmail,
 	   "smtp-host|smtphost=s" => \$opt_smtphost,
 	   "smtp-user|smtp-username=s" => \$opt_smtpuser,
@@ -498,6 +513,7 @@ GetOptions("help|h" => \$opt_help,
 	   "i|interactive" => \$interactive,
 	   "no-interactive" => sub { $interactive = 0; $forceinteractive = 0; },
 	   "force-interactive" => sub { $interactive = 1; $forceinteractive = 1; },
+	   "use-default-cc!" => \$use_default_cc,
 	   )
     or die "Usage: bts [options]\nRun $progname --help for more details\n";
 
@@ -506,6 +522,15 @@ if ($opt_noconf) {
 }
 if ($opt_help) { bts_help(); exit 0; }
 if ($opt_version) { bts_version(); exit 0; }
+
+if (!$use_default_cc) {
+    $ccemail = "";
+}
+
+if ($opt_ccemail) {
+    $ccemail .= ", " if $ccemail;
+    $ccemail .= $opt_ccemail;
+}
 
 if ($opt_mailreader) {
     if ($opt_mailreader =~ /\%s/) {
@@ -1807,8 +1832,12 @@ Valid options are:
    --mailreader=CMD       Run CMD to read an mbox; default is 'mutt -f %s'
                           (must contain %s, which is replaced by mbox name)
    --cc-addr=CC_EMAIL_ADDRESS
-                          Send carbon copies to a list of users. CC_EMAIL_ADDRESS
-                          should be a comma-separated list of emails.
+                          Send carbon copies to a list of users.
+                          CC_EMAIL_ADDRESS should be a comma-separated list of
+                          e-mail addresses.
+   --use-default-cc       Send carbon copies to any addresses specified in the
+                          configuration file BTS_DEFAULT_CC (default)
+   --no-use-default-cc    Do not do so
    -f, --force-refresh    Reload all bug reports being cached, even unchanged
                           ones
    --no-force-refresh     Do not do so (default)
@@ -3391,6 +3420,11 @@ line parameter being used.  The default is I<no>.
 If this is set to I<yes> or I<force>, then it is the same as the 
 --interactive or --force-interactive command line parameter being used.  
 The default is I<no>.
+
+=item BTS_DEFAULT_CC
+
+Specify a list of e-mail addresses to which a carbon copy of the generated
+e-mail to the control bot should automatically be sent.
 
 =cut
 

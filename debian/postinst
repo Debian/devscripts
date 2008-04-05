@@ -480,6 +480,19 @@ EOF
 
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.22
+	then
+	    # Added in devscripts 2.10.22
+	    cat >> /etc/devscripts.conf <<EOF
+##### bts option added in version 2.10.22
+#
+# Specify a list of e-mail addresses to which a carbon copy of the
+# generated e-mail to the control bot should automatically be sent.
+# BTS_DEFAULT_CC=example@example.com
+
+EOF
+	fi
     fi
 fi
 
