@@ -92,7 +92,7 @@ while ($control = shift) {
     my $version;
     my $last_line_build_deps;
 
-    if( -r $control) {
+    if (-r $control and -f $control) {
 	open CONTROL, $control;
     }
     else {
