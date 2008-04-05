@@ -20,7 +20,7 @@ Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), sed (>= 2.95),
 Recommends: fakeroot
 Suggests: devscripts-el, at, build-essential, curl | wget, cvs-buildpackage,
  cvs | subversion | svk | tla | bzr | git-core | mercurial, dctrl-tools,
- debian-keyring, debian-maintainers, dupload (>=2.1) | dput,
+ debian-keyring, debian-maintainers, dupload (>=2.1) | dput, equivs,
  gnupg (>= 1.0.7), gnuplot, libauthen-sasl-perl, libcrypt-ssleay-perl,
  libdigest-md5-perl, libfile-desktopentry-perl, libsoap-lite-perl,
  libterm-size-perl, libtimedate-perl, liburi-perl, libwww-perl, lintian,
@@ -91,6 +91,9 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - mass-bug: mass-file bug reports [mailx | mailutils]
   - mergechanges: merge .changes files from a package built on different
     architectures
+  - mk-build-deps [equivs]: Given a package name and/or control
+    file, generate a binary package which may be installed to satisfy the
+    build-dependencies of the given packages.
   - nmudiff: mail a diff of the current package against the previous version
     to the BTS to assist in tracking NMUs [patchutils, mutt]
   - plotchangelog: view a nice plot of the data in a changelog file

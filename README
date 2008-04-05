@@ -165,6 +165,10 @@ And now, in mostly alphabetical order, the scripts:
 - mergechanges: merge .changes files from the same release but built
   on different architectures.
 
+- mk-build-deps [equivs]: Given a package name and/or control
+  file, generate a binary package which may be installed to satisfy the
+  build-dependencies of the given package.
+
 - nmudiff [patchutils, mutt]: prepare a diff of this version
   (presumably an NMU against the previously released version (as per
   the changelog) and submit the diff to the BTS.

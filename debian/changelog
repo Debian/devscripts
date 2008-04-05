@@ -42,11 +42,15 @@ devscripts (2.10.21) UNRELEASED; urgency=low
   * dscverify:
     + Add debian-maintainers to the default set of keyrings
     + Add a --no-default-keyrings option to override the default keyrings
+  * mk-build-deps: New script by Vincent Fourmond to build a binary package
+    satisfying the build-dependencies of a given package (Closes: #474302)
   * tagpending: Allow the mail sent to the BTS to be displayed and (assuming
     --noact is not in effect) confirmed before sending
   * who-uploads: Mention the debian-maintainers keyring in --help
-  * README, debian/control: Add libsasl-authen-perl to Suggests and the
-    description of bts, to support SMTP authentication
+  * README, debian/control:
+    + Add libsasl-authen-perl to Suggests and the description of bts, to
+      support SMTP authentication
+    + Add equivs to Suggests (for mk-build-deps)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 25 Mar 2008 18:51:59 +0000
 
