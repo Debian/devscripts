@@ -645,7 +645,7 @@ if (! $opt_m) {
 
 #####
 
-if (! $opt_v) {
+if (! $opt_v and ! $opt_l and ! $opt_s and ! $opt_qa and ! $opt_bpo and ! $opt_bn and ! $opt_n) {
 
     if (-f 'debian/control') {
 	my $parser = new Parse::DebControl;
