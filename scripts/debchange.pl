@@ -952,6 +952,9 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 
 	$merge = 1;
     } else {
+	if ($opt_n && ! $opt_u) {
+	    $urgency='high';
+	}
 	print O "$PACKAGE ($NEW_VERSION) $distribution; urgency=$urgency\n\n";
 	if ($opt_n && ! $opt_news) {
             print O "  * Non-maintainer upload.\n";
