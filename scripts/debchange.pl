@@ -40,7 +40,6 @@ use File::Basename;
 use Cwd;
 use lib '/usr/share/devscripts';
 use Devscripts::Debbugs;
-use Parse::DebControl;
 
 # Predeclare functions
 sub fatal($);
@@ -51,6 +50,25 @@ my $progname = basename($0);
 my $modified_conf_msg;
 my %env;
 my $CHGLINE;  # used by the format O section at the end
+
+my $lpdc_broken;
+
+sub have_lpdc {
+    return ($lpdc_broken ? 0 : 1) if defined $lpdc_broken;
+    eval {
+	require Parse::DebControl;
+    };
+
+    if ($@) {
+        if ($@ =~ m%^Can\'t locate Parse/DebControl%) {
+            $lpdc_broken="the libparse-debcontrol-perl package is not installed";
+        } else {
+            $lpdc_broken="couldn't load Parse::DebControl: $@";
+        }
+    }
+    else { $lpdc_broken=''; }
+    return $lpdc_broken ? 0 : 1;
+}
 
 sub usage () {
     print <<"EOF";
@@ -648,6 +666,9 @@ if (! $opt_m) {
 if (! $opt_v and ! $opt_l and ! $opt_s and ! $opt_qa and ! $opt_bpo and ! $opt_bn and ! $opt_n) {
 
     if (-f 'debian/control') {
+	die "$progname: Unable to parse control file: $lpdc_broken\n"
+	    unless have_lpdc();
+
 	my $parser = new Parse::DebControl;
 	my $deb822 = $parser->parse_file('debian/control', { });
 	my $uploader = $deb822->[0]->{'Uploaders'};
