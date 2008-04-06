@@ -7,8 +7,8 @@ devscripts (2.10.22) unstable; urgency=low
     libparse-debcontrol-perl isn't installed.  (Closes: #474476)
 
   [ Patrick Schoenfeld ]
-  * Add libparse-debcontrol-perl to depends because it really makes
-    sense for such an important script as debchange
+  * Add libparse-debcontrol-perl to depends instead of suggest
+    because it really makes sense for such an important script as debchange
     (Closes: #474559)
 
  -- Patrick Schoenfeld <schoenfeld@in-medias-res.com>  Sun, 06 Apr 2008 16:51:57 +0200
