@@ -4,11 +4,16 @@ devscripts (2.10.24) UNRELEASED; urgency=low
   * Dont look for debian/control if invoked with -c. We also then are not
     looking for NMUs. (Closes: #474564)
 
+  [ Adam D. Barratt ]
+  * debchange:
+    + Add a DEBCHANGE_AUTO_NMU configuration file option allowing the NMU
+      heuristics introduced in 2.10.21 to be disabled. Based on a patch by
+      gregor herrmann
+
  -- Martin Zobel-Helas <zobel@debian.org>  Sun, 06 Apr 2008 21:43:04 +0200
 
 devscripts (2.10.23) unstable; urgency=low
 
-  [ Adam D. Barratt ]
   * Move the current Suggests: to Recommends: so that they are pulled in by
     default but may be removed if desired (Closes: #474559)
   * bug/presubj: Update in line with the change to Recommends:

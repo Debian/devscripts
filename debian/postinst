@@ -493,6 +493,18 @@ EOF
 
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.24
+	then
+	    # Added in devscripts 2.10.24
+	    cat >> /etc/devscripts.conf <<EOF
+##### debchange option added in version 2.10.24
+#
+# Attempt to automatically determine whether the current changelog
+# stanza represents an NMU?
+# DEBCHANGE_AUTO_NMU=yes
+
+	fi
     fi
 fi
 

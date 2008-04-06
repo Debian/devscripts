@@ -193,6 +193,7 @@ my $opt_multimaint_merge = 0;
 my $opt_tz = undef;
 my $opt_t = '';
 my $opt_allow_lower = '';
+my $opt_auto_nmu = 'yes';
 
 # Next, read configuration files and then command line
 # The next stuff is boilerplate
@@ -213,6 +214,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBCHANGE_MULTIMAINT_MERGE' => 'no',
 		       'DEBCHANGE_MAINTTRAILER' => '',
 		       'DEBCHANGE_LOWER_VERSION_PATTERN' => '',
+		       'DEBCHANGE_AUTO_NMU' => 'yes',
 		       );
     $config_vars{'DEBCHANGE_TZ'} ||= '';
     my %config_default = %config_vars;
@@ -242,6 +244,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'DEBCHANGE_MULTIMAINT'}='yes';
     $config_vars{'DEBCHANGE_MULTIMAINT_MERGE'} =~ /^(yes|no)$/
 	or $config_vars{'DEBCHANGE_MULTIMAINT_MERGE'}='no';
+    $config_vars{'DEBCHANGE_AUTO_NMU'} =~ /^(yes|no)$/
+	or $config_vars{'DEBCHANGE_AUTO_NMU'}='yes';
 
     foreach my $var (sort keys %config_vars) {
 	if ($config_vars{$var} ne $config_default{$var}) {
@@ -262,6 +266,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $opt_t = ($config_vars{'DEBCHANGE_MAINTTRAILER'} eq 'no' ? 0 : 1)
 	if $config_vars{'DEBCHANGE_MAINTTRAILER'};
     $opt_allow_lower = $config_vars{'DEBCHANGE_LOWER_VERSION_PATTERN'};
+    $opt_auto_nmu = $config_vars{'DEBCHANGE_AUTO_NMU'};
 }
 
 # We use bundling so that the short option behaviour is the same as
@@ -663,7 +668,8 @@ if (! $opt_m) {
 
 #####
 
-if (! $opt_v and ! $opt_l and ! $opt_s and ! $opt_qa and ! $opt_bpo and ! $opt_bn and ! $opt_n and ! $opt_c) {
+if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and 
+    ! $opt_qa and ! $opt_bpo and ! $opt_bn and ! $opt_n and ! $opt_c) {
 
     if (-f 'debian/control') {
 	fatal "$progname: Unable to parse control file: $lpdc_broken\n"

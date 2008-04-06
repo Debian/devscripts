@@ -180,6 +180,10 @@
 # Allow a new version to be lower than the current package version
 # if the new version matches the specified regular expression
 # DEBCHANGE_LOWER_VERSION_PATTERN=bpo
+#
+# Attempt to automatically determine whether the current changelog
+# stanza represents an NMU?
+# DEBCHANGE_AUTO_NMU=yes
 
 ##### debcheckout
 #
