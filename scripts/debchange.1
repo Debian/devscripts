@@ -49,16 +49,16 @@ released, or otherwise as if \fB\-\-append\fR has been specified.
 .PP
 Two different sets of heuristics can be used, as controlled by the
 \fB\-\-release-heuristic\fR option or the
-\fB\fRDEBCHANGE_RELEASE_HEURISTIC\fR configuration variable. The default
-"log" heuristic determines if a package has been released by looking for an
+\fBDEBCHANGE_RELEASE_HEURISTIC\fR configuration variable. The default
+\fIlog\fR heuristic determines if a package has been released by looking for an
 appropriate \fBdupload\fR(1) or \fBdput\fR(1) log file in the parent
 directory. A warning will be issued if the log file is found but a
 successful upload is not recorded. This may be because the previous upload
 was performed with a version of \fBdupload\fR prior to 2.1 or because the
-upload failed. The alternate "changelog" heuristic assumes the package has
-been released unless its changelog contains "UNRELEASED" in the
+upload failed. The alternate \fIchangelog\fR heuristic assumes the package has
+been released unless its changelog contains \fIUNRELEASED\fR in the
 distribution field. If this heuristic is enabled then the distribution will
-default to "UNRELEASED" in new changelog entries, and the
+default to \fIUNRELEASED\fR in new changelog entries, and the
 \fB\-\-mainttrailer\fR option described below will be automatically
 enabled. This can be useful if a package can be released by different
 maintainers, or if you do not keep the upload logs.
@@ -90,7 +90,7 @@ one of the several such styles of recording this information is supported,
 in which the name of the maintainer who made a set of changes appears
 on a line before the changes, inside square brackets. This can be
 switched on and off using the \fB\-\-[no]multimaint\fR option or the
-DEBCHANGE_MULTIMAINT configuration file option; the default is to
+\fBDEBCHANGE_MULTIMAINT\fR configuration file option; the default is to
 enable it.  Note that if an entry has already been marked in this way,
 then this option will be silently ignored.
 .PP
@@ -101,7 +101,7 @@ prevented by using the \fB\-\-preserve\fR command line or
 configuration file option as described below.
 .PP
 If \fB\-\-force\-bad\-version\fR or \fB\-\-allow\-lower\-version\fR is used,
-debchange will not stop if the new version is less than the current one.
+\fBdebchange\fR will not stop if the new version is less than the current one.
 This is especially useful while doing backports. 
 .SH "Directory name checking"
 In common with several other scripts in the \fBdevscripts\fR package,
@@ -167,10 +167,10 @@ Edit the changelog in an editor.
 .BR \-\-release ", " \-r
 Finalize the changelog for a release.
 Update the changelog timestamp. If the distribution is set to
-"UNRELEASED", change it to the distribution from the previous changelog entry 
+\fIUNRELEASED\fR, change it to the distribution from the previous changelog entry 
 (or another distribution as specified by \fB\-\-distribution\fR).  If there are 
 no previous changelog entries and an explicit distribution has not been 
-specified, "unstable" will be used.
+specified, \fIunstable\fR will be used.
 .TP
 .BR \-\-create
 This will create a new \fIdebian/changelog\fR file (or \fINEWS\fR if
@@ -280,7 +280,7 @@ version.
 \fB\-\-[no]multimaint\fR
 Should we indicate that parts of a changelog entry have been made by
 different maintainers?  Default is yes; see the discussion above and
-also the DEBCHANGE_MULTIMAINT configuration file option below.
+also the \fBDEBCHANGE_MULTIMAINT\fR configuration file option below.
 .TP
 .BR \-\-maintmaint ", " \-m
 Do not modify the maintainer details previously listed in the changelog. 
@@ -297,7 +297,7 @@ used with options that require the trailer to be modified
 (e.g. \fB\-\-create\fR, \fB\-\-release\fR, \fB\-i\fR, \fB\-\-qa\fR, etc.)
 This option differs from \fB\-\-maintmaint\fR in that it will use
 multi-maintainer mode if appropriate, with the exception of editing the
-trailer. See also the DEBCHANGE_MAINTTRAILER configuration file option 
+trailer. See also the \fBDEBCHANGE_MAINTTRAILER\fR configuration file option 
 below.
 .TP
 \fB\-\-check-dirname-level\fR \fIN\fR
@@ -347,18 +347,18 @@ in \fBdevscripts.conf\fR(5).
 .BR DEBCHANGE_RELEASE_HEURISTIC
 Controls how \fBdebchange\fR determines if a package has been released,
 when deciding whether to create a new changelog entry or append to an
-existing changelog entry. Can be either "log" or "changelog".
+existing changelog entry. Can be either \fIlog\fR or \fIchangelog\fR.
 .TP
 .BR DEBCHANGE_MULTIMAINT
-If set to "no", \fBdebchange\fR will not introduce multiple-maintainer
+If set to \fIno\fR, \fBdebchange\fR will not introduce multiple-maintainer
 distinctions when a different maintainer appends an entry to an
-existing changelog.  See the discussion above.  Default is "yes".
+existing changelog.  See the discussion above.  Default is \fIyes\fR.
 .TP
 .BR DEBCHANGE_MULTIMAINT_MERGE
-If set to "yes", when adding changes in multiple-maintainer mode
+If set to \fIyes\fR, when adding changes in multiple-maintainer mode
 \fBdebchange\fR will check whether previous changes by the current
 maintainer exist and add the new changes to the existing block
-rather than creating a new block.  Default is "no".
+rather than creating a new block.  Default is \fIno\fR.
 .TP
 .BR DEBCHANGE_MAINTTRAILER
 If this is set to \fIno\fR, then it is the same as the
@@ -370,7 +370,7 @@ timezone as shown by `date \-R`.
 .TP
 .BR DEBCHANGE_LOWER_VERSION_PATTERN
 If this is set, then it is the same as the
-\fB\-\-allow\-lower\-version command line parameter being used.
+\fB\-\-allow\-lower\-version\fR command line parameter being used.
 .TP
 .BR DEBCHANGE_AUTO_NMU
 If this is set to \fIno\fR then \fBdebchange\fR will not attempt to
