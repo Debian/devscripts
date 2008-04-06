@@ -1,10 +1,10 @@
-devscripts (2.10.23) unstable; urgency=low
+devscripts (2.10.23) UNRELEASED; urgency=low
 
-  * Add libparse-debcontrol-perl to depends instead of suggest
-    because it really makes sense for such an important script as debchange
-    (Closes: #474559)
+  * Move the current Suggests: to Recommends: so that they are pulled in by
+    default but may be removed if desired (Closes: #474559)
+  * bug/presubj: Update in line with the change to Recommends:
 
- -- Patrick Schoenfeld <schoenfeld@in-medias-res.com>  Sun, 06 Apr 2008 17:07:21 +0200
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sun, 06 Apr 2008 16:28:34 +0100
 
 devscripts (2.10.22) unstable; urgency=low
 

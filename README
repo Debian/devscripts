@@ -10,10 +10,11 @@ the authors, please see the code or manpages.
 Also, many of these scripts have dependencies on other packages, but
 rather than burden the package with a large number of dependencies,
 most of which will not be needed by most people, the individual
-dependencies are listed as "Suggests" in the control file.  The
-dependencies and recommendations are listed after the program name in
-the description below, as well as in the Description field in the
-control file.
+dependencies are listed as "Recommends" in the control file.  This
+ensures that the packages will be installed by default but allows
+users to remove them if desired.  The dependencies and recommendations
+are listed after the program name in the description below, as well as in
+the Description field in the control file.
 
 And now, in mostly alphabetical order, the scripts:
 
