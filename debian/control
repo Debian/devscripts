@@ -15,7 +15,7 @@ Package: devscripts
 Architecture: any
 Conflicts: debmake (<< 3.5), dupload (<< 2.1), suidmanager (<< 0.51),
  kdesdk-scripts (<< 4:3.5.6-2)
-Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), sed (>= 2.95),
+Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), sed (>= 2.95), libparse-debcontrol-perl
  ${shlibs:Depends}, ${misc:Depends}
 Recommends: fakeroot
 Suggests: devscripts-el, at, build-essential, curl | wget, cvs-buildpackage,
