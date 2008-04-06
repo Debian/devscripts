@@ -24,8 +24,8 @@ Recommends: devscripts-el, at, build-essential, curl | wget, cvs-buildpackage,
  libcrypt-ssleay-perl, libdigest-md5-perl, libfile-desktopentry-perl,
  libparse-debcontrol-perl, libsoap-lite-perl, libterm-size-perl,
  libtimedate-perl, liburi-perl, libwww-perl, lintian, lsb-release,
- mailx | mailutils, man-db, mutt, patch, patchutils, ssh, strace, unzip,
- wdiff, www-browser
+ mailx | mailutils, man-db, mutt, patch, patchutils, ssh-client, strace,
+ unzip, wdiff, www-browser
 Description: scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
  brackets afterwards:
@@ -44,7 +44,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
     after running cvs-debuild or cvs-buildpackage [cvs-buildpackage]
   - cvs-debrelease: to call debrelease from the CVS working directory
     after running cvs-debuild or cvs-buildpackage [cvs-buildpackage,
-    dupload | dput, ssh]
+    dupload | dput, ssh-client]
   - cvs-debuild: run cvs-buildpackage using debuild (see below) as the
     package building program [cvs-buildpackage, fakeroot, lintian, gnupg]
   - dcmd: run a given command replacing the name of a .changes or .dsc file
@@ -62,11 +62,11 @@ Description: scripts to make the life of a Debian Package maintainer easier
     added and removed files [wdiff, patchutils]
   - debi: install a just-built package
   - debpkg: dpkg wrapper to be able to manage/test packages without su
-  - debrelease: wrapper around dupload or dput [dupload | dput, ssh]
+  - debrelease: wrapper around dupload or dput [dupload | dput, ssh-client]
   - debsign, debrsign: sign a .changes/.dsc pair without needing any of
     the rest of the package to be present; can sign the pair remotely
     or fetch the pair from a remote machine for signing [gnupg,
-    debian-keyring, ssh]
+    debian-keyring, ssh-client]
   - debuild: wrapper to build a package without having to su or worry
     about how to invoke dpkg to build using fakeroot.  Also deals
     with common environment problems, umask etc. [fakeroot,
@@ -79,8 +79,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - dpkg-depcheck, dpkg-genbuilddeps: determine the packages used during
     the build of a Debian package; useful for determining the Build-Depends
     control field needed [build-essential, strace]
-  - diff2patches [patchutils]: extract patches from a .diff.gz file
-    placing them  under debian/ or, if present, debian/patches
+  - diff2patches: extract patches from a .diff.gz file placing them  under
+    debian/ or, if present, debian/patches [patchutils]
   - dscverify: verify the integrity of a Debian package from the
     .changes or .dsc files [gnupg, debian-keyring, libdigest-md5-perl]
   - grep-excuses: grep the update_excuses.html file for your packages
@@ -91,9 +91,9 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - mass-bug: mass-file bug reports [mailx | mailutils]
   - mergechanges: merge .changes files from a package built on different
     architectures
-  - mk-build-deps [equivs]: Given a package name and/or control
-    file, generate a binary package which may be installed to satisfy the
-    build-dependencies of the given packages.
+  - mk-build-deps: Given a package name and/or control file, generate a binary
+    package which may be installed to satisfy the build-dependencies of the
+    given packages. [equivs]
   - nmudiff: mail a diff of the current package against the previous version
     to the BTS to assist in tracking NMUs [patchutils, mutt]
   - plotchangelog: view a nice plot of the data in a changelog file
@@ -110,8 +110,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
     [libcrypt-ssleay-perl, libwww-perl]
   - uupdate: integrate upstream changes into a source package [patch]
   - whodepends: check which maintainers' packages depend on a package
-  - who-uploads [gnupg, debian-keyring, debian-maintainers, wget]:
-    determine the most recent uploaders of a package to the Debian archive
+  - who-uploads: determine the most recent uploaders of a package to the Debian
+    archive [gnupg, debian-keyring, debian-maintainers, wget]
   - wnpp-alert: list installed packages which are orphaned or up for
     adoption [wget]
  .
