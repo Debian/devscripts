@@ -2,13 +2,13 @@
 .SH NAME
 rc-alert \- check for installed packages with release-critical bugs
 .SH SYNOPSIS
-\fBrc-alert\fR
+\fBrc-alert [package ...]\fR
 .br
 \fBrc-alert \-\-help|\-\-version\fR
 .SH DESCRIPTION
 \fBrc-alert\fR downloads the list of release-critical bugs from the
 Debian BTS webpages, and then outputs a list of packages installed on
-the system which are in that list.
+the system, or given on the command-line, which are in that list.
 .P
 If the directory \fI~/.devscripts_cache\fP exists or the
 \fB\-\-cache\fP option is given, then the (sizable) downloaded list

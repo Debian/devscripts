@@ -37,9 +37,10 @@ my $usecache = 0;
 my $progname = basename($0);
 
 my $usage = <<"EOF";
-Usage: $progname [--help|--version|--cache]
-  List all installed packages with release-critical bugs,
-  as determined from the Debian release-critical bugs list.
+Usage: $progname [--help|--version|--cache] [package ...]
+  List all installed packages (or listed packages) with
+  release-critical bugs, as determined from the Debian
+  release-critical bugs list.
 
   Options:
   --cache     Create ~/.devscripts_cache directory if it does not exist
