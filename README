@@ -13,7 +13,7 @@ most of which will not be needed by most people, the individual
 dependencies are listed as "Recommends" in the control file.  This
 ensures that the packages will be installed by default but allows
 users to remove them if desired.  The dependencies and recommendations
-are listed after the program name in the description below, as well as in
+are listed in square brackets in the description below, as well as in
 the Description field in the control file.
 
 And now, in mostly alphabetical order, the scripts:
@@ -24,30 +24,29 @@ And now, in mostly alphabetical order, the scripts:
 - archpath: Prints arch (tla/Bazaar) package names. Also supports
   calculating the package names for other branches.
 
-- bts [www-browser, libauthen-sasl-perl, libsoap-lite-perl, libwww-perl,
-  mailx | mailutils]: A command-line tool for accessing the BTS, both to
+- bts: A command-line tool for accessing the BTS, both to
   send mails to control@bts.debian.org and to access the web pages and
-  SOAP interface of the BTS.
+  SOAP interface of the BTS. [www-browser, libauthen-sasl-perl, 
+  libsoap-lite-perl, libwww-perl, mailx | mailutils]
 
-- build-rdeps [dctrl-tools]:
-  Searches for all packages that build-depend on a given package.
+- build-rdeps: Searches for all packages that build-depend on a given package
+  [dctrl-tools]
 
-- chdist [dctrl-tools]: A tool to easily play with several distributions.
+- chdist: A tool to easily play with several distributions. [dctrl-tools]
 
 - checkbashisms: checks whether a /bin/sh script uses any common
   bash-specific features
 
-- cvs-debi, cvs-debc [cvs-buildpackage]: wrappers around debi and debc
-  respectively (see below) which allow them to be called from the CVS
-  working directory.
+- cvs-debi, cvs-debc: wrappers around debi and debc respectively (see below)
+  which allow them to be called from the CVS working directory.
+  [cvs-buildpackage]
 
-- cvs-debrelease [cvs-buildpackage, dupload | dput, ssh-client]: wrapper
-  around debrelease which allows it to be called from the CVS working
-  directory.
+- cvs-debrelease: wrapper around debrelease which allows it to be called
+  from the CVS working directory. [cvs-buildpackage, dupload | dput, 
+  ssh-client]
 
-- cvs-debuild [cvs-buildpackage, fakeroot, lintian, gnupg]: A
-  wrapper for cvs-buildpackage to use debuild as its package building
-  program.
+- cvs-debuild: A wrapper for cvs-buildpackage to use debuild as its package
+  building program. [cvs-buildpackage, fakeroot, lintian, gnupg]
 
 - dcmd: Run a given command replacing the name of a .changes or .dsc
   file with each of the files referenced therein 
@@ -57,30 +56,30 @@ And now, in mostly alphabetical order, the scripts:
 - debc: List contents of current package.  Do this after a successful
   "debuild" to see if the package looks all right.
 
-- debchange (abbreviation dch) [libparse-debcontrol-perl, libsoap-lite-perl,
-  lsb-release]: Modifies debian/changelog and manages version numbers for
-  you.  It will either increment the version number or add an entry for the
-  current version, depending upon the options given to it.
+- debchange (abbreviation dch): Modifies debian/changelog and manages version
+  numbers for you.  It will either increment the version number or add a
+  entry for the current version, depending upon the options given to it.
+  [libparse-debcontrol-perl, libsoap-lite-perl,  lsb-release]
 
 - debcheckout: checkout the development repository of a debian package
 
-- debclean [fakeroot]: Clean a Debian source tree.  Debclean will
-  clean all Debian source trees below the current directory, and if
-  requested, also remove all files that were generated from these
-  source trees (that is .deb, .dsc and .changes files).  It will keep
-  the .diffs and original files, though, so that the binaries and
-  other files can be rebuilt if necessary.
+- debclean: Clean a Debian source tree.  Debclean will clean all Debian
+  source trees below the current directory, and if requested, also remove
+  all files that were generated from these source trees (that is .deb, .dsc
+  and .changes files).  It will keep the .diffs and original files, though,
+  so that the binaries and other files can be rebuilt if necessary.
+  [fakeroot]
 
-- debcommit [cvs | subversion | svk | tla | bzr | git-core | mercurial]:
-  Commits changes to cvs, svn, arch, git, or hg, using new entries in
-  debian/changelog as the commit message. Also supports tagging Debian
-  package releases.
+- debcommit: Commits changes to cvs, svn, arch, git, or hg, using new entries
+  in debian/changelog as the commit message. Also supports tagging Debian
+  package releases. [cvs | subversion | svk | tla | bzr | git-core | 
+  mercurial]
 
-- debdiff [wdiff, patchutils]: A program which examines two .deb files
-  or two .changes files and reports on any difference found in their
-  file lists.  Useful for ensuring that no files were inadvertantly
-  lost between versions.  Can also examine two .dsc files and report
-  on the changes between source versions.
+- debdiff: A program which examines two .deb files or two .changes files and
+  reports on any difference found in their file lists.  Useful for ensuring
+  that no files were inadvertantly lost between versions.  Can also examine
+  two .dsc files and report on the changes between source versions.
+  [wdiff, patchutils]
 
 - debi: Installs the current package by using the setuid root debpkg
   script described below.  It assumes that the current package has
@@ -100,58 +99,56 @@ And now, in mostly alphabetical order, the scripts:
   superuser mode (e.g., an inadvertant rm -rf * in the wrong directory
   is disastrous as many can attest to).
 
-- debrelease [dupload | dput, ssh-client]: A wrapper around dupload or dput
-  which figures out which version to upload, and then calls dupload or
-  dput to actually perform the upload.
+- debrelease: A wrapper around dupload or dput which figures out which
+  version to upload, and then calls dupload or dput to actually perform
+  the upload. [dupload | dput, ssh-client]
 
-- debrsign [gnupg, debian-keyring, ssh-client]: This transfers a
-  .changes/.dsc pair to a remote machine for signing, and runs debsign
-  on the remote machine over an SSH connection.
+- debrsign: This transfers a .changes/.dsc pair to a remote machine for
+  signing, and runs debsign on the remote machine over an SSH connection.
+  [gnupg, debian-keyring, ssh-client]
 
-- debsign [gnupg, debian-keyring, ssh-client]: Use GNU Privacy Guard to
-  sign the changes (and possibly dsc) files created by running
-  dpkg-buildpackage with no-sign options.  Useful if you are building
-  a package on a remote machine and wish to sign it on a local one.
-  This script is capable of automatically downloading the .changes and
-  .dsc files from a remote machine.
+- debsign: Use GNU Privacy Guard to sign the changes (and possibly dsc)
+  files created by running dpkg-buildpackage with no-sign options.  Useful
+  if you are building a package on a remote machine and wish to sign it on
+  a local one.  This script is capable of automatically downloading the
+  .changes and .dsc files from a remote machine. [gnupg, debian-keyring, 
+  ssh-client]
 
-- debuild [fakeroot, lintian, gnupg]: A wrapper for building a
-  package (i.e., dpkg-buildpackage) to avoid problems with
-  insufficient permissions and wrong paths etc.  Debuild will set up
-  the proper environment for building a package.  Debuild will use the
-  fakeroot program to build the package by default, but can be
-  instructed to use any other gain-root command, or can even be
+- debuild: A wrapper for building a package (i.e., dpkg-buildpackage) to
+  avoid problems with insufficient permissions and wrong paths etc.
+  Debuild will set up the proper environment for building a package.
+  Debuild will use the fakeroot program to build the package by default, but
+  can be instructed to use any other gain-root command, or can even be
   installed setuid root.  Debuild can also be used to run various of
   the debian/rules operations with the same root-gaining procedure.
   Debuild will also run lintian to check that the package does not
-  have any major policy violations.
+  have any major policy violations. [fakeroot, lintian, gnupg]
 
 - deb-reversion: Increases a binary package version number and repacks
   the package, useful for porters and the like.
 
-- desktop2menu [libfile-desktopentry-perl]: given a freedesktop.org
-  desktop file, generate a skeleton for a menu file
+- desktop2menu: given a freedesktop.org desktop file, generate a skeleton
+  for a menu file [libfile-desktopentry-perl]
 
-- dget [wget | curl]: Downloads Debian source and binary packages. Point
-  at a .changes or .dsc to download all references files. Specify a package
-  name to download it from the configured apt repository.
+- dget: Downloads Debian source and binary packages. Point at a .changes or
+  .dsc to download all references files. Specify a package name to download
+  it from the configured apt repository. [wget | curl]
 
-- diff2patches [patchutils]: Extracts patches from a .diff.gz file 
-  placing them under debian/ or, if present, debian/patches.
+- diff2patches: Extracts patches from a .diff.gz file placing them under
+  debian/ or, if present, debian/patches. [patchutils]
 
-- dpkg-depcheck, dpkg-genbuilddeps [build-essential, strace]: Runs a
-  specified command (such as debian/rules build) or dpkg-buildpackage,
-  respectively, to determine the packages used during the build
-  process.  This information can be helpful when trying to determine
-  the packages needed in the Build-Depends etc. lines in the
-  debian/control file.
+- dpkg-depcheck, dpkg-genbuilddeps: Runs a specified command (such as
+  debian/rules build) or dpkg-buildpackage, respectively, to determine the
+  packages used during the build process.  This information can be helpful
+  when trying to determine the packages needed in the Build-Depends etc.
+  lines in the debian/control file. [build-essential, strace]
 
-- dscverify [gnupg, debian-keyring, libdigest-md5-perl]: check the
-  signature and MD5 sums of a dsc file against the most current Debian
-  keyring on your system.
+- dscverify: check the signature and MD5 sums of a dsc file against the most
+  current Debian keyring on your system. [gnupg, debian-keyring, 
+  libdigest-md5-perl]
 
-- grep-excuses [libterm-size-perl, wget]: grep the update_excuses.html
-  file to find out what is happening to your packages.
+- grep-excuses: grep the update_excuses.html file to find out what is
+  happening to your packages. [libterm-size-perl, wget]
 
 - licensecheck: given a list of source files, attempt to determine which
   license (or combination of licenses) each file is placed under.
@@ -159,59 +156,58 @@ And now, in mostly alphabetical order, the scripts:
 - list-unreleased: searches for packages marked UNRELEASED in their
   changelog
 
-- manpage-alert [man-db]: locate binaries without corresponding manpages.
+- manpage-alert: locate binaries without corresponding manpages. [man-db]
 
-- mass-bug [mailx | mailutils]: mass-file bug reports
+- mass-bug: mass-file bug reports [mailx | mailutils]
 
 - mergechanges: merge .changes files from the same release but built
   on different architectures.
 
-- mk-build-deps [equivs]: Given a package name and/or control
-  file, generate a binary package which may be installed to satisfy the
-  build-dependencies of the given package.
+- mk-build-deps: Given a package name and/or control file, generate a 
+  binary package which may be installed to satisfy the build-dependencies
+  of the given package. [equivs]
 
-- nmudiff [patchutils, mutt]: prepare a diff of this version
-  (presumably an NMU against the previously released version (as per
-  the changelog) and submit the diff to the BTS.
+- nmudiff: prepare a diff of this version (presumably an NMU against the
+  previously released version (as per the changelog) and submit the diff
+  to the BTS. [patchutils, mutt]
 
-- plotchangelog [libtimedate-perl, gnuplot]: display information from
-  a changelog graphically using gnuplot.
+- plotchangelog: display information from a changelog graphically using
+  gnuplot. [libtimedate-perl, gnuplot]
 
-- pts-subscribe [mailx | mailutils, at]: subscribe to the PTS (Package
-  Tracking System) for a limited period of time.
+- pts-subscribe: subscribe to the PTS (Package Tracking System) for a
+  limited period of time. [mailx | mailutils, at]
 
-- rc-alert [wget]: list installed packages which have release-critical
-  bugs
+- rc-alert: list installed packages which have release-critical bugs [wget]
 
-- rmadison [liburi-perl, wget | curl]: Remotely query the Debian archive
-  database about packages.
+- rmadison: Remotely query the Debian archive database about packages.
+  [liburi-perl, wget | curl]
 
-- svnpath [subversion]: Prints the path to the suversion repository of a
-  subversion checkout. Also supports calculating the paths for branches and
+- svnpath: Prints the path to the suversion repository of a subversion
+  checkout. Also supports calculating the paths for branches and
   tags in a repository independent fashion. Used by debcommit to generate
-  svn tags.
+  svn tags. [subversion]
 
-- tagpending [libsoap-lite-perl]: Runs from a Debian source tree and
-  tags bugs that are to be closed in the latest changelog as pending.
+- tagpending: Runs from a Debian source tree and tags bugs that are to be
+  closed in the latest changelog as pending. [libsoap-lite-perl]
 
-- uscan [libcrypt-ssleay-perl, libwww-perl, unzip]: Automatically scan
-  for and download upstream updates.  Uscan can also call a program such
-  as uupdate to attempt to update the Debianised version based on the new
-  update.  Whilst uscan could be used to release the updated version
-  automatically, it is probably better not to without testing it first.
+- uscan: Automatically scan for and download upstream updates.  Uscan can
+  also call a program such as uupdate to attempt to update the Debianised
+  version based on the new update.  Whilst uscan could be used to release
+  the updated version automatically, it is probably better not to without
+  testing it first. [libcrypt-ssleay-perl, libwww-perl, unzip]
 
-- uupdate [patch]: Update the package with an archive or patches from
+- uupdate: Update the package with an archive or patches from
   an upstream author.  This will be of help if you have to update your
   package.  It will try to apply the latest diffs to your package and
-  tell you how successful it was.
+  tell you how successful it was. [patch]
 
 - whodepends: check which maintainers' packages depend on a package
 
-- who-uploads [gnupg, debian-keyring, debian-maintainers, wget]:
-  determine the most recent uploaders of a package to the Debian archive
+- who-uploads: determine the most recent uploaders of a package to the
+  Debian archive [gnupg, debian-keyring, debian-maintainers, wget]
 
-- wnpp-alert [wget]: list installed packages which are orphaned or up
-  for adoption
+- wnpp-alert: list installed packages which are orphaned or up for adoption
+  [wget]
 
 - /usr/share/doc/devscripts/examples: This directory contains examples of
   procmail and exim scripts for sorting mail arriving to Debian
