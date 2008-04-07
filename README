@@ -194,11 +194,11 @@ And now, in mostly alphabetical order, the scripts:
 - tagpending [libsoap-lite-perl]: Runs from a Debian source tree and
   tags bugs that are to be closed in the latest changelog as pending.
 
-- uscan [libcrypt-ssleay-perl, libwww-perl]: Automatically scan for and
-  download upstream updates.  Uscan can also call a program such as uupdate
-  to attempt to update the Debianised version based on the new update.
-  Whilst uscan could be used to release the updated version automatically,
-  it is probably better not to without testing it first.
+- uscan [libcrypt-ssleay-perl, libwww-perl, unzip]: Automatically scan
+  for and download upstream updates.  Uscan can also call a program such
+  as uupdate to attempt to update the Debianised version based on the new
+  update.  Whilst uscan could be used to release the updated version
+  automatically, it is probably better not to without testing it first.
 
 - uupdate [patch]: Update the package with an archive or patches from
   an upstream author.  This will be of help if you have to update your

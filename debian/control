@@ -108,7 +108,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - tagpending: runs from a Debian source tree and tags bugs that are to 
     be closed in the latest changelog as pending. [libsoap-lite-perl]
   - uscan: scan upstream sites for new releases of packages
-    [libcrypt-ssleay-perl, libwww-perl]
+    [libcrypt-ssleay-perl, libwww-perl, unzip]
   - uupdate: integrate upstream changes into a source package [patch]
   - whodepends: check which maintainers' packages depend on a package
   - who-uploads: determine the most recent uploaders of a package to the Debian
