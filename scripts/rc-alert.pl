@@ -93,7 +93,14 @@ else {
 }
 
 ## Get list of installed packages (not source packages)
-my $package_list = InstalledPackages(0);
+my $package_list;
+if (@ARGV) {
+    my %tmp = map { $_ => 1 } @ARGV;
+    $package_list = \%tmp;
+}
+else {
+    $package_list = InstalledPackages(0);
+}
 
 ## Read the list of bugs
 

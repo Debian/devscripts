@@ -17,6 +17,8 @@ devscripts (2.10.24) UNRELEASED; urgency=low
     + Change ssh Recommends to ssh-client.
     + Unify the tool descriptions to show the tools they use at the end of the
       description.
+  * rc-alert: Allow the user to pass a list of packages to the script.
+    (Closes: #474659)
 
  -- Martin Zobel-Helas <zobel@debian.org>  Sun, 06 Apr 2008 21:43:04 +0200
 
