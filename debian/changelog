@@ -17,7 +17,7 @@ devscripts (2.10.24) UNRELEASED; urgency=low
 
   [ James Vega ]
   * debian/control:
-    + Change ssh Recommends to ssh-client.
+    + Change ssh Recommends to ssh-client. (Closes: #474682)
     + Unify the tool descriptions to show the tools they use at the end of the
       description.
   * rc-alert: Allow the user to pass a list of packages to the script.
