@@ -31,7 +31,7 @@ usage () {
     --sendmail=SENDMAILCMD
                       Use SENDMAILCMD instead of \"/usr/sbin/sendmail -t\"
     --mutt            Use mutt to mail the message (default)
-    --no-mutt         Mail the message directly, don\' use mutt
+    --no-mutt         Mail the message directly, don\'t use mutt
     --from=EMAIL      Use EMAIL address for message to BTS; defaults to
                       value of DEBEMAIL or EMAIL
     --no-conf, --noconf
