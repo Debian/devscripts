@@ -678,7 +678,7 @@ if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and
 
 	my $parser = new Parse::DebControl;
 	my $deb822 = $parser->parse_file('debian/control', { });
-	my $uploader = $deb822->[0]->{'Uploaders'};
+	my $uploader = $deb822->[0]->{'Uploaders'} || '';
 	my $maintainer = $deb822->[0]->{'Maintainer'};
 	my @uploaders = split(/,\s+/, $uploader);
 

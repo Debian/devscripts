@@ -14,6 +14,8 @@ devscripts (2.10.24) UNRELEASED; urgency=low
     + Fix NEWS files in combination with NMU versioning 
     + Do not trigger NMU detection if the current changelog was authored
       by the current user
+    + Fix uninitialised variable warning if Uploaders is empty
+      (Closes: #474687)
   * debian/control:
     + Move devscripts-el back to Suggests as it doesn't fit the definition
       of something we should be Recommending
