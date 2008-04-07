@@ -20,9 +20,11 @@ devscripts (2.10.24) UNRELEASED; urgency=low
   * debian/control:
     + Move devscripts-el back to Suggests as it doesn't fit the definition
       of something we should be Recommending
+    + Add lsb-release to the description of debchange
   * README:
     + Add recommended packages to desktop2menu, dget and rmadison
     + Add svk to the description of debcommit 
+    + Add lsb-release to the description of debchange
 
   [ James Vega ]
   * debian/control:

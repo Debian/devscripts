@@ -57,10 +57,10 @@ And now, in mostly alphabetical order, the scripts:
 - debc: List contents of current package.  Do this after a successful
   "debuild" to see if the package looks all right.
 
-- debchange (abbreviation dch) [libparse-debcontrol-perl, libsoap-lite-perl]:
-  Modifies debian/changelog and manages version numbers for you.  It will
-  either increment the version number or add an entry for the current
-  version, depending upon the options given to it.
+- debchange (abbreviation dch) [libparse-debcontrol-perl, libsoap-lite-perl,
+  lsb-release]: Modifies debian/changelog and manages version numbers for
+  you.  It will either increment the version number or add an entry for the
+  current version, depending upon the options given to it.
 
 - debcheckout: checkout the development repository of a debian package
 
