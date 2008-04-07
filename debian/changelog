@@ -1,7 +1,7 @@
 devscripts (2.10.24) UNRELEASED; urgency=low
 
   [ Martin Zobel-Helas ]
-  * Dont look for debian/control if invoked with -c. We also then are not
+  * Don't look for debian/control if invoked with -c. We also then are not
     looking for NMUs. (Closes: #474564)
 
   [ Adam D. Barratt ]
