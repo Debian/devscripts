@@ -684,7 +684,8 @@ if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and
 
 	my $packager = "$MAINTAINER <$EMAIL>";
 
-	if (! grep { $_ eq $packager } ($maintainer, @uploaders)) {
+	if (! grep { $_ eq $packager } ($maintainer, @uploaders) and
+	    $packager ne $changelog{'Maintainer'}) {
 	    $opt_n=1;
 	}
 

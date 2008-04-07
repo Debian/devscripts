@@ -12,6 +12,8 @@ devscripts (2.10.24) UNRELEASED; urgency=low
     + Fix and improve some manpage formatting. Thanks gregor herrmann
     + Skip NMU detection when creating a new changelog 
     + Fix NEWS files in combination with NMU versioning 
+    + Do not trigger NMU detection if the current changelog was authored
+      by the current user
 
   [ James Vega ]
   * debian/control:
