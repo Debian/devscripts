@@ -41,7 +41,7 @@ And now, in mostly alphabetical order, the scripts:
   respectively (see below) which allow them to be called from the CVS
   working directory.
 
-- cvs-debrelease [cvs-buildpackage, dupload | dput, ssh]: wrapper
+- cvs-debrelease [cvs-buildpackage, dupload | dput, ssh-client]: wrapper
   around debrelease which allows it to be called from the CVS working
   directory.
 
@@ -100,16 +100,16 @@ And now, in mostly alphabetical order, the scripts:
   superuser mode (e.g., an inadvertant rm -rf * in the wrong directory
   is disastrous as many can attest to).
 
-- debrelease [dupload | dput, ssh]: A wrapper around dupload or dput
+- debrelease [dupload | dput, ssh-client]: A wrapper around dupload or dput
   which figures out which version to upload, and then calls dupload or
   dput to actually perform the upload.
 
-- debrsign [gnupg, debian-keyring, ssh]: This transfers a
+- debrsign [gnupg, debian-keyring, ssh-client]: This transfers a
   .changes/.dsc pair to a remote machine for signing, and runs debsign
   on the remote machine over an SSH connection.
 
-- debsign [gnupg, debian-keyring, ssh]: Use GNU Privacy Guard to sign
-  the changes (and possibly dsc) files created by running
+- debsign [gnupg, debian-keyring, ssh-client]: Use GNU Privacy Guard to
+  sign the changes (and possibly dsc) files created by running
   dpkg-buildpackage with no-sign options.  Useful if you are building
   a package on a remote machine and wish to sign it on a local one.
   This script is capable of automatically downloading the .changes and
