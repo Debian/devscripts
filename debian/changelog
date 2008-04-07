@@ -18,7 +18,7 @@ devscripts (2.10.24) unstable; urgency=low
       (Closes: #474687)
     + Correctly handle UTF-8 maintainer / uploaders (Closes: #474685)
     + Revert the NMU urgency change introduced in 2.10.21. NMUs now default
-      to the default "low" urgency.
+      to the default "low" urgency. (Closes: #474739)
   * debian/control:
     + Move devscripts-el back to Suggests as it doesn't fit the definition
       of something we should be Recommending
