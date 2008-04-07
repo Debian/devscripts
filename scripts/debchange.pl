@@ -791,6 +791,14 @@ if (@ARGV and ! $TEXT) {
 my $date_cmd = ($opt_tz ? "TZ=$opt_tz " : "") . "date -R";
 chomp(my $DATE=`$date_cmd`);
 
+if ($opt_news && !$opt_i && !$opt_a) {
+    if ($VERSION eq $changelog{'Version'}) {
+	$opt_a = 1;
+    } else {
+	$opt_i = 1;
+    }
+}
+
 # Are we going to have to figure things out for ourselves?
 if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r &&
     ! $opt_n && ! $opt_bn && ! $opt_qa && ! $opt_s && ! $opt_bpo &&
