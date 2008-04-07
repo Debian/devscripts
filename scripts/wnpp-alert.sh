@@ -18,10 +18,10 @@ CACHEDIR=~/.devscripts_cache
 CACHEDDIFF="${CACHEDIR}/wnpp-diff"
 
 usage () { echo \
-"Usage: $PROGNAME [--help|-h|--version|-v]
-  List all installed packages with Request for Adoption (RFA),
-  Request for Help (RHF), or Orphaned (O) bugs against them,
-  as determined from the WNPP website.
+"Usage: $PROGNAME [--help|-h|--version|-v|--diff|-d] [package ...]
+  List all installed (or listed) packages with Request for
+  Adoption (RFA), Request for Help (RHF), or Orphaned (O)
+  bugs against them, as determined from the WNPP website.
   http://www.debian.org/devel/wnpp"
 }
 
@@ -74,6 +74,7 @@ trap "rm -f '$INSTALLED' '$WNPP' '$WNPPTMP' '$WNPP_PACKAGES'" \
   0 1 2 3 7 10 13 15
 
 if [ "x$1" = "x--diff" ] || [ "x$1" = "x-d" ]; then
+    shift
     WNPP_DIFF=`mktemp -t wnppalert-wnpp_diff.XXXXXX`
     trap "rm -f '$INSTALLED' '$WNPP' '$WNPPTMP' '$WNPP_PACKAGES' '$WNPP_DIFF'" \
       0 1 2 3 7 10 13 15
@@ -104,13 +105,17 @@ cut -f3 -d' ' $WNPP | sort > $WNPP_PACKAGES
 # the dpkg source, defn of fieldinfos[] in lib/parse.c
 # (and should match Devscripts/Packages.pm)
 
-grep -B2 -A7 'Status: install ok installed' /var/lib/dpkg/status | \
-grep '^\(Package\|Source\):' | \
-cut -f2 -d' ' | \
-sort -u \
-> $INSTALLED
+if [ $# -gt 0 ]; then
+    echo $* | tr ' ' '\n' | sort -u > $INSTALLED
+else
+    grep -B2 -A7 'Status: install ok installed' /var/lib/dpkg/status | \
+    grep '^\(Package\|Source\):' | \
+    cut -f2 -d' ' | \
+    sort -u \
+    > $INSTALLED
+fi
 
-if [ "x$1" = "x--diff" -o "x$1" = "x-d" ]; then 
+if [ -f "$WNPP_DIFF" ]; then 
     if [ -d "$CACHEDIR" ]; then
         wnppdiff
         exit 0

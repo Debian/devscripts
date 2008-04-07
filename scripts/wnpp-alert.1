@@ -2,14 +2,15 @@
 .SH NAME
 wnpp-alert \- check for installed packages up for adoption or orphaned
 .SH SYNOPSIS
-\fBwnpp-alert\fR
+\fBwnpp-alert [\-\-diff] [package ...]\fR
 .br
-\fBwnpp-alert \-\-help|\-\-version|\-\-diff\fR
+\fBwnpp-alert \-\-help|\-\-version\fR
 .SH DESCRIPTION
 \fBwnpp-alert\fR downloads the lists of packages which have been
 orphaned (O), are up for adoption (RFA), or the maintainer has asked
 for help (RFH) from the WNPP webpages, and then outputs a list of
-packages installed on the system which are in those lists.
+packages installed on the system, or matching the listed packages,
+which are in those lists.
 .PP
 Note that WNPP, and therefore \fBwnpp-alert\fR's output, is source 
 package based.
