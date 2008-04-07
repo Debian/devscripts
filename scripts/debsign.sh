@@ -368,18 +368,33 @@ dosigning() {
 	    fi
 	    check_already_signed "$dsc" "dsc" || withecho signfile "$dsc" "$signas"
 	    dsc_md5=`md5sum $dsc | cut -d' ' -f1`
+	    dsc_sha1=`sha1sum $dsc | cut -d' ' -f1`
+	    dsc_sha256=`sha256sum $dsc | cut -d' ' -f1`
 
 	    perl -i -pe 'BEGIN {
 		'" \$dsc_file=\"$dsc\"; \$dsc_md5=\"$dsc_md5\"; "'
+		'" \$dsc_sha1=\"$dsc_sha1\"; \$dsc_sha256=\"$dsc_sha256\"; "'
 		$dsc_size=(-s $dsc_file); ($dsc_base=$dsc_file) =~ s|.*/||;
-		$infiles=0;
+		$infiles=0; $insha1=0; $insha256=0;
 		}
-		/^Files:/ && ($infiles=1);
-		/^\s*$/ && ($infiles=0);
+		/^Files:/ && ($infiles=1,$insha1=0,$insha256=0);
+		/^Checksums-Sha1:/ && ($insha1=1,$infiles=0,$insha256=0);
+		/^Checksums-Sha256:/ && ($insha256=1,$infiles=0,$insha1=0);
+		/^\s*$/ && ($infiles=0,$insha1=0,$insha256=0);
 		if ($infiles &&
 		    /^ (\S+) (\d+) (\S+) (\S+) \Q$dsc_base\E\s*$/) {
 		    $_ = " $dsc_md5 $dsc_size $3 $4 $dsc_base\n";
 		    $infiles=0;
+		}
+		if ($insha1 &&
+		    /^ (\S+) (\d+) \Q$dsc_base\E\s*$/) {
+		    $_ = " $dsc_sha1 $dsc_size $dsc_base\n";
+		    $insha1=0;
+		}
+		if ($insha256 &&
+		    /^ (\S+) (\d+) \Q$dsc_base\E\s*$/) {
+		    $_ = " $dsc_sha256 $dsc_size $dsc_base\n";
+		    $insha256=0;
 		}' "$changes"
 	    
 	    withecho signfile "$changes" "$signas"
