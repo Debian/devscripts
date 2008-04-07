@@ -132,9 +132,9 @@ And now, in mostly alphabetical order, the scripts:
 - desktop2menu: given a freedesktop.org desktop file, generate a skeleton
   for a menu file
 
-- dget: Downloads Debian source and binary packages. Point at a .changes
-  or .dsc to download all references files. Specify a package name to
-  download it from the configured apt repository.
+- dget [wget | curl]: Downloads Debian source and binary packages. Point
+  at a .changes or .dsc to download all references files. Specify a package
+  name to download it from the configured apt repository.
 
 - diff2patches [patchutils]: Extracts patches from a .diff.gz file 
   placing them under debian/ or, if present, debian/patches.
@@ -183,8 +183,8 @@ And now, in mostly alphabetical order, the scripts:
 - rc-alert [wget]: list installed packages which have release-critical
   bugs
 
-- rmadison [wget]: Remotely query the Debian archive database about
-  packages.
+- rmadison [liburi-perl, wget | curl]: Remotely query the Debian archive
+  database about packages.
 
 - svnpath [subversion]: Prints the path to the suversion repository of a
   subversion checkout. Also supports calculating the paths for branches and
