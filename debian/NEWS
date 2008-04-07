@@ -1,3 +1,15 @@
+devscripts (2.10.24) unstable; urgency=low
+
+    Starting with devscripts 2.10.21, debchange attempts to
+    automatically determine whether an NMU changelog should be
+    started, by comparing DEBEMAIL and DEBFULLNAME to the
+    package's Maintainer and Uploaders fields.
+
+    This behaviour may now be disabled using the DEBCHANGE_AUTO_NMU
+    configuration file variable.
+
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 07 Apr 2008 14:38:08 +0100
+
 devscripts (2.10.20) unstable; urgency=low
 
     devscripts 2.10.19 modified debcommit's --release option to use the
