@@ -974,7 +974,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 		# If it's not already a backport make it so
 		# otherwise we can be safe if we behave like dch -i
 		$end .= "~bpo40+1";
-	    } elsif ($opt_l and not $start =~ /$opt_l/) {
+	    } elsif ($opt_l and not $start =~ /\Q$opt_l\E/) {
 		# If it's not already a local package make it so
 		# otherwise we can be safe if we behave like dch -i
 		$end .= $opt_l."1";
