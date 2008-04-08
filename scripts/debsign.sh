@@ -388,7 +388,7 @@ dosigning() {
 			unless $format =~ /^\d+(\.\d+)*$/;
 		    $format+=0;
 		    die "Unsupported .changes format: $format\n"
-			if($format > 1.8 or $format < 1.5);
+			if($format > 1.8 or $format < 1.7);
 		}
 		/^Files:/ && ($infiles=1,$insha1=0,$insha256=0);
 		if(/^Checksums-Sha1:/) {$insha1=1;$infiles=0;$insha256=0;}
