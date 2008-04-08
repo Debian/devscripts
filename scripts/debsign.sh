@@ -380,7 +380,15 @@ dosigning() {
 		'" \$dsc_file=\"$dsc\"; \$dsc_md5=\"$dsc_md5\"; "'
 		'" \$dsc_sha1=\"$dsc_sha1\"; \$dsc_sha256=\"$dsc_sha256\"; "'
 		$dsc_size=(-s $dsc_file); ($dsc_base=$dsc_file) =~ s|.*/||;
-		$infiles=0; $insha1=0; $insha256=0;
+		$infiles=0; $insha1=0; $insha256=0; $format="";
+		}
+		if(/^Format:\s+(.*)/) {
+		    $format=$1;
+		    die "Unrecognised .changes format: $format\n"
+			unless $format =~ /^\d+(\.\d+)*$/;
+		    $format+=0;
+		    die "Unsupported .changes format: $format\n"
+			if($format > 1.8);
 		}
 		/^Files:/ && ($infiles=1,$insha1=0,$insha256=0);
 		if(/^Checksums-Sha1:/) {$insha1=1;$infiles=0;$insha256=0;}

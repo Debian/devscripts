@@ -5,6 +5,8 @@ devscripts (2.10.25) UNRELEASED; urgency=low
       introduced by dpkg 1.14.17 (Closes: #474749)
     + Abort if any unknown Checksums-* fields are found in the .changes
       file
+    + Abort if the Format field of the .changes file is unsupported
+      (greater than 1.8 or non-numeric)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 07 Apr 2008 19:57:25 +0100
 
