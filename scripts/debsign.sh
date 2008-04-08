@@ -386,9 +386,10 @@ dosigning() {
 		    $format=$1;
 		    die "Unrecognised .changes format: $format\n"
 			unless $format =~ /^\d+(\.\d+)*$/;
-		    $format+=0;
+		    ($major, $minor) = split(/\./, $format);
+		    $major+=0;$minor+=0;
 		    die "Unsupported .changes format: $format\n"
-			if($format > 1.8 or $format < 1.7);
+			if($major!=1 or $minor > 8 or $minor < 7);
 		}
 		/^Files:/i && ($infiles=1,$insha1=0,$insha256=0);
 		if(/^Checksums-Sha1:/i) {$insha1=1;$infiles=0;$insha256=0;}
