@@ -1,5 +1,6 @@
 devscripts (2.10.25) UNRELEASED; urgency=low
 
+  [ Adam D. Barratt ]
   * debsign:
     + Add support for the new Checksums-Sha* .changes file fields
       introduced by dpkg 1.14.17 (Closes: #474749)
@@ -7,6 +8,9 @@ devscripts (2.10.25) UNRELEASED; urgency=low
       file
     + Abort if the Format field of the .changes file is unsupported
       (greater than 1.8 or non-numeric)
+
+  [ James Vega ]
+  * debian/control: Set subversion as the first VCS Recommends alternative.
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 07 Apr 2008 19:57:25 +0100
 

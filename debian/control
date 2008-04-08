@@ -18,7 +18,7 @@ Conflicts: debmake (<< 3.5), dupload (<< 2.1), suidmanager (<< 0.51),
 Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), sed (>= 2.95),
  ${shlibs:Depends}, ${misc:Depends}
 Recommends: at, build-essential, curl | wget, cvs-buildpackage,
- cvs | subversion | svk | tla | bzr | git-core | mercurial, dctrl-tools,
+ subversion | cvs | svk | tla | bzr | git-core | mercurial, dctrl-tools,
  debian-keyring, debian-maintainers, dupload (>=2.1) | dput, equivs,
  fakeroot, gnupg (>= 1.0.7), gnuplot, libauthen-sasl-perl,
  libcrypt-ssleay-perl, libdigest-md5-perl, libfile-desktopentry-perl,
