@@ -1,7 +1,10 @@
 devscripts (2.10.25) UNRELEASED; urgency=low
 
-  * debsign: Add support for the new Checksum-Sha* .changes file fields
-    introduced by dpkg 1.14.17
+  * debsign:
+    + Add support for the new Checksums-Sha* .changes file fields
+      introduced by dpkg 1.14.17 (Closes: #474749)
+    + Abort if any unknown Checksums-* fields are found in the .changes
+      file
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 07 Apr 2008 19:57:25 +0100
 

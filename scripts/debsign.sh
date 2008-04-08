@@ -371,15 +371,24 @@ dosigning() {
 	    dsc_sha1=`sha1sum $dsc | cut -d' ' -f1`
 	    dsc_sha256=`sha256sum $dsc | cut -d' ' -f1`
 
-	    perl -i -pe 'BEGIN {
+	    temp_changes=`mktemp` || {
+		echo "$PROGNAME: Unable to create temporary changes file; aborting" >&2
+		exit 1
+	    }
+	    cp "$changes" "$temp_changes"
+	    if perl -i -pe 'BEGIN {
 		'" \$dsc_file=\"$dsc\"; \$dsc_md5=\"$dsc_md5\"; "'
 		'" \$dsc_sha1=\"$dsc_sha1\"; \$dsc_sha256=\"$dsc_sha256\"; "'
 		$dsc_size=(-s $dsc_file); ($dsc_base=$dsc_file) =~ s|.*/||;
 		$infiles=0; $insha1=0; $insha256=0;
 		}
 		/^Files:/ && ($infiles=1,$insha1=0,$insha256=0);
-		/^Checksums-Sha1:/ && ($insha1=1,$infiles=0,$insha256=0);
-		/^Checksums-Sha256:/ && ($insha256=1,$infiles=0,$insha1=0);
+		if(/^Checksums-Sha1:/) {$insha1=1;$infiles=0;$insha256=0;}
+		elsif(/^Checksums-Sha256:/) {
+		    $insha256=1;$infiles=0;$insha1=0;
+		} elsif(/^Checksums-.*?:/) {
+		    die "Unknown checksum format: $_\n";
+		}
 		/^\s*$/ && ($infiles=0,$insha1=0,$insha256=0);
 		if ($infiles &&
 		    /^ (\S+) (\d+) (\S+) (\S+) \Q$dsc_base\E\s*$/) {
@@ -395,7 +404,14 @@ dosigning() {
 		    /^ (\S+) (\d+) \Q$dsc_base\E\s*$/) {
 		    $_ = " $dsc_sha256 $dsc_size $dsc_base\n";
 		    $insha256=0;
-		}' "$changes"
+		}' "$temp_changes"
+	    then
+		mv "$temp_changes" "$changes"
+	    else
+		rm "$temp_changes"
+		echo "$PROGNAME: Error processing .changes file (see above)" >&2
+		exit 1
+	    fi
 	    
 	    withecho signfile "$changes" "$signas"
 	
