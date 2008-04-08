@@ -8,6 +8,7 @@ devscripts (2.10.25) UNRELEASED; urgency=low
       file
     + Abort if the Format field of the .changes file is unsupported
       (greater than 1.8, less than 1.7 or non-numeric)
+    + Use a case-insensitive search for field names
 
   [ James Vega ]
   * debian/control: Set subversion as the first VCS Recommends alternative.

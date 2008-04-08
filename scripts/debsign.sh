@@ -390,11 +390,11 @@ dosigning() {
 		    die "Unsupported .changes format: $format\n"
 			if($format > 1.8 or $format < 1.7);
 		}
-		/^Files:/ && ($infiles=1,$insha1=0,$insha256=0);
-		if(/^Checksums-Sha1:/) {$insha1=1;$infiles=0;$insha256=0;}
-		elsif(/^Checksums-Sha256:/) {
+		/^Files:/i && ($infiles=1,$insha1=0,$insha256=0);
+		if(/^Checksums-Sha1:/i) {$insha1=1;$infiles=0;$insha256=0;}
+		elsif(/^Checksums-Sha256:/i) {
 		    $insha256=1;$infiles=0;$insha1=0;
-		} elsif(/^Checksums-.*?:/) {
+		} elsif(/^Checksums-.*?:/i) {
 		    die "Unknown checksum format: $_\n";
 		}
 		/^\s*$/ && ($infiles=0,$insha1=0,$insha256=0);
