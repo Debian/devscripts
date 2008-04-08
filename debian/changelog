@@ -6,7 +6,7 @@ devscripts (2.10.25) UNRELEASED; urgency=low
     contain shell meta-characters (Closes: #475075)
   * debsign:
     + Add support for the new Checksums-Sha* .changes file fields
-      introduced by dpkg 1.14.17 (Closes: #474749)
+      introduced by dpkg 1.14.17 (Closes: #474949)
     + Abort if any unknown Checksums-* fields are found in the .changes
       file
     + Abort if the Format field of the .changes file is unsupported
