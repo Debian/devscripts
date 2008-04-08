@@ -10,7 +10,7 @@ file or an unsigned \fI.changes\fR file (along with the associated
 unsigned \fI.dsc\fR file found by replacing the architecture name and
 \fI.changes\fR by \fI.dsc\fR if it appears in the \fI.changes\fR
 file), and signs them using the GNU Privacy Guard or PGP.  It is
-careful to calculate the size and MD5 sum of the newly signed
+careful to calculate the size and checksums of the newly signed
 \fI.dsc\fR file and replace the original values in the \fI.changes\fR
 file.
 .PP
@@ -121,6 +121,8 @@ And this is the \fB\-k\fR option.
 .BR dpkg-architecture (1),
 .BR debuild (1),
 .BR md5sum (1),
+.BR sha1sum (1),
+.BR sha256sum (1),
 .BR gpg (1),
 .BR pgp (1)
 and
