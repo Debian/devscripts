@@ -442,8 +442,8 @@ elsif ($type eq 'dsc') {
 	and scalar(@excludes) == 0 and $use_interdiff) {
 	# same orig tar ball and interdiff exists
 
-	my $command = join( " ", ("interdiff", "-z", @diff_opts, $diffs[1],
-	    $diffs[2], ">", $filename) );
+	my $command = join( " ", ("interdiff", "-z", @diff_opts, "'$diffs[1]'",
+	    "'$diffs[2]'", ">", $filename) );
 	my $rv = system($command);
 	if ($rv) {
 	    fatal "interdiff -z $diffs[1] $diffs[2] failed!";
@@ -515,7 +515,7 @@ elsif ($type eq 'dsc') {
 	for my $exclude (@excludes) {
 	    push @command, ("--exclude", "'$exclude'");
 	}
-	push @command, ("$dir1/$sdir1", "$dir2/$sdir2");
+	push @command, ("'$dir1/$sdir1'", "'$dir2/$sdir2'");
 	push @command, (">", $filename);
 
 	# Execute diff and remove the common prefixes $dir1/$dir2, so the patch can be used with -p1,
