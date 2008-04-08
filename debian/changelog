@@ -1,6 +1,9 @@
 devscripts (2.10.25) UNRELEASED; urgency=low
 
   [ Adam D. Barratt ]
+  * debchange: Escape arguments to --local (Closes: #475034)
+  * debdiff: Ensure arguments to --exclude are properly quoted in case they
+    contain shell meta-characters (Closes: #475075)
   * debsign:
     + Add support for the new Checksums-Sha* .changes file fields
       introduced by dpkg 1.14.17 (Closes: #474749)
@@ -9,9 +12,6 @@ devscripts (2.10.25) UNRELEASED; urgency=low
     + Abort if the Format field of the .changes file is unsupported
       (greater than 1.8, less than 1.7 or non-numeric)
     + Use a case-insensitive search for field names
-  * debchange: Escape arguments to --local (Closes: #475034)
-  * debdiff: Ensure arguments to --exclude are properly quoted in case they
-    contain shell meta-characters (Closes: #475075)
 
   [ James Vega ]
   * debian/control: Set subversion as the first VCS Recommends alternative.
