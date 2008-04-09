@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-04-07 16:35+0100\n"
+"POT-Creation-Date: 2008-04-09 16:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -165,7 +165,7 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../scripts/annotate-output.1:55 ../scripts/archpath.1:54 ../scripts/build-rdeps.pl:253 ../scripts/checkbashisms.1:58 ../scripts/cvs-debc.1:64 ../scripts/cvs-debi.1:68 ../scripts/cvs-debrelease.1:69 ../scripts/cvs-debuild.1:59 ../scripts/dcmd.1:36 ../scripts/dd-list.1:93 ../scripts/debc.1:120 ../scripts/debchange.1:401 ../scripts/debcheckout.pl:106 ../scripts/debclean.1:111 ../scripts/debcommit.pl:699 ../scripts/debdiff.1:187 ../scripts/debi.1:120 ../scripts/debpkg.1:23 ../scripts/debrelease.1:137 ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:71 ../scripts/debsign.1:128 ../scripts/debuild.1:416 ../scripts/desktop2menu.pl:52 ../scripts/dget.pl:617 ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscverify.1:52 ../scripts/grep-excuses.1:39 ../scripts/licensecheck.pl:116 ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:20 ../scripts/mass-bug.pl:492 ../scripts/mergechanges.1:17 ../scripts/mk-build-deps.pl:54 ../scripts/nmudiff.1:97 ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:29 ../scripts/rmadison.pl:241 ../scripts/svnpath.pl:97 ../scripts/uscan.1:521 ../scripts/uupdate.1:167 ../scripts/whodepends.1:19 ../scripts/who-uploads.1:60 ../scripts/wnpp-alert.1:31 ../scripts/devscripts.conf.5:58
+#: ../scripts/annotate-output.1:55 ../scripts/archpath.1:54 ../scripts/build-rdeps.pl:253 ../scripts/checkbashisms.1:58 ../scripts/cvs-debc.1:64 ../scripts/cvs-debi.1:68 ../scripts/cvs-debrelease.1:69 ../scripts/cvs-debuild.1:59 ../scripts/dcmd.1:36 ../scripts/dd-list.1:93 ../scripts/debc.1:120 ../scripts/debchange.1:401 ../scripts/debcheckout.pl:106 ../scripts/debclean.1:111 ../scripts/debcommit.pl:699 ../scripts/debdiff.1:187 ../scripts/debi.1:120 ../scripts/debpkg.1:23 ../scripts/debrelease.1:137 ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:71 ../scripts/debsign.1:130 ../scripts/debuild.1:416 ../scripts/desktop2menu.pl:52 ../scripts/dget.pl:617 ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscverify.1:52 ../scripts/grep-excuses.1:39 ../scripts/licensecheck.pl:116 ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:20 ../scripts/mass-bug.pl:492 ../scripts/mergechanges.1:17 ../scripts/mk-build-deps.pl:54 ../scripts/nmudiff.1:97 ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:29 ../scripts/rmadison.pl:241 ../scripts/svnpath.pl:97 ../scripts/uscan.1:521 ../scripts/uupdate.1:167 ../scripts/whodepends.1:19 ../scripts/who-uploads.1:60 ../scripts/wnpp-alert.1:31 ../scripts/devscripts.conf.5:58
 #, no-wrap
 msgid "AUTHOR"
 msgstr ""
@@ -5800,7 +5800,7 @@ msgid "B<debsign>(1), B<dpkg-architecture>(1)  and B<ssh>(1)."
 msgstr ""
 
 # type: Plain text
-#: ../scripts/debrsign.1:73 ../scripts/debsign.1:130
+#: ../scripts/debrsign.1:73 ../scripts/debsign.1:132
 msgid ""
 "This program was written by Julian Gilbey E<lt>jdg@debian.orgE<gt> and is "
 "copyright under the GPL, version 2 or later."
@@ -5830,8 +5830,8 @@ msgid ""
 "unsigned I<.changes> file (along with the associated unsigned I<.dsc> file "
 "found by replacing the architecture name and I<.changes> by I<.dsc> if it "
 "appears in the I<.changes> file), and signs them using the GNU Privacy Guard "
-"or PGP.  It is careful to calculate the size and MD5 sum of the newly signed "
-"I<.dsc> file and replace the original values in the I<.changes> file."
+"or PGP.  It is careful to calculate the size and checksums of the newly "
+"signed I<.dsc> file and replace the original values in the I<.changes> file."
 msgstr ""
 
 # type: Plain text
@@ -5995,11 +5995,11 @@ msgid "And this is the B<-k> option."
 msgstr ""
 
 # type: Plain text
-#: ../scripts/debsign.1:128
+#: ../scripts/debsign.1:130
 msgid ""
 "B<debrsign>(1), B<dpkg-buildpackage>(1), B<dpkg-architecture>(1), "
-"B<debuild>(1), B<md5sum>(1), B<gpg>(1), B<pgp>(1)  and "
-"B<devscripts.conf>(5)."
+"B<debuild>(1), B<md5sum>(1), B<sha1sum>(1), B<sha256sum>(1), B<gpg>(1), "
+"B<pgp>(1)  and B<devscripts.conf>(5)."
 msgstr ""
 
 # type: TH

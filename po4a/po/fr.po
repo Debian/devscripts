@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2008-04-07 16:35+0100\n"
+"POT-Creation-Date: 2008-04-09 16:09+0200\n"
 "PO-Revision-Date: 2006-11-27 09:30+0100\n"
 "Last-Translator: Julien Cristau <julien.cristau@ens-lyon.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -299,7 +299,7 @@ msgstr ""
 #: ../scripts/debclean.1:111 ../scripts/debcommit.pl:699
 #: ../scripts/debdiff.1:187 ../scripts/debi.1:120 ../scripts/debpkg.1:23
 #: ../scripts/debrelease.1:137 ../scripts/deb-reversion.dbk:292
-#: ../scripts/debrsign.1:71 ../scripts/debsign.1:128 ../scripts/debuild.1:416
+#: ../scripts/debrsign.1:71 ../scripts/debsign.1:130 ../scripts/debuild.1:416
 #: ../scripts/desktop2menu.pl:52 ../scripts/dget.pl:617
 #: ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscverify.1:52
 #: ../scripts/grep-excuses.1:39 ../scripts/licensecheck.pl:116
@@ -7342,7 +7342,7 @@ msgid "B<debsign>(1), B<dpkg-architecture>(1)  and B<ssh>(1)."
 msgstr "B<debsign>(1), B<dpkg-architecture>(1) et B<ssh>(1)."
 
 # type: Plain text
-#: ../scripts/debrsign.1:73 ../scripts/debsign.1:130
+#: ../scripts/debrsign.1:73 ../scripts/debsign.1:132
 msgid ""
 "This program was written by Julian Gilbey E<lt>jdg@debian.orgE<gt> and is "
 "copyright under the GPL, version 2 or later."
@@ -7371,13 +7371,14 @@ msgstr ""
 
 # type: Plain text
 #: ../scripts/debsign.1:16
+#, fuzzy
 msgid ""
 "B<debsign> mimics the signing aspects (and bugs) of B<dpkg-buildpackage>"
 "(1).  It takes either an unsigned I<.dsc> file or an unsigned I<.changes> "
 "file (along with the associated unsigned I<.dsc> file found by replacing the "
 "architecture name and I<.changes> by I<.dsc> if it appears in the I<."
 "changes> file), and signs them using the GNU Privacy Guard or PGP.  It is "
-"careful to calculate the size and MD5 sum of the newly signed I<.dsc> file "
+"careful to calculate the size and checksums of the newly signed I<.dsc> file "
 "and replace the original values in the I<.changes> file."
 msgstr ""
 "B<debsign> copie les aspects (et les bogues) concernant la signature de "
@@ -7590,10 +7591,12 @@ msgid "And this is the B<-k> option."
 msgstr "Équivaut à utiliser l'option B<-k>."
 
 # type: Plain text
-#: ../scripts/debsign.1:128
+#: ../scripts/debsign.1:130
+#, fuzzy
 msgid ""
 "B<debrsign>(1), B<dpkg-buildpackage>(1), B<dpkg-architecture>(1), B<debuild>"
-"(1), B<md5sum>(1), B<gpg>(1), B<pgp>(1)  and B<devscripts.conf>(5)."
+"(1), B<md5sum>(1), B<sha1sum>(1), B<sha256sum>(1), B<gpg>(1), B<pgp>(1)  and "
+"B<devscripts.conf>(5)."
 msgstr ""
 "B<debrsign>(1), B<dpkg-buildpackage>(1), B<dpkg-architecture>(1), B<debuild>"
 "(1), B<md5sum>(1), B<gpg>(1), B<pgp>(1) et B<devscripts.conf>(5)."
