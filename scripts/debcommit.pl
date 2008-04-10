@@ -85,7 +85,7 @@ changelog, the characters "* " will be stripped from the beginning of
 the message.
 
 This option is set by default and ignored if more than one line of
-the message begins with "* ".
+the message begins with "[*+-] ".
 
 =item B<--sign-tags>, B<--no-sign-tags>
 
@@ -640,10 +640,10 @@ sub getmessage {
 	    }
 
 	    if ($stripmessage or $prog eq 'git') {
-		my $count = () = $ret =~ /^\* /mg;
+		my $count = () = $ret =~ /^[ \t]*[\*\+-] /mg;
 		if ($count == 1) {
-		    $ret =~ s/^\* //;
-		    $ret =~ s/^\s+//mg;
+		    $ret =~ s/^[ \t]*[\*\+-] //;
+		    $ret =~ s/^[ \t]*//mg;
 		}
 	    }
 	}
