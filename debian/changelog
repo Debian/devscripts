@@ -11,7 +11,8 @@ devscripts (2.10.26) UNRELEASED; urgency=low
       the same as that between two upstream versions
     + Normalise directory names in all file headers within a diff, not just
       the first
-  * debian/control: Suggest instead of Recommending gnuplot
+  * debian/control: Suggest instead of Recommending gnuplot and
+    cvs-buildpackage
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 09 Apr 2008 18:39:33 +0100
 
