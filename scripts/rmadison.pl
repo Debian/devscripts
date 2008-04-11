@@ -58,6 +58,8 @@ Display information about PACKAGE(s).
   -t, --time                 show projectb snapshot date
   -u, --url=URL              use URL instead of http://qa.debian.org/madison.php
 
+  --noconf, --no-conf        don\'t read devscripts configuration files
+
 ARCH, COMPONENT and SUITE can be comma (or space) separated lists, e.g.
     --architecture=m68k,i386
 EOT
@@ -65,6 +67,39 @@ EOT
 }
 
 my $params;
+my %url_map = (
+    'debian' => "http://qa.debian.org/madison.php",
+    'qa' => "http://qa.debian.org/madison.php",
+    'myon' => "http://qa.debian.org/~myon/madison.php",
+    'bpo' => "http://www.backports.org/cgi-bin/madison.cgi",
+    'ubuntu' => "http://people.ubuntu.com/~ubuntu-archive/madison.cgi",
+);
+
+if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
+    shift;
+} else {
+    # We don't have any predefined variables, but allow any of the form
+    # RMADISON_URL_MAP_SHORTCODE=URL
+    my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
+    my @config_vars = ();
+
+    my $shell_cmd;
+    # Set defaults
+    $shell_cmd .= qq[unset `set | grep "^RMADISON_" | cut -d= -f1`;\n];
+    $shell_cmd .= 'for file in ' . join(" ", @config_files) . "; do\n";
+    $shell_cmd .= '[ -f $file ] && . $file; done;' . "\n";
+    $shell_cmd .= 'for var in `set | grep "^RMADISON_" | cut -d= -f1`; do ';
+    $shell_cmd .= 'eval echo $var=\$$var; done;' . "\n";
+    # Read back values
+    my $shell_out = `/bin/bash -c '$shell_cmd'`;
+    @config_vars = split /\n/, $shell_out, -1;
+
+   foreach my $envvar (@config_vars) {
+	$envvar =~ /^RMADISON_URL_MAP_([^=]*)=(.*)$/ or next;
+	$url_map{lc($1)}=$2;
+    }
+}
+
 Getopt::Long::config('bundling');
 unless (GetOptions(
     '-a=s'                =>  \$params->{'architecture'},
@@ -126,14 +161,6 @@ push @args, "S" if $params->{'source-and-binary'};
 push @args, "t" if $params->{'time'};
 
 my $url = $params->{'url'} ? $params->{'url'} : "debian";
-my %url_map = (
-    'debian' => "http://qa.debian.org/madison.php",
-    'qa' => "http://qa.debian.org/madison.php",
-    'myon' => "http://qa.debian.org/~myon/madison.php",
-    'bpo' => "http://www.backports.org/cgi-bin/madison.cgi",
-    'ubuntu' => "http://people.ubuntu.com/~ubuntu-archive/madison.cgi",
-);
-
 my @url = split /,/, $url;
 
 foreach my $url (@url) {
@@ -213,14 +240,41 @@ use I<URL> for the query. Supported shorthands are
  B<bpo> http://www.backports.org/cgi-bin/madison.cgi
  B<ubuntu> http://people.ubuntu.com/~ubuntu-archive/madison.cgi
 
+See the B<RMADISON_URL_MAP_> variable below for a method to add
+new shorthands.
+
 =item B<--version>
 
 show version and exit
+
+=item B<--no-conf>, B<--noconf>
+
+don't read the devscripts configuration files
 
 =back
 
 ARCH, COMPONENT and SUITE can be comma (or space) separated lists, e.g.
 --architecture=m68k,i386
+
+=head1 CONFIGURATION VARIABLES
+
+The two configuration files F</etc/devscripts.conf> and
+F<~/.devscripts> are sourced by a shell in that order to set
+configuration variables. Command line options can be used to override
+configuration file settings. Environment variable settings are
+ignored for this purpose. The currently recognised variables are:
+
+=over 4
+
+=item B<RMADISON_URL_MAP_>I<SHORTHAND>=I<URL>
+
+Add an entry to the set of shorthand URLs listed above. I<SHORTHAND> should
+be replaced with the shorthand form to be used to refer to I<URL>.
+
+Multiple shorthand entries may be specified by using multiple
+B<RMADISON_URL_MAP_*> variables.
+
+=back
 
 =head1 NOTES
 

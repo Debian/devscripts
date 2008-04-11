@@ -506,6 +506,20 @@ EOF
 
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.26
+	then
+	    # Added in devscripts 2.10.26
+	    cat >> /etc/devscripts.conf <<EOF
+##### rmadison option added in version 2.10.26
+# 
+# Add a custom URL to the default list of shorthands so one
+# can use it with -u without having to specify the full URL
+# 
+# RMADISON_URL_MAP_EXAMPLE=http://example.com/madison.cgi
+
+EOF
+	fi
     fi
 fi
 
