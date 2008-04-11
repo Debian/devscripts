@@ -13,6 +13,11 @@ devscripts (2.10.26) UNRELEASED; urgency=low
       the first
   * debian/control: Suggest instead of Recommending gnuplot and
     cvs-buildpackage
+  * mergechanges:
+    + Update for the new .changes format introduced with dpkg 1.14.17:
+      - Handle Checksums-Sha(1|256)
+      - Only allow .changes files with the same Format to be merged
+      - Reject .changes files with unsupported Formats or Checksums fields
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 09 Apr 2008 18:39:33 +0100
 

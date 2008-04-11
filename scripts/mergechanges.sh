@@ -96,8 +96,17 @@ SVERSION=$(echo "$VERSION" | perl -pe 's/^\d+://')
 SOURCE=$(grep -h "^Source: " "$@" | sed -e "s,^Source: ,," | sort -u)
 # Extract & merge the files from all files
 FILES=$(egrep -h "^ [0-9a-f]{32} [0-9]+" "$@" | sort -u)
+# Extract & merge the sha1 checksums from all files
+SHA1S=$(egrep -h "^ [0-9a-f]{40} [0-9]+" "$@" | sort -u)
+# Extract & merge the sha256 checksums from all files
+SHA256S=$(egrep -h "^ [0-9a-f]{64} [0-9]+" "$@" | sort -u)
 # Extract & merge the description from all files
 DESCRIPTIONS=$(sed '/^Description:/,/^[^ ]/{/^ /p;d};d' "$@" | sort -u)
+# Extract & merge the Formats from all files
+FORMATS=$(grep -h "^Format: " "$@" | sed -e "s,^Format: ,," | sort -u)
+# Extract & merge the Checksums-* field names from all files
+CHECKSUMS=$(grep -h "^Checksums-.*:" "$@" | sort -u)
+UNSUPCHECKSUMS="$(echo "${CHECKSUMS}" | grep -v "^Checksums-Sha\(1\|256\):" || true)"
 
 # Sanity check #2: Versions must match
 if test $(echo "${VERSION}" | wc -l) -ne 1; then
@@ -117,6 +126,31 @@ fi
 if test $(echo "${DESCRIPTIONS}" | sed -e 's/ \+- .*$//' | uniq -d | wc -l) -ne 0; then
     echo "Error: Descriptions do not match:"
     echo "${DESCRIPTIONS}"
+    exit 1
+fi
+
+# Sanity check #5: Formats must match
+if test $(echo "${FORMATS}" | wc -l) -ne 1; then
+    echo "Error: Changes files have different Format fields:"
+    grep "^Format: " "$@"
+    exit 1
+fi
+
+# Sanity check #6: The Format must be one we understand
+case "$FORMATS" in
+    1.7|1.8) # Supported
+        ;;
+    *)
+        echo "Error: Changes files use unknown Format:"
+        echo "${FORMATS}"       
+        exit 1
+        ;;
+esac
+
+# Sanity check #7: Unknown checksum fields
+if test -n "${UNSUPCHECKSUMS}"; then
+    echo "Error: Unsupported checksum fields:"
+    echo "${UNSUPCHECKSUMS}"
     exit 1
 fi
 
@@ -145,12 +179,22 @@ fi
 
 # Replace the Architecture: field, nuke the value of Files:, and insert
 # the Description: field before the Changes: field
-eval "sed -e 's,^Architecture: .*,Architecture: ${ARCHS},; /^Files: /q' \
+eval "sed -e 's,^Architecture: .*,Architecture: ${ARCHS},' \
+    -e '/^Files: /,$ d; /^Checksums-.*: /,$ d' \
     -e '/^Description:/,/^[^ ]/{/^Description:/d;/^[ ]/d}' \
     -e '/^Changes:/{r '${DESCFILE} -e ';aChanges:' -e ';d}' \
     ${OUTPUT} ${REDIR1}"
 
-# Voodoo magic to get the merged filelist into the output
+# Voodoo magic to get the merged file and checksum lists into the output
+if test -n "${SHA1S}"; then
+    eval "echo 'Checksums-Sha1: ' ${REDIR2}"
+    eval "echo '${SHA1S}' ${REDIR2}"
+fi
+if test -n "${SHA256S}"; then
+    eval "echo 'Checksums-Sha256: ' ${REDIR2}"
+    eval "echo '${SHA256S}' ${REDIR2}"
+fi
+eval "echo 'Files: ' ${REDIR2}"
 eval "echo '${FILES}' ${REDIR2}"
 
 exit 0

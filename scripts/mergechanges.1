@@ -5,10 +5,11 @@ mergechanges \- merge multiple changes files
 \fBmergechanges\fR [\fB\-f\fR] \fIfile1 file2\fR [\fIfile\fR...]
 .SH DESCRIPTION
 \fBmergechanges\fR merges two or more \fI.changes\fR files, merging
-the Architecture, Description and Files fields of the two.  There are 
-basic checks made to ensure that the changes files are from the same 
-source package and version.  The first changes file is used as the basis 
-and the information from the later ones is merged into it.
+the Architecture, Description and Files (and Checksums-*, if present)
+fields of the two.  There are checks made to ensure that the changes
+files are from the same source package and version and use the same
+changes file Format.  The first changes file is used as the basis and
+the information from the later ones is merged into it.
 .PP
 The output is normally written to \fIstdout\fR.  If the \fB\-f\fR
 option is given, the output is written to
@@ -16,4 +17,5 @@ option is given, the output is written to
 directory as the first changes file listed.
 .SH AUTHOR
 Gergely Nagy <algernon@debian.org>,
-modifications by Julian Gilbey <jdg@debian.org>.
+modifications by Julian Gilbey <jdg@debian.org> and
+Adam D. Barratt <adam@adam-barratt.org.uk>.
