@@ -184,6 +184,13 @@ determined from the environment if this is possible, and the
 distribution is specified either using the \fB\-\-distribution\fR
 option or in the generated changelog file.
 .TP
+.BR \-\-empty
+When used in combination with \fB\-\-create\fR, suppress the automatic
+addition of an "initial release" changelog entry (so that the next
+invocation of \fBdebchange\fR adds the first entry).  Note that this
+will cause a \fBdpkg\-parsechangelog\fR warning on the next invocation
+due to the lack of changes.
+.TP
 \fB\-\-package\fR \fIpackage\fR
 This specifies the package name to be used in the new changelog; this
 may only be used in conjunction with the \fB\-\-create\fR option.

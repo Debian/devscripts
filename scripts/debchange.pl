@@ -90,6 +90,9 @@ Options:
   --create
          Create a new changelog (default) or NEWS file (with --news) and
          open for editing
+  --empty
+         When creating a new changelog, don't add any changes to it
+         (i.e. only include the header and trailer lines)
   --package <package>
          Specify the package name when using --create (optional)
   -n, --nmu
@@ -275,7 +278,7 @@ my ($opt_help, $opt_version);
 my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u, $opt_force_dist);
 my ($opt_n, $opt_bn, $opt_qa, $opt_s, $opt_bpo, $opt_l, $opt_c, $opt_m, $opt_create, $opt_package, @closes);
 my ($opt_news);
-my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
+my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf, $opt_empty);
 
 Getopt::Long::Configure('bundling');
 GetOptions("help|h" => \$opt_help,
@@ -315,6 +318,7 @@ GetOptions("help|h" => \$opt_help,
 	   "noconf" => \$opt_noconf,
 	   "no-conf" => \$opt_noconf,
 	   "release-heuristic=s" => \$opt_release_heuristic,
+	   "empty" => \$opt_empty,
 	   )
     or die "Usage: $progname [options] [changelog entry]\nRun $progname --help for more details\n";
 
@@ -1230,7 +1234,7 @@ elsif ($opt_e && ! $opt_create) {
     $line=0;
 }
 elsif ($opt_create) {
-    if (! $initial_release and ! $opt_news) {
+    if (! $initial_release and ! $opt_news and ! $opt_empty) {
 	push @closes_text, "Initial release. (Closes: \#XXXXXX)\n";
     }
 
@@ -1242,6 +1246,8 @@ elsif ($opt_create) {
 	if (length $TEXT) { format_line($TEXT, 1); }
     } elsif ($opt_news) {
 	print O "  \n";
+    } elsif ($opt_empty) {
+	# Do nothing, but skip the empty entry
     } else { # this can't happen, but anyway...
 	print O "  * \n";
     }
