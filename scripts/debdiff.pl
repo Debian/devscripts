@@ -449,7 +449,10 @@ elsif ($type eq 'dsc') {
 	    fatal "interdiff -z $diffs[1] $diffs[2] failed!";
 	} else {
 	    if ($have_diffstat and $show_diffstat) {
-		print "diffstat for $diffs[1] $diffs[2]\n\n";
+		my $header = "diffstat for " . basename($diffs[1])
+				. " " . basename($diffs[2]) . "\n\n";
+		$header =~ s/\.diff\.gz//g;
+		print $header;
 		system("diffstat $filename");
 		print "\n";
 	    }
@@ -530,15 +533,11 @@ elsif ($type eq 'dsc') {
 
 	open( DIFF, '<', $filename );
 
-	# replace in first line:
-	my $first = <DIFF>;
-	$first =~ s/ $dir1\/\Q$sdir1\E/ $sdir1/;
-	$first =~ s/ $dir2\/\Q$sdir2\E/ $sdir2/;
-	print $first;
-
 	while(<DIFF>) {
 		s/^--- $dir1\//--- /;
 		s/^\+\+\+ $dir2\//+++ /;
+		s/^(diff .*) $dir1\/\Q$sdir1\E/$1 $sdir1/;
+		s/^(diff .*) $dir2\/\Q$sdir2\E/$1 $sdir2/;
 		print;
  	}
 	close DIFF;

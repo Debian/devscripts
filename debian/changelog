@@ -6,6 +6,11 @@ devscripts (2.10.26) UNRELEASED; urgency=low
       the message
     - When trimming leading whitespace on continuation lines, only spaces 
       and tabs are considered rather than line breaks (Closes: #475337)
+  * debdiff:
+    + Make the diffstat header for comparisons between two Debian revisions
+      the same as that between two upstream versions
+    + Normalise directory names in all file headers within a diff, not just
+      the first
   * debian/control: Suggest instead of Recommending gnuplot
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 09 Apr 2008 18:39:33 +0100
