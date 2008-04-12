@@ -681,7 +681,7 @@ if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and
 	    unless have_lpdc();
 
 	my $parser = new Parse::DebControl;
-	my $deb822 = $parser->parse_file('debian/control', { });
+	my $deb822 = $parser->parse_file('debian/control', {stripComments => 'true'});
 	my $uploader = decode_utf8($deb822->[0]->{'Uploaders'}) || '';
 	my $maintainer = decode_utf8($deb822->[0]->{'Maintainer'});
 	my @uploaders = split(/,\s+/, $uploader);

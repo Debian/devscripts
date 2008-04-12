@@ -1,8 +1,11 @@
 devscripts (2.10.26) UNRELEASED; urgency=low
 
-  * debchange: Allow a changelog with no entries to be created. (Note that
-    such a changelog will cause a warning from dpkg-parsehchangelog the
-    next time debchange is used with it) (Closes: #475578)
+  * debchange:
+    + Allow a changelog with no entries to be created. (Note that
+      such a changelog will cause a warning from dpkg-parsehchangelog the
+      next time debchange is used with it) (Closes: #475578)
+    + Correctly handle control files containing comments when checking
+      for NMUs (Closes: #475750)
   * debcommit: Modify the "strip message" functionality so that:
     - Changelog lines beginning with any of *, + or - are considered to
       indicate a "change" for the purposes of deciding whether to strip 
