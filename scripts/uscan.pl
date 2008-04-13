@@ -112,6 +112,10 @@ Options:
     --upstream-version VERSION
                    Specify the current upstream version in use rather than
                    parsing debian/changelog to determine this
+    --download-version VERSION
+                   Specify the version which the upstream release must
+                   match in order to be considered, rather than using the
+                   release with the highest version
     --package PACKAGE
                    Specify the package name rather than examining
                    debian/changelog; must use --upstream-version and
@@ -152,6 +156,7 @@ our $passive = 'default';
 
 my $destdir = "..";
 my $download = 1;
+my $download_version;
 my $force_download = 0;
 my $report = 0; # report even on up-to-date packages?
 my $repack = 0; # repack .tar.bz2 or .zip to .tar.gz
@@ -248,12 +253,14 @@ my ($opt_h, $opt_v, $opt_destdir, $opt_download, $opt_force_download,
     $opt_report, $opt_passive, $opt_symlink, $opt_repack);
 my ($opt_verbose, $opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
+my $opt_download_version;
 my $opt_user_agent;
 
 GetOptions("help" => \$opt_h,
 	   "version" => \$opt_v,
 	   "destdir=s" => \$opt_destdir,
 	   "download!" => \$opt_download,
+	   "download-version=s" => \$opt_download_version,
 	   "force-download" => \$opt_force_download,
 	   "report" => sub { $opt_download = 0; },
 	   "report-status" => sub { $opt_download = 0; $opt_report = 1; },
@@ -298,6 +305,7 @@ $symlink = $opt_symlink if defined $opt_symlink;
 $verbose = $opt_verbose if defined $opt_verbose;
 $dehs = $opt_dehs if defined $opt_dehs;
 $user_agent_string = $opt_user_agent if defined $opt_user_agent;
+$download_version = $opt_download_version if defined $opt_download_version;
 if ($dehs) {
     $SIG{'__WARN__'} = \&dehs_warn;
     $SIG{'__DIE__'} = \&dehs_die;
@@ -841,8 +849,19 @@ sub process_watchline ($$$$$$)
 		print "-- Found the following matching hrefs:\n";
 		foreach my $href (@hrefs) { print "     $$href[1]\n"; }
 	    }
-	    @hrefs = Devscripts::Versort::versort(@hrefs);
-	    ($newversion, $newfile) = @{$hrefs[0]};
+	    if (defined $download_version) {
+		my @vhrefs = grep { $$_[0] eq $download_version } @hrefs;
+		if (@vhrefs) {
+		    ($newversion, $newfile) = @{$vhrefs[0]};
+		} else {
+		    warn "$progname warning: In $watchfile no matching hrefs for version $download_version"
+			. " in watch line\n  $line\n";
+		    return 1;
+		}
+	    } else {
+		@hrefs = Devscripts::Versort::versort(@hrefs);
+		($newversion, $newfile) = @{$hrefs[0]};
+	    }
 	} else {
 	    warn "$progname warning: In $watchfile,\n  no matching hrefs for watch line\n  $line\n";
 	    return 1;
@@ -911,8 +930,19 @@ sub process_watchline ($$$$$$)
 		print "-- Found the following matching files:\n";
 		foreach my $file (@files) { print "     $$file[1]\n"; }
 	    }
-	    @files = Devscripts::Versort::versort(@files);
-	    ($newversion, $newfile) = @{$files[0]};
+	    if (defined $download_version) {
+		my @vfiles = grep { $$_[0] eq $download_version } @files;
+		if (@vfiles) {
+		    ($newversion, $newfile) = @{$vfiles[0]};
+		} else {
+		    warn "$progname warning: In $watchfile no matching files for version $download_version"
+			. " in watch line\n  $line\n";
+		    return 1;
+		}
+	    } else {
+		@files = Devscripts::Versort::versort(@files);
+		($newversion, $newfile) = @{$files[0]};
+	    }
 	} else {
 	    warn "$progname warning: In $watchfile no matching files for watch line\n  $line\n";
 	    return 1;
