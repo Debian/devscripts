@@ -4,6 +4,8 @@ devscripts (2.10.26) UNRELEASED; urgency=low
     + Add experimental makefile support (only enabled if -f is used)
     + Modify the "2>&foo" check to allow a valid file descriptor followed
       by a backslash (for line continuations)
+    + Check the initial lines of shell script wrappers. Based on a patch from
+      Raphael Geissert
   * debchange:
     + Allow a changelog with no entries to be created. (Note that
       such a changelog will cause a warning from dpkg-parsehchangelog the

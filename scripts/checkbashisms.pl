@@ -68,10 +68,22 @@ if ($opt_version) { print $version; exit 0; }
 my $status = 0;
 
 foreach my $filename (@ARGV) {
-    if (!$opt_force and script_is_evil_and_wrong($filename)) {
+    my $check_lines_count = -1;
+
+    if (!$opt_force) {
+	$check_lines_count = script_is_evil_and_wrong($filename);
+    }
+
+    if ($check_lines_count == 0 or $check_lines_count == 1) {
 	warn "script $filename does not appear to be a /bin/sh script; skipping\n";
 	next;
     }
+
+    if ($check_lines_count != -1) {
+	warn "script $filename appears to be a shell wrapper; only checking the first "
+	     . "$check_lines_count lines\n";
+    }
+
     unless (open C, "$filename") {
 	warn "cannot open script $filename for reading: $!\n";
 	$status |= 2;
@@ -86,6 +98,8 @@ foreach my $filename (@ARGV) {
     my $makefile = 0;
 
     while (<C>) {
+	next unless ($check_lines_count == -1 or $. <= $check_lines_count);
+
 	if ($. == 1) { # This should be an interpreter line
 	    if (m,^\#!\s*(\S+),) {
 		my $interpreter = $1;
@@ -389,12 +403,12 @@ sub output_explanation {
 # just looks like one.
 sub script_is_evil_and_wrong {
     my ($filename) = @_;
-    my $ret = 0;
+    my $ret = -1;
     # lintian's version of this function aborts if the file
     # can't be opened, but we simply return as the next
     # test in the calling code handles reporting the error
     # itself
-    open (IN, '<', $filename) or return;
+    open (IN, '<', $filename) or return $ret;
     my $i = 0;
     my $var = "0";
     local $_;
@@ -404,7 +418,7 @@ sub script_is_evil_and_wrong {
         next if /^$/o;
         last if (++$i > 55);
         if (/(^\s*|\beval\s*[\'\"]|(;|&&)\s*)exec\s*.+\s*.?\$$var.?\s*(--\s*)?.?(\${1:?\+.?)?\$(\@|\*)/) {
-            $ret = 1;
+            $ret = $. - 1;
             last;
         } elsif (/^\s*(\w+)=\$0;/) {
 	    $var = $1;
