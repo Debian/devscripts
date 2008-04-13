@@ -1,5 +1,8 @@
 devscripts (2.10.26) UNRELEASED; urgency=low
 
+  * bts: Update documentation for "forwarded" to indicate that it may also
+    be used with a URL (for instance, for an upstream bug tracker)
+    (Closes: #475896)
   * checkbashisms:
     + Add experimental makefile support (only enabled if -f is used)
     + Modify the "2>&foo" check to allow a valid file descriptor followed

@@ -1389,9 +1389,10 @@ sub bts_severity {
     mailbts("severity of $bug is $matches[0]", "severity $bug $matches[0]");
 }
 
-=item forwarded <bug> <email>
+=item forwarded <bug> <address>
 
-Mark the bug as forwarded to the given email address.
+Mark the bug as forwarded to the given address (usually an email address or
+a URL for an upstream bug tracker).
 
 =cut
 
