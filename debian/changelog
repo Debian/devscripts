@@ -1,5 +1,7 @@
 devscripts (2.10.26) UNRELEASED; urgency=low
 
+  * checkbashisms:
+    + Add experimental makefile support (only enabled if -f is used)
   * debchange:
     + Allow a changelog with no entries to be created. (Note that
       such a changelog will cause a warning from dpkg-parsehchangelog the

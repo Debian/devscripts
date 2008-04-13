@@ -80,12 +80,19 @@ foreach my $filename (@ARGV) {
 
     my $cat_string = "";
     my $quote_string = "";
+    my $last_continued = 0;
+    my $continued = 0;
+    my $found_rules = 0;
+    my $makefile = 0;
 
     while (<C>) {
 	if ($. == 1) { # This should be an interpreter line
 	    if (m,^\#!\s*(\S+),) {
-		next if $opt_force;
 		my $interpreter = $1;
+
+		$makefile = 1 if $interpreter =~ m,/make$,;
+		next if $opt_force;
+
 		if ($interpreter =~ m,/bash$,) {
 		    warn "script $filename is already a bash script; skipping\n";
 		    $status |= 2;
@@ -104,6 +111,27 @@ foreach my $filename (@ARGV) {
 
 	chomp;
 	my $orig_line = $_;
+
+	if ($makefile) {
+	    $last_continued = $continued;
+	    if (/[^\\]\\$/) {
+		$continued = 1;
+	    } else {
+		$continued = 0;
+	    }
+
+	    # Don't match lines that look like a rule if we're in a
+	    # continuation line before the start of the rules
+	    if (/^[\w%-]+:+\s.*?;?(.*)$/ and !($last_continued and !$found_rules)) {
+		$found_rules = 1;
+		$_ = $1 if $1;
+	    } 
+
+	    last if m%^(export )?SHELL=/bin/bash\s*$%;
+
+	    s/^\t//;
+	    s/(\$){2}/$1/;
+	}
 
 	# We want to remove end-of-line comments, so need to skip
 	# comments in the "quoted" part of a line that starts
@@ -149,7 +177,6 @@ foreach my $filename (@ARGV) {
 		'\s\|\&' =>                    q<pipelining is not POSIX>,
 		'[^\\\]\{([^\s\\\}]+?,)+[^\\\}\s]+\}' =>
 		                               q<brace expansion>,
-		'(?:^|\s+)\w+\+=' =>           q<should be VAR="${VAR}foo">,
 		'(?:^|\s+)\w+\[\d+\]=' =>      q<bash arrays, H[0]>,
 		'(?:^|\s+)(read\s*(-[^r])?(?:;|$))' => q<should be read [-r] variable>,
 		'(?:^|\s+)echo\s+-[e]' =>      q<echo -e>,
@@ -191,7 +218,6 @@ foreach my $filename (@ARGV) {
 		'\$\{!\w+\}' =>                q<${!name}>,
 		'\$\{\w+(/.+?){1,2}\}' =>      q<${parm/?/pat[/str]}>,
 		'\$\{\#?\w+\[[0-9\*\@]+\]\}' => q<bash arrays, ${name[0|*|@]}>,
-		'(\$\(|\`)\s*\<\s*\S+\s*(\)|\`)' => q<'$(\< foo)' should be '$(cat foo)'>,
 		'\$\{?RANDOM\}?\b' =>          q<$RANDOM>,
 		'\$\{?(OS|MACH)TYPE\}?\b'   => q<$(OS|MACH)TYPE>,
 		'\$\{?HOST(TYPE|NAME)\}?\b' => q<$HOST(TYPE|NAME)>,
@@ -207,6 +233,14 @@ foreach my $filename (@ARGV) {
 		$bashisms{'echo\s+-[n]'} = q<echo -n>;
 	    }
 
+	    if ($makefile) {
+		$bashisms{'(\$\(|\`)\s*\<\s*([^\s\)]{2,}|[^DF])\s*(\)|\`)'} =
+		    q<'$(\< foo)' should be '$(cat foo)'>;
+	    } else {
+		$bashisms{'(?:^|\s+)\w+\+='} = q<should be VAR="${VAR}foo">;
+		$bashisms{'(\$\(|\`)\s*\<\s*\S+\s*(\)|\`)'} = q<'$(\< foo)' should be '$(cat foo)'>;
+	    }
+	    
 	    if ($opt_extra) {
 		$string_bashisms{'\$\{?BASH\}?\b'} = q<$BASH>;
 		$string_bashisms{'(?:^|\s+)RANDOM='} = q<RANDOM=>;
