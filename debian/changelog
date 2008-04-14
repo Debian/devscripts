@@ -17,6 +17,8 @@ devscripts (2.10.26) UNRELEASED; urgency=low
       for NMUs (Closes: #475750)
     + Fix a side-effect of the automagic NMU detection functionality which
       could lead to a spurious stanza being added to the end of the changelog
+    + Skip automatic NMU detection if -a was explicitly passed on the command
+      line
   * debcommit: Modify the "strip message" functionality so that:
     - Changelog lines beginning with any of *, + or - are considered to
       indicate a "change" for the purposes of deciding whether to strip 

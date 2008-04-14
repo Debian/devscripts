@@ -322,6 +322,11 @@ GetOptions("help|h" => \$opt_help,
 	   )
     or die "Usage: $progname [options] [changelog entry]\nRun $progname --help for more details\n";
 
+# So that we can distinguish, if required, between an explicit
+# passing of -a / -i and their values being automagically deduced
+# later on
+my $opt_a_passed = $opt_a || 0;
+my $opt_i_passed = $opt_i || 0;
 $opt_news = 'debian/NEWS' if defined $opt_news and $opt_news eq '';
 
 if ($opt_t eq '' && $opt_release_heuristic eq 'changelog') {
@@ -674,7 +679,7 @@ if (! $opt_m) {
 
 if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and 
     ! $opt_qa and ! $opt_bpo and ! $opt_bn and ! $opt_n and ! $opt_c and
-    ! $opt_create) {
+    ! $opt_create and ! $opt_a_passed) {
 
     if (-f 'debian/control') {
 	fatal "$progname: Unable to parse control file: $lpdc_broken\n"
