@@ -30,7 +30,7 @@ devscripts (2.10.26) UNRELEASED; urgency=low
     cvs-buildpackage
   * mergechanges:
     + Update for the new .changes format introduced with dpkg 1.14.17:
-      - Handle Checksums-Sha(1|256)
+      - Handle Checksums-Sha(1|256) (Closes: #475957)
       - Only allow .changes files with the same Format to be merged
       - Reject .changes files with unsupported Formats or Checksums fields
   * rmadison: Allow custom shorthand URLs to be defined (Closes: #472922)
