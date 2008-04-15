@@ -9,6 +9,8 @@ devscripts (2.10.26) UNRELEASED; urgency=low
       by a backslash (for line continuations)
     + Check the initial lines of shell script wrappers. Based on a patch from
       Raphael Geissert
+    + Fix a couple of the quoted block detection checks so as not to trigger
+      on escaped quotes
   * debchange:
     + Allow a changelog with no entries to be created. (Note that
       such a changelog will cause a warning from dpkg-parsehchangelog the

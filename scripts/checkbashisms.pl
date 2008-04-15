@@ -276,9 +276,9 @@ foreach my $filename (@ARGV) {
 		    my $templine = $line;
 
 		    # Remove quoted strings delimited with $otherquote
-		    $templine =~ s/$otherquote[^$quote_string]*?$otherquote//g;
+		    $templine =~ s/[^\\]$otherquote[^$quote_string]*?[^\\]$otherquote//g;
 		    # Remove quotes that are themselves quoted
-		    $templine =~ s/$otherquote.*?$quote_string.*?$otherquote//g;
+		    $templine =~ s/[^\\]$otherquote.*?$quote_string.*?[^\\]$otherquote//g;
 		    # Remove "" or ''
 		    $templine =~ s/(^|[^\\])$quote_string$quote_string/$1/g;
 
