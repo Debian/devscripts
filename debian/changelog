@@ -19,6 +19,10 @@ devscripts (2.10.26) UNRELEASED; urgency=low
       could lead to a spurious stanza being added to the end of the changelog
     + Skip automatic NMU detection if -a was explicitly passed on the command
       line
+    + Add {oldstable-,testing-,}proposed-updates to the list of supported
+      distributions (Closes: #476264)
+    + Add oldstable to the list of supported distributions, as updates
+      to oldstable have been possible for some time
   * debcommit: Modify the "strip message" functionality so that:
     - Changelog lines beginning with any of *, + or - are considered to
       indicate a "change" for the purposes of deciding whether to strip 
