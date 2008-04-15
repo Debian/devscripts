@@ -33,6 +33,8 @@ devscripts (2.10.26) UNRELEASED; urgency=low
   * debian/control:
     + Suggest instead of Recommending gnuplot and cvs-buildpackage
     + Suggest svn-buildpackage (Closes: #476240)
+  * licensecheck: Replace a literal copyright symbol with a hex escape
+    so that the package builds using etch's po4a (Closes: #476251)
   * mergechanges:
     + Update for the new .changes format introduced with dpkg 1.14.17:
       - Handle Checksums-Sha(1|256) (Closes: #475957)
