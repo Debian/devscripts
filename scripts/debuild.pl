@@ -611,7 +611,8 @@ foreach my $var (('DISPLAY', 'GNOME_KEYRING_SOCKET', 'GPG_AGENT_INFO', 'SSH_AUTH
 unless ($preserve_env) {
     foreach my $var (keys %ENV) {
 	delete $ENV{$var} unless
-	    $save_vars{$var} or $var =~ /^(LC|DEB(SIGN)?)_[A-Z_]+$/;
+	    $save_vars{$var} or $var =~ /^(LC|DEB(SIGN)?)_[A-Z_]+$/
+	    or $var =~ /^(C(PP|XX)?|LD|F)FLAGS(_APPEND)?$/;
     }
 }
 
@@ -1008,7 +1009,48 @@ if ($command_version eq 'dpkg') {
     } else {
 	# Not using dpkg-cross, so we emulate dpkg-buildpackage ourselves
 	# We emulate the version found in dpkg-buildpackage-snapshot in
-	# the source package with the addition of -j support
+	# the source package with the addition of -j and *FLAGS(_APPEND)
+	# support
+
+	my $build_opts = parsebuildopts();
+
+	# From dpkg-buildpackage 1.14.15
+	if ($parallel) {
+	    $parallel = $build_opts->{parallel}
+		if (defined $build_opts->{parallel});
+	    $ENV{MAKEFLAGS} ||= '';
+
+	    if ($parallel eq '-1') {
+		$ENV{MAKEFLAGS} .= " -j";
+	    } else {
+		$ENV{MAKEFLAGS} .= " -j$parallel";
+	    }
+
+	    $build_opts->{parallel} = $parallel;
+	    setbuildopts($build_opts);
+	}
+
+	# From dpkg-buildpackage 1.14.18
+	# (with messages tweaked as we don't support localization)
+	my $default_flags = defined $build_opts->{noopt} ? "-g -O0" : "-g -O2";
+	my %flags = (	CPPFLAGS => '',
+			CFLAGS   => $default_flags,
+			CXXFLAGS => $default_flags,
+			FFLAGS   => $default_flags,
+			LDFLAGS  => '',
+		    );
+
+	foreach my $flag (keys %flags) {
+	    if ($ENV{$flag}) {
+	        print "$progname: using $flag from environment: $ENV{$flag}\n";
+	    } else {
+	        $ENV{$flag} = $flags{$flag};
+		print "$progname: set $flag to defailt value: $ENV{$flag}\n";
+	    }
+	    if ($ENV{"${flag}_APPEND"}) {
+	        $ENV{$flag} .= " ".$ENV{"${flag}_APPEND"};
+	    }
+	}
 
 	# First dpkg-buildpackage action: run dpkg-checkbuilddeps
 	if ($checkbuilddep) {
@@ -1057,24 +1099,6 @@ if ($command_version eq 'dpkg') {
 	}
 
 	run_hook('build', ! $sourceonly);
-
-	# From dpkg-buildpackage 1.14.15
-	if ($parallel) {
-	    my $build_opts = parsebuildopts();
-
-	    $parallel = $build_opts->{parallel}
-		if (defined $build_opts->{parallel});
-	    $ENV{MAKEFLAGS} ||= '';
-
-	    if ($parallel eq '-1') {
-		$ENV{MAKEFLAGS} .= " -j";
-	    } else {
-		$ENV{MAKEFLAGS} .= " -j$parallel";
-	    }
-
-	    $build_opts->{parallel} = $parallel;
-	    setbuildopts($build_opts);
-	}
 
 	# Next dpkg-buildpackage action: build and binary targets
 	if (! $sourceonly) {

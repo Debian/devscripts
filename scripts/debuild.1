@@ -87,9 +87,10 @@ PACKAGE-version.
 As environment variables can affect the building of a package, often
 unintentionally, \fBdebuild\fR sanitises the environment by removing
 all environment variables except for TERM, HOME, LOGNAME, GNUPGHOME,
-PGPPATH, GPG_AGENT_INFO, FAKEROOTKEY, DEB_* and the locale variables
-LANG and LC_*.  TERM is set to `dumb' if it is unset, and PATH is set
-to "/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11".
+PGPPATH, GPG_AGENT_INFO, FAKEROOTKEY, DEB_*, the
+(C, CPP, CXX, LD and F)FLAGS variables and their _EXTEND counterparts
+and the locale variables LANG and LC_*.  TERM is set to `dumb' if it
+is unset, and PATH is set to "/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11".
 .PP
 If a particular environment variable is required to be passed through
 untouched to the build process, this may be specified by using a
