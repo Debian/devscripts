@@ -834,7 +834,13 @@ if ($command_version eq 'dpkg') {
 	    push(@dpkg_opts, $_), next;
 	# dpkg-cross specific option
 	if (/^-M/ and $dpkg_cross) { push(@dpkg_opts, $_), next; }
-	fatal "unknown dpkg-buildpackage option in configuration file: $_";
+	if ($emulate_dpkgbp) {
+	    fatal "unknown dpkg-buildpackage option in configuration file: $_";
+	} else {
+	    warn "$progname: unknown dpkg-buildpackage option in configuration file: $_\n";
+	    push (@dpkg_opts, $_);
+	    next;
+	}
     }
 
     while ($_=shift) {
@@ -882,7 +888,13 @@ if ($command_version eq 'dpkg') {
 	    unshift @ARGV, $_;
 	    last;
 	}
-	fatal "unknown dpkg-buildpackage/debuild option: $_";
+	if ($emulate_dpkgbp) {
+	    fatal "unknown dpkg-buildpackage/debuild option: $_";
+	} else {
+	    warn "$progname: unknown dpkg-buildpackage/debuild option: $_\n";
+	    push (@dpkg_opts, $_);
+	    next;
+	}
     }
 
     if ($sourceonly and $binaryonly) {

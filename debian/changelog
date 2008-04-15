@@ -47,6 +47,8 @@ devscripts (2.10.26) UNRELEASED; urgency=low
     + Automatically preserve the (C, CPP, CXX, LD and F)FLAGS variables and
       the corresponding *FLAGS_EXTEND variables
     + Add *FLAGS and *FLAGS_EXTEND support to the emulated dpkg-buildpackage
+    + When running dpkg-buildpackage directly, pass through unrecognised
+      options (with a warning) rather than aborting the build ourselves
   * licensecheck: Replace a literal copyright symbol with a hex escape
     so that the package builds using etch's po4a (Closes: #476251)
   * mergechanges:
