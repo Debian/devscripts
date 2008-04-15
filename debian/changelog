@@ -30,8 +30,9 @@ devscripts (2.10.26) UNRELEASED; urgency=low
       the same as that between two upstream versions
     + Normalise directory names in all file headers within a diff, not just
       the first
-  * debian/control: Suggest instead of Recommending gnuplot and
-    cvs-buildpackage
+  * debian/control:
+    + Suggest instead of Recommending gnuplot and cvs-buildpackage
+    + Suggest svn-buildpackage (Closes: #476240)
   * mergechanges:
     + Update for the new .changes format introduced with dpkg 1.14.17:
       - Handle Checksums-Sha(1|256) (Closes: #475957)
