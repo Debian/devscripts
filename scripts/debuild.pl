@@ -184,6 +184,7 @@ my $logging=0;
 my $tgz_check=1;
 my $prepend_path='';
 my $username='';
+my $emulate_dpkgbp = 0;
 my @hooks = (qw(dpkg-buildpackage clean dpkg-source build binary final-clean
 		lintian signing post-dpkg-buildpackage));
 my %hook;
@@ -737,6 +738,18 @@ if ($command_version eq 'dpkg') {
 	    my $ans = <STDIN>;
 	    exit 1 unless $ans =~ /^y/i;
 	}
+    } else {
+	# check hooks
+	my @skip_hooks = ();
+	for my $hookname (qw(clean dpkg-source build binary dpkg-genchanges
+			     final-clean)) {
+	    if ($hook{$hookname}) { push @skip_hooks, $hookname; }
+	}
+	if (@skip_hooks) {	
+	    $emulate_dpkgbp = 1;
+	    warn "$progname: emulating dpkg-buildpackage as the following hooks were defined:\n"
+		. "  " . join(", ", @skip_hooks) . "\n\n";
+	}
     }
 
     # Our first task is to parse the command line options.
@@ -986,6 +999,12 @@ if ($command_version eq 'dpkg') {
 	    @changes = sort { -M $a <=> -M $b } @changes;
 	    $changes = $changes[0];
 	}
+    } elsif ($emulate_dpkgbp == 0) {
+	unshift @dpkg_opts, ($checkbuilddep ? "-D" : "-d");
+	unshift @dpkg_opts, "-r$root_command" if $root_command;
+	system_withecho('dpkg-buildpackage', @dpkg_opts);
+
+	chdir '..' or fatal "can't chdir: $!";
     } else {
 	# Not using dpkg-cross, so we emulate dpkg-buildpackage ourselves
 	# We emulate the version found in dpkg-buildpackage-snapshot in

@@ -37,6 +37,13 @@ devscripts (2.10.26) UNRELEASED; urgency=low
   * debian/control:
     + Suggest instead of Recommending gnuplot and cvs-buildpackage
     + Suggest svn-buildpackage (Closes: #476240)
+  * debuild:
+    + Run dpkg-buildpackage directly where possible, rather than emulating it.
+      Emulation will still be used if any of the clean, dpkg-source, build,
+      binary, dpkg-genchanges or final-clean hooks are defined, as dpkg
+      does not currently support them.
+    + Make it clearer that a particular invocation is using the emulated
+      dpkg-buildpackage, and why.
   * licensecheck: Replace a literal copyright symbol with a hex escape
     so that the package builds using etch's po4a (Closes: #476251)
   * mergechanges:
