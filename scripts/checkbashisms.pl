@@ -26,6 +26,8 @@
 use strict;
 use Getopt::Long;
 
+sub init_hashes;
+
 (my $progname = $0) =~ s|.*/||;
 
 my $usage = <<"EOF";
@@ -66,6 +68,10 @@ if ($opt_help) { print $usage; exit 0; }
 if ($opt_version) { print $version; exit 0; }
 
 my $status = 0;
+my $makefile = 0;
+my (%bashisms, %string_bashisms);
+
+init_hashes;
 
 foreach my $filename (@ARGV) {
     my $check_lines_count = -1;
@@ -95,7 +101,6 @@ foreach my $filename (@ARGV) {
     my $last_continued = 0;
     my $continued = 0;
     my $found_rules = 0;
-    my $makefile = 0;
 
     while (<C>) {
 	next unless ($check_lines_count == -1 or $. <= $check_lines_count);
@@ -104,7 +109,13 @@ foreach my $filename (@ARGV) {
 	    if (m,^\#!\s*(\S+),) {
 		my $interpreter = $1;
 
-		$makefile = 1 if $interpreter =~ m,/make$,;
+		if ($interpreter =~ m,/make$,) {
+		    init_hashes if !$makefile;
+		    $makefile = 1;
+		} else {
+		    init_hashes if $makefile;
+		    $makefile = 0;
+		}
 		next if $opt_force;
 
 		if ($interpreter =~ m,/bash$,) {
@@ -181,91 +192,6 @@ foreach my $filename (@ARGV) {
 	    my $found = 0;
 	    my $match = '';
 	    my $explanation = '';
-	    my %bashisms = (
-		'(?:^|\s+)function\s+\w+' =>   q<'function' is useless>,
-		'(?:^|\s+)select\s+\w+' =>     q<'select' is not POSIX>,
-		'(?:^|\s+)source\s+(?:\.\/|\/|\$)[^\s]+' =>
-		                               q<should be '.', not 'source'>,
-		'(\[|test|-o|-a)\s*[^\s]+\s+==\s' =>
-		                               q<should be 'b = a'>,
-		'\s\|\&' =>                    q<pipelining is not POSIX>,
-		'[^\\\]\{([^\s\\\}]+?,)+[^\\\}\s]+\}' =>
-		                               q<brace expansion>,
-		'(?:^|\s+)\w+\[\d+\]=' =>      q<bash arrays, H[0]>,
-		'(?:^|\s+)(read\s*(-[^r])?(?:;|$))' => q<should be read [-r] variable>,
-		'(?:^|\s+)echo\s+-[e]' =>      q<echo -e>,
-		'(?:^|\s+)exec\s+-[acl]' =>    q<exec -c/-l/-a name>,
-		'(?:^|\s+)let\s' =>            q<let ...>,
-		'(?<![\$\(])\(\(.*\)\)' =>     q<'((' should be '$(('>,
-		'(\[|test)\s+-a' =>            q<test with unary -a (should be -e)>,
-		'\&>' =>	               q<should be \>word 2\>&1>,
-		'(<\&|>\&)\s*((-|\d+)[^\s;|)`&\\\\]|[^-\d\s])' =>
-					       q<should be \>word 2\>&1>,
-		'(?:^|\s+)kill\s+-[^sl]\w*' => q<kill -[0-9] or -[A-Z]>,
-		'(?:^|\s+)trap\s+["\']?.*["\']?\s+.*[1-9]' => q<trap with signal numbers>,
-		'\[\[(?!:)' => q<alternative test command ([[ foo ]] should be [ foo ])>,
-		'/dev/(tcp|udp)'	    => q</dev/(tcp|udp)>,
-		'(?:^|\s+)suspend\s' =>        q<suspend>,
-		'(?:^|\s+)caller\s' =>         q<caller>,
-#		'(?:^|\s+)complete\s' =>       q<complete>,
-		'(?:^|\s+)compgen\s' =>        q<compgen>,
-		'(?:^|\s+)declare\s' =>        q<declare>,
-		'(?:^|\s+)typeset\s' =>        q<typeset>,
-		'(?:^|\s+)disown\s' =>         q<disown>,
-		'(?:^|\s+)builtin\s' =>        q<builtin>,
-		'(?:^|\s+)set\s+-[BHT]+' =>    q<set -[BHT]>,
-		'(?:^|\s+)alias\s+-p' =>       q<alias -p>,
-		'(?:^|\s+)unalias\s+-a' =>     q<unalias -a>,
-		'(?:^|\s+)local\s+-[a-zA-Z]+' => q<local -opt>,
-		'(?:^|\s+)local\s+\w+=' =>     q<local foo=bar>,
-		'(?:^|\s+)\s*\(?\w*[^\(\w\s]+\S*?\s*[^\"]\(\)' => q<function names should only contain [a-z0-9_]>,
-		'(?:^|\s+)(push|pod)d\b' =>    q<(push|pod)d>,
-		'(?:^|\s+)export\s+-[^p]' =>   q<export only takes -p as an option>,
-		'(?:^|\s+)ulimit\b' =>         q<ulimit>,
-		'(?:^|\s+)shopt\b' =>          q<shopt>,
-	    );
-
-	    my %string_bashisms = (
-		'\$\[\w+\]' =>                 q<arithmetic not allowed>,
-		'\$\{\w+\:\d+(?::\d+)?\}' =>   q<${foo:3[:1]}>,
-		'\$\{!\w+[\@*]\}' =>           q<${!prefix[*|@]>,
-		'\$\{!\w+\}' =>                q<${!name}>,
-		'\$\{\w+(/.+?){1,2}\}' =>      q<${parm/?/pat[/str]}>,
-		'\$\{\#?\w+\[[0-9\*\@]+\]\}' => q<bash arrays, ${name[0|*|@]}>,
-		'\$\{?RANDOM\}?\b' =>          q<$RANDOM>,
-		'\$\{?(OS|MACH)TYPE\}?\b'   => q<$(OS|MACH)TYPE>,
-		'\$\{?HOST(TYPE|NAME)\}?\b' => q<$HOST(TYPE|NAME)>,
-		'\$\{?DIRSTACK\}?\b'        => q<$DIRSTACK>,
-		'\$\{?EUID\}?\b'	    => q<$EUID should be "id -u">,
-		'\$\{?SECONDS\}?\b'	    => q<$SECONDS>,
-		'\$\{?BASH_[A-Z]+\}?\b'     => q<$BASH_SOMETHING>,
-		'\$\{?SHELLOPTS\}?\b'       => q<$SHELLOPTS>,
-		'<<<'                       => q<\<\<\< here string>,
-	    );
-
-	    if ($opt_echo) {
-		$bashisms{'echo\s+-[n]'} = q<echo -n>;
-	    }
-
-	    if ($makefile) {
-		$bashisms{'(\$\(|\`)\s*\<\s*([^\s\)]{2,}|[^DF])\s*(\)|\`)'} =
-		    q<'$(\< foo)' should be '$(cat foo)'>;
-	    } else {
-		$bashisms{'(?:^|\s+)\w+\+='} = q<should be VAR="${VAR}foo">;
-		$bashisms{'(\$\(|\`)\s*\<\s*\S+\s*(\)|\`)'} = q<'$(\< foo)' should be '$(cat foo)'>;
-	    }
-	    
-	    if ($opt_extra) {
-		$string_bashisms{'\$\{?BASH\}?\b'} = q<$BASH>;
-		$string_bashisms{'(?:^|\s+)RANDOM='} = q<RANDOM=>;
-		$string_bashisms{'(?:^|\s+)(OS|MACH)TYPE='} = q<(OS|MACH)TYPE=>;
-		$string_bashisms{'(?:^|\s+)HOST(TYPE|NAME)='} = q<HOST(TYPE|NAME)=>;
-		$string_bashisms{'(?:^|\s+)DIRSTACK='} = q<DIRSTACK=>;
-		$string_bashisms{'(?:^|\s+)EUID='} = q<EUID=>;
-		$string_bashisms{'(?:^|\s+)BASH(_[A-Z]+)?='} = q<BASH(_SOMETHING)=>;
-		$string_bashisms{'(?:^|\s+)SHELLOPTS='} = q<SHELLOPTS=>;
-	    }
-
 	    my $line = $_;
 
 	    if ($quote_string ne "") {
@@ -428,3 +354,89 @@ sub script_is_evil_and_wrong {
     return $ret;
 }
 
+sub init_hashes {
+    %bashisms = (
+	'(?:^|\s+)function\s+\w+' =>   q<'function' is useless>,
+	'(?:^|\s+)select\s+\w+' =>     q<'select' is not POSIX>,
+	'(?:^|\s+)source\s+(?:\.\/|\/|\$)[^\s]+' =>
+	                               q<should be '.', not 'source'>,
+	'(\[|test|-o|-a)\s*[^\s]+\s+==\s' =>
+	                               q<should be 'b = a'>,
+	'\s\|\&' =>                    q<pipelining is not POSIX>,
+	'[^\\\]\{([^\s\\\}]+?,)+[^\\\}\s]+\}' =>
+	                               q<brace expansion>,
+	'(?:^|\s+)\w+\[\d+\]=' =>      q<bash arrays, H[0]>,
+	'(?:^|\s+)(read\s*(-[^r])?(?:;|$))' => q<should be read [-r] variable>,
+	'(?:^|\s+)echo\s+-[e]' =>      q<echo -e>,
+	'(?:^|\s+)exec\s+-[acl]' =>    q<exec -c/-l/-a name>,
+	'(?:^|\s+)let\s' =>            q<let ...>,
+	'(?<![\$\(])\(\(.*\)\)' =>     q<'((' should be '$(('>,
+	'(\[|test)\s+-a' =>            q<test with unary -a (should be -e)>,
+	'\&>' =>	               q<should be \>word 2\>&1>,
+	'(<\&|>\&)\s*((-|\d+)[^\s;|)`&\\\\]|[^-\d\s])' =>
+				       q<should be \>word 2\>&1>,
+	'(?:^|\s+)kill\s+-[^sl]\w*' => q<kill -[0-9] or -[A-Z]>,
+	'(?:^|\s+)trap\s+["\']?.*["\']?\s+.*[1-9]' => q<trap with signal numbers>,
+	'\[\[(?!:)' => q<alternative test command ([[ foo ]] should be [ foo ])>,
+	'/dev/(tcp|udp)'	    => q</dev/(tcp|udp)>,
+	'(?:^|\s+)suspend\s' =>        q<suspend>,
+	'(?:^|\s+)caller\s' =>         q<caller>,
+#	'(?:^|\s+)complete\s' =>       q<complete>,
+	'(?:^|\s+)compgen\s' =>        q<compgen>,
+	'(?:^|\s+)declare\s' =>        q<declare>,
+	'(?:^|\s+)typeset\s' =>        q<typeset>,
+	'(?:^|\s+)disown\s' =>         q<disown>,
+	'(?:^|\s+)builtin\s' =>        q<builtin>,
+	'(?:^|\s+)set\s+-[BHT]+' =>    q<set -[BHT]>,
+	'(?:^|\s+)alias\s+-p' =>       q<alias -p>,
+	'(?:^|\s+)unalias\s+-a' =>     q<unalias -a>,
+	'(?:^|\s+)local\s+-[a-zA-Z]+' => q<local -opt>,
+	'(?:^|\s+)local\s+\w+=' =>     q<local foo=bar>,
+	'(?:^|\s+)\s*\(?\w*[^\(\w\s]+\S*?\s*[^\"]\(\)' => q<function names should only contain [a-z0-9_]>,
+	'(?:^|\s+)(push|pod)d\b' =>    q<(push|pod)d>,
+	'(?:^|\s+)export\s+-[^p]' =>   q<export only takes -p as an option>,
+	'(?:^|\s+)ulimit\b' =>         q<ulimit>,
+	'(?:^|\s+)shopt\b' =>          q<shopt>,
+    );
+
+    %string_bashisms = (
+	'\$\[\w+\]' =>                 q<arithmetic not allowed>,
+	'\$\{\w+\:\d+(?::\d+)?\}' =>   q<${foo:3[:1]}>,
+	'\$\{!\w+[\@*]\}' =>           q<${!prefix[*|@]>,
+	'\$\{!\w+\}' =>                q<${!name}>,
+	'\$\{\w+(/.+?){1,2}\}' =>      q<${parm/?/pat[/str]}>,
+	'\$\{\#?\w+\[[0-9\*\@]+\]\}' => q<bash arrays, ${name[0|*|@]}>,
+	'\$\{?RANDOM\}?\b' =>          q<$RANDOM>,
+	'\$\{?(OS|MACH)TYPE\}?\b'   => q<$(OS|MACH)TYPE>,
+	'\$\{?HOST(TYPE|NAME)\}?\b' => q<$HOST(TYPE|NAME)>,
+	'\$\{?DIRSTACK\}?\b'        => q<$DIRSTACK>,
+	'\$\{?EUID\}?\b'	    => q<$EUID should be "id -u">,
+	'\$\{?SECONDS\}?\b'	    => q<$SECONDS>,
+	'\$\{?BASH_[A-Z]+\}?\b'     => q<$BASH_SOMETHING>,
+	'\$\{?SHELLOPTS\}?\b'       => q<$SHELLOPTS>,
+	'<<<'                       => q<\<\<\< here string>,
+    );
+
+    if ($opt_echo) {
+	$bashisms{'echo\s+-[n]'} = q<echo -n>;
+    }
+
+    if ($makefile) {
+	$bashisms{'(\$\(|\`)\s*\<\s*([^\s\)]{2,}|[^DF])\s*(\)|\`)'} =
+	    q<'$(\< foo)' should be '$(cat foo)'>;
+    } else {
+	$bashisms{'(?:^|\s+)\w+\+='} = q<should be VAR="${VAR}foo">;
+	$bashisms{'(\$\(|\`)\s*\<\s*\S+\s*(\)|\`)'} = q<'$(\< foo)' should be '$(cat foo)'>;
+    }
+	    
+    if ($opt_extra) {
+	$string_bashisms{'\$\{?BASH\}?\b'} = q<$BASH>;
+	$string_bashisms{'(?:^|\s+)RANDOM='} = q<RANDOM=>;
+	$string_bashisms{'(?:^|\s+)(OS|MACH)TYPE='} = q<(OS|MACH)TYPE=>;
+	$string_bashisms{'(?:^|\s+)HOST(TYPE|NAME)='} = q<HOST(TYPE|NAME)=>;
+	$string_bashisms{'(?:^|\s+)DIRSTACK='} = q<DIRSTACK=>;
+	$string_bashisms{'(?:^|\s+)EUID='} = q<EUID=>;
+	$string_bashisms{'(?:^|\s+)BASH(_[A-Z]+)?='} = q<BASH(_SOMETHING)=>;
+	$string_bashisms{'(?:^|\s+)SHELLOPTS='} = q<SHELLOPTS=>;
+    }
+}

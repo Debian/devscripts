@@ -11,6 +11,10 @@ devscripts (2.10.26) UNRELEASED; urgency=low
       Raphael Geissert
     + Fix a couple of the quoted block detection checks so as not to trigger
       on escaped quotes
+    + Only rebuild the lists of expressions to search for when required,
+      rather than for each line of each file
+    + Disable "makefile mode" after checking a makefile if the next file to
+      check isn't a makefile
   * debchange:
     + Allow a changelog with no entries to be created. (Note that
       such a changelog will cause a warning from dpkg-parsehchangelog the
