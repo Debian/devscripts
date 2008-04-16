@@ -51,6 +51,11 @@ devscripts (2.10.26) UNRELEASED; urgency=low
     + Add *FLAGS and *FLAGS_EXTEND support to the emulated dpkg-buildpackage
     + When running dpkg-buildpackage directly, pass through unrecognised
       options (with a warning) rather than aborting the build ourselves
+  * dscverify:
+    + Update for the .changes and .dsc format introduced with dpkg 1.14.17:
+      - Handle Checksums-Sha(1|256)
+      - Reject .changes files with unsupported Formats and any file with
+        unsupported Checksums fields
   * licensecheck: Replace a literal copyright symbol with a hex escape
     so that the package builds using etch's po4a (Closes: #476251)
   * mergechanges:

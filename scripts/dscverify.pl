@@ -143,6 +143,13 @@ sub process_file {
 	return;
     }
 
+    if ($file =~ /\.changes$/ and $out =~ /^Format:\s*(.*)$/mi) {
+	if ($1 ne "1.7" and $1 ne "1.8") {
+	    xwarn "$file is an unsupported format: $1\n";
+	    return;
+	}
+    }
+
     if ($verify_sigs == 1) {
 	$sigcheck = check_signature $filebase, @rings;
 	if ($sigcheck) {
@@ -153,12 +160,24 @@ sub process_file {
 	}
     }
 
-    my @spec = map { split /\n/ } $out =~ /^Files:\s*\n((?:[ \t]+.*\n)+)/mg;
+    my @spec = map { split /\n/ } $out =~ /^Files:\s*\n((?:[ \t]+.*\n)+)/mgi;
     unless (@spec) {
 	xwarn "no file spec lines in $file\n";
 	return;
     }
 
+    my @checksums = map { split /\n/ } $out =~ /^Checksums-(\S+):\s*\n/mgi;
+    @checksums = grep {!/^Sha(1|256)$/i} @checksums;
+    if (@checksums) {
+	xwarn "$file contains unsupported checksums:\n"
+	    . join (", ", @checksums) . "\n";
+	return;
+    }
+
+    my %sha1s = map { reverse split /(\S+)\s*$/m }
+	$out =~ /^Checksums-Sha1:\s*\n((?:[ \t]+.*\n)+)/mgi;
+    my %sha256s = map { reverse split /(\S+)\s*$/m }
+	$out =~ /^Checksums-Sha256:\s*\n((?:[ \t]+.*\n)+)/mgi;
     my $md5o = Digest::MD5->new or xdie "can't initialize MD5\n";
     my $any;
     for (@spec) {
@@ -167,6 +186,37 @@ sub process_file {
 	    next;
 	}
 	my ($md5, $size, $filename) = ($1, $2, $3);
+	my ($sha1, $sha1size, $sha256, $sha256size);
+
+	if (keys %sha1s) {
+	    $sha1 = $sha1s{$filename};
+	    unless (defined $sha1) {
+		xwarn "no sha1 for `$filename' in $file\n";
+		next;
+	    }
+	    unless ($sha1 =~ /^\s+([0-9a-f]{40})\s+(\d+)\s*$/) {
+		xwarn "invalid sha1 spec in $file `$sha1'\n";
+		next;
+	    }
+	    ($sha1, $sha1size) = ($1, $2);
+	} else {
+	    $sha1size = $size;
+	}
+
+	if (keys %sha256s) {
+	    $sha256 = $sha256s{$filename};
+	    unless (defined $sha256) {
+		xwarn "no sha256 for `$filename' in $file\n";
+		next;
+	    }
+	    unless ($sha256 =~ /^\s+([0-9a-f]{64})\s+(\d+)\s*$/) {
+		xwarn "invalid sha256 spec in $file `$sha256'\n";
+		next;
+	    }
+	    ($sha256, $sha256size) = ($1, $2);
+	} else {
+	    $sha256size = $size;
+	}
 
 	unless (open FILE, $filename) {
 	    if ($! == ENOENT) {
@@ -191,13 +241,33 @@ sub process_file {
 	    xwarn "invalid file length for $filename (wanted $size got $this_size)\n";
 	    next;
 	}
+	unless ($this_size == $sha1size) {
+	    xwarn "invalid sha1 file length for $filename (wanted $sha1size got $this_size)\n";
+	    next;
+	}
+	unless ($this_size == $sha256size) {
+	    xwarn "invalid sha256 file length for $filename (wanted $sha256size got $this_size)\n";
+	    next;
+	}
 
 	# MD5
 	$md5o->reset;
 	$md5o->addfile(*FILE);
 	my $this_md5 = $md5o->hexdigest;
+	my $this_sha1 = `sha1sum $filename | cut -d' ' -f1`;
+	chomp $this_sha1;
+	my $this_sha256 =`sha256sum $filename | cut -d' ' -f1`;
+	chomp $this_sha256;
 	unless ($this_md5 eq $md5) {
 	    xwarn "MD5 mismatch for $filename (wanted $md5 got $this_md5)\n";
+	    next;
+	}
+	unless (! keys %sha1s or $this_sha1 eq $sha1) {
+	    xwarn "SHA1 mismatch for $filename (wanted $sha1 got $this_sha1)\n";
+	    next;
+	}
+	unless (! keys %sha256s or $this_sha256 eq $sha256) {
+	    xwarn "SHA256 mismatch for $filename (wanted $sha256 got $this_sha256)\n";
 	    next;
 	}
 
