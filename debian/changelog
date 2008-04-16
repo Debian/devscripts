@@ -43,7 +43,7 @@ devscripts (2.10.26) UNRELEASED; urgency=low
     + Run dpkg-buildpackage directly where possible, rather than emulating it.
       Emulation will still be used if any of the clean, dpkg-source, build,
       binary, dpkg-genchanges or final-clean hooks are defined, as dpkg
-      does not currently support them.
+      does not currently support them. (Closes: #476100)
     + Make it clearer that a particular invocation is using the emulated
       dpkg-buildpackage, and why.
     + Automatically preserve the (C, CPP, CXX, LD and F)FLAGS variables and
