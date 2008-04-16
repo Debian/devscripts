@@ -144,8 +144,16 @@ sub process_file {
     }
 
     if ($file =~ /\.changes$/ and $out =~ /^Format:\s*(.*)$/mi) {
-	if ($1 ne "1.7" and $1 ne "1.8") {
-	    xwarn "$file is an unsupported format: $1\n";
+	my $format = $1;
+	unless ($format =~ /^(\d+)\.(\d+)$/) {
+	    xwarn "$file has an unrecognised format: $format\n";
+	    return;
+	}
+	my ($major, $minor) = split /\./, $format;
+	$major += 0;
+	$minor += 0;
+	unless ($major == 1 and $minor <= 8) {
+	    xwarn "$file is an unsupported format: $format\n";
 	    return;
 	}
     }
