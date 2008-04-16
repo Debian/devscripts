@@ -47,8 +47,8 @@ devscripts (2.10.26) UNRELEASED; urgency=low
     + Make it clearer that a particular invocation is using the emulated
       dpkg-buildpackage, and why.
     + Automatically preserve the (C, CPP, CXX, LD and F)FLAGS variables and
-      the corresponding *FLAGS_EXTEND variables
-    + Add *FLAGS and *FLAGS_EXTEND support to the emulated dpkg-buildpackage
+      the corresponding *FLAGS_APPEND variables
+    + Add *FLAGS and *FLAGS_APPEND support to the emulated dpkg-buildpackage
     + When running dpkg-buildpackage directly, pass through unrecognised
       options (with a warning) rather than aborting the build ourselves
   * dscverify:
