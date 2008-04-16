@@ -27,7 +27,16 @@ Output version information and exit.
 Existence of this file is tested before any patch is extracted.
 .br 
 \fIdebian/patches\fP 
-When present and is a directory, patches are extracted in that directory.
-.SH "AUTHORS"
+When present and is a directory, patches are extracted in that directory,
+unless \fIDEB_PATCHES\fP is defined (read the "ENVIRONMENT VARIABLES" section below).
+.SH "ENVIRONMENT VARIABLES"
+.TP
+\fIDEB_PATCHES\fP
+When defined and points to an existing directory, patches are extracted in that directory
+and not under debian nor debian/patches.
+.SH "SEE ALSO"
+.LP
+\fBcombinediff\fR(1)
+.SH "AUTHOR"
 .LP 
 Raphael Geissert <atomo64@gmail.com>

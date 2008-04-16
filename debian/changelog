@@ -51,6 +51,7 @@ devscripts (2.10.26) UNRELEASED; urgency=low
     + Add *FLAGS and *FLAGS_APPEND support to the emulated dpkg-buildpackage
     + When running dpkg-buildpackage directly, pass through unrecognised
       options (with a warning) rather than aborting the build ourselves
+  * diff2patches: Update to new upstream version.
   * dscverify:
     + Update for the .changes and .dsc format introduced with dpkg 1.14.17:
       - Handle Checksums-Sha(1|256)
