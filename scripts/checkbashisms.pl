@@ -212,8 +212,12 @@ foreach my $filename (@ARGV) {
 		    my $count = () = $templine =~ /(^|[^\\])$quote_string/g;
 		    next if $count == 0;
 
-		    $count = () = $rest =~ /(^|[^\\])$quote_string/g;
-		    if ($count % 2 == 1 or $count == 0) {
+		    $templine = $rest;
+		    # Remove "" or ''
+		    $templine =~ s/(^|[^\\])$quote_string$quote_string/$1/g;
+
+		    $count = () = $templine =~ /(^|[^\\])$quote_string/g;
+		    if ($count % 2 == 0) {
 			# Quoted block ends on this line
 			# Ignore everything before the closing quote
 			$line = $rest || '';
