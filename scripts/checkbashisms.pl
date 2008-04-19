@@ -179,8 +179,9 @@ foreach my $filename (@ARGV) {
 	    $_ = $orig_line;
 	}
 
-	if ($cat_string ne "" and m/^$cat_string/) {
+	if ($cat_string ne "" and m/^\Q$cat_string\E$/) {
 	    $cat_string = "";
+	    next;
 	}
 	my $within_another_shell = 0;
 	if (m,(^|\s+)((/usr)?/bin/)?((b|d)?a|k|z|t?c)sh\s+-c\s*.+,) {
@@ -285,8 +286,10 @@ foreach my $filename (@ARGV) {
 	    $line =~ s/(^|[^\\\'\"])\'\"\'/$1/g;
 
 	    # Ignore anything inside single quotes; it could be an
-	    # argument to grep or the like.
-	    $line =~ s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
+	    # argument to grep or the like. The only exception is
+	    # if the quote is immediately preceeded by a <, so we
+	    # can match "foo <<'xyz'" as a heredoc later
+	    $line =~ s/(^|[^<\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
 
 	    while (my ($re,$expl) = each %string_bashisms) {
 		if ($line =~ m/($re)/) {
@@ -311,9 +314,9 @@ foreach my $filename (@ARGV) {
 
 	    # Only look for the beginning of a heredoc here, after we've
 	    # stripped out quoted material, to avoid false positives.
-	    if (m/(?:^|[^<])\<\<\s*[\'\"\\]?(\w+)[\'\"]?/) {
-		$cat_string = $1;
-	    }
+	    if (m/(?:^|[^<])\<\<\s*(?:[\\]?(\w+)|[\'\"](.*?)[\'\"])/) {
+		$cat_string = $1 || $2;
+            }
 	}
     }
 

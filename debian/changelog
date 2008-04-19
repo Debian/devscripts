@@ -16,6 +16,14 @@ devscripts (2.10.26) UNRELEASED; urgency=low
       rather than for each line of each file
     + Disable "makefile mode" after checking a makefile if the next file to
       check isn't a makefile
+    + Several enhancements to heredoc detection:
+      - Heredoc delimiters may contain "non word" characters if the delimiter
+        is quoted. As a side-effect, delimiters which match one of the bashism
+        expressions may now be flagged due to the order in which checks are
+        performed.
+      - SUS specifies that a heredoc ends on a line consisting solely of a
+        delimiter, so we enforce that and also don't check such lines.
+      - Delimiters may now contain regular expression meta-characters.
   * debchange:
     + Allow a changelog with no entries to be created. (Note that
       such a changelog will cause a warning from dpkg-parsehchangelog the
