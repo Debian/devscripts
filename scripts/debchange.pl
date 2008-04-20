@@ -684,23 +684,23 @@ if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and
     ! $opt_create and ! $opt_a_passed and ! $opt_r) {
 
     if (-f 'debian/control') {
-	fatal "$progname: Unable to parse control file: $lpdc_broken\n"
-	    unless have_lpdc();
+	if (have_lpdc()) {
+	    my $parser = new Parse::DebControl;
+	    my $deb822 = $parser->parse_file('debian/control', {stripComments => 'true'});
+	    my $uploader = decode_utf8($deb822->[0]->{'Uploaders'}) || '';
+	    my $maintainer = decode_utf8($deb822->[0]->{'Maintainer'});
+	    my @uploaders = split(/,\s+/, $uploader);
 
-	my $parser = new Parse::DebControl;
-	my $deb822 = $parser->parse_file('debian/control', {stripComments => 'true'});
-	my $uploader = decode_utf8($deb822->[0]->{'Uploaders'}) || '';
-	my $maintainer = decode_utf8($deb822->[0]->{'Maintainer'});
-	my @uploaders = split(/,\s+/, $uploader);
+	    my $packager = "$MAINTAINER <$EMAIL>";
 
-	my $packager = "$MAINTAINER <$EMAIL>";
-
-	if (! grep { $_ eq $packager } ($maintainer, @uploaders) and
-	    $packager ne $changelog{'Maintainer'}) {
-	    $opt_n=1;
-	    $opt_a=0;
+	    if (! grep { $_ eq $packager } ($maintainer, @uploaders) and
+		$packager ne $changelog{'Maintainer'}) {
+		$opt_n=1;
+		$opt_a=0;
+	    }
+	} else {
+	    warn "$progname: skipping automatic NMU detection: $lpdc_broken\n";
 	}
-
     } else {
 	fatal "Missing file debian/control";
     }

@@ -422,7 +422,7 @@ sub init_hashes {
 	'\$\{?BASH_[A-Z]+\}?\b'     => q<$BASH_SOMETHING>,
 	'\$\{?SHELLOPTS\}?\b'       => q<$SHELLOPTS>,
 	'<<<'                       => q<\<\<\< here string>,
-	'(?:^|\s+)<\(.*?\)'	    => q<\<() process substituion>,
+	'(?:^|\s+)[<>]\(.*?\)'	    => q<\<() process substituion>,
     );
 
     if ($opt_echo) {

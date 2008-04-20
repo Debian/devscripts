@@ -37,6 +37,7 @@ devscripts (2.10.26) UNRELEASED; urgency=low
     + Fix a side-effect of the automagic NMU detection functionality which
       could lead to a spurious stanza being added to the end of the changelog
     + Skip automatic NMU detection if -a or -r was passed on the command line
+      or if libparse-debcontrol-perl is not installed
     + Add {oldstable-,testing-,}proposed-updates to the list of supported
       distributions (Closes: #476264)
     + Add oldstable to the list of supported distributions, as updates
@@ -57,6 +58,8 @@ devscripts (2.10.26) UNRELEASED; urgency=low
   * debian/control:
     + Suggest instead of Recommending gnuplot and cvs-buildpackage
     + Suggest svn-buildpackage (Closes: #476240)
+    + Drop libparse-debcontrol-perl build-dependency now that debchange no
+      longer fails in the absence of the package
   * debuild:
     + Run dpkg-buildpackage directly where possible, rather than emulating it.
       Emulation will still be used if any of the clean, dpkg-source, build,
