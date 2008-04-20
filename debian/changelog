@@ -27,6 +27,7 @@ devscripts (2.10.26) UNRELEASED; urgency=low
       - Delimiters may now contain regular expression meta-characters.
     + Match shell script wrappers that don't pass on parameters when execing
       (for example for scripts which take all input from STDIN)
+    + Add a check for process substitution (using "foo <(bar)")
   * debchange:
     + Allow a changelog with no entries to be created. (Note that
       such a changelog will cause a warning from dpkg-parsehchangelog the
