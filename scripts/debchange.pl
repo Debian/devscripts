@@ -319,6 +319,8 @@ GetOptions("help|h" => \$opt_help,
 	   "no-conf" => \$opt_noconf,
 	   "release-heuristic=s" => \$opt_release_heuristic,
 	   "empty" => \$opt_empty,
+	   "nonmu" => sub { $opt_auto_nmu = 0; },
+	   "no-nmu" => sub { $opt_auto_nmu = 0; },
 	   )
     or die "Usage: $progname [options] [changelog entry]\nRun $progname --help for more details\n";
 
