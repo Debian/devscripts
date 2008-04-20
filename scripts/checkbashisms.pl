@@ -152,7 +152,7 @@ foreach my $filename (@ARGV) {
 		$_ = $1 if $1;
 	    } 
 
-	    last if m%^(export )?SHELL=/bin/bash\s*$%;
+	    last if m%^(export )?SHELL\s*=\s*/bin/bash\s*$%;
 
 	    s/^\t//;
 	    s/(\$){2}/$1/;
