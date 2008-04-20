@@ -1,5 +1,6 @@
 devscripts (2.10.26) UNRELEASED; urgency=low
 
+  [ Adam D. Barratt ]
   * bts: Update documentation for "forwarded" to indicate that it may also
     be used with a URL (for instance, for an upstream bug tracker)
     (Closes: #475896)
@@ -83,7 +84,10 @@ devscripts (2.10.26) UNRELEASED; urgency=low
     the most recent (assuming it is in the list retrieved by the watch file)
     (Closes: #475828)
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 09 Apr 2008 18:39:33 +0100
+  [ Christoph Berg ]
+  * dcmd: If no command is given, print filenames line-by-line.
+
+ -- Christoph Berg <myon@debian.org>  Sun, 20 Apr 2008 15:29:47 +0200
 
 devscripts (2.10.25) unstable; urgency=low
 

@@ -3,6 +3,7 @@
 # dcmd: expand file lists of .dsc/.changes files in the command line
 #
 # Copyright (C) 2008 Romain Francoise <rfrancoise@debian.org>
+# Copyright (C) 2008 Christoph Berg <myon@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -60,7 +61,7 @@ RE="^ [0-9a-f]{32} [0-9]+ ([a-z1]+ [a-z]+ )?(.*)$"
 maybe_expand()
 {
     local dir
-    if [ -f "$1" ] && (endswith "$1" .changes || endswith "$1" .dsc); then
+    if [ -e "$1" ] && (endswith "$1" .changes || endswith "$1" .dsc); then
 	dir=$(dirname "$1")
 	sed -rn "s,$RE,$dir/\2,p" <"$1" | sed 's,^\./,,'
     fi
@@ -72,17 +73,19 @@ if [ "$1" = "--version" ] || [ "$1" = "-v" ]; then
 elif [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
     usage
     exit 0
-elif [ $# -lt 2 ]; then
-    usage
-    exit 1
 fi
-
-cmd=$1
-shift
 
 args=""
 for arg in "$@"; do
     args="$args $(maybe_expand "$arg") $arg"
 done
 
-exec $cmd $args
+if [ -e "$1" ] && (endswith "$1" .changes || endswith "$1" .dsc); then
+    set -- $args
+    for arg in $args; do
+	echo $arg
+    done
+    exit 0
+fi
+
+exec $args

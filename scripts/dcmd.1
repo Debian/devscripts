@@ -2,12 +2,16 @@
 .SH NAME
 dcmd \- expand file lists of .dsc/.changes files in the command line
 .SH SYNOPSIS
-\fBdcmd\fR [command] [\fIchanges-file\fR|\fIdsc-file\fR] [...]
+\fBdcmd\fR [\fIcommand\fR] [\fIchanges-file\fR|\fIdsc-file\fR] [\fI...\fR]
 .SH DESCRIPTION
 \fBdcmd\fR replaces any reference to a .dsc or .changes file in the
 command line with the list of files in its 'Files' section, plus the
 file itself.  It allows easy manipulation of all the files involved in
 an upload (for changes files) or a source package (for dsc files).
+
+If \fIcommand\fR is omitted (that is the first argument is an existing .dsc
+or .changes file), the expanded list of files is printed to stdout, one file
+by line. Useful for usage in backticks.
 .SH "EXAMPLES"
 Copy the result of a build to another machine:
 
