@@ -34,8 +34,7 @@ devscripts (2.10.26) UNRELEASED; urgency=low
       for NMUs (Closes: #475750)
     + Fix a side-effect of the automagic NMU detection functionality which
       could lead to a spurious stanza being added to the end of the changelog
-    + Skip automatic NMU detection if -a was explicitly passed on the command
-      line
+    + Skip automatic NMU detection if -a or -r was passed on the command line
     + Add {oldstable-,testing-,}proposed-updates to the list of supported
       distributions (Closes: #476264)
     + Add oldstable to the list of supported distributions, as updates

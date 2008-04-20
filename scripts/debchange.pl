@@ -679,7 +679,7 @@ if (! $opt_m) {
 
 if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and 
     ! $opt_qa and ! $opt_bpo and ! $opt_bn and ! $opt_n and ! $opt_c and
-    ! $opt_create and ! $opt_a_passed) {
+    ! $opt_create and ! $opt_a_passed and ! $opt_r) {
 
     if (-f 'debian/control') {
 	fatal "$progname: Unable to parse control file: $lpdc_broken\n"
