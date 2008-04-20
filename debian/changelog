@@ -41,10 +41,10 @@ devscripts (2.10.26) UNRELEASED; urgency=low
     + Add oldstable to the list of supported distributions, as updates
       to oldstable have been possible for some time
   * debcommit: Modify the "strip message" functionality so that:
-    - Changelog lines beginning with any of *, + or - are considered to
+    + Changelog lines beginning with any of *, + or - are considered to
       indicate a "change" for the purposes of deciding whether to strip 
       the message
-    - When trimming leading whitespace on continuation lines, only spaces 
+    + When trimming leading whitespace on continuation lines, only spaces 
       and tabs are considered rather than line breaks (Closes: #475337)
   * debdiff:
     + Make the diffstat header for comparisons between two Debian revisions
