@@ -95,6 +95,11 @@ Options:
          (i.e. only include the header and trailer lines)
   --package <package>
          Specify the package name when using --create (optional)
+  --auto-nmu
+         Attempt to intelligently determine whether a change to the
+         changelog represents an NMU (default)
+  --no-auto-nmu
+         Do not do so
   -n, --nmu
          Increment the Debian release number for a non-maintainer upload
   --bin-nmu
@@ -319,8 +324,7 @@ GetOptions("help|h" => \$opt_help,
 	   "no-conf" => \$opt_noconf,
 	   "release-heuristic=s" => \$opt_release_heuristic,
 	   "empty" => \$opt_empty,
-	   "nonmu" => sub { $opt_auto_nmu = 0; },
-	   "no-nmu" => sub { $opt_auto_nmu = 0; },
+	   "auto-nmu!" => \$opt_auto_nmu,
 	   )
     or die "Usage: $progname [options] [changelog entry]\nRun $progname --help for more details\n";
 

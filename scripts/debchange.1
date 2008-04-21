@@ -201,7 +201,7 @@ either appending a ".1" to a non-NMU version number or by incrementing
 an NMU version number, and add an NMU changelog comment.  This happens
 automatically if the packager is neither in the Maintainer nor the Uploaders
 field in \fIdebian/control\fR, unless \fBDEBCHANGE_AUTO_NMU\fR is set to
-\fIno\fR or the \fB\-\-no\-nmu\fR option is used.
+\fIno\fR or the \fB\-\-no\-auto\-nmu\fR option is used.
 .TP
 .BR \-\-bin\-nmu
 Increment the Debian release number for a binary non-maintainer upload
@@ -235,7 +235,11 @@ matches the specified pattern.
 Force the provided distribution to be used, even if it doesn't match the list of known 
 distributions (e.g. for unofficial distributions).
 .TP
-.BR \-\-no\-nmu
+.BR \-\-auto\-nmu
+Attempt to automatically determine whether a change to the changelog
+represents a Non Maintainer Upload.  This is the default.
+.TP
+.BR \-\-no\-auto\-nmu
 Disable automatic NMU detection.  Equivalent to setting
 \fBDEBCHANGE_AUTO_NMU\fR to \fIno\fR.
 .TP
