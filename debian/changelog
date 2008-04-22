@@ -1,6 +1,8 @@
 devscripts (2.10.27) UNRELEASED; urgency=low
 
-  * NOT RELEASED YET
+  * checkbashisms: When rebuilding the list of bashisms to check, ensure it is
+    based on whether the current file is a makefile, rather than whether the
+    previous file was. Thanks to Raphael Geissert for the brown paper bag.
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 21 Apr 2008 20:06:13 +0100
 

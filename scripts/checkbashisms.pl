@@ -110,10 +110,10 @@ foreach my $filename (@ARGV) {
 		my $interpreter = $1;
 
 		if ($interpreter =~ m,/make$,) {
-		    init_hashes if !$makefile;
+		    init_hashes if !$makefile++;
 		    $makefile = 1;
 		} else {
-		    init_hashes if $makefile;
+		    init_hashes if $makefile--;
 		    $makefile = 0;
 		}
 		next if $opt_force;
