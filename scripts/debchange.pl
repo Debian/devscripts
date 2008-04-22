@@ -727,13 +727,14 @@ if (@closes and $opt_query) { # and we have to query the BTS
 	my $bugs = Devscripts::Debbugs::select( "src:" . $PACKAGE );
 	my $statuses = Devscripts::Debbugs::status(
 	    map {[bug => $_, indicatesource => 1]} @{$bugs} );
-	if (not defined $bugs) {
-	    warn "$progname warning: Debbugs::status failed, so cannot query the bug-tracking system\n";
+	if ($statuses eq "") {
+	    warn "$progname warning: No bugs found for package $PACKAGE\n";
 	    $opt_query=0;
 	    $warnings++;
 	    # This will now go and execute the "if (@closes and ! $opt_query)" code
 	}
 	foreach my $close (@closes) {
+	    last unless $opt_query;
 	    if (exists $statuses->{$close}) {
 		my $title = $statuses->{$close}->{subject};
 		my $pkg = $statuses->{$close}->{package};
@@ -743,7 +744,7 @@ if (@closes and $opt_query) { # and we have to query the BTS
 	    else { # not our package, or wnpp
 		my $bug = Devscripts::Debbugs::status(
 		    [bug => $close, indicatesource => 1] );
-		if (not defined $bug) {
+		if ($bug eq "") {
 		    warn "$progname warning: unknown bug \#$close does not belong to $PACKAGE,\n  disabling closing changelog entry\n";
 		    $warnings++;
 		    push @closes_text, "Closes?? \#$close: UNKNOWN BUG IN WRONG PACKAGE!!\n";
