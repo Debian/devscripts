@@ -118,6 +118,8 @@ use File::Basename;
 use File::Copy qw/copy/;
 use File::Temp qw/tempdir/;
 use Cwd;
+use lib '/usr/share/devscripts';
+use Devscripts::Versort;
 
 my @files = ();	  # files to checkout
 
@@ -168,6 +170,10 @@ sub find_repo($) {
   my ($pkg) = @_;
   my @repo = (0, "");
   my $found = 0;
+  my $version = "";
+  my $type = "";
+  my $url = "";
+  my @repos = ();
 
   open(APT, "apt-cache showsrc $pkg |");
   while (my $line = <APT>) {
@@ -175,12 +181,24 @@ sub find_repo($) {
     chomp($line);
     if ($line =~ /^(x-)?vcs-(\w+):\s*(.*)$/i) {
       next if lc($2) eq "browser";
-      @repo = (lc($2), $3);
-      last;
+      ($type, $url) = (lc($2), $3);
+    } elsif ($line =~ /^Version:\s*(.*)$/i) {
+      $version = $1;
+    } elsif ($line =~ /^$/) {
+      push (@repos, [$version, $type, $url])
+        if ($version and $type and $url);
+      $version = "";
+      $type = "";
+      $url = "";
     }
   }
   close(APT);
   die "unknown package '$pkg'\n" unless $found;
+
+  if (@repos) {
+    @repos = Devscripts::Versort::versort(@repos);
+    @repo = ($repos[0][1], $repos[0][2])
+  }
   return @repo;
 }
 
@@ -189,6 +207,8 @@ sub find_browse($) {
   my ($pkg) = @_;
   my $browse = "";
   my $found = 0;
+  my $version = "";
+  my @browses;
 
   open(APT, "apt-cache showsrc $pkg |");
   while (my $line = <APT>) {
@@ -197,12 +217,22 @@ sub find_browse($) {
     if ($line =~ /^(x-)?vcs-(\w+):\s*(.*)$/i) {
       if (lc($2) eq "browser") {
         $browse = $3;
-        last;
       }
+    } elsif ($line =~ /^Version:\s*(.*)$/i) {
+      $version = $1;
+    } elsif ($line =~ /^$/) {
+      push(@browses, [$version, $browse])
+        if $version and $browse;
+      $version = "";
+      $browse = "";
     }
   }
   close(APT);
   die "unknown package '$pkg'\n" unless $found;
+  if (@browses) {
+    @browses = Devscripts::Versort::versort(@browses);
+    $browse = $browses[0][1];
+  }
   return $browse;
 }
 
