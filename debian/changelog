@@ -9,7 +9,7 @@ devscripts (2.10.27) UNRELEASED; urgency=low
       still matching 'cat <<"xyz"'
   * debchange: Correctly handle the BTS returning no bugs for a package when
     --closes is used (either because the package doesn't exist in the archive
-    or it has no open bugs)
+    or it has no open bugs) (Closes: #477398)
   * debcheckout: Use the Vcs-* headers from the highest available version
     rather than the first returned by "apt-get source" (Closes: #477386)
 
