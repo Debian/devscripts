@@ -285,11 +285,15 @@ foreach my $filename (@ARGV) {
 	    $line =~ s/(^|[^\\\'\"])\"\'\"/$1/g;
 	    $line =~ s/(^|[^\\\'\"])\'\"\'/$1/g;
 
+	    my $cat_line = $line;
+
 	    # Ignore anything inside single quotes; it could be an
-	    # argument to grep or the like. The only exception is
+	    # argument to grep or the like.
+	    $line =~ s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
+	    # As above, with the exception that we don't remove the string
 	    # if the quote is immediately preceeded by a <, so we
 	    # can match "foo <<'xyz'" as a heredoc later
-	    $line =~ s/(^|[^<\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
+	    $cat_line =~ s/(^|[^<\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
 
 	    while (my ($re,$expl) = each %string_bashisms) {
 		if ($line =~ m/($re)/) {
@@ -303,6 +307,7 @@ foreach my $filename (@ARGV) {
 	    # We've checked for all the things we still want to notice in
 	    # double-quoted strings, so now remove those strings as well.
 	    $line =~ s/(^|[^\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
+	    $cat_line =~ s/(^|[^<\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
 	    while (my ($re,$expl) = each %bashisms) {
 	        if ($line =~ m/($re)/) {
 		    $found = 1;
@@ -314,8 +319,9 @@ foreach my $filename (@ARGV) {
 
 	    # Only look for the beginning of a heredoc here, after we've
 	    # stripped out quoted material, to avoid false positives.
-	    if (m/(?:^|[^<])\<\<\s*(?:[\\]?(\w+)|[\'\"](.*?)[\'\"])/) {
-		$cat_string = $1 || $2;
+	    if ($cat_line =~ m/(?:^|[^<])\<\<\s*(?:[\\]?(\w+)|[\'\"](.*?)[\'\"])/) {
+		$cat_string = $1;
+		$cat_string = $2 if not defined $cat_string;
             }
 	}
     }
