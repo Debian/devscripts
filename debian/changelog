@@ -1,8 +1,10 @@
 devscripts (2.10.27) UNRELEASED; urgency=low
 
-  * checkbashisms: When rebuilding the list of bashisms to check, ensure it is
-    based on whether the current file is a makefile, rather than whether the
-    previous file was. Thanks to Raphael Geissert for the brown paper bag.
+  * checkbashisms:
+    + When rebuilding the list of bashisms to check, ensure it is based
+      on whether the current file is a makefile, rather than whether the
+      previous file was. Thanks to Raphael Geissert for the brown paper bag.
+    + Match use of "SHELL=bash" as well as "SHELL=/bin/bash" in makefile mode
   * debchange: Correctly handle the BTS returning no bugs for a package when
     --closes is used (either because the package doesn't exist in the archive
     or it has no open bugs)
