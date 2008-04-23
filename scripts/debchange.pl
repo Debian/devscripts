@@ -728,14 +728,10 @@ if (@closes and $opt_query) { # and we have to query the BTS
 	my $statuses = Devscripts::Debbugs::status(
 	    map {[bug => $_, indicatesource => 1]} @{$bugs} );
 	if ($statuses eq "") {
-	    warn "$progname warning: No bugs found for package $PACKAGE\n";
-	    $opt_query=0;
-	    $warnings++;
-	    # This will now go and execute the "if (@closes and ! $opt_query)" code
+	    warn "$progname: No bugs found for package $PACKAGE\n";
 	}
 	foreach my $close (@closes) {
-	    last unless $opt_query;
-	    if (exists $statuses->{$close}) {
+	    if ($statuses and exists $statuses->{$close}) {
 		my $title = $statuses->{$close}->{subject};
 		my $pkg = $statuses->{$close}->{package};
 		$title =~ s/^($pkg|$PACKAGE): //;
