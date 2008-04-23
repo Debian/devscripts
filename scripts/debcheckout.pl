@@ -50,6 +50,9 @@ package exposes such an information with a field like S<Vcs-Svn:
 svn://svn.debian.org/svn/pkg-vim/trunk/packages/vim>, you can see it grepping
 through C<apt-cache showsrc vim>.
 
+If more than one source package record containing B<Vcs-*> fields is available,
+B<debcheckout> will select the record with the highest version number.
+
 If you already know the URL of a given repository you can invoke debcheckout
 directly on it, but you will probably need to pass the appropriate B<-t> flag.
 
