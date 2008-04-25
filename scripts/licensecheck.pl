@@ -367,7 +367,7 @@ sub parselicense($) {
 	$license = "GENERATED FILE";
     }
 
-    if ($licensetext =~ /is free software. you can redistribute it and\/or modify it under the terms of the (GNU (Library|Lesser) General Public License|LGPL)/i) {
+    if ($licensetext =~ /is free software.? you can redistribute it and\/or modify it under the terms of the (GNU (Library|Lesser) General Public License|LGPL)/i) {
 	$license = "LGPL$gplver$extrainfo $license";
     }
 

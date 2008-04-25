@@ -12,6 +12,7 @@ devscripts (2.10.27) UNRELEASED; urgency=low
     or it has no open bugs) (Closes: #477398)
   * debcheckout: Use the Vcs-* headers from the highest available version
     rather than the first returned by "apt-get source" (Closes: #477386)
+  * licensecheck: Correctly detect LGPLv3+ (Closes: #477742)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 21 Apr 2008 20:06:13 +0100
 
