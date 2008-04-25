@@ -7,9 +7,11 @@ devscripts (2.10.27) UNRELEASED; urgency=low
     + Match use of "SHELL=bash" as well as "SHELL=/bin/bash" in makefile mode
     + Improve heredoc detection to avoid triggering on "foo bar << x" whilst
       still matching 'cat <<"xyz"'
-  * debchange: Correctly handle the BTS returning no bugs for a package when
-    --closes is used (either because the package doesn't exist in the archive
-    or it has no open bugs) (Closes: #477398)
+  * debchange:
+    + Correctly handle the BTS returning no bugs for a package when --closes
+      is used (either because the package doesn't exist in the archive
+      or it has no open bugs) (Closes: #477398)
+    + Add intrepid (ibex) to the list of Ubuntu distributions
   * debcheckout: Use the Vcs-* headers from the highest available version
     rather than the first returned by "apt-get source" (Closes: #477386)
   * licensecheck: Correctly detect LGPLv3+ (Closes: #477742)
