@@ -50,6 +50,7 @@ $opt_to = '';
 $opt_comments = 1;
 $opt_interactive = 0;
 
+Getopt::Long::Configure ("bundling");
 GetOptions("help|h" => \$opt_help,
 	   "version" => \$opt_version,
 	   "verbose|v!" => \$opt_verbose,
