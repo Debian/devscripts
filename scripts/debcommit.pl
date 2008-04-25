@@ -307,6 +307,11 @@ if (! GetOptions(
     die "Usage: debcommit [--release] [--release-use-changelog] [--message=text] [--noact] [--diff] [--confirm] [--edit] [--changelog=path] [--all | files to commit]\n";
 }
 
+if ($diffmode) {
+    $confirm = 0;
+    $edit = 0;
+}
+
 my @files_to_commit = @ARGV;
 if (@files_to_commit && !grep(/$changelog/,@files_to_commit)) {
     push @files_to_commit, $changelog;
