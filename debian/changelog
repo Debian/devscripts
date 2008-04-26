@@ -1,5 +1,7 @@
 devscripts (2.10.27) UNRELEASED; urgency=low
 
+  * bts: When reassigning bugs, CC the maintainer of the new package(s)
+    (Closes: #478014)
   * checkbashisms:
     + When rebuilding the list of bashisms to check, ensure it is based
       on whether the current file is a makefile, rather than whether the

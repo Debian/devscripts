@@ -121,6 +121,7 @@ my $btscgipkgurl='http://bugs.debian.org/cgi-bin/pkgreport.cgi';
 my $btscgibugurl='http://bugs.debian.org/cgi-bin/bugreport.cgi';
 my $btscgispamurl='http://bugs.debian.org/cgi-bin/bugspam.cgi';
 my $btsemail='control@bugs.debian.org';
+my $packagesserver='packages.debian.org';
 
 my $cachedir=$ENV{'HOME'}."/.devscripts_cache/bts/";
 my $timestampdb=$cachedir."bts_timestamps.db";
@@ -134,6 +135,7 @@ END {
 
 my %clonedbugs = ();
 my %ccbugs = ();
+my %ccpackages = ();
 
 =head1 SYNOPSIS
 
@@ -1066,6 +1068,10 @@ sub bts_reassign {
 
     foreach $bug (@bugs) {
 	mailbts("reassign $bug to $package", "reassign $bug $package $version");
+    }
+
+    foreach my $packagename (split /,/, $package) {
+	$ccpackages{$packagename} = 1;
     }
 }
 
@@ -2030,6 +2036,11 @@ sub mailbtsall {
     if (keys %ccbugs && length(join('', @comment))) {
 	$ccemail .= ", " if length $ccemail;
 	$ccemail .= join("\@$btsserver, ", sort (keys %ccbugs)) . "\@$btsserver";
+    }
+    if (keys %ccpackages && $packagesserver) {
+	$ccemail .= ", " if length $ccemail;
+	$ccemail .= join("\@$packagesserver, ", sort (keys %ccpackages))
+	    . "\@$packagesserver";
     }
     if ($ccsecurity) {
 	my $comma = "";
