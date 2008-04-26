@@ -17,6 +17,13 @@ devscripts (2.10.27) UNRELEASED; urgency=low
   * debcommit: Ignore --confirm and --edit when combined with --diff
   * licensecheck: Correctly detect LGPLv3+ (Closes: #477742)
   * tagpending: Use option bundling (so that e.g. "tagpending -ni" works)
+  * transition-check: New script to determine whether a set of source packages
+    is involved in a transition for which uploads to unstable are currently
+    blocked (Closes: #477922)
+  * debian/control:
+    + Add transition-check
+    + Recommend libyaml-syck-perl (for transition-check)
+  * README: Add transition-check
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 21 Apr 2008 20:06:13 +0100
 

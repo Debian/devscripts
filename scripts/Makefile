@@ -13,10 +13,11 @@ SCRIPTS = $(patsubst %.pl,%,$(PL_FILES)) $(patsubst %.sh,%,$(SH_FILES))
 COMPL_FILES := $(wildcard *.bash_completion)
 COMPLETION = $(patsubst %.bash_completion,devscripts.%,$(COMPL_FILES))
 
-GEN_MAN1S = bts.1 chdist.1 debcheckout.1 debcommit.1 deb-reversion.1 \
-	    desktop2menu.1 dget.1 licensecheck.1 mass-bug.1 rmadison.1 \
-	    svnpath.1 tagpending.1 build-rdeps.1 mk-build-deps.1
-
+GEN_MAN1S = bts.1 build-rdeps.1 chdist.1 debcheckout.1 debcommit.1 \
+	    deb-reversion.1 desktop2menu.1 dget.1 licensecheck.1 mass-bug.1 \
+	    mk-build-deps.1 rmadison.1 svnpath.1 tagpending.1 \
+	    transition-check.1
+   
 BINDIR = /usr/bin
 LIBDIR = /usr/lib/devscripts
 BIN_LIBDIR = /usr/lib/devscripts

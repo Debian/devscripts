@@ -190,6 +190,10 @@ And now, in mostly alphabetical order, the scripts:
 - tagpending: Runs from a Debian source tree and tags bugs that are to be
   closed in the latest changelog as pending. [libsoap-lite-perl]
 
+- transition-check: Check a list of source packages for involvement in
+  transitions for which uploads to unstable are currently blocked
+  [libwww-perl, libyaml-syck-perl]
+
 - uscan: Automatically scan for and download upstream updates.  Uscan can
   also call a program such as uupdate to attempt to update the Debianised
   version based on the new update.  Whilst uscan could be used to release
