@@ -375,6 +375,8 @@ sub init_hashes {
 	                               q<should be '.', not 'source'>,
 	'(\[|test|-o|-a)\s*[^\s]+\s+==\s' =>
 	                               q<should be 'b = a'>,
+	'\[\s+[^\]]+\s+==\s' =>
+	                               q<should be 'b = a'>,
 	'\s\|\&' =>                    q<pipelining is not POSIX>,
 	'[^\\\]\{([^\s\\\}]+?,)+[^\\\}\s]+\}' =>
 	                               q<brace expansion>,
