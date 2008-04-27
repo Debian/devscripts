@@ -12,6 +12,8 @@ devscripts (2.10.27) UNRELEASED; urgency=low
     + Add a variant on the "[ a == b ]" test
     + Enhance the "echo -e" test to also catch "echo -ne"
     + Add checks for "type" and $UID
+  * dcmd: Preserve a leading "./" on .dsc and .changes filenames
+    (Closes: #478172)
   * debchange:
     + Correctly handle the BTS returning no bugs for a package when --closes
       is used (either because the package doesn't exist in the archive

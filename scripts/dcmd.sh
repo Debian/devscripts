@@ -61,9 +61,13 @@ RE="^ [0-9a-f]{32} [0-9]+ ([a-z1]+ [a-z]+ )?(.*)$"
 maybe_expand()
 {
     local dir
+    local sedre
     if [ -e "$1" ] && (endswith "$1" .changes || endswith "$1" .dsc); then
 	dir=$(dirname "$1")
-	sed -rn "s,$RE,$dir/\2,p" <"$1" | sed 's,^\./,,'
+	if [ "${1:0:2}" != "./" ]; then
+	    sedre="\."
+	fi
+	sed -rn "s,$RE,$dir/\2,p" <"$1" | sed "s,^$sedre/,,"
     fi
 }
 
