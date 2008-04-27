@@ -427,6 +427,7 @@ sub init_hashes {
 	'\$\{?HOST(TYPE|NAME)\}?\b' => q<$HOST(TYPE|NAME)>,
 	'\$\{?DIRSTACK\}?\b'        => q<$DIRSTACK>,
 	'\$\{?EUID\}?\b'	    => q<$EUID should be "id -u">,
+	'\$\{?UID\}?\b'	            => q<$UID should be "id -ru">,
 	'\$\{?SECONDS\}?\b'	    => q<$SECONDS>,
 	'\$\{?BASH_[A-Z]+\}?\b'     => q<$BASH_SOMETHING>,
 	'\$\{?SHELLOPTS\}?\b'       => q<$SHELLOPTS>,
