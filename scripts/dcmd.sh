@@ -64,7 +64,7 @@ maybe_expand()
     local sedre
     if [ -e "$1" ] && (endswith "$1" .changes || endswith "$1" .dsc); then
 	dir=$(dirname "$1")
-	if [ "${1:0:2}" != "./" ]; then
+	if [ "$(echo "$1" | cut -b1-2)" != "./" ]; then
 	    sedre="\."
 	fi
 	sed -rn "s,$RE,$dir/\2,p" <"$1" | sed "s,^$sedre/,,"
