@@ -382,7 +382,7 @@ sub init_hashes {
 	                               q<brace expansion>,
 	'(?:^|\s+)\w+\[\d+\]=' =>      q<bash arrays, H[0]>,
 	'(?:^|\s+)(read\s*(-[^r])?(?:;|$))' => q<should be read [-r] variable>,
-	'(?:^|\s+)echo\s+-[e]' =>      q<echo -e>,
+	'(?:^|\s+)echo\s+-\w*e' =>      q<echo -e>,
 	'(?:^|\s+)exec\s+-[acl]' =>    q<exec -c/-l/-a name>,
 	'(?:^|\s+)let\s' =>            q<let ...>,
 	'(?<![\$\(])\(\(.*\)\)' =>     q<'((' should be '$(('>,
@@ -412,6 +412,7 @@ sub init_hashes {
 	'(?:^|\s+)export\s+-[^p]' =>   q<export only takes -p as an option>,
 	'(?:^|\s+)ulimit\b' =>         q<ulimit>,
 	'(?:^|\s+)shopt\b' =>          q<shopt>,
+	'(?:(^|[&;)|])\s*|(if|do|for|while)\s+)type\s' => q<type>,
     );
 
     %string_bashisms = (

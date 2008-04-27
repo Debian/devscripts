@@ -10,6 +10,8 @@ devscripts (2.10.27) UNRELEASED; urgency=low
     + Improve heredoc detection to avoid triggering on "foo bar << x" whilst
       still matching 'cat <<"xyz"'
     + Add a variant on the "[ a == b ]" test
+    + Enhance the "echo -e" test to also catch "echo -ne"
+    + Add a check for "type"
   * debchange:
     + Correctly handle the BTS returning no bugs for a package when --closes
       is used (either because the package doesn't exist in the archive
