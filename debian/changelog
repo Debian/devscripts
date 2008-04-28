@@ -32,6 +32,10 @@ devscripts (2.10.27) UNRELEASED; urgency=low
   * debian/control:
     + Add transition-check
     + Recommend libyaml-syck-perl (for transition-check)
+    + Move build-essential back to Suggests as it's only required by
+      dpkg-depcheck and dpkg-genbuilddeps and will be installed in a build
+      environment anyway
+    + Fix a typo in the Suggests field (svn-buildpacakge)
   * README: Add transition-check
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 21 Apr 2008 20:06:13 +0100
