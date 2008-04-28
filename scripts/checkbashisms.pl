@@ -373,7 +373,7 @@ sub init_hashes {
 	'(?:^|\s+)select\s+\w+' =>     q<'select' is not POSIX>,
 	'(?:^|\s+)source\s+(?:\.\/|\/|\$)[^\s]+' =>
 	                               q<should be '.', not 'source'>,
-	'(\[|test|-o|-a)\s*[^\s]+\s+==\s' =>
+	'(test|-o|-a)\s*[^\s]+\s+==\s' =>
 	                               q<should be 'b = a'>,
 	'\[\s+[^\]]+\s+==\s' =>
 	                               q<should be 'b = a'>,
