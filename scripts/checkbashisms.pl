@@ -409,7 +409,7 @@ sub init_hashes {
 	'(?:^|\s+)local\s+\w+=' =>     q<local foo=bar>,
 	'(?:^|\s+)\s*\(?\w*[^\(\w\s]+\S*?\s*[^\"]\(\)' => q<function names should only contain [a-z0-9_]>,
 	'(?:^|\s+)(push|pod)d\b' =>    q<(push|pod)d>,
-	'(?:^|\s+)export\s+-[^p]' =>   q<export only takes -p as an option>,
+	'(?:(^|[&;)|{])\s*|(if|do|while)\s+)export\s+-[^p]' => q<export only takes -p as an option>,
 	'(?:^|\s+)ulimit\b' =>         q<ulimit>,
 	'(?:^|\s+)shopt\b' =>          q<shopt>,
 	'(?:(^|[&;)|{])\s*|(if|do|while)\s+)type\s' => q<type>,
