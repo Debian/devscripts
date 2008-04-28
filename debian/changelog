@@ -1,7 +1,10 @@
 devscripts (2.10.27) UNRELEASED; urgency=low
 
-  * bts: When reassigning bugs, CC the maintainer of the new package(s)
-    (Closes: #478014)
+  * bts:
+    + When reassigning bugs, CC the maintainer of the new package(s)
+      (Closes: #478014)
+    + Fix an uninitialised value warning when using claim and unclaim with
+      no claim specified and $EMAIL and $DEBEMAIL unset
   * checkbashisms:
     + When rebuilding the list of bashisms to check, ensure it is based
       on whether the current file is a makefile, rather than whether the

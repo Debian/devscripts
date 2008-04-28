@@ -1355,7 +1355,10 @@ or EMAIL (checked in that order) is used.
 
 sub bts_claim {
     my $bug=checkbug(shift) or die "bts claim: claim what bug?\n";
-    my $claim=shift || $ENV{'DEBEMAIL'} || $ENV{'EMAIL'};
+    my $claim=shift || $ENV{'DEBEMAIL'} || $ENV{'EMAIL'} || "";
+    if (! length $claim) {
+	die "bts claim: use what claim token?\n";
+    }
     bts_user("bugsquash\@qa.debian.org");
     bts_usertags("$bug" , " + $claim");
 }
@@ -1371,7 +1374,10 @@ or EMAIL (checked in that order) is used.
 
 sub bts_unclaim {
     my $bug=checkbug(shift) or die "bts unclaim: unclaim what bug?\n";
-    my $claim=shift || $ENV{'DEBEMAIL'} || $ENV{'EMAIL'};
+    my $claim=shift || $ENV{'DEBEMAIL'} || $ENV{'EMAIL'} || "";
+    if (! length $claim) {
+	die "bts unclaim: use what claim token?\n";
+    }
     bts_user("bugsquash\@qa.debian.org");
     bts_usertags("$bug" , " - $claim");
 }
