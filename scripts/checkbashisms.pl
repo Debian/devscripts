@@ -412,7 +412,7 @@ sub init_hashes {
 	'(?:^|\s+)export\s+-[^p]' =>   q<export only takes -p as an option>,
 	'(?:^|\s+)ulimit\b' =>         q<ulimit>,
 	'(?:^|\s+)shopt\b' =>          q<shopt>,
-	'(?:(^|[&;)|{])\s*|(if|do|for|while)\s+)type\s' => q<type>,
+	'(?:(^|[&;)|{])\s*|(if|do|while)\s+)type\s' => q<type>,
     );
 
     %string_bashisms = (
