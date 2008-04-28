@@ -5,6 +5,7 @@ devscripts (2.10.27) UNRELEASED; urgency=low
       (Closes: #478014)
     + Fix an uninitialised value warning when using claim and unclaim with
       no claim specified and $EMAIL and $DEBEMAIL unset
+  * chdist: Add armel to the list of architectures in the bash completion
   * checkbashisms:
     + When rebuilding the list of bashisms to check, ensure it is based
       on whether the current file is a makefile, rather than whether the

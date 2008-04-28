@@ -9,7 +9,7 @@ _chdist ()
 	   compare-versions compare-bin-versions
 	   grep-dctrl-packages grep-dctrl-sources
 	   list'
-  local archs='i386 amd64 powerpc m68k sparc alpha hppa arm mips mipsel ia64 s390 ppc64 sh armeb m32r'
+  local archs='i386 amd64 powerpc m68k sparc alpha hppa arm mips mipsel ia64 armel s390 ppc64 sh armeb m32r'
   local dists=$(ls $HOME/.chdist)
 
   COMPREPLY=()
