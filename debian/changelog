@@ -17,6 +17,7 @@ devscripts (2.10.27) UNRELEASED; urgency=low
     + Enhance the "echo -e" test to also catch "echo -ne"
     + Add checks for "type", "time", "dirs" and $UID
     + Make several of the checks less prone to false positives
+    + Re-enable the check for "complete"
   * dcmd: Preserve a leading "./" on .dsc and .changes filenames
     (Closes: #478172)
   * debchange:

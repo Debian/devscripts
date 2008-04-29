@@ -376,8 +376,7 @@ sub init_hashes {
 	                               q<should be '.', not 'source'>,
 	'(test|-o|-a)\s*[^\s]+\s+==\s' =>
 	                               q<should be 'b = a'>,
-	'\[\s+[^\]]+\s+==\s' =>
-	                               q<should be 'b = a'>,
+	'\[\s+[^\]]+\s+==\s' =>        q<should be 'b = a'>,
 	'\s\|\&' =>                    q<pipelining is not POSIX>,
 	'[^\\\]\{([^\s\\\}]+?,)+[^\\\}\s]+\}' =>
 	                               q<brace expansion>,
@@ -397,7 +396,7 @@ sub init_hashes {
 	'/dev/(tcp|udp)'	    => q</dev/(tcp|udp)>,
 	$LEADIN . 'suspend\s' =>        q<suspend>,
 	$LEADIN . 'caller\s' =>         q<caller>,
-#	'(?:^|\s+)complete\s' =>       q<complete>,
+	$LEADIN . 'complete\s' =>       q<complete>,
 	$LEADIN . 'compgen\s' =>        q<compgen>,
 	$LEADIN . 'declare\s' =>        q<declare>,
 	$LEADIN . 'typeset\s' =>        q<typeset>,
