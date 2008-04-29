@@ -15,7 +15,7 @@ devscripts (2.10.27) UNRELEASED; urgency=low
       still matching 'cat <<"xyz"'
     + Add a variant on the "[ a == b ]" test
     + Enhance the "echo -e" test to also catch "echo -ne"
-    + Add checks for "type" and $UID
+    + Add checks for "type", "time", "dirs" and $UID
     + Make the check for "export with options other than -p" less prone to
       false positives
   * dcmd: Preserve a leading "./" on .dsc and .changes filenames

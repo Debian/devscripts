@@ -368,6 +368,7 @@ sub script_is_evil_and_wrong {
 }
 
 sub init_hashes {
+    my $LEADIN = '(?:(^|[&;)|{])\s*|(if|do|while)\s+)';
     %bashisms = (
 	'(?:^|\s+)function\s+\w+' =>   q<'function' is useless>,
 	'(?:^|\s+)select\s+\w+' =>     q<'select' is not POSIX>,
@@ -413,6 +414,8 @@ sub init_hashes {
 	'(?:^|\s+)ulimit\b' =>         q<ulimit>,
 	'(?:^|\s+)shopt\b' =>          q<shopt>,
 	'(?:(^|[&;)|{])\s*|(if|do|while)\s+)type\s' => q<type>,
+	$LEADIN . 'time\b' =>          q<time>,
+	$LEADIN . 'dirs\b' =>          q<dirs>,
     );
 
     %string_bashisms = (
