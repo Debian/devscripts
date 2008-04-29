@@ -380,7 +380,7 @@ sub init_hashes {
 	'\s\|\&' =>                    q<pipelining is not POSIX>,
 	'[^\\\]\{([^\s\\\}]+?,)+[^\\\}\s]+\}' =>
 	                               q<brace expansion>,
-	$LEADIN . '\w+\[\d+\]=' =>      q<bash arrays, H[0]>,
+	'(?:^|\s+)\w+\[\d+\]=' =>      q<bash arrays, H[0]>,
 	$LEADIN . '(read\s*(-[^r])?(?:;|$))' => q<should be read [-r] variable>,
 	$LEADIN . 'echo\s+-\w*e' =>      q<echo -e>,
 	$LEADIN . 'exec\s+-[acl]' =>    q<exec -c/-l/-a name>,
