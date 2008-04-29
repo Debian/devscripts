@@ -413,7 +413,7 @@ sub init_hashes {
 	'(?:(^|[&;)|{])\s*|(if|do|while)\s+)export\s+-[^p]' => q<export only takes -p as an option>,
 	'(?:^|\s+)ulimit\b' =>         q<ulimit>,
 	'(?:^|\s+)shopt\b' =>          q<shopt>,
-	'(?:(^|[&;)|{])\s*|(if|do|while)\s+)type\s' => q<type>,
+	$LEADIN . 'type\s' =>          q<type>,
 	$LEADIN . 'time\b' =>          q<time>,
 	$LEADIN . 'dirs\b' =>          q<dirs>,
     );
