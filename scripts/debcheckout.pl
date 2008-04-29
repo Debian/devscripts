@@ -51,7 +51,9 @@ svn://svn.debian.org/svn/pkg-vim/trunk/packages/vim>, you can see it grepping
 through C<apt-cache showsrc vim>.
 
 If more than one source package record containing B<Vcs-*> fields is available,
-B<debcheckout> will select the record with the highest version number.
+B<debcheckout> will select the record with the highest version number. 
+Alternatively, a particular version may be selected from those available by
+specifying the package name as I<PACKAGE>=I<VERSION>.
 
 If you already know the URL of a given repository you can invoke debcheckout
 directly on it, but you will probably need to pass the appropriate B<-t> flag.
@@ -169,8 +171,8 @@ sub recurs_mkdir {
 
 # Find the repository URL (and type) for a given package name, parsing Vcs-*
 # fields.
-sub find_repo($) {
-  my ($pkg) = @_;
+sub find_repo($$) {
+  my ($pkg, $desired_ver) = @_;
   my @repo = (0, "");
   my $found = 0;
   my $version = "";
@@ -189,7 +191,8 @@ sub find_repo($) {
       $version = $1;
     } elsif ($line =~ /^$/) {
       push (@repos, [$version, $type, $url])
-        if ($version and $type and $url);
+        if ($version and $type and $url and
+        ($desired_ver eq "" or $desired_ver eq $version));
       $version = "";
       $type = "";
       $url = "";
@@ -206,8 +209,8 @@ sub find_repo($) {
 }
 
 # Find the browse URL for a given package name, parsing Vcs-* fields.
-sub find_browse($) {
-  my ($pkg) = @_;
+sub find_browse($$) {
+  my ($pkg, $desired_ver) = @_;
   my $browse = "";
   my $found = 0;
   my $version = "";
@@ -225,7 +228,8 @@ sub find_browse($) {
       $version = $1;
     } elsif ($line =~ /^$/) {
       push(@browses, [$version, $browse])
-        if $version and $browse;
+        if $version and $browse and 
+        ($desired_ver eq "" or $desired_ver eq $version);
       $version = "";
       $browse = "";
     }
@@ -574,6 +578,7 @@ sub main() {
   my $auth = 0;		  # authenticated mode
   my $destdir = "";	  # destination directory
   my $pkg = "";		  # package name
+  my $version = "";       # package version
   my $print_only = 0;	  # print only mode
   my $repo_type = "svn";  # default repo typo, overridden by '-t'
   my $repo_url = "";	  # repository URL
@@ -593,14 +598,18 @@ sub main() {
   $auth = 1 if $user;
 
   $destdir = $ARGV[1] if $#ARGV > 0;
-  if (not is_package($ARGV[0])) {  # repo-url passed on the command line
+  ($pkg, $version) = split(/=/, $ARGV[0]);
+  $version ||= "";
+  if (not is_package($pkg)) {  # repo-url passed on the command line
     $repo_url = $ARGV[0];
+    $pkg = ""; $version = "";
   } else {  # package name passed on the command line
-    $pkg = $ARGV[0];
-    ($repo_type, $repo_url) = find_repo($pkg);
+    ($repo_type, $repo_url) = find_repo($pkg, $version);
     unless ($repo_type) {
+      my $vermsg = "";
+      $vermsg = ", version $version" if $version;
       print <<EOF;
-No repository found for package $pkg.
+No repository found for package $pkg$vermsg.
 A Vcs-* field is missing in its source record (see Debian Developer's
 Reference 4.10.4 and/or Bug#391023).  If you know that the package is
 maintained via a Version Control System consider asking the maintainer
@@ -608,7 +617,7 @@ to expose such information.
 EOF
       exit(1);
     }
-    $browse_url = find_browse($pkg) if @files;
+    $browse_url = find_browse($pkg, $version) if @files;
   }
 
   $repo_url = set_auth($repo_type, $repo_url, $user, $print_only)
