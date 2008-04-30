@@ -32,7 +32,10 @@ devscripts (2.10.27) UNRELEASED; urgency=low
       the first returned by "apt-get source" (Closes: #477386)
     + Allow the Vcs-* headers from any of the available package versions to
       be used
-  * debcommit: Ignore --confirm and --edit when combined with --diff
+  * debcommit:
+    + Ignore --confirm and --edit when combined with --diff
+    + Fix commit message detection for bzr; thanks Colin Watson
+      (Closes: #478667)
   * licensecheck: Correctly detect LGPLv3+ (Closes: #477742)
   * tagpending: Use option bundling (so that e.g. "tagpending -ni" works)
   * transition-check: New script to determine whether a set of source packages

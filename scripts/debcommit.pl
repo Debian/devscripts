@@ -576,7 +576,7 @@ sub getmessage {
 	} elsif ($prog eq 'baz') {
 	    @diffcmd = ($prog, 'file-diff');
 	} elsif ($prog eq 'bzr') {
-	    @diffcmd = ($prog, 'diff', '--using', '/usr/bin/diff', '--diff-options', '-wu');
+	    @diffcmd = ($prog, 'diff', '--diff-options', '-wu');
 	} elsif ($prog eq 'git') {
 	    if ($all) {
 		@diffcmd = ('git', 'diff', '-w', '--no-color');
