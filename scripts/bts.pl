@@ -188,7 +188,7 @@ necessary so that B<bts> sees the comment):
 The abbreviation "it" may be used to refer to the last mentioned bug
 number, so you could write:
 
- % bts severity 95672 wishlist, retitle it "bts: please add a --foo option"
+ % bts severity 95672 wishlist , retitle it "bts: please add a --foo option"
 
 Please use this program responsibly, and do take our users into
 consideration.
