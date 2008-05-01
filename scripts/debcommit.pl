@@ -341,7 +341,9 @@ if ($release) {
 }
 else {
     if ($edit) {
-	$message = edit($message);
+	my $modified = 0;
+	($message, $modified) = edit($message);
+	die "$progname: Commit message not modified / saved; aborting\n" unless $modified;
     }
     commit($message) if not $confirm or confirm($message);
 }
@@ -672,7 +674,8 @@ sub confirm {
 	    $message = $confirmmessage;
 	    return 1;
 	} elsif (/^e/i) {
-	    $confirmmessage = edit($confirmmessage);
+	    my $modified = 0;
+	    ($confirmmessage, $modified) = edit($confirmmessage);
 	    print "\n", $confirmmessage, "\n--\n";
 	}
     }
@@ -684,6 +687,8 @@ sub edit {
     open(FH, ">$tempfile") || die "debcommit: unable to create a temporary file.\n";
     print FH $message;
     close FH;
+    my $mtime = (stat("$tempfile"))[9];
+    defined $mtime || die "$progname: unable to retrieve modification time for temporary file: $!\n";
     system("sensible-editor $tempfile");
     open(FH, "<$tempfile") || die "debcommit: unable to open temporary file for reading\n";
     $message = "";
@@ -691,9 +696,11 @@ sub edit {
 	$message .= $_;
     }
     close FH;
+    my $newmtime = (stat("$tempfile"))[9];
+    defined $newmtime || die "$progname: unable to retrieve modification time for updated temporary file: $!\n";
     unlink($tempfile);
     chomp $message;
-    return $message;
+    return ($message, $mtime != $newmtime);
 }
 =head1 LICENSE
 

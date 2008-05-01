@@ -39,6 +39,9 @@ devscripts (2.10.27) UNRELEASED; urgency=low
     + Fix commit message detection for bzr; thanks Colin Watson
       (Closes: #478667)
     + Remove trailing newlines after editing the commit message
+    + Don't attempt to commit if an editor was spawned (either via --edit
+      or automatically) and the user quit without updating and saving the
+      message
   * licensecheck: Correctly detect LGPLv3+ (Closes: #477742)
   * tagpending: Use option bundling (so that e.g. "tagpending -ni" works)
   * transition-check: New script to determine whether a set of source packages
