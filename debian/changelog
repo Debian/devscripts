@@ -18,8 +18,10 @@ devscripts (2.10.27) UNRELEASED; urgency=low
     + Add checks for "type", "time", "dirs" and $UID
     + Make several of the checks less prone to false positives
     + Re-enable the check for "complete"
-  * dcmd: Preserve a leading "./" on .dsc and .changes filenames
-    (Closes: #478172)
+  * dcmd:
+    + Preserve a leading "./" on .dsc and .changes filenames (Closes: #478172)
+    + Correctly handle packages with a section of "component/section"
+      (Closes: #478829)
   * debchange:
     + Correctly handle the BTS returning no bugs for a package when --closes
       is used (either because the package doesn't exist in the archive
