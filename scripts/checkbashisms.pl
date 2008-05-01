@@ -368,7 +368,7 @@ sub script_is_evil_and_wrong {
 }
 
 sub init_hashes {
-    my $LEADIN = '(?:(^|\$\(|[`&;)|{])\s*|(if|do|while)\s+)';
+    my $LEADIN = '(?:(^|[`&;(|{])\s*|(if|do|while)\s+)';
     %bashisms = (
 	'(?:^|\s+)function\s+\w+' =>   q<'function' is useless>,
 	$LEADIN . 'select\s+\w+' =>     q<'select' is not POSIX>,
