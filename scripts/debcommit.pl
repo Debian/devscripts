@@ -692,6 +692,7 @@ sub edit {
     }
     close FH;
     unlink($tempfile);
+    chomp $message;
     return $message;
 }
 =head1 LICENSE
