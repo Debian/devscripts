@@ -63,6 +63,9 @@ devscripts (2.10.27) UNRELEASED; urgency=low
     + Remove the versioned conflicts on debmake, dupload and suidmanager, as
       they all referred to versions of those packages older than those in
       oldstable
+    + Remove the version constraints from the perl build-dependency and the
+      debianutils, perl and sed dependencies and the gnupg recommendation, as
+      the referenced versions are all satisfied in oldstable and above
   * README: Add transition-check
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 21 Apr 2008 20:06:13 +0100
