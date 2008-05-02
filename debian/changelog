@@ -55,6 +55,8 @@ devscripts (2.10.27) UNRELEASED; urgency=low
       environment anyway
     + Fix a typo in the Suggests field (svn-buildpacakge)
     + Move libfile-desktopentry-perl back to Suggests
+    + Remove libdigest-md5-perl from Recommends as it's Provided by perl since
+      sarge
   * README: Add transition-check
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 21 Apr 2008 20:06:13 +0100
