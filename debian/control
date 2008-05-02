@@ -14,7 +14,7 @@ XS-Dm-Upload-Allowed: yes
 Package: devscripts
 Architecture: any
 Conflicts: kdesdk-scripts (<< 4:3.5.6-2)
-Depends: dpkg-dev, debianutils, perl, sed, ${shlibs:Depends}, ${misc:Depends}
+Depends: dpkg-dev, perl, ${shlibs:Depends}, ${misc:Depends}
 Recommends: at, curl | wget, dctrl-tools, debian-keyring, debian-maintainers,
  dput | dupload, equivs, fakeroot, gnupg, libauthen-sasl-perl,
  libcrypt-ssleay-perl, libparse-debcontrol-perl, libsoap-lite-perl,
