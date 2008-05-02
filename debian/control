@@ -13,8 +13,7 @@ XS-Dm-Upload-Allowed: yes
 
 Package: devscripts
 Architecture: any
-Conflicts: debmake (<< 3.5), dupload (<< 2.1), suidmanager (<< 0.51),
- kdesdk-scripts (<< 4:3.5.6-2)
+Conflicts: kdesdk-scripts (<< 4:3.5.6-2)
 Depends: dpkg-dev, debianutils (>= 2.0), perl (>= 5.8), sed (>= 2.95),
  ${shlibs:Depends}, ${misc:Depends}
 Recommends: at, curl | wget, dctrl-tools, debian-keyring, debian-maintainers,

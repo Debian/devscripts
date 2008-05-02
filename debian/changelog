@@ -60,6 +60,9 @@ devscripts (2.10.27) UNRELEASED; urgency=low
     + Re-order the "dupload | dput" recommendation to favour dput and remove
       the version constraint from dupload as it refers to a version older than
       that in oldstable
+    + Remove the versioned conflicts on debmake, dupload and suidmanager, as
+      they all referred to versions of those packages older than those in
+      oldstable
   * README: Add transition-check
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 21 Apr 2008 20:06:13 +0100
