@@ -1,6 +1,8 @@
 devscripts (2.10.28) UNRELEASED; urgency=low
 
-  * NOT RELEASED YET
+  * checkbashisms:
+    + Also match use of "SHELL=/bin/bash -e" when checking whether a makefile
+      explicitly uses bash
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sat, 03 May 2008 19:59:06 +0100
 
