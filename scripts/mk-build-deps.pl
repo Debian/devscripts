@@ -100,14 +100,14 @@ while ($control = shift) {
     }
 
     while (<CONTROL>) {
-	if (/^Package:\s*(\S+)/ && !$name) {
+	if (/^(?:Package|Source):\s*(\S+)/ && !$name) {
 	    $name = $1;
 	}
 	if (/^Version:\s*(\S+)/) {
 	    $version = $1;
 	}
 	if (/^Build-Depends(?:-Indep)?:\s*(.*)/) {
-	    $build_deps .= $1;
+	    $build_deps .= $build_deps ? ", $1" : $1;
 	    $last_line_build_deps = 1;
 	}
 	elsif (/^(\S+):/) {

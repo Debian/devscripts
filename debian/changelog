@@ -1,8 +1,17 @@
 devscripts (2.10.28) UNRELEASED; urgency=low
 
+  [ Adam D. Barratt ]
   * checkbashisms:
     + Also match use of "SHELL=/bin/bash -e" when checking whether a makefile
       explicitly uses bash
+
+  [ James Vega ]
+  * mk-build-deps:
+    + Fix Depends generation when both Build-Depends and Build-Depends-Indep
+      exist so that the last package of the former and the first package of
+      the latter are not listed as one concatenated string.
+    + Use the Source package name instead of the first listed Binary package
+      when parsing a control file.
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sat, 03 May 2008 19:59:06 +0100
 
