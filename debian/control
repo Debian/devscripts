@@ -38,6 +38,9 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - chdist: tool to easily play with several distributions [dctrl-tools]
   - checkbashisms: check whether a /bin/sh script contains any common
     bash-specific contructs
+  - cowpoke: upload a Debian source package to a cowbuilder host and build it,
+    optionally also signing and uploading the result to an incoming queue
+    [ssh-client]
   - cvs-debi, cvs-debc: to call debi and debc from the CVS working directory
     after running cvs-debuild or cvs-buildpackage [cvs-buildpackage]
   - cvs-debrelease: to call debrelease from the CVS working directory

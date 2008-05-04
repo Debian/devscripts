@@ -37,6 +37,10 @@ And now, in mostly alphabetical order, the scripts:
 - checkbashisms: checks whether a /bin/sh script uses any common
   bash-specific features
 
+- cowpoke: upload a Debian source package to a cowbuilder host and build it,
+  optionally also signing and uploading the result to an incoming queue 
+  [ssh-client]
+
 - cvs-debi, cvs-debc: wrappers around debi and debc respectively (see below)
   which allow them to be called from the CVS working directory.
   [cvs-buildpackage]
