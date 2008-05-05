@@ -709,6 +709,8 @@ This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the
 GNU General Public License, version 2 or later.
 
+=back
+
 =head1 AUTHOR
 
 Joey Hess <joeyh@debian.org>

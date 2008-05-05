@@ -51,7 +51,11 @@ Choose architecture (default: `dpkg --print-architecture`)
 
 Display version information.
 
+=back
+
 =head1 COMMANDS
+
+=over 4
 
 =item create DIST : prepare a new tree named DIST
 
@@ -83,6 +87,8 @@ Display version information.
 
 =item list : list available DISTs
 
+=back
+
 =head1 COPYRIGHT
 
 This program is copyright 2007 by Lucas Nussbaum and Luk Claes. This
@@ -90,8 +96,6 @@ program comes with ABSOLUTELY NO WARRANTY.
 
 It is licensed under the terms of the GPL, either version 2 of the
 License, or (at your option) any later version.
-
-=back
 
 =cut
 

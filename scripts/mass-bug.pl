@@ -109,8 +109,6 @@ Provide a usage message.
 
 Display version information.
 
-=over 4
-
 =back
 
 =head1 ENVIRONMENT

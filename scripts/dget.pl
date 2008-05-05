@@ -605,7 +605,7 @@ is 'yes'.
 Set to 'no' to disable checking signatures of downloaded source
 packages.  Default is 'yes'.
 
-=cut
+=back
 
 =head1 BUGS AND COMPATIBILITY
 

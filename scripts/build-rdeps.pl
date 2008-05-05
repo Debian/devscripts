@@ -55,8 +55,6 @@ Show the usage information.
 
 Show the version information.
 
-=over 4
-
 =back
 
 =cut

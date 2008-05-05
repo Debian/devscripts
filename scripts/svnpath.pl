@@ -55,7 +55,7 @@ For example, the author uses this file:
  1
 
 =cut
- 
+
 $ENV{LANG}="C";
 
 my $wanted=shift;

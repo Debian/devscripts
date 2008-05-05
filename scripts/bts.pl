@@ -3444,7 +3444,7 @@ The default is I<no>.
 Specify a list of e-mail addresses to which a carbon copy of the generated
 e-mail to the control bot should automatically be sent.
 
-=cut
+=back
 
 =head1 SEE ALSO
 
@@ -3453,8 +3453,6 @@ more details on how to control the BTS using emails and
 L<http://www.debian.org/Bugs/> for more information about the BTS.
 
 reportbug(1), querybts(1)
-
-=cut
 
 =head1 COPYRIGHT
 
