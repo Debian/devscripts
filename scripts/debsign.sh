@@ -164,7 +164,7 @@ check_already_signed () {
 	case $response in
 	[Nn]*)
 	    sed -e '1,/^$/d; /^$/,$d' "$1" > "$1.unsigned"
-	    mv "$1.unsigned" "$1"
+	    mv -f -- "$1.unsigned" "$1"
 	    return 1
 	    ;;
 	*) return 0;;
@@ -415,7 +415,7 @@ dosigning() {
 		    $insha256=0;
 		}' "$temp_changes"
 	    then
-		mv "$temp_changes" "$changes"
+		mv -f -- "$temp_changes" "$changes"
 	    else
 		rm "$temp_changes"
 		echo "$PROGNAME: Error processing .changes file (see above)" >&2
