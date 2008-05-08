@@ -8,6 +8,9 @@ devscripts (2.10.28) UNRELEASED; urgency=low
       explicitly uses bash
     + Update the check for "function" to more closely match lintian's (and
       therefore be less prone to false positives)
+    + Update the check for "echo -e" to only match -n as an extra option
+      rather than all theoretically possible options, thus reducing false
+      positives
   * cowpoke: New script to upload a Debian source package to a cowbuilder host
     and build it, optionally also signing and uploading the result to an
     incoming queue (Closes: #479274)

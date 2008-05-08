@@ -382,7 +382,7 @@ sub init_hashes {
 	                               q<brace expansion>,
 	'(?:^|\s+)\w+\[\d+\]=' =>      q<bash arrays, H[0]>,
 	$LEADIN . '(read\s*(-[^r])?(?:;|$))' => q<should be read [-r] variable>,
-	$LEADIN . 'echo\s+-\w*e' =>      q<echo -e>,
+	$LEADIN . 'echo\s+-n?en?\s' =>      q<echo -e>,
 	$LEADIN . 'exec\s+-[acl]' =>    q<exec -c/-l/-a name>,
 	$LEADIN . 'let\s' =>            q<let ...>,
 	'(?<![\$\(])\(\(.*\)\)' =>     q<'((' should be '$(('>,
