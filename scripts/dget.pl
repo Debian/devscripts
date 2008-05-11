@@ -500,6 +500,11 @@ require root privileges, writes to the current directory, and does not
 download dependencies.  If a version number is specified, this version
 of the package is requested.
 
+(Note that I<.udeb> packages used by debian-installer are located in separate
+packages files from I<.deb> packages. In order to use I<.udebs> with B<dget>,
+you will need to have configured B<apt> to use a packages file for
+I<component>/I<debian-installer>).
+
 Before downloading files listed in .dsc and .changes files, and before
 downloading binary packages, B<dget> checks to see whether any of
 these files already exist.  If they do, then their md5sums are

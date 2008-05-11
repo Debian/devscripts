@@ -21,6 +21,8 @@ devscripts (2.10.28) UNRELEASED; urgency=low
     signature or updating the file sizes within the changes file before
     signing it, as is already done for moving the resulting signed files
     (Closes: #479569)
+  * dget: Mention in the manpage that dget supports udebs so long as an
+    appropriate packages file is available to apt (Closes: #480461)
 
   [ James Vega ]
   * mk-build-deps:
