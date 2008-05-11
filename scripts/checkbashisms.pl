@@ -195,10 +195,15 @@ foreach my $filename (@ARGV) {
 	    my $explanation = '';
 	    my $line = $_;
 
+	    # Remove "" / '' as they clearly aren't quoted strings
+	    # and not considering them makes the matching easier
+	    $line =~ s/(^|[^\\])(\'\')/$1/g;
+	    $line =~ s/(^|[^\\])(\"\")/$1/g;
+
 	    if ($quote_string ne "") {
 		my $otherquote = ($quote_string eq "\"" ? "\'" : "\"");
 		# Inside a quoted block
-		if ($line =~ /(?:^|^.*?[^\\$otherquote])$quote_string(.*)$/) {
+		if ($line =~ /(?:^|^.*[^\\$otherquote])$quote_string(.*)$/) {
 		    my $rest = $1;
 		    my $templine = $line;
 
@@ -206,8 +211,6 @@ foreach my $filename (@ARGV) {
 		    $templine =~ s/[^\\]$otherquote[^$quote_string]*?[^\\]$otherquote//g;
 		    # Remove quotes that are themselves quoted
 		    $templine =~ s/[^\\]$otherquote.*?$quote_string.*?[^\\]$otherquote//g;
-		    # Remove "" or ''
-		    $templine =~ s/(^|[^\\])$quote_string$quote_string/$1/g;
 
 		    # After all that, were there still any quotes left?
 		    my $count = () = $templine =~ /(^|[^\\])$quote_string/g;
@@ -242,12 +245,8 @@ foreach my $filename (@ARGV) {
 		    my $otherquote = ($quote eq "\"" ? "\'" : "\"");
 
 		    # Remove balanced quotes and their content
-		    $templine =~ s/(^|[^\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
-		    $templine =~ s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
-
-		    # Remove "" / '' as they clearly aren't quoted strings
-		    # and not considering them makes the matching easier
-		    $templine =~ s/(^|[^\\])($quote$quote)/$1/g;
+		    $templine =~ s/(^|[^\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1/g;
+		    $templine =~ s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1/g;
 
 		    # Don't flag quotes that are themselves quoted
 		    $templine =~ s/$otherquote.*?$quote.*?$otherquote//g;
@@ -447,11 +446,11 @@ sub init_hashes {
     }
 
     if ($makefile) {
-	$bashisms{'(\$\(|\`)\s*\<\s*([^\s\)]{2,}|[^DF])\s*(\)|\`)'} =
+	$string_bashisms{'(\$\(|\`)\s*\<\s*([^\s\)]{2,}|[^DF])\s*(\)|\`)'} =
 	    q<'$(\< foo)' should be '$(cat foo)'>;
     } else {
 	$bashisms{'(?:^|\s+)\w+\+='} = q<should be VAR="${VAR}foo">;
-	$bashisms{'(\$\(|\`)\s*\<\s*\S+\s*(\)|\`)'} = q<'$(\< foo)' should be '$(cat foo)'>;
+	$string_bashisms{'(\$\(|\`)\s*\<\s*\S+\s*(\)|\`)'} = q<'$(\< foo)' should be '$(cat foo)'>;
     }
 	    
     if ($opt_extra) {
