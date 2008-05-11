@@ -420,6 +420,7 @@ sub init_hashes {
 	$LEADIN . 'type\s' =>          q<type>,
 	$LEADIN . 'time\b' =>          q<time>,
 	$LEADIN . 'dirs\b' =>          q<dirs>,
+	'(?:^|\s+)[<>]\(.*?\)'	    => q<\<() process substituion>,
     );
 
     %string_bashisms = (
@@ -439,7 +440,6 @@ sub init_hashes {
 	'\$\{?BASH_[A-Z]+\}?\b'     => q<$BASH_SOMETHING>,
 	'\$\{?SHELLOPTS\}?\b'       => q<$SHELLOPTS>,
 	'<<<'                       => q<\<\<\< here string>,
-	'(?:^|\s+)[<>]\(.*?\)'	    => q<\<() process substituion>,
     );
 
     if ($opt_echo) {
