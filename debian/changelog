@@ -25,6 +25,8 @@ devscripts (2.10.28) UNRELEASED; urgency=low
     (Closes: #479569)
   * dget: Mention in the manpage that dget supports udebs so long as an
     appropriate packages file is available to apt (Closes: #480461)
+  * scripts/Makefile: Run podchecker(1) before building pod-generated
+    manpages to avoid the generated file containing a "POD errors" section
 
   [ James Vega ]
   * mk-build-deps:

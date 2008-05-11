@@ -37,6 +37,7 @@ all: $(SCRIPTS) $(GEN_MAN1S) $(LIBS) $(CWRAPPERS) $(COMPLETION)
 	chmod +x $@
 
 %.1: %.pl
+	podchecker $<
 	pod2man --center=" " --release="Debian Utilities" $< > $@
 %.1: %.dbk
 	xsltproc --nonet -o $@ \
