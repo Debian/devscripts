@@ -3,6 +3,8 @@ devscripts (2.10.28) UNRELEASED; urgency=low
   [ Adam D. Barratt ]
   * bts, build-rdeps, chdist, debcommit, dget, mass-bug: Fix POD errors in
     the manpages. Thanks Riccardo Stagni (Closes: #479609)
+  * bts: Improve the message produced when unknown options are passed to
+    a command to include the command name
   * checkbashisms:
     + Also match use of "SHELL=/bin/bash -e" when checking whether a makefile
       explicitly uses bash

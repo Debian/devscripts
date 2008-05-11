@@ -3302,7 +3302,7 @@ sub init_agent {
 
 sub opts_done {
     if (@_) {
-         die "bts: unknown options: @_\n";
+         die "bts: unknown options to '$command[$index]': @_\n";
     }
 }
 
