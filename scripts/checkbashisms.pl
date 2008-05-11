@@ -285,7 +285,12 @@ foreach my $filename (@ARGV) {
 	    $line =~ s/(^|[^\\\'\"])\"\'\"/$1/g;
 	    $line =~ s/(^|[^\\\'\"])\'\"\'/$1/g;
 
+	    # $cat_line contains the version of the line we'll check
+	    # for heredoc delimeters later. Initially, remove any
+	    # spaces between << and the delimeter to make the following
+	    # updates to $cat_line easier.
 	    my $cat_line = $line;
+	    $cat_line =~ s/(<\<)\s+/$1/g;
 
 	    # Ignore anything inside single quotes; it could be an
 	    # argument to grep or the like.
