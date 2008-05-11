@@ -418,7 +418,7 @@ sub init_hashes {
 	$LEADIN . 'ulimit\b' =>         q<ulimit>,
 	$LEADIN . 'shopt\b' =>          q<shopt>,
 	$LEADIN . 'type\s' =>          q<type>,
-	$LEADIN . 'time\b' =>          q<time>,
+	$LEADIN . 'time\s' =>          q<time>,
 	$LEADIN . 'dirs\b' =>          q<dirs>,
 	'(?:^|\s+)[<>]\(.*?\)'	    => q<\<() process substituion>,
     );
