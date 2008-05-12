@@ -18,6 +18,7 @@ devscripts (2.10.28) UNRELEASED; urgency=low
     + Don't flag "time)" as matching "time"
     + Apply various improvements to "quoted block" detection
     + Correctly match 'echo "$(< $0)"'
+    + Add a check for "$[" (a deprecated form of arithmetic expansion)
   * cowpoke: New script to upload a Debian source package to a cowbuilder host
     and build it, optionally also signing and uploading the result to an
     incoming queue (Closes: #479274)
