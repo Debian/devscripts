@@ -15,7 +15,7 @@ devscripts (2.10.28) UNRELEASED; urgency=low
       positives
     + Further improve the heredoc detection (to allow the space in "<< 'foo'")
     + Make the check for "process substitution" ignore quoted strings
-    + Don't flag "time)" as matching "time"
+    + Fix false positives in the tests for "time" and "test with unary -a"
     + Apply various improvements to "quoted block" detection
     + Correctly match 'echo "$(< $0)"'
     + Add a check for "$[" (a deprecated form of arithmetic expansion)
