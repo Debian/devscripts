@@ -386,7 +386,7 @@ sub init_hashes {
 	$LEADIN . 'exec\s+-[acl]' =>    q<exec -c/-l/-a name>,
 	$LEADIN . 'let\s' =>            q<let ...>,
 	'(?<![\$\(])\(\(.*\)\)' =>     q<'((' should be '$(('>,
-	'\$\[' =>		       q<'$[' should be '$(('>,
+	'\$\[[^][]+\]' =>	       q<'$[' should be '$(('>,
 	'(?:^|\s+)(\[|test)\s+-a' =>            q<test with unary -a (should be -e)>,
 	'\&>' =>	               q<should be \>word 2\>&1>,
 	'(<\&|>\&)\s*((-|\d+)[^\s;|)`&\\\\]|[^-\d\s])' =>
