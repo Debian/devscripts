@@ -110,29 +110,29 @@ UNSUPCHECKSUMS="$(echo "${CHECKSUMS}" | grep -v "^Checksums-Sha\(1\|256\):" || t
 
 # Sanity check #2: Versions must match
 if test $(echo "${VERSION}" | wc -l) -ne 1; then
-    echo "ERROR: Version numbers do not match:"
-    grep "^Version: [0-9]" "$@"
+    echo "ERROR: Version numbers do not match:" >&2
+    grep "^Version: [0-9]" "$@" >&2
     exit 1
 fi
 
 # Sanity check #3: Sources must match
 if test $(echo "${SOURCE}" | wc -l) -ne 1; then
-    echo "Error: Source packages do not match:"
-    grep "^Source: " "$@"
+    echo "Error: Source packages do not match:" >&2
+    grep "^Source: " "$@" >&2
     exit 1
 fi
 
 # Sanity check #4: Description for same binary must match
 if test $(echo "${DESCRIPTIONS}" | sed -e 's/ \+- .*$//' | uniq -d | wc -l) -ne 0; then
-    echo "Error: Descriptions do not match:"
-    echo "${DESCRIPTIONS}"
+    echo "Error: Descriptions do not match:" >&2
+    echo "${DESCRIPTIONS}" >&2
     exit 1
 fi
 
 # Sanity check #5: Formats must match
 if test $(echo "${FORMATS}" | wc -l) -ne 1; then
-    echo "Error: Changes files have different Format fields:"
-    grep "^Format: " "$@"
+    echo "Error: Changes files have different Format fields:" >&2
+    grep "^Format: " "$@" >&2
     exit 1
 fi
 
@@ -141,16 +141,16 @@ case "$FORMATS" in
     1.7|1.8) # Supported
         ;;
     *)
-        echo "Error: Changes files use unknown Format:"
-        echo "${FORMATS}"       
+        echo "Error: Changes files use unknown Format:" >&2
+        echo "${FORMATS}" >&2
         exit 1
         ;;
 esac
 
 # Sanity check #7: Unknown checksum fields
 if test -n "${UNSUPCHECKSUMS}"; then
-    echo "Error: Unsupported checksum fields:"
-    echo "${UNSUPCHECKSUMS}"
+    echo "Error: Unsupported checksum fields:" >&2
+    echo "${UNSUPCHECKSUMS}" >&2
     exit 1
 fi
 
