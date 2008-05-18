@@ -23,6 +23,8 @@ devscripts (2.10.28) UNRELEASED; urgency=low
   * cowpoke: New script to upload a Debian source package to a cowbuilder host
     and build it, optionally also signing and uploading the result to an
     incoming queue (Closes: #479274)
+  * dcmd: Correctly handle the "debian-installer" section in a .changes
+    file (Closes: #481691)
   * debsign: Use "mv -f" instead of plain "mv" when stripping an existing GPG
     signature or updating the file sizes within the changes file before
     signing it, as is already done for moving the resulting signed files
