@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2008-05-03 17:02+0100\n"
+"POT-Creation-Date: 2008-05-18 18:20+0100\n"
 "PO-Revision-Date: 2006-11-27 09:30+0100\n"
 "Last-Translator: Julien Cristau <julien.cristau@ens-lyon.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -66,10 +66,11 @@ msgstr "DEBIAN"
 # type: SH
 #: ../scripts/annotate-output.1:2 ../scripts/archpath.1:2 ../scripts/bts.pl:27
 #: ../scripts/build-rdeps.pl:18 ../scripts/chdist.pl:19
-#: ../scripts/checkbashisms.1:2 ../scripts/cvs-debc.1:2
-#: ../scripts/cvs-debi.1:2 ../scripts/cvs-debrelease.1:2
-#: ../scripts/cvs-debuild.1:2 ../scripts/dcmd.1:2 ../scripts/dd-list.1:19
-#: ../scripts/debc.1:2 ../scripts/debchange.1:2 ../scripts/debcheckout.pl:23
+#: ../scripts/checkbashisms.1:2 ../scripts/cowpoke.1:18
+#: ../scripts/cvs-debc.1:2 ../scripts/cvs-debi.1:2
+#: ../scripts/cvs-debrelease.1:2 ../scripts/cvs-debuild.1:2
+#: ../scripts/dcmd.1:2 ../scripts/dd-list.1:19 ../scripts/debc.1:2
+#: ../scripts/debchange.1:2 ../scripts/debcheckout.pl:23
 #: ../scripts/debclean.1:2 ../scripts/debcommit.pl:3 ../scripts/debdiff.1:2
 #: ../scripts/debi.1:2 ../scripts/debpkg.1:2 ../scripts/debrelease.1:2
 #: ../scripts/debrsign.1:2 ../scripts/debsign.1:2 ../scripts/debuild.1:2
@@ -100,10 +101,11 @@ msgstr ""
 # type: SH
 #: ../scripts/annotate-output.1:4 ../scripts/archpath.1:4
 #: ../scripts/bts.pl:140 ../scripts/build-rdeps.pl:22 ../scripts/chdist.pl:23
-#: ../scripts/checkbashisms.1:4 ../scripts/cvs-debc.1:4
-#: ../scripts/cvs-debi.1:4 ../scripts/cvs-debrelease.1:4
-#: ../scripts/cvs-debuild.1:4 ../scripts/dcmd.1:4 ../scripts/dd-list.1:22
-#: ../scripts/debc.1:4 ../scripts/debchange.1:4 ../scripts/debcheckout.pl:27
+#: ../scripts/checkbashisms.1:4 ../scripts/cowpoke.1:20
+#: ../scripts/cvs-debc.1:4 ../scripts/cvs-debi.1:4
+#: ../scripts/cvs-debrelease.1:4 ../scripts/cvs-debuild.1:4
+#: ../scripts/dcmd.1:4 ../scripts/dd-list.1:22 ../scripts/debc.1:4
+#: ../scripts/debchange.1:4 ../scripts/debcheckout.pl:27
 #: ../scripts/debclean.1:4 ../scripts/debcommit.pl:7 ../scripts/debdiff.1:4
 #: ../scripts/debi.1:4 ../scripts/debpkg.1:4 ../scripts/debrelease.1:4
 #: ../scripts/debrsign.1:4 ../scripts/debsign.1:4 ../scripts/debuild.1:4
@@ -131,10 +133,11 @@ msgstr "B<annotate-output> I<programme> [I<paramètres> ...]"
 # type: SH
 #: ../scripts/annotate-output.1:6 ../scripts/archpath.1:12
 #: ../scripts/bts.pl:144 ../scripts/build-rdeps.pl:26 ../scripts/chdist.pl:27
-#: ../scripts/checkbashisms.1:8 ../scripts/cvs-debc.1:6
-#: ../scripts/cvs-debi.1:6 ../scripts/cvs-debrelease.1:7
-#: ../scripts/cvs-debuild.1:7 ../scripts/dcmd.1:6 ../scripts/dd-list.1:26
-#: ../scripts/debc.1:6 ../scripts/debchange.1:8 ../scripts/debcheckout.pl:39
+#: ../scripts/checkbashisms.1:8 ../scripts/cowpoke.1:25
+#: ../scripts/cvs-debc.1:6 ../scripts/cvs-debi.1:6
+#: ../scripts/cvs-debrelease.1:7 ../scripts/cvs-debuild.1:7
+#: ../scripts/dcmd.1:6 ../scripts/dd-list.1:26 ../scripts/debc.1:6
+#: ../scripts/debchange.1:8 ../scripts/debcheckout.pl:39
 #: ../scripts/debclean.1:6 ../scripts/debcommit.pl:11 ../scripts/debdiff.1:15
 #: ../scripts/debi.1:6 ../scripts/debpkg.1:6 ../scripts/debrelease.1:6
 #: ../scripts/deb-reversion.dbk:82 ../scripts/debrsign.1:7
@@ -293,20 +296,20 @@ msgstr ""
 
 # type: SH
 #: ../scripts/annotate-output.1:55 ../scripts/archpath.1:54
-#: ../scripts/build-rdeps.pl:253 ../scripts/checkbashisms.1:58
-#: ../scripts/cvs-debc.1:64 ../scripts/cvs-debi.1:68
+#: ../scripts/build-rdeps.pl:251 ../scripts/checkbashisms.1:58
+#: ../scripts/cowpoke.1:150 ../scripts/cvs-debc.1:64 ../scripts/cvs-debi.1:68
 #: ../scripts/cvs-debrelease.1:69 ../scripts/cvs-debuild.1:59
 #: ../scripts/dcmd.1:40 ../scripts/dd-list.1:93 ../scripts/debc.1:120
 #: ../scripts/debchange.1:416 ../scripts/debcheckout.pl:111
-#: ../scripts/debclean.1:111 ../scripts/debcommit.pl:712
+#: ../scripts/debclean.1:111 ../scripts/debcommit.pl:714
 #: ../scripts/debdiff.1:187 ../scripts/debi.1:120 ../scripts/debpkg.1:23
 #: ../scripts/debrelease.1:137 ../scripts/deb-reversion.dbk:292
 #: ../scripts/debrsign.1:71 ../scripts/debsign.1:130 ../scripts/debuild.1:421
-#: ../scripts/desktop2menu.pl:52 ../scripts/dget.pl:617
+#: ../scripts/desktop2menu.pl:52 ../scripts/dget.pl:622
 #: ../scripts/diff2patches.1:40 ../scripts/dpkg-genbuilddeps.1:36
 #: ../scripts/dscverify.1:53 ../scripts/grep-excuses.1:39
 #: ../scripts/licensecheck.pl:116 ../scripts/list-unreleased.1:21
-#: ../scripts/manpage-alert.1:20 ../scripts/mass-bug.pl:492
+#: ../scripts/manpage-alert.1:20 ../scripts/mass-bug.pl:490
 #: ../scripts/mergechanges.1:18 ../scripts/mk-build-deps.pl:54
 #: ../scripts/nmudiff.1:97 ../scripts/plotchangelog.1:126
 #: ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:29
@@ -624,7 +627,7 @@ msgstr ""
 #: ../scripts/debclean.1:60 ../scripts/debcommit.pl:19 ../scripts/debdiff.1:50
 #: ../scripts/debi.1:65 ../scripts/debrelease.1:56
 #: ../scripts/deb-reversion.dbk:128 ../scripts/debrsign.1:30
-#: ../scripts/debsign.1:39 ../scripts/debuild.1:217 ../scripts/dget.pl:518
+#: ../scripts/debsign.1:39 ../scripts/debuild.1:217 ../scripts/dget.pl:523
 #: ../scripts/diff2patches.1:13 ../scripts/dpkg-depcheck.1:15
 #: ../scripts/dscverify.1:17 ../scripts/grep-excuses.1:13
 #: ../scripts/licensecheck.pl:43 ../scripts/list-unreleased.1:12
@@ -1039,7 +1042,7 @@ msgstr ""
 "première position de la ligne de commande."
 
 # type: =head1
-#: ../scripts/bts.pl:644 ../scripts/chdist.pl:54
+#: ../scripts/bts.pl:644 ../scripts/chdist.pl:56
 msgid "COMMANDS"
 msgstr "COMMANDES"
 
@@ -2271,9 +2274,9 @@ msgstr ""
 #: ../scripts/debclean.1:90 ../scripts/debcommit.pl:97
 #: ../scripts/debdiff.1:142 ../scripts/debi.1:93 ../scripts/debrelease.1:105
 #: ../scripts/debrsign.1:57 ../scripts/debsign.1:99 ../scripts/debuild.1:288
-#: ../scripts/dget.pl:581 ../scripts/dpkg-depcheck.1:102
+#: ../scripts/dget.pl:586 ../scripts/dpkg-depcheck.1:102
 #: ../scripts/dscverify.1:38 ../scripts/grep-excuses.1:27
-#: ../scripts/licensecheck.pl:83 ../scripts/mass-bug.pl:121
+#: ../scripts/licensecheck.pl:83 ../scripts/mass-bug.pl:119
 #: ../scripts/nmudiff.1:69 ../scripts/plotchangelog.1:106
 #: ../scripts/pts-subscribe.1:37 ../scripts/rmadison.pl:259
 #: ../scripts/uscan.1:441 ../scripts/uupdate.1:86 ../scripts/who-uploads.1:43
@@ -2284,7 +2287,7 @@ msgstr "VARIABLES DE CONFIGURATION"
 # NOTE: presque identique
 # type: Plain text
 #: ../scripts/bts.pl:3358 ../scripts/debcommit.pl:99
-#: ../scripts/licensecheck.pl:85 ../scripts/mass-bug.pl:123
+#: ../scripts/licensecheck.pl:85 ../scripts/mass-bug.pl:121
 msgid ""
 "The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  Command "
@@ -2386,12 +2389,12 @@ msgstr ""
 "place de mutt. Équivalent à l'option de ligne de commande --mailreader."
 
 # type: =item
-#: ../scripts/bts.pl:3400 ../scripts/mass-bug.pl:131
+#: ../scripts/bts.pl:3400 ../scripts/mass-bug.pl:129
 msgid "BTS_SENDMAIL_COMMAND"
 msgstr "BTS_SENDMAIL_COMMAND"
 
 # type: textblock
-#: ../scripts/bts.pl:3402 ../scripts/mass-bug.pl:133 ../scripts/nmudiff.1:92
+#: ../scripts/bts.pl:3402 ../scripts/mass-bug.pl:131 ../scripts/nmudiff.1:92
 msgid ""
 "If this is set, specifies a sendmail command to use instead of /usr/sbin/"
 "sendmail.  Same as the --sendmail command line option."
@@ -2503,14 +2506,14 @@ msgstr ""
 
 # type: SH
 #: ../scripts/bts.pl:3449 ../scripts/checkbashisms.1:56
-#: ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62
+#: ../scripts/cowpoke.1:145 ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62
 #: ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53
 #: ../scripts/dcmd.1:37 ../scripts/debc.1:115 ../scripts/debchange.1:409
 #: ../scripts/debcheckout.pl:105 ../scripts/debclean.1:107
-#: ../scripts/debcommit.pl:716 ../scripts/debdiff.1:180 ../scripts/debi.1:116
+#: ../scripts/debcommit.pl:718 ../scripts/debdiff.1:180 ../scripts/debi.1:116
 #: ../scripts/debrelease.1:132 ../scripts/deb-reversion.dbk:247
 #: ../scripts/debrsign.1:66 ../scripts/debsign.1:118 ../scripts/debuild.1:408
-#: ../scripts/dget.pl:625 ../scripts/diff2patches.1:37
+#: ../scripts/dget.pl:630 ../scripts/diff2patches.1:37
 #: ../scripts/dpkg-depcheck.1:118 ../scripts/dpkg-genbuilddeps.1:30
 #: ../scripts/dscverify.1:49 ../scripts/grep-excuses.1:37
 #: ../scripts/list-unreleased.1:19 ../scripts/nmudiff.1:92
@@ -2537,13 +2540,13 @@ msgid "reportbug(1), querybts(1)"
 msgstr ""
 
 # type: SH
-#: ../scripts/bts.pl:3459 ../scripts/chdist.pl:86 ../scripts/mass-bug.pl:485
+#: ../scripts/bts.pl:3457 ../scripts/chdist.pl:92 ../scripts/mass-bug.pl:483
 #: ../scripts/tagpending.pl:433
 msgid "COPYRIGHT"
 msgstr "COPYRIGHT"
 
 # type: textblock
-#: ../scripts/bts.pl:3461
+#: ../scripts/bts.pl:3459
 msgid ""
 "This program is Copyright (C) 2001-2003 by Joey Hess <joeyh@debian.org>.  "
 "Many modifications have been made, Copyright (C) 2002-2005 Julian Gilbey "
@@ -2555,7 +2558,7 @@ msgstr ""
 "<josh@freedesktop.org>."
 
 # type: textblock
-#: ../scripts/bts.pl:3466 ../scripts/chdist.pl:91 ../scripts/mass-bug.pl:489
+#: ../scripts/bts.pl:3464 ../scripts/chdist.pl:97 ../scripts/mass-bug.pl:487
 msgid ""
 "It is licensed under the terms of the GPL, either version 2 of the License, "
 "or (at your option) any later version."
@@ -2655,14 +2658,14 @@ msgid "Show the version information."
 msgstr "Affiche les informations sur la version."
 
 # type: =head1
-#: ../scripts/build-rdeps.pl:245 ../scripts/desktop2menu.pl:43
+#: ../scripts/build-rdeps.pl:243 ../scripts/desktop2menu.pl:43
 #: ../scripts/licensecheck.pl:107 ../scripts/svnpath.pl:93
 #: ../scripts/transition-check.pl:72
 msgid "LICENSE"
 msgstr "LICENCE"
 
 # type: textblock
-#: ../scripts/build-rdeps.pl:247
+#: ../scripts/build-rdeps.pl:245
 msgid ""
 "This code is copyright by Patrick Schoenfeld <schoenfeld@in-medias-res.com>, "
 "all rights reserved.  This program comes with ABSOLUTELEY NO WARRANTY.  You "
@@ -2671,7 +2674,7 @@ msgid ""
 msgstr ""
 
 # type: textblock
-#: ../scripts/build-rdeps.pl:255
+#: ../scripts/build-rdeps.pl:253
 msgid "Patrick Schoenfeld <schoenfeld@in-medias-res.com>"
 msgstr "Patrick Schoenfeld <schoenfeld@in-medias-res.com>"
 
@@ -2737,89 +2740,89 @@ msgid "Display version information."
 msgstr "Affiche les informations sur la version."
 
 # type: =item
-#: ../scripts/chdist.pl:56
+#: ../scripts/chdist.pl:60
 msgid "create DIST : prepare a new tree named DIST"
 msgstr ""
 
 # type: =item
-#: ../scripts/chdist.pl:58
+#: ../scripts/chdist.pl:62
 msgid "apt-get DIST (update|source|...) : run apt-get inside DIST"
 msgstr ""
 
 # type: =item
-#: ../scripts/chdist.pl:60
+#: ../scripts/chdist.pl:64
 msgid "apt-cache DIST (show|showsrc|...) : run apt-cache inside DIST"
 msgstr ""
 
 # type: =item
-#: ../scripts/chdist.pl:62
+#: ../scripts/chdist.pl:66
 msgid "apt-rdepends DIST [...] : run apt-rdepends inside DIST"
 msgstr ""
 
 # type: =item
-#: ../scripts/chdist.pl:64
+#: ../scripts/chdist.pl:68
 msgid "src2bin DIST PKG : get binary packages for a source package in DIST"
 msgstr ""
 
 # type: =item
-#: ../scripts/chdist.pl:66
+#: ../scripts/chdist.pl:70
 msgid "bin2src DIST PKG : get source package for a binary package in DIST"
 msgstr ""
 
 # type: =item
-#: ../scripts/chdist.pl:68
+#: ../scripts/chdist.pl:72
 msgid ""
 "compare-packages DIST1 DIST2 [DIST3, ...] : list versions of packages in "
 "several DISTributions"
 msgstr ""
 
 # type: =item
-#: ../scripts/chdist.pl:70
+#: ../scripts/chdist.pl:74
 msgid "compare-bin-packages DIST1 DIST2 [DIST3, ...]"
 msgstr ""
 
 # type: =item
-#: ../scripts/chdist.pl:72
+#: ../scripts/chdist.pl:76
 msgid ""
 "compare-versions DIST1 DIST2 : same as compare-packages, but also run dpkg --"
 "compare-versions and display where the package is newer."
 msgstr ""
 
 # type: =item
-#: ../scripts/chdist.pl:74
+#: ../scripts/chdist.pl:78
 msgid "compare-bin-versions DIST1 DIST2"
 msgstr ""
 
 # type: =item
-#: ../scripts/chdist.pl:76
+#: ../scripts/chdist.pl:80
 msgid "compare-src-bin-packages DIST : compare sources and binaries for DIST"
 msgstr ""
 
 # type: =item
-#: ../scripts/chdist.pl:78
+#: ../scripts/chdist.pl:82
 msgid ""
 "compare-src-bin-versions DIST : same as compare-src-bin-versions, but also "
 "run dpkg --compare-versions and display where the package is newer"
 msgstr ""
 
 # type: =item
-#: ../scripts/chdist.pl:80
+#: ../scripts/chdist.pl:84
 msgid ""
 "grep-dctrl-packages DIST [...] : run grep-dctrl on *_Packages inside DIST"
 msgstr ""
 
 # type: =item
-#: ../scripts/chdist.pl:82
+#: ../scripts/chdist.pl:86
 msgid "grep-dctrl-sources DIST [...] : run grep-dctrl on *_Sources inside DIST"
 msgstr ""
 
 # type: =item
-#: ../scripts/chdist.pl:84
+#: ../scripts/chdist.pl:88
 msgid "list : list available DISTs"
 msgstr ""
 
 # type: textblock
-#: ../scripts/chdist.pl:88
+#: ../scripts/chdist.pl:94
 msgid ""
 "This program is copyright 2007 by Lucas Nussbaum and Luk Claes. This program "
 "comes with ABSOLUTELY NO WARRANTY."
@@ -3011,6 +3014,314 @@ msgstr ""
 "B<checkbashisms> a été initialement écrit sous forme de script shell par "
 "Yann Dirson E<lt>dirson@debian.orgE<gt> et a été récrit en Perl avec "
 "beaucoup plus de fonctionnalités par Julian Gilbey E<lt>jdg@debian.orgE<gt>."
+
+# type: TH
+#: ../scripts/cowpoke.1:5
+#, no-wrap
+msgid "COWPOKE"
+msgstr ""
+
+# type: TH
+#: ../scripts/cowpoke.1:5
+#, no-wrap
+msgid "April 28, 2008"
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:20
+msgid "cowpoke - Build a Debian source package in a remote cowbuilder instance"
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:25
+msgid ""
+"B<cowpoke> I<packagename.dsc> [I< arch >[I< buildd-host >[I< buildd-username "
+">] ] ]"
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:28
+msgid ""
+"Uploads a Debian source package to a cowbuilder host and builds it, "
+"optionally also signing and uploading the result to an incoming queue."
+msgstr ""
+
+# type: SH
+#: ../scripts/cowpoke.1:30
+#, fuzzy, no-wrap
+msgid "CONFIGURATION OPTIONS"
+msgstr "VARIABLES DE CONFIGURATION"
+
+# type: Plain text
+#: ../scripts/cowpoke.1:33
+msgid ""
+"When B<cowpoke> is run the following configuration options are read from "
+"global, per-user, and per-project configuration files if present:"
+msgstr ""
+
+# type: TP
+#: ../scripts/cowpoke.1:33
+#, fuzzy, no-wrap
+msgid "B<BUILDD_HOST>"
+msgstr "B<DEBUILD_ROOTCMD>"
+
+# type: Plain text
+#: ../scripts/cowpoke.1:37
+msgid ""
+"The network address or fqdn of the build machine where cowbuilder is "
+"configured.  This may be overridden by an explicit hostname specified as a "
+"command line option."
+msgstr ""
+
+# type: TP
+#: ../scripts/cowpoke.1:37
+#, fuzzy, no-wrap
+msgid "B<BUILDD_USER>"
+msgstr "B<DEBUILD_PRESERVE_ENV>"
+
+# type: Plain text
+#: ../scripts/cowpoke.1:42
+msgid ""
+"The unprivileged user name for operations on the build machine.  This "
+"defaults to the local name of the user executing B<cowpoke>, and may also be "
+"overridden by specifying the username on the command line."
+msgstr ""
+
+# type: TP
+#: ../scripts/cowpoke.1:42
+#, fuzzy, no-wrap
+msgid "B<BUILDD_ARCH>"
+msgstr "B<DEBUILD_ROOTCMD>"
+
+# type: Plain text
+#: ../scripts/cowpoke.1:48
+msgid ""
+"The Debian architecture string to build for.  This must match the "
+"B<DEB_BUILD_ARCH> of the build chroot being used.  It defaults to the local "
+"machine architecture where B<cowpoke> is executed, and may be overridden on "
+"the command line."
+msgstr ""
+
+# type: TP
+#: ../scripts/cowpoke.1:49
+#, no-wrap
+msgid "B<INCOMING_DIR>"
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:54
+msgid ""
+"The directory path on the build machine where the source package will "
+"initially be placed.  An absolute path may be used, but it must be writable "
+"by the B<BUILDD_USER>.  Relative paths are rooted at that user's home "
+"directory."
+msgstr ""
+
+# type: TP
+#: ../scripts/cowpoke.1:54
+#, fuzzy, no-wrap
+msgid "B<RESULT_DIR>"
+msgstr "B<USCAN_DEHS_OUTPUT>"
+
+# type: Plain text
+#: ../scripts/cowpoke.1:63
+msgid ""
+"The directory path on the build machine where the resulting packages (source "
+"and binary) will be found, and where older versions of the package that were "
+"built previously may be found.  If any such older packages exist, debdiff "
+"will be used to compare the new package with the previous version after the "
+"build is complete, and the result will be included in the build log.  Files "
+"in it must be readable by the B<BUILDD_USER> for sanity checking with "
+"B<lintian> and B<debdiff>, and for upload with B<dput>.  This should always "
+"be an absolute path."
+msgstr ""
+
+# type: TP
+#: ../scripts/cowpoke.1:64
+#, fuzzy, no-wrap
+msgid "B<SIGN_KEYID>"
+msgstr "B<DEBSIGN_KEYID>"
+
+# type: Plain text
+#: ../scripts/cowpoke.1:71
+msgid ""
+"If this option is set, it is expected to contain the gpg key id to pass to "
+"B<debsign> if the packages are to be remotely signed.  You will be prompted "
+"to confirm whether you wish to sign the packages after each build is "
+"complete.  If this option is unset or an empty string, no attempt to sign "
+"packages will be made."
+msgstr ""
+
+# type: TP
+#: ../scripts/cowpoke.1:71
+#, no-wrap
+msgid "B<UPLOAD_QUEUE>"
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:78
+msgid ""
+"If this opton is set, it is expected to contain a 'host' specification for "
+"B<dput> which will be used to upload them after they are signed.  You will "
+"be prompted to confirm whether you wish to upload the packages after they "
+"are signed.  If this option is unset or an empty string, no attempt to "
+"upload packages will be made.  If B<SIGN_KEYID> is not set, this option will "
+"be ignored entirely."
+msgstr ""
+
+# type: TP
+#: ../scripts/cowpoke.1:79
+#, fuzzy, no-wrap
+msgid "B<BUILDD_ROOTCMD>"
+msgstr "B<DEBUILD_ROOTCMD>"
+
+# type: Plain text
+#: ../scripts/cowpoke.1:89
+msgid ""
+"If this opton is unset (which is the default), cowpoke will attempt to log "
+"in to the build machine as the root user initially, then drop those "
+"privileges to assume the identity of the B<BUILDD_USER> for operations which "
+"do not require them.  This is the recommended method when used in "
+"conjunction with a secure key to grant root access to the machine.  If you "
+"prefer to gain root access through some other method, then you should set "
+"this option to contain the privilege escalation command that will be used to "
+"execute the scripts which must run as root, and cowpoke will initially log "
+"in as the B<BUILDD_USER>."
+msgstr ""
+
+# type: SH
+#: ../scripts/cowpoke.1:91
+#, fuzzy, no-wrap
+msgid "CONFIGURATION FILES"
+msgstr "VARIABLES DE CONFIGURATION"
+
+# type: TP
+#: ../scripts/cowpoke.1:92
+#, no-wrap
+msgid "I</etc/cowpoke.conf>"
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:95
+msgid "Global configuration options.  Will override hardcoded defaults."
+msgstr ""
+
+# type: TP
+#: ../scripts/cowpoke.1:95
+#, no-wrap
+msgid "I<~/.cowpoke>"
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:98
+msgid ""
+"Per-user configuration options.  Will override any global configuration."
+msgstr ""
+
+# type: TP
+#: ../scripts/cowpoke.1:98
+#, no-wrap
+msgid "I<.cowpoke>"
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:102
+msgid ""
+"Per-project configuration options.  Will override any per-user or global "
+"configuration if B<cowpoke> is called from the directory where they exist."
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:106
+msgid ""
+"If the environment variable B<COWPOKE_CONF> is set, it specifies an "
+"addtional configuration file which will override all of those above.  "
+"Options specified explicitly on the command line override all configuration "
+"files."
+msgstr ""
+
+# type: SH
+#: ../scripts/cowpoke.1:108
+#, no-wrap
+msgid "COWBUILDER CONFIGURATION"
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:115
+msgid ""
+"There is nothing particularly special required to configure a cowbuilder "
+"instance for use with B<cowpoke>.  Simply create them in the flavour you "
+"require with `cowbuilder --create` according to the cowbuilder "
+"documentation, then configure B<cowpoke> with the user, arch, and path "
+"information required to access it, on the machines you wish to invoke it "
+"from.  The build host running cowbuilder does not require B<cowpoke> "
+"installed locally."
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:121
+msgid ""
+"The build machine should have the lintian and devscripts packages installed "
+"for post-build sanity checking.  Upon completion, the build log and the "
+"results of automated checks will be recorded in the B<INCOMING_DIR>.  If you "
+"wish to upload signed packages the build machine will also need B<dput> "
+"installed and configured to use the 'host' alias specified by "
+"B<UPLOAD_QUEUE>."
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:126
+msgid ""
+"The user executing B<cowpoke> must have ssh access to the build machine as "
+"both 'root' and the B<BUILDD_USER>.  Signing keys are not required to be "
+"installed on the build machine (and will be ignored there if they are).  If "
+"the package is signed, keys will be expected on the machine that executes "
+"B<cowpoke>."
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:133
+msgid ""
+"When B<cowpoke> is invoked, it will first attempt to update the cowbuilder "
+"image if that has not already been done on the same day.  This is checked by "
+"the presence or absence of a I<cowbuilder-update-log-$date> file in the "
+"B<INCOMING_DIR>.  You may move, remove, or touch this file if you wish the "
+"image to be updated more or less often than that.  Its contents log the "
+"output of cowbuilder during the update."
+msgstr ""
+
+# type: =head1
+#: ../scripts/cowpoke.1:135 ../scripts/rmadison.pl:279
+#, no-wrap
+msgid "NOTES"
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:144
+msgid ""
+"Since cowbuilder creates a chroot, and to do that you need root, B<cowpoke> "
+"also requires some degree of root access.  So all the horrible things that "
+"can go wrong with that may well one day rain down upon you.  cowbuilder has "
+"been known to accidentally wipe out bind-mounted filesystems outside the "
+"chroot, and worse than that can easily happen.  So be careful, keep good "
+"backups of things you don't want to lose on your build machine, and use "
+"B<cowpoke> to keep all that on a machine that isn't your bleeding edge dev "
+"box with your last few hours of uncommitted work."
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:149
+#, fuzzy
+msgid "B<cowbuilder>(1), B<pbuilder>(1), B<ssh-agent>(1)."
+msgstr ""
+"B<cvs-buildpackage>(1), B<debuild>(1), B<dpkg-buildpackage>(1), B<lintian>"
+"(1) et B<linda>(1)."
+
+# type: Plain text
+#: ../scripts/cowpoke.1:153
+#, fuzzy
+msgid "B<cowpoke> was written by Ron E<lt>ron@debian.orgE<gt>."
+msgstr "B<whodepends> a été écrit par Moshe Zadka E<lt>moshez@debian.orgE<gt>."
 
 # type: TH
 #: ../scripts/cvs-debc.1:1 ../scripts/cvs-debrelease.1:1
@@ -5165,7 +5476,7 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../scripts/debchange.1:395 ../scripts/mass-bug.pl:116
+#: ../scripts/debchange.1:395 ../scripts/mass-bug.pl:114
 #, no-wrap
 msgid "ENVIRONMENT"
 msgstr "ENVIRONNEMENT"
@@ -5319,7 +5630,7 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../scripts/debcheckout.pl:77 ../scripts/dget.pl:571
+#: ../scripts/debcheckout.pl:77 ../scripts/dget.pl:576
 #: ../scripts/dpkg-depcheck.1:96 ../scripts/mk-build-deps.pl:44
 #: ../scripts/rmadison.pl:220
 #, no-wrap
@@ -5881,12 +6192,12 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../scripts/debcommit.pl:714 ../scripts/mass-bug.pl:494
+#: ../scripts/debcommit.pl:716 ../scripts/mass-bug.pl:492
 msgid "Joey Hess <joeyh@debian.org>"
 msgstr "Joey Hess <joeyh@debian.org>"
 
 # type: textblock
-#: ../scripts/debcommit.pl:718
+#: ../scripts/debcommit.pl:720
 msgid "L<svnpath(1)>."
 msgstr "L<svnpath(1)>."
 
@@ -8807,6 +9118,15 @@ msgstr ""
 
 # type: textblock
 #: ../scripts/dget.pl:503
+msgid ""
+"(Note that I<.udeb> packages used by debian-installer are located in "
+"separate packages files from I<.deb> packages. In order to use I<.udebs> "
+"with B<dget>, you will need to have configured B<apt> to use a packages file "
+"for I<component>/I<debian-installer>)."
+msgstr ""
+
+# type: textblock
+#: ../scripts/dget.pl:508
 #, fuzzy
 msgid ""
 "Before downloading files listed in .dsc and .changes files, and before "
@@ -8826,7 +9146,7 @@ msgstr ""
 "téléchargement utilisés sont B<curl> et B<wget>, recherchés dans cet ordre."
 
 # type: textblock
-#: ../scripts/dget.pl:513
+#: ../scripts/dget.pl:518
 msgid ""
 "B<dget> was written to make it easier to retrieve source packages from the "
 "web for sponsor uploads.  For checking the package with B<debdiff>, the last "
@@ -8839,33 +9159,33 @@ msgstr ""
 "dernière version source via B<apt-get source> I<package>."
 
 # type: TP
-#: ../scripts/dget.pl:522
+#: ../scripts/dget.pl:527
 msgid "B<-b>, B<--backup>"
 msgstr "B<-b>, B<--backup>"
 
 # type: textblock
-#: ../scripts/dget.pl:524
+#: ../scripts/dget.pl:529
 msgid "Move files that would be overwritten to I<./backup>."
 msgstr "Déplace les fichiers qui devraient être écrasés dans I<./backup>."
 
 # type: =item
-#: ../scripts/dget.pl:526
+#: ../scripts/dget.pl:531
 msgid "B<-q>, B<--quiet>"
 msgstr "B<-q>, B<--quiet>"
 
 # type: textblock
-#: ../scripts/dget.pl:528
+#: ../scripts/dget.pl:533
 msgid "Suppress B<wget>/B<curl> non-error output."
 msgstr "Supprime la sortie de B<wget>/B<curl> (sauf les erreurs)."
 
 # type: TP
-#: ../scripts/dget.pl:530
+#: ../scripts/dget.pl:535
 #, fuzzy
 msgid "B<-d>, B<--download-only>"
 msgstr "B<--download>"
 
 # type: textblock
-#: ../scripts/dget.pl:532
+#: ../scripts/dget.pl:537
 #, fuzzy
 msgid ""
 "Do not run B<dpkg-source -x> on the downloaded source package.  This can "
@@ -8875,12 +9195,12 @@ msgstr ""
 "peut être utilisée qu'avec la première méthode d'invocation de B<dget>."
 
 # type: TP
-#: ../scripts/dget.pl:535
+#: ../scripts/dget.pl:540
 msgid "B<-x>, B<--extract>"
 msgstr "B<-x>, B<--extract>"
 
 # type: textblock
-#: ../scripts/dget.pl:537
+#: ../scripts/dget.pl:542
 #, fuzzy
 msgid ""
 "Run B<dpkg-source -x> on the downloaded source package to unpack it.  This "
@@ -8891,37 +9211,37 @@ msgstr ""
 "peut être utilisée qu'avec la première méthode d'invocation de B<dget>."
 
 # type: TP
-#: ../scripts/dget.pl:541
+#: ../scripts/dget.pl:546
 #, fuzzy
 msgid "B<-u>, B<--allow-unauthenticated>"
 msgstr "B<-a>, B<--all>"
 
 # type: textblock
-#: ../scripts/dget.pl:543
+#: ../scripts/dget.pl:548
 msgid ""
 "Do not attempt to verify the integrity of downloaded source packages using "
 "B<dscverify>."
 msgstr ""
 
 # type: TP
-#: ../scripts/dget.pl:546
+#: ../scripts/dget.pl:551
 #, fuzzy
 msgid "B<--build>"
 msgstr "B<--linda>"
 
 # type: textblock
-#: ../scripts/dget.pl:548
+#: ../scripts/dget.pl:553
 #, fuzzy
 msgid "Run B<dpkg-buildpackage -b -uc> on the downloaded source package."
 msgstr "B<-x> lance B<dpkg-source -x> sur le paquet source téléchargé."
 
 # type: =item
-#: ../scripts/dget.pl:550
+#: ../scripts/dget.pl:555
 msgid "B<--path> DIR[:DIR...]"
 msgstr ""
 
 # type: textblock
-#: ../scripts/dget.pl:552
+#: ../scripts/dget.pl:557
 msgid ""
 "In addition to I</var/cache/apt/archives>, B<dget> uses the colon-separated "
 "list given as argument to B<--path> to find files with a matching md5sum.  "
@@ -8934,46 +9254,46 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../scripts/dget.pl:563
+#: ../scripts/dget.pl:568
 msgid "B<--insecure>"
 msgstr "B<--insecure>"
 
 # type: textblock
-#: ../scripts/dget.pl:565
+#: ../scripts/dget.pl:570
 msgid "Allow SSL connections to untrusted hosts."
 msgstr ""
 "Autoriser les connexions SSL vers des hôtes dont l'authenticité n'est pas "
 "certifiée."
 
 # type: TP
-#: ../scripts/dget.pl:567
+#: ../scripts/dget.pl:572
 #, fuzzy
 msgid "B<--no-cache>"
 msgstr "B<--cache>"
 
 # type: textblock
-#: ../scripts/dget.pl:569
+#: ../scripts/dget.pl:574
 msgid "Bypass server-side HTTP caches by sending a B<Pragma: no-cache> header."
 msgstr ""
 
 # type: Plain text
-#: ../scripts/dget.pl:573
+#: ../scripts/dget.pl:578
 msgid "Show a help message."
 msgstr "Affiche un message d'aide."
 
 # type: TP
-#: ../scripts/dget.pl:575
+#: ../scripts/dget.pl:580
 msgid "B<-V>, B<--version>"
 msgstr "B<-V>, B<--version>"
 
 # type: Plain text
-#: ../scripts/dget.pl:577
+#: ../scripts/dget.pl:582
 msgid "Show version information."
 msgstr "Affiche les informations sur la version."
 
 # NOTE: presque identique
 # type: Plain text
-#: ../scripts/dget.pl:583
+#: ../scripts/dget.pl:588
 #, fuzzy
 msgid ""
 "The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
@@ -8990,12 +9310,12 @@ msgstr ""
 "cette fin. Les variables actuellement reconnues sont :"
 
 # type: =item
-#: ../scripts/dget.pl:591
+#: ../scripts/dget.pl:596
 msgid "DGET_PATH"
 msgstr ""
 
 # type: textblock
-#: ../scripts/dget.pl:593
+#: ../scripts/dget.pl:598
 msgid ""
 "This can be set to a colon-separated list of directories in which to search "
 "for files in addition to the default I</var/cache/apt/archives>.  It has the "
@@ -9003,49 +9323,49 @@ msgid ""
 msgstr ""
 
 # type: =item
-#: ../scripts/dget.pl:598
+#: ../scripts/dget.pl:603
 msgid "DGET_UNPACK"
 msgstr ""
 
 # type: textblock
-#: ../scripts/dget.pl:600
+#: ../scripts/dget.pl:605
 msgid ""
 "Set to 'no' to disable extracting downloaded source packages.  Default is "
 "'yes'."
 msgstr ""
 
 # type: TH
-#: ../scripts/dget.pl:603
+#: ../scripts/dget.pl:608
 #, fuzzy
 msgid "DGET_VERIFY"
 msgstr "DSCVERIFY"
 
 # type: textblock
-#: ../scripts/dget.pl:605
+#: ../scripts/dget.pl:610
 msgid ""
 "Set to 'no' to disable checking signatures of downloaded source packages.  "
 "Default is 'yes'."
 msgstr ""
 
 # type: =head1
-#: ../scripts/dget.pl:610
+#: ../scripts/dget.pl:615
 msgid "BUGS AND COMPATIBILITY"
 msgstr ""
 
 # type: textblock
-#: ../scripts/dget.pl:612
+#: ../scripts/dget.pl:617
 msgid "B<dget> I<package> should be implemented in B<apt-get install -d>."
 msgstr "B<dget> I<package> devrait être implémenté dans B<apt-get install -d>."
 
 # type: textblock
-#: ../scripts/dget.pl:614
+#: ../scripts/dget.pl:619
 msgid ""
 "Before devscripts version 2.10.17, the default was not to extract the "
 "downloaded source. Set DGET_UNPACK=no to revert to the old behaviour."
 msgstr ""
 
 # type: textblock
-#: ../scripts/dget.pl:619
+#: ../scripts/dget.pl:624
 #, fuzzy
 msgid ""
 "This program is Copyright (C) 2005-08 by Christoph Berg <myon@debian.org>.  "
@@ -9055,7 +9375,7 @@ msgstr ""
 "modifications sont Copyright \\(co 2005-2006 Julian Gilbey <jdg@debian.org>."
 
 # type: textblock
-#: ../scripts/dget.pl:622 ../scripts/tagpending.pl:442
+#: ../scripts/dget.pl:627 ../scripts/tagpending.pl:442
 msgid ""
 "This program is licensed under the terms of the GPL, either version 2 of the "
 "License, or (at your option) any later version."
@@ -9064,7 +9384,7 @@ msgstr ""
 "(GPL) version 2 ou toute version ultérieure (à votre discrétion)."
 
 # type: textblock
-#: ../scripts/dget.pl:627
+#: ../scripts/dget.pl:632
 msgid ""
 "B<apt-get>(1), B<debdiff>(1), B<dpkg-source>(1), B<curl>(1), B<wget>(1)."
 msgstr ""
@@ -10357,7 +10677,7 @@ msgstr ""
 "commandes. Par défaut, c'est « /usr/sbin/sendmail » qui est utilisé."
 
 # type: textblock
-#: ../scripts/mass-bug.pl:118
+#: ../scripts/mass-bug.pl:116
 msgid ""
 "DEBEMAIL and EMAIL can be set in the environment to control the email "
 "address that the bugs are sent from."
@@ -10366,7 +10686,7 @@ msgstr ""
 "l'adresse électronique utilisée pour envoyer les bogues."
 
 # type: Plain text
-#: ../scripts/mass-bug.pl:487
+#: ../scripts/mass-bug.pl:485
 msgid "This program is Copyright (C) 2006 by Joey Hess <joeyh@debian.org>."
 msgstr ""
 "Ce programme a été écrit par Joey Hess <joeyh@debian.org>, Copyright (C) "
@@ -11436,11 +11756,6 @@ msgstr ""
 msgid ""
 "Multiple shorthand entries may be specified by using multiple "
 "B<RMADISON_URL_MAP_*> variables."
-msgstr ""
-
-# type: =head1
-#: ../scripts/rmadison.pl:279
-msgid "NOTES"
 msgstr ""
 
 # type: textblock
