@@ -131,9 +131,17 @@ fi
 
 # Sanity check #5: Formats must match
 if test $(echo "${FORMATS}" | wc -l) -ne 1; then
-    echo "Error: Changes files have different Format fields:" >&2
-    grep "^Format: " "$@" >&2
-    exit 1
+    if test "${FORMATS}" = "$(printf "1.7\n1.8\n")"; then
+	FORMATS="1.7"
+	CHECKSUMS=""
+	UNSUPCHECKSUMS=""
+	SHA1S=""
+	SHA256S=""
+    else
+	echo "Error: Changes files have different Format fields:" >&2
+	grep "^Format: " "$@" >&2
+	exit 1
+    fi
 fi
 
 # Sanity check #6: The Format must be one we understand
@@ -183,6 +191,7 @@ eval "sed -e 's,^Architecture: .*,Architecture: ${ARCHS},' \
     -e '/^Files: /,$ d; /^Checksums-.*: /,$ d' \
     -e '/^Description:/,/^[^ ]/{/^Description:/d;/^[ ]/d}' \
     -e '/^Changes:/{r '${DESCFILE} -e ';aChanges:' -e ';d}' \
+    -e 's,^Format: .*,Format: ${FORMATS},' \
     ${OUTPUT} ${REDIR1}"
 
 # Voodoo magic to get the merged file and checksum lists into the output
