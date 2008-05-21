@@ -387,7 +387,7 @@ elsif ($type eq 'dsc') {
     # Compare source packages
     my $pwd = cwd;
 
-    my (@origs, @diffs, @dscs);
+    my (@origs, @diffs, @dscs, @dscformats);
     foreach my $i (1,2) {
 	my $dsc = shift;
 	chdir dirname($dsc)
@@ -402,6 +402,8 @@ elsif ($type eq 'dsc') {
 	    if (/^Files:/) {
 		$infiles=1;
 		next;
+	    } elsif (/^Format: (.*)$/) {
+		$dscformats[$i] = $1;
 	    }
 	    next unless $infiles;
 	    last if /^\s*$/;
@@ -474,7 +476,9 @@ elsif ($type eq 'dsc') {
 	mktmpdirs();
 	for my $i (1,2) {
 	    no strict 'refs';
-	    my $cmd = qq(cd ${"dir$i"} && dpkg-source -x $dscs[$i] >/dev/null);
+	    my @opts = ('-x');
+	    push (@opts, '--skip-patches') if $dscformats[$i] eq '3.0 (quilt)';
+	    my $cmd = qq(cd ${"dir$i"} && dpkg-source @opts $dscs[$i] >/dev/null);
 	    system $cmd;
 	    if ($? != 0) {
 	    	    my $dir = dirname $dscs[1] if $i == 2;
@@ -483,7 +487,7 @@ elsif ($type eq 'dsc') {
 		    system $cmdx;
 		    fatal "$cmd failed" if $? != 0;
 		    my $dscx = basename $dscs[$i];
-		    $cmdx = qq(cp $diffs[$i] ${"dir$i"} && cp $dscs[$i] ${"dir$i"} && cd ${"dir$i"} && dpkg-source -x $dscx > /dev/null);
+		    $cmdx = qq(cp $diffs[$i] ${"dir$i"} && cp $dscs[$i] ${"dir$i"} && cd ${"dir$i"} && dpkg-source @opts $dscx > /dev/null);
 		    system $cmdx;
 		    fatal "$cmd failed" if $? != 0;
 	    }
