@@ -84,6 +84,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
     debian/ or, if present, debian/patches [patchutils]
   - dscverify: verify the integrity of a Debian package from the
     .changes or .dsc files [gnupg, debian-keyring, libdigest-md5-perl]
+  - getbuildlog: download package build logs from Debian auto-builders [wget]
   - grep-excuses: grep the update_excuses.html file for your packages
     [libterm-size-perl, wget]
   - licensecheck: attempt to determine the license of source files
