@@ -6,6 +6,9 @@ devscripts (2.10.29) UNRELEASED; urgency=low
     package, to minimise noise in the diffs (Closes: #475506)
   * getbuildlog: New script from Frank S. Thomas to download build logs for
     a given package (Closes: #483169)
+  * mass-bug:
+    + Allow the component parts of a version number to be used in the template,
+      as #EPOCH#, #UPSTREAM_VERSION# and #REVISION# (Closes: #482587)
   * mergechanges: Allow changes files with Formats of 1.7 and 1.8 to be merged,
     by removing the Checksums-* fields from the Format: 1.8 files. The result
     will be a valid Format: 1.7 changes file. (Closes: #481585)

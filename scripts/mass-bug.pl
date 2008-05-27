@@ -47,6 +47,11 @@ report, excluding the BTS pseudo-headers. In the template, #PACKAGE# is
 replaced with the name of the package. If a version was specified for 
 the package, #VERSION# will be replaced by that version.
 
+The components of the version number may be specified using #EPOCH#,
+#UPSTREAM_VERSION# and #REVISION#. #EPOCH# includes the trailing colon and
+#REVISION# the leading dash so that #EPOCH#UPSTREAM_VERSION##REVISION# is
+always the same as #VERSION#.
+
 Note that text in the template will be automatically word-wrapped to 70
 columns, up to the start of a signature (indicated by S<'-- '> at the
 start of a line on its own). This is another reason to avoid including
@@ -273,8 +278,15 @@ sub gen_bug {
 
     $version = $versions{$package} || "";
 
+    my ($epoch, $upstream, $revision) = ($version =~ /^(\d+:)?(.+?)(-[^-]+)?$/);
+    $epoch ||= "";
+    $revision ||= ""; 
+
     $template_text=~s/#PACKAGE#/$package/g;
     $template_text=~s/#VERSION#/$version/g;
+    $template_text=~s/#EPOCH#/$epoch/g;
+    $template_text=~s/#UPSTREAM_VERSION#/$upstream/g;
+    $template_text=~s/#REVISION#/$revision/g;    
 
     $version = "Version: $version\n" if $version;
 
