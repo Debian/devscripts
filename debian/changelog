@@ -11,6 +11,7 @@ devscripts (2.10.29) UNRELEASED; urgency=low
       as #EPOCH#, #UPSTREAM_VERSION# and #REVISION# (Closes: #482587)
     + Add a command-line option to specify that the generated e-mails should
       not be wrapped to 70 characters (Closes: #483030)
+    + Allow the sendmail command to begin with a tilde
   * mergechanges: Allow changes files with Formats of 1.7 and 1.8 to be merged,
     by removing the Checksums-* fields from the Format: 1.8 files. The result
     will be a valid Format: 1.7 changes file. (Closes: #481585)
