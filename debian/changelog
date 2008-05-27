@@ -1,5 +1,7 @@
 devscripts (2.10.29) UNRELEASED; urgency=low
 
+  * checkbashisms: Add checks for "sh -r", "sh -D", "sh [-+]O" and "sh with
+    long options"
   * debdiff: Don't apply patches when extracting a Format 3.0 (quilt) source
     package, to minimise noise in the diffs (Closes: #475506)
   * mergechanges: Allow changes files with Formats of 1.7 and 1.8 to be merged,

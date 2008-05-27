@@ -417,7 +417,10 @@ sub init_hashes {
 	$LEADIN . 'time\s' =>          q<time>,
 	$LEADIN . 'dirs\b' =>          q<dirs>,
 	'(?:^|\s+)[<>]\(.*?\)'	    => q<\<() process substituion>,
-	'(?:^|\s+)readonly\s+-[af]' => q<readonly -[af]>
+	'(?:^|\s+)readonly\s+-[af]' => q<readonly -[af]>,
+	$LEADIN . 'sh -[rD]' =>        q<sh -[rD]>,
+	$LEADIN . 'sh --\w+' =>        q<sh --long-option>,
+	$LEADIN . 'sh [-+]O' =>        q<sh [-+]O>,
     );
 
     %string_bashisms = (
