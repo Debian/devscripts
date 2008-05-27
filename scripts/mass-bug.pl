@@ -101,6 +101,10 @@ Set the BTS pseudo-header for usertags.
 Specify the sendmail command.  The command will be split on white
 space and will not be passed to a shell.  Default is '/usr/sbin/sendmail'.
 
+=item --no-wrap
+
+Do not wrap the template to lines of 70 characters.
+
 =item --no-conf, --noconf
 
 Do not read any configuration files.  This can only be used as the
@@ -176,6 +180,7 @@ Valid options are:
    --usertags=usertags    Set the BTS pseudo-header for usertags
 
    --sendmail=cmd         Sendmail command to use (default /usr/sbin/sendmail)
+   --no-wrap              Don't wrap the template to 70 chars.
    --no-conf, --noconf    Don\'t read devscripts config files;
                           must be the first option given
    --help                 Display this message
@@ -273,6 +278,7 @@ sub gen_bug {
     my $tags=shift;
     my $user=shift;
     my $usertags=shift;
+    my $nowrap=shift;
     my $version="";
     my $bugtext;
 
@@ -290,11 +296,13 @@ sub gen_bug {
 
     $version = "Version: $version\n" if $version;
 
-    if ($template_text =~ /\A(.*?)(^-- $)(.*)/ms) { # there's a sig involved
-	my ($presig, $sig) = ($1, $2 . $3);
-	$template_text=fill("", "", $presig) . "\n" . $sig;
-    } else {
-	$template_text=fill("", "", $template_text);
+    unless ($nowrap) {
+	if ($template_text =~ /\A(.*?)(^-- $)(.*)/ms) { # there's a sig involved
+	    my ($presig, $sig) = ($1, $2 . $3);
+	    $template_text=fill("", "", $presig) . "\n" . $sig;
+	} else {
+	    $template_text=fill("", "", $template_text);
+	}
     }
     $bugtext = "Package: $package\n$version" . "Severity: $severity\n$tags$user$usertags\n$template_text";
     return $bugtext;
@@ -364,6 +372,7 @@ my $tags="";
 my $user="";
 my $usertags="";
 my $opt_sendmail;
+my $nowrap="";
 if (! GetOptions(
 		 "display"    => sub { $mode="display" },
 		 "send"       => sub { $mode="send" },
@@ -375,6 +384,7 @@ if (! GetOptions(
 		 "sendmail=s" => \$opt_sendmail,
 		 "help"       => sub { usage(); exit 0; },
 		 "version"    => sub { version(); exit 0; },
+		 "no-wrap"    => sub { $nowrap=1; },
 		 )) {
     usageerror();
 }
@@ -454,7 +464,7 @@ sub showsample {
     print "To: $submission_email\n";
     print "Subject: ".gen_subject($subject, $package)."\n";
     print "\n";
-    print gen_bug($template_text, $package, $severity, $tags, $user, $usertags)."\n";
+    print gen_bug($template_text, $package, $severity, $tags, $user, $usertags, $nowrap)."\n";
 }
 
 if ($mode eq 'display') {
@@ -486,7 +496,7 @@ elsif ($mode eq 'send') {
     foreach my $package (@packages) {
 	print "Sending bug for $package ...\n";
 	mailbts(gen_subject($subject, $package),
-		gen_bug($template_text, $package, $severity, $tags, $user, $usertags),
+		gen_bug($template_text, $package, $severity, $tags, $user, $usertags, $nowrap),
 		$submission_email, $from);
     }
     print "All bugs sent.\n";
