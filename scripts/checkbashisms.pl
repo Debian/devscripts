@@ -295,7 +295,7 @@ foreach my $filename (@ARGV) {
 	    # can match "foo <<'xyz'" as a heredoc later
 	    while ($cat_line =~ m/(^|[^<\\](-?)(\\\\)*)\'(\\.|[^\\\'])+\'/gc) {
 		$cat_line =~ s/(^|[^<\\](-?)(\\\\)*)\'(\\.|[^\\\'])+\'/$1''/
-		    unless defined $2;
+		    unless length $2 or $1 eq '-';
 	    }
 
 	    while (my ($re,$expl) = each %string_bashisms) {
@@ -312,7 +312,7 @@ foreach my $filename (@ARGV) {
 	    $line =~ s/(^|[^\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
 	    while ($cat_line =~ m/(^|[^<\\](-?)(\\\\)*)\"(\\.|[^\\\"])+\"/gc) {
 		$cat_line =~ s/(^|[^<\\](-?)(\\\\)*)\"(\\.|[^\\\"])+\"/$1""/
-		    unless defined $2;
+		    unless length $2 or $1 eq '-';
 	    }
 	    while (my ($re,$expl) = each %bashisms) {
 	        if ($line =~ m/($re)/) {
