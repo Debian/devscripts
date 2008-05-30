@@ -1,7 +1,10 @@
 devscripts (2.10.29) UNRELEASED; urgency=low
 
-  * checkbashisms: Add checks for "sh -r", "sh -D", "sh [-+]O" and "sh with
-    long options"
+  * checkbashisms:
+    + Add checks for "sh -r", "sh -D", "sh [-+]O" and "sh with long options"
+    + Don't treat scripts with dash or ash shebangs as "/bin/sh scripts", as
+      dash implements some extensions to POSIX
+    + Correctly match heredocs using "<<-"
   * debdiff: Don't apply patches when extracting a Format 3.0 (quilt) source
     package, to minimise noise in the diffs (Closes: #475506)
   * getbuildlog: New script from Frank S. Thomas to download build logs for

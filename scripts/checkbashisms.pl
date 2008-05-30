@@ -123,7 +123,7 @@ foreach my $filename (@ARGV) {
 		    $status |= 2;
 		    last;  # end this file
 		}
-		elsif ($interpreter !~ m,/(sh|ash|dash|posh)$,) {
+		elsif ($interpreter !~ m,/(sh|posh)$,) {
 ### ksh/zsh?
 		    warn "script $filename does not appear to be a /bin/sh script; skipping\n";
 		    $status |= 2;
@@ -285,7 +285,7 @@ foreach my $filename (@ARGV) {
 	    # spaces between << and the delimeter to make the following
 	    # updates to $cat_line easier.
 	    my $cat_line = $line;
-	    $cat_line =~ s/(<\<)\s+/$1/g;
+	    $cat_line =~ s/(<\<-?)\s+/$1/g;
 
 	    # Ignore anything inside single quotes; it could be an
 	    # argument to grep or the like.
@@ -293,7 +293,10 @@ foreach my $filename (@ARGV) {
 	    # As above, with the exception that we don't remove the string
 	    # if the quote is immediately preceeded by a <, so we
 	    # can match "foo <<'xyz'" as a heredoc later
-	    $cat_line =~ s/(^|[^<\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
+	    while ($cat_line =~ m/(^|[^<\\](-?)(\\\\)*)\'(\\.|[^\\\'])+\'/gc) {
+		$cat_line =~ s/(^|[^<\\](-?)(\\\\)*)\'(\\.|[^\\\'])+\'/$1''/
+		    unless defined $2;
+	    }
 
 	    while (my ($re,$expl) = each %string_bashisms) {
 		if ($line =~ m/($re)/) {
@@ -307,7 +310,10 @@ foreach my $filename (@ARGV) {
 	    # We've checked for all the things we still want to notice in
 	    # double-quoted strings, so now remove those strings as well.
 	    $line =~ s/(^|[^\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
-	    $cat_line =~ s/(^|[^<\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
+	    while ($cat_line =~ m/(^|[^<\\](-?)(\\\\)*)\"(\\.|[^\\\"])+\"/gc) {
+		$cat_line =~ s/(^|[^<\\](-?)(\\\\)*)\"(\\.|[^\\\"])+\"/$1""/
+		    unless defined $2;
+	    }
 	    while (my ($re,$expl) = each %bashisms) {
 	        if ($line =~ m/($re)/) {
 		    $found = 1;
@@ -319,7 +325,7 @@ foreach my $filename (@ARGV) {
 
 	    # Only look for the beginning of a heredoc here, after we've
 	    # stripped out quoted material, to avoid false positives.
-	    if ($cat_line =~ m/(?:^|[^<])\<\<\s*(?:[\\]?(\w+)|[\'\"](.*?)[\'\"])/) {
+	    if ($cat_line =~ m/(?:^|[^<])\<\<\-?s*(?:[\\]?(\w+)|[\'\"](.*?)[\'\"])/) {
 		$cat_string = $1;
 		$cat_string = $2 if not defined $cat_string;
             }
