@@ -1,0 +1,39 @@
+.TH WNPP-CHECK 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+wnpp-check \- check if a package is being packaged or if this has been requested
+.SH SYNOPSIS
+\fBwnpp-check package [...]\fR
+.br
+\fBwnpp-check \-\-help|\-\-version\fR
+.SH DESCRIPTION
+\fBwnpp-check\fR downloads the lists of packages which are listed as being
+packaged (ITPed) or for which a package has been requested (RFPed) from the
+WNPP website and lists any packages supplied on the command line which appear
+in those lists.
+.PP
+Note that WNPP, and therefore \fBwnpp-check\fR's output, is source 
+package based.
+.SH OPTIONS
+.TP
+.BR \-\-help ", " \-h
+Show a summary of options.
+.TP
+.BR \-\-version ", " \-v
+Show version and copyright information.
+.SH SEE ALSO
+http://www.debian.org/devel/wnpp
+.SH EXIT STATUS
+.TP
+0
+None of the packages supplied has an open ITP or RFP
+.TP
+1
+Either an error occurred or at least one package supplied has an open ITP or
+RFP
+.SH AUTHOR
+\fBwnpp-check\fR was written by David Paleino <d.paleino@gmail.com>; this man
+page was written by Adam D. Barratt <adam@adam-barratt.org.uk> for the
+devscripts pacakge.
+\fBwnpp-check\fR was originally based on \fBwnpp-alert\fR, which was written
+by Arthur Korn <arthur@korn.ch> and modified by Julian Gilbey <jdg@debian.org>
+for the devscripts package.  Both scripts are in the public domain.

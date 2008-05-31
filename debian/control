@@ -119,6 +119,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
     archive [gnupg, debian-keyring, debian-maintainers, wget]
   - wnpp-alert: list installed packages which are orphaned or up for
     adoption [wget]
+  - wnpp-check: check whether there is an open request for packaging or
+    intention to package bug for a package [wget]
  .
  Also included are a set of example mail filters for filtering mail
  from Debian mailing lists using exim, procmail, etc.

@@ -18,6 +18,9 @@ devscripts (2.10.29) UNRELEASED; urgency=low
   * mergechanges: Allow changes files with Formats of 1.7 and 1.8 to be merged,
     by removing the Checksums-* fields from the Format: 1.8 files. The result
     will be a valid Format: 1.7 changes file. (Closes: #481585)
+  * wnpp-check: New script from David Paleino to check whether a package has
+    has open bugs requested that it be packaged (RFP) or intending to do so
+    (ITP) (Closes: #483707)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 19 May 2008 20:14:38 +0100
 
