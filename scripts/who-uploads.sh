@@ -172,8 +172,8 @@ while [ "$1" ]; do
 done
 
 # Some useful abbreviations for gpg options
-GPG_NO_KEYRING="--no-options --no-default-keyring --keyring /dev/null"
-GPG_OPTIONS="--no-options --no-default-keyring"
+GPG_NO_KEYRING="--no-options --no-auto-check-trustdb --no-default-keyring --keyring /dev/null"
+GPG_OPTIONS="--no-options --no-auto-check-trustdb --no-default-keyring"
 
 # Now actually get the reports :)
 
