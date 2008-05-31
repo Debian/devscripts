@@ -197,7 +197,8 @@ may only be used in conjunction with the \fB\-\-create\fR option.
 .TP
 .BR \-\-nmu ", " \-n
 Increment the Debian release number for a non-maintainer upload by
-either appending a ".1" to a non-NMU version number or by incrementing
+either appending a ".1" to a non-NMU version number (unless the package
+is Debian native, in which case "+nmu1" is appended) or by incrementing
 an NMU version number, and add an NMU changelog comment.  This happens
 automatically if the packager is neither in the Maintainer nor the Uploaders
 field in \fIdebian/control\fR, unless \fBDEBCHANGE_AUTO_NMU\fR is set to
