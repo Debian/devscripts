@@ -291,12 +291,11 @@ foreach my $filename (@ARGV) {
 	    # argument to grep or the like.
 	    $line =~ s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
 	    # As above, with the exception that we don't remove the string
-	    # if the quote is immediately preceeded by a <, so we
-	    # can match "foo <<'xyz'" as a heredoc later
-	    while ($cat_line =~ m/(^|[^<\\](-?)(\\\\)*)\'(\\.|[^\\\'])+\'/gc) {
-		$cat_line =~ s/(^|[^<\\](-?)(\\\\)*)\'(\\.|[^\\\'])+\'/$1''/
-		    unless length $2 or $1 eq '-';
-	    }
+	    # if the quote is immediately preceeded by a < or a -, so we
+	    # can match "foo <<-?'xyz'" as a heredoc later
+	    # The check is a little more greedy than we'd like, but the
+	    # heredoc test itself will weed out any false positives
+	    $cat_line =~ s/(^|[^<\\-](\\\\)*)\'(\\.|[^\\\'])+\'/$1''/g;
 
 	    while (my ($re,$expl) = each %string_bashisms) {
 		if ($line =~ m/($re)/) {
@@ -310,10 +309,7 @@ foreach my $filename (@ARGV) {
 	    # We've checked for all the things we still want to notice in
 	    # double-quoted strings, so now remove those strings as well.
 	    $line =~ s/(^|[^\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
-	    while ($cat_line =~ m/(^|[^<\\](-?)(\\\\)*)\"(\\.|[^\\\"])+\"/gc) {
-		$cat_line =~ s/(^|[^<\\](-?)(\\\\)*)\"(\\.|[^\\\"])+\"/$1""/
-		    unless length $2 or $1 eq '-';
-	    }
+	    $cat_line =~ s/(^|[^<\\-](\\\\)*)\"(\\.|[^\\\"])+\"/$1""/g;
 	    while (my ($re,$expl) = each %bashisms) {
 	        if ($line =~ m/($re)/) {
 		    $found = 1;
