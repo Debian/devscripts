@@ -5,6 +5,8 @@ devscripts (2.10.29) UNRELEASED; urgency=low
     + Don't treat scripts with dash or ash shebangs as "/bin/sh scripts", as
       dash implements some extensions to POSIX
     + Correctly match heredocs using "<<-"
+    + Add checks for $'', $"", the use of echo with backslash escapes, $SHLVL,
+      $POSIXLY_CORRECT and $PIPESTATUS. Based on a patch by Raphael Geissert.
   * debchange: Update the manual page to refer to +nmu versioning for native
     packages (Closes: #483861)
   * debdiff: Don't apply patches when extracting a Format 3.0 (quilt) source

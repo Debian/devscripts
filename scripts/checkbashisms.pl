@@ -69,7 +69,7 @@ if ($opt_version) { print $version; exit 0; }
 
 my $status = 0;
 my $makefile = 0;
-my (%bashisms, %string_bashisms);
+my (%bashisms, %string_bashisms, %singlequote_bashisms);
 
 init_hashes;
 
@@ -280,6 +280,15 @@ foreach my $filename (@ARGV) {
 	    $line =~ s/(^|[^\\\'\"])\"\'\"/$1/g;
 	    $line =~ s/(^|[^\\\'\"])\'\"\'/$1/g;
 
+	    while (my ($re,$expl) = each %singlequote_bashisms) {
+		if ($line =~ m/($re)/) {
+		    $found = 1;
+		    $match = $1;
+		    $explanation = $expl;
+		    output_explanation($filename, $orig_line, $explanation);
+		}
+	    }
+
 	    # $cat_line contains the version of the line we'll check
 	    # for heredoc delimeters later. Initially, remove any
 	    # spaces between << and the delimeter to make the following
@@ -420,9 +429,9 @@ sub init_hashes {
 	$LEADIN . 'dirs\b' =>          q<dirs>,
 	'(?:^|\s+)[<>]\(.*?\)'	    => q<\<() process substituion>,
 	'(?:^|\s+)readonly\s+-[af]' => q<readonly -[af]>,
-	$LEADIN . 'sh -[rD]' =>        q<sh -[rD]>,
-	$LEADIN . 'sh --\w+' =>        q<sh --long-option>,
-	$LEADIN . 'sh [-+]O' =>        q<sh [-+]O>,
+	$LEADIN . '(sh|\$\{?SHELL\}?) -[rD]' => q<sh -[rD]>,
+	$LEADIN . '(sh|\$\{?SHELL\}?) --\w+' =>  q<sh --long-option>,
+	$LEADIN . '(sh|\$\{?SHELL\}?) [-+]O' =>  q<sh [-+]O>,
     );
 
     %string_bashisms = (
@@ -441,7 +450,16 @@ sub init_hashes {
 	'\$\{?SECONDS\}?\b'	    => q<$SECONDS>,
 	'\$\{?BASH_[A-Z]+\}?\b'     => q<$BASH_SOMETHING>,
 	'\$\{?SHELLOPTS\}?\b'       => q<$SHELLOPTS>,
+	'\$\{?PIPESTATUS\}?\b'      => q<$PIPESTATUS>,
+	'\$\{?SHLVL\}?\b'           => q<$SHLVL>,
 	'<<<'                       => q<\<\<\< here string>,
+	$LEADIN . 'echo\s+(?:-[^e]+\s+)?([\"])[^\"]*(\\\[abcEfnrtv\\\0])+.*?[\"]' => q<unsafe echo with backslash>,
+	'(?<![\$\\\])\$\"[^\"]+\"'   => q<$"foo" should be eval gettext "foo">,
+    );
+
+    %singlequote_bashisms = (
+	$LEADIN . 'echo\s+(?:-[^e]+\s+)?([\'])[^\']*(\\\[abcEfnrtv\\\0])+.*?[\']' => q<unsafe echo with backslash>,
+	'(?<![\$\\\])\$\'[^\']+\''              => q<$'...' should be "$(printf '...')">,
     );
 
     if ($opt_echo) {
@@ -465,5 +483,6 @@ sub init_hashes {
 	$string_bashisms{'(?:^|\s+)EUID='} = q<EUID=>;
 	$string_bashisms{'(?:^|\s+)BASH(_[A-Z]+)?='} = q<BASH(_SOMETHING)=>;
 	$string_bashisms{'(?:^|\s+)SHELLOPTS='} = q<SHELLOPTS=>;
+	$string_bashisms{'\$\{?POSIXLY_CORRECT\}?\b'} = q<$POSIXLY_CORRECT>;
     }
 }
