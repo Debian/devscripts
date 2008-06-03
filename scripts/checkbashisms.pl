@@ -304,7 +304,7 @@ foreach my $filename (@ARGV) {
 	    # can match "foo <<-?'xyz'" as a heredoc later
 	    # The check is a little more greedy than we'd like, but the
 	    # heredoc test itself will weed out any false positives
-	    $cat_line =~ s/(^|[^<\\-](\\\\)*)\'(\\.|[^\\\'])+\'/$1''/g;
+	    $cat_line =~ s/(^|[^<\\-](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
 
 	    while (my ($re,$expl) = each %string_bashisms) {
 		if ($line =~ m/($re)/) {
@@ -318,7 +318,7 @@ foreach my $filename (@ARGV) {
 	    # We've checked for all the things we still want to notice in
 	    # double-quoted strings, so now remove those strings as well.
 	    $line =~ s/(^|[^\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
-	    $cat_line =~ s/(^|[^<\\-](\\\\)*)\"(\\.|[^\\\"])+\"/$1""/g;
+	    $cat_line =~ s/(^|[^<\\-](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
 	    while (my ($re,$expl) = each %bashisms) {
 	        if ($line =~ m/($re)/) {
 		    $found = 1;
@@ -454,7 +454,7 @@ sub init_hashes {
 	'\$\{?SHLVL\}?\b'           => q<$SHLVL>,
 	'<<<'                       => q<\<\<\< here string>,
 	$LEADIN . 'echo\s+(?:-[^e]+\s+)?([\"])[^\"]*(\\\[abcEfnrtv\\\0])+.*?[\"]' => q<unsafe echo with backslash>,
-	'(?<![\$\\\])\$\"[^\"]+\"'   => q<$"foo" should be eval gettext "foo">,
+	'(?<![\$\\\])\$\"[^\"]+\"'   => q<$"foo" should be eval_gettext "foo">,
     );
 
     %singlequote_bashisms = (
