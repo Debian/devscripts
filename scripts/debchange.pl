@@ -1245,7 +1245,8 @@ elsif ($opt_e && ! $opt_create) {
     $line=0;
 }
 elsif ($opt_create) {
-    if (! $initial_release and ! $opt_news and ! $opt_empty) {
+    if (! $initial_release and ! $opt_news and ! $opt_empty and
+	! $TEXT and ! $EMPTY_TEXT) {
 	push @closes_text, "Initial release. (Closes: \#XXXXXX)\n";
     }
 
@@ -1286,7 +1287,9 @@ if ($warnings) {
 }
 
 # Now Run the Editor; always run if doing "closes" to give a chance to check
-if ((!$TEXT and !$EMPTY_TEXT) or @closes_text or $opt_create) {
+if ((!$TEXT and !$EMPTY_TEXT and ! ($opt_create and $opt_empty)) or @closes_text or
+    ($opt_create and ! ($PACKAGE ne 'PACKAGE' and $VERSION ne 'VERSION'))) {
+
     my $mtime = (stat("$changelog_path.dch"))[9];
     defined $mtime or fatal
 	"Error getting modification time of temporary $changelog_path: $!";

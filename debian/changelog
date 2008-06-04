@@ -1,6 +1,13 @@
 devscripts (2.10.30) UNRELEASED; urgency=low
 
-  * NOT RELEASED YET
+  * debchange:
+    + Don't automatically open an editor when creating a new changelog if
+      a package name and version are supplied and either --empty was used
+      or the text of a changelog entry was supplied on the command line.
+      Based on a patch from Steve Magoun (Closes: #4843334)
+    + Don't automatically add an "initial release" stanza to a newly created
+      changelog if the text of a changelog entry was supplied on the command
+      line. Thanks Steve Magoun.
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 03 Jun 2008 21:15:58 +0100
 
