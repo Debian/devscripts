@@ -280,7 +280,7 @@ sub set_auth($$$$) {
                if $user_local ne $user_url and !$print_only;
            $url =~ s|^\w+://(darcs\.debian\.org)/(~)(.*?)/(.*)|$user$1:~/public_darcs/$4|;
        } else {
-           $url =~ s|^\w+://(darcs\.debian\.org)/(.*)|$user$1:/darcs/$2|;
+           $url =~ s|^\w+://(darcs\.debian\.org)/(.*)|$user$1:/$2|;
         }
     }
     case "git"    {
