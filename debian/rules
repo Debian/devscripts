@@ -59,6 +59,10 @@ binary-arch: build-arch install
 	dh_installexamples
 	dh_installman
 	dh_link
+	if [ -f debian/devscripts/usr/share/man/fr/man1/debchange.1 ]; then \
+	    dh_link /usr/share/man/fr/man1/debchange.1.gz \
+	    /usr/share/man/fr/man1/dch.1.gz; \
+	fi
 	dh_installchangelogs
 	dh_strip
 	dh_compress

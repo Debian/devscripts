@@ -12,6 +12,9 @@ devscripts (2.10.30) UNRELEASED; urgency=low
     repositories in authenticated mode (Closes: #485044)   
   * wnpp-check: Fix a small typo in the manpage (Closes: #484582)
   * debian/control: Bump Standards-Version to 3.8.0 (no changes)
+  * debian/{link,rules}: Don't install the fr/man1/dch.1 symlink if the
+    corresponding debchange.1 wasn't installed (e.g. due to not being
+    sufficiently translated) (Closes: #485094)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 03 Jun 2008 21:15:58 +0100
 
