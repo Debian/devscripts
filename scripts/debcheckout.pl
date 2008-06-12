@@ -165,10 +165,10 @@ sub recurs_mkdir {
     } elsif (length $createdir and $createdir ne "/") {
       $createdir .= "/";
     }
-     $createdir .= "$piece";
-     if (! -d $createdir) {
-        mkdir($createdir) or return 0;
-     }
+    $createdir .= "$piece";
+    if (! -d $createdir) {
+      mkdir($createdir) or return 0;
+    }
   }
   return 1;
 }
