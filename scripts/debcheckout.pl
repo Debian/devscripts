@@ -160,7 +160,11 @@ sub recurs_mkdir {
   my @temp = split /\//, $dir;
   my $createdir = "";
   foreach my $piece (@temp) {
-     $createdir .= "/" if $createdir;
+    if (! length $createdir and ! length $piece) {
+      $createdir = "/";
+    } elsif (length $createdir and $createdir ne "/") {
+      $createdir .= "/";
+    }
      $createdir .= "$piece";
      if (! -d $createdir) {
         mkdir($createdir) or return 0;

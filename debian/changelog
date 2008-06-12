@@ -8,8 +8,11 @@ devscripts (2.10.30) UNRELEASED; urgency=low
     + Don't automatically add an "initial release" stanza to a newly created
       changelog if the text of a changelog entry was supplied on the command
       line. Thanks Steve Magoun.
-  * debcheckout: Produce the correct URL for "project-based" darcs.d.o
-    repositories in authenticated mode (Closes: #485044)   
+  * debcheckout:
+    + Produce the correct URL for "project-based" darcs.d.o repositories in
+      authenticated mode (Closes: #485044)   
+    + Correctly handle absolute pathnames as the checkout path for a single
+      file (Closes: #485888)
   * wnpp-check: Fix a small typo in the manpage (Closes: #484582)
   * debian/control: Bump Standards-Version to 3.8.0 (no changes)
   * debian/{link,rules}: Don't install the fr/man1/dch.1 symlink if the
