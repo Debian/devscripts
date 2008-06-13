@@ -337,7 +337,7 @@ foreach my $filename (@ARGV) {
 
 	    # Only look for the beginning of a heredoc here, after we've
 	    # stripped out quoted material, to avoid false positives.
-	    if ($cat_line =~ m/(?:^|[^<])\<\<\-?s*(?:[\\]?(\w+)|[\'\"](.*?)[\'\"])/) {
+	    if ($cat_line =~ m/(?:^|[^<])\<\<\-?\s*(?:[\\]?(\w+)|[\'\"](.*?)[\'\"])/) {
 		$cat_string = $1;
 		$cat_string = $2 if not defined $cat_string;
             }

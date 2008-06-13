@@ -5,6 +5,7 @@ devscripts (2.10.30) UNRELEASED; urgency=low
       removal of quoted strings
     + Temporarily disable the $"" and $'' checks as they're very prone to
       false positives
+    + Fix a typo in the heredoc check
   * debchange:
     + Don't automatically open an editor when creating a new changelog if
       a package name and version are supplied and either --empty was used
