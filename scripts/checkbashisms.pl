@@ -296,8 +296,8 @@ foreach my $filename (@ARGV) {
 	    }
 
 	    # $cat_line contains the version of the line we'll check
-	    # for heredoc delimeters later. Initially, remove any
-	    # spaces between << and the delimeter to make the following
+	    # for heredoc delimiters later. Initially, remove any
+	    # spaces between << and the delimiter to make the following
 	    # updates to $cat_line easier.
 	    my $cat_line = $line;
 	    $cat_line =~ s/(<\<-?)\s+/$1/g;
