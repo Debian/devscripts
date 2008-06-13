@@ -125,6 +125,7 @@ use Getopt::Long;
 use File::Basename;
 
 sub fatal($);
+sub parse_copyright($);
 sub parselicense($);
 
 my $progname = basename($0);
@@ -260,27 +261,18 @@ while (@ARGV) {
 while (@files) {
     my $file = shift @files;
     my $content = '';
+    my $copyright_match;
     my $copyright = '';
+    my $license = '';
     my %copyrights;
-    my $match;
 
     open (F, "<$file") or die "Unable to access $file\n";
     while (<F>) {
         last if ($. > $opt_lines);
         $content .= $_;
-	if (m%copyright(?::\s*|\s+)(\S.*)$%i) {
-	    $match = $1;
-	    # Ignore lines matching "see foo for copyright information"
-	    if ($match !~ m%^\s*info(rmation)?\.?\s*$%i) {
-		# De-cruft
-		$match =~ s/([,.])?\s*$//;
-		$match =~ s/(\(C\)|\x{00a9})//i;
-		$match =~ s/^\s+//;
-		$match =~ s/\s{2,}/ /g;
-		$match =~ s/\\@/@/g;
-
-		$copyrights{lc("$match")} = "$match";
-	    }
+	$copyright_match = parse_copyright($_);
+	if ($copyright_match) {
+	    $copyrights{lc("$copyright_match")} = "$copyright_match";
 	}
     }
     close(F);
@@ -295,10 +287,34 @@ while (@files) {
     $content =~ s#//##g;
     $content =~ tr/ //s;
 
-    print "$file: " . parselicense($content) . "\n";
+    $license = parselicense($content);
+    print "$file: ";
+    print "*No copyright* " unless $copyright;
+    print $license . "\n";
     print "  [Copyright: " . $copyright . "]\n"
       if $copyright and $opt_copyright;
     print "\n" if $opt_copyright;
+}
+
+sub parse_copyright($) {
+    my $copyright = '';
+    my $match;
+
+    if (m%copyright(?::\s*|\s+)(\S.*)$%i) {
+	$match = $1;
+	# Ignore lines matching "see foo for copyright information"
+	if ($match !~ m%^\s*info(rmation)?\.?\s*$%i) {
+	    # De-cruft
+	    $match =~ s/([,.])?\s*$//;
+	    $match =~ s/(\(C\)|\x{00a9})//i;
+	    $match =~ s/^\s+//;
+	    $match =~ s/\s{2,}/ /g;
+	    $match =~ s/\\@/@/g;
+	    $copyright = $match;
+	}
+    }
+
+    return $copyright;
 }
 
 sub help {
@@ -432,10 +448,6 @@ sub parselicense($) {
     }
 
     $license = "UNKNOWN" if (!length($license));
-
-    if ($licensetext !~ /copyright/i) {
-	$license = "*No copyright* $license";
-    }
 
     return $license;
 }
