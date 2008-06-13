@@ -306,7 +306,7 @@ sub parse_copyright($) {
 	if ($match !~ m%^\s*info(rmation)?\.?\s*$%i) {
 	    # De-cruft
 	    $match =~ s/([,.])?\s*$//;
-	    $match =~ s/(\(C\)|\x{00a9})//i;
+	    $match =~ s/(\(C\)|\x{00a9}|\xc2)//ig;
 	    $match =~ s/^\s+//;
 	    $match =~ s/\s{2,}/ /g;
 	    $match =~ s/\\@/@/g;

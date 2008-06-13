@@ -21,9 +21,10 @@ devscripts (2.10.30) UNRELEASED; urgency=low
       authenticated mode (Closes: #485044)   
     + Correctly handle absolute pathnames as the checkout path for a single
       file (Closes: #485888)
-  * licensecheck: Apply a patch from Ben Finney to use the copyright parser
-    to determine whether a file contains a valid copyright statement
-    (Closes: #486013)
+  * licensecheck:
+    + Apply a patch from Ben Finney to use the copyright parser to determine
+      whether a file contains a valid copyright statement (Closes: #486013)
+    + Handle another variant of the copyright symbol
   * wnpp-check: Fix a small typo in the manpage (Closes: #484582)
   * debian/control: Bump Standards-Version to 3.8.0 (no changes)
   * debian/{link,rules}: Don't install the fr/man1/dch.1 symlink if the
