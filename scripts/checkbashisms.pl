@@ -461,12 +461,12 @@ sub init_hashes {
 	'\$\{?SHLVL\}?\b'           => q<$SHLVL>,
 	'<<<'                       => q<\<\<\< here string>,
 	$LEADIN . 'echo\s+(?:-[^e]+\s+)?([\"])[^\"]*(\\\[abcEfnrtv\\\0])+.*?[\"]' => q<unsafe echo with backslash>,
-	'(?<![\$\\\])\$\"[^\"]+\"'   => q<$"foo" should be eval_gettext "foo">,
+	#'(?<![\$\\\])\$\"[^\"]+\"'   => q<$"foo" should be eval_gettext "foo">,
     );
 
     %singlequote_bashisms = (
 	$LEADIN . 'echo\s+(?:-[^e]+\s+)?([\'])[^\']*(\\\[abcEfnrtv\\\0])+.*?[\']' => q<unsafe echo with backslash>,
-	'(?<![\$\\\])\$\'[^\']+\''              => q<$'...' should be "$(printf '...')">,
+	#'(?<![\$\\\])\$\'[^\']+\''              => q<$'...' should be "$(printf '...')">,
     );
 
     if ($opt_echo) {
