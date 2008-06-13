@@ -428,7 +428,7 @@ sub init_hashes {
 	$LEADIN . 'local\s+\w+=' =>     q<local foo=bar>,
 	'(?:^|\s+)\s*\(?\w*[^\(\w\s]+\S*?\s*\(\)[^\"]?'
 		=> q<function names should only contain [a-z0-9_]>,
-	$LEADIN . '(push|pod)d\b' =>    q<(push|pod)d>,
+	$LEADIN . '(push|pop)d\b' =>    q<(push|pod)d>,
 	$LEADIN . 'export\s+-[^p]' =>  q<export only takes -p as an option>,
 	$LEADIN . 'ulimit\b' =>         q<ulimit>,
 	$LEADIN . 'shopt\b' =>          q<shopt>,
