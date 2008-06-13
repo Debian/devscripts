@@ -208,9 +208,12 @@ foreach my $filename (@ARGV) {
 		    my $templine = $line;
 
 		    # Remove quoted strings delimited with $otherquote
-		    $templine =~ s/[^\\]$otherquote[^$quote_string]*?[^\\]$otherquote//g;
+		    $templine =~ s/(^|[^\\])$otherquote[^$quote_string]*?[^\\]$otherquote/$1/g;
 		    # Remove quotes that are themselves quoted
-		    $templine =~ s/[^\\]$otherquote.*?$quote_string.*?[^\\]$otherquote//g;
+		    # "a'b"
+		    $templine =~ s/(^|[^\\])$otherquote.*?$quote_string.*?[^\\]$otherquote/$1/g;
+		    # "\""
+		    $templine =~ s/(^|[^\\])$quote_string\\$quote_string$quote_string/$1/g;
 
 		    # After all that, were there still any quotes left?
 		    my $count = () = $templine =~ /(^|[^\\])$quote_string/g;
@@ -241,11 +244,14 @@ foreach my $filename (@ARGV) {
 		    my $otherquote = ($quote eq "\"" ? "\'" : "\"");
 
 		    # Remove balanced quotes and their content
-		    $templine =~ s/(^|[^\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1/g;
-		    $templine =~ s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1/g;
+		    $templine =~ s/(^|[^\\\"](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1/g;
+		    $templine =~ s/(^|[^\\\'](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1/g;
 
 		    # Don't flag quotes that are themselves quoted
+		    # "a'b"
 		    $templine =~ s/$otherquote.*?$quote.*?$otherquote//g;
+		    # "\""
+		    $templine =~ s/(^|[^\\])$quote_string\\$quote_string$quote_string/$1/g;
 		    my $count = () = $templine =~ /(^|[^\\])$quote/g;
 
 		    # If there's an odd number of non-escaped
@@ -298,13 +304,14 @@ foreach my $filename (@ARGV) {
 
 	    # Ignore anything inside single quotes; it could be an
 	    # argument to grep or the like.
-	    $line =~ s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
+	    $line =~ s/(^|[^\\\"](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
+
 	    # As above, with the exception that we don't remove the string
 	    # if the quote is immediately preceeded by a < or a -, so we
 	    # can match "foo <<-?'xyz'" as a heredoc later
 	    # The check is a little more greedy than we'd like, but the
 	    # heredoc test itself will weed out any false positives
-	    $cat_line =~ s/(^|[^<\\-](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
+	    $cat_line =~ s/(^|[^<\\\"-](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
 
 	    while (my ($re,$expl) = each %string_bashisms) {
 		if ($line =~ m/($re)/) {
@@ -317,8 +324,8 @@ foreach my $filename (@ARGV) {
 
 	    # We've checked for all the things we still want to notice in
 	    # double-quoted strings, so now remove those strings as well.
-	    $line =~ s/(^|[^\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
-	    $cat_line =~ s/(^|[^<\\-](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
+	    $line =~ s/(^|[^\\\'](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
+	    $cat_line =~ s/(^|[^<\\'\\-](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
 	    while (my ($re,$expl) = each %bashisms) {
 	        if ($line =~ m/($re)/) {
 		    $found = 1;
