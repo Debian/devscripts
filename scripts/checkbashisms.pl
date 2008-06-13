@@ -399,7 +399,7 @@ sub init_hashes {
 	'[^\\\]\{([^\s\\\}]+?,)+[^\\\}\s]+\}' =>
 	                               q<brace expansion>,
 	'(?:^|\s+)\w+\[\d+\]=' =>      q<bash arrays, H[0]>,
-	$LEADIN . '(read\s*(-[^r])?(?:;|$))' => q<should be read [-r] variable>,
+	$LEADIN . '(read\s*(-[^r]+)*(?:;|$))' => q<should be read [-r] variable>,
 	$LEADIN . 'echo\s+(-n\s+)?-n?en?\s' =>      q<echo -e>,
 	$LEADIN . 'exec\s+-[acl]' =>    q<exec -c/-l/-a name>,
 	$LEADIN . 'let\s' =>            q<let ...>,
@@ -407,7 +407,7 @@ sub init_hashes {
 	'\$\[[^][]+\]' =>	       q<'$[' should be '$(('>,
 	'(?:^|\s+)(\[|test)\s+-a' =>            q<test with unary -a (should be -e)>,
 	'\&>' =>	               q<should be \>word 2\>&1>,
-	'(<\&|>\&)\s*((-|\d+)[^\s;|)`&\\\\]|[^-\d\s])' =>
+	'(<\&|>\&)\s*((-|\d+)[^\s;|)`&\\\\]|[^-\d\s]+)' =>
 				       q<should be \>word 2\>&1>,
 	$LEADIN . 'kill\s+-[^sl]\w*' => q<kill -[0-9] or -[A-Z]>,
 	$LEADIN . 'trap\s+["\']?.*["\']?\s+.*[1-9]' => q<trap with signal numbers>,
@@ -426,7 +426,8 @@ sub init_hashes {
 	$LEADIN . 'unalias\s+-a' =>     q<unalias -a>,
 	$LEADIN . 'local\s+-[a-zA-Z]+' => q<local -opt>,
 	$LEADIN . 'local\s+\w+=' =>     q<local foo=bar>,
-	'(?:^|\s+)\s*\(?\w*[^\(\w\s]+\S*?\s*[^\"]\(\)' => q<function names should only contain [a-z0-9_]>,
+	'(?:^|\s+)\s*\(?\w*[^\(\w\s]+\S*?\s*\(\)[^\"]?'
+		=> q<function names should only contain [a-z0-9_]>,
 	$LEADIN . '(push|pod)d\b' =>    q<(push|pod)d>,
 	$LEADIN . 'export\s+-[^p]' =>  q<export only takes -p as an option>,
 	$LEADIN . 'ulimit\b' =>         q<ulimit>,
@@ -477,7 +478,7 @@ sub init_hashes {
 	$string_bashisms{'(\$\(|\`)\s*\<\s*([^\s\)]{2,}|[^DF])\s*(\)|\`)'} =
 	    q<'$(\< foo)' should be '$(cat foo)'>;
     } else {
-	$bashisms{'(?:^|\s+)\w+\+='} = q<should be VAR="${VAR}foo">;
+	$bashisms{$LEADIN . '\w+\+='} = q<should be VAR="${VAR}foo">;
 	$string_bashisms{'(\$\(|\`)\s*\<\s*\S+\s*(\)|\`)'} = q<'$(\< foo)' should be '$(cat foo)'>;
     }
 	    
