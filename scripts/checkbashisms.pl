@@ -325,7 +325,7 @@ foreach my $filename (@ARGV) {
 	    # We've checked for all the things we still want to notice in
 	    # double-quoted strings, so now remove those strings as well.
 	    $line =~ s/(^|[^\\\'](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
-	    $cat_line =~ s/(^|[^<\\'\\-](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
+	    $cat_line =~ s/(^|[^<\\\'-](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
 	    while (my ($re,$expl) = each %bashisms) {
 	        if ($line =~ m/($re)/) {
 		    $found = 1;
