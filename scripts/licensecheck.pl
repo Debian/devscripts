@@ -300,13 +300,27 @@ sub parse_copyright($) {
     my $copyright = '';
     my $match;
 
-    if (m%copyright(?::\s*|\s+)(\S.*)$%i) {
+    my $copyright_indicator_regex = '
+	(?:copyright	# The full word
+	|copr\.		# Legally-valid abbreviation
+	|\x{00a9}	# Unicode character COPYRIGHT SIGN
+	|\xc2\xa9	# Unicode copyright sign encoded in iso8859
+	|\(c\)		# Legally-null representation of sign
+	)';
+    my $copyright_disindicator_regex = '
+	\b(?:info(?:rmation)?	# Discussing copyright information
+	|notice			# Discussing the notice
+	|and|or                 # Part of a sentence
+	)\b';
+
+    if (m%$copyright_indicator_regex(?::\s*|\s+)(\S.*)$%ix) {
 	$match = $1;
-	# Ignore lines matching "see foo for copyright information"
-	if ($match !~ m%^\s*info(rmation)?\.?\s*$%i) {
+
+	# Ignore lines matching "see foo for copyright information" etc.
+	if ($match !~ m%^\s*$copyright_disindicator_regex%ix) {
 	    # De-cruft
 	    $match =~ s/([,.])?\s*$//;
-	    $match =~ s/(\(C\)|\x{00a9}|\xc2)//ig;
+	    $match =~ s/$copyright_indicator_regex//igx;
 	    $match =~ s/^\s+//;
 	    $match =~ s/\s{2,}/ /g;
 	    $match =~ s/\\@/@/g;
