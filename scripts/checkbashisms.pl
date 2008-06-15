@@ -374,7 +374,28 @@ sub script_is_evil_and_wrong {
         next if /^#/o;
         next if /^$/o;
         last if (++$i > 55);
-        if (/(^\s*|\beval\s*[\'\"]|(;|&&)\s*)exec\s*.+\s*.?\$$var.?\s*(--\s*)?.?(\${1:?\+.?)?(\$(\@|\*))?/) {
+        if (m~
+	    # the exec should either be "eval"ed or a new statement
+	    (^\s*|\beval\s*[\'\"]|(;|&&)\s*)
+
+	    # eat anything between the exec and $0
+	    exec\s*.+\s*
+
+	    # optionally quoted executable name (via $0)
+	    .?\$$var.?\s*
+
+	    # optional "end of options" indicator
+	    (--\s*)?
+
+	    # Match expressions of the form '${1+$@}', '${1:+"$@"',
+	    # '"${1+$@', "$@", etc where the quotes (before the dollar
+	    # sign(s)) are optional and the second (or only if the $1
+	    # clause is omitted) parameter may be $@ or $*. 
+	    # 
+	    # Finally the whole subexpression may be omitted for scripts
+	    # which do not pass on their parameters (i.e. after re-execing
+	    # they take their parameters (and potentially data) from stdin
+	    .?(\${1:?\+.?)?(\$(\@|\*))?~x) {
             $ret = $. - 1;
             last;
         } elsif (/^\s*(\w+)=\$0;/) {
