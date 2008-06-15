@@ -2038,6 +2038,11 @@ sub mailbtsall {
     my $subject=shift;
     my $body=shift;
 
+    my $charset = `locale charmap`;
+    chomp $charset;
+    $charset =~ s/^ANSI_X3\.4-19(68|86)$/US-ASCII/;
+    $subject = MIME_encode_mimewords($subject, 'Charset' => $charset);
+
     # If there were comments, we CC each of the bugs
     if (keys %ccbugs && length(join('', @comment))) {
 	$ccemail .= ", " if length $ccemail;
@@ -2080,9 +2085,6 @@ sub mailbtsall {
 	    $name =~ s/,.*//;
 	}
 	my $from = $name ? "$name <$email>" : $email;
-	my $charset = `locale charmap`;
-	chomp $charset;
-	$charset =~ s/^ANSI_X3\.4-19(68|86)$/US-ASCII/;
         $from = MIME_encode_mimewords($from, 'Charset' => $charset);
 
         send_mail($from, $btsemail, $ccemail, $subject, $body);
