@@ -31,6 +31,13 @@ default can be changed in the configuration file, see below).
 Specifying this option means that the default keyrings will not be
 examined.  The \fB\-\-keyring\fR option overrides this one.
 .TP
+\fB\-\-date\fR
+Show the date of the upload alongside the uploader's details
+.TP
+.BR \-\-nodate ", " \-\-no\-date
+Do not show the date of the upload alongside the uploader's details.
+This is the default behaviour.
+.TP
 \fB\-\-no-conf\fR, \fB\-\-noconf\fR
 Do not read any configuration files.  This can only be used as the
 first option given on the command-line.
@@ -46,6 +53,10 @@ The two configuration files \fI/etc/devscripts.conf\fR and
 variables.  Command line options can be used to override configuration
 file settings.  Environment variable settings are ignored for this
 purpose.  The currently recognised variables are:
+.TP
+.B WHOUPLOADS_DATE
+Show the date of the upload alongside the uploader's details.  By
+default, this is "no".
 .TP
 .B WHOUPLOADS_MAXUPLOADS
 The maximum number of uploads to display for each package.  By

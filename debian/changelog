@@ -28,6 +28,8 @@ devscripts (2.10.30) UNRELEASED; urgency=low
     + Handle another variant of the copyright symbol
   * tagpending: Add a comment to the generated e-mail indicating that the
     script was used (Closes: #486092)
+  * who-uploads: Allow the date of each upload to be displayed. Based on a
+    patch by Filippo Giunchedi (Closes: #486344)
   * wnpp-check: Fix a small typo in the manpage (Closes: #484582)
   * debian/control: Bump Standards-Version to 3.8.0 (no changes)
   * debian/{link,rules}: Don't install the fr/man1/dch.1 symlink if the

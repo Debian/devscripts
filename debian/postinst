@@ -520,6 +520,19 @@ EOF
 
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.30
+	then
+	    # Added in devscripts 2.10.30
+	    cat >> /etc/devscripts.conf <<EOF
+##### who-uploads option added in version 2.10.30
+#
+# Display the date of the upload?
+#
+# WHOUPLOADS_DATE=no
+
+EOF
+	fi
     fi
 fi
 

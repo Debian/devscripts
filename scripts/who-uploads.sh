@@ -42,6 +42,9 @@ usage () {
     --no-conf, --noconf
                       Don't read devscripts config files;
                       must be the first option given
+    --date            Display the date of the upload
+    --no-date, --nodate
+                      Don't display the date of the upload (default)
     --help            Show this message
     --version         Show version and copyright information
 
@@ -63,8 +66,8 @@ GNU General Public License, version 2 or later."
 # Boilerplate: set config variables
 DEFAULT_WHOUPLOADS_KEYRINGS=/usr/share/keyrings/debian-keyring.gpg:/usr/share/keyrings/debian-keyring.pgp:/usr/share/keyrings/debian-maintainers.gpg
 DEFAULT_WHOUPLOADS_MAXUPLOADS=3
-VARS="WHOUPLOADS_KEYRINGS WHOUPLOADS_MAXUPLOADS"
-
+DEFAULT_WHOUPLOADS_DATE=no
+VARS="WHOUPLOADS_KEYRINGS WHOUPLOADS_MAXUPLOADS WHOUPLOADS_DATE"
 
 if [ "$1" = "--no-conf" -o "$1" = "--noconf" ]; then
     shift
@@ -97,6 +100,11 @@ else
 	WHOUPLOADS_MAXUPLOADS=3
     fi
 
+    WHOUPLOADS_DATE="$(echo "$WHOUPLOADS_DATE" | tr A-Z a-z)"
+    if [ "$WHOUPLOADS_DATE" != "yes" ] && [ "$WHOUPLOADS_DATE" != "no" ]; then
+	WHOUPLOADS_DATE=no
+    fi
+
     # don't check WHOUPLOADS_KEYRINGS here
 
     # set config message
@@ -116,6 +124,7 @@ else
 fi
 
 MAXUPLOADS=$WHOUPLOADS_MAXUPLOADS
+WANT_DATE=$WHOUPLOADS_DATE
 
 OIFS="$IFS"
 IFS=:
@@ -136,6 +145,7 @@ declare -a GPG_KEYRINGS
 TEMP=$(getopt -s bash -o 'h' \
 	--long max-uploads:,keyring:,no-default-keyrings \
 	--long no-conf,noconf \
+	--long date,nodate,no-date \
 	--long help,version -n "$PROGNAME" -- "$@")
 if [ $? != 0 ] ; then exit 1 ; fi
 
@@ -163,6 +173,8 @@ while [ "$1" ]; do
     --no-conf|--noconf)
 	echo "$PROGNAME: $1 is only acceptable as the first command-line option!" >&2
 	exit 1 ;;
+    --date) WANT_DATE=yes ;;
+    --no-date|--nodate) WANT_DATE=no ;;
     --help|-h) usage; exit 0 ;;
     --version) version; exit 0 ;;
     --)	shift; break ;;
@@ -189,13 +201,17 @@ for package; do
     count=0
     for news in $(wget -q -O - $pkgurl |
                   sed -ne 's%^.*<a href="\('$package'/news/[0-9A-Z]*\.html\)">Accepted .*%\1%p'); do
-	GPG_TEXT=$(wget -q -O - "$baseurl$news" |
+	HTML_TEXT=$(wget -q -O - "$baseurl$news")
+	GPG_TEXT=$(echo "$HTML_TEXT" |
 	           sed -ne 's/^<pre>//; /-----BEGIN PGP SIGNED MESSAGE-----/,/-----END PGP SIGNATURE-----/p')
 
 	test -n "$GPG_TEXT" || continue
 
 	VERSION=$(echo "$GPG_TEXT" | awk '/^Version/ { print $2; exit }')
 	DISTRO=$(echo "$GPG_TEXT" | awk '/^Distribution/ { print $2; exit }')
+	if [ "$WANT_DATE" = "yes" ]; then
+	    DATE=$(echo "$HTML_TEXT" |  sed -ne 's%<li><em>Date</em>: \(.*\)</li>%\1%p')
+	fi
 
 	GPG_ID=$(echo "$GPG_TEXT" | gpg $GPG_NO_KEYRING --verify 2>&1 |
 	         sed -rne 's/.*ID ([0-9A-Z]+).*/\1/p')
@@ -206,7 +222,9 @@ for package; do
 	           awk  -F: '/@debian\.org>/ { a = $10; exit} /^pub/ { a = $10 } END { print a }' )
 	if [ -z "$UPLOADER" ]; then UPLOADER="<unrecognised public key ($GPG_ID)>"; fi
 
-	echo "$VERSION to $DISTRO: $UPLOADER" | iconv -c -f UTF-8
+	output="$VERSION to $DISTRO: $UPLOADER" 
+	[ "$WANT_DATE" = "yes" ] && output="$output on $DATE"
+	echo $output | iconv -c -f UTF-8
 
 	count=$(($count + 1))
 	[ $count -eq $MAXUPLOADS ] && break
