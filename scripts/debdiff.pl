@@ -564,8 +564,8 @@ my (@deblosses, @debgains);
     grep $debs{$_}--, keys %debs1;
     grep $debs{$_}++, keys %debs2;
 
-    my @deblosses = sort grep $debs{$_} < 0, keys %debs;
-    my @debgains  = sort grep $debs{$_} > 0, keys %debs;
+    @deblosses = sort grep $debs{$_} < 0, keys %debs;
+    @debgains  = sort grep $debs{$_} > 0, keys %debs;
     @CommonDebs= sort grep $debs{$_} == 0, keys %debs;
 }
 

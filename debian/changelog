@@ -21,6 +21,9 @@ devscripts (2.10.30) UNRELEASED; urgency=low
       authenticated mode (Closes: #485044)   
     + Correctly handle absolute pathnames as the checkout path for a single
       file (Closes: #485888)
+  * debdiff: When using --show-moved, indicate whether the two lists of
+    packages being compared are different (this should have always worked,
+    but didn't due to a small logic bug)
   * licensecheck:
     + Apply patches from Ben Finney to use the copyright parser to determine
       whether a file contains a valid copyright statement (Closes: #486013)
