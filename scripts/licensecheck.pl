@@ -3,7 +3,7 @@
 # the KDE SDK (by dfaure@kde.org)
 #
 # This version is
-#   Copyright (C) 2007 Adam D. Barratt
+#   Copyright (C) 2007, 2008 Adam D. Barratt
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -360,7 +360,7 @@ EOF
 sub version {
     print <<"EOF";
 This is $progname, from the Debian devscripts package, version ###VERSION###
-Copyright (C) 2007 by Adam D. Barratt <adam\@adam-barratt.org.uk>; based 
+Copyright (C) 2007, 2008 by Adam D. Barratt <adam\@adam-barratt.org.uk>; based
 on a script of the same name from the KDE SDK by <dfaure\@kde.org>.
 
 This program comes with ABSOLUTELY NO WARRANTY.
