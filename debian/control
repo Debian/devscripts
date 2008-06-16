@@ -19,8 +19,8 @@ Recommends: at, curl | wget, dctrl-tools, debian-keyring, debian-maintainers,
  dput | dupload, equivs, fakeroot, gnupg, libauthen-sasl-perl,
  libcrypt-ssleay-perl, libparse-debcontrol-perl, libsoap-lite-perl,
  libterm-size-perl, libtimedate-perl, liburi-perl, libwww-perl,
- libyaml-syck-perl, lintian, lsb-release, mailx | mailutils, man-db, patch,
- patchutils, ssh-client, strace, unzip, wdiff, www-browser,
+ libyaml-syck-perl, lintian, lsb-release, bsd-mailx | mailx | mailutils, 
+ man-db, patch, patchutils, ssh-client, strace, unzip, wdiff, www-browser,
  subversion | cvs | svk | tla | bzr | git-core | mercurial
 Suggests: build-essential, cvs-buildpackage, devscripts-el, gnuplot,
  libfile-desktopentry-perl, mutt, svn-buildpackage
@@ -32,7 +32,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
     E for stderr) for every line of output
   - archpath: print tla/Bazaar package names [tla | bazaar]
   - bts: a command-line tool for manipulating the BTS [www-browser,
-    libauthen-sasl-perl, libsoap-lite-perl, libwww-perl, mailx | mailutils]
+    libauthen-sasl-perl, libsoap-lite-perl, libwww-perl, bsd-mailx | mailx | 
+    mailutils]
   - build-rdeps: Searches for all packages that build-depend on a
     given package [dctrl-tools]
   - chdist: tool to easily play with several distributions [dctrl-tools]
@@ -90,7 +91,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - licensecheck: attempt to determine the license of source files
   - list-unreleased: searches for unreleased packages
   - manpage-alert: locate binaries without corresponding manpages [man-db]
-  - mass-bug: mass-file bug reports [mailx | mailutils]
+  - mass-bug: mass-file bug reports [bsd-mailx | mailx | mailutils]
   - mergechanges: merge .changes files from a package built on different
     architectures
   - mk-build-deps: Given a package name and/or control file, generate a binary
@@ -101,7 +102,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - plotchangelog: view a nice plot of the data in a changelog file
     [libtimedate-perl, gnuplot]
   - pts-subscribe: subscribe to the PTS for a limited period of time
-    [mailx | mailutils, at]
+    [bsd-mailx | mailx | mailutils, at]
   - rc-alert: list installed packages which have release-critical bugs [wget]
   - rmadison: remotely query the Debian archive database about packages
     [wget | curl, liburi-perl]

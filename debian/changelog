@@ -36,7 +36,10 @@ devscripts (2.10.30) UNRELEASED; urgency=low
   * who-uploads: Allow the date of each upload to be displayed. Based on a
     patch by Filippo Giunchedi (Closes: #486344)
   * wnpp-check: Fix a small typo in the manpage (Closes: #484582)
-  * debian/control: Bump Standards-Version to 3.8.0 (no changes)
+  * debian/control:
+    + Bump Standards-Version to 3.8.0 (no changes)
+    + Add bsd-mailx to the mailx | mailutils Recommends as mailx is now
+      a transitional package for bsd-mailx
   * debian/{link,rules}: Don't install the fr/man1/dch.1 symlink if the
     corresponding debchange.1 wasn't installed (e.g. due to not being
     sufficiently translated) (Closes: #485094)
