@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2008-06-03 19:17+0100\n"
+"POT-Creation-Date: 2008-06-16 17:42+0100\n"
 "PO-Revision-Date: 2006-11-27 09:30+0100\n"
 "Last-Translator: Julien Cristau <julien.cristau@ens-lyon.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -87,7 +87,7 @@ msgstr "DEBIAN"
 #: ../scripts/mk-build-deps.pl:24 ../scripts/nmudiff.1:2
 #: ../scripts/plotchangelog.1:2 ../scripts/pts-subscribe.1:2
 #: ../scripts/rc-alert.1:2 ../scripts/rmadison.pl:175 ../scripts/svnpath.pl:3
-#: ../scripts/tagpending.pl:80 ../scripts/transition-check.pl:23
+#: ../scripts/tagpending.pl:81 ../scripts/transition-check.pl:23
 #: ../scripts/uscan.1:2 ../scripts/uupdate.1:2 ../scripts/whodepends.1:2
 #: ../scripts/who-uploads.1:2 ../scripts/wnpp-alert.1:2
 #: ../scripts/wnpp-check.1:2 ../scripts/devscripts.conf.5:2
@@ -121,7 +121,7 @@ msgstr ""
 #: ../scripts/mk-build-deps.pl:28 ../scripts/nmudiff.1:4
 #: ../scripts/plotchangelog.1:4 ../scripts/pts-subscribe.1:4
 #: ../scripts/rc-alert.1:4 ../scripts/rmadison.pl:179 ../scripts/svnpath.pl:7
-#: ../scripts/tagpending.pl:84 ../scripts/transition-check.pl:27
+#: ../scripts/tagpending.pl:85 ../scripts/transition-check.pl:27
 #: ../scripts/uscan.1:4 ../scripts/uupdate.1:4 ../scripts/whodepends.1:4
 #: ../scripts/who-uploads.1:4 ../scripts/wnpp-alert.1:4
 #: ../scripts/wnpp-check.1:4
@@ -156,7 +156,7 @@ msgstr "B<annotate-output> I<programme> [I<paramètres> ...]"
 #: ../scripts/mk-build-deps.pl:34 ../scripts/nmudiff.1:6
 #: ../scripts/plotchangelog.1:7 ../scripts/pts-subscribe.1:6
 #: ../scripts/rc-alert.1:8 ../scripts/rmadison.pl:187 ../scripts/svnpath.pl:17
-#: ../scripts/tagpending.pl:88 ../scripts/transition-check.pl:33
+#: ../scripts/tagpending.pl:89 ../scripts/transition-check.pl:33
 #: ../scripts/uscan.1:6 ../scripts/uupdate.1:8 ../scripts/whodepends.1:6
 #: ../scripts/who-uploads.1:6 ../scripts/wnpp-alert.1:8
 #: ../scripts/wnpp-check.1:8 ../scripts/devscripts.conf.5:4
@@ -320,7 +320,7 @@ msgstr ""
 #: ../scripts/rc-alert.1:29 ../scripts/rmadison.pl:295
 #: ../scripts/svnpath.pl:97 ../scripts/transition-check.pl:81
 #: ../scripts/uscan.1:525 ../scripts/uupdate.1:167 ../scripts/whodepends.1:19
-#: ../scripts/who-uploads.1:60 ../scripts/wnpp-alert.1:31
+#: ../scripts/who-uploads.1:71 ../scripts/wnpp-alert.1:31
 #: ../scripts/wnpp-check.1:33 ../scripts/devscripts.conf.5:58
 #, no-wrap
 msgid "AUTHOR"
@@ -639,7 +639,7 @@ msgstr ""
 #: ../scripts/mass-bug.pl:60 ../scripts/mk-build-deps.pl:40
 #: ../scripts/nmudiff.1:21 ../scripts/plotchangelog.1:43
 #: ../scripts/pts-subscribe.1:13 ../scripts/rc-alert.1:17
-#: ../scripts/rmadison.pl:196 ../scripts/tagpending.pl:94
+#: ../scripts/rmadison.pl:196 ../scripts/tagpending.pl:95
 #: ../scripts/transition-check.pl:42 ../scripts/uscan.1:332
 #: ../scripts/uupdate.1:50 ../scripts/whodepends.1:10
 #: ../scripts/who-uploads.1:15 ../scripts/wnpp-alert.1:17
@@ -917,7 +917,7 @@ msgid "--only-new"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:307 ../scripts/bts.pl:3407
+#: ../scripts/bts.pl:307 ../scripts/bts.pl:3409
 msgid ""
 "Download only new bugs when caching. Do not check for updates in bugs we "
 "already have."
@@ -972,7 +972,7 @@ msgstr ""
 "Fournit un rapport puis télécharge. (C'est le comportement par défaut.)"
 
 # type: =item
-#: ../scripts/bts.pl:330 ../scripts/tagpending.pl:136
+#: ../scripts/bts.pl:330 ../scripts/tagpending.pl:137
 msgid "-i, --interactive"
 msgstr "-i, --interactive"
 
@@ -1039,7 +1039,7 @@ msgstr "--no-conf, --noconf"
 #: ../scripts/dpkg-depcheck.1:96 ../scripts/dscverify.1:28
 #: ../scripts/grep-excuses.1:18 ../scripts/mass-bug.pl:110
 #: ../scripts/nmudiff.1:63 ../scripts/uscan.1:435 ../scripts/uupdate.1:80
-#: ../scripts/who-uploads.1:37
+#: ../scripts/who-uploads.1:44
 msgid ""
 "Do not read any configuration files.  This can only be used as the first "
 "option given on the command-line."
@@ -2223,19 +2223,19 @@ msgstr ""
 "parties de cette page de manuel."
 
 # type: SH
-#: ../scripts/bts.pl:3333 ../scripts/debuild.1:86 ../scripts/diff2patches.1:32
+#: ../scripts/bts.pl:3335 ../scripts/debuild.1:86 ../scripts/diff2patches.1:32
 #: ../scripts/pts-subscribe.1:29
 #, no-wrap
 msgid "ENVIRONMENT VARIABLES"
 msgstr "VARIABLES D'ENVIRONNEMENT"
 
 # type: TH
-#: ../scripts/bts.pl:3337
+#: ../scripts/bts.pl:3339
 msgid "DEBEMAIL"
 msgstr "DEBEMAIL"
 
 # type: textblock
-#: ../scripts/bts.pl:3339
+#: ../scripts/bts.pl:3341
 msgid ""
 "If this is set, the From: line in the email will be set to use this email "
 "address instead of your normal email address (as would be determined by "
@@ -2246,12 +2246,12 @@ msgstr ""
 "serait déterminée par B<mail>)."
 
 # type: =item
-#: ../scripts/bts.pl:3343
+#: ../scripts/bts.pl:3345
 msgid "DEBFULLNAME"
 msgstr "DEBFULLNAME"
 
 # type: textblock
-#: ../scripts/bts.pl:3345
+#: ../scripts/bts.pl:3347
 msgid ""
 "If DEBEMAIL is set, DEBFULLNAME is examined to determine the full name to "
 "use; if this is not set, B<bts> attempts to determine a name from your "
@@ -2262,12 +2262,12 @@ msgstr ""
 "votre entrée passwd."
 
 # type: =item
-#: ../scripts/bts.pl:3349
+#: ../scripts/bts.pl:3351
 msgid "BROWSER"
 msgstr "BROWSER"
 
 # type: textblock
-#: ../scripts/bts.pl:3351
+#: ../scripts/bts.pl:3353
 msgid ""
 "If set, it specifies the browser to use for the 'show' and 'bugs' options.  "
 "See the description above."
@@ -2276,7 +2276,7 @@ msgstr ""
 "« show » et « bugs ». Voir la description plus haut."
 
 # type: SH
-#: ../scripts/bts.pl:3356 ../scripts/debc.1:92 ../scripts/debchange.1:341
+#: ../scripts/bts.pl:3358 ../scripts/debc.1:92 ../scripts/debchange.1:341
 #: ../scripts/debclean.1:90 ../scripts/debcommit.pl:97
 #: ../scripts/debdiff.1:142 ../scripts/debi.1:93 ../scripts/debrelease.1:105
 #: ../scripts/debrsign.1:57 ../scripts/debsign.1:99 ../scripts/debuild.1:288
@@ -2285,14 +2285,14 @@ msgstr ""
 #: ../scripts/licensecheck.pl:83 ../scripts/mass-bug.pl:128
 #: ../scripts/nmudiff.1:69 ../scripts/plotchangelog.1:106
 #: ../scripts/pts-subscribe.1:37 ../scripts/rmadison.pl:259
-#: ../scripts/uscan.1:441 ../scripts/uupdate.1:86 ../scripts/who-uploads.1:43
+#: ../scripts/uscan.1:441 ../scripts/uupdate.1:86 ../scripts/who-uploads.1:50
 #, no-wrap
 msgid "CONFIGURATION VARIABLES"
 msgstr "VARIABLES DE CONFIGURATION"
 
 # NOTE: presque identique
 # type: Plain text
-#: ../scripts/bts.pl:3358 ../scripts/debcommit.pl:99
+#: ../scripts/bts.pl:3360 ../scripts/debcommit.pl:99
 #: ../scripts/licensecheck.pl:85 ../scripts/mass-bug.pl:130
 msgid ""
 "The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
@@ -2309,12 +2309,12 @@ msgstr ""
 "cette fin. Les variables actuellement reconnues sont :"
 
 # type: =item
-#: ../scripts/bts.pl:3366
+#: ../scripts/bts.pl:3368
 msgid "BTS_OFFLINE"
 msgstr "BTS_OFFLINE"
 
 # type: Plain text
-#: ../scripts/bts.pl:3368
+#: ../scripts/bts.pl:3370
 msgid ""
 "If this is set to I<yes>, then it is the same as the --offline command line "
 "parameter being used.  Only has an effect on the show and bugs commands.  "
@@ -2327,12 +2327,12 @@ msgstr ""
 "commande show ci-dessus pour plus d'informations."
 
 # type: =item
-#: ../scripts/bts.pl:3373
+#: ../scripts/bts.pl:3375
 msgid "BTS_CACHE"
 msgstr "BTS_CACHE"
 
 # type: Plain text
-#: ../scripts/bts.pl:3375
+#: ../scripts/bts.pl:3377
 msgid ""
 "If this is set to I<no>, then it is the same as the --no-cache command line "
 "parameter being used.  Only has an effect on the show and bug commands.  The "
@@ -2344,12 +2344,12 @@ msgstr ""
 "ci-dessus pour plus d'informations."
 
 # type: =item
-#: ../scripts/bts.pl:3380
+#: ../scripts/bts.pl:3382
 msgid "BTS_CACHE_MODE={min,mbox,full}"
 msgstr "BTS_CACHE_MODE={min,mbox,full}"
 
 # type: textblock
-#: ../scripts/bts.pl:3382
+#: ../scripts/bts.pl:3384
 msgid ""
 "How much of the BTS should we mirror when we are asked to cache something? "
 "Just the minimum, or also the mbox or the whole thing? The default is "
@@ -2364,12 +2364,12 @@ msgstr ""
 "documentation de la commande cache pour plus d'informations."
 
 # type: =item
-#: ../scripts/bts.pl:3388
+#: ../scripts/bts.pl:3390
 msgid "BTS_FORCE_REFRESH"
 msgstr "BTS_FORCE_REFRESH"
 
 # type: Plain text
-#: ../scripts/bts.pl:3390
+#: ../scripts/bts.pl:3392
 msgid ""
 "If this is set to I<yes>, then it is the same as the --force-refresh command "
 "line parameter being used.  Only has an effect on the cache command.  The "
@@ -2381,12 +2381,12 @@ msgstr ""
 "d'informations."
 
 # type: =item
-#: ../scripts/bts.pl:3395
+#: ../scripts/bts.pl:3397
 msgid "BTS_MAIL_READER"
 msgstr "BTS_MAIL_READER"
 
 # type: Plain text
-#: ../scripts/bts.pl:3397
+#: ../scripts/bts.pl:3399
 msgid ""
 "If this is set, specifies a mail reader to use instead of mutt.  Same as the "
 "--mailreader command line option."
@@ -2395,12 +2395,12 @@ msgstr ""
 "place de mutt. Équivalent à l'option de ligne de commande --mailreader."
 
 # type: =item
-#: ../scripts/bts.pl:3400 ../scripts/mass-bug.pl:138
+#: ../scripts/bts.pl:3402 ../scripts/mass-bug.pl:138
 msgid "BTS_SENDMAIL_COMMAND"
 msgstr "BTS_SENDMAIL_COMMAND"
 
 # type: textblock
-#: ../scripts/bts.pl:3402 ../scripts/mass-bug.pl:140 ../scripts/nmudiff.1:92
+#: ../scripts/bts.pl:3404 ../scripts/mass-bug.pl:140 ../scripts/nmudiff.1:92
 msgid ""
 "If this is set, specifies a sendmail command to use instead of /usr/sbin/"
 "sendmail.  Same as the --sendmail command line option."
@@ -2410,17 +2410,17 @@ msgstr ""
 "commande --sendmail."
 
 # type: =item
-#: ../scripts/bts.pl:3405
+#: ../scripts/bts.pl:3407
 msgid "BTS_ONLY_NEW"
 msgstr "BTS_ONLY_NEW"
 
 # type: =item
-#: ../scripts/bts.pl:3410
+#: ../scripts/bts.pl:3412
 msgid "BTS_SMTP_HOST"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3412
+#: ../scripts/bts.pl:3414
 #, fuzzy
 msgid ""
 "If this is set, specifies an SMTP host to use for sending mail rather than "
@@ -2431,19 +2431,19 @@ msgstr ""
 "commande --sendmail."
 
 # type: textblock
-#: ../scripts/bts.pl:3416
+#: ../scripts/bts.pl:3418
 msgid ""
 "Note that this option takes priority over BTS_SENDMAIL_COMMAND if both are "
 "set, unless the --sendmail option is used."
 msgstr ""
 
 # type: =item
-#: ../scripts/bts.pl:3419
+#: ../scripts/bts.pl:3421
 msgid "BTS_SMTP_AUTH_USERNAME, BTS_SMTP_AUTH_PASSWORD"
 msgstr ""
 
 # type: Plain text
-#: ../scripts/bts.pl:3421
+#: ../scripts/bts.pl:3423
 #, fuzzy
 msgid ""
 "If these options are set, then it is the same as the --smtp-username and --"
@@ -2452,12 +2452,12 @@ msgstr ""
 "Si elle est positionnée à I<yes>, équivaut à utiliser l'option B<--preserve>."
 
 # type: =item
-#: ../scripts/bts.pl:3424
+#: ../scripts/bts.pl:3426
 msgid "BTS_INCLUDE_RESOLVED"
 msgstr ""
 
 # type: Plain text
-#: ../scripts/bts.pl:3426
+#: ../scripts/bts.pl:3428
 #, fuzzy
 msgid ""
 "If this is set to I<no>, then it is the same as the --no-include-resolved "
@@ -2470,12 +2470,12 @@ msgstr ""
 "d'informations."
 
 # type: =item
-#: ../scripts/bts.pl:3431
+#: ../scripts/bts.pl:3433
 msgid "BTS_SUPPRESS_ACKS"
 msgstr ""
 
 # type: Plain text
-#: ../scripts/bts.pl:3433
+#: ../scripts/bts.pl:3435
 msgid ""
 "If this is set to I<yes>, then it is the same as the --no-acks command line "
 "parameter being used.  The default is I<no>."
@@ -2484,12 +2484,12 @@ msgstr ""
 "valeur par défaut est I<no>."
 
 # type: =item
-#: ../scripts/bts.pl:3436
+#: ../scripts/bts.pl:3438
 msgid "BTS_INTERACTIVE"
 msgstr "BTS_INTERACTIVE"
 
 # type: Plain text
-#: ../scripts/bts.pl:3438
+#: ../scripts/bts.pl:3440
 msgid ""
 "If this is set to I<yes> or I<force>, then it is the same as the --"
 "interactive or --force-interactive command line parameter being used.  The "
@@ -2499,19 +2499,19 @@ msgstr ""
 "ou --force-interactive. La valeur par défaut est I<no>."
 
 # type: =item
-#: ../scripts/bts.pl:3442
+#: ../scripts/bts.pl:3444
 msgid "BTS_DEFAULT_CC"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3444
+#: ../scripts/bts.pl:3446
 msgid ""
 "Specify a list of e-mail addresses to which a carbon copy of the generated e-"
 "mail to the control bot should automatically be sent."
 msgstr ""
 
 # type: SH
-#: ../scripts/bts.pl:3449 ../scripts/checkbashisms.1:56
+#: ../scripts/bts.pl:3451 ../scripts/checkbashisms.1:56
 #: ../scripts/cowpoke.1:145 ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62
 #: ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53
 #: ../scripts/dcmd.1:37 ../scripts/debc.1:115 ../scripts/debchange.1:410
@@ -2525,7 +2525,7 @@ msgstr ""
 #: ../scripts/list-unreleased.1:19 ../scripts/nmudiff.1:92
 #: ../scripts/plotchangelog.1:124 ../scripts/pts-subscribe.1:46
 #: ../scripts/rc-alert.1:27 ../scripts/rmadison.pl:291
-#: ../scripts/tagpending.pl:149 ../scripts/uscan.1:519
+#: ../scripts/tagpending.pl:150 ../scripts/uscan.1:519
 #: ../scripts/uupdate.1:160 ../scripts/wnpp-alert.1:29
 #: ../scripts/wnpp-check.1:23 ../scripts/devscripts.conf.5:54
 #, no-wrap
@@ -2533,7 +2533,7 @@ msgid "SEE ALSO"
 msgstr "VOIR AUSSI"
 
 # type: textblock
-#: ../scripts/bts.pl:3451
+#: ../scripts/bts.pl:3453
 msgid ""
 "Please see L<http://www.debian.org/Bugs/server-control> for more details on "
 "how to control the BTS using emails and L<http://www.debian.org/Bugs/> for "
@@ -2541,18 +2541,18 @@ msgid ""
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:3455
+#: ../scripts/bts.pl:3457
 msgid "reportbug(1), querybts(1)"
 msgstr ""
 
 # type: SH
-#: ../scripts/bts.pl:3457 ../scripts/chdist.pl:92 ../scripts/mass-bug.pl:505
-#: ../scripts/tagpending.pl:433
+#: ../scripts/bts.pl:3459 ../scripts/chdist.pl:92 ../scripts/mass-bug.pl:505
+#: ../scripts/tagpending.pl:439
 msgid "COPYRIGHT"
 msgstr "COPYRIGHT"
 
 # type: textblock
-#: ../scripts/bts.pl:3459
+#: ../scripts/bts.pl:3461
 msgid ""
 "This program is Copyright (C) 2001-2003 by Joey Hess <joeyh@debian.org>.  "
 "Many modifications have been made, Copyright (C) 2002-2005 Julian Gilbey "
@@ -2564,7 +2564,7 @@ msgstr ""
 "<josh@freedesktop.org>."
 
 # type: textblock
-#: ../scripts/bts.pl:3464 ../scripts/chdist.pl:97 ../scripts/mass-bug.pl:509
+#: ../scripts/bts.pl:3466 ../scripts/chdist.pl:97 ../scripts/mass-bug.pl:509
 msgid ""
 "It is licensed under the terms of the GPL, either version 2 of the License, "
 "or (at your option) any later version."
@@ -2653,7 +2653,7 @@ msgstr "Affiche les informations sur l'utilisation."
 #: ../scripts/dscverify.1:35 ../scripts/grep-excuses.1:24
 #: ../scripts/nmudiff.1:66 ../scripts/plotchangelog.1:95
 #: ../scripts/pts-subscribe.1:26 ../scripts/rmadison.pl:246
-#: ../scripts/uscan.1:438 ../scripts/uupdate.1:83 ../scripts/who-uploads.1:40
+#: ../scripts/uscan.1:438 ../scripts/uupdate.1:83 ../scripts/who-uploads.1:47
 #, no-wrap
 msgid "B<--version>"
 msgstr "B<--version>"
@@ -2893,7 +2893,7 @@ msgstr ""
 #: ../scripts/debdiff.1:130 ../scripts/debrelease.1:99 ../scripts/debsign.1:93
 #: ../scripts/dscverify.1:32 ../scripts/pts-subscribe.1:23
 #: ../scripts/rc-alert.1:21 ../scripts/uupdate.1:80
-#: ../scripts/who-uploads.1:37 ../scripts/wnpp-alert.1:23
+#: ../scripts/who-uploads.1:44 ../scripts/wnpp-alert.1:23
 #: ../scripts/wnpp-check.1:17
 #, no-wrap
 msgid "B<--help>, B<-h>"
@@ -3697,7 +3697,7 @@ msgstr ""
 #: ../scripts/debsign.1:89 ../scripts/dpkg-depcheck.1:92
 #: ../scripts/dscverify.1:24 ../scripts/grep-excuses.1:14
 #: ../scripts/nmudiff.1:59 ../scripts/rmadison.pl:250 ../scripts/uscan.1:431
-#: ../scripts/uupdate.1:76 ../scripts/who-uploads.1:33
+#: ../scripts/uupdate.1:76 ../scripts/who-uploads.1:40
 #, no-wrap
 msgid "B<--no-conf>, B<--noconf>"
 msgstr "B<--no-conf>, B<--noconf>"
@@ -4417,7 +4417,7 @@ msgstr "B<--check-dirname-regex> I<regex>"
 #: ../scripts/debi.1:99 ../scripts/debrelease.1:111 ../scripts/debrsign.1:63
 #: ../scripts/debsign.1:105 ../scripts/nmudiff.1:75
 #: ../scripts/pts-subscribe.1:43 ../scripts/uupdate.1:92
-#: ../scripts/who-uploads.1:49
+#: ../scripts/who-uploads.1:56
 msgid ""
 "The two configuration files I</etc/devscripts.conf> and I<~/.devscripts> are "
 "sourced in that order to set configuration variables.  Command line options "
@@ -5331,7 +5331,7 @@ msgstr ""
 #: ../scripts/debrelease.1:102 ../scripts/debsign.1:96
 #: ../scripts/dscverify.1:35 ../scripts/nmudiff.1:66
 #: ../scripts/pts-subscribe.1:26 ../scripts/uupdate.1:83
-#: ../scripts/who-uploads.1:40
+#: ../scripts/who-uploads.1:47
 msgid "Display a help message and exit successfully."
 msgstr "Affiche un message d'aide et quitte avec succès."
 
@@ -5340,7 +5340,7 @@ msgstr "Affiche un message d'aide et quitte avec succès."
 #: ../scripts/debrelease.1:105 ../scripts/debsign.1:99
 #: ../scripts/dscverify.1:38 ../scripts/nmudiff.1:69
 #: ../scripts/pts-subscribe.1:29 ../scripts/uupdate.1:86
-#: ../scripts/who-uploads.1:43
+#: ../scripts/who-uploads.1:50
 msgid "Display version and copyright information and exit successfully."
 msgstr "Affiche la version et le copyright, puis quitte avec succès."
 
@@ -9385,7 +9385,7 @@ msgstr ""
 "modifications sont Copyright \\(co 2005-2006 Julian Gilbey <jdg@debian.org>."
 
 # type: textblock
-#: ../scripts/dget.pl:627 ../scripts/tagpending.pl:442
+#: ../scripts/dget.pl:627 ../scripts/tagpending.pl:448
 msgid ""
 "This program is licensed under the terms of the GPL, either version 2 of the "
 "License, or (at your option) any later version."
@@ -12064,20 +12064,20 @@ msgid "Joey Hess <joey@kitenet.net>"
 msgstr "Joey Hess <joey@kitenet.net>"
 
 # type: textblock
-#: ../scripts/tagpending.pl:82
+#: ../scripts/tagpending.pl:83
 msgid ""
 "tagpending - tags bugs that are to be closed in the latest changelog as "
 "pending"
 msgstr ""
 
 # type: Plain text
-#: ../scripts/tagpending.pl:86
+#: ../scripts/tagpending.pl:87
 #, fuzzy
 msgid "B<tagpending> [options]"
 msgstr "B<tagpending> [I<options>]"
 
 # type: textblock
-#: ../scripts/tagpending.pl:90
+#: ../scripts/tagpending.pl:91
 msgid ""
 "B<tagpending> parses debian/changelog and debian/control to determine which "
 "bugs would be closed if the package were uploaded. Each bug is then marked "
@@ -12085,120 +12085,120 @@ msgid ""
 msgstr ""
 
 # type: =item
-#: ../scripts/tagpending.pl:98
+#: ../scripts/tagpending.pl:99
 #, fuzzy
 msgid "-n, --noact"
 msgstr "-n --noact"
 
 # type: textblock
-#: ../scripts/tagpending.pl:100
+#: ../scripts/tagpending.pl:101
 msgid "Check whether any bugs require tagging, but do not actually do so."
 msgstr ""
 
 # type: TP
-#: ../scripts/tagpending.pl:102
+#: ../scripts/tagpending.pl:103
 #, fuzzy
 msgid "-s, --silent"
 msgstr "B<-s>, B<--silent>"
 
 # type: textblock
-#: ../scripts/tagpending.pl:104
+#: ../scripts/tagpending.pl:105
 msgid "Do not output any messages."
 msgstr ""
 
 # type: TP
-#: ../scripts/tagpending.pl:106
+#: ../scripts/tagpending.pl:107
 #, fuzzy
 msgid "-v, --verbose"
 msgstr "B<-v>, B<--verbose>"
 
 # type: textblock
-#: ../scripts/tagpending.pl:108
+#: ../scripts/tagpending.pl:109
 msgid "List each bug checked and tagged in turn."
 msgstr ""
 
 # type: TP
-#: ../scripts/tagpending.pl:110
+#: ../scripts/tagpending.pl:111
 #, fuzzy
 msgid "-f, --force"
 msgstr "B<-f>, B<--force>"
 
 # type: textblock
-#: ../scripts/tagpending.pl:112
+#: ../scripts/tagpending.pl:113
 msgid "Do not query the BTS, but (re)tag all bugs closed in the changelog."
 msgstr ""
 
 # type: =item
-#: ../scripts/tagpending.pl:114
+#: ../scripts/tagpending.pl:115
 msgid "--comments"
 msgstr ""
 
 # type: textblock
-#: ../scripts/tagpending.pl:116
+#: ../scripts/tagpending.pl:117
 msgid ""
 "Include the changelog header line and the entries relating to the tagged "
 "bugs as comments in the generated mail.  This is the default."
 msgstr ""
 
 # type: textblock
-#: ../scripts/tagpending.pl:119
+#: ../scripts/tagpending.pl:120
 msgid ""
 "Note that when used in combination with --to, the header line output will "
 "always be that of the most recent version."
 msgstr ""
 
 # type: =item
-#: ../scripts/tagpending.pl:122
+#: ../scripts/tagpending.pl:123
 msgid "--no-comments"
 msgstr ""
 
 # type: textblock
-#: ../scripts/tagpending.pl:124
+#: ../scripts/tagpending.pl:125
 msgid "Do not include changelog entries in the generated mail."
 msgstr ""
 
 # type: TP
-#: ../scripts/tagpending.pl:126
+#: ../scripts/tagpending.pl:127
 #, fuzzy
 msgid "-c, --confirm"
 msgstr "B<--no-conf>, B<--noconf>"
 
 # type: textblock
-#: ../scripts/tagpending.pl:128
+#: ../scripts/tagpending.pl:129
 msgid "Tag bugs as both confirmed and pending."
 msgstr ""
 
 # type: TP
-#: ../scripts/tagpending.pl:130
+#: ../scripts/tagpending.pl:131
 #, fuzzy
 msgid "-t, --to <version>"
 msgstr "B<-V>, B<--version>"
 
 # type: textblock
-#: ../scripts/tagpending.pl:132
+#: ../scripts/tagpending.pl:133
 msgid "Parse changelogs for all versions strictly greater than <version>."
 msgstr ""
 
 # type: textblock
-#: ../scripts/tagpending.pl:134
+#: ../scripts/tagpending.pl:135
 msgid "Equivalent to dpkg-parsechangelog's -v option."
 msgstr ""
 
 # type: textblock
-#: ../scripts/tagpending.pl:138
+#: ../scripts/tagpending.pl:139
 msgid ""
 "Display the message which would be sent to the BTS and, except when --noact "
 "was used, prompt for confirmation before sending it."
 msgstr ""
 
 # type: TP
-#: ../scripts/tagpending.pl:141
+#: ../scripts/tagpending.pl:142
 #, fuzzy
 msgid "-w, --wnpp"
 msgstr "B<-h>, B<--help>"
 
 # type: textblock
-#: ../scripts/tagpending.pl:143
+#: ../scripts/tagpending.pl:144
 msgid ""
 "For each bug that does not appear to belong to the current package, check "
 "whether it is filed against wnpp. If so, tag it. This allows e.g.  ITAs and "
@@ -12206,13 +12206,13 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../scripts/tagpending.pl:151
+#: ../scripts/tagpending.pl:152
 #, fuzzy
 msgid "B<bts>(1) and B<dpkg-parsechangelog>(1)"
 msgstr "B<ldapsearch>(1), B<mailx>(1) et B<dpkg-parsechangelog>(1)"
 
 # type: Plain text
-#: ../scripts/tagpending.pl:435
+#: ../scripts/tagpending.pl:441
 #, fuzzy
 msgid ""
 "This program is Copyright 2008 by Adam D. Barratt <adam@adam-barratt.org.uk>."
@@ -12221,7 +12221,7 @@ msgstr ""
 "2006."
 
 # type: textblock
-#: ../scripts/tagpending.pl:438
+#: ../scripts/tagpending.pl:444
 msgid ""
 "The shell script tagpending, on which this program is based, is Copyright "
 "2004 by Joshua Kwan <joshk@triplehelix.org> with changes copyright 2004-7 by "
@@ -14219,13 +14219,53 @@ msgstr ""
 "keyring> remplace cette valeur."
 
 # type: TP
-#: ../scripts/who-uploads.1:49
+#: ../scripts/who-uploads.1:33
+#, fuzzy, no-wrap
+msgid "B<--date>"
+msgstr "B<--create>"
+
+# type: Plain text
+#: ../scripts/who-uploads.1:36
+msgid "Show the date of the upload alongside the uploader's details"
+msgstr ""
+
+# type: TP
+#: ../scripts/who-uploads.1:36
+#, fuzzy, no-wrap
+msgid "B<--nodate>, B<--no-date>"
+msgstr "B<-n>, B<--noact>"
+
+# type: Plain text
+#: ../scripts/who-uploads.1:40
+#, fuzzy
+msgid ""
+"Do not show the date of the upload alongside the uploader's details.  This "
+"is the default behaviour."
+msgstr ""
+"Ne retire pas les fichiers .deb, .changes et .build du répertoire parent. "
+"C'est le comportement par défaut."
+
+# type: TP
+#: ../scripts/who-uploads.1:56
+#, fuzzy, no-wrap
+msgid "B<WHOUPLOADS_DATE>"
+msgstr "B<WHOUPLOADS_KEYRINGS>"
+
+# type: Plain text
+#: ../scripts/who-uploads.1:60
+msgid ""
+"Show the date of the upload alongside the uploader's details.  By default, "
+"this is \"no\"."
+msgstr ""
+
+# type: TP
+#: ../scripts/who-uploads.1:60
 #, no-wrap
 msgid "B<WHOUPLOADS_MAXUPLOADS>"
 msgstr "B<WHOUPLOADS_MAXUPLOADS>"
 
 # type: Plain text
-#: ../scripts/who-uploads.1:53
+#: ../scripts/who-uploads.1:64
 msgid ""
 "The maximum number of uploads to display for each package.  By default, this "
 "is 3."
@@ -14234,13 +14274,13 @@ msgstr ""
 "est 3."
 
 # type: TP
-#: ../scripts/who-uploads.1:53
+#: ../scripts/who-uploads.1:64
 #, no-wrap
 msgid "B<WHOUPLOADS_KEYRINGS>"
 msgstr "B<WHOUPLOADS_KEYRINGS>"
 
 # type: Plain text
-#: ../scripts/who-uploads.1:60
+#: ../scripts/who-uploads.1:71
 #, fuzzy
 msgid ""
 "This is a colon-separated list of the default keyrings to be used.  By "
@@ -14252,7 +14292,7 @@ msgstr ""
 "keyrings/debian-keyring.gpg> et I</usr/share/keyrings/debian-keyring.pgp>."
 
 # type: Plain text
-#: ../scripts/who-uploads.1:63
+#: ../scripts/who-uploads.1:74
 msgid ""
 "The original version of B<who-uploads> was written by Adeodato Sim\\['o] "
 "E<lt>dato@net.com.org.esE<gt>.  The current version is by Julian Gilbey "
@@ -14398,7 +14438,7 @@ msgstr ""
 msgid ""
 "B<wnpp-check> was written by David Paleino E<lt>d.paleino@gmail.comE<gt>; "
 "this man page was written by Adam D. Barratt E<lt>adam@adam-barratt.org."
-"ukE<gt> for the devscripts pacakge.  B<wnpp-check> was originally based on "
+"ukE<gt> for the devscripts package.  B<wnpp-check> was originally based on "
 "B<wnpp-alert>, which was written by Arthur Korn E<lt>arthur@korn.chE<gt> and "
 "modified by Julian Gilbey E<lt>jdg@debian.orgE<gt> for the devscripts "
 "package.  Both scripts are in the public domain."
@@ -14650,10 +14690,6 @@ msgstr ""
 #~ "interroge le BTS (le système de suivi des bogues Debian) pour obtenir les "
 #~ "bogues déjà marqués par une étiquette « pending » du paquet et les exclut "
 #~ "du courrier."
-
-# type: TP
-#~ msgid "B<-n>, B<--noact>"
-#~ msgstr "B<-n>, B<--noact>"
 
 # type: Plain text
 #~ msgid "Do not actually send an email, but print it to stdout."
