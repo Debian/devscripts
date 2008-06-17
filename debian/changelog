@@ -1,6 +1,7 @@
 devscripts (2.10.31) UNRELEASED; urgency=low
 
-  * NOT RELEASED YET
+  * bts, debchange, nmudiff: Replace calls to date -R with strftime(). Thanks
+    Stephen Gran (Closes: #486594)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 16 Jun 2008 20:52:22 +0100
 

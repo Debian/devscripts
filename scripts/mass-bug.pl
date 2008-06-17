@@ -148,6 +148,7 @@ use strict;
 use Getopt::Long;
 use Text::Wrap;
 use File::Basename;
+use POSIX qw(strftime);
 
 my $progname = basename($0);
 $Text::Wrap::columns=70;
@@ -316,8 +317,7 @@ sub mailbts {
     my ($subject, $body, $to, $from) = @_;
 
     if (defined $from) {
-	my $date = `date -R`;
-	chomp $date;
+	my $date = strftime("%a, %d %b %Y %H:%M:%S %z", localtime(time));
 	
 	my $pid = open(MAIL, "|-");
 	if (! defined $pid) {
