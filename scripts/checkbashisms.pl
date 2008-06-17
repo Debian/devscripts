@@ -510,6 +510,7 @@ sub init_hashes {
 	$string_bashisms{'(?:^|\s+)HOST(TYPE|NAME)='} = q<HOST(TYPE|NAME)=>;
 	$string_bashisms{'(?:^|\s+)DIRSTACK='} = q<DIRSTACK=>;
 	$string_bashisms{'(?:^|\s+)EUID='} = q<EUID=>;
+	$string_bashisms{'(?:^|\s+)UID='} = q<UID=>;
 	$string_bashisms{'(?:^|\s+)BASH(_[A-Z]+)?='} = q<BASH(_SOMETHING)=>;
 	$string_bashisms{'(?:^|\s+)SHELLOPTS='} = q<SHELLOPTS=>;
 	$string_bashisms{'\$\{?POSIXLY_CORRECT\}?\b'} = q<$POSIXLY_CORRECT>;
