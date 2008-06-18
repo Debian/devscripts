@@ -2,7 +2,9 @@ devscripts (2.10.31) UNRELEASED; urgency=low
 
   * bts, debchange, nmudiff: Replace calls to date -R with strftime(). Thanks
     Stephen Gran (Closes: #486594)
-  * checkbashisms: Add a check for $UID being set to -x
+  * checkbashisms:
+    + Add a check for $UID being set to -x
+    + Apply a small fix to part of the "quoted block detection"
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 16 Jun 2008 20:52:22 +0100
 

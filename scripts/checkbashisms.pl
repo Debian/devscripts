@@ -203,7 +203,7 @@ foreach my $filename (@ARGV) {
 	    if ($quote_string ne "") {
 		my $otherquote = ($quote_string eq "\"" ? "\'" : "\"");
 		# Inside a quoted block
-		if ($line =~ /(?:^|^.*[^\\$otherquote])$quote_string(.*)$/) {
+		if ($line =~ /(?:^|^.*?[^\\$otherquote])$quote_string(.*)$/) {
 		    my $rest = $1;
 		    my $templine = $line;
 
