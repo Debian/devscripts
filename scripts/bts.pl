@@ -298,7 +298,7 @@ this SMTP host rather than by invoking a sendmail command.
 
 The host name may be followed by a colon (":") and a port number in
 order to use a port other than the default.  It may also begin with
-"ssmtp://" to indicate that SMTPS should be used.
+"ssmtp://" or "smtps://" to indicate that SMTPS should be used.
 
 Note that when sending directly via an SMTP host, specifying addresses in
 --cc-addr or BTS_DEFAULT_CC that the SMTP host will not relay will cause the
@@ -2011,15 +2011,15 @@ sub send_mail {
     elsif (length $smtphost) {
 	my $smtp;
 
-	if ($smtphost =~ m%^(?:ssmtp://)(.*)$%) {
+	if ($smtphost =~ m%^(?:(?:ssmtp|smtps)://)(.*)$%) {
 	    my ($host, $port) = split(/:/, $1);
 	    $port ||= '465';
 
 	    if (have_smtp_ssl) {
 		$smtp = Net::SMTP::SSL->new($smtphost, Port => $port)
-		    or die "bts: failed to open SSMTP connection to $smtphost\n";
+		    or die "bts: failed to open SMTPS connection to $smtphost\n";
 	    } else {
-		die "bts: Unable to establish SSMTP connection: $smtp_ssl_broken\n";
+		die "bts: Unable to establish SMTPS connection: $smtp_ssl_broken\n";
 	    }
 	} else {
 	    my ($host, $port) = split(/:/, $smtphost);
