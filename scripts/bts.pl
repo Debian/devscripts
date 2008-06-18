@@ -53,6 +53,7 @@ $SIG{'__WARN__'} = sub { warn $_[0] unless $_[0] =~ /^Parsing of undecoded UTF-8
 
 my $it = undef;
 my $lwp_broken = undef;
+my $smtp_ssl_broken = undef;
 my $ua;
 
 sub have_lwp() {
@@ -73,6 +74,23 @@ sub have_lwp() {
     }
     else { $lwp_broken=''; }
     return $lwp_broken ? 0 : 1;
+}
+
+sub have_smtp_ssl() {
+    return ($smtp_ssl_broken ? 0 : 1) if defined $smtp_ssl_broken;
+    eval {
+	require Net::SMTP::SSL;
+    };
+
+    if ($@) {
+	if ($@ =~ m%^Can\'t locate Net/SMTP/SSL%) {
+	    $smtp_ssl_broken="the libnet-smtp-ssl-perl package is not installed";
+	} else {
+	    $smtp_ssl_broken="couldn't load Net::SMTP::SSL: $@";
+	}
+    }
+    else { $smtp_ssl_broken=''; }
+    return $smtp_ssl_broken ? 0 : 1;
 }
 
 # Constants
@@ -277,6 +295,10 @@ SENDMAILCMD, for example: --sendmail="/usr/sbin/mymailer -t"
 
 Specify an SMTP host.  If given, B<bts> will send mail by talking directly to
 this SMTP host rather than by invoking a sendmail command.
+
+The host name may be followed by a colon (":") and a port number in
+order to use a port other than the default.  It may also begin with
+"ssmtp://" to indicate that SMTPS should be used.
 
 Note that when sending directly via an SMTP host, specifying addresses in
 --cc-addr or BTS_DEFAULT_CC that the SMTP host will not relay will cause the
@@ -1987,8 +2009,25 @@ sub send_mail {
         print "$message\n";
     }
     elsif (length $smtphost) {
-        my $smtp = Net::SMTP->new($smtphost)
-            or die "bts: failed to open SMTP connection to $smtphost\n";
+	my $smtp;
+
+	if ($smtphost =~ m%^(?:ssmtp://)(.*)$%) {
+	    my ($host, $port) = split(/:/, $1);
+	    $port ||= '465';
+
+	    if (have_smtp_ssl) {
+		$smtp = Net::SMTP::SSL->new($smtphost, Port => $port)
+		    or die "bts: failed to open SSMTP connection to $smtphost\n";
+	    } else {
+		die "bts: Unable to establish SSMTP connection: $smtp_ssl_broken\n";
+	    }
+	} else {
+	    my ($host, $port) = split(/:/, $smtphost);
+	    $port ||= '25';
+
+	    $smtp = Net::SMTP->new($smtphost, Port => $port)
+		or die "bts: failed to open SMTP connection to $smtphost\n";
+	}
 	if ($smtpuser) {
 	    $smtppass = getpass() if not $smtppass;
 	    $smtp->auth($smtpuser, $smtppass)

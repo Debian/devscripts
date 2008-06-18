@@ -23,7 +23,8 @@ Recommends: at, curl | wget, dctrl-tools, debian-keyring, debian-maintainers,
  man-db, patch, patchutils, ssh-client, strace, unzip, wdiff, www-browser,
  subversion | cvs | svk | tla | bzr | git-core | mercurial
 Suggests: build-essential, cvs-buildpackage, devscripts-el, gnuplot,
- libfile-desktopentry-perl, mutt, svn-buildpackage
+ libfile-desktopentry-perl, libnet-smtp-ssl-perl (>= 1.01-2), mutt,
+ svn-buildpackage
 Description: scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
  brackets afterwards:
@@ -32,8 +33,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
     E for stderr) for every line of output
   - archpath: print tla/Bazaar package names [tla | bazaar]
   - bts: a command-line tool for manipulating the BTS [www-browser,
-    libauthen-sasl-perl, libsoap-lite-perl, libwww-perl, bsd-mailx | mailx | 
-    mailutils]
+    libauthen-sasl-perl, libnet-smtp-ssl-perl, libsoap-lite-perl, libwww-perl,
+    bsd-mailx | mailx | mailutils]
   - build-rdeps: Searches for all packages that build-depend on a
     given package [dctrl-tools]
   - chdist: tool to easily play with several distributions [dctrl-tools]

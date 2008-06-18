@@ -1,10 +1,20 @@
 devscripts (2.10.31) UNRELEASED; urgency=low
 
-  * bts, debchange, nmudiff: Replace calls to date -R with strftime(). Thanks
-    Stephen Gran (Closes: #486594)
+  * bts
+    + Replace the use of date -R with strftime(). Thanks Stephen Gran.
+    + Allow an SMTP host to be specified as using SMTPS and/or a
+      non-standard port number
   * checkbashisms:
     + Add a check for $UID being set to -x
     + Apply a small fix to part of the "quoted block detection"
+  * debchange, nmudiff: Replace calls to date -R with strftime(). Thanks
+    Stephen Gran (Closes: #486594)
+  * debian/control
+    + Suggest libnet-smtp-ssl-perl (>= 1.01-2) in order to allow bts to
+      suport SMTPS. The versioned dependency is required in order to ensure
+      that a fixed libio-socket-ssl-perl is used.
+    + Add libnet-smtp-ssl-perl to the description of bts
+  * README: Add libnet-smtp-ssl-perl to the description of bts
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 16 Jun 2008 20:52:22 +0100
 
