@@ -9,6 +9,8 @@ devscripts (2.10.31) UNRELEASED; urgency=low
     + Apply a small fix to part of the "quoted block detection"
   * debchange, nmudiff: Replace calls to date -R with strftime(). Thanks
     Stephen Gran (Closes: #486594)
+  * uscan: Add an example of a newer form of watch file synax for SourceForge
+    based projects to the manpage
   * debian/control
     + Suggest libnet-smtp-ssl-perl (>= 1.01-2) in order to allow bts to
       suport SMTPS. The versioned dependency is required in order to ensure

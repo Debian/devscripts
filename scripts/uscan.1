@@ -68,19 +68,18 @@ http://tmrc.mit.edu/mirror/twisted/Twisted/(\\d\\.\\d)/ \\
   Twisted-([\\d\\.]*)\\.tar\\.bz2
 http://tmrc.mit.edu/mirror/twisted/Twisted/(\\d\.\\d)/Twisted-([\\d\\.]*)\\.tar\\.bz2
 
-# If your package is located on sourceforge, use one of the following
-# formats to automatically use the qa.debian.org redirector, avoiding
-# SF's difficult mirror system.
-http://sf.net/audacity/audacity-src-(.+)\\.tar\\.gz
+# If your package is located on SourceForge, you can use the following
+# format. Note that the trailing .* is required.
+http://sourceforge.net/projects/audacity/files \\ 
+  http://downloads.sourceforge.net/.+/audacity-src-(.+)\\.tar\\.gz\\.*
 
+# qa.debian.org runs a redirector which allows a simpler form of URL
+# for SourceForge based projects. The format below will automatically
+# be rewritten to use the redirector. Note that the format in the
+# previous example, whilst slightly more complicated, is recommended
+# instead of this one as it does not rely on a particular SourceForge
+# mirror being available
 http://sf.net/audacity/ audacity-src-(.+)\\.tar\\.gz
-
-# If the qa.debian.org redirector does not produce any results for
-# your sourceforge-hosted project, you can use the following format
-# to check for new versions.  Note that it does not seem to be
-# possible to download the files via this method.
-ftp://upload.sourceforge.net/pub/sourceforge/a/au/audacity/ \\
-  audacity-src-([\\d\\.]+)\\.tar\\.(gz|bz2)
 
 # This is the format for a site which has funny version numbers;
 # the parenthesised groups will be joined with dots to make a
