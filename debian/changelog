@@ -7,6 +7,8 @@ devscripts (2.10.31) UNRELEASED; urgency=low
   * checkbashisms:
     + Add a check for $UID being set to -x
     + Apply a small fix to part of the "quoted block detection"
+    + Quote test expressions using qr to allow perl to optionally compile
+      or otherwise optimise them. Thanks to Frank Lichtenheld for the idea.
   * debchange, nmudiff: Replace calls to date -R with strftime(). Thanks
     Stephen Gran (Closes: #486594)
   * uscan: Add an example of a newer form of watch file synax for SourceForge

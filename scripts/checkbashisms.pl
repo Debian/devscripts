@@ -407,112 +407,112 @@ sub script_is_evil_and_wrong {
 }
 
 sub init_hashes {
-    my $LEADIN = '(?:(^|[`&;(|{])\s*|(if|do|while)\s+)';
+    my $LEADIN = qr'(?:(^|[`&;(|{])\s*|(if|do|while)\s+)';
     %bashisms = (
-	'(?:^|\s+)function \w+\(\s*\)' =>   q<'function' is useless>,
-	$LEADIN . 'select\s+\w+' =>     q<'select' is not POSIX>,
-	$LEADIN . 'source\s+(?:\.\/|\/|\$)[^\s]+' =>
+	qr'(?:^|\s+)function \w+\(\s*\)' =>   q<'function' is useless>,
+	$LEADIN . qr'select\s+\w+' =>     q<'select' is not POSIX>,
+	$LEADIN . qr'source\s+(?:\.\/|\/|\$)[^\s]+' =>
 	                               q<should be '.', not 'source'>,
-	'(test|-o|-a)\s*[^\s]+\s+==\s' =>
+	qr'(test|-o|-a)\s*[^\s]+\s+==\s' =>
 	                               q<should be 'b = a'>,
-	'\[\s+[^\]]+\s+==\s' =>        q<should be 'b = a'>,
-	'\s\|\&' =>                    q<pipelining is not POSIX>,
-	'[^\\\]\{([^\s\\\}]+?,)+[^\\\}\s]+\}' =>
+	qr'\[\s+[^\]]+\s+==\s' =>        q<should be 'b = a'>,
+	qr'\s\|\&' =>                    q<pipelining is not POSIX>,
+	qr'[^\\]\{([^\s\\\}]+?,)+[^\\\}\s]+\}' =>
 	                               q<brace expansion>,
-	'(?:^|\s+)\w+\[\d+\]=' =>      q<bash arrays, H[0]>,
-	$LEADIN . '(read\s*(-[^r]+)*(?:;|$))' => q<should be read [-r] variable>,
-	$LEADIN . 'echo\s+(-n\s+)?-n?en?\s' =>      q<echo -e>,
-	$LEADIN . 'exec\s+-[acl]' =>    q<exec -c/-l/-a name>,
-	$LEADIN . 'let\s' =>            q<let ...>,
-	'(?<![\$\(])\(\(.*\)\)' =>     q<'((' should be '$(('>,
-	'\$\[[^][]+\]' =>	       q<'$[' should be '$(('>,
-	'(?:^|\s+)(\[|test)\s+-a' =>            q<test with unary -a (should be -e)>,
-	'\&>' =>	               q<should be \>word 2\>&1>,
-	'(<\&|>\&)\s*((-|\d+)[^\s;|)`&\\\\]|[^-\d\s]+)' =>
+	qr'(?:^|\s+)\w+\[\d+\]=' =>      q<bash arrays, H[0]>,
+	$LEADIN . qr'(read\s*(-[^r]+)*(?:;|$))' => q<should be read [-r] variable>,
+	$LEADIN . qr'echo\s+(-n\s+)?-n?en?\s' =>      q<echo -e>,
+	$LEADIN . qr'exec\s+-[acl]' =>    q<exec -c/-l/-a name>,
+	$LEADIN . qr'let\s' =>            q<let ...>,
+	qr'(?<![\$\(])\(\(.*\)\)' =>     q<'((' should be '$(('>,
+	qr'\$\[[^][]+\]' =>	       q<'$[' should be '$(('>,
+	qr'(?:^|\s+)(\[|test)\s+-a' =>            q<test with unary -a (should be -e)>,
+	qr'\&>' =>	               q<should be \>word 2\>&1>,
+	qr'(<\&|>\&)\s*((-|\d+)[^\s;|)`&\\\\]|[^-\d\s]+)' =>
 				       q<should be \>word 2\>&1>,
-	$LEADIN . 'kill\s+-[^sl]\w*' => q<kill -[0-9] or -[A-Z]>,
-	$LEADIN . 'trap\s+["\']?.*["\']?\s+.*[1-9]' => q<trap with signal numbers>,
-	'\[\[(?!:)' => q<alternative test command ([[ foo ]] should be [ foo ])>,
-	'/dev/(tcp|udp)'	    => q</dev/(tcp|udp)>,
-	$LEADIN . 'suspend\s' =>        q<suspend>,
-	$LEADIN . 'caller\s' =>         q<caller>,
-	$LEADIN . 'complete\s' =>       q<complete>,
-	$LEADIN . 'compgen\s' =>        q<compgen>,
-	$LEADIN . 'declare\s' =>        q<declare>,
-	$LEADIN . 'typeset\s' =>        q<typeset>,
-	$LEADIN . 'disown\s' =>         q<disown>,
-	$LEADIN . 'builtin\s' =>        q<builtin>,
-	$LEADIN . 'set\s+-[BHT]+' =>    q<set -[BHT]>,
-	$LEADIN . 'alias\s+-p' =>       q<alias -p>,
-	$LEADIN . 'unalias\s+-a' =>     q<unalias -a>,
-	$LEADIN . 'local\s+-[a-zA-Z]+' => q<local -opt>,
-	$LEADIN . 'local\s+\w+=' =>     q<local foo=bar>,
-	'(?:^|\s+)\s*\(?\w*[^\(\w\s]+\S*?\s*\(\)[^\"]?'
+	$LEADIN . qr'kill\s+-[^sl]\w*' => q<kill -[0-9] or -[A-Z]>,
+	$LEADIN . qr'trap\s+["\']?.*["\']?\s+.*[1-9]' => q<trap with signal numbers>,
+	qr'\[\[(?!:)' => q<alternative test command ([[ foo ]] should be [ foo ])>,
+	qr'/dev/(tcp|udp)'	    => q</dev/(tcp|udp)>,
+	$LEADIN . qr'suspend\s' =>        q<suspend>,
+	$LEADIN . qr'caller\s' =>         q<caller>,
+	$LEADIN . qr'complete\s' =>       q<complete>,
+	$LEADIN . qr'compgen\s' =>        q<compgen>,
+	$LEADIN . qr'declare\s' =>        q<declare>,
+	$LEADIN . qr'typeset\s' =>        q<typeset>,
+	$LEADIN . qr'disown\s' =>         q<disown>,
+	$LEADIN . qr'builtin\s' =>        q<builtin>,
+	$LEADIN . qr'set\s+-[BHT]+' =>    q<set -[BHT]>,
+	$LEADIN . qr'alias\s+-p' =>       q<alias -p>,
+	$LEADIN . qr'unalias\s+-a' =>     q<unalias -a>,
+	$LEADIN . qr'local\s+-[a-zA-Z]+' => q<local -opt>,
+	$LEADIN . qr'local\s+\w+=' =>     q<local foo=bar>,
+	qr'(?:^|\s+)\s*\(?\w*[^\(\w\s]+\S*?\s*\(\)[^\"]?'
 		=> q<function names should only contain [a-z0-9_]>,
-	$LEADIN . '(push|pop)d\b' =>    q<(push|pod)d>,
-	$LEADIN . 'export\s+-[^p]' =>  q<export only takes -p as an option>,
-	$LEADIN . 'ulimit\b' =>         q<ulimit>,
-	$LEADIN . 'shopt\b' =>          q<shopt>,
-	$LEADIN . 'type\s' =>          q<type>,
-	$LEADIN . 'time\s' =>          q<time>,
-	$LEADIN . 'dirs\b' =>          q<dirs>,
-	'(?:^|\s+)[<>]\(.*?\)'	    => q<\<() process substituion>,
-	'(?:^|\s+)readonly\s+-[af]' => q<readonly -[af]>,
-	$LEADIN . '(sh|\$\{?SHELL\}?) -[rD]' => q<sh -[rD]>,
-	$LEADIN . '(sh|\$\{?SHELL\}?) --\w+' =>  q<sh --long-option>,
-	$LEADIN . '(sh|\$\{?SHELL\}?) [-+]O' =>  q<sh [-+]O>,
+	$LEADIN . qr'(push|pop)d\b' =>    q<(push|pod)d>,
+	$LEADIN . qr'export\s+-[^p]' =>  q<export only takes -p as an option>,
+	$LEADIN . qr'ulimit\b' =>         q<ulimit>,
+	$LEADIN . qr'shopt\b' =>          q<shopt>,
+	$LEADIN . qr'type\s' =>          q<type>,
+	$LEADIN . qr'time\s' =>          q<time>,
+	$LEADIN . qr'dirs\b' =>          q<dirs>,
+	qr'(?:^|\s+)[<>]\(.*?\)'	    => q<\<() process substituion>,
+	qr'(?:^|\s+)readonly\s+-[af]' => q<readonly -[af]>,
+	$LEADIN . qr'(sh|\$\{?SHELL\}?) -[rD]' => q<sh -[rD]>,
+	$LEADIN . qr'(sh|\$\{?SHELL\}?) --\w+' =>  q<sh --long-option>,
+	$LEADIN . qr'(sh|\$\{?SHELL\}?) [-+]O' =>  q<sh [-+]O>,
     );
 
     %string_bashisms = (
-	'\$\[\w+\]' =>                 q<arithmetic not allowed>,
-	'\$\{\w+\:\d+(?::\d+)?\}' =>   q<${foo:3[:1]}>,
-	'\$\{!\w+[\@*]\}' =>           q<${!prefix[*|@]>,
-	'\$\{!\w+\}' =>                q<${!name}>,
-	'\$\{\w+(/.+?){1,2}\}' =>      q<${parm/?/pat[/str]}>,
-	'\$\{\#?\w+\[[0-9\*\@]+\]\}' => q<bash arrays, ${name[0|*|@]}>,
-	'\$\{?RANDOM\}?\b' =>          q<$RANDOM>,
-	'\$\{?(OS|MACH)TYPE\}?\b'   => q<$(OS|MACH)TYPE>,
-	'\$\{?HOST(TYPE|NAME)\}?\b' => q<$HOST(TYPE|NAME)>,
-	'\$\{?DIRSTACK\}?\b'        => q<$DIRSTACK>,
-	'\$\{?EUID\}?\b'	    => q<$EUID should be "id -u">,
-	'\$\{?UID\}?\b'	            => q<$UID should be "id -ru">,
-	'\$\{?SECONDS\}?\b'	    => q<$SECONDS>,
-	'\$\{?BASH_[A-Z]+\}?\b'     => q<$BASH_SOMETHING>,
-	'\$\{?SHELLOPTS\}?\b'       => q<$SHELLOPTS>,
-	'\$\{?PIPESTATUS\}?\b'      => q<$PIPESTATUS>,
-	'\$\{?SHLVL\}?\b'           => q<$SHLVL>,
-	'<<<'                       => q<\<\<\< here string>,
-	$LEADIN . 'echo\s+(?:-[^e]+\s+)?([\"])[^\"]*(\\\[abcEfnrtv\\\0])+.*?[\"]' => q<unsafe echo with backslash>,
+	qr'\$\[\w+\]' =>                 q<arithmetic not allowed>,
+	qr'\$\{\w+\:\d+(?::\d+)?\}' =>   q<${foo:3[:1]}>,
+	qr'\$\{!\w+[\@*]\}' =>           q<${!prefix[*|@]>,
+	qr'\$\{!\w+\}' =>                q<${!name}>,
+	qr'\$\{\w+(/.+?){1,2}\}' =>      q<${parm/?/pat[/str]}>,
+	qr'\$\{\#?\w+\[[0-9\*\@]+\]\}' => q<bash arrays, ${name[0|*|@]}>,
+	qr'\$\{?RANDOM\}?\b' =>          q<$RANDOM>,
+	qr'\$\{?(OS|MACH)TYPE\}?\b'   => q<$(OS|MACH)TYPE>,
+	qr'\$\{?HOST(TYPE|NAME)\}?\b' => q<$HOST(TYPE|NAME)>,
+	qr'\$\{?DIRSTACK\}?\b'        => q<$DIRSTACK>,
+	qr'\$\{?EUID\}?\b'	    => q<$EUID should be "id -u">,
+	qr'\$\{?UID\}?\b'	            => q<$UID should be "id -ru">,
+	qr'\$\{?SECONDS\}?\b'	    => q<$SECONDS>,
+	qr'\$\{?BASH_[A-Z]+\}?\b'     => q<$BASH_SOMETHING>,
+	qr'\$\{?SHELLOPTS\}?\b'       => q<$SHELLOPTS>,
+	qr'\$\{?PIPESTATUS\}?\b'      => q<$PIPESTATUS>,
+	qr'\$\{?SHLVL\}?\b'           => q<$SHLVL>,
+	qr'<<<'                       => q<\<\<\< here string>,
+	$LEADIN . qr'echo\s+(?:-[^e]+\s+)?([\"])[^\"]*(\\[\\abcEfnrtv0])+.*?[\"]' => q<unsafe echo with backslash>,
 	#'(?<![\$\\\])\$\"[^\"]+\"'   => q<$"foo" should be eval_gettext "foo">,
     );
 
     %singlequote_bashisms = (
-	$LEADIN . 'echo\s+(?:-[^e]+\s+)?([\'])[^\']*(\\\[abcEfnrtv\\\0])+.*?[\']' => q<unsafe echo with backslash>,
+	$LEADIN . qr'echo\s+(?:-[^e]+\s+)?([\'])[^\']*(\\[\\abcEfnrtv0])+.*?[\']' => q<unsafe echo with backslash>,
 	#'(?<![\$\\\])\$\'[^\']+\''              => q<$'...' should be "$(printf '...')">,
     );
 
     if ($opt_echo) {
-	$bashisms{'echo\s+-[n]'} = q<echo -n>;
+	$bashisms{qr'echo\s+-[n]'} = q<echo -n>;
     }
 
     if ($makefile) {
-	$string_bashisms{'(\$\(|\`)\s*\<\s*([^\s\)]{2,}|[^DF])\s*(\)|\`)'} =
+	$string_bashisms{qr'(\$\(|\`)\s*\<\s*([^\s\)]{2,}|[^DF])\s*(\)|\`)'} =
 	    q<'$(\< foo)' should be '$(cat foo)'>;
     } else {
-	$bashisms{$LEADIN . '\w+\+='} = q<should be VAR="${VAR}foo">;
-	$string_bashisms{'(\$\(|\`)\s*\<\s*\S+\s*(\)|\`)'} = q<'$(\< foo)' should be '$(cat foo)'>;
+	$bashisms{$LEADIN . qr'\w+\+='} = q<should be VAR="${VAR}foo">;
+	$string_bashisms{qr'(\$\(|\`)\s*\<\s*\S+\s*(\)|\`)'} = q<'$(\< foo)' should be '$(cat foo)'>;
     }
 	    
     if ($opt_extra) {
-	$string_bashisms{'\$\{?BASH\}?\b'} = q<$BASH>;
-	$string_bashisms{'(?:^|\s+)RANDOM='} = q<RANDOM=>;
-	$string_bashisms{'(?:^|\s+)(OS|MACH)TYPE='} = q<(OS|MACH)TYPE=>;
-	$string_bashisms{'(?:^|\s+)HOST(TYPE|NAME)='} = q<HOST(TYPE|NAME)=>;
-	$string_bashisms{'(?:^|\s+)DIRSTACK='} = q<DIRSTACK=>;
-	$string_bashisms{'(?:^|\s+)EUID='} = q<EUID=>;
-	$string_bashisms{'(?:^|\s+)UID='} = q<UID=>;
-	$string_bashisms{'(?:^|\s+)BASH(_[A-Z]+)?='} = q<BASH(_SOMETHING)=>;
-	$string_bashisms{'(?:^|\s+)SHELLOPTS='} = q<SHELLOPTS=>;
-	$string_bashisms{'\$\{?POSIXLY_CORRECT\}?\b'} = q<$POSIXLY_CORRECT>;
+	$string_bashisms{qr'\$\{?BASH\}?\b'} = q<$BASH>;
+	$string_bashisms{qr'(?:^|\s+)RANDOM='} = q<RANDOM=>;
+	$string_bashisms{qr'(?:^|\s+)(OS|MACH)TYPE='} = q<(OS|MACH)TYPE=>;
+	$string_bashisms{qr'(?:^|\s+)HOST(TYPE|NAME)='} = q<HOST(TYPE|NAME)=>;
+	$string_bashisms{qr'(?:^|\s+)DIRSTACK='} = q<DIRSTACK=>;
+	$string_bashisms{qr'(?:^|\s+)EUID='} = q<EUID=>;
+	$string_bashisms{qr'(?:^|\s+)UID='} = q<UID=>;
+	$string_bashisms{qr'(?:^|\s+)BASH(_[A-Z]+)?='} = q<BASH(_SOMETHING)=>;
+	$string_bashisms{qr'(?:^|\s+)SHELLOPTS='} = q<SHELLOPTS=>;
+	$string_bashisms{qr'\$\{?POSIXLY_CORRECT\}?\b'} = q<$POSIXLY_CORRECT>;
     }
 }
