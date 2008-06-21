@@ -11,8 +11,10 @@ devscripts (2.10.31) UNRELEASED; urgency=low
       or otherwise optimise them. Thanks to Frank Lichtenheld for the idea.
   * debchange, nmudiff: Replace calls to date -R with strftime(). Thanks
     Stephen Gran (Closes: #486594)
-  * licensecheck: Add .cxx and .hxx to the default list of file extensions to
-    check (Closes: #487384)
+  * licensecheck:
+    + Add .cxx and .hxx to the default list of file extensions to check
+      (Closes: #487384)
+    + Add _MTN (monotone) to the default exclusion expression
   * uscan: Add an example of a newer form of watch file synax for SourceForge
     based projects to the manpage
   * debian/control

@@ -144,7 +144,7 @@ my $default_ignore_regex = '
 (?:^|/)(?:DEADJOE|\.cvsignore|\.arch-inventory|\.bzrignore|\.gitignore)$|
 # File or directory names that should be ignored
 (?:^|/)(?:CVS|RCS|\.deps|\{arch\}|\.arch-ids|\.svn|\.hg|_darcs|\.git|
-\.shelf|\.bzr(?:\.backup|tags)?)(?:$|/.*$)
+\.shelf|_MTN|\.bzr(?:\.backup|tags)?)(?:$|/.*$)
 ';
 
 # Take out comments and newlines
