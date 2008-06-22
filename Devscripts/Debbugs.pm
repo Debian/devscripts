@@ -92,6 +92,14 @@ use warnings;
 my $soapurl='Debbugs/SOAP/1';
 my $soapproxyurl='http://bugs.debian.org/cgi-bin/soap.cgi';
 
+sub init_soap {
+    my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+
+    $soap->transport->env_proxy();
+
+    return $soap;
+}
+
 my $soap_broken;
 sub have_soap {
      return ($soap_broken ? 0 : 1) if defined $soap_broken;
@@ -117,7 +125,7 @@ sub usertags {
 
     my @args = @_;
 
-    my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+    my $soap = init_soap();
     my $usertags = $soap->get_usertag(@_)->result();
 
     return $usertags;
@@ -147,7 +155,7 @@ sub select {
                       );
      my %users;
      my %search_parameters;
-     my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+     my $soap = init_soap();
      my $soapfault;
      $soap->on_fault(sub { $soapfault = $_; });
      for my $arg (@args) {
@@ -186,7 +194,7 @@ sub status {
     die "Couldn't run status: $soap_broken\n" unless have_soap();
     my @args = @_;
 
-    my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+    my $soap = init_soap();
     my $soapfault;
     $soap->on_fault(sub { $soapfault = $_; });
 
@@ -234,7 +242,7 @@ sub versions {
     $search_parameters{arch} = \@archs if @archs;
     $search_parameters{dist} = \@dists if @dists;
 
-    my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+    my $soap = init_soap();
     my $soapfault;
     $soap->on_fault(sub { $soapfault = $_; });
 
@@ -267,7 +275,7 @@ sub newest_bugs {
 
     return if $count !~ /^\d+$/;
 
-    my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+    my $soap = init_soap();
     my $soapfault;
     $soap->on_fault(sub { $soapfault = $_; });
 
@@ -292,7 +300,7 @@ sub bug_log {
 
     return if $bug !~ /^\d+$/;
 
-    my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+    my $soap = init_soap();
     my $soapfault;
     $soap->on_fault(sub { $soapfault = $_; });
 
@@ -310,7 +318,7 @@ sub binary_to_source {
     die "Couldn't run binary_to_source: $soap_broken\n"
 	unless have_soap();
 
-    my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+    my $soap = init_soap();
     my $soapfault;
     $soap->on_fault(sub { $soapfault = $_; });
 
@@ -334,7 +342,7 @@ sub source_to_binary {
     die "Couldn't run source_to_binary: $soap_broken\n"
 	unless have_soap();
 
-    my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+    my $soap = init_soap();
     my $soapfault;
     $soap->on_fault(sub { $soapfault = $_; });
 
