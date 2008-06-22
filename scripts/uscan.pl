@@ -653,13 +653,18 @@ sub process_watchline ($$$$$$)
 
     my $origline = $line;
     my ($base, $site, $dir, $filepattern, $pattern, $lastversion, $action);
+    my (@patterns, @sites, $response_uri);
     my %options = ();
 
     my ($request, $response);
     my ($newfile, $newversion);
     my $style='new';
     my $urlbase;
+    my $headers = HTTP::Headers->new;
 
+    # Comma-separated list of features that sites being queried might
+    # want to be aware of
+    $headers->header('X-uscan-features' => 'enhanced-matching');
     %dehs_tags = ('package' => $pkg);
 
     if ($watch_version == 1) {
@@ -787,6 +792,9 @@ sub process_watchline ($$$$$$)
 	return 1;
     }
 
+    push @patterns, $pattern;
+    push @sites, $site;
+
     # What is the most recent file, based on the filenames?
     # We first have to find the candidates, then we sort them using
     # Devscripts::Versort::versort
@@ -795,11 +803,29 @@ sub process_watchline ($$$$$$)
 	    die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n";
 	}
 	print STDERR "$progname debug: requesting URL $base\n" if $debug;
-	$request = HTTP::Request->new('GET', $base);
+	$request = HTTP::Request->new('GET', $base, $headers);
 	$response = $user_agent->request($request);
 	if (! $response->is_success) {
 	    warn "$progname warning: In watchfile $watchfile, reading webpage\n  $base failed: " . $response->status_line . "\n";
 	    return 1;
+	}
+
+	$response_uri = $response->base;
+	if (! defined($response_uri)) {
+	    warn "$progname warning: In watchfile $watchfile, failed to get base URI: \n";
+	}
+	
+	print STDERR "$progname debug: base URI: $response_uri\n"
+	    if $debug;
+
+	if (defined($response_uri)) {
+	    my $base_dir = $response_uri;
+	    
+	    $base_dir =~ s%^\w+://[^/]+/%/%;
+	    if ($response_uri =~ m%^(\w+://[^/]+)%) {
+		push @patterns, "(?:(?:$1)?" . quotemeta($base_dir) . ")?$filepattern";
+		push @sites, $1;
+	    }
 	}
 
 	my $content = $response->content;
@@ -821,26 +847,28 @@ sub process_watchline ($$$$$$)
 	    ($urlbase = $base) =~ s%/[^/]*$%/%;
 	}
 
-	print STDERR "$progname debug: matching pattern $pattern\n" if $debug;
+	print STDERR "$progname debug: matching pattern(s) @patterns\n" if $debug;
 	my @hrefs;
 	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi) {
 	    my $href = $2;
-	    if ($href =~ m&^$pattern$&) {
-		if ($watch_version == 2) {
-		    # watch_version 2 only recognised one group; the code
-		    # below will break version 2 watchfiles with a construction
-		    # such as file-([\d\.]+(-\d+)?) (bug #327258)
-		    push @hrefs, [$1, $href];
-		} else {
-		    # need the map { ... } here to handle cases of (...)?
-		    # which may match but then return undef values
-		    my $mangled_version =
-			join(".", map { $_ if defined($_) }
-			     $href =~ m&^$pattern$&);
-		    foreach my $pat (@{$options{'uversionmangle'}}) {
-			eval "\$mangled_version =~ $pat;";
+	    foreach my $_pattern (@patterns) {
+		if ($href =~ m&^$_pattern$&) {
+		    if ($watch_version == 2) {
+			# watch_version 2 only recognised one group; the code
+			# below will break version 2 watchfiles with a construction
+			# such as file-([\d\.]+(-\d+)?) (bug #327258)
+			push @hrefs, [$1, $href];
+		    } else {
+			# need the map { ... } here to handle cases of (...)?
+			# which may match but then return undef values
+			my $mangled_version =
+			    join(".", map { $_ if defined($_) }
+			 	$href =~ m&^$_pattern$&);
+			foreach my $pat (@{$options{'uversionmangle'}}) {
+			    eval "\$mangled_version =~ $pat;";
+			}
+			push @hrefs, [$mangled_version, $href];
 		    }
-		    push @hrefs, [$mangled_version, $href];
 		}
 	    }
 	}
@@ -1009,7 +1037,17 @@ EOF
 	}
 	# absolute filename?
 	elsif ($newfile =~ m%^/%) {
-	    $upstream_url = "$site$newfile";
+	    # replace $site here with the one we were redirected to
+	    foreach my $index (0 .. $#patterns) {
+		if ("$sites[$index]$newfile" =~ m&^$patterns[$index]$&) {
+		    $upstream_url = "$sites[$index]$newfile";
+		    last;
+		}
+	    }
+	    if (!defined($upstream_url)) {
+		warn "$progname warning: Unable to determine upstream url\n";
+		return 1;
+	    }
 	}
 	# relative filename, we hope
 	else {
