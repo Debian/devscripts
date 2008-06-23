@@ -9,6 +9,9 @@ devscripts (2.10.31) UNRELEASED; urgency=low
     + Apply a small fix to part of the "quoted block detection"
     + Quote test expressions using qr to allow perl to optionally compile
       or otherwise optimise them. Thanks to Frank Lichtenheld for the idea.
+    + Add a --posix option which flags constructs not supported by POSIX but
+      permitted by Debian Policy (test / [ using -a or -o support is currently
+      missing pending a reliable check being written)
   * Debbugs.pm: Move initialisation of the SOAP object in to a common routine
     and set the underlying transport object to honour proxies from the
     environment (Closes: #487592)

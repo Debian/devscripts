@@ -48,7 +48,7 @@ You are free to redistribute this code under the terms of the
 GNU General Public License, version 2, or (at your option) any later version.
 EOF
 
-my ($opt_echo, $opt_force, $opt_extra);
+my ($opt_echo, $opt_force, $opt_extra, $opt_posix);
 my ($opt_help, $opt_version);
 
 ##
@@ -61,11 +61,14 @@ GetOptions("help|h" => \$opt_help,
 	   "newline|n" => \$opt_echo,
 	   "force|f" => \$opt_force,
 	   "extra|x" => \$opt_extra,
+	   "posix|p" => \$opt_posix,
            )
     or die "Usage: $progname [options] filelist\nRun $progname --help for more details\n";
 
 if ($opt_help) { print $usage; exit 0; }
 if ($opt_version) { print $version; exit 0; }
+
+$opt_echo = 1 if $opt_posix;
 
 my $status = 0;
 my $makefile = 0;
@@ -492,7 +495,12 @@ sub init_hashes {
     );
 
     if ($opt_echo) {
-	$bashisms{qr'echo\s+-[n]'} = q<echo -n>;
+	$bashisms{$LEADIN . qr'echo\s+-[A-Za-z]*n'} = q<echo -n>;
+    }
+    if ($opt_posix) {
+	$bashisms{$LEADIN . qr'local\s+\w+\s+'} = q<local foo>;
+	# Should include test / [ -a and -o here but we need a test
+	# which isn't FP and/or FN prone
     }
 
     if ($makefile) {
