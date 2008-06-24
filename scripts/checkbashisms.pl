@@ -499,8 +499,7 @@ sub init_hashes {
     }
     if ($opt_posix) {
 	$bashisms{$LEADIN . qr'local\s+\w+\s+'} = q<local foo>;
-	# Should include test / [ -a and -o here but we need a test
-	# which isn't FP and/or FN prone
+	$bashisms{$LEADIN . qr'((?:test|\[)\s+.+\s-[ao])\s'} = q<test -a/-o>;
     }
 
     if ($makefile) {
