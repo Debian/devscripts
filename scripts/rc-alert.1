@@ -29,52 +29,51 @@ It is also possible to filter the list of bugs reported based on the
 tags and distributions associated with the package. The filtering options
 are:
 .TP
-.BR \-\-includetags ", " \-f
+.BR \-\-include\-tags ", " \-f
 A list of tags which the bug must have, in the format used for output.
 For example, to include bugs tagged security or help wanted, use "SH".
 .TP
-.BR \-\-includetagop ", " \-t
+.BR \-\-include\-tag\-op ", " \-t
 If set to \fIand\fP, a bug must have all of the tags specified by
 \fB\-\-includetags\fP.
 .TP
-.BR \-\-excludetags
+.BR \-\-exclude\-tags
 A list of tags which the bug must not have, in the same format as
 \fB\-\-includetags\fP.
 .TP
-.BR \-\-excludetagop
+.BR \-\-exclude\-tag\-op
 If set to \fIand\fP, a bug must have none of the tags specified by
 \fB\-\-excludetags\fP.  By default, the bug will be excluded if any tag
 matches.
 .TP
-.BR \-\-includedists ", " \-d
+.BR \-\-include\-dists ", " \-d
 A list of distributions which the bug must apply to, in the format used for
 output.  For example, to include bugs affecting testing or unstable, use "TU".
 .TP
-.BR \-\-includedistop ", " \-o
+.BR \-\-include\-dist\-op ", " \-o
 If set to \fIand\fP, a bug must apply to all of the specified distributions in
 order to be included.
 .TP
-.BR \-\-excludedists
+.BR \-\-exclude\-dists
 A list of distributions to which the bug must not apply, in the same format as
 \fB\-\-includedists\fP.
 .TP
-.BR \-\-excludedistop
+.BR \-\-exclude\-dist\-op
 If set to \fIand\fP, a bug must apply to all of the specified distributions
 in order to be excluded.  By default the bug will be excluded if it applies
 to any of the listed distributions.
 .SH EXAMPLES
 .TP
-.BR \-\-includedists " OS"
+.BR \-\-include\-dists " OS"
 The bug must apply to at least one of oldstable or stable
 .TP
-.BR \-\-includedists " TU" " \-\-includedistop" " and"
+.BR \-\-include\-dists " TU" " \-\-include\-dist\-op" " and"
 The bug must apply to both testing and unstable
 .TP
-.BR \-\-includedists " OS" " \-\-includetags" " S" " \-\-excludetags" " +"
-The bug must apply to either oldstable or stable (or both) and be tagged
-security but not patch
+.BR \-\-include\-dists " O" " \-\-include\-tags" " S" " \-\-exclude\-tags" " +"
+The bug must apply to oldstable and be tagged security but not patch
 .TP
-.BR \-\-excludedists " SOT" " \-\-includetags" " R"
+.BR \-\-exclude\-dists " SOT" " \-\-include\-tags" " R"
 The bug must apply to only unstable or experimental (or both) and be tagged
 unreproducible
 .SH BUGS

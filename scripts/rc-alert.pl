@@ -72,17 +72,17 @@ Usage: $progname [--help|--version|--cache] [package ...]
   release-critical bugs list.
 
   Options:
-  --cache          Create ~/.devscripts_cache directory if it does not exist
+  --cache           Create ~/.devscripts_cache directory if it does not exist
 
   Matching options: (see the manpage for further information)
-  --includetags    Set of tags to include
-  --includetagop   Must all tags match for inclusion?
-  --excludetags    Set of tags to exclude
-  --excludetagop   Must all tags match for exclusion?
-  --includedists   Set of distributions to include
-  --includedistop  Must all distributions be matched for inclusion?
-  --excludedists   Set of distributions to exclude
-  --excludedistop  Must all distributions be matched for exclusion?
+  --include-tags    Set of tags to include
+  --include-tag-op  Must all tags match for inclusion?
+  --exclude-tags    Set of tags to exclude
+  --exclude-tag-op  Must all tags match for exclusion?
+  --include-dists   Set of distributions to include
+  --include-dist-o  Must all distributions be matched for inclusion?
+  --exclude-dists   Set of distributions to exclude
+  --exclude-dist-o  Must all distributions be matched for exclusion?
 EOF
 
 my $version = <<"EOF";
@@ -103,14 +103,14 @@ my ($opt_help, $opt_version);
 GetOptions("help|h" => \$opt_help,
 	   "version|v" => \$opt_version,
 	   "cache" => \$forcecache,
-	   "includetags|f=s" => \$includetags,
-	   "excludetags=s" => \$excludetags,
-	   "includetagop|t=s" => \$tagincoperation,
-	   "excludetagop=s" => \$tagexcoperation,
-	   "includedists|d=s" => \$includedists,
-	   "excludedists=s" => \$excludedists,
-	   "includedistop|o=s" => \$distincoperation,
-	   "excludedistop=s" => \$distexcoperation,
+	   "include-tags|f=s" => \$includetags,
+	   "exclude-tags=s" => \$excludetags,
+	   "include-tag-op|t=s" => \$tagincoperation,
+	   "exclude-tag-op=s" => \$tagexcoperation,
+	   "include-dists|d=s" => \$includedists,
+	   "exclude-dists=s" => \$excludedists,
+	   "include-dist-op|o=s" => \$distincoperation,
+	   "exclude-dist-op=s" => \$distexcoperation,
 	   );
 
 if ($opt_help) { print $usage; exit 0; }
