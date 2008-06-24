@@ -141,7 +141,7 @@ sub select {
                        maint   => 'maint',
                        maintainer => 'maint',
                        submitter => 'submitter',
-		       from => 'submitter',
+                       from => 'submitter',
                        status    => 'status',
                        tag       => 'tag',
                        tags      => 'tag',
@@ -152,6 +152,7 @@ sub select {
                        distribution => 'dist',
                        bugs       => 'bugs',
                        archive    => 'archive',
+                       severity   => 'severity',
                       );
      my %users;
      my %search_parameters;

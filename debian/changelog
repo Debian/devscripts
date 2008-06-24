@@ -1,5 +1,6 @@
 devscripts (2.10.31) UNRELEASED; urgency=low
 
+  [ Adam D. Barratt ]
   * bts
     + Replace the use of date -R with strftime(). Thanks Stephen Gran.
     + Allow an SMTP host to be specified as using SMTPS and/or a
@@ -37,6 +38,12 @@ devscripts (2.10.31) UNRELEASED; urgency=low
       that a fixed libio-socket-ssl-perl is used.
     + Add libnet-smtp-ssl-perl to the description of bts
   * README: Add libnet-smtp-ssl-perl to the description of bts
+
+  [ James Vega ]
+  * Debbugs.pm
+    + Actually include the documented 'severity' key for the select
+      function.
+    + Fix some whitespace.
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 16 Jun 2008 20:52:22 +0100
 
