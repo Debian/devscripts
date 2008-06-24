@@ -2,7 +2,7 @@
 .SH NAME
 rc-alert \- check for installed packages with release-critical bugs
 .SH SYNOPSIS
-\fBrc-alert [package ...]\fR
+\fBrc-alert [inclusion options] [package ...]\fR
 .br
 \fBrc-alert \-\-help|\-\-version\fR
 .SH DESCRIPTION
@@ -24,8 +24,64 @@ Show a summary of options.
 .TP
 .BR \-\-version ", " \-v
 Show version and copyright information.
+.TP
+It is also possible to filter the list of bugs reported based on the
+tags and distributions associated with the package. The filtering options
+are:
+.TP
+.BR \-\-includetags ", " \-f
+A list of tags which the bug must have, in the format used for output.
+For example, to include bugs tagged security or help wanted, use "SH".
+.TP
+.BR \-\-includetagop ", " \-t
+If set to \fIand\fP, a bug must have all of the tags specified by
+\fB\-\-includetags\fP.
+.TP
+.BR \-\-excludetags
+A list of tags which the bug must not have, in the same format as
+\fB\-\-includetags\fP.
+.TP
+.BR \-\-excludetagop
+If set to \fIand\fP, a bug must have none of the tags specified by
+\fB\-\-excludetags\fP.  By default, the bug will be excluded if any tag
+matches.
+.TP
+.BR \-\-includedists ", " \-d
+A list of distributions which the bug must apply to, in the format used for
+output.  For example, to include bugs affecting testing or unstable, use "TU".
+.TP
+.BR \-\-includedistop ", " \-o
+If set to \fIand\fP, a bug must apply to all of the specified distributions in
+order to be included.
+.TP
+.BR \-\-excludedists
+A list of distributions to which the bug must not apply, in the same format as
+\fB\-\-includedists\fP.
+.TP
+.BR \-\-excludedistop
+If set to \fIand\fP, a bug must apply to all of the specified distributions
+in order to be excluded.  By default the bug will be excluded if it applies
+to any of the listed distributions.
+.SH EXAMPLES
+.TP
+.BR \-\-includedists " OS"
+The bug must apply to at least one of oldstable or stable
+.TP
+.BR \-\-includedists " TU" " \-\-includedistop" " and"
+The bug must apply to both testing and unstable
+.TP
+.BR \-\-includedists " OS" " \-\-includetags" " S" " \-\-excludetags" " +"
+The bug must apply to either oldstable or stable (or both) and be tagged
+security but not patch
+.TP
+.BR \-\-excludedists " SOT" " \-\-includetags" " R"
+The bug must apply to only unstable or experimental (or both) and be tagged
+unreproducible
+.SH BUGS
+It is not possible to say "does not apply only to unstable"
 .SH SEE ALSO
 .BR popbugs(1)
 .SH AUTHOR
 \fBrc-alert\fR was written by Anthony DeRobertis and modified by
-Julian Gilbey <jdg@debian.org> for the devscripts package.
+Julian Gilbey <jdg@debian.org> and Adam D. Barratt <adam@adam-barratt.org.uk>
+for the devscripts package.

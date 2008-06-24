@@ -3,6 +3,7 @@
 # RCBugger - find RC bugs for programs on your system
 # Copyright (C) 2003 Anthony DeRobertis
 # Modifications Copyright 2003 Julian Gilbey <jdg@debian.org>
+# Modifications Copyright 2008 Adam D. Barratt <adam@adam-barratt.org.uk>
 # 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,6 +25,7 @@ use Devscripts::Packages;
 use File::Basename;
 use Getopt::Long;
 
+sub remove_duplicate_values($);
 sub print_if_relevant(%);
 sub human_flags($);
 sub unhtmlsanit($);
@@ -34,6 +36,33 @@ my $cachefile = $cachedir . basename($url);
 my $forcecache = 0;
 my $usecache = 0;
 
+my %flagmap = ( '(P)' => "pending",
+		'.(\+)' => "patch",
+		'..(H)' => "help [wanted]",
+		'...(M)' => "moreinfo [needed]",
+		'....(R)' => "unreproducible",
+		'.....(S)' => "security",
+		'......(U)' => "upstream",
+		'.......(I)' => "etch-ignore or lenny-ignore",
+	      );
+# A little hacky but allows us to sort the list by length
+my %distmap = ( '(O)' => "oldstable",
+		'.?(S)' => "stable",
+		'.?.?(T)' => "testing",
+		'.?.?.?(U)' => "unstable",
+		'.?.?.?.?(E)' => "experimental");
+
+my $includetags = "";
+my $excludetags = "";
+
+my $includedists = "";
+my $excludedists = "";
+
+my $tagincoperation = "or";
+my $tagexcoperation = "or";
+my $distincoperation = "or";
+my $distexcoperation = "or";
+
 my $progname = basename($0);
 
 my $usage = <<"EOF";
@@ -43,13 +72,24 @@ Usage: $progname [--help|--version|--cache] [package ...]
   release-critical bugs list.
 
   Options:
-  --cache     Create ~/.devscripts_cache directory if it does not exist
+  --cache          Create ~/.devscripts_cache directory if it does not exist
+
+  Matching options: (see the manpage for further information)
+  --includetags    Set of tags to include
+  --includetagop   Must all tags match for inclusion?
+  --excludetags    Set of tags to exclude
+  --excludetagop   Must all tags match for exclusion?
+  --includedists   Set of distributions to include
+  --includedistop  Must all distributions be matched for inclusion?
+  --excludedists   Set of distributions to exclude
+  --excludesistop  Must all distributions be matched for exclusion?
 EOF
 
 my $version = <<"EOF";
 This is $progname, from the Debian devscripts package, version ###VERSION###
 This code is copyright 2003 by Anthony DeRobertis
 Modifications copyright 2003 by Julian Gilbey <jdg\@debian.org>
+Modifications copyright 2008 by Adam D. Barratt <adam\@adam-barratt.org.uk>
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the
 GNU General Public License, version 2, or (at your option) any later version.
@@ -63,10 +103,31 @@ my ($opt_help, $opt_version);
 GetOptions("help|h" => \$opt_help,
 	   "version|v" => \$opt_version,
 	   "cache" => \$forcecache,
+	   "includetags|f=s" => \$includetags,
+	   "excludetags=s" => \$excludetags,
+	   "includetagop|t=s" => \$tagincoperation,
+	   "excludetagop=s" => \$tagexcoperation,
+	   "includedists|d=s" => \$includedists,
+	   "excludedists=s" => \$excludedists,
+	   "includedistop|o=s" => \$distincoperation,
+	   "excludedistop=s" => \$distexcoperation,
 	   );
 
 if ($opt_help) { print $usage; exit 0; }
 if ($opt_version) { print $version; exit 0; }
+
+$tagincoperation =~ /^(or|and)$/ or $tagincoperation = 'or';
+$distincoperation =~ /^(or|and)$/ or $distincoperation = 'or';
+$tagexcoperation =~ /^(or|and)$/ or $tagexcoperation = 'or';
+$distexcoperation =~ /^(or|and)$/ or $distexcoperation = 'or';
+$includetags =~ s/[^P+HMRSUI]//gi;
+$excludetags =~ s/[^P+HMRSUI]//gi;
+$includedists =~ s/[^OSTUE]//gi;
+$excludedists =~ s/[^OSTUE]//gi;
+$includetags = remove_duplicate_values(uc($includetags));
+$excludetags = remove_duplicate_values(uc($excludetags));
+$includedists = remove_duplicate_values(uc($includedists));
+$excludedists = remove_duplicate_values(uc($excludedists));
 
 ## First download the RC bugs page
 
@@ -128,17 +189,34 @@ close BUGS or die "$progname: could not close $cachefile: $!\n";
 
 exit 0;
 
+sub remove_duplicate_values($) {
+    my $in = shift || "";
+
+    $in = join( "", sort { $a cmp $b } split //, $in );
+
+    $in =~ s/(.)\1/$1/g while $in =~ /(.)\1/;
+
+    return $in;
+}
 
 sub print_if_relevant(%) {
     my %args = @_;
     if (exists($$package_list{$args{pkg}})) {
+	# potentially relevant
+	my ($flags, $flagsapply) = human_flags($args{tags});
+	my $distsapply = 1;
+	my $dists;
+	($dists, $distsapply) = human_dists($args{dists}) if defined $args{dists};
+	
+	return unless $flagsapply and $distsapply;
+
 	# yep, relevant
 	print "Package: $args{pkg}\n",
 	    $comment,  # non-empty comments always contain the trailing \n
 	    "Bug:     $args{num}\n",
 	    "Title:   " . unhtmlsanit($args{name}) , "\n",
-	    "Flags:   " . human_flags($args{tags}) , "\n",
-	    (defined $args{dists} ? "Dists:  " . human_dists($args{dists}) . "\n" : ""),
+	    "Flags:   " . $flags , "\n",
+	    (defined $args{dists} ? "Dists:  " . $dists . "\n" : ""),
 	    "\n";
     }
 }
@@ -146,36 +224,74 @@ sub print_if_relevant(%) {
 sub human_flags($) {
     my $mrf = shift;    # machine readable flags, for those of you wondering
     my @hrf = ();       # considering above, should be obvious
-    $mrf =~ /^\[P/ and push(@hrf, "pending");
-    $mrf =~ /^\[.\+/ and push(@hrf, "patch");
-    $mrf =~ /^\[..H/ and push(@hrf, "help [wanted]");
-    $mrf =~ /^\[...M/ and push(@hrf, "moreinfo [needed]");
-    $mrf =~ /^\[....R/ and push(@hrf, "unreproducible");
-    $mrf =~ /^\[.....S/ and push(@hrf, "security");
-    $mrf =~ /^\[......U/ and push(@hrf, "upstream");
-    $mrf =~ /^\[.......I/ and push(@hrf, "etch-ignore or lenny-ignore");
+    my $matchedflags = 0;
+    my $matchedexcludes = 0;
+    my $applies = 1;
+
+    foreach my $flag ( sort { length $a <=> length $b } keys %flagmap ) {
+	if ($mrf =~ /^\[(?:$flag)/) {
+	    if ($excludetags =~ /\Q$1\E/) {
+		$matchedexcludes++;
+	    } elsif ($includetags =~ /\Q$1\E/ or ! $includetags) {
+		$matchedflags++;
+	    }
+	    push @hrf, $flagmap{$flag};
+	}
+    }
+    if ($excludetags and $tagexcoperation eq 'and' and
+	(length $excludetags == $matchedexcludes)) {
+	$applies = 0;
+    }
+    elsif ($matchedexcludes and $tagexcoperation eq 'or') {
+	$applies = 0;
+    }
+    elsif ($includetags and ! $matchedflags) {
+	$applies = 0;
+    } elsif ($includetags and $tagincoperation eq 'and' and
+	(length $includetags != $matchedflags)) {
+	$applies = 0;
+    }
 
     if (@hrf) {
-	return "$mrf (" . join(", ", @hrf) . ')';
+	return ("$mrf (" . join(", ", @hrf) . ')', $applies);
     } else {
-	return "$mrf (none)";
+	return ("$mrf (none)", $applies);
     }
 }
 
 sub human_dists($) {
     my $mrf = shift;     # machine readable flags, for those of you wondering
     my @hrf = ();        # considering above, should be obvious
+    my $matcheddists = 0;
+    my $matchedexcludes = 0;
+    my $applies = 1;
 
-    $mrf =~ /O/ and push(@hrf, "oldstable");
-    $mrf =~ /S/ and push(@hrf, "stable");
-    $mrf =~ /T/ and push(@hrf, "testing");
-    $mrf =~ /U/ and push(@hrf, "unstable");
-    $mrf =~ /E/ and push(@hrf, "experimental");
-    
+    foreach my $dist ( sort { length $a <=> length $b } keys %distmap ) {
+	if ($mrf =~ /(?:$dist)/) {
+	    if ($excludedists =~ /$dist/) {
+		$matchedexcludes++;
+	    } elsif ($includedists =~ /$dist/ or ! $includedists) {
+		$matcheddists++;
+	    }
+	    push @hrf, $distmap{$dist};
+	}
+    }
+    if ($excludedists and $distexcoperation eq 'and' and
+	(length $excludedists == $matchedexcludes)) {
+	$applies = 0;
+    } elsif ($matchedexcludes and $distexcoperation eq 'or') {
+	$applies = 0;
+    } elsif ($includedists and ! $matcheddists) {
+	$applies = 0;
+    } elsif ($includedists and $distincoperation eq 'and' and
+	(length $includedists != $matcheddists)) {
+	$applies = 0;
+    }
+
     if (@hrf) {
-	return "$mrf (" . join(", ", @hrf) . ')';
+	return ("$mrf (" . join(", ", @hrf) . ')', $applies);
     } else {
-	return '';
+	return ('', $applies);
     }
 }
 
