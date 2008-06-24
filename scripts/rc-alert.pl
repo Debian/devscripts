@@ -82,7 +82,7 @@ Usage: $progname [--help|--version|--cache] [package ...]
   --includedists   Set of distributions to include
   --includedistop  Must all distributions be matched for inclusion?
   --excludedists   Set of distributions to exclude
-  --excludesistop  Must all distributions be matched for exclusion?
+  --excludedistop  Must all distributions be matched for exclusion?
 EOF
 
 my $version = <<"EOF";
