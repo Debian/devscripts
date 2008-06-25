@@ -498,7 +498,7 @@ sub init_hashes {
 	$bashisms{$LEADIN . qr'echo\s+-[A-Za-z]*n'} = q<echo -n>;
     }
     if ($opt_posix) {
-	$bashisms{$LEADIN . qr'local\s+\w+\s+'} = q<local foo>;
+	$bashisms{$LEADIN . qr'local\s+\w+(\s+|;|$)'} = q<local foo>;
 	$bashisms{$LEADIN . qr'((?:test|\[)\s+.+\s-[ao])\s'} = q<test -a/-o>;
     }
 
