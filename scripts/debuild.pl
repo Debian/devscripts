@@ -1371,22 +1371,22 @@ sub parsebuildopts {
 
     my %opts;
 
-    foreach (split(/[\s,]+/, $env)) {
-        # FIXME: This is pending resolution of Debian bug #430649
-        /^([a-z][a-z0-9_-]*)(=(\w*))?$/;
+    foreach (split(/\s+/, $env)) {
+	unless (/^([a-z][a-z0-9_-]*)(=(\S*))?$/) {
+	    warn("$progname: invalid flag in DEB_BUILD_OPTIONS: $_\n");
+	    next;
+	}
 
         my ($k, $v) = ($1, $3 || '');
 
         # Sanity checks
-        if (!$k) {
-            next;
-        } elsif ($k =~ /^(noopt|nostrip|nocheck)$/ && length($v)) {
-            $v = '';
-        } elsif ($k eq 'parallel' && $v !~ /^-?\d+$/) {
-            next;
-        }
+	if ($k =~ /^(noopt|nostrip|nocheck)$/ && length($v)) {
+	    $v = '';
+	} elsif ($k eq 'parallel' && $v !~ /^-?\d+$/) {
+	    next;
+	}
 
-        $opts{$k} = $v;
+	$opts{$k} = $v;
     }
 
     return \%opts;
@@ -1396,17 +1396,15 @@ sub setbuildopts {
     my ($opts, $overwrite) = @_;
     $overwrite = 1 if not defined($overwrite);
 
-    my $env = $overwrite ? '' : $ENV{DEB_BUILD_OPTIONS}||'';
-    if ($env) { $env .= ',' }
+    my $new = {};
+    $new = parsebuildopts() unless $overwrite;
 
     while (my ($k, $v) = each %$opts) {
-        if ($v) {
-            $env .= "$k=$v,";
-        } else {
-            $env .= "$k,";
-        }
+	$new->{$k} = $v;
     }
 
-    $ENV{DEB_BUILD_OPTIONS} = $env if $env;
+    my $env = join(" ", map { $new->{$_} ? $_ . "=" . $new->{$_} : $_ } keys %$new);
+
+    $ENV{DEB_BUILD_OPTIONS} = $env;
     return $env;
 }

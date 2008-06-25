@@ -18,6 +18,10 @@ devscripts (2.10.31) UNRELEASED; urgency=low
     environment (Closes: #487592)
   * debchange, nmudiff: Replace calls to date -R with strftime(). Thanks
     Stephen Gran (Closes: #486594)
+  * debuild: Update the dpkg-buildpackage emulation to use whitespace as the
+    separator in DEB_BUILD_OPTIONS as per Debian Policy 3.8.0 and to print a
+    warning if an unrecognised option is encountered; based on the
+    corresponding patch to Dpkg::BuildOptions
   * licensecheck:
     + Add .cxx and .hxx to the default list of file extensions to check
       (Closes: #487384)
