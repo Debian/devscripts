@@ -22,6 +22,8 @@ devscripts (2.10.31) UNRELEASED; urgency=low
     separator in DEB_BUILD_OPTIONS as per Debian Policy 3.8.0 and to print a
     warning if an unrecognised option is encountered; based on the
     corresponding patch to Dpkg::BuildOptions
+  * debsign: If we don't have permission to create files in the same location
+    as the originals, use a temporary location instead (Closes: #487999)
   * licensecheck:
     + Add .cxx and .hxx to the default list of file extensions to check
       (Closes: #487384)

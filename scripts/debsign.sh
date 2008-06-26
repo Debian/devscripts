@@ -83,6 +83,30 @@ You are free to redistribute this code under the terms of the
 GNU General Public License, version 2 or later."
 }
 
+temp_filename() {
+    local filename
+
+    if ! [ -w "$(dirname "$1")" ]; then
+	filename=`mktemp -t "$(basename "$1").XXXXXXXXXX.$2"` || {
+	    echo "$PROGNAME: Unable to create temporary file; aborting" >&2
+	    exit 1
+	}
+    else
+	filename="$1.$2"
+    fi
+
+    echo "$filename"
+}
+
+movefile() {
+    if [ -w "$(dirname "$2")" ]; then
+	mv -f -- "$1" "$2"
+    else
+	cat "$1" > "$2"
+	rm -f "$1"
+    fi
+}
+
 cleanup_tmpdir () {
     if [ "$PRECIOUS_FILES" -gt 0 ]; then
         echo "$PROGNAME: aborting with $PRECIOUS_FILES signed files in `pwd`" >&2
@@ -110,6 +134,8 @@ signfile () {
     local savestty=$(stty -g 2>/dev/null) || true
     if [ $signinterface = gpg ]
     then
+	ASCII_SIGNED_FILE="$(temp_filename "$1" "asc")"
+
 	gpgversion=`gpg --version | head -n 1 | cut -d' ' -f3`
 	gpgmajorversion=`echo $gpgversion | cut -d. -f1`
 	gpgminorversion=`echo $gpgversion | cut -d. -f2`
@@ -118,7 +144,7 @@ signfile () {
 		(cat "$1" ; echo "") | \
 		    $signcommand --local-user "$2" --clearsign \
 		    --list-options no-show-policy-urls \
-		    --armor --textmode --output - - > "$1.asc" || \
+		    --armor --textmode --output - - > "$ASCII_SIGNED_FILE" || \
 		{ SAVESTAT=$?
 		  echo "$PROGNAME: gpg error occurred!  Aborting...." >&2
 		  stty $savestty 2>/dev/null || true
@@ -128,7 +154,7 @@ signfile () {
 		(cat "$1" ; echo "") | \
 		    $signcommand --local-user "$2" --clearsign \
 		        --no-show-policy-url \
-			--armor --textmode --output - - > "$1.asc" || \
+			--armor --textmode --output - - > "$ASCII_SIGNED_FILE" || \
 		{ SAVESTAT=$?
 		  echo "$PROGNAME: gpg error occurred!  Aborting...." >&2
 		  stty $savestty 2>/dev/null || true
@@ -136,12 +162,12 @@ signfile () {
 		}
 	fi
     else
-	$signcommand -u "$2" +clearsig=on -fast < "$1" > "$1.asc"
+	$signcommand -u "$2" +clearsig=on -fast < "$1" > "$ASCII_SIGNED_FILE"
     fi
     stty $savestty 2>/dev/null || true
     echo
     PRECIOUS_FILES=$(($PRECIOUS_FILES + 1))
-    mv -f -- "$1.asc" "$1"
+    movefile "$ASCII_SIGNED_FILE" "$1"
 }
 
 withecho () {
@@ -163,8 +189,10 @@ check_already_signed () {
 	read response
 	case $response in
 	[Nn]*)
-	    sed -e '1,/^$/d; /^$/,$d' "$1" > "$1.unsigned"
-	    mv -f -- "$1.unsigned" "$1"
+	    UNSIGNED_FILE="$(temp_filename "$1" "unsigned")"
+
+	    sed -e '1,/^$/d; /^$/,$d' "$1" > "$UNSIGNED_FILE"
+	    movefile "$UNSIGNED_FILE" "$1"
 	    return 1
 	    ;;
 	*) return 0;;
@@ -371,10 +399,7 @@ dosigning() {
 	    dsc_sha1=`sha1sum $dsc | cut -d' ' -f1`
 	    dsc_sha256=`sha256sum $dsc | cut -d' ' -f1`
 
-	    temp_changes=`mktemp` || {
-		echo "$PROGNAME: Unable to create temporary changes file; aborting" >&2
-		exit 1
-	    }
+	    temp_changes="$(temp_filename "$changes" "temp")"
 	    cp "$changes" "$temp_changes"
 	    if perl -i -pe 'BEGIN {
 		'" \$dsc_file=\"$dsc\"; \$dsc_md5=\"$dsc_md5\"; "'
@@ -415,7 +440,7 @@ dosigning() {
 		    $insha256=0;
 		}' "$temp_changes"
 	    then
-		mv -f -- "$temp_changes" "$changes"
+		movefile "$temp_changes" "$changes"
 	    else
 		rm "$temp_changes"
 		echo "$PROGNAME: Error processing .changes file (see above)" >&2
