@@ -32,7 +32,8 @@ usage () {
   Packages should be source packages, not binary packages.
 
   Options:
-    --max-uploads=N   Display at most the N most recent uploads (default: 3)
+    -M, --max-uploads=N
+                      Display at most the N most recent uploads (default: 3)
     --keyring KEYRING Add KEYRING as a GPG keyring for Debian Developers'
                       keys in addition to /usr/share/keyrings/debian-keyring.*
                       and /usr/share/keyrings/debian-maintainers.gpg;
@@ -146,7 +147,9 @@ TEMP=$(getopt -s bash -o 'h' \
 	--long max-uploads:,keyring:,no-default-keyrings \
 	--long no-conf,noconf \
 	--long date,nodate,no-date \
-	--long help,version -n "$PROGNAME" -- "$@")
+	--long help,version \
+	--options M: \
+	-n "$PROGNAME" -- "$@")
 if [ $? != 0 ] ; then exit 1 ; fi
 
 eval set -- $TEMP
@@ -154,7 +157,7 @@ eval set -- $TEMP
 # Process Parameters
 while [ "$1" ]; do
     case $1 in
-    --max-uploads)
+    --max-uploads|-M)
 	shift
 	if [ "$1" = "$(echo \"$1\" | tr -cd 0-9)" ]; then
 	    MAXUPLOADS=$1
