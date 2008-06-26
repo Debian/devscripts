@@ -13,6 +13,7 @@ devscripts (2.10.31) UNRELEASED; urgency=low
     + Add a --posix option which flags constructs not supported by POSIX but
       permitted by Debian Policy (echo -n, local (with no options or
       assignments) and test / [ using -a or -o )
+    + Improve the suggested replacement for $UID and $EUID (Closes: #488190)
   * Debbugs.pm: Move initialisation of the SOAP object in to a common routine
     and set the underlying transport object to honour proxies from the
     environment (Closes: #487592)
