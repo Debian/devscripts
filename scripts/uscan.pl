@@ -823,8 +823,15 @@ sub process_watchline ($$$$$$)
 	    
 	    $base_dir =~ s%^\w+://[^/]+/%/%;
 	    if ($response_uri =~ m%^(\w+://[^/]+)%) {
-		push @patterns, "(?:(?:$1)?" . quotemeta($base_dir) . ")?$filepattern";
-		push @sites, $1;
+		my $base_site = $1;
+
+		push @patterns, "(?:(?:$base_site)?" . quotemeta($base_dir) . ")?$filepattern";
+		push @sites, $base_site;
+
+		# remove the filename, if any
+		$base_dir =~ s%/[^/]*$%/%;
+		push @patterns, "(?:(?:$base_site)?" . quotemeta($base_dir) . ")?$filepattern";
+		push @sites, $base_site;
 	    }
 	}
 
@@ -1045,8 +1052,8 @@ EOF
 		}
 	    }
 	    if (!defined($upstream_url)) {
-		warn "$progname warning: Unable to determine upstream url\n";
-		return 1;
+		warn "$progname warning: Unable to determine upstream url\n" if $debug;
+		$upstream_url = "$sites[0]$newfile";
 	    }
 	}
 	# relative filename, we hope
