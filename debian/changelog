@@ -37,8 +37,8 @@ devscripts (2.10.31) UNRELEASED; urgency=low
       based projects to the manpage
     + If the site being checked redirects to another with a directory
       structure that does not match the original site, check for download URLs
-      that refer to the redirected site rather than the original. Based on a
-      patch by Raphael Geissert (Closes: #487436)
+      that refer to any of the redirected sites, in addition to the original
+      site. Based on a patch by Raphael Geissert (Closes: #487436)
   * debian/control
     + Suggest libnet-smtp-ssl-perl (>= 1.01-2) in order to allow bts to
       suport SMTPS. The versioned dependency is required in order to ensure

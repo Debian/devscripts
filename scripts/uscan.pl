@@ -359,7 +359,30 @@ else { $passive = undef; }
 #   else { delete $ENV{'FTP_PASSIVE'}; }
 # to restore $ENV{'FTP_PASSIVE'} to what it was at this point
 
-my $user_agent = LWP::UserAgent->new(env_proxy => 1);
+# dummy subclass used to store all the redirections for later use
+package LWP::UserAgent::UscanCatchRedirections;
+
+use base 'LWP::UserAgent';
+
+my @uscan_redirections;
+
+sub redirect_ok {
+    my $self = shift;
+    my ($request) = @_;
+    if ($self->SUPER::redirect_ok(@_)) {
+	push @uscan_redirections, $request->uri;
+	return 1;
+    }
+    return 0;
+}
+
+sub get_redirections {
+    return \@uscan_redirections;
+}
+
+package main;
+
+my $user_agent = LWP::UserAgent::UscanCatchRedirections->new(env_proxy => 1);
 $user_agent->timeout($timeout);
 $user_agent->agent($user_agent_string);
 
@@ -653,7 +676,7 @@ sub process_watchline ($$$$$$)
 
     my $origline = $line;
     my ($base, $site, $dir, $filepattern, $pattern, $lastversion, $action);
-    my (@patterns, @sites, $response_uri);
+    my (@patterns, @sites, @redirections);
     my %options = ();
 
     my ($request, $response);
@@ -766,7 +789,7 @@ sub process_watchline ($$$$$$)
 	}
 
 	# Handle sf.net addresses specially
-	$base =~ s%^http://sf\.net/%http://qa.debian.org/watch/sf.php/%;
+	$base =~ s%^http://sf\.net/([^/]+)/(.*)%http://qa.debian.org/watch/sf.php/$1/$2\?.*%;
 	if ($base =~ m%^(\w+://[^/]+)%) {
 	    $site = $1;
 	} else {
@@ -810,19 +833,16 @@ sub process_watchline ($$$$$$)
 	    return 1;
 	}
 
-	$response_uri = $response->base;
-	if (! defined($response_uri)) {
-	    warn "$progname warning: In watchfile $watchfile, failed to get base URI: \n";
-	}
+	@redirections = @{$user_agent->get_redirections};
 	
-	print STDERR "$progname debug: base URI: $response_uri\n"
+	print STDERR "$progname debug: redirections: @redirections\n"
 	    if $debug;
 
-	if (defined($response_uri)) {
-	    my $base_dir = $response_uri;
+	foreach my $_redir (@redirections) {
+	    my $base_dir = $_redir;
 	    
 	    $base_dir =~ s%^\w+://[^/]+/%/%;
-	    if ($response_uri =~ m%^(\w+://[^/]+)%) {
+	    if ($_redir =~ m%^(\w+://[^/]+)%) {
 		my $base_site = $1;
 
 		push @patterns, "(?:(?:$base_site)?" . quotemeta($base_dir) . ")?$filepattern";
@@ -1043,7 +1063,7 @@ EOF
 	    $upstream_url = $newfile;
 	}
 	# absolute filename?
-	elsif ($newfile =~ m%^/%) {
+	elsif ($newfile =~ m%^/% and $#patterns > 1) {
 	    # replace $site here with the one we were redirected to
 	    foreach my $index (0 .. $#patterns) {
 		if ("$sites[$index]$newfile" =~ m&^$patterns[$index]$&) {
@@ -1052,7 +1072,10 @@ EOF
 		}
 	    }
 	    if (!defined($upstream_url)) {
-		warn "$progname warning: Unable to determine upstream url\n" if $debug;
+		if ($debug) {
+		    warn "$progname warning: Unable to determine upstream url from redirections,\n" .
+			"defaulting to using site specified in watchfile\n";
+		}
 		$upstream_url = "$sites[0]$newfile";
 	    }
 	}
