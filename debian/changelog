@@ -1,6 +1,8 @@
 devscripts (2.10.32) UNRELEASED; urgency=low
 
-  * NOT RELEASED YET
+  * bts: Fix brown paper bag. When establishing an SMTPS connection, only use
+    the hostname, rather than the fully specified "ssmtp://hostname[:port]"
+    string
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sat, 28 Jun 2008 12:20:36 -0700
 

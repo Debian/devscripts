@@ -2016,7 +2016,7 @@ sub send_mail {
 	    $port ||= '465';
 
 	    if (have_smtp_ssl) {
-		$smtp = Net::SMTP::SSL->new($smtphost, Port => $port)
+		$smtp = Net::SMTP::SSL->new($host, Port => $port)
 		    or die "bts: failed to open SMTPS connection to $smtphost\n";
 	    } else {
 		die "bts: Unable to establish SMTPS connection: $smtp_ssl_broken\n";
@@ -2025,7 +2025,7 @@ sub send_mail {
 	    my ($host, $port) = split(/:/, $smtphost);
 	    $port ||= '25';
 
-	    $smtp = Net::SMTP->new($smtphost, Port => $port)
+	    $smtp = Net::SMTP->new($host, Port => $port)
 		or die "bts: failed to open SMTP connection to $smtphost\n";
 	}
 	if ($smtpuser) {
