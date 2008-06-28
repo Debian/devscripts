@@ -1063,19 +1063,24 @@ EOF
 	    $upstream_url = $newfile;
 	}
 	# absolute filename?
-	elsif ($newfile =~ m%^/% and $#patterns > 1) {
-	    # replace $site here with the one we were redirected to
-	    foreach my $index (0 .. $#patterns) {
-		if ("$sites[$index]$newfile" =~ m&^$patterns[$index]$&) {
-		    $upstream_url = "$sites[$index]$newfile";
-		    last;
+	elsif ($newfile =~ m%^/%) {
+	    # Were there any redirections? If so try using those first
+	    if ($#patterns > 0) {
+		# replace $site here with the one we were redirected to
+		foreach my $index (0 .. $#patterns) {
+		    if ("$sites[$index]$newfile" =~ m&^$patterns[$index]$&) {
+			$upstream_url = "$sites[$index]$newfile";
+			last;
+		    }
 		}
-	    }
-	    if (!defined($upstream_url)) {
-		if ($debug) {
-		    warn "$progname warning: Unable to determine upstream url from redirections,\n" .
-			"defaulting to using site specified in watchfile\n";
+		if (!defined($upstream_url)) {
+		    if ($debug) {
+			warn "$progname warning: Unable to determine upstream url from redirections,\n" .
+			    "defaulting to using site specified in watchfile\n";
+		    }
+		    $upstream_url = "$sites[0]$newfile";
 		}
+	    } else {
 		$upstream_url = "$sites[0]$newfile";
 	    }
 	}
