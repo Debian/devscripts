@@ -2017,34 +2017,34 @@ sub send_mail {
 
 	    if (have_smtp_ssl) {
 		$smtp = Net::SMTP::SSL->new($host, Port => $port)
-		    or die "bts: failed to open SMTPS connection to $smtphost\n";
+		    or die "bts: failed to open SMTPS connection to $smtphost\n($@)\n";
 	    } else {
-		die "bts: Unable to establish SMTPS connection: $smtp_ssl_broken\n";
+		die "bts: Unable to establish SMTPS connection: $smtp_ssl_broken\n($@)\n";
 	    }
 	} else {
 	    my ($host, $port) = split(/:/, $smtphost);
 	    $port ||= '25';
 
 	    $smtp = Net::SMTP->new($host, Port => $port)
-		or die "bts: failed to open SMTP connection to $smtphost\n";
+		or die "bts: failed to open SMTP connection to $smtphost\n($@)\n";
 	}
 	if ($smtpuser) {
 	    $smtppass = getpass() if not $smtppass;
 	    $smtp->auth($smtpuser, $smtppass)
-		or die "bts: failed to authenticate to $smtphost\n";
+		or die "bts: failed to authenticate to $smtphost\n($@)\n";
 	}
         $smtp->mail($fromaddress)
-            or die "bts: failed to set SMTP from address $fromaddress\n";
+            or die "bts: failed to set SMTP from address $fromaddress\n($@)\n";
         my @addresses = extract_addresses($to);
         push @addresses, extract_addresses($cc);
         foreach my $address (@addresses) {
             $smtp->recipient($address)
-                or die "bts: failed to set SMTP recipient $address\n";
+                or die "bts: failed to set SMTP recipient $address\n($@)\n";
         }
         $smtp->data($message)
-            or die "bts: failed to send message as SMTP DATA\n";
+            or die "bts: failed to send message as SMTP DATA\n($@)\n";
         $smtp->quit
-            or die "bts: failed to quit SMTP connection\n";
+            or die "bts: failed to quit SMTP connection\n($@)\n";
     }
     else {
         my $pid = open(MAIL, "|-");
