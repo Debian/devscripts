@@ -41,7 +41,7 @@ devscripts (2.10.31) UNRELEASED; urgency=low
       site. Based on a patch by Raphael Geissert (Closes: #487436)
   * debian/control
     + Suggest libnet-smtp-ssl-perl (>= 1.01-2) in order to allow bts to
-      suport SMTPS. The versioned dependency is required in order to ensure
+      support SMTPS. The versioned dependency is required in order to ensure
       that a fixed libio-socket-ssl-perl is used.
     + Add libnet-smtp-ssl-perl to the description of bts
   * README: Add libnet-smtp-ssl-perl to the description of bts
