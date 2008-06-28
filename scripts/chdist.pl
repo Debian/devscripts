@@ -274,7 +274,7 @@ sub src2bin {
      die "E: no package name provided. Exiting.\n";
   }
   my $args = aptopts($dist) . " showsrc $pkg";
-  my $bins = `/usr/bin/apt-cache $args|sed 's/\(Package: .*\)\n/\(Binary: .*\)/\1\t\2/'|grep "Package: $pkg"|sed 's/.*Binary: \(.*\)\n/\1/'`;
+  my $bins = `/usr/bin/apt-cache $args|sed -n '/^Package: $pkg/{N;p}' | sed -n 's/^Binary: \\(.*\\)/\\1/p'`;
   exit($?) if ($? != 0);
   my @bins = split /, /, $bins;
   print join "\n", @bins;
