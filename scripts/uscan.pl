@@ -789,7 +789,10 @@ sub process_watchline ($$$$$$)
 	}
 
 	# Handle sf.net addresses specially
-	$base =~ s%^http://sf\.net/([^/]+)/(.*)%http://qa.debian.org/watch/sf.php/$1/$2\?.*%;
+	if ($base =~ m%^http://sf\.net/%) {
+	    $base =~ s%^http://sf\.net/%http://qa.debian.org/watch/sf.php/%;
+	    $filepattern .= '(?:\?.*)?';
+	}
 	if ($base =~ m%^(\w+://[^/]+)%) {
 	    $site = $1;
 	} else {
@@ -849,9 +852,12 @@ sub process_watchline ($$$$$$)
 		push @sites, $base_site;
 
 		# remove the filename, if any
+		my $base_dir_orig = $base_dir;
 		$base_dir =~ s%/[^/]*$%/%;
-		push @patterns, "(?:(?:$base_site)?" . quotemeta($base_dir) . ")?$filepattern";
-		push @sites, $base_site;
+		if ($base_dir ne $base_dir_orig) {
+		    push @patterns, "(?:(?:$base_site)?" . quotemeta($base_dir) . ")?$filepattern";
+		    push @sites, $base_site;
+		}
 	    }
 	}
 
