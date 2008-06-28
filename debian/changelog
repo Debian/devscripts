@@ -1,11 +1,11 @@
-devscripts (2.10.32) UNRELEASED; urgency=low
+devscripts (2.10.32) unstable; urgency=low
 
   * bts: Fix brown paper bag. When establishing an SMTPS connection, only use
     the hostname, rather than the fully specified "ssmtp://hostname[:port]"
     string
   * chdist: Fix sed expressions in src2bin (Closes: #488422)
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sat, 28 Jun 2008 12:20:36 -0700
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sat, 28 Jun 2008 13:44:12 -0700
 
 devscripts (2.10.31) unstable; urgency=low
 
