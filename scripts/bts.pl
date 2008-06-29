@@ -40,7 +40,6 @@ use File::Temp qw/tempfile/;
 use Net::SMTP;
 use Cwd;
 use IO::Handle;
-use POSIX qw(strftime);
 use lib '/usr/share/devscripts';
 use Devscripts::DB_File_Lock;
 use Devscripts::Debbugs;
@@ -1985,7 +1984,8 @@ sub send_mail {
     my $fromaddress = $fromaddresses[0];
     # Message-ID algorithm from git-send-email
     my $msgid = sprintf("%s-%s", time(), int(rand(4200)))."-bts-$fromaddress";
-    my $date = strftime("%a, %d %b %Y %H:%M:%S %z", localtime(time));
+    my $date = `date -R`;
+    chomp $date;
 
     my $message = fold_from_header("From: $from") . "\n";
     $message   .= "To: $to\n" if length $to;

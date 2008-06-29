@@ -38,7 +38,6 @@ use Getopt::Long;
 use File::Copy;
 use File::Basename;
 use Cwd;
-use POSIX qw(strftime tzset);
 use lib '/usr/share/devscripts';
 use Devscripts::Debbugs;
 
@@ -804,12 +803,9 @@ if (@ARGV and ! $TEXT) {
     }
 }
 
-if ($opt_tz) { 
-    $ENV{"TZ"} = $opt_tz; 
-    tzset();
-}
-
-my $DATE = strftime("%a, %d %b %Y %H:%M:%S %z", localtime(time));
+# Get the date
+my $date_cmd = ($opt_tz ? "TZ=$opt_tz " : "") . "date -R";
+chomp(my $DATE=`$date_cmd`);
 
 if ($opt_news && !$opt_i && !$opt_a) {
     if ($VERSION eq $changelog{'Version'}) {
