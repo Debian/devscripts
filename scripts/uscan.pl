@@ -882,8 +882,9 @@ sub process_watchline ($$$$$$)
 
 	print STDERR "$progname debug: matching pattern(s) @patterns\n" if $debug;
 	my @hrefs;
-	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi) {
+	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/sgi) {
 	    my $href = $2;
+	    $href =~ s/\n//g;
 	    foreach my $_pattern (@patterns) {
 		if ($href =~ m&^$_pattern$&) {
 		    if ($watch_version == 2) {
