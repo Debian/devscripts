@@ -1020,7 +1020,8 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
     
     my $urgency = $opt_u || 'low';
 
-    if (($opt_v or $opt_i or $opt_l) and $opt_release_heuristic eq "changelog" and
+    if (($opt_v or $opt_i or $opt_l or $opt_d) and
+	$opt_release_heuristic eq "changelog" and
 	$changelog{'Distribution'} eq "UNRELEASED" and
 	$distribution eq "UNRELEASED") {
 

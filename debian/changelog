@@ -1,6 +1,7 @@
 devscripts (2.10.34) UNRELEASED; urgency=low
 
   * checkbashisms: Match the use of "shell echo -n"
+  * debchange: Also collapse UNRELEASED stanzas when -d is used
   * uscan:
     + Parse sites which embed newlines inside hrefs (horrible, but works)
     + Always treat patterns referring to FTP sites as case-sensitive rather
