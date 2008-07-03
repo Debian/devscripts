@@ -348,7 +348,12 @@ sub checkout_files($$$$) {
     my $escaped_file = $file;
     $escaped_file =~ s|\+|%2B|g;
 
-    my $dir = "$destdir/" || "./";
+    my $dir;
+    if (defined $destdir and length $destdir > 0) {
+      $dir = "$destdir/";
+    } else {
+      $dir = "./";
+    }
     $dir .= dirname($file);
 
     if (! recurs_mkdir($dir)) {
@@ -498,12 +503,26 @@ sub checkout_files($$$$) {
           print "Attempting to retrieve $file via HTTP ...\n";
 
           init_agent() unless $ua;
-          my $fileurl = "$browse_url;a=blob_plain;f=$escaped_file;hb=HEAD";
-          my $request = HTTP::Request->new('GET', $fileurl);
+          my $file_url = "$browse_url;a=blob_plain;f=$escaped_file;hb=HEAD";
+          my $request = HTTP::Request->new('GET', $file_url);
           my $response = $ua->request($request);
+          my $error = 0;
           if (!$response->is_success) {
-            print "Error retrieving file: " . $response->status_line . "\n";
-          } else {
+            if ($browse_url =~ /\.git$/) {
+              print "Error retrieving file: " . $response->status_line . "\n";
+              $error = 1;
+            } else {
+              $browse_url .= ".git";
+              $file_url = "$browse_url;a=blob_plain;f=$escaped_file;hb=HEAD";
+              $request = HTTP::Request->new('GET', $file_url);
+              $response = $ua->request($request);
+              if (!$response->is_success) {
+                print "Error retrieving file: " . $response->status_line . "\n";
+                $error = 1;
+              }
+            }
+          }
+          if (!$error) {
             if (! open OUTPUT, ">", $dir . "/" . basename($file)) {
               print STDERR "Failed to create output file " . basename($file) . " $!\n";
               return 1;
