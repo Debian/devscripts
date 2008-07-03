@@ -410,7 +410,8 @@ sub script_is_evil_and_wrong {
 }
 
 sub init_hashes {
-    my $LEADIN = qr'(?:(^|[`&;(|{])\s*|(if|do|while)\s+)';
+    my $LEADIN = qr'(?:(^|[`&;(|{])\s*|(if|do|while|shell)\s+)';
+
     %bashisms = (
 	qr'(?:^|\s+)function \w+\(\s*\)' =>   q<'function' is useless>,
 	$LEADIN . qr'select\s+\w+' =>     q<'select' is not POSIX>,
