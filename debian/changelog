@@ -1,6 +1,12 @@
 devscripts (2.10.34) UNRELEASED; urgency=low
 
-  * uscan: Parse sites which embed newlines inside hrefs (horrible, but works)
+  * uscan:
+    + Parse sites which embed newlines inside hrefs (horrible, but works)
+    + Always treat patterns referring to FTP sites as case-sensitive rather
+      than a confusing (and broken) mixture of case-sensitive and
+      case-insensitive matching
+    + Correctly match directory names in HTMLised FTP proxy listings; the
+      equivalent change for filenames was applied in 2.10.11 (#448636)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 01 Jul 2008 21:10:37 +0100
 

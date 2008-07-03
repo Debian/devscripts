@@ -966,7 +966,7 @@ sub process_watchline ($$$$$$)
 	# that we can target our search correctly
 	if ($content =~ /<\s*a\s+[^>]*href/i) {
 	    while ($content =~ 
-		m/(?:<\s*a\s+[^>]*href\s*=\s*\")($pattern)\"/gi) {
+		m/(?:<\s*a\s+[^>]*href\s*=\s*\")((?-i)$pattern)\"/gi) {
 		my $file = $1;
 		my $mangled_version = join(".", $file =~ m/^$pattern$/);
 		foreach my $pat (@{$options{'uversionmangle'}}) {
@@ -977,7 +977,7 @@ sub process_watchline ($$$$$$)
 	} else {
 	    # they all look like:
 	    # info info ... info filename [ -> linkname]
-	    while ($content =~ m/($filepattern)(\s+->\s+\S+)?$/mgi) {
+	    while ($content =~ m/($filepattern)(\s+->\s+\S+)?$/mg) {
 		my $file = $1;
 		my $mangled_version = join(".", $file =~ m/^$filepattern$/);
 		foreach my $pat (@{$options{'uversionmangle'}}) {
@@ -1511,9 +1511,9 @@ sub newest_dir ($$$$$) {
 
 	# We separate out HTMLised listings from standard listings, so
 	# that we can target our search correctly
-	if (/<\s*a\s+[^>]*href/i) {
+	if ($content =~ /<\s*a\s+[^>]*href/i) {
 	    while ($content =~ 
-		m/(?:<\s*a\s+[^>]*href\s*=\s*\")($pattern)\"/gi) {
+		m/(?:<\s*a\s+[^>]*href\s*=\s*\")((?-i)$pattern)\"/gi) {
 		my $dir = $1;
 		my $mangled_version = join(".", $dir =~ m/^$pattern$/);
 		push @dirs, [$mangled_version, $dir];
@@ -1521,7 +1521,7 @@ sub newest_dir ($$$$$) {
 	} else {
 	    # they all look like:
 	    # info info ... info filename [ -> linkname]
-	    while ($content =~ m/($pattern)(\s+->\s+\S+)?$/mgi) {
+	    while ($content =~ m/($pattern)(\s+->\s+\S+)?$/mg) {
 		my $dir = $1;
 		my $mangled_version = join(".", $dir =~ m/^$pattern$/);
 		push @dirs, [$mangled_version, $dir];
