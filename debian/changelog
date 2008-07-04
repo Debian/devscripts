@@ -1,6 +1,6 @@
 devscripts (2.10.34) UNRELEASED; urgency=low
 
-  * checkbashisms: Match the use of "shell echo -n"
+  * checkbashisms: Match the use of "shell echo -n" and "if foo then echo -n"
   * debchange: Also collapse UNRELEASED stanzas when -d is used
   * debcheckout:
     + Improve git repository handling with --file

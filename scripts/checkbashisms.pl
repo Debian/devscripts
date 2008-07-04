@@ -410,7 +410,7 @@ sub script_is_evil_and_wrong {
 }
 
 sub init_hashes {
-    my $LEADIN = qr'(?:(^|[`&;(|{])\s*|(if|do|while|shell)\s+)';
+    my $LEADIN = qr'(?:(^|[`&;(|{])\s*|(if|then|do|while|shell)\s+)';
 
     %bashisms = (
 	qr'(?:^|\s+)function \w+\(\s*\)' =>   q<'function' is useless>,
