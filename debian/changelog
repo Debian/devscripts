@@ -6,6 +6,8 @@ devscripts (2.10.34) UNRELEASED; urgency=low
       largely benign, unless one was attempting to check libtool...)
     + Fix false positives in the checks for "dirs", "popd", "pushd", "shopt"
       and "ulimit" and the "echo with unsafe backslash" checks
+    + Fix a false-positive in the "source script with arguments check"
+    + Treat """" as "" when removing quotes
   * debchange: Also collapse UNRELEASED stanzas when -d is used
   * debcheckout:
     + Improve git repository handling with --file

@@ -200,8 +200,8 @@ foreach my $filename (@ARGV) {
 
 	    # Remove "" / '' as they clearly aren't quoted strings
 	    # and not considering them makes the matching easier
-	    $line =~ s/(^|[^\\])(\'\')/$1/g;
-	    $line =~ s/(^|[^\\])(\"\")/$1/g;
+	    $line =~ s/(^|[^\\])(\'\')+/$1/g;
+	    $line =~ s/(^|[^\\])(\"\")+/$1/g;
 
 	    if ($quote_string ne "") {
 		my $otherquote = ($quote_string eq "\"" ? "\'" : "\"");
@@ -270,7 +270,7 @@ foreach my $filename (@ARGV) {
 
 	    # since this test is ugly, I have to do it by itself
 	    # detect source (.) trying to pass args to the command it runs
-	    if (not $found and m/^\s*(\.\s+[^\s;\`]+\s+([^\s;]+))/) {
+	    if (not $found and m/^\s*(\.\s+[^\s;\`:]+\s+([^\s;]+))/) {
 		if ($2 =~ /^(\&|\||\d?>|<)/) {
 		    # everything is ok
 		    ;
