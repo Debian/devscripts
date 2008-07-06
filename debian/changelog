@@ -4,6 +4,8 @@ devscripts (2.10.34) UNRELEASED; urgency=low
     + Match the use of "shell echo -n" and "if foo then echo -n"
     + Fix a thinko in the quoted-block detection (thankfully the effects were
       largely benign, unless one was attempting to check libtool...)
+    + Fix a false positive in the checks for "dirs", "popd", "pushd", "shopt"
+      and "ulimit"
   * debchange: Also collapse UNRELEASED stanzas when -d is used
   * debcheckout:
     + Improve git repository handling with --file
