@@ -487,12 +487,12 @@ sub init_hashes {
 	qr'\$\{?PIPESTATUS\}?\b'      => q<$PIPESTATUS>,
 	qr'\$\{?SHLVL\}?\b'           => q<$SHLVL>,
 	qr'<<<'                       => q<\<\<\< here string>,
-	$LEADIN . qr'echo\s+(?:-[^e]+\s+)?([\"])[^\"]*(\\[\\abcEfnrtv0])+.*?[\"]' => q<unsafe echo with backslash>,
+	$LEADIN . qr'echo\s+(?:-[^e\s]+\s+)?\"[^\"]*(\\[\\abcEfnrtv0])+.*?[\"]' => q<unsafe echo with backslash>,
 	#'(?<![\$\\\])\$\"[^\"]+\"'   => q<$"foo" should be eval_gettext "foo">,
     );
 
     %singlequote_bashisms = (
-	$LEADIN . qr'echo\s+(?:-[^e]+\s+)?([\'])[^\']*(\\[\\abcEfnrtv0])+.*?[\']' => q<unsafe echo with backslash>,
+	$LEADIN . qr'echo\s+(?:-[^e\s]+\s+)?\'[^\']*(\\[\\abcEfnrtv0])+.*?[\']' => q<unsafe echo with backslash>,
 	#'(?<![\$\\\])\$\'[^\']+\''              => q<$'...' should be "$(printf '...')">,
     );
 
