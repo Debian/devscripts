@@ -254,7 +254,7 @@ foreach my $filename (@ARGV) {
 		    # "a'b"
 		    $templine =~ s/$otherquote.*?$quote.*?$otherquote//g;
 		    # "\""
-		    $templine =~ s/(^|[^\\])$quote_string\\$quote_string$quote_string/$1/g;
+		    $templine =~ s/(^|[^\\])$quote\\$quote$quote/$1/g;
 		    my $count = () = $templine =~ /(^|[^\\])$quote/g;
 
 		    # If there's an odd number of non-escaped
