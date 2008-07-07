@@ -140,27 +140,6 @@ foreach my $filename (@ARGV) {
 	chomp;
 	my $orig_line = $_;
 
-	if ($makefile) {
-	    $last_continued = $continued;
-	    if (/[^\\]\\$/) {
-		$continued = 1;
-	    } else {
-		$continued = 0;
-	    }
-
-	    # Don't match lines that look like a rule if we're in a
-	    # continuation line before the start of the rules
-	    if (/^[\w%-]+:+\s.*?;?(.*)$/ and !($last_continued and !$found_rules)) {
-		$found_rules = 1;
-		$_ = $1 if $1;
-	    } 
-
-	    last if m%^(export )?SHELL\s*:?=\s*(/bin/)?bash\s*%;
-
-	    s/^\t//;
-	    s/(\$){2}/$1/;
-	}
-
 	# We want to remove end-of-line comments, so need to skip
 	# comments that appear inside balanced pairs
 	# of single or double quotes
@@ -186,6 +165,28 @@ foreach my $filename (@ARGV) {
 	    $_ =~ s/\Q$1\E//;  # eat comments
 	} else {
 	    $_ = $orig_line;
+	}
+
+	if ($makefile) {
+	    $last_continued = $continued;
+	    if (/[^\\]\\$/) {
+		$continued = 1;
+	    } else {
+		$continued = 0;
+	    }
+
+	    # Don't match lines that look like a rule if we're in a
+	    # continuation line before the start of the rules
+	    if (/^[\w%-]+:+\s.*?;?(.*)$/ and !($last_continued and !$found_rules)) {
+		$found_rules = 1;
+		$_ = $1 if $1;
+	    } 
+
+	    last if m%^(export )?SHELL\s*:?=\s*(/bin/)?bash\s*%;
+
+	    s/^\t//;
+	    s/(\$){2}/$1/;
+	    s/^[\s\t]*@//;
 	}
 
 	if ($cat_string ne "" and m/^\Q$cat_string\E$/) {

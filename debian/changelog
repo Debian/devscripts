@@ -11,6 +11,7 @@ devscripts (2.10.34) UNRELEASED; urgency=low
     + Treat """" as "" when removing quotes
     + Catch shell script wrappers which use "foo $0 $@ &\nexec true"
     + Don't treat '. "a b"' as a sourced script being passed arguments
+    + Strip leading @s from makefile lines
   * debchange: Also collapse UNRELEASED stanzas when -d is used
   * debcheckout:
     + Improve git repository handling with --file
