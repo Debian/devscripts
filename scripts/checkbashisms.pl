@@ -447,7 +447,7 @@ sub init_hashes {
 	                               q<should be 'b = a'>,
 	qr'\[\s+[^\]]+\s+==\s' =>        q<should be 'b = a'>,
 	qr'\s\|\&' =>                    q<pipelining is not POSIX>,
-	qr'[^\\]\{([^\s\\\}]+?,)+[^\\\}\s]+\}' =>
+	qr'[^\\\$]\{([^\s\\\}]+?,)+[^\\\}\s]+\}' =>
 	                               q<brace expansion>,
 	qr'(?:^|\s+)\w+\[\d+\]=' =>      q<bash arrays, H[0]>,
 	$LEADIN . qr'(read\s*(-[^r]+)*(?:;|$))' => q<should be read [-r] variable>,
@@ -478,7 +478,7 @@ sub init_hashes {
 	$LEADIN . qr'local\s+-[a-zA-Z]+' => q<local -opt>,
 	$LEADIN . qr'local\s+\w+=' =>     q<local foo=bar>,
 	$LEADIN . qr'local\s+\w+\s+\w+' => q<local x y>,
-	qr'(?:^|\s+)\s*\(?\w*[^\(\w\s]+\S*?\s*\(\)[^\"]?'
+	qr'(?:^|\s+)\s*\(?\w*[^\(\w\s]+\S*?\s*\(\)\s*([\{|\(]|\Z)'
 		=> q<function names should only contain [a-z0-9_]>,
 	$LEADIN . qr'(push|pop)d(\s|\Z)' =>    q<(push|pod)d>,
 	$LEADIN . qr'export\s+-[^p]' =>  q<export only takes -p as an option>,
