@@ -377,6 +377,7 @@ sub script_is_evil_and_wrong {
     open (IN, '<', $filename) or return $ret;
     my $i = 0;
     my $var = "0";
+    my $backgrounded = 0;
     local $_;
     while (<IN>) {
         chomp;
@@ -409,7 +410,26 @@ sub script_is_evil_and_wrong {
             last;
         } elsif (/^\s*(\w+)=\$0;/) {
 	    $var = $1;
+	} elsif (m~
+	    # Match scripts which use "foo $0 $@ &\nexec true\n"
+	    # Program name
+	    \S+\s+
+
+	    # As above
+	    .?\$$var.?\s*
+	    (--\s*)?
+	    .?(\${1:?\+.?)?(\$(\@|\*))?.?\s*\&~x) {
+
+	    $backgrounded = 1;
+	} elsif ($backgrounded and m~
+	    # the exec should either be "eval"ed or a new statement
+	    (^\s*|\beval\s*[\'\"]|(;|&&)\s*)
+	    exec\s+true(\s|\Z)~x) {
+
+	    $ret = $. - 1;
+	    last;
 	}
+
     }
     close IN;
     return $ret;
