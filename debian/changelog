@@ -10,6 +10,7 @@ devscripts (2.10.34) UNRELEASED; urgency=low
     + Fix a false-positive in the "source script with arguments check"
     + Treat """" as "" when removing quotes
     + Catch shell script wrappers which use "foo $0 $@ &\nexec true"
+    + Don't treat '. "a b"' as a sourced script being passed arguments
   * debchange: Also collapse UNRELEASED stanzas when -d is used
   * debcheckout:
     + Improve git repository handling with --file

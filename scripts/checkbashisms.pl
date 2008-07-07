@@ -276,7 +276,10 @@ foreach my $filename (@ARGV) {
 
 	    # since this test is ugly, I have to do it by itself
 	    # detect source (.) trying to pass args to the command it runs
-	    if (not $found and m/^\s*(\.\s+[^\s;\`:]+\s+([^\s;]+))/) {
+	    # The first expression weeds out '. "foo bar"'
+	    if (not $found and
+		not m/^\s*\.\s+(\"[^\"]+\"|\'[^\']+\')\s*(\&|\||\d?>|<|;|\Z)/
+		and m/^\s*(\.\s+[^\s;\`:]+\s+([^\s;]+))/) {
 		if ($2 =~ /^(\&|\||\d?>|<)/) {
 		    # everything is ok
 		    ;
