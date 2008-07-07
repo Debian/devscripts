@@ -162,10 +162,16 @@ foreach my $filename (@ARGV) {
 	}
 
 	# We want to remove end-of-line comments, so need to skip
-	# comments in the "quoted" part of a line that starts
-	# in a quoted block or that appear inside balanced pairs
+	# comments that appear inside balanced pairs
 	# of single or double quotes
-	s/^(?:.*?[^\\])?$quote_string(.*)$/$1/ if $quote_string ne "";
+
+	# Remove comments in the "quoted" part of a line that starts
+	# in a quoted block? The problem is that we have no idea
+	# whether the program interpreting the block treats the
+	# quote character as part of the comment or as a quote
+	# terminator. We err on the side of caution and assume it
+	# will be treated as part of the comment.
+	# s/^(?:.*?[^\\])?$quote_string(.*)$/$1/ if $quote_string ne "";
 
 	next if m,^\s*\#,;  # skip comment lines
 
@@ -206,7 +212,7 @@ foreach my $filename (@ARGV) {
 	    if ($quote_string ne "") {
 		my $otherquote = ($quote_string eq "\"" ? "\'" : "\"");
 		# Inside a quoted block
-		if ($line =~ /(?:^|^.*?[^\\$otherquote])$quote_string(.*)$/) {
+		if ($line =~ /(?:^|^.*?[^\\])$quote_string(.*)$/) {
 		    my $rest = $1;
 		    my $templine = $line;
 
