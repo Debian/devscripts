@@ -12,7 +12,9 @@ devscripts (2.10.34) UNRELEASED; urgency=low
     + Catch shell script wrappers which use "foo $0 $@ &\nexec true"
     + Don't treat '. "a b"' as a sourced script being passed arguments
     + Strip leading @s from makefile lines
-  * debchange: Also collapse UNRELEASED stanzas when -d is used
+  * debchange:
+    + Also collapse UNRELEASED stanzas when -d is used
+    + Fix a typo ("ether") in the manpage; thanks Raphael Geissert
   * debcheckout:
     + Improve git repository handling with --file
     + Fix directory naming when using -f and no explicit destination directory
