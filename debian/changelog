@@ -8,6 +8,7 @@ devscripts (2.10.34) UNRELEASED; urgency=low
       and "ulimit" and the "echo with unsafe backslash", brace expansion and
       invalid function name checks
     + Fix a false-positive in the "source script with arguments check"
+    + Fix a false negative in the "function" check (Closes: #490223)
     + Treat """" as "" when removing quotes
     + Catch shell script wrappers which use "foo $0 $@ &\nexec true"
     + Don't treat '. "a b"' as a sourced script being passed arguments

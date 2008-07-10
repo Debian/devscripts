@@ -443,7 +443,7 @@ sub init_hashes {
     my $LEADIN = qr'(?:(^|[`&;(|{])\s*|(if|then|do|while|shell)\s+)';
 
     %bashisms = (
-	qr'(?:^|\s+)function \w+\(\s*\)' =>   q<'function' is useless>,
+	qr'(?:^|\s+)function \w+(\s|\(|\Z)' => q<'function' is useless>,
 	$LEADIN . qr'select\s+\w+' =>     q<'select' is not POSIX>,
 	$LEADIN . qr'source\s+(?:\.\/|\/|\$)[^\s]+' =>
 	                               q<should be '.', not 'source'>,
