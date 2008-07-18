@@ -615,7 +615,7 @@ sub getmessage {
 	    }
 	} else {
 
-	    if ($prog =~ /^(git|hg)$/) {
+	    if ($prog =~ /^(git|hg)$/ and not $diffmode) {
 		my $count = () = $ret =~ /^\s*[\*\+-] /mg;
 
 		if ($count == 1) {

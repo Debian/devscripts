@@ -1,5 +1,7 @@
 devscripts (2.10.35) UNRELEASED; urgency=low
 
+  * debcommit: When --diff is used, don't open an editor to confirm commit
+    messages
   * po4a/po/fr.po: Update French manpage translations; thanks Nicolas FRANCOIS
     (Closes: #491001)
 
