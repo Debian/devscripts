@@ -1,5 +1,8 @@
 devscripts (2.10.35) UNRELEASED; urgency=low
 
+  * checkbashisms: Only flag "local x y" and "local foo=bar" when --posix is
+    used, as the use of the constructs is likely to become policy compliant
+    in the near future (see Policy bug #473019)
   * debcommit: When --diff is used, don't open an editor to confirm commit
     messages
   * po4a/po/fr.po: Update French manpage translations; thanks Nicolas FRANCOIS

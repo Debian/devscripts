@@ -480,8 +480,6 @@ sub init_hashes {
 	$LEADIN . qr'alias\s+-p' =>       q<alias -p>,
 	$LEADIN . qr'unalias\s+-a' =>     q<unalias -a>,
 	$LEADIN . qr'local\s+-[a-zA-Z]+' => q<local -opt>,
-	$LEADIN . qr'local\s+\w+=' =>     q<local foo=bar>,
-	$LEADIN . qr'local\s+\w+\s+\w+' => q<local x y>,
 	qr'(?:^|\s+)\s*\(?\w*[^\(\w\s]+\S*?\s*\(\)\s*([\{|\(]|\Z)'
 		=> q<function names should only contain [a-z0-9_]>,
 	$LEADIN . qr'(push|pop)d(\s|\Z)' =>    q<(push|pod)d>,
@@ -531,6 +529,8 @@ sub init_hashes {
     }
     if ($opt_posix) {
 	$bashisms{$LEADIN . qr'local\s+\w+(\s+\W|\s*[;&|)]|$)'} = q<local foo>;
+	$bashisms{$LEADIN . qr'local\s+\w+='} = q<local foo=bar>;
+	$bashisms{$LEADIN . qr'local\s+\w+\s+\w+'} = q<local x y>;
 	$bashisms{$LEADIN . qr'((?:test|\[)\s+.+\s-[ao])\s'} = q<test -a/-o>;
     }
 
