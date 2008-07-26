@@ -216,7 +216,7 @@ for package; do
 	    DATE=$(echo "$HTML_TEXT" |  sed -ne 's%<li><em>Date</em>: \(.*\)</li>%\1%p')
 	fi
 
-	GPG_ID=$(echo "$GPG_TEXT" | gpg $GPG_NO_KEYRING --verify 2>&1 |
+	GPG_ID=$(echo "$GPG_TEXT" | LC_ALL=C gpg $GPG_NO_KEYRING --verify 2>&1 |
 	         sed -rne 's/.*ID ([0-9A-Z]+).*/\1/p')
 
 	UPLOADER=$(gpg $GPG_OPTIONS \
