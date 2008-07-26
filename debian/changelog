@@ -1,4 +1,4 @@
-devscripts (2.10.35) UNRELEASED; urgency=low
+devscripts (2.10.35) unstable; urgency=low
 
   * checkbashisms: Only flag "local x y" and "local foo=bar" when --posix is
     used, as the use of the constructs is likely to become policy compliant
@@ -10,7 +10,7 @@ devscripts (2.10.35) UNRELEASED; urgency=low
   * who-uploads: Call "gpg --verify" with LC_ALL set to C to ensure that
     the output is in the expected format (Closes: #492474)
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 15 Jul 2008 19:30:57 +0100
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sat, 26 Jul 2008 21:57:20 +0100
 
 devscripts (2.10.34) unstable; urgency=low
 
