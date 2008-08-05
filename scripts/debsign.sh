@@ -338,7 +338,10 @@ dosigning() {
     if [ -n "$remotehost" ]
     then
 	cd ${TMPDIR:-/tmp}
-	mkdir debsign.$$ || { echo "$PROGNAME: Can't mkdir!" >&2; exit 1; }
+	if [ ! -d "debsign.$$" ]
+	then
+	    mkdir debsign.$$ || { echo "$PROGNAME: Can't mkdir!" >&2; exit 1; }
+	fi
 	trap "cleanup_tmpdir" 0 1 2 3 7 10 13 15
 	cd debsign.$$
 
@@ -351,10 +354,26 @@ dosigning() {
 	commands=`basename "$commands"`
 
 	if [ -n "$changes" ]
-	then withecho scp "$remotehost:$remotechanges" "$changes"
+	then
+	    if [ ! -f "$changes" ]
+	    then
+		withecho scp "$remotehost:$remotechanges" .
+	    fi
 	elif [ -n "$dsc" ]
 	then withecho scp "$remotehost:$remotedsc" "$dsc"
 	else withecho scp "$remotehost:$remotecommands" "$commands"
+	fi
+
+	if [ -n "$changes" ] && echo "$changes" | grep -q "\*"
+	then
+	    for changes in $changes
+	    do
+		printf "\n"
+		dsc=`echo $changes | \
+		    perl -pe 's/\.changes$/.dsc/; s/(.*)_(.*)_(.*)\.dsc/\1_\2.dsc/'`
+		dosigning;
+	    done
+	    exit 0;
 	fi
     fi
 
