@@ -2,6 +2,8 @@ devscripts (2.10.36) UNRELEASED; urgency=low
 
   * debsign: When copying .changes files from a remote host, attempt to process
     each copied file if a wildcard was used in the filename (Closes: #491627)
+  * tagpending: Fix a typo in the help output. Thanks Thijs Kinkhorst.
+    (Closes: #494131)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 28 Jul 2008 20:06:49 +0100
 

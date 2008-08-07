@@ -415,7 +415,7 @@ Valid options are:
 			-v option.)
     -i, --interactive   Display the message which would be sent to the BTS
 			and, except if --noact was used, prompt for
-			confirmation ebfore sending it.
+			confirmation before sending it.
     -w, --wnpp          For each potentially not owned bug, check whether
 			it is filed against wnpp and, if so, tag it. This
 			allows e.g. ITA or ITPs to be tagged.
