@@ -509,6 +509,7 @@ my $quiet=0;
 my $opt_ccemail = "";
 my $use_default_cc = 1;
 my $ccsecurity="";
+my $gifted = "";
 
 Getopt::Long::Configure('require_order');
 GetOptions("help|h" => \$opt_help,
@@ -1263,6 +1264,12 @@ must be specified, unless the '=' flag is used, where the command
 
 will remove all tags from the specified bug.
 
+As a special case, the unofficial "gift" tag name is supported in
+addition to official tag names. "gift" is used as a shorthand for the
+gift usertag; see L<http://wiki.debian.org/qa.debian.org/GiftTag>.
+Adding/removing the gift tag will add/remove the gift usertag,
+belonging to the L<debian-qa@lists.debian.org> user.
+
 =cut
 
 sub bts_tags {
@@ -1287,12 +1294,15 @@ sub bts_tags {
 	die "bts tags: set what tag?\n";
     }
     
+    my $base_command = $command;
     foreach my $tag (@_) {
 	if (exists $valid_tags{$tag}) {
 	    $command .= " $tag";
 	    if ($tag eq "security") {
 		    $ccsecurity = "team\@security.debian.org";
 	    }
+	} elsif ($tag eq "gift") {
+	  $gifted = $bug;
 	} else {
 	    # Try prefixes
 	    my @matches = grep /^\Q$tag\E/, @valid_tags;
@@ -1305,7 +1315,15 @@ sub bts_tags {
 	    $command .= " $matches[0]";
 	}
     }
-    mailbts("tagging $bug", $command);
+    if ($gifted ne "") {
+      my $gift_flag = $flag;
+      $gift_flag = "+" if $gift_flag eq "=";
+      mailbts("gifting $bug",
+	"user debian-qa\@lists.debian.org\nusertag $bug $gift_flag gift");
+    }
+    if ($base_command ne $command) {  # at least one tag other than gift has been manipulated
+      mailbts("tagging $bug", $command);
+    }
 }
 
 =item user <email>
