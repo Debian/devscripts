@@ -509,7 +509,6 @@ my $quiet=0;
 my $opt_ccemail = "";
 my $use_default_cc = 1;
 my $ccsecurity="";
-my $gifted = "";
 
 Getopt::Long::Configure('require_order');
 GetOptions("help|h" => \$opt_help,
@@ -1295,6 +1294,8 @@ sub bts_tags {
     }
     
     my $base_command = $command;
+    my $gifted = "";
+
     foreach my $tag (@_) {
 	if (exists $valid_tags{$tag}) {
 	    $command .= " $tag";
