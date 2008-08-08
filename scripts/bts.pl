@@ -1268,7 +1268,7 @@ As a special case, the unofficial "gift" tag name is supported in
 addition to official tag names. "gift" is used as a shorthand for the
 gift usertag; see L<http://wiki.debian.org/qa.debian.org/GiftTag>.
 Adding/removing the gift tag will add/remove the gift usertag,
-belonging to the L<debian-qa@lists.debian.org> user.
+belonging to the "debian-qa@lists.debian.org" user.
 
 =cut
 
