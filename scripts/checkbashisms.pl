@@ -454,7 +454,9 @@ sub init_hashes {
 	qr'[^\\\$]\{([^\s\\\}]+?,)+[^\\\}\s]+\}' =>
 	                               q<brace expansion>,
 	qr'(?:^|\s+)\w+\[\d+\]=' =>      q<bash arrays, H[0]>,
-	$LEADIN . qr'(read\s*(-[^r]+)*(?:;|$))' => q<should be read [-r] variable>,
+	$LEADIN . qr'read\s+(?:-[a-qs-zA-Z\d-]+)' => q<read with option other than -r>,
+	$LEADIN . qr'read\s*(?:-\w+\s*)*(?:\".*?\"|[\'].*?[\'])?\s*(?:;|$)'
+	    => q<read without variable>,
 	$LEADIN . qr'echo\s+(-n\s+)?-n?en?\s' =>      q<echo -e>,
 	$LEADIN . qr'exec\s+-[acl]' =>    q<exec -c/-l/-a name>,
 	$LEADIN . qr'let\s' =>            q<let ...>,

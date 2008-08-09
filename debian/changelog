@@ -1,6 +1,9 @@
 devscripts (2.10.36) UNRELEASED; urgency=low
 
   [ Adam D. Barratt ]
+  * checkbashisms: Flag "read without variable" and "read with options other
+    than -r" separately to ensure that all uses are correctly matched. Thanks
+    to Frank Lichtenheld for pointing this out via a related bug in lintian.
   * debsign: When copying .changes files from a remote host, attempt to process
     each copied file if a wildcard was used in the filename (Closes: #491627)
   * tagpending: Fix a typo in the help output. Thanks Thijs Kinkhorst.
