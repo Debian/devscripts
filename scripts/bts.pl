@@ -47,6 +47,8 @@ use Fcntl qw(O_RDWR O_RDONLY O_CREAT F_SETFD);
 use Getopt::Long;
 use Encode;
 
+use Scalar::Util qw(looks_like_number);
+
 # Funny UTF-8 warning messages from HTML::Parse should be ignorable (#292671)
 $SIG{'__WARN__'} = sub { warn $_[0] unless $_[0] =~ /^Parsing of undecoded UTF-8 will give garbage when decoding entities/; };
 
@@ -947,6 +949,68 @@ sub bts_select {
 	die "Error while retrieving bugs from SOAP server";
     }
     print map {qq($_\n)} @{$bugs};
+}
+
+=item status [<bug> | file:<file>] ...
+
+Uses the SOAP interface to output status information for the given bugs
+(or as read from the listed files -- use '-' to indicate STDIN).
+
+Empty status fields are not displayed.
+
+=cut
+
+sub bts_status {
+    my @args = @_;
+
+    my @bugs;
+    for my $bug (@args) {
+	if (looks_like_number($bug)) {
+	    push @bugs,$bug;
+	}
+	elsif (m{^file:(.+)}) {
+	    my $file = $1;
+	    my $fh;
+	    if ($file eq '-') {
+		$fh = \*STDIN;
+	    }
+	    else {
+		$fh = IO::File->new($file,'r') or
+		die "Unable to open $file for reading: $!";
+	    }
+	    while (<$fh>) {
+		chomp;
+		next if /^\s*\#/;
+		s/\s//g;
+		next unless looks_like_number($_);
+		push @bugs,$_;
+	    }
+	}
+    }
+    my $bugs = Devscripts::Debbugs::status(@bugs);
+    my $first = 1;
+    for my $bug (keys %{$bugs}) {
+	print "\n" if not $first;
+	$first = 0;
+	my @keys = grep {$_ ne 'bug_num'}
+	keys %{$bugs->{$bug}};
+	for my $key ('bug_num',@keys) {
+	    my $out;
+	    if (ref($bugs->{$bug}{$key}) eq 'ARRAY') {
+		$out .= join(',',@{$bugs->{$bug}{$key}});
+	    }
+	    elsif (ref($bugs->{$bug}{$key}) eq 'HASH') {
+		$out .= join(',',
+		    map { $_ .' => '. ($bugs->{$bug}{$key}{$_}||'') }
+		    keys %{$bugs->{$bug}{$key}}
+		);
+	    }
+	    else {
+		$out .= $bugs->{$bug}{$key}||'';
+	    }
+	    print "$key\t$out\n" if $out;
+	}
+    }
 }
 
 =item clone <bug> [new IDs]

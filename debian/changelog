@@ -13,6 +13,11 @@ devscripts (2.10.36) UNRELEASED; urgency=low
   * bts: add support for the fake "gift" tag. It is to be used as a shorthand
     for the "gift" usertag, see http://wiki.debian.org/qa.debian.org/GiftTag
 
+  [ James Vega ]
+  * bts: Add new 'status' command which returns various bits of information
+    about the state of the given bugs.  Thanks to Don Armstrong for the patch.
+    (Closes: #494614)
+
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 28 Jul 2008 20:06:49 +0100
 
 devscripts (2.10.35) unstable; urgency=low

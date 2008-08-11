@@ -102,22 +102,22 @@ sub init_soap {
 
 my $soap_broken;
 sub have_soap {
-     return ($soap_broken ? 0 : 1) if defined $soap_broken;
-     eval {
-          require SOAP::Lite;
-     };
+    return ($soap_broken ? 0 : 1) if defined $soap_broken;
+    eval {
+	require SOAP::Lite;
+    };
 
-     if ($@) {
-          if ($@ =~ m%^Can't locate SOAP/%) {
-               $soap_broken="the libsoap-lite-perl package is not installed";
-          } else {
-               $soap_broken="couldn't load SOAP::Lite: $@";
-          }
-     }
-     else {
-          $soap_broken = 0;
-     }
-     return ($soap_broken ? 0 : 1);
+    if ($@) {
+	if ($@ =~ m%^Can't locate SOAP/%) {
+	    $soap_broken="the libsoap-lite-perl package is not installed";
+	} else {
+	    $soap_broken="couldn't load SOAP::Lite: $@";
+	}
+    }
+    else {
+	$soap_broken = 0;
+    }
+    return ($soap_broken ? 0 : 1);
 }
 
 sub usertags {
@@ -132,61 +132,63 @@ sub usertags {
 }
 
 sub select {
-     die "Couldn't run select: $soap_broken\n" unless have_soap();
-     my @args = @_;
-     my %valid_keys = (package => 'package',
-                       pkg     => 'package',
-                       src     => 'src',
-                       source  => 'src',
-                       maint   => 'maint',
-                       maintainer => 'maint',
-                       submitter => 'submitter',
-                       from => 'submitter',
-                       status    => 'status',
-                       tag       => 'tag',
-                       tags      => 'tag',
-                       usertag   => 'tag',
-                       usertags  => 'tag',
-                       owner     => 'owner',
-                       dist      => 'dist',
-                       distribution => 'dist',
-                       bugs       => 'bugs',
-                       archive    => 'archive',
-                       severity   => 'severity',
-                      );
-     my %users;
-     my %search_parameters;
-     my $soap = init_soap();
-     my $soapfault;
-     $soap->on_fault(sub { $soapfault = $_; });
-     for my $arg (@args) {
-          my ($key,$value) = split /:/, $arg, 2;
-          next unless $key;
-          if (exists $valid_keys{$key}) {
-               push @{$search_parameters{$valid_keys{$key}}},
-                    $value if $value;
-          } elsif ($key =~/users?$/) {
-               $users{$value} = 1 if $value;
-          } else {
-               warn "select(): Unrecognised key: $key\n";
-          }
-     }
-     my %usertags;
-     for my $user (keys %users) {
-          my $ut = usertags($user);
-          next unless defined $ut and $ut ne "";
-          for my $tag (keys %{$ut}) {
-               push @{$usertags{$tag}},
-                    @{$ut->{$tag}};
-          }
-     }
-     my $bugs = $soap->get_bugs(%search_parameters,
-                                (keys %usertags)?(usertags=>\%usertags):()
-                               )->result();
-     if (not defined $bugs) {
-         die "Error while retrieving bugs from SOAP server: $soapfault"
-             if $soapfault;
-     }
+    die "Couldn't run select: $soap_broken\n" unless have_soap();
+    my @args = @_;
+    my %valid_keys = (package => 'package',
+                      pkg     => 'package',
+                      src     => 'src',
+                      source  => 'src',
+                      maint   => 'maint',
+                      maintainer => 'maint',
+                      submitter => 'submitter',
+                      from => 'submitter',
+                      status    => 'status',
+                      tag       => 'tag',
+                      tags      => 'tag',
+                      usertag   => 'tag',
+                      usertags  => 'tag',
+                      owner     => 'owner',
+                      dist      => 'dist',
+                      distribution => 'dist',
+                      bugs       => 'bugs',
+                      archive    => 'archive',
+                      severity   => 'severity',
+                      correspondent => 'correspondent',
+                      affects       => 'affects',
+    );
+    my %users;
+    my %search_parameters;
+    my $soap = init_soap();
+    my $soapfault;
+    $soap->on_fault(sub { $soapfault = $_; });
+    for my $arg (@args) {
+	my ($key,$value) = split /:/, $arg, 2;
+	next unless $key;
+	if (exists $valid_keys{$key}) {
+	    push @{$search_parameters{$valid_keys{$key}}},
+	    $value if $value;
+	} elsif ($key =~/users?$/) {
+	    $users{$value} = 1 if $value;
+	} else {
+	    warn "select(): Unrecognised key: $key\n";
+	}
+    }
+    my %usertags;
+    for my $user (keys %users) {
+	my $ut = usertags($user);
+	next unless defined $ut and $ut ne "";
+	for my $tag (keys %{$ut}) {
+	    push @{$usertags{$tag}},
+	    @{$ut->{$tag}};
+	}
+    }
+    my $bugs = $soap->get_bugs(%search_parameters,
+	(keys %usertags)?(usertags=>\%usertags):()
+    )->result();
+    if (not defined $bugs) {
+	die "Error while retrieving bugs from SOAP server: $soapfault"
+	if $soapfault;
+    }
 
     return $bugs;
 }
@@ -214,22 +216,22 @@ sub versions {
 
     my @args = @_;
     my %valid_keys = (package => 'package',
-		      pkg     => 'package',
-		      src => 'source',
-		      source => 'source',
-		      time => 'time',
-		      binary => 'no_source_arch',
-		      notsource => 'no_source_arch',
-		      archs => 'return_archs',
-		      displayarch => 'return_archs',
-                      );
+                      pkg     => 'package',
+                      src => 'source',
+                      source => 'source',
+                      time => 'time',
+                      binary => 'no_source_arch',
+                      notsource => 'no_source_arch',
+                      archs => 'return_archs',
+                      displayarch => 'return_archs',
+    );
 
     my %search_parameters;
     my @archs = ();
     my @dists = ();
 
     for my $arg (@args) {
-        my ($key,$value) = split /:/, $arg, 2;
+	my ($key,$value) = split /:/, $arg, 2;
 	$value ||= "1";
 	if ($key =~ /^arch(itecture)?$/) {
 	    push @archs, $value;
