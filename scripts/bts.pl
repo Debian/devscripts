@@ -1119,7 +1119,7 @@ the summary of a bug.
 
 sub bts_summary {
     my $bug=checkbug(shift) or die "bts summary: change summary of what bug?\n";
-    my $msg=shift;
+    my $msg=shift || '';
     if (! length $msg) {
 	die "bts summary: set summary of $bug to what message number?\n";
     }
