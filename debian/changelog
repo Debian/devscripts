@@ -5,6 +5,8 @@ devscripts (2.10.36) UNRELEASED; urgency=low
     + Use a User-Agent header to indicate that the mail was sent via bts,
      rather a comment in the body of the generated e-mail. Thanks Thijs
      Kinkhorst and Josh Triplett. (Closes: #493884)
+    + Add a (largely undocumented) --toolname switch to allow tools calling
+      bts to add themselves to the User-Agent header.
   * checkbashisms: Flag "read without variable" and "read with options other
     than -r" separately to ensure that all uses are correctly matched. Thanks
     to Frank Lichtenheld for pointing this out via a related bug in lintian.

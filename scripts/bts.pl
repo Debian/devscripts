@@ -400,6 +400,7 @@ my $requestack=1;
 my $interactive=0;
 my $forceinteractive=0;
 my $ccemail="";
+my $toolname="";
 
 # Next, read read configuration files and then command line
 # The next stuff is boilerplate
@@ -540,6 +541,7 @@ GetOptions("help|h" => \$opt_help,
 	   "no-interactive" => sub { $interactive = 0; $forceinteractive = 0; },
 	   "force-interactive" => sub { $interactive = 1; $forceinteractive = 1; },
 	   "use-default-cc!" => \$use_default_cc,
+	   "toolname=s" => \$toolname,
 	   )
     or die "Usage: bts [options]\nRun $progname --help for more details\n";
 
@@ -601,6 +603,9 @@ if ($opt_cachemode) {
     }
 }
 
+if ($toolname) {
+    $toolname =" (using $toolname)";
+}
 
 if (@ARGV == 0) {
     bts_help();
@@ -2092,7 +2097,7 @@ sub send_mail {
     $message   .= "X-Debbugs-No-Ack: Yes\n" if $requestack==0;
     $message   .= "Subject: $subject\n"
 	       .  "Date: $date\n"
-               .  "User-Agent: devscripts bts/$version\n"
+               .  "User-Agent: devscripts bts/$version$toolname\n"
                .  "Message-ID: <$msgid>\n"
                .  "\n";
 
@@ -2232,7 +2237,7 @@ sub mailbtsall {
 	$header   .= "Cc: $ccemail\n" if length $ccemail;
 	$header   .= "X-Debbugs-No-Ack: Yes\n" if $requestack==0;
 	$header   .= "Subject: $subject\n"
-		  .  "User-Agent: devscripts bts/$version\n"
+		  .  "User-Agent: devscripts bts/$version$toolname\n"
 		  .  "\n";
 
 	$body = addfooter($body);
@@ -2266,7 +2271,7 @@ sub mailbtsall {
 	    } else {
 		$ccemail =~ s/ //g;
 		my @args;
-		@args = ("-s", $subject, "-a", "User-Agent: devscripts bts/$version", $btsemail);
+		@args = ("-s", $subject, "-a", "User-Agent: devscripts bts/$version$toolname", $btsemail);
 		push(@args, "-c", "$ccemail") if $ccemail;
 		push(@args, "-a", "X-Debbugs-No-Ack: Yes")
 		    if $requestack==0;
