@@ -2092,11 +2092,9 @@ sub send_mail {
     $message   .= "X-Debbugs-No-Ack: Yes\n" if $requestack==0;
     $message   .= "Subject: $subject\n"
 	       .  "Date: $date\n"
-               .  "X-BTS-Version: $version\n"
+               .  "User-Agent: devscripts bts/$version\n"
                .  "Message-ID: <$msgid>\n"
-               .  "\n"
-               .  "# Automatically generated email from bts,"
-                  . " devscripts version $version\n";
+               .  "\n";
 
     $body = addfooter($body);
     $body = confirmmail($message, $body);
@@ -2234,10 +2232,8 @@ sub mailbtsall {
 	$header   .= "Cc: $ccemail\n" if length $ccemail;
 	$header   .= "X-Debbugs-No-Ack: Yes\n" if $requestack==0;
 	$header   .= "Subject: $subject\n"
-		  .  "X-BTS-Version: $version\n"
-		  .  "\n"
-		  .  "# Automatically generated email from bts,"
-		  . " devscripts version $version\n";
+		  .  "User-Agent: devscripts bts/$version\n"
+		  .  "\n";
 
 	$body = addfooter($body);
 	$body = confirmmail($header, $body);
@@ -2259,7 +2255,6 @@ sub mailbtsall {
 	$SIG{'PIPE'} = sub { die "bts: pipe for mail broke\n"; };
 	if ($pid) {
 	    # parent
-	    print MAIL "# Automatically generated email from bts, devscripts version $version\n";
 	    print MAIL $body;
 	    close MAIL or die "bts: mail: $!\n";
 	}
@@ -2271,7 +2266,7 @@ sub mailbtsall {
 	    } else {
 		$ccemail =~ s/ //g;
 		my @args;
-		@args = ("-s", $subject, "-a", "X-BTS-Version: $version", $btsemail);
+		@args = ("-s", $subject, "-a", "User-Agent: devscripts bts/$version", $btsemail);
 		push(@args, "-c", "$ccemail") if $ccemail;
 		push(@args, "-a", "X-Debbugs-No-Ack: Yes")
 		    if $requestack==0;
