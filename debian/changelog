@@ -12,8 +12,10 @@ devscripts (2.10.36) UNRELEASED; urgency=low
     to Frank Lichtenheld for pointing this out via a related bug in lintian.
   * debsign: When copying .changes files from a remote host, attempt to process
     each copied file if a wildcard was used in the filename (Closes: #491627)
-  * tagpending: Fix a typo in the help output. Thanks Thijs Kinkhorst.
-    (Closes: #494131)
+  * tagpending:
+    + Fix a typo in the help output. Thanks Thijs Kinkhorst. (Closes: #494131)
+    + Use the new "bts --toolname" switch instead of an in-body comment to
+      indicate that tagpending was used.
 
   [ Stefano Zacchiroli ]
   * bts: add support for the fake "gift" tag. It is to be used as a shorthand

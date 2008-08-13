@@ -34,7 +34,6 @@ use Devscripts::Debbugs;
 sub bugs_info;
 
 my $progname = basename($0);
-my $prog_header = "# via $progname";
 
 my ($opt_help, $opt_version, $opt_verbose, $opt_noact, $opt_silent);
 my ($opt_online, $opt_confirm, $opt_to, $opt_wnpp, $opt_comments);
@@ -279,7 +278,7 @@ if (@to_tag or @wnpp_to_tag) {
 	    }
 	}
 
-	$comments = "\n \n " . $header . "\n \n" . $comments . " \n"
+	$comments = $header . "\n \n" . $comments . " \n"
 	    if $comments;
     }
 }
@@ -297,7 +296,7 @@ if (@to_tag) {
 }
 
 my %packages = map { $_ => 1 } @sourcepkgs;
-my @bts_args = ("bts");
+my @bts_args = ("bts", "--toolname", $progname);
 
 if ($opt_noact and not $opt_interactive) {
     bugs_info;
@@ -319,10 +318,6 @@ if ($opt_noact and not $opt_interactive) {
 
     if (@to_tag) {
 	push(@bts_args, "package", join " ", keys(%packages));
-	push(@bts_args, $prog_header);
-	# Don't add the version header twice if there are
-	# both package and wnpp bugs
-	$prog_header = '';
 
 	if ($comments) {
 	    $comments =~ s/\n\n/\n/sg;
@@ -341,7 +336,6 @@ if ($opt_noact and not $opt_interactive) {
     if (@wnpp_to_tag) {
 	push(@bts_args, ".") if scalar @bts_args > 1;
 	push(@bts_args, "package wnpp");
-	push(@bts_args, $prog_header) if length $prog_header;
 
 	if ($comments) {
 	    $comments =~ s/\n\n/\n/sg;
