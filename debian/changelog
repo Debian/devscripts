@@ -29,7 +29,12 @@ devscripts (2.10.36) UNRELEASED; urgency=low
   [ Joey Hess ]
   * bts: Add new 'summary' command.
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 28 Jul 2008 20:06:49 +0100
+  [ Patrick Schoenfeld ]
+  * build-rdeps: Add a --distribution parameter to enable selection of
+    another distribution instead of unstable
+    (Closes: #471498)
+
+ -- Patrick Schoenfeld <schoenfeld@in-medias-res.com>  Thu, 14 Aug 2008 22:22:40 +0200
 
 devscripts (2.10.35) unstable; urgency=low
 

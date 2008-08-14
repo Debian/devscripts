@@ -39,6 +39,10 @@ Run apt-get update before searching for build-depends.
 
 Use sudo when running apt-get update. Has no effect if -u is ommitted.
 
+=item B<--distribution>
+
+Select another distribution, which is searched for build-depends.
+
 =item B<-m> B<--print-maintainer>
 
 Print the value of the maintainer field for each package.
@@ -78,6 +82,7 @@ my $opt_update;
 my $opt_sudo;
 my $opt_maintainer;
 my $opt_mainonly;
+my $opt_distribution;
 
 if (!(-x $dctrl)) {
 	die "$progname: Fatal error. grep-dctrl is not available.\nPlease install the 'dctrl-tools' package.\n";
@@ -102,13 +107,15 @@ usage: $progname packagename
 Searches for all packages that build-depend on the specified package.
 
 Options:
-   -u, --update            Run apt-get update before searching for build-depends.
-                           (needs root privileges)
-   -s, --sudo              Use sudo when running apt-get update
-                           (has no effect when -u is ommitted)
-   -d, --debug             Enable the debug mode
-   -m, --print-maintainer  Print the maintainer information (experimental)
-   --only-main             Ignore contrib and non-free
+   -u, --update                  Run apt-get update before searching for build-depends.
+                                 (needs root privileges)
+   -s, --sudo                    Use sudo when running apt-get update
+                                 (has no effect when -u is ommitted)
+   -d, --debug                   Enable the debug mode
+   -m, --print-maintainer        Print the maintainer information (experimental)
+   --distribution distribution   Select a distribution to search for build-depends
+                                 (Default: unstable)
+   --only-main                   Ignore contrib and non-free
 
 EOT
 version;
@@ -188,6 +195,7 @@ GetOptions(
 	"u|update" => \$opt_update,
 	"s|sudo" => \$opt_sudo,
 	"m|print-maintainer" => \$opt_maintainer,
+	"distribution=s" => \$opt_distribution,
 	"only-main" => \$opt_mainonly,
 	"d|debug" => \$opt_debug,
 	"h|help" => sub { usage; },
@@ -211,6 +219,11 @@ if ($opt_update) {
 	}
 	push(@cmd, 'apt-get', 'update');
 	system @cmd;
+}
+
+if ($opt_distribution) {
+	print STDERR "DEBUG: Setting distribution to $opt_distribution" if ($opt_debug);
+	$source_pattern = ".*_dists_" . $opt_distribution . "_.*Sources\$";
 }
 
 # Find sources files
