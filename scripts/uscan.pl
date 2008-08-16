@@ -871,7 +871,7 @@ sub process_watchline ($$$$$$)
 	# Strip comments
 	$content =~ s/<!-- .*?-->//sg;
 	# Is there a base URL given?
-	if ($content =~ /<\s*base\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/) {
+	if ($content =~ /<\s*base\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/i) {
 	    # Ensure it ends with /
 	    $urlbase = "$2/";
 	    $urlbase =~ s%//$%/%;
