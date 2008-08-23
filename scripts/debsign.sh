@@ -364,7 +364,7 @@ dosigning() {
 	else withecho scp "$remotehost:$remotecommands" "$commands"
 	fi
 
-	if [ -n "$changes" ] && echo "$changes" | grep -q "[\*\?\[\]]"
+	if [ -n "$changes" ] && echo "$changes" | egrep -q '[][*?]'
 	then
 	    for changes in $changes
 	    do
