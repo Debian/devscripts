@@ -38,7 +38,11 @@ devscripts (2.10.36) UNRELEASED; urgency=low
   * uscan: Correct the <base ...> regex to be case-insensitive.  (Closes:
     #495265)
 
- -- Patrick Schoenfeld <schoenfeld@in-medias-res.com>  Thu, 14 Aug 2008 22:22:40 +0200
+  [ Christoph Berg ]
+  * debsign: Fix debsign -r dir/*.changes, and do some QA on the manpage.
+    Continue with next file if an already existing signature is kept.
+
+ -- Christoph Berg <myon@debian.org>  Sat, 23 Aug 2008 16:01:52 +0200
 
 devscripts (2.10.35) unstable; urgency=low
 

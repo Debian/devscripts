@@ -364,12 +364,12 @@ dosigning() {
 	else withecho scp "$remotehost:$remotecommands" "$commands"
 	fi
 
-	if [ -n "$changes" ] && echo "$changes" | grep -q "\*"
+	if [ -n "$changes" ] && echo "$changes" | grep -q "[\*\?\[\]]"
 	then
 	    for changes in $changes
 	    do
 		printf "\n"
-		dsc=`echo $changes | \
+		dsc=`echo "${remotedir+$remotedir/}$changes" | \
 		    perl -pe 's/\.changes$/.dsc/; s/(.*)_(.*)_(.*)\.dsc/\1_\2.dsc/'`
 		dosigning;
 	    done
@@ -387,7 +387,7 @@ dosigning() {
 
 	check_already_signed "$changes" "changes" && {
 	   echo "Leaving current signature unchanged." >&2
-	    exit 0
+	   return
 	}
 	if [ -n "$maint" ]
 	then maintainer="$maint"
@@ -480,7 +480,7 @@ dosigning() {
 
 	    if [ -n "$remotehost" ]
 	    then
-		withecho scp "$changes" "$remotehost:$remotechanges"
+		withecho scp "$changes" "$remotehost:$remotedir"
 		PRECIOUS_FILES=$(($PRECIOUS_FILES - 1))
 	    fi
 
@@ -496,7 +496,7 @@ dosigning() {
 
 	check_already_signed "$commands" commands && {
 	    echo "Leaving current signature unchanged." >&2
-	    exit 0
+	    return
 	}
     
     
@@ -563,7 +563,7 @@ for valid format" >&2;
 
 	check_already_signed "$dsc" dsc && {
 	    echo "Leaving current signature unchanged." >&2
-	    exit 0
+	    return
 	}
 	if [ -n "$maint" ]
 	then maintainer="$maint"

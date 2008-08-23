@@ -2,7 +2,7 @@
 .SH NAME
 debsign \- sign a Debian changes and dsc file pair using GPG/PGP
 .SH SYNOPSIS
-\fBdebsign\fR [options] [\fIchanges-file\fR|\fIdsc-file\fR|\fIcommands-file\fR]
+\fBdebsign\fR [options] [\fIchanges-file\fR|\fIdsc-file\fR|\fIcommands-file\fR ...]
 .SH DESCRIPTION
 \fBdebsign\fR mimics the signing aspects (and bugs) of
 \fBdpkg-buildpackage\fR(1).  It takes either an unsigned \fI.dsc\fR
@@ -28,9 +28,9 @@ machine where it is unsafe to sign it; they need then only transfer
 the small \fI.dsc\fR and \fI.changes\fR files to a safe machine and
 then use the \fBdebsign\fR program to sign them before
 transferring them back.  This process can be automated in two ways.
-If the files to be signed live on the remote machine, the \fB\-r\fR
+If the files to be signed live on the \fBremote\fR machine, the \fB\-r\fR
 option may be used to copy them to the local machine and back again
-after signing.  If the files live on the local machine, then they may
+after signing.  If the files live on the \fBlocal\fR machine, then they may
 be transferred to the remote machine for signing using
 \fBdebrsign\fR(1).
 .PP
@@ -42,9 +42,9 @@ configuration files, as described below.
 The \fI.changes\fR and \fI.dsc\fR files live on the specified remote
 host.  In this case, a \fI.changes\fR file must be explicitly named,
 with an absolute directory or one relative to the remote home
-directory.  SSH will be used for the copying.  The
+directory.  \fBscp\fR will be used for the copying.  The
 \fR[\fIusername\fB@\fR]\fIremotehost\fB:\fIchanges\fR syntax is
-permitted as an alternative.
+permitted as an alternative.  Wildcards (\fB*\fR etc.) are allowed.
 .TP
 .B \-p\fIprogname\fR
 \fIprogname\fR is one of \fBpgp\fR or \fBgpg\fR, and specifies which
@@ -82,7 +82,7 @@ to mimic the behaviour of \fBdpkg-buildpackage\fR when determining the
 name of the \fI.changes\fR file.
 .TP
 \fB\-\-multi\fR
-Multiarch changes mode: This signifies that \fBdebrsign\fR should
+Multiarch changes mode: This signifies that \fBdebsign\fR should
 use the most recent file with the name pattern
 \fIpackage_version_*+*.changes\fR as the changes file, allowing for the
 changes files produced by \fBdpkg-cross\fR.
@@ -124,7 +124,8 @@ And this is the \fB\-k\fR option.
 .BR sha1sum (1),
 .BR sha256sum (1),
 .BR gpg (1),
-.BR pgp (1)
+.BR pgp (1),
+.BR scp (1)
 and
 .BR devscripts.conf (5).
 .SH AUTHOR
