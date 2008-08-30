@@ -10,6 +10,10 @@ devscripts (2.10.36) UNRELEASED; urgency=low
     + If the BTS specifies a character set when serving an HTML file, add an
       equivalent META tag to the cached file so that it is rendered correctly.
       (pkgreport.cgi's output is now UTF-8).
+    + Fix the cache file mangling for status mboxes, maintainer links, links
+      to resolved bugs, second and subsequent bug links and version graphs.
+      In the process (hopefully) make a number of the mangles more resilient
+      to BTS HTML changes.
   * checkbashisms: Flag "read without variable" and "read with options other
     than -r" separately to ensure that all uses are correctly matched. Thanks
     to Frank Lichtenheld for pointing this out via a related bug in lintian.

@@ -2678,7 +2678,10 @@ sub download_attachments {
 	}
 	elsif ($cachemode eq 'full' and $msg eq 'versions') {
 	    $bug2filename{$msg} = $filename;
+	    # Ensure we always download the full size images for
+	    # version graphs, without the informational links
 	    $ref =~ s%;info=1%;info=0%;
+	    $ref =~ s%(;|\?)(height|width)=\d+%$1%g;
 	    # already downloaded?
 	    next if -f $bug2filename{$msg} and not $refreshmode;
 	}
@@ -2818,32 +2821,38 @@ sub mangle_cache_file {
 			s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(bugreport\.cgi[^\"]*)">(.+?)</a>%$3 (<a$1 href="$btscgiurl$2">online</a>)%i;
 		    }
 		} else {
-		    s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(bugreport\.cgi[^\?]*\?.*?bug=(\d+))">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+		    s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(bugreport\.cgi[^\?]*\?.*?bug=(\d+))"(.*?)>(.+?)</a>%<a$1 href="$3.html"$4>$5</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
 		}
-	    }
-	    else {
-		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)(pkgreport\.cgi\?(?:pkg|maint)=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+	    } else {
+		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(pkgreport\.cgi\?(?:pkg|maint)=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%gi;
 		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(pkgreport\.cgi\?src=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="src_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
 		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(pkgreport\.cgi\?submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="from_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
 		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(pkgreport\.cgi\?.*?;?archive=([^\"&;]+);submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="from_$4_3Barchive_3D$3.html">$5</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
-		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(pkgreport\.cgi\?.*?;?package=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(pkgreport\.cgi\?.*?;?package=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%gi;
 		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(bugspam\.cgi[^\"]+)">%<a$1 href="$btscgiurl$2">%i;
 		s%<a((?: class=\".*?\")?) href="/([0-9]+?)">(.+?)</a>%<a$1 href="$2.html">$3</a> (<a$1 href="$btsurl$2">online</a>)%i;
 
 		# Version graphs
-		# - remove 'package='
-		s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?)package=([^;]+)(;[^\"]+)\">%$1$2$3">%gi;
-		# - replace ';found=' with '.f.' and ';fixed=' with '.fx.'
-		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?[^;]*);found=([^\"]+)\">%$1.f.$2">%gi;
-		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?[^;]*);fixed=([^\"]+)\">%$1.fx.$2">%gi;
+		# - remove 'package=' and move the package to the front
+		s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?)([^\"]+)package=([^;\"]+)([^\"]+\"|\")>%$1$3;$2$4>%gi;
+		# - replace 'found=' with '.f.' and 'fixed=' with '.fx.'
+		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?)(.*?;)found=([^\"]+)\">%$1$2.f.$3">%i;
+		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?)(.*?;)fixed=([^\"]+)\">%$1$2.fx.$3">%i;
+		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?found=)([^\"]+)\">%$1.f.$2">%i;
+		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?fixed=)([^\"]+)\">%$1.fx.$2">%i;
 		# - replace '%2F' or '%2C' (a URL-encoded / or ,) with '.'
 		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?[^\%]*)\%2[FC]([^\"]+)\">%$1.$2">%gi;
 		# - display collapsed graph images at 25%
-		s%(<img[^>]* src=\"[^\"]+);width=[^;]+;height=[^;]+;collapse=1\">%$1.co" width="25\%" height="25\%">%gi;
-		# - remove ;info=1
-		s%(<a[^>]* href=\"(?:/cgi-bin/)?version\.cgi\?[^\"]+);info=1">%$1">%i;
+		s%(<img[^>]* src=\"[^\"]+);collapse=1([^\"]+)\">%$1$2.co" width="25\%" height="25\%">%gi;
+		#   - and link to the collapsed graph
+		s%(<a[^>]* href=\"[^\"]+);collapse=1([^\"]+)\">%$1$2.co">%gi;
+		# - remove any other parameters
+		1 while s%((?:<img[^>]* src|<a[^>]* href)=\"(?:/cgi-bin/)?version\.cgi\?[^\"]+);(?:\w+=\d+)([^>]+)\>%$1$2>%gi;
 		# - remove any +s (encoded spaces)
 		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?[^\+]*)\+([^\"]+)\">%$1$2">%gi;
+		# - remove trailing ";" and ";." from previous substitutions
+		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?[^\"]+);\.(.*?)>%$1.$2>%gi;
+		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?[^\"]+);\">%$1">%gi;
 		# - final reference should be $package.$versions[.co].png
 		s%(<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?([^\"]+)(\"[^>]*)>%$1$2.png$3>%gi;
 	    }
@@ -3009,10 +3018,11 @@ sub href_to_filename {
 	    $filename = "$bug/$msg$fileext";
 	}
     }
-    elsif ($href =~ m%<a(?: class=\".*?\")? href="(?:/cgi-bin/)?bugreport\.cgi([^\?]*)\?([^"]*);?bug=(\d+).*?">%) {
+    elsif ($href =~ m%<a(?: class=\".*?\")? href="(?:/cgi-bin/)?bugreport\.cgi([^\?]*)\?([^"]*);?bug=(\d+)(.*?)".*?>%) {
 	my $urlfilename = $1;
 	my $ref = $2;
 	my $bug = $3;
+	$ref .= $4 if defined $4;
 	$ref =~ s/&(?:amp;)?/;/g;  # normalise all hrefs
 	$ref =~ s/;archive=(yes|no)\b//;
 	$ref =~ s/%3D/=/g;
@@ -3050,13 +3060,22 @@ sub href_to_filename {
 	my $refs = $2;
 	$refs = $1 if not defined $refs;
 
-	$refs =~ s/package=//;
-	$refs =~ s/;info=1//;
+	# Remove package= and make sure the package name is at the
+	# start of the filename
+	$refs =~ s/(.*?)package=(.*?)(;.*?|)$/$2;$1$3/;
+	# Package versions
 	$refs =~ s/;found=/.f./g;
 	$refs =~ s/;fixed=/.fx./g;
+	# Replace encoded "/" and "," characters with "."
 	$refs =~ s/%2[FC]/./g;
+	# Remove encoded spaces
 	$refs =~ s/\+//g;
-	$refs =~ s/;width=[^;]+;height=[^;]+;collapse=1/.co/;
+	# Is this a "collapsed" graph?
+	$refs =~ s/;collapse=1(.*)/$1.co/;
+	# Remove any other parameters
+	$refs =~ s/(^|;)(\w+)=\d+//g;
+	# and tidy up any remaining separators
+	$refs =~ s/;//g;
 
 	$msg = 'versions';
 	$filename = "$refs.png";
