@@ -159,12 +159,18 @@ The first change detected in the changelog will be unfolded to form a single lin
 summary. If multiple changes were detected then an editor will be spawned to
 allow the message to be fine-tuned.
 
+=item B<bzr>
+
+If the changelog entry used for the commit message closes any bugs then --fixes
+options to "bzr commit" will be generated to associate the revision and the bugs.
+
 =cut
 
 use warnings;
 use strict;
 use Getopt::Long;
 use Cwd;
+use Dpkg::Changelog;
 use File::Basename;
 use File::Temp;
 my $progname = basename($0);
@@ -420,6 +426,18 @@ sub action {
     return (system($prog, @_) != 0) ? 0 : 1;
 }
 
+sub bzr_find_fixes {
+    my $message=shift;
+
+    my $debian_closes = Dpkg::Changelog::find_closes($message);
+    my $launchpad_closes = Dpkg::Changelog::find_launchpad_closes($message);
+
+    my @fixes_arg = ();
+    map { push(@fixes_arg, ("--fixes", "deb:".$_)) } @$debian_closes;
+    map { push(@fixes_arg, ("--fixes", "lp:".$_)) } @$launchpad_closes;
+    return @fixes_arg;
+}
+
 sub commit {
     my $message=shift;
     
@@ -427,7 +445,7 @@ sub commit {
 	if (@files_to_commit and $all);
 
     my $action_rc;  # return code of external command
-    if ($prog =~ /^(cvs|svn|svk|bzr|hg)$/) {
+    if ($prog =~ /^(cvs|svn|svk|hg)$/) {
         $action_rc = $diffmode
 	    ? action($prog, "diff", @files_to_commit)
 	    : action($prog, "commit", "-m", $message, @files_to_commit);
@@ -470,6 +488,15 @@ sub commit {
             @files_to_commit,
         ) if @files_to_commit;
 	$action_rc = action($prog, $diffmode ? "diff" : "commit", @args);
+    }
+    elsif ($prog eq 'bzr') {
+        if ($diffmode) {
+            $action_rc = action($prog, "diff", @files_to_commit);
+        } else {
+            my @fixes_arg = bzr_find_fixes($message);
+            $action_rc = action($prog, "commit", "-m", $message,
+                    @fixes_arg, @files_to_commit);
+        }
     }
     else {
 	die "debcommit: unknown program $prog";
