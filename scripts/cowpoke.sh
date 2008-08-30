@@ -197,7 +197,11 @@ if [ -n "$SIGN_KEYID" ]; then
 	read -e yesno
 	case "$yesno" in
 	    YES | yes)
-		debsign "-k$SIGN_KEYID" -r "root@$BUILDD_HOST" "$RESULT_DIR/${PACKAGE}_$CHANGES"
+		if [ -z "$BUILDD_ROOTCMD" ] ; then
+		    debsign "-k$SIGN_KEYID" -r "root@$BUILDD_HOST" "$RESULT_DIR/${PACKAGE}_$CHANGES"
+		else
+		    debsign "-k$SIGN_KEYID" -r "$BUILDD_USER@$BUILDD_HOST" "$RESULT_DIR/${PACKAGE}_$CHANGES"
+		fi
 
 		if [ -n "$UPLOAD_QUEUE" ]; then
 		    while true; do

@@ -18,6 +18,8 @@ devscripts (2.10.36) UNRELEASED; urgency=low
   * checkbashisms: Flag "read without variable" and "read with options other
     than -r" separately to ensure that all uses are correctly matched. Thanks
     to Frank Lichtenheld for pointing this out via a related bug in lintian.
+  * cowpoke: If BUILDD_ROOTCMD is set, use BUILDD_USER for debrsigning, rather
+    than root. Patch from Cyril Brulebois. (Closes: #495536)
   * debcommit: When committing to a bzr repository with a message including
     bug closures, pass corresponding --fixes to bzr. Thanks James Westby for
     the patch. (Closes: #496643)
