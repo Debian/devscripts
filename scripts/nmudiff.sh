@@ -316,10 +316,13 @@ X-NMUDIFF-Version: ###VERSION###
 
 $TAGS
 
-Hi,
+[Replace XX with correct value]
+Dear maintainer,
 
-The following is the diff for my $SOURCE $VERSION NMU.
+I've prepared an NMU for $SOURCE (versioned as $VERSION) and uploaded it
+to DELAYED/XX. Please feel free to tell me if I should delay it longer.
 
+Regards.
 EOF
 
     cat ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff >> "$TMPNAM"
@@ -352,9 +355,13 @@ else # NMUDIFF_MUTT=yes
     cat <<EOF > "$TMPNAM"
 $TAGS
 
-Hi,
+[Replace XX with correct value]
+Dear maintainer,
 
-Attached is the diff for my $SOURCE $VERSION NMU.
+I've prepared an NMU for $SOURCE (versioned as $VERSION) and uploaded it
+to DELAYED/XX. Please feel free to tell me if I should delay it longer.
+
+Regards.
 EOF
 
     mutt -s "$SOURCE: diff for NMU version $VERSION" -i "$TMPNAM" \
