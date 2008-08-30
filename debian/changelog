@@ -61,8 +61,11 @@ devscripts (2.10.36) UNRELEASED; urgency=low
   [ Mohammed Adnène Trojette ]
   * nmudiff: Use a friendlier template inspired from Lucas Nussbaum's
     patch. (Closes: #496628)
-  * namecheck: New script by Steve Kemp included to check project names
-    are not already taken. (Closes: #484271)
+  * namecheck:
+      + New script by Steve Kemp included to check project names are not
+        already taken. (Closes: #484271)
+      + Remove reference to a LICENSE file.
+      + Don't lose the project name during the check.
   * bts: document that the cache auto-cleaning is overzealous on noatime
     partitions. Patch from intrigeri <intrigeri@boum.org>. (Closes: #488486)
 

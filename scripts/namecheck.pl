@@ -55,7 +55,6 @@ Copyright (c) 2008 by Steve Kemp.  All rights reserved.
 This module is free software;
 you can redistribute it and/or modify it under
 the same terms as Perl itself.
-The LICENSE file contains the full text of the license.
 
 =cut
 
@@ -202,12 +201,12 @@ sub testSites
         #  Find the hostname we're downloading; just to show the user
         # something is happening.
         #
-        my $name = $url;
-        if ( $name =~ /:\/\/([^\/]+)\// )
+        my $urlname = $url;
+        if ( $urlname =~ /:\/\/([^\/]+)\// )
         {
-            $name = $1;
+            $urlname = $1;
         }
-        print sprintf "Testing %20s", $name;
+        print sprintf "Testing %20s", $urlname;
 
 
         #
