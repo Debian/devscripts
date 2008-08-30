@@ -205,6 +205,10 @@ if [ "$NMUDIFF_MUTT" = no ]; then
 	exit 1
     fi
     if [ -n "$FROMNAME" ]; then
+	# If $FROM looks like "Name <email@address>" then extract just the address
+	if [ "$FROM" = "$(echo "$FROM" | sed -ne '/^\(.*\) *<\(.*\)> *$/p')" ]; then
+	    FROM="$(echo "$FROM" | sed -ne 's/^\(.*\) *<\(.*\)> *$/\2/p')"
+	fi
 	FROM="$FROMNAME <$FROM>"
     fi
 fi
