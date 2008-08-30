@@ -193,12 +193,19 @@ if [ "$NMUDIFF_MUTT" = yes ] && ! command -v mutt > /dev/null 2>&1; then
 fi
 
 if [ "$NMUDIFF_MUTT" = no ]; then
+    if [ -z "$FROM" ]; then
+	: ${FROMNAME:="$DEBFULLNAME"}
+	: ${FROMNAME:="$NAME"}
+    fi
     : ${FROM:="$DEBEMAIL"}
     : ${FROM:="$EMAIL"}
     if [ -z "$FROM" ]; then
 	echo "$PROGNAME: must set email address either with DEBEMAIL environment variable" >&2
 	echo "or EMAIL environment variable or using --from command line option." >&2
 	exit 1
+    fi
+    if [ -n "$FROMNAME" ]; then
+	FROM="$FROMNAME <$FROM>"
     fi
 fi
 

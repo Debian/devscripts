@@ -52,10 +52,10 @@ devscripts configuration files; see below.
 \fB\-\-from\fR \fIEMAIL\fR
 If using the sendmail (\fB\-\-no\-mutt\fR) option, then the email to the
 BTS will be sent using the name and address in the environment
-variable DEBEMAIL.  If this is not set, then the variable EMAIL will
-be used instead.  These can be overridden using the \fB\-\-from\fR
-option.  The program will not work in this case if an email address
-cannot be determined.
+variables DEBEMAIL and DEBFULLNAME.  If these are not set, then the
+variables EMAIL and NAME will be used instead.  These can be overridden
+using the \fB\-\-from\fR option.  The program will not work in this case
+if an email address cannot be determined.
 .TP
 \fB\-\-no\-conf\fR, \fB\-\-noconf\fR
 Do not read any configuration files.  This can only be used as the
