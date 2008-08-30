@@ -3573,7 +3573,8 @@ If this is set, specifies a sendmail command to use instead of
 =item BTS_ONLY_NEW
 
 Download only new bugs when caching. Do not check for updates in
-bugs we already have.
+bugs we already have.  The default is I<no>.  Same as the --only-new
+command line option.
 
 =item BTS_SMTP_HOST
 

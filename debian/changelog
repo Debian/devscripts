@@ -14,6 +14,7 @@ devscripts (2.10.36) UNRELEASED; urgency=low
       to resolved bugs, second and subsequent bug links and version graphs.
       In the process (hopefully) make a number of the mangles more resilient
       to BTS HTML changes.
+    + Mention in the manpage that BTS_ONLY_NEW corresponds to --only-new.
   * checkbashisms: Flag "read without variable" and "read with options other
     than -r" separately to ensure that all uses are correctly matched. Thanks
     to Frank Lichtenheld for pointing this out via a related bug in lintian.
