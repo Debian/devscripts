@@ -779,7 +779,11 @@ and BTS_CACHE has not been set to "no"), then any page requested by
 "bts show" will automatically be cached, and be available offline
 thereafter.  Pages which are automatically cached in this way will be
 deleted on subsequent "bts show|bugs|cache" invocations if they have
-not been accessed in 30 days.
+not been accessed in 30 days.  Warning: on a filesystem mounted with
+the "noatime" option, running "bts show|bugs" does not update the cache
+files' access times; a cached bug will then be subject to auto-cleaning
+30 days after its initial download, even if it has been accessed in the
+meantime.
 
 Any other B<bts> commands following this on the command line will be
 executed after the browser has been exited.
