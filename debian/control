@@ -98,6 +98,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - mk-build-deps: Given a package name and/or control file, generate a binary
     package which may be installed to satisfy the build-dependencies of the
     given packages. [equivs]
+  - namecheck: Check project names are not already taken.
   - nmudiff: mail a diff of the current package against the previous version
     to the BTS to assist in tracking NMUs [patchutils, mutt]
   - plotchangelog: view a nice plot of the data in a changelog file

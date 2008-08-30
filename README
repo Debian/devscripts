@@ -174,6 +174,8 @@ And now, in mostly alphabetical order, the scripts:
   binary package which may be installed to satisfy the build-dependencies
   of the given package. [equivs]
 
+- namecheck: Check project names are not already taken.
+
 - nmudiff: prepare a diff of this version (presumably an NMU against the
   previously released version (as per the changelog) and submit the diff
   to the BTS. [patchutils, mutt]
