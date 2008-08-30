@@ -2543,7 +2543,13 @@ sub download {
     print "Downloading $url ... "
 	if ! $quiet and $manual and $thing ne "css/bugs.css";
     IO::Handle::flush(\*STDOUT);
-    my ($ret, $msg, $livepage) = bts_mirror($url, $timestamp, $forcedownload);
+    my ($ret, $msg, $livepage, $contenttype) = bts_mirror($url, $timestamp, $forcedownload);
+    my $charset = $contenttype || '';
+    if ($charset =~ m/charset=(.*?)(;|\Z)/) {
+	$charset = $1;
+    } else {
+	$charset = "";
+    }
     if ($ret == MIRROR_UP_TO_DATE) {
 	# we have an up-to-date version already, nothing to do
 	# and $timestamp is guaranteed to be well-defined
@@ -2579,7 +2585,7 @@ sub download {
 	my $cachefile=cachefile($thing,$thgopts);
 	open (OUT_CACHE, ">$cachefile") or die "bts: open $cachefile: $!\n";
 
-	$data = mangle_cache_file($data, $thing, $bug2filename, $timestamp);
+	$data = mangle_cache_file($data, $thing, $bug2filename, $timestamp, $charset ? $contenttype : '');
 	print OUT_CACHE $data;
 	close OUT_CACHE or die "bts: problems writing to $cachefile: $!\n";
 
@@ -2765,7 +2771,7 @@ sub download_mbox {
 # Mangle downloaded file to work in the local cache, so
 # selectively modify the links
 sub mangle_cache_file {
-    my ($data, $thing, $bug2filename, $timestamp) = @_;
+    my ($data, $thing, $bug2filename, $timestamp, $ctype) = @_;
     my $fullmode = ! ref $bug2filename;
 
     # Undo unnecessary '+' encoding in URLs
@@ -2773,6 +2779,9 @@ sub mangle_cache_file {
     my $time=localtime(abs($timestamp));
     $data =~ s%(<BODY.*>)%$1<p><em>[Locally cached on $time by devscripts version $version]</em></p>%i;
     $data =~ s%href="/css/bugs.css"%href="bugs.css"%;
+    if ($ctype) {
+	$data =~ s%(<HEAD.*>)%$1<META HTTP-EQUIV="Content-Type" CONTENT="$ctype">%i;
+    }
 
     my @data;
     # We have to distinguish between release-critical pages and normal BTS
@@ -3428,7 +3437,7 @@ sub bts_mirror {
 	    # else OK
 	}
 
-	return (MIRROR_DOWNLOADED, $response->status_line, $response->content);
+	return (MIRROR_DOWNLOADED, $response->status_line, $response->content, $response->header('Content-Type'));
     } else {
 	return (MIRROR_ERROR, $response->status_line);
     }

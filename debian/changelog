@@ -7,6 +7,9 @@ devscripts (2.10.36) UNRELEASED; urgency=low
       Kinkhorst and Josh Triplett. (Closes: #493884)
     + Add a (largely undocumented) --toolname switch to allow tools calling
       bts to add themselves to the User-Agent header.
+    + If the BTS specifies a character set when serving an HTML file, add an
+      equivalent META tag to the cached file so that it is rendered correctly.
+      (pkgreport.cgi's output is now UTF-8).
   * checkbashisms: Flag "read without variable" and "read with options other
     than -r" separately to ensure that all uses are correctly matched. Thanks
     to Frank Lichtenheld for pointing this out via a related bug in lintian.
