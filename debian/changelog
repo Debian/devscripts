@@ -15,6 +15,8 @@ devscripts (2.10.36) UNRELEASED; urgency=low
       In the process (hopefully) make a number of the mangles more resilient
       to BTS HTML changes.
     + Mention in the manpage that BTS_ONLY_NEW corresponds to --only-new.
+    + Ensure that the "clone" command is always passed at least one new bug ID
+      (Closes: #497826) and that the new IDs are negative numbers.
   * checkbashisms: Flag "read without variable" and "read with options other
     than -r" separately to ensure that all uses are correctly matched. Thanks
     to Frank Lichtenheld for pointing this out via a related bug in lintian.

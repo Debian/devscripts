@@ -1022,7 +1022,7 @@ sub bts_status {
     }
 }
 
-=item clone <bug> [new IDs]
+=item clone <bug> <new ID> [<new ID> ...]
 
 The clone control command allows you to duplicate a bug report. It is useful
 in the case where a single report actually indicates that multiple distinct
@@ -1034,7 +1034,11 @@ duplicated bugs.  A new report is generated for each new ID.
 
 sub bts_clone {
     my $bug=checkbug(shift) or die "bts clone: clone what bug?\n";
-    @clonedbugs{@_} = (1) x @_;  # add these bug numbers to hash
+    @_ or die "bts clone: must specify at least one new ID\n";
+    foreach (@_) {
+	$_ =~ /^-\d+$/ or die "bts clone: new IDs must be negative numbers\n";
+	$clonedbugs{$_} = 1;
+    }
     mailbts("cloning $bug", "clone $bug " . join(" ",@_));
 }
 
