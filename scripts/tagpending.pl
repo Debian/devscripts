@@ -335,7 +335,7 @@ if ($opt_noact and not $opt_interactive) {
     }
     if (@wnpp_to_tag) {
 	push(@bts_args, ".") if scalar @bts_args > 1;
-	push(@bts_args, "package wnpp");
+	push(@bts_args, "package", "wnpp");
 
 	if ($comments) {
 	    $comments =~ s/\n\n/\n/sg;

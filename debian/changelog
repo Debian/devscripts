@@ -34,6 +34,8 @@ devscripts (2.10.36) UNRELEASED; urgency=low
     + Fix a typo in the help output. Thanks Thijs Kinkhorst. (Closes: #494131)
     + Use the new "bts --toolname" switch instead of an in-body comment to
       indicate that tagpending was used.
+    + Make the --wnpp option work again. Thanks gregor herrmann.
+      (Closes: #497820)
 
   [ Stefano Zacchiroli ]
   * bts: add support for the fake "gift" tag. It is to be used as a shorthand
