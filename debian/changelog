@@ -36,6 +36,8 @@ devscripts (2.10.36) UNRELEASED; urgency=low
       indicate that tagpending was used.
     + Make the --wnpp option work again. Thanks gregor herrmann.
       (Closes: #497820)
+  * uscan: Exit with the correct status when --watchfile was used.
+    (Closes: #498057)
 
   [ Stefano Zacchiroli ]
   * bts: add support for the fake "gift" tag. It is to be used as a shorthand

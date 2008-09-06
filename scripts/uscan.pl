@@ -447,7 +447,7 @@ if (defined $opt_watchfile) {
     # Are there any warnings to give if we're using dehs?
     $dehs_end_output=1;
     dehs_output if $dehs;
-    exit 0;
+    exit ($found ? 0 : 1);
 }
 
 # Otherwise we're scanning for watchfiles
