@@ -17,6 +17,10 @@ devscripts (2.10.36) UNRELEASED; urgency=low
     + Mention in the manpage that BTS_ONLY_NEW corresponds to --only-new.
     + Ensure that the "clone" command is always passed at least one new bug ID
       (Closes: #497826) and that the new IDs are negative numbers.
+    + No longer automatically CC the generated mail to the bug address if a
+      comment was made. Similar functionality may be implemented in the BTS
+      at a later date but in the meantime we'll avoid creating noise in the
+      bug logs. (Closes: #497748)
   * checkbashisms: Flag "read without variable" and "read with options other
     than -r" separately to ensure that all uses are correctly matched. Thanks
     to Frank Lichtenheld for pointing this out via a related bug in lintian.

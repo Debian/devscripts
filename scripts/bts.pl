@@ -195,9 +195,6 @@ Note that most shells do strip out such comments before they get to the
 program, unless the comment is quoted.  (Something like "bts
 severity #85942 normal" will not be treated as a comment!)
 
-In most cases, adding a comment will cause the generated mail to be CCed
-to the bug report, in addition to control@bugs.debian.org.
-
 You can specify multiple commands by separating them with a single dot,
 rather like B<update-rc.d>; a single comma may also be used; all the
 commands will then be sent in a single mail. For example (quoting where
@@ -2192,11 +2189,6 @@ sub mailbtsall {
     $charset =~ s/^ANSI_X3\.4-19(68|86)$/US-ASCII/;
     $subject = MIME_encode_mimewords($subject, 'Charset' => $charset);
 
-    # If there were comments, we CC each of the bugs
-    if (keys %ccbugs && length(join('', @comment))) {
-	$ccemail .= ", " if length $ccemail;
-	$ccemail .= join("\@$btsserver, ", sort (keys %ccbugs)) . "\@$btsserver";
-    }
     if (keys %ccpackages && $packagesserver) {
 	$ccemail .= ", " if length $ccemail;
 	$ccemail .= join("\@$packagesserver, ", sort (keys %ccpackages))
