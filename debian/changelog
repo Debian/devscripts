@@ -75,6 +75,13 @@ devscripts (2.10.36) UNRELEASED; urgency=low
   * bts: document that the cache auto-cleaning is overzealous on noatime
     partitions. Patch from intrigeri <intrigeri@boum.org>. (Closes: #488486)
 
+  [ Colin Watson ]
+  * dpkg-depcheck: Remove -F in order to be compatible with current strace.
+    I'm not sure exactly when plain 'strace -f' started being able to follow
+    vfork on Linux, but it's at least as long ago as Debian 4.0, possibly
+    strace 4.4.93 which would place it before Debian 3.1, so a dependency
+    doesn't seem to be necessary. (Closes: #497955)
+
  -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Sat, 30 Aug 2008 19:58:43 +0200
 
 devscripts (2.10.35) unstable; urgency=low

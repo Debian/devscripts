@@ -391,7 +391,7 @@ sub getusedfiles (@)
 	$file = $opts{"strace-output"} || `tempfile -p depcheck`;
 	chomp $file;
 	$file =~ s%^(\s)%./$1%;
-	my @strace_cmd=('strace', '-e', 'trace=open,execve',  '-f', '-F',
+	my @strace_cmd=('strace', '-e', 'trace=open,execve',  '-f',
 			'-q', '-o', $file, @_);
 	$ENV{'LD_PRELOAD'} = $trace_preload;
 	$ENV{'LC_ALL'}="C" if $opts{"C"};
