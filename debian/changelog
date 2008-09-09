@@ -26,6 +26,8 @@ devscripts (2.10.36) UNRELEASED; urgency=low
     to Frank Lichtenheld for pointing this out via a related bug in lintian.
   * cowpoke: If BUILDD_ROOTCMD is set, use BUILDD_USER for debrsigning, rather
     than root. Patch from Cyril Brulebois. (Closes: #495536)
+  * Debbugs.pm: Special-case the "archive" key in select(). The BTS really
+    doesn't like it being passed as an array. (Closes: #498201)
   * debcommit: When committing to a bzr repository with a message including
     bug closures, pass corresponding --fixes to bzr. Thanks James Westby for
     the patch. (Closes: #496643)
