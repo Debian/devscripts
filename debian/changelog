@@ -34,6 +34,8 @@ devscripts (2.10.36) UNRELEASED; urgency=low
   * nmudiff: Add support for using $DEBFULLNAME as well as $DEBEMAIL when
     generating the From: header for a sendmail-generated mail. Based on a
     patch from Thomas Viehmann. (Closes: #496460)
+  * rc-alert: Fix missing characters in a couple of option names in the help
+    text.
   * tagpending:
     + Fix a typo in the help output. Thanks Thijs Kinkhorst. (Closes: #494131)
     + Use the new "bts --toolname" switch instead of an in-body comment to

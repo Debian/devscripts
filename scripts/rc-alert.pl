@@ -75,14 +75,14 @@ Usage: $progname [--help|--version|--cache] [package ...]
   --cache           Create ~/.devscripts_cache directory if it does not exist
 
   Matching options: (see the manpage for further information)
-  --include-tags    Set of tags to include
-  --include-tag-op  Must all tags match for inclusion?
-  --exclude-tags    Set of tags to exclude
-  --exclude-tag-op  Must all tags match for exclusion?
-  --include-dists   Set of distributions to include
-  --include-dist-o  Must all distributions be matched for inclusion?
-  --exclude-dists   Set of distributions to exclude
-  --exclude-dist-o  Must all distributions be matched for exclusion?
+  --include-tags     Set of tags to include
+  --include-tag-op   Must all tags match for inclusion?
+  --exclude-tags     Set of tags to exclude
+  --exclude-tag-op   Must all tags match for exclusion?
+  --include-dists    Set of distributions to include
+  --include-dist-op  Must all distributions be matched for inclusion?
+  --exclude-dists    Set of distributions to exclude
+  --exclude-dist-op  Must all distributions be matched for exclusion?
 EOF
 
 my $version = <<"EOF";
