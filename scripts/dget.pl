@@ -152,9 +152,9 @@ sub get_file {
 	my $md5sum_new = Digest::MD5->new->addfile($fh5)->hexdigest();
 	close $fh5;
 	if (not $md5sum or ($md5sum_new eq $md5sum)) {
-	    print "$progname: using existing $file\n";
+	    print "$progname: using existing $file\n" unless $opt->{'quiet'};
 	} else {
-	    print "$progname: removing $file (md5sum does not match)\n";
+	    print "$progname: removing $file (md5sum does not match)\n" unless $opt->{'quiet'};
 	    backup_or_unlink($file);
 	}
     }
@@ -171,9 +171,9 @@ sub get_file {
 
 	    if ($md5sum_new eq $md5sum) {
 		if (link "$path/$file", $file) {
-		    print "$progname: using $path/$file (hardlink)\n";
+		    print "$progname: using $path/$file (hardlink)\n" unless $opt->{'quiet'};
 		} else {
-		    print "$progname: using $path/$file (copy)\n";
+		    print "$progname: using $path/$file (copy)\n" unless $opt->{'quiet'};
 		    system "cp -a $path/$file $file";
 		}
 		last;
@@ -183,7 +183,7 @@ sub get_file {
 
     # finally get it from the web
     unless (-e $file) {
-	print "$progname: retrieving $dir/$file\n";
+	print "$progname: retrieving $dir/$file\n" unless $opt->{'quiet'};
 	if (wget($file, "$dir/$file")) {
 	    warn "$progname: $wget $file $dir/$file failed\n";
 	    unlink $file;
@@ -443,7 +443,7 @@ for my $arg (@ARGV) {
 	    }
 	    if ($opt->{'build'}) {
 		my @output = `dpkg-source -x $found_dsc`; # FIXME: this will break when dpkg-source output is localized
-		print @output;
+		print @output unless $opt->{'quiet'};
 		foreach (@output) {
 		    if ( /^dpkg-source: extracting .* in (.*)/ ) {
 			chdir $1;

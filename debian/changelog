@@ -71,6 +71,7 @@ devscripts (2.10.36) UNRELEASED; urgency=low
   [ Christoph Berg ]
   * debsign: Fix debsign -r dir/*.changes, and do some QA on the manpage.
     Continue with next file if an already existing signature is kept.
+  * dget: Make -q really quiet.
 
   [ Mohammed Adnène Trojette ]
   * nmudiff: Use a friendlier template inspired from Lucas Nussbaum's
