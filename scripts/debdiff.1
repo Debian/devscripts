@@ -91,6 +91,14 @@ on.  Files will only be compared if they are present in both
 control files present in both packages, except for md5sums.  This
 option can be used to override a configuration file setting.
 .TP
+.B \-\-wdiff\-source\-control
+When processing source packages, compare control files using \fBwdiff\fR.
+Equivalent to the \fB\-\-control\fR option for binary packages.
+.TP
+.B \-\-no\-wdiff\-source\-control
+Do not compare control files in source packages using \fBwdfiff\fR.  This
+is the default.
+.TP
 .BR \-\-wp ", " \-\-wl ", " \-\-wt
 Pass a \fB\-p\fR, \fB\-l\fR or \fB\-t\fR option to \fBwdiff\fR
 respectively.  (This yields the whole \fBwdiff\fR output rather than
@@ -171,6 +179,9 @@ This option will be passed to \fBwdiff\fR; it should be one of
 .B DEBDIFF_SHOW_DIFFSTAT
 If this is set to \fIyes\fR, then it is the same as the
 \fB\-\-diffstat\fR command line parameter being used.
+.B DEBDIFF_WDIFF_SOURCE_CONTROL
+If this is set to \fIyes\fR, then it is the same as the
+\fB\-\-wdiff\-source\-control\fR command line parameter being used.
 .SH "EXIT VALUES"
 Normally the exit value will be 0 if no differences are reported and 1
 if any are reported.  If there is some fatal error, the exit code will

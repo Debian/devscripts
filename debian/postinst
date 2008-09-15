@@ -533,6 +533,19 @@ EOF
 
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.36
+	then
+	    # Added in devscripts 2.10.36
+	    cat >> /etc/devscripts.con <<EOF
+##### debdiff option added in version 2.10.36
+#
+# Compare control files in source packages using widff?
+#
+# DEBDIFF_WDIFF_SOURCE_CONTROL=no
+
+EOF
+	fi
     fi
 fi
 

@@ -21,6 +21,7 @@ use File::Basename;
 use File::Temp qw/ tempdir tempfile /;
 
 # Predeclare functions
+sub wdiff_control_files($$$$);
 sub process_debc($$);
 sub process_debI($);
 sub mktmpdirs();
@@ -29,6 +30,7 @@ sub fatal(@);
 my $progname = basename($0);
 my $modified_conf_msg;
 my $exit_status = 0;
+my $dummyname = "---DUMMY---";
 
 sub usage {
     print <<"EOF";
@@ -59,6 +61,10 @@ Valid options are:
                             ALL to compare all control files present
    --wp, --wl, --wt       Pass the option -p, -l, -t respectively to wdiff
                             (only one should be used)
+   --wdiff-source-control When processing source packages, compare control
+                            files as with --control for binary packages
+   --no-wdiff-source-control
+                          Do not do so (default)
    --show-moved           Indicate also all files which have moved
                             between packages
    --noshow-moved         Do not also indicate all files which have moved
@@ -94,6 +100,7 @@ my $show_moved = 0;
 my $wdiff_opt = '';
 my @diff_opts = ();
 my $show_diffstat = 0;
+my $wdiff_source_control = 0;
 
 my $quiet = 0;
 
@@ -112,6 +119,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBDIFF_SHOW_MOVED' => 'no',
 		       'DEBDIFF_WDIFF_OPT' => '',
 		       'DEBDIFF_SHOW_DIFFSTAT' => '',
+		       'DEBDIFF_WDIFF_SOURCE_CONTROL' => 'no',
 		       );
     my %config_default = %config_vars;
 
@@ -136,6 +144,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'DEBDIFF_SHOW_MOVED'}='no';
     $config_vars{'DEBDIFF_SHOW_DIFFSTAT'} =~ /^(yes|no)$/
 	or $config_vars{'DEBDIFF_SHOW_DIFFSTAT'}='no';
+    $config_vars{'DEBDIFF_WDIFF_SOURCE_CONTROL'} =~ /^(yes|no)$/
+	or $config_vars{'DEBDIFF_WDIFF_SOURCE_CONTROL'}='no';
 
     foreach my $var (sort keys %config_vars) {
 	if ($config_vars{$var} ne $config_default{$var}) {
@@ -151,6 +161,9 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $show_moved = $config_vars{'DEBDIFF_SHOW_MOVED'} eq 'yes' ? 1 : 0;
     $wdiff_opt = $config_vars{'DEBDIFF_WDIFF_OPT'} =~ /^-([plt])$/ ? $1 : '';
     $show_diffstat = $config_vars{'DEBDIFF_SHOW_DIFFSTAT'} eq 'yes' ? 1 : 0;
+    $wdiff_source_control = $config_vars{'DEBDIFF_WDIFF_SOURCE_CONTROL'}
+	eq 'yes' ? 1 : 0;
+
 }
 
 # Are they a pair of debs, changes or dsc files, or a list of debs?
@@ -233,6 +246,8 @@ while (@ARGV) {
     }
     elsif ($ARGV[0] eq '--diffstat') { $show_diffstat = 1; shift; }
     elsif ($ARGV[0] =~ /^--no-?diffstat$/) { $show_diffstat = 0; shift; }
+    elsif ($ARGV[0] eq '--wdiff-source-control') { $wdiff_source_control = 1; shift; }
+    elsif ($ARGV[0] =~ /^--no-?wdiff-source-control$/) { $wdiff_source_control = 0; shift; }
     elsif ($ARGV[0] =~ /^--no-?conf$/) {
 	fatal "--no-conf is only acceptable as the first command-line option!";
     }
@@ -434,15 +449,21 @@ elsif ($type eq 'dsc') {
     my $use_interdiff = ($?==0) ? 1 : 0;
     system("command -v diffstat >/dev/null 2>&1");
     my $have_diffstat = ($?==0) ? 1 : 0;
+    system("command -v wdiff >/dev/null 2>&1");
+    my $have_wdiff = ($?==0) ? 1 : 0;
 
     my ($fh, $filename) = tempfile("debdiffXXXXXX",
 				SUFFIX => ".diff",
 				DIR => File::Spec->tmpdir,
 				UNLINK => 1);
 
+    # When wdiffing source control files we always fully extract both source
+    # packages as it's the easiest way of getting the debian/control file,
+    # particularly if the orig tar ball contains one which is patched in the
+    # diffs
     if ($origs[1] eq $origs[2] and defined $diffs[1] and defined $diffs[2]
-	and scalar(@excludes) == 0 and $use_interdiff) {
-	# same orig tar ball and interdiff exists
+	and scalar(@excludes) == 0 and $use_interdiff and !$wdiff_source_control) {
+	# same orig tar ball, interdiff exists and not wdiffing
 
 	my $command = join( " ", ("interdiff", "-z", @diff_opts, "'$diffs[1]'",
 	    "'$diffs[2]'", ">", $filename) );
@@ -468,10 +489,11 @@ elsif ($type eq 'dsc') {
 	# Any other situation
 	if ($origs[1] eq $origs[2] and
 	    defined $diffs[1] and defined $diffs[2] and
-	    scalar(@excludes) == 0) {
+	    scalar(@excludes) == 0 and !$wdiff_source_control) {
 	    warn "Warning: You do not seem to have interdiff (in the patchutils package)\ninstalled; this program would use it if it were available.\n";
 	}
-	# possibly different orig tarballs, or no interdiff installed
+	# possibly different orig tarballs, or no interdiff installed,
+	# or wdiffing debian/control
 	our ($sdir1, $sdir2);
 	mktmpdirs();
 	for my $i (1,2) {
@@ -533,6 +555,40 @@ elsif ($type eq 'dsc') {
 	    print "diffstat for $sdir1 $sdir2\n\n";
 	    system("diffstat $filename");
 	    print "\n";
+	}
+
+	if ($have_wdiff and $wdiff_source_control) {
+	    # Abuse global variables slightly to create some temporary directories
+	    my $tempdir1 = $dir1;
+	    my $tempdir2 = $dir2;
+	    mktmpdirs();
+	    our $wdiffdir1 = $dir1;
+	    our $wdiffdir2 = $dir2;
+	    $dir1 = $tempdir1;
+	    $dir2 = $tempdir2;
+	    our @cf;
+	    if ($controlfiles eq 'ALL') {
+		@cf = ('control');
+	    } else {
+		@cf = split /,/, $controlfiles;
+	    }
+
+	    no strict 'refs';
+	    for my $i (1,2) {
+		foreach my $file (@cf) {
+		    system qq(cp ${"dir$i"}/${"sdir$i"}/debian/$file ${"wdiffdir$i"});
+		}
+	    }
+	    use strict 'refs';
+
+	    # We don't support "ALL" for source packages as that would
+	    # wdiff debian/*
+	    $exit_status = wdiff_control_files($wdiffdir1, $wdiffdir2, $dummyname,
+		$controlfiles eq 'ALL' ? 'control' : $controlfiles);
+	    print "\n";
+
+	    # Clean up
+	    system ("rm", "-rf", $wdiffdir1, $wdiffdir2);
 	}
 
 	open( DIFF, '<', $filename );
@@ -721,7 +777,6 @@ if ($show_moved and $type ne 'deb') {
 }
 
 # We compare the control files (at least the dependency fields)
-my $dummyname = "---DUMMY---";
 if (defined $singledeb[1] and defined $singledeb[2]) {
 	@CommonDebs = ( $dummyname );
 	$DebPaths1{$dummyname} = $singledeb[1];
@@ -748,62 +803,8 @@ for my $debname (@CommonDebs) {
     }
 
     use strict 'refs';
+    $exit_status = wdiff_control_files($dir1, $dir2, $debname, $controlfiles);
 
-    my @cf;
-    if ($controlfiles eq 'ALL') {
-	# only need to list one directory as we are only comparing control
-	# files in both packages
-	@cf = grep { ! /md5sums/ } map { basename($_); } glob("$dir1/*");
-    } else {
-	@cf = split /,/, $controlfiles;
-    }
-
-    foreach my $cf (@cf) {
-	next unless -f "$dir1/$cf" and -f "$dir2/$cf";
-	if ($cf eq 'control' or $cf eq 'conffiles') {
-	    for my $file ("$dir1/$cf", "$dir2/$cf") {
-		my ($fd, @hdrs);
-		open $fd, '<', $file or fatal "Cannot read $file: $!";
-		while (<$fd>) {
-		    if (/^\s/ and @hdrs > 0) {
-			$hdrs[$#hdrs] .= $_;
-		    } else {
-			push @hdrs, $_;
-		    }
-		}
-		close $fd;
-		open $fd, '>', $file or fatal "Cannot write $file: $!";
-		print $fd sort @hdrs;
-		close $fd;
-	    }
-	}
-	my $wdiff = `wdiff -n $wdiff_opt $dir1/$cf $dir2/$cf`;
-	my $usepkgname = $debname eq $dummyname ? "" : " of package $debname";
-	if ($? >> 8 == 0) {
-	    if (! $quiet) {
-		print "\nNo differences were encountered between the $cf files$usepkgname\n";
-	    }
-	} elsif ($? >> 8 == 1) {
-	    print "\n";
-	    if ($wdiff_opt) {
-		# Don't try messing with control codes
-		my $msg = ucfirst($cf) . " files$usepkgname: wdiff output";
-		print $msg, "\n", '-' x length $msg, "\n";
-		print $wdiff;
-	    } else {
-		my @output;
-		@output = split /\n/, $wdiff;
-		@output = grep /(\[-|\{\+)/, @output;
-		my $msg = ucfirst($cf) . " files$usepkgname: lines which differ (wdiff format)";
-		print $msg, "\n", '-' x length $msg, "\n";
-		print join("\n",@output), "\n";
-	    }
-	    $exit_status = 1;
-	} else {
-	    warn "wdiff failed (exit status " . ($? >> 8) .
-		(($? & 0x7f) ? " with signal " . ($? & 0x7f) : "") . ")\n";
-	}
-    }
     # Clean up
     system ("rm", "-rf", $dir1, $dir2);
 }
@@ -868,6 +869,71 @@ sub process_debI($)
     }
 
     return \@filelist;
+}
+
+sub wdiff_control_files($$$$)
+{
+    my ($dir1, $dir2, $debname, $controlfiles) = @_;
+    return unless defined $dir1 and defined $dir2 and defined $debname
+	and defined $controlfiles;
+    my @cf;
+    my $exit_status;
+    if ($controlfiles eq 'ALL') {
+	# only need to list one directory as we are only comparing control
+	# files in both packages
+	@cf = grep { ! /md5sums/ } map { basename($_); } glob("$dir1/*");
+    } else {
+	@cf = split /,/, $controlfiles;
+    }
+
+    foreach my $cf (@cf) {
+	next unless -f "$dir1/$cf" and -f "$dir2/$cf";
+	if ($cf eq 'control' or $cf eq 'conffiles') {
+	    for my $file ("$dir1/$cf", "$dir2/$cf") {
+		my ($fd, @hdrs);
+		open $fd, '<', $file or fatal "Cannot read $file: $!";
+		while (<$fd>) {
+		    if (/^\s/ and @hdrs > 0) {
+			$hdrs[$#hdrs] .= $_;
+		    } else {
+			push @hdrs, $_;
+		    }
+		}
+		close $fd;
+		open $fd, '>', $file or fatal "Cannot write $file: $!";
+		print $fd sort @hdrs;
+		close $fd;
+	    }
+	}
+	my $wdiff = `wdiff -n $wdiff_opt $dir1/$cf $dir2/$cf`;
+	my $usepkgname = $debname eq $dummyname ? "" : " of package $debname";
+	if ($? >> 8 == 0) {
+	    if (! $quiet) {
+		print "\nNo differences were encountered between the $cf files$usepkgname\n";
+	    }
+	} elsif ($? >> 8 == 1) {
+	    print "\n";
+	    if ($wdiff_opt) {
+		# Don't try messing with control codes
+		my $msg = ucfirst($cf) . " files$usepkgname: wdiff output";
+		print $msg, "\n", '-' x length $msg, "\n";
+		print $wdiff;
+	    } else {
+		my @output;
+		@output = split /\n/, $wdiff;
+		@output = grep /(\[-|\{\+)/, @output;
+		my $msg = ucfirst($cf) . " files$usepkgname: lines which differ (wdiff format)";
+		print $msg, "\n", '-' x length $msg, "\n";
+		print join("\n",@output), "\n";
+	    }
+	    $exit_status = 1;
+	} else {
+	    warn "wdiff failed (exit status " . ($? >> 8) .
+		(($? & 0x7f) ? " with signal " . ($? & 0x7f) : "") . ")\n";
+	}
+    }
+
+    return $exit_status;
 }
 
 sub mktmpdirs ()
