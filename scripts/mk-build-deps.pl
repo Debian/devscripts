@@ -79,6 +79,12 @@ GetOptions("help|h" => \$opt_help,
 if ($opt_help) { help(); exit 0; }
 if ($opt_version) { version(); exit 0; }
 
+if (!@ARGV) {
+    if (-r 'debian/control') {
+	push(@ARGV, 'debian/control');
+    }
+}
+
 die "Usage: $progname <control file | package name> [...]\nRun $progname --help for more details\n" unless @ARGV;
 
 system("command -v equivs-build >/dev/null 2>&1");
