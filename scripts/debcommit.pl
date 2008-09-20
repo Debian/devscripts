@@ -164,6 +164,8 @@ allow the message to be fine-tuned.
 If the changelog entry used for the commit message closes any bugs then --fixes
 options to "bzr commit" will be generated to associate the revision and the bugs.
 
+=back
+
 =cut
 
 use warnings;
@@ -735,8 +737,6 @@ This code is copyright by Joey Hess <joeyh@debian.org>, all rights reserved.
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the
 GNU General Public License, version 2 or later.
-
-=back
 
 =head1 AUTHOR
 
