@@ -1,4 +1,4 @@
-devscripts (2.10.36) UNRELEASED; urgency=low
+devscripts (2.10.36) unstable; urgency=low
 
   [ Adam D. Barratt ]
   * bts:
@@ -100,7 +100,10 @@ devscripts (2.10.36) UNRELEASED; urgency=low
   * mk-build-deps: Automatically find debian/control if inside of a package
     source tree and no argument is given
 
- -- Patrick Schoenfeld <schoenfeld@debian.org>  Wed, 17 Sep 2008 12:04:18 +0200
+  [ Luk Claes ]
+  * Update debsign for new commands of .commands (Closes: #498649).
+
+ -- Luk Claes <luk@debian.org>  Sat, 20 Sep 2008 18:37:41 +0200
 
 devscripts (2.10.35) unstable; urgency=low
 

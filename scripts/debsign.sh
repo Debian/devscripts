@@ -509,8 +509,9 @@ dosigning() {
                   }
               sub checkcommands {
                   chomp($line=$_[0]);
-                  if ($line =~ m%^\s*mv(\s+[^\s/]+){2}\s*$%) { return 0; }
-                  if ($line =~ m%^\s*rm(\s+[^\s/]+)+\s*$%) { return 0; }
+                  if ($line =~ m%^\s*reschedule\s+[^\s/]+\.changes\s+[0-9]+-day\s*$%) { return 0; }
+                  if ($line =~ m%^\s*cancel\s+[^\s/]+\.changes\s*$%) { return 0; }
+                  if ($line =~ m%^\s*rm(\s+(?:DELAYED/[0-9]+-day/)?[^\s/]+)+\s*$%) { return 0; }
                   if ($line eq "") { return 0; }
                   die ".commands file has invalid Commands line: $line\n";
               }
