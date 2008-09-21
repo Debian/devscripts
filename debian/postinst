@@ -546,6 +546,26 @@ EOF
 
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.38
+	then
+	    if [ -f "/etc/devscripts.con" ] &&
+	      [ "10cabcba2772fc97064bf2f51b39bf25" =
+	      "$(md5sum /etc/devscripts.con | cut -d" " -f1)" ]
+	    then
+		rm /etc/devscripts.con
+
+		# Added in devscripts 2.10.36 but to the wrong file
+		cat >> /etc/devscripts.conf <<EOF
+##### debdiff option added in version 2.10.36
+#
+# Compare control files in source packages using widff?
+#
+# DEBDIFF_WDIFF_SOURCE_CONTROL=no
+
+EOF
+	    fi
+	fi
     fi
 fi
 
