@@ -29,7 +29,7 @@ mk-build-deps - build a package satisfying a package's build-dependencies
 
 B<mk-build-deps> --help|--version
 
-B<mk-build-deps> <control file | package name> [...]
+B<mk-build-deps> [-i|--install] <control file | package name> [...]
 
 =head1 DESCRIPTION
 
@@ -40,6 +40,10 @@ satisfy the build-dependencies of the given package.
 =head1 OPTIONS
 
 =over 4
+
+=item B<-i>, B<--install>
+
+Install the generated packages and its build-dependencies.
 
 =item B<-h>, B<--help>
 
@@ -68,11 +72,15 @@ use Getopt::Long;
 use File::Basename;
 
 my $progname = basename($0);
+my $opt_install;
 my ($opt_help, $opt_version);
 my $control;
+my @packages;
+my @deb_files;
 
 GetOptions("help|h" => \$opt_help,
            "version|v" => \$opt_version,
+	   "install|i" => \$opt_install,
            )
     or die "Usage: $progname <control file | package name> [...]\nRun $progname --help for more details\n";
 
@@ -143,6 +151,19 @@ while ($control = shift) {
 	" Depencency package to build the '$name' package\n";
 
     close EQUIVS;
+
+    push @packages, $name;
+
+}
+
+if ($opt_install) {
+    for my $package (@packages) {
+	my $file = glob "${package}-build-deps_*.deb";
+	push @deb_files, $file;
+    }
+
+    system 'dpkg', '--unpack', @deb_files;
+    system 'aptitude', '-f', 'install';
 }
 
 sub help {

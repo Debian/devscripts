@@ -1,10 +1,15 @@
 devscripts (2.10.38) UNRELEASED; urgency=low
 
+  [ Adam D. Barratt ]
   * When upgrading from devscripts 2.10.36, remove the incorrectly 
     created /etc/devscripts.con if it is present and add the affected 
     section to /etc/devscripts.conf instead.
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sun, 21 Sep 2008 15:08:17 +0100
+  [ Patrick Schoenfeld ]
+  * mk-build-deps: Implement --install switch which installs a generated
+    package and its depends afterwards.
+
+ -- Patrick Schoenfeld <schoenfeld@debian.org>  Sun, 21 Sep 2008 18:12:36 +0200
 
 devscripts (2.10.37) unstable; urgency=low
 
@@ -117,7 +122,7 @@ devscripts (2.10.36) unstable; urgency=low
   [ Luk Claes ]
   * Update debsign for new commands of .commands (Closes: #498649).
 
- -- Luk Claes <luk@debian.org>  Sat, 20 Sep 2008 18:37:41 +0200
+-- Luk Claes <luk@debian.org>  Sat, 20 Sep 2008 18:37:41 +0200
 
 devscripts (2.10.35) unstable; urgency=low
 
