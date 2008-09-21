@@ -6,10 +6,13 @@ devscripts (2.10.38) UNRELEASED; urgency=low
     section to /etc/devscripts.conf instead.
 
   [ Patrick Schoenfeld ]
-  * mk-build-deps: Implement --install switch which installs a generated
-    package and its depends afterwards.
-  * mk-build-deps: Add an option --tool to specify which tool to use
-    when installing the packages (default: apt-get)
+  * mk-build-deps:
+    + Implement --install switch which installs a generated package and its
+      depends afterwards.
+    + Add an option --tool to specify which tool to use when installing the
+      packages (default: apt-get)
+    + Add an option --remove to specify that package files should be deleted
+      after installing it.
 
  -- Patrick Schoenfeld <schoenfeld@debian.org>  Sun, 21 Sep 2008 18:43:33 +0200
 
