@@ -8,8 +8,10 @@ devscripts (2.10.38) UNRELEASED; urgency=low
   [ Patrick Schoenfeld ]
   * mk-build-deps: Implement --install switch which installs a generated
     package and its depends afterwards.
+  * mk-build-deps: Add an option --tool to specify which tool to use
+    when installing the packages (default: apt-get)
 
- -- Patrick Schoenfeld <schoenfeld@debian.org>  Sun, 21 Sep 2008 18:12:36 +0200
+ -- Patrick Schoenfeld <schoenfeld@debian.org>  Sun, 21 Sep 2008 18:43:33 +0200
 
 devscripts (2.10.37) unstable; urgency=low
 

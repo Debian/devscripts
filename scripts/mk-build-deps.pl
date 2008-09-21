@@ -45,6 +45,11 @@ satisfy the build-dependencies of the given package.
 
 Install the generated packages and its build-dependencies.
 
+=item B<-t>, B<--tool>
+
+When installing the generated package use the specified tool.
+(default: apt-get)
+
 =item B<-h>, B<--help>
 
 Show a summary of options.
@@ -75,12 +80,14 @@ my $progname = basename($0);
 my $opt_install;
 my ($opt_help, $opt_version);
 my $control;
+my $install_tool='apt-get';
 my @packages;
 my @deb_files;
 
 GetOptions("help|h" => \$opt_help,
            "version|v" => \$opt_version,
 	   "install|i" => \$opt_install,
+	   "tool|t=s" => \$install_tool,
            )
     or die "Usage: $progname <control file | package name> [...]\nRun $progname --help for more details\n";
 
@@ -163,7 +170,7 @@ if ($opt_install) {
     }
 
     system 'dpkg', '--unpack', @deb_files;
-    system 'aptitude', '-f', 'install';
+    system $install_tool, '-f', 'install';
 }
 
 sub help {
