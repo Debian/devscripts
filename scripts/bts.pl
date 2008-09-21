@@ -1053,16 +1053,13 @@ sub bts_clone {
 sub bts_close {
     my $bug=checkbug(shift) or die "bts close: close what bug?\n";
     my $version=shift;
+    $btsemail="$bug-done\@bugs.debian.org";
     $version="" unless defined $version;
     opts_done(@_);
-    mailbts("closing $bug", "close $bug $version");
+    mailbts("closing $bug", "Version: $version");
     warn <<"EOT";
 bts: Closing $bug as you requested.
-Please note that the "bts close" command is deprecated!
-It is usually better to email nnnnnn-done\@bugs.debian.org with
-an informative mail.
-Please remember to email $bug-submitter\@bugs.debian.org with
-an explanation of why you have closed this bug.  Thank you!
+Don't forget, if needed, to send an explanation of why you are closing the bug.
 EOT
 }
 
