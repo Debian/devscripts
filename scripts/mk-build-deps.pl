@@ -83,12 +83,44 @@ use File::Basename;
 
 my $progname = basename($0);
 my $opt_install;
-my $opt_remove;
+my $opt_remove=0;
 my ($opt_help, $opt_version);
 my $control;
-my $install_tool='apt-get';
+my $install_tool;
 my @packages;
 my @deb_files;
+
+my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
+my %config_vars = (
+		    'MKBUILDDEPS_TOOL' => 'apt-get',
+		    'MKBUILDDEPS_REMOVE_AFTER_INSTALL' => 'no'
+		    );
+my %config_default = %config_vars;
+
+my $shell_cmd;
+# Set defaults
+foreach my $var (keys %config_vars) {
+	$shell_cmd .= qq[$var="$config_vars{$var}";\n];
+}
+$shell_cmd .= 'for file in ' . join(" ",@config_files) . "; do\n";
+$shell_cmd .= '[ -f $file ] && . $file; done;' . "\n";
+# Read back values
+foreach my $var (keys %config_vars) { $shell_cmd .= "echo \$$var;\n" }
+my $shell_out = `/bin/bash -c '$shell_cmd'`;
+@config_vars{keys %config_vars} = split /\n/, $shell_out, -1;
+
+# Check validity
+$config_vars{'MKBUILDDEPS_TOOL'} =~ /./
+	or $config_vars{'MKBUILDDEPS_TOOL'}='/usr/bin/apt-get';
+$config_vars{'MKBUILDDEPS_REMOVE_AFTER_INSTALL'} =~ /^(yes|no)$/
+	or $config_vars{'MKBUILDDEPS_REMOVE_AFTER_INSTALL'}='no';
+
+$install_tool = $config_vars{'MKBUILDDEPS_TOOL'};
+
+if ($config_vars{'MKBUILDDEPS_REMOVE_AFTER_INSTALL'} =~ /yes/) {
+	$opt_remove=1;
+}
+
 
 GetOptions("help|h" => \$opt_help,
            "version|v" => \$opt_version,

@@ -565,6 +565,15 @@ EOF
 
 EOF
 	    fi
+	    cat >> /etc/devscripts.conf << EOF
+##### mk-build-deps options added in version 2.10.38
+#
+# Which tool to use for installing build depends?
+# MKBUILDDEPS_TOOL=/usr/bin/apt-get
+#
+# Remove package files after install?
+# MKBUILDDEPS_REMOVE_AFTER_INSTALL=yes
+EOF
 	fi
     fi
 fi

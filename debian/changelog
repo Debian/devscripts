@@ -13,6 +13,13 @@ devscripts (2.10.38) UNRELEASED; urgency=low
       packages (default: apt-get)
     + Add an option --remove to specify that package files should be deleted
       after installing it.
+    + Enable configuration file parsing
+    + Add a configuration option MKBUILDDEPS_TOOL to specify which tool shall
+      be used if the installation of the build-depends after creation is
+      requested.
+    + Add a configuration option MKBUILDDEPS_REMOVE_AFTER_INSTALL to configure
+      that package files shall always be installed after installing the
+      created packages and its build-depends.
 
  -- Patrick Schoenfeld <schoenfeld@debian.org>  Sun, 21 Sep 2008 18:43:33 +0200
 
