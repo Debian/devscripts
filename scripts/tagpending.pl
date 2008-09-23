@@ -278,7 +278,7 @@ if (@to_tag or @wnpp_to_tag) {
 	    }
 	}
 
-	$comments = $header . "\n \n" . $comments . " \n"
+	$comments = $header . "\n \n" . $comments . "\n \n"
 	    if $comments;
     }
 }

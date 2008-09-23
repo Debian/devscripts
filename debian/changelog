@@ -4,6 +4,8 @@ devscripts (2.10.38) UNRELEASED; urgency=low
   * When upgrading from devscripts 2.10.36, remove the incorrectly 
     created /etc/devscripts.con if it is present and add the affected 
     section to /etc/devscripts.conf instead.
+  * tagpending: Re-add an accidentally removed blank line at the end
+    of the generated comments.
 
   [ Patrick Schoenfeld ]
   * mk-build-deps:
