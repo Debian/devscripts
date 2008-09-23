@@ -432,11 +432,13 @@ sub bzr_find_fixes {
     my $message=shift;
 
     my $debian_closes = Dpkg::Changelog::find_closes($message);
-    my $launchpad_closes = Dpkg::Changelog::find_launchpad_closes($message);
+# Not yet implemented in DPKG-DEV
+#    my $launchpad_closes = Dpkg::Changelog::find_launchpad_closes($message);
 
     my @fixes_arg = ();
     map { push(@fixes_arg, ("--fixes", "deb:".$_)) } @$debian_closes;
-    map { push(@fixes_arg, ("--fixes", "lp:".$_)) } @$launchpad_closes;
+# Not yet implemented in DPKG-DEV
+#    map { push(@fixes_arg, ("--fixes", "lp:".$_)) } @$launchpad_closes;
     return @fixes_arg;
 }
 

@@ -21,7 +21,10 @@ devscripts (2.10.38) UNRELEASED; urgency=low
       that package files shall always be removed after installing the
       created packages and its build-depends.
 
- -- Patrick Schoenfeld <schoenfeld@debian.org>  Sun, 21 Sep 2008 18:43:33 +0200
+  [ Mohammed Adnène Trojette ]
+  * Comment out functions available only on Ubuntu. (Closes: #496643)
+
+ -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Tue, 23 Sep 2008 12:15:22 +0200
 
 devscripts (2.10.37) unstable; urgency=low
 
