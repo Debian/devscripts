@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2008-09-20 18:41+0300\n"
+"POT-Creation-Date: 2008-09-23 18:11+0200\n"
 "PO-Revision-Date: 2008-07-15 23:07+0200\n"
 "Last-Translator: Nicolas François <nicolas.francois@centraliens.net>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -307,7 +307,7 @@ msgstr ""
 #: ../scripts/cvs-debrelease.1:69 ../scripts/cvs-debuild.1:59
 #: ../scripts/dcmd.1:40 ../scripts/dd-list.1:93 ../scripts/debc.1:120
 #: ../scripts/debchange.1:417 ../scripts/debcheckout.pl:111
-#: ../scripts/debclean.1:111 ../scripts/debcommit.pl:741
+#: ../scripts/debclean.1:111 ../scripts/debcommit.pl:743
 #: ../scripts/debdiff.1:198 ../scripts/debi.1:120 ../scripts/debpkg.1:23
 #: ../scripts/debrelease.1:137 ../scripts/deb-reversion.dbk:292
 #: ../scripts/debrsign.1:71 ../scripts/debsign.1:131 ../scripts/debuild.1:421
@@ -317,7 +317,7 @@ msgstr ""
 #: ../scripts/grep-excuses.1:39 ../scripts/licensecheck.pl:116
 #: ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:20
 #: ../scripts/mass-bug.pl:512 ../scripts/mergechanges.1:18
-#: ../scripts/mk-build-deps.pl:54 ../scripts/namecheck.pl:43
+#: ../scripts/mk-build-deps.pl:68 ../scripts/namecheck.pl:43
 #: ../scripts/nmudiff.1:97 ../scripts/plotchangelog.1:126
 #: ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:83
 #: ../scripts/rmadison.pl:295 ../scripts/svnpath.pl:97
@@ -2631,7 +2631,7 @@ msgstr ""
 #: ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53
 #: ../scripts/dcmd.1:37 ../scripts/debc.1:115 ../scripts/debchange.1:410
 #: ../scripts/debcheckout.pl:105 ../scripts/debclean.1:107
-#: ../scripts/debcommit.pl:745 ../scripts/debdiff.1:191 ../scripts/debi.1:116
+#: ../scripts/debcommit.pl:747 ../scripts/debdiff.1:191 ../scripts/debi.1:116
 #: ../scripts/debrelease.1:132 ../scripts/deb-reversion.dbk:247
 #: ../scripts/debrsign.1:66 ../scripts/debsign.1:118 ../scripts/debuild.1:408
 #: ../scripts/dget.pl:630 ../scripts/diff2patches.1:37
@@ -3069,7 +3069,7 @@ msgstr "B<--help>, B<-h>"
 
 # type: Plain text
 #: ../scripts/checkbashisms.1:27 ../scripts/debdiff.1:141
-#: ../scripts/mk-build-deps.pl:46 ../scripts/rc-alert.1:24
+#: ../scripts/mk-build-deps.pl:60 ../scripts/rc-alert.1:24
 #: ../scripts/wnpp-alert.1:26 ../scripts/wnpp-check.1:20
 msgid "Show a summary of options."
 msgstr "Afficher un résumé des options."
@@ -3152,7 +3152,7 @@ msgstr "B<--version>, B<-v>"
 # type: Plain text
 #: ../scripts/checkbashisms.1:49 ../scripts/debdiff.1:144
 #: ../scripts/getbuildlog.1:24 ../scripts/grep-excuses.1:27
-#: ../scripts/manpage-alert.1:20 ../scripts/mk-build-deps.pl:50
+#: ../scripts/manpage-alert.1:20 ../scripts/mk-build-deps.pl:64
 #: ../scripts/rc-alert.1:27 ../scripts/whodepends.1:17
 #: ../scripts/wnpp-alert.1:29 ../scripts/wnpp-check.1:23
 msgid "Show version and copyright information."
@@ -5905,7 +5905,7 @@ msgstr ""
 # type: TP
 #: ../scripts/debcheckout.pl:77 ../scripts/dget.pl:576
 #: ../scripts/dpkg-depcheck.1:96 ../scripts/getbuildlog.1:18
-#: ../scripts/mk-build-deps.pl:44 ../scripts/rmadison.pl:220
+#: ../scripts/mk-build-deps.pl:58 ../scripts/rmadison.pl:220
 #, no-wrap
 msgid "B<-h>, B<--help>"
 msgstr "B<-h>, B<--help>"
@@ -6529,12 +6529,12 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../scripts/debcommit.pl:743 ../scripts/mass-bug.pl:514
+#: ../scripts/debcommit.pl:745 ../scripts/mass-bug.pl:514
 msgid "Joey Hess <joeyh@debian.org>"
 msgstr "Joey Hess <joeyh@debian.org>"
 
 # type: textblock
-#: ../scripts/debcommit.pl:747
+#: ../scripts/debcommit.pl:749
 msgid "L<svnpath(1)>."
 msgstr "L<svnpath(1)>."
 
@@ -10244,7 +10244,7 @@ msgid "Display usage information and exit."
 msgstr "Affiche un message d'aide et quitte."
 
 # type: TP
-#: ../scripts/dpkg-depcheck.1:99 ../scripts/mk-build-deps.pl:48
+#: ../scripts/dpkg-depcheck.1:99 ../scripts/mk-build-deps.pl:62
 #, no-wrap
 msgid "B<-v>, B<--version>"
 msgstr "B<-v>, B<--version>"
@@ -11345,7 +11345,8 @@ msgstr "B<mk-build-deps> --help|--version"
 
 # type: textblock
 #: ../scripts/mk-build-deps.pl:32
-msgid "B<mk-build-deps> <control file | package name> [...]"
+#, fuzzy
+msgid "B<mk-build-deps> [-i|--install] <control file | package name> [...]"
 msgstr "B<mk-build-deps> <fichier control | nom paquet> [...]"
 
 # type: textblock
@@ -11359,8 +11360,45 @@ msgstr ""
 "utilisera B<equivs> pour générer un paquet binaire qui peut être installé "
 "pour satisfaire les dépendances de construction d'un paquet."
 
+# type: TP
+#: ../scripts/mk-build-deps.pl:44
+#, fuzzy
+msgid "B<-i>, B<--install>"
+msgstr "B<-a>, B<--all>"
+
 # type: textblock
-#: ../scripts/mk-build-deps.pl:56
+#: ../scripts/mk-build-deps.pl:46
+msgid "Install the generated packages and its build-dependencies."
+msgstr ""
+
+# type: =item
+#: ../scripts/mk-build-deps.pl:48
+#, fuzzy
+msgid "B<-t>, B<--tool>"
+msgstr "B<-t>, B<--time>"
+
+# type: textblock
+#: ../scripts/mk-build-deps.pl:50
+msgid ""
+"When installing the generated package use the specified tool.  (default: apt-"
+"get)"
+msgstr ""
+
+# type: =item
+#: ../scripts/mk-build-deps.pl:53
+#, fuzzy
+msgid "B<-r>, B<--remove>"
+msgstr "B<-r> B<--recursive>"
+
+# type: textblock
+#: ../scripts/mk-build-deps.pl:55
+msgid ""
+"Remove the package file after installing it. Ignored if used without the "
+"install switch."
+msgstr ""
+
+# type: textblock
+#: ../scripts/mk-build-deps.pl:70
 msgid ""
 "B<mk-build-deps> is copyright by Vincent Fourmond and was modified for the "
 "devscripts package by Adam D. Barratt <adam@adam-barratt.org.uk>."
@@ -11369,7 +11407,7 @@ msgstr ""
 "pour le paquet devscripts par Adam D. Barratt <adam@adam-barratt.org.uk>."
 
 # type: textblock
-#: ../scripts/mk-build-deps.pl:59 ../scripts/transition-check.pl:77
+#: ../scripts/mk-build-deps.pl:73 ../scripts/transition-check.pl:77
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY.  You are free to "
 "redistribute this code under the terms of the GNU General Public License, "
