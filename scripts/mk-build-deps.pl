@@ -124,9 +124,9 @@ if ($config_vars{'MKBUILDDEPS_REMOVE_AFTER_INSTALL'} =~ /yes/) {
 
 GetOptions("help|h" => \$opt_help,
            "version|v" => \$opt_version,
-	   "install|i" => \$opt_install,
-	   "remove|r" => \$opt_remove,
-	   "tool|t=s" => \$install_tool,
+           "install|i" => \$opt_install,
+           "remove|r" => \$opt_remove,
+           "tool|t=s" => \$install_tool,
            )
     or die "Usage: $progname <control file | package name> [...]\nRun $progname --help for more details\n";
 
