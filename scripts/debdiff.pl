@@ -21,7 +21,7 @@ use File::Basename;
 use File::Temp qw/ tempdir tempfile /;
 
 # Predeclare functions
-sub wdiff_control_files($$$$);
+sub wdiff_control_files($$$$$);
 sub process_debc($$);
 sub process_debI($);
 sub mktmpdirs();
@@ -584,7 +584,8 @@ elsif ($type eq 'dsc') {
 	    # We don't support "ALL" for source packages as that would
 	    # wdiff debian/*
 	    $exit_status = wdiff_control_files($wdiffdir1, $wdiffdir2, $dummyname,
-		$controlfiles eq 'ALL' ? 'control' : $controlfiles);
+		$controlfiles eq 'ALL' ? 'control' : $controlfiles,
+		$exit_status);
 	    print "\n";
 
 	    # Clean up
@@ -803,7 +804,8 @@ for my $debname (@CommonDebs) {
     }
 
     use strict 'refs';
-    $exit_status = wdiff_control_files($dir1, $dir2, $debname, $controlfiles);
+    $exit_status = wdiff_control_files($dir1, $dir2, $debname, $controlfiles,
+	$exit_status);
 
     # Clean up
     system ("rm", "-rf", $dir1, $dir2);
@@ -871,13 +873,13 @@ sub process_debI($)
     return \@filelist;
 }
 
-sub wdiff_control_files($$$$)
+sub wdiff_control_files($$$$$)
 {
-    my ($dir1, $dir2, $debname, $controlfiles) = @_;
+    my ($dir1, $dir2, $debname, $controlfiles, $origstatus) = @_;
     return unless defined $dir1 and defined $dir2 and defined $debname
 	and defined $controlfiles;
     my @cf;
-    my $exit_status;
+    my $status = $origstatus;
     if ($controlfiles eq 'ALL') {
 	# only need to list one directory as we are only comparing control
 	# files in both packages
@@ -926,14 +928,14 @@ sub wdiff_control_files($$$$)
 		print $msg, "\n", '-' x length $msg, "\n";
 		print join("\n",@output), "\n";
 	    }
-	    $exit_status = 1;
+	    $status = 1;
 	} else {
 	    warn "wdiff failed (exit status " . ($? >> 8) .
 		(($? & 0x7f) ? " with signal " . ($? & 0x7f) : "") . ")\n";
 	}
     }
 
-    return $exit_status;
+    return $status;
 }
 
 sub mktmpdirs ()
