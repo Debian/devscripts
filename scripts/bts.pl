@@ -311,6 +311,15 @@ then these options should not be used.
 If a username is specified but not a password, B<bts> will prompt for
 the password before sending the mail.
 
+=item --smtp-helo=HELO
+
+Specify the name to use in the HELO command when connecting to the SMTP
+server; defaults to the contents of the file F</etc/mailname>, if it 
+exists.
+
+Note that some SMTP servers may reject the use of a HELO which either 
+does not resolve or does not appear to belong to the host using it.
+
 =item -f, --force-refresh
 
 Download a bug report again, even if it does not appear to have
@@ -389,6 +398,7 @@ my $sendmailcmd='/usr/sbin/sendmail';
 my $smtphost='';
 my $smtpuser='';
 my $smtppass='';
+my $smtphelo='';
 my $noaction=0;
 # regexp for mailers which require a -t option
 my $sendmail_t='^/usr/sbin/sendmail$|^/usr/sbin/exim';
@@ -419,6 +429,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'BTS_SMTP_HOST' => '',
 		       'BTS_SMTP_AUTH_USERNAME' => '',
 		       'BTS_SMTP_AUTH_PASSWORD' => '',
+		       'BTS_SMTP_HELO' => '',
 		       'BTS_SUPPRESS_ACKS' => 'no',
 		       'BTS_INTERACTIVE' => 'no',
 		       'BTS_DEFAULT_CC' => '',
@@ -489,6 +500,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $smtphost = $config_vars{'BTS_SMTP_HOST'};
     $smtpuser = $config_vars{'BTS_SMTP_AUTH_USERNAME'};
     $smtppass = $config_vars{'BTS_SMTP_AUTH_PASSWORD'};
+    $smtphelo = $config_vars{'BTS_SMTP_HELO'};
     $includeresolved = $config_vars{'BTS_INCLUDE_RESOLVED'} eq 'yes' ? 1 : 0;
     $requestack = $config_vars{'BTS_SUPPRESS_ACKS'} eq 'no' ? 1 : 0;
     $interactive = $config_vars{'BTS_INTERACTIVE'} eq 'no' ? 0 : 1;
@@ -502,7 +514,7 @@ if (exists $ENV{'BUGSOFFLINE'}) {
 
 my ($opt_help, $opt_version, $opt_noconf);
 my ($opt_cachemode, $opt_mailreader, $opt_sendmail, $opt_smtphost);
-my ($opt_smtpuser, $opt_smtppass);
+my ($opt_smtpuser, $opt_smtppass, $opt_smtphelo);
 my $opt_cachedelay=5;
 my $mboxmode = 0;
 my $quiet=0;
@@ -526,6 +538,7 @@ GetOptions("help|h" => \$opt_help,
 	   "smtp-host|smtphost=s" => \$opt_smtphost,
 	   "smtp-user|smtp-username=s" => \$opt_smtpuser,
 	   "smtp-pass|smtp-password=s" => \$opt_smtppass,
+	   "smtp-helo=s" => \$opt_smtphelo,
 	   "f" => \$refreshmode,
 	   "force-refresh!" => \$refreshmode,
 	   "only-new!" => \$updatemode,
@@ -572,6 +585,7 @@ if ($opt_sendmail and $opt_smtphost) {
 $smtphost = $opt_smtphost if $opt_smtphost;
 $smtpuser = $opt_smtpuser if $opt_smtpuser;
 $smtppass = $opt_smtppass if $opt_smtppass;
+$smtphelo = $opt_smtphelo if $opt_smtphelo;
 
 if ($opt_sendmail) {
     if ($opt_sendmail ne '/usr/sbin/sendmail'
@@ -590,6 +604,18 @@ if ($opt_sendmail) {
 if ($opt_sendmail) {
     $sendmailcmd = $opt_sendmail;
     $smtphost = '';
+} else {
+    if (length $smtphost and ! length $smtphelo) {
+	if (-e "/etc/mailname") {
+	    if (open MAILNAME, '<', "/etc/mailname") {
+		$smtphelo = <MAILNAME>;
+		chomp $smtphelo;
+		close MAILNAME;
+	    } else {
+		warn "Unable to open /etc/mailname: $!\nUsing default HELO for SMTP\n";
+	    }
+	}
+    }
 }
 
 if ($opt_cachemode) {
@@ -1987,8 +2013,10 @@ Valid options are:
    --no-force-refresh     Do not do so (default)
    --sendmail=cmd         Sendmail command to use (default /usr/sbin/sendmail)
    --smtp-host=host       SMTP host to use
-   --smtp-username=user   Credentials to use when connecting to an SMTP
-   --smtp-password=pass   server which requires authentication
+   --smtp-username=user   } Credentials to use when connecting to an SMTP
+   --smtp-password=pass   } server which requires authentication
+   --smtp-helo=helo       HELO to use when connecting to the SMTP server;
+                            (defaults to the content of /etc/mailname)
    --no-include-resolved  Do not cache bugs marked as resolved
    --include-resolved     Cache bugs marked as resolved (default)
    --no-ack               Suppress BTS acknowledgment mails
@@ -2123,8 +2151,8 @@ sub send_mail {
 	    $port ||= '465';
 
 	    if (have_smtp_ssl) {
-		$smtp = Net::SMTP::SSL->new($host, Port => $port)
-		    or die "bts: failed to open SMTPS connection to $smtphost\n($@)\n";
+		$smtp = Net::SMTP::SSL->new($host, Port => $port,
+		    Hello => $smtphelo) or die "bts: failed to open SMTPS connection to $smtphost\n($@)\n";
 	    } else {
 		die "bts: Unable to establish SMTPS connection: $smtp_ssl_broken\n($@)\n";
 	    }
@@ -2132,7 +2160,7 @@ sub send_mail {
 	    my ($host, $port) = split(/:/, $smtphost);
 	    $port ||= '25';
 
-	    $smtp = Net::SMTP->new($host, Port => $port)
+	    $smtp = Net::SMTP->new($host, Port => $port, Hello => $smtphelo)
 		or die "bts: failed to open SMTP connection to $smtphost\n($@)\n";
 	}
 	if ($smtpuser) {
@@ -3589,6 +3617,10 @@ set, unless the --sendmail option is used.
 
 If these options are set, then it is the same as the --smtp-username and
 --smtp-password options being used.
+
+=item BTS_SMTP_HELO
+
+Same as the --smtp-helo command line option.
 
 =item BTS_INCLUDE_RESOLVED
 

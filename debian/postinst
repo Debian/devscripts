@@ -578,11 +578,14 @@ EOF
 
 	if dpkg --compare-versions "$2" lt 2.10.39
 	then
-	    # Stop using bugs.debian.org as the default example
-	    # server as it won't accept mail sent using Net::SMTP's
-	    # default HELO
-	    perl -i -pe 's/^# BTS_SMTP_HOST=bugs\.debian\.org$/# BTS_SMTP_HOST=server.example.com/' \
-		/etc/devscripts.conf
+	    cat >> /etc/devscripts.conf << EOF
+##### bts option added in version 2.10.39
+#
+# Specify a HELO to use when connecting to the SMTP host. If not supplied
+# and the file /etc/mailname exists, its contents will be used as the HELO
+# BTS_SMTP_HELO=foo.example.com
+
+EOF
 	fi
     fi
 fi
