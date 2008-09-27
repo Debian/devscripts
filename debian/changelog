@@ -5,6 +5,11 @@ devscripts (2.10.39) UNRELEASED; urgency=low
     (Closes: #499971)
   * debdiff: Ensure exit status is always explicitly set (and set
     correctly). (Closes: #500256)
+  * Use "server.example.com" instead of "bugs.debian.org" as the example
+    setting for BTS_SMTP_HOST. By default Net::SMTP will HELO as
+    localhost.localdomain which bugs.d.o will then reject. This will
+    arise if the host is explicitly set to bugs.d.o but not using it as
+    an example should help reduce the incidences (see #500321)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 23 Sep 2008 19:07:48 +0100
 

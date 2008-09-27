@@ -575,6 +575,15 @@ EOF
 # MKBUILDDEPS_REMOVE_AFTER_INSTALL=yes
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.39
+	then
+	    # Stop using bugs.debian.org as the default example
+	    # server as it won't accept mail sent using Net::SMTP's
+	    # default HELO
+	    perl -i -pe 's/^# BTS_SMTP_HOST=bugs\.debian\.org$/# BTS_SMTP_HOST=server.example.com/' \
+		/etc/devscripts.conf
+	fi
     fi
 fi
 
