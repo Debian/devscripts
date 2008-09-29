@@ -3,10 +3,15 @@
 pts-subscribe \- time-limited subscription to the PTS
 .SH SYNOPSIS
 \fBpts-subscribe\fR [options] \fIpackage\fR
+.PP
+\fBpts-unsubscribe\fR [options] \fIpackage\fR
 .SH DESCRIPTION
 \fBpts-subscribe\fR sends a subscription request for \fIpackage\fR to
 the Package Tracking System at pts@qa.debian.org, and cancels the
 subscription 30 days later.
+.PP
+If called as \fBpts-unsubscribe\fR, send an unsubscription request
+for \fIpackage\fR to the Package Tracking System.
 .PP
 This utility is useful if a developer has made an NMU and wants to
 track the package for a limited period of time.

@@ -1,5 +1,6 @@
 devscripts (2.10.39) UNRELEASED; urgency=low
 
+  [ Adam D. Barratt ]
   * bts:
     + Allow an explicit HELO to be specified when connecting via SMTP.
     + If a HELO is not specified then attempt to use the content of
@@ -9,6 +10,10 @@ devscripts (2.10.39) UNRELEASED; urgency=low
     (Closes: #499971)
   * debdiff: Ensure exit status is always explicitly set (and set
     correctly). (Closes: #500256)
+
+  [ James Vega ]
+  * pts-subscribe: When called as pts-unsubscribe, send an unsubscribe request
+    to the PTS.  (Closes: #500585)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 23 Sep 2008 19:07:48 +0100
 

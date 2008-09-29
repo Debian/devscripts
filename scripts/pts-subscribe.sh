@@ -11,6 +11,9 @@ usage () {
   Subscribe to the PTS (Package Tracking System) for the specified package
   for a limited length of time (30 days by default).
 
+  If called as 'pts-unsubscribe', unsubscribe from the PTS for the specified
+  package.
+
   Options:
     -u, --until UNTIL
                    When to unsubscribe; this is given as the command-line
@@ -40,6 +43,11 @@ This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the
 GNU General Public License, version 2 or later."
 }
+
+ACTION="subscribe"
+if [ "$PROGNAME" = pts-unsubscribe ]; then
+    ACTION="unsubscribe"
+fi
 
 # Boilerplate: set config variables
 DEFAULT_PTS_UNTIL='now + 30 days'
@@ -91,7 +99,7 @@ fi
 # Will bomb out if there are unrecognised options
 TEMP=$(getopt -s bash -o "u:" \
 	--long until:,forever \
-        --long no-conf,noconf \
+	--long no-conf,noconf \
 	--long help,version -n "$PROGNAME" -- "$@")
 
 eval set -- $TEMP
@@ -110,7 +118,7 @@ while [ "$1" ]; do
 	exit 1 ;;
     --help) usage; exit 0 ;;
     --version) version; exit 0 ;;
-    --)	shift; break ;;
+    --) shift; break ;;
     *) echo "$PROGNAME: bug in option parser, sorry!" >&2 ; exit 1 ;;
     esac
     shift
@@ -143,7 +151,7 @@ pkg=$1
 
 if [ -z "$DEBEMAIL" ]; then
     if [ -z "$EMAIL" ]; then
-	echo "$PROGNAME warning: \$DEBEMAIL is not set; attempting to subscribe anyway" >&2
+	echo "$PROGNAME warning: \$DEBEMAIL is not set; attempting to $ACTION anyway" >&2
     else
 	echo "$PROGNAME warning: \$DEBEMAIL is not set; using \$EMAIL instead" >&2
 	DEBEMAIL=$EMAIL
@@ -151,15 +159,19 @@ if [ -z "$DEBEMAIL" ]; then
 fi
 DEBEMAIL=$(echo $DEBEMAIL | sed -s 's/^.*[ 	]<\(.*\)>.*/\1/')
 
-cd /
-if [ "$PTS_UNTIL" != forever ]; then
-    TEMPFILE=$(mktemp) || { echo "$PROGNAME: Couldn't create tempfile!" >&2; exit 1; }
-    trap "rm -f '$TEMPFILE'" 0 1 2 3 7 10 13 15
-    echo "echo 'unsubscribe $pkg $DEBEMAIL' | mail pts@qa.debian.org" | \
-	at $PTS_UNTIL 2>$TEMPFILE
-    grep '^job ' $TEMPFILE | sed -e 's/^/Unsubscription will be sent by "at" as /'
+if [ "$ACTION" = "unsubscribe" ]; then
+    echo "$ACTION $pkg $DEBEMAIL" | mail pts@qa.debian.org
 else
-    echo "No unsubscription request will be sent"
-fi
+    cd /
+    if [ "$PTS_UNTIL" != forever ]; then
+	TEMPFILE=$(mktemp) || { echo "$PROGNAME: Couldn't create tempfile!" >&2; exit 1; }
+	trap "rm -f '$TEMPFILE'" 0 1 2 3 7 10 13 15
+	echo "echo 'unsubscribe $pkg $DEBEMAIL' | mail pts@qa.debian.org" | \
+	    at $PTS_UNTIL 2>$TEMPFILE
+	grep '^job ' $TEMPFILE | sed -e 's/^/Unsubscription will be sent by "at" as /'
+    else
+	echo "No unsubscription request will be sent"
+    fi
 
-echo "subscribe $pkg $DEBEMAIL" | mail pts@qa.debian.org
+    echo "$ACTION $pkg $DEBEMAIL" | mail pts@qa.debian.org
+fi
