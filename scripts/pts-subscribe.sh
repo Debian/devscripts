@@ -45,7 +45,7 @@ GNU General Public License, version 2 or later."
 }
 
 ACTION="subscribe"
-if [ "$PROGNAME" = pts-unsubscribe ]; then
+if [ "$PROGNAME" = "pts-unsubscribe" ]; then
     ACTION="unsubscribe"
 fi
 
@@ -138,15 +138,6 @@ if ! command -v mail >/dev/null 2>&1; then
     exit 1
 fi
 
-# Check for an "at" command
-if [ "$PTS_UNTIL" != forever ]; then
-    if ! command -v at >/dev/null 2>&1; then
-	echo "$PROGNAME: Could not find the \"at\" command; you must have the" >&2
-	echo "\"at\" package installed to run this script." >&2
-	exit 1
-    fi
-fi
-
 pkg=$1
 
 if [ -z "$DEBEMAIL" ]; then
@@ -162,6 +153,15 @@ DEBEMAIL=$(echo $DEBEMAIL | sed -s 's/^.*[ 	]<\(.*\)>.*/\1/')
 if [ "$ACTION" = "unsubscribe" ]; then
     echo "$ACTION $pkg $DEBEMAIL" | mail pts@qa.debian.org
 else
+    # Check for an "at" command
+    if [ "$PTS_UNTIL" != forever ]; then
+	if ! command -v at >/dev/null 2>&1; then
+	    echo "$PROGNAME: Could not find the \"at\" command; you must have the" >&2
+	    echo "\"at\" package installed to run this script." >&2
+	    exit 1
+	fi
+    fi
+
     cd /
     if [ "$PTS_UNTIL" != forever ]; then
 	TEMPFILE=$(mktemp) || { echo "$PROGNAME: Couldn't create tempfile!" >&2; exit 1; }
