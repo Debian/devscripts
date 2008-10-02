@@ -10,6 +10,9 @@ devscripts (2.10.39) UNRELEASED; urgency=low
     (Closes: #499971)
   * debdiff: Ensure exit status is always explicitly set (and set
     correctly). (Closes: #500256)
+  * debian/rules: Create a link from the French pts-subscribe manpage
+    as pts-unsubscribe, so long as the former exists (i.e. has been
+    sufficiently translated).
 
   [ James Vega ]
   * pts-subscribe: When called as pts-unsubscribe, send an unsubscribe request
