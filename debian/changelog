@@ -13,6 +13,9 @@ devscripts (2.10.39) UNRELEASED; urgency=low
   * debian/rules: Create a link from the French pts-subscribe manpage
     as pts-unsubscribe, so long as the former exists (i.e. has been
     sufficiently translated).
+  * licensecheck: Add support for fortran and Scilab files and for detecting
+    the CeCILL and "SGI Free B" licenses. Thanks Sylvestre Ledru
+    (Closes: #501447)
 
   [ James Vega ]
   * pts-subscribe: When called as pts-unsubscribe, send an unsubscribe request

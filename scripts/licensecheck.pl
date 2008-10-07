@@ -151,7 +151,7 @@ my $default_ignore_regex = '
 $default_ignore_regex =~ s/^#.*$//mg;
 $default_ignore_regex =~ s/\n//sg;
 
-my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|p(l|m)|sh|php|py|rb|java|el)$';
+my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)|f(77|90)?|p(l|m)|sh|php|py|rb|java|el|sc(i|e))$';
 
 my $modified_conf_msg;
 
@@ -285,6 +285,7 @@ while (@files) {
     $content =~ tr/\t\r\n/ /;
     $content =~ tr% A-Za-z.,@;0-9\(\)/-%%cd;
     $content =~ s#//##g;
+    $content =~ s/ c //g; # Remove fortran comments
     $content =~ tr/ //s;
 
     $license = parselicense($content);
@@ -445,6 +446,10 @@ sub parselicense($) {
 	$license = "Artistic (v$1) $license";
     }
 
+    if ($licensetext =~ /is free software under the Artistic [Ll]icense/) {
+	$license = "Artistic $license";
+    }
+
     if ($licensetext =~ /This program is free software; you can redistribute it and\/or modify it under the same terms as Perl itself/) {
 	$license = "Perl $license";
     }
@@ -455,6 +460,18 @@ sub parselicense($) {
 
     if ($licensetext =~ /This source file is subject to version ([^ ]+) of the PHP license/) {
 	$license = "PHP (v$1) $license";
+    }
+
+    if ($licensetext =~ /under the terms of the CeCILL /) {
+	$license = "CeCILL $license";
+    }
+
+    if ($licensetext =~ /under the terms of the CeCILL-([^ ]+) /) {
+	$license = "CeCILL-$1 $license";
+    }
+
+    if ($licensetext =~ /under the SGI Free Software License B/) {
+	$license = "SGI Free Software License B $license";
     }
 
     if ($licensetext =~ /is in the public domain/i) {
