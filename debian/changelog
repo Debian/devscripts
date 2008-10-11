@@ -16,6 +16,9 @@ devscripts (2.10.39) UNRELEASED; urgency=low
   * licensecheck: Add support for fortran and Scilab files and for detecting
     the CeCILL and "SGI Free B" licenses. Thanks Sylvestre Ledru
     (Closes: #501447)
+  * uscan: Allow --download-version to be more useful in situations where a
+    current upstream version higher than that to be downloaded has been
+    specified. Thanks James Westby. (Closes: #501932)
 
   [ James Vega ]
   * pts-subscribe: When called as pts-unsubscribe, send an unsubscribe request

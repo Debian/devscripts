@@ -1142,18 +1142,24 @@ EOF
 
     # We use dpkg's rules to determine whether our current version
     # is newer or older than the remote version.
-    if (system("dpkg --compare-versions '$mangled_lastversion' gt '$newversion'") == 0) {
-        if ($verbose) {
-	    print " => remote site does not even have current version\n";
-	} elsif ($dehs) {
-	    $dehs_tags{'status'} = "Debian version newer than remote site";
+    if (!defined $download_version) {
+	if (system("dpkg --compare-versions '$mangled_lastversion' gt '$newversion'") == 0) {
+	    if ($verbose) {
+		print " => remote site does not even have current version\n";
+	    } elsif ($dehs) {
+		$dehs_tags{'status'} = "Debian version newer than remote site";
+	    } else {
+		print "$pkg: remote site does not even have current version\n";
+	    }
+	    return 0;
 	} else {
-	    print "$pkg: remote site does not even have current version\n";
+	    # There's a newer upstream version available, which may already
+	    # be on our system or may not be
+	    $found++;
 	}
-        return 0;
     } else {
-	# There's a newer upstream version available, which may already
-	# be on our system or may not be
+	# Flag that we found a newer upstream version, so that the exit status
+	# is set correctly
 	$found++;
     }
 
