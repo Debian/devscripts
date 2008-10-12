@@ -1518,6 +1518,7 @@ sub bts_claim {
     if (! length $claim) {
 	die "bts claim: use what claim token?\n";
     }
+    $claim=extractemail($claim);
     bts_user("bugsquash\@qa.debian.org");
     bts_usertags("$bug" , " + $claim");
 }
@@ -1537,6 +1538,7 @@ sub bts_unclaim {
     if (! length $claim) {
 	die "bts unclaim: use what claim token?\n";
     }
+    $claim=extractemail($claim);
     bts_user("bugsquash\@qa.debian.org");
     bts_usertags("$bug" , " - $claim");
 }
@@ -1654,6 +1656,7 @@ sub bts_subscribe {
     else {
 	$email ||= $ENV{'DEBEMAIL'};
 	$email ||= $ENV{'EMAIL'};
+	$email = extractemail($email);
     }
     opts_done(@_);
     mailto('subscription request for bug #' . $bug, '',
@@ -1679,6 +1682,7 @@ sub bts_unsubscribe {
     else {
 	$email ||= $ENV{'DEBEMAIL'};
 	$email ||= $ENV{'EMAIL'};
+	$email = extractemail($email);
     }
     opts_done(@_);
     mailto('unsubscription request for bug #' . $bug, '',
@@ -2365,6 +2369,16 @@ sub getpass() {
     system "stty echo -cbreak </dev/tty";
     die "bts: error enabling stty echo\n" if $?;
     return $_;
+}
+
+sub extractemail() {
+    my $thing=shift or die "bts: extract e-mail from what?\n";
+
+    if ($thing =~ /^(.*?)\s+<(.*)>\s*$/) {
+	$thing = $2;
+    }
+
+    return $thing;
 }
 
 # A simplified version of mailbtsall which sends one message only to
