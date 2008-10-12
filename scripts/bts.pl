@@ -1663,7 +1663,7 @@ sub bts_subscribe {
     else {
 	$email ||= $ENV{'DEBEMAIL'};
 	$email ||= $ENV{'EMAIL'};
-	$email = extractemail($email);
+	$email = extractemail($email) if defined $email;
     }
     opts_done(@_);
     mailto('subscription request for bug #' . $bug, '',
@@ -1689,7 +1689,7 @@ sub bts_unsubscribe {
     else {
 	$email ||= $ENV{'DEBEMAIL'};
 	$email ||= $ENV{'EMAIL'};
-	$email = extractemail($email);
+	$email = extractemail($email) if defined $email;
     }
     opts_done(@_);
     mailto('unsubscription request for bug #' . $bug, '',
