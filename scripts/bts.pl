@@ -972,6 +972,13 @@ jrandomdeveloper@example.com and tagged wontfix, one would use
 
 bts select submitter:jrandomdeveloper@example.com tag:wontfix
 
+If a key is used multiple times then the set of bugs selected includes
+those matching any of the supplied values; for example
+
+bts select package:foo severity:wishlist severity:minor
+
+returns all bugs of package foo with either wishlist or minor severity.
+
 =cut
 
 sub bts_select {
