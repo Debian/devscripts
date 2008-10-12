@@ -1504,6 +1504,8 @@ sub bts_usertags {
 =item claim <bug> [<claim>]
 
 Record that you have claimed a bug (e.g. for a bug squashing party).
+<claim> should be a unique token allowing the bugs you have claimed
+to be identified; an e-mail address is often used.
 
 If no claim is specified, the environment variable DEBEMAIL
 or EMAIL (checked in that order) is used.

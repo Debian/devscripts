@@ -5,6 +5,7 @@ devscripts (2.10.39) UNRELEASED; urgency=low
     + Allow an explicit HELO to be specified when connecting via SMTP.
     + If a HELO is not specified then attempt to use the content of
       /etc/mailname instread.
+    + Expand on the definition of "claim" in the manpage. (Closes: #501142)
   * checkbashisms: Recognise brace expansions containing a leading or
     trailing empty value ("{,foo}", etc). Thanks Jonny Lamb.
     (Closes: #499971)
