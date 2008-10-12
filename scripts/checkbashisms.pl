@@ -445,8 +445,6 @@ sub init_hashes {
     %bashisms = (
 	qr'(?:^|\s+)function \w+(\s|\(|\Z)' => q<'function' is useless>,
 	$LEADIN . qr'select\s+\w+' =>     q<'select' is not POSIX>,
-	$LEADIN . qr'source\s+(?:\.\/|\/|\$)[^\s]+' =>
-	                               q<should be '.', not 'source'>,
 	qr'(test|-o|-a)\s*[^\s]+\s+==\s' =>
 	                               q<should be 'b = a'>,
 	qr'\[\s+[^\]]+\s+==\s' =>        q<should be 'b = a'>,
@@ -524,6 +522,8 @@ sub init_hashes {
     %singlequote_bashisms = (
 	$LEADIN . qr'echo\s+(?:-[^e\s]+\s+)?\'[^\']*(\\[\\abcEfnrtv0])+.*?[\']' => q<unsafe echo with backslash>,
 	#'(?<![\$\\\])\$\'[^\']+\''              => q<$'...' should be "$(printf '...')">,
+	$LEADIN . qr'source\s+[\"\']?(?:\.\/|\/|\$)[^\s]+' =>
+	                               q<should be '.', not 'source'>,
     );
 
     if ($opt_echo) {
