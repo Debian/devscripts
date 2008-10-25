@@ -5,10 +5,11 @@ devscripts (2.10.40) UNRELEASED; urgency=low
     changelog is an NMU if an alternative changelog location was specified
     using the CHANGELOG environment variable.
   * getbuildlogs:
-    + Unescape %7Es in log URLs to allow explicitly searching for 
-      package versions containing tildes.
-    + Simplify a couple of variable assignments and use shell string
-      operations to extract the version and architecture from the logs.
+    + Apply some patches from Jörg Sommer (Closes: #496065)
+      - Unescape %7Es in log URLs to allow explicitly searching for 
+        package versions containing tildes.
+      - Simplify a couple of variable assignments and use shell string
+        operations to extract the version and architecture from the logs.
   * uscan: Document the USCAN_TIMEOUT configuration file variable.
     (Closes: #502517)
 
