@@ -65,8 +65,8 @@ if [ ! -x "`which wget 2>/dev/null`" ]; then
 fi
 
 PACKAGE=$1
-VERSION=`(test -z "$2" && echo "[:~+.[:alnum:]-]+") || echo "$2"`
-ARCH=`(test -z "$3" && echo "[[:alnum:]-]+") || echo "$3"`
+VERSION=${2:-[:~+.[:alnum:]-]+}
+ARCH=${3:-[[:alnum:]-]+}
 ESCAPED_PACKAGE=`echo "$PACKAGE" | sed -e 's/\+/\\\+/g'`
 
 PATTERN="fetch\.(cgi|php)\?&pkg=$ESCAPED_PACKAGE&ver=$VERSION&arch=$ARCH&\
@@ -85,8 +85,10 @@ getbuildlog() {
     sed -i -e "s/%2B/\+/g" -e "s/%3A/:/g" -e "s/%7E/~/g" $ALL_LOGS
 
     for match in `grep -E -o "$PATTERN" $ALL_LOGS`; do
-        ver=`echo $match | cut -d'&' -f3 | cut -d'=' -f2`
-        arch=`echo $match | cut -d'&' -f4 | cut -d'=' -f2`
+	ver=${match##*ver=}
+	ver=${ver%%&*}
+	arch=${match##*arch=}
+	arch=${arch%%&*}
 	match=`echo $match | sed -e 's/\+/%2B/g'`
         wget -O "${PACKAGE}_${ver}_${arch}.log" "$BASE/$match&file=log"
     done
