@@ -82,7 +82,7 @@ getbuildlog() {
     # matches only one href. This is required because grep is greedy.
     sed -i -e "s/href=\"/\nhref=\"/g" $ALL_LOGS
     # Quick-and-dirty unescaping
-    sed -i -e "s/%2B/\+/g" -e "s/%3A/:/g" $ALL_LOGS
+    sed -i -e "s/%2B/\+/g" -e "s/%3A/:/g" -e "s/%7E/~/g" $ALL_LOGS
 
     for match in `grep -E -o "$PATTERN" $ALL_LOGS`; do
         ver=`echo $match | cut -d'&' -f3 | cut -d'=' -f2`

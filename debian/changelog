@@ -4,6 +4,9 @@ devscripts (2.10.40) UNRELEASED; urgency=low
   * debchange: Don't attempt to automatically determine if the current
     changelog is an NMU if an alternative changelog location was specified
     using the CHANGELOG environment variable.
+  * getbuildlogs:
+    + Unescape %7Es in log URLs to allow explicitly searching for 
+      package versions containing tildes.
   * uscan: Document the USCAN_TIMEOUT configuration file variable.
     (Closes: #502517)
 
