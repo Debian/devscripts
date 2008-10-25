@@ -1,12 +1,16 @@
 devscripts (2.10.40) UNRELEASED; urgency=low
 
+  [ Adam D. Barratt ]
   * debchange: Don't attempt to automatically determine if the current
     changelog is an NMU if an alternative changelog location was specified
     using the CHANGELOG environment variable.
   * uscan: Document the USCAN_TIMEOUT configuration file variable.
     (Closes: #502517)
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sun, 12 Oct 2008 23:41:13 +0100
+  [ Christoph Berg ]
+  * debian/control: Remove the Dm-Upload-Allowed flag.
+
+ -- Christoph Berg <myon@debian.org>  Sat, 25 Oct 2008 18:29:57 +0200
 
 devscripts (2.10.39) unstable; urgency=low
 
