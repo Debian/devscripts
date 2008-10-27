@@ -10,6 +10,8 @@ devscripts (2.10.40) UNRELEASED; urgency=low
         package versions containing tildes.
       - Simplify a couple of variable assignments and use shell string
         operations to extract the version and architecture from the logs.
+    + Allow the logs for the build with the largest version number to be
+      easily retrieved. Based on a patch by Jörg Sommer.
   * uscan: Document the USCAN_TIMEOUT configuration file variable.
     (Closes: #502517)
 

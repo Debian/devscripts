@@ -29,6 +29,12 @@ Usage: $PROGNAME <package> [<version-pattern>] [<architecture-pattern>]
   If <version-pattern> or <architecture-pattern> are given, only build logs
   whose versions and architectures, respectively, matches the given patterns
   are downloaded.
+
+  If <version-pattern> is "last" then only the logs for the most recent
+  version of <package> found on buildd.debian.org will be downloaded.
+
+  If <version-pattern> is "last-all" then the logs for the most recent
+  version found on each build log index will be downloaded.
 Options:
   -h, --help        Show this help message.
   -V, --version     Show version and copyright information.
@@ -69,6 +75,15 @@ VERSION=${2:-[:~+.[:alnum:]-]+}
 ARCH=${3:-[[:alnum:]-]+}
 ESCAPED_PACKAGE=`echo "$PACKAGE" | sed -e 's/\+/\\\+/g'`
 
+GET_LAST_VERSION=no
+if [ "$VERSION" = "last" ]; then
+    GET_LAST_VERSION=yes
+    VERSION=[:~+.[:alnum:]-]+
+elif [ "$VERSION" = "last-all" ]; then
+    GET_LAST_VERSION=all
+    VERSION=[:~+.[:alnum:]-]+
+fi
+
 PATTERN="fetch\.(cgi|php)\?&pkg=$ESCAPED_PACKAGE&ver=$VERSION&arch=$ARCH&\
 stamp=[[:digit:]]+"
 
@@ -84,7 +99,27 @@ getbuildlog() {
     # Quick-and-dirty unescaping
     sed -i -e "s/%2B/\+/g" -e "s/%3A/:/g" -e "s/%7E/~/g" $ALL_LOGS
 
-    for match in `grep -E -o "$PATTERN" $ALL_LOGS`; do
+    # If only the last version was requested, extract and sort
+    # the listed versions and determine the highest
+    if [ "$GET_LAST_VERSION" != "no" ]; then
+	LASTVERSION=$( \
+	    for match in `grep -E -o "$PATTERN" $ALL_LOGS`; do
+		ver=${match##*ver=}
+		echo ${ver%%&*}
+	    done | perl -e '
+		use Devscripts::Versort;
+		while (<>) { push @versions, [$_]; }
+		@versions = Devscripts::Versort::versort(@versions);
+		print $versions[0][0]; ' | sed -e "s/\+/\\\+/g"
+	)
+
+	NEWPATTERN="fetch\.(cgi|php)\?&pkg=$ESCAPED_PACKAGE&\
+ver=$LASTVERSION&\arch=$ARCH&stamp=[[:digit:]]+"
+    else
+	NEWPATTERN=$PATTERN
+    fi
+
+    for match in `grep -E -o "$NEWPATTERN" $ALL_LOGS`; do
 	ver=${match##*ver=}
 	ver=${ver%%&*}
 	arch=${match##*arch=}
@@ -94,6 +129,11 @@ getbuildlog() {
     done
 
     rm -f $ALL_LOGS
+
+    if [ "$GET_LAST_VERSION" = "yes" ]; then
+	PATTERN=$NEWPATTERN
+	GET_LAST_VERSION=no
+    fi
 }
 
 getbuildlog http://buildd.debian.org
