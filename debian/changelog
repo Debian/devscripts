@@ -4,6 +4,8 @@ devscripts (2.10.40) UNRELEASED; urgency=low
   * debchange: Don't attempt to automatically determine if the current
     changelog is an NMU if an alternative changelog location was specified
     using the CHANGELOG environment variable.
+  * debdiff: Correctly handle hyphenated distribution names when generating
+    a diff against the previous version of the package. (Closes: #503950)
   * getbuildlogs:
     + Apply some patches from Jörg Sommer (Closes: #496065)
       - Unescape %7Es in log URLs to allow explicitly searching for 

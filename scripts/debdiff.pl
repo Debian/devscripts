@@ -267,10 +267,12 @@ my $guessed_version = 0;
 # If no file is given, assume that we are in a source directory
 # and try to create a diff with the previous version
 if(@ARGV == 0) {
+    my $name_pat = qr/[-+0-9a-z.]/i;
+
     fatal "Can't read file: debian/changelog" unless -r "debian/changelog";
     open CHL, "debian/changelog";
     while(<CHL>) {
-	if(/^(.+)\s\((\d+:)?(.+)\)\s(\w+)\;\surgency=.+$/) {
+	if(/^(\w$name_pat*)\s\((\d+:)?(.+)\)\s($name_pat+)\;\surgency=.+$/) {
 	    unshift @ARGV, "../".$1."_".$3.".dsc";
 	    $guessed_version++;
 	}
