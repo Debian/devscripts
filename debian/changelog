@@ -6,7 +6,7 @@ devscripts (2.10.40) UNRELEASED; urgency=low
     using the CHANGELOG environment variable.
   * debdiff: Correctly handle hyphenated distribution names when generating
     a diff against the previous version of the package. (Closes: #503950)
-  * getbuildlogs:
+  * getbuildlog:
     + Apply some patches from Jörg Sommer (Closes: #496065)
       - Unescape %7Es in log URLs to allow explicitly searching for 
         package versions containing tildes.
