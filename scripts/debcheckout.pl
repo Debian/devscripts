@@ -55,8 +55,11 @@ B<debcheckout> will select the record with the highest version number.
 Alternatively, a particular version may be selected from those available by
 specifying the package name as I<PACKAGE>=I<VERSION>.
 
-If you already know the URL of a given repository you can invoke debcheckout
-directly on it, but you will probably need to pass the appropriate B<-t> flag.
+If you already know the URL of a given repository you can invoke
+debcheckout directly on it, but you will probably need to pass the
+appropriate B<-t> flag. That is, some heuristics are in use to guess
+the repository type from the URL; if they fail, you might want to
+override the guessed type using B<-t>.
 
 The currently supported version control systems are: arch, bzr, cvs, darcs, git,
 hg, svn.
@@ -590,6 +593,15 @@ sub print_repo($$) {
   exit(0);
 }
 
+sub guess_repo_type($$) {
+    my ($repo_url, $default) = @_;
+    my $repo_type = $default;
+    if ($repo_url =~ /^(git|svn)(\+ssh)?:/) {
+	$repo_type = $1;
+    }
+    return $repo_type;
+}
+
 # Does a given string match the lexical rules for package names?
 sub is_package($) {
   my ($arg) = @_;
@@ -625,6 +637,7 @@ sub main() {
   $version ||= "";
   if (not is_package($pkg)) {  # repo-url passed on the command line
     $repo_url = $ARGV[0];
+    $repo_type = guess_repo_type($repo_url, $repo_type);
     $pkg = ""; $version = "";
   } else {  # package name passed on the command line
     ($repo_type, $repo_url) = find_repo($pkg, $version);

@@ -20,6 +20,9 @@ devscripts (2.10.40) UNRELEASED; urgency=low
   [ Christoph Berg ]
   * debian/control: Remove the Dm-Upload-Allowed flag.
 
+  [ Stefano Zacchiroli ]
+  * debcheckout: try to guess repository type when given raw URLs
+
  -- Christoph Berg <myon@debian.org>  Sat, 25 Oct 2008 18:29:57 +0200
 
 devscripts (2.10.39) unstable; urgency=low
