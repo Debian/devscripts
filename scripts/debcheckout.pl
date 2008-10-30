@@ -598,6 +598,8 @@ sub guess_repo_type($$) {
     my $repo_type = $default;
     if ($repo_url =~ /^(git|svn)(\+ssh)?:/) {
 	$repo_type = $1;
+    } elsif ($repo_url =~ /^https?:\/\/(svn|git|hg|bzr|darcs)\.debian\.org/) {
+	$repo_type = $1;
     }
     return $repo_type;
 }
