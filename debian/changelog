@@ -31,6 +31,8 @@ devscripts (2.10.40) UNRELEASED; urgency=low
     + add -d/--details option to print extended information about
       reopsitories, in machine parseable format. Implement dumping of
       TopGit-specific information for TopGit-enabled GIT repositories
+    + initialize TopGit's automatically, for GIT repositories which are
+      recognized as being managed with TopGit (Closes: #499264)
 
  -- Christoph Berg <myon@debian.org>  Sat, 25 Oct 2008 18:29:57 +0200
 

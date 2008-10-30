@@ -419,9 +419,29 @@ sub checkout_repo($$$) {
     else { die "unsupported version control system '$repo_type'.\n"; }
   }
   @cmd = set_destdir($repo_type, $destdir, @cmd) if $destdir;
+  # XXX Quite annoying: here we don't have an easy way to know the
+  # actual destdir, e.g., to cd into that dir a posteriori. Fix that!
   print "@cmd ...\n";
   system @cmd;
-  return ($? >> 8);
+  my $rc = $? >> 8;
+  return $rc if $rc != 0;
+
+  switch ($repo_type) {	# post-checkout actions
+    case "git"    { my $tg_info = tg_info($repo_url);
+      if ($$tg_info{'topgit'} eq 'yes') {
+	print "TopGit detected, populating top-bases ...\n";
+	my $dir;
+	if ($destdir) {	# see XXX above
+	    $dir = $destdir;
+	} else {	# last URL component, without trailing ".git"
+	    $dir = (split m|\.|, (split m|/|, $repo_url)[-1])[0];
+	}
+	system("cd $dir && tg remote --populate origin");
+	$rc = $? >> 8;
+      }
+    }
+  }
+  return $rc;
 }
 
 # Checkout a given set of files from a given repository in a given
@@ -689,7 +709,7 @@ sub tg_info($) {
   $info{'topgit'} = 'no';
 
   my $tg_prefix = 'refs/top-bases';
-  my $cmd = "git-ls-remote '$url' '$tg_prefix/*'";
+  my $cmd = "git ls-remote '$url' '$tg_prefix/*'";
   open GIT, "$cmd |" or die "can't execute $cmd\n";
   my @bases;
   while (my $line = <GIT>) {
