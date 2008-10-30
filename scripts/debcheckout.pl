@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #
 # debcheckout: checkout the development repository of a Debian package
-# Copyright (C) 2007  Stefano Zacchiroli <zack@debian.org>
+# Copyright (C) 2007-2008  Stefano Zacchiroli <zack@debian.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -648,10 +648,11 @@ sub main() {
       $vermsg = ", version $version" if $version;
       print <<EOF;
 No repository found for package $pkg$vermsg.
-A Vcs-* field is missing in its source record (see Debian Developer's
-Reference 4.10.4 and/or Bug#391023).  If you know that the package is
-maintained via a Version Control System consider asking the maintainer
-to expose such information.
+A Vcs-* field is missing in its source record. See Debian Developer's
+Reference 6.2.5:
+ `http://www.debian.org/doc/developers-reference/best-pkging-practices.html#bpp-vcs'
+If you know that the package is maintained via a Version Control
+System consider asking the maintainer to expose such information.
 EOF
       exit(1);
     }
