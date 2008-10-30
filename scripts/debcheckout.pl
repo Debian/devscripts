@@ -89,8 +89,9 @@ URL
 
 =item B<-t> I<TYPE>, B<--type> I<TYPE>
 
-set the repository type (defaults to "svn"), should be one of the currently
-supported repository types
+override the repository type (which defaults to some heuristics based
+on the URL or, in case of heuristic failures, the fallback "svn"),
+should be one of the currently supported repository types
 
 =item B<-u> I<USERNAME>, B<--user> I<USERNAME>
 
@@ -107,9 +108,8 @@ files.
 
 =head1 SEE ALSO
 
-apt-cache(8), Section 4.10.4 of the Debian Developer's Reference and/or
-Bug#391023 in the Debian Bug Tracking System (for more information about Vcs-*
-fields)
+apt-cache(8), Section 6.2.5 of the Debian Developer's Reference (for
+more information about Vcs-* fields): S<http://www.debian.org/doc/developers-reference/best-pkging-practices.html#bpp-vcs>
 
 =head1 AUTHOR
 
