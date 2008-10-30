@@ -195,7 +195,11 @@
 
 ##### debcheckout
 #
-# No variables currently
+# List of space-separated pairs REGEXP/REPLACEMENT_TEXT to define
+# custom rules to enable authenticated mode.
+# See debcheckout(1) for a more precise description of syntax and
+# semantics of this setting.
+# DEBCHECKOUT_AUTH_URLS=''
 
 ##### debclean
 # 

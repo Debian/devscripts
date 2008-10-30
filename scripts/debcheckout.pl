@@ -83,9 +83,10 @@ print a detailed help message and exit
 
 =item B<-p>, B<--print>
 
-only print information about the package repository, without checking it out;
-the output format is TAB-separated with two fields: repository type, repository
-URL
+only print a summary about the package repository, without checking it
+out; the output format is TAB-separated with two fields: repository
+type, repository URL. This action works offline, it only uses "static"
+information as known by APT's cache.
 
 =item B<-t> I<TYPE>, B<--type> I<TYPE>
 
@@ -103,6 +104,44 @@ implies B<-a>: you don't need to specify both
 Specify that the named file should be extracted from the repository and placed
 in the destionation directory. May be used more than once to extract mutliple
 files.
+
+=back
+
+=head1 CONFIGURATION VARIABLES
+
+The two configuration files F</etc/devscripts.conf> and
+F<~/.devscripts> are sourced by a shell in that order to set
+configuration variables. Command line options can be used to override
+configuration file settings. Environment variable settings are ignored
+for this purpose. The currently recognised variables are:
+
+=over
+
+=item B<DEBCHECKOUT_AUTH_URLS>
+
+This variable should be a space separated list of Perl regular
+expressions and replacement texts, which must come in pairs: REGEXP
+TEXT REGEXP TEXT ... and so on. Each pair denote a substitution which
+is applied to repository URLs if other built-in means of building URLs
+for authenticated mode (see B<-a>) have failed.
+
+References to matching sub-strings in the replacement texts are
+allowed as usual in Perl by the means of $1, $2, ... and so on.
+
+Using this setting users can specify how to enable authenticated mode
+for repositories hosted on non well-known machines.
+
+Here is a sample snippet suitable for the configuration files:
+
+ DEBCHECKOUT_AUTH_URLS='
+  ^\w+://(svn\.example\.com)/(.*)    svn+ssh://$1/srv/svn/$2
+  ^\w+://(git\.example\.com)/(.*)    git+ssh://$1/home/git/$2
+ '
+
+Note that whitespaces are not allowed neither in regexps nor in
+replacement texts. Also, given that configuration files are sourced by
+a shell, you probably want to use single quotes around the value of
+this variable.
 
 =back
 
@@ -130,6 +169,27 @@ use lib '/usr/share/devscripts';
 use Devscripts::Versort;
 
 my @files = ();	  # files to checkout
+
+# <snippet from="bts.pl">
+# <!-- TODO we really need to factor out in a Perl module the
+#      configuration file parsing code -->
+my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
+my %config_vars = (
+    'DEBCHECKOUT_AUTH_URLS' => '',
+    );
+my %config_default = %config_vars;
+my $shell_cmd;
+# Set defaults
+foreach my $var (keys %config_vars) {
+    $shell_cmd .= qq[$var="$config_vars{$var}";\n];
+}
+$shell_cmd .= 'for file in ' . join(" ",@config_files) . "; do\n";
+$shell_cmd .= '[ -f $file ] && . $file; done;' . "\n";
+# Read back values
+foreach my $var (keys %config_vars) { $shell_cmd .= "echo \$$var;\n" }
+my $shell_out = `/bin/bash -c '$shell_cmd'`;
+@config_vars{keys %config_vars} = split /\n/, $shell_out, -1;
+# </snippet>
 
 my $lwp_broken;
 my $ua;
@@ -265,6 +325,19 @@ sub set_destdir(@$$) {
   return @cmd;
 }
 
+# try patching a repository URL to enable authenticated mode, *relying
+# only on user defined rules*
+sub user_set_auth($$) {
+    my ($repo_type, $url) = @_;
+    my @rules = split ' ', $config_vars{'DEBCHECKOUT_AUTH_URLS'};
+    while (my $pat = shift @rules) {	# read pairs for s/$pat/$subst/
+	my $subst = shift @rules
+	    or die "Configuration error for DEBCHECKOUT_AUTH_URLS: regexp and replacement texts must come in pairs. See debcheckout(1).\n";
+	$url =~ s/$pat/qq("$subst")/ee;	# ZACK: my worst Perl line ever
+    }
+    return $url;
+}
+
 # Patch a given repository URL to ensure that the checkoud out repository can be
 # committed to. Only works for well known repositories (mainly Alioth's).
 sub set_auth($$$$) {
@@ -306,6 +379,9 @@ sub set_auth($$$$) {
     case "hg"     { $url =~ s|^\w+://(hg\.debian\.org/.*)|ssh://$user$1|; }
     case "svn"	  { $url =~ s|^\w+://(svn\.debian\.org)/(.*)|svn+ssh://$user$1/svn/$2|; }
     else { die "sorry, don't know how to enable authentication for $repo_type repositories (patches welcome!)\n"; }
+  }
+  if ($url eq $old_url) { # last attempt: try with user-defined rules
+      $url = user_set_auth($repo_type, $url);
   }
   die "can't use authenticated mode on repository '$url' since it is not a known repository (e.g. alioth)\n"
     if $url eq $old_url;

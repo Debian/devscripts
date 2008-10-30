@@ -26,6 +26,8 @@ devscripts (2.10.40) UNRELEASED; urgency=low
     + update user info about Vcs-* fields (correct developers' reference
       section, add an URL to it)
     + suggest using apt-get source as a fallback (Closes: #488717)
+    + add support to define custom rules for authenticated mode, this way
+      personal repos can benefit from '-a' (Closes: #501568)
 
  -- Christoph Berg <myon@debian.org>  Sat, 25 Oct 2008 18:29:57 +0200
 
