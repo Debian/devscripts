@@ -61,8 +61,8 @@ appropriate B<-t> flag. That is, some heuristics are in use to guess
 the repository type from the URL; if they fail, you might want to
 override the guessed type using B<-t>.
 
-The currently supported version control systems are: arch, bzr, cvs, darcs, git,
-hg, svn.
+The currently supported version control systems are: arch, bzr, cvs,
+darcs, git, hg, svn.
 
 =head1 OPTIONS
 
@@ -77,16 +77,28 @@ for subversion repositories hosted on alioth this means that
 S<svn+ssh://svn.debian.org/...> will be used instead of
 S<svn://svn.debian.org/...>
 
+=item B<-d>, B<--details>
+
+only print a list of detailed information about the package
+repository, without checking it out; the output format is a list of
+fields, each field being a pair of TAB-separated field name and field
+value. The actual fields depend on the repository type. This action
+might require network connection to the remote repository.
+
+Also see B<-p>. This option and B<-p> are mutually exclusive.
+
 =item B<-h>, B<--help>
 
 print a detailed help message and exit
 
 =item B<-p>, B<--print>
 
-only print a summary about the package repository, without checking it
-out; the output format is TAB-separated with two fields: repository
-type, repository URL. This action works offline, it only uses "static"
-information as known by APT's cache.
+only print a summary about package repository information, without
+checking it out; the output format is TAB-separated with two fields:
+repository type, repository URL. This action works offline, it only
+uses "static" information as known by APT's cache.
+
+Also see B<-d>. This option and B<-d> are mutually exclusive.
 
 =item B<-t> I<TYPE>, B<--type> I<TYPE>
 
@@ -341,7 +353,7 @@ sub user_set_auth($$) {
 # Patch a given repository URL to ensure that the checkoud out repository can be
 # committed to. Only works for well known repositories (mainly Alioth's).
 sub set_auth($$$$) {
-  my ($repo_type, $url, $user, $print_only) = @_;
+  my ($repo_type, $url, $user, $dont_act) = @_;
 
   my $old_url = $url;
 
@@ -357,7 +369,7 @@ sub set_auth($$$$) {
        if ($url =~ m|(~)|) {
            $user_url =~ s|^\w+://(darcs\.debian\.org)/(~)(.*?)/.*|$3|;
            die "the local user '$user_local' doesn't own the personal repository '$url'\n"
-               if $user_local ne $user_url and !$print_only;
+               if $user_local ne $user_url and !$dont_act;
            $url =~ s|^\w+://(darcs\.debian\.org)/(~)(.*?)/(.*)|$user$1:~/public_darcs/$4|;
        } else {
            $url =~ s|^\w+://(darcs\.debian\.org)/(.*)|$user$1:/$2|;
@@ -369,7 +381,7 @@ sub set_auth($$$$) {
         $user_url =~ s|^\w+://(git\.debian\.org)/~(.*?)/.*|$2|;
 
         die "the local user '$user_local' doesn't own the personal repository '$url'\n"
-          if $user_local ne $user_url and !$print_only;
+          if $user_local ne $user_url and !$dont_act;
         $url =~ s|^\w+://(git\.debian\.org)/git/users/.*?/(.*)|git+ssh://$user$1/~/public_git/$2|;
         $url =~ s|^\w+://(git\.debian\.org)/~.*?/(.*)|git+ssh://$user$1/~/public_git/$2|;
       } else {
@@ -669,6 +681,45 @@ sub print_repo($$) {
   exit(0);
 }
 
+# Given a GIT repository URL, extract its topgit info (if any), see
+# the "topgit" package for more information
+sub tg_info($) {
+  my ($url) = @_;
+  my %info;
+  $info{'topgit'} = 'no';
+
+  my $tg_prefix = 'refs/top-bases';
+  my $cmd = "git-ls-remote '$url' '$tg_prefix/*'";
+  open GIT, "$cmd |" or die "can't execute $cmd\n";
+  my @bases;
+  while (my $line = <GIT>) {
+    chomp $line;
+    my ($sha1, $name) = split /\s+/, $line;
+    push @bases, substr($name, length($tg_prefix) + 1);
+  }
+  close GIT;
+  if (@bases) {
+      $info{'topgit'} = 'yes';
+      $info{'top-bases'} = join ' ', @bases;
+  }
+  return(\%info);
+}
+
+# Print details about a repository and quit.
+sub print_details($$) {
+  my ($repo_type, $repo_url) = @_;
+
+  print "type\t$repo_type\n";
+  print "url\t$repo_url\n";
+  if ($repo_type eq "git") {
+      my $tg_info = tg_info($repo_url);
+      while (my ($k, $v) = each %$tg_info) {
+	  print "$k\t$v\n";
+      }
+  }
+  exit(0);
+}
+
 sub guess_repo_type($$) {
     my ($repo_url, $default) = @_;
     my $repo_type = $default;
@@ -692,7 +743,8 @@ sub main() {
   my $destdir = "";	  # destination directory
   my $pkg = "";		  # package name
   my $version = "";       # package version
-  my $print_only = 0;	  # print only mode
+  my $print_mode = 0;	  # print only mode
+  my $details_mode = 0;	  # details only mode
   my $repo_type = "svn";  # default repo typo, overridden by '-t'
   my $repo_url = "";	  # repository URL
   my $user = "";	  # login name (authenticated mode only)
@@ -700,12 +752,18 @@ sub main() {
   GetOptions(
       "auth|a" => \$auth,
       "help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },
-      "print|p" => \$print_only,
+      "print|p" => \$print_mode,
+      "details|d" => \$details_mode,
       "type|t=s" => \$repo_type,
       "user|u=s" => \$user,
       "file|f=s" => sub { push(@files, $_[1]); },
     ) or pod2usage({-exitval => 3});
   pod2usage({-exitval => 3}) if ($#ARGV < 0 or $#ARGV > 1);
+  pod2usage({-exitval => 3,
+	     -message =>
+		 "-d (--details) and -p (--print) are mutually exclusive.\n", })
+      if ($print_mode and $details_mode);
+  my $dont_act = 1 if ($print_mode or $details_mode);
 
   # -u|--user implies -a|--auth
   $auth = 1 if $user;
@@ -746,9 +804,10 @@ EOF
     $browse_url = find_browse($pkg, $version) if @files;
   }
 
-  $repo_url = set_auth($repo_type, $repo_url, $user, $print_only)
+  $repo_url = set_auth($repo_type, $repo_url, $user, $dont_act)
     if $auth and not @files;
-  print_repo($repo_type, $repo_url) if $print_only; # ... then quit
+  print_repo($repo_type, $repo_url) if $print_mode;		# ... then quit
+  print_details($repo_type, $repo_url) if $details_mode;	# ... then quit
   if (length $pkg) {
     print "declared $repo_type repository at $repo_url\n";
     $destdir = $pkg unless length $destdir;

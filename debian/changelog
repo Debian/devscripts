@@ -28,6 +28,9 @@ devscripts (2.10.40) UNRELEASED; urgency=low
     + suggest using apt-get source as a fallback (Closes: #488717)
     + add support to define custom rules for authenticated mode, this way
       personal repos can benefit from '-a' (Closes: #501568)
+    + add -d/--details option to print extended information about
+      reopsitories, in machine parseable format. Implement dumping of
+      TopGit-specific information for TopGit-enabled GIT repositories
 
  -- Christoph Berg <myon@debian.org>  Sat, 25 Oct 2008 18:29:57 +0200
 
