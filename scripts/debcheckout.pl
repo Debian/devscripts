@@ -648,11 +648,22 @@ sub main() {
       $vermsg = ", version $version" if $version;
       print <<EOF;
 No repository found for package $pkg$vermsg.
+
 A Vcs-* field is missing in its source record. See Debian Developer's
 Reference 6.2.5:
  `http://www.debian.org/doc/developers-reference/best-pkging-practices.html#bpp-vcs'
-If you know that the package is maintained via a Version Control
-System consider asking the maintainer to expose such information.
+If you know that the package is maintained via a version control
+system consider asking the maintainer to expose such information.
+
+Nevertheless, you can get the sources of package $pkg
+from the Debian archive executing:
+
+    apt-get source $pkg
+
+Note however that what you obtain will *not* be a local copy of
+some version control system: your changes will not be preserved
+and it will not be possible to commit them directly.
+
 EOF
       exit(1);
     }
