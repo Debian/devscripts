@@ -202,6 +202,9 @@ check_already_signed () {
 
 # --- main script
 
+# Unset GREP_OPTIONS for sanity
+unset GREP_OPTIONS
+
 # Boilerplate: set config variables
 DEFAULT_DEBSIGN_PROGRAM=
 DEFAULT_DEBSIGN_SIGNLIKE=
