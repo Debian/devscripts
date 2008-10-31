@@ -66,6 +66,8 @@ darcs, git, hg, svn.
 
 =head1 OPTIONS
 
+=head2 GENERAL OPTIONS
+
 =over
 
 =item B<-a>, B<--auth>
@@ -116,6 +118,24 @@ implies B<-a>: you don't need to specify both
 Specify that the named file should be extracted from the repository and placed
 in the destionation directory. May be used more than once to extract mutliple
 files.
+
+=back
+
+=head2 VCS-SPECIFIC OPTIONS
+
+=head3 GIT-SPECIFIC OPTIONS
+
+=over
+
+=item B<--git-track> I<BRANCHES>
+
+Specify a list of remote branches which will be set up for tracking
+(as in S<git branch --track>, see git-branch(1)) after that the remote
+GIT repository has been cloned. The list should be given as a
+space-separated list of branch names.
+
+As a shorthand, the string "*" can be given to require tracking of all
+remote branches.
 
 =back
 
@@ -419,28 +439,9 @@ sub checkout_repo($$$) {
     else { die "unsupported version control system '$repo_type'.\n"; }
   }
   @cmd = set_destdir($repo_type, $destdir, @cmd) if $destdir;
-  # XXX Quite annoying: here we don't have an easy way to know the
-  # actual destdir, e.g., to cd into that dir a posteriori. Fix that!
   print "@cmd ...\n";
   system @cmd;
   my $rc = $? >> 8;
-  return $rc if $rc != 0;
-
-  switch ($repo_type) {	# post-checkout actions
-    case "git"    { my $tg_info = tg_info($repo_url);
-      if ($$tg_info{'topgit'} eq 'yes') {
-	print "TopGit detected, populating top-bases ...\n";
-	my $dir;
-	if ($destdir) {	# see XXX above
-	    $dir = $destdir;
-	} else {	# last URL component, without trailing ".git"
-	    $dir = (split m|\.|, (split m|/|, $repo_url)[-1])[0];
-	}
-	system("cd $dir && tg remote --populate origin");
-	$rc = $? >> 8;
-      }
-    }
-  }
   return $rc;
 }
 
@@ -701,23 +702,32 @@ sub print_repo($$) {
   exit(0);
 }
 
+sub git_ls_remote($$) {
+  my ($url, $prefix) = @_;
+
+  my $cmd = "git ls-remote '$url'";
+  $cmd .= " '$prefix/*'" if $prefix;
+  open GIT, "$cmd |" or die "can't execute $cmd\n";
+  my @refs;
+  while (my $line = <GIT>) {
+    chomp $line;
+    my ($sha1, $name) = split /\s+/, $line;
+    my $ref = $name;
+    $ref = substr($ref, length($prefix) + 1) if $prefix;
+    push @refs, $ref;
+  }
+  close GIT;
+  return @refs;
+}
+
 # Given a GIT repository URL, extract its topgit info (if any), see
 # the "topgit" package for more information
 sub tg_info($) {
   my ($url) = @_;
+
   my %info;
   $info{'topgit'} = 'no';
-
-  my $tg_prefix = 'refs/top-bases';
-  my $cmd = "git ls-remote '$url' '$tg_prefix/*'";
-  open GIT, "$cmd |" or die "can't execute $cmd\n";
-  my @bases;
-  while (my $line = <GIT>) {
-    chomp $line;
-    my ($sha1, $name) = split /\s+/, $line;
-    push @bases, substr($name, length($tg_prefix) + 1);
-  }
-  close GIT;
+  my @bases = git_ls_remote($url, 'refs/top-bases');
   if (@bases) {
       $info{'topgit'} = 'yes';
       $info{'top-bases'} = join ' ', @bases;
@@ -769,6 +779,7 @@ sub main() {
   my $repo_url = "";	  # repository URL
   my $user = "";	  # login name (authenticated mode only)
   my $browse_url = "";    # online browsable repository URL
+  my $git_track = "";     # list of remote GIT branches to --track
   GetOptions(
       "auth|a" => \$auth,
       "help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },
@@ -777,6 +788,7 @@ sub main() {
       "type|t=s" => \$repo_type,
       "user|u=s" => \$user,
       "file|f=s" => sub { push(@files, $_[1]); },
+      "git-track=s" => \$git_track,
     ) or pod2usage({-exitval => 3});
   pod2usage({-exitval => 3}) if ($#ARGV < 0 or $#ARGV > 1);
   pod2usage({-exitval => 3,
@@ -837,11 +849,11 @@ EOF
     $rc = checkout_files($repo_type, $repo_url, $destdir, $browse_url);
   } else {    
     $rc = checkout_repo($repo_type, $repo_url, $destdir);
-  }
-  if ($rc != 0) {
-    print STDERR
-      "checkout failed (the command shown above returned non-zero exit code)\n";
-  }
+  }	# XXX: there is no way to know for sure what is the destdir :-(
+  die "checkout failed (the command shown above returned non-zero exit code)\n"
+    if $rc != 0;
+
+  # post-checkout actions
   if ($repo_type eq 'bzr' and $auth) {
     if (open B, '>>', "$destdir/.bzr/branch/branch.conf") {
       print B "\npush_location = $repo_url";
@@ -849,7 +861,32 @@ EOF
     } else {
       print STDERR "failed to open branch.conf to add push_location: $@\n";
     }
+  } elsif ($repo_type eq 'git') {
+    my $tg_info = tg_info($repo_url);
+    my $wcdir = $destdir;
+    # HACK: if $destdir is unknown, take last URL part and remove /.git$/
+    $wcdir = (split m|\.|, (split m|/|, $repo_url)[-1])[0]
+      unless length $wcdir;
+    if ($$tg_info{'topgit'} eq 'yes') {
+      print "TopGit detected, populating top-bases ...\n";
+      system("cd $wcdir && tg remote --populate origin");
+      $rc = $? >> 8;
+      print STDERR "TopGit population failed\n" if $rc != 0;
+    }
+    if (length $git_track) {
+      my @heads;
+      if ($git_track eq '*') {
+        @heads = git_ls_remote($repo_url, 'refs/heads');
+      } else {
+        @heads = split ' ', $git_track;
+      }
+      foreach my $head (@heads) {
+        next if $head eq 'master';
+	system("cd $wcdir && git branch --track $head remotes/origin/$head");
+      }
+    }
   }
+  
   exit($rc);
 }
 
