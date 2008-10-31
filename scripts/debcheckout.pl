@@ -438,7 +438,7 @@ sub checkout_repo($$$) {
     case "svn"    { @cmd = ("svn", "co", $repo_url); }
     else { die "unsupported version control system '$repo_type'.\n"; }
   }
-  @cmd = set_destdir($repo_type, $destdir, @cmd) if $destdir;
+  @cmd = set_destdir($repo_type, $destdir, @cmd) if length $destdir;
   print "@cmd ...\n";
   system @cmd;
   my $rc = $? >> 8;
@@ -461,7 +461,7 @@ sub checkout_files($$$$) {
     $escaped_file =~ s|\+|%2B|g;
 
     my $dir;
-    if (defined $destdir and length $destdir > 0) {
+    if (defined $destdir and length $destdir) {
       $dir = "$destdir/";
     } else {
       $dir = "./";
@@ -477,7 +477,7 @@ sub checkout_files($$$$) {
       case "arch" {
         # If we've already retrieved a copy of the repository,
         # reuse it
-        if (!$tempdir) {
+        if (!length($tempdir)) {
           if (!($tempdir = tempdir( "debcheckoutXXXX", TMPDIR => 1, CLEANUP => 1 ))) {
             print STDERR "Failed to create temporary directory . $!\n";
             return 1;
@@ -498,7 +498,7 @@ sub checkout_files($$$$) {
         }
       }
       case "cvs" {
-        if (!$tempdir) {
+        if (!length($tempdir)) {
           if (!($tempdir = tempdir( "debcheckoutXXXX", TMPDIR => 1, CLEANUP => 1 ))) {
             print STDERR "Failed to create temporary directory . $!\n";
             return 1;
@@ -508,7 +508,7 @@ sub checkout_files($$$$) {
         my ($root, $module) = split /\s+/, $repo_url;
         # If an explicit module name isn't present, use the last
         # component of the URL
-        if (!$module) {
+        if (!length($module)) {
           $module = $repo_url;
           $module =~ s%^.*/(.*?)$%$1%;
         }
@@ -574,7 +574,7 @@ sub checkout_files($$$$) {
         if ($fetched == 0) {
           # If we've already retrieved a copy of the repository,
           # reuse it
-          if (!$tempdir) {
+          if (!length($tempdir)) {
             if (!($tempdir = tempdir( "debcheckoutXXXX", TMPDIR => 1, CLEANUP => 1 ))) {
               print STDERR "Failed to create temporary directory . $!\n";
               return 1;
@@ -604,7 +604,7 @@ sub checkout_files($$$$) {
 	# If there isn't a browse URL (either because the package
 	# doesn't ship one, or because we were called with a URL,
 	# try a common pattern for gitweb
-	if (!$browse_url) {
+	if (!length($browse_url)) {
 	    if ($repo_url =~ m%^\w+://([^/]+)/(?:git/)?(.*)$%) {
 		$browse_url = "http://$1/?p=$2";
 	    }
@@ -645,10 +645,10 @@ sub checkout_files($$$$) {
             $fetched = 1;
           }
         }
-        if ($fetched ==0) {
+        if ($fetched == 0) {
           # If we've already retrieved a copy of the repository,
           # reuse it
-          if (!$tempdir) {
+          if (!length($tempdir)) {
             if (!($tempdir = tempdir( "debcheckoutXXXX", TMPDIR => 1, CLEANUP => 1 ))) {
               print STDERR "Failed to create temporary directory . $!\n";
               return 1;
@@ -706,14 +706,14 @@ sub git_ls_remote($$) {
   my ($url, $prefix) = @_;
 
   my $cmd = "git ls-remote '$url'";
-  $cmd .= " '$prefix/*'" if $prefix;
+  $cmd .= " '$prefix/*'" if length $prefix;
   open GIT, "$cmd |" or die "can't execute $cmd\n";
   my @refs;
   while (my $line = <GIT>) {
     chomp $line;
     my ($sha1, $name) = split /\s+/, $line;
     my $ref = $name;
-    $ref = substr($ref, length($prefix) + 1) if $prefix;
+    $ref = substr($ref, length($prefix) + 1) if length $prefix;
     push @refs, $ref;
   }
   close GIT;
@@ -798,7 +798,7 @@ sub main() {
   my $dont_act = 1 if ($print_mode or $details_mode);
 
   # -u|--user implies -a|--auth
-  $auth = 1 if $user;
+  $auth = 1 if length $user;
 
   $destdir = $ARGV[1] if $#ARGV > 0;
   ($pkg, $version) = split(/=/, $ARGV[0]);
@@ -811,7 +811,7 @@ sub main() {
     ($repo_type, $repo_url) = find_repo($pkg, $version);
     unless ($repo_type) {
       my $vermsg = "";
-      $vermsg = ", version $version" if $version;
+      $vermsg = ", version $version" if length $version;
       print <<EOF;
 No repository found for package $pkg$vermsg.
 
