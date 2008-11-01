@@ -11,79 +11,154 @@ set -e
 BUILDD_USER="$(id -un 2>/dev/null)"
 BUILDD_ARCH="$(dpkg-architecture -qDEB_BUILD_ARCH 2>/dev/null)"
 
+# The 'default' dist is whatever cowbuilder is locally configured for
+BUILDD_DIST="default"
+
 INCOMING_DIR="cowbuilder-incoming"
-RESULT_DIR="/var/cache/pbuilder/result"
+PBUILDER_BASE="/var/cache/pbuilder"
 
 #SIGN_KEYID=
 #UPLOAD_QUEUE="ftp-master"
 
 REMOTE_SCRIPT="cowssh_it"
+DEBOOTSTRAP="cdebootstrap"
 
 for f in /etc/cowpoke.conf ~/.cowpoke .cowpoke "$COWPOKE_CONF"; do [ -r "$f" ] && . "$f"; done
 
-PROGNAME=`basename $0`
 
-version () {
+get_archdist_vars()
+{
+    _ARCHDIST_OPTIONS="RESULT_DIR BASE_PATH"
+    _RESULT_DIR="result"
+    _BASE_PATH="base.cow"
+
+    for arch in $BUILDD_ARCH; do
+	for dist in $BUILDD_DIST; do
+	    for var in $_ARCHDIST_OPTIONS; do
+		if [ "$1" = "display" ]; then
+		    if [ -z "$(eval echo "\$${arch}_${dist}_${var}")" ]; then
+			echo "   ${arch}_${dist}_${var} = $PBUILDER_BASE/$arch/$dist/$(eval echo "\$_$var")"
+		    else
+			echo "   ${arch}_${dist}_${var} = $(eval echo "\$${arch}_${dist}_${var}")"
+		    fi
+		else
+		    if [ -z "$(eval echo "\$${arch}_${dist}_${var}")" ]; then
+			echo "${arch}_${dist}_${var}=\"$PBUILDER_BASE/$arch/$dist/$(eval echo "\$_$var")\""
+		    else
+			echo "${arch}_${dist}_${var}=\"$(eval echo "\$${arch}_${dist}_${var}")\""
+		    fi
+		fi
+	    done
+	done
+    done
+}
+
+PROGNAME="$(basename $0)"
+version ()
+{
     echo \
 "This is $PROGNAME, from the Debian devscripts package, version ###VERSION###
 This code is copyright 2007-8 by Ron <ron@debian.org>, all rights reserved.
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the
 GNU General Public License."
-   exit 0
+    exit 0
 }
 
 usage()
 {
     cat 1>&2 <<EOF
 
-cowpoke package.dsc [ arch [ buildd-host [ buildd-username ] ] ]
+cowpoke [options] package.dsc
 
   Uploads a Debian source package to a cowbuilder host and builds it,
   optionally also signing and uploading the result to an incoming queue.
+  The following options are supported:
+
+   --arch="arch"         Specify the Debian architecture(s) to build for.
+   --dist="dist"         Specify the Debian distribution(s) to build for.
+   --buildd="host"       Specify the remote host to build on.
+   --buildd-user="name"  Specify the remote user to build as.
+   --create              Create the remote cowbuilder root if necessary.
+
   The current default configuration is:
 
    BUILDD_HOST = $BUILDD_HOST
    BUILDD_USER = $BUILDD_USER
    BUILDD_ARCH = $BUILDD_ARCH
+   BUILDD_DIST = $BUILDD_DIST
 
   The expected remote paths are:
 
-   INCOMING_DIR = ~$BUILDD_USER/$INCOMING_DIR
-   RESULT_DIR   = ${RESULT_DIR:-/}
+   INCOMING_DIR  = ~$BUILDD_USER/$INCOMING_DIR
+   PBUILDER_BASE = ${PBUILDER_BASE:-/}
+
+$(get_archdist_vars display)
 
   The cowbuilder image must have already been created on the build host,
-  and the expected remote paths must already exist.  You must have ssh
-  access to the build host as 'root' and '$BUILDD_USER'.
+  and the expected remote paths must already exist if the --create option
+  is not passed.  You must have ssh access to the build host as '$BUILDD_USER'
+  and the ability to either log in, or execute commands, as the root user.
 
 EOF
 
     exit $1
 }
 
-[ "$1" = "--help" ] && usage 0;
-[ "$1" = "--version" ] && version;
-[ $# -gt 0 ] && [ $# -lt 4 ] || usage 1
+
+for arg; do
+    case "$arg" in
+	--arch=*)
+	    BUILDD_ARCH="${arg#*=}"
+	    ;;
+
+	--dist=*)
+	    BUILDD_DIST="${arg#*=}"
+	    ;;
+
+	--buildd=*)
+	    BUILDD_HOST="${arg#*=}"
+	    ;;
+
+	--buildd-user=*)
+	    BUILDD_USER="${arg#*=}"
+	    ;;
+
+	--create)
+	    CREATE_COW="yes"
+	    ;;
+
+	*.dsc)
+	    DSC="$arg"
+	    ;;
+
+	--help)
+	    usage 0
+	    ;;
+
+	--version)
+	    version
+	    ;;
+
+	*)
+	    echo "ERROR: unrecognised option '$arg'"
+	    usage 1
+	    ;;
+    esac
+done
 
 if [ -z "$REMOTE_SCRIPT" ]; then
     echo "No remote script name set.  Aborted."
     exit 1
 fi
-
-case "$1" in
-    *.dsc) ;;
-    *) echo "ERROR: '$1' is not a package .dsc file"
-       usage 1 ;;
-esac
-if ! [ -r "$1" ]; then
-    echo "ERROR: '$1' not found."
+if [ -z "$DSC" ]; then
+    echo "ERROR: No package .dsc specified"
+    usage 1
+fi
+if ! [ -r "$DSC" ]; then
+    echo "ERROR: '$DSC' not found."
     exit 1
 fi
-
-[ -z "$2" ] || BUILDD_ARCH="$2"
-[ -z "$3" ] || BUILDD_HOST="$3"
-[ -z "$4" ] || BUILDD_USER="$4"
-
 if [ -z "$BUILDD_ARCH" ]; then
     echo "No BUILDD_ARCH set.  Aborted."
     exit 1
@@ -96,7 +171,6 @@ if [ -z "$BUILDD_USER" ]; then
     echo "No BUILDD_USER set.  Aborted."
     exit 1
 fi
-
 if [ -e "$REMOTE_SCRIPT" ]; then
     echo "$REMOTE_SCRIPT file already exists and will be overwritten."
     echo -n "Do you wish to continue (Y/n)? "
@@ -112,75 +186,102 @@ if [ -e "$REMOTE_SCRIPT" ]; then
     esac
 fi
 
-PACKAGE="$(basename $1 .dsc)"
-CHANGES="$BUILDD_ARCH.changes"
-LOGFILE="build.${PACKAGE}_$BUILDD_ARCH.log"
+PACKAGE="$(basename $DSC .dsc)"
 DATE="$(date +%Y%m%d 2>/dev/null)"
+
 
 cat > "$REMOTE_SCRIPT" <<-EOF
 	#! /bin/bash
 	# cowpoke generated remote worker script.
 	# Normally this should have been deleted already, you can safely remove it now.
 
+	$(get_archdist_vars)
 
-	# Sort the list of old changes files for this package to try and
-	# determine the most recent one preceding this version.  We will
-	# debdiff to this revision in the final sanity checks if one exists.
-	# This is adapted from the insertion sort trickery in git-debimport.
+	for arch in $BUILDD_ARCH; do
+	  for dist in $BUILDD_DIST; do
 
-	OLD_CHANGES="\$(find "$RESULT_DIR/" -maxdepth 1 -type f \\
-	                     -name "${PACKAGE%%_*}_*_$CHANGES" 2>/dev/null \\
-	                | sort 2>/dev/null)"
-	P=( \$OLD_CHANGES )
-	count=\${#P[*]}
-	COMPARE="dpkg --compare-versions"
+	    echo " ------- Begin build for \$arch \$dist -------"
 
-	for(( i=1; i < count; ++i )) do
-	    j=i
-	    #echo "was \$i: \${P[i]}"
-	    while ((\$j)) && \$COMPARE "\${P[j-1]%_$CHANGES}" gt "\${P[i]%_$CHANGES}"; do ((--j)); done
-	    ((i==j)) || P=( \${P[@]:0:j} \${P[i]} \${P[j]} \${P[@]:j+1:i-(j+1)} \${P[@]:i+1} )
-	done
-	#for(( i=1; i < count; ++i )) do echo "now \$i: \${P[i]}"; done
+	    CHANGES="\$arch.changes"
+	    LOGFILE="build.${PACKAGE}_\$arch.\$dist.log"
+	    RESULT_DIR="\$(eval echo "\\\$\${arch}_\${dist}_RESULT_DIR")"
+	    BASE_PATH="\$(eval echo "\\\$\${arch}_\${dist}_BASE_PATH")"
 
-	OLD_CHANGES=
-	for(( i=count-1; i >= 0; --i )) do
-	    if [ "\${P[i]}" != "$RESULT_DIR/${PACKAGE}_$CHANGES" ]; then 
-	        OLD_CHANGES="\${P[i]}"
-	        break
+	    # Sort the list of old changes files for this package to try and
+	    # determine the most recent one preceding this version.  We will
+	    # debdiff to this revision in the final sanity checks if one exists.
+	    # This is adapted from the insertion sort trickery in git-debimport.
+
+	    OLD_CHANGES="\$(find "\$RESULT_DIR/" -maxdepth 1 -type f \\
+	                         -name "${PACKAGE%%_*}_*_\$CHANGES" 2>/dev/null \\
+	                    | sort 2>/dev/null)"
+	    P=( \$OLD_CHANGES )
+	    count=\${#P[*]}
+	    COMPARE="dpkg --compare-versions"
+
+	    for(( i=1; i < count; ++i )) do
+	        j=i
+	        #echo "was \$i: \${P[i]}"
+	        while ((\$j)) && \$COMPARE "\${P[j-1]%_*.changes}" gt "\${P[i]%_*.changes}"; do ((--j)); done
+	        ((i==j)) || P=( \${P[@]:0:j} \${P[i]} \${P[j]} \${P[@]:j+1:i-(j+1)} \${P[@]:i+1} )
+	    done
+	    #for(( i=1; i < count; ++i )) do echo "now \$i: \${P[i]}"; done
+
+	    OLD_CHANGES=
+	    for(( i=count-1; i >= 0; --i )) do
+	        if [ "\${P[i]}" != "\$RESULT_DIR/${PACKAGE}_\$CHANGES" ]; then
+	            OLD_CHANGES="\${P[i]}"
+	            break
+	        fi
+	    done
+
+
+	    set -eo pipefail
+
+	    if ! [ -e "\$BASE_PATH" ]; then
+	        if [ "$CREATE_COW" = "yes" ]; then
+	            mkdir -p "\$RESULT_DIR"
+	            mkdir -p "\$(dirname \$BASE_PATH)"
+	            cowbuilder --create --distribution \$dist --basepath "\$BASE_PATH" \\
+	                       --debootstrap "$DEBOOTSTRAP" --debootstrapopts --arch="\$arch" 2>&1 \\
+	            | tee "cowbuilder-\${arch}-\${dist}-update-log-$DATE"
+	        else
+	            echo "SKIPPING \$dist/\$arch build, '\$BASE_PATH' does not exist" | tee "\$LOGFILE"
+	            echo "         use the cowpoke --create option to bootstrap a new build root" | tee -a "\$LOGFILE"
+	            continue
+	        fi
+	    elif ! [ -e "cowbuilder-\${arch}-\${dist}-update-log-$DATE" ]; then
+	        cowbuilder --update --basepath "\$BASE_PATH" 2>&1 | tee "cowbuilder-\${arch}-\${dist}-update-log-$DATE"
 	    fi
+	    cowbuilder --build --basepath "\$BASE_PATH" --buildresult "\$RESULT_DIR" "$(basename $DSC)" 2>&1 \\
+	    | tee "\$LOGFILE"
+
+	    set +eo pipefail
+
+
+	    echo >> "\$LOGFILE"
+	    echo "lintian \$RESULT_DIR/${PACKAGE}_\$CHANGES" >> "\$LOGFILE"
+	    ( su "$BUILDD_USER" -c "lintian \"\$RESULT_DIR/${PACKAGE}_\$CHANGES\"" ) 2>&1 \\
+	    | tee -a "\$LOGFILE"
+
+	    if [ -n "\$OLD_CHANGES" ]; then
+	        echo >> "\$LOGFILE"
+	        echo "debdiff \$OLD_CHANGES ${PACKAGE}_\$CHANGES" >> "\$LOGFILE"
+	        ( su "$BUILDD_USER" -c "debdiff \"\$OLD_CHANGES\" \"\$RESULT_DIR/${PACKAGE}_\$CHANGES\"" ) 2>&1 \\
+	        | tee -a "\$LOGFILE"
+	    else
+	        echo >> "\$LOGFILE"
+	        echo "No previous packages for \$dist/\$arch to compare" >> "\$LOGFILE"
+	    fi
+
+	  done
 	done
-
-
-	set -eo pipefail
-
-	if ! [ -e "cowbuilder-update-log-$DATE" ]; then
-	    cowbuilder --update 2>&1 | tee "cowbuilder-update-log-$DATE"
-	fi
-	cowbuilder --build "$(basename $1)" 2>&1 | tee "$LOGFILE"
-
-	set +eo pipefail
-
-
-	echo >> "$LOGFILE"
-	echo "lintian $RESULT_DIR/${PACKAGE}_$CHANGES" >> "$LOGFILE"
-	( su "$BUILDD_USER" -c "lintian \"$RESULT_DIR/${PACKAGE}_$CHANGES\"" ) 2>&1 \\
-	| tee -a "$LOGFILE"
-
-	if [ -n "\$OLD_CHANGES" ]; then
-	    echo >> "$LOGFILE"
-	    echo "debdiff \$OLD_CHANGES ${PACKAGE}_$CHANGES" >> "$LOGFILE"
-	    ( su "$BUILDD_USER" -c "debdiff \"\$OLD_CHANGES\" \"$RESULT_DIR/${PACKAGE}_$CHANGES\"" ) 2>&1 \\
-	    | tee -a "$LOGFILE"
-	else
-	    echo >> "$LOGFILE"
-	    echo "No previous packages for $BUILDD_ARCH to compare" >> "$LOGFILE"
-	fi
 
 EOF
 chmod 755 "$REMOTE_SCRIPT"
 
-dcmd scp $1 "$REMOTE_SCRIPT" "$BUILDD_USER@$BUILDD_HOST:$INCOMING_DIR"
+
+dcmd scp $DSC "$REMOTE_SCRIPT" "$BUILDD_USER@$BUILDD_HOST:$INCOMING_DIR"
 
 if [ -z "$BUILDD_ROOTCMD" ]; then
     ssh "root@$BUILDD_HOST" "cd ~$BUILDD_USER/\"$INCOMING_DIR\" && \"./$REMOTE_SCRIPT\" && rm -f \"./$REMOTE_SCRIPT\""
@@ -192,49 +293,62 @@ echo
 echo "Build completed."
 
 if [ -n "$SIGN_KEYID" ]; then
-    while true; do
-	echo -n "Sign $PACKAGE with key '$SIGN_KEYID' (yes/no)? "
-	read -e yesno
-	case "$yesno" in
-	    YES | yes)
-		if [ -z "$BUILDD_ROOTCMD" ] ; then
-		    debsign "-k$SIGN_KEYID" -r "root@$BUILDD_HOST" "$RESULT_DIR/${PACKAGE}_$CHANGES"
-		else
-		    debsign "-k$SIGN_KEYID" -r "$BUILDD_USER@$BUILDD_HOST" "$RESULT_DIR/${PACKAGE}_$CHANGES"
-		fi
+    for arch in $BUILDD_ARCH; do
+      CHANGES="$arch.changes"
+      for dist in $BUILDD_DIST; do
 
-		if [ -n "$UPLOAD_QUEUE" ]; then
-		    while true; do
-			echo -n "Upload $PACKAGE to '$UPLOAD_QUEUE' (yes/no)? "
-			read -e upload
-			case "$upload" in
-			    YES | yes)
-				ssh "${BUILDD_USER}@$BUILDD_HOST" \
-				    "cd \"$RESULT_DIR/\" && dput \"$UPLOAD_QUEUE\" \"${PACKAGE}_$CHANGES\""
-				break 2
-				;;
+	RESULT_DIR="$(eval echo "\$${arch}_${dist}_RESULT_DIR")"
+	[ -n "$RESULT_DIR" ] || RESULT_DIR="$PBUILDER_BASE/$arch/$dist/result"
 
-			    NO | no)
-				echo "Package upload skipped."
-				break 2
-				;;
-			    *)
-				echo "Please answer 'yes' or 'no'"
-				;;
-			esac
-		    done
-		fi
-		break
-		;;
+	_desc="$dist/$arch"
+	[ "$dist" != "default" ] || _desc="$arch"
 
-	    NO | no)
-		echo "Package signing skipped."
-		break
-		;;
-	    *)
-		echo "Please answer 'yes' or 'no'"
-		;;
-	esac
+	while true; do
+	    echo -n "Sign $_desc $PACKAGE with key '$SIGN_KEYID' (yes/no)? "
+	    read -e yesno
+	    case "$yesno" in
+		YES | yes)
+		    if [ -z "$BUILDD_ROOTCMD" ] ; then
+			debsign "-k$SIGN_KEYID" -r "root@$BUILDD_HOST" "$RESULT_DIR/${PACKAGE}_$CHANGES"
+		    else
+			debsign "-k$SIGN_KEYID" -r "$BUILDD_USER@$BUILDD_HOST" "$RESULT_DIR/${PACKAGE}_$CHANGES"
+		    fi
+
+		    if [ -n "$UPLOAD_QUEUE" ]; then
+			while true; do
+			    echo -n "Upload $_desc $PACKAGE to '$UPLOAD_QUEUE' (yes/no)? "
+			    read -e upload
+			    case "$upload" in
+				YES | yes)
+				    ssh "${BUILDD_USER}@$BUILDD_HOST" \
+					"cd \"$RESULT_DIR/\" && dput \"$UPLOAD_QUEUE\" \"${PACKAGE}_$CHANGES\""
+				    break 2
+				    ;;
+
+				NO | no)
+				    echo "Package upload skipped."
+				    break 2
+				    ;;
+				*)
+				    echo "Please answer 'yes' or 'no'"
+				    ;;
+			    esac
+			done
+		    fi
+		    break
+		    ;;
+
+		NO | no)
+		    echo "Package signing skipped."
+		    break
+		    ;;
+		*)
+		    echo "Please answer 'yes' or 'no'"
+		    ;;
+	    esac
+	done
+
+      done
     done
 fi
 

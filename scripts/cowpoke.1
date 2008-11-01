@@ -19,32 +19,83 @@
 cowpoke \- Build a Debian source package in a remote cowbuilder instance
 .SH SYNOPSIS
 .B cowpoke
-.I packagename.dsc
-.RI [ " arch " [ " buildd-host " [ " buildd-username " ]
-] ]
+.RI [ options ] " packagename.dsc"
+
 .SH DESCRIPTION
 Uploads a Debian source package to a cowbuilder host and builds it,
 optionally also signing and uploading the result to an incoming queue.
 
 
+.SH OPTIONS
+The following options are available:
+
+.TP
+.BI \-\-arch= arch
+Specify the Debian architecture(s) to build for.  A space separated list of
+architectures may be used to build for all of them in a single pass.  Valid
+arch names are those returned by \fBdpkg-architecture\fP(1) for
+\fBDEB_BUILD_ARCH\fP.
+
+.TP
+.BI \-\-dist= dist
+Specify the Debian distribution(s) to build for.  A space separated list of
+distributions may be used to build for all of them in a single pass.  Either
+codenames (such as sid, or lenny) or distribution names (such as unstable, or
+experimental) may be used, but you should usually stick to using one or the
+other consistently as this name may be used in file paths and to locate old
+packages for comparison reporting.
+
+.TP
+.BI \-\-buildd= host
+Specify the remote host to build on.
+
+.TP
+.BI \-\-buildd\-user= name
+Specify the remote user to build as.
+
+.TP
+.B \-\-create
+Create the remote cowbuilder root if it does not already exist.  If this option
+is not passed it is an error for the specified \fB\-\-dist\fP or \fB\-\-arch\fP
+to not have an existing cowbuilder root in the expected location.
+
+.TP
+.B \-\-help
+Display a brief summary of the available options and current configuration.
+
+.TP
+.B \-\-version
+Display the current version information.
+
+
 .SH CONFIGURATION OPTIONS
 When \fBcowpoke\fP is run the following configuration options are read from
 global, per\-user, and per\-project configuration files if present:
+
+.SS Global defaults
+These apply to every arch and dist in a single cowpoke invocation.
+
 .TP
 .B BUILDD_HOST
 The network address or fqdn of the build machine where cowbuilder is configured.
-This may be overridden by an explicit hostname specified as a command line option.
+This may be overridden by the \fB\-\-buildd\fP command line option.
 .TP
 .B BUILDD_USER
 The unprivileged user name for operations on the build machine.  This defaults
-to the local name of the user executing \fBcowpoke\fP, and may also be overridden
-by specifying the username on the command line.
+to the local name of the user executing \fBcowpoke\fP, and may be overridden by
+the \fB\-\-buildd\-user\fP command line option.
 .TP
 .B BUILDD_ARCH
-The Debian architecture string to build for.  This must match the
-\fBDEB_BUILD_ARCH\fP of the build chroot being used.  It defaults to the local
-machine architecture where \fBcowpoke\fP is executed, and may be overridden on
-the command line.
+The Debian architecture(s) to build for.  This must match the \fBDEB_BUILD_ARCH\fP
+of the build chroot being used.  It defaults to the local machine architecture where
+\fBcowpoke\fP is executed, and may be overridden by the \fB\-\-arch\fP command line
+option.  A (quoted) space separated list of architectures may be used here to build
+for all of them in a single pass.
+.TP
+.B BUILDD_DIST
+The Debian distribution(s) to build for.  A (quoted) space separated list of
+distributions may be used to build for all of them in a single pass.  This may
+be overridden by the \fB\-\-dist\fP command line option.
 
 .TP
 .B INCOMING_DIR
@@ -52,29 +103,24 @@ The directory path on the build machine where the source package will initially
 be placed.  An absolute path may be used, but it must be writable by the
 \fBBUILDD_USER\fP.  Relative paths are rooted at that user's home directory.
 .TP
-.B RESULT_DIR
-The directory path on the build machine where the resulting packages (source and
-binary) will be found, and where older versions of the package that were built
-previously may be found.  If any such older packages exist, debdiff will be used
-to compare the new package with the previous version after the build is complete,
-and the result will be included in the build log.  Files in it must be readable
-by the \fBBUILDD_USER\fP for sanity checking with \fBlintian\fP and \fBdebdiff\fP,
-and for upload with \fBdput\fP.  This should always be an absolute path.
+.B PBUILDER_BASE
+The filesystem root for all pbuilder COW and result files.  Arch and dist
+specific subdirectories will normally be created under this.
 
 .TP
 .B SIGN_KEYID
 If this option is set, it is expected to contain the gpg key id to pass to
-\fBdebsign\fP if the packages are to be remotely signed.  You will be prompted
-to confirm whether you wish to sign the packages after each build is complete.
+\fBdebsign\fP(1) if the packages are to be remotely signed.  You will be prompted
+to confirm whether you wish to sign the packages after all builds are complete.
 If this option is unset or an empty string, no attempt to sign packages will be
 made.
 .TP
 .B UPLOAD_QUEUE
 If this opton is set, it is expected to contain a 'host' specification for
-\fBdput\fP which will be used to upload them after they are signed.  You will be
-prompted to confirm whether you wish to upload the packages after they are signed.
-If this option is unset or an empty string, no attempt to upload packages will
-be made.  If \fBSIGN_KEYID\fP is not set, this option will be ignored entirely.
+\fBdput\fP(1) which will be used to upload them after they are signed.  You will
+be prompted to confirm whether you wish to upload the packages after they are
+signed.  If this option is unset or an empty string, no attempt to upload packages
+will be made.  If \fBSIGN_KEYID\fP is not set, this option will be ignored entirely.
 
 .TP
 .B BUILDD_ROOTCMD
@@ -86,6 +132,34 @@ to grant root access to the machine.  If you prefer to gain root access through
 some other method, then you should set this option to contain the privilege
 escalation command that will be used to execute the scripts which must run as
 root, and cowpoke will initially log in as the \fBBUILDD_USER\fP.
+.TP
+.B DEBOOTSTRAP
+The utility to use when creating a new build root.  Alternatives are
+.BR debootstrap " or " cdebootstrap .
+
+
+.SS Arch and dist specific options
+These are variables of the form: $arch_$dist_VAR which apply only for a
+particular target arch/dist build.
+
+.TP
+.RB arch _ dist _RESULT_DIR
+The directory path on the build machine where the resulting packages (source and
+binary) will be found, and where older versions of the package that were built
+previously may be found.  If any such older packages exist, debdiff will be used
+to compare the new package with the previous version after the build is complete,
+and the result will be included in the build log.  Files in it must be readable
+by the \fBBUILDD_USER\fP for sanity checking with \fBlintian\fP(1) and
+\fBdebdiff\fP(1), and for upload with \fBdput\fP(1).  This should always be an
+absolute path.  If this option is not specified for some arch and dist combination
+then it will default to \fI$PBUILDER_BASE/$arch/$dist/result\fP.
+
+.TP
+.RB arch _ dist _BASE_PATH
+The directory where the COW master files are to be found (or created if the
+\fB\-\-create\fP command line option was passed).  If this option is not specified
+for some arch or dist then it will default to
+.I $PBUILDER_BASE/$arch/$dist/base.cow
 
 
 .SH CONFIGURATION FILES
@@ -110,14 +184,16 @@ There is nothing particularly special required to configure a cowbuilder instanc
 for use with \fBcowpoke\fP.  Simply create them in the flavour you require with
 `cowbuilder \-\-create` according to the cowbuilder documentation, then configure
 \fBcowpoke\fP with the user, arch, and path information required to access it, on
-the machines you wish to invoke it from.  The build host running cowbuilder does
+the machines you wish to invoke it from (or alternatively configure \fBcowpoke\fP
+with the path, arch and distribution information and pass the \fB\-\-create\fP
+option to it on the first invocation).  The build host running cowbuilder does
 not require \fBcowpoke\fP installed locally.
 
 The build machine should have the lintian and devscripts packages installed for
 post-build sanity checking.  Upon completion, the build log and the results of
 automated checks will be recorded in the \fBINCOMING_DIR\fP.  If you wish to
-upload signed packages the build machine will also need \fBdput\fP installed and
-configured to use the 'host' alias specified by \fBUPLOAD_QUEUE\fP.
+upload signed packages the build machine will also need \fBdput\fP(1) installed
+and configured to use the 'host' alias specified by \fBUPLOAD_QUEUE\fP.
 
 The user executing \fBcowpoke\fP must have ssh access to the build machine as
 both 'root' and the \fBBUILDD_USER\fP.  Signing keys are not required to be
@@ -126,10 +202,10 @@ package is signed, keys will be expected on the machine that executes \fBcowpoke
 
 When \fBcowpoke\fP is invoked, it will first attempt to update the cowbuilder
 image if that has not already been done on the same day.  This is checked by
-the presence or absence of a \fIcowbuilder-update-log-$date\fP file in the
-\fBINCOMING_DIR\fP.  You may move, remove, or touch this file if you wish the
-image to be updated more or less often than that.  Its contents log the output
-of cowbuilder during the update.
+the presence or absence of a \fIcowbuilder-$arch-$dist-update-log-$date\fP file
+in the \fBINCOMING_DIR\fP.  You may move, remove, or touch this file if you wish
+the image to be updated more or less often than that.  Its contents log the
+output of cowbuilder during the update (or creation) of the build root.
 
 
 .SH NOTES

@@ -1,6 +1,21 @@
 devscripts (2.10.40) UNRELEASED; urgency=low
 
   [ Adam D. Barratt ]
+  * cowpoke:
+    + Update to new upstream version
+      - Multiple architecture and distribution support.
+      - Options are now specified using --option rather than being listed
+        after the .dsc file.
+      - There is now a --create option to allow new build roots to be
+        easily created.
+      - There are two new configuration file options BUILDD_DIST (the
+        default distribution for which packages will be built) and
+        DEBOOTSTRAP, allowing one to specify which of {c,}debootstrap
+        should be used.
+      - The RESULT_DIR configuration variable has been replaced by
+        PBUILDER_BASE which points to pbuilder's base folder under which
+        architecture and distribution directories will be created.
+      - cowpoke.conf now supports per-arch and per-distribution options.
   * debchange:
     + Don't attempt to automatically determine if the current changelog is
       an NMU if an alternative changelog location was specified using the
