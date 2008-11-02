@@ -33,8 +33,12 @@ devscripts (2.10.40) UNRELEASED; urgency=low
         operations to extract the version and architecture from the logs.
     + Allow the logs for the build with the largest version number to be
       easily retrieved. Based on a patch by Jörg Sommer.
-  * uscan: Document the USCAN_TIMEOUT configuration file variable.
-    (Closes: #502517)
+  * uscan:
+    + Document the USCAN_TIMEOUT configuration file variable.
+      (Closes: #502517)
+    + Add a USCAN_REPACK configuration file variable indicating that bzip
+      tar or zip archives should always be repacked to gzip tar archives.
+      (Closes: #502516)
 
   [ Christoph Berg ]
   * debian/control: Remove the Dm-Upload-Allowed flag.

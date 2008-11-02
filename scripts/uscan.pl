@@ -186,6 +186,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'USCAN_VERBOSE' => 'no',
 		       'USCAN_DEHS_OUTPUT' => 'no',
 		       'USCAN_USER_AGENT' => '',
+		       'USCAN_REPACK' => 'no',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
 		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.*)?',
 		       );
@@ -221,6 +222,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'USCAN_VERBOSE'}='no';
     $config_vars{'USCAN_DEHS_OUTPUT'} =~ /^(yes|no)$/
 	or $config_vars{'USCAN_DEHS_OUTPUT'}='no';
+    $config_vars{'USCAN_REPACK'} =~ /^(yes|no)$/
+	or $config_vars{'USCAN_REPACK'}='no';
     $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} =~ /^[012]$/
 	or $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'}=1;
 
@@ -245,6 +248,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $check_dirname_regex = $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_REGEX'};
     $user_agent_string = $config_vars{'USCAN_USER_AGENT'}
 	if $config_vars{'USCAN_USER_AGENT'};
+    $repack = $config_vars{'USCAN_REPACK'} eq 'yes' ? 1 : 0;
 }
 
 # Now read the command line arguments

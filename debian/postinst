@@ -599,6 +599,10 @@ EOF
 # semantics of this setting.
 # DEBCHECKOUT_AUTH_URLS=''
 
+##### uscan option added in version 2.10.40
+#
+# Automatically repack bzipped tar or zip archives to gzipped tars? 
+# USCAN_REPACK=no
 EOF
 	fi
     fi

@@ -479,6 +479,10 @@ default.  This is equivalent to the \fB\-\-user-agent\fR option.
 .B USCAN_DESTDIR
 If set, the downloaded files will be placed in this directory.  This is 
 equivalent to the \fB\-\-destdir\fR option.
+.B USCAN_REPACK
+If this is set to \fIyes\fR, then after having downloaded a bzip tar or
+zip archive, \fBuscan\fR will repack it to a gzip tar.  This is
+equivalent to the \fB\-\-repack\fR option.
 .SH "EXIT STATUS"
 The exit status gives some indication of whether a newer version was
 found or not; one is advised to read the output to determine exactly
