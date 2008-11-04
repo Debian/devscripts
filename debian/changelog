@@ -38,6 +38,8 @@ devscripts (2.10.40) UNRELEASED; urgency=low
         operations to extract the version and architecture from the logs.
     + Allow the logs for the build with the largest version number to be
       easily retrieved. Based on a patch by Jörg Sommer.
+  * licensecheck: Match a couple more variants on the wording of a
+    3-clause BSD license. (Closes: #503378)
   * uscan:
     + Document the USCAN_TIMEOUT configuration file variable.
       (Closes: #502517)
