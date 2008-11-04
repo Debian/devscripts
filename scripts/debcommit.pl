@@ -240,6 +240,7 @@ my $stripmessage=1;
 my $signtags=0;
 my $changelog="debian/changelog";
 my $keyid;
+my $version;
 
 # Now start by reading configuration files and then command line
 # The next stuff is boilerplate
@@ -340,20 +341,20 @@ if ($release) {
     }
     close C;
     
-    my $version=`dpkg-parsechangelog | grep '^Version:' | cut -f 2 -d ' '`;
+    $version=`dpkg-parsechangelog | grep '^Version:' | cut -f 2 -d ' '`;
     chomp $version;
 
     $message="releasing version $version" if ! defined $message;
-    commit($message);
-    tag($version);
 }
-else {
-    if ($edit) {
-	my $modified = 0;
-	($message, $modified) = edit($message);
-	die "$progname: Commit message not modified / saved; aborting\n" unless $modified;
-    }
-    commit($message) if not $confirm or confirm($message);
+if ($edit) {
+    my $modified = 0;
+    ($message, $modified) = edit($message);
+    die "$progname: Commit message not modified / saved; aborting\n" unless $modified;
+}
+
+if (not $confirm or confirm($message)) {
+    commit($message);
+    tag($version) if $release;
 }
 
 sub getprog {
