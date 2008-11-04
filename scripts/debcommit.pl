@@ -612,10 +612,15 @@ sub getmessage {
 	} elsif ($prog eq 'bzr') {
 	    @diffcmd = ($prog, 'diff', '--diff-options', '-wu');
 	} elsif ($prog eq 'git') {
-	    if ($all) {
-		@diffcmd = ('git', 'diff', '-w', '--no-color');
+	    if (git_repo_has_commits()) {
+		if ($all) {
+		    @diffcmd = ('git', 'diff', '-w', '--no-color');
+		} else {
+		    @diffcmd = ('git', 'diff', '-w', '--cached', '--no-color');
+		}
 	    } else {
-		@diffcmd = ('git', 'diff', '-w', '--cached', '--no-color');
+		# No valid head!  Rather than fail, cheat and use 'diff'
+		@diffcmd = ('diff', '-u', '/dev/null');
 	    }
 	} elsif ($prog eq 'svn') {
 	    @diffcmd = ($prog, 'diff', '--diff-cmd', '/usr/bin/diff', '--extensions', '-wu');
@@ -733,6 +738,12 @@ sub edit {
     unlink($tempfile);
     chomp $message;
     return ($message, $mtime != $newmtime);
+}
+
+sub git_repo_has_commits {
+    my $command = "git rev-parse --verify --quiet HEAD >/dev/null";
+    system $command;
+    return ($? >> 8 == 0) ? 1 : 0;
 }
 =head1 LICENSE
 

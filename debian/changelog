@@ -31,6 +31,8 @@ devscripts (2.10.40) UNRELEASED; urgency=low
   * debcommit:
     + Allow --release to be combined with --edit or --confirm. Based on
       a patch by Eric Gerlach. (Closes: #497988)
+    + Allow a newly initialised (i.e. containing no HEAD) git tree to be
+      committed to. Based on a patch by Eric Gerlach. (Closes: #497995)
   * debdiff: Correctly handle hyphenated distribution names when generating
     a diff against the previous version of the package. (Closes: #503950)
   * getbuildlog:
