@@ -23,6 +23,9 @@ devscripts (2.10.40) UNRELEASED; urgency=low
     + Update the Ubuntu distribution list. Add jaunty and remove the
       no-longer supported warty, hoary, edgy and fiesty. Also add
       "-backports" as a supported "extension".
+    + Modify the message produced by --closes to make it clearer that it 
+      is intended to be edited to add details of the bug and fix as 
+      appropriate. (Closes: #495743)
   * debdiff: Correctly handle hyphenated distribution names when generating
     a diff against the previous version of the package. (Closes: #503950)
   * getbuildlog:

@@ -738,7 +738,7 @@ if (@closes and $opt_query) { # and we have to query the BTS
 		my $title = $statuses->{$close}->{subject};
 		my $pkg = $statuses->{$close}->{package};
 		$title =~ s/^($pkg|$PACKAGE): //;
-		push @closes_text, "$title (Closes: \#$close)\n";
+		push @closes_text, "Fix \"$title\" <explain what you changed and why> (Closes: \#$close)\n";
 	    }
 	    else { # not our package, or wnpp
 		my $bug = Devscripts::Debbugs::status(
