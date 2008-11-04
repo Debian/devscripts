@@ -47,6 +47,8 @@ devscripts (2.10.40) UNRELEASED; urgency=low
       easily retrieved. Based on a patch by Jörg Sommer.
   * licensecheck: Match a couple more variants on the wording of a
     3-clause BSD license. (Closes: #503378)
+  * tagpending: Don't output a spurious empty line near the end of the
+    changelog comments under some circumstances.
   * uscan:
     + Document the USCAN_TIMEOUT configuration file variable.
       (Closes: #502517)

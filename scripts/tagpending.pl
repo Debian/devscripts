@@ -321,6 +321,7 @@ if ($opt_noact and not $opt_interactive) {
 
 	if ($comments) {
 	    $comments =~ s/\n\n/\n/sg;
+	    $comments =~ s/\n\n/\n/m;
 	    $comments =~ s/^ /#/mg;
 	    push(@bts_args, $comments);
 	    # We don't want to add comments twice if there are
