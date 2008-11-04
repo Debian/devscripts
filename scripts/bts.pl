@@ -163,11 +163,13 @@ B<bts> [options] command [args] [#comment] [.|, command [args] [#comment]] ...
 
 =head1 DESCRIPTION
 
-This is a command line interface to the bug tracking system, intended mainly
+This is a command line interface to the Debian Bug Tracking System 
+(BTS), intended mainly
 for use by developers. It lets the BTS be manipulated using simple commands
 that can be run at the prompt or in a script, does various sanity checks on
 the input, and constructs and sends a mail to the BTS control address for
-you.
+you. A local cache of web pages and e-mails from the BTS may also be 
+created and updated.
 
 In general, the command line interface is the same as what you would write
 in a mail to control@bugs.debian.org, just prefixed with "bts". For
@@ -729,7 +731,7 @@ L<sensible-browser(1)>.
 
 Options may be specified after the "bugs" command in addition to or
 instead of options at the start of the command line: recognised
-options at his point are: -o/--offline/--online, --mbox, --mailreader
+options at this point are: -o/--offline/--online, --mbox, --mailreader
 and --[no-]cache.  These are described earlier in this manpage.  If
 either the -o or --offline option is used, or there is already an
 up-to-date copy in the local cache, the cached version will be used.
