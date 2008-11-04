@@ -675,6 +675,8 @@ for $index (0 .. $ncommand) {
     no strict 'refs';
     if (exists $::{"bts_$command[$index]"}) {
 	"bts_$command[$index]"->(@{$args[$index]});
+    } elsif ($command[$index] =~ /^#/) {
+	mailbts('', $command[$index]);
     } else {
 	my @matches=grep /^bts_\Q$command[$index]\E/, keys %::;
 	if (@matches != 1) {
@@ -2106,7 +2108,7 @@ sub mailbts {
 	$subject = $_[0];
     }
     elsif (length($subject) + length($_[0]) < 100) {
-	$subject .= ", $_[0]";
+	$subject .= ", $_[0]" if length($_[0]);
     }
     elsif ($subject !~ / ...$/) {
 	$subject .= " ...";
