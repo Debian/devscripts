@@ -333,15 +333,17 @@ EOF
 	exit 1
     fi
 
-    echo -n "Do you want to go ahead and submit the bug report now? (y/n) "
-    read response
-    case "$response" in
-	y*) ;;
-	*)  echo "OK, then, aborting." >&2
-	    rm -f ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff "$TMPNAM"
-	    exit 1
-	    ;;
-    esac
+    while : ; do
+	echo -n "Do you want to go ahead and submit the bug report now? (y/n) "
+	read response
+	case "$response" in
+	    y*) break;;
+	    n*) echo "OK, then, aborting." >&2
+		rm -f ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff "$TMPNAM"
+		exit 1
+		;;
+	esac
+    done
 
     case "$BTS_SENDMAIL_COMMAND" in
 	/usr/sbin/sendmail*|/usr/sbin/exim*)
