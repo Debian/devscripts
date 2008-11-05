@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2008-10-12 18:36+0200\n"
+"POT-Creation-Date: 2008-11-05 18:57+0000\n"
 "PO-Revision-Date: 2008-07-15 23:07+0200\n"
 "Last-Translator: Nicolas François <nicolas.francois@centraliens.net>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -138,7 +138,7 @@ msgstr "B<annotate-output> I<programme> [I<paramètres> ...]"
 # type: SH
 #: ../scripts/annotate-output.1:6 ../scripts/archpath.1:12
 #: ../scripts/bts.pl:164 ../scripts/build-rdeps.pl:26 ../scripts/chdist.pl:27
-#: ../scripts/checkbashisms.1:8 ../scripts/cowpoke.1:25
+#: ../scripts/checkbashisms.1:8 ../scripts/cowpoke.1:24
 #: ../scripts/cvs-debc.1:6 ../scripts/cvs-debi.1:6
 #: ../scripts/cvs-debrelease.1:7 ../scripts/cvs-debuild.1:7
 #: ../scripts/dcmd.1:6 ../scripts/dd-list.1:26 ../scripts/debc.1:6
@@ -303,17 +303,17 @@ msgstr ""
 # type: SH
 #: ../scripts/annotate-output.1:55 ../scripts/archpath.1:54
 #: ../scripts/build-rdeps.pl:264 ../scripts/checkbashisms.1:62
-#: ../scripts/cowpoke.1:150 ../scripts/cvs-debc.1:64 ../scripts/cvs-debi.1:68
+#: ../scripts/cowpoke.1:226 ../scripts/cvs-debc.1:64 ../scripts/cvs-debi.1:68
 #: ../scripts/cvs-debrelease.1:69 ../scripts/cvs-debuild.1:59
 #: ../scripts/dcmd.1:40 ../scripts/dd-list.1:93 ../scripts/debc.1:120
-#: ../scripts/debchange.1:417 ../scripts/debcheckout.pl:111
-#: ../scripts/debclean.1:111 ../scripts/debcommit.pl:743
+#: ../scripts/debchange.1:417 ../scripts/debcheckout.pl:185
+#: ../scripts/debclean.1:111 ../scripts/debcommit.pl:755
 #: ../scripts/debdiff.1:198 ../scripts/debi.1:120 ../scripts/debpkg.1:23
 #: ../scripts/debrelease.1:137 ../scripts/deb-reversion.dbk:292
 #: ../scripts/debrsign.1:71 ../scripts/debsign.1:131 ../scripts/debuild.1:421
 #: ../scripts/desktop2menu.pl:52 ../scripts/dget.pl:622
 #: ../scripts/diff2patches.1:40 ../scripts/dpkg-genbuilddeps.1:36
-#: ../scripts/dscverify.1:53 ../scripts/getbuildlog.1:34
+#: ../scripts/dscverify.1:53 ../scripts/getbuildlog.1:41
 #: ../scripts/grep-excuses.1:39 ../scripts/licensecheck.pl:116
 #: ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:20
 #: ../scripts/mass-bug.pl:512 ../scripts/mergechanges.1:18
@@ -321,7 +321,7 @@ msgstr ""
 #: ../scripts/nmudiff.1:97 ../scripts/plotchangelog.1:126
 #: ../scripts/pts-subscribe.1:56 ../scripts/rc-alert.1:83
 #: ../scripts/rmadison.pl:295 ../scripts/svnpath.pl:97
-#: ../scripts/transition-check.pl:81 ../scripts/uscan.1:521
+#: ../scripts/transition-check.pl:81 ../scripts/uscan.1:529
 #: ../scripts/uupdate.1:167 ../scripts/whodepends.1:19
 #: ../scripts/who-uploads.1:71 ../scripts/wnpp-alert.1:31
 #: ../scripts/wnpp-check.1:33 ../scripts/devscripts.conf.5:58
@@ -479,12 +479,14 @@ msgstr ""
 
 # type: textblock
 #: ../scripts/bts.pl:166
+#, fuzzy
 msgid ""
-"This is a command line interface to the bug tracking system, intended mainly "
-"for use by developers. It lets the BTS be manipulated using simple commands "
-"that can be run at the prompt or in a script, does various sanity checks on "
-"the input, and constructs and sends a mail to the BTS control address for "
-"you."
+"This is a command line interface to the Debian Bug Tracking System (BTS), "
+"intended mainly for use by developers. It lets the BTS be manipulated using "
+"simple commands that can be run at the prompt or in a script, does various "
+"sanity checks on the input, and constructs and sends a mail to the BTS "
+"control address for you. A local cache of web pages and e-mails from the BTS "
+"may also be created and updated."
 msgstr ""
 "Ceci est une interface au système de suivi de bogues en ligne de commande, "
 "principalement destinée à l'usage des développeurs. Elle permet de manipuler "
@@ -494,7 +496,7 @@ msgstr ""
 "courriel à l'adresse de contrôle du BTS."
 
 # type: textblock
-#: ../scripts/bts.pl:172
+#: ../scripts/bts.pl:174
 msgid ""
 "In general, the command line interface is the same as what you would write "
 "in a mail to control@bugs.debian.org, just prefixed with \"bts\". For "
@@ -505,7 +507,7 @@ msgstr ""
 "« bts ». Par exemple :"
 
 # type: verbatim
-#: ../scripts/bts.pl:176
+#: ../scripts/bts.pl:178
 #, no-wrap
 msgid ""
 " % bts severity 69042 normal\n"
@@ -519,7 +521,7 @@ msgstr ""
 "\n"
 
 # type: textblock
-#: ../scripts/bts.pl:180
+#: ../scripts/bts.pl:182
 msgid ""
 "A few additional commands have been added for your convenience, and this "
 "program is less strict about what constitutes a valid bug number. For "
@@ -535,7 +537,7 @@ msgstr ""
 "mettre entre guillemets.)"
 
 # type: textblock
-#: ../scripts/bts.pl:186
+#: ../scripts/bts.pl:188
 msgid ""
 "Also, for your convenience, this program allows you to abbreviate commands "
 "to the shortest unique substring (similar to how cvs lets you abbreviate "
@@ -546,7 +548,7 @@ msgstr ""
 "celle de cvs). Ainsi des choses comme « bts cl 85942 » sont comprises."
 
 # type: textblock
-#: ../scripts/bts.pl:190
+#: ../scripts/bts.pl:192
 msgid ""
 "It is also possible to include a comment in the mail sent to the BTS. If "
 "your shell does not strip out the comment in a command like \"bts severity "
@@ -567,7 +569,7 @@ msgstr ""
 "un commentaire.)"
 
 # type: textblock
-#: ../scripts/bts.pl:198
+#: ../scripts/bts.pl:200
 msgid ""
 "You can specify multiple commands by separating them with a single dot, "
 "rather like B<update-rc.d>; a single comma may also be used; all the "
@@ -581,7 +583,7 @@ msgstr ""
 "commentaire correctement) :"
 
 # type: verbatim
-#: ../scripts/bts.pl:203
+#: ../scripts/bts.pl:205
 #, no-wrap
 msgid ""
 " % bts severity 95672 normal , merge 95672 95673 \\#they are the same!\n"
@@ -591,7 +593,7 @@ msgstr ""
 "\n"
 
 # type: textblock
-#: ../scripts/bts.pl:205
+#: ../scripts/bts.pl:207
 msgid ""
 "The abbreviation \"it\" may be used to refer to the last mentioned bug "
 "number, so you could write:"
@@ -600,7 +602,7 @@ msgstr ""
 "bogue mentionné, donc vous pouvez écrire :"
 
 # type: verbatim
-#: ../scripts/bts.pl:208
+#: ../scripts/bts.pl:210
 #, no-wrap
 msgid ""
 " % bts severity 95672 wishlist , retitle it \"bts: please add a --foo option\"\n"
@@ -610,7 +612,7 @@ msgstr ""
 "\n"
 
 # type: textblock
-#: ../scripts/bts.pl:210
+#: ../scripts/bts.pl:212
 msgid ""
 "Please use this program responsibly, and do take our users into "
 "consideration."
@@ -619,25 +621,25 @@ msgstr ""
 "utilisateurs en considération."
 
 # type: SH
-#: ../scripts/bts.pl:213 ../scripts/build-rdeps.pl:30 ../scripts/chdist.pl:34
-#: ../scripts/checkbashisms.1:23 ../scripts/cvs-debc.1:24
-#: ../scripts/cvs-debi.1:28 ../scripts/cvs-debrelease.1:21
-#: ../scripts/cvs-debuild.1:32 ../scripts/dd-list.1:58 ../scripts/debc.1:64
-#: ../scripts/debchange.1:146 ../scripts/debcheckout.pl:64
-#: ../scripts/debclean.1:60 ../scripts/debcommit.pl:19 ../scripts/debdiff.1:50
-#: ../scripts/debi.1:65 ../scripts/debrelease.1:56
-#: ../scripts/deb-reversion.dbk:128 ../scripts/debrsign.1:30
-#: ../scripts/debsign.1:39 ../scripts/debuild.1:217 ../scripts/dget.pl:523
-#: ../scripts/diff2patches.1:13 ../scripts/dpkg-depcheck.1:15
-#: ../scripts/dscverify.1:17 ../scripts/getbuildlog.1:17
-#: ../scripts/grep-excuses.1:13 ../scripts/licensecheck.pl:43
-#: ../scripts/list-unreleased.1:12 ../scripts/manpage-alert.1:14
-#: ../scripts/mass-bug.pl:60 ../scripts/mk-build-deps.pl:40
-#: ../scripts/nmudiff.1:21 ../scripts/plotchangelog.1:43
-#: ../scripts/pts-subscribe.1:18 ../scripts/rc-alert.1:17
-#: ../scripts/rmadison.pl:196 ../scripts/tagpending.pl:94
-#: ../scripts/transition-check.pl:42 ../scripts/uscan.1:328
-#: ../scripts/uupdate.1:50 ../scripts/whodepends.1:10
+#: ../scripts/bts.pl:215 ../scripts/build-rdeps.pl:30 ../scripts/chdist.pl:34
+#: ../scripts/checkbashisms.1:23 ../scripts/cowpoke.1:29
+#: ../scripts/cvs-debc.1:24 ../scripts/cvs-debi.1:28
+#: ../scripts/cvs-debrelease.1:21 ../scripts/cvs-debuild.1:32
+#: ../scripts/dd-list.1:58 ../scripts/debc.1:64 ../scripts/debchange.1:146
+#: ../scripts/debcheckout.pl:67 ../scripts/debclean.1:60
+#: ../scripts/debcommit.pl:19 ../scripts/debdiff.1:50 ../scripts/debi.1:65
+#: ../scripts/debrelease.1:56 ../scripts/deb-reversion.dbk:128
+#: ../scripts/debrsign.1:30 ../scripts/debsign.1:39 ../scripts/debuild.1:217
+#: ../scripts/dget.pl:523 ../scripts/diff2patches.1:13
+#: ../scripts/dpkg-depcheck.1:15 ../scripts/dscverify.1:17
+#: ../scripts/getbuildlog.1:24 ../scripts/grep-excuses.1:13
+#: ../scripts/licensecheck.pl:43 ../scripts/list-unreleased.1:12
+#: ../scripts/manpage-alert.1:14 ../scripts/mass-bug.pl:60
+#: ../scripts/mk-build-deps.pl:40 ../scripts/nmudiff.1:21
+#: ../scripts/plotchangelog.1:43 ../scripts/pts-subscribe.1:18
+#: ../scripts/rc-alert.1:17 ../scripts/rmadison.pl:196
+#: ../scripts/tagpending.pl:94 ../scripts/transition-check.pl:42
+#: ../scripts/uscan.1:328 ../scripts/uupdate.1:50 ../scripts/whodepends.1:10
 #: ../scripts/who-uploads.1:15 ../scripts/wnpp-alert.1:17
 #: ../scripts/wnpp-check.1:16
 #, no-wrap
@@ -645,7 +647,7 @@ msgid "OPTIONS"
 msgstr "OPTIONS"
 
 # type: Plain text
-#: ../scripts/bts.pl:215
+#: ../scripts/bts.pl:217
 msgid ""
 "B<bts> examines the B<devscripts> configuration files as described below.  "
 "Command line options override the configuration file settings, though."
@@ -655,12 +657,12 @@ msgstr ""
 "paramètres des fichiers de configuration."
 
 # type: =item
-#: ../scripts/bts.pl:221
+#: ../scripts/bts.pl:223
 msgid "-o, --offline"
 msgstr "-o, --offline"
 
 # type: textblock
-#: ../scripts/bts.pl:223
+#: ../scripts/bts.pl:225
 msgid ""
 "Make bts use cached bugs for the 'show' and 'bugs' commands, if a cache is "
 "available for the requested data. See the cache command, below for "
@@ -672,12 +674,12 @@ msgstr ""
 "plus d'informations sur la mise en place d'un cache."
 
 # type: TP
-#: ../scripts/bts.pl:227
+#: ../scripts/bts.pl:229
 msgid "--online, --no-offline"
 msgstr "--online, --no-offline"
 
 # type: textblock
-#: ../scripts/bts.pl:229
+#: ../scripts/bts.pl:231
 msgid ""
 "Opposite of --offline; overrides any configuration file directive to work "
 "offline."
@@ -686,22 +688,22 @@ msgstr ""
 "de configuration afin de travailler hors ligne."
 
 # type: =item
-#: ../scripts/bts.pl:232
+#: ../scripts/bts.pl:234
 msgid "-n, --no-action"
 msgstr "-n, --no-action"
 
 # type: Plain text
-#: ../scripts/bts.pl:234
+#: ../scripts/bts.pl:236
 msgid "Do not send emails but print them to standard output."
 msgstr "N'envoie pas le courrier, mais l'affiche sur la sortie standard."
 
 # type: =item
-#: ../scripts/bts.pl:236
+#: ../scripts/bts.pl:238
 msgid "--cache, --no-cache"
 msgstr "--cache, --no-cache"
 
 # type: textblock
-#: ../scripts/bts.pl:238
+#: ../scripts/bts.pl:240
 msgid ""
 "Should we attempt to cache new versions of BTS pages when performing show/"
 "bugs commands? Default is to cache."
@@ -711,12 +713,12 @@ msgstr ""
 "cache est activée."
 
 # type: =item
-#: ../scripts/bts.pl:241
+#: ../scripts/bts.pl:243
 msgid "--cache-mode={min|mbox|full}"
 msgstr "--cache-mode={min|mbox|full}"
 
 # type: textblock
-#: ../scripts/bts.pl:243
+#: ../scripts/bts.pl:245
 msgid ""
 "When running a B<bts cache> command, should we only mirror the basic bug "
 "(min), or should we also mirror the mbox version (mbox), or should we mirror "
@@ -730,12 +732,12 @@ msgstr ""
 "« min » est utilisé."
 
 # type: =item
-#: ../scripts/bts.pl:249
+#: ../scripts/bts.pl:251
 msgid "--cache-delay=seconds"
 msgstr "--cache-delay=secondes"
 
 # type: textblock
-#: ../scripts/bts.pl:251
+#: ../scripts/bts.pl:253
 msgid ""
 "Time in seconds to delay between each download, to avoid hammering the BTS "
 "web server. Default is 5 seconds."
@@ -744,12 +746,12 @@ msgstr ""
 "le serveur web du BTS. Il est de 5 secondes par défaut."
 
 # type: =item
-#: ../scripts/bts.pl:254
+#: ../scripts/bts.pl:256
 msgid "--mbox"
 msgstr "--mbox"
 
 # type: textblock
-#: ../scripts/bts.pl:256
+#: ../scripts/bts.pl:258
 msgid ""
 "Open a mail reader to read the mbox corresponding to a given bug number for "
 "show and bugs commands."
@@ -758,12 +760,12 @@ msgstr ""
 "correspondant à un numéro de bogue donné, pour les commandes show et bugs."
 
 # type: =item
-#: ../scripts/bts.pl:259
+#: ../scripts/bts.pl:261
 msgid "--mailreader=READER"
 msgstr "--mailreader=CLIENT_MAIL"
 
 # type: textblock
-#: ../scripts/bts.pl:261
+#: ../scripts/bts.pl:263
 msgid ""
 "Specify the command to read the mbox.  Must contain a \"%s\" string "
 "(unquoted!), which will be replaced by the name of the mbox file.  The "
@@ -779,12 +781,12 @@ msgstr ""
 "nécessaire.)"
 
 # type: =item
-#: ../scripts/bts.pl:267
+#: ../scripts/bts.pl:269
 msgid "--cc-addr=CC_EMAIL_ADDRESS"
 msgstr "--cc-addr=CC_COURRIEL"
 
 # type: textblock
-#: ../scripts/bts.pl:269
+#: ../scripts/bts.pl:271
 msgid ""
 "Send carbon copies to a list of users. CC_EMAIL_ADDRESS should be a comma-"
 "separated list of emails."
@@ -793,12 +795,12 @@ msgstr ""
 "être une liste d'adresses séparées par des virgules."
 
 # type: =item
-#: ../scripts/bts.pl:272
+#: ../scripts/bts.pl:274
 msgid "--use-default-cc"
 msgstr "--use-default-cc"
 
 # type: textblock
-#: ../scripts/bts.pl:274
+#: ../scripts/bts.pl:276
 msgid ""
 "Add the addresses specified in the configuation file option BTS_DEFAULT_CC "
 "to the list specified using --cc-addr.  This is the default."
@@ -808,12 +810,12 @@ msgstr ""
 "comportement par défaut."
 
 # type: TP
-#: ../scripts/bts.pl:278
+#: ../scripts/bts.pl:280
 msgid "--no-use-default-cc"
 msgstr "--no-use-default-cc"
 
 # type: textblock
-#: ../scripts/bts.pl:280
+#: ../scripts/bts.pl:282
 msgid ""
 "Do not add addresses specified in BTS_DEFAULT_CC to the carbon copy list."
 msgstr ""
@@ -821,12 +823,12 @@ msgstr ""
 "copies conformes."
 
 # type: =item
-#: ../scripts/bts.pl:283 ../scripts/mass-bug.pl:99
+#: ../scripts/bts.pl:285 ../scripts/mass-bug.pl:99
 msgid "--sendmail=SENDMAILCMD"
 msgstr "--sendmail=COMMANDE_D_ENVOI_DE_MAIL"
 
 # type: textblock
-#: ../scripts/bts.pl:285
+#: ../scripts/bts.pl:287
 msgid ""
 "Specify the sendmail command.  The command will be split on white space and "
 "will not be passed to a shell.  Default is '/usr/sbin/sendmail'.  The -t "
@@ -843,12 +845,12 @@ msgstr ""
 "nécessaire, par exemple : --sendmail=\"/usr/sbin/mymailer -t\""
 
 # type: =item
-#: ../scripts/bts.pl:292
+#: ../scripts/bts.pl:294
 msgid "--smtp-host=SMTPHOST"
 msgstr "--smtp-host=SERVEUR_SMTP"
 
 # type: textblock
-#: ../scripts/bts.pl:294
+#: ../scripts/bts.pl:296
 msgid ""
 "Specify an SMTP host.  If given, B<bts> will send mail by talking directly "
 "to this SMTP host rather than by invoking a sendmail command."
@@ -858,7 +860,7 @@ msgstr ""
 "sendmail."
 
 # type: textblock
-#: ../scripts/bts.pl:297
+#: ../scripts/bts.pl:299
 msgid ""
 "The host name may be followed by a colon (\":\") and a port number in order "
 "to use a port other than the default.  It may also begin with \"ssmtp://\" "
@@ -870,7 +872,7 @@ msgstr ""
 "protocole SMTPS doit être utilisé."
 
 # type: textblock
-#: ../scripts/bts.pl:301
+#: ../scripts/bts.pl:303
 msgid ""
 "Note that when sending directly via an SMTP host, specifying addresses in --"
 "cc-addr or BTS_DEFAULT_CC that the SMTP host will not relay will cause the "
@@ -881,12 +883,12 @@ msgstr ""
 "SMTP, alors le serveur SMTP rejettera le courrier en entier."
 
 # type: =item
-#: ../scripts/bts.pl:305
+#: ../scripts/bts.pl:307
 msgid "--smtp-username=USERNAME, --smtp-password=PASSWORD"
 msgstr "--smtp-username=NOM_UTILISATEUR, --smtp-password=MOT_DE_PASSE"
 
 # type: textblock
-#: ../scripts/bts.pl:307
+#: ../scripts/bts.pl:309
 msgid ""
 "Specify the credentials to use when connecting to the SMTP server specified "
 "by --smtp-host.  If the server does not require authentication then these "
@@ -897,7 +899,7 @@ msgstr ""
 "d'identification, alors ces options ne devraient pas être utilisées."
 
 # type: textblock
-#: ../scripts/bts.pl:311
+#: ../scripts/bts.pl:313
 msgid ""
 "If a username is specified but not a password, B<bts> will prompt for the "
 "password before sending the mail."
@@ -906,32 +908,32 @@ msgstr ""
 "demandera le mot de passe avant l'envoi du courrier."
 
 # type: =item
-#: ../scripts/bts.pl:314
+#: ../scripts/bts.pl:316
 #, fuzzy
 msgid "--smtp-helo=HELO"
 msgstr "--smtp-host=SERVEUR_SMTP"
 
 # type: textblock
-#: ../scripts/bts.pl:316
+#: ../scripts/bts.pl:318
 msgid ""
 "Specify the name to use in the HELO command when connecting to the SMTP "
 "server; defaults to the contents of the file F</etc/mailname>, if it exists."
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:320
+#: ../scripts/bts.pl:322
 msgid ""
 "Note that some SMTP servers may reject the use of a HELO which either does "
 "not resolve or does not appear to belong to the host using it."
 msgstr ""
 
 # type: =item
-#: ../scripts/bts.pl:323
+#: ../scripts/bts.pl:325
 msgid "-f, --force-refresh"
 msgstr "-f, --force-refresh"
 
 # type: textblock
-#: ../scripts/bts.pl:325
+#: ../scripts/bts.pl:327
 msgid ""
 "Download a bug report again, even if it does not appear to have changed "
 "since the last cache command.  Useful if a --cache-mode=full is requested "
@@ -945,24 +947,24 @@ msgstr ""
 "inintéressantes n'ont pas été téléchargées)."
 
 # type: =item
-#: ../scripts/bts.pl:331
+#: ../scripts/bts.pl:333
 msgid "--no-force-refresh"
 msgstr "--no-force-refresh"
 
 # type: Plain text
-#: ../scripts/bts.pl:333
+#: ../scripts/bts.pl:335
 msgid "Suppress any configuration file --force-refresh option."
 msgstr ""
 "Ne tenir compte d'aucune option --force-refresh venant d'un fichier de "
 "configuration."
 
 # type: =item
-#: ../scripts/bts.pl:335
+#: ../scripts/bts.pl:337
 msgid "--only-new"
 msgstr "--only-new"
 
 # type: textblock
-#: ../scripts/bts.pl:337
+#: ../scripts/bts.pl:339
 msgid ""
 "Download only new bugs when caching. Do not check for updates in bugs we "
 "already have."
@@ -971,12 +973,12 @@ msgstr ""
 "vérifier si les bogues déjà téléchargés ont été modifiés."
 
 # type: =item
-#: ../scripts/bts.pl:340
+#: ../scripts/bts.pl:342
 msgid "--include-resolved"
 msgstr "--include-resolved"
 
 # type: textblock
-#: ../scripts/bts.pl:342
+#: ../scripts/bts.pl:344
 msgid ""
 "When caching bug reports, include those that are marked as resolved.  This "
 "is the default behaviour."
@@ -985,12 +987,12 @@ msgstr ""
 "marqués comme étant résolus. C'est le comportement par défaut."
 
 # type: =item
-#: ../scripts/bts.pl:345
+#: ../scripts/bts.pl:347
 msgid "--no-include-resolved"
 msgstr "--no-include-resolved"
 
 # type: textblock
-#: ../scripts/bts.pl:347
+#: ../scripts/bts.pl:349
 msgid ""
 "Reverse the behaviour of the previous option.  That is, do not cache bugs "
 "that are marked as resolved."
@@ -999,12 +1001,12 @@ msgstr ""
 "les bogues dans le cache s'ils sont marqués comme étant résolus."
 
 # type: TP
-#: ../scripts/bts.pl:350
+#: ../scripts/bts.pl:352
 msgid "--no-ack"
 msgstr "--no-ack"
 
 # type: textblock
-#: ../scripts/bts.pl:352
+#: ../scripts/bts.pl:354
 msgid ""
 "Suppress acknowledgment mails from the BTS.  Note that this will only affect "
 "the copies of messages CCed to bugs, not those sent to the control bot."
@@ -1014,24 +1016,24 @@ msgstr ""
 "robot « control »."
 
 # type: =item
-#: ../scripts/bts.pl:356
+#: ../scripts/bts.pl:358
 msgid "--ack"
 msgstr "--ack"
 
 # type: Plain text
-#: ../scripts/bts.pl:358
+#: ../scripts/bts.pl:360
 msgid "Do not suppress acknowledgement mails.  This is the default behaviour."
 msgstr ""
 "Ne supprime pas les courriers d'acquittement. C'est le comportement par "
 "défaut."
 
 # type: =item
-#: ../scripts/bts.pl:360 ../scripts/tagpending.pl:136
+#: ../scripts/bts.pl:362 ../scripts/tagpending.pl:136
 msgid "-i, --interactive"
 msgstr "-i, --interactive"
 
 # type: textblock
-#: ../scripts/bts.pl:362
+#: ../scripts/bts.pl:364
 msgid ""
 "Before sending an e-mail to the control bot, display the content and allow "
 "it to be edited, or the sending cancelled."
@@ -1040,12 +1042,12 @@ msgstr ""
 "permettre de l'éditer ou d'annuler l'envoi."
 
 # type: =item
-#: ../scripts/bts.pl:365
+#: ../scripts/bts.pl:367
 msgid "--force-interactive"
 msgstr "--force-interactive"
 
 # type: textblock
-#: ../scripts/bts.pl:367
+#: ../scripts/bts.pl:369
 msgid ""
 "Similar to --interactive, with the exception that an editor is spawned "
 "before prompting for confirmation of the message to be sent."
@@ -1054,12 +1056,12 @@ msgstr ""
 "demander la confirmation de l'envoi du courrier."
 
 # type: =item
-#: ../scripts/bts.pl:370
+#: ../scripts/bts.pl:372
 msgid "--no-interactive"
 msgstr "--no-interactive"
 
 # type: Plain text
-#: ../scripts/bts.pl:372
+#: ../scripts/bts.pl:374
 msgid ""
 "Send control e-mails without confirmation.  This is the default behaviour."
 msgstr ""
@@ -1067,12 +1069,12 @@ msgstr ""
 "par défaut."
 
 # type: =item
-#: ../scripts/bts.pl:374
+#: ../scripts/bts.pl:376
 msgid "-q, --quiet"
 msgstr "-q, --quiet"
 
 # type: textblock
-#: ../scripts/bts.pl:376
+#: ../scripts/bts.pl:378
 msgid ""
 "When running bts cache, only display information about newly cached pages, "
 "not messages saying already cached.  If this option is specified twice, only "
@@ -1084,12 +1086,12 @@ msgstr ""
 "messages d'erreur, vers la sortie d'erreur (« stderr »)."
 
 # type: TP
-#: ../scripts/bts.pl:380 ../scripts/mass-bug.pl:108
+#: ../scripts/bts.pl:382 ../scripts/mass-bug.pl:108
 msgid "--no-conf, --noconf"
 msgstr "--no-conf, --noconf"
 
 # type: Plain text
-#: ../scripts/bts.pl:382 ../scripts/cvs-debrelease.1:61 ../scripts/debc.1:89
+#: ../scripts/bts.pl:384 ../scripts/cvs-debrelease.1:61 ../scripts/debc.1:89
 #: ../scripts/debchange.1:330 ../scripts/debclean.1:81
 #: ../scripts/debdiff.1:138 ../scripts/debi.1:90 ../scripts/debrelease.1:99
 #: ../scripts/debsign.1:93 ../scripts/debuild.1:223
@@ -1105,12 +1107,12 @@ msgstr ""
 "première position de la ligne de commande."
 
 # type: =head1
-#: ../scripts/bts.pl:696 ../scripts/chdist.pl:56
+#: ../scripts/bts.pl:700 ../scripts/chdist.pl:56
 msgid "COMMANDS"
 msgstr "COMMANDES"
 
 # type: textblock
-#: ../scripts/bts.pl:698
+#: ../scripts/bts.pl:702
 msgid ""
 "For full details about the commands, see the BTS documentation.  L<http://"
 "www.debian.org/Bugs/server-control>"
@@ -1119,7 +1121,7 @@ msgstr ""
 "du BTS. L<http://bugs.debian.org/Bugs/server-control>"
 
 # type: =item
-#: ../scripts/bts.pl:703
+#: ../scripts/bts.pl:707
 msgid ""
 "show [options] [<bug number> | <package> | <maintainer> | : ] [opt=val ...]"
 msgstr ""
@@ -1127,27 +1129,27 @@ msgstr ""
 "[opt=val ...]"
 
 # type: =item
-#: ../scripts/bts.pl:705
+#: ../scripts/bts.pl:709
 msgid "show [options] [src:<package> | from:<submitter>] [opt=val ...]"
 msgstr "show [options] [src:<paquet> | from:<rapporteur>] [opt=val ...]"
 
 # type: =item
-#: ../scripts/bts.pl:707
+#: ../scripts/bts.pl:711
 msgid "show [options] [tag:<tag> | usertag:<tag> ] [opt=val ...]"
 msgstr "show [options] [tag:<tag> | usertag:<tag> ] [opt=val ...]"
 
 # type: =item
-#: ../scripts/bts.pl:709
+#: ../scripts/bts.pl:713
 msgid "show [release-critical | release-critical/... | RC]"
 msgstr "show [release-critical | release-critical/... | RC]"
 
 # type: textblock
-#: ../scripts/bts.pl:711
+#: ../scripts/bts.pl:715
 msgid "This is a synonym for bts bugs."
 msgstr "Ceci est un synonyme pour « bts bugs »."
 
 # type: =item
-#: ../scripts/bts.pl:719
+#: ../scripts/bts.pl:723
 msgid ""
 "bugs [options] [<bug number> | <package> | <maintainer> | : ] [opt=val ..]"
 msgstr ""
@@ -1155,22 +1157,22 @@ msgstr ""
 "[opt=val ..]"
 
 # type: =item
-#: ../scripts/bts.pl:721
+#: ../scripts/bts.pl:725
 msgid "bugs [options] [src:<package> | from:<submitter>] [opt=val ..]"
 msgstr "bugs [options] [src:<paquet> | from:<rapporteur>] [opt=val ..]"
 
 # type: =item
-#: ../scripts/bts.pl:723
+#: ../scripts/bts.pl:727
 msgid "bugs [options] [tag:<tag> | usertag:<tag> ] [opt=val ..]"
 msgstr "bugs [options] [tag:<tag> | usertag:<tag> ] [opt=val ..]"
 
 # type: =item
-#: ../scripts/bts.pl:725
+#: ../scripts/bts.pl:729
 msgid "bugs [release-critical | release-critical/... | RC]"
 msgstr "bugs [release-critical | release-critical/... | RC]"
 
 # type: textblock
-#: ../scripts/bts.pl:727
+#: ../scripts/bts.pl:731
 msgid ""
 "Display the page listing the requested bugs in a web browser using "
 "L<sensible-browser(1)>."
@@ -1179,11 +1181,12 @@ msgstr ""
 "utilisant L<sensible-browser>(1)."
 
 # type: textblock
-#: ../scripts/bts.pl:730
+#: ../scripts/bts.pl:734
+#, fuzzy
 msgid ""
 "Options may be specified after the \"bugs\" command in addition to or "
 "instead of options at the start of the command line: recognised options at "
-"his point are: -o/--offline/--online, --mbox, --mailreader and --[no-]"
+"this point are: -o/--offline/--online, --mbox, --mailreader and --[no-]"
 "cache.  These are described earlier in this manpage.  If either the -o or --"
 "offline option is used, or there is already an up-to-date copy in the local "
 "cache, the cached version will be used."
@@ -1196,17 +1199,17 @@ msgstr ""
 "local, les versions mises en cache vont être utilisées."
 
 # type: textblock
-#: ../scripts/bts.pl:737
+#: ../scripts/bts.pl:741
 msgid "The meanings of the possible arguments are as follows:"
 msgstr "Les significations des arguments possibles sont les suivantes :"
 
 # type: =item
-#: ../scripts/bts.pl:741
+#: ../scripts/bts.pl:745
 msgid "(none)"
 msgstr "(aucune)"
 
 # type: textblock
-#: ../scripts/bts.pl:743
+#: ../scripts/bts.pl:747
 msgid ""
 "If nothing is specified, bts bugs will display your bugs, assuming that "
 "either DEBEMAIL or EMAIL (examined in that order) is set to the appropriate "
@@ -1217,76 +1220,76 @@ msgstr ""
 "l'adresse de courriel désirée."
 
 # type: =item
-#: ../scripts/bts.pl:747
+#: ../scripts/bts.pl:751
 msgid "<bug number>"
 msgstr "<numéro de bogue>"
 
 # type: textblock
-#: ../scripts/bts.pl:749
+#: ../scripts/bts.pl:753
 msgid "Display bug number <bug number>."
 msgstr "Afficher le bogue de numéro <numéro de bogue>."
 
 # type: TP
-#: ../scripts/bts.pl:751
+#: ../scripts/bts.pl:755
 msgid "<package>"
 msgstr "<paquet>"
 
 # type: textblock
-#: ../scripts/bts.pl:753
+#: ../scripts/bts.pl:757
 msgid "Display the bugs for the package <package>."
 msgstr "Afficher les bogues du paquet <paquet>."
 
 # type: =item
-#: ../scripts/bts.pl:755
+#: ../scripts/bts.pl:759
 msgid "src:<package>"
 msgstr "src:<paquet>"
 
 # type: textblock
-#: ../scripts/bts.pl:757
+#: ../scripts/bts.pl:761
 msgid "Display the bugs for the source package <package>."
 msgstr "Afficher les bogues du paquet source <paquet>."
 
 # type: TP
-#: ../scripts/bts.pl:759
+#: ../scripts/bts.pl:763
 msgid "<maintainer>"
 msgstr "<responsable>"
 
 # type: textblock
-#: ../scripts/bts.pl:761
+#: ../scripts/bts.pl:765
 msgid "Display the bugs for the maintainer email address <maintainer>."
 msgstr ""
 "Afficher les bogues dont le responsable a pour adresse de courriel "
 "<responsable>."
 
 # type: =item
-#: ../scripts/bts.pl:763
+#: ../scripts/bts.pl:767
 msgid "from:<submitter>"
 msgstr "from:<rapporteur>"
 
 # type: textblock
-#: ../scripts/bts.pl:765
+#: ../scripts/bts.pl:769
 msgid "Display the bugs for the submitter email address <submitter>."
 msgstr ""
 "Afficher les bogues dont le rapporteur a pour adresse de "
 "courriel<rapporteur>."
 
 # type: =item
-#: ../scripts/bts.pl:767
+#: ../scripts/bts.pl:771
 msgid "tag:<tag>"
 msgstr "tag:<tag>"
 
 # type: textblock
-#: ../scripts/bts.pl:769
+#: ../scripts/bts.pl:773
 msgid "Display the bugs which are tagged with <tag>."
 msgstr "Afficher les bogues tagués avec <tag>."
 
 # type: =item
-#: ../scripts/bts.pl:771
+#: ../scripts/bts.pl:775
 msgid "usertag:<tag>"
 msgstr "usertag:<tag>"
 
 # type: textblock
-#: ../scripts/bts.pl:773
+#: ../scripts/bts.pl:777
 msgid ""
 "Display the bugs which are tagged with usertag <tag>.  See the BTS "
 "documentation for more information on usertags.  This will require the use "
@@ -1298,12 +1301,12 @@ msgstr ""
 "« users=<courriel> »."
 
 # type: =item
-#: ../scripts/bts.pl:777
+#: ../scripts/bts.pl:781
 msgid ":"
 msgstr ":"
 
 # type: textblock
-#: ../scripts/bts.pl:779
+#: ../scripts/bts.pl:783
 msgid ""
 "Details of the bug tracking system itself, along with a bug-request page "
 "with more options than this script, can be found on http://bugs.debian."
@@ -1315,12 +1318,12 @@ msgstr ""
 "commande « bts bugs : »."
 
 # type: =item
-#: ../scripts/bts.pl:784
+#: ../scripts/bts.pl:788
 msgid "release-critical, RC"
 msgstr "release-critical, RC"
 
 # type: textblock
-#: ../scripts/bts.pl:786
+#: ../scripts/bts.pl:790
 msgid ""
 "Display the front page of the release-critical pages on the BTS.  This is a "
 "synonym for http://bugs.debian.org/release-critical/index.html.  It is also "
@@ -1334,7 +1337,7 @@ msgstr ""
 "release-critical/other/all.html."
 
 # type: textblock
-#: ../scripts/bts.pl:793
+#: ../scripts/bts.pl:797
 msgid ""
 "After the argument specifying what to display, you can optionally specify "
 "options to use to format the page or change what it displayed.  These are "
@@ -1352,7 +1355,7 @@ msgstr ""
 "récents dans le fichier journal des bogues."
 
 # type: textblock
-#: ../scripts/bts.pl:800
+#: ../scripts/bts.pl:804
 #, fuzzy
 msgid ""
 "If caching has been enabled (that is, --no-cache has not been used, and "
@@ -1374,7 +1377,7 @@ msgstr ""
 "accédées dans les 30 jours."
 
 # type: textblock
-#: ../scripts/bts.pl:811
+#: ../scripts/bts.pl:815
 msgid ""
 "Any other B<bts> commands following this on the command line will be "
 "executed after the browser has been exited."
@@ -1383,7 +1386,7 @@ msgstr ""
 "exécutée après que le navigateur aura quitté."
 
 # type: textblock
-#: ../scripts/bts.pl:814
+#: ../scripts/bts.pl:818
 msgid ""
 "The desired browser can be specified and configured by setting the BROWSER "
 "environment variable.  The conventions follow those defined by Eric Raymond "
@@ -1395,7 +1398,7 @@ msgstr ""
 "reproduisons ici les informations pertinentes."
 
 # type: textblock
-#: ../scripts/bts.pl:819
+#: ../scripts/bts.pl:823
 msgid ""
 "The value of BROWSER may consist of a colon-separated series of browser "
 "command parts. These should be tried in order until one succeeds. Each "
@@ -1413,7 +1416,7 @@ msgstr ""
 "La chaîne « %% » doit être remplacée par un simple « % »."
 
 # type: textblock
-#: ../scripts/bts.pl:827
+#: ../scripts/bts.pl:831
 msgid ""
 "Rationale: We need to be able to specify multiple browser commands so "
 "programs obeying this convention can do the right thing in either X or "
@@ -1433,24 +1436,24 @@ msgstr ""
 "en %, sinon il ne serait pas possible d'avoir un %s littéral dans la chaîne."
 
 # type: textblock
-#: ../scripts/bts.pl:835
+#: ../scripts/bts.pl:839
 msgid "For example, on most Linux systems a good thing to do would be:"
 msgstr ""
 "Par exemple, sur la plupart des systèmes Linux, une bonne chose à faire "
 "serait :"
 
 # type: textblock
-#: ../scripts/bts.pl:837
+#: ../scripts/bts.pl:841
 msgid "BROWSER='mozilla -raise -remote \"openURL(%s,new-window)\":links'"
 msgstr "BROWSER='mozilla -raise -remote \"openURL(%s,new-window)\":links'"
 
 # type: =item
-#: ../scripts/bts.pl:912
+#: ../scripts/bts.pl:916
 msgid "select [key:value ...]"
 msgstr "select [clé:valeur ...]"
 
 # type: textblock
-#: ../scripts/bts.pl:914
+#: ../scripts/bts.pl:918
 msgid ""
 "Uses the SOAP interface to output a list of bugs which match the given "
 "selection requirements."
@@ -1459,78 +1462,78 @@ msgstr ""
 "à certains critères de recherche."
 
 # type: textblock
-#: ../scripts/bts.pl:917
+#: ../scripts/bts.pl:921
 msgid "The following keys are allowed, and may be given multiple times."
 msgstr ""
 "Les clés suivantes sont autorisées, et peuvent être utilisées plusieurs fois."
 
 # type: TP
-#: ../scripts/bts.pl:921
+#: ../scripts/bts.pl:925
 msgid "package"
 msgstr "package"
 
 # type: textblock
-#: ../scripts/bts.pl:923
+#: ../scripts/bts.pl:927
 msgid "Binary package name."
 msgstr "Nom d'un paquet binaire."
 
 # type: =item
-#: ../scripts/bts.pl:925
+#: ../scripts/bts.pl:929
 msgid "source"
 msgstr "source"
 
 # type: textblock
-#: ../scripts/bts.pl:927
+#: ../scripts/bts.pl:931
 msgid "Source package name."
 msgstr "Nom d'un paquet source."
 
 # type: TP
-#: ../scripts/bts.pl:929
+#: ../scripts/bts.pl:933
 msgid "maintainer"
 msgstr "maintainer"
 
 # type: textblock
-#: ../scripts/bts.pl:931
+#: ../scripts/bts.pl:935
 msgid "E-mail address of the maintainer."
 msgstr "Adresse électronique du responsable."
 
 # type: =item
-#: ../scripts/bts.pl:933
+#: ../scripts/bts.pl:937
 msgid "submitter"
 msgstr "submitter"
 
 # type: textblock
-#: ../scripts/bts.pl:935
+#: ../scripts/bts.pl:939
 msgid "E-mail address of the submitter."
 msgstr "Adresse électronique de l'auteur du bogue."
 
 # type: =item
-#: ../scripts/bts.pl:937
+#: ../scripts/bts.pl:941
 msgid "severity"
 msgstr "severity"
 
 # type: textblock
-#: ../scripts/bts.pl:939
+#: ../scripts/bts.pl:943
 msgid "Bug severity."
 msgstr "Sévérité du bogue."
 
 # type: =item
-#: ../scripts/bts.pl:941
+#: ../scripts/bts.pl:945
 msgid "status"
 msgstr "status"
 
 # type: textblock
-#: ../scripts/bts.pl:943
+#: ../scripts/bts.pl:947
 msgid "Status of the bug."
 msgstr "État du bogue."
 
 # type: =item
-#: ../scripts/bts.pl:945
+#: ../scripts/bts.pl:949
 msgid "tag"
 msgstr "tag"
 
 # type: textblock
-#: ../scripts/bts.pl:947
+#: ../scripts/bts.pl:951
 msgid ""
 "Tags applied to the bug. If I<users> is specified, may include usertags in "
 "addition to the standard tags."
@@ -1539,44 +1542,44 @@ msgstr ""
 "peuvent être des « usertags » en plus des étiquettes traditionnelles."
 
 # type: =item
-#: ../scripts/bts.pl:950
+#: ../scripts/bts.pl:954
 msgid "owner"
 msgstr "owner"
 
 # type: textblock
-#: ../scripts/bts.pl:952
+#: ../scripts/bts.pl:956
 msgid "Bug's owner."
 msgstr "Propriétaire du bogue."
 
 # type: =item
-#: ../scripts/bts.pl:954
+#: ../scripts/bts.pl:958
 msgid "bugs"
 msgstr "bugs"
 
 # type: textblock
-#: ../scripts/bts.pl:956
+#: ../scripts/bts.pl:960
 msgid "List of bugs to search within."
 msgstr "Liste de bogue dans lesquels chercher."
 
 # type: =item
-#: ../scripts/bts.pl:958
+#: ../scripts/bts.pl:962
 msgid "users"
 msgstr "users"
 
 # type: textblock
-#: ../scripts/bts.pl:960
+#: ../scripts/bts.pl:964
 msgid "Users to use when looking up usertags."
 msgstr ""
 "Utilisateur à utiliser pour la recherche d'étiquettes utilisateur "
 "(« usertags »)."
 
 # type: =item
-#: ../scripts/bts.pl:962
+#: ../scripts/bts.pl:966
 msgid "archive"
 msgstr "archive"
 
 # type: textblock
-#: ../scripts/bts.pl:964
+#: ../scripts/bts.pl:968
 msgid ""
 "Whether to search archived bugs or normal bugs; defaults to 0 (i.e. only "
 "search normal bugs). As a special case, if archive is 'both', both archived "
@@ -1588,7 +1591,7 @@ msgstr ""
 "archivés et non archivés."
 
 # type: textblock
-#: ../scripts/bts.pl:970
+#: ../scripts/bts.pl:974
 msgid ""
 "For example, to select the set of bugs submitted by jrandomdeveloper@example."
 "com and tagged wontfix, one would use"
@@ -1597,52 +1600,52 @@ msgstr ""
 "undéveloppeur@exemple.fr qui ont l'étiquette « wontfix », on utilisera :"
 
 # type: textblock
-#: ../scripts/bts.pl:973
+#: ../scripts/bts.pl:977
 msgid "bts select submitter:jrandomdeveloper@example.com tag:wontfix"
 msgstr "bts select submitter:undéveloppeur@exemple.fr tag:wontfix"
 
 # type: textblock
-#: ../scripts/bts.pl:975
+#: ../scripts/bts.pl:979
 msgid ""
 "If a key is used multiple times then the set of bugs selected includes those "
 "matching any of the supplied values; for example"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:978
+#: ../scripts/bts.pl:982
 msgid "bts select package:foo severity:wishlist severity:minor"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:980
+#: ../scripts/bts.pl:984
 msgid "returns all bugs of package foo with either wishlist or minor severity."
 msgstr ""
 
 # type: =item
-#: ../scripts/bts.pl:993
+#: ../scripts/bts.pl:997
 msgid "status [<bug> | file:<file>] ..."
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:995
+#: ../scripts/bts.pl:999
 msgid ""
 "Uses the SOAP interface to output status information for the given bugs (or "
 "as read from the listed files -- use '-' to indicate STDIN)."
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:998
+#: ../scripts/bts.pl:1002
 msgid "Empty status fields are not displayed."
 msgstr ""
 
 # type: =item
-#: ../scripts/bts.pl:1055
+#: ../scripts/bts.pl:1059
 #, fuzzy
 msgid "clone <bug> <new ID> [<new ID> ...]"
 msgstr "clone <bogue> [nouveaux IDs]"
 
 # type: textblock
-#: ../scripts/bts.pl:1057
+#: ../scripts/bts.pl:1061
 msgid ""
 "The clone control command allows you to duplicate a bug report. It is useful "
 "in the case where a single report actually indicates that multiple distinct "
@@ -1659,22 +1662,22 @@ msgstr ""
 "chaque nouvel identifiant."
 
 # type: =item
-#: ../scripts/bts.pl:1102
+#: ../scripts/bts.pl:1106
 msgid "reopen <bug> [<submitter>]"
 msgstr "reopen <bogue> [<rapporteur>]"
 
 # type: textblock
-#: ../scripts/bts.pl:1104
+#: ../scripts/bts.pl:1108
 msgid "Reopen a bug, with optional submitter."
 msgstr "Réouvrir un bogue, avec rapporteur optionnel."
 
 # type: =item
-#: ../scripts/bts.pl:1115
+#: ../scripts/bts.pl:1119
 msgid "archive <bug>"
 msgstr "archive <bogue>"
 
 # type: textblock
-#: ../scripts/bts.pl:1117
+#: ../scripts/bts.pl:1121
 msgid ""
 "Archive a bug that has previously been archived but is currently not.  The "
 "bug must fulfil all of the requirements for archiving with the exception of "
@@ -1685,42 +1688,42 @@ msgstr ""
 "période d'attente."
 
 # type: =item
-#: ../scripts/bts.pl:1129
+#: ../scripts/bts.pl:1133
 msgid "unarchive <bug>"
 msgstr "unarchive <bogue>"
 
 # type: textblock
-#: ../scripts/bts.pl:1131
+#: ../scripts/bts.pl:1135
 msgid "Unarchive a bug that is currently archived."
 msgstr "Désarchiver un bogue qui est déjà archivé."
 
 # type: =item
-#: ../scripts/bts.pl:1141
+#: ../scripts/bts.pl:1145
 msgid "retitle <bug> <title>"
 msgstr "retitle <bogue> <titre>"
 
 # type: textblock
-#: ../scripts/bts.pl:1143
+#: ../scripts/bts.pl:1147
 msgid "Change the title of the bug."
 msgstr "Changer le titre du bogue."
 
 # type: =item
-#: ../scripts/bts.pl:1156
+#: ../scripts/bts.pl:1160
 msgid "summary <bug> <messagenum>"
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:1158
+#: ../scripts/bts.pl:1162
 msgid "Select a message number that should be used as the summary of a bug."
 msgstr ""
 
 # type: =item
-#: ../scripts/bts.pl:1172
+#: ../scripts/bts.pl:1176
 msgid "submitter <bug> [<bug> ...] <submitter-email>"
 msgstr "submitter <bogue> [<bogue> ...] <courriel-du-rapporteur>"
 
 # type: textblock
-#: ../scripts/bts.pl:1174
+#: ../scripts/bts.pl:1178
 msgid ""
 "Change the submitter address of a bug or a number of bugs, with `!' meaning "
 "`use the address on the current email as the new submitter address'."
@@ -1730,12 +1733,12 @@ msgstr ""
 "adresse du rapporteur »."
 
 # type: =item
-#: ../scripts/bts.pl:1191
+#: ../scripts/bts.pl:1195
 msgid "reassign <bug> [<bug> ...] <package> [<version>]"
 msgstr "reassign <bogue> [<bogue> ...] <paquet> [<version>]"
 
 # type: textblock
-#: ../scripts/bts.pl:1193
+#: ../scripts/bts.pl:1197
 msgid ""
 "Reassign a bug or a number of bugs to a different package.  The version "
 "field is optional; see the explanation at L<http://www.debian.org/Bugs/"
@@ -1746,24 +1749,24 @@ msgstr ""
 "debian.org/Bugs/server-control>."
 
 # type: =item
-#: ../scripts/bts.pl:1223
+#: ../scripts/bts.pl:1227
 msgid "found <bug> [<version>]"
 msgstr "found <bogue> [<version>]"
 
 # type: textblock
-#: ../scripts/bts.pl:1225
+#: ../scripts/bts.pl:1229
 msgid "Indicate that a bug was found to exist in a particular package version."
 msgstr ""
 "Indiquer qu'un bogue a été découvert dans une version particulière d'un "
 "paquet."
 
 # type: =item
-#: ../scripts/bts.pl:1240
+#: ../scripts/bts.pl:1244
 msgid "notfound <bug> <version>"
 msgstr "notfound <bogue> <version>"
 
 # type: textblock
-#: ../scripts/bts.pl:1242
+#: ../scripts/bts.pl:1246
 msgid ""
 "Remove the record that bug was encountered in the given version of the "
 "package to which it is assigned."
@@ -1772,12 +1775,12 @@ msgstr ""
 "découvert."
 
 # type: =item
-#: ../scripts/bts.pl:1254
+#: ../scripts/bts.pl:1258
 msgid "fixed <bug> <version>"
 msgstr "fixed <bogue> <version>"
 
 # type: textblock
-#: ../scripts/bts.pl:1256
+#: ../scripts/bts.pl:1260
 msgid ""
 "Indicate that a bug was fixed in a particular package version, without "
 "affecting the bug's open/closed status."
@@ -1786,19 +1789,19 @@ msgstr ""
 "paquet, sans changer l'état ouvert/fermé du bogue."
 
 # type: =item
-#: ../scripts/bts.pl:1268
+#: ../scripts/bts.pl:1272
 msgid "notfixed <bug> <version>"
 msgstr "notfixed <bogue> <version>"
 
 # type: textblock
-#: ../scripts/bts.pl:1270
+#: ../scripts/bts.pl:1274
 msgid ""
 "Remove the record that a bug was fixed in the given version of the package "
 "to which it is assigned."
 msgstr "Enlever l'indication que ce bogue est corrigé dans une version donnée."
 
 # type: textblock
-#: ../scripts/bts.pl:1273
+#: ../scripts/bts.pl:1277
 msgid ""
 "This is equivalent to the sequence of commands \"found <bug> <version>\", "
 "\"notfound <bug> <version>\"."
@@ -1807,24 +1810,24 @@ msgstr ""
 "« notfound <bogue> <version> »."
 
 # type: =item
-#: ../scripts/bts.pl:1285
+#: ../scripts/bts.pl:1289
 msgid "block <bug> by|with <bug> [<bug> ...]"
 msgstr "block <bogue> by|with <bogue> [<bogue> ...]"
 
 # type: textblock
-#: ../scripts/bts.pl:1287
+#: ../scripts/bts.pl:1291
 msgid "Note that a bug is blocked from being fixed by a set of other bugs."
 msgstr ""
 "Enregistrer que la résolution d'un bogue est bloquée par un ensemble "
 "d'autres bogues."
 
 # type: =item
-#: ../scripts/bts.pl:1305
+#: ../scripts/bts.pl:1309
 msgid "unblock <bug> by|with <bug> [<bug> ...]"
 msgstr "unblock <bogue> by|with <bogue> [<bogue> ...]"
 
 # type: textblock
-#: ../scripts/bts.pl:1307
+#: ../scripts/bts.pl:1311
 msgid ""
 "Note that a bug is no longer blocked from being fixed by a set of other bugs."
 msgstr ""
@@ -1832,22 +1835,22 @@ msgstr ""
 "d'autres bogues."
 
 # type: =item
-#: ../scripts/bts.pl:1325
+#: ../scripts/bts.pl:1329
 msgid "merge <bug> <bug> [<bug> ...]"
 msgstr "merge <bogue> <bogue> [<bogue> ...]"
 
 # type: textblock
-#: ../scripts/bts.pl:1327
+#: ../scripts/bts.pl:1331
 msgid "Merge a set of bugs together."
 msgstr "Fusionner plusieurs bogues."
 
 # type: =item
-#: ../scripts/bts.pl:1342
+#: ../scripts/bts.pl:1346
 msgid "forcemerge <bug> <bug> [<bug> ...]"
 msgstr "forcemerge <bogue> <bogue> [<bogue> ...]"
 
 # type: textblock
-#: ../scripts/bts.pl:1344
+#: ../scripts/bts.pl:1348
 msgid ""
 "Forcibly merge a set of bugs together. The first bug listed is the master "
 "bug, and its settings (those which must be equal in a normal merge) are "
@@ -1859,27 +1862,27 @@ msgstr ""
 "suivent."
 
 # type: =item
-#: ../scripts/bts.pl:1362
+#: ../scripts/bts.pl:1366
 msgid "unmerge <bug>"
 msgstr "unmerge <bogue>"
 
 # type: textblock
-#: ../scripts/bts.pl:1364
+#: ../scripts/bts.pl:1368
 msgid "Unmerge a bug."
 msgstr "Annuler la fusion de plusieurs bogues."
 
 # type: =item
-#: ../scripts/bts.pl:1374
+#: ../scripts/bts.pl:1378
 msgid "tag <bug> [+|-|=] tag [tag ..]"
 msgstr "tag <bogue> [+|-|=] tag [tag ..]"
 
 # type: =item
-#: ../scripts/bts.pl:1376
+#: ../scripts/bts.pl:1380
 msgid "tags <bug> [+|-|=] tag [tag ..]"
 msgstr "tags <bogue> [+|-|=] tag [tag ..]"
 
 # type: textblock
-#: ../scripts/bts.pl:1378
+#: ../scripts/bts.pl:1382
 msgid ""
 "Set or unset a tag on a bug. The tag may either be the exact tag name or it "
 "may be abbreviated to any unique tag substring. (So using \"fixed\" will set "
@@ -1897,7 +1900,7 @@ msgstr ""
 "que le drapeau « = » ne soit utilisé ; la commande"
 
 # type: verbatim
-#: ../scripts/bts.pl:1385
+#: ../scripts/bts.pl:1389
 #, no-wrap
 msgid ""
 "  bts tags <bug> =\n"
@@ -1907,12 +1910,12 @@ msgstr ""
 "\n"
 
 # type: textblock
-#: ../scripts/bts.pl:1387
+#: ../scripts/bts.pl:1391
 msgid "will remove all tags from the specified bug."
 msgstr "va supprimer toutes les étiquettes du bogue indiqué."
 
 # type: textblock
-#: ../scripts/bts.pl:1389
+#: ../scripts/bts.pl:1393
 msgid ""
 "As a special case, the unofficial \"gift\" tag name is supported in addition "
 "to official tag names. \"gift\" is used as a shorthand for the gift usertag; "
@@ -1922,29 +1925,29 @@ msgid ""
 msgstr ""
 
 # type: =item
-#: ../scripts/bts.pl:1453
+#: ../scripts/bts.pl:1457
 msgid "user <email>"
 msgstr "user <courriel>"
 
 # type: textblock
-#: ../scripts/bts.pl:1455
+#: ../scripts/bts.pl:1459
 msgid "Specify a user email address before using the usertags command."
 msgstr ""
 "Spécifier l'adresse de courriel d'un utilisateur avant d'utiliser la "
 "commande usertags."
 
 # type: =item
-#: ../scripts/bts.pl:1468
+#: ../scripts/bts.pl:1472
 msgid "usertag <bug> [+|-|=] tag [tag ..]"
 msgstr "usertag <bogue> [+|-|=] tag [tag ..]"
 
 # type: =item
-#: ../scripts/bts.pl:1470
+#: ../scripts/bts.pl:1474
 msgid "usertags <bug> [+|-|=] tag [tag ..]"
 msgstr "usertags <bogue> [+|-|=] tag [tag ..]"
 
 # type: textblock
-#: ../scripts/bts.pl:1472
+#: ../scripts/bts.pl:1476
 msgid ""
 "Set or unset a user tag on a bug. The tag must be the exact tag name wanted; "
 "there are no defaults or checking of tag names.  Multiple tags may be "
@@ -1960,7 +1963,7 @@ msgstr ""
 "utilisateur, à moins que le drapeau « = » ne soit utilisé ; la commande"
 
 # type: verbatim
-#: ../scripts/bts.pl:1478
+#: ../scripts/bts.pl:1482
 #, no-wrap
 msgid ""
 "  bts usertags <bug> =\n"
@@ -1970,17 +1973,17 @@ msgstr ""
 "\n"
 
 # type: textblock
-#: ../scripts/bts.pl:1480
+#: ../scripts/bts.pl:1484
 msgid "will remove all user tags from the specified bug."
 msgstr "va supprimer toutes les étiquettes utilisateur du bogue indiqué."
 
 # type: =item
-#: ../scripts/bts.pl:1511
+#: ../scripts/bts.pl:1515
 msgid "claim <bug> [<claim>]"
 msgstr "claim <bogue> [<courriel>]"
 
 # type: textblock
-#: ../scripts/bts.pl:1513
+#: ../scripts/bts.pl:1517
 msgid ""
 "Record that you have claimed a bug (e.g. for a bug squashing party).  "
 "<claim> should be a unique token allowing the bugs you have claimed to be "
@@ -1988,7 +1991,7 @@ msgid ""
 msgstr ""
 
 # type: textblock
-#: ../scripts/bts.pl:1517 ../scripts/bts.pl:1537
+#: ../scripts/bts.pl:1521 ../scripts/bts.pl:1541
 msgid ""
 "If no claim is specified, the environment variable DEBEMAIL or EMAIL "
 "(checked in that order) is used."
@@ -1997,22 +2000,22 @@ msgstr ""
 "EMAIL sont utilisées (dans cet ordre)."
 
 # type: =item
-#: ../scripts/bts.pl:1533
+#: ../scripts/bts.pl:1537
 msgid "unclaim <bug> [<claim>]"
 msgstr "unclaim <bogue> [<courriel>]"
 
 # type: textblock
-#: ../scripts/bts.pl:1535
+#: ../scripts/bts.pl:1539
 msgid "Remove the record that you have claimed a bug."
 msgstr "Supprime votre revendication pour un bogue."
 
 # type: =item
-#: ../scripts/bts.pl:1553
+#: ../scripts/bts.pl:1557
 msgid "severity <bug> <severity>"
 msgstr "severity <bogue> <sévérité>"
 
 # type: textblock
-#: ../scripts/bts.pl:1555
+#: ../scripts/bts.pl:1559
 msgid ""
 "Change the severity of a bug. Available severities are: wishlist, minor, "
 "normal, important, serious, grave, critical. The severity may be abbreviated "
@@ -2023,12 +2026,12 @@ msgstr ""
 "abrégée en une sous-chaîne unique."
 
 # type: =item
-#: ../scripts/bts.pl:1572
+#: ../scripts/bts.pl:1576
 msgid "forwarded <bug> <address>"
 msgstr "forwarded <bogue> <adresse>"
 
 # type: textblock
-#: ../scripts/bts.pl:1574
+#: ../scripts/bts.pl:1578
 msgid ""
 "Mark the bug as forwarded to the given address (usually an email address or "
 "a URL for an upstream bug tracker)."
@@ -2037,22 +2040,22 @@ msgstr ""
 "adresse électronique ou une URL pour un système de suivi amont)."
 
 # type: =item
-#: ../scripts/bts.pl:1591
+#: ../scripts/bts.pl:1595
 msgid "notforwarded <bug>"
 msgstr "notforwarded <bogue>"
 
 # type: textblock
-#: ../scripts/bts.pl:1593
+#: ../scripts/bts.pl:1597
 msgid "Mark a bug as not forwarded."
 msgstr "Marquer le bogue comme n'ayant pas été transmis."
 
 # type: TP
-#: ../scripts/bts.pl:1603
+#: ../scripts/bts.pl:1607
 msgid "package [ <package> ... ]"
 msgstr "package [ <paquet> ... ]"
 
 # type: textblock
-#: ../scripts/bts.pl:1605
+#: ../scripts/bts.pl:1609
 msgid ""
 "The following commands will only apply to bugs against the listed packages; "
 "this acts as a safety mechanism for the BTS.  If no packages are listed, "
@@ -2063,12 +2066,12 @@ msgstr ""
 "paquet n'est listé, cette vérification est désactivée à nouveau."
 
 # type: =item
-#: ../scripts/bts.pl:1616
+#: ../scripts/bts.pl:1620
 msgid "owner <bug> <owner-email>"
 msgstr "owner <bogue> <courriel-du-propriétaire>"
 
 # type: textblock
-#: ../scripts/bts.pl:1618
+#: ../scripts/bts.pl:1622
 msgid ""
 "Change the \"owner\" address of a bug, with `!' meaning `use the address on "
 "the current email as the new owner address'."
@@ -2078,7 +2081,7 @@ msgstr ""
 "propriétaire »."
 
 # type: textblock
-#: ../scripts/bts.pl:1621
+#: ../scripts/bts.pl:1625
 msgid ""
 "The owner of a bug accepts responsibility for dealing with it. Note that the "
 "\"owner\" of a bug does not automatically receive all of the email "
@@ -2089,22 +2092,22 @@ msgstr ""
 "mails correspondants ; il faut utiliser la commande « subscribe » pour cela."
 
 # type: =item
-#: ../scripts/bts.pl:1634
+#: ../scripts/bts.pl:1638
 msgid "noowner <bug>"
 msgstr "noowner <bogue>"
 
 # type: textblock
-#: ../scripts/bts.pl:1636
+#: ../scripts/bts.pl:1640
 msgid "Mark a bug as having no \"owner\"."
 msgstr "Marquer un bogue comme n'ayant pas de « propriétaire »."
 
 # type: =item
-#: ../scripts/bts.pl:1646
+#: ../scripts/bts.pl:1650
 msgid "subscribe <bug> <email>"
 msgstr "subscribe <bogue> <courriel>"
 
 # type: textblock
-#: ../scripts/bts.pl:1648
+#: ../scripts/bts.pl:1652
 msgid ""
 "Subscribe the given email address to the specified bug report.  If no email "
 "address is specified, the environment variable DEBEMAIL or EMAIL (in that "
@@ -2117,7 +2120,7 @@ msgstr ""
 "comme adresse de courriel, votre adresse par défaut va être utilisée."
 
 # type: textblock
-#: ../scripts/bts.pl:1653
+#: ../scripts/bts.pl:1657
 msgid ""
 "After executing this command, you will be sent a subscription confirmation "
 "to which you have to reply.  When subscribed to a bug report, you receive "
@@ -2130,12 +2133,12 @@ msgstr ""
 "Utilisez la commande unsubscribe pour vous désabonner."
 
 # type: =item
-#: ../scripts/bts.pl:1673
+#: ../scripts/bts.pl:1677
 msgid "unsubscribe <bug> <email>"
 msgstr "unsubscribe <bogue> <courriel>"
 
 # type: textblock
-#: ../scripts/bts.pl:1675
+#: ../scripts/bts.pl:1679
 msgid ""
 "Unsubscribe the given email address from the specified bug report.  As with "
 "subscribe above, if no email address is specified, the environment variables "
@@ -2149,7 +2152,7 @@ msgstr ""
 "courriel, votre adresse par défaut va être utilisée."
 
 # type: textblock
-#: ../scripts/bts.pl:1680
+#: ../scripts/bts.pl:1684
 msgid ""
 "After executing this command, you will be sent an unsubscription "
 "confirmation to which you have to reply. Use the subscribe command to, well, "
@@ -2160,12 +2163,12 @@ msgstr ""
 "subscribe, évidemment, pour vous abonner."
 
 # type: =item
-#: ../scripts/bts.pl:1699
+#: ../scripts/bts.pl:1703
 msgid "reportspam <bug> ..."
 msgstr "reportspam <bogue> ..."
 
 # type: textblock
-#: ../scripts/bts.pl:1701
+#: ../scripts/bts.pl:1705
 msgid ""
 "The reportspam command allows you to report a bug report as containing "
 "spam.  It saves one from having to go to the bug web page to do so."
@@ -2175,28 +2178,28 @@ msgstr ""
 "bogue pour ce faire."
 
 # type: =item
-#: ../scripts/bts.pl:1730
+#: ../scripts/bts.pl:1734
 msgid "spamreport <bug> ..."
 msgstr "spamreport <bogue> ..."
 
 # type: textblock
-#: ../scripts/bts.pl:1732
+#: ../scripts/bts.pl:1736
 msgid "spamreport is a synonym for reportspam."
 msgstr "spamreport est synonyme de reportspam."
 
 # type: =item
-#: ../scripts/bts.pl:1740
+#: ../scripts/bts.pl:1744
 msgid "cache [options] [<maint email> | <pkg> | src:<pkg> | from:<submitter>]"
 msgstr ""
 "cache [options] [<courriel resp.>] | <pkg> | src:<pkg> | from:<rapporteur>]"
 
 # type: =item
-#: ../scripts/bts.pl:1742
+#: ../scripts/bts.pl:1746
 msgid "cache [options] [release-critical | release-critical/... | RC]"
 msgstr "cache [options] [release-critical | release-critical/... | RC]"
 
 # type: textblock
-#: ../scripts/bts.pl:1744
+#: ../scripts/bts.pl:1748
 msgid ""
 "Generate or update a cache of bug reports for the given email address or "
 "package. By default it downloads all bugs belonging to the email address in "
@@ -2219,12 +2222,12 @@ msgstr ""
 "sont stockés dans ~/.devscripts_cache/bts/"
 
 # type: textblock
-#: ../scripts/bts.pl:1753
+#: ../scripts/bts.pl:1757
 msgid "You can use the cached bugs with the -o switch. For example:"
 msgstr "Vous pouvez utiliser le cache grâce à l'option -o. Par exemple :"
 
 # type: verbatim
-#: ../scripts/bts.pl:1755
+#: ../scripts/bts.pl:1759
 #, no-wrap
 msgid ""
 "  bts -o bugs\n"
@@ -2236,7 +2239,7 @@ msgstr ""
 "\n"
 
 # type: textblock
-#: ../scripts/bts.pl:1758
+#: ../scripts/bts.pl:1762
 msgid ""
 "Also, bts will update the files in it in a piecemeal fashion as it downloads "
 "information from the BTS using the 'show' command. You might thus set up the "
@@ -2251,7 +2254,7 @@ msgstr ""
 "vous accédez fréquemment pendant la semaine."
 
 # type: textblock
-#: ../scripts/bts.pl:1764
+#: ../scripts/bts.pl:1768
 msgid ""
 "Some options affect the behaviour of the cache command.  The first is the "
 "setting of --cache-mode, which controls how much B<bts> downloads of the "
@@ -2278,7 +2281,7 @@ msgstr ""
 "étant résolus doivent être téléchargés lors de la mise en cache."
 
 # type: textblock
-#: ../scripts/bts.pl:1775
+#: ../scripts/bts.pl:1779
 msgid ""
 "Each of these is configurable from the configuration file, as described "
 "below.  They may also be specified after the \"cache\" command as well as at "
@@ -2289,7 +2292,7 @@ msgstr ""
 "commande « cache » qu'au début de la ligne de commande."
 
 # type: textblock
-#: ../scripts/bts.pl:1779
+#: ../scripts/bts.pl:1783
 msgid ""
 "Finally, -q or --quiet will suppress messages about caches being up-to-date, "
 "and giving the option twice will suppress all cache messages (except for "
@@ -2300,7 +2303,7 @@ msgstr ""
 "du cache (excepté les messages d'erreur)."
 
 # type: textblock
-#: ../scripts/bts.pl:1783
+#: ../scripts/bts.pl:1787
 msgid ""
 "Beware of caching RC, though: it will take a LONG time! (With 1000+ RC bugs "
 "and a delay of 5 seconds between bugs, you're looking at a minimum of 1.5 "
@@ -2312,19 +2315,19 @@ msgstr ""
 "que ça.)"
 
 # type: =item
-#: ../scripts/bts.pl:1912
+#: ../scripts/bts.pl:1916
 msgid "cleancache <package> | src:<package> | <maintainer>"
 msgstr "cleancache <paquet> | src:<paquet> | <responsable>"
 
 # type: =item
-#: ../scripts/bts.pl:1914
+#: ../scripts/bts.pl:1918
 msgid ""
 "cleancache from:<submitter> | tag:<tag> | usertag:<tag> | <number> | ALL"
 msgstr ""
 "cleancache from:<rapporteur> | tag:<tag> | usertag:<tag> | <numéro> | ALL"
 
 # type: textblock
-#: ../scripts/bts.pl:1916
+#: ../scripts/bts.pl:1920
 msgid ""
 "Clean the cache for the specified package, maintainer, etc., as described "
 "above for the \"bugs\" command, or clean the entire cache if \"ALL\" is "
@@ -2340,22 +2343,22 @@ msgstr ""
 "défaut."
 
 # type: TP
-#: ../scripts/bts.pl:1965
+#: ../scripts/bts.pl:1969
 msgid "version"
 msgstr "version"
 
 # type: Plain text
-#: ../scripts/bts.pl:1967
+#: ../scripts/bts.pl:1971
 msgid "Display version and copyright information."
 msgstr "Affiche la version et le copyright."
 
 # type: TP
-#: ../scripts/bts.pl:1982
+#: ../scripts/bts.pl:1986
 msgid "help"
 msgstr "help"
 
 # type: textblock
-#: ../scripts/bts.pl:1984
+#: ../scripts/bts.pl:1988
 msgid ""
 "Display a short summary of commands, suspiciously similar to parts of this "
 "man page."
@@ -2364,19 +2367,19 @@ msgstr ""
 "parties de cette page de manuel."
 
 # type: SH
-#: ../scripts/bts.pl:3552 ../scripts/debuild.1:86 ../scripts/diff2patches.1:32
+#: ../scripts/bts.pl:3556 ../scripts/debuild.1:86 ../scripts/diff2patches.1:32
 #: ../scripts/pts-subscribe.1:34
 #, no-wrap
 msgid "ENVIRONMENT VARIABLES"
 msgstr "VARIABLES D'ENVIRONNEMENT"
 
 # type: TH
-#: ../scripts/bts.pl:3556
+#: ../scripts/bts.pl:3560
 msgid "DEBEMAIL"
 msgstr "DEBEMAIL"
 
 # type: textblock
-#: ../scripts/bts.pl:3558
+#: ../scripts/bts.pl:3562
 msgid ""
 "If this is set, the From: line in the email will be set to use this email "
 "address instead of your normal email address (as would be determined by "
@@ -2387,12 +2390,12 @@ msgstr ""
 "serait déterminée par B<mail>)."
 
 # type: =item
-#: ../scripts/bts.pl:3562
+#: ../scripts/bts.pl:3566
 msgid "DEBFULLNAME"
 msgstr "DEBFULLNAME"
 
 # type: textblock
-#: ../scripts/bts.pl:3564
+#: ../scripts/bts.pl:3568
 msgid ""
 "If DEBEMAIL is set, DEBFULLNAME is examined to determine the full name to "
 "use; if this is not set, B<bts> attempts to determine a name from your "
@@ -2403,12 +2406,12 @@ msgstr ""
 "votre entrée passwd."
 
 # type: =item
-#: ../scripts/bts.pl:3568
+#: ../scripts/bts.pl:3572
 msgid "BROWSER"
 msgstr "BROWSER"
 
 # type: textblock
-#: ../scripts/bts.pl:3570
+#: ../scripts/bts.pl:3574
 msgid ""
 "If set, it specifies the browser to use for the 'show' and 'bugs' options.  "
 "See the description above."
@@ -2417,23 +2420,24 @@ msgstr ""
 "« show » et « bugs ». Voir la description plus haut."
 
 # type: SH
-#: ../scripts/bts.pl:3575 ../scripts/debc.1:92 ../scripts/debchange.1:341
-#: ../scripts/debclean.1:90 ../scripts/debcommit.pl:97
-#: ../scripts/debdiff.1:150 ../scripts/debi.1:93 ../scripts/debrelease.1:105
-#: ../scripts/debrsign.1:57 ../scripts/debsign.1:99 ../scripts/debuild.1:288
-#: ../scripts/dget.pl:586 ../scripts/dpkg-depcheck.1:102
-#: ../scripts/dscverify.1:38 ../scripts/grep-excuses.1:27
-#: ../scripts/licensecheck.pl:83 ../scripts/mass-bug.pl:128
-#: ../scripts/nmudiff.1:69 ../scripts/plotchangelog.1:106
-#: ../scripts/pts-subscribe.1:42 ../scripts/rmadison.pl:259
-#: ../scripts/uscan.1:437 ../scripts/uupdate.1:86 ../scripts/who-uploads.1:50
+#: ../scripts/bts.pl:3579 ../scripts/debc.1:92 ../scripts/debchange.1:341
+#: ../scripts/debcheckout.pl:142 ../scripts/debclean.1:90
+#: ../scripts/debcommit.pl:97 ../scripts/debdiff.1:150 ../scripts/debi.1:93
+#: ../scripts/debrelease.1:105 ../scripts/debrsign.1:57
+#: ../scripts/debsign.1:99 ../scripts/debuild.1:288 ../scripts/dget.pl:586
+#: ../scripts/dpkg-depcheck.1:102 ../scripts/dscverify.1:38
+#: ../scripts/grep-excuses.1:27 ../scripts/licensecheck.pl:83
+#: ../scripts/mass-bug.pl:128 ../scripts/nmudiff.1:69
+#: ../scripts/plotchangelog.1:106 ../scripts/pts-subscribe.1:42
+#: ../scripts/rmadison.pl:259 ../scripts/uscan.1:437 ../scripts/uupdate.1:86
+#: ../scripts/who-uploads.1:50
 #, no-wrap
 msgid "CONFIGURATION VARIABLES"
 msgstr "VARIABLES DE CONFIGURATION"
 
 # NOTE: presque identique
 # type: Plain text
-#: ../scripts/bts.pl:3577 ../scripts/debcommit.pl:99
+#: ../scripts/bts.pl:3581 ../scripts/debcommit.pl:99
 #: ../scripts/licensecheck.pl:85 ../scripts/mass-bug.pl:130
 msgid ""
 "The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
@@ -2450,12 +2454,12 @@ msgstr ""
 "cette fin. Les variables actuellement reconnues sont :"
 
 # type: =item
-#: ../scripts/bts.pl:3585
+#: ../scripts/bts.pl:3589
 msgid "BTS_OFFLINE"
 msgstr "BTS_OFFLINE"
 
 # type: Plain text
-#: ../scripts/bts.pl:3587
+#: ../scripts/bts.pl:3591
 msgid ""
 "If this is set to I<yes>, then it is the same as the --offline command line "
 "parameter being used.  Only has an effect on the show and bugs commands.  "
@@ -2468,12 +2472,12 @@ msgstr ""
 "commande show ci-dessus pour plus d'informations."
 
 # type: =item
-#: ../scripts/bts.pl:3592
+#: ../scripts/bts.pl:3596
 msgid "BTS_CACHE"
 msgstr "BTS_CACHE"
 
 # type: Plain text
-#: ../scripts/bts.pl:3594
+#: ../scripts/bts.pl:3598
 msgid ""
 "If this is set to I<no>, then it is the same as the --no-cache command line "
 "parameter being used.  Only has an effect on the show and bug commands.  The "
@@ -2485,12 +2489,12 @@ msgstr ""
 "ci-dessus pour plus d'informations."
 
 # type: =item
-#: ../scripts/bts.pl:3599
+#: ../scripts/bts.pl:3603
 msgid "BTS_CACHE_MODE={min,mbox,full}"
 msgstr "BTS_CACHE_MODE={min,mbox,full}"
 
 # type: textblock
-#: ../scripts/bts.pl:3601
+#: ../scripts/bts.pl:3605
 msgid ""
 "How much of the BTS should we mirror when we are asked to cache something? "
 "Just the minimum, or also the mbox or the whole thing? The default is "
@@ -2505,12 +2509,12 @@ msgstr ""
 "documentation de la commande cache pour plus d'informations."
 
 # type: =item
-#: ../scripts/bts.pl:3607
+#: ../scripts/bts.pl:3611
 msgid "BTS_FORCE_REFRESH"
 msgstr "BTS_FORCE_REFRESH"
 
 # type: Plain text
-#: ../scripts/bts.pl:3609
+#: ../scripts/bts.pl:3613
 msgid ""
 "If this is set to I<yes>, then it is the same as the --force-refresh command "
 "line parameter being used.  Only has an effect on the cache command.  The "
@@ -2522,12 +2526,12 @@ msgstr ""
 "d'informations."
 
 # type: =item
-#: ../scripts/bts.pl:3614
+#: ../scripts/bts.pl:3618
 msgid "BTS_MAIL_READER"
 msgstr "BTS_MAIL_READER"
 
 # type: Plain text
-#: ../scripts/bts.pl:3616
+#: ../scripts/bts.pl:3620
 msgid ""
 "If this is set, specifies a mail reader to use instead of mutt.  Same as the "
 "--mailreader command line option."
@@ -2536,12 +2540,12 @@ msgstr ""
 "place de mutt. Équivalent à l'option de ligne de commande --mailreader."
 
 # type: =item
-#: ../scripts/bts.pl:3619 ../scripts/mass-bug.pl:138
+#: ../scripts/bts.pl:3623 ../scripts/mass-bug.pl:138
 msgid "BTS_SENDMAIL_COMMAND"
 msgstr "BTS_SENDMAIL_COMMAND"
 
 # type: textblock
-#: ../scripts/bts.pl:3621 ../scripts/mass-bug.pl:140 ../scripts/nmudiff.1:92
+#: ../scripts/bts.pl:3625 ../scripts/mass-bug.pl:140 ../scripts/nmudiff.1:92
 msgid ""
 "If this is set, specifies a sendmail command to use instead of /usr/sbin/"
 "sendmail.  Same as the --sendmail command line option."
@@ -2551,12 +2555,12 @@ msgstr ""
 "commande --sendmail."
 
 # type: =item
-#: ../scripts/bts.pl:3624
+#: ../scripts/bts.pl:3628
 msgid "BTS_ONLY_NEW"
 msgstr "BTS_ONLY_NEW"
 
 # type: textblock
-#: ../scripts/bts.pl:3626
+#: ../scripts/bts.pl:3630
 #, fuzzy
 msgid ""
 "Download only new bugs when caching. Do not check for updates in bugs we "
@@ -2567,12 +2571,12 @@ msgstr ""
 "vérifier si les bogues déjà téléchargés ont été modifiés."
 
 # type: =item
-#: ../scripts/bts.pl:3630
+#: ../scripts/bts.pl:3634
 msgid "BTS_SMTP_HOST"
 msgstr "BTS_SMTP_HOST"
 
 # type: textblock
-#: ../scripts/bts.pl:3632
+#: ../scripts/bts.pl:3636
 msgid ""
 "If this is set, specifies an SMTP host to use for sending mail rather than "
 "using the sendmail command.  Same as the --smtp-host command line option."
@@ -2582,7 +2586,7 @@ msgstr ""
 "l'option en ligne de commande --smtp-host."
 
 # type: textblock
-#: ../scripts/bts.pl:3636
+#: ../scripts/bts.pl:3640
 msgid ""
 "Note that this option takes priority over BTS_SENDMAIL_COMMAND if both are "
 "set, unless the --sendmail option is used."
@@ -2591,12 +2595,12 @@ msgstr ""
 "les deux sont utilisées, à moins que l'option --sendmail soit utilisée."
 
 # type: =item
-#: ../scripts/bts.pl:3639
+#: ../scripts/bts.pl:3643
 msgid "BTS_SMTP_AUTH_USERNAME, BTS_SMTP_AUTH_PASSWORD"
 msgstr "BTS_SMTP_AUTH_USERNAME, BTS_SMTP_AUTH_PASSWORD"
 
 # type: Plain text
-#: ../scripts/bts.pl:3641
+#: ../scripts/bts.pl:3645
 msgid ""
 "If these options are set, then it is the same as the --smtp-username and --"
 "smtp-password options being used."
@@ -2605,24 +2609,24 @@ msgstr ""
 "--smtp-password."
 
 # type: =item
-#: ../scripts/bts.pl:3644
+#: ../scripts/bts.pl:3648
 #, fuzzy
 msgid "BTS_SMTP_HELO"
 msgstr "BTS_SMTP_HOST"
 
 # type: Plain text
-#: ../scripts/bts.pl:3646
+#: ../scripts/bts.pl:3650
 #, fuzzy
 msgid "Same as the --smtp-helo command line option."
 msgstr "Accepter les options --help et --version."
 
 # type: =item
-#: ../scripts/bts.pl:3648
+#: ../scripts/bts.pl:3652
 msgid "BTS_INCLUDE_RESOLVED"
 msgstr "BTS_INCLUDE_RESOLVED"
 
 # type: Plain text
-#: ../scripts/bts.pl:3650
+#: ../scripts/bts.pl:3654
 msgid ""
 "If this is set to I<no>, then it is the same as the --no-include-resolved "
 "command line parameter being used.  Only has an effect on the cache "
@@ -2634,12 +2638,12 @@ msgstr ""
 "plus d'informations."
 
 # type: =item
-#: ../scripts/bts.pl:3655
+#: ../scripts/bts.pl:3659
 msgid "BTS_SUPPRESS_ACKS"
 msgstr "BTS_SUPPRESS_ACKS"
 
 # type: Plain text
-#: ../scripts/bts.pl:3657
+#: ../scripts/bts.pl:3661
 msgid ""
 "If this is set to I<yes>, then it is the same as the --no-acks command line "
 "parameter being used.  The default is I<no>."
@@ -2648,12 +2652,12 @@ msgstr ""
 "La valeur par défaut est I<no>."
 
 # type: =item
-#: ../scripts/bts.pl:3660
+#: ../scripts/bts.pl:3664
 msgid "BTS_INTERACTIVE"
 msgstr "BTS_INTERACTIVE"
 
 # type: Plain text
-#: ../scripts/bts.pl:3662
+#: ../scripts/bts.pl:3666
 msgid ""
 "If this is set to I<yes> or I<force>, then it is the same as the --"
 "interactive or --force-interactive command line parameter being used.  The "
@@ -2663,12 +2667,12 @@ msgstr ""
 "B<--interactive> ou B<--force-interactive>. La valeur par défaut est I<no>."
 
 # type: =item
-#: ../scripts/bts.pl:3666
+#: ../scripts/bts.pl:3670
 msgid "BTS_DEFAULT_CC"
 msgstr "BTS_DEFAULT_CC"
 
 # type: textblock
-#: ../scripts/bts.pl:3668
+#: ../scripts/bts.pl:3672
 msgid ""
 "Specify a list of e-mail addresses to which a carbon copy of the generated e-"
 "mail to the control bot should automatically be sent."
@@ -2678,12 +2682,12 @@ msgstr ""
 "automatiquement."
 
 # type: SH
-#: ../scripts/bts.pl:3673 ../scripts/checkbashisms.1:60
-#: ../scripts/cowpoke.1:145 ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62
+#: ../scripts/bts.pl:3677 ../scripts/checkbashisms.1:60
+#: ../scripts/cowpoke.1:221 ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62
 #: ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53
 #: ../scripts/dcmd.1:37 ../scripts/debc.1:115 ../scripts/debchange.1:410
-#: ../scripts/debcheckout.pl:105 ../scripts/debclean.1:107
-#: ../scripts/debcommit.pl:747 ../scripts/debdiff.1:191 ../scripts/debi.1:116
+#: ../scripts/debcheckout.pl:180 ../scripts/debclean.1:107
+#: ../scripts/debcommit.pl:759 ../scripts/debdiff.1:191 ../scripts/debi.1:116
 #: ../scripts/debrelease.1:132 ../scripts/deb-reversion.dbk:247
 #: ../scripts/debrsign.1:66 ../scripts/debsign.1:118 ../scripts/debuild.1:408
 #: ../scripts/dget.pl:630 ../scripts/diff2patches.1:37
@@ -2692,7 +2696,7 @@ msgstr ""
 #: ../scripts/list-unreleased.1:19 ../scripts/nmudiff.1:92
 #: ../scripts/plotchangelog.1:124 ../scripts/pts-subscribe.1:51
 #: ../scripts/rc-alert.1:81 ../scripts/rmadison.pl:291
-#: ../scripts/tagpending.pl:149 ../scripts/uscan.1:515
+#: ../scripts/tagpending.pl:149 ../scripts/uscan.1:523
 #: ../scripts/uupdate.1:160 ../scripts/wnpp-alert.1:29
 #: ../scripts/wnpp-check.1:23 ../scripts/devscripts.conf.5:54
 #, no-wrap
@@ -2700,7 +2704,7 @@ msgid "SEE ALSO"
 msgstr "VOIR AUSSI"
 
 # type: textblock
-#: ../scripts/bts.pl:3675
+#: ../scripts/bts.pl:3679
 msgid ""
 "Please see L<http://www.debian.org/Bugs/server-control> for more details on "
 "how to control the BTS using emails and L<http://www.debian.org/Bugs/> for "
@@ -2711,18 +2715,18 @@ msgstr ""
 "debian.org/Bugs/> pour plus d'informations sur le BTS."
 
 # type: textblock
-#: ../scripts/bts.pl:3679
+#: ../scripts/bts.pl:3683
 msgid "reportbug(1), querybts(1)"
 msgstr "reportbug(1), querybts(1)"
 
 # type: SH
-#: ../scripts/bts.pl:3681 ../scripts/chdist.pl:92 ../scripts/mass-bug.pl:505
-#: ../scripts/tagpending.pl:433
+#: ../scripts/bts.pl:3685 ../scripts/chdist.pl:92 ../scripts/mass-bug.pl:505
+#: ../scripts/tagpending.pl:434
 msgid "COPYRIGHT"
 msgstr "COPYRIGHT"
 
 # type: textblock
-#: ../scripts/bts.pl:3683
+#: ../scripts/bts.pl:3687
 msgid ""
 "This program is Copyright (C) 2001-2003 by Joey Hess <joeyh@debian.org>.  "
 "Many modifications have been made, Copyright (C) 2002-2005 Julian Gilbey "
@@ -2734,7 +2738,7 @@ msgstr ""
 "<josh@freedesktop.org>."
 
 # type: textblock
-#: ../scripts/bts.pl:3688 ../scripts/chdist.pl:97 ../scripts/mass-bug.pl:509
+#: ../scripts/bts.pl:3692 ../scripts/chdist.pl:97 ../scripts/mass-bug.pl:509
 msgid ""
 "It is licensed under the terms of the GPL, either version 2 of the License, "
 "or (at your option) any later version."
@@ -2821,9 +2825,10 @@ msgid "Run the debug mode"
 msgstr "Exécuter en mode débogue."
 
 # type: TP
-#: ../scripts/build-rdeps.pl:54 ../scripts/debclean.1:84
-#: ../scripts/grep-excuses.1:21 ../scripts/nmudiff.1:63
-#: ../scripts/plotchangelog.1:92 ../scripts/uscan.1:431
+#: ../scripts/build-rdeps.pl:54 ../scripts/cowpoke.1:62
+#: ../scripts/debclean.1:84 ../scripts/grep-excuses.1:21
+#: ../scripts/nmudiff.1:63 ../scripts/plotchangelog.1:92
+#: ../scripts/uscan.1:431
 #, no-wrap
 msgid "B<--help>"
 msgstr "B<--help>"
@@ -2834,13 +2839,14 @@ msgid "Show the usage information."
 msgstr "Afficher les informations sur l'utilisation."
 
 # type: TP
-#: ../scripts/build-rdeps.pl:58 ../scripts/debchange.1:338
-#: ../scripts/debclean.1:87 ../scripts/debrelease.1:102
-#: ../scripts/debsign.1:96 ../scripts/diff2patches.1:21
-#: ../scripts/dscverify.1:35 ../scripts/grep-excuses.1:24
-#: ../scripts/nmudiff.1:66 ../scripts/plotchangelog.1:95
-#: ../scripts/pts-subscribe.1:31 ../scripts/rmadison.pl:246
-#: ../scripts/uscan.1:434 ../scripts/uupdate.1:83 ../scripts/who-uploads.1:47
+#: ../scripts/build-rdeps.pl:58 ../scripts/cowpoke.1:66
+#: ../scripts/debchange.1:338 ../scripts/debclean.1:87
+#: ../scripts/debrelease.1:102 ../scripts/debsign.1:96
+#: ../scripts/diff2patches.1:21 ../scripts/dscverify.1:35
+#: ../scripts/grep-excuses.1:24 ../scripts/nmudiff.1:66
+#: ../scripts/plotchangelog.1:95 ../scripts/pts-subscribe.1:31
+#: ../scripts/rmadison.pl:246 ../scripts/uscan.1:434 ../scripts/uupdate.1:83
+#: ../scripts/who-uploads.1:47
 #, no-wrap
 msgid "B<--version>"
 msgstr "B<--version>"
@@ -3203,7 +3209,7 @@ msgstr "B<--version>, B<-v>"
 
 # type: Plain text
 #: ../scripts/checkbashisms.1:49 ../scripts/debdiff.1:144
-#: ../scripts/getbuildlog.1:24 ../scripts/grep-excuses.1:27
+#: ../scripts/getbuildlog.1:31 ../scripts/grep-excuses.1:27
 #: ../scripts/manpage-alert.1:20 ../scripts/mk-build-deps.pl:64
 #: ../scripts/rc-alert.1:27 ../scripts/whodepends.1:17
 #: ../scripts/wnpp-alert.1:29 ../scripts/wnpp-check.1:23
@@ -3228,7 +3234,7 @@ msgstr ""
 
 # type: TP
 #: ../scripts/checkbashisms.1:53 ../scripts/transition-check.pl:66
-#: ../scripts/uscan.1:486 ../scripts/wnpp-check.1:29
+#: ../scripts/uscan.1:494 ../scripts/wnpp-check.1:29
 #, no-wrap
 msgid "1"
 msgstr "1"
@@ -3287,83 +3293,192 @@ msgid "cowpoke - Build a Debian source package in a remote cowbuilder instance"
 msgstr ""
 
 # type: Plain text
-#: ../scripts/cowpoke.1:25
-msgid ""
-"B<cowpoke> I<packagename.dsc> [I< arch >[I< buildd-host >[I< buildd-username "
-">] ] ]"
-msgstr ""
+#: ../scripts/cowpoke.1:23
+#, fuzzy
+msgid "B<cowpoke> [I<options>]I< packagename.dsc>"
+msgstr "B<cvs-debc> [I<options>] [I<paquet> ...]"
 
 # type: Plain text
-#: ../scripts/cowpoke.1:28
+#: ../scripts/cowpoke.1:27
 msgid ""
 "Uploads a Debian source package to a cowbuilder host and builds it, "
 "optionally also signing and uploading the result to an incoming queue."
 msgstr ""
 
+# type: Plain text
+#: ../scripts/cowpoke.1:31
+msgid "The following options are available:"
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:32
+#, fuzzy, no-wrap
+msgid "B<--arch=>I<arch>"
+msgstr "B<archpath> I<branch>"
+
+# type: Plain text
+#: ../scripts/cowpoke.1:38
+msgid ""
+"Specify the Debian architecture(s) to build for.  A space separated list of "
+"architectures may be used to build for all of them in a single pass.  Valid "
+"arch names are those returned by B<dpkg-architecture>(1) for "
+"B<DEB_BUILD_ARCH>."
+msgstr ""
+
+# type: TP
+#: ../scripts/cowpoke.1:39
+#, fuzzy, no-wrap
+msgid "B<--dist=>I<dist>"
+msgstr "B<--destdir>"
+
+# type: Plain text
+#: ../scripts/cowpoke.1:47
+msgid ""
+"Specify the Debian distribution(s) to build for.  A space separated list of "
+"distributions may be used to build for all of them in a single pass.  Either "
+"codenames (such as sid, or lenny) or distribution names (such as unstable, "
+"or experimental) may be used, but you should usually stick to using one or "
+"the other consistently as this name may be used in file paths and to locate "
+"old packages for comparison reporting."
+msgstr ""
+
+# type: TP
+#: ../scripts/cowpoke.1:48
+#, fuzzy, no-wrap
+msgid "B<--buildd=>I<host>"
+msgstr "B<--build>"
+
+# type: Plain text
+#: ../scripts/cowpoke.1:51
+msgid "Specify the remote host to build on."
+msgstr ""
+
+# type: Content of the dhsurname entity
+#: ../scripts/cowpoke.1:52
+#, fuzzy, no-wrap
+msgid "B<--buildd-user=>I<name>"
+msgstr "B<--username> I<nom_utilisateur>"
+
+# type: Plain text
+#: ../scripts/cowpoke.1:55
+msgid "Specify the remote user to build as."
+msgstr ""
+
+# type: TP
+#: ../scripts/cowpoke.1:56 ../scripts/debchange.1:174
+#, no-wrap
+msgid "B<--create>"
+msgstr "B<--create>"
+
+# type: Plain text
+#: ../scripts/cowpoke.1:61
+msgid ""
+"Create the remote cowbuilder root if it does not already exist.  If this "
+"option is not passed it is an error for the specified B<--dist> or B<--arch> "
+"to not have an existing cowbuilder root in the expected location."
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:65
+msgid ""
+"Display a brief summary of the available options and current configuration."
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:69
+#, fuzzy
+msgid "Display the current version information."
+msgstr "Afficher les informations sur la version."
+
 # type: SH
-#: ../scripts/cowpoke.1:30
+#: ../scripts/cowpoke.1:71
 #, no-wrap
 msgid "CONFIGURATION OPTIONS"
 msgstr "OPTIONS DE CONFIGURATION"
 
 # type: Plain text
-#: ../scripts/cowpoke.1:33
+#: ../scripts/cowpoke.1:74
 msgid ""
 "When B<cowpoke> is run the following configuration options are read from "
 "global, per-user, and per-project configuration files if present:"
 msgstr ""
 
+# type: SS
+#: ../scripts/cowpoke.1:75
+#, no-wrap
+msgid "Global defaults"
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:77
+msgid "These apply to every arch and dist in a single cowpoke invocation."
+msgstr ""
+
 # type: TP
-#: ../scripts/cowpoke.1:33
+#: ../scripts/cowpoke.1:78
 #, no-wrap
 msgid "B<BUILDD_HOST>"
 msgstr "B<BUILDD_HOST>"
 
 # type: Plain text
-#: ../scripts/cowpoke.1:37
+#: ../scripts/cowpoke.1:82
 msgid ""
 "The network address or fqdn of the build machine where cowbuilder is "
-"configured.  This may be overridden by an explicit hostname specified as a "
-"command line option."
+"configured.  This may be overridden by the B<--buildd> command line option."
 msgstr ""
 
 # type: TP
-#: ../scripts/cowpoke.1:37
+#: ../scripts/cowpoke.1:82
 #, no-wrap
 msgid "B<BUILDD_USER>"
 msgstr "B<BUILDD_USER>"
 
 # type: Plain text
-#: ../scripts/cowpoke.1:42
+#: ../scripts/cowpoke.1:87
 msgid ""
 "The unprivileged user name for operations on the build machine.  This "
-"defaults to the local name of the user executing B<cowpoke>, and may also be "
-"overridden by specifying the username on the command line."
+"defaults to the local name of the user executing B<cowpoke>, and may be "
+"overridden by the B<--buildd-user> command line option."
 msgstr ""
 
 # type: TP
-#: ../scripts/cowpoke.1:42
+#: ../scripts/cowpoke.1:87
 #, no-wrap
 msgid "B<BUILDD_ARCH>"
 msgstr "B<BUILDD_ARCH>"
 
 # type: Plain text
-#: ../scripts/cowpoke.1:48
+#: ../scripts/cowpoke.1:94
 msgid ""
-"The Debian architecture string to build for.  This must match the "
+"The Debian architecture(s) to build for.  This must match the "
 "B<DEB_BUILD_ARCH> of the build chroot being used.  It defaults to the local "
-"machine architecture where B<cowpoke> is executed, and may be overridden on "
-"the command line."
+"machine architecture where B<cowpoke> is executed, and may be overridden by "
+"the B<--arch> command line option.  A (quoted) space separated list of "
+"architectures may be used here to build for all of them in a single pass."
 msgstr ""
 
 # type: TP
-#: ../scripts/cowpoke.1:49
+#: ../scripts/cowpoke.1:94
+#, fuzzy, no-wrap
+msgid "B<BUILDD_DIST>"
+msgstr "B<BUILDD_HOST>"
+
+# type: Plain text
+#: ../scripts/cowpoke.1:99
+msgid ""
+"The Debian distribution(s) to build for.  A (quoted) space separated list of "
+"distributions may be used to build for all of them in a single pass.  This "
+"may be overridden by the B<--dist> command line option."
+msgstr ""
+
+# type: TP
+#: ../scripts/cowpoke.1:100
 #, no-wrap
 msgid "B<INCOMING_DIR>"
 msgstr "B<INCOMING_DIR>"
 
 # type: Plain text
-#: ../scripts/cowpoke.1:54
+#: ../scripts/cowpoke.1:105
 msgid ""
 "The directory path on the build machine where the source package will "
 "initially be placed.  An absolute path may be used, but it must be writable "
@@ -3372,65 +3487,59 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../scripts/cowpoke.1:54
-#, no-wrap
-msgid "B<RESULT_DIR>"
-msgstr "B<RESULT_DIR>"
+#: ../scripts/cowpoke.1:105
+#, fuzzy, no-wrap
+msgid "B<PBUILDER_BASE>"
+msgstr "B<BUILDD_USER>"
 
 # type: Plain text
-#: ../scripts/cowpoke.1:63
+#: ../scripts/cowpoke.1:109
 msgid ""
-"The directory path on the build machine where the resulting packages (source "
-"and binary) will be found, and where older versions of the package that were "
-"built previously may be found.  If any such older packages exist, debdiff "
-"will be used to compare the new package with the previous version after the "
-"build is complete, and the result will be included in the build log.  Files "
-"in it must be readable by the B<BUILDD_USER> for sanity checking with "
-"B<lintian> and B<debdiff>, and for upload with B<dput>.  This should always "
-"be an absolute path."
+"The filesystem root for all pbuilder COW and result files.  Arch and dist "
+"specific subdirectories will normally be created under this."
 msgstr ""
 
 # type: TP
-#: ../scripts/cowpoke.1:64
+#: ../scripts/cowpoke.1:110
 #, no-wrap
 msgid "B<SIGN_KEYID>"
 msgstr "B<SIGN_KEYID>"
 
 # type: Plain text
-#: ../scripts/cowpoke.1:71
+#: ../scripts/cowpoke.1:117
 msgid ""
 "If this option is set, it is expected to contain the gpg key id to pass to "
-"B<debsign> if the packages are to be remotely signed.  You will be prompted "
-"to confirm whether you wish to sign the packages after each build is "
-"complete.  If this option is unset or an empty string, no attempt to sign "
-"packages will be made."
+"B<debsign>(1) if the packages are to be remotely signed.  You will be "
+"prompted to confirm whether you wish to sign the packages after all builds "
+"are complete.  If this option is unset or an empty string, no attempt to "
+"sign packages will be made."
 msgstr ""
 
 # type: TP
-#: ../scripts/cowpoke.1:71
+#: ../scripts/cowpoke.1:117
 #, no-wrap
 msgid "B<UPLOAD_QUEUE>"
 msgstr "B<UPLOAD_QUEUE>"
 
 # type: Plain text
-#: ../scripts/cowpoke.1:78
+#: ../scripts/cowpoke.1:124
 msgid ""
 "If this opton is set, it is expected to contain a 'host' specification for "
-"B<dput> which will be used to upload them after they are signed.  You will "
-"be prompted to confirm whether you wish to upload the packages after they "
-"are signed.  If this option is unset or an empty string, no attempt to "
+"B<dput>(1) which will be used to upload them after they are signed.  You "
+"will be prompted to confirm whether you wish to upload the packages after "
+"they are signed.  If this option is unset or an empty string, no attempt to "
 "upload packages will be made.  If B<SIGN_KEYID> is not set, this option will "
 "be ignored entirely."
 msgstr ""
 
 # type: TP
-#: ../scripts/cowpoke.1:79
+#: ../scripts/cowpoke.1:125
 #, no-wrap
 msgid "B<BUILDD_ROOTCMD>"
 msgstr "B<BUILDD_ROOTCMD>"
 
 # type: Plain text
-#: ../scripts/cowpoke.1:89
+#: ../scripts/cowpoke.1:135
 msgid ""
 "If this opton is unset (which is the default), cowpoke will attempt to log "
 "in to the build machine as the root user initially, then drop those "
@@ -3443,50 +3552,112 @@ msgid ""
 "in as the B<BUILDD_USER>."
 msgstr ""
 
+# type: TP
+#: ../scripts/cowpoke.1:135
+#, fuzzy, no-wrap
+msgid "B<DEBOOTSTRAP>"
+msgstr "B<DEBCOMMIT_SIGN_TAGS>"
+
+# type: Plain text
+#: ../scripts/cowpoke.1:139
+msgid ""
+"The utility to use when creating a new build root.  Alternatives are "
+"B<debootstrap> or B<cdebootstrap>."
+msgstr ""
+
+# type: SS
+#: ../scripts/cowpoke.1:141
+#, no-wrap
+msgid "Arch and dist specific options"
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:144
+msgid ""
+"These are variables of the form: $arch_$dist_VAR which apply only for a "
+"particular target arch/dist build."
+msgstr ""
+
+# type: TP
+#: ../scripts/cowpoke.1:145
+#, fuzzy, no-wrap
+msgid "archB<_>distB<_RESULT_DIR>"
+msgstr "B<RESULT_DIR>"
+
+# type: Plain text
+#: ../scripts/cowpoke.1:156
+msgid ""
+"The directory path on the build machine where the resulting packages (source "
+"and binary) will be found, and where older versions of the package that were "
+"built previously may be found.  If any such older packages exist, debdiff "
+"will be used to compare the new package with the previous version after the "
+"build is complete, and the result will be included in the build log.  Files "
+"in it must be readable by the B<BUILDD_USER> for sanity checking with "
+"B<lintian>(1) and B<debdiff>(1), and for upload with B<dput>(1).  This "
+"should always be an absolute path.  If this option is not specified for some "
+"arch and dist combination then it will default to I<$PBUILDER_BASE/$arch/"
+"$dist/result>."
+msgstr ""
+
+# type: TP
+#: ../scripts/cowpoke.1:157
+#, no-wrap
+msgid "archB<_>distB<_BASE_PATH>"
+msgstr ""
+
+# type: Plain text
+#: ../scripts/cowpoke.1:163
+msgid ""
+"The directory where the COW master files are to be found (or created if the "
+"B<--create> command line option was passed).  If this option is not "
+"specified for some arch or dist then it will default to I<$PBUILDER_BASE/"
+"$arch/$dist/base.cow>"
+msgstr ""
+
 # type: SH
-#: ../scripts/cowpoke.1:91
+#: ../scripts/cowpoke.1:165
 #, no-wrap
 msgid "CONFIGURATION FILES"
 msgstr "FICHIERS DE CONFIGURATION"
 
 # type: TP
-#: ../scripts/cowpoke.1:92
+#: ../scripts/cowpoke.1:166
 #, no-wrap
 msgid "I</etc/cowpoke.conf>"
 msgstr "I</etc/cowpoke.conf>"
 
 # type: Plain text
-#: ../scripts/cowpoke.1:95
+#: ../scripts/cowpoke.1:169
 msgid "Global configuration options.  Will override hardcoded defaults."
 msgstr ""
 
 # type: TP
-#: ../scripts/cowpoke.1:95
+#: ../scripts/cowpoke.1:169
 #, no-wrap
 msgid "I<~/.cowpoke>"
 msgstr "I<~/.cowpoke>"
 
 # type: Plain text
-#: ../scripts/cowpoke.1:98
+#: ../scripts/cowpoke.1:172
 msgid ""
 "Per-user configuration options.  Will override any global configuration."
 msgstr ""
 
 # type: TP
-#: ../scripts/cowpoke.1:98
+#: ../scripts/cowpoke.1:172
 #, no-wrap
 msgid "I<.cowpoke>"
 msgstr "I<.cowpoke>"
 
 # type: Plain text
-#: ../scripts/cowpoke.1:102
+#: ../scripts/cowpoke.1:176
 msgid ""
 "Per-project configuration options.  Will override any per-user or global "
 "configuration if B<cowpoke> is called from the directory where they exist."
 msgstr ""
 
 # type: Plain text
-#: ../scripts/cowpoke.1:106
+#: ../scripts/cowpoke.1:180
 msgid ""
 "If the environment variable B<COWPOKE_CONF> is set, it specifies an "
 "addtional configuration file which will override all of those above.  "
@@ -3495,36 +3666,38 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../scripts/cowpoke.1:108
+#: ../scripts/cowpoke.1:182
 #, no-wrap
 msgid "COWBUILDER CONFIGURATION"
 msgstr "CONFIGURATION DE COWBUILDER"
 
 # type: Plain text
-#: ../scripts/cowpoke.1:115
+#: ../scripts/cowpoke.1:191
 msgid ""
 "There is nothing particularly special required to configure a cowbuilder "
 "instance for use with B<cowpoke>.  Simply create them in the flavour you "
 "require with `cowbuilder --create` according to the cowbuilder "
 "documentation, then configure B<cowpoke> with the user, arch, and path "
 "information required to access it, on the machines you wish to invoke it "
-"from.  The build host running cowbuilder does not require B<cowpoke> "
+"from (or alternatively configure B<cowpoke> with the path, arch and "
+"distribution information and pass the B<--create> option to it on the first "
+"invocation).  The build host running cowbuilder does not require B<cowpoke> "
 "installed locally."
 msgstr ""
 
 # type: Plain text
-#: ../scripts/cowpoke.1:121
+#: ../scripts/cowpoke.1:197
 msgid ""
 "The build machine should have the lintian and devscripts packages installed "
 "for post-build sanity checking.  Upon completion, the build log and the "
 "results of automated checks will be recorded in the B<INCOMING_DIR>.  If you "
-"wish to upload signed packages the build machine will also need B<dput> "
+"wish to upload signed packages the build machine will also need B<dput>(1) "
 "installed and configured to use the 'host' alias specified by "
 "B<UPLOAD_QUEUE>."
 msgstr ""
 
 # type: Plain text
-#: ../scripts/cowpoke.1:126
+#: ../scripts/cowpoke.1:202
 msgid ""
 "The user executing B<cowpoke> must have ssh access to the build machine as "
 "both 'root' and the B<BUILDD_USER>.  Signing keys are not required to be "
@@ -3534,24 +3707,24 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../scripts/cowpoke.1:133
+#: ../scripts/cowpoke.1:209
 msgid ""
 "When B<cowpoke> is invoked, it will first attempt to update the cowbuilder "
 "image if that has not already been done on the same day.  This is checked by "
-"the presence or absence of a I<cowbuilder-update-log-$date> file in the "
-"B<INCOMING_DIR>.  You may move, remove, or touch this file if you wish the "
-"image to be updated more or less often than that.  Its contents log the "
-"output of cowbuilder during the update."
+"the presence or absence of a I<cowbuilder-$arch-$dist-update-log-$date> file "
+"in the B<INCOMING_DIR>.  You may move, remove, or touch this file if you "
+"wish the image to be updated more or less often than that.  Its contents log "
+"the output of cowbuilder during the update (or creation) of the build root."
 msgstr ""
 
 # type: =head1
-#: ../scripts/cowpoke.1:135 ../scripts/rmadison.pl:279
+#: ../scripts/cowpoke.1:211 ../scripts/rmadison.pl:279
 #, no-wrap
 msgid "NOTES"
 msgstr "NOTES"
 
 # type: Plain text
-#: ../scripts/cowpoke.1:144
+#: ../scripts/cowpoke.1:220
 msgid ""
 "Since cowbuilder creates a chroot, and to do that you need root, B<cowpoke> "
 "also requires some degree of root access.  So all the horrible things that "
@@ -3564,12 +3737,12 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../scripts/cowpoke.1:149
+#: ../scripts/cowpoke.1:225
 msgid "B<cowbuilder>(1), B<pbuilder>(1), B<ssh-agent>(1)."
 msgstr "B<cowbuilder>(1), B<pbuilder>(1), B<ssh-agent>(1)."
 
 # type: Plain text
-#: ../scripts/cowpoke.1:153
+#: ../scripts/cowpoke.1:229
 msgid "B<cowpoke> was written by Ron E<lt>ron@debian.orgE<gt>."
 msgstr "B<cowpoke> a été écrit par Ron E<lt>ron@debian.orgE<gt>."
 
@@ -4158,7 +4331,7 @@ msgstr ""
 "guillemets."
 
 # type: SH
-#: ../scripts/dcmd.1:15 ../scripts/debuild.1:365 ../scripts/getbuildlog.1:24
+#: ../scripts/dcmd.1:15 ../scripts/debuild.1:365 ../scripts/getbuildlog.1:31
 #: ../scripts/rc-alert.1:65
 #, no-wrap
 msgid "EXAMPLES"
@@ -5115,12 +5288,6 @@ msgstr ""
 "qu'aucune distribution n'a été indiquée explicitement, la distribution sera "
 "I<unstable>."
 
-# type: TP
-#: ../scripts/debchange.1:174
-#, no-wrap
-msgid "B<--create>"
-msgstr "B<--create>"
-
 # type: Plain text
 #: ../scripts/debchange.1:186
 msgid ""
@@ -5913,17 +6080,20 @@ msgstr ""
 
 # type: textblock
 #: ../scripts/debcheckout.pl:58
+#, fuzzy
 msgid ""
 "If you already know the URL of a given repository you can invoke debcheckout "
 "directly on it, but you will probably need to pass the appropriate B<-t> "
-"flag."
+"flag. That is, some heuristics are in use to guess the repository type from "
+"the URL; if they fail, you might want to override the guessed type using B<-"
+"t>."
 msgstr ""
 "Si vous connaissez déjà l'URL d'un dépôt, vous pouvez appeler directement "
 "debcheckout avec celle-ci, mais vous aurez probablement à utiliser le "
 "paramètre B<-t> approprié."
 
 # type: textblock
-#: ../scripts/debcheckout.pl:61
+#: ../scripts/debcheckout.pl:64
 msgid ""
 "The currently supported version control systems are: arch, bzr, cvs, darcs, "
 "git, hg, svn."
@@ -5931,13 +6101,19 @@ msgstr ""
 "Les systèmes de gestion de configuration gérés actuellement sont : arch, "
 "bzr, cvs, darcs, git, hg, svn."
 
+# type: SH
+#: ../scripts/debcheckout.pl:69
+#, fuzzy
+msgid "GENERAL OPTIONS"
+msgstr "OPTIONS SPÉCIFIQUES À UN SITE"
+
 # type: TP
-#: ../scripts/debcheckout.pl:68
+#: ../scripts/debcheckout.pl:73
 msgid "B<-a>, B<--auth>"
 msgstr "B<-a>, B<--auth>"
 
 # type: textblock
-#: ../scripts/debcheckout.pl:70
+#: ../scripts/debcheckout.pl:75
 msgid ""
 "work in authenticated mode; this means that for known repositories (mainly "
 "those hosted on S<http://alioth.debian.org>) URL rewriting is attempted "
@@ -5955,55 +6131,89 @@ msgstr ""
 "debian.org/...>"
 
 # type: TP
-#: ../scripts/debcheckout.pl:77 ../scripts/dget.pl:576
-#: ../scripts/dpkg-depcheck.1:96 ../scripts/getbuildlog.1:18
+#: ../scripts/debcheckout.pl:82
+#, fuzzy
+msgid "B<-d>, B<--details>"
+msgstr "B<-d>, B<--dctrl>"
+
+# type: textblock
+#: ../scripts/debcheckout.pl:84
+#, fuzzy
+msgid ""
+"only print a list of detailed information about the package repository, "
+"without checking it out; the output format is a list of fields, each field "
+"being a pair of TAB-separated field name and field value. The actual fields "
+"depend on the repository type. This action might require network connection "
+"to the remote repository."
+msgstr ""
+"Ne faire qu'afficher le dépôt du paquet, sans le récupérer ; le format de "
+"sortie comprend deux champs séparés par une tabulation : le type de dépôt et "
+"l'URL du dépôt."
+
+# type: textblock
+#: ../scripts/debcheckout.pl:90
+msgid "Also see B<-p>. This option and B<-p> are mutually exclusive."
+msgstr ""
+
+# type: TP
+#: ../scripts/debcheckout.pl:92 ../scripts/dget.pl:576
+#: ../scripts/dpkg-depcheck.1:96 ../scripts/getbuildlog.1:25
 #: ../scripts/mk-build-deps.pl:58 ../scripts/rmadison.pl:220
 #, no-wrap
 msgid "B<-h>, B<--help>"
 msgstr "B<-h>, B<--help>"
 
 # type: Plain text
-#: ../scripts/debcheckout.pl:79
+#: ../scripts/debcheckout.pl:94
 msgid "print a detailed help message and exit"
 msgstr "Affiche un message d'aide détaillé et quitte."
 
 # type: TP
-#: ../scripts/debcheckout.pl:81
+#: ../scripts/debcheckout.pl:96
 msgid "B<-p>, B<--print>"
 msgstr "B<-p>, B<--print>"
 
 # type: textblock
-#: ../scripts/debcheckout.pl:83
+#: ../scripts/debcheckout.pl:98
+#, fuzzy
 msgid ""
-"only print information about the package repository, without checking it "
-"out; the output format is TAB-separated with two fields: repository type, "
-"repository URL"
+"only print a summary about package repository information, without checking "
+"it out; the output format is TAB-separated with two fields: repository type, "
+"repository URL. This action works offline, it only uses \"static\" "
+"information as known by APT's cache."
 msgstr ""
 "Ne faire qu'afficher le dépôt du paquet, sans le récupérer ; le format de "
 "sortie comprend deux champs séparés par une tabulation : le type de dépôt et "
 "l'URL du dépôt."
 
+# type: textblock
+#: ../scripts/debcheckout.pl:103
+msgid "Also see B<-d>. This option and B<-d> are mutually exclusive."
+msgstr ""
+
 # type: TP
-#: ../scripts/debcheckout.pl:87
+#: ../scripts/debcheckout.pl:105
 msgid "B<-t> I<TYPE>, B<--type> I<TYPE>"
 msgstr "B<-t> I<TYPE>, B<--type> I<TYPE>"
 
 # type: textblock
-#: ../scripts/debcheckout.pl:89
+#: ../scripts/debcheckout.pl:107
+#, fuzzy
 msgid ""
-"set the repository type (defaults to \"svn\"), should be one of the "
-"currently supported repository types"
+"override the repository type (which defaults to some heuristics based on the "
+"URL or, in case of heuristic failures, the fallback \"svn\"), should be one "
+"of the currently supported repository types"
 msgstr ""
 "Définir le type de dépôt (par défaut « svn »), qui doit être un des types de "
 "dépôt gérés."
 
 # type: TP
-#: ../scripts/debcheckout.pl:92
+#: ../scripts/debcheckout.pl:111
 msgid "B<-u> I<USERNAME>, B<--user> I<USERNAME>"
 msgstr "B<-u> I<NOM_UTILISATEUR>, B<--user> I<NOM_UTILISATEUR>"
 
 # type: textblock
-#: ../scripts/debcheckout.pl:94
+#: ../scripts/debcheckout.pl:113
 msgid ""
 "specify the login name to be used in authenticated mode (see B<-a>). This "
 "option implies B<-a>: you don't need to specify both"
@@ -6013,12 +6223,12 @@ msgstr ""
 "les deux."
 
 # type: TP
-#: ../scripts/debcheckout.pl:97
+#: ../scripts/debcheckout.pl:116
 msgid "B<-f>, B<--file>"
 msgstr "B<-f>, B<--file>"
 
 # type: textblock
-#: ../scripts/debcheckout.pl:99
+#: ../scripts/debcheckout.pl:118
 msgid ""
 "Specify that the named file should be extracted from the repository and "
 "placed in the destionation directory. May be used more than once to extract "
@@ -6028,18 +6238,120 @@ msgstr ""
 "le répertoire de destination. Elle peut être utilisée plus d'une fois pour "
 "extraire plusieurs fichiers."
 
-# type: textblock
-#: ../scripts/debcheckout.pl:107
-msgid ""
-"apt-cache(8), Section 4.10.4 of the Debian Developer's Reference and/or "
-"Bug#391023 in the Debian Bug Tracking System (for more information about Vcs-"
-"* fields)"
+# type: =head1
+#: ../scripts/debcheckout.pl:124
+#, fuzzy
+msgid "VCS-SPECIFIC OPTIONS"
+msgstr "FONCTIONNALITÉS SPÉCIFIQUES AUX SYSTÈMES DE GESTION DE CONFIGURATION"
+
+# type: SH
+#: ../scripts/debcheckout.pl:126
+#, fuzzy
+msgid "GIT-SPECIFIC OPTIONS"
+msgstr "OPTIONS SPÉCIFIQUES À UN SITE"
+
+# type: =item
+#: ../scripts/debcheckout.pl:130
+msgid "B<--git-track> I<BRANCHES>"
 msgstr ""
-"apt-cache(8), la section 4.10.4 de la référence du développeur Debian et/ou "
-"le bogue #391023 dans le BTS (pour plus d'informations sur les champs Vcs-*)."
 
 # type: textblock
-#: ../scripts/debcheckout.pl:113
+#: ../scripts/debcheckout.pl:132
+msgid ""
+"Specify a list of remote branches which will be set up for tracking (as in "
+"S<git branch --track>, see git-branch(1)) after that the remote GIT "
+"repository has been cloned. The list should be given as a space-separated "
+"list of branch names."
+msgstr ""
+
+# type: textblock
+#: ../scripts/debcheckout.pl:137
+msgid ""
+"As a shorthand, the string \"*\" can be given to require tracking of all "
+"remote branches."
+msgstr ""
+
+# NOTE: presque identique
+# type: Plain text
+#: ../scripts/debcheckout.pl:144 ../scripts/rmadison.pl:261
+msgid ""
+"The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
+"sourced by a shell in that order to set configuration variables. Command "
+"line options can be used to override configuration file settings. "
+"Environment variable settings are ignored for this purpose. The currently "
+"recognised variables are:"
+msgstr ""
+"Les deux fichiers de configuration I</etc/devscripts.conf> et I<~/."
+"devscripts> sont chargés dans cet ordre par un interpréteur de commandes "
+"pour positionner les variables de configuration. Des options de ligne de "
+"commande peuvent être utilisées pour écraser les paramètres des fichiers de "
+"configuration. Les paramètres des variables d'environnement sont ignorés à "
+"cette fin. Les variables actuellement reconnues sont :"
+
+# type: TP#: ../scripts/debchange.1:389
+#: ../scripts/debcheckout.pl:152
+#, fuzzy
+msgid "B<DEBCHECKOUT_AUTH_URLS>"
+msgstr "B<DEBCHANGE_AUTO_NMU>"
+
+# type: textblock
+#: ../scripts/debcheckout.pl:154
+msgid ""
+"This variable should be a space separated list of Perl regular expressions "
+"and replacement texts, which must come in pairs: REGEXP TEXT REGEXP TEXT ... "
+"and so on. Each pair denote a substitution which is applied to repository "
+"URLs if other built-in means of building URLs for authenticated mode (see B<-"
+"a>) have failed."
+msgstr ""
+
+# type: textblock
+#: ../scripts/debcheckout.pl:160
+msgid ""
+"References to matching sub-strings in the replacement texts are allowed as "
+"usual in Perl by the means of $1, $2, ... and so on."
+msgstr ""
+
+# type: textblock
+#: ../scripts/debcheckout.pl:163
+msgid ""
+"Using this setting users can specify how to enable authenticated mode for "
+"repositories hosted on non well-known machines."
+msgstr ""
+
+# type: textblock
+#: ../scripts/debcheckout.pl:166
+msgid "Here is a sample snippet suitable for the configuration files:"
+msgstr ""
+
+# type: verbatim
+#: ../scripts/debcheckout.pl:168
+#, no-wrap
+msgid ""
+" DEBCHECKOUT_AUTH_URLS='\n"
+"  ^\\w+://(svn\\.example\\.com)/(.*)    svn+ssh://$1/srv/svn/$2\n"
+"  ^\\w+://(git\\.example\\.com)/(.*)    git+ssh://$1/home/git/$2\n"
+" '\n"
+"\n"
+msgstr ""
+
+# type: textblock
+#: ../scripts/debcheckout.pl:173
+msgid ""
+"Note that whitespaces are not allowed neither in regexps nor in replacement "
+"texts. Also, given that configuration files are sourced by a shell, you "
+"probably want to use single quotes around the value of this variable."
+msgstr ""
+
+# type: textblock
+#: ../scripts/debcheckout.pl:182
+msgid ""
+"apt-cache(8), Section 6.2.5 of the Debian Developer's Reference (for more "
+"information about Vcs-* fields): S<http://www.debian.org/doc/developers-"
+"reference/best-pkging-practices.html#bpp-vcs>"
+msgstr ""
+
+# type: textblock
+#: ../scripts/debcheckout.pl:187
 msgid ""
 "debcheckout and this manpage have been written by Stefano Zacchiroli "
 "<zack@debian.org>"
@@ -6581,12 +6893,12 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../scripts/debcommit.pl:745 ../scripts/mass-bug.pl:514
+#: ../scripts/debcommit.pl:757 ../scripts/mass-bug.pl:514
 msgid "Joey Hess <joeyh@debian.org>"
 msgstr "Joey Hess <joeyh@debian.org>"
 
 # type: textblock
-#: ../scripts/debcommit.pl:749
+#: ../scripts/debcommit.pl:761
 msgid "L<svnpath(1)>."
 msgstr "L<svnpath(1)>."
 
@@ -9747,7 +10059,7 @@ msgid "Show a help message."
 msgstr "Affiche un message d'aide."
 
 # type: TP
-#: ../scripts/dget.pl:580 ../scripts/getbuildlog.1:21
+#: ../scripts/dget.pl:580 ../scripts/getbuildlog.1:28
 #, no-wrap
 msgid "B<-V>, B<--version>"
 msgstr "B<-V>, B<--version>"
@@ -9850,7 +10162,7 @@ msgstr ""
 "org>."
 
 # type: textblock
-#: ../scripts/dget.pl:627 ../scripts/tagpending.pl:442
+#: ../scripts/dget.pl:627 ../scripts/tagpending.pl:443
 msgid ""
 "This program is licensed under the terms of the GPL, either version 2 of the "
 "License, or (at your option) any later version."
@@ -10659,49 +10971,63 @@ msgstr ""
 
 # type: Plain text
 #: ../scripts/getbuildlog.1:21
+msgid ""
+"If I<version-pattern> is \"last\" then only the logs for the most recent "
+"version of I<package> found on buildd.debian.org will be downloaded."
+msgstr ""
+
+# type: Plain text
+#: ../scripts/getbuildlog.1:24
+msgid ""
+"If I<version-pattern> is \"last-all\" then the logs for the most recent "
+"version found on each build log index will be downloaded."
+msgstr ""
+
+# type: Plain text
+#: ../scripts/getbuildlog.1:28
 msgid "Show usage information and examples."
 msgstr "Affiche un message d'aide et des exemples."
 
 # type: TP
-#: ../scripts/getbuildlog.1:25
+#: ../scripts/getbuildlog.1:32
 #, no-wrap
 msgid "getbuildlog hello 2\\e.2-1 amd64"
 msgstr "getbuildlog hello 2\\e.2-1 amd64"
 
 # type: Plain text
-#: ../scripts/getbuildlog.1:28
+#: ../scripts/getbuildlog.1:35
 msgid "Download amd64 build log for hello version 2.2-1."
 msgstr ""
 "Télécharger le journal de construction amd64 pour la version 2.2-1 de hello"
 
 # type: TP
-#: ../scripts/getbuildlog.1:28
+#: ../scripts/getbuildlog.1:35
 #, no-wrap
 msgid "getbuildlog glibc \"\" mips.*"
 msgstr "getbuildlog glibc \"\" mips.*"
 
 # type: Plain text
-#: ../scripts/getbuildlog.1:31
+#: ../scripts/getbuildlog.1:38
 msgid "Download mips(el) build logs of all glibc versions."
 msgstr ""
 "Télécharger les journaux de construction mips(el) pour toutes les version de "
 "la glibc."
 
 # type: TP
-#: ../scripts/getbuildlog.1:31
+#: ../scripts/getbuildlog.1:38
 #, no-wrap
 msgid "getbuildlog wesnoth .*bpo.*"
 msgstr "getbuildlog wesnoth .*bpo.*"
 
 # type: Plain text
-#: ../scripts/getbuildlog.1:34
+#: ../scripts/getbuildlog.1:41
 msgid "Download all build logs of backported wesnoth versions."
 msgstr ""
 "Télécharger tous les journaux de construction des versions rétro-portées de "
 "wesnoth."
 
 # type: Plain text
-#: ../scripts/getbuildlog.1:35
+#: ../scripts/getbuildlog.1:42
 msgid "Written by Frank S. Thomas E<lt>fst@debian.orgE<gt>."
 msgstr "Écrit par Frank S. Thomas E<lt>fst@debian.orgE<gt>."
 
@@ -12734,23 +13060,6 @@ msgstr ""
 "sont séparés par des virgules (ou des espaces), par exemple --"
 "architecture=m68k,i386."
 
-# NOTE: presque identique
-# type: Plain text
-#: ../scripts/rmadison.pl:261
-msgid ""
-"The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
-"sourced by a shell in that order to set configuration variables. Command "
-"line options can be used to override configuration file settings. "
-"Environment variable settings are ignored for this purpose. The currently "
-"recognised variables are:"
-msgstr ""
-"Les deux fichiers de configuration I</etc/devscripts.conf> et I<~/."
-"devscripts> sont chargés dans cet ordre par un interpréteur de commandes "
-"pour positionner les variables de configuration. Des options de ligne de "
-"commande peuvent être utilisées pour écraser les paramètres des fichiers de "
-"configuration. Les paramètres des variables d'environnement sont ignorés à "
-"cette fin. Les variables actuellement reconnues sont :"
-
 # type: =item
 #: ../scripts/rmadison.pl:269
 msgid "B<RMADISON_URL_MAP_>I<SHORTHAND>=I<URL>"
@@ -13139,7 +13448,7 @@ msgid "B<bts>(1) and B<dpkg-parsechangelog>(1)"
 msgstr "B<bts>(1) et B<dpkg-parsechangelog>(1)"
 
 # type: Plain text
-#: ../scripts/tagpending.pl:435
+#: ../scripts/tagpending.pl:436
 msgid ""
 "This program is Copyright 2008 by Adam D. Barratt <adam@adam-barratt.org.uk>."
 msgstr ""
@@ -13147,7 +13456,7 @@ msgstr ""
 "Copyright (C) 2008."
 
 # type: textblock
-#: ../scripts/tagpending.pl:438
+#: ../scripts/tagpending.pl:439
 msgid ""
 "The shell script tagpending, on which this program is based, is Copyright "
 "2004 by Joshua Kwan <joshk@triplehelix.org> with changes copyright 2004-7 by "
@@ -13211,7 +13520,7 @@ msgstr ""
 "paquets à vérifier."
 
 # type: SH
-#: ../scripts/transition-check.pl:54 ../scripts/uscan.1:478
+#: ../scripts/transition-check.pl:54 ../scripts/uscan.1:486
 #: ../scripts/wnpp-check.1:25
 #, no-wrap
 msgid "EXIT STATUS"
@@ -13227,7 +13536,7 @@ msgstr ""
 "transition."
 
 # type: TP
-#: ../scripts/transition-check.pl:61 ../scripts/uscan.1:482
+#: ../scripts/transition-check.pl:61 ../scripts/uscan.1:490
 #: ../scripts/wnpp-check.1:26
 #, no-wrap
 msgid "0"
@@ -14385,12 +14694,28 @@ msgstr ""
 
 # type: TP
 #: ../scripts/uscan.1:455
+#, fuzzy, no-wrap
+msgid "B<USCAN_TIMEOUT>"
+msgstr "B<USCAN_DEHS_OUTPUT>"
+
+# type: Plain text
+#: ../scripts/uscan.1:459
+#, fuzzy
+msgid ""
+"If set to a number I<N>, then set the timeout to I<N> seconds.  This is "
+"equivalent to the B<--timeout> option."
+msgstr ""
+"Si cette option est à I<yes>, alors la sortie sera de type DEHS, comme si "
+"l'option B<--dehs> était utilisée."
+
+# type: TP
+#: ../scripts/uscan.1:459
 #, no-wrap
 msgid "B<USCAN_SYMLINK>"
 msgstr "B<USCAN_SYMLINK>"
 
 # type: Plain text
-#: ../scripts/uscan.1:462
+#: ../scripts/uscan.1:466
 msgid ""
 "If this is set to I<no>, then a pkg_version.orig.tar.{gz|bz2} symlink will "
 "not be made (equivalent to the B<--no-symlink> option).  If it is set to "
@@ -14404,13 +14729,13 @@ msgstr ""
 "rename>)."
 
 # type: TP
-#: ../scripts/uscan.1:462
+#: ../scripts/uscan.1:466
 #, no-wrap
 msgid "B<USCAN_DEHS_OUTPUT>"
 msgstr "B<USCAN_DEHS_OUTPUT>"
 
 # type: Plain text
-#: ../scripts/uscan.1:466
+#: ../scripts/uscan.1:470
 msgid ""
 "If this is set to I<yes>, then DEHS-style output will be used.  This is "
 "equivalent to the B<--dehs> option."
@@ -14419,13 +14744,13 @@ msgstr ""
 "l'option B<--dehs> était utilisée."
 
 # type: TP
-#: ../scripts/uscan.1:466
+#: ../scripts/uscan.1:470
 #, no-wrap
 msgid "B<USCAN_VERBOSE>"
 msgstr "B<USCAN_VERBOSE>"
 
 # type: Plain text
-#: ../scripts/uscan.1:470
+#: ../scripts/uscan.1:474
 msgid ""
 "If this is set to I<yes>, then verbose output will be given.  This is "
 "equivalent to the B<--verbose> option."
@@ -14434,13 +14759,13 @@ msgstr ""
 "l'option B<--verbose> était utilisée."
 
 # type: TP
-#: ../scripts/uscan.1:470
+#: ../scripts/uscan.1:474
 #, no-wrap
 msgid "B<USCAN_USER_AGENT>"
 msgstr "B<USCAN_USER_AGENT>"
 
 # type: Plain text
-#: ../scripts/uscan.1:474
+#: ../scripts/uscan.1:478
 msgid ""
 "If set, the specified user agent string will be used in place of the "
 "default.  This is equivalent to the B<--user-agent> option."
@@ -14450,22 +14775,22 @@ msgstr ""
 "équivalent à l'option B<--user-agent>."
 
 # type: TP
-#: ../scripts/uscan.1:474
+#: ../scripts/uscan.1:478
 #, no-wrap
 msgid "B<USCAN_DESTDIR>"
 msgstr "B<USCAN_DESTDIR>"
 
 # type: Plain text
-#: ../scripts/uscan.1:478
+#: ../scripts/uscan.1:486
 msgid ""
 "If set, the downloaded files will be placed in this directory.  This is "
-"equivalent to the B<--destdir> option."
+"equivalent to the B<--destdir> option.  B<USCAN_REPACK> If this is set to "
+"I<yes>, then after having downloaded a bzip tar or zip archive, B<uscan> "
+"will repack it to a gzip tar.  This is equivalent to the B<--repack> option."
 msgstr ""
-"Si elle est définie, elle désigne le répertoire où les fichiers téléchargés "
-"seront placés. C'est équivalent à l'option B<--destdir>."
 
 # type: Plain text
-#: ../scripts/uscan.1:482
+#: ../scripts/uscan.1:490
 msgid ""
 "The exit status gives some indication of whether a newer version was found "
 "or not; one is advised to read the output to determine exactly what happened "
@@ -14476,7 +14801,7 @@ msgstr ""
 "et pour voir s'il n'y a pas eu d'avertissement."
 
 # type: Plain text
-#: ../scripts/uscan.1:486
+#: ../scripts/uscan.1:494
 msgid ""
 "Either B<--help> or B<--version> was used, or for some watchfile which was "
 "examined, a newer upstream version was located."
@@ -14485,7 +14810,7 @@ msgstr ""
 "nouvelle version amont a été trouvée pour un des fichiers « watch » examinés."
 
 # type: Plain text
-#: ../scripts/uscan.1:490
+#: ../scripts/uscan.1:498
 msgid ""
 "No newer upstream versions were located for any of the watchfiles examined."
 msgstr ""
@@ -14493,13 +14818,13 @@ msgstr ""
 "examinés."
 
 # type: SH
-#: ../scripts/uscan.1:490
+#: ../scripts/uscan.1:498
 #, no-wrap
 msgid "HISTORY AND UPGRADING"
 msgstr "HISTORIQUE ET MISE À NIVEAU"
 
 # type: Plain text
-#: ../scripts/uscan.1:494
+#: ../scripts/uscan.1:502
 msgid ""
 "This section briefly describes the backwards-incompatible watchfile features "
 "which have been added in each watchfile version, and the first version of "
@@ -14511,13 +14836,13 @@ msgstr ""
 "comprenait."
 
 # type: TP
-#: ../scripts/uscan.1:494
+#: ../scripts/uscan.1:502
 #, no-wrap
 msgid "I<Pre-version 2>"
 msgstr "I<Versions antérieures à 2>"
 
 # type: Plain text
-#: ../scripts/uscan.1:499
+#: ../scripts/uscan.1:507
 msgid ""
 "The watchfile syntax was significantly different in those days.  Don't use "
 "it.  If you are upgrading from a pre-version 2 watchfile, you are advised to "
@@ -14529,13 +14854,13 @@ msgstr ""
 "recommencer à zéro."
 
 # type: TP
-#: ../scripts/uscan.1:499
+#: ../scripts/uscan.1:507
 #, no-wrap
 msgid "I<Version 2>"
 msgstr "I<Version 2>"
 
 # type: Plain text
-#: ../scripts/uscan.1:503
+#: ../scripts/uscan.1:511
 msgid ""
 "devscripts version 2.6.90: The first incarnation of the current style of "
 "watchfiles."
@@ -14544,13 +14869,13 @@ msgstr ""
 "watchfile."
 
 # type: TP
-#: ../scripts/uscan.1:503
+#: ../scripts/uscan.1:511
 #, no-wrap
 msgid "I<Version 3>"
 msgstr "I<Version 3>"
 
 # type: Plain text
-#: ../scripts/uscan.1:509
+#: ../scripts/uscan.1:517
 msgid ""
 "devscripts version 2.8.12: Introduced the following: correct handling of "
 "regex special characters in the path part, directory/path pattern matching, "
@@ -14564,7 +14889,7 @@ msgstr ""
 "modification des liens."
 
 # type: Plain text
-#: ../scripts/uscan.1:515
+#: ../scripts/uscan.1:523
 msgid ""
 "If you are upgrading from version 2, the key incompatibility is if you have "
 "multiple groups in the pattern part; whereas only the first one would be "
@@ -14580,12 +14905,12 @@ msgstr ""
 "groupe ordinaire (...)."
 
 # type: Plain text
-#: ../scripts/uscan.1:521
+#: ../scripts/uscan.1:529
 msgid "B<dpkg>(1), B<perlre>(1), B<uupdate>(1)  and B<devscripts.conf>(5)."
 msgstr "B<dpkg>(1), B<perlre>(1), B<uupdate>(1) et B<devscripts.conf>(5)."
 
 # type: Plain text
-#: ../scripts/uscan.1:526
+#: ../scripts/uscan.1:534
 msgid ""
 "The original version of B<uscan> was written by Christoph Lameter "
 "E<lt>clameter@debian.orgE<gt>.  Significant improvements, changes and "
@@ -15544,6 +15869,24 @@ msgid ""
 msgstr ""
 "Cette page de manuel a été écrite pour le paquet B<devscripts> par le "
 "responsable du paquet, Julian Gilbey E<lt>jdg@debian.orgE<gt>."
+
+# type: textblock
+#~ msgid ""
+#~ "apt-cache(8), Section 4.10.4 of the Debian Developer's Reference and/or "
+#~ "Bug#391023 in the Debian Bug Tracking System (for more information about "
+#~ "Vcs-* fields)"
+#~ msgstr ""
+#~ "apt-cache(8), la section 4.10.4 de la référence du développeur Debian et/"
+#~ "ou le bogue #391023 dans le BTS (pour plus d'informations sur les champs "
+#~ "Vcs-*)."
+
+# type: Plain text
+#~ msgid ""
+#~ "If set, the downloaded files will be placed in this directory.  This is "
+#~ "equivalent to the B<--destdir> option."
+#~ msgstr ""
+#~ "Si elle est définie, elle désigne le répertoire où les fichiers "
+#~ "téléchargés seront placés. C'est équivalent à l'option B<--destdir>."
 
 # type: textblock
 #~ msgid "Record that you have claimed a bug (e.g. for a bug squashing party)."
