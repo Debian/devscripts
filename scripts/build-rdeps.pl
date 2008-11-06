@@ -83,6 +83,7 @@ my $opt_sudo;
 my $opt_maintainer;
 my $opt_mainonly;
 my $opt_distribution;
+my @opt_exclude_components;
 
 if (!(-x $dctrl)) {
 	die "$progname: Fatal error. grep-dctrl is not available.\nPlease install the 'dctrl-tools' package.\n";
@@ -107,27 +108,43 @@ usage: $progname packagename
 Searches for all packages that build-depend on the specified package.
 
 Options:
-   -u, --update                  Run apt-get update before searching for build-depends.
-                                 (needs root privileges)
-   -s, --sudo                    Use sudo when running apt-get update
-                                 (has no effect when -u is ommitted)
-   -d, --debug                   Enable the debug mode
-   -m, --print-maintainer        Print the maintainer information (experimental)
-   --distribution distribution   Select a distribution to search for build-depends
-                                 (Default: unstable)
-   --only-main                   Ignore contrib and non-free
+   -u, --update                   Run apt-get update before searching for build-depends.
+                                  (needs root privileges)
+   -s, --sudo                     Use sudo when running apt-get update
+                                  (has no effect when -u is ommitted)
+   -d, --debug                    Enable the debug mode
+   -m, --print-maintainer         Print the maintainer information (experimental)
+   --distribution distribution    Select a distribution to search for build-depends
+                                  (Default: unstable)
+   --only-main                    Ignore contrib and non-free
+   --exclude-component=COMPONENT  Ignore the specified component (can be given multiple times)
 
 EOT
 version;
 }
 
+# Sub to test if a given section shall be included in the result
+sub test_for_valid_component {
+    if ($opt_mainonly and /(contrib|non-free)/) {
+	return -1;
+    }
+    foreach my $component (@opt_exclude_components) {
+	    if ($_ =~ /$component/) {
+		return -1;
+	    }
+    }
+
+    print STDERR "DEBUG: Component ($_) may not be excluded." if ($opt_debug);
+    return 0;
+}
+
 sub findsources {
 	if (/$source_pattern/ and $sources_count <= 3) {
-		unless ($opt_mainonly and /(contrib|non-free)/) {
-			push(@source_files, $_);
-			$sources_count+=1;
-			print STDERR "DEBUG: Added source file: $_ (#$sources_count)\n" if ($opt_debug);
-		}
+	    if (test_for_valid_component($_) eq 0) {
+		push(@source_files, $_);
+		$sources_count+=1;
+		print STDERR "DEBUG: Added source file: $_ (#$sources_count)\n" if ($opt_debug);
+	    }
 	}
 }
 
@@ -197,6 +214,7 @@ GetOptions(
 	"m|print-maintainer" => \$opt_maintainer,
 	"distribution=s" => \$opt_distribution,
 	"only-main" => \$opt_mainonly,
+	"exclude-component=s" => \@opt_exclude_components,
 	"d|debug" => \$opt_debug,
 	"h|help" => sub { usage; },
 	"v|version" => sub { version; }

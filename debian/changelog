@@ -6,8 +6,11 @@ devscripts (2.10.41) UNRELEASED; urgency=low
   [ Patrick Schoenfeld ]
   * mk-build-deps: Make default pattern for source files match on codename
     aswell as suite (unstable, sid)
+  * mk-build-deps: Add a --exclude-components paramater which can be specified
+    multiple times to exclude certain components (e.g. main, contrib,
+    non-free).
 
- -- Patrick Schoenfeld <schoenfeld@debian.org>  Thu, 06 Nov 2008 12:51:51 +0100
+ -- Patrick Schoenfeld <schoenfeld@debian.org>  Thu, 06 Nov 2008 13:30:40 +0100
 
 devscripts (2.10.40) unstable; urgency=low
 
