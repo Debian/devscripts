@@ -282,13 +282,13 @@ foreach my $source_file (@source_files) {
 =head1 LICENSE
 
 This code is copyright by Patrick Schoenfeld
-<schoenfeld@in-medias-res.com>, all rights reserved.
+<schoenfeld@debian.org>, all rights reserved.
 This program comes with ABSOLUTELEY NO WARRANTY.
 You are free to redistribute this code under the terms of the
 GNU General Public License, version 2 or later.
 
 =head1 AUTHOR
 
-Patrick Schoenfeld <schoenfeld@in-medias-res.com>
+Patrick Schoenfeld <schoenfeld@debian.org>
 
 =cut
