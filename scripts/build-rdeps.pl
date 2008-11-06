@@ -117,7 +117,7 @@ Options:
    --distribution distribution    Select a distribution to search for build-depends
                                   (Default: unstable)
    --only-main                    Ignore contrib and non-free
-   --exclude-component=COMPONENT  Ignore the specified component (can be given multiple times)
+   --exclude-component COMPONENT  Ignore the specified component (can be given multiple times)
 
 EOT
 version;
