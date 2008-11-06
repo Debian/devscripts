@@ -1,14 +1,15 @@
 devscripts (2.10.41) UNRELEASED; urgency=low
 
   [ Patrick Schoenfeld ]
-  * mk-build-deps: Make default pattern for source files match on codename
-    aswell as suite (unstable, sid)
-  * mk-build-deps: Add a --exclude-components paramater which can be specified
-    multiple times to exclude certain components (e.g. main, contrib,
-    non-free).
-  * build-rdeps: Add missing documentation of the --only-main param in
-    the manpage
-  * mk-build-deps: Update author email address
+  * build-rdeps:
+    + Make default pattern for source files match on codename
+      aswell as suite (unstable, sid)
+    + Add a --exclude-components paramater which can be specified
+      multiple times to exclude certain components (e.g. main, contrib,
+      non-free).
+    + Add missing documentation of the --only-main param in
+      the manpage
+    + Update author email address
 
  -- Patrick Schoenfeld <schoenfeld@debian.org>  Thu, 06 Nov 2008 13:39:09 +0100
 
