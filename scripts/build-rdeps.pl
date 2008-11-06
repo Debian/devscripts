@@ -74,7 +74,7 @@ my $progname = basename($0);
 my $version = '1.0';
 my $dctrl = "/usr/bin/grep-dctrl";
 my $sources_path = "/var/lib/apt/lists/";
-my $source_pattern = ".*_dists_unstable_.*Sources\$";
+my $source_pattern = ".*_dists_(sid|unstable)_.*Sources\$";
 my @source_files;
 my $sources_count=0;
 my $opt_debug;
