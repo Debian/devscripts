@@ -9,8 +9,10 @@ devscripts (2.10.41) UNRELEASED; urgency=low
   * mk-build-deps: Add a --exclude-components paramater which can be specified
     multiple times to exclude certain components (e.g. main, contrib,
     non-free).
+  * build-rdeps: Add missing documentation of the --only-main param in
+    the manpage
 
- -- Patrick Schoenfeld <schoenfeld@debian.org>  Thu, 06 Nov 2008 13:30:40 +0100
+ -- Patrick Schoenfeld <schoenfeld@debian.org>  Thu, 06 Nov 2008 13:37:35 +0100
 
 devscripts (2.10.40) unstable; urgency=low
 

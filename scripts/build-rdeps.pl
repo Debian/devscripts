@@ -43,6 +43,14 @@ Use sudo when running apt-get update. Has no effect if -u is ommitted.
 
 Select another distribution, which is searched for build-depends.
 
+=item B<--only-main>
+
+Ignore contrib and non-free
+
+=item B<--exclude-component>
+
+Ignore the given component (e.g. main, contrib, non-free).
+
 =item B<-m> B<--print-maintainer>
 
 Print the value of the maintainer field for each package.
