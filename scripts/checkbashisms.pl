@@ -334,6 +334,14 @@ foreach my $filename (@ARGV) {
 	    # heredoc test itself will weed out any false positives
 	    $cat_line =~ s/(^|[^<\\\"-](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
 
+	    my $re='(?<![\$\\\])\$\"[^\"]+\"';
+	    if ($line =~ m/(.*)($re)/){
+		my $count = () = $1 =~ /(^|[^\\])\"/g;
+		if( $count % 2 == 0 ) {
+		    output_explanation($filename, $orig_line, q<$"foo" should be eval_gettext "foo">);
+		}
+	    }   
+
 	    while (my ($re,$expl) = each %string_bashisms) {
 		if ($line =~ m/($re)/) {
 		    $found = 1;
@@ -524,7 +532,6 @@ sub init_hashes {
 	qr'\$\{?SHLVL\}?\b'           => q<$SHLVL>,
 	qr'<<<'                       => q<\<\<\< here string>,
 	$LEADIN . qr'echo\s+(?:-[^e\s]+\s+)?\"[^\"]*(\\[\\abcEfnrtv0])+.*?[\"]' => q<unsafe echo with backslash>,
-	#'(?<![\$\\\])\$\"[^\"]+\"'   => q<$"foo" should be eval_gettext "foo">,
     );
 
     %singlequote_bashisms = (

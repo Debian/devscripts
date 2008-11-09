@@ -12,8 +12,10 @@ devscripts (2.10.41) UNRELEASED; urgency=low
     + Update author email address
 
   [ Adam D. Barratt ]
-  * checkbashisms: Add an updated check for $'' which is much less prone
-    to false positives. Thanks Filippo Giunchedi. (Closes: #504292)
+  * checkbashisms:
+    + Add an updated check for $'' which is much less prone to false
+      positives. Thanks Filippo Giunchedi. (Closes: #504292)
+    + Add an updated check for $"" based on Filippo's $'' patch.
   * Debbugs.pm:
     + Really fix the special-casing of the "archive" key in select() to
       get rid of an uninitialized value warning.
