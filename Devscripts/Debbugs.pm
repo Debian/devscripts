@@ -189,13 +189,18 @@ sub select {
     }
     my $bugs = $soap->get_bugs(%search_parameters,
 	(keys %usertags)?(usertags=>\%usertags):()
-    )->result();
+    );
+
     if (not defined $bugs) {
-	die "Error while retrieving bugs from SOAP server: $soapfault"
-	if $soapfault;
+	die "Error while retrieving bugs from SOAP server: $soapfault";
     }
 
-    return $bugs;
+    my $result = $bugs->result();
+    if (not defined $result) {
+	die "Error while retrieving bugs from SOAP server: $soapfault";
+    }
+
+    return $result;
 }
 
 sub status {
