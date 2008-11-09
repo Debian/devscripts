@@ -308,6 +308,14 @@ foreach my $filename (@ARGV) {
 		}
 	    }
 
+	    my $re='(?<![\$\\\])\$\'[^\']+\'';
+	    if ($line =~ m/(.*)($re)/){
+		my $count = () = $1 =~ /(^|[^\\])\'/g;
+		if( $count % 2 == 0 ) {
+		    output_explanation($filename, $orig_line, q<$'...' should be "$(printf '...')">);
+		}
+	    }   
+
 	    # $cat_line contains the version of the line we'll check
 	    # for heredoc delimiters later. Initially, remove any
 	    # spaces between << and the delimiter to make the following
@@ -521,7 +529,6 @@ sub init_hashes {
 
     %singlequote_bashisms = (
 	$LEADIN . qr'echo\s+(?:-[^e\s]+\s+)?\'[^\']*(\\[\\abcEfnrtv0])+.*?[\']' => q<unsafe echo with backslash>,
-	#'(?<![\$\\\])\$\'[^\']+\''              => q<$'...' should be "$(printf '...')">,
 	$LEADIN . qr'source\s+[\"\']?(?:\.\/|\/|\$)[^\s]+' =>
 	                               q<should be '.', not 'source'>,
     );
