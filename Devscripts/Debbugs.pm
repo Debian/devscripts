@@ -91,11 +91,13 @@ use warnings;
 
 my $soapurl='Debbugs/SOAP/1';
 my $soapproxyurl='http://bugs.debian.org/cgi-bin/soap.cgi';
+my @errors;
 
 sub init_soap {
     my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
 
     $soap->transport->env_proxy();
+    $soap->on_fault(\&getSOAPError);
 
     return $soap;
 }
@@ -120,15 +122,41 @@ sub have_soap {
     return ($soap_broken ? 0 : 1);
 }
 
+sub getSOAPError {
+    my ($soap, $result) = @_;
+    my $err;
+    if (ref($result)) {
+	$err = $result->faultstring;
+    } else {
+	$err = $soap->transport->status;
+    }
+    chomp $err;
+    push @errors, $err;
+    
+    return new SOAP::SOM;
+}
+
 sub usertags {
     die "Couldn't run usertags: $soap_broken\n" unless have_soap();
 
     my @args = @_;
 
     my $soap = init_soap();
-    my $usertags = $soap->get_usertag(@_)->result();
+    my $usertags = $soap->get_usertag(@_);
 
-    return $usertags;
+    if (@errors or not defined $usertags) {
+	my $error = join("\n", @errors);
+	die "Error retrieving usertags from SOAP server: $error\n";
+    }
+
+    my $result = $usertags->result();
+
+    if (@errors or not defined $result) {
+	my $error = join("\n", @errors);
+	die "Error retrieving usertags from SOAP server: $error\n";
+    }
+
+    return $result;
 }
 
 sub select {
@@ -159,8 +187,6 @@ sub select {
     my %users;
     my %search_parameters;
     my $soap = init_soap();
-    my $soapfault;
-    $soap->on_fault(sub { $soapfault = $_; });
     for my $arg (@args) {
 	my ($key,$value) = split /:/, $arg, 2;
 	next unless $key;
@@ -191,13 +217,15 @@ sub select {
 	(keys %usertags)?(usertags=>\%usertags):()
     );
 
-    if (not defined $bugs) {
-	die "Error while retrieving bugs from SOAP server: $soapfault";
+    if (@errors or not defined $bugs) {
+	my $error = join("\n", @errors);
+	die "Error while retrieving bugs from SOAP server: $error\n";
     }
 
     my $result = $bugs->result();
-    if (not defined $result) {
-	die "Error while retrieving bugs from SOAP server: $soapfault";
+    if (@errors or not defined $result) {
+	my $error = join( "\n", @errors );
+	die "Error while retrieving bugs from SOAP server: $error\n";
     }
 
     return $result;
@@ -208,17 +236,22 @@ sub status {
     my @args = @_;
 
     my $soap = init_soap();
-    my $soapfault;
-    $soap->on_fault(sub { $soapfault = $_; });
 
-    my $bugs = $soap->get_status(@args)->result();
+    my $bugs = $soap->get_status(@args);
 
-    if (not defined $bugs) {
-	die "Error while retrieving bug statuses from SOAP server: $soapfault"
-	    if $soapfault;
+    if (@errors or not defined $bugs) {
+	my $error = join("\n", @errors);
+	die "Error while retrieving bug statuses from SOAP server: $error\n";
     }
 
-    return $bugs;
+    my $result = $bugs->result();
+
+    if (@errors or not defined $result) {
+	my $error = join("\n", @errors);
+	die "Error while retrieving bug statuses from SOAP server: $error\n";
+    }
+
+    return $result;
 }
 
 sub versions {
@@ -256,17 +289,22 @@ sub versions {
     $search_parameters{dist} = \@dists if @dists;
 
     my $soap = init_soap();
-    my $soapfault;
-    $soap->on_fault(sub { $soapfault = $_; });
 
-    my $versions = $soap->get_versions(%search_parameters)->result();
+    my $versions = $soap->get_versions(%search_parameters);
 
-    if (not defined $versions) {
-	die "Error while retrieivng package versions from SOAP server: $soapfault"
-	    if $soapfault;
+    if (@errors or not defined $versions) {
+	my $error = join("\n", @errors);
+	die "Error while retrieving package versions from SOAP server: $error\n";
     }
 
-    return $versions;
+    my $result = $versions->result();
+
+    if (@errors or not defined $result) {
+	my $error = join("\n", @errors);
+	die "Error while retrieivng package versions from SOAP server: $error";
+    }
+
+    return $result;
 }
 
 sub versions_with_arch {
@@ -289,17 +327,22 @@ sub newest_bugs {
     return if $count !~ /^\d+$/;
 
     my $soap = init_soap();
-    my $soapfault;
-    $soap->on_fault(sub { $soapfault = $_; });
 
-    my $bugs = $soap->newest_bugs($count)->result();
+    my $bugs = $soap->newest_bugs($count);
 
-    if (not defined $bugs) {
-	die "Error while retrieving newest bug list from SOAP server: $soapfault"
-	    if $soapfault;
+    if (@errors or not defined $bugs) {
+	my $error = join("\n", @errors);
+	die "Error while retrieving newest bug list from SOAP server: $error";
     }
 
-    return $bugs;
+    my $result = $bugs->result();
+
+    if (@errors or not defined $result) {
+	my $error = join("\n", @errors);
+	die "Error while retrieving newest bug list from SOAP server: $error";
+    }
+
+    return $result;
 }
 
 # debbugs currently ignores the $msg_num parameter
@@ -314,17 +357,22 @@ sub bug_log {
     return if $bug !~ /^\d+$/;
 
     my $soap = init_soap();
-    my $soapfault;
-    $soap->on_fault(sub { $soapfault = $_; });
 
-    my $log = $soap->get_bug_log($bug, $message)->result();
+    my $log = $soap->get_bug_log($bug, $message);
 
-    if (not defined $log) {
-	die "Error while retrieving bug log from SOAP server: $soapfault"
-	    if $soapfault;
+    if (@errors or not defined $log) {
+	my $error = join("\n", @errors);
+	die "Error while retrieving bug log from SOAP server: $error\n";
     }
 
-    return $log;
+    my $result = $log->result();
+
+    if (@errors or not defined $result) {
+	my $error = join("\n", @errors);
+	die "Error while retrieving bug log from SOAP server: $error\n";
+    }
+
+    return $result;
 }
 
 sub binary_to_source {
@@ -332,8 +380,6 @@ sub binary_to_source {
 	unless have_soap();
 
     my $soap = init_soap();
-    my $soapfault;
-    $soap->on_fault(sub { $soapfault = $_; });
 
     my $binpkg = shift;
     my $binver = shift;
@@ -341,14 +387,21 @@ sub binary_to_source {
 
     return if not defined $binpkg or not defined $binver;
 
-    my $mapping = $soap->binary_to_source($binpkg, $binver, $arch)->result();
+    my $mapping = $soap->binary_to_source($binpkg, $binver, $arch);
 
-    if (not defined $mapping) {
-	die "Error while retrieving binary to source mapping from SOAP server: $soapfault"
-	    if $soapfault;
+    if (@errors or not defined $mapping) {
+	my $error = join("\n", @errors);
+	die "Error while retrieving binary to source mapping from SOAP server: $error\n";
     }
 
-    return $mapping;
+    my $result = $mapping->result();
+
+    if (@errors or not defined $result) {
+	my $error = join("\n", @errors);
+	die "Error while retrieving binary to source mapping from SOAP server: $error\n";
+    }
+
+    return $result;
 }
 
 sub source_to_binary {
@@ -356,22 +409,27 @@ sub source_to_binary {
 	unless have_soap();
 
     my $soap = init_soap();
-    my $soapfault;
-    $soap->on_fault(sub { $soapfault = $_; });
 
     my $srcpkg = shift;
     my $srcver = shift;
 
     return if not defined $srcpkg or not defined $srcver;
 
-    my $mapping = $soap->source_to_binary($srcpkg, $srcver)->result();
+    my $mapping = $soap->source_to_binary($srcpkg, $srcver);
 
-    if (not defined $mapping) {
-	die "Error while retrieving source to binary mapping from SOAP server: $soapfault"
-	    if $soapfault;
+    if (@errors or not defined $mapping) {
+	my $error = join("\n", @errors);
+	die "Error while retrieving source to binary mapping from SOAP server: $error\n";
     }
 
-    return $mapping;
+    my $result = $mapping->result();
+
+    if (@errors or not defined $result) {
+	my $error = join("\n", @errors);
+	die "Error while retrieving source to binary mapping from SOAP server: $error\n";
+    }
+
+    return $result;
 }
 
 1;
