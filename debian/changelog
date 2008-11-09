@@ -11,6 +11,11 @@ devscripts (2.10.41) UNRELEASED; urgency=low
       the manpage
     + Update author email address
 
+  [ Adam D. Barratt ]
+  * Debbugs.pm:
+    + Really fix the special-casing of the "archive" key in select() to
+      get rid of an uninitialized value warning.
+
  -- Patrick Schoenfeld <schoenfeld@debian.org>  Thu, 06 Nov 2008 13:39:09 +0100
 
 devscripts (2.10.40) unstable; urgency=low

@@ -164,12 +164,14 @@ sub select {
     for my $arg (@args) {
 	my ($key,$value) = split /:/, $arg, 2;
 	next unless $key;
-	if ($valid_keys{$key} eq 'archive') {
-	    $search_parameters{$valid_keys{$key}} = $value
-		if $value;
-	} elsif (exists $valid_keys{$key}) {
-	    push @{$search_parameters{$valid_keys{$key}}},
-	    $value if $value;
+	if (exists $valid_keys{$key}) {
+	    if ($valid_keys{$key} eq 'archive') {
+		$search_parameters{$valid_keys{$key}} = $value
+		    if $value;
+	    } else {
+		push @{$search_parameters{$valid_keys{$key}}},
+		    $value if $value;
+	    }
 	} elsif ($key =~/users?$/) {
 	    $users{$value} = 1 if $value;
 	} else {
