@@ -22,6 +22,9 @@ devscripts (2.10.41) UNRELEASED; urgency=low
     + Check whether a SOAP call returned a valid value before attempting to
       call result() on it.
     + Produce more useful error messages on failure. (Closes: #496013)
+  * tagpending: If an error occurs retrieving the list of bugs for the
+    package, suggest using "--force" in order to tag all the bugs as
+    pending without attempting to query the BTS.
 
  -- Patrick Schoenfeld <schoenfeld@debian.org>  Thu, 06 Nov 2008 13:39:09 +0100
 

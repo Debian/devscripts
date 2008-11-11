@@ -194,8 +194,18 @@ my $pending;
 my $open;
 
 if ($opt_online) {
-    $pending = Devscripts::Debbugs::select( "src:$source", "status:open", "status:forwarded", "tag:pending" );
-    $open = Devscripts::Debbugs::select( "src:$source", "status:open", "status:forwarded" );
+    if (!Devscripts::Debbugs::have_soap()) {
+	die "$progname: The libsoap-lite-perl package is required for online operation; aborting.\n";
+    }
+
+    eval {
+	$pending = Devscripts::Debbugs::select( "src:$source", "status:open", "status:forwarded", "tag:pending" );
+	$open = Devscripts::Debbugs::select( "src:$source", "status:open", "status:forwarded" );
+    };
+
+    if ($@) {
+	die "$@\nUse --force to tag all bugs anyway.\n";
+    }
 }
 
 my %bugs = map { $_ => 1} @closes;
