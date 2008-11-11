@@ -128,9 +128,18 @@ are permitted.
 .B \-\-diffstat
 Include the result of \fBdiffstat\fR before the generated diff.
 .TP
-.B \-\-no-diffstat
+.B \-\-no-\diffstat
 The default behaviour; can be used to override a configuration file
 setting.
+.TP
+.B \-\-auto\-ver\-sort
+When comparing source packages, do so in version order.  This is
+the default behaviour.
+.TP
+.B \-\-no\-auto\-ver\-sort
+Compare source packages in the order they were passed on the
+command-line, even if that means comparing a package with a higher
+version against one with a lower version.
 .TP
 \fB\-\-no-conf\fR, \fB\-\-noconf\fR
 Do not read any configuration files.  This can only be used as the

@@ -22,6 +22,9 @@ devscripts (2.10.41) UNRELEASED; urgency=low
     + Check whether a SOAP call returned a valid value before attempting to
       call result() on it.
     + Produce more useful error messages on failure. (Closes: #496013)
+  * debdiff: When comparing source packages, do so in version order rather
+    than the order the .dsc files were passed on the command line. (May
+    be disabled using --no-auto-ver-sort if desired). (Closes: #505264)
   * tagpending: If an error occurs retrieving the list of bugs for the
     package, suggest using "--force" in order to tag all the bugs as
     pending without attempting to query the BTS.

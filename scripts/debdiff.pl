@@ -19,6 +19,8 @@ use strict;
 use Cwd;
 use File::Basename;
 use File::Temp qw/ tempdir tempfile /;
+use lib '/usr/share/devscripts';
+use Devscripts::Versort;
 
 # Predeclare functions
 sub wdiff_control_files($$$$$);
@@ -75,6 +77,9 @@ Valid options are:
    --quiet, -q            Be quiet if no differences were found
    --exclude PATTERN      Exclude files that match PATTERN
    --ignore-space, -w     Ignore whitespace in diffs
+   --auto-ver-sort        When comparing source packages, ensure the
+                          comparison is performed in version order (default)
+   --no-auto-ver-sort     Do not do so
 
 Default settings modified by devscripts configuration files:
 $modified_conf_msg
@@ -101,6 +106,7 @@ my $wdiff_opt = '';
 my @diff_opts = ();
 my $show_diffstat = 0;
 my $wdiff_source_control = 0;
+my $auto_ver_sort = 1;
 
 my $quiet = 0;
 
@@ -248,6 +254,8 @@ while (@ARGV) {
     elsif ($ARGV[0] =~ /^--no-?diffstat$/) { $show_diffstat = 0; shift; }
     elsif ($ARGV[0] eq '--wdiff-source-control') { $wdiff_source_control = 1; shift; }
     elsif ($ARGV[0] =~ /^--no-?wdiff-source-control$/) { $wdiff_source_control = 0; shift; }
+    elsif ($ARGV[0] eq '--auto-ver-sort') { $auto_ver_sort = 1; shift; }
+    elsif ($ARGV[0] =~ /^--no-?auto-ver-sort$/) { $auto_ver_sort = 0; shift; }
     elsif ($ARGV[0] =~ /^--no-?conf$/) {
 	fatal "--no-conf is only acceptable as the first command-line option!";
     }
@@ -404,7 +412,7 @@ elsif ($type eq 'dsc') {
     # Compare source packages
     my $pwd = cwd;
 
-    my (@origs, @diffs, @dscs, @dscformats);
+    my (@origs, @diffs, @dscs, @dscformats, @versions);
     foreach my $i (1,2) {
 	my $dsc = shift;
 	chdir dirname($dsc)
@@ -421,6 +429,8 @@ elsif ($type eq 'dsc') {
 		next;
 	    } elsif (/^Format: (.*)$/) {
 		$dscformats[$i] = $1;
+	    } elsif (/^Version: (.*)$/) {
+		$versions[$i - 1] = [ $1, $i ];
 	    }
 	    next unless $infiles;
 	    last if /^\s*$/;
@@ -444,6 +454,16 @@ elsif ($type eq 'dsc') {
 	close DSC or fatal "Problem closing $dsc: $!";
 	# Go back again
 	chdir $pwd or fatal "Couldn't chdir $pwd: $!";
+    }
+
+    @versions = Devscripts::Versort::versort(@versions);
+    # If the versions are currently out of order, should we swap them?
+    if ($auto_ver_sort and !$guessed_version and $versions[0][1] == 1) {
+	foreach my $var ((\@origs, \@diffs, \@dscs, \@dscformats)) {
+	    my $temp = @{$var}[1];
+	    @{$var}[1] = @{$var}[2];
+	    @{$var}[2] = $temp;
+	}
     }
 
     # Do we have interdiff?
