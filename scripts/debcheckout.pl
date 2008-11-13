@@ -371,8 +371,8 @@ sub user_set_auth($$) {
     return $url;
 }
 
-# Patch a given repository URL to ensure that the checkoud out repository can be
-# committed to. Only works for well known repositories (mainly Alioth's).
+# Patch a given repository URL to ensure that the checked out out repository
+# can be committed to. Only works for well known repositories (mainly Alioth's).
 sub set_auth($$$$) {
     my ($repo_type, $url, $user, $dont_act) = @_;
 
@@ -385,7 +385,7 @@ sub set_auth($$$$) {
 
     switch ($repo_type) {
 	case "bzr" {
-	    $url =~ s|^\w+://(bzr\.debian\.org)/(.*)|sftp://$user$1/bzr/$2|;
+	    $url =~ s|^[\w+]+://(bzr\.debian\.org)/(.*)|sftp://$user$1/bzr/$2|;
 	    $url =~ s[^\w+://(?:(bazaar|code)\.)?(launchpad\.net/.*)][bzr+ssh://${user}bazaar.$2];
 	}
 	case "darcs"  {
@@ -423,6 +423,21 @@ sub set_auth($$$$) {
     die "can't use authenticated mode on repository '$url' since it is not a known repository (e.g. alioth)\n"
 	if $url eq $old_url;
     return $url;
+}
+
+# Hack around specific, known deficiencies in repositories that don't follow
+# standard behavior.
+sub munge_url($$)
+{
+    my ($repo_type, $repo_url) = @_;
+
+    switch ($repo_type) {
+	case 'bzr' {
+	    # bzr.d.o explicitly doesn't run a smart server.  Need to use nosmart
+	    $repo_url =~ s|^http://(bzr\.debian\.org)/(.*)|nosmart+http://$1/$2|;
+	}
+    }
+    return $repo_url;
 }
 
 # Checkout a given repository in a given destination directory.
@@ -859,6 +874,7 @@ EOF
 	$browse_url = find_browse($pkg, $version) if @files;
     }
 
+    $repo_url = munge_url($repo_type, $repo_url);
     $repo_url = set_auth($repo_type, $repo_url, $user, $dont_act)
 	if $auth and not @files;
     print_repo($repo_type, $repo_url) if $print_mode;		# ... then quit
@@ -870,9 +886,9 @@ EOF
     my $rc;
     if (@files) {
 	$rc = checkout_files($repo_type, $repo_url, $destdir, $browse_url);
-    } else {    
+    } else {
 	$rc = checkout_repo($repo_type, $repo_url, $destdir);
-    }	# XXX: there is no way to know for sure what is the destdir :-(
+    }   # XXX: there is no way to know for sure what is the destdir :-(
     die "checkout failed (the command above returned a non-zero exit code)\n"
 	if $rc != 0;
 
