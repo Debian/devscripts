@@ -1031,6 +1031,8 @@ sub bts_status {
 	}
     }
     my $bugs = Devscripts::Debbugs::status(@bugs);
+    return if ($bugs eq "");
+ 
     my $first = 1;
     for my $bug (keys %{$bugs}) {
 	print "\n" if not $first;
