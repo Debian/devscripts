@@ -12,9 +12,12 @@ devscripts (2.10.41) UNRELEASED; urgency=low
     + Update author email address
 
   [ Adam D. Barratt ]
-  * bts: Don't attempt to iterate the list of bugs returned by "bts status"
-    if it's empty, thereby avoiding a "Can't use string ("") as a HASH ref"
-    error.
+  * bts:
+    + Don't attempt to iterate the list of bugs returned by "bts status"
+      if it's empty, thereby avoiding a "Can't use string ("") as a HASH
+      ref" error.
+    + Correctly handle only one argument being passed to "block" or
+      "unblock".
   * checkbashisms:
     + Add an updated check for $'' which is much less prone to false
       positives. Thanks Filippo Giunchedi. (Closes: #504292)
