@@ -4,6 +4,7 @@
 #
 # Copyright (C) 2008 Romain Francoise <rfrancoise@debian.org>
 # Copyright (C) 2008 Christoph Berg <myon@debian.org>
+# Copyright (C) 2008 Adam D. Barratt <adsb@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,7 +46,7 @@ GNU General Public License, version 2 or later."
 
 usage()
 {
-    printf "Usage: %s [command] [dsc or changes file] [...]\n" $PROGNAME
+    printf "Usage: %s [options] [command] [dsc or changes file] [...]\n" $PROGNAME
 }
 
 endswith()
@@ -71,17 +72,156 @@ maybe_expand()
     fi
 }
 
-if [ "$1" = "--version" ] || [ "$1" = "-v" ]; then
-    version
-    exit 0
-elif [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
-    usage
-    exit 0
-fi
+DSC=1; BCHANGES=1; SCHANGES=1; ARCHDEB=1; INDEPDEB=1; TARBALL=1; DIFF=1
+CHANGES=1; DEB=1
+FILTERED=0; FAIL_MISSING=1
+
+while [ $# -gt 0 ]; do
+    TYPE=""
+    case "$1" in
+	--version|-v) version; exit 0;;
+	--help|-h) usage; exit 0;;
+	--no-fail-on-missing|-r) FAIL_MISSING=0;;
+	--fail-on-missing) FAIL_MISSING=1;;
+	--) shift; break;;
+	--no-*)
+	    TYPE=${1#--no-}
+	    case "$FILTERED" in
+		1)  echo "$PROGNAME: Can't combine --foo and --no-foo options" >&2;
+		    exit 1;;
+		0)  FILTERED=-1;;
+	    esac;;
+	--**)
+	    TYPE=${1#--}
+	    case "$FILTERED" in
+		-1) echo "$PROGNAME: Can't combine --foo and --no-foo options" >&2;
+		    exit 1;;
+		0)  FILTERED=1; DSC=0; BCHANGES=0; SCHANGES=0; CHANGES=0
+		    ARCHDEB=0; INDEPDEB=0; DEB=0; TARBALL=0; DIFF=0;;
+	    esac;;
+	*) break;;
+    esac
+
+    case "$TYPE" in
+	"") ;;
+	dsc) [ "$FILTERED" = "1" ] && DSC=1 || DSC=0;;
+	changes) [ "$FILTERED" = "1" ] &&
+	    { BCHANGES=1; SCHANGES=1; CHANGES=1; } ||
+	    { BCHANGES=0; SCHANGES=0; CHANGES=0; } ;;
+	bchanges) [ "$FILTERED" = "1" ] && BCHANGES=1 || BCHANGES=0;;
+	schanges) [ "$FILTERED" = "1" ] && SCHANGES=1 || SCHANGES=1;;
+	deb) [ "$FILTERED" = "1" ] &&
+	    { ARCHDEB=1; INDEPDEB=1; DEB=1; } ||
+	    { ARCHDEB=0; INDEPDEB=0; DEB=0; };;
+	archdeb) [ "$FILTERED" = "1" ] && ARCHDEB=1 || ARCHDEB=0;;
+	indepdeb) [ "$FILTERED" = "1" ] && INDEPDEB=1 || INDEPDEB=0;;
+	tar|orig) [ "$FILTERED" = "1" ] && TARBALL=1 || TARBALL=0;;
+	diff) [ "$FILTERED" = "1" ] && DIFF=1 || DIFF=0;;
+	*) echo "$PROGNAME: Unknown option '$1'" >&2; exit 1;;
+    esac
+    shift
+done
 
 args=""
 for arg in "$@"; do
-    args="$args $(maybe_expand "$arg") $arg"
+    temparg="$(maybe_expand "$arg")"
+    if [ -z "$temparg" ]; then
+	# Not expanded, so simply add to argument list
+	args="$args $arg"
+    else
+	SEEN_INDEPDEB=0; SEEN_ARCHDEB=0; SEEN_SCHANGES=0; SEEN_BCHANGES=0
+	SEEN_TARBALL=0; SEEN_DIFF=0; SEEN_DSC=0
+	MISSING=0
+	newarg=""
+	# Output those items from the expanded list which were
+	# requested, and record which files are contained in the list
+	eval $(echo "$temparg" | while read THISARG; do
+	    if [ -z "$THISARG" ]; then
+		# Skip
+		:
+	    elif endswith "$THISARG" _all.deb; then
+		[ "$INDEPDEB" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
+		echo "SEEN_INDEPDEB=1;"
+	    elif endswith "$THISARG" .deb; then
+		[ "$ARCHDEB" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
+		echo "SEEN_ARCHDEB=1;"
+	    elif endswith "$THISARG" .tar.gz || \
+		 endswith "$THISARG" .tar.bz2; then
+		[ "$TARBALL" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
+		echo "SEEN_TARBALL=1;"
+	    elif endswith "$THISARG" _source.changes; then
+		[ "$SCHANGES" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
+		echo "SEEN_SCHANGES=1;"
+	    elif endswith "$THISARG" .changes; then
+		[ "$BCHANGES" = "0" ] || echo "newarg\"\$newarg $THISARG\";"
+		echo "SEEN_BCHANGES=1;"
+	    elif endswith "$THISARG" .dsc; then
+		[ "$DSC" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
+		echo "SEEN_DSC=1;"
+	    elif endswith "$THISARG" .diff.gz; then
+		[ "$DIFF" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
+		echo "SEEN_DIFF=1;"
+	    elif [ "$FILTERED" != "1" ]; then
+		# What is it? Output anyway
+		echo "newarg=\"\$newarg $THISARG\";"
+	    fi
+	done)
+
+	INCLUDEARG=1
+	if endswith "$arg" _source.changes; then
+	    [ "$SCHANGES" = "1" ] || INCLUDEARG=0
+	    SEEN_SCHANGES=1
+	elif endswith "$arg" .changes; then
+	    [ "$BCHANGES" = "1" ] || INCLUDEARG=0
+	    SEEN_BCHANGES=1
+	elif endswith "$arg" .dsc; then
+	    [ "$DSC" = "1" ] || INCLUDEARG=0
+	    SEEN_DSC=1
+	fi
+
+	if [ "$FAIL_MISSING" = "1" ] && [ "$FILTERED" = "1" ]; then
+	    if [ "$CHANGES" = "1" ]; then
+		if [ "$SEEN_SCHANGES" = "0" ] && [ "$SEEN_BCHANGES" = "0" ]; then
+		    MISSING=1; echo "$arg: .changes fiie not found" >&2
+		fi
+	    else
+		if [ "$SCHANGES" = "1" ] && [ "$SEEN_SCHANGES" = "0" ]; then
+		    MISSING=1; echo "$arg: source .changes file not found" >&2
+		fi
+		if [ "$BCHANGES" = "1" ] && [ "$SEEN_BCHANGES" = "0" ]; then
+		    MISSING=1; echo "$arg: binary .changes file not found" >&2
+		fi
+	    fi
+
+	    if [ "$DEB" = "1" ]; then
+		if  [ "$SEEN_INDEPDEB" = "0" ] && [ "$SEEN_ARCHDEB" = "0" ]; then
+		    MISSING=1; echo "$arg: binary packages not found" >&2
+		fi
+	    else
+		if [ "$INDEPDEB" = "1" ] && [ "$SEEN_INDEPDEB" = "0" ]; then
+		    MISSING=1; echo "$arg: arch-indep packages not found" >&2
+		fi
+		if [ "$ARCHDEB" = "1" ] && [ "$SEEN_ARCHDEB" = "0" ]; then
+		    MISSING=1; echo "$arg: arch-dep packages not found" >&2
+		fi
+	    fi
+
+	    if [ "$DSC" = "1" ] && [ "$SEEN_DSC" = "0" ]; then
+		MISSING=1; echo "$arg: .dsc file not found" >&2
+	    fi
+	    if [ "$TARBALL" = "1" ] && [ "$SEEN_TARBALL" = "0" ]; then
+		MISSING=1; echo "$arg: upstream tar not found" >&2
+	    fi
+	    if [ "$DIFF" = "1" ] && [ "$SEEN_DIFF" = "0" ]; then
+		MISSING=1; echo "$arg: Debian diff not found" >&2
+	    fi
+
+	    [ "$MISSING" = "0" ] || exit 1
+	fi
+
+	args="$args $newarg"
+	[ "$INCLUDEARG" = "0" ] || args="$args $arg"
+    fi
 done
 
 if [ -e "$1" ] && (endswith "$1" .changes || endswith "$1" .dsc); then

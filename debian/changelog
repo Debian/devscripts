@@ -22,6 +22,8 @@ devscripts (2.10.41) UNRELEASED; urgency=low
     + Add an updated check for $'' which is much less prone to false
       positives. Thanks Filippo Giunchedi. (Closes: #504292)
     + Add an updated check for $"" based on Filippo's $'' patch.
+  * dcmd: Allow only a subset of the files listed in the .changes / .dsc
+    file to be selected. (Closes: #481415)
   * Debbugs.pm:
     + Really fix the special-casing of the "archive" key in select() to
       get rid of an uninitialized value warning.

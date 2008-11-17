@@ -2,7 +2,8 @@
 .SH NAME
 dcmd \- expand file lists of .dsc/.changes files in the command line
 .SH SYNOPSIS
-\fBdcmd\fR [\fIcommand\fR] [\fIchanges-file\fR|\fIdsc-file\fR] [\fI...\fR]
+\fBdcmd\fR [\fIoptions\fR] [\fIcommand\fR] [\fIchanges-file\fR|\fIdsc-file\fR]
+[\fI...\fR]
 .SH DESCRIPTION
 \fBdcmd\fR replaces any reference to a .dsc or .changes file in the
 command line with the list of files in its 'Files' section, plus the
@@ -12,6 +13,47 @@ an upload (for changes files) or a source package (for dsc files).
 If \fIcommand\fR is omitted (that is the first argument is an existing .dsc
 or .changes file), the expanded list of files is printed to stdout, one file
 by line. Useful for usage in backticks.
+.SH OPTIONS
+There are a number of options which may be used in order to select only a
+subset of the files listed in the .dsc or .changes file. If a requested file
+is not found, an error message will be printed.
+.TP 14
+.B \-\-dsc
+Select the .dsc file.
+.TP
+.B \-\-schanges
+Select .changes files for the 'source' architecture.
+.TP
+.B \-\-bchanges
+Select .changes files for binary architectures.
+.TP
+.B \-\-changes
+Select .changes files. Implies \-\-schanges and \-\-bchanges.
+.TP
+.B \-\-archdeb
+Select architecture-dependent binary packages (.deb files).
+.TP
+.B \-\-indepdeb
+Select architecture-independent binary packages (.deb files).
+.TP
+.B \-\-deb
+Select binary packages (.deb files). Implies \-\-archdeb and \-\-indepdeb.
+.TP
+.B \-\-tar, \-\-orig
+Select the tar file.
+.TP
+.B \-\-diff
+Select the Debian diff file.
+.PP
+Each option may be prefixed by \fB\-\-no\fR to indicate that all files
+\fInot\fR matching the specification should be selected.
+.PP
+It is not possible to combine positive filtering options (e.g. \-\-dsc)
+and negative filtering options (e.g. \-\-no\-changes) in the same
+\fBdcmd\fR invocation.
+.TP
+.B \-\-no\-fail\-on\-missing, \-r
+If any of the requested files were not found, do not output an error.
 .SH "EXAMPLES"
 Copy the result of a build to another machine:
 
@@ -22,6 +64,11 @@ rcs_5.7-23.diff.gz              100%   12KB  11.7KB/s   00:00
 rcs_5.7-23_amd64.deb            100%  363KB 362.7KB/s   00:00
 rcs_5.7-23_amd64.changes        100% 1095     1.1KB/s   00:00
 $
+
+$ dcmd --diff --deb scp rcs_5.7-23_amd64.changes elegiac:/tmp
+rcs_5.7-23.diff.gz              100%   12KB  11.7KB/s   00:00
+rcs_5.7-23_amd64.deb            100%  363KB 362.7KB/s   00:00
+$
 .fi
 
 Check the contents of a source package:
@@ -30,6 +77,11 @@ Check the contents of a source package:
 $ dcmd md5sum rcs_5.7-23.dsc 
 8fd09ea9654cda128f8d5c337d3b8de7  rcs_5.7.orig.tar.gz
 f0ceeae96603e823eacba6721a30b5c7  rcs_5.7-23.diff.gz
+5241db1e231b1f43ae5514b63d2523f8  rcs_5.7-23.dsc
+$
+
+$ dcmd --no-diff md5sum rcs_5.7-23.dsc 
+8fd09ea9654cda128f8d5c337d3b8de7  rcs_5.7.orig.tar.gz
 5241db1e231b1f43ae5514b63d2523f8  rcs_5.7-23.dsc
 $
 .fi
