@@ -36,6 +36,8 @@ devscripts (2.10.41) UNRELEASED; urgency=low
   * tagpending: If an error occurs retrieving the list of bugs for the
     package, suggest using "--force" in order to tag all the bugs as
     pending without attempting to query the BTS.
+  * po4a/po/fr.po: Remove a duplicated word and fix a typo. Thanks Franck
+    Joncourt. (Closes: #505786)
 
   [ James Vega ]
   * debcheckout:  Add support for working around repositories that don't
