@@ -271,6 +271,9 @@
 
 ##### debsign
 # 
+# debsign recognises the DEBRELEASE_DEBS_DIR variable; see debrelease
+# above for more information.
+#
 # Which signing program to use?  gpg and pgp are the usual values; the
 # default is determined as described in the manpage.
 # Corresponds to -p option
@@ -424,7 +427,6 @@
 ##### mass-bug
 # 
 # No variables currently
-
 
 #### mk-build-deps
 #
