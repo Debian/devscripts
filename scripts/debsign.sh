@@ -62,6 +62,9 @@ usage () {
     -a<arch>        Use changes file made for Debian target architecture <arch>
     -t<target>      Use changes file made for GNU target architecture <target>
     --multi         Use most recent multiarch .changes file found
+    --debs-dir <directory>
+                    The location of the .changes / .dsc files when called from
+                    within a source tree (default "..")
     --no-conf, --noconf
                     Don't read devscripts config files;
                     must be the first option given
@@ -210,7 +213,9 @@ DEFAULT_DEBSIGN_PROGRAM=
 DEFAULT_DEBSIGN_SIGNLIKE=
 DEFAULT_DEBSIGN_MAINT=
 DEFAULT_DEBSIGN_KEYID=
+DEFAULT_DEBRELEASE_DEBS_DIR=..
 VARS="DEBSIGN_PROGRAM DEBSIGN_SIGNLIKE DEBSIGN_MAINT DEBSIGN_KEYID"
+VARS="$VARS DEBRELEASE_DEBS_DIR"
 
 if [ "$1" = "--no-conf" -o "$1" = "--noconf" ]; then
     shift
@@ -235,13 +240,20 @@ else
 	  [ -r $file ] && . $file
 	done
 
-	set | egrep '^(DEBSIGN|DEVSCRIPTS)_')
+	set | egrep '^(DEBSIGN|DEBRELEASE|DEVSCRIPTS)_')
 
     # check sanity
     case "$DEBSIGN_SIGNLIKE" in
 	gpg|pgp) ;;
 	*) DEBSIGN_SIGNLIKE= ;;
     esac
+
+    # We do not replace this with a default directory to avoid accidentally
+    # signing a broken package
+    DEBRELEASE_DEBS_DIR="`echo \"$DEBRELEASE_DEBS_DIR\" | sed -e 's%/\+%/%g; s%\(.\)/$%\1%;'`"
+    if ! [ -d "$DEBRELEASE_DEBS_DIR" ]; then
+	debsdir_warning="config file specified DEBRELEASE_DEBS_DIR directory $DEBRELEASE_DEBS_DIR does not exist!"
+    fi
 
     # set config message
     MODIFIED_CONF=''
@@ -261,6 +273,7 @@ fi
 
 maint="$DEBSIGN_MAINT"
 signkey="$DEBSIGN_KEYID"
+debsdir="$DEBRELEASE_DEBS_DIR"
 
 signcommand=''
 if [ -n "$DEBSIGN_PROGRAM" ]; then
@@ -306,6 +319,13 @@ do
 		    set -- "$@" "$filepart"
 		fi
 		;;
+	--debs-dir=*)
+	    opt_debsdir="`echo \"$1\" | sed -e 's/^--debs-dir=//; s%/\+%/%g; s%\(.\)/$%\1%;'`"
+	    ;;
+	--debs-dir)
+	    shift
+	    opt_debsdir="`echo \"$1\" | sed -e 's%/\+%/%g; s%\(.\)/$%\1%;'`"
+	    ;;
 	--no-conf|--noconf)
 		echo "$PROGNAME: $1 is only acceptable as the first command-line option!" >&2
 		exit 1 ;;
@@ -319,6 +339,18 @@ do
     esac
     shift
 done
+
+debsdir=${opt_debsdir:-$debsdir}
+# check sanity of debsdir
+if ! [ -d "$debsdir" ]; then
+    if [ -n "$debsdir_warning" ]; then
+        echo "$PROGNAME: $debsdir_warning" >&2
+        exit 1
+    else
+        echo "$PROGNAME: could not find directory $debsdir!" >&2
+        exit 1
+    fi
+fi
 
 if [ -z "$signcommand" ]; then
     echo "Could not find a signing program (pgp or gpg)!" >&2
@@ -468,9 +500,9 @@ dosigning() {
 		echo "$PROGNAME: Error processing .changes file (see above)" >&2
 		exit 1
 	    fi
-	    
+
 	    withecho signfile "$changes" "$signas"
-	
+
 	    if [ -n "$remotehost" ]
 	    then
 		withecho scp "$changes" "$dsc" "$remotehost:$remotedir"
@@ -501,8 +533,7 @@ dosigning() {
 	    echo "Leaving current signature unchanged." >&2
 	    return
 	}
-    
-    
+
 	# simple validator for .commands files, see
 	# ftp://ftp-master.debian.org/pub/UploadQueue/README
 	perl -ne 'BEGIN { $uploader = 0; $incommands = 0; }
@@ -538,7 +569,7 @@ for valid format" >&2;
 
 	if [ -n "$maint" ]
 	then maintainer="$maint"
-	else 
+	else
             maintainer=`sed -n 's/^Uploader: //p' $commands`
             if [ -z "$maintainer" ]
             then
@@ -546,7 +577,7 @@ for valid format" >&2;
 		exit 1
             fi
 	fi
-    
+
 	signas="${signkey:-$maintainer}"
 
 	withecho signfile "$commands" "$signas"
@@ -621,22 +652,22 @@ case $# in
 	sversion=`echo "$version" | perl -pe 's/^\d+://'`
 	pv="${package}_${sversion}"
 	pva="${package}_${sversion}_${arch}"
-	dsc="../$pv.dsc"
-	changes="../$pva.changes"
+	dsc="$debsdir/$pv.dsc"
+	changes="$debsdir/$pva.changes"
 	if [ -n "$multiarch" -o ! -r $changes ]; then
-	    changes=$(ls "../${package}_${sversion}_*+*.changes" "../${package}_${sversion}_multi.changes" 2>/dev/null | head -1)
+	    changes=$(ls "$debsdir/${package}_${sversion}_*+*.changes" "$debsdir/${package}_${sversion}_multi.changes" 2>/dev/null | head -1)
 	    if [ -z "$multiarch" ]; then
 		if [ -n "$changes" ]; then
 		    echo "$PROGNAME: could not find normal .changes file but found multiarch file:" >&2
 		    echo "  $changes" >&2
 		    echo "Using this changes file instead." >&2
-		else 
+		else
 		    echo "$PROGNAME: Can't find or can't read changes file $changes!" >&2
 		    exit 1
 		fi
 	    elif [ -n "$multiarch" -a -z "$changes" ]; then
 		echo "$PROGNAME: could not find any multiarch .changes file with name" >&2
-		echo "../${package}_${sversion}_*.changes" >&2
+		echo "$debsdir/${package}_${sversion}_*.changes" >&2
 		exit 1
 	    fi
 	fi

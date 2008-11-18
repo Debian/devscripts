@@ -33,6 +33,9 @@ devscripts (2.10.41) UNRELEASED; urgency=low
   * debdiff: When comparing source packages, do so in version order rather
     than the order the .dsc files were passed on the command line. (May
     be disabled using --no-auto-ver-sort if desired). (Closes: #505264)
+  * debsign: Support using DEBRELEASE_DEBS_DIR to specify the location
+    of .dsc and .changes files when called without an explicit path to
+    a file. Based on a patch by Philippe Le Brouster. (Closes: #502419)
   * tagpending: If an error occurs retrieving the list of bugs for the
     package, suggest using "--force" in order to tag all the bugs as
     pending without attempting to query the BTS.

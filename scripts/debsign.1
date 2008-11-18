@@ -87,6 +87,12 @@ use the most recent file with the name pattern
 \fIpackage_version_*+*.changes\fR as the changes file, allowing for the
 changes files produced by \fBdpkg-cross\fR.
 .TP
+\fB\-\-debs\-dir\fR \fIDIR\fR
+Look for the \fI.changes\fR and \fI.dsc\fR files in directory
+\fIDIR\fR instead of the parent of the source directory.  This should
+either be an absolute path or relative to the top of the source
+directory.
+.TP
 \fB\-\-no-conf\fR, \fB\-\-noconf\fR
 Do not read any configuration files.  This can only be used as the
 first option given on the command-line.
@@ -115,6 +121,16 @@ This is the \fB\-m\fR option.
 .TP
 .B DEBSIGN_KEYID
 And this is the \fB\-k\fR option.
+.TP
+.B DEBRELEASE_DEBS_DIR
+This specifies the directory in which to look for the \fI.changes\fR
+and \fI.dsc\fR files, and is either an absolute path or relative to
+the top of the source tree.  This corresponds to the
+\fB\-\-debs\-dir\fR command line option.  This directive could be
+used, for example, if you always use \fBpbuilder\fR or
+\fBsvn-buildpackage\fR to build your packages.  Note that it also
+affects \fBdebrelease\fR(1) in the same way, hence the strange name of
+the option.
 .SH "SEE ALSO"
 .BR debrsign (1),
 .BR dpkg-buildpackage (1),
