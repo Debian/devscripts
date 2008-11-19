@@ -1296,9 +1296,9 @@ Note that a bug is blocked from being fixed by a set of other bugs.
 
 sub bts_block {
     my $bug=checkbug(shift) or die "bts block: what bug is blocked?\n";
-    my $word=shift || '';
-    if ($word ne 'by' && $word ne 'with') {
-	    unshift @_, $word if length $word;
+    my $word=shift;
+    if (defined $word && $word ne 'by' && $word ne 'with') {
+	    unshift @_, $word;
     }
     @_ or die "bts block: need to specify at least two bug numbers\n";
     my @blockers;
@@ -1317,9 +1317,9 @@ Note that a bug is no longer blocked from being fixed by a set of other bugs.
 
 sub bts_unblock {
     my $bug=checkbug(shift) or die "bts unblock: what bug is blocked?\n";
-    my $word=shift || '';
-    if ($word ne 'by' && $word ne 'with') {
-	    unshift @_, $word if length $word;
+    my $word=shift;
+    if (defined $word && $word ne 'by' && $word ne 'with') {
+	    unshift @_, $word;
     }
     @_ or die "bts unblock: need to specify at least two bug numbers\n";
     my @blockers;
