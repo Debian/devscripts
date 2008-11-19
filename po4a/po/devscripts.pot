@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2008-11-17 18:36+0000\n"
+"POT-Creation-Date: 2008-11-19 19:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -165,7 +165,7 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../scripts/annotate-output.1:55 ../scripts/archpath.1:54 ../scripts/build-rdeps.pl:290 ../scripts/checkbashisms.1:62 ../scripts/cowpoke.1:226 ../scripts/cvs-debc.1:64 ../scripts/cvs-debi.1:68 ../scripts/cvs-debrelease.1:69 ../scripts/cvs-debuild.1:59 ../scripts/dcmd.1:92 ../scripts/dd-list.1:93 ../scripts/debc.1:120 ../scripts/debchange.1:417 ../scripts/debcheckout.pl:185 ../scripts/debclean.1:111 ../scripts/debcommit.pl:755 ../scripts/debdiff.1:207 ../scripts/debi.1:120 ../scripts/debpkg.1:23 ../scripts/debrelease.1:137 ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:71 ../scripts/debsign.1:131 ../scripts/debuild.1:421 ../scripts/desktop2menu.pl:52 ../scripts/dget.pl:622 ../scripts/diff2patches.1:40 ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscverify.1:53 ../scripts/getbuildlog.1:41 ../scripts/grep-excuses.1:39 ../scripts/licensecheck.pl:116 ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:20 ../scripts/mass-bug.pl:512 ../scripts/mergechanges.1:18 ../scripts/mk-build-deps.pl:68 ../scripts/namecheck.pl:43 ../scripts/nmudiff.1:97 ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56 ../scripts/rc-alert.1:83 ../scripts/rmadison.pl:295 ../scripts/svnpath.pl:97 ../scripts/transition-check.pl:81 ../scripts/uscan.1:530 ../scripts/uupdate.1:167 ../scripts/whodepends.1:19 ../scripts/who-uploads.1:71 ../scripts/wnpp-alert.1:31 ../scripts/wnpp-check.1:33 ../scripts/devscripts.conf.5:58
+#: ../scripts/annotate-output.1:55 ../scripts/archpath.1:54 ../scripts/build-rdeps.pl:290 ../scripts/checkbashisms.1:62 ../scripts/cowpoke.1:226 ../scripts/cvs-debc.1:64 ../scripts/cvs-debi.1:68 ../scripts/cvs-debrelease.1:69 ../scripts/cvs-debuild.1:59 ../scripts/dcmd.1:92 ../scripts/dd-list.1:93 ../scripts/debc.1:120 ../scripts/debchange.1:417 ../scripts/debcheckout.pl:185 ../scripts/debclean.1:111 ../scripts/debcommit.pl:755 ../scripts/debdiff.1:207 ../scripts/debi.1:120 ../scripts/debpkg.1:23 ../scripts/debrelease.1:137 ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:71 ../scripts/debsign.1:147 ../scripts/debuild.1:421 ../scripts/desktop2menu.pl:52 ../scripts/dget.pl:622 ../scripts/diff2patches.1:40 ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscverify.1:53 ../scripts/getbuildlog.1:41 ../scripts/grep-excuses.1:39 ../scripts/licensecheck.pl:116 ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:20 ../scripts/mass-bug.pl:512 ../scripts/mergechanges.1:18 ../scripts/mk-build-deps.pl:68 ../scripts/namecheck.pl:43 ../scripts/nmudiff.1:97 ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56 ../scripts/rc-alert.1:83 ../scripts/rmadison.pl:295 ../scripts/svnpath.pl:97 ../scripts/transition-check.pl:81 ../scripts/uscan.1:530 ../scripts/uupdate.1:167 ../scripts/whodepends.1:19 ../scripts/who-uploads.1:71 ../scripts/wnpp-alert.1:31 ../scripts/wnpp-check.1:33 ../scripts/devscripts.conf.5:58
 #, no-wrap
 msgid "AUTHOR"
 msgstr ""
@@ -754,7 +754,7 @@ msgid "--no-conf, --noconf"
 msgstr ""
 
 # type: Plain text
-#: ../scripts/bts.pl:384 ../scripts/cvs-debrelease.1:61 ../scripts/debc.1:89 ../scripts/debchange.1:330 ../scripts/debclean.1:81 ../scripts/debdiff.1:147 ../scripts/debi.1:90 ../scripts/debrelease.1:99 ../scripts/debsign.1:93 ../scripts/debuild.1:223 ../scripts/dpkg-depcheck.1:96 ../scripts/dscverify.1:28 ../scripts/grep-excuses.1:18 ../scripts/mass-bug.pl:110 ../scripts/nmudiff.1:63 ../scripts/uscan.1:431 ../scripts/uupdate.1:80 ../scripts/who-uploads.1:44
+#: ../scripts/bts.pl:384 ../scripts/cvs-debrelease.1:61 ../scripts/debc.1:89 ../scripts/debchange.1:330 ../scripts/debclean.1:81 ../scripts/debdiff.1:147 ../scripts/debi.1:90 ../scripts/debrelease.1:99 ../scripts/debsign.1:99 ../scripts/debuild.1:223 ../scripts/dpkg-depcheck.1:96 ../scripts/dscverify.1:28 ../scripts/grep-excuses.1:18 ../scripts/mass-bug.pl:110 ../scripts/nmudiff.1:63 ../scripts/uscan.1:431 ../scripts/uupdate.1:80 ../scripts/who-uploads.1:44
 msgid ""
 "Do not read any configuration files.  This can only be used as the first "
 "option given on the command-line."
@@ -1840,7 +1840,7 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../scripts/bts.pl:3583 ../scripts/debc.1:92 ../scripts/debchange.1:341 ../scripts/debcheckout.pl:142 ../scripts/debclean.1:90 ../scripts/debcommit.pl:97 ../scripts/debdiff.1:159 ../scripts/debi.1:93 ../scripts/debrelease.1:105 ../scripts/debrsign.1:57 ../scripts/debsign.1:99 ../scripts/debuild.1:288 ../scripts/dget.pl:586 ../scripts/dpkg-depcheck.1:102 ../scripts/dscverify.1:38 ../scripts/grep-excuses.1:27 ../scripts/licensecheck.pl:83 ../scripts/mass-bug.pl:128 ../scripts/nmudiff.1:69 ../scripts/plotchangelog.1:106 ../scripts/pts-subscribe.1:42 ../scripts/rmadison.pl:259 ../scripts/uscan.1:437 ../scripts/uupdate.1:86 ../scripts/who-uploads.1:50
+#: ../scripts/bts.pl:3583 ../scripts/debc.1:92 ../scripts/debchange.1:341 ../scripts/debcheckout.pl:142 ../scripts/debclean.1:90 ../scripts/debcommit.pl:97 ../scripts/debdiff.1:159 ../scripts/debi.1:93 ../scripts/debrelease.1:105 ../scripts/debrsign.1:57 ../scripts/debsign.1:105 ../scripts/debuild.1:288 ../scripts/dget.pl:586 ../scripts/dpkg-depcheck.1:102 ../scripts/dscverify.1:38 ../scripts/grep-excuses.1:27 ../scripts/licensecheck.pl:83 ../scripts/mass-bug.pl:128 ../scripts/nmudiff.1:69 ../scripts/plotchangelog.1:106 ../scripts/pts-subscribe.1:42 ../scripts/rmadison.pl:259 ../scripts/uscan.1:437 ../scripts/uupdate.1:86 ../scripts/who-uploads.1:50
 #, no-wrap
 msgid "CONFIGURATION VARIABLES"
 msgstr ""
@@ -2040,7 +2040,7 @@ msgid ""
 msgstr ""
 
 # type: SH
-#: ../scripts/bts.pl:3681 ../scripts/checkbashisms.1:60 ../scripts/cowpoke.1:221 ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62 ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53 ../scripts/dcmd.1:89 ../scripts/debc.1:115 ../scripts/debchange.1:410 ../scripts/debcheckout.pl:180 ../scripts/debclean.1:107 ../scripts/debcommit.pl:759 ../scripts/debdiff.1:200 ../scripts/debi.1:116 ../scripts/debrelease.1:132 ../scripts/deb-reversion.dbk:247 ../scripts/debrsign.1:66 ../scripts/debsign.1:118 ../scripts/debuild.1:408 ../scripts/dget.pl:630 ../scripts/diff2patches.1:37 ../scripts/dpkg-depcheck.1:118 ../scripts/dpkg-genbuilddeps.1:30 ../scripts/dscverify.1:49 ../scripts/grep-excuses.1:37 ../scripts/list-unreleased.1:19 ../scripts/nmudiff.1:92 ../scripts/plotchangelog.1:124 ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:81 ../scripts/rmadison.pl:291 ../scripts/tagpending.pl:149 ../scripts/uscan.1:524 ../scripts/uupdate.1:160 ../scripts/wnpp-alert.1:29 ../scripts/wnpp-check.1:23 ../scripts/devscripts.conf.5:54
+#: ../scripts/bts.pl:3681 ../scripts/checkbashisms.1:60 ../scripts/cowpoke.1:221 ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62 ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53 ../scripts/dcmd.1:89 ../scripts/debc.1:115 ../scripts/debchange.1:410 ../scripts/debcheckout.pl:180 ../scripts/debclean.1:107 ../scripts/debcommit.pl:759 ../scripts/debdiff.1:200 ../scripts/debi.1:116 ../scripts/debrelease.1:132 ../scripts/deb-reversion.dbk:247 ../scripts/debrsign.1:66 ../scripts/debsign.1:134 ../scripts/debuild.1:408 ../scripts/dget.pl:630 ../scripts/diff2patches.1:37 ../scripts/dpkg-depcheck.1:118 ../scripts/dpkg-genbuilddeps.1:30 ../scripts/dscverify.1:49 ../scripts/grep-excuses.1:37 ../scripts/list-unreleased.1:19 ../scripts/nmudiff.1:92 ../scripts/plotchangelog.1:124 ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:81 ../scripts/rmadison.pl:291 ../scripts/tagpending.pl:149 ../scripts/uscan.1:524 ../scripts/uupdate.1:160 ../scripts/wnpp-alert.1:29 ../scripts/wnpp-check.1:23 ../scripts/devscripts.conf.5:54
 #, no-wrap
 msgid "SEE ALSO"
 msgstr ""
@@ -2180,7 +2180,7 @@ msgid "Show the usage information."
 msgstr ""
 
 # type: TP
-#: ../scripts/build-rdeps.pl:66 ../scripts/cowpoke.1:66 ../scripts/debchange.1:338 ../scripts/debclean.1:87 ../scripts/debrelease.1:102 ../scripts/debsign.1:96 ../scripts/diff2patches.1:21 ../scripts/dscverify.1:35 ../scripts/grep-excuses.1:24 ../scripts/nmudiff.1:66 ../scripts/plotchangelog.1:95 ../scripts/pts-subscribe.1:31 ../scripts/rmadison.pl:246 ../scripts/uscan.1:434 ../scripts/uupdate.1:83 ../scripts/who-uploads.1:47
+#: ../scripts/build-rdeps.pl:66 ../scripts/cowpoke.1:66 ../scripts/debchange.1:338 ../scripts/debclean.1:87 ../scripts/debrelease.1:102 ../scripts/debsign.1:102 ../scripts/diff2patches.1:21 ../scripts/dscverify.1:35 ../scripts/grep-excuses.1:24 ../scripts/nmudiff.1:66 ../scripts/plotchangelog.1:95 ../scripts/pts-subscribe.1:31 ../scripts/rmadison.pl:246 ../scripts/uscan.1:434 ../scripts/uupdate.1:83 ../scripts/who-uploads.1:47
 #, no-wrap
 msgid "B<--version>"
 msgstr ""
@@ -2404,7 +2404,7 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../scripts/checkbashisms.1:24 ../scripts/debchange.1:335 ../scripts/debdiff.1:147 ../scripts/debrelease.1:99 ../scripts/debsign.1:93 ../scripts/dscverify.1:32 ../scripts/pts-subscribe.1:28 ../scripts/rc-alert.1:21 ../scripts/uupdate.1:80 ../scripts/who-uploads.1:44 ../scripts/wnpp-alert.1:23 ../scripts/wnpp-check.1:17
+#: ../scripts/checkbashisms.1:24 ../scripts/debchange.1:335 ../scripts/debdiff.1:147 ../scripts/debrelease.1:99 ../scripts/debsign.1:99 ../scripts/dscverify.1:32 ../scripts/pts-subscribe.1:28 ../scripts/rc-alert.1:21 ../scripts/uupdate.1:80 ../scripts/who-uploads.1:44 ../scripts/wnpp-alert.1:23 ../scripts/wnpp-check.1:17
 #, no-wrap
 msgid "B<--help>, B<-h>"
 msgstr ""
@@ -3259,7 +3259,7 @@ msgid "This specifies which uploader program to use; the default is B<dupload>."
 msgstr ""
 
 # type: TP
-#: ../scripts/cvs-debrelease.1:57 ../scripts/debc.1:85 ../scripts/debchange.1:326 ../scripts/debclean.1:77 ../scripts/debdiff.1:143 ../scripts/debi.1:86 ../scripts/debrelease.1:95 ../scripts/debsign.1:89 ../scripts/dpkg-depcheck.1:92 ../scripts/dscverify.1:24 ../scripts/grep-excuses.1:14 ../scripts/nmudiff.1:59 ../scripts/rmadison.pl:250 ../scripts/uscan.1:427 ../scripts/uupdate.1:76 ../scripts/who-uploads.1:40
+#: ../scripts/cvs-debrelease.1:57 ../scripts/debc.1:85 ../scripts/debchange.1:326 ../scripts/debclean.1:77 ../scripts/debdiff.1:143 ../scripts/debi.1:86 ../scripts/debrelease.1:95 ../scripts/debsign.1:95 ../scripts/dpkg-depcheck.1:92 ../scripts/dscverify.1:24 ../scripts/grep-excuses.1:14 ../scripts/nmudiff.1:59 ../scripts/rmadison.pl:250 ../scripts/uscan.1:427 ../scripts/uupdate.1:76 ../scripts/who-uploads.1:40
 #, no-wrap
 msgid "B<--no-conf>, B<--noconf>"
 msgstr ""
@@ -3950,7 +3950,7 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../scripts/debc.1:71 ../scripts/debi.1:72 ../scripts/debrelease.1:81
+#: ../scripts/debc.1:71 ../scripts/debi.1:72 ../scripts/debrelease.1:81 ../scripts/debsign.1:89
 #, no-wrap
 msgid "B<--debs-dir> I<DIR>"
 msgstr ""
@@ -3983,7 +3983,7 @@ msgid "B<--check-dirname-regex> I<regex>"
 msgstr ""
 
 # type: Plain text
-#: ../scripts/debc.1:98 ../scripts/debchange.1:347 ../scripts/debclean.1:96 ../scripts/debi.1:99 ../scripts/debrelease.1:111 ../scripts/debrsign.1:63 ../scripts/debsign.1:105 ../scripts/nmudiff.1:75 ../scripts/pts-subscribe.1:48 ../scripts/uupdate.1:92 ../scripts/who-uploads.1:56
+#: ../scripts/debc.1:98 ../scripts/debchange.1:347 ../scripts/debclean.1:96 ../scripts/debi.1:99 ../scripts/debrelease.1:111 ../scripts/debrsign.1:63 ../scripts/debsign.1:111 ../scripts/nmudiff.1:75 ../scripts/pts-subscribe.1:48 ../scripts/uupdate.1:92 ../scripts/who-uploads.1:56
 msgid ""
 "The two configuration files I</etc/devscripts.conf> and I<~/.devscripts> are "
 "sourced in that order to set configuration variables.  Command line options "
@@ -3993,7 +3993,7 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../scripts/debc.1:98 ../scripts/debi.1:99 ../scripts/debrelease.1:116
+#: ../scripts/debc.1:98 ../scripts/debi.1:99 ../scripts/debrelease.1:116 ../scripts/debsign.1:124
 #, no-wrap
 msgid "B<DEBRELEASE_DEBS_DIR>"
 msgstr ""
@@ -4654,12 +4654,12 @@ msgid ""
 msgstr ""
 
 # type: Plain text
-#: ../scripts/debchange.1:338 ../scripts/debclean.1:87 ../scripts/debrelease.1:102 ../scripts/debsign.1:96 ../scripts/dscverify.1:35 ../scripts/nmudiff.1:66 ../scripts/pts-subscribe.1:31 ../scripts/uupdate.1:83 ../scripts/who-uploads.1:47
+#: ../scripts/debchange.1:338 ../scripts/debclean.1:87 ../scripts/debrelease.1:102 ../scripts/debsign.1:102 ../scripts/dscverify.1:35 ../scripts/nmudiff.1:66 ../scripts/pts-subscribe.1:31 ../scripts/uupdate.1:83 ../scripts/who-uploads.1:47
 msgid "Display a help message and exit successfully."
 msgstr ""
 
 # type: Plain text
-#: ../scripts/debchange.1:341 ../scripts/debclean.1:90 ../scripts/debrelease.1:105 ../scripts/debsign.1:99 ../scripts/dscverify.1:38 ../scripts/nmudiff.1:69 ../scripts/pts-subscribe.1:34 ../scripts/uupdate.1:86 ../scripts/who-uploads.1:50
+#: ../scripts/debchange.1:341 ../scripts/debclean.1:90 ../scripts/debrelease.1:105 ../scripts/debsign.1:105 ../scripts/dscverify.1:38 ../scripts/nmudiff.1:69 ../scripts/pts-subscribe.1:34 ../scripts/uupdate.1:86 ../scripts/who-uploads.1:50
 msgid "Display version and copyright information and exit successfully."
 msgstr ""
 
@@ -5469,7 +5469,7 @@ msgid ""
 msgstr ""
 
 # type: TP
-#: ../scripts/debcommit.pl:122 ../scripts/debsign.1:115
+#: ../scripts/debcommit.pl:122 ../scripts/debsign.1:121
 #, no-wrap
 msgid "B<DEBSIGN_KEYID>"
 msgstr ""
@@ -6815,7 +6815,7 @@ msgid "B<debsign>(1), B<dpkg-architecture>(1)  and B<ssh>(1)."
 msgstr ""
 
 # type: Plain text
-#: ../scripts/debrsign.1:73 ../scripts/debsign.1:133
+#: ../scripts/debrsign.1:73 ../scripts/debsign.1:149
 msgid ""
 "This program was written by Julian Gilbey E<lt>jdg@debian.orgE<gt> and is "
 "copyright under the GPL, version 2 or later."
@@ -6978,48 +6978,67 @@ msgid ""
 "changes file, allowing for the changes files produced by B<dpkg-cross>."
 msgstr ""
 
+# type: Plain text
+#: ../scripts/debsign.1:95
+msgid ""
+"Look for the I<.changes> and I<.dsc> files in directory I<DIR> instead of "
+"the parent of the source directory.  This should either be an absolute path "
+"or relative to the top of the source directory."
+msgstr ""
+
 # type: TP
-#: ../scripts/debsign.1:105
+#: ../scripts/debsign.1:111
 #, no-wrap
 msgid "B<DEBSIGN_PROGRAM>"
 msgstr ""
 
 # type: Plain text
-#: ../scripts/debsign.1:108
+#: ../scripts/debsign.1:114
 msgid "Setting this is equivalent to giving a B<-p> option."
 msgstr ""
 
 # type: TP
-#: ../scripts/debsign.1:108
+#: ../scripts/debsign.1:114
 #, no-wrap
 msgid "B<DEBSIGN_SIGNLIKE>"
 msgstr ""
 
 # type: Plain text
-#: ../scripts/debsign.1:112
+#: ../scripts/debsign.1:118
 msgid ""
 "This must be I<gpg> or I<pgp> and is equivalent to using either B<-sgpg> or "
 "B<-spgp> respectively."
 msgstr ""
 
 # type: TP
-#: ../scripts/debsign.1:112
+#: ../scripts/debsign.1:118
 #, no-wrap
 msgid "B<DEBSIGN_MAINT>"
 msgstr ""
 
 # type: Plain text
-#: ../scripts/debsign.1:115
+#: ../scripts/debsign.1:121
 msgid "This is the B<-m> option."
 msgstr ""
 
 # type: Plain text
-#: ../scripts/debsign.1:118
+#: ../scripts/debsign.1:124
 msgid "And this is the B<-k> option."
 msgstr ""
 
 # type: Plain text
-#: ../scripts/debsign.1:131
+#: ../scripts/debsign.1:134
+msgid ""
+"This specifies the directory in which to look for the I<.changes> and "
+"I<.dsc> files, and is either an absolute path or relative to the top of the "
+"source tree.  This corresponds to the B<--debs-dir> command line option.  "
+"This directive could be used, for example, if you always use B<pbuilder> or "
+"B<svn-buildpackage> to build your packages.  Note that it also affects "
+"B<debrelease>(1) in the same way, hence the strange name of the option."
+msgstr ""
+
+# type: Plain text
+#: ../scripts/debsign.1:147
 msgid ""
 "B<debrsign>(1), B<dpkg-buildpackage>(1), B<dpkg-architecture>(1), "
 "B<debuild>(1), B<md5sum>(1), B<sha1sum>(1), B<sha256sum>(1), B<gpg>(1), "
