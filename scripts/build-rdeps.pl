@@ -148,7 +148,7 @@ sub test_for_valid_component {
 
 sub findsources {
 	if (/$source_pattern/ and $sources_count <= 3) {
-	    if (test_for_valid_component($_) eq 0) {
+	    if (test_for_valid_component($_) == 0) {
 		push(@source_files, $_);
 		$sources_count+=1;
 		print STDERR "DEBUG: Added source file: $_ (#$sources_count)\n" if ($opt_debug);
