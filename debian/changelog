@@ -4,7 +4,7 @@ devscripts (2.10.41) UNRELEASED; urgency=low
   * build-rdeps:
     + Make default pattern for source files match on codename
       as well as suite (unstable, sid)
-    + Add a --exclude-components parameter which can be specified
+    + Add a --exclude-component parameter which can be specified
       multiple times to exclude certain components (e.g. main, contrib,
       non-free).
     + Add missing documentation of the --only-main param in
