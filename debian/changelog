@@ -3,8 +3,8 @@ devscripts (2.10.41) UNRELEASED; urgency=low
   [ Patrick Schoenfeld ]
   * build-rdeps:
     + Make default pattern for source files match on codename
-      aswell as suite (unstable, sid)
-    + Add a --exclude-components paramater which can be specified
+      as well as suite (unstable, sid)
+    + Add a --exclude-components parameter which can be specified
       multiple times to exclude certain components (e.g. main, contrib,
       non-free).
     + Add missing documentation of the --only-main param in
@@ -32,7 +32,7 @@ devscripts (2.10.41) UNRELEASED; urgency=low
     + Produce more useful error messages on failure. (Closes: #496013)
   * debdiff: When comparing source packages, do so in version order rather
     than the order the .dsc files were passed on the command line. (May
-    be disabled using --no-auto-ver-sort if desired). (Closes: #505264)
+    be disabled using --no-auto-ver-sort if desired.) (Closes: #505264)
   * debsign: Support using DEBRELEASE_DEBS_DIR to specify the location
     of .dsc and .changes files when called without an explicit path to
     a file. Based on a patch by Philippe Le Brouster. (Closes: #502419)
