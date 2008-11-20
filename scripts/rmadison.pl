@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 # vim:sw=4:sta:
 
-# Copyright (C) 2006, 2007 Christoph Berg <myon@debian.org>
+# Copyright (C) 2006, 2007, 2008 Christoph Berg <myon@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -72,6 +72,7 @@ my %url_map = (
     'qa' => "http://qa.debian.org/madison.php",
     'myon' => "http://qa.debian.org/~myon/madison.php",
     'bpo' => "http://www.backports.org/cgi-bin/madison.cgi",
+    'debug' => "http://debug.debian.net/cgi-bin/madison.cgi",
     'ubuntu' => "http://people.ubuntu.com/~ubuntu-archive/madison.cgi",
 );
 
