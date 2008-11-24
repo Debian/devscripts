@@ -30,6 +30,9 @@ use Getopt::Long;
 use File::Basename;
 use filetest 'access';
 use Cwd;
+use File::Spec;
+use IPC::Open3;
+use Symbol 'gensym';
 
 my $progname = basename($0,'.pl');  # the '.pl' is for when we're debugging
 my $modified_conf_msg;
@@ -48,6 +51,7 @@ Usage: $progname [options] [.changes file] [package ...]
     --debs-dir DIR    Look for the changes and debs files in DIR instead of
                       the parent of the current package directory
     --multi           Search for multiarch .changes file made by dpkg-cross
+    --upgrade         Only upgrade packages; don't install new ones.
     --check-dirname-level N
                       How much to check directory names:
                       N=0   never
@@ -171,6 +175,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 
 # Command line options next
 my ($opt_help, $opt_version, $opt_a, $opt_t, $opt_debsdir, $opt_multi);
+my $opt_upgrade;
 my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 GetOptions("help" => \$opt_help,
 	   "version" => \$opt_version,
@@ -178,6 +183,7 @@ GetOptions("help" => \$opt_help,
 	   "t=s" => \$opt_t,
 	   "debs-dir=s" => \$opt_debsdir,
 	   "multi" => \$opt_multi,
+	   "upgrade" => \$opt_upgrade,
 	   "ignore-dirname" => \$opt_ignore,
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
@@ -378,6 +384,42 @@ while (<CHANGES>) {
     }
 }
 close CHANGES;
+
+if ($progname eq 'debi' and $opt_upgrade and @debs) {
+    my %installed;
+    my @cmd = ('dpkg-query', '-W', '-f', '${Package} ${Status}\n');
+    for my $deb (@debs) {
+	(my $pkg = $deb) =~ s/_.*//;
+	push @cmd, $pkg;
+    }
+    local (*NULL, *QUERY);
+    open NULL, '>', File::Spec->devnull;
+    my $pid = open3(gensym, \*QUERY, '>&NULL', @cmd)
+	or die "$progname: dpkg-query failed\n";
+    while (<QUERY>) {
+	my ($pkg, $want, $eflag, $status) = split;
+	if ($status and $status ne 'not-installed' and
+	    $status ne 'config-files') {
+	    $installed{$pkg} = 1;
+	}
+    }
+    close QUERY;
+    waitpid $pid, 0;
+    my @new_debs;
+    for my $deb (@debs) {
+	(my $pkg = $deb) =~ s/_.*//;
+	if ($installed{$pkg}) {
+	    push @new_debs, $deb;
+	} elsif (@ARGV) {
+	    if (exists $pkgs{$pkg}) {
+		$pkgs{$pkg}--;
+	    } elsif (exists $pkgs{$deb}) {
+		$pkgs{$deb}--;
+	    }
+	}
+    }
+    @debs = @new_debs;
+}
 
 if (! @debs) {
     die "$progname: no appropriate .debs found in the changes file $changes!\n";

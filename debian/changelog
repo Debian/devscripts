@@ -1,7 +1,10 @@
 devscripts (2.10.42) UNRELEASED; urgency=low
 
   [ Adam D. Barratt ]
-  * NOT RELEASED YET
+  * debi: Add an "upgrade" option indicating that only those packages
+    already installed on the system should be installed, rather than
+    all packages listed in the .changes file. Thanks, Colin Watson.
+    (Closes: #506663)
 
   [ Christoph Berg ]
   * rmadison: Add debug.debian.net.
