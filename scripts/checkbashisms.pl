@@ -334,7 +334,7 @@ foreach my $filename (@ARGV) {
 	    # heredoc test itself will weed out any false positives
 	    $cat_line =~ s/(^|[^<\\\"-](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
 
-	    my $re='(?<![\$\\\])\$\"[^\"]+\"';
+	    $re='(?<![\$\\\])\$\"[^\"]+\"';
 	    if ($line =~ m/(.*)($re)/){
 		my $count = () = $1 =~ /(^|[^\\])\"/g;
 		if( $count % 2 == 0 ) {

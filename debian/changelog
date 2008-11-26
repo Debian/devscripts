@@ -1,6 +1,8 @@
 devscripts (2.10.42) UNRELEASED; urgency=low
 
   [ Adam D. Barratt ]
+  * checkbashisms: Fix a variable redeclaration warning. Thanks,
+    Neutron Soutmun. (Closes: #506975)
   * debi: Add an "upgrade" option indicating that only those packages
     already installed on the system should be installed, rather than
     all packages listed in the .changes file. Thanks, Colin Watson.
