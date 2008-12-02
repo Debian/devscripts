@@ -42,7 +42,6 @@
 
 PROGNAME=`basename $0`
 MODIFIED_CONF_MSG='Default settings modified by devscripts configuration files:'
-TEMP_DIR="uupdate-temp.$$"
 
 usage () {
     echo \
@@ -366,8 +365,8 @@ if [ "$PATCH" ]; then
     rm -rf $PACKAGE-$UVERSION.orig
 
     # Unpacking .orig.tar.gz is not quite trivial any longer ;-)
-    mkdir $TEMP_DIR || {
-	echo "$PROGNAME: can't create temporary directory `pwd`/$TEMP_DIR;" >&2
+    TEMP_DIR=$(mktemp -dt uupdate.XXXXXXXX) || {
+	echo "$PROGNAME: can't create temporary directory;" >&2
 	echo "aborting..." >&2
 	exit 1
     }
@@ -574,8 +573,8 @@ else
     fi
 
     cd ..
-    mkdir $TEMP_DIR || {
-	echo "$PROGNAME: can't create temporary directory `pwd`/$TEMP_DIR;" >&2
+    TEMP_DIR=$(mktemp -dt uupdate.XXXXXXXX) || {
+	echo "$PROGNAME: can't create temporary directory;" >&2
 	echo "aborting..." >&2
 	exit 1
     }

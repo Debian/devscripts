@@ -7,6 +7,7 @@ devscripts (2.10.42) UNRELEASED; urgency=low
     already installed on the system should be installed, rather than
     all packages listed in the .changes file. Thanks, Colin Watson.
     (Closes: #506663)
+  * uupdate: Use mktemp rather than hard-coding a temporary directory name.
 
   [ Christoph Berg ]
   * rmadison: Add debug.debian.net.
