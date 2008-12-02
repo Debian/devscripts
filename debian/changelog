@@ -9,6 +9,9 @@ devscripts (2.10.42) UNRELEASED; urgency=low
     already installed on the system should be installed, rather than
     all packages listed in the .changes file. Thanks, Colin Watson.
     (Closes: #506663)
+  * uscan: Remove the downloads.sourceforge.net example from the manpage.
+    It no longer works due to changes in the website structure. Thanks,
+    Alexander Block.
   * uupdate: Use mktemp rather than a temporary directory name based on
     the process ID.
 
