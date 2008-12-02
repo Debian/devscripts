@@ -97,8 +97,11 @@ fi
 # environment: 
 # rootdir workdir (if all original sources are kept in one dir)
 
-TEMPDIR=/tmp/$$
-mkdir $TEMPDIR || exit 1
+TEMPDIR=$(mktemp -dt cvs-debrelease.XXXXXXXX) || {
+    echo "$PROGNAME: Unable to create temporary directory" >&2
+    echo "Aborting...." >&2
+    exit 1
+}
 TEMPFILE=$TEMPDIR/cl-tmp
 trap "rm -f $TEMPFILE; rmdir $TEMPDIR" 0 1 2 3 7 10 13 15
 
