@@ -9,6 +9,11 @@ devscripts (2.10.42) UNRELEASED; urgency=low
     already installed on the system should be installed, rather than
     all packages listed in the .changes file. Thanks, Colin Watson.
     (Closes: #506663)
+  * debsign:
+    + Use mktemp rather than a temporary directory name based on the
+      process ID. (Closes: #507482)
+    + Use temporary files rather than redirecting gpg's stdin and stdout,
+      enabling the use of pinentry-gtk2. (Closes: #507479)
   * uscan: Remove the downloads.sourceforge.net example from the manpage.
     It no longer works due to changes in the website structure. Thanks,
     Alexander Block.

@@ -41,7 +41,33 @@ PRECIOUS_FILES=0
 PROGNAME=`basename $0`
 MODIFIED_CONF_MSG='Default settings modified by devscripts configuration files:'
 
+# Temporary directories
+signingdir=""
+remotefilesdir=""
+
+trap "cleanup_tmpdir" 0 1 2 3 9 11 13 15
+
 # --- Functions
+
+mksigningdir () {
+    if [ -z "$signingdir" ]; then
+	signingdir=$(mktemp -dt debsign.XXXXXXXX) || {
+	    echo "$PROGNAME: Can't create temporary directory" >&2
+	    echo "Aborting..." >&2
+	    exit 1
+	}
+    fi
+}
+
+mkremotefilesdir () {
+    if [ -z "$remotefilesdir" ]; then
+	remotefilesdir=$(mktemp -dt debsign.XXXXXXXX) || {
+	    echo "$PROGNAME: Can't create temporary directory" >&2
+	    echo "Aborting..." >&2
+	    exit 1
+	}
+    fi
+}
 
 usage () {
     echo \
@@ -111,10 +137,19 @@ movefile() {
 }
 
 cleanup_tmpdir () {
-    if [ "$PRECIOUS_FILES" -gt 0 ]; then
-        echo "$PROGNAME: aborting with $PRECIOUS_FILES signed files in `pwd`" >&2
-    else
-        cd ..; rm -rf debsign.$$
+    if [ -n "$remotefilesdir" ] && [ -d "$remotefilesdir" ]; then
+	if [ "$PRECIOUS_FILES" -gt 0 ]; then
+	    echo "$PROGNAME: aborting with $PRECIOUS_FILES signed files in $remotefilesdir" >&2
+	    # Only produce the warning once...
+	    PRECIOUS_FILES=0
+	else
+	    cd ..
+	    rm -rf "$remotefilesdir"
+	fi
+    fi
+
+    if [ -n "$signingdir" ] && [ -d "$signingdir" ]; then
+	rm -rf "$signingdir"
     fi
 }
 
@@ -137,27 +172,32 @@ signfile () {
     local savestty=$(stty -g 2>/dev/null) || true
     if [ $signinterface = gpg ]
     then
-	ASCII_SIGNED_FILE="$(temp_filename "$1" "asc")"
+	mksigningdir
+	UNSIGNED_FILE="$signingdir/$(basename "$1")"
+	ASCII_SIGNED_FILE="${UNSIGNED_FILE}.asc"
 
 	gpgversion=`gpg --version | head -n 1 | cut -d' ' -f3`
 	gpgmajorversion=`echo $gpgversion | cut -d. -f1`
 	gpgminorversion=`echo $gpgversion | cut -d. -f2`
+
 	if [ $gpgmajorversion -gt 1 -o $gpgminorversion -ge 4 ]
 	then
-		(cat "$1" ; echo "") | \
-		    $signcommand --local-user "$2" --clearsign \
+		(cat "$1" ; echo "") > "$UNSIGNED_FILE"
+		$signcommand --local-user "$2" --clearsign \
 		    --list-options no-show-policy-urls \
-		    --armor --textmode --output - - > "$ASCII_SIGNED_FILE" || \
+		    --armor --textmode --output "$ASCII_SIGNED_FILE"\
+		    "$UNSIGNED_FILE" || \
 		{ SAVESTAT=$?
 		  echo "$PROGNAME: gpg error occurred!  Aborting...." >&2
 		  stty $savestty 2>/dev/null || true
 		  exit $SAVESTAT
 		}
 	else
-		(cat "$1" ; echo "") | \
-		    $signcommand --local-user "$2" --clearsign \
-		        --no-show-policy-url \
-			--armor --textmode --output - - > "$ASCII_SIGNED_FILE" || \
+		(cat "$1" ; echo "") > "$UNSIGNED_FILE"
+		$signcommand --local-user "$2" --clearsign \
+		    --no-show-policy-url \
+		    --armor --textmode --output "$ASCII_SIGNED_FILE" \
+		    "$UNSIGNED_FILE" || \
 		{ SAVESTAT=$?
 		  echo "$PROGNAME: gpg error occurred!  Aborting...." >&2
 		  stty $savestty 2>/dev/null || true
@@ -372,13 +412,8 @@ dosigning() {
     # Do we have to download the changes file?
     if [ -n "$remotehost" ]
     then
-	cd ${TMPDIR:-/tmp}
-	if [ ! -d "debsign.$$" ]
-	then
-	    mkdir debsign.$$ || { echo "$PROGNAME: Can't mkdir!" >&2; exit 1; }
-	fi
-	trap "cleanup_tmpdir" 0 1 2 3 7 10 13 15
-	cd debsign.$$
+	mkremotefilesdir
+	cd $remotefilesdir
 
 	remotechanges=$changes
 	remotedsc=$dsc
