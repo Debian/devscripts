@@ -27,6 +27,11 @@ devscripts (2.10.42) UNRELEASED; urgency=low
   * dget: Fix misspelt wget option (should be --no-cache instead of --no-chache)
     (Closes: #507672)
 
+  [ James Vega ]
+  * debcheckout: Use B<> and I<> to denote the different options sections
+    instead of =head2/=head3 since the latter cause pod2usage not to display
+    any options when running debcheckout -h.
+
  -- Patrick Schoenfeld <schoenfeld@debian.org>  Wed, 03 Dec 2008 15:54:07 +0100
 
 devscripts (2.10.41) unstable; urgency=low

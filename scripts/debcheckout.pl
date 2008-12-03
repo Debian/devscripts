@@ -66,7 +66,7 @@ darcs, git, hg, svn.
 
 =head1 OPTIONS
 
-=head2 GENERAL OPTIONS
+B<GENERAL OPTIONS>
 
 =over
 
@@ -121,9 +121,9 @@ files.
 
 =back
 
-=head2 VCS-SPECIFIC OPTIONS
+B<VCS-SPECIFIC OPTIONS>
 
-=head3 GIT-SPECIFIC OPTIONS
+I<GIT-SPECIFIC OPTIONS>
 
 =over
 
