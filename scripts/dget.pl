@@ -116,7 +116,7 @@ sub wget {
     push @cmd, "-f", "-L" if $wget eq "curl";
     push @cmd, ($wget eq "wget" ? "-nv" : ("-s", "-S")) if $opt->{'quiet'};
     push @cmd, ($wget eq "wget" ? "--no-check-certificate" : "--insecure") if $opt->{'insecure'};
-    push @cmd, ($wget eq "wget" ? "--no-chache" : ("--header", "Pragma: no-cache")) if $opt->{'no-cache'};
+    push @cmd, ($wget eq "wget" ? "--no-cache" : ("--header", "Pragma: no-cache")) if $opt->{'no-cache'};
     push @cmd, ($wget eq "wget" ? "-O" : "-o");
     system @cmd, $file, $url;
     return $? >> 8;

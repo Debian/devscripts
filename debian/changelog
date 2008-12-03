@@ -23,7 +23,11 @@ devscripts (2.10.42) UNRELEASED; urgency=low
   [ Christoph Berg ]
   * rmadison: Add debug.debian.net.
 
- -- Christoph Berg <myon@debian.org>  Thu, 20 Nov 2008 13:23:19 +0100
+  [ Patrick Schoenfeld ]
+  * dget: Fix misspelt wget option (should be --no-cache instead of --no-chache)
+    (Closes: #507672)
+
+ -- Patrick Schoenfeld <schoenfeld@debian.org>  Wed, 03 Dec 2008 15:54:07 +0100
 
 devscripts (2.10.41) unstable; urgency=low
 
