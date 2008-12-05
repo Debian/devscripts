@@ -14,9 +14,14 @@ devscripts (2.10.42) UNRELEASED; urgency=low
       process ID. (Closes: #507482)
     + Use temporary files rather than redirecting gpg's stdin and stdout,
       enabling the use of pinentry-gtk2. (Closes: #507479)
-  * uscan: Remove the downloads.sourceforge.net example from the manpage.
-    It no longer works due to changes in the website structure. Thanks,
-    Alexander Block.
+  * uscan:
+    + Remove the downloads.sourceforge.net example from the manpage.
+      It no longer works due to changes in the website structure. Thanks,
+      Alexander Block.
+    + Be more intelligent with redirects and relative filenames. This should
+      help in situations where the watchfile contains http://example.com/foo
+      which is a redirect to http://example.com/foo/, with the latter
+      containing relative filenames.
   * uupdate: Use mktemp rather than a temporary directory name based on
     the process ID.
 

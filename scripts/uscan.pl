@@ -680,7 +680,8 @@ sub process_watchline ($$$$$$)
 
     my $origline = $line;
     my ($base, $site, $dir, $filepattern, $pattern, $lastversion, $action);
-    my (@patterns, @sites, @redirections);
+    my $basedir;
+    my (@patterns, @sites, @redirections, @basedirs);
     my %options = ();
 
     my ($request, $response);
@@ -811,7 +812,7 @@ sub process_watchline ($$$$$$)
 	# We're going to make the pattern
 	# (?:(?:http://site.name)?/dir/path/)?base_pattern
 	# It's fine even for ftp sites
-	my $basedir = $base;
+	$basedir = $base;
 	$basedir =~ s%^\w+://[^/]+/%/%;
 	$pattern = "(?:(?:$site)?" . quotemeta($basedir) . ")?$filepattern";
     }
@@ -824,6 +825,7 @@ sub process_watchline ($$$$$$)
 
     push @patterns, $pattern;
     push @sites, $site;
+    push @basedirs, $basedir;
 
     # What is the most recent file, based on the filenames?
     # We first have to find the candidates, then we sort them using
@@ -854,6 +856,7 @@ sub process_watchline ($$$$$$)
 
 		push @patterns, "(?:(?:$base_site)?" . quotemeta($base_dir) . ")?$filepattern";
 		push @sites, $base_site;
+		push @basedirs, $base_dir;
 
 		# remove the filename, if any
 		my $base_dir_orig = $base_dir;
@@ -861,6 +864,7 @@ sub process_watchline ($$$$$$)
 		if ($base_dir ne $base_dir_orig) {
 		    push @patterns, "(?:(?:$base_site)?" . quotemeta($base_dir) . ")?$filepattern";
 		    push @sites, $base_site;
+		    push @basedirs, $base_dir;
 		}
 	    }
 	}
@@ -1097,7 +1101,28 @@ EOF
 	}
 	# relative filename, we hope
 	else {
-	    $upstream_url = "$urlbase$newfile";
+	    # Were there any redirections? If so try using those first
+	    if ($#patterns > 0) {
+		# replace $site here with the one we were redirected to
+		foreach my $index (0 .. $#patterns) {
+		    # skip unless the basedir looks like a directory
+		    next unless $basedirs[$index] =~ m%/$%;
+		    my $nf = "$basedirs[$index]$newfile";
+		    if ("$sites[$index]$nf" =~ m&^$patterns[$index]$&) {
+			$upstream_url = "$sites[$index]$nf";
+			last;
+		    }
+		}
+		if (!defined($upstream_url)) {
+		    if ($debug) {
+			warn "$progname warning: Unable to determine upstream url from redirections,\n" .
+			    "defaulting to using site specified in watchfile\n";
+		    }
+		    $upstream_url = "$urlbase$newfile";
+		}
+	    } else {
+		$upstream_url = "$urlbase$newfile";
+	    }
 	}
 
 	# mangle if necessary
