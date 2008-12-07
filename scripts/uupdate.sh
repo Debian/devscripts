@@ -365,7 +365,7 @@ if [ "$PATCH" ]; then
     rm -rf $PACKAGE-$UVERSION.orig
 
     # Unpacking .orig.tar.gz is not quite trivial any longer ;-)
-    TEMP_DIR=$(mktemp -dt uupdate.XXXXXXXX) || {
+    TEMP_DIR=$(mktemp -d uupdate.XXXXXXXX) || {
 	echo "$PROGNAME: can't create temporary directory;" >&2
 	echo "aborting..." >&2
 	exit 1
@@ -573,7 +573,7 @@ else
     fi
 
     cd ..
-    TEMP_DIR=$(mktemp -dt uupdate.XXXXXXXX) || {
+    TEMP_DIR=$(mktemp -d uupdate.XXXXXXXX) || {
 	echo "$PROGNAME: can't create temporary directory;" >&2
 	echo "aborting..." >&2
 	exit 1
