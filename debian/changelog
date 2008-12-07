@@ -1,4 +1,4 @@
-devscripts (2.10.42) UNRELEASED; urgency=low
+devscripts (2.10.42) unstable; urgency=low
 
   [ Adam D. Barratt ]
   * checkbashisms: Fix a variable redeclaration warning. Thanks,
@@ -37,7 +37,7 @@ devscripts (2.10.42) UNRELEASED; urgency=low
     instead of =head2/=head3 since the latter cause pod2usage not to display
     any options when running debcheckout -h.
 
- -- Patrick Schoenfeld <schoenfeld@debian.org>  Wed, 03 Dec 2008 15:54:07 +0100
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sun, 07 Dec 2008 17:04:52 +0000
 
 devscripts (2.10.41) unstable; urgency=low
 
