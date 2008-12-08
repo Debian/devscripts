@@ -1,6 +1,9 @@
 devscripts (2.10.43) UNRELEASED; urgency=low
 
-  * NOT RELEASED YET
+  The "how did I miss that one?" release
+
+  * debsign: Fix a use of mktemp to actually generate unique filenames.
+    (Closes: #508111)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sun, 07 Dec 2008 17:10:59 +0000
 

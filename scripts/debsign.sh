@@ -116,7 +116,7 @@ temp_filename() {
     local filename
 
     if ! [ -w "$(dirname "$1")" ]; then
-	filename=`mktemp -t "$(basename "$1").XXXXXXXXXX.$2"` || {
+	filename=`mktemp -t "$(basename "$1").$2.XXXXXXXXXX"` || {
 	    echo "$PROGNAME: Unable to create temporary file; aborting" >&2
 	    exit 1
 	}
