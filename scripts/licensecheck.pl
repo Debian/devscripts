@@ -151,7 +151,7 @@ my $default_ignore_regex = '
 $default_ignore_regex =~ s/^#.*$//mg;
 $default_ignore_regex =~ s/\n//sg;
 
-my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)|f(77|90)?|p(l|m)|sh|php|py|rb|java|el|sc(i|e))$';
+my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)|f(77|90)?|p(l|m)|sh|php|py|rb|java|el|sc(i|e)|cs)$';
 
 my $modified_conf_msg;
 
