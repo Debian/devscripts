@@ -2,6 +2,8 @@ devscripts (2.10.44) UNRELEASED; urgency=low
 
   * licensecheck: Add .cs (C# source files) to the default list of files to
     check. (Closes: #508163)
+  * conf.default.in: Use the new reportbug.debian.org as an example SMTP host
+    for bts rather than bugs.debian.org.
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 08 Dec 2008 06:49:32 +0000
 
