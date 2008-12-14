@@ -1,5 +1,10 @@
 devscripts (2.10.44) UNRELEASED; urgency=low
 
+  * debdiff:
+    + Fix a couple of formatting issues in the manpage.
+    + Mention --{no-,}diffstat in the help message.
+    + Don't treat "DEBDIFF_SHOW_DIFFSTAT=no" as a modification from default
+      settings.
   * licensecheck: Add .cs (C# source files) to the default list of files to
     check. (Closes: #508163)
   * conf.default.in: Use the new reportbug.debian.org as an example SMTP host

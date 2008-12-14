@@ -77,6 +77,8 @@ Valid options are:
    --quiet, -q            Be quiet if no differences were found
    --exclude PATTERN      Exclude files that match PATTERN
    --ignore-space, -w     Ignore whitespace in diffs
+   --diffstat             Include the result of diffstat before the diff
+   --no-diffstat          Do not do so (default)
    --auto-ver-sort        When comparing source packages, ensure the
                           comparison is performed in version order (default)
    --no-auto-ver-sort     Do not do so
@@ -124,7 +126,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBDIFF_CONTROLFILES' => 'control',
 		       'DEBDIFF_SHOW_MOVED' => 'no',
 		       'DEBDIFF_WDIFF_OPT' => '',
-		       'DEBDIFF_SHOW_DIFFSTAT' => '',
+		       'DEBDIFF_SHOW_DIFFSTAT' => 'no',
 		       'DEBDIFF_WDIFF_SOURCE_CONTROL' => 'no',
 		       );
     my %config_default = %config_vars;
