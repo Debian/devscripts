@@ -1,5 +1,9 @@
 devscripts (2.10.44) UNRELEASED; urgency=low
 
+  * bts: Allow an alternative debbugs server to be specified.
+    (Closes: #508676)
+  * Debbugs.pm: Allow the address of the debbugs server to be specified
+    rather than hard-coding bugs.debian.org.
   * debdiff:
     + Fix a couple of formatting issues in the manpage.
     + Mention --{no-,}diffstat in the help message.
@@ -7,8 +11,10 @@ devscripts (2.10.44) UNRELEASED; urgency=low
       settings.
   * licensecheck: Add .cs (C# source files) to the default list of files to
     check. (Closes: #508163)
-  * conf.default.in: Use the new reportbug.debian.org as an example SMTP host
-    for bts rather than bugs.debian.org.
+  * conf.default.in:
+    + Use the new reportbug.debian.org as an example SMTP host for bts
+      rather than bugs.debian.org.
+    + Add BTS_SERVER.
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 08 Dec 2008 06:49:32 +0000
 

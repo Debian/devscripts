@@ -134,14 +134,6 @@ my @no_cc_commands=qw(subscribe unsubscribe reportspam
 			spamreport usertags);
 
 my $browser;  # Will set if necessary
-my $btsserver='bugs.debian.org';
-my $btsurl='http://bugs.debian.org/';
-my $btscgiurl='http://bugs.debian.org/cgi-bin/';
-my $btscgipkgurl='http://bugs.debian.org/cgi-bin/pkgreport.cgi';
-my $btscgibugurl='http://bugs.debian.org/cgi-bin/bugreport.cgi';
-my $btscgispamurl='http://bugs.debian.org/cgi-bin/bugspam.cgi';
-my $btsemail='control@bugs.debian.org';
-my $packagesserver='packages.debian.org';
 
 my $cachedir=$ENV{'HOME'}."/.devscripts_cache/bts/";
 my $timestampdb=$cachedir."bts_timestamps.db";
@@ -322,6 +314,10 @@ exists.
 Note that some SMTP servers may reject the use of a HELO which either 
 does not resolve or does not appear to belong to the host using it.
 
+=item --bts-server
+
+Use a debbugs server other than bugs.debian.org.
+
 =item -f, --force-refresh
 
 Download a bug report again, even if it does not appear to have
@@ -410,6 +406,7 @@ my $interactive=0;
 my $forceinteractive=0;
 my $ccemail="";
 my $toolname="";
+my $btsserver='bugs.debian.org';
 
 # Next, read read configuration files and then command line
 # The next stuff is boilerplate
@@ -435,6 +432,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'BTS_SUPPRESS_ACKS' => 'no',
 		       'BTS_INTERACTIVE' => 'no',
 		       'BTS_DEFAULT_CC' => '',
+		       'BTS_SERVER' => 'bugs.debian.org',
 		       );
     my %config_default = %config_vars;
     
@@ -508,6 +506,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $interactive = $config_vars{'BTS_INTERACTIVE'} eq 'no' ? 0 : 1;
     $forceinteractive = $config_vars{'BTS_INTERACTIVE'} eq 'force' ? 1 : 0;
     $ccemail = $config_vars{'BTS_DEFAULT_CC'};
+    $btsserver = $config_vars{'BTS_SERVER'};
 }
 
 if (exists $ENV{'BUGSOFFLINE'}) {
@@ -554,6 +553,7 @@ GetOptions("help|h" => \$opt_help,
 	   "force-interactive" => sub { $interactive = 1; $forceinteractive = 1; },
 	   "use-default-cc!" => \$use_default_cc,
 	   "toolname=s" => \$toolname,
+	   "bts-server=s" => \$btsserver,
 	   )
     or die "Usage: bts [options]\nRun $progname --help for more details\n";
 
@@ -631,6 +631,27 @@ if ($opt_cachemode) {
 if ($toolname) {
     $toolname =" (using $toolname)";
 }
+
+my $btsurl;
+if ($btsserver =~ m%^https?://(.*)/?$%) {
+    $btsurl = $btsserver . '/';
+    $btsserver=$1;
+} else {
+    $btsurl = "http://$btsserver/";
+}
+$btsurl =~ s%//$%/%;
+my $btscgiurl=$btsurl . 'cgi-bin/';
+my $btscgipkgurl=$btscgiurl . 'pkgreport.cgi';
+my $btscgibugurl=$btscgiurl . 'bugreport.cgi';
+my $btscgispamurl=$btscgiurl . 'bugspam.cgi';
+my $btsemail='control@' . $btsserver;
+my $packagesserver='';
+if ($btsserver =~ /bugs(-[\w-]+)?\.debian\.org/i) {
+    $packagesserver = 'packages.debian.org';
+}
+no warnings 'once';
+$Devscripts::Debbugs::btsurl=$btsurl;
+use warnings 'once';
 
 if (@ARGV == 0) {
     bts_help();
@@ -1098,9 +1119,9 @@ sub bts_close {
     warn <<"EOT";
 bts: Closing $bug as you requested.
 Please note that the "bts close" command is deprecated!
-It is usually better to email nnnnnn-done\@bugs.debian.org with
+It is usually better to email nnnnnn-done\@$btsserver with
 an informative mail.
-Please remember to email $bug-submitter\@bugs.debian.org with
+Please remember to email $bug-submitter\@$btsserver with
 an explanation of why you have closed this bug.  Thank you!
 EOT
 }
@@ -2038,6 +2059,8 @@ Valid options are:
    --smtp-password=pass   } server which requires authentication
    --smtp-helo=helo       HELO to use when connecting to the SMTP server;
                             (defaults to the content of /etc/mailname)
+   --bts-server           The name of the debbugs server to use
+                            (default bugs.debian.org)
    --no-include-resolved  Do not cache bugs marked as resolved
    --include-resolved     Cache bugs marked as resolved (default)
    --no-ack               Suppress BTS acknowledgment mails
@@ -2851,8 +2874,8 @@ sub mangle_cache_file {
     if ($thing =~ /^release-critical/) {
 	@data = split /(?=<[Aa])/, $data;
 	foreach (@data) {
-	    s%<a href="(http://bugs.debian.org/cgi-bin/bugreport\.cgi.*bug=(\d+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$1">online</a>)%i;
-	    s%<a href="(http://bugs.debian.org/cgi-bin/pkgreport\.cgi.*pkg=([^\"&;]+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$1">online</a>)%i;
+	    s%<a href="(http://$btsserver/cgi-bin/bugreport\.cgi.*bug=(\d+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$1">online</a>)%i;
+	    s%<a href="(http://$btsserver/cgi-bin/pkgreport\.cgi.*pkg=([^\"&;]+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$1">online</a>)%i;
 	    # References to other bug lists on bugs.d.o/release-critical
 	    if (m%<a href="((?:debian|other)[-a-z/]+\.html)"%i) {
 		my $ref = 'release-critical/'.$1;
@@ -2860,7 +2883,7 @@ sub mangle_cache_file {
 		s%<a href="((?:debian|other)[-a-z/]+\.html)">(.+?)</a>%<a href="$ref">$2</a> (<a href="${btsurl}release-critical/$1">online</a>)%i;
 	    }
 	    # Maintainer email address - YUCK!!
-	    s%<a href="(http://bugs.debian.org/([^\"?]*\@[^\"?]*))">(.+?)</a>&gt;%<a href="$2.html">$3</a>&gt; (<a href="$1">online</a>)%i;
+	    s%<a href="(http://$btsserver/([^\"?]*\@[^\"?]*))">(.+?)</a>&gt;%<a href="$2.html">$3</a>&gt; (<a href="$1">online</a>)%i;
 	    # Graph - we don't download
 	    s%<img src="graph.png" alt="Graph of RC bugs">%<img src="${btsurl}release-critical/graph.png" alt="Graph of RC bugs (online)">%
 	}
@@ -3675,6 +3698,11 @@ The default is I<no>.
 
 Specify a list of e-mail addresses to which a carbon copy of the generated
 e-mail to the control bot should automatically be sent.
+
+=item BTS_SERVER
+
+Specify the name of a debbugs server which should be used instead of
+bugs.debian.org.
 
 =back
 

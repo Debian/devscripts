@@ -90,10 +90,18 @@ use strict;
 use warnings;
 
 my $soapurl='Debbugs/SOAP/1';
-my $soapproxyurl='http://bugs.debian.org/cgi-bin/soap.cgi';
+our $btsurl='http://bugs.debian.org/';
 my @errors;
 
 sub init_soap {
+    my $soapproxyurl;
+    if ($btsurl =~ m%^https?://(.*)/?$%) {
+	$soapproxyurl = $btsurl . '/';
+    } else {
+	$soapproxyurl = 'http://' . $btsurl . '/';
+    }
+    $soapproxyurl =~ s%//$%/%;
+    $soapproxyurl .= 'cgi-bin/soap.cgi';
     my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
 
     $soap->transport->env_proxy();

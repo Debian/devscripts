@@ -605,6 +605,17 @@ EOF
 # USCAN_REPACK=no
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.44
+	then
+	    cat >> /etc/devscripts.conf << EOF
+##### bts option added in 2.10.44
+#
+# Which debbugs server should be used?
+# BTS_SERVER=bugs.debian.org
+
+EOF
+	fi
     fi
 fi
 
