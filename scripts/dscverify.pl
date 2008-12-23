@@ -54,7 +54,7 @@ Usage: $progname [options] dsc-or-changes-file ...
                        Add <keyring> to the list of keyrings used
            --no-default-keyrings
                        Do not check against the default keyrings
-           --nosigcheck, --no-sig-check
+           --nosigcheck, --no-sig-check, -u
                        Do not verify the GPG signature
            --no-conf, --noconf
                        Do not read the devscripts config file
@@ -342,7 +342,7 @@ sub main {
     while (@ARGV > 0) {
 	if ($ARGV[0] eq '--help') { usage; exit 0; }
 	if ($ARGV[0] eq '--version') { print $version; exit 0; }
-	if ($ARGV[0] =~ /^--no(sig|-sig-)check$/) { $verify_sigs = 0; shift @ARGV; }
+	if ($ARGV[0] =~ /^(--no(sig|-sig-)check|-u)$/) { $verify_sigs = 0; shift @ARGV; }
 	if ($ARGV[0] =~ /^--no-?conf$/) {
 	    xdie "$ARGV[0] is only acceptable as the first command-line option!\n";
 	}

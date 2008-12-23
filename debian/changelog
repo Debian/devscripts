@@ -1,5 +1,6 @@
 devscripts (2.10.44) UNRELEASED; urgency=low
 
+  [ Adam D. Barratt ]
   * bts: Allow an alternative debbugs server to be specified.
     (Closes: #508676)
   * Debbugs.pm: Allow the address of the debbugs server to be specified
@@ -16,7 +17,10 @@ devscripts (2.10.44) UNRELEASED; urgency=low
       rather than bugs.debian.org.
     + Add BTS_SERVER.
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 08 Dec 2008 06:49:32 +0000
+  [ Christoph Berg ]
+  * dscverify: Accept -u as an alias for --nosigcheck, inspired by dput -u.
+
+ -- Christoph Berg <myon@debian.org>  Tue, 23 Dec 2008 17:37:16 +0100
 
 devscripts (2.10.43) unstable; urgency=low
 
