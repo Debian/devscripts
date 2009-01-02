@@ -7,8 +7,11 @@ devscripts (2.10.44) UNRELEASED; urgency=low
       don't always return "unknown".
     + Don't issue repeated "user foo" commands for the same user.
     + Remove excess whitespace from usertag commands.
-  * checkbashisms: Rework the comment detection code to avoid matching "$#"
-    and to avoid a number of similar issues. (Closes: #510343)
+  * checkbashisms:
+    + Rework the comment detection code to avoid matching "$#" and to avoid
+      a number of similar issues. (Closes: #510343)
+    + Flag the use of "source" with an unquoted argument containing no path
+      information. (Closes: #510345)
   * Debbugs.pm: Allow the address of the debbugs server to be specified
     rather than hard-coding bugs.debian.org.
   * debchange:
