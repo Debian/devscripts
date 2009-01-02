@@ -164,7 +164,7 @@ foreach my $filename (@ARGV) {
 	# back in for processing.
 	if (m/(?:^|[^[\\])[\s\&;\(\)](\#.*$)/) {
 	    $_ = $orig_line;
-	    $_ =~ s/\Q$1\E//;  # eat comments
+	    s/\Q$1\E//;  # eat comments
 	} else {
 	    $_ = $orig_line;
 	}
