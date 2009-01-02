@@ -154,13 +154,15 @@ foreach my $filename (@ARGV) {
 
 	next if m,^\s*\#,;  # skip comment lines
 
+	# Remove quoted strings so we can more easily ignore comments
+	# inside them
 	s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
 	s/(^|[^\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
 
 	# If the remaining string contains what looks like a comment,
 	# eat it. In either case, swap the unmodified script line
 	# back in for processing.
-	if (m/(?<!\\)(\#.*$)/) {
+	if (m/(?:^|[^[\\])[\s\&;\(\)](\#.*$)/) {
 	    $_ = $orig_line;
 	    $_ =~ s/\Q$1\E//;  # eat comments
 	} else {
