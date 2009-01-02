@@ -986,7 +986,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
                 $debian_revision++;
                 $start = "$upstream_version-$debian_revision";
                 $end = "";
-	    } elsif ($opt_bpo and not $start =~ /~bpo\.$/) {
+	    } elsif ($opt_bpo and not $start =~ /~bpo[0-9]+\+$/) {
 		# If it's not already a backport make it so
 		# otherwise we can be safe if we behave like dch -i
 		$end .= "~bpo40+1";
