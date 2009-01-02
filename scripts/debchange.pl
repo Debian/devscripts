@@ -538,6 +538,7 @@ if (! $opt_create || ($opt_create && $opt_news)) {
 	    chomp;
 	    if (m%^Version:\s+(\S+)$%) {
 		$VERSION = $1;
+		$VERSION =~ s/~$//;
 		last;
 	    }
 	}
@@ -961,7 +962,9 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
     # including epochs.
 
     if (! $NEW_VERSION) {
-	if ($VERSION =~ /(.*?)([a-yA-Y][a-zA-Z]*|\d+)$/i) {
+	if ($VERSION =~ /(.*?)([a-yA-Y][a-zA-Z]*|\d+)(~)?$/i) {
+	    my $extra=$3 || '';
+	    my $useextra = 0;
 	    my $end=$2;
 	    my $start=$1;
 	    # If it's not already an NMU make it so
@@ -998,8 +1001,14 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 		# Don't bump the version of a NEWS file in this case as we're
 		# using the version from the changelog
 		$end++;
+		if (! ($opt_qa or $opt_bpo or $opt_l)) {
+		    $useextra = 1;
+		}
 	    }
 	    $NEW_VERSION = "$start$end";
+	    if ($useextra) {
+		$NEW_VERSION .= $extra;
+	    }
 	    ($NEW_SVERSION=$NEW_VERSION) =~ s/^\d+://;
 	    ($NEW_UVERSION=$NEW_SVERSION) =~ s/-[^-]*$//;
 	} else {

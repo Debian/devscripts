@@ -13,6 +13,8 @@ devscripts (2.10.44) UNRELEASED; urgency=low
     rather than hard-coding bugs.debian.org.
   * debchange:
     + Correctly increment bpo version numbers.
+    + Attempt to do the right thing (or at least something sensible) if the
+      package version ends in a tilde. (Closes: #510313)
   * debdiff:
     + Fix a couple of formatting issues in the manpage.
     + Mention --{no-,}diffstat in the help message.
