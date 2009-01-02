@@ -5,6 +5,8 @@ devscripts (2.10.44) UNRELEASED; urgency=low
     + Allow an alternative debbugs server to be specified. (Closes: #508676)
     + Modify "bts status" to request source package information, so that we
       don't always return "unknown".
+    + Don't issue repeated "user foo" commands for the same user.
+    + Remove excess whitespace from usertag commands.
   * checkbashisms: Rework the comment detection code to avoid matching "$#"
     and to avoid a number of similar issues. (Closes: #510343)
   * Debbugs.pm: Allow the address of the debbugs server to be specified

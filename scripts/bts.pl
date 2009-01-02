@@ -53,6 +53,7 @@ use Scalar::Util qw(looks_like_number);
 $SIG{'__WARN__'} = sub { warn $_[0] unless $_[0] =~ /^Parsing of undecoded UTF-8 will give garbage when decoding entities/; };
 
 my $it = undef;
+my $last_user = '';
 my $lwp_broken = undef;
 my $smtp_ssl_broken = undef;
 my $ua;
@@ -1491,7 +1492,10 @@ sub bts_user {
 	die "bts user: set user to what email address?\n";
     }
     opts_done(@_);
-    mailbts("user $email", "user $email");
+    if ($email ne $last_user) {
+	mailbts("user $email", "user $email");
+    }
+    $last_user = $email;
 }
 
 =item usertag <bug> [+|-|=] tag [tag ..]
@@ -1556,7 +1560,7 @@ sub bts_claim {
     }
     $claim=extractemail($claim);
     bts_user("bugsquash\@qa.debian.org");
-    bts_usertags("$bug" , " + $claim");
+    bts_usertags("$bug" , "+$claim");
 }
 
 =item unclaim <bug> [<claim>]
@@ -1576,7 +1580,7 @@ sub bts_unclaim {
     }
     $claim=extractemail($claim);
     bts_user("bugsquash\@qa.debian.org");
-    bts_usertags("$bug" , " - $claim");
+    bts_usertags("$bug" , "-$claim");
 }
 
 =item severity <bug> <severity>
