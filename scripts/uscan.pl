@@ -985,7 +985,7 @@ sub process_watchline ($$$$$$)
 	} else {
 	    # they all look like:
 	    # info info ... info filename [ -> linkname]
-	    while ($content =~ m/($filepattern)(\s+->\s+\S+)?$/mg) {
+	    while ($content =~ m/\s($filepattern)(\s+->\s+\S+)?$/mg) {
 		my $file = $1;
 		my $mangled_version = join(".", $file =~ m/^$filepattern$/);
 		foreach my $pat (@{$options{'uversionmangle'}}) {

@@ -22,6 +22,8 @@ devscripts (2.10.44) UNRELEASED; urgency=low
       settings.
   * licensecheck: Add .cs (C# source files) to the default list of files to
     check. (Closes: #508163)
+  * uscan: Improve parsing of non-HTMLised FTP directory listings so that
+    "foobar.tar.gz" doesn't match a request for "bar.tar.gz".
   * conf.default.in:
     + Use the new reportbug.debian.org as an example SMTP host for bts
       rather than bugs.debian.org.
