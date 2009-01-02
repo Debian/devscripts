@@ -1051,7 +1051,7 @@ sub bts_status {
 	    }
 	}
     }
-    my $bugs = Devscripts::Debbugs::status(@bugs);
+    my $bugs = Devscripts::Debbugs::status( map {[bug => $_, indicatesource => 1]} @bugs );
     return if ($bugs eq "");
  
     my $first = 1;
