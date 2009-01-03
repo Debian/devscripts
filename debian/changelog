@@ -23,8 +23,11 @@ devscripts (2.10.44) UNRELEASED; urgency=low
     + Mention --{no-,}diffstat in the help message.
     + Don't treat "DEBDIFF_SHOW_DIFFSTAT=no" as a modification from default
       settings.
-  * licensecheck: Add .cs (C# source files) to the default list of files to
-    check. (Closes: #508163)
+  * licensecheck:
+    + Add .cs (C# source files) to the default list of files to check.
+      (Closes: #508163)
+    + Detect the CDDL license. Thanks to Mike Hommey for the patch.
+      (Closes: #510574)
   * uscan: Improve parsing of non-HTMLised FTP directory listings so that
     "foobar.tar.gz" doesn't match a request for "bar.tar.gz".
   * conf.default.in:

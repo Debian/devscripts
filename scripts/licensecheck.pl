@@ -478,6 +478,10 @@ sub parselicense($) {
 	$license = "Public domain";
     }
 
+    if ($licensetext =~ /terms of the Common Development and Distribution License(, Version ([^(]+))? \(the License\)/) {
+	$license = "CDDL " . ($1 ? "(v$2) " : '') . $license;
+    }
+
     $license = "UNKNOWN" if (!length($license));
 
     return $license;
