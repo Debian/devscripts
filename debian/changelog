@@ -3,8 +3,10 @@ devscripts (2.10.45) UNRELEASED; urgency=low
   * debsnap: Added new script from Ron Lee and David Paleino,
     which grabs source packages from snapshot.debian.net.
     (Closes: #511345)
+  * Add a hint to README.newscripts that new scripts might need a modification
+    to debian/copyright
 
- -- Patrick Schoenfeld <schoenfeld@debian.org>  Fri, 09 Jan 2009 22:44:01 +0100
+ -- Patrick Schoenfeld <schoenfeld@debian.org>  Fri, 09 Jan 2009 23:01:08 +0100
 
 devscripts (2.10.44) unstable; urgency=low
 
