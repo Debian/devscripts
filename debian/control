@@ -69,6 +69,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
     the rest of the package to be present; can sign the pair remotely
     or fetch the pair from a remote machine for signing [gnupg,
     debian-keyring, ssh-client]
+  - debsnap: grab packages from http://snapshot.debian.net [wget]
   - debuild: wrapper to build a package without having to su or worry
     about how to invoke dpkg to build using fakeroot.  Also deals
     with common environment problems, umask etc. [fakeroot,

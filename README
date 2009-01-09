@@ -119,6 +119,8 @@ And now, in mostly alphabetical order, the scripts:
   .changes and .dsc files from a remote machine. [gnupg, debian-keyring, 
   ssh-client]
 
+- debsnap: Grabs packages from http://snapshot.debian.net [wget]
+
 - debuild: A wrapper for building a package (i.e., dpkg-buildpackage) to
   avoid problems with insufficient permissions and wrong paths etc.
   Debuild will set up the proper environment for building a package.

@@ -616,6 +616,33 @@ EOF
 
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.45
+	then
+	    cat >> /etc/devscripts.conf << EOF
+##### debsnap
+#
+# Where to put the directory named <prefix>-<package>/
+# default: source-$package_name if unset
+# DEBSNAP_DESTDIR=
+#
+# Verbosely show messages (yes/no)
+# default: no
+# DEBSNAP_VERBOSE=no
+#
+# The base URL of the archive to download from
+# DEBSNAP_BASE_URL=http://snapshot.debian.net/archive
+#
+# A sed regexp to transform pool/<component>/f/foo into the desired layout
+# default: make the directory from pool/<component>/f/foo to pool/f/foo
+# DEBSNAP_CLEAN_REGEX="s@\([^/]*\)/[^/]*/\(.*\)@\1/\2@"
+#
+# Where the Sources.gz lives, subdirectory of DEBSNAP_BASE_URL/<clean dir>/
+# default: DEBSNAP_BASE_URL/<clean dir>/source/Sources.gz
+# DEBSNAP_SOURCES_GZ_PATH=source/Sources.gz
+
+EOF
+	fi
     fi
 fi
 
