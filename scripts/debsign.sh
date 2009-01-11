@@ -51,7 +51,7 @@ trap "cleanup_tmpdir" 0 1 2 3 9 11 13 15
 
 mksigningdir () {
     if [ -z "$signingdir" ]; then
-	signingdir=$(mktemp -dt debsign.XXXXXXXX) || {
+	signingdir="$(mktemp -dt debsign.XXXXXXXX)" || {
 	    echo "$PROGNAME: Can't create temporary directory" >&2
 	    echo "Aborting..." >&2
 	    exit 1
@@ -61,7 +61,7 @@ mksigningdir () {
 
 mkremotefilesdir () {
     if [ -z "$remotefilesdir" ]; then
-	remotefilesdir=$(mktemp -dt debsign.XXXXXXXX) || {
+	remotefilesdir="$(mktemp -dt debsign.XXXXXXXX)" || {
 	    echo "$PROGNAME: Can't create temporary directory" >&2
 	    echo "Aborting..." >&2
 	    exit 1
@@ -413,7 +413,7 @@ dosigning() {
     if [ -n "$remotehost" ]
     then
 	mkremotefilesdir
-	cd $remotefilesdir
+	cd "$remotefilesdir"
 
 	remotechanges=$changes
 	remotedsc=$dsc

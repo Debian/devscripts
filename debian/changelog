@@ -1,10 +1,15 @@
 devscripts (2.10.45) UNRELEASED; urgency=low
 
+  [ Patrick Schoenfeld ]
   * debsnap: Added new script from Ron Lee and David Paleino,
     which grabs source packages from snapshot.debian.net.
     (Closes: #511345)
   * Add a hint to README.newscripts that new scripts might need a modification
     to debian/copyright
+
+  [ Adam D. Barratt ]
+  * debsign: Add further quoting around the use and generation of temporary
+    directory names, in case $TMPDIR contains spaces.
 
  -- Patrick Schoenfeld <schoenfeld@debian.org>  Fri, 09 Jan 2009 23:01:08 +0100
 
