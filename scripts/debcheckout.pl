@@ -923,8 +923,15 @@ EOF
 	    }
 	    # Filter out any branches already populated via TopGit
 	    my @tgheads = split ' ', $$tg_info{'top-bases'};
+	    my $master = 'master';
+	    if (open(HEAD, "env GIT_DIR=\"$wcdir/.git\" git symbolic-ref HEAD |")) {
+		$master = <HEAD>;
+		chomp $master;
+		$master =~ s@refs/heads/@@;
+	    }
+	    close(HEAD);
 	    foreach my $head (@heads) {
-		next if $head eq 'master';
+		next if $head eq $master;
 		next if grep { $head eq $_ } @tgheads;
 		my $cmd = "cd $wcdir";
 		$cmd .= " && git branch --track $head remotes/origin/$head";
