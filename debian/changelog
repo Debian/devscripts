@@ -11,6 +11,10 @@ devscripts (2.10.45) UNRELEASED; urgency=low
   * debsign: Add further quoting around the use and generation of temporary
     directory names, in case $TMPDIR contains spaces.
 
+  [ James Vega ]
+  * debcheckout: Filter TopGit branches out of the list of branches given to
+    --git-track since "tg populate" already created them.
+
  -- Patrick Schoenfeld <schoenfeld@debian.org>  Fri, 09 Jan 2009 23:01:08 +0100
 
 devscripts (2.10.44) unstable; urgency=low

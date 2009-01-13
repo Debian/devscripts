@@ -765,13 +765,14 @@ sub tg_info($) {
 
     my %info;
     $info{'topgit'} = 'no';
+    $info{'top-bases'} = '';
     my @bases = git_ls_remote($url, 'refs/top-bases');
     if (@bases) {
 	$info{'topgit'} = 'yes';
 	$info{'top-bases'} = join ' ', @bases;
     }
     return(\%info);
-	    }
+}
 
 # Print details about a repository and quit.
 sub print_details($$) {
@@ -920,8 +921,11 @@ EOF
 	    } else {
 		@heads = split ' ', $git_track;
 	    }
+	    # Filter out any branches already populated via TopGit
+	    my @tgheads = split ' ', $$tg_info{'top-bases'};
 	    foreach my $head (@heads) {
 		next if $head eq 'master';
+		next if grep { $head eq $_ } @tgheads;
 		my $cmd = "cd $wcdir";
 		$cmd .= " && git branch --track $head remotes/origin/$head";
 		system($cmd);
