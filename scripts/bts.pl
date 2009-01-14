@@ -977,6 +977,14 @@ usertags in addition to the standard tags.
 
 Bug's owner.
 
+=item correspondent
+
+Address of someone who sent mail to the log.
+
+=item affects
+
+Bugs which affect this package.
+
 =item bugs
 
 List of bugs to search within.

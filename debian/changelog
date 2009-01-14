@@ -18,6 +18,7 @@ devscripts (2.10.45) UNRELEASED; urgency=low
     + Determine the actual HEAD ref to skip when first cloning a git repo
       instead of assuming it is master.  This ensures branches don't get
       skipped when specifying extra branches to track with --git-track.
+  * bts: Document correspondent and affects keys for select command.
 
  -- Patrick Schoenfeld <schoenfeld@debian.org>  Fri, 09 Jan 2009 23:01:08 +0100
 
