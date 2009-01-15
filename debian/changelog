@@ -8,22 +8,22 @@ devscripts (2.10.45) UNRELEASED; urgency=low
     to debian/copyright
 
   [ Adam D. Barratt ]
-  * debcheckout: Fix a typo and perform some QA on the manpage.
-  * debsign: Add further quoting around the use and generation of temporary
-    directory names, in case $TMPDIR contains spaces.
   * debchange:
     + When adding a NEWS item, automatically propagate the urgency from the
       changelog. (Closes: #511911)
     + Make -v and -l interoperate with NEWS files properly again.
+  * debcheckout: Fix a typo and perform some QA on the manpage.
+  * debsign: Add further quoting around the use and generation of temporary
+    directory names, in case $TMPDIR contains spaces.
 
   [ James Vega ]
+  * bts: Document correspondent and affects keys for select command.
   * debcheckout:
     + Filter TopGit branches out of the list of branches given to
       --git-track since "tg populate" already created them.
     + Determine the actual HEAD ref to skip when first cloning a git repo
       instead of assuming it is master.  This ensures branches don't get
       skipped when specifying extra branches to track with --git-track.
-  * bts: Document correspondent and affects keys for select command.
 
  -- Patrick Schoenfeld <schoenfeld@debian.org>  Fri, 09 Jan 2009 23:01:08 +0100
 
