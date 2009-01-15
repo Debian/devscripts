@@ -821,7 +821,7 @@ my $date_cmd = ($opt_tz ? "TZ=$opt_tz " : "") . "date -R";
 chomp(my $DATE=`$date_cmd`);
 
 if ($opt_news && !$opt_i && !$opt_a) {
-    if ($VERSION eq $changelog{'Version'}) {
+    if ($VERSION eq $changelog{'Version'} && !$opt_v && !$opt_l) {
 	$opt_a = 1;
     } else {
 	$opt_i = 1;
