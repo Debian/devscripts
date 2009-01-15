@@ -8,6 +8,7 @@ devscripts (2.10.45) UNRELEASED; urgency=low
     to debian/copyright
 
   [ Adam D. Barratt ]
+  * debcheckout: Fix a typo and perform some QA on the manpage.
   * debsign: Add further quoting around the use and generation of temporary
     directory names, in case $TMPDIR contains spaces.
   * debchange:

@@ -42,13 +42,13 @@ B<debcheckout> retrieves the information about the Version Control System used
 to maintain a given Debian package (the I<PACKAGE> argument), and then checks
 out the latest (potentially unreleased) version of the package from its
 repository.  By default the repository is checked out to the I<PACKAGE>
-directory; it can be overridden providing the I<DESTDIR> argument.
+directory; this can be overridden by providing the I<DESTDIR> argument.
 
 The information about where the repository is available is expected to be found
 in B<Vcs-*> fields available in the source package record. For example, the vim
-package exposes such an information with a field like S<Vcs-Svn:
-svn://svn.debian.org/svn/pkg-vim/trunk/packages/vim>, you can see it grepping
-through C<apt-cache showsrc vim>.
+package exposes such information with a field like S<Vcs-Svn:
+svn://svn.debian.org/svn/pkg-vim/trunk/packages/vim>, you can see it by
+grepping through C<apt-cache showsrc vim>.
 
 If more than one source package record containing B<Vcs-*> fields is available,
 B<debcheckout> will select the record with the highest version number. 
@@ -72,30 +72,30 @@ B<GENERAL OPTIONS>
 
 =item B<-a>, B<--auth>
 
-work in authenticated mode; this means that for known repositories (mainly those
+Work in authenticated mode; this means that for known repositories (mainly those
 hosted on S<http://alioth.debian.org>) URL rewriting is attempted before
 checking out, to ensure that the repository can be committed to. For example,
 for subversion repositories hosted on alioth this means that
 S<svn+ssh://svn.debian.org/...> will be used instead of
-S<svn://svn.debian.org/...>
+S<svn://svn.debian.org/...>.
 
 =item B<-d>, B<--details>
 
-only print a list of detailed information about the package
+Only print a list of detailed information about the package
 repository, without checking it out; the output format is a list of
 fields, each field being a pair of TAB-separated field name and field
 value. The actual fields depend on the repository type. This action
-might require network connection to the remote repository.
+might require a network connection to the remote repository.
 
 Also see B<-p>. This option and B<-p> are mutually exclusive.
 
 =item B<-h>, B<--help>
 
-print a detailed help message and exit
+Print a detailed help message and exit.
 
 =item B<-p>, B<--print>
 
-only print a summary about package repository information, without
+Only print a summary about package repository information, without
 checking it out; the output format is TAB-separated with two fields:
 repository type, repository URL. This action works offline, it only
 uses "static" information as known by APT's cache.
@@ -104,19 +104,19 @@ Also see B<-d>. This option and B<-d> are mutually exclusive.
 
 =item B<-t> I<TYPE>, B<--type> I<TYPE>
 
-override the repository type (which defaults to some heuristics based
-on the URL or, in case of heuristic failures, the fallback "svn"),
-should be one of the currently supported repository types
+Override the repository type (which defaults to some heuristics based
+on the URL or, in case of heuristic failure, the fallback "svn");
+should be one of the currently supported repository types.
 
 =item B<-u> I<USERNAME>, B<--user> I<USERNAME>
 
-specify the login name to be used in authenticated mode (see B<-a>). This option
-implies B<-a>: you don't need to specify both
+Specify the login name to be used in authenticated mode (see B<-a>). This option
+implies B<-a>: you don't need to specify both.
 
 =item B<-f>, B<--file>
 
 Specify that the named file should be extracted from the repository and placed
-in the destionation directory. May be used more than once to extract mutliple
+in the destination directory. May be used more than once to extract mutliple
 files.
 
 =back
@@ -130,7 +130,7 @@ I<GIT-SPECIFIC OPTIONS>
 =item B<--git-track> I<BRANCHES>
 
 Specify a list of remote branches which will be set up for tracking
-(as in S<git branch --track>, see git-branch(1)) after that the remote
+(as in S<git branch --track>, see git-branch(1)) after the remote
 GIT repository has been cloned. The list should be given as a
 space-separated list of branch names.
 
@@ -153,11 +153,11 @@ for this purpose. The currently recognised variables are:
 
 This variable should be a space separated list of Perl regular
 expressions and replacement texts, which must come in pairs: REGEXP
-TEXT REGEXP TEXT ... and so on. Each pair denote a substitution which
+TEXT REGEXP TEXT ... and so on. Each pair denotes a substitution which
 is applied to repository URLs if other built-in means of building URLs
 for authenticated mode (see B<-a>) have failed.
 
-References to matching sub-strings in the replacement texts are
+References to matching substrings in the replacement texts are
 allowed as usual in Perl by the means of $1, $2, ... and so on.
 
 Using this setting users can specify how to enable authenticated mode
@@ -170,7 +170,7 @@ Here is a sample snippet suitable for the configuration files:
   ^\w+://(git\.example\.com)/(.*)    git+ssh://$1/home/git/$2
  '
 
-Note that whitespaces are not allowed neither in regexps nor in
+Note that whitespace is not allowed in either regexps or
 replacement texts. Also, given that configuration files are sourced by
 a shell, you probably want to use single quotes around the value of
 this variable.
