@@ -10,6 +10,9 @@ devscripts (2.10.45) UNRELEASED; urgency=low
   [ Adam D. Barratt ]
   * debsign: Add further quoting around the use and generation of temporary
     directory names, in case $TMPDIR contains spaces.
+  * debchange:
+    + When adding a NEWS item, automatically propogate the urgency from the
+      changelog. (Closes: #511911)
 
   [ James Vega ]
   * debcheckout:

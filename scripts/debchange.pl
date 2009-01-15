@@ -485,6 +485,8 @@ my $EMAIL = 'EMAIL';
 my $DISTRIBUTION = 'UNRELEASED';
 my $bpo_dist = '';
 my $CHANGES = '';
+# Changelog urgency, possibly propogated to NEWS files
+my $CL_URGENCY = '';
 
 if (! $opt_create || ($opt_create && $opt_news)) {
     if (! $opt_create) {
@@ -532,6 +534,8 @@ if (! $opt_create || ($opt_create && $opt_news)) {
 
     # Find the current package version
     if ($opt_news) {
+	my $found_version = 0;
+	my $found_urgency = 0;
 	open PARSED, qq[dpkg-parsechangelog -l"$real_changelog_path" | ]
 	    or fatal "Cannot execute dpkg-parsechangelog: $!";
 	while (<PARSED>) {
@@ -539,6 +543,13 @@ if (! $opt_create || ($opt_create && $opt_news)) {
 	    if (m%^Version:\s+(\S+)$%) {
 		$VERSION = $1;
 		$VERSION =~ s/~$//;
+		$found_version = 1;
+		last if $found_urgency;
+	    } elsif (m%^Urgency:\s+(\S+)(\s|$)%) {
+		$CL_URGENCY = $1;
+		$found_urgency = 1;
+		last if $found_version;
+	    } elsif (m%^$%) {
 		last;
 	    }
 	}
@@ -1028,7 +1039,11 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
     }
     my $distribution = $opt_D || $bpo_dist || (($opt_release_heuristic eq 'changelog') ? "UNRELEASED" : $DISTRIBUTION);
     
-    my $urgency = $opt_u || 'low';
+    my $urgency = $opt_u;
+    if ($opt_news) {
+	$urgency ||= $CL_URGENCY;
+    }
+    $urgency ||= 'low';
 
     if (($opt_v or $opt_i or $opt_l or $opt_d) and
 	$opt_release_heuristic eq "changelog" and
@@ -1153,6 +1168,9 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
     if ($CHANGES =~ m/^\w[-+0-9a-z.]* \([^\(\) \t]+\)((?:\s+[-+0-9a-z.]+)+)\;\s+urgency=(\w+)/i) {
 	my $distribution = $1;
 	my $urgency = $2;
+	if ($opt_news) {
+	    $urgency = $CL_URGENCY;
+	}
 	$distribution =~ s/^\s+//;
 	if ($opt_r) {
 	    # Change the distribution from UNRELEASED for release
@@ -1261,7 +1279,11 @@ elsif ($opt_create) {
 	push @closes_text, "Initial release. (Closes: \#XXXXXX)\n";
     }
 
-    my $urgency = $opt_u || 'low';
+    my $urgency = $opt_u;
+    if ($opt_news) {
+	$urgency ||= $CL_URGENCY;
+    }
+    $urgency ||= 'low';
     print O "$PACKAGE ($VERSION) $DISTRIBUTION; urgency=$urgency\n\n";
 
     if (@closes_text or $TEXT) {
