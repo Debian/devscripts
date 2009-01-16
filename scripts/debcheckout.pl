@@ -46,9 +46,9 @@ directory; this can be overridden by providing the I<DESTDIR> argument.
 
 The information about where the repository is available is expected to be found
 in B<Vcs-*> fields available in the source package record. For example, the vim
-package exposes such information with a field like S<Vcs-Svn:
-svn://svn.debian.org/svn/pkg-vim/trunk/packages/vim>, you can see it by
-grepping through C<apt-cache showsrc vim>.
+package exposes such information with a field like S<Vcs-Git:
+git://git.debian.org/git/pkg-vim/vim.git>, you can see it by grepping through
+C<apt-cache showsrc vim>.
 
 If more than one source package record containing B<Vcs-*> fields is available,
 B<debcheckout> will select the record with the highest version number. 
