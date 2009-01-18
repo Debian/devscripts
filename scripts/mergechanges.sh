@@ -69,9 +69,9 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-# Sanity check #0: Do we have enough paramaters?
+# Sanity check #0: Do we have enough parameters?
 if [ $# -lt 2 ]; then
-    echo "Not enough paramaters." >&2
+    echo "Not enough parameters." >&2
     echo "Usage: mergechanges [--help|--version] [-f] <file1> <file2> [<file...>]" >&2
     exit 1
 fi
