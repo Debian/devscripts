@@ -13,6 +13,10 @@ devscripts (2.10.45) UNRELEASED; urgency=low
       changelog. (Closes: #511911)
     + Make -v and -l interoperate with NEWS files properly again.
   * debcheckout: Fix a typo and perform some QA on the manpage.
+  * debdiff: Default to comparing source packages in the order they were
+    passed on the command line once more, rather than using the "automagic
+    version sorting" introduced in 2.10.41.  The new DEBDIFF_AUTO_VER_SORT
+    configuration file option allows the default behaviour to be controlled.
   * debsign: Add further quoting around the use and generation of temporary
     directory names, in case $TMPDIR contains spaces.
   * mergechanges: Correct spelling of "parameters". Thanks, Kumar Appaiah.

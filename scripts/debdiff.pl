@@ -80,8 +80,8 @@ Valid options are:
    --diffstat             Include the result of diffstat before the diff
    --no-diffstat          Do not do so (default)
    --auto-ver-sort        When comparing source packages, ensure the
-                          comparison is performed in version order (default)
-   --no-auto-ver-sort     Do not do so
+                          comparison is performed in version order
+   --no-auto-ver-sort     Do not do so (default)
 
 Default settings modified by devscripts configuration files:
 $modified_conf_msg
@@ -108,7 +108,7 @@ my $wdiff_opt = '';
 my @diff_opts = ();
 my $show_diffstat = 0;
 my $wdiff_source_control = 0;
-my $auto_ver_sort = 1;
+my $auto_ver_sort = 0;
 
 my $quiet = 0;
 
@@ -128,6 +128,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBDIFF_WDIFF_OPT' => '',
 		       'DEBDIFF_SHOW_DIFFSTAT' => 'no',
 		       'DEBDIFF_WDIFF_SOURCE_CONTROL' => 'no',
+		       'DEBDIFF_AUTO_VER_SORT' => 'no',
 		       );
     my %config_default = %config_vars;
 
@@ -154,6 +155,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'DEBDIFF_SHOW_DIFFSTAT'}='no';
     $config_vars{'DEBDIFF_WDIFF_SOURCE_CONTROL'} =~ /^(yes|no)$/
 	or $config_vars{'DEBDIFF_WDIFF_SOURCE_CONTROL'}='no';
+    $config_vars{'DEBDIFF_AUTO_VER_SORT'} =~ /^(yes|no)$/
+	or $config_vars{'DEBDIFF_AUTO_VER_SORT'}='no';
 
     foreach my $var (sort keys %config_vars) {
 	if ($config_vars{$var} ne $config_default{$var}) {
@@ -171,6 +174,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $show_diffstat = $config_vars{'DEBDIFF_SHOW_DIFFSTAT'} eq 'yes' ? 1 : 0;
     $wdiff_source_control = $config_vars{'DEBDIFF_WDIFF_SOURCE_CONTROL'}
 	eq 'yes' ? 1 : 0;
+    $auto_ver_sort = $config_vars{'DEBDIFF_AUTO_VER_SORT'} eq 'yes' ? 1 : 0;
 
 }
 

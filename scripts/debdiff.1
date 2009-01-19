@@ -133,13 +133,13 @@ The default behaviour; can be used to override a configuration file
 setting.
 .TP
 .B \-\-auto\-ver\-sort
-When comparing source packages, do so in version order.  This is
-the default behaviour.
+When comparing source packages, do so in version order.
 .TP
 .B \-\-no\-auto\-ver\-sort
 Compare source packages in the order they were passed on the
 command-line, even if that means comparing a package with a higher
-version against one with a lower version.
+version against one with a lower version.  This is the default
+behaviour.
 .TP
 \fB\-\-no-conf\fR, \fB\-\-noconf\fR
 Do not read any configuration files.  This can only be used as the
@@ -192,6 +192,10 @@ If this is set to \fIyes\fR, then it is the same as the
 .B DEBDIFF_WDIFF_SOURCE_CONTROL
 If this is set to \fIyes\fR, then it is the same as the
 \fB\-\-wdiff\-source\-control\fR command line parameter being used.
+.TP
+.B DEBDIFF_AUTO_VER_SORT
+If this is set to \fIyes\fR, then it is the same as the
+\fB\-\-auto\-ver\-sort\fR command line parameter being used.
 .SH "EXIT VALUES"
 Normally the exit value will be 0 if no differences are reported and 1
 if any are reported.  If there is some fatal error, the exit code will

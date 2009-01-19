@@ -246,6 +246,10 @@
 #
 # Compare control files in source packages using wdiff?
 # DEBDIFF_WDIFF_SOURCE_CONTROL=no
+#
+# Always compare package in version order, rather than the order specified
+# on the command line?
+# DEBDIFF_AUTO_VER_SORT=no
 
 ##### debi
 # 

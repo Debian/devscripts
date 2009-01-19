@@ -641,6 +641,12 @@ EOF
 # default: DEBSNAP_BASE_URL/<clean dir>/source/Sources.gz
 # DEBSNAP_SOURCES_GZ_PATH=source/Sources.gz
 
+##### debdiff option added in 2.10.45
+#
+# Always compare package in version order, rather than the order specified
+# on the command line?
+# DEBDIFF_AUTO_VER_SORT=no
+
 EOF
 	fi
     fi
