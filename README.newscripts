@@ -12,7 +12,9 @@ List of things to do when adding a new script to devscripts package:
    debian/control
 6. Modify conf.default.in and debian/postinst if necessary
 7. Modify debian/copyright if neccessary
-8. Add a changelog entry
+8. Make the script executable
+   - "svn propset '*' scripts/newscript" so that the permissions are
+     correct in a copy of the repository
+9. Add a changelog entry
 
-Julian, 2 June 2005
 last modified: $Id$
