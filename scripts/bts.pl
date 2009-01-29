@@ -647,8 +647,9 @@ my $btscgibugurl=$btscgiurl . 'bugreport.cgi';
 my $btscgispamurl=$btscgiurl . 'bugspam.cgi';
 my $btsemail='control@' . $btsserver;
 my $packagesserver='';
-if ($btsserver =~ /bugs(-[\w-]+)?\.debian\.org/i) {
+if ($btsserver =~ /^bugs(-[\w-]+)?\.debian\.org/i) {
     $packagesserver = 'packages.debian.org';
+    $btscgispamurl =~ s|$btsurl|http://bugs-master.debian.org/|;
 }
 no warnings 'once';
 $Devscripts::Debbugs::btsurl=$btsurl;
@@ -1760,10 +1761,17 @@ sub bts_reportspam {
 
     init_agent() unless $ua;
     foreach my $bug (@bugs) {
-	my $request = HTTP::Request->new('GET', "$btscgispamurl?bug=$bug;ok=ok");
-	my $response = $ua->request($request);
-	if (! $response->is_success) {
-	    warn "bts: failed to report $bug as containing spam: " . $response->status_line . "\n";
+	my $url = "$btscgispamurl?bug=$bug;ok=ok";
+	if ($noaction) {
+	    print "bts reportspam: would report $bug as containing spam (URL: " .
+		$url . ")\n";
+	} else {
+	    my $request = HTTP::Request->new('GET', $url);
+	    my $response = $ua->request($request);
+	    if (! $response->is_success) {
+		warn "bts: failed to report $bug as containing spam: " .
+		    $response->status_line . "\n";
+	    }
 	}
     }
 }
