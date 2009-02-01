@@ -283,8 +283,9 @@ while (@files) {
 	if $opt_verbose;
 
     $content =~ tr/\t\r\n/ /;
+    # Remove C / C++ comments
+    $content =~ s#(\*/|/[/*])##g;
     $content =~ tr% A-Za-z.,@;0-9\(\)/-%%cd;
-    $content =~ s#//##g;
     $content =~ s/ c //g; # Remove fortran comments
     $content =~ tr/ //s;
 
@@ -382,6 +383,8 @@ sub parselicense($) {
 	$licensetext =~ /GNU General Public License as published by the Free Software Foundation; version ([^ ]+) /i) {
 
 	$gplver = " (v$1)";
+    } elsif ($licensetext =~ /GNU General Public License, version ([^ ]+?)[ .]/) {
+	$gplver = " (v$1)";
     } elsif ($licensetext =~ /either version ([^ ]+) of the License, or \(at your option\) any later version/) {
 	$gplver = " (v$1 or later)";
     }
@@ -403,6 +406,11 @@ sub parselicense($) {
     }
 
     if ($licensetext =~ /is free software.? you can redistribute it and\/or modify it under the terms of (?:version [^ ]+ (?:\(?only\)? )?of )?the GNU General Public License/i) {
+	$license = "GPL$gplver$extrainfo $license";
+    }
+
+    if ($licensetext =~ /is distributed under the terms of the GNU General Public License,/
+	and length $gplver) {
 	$license = "GPL$gplver$extrainfo $license";
     }
 

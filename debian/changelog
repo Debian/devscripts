@@ -5,6 +5,9 @@ devscripts (2.10.46) UNRELEASED; urgency=low
       reporting spam to match recent changes to the BTS.
     + If -n / --no-action was given on the command line, print the URL that
       would have been used to report spam rather than sending the report.
+  * licensecheck:
+    + Remove C /* */ comments. Based on a patch by Jörg Sommer.
+    + Identify another form of GPL wording.
   * README.newscripts: Correct the "svn propset" syntax added in the previous
     upload.
 
