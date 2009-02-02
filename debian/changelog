@@ -10,6 +10,8 @@ devscripts (2.10.46) UNRELEASED; urgency=low
     + Identify another form of GPL wording.
     + Add .xs (Perl XS files) to the default list of files to process.
       (Closes: #513770)
+    + Fix a bug in a regular expression which meant that .h files weren't
+      included in the default list of files to search.
   * README.newscripts: Correct the "svn propset" syntax added in the previous
     upload.
 
