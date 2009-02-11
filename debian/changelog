@@ -8,6 +8,8 @@ devscripts (2.10.46) UNRELEASED; urgency=low
   * debchange:
     + Add lenny-backports and lenny-volatile to the list of recognised
       distributions. (Closes: #514818)
+    + Don't accept "sarge", "etch" or "lenny" as valid distributions. dak
+      requires suite names (e.g. "stable") rather than codenames.
   * licensecheck:
     + Remove C /* */ comments. Based on a patch by Jörg Sommer.
     + Identify another form of GPL wording.
