@@ -22,6 +22,8 @@ devscripts (2.10.46) UNRELEASED; urgency=low
       default list of files to process. (Closes: #513770, #514337)
     + Fix a bug in a regular expression which meant that .h files weren't
       included in the default list of files to search.
+    + Add support for the Boost, Python and zlib/libpng licenses. Thanks,
+      Cristian Greco. (Closes: #514812)
   * README.newscripts: Correct the "svn propset" syntax added in the previous
     upload.
 

@@ -490,6 +490,20 @@ sub parselicense($) {
 	$license = "CDDL " . ($1 ? "(v$2) " : '') . $license;
     }
 
+    if ($licensetext =~ /Permission is hereby granted, free of charge, to any person or organization obtaining a copy of the software and accompanying documentation covered by this license \(the \"Software\"\)/ or
+	$licensetext =~ /Boost Software License([ ,-]+Version ([^ ]+)?(\.))/i) {
+	$license = "BSL " . ($1 ? "(v$2) " : '') . $license;
+    }
+
+    if ($licensetext =~ /PYTHON SOFTWARE FOUNDATION LICENSE (VERSION ([^ ]+))/i) {
+	$license = "PSF " . ($1 ? "(v$2) " : '') . $license;
+    }
+
+    if ($licensetext =~ /The origin of this software must not be misrepresented.*Altered source versions must be plainly marked as such.*This notice may not be removed or altered from any source distribution/ or
+        $licensetext =~ /see copyright notice in zlib\.h/) {
+	$license = "zlib/libpng $license";
+    }
+
     $license = "UNKNOWN" if (!length($license));
 
     return $license;
