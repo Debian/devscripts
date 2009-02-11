@@ -110,7 +110,7 @@ Options:
          Increment the Debian release number for a Debian Security Team upload
   --bpo
          Increment the Debian release number for a Backports.org upload
-	 to "etch-backports"
+	 to "lenny-backports"
   -l, --local <suffix>
          Add a suffix to the Debian version number for a local build
   -b, --force-bad-version
@@ -484,6 +484,8 @@ my $MAINTAINER = 'MAINTAINER';
 my $EMAIL = 'EMAIL';
 my $DISTRIBUTION = 'UNRELEASED';
 my $bpo_dist = '';
+my %bpo_dists = ( '40', 'etch', '50', 'lenny' );
+my $latest_bpo_dist = '50';
 my $CHANGES = '';
 # Changelog urgency, possibly propogated to NEWS files
 my $CL_URGENCY = '';
@@ -1003,7 +1005,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 	    } elsif ($opt_bpo and not $start =~ /~bpo[0-9]+\+$/) {
 		# If it's not already a backport make it so
 		# otherwise we can be safe if we behave like dch -i
-		$end .= "~bpo40+1";
+		$end .= "~bpo$latest_bpo_dist+1";
 	    } elsif ($opt_l and not $start =~ /\Q$opt_l\E/) {
 		# If it's not already a local package make it so
 		# otherwise we can be safe if we behave like dch -i
@@ -1012,6 +1014,21 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 		# Don't bump the version of a NEWS file in this case as we're
 		# using the version from the changelog
 		$end++;
+
+		# Attempt to set the distribution for a backport correctly
+		# based on the version of the previous backport
+		if ($opt_bpo) {
+		    my $previous_dist = $start;
+		    $previous_dist =~ s/^.*~bpo([0-9]+)\+$/$1/;
+		    if (defined $previous_dist and defined
+			$bpo_dists{$previous_dist}) {
+			$bpo_dist = $bpo_dists{$previous_dist} . '-backports';
+		    } else {
+			# Fallback to using the previous distribution
+			$bpo_dist = $changelog{'Distribution'};
+		    }
+		}
+
 		if (! ($opt_qa or $opt_bpo or $opt_l)) {
 		    $useextra = 1;
 		}
@@ -1035,7 +1052,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
     }
 
     if ($opt_bpo) {
-	$bpo_dist='etch-backports';
+	$bpo_dist ||= $bpo_dists{$latest_bpo_dist} . '-backports';
     }
     my $distribution = $opt_D || $bpo_dist || (($opt_release_heuristic eq 'changelog') ? "UNRELEASED" : $DISTRIBUTION);
     
@@ -1067,7 +1084,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
             print O "  * Non-maintainer upload by the Security Team.\n";
             $line = 1;
 	} elsif ($opt_bpo && ! $opt_news) {
-            print O "  * Rebuild for etch-backports.\n";
+            print O "  * Rebuild for $bpo_dist.\n";
             $line = 1;
 	}
 	if (@closes_text or $TEXT) {

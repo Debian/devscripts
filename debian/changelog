@@ -10,6 +10,10 @@ devscripts (2.10.46) UNRELEASED; urgency=low
       distributions. (Closes: #514818)
     + Don't accept "sarge", "etch" or "lenny" as valid distributions. dak
       requires suite names (e.g. "stable") rather than codenames.
+    + Modify --bpo to produce a changelog suitable for uploading to
+      lenny-backports rather than etch-backports by default.  If the latest
+      changelog entry is for an etch backport, a new etch-backports stanza
+      will be produced instead.
   * licensecheck:
     + Remove C /* */ comments. Based on a patch by Jörg Sommer.
     + Identify another form of GPL wording.
