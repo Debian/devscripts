@@ -17,7 +17,7 @@ devscripts (2.10.46) UNRELEASED; urgency=low
       will be produced instead.
   * licensecheck:
     + Remove C /* */ comments. Based on a patch by Jörg Sommer.
-    + Identify another form of GPL wording.
+    + Identify another couple of forms of GPL wording. (Closes: #514811)
     + Add .xs (Perl XS files) and .vala (GNOME Vala source files) to the
       default list of files to process. (Closes: #513770, #514337)
     + Fix a bug in a regular expression which meant that .h files weren't

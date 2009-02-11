@@ -405,7 +405,7 @@ sub parselicense($) {
 	$license = "LGPL$gplver$extrainfo $license";
     }
 
-    if ($licensetext =~ /is free software.? you can redistribute it and\/or modify it under the terms of (?:version [^ ]+ (?:\(?only\)? )?of )?the GNU General Public License/i) {
+    if ($licensetext =~ /is free software.? you (can|may) redistribute it and\/or modify it under the terms of (?:version [^ ]+ (?:\(?only\)? )?of )?the GNU General Public License/i) {
 	$license = "GPL$gplver$extrainfo $license";
     }
 
