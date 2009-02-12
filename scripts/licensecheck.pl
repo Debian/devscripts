@@ -27,9 +27,9 @@ licensecheck - simple license checker for source files
 
 B<licensecheck> B<--help|--version>
 
-B<licensecheck> [B<--verbose>] [B<--copyright>] [B<-l|--lines=N>] 
-[B<-i|--ignore=regex>] [B<-c|--check=regex>] [B<-r|--recursive>]
-I<list of files and directories to check>
+B<licensecheck> [B<--no-conf>] [B<--verbose>] [B<--copyright>]
+[B<-l|--lines=N>] [B<-i|--ignore=regex>] [B<-c|--check=regex>]
+[B<-r|--recursive>] I<list of files and directories to check>
 
 =head1 DESCRIPTION
 
@@ -77,6 +77,10 @@ The default includes common source files.
 =item B<--copyright>
 
 Also display copyright text found within the file
+
+=item B<--no-conf> B<--noconf>
+Do not read any configuration files. This can only be used as the first
+option given on the command-line.
 
 =back
 
@@ -155,7 +159,8 @@ my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|f(77|90)?|p(l|m)|xs|sh|php
 
 my $modified_conf_msg;
 
-my ($opt_verbose, $opt_lines, $opt_noconf, $opt_ignore_regex, $opt_check_regex);
+my ($opt_verbose, $opt_lines, $opt_noconf, $opt_ignore_regex, $opt_check_regex)
+  = ('', '', '', '', '');
 my $opt_recursive = 0;
 my $opt_copyright = 0;
 my ($opt_help, $opt_version);
@@ -218,9 +223,9 @@ GetOptions("help|h" => \$opt_help,
 	   )
     or die "Usage: $progname [options] filelist\nRun $progname --help for more details\n";
 
-$opt_lines =~ /^[1-9][0-9]*$/ or $opt_lines = $def_lines;
-$opt_ignore_regex = $default_ignore_regex if !$opt_ignore_regex;
-$opt_check_regex = $default_check_regex if !$opt_check_regex;
+$opt_lines = $def_lines if $opt_lines !~ /^[1-9][0-9]*$/;
+$opt_ignore_regex = $default_ignore_regex if ! length $opt_ignore_regex;
+$opt_check_regex = $default_check_regex if ! length $opt_check_regex;
 
 if ($opt_noconf) {
     fatal "--no-conf is only acceptable as the first command-line option!";
@@ -339,6 +344,8 @@ Usage: $progname [options] filename [filename ...]
 Valid options are:
    --help, -h             Display this message
    --version, -v          Display version and copyright info
+   --no-conf, --noconf    Don't read devscripts config files; must be
+                          the first option given
    --verbose              Display the header of each file before its
                             license information
    --lines, -l            Specify how many lines of the file header

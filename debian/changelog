@@ -1,6 +1,9 @@
 devscripts (2.10.47) UNRELEASED; urgency=low
 
-  * NOT RELEASED YET
+  * licensecheck:
+    + Document --no-conf.
+    + Fix an uninitialised variable warning when --no-conf is used. Thanks.
+      Cristian Greco. (Closes: #515047)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Thu, 12 Feb 2009 20:23:12 +0000
 
