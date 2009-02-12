@@ -26,6 +26,9 @@ devscripts (2.10.46) UNRELEASED; urgency=low
       Cristian Greco. (Closes: #514812)
   * README.newscripts: Correct the "svn propset" syntax added in the previous
     upload.
+  * debian/lintian.overrides: New file to allow us to override lintian
+    thinking that the mention of snapshot.debian.net in debsnap's description
+    is a reference to an upstream homepage.
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 21 Jan 2009 19:48:47 +0000
 

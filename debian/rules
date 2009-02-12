@@ -45,6 +45,9 @@ install: build
 	dh_installdirs
 	dh_install
 	chmod +x debian/devscripts/usr/share/bug/devscripts/script
+	install -d debian/devscripts/usr/share/lintian/overrides
+	install -p -m644 debian/lintian.overrides \
+	    debian/devscripts/usr/share/lintian/overrides/devscripts
 	$(MAKE) DESTDIR=$(CURDIR)/debian/devscripts install
 
 # Build architecture-independent files here.
