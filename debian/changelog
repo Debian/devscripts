@@ -1,9 +1,15 @@
 devscripts (2.10.47) UNRELEASED; urgency=low
 
+  [ Adam D. Barratt ]
   * licensecheck:
     + Document --no-conf.
     + Fix an uninitialised variable warning when --no-conf is used. Thanks.
       Cristian Greco. (Closes: #515047)
+
+  [ James Vega ]
+  * bts: Include the module name when calling MIME::Base64::encode_base64
+    since MIME::Base64 is only being 'require'd not 'use'd.  Thanks Євгеній
+    Мещеряков. (Closes: #516117)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Thu, 12 Feb 2009 20:23:12 +0000
 

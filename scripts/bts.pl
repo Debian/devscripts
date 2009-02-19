@@ -2481,7 +2481,7 @@ sub mailto {
 sub MIME_encode_B {
     my $str = shift;
     require MIME::Base64;
-    encode_base64($str, '');
+    MIME::Base64::encode_base64($str, '');
 }
 
 sub MIME_encode_Q {
