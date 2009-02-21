@@ -655,7 +655,7 @@ if (! $opt_m) {
 	$MAINTAINER = $env{'NAME'};
     } else {
 	my @pw = getpwuid $<;
-	if (defined($pw[6])) {
+	if ($pw[6]) {
 	    if (my $pw = decode_utf8($pw[6])) {
 		$pw =~ s/,.*//;
 		$MAINTAINER = $pw;

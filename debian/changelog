@@ -10,6 +10,8 @@ devscripts (2.10.47) UNRELEASED; urgency=low
   * bts: Include the module name when calling MIME::Base64::encode_base64
     since MIME::Base64 is only being 'require'd not 'use'd.  Thanks Євгеній
     Мещеряков. (Closes: #516117)
+  * debchange: Do not use an empty gecos field when trying to determine the
+    maintainer's name. (Closes: 516423)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Thu, 12 Feb 2009 20:23:12 +0000
 
