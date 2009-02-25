@@ -43,7 +43,7 @@ my %flagmap = ( '(P)' => "pending",
 		'....(R)' => "unreproducible",
 		'.....(S)' => "security",
 		'......(U)' => "upstream",
-		'.......(I)' => "etch-ignore or lenny-ignore",
+		'.......(I)' => "lenny-ignore or squeeze-ignore",
 	      );
 # A little hacky but allows us to sort the list by length
 my %distmap = ( '(O)' => "oldstable",

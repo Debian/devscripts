@@ -5,6 +5,8 @@ devscripts (2.10.47) UNRELEASED; urgency=low
     + Document --no-conf.
     + Fix an uninitialised variable warning when --no-conf is used. Thanks.
       Cristian Greco. (Closes: #515047)
+  * rc-alert: Modify the description of the "I" flag to reference the
+    squeeze-ignore tag rather than etch-ignore.
 
   [ James Vega ]
   * bts: Include the module name when calling MIME::Base64::encode_base64
