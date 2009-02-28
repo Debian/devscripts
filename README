@@ -56,6 +56,9 @@ And now, in mostly alphabetical order, the scripts:
 - dcmd: Run a given command replacing the name of a .changes or .dsc
   file with each of the files referenced therein 
 
+- dcontrol: Remotely query package and source control files for all Debian
+  distributions. [wget | curl]
+
 - dd-list: Given a list of packages, pretty-print it ordered by maintainer.
 
 - debc: List contents of current package.  Do this after a successful

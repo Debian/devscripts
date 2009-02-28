@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2009-02-11 23:11+0000\n"
+"POT-Creation-Date: 2009-02-28 23:04+0100\n"
 "PO-Revision-Date: 2008-07-15 23:07+0200\n"
 "Last-Translator: Nicolas François <nicolas.francois@centraliens.net>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -72,8 +72,8 @@ msgstr "DEBIAN"
 #: ../scripts/checkbashisms.1:2 ../scripts/cowpoke.1:18
 #: ../scripts/cvs-debc.1:2 ../scripts/cvs-debi.1:2
 #: ../scripts/cvs-debrelease.1:2 ../scripts/cvs-debuild.1:2
-#: ../scripts/dcmd.1:2 ../scripts/dd-list.1:19 ../scripts/debc.1:2
-#: ../scripts/debchange.1:2 ../scripts/debcheckout.pl:23
+#: ../scripts/dcmd.1:2 ../scripts/dcontrol.pl:191 ../scripts/dd-list.1:19
+#: ../scripts/debc.1:2 ../scripts/debchange.1:2 ../scripts/debcheckout.pl:23
 #: ../scripts/debclean.1:2 ../scripts/debcommit.pl:3 ../scripts/debdiff.1:2
 #: ../scripts/debi.1:2 ../scripts/debpkg.1:2 ../scripts/debrelease.1:2
 #: ../scripts/debrsign.1:2 ../scripts/debsign.1:2 ../scripts/debsnap.1:3
@@ -108,8 +108,8 @@ msgstr ""
 #: ../scripts/checkbashisms.1:4 ../scripts/cowpoke.1:20
 #: ../scripts/cvs-debc.1:4 ../scripts/cvs-debi.1:4
 #: ../scripts/cvs-debrelease.1:4 ../scripts/cvs-debuild.1:4
-#: ../scripts/dcmd.1:4 ../scripts/dd-list.1:22 ../scripts/debc.1:4
-#: ../scripts/debchange.1:4 ../scripts/debcheckout.pl:27
+#: ../scripts/dcmd.1:4 ../scripts/dcontrol.pl:195 ../scripts/dd-list.1:22
+#: ../scripts/debc.1:4 ../scripts/debchange.1:4 ../scripts/debcheckout.pl:27
 #: ../scripts/debclean.1:4 ../scripts/debcommit.pl:7 ../scripts/debdiff.1:4
 #: ../scripts/debi.1:4 ../scripts/debpkg.1:4 ../scripts/debrelease.1:4
 #: ../scripts/debrsign.1:4 ../scripts/debsign.1:4 ../scripts/debsnap.1:6
@@ -141,8 +141,8 @@ msgstr "B<annotate-output> I<programme> [I<paramètres> ...]"
 #: ../scripts/checkbashisms.1:8 ../scripts/cowpoke.1:24
 #: ../scripts/cvs-debc.1:6 ../scripts/cvs-debi.1:6
 #: ../scripts/cvs-debrelease.1:7 ../scripts/cvs-debuild.1:7
-#: ../scripts/dcmd.1:7 ../scripts/dd-list.1:26 ../scripts/debc.1:6
-#: ../scripts/debchange.1:8 ../scripts/debcheckout.pl:39
+#: ../scripts/dcmd.1:7 ../scripts/dcontrol.pl:203 ../scripts/dd-list.1:26
+#: ../scripts/debc.1:6 ../scripts/debchange.1:8 ../scripts/debcheckout.pl:39
 #: ../scripts/debclean.1:6 ../scripts/debcommit.pl:11 ../scripts/debdiff.1:15
 #: ../scripts/debi.1:6 ../scripts/debpkg.1:6 ../scripts/debrelease.1:6
 #: ../scripts/deb-reversion.dbk:82 ../scripts/debrsign.1:7
@@ -305,16 +305,17 @@ msgstr ""
 #: ../scripts/build-rdeps.pl:290 ../scripts/checkbashisms.1:62
 #: ../scripts/cowpoke.1:226 ../scripts/cvs-debc.1:64 ../scripts/cvs-debi.1:68
 #: ../scripts/cvs-debrelease.1:69 ../scripts/cvs-debuild.1:59
-#: ../scripts/dcmd.1:92 ../scripts/dd-list.1:93 ../scripts/debc.1:120
-#: ../scripts/debchange.1:417 ../scripts/debcheckout.pl:185
-#: ../scripts/debclean.1:111 ../scripts/debcommit.pl:755
-#: ../scripts/debdiff.1:212 ../scripts/debi.1:126 ../scripts/debpkg.1:23
-#: ../scripts/debrelease.1:137 ../scripts/deb-reversion.dbk:292
-#: ../scripts/debrsign.1:71 ../scripts/debsign.1:147 ../scripts/debuild.1:421
+#: ../scripts/dcmd.1:92 ../scripts/dcontrol.pl:273 ../scripts/dd-list.1:93
+#: ../scripts/debc.1:120 ../scripts/debchange.1:417
+#: ../scripts/debcheckout.pl:185 ../scripts/debclean.1:111
+#: ../scripts/debcommit.pl:755 ../scripts/debdiff.1:212 ../scripts/debi.1:126
+#: ../scripts/debpkg.1:23 ../scripts/debrelease.1:137
+#: ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:71
+#: ../scripts/debsign.1:147 ../scripts/debuild.1:421
 #: ../scripts/desktop2menu.pl:52 ../scripts/dget.pl:622
 #: ../scripts/diff2patches.1:40 ../scripts/dpkg-genbuilddeps.1:36
 #: ../scripts/dscverify.1:53 ../scripts/getbuildlog.1:41
-#: ../scripts/grep-excuses.1:39 ../scripts/licensecheck.pl:116
+#: ../scripts/grep-excuses.1:39 ../scripts/licensecheck.pl:120
 #: ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:20
 #: ../scripts/mass-bug.pl:512 ../scripts/mergechanges.1:18
 #: ../scripts/mk-build-deps.pl:68 ../scripts/namecheck.pl:43
@@ -625,22 +626,23 @@ msgstr ""
 #: ../scripts/checkbashisms.1:23 ../scripts/cowpoke.1:29
 #: ../scripts/cvs-debc.1:24 ../scripts/cvs-debi.1:28
 #: ../scripts/cvs-debrelease.1:21 ../scripts/cvs-debuild.1:32
-#: ../scripts/dcmd.1:16 ../scripts/dd-list.1:58 ../scripts/debc.1:64
-#: ../scripts/debchange.1:146 ../scripts/debcheckout.pl:67
-#: ../scripts/debclean.1:60 ../scripts/debcommit.pl:19 ../scripts/debdiff.1:50
-#: ../scripts/debi.1:65 ../scripts/debrelease.1:56
-#: ../scripts/deb-reversion.dbk:128 ../scripts/debrsign.1:30
-#: ../scripts/debsign.1:39 ../scripts/debsnap.1:26 ../scripts/debuild.1:217
-#: ../scripts/dget.pl:523 ../scripts/diff2patches.1:13
-#: ../scripts/dpkg-depcheck.1:15 ../scripts/dscverify.1:17
-#: ../scripts/getbuildlog.1:24 ../scripts/grep-excuses.1:13
-#: ../scripts/licensecheck.pl:43 ../scripts/list-unreleased.1:12
-#: ../scripts/manpage-alert.1:14 ../scripts/mass-bug.pl:60
-#: ../scripts/mk-build-deps.pl:40 ../scripts/nmudiff.1:21
-#: ../scripts/plotchangelog.1:43 ../scripts/pts-subscribe.1:18
-#: ../scripts/rc-alert.1:17 ../scripts/rmadison.pl:197
-#: ../scripts/tagpending.pl:94 ../scripts/transition-check.pl:42
-#: ../scripts/uscan.1:323 ../scripts/uupdate.1:50 ../scripts/whodepends.1:10
+#: ../scripts/dcmd.1:16 ../scripts/dcontrol.pl:235 ../scripts/dd-list.1:58
+#: ../scripts/debc.1:64 ../scripts/debchange.1:146
+#: ../scripts/debcheckout.pl:67 ../scripts/debclean.1:60
+#: ../scripts/debcommit.pl:19 ../scripts/debdiff.1:50 ../scripts/debi.1:65
+#: ../scripts/debrelease.1:56 ../scripts/deb-reversion.dbk:128
+#: ../scripts/debrsign.1:30 ../scripts/debsign.1:39 ../scripts/debsnap.1:26
+#: ../scripts/debuild.1:217 ../scripts/dget.pl:523
+#: ../scripts/diff2patches.1:13 ../scripts/dpkg-depcheck.1:15
+#: ../scripts/dscverify.1:17 ../scripts/getbuildlog.1:24
+#: ../scripts/grep-excuses.1:13 ../scripts/licensecheck.pl:43
+#: ../scripts/list-unreleased.1:12 ../scripts/manpage-alert.1:14
+#: ../scripts/mass-bug.pl:60 ../scripts/mk-build-deps.pl:40
+#: ../scripts/nmudiff.1:21 ../scripts/plotchangelog.1:43
+#: ../scripts/pts-subscribe.1:18 ../scripts/rc-alert.1:17
+#: ../scripts/rmadison.pl:197 ../scripts/tagpending.pl:94
+#: ../scripts/transition-check.pl:42 ../scripts/uscan.1:323
+#: ../scripts/uupdate.1:50 ../scripts/whodepends.1:10
 #: ../scripts/who-uploads.1:15 ../scripts/wnpp-alert.1:17
 #: ../scripts/wnpp-check.1:16
 #, no-wrap
@@ -2451,17 +2453,17 @@ msgstr ""
 "« show » et « bugs ». Voir la description plus haut."
 
 # type: SH
-#: ../scripts/bts.pl:3626 ../scripts/debc.1:92 ../scripts/debchange.1:341
-#: ../scripts/debcheckout.pl:142 ../scripts/debclean.1:90
-#: ../scripts/debcommit.pl:97 ../scripts/debdiff.1:159 ../scripts/debi.1:99
-#: ../scripts/debrelease.1:105 ../scripts/debrsign.1:57
-#: ../scripts/debsign.1:105 ../scripts/debuild.1:288 ../scripts/dget.pl:586
-#: ../scripts/dpkg-depcheck.1:102 ../scripts/dscverify.1:38
-#: ../scripts/grep-excuses.1:27 ../scripts/licensecheck.pl:83
-#: ../scripts/mass-bug.pl:128 ../scripts/nmudiff.1:69
-#: ../scripts/plotchangelog.1:106 ../scripts/pts-subscribe.1:42
-#: ../scripts/rmadison.pl:261 ../scripts/uscan.1:432 ../scripts/uupdate.1:86
-#: ../scripts/who-uploads.1:50
+#: ../scripts/bts.pl:3626 ../scripts/dcontrol.pl:257 ../scripts/debc.1:92
+#: ../scripts/debchange.1:341 ../scripts/debcheckout.pl:142
+#: ../scripts/debclean.1:90 ../scripts/debcommit.pl:97
+#: ../scripts/debdiff.1:159 ../scripts/debi.1:99 ../scripts/debrelease.1:105
+#: ../scripts/debrsign.1:57 ../scripts/debsign.1:105 ../scripts/debuild.1:288
+#: ../scripts/dget.pl:586 ../scripts/dpkg-depcheck.1:102
+#: ../scripts/dscverify.1:38 ../scripts/grep-excuses.1:27
+#: ../scripts/licensecheck.pl:87 ../scripts/mass-bug.pl:128
+#: ../scripts/nmudiff.1:69 ../scripts/plotchangelog.1:106
+#: ../scripts/pts-subscribe.1:42 ../scripts/rmadison.pl:261
+#: ../scripts/uscan.1:432 ../scripts/uupdate.1:86 ../scripts/who-uploads.1:50
 #, no-wrap
 msgid "CONFIGURATION VARIABLES"
 msgstr "VARIABLES DE CONFIGURATION"
@@ -2469,7 +2471,7 @@ msgstr "VARIABLES DE CONFIGURATION"
 # NOTE: presque identique
 # type: Plain text
 #: ../scripts/bts.pl:3628 ../scripts/debcommit.pl:99
-#: ../scripts/licensecheck.pl:85 ../scripts/mass-bug.pl:130
+#: ../scripts/licensecheck.pl:89 ../scripts/mass-bug.pl:130
 msgid ""
 "The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  Command "
@@ -2729,19 +2731,20 @@ msgstr ""
 #: ../scripts/bts.pl:3729 ../scripts/checkbashisms.1:60
 #: ../scripts/cowpoke.1:221 ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62
 #: ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53
-#: ../scripts/dcmd.1:89 ../scripts/debc.1:115 ../scripts/debchange.1:410
-#: ../scripts/debcheckout.pl:180 ../scripts/debclean.1:107
-#: ../scripts/debcommit.pl:759 ../scripts/debdiff.1:205 ../scripts/debi.1:122
-#: ../scripts/debrelease.1:132 ../scripts/deb-reversion.dbk:247
-#: ../scripts/debrsign.1:66 ../scripts/debsign.1:134 ../scripts/debsnap.1:118
-#: ../scripts/debuild.1:408 ../scripts/dget.pl:630
-#: ../scripts/diff2patches.1:37 ../scripts/dpkg-depcheck.1:118
-#: ../scripts/dpkg-genbuilddeps.1:30 ../scripts/dscverify.1:49
-#: ../scripts/grep-excuses.1:37 ../scripts/list-unreleased.1:19
-#: ../scripts/nmudiff.1:92 ../scripts/plotchangelog.1:124
-#: ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:81
-#: ../scripts/rmadison.pl:293 ../scripts/tagpending.pl:149
-#: ../scripts/uscan.1:519 ../scripts/uupdate.1:160 ../scripts/wnpp-alert.1:29
+#: ../scripts/dcmd.1:89 ../scripts/dcontrol.pl:280 ../scripts/debc.1:115
+#: ../scripts/debchange.1:410 ../scripts/debcheckout.pl:180
+#: ../scripts/debclean.1:107 ../scripts/debcommit.pl:759
+#: ../scripts/debdiff.1:205 ../scripts/debi.1:122 ../scripts/debrelease.1:132
+#: ../scripts/deb-reversion.dbk:247 ../scripts/debrsign.1:66
+#: ../scripts/debsign.1:134 ../scripts/debsnap.1:118 ../scripts/debuild.1:408
+#: ../scripts/dget.pl:630 ../scripts/diff2patches.1:37
+#: ../scripts/dpkg-depcheck.1:118 ../scripts/dpkg-genbuilddeps.1:30
+#: ../scripts/dscverify.1:49 ../scripts/grep-excuses.1:37
+#: ../scripts/list-unreleased.1:19 ../scripts/nmudiff.1:92
+#: ../scripts/plotchangelog.1:124 ../scripts/pts-subscribe.1:51
+#: ../scripts/rc-alert.1:81 ../scripts/rmadison.pl:293
+#: ../scripts/tagpending.pl:149 ../scripts/uscan.1:519
+#: ../scripts/uupdate.1:160 ../scripts/wnpp-alert.1:29
 #: ../scripts/wnpp-check.1:23 ../scripts/devscripts.conf.5:54
 #, no-wrap
 msgid "SEE ALSO"
@@ -2925,7 +2928,7 @@ msgstr "Afficher les informations sur la version."
 
 # type: =head1
 #: ../scripts/build-rdeps.pl:282 ../scripts/desktop2menu.pl:43
-#: ../scripts/licensecheck.pl:107 ../scripts/namecheck.pl:51
+#: ../scripts/licensecheck.pl:111 ../scripts/namecheck.pl:51
 #: ../scripts/svnpath.pl:93 ../scripts/transition-check.pl:72
 msgid "LICENSE"
 msgstr "LICENCE"
@@ -4630,6 +4633,182 @@ msgid ""
 msgstr ""
 "Ce programme a été écrit par Romain Francoise E<lt>rfrancoise@debian."
 "orgE<gt> et est distribué sous licence GPL, version 2 ou ultérieure."
+
+# type: textblock
+#: ../scripts/dcontrol.pl:193
+msgid ""
+"dcontrol -- Query package and source control files for all Debian "
+"distributions"
+msgstr ""
+
+# type: =item
+#: ../scripts/dcontrol.pl:199
+#, fuzzy
+msgid "B<dcontrol> [I<options>] I<package>[I<modifiers>] [I<...>]"
+msgstr "B<dget> [I<options>] I<paquet>=I<version>"
+
+# type: textblock
+#: ../scripts/dcontrol.pl:205
+msgid ""
+"B<dcontrol> queries a remote database of Debian binary and source package "
+"control files. It can be thought of as an B<apt-cache> webservice that also "
+"operates for distributions and architectures different from the local "
+"machine."
+msgstr ""
+
+# type: =head1
+#: ../scripts/dcontrol.pl:209
+msgid "MODIFIERS"
+msgstr ""
+
+# type: textblock
+#: ../scripts/dcontrol.pl:211
+msgid "Like B<apt-cache>, packages can be suffixed by modifiers:"
+msgstr ""
+
+# type: TP
+#: ../scripts/dcontrol.pl:215
+#, fuzzy
+msgid "B<=>I<version>"
+msgstr "B<--version>"
+
+# type: textblock
+#: ../scripts/dcontrol.pl:217
+msgid "Exact version match"
+msgstr ""
+
+# type: =item
+#: ../scripts/dcontrol.pl:219
+#, fuzzy
+msgid "B<@>I<architecture>"
+msgstr "B<-a>, B<--architecture=>I<ARCH>"
+
+# type: textblock
+#: ../scripts/dcontrol.pl:221
+msgid ""
+"Query this only architecture. Use B<@source> for source packages, B<@binary> "
+"excludes source packages."
+msgstr ""
+
+# type: =item
+#: ../scripts/dcontrol.pl:224
+msgid "B</>[I<archive>B<.>][I<suite>][B</>I<component>]"
+msgstr ""
+
+# type: textblock
+#: ../scripts/dcontrol.pl:226
+msgid ""
+"Restrict to archive (debian, debian-backports, debian-security, debian-"
+"volatile), suite (always codenames, with the exception of experimental), and/"
+"or component (main, updates/main, ...)"
+msgstr ""
+
+# type: textblock
+#: ../scripts/dcontrol.pl:232
+msgid ""
+"By default, all versions, suites, and architectures are queried. Refer to "
+"B<http://qa.debian.org/cgi-bin/dcontrol> for currently supported values."
+msgstr ""
+
+# type: TP
+#: ../scripts/dcontrol.pl:239
+#, fuzzy
+msgid "B<-s>, B<--show-suites>"
+msgstr "B<-l>, B<--list-files>"
+
+# type: textblock
+#: ../scripts/dcontrol.pl:241
+msgid "Add headers showing which distribution the control file is from."
+msgstr ""
+
+# type: TP
+#: ../scripts/dcontrol.pl:243
+#, fuzzy
+msgid "B<-d>, B<--debug>"
+msgstr "B<-d> B<--debug>"
+
+# type: Plain text
+#: ../scripts/dcontrol.pl:245
+#, fuzzy
+msgid "Print URL queried."
+msgstr "Affiche la version."
+
+# type: TP
+#: ../scripts/dcontrol.pl:247 ../scripts/debcheckout.pl:92
+#: ../scripts/debsnap.1:49 ../scripts/dget.pl:576
+#: ../scripts/dpkg-depcheck.1:96 ../scripts/getbuildlog.1:25
+#: ../scripts/mk-build-deps.pl:58 ../scripts/rmadison.pl:221
+#, no-wrap
+msgid "B<-h>, B<--help>"
+msgstr "B<-h>, B<--help>"
+
+# type: Plain text
+#: ../scripts/dcontrol.pl:249 ../scripts/dget.pl:578
+msgid "Show a help message."
+msgstr "Affiche un message d'aide."
+
+# type: TP
+#: ../scripts/dcontrol.pl:251 ../scripts/dget.pl:580
+#: ../scripts/getbuildlog.1:28
+#, no-wrap
+msgid "B<-V>, B<--version>"
+msgstr "B<-V>, B<--version>"
+
+# type: Plain text
+#: ../scripts/dcontrol.pl:253 ../scripts/dget.pl:582
+msgid "Show version information."
+msgstr "Affiche les informations sur la version."
+
+# NOTE: presque identique
+# type: Plain text
+#: ../scripts/dcontrol.pl:259 ../scripts/dget.pl:588
+msgid ""
+"The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
+"sourced by a shell in that order to set configuration variables.  Command "
+"line options can be used to override configuration file settings.  "
+"Environment variable settings are ignored for this purpose.  The currently "
+"recognised variable is:"
+msgstr ""
+"Les deux fichiers de configuration I</etc/devscripts.conf> et I<~/."
+"devscripts> sont chargés dans cet ordre par un interpréteur de commandes "
+"pour positionner les variables de configuration. Des options de ligne de "
+"commande peuvent être utilisées pour écraser les paramètres des fichiers de "
+"configuration. Les paramètres des variables d'environnement sont ignorés à "
+"cette fin. La variable actuellement reconnue est :"
+
+# type: =item
+#: ../scripts/dcontrol.pl:267
+msgid "DCONTROL_URL"
+msgstr ""
+
+# type: textblock
+#: ../scripts/dcontrol.pl:269
+msgid "URL to query. Default is B<http://qa.debian.org/cgi-bin/dcontrol>."
+msgstr ""
+
+# type: Plain text
+#: ../scripts/dcontrol.pl:275
+#, fuzzy
+msgid "This program is Copyright (C) 2009 by Christoph Berg <myon@debian.org>."
+msgstr ""
+"Ce programme a été écrit par Joey Hess <joeyh@debian.org>, Copyright (C) "
+"2006."
+
+# type: textblock
+#: ../scripts/dcontrol.pl:277 ../scripts/dget.pl:627
+#: ../scripts/tagpending.pl:453
+msgid ""
+"This program is licensed under the terms of the GPL, either version 2 of the "
+"License, or (at your option) any later version."
+msgstr ""
+"Ce programme est publié sous les termes de la Licence Publique Générale "
+"(GPL) version 2 ou toute version ultérieure (à votre discrétion)."
+
+# type: Plain text
+#: ../scripts/dcontrol.pl:282
+#, fuzzy
+msgid "B<apt-cache>(1), B<curl>(1), B<wget>(1)."
+msgstr "B<cowbuilder>(1), B<pbuilder>(1), B<ssh-agent>(1)."
 
 # type: TH
 #: ../scripts/dd-list.1:17
@@ -6394,14 +6573,6 @@ msgstr ""
 #: ../scripts/debcheckout.pl:90
 msgid "Also see B<-p>. This option and B<-p> are mutually exclusive."
 msgstr ""
-
-# type: TP
-#: ../scripts/debcheckout.pl:92 ../scripts/debsnap.1:49 ../scripts/dget.pl:576
-#: ../scripts/dpkg-depcheck.1:96 ../scripts/getbuildlog.1:25
-#: ../scripts/mk-build-deps.pl:58 ../scripts/rmadison.pl:221
-#, no-wrap
-msgid "B<-h>, B<--help>"
-msgstr "B<-h>, B<--help>"
 
 # type: Plain text
 #: ../scripts/debcheckout.pl:94
@@ -10712,39 +10883,6 @@ msgstr ""
 "Éviter les caches HTTP côté serveur en envoyant un en-tête B<Pragma: no-"
 "cache>."
 
-# type: Plain text
-#: ../scripts/dget.pl:578
-msgid "Show a help message."
-msgstr "Affiche un message d'aide."
-
-# type: TP
-#: ../scripts/dget.pl:580 ../scripts/getbuildlog.1:28
-#, no-wrap
-msgid "B<-V>, B<--version>"
-msgstr "B<-V>, B<--version>"
-
-# type: Plain text
-#: ../scripts/dget.pl:582
-msgid "Show version information."
-msgstr "Affiche les informations sur la version."
-
-# NOTE: presque identique
-# type: Plain text
-#: ../scripts/dget.pl:588
-msgid ""
-"The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
-"sourced by a shell in that order to set configuration variables.  Command "
-"line options can be used to override configuration file settings.  "
-"Environment variable settings are ignored for this purpose.  The currently "
-"recognised variable is:"
-msgstr ""
-"Les deux fichiers de configuration I</etc/devscripts.conf> et I<~/."
-"devscripts> sont chargés dans cet ordre par un interpréteur de commandes "
-"pour positionner les variables de configuration. Des options de ligne de "
-"commande peuvent être utilisées pour écraser les paramètres des fichiers de "
-"configuration. Les paramètres des variables d'environnement sont ignorés à "
-"cette fin. La variable actuellement reconnue est :"
-
 # type: =item
 #: ../scripts/dget.pl:596
 msgid "DGET_PATH"
@@ -10819,15 +10957,6 @@ msgstr ""
 "Ce programme est Copyright \\(co 2005-2008 Christoph Berg <myon@debian.org>. "
 "Les modifications sont Copyright \\(co 2005-2006 Julian Gilbey <jdg@debian."
 "org>."
-
-# type: textblock
-#: ../scripts/dget.pl:627 ../scripts/tagpending.pl:453
-msgid ""
-"This program is licensed under the terms of the GPL, either version 2 of the "
-"License, or (at your option) any later version."
-msgstr ""
-"Ce programme est publié sous les termes de la Licence Publique Générale "
-"(GPL) version 2 ou toute version ultérieure (à votre discrétion)."
 
 # type: textblock
 #: ../scripts/dget.pl:632
@@ -11776,10 +11905,11 @@ msgstr "B<licensecheck> B<--help|--version>"
 
 # type: textblock
 #: ../scripts/licensecheck.pl:30
+#, fuzzy
 msgid ""
-"B<licensecheck> [B<--verbose>] [B<--copyright>] [B<-l|--lines=N>] [B<-i|--"
-"ignore=regex>] [B<-c|--check=regex>] [B<-r|--recursive>] I<list of files and "
-"directories to check>"
+"B<licensecheck> [B<--no-conf>] [B<--verbose>] [B<--copyright>] [B<-l|--"
+"lines=N>] [B<-i|--ignore=regex>] [B<-c|--check=regex>] [B<-r|--recursive>] "
+"I<list of files and directories to check>"
 msgstr ""
 "B<licensecheck> [B<--verbose>] [B<--copyright>] [B<-l|--lines=N>] [B<-i|--"
 "ignore=regex>] [B<-c|--check=regex>] [B<-r|--recursive>] I<liste de fichiers "
@@ -11898,13 +12028,23 @@ msgid "Also display copyright text found within the file"
 msgstr ""
 "Afficher aussi les blocs de textes de copyright trouvés dans le fichier."
 
+# type: Plain text
+#: ../scripts/licensecheck.pl:81
+#, fuzzy
+msgid ""
+"B<--no-conf> B<--noconf> Do not read any configuration files. This can only "
+"be used as the first option given on the command-line."
+msgstr ""
+"Ne lit aucun fichier de configuration. L'option ne peut être utilisée qu'en "
+"première position de la ligne de commande."
+
 # type: TP
-#: ../scripts/licensecheck.pl:93
+#: ../scripts/licensecheck.pl:97
 msgid "B<LICENSECHECK_VERBOSE>"
 msgstr "B<LICENSECHECK_VERBOSE>"
 
 # type: Plain text
-#: ../scripts/licensecheck.pl:95
+#: ../scripts/licensecheck.pl:99
 msgid ""
 "If this is set to I<yes>, then it is the same as the --verbose command line "
 "parameter being used. The default is I<no>."
@@ -11913,12 +12053,12 @@ msgstr ""
 "de la ligne de commande. La valeur par défaut est I<no>."
 
 # type: =item
-#: ../scripts/licensecheck.pl:98
+#: ../scripts/licensecheck.pl:102
 msgid "B<LICENSECHECK_PARSELINES>"
 msgstr "B<LICENSECHECK_PARSELINES>"
 
 # type: textblock
-#: ../scripts/licensecheck.pl:100
+#: ../scripts/licensecheck.pl:104
 msgid ""
 "If this is set to a positive number then the specified number of lines at "
 "the start of each file will be read whilst attempting to determine the "
@@ -11930,7 +12070,7 @@ msgstr ""
 "de commande."
 
 # type: textblock
-#: ../scripts/licensecheck.pl:109
+#: ../scripts/licensecheck.pl:113
 msgid ""
 "This code is copyright by Adam D. Barratt <adam@adam-barratt.org.uk>, all "
 "rights reserved; based on a script of the same name from the KDE SDK, which "
@@ -11945,7 +12085,7 @@ msgstr ""
 "générale GNU (GNU General Public Licence), version 2 ou ultérieure."
 
 # type: textblock
-#: ../scripts/licensecheck.pl:118 ../scripts/transition-check.pl:83
+#: ../scripts/licensecheck.pl:122 ../scripts/transition-check.pl:83
 msgid "Adam D. Barratt <adam@adam-barratt.org.uk>"
 msgstr "Adam D. Barratt <adam@adam-barratt.org.uk>"
 

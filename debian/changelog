@@ -15,7 +15,11 @@ devscripts (2.10.47) UNRELEASED; urgency=low
   * debchange: Do not use an empty gecos field when trying to determine the
     maintainer's name. (Closes: 516423)
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Thu, 12 Feb 2009 20:23:12 +0000
+  [ Christoph Berg ]
+  * dcontrol: New script to query binary and source package control files at
+    http://qa.debian.org/cgi-bin/dcontrol.
+
+ -- Christoph Berg <myon@debian.org>  Sat, 28 Feb 2009 22:59:55 +0100
 
 devscripts (2.10.46) unstable; urgency=low
 

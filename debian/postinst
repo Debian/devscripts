@@ -620,7 +620,7 @@ EOF
 	if dpkg --compare-versions "$2" lt 2.10.45
 	then
 	    cat >> /etc/devscripts.conf << EOF
-##### debsnap
+##### debsnap options added in 2.10.45
 #
 # Where to put the directory named <prefix>-<package>/
 # default: source-$package_name if unset
@@ -646,6 +646,17 @@ EOF
 # Always compare package in version order, rather than the order specified
 # on the command line?
 # DEBDIFF_AUTO_VER_SORT=no
+
+EOF
+	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.47
+	then
+	    cat >> /etc/devscripts.conf << EOF
+##### dcontrol option added in 2.10.47
+#
+# URL to query
+# DCONTROL_URL="http://qa.debian.org/cgi-bin/dcontrol"
 
 EOF
 	fi
