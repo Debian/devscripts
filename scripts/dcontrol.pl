@@ -81,7 +81,7 @@ sub apt_get {
 	die "$arg does not start with a valid package name\n";
     }
     my $url = "$dcontrol_url?package=" . uri_escape($1);
-    if ($arg =~ /=([\w.+-]+)/) {
+    if ($arg =~ /=([\w~:.+-]+)/) {
 	$url .= "&version=" . uri_escape($1);
     }
     if ($arg =~ /@([\w.-]+)/) {
