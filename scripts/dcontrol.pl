@@ -48,11 +48,12 @@ Options:
 Modifiers:
     =version         Exact version match
     \@architecture    Query this architecture
-    /[archive.][suite][/component]
+    /[archive:][suite][/component]
                      Restrict to archive (debian, debian-backports,
 		     debian-security, debian-volatile), suite (always
 		     codenames, with the exception of experimental), and/or
-		     component (main, updates/main, ...)
+		     component (main, updates/main, ...). Use // if the suite
+		     name contains slashes.
 
 By default, all versions, suites, and architectures are queried.
 Use \@source for source packages. \@binary returns no source packages.
@@ -86,13 +87,17 @@ sub apt_get {
     if ($arg =~ /@([\w.-]+)/) {
 	$url .= "&architecture=$1";
     }
-    if ($arg =~ /\/([\w-]*)\.([\w-]*)\/([\w-]+)/) {
+    if ($arg =~ m!/([\w-]*):([\w/-]*)//([\w/-]*)!) {
 	$url .= "&archive=$1&suite=$2&component=$3";
-    } elsif ($arg =~ /\/([\w-]*)\.([\w\/-]*)/) {
-	$url .= "&archive=$1&suite=$2";
-    } elsif ($arg =~ /\/([\w-]*)\/([\w-]*)/) {
+    } elsif ($arg =~ m!/([\w/-]*)//([\w/-]*)!) {
 	$url .= "&suite=$1&component=$2";
-    } elsif ($arg =~ /\/([\w\/-]+)/) {
+    } elsif ($arg =~ m!/([\w-]*):([\w-]*)/([\w/-]*)!) {
+	$url .= "&archive=$1&suite=$2&component=$3";
+    } elsif ($arg =~ m!/([\w-]*):([\w-]*)!) {
+	$url .= "&archive=$1&suite=$2";
+    } elsif ($arg =~ m!/([\w-]*)/([\w/-]*)!) {
+	$url .= "&suite=$1&component=$2";
+    } elsif ($arg =~ m!/([\w\/-]+)!) {
 	$url .= "&suite=$1";
     }
     if ($opt->{'show-suite'}) {
@@ -203,11 +208,13 @@ Exact version match
 Query this only architecture. Use B<@source> for source packages,
 B<@binary> excludes source packages.
 
-=item B</>[I<archive>B<.>][I<suite>][B</>I<component>]
+=item B</>[I<archive>B<:>][I<suite>][B</>I<component>]
 
-Restrict to archive (debian, debian-backports, debian-security,
-debian-volatile), suite (always codenames, with the exception of experimental),
-and/or component (main, updates/main, ...)
+Restrict to I<archive> (debian, debian-backports, debian-security,
+debian-volatile), I<suite> (always codenames, with the exception of
+experimental), and/or I<component> (main, updates/main, ...). Use two slashes
+(B<//>) to separate suite and component if the suite name contains slashes.
+(Component can be left empty.)
 
 =back
 
