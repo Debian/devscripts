@@ -19,25 +19,19 @@
 #   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 
 use strict;
-use Getopt::Long;
 use File::Basename;
+use Getopt::Long;
+use LWP::UserAgent;
+use URI::Escape;
 
 # global variables
 
 my $progname = basename($0,'.pl');  # the '.pl' is for when we're debugging
 my $modified_conf_msg;
 my $dcontrol_url;
-my $wget;
 my $opt;
 
-# use curl if installed, wget otherwise
-if (system("command -v curl >/dev/null 2>&1") == 0) {
-    $wget = "curl";
-} elsif (system("command -v wget >/dev/null 2>&1") == 0) {
-    $wget = "wget";
-} else {
-    die "$progname: can't find either curl or wget; you need at least one of these\ninstalled to run me!\n";
-}
+my $ua = LWP::UserAgent->new(agent => "$progname ###VERSION###");
 
 # functions
 
@@ -80,30 +74,14 @@ GNU General Public License, version 2 or later.
 EOF
 }
 
-
-sub wget {
-    my ($url) = @_;
-
-    my @cmd = ($wget);
-    # curl does not follow document moved headers, and does not exit
-    # with a non-zero error code by default if a document is not found
-    if ($wget eq "curl") {
-	push @cmd, "-f", "-L", "-s", "-S";
-    } else {
-	push @cmd, "-O", "-", "-q";
-    }
-    system @cmd, $url;
-    return $? >> 8;
-}
-
 sub apt_get {
     my ($arg) = @_;
     unless ($arg =~ /^([\w.+-]+)/) {
 	die "$arg does not start with a valid package name\n";
     }
-    my $url = "$dcontrol_url?package=$1";
-    if ($arg =~ /=([\w.-]+)/) {
-	$url .= "&version=$1";
+    my $url = "$dcontrol_url?package=" . uri_escape($1);
+    if ($arg =~ /=([\w.+-]+)/) {
+	$url .= "&version=" . uri_escape($1);
     }
     if ($arg =~ /@([\w.-]+)/) {
 	$url .= "&architecture=$1";
@@ -121,8 +99,12 @@ sub apt_get {
 	$url .= "&annotate=yes";
     }
     print "$url\n" if $opt->{debug};
-    wget ($url);
-    print "\n";
+    my $response = $ua->get ($url);
+    if ($response->is_success) {
+	print $response->content . "\n";
+    } else {
+	die $response->status_line;
+    }
 }
 
 # main program
@@ -279,4 +261,4 @@ of the License, or (at your option) any later version.
 
 =head1 SEE ALSO
 
-B<apt-cache>(1), B<curl>(1), B<wget>(1).
+B<apt-cache>(1).

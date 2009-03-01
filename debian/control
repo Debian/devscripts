@@ -52,7 +52,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - dcmd: run a given command replacing the name of a .changes or .dsc file
     with each of the files referenced therein 
   - dcontrol: remotely query package and source control files for all Debian
-    distributions. [wget | curl]
+    distributions. [libwww-perl]
   - dd-list: given a list of packages, pretty-print it ordered by maintainer
   - debc: display the contents of just-built .debs
   - debchange/dch: automagically add entries to debian/changelog files
