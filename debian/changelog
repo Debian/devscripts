@@ -8,6 +8,8 @@ devscripts (2.10.47) UNRELEASED; urgency=low
       differences were found, debdiff will now exit with a status of 1, as
       per debdiff(1).
     + Support bzip2 and lzma compressed orig tarballs. (Closes: #473969)
+  * debuild: Support bzip2 and lzma compressed orig tarballs.
+    (Closes: #473974)
   * licensecheck:
     + Document --no-conf.
     + Fix an uninitialised variable warning when --no-conf is used. Thanks.
