@@ -507,11 +507,16 @@ elsif ($type eq 'dsc') {
 		system("diffstat $filename");
 		print "\n";
 	    }
-	    open( INTERDIFF, '<', $filename );
-	    while( <INTERDIFF> ) {
-		print $_;
+
+	    if (-s $filename) {
+		open( INTERDIFF, '<', $filename );
+		while( <INTERDIFF> ) {
+		    print $_;
+		}
+		close INTERDIFF;
+
+		$exit_status = 1;
 	    }
-	    close INTERDIFF;
 	}
     } else {
 	# Any other situation
@@ -623,19 +628,23 @@ elsif ($type eq 'dsc') {
 	    system ("rm", "-rf", $wdiffdir1, $wdiffdir2);
 	}
 
-	open( DIFF, '<', $filename );
+	if (-s $filename) {
+	    open( DIFF, '<', $filename );
 
-	while(<DIFF>) {
+	    while(<DIFF>) {
 		s/^--- $dir1\//--- /;
 		s/^\+\+\+ $dir2\//+++ /;
 		s/^(diff .*) $dir1\/\Q$sdir1\E/$1 $sdir1/;
 		s/^(diff .*) $dir2\/\Q$sdir2\E/$1 $sdir2/;
 		print;
- 	}
-	close DIFF;
+	    }
+	    close DIFF;
+
+	    $exit_status = 1;
+	}
     }
 
-    exit 0;
+    exit $exit_status;
 }
 else {
     fatal "Internal error: \$type = $type unrecognised";
