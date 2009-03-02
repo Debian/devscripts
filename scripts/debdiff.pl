@@ -449,7 +449,7 @@ elsif ($type eq 'dsc') {
 		if ($file =~ /\.diff\.gz$/) {
 		    $diffs[$i] = cwd() . '/' . $file;
 		}
-		elsif ($file =~ /(\.orig)?\.tar\.gz$/) {
+		elsif ($file =~ /(\.orig)?\.tar\.(gz|bz2|lzma)$/) {
 		    $origs[$i] = $file;
 		}
 	    } else {

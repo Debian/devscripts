@@ -7,6 +7,7 @@ devscripts (2.10.47) UNRELEASED; urgency=low
     + Set the exit status correctly when comparing source packages.  If
       differences were found, debdiff will now exit with a status of 1, as
       per debdiff(1).
+    + Support bzip2 and lzma compressed orig tarballs. (Closes: #473969)
   * licensecheck:
     + Document --no-conf.
     + Fix an uninitialised variable warning when --no-conf is used. Thanks.
