@@ -577,7 +577,10 @@ elsif ($type eq 'dsc') {
 
 	# Execute diff and remove the common prefixes $dir1/$dir2, so the patch can be used with -p1,
 	# as if when interdiff would have been used:
-	system(join(" ", @command)) || fatal "Failed to execute @command!";
+	system(join(" ", @command));
+	if ($? != 0 and $? >> 8 != 1) {
+	    fatal "Failed to execute @command!";
+	}
 
 	if ($have_diffstat and $show_diffstat) {
 	    print "diffstat for $sdir1 $sdir2\n\n";
