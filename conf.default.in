@@ -475,6 +475,11 @@
 
 ##### nmudiff
 # 
+# Number of days to indicate that an NMU upload has been delayed by
+# using the DELAYED upload queue. 0 indicates no delay.
+# Defaults to "XX" which adds a placeholder to the e-mail.
+# NMUDIFF_DELAY=3
+#
 # Should we use mutt to edit and send the message or just a plain old
 # editor?
 # NMUDIFF_MUTT=yes

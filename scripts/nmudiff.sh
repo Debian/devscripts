@@ -34,6 +34,11 @@ usage () {
     --no-mutt         Mail the message directly, don't use mutt
     --from=EMAIL      Use EMAIL address for message to BTS; defaults to
                       value of DEBEMAIL or EMAIL
+    --delay=DELAY     Indicate that the NMU has been uploaded to the
+                      DELAYED queue, with a delay of DELAY days; defaults
+                      to a placeholder value of "XX". If DELAY is 0 then
+                      no reference is made to the DELAYED queue.
+    --no-delay        Equivalent to \"--delay=0\"
     --no-conf, --noconf
                       Don't read devscripts config files;
                       must be the first option given
@@ -54,10 +59,11 @@ EOF
 }
 
 # Boilerplate: set config variables
+DEFAULT_NMUDIFF_DELAY="XX"
 DEFAULT_NMUDIFF_MUTT="yes"
 DEFAULT_NMUDIFF_NEWREPORT="maybe"
 DEFAULT_BTS_SENDMAIL_COMMAND="/usr/sbin/sendmail"
-VARS="NMUDIFF_MUTT NMUDIFF_NEWREPORT BTS_SENDMAIL_COMMAND"
+VARS="NMUDIFF_DELAY NMUDIFF_MUTT NMUDIFF_NEWREPORT BTS_SENDMAIL_COMMAND"
 # Don't think it's worth including this stuff
 # DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1
 # DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.*)?'
@@ -93,6 +99,14 @@ else
 	"") BTS_SENDMAIL_COMMAND=/usr/sbin/sendmail ;;
 	*) ;;
     esac
+    if [ "$NMUDIFF_DELAY" = "XX" ]; then
+	# Fine
+	:
+    else
+	if ! [ "$NMUDIFF_DELAY" -ge 0 ] 2>/dev/null; then
+	    NMUDIFF_DELAY=XX
+	fi
+    fi
     case "$NMUDIFF_MUTT" in
 	yes|no) ;;
 	*) NMUDIFF_MUTT=yes ;;
@@ -130,6 +144,7 @@ fi
 # Removed: --long check-dirname-level:,check-dirname-regex: \
 TEMP=$(getopt -s bash -o "h" \
 	--long sendmail:,from:,new,old,mutt,no-mutt,nomutt \
+	--long delay:,no-delay,nodelay \
 	--long no-conf,noconf \
 	--long help,version -n "$PROGNAME" -- "$@")
 if [ $? != 0 ] ; then exit 1 ; fi
@@ -149,6 +164,21 @@ while [ "$1" ]; do
 # 	;;
 #     --check-dirname-regex)
 # 	shift; 	CHECK_DIRNAME_REGEX="$1" ;;
+    --delay)
+	shift
+	if [ "$1" = "XX" ]; then
+	    # Fine
+	    NMUDIFF_DELAY="$1"
+	else
+	    if ! [ "$1" -ge 0 ] 2>/dev/null; then
+		NMUDIFF_DELAY=XX
+	    else
+		NMUDIFF_DELAY="$1"
+	    fi
+	fi
+	;;
+    --nodelay|--no-delay)
+	NMUDIFF_DELAY=0 ;;
     --mutt)
 	NMUDIFF_MUTT=yes ;;
     --nomutt|--no-mutt)
@@ -304,6 +334,22 @@ fi
 
 TMPNAM="$( tempfile )"
 
+if [ "$NMUDIFF_DELAY" = "XX" ]; then
+    DELAY_HEADER="
+[Replace XX with correct value]"
+fi
+
+if [ "$NMUDIFF_DELAY" = "0" ]; then
+    BODY="$(printf "%s\n%s\n" \
+"I've prepared an NMU for $SOURCE (versioned as $VERSION). The diff" \
+"is attached to this message.")"
+else
+    BODY="$(printf "%s\n%s\n%s\n" \
+"I've prepared an NMU for $SOURCE (versioned as $VERSION) and" \
+"uploaded it to DELAYED/$NMUDIFF_DELAY. Please free to tell me if I should" \
+"delay it longer.")"
+fi
+
 if [ "$NMUDIFF_MUTT" = no ]; then
     cat <<EOF > "$TMPNAM"
 From: $FROM
@@ -315,12 +361,10 @@ Date: `date -R`
 X-NMUDIFF-Version: ###VERSION###
 
 $TAGS
-
-[Replace XX with correct value]
+$DELAY_HEADER
 Dear maintainer,
 
-I've prepared an NMU for $SOURCE (versioned as $VERSION) and uploaded it
-to DELAYED/XX. Please feel free to tell me if I should delay it longer.
+$BODY
 
 Regards.
 EOF
@@ -356,12 +400,10 @@ EOF
 else # NMUDIFF_MUTT=yes
     cat <<EOF > "$TMPNAM"
 $TAGS
-
-[Replace XX with correct value]
+$DELAY_HEADER
 Dear maintainer,
 
-I've prepared an NMU for $SOURCE (versioned as $VERSION) and uploaded it
-to DELAYED/XX. Please feel free to tell me if I should delay it longer.
+$BODY
 
 Regards.
 EOF

@@ -658,6 +658,13 @@ EOF
 # URL to query
 # DCONTROL_URL="http://qa.debian.org/cgi-bin/dcontrol"
 
+#### nmudiff option added in 2.10.47
+#
+# Number of days to indicate that an NMU upload has been delayed by
+# using the DELAYED upload queue. 0 indicates no delay.
+# Defaults to "XX" which adds a placeholder to the e-mail.
+# NMUDIFF_DELAY=3
+
 EOF
 	fi
     fi

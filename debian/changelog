@@ -18,6 +18,9 @@ devscripts (2.10.47) UNRELEASED; urgency=low
     + Rework the arguments passed to mutt in order to avoid problems
       attaching the diff with recent versions of mutt.  Thanks, Adeodato
       Simó. (Closes: #518127)
+    + Allow the specification of a particular DELAYED queue, rather
+      than including the "DELAYED/XX" placeholder.  May be specified as
+      0 to remove mention of DELAYED. (Closes: #518126)
   * rc-alert: Modify the description of the "I" flag to reference the
     squeeze-ignore tag rather than etch-ignore.
 
