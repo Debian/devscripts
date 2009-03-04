@@ -367,8 +367,8 @@ Regards.
 EOF
 
     mutt -s "$SOURCE: diff for NMU version $VERSION" -i "$TMPNAM" \
-	-a ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff \
 	-e "my_hdr X-NMUDIFF-Version: ###VERSION###" \
+	-a ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff -- \
 	$BCC_ADDRESS_MUTT $TO_ADDRESSES_MUTT
 
 fi

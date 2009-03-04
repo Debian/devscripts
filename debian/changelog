@@ -14,6 +14,10 @@ devscripts (2.10.47) UNRELEASED; urgency=low
     + Document --no-conf.
     + Fix an uninitialised variable warning when --no-conf is used. Thanks.
       Cristian Greco. (Closes: #515047)
+  * nmudiff:
+    + Rework the arguments passed to mutt in order to avoid problems
+      attaching the diff with recent versions of mutt.  Thanks, Adeodato
+      Simó. (Closes: #518127)
   * rc-alert: Modify the description of the "I" flag to reference the
     squeeze-ignore tag rather than etch-ignore.
 
