@@ -1,6 +1,8 @@
 devscripts (2.10.47) UNRELEASED; urgency=low
 
   [ Adam D. Barratt ]
+  * dcontrol: Produce "friendly" error messages if liburi-perl and/or
+    libwww-perl aren't installed.
   * debdiff:
     + Don't treat an absence of differences as an error when comparing
       source packages. (Closes: #515683)
@@ -23,6 +25,7 @@ devscripts (2.10.47) UNRELEASED; urgency=low
       0 to remove mention of DELAYED. (Closes: #518126)
   * rc-alert: Modify the description of the "I" flag to reference the
     squeeze-ignore tag rather than etch-ignore.
+  * debian/control, README: Add liburi-perl to the description of dcontrol.
 
   [ James Vega ]
   * bts: Include the module name when calling MIME::Base64::encode_base64
