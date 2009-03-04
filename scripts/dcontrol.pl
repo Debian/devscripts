@@ -24,7 +24,7 @@ use Getopt::Long;
 
 BEGIN {
     # Load the URI::Escape and LWP::UserAgent modules safely
-    my $progname = basename($0;,'.pl');
+    my $progname = basename($0,'.pl');
     eval { require URI::Escape; };
     if ($@) {
        if ($@ =~ /^Can\'t locate URI\/Escape\.pm/) {
@@ -37,7 +37,7 @@ BEGIN {
     eval { require LWP::UserAgent; };
     if ($@) {
        my $progname = basename $0;
-       if ($@ =~ /^Can\'t locate LWP) {
+       if ($@ =~ /^Can\'t locate LWP/) {
            die "$progname: you must have the libwww-perl package installed\nto use this script\n";
        }
        die "$progname: problem loading the LWP::UserAgent module:\n  $@\nHave you installed the libwww-perl package?\n";
