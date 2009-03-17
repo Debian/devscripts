@@ -18,7 +18,7 @@
 #
 
 # Created: Tue, 14 Aug 2007 10:20:55 +0200
-# Last-Modified: $Date$ 
+# Last-Modified: $Date: 2009-01-16 00:50:02 +0000 (Fri, 16 Jan 2009) $ 
 
 =head1 NAME
 
