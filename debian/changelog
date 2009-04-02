@@ -1,8 +1,14 @@
 devscripts (2.10.48) UNRELEASED; urgency=low
 
+  [ Adam D. Barratt ]
   * Update Standards Version to 3.8.1 (no changes required)
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 04 Mar 2009 19:41:41 +0000
+  [ Patrick Schoenfeld ]
+  * debchange: When renaming a directory (because of version change)
+    and noticing that no matching orig tarball exist, emit a warning.
+    (Closes: #500932)
+
+ -- Patrick Schoenfeld <schoenfeld@debian.org>  Thu, 02 Apr 2009 15:30:56 +0200
 
 devscripts (2.10.47) unstable; urgency=low
 

@@ -1393,6 +1393,12 @@ if ((basename(cwd()) =~ m%^\Q$PACKAGE\E-\Q$UVERSION\E$%) &&
 	} else {
 	    warn "$progname warning: Couldn't rename directory: $!";
 	}
+       # And check weither a new orig tarball exists
+       my @origs = glob("../$(PACKAGE)_$(new_uversion).*");
+       my $num_origs = grep { $_ =~ /^$(PACKAGE)_$(new_uversion)\.tar\.(gz|bz2|lzma)$/ } @origs;
+       if ($num_origs eq 0) {
+          warn "$progname warning: no orig tarball found for the new version.\n";
+       }
     }
 }
 
