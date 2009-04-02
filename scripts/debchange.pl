@@ -1351,7 +1351,7 @@ if ((!$TEXT and !$EMPTY_TEXT and ! ($opt_create and $opt_empty)) or @closes_text
 	my $newmtime = (stat("$changelog_path.dch"))[9];
 	defined $newmtime or fatal
 	    "Error getting modification time of temporary $changelog_path: $!";
-	if ($mtime == $newmtime && ! $opt_r && ! $opt_create) {
+	if ($mtime == $newmtime && ! $opt_create) {
 	    warn "$progname: $changelog_path unmodified; exiting.\n";
 	    exit 0;
 	}
