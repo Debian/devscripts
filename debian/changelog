@@ -7,6 +7,9 @@ devscripts (2.10.48) UNRELEASED; urgency=low
   * debchange: When renaming a directory (because of version change)
     and noticing that no matching orig tarball exist, emit a warning.
     (Closes: #500932)
+  * uscan: Use maximum compression rate while repacking files from bzip2/zip
+    into gzip. Thanks Nelson A. de Oliveira.
+    (Closes: #522442)
 
   [ James Vega ]
   * debchange: As per the other edit flags, do not modify the original

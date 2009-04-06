@@ -1289,7 +1289,7 @@ EOF
     if ($repack and $newfile_base =~ /^(.*)\.(tar\.bz2|tbz2?)$/) {
 	print "-- Repacking from bzip2 to gzip\n" if $verbose;
 	my $newfile_base_gz = "$1.tar.gz";
-	system("bunzip2 -c $destdir/$newfile_base | gzip > $destdir/$newfile_base_gz") == 0
+	system("bunzip2 -c $destdir/$newfile_base | gzip -9 > $destdir/$newfile_base_gz") == 0
 	  or die "repacking from bzip2 to gzip failed\n";
 	unlink "$destdir/$newfile_base";
 	$newfile_base = $newfile_base_gz;
@@ -1303,7 +1303,7 @@ EOF
 
 	my $newfile_base_gz = "$1.tar.gz";
 	my $tempdir = tempdir ( "uscanXXXX", TMPDIR => 1, CLEANUP => 1 );
-	system("unzip -q -d $tempdir $destdir/$newfile_base; tar -C $tempdir -czf $destdir/$newfile_base_gz .") == 0 
+	system("unzip -q -d $tempdir $destdir/$newfile_base; GZIP=-9 tar -C $tempdir -czf $destdir/$newfile_base_gz .") == 0 
 	  or die("Repacking from zip to tar.gz failed\n");
 	unlink "$destdir/$newfile_base";
 	$newfile_base = $newfile_base_gz;
