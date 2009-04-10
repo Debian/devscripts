@@ -5,6 +5,8 @@ devscripts (2.10.48) UNRELEASED; urgency=low
   * debdiff: Don't bail if diff returned an exit status of 2 when comparing
     files. If there are binary files in either of the trees being compared
     then that's expected as the files can't be reliably compared.
+  * nmudiff: Adapt to handle the fact that debdiff will now return an exit
+    status of 1 when comparing non-identical source packages.
 
   [ Patrick Schoenfeld ]
   * debchange: When renaming a directory (because of version change)

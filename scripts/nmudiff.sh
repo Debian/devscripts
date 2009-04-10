@@ -298,7 +298,7 @@ fi
 debdiff ../${SOURCE}_${OLDVERSION_NO_EPOCH}.dsc \
   ../${SOURCE}_${VERSION_NO_EPOCH}.dsc \
   > ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff
-if [ $? -ne 0 ]; then
+if [ $? -ne 0 ] && [ $? -ne 1 ]; then
     echo "nmudiff: debdiff failed, aborting." >&2
     rm -f ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff
     exit 1
