@@ -2,6 +2,9 @@ devscripts (2.10.48) UNRELEASED; urgency=low
 
   [ Adam D. Barratt ]
   * Update Standards Version to 3.8.1 (no changes required)
+  * debdiff: Don't bail if diff returned an exit status of 2 when comparing
+    files. If there are binary files in either of the trees being compared
+    then that's expected as the files can't be reliably compared.
 
   [ Patrick Schoenfeld ]
   * debchange: When renaming a directory (because of version change)

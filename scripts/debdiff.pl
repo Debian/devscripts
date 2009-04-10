@@ -583,13 +583,11 @@ elsif ($type eq 'dsc') {
 	# Execute diff and remove the common prefixes $dir1/$dir2, so the patch can be used with -p1,
 	# as if when interdiff would have been used:
 	system(join(" ", @command));
-	if ($? != 0 and $? >> 8 != 1) {
-	    fatal "Failed to execute @command!";
-	}
 
 	if ($have_diffstat and $show_diffstat) {
 	    print "diffstat for $sdir1 $sdir2\n\n";
-	    system("diffstat $filename");
+	    system("diffstat $filename")
+		or fatal "Failed to diffstat $filename!";
 	    print "\n";
 	}
 
@@ -628,8 +626,10 @@ elsif ($type eq 'dsc') {
 	    system ("rm", "-rf", $wdiffdir1, $wdiffdir2);
 	}
 
-	if (-s $filename) {
-	    open( DIFF, '<', $filename );
+	if (! -f $filename) {
+	    fatal "Creation of diff file $filename failed!";
+	} elsif (-s $filename) {
+	    open( DIFF, '<', $filename ) or fatal "Opening diff file $filename failed!";
 
 	    while(<DIFF>) {
 		s/^--- $dir1\//--- /;
