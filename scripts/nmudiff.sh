@@ -295,10 +295,11 @@ if [ ! -r ../${SOURCE}_${VERSION_NO_EPOCH}.dsc ]; then
     exit 1
 fi
 
+ret=0
 debdiff ../${SOURCE}_${OLDVERSION_NO_EPOCH}.dsc \
   ../${SOURCE}_${VERSION_NO_EPOCH}.dsc \
-  > ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff
-if [ $? -ne 0 ] && [ $? -ne 1 ]; then
+  > ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff || ret=$?
+if [ $ret -ne 0 ] && [ $ret -ne 1 ]; then
     echo "nmudiff: debdiff failed, aborting." >&2
     rm -f ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff
     exit 1
