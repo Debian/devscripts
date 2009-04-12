@@ -2,6 +2,8 @@ devscripts (2.10.48) UNRELEASED; urgency=low
 
   [ Adam D. Barratt ]
   * Update Standards Version to 3.8.1 (no changes required)
+  * debchange: Fix a couple of syntax errors in the "does an orig tarball
+    exist?" test introduced for #500932.
   * debdiff:
     + Don't bail if diff returned an exit status of 2 when comparing
       files. If there are binary files in either of the trees being compared
