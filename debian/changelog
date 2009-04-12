@@ -10,6 +10,8 @@ devscripts (2.10.48) UNRELEASED; urgency=low
       255 (i.e. the result of die()ing).
   * nmudiff: Adapt to handle the fact that debdiff will now return an exit
     status of 1 when comparing non-identical source packages.
+  * debian/copyright: Explicitly refer to the GPL-2 and GPL-3 common license
+    files rather than the "GPL" symlink.
 
   [ Patrick Schoenfeld ]
   * debchange: When renaming a directory (because of version change)
