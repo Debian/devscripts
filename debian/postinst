@@ -667,6 +667,16 @@ EOF
 
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.49
+	then
+	    cat >> /etc/devscripts.conf << EOF
+#### rmadison option added in 2.10.49
+#
+# Default URL to use if none is specified on the command line.
+# RMADISON_DEFAULT_URL=debian
+EOF
+	fi
     fi
 fi
 
