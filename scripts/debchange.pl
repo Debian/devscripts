@@ -1396,7 +1396,7 @@ if ((basename(cwd()) =~ m%^\Q$PACKAGE\E-\Q$UVERSION\E$%) &&
        # And check whether a new orig tarball exists
        my @origs = glob("../$PACKAGE\_$new_uversion.*");
        my $num_origs = grep { /^..\/\Q$PACKAGE\E_\Q$new_uversion\E\.orig\.tar\.(gz|bz2|lzma)$/ } @origs;
-       if ($num_origs eq 0) {
+       if ($num_origs == 0) {
           warn "$progname warning: no orig tarball found for the new version.\n";
        }
     }
