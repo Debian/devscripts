@@ -386,11 +386,11 @@ sub parselicense($) {
     my $extrainfo = "";
     my $license = "";
 
-    if ($licensetext =~ /version ([^ ]+) (?:\(?only\)?.? )?(?:of the GNU General Public License )?as published by the Free Software Foundation/i or
-	$licensetext =~ /GNU General Public License as published by the Free Software Foundation; version ([^ ]+) /i) {
+    if ($licensetext =~ /version ([^ ]+) (?:\(?only\)?.? )?(?:of the GNU (Affero )?General Public License )?as published by the Free Software Foundation/i or
+	$licensetext =~ /GNU (Affero )?General Public License as published by the Free Software Foundation; version ([^ ]+) /i) {
 
 	$gplver = " (v$1)";
-    } elsif ($licensetext =~ /GNU General Public License, version ([^ ]+?)[ .]/) {
+    } elsif ($licensetext =~ /GNU (Affero ?)General Public License, version ([^ ]+?)[ .]/) {
 	$gplver = " (v$1)";
     } elsif ($licensetext =~ /either version ([^ ]+) of the License, or \(at your option\) any later version/) {
 	$gplver = " (v$1 or later)";
@@ -410,6 +410,10 @@ sub parselicense($) {
 
     if ($licensetext =~ /is free software.? you can redistribute it and\/or modify it under the terms of the (GNU (Library|Lesser) General Public License|LGPL)/i) {
 	$license = "LGPL$gplver$extrainfo $license";
+    }
+    
+    if ($licensetext =~ /is free software.? you can redistribute it and\/or modify it under the terms of the (GNU Affero General Public License|AGPL)/i) {
+	$license = "AGPL$gplver$extrainfo $license";
     }
 
     if ($licensetext =~ /is free software.? you (can|may) redistribute it and\/or modify it under the terms of (?:version [^ ]+ (?:\(?only\)? )?of )?the GNU General Public License/i) {
