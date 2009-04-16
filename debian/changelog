@@ -1,6 +1,9 @@
 devscripts (2.10.49) UNRELEASED; urgency=low
 
   * debchange: Use == for numeric comparison, not eq.
+  * getbuildlog: Add a missing "use lib" to allow the special "last" and
+    "last-all" versions to work correctly.  Thanks, Iustin Pop.
+    (Closes: #523982)
   * rmadison: Allow a default URL to be specified in the configuration file.
     Thanks, Roland Mas.  (Closes: #524198)
 

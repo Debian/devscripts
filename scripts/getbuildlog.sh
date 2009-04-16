@@ -107,6 +107,7 @@ getbuildlog() {
 		ver=${match##*ver=}
 		echo ${ver%%&*}
 	    done | perl -e '
+		use lib "/usr/share/devscripts";
 		use Devscripts::Versort;
 		while (<>) { push @versions, [$_]; }
 		@versions = Devscripts::Versort::versort(@versions);
