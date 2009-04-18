@@ -4,6 +4,7 @@
 # Copyright (C) 2003 Anthony DeRobertis
 # Modifications Copyright 2003 Julian Gilbey <jdg@debian.org>
 # Modifications Copyright 2008 Adam D. Barratt <adam@adam-barratt.org.uk>
+# Modifications copyright 2009 by Jan Hauke Rahm <info@jhr-online.de>
 # 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -29,6 +30,7 @@ sub remove_duplicate_values($);
 sub print_if_relevant(%);
 sub human_flags($);
 sub unhtmlsanit($);
+sub dt_parse_request($);
 
 my $cachedir = $ENV{'HOME'}."/.devscripts_cache/";
 my $url = "http://bugs.debian.org/release-critical/other/all.html";
@@ -63,6 +65,9 @@ my $tagexcoperation = "or";
 my $distincoperation = "or";
 my $distexcoperation = "or";
 
+my $debtags = '';
+my $debtags_db = '/var/lib/debtags/package-tags';
+
 my $progname = basename($0);
 
 my $usage = <<"EOF";
@@ -83,6 +88,11 @@ Usage: $progname [--help|--version|--cache] [package ...]
   --include-dist-op  Must all distributions be matched for inclusion?
   --exclude-dists    Set of distributions to exclude
   --exclude-dist-op  Must all distributions be matched for exclusion?
+
+  Debtags options: (only list packages with matching debtags)
+  --debtags          Comma separated list of tags
+                       (e.g. implemented-in::perl,role::plugin)
+  --debtags-database Database file (default: /var/lib/debtags/package-tags)
 EOF
 
 my $version = <<"EOF";
@@ -90,6 +100,7 @@ This is $progname, from the Debian devscripts package, version ###VERSION###
 This code is copyright 2003 by Anthony DeRobertis
 Modifications copyright 2003 by Julian Gilbey <jdg\@debian.org>
 Modifications copyright 2008 by Adam D. Barratt <adam\@adam-barratt.org.uk>
+Modifications copyright 2009 by Jan Hauke Rahm <info\@jhr-online.de>
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the
 GNU General Public License, version 2, or (at your option) any later version.
@@ -111,6 +122,8 @@ GetOptions("help|h" => \$opt_help,
 	   "exclude-dists=s" => \$excludedists,
 	   "include-dist-op|o=s" => \$distincoperation,
 	   "exclude-dist-op=s" => \$distexcoperation,
+	   "debtags=s" => \$debtags,
+	   "debtags-database=s" => \$debtags_db,
 	   );
 
 if ($opt_help) { print $usage; exit 0; }
@@ -164,6 +177,22 @@ else {
     $package_list = InstalledPackages(0);
 }
 
+## Get debtags info
+my %dt_pkg;
+my @dt_requests;
+if ($debtags) {
+    ## read debtags database to %dt_pkg
+    open DEBTAGS, $debtags_db or die "$progname: could not read debtags database: $!\n";
+    while (<DEBTAGS>) {
+        next unless /^(.+?)(?::?\s*|:\s+(.+?)\s*)$/;
+        $dt_pkg{$1} = $2;
+    }
+    close DEBTAGS;
+
+    ## and parse the request string
+    @dt_requests = dt_parse_request($debtags);
+}
+
 ## Read the list of bugs
 
 my $found_bugs_start;
@@ -210,6 +239,12 @@ sub print_if_relevant(%) {
 	
 	return unless $flagsapply and $distsapply;
 
+	foreach (@dt_requests) {
+	    ## the array should be empty if nothing requested
+	    return unless ($dt_pkg{$args{pkg}} and
+		$dt_pkg{$args{pkg}} =~ /(\A|,\s*)$_(,|\z)/);
+	}
+
 	# yep, relevant
 	print "Package: $args{pkg}\n",
 	    $comment,  # non-empty comments always contain the trailing \n
@@ -217,6 +252,8 @@ sub print_if_relevant(%) {
 	    "Title:   " . unhtmlsanit($args{name}) , "\n",
 	    "Flags:   " . $flags , "\n",
 	    (defined $args{dists} ? "Dists:  " . $dists . "\n" : ""),
+	    (defined $dt_pkg{$args{pkg}} ? 
+		"Debtags: " . $dt_pkg{$args{pkg}} . "\n" : ""),
 	    "\n";
     }
 }
@@ -301,4 +338,25 @@ sub unhtmlsanit ($) {
     my $in = $_[0];
     $in =~ s/&(lt|gt|amp|quot);/$saniarray{$1}/g;
     return $in;
+}
+
+sub dt_parse_request($) {
+    my %dt_lookup;
+    foreach (split /,/, $_[0]) {
+	my ($d_key, $d_val) = split '::', $_;
+	die "$progname: A debtag must be of the form 'key::value'. See debtags(1) for details!"
+	    unless ($d_key and $d_val);
+	if ($dt_lookup{$d_key}) {
+	    $dt_lookup{$d_key} = "$dt_lookup{$d_key}|$d_val";
+	} else {
+	    $dt_lookup{$d_key} = quotemeta($d_val);
+	}
+    }
+
+    my @out;
+    while (my ($dk, $dv) = each %dt_lookup) {
+	$dv = "($dv)" if ($dv =~ /\|/);
+	push @out, $dk . "::" . $dv;
+    }
+    return @out;
 }

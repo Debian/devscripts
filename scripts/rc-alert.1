@@ -2,7 +2,7 @@
 .SH NAME
 rc-alert \- check for installed packages with release-critical bugs
 .SH SYNOPSIS
-\fBrc-alert [inclusion options] [package ...]\fR
+\fBrc-alert [inclusion options] [\-\-debtags [tag[,tag ...]] [package ...]\fR
 .br
 \fBrc-alert \-\-help|\-\-version\fR
 .SH DESCRIPTION
@@ -24,7 +24,7 @@ Show a summary of options.
 .TP
 .BR \-\-version ", " \-v
 Show version and copyright information.
-.TP
+.P
 It is also possible to filter the list of bugs reported based on the
 tags and distributions associated with the package. The filtering options
 are:
@@ -62,6 +62,20 @@ A list of distributions to which the bug must not apply, in the same format as
 If set to \fIand\fP, a bug must apply to all of the specified distributions
 in order to be excluded.  By default the bug will be excluded if it applies
 to any of the listed distributions.
+.P
+It is also possible to only list bugs which have specific debtags set. Note
+that you need to have debtags installed and also that it's not mandatory for
+maintainers to set proper debtags. The produced list will thus probably be
+incomplete.
+.TP
+.BR \-\-debtags
+Match packages based on the listed tags. Each package is matched only if it has
+all the listed tags; in the case of multiple tags within the same facet, a
+package is matched if it has any of the listed tags within the facet.
+.TP
+.BR \-\-debtags\-database
+Use a non-standard debtags database.  The default is
+/var/lib/debtags/packages-tags.
 .SH EXAMPLES
 .TP
 .BR \-\-include\-dists " OS"
@@ -76,11 +90,18 @@ The bug must apply to oldstable and be tagged security but not patch
 .BR \-\-exclude\-dists " SOT" " \-\-include\-tags" " R"
 The bug must apply to only unstable or experimental (or both) and be tagged
 unreproducible
+.TP
+.BR \-\-debtags " implemented-in::perl,role::plugin,implemented-in::python"
+The bug must apply to packages matching the specified debtags, i.e. the match
+will only include packages that have the ‘role::plugin’ tag and that have
+either of the tags ‘implemented-in::perl’ or ‘implemented-in::python’.
 .SH BUGS
 It is not possible to say "does not apply only to unstable"
 .SH SEE ALSO
+.BR debtags(1)
 .BR popbugs(1)
 .SH AUTHOR
 \fBrc-alert\fR was written by Anthony DeRobertis and modified by
 Julian Gilbey <jdg@debian.org> and Adam D. Barratt <adam@adam-barratt.org.uk>
-for the devscripts package.
+for the devscripts package. Debtags functionality was added by Jan Hauke Rahm
+<info@jhr-online.de>.
