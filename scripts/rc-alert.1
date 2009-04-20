@@ -2,7 +2,7 @@
 .SH NAME
 rc-alert \- check for installed packages with release-critical bugs
 .SH SYNOPSIS
-\fBrc-alert [inclusion options] [\-\-debtags [tag[,tag ...]] [package ...]\fR
+\fBrc-alert [inclusion options] [\-\-debtags [tag[,tag ...]] [\-\-popcon] [package ...]\fR
 .br
 \fBrc-alert \-\-help|\-\-version\fR
 .SH DESCRIPTION
@@ -76,6 +76,23 @@ package is matched if it has any of the listed tags within the facet.
 .BR \-\-debtags\-database
 Use a non-standard debtags database.  The default is
 /var/lib/debtags/packages-tags.
+.P
+Popularity-contest collects data about installation and usage of Debian
+packages. You can additionally sort the bugs by the popcon rank of the related
+packages.
+.TP
+.BR \-\-popcon
+Sort bugs by the popcon rank of the package the bug belongs to.
+.TP
+.BR \-\-pc\-vote
+By default, packages are sorted according to the number of people who have the
+package installed. This option enables sorting by the number of people
+regularly using the package instead. This option has no effect in combination
+with \-\-pc\-local.
+.TP
+.BR \-\-pc\-local
+Instead of requesting remote data the information from the last popcon run is
+used (/var/log/popularity-contest).
 .SH EXAMPLES
 .TP
 .BR \-\-include\-dists " OS"
@@ -95,13 +112,18 @@ unreproducible
 The bug must apply to packages matching the specified debtags, i.e. the match
 will only include packages that have the ‘role::plugin’ tag and that have
 either of the tags ‘implemented-in::perl’ or ‘implemented-in::python’.
+.TP
+.BR \-\-popcon " "\-\-pc\-local
+Read /var/log/popularity-contest and sort bugs by your personal popcon ranking
+(which is basically the atime of your packages' binaries).
 .SH BUGS
 It is not possible to say "does not apply only to unstable"
 .SH SEE ALSO
 .BR debtags(1)
 .BR popbugs(1)
+.BR popularity-contest(8)
 .SH AUTHOR
 \fBrc-alert\fR was written by Anthony DeRobertis and modified by
 Julian Gilbey <jdg@debian.org> and Adam D. Barratt <adam@adam-barratt.org.uk>
-for the devscripts package. Debtags functionality was added by Jan Hauke Rahm
-<info@jhr-online.de>.
+for the devscripts package. Debtags and popcon functionality was added by Jan
+Hauke Rahm <info@jhr-online.de>.

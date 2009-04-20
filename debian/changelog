@@ -6,9 +6,12 @@ devscripts (2.10.49) UNRELEASED; urgency=low
     (Closes: #523982)
   * licensecheck: Add detection of the AGPL.  Thanks, Didier Raboud.
     (Closes: #520903)
-  * rc-alert: Allow the generated list of bugs to be restricted to those
-    affecting packages with particular debtags facets.  Thanks, Jan Hauke
-    Rahm.  (Closes: #523523)
+  * rc-alert:
+    + Allow the generated list of bugs to be restricted to those affecting
+      packages with particular debtags facets.  Thanks, Jan Hauke Rahm.
+     (Closes: #523523)
+    + Allow the generated list of bugs to be sorted using popcon results.
+      Thanks, Jan Hauke Rahm.  (Closes: #478833)
   * rmadison: Allow a default URL to be specified in the configuration file.
     Thanks, Roland Mas.  (Closes: #524198)
 

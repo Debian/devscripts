@@ -27,7 +27,7 @@ use File::Basename;
 use Getopt::Long;
 
 sub remove_duplicate_values($);
-sub print_if_relevant(%);
+sub store_if_relevant(%);
 sub human_flags($);
 sub unhtmlsanit($);
 sub dt_parse_request($);
@@ -65,6 +65,10 @@ my $tagexcoperation = "or";
 my $distincoperation = "or";
 my $distexcoperation = "or";
 
+my $popcon = 0;
+my $popcon_by_vote = 0;
+my $popcon_local = 0;
+
 my $debtags = '';
 my $debtags_db = '/var/lib/debtags/package-tags';
 
@@ -93,6 +97,13 @@ Usage: $progname [--help|--version|--cache] [package ...]
   --debtags          Comma separated list of tags
                        (e.g. implemented-in::perl,role::plugin)
   --debtags-database Database file (default: /var/lib/debtags/package-tags)
+
+  Popcon options:
+  --popcon           Sort bugs by package's popcon rank
+  --pc-vote          Sort by_vote instead of by_inst
+                       (see popularity-contest(8))
+  --pc-local         Use local popcon data from last popcon run
+                       (/var/log/popularity-contest)
 EOF
 
 my $version = <<"EOF";
@@ -124,6 +135,9 @@ GetOptions("help|h" => \$opt_help,
 	   "exclude-dist-op=s" => \$distexcoperation,
 	   "debtags=s" => \$debtags,
 	   "debtags-database=s" => \$debtags_db,
+	   "popcon" => \$popcon,
+	   "pc-vote" => \$popcon_by_vote,
+	   "pc-local" => \$popcon_local,
 	   );
 
 if ($opt_help) { print $usage; exit 0; }
@@ -177,6 +191,35 @@ else {
     $package_list = InstalledPackages(0);
 }
 
+## Get popcon information
+my %popcon;
+if ($popcon) {
+    my $pc_by = $popcon_by_vote ? 'vote' : 'inst';
+
+    my $pc_regex;
+    if ($popcon_local) {
+	open POPCON, "/var/log/popularity-contest"
+	    or die "$progname: Unable to access popcon data: $!";
+	$pc_regex = '(\d+)\s\d+\s(\S+)';
+    } else {
+	open POPCON, "wget -q -O - http://popcon.debian.org/by_$pc_by.gz | gunzip -c |"
+	    or die "$progname: Not able to receive remote popcon data!";
+	$pc_regex = '(\d+)\s+(\S+)\s+(\d+\s+){5}\(.*\)';
+    }
+
+    while (<POPCON>) {
+	next unless /$pc_regex/;
+	# rank $1 for package $2
+	if ($popcon_local) {
+	    # negative for inverse sorting of atimes
+	    $popcon{$2} = "-$1";
+	} else {
+	    $popcon{$2} = $1;
+	}
+    }
+    close POPCON;
+}
+
 ## Get debtags info
 my %dt_pkg;
 my @dt_requests;
@@ -198,6 +241,7 @@ if ($debtags) {
 my $found_bugs_start;
 my ($current_package, $comment);
 
+my %pkg_store;
 while (defined(my $line = <BUGS>)) {
     if( $line =~ /^<div class="package">/) {
 	$found_bugs_start = 1;
@@ -210,9 +254,10 @@ while (defined(my $line = <BUGS>)) {
     } elsif ($line =~ m%<a name="(\d+)"></a>\s*<a href="[^\"]+">\d+</a> (\[[^\]]+\])( \[[^\]]+\])? ([^<]+)%i) {
 	my ($num, $tags, $dists, $name) = ($1, $2, $3, $4);
 	chomp $name;
-	print_if_relevant(pkg => $current_package, num => $num, tags => $tags, dists => $dists, name => $name, comment => $comment);
+	store_if_relevant(pkg => $current_package, num => $num, tags => $tags, dists => $dists, name => $name, comment => $comment);
     }
 }
+for (sort {$a <=> $b } keys %pkg_store) { print $pkg_store{$_}; }
 
 close BUGS or die "$progname: could not close $cachefile: $!\n";
 
@@ -228,8 +273,9 @@ sub remove_duplicate_values($) {
     return $in;
 }
 
-sub print_if_relevant(%) {
+sub store_if_relevant(%) {
     my %args = @_;
+    
     if (exists($$package_list{$args{pkg}})) {
 	# potentially relevant
 	my ($flags, $flagsapply) = human_flags($args{tags});
@@ -246,15 +292,28 @@ sub print_if_relevant(%) {
 	}
 
 	# yep, relevant
-	print "Package: $args{pkg}\n",
-	    $comment,  # non-empty comments always contain the trailing \n
-	    "Bug:     $args{num}\n",
-	    "Title:   " . unhtmlsanit($args{name}) , "\n",
-	    "Flags:   " . $flags , "\n",
-	    (defined $args{dists} ? "Dists:  " . $dists . "\n" : ""),
-	    (defined $dt_pkg{$args{pkg}} ? 
-		"Debtags: " . $dt_pkg{$args{pkg}} . "\n" : ""),
-	    "\n";
+	my $bug_string = "Package: $args{pkg}\n" .
+	    $comment .  # non-empty comments always contain the trailing \n
+	    "Bug:     $args{num}\n" .
+	    "Title:   " . unhtmlsanit($args{name}) . "\n" .
+	    "Flags:   " . $flags . "\n" .
+	    (defined $args{dists} ? "Dists:  " . $dists . "\n" : "") .
+	    (defined $dt_pkg{$args{pkg}} ?
+		"Debtags: " . $dt_pkg{$args{pkg}} . "\n" : "");
+
+	unless ($popcon_local) {
+	    $bug_string .= (defined $popcon{$args{pkg}} ?
+		"Popcon rank: " . $popcon{$args{pkg}} . "\n" : "");
+	}
+	$bug_string .= "\n";
+
+	if ($popcon) {
+	    return unless $bug_string;
+	    my $index = $popcon{$args{pkg}} ? $popcon{$args{pkg}} : 9999999;
+	    $pkg_store{$index} .= $bug_string;
+	} else {
+	    $pkg_store{1} .= $bug_string;
+	}
     }
 }
 
