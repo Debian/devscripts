@@ -433,13 +433,21 @@ sub bzr_find_fixes {
     my $message=shift;
 
     my $debian_closes = Dpkg::Changelog::find_closes($message);
-# Not yet implemented in DPKG-DEV
-#    my $launchpad_closes = Dpkg::Changelog::find_launchpad_closes($message);
+    my $launchpad_closes = [];
+    eval {
+	require Dpkg::Vendor::Ubuntu;
+    };
+    if (not $@) {
+	# dpkg >= 1.15.0
+	$launchpad_closes = Dpkg::Vendor::Ubuntu::find_launchpad_closes($message);
+    } elsif (exists &Dpkg::Changelog::find_launchpad_closes) {
+	# Ubuntu dpkg << 1.15.0
+	$launchpad_closes = Dpkg::Changelog::find_launchpad_closes($message);
+    }
 
     my @fixes_arg = ();
     map { push(@fixes_arg, ("--fixes", "deb:".$_)) } @$debian_closes;
-# Not yet implemented in DPKG-DEV
-#    map { push(@fixes_arg, ("--fixes", "lp:".$_)) } @$launchpad_closes;
+    map { push(@fixes_arg, ("--fixes", "lp:".$_)) } @$launchpad_closes;
     return @fixes_arg;
 }
 
