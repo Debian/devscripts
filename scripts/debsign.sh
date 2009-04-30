@@ -170,19 +170,19 @@ mustsetvar () {
 # information when this function is read first.
 signfile () {
     local savestty=$(stty -g 2>/dev/null) || true
+    mksigningdir
+    UNSIGNED_FILE="$signingdir/$(basename "$1")"
+    ASCII_SIGNED_FILE="${UNSIGNED_FILE}.asc"
+    (cat "$1" ; echo "") > "$UNSIGNED_FILE"
+
     if [ $signinterface = gpg ]
     then
-	mksigningdir
-	UNSIGNED_FILE="$signingdir/$(basename "$1")"
-	ASCII_SIGNED_FILE="${UNSIGNED_FILE}.asc"
-
 	gpgversion=`gpg --version | head -n 1 | cut -d' ' -f3`
 	gpgmajorversion=`echo $gpgversion | cut -d. -f1`
 	gpgminorversion=`echo $gpgversion | cut -d. -f2`
 
 	if [ $gpgmajorversion -gt 1 -o $gpgminorversion -ge 4 ]
 	then
-		(cat "$1" ; echo "") > "$UNSIGNED_FILE"
 		$signcommand --local-user "$2" --clearsign \
 		    --list-options no-show-policy-urls \
 		    --armor --textmode --output "$ASCII_SIGNED_FILE"\
@@ -193,7 +193,6 @@ signfile () {
 		  exit $SAVESTAT
 		}
 	else
-		(cat "$1" ; echo "") > "$UNSIGNED_FILE"
 		$signcommand --local-user "$2" --clearsign \
 		    --no-show-policy-url \
 		    --armor --textmode --output "$ASCII_SIGNED_FILE" \
@@ -205,7 +204,8 @@ signfile () {
 		}
 	fi
     else
-	$signcommand -u "$2" +clearsig=on -fast < "$1" > "$ASCII_SIGNED_FILE"
+	$signcommand -u "$2" +clearsig=on -fast \
+	    < "$UNSIGNED_FILE" > "$ASCII_SIGNED_FILE"
     fi
     stty $savestty 2>/dev/null || true
     echo

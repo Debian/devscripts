@@ -5,6 +5,8 @@ devscripts (2.10.49) UNRELEASED; urgency=low
     list of appropriate bugs, automatically generate bzr --fixes arguments
     for Launchpad bugs as well as Debian bugs.  Thanks, Colin Watson.
     (Closes: #525823)
+  * debsign: Make the PGP signing method work again.  Thanks, Florian Weimer.
+    (Closes: #518821)
   * getbuildlog: Add a missing "use lib" to allow the special "last" and
     "last-all" versions to work correctly.  Thanks, Iustin Pop.
     (Closes: #523982)
