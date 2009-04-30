@@ -1571,7 +1571,7 @@ sub newest_dir ($$$$$) {
 	    my ($newversion, $newdir) = @{$dirs[0]};
 	    return $newdir;
 	} else {
-	    warn "$progname warning: In $watchfile no matching dirs for pattern\n  $site$base$pattern\n";
+	    warn "$progname warning: In $watchfile no matching dirs for pattern\n  $base$pattern\n";
 	    return '';
 	}
     }
