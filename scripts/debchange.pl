@@ -87,6 +87,15 @@ Options:
          Update the changelog timestamp. If the distribution is set to
          "UNRELEASED", change it to unstable (or another distribution as
          specified by --distribution).
+  --force-save-on-release
+         When --release is used and an editor opened to allow inspection
+         of the changelog, force the file to be saved in the editor even
+         if no further changes are made. (default)
+  --no-force-save-on-release
+         Do not do so. Note that a dummy changelog entry made be supplied
+         in order to achieve the same effect - e.g. $progname --release ""
+         The entry will not be added to the changelog but its presence will
+         suppress the editor
   --create
          Create a new changelog (default) or NEWS file (with --news) and
          open for editing
@@ -202,6 +211,7 @@ my $opt_tz = undef;
 my $opt_t = '';
 my $opt_allow_lower = '';
 my $opt_auto_nmu = 'yes';
+my $opt_force_save_on_release = 1;
 
 # Next, read configuration files and then command line
 # The next stuff is boilerplate
@@ -223,6 +233,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBCHANGE_MAINTTRAILER' => '',
 		       'DEBCHANGE_LOWER_VERSION_PATTERN' => '',
 		       'DEBCHANGE_AUTO_NMU' => 'yes',
+		       'DEBCHANGE_FORCE_SAVE_ON_RELEASE' => 'yes',
 		       );
     $config_vars{'DEBCHANGE_TZ'} ||= '';
     my %config_default = %config_vars;
@@ -254,6 +265,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'DEBCHANGE_MULTIMAINT_MERGE'}='no';
     $config_vars{'DEBCHANGE_AUTO_NMU'} =~ /^(yes|no)$/
 	or $config_vars{'DEBCHANGE_AUTO_NMU'}='yes';
+    $config_vars{'DEBCHANGE_FORCE_SAVE_ON_RELEASE'} =~ /^(yes|no)$/
+	or $config_vars{'DEBCHANGE_FORCE_SAVE_ON_RELEASE'}='yes';
 
     foreach my $var (sort keys %config_vars) {
 	if ($config_vars{$var} ne $config_default{$var}) {
@@ -275,6 +288,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	if $config_vars{'DEBCHANGE_MAINTTRAILER'};
     $opt_allow_lower = $config_vars{'DEBCHANGE_LOWER_VERSION_PATTERN'};
     $opt_auto_nmu = $config_vars{'DEBCHANGE_AUTO_NMU'};
+    $opt_force_save_on_release =
+	$config_vars{'DEBCHANGE_FORCE_SAVE_ON_RELEASE'} eq 'yes' ? 1 : 0;
 }
 
 # We use bundling so that the short option behaviour is the same as
@@ -325,6 +340,7 @@ GetOptions("help|h" => \$opt_help,
 	   "release-heuristic=s" => \$opt_release_heuristic,
 	   "empty" => \$opt_empty,
 	   "auto-nmu!" => \$opt_auto_nmu,
+	   "force-save-on-release!" => \$opt_force_save_on_release,
 	   )
     or die "Usage: $progname [options] [changelog entry]\nRun $progname --help for more details\n";
 
@@ -1351,7 +1367,9 @@ if ((!$TEXT and !$EMPTY_TEXT and ! ($opt_create and $opt_empty)) or @closes_text
 	my $newmtime = (stat("$changelog_path.dch"))[9];
 	defined $newmtime or fatal
 	    "Error getting modification time of temporary $changelog_path: $!";
-	if ($mtime == $newmtime && ! $opt_create) {
+	if ($mtime == $newmtime && ! $opt_create &&
+	    (!$opt_r || ($opt_r && $opt_force_save_on_release))) {
+
 	    warn "$progname: $changelog_path unmodified; exiting.\n";
 	    exit 0;
 	}

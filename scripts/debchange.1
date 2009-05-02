@@ -172,6 +172,17 @@ Update the changelog timestamp. If the distribution is set to
 no previous changelog entries and an explicit distribution has not been 
 specified, \fIunstable\fR will be used.
 .TP
+.BR \-\-force\-save\-on\-release
+When \-\-release is used and an editor opened to allow inspection
+of the changelog, force the file to be saved in the editor even
+if no further changes are made. (default)
+.TP
+.BR \-\-no\-force\-save\-on\-release
+Do not do so. Note that a dummy changelog entry made be supplied
+in order to achieve the same effect - e.g. \fBdebchange \-\-release ""\fR.
+The entry will not be added to the changelog but its presence will suppress
+the editor.
+.TP
 .BR \-\-create
 This will create a new \fIdebian/changelog\fR file (or \fINEWS\fR if
 the \fB\-\-news\fR option is used).  You must be in the top-level
@@ -393,6 +404,10 @@ If this is set to \fIno\fR then \fBdebchange\fR will not attempt to
 automatically determine whether the current changelog stanza represents
 an NMU.  The default is \fIyes\fR.  See the discussion of the
 \fB\-\-nmu\fR option above.
+.TP
+.BR DEBCHANGE_FORCE_SAVE_ON_RELEASE
+If this is set to \fIno\fR, then it is the same as the
+\fB\-\-no\-force\-save\-on\-release\fR command line parameter being used.
 .SH ENVIRONMENT
 .TP
 .BR DEBEMAIL ", " EMAIL ", " DEBFULLNAME ", " NAME

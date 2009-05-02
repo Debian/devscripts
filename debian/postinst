@@ -675,6 +675,14 @@ EOF
 #
 # Default URL to use if none is specified on the command line.
 # RMADISON_DEFAULT_URL=debian
+
+#### debchange option added in 2.10.49
+#
+# When --release was used and an editor presented, force the changelog
+# to be explicitly saved in the editor?  If this is set to "no" then
+# the changes made by --release will be automatically saved.
+# DEBCHANGE_FORCE_SAVE_ON_RELEASE=yes
+
 EOF
 	fi
     fi
