@@ -33,6 +33,8 @@ devscripts (2.10.49) UNRELEASED; urgency=low
     Thanks, Roland Mas.  (Closes: #524198)
   * uscan: Remove a superfluous and repeated copy of the site name in an FTP
     error message.  Thanks, Vaclav Ovsik.
+  * Makefile: Remove cruft relating to French manpages, which has been handled
+    by the po4a setup for a while now.
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sun, 12 Apr 2009 16:20:10 +0100
 
