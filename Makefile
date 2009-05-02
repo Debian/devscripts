@@ -21,8 +21,6 @@ conf.default: conf.default.in version
 
 translated_manpages:
 	$(MAKE) -C po4a/
-	# These may or may not have been successfully made; we don't stop
-	# building the rest of the package in such a case
 	touch translated_manpages
 
 clean_translated_manpages:
