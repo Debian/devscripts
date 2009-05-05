@@ -276,7 +276,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     foreach my $var ($dpkg_opts_var, $lintian_opts_var) {
 	$shell_cmd .= "eval set -- \$$var;\n";
 	$shell_cmd .= "echo \">>> $var BEGIN <<<\";\n";
-	$shell_cmd .= 'while [ $# -gt 0 ]; do echo $1; shift; done;' . "\n";
+	$shell_cmd .= 'while [ $# -gt 0 ]; do printf "%s\n" $1; shift; done;' . "\n";
 	$shell_cmd .= "echo \">>> $var END <<<\";\n";
     }
     # Not totally efficient, but never mind
