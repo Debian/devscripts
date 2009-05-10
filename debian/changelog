@@ -4,6 +4,9 @@ devscripts (2.10.50) UNRELEASED; urgency=low
     distributions.
   * debuild: Use printf when parsing the DEBUILD_LINTIAN_OPTS configuration
     file variable, to avoid eating -E.  (Closes: #527027)
+  * mass-bug: Add an option to specify that the supplied package names are
+    those of source packages rather than binary packages.  Based on a patch
+    by Felipe Sateler.  (Closes: #527396)
   * rc-alert: Use standard single quotes in the debtags section of the manpage
     to avoid odd formatting and warnings from man
 

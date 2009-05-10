@@ -96,6 +96,11 @@ Set the BTS pseudo-header for a usertags' user.
 
 Set the BTS pseudo-header for usertags.
 
+=item --source
+
+Specify that package names refer to source packages rather than binary
+packages.
+
 =item --sendmail=SENDMAILCMD
 
 Specify the sendmail command.  The command will be split on white
@@ -178,6 +183,7 @@ Valid options are:
    --tags=tags            Set the BTS pseudo-header for tags.
    --user=user            Set the BTS pseudo-header for a usertags' user
    --usertags=usertags    Set the BTS pseudo-header for usertags
+   --source               Specify that package names refer to source packages
 
    --sendmail=cmd         Sendmail command to use (default /usr/sbin/sendmail)
    --no-wrap              Don't wrap the template to 70 chars.
@@ -279,6 +285,7 @@ sub gen_bug {
     my $user=shift;
     my $usertags=shift;
     my $nowrap=shift;
+    my $type=shift;
     my $version="";
     my $bugtext;
 
@@ -304,7 +311,7 @@ sub gen_bug {
 	    $template_text=fill("", "", $template_text);
 	}
     }
-    $bugtext = "Package: $package\n$version" . "Severity: $severity\n$tags$user$usertags\n$template_text";
+    $bugtext = "$type: $package\n$version" . "Severity: $severity\n$tags$user$usertags\n$template_text";
     return $bugtext;
 }
 		
@@ -371,6 +378,7 @@ my $severity="normal";
 my $tags="";
 my $user="";
 my $usertags="";
+my $type="Package";
 my $opt_sendmail;
 my $nowrap="";
 if (! GetOptions(
@@ -381,6 +389,7 @@ if (! GetOptions(
                  "tags=s"     => \$tags,
 		 "user=s"     => \$user,
 		 "usertags=s" => \$usertags,
+		 "source"     => sub { $type="Source"; },
 		 "sendmail=s" => \$opt_sendmail,
 		 "help"       => sub { usage(); exit 0; },
 		 "version"    => sub { version(); exit 0; },
@@ -464,7 +473,7 @@ sub showsample {
     print "To: $submission_email\n";
     print "Subject: ".gen_subject($subject, $package)."\n";
     print "\n";
-    print gen_bug($template_text, $package, $severity, $tags, $user, $usertags, $nowrap)."\n";
+    print gen_bug($template_text, $package, $severity, $tags, $user, $usertags, $nowrap, $type)."\n";
 }
 
 if ($mode eq 'display') {
@@ -496,7 +505,7 @@ elsif ($mode eq 'send') {
     foreach my $package (@packages) {
 	print "Sending bug for $package ...\n";
 	mailbts(gen_subject($subject, $package),
-		gen_bug($template_text, $package, $severity, $tags, $user, $usertags, $nowrap),
+		gen_bug($template_text, $package, $severity, $tags, $user, $usertags, $nowrap, $type),
 		$submission_email, $from);
     }
     print "All bugs sent.\n";
