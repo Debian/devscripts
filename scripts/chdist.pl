@@ -100,6 +100,7 @@ License, or (at your option) any later version.
 =cut
 
 use Getopt::Long qw(:config require_order);
+use Cwd qw(abs_path cwd);
 
 my $datadir = $ENV{'HOME'} . '/.chdist';
 
@@ -156,8 +157,8 @@ GetOptions(
 );
 
 # Fix-up relative paths
-$datadir = $ENV{'PWD'} . "/$datadir" unless $datadir =~ m!^/!;
-$datadir =~ s!/\./!/!g;
+$datadir = cwd() . "/$datadir" unless $datadir =~ m!^/!;
+$datadir = abs_path($datadir);
 
 if ($help) {
   print usage(0);
