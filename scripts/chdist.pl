@@ -155,6 +155,10 @@ GetOptions(
   "version"    => \$version,
 );
 
+# Fix-up relative paths
+$datadir = $ENV{'PWD'} . "/$datadir" unless $datadir =~ m!^/!;
+$datadir =~ s!/\./!/!g;
+
 if ($help) {
   print usage(0);
   exit;
