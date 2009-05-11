@@ -220,7 +220,7 @@ fi
 
 
 # download the Sources.gz
-tmpdir=$(mktemp -d /tmp/$PROGNAME.XXXX)
+tmpdir=$(mktemp -d -t $PROGNAME.XXXXXXXX)
 trap "rm -rf \"$tmpdir\"; exit 1" 0 SIGHUP SIGINT SIGTERM
 sources_url="$DEBSNAP_BASE_URL/$clean_dir/$DEBSNAP_SOURCES_GZ_PATH"
 sources_path="$tmpdir/Sources.gz"
