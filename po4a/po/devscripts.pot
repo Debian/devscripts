@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-05-02 18:56+0200\n"
+"POT-Creation-Date: 2009-05-14 20:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -165,7 +165,7 @@ msgid ""
 msgstr ""
 
 #. type: SH
-#: ../scripts/annotate-output.1:55 ../scripts/archpath.1:54 ../scripts/build-rdeps.pl:290 ../scripts/checkbashisms.1:62 ../scripts/cowpoke.1:226 ../scripts/cvs-debc.1:64 ../scripts/cvs-debi.1:68 ../scripts/cvs-debrelease.1:69 ../scripts/cvs-debuild.1:59 ../scripts/dcmd.1:92 ../scripts/dcontrol.pl:283 ../scripts/dd-list.1:93 ../scripts/debc.1:120 ../scripts/debchange.1:432 ../scripts/debcheckout.pl:185 ../scripts/debclean.1:111 ../scripts/debcommit.pl:763 ../scripts/debdiff.1:210 ../scripts/debi.1:126 ../scripts/debpkg.1:23 ../scripts/debrelease.1:137 ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:71 ../scripts/debsign.1:147 ../scripts/debuild.1:421 ../scripts/desktop2menu.pl:52 ../scripts/dget.pl:622 ../scripts/diff2patches.1:40 ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscverify.1:53 ../scripts/getbuildlog.1:41 ../scripts/grep-excuses.1:39 ../scripts/licensecheck.pl:120 ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:20 ../scripts/mass-bug.pl:512 ../scripts/mergechanges.1:18 ../scripts/mk-build-deps.pl:68 ../scripts/namecheck.pl:30 ../scripts/nmudiff.1:113 ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56 ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:305 ../scripts/svnpath.pl:97 ../scripts/transition-check.pl:81 ../scripts/uscan.1:525 ../scripts/uupdate.1:167 ../scripts/whodepends.1:19 ../scripts/who-uploads.1:71 ../scripts/wnpp-alert.1:31 ../scripts/wnpp-check.1:33 ../scripts/devscripts.conf.5:58
+#: ../scripts/annotate-output.1:55 ../scripts/archpath.1:54 ../scripts/build-rdeps.pl:290 ../scripts/checkbashisms.1:62 ../scripts/cowpoke.1:226 ../scripts/cvs-debc.1:64 ../scripts/cvs-debi.1:68 ../scripts/cvs-debrelease.1:69 ../scripts/cvs-debuild.1:59 ../scripts/dcmd.1:92 ../scripts/dcontrol.pl:283 ../scripts/dd-list.1:93 ../scripts/debc.1:120 ../scripts/debchange.1:432 ../scripts/debcheckout.pl:185 ../scripts/debclean.1:111 ../scripts/debcommit.pl:763 ../scripts/debdiff.1:210 ../scripts/debi.1:126 ../scripts/debpkg.1:23 ../scripts/debrelease.1:137 ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:71 ../scripts/debsign.1:147 ../scripts/debuild.1:421 ../scripts/desktop2menu.pl:52 ../scripts/dget.pl:622 ../scripts/diff2patches.1:40 ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscverify.1:53 ../scripts/getbuildlog.1:41 ../scripts/grep-excuses.1:39 ../scripts/licensecheck.pl:120 ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:20 ../scripts/mass-bug.pl:521 ../scripts/mergechanges.1:18 ../scripts/mk-build-deps.pl:68 ../scripts/namecheck.pl:30 ../scripts/nmudiff.1:113 ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56 ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:305 ../scripts/svnpath.pl:97 ../scripts/transition-check.pl:81 ../scripts/uscan.1:525 ../scripts/uupdate.1:167 ../scripts/whodepends.1:19 ../scripts/who-uploads.1:71 ../scripts/wnpp-alert.1:31 ../scripts/wnpp-check.1:33 ../scripts/devscripts.conf.5:58
 #, no-wrap
 msgid "AUTHOR"
 msgstr ""
@@ -537,7 +537,7 @@ msgid "Do not add addresses specified in BTS_DEFAULT_CC to the carbon copy list.
 msgstr ""
 
 #. type: =item
-#: ../scripts/bts.pl:278 ../scripts/mass-bug.pl:99
+#: ../scripts/bts.pl:278 ../scripts/mass-bug.pl:104
 msgid "--sendmail=SENDMAILCMD"
 msgstr ""
 
@@ -759,12 +759,12 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/bts.pl:379 ../scripts/mass-bug.pl:108
+#: ../scripts/bts.pl:379 ../scripts/mass-bug.pl:113
 msgid "--no-conf, --noconf"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/bts.pl:381 ../scripts/cvs-debrelease.1:61 ../scripts/debc.1:89 ../scripts/debchange.1:341 ../scripts/debclean.1:81 ../scripts/debdiff.1:147 ../scripts/debi.1:96 ../scripts/debrelease.1:99 ../scripts/debsign.1:99 ../scripts/debuild.1:223 ../scripts/dpkg-depcheck.1:96 ../scripts/dscverify.1:28 ../scripts/grep-excuses.1:18 ../scripts/mass-bug.pl:110 ../scripts/nmudiff.1:73 ../scripts/uscan.1:426 ../scripts/uupdate.1:80 ../scripts/who-uploads.1:44
+#: ../scripts/bts.pl:381 ../scripts/cvs-debrelease.1:61 ../scripts/debc.1:89 ../scripts/debchange.1:341 ../scripts/debclean.1:81 ../scripts/debdiff.1:147 ../scripts/debi.1:96 ../scripts/debrelease.1:99 ../scripts/debsign.1:99 ../scripts/debuild.1:223 ../scripts/dpkg-depcheck.1:96 ../scripts/dscverify.1:28 ../scripts/grep-excuses.1:18 ../scripts/mass-bug.pl:115 ../scripts/nmudiff.1:73 ../scripts/uscan.1:426 ../scripts/uupdate.1:80 ../scripts/who-uploads.1:44
 msgid ""
 "Do not read any configuration files.  This can only be used as the first "
 "option given on the command-line."
@@ -1870,13 +1870,13 @@ msgid ""
 msgstr ""
 
 #. type: SH
-#: ../scripts/bts.pl:3626 ../scripts/dcontrol.pl:267 ../scripts/debc.1:92 ../scripts/debchange.1:352 ../scripts/debcheckout.pl:142 ../scripts/debclean.1:90 ../scripts/debcommit.pl:97 ../scripts/debdiff.1:159 ../scripts/debi.1:99 ../scripts/debrelease.1:105 ../scripts/debrsign.1:57 ../scripts/debsign.1:105 ../scripts/debuild.1:288 ../scripts/dget.pl:586 ../scripts/dpkg-depcheck.1:102 ../scripts/dscverify.1:38 ../scripts/grep-excuses.1:27 ../scripts/licensecheck.pl:87 ../scripts/mass-bug.pl:128 ../scripts/nmudiff.1:79 ../scripts/plotchangelog.1:106 ../scripts/pts-subscribe.1:42 ../scripts/rmadison.pl:265 ../scripts/uscan.1:432 ../scripts/uupdate.1:86 ../scripts/who-uploads.1:50
+#: ../scripts/bts.pl:3626 ../scripts/dcontrol.pl:267 ../scripts/debc.1:92 ../scripts/debchange.1:352 ../scripts/debcheckout.pl:142 ../scripts/debclean.1:90 ../scripts/debcommit.pl:97 ../scripts/debdiff.1:159 ../scripts/debi.1:99 ../scripts/debrelease.1:105 ../scripts/debrsign.1:57 ../scripts/debsign.1:105 ../scripts/debuild.1:288 ../scripts/dget.pl:586 ../scripts/dpkg-depcheck.1:102 ../scripts/dscverify.1:38 ../scripts/grep-excuses.1:27 ../scripts/licensecheck.pl:87 ../scripts/mass-bug.pl:133 ../scripts/nmudiff.1:79 ../scripts/plotchangelog.1:106 ../scripts/pts-subscribe.1:42 ../scripts/rmadison.pl:265 ../scripts/uscan.1:432 ../scripts/uupdate.1:86 ../scripts/who-uploads.1:50
 #, no-wrap
 msgid "CONFIGURATION VARIABLES"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/bts.pl:3628 ../scripts/debcommit.pl:99 ../scripts/licensecheck.pl:89 ../scripts/mass-bug.pl:130
+#: ../scripts/bts.pl:3628 ../scripts/debcommit.pl:99 ../scripts/licensecheck.pl:89 ../scripts/mass-bug.pl:135
 msgid ""
 "The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  Command "
@@ -1953,12 +1953,12 @@ msgid ""
 msgstr ""
 
 #. type: =item
-#: ../scripts/bts.pl:3670 ../scripts/mass-bug.pl:138
+#: ../scripts/bts.pl:3670 ../scripts/mass-bug.pl:143
 msgid "BTS_SENDMAIL_COMMAND"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/bts.pl:3672 ../scripts/mass-bug.pl:140 ../scripts/nmudiff.1:108
+#: ../scripts/bts.pl:3672 ../scripts/mass-bug.pl:145 ../scripts/nmudiff.1:108
 msgid ""
 "If this is set, specifies a sendmail command to use instead of "
 "/usr/sbin/sendmail.  Same as the --sendmail command line option."
@@ -2101,7 +2101,7 @@ msgid "reportbug(1), querybts(1)"
 msgstr ""
 
 #. type: =head1
-#: ../scripts/bts.pl:3737 ../scripts/chdist.pl:92 ../scripts/debsnap.1:129 ../scripts/mass-bug.pl:505 ../scripts/tagpending.pl:444
+#: ../scripts/bts.pl:3737 ../scripts/chdist.pl:92 ../scripts/debsnap.1:129 ../scripts/mass-bug.pl:514 ../scripts/tagpending.pl:444
 #, no-wrap
 msgid "COPYRIGHT"
 msgstr ""
@@ -2116,7 +2116,7 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/bts.pl:3744 ../scripts/chdist.pl:97 ../scripts/mass-bug.pl:509
+#: ../scripts/bts.pl:3744 ../scripts/chdist.pl:97 ../scripts/mass-bug.pl:518
 msgid ""
 "It is licensed under the terms of the GPL, either version 2 of the License, "
 "or (at your option) any later version."
@@ -2277,7 +2277,7 @@ msgid "-h, --help"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/chdist.pl:40 ../scripts/mass-bug.pl:115
+#: ../scripts/chdist.pl:40 ../scripts/mass-bug.pl:120
 msgid "Provide a usage message."
 msgstr ""
 
@@ -2302,12 +2302,12 @@ msgid "Choose architecture (default: `dpkg --print-architecture`)"
 msgstr ""
 
 #. type: =item
-#: ../scripts/chdist.pl:50 ../scripts/mass-bug.pl:117
+#: ../scripts/chdist.pl:50 ../scripts/mass-bug.pl:122
 msgid "--version"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/chdist.pl:52 ../scripts/deb-reversion.dbk:239 ../scripts/mass-bug.pl:119 ../scripts/uscan.1:432
+#: ../scripts/chdist.pl:52 ../scripts/deb-reversion.dbk:239 ../scripts/mass-bug.pl:124 ../scripts/uscan.1:432
 msgid "Display version information."
 msgstr ""
 
@@ -5024,7 +5024,7 @@ msgid ""
 msgstr ""
 
 #. type: =head1
-#: ../scripts/debchange.1:411 ../scripts/mass-bug.pl:123
+#: ../scripts/debchange.1:411 ../scripts/mass-bug.pl:128
 #, no-wrap
 msgid "ENVIRONMENT"
 msgstr ""
@@ -5786,7 +5786,7 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/debcommit.pl:765 ../scripts/mass-bug.pl:514
+#: ../scripts/debcommit.pl:765 ../scripts/mass-bug.pl:523
 msgid "Joey Hess <joeyh@debian.org>"
 msgstr ""
 
@@ -9849,37 +9849,49 @@ msgstr ""
 msgid "Set the BTS pseudo-header for usertags."
 msgstr ""
 
+#. type: =item
+#: ../scripts/mass-bug.pl:99
+msgid "--source"
+msgstr ""
+
 #. type: textblock
 #: ../scripts/mass-bug.pl:101
+msgid ""
+"Specify that package names refer to source packages rather than binary "
+"packages."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/mass-bug.pl:106
 msgid ""
 "Specify the sendmail command.  The command will be split on white space and "
 "will not be passed to a shell.  Default is '/usr/sbin/sendmail'."
 msgstr ""
 
 #. type: =item
-#: ../scripts/mass-bug.pl:104
+#: ../scripts/mass-bug.pl:109
 msgid "--no-wrap"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/mass-bug.pl:106
+#: ../scripts/mass-bug.pl:111
 msgid "Do not wrap the template to lines of 70 characters."
 msgstr ""
 
 #. type: =item
-#: ../scripts/mass-bug.pl:113
+#: ../scripts/mass-bug.pl:118
 msgid "--help"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/mass-bug.pl:125
+#: ../scripts/mass-bug.pl:130
 msgid ""
 "DEBEMAIL and EMAIL can be set in the environment to control the email "
 "address that the bugs are sent from."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/mass-bug.pl:507
+#: ../scripts/mass-bug.pl:516
 msgid "This program is Copyright (C) 2006 by Joey Hess <joeyh@debian.org>."
 msgstr ""
 
@@ -11011,8 +11023,8 @@ msgstr ""
 #: ../scripts/rc-alert.1:115
 msgid ""
 "The bug must apply to packages matching the specified debtags, i.e. the "
-"match will only include packages that have the ‘role::plugin’ tag and that "
-"have either of the tags ‘implemented-in::perl’ or ‘implemented-in::python’."
+"match will only include packages that have the 'role::plugin' tag and that "
+"have either of the tags 'implemented-in::perl' or 'implemented-in::python'."
 msgstr ""
 
 #. type: TP
