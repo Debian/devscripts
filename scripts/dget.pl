@@ -441,8 +441,10 @@ for my $arg (@ARGV) {
 		system 'dscverify', $found_dsc;
 		exit $? >> 8 if $? >> 8 != 0;
 	    }
+	    my @cmd = qw(dpkg-source -x);
+	    push @cmd, '--no-check' unless $dget_verify;
 	    if ($opt->{'build'}) {
-		my @output = `dpkg-source -x $found_dsc`; # FIXME: this will break when dpkg-source output is localized
+		my @output = `LC_ALL=C @cmd $found_dsc`; # FIXME: breaks when dpkg-source output is localized
 		print @output unless $opt->{'quiet'};
 		foreach (@output) {
 		    if ( /^dpkg-source: extracting .* in (.*)/ ) {
@@ -452,7 +454,7 @@ for my $arg (@ARGV) {
 		    }
 		}
 	    } elsif ($dget_unpack) {
-		system 'dpkg-source', '-x', $found_dsc;
+		system @cmd, $found_dsc;
 	    }
 	}
 

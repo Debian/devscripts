@@ -1,5 +1,6 @@
 devscripts (2.10.50) UNRELEASED; urgency=low
 
+  [ Adam D. Barratt ]
   * chdist: Make --data-dir work with relative paths.  (Closes: #528254)
   * debchange: Add karmic (koala) to the list of recognised Ubuntu
     distributions.
@@ -15,7 +16,11 @@ devscripts (2.10.50) UNRELEASED; urgency=low
   * uscan: Pass -n to gzip when repacking bz2 files to ensure consistent
     checksums.  Thanks, Damyan Ivanov.  (Closes: #504672)
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sat, 02 May 2009 20:47:39 +0100
+  [ Christoph Berg ]
+  * dget: -u implies dpkg-source --no-check. Also, force LC_ALL=C to correctly
+    capture dpkg-source output with --build.
+
+ -- Christoph Berg <myon@debian.org>  Sun, 17 May 2009 22:19:54 +0200
 
 devscripts (2.10.49) unstable; urgency=low
 
