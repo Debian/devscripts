@@ -233,7 +233,7 @@ number is mangled by executing the Perl command:
     $version =~ \fIrule\fR;
 .fi
 for each rule.  Thus, suitable rules might be `s/^/0./' to prepend
-`0.' to the version number and `s/_/./' to change underscores into
+`0.' to the version number and `s/_/./g' to change underscores into
 periods.  Note that the \fIrules\fR string may not contain commas;
 this should not be a problem.
 .TP
