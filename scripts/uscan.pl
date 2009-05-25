@@ -1401,24 +1401,19 @@ EOF
 	    $action =~ s/^uupdate/uupdate --no-symlink/;
 	}
 
+	my $actioncmd;
 	if ($watch_version > 1) {
-	    print "-- Executing user specified script\n     $action --upstream-version $newversion $newfile_base" if $verbose;
-	    if ($dehs) {
-		my $msg = "Executing user specified script: $action --upstream-version $newversion $newfile_base; output:\n";
-		$msg .= `$action --upstream-version $newversion $usefile 2>&1`;
-		dehs_msg($msg);
-	    } else {
-		system("$action --upstream-version $newversion $usefile");
-	    }
+	    $actioncmd = "$action --upstream-version $newversion $usefile";
 	} else {
-	    print "-- Executing user specified script $action $newfile_base $newversion" if $verbose;
-	    if ($dehs) {
-		my $msg = "Executing user specified script: $action $newfile_base $newversion; output:\n";
-		$msg .= `$action $usefile $newversion 2>&1`;
-		dehs_msg($msg);
-	    } else {
-		system("$action $usefile $newversion");
-	    }
+	    $actioncmd = "$action $usefile $newversion";
+	}
+	print "-- Executing user specified script\n     $actioncmd\n" if $verbose;
+	if ($dehs) {
+	    my $msg = "Executing user specified script: $actioncmd; output:\n";
+	    $msg .= `$actioncmd 2>&1`;
+	    dehs_msg($msg);
+	} else {
+	    system($actioncmd);
 	}
     }
 
