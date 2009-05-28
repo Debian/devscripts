@@ -2271,6 +2271,15 @@ sub send_mail {
     }
 }
 
+sub generate_packages_cc {
+    my $ccs = '';
+    if (keys %ccpackages && $packagesserver) {
+	$ccs .= join("\@$packagesserver, ", sort (keys %ccpackages))
+	    . "\@$packagesserver";
+    }
+    return $ccs;
+}
+
 # Sends all cached mail to the bts (duh).
 sub mailbtsall {
     my $subject=shift;
@@ -2281,10 +2290,9 @@ sub mailbtsall {
     $charset =~ s/^ANSI_X3\.4-19(68|86)$/US-ASCII/;
     $subject = MIME_encode_mimewords($subject, 'Charset' => $charset);
 
-    if (keys %ccpackages && $packagesserver) {
+    if ($forceinteractive) {
 	$ccemail .= ", " if length $ccemail;
-	$ccemail .= join("\@$packagesserver, ", sort (keys %ccpackages))
-	    . "\@$packagesserver";
+	$ccemail .= generate_packages_cc();
     }
     if ($ccsecurity) {
 	my $comma = "";
@@ -2377,6 +2385,7 @@ sub confirmmail {
     my ($header, $body) = @_;
 
     $body = edit($body) if $forceinteractive;
+    my $setHeader = 0;
     if ($interactive) {
 	while(1) {
 	    print "\n", $header, "\n", $body, "\n---\n";
@@ -2388,6 +2397,20 @@ sub confirmmail {
 	    } elsif (/^(y|$)/i) {
 		last;
 	    } elsif (/^e/i) {
+		# Since the user has chosen to edit the message, we go ahead
+		# and add the $ccpackages Ccs (if they haven't already been
+		# added due to $forceinteractive).
+		if (!$forceinteractive && !$setHeader) {
+		    $setHeader = 1;
+		    my $ccs = generate_packages_cc();
+		    if ($header =~ m/^Cc: (.*?)$/m) {
+			$ccs = "$1, $ccs";
+			$header =~ s/^Cc: .*?$/Cc: $ccs/m;
+		    }
+		    else {
+			$header =~ s/^(To: .*?)$/$1\nCc: $ccs/m;
+		    }
+		}
 		$body = edit($body);
 	    }
 	}
@@ -2399,7 +2422,7 @@ sub confirmmail {
 sub addfooter() {
     my $body = shift;
 
-    if ($forceinteractive) {	
+    if ($forceinteractive) {
 	$body .= "thanks\n";
 	if (-r $ENV{'HOME'} . "/.signature") {
 	    if (open SIG, "<", $ENV{'HOME'} . "/.signature") {
