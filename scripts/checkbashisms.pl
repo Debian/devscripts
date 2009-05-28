@@ -74,6 +74,7 @@ my $status = 0;
 my $makefile = 0;
 my (%bashisms, %string_bashisms, %singlequote_bashisms);
 
+my $LEADIN = qr'(?:(?:^|[`&;(|{])\s*|(?:if|then|do|while|shell)\s+)';
 init_hashes;
 
 foreach my $filename (@ARGV) {
@@ -281,8 +282,8 @@ foreach my $filename (@ARGV) {
 	    # detect source (.) trying to pass args to the command it runs
 	    # The first expression weeds out '. "foo bar"'
 	    if (not $found and
-		not m/^\s*\.\s+(\"[^\"]+\"|\'[^\']+\')\s*(\&|\||\d?>|<|;|\Z)/
-		and m/^\s*(\.\s+[^\s;\`:]+\s+([^\s;]+))/) {
+		not m/$LEADIN\.\s+(\"[^\"]+\"|\'[^\']+\'|\$\([^)]+\)+)\s*(\&|\||\d?>|<|;|\Z)/
+		and m/$LEADIN(\.\s+[^\s;\`:]+\s+([^\s;]+))/) {
 		if ($2 =~ /^(\&|\||\d?>|<)/) {
 		    # everything is ok
 		    ;
@@ -408,7 +409,7 @@ sub script_is_evil_and_wrong {
         last if (++$i > 55);
         if (m~
 	    # the exec should either be "eval"ed or a new statement
-	    (^\s*|\beval\s*[\'\"]|(;|&&)\s*)
+	    (^\s*|\beval\s*[\'\"]|(;|&&|\b(then|else))\s*)
 
 	    # eat anything between the exec and $0
 	    exec\s*.+\s*
@@ -445,7 +446,7 @@ sub script_is_evil_and_wrong {
 	    $backgrounded = 1;
 	} elsif ($backgrounded and m~
 	    # the exec should either be "eval"ed or a new statement
-	    (^\s*|\beval\s*[\'\"]|(;|&&)\s*)
+	    (^\s*|\beval\s*[\'\"]|(;|&&|\b(then|else))\s*)
 	    exec\s+true(\s|\Z)~x) {
 
 	    $ret = $. - 1;
@@ -458,7 +459,6 @@ sub script_is_evil_and_wrong {
 }
 
 sub init_hashes {
-    my $LEADIN = qr'(?:(^|[`&;(|{])\s*|(if|then|do|while|shell)\s+)';
 
     %bashisms = (
 	qr'(?:^|\s+)function \w+(\s|\(|\Z)' => q<'function' is useless>,

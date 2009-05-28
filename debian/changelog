@@ -1,6 +1,13 @@
 devscripts (2.10.51) UNRELEASED; urgency=low
 
   [ Adam D. Barratt ]
+  * checkbashisms:
+    + Detect shellscript wrappers that use "then" or "else" before calling
+      exec.  Thanks, Raphael Geissert.  (Closes: #530815)
+    + Fix a false positive detection of ". $(foo bar)" as attempting to pass
+      arguments to a sourced script.  Thanks, Raphael Geissert.
+    + Detect use of passing arguments to a sourced script as part of a
+      conditional statement.  Thanks, Raphael Geissert.
   * uscan: Make a regular expression example in the manpage clearer.  Thanks,
     Jason Heeris.  (Closes: #530362)
 
