@@ -1940,7 +1940,7 @@ sub bts_cache {
 	    next;
 	}
 	download($bug, '', 1, 0, $bugcount, $bugtotal);
-        sleep $opt_cachedelay;
+	sleep $opt_cachedelay;
 	$bugcount++;
     }
 
@@ -2166,15 +2166,15 @@ sub mailbts {
 
 # Extract an array of email addresses from a string
 sub extract_addresses {
-        my $s = shift;
-        my @addresses;
+    my $s = shift;
+    my @addresses;
 
-        # Original regular expression from git-send-email, slightly modified
-        while ($s =~ /([^,<>"\s\@]+\@[^.,<>"\s@]+(?:\.[^.,<>"\s\@]+)+)(.*)/) {
-            push @addresses, $1;
-            $s = $2;
-        }
-        return @addresses;
+    # Original regular expression from git-send-email, slightly modified
+    while ($s =~ /([^,<>"\s\@]+\@[^.,<>"\s@]+(?:\.[^.,<>"\s\@]+)+)(.*)/) {
+	push @addresses, $1;
+	$s = $2;
+    }
+    return @addresses;
 }
 
 # Send one full mail message using the smtphost or sendmail.
@@ -2193,7 +2193,7 @@ sub send_mail {
     $message   .= "Cc: $cc\n" if length $cc;
     $message   .= "X-Debbugs-No-Ack: Yes\n" if $requestack==0;
     $message   .= "Subject: $subject\n"
-	       .  "Date: $date\n"
+               .  "Date: $date\n"
                .  "User-Agent: devscripts bts/$version$toolname\n"
                .  "Message-ID: <$msgid>\n"
                .  "\n";
@@ -2205,7 +2205,7 @@ sub send_mail {
 
     $message .= "$body\n";
     if ($noaction) {
-        print "$message\n";
+	print "$message\n";
     }
     elsif (length $smtphost) {
 	my $smtp;
@@ -2232,42 +2232,42 @@ sub send_mail {
 	    $smtp->auth($smtpuser, $smtppass)
 		or die "bts: failed to authenticate to $smtphost\n($@)\n";
 	}
-        $smtp->mail($fromaddress)
-            or die "bts: failed to set SMTP from address $fromaddress\n($@)\n";
-        my @addresses = extract_addresses($to);
-        push @addresses, extract_addresses($cc);
-        foreach my $address (@addresses) {
-            $smtp->recipient($address)
-                or die "bts: failed to set SMTP recipient $address\n($@)\n";
-        }
-        $smtp->data($message)
-            or die "bts: failed to send message as SMTP DATA\n($@)\n";
-        $smtp->quit
-            or die "bts: failed to quit SMTP connection\n($@)\n";
+	$smtp->mail($fromaddress)
+	    or die "bts: failed to set SMTP from address $fromaddress\n($@)\n";
+	my @addresses = extract_addresses($to);
+	push @addresses, extract_addresses($cc);
+	foreach my $address (@addresses) {
+	    $smtp->recipient($address)
+	        or die "bts: failed to set SMTP recipient $address\n($@)\n";
+	}
+	$smtp->data($message)
+	    or die "bts: failed to send message as SMTP DATA\n($@)\n";
+	$smtp->quit
+	    or die "bts: failed to quit SMTP connection\n($@)\n";
     }
     else {
-        my $pid = open(MAIL, "|-");
-        if (! defined $pid) {
-            die "bts: Couldn't fork: $!\n";
-        }
-        $SIG{'PIPE'} = sub { die "bts: pipe for $sendmailcmd broke\n"; };
-        if ($pid) {
-            # parent
-            print MAIL $message;
-            close MAIL or die "bts: sendmail error: $!\n";
-        }
-        else {
-            # child
-            if ($debug) {
-                exec("/bin/cat")
-                    or die "bts: error running cat: $!\n";
-            } else {
-                my @mailcmd = split ' ', $sendmailcmd;
-                push @mailcmd, "-t" if $sendmailcmd =~ /$sendmail_t/;
-                exec @mailcmd
-                    or die "bts: error running sendmail: $!\n";
-            }
-        }
+	my $pid = open(MAIL, "|-");
+	if (! defined $pid) {
+	    die "bts: Couldn't fork: $!\n";
+	}
+	$SIG{'PIPE'} = sub { die "bts: pipe for $sendmailcmd broke\n"; };
+	if ($pid) {
+	    # parent
+	    print MAIL $message;
+	    close MAIL or die "bts: sendmail error: $!\n";
+	}
+	else {
+	    # child
+	    if ($debug) {
+		exec("/bin/cat")
+		    or die "bts: error running cat: $!\n";
+	    } else {
+		my @mailcmd = split ' ', $sendmailcmd;
+		push @mailcmd, "-t" if $sendmailcmd =~ /$sendmail_t/;
+		exec @mailcmd
+		    or die "bts: error running sendmail: $!\n";
+	    }
+	}
     }
 }
 
@@ -2296,9 +2296,9 @@ sub mailbtsall {
     }
     if ($ccsecurity) {
 	my $comma = "";
-        if ($ccemail) {
+	if ($ccemail) {
 	    $comma = ", ";
-        }
+	}
 	$ccemail = "$ccemail$comma$ccsecurity";
     }
     if ($ENV{'DEBEMAIL'} || $ENV{'EMAIL'}) {
@@ -2326,9 +2326,9 @@ sub mailbtsall {
 	    $name =~ s/,.*//;
 	}
 	my $from = $name ? "$name <$email>" : $email;
-        $from = MIME_encode_mimewords($from, 'Charset' => $charset);
+	$from = MIME_encode_mimewords($from, 'Charset' => $charset);
 
-        send_mail($from, $btsemail, $ccemail, $subject, $body);
+	send_mail($from, $btsemail, $ccemail, $subject, $body);
     }
     else {  # No DEBEMAIL
 	my $header = "";
@@ -2468,7 +2468,7 @@ sub mailto {
     my ($subject, $body, $to, $from) = @_;
 
     if (defined $from) {
-        send_mail($from, $to, '', $subject, $body);
+	send_mail($from, $to, '', $subject, $body);
     }
     else {  # No $from
 	unless (system("command -v mail >/dev/null 2>&1") == 0) {
@@ -2782,12 +2782,12 @@ sub download_attachments {
 	}
 	elsif ($cachemode eq 'full' and $msg =~ /^\d+$/) {
 	    $bug2filename{$msg} = $filename;
-            # already downloaded?
+	    # already downloaded?
 	    next if -f $bug2filename{$msg} and not $refreshmode;
 	}
 	elsif ($cachemode eq 'full' and $msg =~ /^\d+-mbox$/) {
 	    $bug2filename{$msg} = $filename;
-            # already downloaded?
+	    # already downloaded?
 	    next if -f $bug2filename{$msg} and not $refreshmode;
 	}
 	elsif (($cachemode eq 'full' or $cachemode eq 'mbox' or $mboxmode) and
@@ -2828,7 +2828,7 @@ sub download_attachments {
 	    my $data = $response->content;
 
 	    if ($msg =~ /^\d+$/) {
-                # we're dealing with a boring message, and so we must be
+		# we're dealing with a boring message, and so we must be
 		# in 'full' mode
 		$data =~ s%<HEAD>%<HEAD><BASE href="../">%;
 		$data = mangle_cache_file($data, $thing, 'full', $timestamp);
@@ -3595,7 +3595,7 @@ sub init_agent {
 
 sub opts_done {
     if (@_) {
-         die "bts: unknown options to '$command[$index]': @_\n";
+	die "bts: unknown options to '$command[$index]': @_\n";
     }
 }
 
@@ -3614,7 +3614,7 @@ sub edit {
 	or die "bts: reading from temporary file: $!\n";
     $message = "";
     while(<OUT_MAIL>) {
-        $message .= $_;
+	$message .= $_;
     }
     close OUT_MAIL;
     unlink($filename);
