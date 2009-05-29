@@ -297,6 +297,13 @@ Note that when sending directly via an SMTP host, specifying addresses in
 --cc-addr or BTS_DEFAULT_CC that the SMTP host will not relay will cause the
 SMTP host to reject the entire mail.
 
+Note also that the use of the reassign command may, when either interactive
+or force-interactive mode is enabled, lead to the automatic addition of a Cc
+to $newpackage@packages.debian.org.  In these cases, the note above regarding
+relaying applies.  The submission interface (port 587) on reportbug.debian.org
+does not support relaying and, as such, should not be used as an SMTP server
+for B<bts> under the circumstances described in this paragraph.
+
 =item --smtp-username=USERNAME, --smtp-password=PASSWORD
 
 Specify the credentials to use when connecting to the SMTP server
