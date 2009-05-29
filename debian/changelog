@@ -16,13 +16,13 @@ devscripts (2.10.51) UNRELEASED; urgency=low
     Jason Heeris.  (Closes: #530362)
 
   [ James Vega ]
-  * uscan: Log the correct filename when running the post-download action.
-    Simplify the surrounding logic so the logging and command are less likely
-    to get out of sync in the future.
   * bts: Only Cc $package@packages.debian.org if we're reasonably sure we have
     an email body instead of simply control messages; i.e., if the user
     specifies the --force-interactive option or the --interactive option and
     chooses to edit the email body.  (Closes: #530926)
+  * uscan: Log the correct filename when running the post-download action.
+    Simplify the surrounding logic so the logging and command are less likely
+    to get out of sync in the future.
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Thu, 21 May 2009 21:59:23 +0100
 
