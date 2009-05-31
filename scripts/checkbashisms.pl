@@ -535,11 +535,11 @@ sub init_hashes {
 	qr'\$\{?PIPESTATUS\}?\b'      => q<$PIPESTATUS>,
 	qr'\$\{?SHLVL\}?\b'           => q<$SHLVL>,
 	qr'<<<'                       => q<\<\<\< here string>,
-	$LEADIN . qr'echo\s+(?:-[^e\s]+\s+)?\"[^\"]*(\\[\\abcEfnrtv0])+.*?[\"]' => q<unsafe echo with backslash>,
+	$LEADIN . qr'echo\s+(?:-[^e\s]+\s+)?\"[^\"]*(\\[abcEfnrtv0])+.*?[\"]' => q<unsafe echo with backslash>,
     );
 
     %singlequote_bashisms = (
-	$LEADIN . qr'echo\s+(?:-[^e\s]+\s+)?\'[^\']*(\\[\\abcEfnrtv0])+.*?[\']' => q<unsafe echo with backslash>,
+	$LEADIN . qr'echo\s+(?:-[^e\s]+\s+)?\'[^\']*(\\[abcEfnrtv0])+.*?[\']' => q<unsafe echo with backslash>,
 	$LEADIN . qr'source\s+[\"\']?(?:\.\/|\/|\$|[\w.-])[^\s]+' =>
 	                               q<should be '.', not 'source'>,
     );
