@@ -12,6 +12,9 @@ devscripts (2.10.51) UNRELEASED; urgency=low
       arguments to a sourced script.  Thanks, Raphael Geissert.
     + Detect use of passing arguments to a sourced script as part of a
       conditional statement.  Thanks, Raphael Geissert.
+    + Correctly count the number of quotes in a line when detecting whether
+      we are currently inside a "quoted block".  Thanks, Raphael Geissert.
+      (Closes: #531247)
   * licensecheck: Fix an error in a regular expression which led to an
     uninitialized value warning and missing version for some GPL headers.
     Thanks, Jakub Wilk.  (Closes: #531059)

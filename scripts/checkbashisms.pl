@@ -265,7 +265,7 @@ foreach my $filename (@ARGV) {
 		    $templine =~ s/$otherquote.*?$quote.*?$otherquote//g;
 		    # "\""
 		    $templine =~ s/(^|[^\\])$quote\\$quote$quote/$1/g;
-		    my $count = () = $templine =~ /(^|[^\\])$quote/g;
+		    my $count = () = $templine =~ /(^|(?!\\))$quote/g;
 
 		    # If there's an odd number of non-escaped
 		    # quotes in the line it's almost certainly the
