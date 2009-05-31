@@ -480,7 +480,6 @@ sub init_hashes {
 	$LEADIN . qr'exec\s+-[acl]' =>    q<exec -c/-l/-a name>,
 	$LEADIN . qr'let\s' =>            q<let ...>,
 	qr'(?<![\$\(])\(\(.*\)\)' =>     q<'((' should be '$(('>,
-	qr'\$\[[^][]+\]' =>	       q<'$[' should be '$(('>,
 	qr'(?:^|\s+)(\[|test)\s+-a' =>            q<test with unary -a (should be -e)>,
 	qr'\&>' =>	               q<should be \>word 2\>&1>,
 	qr'(<\&|>\&)\s*((-|\d+)[^\s;|)`&\\\\]|[^-\d\s]+)' =>
@@ -518,7 +517,7 @@ sub init_hashes {
     );
 
     %string_bashisms = (
-	qr'\$\[\w+\]' =>                 q<arithmetic not allowed>,
+	qr'\$\[[^][]+\]' =>	         q<'$[' should be '$(('>,
 	qr'\$\{\w+\:\d+(?::\d+)?\}' =>   q<${foo:3[:1]}>,
 	qr'\$\{!\w+[\@*]\}' =>           q<${!prefix[*|@]>,
 	qr'\$\{!\w+\}' =>                q<${!name}>,
