@@ -510,7 +510,7 @@ sub init_hashes {
 	$LEADIN . qr'time\s' =>          q<time>,
 	$LEADIN . qr'dirs(\s|\Z)' =>          q<dirs>,
 	qr'(?:^|\s+)[<>]\(.*?\)'	    => q<\<() process substituion>,
-	qr'(?:^|\s+)readonly\s+-[af]' => q<readonly -[af]>,
+	$LEADIN . qr'readonly\s+-[af]' => q<readonly -[af]>,
 	$LEADIN . qr'(sh|\$\{?SHELL\}?) -[rD]' => q<sh -[rD]>,
 	$LEADIN . qr'(sh|\$\{?SHELL\}?) --\w+' =>  q<sh --long-option>,
 	$LEADIN . qr'(sh|\$\{?SHELL\}?) [-+]O' =>  q<sh [-+]O>,

@@ -19,6 +19,7 @@ devscripts (2.10.51) UNRELEASED; urgency=low
       /bin/sh and we can't detect the interpreter of a patch.
     + Improve the check for the use of $[] inside quoted text.  Thanks,
       Raphael Geissert.
+    + Apply the "common lead-in text" to the "readonly" check.
   * licensecheck: Fix an error in a regular expression which led to an
     uninitialized value warning and missing version for some GPL headers.
     Thanks, Jakub Wilk.  (Closes: #531059)
