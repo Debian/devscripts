@@ -32,7 +32,11 @@ devscripts (2.10.51) UNRELEASED; urgency=low
     Simplify the surrounding logic so the logging and command are less likely
     to get out of sync in the future.
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Thu, 21 May 2009 21:59:23 +0100
+  [ Mohammed Adnène Trojette ]
+  * pts-subscribe: refer to bsd-mailx rather to the transitional mailx
+    package. Thanks Ansgar Burchardt for the patch. (Closes: #531332)
+
+ -- Mohammed Adnène Trojette <adn+deb@diwi.org>  Sun, 31 May 2009 19:09:11 +0200
 
 devscripts (2.10.50) unstable; urgency=low
 
