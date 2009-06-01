@@ -2391,6 +2391,8 @@ sub mailbtsall {
 sub confirmmail {
     my ($header, $body) = @_;
 
+    return $body if $noaction;
+
     $body = edit($body) if $forceinteractive;
     my $setHeader = 0;
     if ($interactive) {

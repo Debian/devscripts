@@ -1,10 +1,13 @@
 devscripts (2.10.51) UNRELEASED; urgency=low
 
   [ Adam D. Barratt ]
-  * bts: Add a note to the description of --smtp-server explaining that
-    reportbug.debian.org does not support relaying and is therefore not a
-    suitable server to use in circumstances where $package@packages.debian.org
-    may be automatically Cced.
+  * bts:
+    + Add a note to the description of --smtp-server explaining that
+      reportbug.debian.org does not support relaying and is therefore not a
+      suitable server to use in circumstances where $package@packages.d.o
+      may be automatically Cced.
+    + Ignore the --{force-,}interactive options when combined with -n.
+      (Closes: #531422)
   * checkbashisms:
     + Detect shellscript wrappers that use "then" or "else" before calling
       exec.  Thanks, Raphael Geissert.  (Closes: #530815)
