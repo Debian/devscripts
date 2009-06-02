@@ -32,6 +32,8 @@ devscripts (2.10.51) UNRELEASED; urgency=low
     Thanks, Jakub Wilk.  (Closes: #531059)
   * uscan: Make a regular expression example in the manpage clearer.  Thanks,
     Jason Heeris.  (Closes: #530362)
+  * uupdate: Add support for .lzma compressed tarballs and diffs.  Thanks to
+    Simon Richter for the patch.  (Closes: #531570)
 
   [ James Vega ]
   * bts: Only Cc $package@packages.debian.org if we're reasonably sure we have
