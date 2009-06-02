@@ -25,6 +25,8 @@ devscripts (2.10.51) UNRELEASED; urgency=low
     + Apply the "common lead-in text" to the "readonly" check.
     + Remove "\\" from the list of unsafe backslash escapes, as it appears to
       work in all shells.
+  * dcmd: Parse changes / dsc files containing section or priority entries of
+    "-".  (Closes: #531593)
   * licensecheck: Fix an error in a regular expression which led to an
     uninitialized value warning and missing version for some GPL headers.
     Thanks, Jakub Wilk.  (Closes: #531059)
