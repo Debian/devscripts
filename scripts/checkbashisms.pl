@@ -451,7 +451,7 @@ sub script_is_evil_and_wrong {
 
 	    $ret = $. - 1;
 	    last;
-	} elsif (m~@DPATCH@~) {
+	} elsif (m~\@DPATCH\@~) {
 	    $ret = $. - 1;
 	    last;
 	}
