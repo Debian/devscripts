@@ -1,6 +1,7 @@
 devscripts (2.10.52) UNRELEASED; urgency=low
 
-  * NOT RELEASED YET
+  * debdiff: Make --diffstat work again; diffstat exits 0 unless there was
+    a problem.  Accidentally broken in 2.10.48.
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 15 Jun 2009 19:41:02 +0100
 

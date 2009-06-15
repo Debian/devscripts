@@ -586,8 +586,10 @@ elsif ($type eq 'dsc') {
 
 	if ($have_diffstat and $show_diffstat) {
 	    print "diffstat for $sdir1 $sdir2\n\n";
-	    system("diffstat $filename")
-		or fatal "Failed to diffstat $filename!";
+	    system("diffstat $filename");
+	    if ($? != 0) {
+		fatal "Failed to diffstat $filename!";
+	    }
 	    print "\n";
 	}
 
