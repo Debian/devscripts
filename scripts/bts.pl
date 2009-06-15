@@ -2206,7 +2206,7 @@ sub send_mail {
                .  "\n";
 
     $body = addfooter($body);
-    $body = confirmmail($message, $body);
+    ($message, $body) = confirmmail($message, $body);
 
     return if not defined $body;
 
@@ -2348,7 +2348,7 @@ sub mailbtsall {
 		  .  "\n";
 
 	$body = addfooter($body);
-	$body = confirmmail($header, $body);
+	($header, $body) = confirmmail($header, $body);
 
 	return if not defined $body;
 
@@ -2391,7 +2391,7 @@ sub mailbtsall {
 sub confirmmail {
     my ($header, $body) = @_;
 
-    return $body if $noaction;
+    return ($header, $body) if $noaction;
 
     $body = edit($body) if $forceinteractive;
     my $setHeader = 0;
@@ -2425,7 +2425,7 @@ sub confirmmail {
 	}
     }
 
-    return $body;
+    return ($header, $body);
 }
 
 sub addfooter() {
