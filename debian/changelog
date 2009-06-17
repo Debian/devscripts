@@ -1,7 +1,6 @@
 devscripts (2.10.52) UNRELEASED; urgency=low
 
-  * debdiff: Make --diffstat work again; diffstat exits 0 unless there was
-    a problem.  Accidentally broken in 2.10.48.
+  * debdiff: Make --diffstat work again; accidentally broken in 2.10.48.
   * uupdate: Fix invocation of *cat when attempting to apply diffs.
     Thanks, Yannick Roehlly.  (Closes: #533415)
   * debian/control: Update Standards-Version to 3.8.2 (no changes needed)
