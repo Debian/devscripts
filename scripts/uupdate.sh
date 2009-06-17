@@ -722,7 +722,7 @@ else
 	    done
 	fi
 
-	if $DIFFCAT ../$DIFF | patch -sNp1 ; then
+	if $DIFFCAT $DIFF | patch -sNp1 ; then
 	    echo "Success!  The diffs from version $VERSION worked fine."
 	else
 	    echo "$PROGNAME: the diffs from version $VERSION did not apply cleanly!" >&2
