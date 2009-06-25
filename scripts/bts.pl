@@ -131,9 +131,6 @@ our (@gTags, @valid_tags, %valid_tags);
 my @valid_severities=qw(wishlist minor normal important
 			serious grave critical);
 
-my @no_cc_commands=qw(subscribe unsubscribe reportspam
-			spamreport usertags);
-
 my $browser;  # Will set if necessary
 
 my $cachedir=$ENV{'HOME'}."/.devscripts_cache/bts/";
@@ -147,7 +144,6 @@ END {
 }
 
 my %clonedbugs = ();
-my %ccbugs = ();
 my %ccpackages = ();
 
 =head1 SYNOPSIS
@@ -2138,20 +2134,17 @@ sub checkbug {
 	if (not defined $it) {
 	    die "bts: You specified 'it', but no previous bug number referenced!\n";
 	}
-    } else {    
+    } else {
 	$bug=~s/^(?:(?:bug)?\#)?(-?\d+):?$/$1/i;
 	if (! exists $clonedbugs{$bug} &&
 	   (! length $bug || $bug !~ /^[0-9]+$/)) {
 	    warn "\"$_[0]\" does not look like a bug number\n" unless $quiet;
 	    return "";
-    	}
+	}
 
 	# Valid, now set $it to this so that we can refer to it by 'it' later
-    	$it = $bug;
+	$it = $bug;
     }
-
-    $ccbugs{$it} = 1 if ! exists $clonedbugs{$it} &&
-	! (grep /^\Q$command[$index]\E/, @no_cc_commands);
 
     return $it;
 }
