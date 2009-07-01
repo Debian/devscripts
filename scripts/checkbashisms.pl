@@ -540,7 +540,7 @@ sub init_hashes {
 
     %singlequote_bashisms = (
 	$LEADIN . qr'echo\s+(?:-[^e\s]+\s+)?\'[^\']*(\\[abcEfnrtv0])+.*?[\']' => q<unsafe echo with backslash>,
-	$LEADIN . qr'source\s+[\"\']?(?:\.\/|\/|\$|[\w~.-])\S*(\s|\z)' =>
+	$LEADIN . qr'source\s+[\"\']?(?:\.\/|\/|\$|[\w~.-])\S*' =>
 	                               q<should be '.', not 'source'>,
     );
 
