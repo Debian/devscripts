@@ -1,3 +1,11 @@
+devscripts (2.10.53) UNRELEASED; urgency=low
+
+  * checkbashisms: Detect the use of "source" when the sourced filename
+    contains a tilde (Closes: #528592) or consists of a single character
+    (Closes: #535252).  Thanks, Raphael Geissert and Ryan Niebur.
+
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 01 Jul 2009 18:43:43 +0100
+
 devscripts (2.10.52) unstable; urgency=low
 
   * debdiff: Make --diffstat work again; accidentally broken in 2.10.48.
