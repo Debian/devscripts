@@ -3,6 +3,9 @@ devscripts (2.10.53) UNRELEASED; urgency=low
   * checkbashisms: Detect the use of "source" when the sourced filename
     contains a tilde (Closes: #528592) or consists of a single character
     (Closes: #535252).  Thanks, Raphael Geissert and Ryan Niebur.
+  * nmudiff: Fix specification of BCc to control@bugs so that it's interpreted
+    as an option to mutt and not as a recipient address.  Thanks, Filippo
+    Giunchedi.  (Closes: #534585)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 01 Jul 2009 18:43:43 +0100
 
