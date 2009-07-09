@@ -347,8 +347,8 @@ if [ "$NMUDIFF_DELAY" = "0" ]; then
 else
     BODY="$(printf "%s\n%s\n%s\n" \
 "I've prepared an NMU for $SOURCE (versioned as $VERSION) and" \
-"uploaded it to DELAYED/$NMUDIFF_DELAY. Please free to tell me if I should" \
-"delay it longer.")"
+"uploaded it to DELAYED/$NMUDIFF_DELAY. Please feel free to tell me if I" \
+"should delay it longer.")"
 fi
 
 if [ "$NMUDIFF_MUTT" = no ]; then
