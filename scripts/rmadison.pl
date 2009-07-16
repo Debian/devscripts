@@ -73,7 +73,7 @@ my %url_map = (
     'myon' => "http://qa.debian.org/~myon/madison.php",
     'bpo' => "http://www.backports.org/cgi-bin/madison.cgi",
     'debug' => "http://debug.debian.net/cgi-bin/madison.cgi",
-    'ubuntu' => "http://people.ubuntu.com/~ubuntu-archive/madison.cgi",
+    'ubuntu' => "http://people.canonical.com/~ubuntu-archive/madison.cgi",
 );
 my $default_url = "debian";
 
@@ -244,7 +244,7 @@ use I<URL> for the query. Supported shorthands are
  B<debian> or B<qa> http://qa.debian.org/madison.php (the default)
  B<bpo> http://www.backports.org/cgi-bin/madison.cgi
  B<debug> http://debug.debian.net/cgi-bin/madison.cgi
- B<ubuntu> http://people.ubuntu.com/~ubuntu-archive/madison.cgi
+ B<ubuntu> http://people.canonical.com/~ubuntu-archive/madison.cgi
 
 See the B<RMADISON_URL_MAP_> variable below for a method to add
 new shorthands.
