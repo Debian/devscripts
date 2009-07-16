@@ -171,7 +171,7 @@ my @url = split /,/, $url;
 foreach my $url (@url) {
     print "$url:\n" if @url > 1;
     $url = $url_map{$url} if $url_map{$url};
-    my @cmd = -x "/usr/bin/curl" ? qw/curl -s -S/ : qw/wget -q -O -/;
+    my @cmd = -x "/usr/bin/curl" ? qw/curl -s -S -L/ : qw/wget -q -O -/;
     system @cmd, $url . "?package=" . join("+", map { uri_escape($_) } @ARGV) . "&text=on&" . join ("&", @args);
 }
 

@@ -14,6 +14,8 @@ devscripts (2.10.53) UNRELEASED; urgency=low
   * rmadison:
     + Add patch from Ubuntu to make lookups against their database work again.
       (The server moved from people.ubuntu.com to people.canonical.com)
+    + When using curl, follow redirects by default.  (Also from the Ubuntu
+      patch).
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 01 Jul 2009 18:43:43 +0100
 
