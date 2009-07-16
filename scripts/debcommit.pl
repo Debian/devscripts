@@ -14,7 +14,7 @@ B<debcommit> generates a commit message based on new text in B<debian/changelog>
 and commits the change to a package's repository. It must be run in a working
 copy for the package. Supported version control systems are:
 B<cvs>, B<git>, B<hg> (mercurial), B<svk>, B<svn> (subversion),
-B<baz>, B<bzr>, B<tla> (arch).
+B<baz>, B<bzr>, B<tla> (arch), B<darcs>.
 
 =head1 OPTIONS
 
@@ -372,6 +372,8 @@ sub getprog {
 	    } else {
 		return "tla";
 	    }
+	} elsif (-d "debian/_darcs") {
+	    return "darcs";
 	}
     }
     if (-d ".svn") {
@@ -399,6 +401,9 @@ sub getprog {
     if (-d ".hg") {
 	return "hg";
     }
+    if (-d "_darcs") {
+       return "darcs";
+    }
 
     # Test for this file to avoid interactive prompting from svk.
     if (-d "$ENV{HOME}/.svk/local") {
@@ -418,7 +423,7 @@ sub getprog {
     	}
     }
 
-    die "debcommit: not in a cvs, subversion, baz, bzr, git, hg, or svk working copy\n";
+    die "debcommit: not in a cvs, subversion, baz, bzr, git, hg, svk or darcs working copy\n";
 }
 
 sub action {
@@ -511,6 +516,13 @@ sub commit {
                     @fixes_arg, @files_to_commit);
         }
     }
+    elsif ($prog eq 'darcs') {
+       if ($diffmode) {
+           $action_rc = action($prog, "diff", @files_to_commit);
+        } else {
+           $action_rc = action($prog, "record", "-m", $message, "-a", @files_to_commit);
+        }
+    }
     else {
 	die "debcommit: unknown program $prog";
     }
@@ -601,6 +613,11 @@ sub tag {
 	        die "debcommit: failed tagging with $tag\n";
     	}
     }
+    elsif ($prog eq 'darcs') {
+       if (! action($prog, "tag", $tag)) {
+               die "debcommit: failed tagging with $tag\n";
+       }
+    }
     else {
 	die "debcommit: unknown program $prog";
     }
@@ -609,7 +626,7 @@ sub tag {
 sub getmessage {
     my $ret;
 
-    if ($prog =~ /^(cvs|svn|svk|tla|baz|bzr|git|hg)$/) {
+    if ($prog =~ /^(cvs|svn|svk|tla|baz|bzr|git|hg|darcs)$/) {
 	$ret='';
 	my @diffcmd;
 
@@ -635,6 +652,8 @@ sub getmessage {
 	} elsif ($prog eq 'svk') {
 	    $ENV{'SVKDIFF'} = '/usr/bin/diff -w -u';
 	    @diffcmd = ($prog, 'diff');
+	} elsif ($prog eq 'darcs') {
+	    @diffcmd = ($prog, 'diff', '--diff-opts=-wu');
 	} else {
 	    @diffcmd = ($prog, 'diff', '-w');
 	}
