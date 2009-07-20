@@ -56,11 +56,12 @@ if (system("command -v curl >/dev/null 2>&1") == 0) {
 
 sub usage {
     print <<"EOT";
-Usage: $progname [options] URL
+Usage: $progname [options] URL ...
        $progname [options] package[=version]
 
-Downloads Debian packages (source and binary) from the specified URL (first form),
+Downloads Debian packages (source and binary) from the specified URLs (first form),
 or using the mirror configured in /etc/apt/sources.list(.d) (second form).
+It is capable of downloading several packages at once.
 
    -b, --backup    Move files that would be overwritten to ./backup
    -q, --quiet     Suppress wget/curl output
@@ -481,7 +482,7 @@ dget -- Download Debian source and binary packages
 
 =over
 
-=item B<dget> [I<options>] I<URL>
+=item B<dget> [I<options>] I<URL> ...
 
 =item B<dget> [I<options>] I<package>[=I<version>]
 
@@ -490,7 +491,7 @@ dget -- Download Debian source and binary packages
 =head1 DESCRIPTION
 
 B<dget> downloads Debian packages.  In the first form, B<dget> fetches
-the requested URL.  If this is a .dsc or .changes file, then B<dget>
+the requested URLs.  If this is a .dsc or .changes file, then B<dget>
 acts as a source-package aware form of B<wget>: it also fetches any
 files referenced in the .dsc/.changes file.  The downloaded source is
 then unpacked by B<dpkg-source>.
@@ -501,6 +502,9 @@ I<.deb> file) from the Debian mirror configured in
 require root privileges, writes to the current directory, and does not
 download dependencies.  If a version number is specified, this version
 of the package is requested.
+
+In both cases dget is capable of getting several packages and/or URLs
+at once.
 
 (Note that I<.udeb> packages used by debian-installer are located in separate
 packages files from I<.deb> packages. In order to use I<.udebs> with B<dget>,

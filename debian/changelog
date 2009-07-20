@@ -1,5 +1,6 @@
 devscripts (2.10.53) UNRELEASED; urgency=low
 
+  [ Adam D. Barratt ]
   * checkbashisms: Detect the use of "source" when the sourced filename
     contains a tilde (Closes: #528592) or consists of a single character
     (Closes: #535252).  Thanks, Raphael Geissert and Ryan Niebur.
@@ -18,7 +19,12 @@ devscripts (2.10.53) UNRELEASED; urgency=low
     + When using curl, follow redirects by default.  (Also from the Ubuntu
       patch).
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 01 Jul 2009 18:43:43 +0100
+  [ Patrick Schoenfeld ]
+  * dch: Make it clear in manpage and usage information, that dget is capable
+    of processing several URLs or packages
+    (Closes: #535977)
+
+ -- Patrick Schoenfeld <schoenfeld@debian.org>  Mon, 20 Jul 2009 17:05:01 +0200
 
 devscripts (2.10.52) unstable; urgency=low
 
