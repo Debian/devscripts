@@ -324,8 +324,10 @@ else
 	TO_ADDRESSES_SENDMAIL="$TO_ADDRESSES_SENDMAIL,
   $b@bugs.debian.org"
 	TO_ADDRESSES_MUTT="$TO_ADDRESSES_MUTT $b@bugs.debian.org"
-	TAGS="$TAGS
+	if [ "`bts select bugs:$b tag:patch`" != "$b" ]; then
+	    TAGS="$TAGS
 tags $b + patch"
+	fi
     done
     TO_ADDRESSES_SENDMAIL=$(echo "$TO_ADDRESSES_SENDMAIL" | tail -n +2)
     TAGS=$(echo "$TAGS" | tail -n +2)
