@@ -47,7 +47,7 @@ my $modified_conf_msg;
 if (system("command -v curl >/dev/null 2>&1") == 0) {
     $wget = "curl";
 } elsif (system("command -v wget >/dev/null 2>&1") == 0) {
-    $wget = "curl";
+    $wget = "wget";
 } else {
     die "$progname: can't find either curl or wget; you need at least one of these\ninstalled to run me!\n";
 }
