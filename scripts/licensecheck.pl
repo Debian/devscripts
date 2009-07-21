@@ -254,6 +254,8 @@ while (@ARGV) {
 	while (<FIND>) {
 	    chomp;
 	    next unless m%$opt_check_regex%;
+	    # Skip empty files
+	    next if (-z $_);
 	    push @files, $_ unless m%$opt_ignore_regex%;
 	}
 	close FIND;
