@@ -23,8 +23,14 @@ devscripts (2.10.53) UNRELEASED; urgency=low
   * dget: Make it clear in manpage and usage information, that dget is capable
     of processing several URLs or packages
     (Closes: #535977)
+  * debi:
+    + Implement a --with-depends switch to install depencies of the
+      package together with the package
+      (Closes: #511061)
+    + Implement a --tool switch to choose the tool for installing
+      dependencies
 
- -- Patrick Schoenfeld <schoenfeld@debian.org>  Mon, 20 Jul 2009 17:05:01 +0200
+ -- Patrick Schoenfeld <schoenfeld@debian.org>  Tue, 21 Jul 2009 11:35:09 +0200
 
 devscripts (2.10.52) unstable; urgency=low
 

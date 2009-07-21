@@ -62,6 +62,10 @@ Usage: $progname [options] [.changes file] [package ...]
                       a Perl regular expression; the string \`PACKAGE\' will
                       be replaced by the package name; see manpage for details
                       (default: 'PACKAGE(-.*)?')
+    --with-depends    Install packages with their depends.
+    --tool TOOL       Use the specified tool for installing the dependencies
+                      of the package(s) to be installed.
+		      (default: apt-get)
     --help            Show this message
     --version         Show version and copyright information
 
@@ -121,6 +125,7 @@ my $debsdir = '..';
 my $debsdir_warning;
 my $check_dirname_level = 1;
 my $check_dirname_regex = 'PACKAGE(-.*)?';
+my $install_tool = 'apt-get';
 
 # Next, read configuration files and then command line
 # The next stuff is boilerplate
@@ -177,6 +182,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 my ($opt_help, $opt_version, $opt_a, $opt_t, $opt_debsdir, $opt_multi);
 my $opt_upgrade;
 my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
+my ($opt_tool, $opt_with_depends);
 GetOptions("help" => \$opt_help,
 	   "version" => \$opt_version,
 	   "a=s" => \$opt_a,
@@ -187,6 +193,8 @@ GetOptions("help" => \$opt_help,
 	   "ignore-dirname" => \$opt_ignore,
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
+	   "with-depends" => \$opt_with_depends,
+	   "tool=s" => \$opt_tool,
 	   "noconf" => \$opt_noconf,
 	   "no-conf" => \$opt_noconf,
 	   )
@@ -228,6 +236,10 @@ if (defined $opt_level) {
 }
 
 if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
+
+if ($opt_tool) {
+    $install_tool = $opt_tool;
+}
 
 # Is a .changes file listed on the command line?
 my ($changes, $mchanges, $arch);
@@ -426,8 +438,15 @@ if (! @debs) {
 }
 
 if ($progname eq 'debi') {
-    system('debpkg', '-i', @debs) == 0
-	or die "$progname: debpkg -i failed\n";
+    if ($opt_with_depends) {
+	system('debpkg', '--unpack', @debs) == 0
+	    or die "$progname: debpkg --unpack failed \n";
+	system($install_tool, '-f', 'install') == 0
+	    or die "$progname: " . $install_tool . ' -f install failed\n';
+    } else {
+	system('debpkg', '-i', @debs) == 0
+	    or die "$progname: debpkg -i failed\n";
+    }
 } else {
     # $progname eq 'debc'
     foreach my $deb (@debs) {
