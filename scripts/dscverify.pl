@@ -44,6 +44,7 @@ my $Exit = 0;
 my $start_dir = cwd;
 my $verify_sigs = 1;
 my $use_default_keyrings = 1;
+my $verbose = 0;
 
 sub usage {
     print <<"EOF";
@@ -58,6 +59,9 @@ Usage: $progname [options] dsc-or-changes-file ...
                        Do not verify the GPG signature
            --no-conf, --noconf
                        Do not read the devscripts config file
+           --verbose
+	               Do not suppress GPG output.
+
 
 Default settings modified by devscripts configuration files:
 $modified_conf_msg
@@ -106,7 +110,8 @@ sub check_signature {
 
     my $cmd = 'gpg --batch --no-options --no-default-keyring --always-trust';
     foreach (@rings) { $cmd .= " --keyring $_"; }
-    $cmd .= " <$file 2>&1 >/dev/null";
+    $cmd .= " <$file";
+    $cmd .= "2>&1 >/dev/null" if not ($verbose);
 
     my $out=`$cmd`;
     if ($? == 0) { return ""; }
@@ -374,6 +379,10 @@ sub main {
 		xwarn "Keyring $ring unreadable\n";
 	    }
 	    next;
+	}
+	if ($ARGV[0] eq '--verbose') {
+	    shift @ARGV;
+	    $verbose = 1;
 	}
 	if ($ARGV[0] eq '--') {
 	    shift @ARGV; last;

@@ -29,8 +29,10 @@ devscripts (2.10.53) UNRELEASED; urgency=low
       (Closes: #511061)
     + Implement a --tool switch to choose the tool for installing
       dependencies
+  * dscverify: Implement a --verbose option to disable suppressing
+    of GPG output (Closes: #525670)
 
- -- Patrick Schoenfeld <schoenfeld@debian.org>  Tue, 21 Jul 2009 11:35:09 +0200
+ -- Patrick Schoenfeld <schoenfeld@debian.org>  Tue, 21 Jul 2009 13:52:10 +0200
 
 devscripts (2.10.52) unstable; urgency=low
 
