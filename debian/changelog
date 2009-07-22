@@ -35,8 +35,10 @@ devscripts (2.10.53) UNRELEASED; urgency=low
     have a copyright (Closes: #535337)
   * nmudiff: Use 'bts select' to test, weither a check already has a patch
     tag set or not and only set it, if not (Closes: #519678)
+  * Add a script listing to devscripts.1 which is auto-generated from
+    debian/control
 
- -- Patrick Schoenfeld <schoenfeld@debian.org>  Tue, 21 Jul 2009 15:01:22 +0200
+ -- Patrick Schoenfeld <schoenfeld@debian.org>  Tue, 21 Jul 2009 17:25:40 +0200
 
 devscripts (2.10.52) unstable; urgency=low
 
