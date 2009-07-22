@@ -50,10 +50,29 @@ read.  The currently recognised variable is:
 .B DSCVERIFY_KEYRINGS
 This is a colon-separated list of extra keyrings to use in addition to
 any specified on the command line.
+.SH KEYRING
+Please note that the keyring provided by the debian-keyring package
+can be slightly out of date. The latest version can be obtained with
+rsync, as documented in the README that comes with debian-keyring.
+If you sync the keyring to a non-standard location (see below),
+you can use the possibilities to specify extra keyrings, by either
+using the above mentioned configuration option or the --keyring option.
+
+Below is an example for an alias:
+
+alias dscverify='dscverify --keyring ~/.gnupg/pubring.gpg'
+.SH STANDARD KEYRING LOCATIONS
+By default dscverify searches for the debian-keyring in the following 
+locations:
+
+- /org/keyring.debian.org/keyrings/debian-keyring.(gpg|pgp)
+
+- /usr/share/keyrings/debian-keyring.(pgp|gpg)
 .SH "SEE ALSO"
 .BR gpg (1)
 and
 .BR devscripts.conf (5).
+
 .SH AUTHOR
 \fBdscverify\fR was written by Roderick Schertler <roderick@argon.org>
 and posted on the debian-devel@lists.debian.org mailing list,

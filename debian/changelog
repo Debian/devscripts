@@ -29,8 +29,13 @@ devscripts (2.10.53) UNRELEASED; urgency=low
       (Closes: #511061)
     + Implement a --tool switch to choose the tool for installing
       dependencies
-  * dscverify: Implement a --verbose option to disable suppressing
-    of GPG output (Closes: #525670)
+  * dscverify:
+    + Implement a --verbose option to disable suppressing
+      of GPG output (Closes: #525670)
+    + Add a notice to the manpage of dscverify that the debian-keyring package
+      has the potential to be out of date and how this can be worked around
+      (Closes: #438679)
+    + Document standard keyring locations in the dscverify manpage
   * licensecheck: Skip empty files instead of reporting that they don't
     have a copyright (Closes: #535337)
   * nmudiff: Use 'bts select' to test, weither a check already has a patch
@@ -45,7 +50,7 @@ devscripts (2.10.53) UNRELEASED; urgency=low
       interactive to encourage writing explanations, why the bug
       was closed. (Closes: #482751)
 
- -- Patrick Schoenfeld <schoenfeld@debian.org>  Wed, 22 Jul 2009 16:45:09 +0200
+ -- Patrick Schoenfeld <schoenfeld@debian.org>  Wed, 22 Jul 2009 17:23:23 +0200
 
 devscripts (2.10.52) unstable; urgency=low
 
