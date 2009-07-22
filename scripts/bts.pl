@@ -280,6 +280,16 @@ the command is /usr/sbin/sendmail or /usr/sbin/exim*.  For other
 mailers, if they require a -t option, this must be included in the
 SENDMAILCMD, for example: --sendmail="/usr/sbin/mymailer -t"
 
+=item --mutt
+
+Use mutt for sending of mails. Default is not to use mutt,
+except for some commands (e.g. the done command).
+
+=item --no-mutt
+
+Don't use mutt for sending of mails, even for commands that
+default to use mutt (e.g. the done command).
+
 =item --smtp-host=SMTPHOST
 
 Specify an SMTP host.  If given, B<bts> will send mail by talking directly to
@@ -396,6 +406,7 @@ my $cachemode='min';
 my $refreshmode=0;
 my $updatemode=0;
 my $mailreader='mutt -f %s';
+my $muttcmd='mutt -H %s';
 my $sendmailcmd='/usr/sbin/sendmail';
 my $smtphost='';
 my $smtpuser='';
@@ -411,6 +422,7 @@ my $forceinteractive=0;
 my $ccemail="";
 my $toolname="";
 my $btsserver='bugs.debian.org';
+my $use_mutt = 0;
 
 # Next, read read configuration files and then command line
 # The next stuff is boilerplate
@@ -521,6 +533,7 @@ my ($opt_help, $opt_version, $opt_noconf);
 my ($opt_cachemode, $opt_mailreader, $opt_sendmail, $opt_smtphost);
 my ($opt_smtpuser, $opt_smtppass, $opt_smtphelo);
 my $opt_cachedelay=5;
+my $opt_mutt;
 my $mboxmode = 0;
 my $quiet=0;
 my $opt_ccemail = "";
@@ -558,6 +571,7 @@ GetOptions("help|h" => \$opt_help,
 	   "use-default-cc!" => \$use_default_cc,
 	   "toolname=s" => \$toolname,
 	   "bts-server=s" => \$btsserver,
+	   "mutt" => \$opt_mutt,
 	   )
     or die "Usage: bts [options]\nRun $progname --help for more details\n";
 
@@ -584,8 +598,16 @@ if ($opt_mailreader) {
     }
 }
 
+if ($opt_mutt) {
+    $use_mutt = 1;
+}
+
 if ($opt_sendmail and $opt_smtphost) {
     die "bts: --sendmail and --smtp-host mutually exclusive\n";
+} elsif ($opt_mutt and $opt_sendmail) {
+    die "bts: --sendmail and --mutt mutually exclusive\n";
+} elsif ($opt_mutt and $opt_smtphost) {
+    die "bts: --smtp-host and --mutt mutually exclusive\n";
 }
 
 $smtphost = $opt_smtphost if $opt_smtphost;
@@ -1137,6 +1159,47 @@ an informative mail.
 Please remember to email $bug-submitter\@$btsserver with
 an explanation of why you have closed this bug.  Thank you!
 EOT
+}
+
+=item done <bug> <version>
+
+Mark a bug as Done. Defaults to implying interactive mode,
+because you should edit the message and provide explanations,
+why the bug is beeing closed.
+You should specify which version of the package closed the bug, if
+possible.
+=cut
+
+sub bts_done {
+    my $bug=checkbug(shift) or die "bts done: close what bug?\n";
+    my $version=shift;
+    my $subject="Closing $bug";
+    $version="" unless defined $version;
+    opts_done(@_);
+
+    # TODO: Evaluate if we want to do this by default
+    my $bug_status = Devscripts::Debbugs::status( map {[bug => $_, indicatesource => 1]} ($bug) );
+    if ($bug_status) {
+	$subject = "Re: $bug_status->{$bug}->{subject}";
+    }
+
+    # This command defaults to using interactive mode, because
+    # mails shouldn't be sent without an explanation
+    if (not $use_mutt) {
+	$interactive = 1;
+    }
+
+    # Workaround (?) - We need to set the btsemail to nnn-done@b.d.o
+    # to close a bug.
+    # TODO: Evaluate other possbilities to do that more "beauty"
+    $btsemail = $bug . '-done@bugs.debian.org';
+  
+    my $message = "";
+    if ($version) {
+	$message .= "Version: $version";
+    }
+    $message .= "\n<Explanation for closing the bug should go here>";
+    mailbts($subject, $message);
 }
 
 =item reopen <bug> [<submitter>]
@@ -2206,6 +2269,21 @@ sub send_mail {
     $message .= "$body\n";
     if ($noaction) {
 	print "$message\n";
+    }
+    elsif ($use_mutt) {
+	my ($fh,$filename) = tempfile("btsXXXXXX",
+				       SUFFIX => ".mail",
+				       DIR => File::Spec->tmpdir,
+				       UNLINK => 1);
+	open (MAILOUT, ">/dev/fd/" . fileno($fh))
+	    or die "bts: writing to temporary file: $!\n";
+
+	print MAILOUT $message;
+
+	my $mailcmd = $muttcmd;
+	$mailcmd =~ s/\%([%s])/$1 eq '%' ? '%' : $filename/eg;
+
+	exec($mailcmd) or die "bts: unable to start mailclient: $!";
     }
     elsif (length $smtphost) {
 	my $smtp;
