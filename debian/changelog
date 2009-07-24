@@ -18,6 +18,8 @@ devscripts (2.10.53) UNRELEASED; urgency=low
       (Closes: #537302)
     + When using curl, follow redirects by default.  (Also from the Ubuntu
       patch).
+  * debian/control: Replace descriptions of cvs-* with those from README,
+    because they're better.
 
   [ Patrick Schoenfeld ]
   * dget: Make it clear in manpage and usage information, that dget is capable
@@ -50,7 +52,7 @@ devscripts (2.10.53) UNRELEASED; urgency=low
       interactive to encourage writing explanations, why the bug
       was closed. (Closes: #482751)
 
- -- Patrick Schoenfeld <schoenfeld@debian.org>  Wed, 22 Jul 2009 17:23:23 +0200
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Fri, 24 Jul 2009 12:23:14 +0100
 
 devscripts (2.10.52) unstable; urgency=low
 
