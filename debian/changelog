@@ -1,6 +1,8 @@
 devscripts (2.10.53) UNRELEASED; urgency=low
 
   [ Adam D. Barratt ]
+  * bts: Add a missing "use IO::File" to make "bts select file:foo" work.
+    Thanks, Raphaël Hertzog.  (Closes: #538288)
   * checkbashisms: Detect the use of "source" when the sourced filename
     contains a tilde (Closes: #528592) or consists of a single character
     (Closes: #535252).  Thanks, Raphael Geissert and Ryan Niebur.

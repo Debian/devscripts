@@ -39,6 +39,7 @@ use File::Spec;
 use File::Temp qw/tempfile/;
 use Net::SMTP;
 use Cwd;
+use IO::File;
 use IO::Handle;
 use lib '/usr/share/devscripts';
 use Devscripts::DB_File_Lock;
