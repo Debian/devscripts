@@ -51,8 +51,11 @@ devscripts (2.10.53) UNRELEASED; urgency=low
       nnn-done@bugs.debian.org and defaults to sending the mail
       interactive to encourage writing explanations, why the bug
       was closed. (Closes: #482751)
+  * debchange: Implement a dist indication mechanism that parses
+    an 'Upload to $DIST' line and sets the distribution accordingly, when
+    the --release parameter is used. (Closes: #515346)
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Fri, 24 Jul 2009 12:23:14 +0100
+ -- Patrick Schoenfeld <schoenfeld@debian.org>  Fri, 24 Jul 2009 15:03:56 +0200
 
 devscripts (2.10.52) unstable; urgency=low
 

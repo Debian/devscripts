@@ -1131,7 +1131,7 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
     # last entry, and determine whether there are existing
     # multi-developer changes by the current maintainer.
     $line=-1;
-    my ($lastmaint, $nextmaint, $maintline, $count, $lastheader, $lastdist);
+    my ($lastmaint, $nextmaint, $maintline, $count, $lastheader, $lastdist, $dist_indicator);
     my $savedline = $line;;
     while (<S>) {
 	$line++;
@@ -1157,6 +1157,9 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
 		last;
 	    }
 	}	
+	elsif (/  \* Upload to (.*)$/) {
+	    $dist_indicator = $1;
+	}
 	elsif (/^ --\s+([^<]+)\s+/) {
 	    $lastmaint=$1;
 	    # Remember where we are so we can skip back afterwards
@@ -1208,7 +1211,11 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
 	if ($opt_r) {
 	    # Change the distribution from UNRELEASED for release
 	    if ($distribution eq "UNRELEASED") {
-		$distribution = $opt_D || $lastdist || "unstable";
+		if ($dist_indicator and not $opt_D) {
+		    $distribution = $dist_indicator;
+		} else {
+		    $distribution = $opt_D || $lastdist || "unstable";
+		}
 	    } elsif ($opt_D) {
 		warn "$progname warning: ignoring distribution passed to --release as changelog has already been released\n";
 	    }
