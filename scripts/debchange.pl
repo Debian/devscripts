@@ -1157,8 +1157,9 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
 		last;
 	    }
 	}	
-	elsif (/  \* Upload to (.*)$/) {
-	    $dist_indicator = $1;
+	elsif (/  \* Upload to ([^ ]+).*$/) {
+	    ($dist_indicator = $1) =~ s/[,;]$//;
+	    chomp $dist_indicator;
 	}
 	elsif (/^ --\s+([^<]+)\s+/) {
 	    $lastmaint=$1;
