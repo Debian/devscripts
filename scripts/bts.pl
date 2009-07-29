@@ -1556,6 +1556,44 @@ sub bts_tags {
     }
 }
 
+=item affects <bug> [+|-|=] <package> [<package> ..]
+
+Indicates that a bug affects a package other than that against which it is filed, causing
+the bug to be listed by default in the package list of the other package.  This should 
+generally be used where the bug is severe enough to cause multiple reports from users to be 
+assigned to the wrong package. 
+
+=cut
+
+sub bts_affects {
+    my $bug=checkbug(shift) or die "bts affects: mark what bug as affecting another package?\n";
+
+    if (! @_) {
+	die "bts affects: mark which package as affected?\n";
+    }
+    # Parse the rest of the command line.
+    my $command="affects $bug";
+    my $flag="";
+    if ($_[0] =~ /^[-+=]$/) {
+	$flag = $_[0];
+	$command .= " $flag";
+	shift;
+    } elsif ($_[0] =~ s/^([-+=])//) {
+	$flag = $1;
+	$command .= " $flag";
+    }
+
+    if (! @_) {
+	die "bts affects: mark which package as affected?\n";
+    }
+
+    foreach my $package (@_) {
+	$command .= " $package";
+    }
+
+    mailbts("affects $bug", $command);
+}
+
 =item user <email>
 
 Specify a user email address before using the usertags command.
