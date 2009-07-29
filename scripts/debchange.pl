@@ -89,8 +89,9 @@ Options:
          specified by --distribution).
   --force-save-on-release
          When --release is used and an editor opened to allow inspection
-         of the changelog, force the file to be saved in the editor even
-         if no further changes are made. (default)
+         of the changelog, require the user to save the changelog their
+         editor opened.  Otherwise, the original changelog will not be
+         modified. (default)
   --no-force-save-on-release
          Do not do so. Note that a dummy changelog entry made be supplied
          in order to achieve the same effect - e.g. $progname --release ""
