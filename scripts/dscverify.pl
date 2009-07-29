@@ -111,7 +111,7 @@ sub check_signature {
     my $cmd = 'gpg --batch --no-options --no-default-keyring --always-trust';
     foreach (@rings) { $cmd .= " --keyring $_"; }
     $cmd .= " <$file";
-    $cmd .= "2>&1 >/dev/null" if not ($verbose);
+    $cmd .= " 2>&1 >/dev/null" if not ($verbose);
 
     my $out=`$cmd`;
     if ($? == 0) { return ""; }
