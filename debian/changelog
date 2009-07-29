@@ -52,10 +52,6 @@ devscripts (2.10.53) UNRELEASED; urgency=low
   * bts:
     + Implement a --mutt parameter, which allows mails to be sended
       using mutt.
-    + Implement a 'Done' command which creates a mail to
-      nnn-done@bugs.debian.org and defaults to sending the mail
-      interactive to encourage writing explanations, why the bug
-      was closed. (Closes: #482751)
   * debchange: Implement a dist indication mechanism that parses
     an 'Upload to $DIST' line and sets the distribution accordingly, when
     the --release parameter is used. (Closes: #515346)
