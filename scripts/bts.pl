@@ -284,12 +284,11 @@ SENDMAILCMD, for example: --sendmail="/usr/sbin/mymailer -t"
 =item --mutt
 
 Use mutt for sending of mails. Default is not to use mutt,
-except for some commands (e.g. the done command).
+except for some commands.
 
 =item --no-mutt
 
-Don't use mutt for sending of mails, even for commands that
-default to use mutt (e.g. the done command).
+Don't use mutt for sending of mails.
 
 =item --smtp-host=SMTPHOST
 
