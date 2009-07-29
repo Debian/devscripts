@@ -27,15 +27,19 @@ devscripts (2.10.53) UNRELEASED; urgency=low
     because they're better.
 
   [ Patrick Schoenfeld ]
-  * dget: Make it clear in manpage and usage information, that dget is capable
-    of processing several URLs or packages
-    (Closes: #535977)
+  * bts: Implement a --mutt parameter, which allows mails to be sent
+    using mutt.
+  * debchange: Implement a dist indication mechanism that parses
+    an 'Upload to $DIST' line and sets the distribution accordingly, when
+    the --release parameter is used. (Closes: #515346)
   * debi:
     + Implement a --with-depends switch to install depencies of the
       package together with the package
       (Closes: #511061)
     + Implement a --tool switch to choose the tool for installing
       dependencies
+  * dget: Make it clear in manpage and usage information, that dget is capable
+    of processing several URLs or packages (Closes: #535977)
   * dscverify:
     + Implement a --verbose option to disable suppressing
       of GPG output (Closes: #525670)
@@ -49,12 +53,6 @@ devscripts (2.10.53) UNRELEASED; urgency=low
     tag set or not and only set it, if not (Closes: #519678)
   * Add a script listing to devscripts.1 which is auto-generated from
     debian/control (Closes: #504008)
-  * bts:
-    + Implement a --mutt parameter, which allows mails to be sended
-      using mutt.
-  * debchange: Implement a dist indication mechanism that parses
-    an 'Upload to $DIST' line and sets the distribution accordingly, when
-    the --release parameter is used. (Closes: #515346)
 
  -- Patrick Schoenfeld <schoenfeld@debian.org>  Fri, 24 Jul 2009 15:03:56 +0200
 
