@@ -1,7 +1,12 @@
 devscripts (2.10.54) UNRELEASED; urgency=low
 
+  [ James Vega ]
   * debchange: Clarify the wording for the explanation of
     --force-save-on-release.  (Closes: #539155)
+
+  [ Adam D. Barratt ]
+  * bts:
+    + Make "tags NNNNNN =" operate correctly again.  (Closes: #539688)
 
  -- James Vega <jamessan@debian.org>  Wed, 29 Jul 2009 19:04:12 +0200
 

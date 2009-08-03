@@ -1550,8 +1550,10 @@ sub bts_tags {
       mailbts("gifting $bug",
 	"user debian-qa\@lists.debian.org\nusertag $bug $gift_flag gift");
     }
-    if ($base_command ne $command) {  # at least one tag other than gift has been manipulated
-      mailbts("tagging $bug", $command);
+    if (($base_command ne $command) or ($flag eq "=" and $gifted eq "")) { 
+	# at least one tag other than gift has been manipulated
+	# or all tags were removed
+	mailbts("tagging $bug", $command);
     }
 }
 
