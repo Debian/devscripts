@@ -4,6 +4,8 @@ devscripts (2.10.54) UNRELEASED; urgency=low
   * debchange: Clarify the wording for the explanation of
     --force-save-on-release.  (Closes: #539155)
   * grep-excuses: Document that -w only works with a package name.
+  * manpage-alert: Fix handling of commands which start with non-word
+    characters.  Based on a patch from Ville Skyttä.
 
   [ Adam D. Barratt ]
   * bts:

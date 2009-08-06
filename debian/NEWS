@@ -1,3 +1,16 @@
+devscripts (2.10.54) UNRELEASED; urgency=low
+
+    manpage-alert now, as originally intended, prints out the full path to the
+    binary which is lacking a manpage instead of simply the binary name.
+
+    Before:
+      No manual entry for somebinary
+
+    After:
+      No manual entry for /usr/bin/somebinary
+
+ -- James Vega <jamessan@debian.org>  Thu, 06 Aug 2009 18:03:41 -0400
+
 devscripts (2.10.24) unstable; urgency=low
 
     Starting with devscripts 2.10.21, debchange attempts to
