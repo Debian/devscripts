@@ -141,6 +141,14 @@ command-line, even if that means comparing a package with a higher
 version against one with a lower version.  This is the default
 behaviour.
 .TP
+.B \-\-unpack\-tarballs
+When comparing source packages, also unpack tarballs found in the top level
+source directory to compare their contents along with the other files.
+This is the default behaviour.
+.TP
+.B \-\-no\-unpack\-tarballs
+Do not unpack tarballs inside source packages.
+.TP
 \fB\-\-no-conf\fR, \fB\-\-noconf\fR
 Do not read any configuration files.  This can only be used as the
 first option given on the command-line.

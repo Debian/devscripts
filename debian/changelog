@@ -15,7 +15,11 @@ devscripts (2.10.54) UNRELEASED; urgency=low
   * Add an example for githubredir.debian.net to the uscan manpage
     (Closes: #539923)
 
- -- Patrick Schoenfeld <schoenfeld@debian.org>  Wed, 05 Aug 2009 11:40:49 +0200
+  [ Christoph Berg ]
+  * debdiff: New option --no-unpack-tarballs to skip unpacking tarballs
+    contained in source packages.
+
+ -- Christoph Berg <myon@debian.org>  Wed, 12 Aug 2009 14:15:54 +0200
 
 devscripts (2.10.53) unstable; urgency=low
 
