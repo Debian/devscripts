@@ -10,6 +10,8 @@ devscripts (2.10.54) UNRELEASED; urgency=low
   [ Adam D. Barratt ]
   * bts:
     + Make "tags NNNNNN =" operate correctly again.  (Closes: #539688)
+  * dget: Update the dpkg-source output matching to enable --build to work
+    again.  (Closes: #541409)
 
   [ Patrick Schoenfeld ]
   * Add an example for githubredir.debian.net to the uscan manpage

@@ -448,7 +448,7 @@ for my $arg (@ARGV) {
 		my @output = `LC_ALL=C @cmd $found_dsc`;
 		print @output unless $opt->{'quiet'};
 		foreach (@output) {
-		    if ( /^dpkg-source: extracting .* in (.*)/ ) {
+		    if ( /^dpkg-source: (?:info: )?extracting .* in (.*)/ ) {
 			chdir $1;
 			system 'dpkg-buildpackage', '-b', '-uc';
 			last;
