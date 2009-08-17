@@ -27,6 +27,9 @@ devscripts (2.10.54) UNRELEASED; urgency=low
       - Autoclean the apt-cache so it doesn't grow unbounded.
   * dget: Update the dpkg-source output matching to enable --build to work
     again.  (Closes: #541409)
+  * Packaging changes: Add sensible-utils to Recommends.  Several scripts
+    make use of sensible-editor and it has moved from debianutils so is
+    no longer essential.  (Closes: #541846)
 
   [ Patrick Schoenfeld ]
   * Add an example for githubredir.debian.net to the uscan manpage
