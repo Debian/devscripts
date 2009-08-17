@@ -10,6 +10,19 @@ devscripts (2.10.54) UNRELEASED; urgency=low
   [ Adam D. Barratt ]
   * bts:
     + Make "tags NNNNNN =" operate correctly again.  (Closes: #539688)
+  * cowpoke:
+    + Update to new upstream version
+      - Run with reduced privileges and only elevate them when needed to
+        run cowbuilder.
+      - Don't explicitly pass a buildd username unless it is set, this allows
+        people to configure the remote username in their ssh config or
+        similar.  (Closes: #538191)
+      - Supply pbuilder with the --buildplace and --aptcache options to
+        enable use with reduced privileges.
+      - Relative paths are all relative to the BUILDD_USER's home directory
+        now, not the incoming dir.
+      - Add --dpkg-opts support for passing options on to dpkg.
+      - Autoclean the apt-cache so it doesn't grow unbounded.
   * dget: Update the dpkg-source output matching to enable --build to work
     again.  (Closes: #541409)
 

@@ -1,14 +1,13 @@
 #! /bin/bash
 # Simple shell script for driving a remote cowbuilder via ssh
 #
-# Copyright(C) 2007, 2008, Ron <ron@debian.org>
+# Copyright(C) 2007, 2008, 2009, Ron <ron@debian.org>
 # This script is distributed according to the terms of the GNU GPL.
 
 set -e
 
 #BUILDD_HOST=
-#BUILDD_ROOTCMD=
-BUILDD_USER="$(id -un 2>/dev/null)"
+#BUILDD_USER=
 BUILDD_ARCH="$(dpkg-architecture -qDEB_BUILD_ARCH 2>/dev/null)"
 
 # The 'default' dist is whatever cowbuilder is locally configured for
@@ -19,6 +18,7 @@ PBUILDER_BASE="/var/cache/pbuilder"
 
 #SIGN_KEYID=
 #UPLOAD_QUEUE="ftp-master"
+BUILDD_ROOTCMD="sudo"
 
 REMOTE_SCRIPT="cowssh_it"
 DEBOOTSTRAP="cdebootstrap"
@@ -58,7 +58,7 @@ version ()
 {
     echo \
 "This is $PROGNAME, from the Debian devscripts package, version ###VERSION###
-This code is copyright 2007-8 by Ron <ron@debian.org>, all rights reserved.
+This code is copyright 2007-9 by Ron <ron@debian.org>, all rights reserved.
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the
 GNU General Public License."
@@ -90,15 +90,17 @@ cowpoke [options] package.dsc
 
   The expected remote paths are:
 
-   INCOMING_DIR  = ~$BUILDD_USER/$INCOMING_DIR
+   INCOMING_DIR  = $INCOMING_DIR
    PBUILDER_BASE = ${PBUILDER_BASE:-/}
 
 $(get_archdist_vars display)
 
-  The cowbuilder image must have already been created on the build host,
+  The cowbuilder image must have already been created on the build host
   and the expected remote paths must already exist if the --create option
-  is not passed.  You must have ssh access to the build host as '$BUILDD_USER'
-  and the ability to either log in, or execute commands, as the root user.
+  is not passed.  You must have ssh access to the build host as BUILDD_USER
+  if that is set, else as the user executing cowpoke or a user specified
+  in your ssh config for '$BUILDD_HOST'.
+  That user must be able to execute cowbuilder as root using '$BUILDD_ROOTCMD'.
 
 EOF
 
@@ -126,6 +128,10 @@ for arg; do
 
 	--create)
 	    CREATE_COW="yes"
+	    ;;
+
+	--dpkg-opts=*)
+	    DEBBUILDOPTS="--debbuildopts \"${arg#*=}\""
 	    ;;
 
 	*.dsc)
@@ -167,8 +173,8 @@ if [ -z "$BUILDD_HOST" ]; then
     echo "No BUILDD_HOST set.  Aborted."
     exit 1
 fi
-if [ -z "$BUILDD_USER" ]; then
-    echo "No BUILDD_USER set.  Aborted."
+if [ -z "$BUILDD_ROOTCMD" ]; then
+    echo "No BUILDD_ROOTCMD set.  Aborted."
     exit 1
 fi
 if [ -e "$REMOTE_SCRIPT" ]; then
@@ -185,6 +191,8 @@ if [ -e "$REMOTE_SCRIPT" ]; then
 	*) ;;
     esac
 fi
+
+[ -z "$BUILDD_USER" ] || BUILDD_USER="$BUILDD_USER@"
 
 PACKAGE="$(basename $DSC .dsc)"
 DATE="$(date +%Y%m%d 2>/dev/null)"
@@ -203,7 +211,8 @@ cat > "$REMOTE_SCRIPT" <<-EOF
 	    echo " ------- Begin build for \$arch \$dist -------"
 
 	    CHANGES="\$arch.changes"
-	    LOGFILE="build.${PACKAGE}_\$arch.\$dist.log"
+	    LOGFILE="$INCOMING_DIR/build.${PACKAGE}_\$arch.\$dist.log"
+	    UPDATELOG="$INCOMING_DIR/cowbuilder-\${arch}-\${dist}-update-log-$DATE"
 	    RESULT_DIR="\$(eval echo "\\\$\${arch}_\${dist}_RESULT_DIR")"
 	    BASE_PATH="\$(eval echo "\\\$\${arch}_\${dist}_BASE_PATH")"
 
@@ -242,18 +251,30 @@ cat > "$REMOTE_SCRIPT" <<-EOF
 	        if [ "$CREATE_COW" = "yes" ]; then
 	            mkdir -p "\$RESULT_DIR"
 	            mkdir -p "\$(dirname \$BASE_PATH)"
-	            cowbuilder --create --distribution \$dist --basepath "\$BASE_PATH" \\
-	                       --debootstrap "$DEBOOTSTRAP" --debootstrapopts --arch="\$arch" 2>&1 \\
-	            | tee "cowbuilder-\${arch}-\${dist}-update-log-$DATE"
+	            mkdir -p "$PBUILDER_BASE/aptcache"
+	            $BUILDD_ROOTCMD cowbuilder --create --distribution \$dist       \\
+	                                       --basepath "\$BASE_PATH"             \\
+	                                       --aptcache "$PBUILDER_BASE/aptcache" \\
+	                                       --debootstrap "$DEBOOTSTRAP"         \\
+	                                       --debootstrapopts --arch="\$arch"    \\
+	            2>&1 | tee "\$UPDATELOG"
 	        else
 	            echo "SKIPPING \$dist/\$arch build, '\$BASE_PATH' does not exist" | tee "\$LOGFILE"
 	            echo "         use the cowpoke --create option to bootstrap a new build root" | tee -a "\$LOGFILE"
 	            continue
 	        fi
-	    elif ! [ -e "cowbuilder-\${arch}-\${dist}-update-log-$DATE" ]; then
-	        cowbuilder --update --basepath "\$BASE_PATH" 2>&1 | tee "cowbuilder-\${arch}-\${dist}-update-log-$DATE"
+	    elif ! [ -e "\$UPDATELOG" ]; then
+	        $BUILDD_ROOTCMD cowbuilder --update --basepath "\$BASE_PATH"    \\
+	                                   --aptcache "$PBUILDER_BASE/aptcache" \\
+	                                   --autocleanaptcache                  \\
+	        2>&1 | tee "\$UPDATELOG"
 	    fi
-	    cowbuilder --build --basepath "\$BASE_PATH" --buildresult "\$RESULT_DIR" "$(basename $DSC)" 2>&1 \\
+	    $BUILDD_ROOTCMD cowbuilder --build --basepath "\$BASE_PATH"      \\
+	                               --aptcache "$PBUILDER_BASE/aptcache"  \\
+	                               --buildplace "$PBUILDER_BASE/build"   \\
+	                               --buildresult "\$RESULT_DIR"          \\
+	                               $DEBBUILDOPTS                         \\
+	                               "$INCOMING_DIR/$(basename $DSC)" 2>&1 \\
 	    | tee "\$LOGFILE"
 
 	    set +eo pipefail
@@ -261,13 +282,12 @@ cat > "$REMOTE_SCRIPT" <<-EOF
 
 	    echo >> "\$LOGFILE"
 	    echo "lintian \$RESULT_DIR/${PACKAGE}_\$CHANGES" >> "\$LOGFILE"
-	    ( su "$BUILDD_USER" -c "lintian \"\$RESULT_DIR/${PACKAGE}_\$CHANGES\"" ) 2>&1 \\
-	    | tee -a "\$LOGFILE"
+	    lintian "\$RESULT_DIR/${PACKAGE}_\$CHANGES" 2>&1 | tee -a "\$LOGFILE"
 
 	    if [ -n "\$OLD_CHANGES" ]; then
 	        echo >> "\$LOGFILE"
 	        echo "debdiff \$OLD_CHANGES ${PACKAGE}_\$CHANGES" >> "\$LOGFILE"
-	        ( su "$BUILDD_USER" -c "debdiff \"\$OLD_CHANGES\" \"\$RESULT_DIR/${PACKAGE}_\$CHANGES\"" ) 2>&1 \\
+	        debdiff "\$OLD_CHANGES" "\$RESULT_DIR/${PACKAGE}_\$CHANGES" 2>&1 \\
 	        | tee -a "\$LOGFILE"
 	    else
 	        echo >> "\$LOGFILE"
@@ -281,13 +301,8 @@ EOF
 chmod 755 "$REMOTE_SCRIPT"
 
 
-dcmd scp $DSC "$REMOTE_SCRIPT" "$BUILDD_USER@$BUILDD_HOST:$INCOMING_DIR"
-
-if [ -z "$BUILDD_ROOTCMD" ]; then
-    ssh "root@$BUILDD_HOST" "cd ~$BUILDD_USER/\"$INCOMING_DIR\" && \"./$REMOTE_SCRIPT\" && rm -f \"./$REMOTE_SCRIPT\""
-else
-    ssh -t "$BUILDD_USER@$BUILDD_HOST" "cd \"$INCOMING_DIR\" && $BUILDD_ROOTCMD \"./$REMOTE_SCRIPT\" && rm -f \"./$REMOTE_SCRIPT\""
-fi
+dcmd scp $DSC "$REMOTE_SCRIPT" "$BUILDD_USER$BUILDD_HOST:$INCOMING_DIR"
+ssh -t "$BUILDD_USER$BUILDD_HOST" "\"$INCOMING_DIR/$REMOTE_SCRIPT\" && rm -f \"$INCOMING_DIR/$REMOTE_SCRIPT\""
 
 echo
 echo "Build completed."
@@ -308,11 +323,7 @@ if [ -n "$SIGN_KEYID" ]; then
 	    read -e yesno
 	    case "$yesno" in
 		YES | yes)
-		    if [ -z "$BUILDD_ROOTCMD" ] ; then
-			debsign "-k$SIGN_KEYID" -r "root@$BUILDD_HOST" "$RESULT_DIR/${PACKAGE}_$CHANGES"
-		    else
-			debsign "-k$SIGN_KEYID" -r "$BUILDD_USER@$BUILDD_HOST" "$RESULT_DIR/${PACKAGE}_$CHANGES"
-		    fi
+		    debsign "-k$SIGN_KEYID" -r "$BUILDD_USER$BUILDD_HOST" "$RESULT_DIR/${PACKAGE}_$CHANGES"
 
 		    if [ -n "$UPLOAD_QUEUE" ]; then
 			while true; do
@@ -320,7 +331,7 @@ if [ -n "$SIGN_KEYID" ]; then
 			    read -e upload
 			    case "$upload" in
 				YES | yes)
-				    ssh "${BUILDD_USER}@$BUILDD_HOST" \
+				    ssh "$BUILDD_USER$BUILDD_HOST" \
 					"cd \"$RESULT_DIR/\" && dput \"$UPLOAD_QUEUE\" \"${PACKAGE}_$CHANGES\""
 				    break 2
 				    ;;
