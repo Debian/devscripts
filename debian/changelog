@@ -25,6 +25,7 @@ devscripts (2.10.54) UNRELEASED; urgency=low
         now, not the incoming dir.
       - Add --dpkg-opts support for passing options on to dpkg.
       - Autoclean the apt-cache so it doesn't grow unbounded.
+  * dcmd: Add filtering options for udebs.  (Closes: #541827)
   * dget: Update the dpkg-source output matching to enable --build to work
     again.  (Closes: #541409)
   * Packaging changes: Add sensible-utils to Recommends.  Several scripts

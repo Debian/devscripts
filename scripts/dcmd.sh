@@ -73,7 +73,7 @@ maybe_expand()
 }
 
 DSC=1; BCHANGES=1; SCHANGES=1; ARCHDEB=1; INDEPDEB=1; TARBALL=1; DIFF=1
-CHANGES=1; DEB=1
+CHANGES=1; DEB=1; ARCHUDEB=1; INDEPUDEB=1; UDEB=1;
 FILTERED=0; FAIL_MISSING=1
 
 while [ $# -gt 0 ]; do
@@ -97,7 +97,8 @@ while [ $# -gt 0 ]; do
 		-1) echo "$PROGNAME: Can't combine --foo and --no-foo options" >&2;
 		    exit 1;;
 		0)  FILTERED=1; DSC=0; BCHANGES=0; SCHANGES=0; CHANGES=0
-		    ARCHDEB=0; INDEPDEB=0; DEB=0; TARBALL=0; DIFF=0;;
+		    ARCHDEB=0; INDEPDEB=0; DEB=0; ARCHUDEB=0; INDEPUDEB=0
+		    UDEB=0; TARBALL=0; DIFF=0;;
 	    esac;;
 	*) break;;
     esac
@@ -115,6 +116,11 @@ while [ $# -gt 0 ]; do
 	    { ARCHDEB=0; INDEPDEB=0; DEB=0; };;
 	archdeb) [ "$FILTERED" = "1" ] && ARCHDEB=1 || ARCHDEB=0;;
 	indepdeb) [ "$FILTERED" = "1" ] && INDEPDEB=1 || INDEPDEB=0;;
+	udeb) [ "$FILTERED" = "1" ] &&
+	    { ARCHUDEB=1; INDEPUDEB=1; UDEB=1; } ||
+	    { ARCHUDEB=0; INDEPUDEB=0; UDEB=0; };;
+	archudeb) [ "$FILTERED" = "1" ] && ARCHUDEB=1 || ARCHUDEB=0;;
+	indepudeb) [ "$FILTERED" = "1" ] && INDEPUDEB=1 || INDEPUDEB=0;;
 	tar|orig) [ "$FILTERED" = "1" ] && TARBALL=1 || TARBALL=0;;
 	diff) [ "$FILTERED" = "1" ] && DIFF=1 || DIFF=0;;
 	*) echo "$PROGNAME: Unknown option '$1'" >&2; exit 1;;
@@ -130,6 +136,7 @@ for arg in "$@"; do
 	args="$args $arg"
     else
 	SEEN_INDEPDEB=0; SEEN_ARCHDEB=0; SEEN_SCHANGES=0; SEEN_BCHANGES=0
+	SEEN_INDEPUDEB=0; SEEN_ARCHUDEB=0; SEEN_UDEB=0;
 	SEEN_TARBALL=0; SEEN_DIFF=0; SEEN_DSC=0
 	MISSING=0
 	newarg=""
@@ -145,6 +152,12 @@ for arg in "$@"; do
 	    elif endswith "$THISARG" .deb; then
 		[ "$ARCHDEB" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
 		echo "SEEN_ARCHDEB=1;"
+	    elif endswith "$THISARG" _all.udeb; then
+		[ "$INDEPUDEB" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
+		echo "SEEN_INDEPUDEB=1;"
+	    elif endswith "$THISARG" .udeb; then
+		[ "$ARCHUDEB" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
+		echo "SEEN_ARCHUDEB=1;"
 	    elif endswith "$THISARG" .tar.gz || \
 		 endswith "$THISARG" .tar.bz2; then
 		[ "$TARBALL" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
@@ -204,6 +217,20 @@ for arg in "$@"; do
 		if [ "$ARCHDEB" = "1" ] && [ "$SEEN_ARCHDEB" = "0" ]; then
 		    MISSING=1; echo "$arg: arch-dep packages not found" >&2
 		fi
+	    fi
+
+	    if [ "$UDEB" = "1" ]; then
+		if [ "$SEEN_INDEPUDEB" = "0" ] && [ "$SEEN_ARCHUDEB" = "0" ]; then
+		    MISSING=1; echo "$arg: udeb packages not found" >&2
+		fi
+	    else
+		if [ "$INDEPUDEB" = "1" ] && [ "$SEEN_INDEPUDEB" = "0" ]; then
+		    MISSING=1; echo "$arg: arch-indep udeb packages not found" >&2
+		fi
+		if [ "$ARCHUDEB" = "1" ] && [ "$SEEN_ARCHUDEB" = "0" ]; then
+		    MISSING=1; echo "$arg: arch-dep udeb packages not found" >&2
+		fi
+
 	    fi
 
 	    if [ "$DSC" = "1" ] && [ "$SEEN_DSC" = "0" ]; then
