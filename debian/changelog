@@ -10,6 +10,8 @@ devscripts (2.10.54) UNRELEASED; urgency=low
   [ Adam D. Barratt ]
   * bts:
     + Make "tags NNNNNN =" operate correctly again.  (Closes: #539688)
+    + Use >& rather than writing to filehandles under /dev/fd.
+      (Closes: #517917)
   * cowpoke:
     + Update to new upstream version
       - Run with reduced privileges and only elevate them when needed to

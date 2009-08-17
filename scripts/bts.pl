@@ -2315,7 +2315,7 @@ sub send_mail {
 				       SUFFIX => ".mail",
 				       DIR => File::Spec->tmpdir,
 				       UNLINK => 1);
-	open (MAILOUT, ">/dev/fd/" . fileno($fh))
+	open (MAILOUT, ">&", $fh)
 	    or die "bts: writing to temporary file: $!\n";
 
 	print MAILOUT $message;
@@ -2999,7 +2999,7 @@ sub download_mbox {
 				       DIR => File::Spec->tmpdir,
 				       UNLINK => 1);
 	    # Use filehandle for security
-	    open (OUT_MBOX, ">/dev/fd/" . fileno($fh))
+	    open (OUT_MBOX, ">&", $fh)
 		or die "bts: writing to temporary file: $!\n";
 	} else {
 	    $filename = $mboxfile;
@@ -3405,7 +3405,7 @@ sub browse {
 					      UNLINK => 1);
 
 		# Use filehandle for security
-		open (OUT_LIVE, ">/dev/fd/" . fileno($fh))
+		open (OUT_LIVE, ">&", $fh)
 		    or die "bts: writing to temporary file: $!\n";
 		# Correct relative urls to point to the bts.
 		$live =~ s%\shref="(?:/cgi-bin/)?(\w+\.cgi)% href="$btscgiurl$1%g;
