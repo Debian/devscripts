@@ -1385,7 +1385,7 @@ sub bts_notfixed {
     mailbts("notfixed $bug in $version", "notfixed $bug $version");
 }
 
-=item block <bug> by|with <bug> [<bug> ...]
+=item block <bug> by <bug> [<bug> ...]
 
 Note that a bug is blocked from being fixed by a set of other bugs.
 
@@ -1394,7 +1394,7 @@ Note that a bug is blocked from being fixed by a set of other bugs.
 sub bts_block {
     my $bug=checkbug(shift) or die "bts block: what bug is blocked?\n";
     my $word=shift;
-    if (defined $word && $word ne 'by' && $word ne 'with') {
+    if (defined $word && $word ne 'by') {
 	    unshift @_, $word;
     }
     @_ or die "bts block: need to specify at least two bug numbers\n";
@@ -1403,10 +1403,10 @@ sub bts_block {
 	my $blocker=checkbug($_) or die "bts block: some blocking bug number(s) not valid\n";
 	push @blockers, $blocker;
     }
-    mailbts("block $bug with @blockers", "block $bug with @blockers");
+    mailbts("block $bug by @blockers", "block $bug by @blockers");
 }
 
-=item unblock <bug> by|with <bug> [<bug> ...]
+=item unblock <bug> by <bug> [<bug> ...]
 
 Note that a bug is no longer blocked from being fixed by a set of other bugs.
 
@@ -1415,7 +1415,7 @@ Note that a bug is no longer blocked from being fixed by a set of other bugs.
 sub bts_unblock {
     my $bug=checkbug(shift) or die "bts unblock: what bug is blocked?\n";
     my $word=shift;
-    if (defined $word && $word ne 'by' && $word ne 'with') {
+    if (defined $word && $word ne 'by') {
 	    unshift @_, $word;
     }
     @_ or die "bts unblock: need to specify at least two bug numbers\n";
@@ -1424,7 +1424,7 @@ sub bts_unblock {
 	my $blocker=checkbug($_) or die "bts unblock: some blocking bug number(s) not valid\n";
 	push @blockers, $blocker;
     }
-    mailbts("unblock $bug with @blockers", "unblock $bug with @blockers");
+    mailbts("unblock $bug by @blockers", "unblock $bug by @blockers");
 }
 
 =item merge <bug> <bug> [<bug> ...]
