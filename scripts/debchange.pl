@@ -1453,10 +1453,14 @@ sub format_line {
     my $newentry=shift;
 
     # Work around the fact that write() with formats
-    # seems to assume that character == byte
+    # seems to assume that characters are 7-bit
     # See http://rt.perl.org/rt3/Public/Bug/Display.html?id=33832
-    # and Debian bug #473769
+    # and Debian bugs #473769 and #541484
+    # High-bit single characters need an extra space adding per
+    # character, extended Unicode characters two
     my $count = () = $CHGLINE =~ /[^\x00-\x7F]/mg;
+    $CHGLINE .= " " x $count;
+    $count = () = $CHGLINE =~ /[\x{0100}-\x{ffff}]/mg;
     $CHGLINE .= " " x $count;
 
     print O "\n" if $opt_news && ! ($newentry || $linecount);
