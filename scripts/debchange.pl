@@ -33,7 +33,8 @@ use 5.008;  # We're using PerlIO layers
 use strict;
 use open ':utf8';  # changelogs are written with UTF-8 encoding
 use filetest 'access';  # use access rather than stat for -w
-use Encode 'decode_utf8';  # for checking whether user names are valid
+# for checking whether user names are valid and making format() behave
+use Encode qw/decode_utf8 encode_utf8/;
 use Getopt::Long;
 use File::Copy;
 use File::Basename;
@@ -1248,7 +1249,7 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
     };
 
     if (! $opt_r) {
-    	# Add a multi-maintainer header...
+	# Add a multi-maintainer header...
 	if ($multimaint) {
 	    # ...unless there already is one for this maintainer.
 	    if (!defined $maintline) {
@@ -1453,14 +1454,13 @@ sub format_line {
     my $newentry=shift;
 
     # Work around the fact that write() with formats
-    # seems to assume that characters are 7-bit
+    # seems to assume that characters are single-byte
     # See http://rt.perl.org/rt3/Public/Bug/Display.html?id=33832
     # and Debian bugs #473769 and #541484
-    # High-bit single characters need an extra space adding per
-    # character, extended Unicode characters two
-    my $count = () = $CHGLINE =~ /[^\x00-\x7F]/mg;
-    $CHGLINE .= " " x $count;
-    $count = () = $CHGLINE =~ /[\x{0100}-\x{ffff}]/mg;
+    # This relies on $CHGLINE being a sequence of unicode characters.  We can
+    # compare how many unicode characters we have to how many bytes we have
+    # when encoding to utf8 and therefore how many spaces we need to pad.
+    my $count = length(encode_utf8($CHGLINE)) - length($CHGLINE);
     $CHGLINE .= " " x $count;
 
     print O "\n" if $opt_news && ! ($newentry || $linecount);
