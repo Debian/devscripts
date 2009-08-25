@@ -87,7 +87,7 @@ B<tagpending> [options]
 
 =head1 DESCRIPTION
 
-B<tagpending> parses debian/changelog and debian/control to determine
+B<tagpending> parses debian/changelog to determine
 which bugs would be closed if the package were uploaded. Each bug is
 then marked as pending, using B<bts>(1) if it is not already so.
 
@@ -158,7 +158,7 @@ my $in_changes=0;
 my $changes='';
 my $header='';
 
-foreach my $file ("debian/control", "debian/changelog") {
+foreach my $file ("debian/changelog") {
     if (! -f $file) {
 	die "$progname error: $file does not exist!\n";
     }
