@@ -1088,7 +1088,7 @@ sub bts_status {
     }
     my $bugs = Devscripts::Debbugs::status( map {[bug => $_, indicatesource => 1]} @bugs );
     return if ($bugs eq "");
- 
+
     my $first = 1;
     for my $bug (keys %{$bugs}) {
 	print "\n" if not $first;
@@ -1748,7 +1748,7 @@ sub bts_notforwarded {
     mailbts("bug $bug is not forwarded", "notforwarded $bug");
 }
 
-=item package [ <package> ... ]
+=item package [<package> ...]
 
 The following commands will only apply to bugs against the listed
 packages; this acts as a safety mechanism for the BTS.  If no packages
@@ -1757,8 +1757,153 @@ are listed, this check is turned off again.
 =cut
 
 sub bts_package {
-    my $email=join(' ', @_);
-    mailbts("setting package to $email", "package $email");
+    if (@_) {
+        bts_limit(map { "package:$_" } @_);
+    } else {
+        bts_limit('package');
+    }
+}
+
+=item limit [<key>[:<value>]  ...]
+
+The following commands will only apply to bugs which meet the specified
+criterion; this acts as a safety mechanism for the BTS.  If no C<value>s are
+listed, the limits for that C<key> are turned off again.  If no C<key>s are
+specified, all limits are reset.
+
+=over 8
+
+=item submitter
+
+E-mail address of the submitter.
+
+=item date
+
+Date the bug was submitted.
+
+=item subject
+
+Subject of the bug.
+
+=item msgid
+
+Message-id of the initial bug report.
+
+=item package
+
+Binary package name.
+
+=item source
+
+Source package name.
+
+=item tag
+
+Tags applied to the bug.
+
+=item severity
+
+Bug severity.
+
+=item owner
+
+Bug's owner.
+
+=item affects
+
+Bugs affecting this package.
+
+=item archive
+
+Whether to search archived bugs or normal bugs; defaults to 0
+(i.e. only search normal bugs). As a special case, if archive is
+'both', both archived and unarchived bugs are returned.
+
+=back
+
+For example, to limit the set of bugs affected by the subsequent control
+commands to those submitted by jrandomdeveloper@example.com and tagged
+wontfix, one would use
+
+bts limit submitter:jrandomdeveloper@example.com tag:wontfix
+
+If a key is used multiple times then the set of bugs selected includes
+those matching any of the supplied values; for example
+
+bts limit package:foo severity:wishlist severity:minor
+
+only applies the subsequent control commands to bugs of package foo with
+either wishlist or minor severity.
+
+=cut
+
+sub bts_limit {
+    my @args=@_;
+    my %limits;
+    # Ensure we're using the limit fields that debbugs expects.  These are the
+    # keys from Debbugs::Status::fields
+    my %valid_keys = (submitter => 'originator',
+                      date => 'date',
+                      subject => 'subject',
+                      msgid => 'msgid',
+                      package => 'package',
+                      source => 'package',
+                      src => 'package',
+                      tag => 'keywords',
+                      severity => 'severity',
+                      owner => 'owner',
+                      affects => 'affects',
+                      archive => 'unarchived',
+    );
+    for my $arg (@args) {
+	my ($key,$value) = split /:/, $arg, 2;
+	next unless $key;
+	if (exists $valid_keys{$key}) {
+	    # Support "$key:" by making it look like "$key", i.e. no $value
+	    # defined
+	    undef $value unless length($value);
+	    if ($key =~ /^(?:source|src)$/) {
+		$value = "src:$value" if defined $value;
+	    } elsif ($key eq "archive") {
+		if (defined $value) {
+		    # limit looks for unarchived, not archive.  Verify we have
+		    # a valid value and then switch the boolean value to match
+		    # archive => unarchive
+		    if ($value =~ /^yes|1|true|on$/i) {
+			$value = 0;
+		    } elsif ($value =~ /^no|0|false|off$/i) {
+			$value = 1;
+		    }
+		    elsif ($value ne 'both') {
+			die "bts limit: Invalid value ($value) for archive\n";
+		    }
+		}
+	    }
+	    $key = $valid_keys{$key};
+	    if (defined $value and $value) {
+		push(@{$limits{$key}},$value);
+	    } else {
+		$limits{$key} = ();
+	    }
+	} elsif ($key eq 'clear') {
+	    %limits = ();
+	    $limits{$key} = 1;
+	} else {
+	    die "bts limit: Unrecognized key: $key\n";
+	}
+    }
+    for my $key (keys %limits) {
+	if ($key eq 'clear') {
+	    mailbts('clear all limit(s)', 'limit clear');
+	    next;
+	}
+	if (defined $limits{$key}) {
+	    my $value = join ' ', @{$limits{$key}};
+	    mailbts("limit $key to $value", "limit $key $value");
+	} else {
+	    mailbts("clear $key limit", "limit $key");
+	}
+    }
 }
 
 =item owner <bug> <owner-email>
