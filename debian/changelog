@@ -7,6 +7,10 @@ devscripts (2.10.54) UNRELEASED; urgency=low
   * manpage-alert: Fix handling of commands which start with non-word
     characters.  Based on a patch from Ville Skyttä.
   * bts: Add support for the limit command.  (Closes: #541698)
+  * tagpending: Use 'bts limit source ...' instead of 'bts package ...' and
+    listing every binary package the source produces.  This will prevent
+    tagpending emails from exceeding the 998 characters per line limit of
+    email.
 
   [ Adam D. Barratt ]
   * bts:

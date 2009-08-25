@@ -87,8 +87,8 @@ B<tagpending> [options]
 
 =head1 DESCRIPTION
 
-B<tagpending> parses debian/changelog and debian/control to determine 
-which bugs would be closed if the package were uploaded. Each bug is 
+B<tagpending> parses debian/changelog and debian/control to determine
+which bugs would be closed if the package were uploaded. Each bug is
 then marked as pending, using B<bts>(1) if it is not already so.
 
 =head1 OPTIONS
@@ -113,10 +113,10 @@ Do not query the BTS, but (re)tag all bugs closed in the changelog.
 
 =item --comments
 
-Include the changelog header line and the entries relating to the tagged 
+Include the changelog header line and the entries relating to the tagged
 bugs as comments in the generated mail.  This is the default.
 
-Note that when used in combination with --to, the header line output 
+Note that when used in combination with --to, the header line output
 will always be that of the most recent version.
 
 =item --no-comments
@@ -140,7 +140,7 @@ Display the message which would be sent to the BTS and, except when
 
 =item -w, --wnpp
 
-For each bug that does not appear to belong to the current package, 
+For each bug that does not appear to belong to the current package,
 check whether it is filed against wnpp. If so, tag it. This allows e.g.
 ITAs and ITPs closed in an upload to be tagged.
 
@@ -269,7 +269,7 @@ if (@to_tag or @wnpp_to_tag) {
 	foreach my $change (split /\n/, $changes) {
             if ($change =~ /^ {3}\*(.*)/) {
 		# Adapted from dpkg-parsechangelog / Changelog.pm
-        	while ($thischange && ($thischange =~
+		while ($thischange && ($thischange =~
 		  /closes:\s*(?:bug)?\#?\s?\d+(?:,\s*(?:bug)?\#?\s?\d+)*/sig)) {
 		    push(@thiscloses, $& =~ /\#?\s?(\d+)/g);
 		}
@@ -297,7 +297,7 @@ if (@to_tag) {
     open CONTROL, "debian/control";
 
     while (<CONTROL>) {
-	if (/^(Package|Source): (.*)/) {
+	if (/^Source: (.*)/) {
 	    push (@sourcepkgs, $2);
 	}
     }
@@ -327,7 +327,7 @@ if ($opt_noact and not $opt_interactive) {
     }
 
     if (@to_tag) {
-	push(@bts_args, "package", join " ", keys(%packages));
+	push(@bts_args, "limit source", join " ", keys(%packages));
 
 	if ($comments) {
 	    $comments =~ s/\n\n/\n/sg;
@@ -443,14 +443,14 @@ EOF
 
 =head1 COPYRIGHT
 
-This program is Copyright 2008 by Adam D. Barratt 
+This program is Copyright 2008 by Adam D. Barratt
 <adam@adam-barratt.org.uk>.
 
-The shell script tagpending, on which this program is based, is 
+The shell script tagpending, on which this program is based, is
 Copyright 2004 by Joshua Kwan <joshk@triplehelix.org> with changes
 copyright 2004-7 by their respective authors.
 
-This program is licensed under the terms of the GPL, either version 2 of 
+This program is licensed under the terms of the GPL, either version 2 of
 the License, or (at your option) any later version.
 
 =cut
