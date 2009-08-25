@@ -293,19 +293,6 @@ if (@to_tag or @wnpp_to_tag) {
     }
 }
 
-if (@to_tag) {
-    open CONTROL, "debian/control";
-
-    while (<CONTROL>) {
-	if (/^Source: (.*)/) {
-	    push (@sourcepkgs, $2);
-	}
-    }
-
-    close CONTROL;
-}
-
-my %packages = map { $_ => 1 } @sourcepkgs;
 my @bts_args = ("bts", "--toolname", $progname);
 
 if ($opt_noact and not $opt_interactive) {
@@ -327,7 +314,7 @@ if ($opt_noact and not $opt_interactive) {
     }
 
     if (@to_tag) {
-	push(@bts_args, "limit source", join " ", keys(%packages));
+	push(@bts_args, "limit", "source:$source");
 
 	if ($comments) {
 	    $comments =~ s/\n\n/\n/sg;
