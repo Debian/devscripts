@@ -47,7 +47,11 @@ devscripts (2.10.54) UNRELEASED; urgency=low
   * debdiff: New option --no-unpack-tarballs to skip unpacking tarballs
     contained in source packages.
 
- -- Christoph Berg <myon@debian.org>  Wed, 12 Aug 2009 14:15:54 +0200
+  [ Ryan Niebur ]
+  * uscan: add --download-current-version option (Closes: #539724)
+  * Add myself to Uploaders
+
+ -- Ryan Niebur <ryanryan52@gmail.com>  Thu, 27 Aug 2009 23:27:32 -0700
 
 devscripts (2.10.53) unstable; urgency=low
 

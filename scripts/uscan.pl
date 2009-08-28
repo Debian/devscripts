@@ -116,6 +116,8 @@ Options:
                    Specify the version which the upstream release must
                    match in order to be considered, rather than using the
                    release with the highest version
+    --download-current-version
+                   Download the currently packaged version
     --package PACKAGE
                    Specify the package name rather than examining
                    debian/changelog; must use --upstream-version and
@@ -259,6 +261,7 @@ my ($opt_verbose, $opt_ignore, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
 my $opt_download_version;
 my $opt_user_agent;
+my $opt_download_current_version;
 
 GetOptions("help" => \$opt_h,
 	   "version" => \$opt_v,
@@ -286,6 +289,7 @@ GetOptions("help" => \$opt_h,
 	   "useragent=s" => \$opt_user_agent,
 	   "noconf" => \$opt_noconf,
 	   "no-conf" => \$opt_noconf,
+	   "download-current-version" => \$opt_download_current_version,
 	   )
     or die "Usage: $progname [options] [directories]\nRun $progname --help for more details\n";
 
@@ -817,6 +821,25 @@ sub process_watchline ($$$$$$)
 	$pattern = "(?:(?:$site)?" . quotemeta($basedir) . ")?$filepattern";
     }
 
+    if (! $lastversion or $lastversion eq 'debian') {
+	if (defined $pkg_version) {
+	    $lastversion=$pkg_version;
+	} else {
+	    warn "$progname warning: Unable to determine current version\n  in $watchfile, skipping:\n  $line\n";
+	    return 1;
+	}
+    }
+    # And mangle it if requested
+    my $mangled_lastversion;
+    $mangled_lastversion = $lastversion;
+    foreach my $pat (@{$options{'dversionmangle'}}) {
+	eval "\$mangled_lastversion =~ $pat;";
+    }
+    if($opt_download_current_version) {
+	$download_version = $mangled_lastversion;
+	$force_download = 1;
+    }
+
     # Check all's OK
     if ($pattern !~ /\(.*\)/) {
 	warn "$progname warning: Filename pattern missing version delimiters ()\n  in $watchfile, skipping:\n  $line\n";
@@ -1055,20 +1078,7 @@ EOF
 	    $newfile_base = "$pkg-$newversion.download";
 	}
     }
-    if (! $lastversion or $lastversion eq 'debian') {
-	if (defined $pkg_version) {
-	    $lastversion=$pkg_version;
-	} else {
-	    warn "$progname warning: Unable to determine current version\n  in $watchfile, skipping:\n  $line\n";
-	    return 1;
-	}
-    }
-    # And mangle it if requested
-    my $mangled_lastversion = $lastversion;
-    foreach my $pat (@{$options{'dversionmangle'}}) {
-	eval "\$mangled_lastversion =~ $pat;";
-    }
-
+    
     # So what have we got to report now?
     my $upstream_url;
     # Upstream URL?  Copying code from below - ugh.
