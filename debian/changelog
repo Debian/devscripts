@@ -52,8 +52,10 @@ devscripts (2.10.54) UNRELEASED; urgency=low
   * Add myself to Uploaders
   * debchange: add support for using --package with -i to change the
     source package name (Closes: #515885)
+  * debcheckout: use bzr+ssh instead of sftp, thanks to Colin Watson for
+    the patch (Closes: #526068)
 
- -- Ryan Niebur <ryanryan52@gmail.com>  Sat, 29 Aug 2009 21:35:02 -0700
+ -- Ryan Niebur <ryanryan52@gmail.com>  Sat, 29 Aug 2009 21:39:38 -0700
 
 devscripts (2.10.53) unstable; urgency=low
 
