@@ -50,8 +50,10 @@ devscripts (2.10.54) UNRELEASED; urgency=low
   [ Ryan Niebur ]
   * uscan: add --download-current-version option (Closes: #539724)
   * Add myself to Uploaders
+  * debchange: add support for using --package with -i to change the
+    source package name (Closes: #515885)
 
- -- Ryan Niebur <ryanryan52@gmail.com>  Thu, 27 Aug 2009 23:27:32 -0700
+ -- Ryan Niebur <ryanryan52@gmail.com>  Sat, 29 Aug 2009 21:35:02 -0700
 
 devscripts (2.10.53) unstable; urgency=low
 

@@ -417,9 +417,10 @@ if (defined $opt_D) {
 
 fatal "--closes should not be used with --news; put bug numbers in the changelog not the NEWS file"
     if $opt_news && @closes;
-    
-fatal "--package can only be used with --create"
-    if $opt_package && ! $opt_create;
+
+# hm, this can probably be used with more than just -i.
+fatal "--package can only be used with --create and --increment"
+    if $opt_package && ! ($opt_create || $opt_i);
 
 my $changelog_path = $opt_c || $ENV{'CHANGELOG'} || 'debian/changelog';
 my $real_changelog_path = $changelog_path;
@@ -615,14 +616,6 @@ EOF
 	    # don't know anything
 	}
     }
-    if ($opt_package) {
-	if ($opt_package =~ m/^[a-z0-9][a-z0-9+\-\.]+$/) {
-	    $PACKAGE=$opt_package;
-	} else {
-	    warn "$progname warning: illegal package name used with --package: $opt_package\n";
-	    $warnings++;
-	}
-    }
     if ($opt_v) {
 	$VERSION=$opt_v;
     }
@@ -630,6 +623,15 @@ EOF
 	$DISTRIBUTION=$opt_D;
     }
 }    
+
+if ($opt_package) {
+    if ($opt_package =~ m/^[a-z0-9][a-z0-9+\-\.]+$/) {
+        $PACKAGE=$opt_package;
+    } else {
+        warn "$progname warning: illegal package name used with --package: $opt_package\n";
+        $warnings++;
+    }
+}
 
 # Clean up after old versions of debchange
 if (-f "debian/RELEASED") {
