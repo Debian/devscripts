@@ -91,17 +91,13 @@ exit;
 
 
 
-=begin doc
-
-  Load the list of sites, and patterns, to test.
-
-  By default these will come from the end of the script
- itself.  A user may create the file ~/.namecheckrc with
- their own patterns if they prefer.
-
-=end doc
-
-=cut
+#
+#  Load the list of sites, and patterns, to test.
+#
+#  By default these will come from the end of the script
+# itself.  A user may create the file ~/.namecheckrc with
+# their own patterns if they prefer.
+#
 
 sub loadPatterns
 {
@@ -129,16 +125,10 @@ sub loadPatterns
     return (@lines);
 }
 
-
-
-=begin doc
-
-  Test the given name against the patterns we've loaded from our
- own script, or the users configuration file.
-
-=end doc
-
-=cut
+#
+#  Test the given name against the patterns we've loaded from our
+# own script, or the users configuration file.
+#
 
 sub testSites
 {

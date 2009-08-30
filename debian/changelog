@@ -58,8 +58,11 @@ devscripts (2.10.54) UNRELEASED; urgency=low
     (Closes: 487323)
   * uscan: add support for repacking lzma compressed tarballs, thanks to
     Michal Čihař for the patch (Closes: #514504)
+  * namecheck: use comments instead of pod blocks so that they don't get
+    translated, thanks to Florentin Duneau for the patch (Closes:
+    #529062)
 
- -- Ryan Niebur <ryanryan52@gmail.com>  Sat, 29 Aug 2009 22:18:08 -0700
+ -- Ryan Niebur <ryanryan52@gmail.com>  Sat, 29 Aug 2009 22:25:25 -0700
 
 devscripts (2.10.53) unstable; urgency=low
 
