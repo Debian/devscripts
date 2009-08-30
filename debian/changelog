@@ -54,10 +54,12 @@ devscripts (2.10.54) UNRELEASED; urgency=low
     source package name (Closes: #515885)
   * debcheckout: use bzr+ssh instead of sftp, thanks to Colin Watson for
     the patch (Closes: #526068)
-  * remove NMU version when -i is ran without -n or auto nmu (Closes:
-    487323)
+  * debchange: remove NMU version when -i is ran without -n or auto nmu
+    (Closes: 487323)
+  * uscan: add support for repacking lzma compressed tarballs, thanks to
+    Michal Čihař for the patch (Closes: #514504)
 
- -- Ryan Niebur <ryanryan52@gmail.com>  Sat, 29 Aug 2009 22:07:02 -0700
+ -- Ryan Niebur <ryanryan52@gmail.com>  Sat, 29 Aug 2009 22:18:08 -0700
 
 devscripts (2.10.53) unstable; urgency=low
 

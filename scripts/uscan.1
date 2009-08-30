@@ -363,12 +363,14 @@ orig.tar.gz names if their extensions are \fI.tar.gz\fR or \fI.tgz\fR,
 and similarly for tar.bz2 files.
 .TP
 .B \-\-repack
-After having downloaded a bzip tar or zip archive, repack it to a gzip tar
-archive, which is still currently required as a member of a Debian source
-package. Does nothing if the downloaded archive is not a bzip tar archive or a
-zip archive (i.e. it doesn't match a .tbz, .tbz2, .tar.bz2 or .zip 
-extension). The unzip package must be installed in order to repack .zip 
-archives.
+After having downloaded a lzma tar, bzip tar or zip archive, repack it
+to a gzip tar archive, which is still currently required as a member
+of a Debian source package. Does nothing if the downloaded archive is
+not a lzma tar archive, bzip tar archive or a zip archive (i.e. it
+doesn't match a .tlzma, .tar.lzma, .tbz, .tbz2, .tar.bz2 or .zip
+extension). The unzip package must be installed in order to
+repack .zip archives, and the lzma package must be installed to repack
+lzma tar archives.
 .TP
 .B \-\-no\-symlink
 Don't make these symlinks and don't rename the files.
@@ -483,9 +485,9 @@ If set, the downloaded files will be placed in this directory.  This is
 equivalent to the \fB\-\-destdir\fR option.
 .TP
 .B USCAN_REPACK
-If this is set to \fIyes\fR, then after having downloaded a bzip tar or
-zip archive, \fBuscan\fR will repack it to a gzip tar.  This is
-equivalent to the \fB\-\-repack\fR option.
+If this is set to \fIyes\fR, then after having downloaded a bzip tar,
+lzma tar or zip archive, \fBuscan\fR will repack it to a gzip tar.
+This is equivalent to the \fB\-\-repack\fR option.
 .SH "EXIT STATUS"
 The exit status gives some indication of whether a newer version was
 found or not; one is advised to read the output to determine exactly
