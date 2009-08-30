@@ -61,11 +61,11 @@ sub have_lpdc {
     };
 
     if ($@) {
-        if ($@ =~ m%^Can\'t locate Parse/DebControl%) {
-            $lpdc_broken="the libparse-debcontrol-perl package is not installed";
-        } else {
-            $lpdc_broken="couldn't load Parse::DebControl: $@";
-        }
+	if ($@ =~ m%^Can\'t locate Parse/DebControl%) {
+	    $lpdc_broken="the libparse-debcontrol-perl package is not installed";
+	} else {
+	    $lpdc_broken="couldn't load Parse::DebControl: $@";
+	}
     }
     else { $lpdc_broken=''; }
     return $lpdc_broken ? 0 : 1;
@@ -239,7 +239,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       );
     $config_vars{'DEBCHANGE_TZ'} ||= '';
     my %config_default = %config_vars;
-    
+
     my $shell_cmd;
     # Set defaults
     foreach my $var (keys %config_vars) {
@@ -622,14 +622,14 @@ EOF
     if ($opt_D) {
 	$DISTRIBUTION=$opt_D;
     }
-}    
+}
 
 if ($opt_package) {
     if ($opt_package =~ m/^[a-z0-9][a-z0-9+\-\.]+$/) {
-        $PACKAGE=$opt_package;
+	$PACKAGE=$opt_package;
     } else {
-        warn "$progname warning: illegal package name used with --package: $opt_package\n";
-        $warnings++;
+	warn "$progname warning: illegal package name used with --package: $opt_package\n";
+	$warnings++;
     }
 }
 
@@ -1011,17 +1011,17 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 		    # First NMU of a Debian native package
 		    $end .= "+nmu1";
 		} else {
-	    	    $end += 0.1;
+		    $end += 0.1;
 		}
-            } elsif ($opt_bn and not $start =~ /\+b/) {
-                $end .= "+b1";
+	    } elsif ($opt_bn and not $start =~ /\+b/) {
+		$end .= "+b1";
 	    } elsif ($opt_qa and $start =~/(.*?)-(\d+)\.$/) {
-                # Drop NMU revision when doing a QA upload
-                my $upstream_version = $1;
-                my $debian_revision = $2;
-                $debian_revision++;
-                $start = "$upstream_version-$debian_revision";
-                $end = "";
+		# Drop NMU revision when doing a QA upload
+		my $upstream_version = $1;
+		my $debian_revision = $2;
+		$debian_revision++;
+		$start = "$upstream_version-$debian_revision";
+		$end = "";
 	    } elsif ($opt_bpo and not $start =~ /~bpo[0-9]+\+$/) {
 		# If it's not already a backport make it so
 		# otherwise we can be safe if we behave like dch -i
@@ -1086,7 +1086,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 	$bpo_dist ||= $bpo_dists{$latest_bpo_dist} . '-backports';
     }
     my $distribution = $opt_D || $bpo_dist || (($opt_release_heuristic eq 'changelog') ? "UNRELEASED" : $DISTRIBUTION);
-    
+
     my $urgency = $opt_u;
     if ($opt_news) {
 	$urgency ||= $CL_URGENCY;
@@ -1102,29 +1102,29 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
     } else {
 	print O "$PACKAGE ($NEW_VERSION) $distribution; urgency=$urgency\n\n";
 	if ($opt_n && ! $opt_news) {
-            print O "  * Non-maintainer upload.\n";
+	    print O "  * Non-maintainer upload.\n";
 	    $line = 1;
 	} elsif ($opt_bn && ! $opt_news) {
-            my $arch = qx/dpkg-architecture -qDEB_BUILD_ARCH/; chomp ($arch);
-            print O "  * Binary-only non-maintainer upload for $arch; no source changes.\n";
-            $line = 1;
+	    my $arch = qx/dpkg-architecture -qDEB_BUILD_ARCH/; chomp ($arch);
+	    print O "  * Binary-only non-maintainer upload for $arch; no source changes.\n";
+	    $line = 1;
 	} elsif ($opt_qa && ! $opt_news) {
-            print O "  * QA upload.\n";
-            $line = 1;
+	    print O "  * QA upload.\n";
+	    $line = 1;
 	} elsif ($opt_s && ! $opt_news) {
-            print O "  * Non-maintainer upload by the Security Team.\n";
-            $line = 1;
+	    print O "  * Non-maintainer upload by the Security Team.\n";
+	    $line = 1;
 	} elsif ($opt_bpo && ! $opt_news) {
-            print O "  * Rebuild for $bpo_dist.\n";
-            $line = 1;
+	    print O "  * Rebuild for $bpo_dist.\n";
+	    $line = 1;
 	}
 	if (@closes_text or $TEXT) {
-            foreach (@closes_text) { format_line($_, 1); }
-            if (length $TEXT) { format_line($TEXT, 1); }
+	    foreach (@closes_text) { format_line($_, 1); }
+	    if (length $TEXT) { format_line($TEXT, 1); }
 	} elsif ($opt_news) {
-            print O "  \n";
+	    print O "  \n";
 	} else {
-            print O "  * \n";
+	    print O "  * \n";
 	}
 	$line += 3;
 	print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n\n";
@@ -1137,7 +1137,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 if (($opt_r || $opt_a || $merge) && ! $opt_create) {
     # This means we just have to generate a new * entry in changelog
     # and if a multi-developer changelog is detected, add developer names.
-    
+
     $NEW_VERSION=$VERSION unless $NEW_VERSION;
     $NEW_SVERSION=$SVERSION unless $NEW_SVERSION;
     $NEW_UVERSION=$UVERSION unless $NEW_UVERSION;
@@ -1171,7 +1171,7 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
 		$line = $savedline;
 		last;
 	    }
-	}	
+	}
 	elsif (/  \* Upload to ([^ ]+).*$/) {
 	    ($dist_indicator = $1) =~ s/[,;]$//;
 	    chomp $dist_indicator;
@@ -1434,12 +1434,12 @@ if ((basename(cwd()) =~ m%^\Q$PACKAGE\E-\Q$UVERSION\E$%) &&
 	} else {
 	    warn "$progname warning: Couldn't rename directory: $!";
 	}
-       # And check whether a new orig tarball exists
-       my @origs = glob("../$PACKAGE\_$new_uversion.*");
-       my $num_origs = grep { /^..\/\Q$PACKAGE\E_\Q$new_uversion\E\.orig\.tar\.(gz|bz2|lzma)$/ } @origs;
-       if ($num_origs == 0) {
-          warn "$progname warning: no orig tarball found for the new version.\n";
-       }
+	# And check whether a new orig tarball exists
+	my @origs = glob("../$PACKAGE\_$new_uversion.*");
+	my $num_origs = grep { /^..\/\Q$PACKAGE\E_\Q$new_uversion\E\.orig\.tar\.(gz|bz2|lzma)$/ } @origs;
+	if ($num_origs == 0) {
+	    warn "$progname warning: no orig tarball found for the new version.\n";
+	}
     }
 }
 
