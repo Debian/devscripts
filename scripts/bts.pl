@@ -1858,6 +1858,9 @@ sub bts_limit {
     for my $arg (@args) {
 	my ($key,$value) = split /:/, $arg, 2;
 	next unless $key;
+	if (!defined $value) {
+	    die "bts limit: No value given for '$key'\n";
+	}
 	if (exists $valid_keys{$key}) {
 	    # Support "$key:" by making it look like "$key", i.e. no $value
 	    # defined
