@@ -1847,8 +1847,8 @@ sub bts_limit {
                       subject => 'subject',
                       msgid => 'msgid',
                       package => 'package',
-                      source => 'package',
-                      src => 'package',
+                      source => 'source',
+                      src => 'source',
                       tag => 'keywords',
                       severity => 'severity',
                       owner => 'owner',
@@ -1862,9 +1862,7 @@ sub bts_limit {
 	    # Support "$key:" by making it look like "$key", i.e. no $value
 	    # defined
 	    undef $value unless length($value);
-	    if ($key =~ /^(?:source|src)$/) {
-		$value = "src:$value" if defined $value;
-	    } elsif ($key eq "archive") {
+	    if ($key eq "archive") {
 		if (defined $value) {
 		    # limit looks for unarchived, not archive.  Verify we have
 		    # a valid value and then switch the boolean value to match
