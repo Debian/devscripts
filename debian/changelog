@@ -1,3 +1,11 @@
+devscripts (2.10.54~bpo50+1) lenny-backports; urgency=high
+
+  * Urgency "high" for uscan security update
+  * Rebuild for lenny-backports.
+  * Remove sensible-utils from Recommends as it doesn't exist in lenny.
+
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 02 Sep 2009 20:48:38 +0100
+
 devscripts (2.10.54) unstable; urgency=high
 
   * Urgency "high" for security update
