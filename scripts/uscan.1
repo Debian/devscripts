@@ -232,7 +232,8 @@ site.
 This is used to mangle the upstream version number as matched by the
 ftp://... or http:// rules as follows.  First, the \fIrules\fR string
 is split into multiple rules at every `;'.  Then the upstream version
-number is mangled by executing the Perl command:
+number is mangled by applying \fIrule\fR to the version, in a similar
+way to executing the Perl command:
 .nf
     $version =~ \fIrule\fR;
 .fi
@@ -240,6 +241,11 @@ for each rule.  Thus, suitable rules might be `s/^/0./' to prepend
 `0.' to the version number and `s/_/./g' to change underscores into
 periods.  Note that the \fIrules\fR string may not contain commas;
 this should not be a problem.
+
+\fIrule\fR may only use the 's', 'tr' and 'y' operations.  When the 's'
+operation is used, only the 'g', 'i' and 'x' flags are available and
+\fIrule\fR may not contain any expressions which have the potential to
+execute code (i.e. the (?{}) and (??{}) constructs are not supported).
 .TP
 \fBdversionmangle=\fIrules\fR
 This is used to mangle the Debian version number of the currently

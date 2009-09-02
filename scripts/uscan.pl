@@ -66,6 +66,8 @@ sub dehs_msg ($);
 sub dehs_warn ($);
 sub dehs_die ($);
 sub dehs_output ();
+sub quoted_regex_replace ($);
+sub safe_replace ($$);
 
 sub usage {
     print <<"EOF";
@@ -833,7 +835,14 @@ sub process_watchline ($$$$$$)
     my $mangled_lastversion;
     $mangled_lastversion = $lastversion;
     foreach my $pat (@{$options{'dversionmangle'}}) {
-	eval "\$mangled_lastversion =~ $pat;";
+	if (! safe_replace(\$mangled_lastversion, $pat)) {
+	    warn "$progname: In $watchfile, potentially"
+	      . " unsafe or malformed dversionmangle"
+	      . " pattern:\n  '$pat'"
+	      . " found. Skipping watchline\n"
+	      . "  $line\n";
+	    return 1;
+	}
     }
     if($opt_download_current_version) {
 	$download_version = $mangled_lastversion;
@@ -930,7 +939,14 @@ sub process_watchline ($$$$$$)
 			    join(".", map { $_ if defined($_) }
 			 	$href =~ m&^$_pattern$&);
 			foreach my $pat (@{$options{'uversionmangle'}}) {
-			    eval "\$mangled_version =~ $pat;";
+			    if (! safe_replace(\$mangled_version, $pat)) {
+				warn "$progname: In $watchfile, potentially"
+			 	 . " unsafe or malformed uversionmangle"
+				  . " pattern:\n  '$pat'"
+				  . " found. Skipping watchline\n"
+				  . "  $line\n";
+				return 1;
+			    }
 			}
 			push @hrefs, [$mangled_version, $href];
 		    }
@@ -1001,7 +1017,14 @@ sub process_watchline ($$$$$$)
 		my $file = $1;
 		my $mangled_version = join(".", $file =~ m/^$pattern$/);
 		foreach my $pat (@{$options{'uversionmangle'}}) {
-		    eval "\$mangled_version =~ $pat;";
+		    if (! safe_replace(\$mangled_version, $pat)) {
+			warn "$progname: In $watchfile, potentially"
+			  . " unsafe or malformed uversionmangle"
+			  . " pattern:\n  '$pat'"
+			  . " found. Skipping watchline\n"
+			  . "  $line\n";
+			return 1;
+		    }
 		}
 		push @files, [$mangled_version, $file];
 	    }
@@ -1012,7 +1035,14 @@ sub process_watchline ($$$$$$)
 		my $file = $1;
 		my $mangled_version = join(".", $file =~ m/^$filepattern$/);
 		foreach my $pat (@{$options{'uversionmangle'}}) {
-		    eval "\$mangled_version =~ $pat;";
+		    if (! safe_replace(\$mangled_version, $pat)) {
+			warn "$progname: In $watchfile, potentially"
+			  . " unsafe or malformed uversionmangle"
+			  . " pattern:\n  '$pat'"
+			  . " found. Skipping watchline\n"
+			  . "  $line\n";
+			return 1;
+		    }
 		}
 		push @files, [$mangled_version, $file];
 	    }
@@ -1068,7 +1098,14 @@ EOF
         $newfile_base=$newfile;
     }
     foreach my $pat (@{$options{'filenamemangle'}}) {
-	eval "\$newfile_base =~ $pat;";
+	if (! safe_replace(\$newfile_base, $pat)) {
+	    warn "$progname: In $watchfile, potentially"
+	      . " unsafe or malformed filenamemangle"
+	      . " pattern:\n  '$pat'"
+	      . " found. Skipping watchline\n"
+	      . "  $line\n";
+		return 1;
+	}
     }
     # Remove HTTP header trash
     if ($site =~ m%^https?://%) {
@@ -1139,7 +1176,14 @@ EOF
 	$upstream_url =~ s/&amp;/&/g;
 	if (exists $options{'downloadurlmangle'}) {
 	    foreach my $pat (@{$options{'downloadurlmangle'}}) {
-		eval "\$upstream_url =~ $pat;";
+		if (! safe_replace(\$upstream_url, $pat)) {
+		    warn "$progname: In $watchfile, potentially"
+		      . " unsafe or malformed downloadurlmangle"
+		      . " pattern:\n  '$pat'"
+		      . " found. Skipping watchline\n"
+		      . "  $line\n";
+		    return 1;
+		}
 	    }
 	}
     }
@@ -1155,7 +1199,7 @@ EOF
 
     # Can't just use $lastversion eq $newversion, as then 0.01 and 0.1
     # compare different, whereas they are treated as equal by dpkg
-    if (system("dpkg --compare-versions '$mangled_lastversion' eq '$newversion'") == 0) {
+    if (system("dpkg", "--compare-versions", "'$mangled_lastversion'", "eq", "'$newversion'") == 0) {
 	if ($verbose or ($download == 0 and $report and ! $dehs)) {
 	    print $pkg_report_header;
 	    $pkg_report_header = '';
@@ -1182,7 +1226,7 @@ EOF
     # We use dpkg's rules to determine whether our current version
     # is newer or older than the remote version.
     if (!defined $download_version) {
-	if (system("dpkg --compare-versions '$mangled_lastversion' gt '$newversion'") == 0) {
+	if (system("dpkg", "--compare-versions", "'$mangled_lastversion'", "gt", "'$newversion'") == 0) {
 	    if ($verbose) {
 		print " => remote site does not even have current version\n";
 	    } elsif ($dehs) {
@@ -1406,6 +1450,7 @@ EOF
     # Do whatever the user wishes to do
     if ($action) {
 	my $usefile = "$destdir/$newfile_base";
+	my @cmd = ($action);
 	if ($symlink =~ /^(symlink|rename)$/
 	    and $newfile_base =~ /\.(tar\.gz|tgz)$/) {
 	    $usefile = "$destdir/${pkg}_${newversion}.orig.tar.gz";
@@ -1417,22 +1462,22 @@ EOF
 
 	# Any symlink requests are already handled by uscan
 	if ($action =~ /^uupdate(\s|$)/) {
-	    $action =~ s/^uupdate/uupdate --no-symlink/;
+	    push @cmd, "--no-symlink";
 	}
 
-	my $actioncmd;
 	if ($watch_version > 1) {
-	    $actioncmd = "$action --upstream-version $newversion $usefile";
+	    push @cmd, ("--upstream-version", "$newversion", "$usefile");
 	} else {
-	    $actioncmd = "$action $usefile $newversion";
+	    push @cmd, ("$usefile", "$newversion");
 	}
+	my $actioncmd = join(" ", @cmd);
 	print "-- Executing user specified script\n     $actioncmd\n" if $verbose;
 	if ($dehs) {
 	    my $msg = "Executing user specified script: $actioncmd; output:\n";
 	    $msg .= `$actioncmd 2>&1`;
 	    dehs_msg($msg);
 	} else {
-	    system($actioncmd);
+	    system(@cmd);
 	}
     }
 
@@ -1720,4 +1765,179 @@ sub dehs_output ()
 
     # Don't repeat output
     %dehs_tags = ();
+}
+
+sub quoted_regex_parse($) {
+    my $pattern = shift;
+    my %closers = ('{', '}', '[', ']', '(', ')', '<', '>');
+
+    $pattern =~ /^(s|tr|y)(.)(.*)$/;
+    my ($sep, $rest) = ($2, $3 || '');
+    my $closer = $closers{$sep};
+
+    my $parsed_ok = 1;
+    my $regexp = '';
+    my $replacement = '';
+    my $flags = '';
+    my $open = 1;
+    my $last_was_escape = 0;
+    my $in_replacement = 0;
+
+    for my $char (split //, $rest) {
+	if ($char eq $sep and ! $last_was_escape) {
+	    $open++;
+	    if ($open == 1) {
+		if ($in_replacement) {
+		    # Separator after end of replacement
+		    $parsed_ok = 0;
+		    last;
+		} else {
+		    $in_replacement = 1;
+		}
+	    } else {
+		if ($open > 1) {
+		    if ($in_replacement) {
+			$replacement .= $char;
+		    } else {
+			$regexp .= $char;
+		    }
+		}
+	    }
+	} elsif ($char eq $closer and ! $last_was_escape) {
+	    $open--;
+	    if ($open) {
+		if ($in_replacement) {
+		    $replacement .= $char;
+		} else {
+		    $regexp .= $char;
+		}
+	    } elsif ($open < 0) {
+		$parsed_ok = 0;
+		last;
+	    }
+	} else {
+	    if ($in_replacement) {
+		if ($open) {
+		    $replacement .= $char;
+		} else {
+		    $flags .= $char;
+		}
+	    } else {
+		$regexp .= $char;
+	    }
+	}
+	# Don't treat \\ as an escape
+	$last_was_escape = ($char eq '\\' and ! $last_was_escape);
+    }
+
+    $parsed_ok = 0 unless $in_replacement and $open == 0;
+
+    return ($parsed_ok, $regexp, $replacement, $flags);
+}
+
+sub safe_replace($$) {
+    my ($in, $pat) = @_;
+    $pat =~ s/^\s*(.*)\s*$/$1/;
+
+    $pat =~ /^(s|tr|y)(.)/;
+    my ($op, $sep) = ($1, $2 || '');
+    my $esc = "\Q$sep\E";
+    my ($parsed_ok, $regexp, $replacement, $flags);
+
+    if ($sep eq '{' or $sep eq '(' or $sep eq '[' or $sep eq '<') {
+	($parsed_ok, $regexp, $replacement, $flags) = quoted_regex_parse($pat);
+
+	return 0 unless $parsed_ok;
+    } elsif ($pat !~ /^(?:s|tr|y)$esc((?:\\.|[^\\$esc])*)$esc((?:\\.|[^\\$esc])*)$esc([a-z]*)$/) {
+	return 0;
+    } else {
+	($regexp, $replacement, $flags) = ($1, $2, $3);
+    }
+
+    my $safeflags = $flags;
+    if ($op eq 'tr' or $op eq 'y') {
+	$safeflags =~ tr/cds//cd;
+	return 0 if $safeflags ne $flags;
+	
+	$regexp =~ s/\\(.)/$1/g;
+	$replacement =~ s/\\(.)/$1/g;
+
+	$regexp =~ s/([^-])/'\\x'  . unpack 'H*', $1/ge;
+	$replacement =~ s/([^-])/'\\x'  . unpack 'H*', $1/ge;
+
+	eval "\$\$in =~ tr<$regexp><$replacement>$flags;";
+
+	if ($@) {
+	    return 0;
+	} else {
+	    return 1;
+	}
+    } else {
+	$safeflags =~ tr/gix//cd;
+	return 0 if $safeflags ne $flags;
+
+	my $global = ($flags =~ s/g//);
+	$flags = "(?$flags)" if length $flags;
+
+	my (@captures, $first, $last);
+
+	# Behave like Perl and treat e.g. "\." in replacement as "."
+	# We allow the case escape characters to remain and
+	# process them later
+	$replacement =~ s/(^|[^\\])\\([^luLUE])/$1$2/g;
+
+	# Unescape escaped separator characters
+	$replacement =~ s/\\\Q$sep\E/$sep/g;
+	# If bracketing quotes were used, also unescape the
+	# closing version
+	$replacement =~ s/\\\Q}\E/}/g if $sep eq '{';
+	$replacement =~ s/\\\Q]\E/]/g if $sep eq '[';
+	$replacement =~ s/\\\Q)\E/)/g if $sep eq '(';
+	$replacement =~ s/\\\Q>\E/>/g if $sep eq '<';
+
+	# The replacement below will modify $replacement so keep
+	# a copy. We'll need to restore it to the current value if
+	# the global flag was set on the input pattern.
+	my $orig_replacement = $replacement;
+
+	while (1) {
+	    eval {
+		# handle errors due to unsafe constructs in $regexp
+		no re 'eval';
+
+		my $re = qr/$flags$regexp/;
+
+		@captures = ($$in =~ $re);
+		($first, $last) = ($-[0], $+[0]);
+	    };
+	    return 0 if $@;
+
+	    # No match; leave the original string  untouched but return
+	    # success as there was nothing wrong with the pattern
+	    return 1 if @captures == 0;
+
+	    # Replace $X
+	    unshift @captures, substr $$in, $first, $last - $first;
+	    $replacement =~ s/[\$\\](\d)/defined $captures[$1] ? $captures[$1] : ''/ge;
+	    $replacement =~ s/\$\{(\d)\}/defined $captures[$1] ? $captures[$1] : ''/ge;
+	    $replacement =~ s/\$&/$captures[0]/g;
+
+	    # Make \l etc escapes work
+	    $replacement =~ s/\\l(.)/lc $1/e;
+	    $replacement =~ s/\\L(.*?)(\\E|\z)/lc $1/e;
+	    $replacement =~ s/\\u(.)/uc $1/e;
+	    $replacement =~ s/\\U(.*?)(\\E|\z)/uc $1/e;
+
+	    # Actually do the replacement
+	    substr $$in, $first, $last - $first, $replacement;
+
+	    if ($global) {
+		$replacement = $orig_replacement;
+	    } else {
+		last;
+	    }
+ 	}
+
+	return 1;
+    }
 }

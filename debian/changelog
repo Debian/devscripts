@@ -35,6 +35,9 @@ devscripts (2.10.54) UNRELEASED; urgency=low
     characters are passed on the command line.  (Closes: #542484)
   * dget: Update the dpkg-source output matching to enable --build to work
     again.  (Closes: #541409)
+  * uscan: Evaluate mangle rules without evaluating them directly as Perl
+    code to avoid the possibility of remote code execution.  This is
+    CVE-2009-2946.  As a side effect, (Closes: #515209)
   * Packaging changes: Add sensible-utils to Recommends.  Several scripts
     make use of sensible-editor and it has moved from debianutils so is
     no longer essential.  (Closes: #541846)
