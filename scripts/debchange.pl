@@ -1050,14 +1050,14 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 		}
 
 		if(! ($opt_s or $opt_n)) {
-			if ($start =~/(.*?)-(\d+)\.$/) {
-				# Drop NMU revision
-				my $upstream_version = $1;
-				my $debian_revision = $2;
-				$debian_revision++;
-				$start = "$upstream_version-$debian_revision";
-				$end = "";
-			}
+		    if ($start =~/(.*?)-(\d+)\.$/) {
+			# Drop NMU revision
+			my $upstream_version = $1;
+			my $debian_revision = $2;
+			$debian_revision++;
+			$start = "$upstream_version-$debian_revision";
+			$end = "";
+		    }
 		}
 
 		if (! ($opt_qa or $opt_bpo or $opt_l)) {
