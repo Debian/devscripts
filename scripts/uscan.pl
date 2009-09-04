@@ -1450,7 +1450,7 @@ EOF
     # Do whatever the user wishes to do
     if ($action) {
 	my $usefile = "$destdir/$newfile_base";
-	my @cmd = ($action);
+	my @cmd = split(' ', $action);
 	if ($symlink =~ /^(symlink|rename)$/
 	    and $newfile_base =~ /\.(tar\.gz|tgz)$/) {
 	    $usefile = "$destdir/${pkg}_${newversion}.orig.tar.gz";
