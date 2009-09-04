@@ -32,6 +32,7 @@ use filetest 'access';
 use Getopt::Long;
 use lib '/usr/share/devscripts';
 use Devscripts::Versort;
+use Text::ParseWords;
 BEGIN {
     eval { require LWP::UserAgent; };
     if ($@) {
@@ -1450,7 +1451,7 @@ EOF
     # Do whatever the user wishes to do
     if ($action) {
 	my $usefile = "$destdir/$newfile_base";
-	my @cmd = split(' ', $action);
+	my @cmd = shellwords($action);
 	if ($symlink =~ /^(symlink|rename)$/
 	    and $newfile_base =~ /\.(tar\.gz|tgz)$/) {
 	    $usefile = "$destdir/${pkg}_${newversion}.orig.tar.gz";

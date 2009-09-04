@@ -1,7 +1,8 @@
 devscripts (2.10.55) UNRELEASED; urgency=low
 
   * uscan: fix a regression from the security fix when the command is
-    given parameters
+    given parameters. use Text::ParseWords::shellwords to parse the
+    given command.
 
  -- Ryan Niebur <ryanryan52@gmail.com>  Thu, 03 Sep 2009 17:54:51 -0700
 
