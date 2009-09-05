@@ -1451,6 +1451,7 @@ EOF
     # Do whatever the user wishes to do
     if ($action) {
 	my $usefile = "$destdir/$newfile_base";
+	my @cmd = shellwords($action);
 	if ($symlink =~ /^(symlink|rename)$/
 	    and $newfile_base =~ /\.(tar\.gz|tgz)$/) {
 	    $usefile = "$destdir/${pkg}_${newversion}.orig.tar.gz";
@@ -1462,10 +1463,8 @@ EOF
 
 	# Any symlink requests are already handled by uscan
 	if ($action =~ /^uupdate(\s|$)/) {
-	    $action =~ s/^uupdate/uupdate --no-symlink/;
+	    push @cmd, "--no-symlink";
 	}
-
-	my @cmd = shellwords($action);
 
 	if ($watch_version > 1) {
 	    push @cmd, ("--upstream-version", "$newversion", "$usefile");
