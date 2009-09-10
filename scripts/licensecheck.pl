@@ -79,6 +79,7 @@ The default includes common source files.
 Also display copyright text found within the file
 
 =item B<--no-conf> B<--noconf>
+
 Do not read any configuration files. This can only be used as the first
 option given on the command-line.
 

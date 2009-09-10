@@ -11,6 +11,7 @@ devscripts (2.10.55) UNRELEASED; urgency=low
   * bts: Refer to the "--no-ack" option rather than the incorrect "--no-acks"
     in the description of the BTS_SUPPRESS_ACKS variable.  Thanks, Jakub
     Wilk.  (Closes: #542961)
+  * licensecheck: Add missing blank line in POD.  Thanks, Nicolas Francois.
   * l10n updates; thanks, Nicolas Francois:  (Closes: #545327)
     + Update French manpage translations
     + Fix addendum format for dcontrol in po4a/devscripts-po4a.conf
