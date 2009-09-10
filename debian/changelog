@@ -1,10 +1,16 @@
 devscripts (2.10.55) UNRELEASED; urgency=low
 
+  [ Ryan Niebur ]
   * uscan: fix a regression from the security fix when the command is
     given parameters. use Text::ParseWords::shellwords to parse the
     given command.
   * dch: fix comparison of versions when the new and current version are
     the same (Closes: #545099)
+
+  [ Adam D. Barratt ]
+  * bts: Refer to the "--no-ack" option rather than the incorrect "--no-acks"
+    in the description of the BTS_SUPPRESS_ACKS variable.  Thanks, Jakub
+    Wilk.  (Closes: #542961)
 
  -- Ryan Niebur <ryanryan52@gmail.com>  Fri, 04 Sep 2009 21:20:22 -0700
 

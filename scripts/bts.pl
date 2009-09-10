@@ -3994,7 +3994,7 @@ information.
 
 =item BTS_SUPPRESS_ACKS
 
-If this is set to I<yes>, then it is the same as the --no-acks command 
+If this is set to I<yes>, then it is the same as the --no-ack command 
 line parameter being used.  The default is I<no>.
 
 =item BTS_INTERACTIVE
