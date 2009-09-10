@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2009-09-06 12:13+0300\n"
+"POT-Creation-Date: 2009-09-10 19:33+0200\n"
 "PO-Revision-Date: 2009-09-06 15:06+0200\n"
 "Last-Translator: Nicolas François <nicolas.francois@centraliens.net>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -2200,8 +2200,8 @@ msgid ""
 "listed, the limits for that C<key> are turned off again.  If no C<key>s are "
 "specified, all limits are reset."
 msgstr ""
-"Les commandes suivantes ne vont s'appliquer qu'aux bogues correspondant "
-"aux critères indiqués ; il s'agit d'un mécanisme de sûreté pour le BTS. Si "
+"Les commandes suivantes ne vont s'appliquer qu'aux bogues correspondant aux "
+"critères indiqués ; il s'agit d'un mécanisme de sûreté pour le BTS. Si "
 "aucune C<valeur> n'est indiquée, les limites pour cette C<vlé> sont "
 "désactivées. Si aucune C<clé> n'est indiquée, les limites sont remises à "
 "zéro."
@@ -2854,10 +2854,10 @@ msgstr "BTS_SUPPRESS_ACKS"
 #. type: textblock
 #: ../scripts/bts.pl:3997
 msgid ""
-"If this is set to I<yes>, then it is the same as the --no-acks command line "
+"If this is set to I<yes>, then it is the same as the --no-ack command line "
 "parameter being used.  The default is I<no>."
 msgstr ""
-"Si elle est positionnée à I<yes>, équivaut à utiliser l'option B<--no-acks>. "
+"Si elle est positionnée à I<yes>, équivaut à utiliser l'option B<--no-ack>. "
 "La valeur par défaut est I<no>."
 
 #. type: =item
@@ -3659,9 +3659,9 @@ msgid ""
 "specified in DEBBUILDOPTS in the build host's pbuilderrc."
 msgstr ""
 "Indiquer des options supplémentaires à fournir à B<dpkg-buildpackage>(1). "
-"les différentes options sont séparées par des espaces. Ceci remplacera "
-"toute option fournie par la variable DEBBUILDOPTS du fichier pbuilderrc de "
-"la machine de construction."
+"les différentes options sont séparées par des espaces. Ceci remplacera toute "
+"option fournie par la variable DEBBUILDOPTS du fichier pbuilderrc de la "
+"machine de construction."
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:71
@@ -3692,9 +3692,9 @@ msgid ""
 "used, tilde expansion will B<not> be performed on them."
 msgstr ""
 "Quand B<cowpoke> est exécuté, les options de configuration suivantes sont "
-"lues dans le fichier de configuration global, celui de l'utilisateur et "
-"du projet, s'ils sont présents. Les chemins peuvent être indiqués de "
-"façon absolue ou relative (les chemins étant alors relatifs au répertoire "
+"lues dans le fichier de configuration global, celui de l'utilisateur et du "
+"projet, s'ils sont présents. Les chemins peuvent être indiqués de façon "
+"absolue ou relative (les chemins étant alors relatifs au répertoire "
 "personnel de l'utilisateur BUILDD_USER). Les chemins étant généralement "
 "fournis entre guillemets, l'expansion des tildes ne sera B<pas> réalisée."
 
@@ -3804,8 +3804,8 @@ msgid ""
 "initially be placed.  This must be writable by the B<BUILDD_USER>."
 msgstr ""
 "Le chemin du répertoire sur la machine de construction où sont placés "
-"initialement les paquets source. Il "
-"doit être accessible en écriture par l'utilisateur B<BUILDD_USER>."
+"initialement les paquets source. Il doit être accessible en écriture par "
+"l'utilisateur B<BUILDD_USER>."
 
 #. type: TP
 #: ../scripts/cowpoke.1:114
@@ -3822,9 +3822,9 @@ msgid ""
 msgstr ""
 "La racine du système de fichiers pour tous les fichiers COW et les fichiers "
 "résultats. Des sous-répertoires spécifiques aux architectures et aux "
-"distributions seront normalement créés sous cette racine. Le cache d'apt "
-"et les répertoire temporaire de construction se trouveront également sous "
-"ce chemin."
+"distributions seront normalement créés sous cette racine. Le cache d'apt et "
+"les répertoire temporaire de construction se trouveront également sous ce "
+"chemin."
 
 #. type: TP
 #: ../scripts/cowpoke.1:120
@@ -3889,12 +3889,12 @@ msgid ""
 "password entry required:"
 msgstr ""
 "La commande à utiliser pour obtenir les privilèges root sur la machine "
-"distante de construction. Si elle n'est pas définie, la commande par "
-"défaut est B<sudo>(8). Elle n'est nécessaire que pour appeler cowbuilder "
-"et lui permettre d'entrer dans son chroot. Vous pouvez donc n'autoriser "
-"cet utilisateur à utiliser des privilèges supplémentaires que pour "
-"l'exécution de cette commande. La ligne suivante dans sudoers permettra "
-"d'appeler cowbuilder sans avoir à forunir de mot de passe :"
+"distante de construction. Si elle n'est pas définie, la commande par défaut "
+"est B<sudo>(8). Elle n'est nécessaire que pour appeler cowbuilder et lui "
+"permettre d'entrer dans son chroot. Vous pouvez donc n'autoriser cet "
+"utilisateur à utiliser des privilèges supplémentaires que pour l'exécution "
+"de cette commande. La ligne suivante dans sudoers permettra d'appeler "
+"cowbuilder sans avoir à forunir de mot de passe :"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:147
@@ -3909,9 +3909,9 @@ msgid ""
 "due to its quoting requirements being different from all the rest."
 msgstr ""
 "Autrement, vous pouvez utiliser ssh avec une clé ou tout autre mécanisme "
-"correspondant à votre politique locale. su -c n'est pas vraiment "
-"utilisable ici parce qu'il nécessite de placer des guillemets autour, "
-"contrairement aux autres."
+"correspondant à votre politique locale. su -c n'est pas vraiment utilisable "
+"ici parce qu'il nécessite de placer des guillemets autour, contrairement aux "
+"autres."
 
 #. type: TP
 #: ../scripts/cowpoke.1:154
@@ -3971,10 +3971,9 @@ msgstr ""
 "construction finie, et le résultat se trouvera dans le journal de "
 "construction. Les fichiers du répertoire doivent être lisibles par "
 "B<BUILDD_USER> pour les vérifications par B<lintian>(1) et B<debdiff>(1) "
-"ainsi que pour les envois par B<dput>(1). "
-"Si cette option n'est pas définie pour certaines combinaisons "
-"d'architectures et de distributions, alors le chemin par défaut sera I<"
-"$PBUILDER_BASE/$arch/$dist/result>"
+"ainsi que pour les envois par B<dput>(1). Si cette option n'est pas définie "
+"pour certaines combinaisons d'architectures et de distributions, alors le "
+"chemin par défaut sera I<$PBUILDER_BASE/$arch/$dist/result>"
 
 #. type: TP
 #: ../scripts/cowpoke.1:176
@@ -4118,8 +4117,8 @@ msgid ""
 msgstr ""
 "L'utilisateur qui exécute B<cowpoke> doit avoir un accès ssh à la machine de "
 "construction en tant que B<BUILDD_USER>. Cet utilisateur doit pouvoir "
-"exécuter cowbuilder est tant que root en utilisant B<BUILDD_ROOTCMD>. Les clés "
-"pour les signatures n'ont pas nécessairement à être installées sur la "
+"exécuter cowbuilder est tant que root en utilisant B<BUILDD_ROOTCMD>. Les "
+"clés pour les signatures n'ont pas nécessairement à être installées sur la "
 "machine de construction (et elles seront ignorées si elles le sont). Si un "
 "paquet est signé, les clés seront nécessaires sur la machine qui exécute "
 "B<cowpoke>."
@@ -4870,9 +4869,7 @@ msgstr "B<--archudeb>"
 #. type: Plain text
 #: ../scripts/dcmd.1:44
 msgid "Select architecture-dependent udeb binary packages."
-msgstr ""
-"Sélectionner les paquets udeb binaires dépendant d'une "
-"architecture."
+msgstr "Sélectionner les paquets udeb binaires dépendant d'une architecture."
 
 #. type: TP
 #: ../scripts/dcmd.1:44
@@ -4883,9 +4880,7 @@ msgstr "B<--indepudeb>"
 #. type: Plain text
 #: ../scripts/dcmd.1:47
 msgid "Select architecture-independent udeb binary packages."
-msgstr ""
-"Sélectionner les paquets udeb binaires indépendant d'une "
-"architecture."
+msgstr "Sélectionner les paquets udeb binaires indépendant d'une architecture."
 
 #. type: TP
 #: ../scripts/dcmd.1:47
@@ -4897,8 +4892,7 @@ msgstr "B<--udeb>"
 #: ../scripts/dcmd.1:50
 msgid "Select udeb binary packages. Implies --archudeb and --indepudeb."
 msgstr ""
-"Sélectionner les paquets udeb binaires. Implique --archudeb et --"
-"indepudeb."
+"Sélectionner les paquets udeb binaires. Implique --archudeb et --indepudeb."
 
 #. type: TP
 #: ../scripts/dcmd.1:50
@@ -6146,10 +6140,9 @@ msgid ""
 "Otherwise, the original changelog will not be modified. (default)"
 msgstr ""
 "Quand l'option --release est utilisée et qu'un éditeur a été ouvert pour "
-"permettre de vérifier le journal des modifications, "
-"l'utilisateur doit enregistrer le journal de modifications ouvert par "
-"l'éditeur. Sinon, le journal d'origine ne sera pas modifié. "
-"(option par défaut)"
+"permettre de vérifier le journal des modifications, l'utilisateur doit "
+"enregistrer le journal de modifications ouvert par l'éditeur. Sinon, le "
+"journal d'origine ne sera pas modifié. (option par défaut)"
 
 #. type: TP
 #: ../scripts/debchange.1:179
@@ -6227,8 +6220,8 @@ msgid ""
 "only be used in conjunction with the B<--create> and B<--increment> options."
 msgstr ""
 "Spécifie le nom du paquet qui devra être utilisé dans le nouveau journal des "
-"modifications ; doit être utilisé seulement en conjonction avec les "
-"options B<--create> et B<--increment>."
+"modifications ; doit être utilisé seulement en conjonction avec les options "
+"B<--create> et B<--increment>."
 
 #. type: TP
 #: ../scripts/debchange.1:209
@@ -8249,9 +8242,9 @@ msgid ""
 "source directory to compare their contents along with the other files.  This "
 "is the default behaviour."
 msgstr ""
-"Lors de la comparaison des paquets source, ouvrir également les archives "
-"tar trouvées dans la racine des sources pour comparer leurs contenus en "
-"même temps que les autres fichiers. Il s'agit du comportement par défaut."
+"Lors de la comparaison des paquets source, ouvrir également les archives tar "
+"trouvées dans la racine des sources pour comparer leurs contenus en même "
+"temps que les autres fichiers. Il s'agit du comportement par défaut."
 
 #. type: TP
 #: ../scripts/debdiff.1:148
@@ -8436,8 +8429,8 @@ msgid ""
 "If this is set to I<no>, then it is the same as the B<--no-unpack-tarballs> "
 "command line parameter being used."
 msgstr ""
-"Si elle est positionnée à I<no>, alors c'est comme si l'option B<--no-"
-"unpack-tarballs> était utilisée."
+"Si elle est positionnée à I<no>, alors c'est comme si l'option B<--no-unpack-"
+"tarballs> était utilisée."
 
 #. type: Plain text
 #: ../scripts/debdiff.1:215
@@ -12547,8 +12540,8 @@ msgid ""
 "Get information from E<lt>http://release.debian.org/migration/E<gt>.  A "
 "package name must be given when using this option."
 msgstr ""
-"Récupérer les informations de E<lt>http://release.debian.org/migration/E<gt>. "
-"Un nom de paquet doit être fourni quand on utilise cette option."
+"Récupérer les informations de E<lt>http://release.debian.org/migration/"
+"E<gt>. Un nom de paquet doit être fourni quand on utilise cette option."
 
 #. type: Plain text
 #: ../scripts/grep-excuses.1:25 ../scripts/whodepends.1:14
@@ -14988,10 +14981,10 @@ msgid ""
 "closed if the package were uploaded. Each bug is then marked as pending, "
 "using B<bts>(1) if it is not already so."
 msgstr ""
-"B<tagpending> analyse les fichiers debian/changelog afin "
-"de trouver quels bogues seront fermés si le paquet était envoyé. Chaque "
-"bogue est ensuite marqué avec une étiquette « pending », en utilisant B<bts>"
-"(1), si elle n'est pas déjà présente."
+"B<tagpending> analyse les fichiers debian/changelog afin de trouver quels "
+"bogues seront fermés si le paquet était envoyé. Chaque bogue est ensuite "
+"marqué avec une étiquette « pending », en utilisant B<bts>(1), si elle n'est "
+"pas déjà présente."
 
 #. type: =item
 #: ../scripts/tagpending.pl:98
@@ -15822,9 +15815,9 @@ msgstr ""
 "Ceci permet de modifier le numéro de version amont qui correspond à une "
 "règle ftp://... ou http://... de la façon suivante. Dans un premier temps, "
 "les I<règles> sont découpées en plusieurs règles en utilisant « ; » comme "
-"séparateur. Puis les numéros de version amont sont modifiés en appliquant "
-"la I<règle> à la version, de façon similaire à l'exécution de la "
-"commande Perl suivante :"
+"séparateur. Puis les numéros de version amont sont modifiés en appliquant la "
+"I<règle> à la version, de façon similaire à l'exécution de la commande Perl "
+"suivante :"
 
 #. type: Plain text
 #: ../scripts/uscan.1:239
@@ -15853,11 +15846,11 @@ msgid ""
 "may not contain any expressions which have the potential to execute code (i."
 "e. the (?{}) and (??{}) constructs are not supported)."
 msgstr ""
-"I<règle> ne peut utiliser que les opérations « s », « tr » et « y ». "
-"Quand l'opération « s » est utilisée, seuls les drapeaux « g », « i » et "
-"« x » peuvent être utilisés et I<règle> ne peut contenir d'expression "
-"pouvant exécuter du code (c'est-à-dire que les constructions de la forme "
-"(?{}) ou (??{}) ne sont pas prises en charge)."
+"I<règle> ne peut utiliser que les opérations « s », « tr » et « y ». Quand "
+"l'opération « s » est utilisée, seuls les drapeaux « g », « i » et « x » peuvent "
+"être utilisés et I<règle> ne peut contenir d'expression pouvant exécuter du "
+"code (c'est-à-dire que les constructions de la forme (?{}) ou (??{}) ne sont "
+"pas prises en charge)."
 
 #. type: TP
 #: ../scripts/uscan.1:249
@@ -16168,14 +16161,14 @@ msgid ""
 "be installed in order to repack .zip archives, and the lzma package must be "
 "installed to repack lzma tar archives."
 msgstr ""
-"Après avoir téléchargé une archive tar compressée avec lzma ou bzip ou une archive "
-"zip, la rempaqueter dans une archive tar compressée avec gzip, ce qui est "
-"toujours nécessaire pour les paquets source Debian. Ne rien faire si "
-"l'archive téléchargée n'est ni une archive tar compressée avec lzma ou bzip ni une "
-"archive zip (c'est-à-dire si elle ne finie pas par l'extension .tlzma, tar.lzma, .tbz, .tbz2, ."
-"tar.bz2 ou .zip). Le paquet unzip doit être installé pour rempaqueter les "
-"archives .zip et le paquet lzma doit être installé pour rempaqueter les "
-"archives tar compressées avec lzma."
+"Après avoir téléchargé une archive tar compressée avec lzma ou bzip ou une "
+"archive zip, la rempaqueter dans une archive tar compressée avec gzip, ce "
+"qui est toujours nécessaire pour les paquets source Debian. Ne rien faire si "
+"l'archive téléchargée n'est ni une archive tar compressée avec lzma ou bzip "
+"ni une archive zip (c'est-à-dire si elle ne finie pas par l'extension ."
+"tlzma, tar.lzma, .tbz, .tbz2, .tar.bz2 ou .zip). Le paquet unzip doit être "
+"installé pour rempaqueter les archives .zip et le paquet lzma doit être "
+"installé pour rempaqueter les archives tar compressées avec lzma."
 
 #. type: TP
 #: ../scripts/uscan.1:380 ../scripts/uupdate.1:74
@@ -16504,8 +16497,8 @@ msgid ""
 "to the B<--repack> option."
 msgstr ""
 "Si elle est positionnée à I<yes>, alors après avoir téléchargé une archive "
-"tar compressée avec bzip ou lzma ou une archive zip, B<uscan> recréera une archive tar "
-"compressée avec gzip. C'est équivalent à l'option B<--repack>."
+"tar compressée avec bzip ou lzma ou une archive zip, B<uscan> recréera une "
+"archive tar compressée avec gzip. C'est équivalent à l'option B<--repack>."
 
 #. type: Plain text
 #: ../scripts/uscan.1:501
@@ -17644,7 +17637,8 @@ msgstr ""
 #~ "\n"
 #~ msgstr ""
 #~ "Par défaut, ils proviennent de la fin du script lui-même. \n"
-#~ "Un utilisateur peut indiquer ses propres motifs dans un fichier ~/.namecheckrc.\n"
+#~ "Un utilisateur peut indiquer ses propres motifs dans un fichier ~/."
+#~ "namecheckrc.\n"
 #~ "\n"
 
 #~ msgid ""
