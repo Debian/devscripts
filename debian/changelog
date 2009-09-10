@@ -15,6 +15,8 @@ devscripts (2.10.55) UNRELEASED; urgency=low
     + Update French manpage translations
     + Fix addendum format for dcontrol in po4a/devscripts-po4a.conf
     + Use --previous when invoking po4a
+  * debian/control: Bump version of po4a build-dependency to 0.31 to ensure
+    support for --previous.
 
  -- Ryan Niebur <ryanryan52@gmail.com>  Fri, 04 Sep 2009 21:20:22 -0700
 
