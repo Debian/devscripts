@@ -1173,7 +1173,7 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
 	    }
 	}
 	elsif (/  \* Upload to ([^ ]+).*$/) {
-	    ($dist_indicator = $1) =~ s/[,;]$//;
+	    ($dist_indicator = $1) =~ s/[!:.,;]$//;
 	    chomp $dist_indicator;
 	}
 	elsif (/^ --\s+([^<]+)\s+/) {
