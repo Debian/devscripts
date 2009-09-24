@@ -1,6 +1,12 @@
 devscripts (2.10.56) UNRELEASED; urgency=low
 
+  [ Adam D. Barratt ]
   * NOT RELEASED YET
+
+  [ James Vega ]
+  * mk-build-deps: Use Pod::Usage to generate the --help message.  This keeps
+    the message in sync with the POD instead of keeping two different texts in
+    sync.  (Closes: #548245)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Fri, 11 Sep 2009 10:06:33 +0100
 

@@ -29,7 +29,7 @@ mk-build-deps - build a package satisfying a package's build-dependencies
 
 B<mk-build-deps> --help|--version
 
-B<mk-build-deps> [-i|--install] <control file | package name> [...]
+B<mk-build-deps> [options] <control file | package name> [...]
 
 =head1 DESCRIPTION
 
@@ -80,6 +80,7 @@ use strict;
 use warnings;
 use Getopt::Long;
 use File::Basename;
+use Pod::Usage;
 
 my $progname = basename($0);
 my $opt_install;
@@ -128,9 +129,9 @@ GetOptions("help|h" => \$opt_help,
            "remove|r" => \$opt_remove,
            "tool|t=s" => \$install_tool,
            )
-    or die "Usage: $progname <control file | package name> [...]\nRun $progname --help for more details\n";
+    or pod2usage({ -exitval => 1, -verbose => 0 });
 
-if ($opt_help) { help(); exit 0; }
+pod2usage({ -exitval => 0, -verbose => 1 }) if ($opt_help);
 if ($opt_version) { version(); exit 0; }
 
 if (!@ARGV) {
@@ -139,7 +140,7 @@ if (!@ARGV) {
     }
 }
 
-die "Usage: $progname <control file | package name> [...]\nRun $progname --help for more details\n" unless @ARGV;
+pod2usage({ -exitval => 1, -verbose => 0 }) unless @ARGV;
 
 system("command -v equivs-build >/dev/null 2>&1");
 if ($?) {
@@ -216,15 +217,6 @@ if ($opt_install) {
 	    unlink $file;
 	}
     }
-}
-
-sub help {
-   print <<"EOF";
-Usage: $progname <control file> | <package name> [...]
-Valid options are:
-   --help, -h             Display this message
-   --version, -v          Display version and copyright info
-EOF
 }
 
 sub version {
