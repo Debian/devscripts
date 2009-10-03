@@ -161,6 +161,7 @@ while ($control = shift) {
     }
 
     while (<CONTROL>) {
+	next if /^#|^\s*$/;
 	if (/^(?:Package|Source):\s*(\S+)/ && !$name) {
 	    $name = $1;
 	}

@@ -4,9 +4,12 @@ devscripts (2.10.56) UNRELEASED; urgency=low
   * NOT RELEASED YET
 
   [ James Vega ]
-  * mk-build-deps: Use Pod::Usage to generate the --help message.  This keeps
-    the message in sync with the POD instead of keeping two different texts in
-    sync.  (Closes: #548245)
+  * mk-build-deps:
+    + Use Pod::Usage to generate the --help message.  This keeps the message
+      in sync with the POD instead of keeping two different texts in sync.
+      (Closes: #548245)
+    + Skip comment/blank lines when parsing the control file.  (Closes:
+      #549402)
   * debchange:
     + Based on a scan of the lintian lab, add '.', '!', and ':' to the set of
       punctuation characters we strip from the distribution name when we parse
