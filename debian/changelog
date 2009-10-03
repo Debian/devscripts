@@ -7,9 +7,11 @@ devscripts (2.10.56) UNRELEASED; urgency=low
   * mk-build-deps: Use Pod::Usage to generate the --help message.  This keeps
     the message in sync with the POD instead of keeping two different texts in
     sync.  (Closes: #548245)
-  * debchange: Based on a scan of the lintian lab, add '.', '!', and ':' to
-    the set of punctuation characters we strip from the distribution name when
-    we parse an "Upload to ..." line.  (Closes: #548171)
+  * debchange:
+    + Based on a scan of the lintian lab, add '.', '!', and ':' to the set of
+      punctuation characters we strip from the distribution name when we parse
+      an "Upload to ..." line.  (Closes: #548171)
+    + Consistently use “--nomainttrailer” in the manpage.  (Closes: #544351)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Fri, 11 Sep 2009 10:06:33 +0100
 
