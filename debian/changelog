@@ -19,8 +19,11 @@ devscripts (2.10.56) UNRELEASED; urgency=low
   [ Ryan Niebur ]
   * add w3m to suggests for grep-excuses -w, check for it at runtime too
     (Closes: #551516)
+  * mk-build-deps: allow passing options to the command in
+    MKBUILDDEPS_TOOL. Setting MKBUILDDEPS_TOOL="aptitude --schedule-
+    only" in ~/.devscripts should work now. (Closes: #547164)
 
- -- Ryan Niebur <ryan@debian.org>  Sun, 18 Oct 2009 14:14:25 -0700
+ -- Ryan Niebur <ryan@debian.org>  Sun, 18 Oct 2009 14:31:42 -0700
 
 devscripts (2.10.55) unstable; urgency=high
 

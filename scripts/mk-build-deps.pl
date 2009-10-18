@@ -204,6 +204,8 @@ while ($control = shift) {
 
 }
 
+use Text::ParseWords;
+
 if ($opt_install) {
     for my $package (@packages) {
 	my $file = glob "${package}-build-deps_*.deb";
@@ -211,7 +213,7 @@ if ($opt_install) {
     }
 
     system 'dpkg', '--unpack', @deb_files;
-    system $install_tool, '-f', 'install';
+    system shellwords($install_tool), '-f', 'install';
 
     if ($opt_remove) {
 	foreach my $file (@deb_files) {
