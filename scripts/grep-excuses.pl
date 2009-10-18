@@ -88,6 +88,10 @@ die "$progname: Couldn't run wipnity: $term_size_broken\n" unless have_term_size
 
 my $columns = Term::Size::chars();
 
+if (system("command -v w3m >/dev/null 2>&1") != 0) {
+    die "$progname: wipnity mode requires the w3m package to be installed\n";
+}
+
 while( my $package=shift ) {
     my $dump = `w3m -dump -cols $columns "http://release.debian.org/migration/testing.pl?package=$package"`;
     $dump =~ s/^.*?(?=Checking)//s;

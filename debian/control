@@ -24,7 +24,7 @@ Recommends: at, curl | wget, dctrl-tools, debian-keyring, debian-maintainers,
  sensible-utils
 Suggests: build-essential, cvs-buildpackage, devscripts-el, gnuplot,
  libfile-desktopentry-perl, libnet-smtp-ssl-perl (>= 1.01-2), mutt,
- svn-buildpackage
+ svn-buildpackage, w3m
 Description: scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
  brackets afterwards:
@@ -92,7 +92,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
     .changes or .dsc files [gnupg, debian-keyring, libdigest-md5-perl]
   - getbuildlog: download package build logs from Debian auto-builders [wget]
   - grep-excuses: grep the update_excuses.html file for your packages
-    [libterm-size-perl, wget]
+    [libterm-size-perl, wget, w3m]
   - licensecheck: attempt to determine the license of source files
   - list-unreleased: searches for unreleased packages
   - manpage-alert: locate binaries without corresponding manpages [man-db]
