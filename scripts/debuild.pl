@@ -786,6 +786,8 @@ if ($command_version eq 'dpkg') {
     my $targetarch='';
     my $targetgnusystem='';
     my $changedby='';
+    my $compression='';
+    my $comp_level='';
 
     # and one for us
     my @debsign_opts = ();
@@ -811,6 +813,8 @@ if ($command_version eq 'dpkg') {
 	/^-s[iad]$/ and $sourcestyle=$_, push(@dpkg_opts, $_), next;
 	/^-i/ and $diffignore=$_, push(@dpkg_opts, $_), next;
 	/^-I/ and push(@tarignore, $_), push(@dpkg_opts, $_), next;
+	/^-Z/ and $compression=$_, push(@passopts, $_), next;
+	/^-z/ and $comp_level=$_, push(@passopts, $_), next;
 	$_ eq '-tc' and $cleansource=1, push(@dpkg_opts, $_), next;
 	/^-t(.*)/ and $targetgnusystem=$1, push(@dpkg_opts, $_), next; # Ditto	
 	$_ eq '-nc' and $noclean=1, $binaryonly ||= '-b', push(@dpkg_opts, $_),
@@ -859,6 +863,8 @@ if ($command_version eq 'dpkg') {
 	/^-s[iad]$/ and $sourcestyle=$_, push(@dpkg_opts, $_), next;
 	/^-i/ and $diffignore=$_, push(@dpkg_opts, $_), next;
 	/^-I/ and push(@tarignore, $_), push(@dpkg_opts, $_), next;
+	/^-Z/ and $compression=$_, push(@passopts, $_), next;
+	/^-z/ and $comp_level=$_, push(@passopts, $_), next;
 	$_ eq '-tc' and $cleansource=1, push(@dpkg_opts, $_), next;
 	/^-t(.*)/ and $targetgnusystem=$1, $checkbuilddep=0, next;
 	$_ eq '-nc' and $noclean=1, $binaryonly ||= '-b', push(@dpkg_opts, $_),
@@ -1111,7 +1117,7 @@ if ($command_version eq 'dpkg') {
 	    push @cmd, @tarignore;
 	    push @cmd, "-b", $dirn;
 	    chdir '..' or fatal "can't chdir ..: $!";
-	    system_withecho(@cmd);	
+	    system_withecho(@cmd);
 	    chdir $dirn or fatal "can't chdir $dirn: $!";
 	}
 
@@ -1215,7 +1221,7 @@ if ($command_version eq 'dpkg') {
     } # end of debuild dpkg-buildpackage emulation
 
     run_hook('lintian', $run_lintian && $lintian_exists);
-    
+
     if ($run_lintian && $lintian_exists) {
 	$<=$>=$uid;  # Give up on root privileges if we can
 	$(=$)=$gid;

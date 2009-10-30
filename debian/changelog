@@ -15,6 +15,7 @@ devscripts (2.10.56) UNRELEASED; urgency=low
       punctuation characters we strip from the distribution name when we parse
       an "Upload to ..." line.  (Closes: #548171)
     + Consistently use “--nomainttrailer” in the manpage.  (Closes: #544351)
+  * debuild: Recognize dpkg-source's -z/-Z options.  (Closes: #553205)
 
   [ Ryan Niebur ]
   * add w3m to suggests for grep-excuses -w, check for it at runtime too
