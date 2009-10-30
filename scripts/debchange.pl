@@ -406,8 +406,8 @@ if (defined $opt_D) {
 	    $warnings++ if not $opt_force_dist;
 	}
     } elsif ($distributor eq 'Ubuntu') {
-	unless ($opt_D =~ /^((dapper|gutsy|hardy|intrepid|jaunty|karmic)(-updates|-security|-proposed|-backports)?|UNRELEASED)$/) {
-	    warn "$progname warning: Recognised distributions are:\n{dapper,gutsy,hardy,intrepid,jaunty,karmic}{,-updates,-security,-proposed,-backports} and UNRELEASED.\nUsing your request anyway.\n";
+	unless ($opt_D =~ /^((dapper|hardy|intrepid|jaunty|karmic|lucid)(-updates|-security|-proposed|-backports)?|UNRELEASED)$/) {
+	    warn "$progname warning: Recognised distributions are:\n{dapper,hardy,intrepid,jaunty,karmic,lucid}{,-updates,-security,-proposed,-backports} and UNRELEASED.\nUsing your request anyway.\n";
 	    $warnings++ if not $opt_force_dist;
 	}
     } else {
