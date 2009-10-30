@@ -813,8 +813,8 @@ if ($command_version eq 'dpkg') {
 	/^-s[iad]$/ and $sourcestyle=$_, push(@dpkg_opts, $_), next;
 	/^-i/ and $diffignore=$_, push(@dpkg_opts, $_), next;
 	/^-I/ and push(@tarignore, $_), push(@dpkg_opts, $_), next;
-	/^-Z/ and $compression=$_, push(@passopts, $_), next;
-	/^-z/ and $comp_level=$_, push(@passopts, $_), next;
+	/^-Z/ and $compression=$_, push(@dpkg_opts, $_), next;
+	/^-z/ and $comp_level=$_, push(@dpkg_opts, $_), next;
 	$_ eq '-tc' and $cleansource=1, push(@dpkg_opts, $_), next;
 	/^-t(.*)/ and $targetgnusystem=$1, push(@dpkg_opts, $_), next; # Ditto	
 	$_ eq '-nc' and $noclean=1, $binaryonly ||= '-b', push(@dpkg_opts, $_),
@@ -863,8 +863,8 @@ if ($command_version eq 'dpkg') {
 	/^-s[iad]$/ and $sourcestyle=$_, push(@dpkg_opts, $_), next;
 	/^-i/ and $diffignore=$_, push(@dpkg_opts, $_), next;
 	/^-I/ and push(@tarignore, $_), push(@dpkg_opts, $_), next;
-	/^-Z/ and $compression=$_, push(@passopts, $_), next;
-	/^-z/ and $comp_level=$_, push(@passopts, $_), next;
+	/^-Z/ and $compression=$_, push(@dpkg_opts, $_), next;
+	/^-z/ and $comp_level=$_, push(@dpkg_opts, $_), next;
 	$_ eq '-tc' and $cleansource=1, push(@dpkg_opts, $_), next;
 	/^-t(.*)/ and $targetgnusystem=$1, $checkbuilddep=0, next;
 	$_ eq '-nc' and $noclean=1, $binaryonly ||= '-b', push(@dpkg_opts, $_),
@@ -1114,6 +1114,8 @@ if ($command_version eq 'dpkg') {
 	    my @cmd = (qw(dpkg-source));
 	    push @cmd, @passopts;
 	    push @cmd, $diffignore if $diffignore;
+	    push @cmd, $compress if $compress;
+	    push @cmd, $comp_level if $comp_level;
 	    push @cmd, @tarignore;
 	    push @cmd, "-b", $dirn;
 	    chdir '..' or fatal "can't chdir ..: $!";
