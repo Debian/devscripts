@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #
 # debcheckout: checkout the development repository of a Debian package
-# Copyright (C) 2007-2008  Stefano Zacchiroli <zack@debian.org>
+# Copyright (C) 2007-2009  Stefano Zacchiroli <zack@debian.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -914,6 +914,10 @@ EOF
 	    $rc = $? >> 8;
 	    print STDERR "TopGit population failed\n" if $rc != 0;
 	}
+	system("cd $wcdir && git config user.name \"$ENV{'DEBFULLNAME'}\"")
+	    if (defined($ENV{'DEBFULLNAME'}));
+	system("cd $wcdir && git config user.email \"$ENV{'DEBEMAIL'}\"")
+	    if (defined($ENV{'DEBEMAIL'}));
 	if (length $git_track) {
 	    my @heads;
 	    if ($git_track eq '*') {
