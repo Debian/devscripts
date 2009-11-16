@@ -31,7 +31,12 @@ devscripts (2.10.56) UNRELEASED; urgency=low
     + make trailing whitespace consistent with how 'normal'
       .changes file are
 
- -- Ryan Niebur <ryan@debian.org>  Sun, 18 Oct 2009 14:31:42 -0700
+  [ Patrick Schoenfeld ]
+  * debchange:
+    + Include patch from Mathieu Parent to allow --newversion to be mixed
+      together with --package. (Closes: #549469)
+
+ -- Patrick Schoenfeld <schoenfeld@debian.org>  Mon, 16 Nov 2009 16:08:05 +0100
 
 devscripts (2.10.55) unstable; urgency=high
 

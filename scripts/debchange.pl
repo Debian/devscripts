@@ -419,8 +419,8 @@ fatal "--closes should not be used with --news; put bug numbers in the changelog
     if $opt_news && @closes;
 
 # hm, this can probably be used with more than just -i.
-fatal "--package can only be used with --create and --increment"
-    if $opt_package && ! ($opt_create || $opt_i);
+fatal "--package can only be used with --create, --increment and --newversion"
+    if $opt_package && ! ($opt_create || $opt_i || $opt_v);
 
 my $changelog_path = $opt_c || $ENV{'CHANGELOG'} || 'debian/changelog';
 my $real_changelog_path = $changelog_path;
