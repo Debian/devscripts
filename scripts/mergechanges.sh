@@ -86,7 +86,7 @@ done
 
 # Extract the Architecture: field from all .changes files,
 # and merge them, sorting out duplicates
-ARCHS=$(grep -h "^Architecture: " "$@" | sed -e "s,^Architecture: ,," | tr ' ' '\n' | sort -u | tr '\n' ' ')
+ARCHS=$(grep -h "^Architecture: " "$@" | sed -e "s,^Architecture: ,," | tr ' ' '\n' | sort -u | tr '\n' ' ' | sed 's/ $//')
 
 checksum_uniq() {
     awk '{if(arr[$NF] != 1){arr[$NF] = 1; print;}}'
@@ -178,7 +178,7 @@ DESCFILE=`tempfile`
 trap "rm -f '${OUTPUT}' '${DESCFILE}'" 0 1 2 3 7 10 13 15
 
 if test $(echo "${DESCRIPTIONS}" | wc -l) -ne 0; then
-    echo "Description:" > "${DESCFILE}"
+    echo "Description: " > "${DESCFILE}"
     echo "${DESCRIPTIONS}" >> "${DESCFILE}"
 fi
 
@@ -194,7 +194,7 @@ fi
 eval "sed -e 's,^Architecture: .*,Architecture: ${ARCHS},' \
     -e '/^Files: /,$ d; /^Checksums-.*: /,$ d' \
     -e '/^Description:/,/^[^ ]/{/^Description:/d;/^[ ]/d}' \
-    -e '/^Changes:/{r '${DESCFILE} -e ';aChanges:' -e ';d}' \
+    -e '/^Changes:/{r '${DESCFILE} -e ';aChanges: ' -e ';d}' \
     -e 's,^Format: .*,Format: ${FORMATS},' \
     ${OUTPUT} ${REDIR1}"
 

@@ -24,9 +24,12 @@ devscripts (2.10.56) UNRELEASED; urgency=low
   * mk-build-deps: allow passing options to the command in
     MKBUILDDEPS_TOOL. Setting MKBUILDDEPS_TOOL="aptitude --schedule-
     only" in ~/.devscripts should work now. (Closes: #547164)
-  * mergechanges: if both input files have the same file listed but with
-    different checksums, keep the first and get rid of the one from the
-    second.
+  * mergechanges:
+    + if both input files have the same file listed but with
+      different checksums, keep the first and get rid of the one from the
+      second.
+    + make trailing whitespace consistent with how 'normal'
+      .changes file are
 
  -- Ryan Niebur <ryan@debian.org>  Sun, 18 Oct 2009 14:31:42 -0700
 
