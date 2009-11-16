@@ -88,6 +88,10 @@ done
 # and merge them, sorting out duplicates
 ARCHS=$(grep -h "^Architecture: " "$@" | sed -e "s,^Architecture: ,," | tr ' ' '\n' | sort -u | tr '\n' ' ')
 
+checksum_uniq() {
+    awk '{if(arr[$NF] != 1){arr[$NF] = 1; print;}}'
+}
+
 # Extract & merge the Version: field from all files..
 # Don't catch Version: GnuPG lines, though!
 VERSION=$(grep -h "^Version: [0-9]" "$@" | sed -e "s,^Version: ,," | sort -u)
@@ -95,11 +99,11 @@ SVERSION=$(echo "$VERSION" | perl -pe 's/^\d+://')
 # Extract & merge the sources from all files
 SOURCE=$(grep -h "^Source: " "$@" | sed -e "s,^Source: ,," | sort -u)
 # Extract & merge the files from all files
-FILES=$(egrep -h "^ [0-9a-f]{32} [0-9]+" "$@" | sort -u)
+FILES=$(egrep -h "^ [0-9a-f]{32} [0-9]+" "$@" | checksum_uniq)
 # Extract & merge the sha1 checksums from all files
-SHA1S=$(egrep -h "^ [0-9a-f]{40} [0-9]+" "$@" | sort -u)
+SHA1S=$(egrep -h "^ [0-9a-f]{40} [0-9]+" "$@" | checksum_uniq)
 # Extract & merge the sha256 checksums from all files
-SHA256S=$(egrep -h "^ [0-9a-f]{64} [0-9]+" "$@" | sort -u)
+SHA256S=$(egrep -h "^ [0-9a-f]{64} [0-9]+" "$@" | checksum_uniq)
 # Extract & merge the description from all files
 DESCRIPTIONS=$(sed '/^Description:/,/^[^ ]/{/^ /p;d};d' "$@" | sort -u)
 # Extract & merge the Formats from all files
