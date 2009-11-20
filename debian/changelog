@@ -16,7 +16,10 @@ devscripts (2.10.56) UNRELEASED; urgency=low
       punctuation characters we strip from the distribution name when we parse
       an "Upload to ..." line.  (Closes: #548171)
     + Consistently use “--nomainttrailer” in the manpage.  (Closes: #544351)
-  * debuild: Recognize dpkg-source's -z/-Z options.  (Closes: #553205)
+  * debuild:
+    + Recognize dpkg-source's -z/-Z options.  (Closes: #553205)
+    + Remove references to pbuilder-satisfydepends.  Suggest mk-build-deps
+      instead.  (Closes: #446318)
   * debcommit:
     + Handle the split up of Dpkg::Changelog in Dpkg 1.15.5.2.
     + Use Dpkg::Changelog::Parse, if available, instead of shelling out to

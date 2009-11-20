@@ -1083,15 +1083,13 @@ if ($command_version eq 'dpkg') {
 		system('dpkg-checkbuilddeps');
 	    }
 	    if ($?>>8) {
-		# Horrible non-Perlish formatting here, but emacs formatting
-		# dies miserably if this paragraph is done as a here-document.
-		# And even the documented hack doesn't work here :(
-		fatal "You do not appear to have all build dependencies properly met, aborting.\n" .
-		    "(Use -d flag to override.)\n" .
-		    "If you have the pbuilder package installed you can run\n" .
-		    "/usr/lib/pbuilder/pbuilder-satisfydepends as root to install the\n" .
-		    "required packages, or you can do it manually using dpkg or apt using\n" .
-		    "the error messages just above this message.\n";
+		fatal <<"EOT";
+You do not appear to have all build dependencies properly met, aborting.
+(Use -d flag to override.)
+You can use mk-build-deps to generate a dummy package which Depends on all the
+required packages, or you can install them manually using dpkg or apt using
+the error messages just above this message.
+EOT
 	    }
 	}
 
@@ -1296,10 +1294,10 @@ else {
 	if ($?>>8) {
 	    fatal <<"EOT";
 You do not appear to have all build dependencies properly met.
-If you have the pbuilder package installed, you can run
-/usr/lib/pbuilder/pbuilder-satisfydepends as root to install the
-required packages, or you can do it manually using dpkg or apt using
-the error messages just above this message.
+You can use mk-build-deps to generate a dummy package which
+Depends on all the required packages, or you can install them
+manually using dpkg or apt using the error messages just above
+this message.
 EOT
 	}
     }
