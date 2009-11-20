@@ -1112,7 +1112,7 @@ EOT
 	    my @cmd = (qw(dpkg-source));
 	    push @cmd, @passopts;
 	    push @cmd, $diffignore if $diffignore;
-	    push @cmd, $compress if $compress;
+	    push @cmd, $compression if $compression;
 	    push @cmd, $comp_level if $comp_level;
 	    push @cmd, @tarignore;
 	    push @cmd, "-b", $dirn;
