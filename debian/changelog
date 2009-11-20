@@ -17,6 +17,10 @@ devscripts (2.10.56) UNRELEASED; urgency=low
       an "Upload to ..." line.  (Closes: #548171)
     + Consistently use “--nomainttrailer” in the manpage.  (Closes: #544351)
   * debuild: Recognize dpkg-source's -z/-Z options.  (Closes: #553205)
+  * debcommit:
+    + Handle the split up of Dpkg::Changelog in Dpkg 1.15.5.2.
+    + Use Dpkg::Changelog::Parse, if available, instead of shelling out to
+      dpkg-parsechangelog.
 
   [ Ryan Niebur ]
   * add w3m to suggests for grep-excuses -w, check for it at runtime too

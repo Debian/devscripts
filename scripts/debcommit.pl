@@ -334,15 +334,28 @@ if (! -e $changelog) {
 $message=getmessage() if ! defined $message and (not $release or $release_use_changelog);
 
 if ($release) {
-    open (C, "<$changelog" ) || die "debcommit: cannot read $changelog: $!";
-    my $top=<C>;
-    if ($top=~/UNRELEASED/) {
-	die "debcommit: $changelog says it's UNRELEASED\nTry running dch --release first\n";
+    eval {
+	require Dpkg::Changelog::Parse;
+    };
+    if (not $@) {
+	# dpkg >= 1.15.5.2
+	my $log = Dpkg::Changelog::Parse::changelog_parse(file => $changelog);
+	if ($log->{Distribution} =~ /UNRELEASED/) {
+	    die "debcommit: $changelog says it's UNRELEASED\nTry running dch --release first\n";
+	}
+	$version = $log->{Version};
     }
-    close C;
-    
-    $version=`dpkg-parsechangelog | grep '^Version:' | cut -f 2 -d ' '`;
-    chomp $version;
+    else {
+	open (C, "<$changelog" ) || die "debcommit: cannot read $changelog: $!";
+	my $top=<C>;
+	if ($top=~/UNRELEASED/) {
+	    die "debcommit: $changelog says it's UNRELEASED\nTry running dch --release first\n";
+	}
+	close C;
+
+	$version=`dpkg-parsechangelog | grep '^Version:' | cut -f 2 -d ' '`;
+	chomp $version;
+    }
 
     $message="releasing version $version" if ! defined $message;
 }
@@ -437,7 +450,16 @@ sub action {
 sub bzr_find_fixes {
     my $message=shift;
 
-    my $debian_closes = Dpkg::Changelog::find_closes($message);
+    my $debian_closes;
+    eval {
+	require Dpkg::Changelog::Entry::Debian;
+    };
+    if (not $@) {
+	# dpkg >= 1.15.5.2
+	$debian_closes = Dpkg::Changelog::Entry::Debian::find_closes($message);
+    } else {
+	$debian_closes = Dpkg::Changelog::find_closes($message);
+    }
     my $launchpad_closes = [];
     eval {
 	require Dpkg::Vendor::Ubuntu;
