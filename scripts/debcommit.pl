@@ -31,7 +31,7 @@ Commit a release of the package. The version number is determined from
 debian/changelog, and is used to tag the package in the repository.
 
 Note that svn/svk tagging conventions vary, so debcommit uses
-L<svnpath(1)> to determine where the tag should be placed in the
+svnpath(1) to determine where the tag should be placed in the
 repository.
 
 =item B<-R> B<--release-use-changelog>
@@ -807,6 +807,6 @@ Joey Hess <joeyh@debian.org>
 
 =head1 SEE ALSO
 
-L<svnpath(1)>.
+svnpath(1).
 
 =cut

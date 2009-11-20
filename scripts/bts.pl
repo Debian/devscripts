@@ -777,7 +777,7 @@ sub bts_show {
 =item bugs [release-critical | release-critical/... | RC]
 
 Display the page listing the requested bugs in a web browser using
-L<sensible-browser(1)>.
+sensible-browser(1).
 
 Options may be specified after the "bugs" command in addition to or
 instead of options at the start of the command line: recognised

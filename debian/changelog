@@ -24,6 +24,7 @@ devscripts (2.10.56) UNRELEASED; urgency=low
     + Handle the split up of Dpkg::Changelog in Dpkg 1.15.5.2.
     + Use Dpkg::Changelog::Parse, if available, instead of shelling out to
       dpkg-parsechangelog.
+    + Remove use of deprecated L<> markup for pod2man.
   * who-uploads: Set a 30 second timeout when invoking wget instead of using
     wget's default 900 second timeout.  (Closes: #541732)
   * debsign: Update the dcut reference to point to ftp.upload.debian.org
@@ -32,6 +33,7 @@ devscripts (2.10.56) UNRELEASED; urgency=low
     + Support using buildArea from .svn/deb-layout.  (Closes: #456226)
     + Change to the package root directory before verifying the existence of
       debsdir.
+  * bts: Remove use of deprecated L<> markup for pod2man.
 
   [ Ryan Niebur ]
   * add w3m to suggests for grep-excuses -w, check for it at runtime too
