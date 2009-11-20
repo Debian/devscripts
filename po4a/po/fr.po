@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2009-09-10 19:33+0200\n"
+"POT-Creation-Date: 2009-11-20 04:56+0000\n"
 "PO-Revision-Date: 2009-09-06 15:06+0200\n"
 "Last-Translator: Nicolas François <nicolas.francois@centraliens.net>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -311,7 +311,7 @@ msgstr ""
 #: ../scripts/dcmd.1:101 ../scripts/dcontrol.pl:283 ../scripts/dd-list.1:93
 #: ../scripts/debc.1:120 ../scripts/debchange.1:433
 #: ../scripts/debcheckout.pl:185 ../scripts/debclean.1:111
-#: ../scripts/debcommit.pl:782 ../scripts/debdiff.1:222 ../scripts/debi.1:126
+#: ../scripts/debcommit.pl:804 ../scripts/debdiff.1:222 ../scripts/debi.1:126
 #: ../scripts/debpkg.1:23 ../scripts/debrelease.1:137
 #: ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:71
 #: ../scripts/debsign.1:147 ../scripts/debuild.1:421
@@ -2910,7 +2910,7 @@ msgstr ""
 #: ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53
 #: ../scripts/dcmd.1:98 ../scripts/dcontrol.pl:290 ../scripts/debc.1:115
 #: ../scripts/debchange.1:426 ../scripts/debcheckout.pl:180
-#: ../scripts/debclean.1:107 ../scripts/debcommit.pl:786
+#: ../scripts/debclean.1:107 ../scripts/debcommit.pl:808
 #: ../scripts/debdiff.1:215 ../scripts/debi.1:122 ../scripts/debrelease.1:132
 #: ../scripts/deb-reversion.dbk:247 ../scripts/debrsign.1:66
 #: ../scripts/debsign.1:134 ../scripts/debsnap.1:118 ../scripts/debuild.1:408
@@ -6217,11 +6217,12 @@ msgstr "B<--package> I<paquet>"
 #: ../scripts/debchange.1:209
 msgid ""
 "This specifies the package name to be used in the new changelog; this may "
-"only be used in conjunction with the B<--create> and B<--increment> options."
+"only be used in conjunction with the B<--create>, B<--increment> and B<--"
+"newversion> options."
 msgstr ""
 "Spécifie le nom du paquet qui devra être utilisé dans le nouveau journal des "
 "modifications ; doit être utilisé seulement en conjonction avec les options "
-"B<--create> et B<--increment>."
+"B<--create>, B<--increment>, et B<--newversion>."
 
 #. type: TP
 #: ../scripts/debchange.1:209
@@ -6482,8 +6483,8 @@ msgstr ""
 #. type: TP
 #: ../scripts/debchange.1:282
 #, no-wrap
-msgid "B<--no-preserve>"
-msgstr "B<--no-preserve>"
+msgid " B<--no-preserve>, B<--nopreserve>"
+msgstr "B<--no-preserve>, B<--nopreserve>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:285
@@ -6759,11 +6760,11 @@ msgstr "B<DEBCHANGE_MAINTTRAILER>"
 #. type: Plain text
 #: ../scripts/debchange.1:394
 msgid ""
-"If this is set to I<no>, then it is the same as the B<--no-mainttrailer> "
+"If this is set to I<no>, then it is the same as the B<--nomainttrailer> "
 "command line parameter being used."
 msgstr ""
-"Si elle est positionnée à I<no>, alors c'est comme si l'option B<--no-"
-"mainttrailer> était utilisée."
+"Si elle est positionnée à I<no>, alors c'est comme si l'option B<--"
+"nomainttrailer> était utilisée."
 
 #. type: TP
 #: ../scripts/debchange.1:394
@@ -7808,12 +7809,12 @@ msgstr ""
 "pour associer la résision aux bogues."
 
 #. type: textblock
-#: ../scripts/debcommit.pl:784 ../scripts/mass-bug.pl:523
+#: ../scripts/debcommit.pl:806 ../scripts/mass-bug.pl:523
 msgid "Joey Hess <joeyh@debian.org>"
 msgstr "Joey Hess <joeyh@debian.org>"
 
 #. type: textblock
-#: ../scripts/debcommit.pl:788
+#: ../scripts/debcommit.pl:810
 msgid "L<svnpath(1)>."
 msgstr "L<svnpath(1)>."
 
@@ -9536,11 +9537,11 @@ msgstr ""
 #: ../scripts/debsign.1:25
 msgid ""
 "If a I<.commands> file is specified it is first validated (see the details "
-"at I<ftp://ftp-master.debian.org/pub/UploadQueue/README>), and the name "
+"at I<ftp://ftp.upload.debian.org/pub/UploadQueue/README>), and the name "
 "specified in the Uploader field is used for signing."
 msgstr ""
 "Si un fichier I<.commands> est indiqué, il est validé en premier (voir les "
-"détails I<ftp://ftp-master.debian.org/pub/UploadQueue/README>) ; et le nom "
+"détails I<ftp://ftp.upload.debian.org/pub/UploadQueue/README>) ; et le nom "
 "indiqué dans le champ Uploader est utilisé pour la signature."
 
 # NOTE: presque identique à une autre chaîne
@@ -13222,8 +13223,8 @@ msgstr "B<mk-build-deps> --help|--version"
 
 #. type: textblock
 #: ../scripts/mk-build-deps.pl:32
-msgid "B<mk-build-deps> [-i|--install] <control file | package name> [...]"
-msgstr "B<mk-build-deps> [-i|--install] <fichier control | nom paquet> [...]"
+msgid "B<mk-build-deps> [options] <control file | package name> [...]"
+msgstr "B<mk-build-deps> [options] <fichier control | nom paquet> [...]"
 
 #. type: textblock
 #: ../scripts/mk-build-deps.pl:36
@@ -17590,6 +17591,16 @@ msgstr ""
 "Cette page de manuel a été écrite pour le paquet B<devscripts> par le "
 "responsable du paquet, Julian Gilbey E<lt>jdg@debian.orgE<gt>."
 
+#~ msgid "B<--no-preserve>, B<--nopreserve>"
+#~ msgstr "B<--no-preserve>, B<--nopreserve>"
+
+#~ msgid "B<--no-preserve>"
+#~ msgstr "B<--no-preserve>"
+
+#~ msgid "B<mk-build-deps> [-i|--install] <control file | package name> [...]"
+#~ msgstr ""
+#~ "B<mk-build-deps> [-i|--install] <fichier control | nom paquet> [...]"
+
 #~ msgid ""
 #~ "When B<cowpoke> is run the following configuration options are read from "
 #~ "global, per-user, and per-project configuration files if present:"
@@ -18002,9 +18013,6 @@ msgstr ""
 #~ "B<licensecheck> [B<--verbose>] [B<--copyright>] [B<-l|--lines=N>] [B<-i|--"
 #~ "ignore=regex>] [B<-c|--check=regex>] [B<-r|--recursive>] I<liste de "
 #~ "fichiers ou répertoires à vérifier>"
-
-#~ msgid "B<mk-build-deps> <control file | package name> [...]"
-#~ msgstr "B<mk-build-deps> <fichier control | nom paquet> [...]"
 
 #~ msgid ""
 #~ "If using the sendmail (B<--no-mutt>) option, then the email to the BTS "
