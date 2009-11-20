@@ -570,7 +570,7 @@ dosigning() {
 	}
 
 	# simple validator for .commands files, see
-	# ftp://ftp-master.debian.org/pub/UploadQueue/README
+	# ftp://ftp.upload.debian.org/pub/UploadQueue/README
 	perl -ne 'BEGIN { $uploader = 0; $incommands = 0; }
               END { exit $? if $?;
                     if ($uploader && $incommands) { exit 0; }
@@ -598,7 +598,7 @@ dosigning() {
                  if (/./) { die ".commands file: extra stuff after Commands field!\n"; }
               }' $commands || {
 	echo "$PROGNAME: .commands file appears to be invalid. see:
-ftp://ftp-master.debian.org/pub/UploadQueue/README
+ftp://ftp.upload.debian.org/pub/UploadQueue/README
 for valid format" >&2;
 	exit 1; }
 
