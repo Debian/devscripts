@@ -167,20 +167,14 @@ do
     --multi) multiarch=yes ;;
     --dupload) DEBRELEASE_UPLOADER=dupload ;;
     --dput) DEBRELEASE_UPLOADER=dput ;;
+    # Delay checking of debsdir until we need it.  We need to make sure we're
+    # in the package root directory first.
     --debs-dir=*)
-	debsdir="`echo \"$1\" | sed -e 's/^--debs-dir=//; s%/\+%/%g; s%\(.\)/$%\1%;'`"
-	if ! [ -d "$debsdir" ]; then
-	    echo "$PROGNAME: directory $debsdir does not exist!" >&2
-	    exit 1
-	fi
+	opt_debsdir="`echo \"$1\" | sed -e 's/^--debs-dir=//; s%/\+%/%g; s%\(.\)/$%\1%;'`"
 	;;
     --debs-dir)
 	shift
-	debsdir="`echo \"$1\" | sed -e 's%/\+%/%g; s%\(.\)/$%\1%;'`"
-	if ! [ -d "$debsdir" ]; then
-	    echo "$PROGNAME: directory $debsdir does not exist!" >&2
-	    exit 1
-	fi
+	opt_debsdir="`echo \"$1\" | sed -e 's%/\+%/%g; s%\(.\)/$%\1%;'`"
 	;;
     --check-dirname-level=*)
 	level="`echo \"$1\" | sed -e 's/^--check-dirname-level=//'`"
@@ -231,17 +225,6 @@ do
     shift
 done
 
-# check sanity of debdir
-if ! [ -d "$debsdir" ]; then
-    if [ -n "$debsdir_warning" ]; then
-	echo "$PROGNAME: $debsdir_warning" >&2
-	exit 1
-    else
-	echo "$PROGNAME: could not find directory $debsdir!" >&2
-	exit 1
-    fi
-fi
-
 # Look for .changes file via debian/changelog
 CHDIR=
 until [ -f debian/changelog ]; do
@@ -253,6 +236,26 @@ until [ -f debian/changelog ]; do
 	exit 1
     fi
 done
+
+# Use svn-buildpackage's directory if there is one and debsdir wasn't already
+# specified on the command-line.  This can override DEBRELEASE_DEBS_DIR.
+if [ -e ".svn/deb-layout" ]; then
+    buildArea="$(sed -ne '/^buildArea=/{s/^buildArea=//; s%/\+%/%g; s%\(.\)/$%\1%; p; q}' .svn/deb-layout)"
+    if [ -n "$buildArea" -a -d "$buildArea" -a -z "$opt_debsdir" ]; then
+	debsdir="$buildArea"
+    fi
+fi
+
+# check sanity of debdir
+if ! [ -d "$debsdir" ]; then
+    if [ -n "$debsdir_warning" ]; then
+	echo "$PROGNAME: $debsdir_warning" >&2
+	exit 1
+    else
+	echo "$PROGNAME: could not find directory $debsdir!" >&2
+	exit 1
+    fi
+fi
 
 mustsetvar package "`dpkg-parsechangelog | sed -n 's/^Source: //p'`" \
     "source package"

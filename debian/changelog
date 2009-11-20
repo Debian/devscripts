@@ -28,6 +28,10 @@ devscripts (2.10.56) UNRELEASED; urgency=low
     wget's default 900 second timeout.  (Closes: #541732)
   * debsign: Update the dcut reference to point to ftp.upload.debian.org
     instead of ftp-master.debian.org.
+  * debrelease:
+    + Support using buildArea from .svn/deb-layout.  (Closes: #456226)
+    + Change to the package root directory before verifying the existence of
+      debsdir.
 
   [ Ryan Niebur ]
   * add w3m to suggests for grep-excuses -w, check for it at runtime too
