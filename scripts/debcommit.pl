@@ -450,13 +450,14 @@ sub action {
 sub bzr_find_fixes {
     my $message=shift;
 
-    my $debian_closes;
+    my $debian_closes = [];
     eval {
 	require Dpkg::Changelog::Entry::Debian;
     };
     if (not $@) {
 	# dpkg >= 1.15.5.2
-	$debian_closes = Dpkg::Changelog::Entry::Debian::find_closes($message);
+	push(@$debian_closes,
+	     Dpkg::Changelog::Entry::Debian::find_closes($message));
     } else {
 	$debian_closes = Dpkg::Changelog::find_closes($message);
     }
