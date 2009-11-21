@@ -1,4 +1,4 @@
-devscripts (2.10.57) UNRELEASED; urgency=low
+devscripts (2.10.57) unstable; urgency=low
 
   [ James Vega ]
   * debcommit: Fix gathering of "Closes" with dpkg >= 1.15.5.2.  (Closes:
@@ -8,7 +8,7 @@ devscripts (2.10.57) UNRELEASED; urgency=low
   * Tighten default dirname regex to match a version only if it contains
     at least one character: ‘PACKAGE(-.+)?’.  (Closes: #521126)
 
- -- James Vega <jamessan@debian.org>  Fri, 20 Nov 2009 00:37:03 -0500
+ -- James Vega <jamessan@debian.org>  Sat, 21 Nov 2009 18:01:28 -0500
 
 devscripts (2.10.56) unstable; urgency=low
 
