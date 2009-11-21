@@ -102,7 +102,7 @@ First usage method:
                 What constitutes a matching directory name; REGEX is
                 a Perl regular expression; the string \`PACKAGE\' will
                 be replaced by the package name; see manpage for details
-                (default: 'PACKAGE(-.*)?')
+                (default: 'PACKAGE(-.+)?')
 
         --help, -h    display this message
 
@@ -179,7 +179,7 @@ my @lintian_extra_opts=();
 my @lintian_opts=();
 my $checkbuilddep=1;
 my $check_dirname_level = 1;
-my $check_dirname_regex = 'PACKAGE(-.*)?';
+my $check_dirname_regex = 'PACKAGE(-.+)?';
 my $logging=0;
 my $tgz_check=1;
 my $prepend_path='';
@@ -254,7 +254,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBUILD_POST_DPKG_BUILDPACKAGE_HOOK' => '',
 		       'DEBUILD_SIGNING_USERNAME' => '',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
-		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.*)?',
+		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.+)?',
 		       );
     my %config_default = %config_vars;
     my $dpkg_opts_var = 'DEBUILD_DPKG_BUILDPACKAGE_OPTS';

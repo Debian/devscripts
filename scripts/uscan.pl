@@ -108,7 +108,7 @@ Options:
                    What constitutes a matching directory name; REGEX is
                    a Perl regular expression; the string \`PACKAGE\' will
                    be replaced by the package name; see manpage for details
-                   (default: 'PACKAGE(-.*)?')
+                   (default: 'PACKAGE(-.+)?')
     --watchfile FILE
                    Specify the watchfile rather than using debian/watch;
                    no directory traversing will be done in this case
@@ -168,7 +168,7 @@ my $repack = 0; # repack .tar.bz2 or .zip to .tar.gz
 my $symlink = 'symlink';
 my $verbose = 0;
 my $check_dirname_level = 1;
-my $check_dirname_regex = 'PACKAGE(-.*)?';
+my $check_dirname_regex = 'PACKAGE(-.+)?';
 my $dehs = 0;
 my %dehs_tags;
 my $dehs_end_output = 0;
@@ -193,7 +193,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'USCAN_USER_AGENT' => '',
 		       'USCAN_REPACK' => 'no',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
-		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.*)?',
+		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.+)?',
 		       );
     my %config_default = %config_vars;
 

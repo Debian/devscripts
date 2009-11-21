@@ -24,7 +24,7 @@ usage () {
                    What constitutes a matching directory name; REGEX is
                    a Perl regular expression; the string \`PACKAGE' will
                    be replaced by the package name; see manpage for details
-                   (default: 'PACKAGE(-.*)?')
+                   (default: 'PACKAGE(-.+)?')
 
     --no-conf, --noconf
                    Do not read devscripts config files;
@@ -52,7 +52,7 @@ GNU General Public License, version 2 or later."
 # Boilerplate: set config variables
 DEFAULT_DEBCLEAN_CLEANDEBS=no
 DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1
-DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.*)?'
+DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.+)?'
 VARS="DEBCLEAN_CLEANDEBS DEVSCRIPTS_CHECK_DIRNAME_LEVEL DEVSCRIPTS_CHECK_DIRNAME_REGEX"
 
 

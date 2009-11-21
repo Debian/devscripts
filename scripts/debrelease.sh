@@ -49,7 +49,7 @@ usage () {
                       What constitutes a matching directory name; REGEX is
                       a Perl regular expression; the string \`PACKAGE' will
                       be replaced by the package name; see manpage for details
-                      (default: 'PACKAGE(-.*)?')
+                      (default: 'PACKAGE(-.+)?')
     --no-conf, --noconf
                       Don't read devscripts config files;
                       must be the first option given
@@ -84,7 +84,7 @@ mustsetvar () {
 DEFAULT_DEBRELEASE_UPLOADER=dupload
 DEFAULT_DEBRELEASE_DEBS_DIR=..
 DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1
-DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.*)?'
+DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.+)?'
 VARS="DEBRELEASE_UPLOADER DEBRELEASE_DEBS_DIR DEVSCRIPTS_CHECK_DIRNAME_LEVEL DEVSCRIPTS_CHECK_DIRNAME_REGEX"
 
 if [ "$1" = "--no-conf" -o "$1" = "--noconf" ]; then

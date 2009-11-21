@@ -170,7 +170,7 @@ Options:
          What constitutes a matching directory name; REGEX is
          a Perl regular expression; the string \`PACKAGE\' will
          be replaced by the package name; see manpage for details
-         (default: 'PACKAGE(-.*)?')
+         (default: 'PACKAGE(-.+)?')
   --no-conf, --noconf
          Don\'t read devscripts config files; must be the first option given
   --release-heuristic log|changelog
@@ -203,7 +203,7 @@ EOF
 
 # Start by setting default values
 my $check_dirname_level = 1;
-my $check_dirname_regex = 'PACKAGE(-.*)?';
+my $check_dirname_regex = 'PACKAGE(-.+)?';
 my $opt_p = 0;
 my $opt_query = 1;
 my $opt_release_heuristic = 'log';
@@ -227,7 +227,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBCHANGE_PRESERVE' => 'no',
 		       'DEBCHANGE_QUERY_BTS' => 'yes',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
-		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.*)?',
+		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.+)?',
 		       'DEBCHANGE_RELEASE_HEURISTIC' => 'log',
 		       'DEBCHANGE_MULTIMAINT' => 'yes',
 		       'DEBCHANGE_TZ' => $ENV{TZ}, # undef if TZ unset

@@ -1,7 +1,12 @@
 devscripts (2.10.57) UNRELEASED; urgency=low
 
+  [ James Vega ]
   * debcommit: Fix gathering of "Closes" with dpkg >= 1.15.5.2.  (Closes:
     #557318)
+
+  [ Ben Finney ]
+  * Tighten default dirname regex to match a version only if it contains
+    at least one character: ‘PACKAGE(-.+)?’.  (Closes: #521126)
 
  -- James Vega <jamessan@debian.org>  Fri, 20 Nov 2009 00:37:03 -0500
 

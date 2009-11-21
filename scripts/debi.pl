@@ -61,7 +61,7 @@ Usage: $progname [options] [.changes file] [package ...]
                       What constitutes a matching directory name; REGEX is
                       a Perl regular expression; the string \`PACKAGE\' will
                       be replaced by the package name; see manpage for details
-                      (default: 'PACKAGE(-.*)?')
+                      (default: 'PACKAGE(-.+)?')
     --with-depends    Install packages with their depends.
     --tool TOOL       Use the specified tool for installing the dependencies
                       of the package(s) to be installed.
@@ -97,7 +97,7 @@ Usage: $progname [options] [.changes file] [package ...]
                       What constitutes a matching directory name; REGEX is
                       a Perl regular expression; the string \`PACKAGE\' will
                       be replaced by the package name; see manpage for details
-                      (default: 'PACKAGE(-.*)?')
+                      (default: 'PACKAGE(-.+)?')
     --help            Show this message
     --version         Show version and copyright information
 
@@ -124,7 +124,7 @@ EOF
 my $debsdir = '..';
 my $debsdir_warning;
 my $check_dirname_level = 1;
-my $check_dirname_regex = 'PACKAGE(-.*)?';
+my $check_dirname_regex = 'PACKAGE(-.+)?';
 my $install_tool = 'apt-get';
 
 # Next, read configuration files and then command line
@@ -138,7 +138,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     my %config_vars = (
 		       'DEBRELEASE_DEBS_DIR' => '..',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
-		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.*)?',
+		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.+)?',
 		       );
     my %config_default = %config_vars;
 
