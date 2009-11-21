@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2009-11-20 04:56+0000\n"
+"POT-Creation-Date: 2009-11-21 22:58+0000\n"
 "PO-Revision-Date: 2009-09-06 15:06+0200\n"
 "Last-Translator: Nicolas François <nicolas.francois@centraliens.net>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -311,7 +311,7 @@ msgstr ""
 #: ../scripts/dcmd.1:101 ../scripts/dcontrol.pl:283 ../scripts/dd-list.1:93
 #: ../scripts/debc.1:120 ../scripts/debchange.1:433
 #: ../scripts/debcheckout.pl:185 ../scripts/debclean.1:111
-#: ../scripts/debcommit.pl:804 ../scripts/debdiff.1:222 ../scripts/debi.1:126
+#: ../scripts/debcommit.pl:805 ../scripts/debdiff.1:222 ../scripts/debi.1:126
 #: ../scripts/debpkg.1:23 ../scripts/debrelease.1:137
 #: ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:71
 #: ../scripts/debsign.1:147 ../scripts/debuild.1:421
@@ -1238,11 +1238,11 @@ msgstr "bugs [release-critical | release-critical/... | RC]"
 #. type: textblock
 #: ../scripts/bts.pl:779
 msgid ""
-"Display the page listing the requested bugs in a web browser using "
-"L<sensible-browser(1)>."
+"Display the page listing the requested bugs in a web browser using sensible-"
+"browser(1)."
 msgstr ""
 "Afficher la page référençant les bogues demandés dans un navigateur web en "
-"utilisant L<sensible-browser>(1)."
+"utilisant sensible-browser(1)."
 
 #. type: textblock
 #: ../scripts/bts.pl:782
@@ -2910,7 +2910,7 @@ msgstr ""
 #: ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53
 #: ../scripts/dcmd.1:98 ../scripts/dcontrol.pl:290 ../scripts/debc.1:115
 #: ../scripts/debchange.1:426 ../scripts/debcheckout.pl:180
-#: ../scripts/debclean.1:107 ../scripts/debcommit.pl:808
+#: ../scripts/debclean.1:107 ../scripts/debcommit.pl:809
 #: ../scripts/debdiff.1:215 ../scripts/debi.1:122 ../scripts/debrelease.1:132
 #: ../scripts/deb-reversion.dbk:247 ../scripts/debrsign.1:66
 #: ../scripts/debsign.1:134 ../scripts/debsnap.1:118 ../scripts/debuild.1:408
@@ -5618,7 +5618,7 @@ msgid ""
 "contains a '/', then it must match the full directory path.  If not, then it "
 "must match the full directory name.  If I<regex> contains the string "
 "\\'PACKAGE', this will be replaced by the source package name, as determined "
-"from the changelog.  The default value for the regex is: \\'PACKAGE(-.*)?', "
+"from the changelog.  The default value for the regex is: \\'PACKAGE(-.+)?', "
 "thus matching directory names such as PACKAGE and PACKAGE-version."
 msgstr ""
 "Le nom du répertoire est vérifié en testant si le nom du répertoire courant "
@@ -5629,7 +5629,7 @@ msgstr ""
 "fin. Si elle contient un « / », alors elle doit correspondre au chemin "
 "complet. Si elle contient la chaîne « PACKAGE », cette chaîne sera remplacée "
 "par le nom du paquet source déterminé par le fichier changelog. La valeur "
-"par défaut de cette expression rationnelle est « PACKAGE(-.*)? », ce qui "
+"par défaut de cette expression rationnelle est « PACKAGE(-.+)? », ce qui "
 "correspond aux répertoires nommés PACKAGE ou PACKAGE-version."
 
 #. type: TP
@@ -7489,11 +7489,11 @@ msgstr ""
 #. type: textblock
 #: ../scripts/debcommit.pl:33
 msgid ""
-"Note that svn/svk tagging conventions vary, so debcommit uses L<svnpath(1)> "
-"to determine where the tag should be placed in the repository."
+"Note that svn/svk tagging conventions vary, so debcommit uses svnpath(1) to "
+"determine where the tag should be placed in the repository."
 msgstr ""
 "Veuillez noter que les conventions de nommage des tags varient pour svn et "
-"svk, donc debcommit utilise L<svnpath(1)> pour déterminer où le tag doit "
+"svk, donc debcommit utilise svnpath(1) pour déterminer où le tag doit "
 "être placé dans le dépôt."
 
 #. type: =item
@@ -7809,14 +7809,14 @@ msgstr ""
 "pour associer la résision aux bogues."
 
 #. type: textblock
-#: ../scripts/debcommit.pl:806 ../scripts/mass-bug.pl:523
+#: ../scripts/debcommit.pl:807 ../scripts/mass-bug.pl:523
 msgid "Joey Hess <joeyh@debian.org>"
 msgstr "Joey Hess <joeyh@debian.org>"
 
 #. type: textblock
-#: ../scripts/debcommit.pl:810
-msgid "L<svnpath(1)>."
-msgstr "L<svnpath(1)>."
+#: ../scripts/debcommit.pl:811
+msgid "svnpath(1)."
+msgstr "svnpath(1)."
 
 #. type: TH
 #: ../scripts/debdiff.1:1
