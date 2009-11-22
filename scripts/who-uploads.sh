@@ -201,11 +201,11 @@ for package; do
 
     # only grab the actual "Accepted" news announcements; hopefully this
     # won't pick up many false positives
-    WGETOPTS="-q -O --timeout=30"
+    WGETOPTS="-q -O - --timeout=30 "
     count=0
-    for news in $(wget $WGETOPTS - $pkgurl |
+    for news in $(wget $WGETOPTS $pkgurl |
                   sed -ne 's%^.*<a href="\('$package'/news/[0-9A-Z]*\.html\)">Accepted .*%\1%p'); do
-	HTML_TEXT=$(wget $WGETOPTS - "$baseurl$news")
+	HTML_TEXT=$(wget $WGETOPTS "$baseurl$news")
 	GPG_TEXT=$(echo "$HTML_TEXT" |
 	           sed -ne 's/^<pre>//; /-----BEGIN PGP SIGNED MESSAGE-----/,/-----END PGP SIGNATURE-----/p')
 
