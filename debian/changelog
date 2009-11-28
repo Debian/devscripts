@@ -2,6 +2,8 @@ devscripts (2.10.59) UNRELEASED; urgency=low
 
   * debrelease: Do not use .svn/deb-layout to determine debsdir if --debs-dir
     was used.  (Closes: #558172)
+  * checkbashisms: Fix a false positive detection of ". $(foo bar)/baz" as
+    attempting to pass arguments to a sourced script.  (Closes: #557639)
 
  -- James Vega <jamessan@debian.org>  Sat, 28 Nov 2009 16:04:37 -0500
 

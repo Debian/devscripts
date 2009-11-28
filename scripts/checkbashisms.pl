@@ -94,7 +94,7 @@ foreach my $filename (@ARGV) {
 	     . "$check_lines_count lines\n";
     }
 
-    unless (open C, "$filename") {
+    unless (open C, '<', $filename) {
 	warn "cannot open script $filename for reading: $!\n";
 	$status |= 2;
 	next;
@@ -282,7 +282,7 @@ foreach my $filename (@ARGV) {
 	    # detect source (.) trying to pass args to the command it runs
 	    # The first expression weeds out '. "foo bar"'
 	    if (not $found and
-		not m/$LEADIN\.\s+(\"[^\"]+\"|\'[^\']+\'|\$\([^)]+\)+)\s*(\&|\||\d?>|<|;|\Z)/
+		not m/$LEADIN\.\s+(\"[^\"]+\"|\'[^\']+\'|\$\([^)]+\)+(?:\/[^\s;]+)?)\s*(\&|\||\d?>|<|;|\Z)/
 		and m/$LEADIN(\.\s+[^\s;\`:]+\s+([^\s;]+))/) {
 		if ($2 =~ /^(\&|\||\d?>|<)/) {
 		    # everything is ok
@@ -561,7 +561,7 @@ sub init_hashes {
 	$bashisms{$LEADIN . qr'\w+\+='} = q<should be VAR="${VAR}foo">;
 	$string_bashisms{qr'(\$\(|\`)\s*\<\s*\S+\s*(\)|\`)'} = q<'$(\< foo)' should be '$(cat foo)'>;
     }
-	    
+
     if ($opt_extra) {
 	$string_bashisms{qr'\$\{?BASH\}?\b'} = q<$BASH>;
 	$string_bashisms{qr'(?:^|\s+)RANDOM='} = q<RANDOM=>;
