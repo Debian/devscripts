@@ -239,9 +239,11 @@ done
 
 # Use svn-buildpackage's directory if there is one and debsdir wasn't already
 # specified on the command-line.  This can override DEBRELEASE_DEBS_DIR.
-if [ -e ".svn/deb-layout" ]; then
+if [ -n "$opt_debsdir" ]; then
+    debsdir="$opt_debsdir"
+elif [ -e ".svn/deb-layout" ]; then
     buildArea="$(sed -ne '/^buildArea=/{s/^buildArea=//; s%/\+%/%g; s%\(.\)/$%\1%; p; q}' .svn/deb-layout)"
-    if [ -n "$buildArea" -a -d "$buildArea" -a -z "$opt_debsdir" ]; then
+    if [ -n "$buildArea" -a -d "$buildArea" ]; then
 	debsdir="$buildArea"
     fi
 fi

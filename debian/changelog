@@ -1,3 +1,10 @@
+devscripts (2.10.59) UNRELEASED; urgency=low
+
+  * debrelease: Do not use .svn/deb-layout to determine debsdir if --debs-dir
+    was used.  (Closes: #558172)
+
+ -- James Vega <jamessan@debian.org>  Sat, 28 Nov 2009 16:04:37 -0500
+
 devscripts (2.10.58) unstable; urgency=low
 
   * who-uploads: Correct the argument to wget's -O option.  Thanks to
