@@ -238,9 +238,10 @@ my $edit=0;
 my $all=0;
 my $stripmessage=1;
 my $signtags=0;
-my $changelog="debian/changelog";
+my $changelog;
 my $keyid;
 my $version;
+my $onlydebian=0;
 
 # Now start by reading configuration files and then command line
 # The next stuff is boilerplate
@@ -295,6 +296,12 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     }
 }
 
+# Find a good default for the changelog file location
+
+for (qw"debian/changelog changelog") {
+    $changelog = $_ if -e ($_);
+}
+
 # Now read the command line arguments
 
 Getopt::Long::Configure("bundling");
@@ -327,6 +334,9 @@ if (@files_to_commit && !grep(/$changelog/,@files_to_commit)) {
 }
 
 my $prog=getprog();
+if (! defined $changelog) {
+    die "debcommit: Could not find a Debian changelog\n";
+}
 if (! -e $changelog) {
     die "debcommit: cannot find $changelog\n";
 }
@@ -353,7 +363,7 @@ if ($release) {
 	}
 	close C;
 
-	$version=`dpkg-parsechangelog | grep '^Version:' | cut -f 2 -d ' '`;
+	$version=`dpkg-parsechangelog -l\Q$changelog\E | grep '^Version:' | cut -f 2 -d ' '`;
 	chomp $version;
     }
 
@@ -373,8 +383,17 @@ if (not $confirm or confirm($message)) {
 sub getprog {
     if (-d "debian") {
 	if (-d "debian/.svn") {
+	    # SVN has .svn even in subdirs...
+	    if (! -d ".svn") {
+		$onlydebian = 1;
+	    }
 	    return "svn";
 	} elsif (-d "debian/CVS") {
+	    # CVS has CVS even in subdirs...
+	    if (! -d "CVS") {
+		$onlydebian = 1;
+	    }
+	    $onlydebian = 1;
 	    return "cvs";
 	} elsif (-d "debian/{arch}") {
 	    # I don't think we can tell just from the working copy
@@ -386,6 +405,7 @@ sub getprog {
 		return "tla";
 	    }
 	} elsif (-d "debian/_darcs") {
+	    $onlydebian = 1;
 	    return "darcs";
 	}
     }
@@ -415,12 +435,12 @@ sub getprog {
 	return "hg";
     }
     if (-d "_darcs") {
-       return "darcs";
+	return "darcs";
     }
 
     # Test for this file to avoid interactive prompting from svk.
     if (-d "$ENV{HOME}/.svk/local") {
-    	# svk has no useful directories so try to run it.
+	# svk has no useful directories so try to run it.
 	my $svkpath=`svk info . 2>/dev/null| grep -i '^Depot Path:' | cut -d ' ' -f 3`;
 	if (length $svkpath) {
 	    return "svk";
@@ -431,9 +451,9 @@ sub getprog {
     # directory, if multiple packages are kept in one git repository.
     my $dir=getcwd();
     while ($dir=~s/[^\/]*\/?$// && length $dir) {
-    	if (-d "$dir/.git") {
-    		return "git";
-    	}
+	if (-d "$dir/.git") {
+	    return "git";
+	}
     }
 
     die "debcommit: not in a cvs, subversion, baz, bzr, git, hg, svk or darcs working copy\n";
@@ -441,6 +461,9 @@ sub getprog {
 
 sub action {
     my $prog=shift;
+    if ($prog eq "darcs" && $onlydebian) {
+	splice(@_, 1, 0, "--repodir=debian");
+    }
     print $prog, " ",
       join(" ", map { if (/[^-A-Za-z0-9]/) { "'$_'" } else { $_ } } @_), "\n";
     return 1 if $noact;
@@ -481,13 +504,16 @@ sub bzr_find_fixes {
 
 sub commit {
     my $message=shift;
-    
+
     die "debcommit: can't specify a list of files to commit when using --all\n"
 	if (@files_to_commit and $all);
 
     my $action_rc;  # return code of external command
     if ($prog =~ /^(cvs|svn|svk|hg)$/) {
-        $action_rc = $diffmode
+	if (!@files_to_commit && $onlydebian) {
+	    @files_to_commit = ("debian");
+	}
+	$action_rc = $diffmode
 	    ? action($prog, "diff", @files_to_commit)
 	    : action($prog, "commit", "-m", $message, @files_to_commit);
     }
@@ -505,7 +531,7 @@ sub commit {
 	    $action_rc = action($prog, "diff", @files_to_commit);
 	} else {
 	    if ($all) {
-	        @files_to_commit=("-a")
+		@files_to_commit=("-a")
 	    }
 	    $action_rc = action($prog, "commit", "-m", $message, @files_to_commit);
 	}
@@ -523,28 +549,28 @@ sub commit {
 		@args=("-s", "$summary ...", "-L", $message);
 	    }
 	}
-        push(
-            @args,
-            (($prog eq 'tla') ? '--' : ()),
-            @files_to_commit,
-        ) if @files_to_commit;
+	push(
+	    @args,
+	    (($prog eq 'tla') ? '--' : ()),
+	    @files_to_commit,
+	) if @files_to_commit;
 	$action_rc = action($prog, $diffmode ? "diff" : "commit", @args);
     }
     elsif ($prog eq 'bzr') {
-        if ($diffmode) {
-            $action_rc = action($prog, "diff", @files_to_commit);
-        } else {
-            my @fixes_arg = bzr_find_fixes($message);
-            $action_rc = action($prog, "commit", "-m", $message,
-                    @fixes_arg, @files_to_commit);
-        }
+	if ($diffmode) {
+	    $action_rc = action($prog, "diff", @files_to_commit);
+	} else {
+	    my @fixes_arg = bzr_find_fixes($message);
+	    $action_rc = action($prog, "commit", "-m", $message,
+		@fixes_arg, @files_to_commit);
+	}
     }
     elsif ($prog eq 'darcs') {
-       if ($diffmode) {
-           $action_rc = action($prog, "diff", @files_to_commit);
-        } else {
-           $action_rc = action($prog, "record", "-m", $message, "-a", @files_to_commit);
-        }
+	if ($diffmode) {
+	    $action_rc = action($prog, "diff", @files_to_commit);
+	} else {
+	    $action_rc = action($prog, "record", "-m", $message, "-a", @files_to_commit);
+	}
     }
     else {
 	die "debcommit: unknown program $prog";
@@ -677,6 +703,9 @@ sub getmessage {
 	    @diffcmd = ($prog, 'diff');
 	} elsif ($prog eq 'darcs') {
 	    @diffcmd = ($prog, 'diff', '--diff-opts=-wu');
+	    if ($onlydebian) {
+		push(@diffcmd, '--repodir=debian');
+	    }
 	} else {
 	    @diffcmd = ($prog, 'diff', '-w');
 	}
