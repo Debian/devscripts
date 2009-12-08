@@ -518,6 +518,18 @@ sub parselicense($) {
 	$license = "zlib/libpng $license";
     }
 
+    if ($licensetext =~ /Do What The Fuck You Want To Public License, Version ([^, ]+)/i) {
+        $license = "WTFPL (v$1)";
+    }
+
+    if ($licensetext =~ /Do what The Fuck You Want To Public License/i) {
+        $license = "WTFPL";
+    }
+
+    if ($licensetext =~ /(License WTFPL|Under (the|a) WTFPL)/i) {
+        $license = "WTFPL";
+    }
+
     $license = "UNKNOWN" if (!length($license));
 
     return $license;
