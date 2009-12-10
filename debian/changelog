@@ -6,6 +6,10 @@ devscripts (2.10.60) UNRELEASED; urgency=low
   [ Patrick Schoenfeld ]
   * licensecheck: Add support for some common variants of the WTFPL
 
+  [ Ryan Niebur ]
+  * Fix deb-reversion with recent dpkg-dev, thanks to Salvatore
+    Bonaccorso (Closes: #559702)
+
  -- Patrick Schoenfeld <schoenfeld@debian.org>  Tue, 08 Dec 2009 10:01:04 +0100
 
 devscripts (2.10.59) unstable; urgency=low
