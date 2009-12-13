@@ -190,6 +190,11 @@ done
 GPG_NO_KEYRING="--no-options --no-auto-check-trustdb --no-default-keyring --keyring /dev/null"
 GPG_OPTIONS="--no-options --no-auto-check-trustdb --no-default-keyring"
 
+if [ $# -eq 0 ]; then
+    usage;
+    exit 1
+fi
+
 # Now actually get the reports :)
 
 for package; do
