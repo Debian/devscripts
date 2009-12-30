@@ -52,7 +52,7 @@ Do not actually do anything, but do print the commands that would be run.
 
 =item B<-d> B<--diff>
 
-Instead of commiting, do print the diff of what would have been committed if
+Instead of committing, do print the diff of what would have been committed if
 this option were not given. A typical usage scenario of this option is the
 generation of patches against the current working copy (e.g. when you don't have
 commit access right).
