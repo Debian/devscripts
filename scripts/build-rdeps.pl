@@ -37,7 +37,7 @@ Run apt-get update before searching for build-depends.
 
 =item B<-s> B<--sudo>
 
-Use sudo when running apt-get update. Has no effect if -u is ommitted.
+Use sudo when running apt-get update. Has no effect if -u is omitted.
 
 =item B<--distribution>
 
