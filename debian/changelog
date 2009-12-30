@@ -5,6 +5,9 @@ devscripts (2.10.60) UNRELEASED; urgency=low
     Geissert.  (Closes: #560774)
   * who-uploads: Show usage if no arguments are given.  Thanks to Kumar
     Appaiah.  (Closes: #560955)
+  * uscan:
+    + Add missing escape of '\' in man page.  Thanks to Marco Túlio Gontijo
+      for the patch.  (Closes: #562857)
 
   [ Patrick Schoenfeld ]
   * licensecheck: Add support for some common variants of the WTFPL
