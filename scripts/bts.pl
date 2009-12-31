@@ -2688,8 +2688,8 @@ sub confirmmail {
 sub addfooter() {
     my $body = shift;
 
+    $body .= "thanks\n";
     if ($forceinteractive) {
-	$body .= "thanks\n";
 	if (-r $ENV{'HOME'} . "/.signature") {
 	    if (open SIG, "<", $ENV{'HOME'} . "/.signature") {
 		$body .= "-- \n";
