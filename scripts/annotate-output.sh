@@ -21,12 +21,47 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
 
+progname=$(basename $0)
+
 addtime ()
 {
 	while read line; do
-		echo "`date +%H:%M:%S` $1: $line"
+		echo "`date ${FMT}` $1: $line"
 	done
 }
+
+usage ()
+{
+	echo \
+"Usage: $progname [options] program [args ...]
+  Run program and annotate STDOUT/STDERR with a timestamp.
+
+  Options:
+   +FORMAT    - Controls the timestamp format as per date(1)
+   -h, --help - Show this message"
+}
+
+FMT="+%H:%M:%S"
+while [ "$1" ]; do
+	case "$1" in
+	+*)
+		FMT="$1"
+		shift
+		;;
+	-h|-help|--help)
+		usage
+		exit 0
+		;;
+	*)
+		break
+		;;
+	esac
+done
+
+if [ $# -lt 1 ]; then
+	usage
+	exit 1
+fi
 
 OUT=`mktemp /tmp/annotate.XXXXXX` || exit 1
 ERR=`mktemp /tmp/annotate.XXXXXX` || exit 1
@@ -37,11 +72,11 @@ mkfifo $OUT $ERR || exit 1
 addtime O < $OUT &
 addtime E < $ERR &
 
-echo "`date +%H:%M:%S` I: Started $@"
+echo "`date ${FMT}` I: Started $@"
 "$@" > $OUT 2> $ERR ; EXIT=$?
 rm -f $OUT $ERR
 wait
 
-echo "`date +%H:%M:%S` I: Finished with exitcode $EXIT"
+echo "`date ${FMT}` I: Finished with exitcode $EXIT"
 
 exit $EXIT
