@@ -11,8 +11,13 @@ devscripts (2.10.60) UNRELEASED; urgency=low
     + Add missing verb in description of FTP syntax.  Thanks to Marco Túlio
       Gontijo for the patch.  (Closes: #562586)
   * annotate-output: Allow specifying a timestamp format.  (Closes: #539720)
-  * bts: Always include "thanks" at the end of the control block.  (Closes:
-    #542962)
+  * bts:
+    + Always include "thanks" at the end of the control block.  (Closes:
+      #542962)
+    + Allow specifying which fields will be shown by "bts status".  (Closes:
+      #499283)
+    + Add "verbose" option to "bts status", which will also show fields that
+      don't have a set value.
 
   [ Patrick Schoenfeld ]
   * licensecheck: Add support for some common variants of the WTFPL

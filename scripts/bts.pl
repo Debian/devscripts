@@ -1050,12 +1050,17 @@ sub bts_select {
     print map {qq($_\n)} @{$bugs};
 }
 
-=item status [<bug> | file:<file>] ...
+=item status [<bug> | file:<file> | fields:<field,field,...> | verbose] ...
 
 Uses the SOAP interface to output status information for the given bugs
 (or as read from the listed files -- use '-' to indicate STDIN).
 
-Empty status fields are not displayed.
+By default, all populated fields for a bug are displayed.
+
+If B<verbose> is given, empty fields will also be displayed.
+
+If B<fields> is given, only those fields will be displayed.  No validity
+checking is performed on any specified fields.
 
 =cut
 
@@ -1063,11 +1068,13 @@ sub bts_status {
     my @args = @_;
 
     my @bugs;
+    my $showempty = 0;
+    my %field;
     for my $bug (@args) {
 	if (looks_like_number($bug)) {
 	    push @bugs,$bug;
 	}
-	elsif (m{^file:(.+)}) {
+	elsif ($bug =~ m{^file:(.+)}) {
 	    my $file = $1;
 	    my $fh;
 	    if ($file eq '-') {
@@ -1085,6 +1092,16 @@ sub bts_status {
 		push @bugs,$_;
 	    }
 	}
+	elsif ($bug =~ m{^fields:(.+)}) {
+	    my $fields = $1;
+	    for my $field (split /,/, $fields) {
+		$field{lc $field} = 1;
+	    }
+	    $showempty = 1;
+	}
+	elsif ($bug =~ m{^verbose$}) {
+	    $showempty = 1;
+	}
     }
     my $bugs = Devscripts::Debbugs::status( map {[bug => $_, indicatesource => 1]} @bugs );
     return if ($bugs eq "");
@@ -1096,6 +1113,9 @@ sub bts_status {
 	my @keys = grep {$_ ne 'bug_num'}
 	keys %{$bugs->{$bug}};
 	for my $key ('bug_num',@keys) {
+	    if (%field) {
+		next unless exists $field{$key};
+	    }
 	    my $out;
 	    if (ref($bugs->{$bug}{$key}) eq 'ARRAY') {
 		$out .= join(',',@{$bugs->{$bug}{$key}});
@@ -1109,7 +1129,9 @@ sub bts_status {
 	    else {
 		$out .= $bugs->{$bug}{$key}||'';
 	    }
-	    print "$key\t$out\n" if $out;
+	    if ($out || $showempty) {
+		print "$key\t$out\n";
+	    }
 	}
     }
 }
