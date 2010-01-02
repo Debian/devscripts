@@ -1156,10 +1156,19 @@ sub bts_clone {
     mailbts("cloning $bug", "clone $bug " . join(" ",@_));
 }
 
+sub common_close {
+    my $bug=checkbug(shift) or die "bts $command[$index]: close what bug?\n";
+    my $version=shift;
+    $version="" unless defined $version;
+    opts_done(@_);
+    mailbts("closing $bug", "close $bug $version");
+    return $bug;
+}
+
 # Do not include this in the manpage - it's deprecated
-# 
+#
 # =item close <bug> <version>
-# 
+#
 # Close a bug. Remember that using this to close a bug is often bad manners,
 # sending an informative mail to nnnnn-done@bugs.debian.org is much better.
 # You should specify which version of the package closed the bug, if
@@ -1168,11 +1177,7 @@ sub bts_clone {
 # =cut
 
 sub bts_close {
-    my $bug=checkbug(shift) or die "bts close: close what bug?\n";
-    my $version=shift;
-    $version="" unless defined $version;
-    opts_done(@_);
-    mailbts("closing $bug", "close $bug $version");
+    my ($bug) = common_close(@_);
     warn <<"EOT";
 bts: Closing $bug as you requested.
 Please note that the "bts close" command is deprecated!
@@ -1183,46 +1188,25 @@ an explanation of why you have closed this bug.  Thank you!
 EOT
 }
 
-# =item done <bug> <version>
-# 
-# # Mark a bug as Done. Defaults to implying interactive mode,
-# because you should edit the message and provide explanations,
-# why the bug is beeing closed.
-# You should specify which version of the package closed the bug, if
-# possible.
-# =cut
-# 
-# sub bts_done {
-#     my $bug=checkbug(shift) or die "bts done: close what bug?\n";
-#     my $version=shift;
-#     my $subject="Closing $bug";
-#     $version="" unless defined $version;
-#     opts_done(@_);
-# 
-#     # TODO: Evaluate if we want to do this by default
-#     my $bug_status = Devscripts::Debbugs::status( map {[bug => $_, indicatesource => 1]} ($bug) );
-#     if ($bug_status) {
-# 	$subject = "Re: $bug_status->{$bug}->{subject}";
-#     }
-# 
-#     # This command defaults to using interactive mode, because
-#     # mails shouldn't be sent without an explanation
-#     if (not $use_mutt) {
-# 	$interactive = 1;
-#     }
-# 
-#     # Workaround (?) - We need to set the btsemail to nnn-done@b.d.o
-#     # to close a bug.
-#     # TODO: Evaluate other possbilities to do that more "beauty"
-#     $btsemail = $bug . '-done@bugs.debian.org';
-#   
-#     my $message = "";
-#     if ($version) {
-# 	$message .= "Version: $version";
-#     }
-#     $message .= "\n<Explanation for closing the bug should go here>";
-#     mailbts($subject, $message);
-# }
+=item done <bug> <version>
+
+Mark a bug as Done. This forces interactive mode since done messages should
+include an explanation why the bug is being closed.  You should specify which
+version of the package closed the bug, if possible.
+
+=cut
+
+sub bts_done {
+    my ($bug) = common_close(@_);
+    # Force interactive mode since done mails shouldn't be sent without an
+    # explanation
+    if (not $use_mutt) {
+	$forceinteractive = 1;
+    }
+
+    # Include the submitter in the email, so we act like a mail to -done
+    $ccpackages{"$bug-submitter"} = 1;
+}
 
 =item reopen <bug> [<submitter>]
 

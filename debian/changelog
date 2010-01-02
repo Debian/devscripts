@@ -18,6 +18,8 @@ devscripts (2.10.60) UNRELEASED; urgency=low
       #499283)
     + Add "verbose" option to "bts status", which will also show fields that
       don't have a set value.
+    + Add "done" command which sends a close command as well as Ccing the bug
+      submitter.  (Closes: #482751)
 
   [ Patrick Schoenfeld ]
   * licensecheck: Add support for some common variants of the WTFPL
