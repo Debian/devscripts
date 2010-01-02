@@ -15,7 +15,7 @@ devscripts (2.10.60) UNRELEASED; urgency=low
     + Always include "thanks" at the end of the control block.  (Closes:
       #542962)
     + Allow specifying which fields will be shown by "bts status".  (Closes:
-      #499283)
+      #499283, #323782)
     + Add "verbose" option to "bts status", which will also show fields that
       don't have a set value.
     + Add "done" command which sends a close command as well as Ccing the bug
