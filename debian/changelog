@@ -20,6 +20,11 @@ devscripts (2.10.60) UNRELEASED; urgency=low
       don't have a set value.
     + Add "done" command which sends a close command as well as Ccing the bug
       submitter.  (Closes: #482751)
+  * build-rdeps:
+    + Add --origin option to specify which origin to use.
+    + Use the Release file to determine which Sources file(s) to search for
+      the given origin.  Thanks to Michael Schutte for the patch.  (Closes:
+      #545115)
 
   [ Patrick Schoenfeld ]
   * licensecheck: Add support for some common variants of the WTFPL

@@ -51,6 +51,10 @@ Ignore contrib and non-free
 
 Ignore the given component (e.g. main, contrib, non-free).
 
+=item B<--origin>
+
+Restrict the search to only the specified origin (such as "Debian").
+
 =item B<-m> B<--print-maintainer>
 
 Print the value of the maintainer field for each package.
@@ -82,15 +86,16 @@ my $progname = basename($0);
 my $version = '1.0';
 my $dctrl = "/usr/bin/grep-dctrl";
 my $sources_path = "/var/lib/apt/lists/";
-my $source_pattern = ".*_dists_(sid|unstable)_.*Sources\$";
+my $release_pattern = '(.*_dists_(sid|unstable))_Release$';
+my %seen_origins;
 my @source_files;
-my $sources_count=0;
 my $opt_debug;
 my $opt_update;
 my $opt_sudo;
 my $opt_maintainer;
 my $opt_mainonly;
 my $opt_distribution;
+my $opt_origin = 'Debian';
 my @opt_exclude_components;
 
 if (!(-x $dctrl)) {
@@ -124,6 +129,8 @@ Options:
    -m, --print-maintainer         Print the maintainer information (experimental)
    --distribution distribution    Select a distribution to search for build-depends
                                   (Default: unstable)
+   --origin origin                Select an origin to search for build-depends
+                                  (Default: Debian)
    --only-main                    Ignore contrib and non-free
    --exclude-component COMPONENT  Ignore the specified component (can be given multiple times)
 
@@ -137,23 +144,54 @@ sub test_for_valid_component {
 	return -1;
     }
     foreach my $component (@opt_exclude_components) {
-	    if ($_ =~ /$component/) {
-		return -1;
-	    }
+	if ($_ =~ /$component/) {
+	    return -1;
+	}
     }
 
-    print STDERR "DEBUG: Component ($_) may not be excluded." if ($opt_debug);
+    print STDERR "DEBUG: Component ($_) may not be excluded.\n" if ($opt_debug);
     return 0;
 }
 
-sub findsources {
-	if (/$source_pattern/ and $sources_count <= 3) {
-	    if (test_for_valid_component($_) == 0) {
-		push(@source_files, $_);
-		$sources_count+=1;
-		print STDERR "DEBUG: Added source file: $_ (#$sources_count)\n" if ($opt_debug);
+# Scan Release files and add appropriate Sources files
+sub readrelease {
+    my ($file, $base) = @_;
+    open(RELEASE, '<', "$sources_path/$file");
+    while (<RELEASE>) {
+	if (/^Origin:\s*(.+)\s*$/) {
+	    my $origin = $1;
+	    # skip undesired (non-specified or already seen) origins
+	    if (($opt_origin && $origin !~ /^\s*\Q$opt_origin\E\s*$/)
+	        || $seen_origins{$origin}) {
+		last;
 	    }
+	    $seen_origins{$origin} = 1;
 	}
+	elsif (/^(?:MD5|SHA)\w+:/) {
+	    # from a list of checksums, grab names of Sources files
+	    while (<RELEASE>) {
+		last unless /^ /;
+		if (/([^ ]+\/Sources)$/) {
+		    addsources($base, $1);
+		}
+	    }
+	    last;
+	}
+    }
+    close(RELEASE);
+}
+
+# Add a *_Sources file if test_for_valid_component likes it
+sub addsources {
+    my ($base, $filename) = @_;
+    # main/source/Sources
+    $filename =~ s/\//_/g;
+    # -> ftp.debian.org_..._main_source_Sources
+    $filename = "${base}_${filename}";
+    if (test_for_valid_component($filename) == 0) {
+	push(@source_files, $filename);
+	print STDERR "DEBUG: Added source file: $_\n" if ($opt_debug);
+    }
 }
 
 sub findreversebuilddeps {
@@ -223,6 +261,7 @@ GetOptions(
 	"distribution=s" => \$opt_distribution,
 	"only-main" => \$opt_mainonly,
 	"exclude-component=s" => \@opt_exclude_components,
+	"origin=s" => \$opt_origin,
 	"d|debug" => \$opt_debug,
 	"h|help" => sub { usage; },
 	"v|version" => sub { version; }
@@ -248,12 +287,12 @@ if ($opt_update) {
 }
 
 if ($opt_distribution) {
-	print STDERR "DEBUG: Setting distribution to $opt_distribution" if ($opt_debug);
-	$source_pattern = ".*_dists_" . $opt_distribution . "_.*Sources\$";
+	print STDERR "DEBUG: Setting distribution to $opt_distribution\n" if ($opt_debug);
+	$release_pattern = '(.*_dists_' . $opt_distribution . ')_Release$';
 }
 
 # Find sources files
-find(\&findsources, $sources_path);
+find(sub { readrelease($_, $1) if /$release_pattern/ }, $sources_path);
 
 if (($#source_files+1) <= 0) {
 	die "$progname: unable to find sources files.\nDid you forget to run apt-get update (or add --update to this command)?";
