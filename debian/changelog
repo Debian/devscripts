@@ -139,6 +139,10 @@ devscripts (2.10.56) unstable; urgency=low
     + Include patch from Mathieu Parent to allow --newversion to be mixed
       together with --package. (Closes: #549469)
 
+  [ Stefano Zacchiroli ]
+  * debcheckout: Set user.name and user.email in the checked out repository if
+    it is a git repo.  (Closes: #555025)
+
  -- James Vega <jamessan@debian.org>  Fri, 20 Nov 2009 00:28:13 -0500
 
 devscripts (2.10.55) unstable; urgency=high
