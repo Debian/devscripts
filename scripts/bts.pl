@@ -146,6 +146,7 @@ END {
 
 my %clonedbugs = ();
 my %ccpackages = ();
+my %ccsubmitters = ();
 
 =head1 SYNOPSIS
 
@@ -1205,7 +1206,7 @@ sub bts_done {
     }
 
     # Include the submitter in the email, so we act like a mail to -done
-    $ccpackages{"$bug-submitter"} = 1;
+    $ccsubmitters{"$bug-submitter"} = 1;
 }
 
 =item reopen <bug> [<submitter>]
@@ -2546,6 +2547,10 @@ sub generate_packages_cc {
     if (keys %ccpackages && $packagesserver) {
 	$ccs .= join("\@$packagesserver, ", sort (keys %ccpackages))
 	    . "\@$packagesserver";
+    }
+    if (keys %ccsubmitters && $btsserver) {
+	$ccs .= join("\@$btsserver, ", sort (keys %ccsubmitters))
+	    . "\@$btsserver";
     }
     return $ccs;
 }
