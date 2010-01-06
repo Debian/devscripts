@@ -393,7 +393,6 @@ sub getprog {
 	    if (! -d "CVS") {
 		$onlydebian = 1;
 	    }
-	    $onlydebian = 1;
 	    return "cvs";
 	} elsif (-d "debian/{arch}") {
 	    # I don't think we can tell just from the working copy

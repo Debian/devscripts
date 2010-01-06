@@ -1,6 +1,8 @@
 devscripts (2.10.62) UNRELEASED; urgency=low
 
-  * NOT YET RELEASED
+  * debcommit: Fix a regression where only debian/ changes were being
+    committed in CVS repos.  Thanks to Thomas Parmelan for the patch.
+    (Closes: #563918)
 
  -- James Vega <jamessan@debian.org>  Sat, 02 Jan 2010 22:30:26 -0500
 
