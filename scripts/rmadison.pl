@@ -74,6 +74,7 @@ my %url_map = (
     'bpo' => "http://www.backports.org/cgi-bin/madison.cgi",
     'debug' => "http://debug.debian.net/cgi-bin/madison.cgi",
     'ubuntu' => "http://people.canonical.com/~ubuntu-archive/madison.cgi",
+    'udd' => 'http://qa.debian.org/cgi-bin/madison.cgi',
 );
 my $default_url = "debian";
 
@@ -172,7 +173,7 @@ foreach my $url (@url) {
     print "$url:\n" if @url > 1;
     $url = $url_map{$url} if $url_map{$url};
     my @cmd = -x "/usr/bin/curl" ? qw/curl -s -S -L/ : qw/wget -q -O -/;
-    system @cmd, $url . "?package=" . join("+", map { uri_escape($_) } @ARGV) . "&text=on&" . join ("&", @args);
+    system @cmd, $url . (($url =~ m/\?/)?'&':'?')."package=" . join("+", map { uri_escape($_) } @ARGV) . "&text=on&" . join ("&", @args);
 }
 
 =pod
