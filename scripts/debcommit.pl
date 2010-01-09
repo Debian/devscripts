@@ -153,7 +153,7 @@ and a commit message formed using the summary line followed by a blank line and
 the changes as extracted from the changelog. B<debcommit> will then spawn an
 editor so that the message may be fine-tuned before committing.
 
-=item B<hg>
+=item B<hg> / B<darcs>
 
 The first change detected in the changelog will be unfolded to form a single line
 summary. If multiple changes were detected then an editor will be spawned to
@@ -568,7 +568,10 @@ sub commit {
 	if ($diffmode) {
 	    $action_rc = action($prog, "diff", @files_to_commit);
 	} else {
-	    $action_rc = action($prog, "record", "-m", $message, "-a", @files_to_commit);
+	    my $fh = File::Temp->new(TEMPLATE => '.commit-tmp.XXXXXX');
+	    $fh->print("$message\n");
+	    $fh->close();
+	    $action_rc = action($prog, "record", "--logfile", "$fh", "-a", @files_to_commit);
 	}
     }
     else {
@@ -730,8 +733,7 @@ sub getmessage {
 		die "debcommit: unable to determine commit message using $prog$info\nTry using the -m flag.\n";
 	    }
 	} else {
-
-	    if ($prog =~ /^(git|hg)$/ and not $diffmode) {
+	    if ($prog =~ /^(git|hg|darcs)$/ and not $diffmode) {
 		my $count = () = $ret =~ /^\s*[\*\+-] /mg;
 
 		if ($count == 1) {
@@ -756,7 +758,7 @@ sub getmessage {
 		    } else {
 			# Strip off the first change so that we can prepend
 			# the unfolded version
-			$ret =~ s/^\* .*?(^\s*[\*\+-] .*)/$1/msg;
+			$ret =~ s/^\* .*?(^\s*[\*\+-] .*)/$1\n/msg;
 			$ret = $summary . $ret;
 		    }
 		}
@@ -790,31 +792,31 @@ sub confirm {
 	    $message = $confirmmessage;
 	    return 1;
 	} elsif (/^e/i) {
-	    my $modified = 0;
-	    ($confirmmessage, $modified) = edit($confirmmessage);
+	    ($confirmmessage) = edit("$confirmmessage\n");
 	    print "\n", $confirmmessage, "\n--\n";
 	}
     }
 }
 
+# The string returned by edit is chomp()ed, so anywhere we present that string
+# to the user again needs to have a \n tacked on to the end.
 sub edit {
     my $message=shift;
-    my $tempfile=".commit-tmp";
-    open(FH, ">$tempfile") || die "debcommit: unable to create a temporary file.\n";
-    print FH $message;
-    close FH;
-    my $mtime = (stat("$tempfile"))[9];
+    my $fh=File::Temp->new(TEMPLATE => '.commit-tmp.XXXXXX')
+	|| die "$progname: unable to create a temporary file.\n";
+    $fh->print($message);
+    $fh->close();
+    my $mtime = (stat("$fh"))[9];
     defined $mtime || die "$progname: unable to retrieve modification time for temporary file: $!\n";
-    system("sensible-editor $tempfile");
-    open(FH, "<$tempfile") || die "debcommit: unable to open temporary file for reading\n";
+    system("sensible-editor $fh");
+    open(FH, '<', "$fh") || die "$progname: unable to open temporary file for reading\n";
     $message = "";
     while(<FH>) {
 	$message .= $_;
     }
-    close FH;
-    my $newmtime = (stat("$tempfile"))[9];
+    close(FH);
+    my $newmtime = (stat("$fh"))[9];
     defined $newmtime || die "$progname: unable to retrieve modification time for updated temporary file: $!\n";
-    unlink($tempfile);
     chomp $message;
     return ($message, $mtime != $newmtime);
 }

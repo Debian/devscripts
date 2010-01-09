@@ -5,6 +5,9 @@ devscripts (2.10.62) UNRELEASED; urgency=low
       repos.  Thanks to Thomas Parmelan for the patch.  (Closes: #563918)
     + Change '~' in version numbers to '.' when tagging in git.  Thanks to
       Damyan Ivanov.  (Closes: #564075)
+    + Treat darcs similar to hg with respect to determining the commit
+      message.  Fold a single change into one line and spawn an editor if
+      multiple changes are detected.  (Closes: #563901)
   * rmadison:
     + Add http://qa.debian.org/cgi-madison/madison.cgi, shorthand "udd", as a
       known madison URL.
