@@ -73,6 +73,19 @@ Show the version information.
 
 =back
 
+=head1 REQUIREMENTS
+
+The tool requires apt Sources files to be around for the checked components.
+In the default case this means that in /var/lib/apt/lists files need to be
+around for main, contrib and non-free.
+
+In practice this means one needs to add one deb-src line for each component,
+e.g.
+
+deb-src http://<mirror>/debian <dist> main contrib non-free
+
+and run apt-get update afterwards or use the update option of this tool.
+
 =cut
 
 use warnings;

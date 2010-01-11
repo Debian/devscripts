@@ -23,8 +23,11 @@ devscripts (2.10.62) UNRELEASED; urgency=low
   [ Patrick Schoenfeld ]
   * nmudiff: Fix "[nmudiff] please include --tagpending option" by applying the
     patch from Gregor Herrmann. Thanks. (Closes: #559549)
+  * build-rdeps: Add some documentation to the manpage, which emphasizes on
+    the fact that the tool has some external dependencies (namely apt Sources
+    files)
 
- -- Patrick Schoenfeld <schoenfeld@debian.org>  Mon, 11 Jan 2010 11:47:42 +0100
+ -- Patrick Schoenfeld <schoenfeld@debian.org>  Mon, 11 Jan 2010 12:46:00 +0100
 
 devscripts (2.10.61) unstable; urgency=low
 
