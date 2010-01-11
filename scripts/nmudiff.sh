@@ -305,21 +305,19 @@ if [ $ret -ne 0 ] && [ $ret -ne 1 ]; then
     exit 1
 fi
 
+TO_ADDRESSES_SENDMAIL=""
+TO_ADDRESSES_MUTT=""
+BCC_ADDRESS_SENDMAIL=""
+BCC_ADDRESS_MUTT=""
+TAGS=""
 if [ "$NMUDIFF_NEWREPORT" = "yes" ]; then
     TO_ADDRESSES_SENDMAIL="submit@bugs.debian.org"
     TO_ADDRESSES_MUTT="submit@bugs.debian.org"
-    BCC_ADDRESS_SENDMAIL=""
-    BCC_ADDRESS_MUTT=""
     TAGS="Package: $SOURCE
 Version: $OLDVERSION
 Severity: normal
-Tags: patch"
+Tags: patch pending"
 else
-    TO_ADDRESSES_SENDMAIL=""
-    TO_ADDRESSES_MUTT=""
-    BCC_ADDRESS_SENDMAIL="control@bugs.debian.org"
-    BCC_ADDRESS_MUTT="-b control@bugs.debian.org"
-    TAGS=""
     for b in $CLOSES; do
 	TO_ADDRESSES_SENDMAIL="$TO_ADDRESSES_SENDMAIL,
   $b@bugs.debian.org"
@@ -328,11 +326,19 @@ else
 	    TAGS="$TAGS
 tags $b + patch"
 	fi
+	if [ "$NMUDIFF_DELAY" != "0" ] && [ "`bts select bugs:$b tag:pending`" != "$b" ]; then
+	    TAGS="$TAGS
+tags $b + pending"
+	fi
     done
     TO_ADDRESSES_SENDMAIL=$(echo "$TO_ADDRESSES_SENDMAIL" | tail -n +2)
-    TAGS=$(echo "$TAGS" | tail -n +2)
-    TAGS="$TAGS
+    if [ "$TAGS" != "" ]; then
+        TAGS=$(echo "$TAGS" | tail -n +2)
+        TAGS="$TAGS
 thanks"
+        BCC_ADDRESS_SENDMAIL="control@bugs.debian.org"
+        BCC_ADDRESS_MUTT="-b control@bugs.debian.org"
+    fi
 fi
 
 TMPNAM="$( tempfile )"
