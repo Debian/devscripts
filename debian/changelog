@@ -16,6 +16,8 @@ devscripts (2.10.62) UNRELEASED; urgency=low
   * chdist:
     + Add "use strict" and update for compliance.
     + Use Dpkg::Version to perform version comparisons.
+  * Devscripts::Versort: Use Dpkg::Version::version_compare instead of
+    invoking “dpkg --compare-versions”.
 
  -- James Vega <jamessan@debian.org>  Sat, 02 Jan 2010 22:30:26 -0500
 
