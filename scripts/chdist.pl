@@ -104,6 +104,7 @@ use warnings;
 use File::Basename;
 use Getopt::Long qw(:config require_order);
 use Cwd qw(abs_path cwd);
+use Dpkg::Version;
 
 my $progname = basename($0);
 
@@ -220,18 +221,6 @@ sub aptconfig {
   # Build APT_CONFIG override
   my ($dist) = @_;
   return "APT_CONFIG=$datadir/$dist/etc/apt/apt.conf";
-}
-
-sub compare_versions {
-  # Compare two versions
-  my ($va, $vb) = @_;
-  if (!vb) {
-    die "E: Must provide two versions\n";
-  }
-
-  my $test = `/usr/bin/dpkg --compare-versions $va lt $vb && echo 'true' || echo 'false'`;
-  chomp $test;
-  return $test;
 }
 
 ###
@@ -450,21 +439,19 @@ sub dist_compare(\@;$;$) {
            die "E: Can only compare versions if there are two distros.\n";
         }
         if (!$status) {
-          if ($versions[0] eq $versions[1]) {
+          my $cmp = version_compare($versions[0], $versions[1]);
+          if (!$cmp) {
             $status = "same_version";
-          } else {
-            $test = compare_versions($versions[0], $versions[1]);
-            if ($test eq 'true') {
-               $status = "newer_in_$dists[1]";
-               if ( $versions[1] =~ m|^$esc_vers[0]| ) {
-                  $details = " local_changes_in_$dists[1]";
-               }
-            } else {
-               $status = "newer_in_$dists[0]";
-               if ( $versions[0] =~ m|^$esc_vers[1]| ) {
-                  $details = " local_changes_in_$dists[0]";
-               }
+          } elsif ($cmp < 0) {
+            $status = "newer_in_$dists[1]";
+            if ( $versions[1] =~ m|^$esc_vers[0]| ) {
+               $details = " local_changes_in_$dists[1]";
             }
+          } else {
+             $status = "newer_in_$dists[0]";
+             if ( $versions[0] =~ m|^$esc_vers[1]| ) {
+                $details = " local_changes_in_$dists[0]";
+             }
           }
         }
         $line .= " $status $details";
@@ -552,21 +539,19 @@ sub compare_src_bin {
            die "E: Can only compare versions if there are two types.\n";
         }
         if (!$status) {
-          if ($versions[0] eq $versions[1]) {
+          my $cmp = version_compare($versions[0], $versions[1]);
+          if (!$cmp) {
             $status = "same_version";
-          } else {
-            $test = compare_versions($versions[0], $versions[1]);
-            if ($test eq 'true') {
-               $status = "newer_in_$comp_types[1]";
-               if ( $versions[1] =~ m|^$esc_vers[0]| ) {
-                  $details = " local_changes_in_$comp_types[1]";
-               }
-            } else {
-               $status = "newer_in_$comp_types[0]";
-               if ( $versions[0] =~ m|^$esc_vers[1]| ) {
-                  $details = " local_changes_in_$comp_types[0]";
-               }
+          } elsif ($cmp < 0) {
+            $status = "newer_in_$comp_types[1]";
+            if ( $versions[1] =~ m|^$esc_vers[0]| ) {
+               $details = " local_changes_in_$comp_types[1]";
             }
+          } else {
+             $status = "newer_in_$comp_types[0]";
+             if ( $versions[0] =~ m|^$esc_vers[1]| ) {
+                $details = " local_changes_in_$comp_types[0]";
+             }
           }
         }
         $line .= " $status $details";
