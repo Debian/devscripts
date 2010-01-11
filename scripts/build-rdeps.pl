@@ -153,13 +153,20 @@ version;
 
 # Sub to test if a given section shall be included in the result
 sub test_for_valid_component {
-    if ($opt_mainonly and /(contrib|non-free)/) {
+    my $filebase = shift;
+
+    if ($opt_mainonly and $filebase =~ /(contrib|non-free)/) {
 	return -1;
     }
     foreach my $component (@opt_exclude_components) {
-	if ($_ =~ /$component/) {
+	if ($filebase =~ /$component/) {
 	    return -1;
 	}
+    }
+
+    if (! -e "$sources_path/$filebase") {
+	print STDERR "Warning: Ignoring missing sources file $filebase. (Missing component in sources.list?)\n";
+	return -1;
     }
 
     print STDERR "DEBUG: Component ($_) may not be excluded.\n" if ($opt_debug);
