@@ -99,10 +99,13 @@ License, or (at your option) any later version.
 
 =cut
 
+use strict;
+use warnings;
+use File::Basename;
 use Getopt::Long qw(:config require_order);
 use Cwd qw(abs_path cwd);
 
-my $datadir = $ENV{'HOME'} . '/.chdist';
+my $progname = basename($0);
 
 sub usage {
   return <<EOF;
@@ -148,6 +151,9 @@ Claes. This program comes with ABSOLUTELY NO WARRANTY. You are free
 to redistribute this code under the terms of the GNU General Public
 License, version 2 or (at your option) any later version.
 EOF
+
+my $arch;
+my $datadir = $ENV{'HOME'} . '/.chdist';
 
 GetOptions(
   "help"       => \$help,
@@ -290,7 +296,7 @@ sub recurs_mkdir {
   my ($dir) = @_;
   my @temp = split /\//, $dir;
   my $createdir = "";
-  foreach $piece (@temp) {
+  foreach my $piece (@temp) {
      $createdir .= "/$piece";
      if (! -d $createdir) {
         mkdir($createdir);
@@ -311,7 +317,7 @@ sub dist_create {
     mkdir($datadir);
   }
   mkdir($dir);
-  foreach $d (('/etc/apt', '/var/lib/apt/lists/partial', '/var/lib/dpkg', '/var/cache/apt/archives/partial')) {
+  foreach my $d (('/etc/apt', '/var/lib/apt/lists/partial', '/var/lib/dpkg', '/var/cache/apt/archives/partial')) {
      recurs_mkdir("$dir/$d");
   }
 
@@ -387,7 +393,7 @@ sub dist_compare(\@;$;$) {
   # Takes a list of dists, a type of comparison and a do_compare flag
   my ($dists, $do_compare, $type) = @_;
   # Type is 'Sources' by default
-  $type ||= Sources;
+  $type ||= 'Sources';
   type_check($type);
 
   $do_compare = 0 if $do_compare eq 'false';
@@ -572,16 +578,16 @@ sub compare_src_bin {
 
 sub grep_file {
   my (@argv, $file) = @_;
-  $dist = shift @argv;
+  my $dist = shift @argv;
   dist_check($dist);
-  $f = glob($datadir . '/' . $dist . "/var/lib/apt/lists/*_$file");
+  my $f = glob($datadir . '/' . $dist . "/var/lib/apt/lists/*_$file");
   # FIXME avoid shell invoc, potential quoting problems here
   system("cat $f | grep-dctrl @argv");
 }
 
 sub list {
   opendir(DIR, $datadir) or die "can't open dir $datadir: $!";
-  while (defined($file = readdir(DIR))) {
+  while (my $file = readdir(DIR)) {
      if ( (-d "$datadir/$file") && ($file =~ m|^\w+|) ) {
         print "$file\n";
      }
