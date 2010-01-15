@@ -792,7 +792,7 @@ sub confirm {
 	    $message = $confirmmessage;
 	    return 1;
 	} elsif (/^e/i) {
-	    ($confirmmessage) = edit("$confirmmessage\n");
+	    ($confirmmessage) = edit($confirmmessage);
 	    print "\n", $confirmmessage, "\n--\n";
 	}
     }
@@ -804,7 +804,9 @@ sub edit {
     my $message=shift;
     my $fh=File::Temp->new(TEMPLATE => '.commit-tmp.XXXXXX')
 	|| die "$progname: unable to create a temporary file.\n";
-    $fh->print($message);
+    # Ensure the message we present to the user has an EOL on the last line.
+    chomp($message);
+    $fh->print("$message\n");
     $fh->close();
     my $mtime = (stat("$fh"))[9];
     defined $mtime || die "$progname: unable to retrieve modification time for temporary file: $!\n";

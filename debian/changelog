@@ -9,6 +9,8 @@ devscripts (2.10.62) UNRELEASED; urgency=low
     + Treat darcs similar to hg with respect to determining the commit
       message.  Fold a single change into one line and spawn an editor if
       multiple changes are detected.  (Closes: #563901)
+    + Ensure the commit message presented to the user for editing always has
+      an EOL on the last line.
   * rmadison:
     + Add http://qa.debian.org/cgi-madison/madison.cgi, shorthand "udd", as a
       known madison URL.
