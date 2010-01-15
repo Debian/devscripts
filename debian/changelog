@@ -19,6 +19,7 @@ devscripts (2.10.62) UNRELEASED; urgency=low
     + Use Dpkg::Version to perform version comparisons.
   * Devscripts::Versort: Use Dpkg::Version::version_compare instead of
     invoking “dpkg --compare-versions”.
+  * debian/control: Update Vcs-* to point to the new Git repository.
 
   [ Patrick Schoenfeld ]
   * nmudiff: Fix "[nmudiff] please include --tagpending option" by applying the
