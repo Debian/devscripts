@@ -408,7 +408,7 @@ sub set_auth($$$$) {
 		$url =~ s|^\w+://(git\.debian\.org)/git/users/.*?/(.*)|git+ssh://$user$1/~/public_git/$2|;
 		$url =~ s|^\w+://(git\.debian\.org)/~.*?/(.*)|git+ssh://$user$1/~/public_git/$2|;
 	    } else {
-		$url =~ s|^\w+://(git\.debian\.org/.*)|git+ssh://$user$1|;
+		$url =~ s|^\w+://(git\.debian\.org)/(?:git/)?(.*)|git+ssh://$user$1/git/$2|;
 	    }
 	}
 	case "hg" { $url =~ s|^\w+://(hg\.debian\.org/.*)|ssh://$user$1|; }

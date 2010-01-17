@@ -24,6 +24,8 @@ devscripts (2.10.62) UNRELEASED; urgency=low
   * debian/control: Update Vcs-* to point to the new Git repository.
   * dcmd: Allow capital letters for the section and priority fields.  (Closes:
     #565159)
+  * debcheckout: Ensure "/git/" is at the start of the URL's path when
+    performing an authenticated clone of an Alioth git repo.
 
   [ Patrick Schoenfeld ]
   * nmudiff: Fix "[nmudiff] please include --tagpending option" by applying the
