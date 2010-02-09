@@ -742,7 +742,7 @@ else
 
     elif [ "$DIFFTYPE" = tar ]; then
 	if [ -d debian ]; then
-	    echo "$PROGNAME warning: using a debian.tar.{gz|bz2|lzma} file in old Debian source," >&@
+	    echo "$PROGNAME warning: using a debian.tar.{gz|bz2|lzma} file in old Debian source," >&2
 	    echo "but upstream also contains a debian/ directory!" >&2
 	    if [ -e "debian.upstream" ]; then
 		echo "Please apply the diff by hand and take care with this." >&2

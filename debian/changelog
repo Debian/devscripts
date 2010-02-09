@@ -26,6 +26,8 @@ devscripts (2.10.62) UNRELEASED; urgency=low
     #565159)
   * debcheckout: Ensure "/git/" is at the start of the URL's path when
     performing an authenticated clone of an Alioth git repo.
+  * uupdate: Fix a typo which caused redirection of stdout to a file name "@".
+    (Closes: #569062)
 
   [ Patrick Schoenfeld ]
   * nmudiff: Fix "[nmudiff] please include --tagpending option" by applying the
