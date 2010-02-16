@@ -41,6 +41,10 @@ devscripts (2.10.62) UNRELEASED; urgency=low
       file actually exists and otherwise print a more meaningful warning.
       (Closes: #564443)
 
+  [ Adam D. Barratt ]
+  * debchange: Sanitise list of distributions.  Remove {sarge,etch}-backports
+    and sarge-volatile, none of which accept uploads any more.
+
  -- Patrick Schoenfeld <schoenfeld@debian.org>  Mon, 11 Jan 2010 15:32:59 +0100
 
 devscripts (2.10.61) unstable; urgency=low

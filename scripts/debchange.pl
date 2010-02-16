@@ -401,8 +401,8 @@ if (defined $opt_D) {
     $distributor ||= 'Debian';
 
     if ($distributor eq 'Debian') {
-	unless ($opt_D =~ /^(unstable|((old)?stable|testing)(-security)?|experimental|UNRELEASED|(sarge|etch|lenny)(-volatile|-backports)|((oldstable|testing)-)?proposed-updates)$/) {
-	    warn "$progname warning: Recognised distributions are: unstable, testing, stable,\noldstable, experimental, UNRELEASED, {sarge,etch,lenny}-{volatile,backports},\n{oldstable-,testing-,}proposed-updates and {testing,stable,oldstable}-security.\nUsing your request anyway.\n";
+	unless ($opt_D =~ /^(unstable|((old)?stable|testing)(-security)?|experimental|UNRELEASED|(etch|lenny)-volatile|lenny-backports|((oldstable|testing)-)?proposed-updates)$/) {
+	    warn "$progname warning: Recognised distributions are: unstable, testing, stable,\noldstable, experimental, UNRELEASED, {etch,lenny}-volatile, lenny-backports,\n{oldstable-,testing-,}proposed-updates and {testing,stable,oldstable}-security.\nUsing your request anyway.\n";
 	    $warnings++ if not $opt_force_dist;
 	}
     } elsif ($distributor eq 'Ubuntu') {
