@@ -20,7 +20,7 @@ Recommends: at, curl | wget, dctrl-tools, debian-keyring, debian-maintainers,
  libterm-size-perl, libtimedate-perl, liburi-perl, libwww-perl,
  libyaml-syck-perl, lintian, lsb-release, bsd-mailx | mailx | mailutils, 
  man-db, patch, patchutils, ssh-client, strace, unzip, wdiff, www-browser,
- subversion | cvs | svk | tla | bzr | git-core | mercurial, lzma,
+ subversion | cvs | darcs | svk | tla | bzr | git-core | mercurial, lzma,
  sensible-utils
 Suggests: build-essential, cvs-buildpackage, devscripts-el, gnuplot,
  libfile-desktopentry-perl, libnet-smtp-ssl-perl (>= 1.01-2), mutt,
@@ -61,9 +61,9 @@ Description: scripts to make the life of a Debian Package maintainer easier
     [libparse-debcontrol-perl, libsoap-lite-perl, lsb-release]
   - debcheckout: checkout the development repository of a Debian package
   - debclean: purge a Debian source tree [fakeroot]
-  - debcommit: commit changes to cvs, svn, svk, tla, bzr, git, or hg, basing
-    commit message on changelog
-    [cvs | subversion | svk | tla | bzr | git-core | mercurial]
+  - debcommit: commit changes to cvs, darcs, svn, svk, tla, bzr, git, or hg,
+    basing commit message on changelog
+    [cvs | darcs | subversion | svk | tla | bzr | git-core | mercurial]
   - debdiff: compare two versions of a Debian package to check for
     added and removed files [wdiff, patchutils]
   - debi: install a just-built package

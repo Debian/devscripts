@@ -78,10 +78,10 @@ And now, in mostly alphabetical order, the scripts:
   so that the binaries and other files can be rebuilt if necessary.
   [fakeroot]
 
-- debcommit: Commits changes to cvs, svn, arch, git, or hg, using new entries
-  in debian/changelog as the commit message. Also supports tagging Debian
-  package releases. [cvs | subversion | svk | tla | bzr | git-core | 
-  mercurial]
+- debcommit: Commits changes to cvs, darcs, svn, svk, tla, bzr, git, or hg,
+  using new entries in debian/changelog as the commit message. Also supports
+  tagging Debian package releases. [cvs | darcs | subversion | svk | tla |
+  bzr | git-core | mercurial]
 
 - debdiff: A program which examines two .deb files or two .changes files and
   reports on any difference found in their file lists.  Useful for ensuring
