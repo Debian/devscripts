@@ -501,7 +501,7 @@ sub init_hashes {
 	$LEADIN . qr'local\s+-[a-zA-Z]+' => q<local -opt>,
 	qr'(?:^|\s+)\s*\(?\w*[^\(\w\s]+\S*?\s*\(\)\s*([\{|\(]|\Z)'
 		=> q<function names should only contain [a-z0-9_]>,
-	$LEADIN . qr'(push|pop)d(\s|\Z)' =>    q<(push|pod)d>,
+	$LEADIN . qr'(push|pop)d(\s|\Z)' =>    q<(push|pop)d>,
 	$LEADIN . qr'export\s+-[^p]' =>  q<export only takes -p as an option>,
 	$LEADIN . qr'ulimit(\s|\Z)' =>         q<ulimit>,
 	$LEADIN . qr'shopt(\s|\Z)' =>          q<shopt>,
