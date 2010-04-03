@@ -35,6 +35,8 @@ devscripts (2.10.62) UNRELEASED; urgency=low
   * debuild: Expose two new variables (epoch-less source version, and upstream
     version) to hooks.  Thanks to gregor herrmann for the patch.  (Closes:
     573092)
+  * checkbashisms: Detect more Bash builtins -- readarray, mapfile, enable.
+    (Closes: #568473)
 
   [ Patrick Schoenfeld ]
   * nmudiff: Fix "[nmudiff] please include --tagpending option" by applying the
