@@ -654,6 +654,8 @@ my $pkg = $changelog{'Source'};
 fatal "no version number in changelog!"
     unless exists $changelog{'Version'};
 my $version = $changelog{'Version'};
+(my $sversion=$version) =~ s/^\d+://;
+(my $uversion=$sversion) =~ s/-[a-z0-9+\.]+$//i;
 
 # Is the directory name acceptable?
 if ($check_dirname_level ==  2 or
@@ -963,10 +965,9 @@ if ($command_version eq 'dpkg') {
 	/^(.*)=(.*)$/ and $ENV{$1} = $2;
     }
 
-    # We need to do the arch, sversion, pv, pva stuff to figure out
+    # We need to do the arch, pv, pva stuff to figure out
     # what the changes file will be called,
-    my ($sversion, $uversion, $dsc, $changes, $build);
-    my $arch;
+    my ($arch, $dsc, $changes, $build);
     if ($sourceonly) {
 	$arch = 'source';
     } else {
@@ -975,8 +976,6 @@ if ($command_version eq 'dpkg') {
 	fatal "couldn't determine host architecture!?" if ! $arch;
     }
 
-    ($sversion=$version) =~ s/^\d+://;
-    ($uversion=$sversion) =~ s/-[a-z0-9+\.]+$//i;
     $dsc = "${pkg}_${sversion}.dsc";
     my $orig_prefix = "${pkg}_${uversion}.orig.tar";
     my $origdir = basename(cwd()) . ".orig";
@@ -1344,7 +1343,7 @@ sub run_hook ($$) {
     print STDERR " Running $hook-hook\n";
     my $hookcmd = $hook{$hook};
     $act = $act ? 1 : 0;
-    my %per=("%"=>"%", "p"=>$pkg, "v"=>$version, "a"=>$act);
+    my %per=("%"=>"%", "p"=>$pkg, "v"=>$version, "s"=>$sversion, "u"=>$uversion, "a"=>$act);
     $hookcmd =~ s/\%(.)/exists $per{$1} ? $per{$1} :
 	(warn ("Unrecognised \% substitution in hook: \%$1\n"), "\%$1")/eg;
 

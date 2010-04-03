@@ -32,6 +32,9 @@ devscripts (2.10.62) UNRELEASED; urgency=low
     (Closes: #570138)
   * debchange: Add maverick as a valid distribution.  Thanks to Benjamin Drung
     for the patch.  (Closes: #576287)
+  * debuild: Expose two new variables (epoch-less source version, and upstream
+    version) to hooks.  Thanks to gregor herrmann for the patch.  (Closes:
+    573092)
 
   [ Patrick Schoenfeld ]
   * nmudiff: Fix "[nmudiff] please include --tagpending option" by applying the
