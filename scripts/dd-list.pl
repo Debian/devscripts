@@ -81,7 +81,7 @@ Usage: dd-list [options] [package ...]
         Read package names from the standard input.
 
     -d, --dctrl
-        Read Debian control data from standard input.
+        Read package list in Debian control data from standard input.
 
     -u, --uploaders
         Also list Uploaders of packages, not only the listed Maintainers

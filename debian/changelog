@@ -37,6 +37,9 @@ devscripts (2.10.62) UNRELEASED; urgency=low
     573092)
   * checkbashisms: Detect more Bash builtins -- readarray, mapfile, enable.
     (Closes: #568473)
+  * dd-list: Clarify that --dctrl simply changes the expected format of the
+    list of packages.  Thanks to Adeodato Simó for the suggestion.  (Partially
+    addresses #509983)
 
   [ Patrick Schoenfeld ]
   * nmudiff: Fix "[nmudiff] please include --tagpending option" by applying the
