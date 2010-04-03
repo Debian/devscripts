@@ -30,8 +30,11 @@ devscripts (2.10.62) UNRELEASED; urgency=low
     (Closes: #569062)
   * Update descriptions of debcommit to include darcs as a supported VCS.
     (Closes: #570138)
-  * debchange: Add maverick as a valid distribution.  Thanks to Benjamin Drung
-    for the patch.  (Closes: #576287)
+  * debchange:
+    + Add maverick as a valid distribution.  Thanks to Benjamin Drung for the
+      patch.  (Closes: #576287)
+    + Treat a trailing '+' like a trailing '~' when incrementing the version
+      number.  (Closes: #521642)
   * debuild: Expose two new variables (epoch-less source version, and upstream
     version) to hooks.  Thanks to gregor herrmann for the patch.  (Closes:
     573092)

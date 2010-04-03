@@ -995,7 +995,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
     # including epochs.
 
     if (! $NEW_VERSION) {
-	if ($VERSION =~ /(.*?)([a-yA-Y][a-zA-Z]*|\d+)(~)?$/i) {
+	if ($VERSION =~ /(.*?)([a-yA-Y][a-zA-Z]*|\d+)([+~])?$/i) {
 	    my $extra=$3 || '';
 	    my $useextra = 0;
 	    my $end=$2;
