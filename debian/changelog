@@ -47,6 +47,8 @@ devscripts (2.10.62) UNRELEASED; urgency=low
     Thanks to Simon Paillard for the patch.  (Closes: #507776)
   * Document in dscverify(1) that /usr/share/keyrings/debian-maintainers.gpg
     is one of the default keyrings.
+  * dget: Add description of the use of dscverify to the description in the
+    man page.  (Closes: #537367)
 
   [ Patrick Schoenfeld ]
   * nmudiff: Fix "[nmudiff] please include --tagpending option" by applying the

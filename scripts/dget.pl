@@ -494,7 +494,8 @@ B<dget> downloads Debian packages.  In the first form, B<dget> fetches
 the requested URLs.  If this is a .dsc or .changes file, then B<dget>
 acts as a source-package aware form of B<wget>: it also fetches any
 files referenced in the .dsc/.changes file.  The downloaded source is
-then unpacked by B<dpkg-source>.
+then checked with B<dscverify> and, if successful, unpacked by
+B<dpkg-source>.
 
 In the second form, B<dget> downloads a I<binary> package (i.e., a
 I<.deb> file) from the Debian mirror configured in
