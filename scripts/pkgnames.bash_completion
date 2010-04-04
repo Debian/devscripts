@@ -1,0 +1,12 @@
+_pkg_names() 
+{
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+
+    COMPREPLY=( $( apt-cache pkgnames $cur 2> /dev/null ) )
+
+    return 0
+}
+complete -F _pkg_names wnpp-alert wnpp-check mk-build-deps rmadison mass-bug debsnap dd-list build-rdeps who-uploads transition-check getbuildlog dcontrol grep-excuses rc-alert debcheckout mergechanges bts whodepends dget pts-subscribe debc pts-unsubscribe
+
