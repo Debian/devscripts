@@ -73,6 +73,9 @@ devscripts (2.10.62) UNRELEASED; urgency=low
   * debchange: Sanitise list of distributions.  Remove {sarge,etch}-backports
     and sarge-volatile, none of which accept uploads any more.
 
+  [ Martin Zobel-Helas ]
+  * checkbashisms: Fix typo spotted by Dann Frazier. (Closes: #575554)
+
  -- Patrick Schoenfeld <schoenfeld@debian.org>  Mon, 11 Jan 2010 15:32:59 +0100
 
 devscripts (2.10.61) unstable; urgency=low
