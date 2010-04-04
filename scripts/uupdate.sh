@@ -804,7 +804,7 @@ else
 	    exit 1
 	fi
     else
-	echo "$PROGNAME: could not find diffs from version $VERSION to apply!" >&2
+	echo "$PROGNAME: could not find {diff|debian.tar}.{gz|bz2|lzma|xz} from version $VERSION to apply!" >&2
 	exit 1
     fi
     chmod a+x debian/rules
