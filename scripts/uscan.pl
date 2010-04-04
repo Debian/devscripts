@@ -1350,11 +1350,20 @@ EOF
 	$newfile_base = $newfile_base_gz;
     }
 
-    if ($repack and $newfile_base =~ /^(.*)\.(tar\.lzma|tlzma?)$/) {
+    if ($repack and $newfile_base =~ /^(.*)\.(tar\.lzma|tlz(?:ma?)?)$/) {
 	print "-- Repacking from lzma to gzip\n" if $verbose;
 	my $newfile_base_gz = "$1.tar.gz";
 	system("lzma -cd $destdir/$newfile_base | gzip -n -9 > $destdir/$newfile_base_gz") == 0
 	  or die "repacking from lzma to gzip failed\n";
+	unlink "$destdir/$newfile_base";
+	$newfile_base = $newfile_base_gz;
+    }
+
+    if ($repack and $newfile_base =~ /^(.*)\.(tar\.xz|txz)$/) {
+	print "-- Repacking from xz to gzip\n" if $verbose;
+	my $newfile_base_gz = "$1.tar.gz";
+	system("xz -cd $destdir/$newfile_base | gzip -n -9 > $destdir/$newfile_base_gz") == 0
+	  or die "repacking from xz to gzip failed\n";
 	unlink "$destdir/$newfile_base";
 	$newfile_base = $newfile_base_gz;
     }

@@ -48,7 +48,7 @@ usage () {
 "Usage for a new archive:
   $PROGNAME [options] <new upstream archive> [<version>]
 For a patch file:
-  $PROGNAME [options] --patch|-p <patch>[.gz|.bz2|.lzma]
+  $PROGNAME [options] --patch|-p <patch>[.gz|.bz2|.lzma|.xz]
 Options are:
    --upstream-version <version>, -v <version>
                       specify version number of upstream package
@@ -56,10 +56,10 @@ Options are:
                       which command to be used to become root
                       for package-building
    --pristine, -u     Source is pristine upstream source and should be
-                      copied to <pkg>_<version>.orig.tar.{gz|bz2|lzma}; not valid
+                      copied to <pkg>_<version>.orig.tar.{gz|bz2|lzma|xz}; not valid
                       for patches
    --no-symlink       Copy new upstream archive to new location
-                      as <pkg>_<version>.orig.tar.{gz|bz2|lzma} instead of making a
+                      as <pkg>_<version>.orig.tar.{gz|bz2|lzma|xz} instead of making a
                       symlink
    --no-conf, --noconf
                       Don't read devscripts config files;
@@ -258,6 +258,7 @@ if [ "$PATCH" ]; then
 		*.gz)  CATPATCH="zcat $PATCH"; X=${X%.gz};;
 		*.bz2) CATPATCH="bzcat $PATCH"; X=${X%.bz2};;
 		*.lzma) CATPATCH="lzcat $PATCH"; X=${X%.lzma};;
+		*.xz) CATPATCH="xzcat $PATCH"; X=${X%.xz};;
 		*)     CATPATCH="cat $PATCH";;
 	    esac
 	    ;;
@@ -290,6 +291,14 @@ if [ "$PATCH" ]; then
 			CATPATCH="lzcat ../$PATCH"
 		    fi
 		    X=${X%.lzma}
+		    ;;
+		*.xz)
+		    if [ -r "$OPWD/$PATCH" ]; then
+			CATPATCH="xzcat $OPWD/$PATCH"
+		    else
+			CATPATCH="xzcat ../$PATCH"
+		    fi
+		    X=${X%.xz}
 		    ;;
 		*)    if [ -r "$OPWD/$PATCH" ]; then
 			CATPATCH="cat $OPWD/$PATCH"
@@ -350,8 +359,11 @@ if [ "$PATCH" ]; then
     elif [ -r "../${PACKAGE}_$UVERSION.orig.tar.lzma" ]; then
 	OLDARCHIVE="${PACKAGE}_$UVERSION.orig.tar.lzma"
 	OLDARCHIVETYPE=lzma
+    elif [ -r "../${PACKAGE}_$UVERSION.orig.tar.xz" ]; then
+	OLDARCHIVE="${PACKAGE}_$UVERSION.orig.tar.xz"
+	OLDARCHIVETYPE=xz
     else
-	echo "$PROGNAME: can't find/read ${PACKAGE}_$UVERSION.orig.tar.{gz|bz2}" >&2
+	echo "$PROGNAME: can't find/read ${PACKAGE}_$UVERSION.orig.tar.{gz|bz2|lzma|xz}" >&2
 	echo "in the parent directory!" >&2
 	echo "Aborting...." >&2
 	exit 1
@@ -397,6 +409,12 @@ if [ "$PATCH" ]; then
 	}
     elif [ "$OLDARCHIVETYPE" = lzma ]; then
 	tar --lzma -xf ../$OLDARCHIVE || {
+	    echo "$PROGNAME: can't untar $OLDARCHIVE;" >&2
+	    echo "aborting..." >&2
+	    exit 1
+	}
+    elif [ "$OLDARCHIVETYPE" = xz ]; then
+	tar --xz -xf ../$OLDARCHIVE || {
 	    echo "$PROGNAME: can't untar $OLDARCHIVE;" >&2
 	    echo "aborting..." >&2
 	    exit 1
@@ -488,9 +506,12 @@ else
 	                    TYPE=bz2 ;;
 	    *.orig.tar.lzma) X="${X%.orig.tar.lzma}"; UNPACK="tar --lzma -xf";
 	                    TYPE=lzma ;;
+	    *.orig.tar.xz) X="${X%.orig.tar.xz}"; UNPACK="tar --xz -xf";
+	                    TYPE=xz ;;
 	    *.tar.gz)  X="${X%.tar.gz}";  UNPACK="tar zxf"; TYPE=gz ;;
 	    *.tar.bz2) X="${X%.tar.bz2}"; UNPACK="tar --bzip -xf"; TYPE=bz2 ;;
 	    *.tar.lzma) X="${X%.tar.lzma}"; UNPACK="tar --lzma -xf"; TYPE=lzma ;;
+	    *.tar.xz)  X="${X%.tar.xz}";  UNPACK="tar --xz -xf"; TYPE=xz ;;
 	    *.tar.Z)   X="${X%.tar.Z}";   UNPACK="tar zxf"; TYPE="" ;;
 	    *.tgz)     X="${X%.tgz}";     UNPACK="tar zxf"; TYPE=gz ;;
 	    *.tar)     X="${X%.tar}";     UNPACK="tar xf";  TYPE="" ;;
@@ -564,12 +585,21 @@ else
 	echo "already exists in the parent dir;" >&2
 	echo "please check on the situation before trying $PROGNAME again." >&2
 	exit 1
+    elif [ -e "../${PACKAGE}_$SNEW_VERSION.orig.tar.xz" ] && \
+	[ "$(md5sum "${ARCHIVE_PATH}" | cut -d" " -f1)" != \
+	  "$(md5sum "../${PACKAGE}_$SNEW_VERSION.orig.tar.xz" | cut -d" " -f1)" ]
+    then
+	echo "$PROGNAME: a different ${PACKAGE}_$SNEW_VERSION.orig.tar.xz" >&2
+	echo "already exists in the parent dir;" >&2
+	echo "please check on the situation before trying $PROGNAME again." >&2
+	exit 1
     fi
 
     if [ $UUPDATE_PRISTINE = yes -a -n "$TYPE" -a \
 	! -e "../${PACKAGE}_$SNEW_VERSION.orig.tar.gz" -a \
 	! -e "../${PACKAGE}_$SNEW_VERSION.orig.tar.bz2" -a \
-	! -e "../${PACKAGE}_$SNEW_VERSION.orig.tar.lzma" ]; then
+	! -e "../${PACKAGE}_$SNEW_VERSION.orig.tar.lzma" -a \
+	! -e "../${PACKAGE}_$SNEW_VERSION.orig.tar.xz" ]; then
 	if [ "$UUPDATE_SYMLINK_ORIG" = yes ]; then
 	    echo "Symlinking to pristine source from ${PACKAGE}_$SNEW_VERSION.orig.tar.$TYPE..."
 	    case $ARCHIVE_PATH in
@@ -602,8 +632,15 @@ else
 		    cp "$ARCHIVE_PATH" "../${PACKAGE}_$SNEW_VERSION.orig.tar.lzma"
 		fi
 		;;
+	    xz)
+		if [ "$UUPDATE_SYMLINK_ORIG" = yes ]; then
+		    ln -s "$LINKARCHIVE" "../${PACKAGE}_$SNEW_VERSION.orig.tar.xz"
+		else
+		    cp "$ARCHIVE_PATH" "../${PACKAGE}_$SNEW_VERSION.orig.tar.xz"
+		fi
+		;;
 	    *)
-		echo "$PROGNAME: can't preserve pristine sources from non .tar.gz/.tar.bz2 upstream archive!" >&2
+		echo "$PROGNAME: can't preserve pristine sources from non .tar.{gz|bz2|lzma|xz} upstream archive!" >&2
 		echo "Continuing anyway..." >&2
 		;;
 	esac
@@ -656,6 +693,10 @@ else
 	DIFF="../${PACKAGE}_$SVERSION.diff.lzma"
 	DIFFTYPE=diff
 	DIFFCAT=lzcat
+    elif [ -r "../${PACKAGE}_$SVERSION.diff.xz" ]; then
+	DIFF="../${PACKAGE}_$SVERSION.diff.xz"
+	DIFFTYPE=diff
+	DIFFCAT=xzcat
     elif [ -r "../${PACKAGE}_$SVERSION.debian.tar.gz" ]; then
 	DIFF="../${PACKAGE}_$SVERSION.debian.tar.gz"
 	DIFFTYPE=tar
@@ -668,6 +709,10 @@ else
 	DIFF="../${PACKAGE}_$SVERSION.debian.tar.lzma"
 	DIFFTYPE=tar
 	DIFFUNPACK="tar --lzma -xf"
+    elif [ -r "../${PACKAGE}_$SVERSION.debian.tar.xz" ]; then
+	DIFF="../${PACKAGE}_$SVERSION.debian.tar.xz"
+	DIFFTYPE=tar
+	DIFFUNPACK="tar --xz -xf"
     fi
 
     if [ "$DIFFTYPE" = diff ]; then
@@ -742,7 +787,7 @@ else
 
     elif [ "$DIFFTYPE" = tar ]; then
 	if [ -d debian ]; then
-	    echo "$PROGNAME warning: using a debian.tar.{gz|bz2|lzma} file in old Debian source," >&2
+	    echo "$PROGNAME warning: using a debian.tar.{gz|bz2|lzma|xz} file in old Debian source," >&2
 	    echo "but upstream also contains a debian/ directory!" >&2
 	    if [ -e "debian.upstream" ]; then
 		echo "Please apply the diff by hand and take care with this." >&2

@@ -981,12 +981,13 @@ if ($command_version eq 'dpkg') {
     my $origdir = basename(cwd()) . ".orig";
     if (! $binaryonly and $tgz_check and $uversion ne $sversion
 	and ! -f "../${orig_prefix}.bz2" and ! -f "../${orig_prefix}.lzma"
-	and ! -f "../${orig_prefix}.gz" and ! -d "../$origdir") {
+	and ! -f "../${orig_prefix}.gz" and ! -f "../${orig_prefix}.xz"
+	and ! -d "../$origdir") {
 	print STDERR "This package has a Debian revision number but there does"
 	    . " not seem to be\nan appropriate original tar file or .orig"
 	    . " directory in the parent directory;\n(expected one of"
-	    . " ${orig_prefix}.gz, ${orig_prefix}.bz2,\n${orig_prefix}.lzma or"
-	    . " $origdir)\ncontinue anyway? (y/n) ";
+	    . " ${orig_prefix}.gz, ${orig_prefix}.bz2,\n${orig_prefix}.lzma, "
+	    . " ${orig_prefix}.xz or $origdir)\ncontinue anyway? (y/n) ";
 	my $ans = <STDIN>;
 	exit 1 unless $ans =~ /^y/i;
     }

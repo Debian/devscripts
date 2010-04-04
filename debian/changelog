@@ -26,8 +26,11 @@ devscripts (2.10.62) UNRELEASED; urgency=low
     #565159)
   * debcheckout: Ensure "/git/" is at the start of the URL's path when
     performing an authenticated clone of an Alioth git repo.
-  * uupdate: Fix a typo which caused redirection of stdout to a file name "@".
-    (Closes: #569062)
+  * uupdate:
+    + Fix a typo which caused redirection of stdout to a file name "@".
+      (Closes: #569062)
+    + Add support for xz compressed archives/patches.  Thanks to Hideki Yamane
+      for the patch.  (Closes: #568615)
   * Update descriptions of debcommit to include darcs as a supported VCS.
     (Closes: #570138)
   * debchange:
@@ -49,6 +52,8 @@ devscripts (2.10.62) UNRELEASED; urgency=low
     is one of the default keyrings.
   * dget: Add description of the use of dscverify to the description in the
     man page.  (Closes: #537367)
+  * Add support for working with/recognizing xz archives to debchange,
+    debdiff, debuild, uscan.
 
   [ Patrick Schoenfeld ]
   * nmudiff: Fix "[nmudiff] please include --tagpending option" by applying the
