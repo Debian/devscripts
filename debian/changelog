@@ -29,8 +29,8 @@ devscripts (2.10.62) UNRELEASED; urgency=low
   * uupdate:
     + Fix a typo which caused redirection of stdout to a file name "@".
       (Closes: #569062)
-    + Add support for xz compressed archives/patches.  Thanks to Hideki Yamane
-      for the patch.  (Closes: #568615)
+    + Add support for xz compressed archives/patches and 7z archives.  Thanks
+      to Hideki Yamane for the patch.  (Closes: #568615)
     + Clarify wording when neither a diff nor a debian.tar is found.  (Closes:
       #575820)
   * Update descriptions of debcommit to include darcs as a supported VCS.

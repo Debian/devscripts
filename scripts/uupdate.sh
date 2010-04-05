@@ -516,6 +516,7 @@ else
 	    *.tgz)     X="${X%.tgz}";     UNPACK="tar zxf"; TYPE=gz ;;
 	    *.tar)     X="${X%.tar}";     UNPACK="tar xf";  TYPE="" ;;
 	    *.zip)     X="${X%.zip}";     UNPACK="unzip";   TYPE="" ;;
+	    *.7z)      X="${X%.7z}";      UNPACK="7z x";    TYPE="" ;;
 	    *)
 		echo "$PROGNAME: sorry: Unknown archive type" >&2
 		exit 1
