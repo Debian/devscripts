@@ -21,7 +21,9 @@ devscripts (2.10.62) UNRELEASED; urgency=low
     + Use Dpkg::Version to perform version comparisons.
   * Devscripts::Versort: Use Dpkg::Version::version_compare instead of
     invoking “dpkg --compare-versions”.
-  * debian/control: Update Vcs-* to point to the new Git repository.
+  * debian/control:
+    + Update Vcs-* to point to the new Git repository.
+    + Remove Conflicts on kdesdk-scripts from Etch.
   * dcmd: Allow capital letters for the section and priority fields.  (Closes:
     #565159)
   * debcheckout: Ensure "/git/" is at the start of the URL's path when

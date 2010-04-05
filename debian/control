@@ -12,7 +12,6 @@ Vcs-Git: git://git.debian.org/devscripts/devscripts.git
 
 Package: devscripts
 Architecture: any
-Conflicts: kdesdk-scripts (<< 4:3.5.6-2)
 Depends: dpkg-dev, perl, ${shlibs:Depends}, ${misc:Depends}
 Recommends: at, curl | wget, dctrl-tools, debian-keyring, debian-maintainers,
  dput | dupload, equivs, fakeroot, gnupg, libauthen-sasl-perl,
