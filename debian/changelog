@@ -60,6 +60,7 @@ devscripts (2.10.62) UNRELEASED; urgency=low
   * Add support for working with/recognizing xz archives to debchange,
     debdiff, debuild, uscan.
   * Use standalone “set -e” lines in maintainer scripts.
+  * Add debian/source/format with "3.0 (native)".
 
   [ Patrick Schoenfeld ]
   * nmudiff: Fix "[nmudiff] please include --tagpending option" by applying the
