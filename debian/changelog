@@ -24,6 +24,7 @@ devscripts (2.10.62) UNRELEASED; urgency=low
   * debian/control:
     + Update Vcs-* to point to the new Git repository.
     + Remove Conflicts on kdesdk-scripts from Etch.
+    + Bump Standards-Version to 3.8.4 -- no changes necessary.
   * dcmd: Allow capital letters for the section and priority fields.  (Closes:
     #565159)
   * debcheckout: Ensure "/git/" is at the start of the URL's path when
