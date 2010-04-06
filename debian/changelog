@@ -59,6 +59,7 @@ devscripts (2.10.62) UNRELEASED; urgency=low
     man page.  (Closes: #537367)
   * Add support for working with/recognizing xz archives to debchange,
     debdiff, debuild, uscan.
+  * Use standalone “set -e” lines in maintainer scripts.
 
   [ Patrick Schoenfeld ]
   * nmudiff: Fix "[nmudiff] please include --tagpending option" by applying the
