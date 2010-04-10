@@ -20,7 +20,7 @@ Recommends: at, curl | wget, dctrl-tools, debian-keyring, debian-maintainers,
  libyaml-syck-perl, lintian, lsb-release, bsd-mailx | mailx | mailutils, 
  man-db, patch, patchutils, ssh-client, strace, unzip, wdiff, www-browser,
  subversion | cvs | darcs | svk | tla | bzr | git-core | mercurial, lzma,
- xz-utils, sensible-utils
+ xz-utils, sensible-utils, libjson-perl
 Suggests: build-essential, cvs-buildpackage, devscripts-el, gnuplot,
  libfile-desktopentry-perl, libnet-smtp-ssl-perl (>= 1.01-2), mutt,
  svn-buildpackage, w3m
@@ -72,7 +72,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
     the rest of the package to be present; can sign the pair remotely
     or fetch the pair from a remote machine for signing [gnupg,
     debian-keyring, ssh-client]
-  - debsnap: grab packages from http://snapshot.debian.net [wget]
+  - debsnap: grab packages from http://snapshot.debian.org [libwww-perl,
+    libjson-perl]
   - debuild: wrapper to build a package without having to su or worry
     about how to invoke dpkg to build using fakeroot.  Also deals
     with common environment problems, umask etc. [fakeroot,

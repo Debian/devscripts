@@ -12,6 +12,10 @@ devscripts (2.10.63) UNRELEASED; urgency=low
   * debian/control: Require dpkg-dev >= 1.15.4.1 since we're using bits of the
     new Perl API.
 
+  [ David Paleino ]
+  * debsnap: rewritten from scratch in Perl, use snapshot-dev.debian.org
+    and its JSON API (Closes: #530416)
+
  -- Christoph Berg <myon@debian.org>  Fri, 09 Apr 2010 21:31:24 +0200
 
 devscripts (2.10.62) unstable; urgency=low

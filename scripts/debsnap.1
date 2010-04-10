@@ -71,32 +71,9 @@ Set a default path for the destination directory.  If unset
 
 .TP
 .B DEBSNAP_BASE_URL
-The base url for the snapshots archive.  This is the root of a directory tree
-such as \fIpool/<initial>/<package>/\fP under which a \fISources.gz\fP may be
-found, and the root for the location of the packages specified in the
-\fISources.gz\fP file found there.
+The base url for the snapshots archive.
 
-If unset this defaults to \fIhttp://snapshot.debian.net/archive/\fP
-
-.TP
-.B DEBSNAP_CLEAN_REGEX
-A sed regular expression to transform the directory returned by
-`\fBapt\-cache showsrc\fP \fIpackage\fP \fB| grep ^Directory\fP` to a suitable
-path to be put between \fBDEBSNAP_BASE_URL\fP and \fBDEBSNAP_SOURCES_GZ_PATH\fP.
-
-If unset it will default to s@\e([^/]*\e)/[^/]*/\e(\&.*\e)@\e1/\e2@
-.br
-i.e. it transforms \fIpool/<component>/<initial>/<package>\fP into
-\fIpool/<initial>/<package>\fP
-
-.TP
-.B DEBSNAP_SOURCES_GZ_PATH
-The final path to the \fISources.gz\fP file.  This is appended after the
-\fBDEBSNAP_BASE_URL\fP and the path modified by \fBDEBSNAP_CLEAN_REGEX\fP to
-locate the \fISources.gz\fP file for the package to download.
-
-If unset it will default to \fIsource/Sources.gz\fP
-
+If unset this defaults to \fIhttp://snapshot-dev.debian.org\fP
 
 .SH EXIT STATUS
 \fBdebsnap\fP will return an exit status of 0 if all operations succeeded,
@@ -104,7 +81,6 @@ If unset it will default to \fIsource/Sources.gz\fP
 but operations otherwise succeeded as expected.  In some cases packages may
 fail to be downloaded because they are no longer available on the snapshot
 mirror, so any caller should expect this may occur in normal use.
-
 
 .SH FILES
 .TP
@@ -114,20 +90,16 @@ Global devscripts configuration options.  Will override hardcoded defaults.
 .I ~/.devscripts
 Per\-user configuration options.  Will override any global configuration.
 
-
 .SH SEE ALSO
 .BR devscripts (1),
 .BR devscripts.conf (5),
 .BR git-debimport (1)
 
-
 .SH AUTHORS
-David Paleino <d.paleino@gmail.com>
-.br
-Ron Lee <ron@debian.org>
+David Paleino <dapal@debian.org>
 
 .SH COPYRIGHT
-Copyright \(co 2009 David Paleino, Ron Lee
+Copyright \(co 2010 David Paleino
 
 Permission is granted to copy, distribute and/or modify this document under
 the terms of the GNU General Public License, Version 3 or (at your option)
@@ -135,7 +107,6 @@ any later version published by the Free Software Foundation.
 
 On Debian systems, the complete text of the GNU General Public License can
 be found in \fI/usr/share/common\-licenses/GPL\fP.
-
 
 .SH BUGS
 .SS Reporting bugs
