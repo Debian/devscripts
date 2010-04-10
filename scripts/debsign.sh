@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 
 # This program is designed to PGP sign a .dsc and .changes file pair
 # in the form needed for a legal Debian upload.  It is based in part
@@ -45,7 +45,7 @@ MODIFIED_CONF_MSG='Default settings modified by devscripts configuration files:'
 signingdir=""
 remotefilesdir=""
 
-trap "cleanup_tmpdir" 0 1 2 3 9 11 13 15
+trap "cleanup_tmpdir" EXIT HUP INT QUIT KILL SEGV PIPE TERM
 
 # --- Functions
 
