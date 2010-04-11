@@ -411,7 +411,7 @@ sub set_auth($$$$) {
 		$url =~ s|^\w+://(git\.debian\.org)/(?:git/)?(.*)|git+ssh://$user$1/git/$2|;
 	    }
 	}
-	# "hg ssh://" needs an extra slash so paths are based in the user's $HOME
+	# "hg ssh://" needs an extra slash so paths are not based in the user's $HOME
 	case "hg" { $url =~ s|^\w+://(hg\.debian\.org/)|ssh://$user$1/|; }
 	case "svn" {
 	    $url =~ s|^\w+://(svn\.debian\.org)/(.*)|svn+ssh://$user$1/svn/$2|;
