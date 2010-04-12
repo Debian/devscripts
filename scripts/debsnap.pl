@@ -54,7 +54,7 @@ sub usage
     print <<"EOF";
 $progname [options] <package name> [package version]
 
-Automatically downloads packages from snapshot.debian.net
+Automatically downloads packages from snapshot.debian.org
 
 The following options are supported:
     -h, --help                          Shows this help message
@@ -96,7 +96,7 @@ sub read_conf
     %config_vars = (
         'DEBSNAP_VERBOSE' => 'no',
         'DEBSNAP_DESTDIR' => '',
-        'DEBSNAP_BASE_URL' => 'http://snapshot-dev.debian.org',
+        'DEBSNAP_BASE_URL' => 'http://snapshot.debian.org',
     );
 
     my %config_default = %config_vars;
@@ -236,11 +236,11 @@ eval {
             next if $version->{version} ne $pkgversion;
         }
 
-        my $src_json = fetch_json_page("http://snapshot-dev.debian.org/mr/package/$package/$version->{version}/srcfiles");
+        my $src_json = fetch_json_page("http://snapshot.debian.org/mr/package/$package/$version->{version}/srcfiles");
 
         foreach my $file(@{$src_json->{result}}){
             my $hash = $file->{hash};
-            my $file = fetch_json_page("http://snapshot-dev.debian.org/mr/file/$hash/info")->{result}[0];
+            my $file = fetch_json_page("http://snapshot.debian.org/mr/file/$hash/info")->{result}[0];
 
             #my %file_hash = ();
             #$file_hash{path} = $file->{path};
@@ -251,7 +251,7 @@ eval {
             #    print "$k => $v\n";
             #}
 
-            my $file_url = "http://snapshot-dev.debian.org/file/$hash";
+            my $file_url = "http://snapshot.debian.org/file/$hash";
             verbose "Getting file $file->{name}: $file_url";
             eval {
                 getstore($file_url, "$destdir/$file->{name}");
