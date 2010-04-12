@@ -28,9 +28,23 @@ use Dpkg::Version;
 
 sub versort (@)
 {
-    my @namever_pairs = @_;
+    return _versort(0, @_);
+}
 
-    my @sorted = sort { version_compare($a->[0], $b->[0]) } @namever_pairs;
+sub deb_versort (@)
+{
+    return _versort(1, @_);
+}
+
+sub _versort ($@)
+{
+    my ($check, @namever_pairs) = @_;
+
+    my @sorted = map { [$_->[0], $_->[1]] }
+                 sort { $a->[2] <=> $b->[2] }
+                 map { [$_->[0], $_->[1], Dpkg::Version->new($_->[0], check => $check)] }
+                 @namever_pairs;
+
     return reverse @sorted;
 }
 

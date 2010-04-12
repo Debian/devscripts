@@ -1,7 +1,14 @@
-devscripts (2.10.63) unreleased; urgency=low
+devscripts (2.10.63) UNRELEASED; urgency=low
 
+  [ Christoph Berg ]
   * debcheckout: inject extra slash in "hg ssh://hg.debian.org//" URLs so
     paths are not based in the user's $HOME.
+
+  [ James Vega ]
+  * Devscripts::Versort:
+    + Restore previous behavior of versort not performing a check on whether
+      the version is a valid Debian version.  (Closes: #577043)
+    + Re-add deb_versort which ensures the versions are valid Debian versions.
 
  -- Christoph Berg <myon@debian.org>  Fri, 09 Apr 2010 21:31:24 +0200
 
