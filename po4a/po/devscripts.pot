@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-04-06 02:32+0000\n"
+"POT-Creation-Date: 2010-04-13 03:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -116,7 +116,7 @@ msgid ""
 msgstr ""
 
 #. type: SH
-#: ../scripts/annotate-output.1:32 ../scripts/debsnap.1:140 ../scripts/rc-alert.1:119 ../scripts/whodepends.1:17
+#: ../scripts/annotate-output.1:32 ../scripts/debsnap.1:111 ../scripts/rc-alert.1:119 ../scripts/whodepends.1:17
 #, no-wrap
 msgid "BUGS"
 msgstr ""
@@ -148,7 +148,7 @@ msgid ""
 msgstr ""
 
 #. type: SH
-#: ../scripts/annotate-output.1:47 ../scripts/bts.pl:4029 ../scripts/checkbashisms.1:60 ../scripts/cowpoke.1:241 ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62 ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53 ../scripts/dcmd.1:98 ../scripts/dcontrol.pl:290 ../scripts/debc.1:115 ../scripts/debchange.1:426 ../scripts/debcheckout.pl:180 ../scripts/debclean.1:107 ../scripts/debcommit.pl:842 ../scripts/debdiff.1:215 ../scripts/debi.1:122 ../scripts/debrelease.1:132 ../scripts/deb-reversion.dbk:247 ../scripts/debrsign.1:66 ../scripts/debsign.1:134 ../scripts/debsnap.1:118 ../scripts/debuild.1:410 ../scripts/dget.pl:637 ../scripts/diff2patches.1:37 ../scripts/dpkg-depcheck.1:118 ../scripts/dpkg-genbuilddeps.1:30 ../scripts/dscverify.1:73 ../scripts/grep-excuses.1:38 ../scripts/list-unreleased.1:19 ../scripts/nmudiff.1:108 ../scripts/plotchangelog.1:124 ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:121 ../scripts/rmadison.pl:302 ../scripts/tagpending.pl:149 ../scripts/uscan.1:535 ../scripts/uupdate.1:162 ../scripts/wnpp-alert.1:29 ../scripts/wnpp-check.1:23 ../scripts/devscripts.conf.5:54
+#: ../scripts/annotate-output.1:47 ../scripts/bts.pl:4029 ../scripts/checkbashisms.1:60 ../scripts/cowpoke.1:241 ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62 ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53 ../scripts/dcmd.1:98 ../scripts/dcontrol.pl:290 ../scripts/debc.1:115 ../scripts/debchange.1:426 ../scripts/debcheckout.pl:180 ../scripts/debclean.1:107 ../scripts/debcommit.pl:842 ../scripts/debdiff.1:215 ../scripts/debi.1:122 ../scripts/debrelease.1:132 ../scripts/deb-reversion.dbk:247 ../scripts/debrsign.1:66 ../scripts/debsign.1:134 ../scripts/debsnap.1:93 ../scripts/debuild.1:410 ../scripts/dget.pl:637 ../scripts/diff2patches.1:37 ../scripts/dpkg-depcheck.1:118 ../scripts/dpkg-genbuilddeps.1:30 ../scripts/dscverify.1:73 ../scripts/grep-excuses.1:38 ../scripts/list-unreleased.1:19 ../scripts/nmudiff.1:108 ../scripts/plotchangelog.1:124 ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:121 ../scripts/rmadison.pl:302 ../scripts/tagpending.pl:149 ../scripts/uscan.1:535 ../scripts/uupdate.1:162 ../scripts/wnpp-alert.1:29 ../scripts/wnpp-check.1:23 ../scripts/devscripts.conf.5:54
 #, no-wrap
 msgid "SEE ALSO"
 msgstr ""
@@ -2249,7 +2249,7 @@ msgid "reportbug(1), querybts(1)"
 msgstr ""
 
 #. type: =head1
-#: ../scripts/bts.pl:4037 ../scripts/chdist.pl:92 ../scripts/debsnap.1:129 ../scripts/mass-bug.pl:514 ../scripts/tagpending.pl:431
+#: ../scripts/bts.pl:4037 ../scripts/chdist.pl:92 ../scripts/debsnap.1:101 ../scripts/mass-bug.pl:514 ../scripts/tagpending.pl:431
 #, no-wrap
 msgid "COPYRIGHT"
 msgstr ""
@@ -3146,7 +3146,7 @@ msgid "I<~/.cowpoke>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:191 ../scripts/debsnap.1:116
+#: ../scripts/cowpoke.1:191 ../scripts/debsnap.1:92
 msgid "Per-user configuration options.  Will override any global configuration."
 msgstr ""
 
@@ -7605,7 +7605,7 @@ msgstr ""
 #: ../scripts/debsnap.1:20
 msgid ""
 "The only publicly available snapshot archive is currently located at "
-"I<http://snapshot.debian.net>"
+"I<http://snapshot.debian.org>"
 msgstr ""
 
 #. type: Plain text
@@ -7708,73 +7708,23 @@ msgid "B<DEBSNAP_BASE_URL>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:78
-msgid ""
-"The base url for the snapshots archive.  This is the root of a directory "
-"tree such as I<pool/E<lt>initialE<gt>/E<lt>packageE<gt>/> under which a "
-"I<Sources.gz> may be found, and the root for the location of the packages "
-"specified in the I<Sources.gz> file found there."
+#: ../scripts/debsnap.1:75
+msgid "The base url for the snapshots archive."
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:80
-msgid "If unset this defaults to I<http://snapshot.debian.net/archive/>"
-msgstr ""
-
-#. type: TP
-#: ../scripts/debsnap.1:81
-#, no-wrap
-msgid "B<DEBSNAP_CLEAN_REGEX>"
-msgstr ""
-
-#. type: Plain text
-#: ../scripts/debsnap.1:86
-msgid ""
-"A sed regular expression to transform the directory returned by `B<apt-cache "
-"showsrc> I<package> B<| grep ^Directory>` to a suitable path to be put "
-"between B<DEBSNAP_BASE_URL> and B<DEBSNAP_SOURCES_GZ_PATH>."
-msgstr ""
-
-#. type: Plain text
-#: ../scripts/debsnap.1:88
-msgid "If unset it will default to s@\\e([^/]*\\e)/[^/]*/\\e(\\&.*\\e)@\\e1/\\e2@"
-msgstr ""
-
-#. type: Plain text
-#: ../scripts/debsnap.1:91
-msgid ""
-"i.e. it transforms "
-"I<pool/E<lt>componentE<gt>/E<lt>initialE<gt>/E<lt>packageE<gt>> into "
-"I<pool/E<lt>initialE<gt>/E<lt>packageE<gt>>"
-msgstr ""
-
-#. type: TP
-#: ../scripts/debsnap.1:92
-#, no-wrap
-msgid "B<DEBSNAP_SOURCES_GZ_PATH>"
-msgstr ""
-
-#. type: Plain text
-#: ../scripts/debsnap.1:97
-msgid ""
-"The final path to the I<Sources.gz> file.  This is appended after the "
-"B<DEBSNAP_BASE_URL> and the path modified by B<DEBSNAP_CLEAN_REGEX> to "
-"locate the I<Sources.gz> file for the package to download."
-msgstr ""
-
-#. type: Plain text
-#: ../scripts/debsnap.1:99
-msgid "If unset it will default to I<source/Sources.gz>"
+#: ../scripts/debsnap.1:77
+msgid "If unset this defaults to I<http://snapshot.debian.org>"
 msgstr ""
 
 #. type: SH
-#: ../scripts/debsnap.1:101 ../scripts/transition-check.pl:54 ../scripts/uscan.1:498 ../scripts/wnpp-check.1:25
+#: ../scripts/debsnap.1:78 ../scripts/transition-check.pl:54 ../scripts/uscan.1:498 ../scripts/wnpp-check.1:25
 #, no-wrap
 msgid "EXIT STATUS"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:107
+#: ../scripts/debsnap.1:84
 msgid ""
 "B<debsnap> will return an exit status of 0 if all operations succeeded, 1 if "
 "a fatal error occurred, and 2 if some packages failed to be downloaded but "
@@ -7784,56 +7734,51 @@ msgid ""
 msgstr ""
 
 #. type: SH
-#: ../scripts/debsnap.1:109 ../scripts/diff2patches.1:24
+#: ../scripts/debsnap.1:85 ../scripts/diff2patches.1:24
 #, no-wrap
 msgid "FILES"
 msgstr ""
 
 #. type: TP
-#: ../scripts/debsnap.1:110
+#: ../scripts/debsnap.1:86
 #, no-wrap
 msgid "I</etc/devscripts.conf>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:113
+#: ../scripts/debsnap.1:89
 msgid "Global devscripts configuration options.  Will override hardcoded defaults."
 msgstr ""
 
 #. type: TP
-#: ../scripts/debsnap.1:113
+#: ../scripts/debsnap.1:89
 #, no-wrap
 msgid "I<~/.devscripts>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:122
+#: ../scripts/debsnap.1:97
 msgid "B<devscripts>(1), B<devscripts.conf>(5), B<git-debimport>(1)"
 msgstr ""
 
 #. type: SH
-#: ../scripts/debsnap.1:124
+#: ../scripts/debsnap.1:98
 #, no-wrap
 msgid "AUTHORS"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:126
-msgid "David Paleino E<lt>d.paleino@gmail.comE<gt>"
+#: ../scripts/debsnap.1:100
+msgid "David Paleino E<lt>dapal@debian.orgE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:128
-msgid "Ron Lee E<lt>ron@debian.orgE<gt>"
+#: ../scripts/debsnap.1:103
+msgid "Copyright \\(co 2010 David Paleino"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:131
-msgid "Copyright \\(co 2009 David Paleino, Ron Lee"
-msgstr ""
-
-#. type: Plain text
-#: ../scripts/debsnap.1:135
+#: ../scripts/debsnap.1:107
 msgid ""
 "Permission is granted to copy, distribute and/or modify this document under "
 "the terms of the GNU General Public License, Version 3 or (at your option)  "
@@ -7841,20 +7786,20 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:138
+#: ../scripts/debsnap.1:110
 msgid ""
 "On Debian systems, the complete text of the GNU General Public License can "
 "be found in I</usr/share/common-licenses/GPL>."
 msgstr ""
 
 #. type: SS
-#: ../scripts/debsnap.1:141
+#: ../scripts/debsnap.1:112
 #, no-wrap
 msgid "Reporting bugs"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:144
+#: ../scripts/debsnap.1:115
 msgid ""
 "The program is part of the devscripts package.  Please report bugs using "
 "`B<reportbug devscripts>`"
