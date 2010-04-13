@@ -9,8 +9,9 @@ devscripts (2.10.63) UNRELEASED; urgency=low
     + Restore previous behavior of versort not performing a check on whether
       the version is a valid Debian version.  (Closes: #577043)
     + Re-add deb_versort which ensures the versions are valid Debian versions.
-  * debian/control: Require dpkg-dev >= 1.15.4.1 since we're using bits of the
-    new Perl API.
+  * debian/control:
+    + Require dpkg-dev >= 1.15.4.1 since we're using bits of the new Perl API.
+    + Add libjson-perl to Build-Depends so we can syntax check debsnap.
   * debcheckout: Use $DEBEMAIL/$DEBFULLNAME to set username in .hg/hgrc.
 
   [ David Paleino ]
