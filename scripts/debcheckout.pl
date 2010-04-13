@@ -901,7 +901,7 @@ EOF
 	    close B;
 	} else {
 	    print STDERR
-		"failed to open branch.conf to add push_location: $@\n";
+		"failed to open branch.conf to add push_location: $!\n";
 	}
     } elsif ($repo_type eq 'git') {
 	my $tg_info = tg_info($repo_url);
@@ -943,8 +943,20 @@ EOF
 		system($cmd);
 	    }
 	}
+    } elsif ($repo_type eq 'hg') {
+	my $username = '';
+	$username .= " $ENV{'DEBFULLNAME'}" if (defined($ENV{'DEBFULLNAME'}));
+	$username .= " <$ENV{'DEBEMAIL'}>" if (defined($ENV{'DEBEMAIL'}));
+	if ($username) {
+	    if (open(HGRC, '>>', "$destdir/.hg/hgrc")) {
+		print HGRC "[ui]\nusername =$username\n";
+		close HGRC;
+	    } else {
+		print STDERR
+		    "failed to open hgrc to set username: $!\n";
+	    }
+	}
     }
-    
     exit($rc);
 }
 
