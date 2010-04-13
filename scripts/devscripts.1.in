@@ -13,6 +13,18 @@ manpages.
 Also, the directory \fI/usr/share/doc/devscripts/examples\fR contains
 examples of \fBprocmail\fR and \fBexim\fR scripts for sorting mail
 arriving to Debian mailing lists.
+.SH ENVIRONMENT
+Several scripts of the devscripts suite use the following environment
+variables. Check the man page of individual scripts for more details on how the
+variables are used.
+.IX Header "ENVIRONMENT"
+.IP "\s-1DEBEMAIL\s0" 4
+.IX Item "DEBEMAIL"
+Email of the person acting on a given Debian package via devscripts.
+.IP "\s-1DEBFULLNAME\s0" 4
+.IX Item "DEBFULLNAME"
+Full name (first + family) of the person acting on a given Debian package via
+devscripts.
 .SH SCRIPTS
 Here is the complete list of available devscripts. See their man pages
 for additional documentation.
