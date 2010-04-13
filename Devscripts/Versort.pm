@@ -40,12 +40,17 @@ sub _versort ($@)
 {
     my ($check, @namever_pairs) = @_;
 
-    my @sorted = map { [$_->[0], $_->[1]] }
-                 sort { $a->[2] <=> $b->[2] }
-                 map { [$_->[0], $_->[1], Dpkg::Version->new($_->[0], check => $check)] }
-                 @namever_pairs;
+    foreach my $pair (@namever_pairs) {
+	unshift(@$pair, Dpkg::Version->new($pair->[0], check => $check));
+    }
 
-    return reverse @sorted;
+    my @sorted = sort { $b->[0] <=> $a->[0] } @namever_pairs;
+
+    foreach my $pair (@sorted) {
+	shift @$pair;
+    }
+
+    return @sorted;
 }
 
 1;

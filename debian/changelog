@@ -1,6 +1,11 @@
-devscripts (2.10.64) UNSTABLE; urgency=low
+devscripts (2.10.64) UNRELEASED; urgency=low
 
+  [ Stefano Zacchiroli ]
   * devscripts.1: generic documentation for $DEBEMAIL and $DEBFULLNAME
+
+  [ James Vega ]
+  * Devscripts::Versort: Correct _versort so the lists it returns aren't
+    shorter than the ones passed in to _versort.  (Closes: #577654)
 
  -- Stefano Zacchiroli <zack@debian.org>  Tue, 13 Apr 2010 16:31:50 +0200
 
