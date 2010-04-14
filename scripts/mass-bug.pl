@@ -330,7 +330,7 @@ sub mailbts {
 	if (! defined $pid) {
 	    die "$progname: Couldn't fork: $!\n";
 	}
-	$SIG{'PIPE'} = sub { die "bts: pipe for $sendmailcmd broke\n"; };
+	$SIG{'PIPE'} = sub { die "$progname: pipe for $sendmailcmd broke\n"; };
 	if ($pid) {
 	    # parent
 	    print MAIL <<"EOM";
@@ -356,9 +356,9 @@ EOM
 	}
 	my $pid = open(MAIL, "|-");
 	if (! defined $pid) {
-	    die "bts: Couldn't fork: $!\n";
+	    die "$progname: Couldn't fork: $!\n";
 	}
-	$SIG{'PIPE'} = sub { die "bts: pipe for mail broke\n"; };
+	$SIG{'PIPE'} = sub { die "$progname: pipe for mail broke\n"; };
 	if ($pid) {
 	    # parent
 	    print MAIL $body;
