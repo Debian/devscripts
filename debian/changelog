@@ -6,6 +6,8 @@ devscripts (2.10.64) UNRELEASED; urgency=low
   [ James Vega ]
   * Devscripts::Versort: Correct _versort so the lists it returns aren't
     shorter than the ones passed in to _versort.  (Closes: #577654)
+  * debcheckout: Switch from using the Switch module to Perl 5.10's switch
+    feature.
 
  -- Stefano Zacchiroli <zack@debian.org>  Tue, 13 Apr 2010 16:31:50 +0200
 
