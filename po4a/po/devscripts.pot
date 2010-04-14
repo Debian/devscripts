@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-04-13 03:45+0000\n"
+"POT-Creation-Date: 2010-04-14 03:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1985,8 +1985,9 @@ msgstr ""
 msgid "ENVIRONMENT VARIABLES"
 msgstr ""
 
-#. type: =item
-#: ../scripts/bts.pl:3907
+#. type: IX
+#: ../scripts/bts.pl:3907 ../scripts/devscripts.1.in:22
+#, no-wrap
 msgid "DEBEMAIL"
 msgstr ""
 
@@ -1998,8 +1999,9 @@ msgid ""
 "B<mail>)."
 msgstr ""
 
-#. type: =item
-#: ../scripts/bts.pl:3913
+#. type: IX
+#: ../scripts/bts.pl:3913 ../scripts/devscripts.1.in:25
+#, no-wrap
 msgid "DEBFULLNAME"
 msgstr ""
 
@@ -5262,7 +5264,7 @@ msgid ""
 msgstr ""
 
 #. type: =head1
-#: ../scripts/debchange.1:412 ../scripts/mass-bug.pl:128
+#: ../scripts/debchange.1:412 ../scripts/devscripts.1.in:16 ../scripts/devscripts.1.in:20 ../scripts/mass-bug.pl:128
 #, no-wrap
 msgid "ENVIRONMENT"
 msgstr ""
@@ -8647,14 +8649,58 @@ msgid ""
 "mailing lists."
 msgstr ""
 
+#. type: Plain text
+#: ../scripts/devscripts.1.in:20
+msgid ""
+"Several scripts of the devscripts suite use the following environment "
+"variables. Check the man page of individual scripts for more details on how "
+"the variables are used."
+msgstr ""
+
+#. type: IX
+#: ../scripts/devscripts.1.in:20
+#, no-wrap
+msgid "Header"
+msgstr ""
+
+#. type: IP
+#: ../scripts/devscripts.1.in:21
+#, no-wrap
+msgid "\\s-1DEBEMAIL\\s0"
+msgstr ""
+
+#. type: IX
+#: ../scripts/devscripts.1.in:22 ../scripts/devscripts.1.in:25
+#, no-wrap
+msgid "Item"
+msgstr ""
+
+#. type: Plain text
+#: ../scripts/devscripts.1.in:24
+msgid "Email of the person acting on a given Debian package via devscripts."
+msgstr ""
+
+#. type: IP
+#: ../scripts/devscripts.1.in:24
+#, no-wrap
+msgid "\\s-1DEBFULLNAME\\s0"
+msgstr ""
+
+#. type: Plain text
+#: ../scripts/devscripts.1.in:28
+msgid ""
+"Full name (first + family) of the person acting on a given Debian package "
+"via devscripts."
+msgstr ""
+
 #. type: SH
-#: ../scripts/devscripts.1.in:16
+#: ../scripts/devscripts.1.in:28
 #, no-wrap
 msgid "SCRIPTS"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/devscripts.1.in:18
+#: ../scripts/devscripts.1.in:30
 msgid ""
 "Here is the complete list of available devscripts. See their man pages for "
 "additional documentation."

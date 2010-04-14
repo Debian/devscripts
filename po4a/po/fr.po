@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2010-04-13 03:45+0000\n"
+"POT-Creation-Date: 2010-04-14 03:49+0000\n"
 "PO-Revision-Date: 2009-09-06 15:06+0200\n"
 "Last-Translator: Nicolas François <nicolas.francois@centraliens.net>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -2642,8 +2642,9 @@ msgstr ""
 msgid "ENVIRONMENT VARIABLES"
 msgstr "VARIABLES D'ENVIRONNEMENT"
 
-#. type: =item
-#: ../scripts/bts.pl:3907
+#. type: IX
+#: ../scripts/bts.pl:3907 ../scripts/devscripts.1.in:22
+#, no-wrap
 msgid "DEBEMAIL"
 msgstr "DEBEMAIL"
 
@@ -2658,8 +2659,9 @@ msgstr ""
 "utiliser cette adresse de courriel au lieu de votre adresse habituelle (qui "
 "serait déterminée par B<mail>)."
 
-#. type: =item
-#: ../scripts/bts.pl:3913
+#. type: IX
+#: ../scripts/bts.pl:3913 ../scripts/devscripts.1.in:25
+#, no-wrap
 msgid "DEBFULLNAME"
 msgstr "DEBFULLNAME"
 
@@ -6907,7 +6909,8 @@ msgstr ""
 "save-on-release> était utilisée."
 
 #. type: =head1
-#: ../scripts/debchange.1:412 ../scripts/mass-bug.pl:128
+#: ../scripts/debchange.1:412 ../scripts/devscripts.1.in:16
+#: ../scripts/devscripts.1.in:20 ../scripts/mass-bug.pl:128
 #, no-wrap
 msgid "ENVIRONMENT"
 msgstr "ENVIRONNEMENT"
@@ -11276,14 +11279,60 @@ msgstr ""
 "exemples de scripts pour B<procmail> et B<exim> permettant de trier les "
 "courriels arrivant aux listes de diffusion Debian."
 
+#. type: Plain text
+#: ../scripts/devscripts.1.in:20
+msgid ""
+"Several scripts of the devscripts suite use the following environment "
+"variables. Check the man page of individual scripts for more details on how "
+"the variables are used."
+msgstr ""
+
+#. type: IX
+#: ../scripts/devscripts.1.in:20
+#, no-wrap
+msgid "Header"
+msgstr ""
+
+#. type: IP
+#: ../scripts/devscripts.1.in:21
+#, fuzzy, no-wrap
+#| msgid "DEBEMAIL"
+msgid "\\s-1DEBEMAIL\\s0"
+msgstr "DEBEMAIL"
+
+#. type: IX
+#: ../scripts/devscripts.1.in:22 ../scripts/devscripts.1.in:25
+#, no-wrap
+msgid "Item"
+msgstr ""
+
+#. type: Plain text
+#: ../scripts/devscripts.1.in:24
+msgid "Email of the person acting on a given Debian package via devscripts."
+msgstr ""
+
+#. type: IP
+#: ../scripts/devscripts.1.in:24
+#, fuzzy, no-wrap
+#| msgid "DEBFULLNAME"
+msgid "\\s-1DEBFULLNAME\\s0"
+msgstr "DEBFULLNAME"
+
+#. type: Plain text
+#: ../scripts/devscripts.1.in:28
+msgid ""
+"Full name (first + family) of the person acting on a given Debian package "
+"via devscripts."
+msgstr ""
+
 #. type: SH
-#: ../scripts/devscripts.1.in:16
+#: ../scripts/devscripts.1.in:28
 #, no-wrap
 msgid "SCRIPTS"
 msgstr "SCRIPTS"
 
 #. type: Plain text
-#: ../scripts/devscripts.1.in:18
+#: ../scripts/devscripts.1.in:30
 msgid ""
 "Here is the complete list of available devscripts. See their man pages for "
 "additional documentation."
