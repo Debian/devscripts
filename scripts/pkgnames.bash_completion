@@ -8,5 +8,5 @@ _pkg_names()
 
     return 0
 }
-complete -F _pkg_names wnpp-alert wnpp-check mk-build-deps rmadison mass-bug debsnap dd-list build-rdeps who-uploads transition-check getbuildlog dcontrol grep-excuses rc-alert debcheckout mergechanges bts whodepends dget pts-subscribe debc pts-unsubscribe
+complete -F _pkg_names wnpp-alert wnpp-check mk-build-deps rmadison mass-bug debsnap dd-list build-rdeps who-uploads transition-check getbuildlog dcontrol grep-excuses rc-alert debcheckout bts whodepends dget pts-subscribe debc pts-unsubscribe
 
