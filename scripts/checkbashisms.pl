@@ -517,6 +517,7 @@ sub init_hashes {
 	$LEADIN . qr'(sh|\$\{?SHELL\}?) -[rD]' => q<sh -[rD]>,
 	$LEADIN . qr'(sh|\$\{?SHELL\}?) --\w+' =>  q<sh --long-option>,
 	$LEADIN . qr'(sh|\$\{?SHELL\}?) [-+]O' =>  q<sh [-+]O>,
+	qr'\[\^[^]]+\]' =>  q<[^] should be [!]>,
     );
 
     %string_bashisms = (
