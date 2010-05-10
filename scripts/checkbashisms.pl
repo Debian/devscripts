@@ -188,6 +188,7 @@ foreach my $filename (@ARGV) {
 	    last if m%^(export )?SHELL\s*:?=\s*(/bin/)?bash\s*%;
 
 	    s/^\t//;
+	    s/(?<!\$)\$\((\w+)\)/\${$1}/g;
 	    s/(\$){2}/$1/;
 	    s/^[\s\t]*@//;
 	}
