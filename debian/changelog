@@ -1,9 +1,14 @@
 devscripts (2.10.65) UNRELEASED; urgency=low
 
+  [ James Vega ]
   * Remove mergechanges from the set of commands which use completion of
     package names.  (Closes: #578167)
 
- -- James Vega <jamessan@debian.org>  Sat, 17 Apr 2010 18:52:40 -0400
+  [ Martin Zobel-Helas ]
+  * Remove svk from Recommends, it is no longer in the archive. (Closes:
+    #581224)
+
+ -- Martin Zobel-Helas <zobel@debian.org>  Tue, 11 May 2010 20:48:16 +0200
 
 devscripts (2.10.64) unstable; urgency=low
 
