@@ -556,10 +556,10 @@ sub init_hashes {
 	qr'\$\{?SHLVL\}?\b'           => q<$SHLVL>,
 	qr'<<<'                       => q<\<\<\< here string>,
 	$LEADIN . qr'echo\s+(?:-[^e\s]+\s+)?\"[^\"]*(\\[abcEfnrtv0])+.*?[\"]' => q<unsafe echo with backslash>,
-	qr'\$\(\(\s*\w+\+\+\s*\)\)'   => q<'$((n++))' should be '$n; $((n=n+1))'>,
-	qr'\$\(\(\s*\+\+\w+\s*\)\)'   => q<'$((++n))' should be '$((n=n+1))'>,
-	qr'\$\(\(\s*\w+\-\-\s*\)\)'   => q<'$((n--))' should be '$n; $((n=n-1))'>,
-	qr'\$\(\(\s*\-\-\w+\s*\)\)'   => q<'$((--n))' should be '$((n=n-1))'>,
+	qr'\$\(\([\s\w$*/+-]*\w\+\+.*?\)\)'   => q<'$((n++))' should be '$n; $((n=n+1))'>,
+	qr'\$\(\([\s\w$*/+-]*\+\+\w.*?\)\)'   => q<'$((++n))' should be '$((n=n+1))'>,
+	qr'\$\(\([\s\w$*/+-]*\w\-\-.*?\)\)'   => q<'$((n--))' should be '$n; $((n=n-1))'>,
+	qr'\$\(\([\s\w$*/+-]*\-\-\w.*?\)\)'   => q<'$((--n))' should be '$((n=n-1))'>,
 	$LEADIN . qr'printf\s["\'][^"\']+?%[qb].+?["\']' => q<printf %q|%b>,
     );
 
