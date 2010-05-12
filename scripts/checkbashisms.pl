@@ -518,6 +518,7 @@ sub init_hashes {
 	$LEADIN . qr'(sh|\$\{?SHELL\}?) --\w+' =>  q<sh --long-option>,
 	$LEADIN . qr'(sh|\$\{?SHELL\}?) [-+]O' =>  q<sh [-+]O>,
 	qr'\[\^[^]]+\]' =>  q<[^] should be [!]>,
+	$LEADIN . qr'printf\s+-v' => q<'printf -v var ...' should be var='$(printf ...)'>,
     );
 
     %string_bashisms = (
@@ -544,6 +545,7 @@ sub init_hashes {
 	qr'\$\(\(\s*\+\+\w+\s*\)\)'   => q<'$((++n))' should be '$((n=n+1))'>,
 	qr'\$\(\(\s*\w+\-\-\s*\)\)'   => q<'$((n--))' should be '$n; $((n=n-1))'>,
 	qr'\$\(\(\s*\-\-\w+\s*\)\)'   => q<'$((--n))' should be '$((n=n-1))'>,
+	$LEADIN . qr'printf\s["\'][^"\']+?%[qb].+?["\']' => q<printf %q|%b>,
     );
 
     %singlequote_bashisms = (
