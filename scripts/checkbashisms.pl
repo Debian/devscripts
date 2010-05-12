@@ -520,6 +520,7 @@ sub init_hashes {
 	qr'\[\^[^]]+\]' =>  q<[^] should be [!]>,
 	$LEADIN . qr'printf\s+-v' => q<'printf -v var ...' should be var='$(printf ...)'>,
 	$LEADIN . qr'coproc\s' =>        q<coproc>,
+	qr';;?&' =>  q<;;& and ;& special case operators>,
     );
 
     %string_bashisms = (
