@@ -105,6 +105,7 @@ foreach my $filename (@ARGV) {
     my $last_continued = 0;
     my $continued = 0;
     my $found_rules = 0;
+    my $buffered_line = "";
 
     while (<C>) {
 	next unless ($check_lines_count == -1 or $. <= $check_lines_count);
@@ -168,6 +169,18 @@ foreach my $filename (@ARGV) {
 	    s/\Q$1\E//;  # eat comments
 	} else {
 	    $_ = $orig_line;
+	}
+
+	# Handle line continuation
+	if (!$makefile && $cat_string eq '' && m/\\$/) {
+	    chop;
+	    $buffered_line .= $_;
+	    next;
+	}
+
+	if ($buffered_line ne '') {
+	    $_ = $buffered_line . $_;
+	    $buffered_line ='';
 	}
 
 	if ($makefile) {
