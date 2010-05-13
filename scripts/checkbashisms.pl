@@ -105,6 +105,7 @@ foreach my $filename (@ARGV) {
     my $last_continued = 0;
     my $continued = 0;
     my $found_rules = 0;
+    my $buffered_orig_line = "";
     my $buffered_line = "";
 
     while (<C>) {
@@ -175,12 +176,15 @@ foreach my $filename (@ARGV) {
 	if (!$makefile && $cat_string eq '' && m/\\$/) {
 	    chop;
 	    $buffered_line .= $_;
+	    $buffered_orig_line .= $orig_line . "\n";
 	    next;
 	}
 
 	if ($buffered_line ne '') {
 	    $_ = $buffered_line . $_;
+	    $orig_line = $buffered_orig_line . $orig_line;
 	    $buffered_line ='';
+	    $buffered_orig_line ='';
 	}
 
 	if ($makefile) {
