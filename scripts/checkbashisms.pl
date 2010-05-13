@@ -207,7 +207,7 @@ foreach my $filename (@ARGV) {
 	    s/^\t//;
 	    s/(?<!\$)\$\((\w+)\)/\${$1}/g;
 	    s/(\$){2}/$1/g;
-	    s/^[\s\t]*@//;
+	    s/^[\s\t]*[@-]{1,2}//;
 	}
 
 	if ($cat_string ne "" and m/^\Q$cat_string\E$/) {
