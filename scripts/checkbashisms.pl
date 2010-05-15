@@ -204,6 +204,8 @@ foreach my $filename (@ARGV) {
 
 	    last if m%^\s*(override|export)?\s*SHELL\s*:?=\s*(/bin/)?bash\s*%;
 
+	    # Remove "simple" target names
+	    s/^[\w%.-]+(?:\s+[\w%.-]+)*::?//;
 	    s/^\t//;
 	    s/(?<!\$)\$\((\w+)\)/\${$1}/g;
 	    s/(\$){2}/$1/g;
