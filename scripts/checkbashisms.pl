@@ -499,7 +499,7 @@ sub init_hashes {
 	qr'(?<![\$\(])\(\(.*\)\)' =>     q<'((' should be '$(('>,
 	qr'(?:^|\s+)(\[|test)\s+-a' =>            q<test with unary -a (should be -e)>,
 	qr'\&>' =>	               q<should be \>word 2\>&1>,
-	qr'(<\&|>\&)\s*((-|\d+)[^\s;|)`&\\\\]|[^-\d\s]+)' =>
+	qr'(<\&|>\&)\s*((-|\d+)[^\s;|)}`&\\\\]|[^-\d\s]+)' =>
 				       q<should be \>word 2\>&1>,
 	$LEADIN . qr'kill\s+-[^sl]\w*' => q<kill -[0-9] or -[A-Z]>,
 	$LEADIN . qr'trap\s+["\']?.*["\']?\s+.*[1-9]' => q<trap with signal numbers>,
