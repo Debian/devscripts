@@ -55,6 +55,13 @@ When installing the generated package use the specified tool.
 Remove the package file after installing it. Ignored if used without
 the install switch.
 
+=item B<-a> I<foo>, B<--arch> I<foo>
+
+If the source package has architecture-specific build dependencies, produce
+a package for architecture I<foo>, not for the system architecture. (If the
+source package does not have architecture-specific build dependencies,
+the package produced is always for the pseudo-architecture B<all>.)
+
 =item B<-h>, B<--help>
 
 Show a summary of options.
@@ -85,7 +92,7 @@ use Pod::Usage;
 my $progname = basename($0);
 my $opt_install;
 my $opt_remove=0;
-my ($opt_help, $opt_version);
+my ($opt_help, $opt_version, $opt_arch);
 my $control;
 my $install_tool;
 my @packages;
@@ -128,6 +135,7 @@ GetOptions("help|h" => \$opt_help,
            "install|i" => \$opt_install,
            "remove|r" => \$opt_remove,
            "tool|t=s" => \$install_tool,
+	   "arch|a=s" => \$opt_arch,
            )
     or pod2usage({ -exitval => 1, -verbose => 0 });
 
@@ -186,6 +194,10 @@ while ($control = shift) {
 
     if ($build_deps =~ /\[|\]/) {
         $arch = 'any';
+
+        if (defined $opt_arch) {
+            $equivs_build .= " --arch=$opt_arch";
+        }
     }
 
     # Now, running equivs-build:
