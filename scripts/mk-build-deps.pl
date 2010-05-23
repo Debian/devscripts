@@ -181,17 +181,25 @@ while ($control = shift) {
     }
     close CONTROL;
 
+    my $equivs_build = 'equivs-build';
+    my $arch = 'all';
+
+    if ($build_deps =~ /\[|\]/) {
+        $arch = 'any';
+    }
+
     # Now, running equivs-build:
 
     die "$progname: Unable to find package name in '$control'\n" unless $name;
     die "$progname: Unable to find build-deps for $name\n" unless $build_deps;
 
-    open EQUIVS, "| equivs-build -"
+    open EQUIVS, "| $equivs_build -"
 	or die "$progname: Failed to execute equivs-build: $!\n";
     print EQUIVS "Section: devel\n" .
 	"Priority: optional\n".
 	"Standards-Version: 3.7.3\n\n".
 	"Package: ".$name."-build-deps\n".
+	"Architecture: $arch\n".
 	"Depends: $build_deps\n";
     print EQUIVS "Version: $version\n" if $version;
 
