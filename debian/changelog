@@ -8,6 +8,25 @@ devscripts (2.10.65) UNRELEASED; urgency=low
   * Remove svk from Recommends, it is no longer in the archive. (Closes:
     #581224)
 
+  [ Raphael Geissert ]
+  * checkbashisms:
+    + Makefile handling:
+      - Simplify make variables as shell variables.  (Closes: #535368)
+      - Convert all $$ to $.
+      - Recognize SHELL setting in Makefile when being set as an override.
+      - Ignore make's '-' for ignore errors.
+      - Fix some false positives due to target names.
+    + Detect incorrect use of ^ instead of ! for negation in pattern matching
+      collections.  (Closes: #497489)
+    + Detect use of {post,pre}{increment,decrement} in arithmetic expansion.
+      (Closes: #572006)
+    + Detect use of Bash's “printf -v var ...” or the %b and %q format
+      specifiers.
+    + Detect use of the Bash's “coproc” keyword.
+    + Detect use of Bash's “;;&” and ”;&” operators.
+    + Add support for handling line continuations.  (Closes: #531327)
+    + Fix a false positive with file redirection.
+
  -- Martin Zobel-Helas <zobel@debian.org>  Tue, 11 May 2010 20:48:16 +0200
 
 devscripts (2.10.64) unstable; urgency=low
