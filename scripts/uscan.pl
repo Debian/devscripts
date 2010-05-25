@@ -527,7 +527,7 @@ for my $dir (@dirs) {
 	    print "-- Found watchfile in $dir/debian\n" if $verbose;
 	} else {
 	    print "-- Skip watchfile in $dir/debian since it does not match the package name\n" .
-	        "   (or the settings of the--check-dirname-level and --check-dirname-regex options if any).\n"
+	        "   (or the settings of the --check-dirname-level and --check-dirname-regex options if any).\n"
 	        if $verbose;
 	    next;
 	}
