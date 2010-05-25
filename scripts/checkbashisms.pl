@@ -156,7 +156,10 @@ foreach my $filename (@ARGV) {
 	# will be treated as part of the comment.
 	# s/^(?:.*?[^\\])?$quote_string(.*)$/$1/ if $quote_string ne "";
 
-	next if m,^\s*\#,;  # skip comment lines
+	# skip comment lines
+	if (m,^\s*\#, && $quote_string eq '' && $buffered_line eq '' && $cat_string eq '') {
+	    next;
+	}
 
 	# Remove quoted strings so we can more easily ignore comments
 	# inside them
@@ -278,7 +281,7 @@ foreach my $filename (@ARGV) {
 		    my $otherquote = ($quote eq "\"" ? "\'" : "\"");
 
 		    # Remove balanced quotes and their content
-		    $templine =~ s/(^|[^\\\"](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1/g;
+		    $templine =~ s/(^|[^\\\"](?:\\\\)*)\'[^\']*\'/$1/g;
 		    $templine =~ s/(^|[^\\\'](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1/g;
 
 		    # Don't flag quotes that are themselves quoted
@@ -286,6 +289,8 @@ foreach my $filename (@ARGV) {
 		    $templine =~ s/$otherquote.*?$quote.*?$otherquote//g;
 		    # "\""
 		    $templine =~ s/(^|[^\\])$quote\\$quote$quote/$1/g;
+		    # \' or \"
+		    $templine =~ s/\\[\'\"]//g;
 		    my $count = () = $templine =~ /(^|(?!\\))$quote/g;
 
 		    # If there's an odd number of non-escaped
@@ -397,7 +402,6 @@ foreach my $filename (@ARGV) {
             }
 	}
     }
-
     close C;
 }
 
