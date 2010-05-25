@@ -101,6 +101,7 @@ foreach my $filename (@ARGV) {
     }
 
     my $cat_string = "";
+    my $cat_indented = 0;
     my $quote_string = "";
     my $last_continued = 0;
     my $continued = 0;
@@ -212,7 +213,7 @@ foreach my $filename (@ARGV) {
 	    s/^[\s\t]*[@-]{1,2}//;
 	}
 
-	if ($cat_string ne "" and m/^\Q$cat_string\E$/) {
+	if ($cat_string ne "" && (m/^\Q$cat_string\E$/ || ($cat_indented && m/^\t*\Q$cat_string\E$/))) {
 	    $cat_string = "";
 	    next;
 	}
@@ -389,9 +390,10 @@ foreach my $filename (@ARGV) {
 
 	    # Only look for the beginning of a heredoc here, after we've
 	    # stripped out quoted material, to avoid false positives.
-	    if ($cat_line =~ m/(?:^|[^<])\<\<\-?\s*(?:[\\]?(\w+)|[\'\"](.*?)[\'\"])/) {
-		$cat_string = $1;
-		$cat_string = $2 if not defined $cat_string;
+	    if ($cat_line =~ m/(?:^|[^<])\<\<(\-?)\s*(?:[\\]?(\w+)|[\'\"](.*?)[\'\"])/) {
+		$cat_indented = ($1 && $1 eq '-')? 1 : 0;
+		$cat_string = $2;
+		$cat_string = $3 if not defined $cat_string;
             }
 	}
     }
