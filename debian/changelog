@@ -26,6 +26,8 @@ devscripts (2.10.65) UNRELEASED; urgency=low
     + Detect use of Bash's “;;&” and ”;&” operators.
     + Add support for handling line continuations.  (Closes: #531327)
     + Fix a false positive with file redirection.
+    + Fix handling of indented heredoc delimiters.
+    + Fix some parsing of quoted strings.
 
  -- Martin Zobel-Helas <zobel@debian.org>  Tue, 11 May 2010 20:48:16 +0200
 
