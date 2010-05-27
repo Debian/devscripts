@@ -548,6 +548,7 @@ sub init_hashes {
 	qr';;?&' =>  q<;;& and ;& special case operators>,
 	$LEADIN . qr'jobs\s' =>  q<jobs>,
 #	$LEADIN . qr'jobs\s+-[^lp]\s' =>  q<'jobs' with option other than -l or -p>,
+	$LEADIN . qr'command\s+-[^p]\s' =>  q<'command' with option other than -p>,
     );
 
     %string_bashisms = (
