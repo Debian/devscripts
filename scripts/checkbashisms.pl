@@ -546,6 +546,8 @@ sub init_hashes {
 	$LEADIN . qr'printf\s+-v' => q<'printf -v var ...' should be var='$(printf ...)'>,
 	$LEADIN . qr'coproc\s' =>        q<coproc>,
 	qr';;?&' =>  q<;;& and ;& special case operators>,
+	$LEADIN . qr'jobs\s' =>  q<jobs>,
+#	$LEADIN . qr'jobs\s+-[^lp]\s' =>  q<'jobs' with option other than -l or -p>,
     );
 
     %string_bashisms = (
