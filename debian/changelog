@@ -8,6 +8,8 @@ devscripts (2.10.65) UNRELEASED; urgency=low
       present.  (Closes: #577564)
     + Document that $(DEB)EMAIL must be in the environment to send email using
       either --mutt or --smtp-host.  (Closes: #578334)
+    + Cleanup the help output and add some options which were only documented
+      in the man page.
 
   [ Martin Zobel-Helas ]
   * Remove svk from Recommends, it is no longer in the archive. (Closes:

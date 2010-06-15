@@ -2309,8 +2309,6 @@ sub bts_help {
     print <<"EOF";
 Usage: $progname [options] command [args] [\#comment] [.|, command ... ]
 Valid options are:
-   --no-conf, --noconf    Do not read devscripts config files;
-                          must be the first option given
    -o, --offline          Do not attempt to connect to BTS for show/bug
                           commands: use cached copy
    --online, --no-offline Attempt to connect (default)
@@ -2335,10 +2333,9 @@ Valid options are:
    --use-default-cc       Send carbon copies to any addresses specified in the
                           configuration file BTS_DEFAULT_CC (default)
    --no-use-default-cc    Do not do so
-   -f, --force-refresh    Reload all bug reports being cached, even unchanged
-                          ones
-   --no-force-refresh     Do not do so (default)
    --sendmail=cmd         Sendmail command to use (default /usr/sbin/sendmail)
+   --mutt                 Use mutt for sending of mails.
+   --no-mutt              Do not do so (default)
    --smtp-host=host       SMTP host to use
    --smtp-username=user   } Credentials to use when connecting to an SMTP
    --smtp-password=pass   } server which requires authentication
@@ -2346,14 +2343,23 @@ Valid options are:
                             (defaults to the content of /etc/mailname)
    --bts-server           The name of the debbugs server to use
                             (default bugs.debian.org)
-   --no-include-resolved  Do not cache bugs marked as resolved
+   -f, --force-refresh    Reload all bug reports being cached, even unchanged
+                          ones
+   --no-force-refresh     Do not do so (default)
+   --only-new             Download only new bugs when caching.  Do not check
+                          for updates in bugs we already have.
    --include-resolved     Cache bugs marked as resolved (default)
+   --no-include-resolved  Do not cache bugs marked as resolved
    --no-ack               Suppress BTS acknowledgment mails
    --ack                  Do not do so (default)
    -i, --interactive      Prompt for confirmation before sending e-mail
    --force-interactive    Same as --interactive, with the exception that an
                           editor is spawned before confirmation is requested
    --no-interactive       Do not do so (default)
+   -q, --quiet            Only display information about newly cached pages.
+                          If given twice, only display error messages.
+   --no-conf, --noconf    Do not read devscripts config files;
+                          must be the first option given
    -h, --help             Display this message
    -v, --version          Display version and copyright info
 
