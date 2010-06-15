@@ -2525,7 +2525,7 @@ sub send_mail {
 	if ($pid) {
 	    # parent
 	    print MAIL $message;
-	    close MAIL or die "$progname: sendmail error: $!\n";
+	    close MAIL or die "$progname: $sendmailcmd error: $!\n";
 	}
 	else {
 	    # child
@@ -2536,7 +2536,7 @@ sub send_mail {
 		my @mailcmd = split ' ', $sendmailcmd;
 		push @mailcmd, "-t" if $sendmailcmd =~ /$sendmail_t/;
 		exec @mailcmd
-		    or die "$progname: error running sendmail: $!\n";
+		    or die "$progname: error running $sendmailcmd: $!\n";
 	    }
 	}
     }
@@ -2621,22 +2621,20 @@ sub mailbtsall {
 	return if not defined $body;
 
 	if ($noaction) {
-	    print "$header\n$body\n";
+	    print "$header$body\n";
 	    return;
 	}
 
-	unless (system("command -v mail >/dev/null 2>&1") == 0) {
-	    die "$progname: You need to either set DEBEMAIL or have the mailx/mailutils package\ninstalled to send mail!\n";
-	}
 	my $pid = open(MAIL, "|-");
 	if (! defined $pid) {
 	    die "$progname: Couldn't fork: $!\n";
 	}
-	$SIG{'PIPE'} = sub { die "$progname: pipe for mail broke\n"; };
+	$SIG{'PIPE'} = sub { die "$progname: pipe for $sendmailcmd broke\n"; };
 	if ($pid) {
 	    # parent
+	    print MAIL $header;
 	    print MAIL $body;
-	    close MAIL or die "$progname: mail: $!\n";
+	    close MAIL or die "$progname: $sendmailcmd: $!\n";
 	}
 	else {
 	    # child
@@ -2644,13 +2642,10 @@ sub mailbtsall {
 		exec("/bin/cat")
 		    or die "$progname: error running cat: $!\n";
 	    } else {
-		$ccemail =~ s/ //g;
-		my @args;
-		@args = ("-s", $subject, "-a", "User-Agent: devscripts bts/$version$toolname", $btsemail);
-		push(@args, "-c", "$ccemail") if $ccemail;
-		push(@args, "-a", "X-Debbugs-No-Ack: Yes")
-		    if $requestack==0;
-		exec("mail", @args) or die "$progname: error running mail: $!\n";
+		my @mailcmd = split ' ', $sendmailcmd;
+		push @mailcmd, "-t" if $sendmailcmd =~ /$sendmail_t/;
+		exec @mailcmd
+		    or die "$progname: error running $sendmailcmd: $!\n";
 	    }
 	}
     }
@@ -2748,18 +2743,18 @@ sub mailto {
 	send_mail($from, $to, '', $subject, $body);
     }
     else {  # No $from
-	unless (system("command -v mail >/dev/null 2>&1") == 0) {
-	    die "$progname: You need to either specify an email address (say using DEBEMAIL)\n or have the mailx/mailutils package installed to send mail!\n";
+	unless (system("command -v mailx >/dev/null 2>&1") == 0) {
+	    die "$progname: You need to either specify an email address (say using DEBEMAIL)\nor have the bsd-mailx package (or another package providing mailx) installed\nto send mail!\n";
 	}
 	my $pid = open(MAIL, "|-");
 	if (! defined $pid) {
 	    die "$progname: Couldn't fork: $!\n";
 	}
-	$SIG{'PIPE'} = sub { die "$progname: pipe for mail broke\n"; };
+	$SIG{'PIPE'} = sub { die "$progname: pipe for mailx broke\n"; };
 	if ($pid) {
 	    # parent
 	    print MAIL $body;
-	    close MAIL or die "$progname: mail: $!\n";
+	    close MAIL or die "$progname: mailx: $!\n";
 	}
 	else {
 	    # child
@@ -2767,8 +2762,8 @@ sub mailto {
 		exec("/bin/cat")
 		    or die "$progname: error running cat: $!\n";
 	    } else {
-		exec("mail", "-s", $subject, $to)
-		    or die "$progname: error running mail: $!\n";
+		exec("mailx", "-s", $subject, $to)
+		    or die "$progname: error running mailx: $!\n";
 	    }
 	}
     }
