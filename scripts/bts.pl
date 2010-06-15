@@ -284,8 +284,11 @@ SENDMAILCMD, for example: --sendmail="/usr/sbin/mymailer -t"
 
 =item --mutt
 
-Use mutt for sending of mails. Default is not to use mutt,
-except for some commands.
+Use mutt for sending of mails. Default is not to use mutt, except for some
+commands.
+
+Note that one of $DEBEMAIL or $EMAIL must be set in the environment in order
+to use mutt to send emails.
 
 =item --no-mutt
 
@@ -299,6 +302,9 @@ this SMTP host rather than by invoking a sendmail command.
 The host name may be followed by a colon (":") and a port number in
 order to use a port other than the default.  It may also begin with
 "ssmtp://" or "smtps://" to indicate that SMTPS should be used.
+
+Note that one of $DEBEMAIL or $EMAIL must be set in the environment in order
+to use direct SMTP connections to send emails.
 
 Note that when sending directly via an SMTP host, specifying addresses in
 --cc-addr or BTS_DEFAULT_CC that the SMTP host will not relay will cause the

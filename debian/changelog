@@ -3,8 +3,11 @@ devscripts (2.10.65) UNRELEASED; urgency=low
   [ James Vega ]
   * Remove mergechanges from the set of commands which use completion of
     package names.  (Closes: #578167)
-  * bts: Use sendmail to send mails with extra headers when $(DEB)EMAIL aren't
-    present.  (Closes: #577564)
+  * bts:
+    + Use sendmail to send mails with extra headers when $(DEB)EMAIL aren't
+      present.  (Closes: #577564)
+    + Document that $(DEB)EMAIL must be in the environment to send email using
+      either --mutt or --smtp-host.  (Closes: #578334)
 
   [ Martin Zobel-Helas ]
   * Remove svk from Recommends, it is no longer in the archive. (Closes:
