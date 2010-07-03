@@ -18,23 +18,48 @@
 use strict;
 use warnings;
 
-use LWP::Simple;
-use JSON -support_by_pp;
+use Getopt::Long;
 use File::Basename;
-use File::Path qw/remove_tree/;
+use Cwd qw/cwd abs_path/;
+use File::Path qw/make_path/;
+use Dpkg::Version;
 
 my $progname = basename($0);
+
+eval {
+    require LWP::Simple;
+    require LWP::UserAgent;
+    no warnings;
+    $LWP::Simple::ua = LWP::UserAgent->new(agent => 'LWP::UserAgent/Devscripts/###VERSION###');
+};
+if ($@) {
+    if ($@ =~ m/Can\'t locate LWP/) {
+	die "$progname: Unable to run: the libwww-perl package is not installed";
+    } else {
+	die "$progname: Unable to run: Couldn't load LWP::Simple: $@";
+    }
+}
+
+eval {
+    require JSON;
+};
+if ($@) {
+    if ($@ =~ m/Can\'t locate JSON/) {
+	die "$progname: Unable to run: the libjson-perl package is not installed";
+    } else {
+	die "$progname: Unable to run: Couldn't load JSON: $@";
+    }
+}
+
 my $modified_conf_msg = '';
 my %config_vars = ();
-my $force_actions = 0;
 
-my $numshifts = 0;
-
+my %opt;
 my $package = '';
 my $pkgversion = '';
-my $destdir = '';
+my $warnings = 0;
 
-sub fatal($;$);
+sub fatal($);
 sub verbose($);
 
 sub version
@@ -51,6 +76,7 @@ EOF
 
 sub usage
 {
+    my $rc = shift;
     print <<"EOF";
 $progname [options] <package name> [package version]
 
@@ -70,7 +96,7 @@ Default settings modified by devscripts configuration files or command-line
 options:
 $modified_conf_msg
 EOF
-    exit 0;
+    exit $rc;
 }
 
 sub fetch_json_page
@@ -79,8 +105,9 @@ sub fetch_json_page
 
     # download the json page:
     verbose "Getting json $json_url\n";
-    my $content = get $json_url;
-    my $json = new JSON;
+    my $content = LWP::Simple::get($json_url);
+    return unless defined $content;
+    my $json = JSON->new();
 
     # these are some nice json options to relax restrictions a bit:
     my $json_text = $json->allow_nonref->utf8->relaxed->escape_slash->loose->allow_singlequote->allow_barekey->decode($content);
@@ -90,95 +117,53 @@ sub fetch_json_page
 
 sub read_conf
 {
-    # Most of the code in this sub has been stol^Wadapted from debuild.pl
-
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
     %config_vars = (
-        'DEBSNAP_VERBOSE' => 'no',
-        'DEBSNAP_DESTDIR' => '',
-        'DEBSNAP_BASE_URL' => 'http://snapshot.debian.org',
+	'DEBSNAP_VERBOSE' => 'no',
+	'DEBSNAP_DESTDIR' => '',
+	'DEBSNAP_BASE_URL' => 'http://snapshot.debian.org',
     );
 
     my %config_default = %config_vars;
-    my $shell_cmd;
 
+    my $shell_cmd;
     # Set defaults
     $shell_cmd .= qq[unset `set | grep "^DEBSNAP_" | cut -d= -f1`;\n];
     foreach my $var (keys %config_vars) {
-        $shell_cmd .= qq[$var="$config_vars{$var}";\n];
+	$shell_cmd .= qq[$var="$config_vars{$var}";\n];
     }
-
     $shell_cmd .= 'for file in ' . join(" ",@config_files) . "; do\n";
     $shell_cmd .= '[ -f $file ] && . $file; done;' . "\n";
-
     # Read back values
     foreach my $var (keys %config_vars) { $shell_cmd .= "echo \$$var;\n" }
-
-    # print STDERR "Running shell command:\n$shell_cmd";
     my $shell_out = `/bin/bash -c '$shell_cmd'`;
-    # print STDERR "Shell output:\n${shell_out}End shell output\n";
-    my @othervars;
-    (@config_vars{keys %config_vars}, @othervars) = split /\n/, $shell_out, -1;
+    @config_vars{keys %config_vars} = split /\n/, $shell_out, -1;
 
     # Check validity
     $config_vars{'DEBSNAP_VERBOSE'} =~ /^(yes|no)$/
-    or $config_vars{'DEBSNAP_VERBOSE'} = 'no';
-
-    # Lastly, command-line options have priority
-    while (my $arg=shift) {
-        my $opt = '';
-        $numshifts++;
-
-        $arg =~/^(-v|--verbose)$/ and $config_vars{DEBSNAP_VERBOSE} = 'yes';
-
-        if ($arg =~/^(-d|--destdir)$/) {
-            $opt = shift;
-            unless (defined ($opt) and ($opt !~ /^-.*$/)) {
-                fatal "$arg requires an argument,\nrun $progname --help for usage information.";
-            }
-            $config_vars{DEBSNAP_DESTDIR} = $opt;
-        }
-        elsif ($arg =~/^--destdir=(.*)$/) {
-            $arg = '--destdir';
-            $opt = $1;
-            $config_vars{DEBSNAP_DESTDIR} = $opt;
-        }
-
-        $arg =~ /^(-f|--force)$/ and $force_actions = 1;
-
-        $arg =~ /^(-h|--help)$/ and usage();
-        $arg eq '--version' and version();
-
-        $arg eq '--' and last;
-        $arg !~ /^-.*$/ and unshift(@ARGV, $arg), last;
-    }
+	or $config_vars{'DEBSNAP_VERBOSE'} = 'no';
 
     foreach my $var (sort keys %config_vars) {
-        if ($config_vars{$var} ne $config_default{$var}) {
-            $modified_conf_msg .= "  $var=$config_vars{$var}\n";
-        }
+	if ($config_vars{$var} ne $config_default{$var}) {
+	    $modified_conf_msg .= "  $var=$config_vars{$var}\n";
+	}
     }
 
     $modified_conf_msg ||= "  (none)\n";
     chomp $modified_conf_msg;
+
+    $opt{verbose} = $config_vars{DEBSNAP_VERBOSE} eq 'yes';
+    $opt{destdir} = $config_vars{DEBSNAP_DESTDIR};
+    $opt{baseurl} = $config_vars{DEBSNAP_BASE_URL};
 }
 
-sub fatal($;$)
+sub fatal($)
 {
     my ($pack, $file, $line);
     ($pack, $file, $line) = caller();
-    my $msg = shift;
-    ($msg = "$progname: fatal error at line $line:\n$msg\n") =~ tr/\0//d;
+    (my $msg = "$progname: fatal error at line $line:\n@_\n") =~ tr/\0//d;
     $msg =~ s/\n\n$/\n/;
-
-    my $code = shift;
-    if (defined $code) {
-        $! = $code;
-    }
-    else {
-        $! = 1;
-    }
-
+    $! = 1;
     die $msg;
 }
 
@@ -186,88 +171,83 @@ sub verbose($)
 {
     (my $msg = "@_\n") =~ tr/\0//d;
     $msg =~ s/\n\n$/\n/;
-    print "$msg" if $config_vars{DEBSNAP_VERBOSE} eq 'yes';
+    print "$msg" if $opt{verbose};
 }
 
 ###
 # Main program
 ###
 read_conf(@ARGV);
-# TODO: check if something less hacky can be done.
+Getopt::Long::Configure('gnu_compat');
+Getopt::Long::Configure('no_ignore_case');
+GetOptions(\%opt, 'verbose|v', 'destdir|d=s', 'force|f', 'help|h', 'version') || exit 1;
+
+usage(0) if $opt{help};
+usage(1) unless @ARGV;
+$package = shift;
 if (@ARGV) {
-    splice(@ARGV, 0, $numshifts);
-
-    $package = shift;
-    $pkgversion = shift;
-} else {
-    usage();
-}
-$package eq '' and usage();
-$pkgversion ||= '';
-
-# TODO: more compact version?
-if ($config_vars{DEBSNAP_DESTDIR}) {
-    $destdir = $config_vars{DEBSNAP_DESTDIR};
-}
-else {
-    $destdir = "source-$package";
+    my $version = shift;
+    $pkgversion = Dpkg::Version->new($version, check => 1);
+    fatal "Invalid version '$version'" unless $pkgversion;
 }
 
-my $baseurl = "$config_vars{DEBSNAP_BASE_URL}/mr/package/$package/";
-if (-d $destdir) {
-    if ($force_actions) {
-        my $verbose = 1 if $config_vars{DEBSNAP_VERBOSE} eq 'yes';
-        remove_tree($destdir, { verbose => $verbose });
-        mkdir($destdir);
-    }
-    else {
-        fatal "Destination dir $destdir already exists.\nPlease (re)move it first, or use --force to overwrite.";
+$package eq '' && usage(1);
+
+$opt{destdir} ||= "source-$package";
+
+my $baseurl = "$opt{baseurl}/mr/package/$package/";
+if (-d $opt{destdir}) {
+    unless ($opt{force} || cwd() eq abs_path($opt{destdir})) {
+	fatal "Destination dir $opt{destdir} already exists.\nPlease (re)move it first, or use --force to overwrite.";
     }
 }
-else {
-    mkdir($destdir);
+make_path($opt{destdir});
+
+my $json_text = fetch_json_page($baseurl);
+unless ($json_text && @{$json_text->{result}}) {
+    fatal "Unable to retrieve information for $package from $baseurl.";
 }
-
-eval {
-    my $json_text = fetch_json_page($baseurl);
-    # iterate over each available version in the JSON structure:
-    foreach my $version(@{$json_text->{result}}){
-        if ($pkgversion) {
-            next if $version->{version} ne $pkgversion;
-        }
-
-        my $src_json = fetch_json_page("http://snapshot.debian.org/mr/package/$package/$version->{version}/srcfiles");
-
-        foreach my $file(@{$src_json->{result}}){
-            my $hash = $file->{hash};
-            my $file = fetch_json_page("http://snapshot.debian.org/mr/file/$hash/info")->{result}[0];
-
-            #my %file_hash = ();
-            #$file_hash{path} = $file->{path};
-            #$file_hash{run} = $file->{run};
-            #$file_hash{name} = $file->{name};
-            #$file_hash{size} = $file->{size};
-            #while (my($k, $v) = each (%file_hash)){
-            #    print "$k => $v\n";
-            #}
-
-            my $file_url = "http://snapshot.debian.org/file/$hash";
-            verbose "Getting file $file->{name}: $file_url";
-            eval {
-                getstore($file_url, "$destdir/$file->{name}");
-            };
-            if ($@) {
-                fatal("$@", 2);
-            }
-
-            # http://snapshot-dev.debian.org/file/7b4d5b2f24af4b5a299979134bc7f6d7b1eaf875
-            # http://snapshot-dev.debian.org/mr/file/7b4d5b2f24af4b5a299979134bc7f6d7b1eaf875/info
-            # "result": [{"path": "/pool/main/p/p0f", "run": "20070806T000000Z", "archive_name": "debian", "name": "p0f_2.0.8.orig.tar.gz", "size": 136877}]
-        }
+# Keep track of what's been downloaded so we don't download the same
+# orig.tar.gz multiple times
+my %fetched;
+# iterate over each available version in the JSON structure:
+foreach my $version (@{$json_text->{result}}) {
+    if ($pkgversion) {
+	next if ($version->{version} <=> $pkgversion);
     }
-};
 
-# catch crashes:
-if($@){
-    fatal "$@";
+    my $src_json = fetch_json_page("$baseurl/$version->{version}/srcfiles?fileinfo=1");
+    unless ($src_json) {
+	warn "$progname: No source files found for $package version $version->{version}\n";
+	$warnings++;
+    }
+
+    foreach my $hash (keys %{$src_json->{fileinfo}}) {
+	my $fileinfo = $src_json->{fileinfo}{$hash};
+	my $file_name;
+	# fileinfo may match multiple files (e.g., orig tarball for iceweasel 3.0.12)
+	foreach my $info (@$fileinfo) {
+	    if ($info->{name} =~ m/^${package}/) {
+		$file_name = $info->{name};
+		last;
+	    }
+	}
+	unless ($file_name) {
+	    warn "$progname: No files with hash $hash matched '${package}'\n";
+	    $warnings++;
+	    next;
+	}
+	my $file_url = "$opt{baseurl}/file/$hash";
+	$file_name = basename($file_name);
+	if (!$fetched{$file_name}) {
+	    verbose "Getting file $file_name: $file_url";
+	    LWP::Simple::getstore($file_url, "$opt{destdir}/$file_name");
+	}
+	$fetched{$file_name} = 1;
+    }
 }
+
+if ($warnings) {
+    exit 2;
+}
+exit 0;

@@ -10,6 +10,16 @@ devscripts (2.10.65) UNRELEASED; urgency=low
       either --mutt or --smtp-host.  (Closes: #578334)
     + Cleanup the help output and add some options which were only documented
       in the man page.
+  * debsnap:
+    + Iterate over the list of files listed for a hash until we find one that
+      matches the requested package.  (Closes: #584734)
+    + Warn and move on to the next file if no files are present for a given
+      hash or none match the requested package.  (Closes: #587265)
+    + Handle error responses from snapshot.debian.org.  (Closes: #587217)
+    + Use the basename of the file being downloaded as the name under which to
+      save it.  (Closes: #584735)
+    + Do not remove the destination directory when --force is given.  (Closes:
+      #587517)
 
   [ Martin Zobel-Helas ]
   * Remove svk from Recommends, it is no longer in the archive. (Closes:

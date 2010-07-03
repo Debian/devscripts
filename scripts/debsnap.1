@@ -1,5 +1,5 @@
 .\" for manpage-specific macros, see man(7)
-.TH DEBSNAP 1 "January 8, 2009" "Debian devscripts" "DebSnap User Manual"
+.TH DEBSNAP 1 "July 3, 2010" "Debian devscripts" "DebSnap User Manual"
 .SH NAME
 debsnap \- retrieve old snapshots of Debian packages
 
@@ -32,14 +32,12 @@ Directory to place retrieved packages.
 
 .TP
 .BR \-f ", " \-\-force
-Force overwriting an existing \fIdestination\fP.  By default \fBdebsnap\fP will
+Force writing into an existing \fIdestination\fP.  By default \fBdebsnap\fP will
 insist the destination directory does not exist yet unless it is explicitly
 specified to be '.' (the current working directory).  This is to avoid files
 being accidentally overwritten by what is fetched from the archive and to
 provide a guarantee for other scripts that only the files fetched will be
-present there upon completion.  Note that this option will remove the
-\fIdestination\fP directory and all of its contents prior to beginning the
-download.
+present there upon completion.
 
 .TP
 .BR \-v ", " \-\-verbose
