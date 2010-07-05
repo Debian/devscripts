@@ -1518,55 +1518,62 @@ sub bts_tags {
 	die "bts tags: set what tag?\n";
     }
     # Parse the rest of the command line.
-    my $command="tags $bug";
-    my $flag="";
-    if ($_[0] =~ /^[-+=]$/) {
-	$flag = $_[0];
-	$command .= " $flag";
-	shift;
-    }
-    elsif ($_[0] =~ s/^([-+=])//) {
-	$flag = $1;
-	$command .= " $flag";
-    }
+    my $base_command="tags $bug";
+    my $commands = [];
 
-    if ($flag ne '=' && ! @_) {
-	die "bts tags: set what tag?\n";
-    }
-    
-    my $base_command = $command;
-    my $gifted = "";
-
+    my $curop;
     foreach my $tag (@_) {
-	if (exists $valid_tags{$tag}) {
-	    $command .= " $tag";
-	    if ($tag eq "security") {
-		    $ccsecurity = "team\@security.debian.org";
+	if ($tag =~ s/^([-+=])//) {
+	    my $op = $1;
+	    if ($op eq '=') {
+		$curop = '=';
+		$commands = [];
+		$ccsecurity = '';
 	    }
-	} elsif ($tag eq "gift") {
-	  $gifted = $bug;
-	} else {
+	    elsif (!$curop || $curop ne $op) {
+		$curop = $op;
+	    }
+	    next unless $tag;
+	}
+	if (!$curop) {
+	    $curop = '+';
+	}
+	if ($tag eq 'gift') {
+	    my $gift_flag = $curop;
+	    if ($gift_flag eq '=') {
+		$gift_flag = '+';
+	    }
+	    mailbts("gifting $bug",
+		"user debian-qa\@lists.debian.org\nusertag $bug $gift_flag gift");
+	    next;
+	}
+	if (!exists $valid_tags{$tag}) {
 	    # Try prefixes
 	    my @matches = grep /^\Q$tag\E/, @valid_tags;
 	    if (@matches != 1) {
-		if ($tag =~ /^[-+=]/) {
-		    die "bts tags: The +|-|= flag must not be joined to the tags.  Run bts help for usage info.\n";
-		}
 		die "bts tags: \"$tag\" is not a " . (@matches > 1 ? "unique" : "valid") . " tag prefix. Choose from: " . join(" ", @valid_tags) . "\n";
 	    }
-	    $command .= " $matches[0]";
+	    $tag = $matches[0];
+	}
+	if (!@$commands || $curop ne $commands->[-1]{op}) {
+	    push(@$commands, { op => $curop, tags => [] });
+	}
+	push(@{$commands->[-1]{tags}}, $tag);
+	if ($tag eq "security") {
+	    $ccsecurity = "team\@security.debian.org";
 	}
     }
-    if ($gifted ne "") {
-      my $gift_flag = $flag;
-      $gift_flag = "+" if $gift_flag eq "=";
-      mailbts("gifting $bug",
-	"user debian-qa\@lists.debian.org\nusertag $bug $gift_flag gift");
+
+    my $command = '';
+    foreach my $cmd (@$commands) {
+	if ($cmd->{op} ne '=' && !@{$cmd->{tags}}) {
+	    die "bts tags: set what tag?\n";
+	}
+	$command .= " $cmd->{op} " . join(' ', @{$cmd->{tags}});
     }
-    if (($base_command ne $command) or ($flag eq "=" and $gifted eq "")) { 
-	# at least one tag other than gift has been manipulated
-	# or all tags were removed
-	mailbts("tagging $bug", $command);
+
+    if ($command) {
+	mailbts("tagging $bug", $base_command . $command);
     }
 }
 
