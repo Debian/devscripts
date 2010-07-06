@@ -512,7 +512,8 @@ devscripts (2.10.51) unstable; urgency=low
     + Detect shellscript wrappers that use "then" or "else" before calling
       exec.  Thanks, Raphael Geissert.  (Closes: #530815)
     + Fix a false positive detection of ". $(foo bar)" as attempting to pass
-      arguments to a sourced script.  Thanks, Raphael Geissert.
+      arguments to a sourced script.  Thanks, Raphael Geissert.  (Closes:
+      #530905)
     + Detect use of passing arguments to a sourced script as part of a
       conditional statement.  Thanks, Raphael Geissert.
     + Correctly count the number of quotes in a line when detecting whether
