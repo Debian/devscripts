@@ -12,6 +12,8 @@ devscripts (2.10.65) UNRELEASED; urgency=low
       in the man page.
     + Allow specifying multiple tag modifiers (+, -, =) in one tag stanza.
       (Closes: #578118)
+    + Document the valid values for the status key in the select command.
+      (Closes: #583067)
   * debsnap:
     + Iterate over the list of files listed for a hash until we find one that
       matches the requested package.  (Closes: #584734)

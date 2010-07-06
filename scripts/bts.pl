@@ -999,7 +999,7 @@ Bug severity.
 
 =item status
 
-Status of the bug.
+Status of the bug.  One of "open", "done", or "forwarded".
 
 =item tag
 
