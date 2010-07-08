@@ -120,7 +120,7 @@ my (@debuild_opts, @cvs_opts, @lin_opts);
 	    push @debuild_opts, $arg;
 	    next;
 	}
-	if ($arg =~ /^--(preserve-env|ignore-dirname)$/) {
+	if ($arg =~ /^--preserve-env$/) {
 	    push @debuild_opts, $arg;
 	    next;
 	}

@@ -24,6 +24,8 @@ devscripts (2.10.65) UNRELEASED; urgency=low
       save it.  (Closes: #584735)
     + Do not remove the destination directory when --force is given.  (Closes:
       #587517)
+  * Remove --ignore-dirname options (and deprecation notices) from all
+    scripts.  6.5 years is long enough to stop using that option.
 
   [ Martin Zobel-Helas ]
   * Remove svk from Recommends, it is no longer in the archive. (Closes:

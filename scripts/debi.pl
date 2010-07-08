@@ -65,7 +65,7 @@ Usage: $progname [options] [.changes file] [package ...]
     --with-depends    Install packages with their depends.
     --tool TOOL       Use the specified tool for installing the dependencies
                       of the package(s) to be installed.
-		      (default: apt-get)
+                      (default: apt-get)
     --help            Show this message
     --version         Show version and copyright information
 
@@ -181,7 +181,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # Command line options next
 my ($opt_help, $opt_version, $opt_a, $opt_t, $opt_debsdir, $opt_multi);
 my $opt_upgrade;
-my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
+my ($opt_level, $opt_regex, $opt_noconf);
 my ($opt_tool, $opt_with_depends);
 GetOptions("help" => \$opt_help,
 	   "version" => \$opt_version,
@@ -190,7 +190,6 @@ GetOptions("help" => \$opt_help,
 	   "debs-dir=s" => \$opt_debsdir,
 	   "multi" => \$opt_multi,
 	   "upgrade" => \$opt_upgrade,
-	   "ignore-dirname" => \$opt_ignore,
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
 	   "with-depends" => \$opt_with_depends,
@@ -223,11 +222,6 @@ if ($debsdir_warning) {
     die "$progname: $debsdir_warning\n";
 }
 
-# dirname stuff
-if ($opt_ignore) {
-    die "$progname: --ignore-dirname has been replaced by --check-dirname-level and\n--check-dirname-regex; run $progname --help for more details\n";
-}
-
 if (defined $opt_level) {
     if ($opt_level =~ /^[012]$/) { $check_dirname_level = $opt_level; }
     else {
@@ -253,7 +247,6 @@ if ($? != 0 or ! $arch) {
     die "$progname: unable to determine target architecture.\n";
 }
 chomp $arch;
-
 
 my $chdir = 0;
 

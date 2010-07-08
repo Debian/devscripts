@@ -498,9 +498,6 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
 	$arg eq '--tgz-check' and $tgz_check=1, next;
 	$arg =~ /^--no-?tgz-check$/ and $tgz_check=0, next;
 	$arg =~ /^-r(.*)/ and $root_command=$1, next;
-	if ($arg eq '--ignore-dirname') {
-	    fatal "--ignore-dirname has been replaced by --check-dirname-level and\n--check-dirname-regex; run $progname --help for more details";
-	}
 	if ($arg =~ /^--check-dirname-level=(.*)$/) {
 	    $arg = '--check-dirname-level';
 	    unshift @ARGV, $1;

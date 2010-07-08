@@ -300,7 +300,7 @@ my ($opt_help, $opt_version);
 my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u, $opt_force_dist);
 my ($opt_n, $opt_bn, $opt_qa, $opt_s, $opt_bpo, $opt_l, $opt_c, $opt_m, $opt_create, $opt_package, @closes);
 my ($opt_news);
-my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf, $opt_empty);
+my ($opt_level, $opt_regex, $opt_noconf, $opt_empty);
 
 Getopt::Long::Configure('bundling');
 GetOptions("help|h" => \$opt_help,
@@ -334,7 +334,6 @@ GetOptions("help|h" => \$opt_help,
 	   "multi-maint!" => \$opt_multimaint,
 	   "m|maintmaint" => \$opt_m,
 	   "t|mainttrailer!" => \$opt_t,
-	   "ignore-dirname" => \$opt_ignore,
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
 	   "noconf" => \$opt_noconf,
@@ -362,11 +361,6 @@ if ($opt_noconf) {
 }
 if ($opt_help) { usage; exit 0; }
 if ($opt_version) { version; exit 0; }
-
-# dirname stuff
-if ($opt_ignore) {
-    fatal "--ignore-dirname has been replaced by --check-dirname-level and\n--check-dirname-regex; run $progname --help for more details";
-}
 
 if (defined $opt_level) {
     if ($opt_level =~ /^[012]$/) { $check_dirname_level = $opt_level; }

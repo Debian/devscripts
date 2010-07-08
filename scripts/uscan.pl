@@ -260,7 +260,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 my $debug = 0;
 my ($opt_h, $opt_v, $opt_destdir, $opt_download, $opt_force_download,
     $opt_report, $opt_passive, $opt_symlink, $opt_repack);
-my ($opt_verbose, $opt_ignore, $opt_level, $opt_regex, $opt_noconf);
+my ($opt_verbose, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
 my $opt_download_version;
 my $opt_user_agent;
@@ -285,7 +285,6 @@ GetOptions("help" => \$opt_h,
 	   "dehs!" => \$opt_dehs,
 	   "verbose!" => \$opt_verbose,
 	   "debug" => \$debug,
-	   "ignore-dirname" => \$opt_ignore,
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
 	   "user-agent=s" => \$opt_user_agent,
@@ -320,11 +319,6 @@ $download_version = $opt_download_version if defined $opt_download_version;
 if ($dehs) {
     $SIG{'__WARN__'} = \&dehs_warn;
     $SIG{'__DIE__'} = \&dehs_die;
-}
-
-# dirname stuff
-if ($opt_ignore) {
-    die "$progname: --ignore-dirname has been replaced by --check-dirname-level and\n--check-dirname-regex; run $progname --help for more details\n";
 }
 
 if (defined $opt_level) {
