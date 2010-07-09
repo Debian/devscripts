@@ -26,6 +26,9 @@ devscripts (2.10.65) UNRELEASED; urgency=low
       #587517)
   * Remove --ignore-dirname options (and deprecation notices) from all
     scripts.  6.5 years is long enough to stop using that option.
+  * diff2patches: Document the patch naming scheme and use of “debian/” as the
+    destination directory when “debian/patches/” doesn't exist.  (Closes:
+    #552693)
 
   [ Martin Zobel-Helas ]
   * Remove svk from Recommends, it is no longer in the archive. (Closes:
