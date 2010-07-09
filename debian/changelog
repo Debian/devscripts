@@ -61,6 +61,12 @@ devscripts (2.10.65) UNRELEASED; urgency=low
     + Detect unexpected EOF for unclosed heredocs, quoted strings, and line
       continuations.
 
+  [ Simon McVittie ]
+  * mk-build-deps:
+    + Build an Arch: any package if any of the Build-Depends have architecture
+      requirements.  (Closes: #580600)
+    + Allow specifying for which architecture to build the package.
+
  -- Martin Zobel-Helas <zobel@debian.org>  Tue, 11 May 2010 20:48:16 +0200
 
 devscripts (2.10.64) unstable; urgency=low
