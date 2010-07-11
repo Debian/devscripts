@@ -35,6 +35,9 @@ devscripts (2.10.65) UNRELEASED; urgency=low
     + Include build-essential in Depends.  (Closes: #565889)
   * debi: Use “dpkg -O” instead of parsing dpkg-query's output to upgrade only
     packages which are already installed.  (Closes: #563390)
+  * debcheckout: Specifically call out that Debian hosts are already handled
+    in DEBCHECKOUT_AUTH_URLS' description.  Thanks to martin f. krafft for the
+    suggested wording.  (Closes: #530581)
 
   [ Martin Zobel-Helas ]
   * Remove svk from Recommends, it is no longer in the archive. (Closes:

@@ -160,8 +160,9 @@ for authenticated mode (see B<-a>) have failed.
 References to matching substrings in the replacement texts are
 allowed as usual in Perl by the means of $1, $2, ... and so on.
 
-Using this setting users can specify how to enable authenticated mode
-for repositories hosted on non well-known machines.
+This setting can be used to enable authenticated mode for most repositories
+out there.  Note that the Debian repositories on S<alioth.debian.org>
+(S<$vcs.debian.org>) are implicitly defined.
 
 Here is a sample snippet suitable for the configuration files:
 
