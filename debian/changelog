@@ -33,6 +33,8 @@ devscripts (2.10.65) UNRELEASED; urgency=low
     + Add options to build packages which depend on solely Build-Depends or
       Build-Depends-Indep.  (Closes: #498898)
     + Include build-essential in Depends.  (Closes: #565889)
+  * debi: Use “dpkg -O” instead of parsing dpkg-query's output to upgrade only
+    packages which are already installed.  (Closes: #563390)
 
   [ Martin Zobel-Helas ]
   * Remove svk from Recommends, it is no longer in the archive. (Closes:
