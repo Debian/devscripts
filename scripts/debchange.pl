@@ -1161,18 +1161,25 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
 	    # maintainer
 	    $nextmaint ||= $1;
 	}
-	elsif (defined $lastmaint) {
-	    if (m/^\w[-+0-9a-z.]* \([^\(\) \t]+\)((?:\s+[-+0-9a-z.]+)+)\;\s+urgency=(\w+)/i) {
+	elsif (m/^\w[-+0-9a-z.]* \(([^\(\) \t]+)\)((?:\s+[-+0-9a-z.]+)+)\;\s+urgency=(\w+)/i) {
+	    if (defined $lastmaint) {
 		$lastheader = $_;
-		$lastdist = $1;
+		$lastdist = $2;
 		$lastdist =~ s/^\s+//;
 		undef $lastdist if $lastdist eq "UNRELEASED";
 		# Revert to our previously saved position
 		$line = $savedline;
 		last;
 	    }
+	    else {
+		my $tmpver = $1;
+		$tmpver =~ s/^\s+//;
+		if ($tmpver =~ m/~bpo(\d+)\+/ && exists $bpo_dists{$1}) {
+		    $dist_indicator = "$bpo_dists{$1}-backports";
+		}
+	    }
 	}
-	elsif (/  \* Upload to ([^ ]+).*$/) {
+	elsif (/  \* (?:Upload to|Rebuild for) (\S+).*$/) {
 	    ($dist_indicator = $1) =~ s/[!:.,;]$//;
 	    chomp $dist_indicator;
 	}

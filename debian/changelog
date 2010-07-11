@@ -38,6 +38,8 @@ devscripts (2.10.65) UNRELEASED; urgency=low
   * debcheckout: Specifically call out that Debian hosts are already handled
     in DEBCHECKOUT_AUTH_URLS' description.  Thanks to martin f. krafft for the
     suggested wording.  (Closes: #530581)
+  * debchange: When running “dch -r”, use <dist>-backports if a backports
+    upload is detected.  (Closes: #588502)
 
   [ Martin Zobel-Helas ]
   * Remove svk from Recommends, it is no longer in the archive. (Closes:
