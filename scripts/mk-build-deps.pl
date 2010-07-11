@@ -35,7 +35,11 @@ B<mk-build-deps> [options] <control file | package name> [...]
 
 Given a package name and/or control file, B<mk-build-deps>
 will use B<equivs> to generate a binary package which may be installed to
-satisfy the build-dependencies of the given package.
+satisfy all the build dependencies of the given package.
+
+If B<--build-dep> and/or B<--build-indep> are given, then the resulting binary
+package(s) will depend solely on the Build-Depends/Build-Depends-Indep
+dependencies, respectively.
 
 =head1 OPTIONS
 
@@ -61,6 +65,16 @@ If the source package has architecture-specific build dependencies, produce
 a package for architecture I<foo>, not for the system architecture. (If the
 source package does not have architecture-specific build dependencies,
 the package produced is always for the pseudo-architecture B<all>.)
+
+=item B<-B>, B<--build-dep>
+
+Generate a package which only depends on the source package's Build-Depends
+dependencies.
+
+=item B<-A>, B<--build-indep>
+
+Generate a package which only depends on the source package's
+Build-Depends-Indep dependencies.
 
 =item B<-h>, B<--help>
 
@@ -88,11 +102,12 @@ use warnings;
 use Getopt::Long;
 use File::Basename;
 use Pod::Usage;
+use Dpkg::Control;
 
 my $progname = basename($0);
 my $opt_install;
 my $opt_remove=0;
-my ($opt_help, $opt_version, $opt_arch);
+my ($opt_help, $opt_version, $opt_arch, $opt_dep, $opt_indep);
 my $control;
 my $install_tool;
 my @packages;
@@ -135,7 +150,9 @@ GetOptions("help|h" => \$opt_help,
            "install|i" => \$opt_install,
            "remove|r" => \$opt_remove,
            "tool|t=s" => \$install_tool,
-	   "arch|a=s" => \$opt_arch,
+           "arch|a=s" => \$opt_arch,
+           "build-dep|B" => \$opt_dep,
+           "build-indep|A" => \$opt_indep,
            )
     or pod2usage({ -exitval => 1, -verbose => 0 });
 
@@ -156,79 +173,77 @@ if ($?) {
 }
 
 while ($control = shift) {
-    my $name;
-    my $build_deps = "";
-    my $version;
-    my $last_line_build_deps;
-
+    my ($name, $fh);
     if (-r $control and -f $control) {
-	open CONTROL, $control;
+	open $fh, $control || do {
+	    warn "Unable to open $control: $!\n";
+	    next;
+        };
+	$name = 'Source';
     }
     else {
-	open CONTROL, "apt-cache showsrc $control |";
+	open $fh, "apt-cache showsrc $control |" || do {
+	    warn "Unable to run apt-cache: $!\n";
+	    next;
+        };
+	$name = 'Package';
     }
 
-    while (<CONTROL>) {
-	next if /^#|^\s*$/;
-	if (/^(?:Package|Source):\s*(\S+)/ && !$name) {
-	    $name = $1;
+    my $ctrl = Dpkg::Control->new(type => CTRL_INFO_SRC);
+    if ($ctrl->parse($fh, $control)) {
+	my $args = '';
+	my $arch = 'all';
+	my ($build_deps, $build_dep, $build_indep);
+
+	if (exists $ctrl->{'Build-Depends'}) {
+	    $build_dep = $ctrl->{'Build-Depends'};
+	    $build_dep =~ s/\n/ /g;
+	    $build_deps = $build_dep;
 	}
-	if (/^Version:\s*(\S+)/) {
-	    $version = $1;
+	if (exists $ctrl->{'Build-Depends-Indep'}) {
+	    $build_indep = $ctrl->{'Build-Depends-Indep'};
+	    $build_indep =~ s/\n/ /g;
+	    $build_deps .= ', ' if $build_deps;
+	    $build_deps .= $build_indep;
 	}
-	if (/^Build-Depends(?:-Indep)?:\s*(.*)/) {
-	    $build_deps .= $build_deps ? ", $1" : $1;
-	    $last_line_build_deps = 1;
+
+	die "$progname: Unable to find build-deps for $ctrl->{$name}\n" unless $build_deps;
+
+	# Only build a package with both B-D and B-D-I in Depends if the
+	# B-D/B-D-I specific packages weren't requested
+	if (!($opt_dep || $opt_indep)) {
+	    push(@packages,
+		 build_equiv({ depends => $build_deps,
+			       name => $ctrl->{$name},
+			       type => 'build-deps',
+			       version => $ctrl->{Version} }));
+	    next;
 	}
-	elsif (/^(\S+):/) {
-	    $last_line_build_deps = 0;
+	if ($opt_dep) {
+	    push(@packages,
+		 build_equiv({ depends => $build_dep,
+			       name => $ctrl->{$name},
+			       type => 'build-deps-depends',
+			       version => $ctrl->{Version} }));
 	}
-	elsif(/^\s+(.*)/ && $last_line_build_deps) {
-	    $build_deps .= $1;
+	if ($opt_indep) {
+	    push(@packages,
+		 build_equiv({ depends => $build_indep,
+			       name => $ctrl->{$name},
+			       type => 'build-deps-indep',
+			       version => $ctrl->{Version} }));
 	}
     }
-    close CONTROL;
-
-    my $equivs_build = 'equivs-build';
-    my $arch = 'all';
-
-    if ($build_deps =~ /\[|\]/) {
-        $arch = 'any';
-
-        if (defined $opt_arch) {
-            $equivs_build .= " --arch=$opt_arch";
-        }
+    else {
+	die "$progname: Unable to find package name in '$control'\n";
     }
-
-    # Now, running equivs-build:
-
-    die "$progname: Unable to find package name in '$control'\n" unless $name;
-    die "$progname: Unable to find build-deps for $name\n" unless $build_deps;
-
-    open EQUIVS, "| $equivs_build -"
-	or die "$progname: Failed to execute equivs-build: $!\n";
-    print EQUIVS "Section: devel\n" .
-	"Priority: optional\n".
-	"Standards-Version: 3.7.3\n\n".
-	"Package: ".$name."-build-deps\n".
-	"Architecture: $arch\n".
-	"Depends: $build_deps\n";
-    print EQUIVS "Version: $version\n" if $version;
-
-    print EQUIVS "Description: build-dependencies for $name\n" .
-	" Depencency package to build the '$name' package\n";
-
-    close EQUIVS;
-
-    push @packages, $name;
-
 }
 
 use Text::ParseWords;
 
 if ($opt_install) {
     for my $package (@packages) {
-	my $file = glob "${package}-build-deps_*.deb";
+	my $file = glob "${package}_*.deb";
 	push @deb_files, $file;
     }
 
@@ -254,3 +269,33 @@ later version.
 EOF
 }
 
+sub build_equiv
+{
+    my ($opts) = @_;
+    my $args = '';
+    my $arch = 'all';
+
+    if ($opts->{depends} =~ /\[|\]/) {
+	$arch = 'any';
+
+	if (defined $opt_arch) {
+	    $args = "--arch=$opt_arch ";
+	}
+    }
+
+    open EQUIVS, "| equivs-build $args-"
+	or die "$progname: Failed to execute equivs-build: $!\n";
+    print EQUIVS "Section: devel\n" .
+    "Priority: optional\n".
+    "Standards-Version: 3.7.3\n\n".
+    "Package: $opts->{name}-$opts->{type}\n".
+    "Architecture: $arch\n".
+    "Depends: $opts->{depends}\n";
+    print EQUIVS "Version: $opts->{version}\n" if $opts->{version};
+
+    print EQUIVS "Description: build-dependencies for $opts->{name}\n" .
+    " Depencency package to build the '$opts->{name}' package\n";
+
+    close EQUIVS;
+    return "$opts->{name}-$opts->{type}";
+}

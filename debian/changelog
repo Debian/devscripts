@@ -29,6 +29,8 @@ devscripts (2.10.65) UNRELEASED; urgency=low
   * diff2patches: Document the patch naming scheme and use of “debian/” as the
     destination directory when “debian/patches/” doesn't exist.  (Closes:
     #552693)
+  * mk-build-deps: Add options to build packages which depend on solely
+    Build-Depends or Build-Depends-Indep.  (Closes: #498898)
 
   [ Martin Zobel-Helas ]
   * Remove svk from Recommends, it is no longer in the archive. (Closes:
