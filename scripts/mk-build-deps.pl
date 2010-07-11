@@ -290,7 +290,7 @@ sub build_equiv
     "Standards-Version: 3.7.3\n\n".
     "Package: $opts->{name}-$opts->{type}\n".
     "Architecture: $arch\n".
-    "Depends: $opts->{depends}\n";
+    "Depends: build-essential, $opts->{depends}\n";
     print EQUIVS "Version: $opts->{version}\n" if $opts->{version};
 
     print EQUIVS "Description: build-dependencies for $opts->{name}\n" .
