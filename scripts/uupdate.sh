@@ -106,6 +106,15 @@ DEFAULT_UUPDATE_ROOTCMD=
 DEFAULT_UUPDATE_PRISTINE=yes
 DEFAULT_UUPDATE_SYMLINK_ORIG=yes
 VARS="UUPDATE_ROOTCMD UUPDATE_PRISTINE UUPDATE_SYMLINK_ORIG"
+SUFFIX="1"
+
+if which lsb_release >/dev/null 2>&1; then
+    case "$(lsb_release --short --id 2>/dev/null)" in
+	"Ubuntu")
+	    SUFFIX="0ubuntu1"
+	    ;;
+    esac
+fi
 
 if [ "$1" = "--no-conf" -o "$1" = "--noconf" ]; then
     shift
@@ -320,9 +329,9 @@ if [ "$PATCH" ]; then
 	fi
 
 	if [ -n "$EPOCH" ]; then
-	    echo "New Release will be $EPOCH:$NEW_VERSION-1."
+	    echo "New Release will be $EPOCH:$NEW_VERSION-$SUFFIX."
 	else
-	    echo "New Release will be $NEW_VERSION-1."
+	    echo "New Release will be $NEW_VERSION-$SUFFIX."
 	fi
     fi
 
@@ -333,8 +342,8 @@ if [ "$PATCH" ]; then
     fi
 
     # Sanity check
-    if dpkg --compare-versions "$NEW_VERSION-1" le "$VERSION"; then
-	echo "$PROGNAME: new version $NEW_VERSION-1 <= current version $VERSION; aborting!" >&2
+    if dpkg --compare-versions "$NEW_VERSION-$SUFFIX" le "$VERSION"; then
+	echo "$PROGNAME: new version $NEW_VERSION-$SUFFIX <= current version $VERSION; aborting!" >&2
 	exit 1
     fi
 
@@ -456,7 +465,7 @@ if [ "$PATCH" ]; then
 	    STATUS=1
 	fi
 	chmod a+x debian/rules
-	debchange -v "$NEW_VERSION-1" "New upstream release"
+	debchange -v "$NEW_VERSION-$SUFFIX" "New upstream release"
 	echo "Remember: Your current directory is the OLD sourcearchive!"
 	echo "Do a \"cd ../$PACKAGE-$SNEW_VERSION\" to see the new package"
 	exit
@@ -533,9 +542,9 @@ else
 	fi
     fi
     if [ -n "$EPOCH" ]; then
-	echo "New Release will be $EPOCH:$NEW_VERSION-1."
+	echo "New Release will be $EPOCH:$NEW_VERSION-$SUFFIX."
     else
-	echo "New Release will be $NEW_VERSION-1."
+	echo "New Release will be $NEW_VERSION-$SUFFIX."
     fi
 
     # Strip epoch number
@@ -545,8 +554,8 @@ else
     fi
 
     # Sanity check
-    if dpkg --compare-versions "$NEW_VERSION-1" le "$VERSION"; then
-	echo "$PROGNAME: new version $NEW_VERSION-1 <= current version $VERSION; aborting!" >&2
+    if dpkg --compare-versions "$NEW_VERSION-$SUFFIX" le "$VERSION"; then
+	echo "$PROGNAME: new version $NEW_VERSION-$SUFFIX <= current version $VERSION; aborting!" >&2
 	exit 1
     fi
 
@@ -809,7 +818,7 @@ else
 	exit 1
     fi
     chmod a+x debian/rules
-    debchange -v "$NEW_VERSION-1" New upstream release
+    debchange -v "$NEW_VERSION-$SUFFIX" New upstream release
     echo "Remember: Your current directory is the OLD sourcearchive!"
     echo "Do a \"cd ../$PACKAGE-$SNEW_VERSION\" to see the new package"
 fi

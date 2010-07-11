@@ -32,11 +32,11 @@ Usually \fBuupdate\fR will be able to deduce the version number from
 the source archive name (as long as it only contains digits and
 periods).  If that fails, you need to specify the version number
 explicitly (without the Debian release number which will always be
-initially 1!).  This can be done with an initial
-\fB\-\-upstream-version\fR or \fB\-v\fR option, or in the case of an
-archive, with a version number after the filename.  (The reason for
-the latter is so that \fBuupdate\fR can be called directly from
-\fBuscan\fR.)
+initially \(lq1\(rq, or \(lq0ubuntu1\(rq on Ubuntu-detected systems).  This can be
+done with an initial \fB\-\-upstream-version\fR or \fB\-v\fR option, or
+in the case of an archive, with a version number after the filename.
+(The reason for the latter is so that \fBuupdate\fR can be called
+directly from \fBuscan\fR.)
 .PP
 Since \fBuupdate\fR uses \fBdebuild\fR to clean the current archive
 before trying to apply a patch file, it accepts a \fB\-\-rootcmd\fR or
@@ -130,7 +130,11 @@ files created by \fBpatch\fR are deleted.
 .TP
 .B Changelog update
 A changelog entry with the new version number is generated with the
-text "New upstream release".
+text \(lqNew upstream release\(rq.
+
+When used on Ubuntu systems, \fBlsb_release\fR detection is used to set
+the Debian revision to \(lq0ubuntu1\(rq.  You may change
+\fIdebian/changelog\fR manually afterwards.
 .SH "ACTIONS TAKEN ON A PATCH FILE"
 .TP
 .B Figure out new version number
@@ -158,7 +162,11 @@ with non-zero exit status.
 .TP
 .B Changelog update
 A changelog entry with the new version number is generated with the
-text "New upstream release".
+text \(lqNew upstream release\(rq.
+
+When used on Ubuntu systems, \fBlsb_release\fR detection is used to set
+the Debian revision to \(lq0ubuntu1\(rq.  You may change
+\fIdebian/changelog\fR manually afterwards.
 .SH "SEE ALSO"
 .BR debuild (1),
 .BR fakeroot (1),

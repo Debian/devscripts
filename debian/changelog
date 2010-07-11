@@ -40,6 +40,9 @@ devscripts (2.10.65) UNRELEASED; urgency=low
     suggested wording.  (Closes: #530581)
   * debchange: When running “dch -r”, use <dist>-backports if a backports
     upload is detected.  (Closes: #588502)
+  * uupdate: Use “0ubuntu1” for the Debian revision of the version number when
+    running uupdate on Ubuntu systems.  Based on a patch by Guillaume Martres.
+    (Closes: #577998)
 
   [ Martin Zobel-Helas ]
   * Remove svk from Recommends, it is no longer in the archive. (Closes:
