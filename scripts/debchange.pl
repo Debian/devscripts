@@ -119,6 +119,8 @@ Options:
          Increment the Debian release number for a Debian QA Team upload
   -s, --security
          Increment the Debian release number for a Debian Security Team upload
+  --team
+         Increment the Debian release number for a team upload
   --bpo
          Increment the Debian release number for a Backports.org upload
 	 to "lenny-backports"
@@ -180,7 +182,7 @@ Options:
          Display this help message and exit
   --version
          Display version information
-  At most one of -a, -i, -e, -r, -v, -d, -n, --bin-nmu, -q, --qa, -s, --bpo, -l
+  At most one of -a, -i, -e, -r, -v, -d, -n, --bin-nmu, -q, --qa, -s, --team, --bpo, -l
   (or their long equivalents) may be used.
   With no options, one of -i or -a is chosen by looking for a .upload
   file in the parent directory and checking its contents.
@@ -298,7 +300,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # with older debchange versions.
 my ($opt_help, $opt_version);
 my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u, $opt_force_dist);
-my ($opt_n, $opt_bn, $opt_qa, $opt_s, $opt_bpo, $opt_l, $opt_c, $opt_m, $opt_create, $opt_package, @closes);
+my ($opt_n, $opt_bn, $opt_qa, $opt_s, $opt_team, $opt_bpo, $opt_l, $opt_c, $opt_m, $opt_create, $opt_package, @closes);
 my ($opt_news);
 my ($opt_level, $opt_regex, $opt_noconf, $opt_empty);
 
@@ -324,6 +326,7 @@ GetOptions("help|h" => \$opt_help,
 	   "bin-nmu" => \$opt_bn,
 	   "q|qa" => \$opt_qa,
 	   "s|security" => \$opt_s,
+	   "team" => \$opt_team,
 	   "bpo" => \$opt_bpo,
 	   "l|local=s" => \$opt_l,
 	   "query!" => \$opt_query,
@@ -372,8 +375,8 @@ if (defined $opt_level) {
 if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
 
 # Only allow at most one non-help option
-fatal "Only one of -a, -i, -e, -r, -v, -d, -n/--nmu, --bin-nmu, -q/--qa, -s/--security, --bpo, -l/--local is allowed;\ntry $progname --help for more help"
-    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) + ($opt_n?1:0) + ($opt_bn?1:0) + ($opt_qa?1:0) + ($opt_s?1:0) + ($opt_bpo?1:0) + ($opt_l?1:0) > 1;
+fatal "Only one of -a, -i, -e, -r, -v, -d, -n/--nmu, --bin-nmu, -q/--qa, -s/--security, --team, --bpo, -l/--local is allowed;\ntry $progname --help for more help"
+    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) + ($opt_n?1:0) + ($opt_bn?1:0) + ($opt_qa?1:0) + ($opt_s?1:0) + ($opt_team?1:0) + ($opt_bpo?1:0) + ($opt_l?1:0) > 1;
 
 if ($opt_s) {
     $opt_u = "high";
@@ -429,8 +432,8 @@ fatal "--package cannot be used when creating a NEWS file"
 
 if ($opt_create) {
     if ($opt_a || $opt_i || $opt_e || $opt_r || $opt_b || $opt_n || $opt_bn ||
-	    $opt_qa || $opt_s || $opt_bpo || $opt_l || $opt_allow_lower) {
-	warn "$progname warning: ignoring -a/-i/-e/-r/-b/--allow-lower-version/-n/--bin-nmu/-q/--qa/-s/--bpo/-l options with --create\n";
+	    $opt_qa || $opt_s || $opt_team || $opt_bpo || $opt_l || $opt_allow_lower) {
+	warn "$progname warning: ignoring -a/-i/-e/-r/-b/--allow-lower-version/-n/--bin-nmu/-q/--qa/-s/--team/--bpo/-l options with --create\n";
 	$warnings++;
     }
     if ($opt_package && $opt_d) {
@@ -712,7 +715,7 @@ if (! $opt_m) {
 #####
 
 if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and 
-    ! $opt_qa and ! $opt_bpo and ! $opt_bn and ! $opt_n and ! $opt_c and
+    ! $opt_team and ! $opt_qa and ! $opt_bpo and ! $opt_bn and ! $opt_n and ! $opt_c and
     ! (exists $ENV{'CHANGELOG'} and length $ENV{'CHANGELOG'}) and
     ! $opt_create and ! $opt_a_passed and ! $opt_r and ! $opt_e and
     ! ($opt_release_heuristic eq 'changelog' and
@@ -729,7 +732,7 @@ if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and
 	    my $packager = "$MAINTAINER <$EMAIL>";
 
 	    if (! grep { $_ eq $packager } ($maintainer, @uploaders) and
-		$packager ne $changelog{'Maintainer'}) {
+		$packager ne $changelog{'Maintainer'} and ! $opt_team) {
 		$opt_n=1;
 		$opt_a=0;
 	    }
@@ -846,7 +849,7 @@ if ($opt_news && !$opt_i && !$opt_a) {
 
 # Are we going to have to figure things out for ourselves?
 if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r &&
-    ! $opt_n && ! $opt_bn && ! $opt_qa && ! $opt_s && ! $opt_bpo &&
+    ! $opt_n && ! $opt_bn && ! $opt_qa && ! $opt_s && ! $opt_team && ! $opt_bpo &&
     ! $opt_l && ! $opt_create) {
     # Yes, we are
     if ($opt_release_heuristic eq 'log') {
@@ -923,7 +926,7 @@ my $line;
 my $optionsok=0;
 my $merge=0;
 
-if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $opt_v || $opt_d ||
+if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_team || $opt_bpo || $opt_l || $opt_v || $opt_d ||
     ($opt_news && $VERSION ne $changelog{'Version'})) && ! $opt_create) {
 
     $optionsok=1;
@@ -1107,6 +1110,9 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 	    $line = 1;
 	} elsif ($opt_s && ! $opt_news) {
 	    print O "  * Non-maintainer upload by the Security Team.\n";
+	    $line = 1;
+	} elsif ($opt_team && ! $opt_news) {
+	    print O "  * Team upload.\n";
 	    $line = 1;
 	} elsif ($opt_bpo && ! $opt_news) {
 	    print O "  * Rebuild for $bpo_dist.\n";
