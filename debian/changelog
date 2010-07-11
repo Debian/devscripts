@@ -73,6 +73,9 @@ devscripts (2.10.65) UNRELEASED; urgency=low
       requirements.  (Closes: #580600)
     + Allow specifying for which architecture to build the package.
 
+  [ Charles Plessy ]
+  * debchange: Add “--team” support.  (Closes: #588714)
+
  -- Martin Zobel-Helas <zobel@debian.org>  Tue, 11 May 2010 20:48:16 +0200
 
 devscripts (2.10.64) unstable; urgency=low

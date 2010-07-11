@@ -221,19 +221,23 @@ Increment the Debian release number for a binary non-maintainer upload
 by either appending a "+b1" to a non-binNMU version number or by
 incrementing a binNMU version number, and add a binNMU changelog comment.
 .TP
-.B \-\-qa ", " \-q
+.BR \-\-qa ", " \-q
 Increment the Debian release number for a Debian QA Team upload, and
 add a QA upload changelog comment.
 .TP
-.B \-\-security ", " \-s
+.BR \-\-security ", " \-s
 Increment the Debian release number for a Debian Security Team non-maintainer
 upload, and add a Security Team upload changelog comment.
+.TP
+.B \-\-team
+Increment the Debian release number for a team upload, and add a team upload
+changelog comment.
 .TP
 .B \-\-bpo
 Increment the Debian release number for an upload to lenny-backports,
 and add a backport upload changelog comment.
 .TP
-.B \-\-local ", " \-l \fIsuffix\fR
+.BR \-\-local ", " \-l \fIsuffix\fR
  Add a suffix to the Debian version number for a local build.
 .TP
 .BR \-\-force\-bad\-version ", " \-b
