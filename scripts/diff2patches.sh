@@ -49,10 +49,10 @@ case "$1" in
 	--version) version; exit 0 ;;
 esac
 
-[ ! -z "$(which lsdiff)" ] || {
+if ! which lsdiff >/dev/null 2>&1; then
 	echo "lsdiff was not found in \$PATH, package patchutils probably not installed!"
 	exit 1
-}
+fi
 
 diffgz="$1"
 

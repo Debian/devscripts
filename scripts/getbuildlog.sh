@@ -65,7 +65,7 @@ EOT
 
 [ $# -ge 1 ] && [ $# -le 3 ] || { usage && exit 1; }
 
-if [ ! -x "`which wget 2>/dev/null`" ]; then
+if ! which wget >/dev/null 2>&1; then
     echo "$PROGNAME: this program requires the wget package to be installed";
     exit 1
 fi
