@@ -43,6 +43,7 @@ devscripts (2.10.65) UNRELEASED; urgency=low
   * uupdate: Use “0ubuntu1” for the Debian revision of the version number when
     running uupdate on Ubuntu systems.  Based on a patch by Guillaume Martres.
     (Closes: #577998)
+  * Ship French man pages in UTF-8 now that #196762 is fixed.
 
   [ Martin Zobel-Helas ]
   * Remove svk from Recommends, it is no longer in the archive. (Closes:
