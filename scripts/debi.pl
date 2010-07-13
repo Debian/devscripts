@@ -273,7 +273,7 @@ if (! defined $changes) {
     }
 
     # Find the source package name and version number
-    my $changelog = changelog_parse('debian/changelog');
+    my $changelog = changelog_parse();
 
     die "$progname: no package name in changelog!\n"
 	unless exists $changelog->{'Source'};
