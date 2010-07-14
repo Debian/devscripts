@@ -8,5 +8,16 @@ _pkg_names()
 
     return 0
 }
-complete -F _pkg_names wnpp-alert wnpp-check mk-build-deps rmadison mass-bug debsnap dd-list build-rdeps who-uploads transition-check getbuildlog dcontrol grep-excuses rc-alert debcheckout bts whodepends dget pts-subscribe debc pts-unsubscribe
 
+_debc()
+{
+    local cur
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    COMPREPLY=($(compgen -f -X '!*.changes' -- "$cur"))
+    if echo "$cur" | grep -qs '^[a-z0-9+.-]*$'; then
+        COMPREPLY=(${COMPREPLY[@]} $(apt-cache pkgnames -- $cur 2> /dev/null))
+    fi
+    return 0
+}
+complete -F _pkg_names wnpp-alert wnpp-check mk-build-deps rmadison mass-bug debsnap dd-list build-rdeps who-uploads transition-check getbuildlog dcontrol grep-excuses rc-alert bts whodepends dget pts-subscribe debc pts-unsubscribe
+complete -o dirnames -F _debc debc
