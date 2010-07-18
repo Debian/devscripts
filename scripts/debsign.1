@@ -87,6 +87,12 @@ use the most recent file with the name pattern
 \fIpackage_version_*+*.changes\fR as the changes file, allowing for the
 changes files produced by \fBdpkg-cross\fR.
 .TP
+\fB\-\-re\-sign\fR, \fB\-\-no\-re\-sign\fR
+Recreate signature, respectively use the existing signature, if the
+file has been signed already.  If neither option is given and an already
+signed file is found the user is asked if he or she likes to use the
+current signature.
+.TP
 \fB\-\-debs\-dir\fR \fIDIR\fR
 Look for the \fI.changes\fR and \fI.dsc\fR files in directory
 \fIDIR\fR instead of the parent of the source directory.  This should

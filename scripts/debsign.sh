@@ -88,6 +88,8 @@ usage () {
     -a<arch>        Use changes file made for Debian target architecture <arch>
     -t<target>      Use changes file made for GNU target architecture <target>
     --multi         Use most recent multiarch .changes file found
+    --re-sign       Re-sign if the file is already signed.
+    --no-re-sign    Don't re-sign if the file is already signed.
     --debs-dir <directory>
                     The location of the .changes / .dsc files when called from
                     within a source tree (default "..")
@@ -224,23 +226,31 @@ withecho () {
 # and failure if the file needs signing.  Parameters: $1=filename,
 # $2=file description for message (dsc or changes)
 check_already_signed () {
-    if [ "`head -n 1 \"$1\"`" != "-----BEGIN PGP SIGNED MESSAGE-----" ]
-    then
+    [ "`head -n 1 \"$1\"`" = "-----BEGIN PGP SIGNED MESSAGE-----" ] || \
 	return 1
+
+    local resign
+    if [ "$opt_re_sign" = "true" ]; then
+	resign="true"
+    elif [ "$opt_re_sign" = "false" ]; then
+	resign="false"
     else
 	printf "The .$2 file is already signed.\nWould you like to use the current signature? [Yn]"
 	read response
 	case $response in
-	[Nn]*)
-	    UNSIGNED_FILE="$(temp_filename "$1" "unsigned")"
-
-	    sed -e '1,/^$/d; /^$/,$d' "$1" > "$UNSIGNED_FILE"
-	    movefile "$UNSIGNED_FILE" "$1"
-	    return 1
-	    ;;
-	*) return 0;;
+	[Nn]*) resign="true" ;;
+	*)     resign="false" ;;
 	esac
     fi
+
+    [ "$resign" = "true" ] || \
+	return 0
+
+    UNSIGNED_FILE="$(temp_filename "$1" "unsigned")"
+
+    sed -e '1,/^$/d; /^$/,$d' "$1" > "$UNSIGNED_FILE"
+    movefile "$UNSIGNED_FILE" "$1"
+    return 1
 }
 
 # --- main script
@@ -345,6 +355,8 @@ do
 	-a*)	targetarch="$value" ;;
 	-t*)	targetgnusystem="$value" ;;
 	--multi) multiarch="true" ;;
+	--re-sign)    opt_re_sign="true" ;;
+	--no-re-sign) opt_re_sign="false" ;;
 	-r*)	if [ -n "$value" ]; then remotehost=$value;
 		elif [ $# -lt 1 ]; then
 		    echo "$PROGNAME: -r option missing argument!" >&2

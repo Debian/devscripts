@@ -20,6 +20,10 @@ devscripts (2.10.66) UNRELEASED; urgency=low
   * uscan: Get rid of extra quoting in dpkg --compare-versions calls.
     (Closes: #590178)
 
+  [ Carsten Hey ]
+  * debsign: Add options --re-sign and --no-re-sign to let the user choose
+    whether an already signed file should be resigned.  (Closes: #580821)
+
  -- James Vega <jamessan@debian.org>  Mon, 19 Jul 2010 21:16:02 -0400
 
 devscripts (2.10.65.1) unstable; urgency=low
