@@ -1571,6 +1571,9 @@ sub bts_tags {
 	}
 	$command .= " $cmd->{op} " . join(' ', @{$cmd->{tags}});
     }
+    if (!$command && $curop eq '=') {
+        $command = " $curop";
+    }
 
     if ($command) {
 	mailbts("tagging $bug", $base_command . $command);
