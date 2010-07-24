@@ -1194,7 +1194,7 @@ EOF
 
     # Can't just use $lastversion eq $newversion, as then 0.01 and 0.1
     # compare different, whereas they are treated as equal by dpkg
-    if (system("dpkg", "--compare-versions", "'$mangled_lastversion'", "eq", "'$newversion'") == 0) {
+    if (system("dpkg", "--compare-versions", "$mangled_lastversion", "eq", "$newversion") == 0) {
 	if ($verbose or ($download == 0 and $report and ! $dehs)) {
 	    print $pkg_report_header;
 	    $pkg_report_header = '';
@@ -1221,7 +1221,7 @@ EOF
     # We use dpkg's rules to determine whether our current version
     # is newer or older than the remote version.
     if (!defined $download_version) {
-	if (system("dpkg", "--compare-versions", "'$mangled_lastversion'", "gt", "'$newversion'") == 0) {
+	if (system("dpkg", "--compare-versions", "$mangled_lastversion", "gt", "$newversion") == 0) {
 	    if ($verbose) {
 		print " => remote site does not even have current version\n";
 	    } elsif ($dehs) {
