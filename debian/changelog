@@ -1,8 +1,13 @@
 devscripts (2.10.66) UNRELEASED; urgency=low
 
+  [ James Vega ]
   * bts: Fix ability to clear all tags on a bug.  (Closes: #539688)
   * rc-alert: Add missing hyphens and correct formatting in the man page.
     Based on a patch by Salvatore Bonaccorso.  (Closes: #589607)
+
+  [ Cyril Brulebois ]
+  * uscan: Get rid of extra quoting in dpkg --compare-versions calls.
+    (Closes: #590178)
 
  -- James Vega <jamessan@debian.org>  Mon, 19 Jul 2010 21:16:02 -0400
 
