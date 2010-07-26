@@ -517,8 +517,6 @@ sub init_hashes {
 	qr'\&>' =>	               q<should be \>word 2\>&1>,
 	qr'(<\&|>\&)\s*((-|\d+)[^\s;|)}`&\\\\]|[^-\d\s]+(?<!\$)(?!\d))' =>
 				       q<should be \>word 2\>&1>,
-	$LEADIN . qr'kill\s+-[^sl]\w*' => q<kill -[0-9] or -[A-Z]>,
-	$LEADIN . qr'trap\s+["\']?.*["\']?\s+.*[1-9]' => q<trap with signal numbers>,
 	qr'\[\[(?!:)' => q<alternative test command ([[ foo ]] should be [ foo ])>,
 	qr'/dev/(tcp|udp)'	    => q</dev/(tcp|udp)>,
 	$LEADIN . qr'builtin\s' =>        q<builtin>,
@@ -601,6 +599,8 @@ sub init_hashes {
 	$bashisms{$LEADIN . qr'local\s+\w+='} = q<local foo=bar>;
 	$bashisms{$LEADIN . qr'local\s+\w+\s+\w+'} = q<local x y>;
 	$bashisms{$LEADIN . qr'((?:test|\[)\s+.+\s-[ao])\s'} = q<test -a/-o>;
+	$bashisms{$LEADIN . qr'kill\s+-[^sl]\w*'} => q<kill -[0-9] or -[A-Z]>;
+	$bashisms{$LEADIN . qr'trap\s+["\']?.*["\']?\s+.*[1-9]'} => q<trap with signal numbers>;
     }
 
     if ($makefile) {
