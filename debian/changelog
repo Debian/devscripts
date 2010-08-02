@@ -15,6 +15,7 @@ devscripts (2.10.66) UNRELEASED; urgency=low
     check list.  (Closes: #534988, #591305)
   * build-rdeps: Escape regular expression metacharacters in package names.
     (Closes: #590832)
+  * Build-Depends on po4a (>= 0.40) so po4a recognizes .TQ macro.
 
   [ Cyril Brulebois ]
   * uscan: Get rid of extra quoting in dpkg --compare-versions calls.
