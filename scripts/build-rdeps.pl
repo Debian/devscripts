@@ -230,17 +230,15 @@ sub findreversebuilddeps {
 			$depending_package = $1;
 			$packages{$depending_package}->{'Build-Depends'} = 0;
 		}
-
-		if (/Maintainer: (.*)$/) {
+		elsif (/Maintainer: (.*)$/) {
 			if ($depending_package) {
 				$packages{$depending_package}->{'Maintainer'} = $1;
 			}
 		}
-
-		if (/Build-Depends: (.*)$/ or /Build-Depends-Indep: (.*)$/) {
+		elsif (/Build-Depends: (.*)$/ or /Build-Depends-Indep: (.*)$/) {
 			if ($depending_package) {
 				print STDERR "$1\n" if ($opt_debug);
-				if ($1 =~ /^(.*\s)?$package([\s,]|$)/) {
+				if ($1 =~ /^(.*\s)?\Q$package\E([\s,]|$)/) {
 					$packages{$depending_package}->{'Build-Depends'} = 1;
 				}
 			}
@@ -314,7 +312,7 @@ if ($opt_distribution) {
 # Find sources files
 find(sub { readrelease($_, $1) if /$release_pattern/ }, $sources_path);
 
-if (($#source_files+1) <= 0) {
+if (!@source_files) {
 	die "$progname: unable to find sources files.\nDid you forget to run apt-get update (or add --update to this command)?";
 }
 
