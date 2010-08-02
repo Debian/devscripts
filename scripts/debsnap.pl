@@ -110,7 +110,7 @@ sub fetch_json_page
     my $json = JSON->new();
 
     # these are some nice json options to relax restrictions a bit:
-    my $json_text = $json->allow_nonref->utf8->relaxed->escape_slash->loose->allow_singlequote->allow_barekey->decode($content);
+    my $json_text = $json->allow_nonref->utf8->relaxed->decode($content);
 
     return $json_text;
 }

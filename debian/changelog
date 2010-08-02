@@ -2,6 +2,8 @@ devscripts (2.10.67) UNRELEASED; urgency=low
 
   * debcommit: Use the first detected changelog instead of the last.  (Closes:
     #591368)
+  * debsnap: Remove use of pure-perl specific functions from JSON module.
+    (Closes: #591392)
 
  -- James Vega <jamessan@debian.org>  Mon, 02 Aug 2010 19:30:40 -0400
 
