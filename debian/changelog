@@ -11,6 +11,8 @@ devscripts (2.10.66) UNRELEASED; urgency=low
     Policy 3.9.1.0.  (Closes: #486823)
   * debchange: Add --[no]multimaint-merge option, corresponding to the
     DEBCHANGE_MULTIMAINT_MERGE configuration variable.  (Closes: #590842)
+  * licensecheck: Add .pas, .inc, .dtd., .xsl, and .mod files to the default
+    check list.  (Closes: #534988, #591305)
 
   [ Cyril Brulebois ]
   * uscan: Get rid of extra quoting in dpkg --compare-versions calls.
