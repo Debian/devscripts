@@ -299,7 +299,10 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # Find a good default for the changelog file location
 
 for (qw"debian/changelog changelog") {
-    $changelog = $_ if -e ($_);
+    if (-e $_) {
+        $changelog = $_;
+        last;
+    }
 }
 
 # Now read the command line arguments
