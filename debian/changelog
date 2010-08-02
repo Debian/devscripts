@@ -9,6 +9,8 @@ devscripts (2.10.66) UNRELEASED; urgency=low
     Based on a patch by Salvatore Bonaccorso.  (Closes: #589607)
   * checkbashisms: Allow kill & trap XSI-isms unless --posix is given, as per
     Policy 3.9.1.0.  (Closes: #486823)
+  * debchange: Add --[no]multimaint-merge option, corresponding to the
+    DEBCHANGE_MULTIMAINT_MERGE configuration variable.  (Closes: #590842)
 
   [ Cyril Brulebois ]
   * uscan: Get rid of extra quoting in dpkg --compare-versions calls.

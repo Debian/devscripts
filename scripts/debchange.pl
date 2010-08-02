@@ -158,6 +158,10 @@ Options:
   --[no]multimaint
          When appending an entry to a changelog section (-a), [do not]
          indicate if multiple maintainers are now involved (default: do so)
+  --[no]multimaint-merge
+         When appending an entry to a changelog section, [do not] merge the
+         entry into an existing changelog section for the current author.
+         (default: do not)
   -m, --maintmaint
          Don\'t change (maintain) the maintainer details in the changelog entry
   -t, --mainttrailer
@@ -335,6 +339,8 @@ GetOptions("help|h" => \$opt_help,
 	   "news:s" => \$opt_news,
 	   "multimaint!" => \$opt_multimaint,
 	   "multi-maint!" => \$opt_multimaint,
+	   'multimaint-merge!' => \$opt_multimaint_merge,
+	   'multi-maint-merge!' => \$opt_multimaint_merge,
 	   "m|maintmaint" => \$opt_m,
 	   "t|mainttrailer!" => \$opt_t,
 	   "check-dirname-level=s" => \$opt_level,
