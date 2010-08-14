@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2010-08-02 04:50+0000\n"
+"POT-Creation-Date: 2010-08-14 15:49+0000\n"
 "PO-Revision-Date: 2009-09-06 15:06+0200\n"
 "Last-Translator: Nicolas François <nicolas.francois@centraliens.net>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -316,7 +316,7 @@ msgstr ""
 #: ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53
 #: ../scripts/dcmd.1:98 ../scripts/dcontrol.pl:290 ../scripts/debc.1:115
 #: ../scripts/debchange.1:435 ../scripts/debcheckout.pl:181
-#: ../scripts/debclean.1:107 ../scripts/debcommit.pl:842
+#: ../scripts/debclean.1:107 ../scripts/debcommit.pl:845
 #: ../scripts/debdiff.1:215 ../scripts/debi.1:122 ../scripts/debrelease.1:132
 #: ../scripts/deb-reversion.dbk:247 ../scripts/debrsign.1:66
 #: ../scripts/debsign.1:140 ../scripts/debsnap.1:91 ../scripts/debuild.1:410
@@ -364,7 +364,7 @@ msgstr ""
 #: ../scripts/dcmd.1:101 ../scripts/dcontrol.pl:283 ../scripts/dd-list.1:93
 #: ../scripts/debc.1:120 ../scripts/debchange.1:442
 #: ../scripts/debcheckout.pl:186 ../scripts/debclean.1:111
-#: ../scripts/debcommit.pl:838 ../scripts/debdiff.1:222 ../scripts/debi.1:126
+#: ../scripts/debcommit.pl:841 ../scripts/debdiff.1:222 ../scripts/debi.1:126
 #: ../scripts/debpkg.1:23 ../scripts/debrelease.1:137
 #: ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:71
 #: ../scripts/debsign.1:153 ../scripts/debuild.1:423
@@ -1751,7 +1751,8 @@ msgstr "renvoie tous les bogues du paquet foo de sévérité wishlist ou minor."
 #. type: =item
 #: ../scripts/bts.pl:1060
 msgid "status [<bug> | file:<file> | fields:<field,field,...> | verbose] ..."
-msgstr "status [<bogue> | file:<fichier> | fields:<champ,champ,...> | verbose] ..."
+msgstr ""
+"status [<bogue> | file:<fichier> | fields:<champ,champ,...> | verbose] ..."
 
 #. type: textblock
 #: ../scripts/bts.pl:1062
@@ -6393,8 +6394,8 @@ msgid ""
 "Increment the Debian release number for a team upload, and add a team upload "
 "changelog comment."
 msgstr ""
-"Incrémente le numéro de publication de Debian pour un envoi par l'équipe, "
-"et ajoute un commentaire « Team upload » dans le changelog."
+"Incrémente le numéro de publication de Debian pour un envoi par l'équipe, et "
+"ajoute un commentaire « Team upload » dans le changelog."
 
 #. type: TP
 #: ../scripts/debchange.1:235
@@ -6887,9 +6888,13 @@ msgstr "B<DEBCHANGE_TZ>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:407
+#, fuzzy
+#| msgid ""
+#| "Use this timezone for changelog entries.  Default is the user/system "
+#| "timezone as shown by `date -R`."
 msgid ""
 "Use this timezone for changelog entries.  Default is the user/system "
-"timezone as shown by `date -R`."
+"timezone as shown by `date -R` and affected by the environment variable TZ."
 msgstr ""
 "Utiliser ce fuseau horaire pour les entrées de journal des modifications. "
 "Par défaut, le fuseau horaire de l'utilisateur/du système est utilisé, comme "
@@ -7921,12 +7926,12 @@ msgstr ""
 "pour associer la résision aux bogues."
 
 #. type: textblock
-#: ../scripts/debcommit.pl:840 ../scripts/mass-bug.pl:523
+#: ../scripts/debcommit.pl:843 ../scripts/mass-bug.pl:523
 msgid "Joey Hess <joeyh@debian.org>"
 msgstr "Joey Hess <joeyh@debian.org>"
 
 #. type: textblock
-#: ../scripts/debcommit.pl:844
+#: ../scripts/debcommit.pl:847
 msgid "svnpath(1)."
 msgstr "svnpath(1)."
 
@@ -11768,8 +11773,7 @@ msgstr "I<debian/control>"
 #. type: Plain text
 #: ../scripts/diff2patches.1:32
 msgid "Existence of this file is tested before any patch is extracted."
-msgstr ""
-"L'existence de ce fichier est testée avant d'extraire les patches."
+msgstr "L'existence de ce fichier est testée avant d'extraire les patches."
 
 #. type: TP
 #: ../scripts/diff2patches.1:32
@@ -16340,16 +16344,16 @@ msgid ""
 "archives, the lzma package must be installed to repack lzma tar archives, "
 "and the xz-utils package must be installed to repack xz tar archives."
 msgstr ""
-"Après avoir téléchargé une archive tar compressée avec lzma ou xz ou bzip ou une "
-"archive zip, la rempaqueter dans une archive tar compressée avec gzip, ce "
-"qui est toujours nécessaire pour les paquets source Debian. Ne rien faire si "
-"l'archive téléchargée n'est ni une archive tar compressée avec lzma ou xz ou bzip "
-"ni une archive zip (c'est-à-dire si elle ne finie pas par l'extension ."
-"tlz, tar.lzma, .txz, .tar.xz \\^.tbz, .tbz2, .tar.bz2 ou .zip). Le paquet unzip doit être "
-"installé pour rempaqueter les archives .zip, le paquet lzma doit être "
-"installé pour rempaqueter les archives tar compressées avec lzma et le paquet "
-"xz-utils doit être installé pour rempaqueter les archives tar compressées "
-"avec xz."
+"Après avoir téléchargé une archive tar compressée avec lzma ou xz ou bzip ou "
+"une archive zip, la rempaqueter dans une archive tar compressée avec gzip, "
+"ce qui est toujours nécessaire pour les paquets source Debian. Ne rien faire "
+"si l'archive téléchargée n'est ni une archive tar compressée avec lzma ou xz "
+"ou bzip ni une archive zip (c'est-à-dire si elle ne finie pas par "
+"l'extension .tlz, tar.lzma, .txz, .tar.xz \\^.tbz, .tbz2, .tar.bz2 ou .zip). "
+"Le paquet unzip doit être installé pour rempaqueter les archives .zip, le "
+"paquet lzma doit être installé pour rempaqueter les archives tar compressées "
+"avec lzma et le paquet xz-utils doit être installé pour rempaqueter les "
+"archives tar compressées avec xz."
 
 #. type: TP
 #: ../scripts/uscan.1:381 ../scripts/uupdate.1:74
@@ -16678,8 +16682,9 @@ msgid ""
 "equivalent to the B<--repack> option."
 msgstr ""
 "Si elle est positionnée à I<yes>, alors après avoir téléchargé une archive "
-"tar compressée avec bzip ou lzma ou xz ou une archive zip, B<uscan> recréera une "
-"archive tar compressée avec gzip. C'est équivalent à l'option B<--repack>."
+"tar compressée avec bzip ou lzma ou xz ou une archive zip, B<uscan> recréera "
+"une archive tar compressée avec gzip. C'est équivalent à l'option B<--"
+"repack>."
 
 #. type: Plain text
 #: ../scripts/uscan.1:502
