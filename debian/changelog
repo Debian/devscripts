@@ -2,6 +2,8 @@ devscripts (2.10.68) UNRELEASED; urgency=low
 
   * dget: Fix parsing of apt-cache and sources.list when given only a package
     name.  (Closes: #594904)
+  * debchange: Remove EOL Ubuntu releases Dapper and Intrepid.  Add new
+    development release Natty.  (Closes: #593659)
 
  -- James Vega <jamessan@debian.org>  Sat, 04 Sep 2010 15:12:05 -0400
 
