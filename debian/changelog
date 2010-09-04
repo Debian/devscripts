@@ -1,3 +1,10 @@
+devscripts (2.10.68) UNRELEASED; urgency=low
+
+  * dget: Fix parsing of apt-cache and sources.list when given only a package
+    name.  (Closes: #594904)
+
+ -- James Vega <jamessan@debian.org>  Sat, 04 Sep 2010 15:12:05 -0400
+
 devscripts (2.10.67) unstable; urgency=low
 
   * debcommit: Use the first detected changelog instead of the last.  (Closes:
