@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2010-08-14 15:49+0000\n"
+"POT-Creation-Date: 2010-09-05 15:24+0300\n"
 "PO-Revision-Date: 2009-09-06 15:06+0200\n"
 "Last-Translator: Nicolas François <nicolas.francois@centraliens.net>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -81,7 +81,7 @@ msgstr "DEBIAN"
 #: ../scripts/debi.1:2 ../scripts/debpkg.1:2 ../scripts/debrelease.1:2
 #: ../scripts/debrsign.1:2 ../scripts/debsign.1:2 ../scripts/debsnap.1:3
 #: ../scripts/debuild.1:2 ../scripts/desktop2menu.pl:24
-#: ../scripts/devscripts.1.in:2 ../scripts/dget.pl:477
+#: ../scripts/devscripts.1.in:2 ../scripts/dget.pl:479
 #: ../scripts/diff2patches.1:2 ../scripts/dpkg-depcheck.1:2
 #: ../scripts/dpkg-genbuilddeps.1:2 ../scripts/dscverify.1:2
 #: ../scripts/getbuildlog.1:2 ../scripts/grep-excuses.1:2
@@ -116,7 +116,7 @@ msgstr ""
 #: ../scripts/debclean.1:4 ../scripts/debcommit.pl:7 ../scripts/debdiff.1:4
 #: ../scripts/debi.1:4 ../scripts/debpkg.1:4 ../scripts/debrelease.1:4
 #: ../scripts/debrsign.1:4 ../scripts/debsign.1:4 ../scripts/debsnap.1:6
-#: ../scripts/debuild.1:4 ../scripts/desktop2menu.pl:28 ../scripts/dget.pl:481
+#: ../scripts/debuild.1:4 ../scripts/desktop2menu.pl:28 ../scripts/dget.pl:483
 #: ../scripts/dpkg-depcheck.1:4 ../scripts/dpkg-genbuilddeps.1:4
 #: ../scripts/dscverify.1:4 ../scripts/getbuildlog.1:4
 #: ../scripts/grep-excuses.1:4 ../scripts/licensecheck.pl:26
@@ -151,7 +151,7 @@ msgstr "B<annotate-output> [I<options>] I<programme> [I<paramètres> ...]"
 #: ../scripts/deb-reversion.dbk:82 ../scripts/debrsign.1:7
 #: ../scripts/debsign.1:6 ../scripts/debsnap.1:14 ../scripts/debuild.1:10
 #: ../scripts/desktop2menu.pl:34 ../scripts/devscripts.1.in:4
-#: ../scripts/dget.pl:491 ../scripts/diff2patches.1:10
+#: ../scripts/dget.pl:493 ../scripts/diff2patches.1:10
 #: ../scripts/dpkg-depcheck.1:6 ../scripts/dpkg-genbuilddeps.1:6
 #: ../scripts/dscverify.1:6 ../scripts/getbuildlog.1:8
 #: ../scripts/grep-excuses.1:6 ../scripts/licensecheck.pl:34
@@ -190,7 +190,7 @@ msgstr ""
 #: ../scripts/debcommit.pl:19 ../scripts/debdiff.1:50 ../scripts/debi.1:65
 #: ../scripts/debrelease.1:56 ../scripts/deb-reversion.dbk:128
 #: ../scripts/debrsign.1:30 ../scripts/debsign.1:39 ../scripts/debsnap.1:26
-#: ../scripts/debuild.1:219 ../scripts/dget.pl:530
+#: ../scripts/debuild.1:219 ../scripts/dget.pl:532
 #: ../scripts/diff2patches.1:16 ../scripts/dpkg-depcheck.1:15
 #: ../scripts/dscverify.1:17 ../scripts/getbuildlog.1:24
 #: ../scripts/grep-excuses.1:13 ../scripts/licensecheck.pl:43
@@ -221,7 +221,7 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/annotate-output.1:16 ../scripts/dcontrol.pl:257
-#: ../scripts/debcheckout.pl:92 ../scripts/debsnap.1:47 ../scripts/dget.pl:583
+#: ../scripts/debcheckout.pl:92 ../scripts/debsnap.1:47 ../scripts/dget.pl:585
 #: ../scripts/dpkg-depcheck.1:96 ../scripts/getbuildlog.1:25
 #: ../scripts/mk-build-deps.pl:79 ../scripts/rmadison.pl:226
 #, no-wrap
@@ -320,7 +320,7 @@ msgstr ""
 #: ../scripts/debdiff.1:215 ../scripts/debi.1:122 ../scripts/debrelease.1:132
 #: ../scripts/deb-reversion.dbk:247 ../scripts/debrsign.1:66
 #: ../scripts/debsign.1:140 ../scripts/debsnap.1:91 ../scripts/debuild.1:410
-#: ../scripts/dget.pl:637 ../scripts/diff2patches.1:45
+#: ../scripts/dget.pl:639 ../scripts/diff2patches.1:45
 #: ../scripts/dpkg-depcheck.1:118 ../scripts/dpkg-genbuilddeps.1:30
 #: ../scripts/dscverify.1:73 ../scripts/grep-excuses.1:38
 #: ../scripts/list-unreleased.1:19 ../scripts/nmudiff.1:108
@@ -368,7 +368,7 @@ msgstr ""
 #: ../scripts/debpkg.1:23 ../scripts/debrelease.1:137
 #: ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:71
 #: ../scripts/debsign.1:153 ../scripts/debuild.1:423
-#: ../scripts/desktop2menu.pl:52 ../scripts/dget.pl:629
+#: ../scripts/desktop2menu.pl:52 ../scripts/dget.pl:631
 #: ../scripts/diff2patches.1:48 ../scripts/dpkg-genbuilddeps.1:36
 #: ../scripts/dscverify.1:78 ../scripts/getbuildlog.1:41
 #: ../scripts/grep-excuses.1:40 ../scripts/licensecheck.pl:121
@@ -2703,7 +2703,7 @@ msgstr ""
 #: ../scripts/debclean.1:90 ../scripts/debcommit.pl:97
 #: ../scripts/debdiff.1:167 ../scripts/debi.1:99 ../scripts/debrelease.1:105
 #: ../scripts/debrsign.1:57 ../scripts/debsign.1:111 ../scripts/debuild.1:290
-#: ../scripts/dget.pl:593 ../scripts/dpkg-depcheck.1:102
+#: ../scripts/dget.pl:595 ../scripts/dpkg-depcheck.1:102
 #: ../scripts/dscverify.1:42 ../scripts/grep-excuses.1:28
 #: ../scripts/licensecheck.pl:88 ../scripts/mass-bug.pl:133
 #: ../scripts/nmudiff.1:79 ../scripts/plotchangelog.1:106
@@ -5246,25 +5246,25 @@ msgid "Print URL queried."
 msgstr "Affiche l'URL demandée."
 
 #. type: textblock
-#: ../scripts/dcontrol.pl:259 ../scripts/dget.pl:585
+#: ../scripts/dcontrol.pl:259 ../scripts/dget.pl:587
 msgid "Show a help message."
 msgstr "Affiche un message d'aide."
 
 #. type: TP
-#: ../scripts/dcontrol.pl:261 ../scripts/dget.pl:587
+#: ../scripts/dcontrol.pl:261 ../scripts/dget.pl:589
 #: ../scripts/getbuildlog.1:28
 #, no-wrap
 msgid "B<-V>, B<--version>"
 msgstr "B<-V>, B<--version>"
 
 #. type: textblock
-#: ../scripts/dcontrol.pl:263 ../scripts/dget.pl:589
+#: ../scripts/dcontrol.pl:263 ../scripts/dget.pl:591
 msgid "Show version information."
 msgstr "Affiche les informations sur la version."
 
 # NOTE: presque identique
 #. type: textblock
-#: ../scripts/dcontrol.pl:269 ../scripts/dget.pl:595
+#: ../scripts/dcontrol.pl:269 ../scripts/dget.pl:597
 msgid ""
 "The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  Command "
@@ -5296,7 +5296,7 @@ msgid "This program is Copyright (C) 2009 by Christoph Berg <myon@debian.org>."
 msgstr "Ce programme est Copyright (C) 2009 Christoph Berg <myon@debian.org>."
 
 #. type: textblock
-#: ../scripts/dcontrol.pl:287 ../scripts/dget.pl:634
+#: ../scripts/dcontrol.pl:287 ../scripts/dget.pl:636
 #: ../scripts/tagpending.pl:440
 msgid ""
 "This program is licensed under the terms of the GPL, either version 2 of the "
@@ -11370,22 +11370,22 @@ msgstr ""
 "pages de manuel pour une documentation plus complète."
 
 #. type: textblock
-#: ../scripts/dget.pl:479
+#: ../scripts/dget.pl:481
 msgid "dget -- Download Debian source and binary packages"
 msgstr "dget -- Télécharger des paquets Debian source et binaire"
 
 #. type: =item
-#: ../scripts/dget.pl:485
+#: ../scripts/dget.pl:487
 msgid "B<dget> [I<options>] I<URL> ..."
 msgstr "B<dget> [I<options>] I<URL> ..."
 
 #. type: =item
-#: ../scripts/dget.pl:487
+#: ../scripts/dget.pl:489
 msgid "B<dget> [I<options>] I<package>[=I<version>]"
 msgstr "B<dget> [I<options>] I<paquet>=I<version>"
 
 #. type: textblock
-#: ../scripts/dget.pl:493
+#: ../scripts/dget.pl:495
 #, fuzzy
 #| msgid ""
 #| "B<dget> downloads Debian packages.  In the first form, B<dget> fetches "
@@ -11408,7 +11408,7 @@ msgstr ""
 "source>."
 
 #. type: textblock
-#: ../scripts/dget.pl:500
+#: ../scripts/dget.pl:502
 msgid ""
 "In the second form, B<dget> downloads a I<binary> package (i.e., a I<.deb> "
 "file) from the Debian mirror configured in /etc/apt/sources.list(.d).  "
@@ -11424,7 +11424,7 @@ msgstr ""
 "version du paquet est téléchargée."
 
 #. type: textblock
-#: ../scripts/dget.pl:507
+#: ../scripts/dget.pl:509
 msgid ""
 "In both cases dget is capable of getting several packages and/or URLs at "
 "once."
@@ -11432,7 +11432,7 @@ msgstr ""
 "Dans tous les cas, dget peut récupérer plusieurs paquet et/ou URL à la fois."
 
 #. type: textblock
-#: ../scripts/dget.pl:510
+#: ../scripts/dget.pl:512
 msgid ""
 "(Note that I<.udeb> packages used by debian-installer are located in "
 "separate packages files from I<.deb> packages. In order to use I<.udebs> "
@@ -11445,7 +11445,7 @@ msgstr ""
 "utiliser des fichiers de paquets pour I<composant>/I<debian-installer>)."
 
 #. type: textblock
-#: ../scripts/dget.pl:515
+#: ../scripts/dget.pl:517
 msgid ""
 "Before downloading files listed in .dsc and .changes files, and before "
 "downloading binary packages, B<dget> checks to see whether any of these "
@@ -11469,7 +11469,7 @@ msgstr ""
 "recherchés dans cet ordre."
 
 #. type: textblock
-#: ../scripts/dget.pl:525
+#: ../scripts/dget.pl:527
 msgid ""
 "B<dget> was written to make it easier to retrieve source packages from the "
 "web for sponsor uploads.  For checking the package with B<debdiff>, the last "
@@ -11482,32 +11482,32 @@ msgstr ""
 "dernière version source via B<apt-get source> I<package>."
 
 #. type: =item
-#: ../scripts/dget.pl:534
+#: ../scripts/dget.pl:536
 msgid "B<-b>, B<--backup>"
 msgstr "B<-b>, B<--backup>"
 
 #. type: textblock
-#: ../scripts/dget.pl:536
+#: ../scripts/dget.pl:538
 msgid "Move files that would be overwritten to I<./backup>."
 msgstr "Déplace les fichiers qui devraient être écrasés dans I<./backup>."
 
 #. type: =item
-#: ../scripts/dget.pl:538
+#: ../scripts/dget.pl:540
 msgid "B<-q>, B<--quiet>"
 msgstr "B<-q>, B<--quiet>"
 
 #. type: textblock
-#: ../scripts/dget.pl:540
+#: ../scripts/dget.pl:542
 msgid "Suppress B<wget>/B<curl> non-error output."
 msgstr "Supprime la sortie de B<wget>/B<curl> (sauf les erreurs)."
 
 #. type: =item
-#: ../scripts/dget.pl:542
+#: ../scripts/dget.pl:544
 msgid "B<-d>, B<--download-only>"
 msgstr "B<-d>, B<--download-only>"
 
 #. type: textblock
-#: ../scripts/dget.pl:544
+#: ../scripts/dget.pl:546
 msgid ""
 "Do not run B<dpkg-source -x> on the downloaded source package.  This can "
 "only be used with the first method of calling B<dget>."
@@ -11517,12 +11517,12 @@ msgstr ""
 "B<dget>."
 
 #. type: =item
-#: ../scripts/dget.pl:547
+#: ../scripts/dget.pl:549
 msgid "B<-x>, B<--extract>"
 msgstr "B<-x>, B<--extract>"
 
 #. type: textblock
-#: ../scripts/dget.pl:549
+#: ../scripts/dget.pl:551
 msgid ""
 "Run B<dpkg-source -x> on the downloaded source package to unpack it.  This "
 "option is the default and can only be used with the first method of calling "
@@ -11533,12 +11533,12 @@ msgstr ""
 "première méthode d'invocation de B<dget>."
 
 #. type: =item
-#: ../scripts/dget.pl:553
+#: ../scripts/dget.pl:555
 msgid "B<-u>, B<--allow-unauthenticated>"
 msgstr "B<-u>, B<--allow-unauthenticated>"
 
 #. type: textblock
-#: ../scripts/dget.pl:555
+#: ../scripts/dget.pl:557
 msgid ""
 "Do not attempt to verify the integrity of downloaded source packages using "
 "B<dscverify>."
@@ -11547,22 +11547,22 @@ msgstr ""
 "utilisant B<dscverify>."
 
 #. type: =item
-#: ../scripts/dget.pl:558
+#: ../scripts/dget.pl:560
 msgid "B<--build>"
 msgstr "B<--build>"
 
 #. type: textblock
-#: ../scripts/dget.pl:560
+#: ../scripts/dget.pl:562
 msgid "Run B<dpkg-buildpackage -b -uc> on the downloaded source package."
 msgstr "Exécute B<dpkg-buildpackage -b -uc> sur le paquet source téléchargé."
 
 #. type: =item
-#: ../scripts/dget.pl:562
+#: ../scripts/dget.pl:564
 msgid "B<--path> DIR[:DIR...]"
 msgstr "B<--path> RÉP[:RÉP...]"
 
 #. type: textblock
-#: ../scripts/dget.pl:564
+#: ../scripts/dget.pl:566
 msgid ""
 "In addition to I</var/cache/apt/archives>, B<dget> uses the colon-separated "
 "list given as argument to B<--path> to find files with a matching md5sum.  "
@@ -11584,36 +11584,36 @@ msgstr ""
 "path /home/cb/UploadQueue »."
 
 #. type: =item
-#: ../scripts/dget.pl:575
+#: ../scripts/dget.pl:577
 msgid "B<--insecure>"
 msgstr "B<--insecure>"
 
 #. type: textblock
-#: ../scripts/dget.pl:577
+#: ../scripts/dget.pl:579
 msgid "Allow SSL connections to untrusted hosts."
 msgstr ""
 "Autoriser les connexions SSL vers des hôtes dont l'authenticité n'est pas "
 "certifiée."
 
 #. type: =item
-#: ../scripts/dget.pl:579
+#: ../scripts/dget.pl:581
 msgid "B<--no-cache>"
 msgstr "B<--no-cache>"
 
 #. type: textblock
-#: ../scripts/dget.pl:581
+#: ../scripts/dget.pl:583
 msgid "Bypass server-side HTTP caches by sending a B<Pragma: no-cache> header."
 msgstr ""
 "Éviter les caches HTTP côté serveur en envoyant un en-tête B<Pragma: no-"
 "cache>."
 
 #. type: =item
-#: ../scripts/dget.pl:603
+#: ../scripts/dget.pl:605
 msgid "DGET_PATH"
 msgstr "DGET_PATH"
 
 #. type: textblock
-#: ../scripts/dget.pl:605
+#: ../scripts/dget.pl:607
 msgid ""
 "This can be set to a colon-separated list of directories in which to search "
 "for files in addition to the default I</var/cache/apt/archives>.  It has the "
@@ -11625,12 +11625,12 @@ msgstr ""
 "pas positionnée."
 
 #. type: =item
-#: ../scripts/dget.pl:610
+#: ../scripts/dget.pl:612
 msgid "DGET_UNPACK"
 msgstr "DGET_UNPACK"
 
 #. type: textblock
-#: ../scripts/dget.pl:612
+#: ../scripts/dget.pl:614
 msgid ""
 "Set to 'no' to disable extracting downloaded source packages.  Default is "
 "'yes'."
@@ -11639,12 +11639,12 @@ msgstr ""
 "téléchargés. La valeur par défaut est « yes »."
 
 #. type: =item
-#: ../scripts/dget.pl:615
+#: ../scripts/dget.pl:617
 msgid "DGET_VERIFY"
 msgstr "DGET_VERIFY"
 
 #. type: textblock
-#: ../scripts/dget.pl:617
+#: ../scripts/dget.pl:619
 msgid ""
 "Set to 'no' to disable checking signatures of downloaded source packages.  "
 "Default is 'yes'."
@@ -11653,17 +11653,17 @@ msgstr ""
 "paquets source téléchargés. La valeur par défaut est « yes »."
 
 #. type: =head1
-#: ../scripts/dget.pl:622
+#: ../scripts/dget.pl:624
 msgid "BUGS AND COMPATIBILITY"
 msgstr "BOGUES ET COMPATIBILITÉ"
 
 #. type: textblock
-#: ../scripts/dget.pl:624
+#: ../scripts/dget.pl:626
 msgid "B<dget> I<package> should be implemented in B<apt-get install -d>."
 msgstr "B<dget> I<package> devrait être implémenté dans B<apt-get install -d>."
 
 #. type: textblock
-#: ../scripts/dget.pl:626
+#: ../scripts/dget.pl:628
 msgid ""
 "Before devscripts version 2.10.17, the default was not to extract the "
 "downloaded source. Set DGET_UNPACK=no to revert to the old behaviour."
@@ -11673,7 +11673,7 @@ msgstr ""
 "pour retrouver cet ancien comportement."
 
 #. type: textblock
-#: ../scripts/dget.pl:631
+#: ../scripts/dget.pl:633
 msgid ""
 "This program is Copyright (C) 2005-08 by Christoph Berg <myon@debian.org>.  "
 "Modifications are Copyright (C) 2005-06 by Julian Gilbey <jdg@debian.org>."
@@ -11683,7 +11683,7 @@ msgstr ""
 "org>."
 
 #. type: textblock
-#: ../scripts/dget.pl:639
+#: ../scripts/dget.pl:641
 msgid ""
 "B<apt-get>(1), B<debdiff>(1), B<dpkg-source>(1), B<curl>(1), B<wget>(1)."
 msgstr ""
@@ -14748,11 +14748,19 @@ msgstr "B<rmadison> [I<OPTIONS>] I<PAQUET> ..."
 
 #. type: textblock
 #: ../scripts/rmadison.pl:195
+#, fuzzy
+#| msgid ""
+#| "B<dak ls> queries the Debian archive database (\"projectb\") and displays "
+#| "which package version is registered per architecture/component/suite.  "
+#| "The CGI at B<http://qa.debian.org/madison.php> provides that service "
+#| "without requiring ssh access to ftp-master.debian.org or the mirror on "
+#| "merkel.debian.org. This script, B<rmadison>, is a command line frontend "
+#| "to this CGI."
 msgid ""
 "B<dak ls> queries the Debian archive database (\"projectb\") and displays "
 "which package version is registered per architecture/component/suite.  The "
 "CGI at B<http://qa.debian.org/madison.php> provides that service without "
-"requiring ssh access to ftp-master.debian.org or the mirror on merkel.debian."
+"requiring ssh access to ftp-master.debian.org or the mirror on ries.debian."
 "org. This script, B<rmadison>, is a command line frontend to this CGI."
 msgstr ""
 "L'outil B<dak ls> interroge la base d'archive Debian (« projectb ») et "
