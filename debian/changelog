@@ -3,8 +3,11 @@ devscripts (2.10.68) UNRELEASED; urgency=low
   [ James Vega ]
   * dget: Fix parsing of apt-cache and sources.list when given only a package
     name.  (Closes: #594904)
-  * debchange: Remove EOL Ubuntu releases Dapper and Intrepid.  Add new
-    development release Natty.  (Closes: #593659)
+  * debchange:
+    + Remove EOL Ubuntu releases Dapper and Intrepid.  Add new development
+      release Natty.  (Closes: #593659)
+    + Remove Etch and add Squeeze as backports targets.  Lenny is still the
+      default bpo target.
   * rmadison: Change Backports URL to backports.debian.org. (Closes: #595714)
 
   [ Luk Claes ]
