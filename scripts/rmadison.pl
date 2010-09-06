@@ -71,7 +71,7 @@ my %url_map = (
     'debian' => "http://qa.debian.org/madison.php",
     'qa' => "http://qa.debian.org/madison.php",
     'myon' => "http://qa.debian.org/~myon/madison.php",
-    'bpo' => "http://www.backports.org/cgi-bin/madison.cgi",
+    'bpo' => "http://backports.debian.org/cgi-bin/madison.cgi",
     'debug' => "http://debug.debian.net/cgi-bin/madison.cgi",
     'ubuntu' => "http://people.canonical.com/~ubuntu-archive/madison.cgi",
     'udd' => 'http://qa.debian.org/cgi-bin/madison.cgi',
@@ -243,7 +243,7 @@ show projectb snapshot and reload time (not supported by all archives)
 
 use I<URL> for the query. Supported shorthands are
  B<debian> or B<qa> http://qa.debian.org/madison.php (the default)
- B<bpo> http://www.backports.org/cgi-bin/madison.cgi
+ B<bpo> http://backports.debian.org/cgi-bin/madison.cgi
  B<debug> http://debug.debian.net/cgi-bin/madison.cgi
  B<ubuntu> http://people.canonical.com/~ubuntu-archive/madison.cgi
 
