@@ -38,7 +38,7 @@ install: all install_scripts
 make_scripts:
 	$(MAKE) -C scripts/
 	touch $@
-clean_scripts:
+clean_scripts: clean_translated_manpages
 	$(MAKE) -C scripts/ clean
 install_scripts:
 	$(MAKE) -C scripts/ install DESTDIR=$(DESTDIR)

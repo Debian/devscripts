@@ -35,7 +35,7 @@ all: $(SCRIPTS) $(GEN_MAN1S) $(LIBS) $(CWRAPPERS) $(COMPLETION)
 
 %.1: %.pl
 	podchecker $<
-	pod2man --center=" " --release="Debian Utilities" $< > $@
+	pod2man --utf8 --center=" " --release="Debian Utilities" $< > $@
 %.1: %.dbk
 	xsltproc --nonet -o $@ \
 	  /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl $<
