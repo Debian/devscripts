@@ -567,7 +567,7 @@ In addition to I</var/cache/apt/archives>, B<dget> uses the
 colon-separated list given as argument to B<--path> to find files with
 a matching md5sum.  For example: "--path
 /srv/pbuilder/result:/home/cb/UploadQueue".  If DIR is empty (i.e.,
-"S<--path ''>" is specified), then any previously listed directories
+"--path ''" is specified), then any previously listed directories
 or directories specified in the configuration files will be ignored.
 This option may be specified multiple times, and all of the
 directories listed will be searched; hence, the above example could
