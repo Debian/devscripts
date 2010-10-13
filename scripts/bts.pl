@@ -264,7 +264,7 @@ comma-separated list of emails.
 
 =item --use-default-cc
 
-Add the addresses specified in the configuation file option
+Add the addresses specified in the configuration file option
 BTS_DEFAULT_CC to the list specified using --cc-addr.  This is the
 default.
 
@@ -280,7 +280,7 @@ space and will not be passed to a shell.  Default is
 '/usr/sbin/sendmail'.  The -t option will be automatically added if
 the command is /usr/sbin/sendmail or /usr/sbin/exim*.  For other
 mailers, if they require a -t option, this must be included in the
-SENDMAILCMD, for example: --sendmail="/usr/sbin/mymailer -t"
+SENDMAILCMD, for example: --sendmail="/usr/sbin/mymailer -t".
 
 =item --mutt
 
@@ -311,7 +311,7 @@ Note that when sending directly via an SMTP host, specifying addresses in
 SMTP host to reject the entire mail.
 
 Note also that the use of the reassign command may, when either interactive
-or force-interactive mode is enabled, lead to the automatic addition of a Cc
+or --force-interactive mode is enabled, lead to the automatic addition of a Cc
 to $newpackage@packages.debian.org.  In these cases, the note above regarding
 relaying applies.  The submission interface (port 587) on reportbug.debian.org
 does not support relaying and, as such, should not be used as an SMTP server
