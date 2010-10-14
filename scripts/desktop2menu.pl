@@ -27,7 +27,7 @@ desktop2menu - create a menu file skeleton from a desktop file
 
 =head1 SYNOPSIS
 
-B<desktop2menu> B<--help|--version>
+B<desktop2menu> B<--help>|B<--version>
 
 B<desktop2menu> I<desktop file> [I<package name>]
 

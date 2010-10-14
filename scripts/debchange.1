@@ -89,7 +89,7 @@ the changelog to tell which maintainers made which changes. Currently only
 one of the several such styles of recording this information is supported,
 in which the name of the maintainer who made a set of changes appears
 on a line before the changes, inside square brackets. This can be
-switched on and off using the \fB\-\-[no]multimaint\fR option or the
+switched on and off using the \fB\-\-\fR[\fBno\fR]\fBmultimaint\fR option or the
 \fBDEBCHANGE_MULTIMAINT\fR configuration file option; the default is to
 enable it.  Note that if an entry has already been marked in this way,
 then this option will be silently ignored.
@@ -270,13 +270,13 @@ with the same epoch as the previous package version.  If the upstream
 version number is the same, this option will behave in the same way as
 \fB\-i\fR.
 .TP
-.BI \-\-closes " nnnnn,[nnnnn,...]"
+.BI \-\-closes " nnnnn\fR[\fB,\fInnnnn \fR...]
 Add changelog entries to close the specified bug numbers.  Also invoke
 the editor after adding these entries.  Will generate warnings if the
 BTS cannot be contacted (and \fB\-\-noquery\fR has not been
 specified), or if there are problems with the bug report located.
 .TP
-.B \-\-[no]query
+.B \-\-\fR[\fBno\fR]\fBquery
 Should we attempt to query the BTS when generating closes entries?
 .TP
 .BR \-\-preserve ", " \-p
@@ -309,12 +309,12 @@ of the regular changelog.  Directory searching will be performed.
 The changelog will be examined in order to determine the current package 
 version.
 .TP
-\fB\-\-[no]multimaint\fR
+\fB\-\-\fR[\fBno\fR]\fBmultimaint\fR
 Should we indicate that parts of a changelog entry have been made by
 different maintainers?  Default is yes; see the discussion above and
 also the \fBDEBCHANGE_MULTIMAINT\fR configuration file option below.
 .TP
-\fB\-\-[no]multimaint\-merge\fR
+\fB\-\-\fR[\fBno\fR]\fBmultimaint\-merge\fR
 Should all changes made by the same author be merged into the same
 changelog section?  Default is no; see the discussion above and also the
 \fBDEBCHANGE_MULTIMAINT_MERGE\fR configuration file option below.
@@ -327,7 +327,7 @@ Note that there may be some interesting interactions if
 multi-maintainer mode is in use; you will probably wish to check the
 changelog manually before uploading it in such cases.
 .TP
-.BR \-\-[no]mainttrailer ", " \-t
+.BR \-\-\fR[\fBno\fR]\fBmainttrailer ", " \-t
 If mainttrailer is set, it will avoid modifying the existing changelog
 trailer line (i.e. the maintainer and date-stamp details), unless
 used with options that require the trailer to be modified
@@ -349,7 +349,7 @@ this option.
 Do not read any configuration files.  This can only be used as the
 first option given on the command-line.
 .TP
-\fB\-\-release\-heuristic\fR \fIlog|changelog\fR
+\fB\-\-release\-heuristic\fR \fIlog\fR|\fIchangelog\fR
 Controls how \fBdebchange\fR determines if a package has been released,
 when deciding whether to create a new changelog entry or append to an
 existing changelog entry.

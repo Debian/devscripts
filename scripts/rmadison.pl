@@ -259,7 +259,7 @@ show info for the binary children of source pkgs
 
 show projectb snapshot and reload time (not supported by all archives)
 
-=item B<-u>, B<--url=>I<URL>[B<,>I<URL...>]
+=item B<-u>, B<--url=>I<URL>[B<,>I<URL> ...]
 
 use I<URL> for the query. Supported shorthands are
  B<debian> or B<qa> http://qa.debian.org/madison.php (the default)

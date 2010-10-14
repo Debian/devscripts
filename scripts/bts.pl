@@ -150,7 +150,7 @@ my %ccsubmitters = ();
 
 =head1 SYNOPSIS
 
-B<bts> [options] command [args] [#comment] [.|, command [args] [#comment]] ...
+B<bts> [I<options>] I<command> [I<args>] [B<#>I<comment>] [B<.>|B<,> I<command> [I<args>] [B<#>I<comment>]] ...
 
 =head1 DESCRIPTION
 
@@ -211,192 +211,192 @@ though.
 
 =over 4
 
-=item -o, --offline
+=item B<-o>, B<--offline>
 
-Make bts use cached bugs for the 'show' and 'bugs' commands, if a cache
-is available for the requested data. See the cache command, below for
+Make B<bts> use cached bugs for the B<show> and B<bugs> commands, if a cache
+is available for the requested data. See the B<cache> command, below for
 information on setting up a cache.
 
-=item --online, --no-offline
+=item B<--online>, B<--no-offline>
 
-Opposite of --offline; overrides any configuration file directive to work
+Opposite of B<--offline>; overrides any configuration file directive to work
 offline.
 
-=item -n, --no-action
+=item B<-n>, B<--no-action>
 
 Do not send emails but print them to standard output.
 
-=item --cache, --no-cache
+=item B<--cache>, B<--no-cache>
 
 Should we attempt to cache new versions of BTS pages when
 performing show/bugs commands?  Default is to cache.
 
-=item --cache-mode={min|mbox|full}
+=item B<--cache-mode=>{B<min>|B<mbox>|B<full>}
 
 When running a B<bts cache> command, should we only mirror the basic
-bug (min), or should we also mirror the mbox version (mbox), or should
+bug (B<min>), or should we also mirror the mbox version (B<mbox>), or should
 we mirror the whole thing, including the mbox and the boring
-attachments to the BTS bug pages and the acknowledgement emails (full)?
-Default is min.
+attachments to the BTS bug pages and the acknowledgement emails (B<full>)?
+Default is B<min>.
 
-=item --cache-delay=seconds
+=item B<--cache-delay=>I<seconds>
 
 Time in seconds to delay between each download, to avoid hammering the BTS
 web server. Default is 5 seconds.
 
-=item --mbox
+=item B<--mbox>
 
 Open a mail reader to read the mbox corresponding to a given bug number
 for show and bugs commands.
 
-=item --mailreader=READER
+=item B<--mailreader=>I<READER>
 
-Specify the command to read the mbox.  Must contain a "%s" string
+Specify the command to read the mbox.  Must contain a "B<%s>" string
 (unquoted!), which will be replaced by the name of the mbox file.  The
 command will be split on white space and will not be passed to a
-shell.  Default is 'mutt -f %s'.  (Also, %% will be substituted by a
+shell.  Default is 'B<mutt -f %s>'.  (Also, B<%%> will be substituted by a
 single % if this is needed.)
 
-=item --cc-addr=CC_EMAIL_ADDRESS
+=item B<--cc-addr=>I<CC_EMAIL_ADDRESS>
 
-Send carbon copies to a list of users. CC_EMAIL_ADDRESS should be a 
+Send carbon copies to a list of users. I<CC_EMAIL_ADDRESS> should be a
 comma-separated list of emails.
 
-=item --use-default-cc
+=item B<--use-default-cc>
 
 Add the addresses specified in the configuration file option
-BTS_DEFAULT_CC to the list specified using --cc-addr.  This is the
+B<BTS_DEFAULT_CC> to the list specified using B<--cc-addr>.  This is the
 default.
 
-=item --no-use-default-cc
+=item B<--no-use-default-cc>
 
-Do not add addresses specified in BTS_DEFAULT_CC to the carbon copy
+Do not add addresses specified in B<BTS_DEFAULT_CC> to the carbon copy
 list.
 
-=item --sendmail=SENDMAILCMD
+=item B<--sendmail=>I<SENDMAILCMD>
 
-Specify the sendmail command.  The command will be split on white
+Specify the B<sendmail> command.  The command will be split on white
 space and will not be passed to a shell.  Default is
-'/usr/sbin/sendmail'.  The -t option will be automatically added if
-the command is /usr/sbin/sendmail or /usr/sbin/exim*.  For other
+F</usr/sbin/sendmail>.  The B<-t> option will be automatically added if
+the command is F</usr/sbin/sendmail> or F</usr/sbin/exim*>.  For other
 mailers, if they require a -t option, this must be included in the
-SENDMAILCMD, for example: --sendmail="/usr/sbin/mymailer -t".
+I<SENDMAILCMD>, for example: B<--sendmail="/usr/sbin/mymailer -t">.
 
-=item --mutt
+=item B<--mutt>
 
-Use mutt for sending of mails. Default is not to use mutt, except for some
+Use B<mutt> for sending of mails. Default is not to use B<mutt>, except for some
 commands.
 
-Note that one of $DEBEMAIL or $EMAIL must be set in the environment in order
-to use mutt to send emails.
+Note that one of B<$DEBEMAIL> or B<$EMAIL> must be set in the environment in order
+to use B<mutt> to send emails.
 
-=item --no-mutt
+=item B<--no-mutt>
 
-Don't use mutt for sending of mails.
+Don't use B<mutt> for sending of mails.
 
-=item --smtp-host=SMTPHOST
+=item B<--smtp-host=>I<SMTPHOST>
 
 Specify an SMTP host.  If given, B<bts> will send mail by talking directly to
-this SMTP host rather than by invoking a sendmail command.
+this SMTP host rather than by invoking a B<sendmail> command.
 
 The host name may be followed by a colon (":") and a port number in
 order to use a port other than the default.  It may also begin with
 "ssmtp://" or "smtps://" to indicate that SMTPS should be used.
 
-Note that one of $DEBEMAIL or $EMAIL must be set in the environment in order
+Note that one of B<$DEBEMAIL> or B<$EMAIL> must be set in the environment in order
 to use direct SMTP connections to send emails.
 
 Note that when sending directly via an SMTP host, specifying addresses in
---cc-addr or BTS_DEFAULT_CC that the SMTP host will not relay will cause the
+B<--cc-addr> or B<BTS_DEFAULT_CC> that the SMTP host will not relay will cause the
 SMTP host to reject the entire mail.
 
-Note also that the use of the reassign command may, when either interactive
-or --force-interactive mode is enabled, lead to the automatic addition of a Cc
-to $newpackage@packages.debian.org.  In these cases, the note above regarding
+Note also that the use of the B<reassign> command may, when either B<--interactive>
+or B<--force-interactive> mode is enabled, lead to the automatic addition of a Cc
+to I<$newpackage>@packages.debian.org.  In these cases, the note above regarding
 relaying applies.  The submission interface (port 587) on reportbug.debian.org
 does not support relaying and, as such, should not be used as an SMTP server
 for B<bts> under the circumstances described in this paragraph.
 
-=item --smtp-username=USERNAME, --smtp-password=PASSWORD
+=item B<--smtp-username=>I<USERNAME>, B<--smtp-password=>I<PASSWORD>
 
 Specify the credentials to use when connecting to the SMTP server
-specified by --smtp-host.  If the server does not require authentication
+specified by B<--smtp-host>.  If the server does not require authentication
 then these options should not be used.
 
 If a username is specified but not a password, B<bts> will prompt for
 the password before sending the mail.
 
-=item --smtp-helo=HELO
+=item B<--smtp-helo=>I<HELO>
 
-Specify the name to use in the HELO command when connecting to the SMTP
+Specify the name to use in the I<HELO> command when connecting to the SMTP
 server; defaults to the contents of the file F</etc/mailname>, if it 
 exists.
 
-Note that some SMTP servers may reject the use of a HELO which either 
+Note that some SMTP servers may reject the use of a I<HELO> which either
 does not resolve or does not appear to belong to the host using it.
 
-=item --bts-server
+=item B<--bts-server>
 
 Use a debbugs server other than bugs.debian.org.
 
-=item -f, --force-refresh
+=item B<-f>, B<--force-refresh>
 
 Download a bug report again, even if it does not appear to have
-changed since the last cache command.  Useful if a --cache-mode=full is
+changed since the last cache command.  Useful if a B<--cache-mode=full> is
 requested for the first time (otherwise unchanged bug reports will not
 be downloaded again, even if the boring bits have not been
 downloaded).
 
-=item --no-force-refresh
+=item B<--no-force-refresh>
 
-Suppress any configuration file --force-refresh option.
+Suppress any configuration file B<--force-refresh> option.
 
-=item --only-new
+=item B<--only-new>
 
 Download only new bugs when caching. Do not check for updates in
 bugs we already have.
 
-=item --include-resolved
+=item B<--include-resolved>
 
 When caching bug reports, include those that are marked as resolved.  This
 is the default behaviour.
 
-=item --no-include-resolved
+=item B<--no-include-resolved>
 
 Reverse the behaviour of the previous option.  That is, do not cache bugs
 that are marked as resolved.
 
-=item --no-ack
+=item B<--no-ack>
 
 Suppress acknowledgment mails from the BTS.  Note that this will only 
 affect the copies of messages CCed to bugs, not those sent to the 
 control bot.
 
-=item --ack
+=item B<--ack>
 
 Do not suppress acknowledgement mails.  This is the default behaviour.
 
-=item -i, --interactive
+=item B<-i>, B<--interactive>
 
 Before sending an e-mail to the control bot, display the content and
 allow it to be edited, or the sending cancelled.
 
-=item --force-interactive
+=item B<--force-interactive>
 
-Similar to --interactive, with the exception that an editor is spawned 
+Similar to B<--interactive>, with the exception that an editor is spawned
 before prompting for confirmation of the message to be sent.
 
-=item --no-interactive
+=item B<--no-interactive>
 
 Send control e-mails without confirmation.  This is the default behaviour.
 
-=item -q, --quiet
+=item B<-q>, B<--quiet>
 
-When running bts cache, only display information about newly cached
+When running B<bts cache>, only display information about newly cached
 pages, not messages saying already cached.  If this option is
 specified twice, only output error messages (to stderr).
 
-=item --no-conf, --noconf
+=item B<--no-conf>, B<--noconf>
 
 Do not read any configuration files.  This can only be used as the
 first option given on the command-line.
@@ -759,15 +759,15 @@ L<http://www.debian.org/Bugs/server-control>
 
 =over 4
 
-=item show [options] [<bug number> | <package> | <maintainer> | : ] [opt=val ...]
+=item B<show> [I<options>] [I<bug number> | I<package> | I<maintainer> | B<:> ] [I<opt>B<=>I<val> ...]
 
-=item show [options] [src:<package> | from:<submitter>] [opt=val ...]
+=item B<show> [I<options>] [B<src:>I<package> | B<from:>I<submitter>] [I<opt>B<=>I<val> ...]
 
-=item show [options] [tag:<tag> | usertag:<tag> ] [opt=val ...]
+=item B<show> [I<options>] [B<tag:>I<tag> | B<usertag:>I<tag> ] [I<opt>B<=>I<val> ...]
 
-=item show [release-critical | release-critical/... | RC]
+=item B<show> [B<release-critical> | B<release-critical/>... | B<RC>]
 
-This is a synonym for bts bugs.
+This is a synonym for B<bts bugs>.
 
 =cut
 
@@ -775,22 +775,22 @@ sub bts_show {
     goto &bts_bugs;
 }
 
-=item bugs [options] [<bug number> | <package> | <maintainer> | : ] [opt=val ..]
+=item B<bugs> [I<options>] [I<bug_number> | I<package> | I<maintainer> | B<:> ] [I<opt>B<=>I<val> ...]
 
-=item bugs [options] [src:<package> | from:<submitter>] [opt=val ..]
+=item B<bugs> [I<options>] [B<src:>I<package> | B<from:>I<submitter>] [I<opt>B<=>I<val> ...]
 
-=item bugs [options] [tag:<tag> | usertag:<tag> ] [opt=val ..]
+=item B<bugs> [I<options>] [B<tag:>I<tag> | B<usertag:>I<tag> ] [I<opt>B<=>I<val> ...]
 
-=item bugs [release-critical | release-critical/... | RC]
+=item B<bugs> [B<release-critical> | B<release-critical/>... | B<RC>]
 
 Display the page listing the requested bugs in a web browser using
 sensible-browser(1).
 
-Options may be specified after the "bugs" command in addition to or
+Options may be specified after the B<bugs> command in addition to or
 instead of options at the start of the command line: recognised
-options at this point are: -o/--offline/--online, --mbox, --mailreader
-and --[no-]cache.  These are described earlier in this manpage.  If
-either the -o or --offline option is used, or there is already an
+options at this point are: B<-o>/B<--offline>/B<--online>, B<--mbox>, B<--mailreader>
+and B<-->[B<no->]B<cache>.  These are described earlier in this manpage.  If
+either the B<-o> or B<--offline> option is used, or there is already an
 up-to-date copy in the local cache, the cached version will be used.
 
 The meanings of the possible arguments are as follows:
@@ -799,48 +799,48 @@ The meanings of the possible arguments are as follows:
 
 =item (none)
 
-If nothing is specified, bts bugs will display your bugs, assuming
-that either DEBEMAIL or EMAIL (examined in that order) is set to the
+If nothing is specified, B<bts bugs> will display your bugs, assuming
+that either B<DEBEMAIL> or B<EMAIL> (examined in that order) is set to the
 appropriate email address.
 
-=item <bug number>
+=item I<bug_number>
 
-Display bug number <bug number>.
+Display bug number I<bug_number>.
 
-=item <package>
+=item I<package>
 
-Display the bugs for the package <package>.
+Display the bugs for the package I<package>.
 
-=item src:<package>
+=item B<src:>I<package>
 
-Display the bugs for the source package <package>.
+Display the bugs for the source package I<package>.
 
-=item <maintainer>
+=item I<maintainer>
 
-Display the bugs for the maintainer email address <maintainer>.
+Display the bugs for the maintainer email address I<maintainer>.
 
-=item from:<submitter>
+=item B<from:>I<submitter>
 
-Display the bugs for the submitter email address <submitter>.
+Display the bugs for the submitter email address I<submitter>.
 
-=item tag:<tag>
+=item B<tag:>I<tag>
 
-Display the bugs which are tagged with <tag>.
+Display the bugs which are tagged with I<tag>.
 
-=item usertag:<tag>
+=item B<usertag:>I<tag>
 
-Display the bugs which are tagged with usertag <tag>.  See the BTS
+Display the bugs which are tagged with usertag I<tag>.  See the BTS
 documentation for more information on usertags.  This will require the
-use of a users=<email> option.
+use of a B<users=>I<email> option.
 
-=item :
+=item B<:>
 
 Details of the bug tracking system itself, along with a bug-request
 page with more options than this script, can be found on
 http://bugs.debian.org/.  This page itself will be opened if the
 command 'bts bugs :' is used.
 
-=item release-critical, RC
+=item B<release-critical>, B<RC>
 
 Display the front page of the release-critical pages on the BTS.  This
 is a synonym for http://bugs.debian.org/release-critical/index.html.
@@ -856,13 +856,13 @@ dist=stable to see bugs affecting the stable version of a package,
 version=1.0 to see bugs affecting that version of a package, or reverse=yes
 to display newest messages first in a bug log.
 
-If caching has been enabled (that is, --no-cache has not been used,
-and BTS_CACHE has not been set to "no"), then any page requested by
-"bts show" will automatically be cached, and be available offline
+If caching has been enabled (that is, B<--no-cache> has not been used,
+and B<BTS_CACHE> has not been set to B<no>), then any page requested by
+B<bts show> will automatically be cached, and be available offline
 thereafter.  Pages which are automatically cached in this way will be
-deleted on subsequent "bts show|bugs|cache" invocations if they have
+deleted on subsequent B<bts show>|B<bugs>|B<cache>" invocations if they have
 not been accessed in 30 days.  Warning: on a filesystem mounted with
-the "noatime" option, running "bts show|bugs" does not update the cache
+the "noatime" option, running "B<bts show>|B<bugs>" does not update the cache
 files' access times; a cached bug will then be subject to auto-cleaning
 30 days after its initial download, even if it has been accessed in the
 meantime.
@@ -871,25 +871,25 @@ Any other B<bts> commands following this on the command line will be
 executed after the browser has been exited.
 
 The desired browser can be specified and configured by setting the
-BROWSER environment variable.  The conventions follow those defined by
+B<BROWSER> environment variable.  The conventions follow those defined by
 Eric Raymond at http://www.catb.org/~esr/BROWSER/; we here reproduce the
 relevant part.
 
-The value of BROWSER may consist of a colon-separated series of
+The value of B<BROWSER> may consist of a colon-separated series of
 browser command parts. These should be tried in order until one
-succeeds. Each command part may optionally contain the string "%s"; if
+succeeds. Each command part may optionally contain the string B<%s>; if
 it does, the URL to be viewed is substituted there. If a command part
-does not contain %s, the browser is to be launched as if the URL had
-been supplied as its first argument. The string %% must be substituted
+does not contain B<%s>, the browser is to be launched as if the URL had
+been supplied as its first argument. The string B<%%> must be substituted
 as a single %.
 
 Rationale: We need to be able to specify multiple browser commands so
 programs obeying this convention can do the right thing in either X or
 console environments, trying X first. Specifying multiple commands may
-also be useful for people who share files like .profile across
-multiple systems. We need %s because some popular browsers have
-remote-invocation syntax that requires it. Unless %% reduces to %, it
-won't be possible to have a literal %s in the string.
+also be useful for people who share files like F<.profile> across
+multiple systems. We need B<%s> because some popular browsers have
+remote-invocation syntax that requires it. Unless B<%%> reduces to %, it
+won't be possible to have a literal B<%s> in the string.
 
 For example, on most Linux systems a good thing to do would be:
 
@@ -968,7 +968,7 @@ sub bts_bugs {
     }
 }
 
-=item select [key:value  ...]
+=item B<select> [I<key>B<:>I<value> ...]
 
 Uses the SOAP interface to output a list of bugs which match the given
 selection requirements.
@@ -977,65 +977,65 @@ The following keys are allowed, and may be given multiple times.
 
 =over 8
 
-=item package
+=item B<package>
 
 Binary package name.
 
-=item source
+=item B<source>
 
 Source package name.
 
-=item maintainer
+=item B<maintainer>
 
 E-mail address of the maintainer.
 
-=item submitter
+=item B<submitter>
 
 E-mail address of the submitter.
 
-=item severity
+=item B<severity>
 
 Bug severity.
 
-=item status
+=item B<status>
 
-Status of the bug.  One of "open", "done", or "forwarded".
+Status of the bug.  One of B<open>, B<done>, or B<forwarded>.
 
-=item tag
+=item B<tag>
 
-Tags applied to the bug. If I<users> is specified, may include 
+Tags applied to the bug. If B<users> is specified, may include
 usertags in addition to the standard tags.
 
-=item owner
+=item B<owner>
 
 Bug's owner.
 
-=item correspondent
+=item B<correspondent>
 
 Address of someone who sent mail to the log.
 
-=item affects
+=item B<affects>
 
 Bugs which affect this package.
 
-=item bugs
+=item B<bugs>
 
 List of bugs to search within.
 
-=item users
+=item B<users>
 
 Users to use when looking up usertags.
 
-=item archive
+=item B<archive>
 
-Whether to search archived bugs or normal bugs; defaults to 0 
+Whether to search archived bugs or normal bugs; defaults to B<0>
 (i.e. only search normal bugs). As a special case, if archive is 
-'both', both archived and unarchived bugs are returned.
+B<both>, both archived and unarchived bugs are returned.
 
 =back
 
 For example, to select the set of bugs submitted by 
-jrandomdeveloper@example.com and tagged wontfix, one would use
+jrandomdeveloper@example.com and tagged B<wontfix>, one would use
 
 bts select submitter:jrandomdeveloper@example.com tag:wontfix
 
@@ -1057,10 +1057,10 @@ sub bts_select {
     print map {qq($_\n)} @{$bugs};
 }
 
-=item status [<bug> | file:<file> | fields:<field,field,...> | verbose] ...
+=item B<status> [I<bug> | B<file:>I<file> | B<fields:>I<field>[B<,>I<field> ...] | B<verbose>] ...
 
 Uses the SOAP interface to output status information for the given bugs
-(or as read from the listed files -- use '-' to indicate STDIN).
+(or as read from the listed files -- use B<-> to indicate STDIN).
 
 By default, all populated fields for a bug are displayed.
 
@@ -1143,9 +1143,9 @@ sub bts_status {
     }
 }
 
-=item clone <bug> <new ID> [<new ID> ...]
+=item B<clone> I<bug> I<new_ID> [I<new_ID> ...]
 
-The clone control command allows you to duplicate a bug report. It is useful
+The B<clone> control command allows you to duplicate a I<bug> report. It is useful
 in the case where a single report actually indicates that multiple distinct
 bugs have occurred. "New IDs" are negative numbers, separated by spaces,
 which may be used in subsequent control commands to refer to the newly
@@ -1174,11 +1174,11 @@ sub common_close {
 
 # Do not include this in the manpage - it's deprecated
 #
-# =item close <bug> <version>
+# =item B<close> I<bug> I<version>
 #
-# Close a bug. Remember that using this to close a bug is often bad manners,
+# Close a I<bug>. Remember that using this to close a bug is often bad manners,
 # sending an informative mail to nnnnn-done@bugs.debian.org is much better.
-# You should specify which version of the package closed the bug, if
+# You should specify which I<version> of the package closed the I<bug>, if
 # possible.
 # 
 # =cut
@@ -1195,11 +1195,11 @@ an explanation of why you have closed this bug.  Thank you!
 EOT
 }
 
-=item done <bug> <version>
+=item B<done> I<bug> I<version>
 
-Mark a bug as Done. This forces interactive mode since done messages should
+Mark a I<bug> as Done. This forces interactive mode since done messages should
 include an explanation why the bug is being closed.  You should specify which
-version of the package closed the bug, if possible.
+I<version> of the package closed the bug, if possible.
 
 =cut
 
@@ -1215,9 +1215,9 @@ sub bts_done {
     $ccsubmitters{"$bug-submitter"} = 1;
 }
 
-=item reopen <bug> [<submitter>]
+=item B<reopen> I<bug> [I<submitter>]
 
-Reopen a bug, with optional submitter.
+Reopen a I<bug>, with optional I<submitter>.
 
 =cut
 
@@ -1228,10 +1228,10 @@ sub bts_reopen {
     mailbts("reopening $bug", "reopen $bug $submitter");
 }
 
-=item archive <bug>
+=item B<archive> I<bug>
 
-Archive a bug that has previously been archived but is currently not.
-The bug must fulfil all of the requirements for archiving with the
+Archive a I<bug> that has previously been archived but is currently not.
+The I<bug> must fulfil all of the requirements for archiving with the
 exception of those that are time-based.
 
 =cut
@@ -1242,9 +1242,9 @@ sub bts_archive {
     mailbts("archiving $bug", "archive $bug");
 }
 
-=item unarchive <bug>
+=item B<unarchive> I<bug>
 
-Unarchive a bug that is currently archived.
+Unarchive a I<bug> that is currently archived.
 
 =cut
 
@@ -1254,9 +1254,9 @@ sub bts_unarchive {
     mailbts("unarchiving $bug", "unarchive $bug");
 }
 
-=item retitle <bug> <title>
+=item B<retitle> I<bug> I<title>
 
-Change the title of the bug.
+Change the I<title> of the I<bug>.
 
 =cut
 
@@ -1269,10 +1269,10 @@ sub bts_retitle {
     mailbts("retitle $bug to $title", "retitle $bug $title");
 }
 
-=item summary <bug> [<messagenum>]
+=item B<summary> I<bug> [I<messagenum>]
 
 Select a message number that should be used as
-the summary of a bug.
+the summary of a I<bug>.
 
 If no message number is given, the summary is cleared.
 
@@ -1284,9 +1284,9 @@ sub bts_summary {
     mailbts("summary $bug $msg", "summary $bug $msg");
 }
 
-=item submitter <bug> [<bug> ...] <submitter-email>
+=item B<submitter> I<bug> [I<bug> ...] I<submitter-email>
 
-Change the submitter address of a bug or a number of bugs, with `!' meaning
+Change the submitter address of a I<bug> or a number of bugs, with B<!> meaning
 `use the address on the current email as the new submitter address'.
 
 =cut
@@ -1303,10 +1303,10 @@ sub bts_submitter {
     }
 }
 
-=item reassign <bug> [<bug> ...] <package> [<version>]
+=item B<reassign> I<bug> [I<bug> ...] I<package> [I<version>]
 
-Reassign a bug or a number of bugs to a different package.
-The version field is optional; see the explanation at
+Reassign a I<bug> or a number of bugs to a different I<package>.
+The I<version> field is optional; see the explanation at
 L<http://www.debian.org/Bugs/server-control>.
 
 =cut
@@ -1335,9 +1335,9 @@ sub bts_reassign {
     }
 }
 
-=item found <bug> [<version>]
+=item B<found> I<bug> [I<version>]
 
-Indicate that a bug was found to exist in a particular package version.
+Indicate that a I<bug> was found to exist in a particular package version.
 
 =cut
 
@@ -1352,9 +1352,9 @@ sub bts_found {
     mailbts("found $bug in $version", "found $bug $version");
 }
 
-=item notfound <bug> <version>
+=item B<notfound> I<bug> I<version>
 
-Remove the record that bug was encountered in the given version of the
+Remove the record that I<bug> was encountered in the given version of the
 package to which it is assigned.
 
 =cut
@@ -1366,10 +1366,10 @@ sub bts_notfound {
     mailbts("notfound $bug in $version", "notfound $bug $version");
 }
 
-=item fixed <bug> <version>
+=item B<fixed> I<bug> I<version>
 
-Indicate that a bug was fixed in a particular package version, without
-affecting the bug's open/closed status.
+Indicate that a I<bug> was fixed in a particular package version, without
+affecting the I<bug>'s open/closed status.
 
 =cut
 
@@ -1380,13 +1380,13 @@ sub bts_fixed {
     mailbts("fixed $bug in $version", "fixed $bug $version");
 }
 
-=item notfixed <bug> <version>
+=item B<notfixed> I<bug> I<version>
 
-Remove the record that a bug was fixed in the given version of the
+Remove the record that a I<bug> was fixed in the given version of the
 package to which it is assigned.
 
-This is equivalent to the sequence of commands "found <bug> <version>",
-"notfound <bug> <version>".
+This is equivalent to the sequence of commands "B<found> I<bug> I<version>",
+"B<notfound> I<bug> I<version>".
 
 =cut
 
@@ -1397,9 +1397,9 @@ sub bts_notfixed {
     mailbts("notfixed $bug in $version", "notfixed $bug $version");
 }
 
-=item block <bug> by|with <bug> [<bug> ...]
+=item B<block> I<bug> B<by>|B<with> I<bug> [I<bug> ...]
 
-Note that a bug is blocked from being fixed by a set of other bugs.
+Note that a B<bug> is blocked from being fixed by a set of other bugs.
 
 =cut
 
@@ -1418,9 +1418,9 @@ sub bts_block {
     mailbts("block $bug with @blockers", "block $bug with @blockers");
 }
 
-=item unblock <bug> by|with <bug> [<bug> ...]
+=item B<unblock> I<bug> B<by>|B<with> I<bug> [I<bug> ...]
 
-Note that a bug is no longer blocked from being fixed by a set of other bugs.
+Note that a B<bug> is no longer blocked from being fixed by a set of other bugs.
 
 =cut
 
@@ -1439,7 +1439,7 @@ sub bts_unblock {
     mailbts("unblock $bug with @blockers", "unblock $bug with @blockers");
 }
 
-=item merge <bug> <bug> [<bug> ...]
+=item B<merge> I<bug> I<bug> [I<bug> ...]
 
 Merge a set of bugs together.
 
@@ -1456,10 +1456,10 @@ sub bts_merge {
     mailbts("merging @bugs", "merge @bugs");
 }
 
-=item forcemerge <bug> <bug> [<bug> ...]
+=item B<forcemerge> I<bug> I<bug> [I<bug> ...]
 
-Forcibly merge a set of bugs together. The first bug listed is the master bug, 
-and its settings (those which must be equal in a normal merge) are assigned to 
+Forcibly merge a set of bugs together. The first I<bug> listed is the master bug,
+and its settings (those which must be equal in a normal B<merge>) are assigned to
 the bugs listed next.
 
 =cut
@@ -1476,9 +1476,9 @@ sub bts_forcemerge {
 }
 
 
-=item unmerge <bug>
+=item B<unmerge> I<bug>
 
-Unmerge a bug.
+Unmerge a I<bug>.
 
 =cut
 
@@ -1488,25 +1488,25 @@ sub bts_unmerge {
     mailbts("unmerging $bug", "unmerge $bug");
 }
 
-=item tag <bug> [+|-|=] tag [tag ..]
+=item B<tag> I<bug> [B<+>|B<->|B<=>] I<tag> [I<tag> ...]
 
-=item tags <bug> [+|-|=] tag [tag ..]
+=item B<tags> I<bug> [B<+>|B<->|B<=>] I<tag> [I<tag> ...]
 
-Set or unset a tag on a bug. The tag may either be the exact tag name
+Set or unset a I<tag> on a I<bug>. The tag may either be the exact tag name
 or it may be abbreviated to any unique tag substring. (So using
-"fixed" will set the tag "fixed", not "fixed-upstream", for example,
-but "fix" would not be acceptable.) Multiple tags may be specified as
+B<fixed> will set the tag B<fixed>, not B<fixed-upstream>, for example,
+but B<fix> would not be acceptable.) Multiple tags may be specified as
 well. The two commands (tag and tags) are identical. At least one tag
-must be specified, unless the '=' flag is used, where the command
+must be specified, unless the B<=> flag is used, where the command
 
   bts tags <bug> =
 
-will remove all tags from the specified bug.
+will remove all tags from the specified I<bug>.
 
-As a special case, the unofficial "gift" tag name is supported in
-addition to official tag names. "gift" is used as a shorthand for the
-gift usertag; see L<http://wiki.debian.org/qa.debian.org/GiftTag>.
-Adding/removing the gift tag will add/remove the gift usertag,
+As a special case, the unofficial B<gift> tag name is supported in
+addition to official tag names. B<gift> is used as a shorthand for the
+B<gift> usertag; see L<http://wiki.debian.org/qa.debian.org/GiftTag>.
+Adding/removing the B<gift> tag will add/remove the B<gift> usertag,
 belonging to the "debian-qa@lists.debian.org" user.
 
 =cut
@@ -1579,11 +1579,11 @@ sub bts_tags {
     }
 }
 
-=item affects <bug> [+|-|=] <package> [<package> ..]
+=item B<affects> I<bug> [B<+>|B<->|B<=>] I<package> [I<package> ...]
 
-Indicates that a bug affects a package other than that against which it is filed, causing
-the bug to be listed by default in the package list of the other package.  This should 
-generally be used where the bug is severe enough to cause multiple reports from users to be 
+Indicates that a I<bug> affects a I<package> other than that against which it is filed, causing
+the I<bug> to be listed by default in the I<package> list of the other I<package>.  This should
+generally be used where the I<bug> is severe enough to cause multiple reports from users to be
 assigned to the wrong package. 
 
 =cut
@@ -1617,9 +1617,9 @@ sub bts_affects {
     mailbts("affects $bug", $command);
 }
 
-=item user <email>
+=item B<user> I<email>
 
-Specify a user email address before using the usertags command.
+Specify a user I<email> address before using the B<usertags> command.
 
 =cut
 
@@ -1635,19 +1635,19 @@ sub bts_user {
     $last_user = $email;
 }
 
-=item usertag <bug> [+|-|=] tag [tag ..]
+=item B<usertag> I<bug> [B<+>|B<->|B<=>] I<tag> [I<tag> ...]
 
-=item usertags <bug> [+|-|=] tag [tag ..]
+=item B<usertags> I<bug> [B<+>|B<->|B<=>] I<tag> [I<tag> ...]
 
-Set or unset a user tag on a bug. The tag must be the exact tag name wanted;
+Set or unset a user tag on a I<bug>. The I<tag> must be the exact tag name wanted;
 there are no defaults or checking of tag names.  Multiple tags may be
-specified as well. The two commands (usertag and usertags) are identical.
-At least one tag must be specified, unless the '=' flag is used, where the
+specified as well. The two commands (B<usertag> and B<usertags>) are identical.
+At least one I<tag> must be specified, unless the B<=> flag is used, where the
 command
 
   bts usertags <bug> =
 
-will remove all user tags from the specified bug.
+will remove all user tags from the specified B<bug>.
 
 =cut
 
@@ -1702,14 +1702,14 @@ sub bts_usertags {
     }
 }
 
-=item claim <bug> [<claim>]
+=item B<claim> I<bug> [I<claim>]
 
-Record that you have claimed a bug (e.g. for a bug squashing party).
-<claim> should be a unique token allowing the bugs you have claimed
+Record that you have claimed a I<bug> (e.g. for a bug squashing party).
+I<claim> should be a unique token allowing the bugs you have claimed
 to be identified; an e-mail address is often used.
 
-If no claim is specified, the environment variable DEBEMAIL
-or EMAIL (checked in that order) is used.
+If no I<claim> is specified, the environment variable B<DEBEMAIL>
+or B<EMAIL> (checked in that order) is used.
 
 =cut
 
@@ -1724,12 +1724,12 @@ sub bts_claim {
     bts_usertags("$bug" , "+$claim");
 }
 
-=item unclaim <bug> [<claim>]
+=item B<unclaim> I<bug> [I<claim>]
 
 Remove the record that you have claimed a bug.
 
-If no claim is specified, the environment variable DEBEMAIL
-or EMAIL (checked in that order) is used.
+If no I<claim> is specified, the environment variable B<DEBEMAIL>
+or B<EMAIL> (checked in that order) is used.
 
 =cut
 
@@ -1744,10 +1744,10 @@ sub bts_unclaim {
     bts_usertags("$bug" , "-$claim");
 }
 
-=item severity <bug> <severity>
+=item B<severity> I<bug> I<severity>
 
-Change the severity of a bug. Available severities are: wishlist, minor, normal,
-important, serious, grave, critical. The severity may be abbreviated to any
+Change the I<severity> of a B<bug>. Available severities are: B<wishlist>, B<minor>, B<normal>,
+B<important>, B<serious>, B<grave>, B<critical>. The severity may be abbreviated to any
 unique substring.
 
 =cut
@@ -1763,9 +1763,9 @@ sub bts_severity {
     mailbts("severity of $bug is $matches[0]", "severity $bug $matches[0]");
 }
 
-=item forwarded <bug> <address>
+=item B<forwarded> I<bug> I<address>
 
-Mark the bug as forwarded to the given address (usually an email address or
+Mark the I<bug> as forwarded to the given I<address> (usually an email address or
 a URL for an upstream bug tracker).
 
 =cut
@@ -1782,9 +1782,9 @@ sub bts_forwarded {
     mailbts("bug $bug is forwarded to $email", "forwarded $bug $email");
 }
 
-=item notforwarded <bug>
+=item B<notforwarded> I<bug>
 
-Mark a bug as not forwarded.
+Mark a I<bug> as not forwarded.
 
 =cut
 
@@ -1794,10 +1794,10 @@ sub bts_notforwarded {
     mailbts("bug $bug is not forwarded", "notforwarded $bug");
 }
 
-=item package [<package> ...]
+=item B<package> [I<package> ...]
 
 The following commands will only apply to bugs against the listed
-packages; this acts as a safety mechanism for the BTS.  If no packages
+I<package>s; this acts as a safety mechanism for the BTS.  If no packages
 are listed, this check is turned off again.
 
 =cut
@@ -1810,66 +1810,66 @@ sub bts_package {
     }
 }
 
-=item limit [<key>[:<value>]  ...]
+=item B<limit> [I<key>[B<:>I<value>]] ...
 
 The following commands will only apply to bugs which meet the specified
-criterion; this acts as a safety mechanism for the BTS.  If no C<value>s are
-listed, the limits for that C<key> are turned off again.  If no C<key>s are
+criterion; this acts as a safety mechanism for the BTS.  If no I<value>s are
+listed, the limits for that I<key> are turned off again.  If no I<key>s are
 specified, all limits are reset.
 
 =over 8
 
-=item submitter
+=item B<submitter>
 
 E-mail address of the submitter.
 
-=item date
+=item B<date>
 
 Date the bug was submitted.
 
-=item subject
+=item B<subject>
 
 Subject of the bug.
 
-=item msgid
+=item B<msgid>
 
 Message-id of the initial bug report.
 
-=item package
+=item B<package>
 
 Binary package name.
 
-=item source
+=item B<source>
 
 Source package name.
 
-=item tag
+=item B<tag>
 
 Tags applied to the bug.
 
-=item severity
+=item B<severity>
 
 Bug severity.
 
-=item owner
+=item B<owner>
 
 Bug's owner.
 
-=item affects
+=item B<affects>
 
 Bugs affecting this package.
 
-=item archive
+=item B<archive>
 
-Whether to search archived bugs or normal bugs; defaults to 0
+Whether to search archived bugs or normal bugs; defaults to B<0>
 (i.e. only search normal bugs). As a special case, if archive is
-'both', both archived and unarchived bugs are returned.
+B<both>, both archived and unarchived bugs are returned.
 
 =back
 
 For example, to limit the set of bugs affected by the subsequent control
 commands to those submitted by jrandomdeveloper@example.com and tagged
-wontfix, one would use
+B<wontfix>, one would use
 
 bts limit submitter:jrandomdeveloper@example.com tag:wontfix
 
@@ -1879,7 +1879,7 @@ those matching any of the supplied values; for example
 bts limit package:foo severity:wishlist severity:minor
 
 only applies the subsequent control commands to bugs of package foo with
-either wishlist or minor severity.
+either B<wishlist> or B<minor> severity.
 
 =cut
 
@@ -1953,14 +1953,14 @@ sub bts_limit {
     }
 }
 
-=item owner <bug> <owner-email>
+=item B<owner> I<bug> I<owner-email>
 
-Change the "owner" address of a bug, with `!' meaning
+Change the "owner" address of a I<bug>, with B<!> meaning
 `use the address on the current email as the new owner address'.
 
 The owner of a bug accepts responsibility for dealing with it. Note that 
 the "owner" of a bug does not automatically receive all of the email 
-corresponding to it; use "subscribe" to achieve that.
+corresponding to it; use B<subscribe> to achieve that.
 
 =cut
 
@@ -1971,7 +1971,7 @@ sub bts_owner {
     mailbts("owner $bug", "owner $bug $owner");
 }
 
-=item noowner <bug>
+=item B<noowner> I<bug>
 
 Mark a bug as having no "owner".
 
@@ -1983,11 +1983,11 @@ sub bts_noowner {
     mailbts("bug $bug has no owner", "noowner $bug");
 }
 
-=item subscribe <bug> <email>
+=item B<subscribe> I<bug> I<email>
 
-Subscribe the given email address to the specified bug report.  If no email
-address is specified, the environment variable DEBEMAIL or EMAIL (in that
-order) is used.  If those are not set, or `!' is given as email address,
+Subscribe the given I<email> address to the specified B<bug> report.  If no email
+address is specified, the environment variable B<DEBEMAIL> or B<EMAIL> (in that
+order) is used.  If those are not set, or B<!> is given as email address,
 your default address will be used.
 
 After executing this command, you will be sent a subscription confirmation to
@@ -2010,15 +2010,15 @@ sub bts_subscribe {
 	   $bug . '-subscribe@' . $btsserver, $email);
 }
 
-=item unsubscribe <bug> <email>
+=item B<unsubscribe> I<bug> I<email>
 
 Unsubscribe the given email address from the specified bug report.  As with
 subscribe above, if no email address is specified, the environment variables
-DEBEMAIL or EMAIL (in that order) is used.  If those are not set, or `!' is
+B<DEBEMAIL> or B<EMAIL> (in that order) is used.  If those are not set, or B<!> is
 given as email address, your default address will be used.
 
 After executing this command, you will be sent an unsubscription confirmation
-to which you have to reply. Use the subscribe command to, well, subscribe.
+to which you have to reply. Use the B<subscribe> command to, well, subscribe.
 
 =cut
 
@@ -2036,9 +2036,9 @@ sub bts_unsubscribe {
 	   $bug . '-unsubscribe@' . $btsserver, $email);
 }
 
-=item reportspam <bug> ...
+=item B<reportspam> I<bug> ...
 
-The reportspam command allows you to report a bug report as containing spam.
+The B<reportspam> command allows you to report a I<bug> report as containing spam.
 It saves one from having to go to the bug web page to do so.
 
 =cut
@@ -2074,9 +2074,9 @@ sub bts_reportspam {
     }
 }
 
-=item spamreport <bug> ...
+=item B<spamreport> I<bug> ...
 
-spamreport is a synonym for reportspam.
+B<spamreport> is a synonym for B<reportspam>.
 
 =cut
 
@@ -2084,46 +2084,46 @@ sub bts_spamreport {
     goto &bts_reportspam;
 }
 
-=item cache [options] [<maint email> | <pkg> | src:<pkg> | from:<submitter>]
+=item B<cache> [I<options>] [I<maint_email> | I<pkg> | B<src:>I<pkg> | B<from:>I<submitter>]
 
-=item cache [options] [release-critical | release-critical/... | RC]
+=item B<cache> [I<options>] [B<release-critical> | B<release-critical/>... | B<RC>]
 
 Generate or update a cache of bug reports for the given email address
 or package. By default it downloads all bugs belonging to the email
-address in the DEBEMAIL environment variable (or the EMAIL environment
-variable if DEBEMAIL is unset). This command may be repeated to cache
+address in the B<DEBEMAIL> environment variable (or the B<EMAIL> environment
+variable if B<DEBEMAIL> is unset). This command may be repeated to cache
 bugs belonging to several people or packages. If multiple packages or
 addresses are supplied, bugs belonging to any of the arguments will be
 cached; those belonging to more than one of the arguments will only be
-downloaded once. The cached bugs are stored in ~/.devscripts_cache/bts/
+downloaded once. The cached bugs are stored in F<~/.devscripts_cache/bts/>
 
-You can use the cached bugs with the -o switch. For example:
+You can use the cached bugs with the B<-o> switch. For example:
 
   bts -o bugs
   bts -o show 12345
 
-Also, bts will update the files in it in a piecemeal fashion as it
-downloads information from the BTS using the 'show' command. You might
+Also, B<bts> will update the files in it in a piecemeal fashion as it
+downloads information from the BTS using the B<show> command. You might
 thus set up the cache, and update the whole thing once a week, while
 letting the automatic cache updates update the bugs you frequently
 refer to during the week.
 
 Some options affect the behaviour of the cache command.  The first is
-the setting of --cache-mode, which controls how much B<bts> downloads
+the setting of B<--cache-mode>, which controls how much B<bts> downloads
 of the referenced links from the bug page, including boring bits such
 as the acknowledgement emails, emails to the control bot, and the mbox
-version of the bug report.  It can take three values: min (the
-minimum), mbox (download the minimum plus the mbox version of the bug
-report) or full (the whole works).  The second is --force-refresh or
--f, which forces the download, even if the cached bug report is
-up-to-date.  The --include-resolved option indicates whether bug
+version of the bug report.  It can take three values: B<min> (the
+minimum), B<mbox> (download the minimum plus the mbox version of the bug
+report) or B<full> (the whole works).  The second is B<--force-refresh> or
+B<-f>, which forces the download, even if the cached bug report is
+up-to-date.  The B<--include-resolved> option indicates whether bug
 reports marked as resolved should be downloaded during caching.
 
 Each of these is configurable from the configuration
 file, as described below.  They may also be specified after the
-"cache" command as well as at the start of the command line.
+B<cache> command as well as at the start of the command line.
 
-Finally, -q or --quiet will suppress messages about caches being
+Finally, B<-q> or B<--quiet> will suppress messages about caches being
 up-to-date, and giving the option twice will suppress all cache
 messages (except for error messages).
 
@@ -2256,16 +2256,16 @@ sub bts_cache {
     $includeresolved = $sub_includeresolved;
 }
 
-=item cleancache <package> | src:<package> | <maintainer>
+=item B<cleancache> I<package> | B<src:>I<package> | I<maintainer>
 
-=item cleancache from:<submitter> | tag:<tag> | usertag:<tag> | <number> | ALL
+=item B<cleancache from:>I<submitter> | B<tag:>I<tag> | B<usertag:>I<tag> | I<number> | B<ALL>
 
-Clean the cache for the specified package, maintainer, etc., as
-described above for the "bugs" command, or clean the entire cache if
-"ALL" is specified. This is useful if you are going to have permanent
+Clean the cache for the specified I<package>, I<maintainer>, etc., as
+described above for the B<bugs> command, or clean the entire cache if
+B<ALL> is specified. This is useful if you are going to have permanent
 network access or if the database has become corrupted for some
 reason.  Note that for safety, this command does not default to the
-value of DEBEMAIL or EMAIL.
+value of B<DEBEMAIL> or B<EMAIL>.
 
 =cut
 
@@ -2309,7 +2309,7 @@ sub bts_cleancache {
 
 # Add any new commands here.
 
-=item version
+=item B<version>
 
 Display version and copyright information.
 
@@ -2326,7 +2326,7 @@ License, or (at your option) any later version.
 EOF
 }
 
-=item help
+=item B<help>
 
 Display a short summary of commands, suspiciously similar to parts of this
 man page.
@@ -3944,19 +3944,19 @@ sub edit {
 
 =over 4
 
-=item DEBEMAIL
+=item B<DEBEMAIL>
 
 If this is set, the From: line in the email will be set to use this email
 address instead of your normal email address (as would be determined by
 B<mail>).
 
-=item DEBFULLNAME
+=item B<DEBFULLNAME>
 
 If DEBEMAIL is set, DEBFULLNAME is examined to determine the full name
 to use; if this is not set, B<bts> attempts to determine a name from
 your passwd entry.
 
-=item BROWSER
+=item B<BROWSER>
 
 If set, it specifies the browser to use for the 'show' and 'bugs'
 options.  See the description above.
@@ -3973,93 +3973,93 @@ ignored for this purpose.  The currently recognised variables are:
 
 =over 4
 
-=item BTS_OFFLINE
+=item B<BTS_OFFLINE>
 
-If this is set to I<yes>, then it is the same as the --offline command
-line parameter being used.  Only has an effect on the show and bugs
-commands.  The default is I<no>.  See the description of the show
+If this is set to B<yes>, then it is the same as the B<--offline> command
+line parameter being used.  Only has an effect on the B<show> and B<bugs>
+commands.  The default is B<no>.  See the description of the show
 command above for more information.
 
-=item BTS_CACHE
+=item B<BTS_CACHE>
 
-If this is set to I<no>, then it is the same as the --no-cache command
-line parameter being used.  Only has an effect on the show and bug
-commands.  The default is I<yes>.  Again, see the show command above
+If this is set to B<no>, then it is the same as the B<--no-cache> command
+line parameter being used.  Only has an effect on the B<show> and B<bug>
+commands.  The default is B<yes>.  Again, see the show command above
 for more information.
 
-=item BTS_CACHE_MODE={min,mbox,full}
+=item B<BTS_CACHE_MODE=>{B<min>,B<mbox>,B<full>}
 
 How much of the BTS should we mirror when we are asked to cache something?
 Just the minimum, or also the mbox or the whole thing?  The default is
-I<min>, and it has the same meaning as the --cache-mode command line
-parameter.  Only has an effect on the cache.  See the cache command for more
+B<min>, and it has the same meaning as the B<--cache-mode> command line
+parameter.  Only has an effect on the cache.  See the B<cache> command for more
 information.
 
-=item BTS_FORCE_REFRESH
+=item B<BTS_FORCE_REFRESH>
 
-If this is set to I<yes>, then it is the same as the --force-refresh
+If this is set to B<yes>, then it is the same as the B<--force-refresh>
 command line parameter being used.  Only has an effect on the cache
-command.  The default is I<no>.  See the cache command for more
+command.  The default is B<no>.  See the cache command for more
 information.
 
-=item BTS_MAIL_READER
+=item B<BTS_MAIL_READER>
 
-If this is set, specifies a mail reader to use instead of mutt.  Same as
-the --mailreader command line option.
+If this is set, specifies a mail reader to use instead of B<mutt>.  Same as
+the B<--mailreader> command line option.
 
-=item BTS_SENDMAIL_COMMAND
+=item B<BTS_SENDMAIL_COMMAND>
 
-If this is set, specifies a sendmail command to use instead of
-/usr/sbin/sendmail.  Same as the --sendmail command line option.
+If this is set, specifies a B<sendmail> command to use instead of
+F</usr/sbin/sendmail>.  Same as the B<--sendmail> command line option.
 
-=item BTS_ONLY_NEW
+=item B<BTS_ONLY_NEW>
 
 Download only new bugs when caching. Do not check for updates in
-bugs we already have.  The default is I<no>.  Same as the --only-new
+bugs we already have.  The default is B<no>.  Same as the B<--only-new>
 command line option.
 
-=item BTS_SMTP_HOST
+=item B<BTS_SMTP_HOST>
 
 If this is set, specifies an SMTP host to use for sending mail rather
-than using the sendmail command.  Same as the --smtp-host command line
+than using the B<sendmail> command.  Same as the B<--smtp-host> command line
 option.
 
-Note that this option takes priority over BTS_SENDMAIL_COMMAND if both are
-set, unless the --sendmail option is used.
+Note that this option takes priority over B<BTS_SENDMAIL_COMMAND> if both are
+set, unless the B<--sendmail> option is used.
 
-=item BTS_SMTP_AUTH_USERNAME, BTS_SMTP_AUTH_PASSWORD
+=item B<BTS_SMTP_AUTH_USERNAME>, B<BTS_SMTP_AUTH_PASSWORD>
 
-If these options are set, then it is the same as the --smtp-username and
---smtp-password options being used.
+If these options are set, then it is the same as the B<--smtp-username> and
+B<--smtp-password> options being used.
 
-=item BTS_SMTP_HELO
+=item B<BTS_SMTP_HELO>
 
-Same as the --smtp-helo command line option.
+Same as the B<--smtp-helo> command line option.
 
-=item BTS_INCLUDE_RESOLVED
+=item B<BTS_INCLUDE_RESOLVED>
 
-If this is set to I<no>, then it is the same as the --no-include-resolved
+If this is set to B<no>, then it is the same as the B<--no-include-resolved>
 command line parameter being used.  Only has an effect on the cache
-command.  The default is I<yes>.  See the cache command for more
+command.  The default is B<yes>.  See the cache command for more
 information.
 
-=item BTS_SUPPRESS_ACKS
+=item B<BTS_SUPPRESS_ACKS>
 
-If this is set to I<yes>, then it is the same as the --no-ack command 
-line parameter being used.  The default is I<no>.
+If this is set to B<yes>, then it is the same as the B<--no-ack> command
+line parameter being used.  The default is B<no>.
 
-=item BTS_INTERACTIVE
+=item B<BTS_INTERACTIVE>
 
-If this is set to I<yes> or I<force>, then it is the same as the 
---interactive or --force-interactive command line parameter being used.  
-The default is I<no>.
+If this is set to B<yes> or B<force>, then it is the same as the
+B<--interactive> or B<--force-interactive> command line parameter being used.
+The default is B<no>.
 
-=item BTS_DEFAULT_CC
+=item B<BTS_DEFAULT_CC>
 
 Specify a list of e-mail addresses to which a carbon copy of the generated
 e-mail to the control bot should automatically be sent.
 
-=item BTS_SERVER
+=item B<BTS_SERVER>
 
 Specify the name of a debbugs server which should be used instead of
 bugs.debian.org.

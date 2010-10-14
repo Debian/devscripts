@@ -27,13 +27,13 @@ mk-build-deps - build a package satisfying a package's build-dependencies
 
 =head1 SYNOPSIS
 
-B<mk-build-deps> --help|--version
+B<mk-build-deps> B<--help>|B<--version>
 
-B<mk-build-deps> [options] <control file | package name> [...]
+B<mk-build-deps> [I<options>] I<control file> | I<package name> ...
 
 =head1 DESCRIPTION
 
-Given a package name and/or control file, B<mk-build-deps>
+Given a I<package name> and/or I<control file>, B<mk-build-deps>
 will use B<equivs> to generate a binary package which may be installed to
 satisfy all the build dependencies of the given package.
 

@@ -24,7 +24,7 @@ mass-bug - mass-file a bug report against a list of packages
 
 =head1 SYNOPSIS
 
-mass-bug [options] --subject="bug subject" template package-list
+B<mass-bug> [I<options>] B<--subject=">I<bug subject>B<"> I<template package-list>
 
 =head1 DESCRIPTION
 
@@ -64,61 +64,61 @@ though.
 
 =over 4
 
-=item --severity=(wishlist|minor|normal|important|serious|grave|critical)
+=item B<--severity=>(B<wishlist>|B<minor>|B<normal>|B<important>|B<serious>|B<grave>|B<critical>)
 
 Specify the severity with which bugs should be filed. Default
-is 'normal'.
+is B<normal>.
 
-=item --display
+=item B<--display>
 
 Fill out the templates for each package and display them all for
 verification. This is the default behavior.
 
-=item --send
+=item B<--send>
 
 Actually send the bug reports.
 
-=item --subject="bug subject"
+=item B<--subject=">I<bug subject>B<">
 
 Specify the subject of the bug report. The subject will be automatically
 prefixed with the name of the package that the bug is filed against.
 
-=item --tags
+=item B<--tags>
 
 Set the BTS pseudo-header for tags.
 
-=item --user
+=item B<--user>
 
 Set the BTS pseudo-header for a usertags' user.
 
-=item --usertags
+=item B<--usertags>
 
 Set the BTS pseudo-header for usertags.
 
-=item --source
+=item B<--source>
 
 Specify that package names refer to source packages rather than binary
 packages.
 
-=item --sendmail=SENDMAILCMD
+=item B<--sendmail=>I<SENDMAILCMD>
 
-Specify the sendmail command.  The command will be split on white
-space and will not be passed to a shell.  Default is '/usr/sbin/sendmail'.
+Specify the B<sendmail> command.  The command will be split on white
+space and will not be passed to a shell.  Default is F</usr/sbin/sendmail>.
 
-=item --no-wrap
+=item B<--no-wrap>
 
 Do not wrap the template to lines of 70 characters.
 
-=item --no-conf, --noconf
+=item B<--no-conf>, B<--noconf>
 
 Do not read any configuration files.  This can only be used as the
 first option given on the command-line.
 
-=item --help
+=item B<--help>
 
 Provide a usage message.
 
-=item --version
+=item B<--version>
 
 Display version information.
 
@@ -126,7 +126,7 @@ Display version information.
 
 =head1 ENVIRONMENT
 
-DEBEMAIL and EMAIL can be set in the environment to control the email
+B<DEBEMAIL> and B<EMAIL> can be set in the environment to control the email
 address that the bugs are sent from.
 
 =head1 CONFIGURATION VARIABLES
@@ -139,10 +139,10 @@ ignored for this purpose.  The currently recognised variables are:
 
 =over 4
 
-=item BTS_SENDMAIL_COMMAND
+=item B<BTS_SENDMAIL_COMMAND>
 
-If this is set, specifies a sendmail command to use instead of
-/usr/sbin/sendmail.  Same as the --sendmail command line option.
+If this is set, specifies a B<sendmail> command to use instead of
+F</usr/sbin/sendmail>.  Same as the B<--sendmail> command line option.
 
 =back
 

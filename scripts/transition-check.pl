@@ -26,9 +26,9 @@ transition-check - check a package list for involvement in transitions
 
 =head1 SYNOPSIS
 
-B<transition-check> B<--help|--version>
+B<transition-check> B<--help>|B<--version>
 
-B<transition-check> [B<-f|--filename>=I<FILENAME>] [I<source package list>]
+B<transition-check> [B<-f>|B<--filename=>I<FILENAME>] [I<source package list>]
 
 =head1 DESCRIPTION
 
@@ -43,7 +43,7 @@ will use the source package name from I<debian/control>.
 
 =over 4
 
-=item B<-f> B<--filename>=I<filename>
+=item B<-f>, B<--filename=>I<filename>
 
 Read a source package name from I<filename>, which should be a Debian
 package control file or .changes file, and add that package to the list

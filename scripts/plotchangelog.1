@@ -3,7 +3,7 @@
 plotchangelog \- graph debian changelogs
 .SH SYNOPSIS
 .B plotchangelog
-.I "[options] changelog ..."
+.I "\fR[\fPoptions\fR]\fP changelog \fR...\fP"
 .SH "DESCRIPTION"
 .BR plotchangelog
 is a tool to aid in visualizing a Debian changelog. The changelogs are
@@ -42,20 +42,20 @@ It's also easy to tell by looking at the points when a package changes
 maintainers.
 .SH OPTIONS
 .TP
-.B \-l, \-\-linecount
+.B \-l\fR, \fP\-\-linecount
 Instead of using the debian version number as the Y axis, use the number of
 lines in the changelog entry for each version.  Cannot be used
 together with
 .BR \-\-bugcount .
 .TP
-.B \-b, \-\-bugcount
+.B \-b\fR, \fP\-\-bugcount
 Instead of using the debian version number as the Y axis, use the number of
 bugs that were closed by each changelog entry. Note that this number is
 obtained by searching for "#dddd" in the changelog, and so it may be
 inaccurate.  Cannot be used together with
 .BR \-\-linecount .
 .TP
-.B \-c, \-\-cumulative
+.B \-c\fR, \fP\-\-cumulative
 When used together with either
 .B \-\-bugcount
 or
@@ -63,27 +63,27 @@ or
 graphs the cumulative count rather than the count in each individual
 changelog entry.
 .TP
-.B \-v, \-\-no-version
+.B \-v\fR, \fP\-\-no-version
 Do not show upstream version labels. Useful if the graph gets too crowded.
 .TP
 .B \-m, \-\-no-maint
 Do not differentiate between different maintainers of the package.
 .TP
-.B \-s file, \-\-save=file
-Save the graph to "file" in postscript format instead of immediately
+.B \-s file\fR, \fP\-\-save=\fIfile
+Save the graph to \fIfile\fR in postscript format instead of immediately
 displaying it.
 .TP
-.B \-u, \-\-urgency
+.B \-u\fR, \fP\-\-urgency
 Use larger points when displaying higher-urgency package uploads.
 .TP
 .B \-\-verbose
 Output the gnuplot script that is fed into gnuplot (for debugging purposes).
 .TP
-.BI \-g commands, \-\-gnuplot=" commands "
+.B \-g\fIcommands\fR, \fB\-\-gnuplot=\fIcommands
 This allows you to insert
 .BR gnuplot (1)
 commands into the gnuplot script that is used to generate the graph. The
-commands are placed after all initialization but before the final "plot"
+commands are placed after all initialization but before the final \fBplot\fR
 command. This can be used to override the default look provided by this
 program in arbitrary ways. You can also use things like 
 "set terminal png color"
@@ -96,10 +96,10 @@ Show a usage summary.
 .B \-\-version
 Display version, author and copyright information.
 .TP
-.B \-\-noconf, \-\-no-conf
+.B \-\-noconf\fR, \fP\-\-no-conf
 Do not read any configuration files (see below).
 .TP
-.B changelog ...
+.B changelog \fR...
 The changelog files to graph. If multiple files are specified they will all
 be display on the same graph. The files may be compressed with gzip. Any
 text in them that is not in Debian changelog format will be ignored.
@@ -113,7 +113,7 @@ recognised variables are:
 .TP
 .B PLOTCHANGELOG_OPTIONS
 This is a space-separated list of options to always use, for example
-"\-l \-b".  Do not include "\-g" or "\-\-gnuplot" among this list as it 
+\fB\-l \-b\fP.  Do not include \fB\-g\fP or \fB\-\-gnuplot\fP among this list as it
 may be ignored; see the next variable instead.
 .TP
 .B PLOTCHANGELOG_GNUPLOT

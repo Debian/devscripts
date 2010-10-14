@@ -486,7 +486,7 @@ dget -- Download Debian source and binary packages
 
 =item B<dget> [I<options>] I<URL> ...
 
-=item B<dget> [I<options>] I<package>[=I<version>]
+=item B<dget> [I<options>] I<package>[B<=>I<version>]
 
 =back
 
@@ -561,7 +561,7 @@ using B<dscverify>.
 
 Run B<dpkg-buildpackage -b -uc> on the downloaded source package.
 
-=item B<--path> DIR[:DIR...]
+=item B<--path> I<DIR>[B<:>I<DIR> ...]
 
 In addition to I</var/cache/apt/archives>, B<dget> uses the
 colon-separated list given as argument to B<--path> to find files with
@@ -602,19 +602,19 @@ ignored for this purpose.  The currently recognised variable is:
 
 =over 4
 
-=item DGET_PATH
+=item B<DGET_PATH>
 
 This can be set to a colon-separated list of directories in which to
 search for files in addition to the default
 I</var/cache/apt/archives>.  It has the same effect as the B<--path>
 command line option.  It is not set by default.
 
-=item DGET_UNPACK
+=item B<DGET_UNPACK>
 
 Set to 'no' to disable extracting downloaded source packages.  Default
 is 'yes'.
 
-=item DGET_VERIFY
+=item B<DGET_VERIFY>
 
 Set to 'no' to disable checking signatures of downloaded source
 packages.  Default is 'yes'.

@@ -2,9 +2,9 @@
 .SH NAME
 pts-subscribe \- time-limited subscription to the PTS
 .SH SYNOPSIS
-\fBpts-subscribe\fR [options] \fIpackage\fR
+\fBpts-subscribe\fR [\fIoptions\fR] \fIpackage\fR
 .PP
-\fBpts-unsubscribe\fR [options] \fIpackage\fR
+\fBpts-unsubscribe\fR [\fIoptions\fR] \fIpackage\fR
 .SH DESCRIPTION
 \fBpts-subscribe\fR sends a subscription request for \fIpackage\fR to
 the Package Tracking System at pts@qa.debian.org, and cancels the
@@ -34,7 +34,7 @@ Display version and copyright information and exit successfully.
 .SH "ENVIRONMENT VARIABLES"
 .TP
 .BR DEBEMAIL ", " EMAIL
-If one of these is set (with preference give to DEBEMAIL), then this
+If one of these is set (with preference give to \fBDEBEMAIL\fR), then this
 will be used for the subscription address.  If neither is set, then
 the email will be sent without a specified subscription address, and
 the email's From: line will be used to determine the sender's

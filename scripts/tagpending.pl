@@ -83,7 +83,7 @@ tagpending - tags bugs that are to be closed in the latest changelog as pending
 
 =head1 SYNOPSIS
 
-B<tagpending> [options]
+B<tagpending> [I<options>]
 
 =head1 DESCRIPTION
 
@@ -95,50 +95,50 @@ then marked as pending, using B<bts>(1) if it is not already so.
 
 =over 4
 
-=item -n, --noact
+=item B<-n>, B<--noact>
 
 Check whether any bugs require tagging, but do not actually do so.
 
-=item -s, --silent
+=item B<-s>, B<--silent>
 
 Do not output any messages.
 
-=item -v, --verbose
+=item B<-v>, B<--verbose>
 
 List each bug checked and tagged in turn.
 
-=item -f, --force
+=item B<-f>, B<--force>
 
 Do not query the BTS, but (re)tag all bugs closed in the changelog.
 
-=item --comments
+=item B<--comments>
 
 Include the changelog header line and the entries relating to the tagged
 bugs as comments in the generated mail.  This is the default.
 
-Note that when used in combination with --to, the header line output
+Note that when used in combination with B<--to>, the header line output
 will always be that of the most recent version.
 
-=item --no-comments
+=item B<--no-comments>
 
 Do not include changelog entries in the generated mail.
 
-=item -c, --confirm
+=item B<-c>, B<--confirm>
 
 Tag bugs as both confirmed and pending.
 
-=item -t, --to <version>
+=item B<-t>, B<--to> I<version>
 
-Parse changelogs for all versions strictly greater than <version>.
+Parse changelogs for all versions strictly greater than I<version>.
 
-Equivalent to dpkg-parsechangelog's -v option.
+Equivalent to B<dpkg-parsechangelog>'s B<-v> option.
 
-=item -i, --interactive
+=item B<-i>, B<--interactive>
 
 Display the message which would be sent to the BTS and, except when
 --noact was used, prompt for confirmation before sending it.
 
-=item -w, --wnpp
+=item B<-w>, B<--wnpp>
 
 For each bug that does not appear to belong to the current package,
 check whether it is filed against wnpp. If so, tag it. This allows e.g.

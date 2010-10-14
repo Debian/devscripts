@@ -21,7 +21,7 @@ chdist - script to easily play with several distributions
 
 =head1 SYNOPSIS
 
-B<chdist> [options] [command] [command parameters]
+B<chdist> [I<options>] [I<command>] [I<command parameters>]
 
 =head1 DESCRIPTION
 
@@ -34,19 +34,19 @@ without using chroots, for instance.
 
 =over 4
 
-=item -h, --help
+=item B<-h>, B<--help>
 
 Provide a usage message.
 
-=item -d, --data-dir DIR
+=item B<-d>, B<--data-dir> I<DIR>
 
 Choose data directory (default: $HOME/.chdist/).
 
-=item -a, --arch ARCH
+=item B<-a>, B<--arch> I<ARCH>
 
-Choose architecture (default: `dpkg --print-architecture`)
+Choose architecture (default: `B<dpkg --print-architecture>`)
 
-=item --version
+=item B<--version>
 
 Display version information.
 
@@ -56,35 +56,35 @@ Display version information.
 
 =over 4
 
-=item create DIST : prepare a new tree named DIST
+=item B<create> I<DIST> : prepare a new tree named I<DIST>
 
-=item apt-get DIST (update|source|...) : run apt-get inside DIST
+=item B<apt-get> I<DIST> (B<update>|B<source>|...) : run B<apt-get> inside I<DIST>
 
-=item apt-cache DIST (show|showsrc|...) : run apt-cache inside DIST
+=item B<apt-cache> I<DIST> (B<show>|B<showsrc>|...) : run B<apt-cache> inside I<DIST>
 
-=item apt-rdepends DIST [...] : run apt-rdepends inside DIST
+=item B<apt-rdepends> I<DIST> [...] : run B<apt-rdepends> inside I<DIST>
 
-=item src2bin DIST PKG : get binary packages for a source package in DIST
+=item B<src2bin> I<DIST PKG> : get binary packages for a source package in I<DIST>
 
-=item bin2src DIST PKG : get source package for a binary package in DIST
+=item B<bin2src> I<DIST PKG> : get source package for a binary package in I<DIST>
 
-=item compare-packages DIST1 DIST2 [DIST3, ...] : list versions of packages in several DISTributions
+=item B<compare-packages> I<DIST1 DIST2> [I<DIST3>, ...] : list versions of packages in several I<DIST>ributions
 
-=item compare-bin-packages DIST1 DIST2 [DIST3, ...]
+=item B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]
 
-=item compare-versions DIST1 DIST2 : same as compare-packages, but also run dpkg --compare-versions and display where the package is newer.
+=item B<compare-versions> I<DIST1 DIST2> : same as B<compare-packages>, but also run B<dpkg --compare-versions> and display where the package is newer.
 
-=item compare-bin-versions DIST1 DIST2
+=item B<compare-bin-versions> I<DIST1 DIST2>
 
-=item compare-src-bin-packages DIST : compare sources and binaries for DIST
+=item B<compare-src-bin-packages> I<DIST> : compare sources and binaries for I<DIST>
 
-=item compare-src-bin-versions DIST : same as compare-src-bin-versions, but also run dpkg --compare-versions and display where the package is newer
+=item B<compare-src-bin-versions> I<DIST> : same as B<compare-src-bin-versions>, but also run I<dpkg --compare-versions> and display where the package is newer
 
-=item grep-dctrl-packages DIST [...] : run grep-dctrl on *_Packages inside DIST
+=item B<grep-dctrl-packages> I<DIST> [...] : run B<grep-dctrl> on F<*_Packages> inside I<DIST>
 
-=item grep-dctrl-sources DIST [...] : run grep-dctrl on *_Sources inside DIST
+=item B<grep-dctrl-sources> I<DIST> [...] : run B<grep-dctrl> on F<*_Sources> inside I<DIST>
 
-=item list : list available DISTs
+=item B<list> : list available I<DIST>s
 
 =back
 

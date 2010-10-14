@@ -20,12 +20,12 @@ B<baz>, B<bzr>, B<tla> (arch), B<darcs>.
 
 =over 4
 
-=item B<-c> B<--changelog> I<path>
+=item B<-c>, B<--changelog> I<path>
 
 Specify an alternate location for the changelog. By default debian/changelog is
 used.
 
-=item B<-r> B<--release>
+=item B<-r>, B<--release>
 
 Commit a release of the package. The version number is determined from
 debian/changelog, and is used to tag the package in the repository.
@@ -34,41 +34,41 @@ Note that svn/svk tagging conventions vary, so debcommit uses
 svnpath(1) to determine where the tag should be placed in the
 repository.
 
-=item B<-R> B<--release-use-changelog>
+=item B<-R>, B<--release-use-changelog>
 
 When used in conjunction with --release, if there are uncommited
 changes to the changelog then derive the commit message from those
 changes rather than using the default message.
 
-=item B<-m> I<text> B<--message> I<text>
+=item B<-m> I<text>, B<--message> I<text>
 
 Specify a commit message to use. Useful if the program cannot determine
 a commit message on its own based on debian/changelog, or if you want to
 override the default message.
 
-=item B<-n> B<--noact>
+=item B<-n>, B<--noact>
 
 Do not actually do anything, but do print the commands that would be run.
 
-=item B<-d> B<--diff>
+=item B<-d>, B<--diff>
 
 Instead of committing, do print the diff of what would have been committed if
 this option were not given. A typical usage scenario of this option is the
 generation of patches against the current working copy (e.g. when you don't have
 commit access right).
 
-=item B<-C> B<--confirm>
+=item B<-C>, B<--confirm>
 
 Display the generated commit message and ask for confirmation before committing
 it. It is also possible to edit the message at this stage; in this case, the
 confirmation prompt will be re-displayed after the editing has been performed.
 
-=item B<-e> B<--edit>
+=item B<-e>, B<--edit>
 
 Edit the generated commit message in your favorite editor before committing
 it.
 
-=item B<-a> B<--all>
+=item B<-a>, B<--all>
 
 Commit all files. This is the default operation when using a VCS other 
 than git.
@@ -78,7 +78,7 @@ than git.
 Specify which files to commit (debian/changelog is added to the list
 automatically.)
 
-=item B<-s> B<--strip-message>, B<--no-strip-message>
+=item B<-s>, B<--strip-message>, B<--no-strip-message>
 
 If this option is set and the commit message has been derived from the 
 changelog, the characters "* " will be stripped from the beginning of 

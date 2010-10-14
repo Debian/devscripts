@@ -4,9 +4,9 @@
 diff2patches \- Extract non\-debian/ patches from .diff.gz files
 .SH "SYNTAX"
 .LP 
-diff2patches \fI<filename>\fP
+\fBdiff2patches \fIfilename\fP
 .br 
-diff2patches \fI\-\-help\fP|\fI\-\-version\fP
+\fBdiff2patches \-\-help\fR|\fB\-\-version\fP
 .SH "DESCRIPTION"
 .LP 
 Extracts patches from .diff.gz which apply to files outside the
@@ -39,7 +39,7 @@ it will override this behavior (see \*(lqENVIRONMENT VARIABLES\*(rq section
 below).
 .SH "ENVIRONMENT VARIABLES"
 .TP
-\fIDEB_PATCHES\fP
+\fBDEB_PATCHES\fP
 When defined and points to an existing directory, patches are extracted in that directory
 and not under \*(lqdebian/\*(rq nor \*(lqdebian/patches/\*(rq.
 .SH "SEE ALSO"

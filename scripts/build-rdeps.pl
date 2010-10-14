@@ -31,11 +31,11 @@ B<build-rdeps> searches for all packages that build-depend on the specified pack
 
 =over 4
 
-=item B<-u> B<--update>
+=item B<-u>, B<--update>
 
 Run apt-get update before searching for build-depends.
 
-=item B<-s> B<--sudo>
+=item B<-s>, B<--sudo>
 
 Use sudo when running apt-get update. Has no effect if -u is omitted.
 
@@ -55,11 +55,11 @@ Ignore the given component (e.g. main, contrib, non-free).
 
 Restrict the search to only the specified origin (such as "Debian").
 
-=item B<-m> B<--print-maintainer>
+=item B<-m>, B<--print-maintainer>
 
 Print the value of the maintainer field for each package.
 
-=item B<-d> B<--debug>
+=item B<-d>, B<--debug>
 
 Run the debug mode
 

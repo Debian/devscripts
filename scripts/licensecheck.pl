@@ -24,11 +24,11 @@ licensecheck - simple license checker for source files
 
 =head1 SYNOPSIS
 
-B<licensecheck> B<--help|--version>
+B<licensecheck> B<--help>|B<--version>
 
 B<licensecheck> [B<--no-conf>] [B<--verbose>] [B<--copyright>]
-[B<-l|--lines=N>] [B<-i|--ignore=regex>] [B<-c|--check=regex>]
-[B<-r|--recursive>] I<list of files and directories to check>
+[B<-l>|B<--lines=>I<N>] [B<-i>|B<--ignore=>I<regex>] [B<-c>|B<--check=>I<regex>]
+[B<-r>|B<--recursive>] I<list of files and directories to check>
 
 =head1 DESCRIPTION
 
@@ -43,30 +43,30 @@ the files contained within to the list of files to process.
 
 =over 4
 
-=item B<--verbose> B<--no-verbose>
+=item B<--verbose>, B<--no-verbose>
 
 Specify whether to output the text being processed from each file before
 the corresponding license information.
 
 Default is to be quiet.
 
-=item B<-l=N> B<--lines=N>
+=item B<-l=>I<N>, B<--lines=>I<N>
 
 Specify the number of lines of each file's header which should be parsed 
 for license information. (Default is 60).
 
-=item B<-i=regex> B<--ignore=regex>
+=item B<-i=>I<regex>, B<--ignore=>I<regex>
 
 When processing the list of files and directories, the regular 
 expression specified by this option will be used to indicate those which 
 should not be considered (e.g. backup files, VCS metadata). 
 
-=item B<-r> B<--recursive>
+=item B<-r>, B<--recursive>
 
 Specify that the contents of directories should be added 
 recursively.
 
-=item B<-c=regex> B<--check=regex>
+=item B<-c=>I<regex>, B<--check=>I<regex>
 
 Specify a pattern against which filenames will be matched in order to 
 decide which files to check the license of.
@@ -77,7 +77,7 @@ The default includes common source files.
 
 Also display copyright text found within the file
 
-=item B<--no-conf> B<--noconf>
+=item B<--no-conf>, B<--noconf>
 
 Do not read any configuration files. This can only be used as the first
 option given on the command-line.
