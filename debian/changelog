@@ -14,6 +14,12 @@ devscripts (2.10.69) UNRELEASED; urgency=low
     what should be written inside of source files.
     (Closes: #502512) 
 
+  [ Christoph Berg ]
+  * rmadison: New configuration variable: RMADISON_ARCHITECTURE.
+    Set the default architecture to use unless overridden by a command line
+    option. To see any packages with a set B<RMADISON_ARCHITECTURE>, use
+    --architecture=any. By Uli Martens.
+
  -- Martin Zobel-Helas <zobel@debian.org>  Wed, 13 Oct 2010 02:01:57 +0200
 
 devscripts (2.10.68) unstable; urgency=low
