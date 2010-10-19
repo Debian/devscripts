@@ -689,19 +689,6 @@ EOF
 
 EOF
 	fi
-
-	if dpkg --compare-versions "$2" lt 2.10.69
-	then
-	    cat >> /etc/devscripts.conf << EOF
-#### rmadison option added in 2.10.69
-#
-# Default architecture to use if none is specified on the command line.
-# use --architecture=any to see any...
-# RMADISON_ARCHITECTURE=source,i386,amd64,all
-
-EOF
-	fi
-
     fi
 fi
 
