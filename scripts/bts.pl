@@ -2784,7 +2784,7 @@ sub extractemail() {
 sub mailto {
     my ($subject, $body, $to, $from) = @_;
 
-    if (defined $from) {
+    if (defined($from) || $noaction) {
 	send_mail($from, $to, '', $subject, $body);
     }
     else {  # No $from

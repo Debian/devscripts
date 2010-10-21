@@ -5,6 +5,8 @@ devscripts (2.10.69) UNRELEASED; urgency=low
     pages.  (Closes: #597782)
   * Include command list in localized devscripts.1.  (Closes: #597906)
   * Fix a couple markup issues in source files for generated man pages.
+  * bts: Don't send an empty email when --no-action is given.  (Closes:
+    #600822)
 
   [ David Prévot ]
   * Update French translation.  (Closes: #599234, #600033)
