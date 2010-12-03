@@ -154,16 +154,14 @@ if [ "$ACTION" = "unsubscribe" ]; then
     echo "$ACTION $pkg $DEBEMAIL" | mail pts@qa.debian.org
 else
     # Check for an "at" command
-    if [ "$PTS_UNTIL" != forever ]; then
+    if [ "$PTS_UNTIL" != forever -a "$PTS_UNTIL" -ne 0 ]; then
 	if ! command -v at >/dev/null 2>&1; then
 	    echo "$PROGNAME: Could not find the \"at\" command; you must have the" >&2
 	    echo "\"at\" package installed to run this script." >&2
 	    exit 1
 	fi
-    fi
 
-    cd /
-    if [ "$PTS_UNTIL" != forever ]; then
+	cd /
 	TEMPFILE=$(mktemp) || { echo "$PROGNAME: Couldn't create tempfile!" >&2; exit 1; }
 	trap "rm -f '$TEMPFILE'" 0 1 2 3 7 10 13 15
 	echo "echo 'unsubscribe $pkg $DEBEMAIL' | mail pts@qa.debian.org" | \
