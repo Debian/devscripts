@@ -35,12 +35,12 @@ version=3
 
 # This is the format for an FTP site:
 # Full-site-with-pattern  [Version  [Action]]
-ftp://ftp.tex.ac.uk/tex-archive/web/c_cpp/cweb/cweb-(.*)\\.tar\\.gz \\
+ftp://ftp.tex.ac.uk/tex-archive/web/c_cpp/cweb/cweb-(.+)\\.tar\\.gz \\
   debian  uupdate
 
 # This is the format for an FTP site with regex special characters in
 # the filename part
-ftp://ftp.worldforge.org/pub/worldforge/libs/Atlas-C++/transitional/Atlas-C\\+\\+-(.*)\\.tar\\.gz
+ftp://ftp.worldforge.org/pub/worldforge/libs/Atlas-C++/transitional/Atlas-C\\+\\+-(.+)\\.tar\\.gz
 
 # This is the format for an FTP site with directory pattern matching
 ftp://ftp.nessus.org/pub/nessus/nessus-([\\d\\.]+)/src/nessus-core-([\\d\\.]+)\\.tar\\.gz
@@ -53,7 +53,7 @@ ftp://ftp.nessus.org/pub/nessus/nessus-([\\d\\.]+)/src/nessus-core-([\\d\\.]+)\\
 # as the FTP format.  uscan starts by downloading the homepage,
 # obtained by removing the last component of the URL; in this case,
 # http://www.cpan.org/modules/by-module/Text/
-http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-(.*)\\.tar\\.gz
+http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-(.+)\\.tar\\.gz
 
 # This is a variant HTTP format which allows direct specification of
 # the homepage:
@@ -75,7 +75,7 @@ http://sf.net/audacity/audacity-src-(.+)\\.tar\\.gz
 
 # githubredir.debian.net is a redirector for GitHub projects
 # It can be used as following:
-http://githubredir.debian.net/github/<user>/<project> (.*).tar.gz
+http://githubredir.debian.net/github/<user>/<project> (.+).tar.gz
 
 # This is the format for a site which has funny version numbers;
 # the parenthesised groups will be joined with dots to make a
@@ -88,12 +88,12 @@ http://www.site.com/pub/foobar/foobar_v(\\d+)_(\\d+)\\.tar\\.gz
 # only be performed on the basename version number, not any path
 # version numbers.)
 opts="uversionmangle=s/^/0.0./" \\
-  ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/Wine-(.*)\\.tar\\.gz
+  ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/Wine-(.+)\\.tar\\.gz
 
 # Similarly, the upstream part of the Debian version number can be
 # mangled:
 opts=dversionmangle=s/\\.dfsg\\.\\d+$// \\
-  http://some.site.org/some/path/foobar-(.*)\\.tar\\.gz
+  http://some.site.org/some/path/foobar-(.+)\\.tar\\.gz
 
 # The filename is found by taking the last component of the URL and
 # removing everything after any '?'.  If this would not make a usable
@@ -101,12 +101,12 @@ opts=dversionmangle=s/\\.dfsg\\.\\d+$// \\
 # <A href="http://foo.bar.org/download/?path=&download=foo-0.1.1.tar.gz">
 # could be handled as:
 # opts=filenamemangle=s/.*=(.*)/$1/ \\
-#     http://foo.bar.org/download/\\?path=&download=foo-(.*)\\.tar\\.gz
+#     http://foo.bar.org/download/\\?path=&download=foo-(.+)\\.tar\\.gz
 # 
 # <A href="http://foo.bar.org/download/?path=&download_version=0.1.1">
 # could be handled as:
 # opts=filenamemangle=s/.*=(.*)/foo-$1\\.tar\\.gz/ \\
-#    http://foo.bar.org/download/\\?path=&download_version=(.*)
+#    http://foo.bar.org/download/\\?path=&download_version=(.+)
 
 # The option downloadurlmangle can be used to mangle the URL of the file
 # to download.  This can only be used with http:// URLs.  This may be
@@ -114,7 +114,7 @@ opts=dversionmangle=s/\\.dfsg\\.\\d+$// \\
 # some way into one which will work automatically, for example:
 # opts=downloadurlmangle=s/prdownload/download/ \\
 #   http://developer.berlios.de/project/showfiles.php?group_id=2051 \\
-#   http://prdownload.berlios.de/softdevice/vdr-softdevice-(.*).tgz
+#   http://prdownload.berlios.de/softdevice/vdr-softdevice-(.+).tgz
 
 .fi
 .PP
@@ -207,8 +207,8 @@ then searched for hrefs matching the pattern given in the second
 field.  (Again, this pattern will be anchored at the beginning and the
 end, so it must match the whole href.  If you want to match just the
 basename of the href, you can use a pattern like
-".*/name-(.*)\\.tar\\.gz" if you know that there is a full URL, or
-better still: "(?:.*/)?name-(.*)\\.tar\\.gz" if there may or may not
+".*/name-(.+)\\.tar\\.gz" if you know that there is a full URL, or
+better still: "(?:.*/)?name-(.+)\\.tar\\.gz" if there may or may not
 be.  Note the use of (?:...) to avoid making a backreference.)  If any
 of the hrefs in the homepage which match the (anchored) pattern are
 relative URLs, they will be taken as being relative to the base URL of

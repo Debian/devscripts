@@ -4,6 +4,8 @@ devscripts (2.10.70) UNRELEASED; urgency=low
     #556248)
   * pts-subscribe: Handle “--until 0” the same as “--forever”.  (Closes:
     #604740)
+  * uscan: Update documentation to use “.+” instead of “.*” in groupings.
+    Thanks to Ben Finney for the patch.  (Closes: #606060)
 
  -- James Vega <jamessan@debian.org>  Thu, 02 Dec 2010 20:27:34 -0500
 

@@ -611,12 +611,12 @@ exit ($found ? 0 : 1);
 # watch_version=2:
 #
 # For ftp sites:
-#   ftp://site.name/dir/path/pattern-(.*)\.tar\.gz [version [action]]
+#   ftp://site.name/dir/path/pattern-(.+)\.tar\.gz [version [action]]
 #
 # For http sites:
-#   http://site.name/dir/path/pattern-(.*)\.tar\.gz [version [action]]
+#   http://site.name/dir/path/pattern-(.+)\.tar\.gz [version [action]]
 # or
-#   http://site.name/dir/path/base pattern-(.*)\.tar\.gz [version [action]]
+#   http://site.name/dir/path/base pattern-(.+)\.tar\.gz [version [action]]
 #
 # Lines can be prefixed with opts=<opts>.
 #
@@ -627,7 +627,7 @@ exit ($found ? 0 : 1);
 # watch_version=3:
 #
 # Correct handling of regex special characters in the path part:
-# ftp://ftp.worldforge.org/pub/worldforge/libs/Atlas-C++/transitional/Atlas-C\+\+-(.*)\.tar\.gz
+# ftp://ftp.worldforge.org/pub/worldforge/libs/Atlas-C++/transitional/Atlas-C\+\+-(.+)\.tar\.gz
 # 
 # Directory pattern matching:
 # ftp://ftp.nessus.org/pub/nessus/nessus-([\d\.]+)/src/nessus-core-([\d\.]+)\.tar\.gz
@@ -643,12 +643,12 @@ exit ($found ? 0 : 1);
 # only be performed on the basename version number, not any path version
 # numbers.)
 # opts=uversionmangle=s/^/0.0./ \
-#   ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/Wine-(.*)\.tar\.gz
+#   ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/Wine-(.+)\.tar\.gz
 # 
 # Similarly, the upstream part of the Debian version number can be
 # mangled:
 # opts=dversionmangle=s/\.dfsg\.\d+$// \
-#   http://some.site.org/some/path/foobar-(.*)\.tar\.gz
+#   http://some.site.org/some/path/foobar-(.+)\.tar\.gz
 # 
 # The versionmangle=... option is a shorthand for saying uversionmangle=...
 # and dversionmangle=... and applies to both upstream and Debian versions.
@@ -658,12 +658,12 @@ exit ($found ? 0 : 1);
 #   href="http://foo.bar.org/download/?path=&amp;download=foo-0.1.1.tar.gz"
 # could be handled as:
 # opts=filenamemangle=s/.*=(.*)/$1/ \
-#     http://foo.bar.org/download/\?path=&amp;download=foo-(.*)\.tar\.gz
+#     http://foo.bar.org/download/\?path=&amp;download=foo-(.+)\.tar\.gz
 # and
 #   href="http://foo.bar.org/download/?path=&amp;download_version=0.1.1"
 # as:
 # opts=filenamemangle=s/.*=(.*)/foo-$1\.tar\.gz/ \
-#    http://foo.bar.org/download/\?path=&amp;download_version=(.*)
+#    http://foo.bar.org/download/\?path=&amp;download_version=(.+)
 # 
 # The option downloadurlmangle can be used to mangle the URL of the file
 # to download.  This can only be used with http:// URLs.  This may be
@@ -671,7 +671,7 @@ exit ($found ? 0 : 1);
 # some way into one which will work automatically, for example:
 # opts=downloadurlmangle=s/prdownload/download/ \
 #   http://developer.berlios.de/project/showfiles.php?group_id=2051 \
-#   http://prdownload.berlios.de/softdevice/vdr-softdevice-(.*).tgz
+#   http://prdownload.berlios.de/softdevice/vdr-softdevice-(.+).tgz
 
 
 sub process_watchline ($$$$$$)
