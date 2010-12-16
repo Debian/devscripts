@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 #
 # debcheckout: checkout the development repository of a Debian package
-# Copyright (C) 2007-2008  Stefano Zacchiroli <zack@debian.org>
+# Copyright (C) 2007-2009  Stefano Zacchiroli <zack@debian.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -160,8 +160,9 @@ for authenticated mode (see B<-a>) have failed.
 References to matching substrings in the replacement texts are
 allowed as usual in Perl by the means of $1, $2, ... and so on.
 
-Using this setting users can specify how to enable authenticated mode
-for repositories hosted on non well-known machines.
+This setting can be used to enable authenticated mode for most repositories
+out there.  Note that the Debian repositories on S<alioth.debian.org>
+(S<$vcs.debian.org>) are implicitly defined.
 
 Here is a sample snippet suitable for the configuration files:
 
@@ -189,8 +190,9 @@ debcheckout and this manpage have been written by Stefano Zacchiroli
 
 =cut
 
+use feature 'switch';
 use strict;
-use Switch;
+use warnings;
 use Getopt::Long;
 use Pod::Usage;
 use File::Basename;
@@ -348,12 +350,17 @@ sub set_destdir(@$$) {
     my ($repo_type, $destdir, @cmd) = @_;
     $destdir =~ s|^-d\s*||;
 
-    switch ($repo_type) {
-	case "cvs" { my $module = pop @cmd;
-		     push @cmd, ("-d", $destdir, $module);
+    given ($repo_type) {
+	when ("cvs") {
+	    my $module = pop @cmd;
+	    push @cmd, ("-d", $destdir, $module);
 	}
-	case /^(bzr|darcs|git|hg|svn)$/ { push @cmd, $destdir; }
-	else { die "sorry, don't know how to set the destination directory for $repo_type repositories (patches welcome!)\n"; }
+	when (/^(bzr|darcs|git|hg|svn)$/) {
+	    push @cmd, $destdir;
+	}
+	default {
+	    die "sorry, don't know how to set the destination directory for $repo_type repositories (patches welcome!)\n";
+	}
     }
     return @cmd;
 }
@@ -383,12 +390,12 @@ sub set_auth($$$$) {
     $user_local =~ s|(.*)(@)|$1|;
     my $user_url = $url;
 
-    switch ($repo_type) {
-	case "bzr" {
+    given ($repo_type) {
+	when ("bzr") {
 	    $url =~ s|^[\w+]+://(bzr\.debian\.org)/(.*)|bzr+ssh://$user$1/bzr/$2|;
 	    $url =~ s[^\w+://(?:(bazaar|code)\.)?(launchpad\.net/.*)][bzr+ssh://${user}bazaar.$2];
 	}
-	case "darcs"  {
+	when ("darcs")  {
 	    if ($url =~ m|(~)|) {
 		$user_url =~ s|^\w+://(darcs\.debian\.org)/(~)(.*?)/.*|$3|;
 		die "the local user '$user_local' doesn't own the personal repository '$url'\n"
@@ -398,7 +405,7 @@ sub set_auth($$$$) {
 		$url =~ s|^\w+://(darcs\.debian\.org)/(.*)|$user$1:/$2|;
 	    }
 	}
-	case "git" {
+	when ("git") {
 	    if ($url =~ m%(/users/|~)%) {
 		$user_url =~ s|^\w+://(git\.debian\.org)/git/users/(.*?)/.*|$2|;
 		$user_url =~ s|^\w+://(git\.debian\.org)/~(.*?)/.*|$2|;
@@ -408,14 +415,19 @@ sub set_auth($$$$) {
 		$url =~ s|^\w+://(git\.debian\.org)/git/users/.*?/(.*)|git+ssh://$user$1/~/public_git/$2|;
 		$url =~ s|^\w+://(git\.debian\.org)/~.*?/(.*)|git+ssh://$user$1/~/public_git/$2|;
 	    } else {
-		$url =~ s|^\w+://(git\.debian\.org/.*)|git+ssh://$user$1|;
+		$url =~ s|^\w+://(git\.debian\.org)/(?:git/)?(.*)|git+ssh://$user$1/git/$2|;
 	    }
 	}
-	case "hg" { $url =~ s|^\w+://(hg\.debian\.org/.*)|ssh://$user$1|; }
-	case "svn" {
+	# "hg ssh://" needs an extra slash so paths are not based in the user's $HOME
+	when ("hg") {
+	    $url =~ s|^\w+://(hg\.debian\.org/)|ssh://$user$1/|;
+	}
+	when ("svn") {
 	    $url =~ s|^\w+://(svn\.debian\.org)/(.*)|svn+ssh://$user$1/svn/$2|;
 	}
-	else { die "sorry, don't know how to enable authentication for $repo_type repositories (patches welcome!)\n"; }
+	default {
+	    die "sorry, don't know how to enable authentication for $repo_type repositories (patches welcome!)\n";
+	}
     }
     if ($url eq $old_url) { # last attempt: try with user-defined rules
 	$url = user_set_auth($repo_type, $url);
@@ -431,8 +443,8 @@ sub munge_url($$)
 {
     my ($repo_type, $repo_url) = @_;
 
-    switch ($repo_type) {
-	case 'bzr' {
+    given ($repo_type) {
+	when ('bzr') {
 	    # bzr.d.o explicitly doesn't run a smart server.  Need to use nosmart
 	    $repo_url =~ s|^http://(bzr\.debian\.org)/(.*)|nosmart+http://$1/$2|;
 	}
@@ -445,20 +457,20 @@ sub checkout_repo($$$) {
     my ($repo_type, $repo_url, $destdir) = @_;
     my @cmd;
 
-    switch ($repo_type) {
-	case "arch" { @cmd = ("tla", "grab", $repo_url); }  # XXX ???
-	case "bzr" { @cmd = ("bzr", "branch", $repo_url); }
-	case "cvs" {
+    given ($repo_type) {
+	when ("arch") { @cmd = ("tla", "grab", $repo_url); }  # XXX ???
+	when ("bzr") { @cmd = ("bzr", "branch", $repo_url); }
+	when ("cvs") {
 	    $repo_url =~ s|^-d\s*||;
 	    my ($root, $module) = split /\s+/, $repo_url;
 	    $module ||= '';
 	    @cmd = ("cvs", "-d", $root, "checkout", $module);
 	}
-	case "darcs" { @cmd = ("darcs", "get", $repo_url); }
-	case "git" { @cmd = ("git", "clone", $repo_url); }
-	case "hg" { @cmd = ("hg", "clone", $repo_url); }
-	case "svn" { @cmd = ("svn", "co", $repo_url); }
-	else { die "unsupported version control system '$repo_type'.\n"; }
+	when ("darcs") { @cmd = ("darcs", "get", $repo_url); }
+	when ("git") { @cmd = ("git", "clone", $repo_url); }
+	when ("hg") { @cmd = ("hg", "clone", $repo_url); }
+	when ("svn") { @cmd = ("svn", "co", $repo_url); }
+	default { die "unsupported version control system '$repo_type'.\n"; }
     }
     @cmd = set_destdir($repo_type, $destdir, @cmd) if length $destdir;
     print "@cmd ...\n";
@@ -495,8 +507,8 @@ sub checkout_files($$$$) {
 	    return 1;
 	}
 
-	switch ($repo_type) {
-	    case "arch" {
+	given ($repo_type) {
+	    when ("arch") {
 		# If we've already retrieved a copy of the repository,
 		# reuse it
 		if (!length($tempdir)) {
@@ -520,7 +532,7 @@ sub checkout_files($$$$) {
 		    return 1;
 		}
 	    }
-	    case "cvs" {
+	    when ("cvs") {
 		if (!length($tempdir)) {
 		    if (!($tempdir = tempdir( "debcheckoutXXXX", TMPDIR => 1, CLEANUP => 1 ))) {
 			print STDERR
@@ -558,7 +570,7 @@ sub checkout_files($$$$) {
 		    }
 		}
 	    }
-	    case /(svn|bzr)/ {
+	    when (/(svn|bzr)/) {
 		@cmd = ($repo_type, "cat", "$repo_url/$file");
 		print "@cmd > $dir/" . basename($file) . " ... \n";
 		if (! open CAT, '-|', @cmd) {
@@ -576,7 +588,7 @@ sub checkout_files($$$$) {
 		print OUTPUT $content;
 		close OUTPUT;
 	    }
-	    case /(darcs|hg)/ {
+	    when (/(darcs|hg)/) {
 		# Subtly different but close enough
 		if (have_lwp) {
 		    print "Attempting to retrieve $file via HTTP ...\n";
@@ -629,7 +641,7 @@ sub checkout_files($$$$) {
 		    return 1;
 		}
 	    }
-	    case "git" {
+	    when ("git") {
 		# If there isn't a browse URL (either because the package
 		# doesn't ship one, or because we were called with a URL,
 		# try a common pattern for gitweb
@@ -724,7 +736,9 @@ sub checkout_files($$$$) {
 		    close OUTPUT;
 		}
 	    }
-	    else { die "unsupported version control system '$repo_type'.\n"; }
+	    default {
+		die "unsupported version control system '$repo_type'.\n";
+	    }
 	}
     }
 
@@ -900,7 +914,7 @@ EOF
 	    close B;
 	} else {
 	    print STDERR
-		"failed to open branch.conf to add push_location: $@\n";
+		"failed to open branch.conf to add push_location: $!\n";
 	}
     } elsif ($repo_type eq 'git') {
 	my $tg_info = tg_info($repo_url);
@@ -914,6 +928,10 @@ EOF
 	    $rc = $? >> 8;
 	    print STDERR "TopGit population failed\n" if $rc != 0;
 	}
+	system("cd $wcdir && git config user.name \"$ENV{'DEBFULLNAME'}\"")
+	    if (defined($ENV{'DEBFULLNAME'}));
+	system("cd $wcdir && git config user.email \"$ENV{'DEBEMAIL'}\"")
+	    if (defined($ENV{'DEBEMAIL'}));
 	if (length $git_track) {
 	    my @heads;
 	    if ($git_track eq '*') {
@@ -938,8 +956,20 @@ EOF
 		system($cmd);
 	    }
 	}
+    } elsif ($repo_type eq 'hg') {
+	my $username = '';
+	$username .= " $ENV{'DEBFULLNAME'}" if (defined($ENV{'DEBFULLNAME'}));
+	$username .= " <$ENV{'DEBEMAIL'}>" if (defined($ENV{'DEBEMAIL'}));
+	if ($username) {
+	    if (open(HGRC, '>>', "$destdir/.hg/hgrc")) {
+		print HGRC "[ui]\nusername =$username\n";
+		close HGRC;
+	    } else {
+		print STDERR
+		    "failed to open hgrc to set username: $!\n";
+	    }
+	}
     }
-    
     exit($rc);
 }
 

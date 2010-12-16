@@ -26,8 +26,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use 5.008;  # We're using PerlIO layers
 use strict;
@@ -119,6 +118,8 @@ Options:
          Increment the Debian release number for a Debian QA Team upload
   -s, --security
          Increment the Debian release number for a Debian Security Team upload
+  --team
+         Increment the Debian release number for a team upload
   --bpo
          Increment the Debian release number for a Backports.org upload
 	 to "lenny-backports"
@@ -156,6 +157,10 @@ Options:
   --[no]multimaint
          When appending an entry to a changelog section (-a), [do not]
          indicate if multiple maintainers are now involved (default: do so)
+  --[no]multimaint-merge
+         When appending an entry to a changelog section, [do not] merge the
+         entry into an existing changelog section for the current author.
+         (default: do not)
   -m, --maintmaint
          Don\'t change (maintain) the maintainer details in the changelog entry
   -t, --mainttrailer
@@ -170,7 +175,7 @@ Options:
          What constitutes a matching directory name; REGEX is
          a Perl regular expression; the string \`PACKAGE\' will
          be replaced by the package name; see manpage for details
-         (default: 'PACKAGE(-.*)?')
+         (default: 'PACKAGE(-.+)?')
   --no-conf, --noconf
          Don\'t read devscripts config files; must be the first option given
   --release-heuristic log|changelog
@@ -180,7 +185,7 @@ Options:
          Display this help message and exit
   --version
          Display version information
-  At most one of -a, -i, -e, -r, -v, -d, -n, --bin-nmu, -q, --qa, -s, --bpo, -l
+  At most one of -a, -i, -e, -r, -v, -d, -n, --bin-nmu, -q, --qa, -s, --team, --bpo, -l
   (or their long equivalents) may be used.
   With no options, one of -i or -a is chosen by looking for a .upload
   file in the parent directory and checking its contents.
@@ -203,7 +208,7 @@ EOF
 
 # Start by setting default values
 my $check_dirname_level = 1;
-my $check_dirname_regex = 'PACKAGE(-.*)?';
+my $check_dirname_regex = 'PACKAGE(-.+)?';
 my $opt_p = 0;
 my $opt_query = 1;
 my $opt_release_heuristic = 'log';
@@ -227,7 +232,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBCHANGE_PRESERVE' => 'no',
 		       'DEBCHANGE_QUERY_BTS' => 'yes',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
-		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.*)?',
+		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.+)?',
 		       'DEBCHANGE_RELEASE_HEURISTIC' => 'log',
 		       'DEBCHANGE_MULTIMAINT' => 'yes',
 		       'DEBCHANGE_TZ' => $ENV{TZ}, # undef if TZ unset
@@ -298,9 +303,9 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # with older debchange versions.
 my ($opt_help, $opt_version);
 my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u, $opt_force_dist);
-my ($opt_n, $opt_bn, $opt_qa, $opt_s, $opt_bpo, $opt_l, $opt_c, $opt_m, $opt_create, $opt_package, @closes);
+my ($opt_n, $opt_bn, $opt_qa, $opt_s, $opt_team, $opt_bpo, $opt_l, $opt_c, $opt_m, $opt_create, $opt_package, @closes);
 my ($opt_news);
-my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf, $opt_empty);
+my ($opt_level, $opt_regex, $opt_noconf, $opt_empty);
 
 Getopt::Long::Configure('bundling');
 GetOptions("help|h" => \$opt_help,
@@ -324,6 +329,7 @@ GetOptions("help|h" => \$opt_help,
 	   "bin-nmu" => \$opt_bn,
 	   "q|qa" => \$opt_qa,
 	   "s|security" => \$opt_s,
+	   "team" => \$opt_team,
 	   "bpo" => \$opt_bpo,
 	   "l|local=s" => \$opt_l,
 	   "query!" => \$opt_query,
@@ -332,9 +338,10 @@ GetOptions("help|h" => \$opt_help,
 	   "news:s" => \$opt_news,
 	   "multimaint!" => \$opt_multimaint,
 	   "multi-maint!" => \$opt_multimaint,
+	   'multimaint-merge!' => \$opt_multimaint_merge,
+	   'multi-maint-merge!' => \$opt_multimaint_merge,
 	   "m|maintmaint" => \$opt_m,
 	   "t|mainttrailer!" => \$opt_t,
-	   "ignore-dirname" => \$opt_ignore,
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
 	   "noconf" => \$opt_noconf,
@@ -363,11 +370,6 @@ if ($opt_noconf) {
 if ($opt_help) { usage; exit 0; }
 if ($opt_version) { version; exit 0; }
 
-# dirname stuff
-if ($opt_ignore) {
-    fatal "--ignore-dirname has been replaced by --check-dirname-level and\n--check-dirname-regex; run $progname --help for more details";
-}
-
 if (defined $opt_level) {
     if ($opt_level =~ /^[012]$/) { $check_dirname_level = $opt_level; }
     else {
@@ -378,8 +380,8 @@ if (defined $opt_level) {
 if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
 
 # Only allow at most one non-help option
-fatal "Only one of -a, -i, -e, -r, -v, -d, -n/--nmu, --bin-nmu, -q/--qa, -s/--security, --bpo, -l/--local is allowed;\ntry $progname --help for more help"
-    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) + ($opt_n?1:0) + ($opt_bn?1:0) + ($opt_qa?1:0) + ($opt_s?1:0) + ($opt_bpo?1:0) + ($opt_l?1:0) > 1;
+fatal "Only one of -a, -i, -e, -r, -v, -d, -n/--nmu, --bin-nmu, -q/--qa, -s/--security, --team, --bpo, -l/--local is allowed;\ntry $progname --help for more help"
+    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) + ($opt_n?1:0) + ($opt_bn?1:0) + ($opt_qa?1:0) + ($opt_s?1:0) + ($opt_team?1:0) + ($opt_bpo?1:0) + ($opt_l?1:0) > 1;
 
 if ($opt_s) {
     $opt_u = "high";
@@ -401,13 +403,13 @@ if (defined $opt_D) {
     $distributor ||= 'Debian';
 
     if ($distributor eq 'Debian') {
-	unless ($opt_D =~ /^(unstable|((old)?stable|testing)(-security)?|experimental|UNRELEASED|(sarge|etch|lenny)(-volatile|-backports)|((oldstable|testing)-)?proposed-updates)$/) {
-	    warn "$progname warning: Recognised distributions are: unstable, testing, stable,\noldstable, experimental, UNRELEASED, {sarge,etch,lenny}-{volatile,backports},\n{oldstable-,testing-,}proposed-updates and {testing,stable,oldstable}-security.\nUsing your request anyway.\n";
+	unless ($opt_D =~ /^(unstable|((old)?stable|testing)(-security)?|experimental|UNRELEASED|(etch|lenny)-volatile|lenny-backports|((oldstable|testing)-)?proposed-updates)$/) {
+	    warn "$progname warning: Recognised distributions are: unstable, testing, stable,\noldstable, experimental, UNRELEASED, {etch,lenny}-volatile, lenny-backports,\n{oldstable-,testing-,}proposed-updates and {testing,stable,oldstable}-security.\nUsing your request anyway.\n";
 	    $warnings++ if not $opt_force_dist;
 	}
     } elsif ($distributor eq 'Ubuntu') {
-	unless ($opt_D =~ /^((dapper|gutsy|hardy|intrepid|jaunty|karmic)(-updates|-security|-proposed|-backports)?|UNRELEASED)$/) {
-	    warn "$progname warning: Recognised distributions are:\n{dapper,gutsy,hardy,intrepid,jaunty,karmic}{,-updates,-security,-proposed,-backports} and UNRELEASED.\nUsing your request anyway.\n";
+	unless ($opt_D =~ /^((dapper|hardy|jaunty|karmic|lucid|maverick|natty)(-updates|-security|-proposed|-backports)?|UNRELEASED)$/) {
+	    warn "$progname warning: Recognised distributions are:\n{dapper,hardy,jaunty,karmic,lucid,maverick,natty}{,-updates,-security,-proposed,-backports} and UNRELEASED.\nUsing your request anyway.\n";
 	    $warnings++ if not $opt_force_dist;
 	}
     } else {
@@ -419,8 +421,8 @@ fatal "--closes should not be used with --news; put bug numbers in the changelog
     if $opt_news && @closes;
 
 # hm, this can probably be used with more than just -i.
-fatal "--package can only be used with --create and --increment"
-    if $opt_package && ! ($opt_create || $opt_i);
+fatal "--package can only be used with --create, --increment and --newversion"
+    if $opt_package && ! ($opt_create || $opt_i || $opt_v);
 
 my $changelog_path = $opt_c || $ENV{'CHANGELOG'} || 'debian/changelog';
 my $real_changelog_path = $changelog_path;
@@ -435,8 +437,8 @@ fatal "--package cannot be used when creating a NEWS file"
 
 if ($opt_create) {
     if ($opt_a || $opt_i || $opt_e || $opt_r || $opt_b || $opt_n || $opt_bn ||
-	    $opt_qa || $opt_s || $opt_bpo || $opt_l || $opt_allow_lower) {
-	warn "$progname warning: ignoring -a/-i/-e/-r/-b/--allow-lower-version/-n/--bin-nmu/-q/--qa/-s/--bpo/-l options with --create\n";
+	    $opt_qa || $opt_s || $opt_team || $opt_bpo || $opt_l || $opt_allow_lower) {
+	warn "$progname warning: ignoring -a/-i/-e/-r/-b/--allow-lower-version/-n/--bin-nmu/-q/--qa/-s/--team/--bpo/-l options with --create\n";
 	$warnings++;
     }
     if ($opt_package && $opt_d) {
@@ -503,7 +505,7 @@ my $MAINTAINER = 'MAINTAINER';
 my $EMAIL = 'EMAIL';
 my $DISTRIBUTION = 'UNRELEASED';
 my $bpo_dist = '';
-my %bpo_dists = ( '40', 'etch', '50', 'lenny' );
+my %bpo_dists = ( 50, 'lenny', 60, 'squeeze' );
 my $latest_bpo_dist = '50';
 my $CHANGES = '';
 # Changelog urgency, possibly propogated to NEWS files
@@ -718,7 +720,7 @@ if (! $opt_m) {
 #####
 
 if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and 
-    ! $opt_qa and ! $opt_bpo and ! $opt_bn and ! $opt_n and ! $opt_c and
+    ! $opt_team and ! $opt_qa and ! $opt_bpo and ! $opt_bn and ! $opt_n and ! $opt_c and
     ! (exists $ENV{'CHANGELOG'} and length $ENV{'CHANGELOG'}) and
     ! $opt_create and ! $opt_a_passed and ! $opt_r and ! $opt_e and
     ! ($opt_release_heuristic eq 'changelog' and
@@ -735,7 +737,7 @@ if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and
 	    my $packager = "$MAINTAINER <$EMAIL>";
 
 	    if (! grep { $_ eq $packager } ($maintainer, @uploaders) and
-		$packager ne $changelog{'Maintainer'}) {
+		$packager ne $changelog{'Maintainer'} and ! $opt_team) {
 		$opt_n=1;
 		$opt_a=0;
 	    }
@@ -852,7 +854,7 @@ if ($opt_news && !$opt_i && !$opt_a) {
 
 # Are we going to have to figure things out for ourselves?
 if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r &&
-    ! $opt_n && ! $opt_bn && ! $opt_qa && ! $opt_s && ! $opt_bpo &&
+    ! $opt_n && ! $opt_bn && ! $opt_qa && ! $opt_s && ! $opt_team && ! $opt_bpo &&
     ! $opt_l && ! $opt_create) {
     # Yes, we are
     if ($opt_release_heuristic eq 'log') {
@@ -929,7 +931,7 @@ my $line;
 my $optionsok=0;
 my $merge=0;
 
-if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $opt_v || $opt_d ||
+if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_team || $opt_bpo || $opt_l || $opt_v || $opt_d ||
     ($opt_news && $VERSION ne $changelog{'Version'})) && ! $opt_create) {
 
     $optionsok=1;
@@ -995,7 +997,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
     # including epochs.
 
     if (! $NEW_VERSION) {
-	if ($VERSION =~ /(.*?)([a-yA-Y][a-zA-Z]*|\d+)(~)?$/i) {
+	if ($VERSION =~ /(.*?)([a-yA-Y][a-zA-Z]*|\d+)([+~])?$/i) {
 	    my $extra=$3 || '';
 	    my $useextra = 0;
 	    my $end=$2;
@@ -1114,6 +1116,9 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 	} elsif ($opt_s && ! $opt_news) {
 	    print O "  * Non-maintainer upload by the Security Team.\n";
 	    $line = 1;
+	} elsif ($opt_team && ! $opt_news) {
+	    print O "  * Team upload.\n";
+	    $line = 1;
 	} elsif ($opt_bpo && ! $opt_news) {
 	    print O "  * Rebuild for $bpo_dist.\n";
 	    $line = 1;
@@ -1161,19 +1166,26 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
 	    # maintainer
 	    $nextmaint ||= $1;
 	}
-	elsif (defined $lastmaint) {
-	    if (m/^\w[-+0-9a-z.]* \([^\(\) \t]+\)((?:\s+[-+0-9a-z.]+)+)\;\s+urgency=(\w+)/i) {
+	elsif (m/^\w[-+0-9a-z.]* \(([^\(\) \t]+)\)((?:\s+[-+0-9a-z.]+)+)\;\s+urgency=(\w+)/i) {
+	    if (defined $lastmaint) {
 		$lastheader = $_;
-		$lastdist = $1;
+		$lastdist = $2;
 		$lastdist =~ s/^\s+//;
 		undef $lastdist if $lastdist eq "UNRELEASED";
 		# Revert to our previously saved position
 		$line = $savedline;
 		last;
 	    }
+	    else {
+		my $tmpver = $1;
+		$tmpver =~ s/^\s+//;
+		if ($tmpver =~ m/~bpo(\d+)\+/ && exists $bpo_dists{$1}) {
+		    $dist_indicator = "$bpo_dists{$1}-backports";
+		}
+	    }
 	}
-	elsif (/  \* Upload to ([^ ]+).*$/) {
-	    ($dist_indicator = $1) =~ s/[,;]$//;
+	elsif (/  \* (?:Upload to|Rebuild for) (\S+).*$/) {
+	    ($dist_indicator = $1) =~ s/[!:.,;]$//;
 	    chomp $dist_indicator;
 	}
 	elsif (/^ --\s+([^<]+)\s+/) {
@@ -1436,7 +1448,7 @@ if ((basename(cwd()) =~ m%^\Q$PACKAGE\E-\Q$UVERSION\E$%) &&
 	}
 	# And check whether a new orig tarball exists
 	my @origs = glob("../$PACKAGE\_$new_uversion.*");
-	my $num_origs = grep { /^..\/\Q$PACKAGE\E_\Q$new_uversion\E\.orig\.tar\.(gz|bz2|lzma)$/ } @origs;
+	my $num_origs = grep { /^..\/\Q$PACKAGE\E_\Q$new_uversion\E\.orig\.tar\.(gz|bz2|lzma|xz)$/ } @origs;
 	if ($num_origs == 0) {
 	    warn "$progname warning: no orig tarball found for the new version.\n";
 	}

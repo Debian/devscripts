@@ -18,10 +18,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, you can find it on the World Wide
-# Web at http://www.gnu.org/copyleft/gpl.html, or write to the Free
-# Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
-# MA 02111-1307, USA.
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use strict;
 use Getopt::Long;
@@ -94,17 +91,20 @@ foreach my $filename (@ARGV) {
 	     . "$check_lines_count lines\n";
     }
 
-    unless (open C, "$filename") {
+    unless (open C, '<', $filename) {
 	warn "cannot open script $filename for reading: $!\n";
 	$status |= 2;
 	next;
     }
 
     my $cat_string = "";
+    my $cat_indented = 0;
     my $quote_string = "";
     my $last_continued = 0;
     my $continued = 0;
     my $found_rules = 0;
+    my $buffered_orig_line = "";
+    my $buffered_line = "";
 
     while (<C>) {
 	next unless ($check_lines_count == -1 or $. <= $check_lines_count);
@@ -153,7 +153,10 @@ foreach my $filename (@ARGV) {
 	# will be treated as part of the comment.
 	# s/^(?:.*?[^\\])?$quote_string(.*)$/$1/ if $quote_string ne "";
 
-	next if m,^\s*\#,;  # skip comment lines
+	# skip comment lines
+	if (m,^\s*\#, && $quote_string eq '' && $buffered_line eq '' && $cat_string eq '') {
+	    next;
+	}
 
 	# Remove quoted strings so we can more easily ignore comments
 	# inside them
@@ -168,6 +171,21 @@ foreach my $filename (@ARGV) {
 	    s/\Q$1\E//;  # eat comments
 	} else {
 	    $_ = $orig_line;
+	}
+
+	# Handle line continuation
+	if (!$makefile && $cat_string eq '' && m/\\$/) {
+	    chop;
+	    $buffered_line .= $_;
+	    $buffered_orig_line .= $orig_line . "\n";
+	    next;
+	}
+
+	if ($buffered_line ne '') {
+	    $_ = $buffered_line . $_;
+	    $orig_line = $buffered_orig_line . $orig_line;
+	    $buffered_line ='';
+	    $buffered_orig_line ='';
 	}
 
 	if ($makefile) {
@@ -185,14 +203,17 @@ foreach my $filename (@ARGV) {
 		$_ = $1 if $1;
 	    } 
 
-	    last if m%^(export )?SHELL\s*:?=\s*(/bin/)?bash\s*%;
+	    last if m%^\s*(override\s|export\s)?\s*SHELL\s*:?=\s*(/bin/)?bash\s*%;
 
+	    # Remove "simple" target names
+	    s/^[\w%.-]+(?:\s+[\w%.-]+)*::?//;
 	    s/^\t//;
-	    s/(\$){2}/$1/;
-	    s/^[\s\t]*@//;
+	    s/(?<!\$)\$\((\w+)\)/\${$1}/g;
+	    s/(\$){2}/$1/g;
+	    s/^[\s\t]*[@-]{1,2}//;
 	}
 
-	if ($cat_string ne "" and m/^\Q$cat_string\E$/) {
+	if ($cat_string ne "" && (m/^\Q$cat_string\E$/ || ($cat_indented && m/^\t*\Q$cat_string\E$/))) {
 	    $cat_string = "";
 	    next;
 	}
@@ -257,7 +278,7 @@ foreach my $filename (@ARGV) {
 		    my $otherquote = ($quote eq "\"" ? "\'" : "\"");
 
 		    # Remove balanced quotes and their content
-		    $templine =~ s/(^|[^\\\"](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1/g;
+		    $templine =~ s/(^|[^\\\"](?:\\\\)*)\'[^\']*\'/$1/g;
 		    $templine =~ s/(^|[^\\\'](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1/g;
 
 		    # Don't flag quotes that are themselves quoted
@@ -265,6 +286,8 @@ foreach my $filename (@ARGV) {
 		    $templine =~ s/$otherquote.*?$quote.*?$otherquote//g;
 		    # "\""
 		    $templine =~ s/(^|[^\\])$quote\\$quote$quote/$1/g;
+		    # \' or \"
+		    $templine =~ s/\\[\'\"]//g;
 		    my $count = () = $templine =~ /(^|(?!\\))$quote/g;
 
 		    # If there's an odd number of non-escaped
@@ -282,7 +305,7 @@ foreach my $filename (@ARGV) {
 	    # detect source (.) trying to pass args to the command it runs
 	    # The first expression weeds out '. "foo bar"'
 	    if (not $found and
-		not m/$LEADIN\.\s+(\"[^\"]+\"|\'[^\']+\'|\$\([^)]+\)+)\s*(\&|\||\d?>|<|;|\Z)/
+		not m/$LEADIN\.\s+(\"[^\"]+\"|\'[^\']+\'|\$\([^)]+\)+(?:\/[^\s;]+)?)\s*(\&|\||\d?>|<|;|\Z)/
 		and m/$LEADIN(\.\s+[^\s;\`:]+\s+([^\s;]+))/) {
 		if ($2 =~ /^(\&|\||\d?>|<)/) {
 		    # everything is ok
@@ -369,12 +392,20 @@ foreach my $filename (@ARGV) {
 
 	    # Only look for the beginning of a heredoc here, after we've
 	    # stripped out quoted material, to avoid false positives.
-	    if ($cat_line =~ m/(?:^|[^<])\<\<\-?\s*(?:[\\]?(\w+)|[\'\"](.*?)[\'\"])/) {
-		$cat_string = $1;
-		$cat_string = $2 if not defined $cat_string;
+	    if ($cat_line =~ m/(?:^|[^<])\<\<(\-?)\s*(?:[\\]?(\w+)|[\'\"](.*?)[\'\"])/) {
+		$cat_indented = ($1 && $1 eq '-')? 1 : 0;
+		$cat_string = $2;
+		$cat_string = $3 if not defined $cat_string;
             }
 	}
     }
+
+    warn "error: $filename:  Unterminated heredoc found, EOF reached. Wanted: <$cat_string>\n"
+	if ($cat_string ne '');
+    warn "error: $filename: Unterminated quoted string found, EOF reached. Wanted: <$quote_string>\n"
+	if ($quote_string ne '');
+    warn "error: $filename: EOF reached while on line continuation.\n"
+	if ($buffered_line ne '');
 
     close C;
 }
@@ -466,12 +497,11 @@ sub init_hashes {
     %bashisms = (
 	qr'(?:^|\s+)function \w+(\s|\(|\Z)' => q<'function' is useless>,
 	$LEADIN . qr'select\s+\w+' =>     q<'select' is not POSIX>,
-	qr'(test|-o|-a)\s*[^\s]+\s+==\s' =>
-	                               q<should be 'b = a'>,
+	qr'(test|-o|-a)\s*[^\s]+\s+==\s' => q<should be 'b = a'>,
 	qr'\[\s+[^\]]+\s+==\s' =>        q<should be 'b = a'>,
 	qr'\s\|\&' =>                    q<pipelining is not POSIX>,
-	qr'[^\\\$]\{([^\s\\\}]*?,)+[^\\\}\s]*\}' =>
-	                               q<brace expansion>,
+	qr'[^\\\$]\{([^\s\\\}]*?,)+[^\\\}\s]*\}' => q<brace expansion>,
+	qr'\{\d+\.\.\d+\}' =>          q<brace expansion, should be $(seq a b)>,
 	qr'(?:^|\s+)\w+\[\d+\]=' =>      q<bash arrays, H[0]>,
 	$LEADIN . qr'read\s+(?:-[a-qs-zA-Z\d-]+)' => q<read with option other than -r>,
 	$LEADIN . qr'read\s*(?:-\w+\s*)*(?:\".*?\"|[\'].*?[\'])?\s*(?:;|$)'
@@ -482,38 +512,46 @@ sub init_hashes {
 	qr'(?<![\$\(])\(\(.*\)\)' =>     q<'((' should be '$(('>,
 	qr'(?:^|\s+)(\[|test)\s+-a' =>            q<test with unary -a (should be -e)>,
 	qr'\&>' =>	               q<should be \>word 2\>&1>,
-	qr'(<\&|>\&)\s*((-|\d+)[^\s;|)`&\\\\]|[^-\d\s]+)' =>
+	qr'(<\&|>\&)\s*((-|\d+)[^\s;|)}`&\\\\]|[^-\d\s]+(?<!\$)(?!\d))' =>
 				       q<should be \>word 2\>&1>,
-	$LEADIN . qr'kill\s+-[^sl]\w*' => q<kill -[0-9] or -[A-Z]>,
-	$LEADIN . qr'trap\s+["\']?.*["\']?\s+.*[1-9]' => q<trap with signal numbers>,
 	qr'\[\[(?!:)' => q<alternative test command ([[ foo ]] should be [ foo ])>,
 	qr'/dev/(tcp|udp)'	    => q</dev/(tcp|udp)>,
-	$LEADIN . qr'suspend\s' =>        q<suspend>,
-	$LEADIN . qr'caller\s' =>         q<caller>,
-	$LEADIN . qr'complete\s' =>       q<complete>,
-	$LEADIN . qr'compgen\s' =>        q<compgen>,
-	$LEADIN . qr'declare\s' =>        q<declare>,
-	$LEADIN . qr'typeset\s' =>        q<typeset>,
-	$LEADIN . qr'disown\s' =>         q<disown>,
 	$LEADIN . qr'builtin\s' =>        q<builtin>,
+	$LEADIN . qr'caller\s' =>         q<caller>,
+	$LEADIN . qr'compgen\s' =>        q<compgen>,
+	$LEADIN . qr'complete\s' =>       q<complete>,
+	$LEADIN . qr'declare\s' =>        q<declare>,
+	$LEADIN . qr'dirs(\s|\Z)' =>      q<dirs>,
+	$LEADIN . qr'disown\s' =>         q<disown>,
+	$LEADIN . qr'enable\s' =>         q<enable>,
+	$LEADIN . qr'mapfile\s' =>        q<mapfile>,
+	$LEADIN . qr'readarray\s' =>      q<readarray>,
+	$LEADIN . qr'shopt(\s|\Z)' =>     q<shopt>,
+	$LEADIN . qr'suspend\s' =>        q<suspend>,
+	$LEADIN . qr'time\s' =>           q<time>,
+	$LEADIN . qr'type\s' =>           q<type>,
+	$LEADIN . qr'typeset\s' =>        q<typeset>,
+	$LEADIN . qr'ulimit(\s|\Z)' =>    q<ulimit>,
 	$LEADIN . qr'set\s+-[BHT]+' =>    q<set -[BHT]>,
 	$LEADIN . qr'alias\s+-p' =>       q<alias -p>,
 	$LEADIN . qr'unalias\s+-a' =>     q<unalias -a>,
 	$LEADIN . qr'local\s+-[a-zA-Z]+' => q<local -opt>,
 	qr'(?:^|\s+)\s*\(?\w*[^\(\w\s]+\S*?\s*\(\)\s*([\{|\(]|\Z)'
 		=> q<function names should only contain [a-z0-9_]>,
-	$LEADIN . qr'(push|pop)d(\s|\Z)' =>    q<(push|pod)d>,
+	$LEADIN . qr'(push|pop)d(\s|\Z)' =>    q<(push|pop)d>,
 	$LEADIN . qr'export\s+-[^p]' =>  q<export only takes -p as an option>,
-	$LEADIN . qr'ulimit(\s|\Z)' =>         q<ulimit>,
-	$LEADIN . qr'shopt(\s|\Z)' =>          q<shopt>,
-	$LEADIN . qr'type\s' =>          q<type>,
-	$LEADIN . qr'time\s' =>          q<time>,
-	$LEADIN . qr'dirs(\s|\Z)' =>          q<dirs>,
 	qr'(?:^|\s+)[<>]\(.*?\)'	    => q<\<() process substituion>,
 	$LEADIN . qr'readonly\s+-[af]' => q<readonly -[af]>,
 	$LEADIN . qr'(sh|\$\{?SHELL\}?) -[rD]' => q<sh -[rD]>,
 	$LEADIN . qr'(sh|\$\{?SHELL\}?) --\w+' =>  q<sh --long-option>,
 	$LEADIN . qr'(sh|\$\{?SHELL\}?) [-+]O' =>  q<sh [-+]O>,
+	qr'\[\^[^]]+\]' =>  q<[^] should be [!]>,
+	$LEADIN . qr'printf\s+-v' => q<'printf -v var ...' should be var='$(printf ...)'>,
+	$LEADIN . qr'coproc\s' =>        q<coproc>,
+	qr';;?&' =>  q<;;& and ;& special case operators>,
+	$LEADIN . qr'jobs\s' =>  q<jobs>,
+#	$LEADIN . qr'jobs\s+-[^lp]\s' =>  q<'jobs' with option other than -l or -p>,
+	$LEADIN . qr'command\s+-[^p]\s' =>  q<'command' with option other than -p>,
     );
 
     %string_bashisms = (
@@ -536,6 +574,12 @@ sub init_hashes {
 	qr'\$\{?SHLVL\}?\b'           => q<$SHLVL>,
 	qr'<<<'                       => q<\<\<\< here string>,
 	$LEADIN . qr'echo\s+(?:-[^e\s]+\s+)?\"[^\"]*(\\[abcEfnrtv0])+.*?[\"]' => q<unsafe echo with backslash>,
+	qr'\$\(\([\s\w$*/+-]*\w\+\+.*?\)\)'   => q<'$((n++))' should be '$n; $((n=n+1))'>,
+	qr'\$\(\([\s\w$*/+-]*\+\+\w.*?\)\)'   => q<'$((++n))' should be '$((n=n+1))'>,
+	qr'\$\(\([\s\w$*/+-]*\w\-\-.*?\)\)'   => q<'$((n--))' should be '$n; $((n=n-1))'>,
+	qr'\$\(\([\s\w$*/+-]*\-\-\w.*?\)\)'   => q<'$((--n))' should be '$((n=n-1))'>,
+	qr'\$\(\([\s\w$*/+-]*\*\*.*?\)\)'   => q<exponentiation is not POSIX>,
+	$LEADIN . qr'printf\s["\'][^"\']+?%[qb].+?["\']' => q<printf %q|%b>,
     );
 
     %singlequote_bashisms = (
@@ -552,6 +596,8 @@ sub init_hashes {
 	$bashisms{$LEADIN . qr'local\s+\w+='} = q<local foo=bar>;
 	$bashisms{$LEADIN . qr'local\s+\w+\s+\w+'} = q<local x y>;
 	$bashisms{$LEADIN . qr'((?:test|\[)\s+.+\s-[ao])\s'} = q<test -a/-o>;
+	$bashisms{$LEADIN . qr'kill\s+-[^sl]\w*'} = q<kill -[0-9] or -[A-Z]>;
+	$bashisms{$LEADIN . qr'trap\s+["\']?.*["\']?\s+.*[1-9]'} = q<trap with signal numbers>;
     }
 
     if ($makefile) {
@@ -561,7 +607,7 @@ sub init_hashes {
 	$bashisms{$LEADIN . qr'\w+\+='} = q<should be VAR="${VAR}foo">;
 	$string_bashisms{qr'(\$\(|\`)\s*\<\s*\S+\s*(\)|\`)'} = q<'$(\< foo)' should be '$(cat foo)'>;
     }
-	    
+
     if ($opt_extra) {
 	$string_bashisms{qr'\$\{?BASH\}?\b'} = q<$BASH>;
 	$string_bashisms{qr'(?:^|\s+)RANDOM='} = q<RANDOM=>;

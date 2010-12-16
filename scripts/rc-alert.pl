@@ -1,6 +1,6 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
-# RCBugger - find RC bugs for programs on your system
+# rc-alert - find RC bugs for programs on your system
 # Copyright (C) 2003 Anthony DeRobertis
 # Modifications Copyright 2003 Julian Gilbey <jdg@debian.org>
 # Modifications Copyright 2008 Adam D. Barratt <adam@adam-barratt.org.uk>
@@ -17,10 +17,10 @@
 # GNU General Public License for more details.
 # 
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use strict;
+use warnings;
 use lib '/usr/share/devscripts';
 use Devscripts::Packages;
 use File::Basename;

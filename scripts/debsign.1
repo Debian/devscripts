@@ -20,7 +20,7 @@ the name of the \fI.changes\fR file to look for in the parent
 directory.
 .PP
 If a \fI.commands\fR file is specified it is first validated (see the
-details at \fIftp://ftp-master.debian.org/pub/UploadQueue/README\fR),
+details at \fIftp://ftp.upload.debian.org/pub/UploadQueue/README\fR),
 and the name specified in the Uploader field is used for signing.
 .PP
 This utility is useful if a developer must build a package on one
@@ -86,6 +86,12 @@ Multiarch changes mode: This signifies that \fBdebsign\fR should
 use the most recent file with the name pattern
 \fIpackage_version_*+*.changes\fR as the changes file, allowing for the
 changes files produced by \fBdpkg-cross\fR.
+.TP
+\fB\-\-re\-sign\fR, \fB\-\-no\-re\-sign\fR
+Recreate signature, respectively use the existing signature, if the
+file has been signed already.  If neither option is given and an already
+signed file is found the user is asked if he or she likes to use the
+current signature.
 .TP
 \fB\-\-debs\-dir\fR \fIDIR\fR
 Look for the \fI.changes\fR and \fI.dsc\fR files in directory

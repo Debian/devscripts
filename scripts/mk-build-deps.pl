@@ -29,13 +29,17 @@ mk-build-deps - build a package satisfying a package's build-dependencies
 
 B<mk-build-deps> --help|--version
 
-B<mk-build-deps> [-i|--install] <control file | package name> [...]
+B<mk-build-deps> [options] <control file | package name> [...]
 
 =head1 DESCRIPTION
 
 Given a package name and/or control file, B<mk-build-deps>
 will use B<equivs> to generate a binary package which may be installed to
-satisfy the build-dependencies of the given package.
+satisfy all the build dependencies of the given package.
+
+If B<--build-dep> and/or B<--build-indep> are given, then the resulting binary
+package(s) will depend solely on the Build-Depends/Build-Depends-Indep
+dependencies, respectively.
 
 =head1 OPTIONS
 
@@ -54,6 +58,23 @@ When installing the generated package use the specified tool.
 
 Remove the package file after installing it. Ignored if used without
 the install switch.
+
+=item B<-a> I<foo>, B<--arch> I<foo>
+
+If the source package has architecture-specific build dependencies, produce
+a package for architecture I<foo>, not for the system architecture. (If the
+source package does not have architecture-specific build dependencies,
+the package produced is always for the pseudo-architecture B<all>.)
+
+=item B<-B>, B<--build-dep>
+
+Generate a package which only depends on the source package's Build-Depends
+dependencies.
+
+=item B<-A>, B<--build-indep>
+
+Generate a package which only depends on the source package's
+Build-Depends-Indep dependencies.
 
 =item B<-h>, B<--help>
 
@@ -80,11 +101,13 @@ use strict;
 use warnings;
 use Getopt::Long;
 use File::Basename;
+use Pod::Usage;
+use Dpkg::Control;
 
 my $progname = basename($0);
 my $opt_install;
 my $opt_remove=0;
-my ($opt_help, $opt_version);
+my ($opt_help, $opt_version, $opt_arch, $opt_dep, $opt_indep);
 my $control;
 my $install_tool;
 my @packages;
@@ -127,10 +150,13 @@ GetOptions("help|h" => \$opt_help,
            "install|i" => \$opt_install,
            "remove|r" => \$opt_remove,
            "tool|t=s" => \$install_tool,
+           "arch|a=s" => \$opt_arch,
+           "build-dep|B" => \$opt_dep,
+           "build-indep|A" => \$opt_indep,
            )
-    or die "Usage: $progname <control file | package name> [...]\nRun $progname --help for more details\n";
+    or pod2usage({ -exitval => 1, -verbose => 0 });
 
-if ($opt_help) { help(); exit 0; }
+pod2usage({ -exitval => 0, -verbose => 1 }) if ($opt_help);
 if ($opt_version) { version(); exit 0; }
 
 if (!@ARGV) {
@@ -139,7 +165,7 @@ if (!@ARGV) {
     }
 }
 
-die "Usage: $progname <control file | package name> [...]\nRun $progname --help for more details\n" unless @ARGV;
+pod2usage({ -exitval => 1, -verbose => 0 }) unless @ARGV;
 
 system("command -v equivs-build >/dev/null 2>&1");
 if ($?) {
@@ -147,84 +173,88 @@ if ($?) {
 }
 
 while ($control = shift) {
-    my $name;
-    my $build_deps = "";
-    my $version;
-    my $last_line_build_deps;
-
+    my ($name, $fh);
     if (-r $control and -f $control) {
-	open CONTROL, $control;
+	open $fh, $control || do {
+	    warn "Unable to open $control: $!\n";
+	    next;
+        };
+	$name = 'Source';
     }
     else {
-	open CONTROL, "apt-cache showsrc $control |";
+	open $fh, "apt-cache showsrc $control |" || do {
+	    warn "Unable to run apt-cache: $!\n";
+	    next;
+        };
+	$name = 'Package';
     }
 
-    while (<CONTROL>) {
-	if (/^(?:Package|Source):\s*(\S+)/ && !$name) {
-	    $name = $1;
+    my $ctrl = Dpkg::Control->new(type => CTRL_INFO_SRC);
+    if ($ctrl->parse($fh, $control)) {
+	my $args = '';
+	my $arch = 'all';
+	my ($build_deps, $build_dep, $build_indep);
+
+	if (exists $ctrl->{'Build-Depends'}) {
+	    $build_dep = $ctrl->{'Build-Depends'};
+	    $build_dep =~ s/\n/ /g;
+	    $build_deps = $build_dep;
 	}
-	if (/^Version:\s*(\S+)/) {
-	    $version = $1;
+	if (exists $ctrl->{'Build-Depends-Indep'}) {
+	    $build_indep = $ctrl->{'Build-Depends-Indep'};
+	    $build_indep =~ s/\n/ /g;
+	    $build_deps .= ', ' if $build_deps;
+	    $build_deps .= $build_indep;
 	}
-	if (/^Build-Depends(?:-Indep)?:\s*(.*)/) {
-	    $build_deps .= $build_deps ? ", $1" : $1;
-	    $last_line_build_deps = 1;
+
+	die "$progname: Unable to find build-deps for $ctrl->{$name}\n" unless $build_deps;
+
+	# Only build a package with both B-D and B-D-I in Depends if the
+	# B-D/B-D-I specific packages weren't requested
+	if (!($opt_dep || $opt_indep)) {
+	    push(@packages,
+		 build_equiv({ depends => $build_deps,
+			       name => $ctrl->{$name},
+			       type => 'build-deps',
+			       version => $ctrl->{Version} }));
+	    next;
 	}
-	elsif (/^(\S+):/) {
-	    $last_line_build_deps = 0;
+	if ($opt_dep) {
+	    push(@packages,
+		 build_equiv({ depends => $build_dep,
+			       name => $ctrl->{$name},
+			       type => 'build-deps-depends',
+			       version => $ctrl->{Version} }));
 	}
-	elsif(/^\s+(.*)/ && $last_line_build_deps) {
-	    $build_deps .= $1;
+	if ($opt_indep) {
+	    push(@packages,
+		 build_equiv({ depends => $build_indep,
+			       name => $ctrl->{$name},
+			       type => 'build-deps-indep',
+			       version => $ctrl->{Version} }));
 	}
     }
-    close CONTROL;
-
-    # Now, running equivs-build:
-
-    die "$progname: Unable to find package name in '$control'\n" unless $name;
-    die "$progname: Unable to find build-deps for $name\n" unless $build_deps;
-
-    open EQUIVS, "| equivs-build -"
-	or die "$progname: Failed to execute equivs-build: $!\n";
-    print EQUIVS "Section: devel\n" .
-	"Priority: optional\n".
-	"Standards-Version: 3.7.3\n\n".
-	"Package: ".$name."-build-deps\n".
-	"Depends: $build_deps\n";
-    print EQUIVS "Version: $version\n" if $version;
-
-    print EQUIVS "Description: build-dependencies for $name\n" .
-	" Depencency package to build the '$name' package\n";
-
-    close EQUIVS;
-
-    push @packages, $name;
-
+    else {
+	die "$progname: Unable to find package name in '$control'\n";
+    }
 }
+
+use Text::ParseWords;
 
 if ($opt_install) {
     for my $package (@packages) {
-	my $file = glob "${package}-build-deps_*.deb";
+	my $file = glob "${package}_*.deb";
 	push @deb_files, $file;
     }
 
     system 'dpkg', '--unpack', @deb_files;
-    system $install_tool, '-f', 'install';
+    system shellwords($install_tool), '-f', 'install';
 
     if ($opt_remove) {
 	foreach my $file (@deb_files) {
 	    unlink $file;
 	}
     }
-}
-
-sub help {
-   print <<"EOF";
-Usage: $progname <control file> | <package name> [...]
-Valid options are:
-   --help, -h             Display this message
-   --version, -v          Display version and copyright info
-EOF
 }
 
 sub version {
@@ -239,3 +269,33 @@ later version.
 EOF
 }
 
+sub build_equiv
+{
+    my ($opts) = @_;
+    my $args = '';
+    my $arch = 'all';
+
+    if ($opts->{depends} =~ /\[|\]/) {
+	$arch = 'any';
+
+	if (defined $opt_arch) {
+	    $args = "--arch=$opt_arch ";
+	}
+    }
+
+    open EQUIVS, "| equivs-build $args-"
+	or die "$progname: Failed to execute equivs-build: $!\n";
+    print EQUIVS "Section: devel\n" .
+    "Priority: optional\n".
+    "Standards-Version: 3.7.3\n\n".
+    "Package: $opts->{name}-$opts->{type}\n".
+    "Architecture: $arch\n".
+    "Depends: build-essential, $opts->{depends}\n";
+    print EQUIVS "Version: $opts->{version}\n" if $opts->{version};
+
+    print EQUIVS "Description: build-dependencies for $opts->{name}\n" .
+    " Depencency package to build the '$opts->{name}' package\n";
+
+    close EQUIVS;
+    return "$opts->{name}-$opts->{type}";
+}

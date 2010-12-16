@@ -262,7 +262,9 @@ sub apt_get {
 	if ($qversion and /^ [ *]{3} ($qversion) 0/) {
 	    while (<$apt>) {
 		last OUTER unless /^  *(?:\d+) (\S+)/;
-		push @hosts, $1;
+		(my $host = $1) =~ s@/$@@;
+		next if $host eq '/var/lib/dpkg/status';
+		push @hosts, $host;
 	    }
 	}
     }
@@ -274,7 +276,7 @@ sub apt_get {
 	die "$progname: no hostnames in apt-cache policy $package for $version found\n";
     }
 
-    $apt = new IO::File("LC_ALL=C apt-cache --all-versions show $package |")
+    $apt = new IO::File("LC_ALL=C apt-cache show $package=$version |")
 	or die "$!";
     my ($v, $p, $filename, $md5sum);
     while (<$apt>) {
@@ -312,7 +314,7 @@ sub apt_get {
     if (-f "/etc/apt/sources.list") {
 	$apt = new IO::File("/etc/apt/sources.list") or die "/etc/apt/sources.list: $!";
 	while (<$apt>) {
-	    if (/^\s*deb\s*($host_re\S+)/) {
+	    if (/^\s*deb\s*($host_re\b)/) {
 		push @repositories, $1;
 	    }
 	}
@@ -325,7 +327,7 @@ sub apt_get {
 	$_ = "/etc/apt/sources.list.d/$_";
 	$apt = new IO::File("$_") or die "$_: $!";
 	while (<$apt>) {
-	    if (/^\s*deb\s*($host_re\S+)/) {
+	    if (/^\s*deb\s*($host_re\b)/) {
 		push @repositories, $1;
 	    }
 	}
@@ -494,7 +496,8 @@ B<dget> downloads Debian packages.  In the first form, B<dget> fetches
 the requested URLs.  If this is a .dsc or .changes file, then B<dget>
 acts as a source-package aware form of B<wget>: it also fetches any
 files referenced in the .dsc/.changes file.  The downloaded source is
-then unpacked by B<dpkg-source>.
+then checked with B<dscverify> and, if successful, unpacked by
+B<dpkg-source>.
 
 In the second form, B<dget> downloads a I<binary> package (i.e., a
 I<.deb> file) from the Debian mirror configured in
@@ -564,7 +567,7 @@ In addition to I</var/cache/apt/archives>, B<dget> uses the
 colon-separated list given as argument to B<--path> to find files with
 a matching md5sum.  For example: "--path
 /srv/pbuilder/result:/home/cb/UploadQueue".  If DIR is empty (i.e.,
-"S<--path ''>" is specified), then any previously listed directories
+"--path ''" is specified), then any previously listed directories
 or directories specified in the configuration files will be ignored.
 This option may be specified multiple times, and all of the
 directories listed will be searched; hence, the above example could

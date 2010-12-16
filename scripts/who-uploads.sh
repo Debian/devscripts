@@ -19,8 +19,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 PROGNAME=`basename $0`
 MODIFIED_CONF_MSG='Default settings modified by devscripts configuration files:'
@@ -190,6 +189,11 @@ done
 GPG_NO_KEYRING="--no-options --no-auto-check-trustdb --no-default-keyring --keyring /dev/null"
 GPG_OPTIONS="--no-options --no-auto-check-trustdb --no-default-keyring"
 
+if [ $# -eq 0 ]; then
+    usage;
+    exit 1
+fi
+
 # Now actually get the reports :)
 
 for package; do
@@ -201,10 +205,11 @@ for package; do
 
     # only grab the actual "Accepted" news announcements; hopefully this
     # won't pick up many false positives
+    WGETOPTS="-q -O - --timeout=30 "
     count=0
-    for news in $(wget -q -O - $pkgurl |
+    for news in $(wget $WGETOPTS $pkgurl |
                   sed -ne 's%^.*<a href="\('$package'/news/[0-9A-Z]*\.html\)">Accepted .*%\1%p'); do
-	HTML_TEXT=$(wget -q -O - "$baseurl$news")
+	HTML_TEXT=$(wget $WGETOPTS "$baseurl$news")
 	GPG_TEXT=$(echo "$HTML_TEXT" |
 	           sed -ne 's/^<pre>//; /-----BEGIN PGP SIGNED MESSAGE-----/,/-----END PGP SIGNATURE-----/p')
 

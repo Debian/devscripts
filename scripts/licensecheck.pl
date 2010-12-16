@@ -16,8 +16,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+# with this program. If not, see <http://www.gnu.org/licenses/>.
 
 =head1 NAME
 
@@ -156,7 +155,7 @@ my $default_ignore_regex = '
 $default_ignore_regex =~ s/^#.*$//mg;
 $default_ignore_regex =~ s/\n//sg;
 
-my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|f(77|90)?|p(l|m)|xs|sh|php|py|rb|java|vala|el|sc(i|e)|cs)$';
+my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|f(77|90)?|p(l|m)|xs|sh|php|py|rb|java|vala|el|sc(i|e)|cs|pas|inc|dtd|xsl|mod)$';
 
 my $modified_conf_msg;
 
@@ -516,6 +515,18 @@ sub parselicense($) {
     if ($licensetext =~ /The origin of this software must not be misrepresented.*Altered source versions must be plainly marked as such.*This notice may not be removed or altered from any source distribution/ or
         $licensetext =~ /see copyright notice in zlib\.h/) {
 	$license = "zlib/libpng $license";
+    }
+
+    if ($licensetext =~ /Do What The Fuck You Want To Public License, Version ([^, ]+)/i) {
+        $license = "WTFPL (v$1)";
+    }
+
+    if ($licensetext =~ /Do what The Fuck You Want To Public License/i) {
+        $license = "WTFPL";
+    }
+
+    if ($licensetext =~ /(License WTFPL|Under (the|a) WTFPL)/i) {
+        $license = "WTFPL";
     }
 
     $license = "UNKNOWN" if (!length($license));

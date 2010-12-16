@@ -13,8 +13,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 =head1 NAME
 
@@ -99,10 +98,14 @@ License, or (at your option) any later version.
 
 =cut
 
+use strict;
+use warnings;
+use File::Basename;
 use Getopt::Long qw(:config require_order);
 use Cwd qw(abs_path cwd);
+use Dpkg::Version;
 
-my $datadir = $ENV{'HOME'} . '/.chdist';
+my $progname = basename($0);
 
 sub usage {
   return <<EOF;
@@ -148,6 +151,9 @@ Claes. This program comes with ABSOLUTELY NO WARRANTY. You are free
 to redistribute this code under the terms of the GNU General Public
 License, version 2 or (at your option) any later version.
 EOF
+
+my $arch;
+my $datadir = $ENV{'HOME'} . '/.chdist';
 
 GetOptions(
   "help"       => \$help,
@@ -216,18 +222,6 @@ sub aptconfig {
   return "APT_CONFIG=$datadir/$dist/etc/apt/apt.conf";
 }
 
-sub compare_versions {
-  # Compare two versions
-  my ($va, $vb) = @_;
-  if (!vb) {
-    die "E: Must provide two versions\n";
-  }
-
-  my $test = `/usr/bin/dpkg --compare-versions $va lt $vb && echo 'true' || echo 'false'`;
-  chomp $test;
-  return $test;
-}
-
 ###
 
 sub aptcache {
@@ -290,7 +284,7 @@ sub recurs_mkdir {
   my ($dir) = @_;
   my @temp = split /\//, $dir;
   my $createdir = "";
-  foreach $piece (@temp) {
+  foreach my $piece (@temp) {
      $createdir .= "/$piece";
      if (! -d $createdir) {
         mkdir($createdir);
@@ -311,7 +305,7 @@ sub dist_create {
     mkdir($datadir);
   }
   mkdir($dir);
-  foreach $d (('/etc/apt', '/var/lib/apt/lists/partial', '/var/lib/dpkg', '/var/cache/apt/archives/partial')) {
+  foreach my $d (('/etc/apt', '/var/lib/apt/lists/partial', '/var/lib/dpkg', '/var/cache/apt/archives/partial')) {
      recurs_mkdir("$dir/$d");
   }
 
@@ -387,7 +381,7 @@ sub dist_compare(\@;$;$) {
   # Takes a list of dists, a type of comparison and a do_compare flag
   my ($dists, $do_compare, $type) = @_;
   # Type is 'Sources' by default
-  $type ||= Sources;
+  $type ||= 'Sources';
   type_check($type);
 
   $do_compare = 0 if $do_compare eq 'false';
@@ -444,21 +438,19 @@ sub dist_compare(\@;$;$) {
            die "E: Can only compare versions if there are two distros.\n";
         }
         if (!$status) {
-          if ($versions[0] eq $versions[1]) {
+          my $cmp = version_compare($versions[0], $versions[1]);
+          if (!$cmp) {
             $status = "same_version";
-          } else {
-            $test = compare_versions($versions[0], $versions[1]);
-            if ($test eq 'true') {
-               $status = "newer_in_$dists[1]";
-               if ( $versions[1] =~ m|^$esc_vers[0]| ) {
-                  $details = " local_changes_in_$dists[1]";
-               }
-            } else {
-               $status = "newer_in_$dists[0]";
-               if ( $versions[0] =~ m|^$esc_vers[1]| ) {
-                  $details = " local_changes_in_$dists[0]";
-               }
+          } elsif ($cmp < 0) {
+            $status = "newer_in_$dists[1]";
+            if ( $versions[1] =~ m|^$esc_vers[0]| ) {
+               $details = " local_changes_in_$dists[1]";
             }
+          } else {
+             $status = "newer_in_$dists[0]";
+             if ( $versions[0] =~ m|^$esc_vers[1]| ) {
+                $details = " local_changes_in_$dists[0]";
+             }
           }
         }
         $line .= " $status $details";
@@ -546,21 +538,19 @@ sub compare_src_bin {
            die "E: Can only compare versions if there are two types.\n";
         }
         if (!$status) {
-          if ($versions[0] eq $versions[1]) {
+          my $cmp = version_compare($versions[0], $versions[1]);
+          if (!$cmp) {
             $status = "same_version";
-          } else {
-            $test = compare_versions($versions[0], $versions[1]);
-            if ($test eq 'true') {
-               $status = "newer_in_$comp_types[1]";
-               if ( $versions[1] =~ m|^$esc_vers[0]| ) {
-                  $details = " local_changes_in_$comp_types[1]";
-               }
-            } else {
-               $status = "newer_in_$comp_types[0]";
-               if ( $versions[0] =~ m|^$esc_vers[1]| ) {
-                  $details = " local_changes_in_$comp_types[0]";
-               }
+          } elsif ($cmp < 0) {
+            $status = "newer_in_$comp_types[1]";
+            if ( $versions[1] =~ m|^$esc_vers[0]| ) {
+               $details = " local_changes_in_$comp_types[1]";
             }
+          } else {
+             $status = "newer_in_$comp_types[0]";
+             if ( $versions[0] =~ m|^$esc_vers[1]| ) {
+                $details = " local_changes_in_$comp_types[0]";
+             }
           }
         }
         $line .= " $status $details";
@@ -572,16 +562,16 @@ sub compare_src_bin {
 
 sub grep_file {
   my (@argv, $file) = @_;
-  $dist = shift @argv;
+  my $dist = shift @argv;
   dist_check($dist);
-  $f = glob($datadir . '/' . $dist . "/var/lib/apt/lists/*_$file");
+  my $f = glob($datadir . '/' . $dist . "/var/lib/apt/lists/*_$file");
   # FIXME avoid shell invoc, potential quoting problems here
   system("cat $f | grep-dctrl @argv");
 }
 
 sub list {
   opendir(DIR, $datadir) or die "can't open dir $datadir: $!";
-  while (defined($file = readdir(DIR))) {
+  while (my $file = readdir(DIR)) {
      if ( (-d "$datadir/$file") && ($file =~ m|^\w+|) ) {
         print "$file\n";
      }

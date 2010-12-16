@@ -16,8 +16,7 @@
 #
 
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use 5.006;
 use strict;
@@ -87,6 +86,10 @@ sub wipnity {
 die "$progname: Couldn't run wipnity: $term_size_broken\n" unless have_term_size();
 
 my $columns = Term::Size::chars();
+
+if (system("command -v w3m >/dev/null 2>&1") != 0) {
+    die "$progname: wipnity mode requires the w3m package to be installed\n";
+}
 
 while( my $package=shift ) {
     my $dump = `w3m -dump -cols $columns "http://release.debian.org/migration/testing.pl?package=$package"`;

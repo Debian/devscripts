@@ -81,7 +81,7 @@ then it must match the full directory path.  If not, then it must
 match the full directory name.  If \fIregex\fR contains the string
 \'PACKAGE', this will be replaced by the source package name, as
 determined from the changelog.  The default value for the regex is:
-\'PACKAGE(-.*)?', thus matching directory names such as PACKAGE and
+\'PACKAGE(-.+)?', thus matching directory names such as PACKAGE and
 PACKAGE-version.
 .SH ENVIRONMENT VARIABLES
 As environment variables can affect the building of a package, often
@@ -197,13 +197,15 @@ for example, DEBUILD_SIGNING_HOOK='foo' (note the hyphens change into
 underscores!) or as a command line option \fB\-\-signing\-hook-foo\fR.
 The command will have certain percent substitutions made on it: %%
 will be replaced by a single % sign, %p will be replaced by the
-package name, %v by the package version number, %a will be 1 if the
-immediately following action is to be performed and 0 if not (for
-example, in the dpkg-source hook, %a will become 1 if dpkg-source is
-to be run and 0 if not).  Then it will be handed to the shell to deal
-with, so it can include redirections and stuff.  For example, to only
-run the dpkg-source hook if dpkg-source is to be run, the hook could
-be something like: "if [ %a \-eq 1 ]; then ...; fi".
+package name, %v by the package version number, %s by the source
+version number, %u by the upstream version number.  Neither %s nor %u
+will contain an epoch.  %a will be 1 if the immediately following
+action is to be performed and 0 if not (for example, in the
+dpkg-source hook, %a will become 1 if dpkg-source is to be run and 0
+if not).  Then it will be handed to the shell to deal with, so it can
+include redirections and stuff.  For example, to only run the
+dpkg-source hook if dpkg-source is to be run, the hook could be
+something like: "if [ %a \-eq 1 ]; then ...; fi".
 .PP
 \fBPlease take care with hooks\fR, as misuse of them can lead to
 packages which FTBFS (fail to build from source).  They can be useful

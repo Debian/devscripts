@@ -1,3 +1,450 @@
+devscripts (2.10.69) unstable; urgency=low
+
+  [ James Vega ]
+  * po4a: Add targets to transform translated POD/DocBook files into man
+    pages.  (Closes: #597782)
+  * Include command list in localized devscripts.1.  (Closes: #597906)
+  * Fix a couple markup issues in source files for generated man pages.
+  * bts: Don't send an empty email when --no-action is given.  (Closes:
+    #600822)
+
+  [ David Prévot ]
+  * Update French translation.  (Closes: #599234, #600033)
+
+  [ Patrick Schoenfeld ]
+  * Replace occurences of old FSF address with the FSF recommendation
+    what should be written inside of source files.
+    (Closes: #502512) 
+
+ -- James Vega <jamessan@debian.org>  Thu, 21 Oct 2010 07:36:42 -0400
+
+devscripts (2.10.68) unstable; urgency=low
+
+  [ James Vega ]
+  * dget: Fix parsing of apt-cache and sources.list when given only a package
+    name.  (Closes: #594904)
+  * debchange:
+    + Remove EOL Ubuntu release Intrepid.  Add new development release Natty.
+      (Closes: #593659)
+    + Remove Etch and add Squeeze as backports targets.  Lenny is still the
+      default bpo target.
+  * rmadison: Change Backports URL to backports.debian.org. (Closes: #595714)
+
+  [ Luk Claes ]
+  * Adjust rmadison documentation for move of accessible projectb mirror
+    from merkel to ries.
+
+ -- James Vega <jamessan@debian.org>  Wed, 08 Sep 2010 18:46:35 -0400
+
+devscripts (2.10.67) unstable; urgency=low
+
+  * debcommit: Use the first detected changelog instead of the last.  (Closes:
+    #591368)
+  * debsnap: Remove use of pure-perl specific functions from JSON module.
+    (Closes: #591392)
+  * debchange: Clarify how the TZ environment variable affects debchange.
+    Based on a patch by Rolf Leggewie.  (LP: #330430)
+
+ -- James Vega <jamessan@debian.org>  Sat, 14 Aug 2010 12:02:17 -0400
+
+devscripts (2.10.66) unstable; urgency=low
+
+  [ James Vega ]
+  * bts:
+    + Fix ability to clear all tags on a bug.  (Closes: #539688)
+    + Detect invalid characters in usertags.  (Closes: #590930)
+    + Allow specifying multiple tag modifiers (+, -, =) in one usertag stanza.
+  * rc-alert: Add missing hyphens and correct formatting in the man page.
+    Based on a patch by Salvatore Bonaccorso.  (Closes: #589607)
+  * checkbashisms: Allow kill & trap XSI-isms unless --posix is given, as per
+    Policy 3.9.1.0.  (Closes: #486823)
+  * debchange: Add --[no]multimaint-merge option, corresponding to the
+    DEBCHANGE_MULTIMAINT_MERGE configuration variable.  (Closes: #590842)
+  * licensecheck: Add .pas, .inc, .dtd., .xsl, and .mod files to the default
+    check list.  (Closes: #534988, #591305)
+  * build-rdeps: Escape regular expression metacharacters in package names.
+    (Closes: #590832)
+  * Build-Depends on po4a (>= 0.40) so po4a recognizes .TQ macro.
+
+  [ Cyril Brulebois ]
+  * uscan: Get rid of extra quoting in dpkg --compare-versions calls.
+    (Closes: #590178)
+
+  [ Carsten Hey ]
+  * debsign: Add options --re-sign and --no-re-sign to let the user choose
+    whether an already signed file should be resigned.  (Closes: #580821)
+
+ -- James Vega <jamessan@debian.org>  Mon, 02 Aug 2010 01:31:38 -0400
+
+devscripts (2.10.65.1) unstable; urgency=low
+
+  * debc:
+    + Call changelog_parse correctly.  (Closes: #588947)
+    + Update bash completion to complete *.changes files and package names.
+      Thanks to Stefano Rivera for the patch.  (Closes: #584703)
+
+ -- James Vega <jamessan@debian.org>  Tue, 13 Jul 2010 20:10:09 -0400
+
+devscripts (2.10.65) unstable; urgency=low
+
+  [ James Vega ]
+  * Remove mergechanges from the set of commands which use completion of
+    package names.  (Closes: #578167)
+  * bts:
+    + Use sendmail to send mails with extra headers when $(DEB)EMAIL aren't
+      present.  (Closes: #577564)
+    + Document that $(DEB)EMAIL must be in the environment to send email using
+      either --mutt or --smtp-host.  (Closes: #578334)
+    + Cleanup the help output and add some options which were only documented
+      in the man page.
+    + Allow specifying multiple tag modifiers (+, -, =) in one tag stanza.
+      (Closes: #578118)
+    + Document the valid values for the status key in the select command.
+      (Closes: #583067)
+  * debsnap:
+    + Iterate over the list of files listed for a hash until we find one that
+      matches the requested package.  (Closes: #584734)
+    + Warn and move on to the next file if no files are present for a given
+      hash or none match the requested package.  (Closes: #587265)
+    + Handle error responses from snapshot.debian.org.  (Closes: #587217)
+    + Use the basename of the file being downloaded as the name under which to
+      save it.  (Closes: #584735)
+    + Do not remove the destination directory when --force is given.  (Closes:
+      #587517)
+  * Remove --ignore-dirname options (and deprecation notices) from all
+    scripts.  6.5 years is long enough to stop using that option.
+  * diff2patches: Document the patch naming scheme and use of “debian/” as the
+    destination directory when “debian/patches/” doesn't exist.  (Closes:
+    #552693)
+  * mk-build-deps:
+    + Add options to build packages which depend on solely Build-Depends or
+      Build-Depends-Indep.  (Closes: #498898)
+    + Include build-essential in Depends.  (Closes: #565889)
+  * debi: Use “dpkg -O” instead of parsing dpkg-query's output to upgrade only
+    packages which are already installed.  (Closes: #563390)
+  * debcheckout: Specifically call out that Debian hosts are already handled
+    in DEBCHECKOUT_AUTH_URLS' description.  Thanks to martin f. krafft for the
+    suggested wording.  (Closes: #530581)
+  * debchange: When running “dch -r”, use <dist>-backports if a backports
+    upload is detected.  (Closes: #588502)
+  * uupdate: Use “0ubuntu1” for the Debian revision of the version number when
+    running uupdate on Ubuntu systems.  Based on a patch by Guillaume Martres.
+    (Closes: #577998)
+  * Ship French man pages in UTF-8 now that #196762 is fixed.
+
+  [ Martin Zobel-Helas ]
+  * Remove svk from Recommends, it is no longer in the archive. (Closes:
+    #581224)
+
+  [ Raphael Geissert ]
+  * checkbashisms:
+    + Makefile handling:
+      - Simplify make variables as shell variables.  (Closes: #535368)
+      - Convert all $$ to $.
+      - Recognize SHELL setting in Makefile when being set as an override.
+      - Ignore make's '-' for ignore errors.
+      - Fix some false positives due to target names.
+    + Detect incorrect use of ^ instead of ! for negation in pattern matching
+      collections.  (Closes: #497489)
+    + Detect use of {post,pre}{increment,decrement} in arithmetic expansion.
+      (Closes: #572006)
+    + Detect use of Bash's “printf -v var ...” or the %b and %q format
+      specifiers.
+    + Detect use of the Bash's “coproc” keyword.
+    + Detect use of Bash's “;;&” and ”;&” operators.
+    + Add support for handling line continuations.  (Closes: #531327)
+    + Fix a false positive with file redirection.
+    + Fix handling of indented heredoc delimiters.
+    + Fix some parsing of quoted strings.
+    + Detect use of exponentiation.
+    + Detect use of the 'jobs' built-in.
+    + Detect use of command with options other than “-p”.
+    + Fix a false positive with redirection to an fd specified via a variable.
+    + Detect unexpected EOF for unclosed heredocs, quoted strings, and line
+      continuations.
+
+  [ Simon McVittie ]
+  * mk-build-deps:
+    + Build an Arch: any package if any of the Build-Depends have architecture
+      requirements.  (Closes: #580600)
+    + Allow specifying for which architecture to build the package.
+
+  [ Charles Plessy ]
+  * debchange: Add “--team” support.  (Closes: #588714)
+
+ -- James Vega <jamessan@debian.org>  Mon, 12 Jul 2010 23:22:08 -0400
+
+devscripts (2.10.64) unstable; urgency=low
+
+  [ Stefano Zacchiroli ]
+  * devscripts.1: generic documentation for $DEBEMAIL and $DEBFULLNAME
+
+  [ James Vega ]
+  * Devscripts::Versort: Correct _versort so the lists it returns aren't
+    shorter than the ones passed in to _versort.  (Closes: #577654)
+  * debcheckout: Switch from using the Switch module to Perl 5.10's switch
+    feature.
+
+ -- James Vega <jamessan@debian.org>  Tue, 13 Apr 2010 23:46:10 -0400
+
+devscripts (2.10.63) unstable; urgency=low
+
+  [ Christoph Berg ]
+  * debcheckout: inject extra slash in "hg ssh://hg.debian.org//" URLs so
+    paths are not based in the user's $HOME.
+
+  [ James Vega ]
+  * Devscripts::Versort:
+    + Restore previous behavior of versort not performing a check on whether
+      the version is a valid Debian version.  (Closes: #577043)
+    + Re-add deb_versort which ensures the versions are valid Debian versions.
+  * debian/control:
+    + Require dpkg-dev >= 1.15.4.1 since we're using bits of the new Perl API.
+    + Add libjson-perl to Build-Depends so we can syntax check debsnap.
+  * debcheckout: Use $DEBEMAIL/$DEBFULLNAME to set username in .hg/hgrc.
+
+  [ David Paleino ]
+  * debsnap: rewritten from scratch in Perl, use snapshot.debian.org
+    and its JSON API (Closes: #530416)
+
+  [ Thorsten Glaser ]
+  * debsign: Convert to a Debian Policy §10.4 shell script. (Closes: #577251)
+
+ -- James Vega <jamessan@debian.org>  Mon, 12 Apr 2010 23:56:40 -0400
+
+devscripts (2.10.62) unstable; urgency=low
+
+  [ James Vega ]
+  * debcommit:
+    + Fix a regression where only debian/ changes were being committed in CVS
+      repos.  Thanks to Thomas Parmelan for the patch.  (Closes: #563918)
+    + Change '~' in version numbers to '.' when tagging in git.  Thanks to
+      Damyan Ivanov.  (Closes: #564075)
+    + Treat darcs similar to hg with respect to determining the commit
+      message.  Fold a single change into one line and spawn an editor if
+      multiple changes are detected.  (Closes: #563901)
+    + Ensure the commit message presented to the user for editing always has
+      an EOL on the last line.
+  * rmadison:
+    + Add http://qa.debian.org/cgi-madison/madison.cgi, shorthand "udd", as a
+      known madison URL.
+    + Detect an existing '?' in a URL and use '&' to append more cgi
+      parameters.  Thanks to Raphael Geissert.
+  * chdist:
+    + Add "use strict" and update for compliance.
+    + Use Dpkg::Version to perform version comparisons.
+  * Devscripts::Versort: Use Dpkg::Version::version_compare instead of
+    invoking “dpkg --compare-versions”.
+  * debian/control:
+    + Update Vcs-* to point to the new Git repository.
+    + Remove Conflicts on kdesdk-scripts from Etch.
+    + Bump Standards-Version to 3.8.4 -- no changes necessary.
+  * dcmd: Allow capital letters for the section and priority fields.  (Closes:
+    #565159)
+  * debcheckout: Ensure "/git/" is at the start of the URL's path when
+    performing an authenticated clone of an Alioth git repo.
+  * uupdate:
+    + Fix a typo which caused redirection of stdout to a file name "@".
+      (Closes: #569062)
+    + Add support for xz compressed archives/patches and 7z archives.  Thanks
+      to Hideki Yamane for the patch.  (Closes: #568615)
+    + Clarify wording when neither a diff nor a debian.tar is found.  (Closes:
+      #575820)
+  * Update descriptions of debcommit to include darcs as a supported VCS.
+    (Closes: #570138)
+  * debchange:
+    + Add maverick as a valid distribution.  Thanks to Benjamin Drung for the
+      patch.  (Closes: #576287)
+    + Treat a trailing '+' like a trailing '~' when incrementing the version
+      number.  (Closes: #521642)
+  * debuild: Expose two new variables (epoch-less source version, and upstream
+    version) to hooks.  Thanks to gregor herrmann for the patch.  (Closes:
+    573092)
+  * checkbashisms: Detect more Bash builtins -- readarray, mapfile, enable.
+    (Closes: #568473)
+  * dd-list: Clarify that --dctrl simply changes the expected format of the
+    list of packages.  Thanks to Adeodato Simó for the suggestion.  (Partially
+    addresses #509983)
+  * Add bash completion of package names for various Devscripts commands.
+    Thanks to Simon Paillard for the patch.  (Closes: #507776)
+  * Document in dscverify(1) that /usr/share/keyrings/debian-maintainers.gpg
+    is one of the default keyrings.
+  * dget: Add description of the use of dscverify to the description in the
+    man page.  (Closes: #537367)
+  * Add support for working with/recognizing xz archives to debchange,
+    debdiff, debuild, uscan.
+  * Use standalone “set -e” lines in maintainer scripts.
+  * Add debian/source/format with "3.0 (native)".
+
+  [ Patrick Schoenfeld ]
+  * nmudiff: Fix "[nmudiff] please include --tagpending option" by applying the
+    patch from Gregor Herrmann. Thanks. (Closes: #559549)
+  * build-rdeps:
+    + Add some documentation to the manpage, which emphasizes on the fact that
+      the tool has some external dependencies (namely apt Sources files)
+    + Add a proper argument passing to test_for_valid_component() so that
+      it really gets the filename and not the Release file entry.
+    + Add a check to test_for_valid_component() to test if a given Sources
+      file actually exists and otherwise print a more meaningful warning.
+      (Closes: #564443)
+
+  [ Adam D. Barratt ]
+  * debchange: Sanitise list of distributions.  Remove {sarge,etch}-backports
+    and sarge-volatile, none of which accept uploads any more.
+
+  [ Martin Zobel-Helas ]
+  * checkbashisms: Fix typo spotted by Dann Frazier. (Closes: #575554)
+
+ -- James Vega <jamessan@debian.org>  Mon, 05 Apr 2010 23:00:39 -0400
+
+devscripts (2.10.61) unstable; urgency=low
+
+  * bts: Correct the address used to email the submitter when using the "bts
+    done" command.
+
+ -- James Vega <jamessan@debian.org>  Sat, 02 Jan 2010 22:20:19 -0500
+
+devscripts (2.10.60) unstable; urgency=low
+
+  The "Welcome to the New Year" release.
+
+  [ James Vega ]
+  * checkbashisms: Detect use of {x..z} expansion.  Thanks to Raphael
+    Geissert.  (Closes: #560774)
+  * who-uploads: Show usage if no arguments are given.  Thanks to Kumar
+    Appaiah.  (Closes: #560955)
+  * uscan:
+    + Add missing escape of '\' in man page.  Thanks to Marco Túlio Gontijo
+      for the patch.  (Closes: #562587)
+    + Add missing verb in description of FTP syntax.  Thanks to Marco Túlio
+      Gontijo for the patch.  (Closes: #562586)
+  * annotate-output: Allow specifying a timestamp format.  (Closes: #539720)
+  * bts:
+    + Always include "thanks" at the end of the control block.  (Closes:
+      #542962)
+    + Allow specifying which fields will be shown by "bts status".  (Closes:
+      #499283, #323782)
+    + Add "verbose" option to "bts status", which will also show fields that
+      don't have a set value.
+    + Add "done" command which sends a close command as well as Ccing the bug
+      submitter.  (Closes: #482751)
+  * build-rdeps:
+    + Add --origin option to specify which origin to use.
+    + Use the Release file to determine which Sources file(s) to search for
+      the given origin.  Thanks to Michael Schutte for the patch.  (Closes:
+      #545115)
+
+  [ Patrick Schoenfeld ]
+  * licensecheck: Add support for some common variants of the WTFPL
+
+  [ Ryan Niebur ]
+  * deb-reversion: Fix use with recent dpkg-dev, thanks to Salvatore
+    Bonaccorso (Closes: #559702)
+
+  [ Adam D. Barratt ]
+  * Bump Standards-Version to 3.8.3.  No changes required.
+  * build-rdeps: Correct spelling error in manpage ("ommitted" -> "omitted").
+  * checkbashisms: Correct spelling error in manpage ("preceeded" ->
+    "preceded").
+  * decbommit: Correct spelling error in manpage ("commiting" ->
+    "committing").
+
+ -- James Vega <jamessan@debian.org>  Fri, 01 Jan 2010 23:30:33 -0500
+
+devscripts (2.10.59) unstable; urgency=low
+
+  [ James Vega ]
+  * debrelease: Do not use .svn/deb-layout to determine debsdir if --debs-dir
+    was used.  (Closes: #558172)
+  * checkbashisms: Fix a false positive detection of ". $(foo bar)/baz" as
+    attempting to pass arguments to a sourced script.  (Closes: #557639)
+
+  [ Joachim Breitner ]
+  * debcommit: Add support for having only debian/ under a svn, cvs or darcs
+    VCS (Closes: #450878)
+
+ -- James Vega <jamessan@debian.org>  Tue, 01 Dec 2009 00:16:53 -0500
+
+devscripts (2.10.58) unstable; urgency=low
+
+  * who-uploads: Correct the argument to wget's -O option.  Thanks to
+    Yves-Alexis Perez for the patch.  (Closes: #557507)
+
+ -- James Vega <jamessan@debian.org>  Sun, 22 Nov 2009 09:16:03 -0500
+
+devscripts (2.10.57) unstable; urgency=low
+
+  [ James Vega ]
+  * debcommit: Fix gathering of "Closes" with dpkg >= 1.15.5.2.  (Closes:
+    #557318)
+
+  [ Ben Finney ]
+  * Tighten default dirname regex to match a version only if it contains
+    at least one character: ‘PACKAGE(-.+)?’.  (Closes: #521126)
+
+ -- James Vega <jamessan@debian.org>  Sat, 21 Nov 2009 18:01:28 -0500
+
+devscripts (2.10.56) unstable; urgency=low
+
+  [ Adam D. Barratt ]
+  * debchange: Update the list of known Ubuntu distributions, adding
+    lucid (lynx) and removing gutsy.
+
+  [ James Vega ]
+  * mk-build-deps:
+    + Use Pod::Usage to generate the --help message.  This keeps the message
+      in sync with the POD instead of keeping two different texts in sync.
+      (Closes: #548245)
+    + Skip comment/blank lines when parsing the control file.  (Closes:
+      #549402)
+  * debchange:
+    + Based on a scan of the lintian lab, add '.', '!', and ':' to the set of
+      punctuation characters we strip from the distribution name when we parse
+      an "Upload to ..." line.  (Closes: #548171)
+    + Consistently use “--nomainttrailer” in the manpage.  (Closes: #544351)
+  * debuild:
+    + Recognize dpkg-source's -z/-Z options.  (Closes: #553205)
+    + Remove references to pbuilder-satisfydepends.  Suggest mk-build-deps
+      instead.  (Closes: #446318)
+  * debcommit:
+    + Handle the split up of Dpkg::Changelog in Dpkg 1.15.5.2.
+    + Use Dpkg::Changelog::Parse, if available, instead of shelling out to
+      dpkg-parsechangelog.
+    + Remove use of deprecated L<> markup for pod2man.
+  * who-uploads: Set a 30 second timeout when invoking wget instead of using
+    wget's default 900 second timeout.  (Closes: #541732)
+  * debsign: Update the dcut reference to point to ftp.upload.debian.org
+    instead of ftp-master.debian.org.
+  * debrelease:
+    + Support using buildArea from .svn/deb-layout.  (Closes: #456226)
+    + Change to the package root directory before verifying the existence of
+      debsdir.
+  * bts: Remove use of deprecated L<> markup for pod2man.
+
+  [ Ryan Niebur ]
+  * add w3m to suggests for grep-excuses -w, check for it at runtime too
+    (Closes: #551516)
+  * mk-build-deps: allow passing options to the command in
+    MKBUILDDEPS_TOOL. Setting MKBUILDDEPS_TOOL="aptitude --schedule-
+    only" in ~/.devscripts should work now. (Closes: #547164)
+  * mergechanges:
+    + if both input files have the same file listed but with
+      different checksums, keep the first and get rid of the one from the
+      second.
+    + make trailing whitespace consistent with how 'normal'
+      .changes file are
+
+  [ Patrick Schoenfeld ]
+  * debchange:
+    + Include patch from Mathieu Parent to allow --newversion to be mixed
+      together with --package. (Closes: #549469)
+
+  [ Stefano Zacchiroli ]
+  * debcheckout: Set user.name and user.email in the checked out repository if
+    it is a git repo.  (Closes: #555025)
+
+ -- James Vega <jamessan@debian.org>  Fri, 20 Nov 2009 00:28:13 -0500
+
 devscripts (2.10.55~bpo50+1) lenny-backports; urgency=high
 
   * Urgency "high" for uscan security update fix

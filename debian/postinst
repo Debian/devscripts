@@ -1,4 +1,5 @@
-#! /bin/sh -e
+#! /bin/sh
+set -e
 
 if [ "$1" = configure ]
 then
@@ -73,7 +74,7 @@ EOF
 # 
 # The default settings are:
 # DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1
-# DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.*)?'
+# DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.+)?'
 EOF
 	    fi
 
@@ -631,15 +632,7 @@ EOF
 # DEBSNAP_VERBOSE=no
 #
 # The base URL of the archive to download from
-# DEBSNAP_BASE_URL=http://snapshot.debian.net/archive
-#
-# A sed regexp to transform pool/<component>/f/foo into the desired layout
-# default: make the directory from pool/<component>/f/foo to pool/f/foo
-# DEBSNAP_CLEAN_REGEX="s@\([^/]*\)/[^/]*/\(.*\)@\1/\2@"
-#
-# Where the Sources.gz lives, subdirectory of DEBSNAP_BASE_URL/<clean dir>/
-# default: DEBSNAP_BASE_URL/<clean dir>/source/Sources.gz
-# DEBSNAP_SOURCES_GZ_PATH=source/Sources.gz
+# DEBSNAP_BASE_URL=http://snapshot-dev.debian.org
 
 ##### debdiff option added in 2.10.45
 #

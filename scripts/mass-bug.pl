@@ -16,8 +16,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 =head1 NAME
 
@@ -330,7 +329,7 @@ sub mailbts {
 	if (! defined $pid) {
 	    die "$progname: Couldn't fork: $!\n";
 	}
-	$SIG{'PIPE'} = sub { die "bts: pipe for $sendmailcmd broke\n"; };
+	$SIG{'PIPE'} = sub { die "$progname: pipe for $sendmailcmd broke\n"; };
 	if ($pid) {
 	    # parent
 	    print MAIL <<"EOM";
@@ -356,9 +355,9 @@ EOM
 	}
 	my $pid = open(MAIL, "|-");
 	if (! defined $pid) {
-	    die "bts: Couldn't fork: $!\n";
+	    die "$progname: Couldn't fork: $!\n";
 	}
-	$SIG{'PIPE'} = sub { die "bts: pipe for mail broke\n"; };
+	$SIG{'PIPE'} = sub { die "$progname: pipe for mail broke\n"; };
 	if ($pid) {
 	    # parent
 	    print MAIL $body;

@@ -33,7 +33,7 @@ version=3
 
 # Line continuations are performed with \\
 
-# This the format for an FTP site:
+# This is the format for an FTP site:
 # Full-site-with-pattern  [Version  [Action]]
 ftp://ftp.tex.ac.uk/tex-archive/web/c_cpp/cweb/cweb-(.*)\\.tar\\.gz \\
   debian  uupdate
@@ -66,7 +66,7 @@ http://www.dataway.ch/~lukasl/amph/amph.html \\
 # http://site/inter/mediate/dir/
 http://tmrc.mit.edu/mirror/twisted/Twisted/(\\d\\.\\d)/ \\
   Twisted-([\\d\\.]*)\\.tar\\.bz2
-http://tmrc.mit.edu/mirror/twisted/Twisted/(\\d\.\\d)/Twisted-([\\d\\.]*)\\.tar\\.bz2
+http://tmrc.mit.edu/mirror/twisted/Twisted/(\\d\\.\\d)/Twisted-([\\d\\.]*)\\.tar\\.bz2
 
 # qa.debian.org runs a redirector which allows a simpler form of URL
 # for SourceForge based projects. The format below will automatically
@@ -313,7 +313,7 @@ then it must match the full directory path.  If not, then it must
 match the full directory name.  If \fIregex\fR contains the string
 \'PACKAGE', this will be replaced by the source package name, as
 determined from the changelog.  The default value for the regex is:
-\'PACKAGE(-.*)?', thus matching directory names such as PACKAGE and
+\'PACKAGE(-.+)?', thus matching directory names such as PACKAGE and
 PACKAGE-version.
 .SH EXAMPLE
 This script will perform a fully automatic upstream update.
@@ -369,14 +369,15 @@ orig.tar.gz names if their extensions are \fI.tar.gz\fR or \fI.tgz\fR,
 and similarly for tar.bz2 files.
 .TP
 .B \-\-repack
-After having downloaded a lzma tar, bzip tar or zip archive, repack it
-to a gzip tar archive, which is still currently required as a member
-of a Debian source package. Does nothing if the downloaded archive is
-not a lzma tar archive, bzip tar archive or a zip archive (i.e. it
-doesn't match a .tlzma, .tar.lzma, .tbz, .tbz2, .tar.bz2 or .zip
-extension). The unzip package must be installed in order to
-repack .zip archives, and the lzma package must be installed to repack
-lzma tar archives.
+After having downloaded an lzma tar, xz tar, bzip tar or zip archive,
+repack it to a gzip tar archive, which is still currently required as a
+member of a Debian source package. Does nothing if the downloaded
+archive is not an lzma tar archive, xz tar archive, bzip tar archive or
+a zip archive (i.e. it doesn't match a .tlz, .tar.lzma, .txz, .tar.xz
+\^.tbz, .tbz2, .tar.bz2 or .zip extension). The unzip package must be
+installed in order to repack .zip archives, the lzma package must be
+installed to repack lzma tar archives, and the xz-utils package must be
+installed to repack xz tar archives.
 .TP
 .B \-\-no\-symlink
 Don't make these symlinks and don't rename the files.
@@ -492,7 +493,7 @@ equivalent to the \fB\-\-destdir\fR option.
 .TP
 .B USCAN_REPACK
 If this is set to \fIyes\fR, then after having downloaded a bzip tar,
-lzma tar or zip archive, \fBuscan\fR will repack it to a gzip tar.
+lzma tar, xz tar, or zip archive, \fBuscan\fR will repack it to a gzip tar.
 This is equivalent to the \fB\-\-repack\fR option.
 .SH "EXIT STATUS"
 The exit status gives some indication of whether a newer version was

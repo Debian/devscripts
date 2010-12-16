@@ -9,12 +9,16 @@ diff2patches \fI<filename>\fP
 diff2patches \fI\-\-help\fP|\fI\-\-version\fP
 .SH "DESCRIPTION"
 .LP 
-Extracts patches from .diff.gz which apply to files outside the debian/ directory scope.
+Extracts patches from .diff.gz which apply to files outside the
+\*(lqdebian/\*(rq directory scope.  A patch is created for each modified file.
+Each patch is named according to the path of the modified file, with \*(lq/\*(rq
+replaced by \*(lq___\*(rq, and an extension of \*(lq.patch\*(rq.
 .SH "OPTIONS"
 .LP 
-.TP 
+.TP 4
 \fB\fIfilename\fP\fR
-Extract patches from \fB\fIfilename\fP\fR which apply outside the debian/ directory.
+Extract patches from \fB\fIfilename\fP\fR which apply outside the
+\*(lqdebian/\*(rq directory.
 .TP 
 \fB\-\-help\fR 
 Output help information and exit.
@@ -22,18 +26,22 @@ Output help information and exit.
 \fB\-\-version\fR
 Output version information and exit.
 .SH "FILES"
-.LP 
+.TP
 \fIdebian/control\fP 
 Existence of this file is tested before any patch is extracted.
-.br 
-\fIdebian/patches\fP 
-When present and is a directory, patches are extracted in that directory,
-unless \fIDEB_PATCHES\fP is defined (read the "ENVIRONMENT VARIABLES" section below).
+.TP
+\fIdebian/\fP
+.TQ
+\fIdebian/patches/\fP
+Patches are extracted to one of these directories.  \*(lqdebian/patches/\*(rq is
+preferred, if it exists.  If \fIDEB_PATCHES\fP is present in the environment,
+it will override this behavior (see \*(lqENVIRONMENT VARIABLES\*(rq section
+below).
 .SH "ENVIRONMENT VARIABLES"
 .TP
 \fIDEB_PATCHES\fP
 When defined and points to an existing directory, patches are extracted in that directory
-and not under debian nor debian/patches.
+and not under \*(lqdebian/\*(rq nor \*(lqdebian/patches/\*(rq.
 .SH "SEE ALSO"
 .LP
 \fBcombinediff\fR(1)

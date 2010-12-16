@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 
 # This program is designed to PGP sign a .dsc and .changes file pair
 # in the form needed for a legal Debian upload.  It is based in part
@@ -31,8 +31,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # Abort if anything goes wrong
 set -e
@@ -45,7 +44,7 @@ MODIFIED_CONF_MSG='Default settings modified by devscripts configuration files:'
 signingdir=""
 remotefilesdir=""
 
-trap "cleanup_tmpdir" 0 1 2 3 9 11 13 15
+trap "cleanup_tmpdir" EXIT HUP INT QUIT KILL SEGV PIPE TERM
 
 # --- Functions
 
@@ -88,6 +87,8 @@ usage () {
     -a<arch>        Use changes file made for Debian target architecture <arch>
     -t<target>      Use changes file made for GNU target architecture <target>
     --multi         Use most recent multiarch .changes file found
+    --re-sign       Re-sign if the file is already signed.
+    --no-re-sign    Don't re-sign if the file is already signed.
     --debs-dir <directory>
                     The location of the .changes / .dsc files when called from
                     within a source tree (default "..")
@@ -224,23 +225,31 @@ withecho () {
 # and failure if the file needs signing.  Parameters: $1=filename,
 # $2=file description for message (dsc or changes)
 check_already_signed () {
-    if [ "`head -n 1 \"$1\"`" != "-----BEGIN PGP SIGNED MESSAGE-----" ]
-    then
+    [ "`head -n 1 \"$1\"`" = "-----BEGIN PGP SIGNED MESSAGE-----" ] || \
 	return 1
+
+    local resign
+    if [ "$opt_re_sign" = "true" ]; then
+	resign="true"
+    elif [ "$opt_re_sign" = "false" ]; then
+	resign="false"
     else
 	printf "The .$2 file is already signed.\nWould you like to use the current signature? [Yn]"
 	read response
 	case $response in
-	[Nn]*)
-	    UNSIGNED_FILE="$(temp_filename "$1" "unsigned")"
-
-	    sed -e '1,/^$/d; /^$/,$d' "$1" > "$UNSIGNED_FILE"
-	    movefile "$UNSIGNED_FILE" "$1"
-	    return 1
-	    ;;
-	*) return 0;;
+	[Nn]*) resign="true" ;;
+	*)     resign="false" ;;
 	esac
     fi
+
+    [ "$resign" = "true" ] || \
+	return 0
+
+    UNSIGNED_FILE="$(temp_filename "$1" "unsigned")"
+
+    sed -e '1,/^$/d; /^$/,$d' "$1" > "$UNSIGNED_FILE"
+    movefile "$UNSIGNED_FILE" "$1"
+    return 1
 }
 
 # --- main script
@@ -345,6 +354,8 @@ do
 	-a*)	targetarch="$value" ;;
 	-t*)	targetgnusystem="$value" ;;
 	--multi) multiarch="true" ;;
+	--re-sign)    opt_re_sign="true" ;;
+	--no-re-sign) opt_re_sign="false" ;;
 	-r*)	if [ -n "$value" ]; then remotehost=$value;
 		elif [ $# -lt 1 ]; then
 		    echo "$PROGNAME: -r option missing argument!" >&2
@@ -570,7 +581,7 @@ dosigning() {
 	}
 
 	# simple validator for .commands files, see
-	# ftp://ftp-master.debian.org/pub/UploadQueue/README
+	# ftp://ftp.upload.debian.org/pub/UploadQueue/README
 	perl -ne 'BEGIN { $uploader = 0; $incommands = 0; }
               END { exit $? if $?;
                     if ($uploader && $incommands) { exit 0; }
@@ -598,7 +609,7 @@ dosigning() {
                  if (/./) { die ".commands file: extra stuff after Commands field!\n"; }
               }' $commands || {
 	echo "$PROGNAME: .commands file appears to be invalid. see:
-ftp://ftp-master.debian.org/pub/UploadQueue/README
+ftp://ftp.upload.debian.org/pub/UploadQueue/README
 for valid format" >&2;
 	exit 1; }
 

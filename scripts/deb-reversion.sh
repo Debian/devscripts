@@ -188,7 +188,7 @@ repack_file()
 {
   cd ..
   dpkg-deb -b package >/dev/null
-  dpkg-name package.deb | sed -e 's,.*to `\(.*\).,\1,'
+  dpkg-name package.deb | sed -e "s,.*['\`]\(.*\).,\1,"
 }
 
 [ -z "${OLD_VERSION:-}" ] && OLD_VERSION="$(get_version $DEB)"

@@ -17,8 +17,7 @@
 ## GNU General Public License for more details.
 ##
 ## You should have received a copy of the GNU General Public License
-## along with this program; if not, write to the Free Software
-## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+## along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 set -e
 
@@ -86,7 +85,11 @@ done
 
 # Extract the Architecture: field from all .changes files,
 # and merge them, sorting out duplicates
-ARCHS=$(grep -h "^Architecture: " "$@" | sed -e "s,^Architecture: ,," | tr ' ' '\n' | sort -u | tr '\n' ' ')
+ARCHS=$(grep -h "^Architecture: " "$@" | sed -e "s,^Architecture: ,," | tr ' ' '\n' | sort -u | tr '\n' ' ' | sed 's/ $//')
+
+checksum_uniq() {
+    awk '{if(arr[$NF] != 1){arr[$NF] = 1; print;}}'
+}
 
 # Extract & merge the Version: field from all files..
 # Don't catch Version: GnuPG lines, though!
@@ -95,11 +98,11 @@ SVERSION=$(echo "$VERSION" | perl -pe 's/^\d+://')
 # Extract & merge the sources from all files
 SOURCE=$(grep -h "^Source: " "$@" | sed -e "s,^Source: ,," | sort -u)
 # Extract & merge the files from all files
-FILES=$(egrep -h "^ [0-9a-f]{32} [0-9]+" "$@" | sort -u)
+FILES=$(egrep -h "^ [0-9a-f]{32} [0-9]+" "$@" | checksum_uniq)
 # Extract & merge the sha1 checksums from all files
-SHA1S=$(egrep -h "^ [0-9a-f]{40} [0-9]+" "$@" | sort -u)
+SHA1S=$(egrep -h "^ [0-9a-f]{40} [0-9]+" "$@" | checksum_uniq)
 # Extract & merge the sha256 checksums from all files
-SHA256S=$(egrep -h "^ [0-9a-f]{64} [0-9]+" "$@" | sort -u)
+SHA256S=$(egrep -h "^ [0-9a-f]{64} [0-9]+" "$@" | checksum_uniq)
 # Extract & merge the description from all files
 DESCRIPTIONS=$(sed '/^Description:/,/^[^ ]/{/^ /p;d};d' "$@" | sort -u)
 # Extract & merge the Formats from all files
@@ -174,7 +177,7 @@ DESCFILE=`tempfile`
 trap "rm -f '${OUTPUT}' '${DESCFILE}'" 0 1 2 3 7 10 13 15
 
 if test $(echo "${DESCRIPTIONS}" | wc -l) -ne 0; then
-    echo "Description:" > "${DESCFILE}"
+    echo "Description: " > "${DESCFILE}"
     echo "${DESCRIPTIONS}" >> "${DESCFILE}"
 fi
 
@@ -190,7 +193,7 @@ fi
 eval "sed -e 's,^Architecture: .*,Architecture: ${ARCHS},' \
     -e '/^Files: /,$ d; /^Checksums-.*: /,$ d' \
     -e '/^Description:/,/^[^ ]/{/^Description:/d;/^[ ]/d}' \
-    -e '/^Changes:/{r '${DESCFILE} -e ';aChanges:' -e ';d}' \
+    -e '/^Changes:/{r '${DESCFILE} -e ';aChanges: ' -e ';d}' \
     -e 's,^Format: .*,Format: ${FORMATS},' \
     ${OUTPUT} ${REDIR1}"
 

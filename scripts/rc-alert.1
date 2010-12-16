@@ -2,11 +2,11 @@
 .SH NAME
 rc-alert \- check for installed packages with release-critical bugs
 .SH SYNOPSIS
-\fBrc-alert [inclusion options] [\-\-debtags [tag[,tag ...]] [\-\-popcon] [package ...]\fR
+\fBrc\-alert [inclusion options] [\-\-debtags [tag[,tag ...]] [\-\-popcon] [package ...]\fR
 .br
-\fBrc-alert \-\-help|\-\-version\fR
+\fBrc\-alert \-\-help|\-\-version\fR
 .SH DESCRIPTION
-\fBrc-alert\fR downloads the list of release-critical bugs from the
+\fBrc\-alert\fR downloads the list of release-critical bugs from the
 Debian BTS webpages, and then outputs a list of packages installed on
 the system, or given on the command-line, which are in that list.
 .P
@@ -35,15 +35,15 @@ For example, to include bugs tagged security or help wanted, use "SH".
 .TP
 .BR \-\-include\-tag\-op ", " \-t
 If set to \fIand\fP, a bug must have all of the tags specified by
-\fB\-\-includetags\fP.
+\fB\-\-include\-tags\fP.
 .TP
 .BR \-\-exclude\-tags
 A list of tags which the bug must not have, in the same format as
-\fB\-\-includetags\fP.
+\fB\-\-include\-tags\fP.
 .TP
 .BR \-\-exclude\-tag\-op
 If set to \fIand\fP, a bug must have none of the tags specified by
-\fB\-\-excludetags\fP.  By default, the bug will be excluded if any tag
+\fB\-\-exclude\-tags\fP.  By default, the bug will be excluded if any tag
 matches.
 .TP
 .BR \-\-include\-dists ", " \-d
@@ -56,7 +56,7 @@ order to be included.
 .TP
 .BR \-\-exclude\-dists
 A list of distributions to which the bug must not apply, in the same format as
-\fB\-\-includedists\fP.
+\fB\-\-include\-dists\fP.
 .TP
 .BR \-\-exclude\-dist\-op
 If set to \fIand\fP, a bug must apply to all of the specified distributions
@@ -75,7 +75,7 @@ package is matched if it has any of the listed tags within the facet.
 .TP
 .BR \-\-debtags\-database
 Use a non-standard debtags database.  The default is
-/var/lib/debtags/packages-tags.
+\fI/var/lib/debtags/packages-tags\fP.
 .P
 Popularity-contest collects data about installation and usage of Debian
 packages. You can additionally sort the bugs by the popcon rank of the related
@@ -92,7 +92,7 @@ with \-\-pc\-local.
 .TP
 .BR \-\-pc\-local
 Instead of requesting remote data the information from the last popcon run is
-used (/var/log/popularity-contest).
+used (\fI/var/log/popularity-contest\fP).
 .SH EXAMPLES
 .TP
 .BR \-\-include\-dists " OS"
@@ -114,7 +114,7 @@ will only include packages that have the 'role::plugin' tag and that have
 either of the tags 'implemented-in::perl' or 'implemented-in::python'.
 .TP
 .BR \-\-popcon " "\-\-pc\-local
-Read /var/log/popularity-contest and sort bugs by your personal popcon ranking
+Read \fI/var/log/popularity-contest\fP and sort bugs by your personal popcon ranking
 (which is basically the atime of your packages' binaries).
 .SH BUGS
 It is not possible to say "does not apply only to unstable"

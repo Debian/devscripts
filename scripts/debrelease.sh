@@ -19,8 +19,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 set -e
 
@@ -49,7 +48,7 @@ usage () {
                       What constitutes a matching directory name; REGEX is
                       a Perl regular expression; the string \`PACKAGE' will
                       be replaced by the package name; see manpage for details
-                      (default: 'PACKAGE(-.*)?')
+                      (default: 'PACKAGE(-.+)?')
     --no-conf, --noconf
                       Don't read devscripts config files;
                       must be the first option given
@@ -84,7 +83,7 @@ mustsetvar () {
 DEFAULT_DEBRELEASE_UPLOADER=dupload
 DEFAULT_DEBRELEASE_DEBS_DIR=..
 DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1
-DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.*)?'
+DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.+)?'
 VARS="DEBRELEASE_UPLOADER DEBRELEASE_DEBS_DIR DEVSCRIPTS_CHECK_DIRNAME_LEVEL DEVSCRIPTS_CHECK_DIRNAME_REGEX"
 
 if [ "$1" = "--no-conf" -o "$1" = "--noconf" ]; then
@@ -167,20 +166,14 @@ do
     --multi) multiarch=yes ;;
     --dupload) DEBRELEASE_UPLOADER=dupload ;;
     --dput) DEBRELEASE_UPLOADER=dput ;;
+    # Delay checking of debsdir until we need it.  We need to make sure we're
+    # in the package root directory first.
     --debs-dir=*)
-	debsdir="`echo \"$1\" | sed -e 's/^--debs-dir=//; s%/\+%/%g; s%\(.\)/$%\1%;'`"
-	if ! [ -d "$debsdir" ]; then
-	    echo "$PROGNAME: directory $debsdir does not exist!" >&2
-	    exit 1
-	fi
+	opt_debsdir="`echo \"$1\" | sed -e 's/^--debs-dir=//; s%/\+%/%g; s%\(.\)/$%\1%;'`"
 	;;
     --debs-dir)
 	shift
-	debsdir="`echo \"$1\" | sed -e 's%/\+%/%g; s%\(.\)/$%\1%;'`"
-	if ! [ -d "$debsdir" ]; then
-	    echo "$PROGNAME: directory $debsdir does not exist!" >&2
-	    exit 1
-	fi
+	opt_debsdir="`echo \"$1\" | sed -e 's%/\+%/%g; s%\(.\)/$%\1%;'`"
 	;;
     --check-dirname-level=*)
 	level="`echo \"$1\" | sed -e 's/^--check-dirname-level=//'`"
@@ -231,17 +224,6 @@ do
     shift
 done
 
-# check sanity of debdir
-if ! [ -d "$debsdir" ]; then
-    if [ -n "$debsdir_warning" ]; then
-	echo "$PROGNAME: $debsdir_warning" >&2
-	exit 1
-    else
-	echo "$PROGNAME: could not find directory $debsdir!" >&2
-	exit 1
-    fi
-fi
-
 # Look for .changes file via debian/changelog
 CHDIR=
 until [ -f debian/changelog ]; do
@@ -253,6 +235,28 @@ until [ -f debian/changelog ]; do
 	exit 1
     fi
 done
+
+# Use svn-buildpackage's directory if there is one and debsdir wasn't already
+# specified on the command-line.  This can override DEBRELEASE_DEBS_DIR.
+if [ -n "$opt_debsdir" ]; then
+    debsdir="$opt_debsdir"
+elif [ -e ".svn/deb-layout" ]; then
+    buildArea="$(sed -ne '/^buildArea=/{s/^buildArea=//; s%/\+%/%g; s%\(.\)/$%\1%; p; q}' .svn/deb-layout)"
+    if [ -n "$buildArea" -a -d "$buildArea" ]; then
+	debsdir="$buildArea"
+    fi
+fi
+
+# check sanity of debdir
+if ! [ -d "$debsdir" ]; then
+    if [ -n "$debsdir_warning" ]; then
+	echo "$PROGNAME: $debsdir_warning" >&2
+	exit 1
+    else
+	echo "$PROGNAME: could not find directory $debsdir!" >&2
+	exit 1
+    fi
+fi
 
 mustsetvar package "`dpkg-parsechangelog | sed -n 's/^Source: //p'`" \
     "source package"

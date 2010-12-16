@@ -19,8 +19,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use 5.008;  # uses 'our' variables and filetest
 use strict;
@@ -108,7 +107,7 @@ Options:
                    What constitutes a matching directory name; REGEX is
                    a Perl regular expression; the string \`PACKAGE\' will
                    be replaced by the package name; see manpage for details
-                   (default: 'PACKAGE(-.*)?')
+                   (default: 'PACKAGE(-.+)?')
     --watchfile FILE
                    Specify the watchfile rather than using debian/watch;
                    no directory traversing will be done in this case
@@ -168,7 +167,7 @@ my $repack = 0; # repack .tar.bz2 or .zip to .tar.gz
 my $symlink = 'symlink';
 my $verbose = 0;
 my $check_dirname_level = 1;
-my $check_dirname_regex = 'PACKAGE(-.*)?';
+my $check_dirname_regex = 'PACKAGE(-.+)?';
 my $dehs = 0;
 my %dehs_tags;
 my $dehs_end_output = 0;
@@ -193,7 +192,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'USCAN_USER_AGENT' => '',
 		       'USCAN_REPACK' => 'no',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
-		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.*)?',
+		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.+)?',
 		       );
     my %config_default = %config_vars;
 
@@ -260,7 +259,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 my $debug = 0;
 my ($opt_h, $opt_v, $opt_destdir, $opt_download, $opt_force_download,
     $opt_report, $opt_passive, $opt_symlink, $opt_repack);
-my ($opt_verbose, $opt_ignore, $opt_level, $opt_regex, $opt_noconf);
+my ($opt_verbose, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
 my $opt_download_version;
 my $opt_user_agent;
@@ -285,7 +284,6 @@ GetOptions("help" => \$opt_h,
 	   "dehs!" => \$opt_dehs,
 	   "verbose!" => \$opt_verbose,
 	   "debug" => \$debug,
-	   "ignore-dirname" => \$opt_ignore,
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
 	   "user-agent=s" => \$opt_user_agent,
@@ -320,11 +318,6 @@ $download_version = $opt_download_version if defined $opt_download_version;
 if ($dehs) {
     $SIG{'__WARN__'} = \&dehs_warn;
     $SIG{'__DIE__'} = \&dehs_die;
-}
-
-# dirname stuff
-if ($opt_ignore) {
-    die "$progname: --ignore-dirname has been replaced by --check-dirname-level and\n--check-dirname-regex; run $progname --help for more details\n";
 }
 
 if (defined $opt_level) {
@@ -527,7 +520,7 @@ for my $dir (@dirs) {
 	    print "-- Found watchfile in $dir/debian\n" if $verbose;
 	} else {
 	    print "-- Skip watchfile in $dir/debian since it does not match the package name\n" .
-	        "   (or the settings of the--check-dirname-level and --check-dirname-regex options if any).\n"
+	        "   (or the settings of the --check-dirname-level and --check-dirname-regex options if any).\n"
 	        if $verbose;
 	    next;
 	}
@@ -562,7 +555,7 @@ if (defined $opt_uversion) {
 
 # Now sort the list of directories, so that we process the most recent
 # directories first, as determined by the package version numbers
-@debdirs = Devscripts::Versort::versort(@debdirs);
+@debdirs = Devscripts::Versort::deb_versort(@debdirs);
 
 # Now process the watchfiles in order.  If a directory d has subdirectories
 # d/sd1/debian and d/sd2/debian, which each contain watchfiles corresponding
@@ -1200,7 +1193,7 @@ EOF
 
     # Can't just use $lastversion eq $newversion, as then 0.01 and 0.1
     # compare different, whereas they are treated as equal by dpkg
-    if (system("dpkg", "--compare-versions", "'$mangled_lastversion'", "eq", "'$newversion'") == 0) {
+    if (system("dpkg", "--compare-versions", "$mangled_lastversion", "eq", "$newversion") == 0) {
 	if ($verbose or ($download == 0 and $report and ! $dehs)) {
 	    print $pkg_report_header;
 	    $pkg_report_header = '';
@@ -1227,7 +1220,7 @@ EOF
     # We use dpkg's rules to determine whether our current version
     # is newer or older than the remote version.
     if (!defined $download_version) {
-	if (system("dpkg", "--compare-versions", "'$mangled_lastversion'", "gt", "'$newversion'") == 0) {
+	if (system("dpkg", "--compare-versions", "$mangled_lastversion", "gt", "$newversion") == 0) {
 	    if ($verbose) {
 		print " => remote site does not even have current version\n";
 	    } elsif ($dehs) {
@@ -1350,11 +1343,20 @@ EOF
 	$newfile_base = $newfile_base_gz;
     }
 
-    if ($repack and $newfile_base =~ /^(.*)\.(tar\.lzma|tlzma?)$/) {
+    if ($repack and $newfile_base =~ /^(.*)\.(tar\.lzma|tlz(?:ma?)?)$/) {
 	print "-- Repacking from lzma to gzip\n" if $verbose;
 	my $newfile_base_gz = "$1.tar.gz";
 	system("lzma -cd $destdir/$newfile_base | gzip -n -9 > $destdir/$newfile_base_gz") == 0
 	  or die "repacking from lzma to gzip failed\n";
+	unlink "$destdir/$newfile_base";
+	$newfile_base = $newfile_base_gz;
+    }
+
+    if ($repack and $newfile_base =~ /^(.*)\.(tar\.xz|txz)$/) {
+	print "-- Repacking from xz to gzip\n" if $verbose;
+	my $newfile_base_gz = "$1.tar.gz";
+	system("xz -cd $destdir/$newfile_base | gzip -n -9 > $destdir/$newfile_base_gz") == 0
+	  or die "repacking from xz to gzip failed\n";
 	unlink "$destdir/$newfile_base";
 	$newfile_base = $newfile_base_gz;
     }

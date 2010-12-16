@@ -17,8 +17,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use strict;
 use Getopt::Long;
@@ -81,7 +80,7 @@ Usage: dd-list [options] [package ...]
         Read package names from the standard input.
 
     -d, --dctrl
-        Read Debian control data from standard input.
+        Read package list in Debian control data from standard input.
 
     -u, --uploaders
         Also list Uploaders of packages, not only the listed Maintainers

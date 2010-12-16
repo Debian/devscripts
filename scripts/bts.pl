@@ -21,8 +21,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 =head1 NAME
 
@@ -146,6 +145,7 @@ END {
 
 my %clonedbugs = ();
 my %ccpackages = ();
+my %ccsubmitters = ();
 
 =head1 SYNOPSIS
 
@@ -283,8 +283,11 @@ SENDMAILCMD, for example: --sendmail="/usr/sbin/mymailer -t"
 
 =item --mutt
 
-Use mutt for sending of mails. Default is not to use mutt,
-except for some commands.
+Use mutt for sending of mails. Default is not to use mutt, except for some
+commands.
+
+Note that one of $DEBEMAIL or $EMAIL must be set in the environment in order
+to use mutt to send emails.
 
 =item --no-mutt
 
@@ -298,6 +301,9 @@ this SMTP host rather than by invoking a sendmail command.
 The host name may be followed by a colon (":") and a port number in
 order to use a port other than the default.  It may also begin with
 "ssmtp://" or "smtps://" to indicate that SMTPS should be used.
+
+Note that one of $DEBEMAIL or $EMAIL must be set in the environment in order
+to use direct SMTP connections to send emails.
 
 Note that when sending directly via an SMTP host, specifying addresses in
 --cc-addr or BTS_DEFAULT_CC that the SMTP host will not relay will cause the
@@ -573,10 +579,10 @@ GetOptions("help|h" => \$opt_help,
 	   "bts-server=s" => \$btsserver,
 	   "mutt" => \$opt_mutt,
 	   )
-    or die "Usage: bts [options]\nRun $progname --help for more details\n";
+    or die "Usage: $progname [options]\nRun $progname --help for more details\n";
 
 if ($opt_noconf) {
-    die "bts: --no-conf is only acceptable as the first command-line option!\n";
+    die "$progname: --no-conf is only acceptable as the first command-line option!\n";
 }
 if ($opt_help) { bts_help(); exit 0; }
 if ($opt_version) { bts_version(); exit 0; }
@@ -594,7 +600,7 @@ if ($opt_mailreader) {
     if ($opt_mailreader =~ /\%s/) {
 	$mailreader=$opt_mailreader;
     } else {
-	warn "bts: ignoring invalid --mailreader option: invalid mail command following it.\n";
+	warn "$progname: ignoring invalid --mailreader option: invalid mail command following it.\n";
     }
 }
 
@@ -603,11 +609,11 @@ if ($opt_mutt) {
 }
 
 if ($opt_sendmail and $opt_smtphost) {
-    die "bts: --sendmail and --smtp-host mutually exclusive\n";
+    die "$progname: --sendmail and --smtp-host mutually exclusive\n";
 } elsif ($opt_mutt and $opt_sendmail) {
-    die "bts: --sendmail and --mutt mutually exclusive\n";
+    die "$progname: --sendmail and --mutt mutually exclusive\n";
 } elsif ($opt_mutt and $opt_smtphost) {
-    die "bts: --smtp-host and --mutt mutually exclusive\n";
+    die "$progname: --smtp-host and --mutt mutually exclusive\n";
 }
 
 $smtphost = $opt_smtphost if $opt_smtphost;
@@ -650,7 +656,7 @@ if ($opt_cachemode) {
     if ($opt_cachemode =~ /^(min|mbox|full)$/) {
 	$cachemode=$opt_cachemode;
     } else {
-	warn "bts: ignoring invalid --cache-mode; must be one of min, mbox, full.\n";
+	warn "$progname: ignoring invalid --cache-mode; must be one of min, mbox, full.\n";
     }
 }
 
@@ -728,7 +734,7 @@ for $index (0 .. $ncommand) {
     } else {
 	my @matches=grep /^bts_\Q$command[$index]\E/, keys %::;
 	if (@matches != 1) {
-	    die "bts: Couldn't find a unique match for the command $command[$index]!\nRun $progname --help for a list of valid commands.\n";
+	    die "$progname: Couldn't find a unique match for the command $command[$index]!\nRun $progname --help for a list of valid commands.\n";
 	}
 
 	# Replace the abbreviated command with its expanded equivalent
@@ -777,7 +783,7 @@ sub bts_show {
 =item bugs [release-critical | release-critical/... | RC]
 
 Display the page listing the requested bugs in a web browser using
-L<sensible-browser(1)>.
+sensible-browser(1).
 
 Options may be specified after the "bugs" command in addition to or
 instead of options at the start of the command line: recognised
@@ -900,7 +906,7 @@ sub bts_bugs {
 	       "m|mbox" => \$sub_mboxmode,
 	       "mailreader|mail-reader=s" => \$sub_mailreader,
 	       )
-    or die "bts: unknown options for bugs command\n";
+    or die "$progname: unknown options for bugs command\n";
     @_ = @ARGV; # whatever's left
 
     if (defined $sub_offlinemode) {
@@ -916,7 +922,7 @@ sub bts_bugs {
 	if ($sub_mailreader =~ /\%s/) {
 	    ($mailreader, $sub_mailreader) = ($sub_mailreader, $mailreader);
 	} else {
-	    warn "bts: ignoring invalid --mailreader $sub_mailreader option:\ninvalid mail command following it.\n";
+	    warn "$progname: ignoring invalid --mailreader $sub_mailreader option:\ninvalid mail command following it.\n";
 	    $sub_mailreader = undef;
 	}
     }
@@ -992,7 +998,7 @@ Bug severity.
 
 =item status
 
-Status of the bug.
+Status of the bug.  One of "open", "done", or "forwarded".
 
 =item tag
 
@@ -1050,12 +1056,17 @@ sub bts_select {
     print map {qq($_\n)} @{$bugs};
 }
 
-=item status [<bug> | file:<file>] ...
+=item status [<bug> | file:<file> | fields:<field,field,...> | verbose] ...
 
 Uses the SOAP interface to output status information for the given bugs
 (or as read from the listed files -- use '-' to indicate STDIN).
 
-Empty status fields are not displayed.
+By default, all populated fields for a bug are displayed.
+
+If B<verbose> is given, empty fields will also be displayed.
+
+If B<fields> is given, only those fields will be displayed.  No validity
+checking is performed on any specified fields.
 
 =cut
 
@@ -1063,11 +1074,13 @@ sub bts_status {
     my @args = @_;
 
     my @bugs;
+    my $showempty = 0;
+    my %field;
     for my $bug (@args) {
 	if (looks_like_number($bug)) {
 	    push @bugs,$bug;
 	}
-	elsif (m{^file:(.+)}) {
+	elsif ($bug =~ m{^file:(.+)}) {
 	    my $file = $1;
 	    my $fh;
 	    if ($file eq '-') {
@@ -1085,6 +1098,16 @@ sub bts_status {
 		push @bugs,$_;
 	    }
 	}
+	elsif ($bug =~ m{^fields:(.+)}) {
+	    my $fields = $1;
+	    for my $field (split /,/, $fields) {
+		$field{lc $field} = 1;
+	    }
+	    $showempty = 1;
+	}
+	elsif ($bug =~ m{^verbose$}) {
+	    $showempty = 1;
+	}
     }
     my $bugs = Devscripts::Debbugs::status( map {[bug => $_, indicatesource => 1]} @bugs );
     return if ($bugs eq "");
@@ -1096,6 +1119,9 @@ sub bts_status {
 	my @keys = grep {$_ ne 'bug_num'}
 	keys %{$bugs->{$bug}};
 	for my $key ('bug_num',@keys) {
+	    if (%field) {
+		next unless exists $field{$key};
+	    }
 	    my $out;
 	    if (ref($bugs->{$bug}{$key}) eq 'ARRAY') {
 		$out .= join(',',@{$bugs->{$bug}{$key}});
@@ -1109,7 +1135,9 @@ sub bts_status {
 	    else {
 		$out .= $bugs->{$bug}{$key}||'';
 	    }
-	    print "$key\t$out\n" if $out;
+	    if ($out || $showempty) {
+		print "$key\t$out\n";
+	    }
 	}
     }
 }
@@ -1134,10 +1162,19 @@ sub bts_clone {
     mailbts("cloning $bug", "clone $bug " . join(" ",@_));
 }
 
+sub common_close {
+    my $bug=checkbug(shift) or die "bts $command[$index]: close what bug?\n";
+    my $version=shift;
+    $version="" unless defined $version;
+    opts_done(@_);
+    mailbts("closing $bug", "close $bug $version");
+    return $bug;
+}
+
 # Do not include this in the manpage - it's deprecated
-# 
+#
 # =item close <bug> <version>
-# 
+#
 # Close a bug. Remember that using this to close a bug is often bad manners,
 # sending an informative mail to nnnnn-done@bugs.debian.org is much better.
 # You should specify which version of the package closed the bug, if
@@ -1146,14 +1183,10 @@ sub bts_clone {
 # =cut
 
 sub bts_close {
-    my $bug=checkbug(shift) or die "bts close: close what bug?\n";
-    my $version=shift;
-    $version="" unless defined $version;
-    opts_done(@_);
-    mailbts("closing $bug", "close $bug $version");
+    my ($bug) = common_close(@_);
     warn <<"EOT";
-bts: Closing $bug as you requested.
-Please note that the "bts close" command is deprecated!
+$progname: Closing $bug as you requested.
+Please note that the "$progname close" command is deprecated!
 It is usually better to email nnnnnn-done\@$btsserver with
 an informative mail.
 Please remember to email $bug-submitter\@$btsserver with
@@ -1161,46 +1194,25 @@ an explanation of why you have closed this bug.  Thank you!
 EOT
 }
 
-# =item done <bug> <version>
-# 
-# # Mark a bug as Done. Defaults to implying interactive mode,
-# because you should edit the message and provide explanations,
-# why the bug is beeing closed.
-# You should specify which version of the package closed the bug, if
-# possible.
-# =cut
-# 
-# sub bts_done {
-#     my $bug=checkbug(shift) or die "bts done: close what bug?\n";
-#     my $version=shift;
-#     my $subject="Closing $bug";
-#     $version="" unless defined $version;
-#     opts_done(@_);
-# 
-#     # TODO: Evaluate if we want to do this by default
-#     my $bug_status = Devscripts::Debbugs::status( map {[bug => $_, indicatesource => 1]} ($bug) );
-#     if ($bug_status) {
-# 	$subject = "Re: $bug_status->{$bug}->{subject}";
-#     }
-# 
-#     # This command defaults to using interactive mode, because
-#     # mails shouldn't be sent without an explanation
-#     if (not $use_mutt) {
-# 	$interactive = 1;
-#     }
-# 
-#     # Workaround (?) - We need to set the btsemail to nnn-done@b.d.o
-#     # to close a bug.
-#     # TODO: Evaluate other possbilities to do that more "beauty"
-#     $btsemail = $bug . '-done@bugs.debian.org';
-#   
-#     my $message = "";
-#     if ($version) {
-# 	$message .= "Version: $version";
-#     }
-#     $message .= "\n<Explanation for closing the bug should go here>";
-#     mailbts($subject, $message);
-# }
+=item done <bug> <version>
+
+Mark a bug as Done. This forces interactive mode since done messages should
+include an explanation why the bug is being closed.  You should specify which
+version of the package closed the bug, if possible.
+
+=cut
+
+sub bts_done {
+    my ($bug) = common_close(@_);
+    # Force interactive mode since done mails shouldn't be sent without an
+    # explanation
+    if (not $use_mutt) {
+	$forceinteractive = 1;
+    }
+
+    # Include the submitter in the email, so we act like a mail to -done
+    $ccsubmitters{"$bug-submitter"} = 1;
+}
 
 =item reopen <bug> [<submitter>]
 
@@ -1333,7 +1345,7 @@ sub bts_found {
     my $bug=checkbug(shift) or die "bts found: found what bug?\n";
     my $version=shift;
     if (! defined $version) {
-	warn "bts: found has no version number, but sending to the BTS anyway\n";
+	warn "$progname: found has no version number, but sending to the BTS anyway\n";
 	$version="";
     }
     opts_done(@_);
@@ -1505,55 +1517,65 @@ sub bts_tags {
 	die "bts tags: set what tag?\n";
     }
     # Parse the rest of the command line.
-    my $command="tags $bug";
-    my $flag="";
-    if ($_[0] =~ /^[-+=]$/) {
-	$flag = $_[0];
-	$command .= " $flag";
-	shift;
-    }
-    elsif ($_[0] =~ s/^([-+=])//) {
-	$flag = $1;
-	$command .= " $flag";
-    }
+    my $base_command="tags $bug";
+    my $commands = [];
 
-    if ($flag ne '=' && ! @_) {
-	die "bts tags: set what tag?\n";
-    }
-    
-    my $base_command = $command;
-    my $gifted = "";
-
+    my $curop;
     foreach my $tag (@_) {
-	if (exists $valid_tags{$tag}) {
-	    $command .= " $tag";
-	    if ($tag eq "security") {
-		    $ccsecurity = "team\@security.debian.org";
+	if ($tag =~ s/^([-+=])//) {
+	    my $op = $1;
+	    if ($op eq '=') {
+		$curop = '=';
+		$commands = [];
+		$ccsecurity = '';
 	    }
-	} elsif ($tag eq "gift") {
-	  $gifted = $bug;
-	} else {
+	    elsif (!$curop || $curop ne $op) {
+		$curop = $op;
+	    }
+	    next unless $tag;
+	}
+	if (!$curop) {
+	    $curop = '+';
+	}
+	if ($tag eq 'gift') {
+	    my $gift_flag = $curop;
+	    if ($gift_flag eq '=') {
+		$gift_flag = '+';
+	    }
+	    mailbts("gifting $bug",
+		"user debian-qa\@lists.debian.org\nusertag $bug $gift_flag gift");
+	    next;
+	}
+	if (!exists $valid_tags{$tag}) {
 	    # Try prefixes
 	    my @matches = grep /^\Q$tag\E/, @valid_tags;
 	    if (@matches != 1) {
-		if ($tag =~ /^[-+=]/) {
-		    die "bts tags: The +|-|= flag must not be joined to the tags.  Run bts help for usage info.\n";
-		}
 		die "bts tags: \"$tag\" is not a " . (@matches > 1 ? "unique" : "valid") . " tag prefix. Choose from: " . join(" ", @valid_tags) . "\n";
 	    }
-	    $command .= " $matches[0]";
+	    $tag = $matches[0];
+	}
+	if (!@$commands || $curop ne $commands->[-1]{op}) {
+	    push(@$commands, { op => $curop, tags => [] });
+	}
+	push(@{$commands->[-1]{tags}}, $tag);
+	if ($tag eq "security") {
+	    $ccsecurity = "team\@security.debian.org";
 	}
     }
-    if ($gifted ne "") {
-      my $gift_flag = $flag;
-      $gift_flag = "+" if $gift_flag eq "=";
-      mailbts("gifting $bug",
-	"user debian-qa\@lists.debian.org\nusertag $bug $gift_flag gift");
+
+    my $command = '';
+    foreach my $cmd (@$commands) {
+	if ($cmd->{op} ne '=' && !@{$cmd->{tags}}) {
+	    die "bts tags: set what tag?\n";
+	}
+	$command .= " $cmd->{op} " . join(' ', @{$cmd->{tags}});
     }
-    if (($base_command ne $command) or ($flag eq "=" and $gifted eq "")) { 
-	# at least one tag other than gift has been manipulated
-	# or all tags were removed
-	mailbts("tagging $bug", $command);
+    if (!$command && $curop eq '=') {
+        $command = " $curop";
+    }
+
+    if ($command) {
+	mailbts("tagging $bug", $base_command . $command);
     }
 }
 
@@ -1635,25 +1657,49 @@ sub bts_usertags {
 	die "bts usertags: set what user tag?\n";
     }
     # Parse the rest of the command line.
-    my $command="usertags $bug";
-    my $flag="";
-    if ($_[0] =~ /^[-+=]$/) {
-	$flag = $_[0];
-	$command .= " $flag";
-	shift;
-    }
-    elsif ($_[0] =~ s/^([-+=])//) {
-	$flag = $1;
-	$command .= " $flag";
+    my $base_command="usertags $bug";
+    my $commands = [];
+
+    my $curop;
+    foreach my $tag (@_) {
+	if ($tag =~ s/^([-+=])//) {
+	    my $op = $1;
+	    if ($op eq '=') {
+		$curop = '=';
+		$commands = [];
+	    }
+	    elsif (!$curop || $curop ne $op) {
+		$curop = $op;
+	    }
+	    next unless $tag;
+	}
+	if (!$curop) {
+	    $curop = '+';
+	}
+	if (!@$commands || $curop ne $commands->[-1]{op}) {
+	    push(@$commands, { op => $curop, tags => [] });
+	}
+	if ($tag !~ m/^[-[:alnum:]@.+]+$/i) {
+	    die "bts usertag: \"$tag\" contains characters other than " .
+	        "alpha-numerics, '\@', '.', '+', and '-'.\n";
+	}
+	push(@{$commands->[-1]{tags}}, $tag);
     }
 
-    if ($flag ne '=' && ! @_) {
-	die "bts usertags: set what tag?\n";
+    my $command = '';
+    foreach my $cmd (@$commands) {
+	if ($cmd->{op} ne '=' && !@{$cmd->{tags}}) {
+	    die "bts usertags: set what tag?\n";
+	}
+	$command .= " $cmd->{op} " . join(' ', @{$cmd->{tags}});
     }
-    
-    $command .= " " . join(" ", @_);
+    if (!$command && $curop eq '=') {
+	$command = " $curop";
+    }
 
-    mailbts("usertagging $bug", $command);
+    if ($command) {
+	mailbts("usertagging $bug", $base_command . $command);
+    }
 }
 
 =item claim <bug> [<claim>]
@@ -2001,7 +2047,7 @@ sub bts_reportspam {
     my @bugs;
 
     if (! have_lwp()) {
-	die "bts: Couldn't run bts reportspam: $lwp_broken\n";
+	die "$progname: Couldn't run bts reportspam: $lwp_broken\n";
     }
 
     foreach (@_) {
@@ -2021,7 +2067,7 @@ sub bts_reportspam {
 	    my $request = HTTP::Request->new('GET', $url);
 	    my $response = $ua->request($request);
 	    if (! $response->is_success) {
-		warn "bts: failed to report $bug as containing spam: " .
+		warn "$progname: failed to report $bug as containing spam: " .
 		    $response->status_line . "\n";
 	    }
 	}
@@ -2099,7 +2145,7 @@ sub bts_cache {
 	       "q|quiet+" => \$sub_quiet,
 	       "include-resolved!" => \$sub_includeresolved,
 	       )
-    or die "bts: unknown options for cache command\n";
+    or die "$progname: unknown options for cache command\n";
     @_ = @ARGV; # whatever's left
 
     if (defined $sub_refreshmode) {
@@ -2112,7 +2158,7 @@ sub bts_cache {
 	if ($sub_cachemode =~ /^(min|mbox|full)$/) {
 	    ($cachemode, $sub_cachemode) = ($sub_cachemode, $cachemode);
 	} else {
-	    warn "bts: ignoring invalid --cache-mode $sub_cachemode;\nmust be one of min, mbox, full.\n";
+	    warn "$progname: ignoring invalid --cache-mode $sub_cachemode;\nmust be one of min, mbox, full.\n";
 	}
     }
     # This may be a no-op, we don't mind
@@ -2121,16 +2167,16 @@ sub bts_cache {
 
     prunecache();
     if (! have_lwp()) {
-	die "bts: Couldn't run bts cache: $lwp_broken\n";
+	die "$progname: Couldn't run bts cache: $lwp_broken\n";
     }
 
     if (! -d $cachedir) {
 	if (! -d dirname($cachedir)) {
 	    mkdir(dirname($cachedir))
-		or die "bts: couldn't mkdir ".dirname($cachedir).": $!\n";
+		or die "$progname: couldn't mkdir ".dirname($cachedir).": $!\n";
 	}
 	mkdir($cachedir)
-	    or die "bts: couldn't mkdir $cachedir: $!\n";
+	    or die "$progname: couldn't mkdir $cachedir: $!\n";
     }
 
     download("css/bugs.css");
@@ -2169,7 +2215,7 @@ sub bts_cache {
     if (keys %oldbugs) {
 	tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	     O_RDWR()|O_CREAT(), 0600, $DB_HASH, "write")
-	    or die "bts: couldn't open DB file $timestampdb for writing: $!\n"
+	    or die "$progname: couldn't open DB file $timestampdb for writing: $!\n"
 	    if ! tied %timestamp;
     }
 
@@ -2242,7 +2288,7 @@ sub bts_cleancache {
     # clean index
     tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	 O_RDWR()|O_CREAT(), 0600, $DB_HASH, "write")
-	or die "bts: couldn't open DB file $timestampdb for writing: $!\n"
+	or die "$progname: couldn't open DB file $timestampdb for writing: $!\n"
 	if ! tied %timestamp;
 
     if ($toclean =~ /^\d+$/) {
@@ -2296,8 +2342,6 @@ sub bts_help {
     print <<"EOF";
 Usage: $progname [options] command [args] [\#comment] [.|, command ... ]
 Valid options are:
-   --no-conf, --noconf    Do not read devscripts config files;
-                          must be the first option given
    -o, --offline          Do not attempt to connect to BTS for show/bug
                           commands: use cached copy
    --online, --no-offline Attempt to connect (default)
@@ -2322,10 +2366,9 @@ Valid options are:
    --use-default-cc       Send carbon copies to any addresses specified in the
                           configuration file BTS_DEFAULT_CC (default)
    --no-use-default-cc    Do not do so
-   -f, --force-refresh    Reload all bug reports being cached, even unchanged
-                          ones
-   --no-force-refresh     Do not do so (default)
    --sendmail=cmd         Sendmail command to use (default /usr/sbin/sendmail)
+   --mutt                 Use mutt for sending of mails.
+   --no-mutt              Do not do so (default)
    --smtp-host=host       SMTP host to use
    --smtp-username=user   } Credentials to use when connecting to an SMTP
    --smtp-password=pass   } server which requires authentication
@@ -2333,14 +2376,23 @@ Valid options are:
                             (defaults to the content of /etc/mailname)
    --bts-server           The name of the debbugs server to use
                             (default bugs.debian.org)
-   --no-include-resolved  Do not cache bugs marked as resolved
+   -f, --force-refresh    Reload all bug reports being cached, even unchanged
+                          ones
+   --no-force-refresh     Do not do so (default)
+   --only-new             Download only new bugs when caching.  Do not check
+                          for updates in bugs we already have.
    --include-resolved     Cache bugs marked as resolved (default)
+   --no-include-resolved  Do not cache bugs marked as resolved
    --no-ack               Suppress BTS acknowledgment mails
    --ack                  Do not do so (default)
    -i, --interactive      Prompt for confirmation before sending e-mail
    --force-interactive    Same as --interactive, with the exception that an
                           editor is spawned before confirmation is requested
    --no-interactive       Do not do so (default)
+   -q, --quiet            Only display information about newly cached pages.
+                          If given twice, only display error messages.
+   --no-conf, --noconf    Do not read devscripts config files;
+                          must be the first option given
    -h, --help             Display this message
    -v, --version          Display version and copyright info
 
@@ -2381,7 +2433,7 @@ sub checkbug {
 
     if ($bug eq 'it') {
 	if (not defined $it) {
-	    die "bts: You specified 'it', but no previous bug number referenced!\n";
+	    die "$progname: You specified 'it', but no previous bug number referenced!\n";
 	}
     } else {
 	$bug=~s/^(?:(?:bug)?\#)?(-?\d+):?$/$1/i;
@@ -2462,14 +2514,14 @@ sub send_mail {
 				       DIR => File::Spec->tmpdir,
 				       UNLINK => 1);
 	open (MAILOUT, ">&", $fh)
-	    or die "bts: writing to temporary file: $!\n";
+	    or die "$progname: writing to temporary file: $!\n";
 
 	print MAILOUT $message;
 
 	my $mailcmd = $muttcmd;
 	$mailcmd =~ s/\%([%s])/$1 eq '%' ? '%' : $filename/eg;
 
-	exec($mailcmd) or die "bts: unable to start mailclient: $!";
+	exec($mailcmd) or die "$progname: unable to start mailclient: $!";
     }
     elsif (length $smtphost) {
 	my $smtp;
@@ -2480,56 +2532,56 @@ sub send_mail {
 
 	    if (have_smtp_ssl) {
 		$smtp = Net::SMTP::SSL->new($host, Port => $port,
-		    Hello => $smtphelo) or die "bts: failed to open SMTPS connection to $smtphost\n($@)\n";
+		    Hello => $smtphelo) or die "$progname: failed to open SMTPS connection to $smtphost\n($@)\n";
 	    } else {
-		die "bts: Unable to establish SMTPS connection: $smtp_ssl_broken\n($@)\n";
+		die "$progname: Unable to establish SMTPS connection: $smtp_ssl_broken\n($@)\n";
 	    }
 	} else {
 	    my ($host, $port) = split(/:/, $smtphost);
 	    $port ||= '25';
 
 	    $smtp = Net::SMTP->new($host, Port => $port, Hello => $smtphelo)
-		or die "bts: failed to open SMTP connection to $smtphost\n($@)\n";
+		or die "$progname: failed to open SMTP connection to $smtphost\n($@)\n";
 	}
 	if ($smtpuser) {
 	    $smtppass = getpass() if not $smtppass;
 	    $smtp->auth($smtpuser, $smtppass)
-		or die "bts: failed to authenticate to $smtphost\n($@)\n";
+		or die "$progname: failed to authenticate to $smtphost\n($@)\n";
 	}
 	$smtp->mail($fromaddress)
-	    or die "bts: failed to set SMTP from address $fromaddress\n($@)\n";
+	    or die "$progname: failed to set SMTP from address $fromaddress\n($@)\n";
 	my @addresses = extract_addresses($to);
 	push @addresses, extract_addresses($cc);
 	foreach my $address (@addresses) {
 	    $smtp->recipient($address)
-	        or die "bts: failed to set SMTP recipient $address\n($@)\n";
+	        or die "$progname: failed to set SMTP recipient $address\n($@)\n";
 	}
 	$smtp->data($message)
-	    or die "bts: failed to send message as SMTP DATA\n($@)\n";
+	    or die "$progname: failed to send message as SMTP DATA\n($@)\n";
 	$smtp->quit
-	    or die "bts: failed to quit SMTP connection\n($@)\n";
+	    or die "$progname: failed to quit SMTP connection\n($@)\n";
     }
     else {
 	my $pid = open(MAIL, "|-");
 	if (! defined $pid) {
-	    die "bts: Couldn't fork: $!\n";
+	    die "$progname: Couldn't fork: $!\n";
 	}
-	$SIG{'PIPE'} = sub { die "bts: pipe for $sendmailcmd broke\n"; };
+	$SIG{'PIPE'} = sub { die "$progname: pipe for $sendmailcmd broke\n"; };
 	if ($pid) {
 	    # parent
 	    print MAIL $message;
-	    close MAIL or die "bts: sendmail error: $!\n";
+	    close MAIL or die "$progname: $sendmailcmd error: $!\n";
 	}
 	else {
 	    # child
 	    if ($debug) {
 		exec("/bin/cat")
-		    or die "bts: error running cat: $!\n";
+		    or die "$progname: error running cat: $!\n";
 	    } else {
 		my @mailcmd = split ' ', $sendmailcmd;
 		push @mailcmd, "-t" if $sendmailcmd =~ /$sendmail_t/;
 		exec @mailcmd
-		    or die "bts: error running sendmail: $!\n";
+		    or die "$progname: error running $sendmailcmd: $!\n";
 	    }
 	}
     }
@@ -2540,6 +2592,10 @@ sub generate_packages_cc {
     if (keys %ccpackages && $packagesserver) {
 	$ccs .= join("\@$packagesserver, ", sort (keys %ccpackages))
 	    . "\@$packagesserver";
+    }
+    if (keys %ccsubmitters && $btsserver) {
+	$ccs .= join("\@$btsserver, ", sort (keys %ccsubmitters))
+	    . "\@$btsserver";
     }
     return $ccs;
 }
@@ -2610,36 +2666,31 @@ sub mailbtsall {
 	return if not defined $body;
 
 	if ($noaction) {
-	    print "$header\n$body\n";
+	    print "$header$body\n";
 	    return;
 	}
 
-	unless (system("command -v mail >/dev/null 2>&1") == 0) {
-	    die "bts: You need to either set DEBEMAIL or have the mailx/mailutils package\ninstalled to send mail!\n";
-	}
 	my $pid = open(MAIL, "|-");
 	if (! defined $pid) {
-	    die "bts: Couldn't fork: $!\n";
+	    die "$progname: Couldn't fork: $!\n";
 	}
-	$SIG{'PIPE'} = sub { die "bts: pipe for mail broke\n"; };
+	$SIG{'PIPE'} = sub { die "$progname: pipe for $sendmailcmd broke\n"; };
 	if ($pid) {
 	    # parent
+	    print MAIL $header;
 	    print MAIL $body;
-	    close MAIL or die "bts: mail: $!\n";
+	    close MAIL or die "$progname: $sendmailcmd: $!\n";
 	}
 	else {
 	    # child
 	    if ($debug) {
 		exec("/bin/cat")
-		    or die "bts: error running cat: $!\n";
+		    or die "$progname: error running cat: $!\n";
 	    } else {
-		$ccemail =~ s/ //g;
-		my @args;
-		@args = ("-s", $subject, "-a", "User-Agent: devscripts bts/$version$toolname", $btsemail);
-		push(@args, "-c", "$ccemail") if $ccemail;
-		push(@args, "-a", "X-Debbugs-No-Ack: Yes")
-		    if $requestack==0;
-		exec("mail", @args) or die "bts: error running mail: $!\n";
+		my @mailcmd = split ' ', $sendmailcmd;
+		push @mailcmd, "-t" if $sendmailcmd =~ /$sendmail_t/;
+		exec @mailcmd
+		    or die "$progname: error running $sendmailcmd: $!\n";
 	    }
 	}
     }
@@ -2688,8 +2739,8 @@ sub confirmmail {
 sub addfooter() {
     my $body = shift;
 
+    $body .= "thanks\n";
     if ($forceinteractive) {
-	$body .= "thanks\n";
 	if (-r $ENV{'HOME'} . "/.signature") {
 	    if (open SIG, "<", $ENV{'HOME'} . "/.signature") {
 		$body .= "-- \n";
@@ -2706,7 +2757,7 @@ sub addfooter() {
 
 sub getpass() {
     system "stty -echo cbreak </dev/tty";
-    die "bts: error disabling stty echo\n" if $?;
+    die "$progname: error disabling stty echo\n" if $?;
     print "\a${smtpuser}";
     print "\@$smtphost" if $smtpuser !~ /\@/;
     print "'s SMTP password: ";
@@ -2714,12 +2765,12 @@ sub getpass() {
     chomp;
     print "\n";
     system "stty echo -cbreak </dev/tty";
-    die "bts: error enabling stty echo\n" if $?;
+    die "$progname: error enabling stty echo\n" if $?;
     return $_;
 }
 
 sub extractemail() {
-    my $thing=shift or die "bts: extract e-mail from what?\n";
+    my $thing=shift or die "$progname: extract e-mail from what?\n";
 
     if ($thing =~ /^(.*?)\s+<(.*)>\s*$/) {
 	$thing = $2;
@@ -2733,31 +2784,31 @@ sub extractemail() {
 sub mailto {
     my ($subject, $body, $to, $from) = @_;
 
-    if (defined $from) {
+    if (defined($from) || $noaction) {
 	send_mail($from, $to, '', $subject, $body);
     }
     else {  # No $from
-	unless (system("command -v mail >/dev/null 2>&1") == 0) {
-	    die "bts: You need to either specify an email address (say using DEBEMAIL)\n or have the mailx/mailutils package installed to send mail!\n";
+	unless (system("command -v mailx >/dev/null 2>&1") == 0) {
+	    die "$progname: You need to either specify an email address (say using DEBEMAIL)\nor have the bsd-mailx package (or another package providing mailx) installed\nto send mail!\n";
 	}
 	my $pid = open(MAIL, "|-");
 	if (! defined $pid) {
-	    die "bts: Couldn't fork: $!\n";
+	    die "$progname: Couldn't fork: $!\n";
 	}
-	$SIG{'PIPE'} = sub { die "bts: pipe for mail broke\n"; };
+	$SIG{'PIPE'} = sub { die "$progname: pipe for mailx broke\n"; };
 	if ($pid) {
 	    # parent
 	    print MAIL $body;
-	    close MAIL or die "bts: mail: $!\n";
+	    close MAIL or die "$progname: mailx: $!\n";
 	}
 	else {
 	    # child
 	    if ($debug) {
 		exec("/bin/cat")
-		    or die "bts: error running cat: $!\n";
+		    or die "$progname: error running cat: $!\n";
 	    } else {
-		exec("mail", "-s", $subject, $to)
-		    or die "bts: error running mail: $!\n";
+		exec("mailx", "-s", $subject, $to)
+		    or die "$progname: error running mailx: $!\n";
 	    }
 	}
     }
@@ -2899,10 +2950,10 @@ sub download {
     }
 
     if (! -d $cachedir) {
-	die "bts: download() called but no cachedir!\n";
+	die "$progname: download() called but no cachedir!\n";
     }
 
-    chdir($cachedir) || die "bts: chdir $cachedir: $!\n";
+    chdir($cachedir) || die "$progname: chdir $cachedir: $!\n";
 
     if (-f cachefile($thing, $thgopts)) {
 	($timestamp, $versionstamp) = get_timestamp($thing, $thgopts);
@@ -2923,7 +2974,7 @@ sub download {
 	    if (! -r mboxfile($thing)) {
 		$forcedownload = 1;
 	    } elsif ($cachemode eq 'full' and -d $thing) {
-		opendir DIR, $thing or die "bts: opendir $cachedir/$thing: $!\n";
+		opendir DIR, $thing or die "$progname: opendir $cachedir/$thing: $!\n";
 		my @htmlfiles = grep { /^\d+\.html$/ } readdir(DIR);
 		closedir DIR;
 		$forcedownload = 1 unless @htmlfiles;
@@ -2953,7 +3004,7 @@ sub download {
 	    print "$bug_current/$bug_total" if $bug_total;
 	    print "\n";
 	}
-	chdir $oldcwd or die "bts: chdir $oldcwd failed: $!\n";
+	chdir $oldcwd or die "$progname: chdir $oldcwd failed: $!\n";
 	return "";
     }
     elsif ($ret == MIRROR_DOWNLOADED) {
@@ -2961,7 +3012,7 @@ sub download {
 	# we've successfully stashed the data away
 	$timestamp = time;
 
-	die "bts: empty page downloaded\n" unless length $livepage;
+	die "$progname: empty page downloaded\n" unless length $livepage;
 
 	my $bug2filename = { };
 
@@ -2974,11 +3025,11 @@ sub download {
 
 	my $data = $livepage;  # work on a copy, not the original
 	my $cachefile=cachefile($thing,$thgopts);
-	open (OUT_CACHE, ">$cachefile") or die "bts: open $cachefile: $!\n";
+	open (OUT_CACHE, ">$cachefile") or die "$progname: open $cachefile: $!\n";
 
 	$data = mangle_cache_file($data, $thing, $bug2filename, $timestamp, $charset ? $contenttype : '');
 	print OUT_CACHE $data;
-	close OUT_CACHE or die "bts: problems writing to $cachefile: $!\n";
+	close OUT_CACHE or die "$progname: problems writing to $cachefile: $!\n";
 
 	set_timestamp($thing, $thgopts,
 	    $manual ? make_manual($timestamp) : make_automatic($timestamp),
@@ -3000,10 +3051,10 @@ sub download {
 	$base=~s%/[^/]*$%%;
 	$livepage=~s%<head>%<head><base href="$base">%i;
 
-	chdir $oldcwd or die "bts: chdir $oldcwd failed: $!\n";
+	chdir $oldcwd or die "$progname: chdir $oldcwd failed: $!\n";
 	return $livepage;
     } else {
-	die "bts: couldn't download $url:\n$msg\n";
+	die "$progname: couldn't download $url:\n$msg\n";
     }
 }
 
@@ -3037,7 +3088,7 @@ sub download_attachments {
 	    # it's an attachment, must download
 
 	    if (-f dirname($filename)) {
-		warn "bts: found file where directory expected; using existing file (" . dirname($filename) . ")\n";
+		warn "$progname: found file where directory expected; using existing file (" . dirname($filename) . ")\n";
 		$bug2filename{$msg} = dirname($filename);
 	    } else {
 	        $bug2filename{$msg} = $filename;
@@ -3087,7 +3138,7 @@ sub download_attachments {
 	    my $content_length = defined $response->content ?
 		length($response->content) : 0;
 	    if ($content_length == 0) {
-		warn "bts: failed to download $ref, skipping\n";
+		warn "$progname: failed to download $ref, skipping\n";
 		next;
 	    }
 
@@ -3101,11 +3152,11 @@ sub download_attachments {
 	    }
 	    mkpath(dirname $bug2filename{$msg});
 	    open OUT_CACHE, ">$bug2filename{$msg}"
-	        or die "bts: open cache $bug2filename{$msg}\n";
+	        or die "$progname: open cache $bug2filename{$msg}\n";
 	    print OUT_CACHE $data;
 	    close OUT_CACHE;
 	} else {
-	    warn "bts: failed to download $ref, skipping\n";
+	    warn "$progname: failed to download $ref, skipping\n";
 	    next;
 	}
     }
@@ -3121,11 +3172,11 @@ sub download_mbox {
     my $temp = shift;  # do we wish to store it in cache or in a temp file?
     my $mboxfile = mboxfile($thing);
 
-    die "bts: trying to download mbox for illegal bug number $thing.\n"
+    die "$progname: trying to download mbox for illegal bug number $thing.\n"
 	unless $mboxfile;
 
     if (! have_lwp()) {
-	die "bts: couldn't run bts --mbox: $lwp_broken\n";
+	die "$progname: couldn't run bts --mbox: $lwp_broken\n";
     }
     init_agent() unless $ua;
 
@@ -3135,7 +3186,7 @@ sub download_mbox {
 	my $content_length = defined $response->content ?
 	    length($response->content) : 0;
 	if ($content_length == 0) {
-	    die "bts: failed to download mbox.\n";
+	    die "$progname: failed to download mbox.\n";
 	}
 
 	my ($fh, $filename);
@@ -3146,18 +3197,18 @@ sub download_mbox {
 				       UNLINK => 1);
 	    # Use filehandle for security
 	    open (OUT_MBOX, ">&", $fh)
-		or die "bts: writing to temporary file: $!\n";
+		or die "$progname: writing to temporary file: $!\n";
 	} else {
 	    $filename = $mboxfile;
 	    open (OUT_MBOX, ">$mboxfile")
-		or die "bts: writing to mbox file $mboxfile: $!\n";
+		or die "$progname: writing to mbox file $mboxfile: $!\n";
 	}
 	print OUT_MBOX $response->content;
 	close OUT_MBOX;
 	    
 	return ($fh, $filename);
     } else {
-	die "bts: failed to download mbox.\n";
+	die "$progname: failed to download mbox.\n";
     }
 }
 
@@ -3260,7 +3311,7 @@ sub deletecache {
     my $thgopts=shift || '';
 
     if (! -d $cachedir) {
-	die "bts: deletecache() called but no cachedir!\n";
+	die "$progname: deletecache() called but no cachedir!\n";
     }
 
     delete_timestamp($thing,$thgopts);
@@ -3277,7 +3328,7 @@ sub deletecache {
 sub cachefile {
     my $thing=shift;
     my $thgopts=shift || '';
-    if ($thing eq '') { die "bts: cachefile given empty argument\n"; }
+    if ($thing eq '') { die "$progname: cachefile given empty argument\n"; }
     if ($thing =~ /bugs.css$/) { return $cachedir."bugs.css" }
     $thing =~ s/^src:/src_/;
     $thing =~ s/^from:/from_/;
@@ -3299,7 +3350,7 @@ sub mboxfile {
 # Given a bug number, returns the dirname for it in the cache.
 sub cachebugdir {
     my $thing=shift;
-    if ($thing !~ /^\d+$/) { die "bts: cachebugdir given faulty argument: $thing\n"; }
+    if ($thing !~ /^\d+$/) { die "$progname: cachebugdir given faulty argument: $thing\n"; }
     return $cachedir.$thing;
 }
 
@@ -3363,7 +3414,7 @@ sub bugs_from_thing {
 
     if (-f $cachefile) {
 	local $/;
-	open (IN, $cachefile) || die "bts: open $cachefile: $!\n";
+	open (IN, $cachefile) || die "$progname: open $cachefile: $!\n";
 	my $data=<IN>;
 	close IN;
 
@@ -3443,7 +3494,7 @@ sub href_to_filename {
 	}
 	else {
 	    $href =~ s/>.*/>/s;
-	    warn "bts: in href_to_filename: unrecognised BTS URL type: $href\n";
+	    warn "$progname: in href_to_filename: unrecognised BTS URL type: $href\n";
 	    return undef;
 	}
     }
@@ -3487,7 +3538,7 @@ sub browse {
     
     if ($thing eq '') {
 	if ($thgopts ne '') {
-	    die "bts: you can only give options for a BTS page if you specify a bug/maint/... .\n";
+	    die "$progname: you can only give options for a BTS page if you specify a bug/maint/... .\n";
 	}
 	runbrowser($btsurl);
 	return;
@@ -3497,13 +3548,13 @@ sub browse {
     my $cachefile=cachefile($thing,$thgopts);
     my $mboxfile=mboxfile($thing);
     if ($mboxmode and ! $mboxfile) {
-	die "bts: you can only request a mailbox for a single bug report.\n";
+	die "$progname: you can only request a mailbox for a single bug report.\n";
     }
 
     # Check that if we're requesting a tag, that it's a valid tag
     if (($thing.$thgopts) =~ /(?:^|;)(?:tag|include|exclude)[:=]([^;]*)/) {
 	unless (exists $valid_tags{$1}) {
-	    die "bts: invalid tag requested: $1\nRecognised tag names are: " . join(" ", @valid_tags) . "\n";
+	    die "$progname: invalid tag requested: $1\nRecognised tag names are: " . join(" ", @valid_tags) . "\n";
 	}
     }
 
@@ -3511,11 +3562,11 @@ sub browse {
     if ($offlinemode) {
 	$livedownload = 0;
 	if (! $hascache) {
-	    die "bts: Sorry, you are in offline mode and have no cache.\nRun \"bts cache\" or \"bts show\" to create one.\n";
+	    die "$progname: Sorry, you are in offline mode and have no cache.\nRun \"bts cache\" or \"bts show\" to create one.\n";
 	}
 	elsif ((! $mboxmode and ! -r $cachefile) or
 	       ($mboxmode and ! -r $mboxfile)) {
-	    die "bts: Sorry, you are in offline mode and that is not cached.\nUse \"bts [--cache-mode=...] cache\" to update the cache.\n";
+	    die "$progname: Sorry, you are in offline mode and that is not cached.\nUse \"bts [--cache-mode=...] cache\" to update the cache.\n";
 	}
 	if ($mboxmode) {
 	    runmailreader($mboxfile);
@@ -3528,12 +3579,12 @@ sub browse {
 	if (! $hascache) {
 	    if (! -d dirname($cachedir)) {
 		unless (mkdir(dirname($cachedir))) {
-		    warn "bts: couldn't mkdir ".dirname($cachedir).": $!\n";
+		    warn "$progname: couldn't mkdir ".dirname($cachedir).": $!\n";
 		    goto LIVE;
 		}
 	    }
 	    unless (mkdir($cachedir)) {
-		warn "bts: couldn't mkdir $cachedir: $!\n";
+		warn "$progname: couldn't mkdir $cachedir: $!\n";
 		goto LIVE;
 	    }
 	}
@@ -3552,7 +3603,7 @@ sub browse {
 
 		# Use filehandle for security
 		open (OUT_LIVE, ">&", $fh)
-		    or die "bts: writing to temporary file: $!\n";
+		    or die "$progname: writing to temporary file: $!\n";
 		# Correct relative urls to point to the bts.
 		$live =~ s%\shref="(?:/cgi-bin/)?(\w+\.cgi)% href="$btscgiurl$1%g;
 		print OUT_LIVE $live;
@@ -3595,12 +3646,12 @@ sub prunecache {
 
     my $oldcwd = getcwd;
 
-    chdir($cachedir) || die "bts: chdir $cachedir: $!\n";
+    chdir($cachedir) || die "$progname: chdir $cachedir: $!\n";
 
     # remove the now-defunct live-download file
     unlink "live_download.html";
 
-    opendir DIR, '.' or die "bts: opendir $cachedir: $!\n";
+    opendir DIR, '.' or die "$progname: opendir $cachedir: $!\n";
     my @cachefiles = grep { ! /^\.\.?$/ } readdir(DIR);
     closedir DIR;
 
@@ -3625,7 +3676,7 @@ sub prunecache {
 	}
     }
 
-    warn "bts: unexpected files/dirs in cache directory $cachedir:\n  " .
+    warn "$progname: unexpected files/dirs in cache directory $cachedir:\n  " .
 	join("\n  ", keys %weirdfiles) . "\n"
 	if keys %weirdfiles;
 
@@ -3638,7 +3689,7 @@ sub prunecache {
     # We now remove the oldfiles if they're automatically downloaded
     tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	 O_RDWR()|O_CREAT(), 0600, $DB_HASH, "write")
-	or die "bts: couldn't open DB file $timestampdb for writing: $!\n"
+	or die "$progname: couldn't open DB file $timestampdb for writing: $!\n"
 	if ! tied %timestamp;
 
     my @unrecognised;
@@ -3657,10 +3708,10 @@ sub prunecache {
     untie %timestamp;
 
     if (! -e $prunestamp) {
-	open PRUNESTAMP, ">$prunestamp" || die "bts: prune timestamp: $!\n";
+	open PRUNESTAMP, ">$prunestamp" || die "$progname: prune timestamp: $!\n";
 	close PRUNESTAMP;
     }
-    chdir $oldcwd || die "bts: chdir $oldcwd: $!\n";
+    chdir $oldcwd || die "$progname: chdir $oldcwd: $!\n";
     utime time, time, $prunestamp;
 }
 
@@ -3677,11 +3728,11 @@ sub runbrowser {
 sub runmailreader {
     my $file = shift;
     my $quotedfile;
-    die "bts: could not read mbox file!\n" unless -r $file;
+    die "$progname: could not read mbox file!\n" unless -r $file;
 
     if ($file !~ /\'/) { $quotedfile = qq['$file']; }
     elsif ($file !~ /[\"\\\$\'\!]/) { $quotedfile = qq["$file"]; }
-    else { die "bts: could not figure out how to quote the mbox filename \"$file\"\n"; }
+    else { die "$progname: could not figure out how to quote the mbox filename \"$file\"\n"; }
 
     my $reader = $mailreader;
     $reader =~ s/\%([%s])/$1 eq '%' ? '%' : $quotedfile/eg;
@@ -3708,7 +3759,7 @@ sub get_timestamp {
     } else {
 	tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	     O_RDONLY(), 0600, $DB_HASH, "read")
-	    or die "bts: couldn't open DB file $timestampdb for reading: $!\n";
+	    or die "$progname: couldn't open DB file $timestampdb for reading: $!\n";
 
 	($timestamp, $versionstamp) = split /;/, $timestamp{$thing.$thgopts}
 	    if exists $timestamp{$thing.$thgopts};
@@ -3730,7 +3781,7 @@ sub set_timestamp {
     } else {
 	tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	     O_RDWR()|O_CREAT(), 0600, $DB_HASH, "write")
-	    or die "bts: couldn't open DB file $timestampdb for writing: $!\n";
+	    or die "$progname: couldn't open DB file $timestampdb for writing: $!\n";
 
 	$timestamp{$thing.$thgopts} = "$timestamp;$versionstamp";
 
@@ -3747,7 +3798,7 @@ sub delete_timestamp {
     } else {
 	tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	     O_RDWR()|O_CREAT(), 0600, $DB_HASH, "write")
-	    or die "bts: couldn't open DB file $timestampdb for writing: $!\n";
+	    or die "$progname: couldn't open DB file $timestampdb for writing: $!\n";
 
 	delete $timestamp{$thing.$thgopts};
 
@@ -3861,7 +3912,7 @@ sub init_agent {
 
 sub opts_done {
     if (@_) {
-	die "bts: unknown options to '$command[$index]': @_\n";
+	die "$progname: unknown options to '$command[$index]': @_\n";
     }
 }
 
@@ -3872,12 +3923,12 @@ sub edit {
 				  SUFFIX => ".mail",
 				  DIR => File::Spec->tmpdir);
     open(OUT_MAIL, ">$filename")
-	or die "bts: writing to temporary file: $!\n";
+	or die "$progname: writing to temporary file: $!\n";
     print OUT_MAIL $message;
     close OUT_MAIL;
     system("sensible-editor $filename");
     open(OUT_MAIL, "<$filename")
-	or die "bts: reading from temporary file: $!\n";
+	or die "$progname: reading from temporary file: $!\n";
     $message = "";
     while(<OUT_MAIL>) {
 	$message .= $_;

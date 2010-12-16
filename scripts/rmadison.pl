@@ -71,9 +71,10 @@ my %url_map = (
     'debian' => "http://qa.debian.org/madison.php",
     'qa' => "http://qa.debian.org/madison.php",
     'myon' => "http://qa.debian.org/~myon/madison.php",
-    'bpo' => "http://www.backports.org/cgi-bin/madison.cgi",
+    'bpo' => "http://backports.debian.org/cgi-bin/madison.cgi",
     'debug' => "http://debug.debian.net/cgi-bin/madison.cgi",
     'ubuntu' => "http://people.canonical.com/~ubuntu-archive/madison.cgi",
+    'udd' => 'http://qa.debian.org/cgi-bin/madison.cgi',
 );
 my $default_url = "debian";
 
@@ -172,7 +173,7 @@ foreach my $url (@url) {
     print "$url:\n" if @url > 1;
     $url = $url_map{$url} if $url_map{$url};
     my @cmd = -x "/usr/bin/curl" ? qw/curl -s -S -L/ : qw/wget -q -O -/;
-    system @cmd, $url . "?package=" . join("+", map { uri_escape($_) } @ARGV) . "&text=on&" . join ("&", @args);
+    system @cmd, $url . (($url =~ m/\?/)?'&':'?')."package=" . join("+", map { uri_escape($_) } @ARGV) . "&text=on&" . join ("&", @args);
 }
 
 =pod
@@ -195,7 +196,7 @@ B<dak ls> queries the Debian archive database ("projectb") and
 displays which package version is registered per architecture/component/suite.
 The CGI at B<http://qa.debian.org/madison.php> provides that service without
 requiring ssh access to ftp-master.debian.org or the mirror on
-merkel.debian.org. This script, B<rmadison>, is a command line frontend to
+ries.debian.org. This script, B<rmadison>, is a command line frontend to
 this CGI.
 
 =head1 OPTIONS
@@ -242,7 +243,7 @@ show projectb snapshot and reload time (not supported by all archives)
 
 use I<URL> for the query. Supported shorthands are
  B<debian> or B<qa> http://qa.debian.org/madison.php (the default)
- B<bpo> http://www.backports.org/cgi-bin/madison.cgi
+ B<bpo> http://backports.debian.org/cgi-bin/madison.cgi
  B<debug> http://debug.debian.net/cgi-bin/madison.cgi
  B<ubuntu> http://people.canonical.com/~ubuntu-archive/madison.cgi
 

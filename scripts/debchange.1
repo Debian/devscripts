@@ -137,7 +137,7 @@ then it must match the full directory path.  If not, then it must
 match the full directory name.  If \fIregex\fR contains the string
 \'PACKAGE', this will be replaced by the source package name, as
 determined from the changelog.  The default value for the regex is:
-\'PACKAGE(-.*)?', thus matching directory names such as PACKAGE and
+\'PACKAGE(-.+)?', thus matching directory names such as PACKAGE and
 PACKAGE-version.
 .PP
 The default changelog to be edited is \fIdebian/changelog\fR; however,
@@ -204,8 +204,8 @@ due to the lack of changes.
 .TP
 \fB\-\-package\fR \fIpackage\fR
 This specifies the package name to be used in the new changelog; this
-may only be used in conjunction with the \fB\-\-create\fR and
-\fB\-\-increment\fR options.
+may only be used in conjunction with the \fB\-\-create\fR, \fB\-\-increment\fR and
+\fB\-\-newversion\fR options.
 .TP
 .BR \-\-nmu ", " \-n
 Increment the Debian release number for a non-maintainer upload by
@@ -221,19 +221,23 @@ Increment the Debian release number for a binary non-maintainer upload
 by either appending a "+b1" to a non-binNMU version number or by
 incrementing a binNMU version number, and add a binNMU changelog comment.
 .TP
-.B \-\-qa ", " \-q
+.BR \-\-qa ", " \-q
 Increment the Debian release number for a Debian QA Team upload, and
 add a QA upload changelog comment.
 .TP
-.B \-\-security ", " \-s
+.BR \-\-security ", " \-s
 Increment the Debian release number for a Debian Security Team non-maintainer
 upload, and add a Security Team upload changelog comment.
+.TP
+.B \-\-team
+Increment the Debian release number for a team upload, and add a team upload
+changelog comment.
 .TP
 .B \-\-bpo
 Increment the Debian release number for an upload to lenny-backports,
 and add a backport upload changelog comment.
 .TP
-.B \-\-local ", " \-l \fIsuffix\fR
+.BR \-\-local ", " \-l \fIsuffix\fR
  Add a suffix to the Debian version number for a local build.
 .TP
 .BR \-\-force\-bad\-version ", " \-b
@@ -280,7 +284,7 @@ Preserve the source tree directory name if the upstream version number
 (or the version number of a Debian native package) changes.  See also
 the configuration variables section below.
 .TP
-.B \-\-no\-preserve
+\fB \-\-no\-preserve\fR, \fB\-\-nopreserve\fR
 Do not preserve the source tree directory name (default).
 .TP
 \fB\-\-distribution \fIdist\fR, \fB\-D \fIdist\fR
@@ -309,6 +313,11 @@ version.
 Should we indicate that parts of a changelog entry have been made by
 different maintainers?  Default is yes; see the discussion above and
 also the \fBDEBCHANGE_MULTIMAINT\fR configuration file option below.
+.TP
+\fB\-\-[no]multimaint\-merge\fR
+Should all changes made by the same author be merged into the same
+changelog section?  Default is no; see the discussion above and also the
+\fBDEBCHANGE_MULTIMAINT_MERGE\fR configuration file option below.
 .TP
 .BR \-\-maintmaint ", " \-m
 Do not modify the maintainer details previously listed in the changelog. 
@@ -390,11 +399,11 @@ rather than creating a new block.  Default is \fIno\fR.
 .TP
 .BR DEBCHANGE_MAINTTRAILER
 If this is set to \fIno\fR, then it is the same as the
-\fB\-\-no\-mainttrailer\fR command line parameter being used.
+\fB\-\-nomainttrailer\fR command line parameter being used.
 .TP
 .BR DEBCHANGE_TZ
 Use this timezone for changelog entries.  Default is the user/system
-timezone as shown by `date \-R`.
+timezone as shown by `date \-R` and affected by the environment variable TZ.
 .TP
 .BR DEBCHANGE_LOWER_VERSION_PATTERN
 If this is set, then it is the same as the

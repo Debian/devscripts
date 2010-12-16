@@ -16,9 +16,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 # We will do simple option processing.  The calling syntax of this
 # program is:
@@ -102,7 +100,7 @@ First usage method:
                 What constitutes a matching directory name; REGEX is
                 a Perl regular expression; the string \`PACKAGE\' will
                 be replaced by the package name; see manpage for details
-                (default: 'PACKAGE(-.*)?')
+                (default: 'PACKAGE(-.+)?')
 
         --help, -h    display this message
 
@@ -179,7 +177,7 @@ my @lintian_extra_opts=();
 my @lintian_opts=();
 my $checkbuilddep=1;
 my $check_dirname_level = 1;
-my $check_dirname_regex = 'PACKAGE(-.*)?';
+my $check_dirname_regex = 'PACKAGE(-.+)?';
 my $logging=0;
 my $tgz_check=1;
 my $prepend_path='';
@@ -254,7 +252,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBUILD_POST_DPKG_BUILDPACKAGE_HOOK' => '',
 		       'DEBUILD_SIGNING_USERNAME' => '',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
-		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.*)?',
+		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.+)?',
 		       );
     my %config_default = %config_vars;
     my $dpkg_opts_var = 'DEBUILD_DPKG_BUILDPACKAGE_OPTS';
@@ -498,9 +496,6 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
 	$arg eq '--tgz-check' and $tgz_check=1, next;
 	$arg =~ /^--no-?tgz-check$/ and $tgz_check=0, next;
 	$arg =~ /^-r(.*)/ and $root_command=$1, next;
-	if ($arg eq '--ignore-dirname') {
-	    fatal "--ignore-dirname has been replaced by --check-dirname-level and\n--check-dirname-regex; run $progname --help for more details";
-	}
 	if ($arg =~ /^--check-dirname-level=(.*)$/) {
 	    $arg = '--check-dirname-level';
 	    unshift @ARGV, $1;
@@ -654,6 +649,8 @@ my $pkg = $changelog{'Source'};
 fatal "no version number in changelog!"
     unless exists $changelog{'Version'};
 my $version = $changelog{'Version'};
+(my $sversion=$version) =~ s/^\d+://;
+(my $uversion=$sversion) =~ s/-[a-z0-9+\.]+$//i;
 
 # Is the directory name acceptable?
 if ($check_dirname_level ==  2 or
@@ -786,6 +783,8 @@ if ($command_version eq 'dpkg') {
     my $targetarch='';
     my $targetgnusystem='';
     my $changedby='';
+    my $compression='';
+    my $comp_level='';
 
     # and one for us
     my @debsign_opts = ();
@@ -811,6 +810,8 @@ if ($command_version eq 'dpkg') {
 	/^-s[iad]$/ and $sourcestyle=$_, push(@dpkg_opts, $_), next;
 	/^-i/ and $diffignore=$_, push(@dpkg_opts, $_), next;
 	/^-I/ and push(@tarignore, $_), push(@dpkg_opts, $_), next;
+	/^-Z/ and $compression=$_, push(@dpkg_opts, $_), next;
+	/^-z/ and $comp_level=$_, push(@dpkg_opts, $_), next;
 	$_ eq '-tc' and $cleansource=1, push(@dpkg_opts, $_), next;
 	/^-t(.*)/ and $targetgnusystem=$1, push(@dpkg_opts, $_), next; # Ditto	
 	$_ eq '-nc' and $noclean=1, $binaryonly ||= '-b', push(@dpkg_opts, $_),
@@ -859,6 +860,8 @@ if ($command_version eq 'dpkg') {
 	/^-s[iad]$/ and $sourcestyle=$_, push(@dpkg_opts, $_), next;
 	/^-i/ and $diffignore=$_, push(@dpkg_opts, $_), next;
 	/^-I/ and push(@tarignore, $_), push(@dpkg_opts, $_), next;
+	/^-Z/ and $compression=$_, push(@dpkg_opts, $_), next;
+	/^-z/ and $comp_level=$_, push(@dpkg_opts, $_), next;
 	$_ eq '-tc' and $cleansource=1, push(@dpkg_opts, $_), next;
 	/^-t(.*)/ and $targetgnusystem=$1, $checkbuilddep=0, next;
 	$_ eq '-nc' and $noclean=1, $binaryonly ||= '-b', push(@dpkg_opts, $_),
@@ -957,10 +960,9 @@ if ($command_version eq 'dpkg') {
 	/^(.*)=(.*)$/ and $ENV{$1} = $2;
     }
 
-    # We need to do the arch, sversion, pv, pva stuff to figure out
+    # We need to do the arch, pv, pva stuff to figure out
     # what the changes file will be called,
-    my ($sversion, $uversion, $dsc, $changes, $build);
-    my $arch;
+    my ($arch, $dsc, $changes, $build);
     if ($sourceonly) {
 	$arch = 'source';
     } else {
@@ -969,19 +971,18 @@ if ($command_version eq 'dpkg') {
 	fatal "couldn't determine host architecture!?" if ! $arch;
     }
 
-    ($sversion=$version) =~ s/^\d+://;
-    ($uversion=$sversion) =~ s/-[a-z0-9+\.]+$//i;
     $dsc = "${pkg}_${sversion}.dsc";
     my $orig_prefix = "${pkg}_${uversion}.orig.tar";
     my $origdir = basename(cwd()) . ".orig";
     if (! $binaryonly and $tgz_check and $uversion ne $sversion
 	and ! -f "../${orig_prefix}.bz2" and ! -f "../${orig_prefix}.lzma"
-	and ! -f "../${orig_prefix}.gz" and ! -d "../$origdir") {
+	and ! -f "../${orig_prefix}.gz" and ! -f "../${orig_prefix}.xz"
+	and ! -d "../$origdir") {
 	print STDERR "This package has a Debian revision number but there does"
 	    . " not seem to be\nan appropriate original tar file or .orig"
 	    . " directory in the parent directory;\n(expected one of"
-	    . " ${orig_prefix}.gz, ${orig_prefix}.bz2,\n${orig_prefix}.lzma or"
-	    . " $origdir)\ncontinue anyway? (y/n) ";
+	    . " ${orig_prefix}.gz, ${orig_prefix}.bz2,\n${orig_prefix}.lzma, "
+	    . " ${orig_prefix}.xz or $origdir)\ncontinue anyway? (y/n) ";
 	my $ans = <STDIN>;
 	exit 1 unless $ans =~ /^y/i;
     }
@@ -1077,15 +1078,13 @@ if ($command_version eq 'dpkg') {
 		system('dpkg-checkbuilddeps');
 	    }
 	    if ($?>>8) {
-		# Horrible non-Perlish formatting here, but emacs formatting
-		# dies miserably if this paragraph is done as a here-document.
-		# And even the documented hack doesn't work here :(
-		fatal "You do not appear to have all build dependencies properly met, aborting.\n" .
-		    "(Use -d flag to override.)\n" .
-		    "If you have the pbuilder package installed you can run\n" .
-		    "/usr/lib/pbuilder/pbuilder-satisfydepends as root to install the\n" .
-		    "required packages, or you can do it manually using dpkg or apt using\n" .
-		    "the error messages just above this message.\n";
+		fatal <<"EOT";
+You do not appear to have all build dependencies properly met, aborting.
+(Use -d flag to override.)
+You can use mk-build-deps to generate a dummy package which Depends on all the
+required packages, or you can install them manually using dpkg or apt using
+the error messages just above this message.
+EOT
 	    }
 	}
 
@@ -1108,10 +1107,12 @@ if ($command_version eq 'dpkg') {
 	    my @cmd = (qw(dpkg-source));
 	    push @cmd, @passopts;
 	    push @cmd, $diffignore if $diffignore;
+	    push @cmd, $compression if $compression;
+	    push @cmd, $comp_level if $comp_level;
 	    push @cmd, @tarignore;
 	    push @cmd, "-b", $dirn;
 	    chdir '..' or fatal "can't chdir ..: $!";
-	    system_withecho(@cmd);	
+	    system_withecho(@cmd);
 	    chdir $dirn or fatal "can't chdir $dirn: $!";
 	}
 
@@ -1215,7 +1216,7 @@ if ($command_version eq 'dpkg') {
     } # end of debuild dpkg-buildpackage emulation
 
     run_hook('lintian', $run_lintian && $lintian_exists);
-    
+
     if ($run_lintian && $lintian_exists) {
 	$<=$>=$uid;  # Give up on root privileges if we can
 	$(=$)=$gid;
@@ -1288,10 +1289,10 @@ else {
 	if ($?>>8) {
 	    fatal <<"EOT";
 You do not appear to have all build dependencies properly met.
-If you have the pbuilder package installed, you can run
-/usr/lib/pbuilder/pbuilder-satisfydepends as root to install the
-required packages, or you can do it manually using dpkg or apt using
-the error messages just above this message.
+You can use mk-build-deps to generate a dummy package which
+Depends on all the required packages, or you can install them
+manually using dpkg or apt using the error messages just above
+this message.
 EOT
 	}
     }
@@ -1338,7 +1339,7 @@ sub run_hook ($$) {
     print STDERR " Running $hook-hook\n";
     my $hookcmd = $hook{$hook};
     $act = $act ? 1 : 0;
-    my %per=("%"=>"%", "p"=>$pkg, "v"=>$version, "a"=>$act);
+    my %per=("%"=>"%", "p"=>$pkg, "v"=>$version, "s"=>$sversion, "u"=>$uversion, "a"=>$act);
     $hookcmd =~ s/\%(.)/exists $per{$1} ? $per{$1} :
 	(warn ("Unrecognised \% substitution in hook: \%$1\n"), "\%$1")/eg;
 

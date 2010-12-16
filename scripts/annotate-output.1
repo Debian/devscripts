@@ -2,11 +2,20 @@
 .SH NAME
 annotate-output \- annotate program output with time and stream
 .SH SYNOPSIS
-\fBannotate\-output\fR \fIprogram\fR [\fIargs\fR ...]
+\fBannotate\-output\fR [\fIoptions\fR] \fIprogram\fR [\fIargs\fR ...]
 .SH DESCRIPTION
 \fBannotate\-output\fR will execute the specified program, while
 prepending every line with the current time and O for stdout and E for
 stderr.
+
+.SH OPTIONS
+.TP
+\fB+FORMAT\fR
+Controls the timestamp format, as per \fBdate\fR(1).  Defaults to
+"%H:%M:%S".
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Display a help message and exit successfully.
 
 .SH EXAMPLE
 
@@ -35,19 +44,10 @@ particular, when an interactive program asks for input, the question
 might not be shown until after you have answered it.  This will give
 the impression that the annotated program has hung, while it has not.
 
-\fBannotate-output\fR does not currently accept any command-line
-options, so \-\-help, \-\-version, and that kind of stuff do not
-currently work (unless you install /usr/bin/\-\-help ;) ).
+.SH "SEE ALSO"
+\fBdate\fR(1)
 
-.SH TODO
-Accept \-\-help, \-\-version command-line options.
-
-Get rich with this very sophisticated piece of bash.
-
-.SH WEBSITE/SUPPORT
-The most recent version of this utility is on
-http://jeroen.A-Eskwadraat.nl/sw/annotate
-
+.SH SUPPORT
 This program is community-supported (meaning: you'll need to fix it
 yourself).  Patches are however appreciated, as is any feedback
 (positive or negative).

@@ -27,8 +27,7 @@ And now, in mostly alphabetical order, the scripts:
 - bts: A command-line tool for accessing the BTS, both to
   send mails to control@bts.debian.org and to access the web pages and
   SOAP interface of the BTS. [www-browser, libauthen-sasl-perl, 
-  libnet-smtp-ssl-perl, libsoap-lite-perl, libwww-perl, bsd-mailx |
-  mailx | mailutils]
+  libnet-smtp-ssl-perl, libsoap-lite-perl, libwww-perl, bsd-mailx | mailx]
 
 - build-rdeps: Searches for all packages that build-depend on a given package
   [dctrl-tools]
@@ -78,10 +77,10 @@ And now, in mostly alphabetical order, the scripts:
   so that the binaries and other files can be rebuilt if necessary.
   [fakeroot]
 
-- debcommit: Commits changes to cvs, svn, arch, git, or hg, using new entries
-  in debian/changelog as the commit message. Also supports tagging Debian
-  package releases. [cvs | subversion | svk | tla | bzr | git-core | 
-  mercurial]
+- debcommit: Commits changes to cvs, darcs, svn, svk, tla, bzr, git, or hg,
+  using new entries in debian/changelog as the commit message. Also supports
+  tagging Debian package releases. [cvs | darcs | subversion | svk | tla |
+  bzr | git-core | mercurial]
 
 - debdiff: A program which examines two .deb files or two .changes files and
   reports on any difference found in their file lists.  Useful for ensuring
@@ -160,7 +159,7 @@ And now, in mostly alphabetical order, the scripts:
 - getbuildlog: Download package build logs from Debian auto-builders. [wget]
 
 - grep-excuses: grep the update_excuses.html file to find out what is
-  happening to your packages. [libterm-size-perl, wget]
+  happening to your packages. [libterm-size-perl, wget, w3m]
 
 - licensecheck: given a list of source files, attempt to determine which
   license (or combination of licenses) each file is placed under.
@@ -170,7 +169,7 @@ And now, in mostly alphabetical order, the scripts:
 
 - manpage-alert: locate binaries without corresponding manpages. [man-db]
 
-- mass-bug: mass-file bug reports [bsd-mailx | mailx | mailutils]
+- mass-bug: mass-file bug reports [bsd-mailx | mailx]
 
 - mergechanges: merge .changes files from the same release but built
   on different architectures.
@@ -189,7 +188,7 @@ And now, in mostly alphabetical order, the scripts:
   gnuplot. [libtimedate-perl, gnuplot]
 
 - pts-subscribe: subscribe to the PTS (Package Tracking System) for a
-  limited period of time. [bsd-mailx | mailx | mailutils, at]
+  limited period of time. [bsd-mailx | mailx, at]
 
 - rc-alert: list installed packages which have release-critical bugs [wget]
 
@@ -212,7 +211,7 @@ And now, in mostly alphabetical order, the scripts:
   also call a program such as uupdate to attempt to update the Debianised
   version based on the new update.  Whilst uscan could be used to release
   the updated version automatically, it is probably better not to without
-  testing it first. [libcrypt-ssleay-perl, libwww-perl, unzip, lzma]
+  testing it first. [libcrypt-ssleay-perl, libwww-perl, unzip, lzma, xz-utils]
 
 - uupdate: Update the package with an archive or patches from
   an upstream author.  This will be of help if you have to update your

@@ -11,8 +11,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 PROGNAME=`basename $0`
 MODIFIED_CONF_MSG='Default settings modified by devscripts configuration files:'
@@ -66,7 +65,7 @@ DEFAULT_BTS_SENDMAIL_COMMAND="/usr/sbin/sendmail"
 VARS="NMUDIFF_DELAY NMUDIFF_MUTT NMUDIFF_NEWREPORT BTS_SENDMAIL_COMMAND"
 # Don't think it's worth including this stuff
 # DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1
-# DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.*)?'
+# DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.+)?'
 # VARS="BTS_SENDMAIL_COMMAND DEVSCRIPTS_CHECK_DIRNAME_LEVEL DEVSCRIPTS_CHECK_DIRNAME_REGEX"
 
 if [ "$1" = "--no-conf" -o "$1" = "--noconf" ]; then
@@ -305,21 +304,19 @@ if [ $ret -ne 0 ] && [ $ret -ne 1 ]; then
     exit 1
 fi
 
+TO_ADDRESSES_SENDMAIL=""
+TO_ADDRESSES_MUTT=""
+BCC_ADDRESS_SENDMAIL=""
+BCC_ADDRESS_MUTT=""
+TAGS=""
 if [ "$NMUDIFF_NEWREPORT" = "yes" ]; then
     TO_ADDRESSES_SENDMAIL="submit@bugs.debian.org"
     TO_ADDRESSES_MUTT="submit@bugs.debian.org"
-    BCC_ADDRESS_SENDMAIL=""
-    BCC_ADDRESS_MUTT=""
     TAGS="Package: $SOURCE
 Version: $OLDVERSION
 Severity: normal
-Tags: patch"
+Tags: patch pending"
 else
-    TO_ADDRESSES_SENDMAIL=""
-    TO_ADDRESSES_MUTT=""
-    BCC_ADDRESS_SENDMAIL="control@bugs.debian.org"
-    BCC_ADDRESS_MUTT="-b control@bugs.debian.org"
-    TAGS=""
     for b in $CLOSES; do
 	TO_ADDRESSES_SENDMAIL="$TO_ADDRESSES_SENDMAIL,
   $b@bugs.debian.org"
@@ -328,11 +325,19 @@ else
 	    TAGS="$TAGS
 tags $b + patch"
 	fi
+	if [ "$NMUDIFF_DELAY" != "0" ] && [ "`bts select bugs:$b tag:pending`" != "$b" ]; then
+	    TAGS="$TAGS
+tags $b + pending"
+	fi
     done
     TO_ADDRESSES_SENDMAIL=$(echo "$TO_ADDRESSES_SENDMAIL" | tail -n +2)
-    TAGS=$(echo "$TAGS" | tail -n +2)
-    TAGS="$TAGS
+    if [ "$TAGS" != "" ]; then
+        TAGS=$(echo "$TAGS" | tail -n +2)
+        TAGS="$TAGS
 thanks"
+        BCC_ADDRESS_SENDMAIL="control@bugs.debian.org"
+        BCC_ADDRESS_MUTT="-b control@bugs.debian.org"
+    fi
 fi
 
 TMPNAM="$( tempfile )"

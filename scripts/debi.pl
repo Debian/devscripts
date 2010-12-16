@@ -21,8 +21,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use 5.008;
 use strict;
@@ -30,9 +29,8 @@ use Getopt::Long;
 use File::Basename;
 use filetest 'access';
 use Cwd;
-use File::Spec;
-use IPC::Open3;
-use Symbol 'gensym';
+use Dpkg::Control;
+use Dpkg::Changelog::Parse;
 
 my $progname = basename($0,'.pl');  # the '.pl' is for when we're debugging
 my $modified_conf_msg;
@@ -61,11 +59,11 @@ Usage: $progname [options] [.changes file] [package ...]
                       What constitutes a matching directory name; REGEX is
                       a Perl regular expression; the string \`PACKAGE\' will
                       be replaced by the package name; see manpage for details
-                      (default: 'PACKAGE(-.*)?')
+                      (default: 'PACKAGE(-.+)?')
     --with-depends    Install packages with their depends.
     --tool TOOL       Use the specified tool for installing the dependencies
                       of the package(s) to be installed.
-		      (default: apt-get)
+                      (default: apt-get)
     --help            Show this message
     --version         Show version and copyright information
 
@@ -97,7 +95,7 @@ Usage: $progname [options] [.changes file] [package ...]
                       What constitutes a matching directory name; REGEX is
                       a Perl regular expression; the string \`PACKAGE\' will
                       be replaced by the package name; see manpage for details
-                      (default: 'PACKAGE(-.*)?')
+                      (default: 'PACKAGE(-.+)?')
     --help            Show this message
     --version         Show version and copyright information
 
@@ -124,7 +122,7 @@ EOF
 my $debsdir = '..';
 my $debsdir_warning;
 my $check_dirname_level = 1;
-my $check_dirname_regex = 'PACKAGE(-.*)?';
+my $check_dirname_regex = 'PACKAGE(-.+)?';
 my $install_tool = 'apt-get';
 
 # Next, read configuration files and then command line
@@ -138,7 +136,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     my %config_vars = (
 		       'DEBRELEASE_DEBS_DIR' => '..',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
-		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.*)?',
+		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.+)?',
 		       );
     my %config_default = %config_vars;
 
@@ -181,7 +179,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # Command line options next
 my ($opt_help, $opt_version, $opt_a, $opt_t, $opt_debsdir, $opt_multi);
 my $opt_upgrade;
-my ($opt_ignore, $opt_level, $opt_regex, $opt_noconf);
+my ($opt_level, $opt_regex, $opt_noconf);
 my ($opt_tool, $opt_with_depends);
 GetOptions("help" => \$opt_help,
 	   "version" => \$opt_version,
@@ -190,7 +188,6 @@ GetOptions("help" => \$opt_help,
 	   "debs-dir=s" => \$opt_debsdir,
 	   "multi" => \$opt_multi,
 	   "upgrade" => \$opt_upgrade,
-	   "ignore-dirname" => \$opt_ignore,
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
 	   "with-depends" => \$opt_with_depends,
@@ -223,11 +220,6 @@ if ($debsdir_warning) {
     die "$progname: $debsdir_warning\n";
 }
 
-# dirname stuff
-if ($opt_ignore) {
-    die "$progname: --ignore-dirname has been replaced by --check-dirname-level and\n--check-dirname-regex; run $progname --help for more details\n";
-}
-
 if (defined $opt_level) {
     if ($opt_level =~ /^[012]$/) { $check_dirname_level = $opt_level; }
     else {
@@ -253,7 +245,6 @@ if ($? != 0 or ! $arch) {
     die "$progname: unable to determine target architecture.\n";
 }
 chomp $arch;
-
 
 my $chdir = 0;
 
@@ -281,31 +272,18 @@ if (! defined $changes) {
     }
 
     # Find the source package name and version number
-    my %changelog;
-    open PARSED, q[dpkg-parsechangelog | grep '^\(Source\|Version\):' |]
-	or die "$progname; cannot execute dpkg-parsechangelog | grep: $!\n";
-    while (<PARSED>) {
-	chomp;
-	if (/^(\S+):\s(.+?)\s*$/) { $changelog{$1}=$2; }
-	else {
-	    die "$progname: don't understand dpkg-parsechangelog output: $_\n";
-	}
-    }
-
-    close PARSED
-	or die "$progname: problem executing dpkg-parsechangelog | grep: $!\n";
-    if ($?) { die "$progname: dpkg-parsechangelog | grep failed!\n" }
+    my $changelog = changelog_parse();
 
     die "$progname: no package name in changelog!\n"
-	unless exists $changelog{'Source'};
+	unless exists $changelog->{'Source'};
     die "$progname: no package version in changelog!\n"
-	unless exists $changelog{'Version'};
+	unless exists $changelog->{'Version'};
 
     # Is the directory name acceptable?
     if ($check_dirname_level ==  2 or
 	    ($check_dirname_level == 1 and $chdir)) {
 	my $re = $check_dirname_regex;
-	$re =~ s/PACKAGE/\\Q$changelog{'Source'}\\E/g;
+	$re =~ s/PACKAGE/\\Q$changelog->{'Source'}\\E/g;
 	my $gooddir;
 	if ($re =~ m%/%) { $gooddir = eval "cwd() =~ /^$re\$/;"; }
 	else { $gooddir = eval "basename(cwd()) =~ /^$re\$/;"; }
@@ -313,7 +291,7 @@ if (! defined $changes) {
 	if (! $gooddir) {
 	    my $pwd = cwd();
 	    die <<"EOF";
-$progname: found debian/changelog for package $changelog{'Source'} in the directory
+$progname: found debian/changelog for package $changelog->{'Source'} in the directory
   $pwd
 but this directory name does not match the package name according to the
 regex  $check_dirname_regex.
@@ -324,9 +302,9 @@ EOF
 	}
     }
 
-    my $sversion = $changelog{'Version'};
+    my $sversion = $changelog->{'Version'};
     $sversion =~ s/^\d+://;
-    my $package = $changelog{'Source'};
+    my $package = $changelog->{'Source'};
     my $pva="${package}_${sversion}_${arch}";
     $changes="$debsdir/$pva.changes";
 
@@ -365,72 +343,31 @@ if (! -r $changes and $opt_multi) {
 
 my @debs = ();
 my %pkgs = map { $_ => 0 } @ARGV;
-open CHANGES, $changes or die "$progname: problem opening $changes: $!\n";
-my $infiles;
-while (<CHANGES>) {
-    last if $infiles and /^[^ ]/;
-    /^Files:/ and $infiles=1, next;
-    next unless $infiles;
-
+my $ctrl = Dpkg::Control->new(name => $changes, type => CTRL_FILE_CHANGES);
+$ctrl->load($changes);
+for (split(/\n/, $ctrl->{Files})) {
     # udebs are only supported for debc
     if ((($progname eq 'debi') && (/ (\S*\.deb)$/)) ||
-        (($progname eq 'debc') && (/ (\S*\.u?deb)$/))) {
-        my $deb = $1;
-        $deb =~ /^([a-z0-9+\.-]+)_/ or warn "unrecognised .deb name: $deb\n";
+	(($progname eq 'debc') && (/ (\S*\.u?deb)$/))) {
+	my $deb = $1;
+	$deb =~ /^([a-z0-9+\.-]+)_/ or warn "unrecognised .deb name: $deb\n";
 	# don't want other archs' .debs:
 	next unless $deb =~ /[_+]($arch|all)[\.+]/;
-        my $pkg = $deb;
+	my $pkg = $deb;
 	$pkg =~ s/_.*$//;
 
-        if (@ARGV) {
-            if (exists $pkgs{$pkg}) {
-                push @debs, $deb;
-                $pkgs{$pkg}++;
+	if (@ARGV) {
+	    if (exists $pkgs{$pkg}) {
+		push @debs, $deb;
+		$pkgs{$pkg}++;
 	    } elsif (exists $pkgs{$deb}) {
 		push @debs, $deb;
 		$pkgs{$deb}++;
-            }
-        } else {
-            push @debs, $deb;
-        }
-    }
-}
-close CHANGES;
-
-if ($progname eq 'debi' and $opt_upgrade and @debs) {
-    my %installed;
-    my @cmd = ('dpkg-query', '-W', '-f', '${Package} ${Status}\n');
-    for my $deb (@debs) {
-	(my $pkg = $deb) =~ s/_.*//;
-	push @cmd, $pkg;
-    }
-    local (*NULL, *QUERY);
-    open NULL, '>', File::Spec->devnull;
-    my $pid = open3(gensym, \*QUERY, '>&NULL', @cmd)
-	or die "$progname: dpkg-query failed\n";
-    while (<QUERY>) {
-	my ($pkg, $want, $eflag, $status) = split;
-	if ($status and $status ne 'not-installed' and
-	    $status ne 'config-files') {
-	    $installed{$pkg} = 1;
-	}
-    }
-    close QUERY;
-    waitpid $pid, 0;
-    my @new_debs;
-    for my $deb (@debs) {
-	(my $pkg = $deb) =~ s/_.*//;
-	if ($installed{$pkg}) {
-	    push @new_debs, $deb;
-	} elsif (@ARGV) {
-	    if (exists $pkgs{$pkg}) {
-		$pkgs{$pkg}--;
-	    } elsif (exists $pkgs{$deb}) {
-		$pkgs{$deb}--;
 	    }
+	} else {
+	    push @debs, $deb;
 	}
     }
-    @debs = @new_debs;
 }
 
 if (! @debs) {
@@ -438,13 +375,14 @@ if (! @debs) {
 }
 
 if ($progname eq 'debi') {
+    my @upgrade = $opt_upgrade ? ('-O') : ();
     if ($opt_with_depends) {
-	system('debpkg', '--unpack', @debs) == 0
+	system('debpkg', @upgrade, '--unpack', @debs) == 0
 	    or die "$progname: debpkg --unpack failed \n";
 	system($install_tool, '-f', 'install') == 0
 	    or die "$progname: " . $install_tool . ' -f install failed\n';
     } else {
-	system('debpkg', '-i', @debs) == 0
+	system('debpkg', @upgrade, '-i', @debs) == 0
 	    or die "$progname: debpkg -i failed\n";
     }
 } else {
@@ -463,11 +401,11 @@ if ($progname eq 'debi') {
 # Now do a sanity check
 if (@ARGV) {
     foreach my $pkg (keys %pkgs) {
-        if ($pkgs{$pkg} == 0) {
-            warn "$progname: package $pkg not found in $changes, ignoring\n";
-        } elsif ($pkgs{$pkg} > 1) {
-            warn "$progname: package $pkg found more than once in $changes, installing all\n";
-        }
+	if ($pkgs{$pkg} == 0) {
+	    warn "$progname: package $pkg not found in $changes, ignoring\n";
+	} elsif ($pkgs{$pkg} > 1) {
+	    warn "$progname: package $pkg found more than once in $changes, installing all\n";
+	}
     }
 }
 
