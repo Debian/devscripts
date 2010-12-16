@@ -973,7 +973,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 	    $opt_p=1;
 	}
 
-	if (system("dpkg --compare-versions $VERSION lt $NEW_VERSION" .
+	if (system("dpkg --compare-versions $VERSION le $NEW_VERSION" .
 		  " 2>/dev/null 1>&2")) {
 	    if ($opt_b or ($opt_allow_lower and $NEW_VERSION =~ /$opt_allow_lower/)) {
 		warn "$progname warning: new version ($NEW_VERSION) is less than\n" .

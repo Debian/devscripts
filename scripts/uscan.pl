@@ -32,6 +32,7 @@ use filetest 'access';
 use Getopt::Long;
 use lib '/usr/share/devscripts';
 use Devscripts::Versort;
+use Text::ParseWords;
 BEGIN {
     eval { require LWP::UserAgent; };
     if ($@) {
@@ -1450,7 +1451,7 @@ EOF
     # Do whatever the user wishes to do
     if ($action) {
 	my $usefile = "$destdir/$newfile_base";
-	my @cmd = ($action);
+	my @cmd = shellwords($action);
 	if ($symlink =~ /^(symlink|rename)$/
 	    and $newfile_base =~ /\.(tar\.gz|tgz)$/) {
 	    $usefile = "$destdir/${pkg}_${newversion}.orig.tar.gz";
@@ -1837,7 +1838,7 @@ sub quoted_regex_parse($) {
 
 sub safe_replace($$) {
     my ($in, $pat) = @_;
-    $pat =~ s/^\s*(.*)\s*$/$1/;
+    $pat =~ s/^\s*(.*?)\s*$/$1/;
 
     $pat =~ /^(s|tr|y)(.)/;
     my ($op, $sep) = ($1, $2 || '');
@@ -1879,7 +1880,12 @@ sub safe_replace($$) {
 	my $global = ($flags =~ s/g//);
 	$flags = "(?$flags)" if length $flags;
 
-	my (@captures, $first, $last);
+	my $slashg;
+	if ($regexp =~ /(?<!\\)(\\\\)*\\G/) {
+	    $slashg = 1;
+	    # if it's not initial, it is too dangerous
+	    return 0 if $regexp =~ /^.*[^\\](\\\\)*\\G/;
+	}
 
 	# Behave like Perl and treat e.g. "\." in replacement as "."
 	# We allow the case escape characters to remain and
@@ -1900,24 +1906,50 @@ sub safe_replace($$) {
 	# the global flag was set on the input pattern.
 	my $orig_replacement = $replacement;
 
+	my ($first, $last, $pos, $zerowidth, $matched, @captures) = (0, -1, 0);
 	while (1) {
 	    eval {
 		# handle errors due to unsafe constructs in $regexp
 		no re 'eval';
 
-		my $re = qr/$flags$regexp/;
+		# restore position
+		pos($$in) = $pos if $pos;
 
-		@captures = ($$in =~ $re);
-		($first, $last) = ($-[0], $+[0]);
+		if ($zerowidth) {
+		    # previous match was a zero-width match, simulate it to set
+		    # the internal flag that avoids the infinite loop
+		    $$in =~ /()/g;
+		}
+		# Need to use /g to make it use and save pos()
+		$matched = ($$in =~ /$flags$regexp/g);
+
+		if ($matched) {
+		    # save position and size of the match
+		    my $oldpos = $pos;
+		    $pos = pos($$in);
+		    ($first, $last) = ($-[0], $+[0]);
+
+		    if ($slashg) {
+			# \G in the match, weird things can happen
+			$zerowidth = ($pos == $oldpos);
+			# For example, matching without a match
+			$matched = 0 if (not defined $first
+			    or not defined $last);
+		    } else {
+			$zerowidth = ($last - $first == 0);
+		    }
+		    for my $i (0..$#-) {
+			$captures[$i] = substr $$in, $-[$i], $+[$i] - $-[$i];
+		    }
+		}
 	    };
 	    return 0 if $@;
 
 	    # No match; leave the original string  untouched but return
 	    # success as there was nothing wrong with the pattern
-	    return 1 if @captures == 0;
+	    return 1 unless $matched;
 
 	    # Replace $X
-	    unshift @captures, substr $$in, $first, $last - $first;
 	    $replacement =~ s/[\$\\](\d)/defined $captures[$1] ? $captures[$1] : ''/ge;
 	    $replacement =~ s/\$\{(\d)\}/defined $captures[$1] ? $captures[$1] : ''/ge;
 	    $replacement =~ s/\$&/$captures[0]/g;
@@ -1930,6 +1962,8 @@ sub safe_replace($$) {
 
 	    # Actually do the replacement
 	    substr $$in, $first, $last - $first, $replacement;
+	    # Update position
+	    $pos += length($replacement) - ($last - $first);
 
 	    if ($global) {
 		$replacement = $orig_replacement;

@@ -1,10 +1,31 @@
-devscripts (2.10.54~bpo50+1) lenny-backports; urgency=high
+devscripts (2.10.55) unstable; urgency=high
 
-  * Urgency "high" for uscan security update
-  * Rebuild for lenny-backports.
-  * Remove sensible-utils from Recommends as it doesn't exist in lenny.
+  * Urgency "high" for security fix fix
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 02 Sep 2009 20:48:38 +0100
+  [ Ryan Niebur ]
+  * uscan: fix a regression from the security fix when the command is
+    given parameters. use Text::ParseWords::shellwords to parse the
+    given command.
+  * dch: fix comparison of versions when the new and current version are
+    the same (Closes: #545099)
+
+  [ Adam D. Barratt ]
+  * bts: Refer to the "--no-ack" option rather than the incorrect "--no-acks"
+    in the description of the BTS_SUPPRESS_ACKS variable.  Thanks, Jakub
+    Wilk.  (Closes: #542961)
+  * licensecheck: Add missing blank line in POD.  Thanks, Nicolas Francois.
+  * uscan: Fix regressions introduced by the security fix in the previous
+    upload.  The parser now correctly keeps track of the last match when /g
+    is used to avoid infinite loops.  Thanks, Raphael Geissert and Martín
+    Ferrari.  (Closes: #544931)
+  * l10n updates; thanks, Nicolas Francois:  (Closes: #545327)
+    + Update French manpage translations
+    + Fix addendum format for dcontrol in po4a/devscripts-po4a.conf
+    + Use --previous when invoking po4a
+  * debian/control: Bump version of po4a build-dependency to 0.31 to ensure
+    support for --previous.
+
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Fri, 11 Sep 2009 10:02:52 +0100
 
 devscripts (2.10.54) unstable; urgency=high
 
