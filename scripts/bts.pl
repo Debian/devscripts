@@ -39,6 +39,7 @@ use File::Spec;
 use File::Temp qw/tempfile/;
 use Net::SMTP;
 use Cwd;
+use IO::File;
 use IO::Handle;
 use lib '/usr/share/devscripts';
 use Devscripts::DB_File_Lock;
@@ -131,9 +132,6 @@ our (@gTags, @valid_tags, %valid_tags);
 my @valid_severities=qw(wishlist minor normal important
 			serious grave critical);
 
-my @no_cc_commands=qw(subscribe unsubscribe reportspam
-			spamreport usertags);
-
 my $browser;  # Will set if necessary
 
 my $cachedir=$ENV{'HOME'}."/.devscripts_cache/bts/";
@@ -147,7 +145,6 @@ END {
 }
 
 my %clonedbugs = ();
-my %ccbugs = ();
 my %ccpackages = ();
 
 =head1 SYNOPSIS
@@ -284,6 +281,15 @@ the command is /usr/sbin/sendmail or /usr/sbin/exim*.  For other
 mailers, if they require a -t option, this must be included in the
 SENDMAILCMD, for example: --sendmail="/usr/sbin/mymailer -t"
 
+=item --mutt
+
+Use mutt for sending of mails. Default is not to use mutt,
+except for some commands.
+
+=item --no-mutt
+
+Don't use mutt for sending of mails.
+
 =item --smtp-host=SMTPHOST
 
 Specify an SMTP host.  If given, B<bts> will send mail by talking directly to
@@ -296,6 +302,13 @@ order to use a port other than the default.  It may also begin with
 Note that when sending directly via an SMTP host, specifying addresses in
 --cc-addr or BTS_DEFAULT_CC that the SMTP host will not relay will cause the
 SMTP host to reject the entire mail.
+
+Note also that the use of the reassign command may, when either interactive
+or force-interactive mode is enabled, lead to the automatic addition of a Cc
+to $newpackage@packages.debian.org.  In these cases, the note above regarding
+relaying applies.  The submission interface (port 587) on reportbug.debian.org
+does not support relaying and, as such, should not be used as an SMTP server
+for B<bts> under the circumstances described in this paragraph.
 
 =item --smtp-username=USERNAME, --smtp-password=PASSWORD
 
@@ -393,6 +406,7 @@ my $cachemode='min';
 my $refreshmode=0;
 my $updatemode=0;
 my $mailreader='mutt -f %s';
+my $muttcmd='mutt -H %s';
 my $sendmailcmd='/usr/sbin/sendmail';
 my $smtphost='';
 my $smtpuser='';
@@ -408,6 +422,7 @@ my $forceinteractive=0;
 my $ccemail="";
 my $toolname="";
 my $btsserver='bugs.debian.org';
+my $use_mutt = 0;
 
 # Next, read read configuration files and then command line
 # The next stuff is boilerplate
@@ -518,6 +533,7 @@ my ($opt_help, $opt_version, $opt_noconf);
 my ($opt_cachemode, $opt_mailreader, $opt_sendmail, $opt_smtphost);
 my ($opt_smtpuser, $opt_smtppass, $opt_smtphelo);
 my $opt_cachedelay=5;
+my $opt_mutt;
 my $mboxmode = 0;
 my $quiet=0;
 my $opt_ccemail = "";
@@ -555,6 +571,7 @@ GetOptions("help|h" => \$opt_help,
 	   "use-default-cc!" => \$use_default_cc,
 	   "toolname=s" => \$toolname,
 	   "bts-server=s" => \$btsserver,
+	   "mutt" => \$opt_mutt,
 	   )
     or die "Usage: bts [options]\nRun $progname --help for more details\n";
 
@@ -581,8 +598,16 @@ if ($opt_mailreader) {
     }
 }
 
+if ($opt_mutt) {
+    $use_mutt = 1;
+}
+
 if ($opt_sendmail and $opt_smtphost) {
     die "bts: --sendmail and --smtp-host mutually exclusive\n";
+} elsif ($opt_mutt and $opt_sendmail) {
+    die "bts: --sendmail and --mutt mutually exclusive\n";
+} elsif ($opt_mutt and $opt_smtphost) {
+    die "bts: --smtp-host and --mutt mutually exclusive\n";
 }
 
 $smtphost = $opt_smtphost if $opt_smtphost;
@@ -1063,7 +1088,7 @@ sub bts_status {
     }
     my $bugs = Devscripts::Debbugs::status( map {[bug => $_, indicatesource => 1]} @bugs );
     return if ($bugs eq "");
- 
+
     my $first = 1;
     for my $bug (keys %{$bugs}) {
 	print "\n" if not $first;
@@ -1135,6 +1160,47 @@ Please remember to email $bug-submitter\@$btsserver with
 an explanation of why you have closed this bug.  Thank you!
 EOT
 }
+
+# =item done <bug> <version>
+# 
+# # Mark a bug as Done. Defaults to implying interactive mode,
+# because you should edit the message and provide explanations,
+# why the bug is beeing closed.
+# You should specify which version of the package closed the bug, if
+# possible.
+# =cut
+# 
+# sub bts_done {
+#     my $bug=checkbug(shift) or die "bts done: close what bug?\n";
+#     my $version=shift;
+#     my $subject="Closing $bug";
+#     $version="" unless defined $version;
+#     opts_done(@_);
+# 
+#     # TODO: Evaluate if we want to do this by default
+#     my $bug_status = Devscripts::Debbugs::status( map {[bug => $_, indicatesource => 1]} ($bug) );
+#     if ($bug_status) {
+# 	$subject = "Re: $bug_status->{$bug}->{subject}";
+#     }
+# 
+#     # This command defaults to using interactive mode, because
+#     # mails shouldn't be sent without an explanation
+#     if (not $use_mutt) {
+# 	$interactive = 1;
+#     }
+# 
+#     # Workaround (?) - We need to set the btsemail to nnn-done@b.d.o
+#     # to close a bug.
+#     # TODO: Evaluate other possbilities to do that more "beauty"
+#     $btsemail = $bug . '-done@bugs.debian.org';
+#   
+#     my $message = "";
+#     if ($version) {
+# 	$message .= "Version: $version";
+#     }
+#     $message .= "\n<Explanation for closing the bug should go here>";
+#     mailbts($subject, $message);
+# }
 
 =item reopen <bug> [<submitter>]
 
@@ -1484,9 +1550,49 @@ sub bts_tags {
       mailbts("gifting $bug",
 	"user debian-qa\@lists.debian.org\nusertag $bug $gift_flag gift");
     }
-    if ($base_command ne $command) {  # at least one tag other than gift has been manipulated
-      mailbts("tagging $bug", $command);
+    if (($base_command ne $command) or ($flag eq "=" and $gifted eq "")) { 
+	# at least one tag other than gift has been manipulated
+	# or all tags were removed
+	mailbts("tagging $bug", $command);
     }
+}
+
+=item affects <bug> [+|-|=] <package> [<package> ..]
+
+Indicates that a bug affects a package other than that against which it is filed, causing
+the bug to be listed by default in the package list of the other package.  This should 
+generally be used where the bug is severe enough to cause multiple reports from users to be 
+assigned to the wrong package. 
+
+=cut
+
+sub bts_affects {
+    my $bug=checkbug(shift) or die "bts affects: mark what bug as affecting another package?\n";
+
+    if (! @_) {
+	die "bts affects: mark which package as affected?\n";
+    }
+    # Parse the rest of the command line.
+    my $command="affects $bug";
+    my $flag="";
+    if ($_[0] =~ /^[-+=]$/) {
+	$flag = $_[0];
+	$command .= " $flag";
+	shift;
+    } elsif ($_[0] =~ s/^([-+=])//) {
+	$flag = $1;
+	$command .= " $flag";
+    }
+
+    if (! @_) {
+	die "bts affects: mark which package as affected?\n";
+    }
+
+    foreach my $package (@_) {
+	$command .= " $package";
+    }
+
+    mailbts("affects $bug", $command);
 }
 
 =item user <email>
@@ -1642,7 +1748,7 @@ sub bts_notforwarded {
     mailbts("bug $bug is not forwarded", "notforwarded $bug");
 }
 
-=item package [ <package> ... ]
+=item package [<package> ...]
 
 The following commands will only apply to bugs against the listed
 packages; this acts as a safety mechanism for the BTS.  If no packages
@@ -1651,8 +1757,154 @@ are listed, this check is turned off again.
 =cut
 
 sub bts_package {
-    my $email=join(' ', @_);
-    mailbts("setting package to $email", "package $email");
+    if (@_) {
+        bts_limit(map { "package:$_" } @_);
+    } else {
+        bts_limit('package');
+    }
+}
+
+=item limit [<key>[:<value>]  ...]
+
+The following commands will only apply to bugs which meet the specified
+criterion; this acts as a safety mechanism for the BTS.  If no C<value>s are
+listed, the limits for that C<key> are turned off again.  If no C<key>s are
+specified, all limits are reset.
+
+=over 8
+
+=item submitter
+
+E-mail address of the submitter.
+
+=item date
+
+Date the bug was submitted.
+
+=item subject
+
+Subject of the bug.
+
+=item msgid
+
+Message-id of the initial bug report.
+
+=item package
+
+Binary package name.
+
+=item source
+
+Source package name.
+
+=item tag
+
+Tags applied to the bug.
+
+=item severity
+
+Bug severity.
+
+=item owner
+
+Bug's owner.
+
+=item affects
+
+Bugs affecting this package.
+
+=item archive
+
+Whether to search archived bugs or normal bugs; defaults to 0
+(i.e. only search normal bugs). As a special case, if archive is
+'both', both archived and unarchived bugs are returned.
+
+=back
+
+For example, to limit the set of bugs affected by the subsequent control
+commands to those submitted by jrandomdeveloper@example.com and tagged
+wontfix, one would use
+
+bts limit submitter:jrandomdeveloper@example.com tag:wontfix
+
+If a key is used multiple times then the set of bugs selected includes
+those matching any of the supplied values; for example
+
+bts limit package:foo severity:wishlist severity:minor
+
+only applies the subsequent control commands to bugs of package foo with
+either wishlist or minor severity.
+
+=cut
+
+sub bts_limit {
+    my @args=@_;
+    my %limits;
+    # Ensure we're using the limit fields that debbugs expects.  These are the
+    # keys from Debbugs::Status::fields
+    my %valid_keys = (submitter => 'originator',
+                      date => 'date',
+                      subject => 'subject',
+                      msgid => 'msgid',
+                      package => 'package',
+                      source => 'source',
+                      src => 'source',
+                      tag => 'keywords',
+                      severity => 'severity',
+                      owner => 'owner',
+                      affects => 'affects',
+                      archive => 'unarchived',
+    );
+    for my $arg (@args) {
+	my ($key,$value) = split /:/, $arg, 2;
+	next unless $key;
+	if (!defined $value) {
+	    die "bts limit: No value given for '$key'\n";
+	}
+	if (exists $valid_keys{$key}) {
+	    # Support "$key:" by making it look like "$key", i.e. no $value
+	    # defined
+	    undef $value unless length($value);
+	    if ($key eq "archive") {
+		if (defined $value) {
+		    # limit looks for unarchived, not archive.  Verify we have
+		    # a valid value and then switch the boolean value to match
+		    # archive => unarchive
+		    if ($value =~ /^yes|1|true|on$/i) {
+			$value = 0;
+		    } elsif ($value =~ /^no|0|false|off$/i) {
+			$value = 1;
+		    }
+		    elsif ($value ne 'both') {
+			die "bts limit: Invalid value ($value) for archive\n";
+		    }
+		}
+	    }
+	    $key = $valid_keys{$key};
+	    if (defined $value and $value) {
+		push(@{$limits{$key}},$value);
+	    } else {
+		$limits{$key} = ();
+	    }
+	} elsif ($key eq 'clear') {
+	    %limits = ();
+	    $limits{$key} = 1;
+	} else {
+	    die "bts limit: Unrecognized key: $key\n";
+	}
+    }
+    for my $key (keys %limits) {
+	if ($key eq 'clear') {
+	    mailbts('clear all limit(s)', 'limit clear');
+	    next;
+	}
+	if (defined $limits{$key}) {
+	    my $value = join ' ', @{$limits{$key}};
+	    mailbts("limit $key to $value", "limit $key $value");
+	} else {
+	    mailbts("clear $key limit", "limit $key");
+	}
+    }
 }
 
 =item owner <bug> <owner-email>
@@ -1940,7 +2192,7 @@ sub bts_cache {
 	    next;
 	}
 	download($bug, '', 1, 0, $bugcount, $bugtotal);
-        sleep $opt_cachedelay;
+	sleep $opt_cachedelay;
 	$bugcount++;
     }
 
@@ -2131,20 +2383,17 @@ sub checkbug {
 	if (not defined $it) {
 	    die "bts: You specified 'it', but no previous bug number referenced!\n";
 	}
-    } else {    
+    } else {
 	$bug=~s/^(?:(?:bug)?\#)?(-?\d+):?$/$1/i;
 	if (! exists $clonedbugs{$bug} &&
 	   (! length $bug || $bug !~ /^[0-9]+$/)) {
 	    warn "\"$_[0]\" does not look like a bug number\n" unless $quiet;
 	    return "";
-    	}
+	}
 
 	# Valid, now set $it to this so that we can refer to it by 'it' later
-    	$it = $bug;
+	$it = $bug;
     }
-
-    $ccbugs{$it} = 1 if ! exists $clonedbugs{$it} &&
-	! (grep /^\Q$command[$index]\E/, @no_cc_commands);
 
     return $it;
 }
@@ -2166,15 +2415,15 @@ sub mailbts {
 
 # Extract an array of email addresses from a string
 sub extract_addresses {
-        my $s = shift;
-        my @addresses;
+    my $s = shift;
+    my @addresses;
 
-        # Original regular expression from git-send-email, slightly modified
-        while ($s =~ /([^,<>"\s\@]+\@[^.,<>"\s@]+(?:\.[^.,<>"\s\@]+)+)(.*)/) {
-            push @addresses, $1;
-            $s = $2;
-        }
-        return @addresses;
+    # Original regular expression from git-send-email, slightly modified
+    while ($s =~ /([^,<>"\s\@]+\@[^.,<>"\s@]+(?:\.[^.,<>"\s\@]+)+)(.*)/) {
+	push @addresses, $1;
+	$s = $2;
+    }
+    return @addresses;
 }
 
 # Send one full mail message using the smtphost or sendmail.
@@ -2193,19 +2442,34 @@ sub send_mail {
     $message   .= "Cc: $cc\n" if length $cc;
     $message   .= "X-Debbugs-No-Ack: Yes\n" if $requestack==0;
     $message   .= "Subject: $subject\n"
-	       .  "Date: $date\n"
+               .  "Date: $date\n"
                .  "User-Agent: devscripts bts/$version$toolname\n"
                .  "Message-ID: <$msgid>\n"
                .  "\n";
 
     $body = addfooter($body);
-    $body = confirmmail($message, $body);
+    ($message, $body) = confirmmail($message, $body);
 
     return if not defined $body;
 
     $message .= "$body\n";
     if ($noaction) {
-        print "$message\n";
+	print "$message\n";
+    }
+    elsif ($use_mutt) {
+	my ($fh,$filename) = tempfile("btsXXXXXX",
+				       SUFFIX => ".mail",
+				       DIR => File::Spec->tmpdir,
+				       UNLINK => 1);
+	open (MAILOUT, ">&", $fh)
+	    or die "bts: writing to temporary file: $!\n";
+
+	print MAILOUT $message;
+
+	my $mailcmd = $muttcmd;
+	$mailcmd =~ s/\%([%s])/$1 eq '%' ? '%' : $filename/eg;
+
+	exec($mailcmd) or die "bts: unable to start mailclient: $!";
     }
     elsif (length $smtphost) {
 	my $smtp;
@@ -2232,43 +2496,52 @@ sub send_mail {
 	    $smtp->auth($smtpuser, $smtppass)
 		or die "bts: failed to authenticate to $smtphost\n($@)\n";
 	}
-        $smtp->mail($fromaddress)
-            or die "bts: failed to set SMTP from address $fromaddress\n($@)\n";
-        my @addresses = extract_addresses($to);
-        push @addresses, extract_addresses($cc);
-        foreach my $address (@addresses) {
-            $smtp->recipient($address)
-                or die "bts: failed to set SMTP recipient $address\n($@)\n";
-        }
-        $smtp->data($message)
-            or die "bts: failed to send message as SMTP DATA\n($@)\n";
-        $smtp->quit
-            or die "bts: failed to quit SMTP connection\n($@)\n";
+	$smtp->mail($fromaddress)
+	    or die "bts: failed to set SMTP from address $fromaddress\n($@)\n";
+	my @addresses = extract_addresses($to);
+	push @addresses, extract_addresses($cc);
+	foreach my $address (@addresses) {
+	    $smtp->recipient($address)
+	        or die "bts: failed to set SMTP recipient $address\n($@)\n";
+	}
+	$smtp->data($message)
+	    or die "bts: failed to send message as SMTP DATA\n($@)\n";
+	$smtp->quit
+	    or die "bts: failed to quit SMTP connection\n($@)\n";
     }
     else {
-        my $pid = open(MAIL, "|-");
-        if (! defined $pid) {
-            die "bts: Couldn't fork: $!\n";
-        }
-        $SIG{'PIPE'} = sub { die "bts: pipe for $sendmailcmd broke\n"; };
-        if ($pid) {
-            # parent
-            print MAIL $message;
-            close MAIL or die "bts: sendmail error: $!\n";
-        }
-        else {
-            # child
-            if ($debug) {
-                exec("/bin/cat")
-                    or die "bts: error running cat: $!\n";
-            } else {
-                my @mailcmd = split ' ', $sendmailcmd;
-                push @mailcmd, "-t" if $sendmailcmd =~ /$sendmail_t/;
-                exec @mailcmd
-                    or die "bts: error running sendmail: $!\n";
-            }
-        }
+	my $pid = open(MAIL, "|-");
+	if (! defined $pid) {
+	    die "bts: Couldn't fork: $!\n";
+	}
+	$SIG{'PIPE'} = sub { die "bts: pipe for $sendmailcmd broke\n"; };
+	if ($pid) {
+	    # parent
+	    print MAIL $message;
+	    close MAIL or die "bts: sendmail error: $!\n";
+	}
+	else {
+	    # child
+	    if ($debug) {
+		exec("/bin/cat")
+		    or die "bts: error running cat: $!\n";
+	    } else {
+		my @mailcmd = split ' ', $sendmailcmd;
+		push @mailcmd, "-t" if $sendmailcmd =~ /$sendmail_t/;
+		exec @mailcmd
+		    or die "bts: error running sendmail: $!\n";
+	    }
+	}
     }
+}
+
+sub generate_packages_cc {
+    my $ccs = '';
+    if (keys %ccpackages && $packagesserver) {
+	$ccs .= join("\@$packagesserver, ", sort (keys %ccpackages))
+	    . "\@$packagesserver";
+    }
+    return $ccs;
 }
 
 # Sends all cached mail to the bts (duh).
@@ -2281,16 +2554,15 @@ sub mailbtsall {
     $charset =~ s/^ANSI_X3\.4-19(68|86)$/US-ASCII/;
     $subject = MIME_encode_mimewords($subject, 'Charset' => $charset);
 
-    if (keys %ccpackages && $packagesserver) {
+    if ($forceinteractive) {
 	$ccemail .= ", " if length $ccemail;
-	$ccemail .= join("\@$packagesserver, ", sort (keys %ccpackages))
-	    . "\@$packagesserver";
+	$ccemail .= generate_packages_cc();
     }
     if ($ccsecurity) {
 	my $comma = "";
-        if ($ccemail) {
+	if ($ccemail) {
 	    $comma = ", ";
-        }
+	}
 	$ccemail = "$ccemail$comma$ccsecurity";
     }
     if ($ENV{'DEBEMAIL'} || $ENV{'EMAIL'}) {
@@ -2318,9 +2590,9 @@ sub mailbtsall {
 	    $name =~ s/,.*//;
 	}
 	my $from = $name ? "$name <$email>" : $email;
-        $from = MIME_encode_mimewords($from, 'Charset' => $charset);
+	$from = MIME_encode_mimewords($from, 'Charset' => $charset);
 
-        send_mail($from, $btsemail, $ccemail, $subject, $body);
+	send_mail($from, $btsemail, $ccemail, $subject, $body);
     }
     else {  # No DEBEMAIL
 	my $header = "";
@@ -2333,7 +2605,7 @@ sub mailbtsall {
 		  .  "\n";
 
 	$body = addfooter($body);
-	$body = confirmmail($header, $body);
+	($header, $body) = confirmmail($header, $body);
 
 	return if not defined $body;
 
@@ -2376,7 +2648,10 @@ sub mailbtsall {
 sub confirmmail {
     my ($header, $body) = @_;
 
+    return ($header, $body) if $noaction;
+
     $body = edit($body) if $forceinteractive;
+    my $setHeader = 0;
     if ($interactive) {
 	while(1) {
 	    print "\n", $header, "\n", $body, "\n---\n";
@@ -2388,18 +2663,32 @@ sub confirmmail {
 	    } elsif (/^(y|$)/i) {
 		last;
 	    } elsif (/^e/i) {
+		# Since the user has chosen to edit the message, we go ahead
+		# and add the $ccpackages Ccs (if they haven't already been
+		# added due to $forceinteractive).
+		if (!$forceinteractive && !$setHeader) {
+		    $setHeader = 1;
+		    my $ccs = generate_packages_cc();
+		    if ($header =~ m/^Cc: (.*?)$/m) {
+			$ccs = "$1, $ccs";
+			$header =~ s/^Cc: .*?$/Cc: $ccs/m;
+		    }
+		    else {
+			$header =~ s/^(To: .*?)$/$1\nCc: $ccs/m;
+		    }
+		}
 		$body = edit($body);
 	    }
 	}
     }
 
-    return $body;
+    return ($header, $body);
 }
 
 sub addfooter() {
     my $body = shift;
 
-    if ($forceinteractive) {	
+    if ($forceinteractive) {
 	$body .= "thanks\n";
 	if (-r $ENV{'HOME'} . "/.signature") {
 	    if (open SIG, "<", $ENV{'HOME'} . "/.signature") {
@@ -2445,7 +2734,7 @@ sub mailto {
     my ($subject, $body, $to, $from) = @_;
 
     if (defined $from) {
-        send_mail($from, $to, '', $subject, $body);
+	send_mail($from, $to, '', $subject, $body);
     }
     else {  # No $from
 	unless (system("command -v mail >/dev/null 2>&1") == 0) {
@@ -2759,12 +3048,12 @@ sub download_attachments {
 	}
 	elsif ($cachemode eq 'full' and $msg =~ /^\d+$/) {
 	    $bug2filename{$msg} = $filename;
-            # already downloaded?
+	    # already downloaded?
 	    next if -f $bug2filename{$msg} and not $refreshmode;
 	}
 	elsif ($cachemode eq 'full' and $msg =~ /^\d+-mbox$/) {
 	    $bug2filename{$msg} = $filename;
-            # already downloaded?
+	    # already downloaded?
 	    next if -f $bug2filename{$msg} and not $refreshmode;
 	}
 	elsif (($cachemode eq 'full' or $cachemode eq 'mbox' or $mboxmode) and
@@ -2805,7 +3094,7 @@ sub download_attachments {
 	    my $data = $response->content;
 
 	    if ($msg =~ /^\d+$/) {
-                # we're dealing with a boring message, and so we must be
+		# we're dealing with a boring message, and so we must be
 		# in 'full' mode
 		$data =~ s%<HEAD>%<HEAD><BASE href="../">%;
 		$data = mangle_cache_file($data, $thing, 'full', $timestamp);
@@ -2856,7 +3145,7 @@ sub download_mbox {
 				       DIR => File::Spec->tmpdir,
 				       UNLINK => 1);
 	    # Use filehandle for security
-	    open (OUT_MBOX, ">/dev/fd/" . fileno($fh))
+	    open (OUT_MBOX, ">&", $fh)
 		or die "bts: writing to temporary file: $!\n";
 	} else {
 	    $filename = $mboxfile;
@@ -3262,7 +3551,7 @@ sub browse {
 					      UNLINK => 1);
 
 		# Use filehandle for security
-		open (OUT_LIVE, ">/dev/fd/" . fileno($fh))
+		open (OUT_LIVE, ">&", $fh)
 		    or die "bts: writing to temporary file: $!\n";
 		# Correct relative urls to point to the bts.
 		$live =~ s%\shref="(?:/cgi-bin/)?(\w+\.cgi)% href="$btscgiurl$1%g;
@@ -3572,7 +3861,7 @@ sub init_agent {
 
 sub opts_done {
     if (@_) {
-         die "bts: unknown options to '$command[$index]': @_\n";
+	die "bts: unknown options to '$command[$index]': @_\n";
     }
 }
 
@@ -3591,7 +3880,7 @@ sub edit {
 	or die "bts: reading from temporary file: $!\n";
     $message = "";
     while(<OUT_MAIL>) {
-        $message .= $_;
+	$message .= $_;
     }
     close OUT_MAIL;
     unlink($filename);

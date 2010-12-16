@@ -4,6 +4,7 @@
 # Copyright (C) 2003 Anthony DeRobertis
 # Modifications Copyright 2003 Julian Gilbey <jdg@debian.org>
 # Modifications Copyright 2008 Adam D. Barratt <adam@adam-barratt.org.uk>
+# Modifications copyright 2009 by Jan Hauke Rahm <info@jhr-online.de>
 # 
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -26,9 +27,10 @@ use File::Basename;
 use Getopt::Long;
 
 sub remove_duplicate_values($);
-sub print_if_relevant(%);
+sub store_if_relevant(%);
 sub human_flags($);
 sub unhtmlsanit($);
+sub dt_parse_request($);
 
 my $cachedir = $ENV{'HOME'}."/.devscripts_cache/";
 my $url = "http://bugs.debian.org/release-critical/other/all.html";
@@ -63,6 +65,13 @@ my $tagexcoperation = "or";
 my $distincoperation = "or";
 my $distexcoperation = "or";
 
+my $popcon = 0;
+my $popcon_by_vote = 0;
+my $popcon_local = 0;
+
+my $debtags = '';
+my $debtags_db = '/var/lib/debtags/package-tags';
+
 my $progname = basename($0);
 
 my $usage = <<"EOF";
@@ -83,6 +92,18 @@ Usage: $progname [--help|--version|--cache] [package ...]
   --include-dist-op  Must all distributions be matched for inclusion?
   --exclude-dists    Set of distributions to exclude
   --exclude-dist-op  Must all distributions be matched for exclusion?
+
+  Debtags options: (only list packages with matching debtags)
+  --debtags          Comma separated list of tags
+                       (e.g. implemented-in::perl,role::plugin)
+  --debtags-database Database file (default: /var/lib/debtags/package-tags)
+
+  Popcon options:
+  --popcon           Sort bugs by package's popcon rank
+  --pc-vote          Sort by_vote instead of by_inst
+                       (see popularity-contest(8))
+  --pc-local         Use local popcon data from last popcon run
+                       (/var/log/popularity-contest)
 EOF
 
 my $version = <<"EOF";
@@ -90,6 +111,7 @@ This is $progname, from the Debian devscripts package, version ###VERSION###
 This code is copyright 2003 by Anthony DeRobertis
 Modifications copyright 2003 by Julian Gilbey <jdg\@debian.org>
 Modifications copyright 2008 by Adam D. Barratt <adam\@adam-barratt.org.uk>
+Modifications copyright 2009 by Jan Hauke Rahm <info\@jhr-online.de>
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the
 GNU General Public License, version 2, or (at your option) any later version.
@@ -111,6 +133,11 @@ GetOptions("help|h" => \$opt_help,
 	   "exclude-dists=s" => \$excludedists,
 	   "include-dist-op|o=s" => \$distincoperation,
 	   "exclude-dist-op=s" => \$distexcoperation,
+	   "debtags=s" => \$debtags,
+	   "debtags-database=s" => \$debtags_db,
+	   "popcon" => \$popcon,
+	   "pc-vote" => \$popcon_by_vote,
+	   "pc-local" => \$popcon_local,
 	   );
 
 if ($opt_help) { print $usage; exit 0; }
@@ -164,11 +191,57 @@ else {
     $package_list = InstalledPackages(0);
 }
 
+## Get popcon information
+my %popcon;
+if ($popcon) {
+    my $pc_by = $popcon_by_vote ? 'vote' : 'inst';
+
+    my $pc_regex;
+    if ($popcon_local) {
+	open POPCON, "/var/log/popularity-contest"
+	    or die "$progname: Unable to access popcon data: $!";
+	$pc_regex = '(\d+)\s\d+\s(\S+)';
+    } else {
+	open POPCON, "wget -q -O - http://popcon.debian.org/by_$pc_by.gz | gunzip -c |"
+	    or die "$progname: Not able to receive remote popcon data!";
+	$pc_regex = '(\d+)\s+(\S+)\s+(\d+\s+){5}\(.*\)';
+    }
+
+    while (<POPCON>) {
+	next unless /$pc_regex/;
+	# rank $1 for package $2
+	if ($popcon_local) {
+	    # negative for inverse sorting of atimes
+	    $popcon{$2} = "-$1";
+	} else {
+	    $popcon{$2} = $1;
+	}
+    }
+    close POPCON;
+}
+
+## Get debtags info
+my %dt_pkg;
+my @dt_requests;
+if ($debtags) {
+    ## read debtags database to %dt_pkg
+    open DEBTAGS, $debtags_db or die "$progname: could not read debtags database: $!\n";
+    while (<DEBTAGS>) {
+        next unless /^(.+?)(?::?\s*|:\s+(.+?)\s*)$/;
+        $dt_pkg{$1} = $2;
+    }
+    close DEBTAGS;
+
+    ## and parse the request string
+    @dt_requests = dt_parse_request($debtags);
+}
+
 ## Read the list of bugs
 
 my $found_bugs_start;
 my ($current_package, $comment);
 
+my %pkg_store;
 while (defined(my $line = <BUGS>)) {
     if( $line =~ /^<div class="package">/) {
 	$found_bugs_start = 1;
@@ -181,9 +254,10 @@ while (defined(my $line = <BUGS>)) {
     } elsif ($line =~ m%<a name="(\d+)"></a>\s*<a href="[^\"]+">\d+</a> (\[[^\]]+\])( \[[^\]]+\])? ([^<]+)%i) {
 	my ($num, $tags, $dists, $name) = ($1, $2, $3, $4);
 	chomp $name;
-	print_if_relevant(pkg => $current_package, num => $num, tags => $tags, dists => $dists, name => $name, comment => $comment);
+	store_if_relevant(pkg => $current_package, num => $num, tags => $tags, dists => $dists, name => $name, comment => $comment);
     }
 }
+for (sort {$a <=> $b } keys %pkg_store) { print $pkg_store{$_}; }
 
 close BUGS or die "$progname: could not close $cachefile: $!\n";
 
@@ -199,8 +273,9 @@ sub remove_duplicate_values($) {
     return $in;
 }
 
-sub print_if_relevant(%) {
+sub store_if_relevant(%) {
     my %args = @_;
+    
     if (exists($$package_list{$args{pkg}})) {
 	# potentially relevant
 	my ($flags, $flagsapply) = human_flags($args{tags});
@@ -210,14 +285,35 @@ sub print_if_relevant(%) {
 	
 	return unless $flagsapply and $distsapply;
 
+	foreach (@dt_requests) {
+	    ## the array should be empty if nothing requested
+	    return unless ($dt_pkg{$args{pkg}} and
+		$dt_pkg{$args{pkg}} =~ /(\A|,\s*)$_(,|\z)/);
+	}
+
 	# yep, relevant
-	print "Package: $args{pkg}\n",
-	    $comment,  # non-empty comments always contain the trailing \n
-	    "Bug:     $args{num}\n",
-	    "Title:   " . unhtmlsanit($args{name}) , "\n",
-	    "Flags:   " . $flags , "\n",
-	    (defined $args{dists} ? "Dists:  " . $dists . "\n" : ""),
-	    "\n";
+	my $bug_string = "Package: $args{pkg}\n" .
+	    $comment .  # non-empty comments always contain the trailing \n
+	    "Bug:     $args{num}\n" .
+	    "Title:   " . unhtmlsanit($args{name}) . "\n" .
+	    "Flags:   " . $flags . "\n" .
+	    (defined $args{dists} ? "Dists:  " . $dists . "\n" : "") .
+	    (defined $dt_pkg{$args{pkg}} ?
+		"Debtags: " . $dt_pkg{$args{pkg}} . "\n" : "");
+
+	unless ($popcon_local) {
+	    $bug_string .= (defined $popcon{$args{pkg}} ?
+		"Popcon rank: " . $popcon{$args{pkg}} . "\n" : "");
+	}
+	$bug_string .= "\n";
+
+	if ($popcon) {
+	    return unless $bug_string;
+	    my $index = $popcon{$args{pkg}} ? $popcon{$args{pkg}} : 9999999;
+	    $pkg_store{$index} .= $bug_string;
+	} else {
+	    $pkg_store{1} .= $bug_string;
+	}
     }
 }
 
@@ -301,4 +397,25 @@ sub unhtmlsanit ($) {
     my $in = $_[0];
     $in =~ s/&(lt|gt|amp|quot);/$saniarray{$1}/g;
     return $in;
+}
+
+sub dt_parse_request($) {
+    my %dt_lookup;
+    foreach (split /,/, $_[0]) {
+	my ($d_key, $d_val) = split '::', $_;
+	die "$progname: A debtag must be of the form 'key::value'. See debtags(1) for details!"
+	    unless ($d_key and $d_val);
+	if ($dt_lookup{$d_key}) {
+	    $dt_lookup{$d_key} = "$dt_lookup{$d_key}|$d_val";
+	} else {
+	    $dt_lookup{$d_key} = quotemeta($d_val);
+	}
+    }
+
+    my @out;
+    while (my ($dk, $dv) = each %dt_lookup) {
+	$dv = "($dv)" if ($dv =~ /\|/);
+	push @out, $dk . "::" . $dv;
+    }
+    return @out;
 }

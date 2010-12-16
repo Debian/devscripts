@@ -67,8 +67,8 @@ for DIR in "$@"; do
         if [ $RET = "0" ]; then
             NUM_MANPAGES_FOUND=$(( $NUM_MANPAGES_FOUND + 1 ))
         else
-            echo "$OUT" | sed -e "/^.*'man 7 undocumented'.*$/ d" \
-              -e "s,\(.\)\b${F##*/}(\b|$),\1$F," -e 's,//,/,'
+            echo "$OUT" | perl -ne "next if /^.*'man 7 undocumented'.*$/;" \
+              -e "s,(\W)\Q${F##*/}\E(?:\b|$),\1$F,; s,//,/,; print;"
             NUM_MANPAGES_MISSING=$(( $NUM_MANPAGES_MISSING + 1 ))
         fi
     done

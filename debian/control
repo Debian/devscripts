@@ -2,8 +2,8 @@ Source: devscripts
 Section: devel
 Priority: optional
 Maintainer: Devscripts Devel Team <pkg-devscripts@teams.debian.net>
-Uploaders: Julian Gilbey <jdg@debian.org>, Joey Hess <joeyh@debian.org>, Mohammed Adnène Trojette <adn+deb@diwi.org>, Christoph Berg <myon@debian.org>, Stefano Zacchiroli <zack@debian.org>, James Vega <jamessan@debian.org>, Martin Zobel-Helas <zobel@debian.org>, Adam D. Barratt <adam@adam-barratt.org.uk>, Luk Claes <luk@debian.org>, Patrick Schoenfeld <schoenfeld@debian.org>
-Standards-Version: 3.8.0
+Uploaders: Julian Gilbey <jdg@debian.org>, Joey Hess <joeyh@debian.org>, Mohammed Adnène Trojette <adn+deb@diwi.org>, Christoph Berg <myon@debian.org>, Stefano Zacchiroli <zack@debian.org>, James Vega <jamessan@debian.org>, Martin Zobel-Helas <zobel@debian.org>, Adam D. Barratt <adam@adam-barratt.org.uk>, Luk Claes <luk@debian.org>, Patrick Schoenfeld <schoenfeld@debian.org>, Ryan Niebur <ryanryan52@gmail.com>
+Standards-Version: 3.8.2
 Build-Depends: perl, debhelper (>= 6.0.0), docbook-xsl, libtimedate-perl,
  libfile-desktopentry-perl, libterm-size-perl,  liburi-perl, libwww-perl,
  po4a (>= 0.26), xsltproc
@@ -20,7 +20,8 @@ Recommends: at, curl | wget, dctrl-tools, debian-keyring, debian-maintainers,
  libterm-size-perl, libtimedate-perl, liburi-perl, libwww-perl,
  libyaml-syck-perl, lintian, lsb-release, bsd-mailx | mailx | mailutils, 
  man-db, patch, patchutils, ssh-client, strace, unzip, wdiff, www-browser,
- subversion | cvs | svk | tla | bzr | git-core | mercurial
+ subversion | cvs | svk | tla | bzr | git-core | mercurial, lzma,
+ sensible-utils
 Suggests: build-essential, cvs-buildpackage, devscripts-el, gnuplot,
  libfile-desktopentry-perl, libnet-smtp-ssl-perl (>= 1.01-2), mutt,
  svn-buildpackage
@@ -42,13 +43,14 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - cowpoke: upload a Debian source package to a cowbuilder host and build it,
     optionally also signing and uploading the result to an incoming queue
     [ssh-client]
-  - cvs-debi, cvs-debc: to call debi and debc from the CVS working directory
-    after running cvs-debuild or cvs-buildpackage [cvs-buildpackage]
-  - cvs-debrelease: to call debrelease from the CVS working directory
-    after running cvs-debuild or cvs-buildpackage [cvs-buildpackage,
-    dupload | dput, ssh-client]
-  - cvs-debuild: run cvs-buildpackage using debuild (see below) as the
-    package building program [cvs-buildpackage, fakeroot, lintian, gnupg]
+  - cvs-debi, cvs-debc: wrappers around debi and debc respectively (see below)
+    which allow them to be called from the CVS working directory.
+    [cvs-buildpackage]
+  - cvs-debrelease: wrapper around debrelease which allows it to be called
+    from the CVS working directory. [cvs-buildpackage, dupload | dput,
+    ssh-client]
+  - cvs-debuild: A wrapper for cvs-buildpackage to use debuild as its package
+    building program. [cvs-buildpackage, fakeroot, lintian, gnupg]
   - dcmd: run a given command replacing the name of a .changes or .dsc file
     with each of the files referenced therein 
   - dcontrol: remotely query package and source control files for all Debian
@@ -117,7 +119,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
     transitions for which uploads to unstable are currently blocked
     [libwww-perl, libyaml-syck-perl]
   - uscan: scan upstream sites for new releases of packages
-    [libcrypt-ssleay-perl, libwww-perl, unzip]
+    [libcrypt-ssleay-perl, libwww-perl, unzip, lzma]
   - uupdate: integrate upstream changes into a source package [patch]
   - whodepends: check which maintainers' packages depend on a package
   - who-uploads: determine the most recent uploaders of a package to the Debian

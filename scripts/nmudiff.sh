@@ -295,10 +295,11 @@ if [ ! -r ../${SOURCE}_${VERSION_NO_EPOCH}.dsc ]; then
     exit 1
 fi
 
+ret=0
 debdiff ../${SOURCE}_${OLDVERSION_NO_EPOCH}.dsc \
   ../${SOURCE}_${VERSION_NO_EPOCH}.dsc \
-  > ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff
-if [ $? -ne 0 ]; then
+  > ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff || ret=$?
+if [ $ret -ne 0 ] && [ $ret -ne 1 ]; then
     echo "nmudiff: debdiff failed, aborting." >&2
     rm -f ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff
     exit 1
@@ -323,8 +324,10 @@ else
 	TO_ADDRESSES_SENDMAIL="$TO_ADDRESSES_SENDMAIL,
   $b@bugs.debian.org"
 	TO_ADDRESSES_MUTT="$TO_ADDRESSES_MUTT $b@bugs.debian.org"
-	TAGS="$TAGS
+	if [ "`bts select bugs:$b tag:patch`" != "$b" ]; then
+	    TAGS="$TAGS
 tags $b + patch"
+	fi
     done
     TO_ADDRESSES_SENDMAIL=$(echo "$TO_ADDRESSES_SENDMAIL" | tail -n +2)
     TAGS=$(echo "$TAGS" | tail -n +2)
@@ -346,8 +349,8 @@ if [ "$NMUDIFF_DELAY" = "0" ]; then
 else
     BODY="$(printf "%s\n%s\n%s\n" \
 "I've prepared an NMU for $SOURCE (versioned as $VERSION) and" \
-"uploaded it to DELAYED/$NMUDIFF_DELAY. Please free to tell me if I should" \
-"delay it longer.")"
+"uploaded it to DELAYED/$NMUDIFF_DELAY. Please feel free to tell me if I" \
+"should delay it longer.")"
 fi
 
 if [ "$NMUDIFF_MUTT" = no ]; then
@@ -410,8 +413,8 @@ EOF
 
     mutt -s "$SOURCE: diff for NMU version $VERSION" -i "$TMPNAM" \
 	-e "my_hdr X-NMUDIFF-Version: ###VERSION###" \
-	-a ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff -- \
-	$BCC_ADDRESS_MUTT $TO_ADDRESSES_MUTT
+	-a ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff $BCC_ADDRESS_MUTT \
+	-- $TO_ADDRESSES_MUTT
 
 fi
 

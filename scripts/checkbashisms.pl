@@ -74,6 +74,7 @@ my $status = 0;
 my $makefile = 0;
 my (%bashisms, %string_bashisms, %singlequote_bashisms);
 
+my $LEADIN = qr'(?:(?:^|[`&;(|{])\s*|(?:if|then|do|while|shell)\s+)';
 init_hashes;
 
 foreach my $filename (@ARGV) {
@@ -264,7 +265,7 @@ foreach my $filename (@ARGV) {
 		    $templine =~ s/$otherquote.*?$quote.*?$otherquote//g;
 		    # "\""
 		    $templine =~ s/(^|[^\\])$quote\\$quote$quote/$1/g;
-		    my $count = () = $templine =~ /(^|[^\\])$quote/g;
+		    my $count = () = $templine =~ /(^|(?!\\))$quote/g;
 
 		    # If there's an odd number of non-escaped
 		    # quotes in the line it's almost certainly the
@@ -281,8 +282,8 @@ foreach my $filename (@ARGV) {
 	    # detect source (.) trying to pass args to the command it runs
 	    # The first expression weeds out '. "foo bar"'
 	    if (not $found and
-		not m/^\s*\.\s+(\"[^\"]+\"|\'[^\']+\')\s*(\&|\||\d?>|<|;|\Z)/
-		and m/^\s*(\.\s+[^\s;\`:]+\s+([^\s;]+))/) {
+		not m/$LEADIN\.\s+(\"[^\"]+\"|\'[^\']+\'|\$\([^)]+\)+)\s*(\&|\||\d?>|<|;|\Z)/
+		and m/$LEADIN(\.\s+[^\s;\`:]+\s+([^\s;]+))/) {
 		if ($2 =~ /^(\&|\||\d?>|<)/) {
 		    # everything is ok
 		    ;
@@ -408,7 +409,7 @@ sub script_is_evil_and_wrong {
         last if (++$i > 55);
         if (m~
 	    # the exec should either be "eval"ed or a new statement
-	    (^\s*|\beval\s*[\'\"]|(;|&&)\s*)
+	    (^\s*|\beval\s*[\'\"]|(;|&&|\b(then|else))\s*)
 
 	    # eat anything between the exec and $0
 	    exec\s*.+\s*
@@ -445,9 +446,12 @@ sub script_is_evil_and_wrong {
 	    $backgrounded = 1;
 	} elsif ($backgrounded and m~
 	    # the exec should either be "eval"ed or a new statement
-	    (^\s*|\beval\s*[\'\"]|(;|&&)\s*)
+	    (^\s*|\beval\s*[\'\"]|(;|&&|\b(then|else))\s*)
 	    exec\s+true(\s|\Z)~x) {
 
+	    $ret = $. - 1;
+	    last;
+	} elsif (m~\@DPATCH\@~) {
 	    $ret = $. - 1;
 	    last;
 	}
@@ -458,7 +462,6 @@ sub script_is_evil_and_wrong {
 }
 
 sub init_hashes {
-    my $LEADIN = qr'(?:(^|[`&;(|{])\s*|(if|then|do|while|shell)\s+)';
 
     %bashisms = (
 	qr'(?:^|\s+)function \w+(\s|\(|\Z)' => q<'function' is useless>,
@@ -477,7 +480,6 @@ sub init_hashes {
 	$LEADIN . qr'exec\s+-[acl]' =>    q<exec -c/-l/-a name>,
 	$LEADIN . qr'let\s' =>            q<let ...>,
 	qr'(?<![\$\(])\(\(.*\)\)' =>     q<'((' should be '$(('>,
-	qr'\$\[[^][]+\]' =>	       q<'$[' should be '$(('>,
 	qr'(?:^|\s+)(\[|test)\s+-a' =>            q<test with unary -a (should be -e)>,
 	qr'\&>' =>	               q<should be \>word 2\>&1>,
 	qr'(<\&|>\&)\s*((-|\d+)[^\s;|)`&\\\\]|[^-\d\s]+)' =>
@@ -508,14 +510,14 @@ sub init_hashes {
 	$LEADIN . qr'time\s' =>          q<time>,
 	$LEADIN . qr'dirs(\s|\Z)' =>          q<dirs>,
 	qr'(?:^|\s+)[<>]\(.*?\)'	    => q<\<() process substituion>,
-	qr'(?:^|\s+)readonly\s+-[af]' => q<readonly -[af]>,
+	$LEADIN . qr'readonly\s+-[af]' => q<readonly -[af]>,
 	$LEADIN . qr'(sh|\$\{?SHELL\}?) -[rD]' => q<sh -[rD]>,
 	$LEADIN . qr'(sh|\$\{?SHELL\}?) --\w+' =>  q<sh --long-option>,
 	$LEADIN . qr'(sh|\$\{?SHELL\}?) [-+]O' =>  q<sh [-+]O>,
     );
 
     %string_bashisms = (
-	qr'\$\[\w+\]' =>                 q<arithmetic not allowed>,
+	qr'\$\[[^][]+\]' =>	         q<'$[' should be '$(('>,
 	qr'\$\{\w+\:\d+(?::\d+)?\}' =>   q<${foo:3[:1]}>,
 	qr'\$\{!\w+[\@*]\}' =>           q<${!prefix[*|@]>,
 	qr'\$\{!\w+\}' =>                q<${!name}>,
@@ -533,12 +535,12 @@ sub init_hashes {
 	qr'\$\{?PIPESTATUS\}?\b'      => q<$PIPESTATUS>,
 	qr'\$\{?SHLVL\}?\b'           => q<$SHLVL>,
 	qr'<<<'                       => q<\<\<\< here string>,
-	$LEADIN . qr'echo\s+(?:-[^e\s]+\s+)?\"[^\"]*(\\[\\abcEfnrtv0])+.*?[\"]' => q<unsafe echo with backslash>,
+	$LEADIN . qr'echo\s+(?:-[^e\s]+\s+)?\"[^\"]*(\\[abcEfnrtv0])+.*?[\"]' => q<unsafe echo with backslash>,
     );
 
     %singlequote_bashisms = (
-	$LEADIN . qr'echo\s+(?:-[^e\s]+\s+)?\'[^\']*(\\[\\abcEfnrtv0])+.*?[\']' => q<unsafe echo with backslash>,
-	$LEADIN . qr'source\s+[\"\']?(?:\.\/|\/|\$|[\w.-])[^\s]+' =>
+	$LEADIN . qr'echo\s+(?:-[^e\s]+\s+)?\'[^\']*(\\[abcEfnrtv0])+.*?[\']' => q<unsafe echo with backslash>,
+	$LEADIN . qr'source\s+[\"\']?(?:\.\/|\/|\$|[\w~.-])\S*' =>
 	                               q<should be '.', not 'source'>,
     );
 

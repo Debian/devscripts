@@ -60,6 +60,12 @@ is not passed it is an error for the specified \fB\-\-dist\fP or \fB\-\-arch\fP
 to not have an existing cowbuilder root in the expected location.
 
 .TP
+.BI \-\-dpkg\-opts= "'opt1 opt2 ...'"
+Specify additional options to be passed to \fBdpkg-buildpackage\fP(1).  Multiple
+options are delimited with spaces.  This will override any options specified in
+DEBBUILDOPTS in the build host's pbuilderrc.
+
+.TP
 .B \-\-help
 Display a brief summary of the available options and current configuration.
 
@@ -70,7 +76,10 @@ Display the current version information.
 
 .SH CONFIGURATION OPTIONS
 When \fBcowpoke\fP is run the following configuration options are read from
-global, per\-user, and per\-project configuration files if present:
+global, per\-user, and per\-project configuration files if present.  File paths
+may be absolute or relative, the latter being relative to the BUILDD_USER's
+home directory.  Since the paths are typically quoted when used, tilde expansion
+will \fBnot\fP be performed on them.
 
 .SS Global defaults
 These apply to every arch and dist in a single cowpoke invocation.
@@ -82,8 +91,9 @@ This may be overridden by the \fB\-\-buildd\fP command line option.
 .TP
 .B BUILDD_USER
 The unprivileged user name for operations on the build machine.  This defaults
-to the local name of the user executing \fBcowpoke\fP, and may be overridden by
-the \fB\-\-buildd\-user\fP command line option.
+to the local name of the user executing \fBcowpoke\fP (or to a username that is
+specified in your ssh config for BUILDD_HOST), and may be overridden by the
+\fB\-\-buildd\-user\fP command line option.
 .TP
 .B BUILDD_ARCH
 The Debian architecture(s) to build for.  This must match the \fBDEB_BUILD_ARCH\fP
@@ -100,12 +110,12 @@ be overridden by the \fB\-\-dist\fP command line option.
 .TP
 .B INCOMING_DIR
 The directory path on the build machine where the source package will initially
-be placed.  An absolute path may be used, but it must be writable by the
-\fBBUILDD_USER\fP.  Relative paths are rooted at that user's home directory.
+be placed.  This must be writable by the \fBBUILDD_USER\fP.
 .TP
 .B PBUILDER_BASE
 The filesystem root for all pbuilder COW and result files.  Arch and dist
-specific subdirectories will normally be created under this.
+specific subdirectories will normally be created under this.  The apt cache
+and temporary build directory will also be located under this path.
 
 .TP
 .B SIGN_KEYID
@@ -116,7 +126,7 @@ If this option is unset or an empty string, no attempt to sign packages will be
 made.
 .TP
 .B UPLOAD_QUEUE
-If this opton is set, it is expected to contain a 'host' specification for
+If this option is set, it is expected to contain a 'host' specification for
 \fBdput\fP(1) which will be used to upload them after they are signed.  You will
 be prompted to confirm whether you wish to upload the packages after they are
 signed.  If this option is unset or an empty string, no attempt to upload packages
@@ -124,14 +134,23 @@ will be made.  If \fBSIGN_KEYID\fP is not set, this option will be ignored entir
 
 .TP
 .B BUILDD_ROOTCMD
-If this opton is unset (which is the default), cowpoke will attempt to log in
-to the build machine as the root user initially, then drop those privileges to
-assume the identity of the \fBBUILDD_USER\fP for operations which do not require
-them.  This is the recommended method when used in conjunction with a secure key
-to grant root access to the machine.  If you prefer to gain root access through
-some other method, then you should set this option to contain the privilege
-escalation command that will be used to execute the scripts which must run as
-root, and cowpoke will initially log in as the \fBBUILDD_USER\fP.
+The command to use to gain root privileges on the remote build machine.  If
+unset the default is \fBsudo\fP(8).  This is only required to invoke cowbuilder
+and allow it to enter its chroot, so you may restrict this user to only being
+able to run that command with escalated privileges.  Something like this in
+sudoers will enable invoking cowbuilder without an additional password entry
+required:
+.TP
+.B " "
+.RS 1.5i
+youruser ALL = NOPASSWD: /usr/sbin/cowbuilder
+.RE
+.TP
+.B " "
+Alternatively you could use ssh with a forwarded key, or whatever other
+mechanism suits your local access policy.  su \-c isn't really suitable
+here due to its quoting requirements being different from all the rest.
+
 .TP
 .B DEBOOTSTRAP
 The utility to use when creating a new build root.  Alternatives are
@@ -150,9 +169,9 @@ previously may be found.  If any such older packages exist, debdiff will be used
 to compare the new package with the previous version after the build is complete,
 and the result will be included in the build log.  Files in it must be readable
 by the \fBBUILDD_USER\fP for sanity checking with \fBlintian\fP(1) and
-\fBdebdiff\fP(1), and for upload with \fBdput\fP(1).  This should always be an
-absolute path.  If this option is not specified for some arch and dist combination
-then it will default to \fI$PBUILDER_BASE/$arch/$dist/result\fP.
+\fBdebdiff\fP(1), and for upload with \fBdput\fP(1).  If this option is not
+specified for some arch and dist combination then it will default to
+.I $PBUILDER_BASE/$arch/$dist/result
 
 .TP
 .RB arch _ dist _BASE_PATH
@@ -196,9 +215,10 @@ upload signed packages the build machine will also need \fBdput\fP(1) installed
 and configured to use the 'host' alias specified by \fBUPLOAD_QUEUE\fP.
 
 The user executing \fBcowpoke\fP must have ssh access to the build machine as
-both 'root' and the \fBBUILDD_USER\fP.  Signing keys are not required to be
-installed on the build machine (and will be ignored there if they are).  If the
-package is signed, keys will be expected on the machine that executes \fBcowpoke\fP.
+the \fBBUILDD_USER\fP.  That user must be able to invoke cowbuilder as root by
+using the \fBBUILDD_ROOTCMD\fP.  Signing keys are not required to be installed
+on the build machine (and will be ignored there if they are).  If the package
+is signed, keys will be expected on the machine that executes \fBcowpoke\fP.
 
 When \fBcowpoke\fP is invoked, it will first attempt to update the cowbuilder
 image if that has not already been done on the same day.  This is checked by
@@ -221,7 +241,8 @@ of uncommitted work.
 .SH SEE ALSO
 .BR cowbuilder (1),
 .BR pbuilder (1),
-.BR ssh-agent (1).
+.BR ssh-agent (1),
+.BR sudoers (5).
 
 .SH AUTHOR
 .B cowpoke

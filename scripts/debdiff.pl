@@ -82,6 +82,9 @@ Valid options are:
    --auto-ver-sort        When comparing source packages, ensure the
                           comparison is performed in version order
    --no-auto-ver-sort     Do not do so (default)
+   --unpack-tarballs      Unpack tarballs found in the top level source
+                          directory (default)
+   --no-unpack-tarballs   Do not do so
 
 Default settings modified by devscripts configuration files:
 $modified_conf_msg
@@ -109,6 +112,7 @@ my @diff_opts = ();
 my $show_diffstat = 0;
 my $wdiff_source_control = 0;
 my $auto_ver_sort = 0;
+my $unpack_tarballs = 1;
 
 my $quiet = 0;
 
@@ -129,6 +133,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBDIFF_SHOW_DIFFSTAT' => 'no',
 		       'DEBDIFF_WDIFF_SOURCE_CONTROL' => 'no',
 		       'DEBDIFF_AUTO_VER_SORT' => 'no',
+		       'DEBDIFF_UNPACK_TARBALLS' => 'yes',
 		       );
     my %config_default = %config_vars;
 
@@ -157,6 +162,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'DEBDIFF_WDIFF_SOURCE_CONTROL'}='no';
     $config_vars{'DEBDIFF_AUTO_VER_SORT'} =~ /^(yes|no)$/
 	or $config_vars{'DEBDIFF_AUTO_VER_SORT'}='no';
+    $config_vars{'DEBDIFF_UNPACK_TARBALLS'} =~ /^(yes|no)$/
+	or $config_vars{'DEBDIFF_UNPACK_TARBALLS'}='yes';
 
     foreach my $var (sort keys %config_vars) {
 	if ($config_vars{$var} ne $config_default{$var}) {
@@ -175,6 +182,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $wdiff_source_control = $config_vars{'DEBDIFF_WDIFF_SOURCE_CONTROL'}
 	eq 'yes' ? 1 : 0;
     $auto_ver_sort = $config_vars{'DEBDIFF_AUTO_VER_SORT'} eq 'yes' ? 1 : 0;
+    $unpack_tarballs = $config_vars{'DEBDIFF_UNPACK_TARBALLS'} eq 'yes' ? 1 : 0;
 
 }
 
@@ -262,6 +270,8 @@ while (@ARGV) {
     elsif ($ARGV[0] =~ /^--no-?wdiff-source-control$/) { $wdiff_source_control = 0; shift; }
     elsif ($ARGV[0] eq '--auto-ver-sort') { $auto_ver_sort = 1; shift; }
     elsif ($ARGV[0] =~ /^--no-?auto-ver-sort$/) { $auto_ver_sort = 0; shift; }
+    elsif ($ARGV[0] eq '--unpack-tarballs') { $unpack_tarballs = 1; shift; }
+    elsif ($ARGV[0] =~ /^--no-?unpack-tarballs$/) { $unpack_tarballs = 0; shift; }
     elsif ($ARGV[0] =~ /^--no-?conf$/) {
 	fatal "--no-conf is only acceptable as the first command-line option!";
     }
@@ -553,6 +563,9 @@ elsif ($type eq 'dsc') {
 		    last;
 	    }
 	    closedir(DIR);
+
+	    # also unpack tarballs found in the top level source directory so we can compare their contents too
+	    next unless $unpack_tarballs;
 	    opendir DIR,${"dir$i"}.'/'.${"sdir$i"};
 
 	    my $tarballs = 1;
@@ -583,9 +596,6 @@ elsif ($type eq 'dsc') {
 	# Execute diff and remove the common prefixes $dir1/$dir2, so the patch can be used with -p1,
 	# as if when interdiff would have been used:
 	system(join(" ", @command));
-	if ($? != 0 and $? >> 8 != 1) {
-	    fatal "Failed to execute @command!";
-	}
 
 	if ($have_diffstat and $show_diffstat) {
 	    print "diffstat for $sdir1 $sdir2\n\n";
@@ -628,8 +638,10 @@ elsif ($type eq 'dsc') {
 	    system ("rm", "-rf", $wdiffdir1, $wdiffdir2);
 	}
 
-	if (-s $filename) {
-	    open( DIFF, '<', $filename );
+	if (! -f $filename) {
+	    fatal "Creation of diff file $filename failed!";
+	} elsif (-s $filename) {
+	    open( DIFF, '<', $filename ) or fatal "Opening diff file $filename failed!";
 
 	    while(<DIFF>) {
 		s/^--- $dir1\//--- /;

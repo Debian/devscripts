@@ -32,9 +32,9 @@ sub have_term_size {
     # Load the Term::Size module safely
     eval { require Term::Size; };
     if ($@) {
-        if ($@ =~ /^Can\'t locate Term\/Size\.pm/) {
+	if ($@ =~ /^Can\'t locate Term\/Size\.pm/) {
 	    $term_size_broken="the libterm-size-perl package is not installed";
-        } else {
+	} else {
 	    $term_size_broken="couldn't load Term::Size: $@";
 	}
     } else {
@@ -64,7 +64,8 @@ Usage: $progname [options] [<maintainer>|<package>]
 Options:
   --no-conf, --noconf Don\'t read devscripts config files;
                       must be the first option given
-  --wipnity, -w       Check <http://release.debian.org/migration/>
+  --wipnity, -w       Check <http://release.debian.org/migration/>.  A package
+                      name must be given when using this option.
   --help              Show this help
   --version           Give version information
 
@@ -133,22 +134,18 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $string = $config_vars{'GREP_EXCUSES_MAINTAINER'};
 }
 
-if (! $string and exists $ENV{'DEBFULLNAME'}) {
-    $string = $ENV{'DEBFULLNAME'};
-}
-
 while (@ARGV and $ARGV[0] =~ /^-/) {
     if ($ARGV[0] eq '--wipnity' or $ARGV[0] eq '-w') {
 	if (@ARGV) {
-            shift;
-            $string=shift;
-        }
+	    shift;
+	    $string=shift;
+	}
 	if (! $string or $string eq '') {
-            die "$progname: no maintainer or package specified!\nTry $progname --help for help.\n";
-        }
-        if (@ARGV) {
-            die "$progname: too many arguments!  Try $progname --help for help.\n";
-        } else { wipnity($string); exit 0; }
+	    die "$progname: no package specified!\nTry $progname --help for help.\n";
+	}
+	if (@ARGV) {
+	    die "$progname: too many arguments!  Try $progname --help for help.\n";
+	} else { wipnity($string); exit 0; }
     }
     if ($ARGV[0] eq '--help') { usage(); exit 0; }
     if ($ARGV[0] eq '--version') { print $version; exit 0; }
@@ -156,6 +153,10 @@ while (@ARGV and $ARGV[0] =~ /^-/) {
 	die "$progname: $ARGV[0] is only acceptable as the first command-line option!\n";
     }
     die "$progname: unrecognised option $ARGV[0]; try $progname --help for help\n";
+}
+
+if (! $string and exists $ENV{'DEBFULLNAME'}) {
+    $string = $ENV{'DEBFULLNAME'};
 }
 
 if (@ARGV) {
@@ -174,7 +175,7 @@ chomp $hostname;
 if (system("command -v wget >/dev/null 2>&1") != 0) {
     die "$progname: this program requires the wget package to be installed\n";
 }
-    
+
 open EXCUSES, "wget -q -O - $url | zcat |" or
     die "$progname: wget | zcat failed: $!\n";
 

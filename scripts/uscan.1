@@ -73,6 +73,10 @@ http://tmrc.mit.edu/mirror/twisted/Twisted/(\\d\.\\d)/Twisted-([\\d\\.]*)\\.tar\
 # be rewritten to use the redirector.
 http://sf.net/audacity/audacity-src-(.+)\\.tar\\.gz
 
+# githubredir.debian.net is a redirector for GitHub projects
+# It can be used as following:
+http://githubredir.debian.net/github/<user>/<project> (.*).tar.gz
+
 # This is the format for a site which has funny version numbers;
 # the parenthesised groups will be joined with dots to make a
 # sanitised version number
@@ -228,14 +232,20 @@ site.
 This is used to mangle the upstream version number as matched by the
 ftp://... or http:// rules as follows.  First, the \fIrules\fR string
 is split into multiple rules at every `;'.  Then the upstream version
-number is mangled by executing the Perl command:
+number is mangled by applying \fIrule\fR to the version, in a similar
+way to executing the Perl command:
 .nf
     $version =~ \fIrule\fR;
 .fi
 for each rule.  Thus, suitable rules might be `s/^/0./' to prepend
-`0.' to the version number and `s/_/./' to change underscores into
+`0.' to the version number and `s/_/./g' to change underscores into
 periods.  Note that the \fIrules\fR string may not contain commas;
 this should not be a problem.
+
+\fIrule\fR may only use the 's', 'tr' and 'y' operations.  When the 's'
+operation is used, only the 'g', 'i' and 'x' flags are available and
+\fIrule\fR may not contain any expressions which have the potential to
+execute code (i.e. the (?{}) and (??{}) constructs are not supported).
 .TP
 \fBdversionmangle=\fIrules\fR
 This is used to mangle the Debian version number of the currently
@@ -359,12 +369,14 @@ orig.tar.gz names if their extensions are \fI.tar.gz\fR or \fI.tgz\fR,
 and similarly for tar.bz2 files.
 .TP
 .B \-\-repack
-After having downloaded a bzip tar or zip archive, repack it to a gzip tar
-archive, which is still currently required as a member of a Debian source
-package. Does nothing if the downloaded archive is not a bzip tar archive or a
-zip archive (i.e. it doesn't match a .tbz, .tbz2, .tar.bz2 or .zip 
-extension). The unzip package must be installed in order to repack .zip 
-archives.
+After having downloaded a lzma tar, bzip tar or zip archive, repack it
+to a gzip tar archive, which is still currently required as a member
+of a Debian source package. Does nothing if the downloaded archive is
+not a lzma tar archive, bzip tar archive or a zip archive (i.e. it
+doesn't match a .tlzma, .tar.lzma, .tbz, .tbz2, .tar.bz2 or .zip
+extension). The unzip package must be installed in order to
+repack .zip archives, and the lzma package must be installed to repack
+lzma tar archives.
 .TP
 .B \-\-no\-symlink
 Don't make these symlinks and don't rename the files.
@@ -399,6 +411,9 @@ through the tree).
 \fB\-\-download\-version\fR \fIversion\fR
 Specify the version which the upstream release must match in order to be
 considered, rather than using the release with the highest version.
+.TP
+\fB\-\-download\-current\-version\fR
+Download the currently packaged version
 .TP
 .B \-\-verbose
 Give verbose output.
@@ -476,9 +491,9 @@ If set, the downloaded files will be placed in this directory.  This is
 equivalent to the \fB\-\-destdir\fR option.
 .TP
 .B USCAN_REPACK
-If this is set to \fIyes\fR, then after having downloaded a bzip tar or
-zip archive, \fBuscan\fR will repack it to a gzip tar.  This is
-equivalent to the \fB\-\-repack\fR option.
+If this is set to \fIyes\fR, then after having downloaded a bzip tar,
+lzma tar or zip archive, \fBuscan\fR will repack it to a gzip tar.
+This is equivalent to the \fB\-\-repack\fR option.
 .SH "EXIT STATUS"
 The exit status gives some indication of whether a newer version was
 found or not; one is advised to read the output to determine exactly

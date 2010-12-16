@@ -200,6 +200,11 @@
 # Attempt to automatically determine whether the current changelog
 # stanza represents an NMU?
 # DEBCHANGE_AUTO_NMU=yes
+#
+# When --release was used and an editor presented, force the changelog
+# to be explicitly saved in the editor?  If this is set to "no" then
+# the changes made by --release will be automatically saved.
+# DEBCHANGE_FORCE_SAVE_ON_RELEASE=yes
 
 ##### debcheckout
 #
@@ -255,6 +260,9 @@
 # Always compare package in version order, rather than the order specified
 # on the command line?
 # DEBDIFF_AUTO_VER_SORT=no
+#
+# Unpack tarballs found in the top level source directory.
+# DEBDIFF_UNPACK_TARBALLS=yes
 
 ##### debi
 # 
@@ -519,6 +527,9 @@
 # can use it with -u without having to specify the full URL
 # 
 # RMADISON_URL_MAP_EXAMPLE=http://example.com/madison.cgi
+#
+# Default URL to use if none is specified on the command line.
+# RMADISON_DEFAULT_URL=debian
 
 ##### svnpath
 # 

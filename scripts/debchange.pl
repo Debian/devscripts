@@ -33,7 +33,8 @@ use 5.008;  # We're using PerlIO layers
 use strict;
 use open ':utf8';  # changelogs are written with UTF-8 encoding
 use filetest 'access';  # use access rather than stat for -w
-use Encode 'decode_utf8';  # for checking whether user names are valid
+# for checking whether user names are valid and making format() behave
+use Encode qw/decode_utf8 encode_utf8/;
 use Getopt::Long;
 use File::Copy;
 use File::Basename;
@@ -60,11 +61,11 @@ sub have_lpdc {
     };
 
     if ($@) {
-        if ($@ =~ m%^Can\'t locate Parse/DebControl%) {
-            $lpdc_broken="the libparse-debcontrol-perl package is not installed";
-        } else {
-            $lpdc_broken="couldn't load Parse::DebControl: $@";
-        }
+	if ($@ =~ m%^Can\'t locate Parse/DebControl%) {
+	    $lpdc_broken="the libparse-debcontrol-perl package is not installed";
+	} else {
+	    $lpdc_broken="couldn't load Parse::DebControl: $@";
+	}
     }
     else { $lpdc_broken=''; }
     return $lpdc_broken ? 0 : 1;
@@ -87,6 +88,16 @@ Options:
          Update the changelog timestamp. If the distribution is set to
          "UNRELEASED", change it to unstable (or another distribution as
          specified by --distribution).
+  --force-save-on-release
+         When --release is used and an editor opened to allow inspection
+         of the changelog, require the user to save the changelog their
+         editor opened.  Otherwise, the original changelog will not be
+         modified. (default)
+  --no-force-save-on-release
+         Do not do so. Note that a dummy changelog entry made be supplied
+         in order to achieve the same effect - e.g. $progname --release ""
+         The entry will not be added to the changelog but its presence will
+         suppress the editor
   --create
          Create a new changelog (default) or NEWS file (with --news) and
          open for editing
@@ -202,6 +213,7 @@ my $opt_tz = undef;
 my $opt_t = '';
 my $opt_allow_lower = '';
 my $opt_auto_nmu = 'yes';
+my $opt_force_save_on_release = 1;
 
 # Next, read configuration files and then command line
 # The next stuff is boilerplate
@@ -223,10 +235,11 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBCHANGE_MAINTTRAILER' => '',
 		       'DEBCHANGE_LOWER_VERSION_PATTERN' => '',
 		       'DEBCHANGE_AUTO_NMU' => 'yes',
+		       'DEBCHANGE_FORCE_SAVE_ON_RELEASE' => 'yes',
 		       );
     $config_vars{'DEBCHANGE_TZ'} ||= '';
     my %config_default = %config_vars;
-    
+
     my $shell_cmd;
     # Set defaults
     foreach my $var (keys %config_vars) {
@@ -254,6 +267,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'DEBCHANGE_MULTIMAINT_MERGE'}='no';
     $config_vars{'DEBCHANGE_AUTO_NMU'} =~ /^(yes|no)$/
 	or $config_vars{'DEBCHANGE_AUTO_NMU'}='yes';
+    $config_vars{'DEBCHANGE_FORCE_SAVE_ON_RELEASE'} =~ /^(yes|no)$/
+	or $config_vars{'DEBCHANGE_FORCE_SAVE_ON_RELEASE'}='yes';
 
     foreach my $var (sort keys %config_vars) {
 	if ($config_vars{$var} ne $config_default{$var}) {
@@ -275,6 +290,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	if $config_vars{'DEBCHANGE_MAINTTRAILER'};
     $opt_allow_lower = $config_vars{'DEBCHANGE_LOWER_VERSION_PATTERN'};
     $opt_auto_nmu = $config_vars{'DEBCHANGE_AUTO_NMU'};
+    $opt_force_save_on_release =
+	$config_vars{'DEBCHANGE_FORCE_SAVE_ON_RELEASE'} eq 'yes' ? 1 : 0;
 }
 
 # We use bundling so that the short option behaviour is the same as
@@ -325,6 +342,7 @@ GetOptions("help|h" => \$opt_help,
 	   "release-heuristic=s" => \$opt_release_heuristic,
 	   "empty" => \$opt_empty,
 	   "auto-nmu!" => \$opt_auto_nmu,
+	   "force-save-on-release!" => \$opt_force_save_on_release,
 	   )
     or die "Usage: $progname [options] [changelog entry]\nRun $progname --help for more details\n";
 
@@ -388,8 +406,8 @@ if (defined $opt_D) {
 	    $warnings++ if not $opt_force_dist;
 	}
     } elsif ($distributor eq 'Ubuntu') {
-	unless ($opt_D =~ /^((dapper|gutsy|hardy|intrepid|jaunty)(-updates|-security|-proposed|-backports)?|UNRELEASED)$/) {
-	    warn "$progname warning: Recognised distributions are:\n{dapper,gutsy,hardy,intrepid,jaunty}{,-updates,-security,-proposed,-backports} and UNRELEASED.\nUsing your request anyway.\n";
+	unless ($opt_D =~ /^((dapper|gutsy|hardy|intrepid|jaunty|karmic)(-updates|-security|-proposed|-backports)?|UNRELEASED)$/) {
+	    warn "$progname warning: Recognised distributions are:\n{dapper,gutsy,hardy,intrepid,jaunty,karmic}{,-updates,-security,-proposed,-backports} and UNRELEASED.\nUsing your request anyway.\n";
 	    $warnings++ if not $opt_force_dist;
 	}
     } else {
@@ -399,9 +417,10 @@ if (defined $opt_D) {
 
 fatal "--closes should not be used with --news; put bug numbers in the changelog not the NEWS file"
     if $opt_news && @closes;
-    
-fatal "--package can only be used with --create"
-    if $opt_package && ! $opt_create;
+
+# hm, this can probably be used with more than just -i.
+fatal "--package can only be used with --create and --increment"
+    if $opt_package && ! ($opt_create || $opt_i);
 
 my $changelog_path = $opt_c || $ENV{'CHANGELOG'} || 'debian/changelog';
 my $real_changelog_path = $changelog_path;
@@ -597,21 +616,22 @@ EOF
 	    # don't know anything
 	}
     }
-    if ($opt_package) {
-	if ($opt_package =~ m/^[a-z0-9][a-z0-9+\-\.]+$/) {
-	    $PACKAGE=$opt_package;
-	} else {
-	    warn "$progname warning: illegal package name used with --package: $opt_package\n";
-	    $warnings++;
-	}
-    }
     if ($opt_v) {
 	$VERSION=$opt_v;
     }
     if ($opt_D) {
 	$DISTRIBUTION=$opt_D;
     }
-}    
+}
+
+if ($opt_package) {
+    if ($opt_package =~ m/^[a-z0-9][a-z0-9+\-\.]+$/) {
+	$PACKAGE=$opt_package;
+    } else {
+	warn "$progname warning: illegal package name used with --package: $opt_package\n";
+	$warnings++;
+    }
+}
 
 # Clean up after old versions of debchange
 if (-f "debian/RELEASED") {
@@ -991,17 +1011,17 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 		    # First NMU of a Debian native package
 		    $end .= "+nmu1";
 		} else {
-	    	    $end += 0.1;
+		    $end += 0.1;
 		}
-            } elsif ($opt_bn and not $start =~ /\+b/) {
-                $end .= "+b1";
+	    } elsif ($opt_bn and not $start =~ /\+b/) {
+		$end .= "+b1";
 	    } elsif ($opt_qa and $start =~/(.*?)-(\d+)\.$/) {
-                # Drop NMU revision when doing a QA upload
-                my $upstream_version = $1;
-                my $debian_revision = $2;
-                $debian_revision++;
-                $start = "$upstream_version-$debian_revision";
-                $end = "";
+		# Drop NMU revision when doing a QA upload
+		my $upstream_version = $1;
+		my $debian_revision = $2;
+		$debian_revision++;
+		$start = "$upstream_version-$debian_revision";
+		$end = "";
 	    } elsif ($opt_bpo and not $start =~ /~bpo[0-9]+\+$/) {
 		# If it's not already a backport make it so
 		# otherwise we can be safe if we behave like dch -i
@@ -1026,6 +1046,17 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 		    } else {
 			# Fallback to using the previous distribution
 			$bpo_dist = $changelog{'Distribution'};
+		    }
+		}
+
+		if(! ($opt_s or $opt_n)) {
+		    if ($start =~/(.*?)-(\d+)\.$/) {
+			# Drop NMU revision
+			my $upstream_version = $1;
+			my $debian_revision = $2;
+			$debian_revision++;
+			$start = "$upstream_version-$debian_revision";
+			$end = "";
 		    }
 		}
 
@@ -1055,7 +1086,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 	$bpo_dist ||= $bpo_dists{$latest_bpo_dist} . '-backports';
     }
     my $distribution = $opt_D || $bpo_dist || (($opt_release_heuristic eq 'changelog') ? "UNRELEASED" : $DISTRIBUTION);
-    
+
     my $urgency = $opt_u;
     if ($opt_news) {
 	$urgency ||= $CL_URGENCY;
@@ -1071,29 +1102,29 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
     } else {
 	print O "$PACKAGE ($NEW_VERSION) $distribution; urgency=$urgency\n\n";
 	if ($opt_n && ! $opt_news) {
-            print O "  * Non-maintainer upload.\n";
+	    print O "  * Non-maintainer upload.\n";
 	    $line = 1;
 	} elsif ($opt_bn && ! $opt_news) {
-            my $arch = qx/dpkg-architecture -qDEB_BUILD_ARCH/; chomp ($arch);
-            print O "  * Binary-only non-maintainer upload for $arch; no source changes.\n";
-            $line = 1;
+	    my $arch = qx/dpkg-architecture -qDEB_BUILD_ARCH/; chomp ($arch);
+	    print O "  * Binary-only non-maintainer upload for $arch; no source changes.\n";
+	    $line = 1;
 	} elsif ($opt_qa && ! $opt_news) {
-            print O "  * QA upload.\n";
-            $line = 1;
+	    print O "  * QA upload.\n";
+	    $line = 1;
 	} elsif ($opt_s && ! $opt_news) {
-            print O "  * Non-maintainer upload by the Security Team.\n";
-            $line = 1;
+	    print O "  * Non-maintainer upload by the Security Team.\n";
+	    $line = 1;
 	} elsif ($opt_bpo && ! $opt_news) {
-            print O "  * Rebuild for $bpo_dist.\n";
-            $line = 1;
+	    print O "  * Rebuild for $bpo_dist.\n";
+	    $line = 1;
 	}
 	if (@closes_text or $TEXT) {
-            foreach (@closes_text) { format_line($_, 1); }
-            if (length $TEXT) { format_line($TEXT, 1); }
+	    foreach (@closes_text) { format_line($_, 1); }
+	    if (length $TEXT) { format_line($TEXT, 1); }
 	} elsif ($opt_news) {
-            print O "  \n";
+	    print O "  \n";
 	} else {
-            print O "  * \n";
+	    print O "  * \n";
 	}
 	$line += 3;
 	print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n\n";
@@ -1106,7 +1137,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_bpo || $opt_l || $
 if (($opt_r || $opt_a || $merge) && ! $opt_create) {
     # This means we just have to generate a new * entry in changelog
     # and if a multi-developer changelog is detected, add developer names.
-    
+
     $NEW_VERSION=$VERSION unless $NEW_VERSION;
     $NEW_SVERSION=$SVERSION unless $NEW_SVERSION;
     $NEW_UVERSION=$UVERSION unless $NEW_UVERSION;
@@ -1115,7 +1146,7 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
     # last entry, and determine whether there are existing
     # multi-developer changes by the current maintainer.
     $line=-1;
-    my ($lastmaint, $nextmaint, $maintline, $count, $lastheader, $lastdist);
+    my ($lastmaint, $nextmaint, $maintline, $count, $lastheader, $lastdist, $dist_indicator);
     my $savedline = $line;;
     while (<S>) {
 	$line++;
@@ -1140,7 +1171,11 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
 		$line = $savedline;
 		last;
 	    }
-	}	
+	}
+	elsif (/  \* Upload to ([^ ]+).*$/) {
+	    ($dist_indicator = $1) =~ s/[,;]$//;
+	    chomp $dist_indicator;
+	}
 	elsif (/^ --\s+([^<]+)\s+/) {
 	    $lastmaint=$1;
 	    # Remember where we are so we can skip back afterwards
@@ -1192,7 +1227,11 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
 	if ($opt_r) {
 	    # Change the distribution from UNRELEASED for release
 	    if ($distribution eq "UNRELEASED") {
-		$distribution = $opt_D || $lastdist || "unstable";
+		if ($dist_indicator and not $opt_D) {
+		    $distribution = $dist_indicator;
+		} else {
+		    $distribution = $opt_D || $lastdist || "unstable";
+		}
 	    } elsif ($opt_D) {
 		warn "$progname warning: ignoring distribution passed to --release as changelog has already been released\n";
 	    }
@@ -1223,7 +1262,7 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
     };
 
     if (! $opt_r) {
-    	# Add a multi-maintainer header...
+	# Add a multi-maintainer header...
 	if ($multimaint) {
 	    # ...unless there already is one for this maintainer.
 	    if (!defined $maintline) {
@@ -1351,7 +1390,9 @@ if ((!$TEXT and !$EMPTY_TEXT and ! ($opt_create and $opt_empty)) or @closes_text
 	my $newmtime = (stat("$changelog_path.dch"))[9];
 	defined $newmtime or fatal
 	    "Error getting modification time of temporary $changelog_path: $!";
-	if ($mtime == $newmtime && ! $opt_r && ! $opt_create) {
+	if ($mtime == $newmtime && ! $opt_create &&
+	    (!$opt_r || ($opt_r && $opt_force_save_on_release))) {
+
 	    warn "$progname: $changelog_path unmodified; exiting.\n";
 	    exit 0;
 	}
@@ -1393,6 +1434,12 @@ if ((basename(cwd()) =~ m%^\Q$PACKAGE\E-\Q$UVERSION\E$%) &&
 	} else {
 	    warn "$progname warning: Couldn't rename directory: $!";
 	}
+	# And check whether a new orig tarball exists
+	my @origs = glob("../$PACKAGE\_$new_uversion.*");
+	my $num_origs = grep { /^..\/\Q$PACKAGE\E_\Q$new_uversion\E\.orig\.tar\.(gz|bz2|lzma)$/ } @origs;
+	if ($num_origs == 0) {
+	    warn "$progname warning: no orig tarball found for the new version.\n";
+	}
     }
 }
 
@@ -1420,10 +1467,13 @@ sub format_line {
     my $newentry=shift;
 
     # Work around the fact that write() with formats
-    # seems to assume that character == byte
+    # seems to assume that characters are single-byte
     # See http://rt.perl.org/rt3/Public/Bug/Display.html?id=33832
-    # and Debian bug #473769
-    my $count = () = $CHGLINE =~ /[^\x00-\x7F]/mg;
+    # and Debian bugs #473769 and #541484
+    # This relies on $CHGLINE being a sequence of unicode characters.  We can
+    # compare how many unicode characters we have to how many bytes we have
+    # when encoding to utf8 and therefore how many spaces we need to pad.
+    my $count = length(encode_utf8($CHGLINE)) - length($CHGLINE);
     $CHGLINE .= " " x $count;
 
     print O "\n" if $opt_news && ! ($newentry || $linecount);

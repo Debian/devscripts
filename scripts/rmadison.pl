@@ -73,8 +73,9 @@ my %url_map = (
     'myon' => "http://qa.debian.org/~myon/madison.php",
     'bpo' => "http://www.backports.org/cgi-bin/madison.cgi",
     'debug' => "http://debug.debian.net/cgi-bin/madison.cgi",
-    'ubuntu' => "http://people.ubuntu.com/~ubuntu-archive/madison.cgi",
+    'ubuntu' => "http://people.canonical.com/~ubuntu-archive/madison.cgi",
 );
+my $default_url = "debian";
 
 if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     shift;
@@ -95,9 +96,12 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     my $shell_out = `/bin/bash -c '$shell_cmd'`;
     @config_vars = split /\n/, $shell_out, -1;
 
-   foreach my $envvar (@config_vars) {
-	$envvar =~ /^RMADISON_URL_MAP_([^=]*)=(.*)$/ or next;
-	$url_map{lc($1)}=$2;
+    foreach my $envvar (@config_vars) {
+	if ($envvar =~ /^RMADISON_URL_MAP_([^=]*)=(.*)$/) {
+	    $url_map{lc($1)}=$2;
+	} elsif ($envvar =~ /^RMADISON_DEFAULT_URL=(.*)$/) {
+	    $default_url=$1;
+	}
     }
 }
 
@@ -161,13 +165,13 @@ push @args, "s=$params->{'suite'}" if $params->{'suite'};
 push @args, "S" if $params->{'source-and-binary'};
 push @args, "t" if $params->{'time'};
 
-my $url = $params->{'url'} ? $params->{'url'} : "debian";
+my $url = $params->{'url'} ? $params->{'url'} : $default_url;
 my @url = split /,/, $url;
 
 foreach my $url (@url) {
     print "$url:\n" if @url > 1;
     $url = $url_map{$url} if $url_map{$url};
-    my @cmd = -x "/usr/bin/curl" ? qw/curl -s -S/ : qw/wget -q -O -/;
+    my @cmd = -x "/usr/bin/curl" ? qw/curl -s -S -L/ : qw/wget -q -O -/;
     system @cmd, $url . "?package=" . join("+", map { uri_escape($_) } @ARGV) . "&text=on&" . join ("&", @args);
 }
 
@@ -240,7 +244,7 @@ use I<URL> for the query. Supported shorthands are
  B<debian> or B<qa> http://qa.debian.org/madison.php (the default)
  B<bpo> http://www.backports.org/cgi-bin/madison.cgi
  B<debug> http://debug.debian.net/cgi-bin/madison.cgi
- B<ubuntu> http://people.ubuntu.com/~ubuntu-archive/madison.cgi
+ B<ubuntu> http://people.canonical.com/~ubuntu-archive/madison.cgi
 
 See the B<RMADISON_URL_MAP_> variable below for a method to add
 new shorthands.
@@ -275,6 +279,10 @@ be replaced with the shorthand form to be used to refer to I<URL>.
 
 Multiple shorthand entries may be specified by using multiple
 B<RMADISON_URL_MAP_*> variables.
+
+=item B<RMADISON_DEFAULT_URL>=I<URL>
+
+Set the default URL to use unless overridden by a command line option.
 
 =back
 

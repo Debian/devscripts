@@ -134,7 +134,7 @@ fi
 # Check for a "mail" command
 if ! command -v mail >/dev/null 2>&1; then
     echo "$PROGNAME: Could not find the \"mail\" command; you must have the" >&2
-    echo "mailx or mailutils package installed to run this script." >&2
+    echo "bsd-mailx or mailutils package installed to run this script." >&2
     exit 1
 fi
 

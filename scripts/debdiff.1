@@ -141,6 +141,14 @@ command-line, even if that means comparing a package with a higher
 version against one with a lower version.  This is the default
 behaviour.
 .TP
+.B \-\-unpack\-tarballs
+When comparing source packages, also unpack tarballs found in the top level
+source directory to compare their contents along with the other files.
+This is the default behaviour.
+.TP
+.B \-\-no\-unpack\-tarballs
+Do not unpack tarballs inside source packages.
+.TP
 \fB\-\-no-conf\fR, \fB\-\-noconf\fR
 Do not read any configuration files.  This can only be used as the
 first option given on the command-line.
@@ -196,12 +204,14 @@ If this is set to \fIyes\fR, then it is the same as the
 .B DEBDIFF_AUTO_VER_SORT
 If this is set to \fIyes\fR, then it is the same as the
 \fB\-\-auto\-ver\-sort\fR command line parameter being used.
+.TP
+.B DEBDIFF_UNPACK_TARBALLS
+If this is set to \fIno\fR, then it is the same as the
+\fB\-\-no\-unpack\-tarballs\fR command line parameter being used.
 .SH "EXIT VALUES"
 Normally the exit value will be 0 if no differences are reported and 1
 if any are reported.  If there is some fatal error, the exit code will
-be non-zero, and will depend upon the type of error encountered: if it
-was an external error, then it will be the exit code of that program,
-else it should be 255.
+be 255.
 .SH "SEE ALSO"
 .BR dpkg-deb (1),
 .BR wdiff (1),

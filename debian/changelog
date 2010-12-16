@@ -1,9 +1,290 @@
-devscripts (2.10.47~bpo50+1) lenny-backports; urgency=low
+devscripts (2.10.54) unstable; urgency=high
 
-  * Rebuild for lenny-backports.
-    + No changes required
+  * Urgency "high" for security update
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 17 Mar 2009 23:23:22 +0000
+  [ James Vega ]
+  * debchange: Clarify the wording for the explanation of
+    --force-save-on-release.  (Closes: #539155)
+  * grep-excuses: Document that -w only works with a package name.
+  * manpage-alert: Fix handling of commands which start with non-word
+    characters.  Based on a patch from Ville Skyttä.
+  * bts: Add support for the limit command.  (Closes: #541698)
+  * tagpending: Use 'bts limit source ...' instead of 'bts package ...' and
+    listing every binary package the source produces.  This will prevent
+    tagpending emails from exceeding the 998 characters per line limit of
+    email.
+
+  [ Adam D. Barratt ]
+  * bts:
+    + Make "tags NNNNNN =" operate correctly again.  (Closes: #539688)
+    + Use >& rather than writing to filehandles under /dev/fd.
+      (Closes: #517917)
+  * cowpoke:
+    + Update to new upstream version
+      - Run with reduced privileges and only elevate them when needed to
+        run cowbuilder.
+      - Don't explicitly pass a buildd username unless it is set, this allows
+        people to configure the remote username in their ssh config or
+        similar.  (Closes: #538191)
+      - Supply pbuilder with the --buildplace and --aptcache options to
+        enable use with reduced privileges.
+      - Relative paths are all relative to the BUILDD_USER's home directory
+        now, not the incoming dir.
+      - Add --dpkg-opts support for passing options on to dpkg.
+      - Autoclean the apt-cache so it doesn't grow unbounded.
+  * dcmd: Add filtering options for udebs.  (Closes: #541827)
+  * debchange: Don't output spurious characters when extended Unicode
+    characters are passed on the command line.  (Closes: #542484)
+  * dget: Update the dpkg-source output matching to enable --build to work
+    again.  (Closes: #541409)
+  * uscan: Evaluate mangle rules without evaluating them directly as Perl
+    code to avoid the possibility of remote code execution.  This is
+    CVE-2009-2946.  As a side effect, (Closes: #515209)
+  * Packaging changes: Add sensible-utils to Recommends.  Several scripts
+    make use of sensible-editor and it has moved from debianutils so is
+    no longer essential.  (Closes: #541846)
+
+  [ Patrick Schoenfeld ]
+  * Add an example for githubredir.debian.net to the uscan manpage
+    (Closes: #539923)
+
+  [ Christoph Berg ]
+  * debdiff: New option --no-unpack-tarballs to skip unpacking tarballs
+    contained in source packages.
+
+  [ Ryan Niebur ]
+  * uscan: add --download-current-version option (Closes: #539724)
+  * Add myself to Uploaders
+  * debchange: add support for using --package with -i to change the
+    source package name (Closes: #515885)
+  * debcheckout: use bzr+ssh instead of sftp, thanks to Colin Watson for
+    the patch (Closes: #526068)
+  * debchange: remove NMU version when -i is ran without -n or auto nmu
+    (Closes: 487323)
+  * uscan: add support for repacking lzma compressed tarballs, thanks to
+    Michal Čihař for the patch (Closes: #514504)
+  * namecheck: use comments instead of pod blocks so that they don't get
+    translated, thanks to Florentin Duneau for the patch (Closes:
+    #529062)
+
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 02 Sep 2009 20:22:29 +0100
+
+devscripts (2.10.53) unstable; urgency=low
+
+  The "Debconf fish!" upload
+
+  [ Adam D. Barratt ]
+  * bts:
+    + Add a missing "use IO::File" to make "bts select file:foo" work.
+      Thanks, Raphaël Hertzog.  (Closes: #538288)
+    + Add the "affects" command to mark a bug as affecting packages other
+      than the package it was filed against.
+  * checkbashisms: Detect the use of "source" when the sourced filename
+    contains a tilde (Closes: #528592) or consists of a single character
+    (Closes: #535252).  Thanks, Raphael Geissert and Ryan Niebur.
+  * debcommit: Add darcs support.  Thanks to Joachim Breitner for the patch.
+    (Closes: #536037)
+  * nmudiff:
+    + Fix specification of BCc to control@bugs so that it's interpreted
+      as an option to mutt and not as a recipient address.  Thanks, Filippo
+      Giunchedi.  (Closes: #534585)
+    + Add a missing "feel" to the delayed/XX template.  Thanks, Raphael
+      Geissert.
+  * rmadison:
+    + Add patch from Ubuntu to make lookups against their database work again.
+      (The server moved from people.ubuntu.com to people.canonical.com)
+      (Closes: #537302)
+    + When using curl, follow redirects by default.  (Also from the Ubuntu
+      patch).
+  * debian/control: Replace descriptions of cvs-* with those from README,
+    because they're better.
+
+  [ Patrick Schoenfeld ]
+  * bts: Implement a --mutt parameter, which allows mails to be sent
+    using mutt.
+  * debchange: Implement a dist indication mechanism that parses
+    an 'Upload to $DIST' line and sets the distribution accordingly, when
+    the --release parameter is used. (Closes: #515346)
+  * debi:
+    + Implement a --with-depends switch to install depencies of the
+      package together with the package
+      (Closes: #511061)
+    + Implement a --tool switch to choose the tool for installing
+      dependencies
+  * dget: Make it clear in manpage and usage information, that dget is capable
+    of processing several URLs or packages (Closes: #535977)
+  * dscverify:
+    + Implement a --verbose option to disable suppressing
+      of GPG output (Closes: #525670)
+    + Add a notice to the manpage of dscverify that the debian-keyring package
+      has the potential to be out of date and how this can be worked around
+      (Closes: #438679)
+    + Document standard keyring locations in the dscverify manpage
+  * licensecheck: Skip empty files instead of reporting that they don't
+    have a copyright (Closes: #535337)
+  * nmudiff: Use 'bts select' to test, weither a check already has a patch
+    tag set or not and only set it, if not (Closes: #519678)
+  * Add a script listing to devscripts.1 which is auto-generated from
+    debian/control (Closes: #504008)
+
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 29 Jul 2009 15:12:24 +0100
+
+devscripts (2.10.52) unstable; urgency=low
+
+  * debdiff: Make --diffstat work again; accidentally broken in 2.10.48.
+  * uupdate: Fix invocation of *cat when attempting to apply diffs.
+    Thanks, Yannick Roehlly.  (Closes: #533415)
+  * debian/control: Update Standards-Version to 3.8.2 (no changes needed)
+
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 17 Jun 2009 19:39:33 +0100
+
+devscripts (2.10.51) unstable; urgency=low
+
+  [ Adam D. Barratt ]
+  * bts:
+    + Add a note to the description of --smtp-server explaining that
+      reportbug.debian.org does not support relaying and is therefore not a
+      suitable server to use in circumstances where $package@packages.d.o
+      may be automatically Cced.
+    + Ignore the --{force-,}interactive options when combined with -n.
+      (Closes: #531422)
+  * checkbashisms:
+    + Detect shellscript wrappers that use "then" or "else" before calling
+      exec.  Thanks, Raphael Geissert.  (Closes: #530815)
+    + Fix a false positive detection of ". $(foo bar)" as attempting to pass
+      arguments to a sourced script.  Thanks, Raphael Geissert.
+    + Detect use of passing arguments to a sourced script as part of a
+      conditional statement.  Thanks, Raphael Geissert.
+    + Correctly count the number of quotes in a line when detecting whether
+      we are currently inside a "quoted block".  Thanks, Raphael Geissert.
+      (Closes: #531247)
+    + Do not check the contents of a dpatch.  The wrapper script always uses
+      /bin/sh and we can't detect the interpreter of a patch.
+    + Improve the check for the use of $[] inside quoted text.  Thanks,
+      Raphael Geissert.
+    + Apply the "common lead-in text" to the "readonly" check.
+    + Remove "\\" from the list of unsafe backslash escapes, as it appears to
+      work in all shells.
+  * dcmd: Parse changes / dsc files containing section or priority entries of
+    "-".  (Closes: #531593)
+  * licensecheck: Fix an error in a regular expression which led to an
+    uninitialized value warning and missing version for some GPL headers.
+    Thanks, Jakub Wilk.  (Closes: #531059)
+  * uscan: Make a regular expression example in the manpage clearer.  Thanks,
+    Jason Heeris.  (Closes: #530362)
+  * uupdate: Add support for .lzma compressed tarballs and diffs.  Thanks to
+    Simon Richter for the patch.  (Closes: #531570)
+
+  [ James Vega ]
+  * bts: Only Cc $package@packages.debian.org if we're reasonably sure we have
+    an email body instead of simply control messages; i.e., if the user
+    specifies the --force-interactive option or the --interactive option and
+    chooses to edit the email body.  (Closes: #530926)
+  * uscan: Log the correct filename when running the post-download action.
+    Simplify the surrounding logic so the logging and command are less likely
+    to get out of sync in the future.
+
+  [ Mohammed Adnène Trojette ]
+  * pts-subscribe: refer to bsd-mailx rather to the transitional mailx
+    package. Thanks Ansgar Burchardt for the patch. (Closes: #531332)
+
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Mon, 15 Jun 2009 18:57:20 +0100
+
+devscripts (2.10.50) unstable; urgency=low
+
+  [ Adam D. Barratt ]
+  * chdist: Make --data-dir work with relative paths.  (Closes: #528254)
+  * debchange: Add karmic (koala) to the list of recognised Ubuntu
+    distributions.
+  * debsnap: Fix mktemp call to use a sufficient number of Xs in the template
+    string (Closes: #528193) and use -t rather than hard-coding /tmp.
+  * debuild: Use printf when parsing the DEBUILD_LINTIAN_OPTS configuration
+    file variable, to avoid eating -E.  (Closes: #527027)
+  * mass-bug: Add an option to specify that the supplied package names are
+    those of source packages rather than binary packages.  Based on a patch
+    by Felipe Sateler.  (Closes: #527396)
+  * rc-alert: Use standard single quotes in the debtags section of the manpage
+    to avoid odd formatting and warnings from man
+  * uscan: Pass -n to gzip when repacking bz2 files to ensure consistent
+    checksums.  Thanks, Damyan Ivanov.  (Closes: #504672)
+
+  [ Christoph Berg ]
+  * dget: -u implies dpkg-source --no-check. Also, force LC_ALL=C to correctly
+    capture dpkg-source output with --build.
+
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Thu, 21 May 2009 21:50:18 +0100
+
+devscripts (2.10.49) unstable; urgency=low
+
+  * debchange:
+    + Use == for numeric comparison, not eq.
+    + Mention in the help output and manpage that a dummy changelog entry
+      may be supplied in conjunction with --release in order to avoid
+      spawning an editor.
+    + Add a configuration variable and command line option to allow the
+      recent change to --release's "auto-save" behaviour to be disabled.
+      For consistency with other debchange options, the default is to
+      retain the behaviour introduced in 2.10.48 - i.e. that the changelog
+      must be explicitly saved after the use of --release. (Closes: #524393)
+  * debcommit: If the installed version of dpkg-dev supports retrieving a
+    list of appropriate bugs, automatically generate bzr --fixes arguments
+    for Launchpad bugs as well as Debian bugs.  Thanks, Colin Watson.
+    (Closes: #525823)
+  * debsign: Make the PGP signing method work again.  Thanks, Florian Weimer.
+    (Closes: #518821)
+  * getbuildlog: Add a missing "use lib" to allow the special "last" and
+    "last-all" versions to work correctly.  Thanks, Iustin Pop.
+    (Closes: #523982)
+  * licensecheck: Add detection of the AGPL.  Thanks, Didier Raboud.
+    (Closes: #520903)
+  * namecheck: Fix the formatting of a number of POD strings, also making
+    them easier to translate.  Thanks, Florentin Duneau.  (Closes: #526047)
+  * rc-alert:
+    + Allow the generated list of bugs to be restricted to those affecting
+      packages with particular debtags facets.  Thanks, Jan Hauke Rahm.
+     (Closes: #523523)
+    + Allow the generated list of bugs to be sorted using popcon results.
+      Thanks, Jan Hauke Rahm.  (Closes: #478833)
+  * rmadison: Allow a default URL to be specified in the configuration file.
+    Thanks, Roland Mas.  (Closes: #524198)
+  * uscan: Remove a superfluous and repeated copy of the site name in an FTP
+    error message.  Thanks, Vaclav Ovsik.
+  * Makefile: Remove cruft relating to French manpages, which has been handled
+    by the po4a setup for a while now.
+
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sat, 02 May 2009 19:34:55 +0100
+
+devscripts (2.10.48) unstable; urgency=low
+
+  [ Adam D. Barratt ]
+  * Update Standards Version to 3.8.1 (no changes required)
+  * debchange: Fix a couple of syntax errors in the "does an orig tarball
+    exist?" test introduced for #500932.
+  * debdiff:
+    + Don't bail if diff returned an exit status of 2 when comparing
+      files. If there are binary files in either of the trees being compared
+      then that's expected as the files can't be reliably compared.
+    + Don't claim that the exit status on failure will be anything other than
+      255 (i.e. the result of die()ing).
+  * nmudiff: Adapt to handle the fact that debdiff will now return an exit
+    status of 1 when comparing non-identical source packages.
+  * debian/copyright: Explicitly refer to the GPL-2 and GPL-3 common license
+    files rather than the "GPL" symlink.
+
+  [ Patrick Schoenfeld ]
+  * debchange: When renaming a directory (because of version change)
+    and noticing that no matching orig tarball exist, emit a warning.
+    (Closes: #500932)
+  * uscan: Use maximum compression rate while repacking files from bzip2/zip
+    into gzip. Thanks Nelson A. de Oliveira.
+    (Closes: #522442)
+
+  [ James Vega ]
+  * debchange: As per the other edit flags, do not modify the original
+    changelog when using `debchange -r' unless the user saves the temporary
+    changelog.  (Closes: #422450)
+
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Sun, 12 Apr 2009 16:11:40 +0100
 
 devscripts (2.10.47) unstable; urgency=low
 
