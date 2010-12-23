@@ -3,6 +3,8 @@ devscripts (2.10.70) UNRELEASED; urgency=low
   * debuild:
     + Properly quote shell variable when parsing options.  (Closes: #556248)
     + Don't treat “-nc” as implying binary only build.  (Closes: #607303)
+    + Add recognition of dpkg-buildpackage's “-A” option for building only
+      binary independent packages.
   * pts-subscribe: Handle “--until 0” the same as “--forever”.  (Closes:
     #604740)
   * uscan: Update documentation to use “.+” instead of “.*” in groupings.

@@ -820,6 +820,8 @@ if ($command_version eq 'dpkg') {
 	    push(@dpkg_opts, $_), next;
 	$_ eq '-B' and $binaryonly=$_, $binarytarget='binary-arch',
 	    push(@dpkg_opts, $_), next;
+	$_ eq '-A' and $binaryonly=$_, $binarytarget='binary-indep',
+	    push(@dpkg_opts, $_), next;
 	$_ eq '-S' and $sourceonly=$_, push(@dpkg_opts, $_), next;
 	    # Explained below, no implied -d
 	/^-v(.*)/ and $since=$1, push(@dpkg_opts, $_), next;
@@ -869,6 +871,8 @@ if ($command_version eq 'dpkg') {
 	$_ eq '-b' and $binaryonly=$_, $binarytarget='binary',
 	    push(@dpkg_opts, $_), next;
 	$_ eq '-B' and $binaryonly=$_, $binarytarget='binary-arch',
+	    push(@dpkg_opts, $_), next;
+	$_ eq '-A' and $binaryonly=$_, $binarytarget='binary-indep',
 	    push(@dpkg_opts, $_), next;
 	$_ eq '-S' and $sourceonly=$_, $checkbuilddep=0, push(@dpkg_opts, $_),
 	    next;
