@@ -346,7 +346,7 @@ sub find_browse($$) {
 
 # Patch the cmdline invocation of a VCS to ensure the repository is checkout to
 # a given target directory.
-sub set_destdir(@$$) {
+sub set_destdir($$@) {
     my ($repo_type, $destdir, @cmd) = @_;
     $destdir =~ s|^-d\s*||;
 

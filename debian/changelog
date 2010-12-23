@@ -9,6 +9,7 @@ devscripts (2.10.70) UNRELEASED; urgency=low
     #604740)
   * uscan: Update documentation to use “.+” instead of “.*” in groupings.
     Thanks to Ben Finney for the patch.  (Closes: #606060)
+  * debcheckout: Use the correct prototype for set_destdir.  (Closes: #606053)
 
  -- James Vega <jamessan@debian.org>  Thu, 02 Dec 2010 20:27:34 -0500
 
