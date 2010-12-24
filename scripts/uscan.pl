@@ -1418,17 +1418,23 @@ EOF
     } elsif ($dehs) {
 	my $msg = "Successfully downloaded updated package $newfile_base";
 	if ($newfile_base =~ /\.(tar\.gz|tgz)$/) {
+	    $dehs_tags{'target'} = "${pkg}_${newversion}.orig.tar.gz";
 	    if ($symlink eq 'symlink') {
 		$msg .= " and symlinked ${pkg}_${newversion}.orig.tar.gz to it";
 	    } elsif ($symlink eq 'rename') {
 		$msg .= " and renamed it as ${pkg}_${newversion}.orig.tar.gz";
+	    } else {
+		$dehs_tags{'target'} = $newfile_base;
 	    }
 	}
 	elsif ($newfile_base =~ /\.(tar\.bz2|tbz2?)$/) {
+	    $dehs_tags{'target'} = "${pkg}_${newversion}.orig.tar.bz2";
 	    if ($symlink eq 'symlink') {
 		$msg .= " and symlinked ${pkg}_${newversion}.orig.tar.bz2 to it";
 	    } elsif ($symlink eq 'rename') {
 		$msg .= " and renamed it as ${pkg}_${newversion}.orig.tar.bz2";
+	    } else {
+		$dehs_tags{'target'} = $newfile_base;
 	    }
 	}
 	dehs_msg($msg);
@@ -1745,7 +1751,7 @@ sub dehs_output ()
 
     for my $tag (qw(package debian-uversion debian-mangled-uversion
 		    upstream-version upstream-url
-		    status messages warnings errors)) {
+		    status target messages warnings errors)) {
 	if (exists $dehs_tags{$tag}) {
 	    if (ref $dehs_tags{$tag} eq "ARRAY") {
 		foreach my $entry (@{$dehs_tags{$tag}}) {
