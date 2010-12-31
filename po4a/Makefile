@@ -1,17 +1,22 @@
 include ../Makefile.common
 GEN_TR_MAN1S := $(patsubst %.1,fr/%.fr.1,$(GEN_MAN1S))
 
-all: translate $(GEN_TR_MAN1S)
+all: translate
+# GEN_TR_MAN1S needs translate finished, serialize the calls
+	@$(MAKE) -C . transform
+transform: $(GEN_TR_MAN1S)
 
-translate:
-	$(MAKE) -C ../scripts/ devscripts.1
+translate: ../scripts/devscripts.1
 	po4a --previous --no-backups devscripts-po4a.conf
 	touch translate
-clean:
-# The po4a cleanup fails if devscripts.1 has already been cleaned up
-	$(MAKE) -C ../scripts/ devscripts.1
+
+clean: ../scripts/devscripts.1
 	po4a --previous --rm-translations --no-backups devscripts-po4a.conf
-	rm -f $(GEN_TR_MAN1S) translate ../scripts/devscripts.1
+	rm -f $(GEN_TR_MAN1S) translate
+
+../scripts/devscripts.1:
+	# po4a translate and clean need ../scripts/devscripts.1, rebuild it
+	$(MAKE) -C ../scripts/ devscripts.1
 
 fr/%.fr.1: fr/%.fr.pl translate
 	podchecker $<

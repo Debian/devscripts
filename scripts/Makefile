@@ -21,6 +21,10 @@ BIN_LIBDIR = /usr/lib/devscripts
 
 all: $(SCRIPTS) $(GEN_MAN1S) $(LIBS) $(CWRAPPERS) $(COMPLETION)
 
+$(VERSION_FILE):
+	@echo "You need to 'make' the toplevel directory first"
+	@false
+
 %: %.sh
 
 %.tmp: %.sh $(VERSION_FILE)
@@ -40,9 +44,13 @@ all: $(SCRIPTS) $(GEN_MAN1S) $(LIBS) $(CWRAPPERS) $(COMPLETION)
 	xsltproc --nonet -o $@ \
 	  /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl $<
 
+# There is a slight chance this gets called twice, once here from here and once
+# from ../po4a/Makefile. Treat files with care.
+PID := $(shell echo $$$$-$$PPID)
 devscripts.1: devscripts.1.in
-	cat $+ > $@
-	perl ../debian/genmanpage.pl >> $@
+	cat $+ > $@.$(PID)
+	perl ../debian/genmanpage.pl >> $@.$(PID)
+	mv $@.$(PID) $@
 
 devscripts.%: %.bash_completion
 	cp $< $@

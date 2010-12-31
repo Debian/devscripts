@@ -16,6 +16,7 @@ devscripts (2.10.70) UNRELEASED; urgency=low
   * debcheckout: For debian-dir-only repositories, also retrieve the source
     package, unpack it, and move the missing files over. Add a new option
     --source (DEBCHECKOUT_SOURCE) to control this behavior. (Closes: #535767)
+  * Makefiles: Fix parallelization for use with make -j N.
 
  -- James Vega <jamessan@debian.org>  Thu, 02 Dec 2010 20:27:34 -0500
 
