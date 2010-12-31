@@ -2,6 +2,7 @@
 #
 # debcheckout: checkout the development repository of a Debian package
 # Copyright (C) 2007-2009  Stefano Zacchiroli <zack@debian.org>
+# Copyright (C) 2010  Christoph Berg <myon@debian.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -239,6 +240,7 @@ my @files = ();	  # files to checkout
 my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
 my %config_vars = (
     'DEBCHECKOUT_AUTH_URLS' => '',
+    'DEBCHECKOUT_SOURCE' => 'auto',
     );
 my %config_default = %config_vars;
 my $shell_cmd;
@@ -942,7 +944,7 @@ sub main() {
     my $user = "";	  # login name (authenticated mode only)
     my $browse_url = "";    # online browsable repository URL
     my $git_track = "";     # list of remote GIT branches to --track
-    my $unpack_source = 'auto'; # retrieve and unpack orig.tar.gz
+    my $unpack_source = $config_vars{DEBCHECKOUT_SOURCE}; # retrieve and unpack orig.tar.gz
     GetOptions(
 	"auth|a" => \$auth,
 	"help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },

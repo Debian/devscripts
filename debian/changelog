@@ -1,5 +1,6 @@
 devscripts (2.10.70) UNRELEASED; urgency=low
 
+  [ James Vega ]
   * debuild:
     + Properly quote shell variable when parsing options.  (Closes: #556248)
     + Don't treat “-nc” as implying binary only build.  (Closes: #607303)
@@ -10,6 +11,11 @@ devscripts (2.10.70) UNRELEASED; urgency=low
   * uscan: Update documentation to use “.+” instead of “.*” in groupings.
     Thanks to Ben Finney for the patch.  (Closes: #606060)
   * debcheckout: Use the correct prototype for set_destdir.  (Closes: #606053)
+
+  [ Christoph Berg ]
+  * debcheckout: For debian-dir-only repositories, also retrieve the source
+    package, unpack it, and move the missing files over. Add a new option
+    --source (DEBCHECKOUT_SOURCE) to control this behavior. (Closes: #535767)
 
  -- James Vega <jamessan@debian.org>  Thu, 02 Dec 2010 20:27:34 -0500
 
