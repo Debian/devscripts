@@ -2,6 +2,7 @@
 #
 # debcheckout: checkout the development repository of a Debian package
 # Copyright (C) 2007-2009  Stefano Zacchiroli <zack@debian.org>
+# Copyright (C) 2010  Christoph Berg <myon@debian.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -119,6 +120,35 @@ Specify that the named file should be extracted from the repository and placed
 in the destination directory. May be used more than once to extract mutliple
 files.
 
+=item B<--source=never|auto|download-only|always>
+
+Some packages only place the debian directory in version control.
+B<debcheckout> can retrieve the remaining parts of the source using B<apt-get
+source> and move the files into the checkout.
+
+=over
+
+=item B<never>
+
+Only use the repository.
+
+=item B<auto> (default)
+
+If the repository only contains the debian directory, retrieve the source
+package, unpack it, and also place the .orig.tar.gz file into the current
+directory. Else, do nothing.
+
+=item B<download-only>
+
+Always retrieve the .orig.tar.gz file, but do not unpack it.
+
+=item B<always>
+
+Always retrieve the .orig.tar.gz file, and if the repository only contains the
+debian directory, unpack it.
+
+=back
+
 =back
 
 B<VCS-SPECIFIC OPTIONS>
@@ -210,6 +240,7 @@ my @files = ();	  # files to checkout
 my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
 my %config_vars = (
     'DEBCHECKOUT_AUTH_URLS' => '',
+    'DEBCHECKOUT_SOURCE' => 'auto',
     );
 my %config_default = %config_vars;
 my $shell_cmd;
@@ -271,12 +302,13 @@ sub recurs_mkdir {
 }
 
 # Find the repository URL (and type) for a given package name, parsing Vcs-*
-# fields.
+# fields.  Returns (version, type, url, origtgz_name) tuple.
 sub find_repo($$) {
     my ($pkg, $desired_ver) = @_;
-    my @repo = (0, "");
+    my @repo = ("", 0, "", "");
     my $found = 0;
     my $version = "";
+    my $origtgz_name = "";
     my $type = "";
     my $url = "";
     my @repos = ();
@@ -290,13 +322,16 @@ sub find_repo($$) {
 	    ($type, $url) = (lc($2), $3);
 	} elsif ($line =~ /^Version:\s*(.*)$/i) {
 	    $version = $1;
+	} elsif ($line =~ /^ [a-f0-9]{32} \d+ (\S+)\.orig\.tar\.gz$/) {
+	    $origtgz_name = $1;
 	} elsif ($line =~ /^$/) {
-	    push (@repos, [$version, $type, $url])
+	    push (@repos, [$version, $type, $url, $origtgz_name])
 		if ($version and $type and $url and
 		    ($desired_ver eq "" or $desired_ver eq $version));
 	    $version = "";
 	    $type = "";
 	    $url = "";
+	    $origtgz_name = "";
 	}
     }
     close(APT);
@@ -304,7 +339,7 @@ sub find_repo($$) {
 
     if (@repos) {
 	@repos = Devscripts::Versort::versort(@repos);
-	@repo = ($repos[0][1], $repos[0][2])
+	@repo = @{$repos[0]};
     }
     return @repo;
 }
@@ -746,6 +781,81 @@ sub checkout_files($$$$) {
     return 0;
 }
 
+# download source package, unpack it, and merge its contents into the checkout
+sub unpack_source($$$$) {
+    my ($pkg, $version, $origtgz_name, $unpack_source) = @_;
+
+    return 1 if ($unpack_source eq 'never');
+    return 1 if (defined $origtgz_name and $origtgz_name eq ''); # only really relevant with URL on command line
+
+    # is this a debian-dir-only repository?
+    unless (-d $pkg) {
+	print STDERR "debcheckout did not create the $pkg directory - this is probably a bug\n";
+	return 0;
+    }
+    my @repo_files = glob "$pkg/*";
+    my $debian_only = 0;
+    if (@repo_files == 1 and $repo_files[0] eq "$pkg/debian") {
+	$debian_only = 1;
+    }
+
+    return 1 if ($unpack_source eq 'auto' and not $debian_only);
+    if ($unpack_source ne 'download-only' and $debian_only) {
+	print "repository only contains the debian directory, using apt-get source\n";
+    }
+
+    use File::Temp;
+    my $tmpdir = File::Temp->newdir(DIR => ".");
+
+    # unpack
+    my $cmd = "cd $tmpdir && apt-get source ";
+    $cmd .= "--download-only " if ($unpack_source eq 'download-only' or not $debian_only);
+    $cmd .= $pkg;
+    $cmd .= "=$version" if ($version);
+    system($cmd);
+    if ($? >> 8) {
+	print STDERR "apt-get source failed\n";
+	return 0;
+    }
+
+    # put orig.tar.gz in place
+    my @origtgz = glob "$tmpdir/${pkg}_*.orig.tar.gz";
+    if (@origtgz) {
+	my $base = $origtgz[0];
+	$base =~ s!.*/!!;
+	rename $origtgz[0], $base or die "rename $origtgz[0] $base: $!";
+    }
+
+    return 1 if ($unpack_source eq 'download-only' or not $debian_only);
+
+    # figure out which directory was created
+    my @dirs = glob "$tmpdir/$pkg-*/";
+    unless (@dirs) {
+	print STDERR "apt-get source did not create any $tmpdir/$pkg-* directory\n";
+	return 0;
+    }
+    my $directory = $dirs[0];
+    chop $directory;
+
+    # move all files over, except the debian directory
+    opendir DIR, $directory or die "opendir $directory: $!";
+    foreach my $file (readdir DIR) {
+	if ($file eq 'debian') {
+	    system ('rm', '-rf', "$directory/$file");
+	} elsif ($file eq '.' or $file eq '..') {
+	    next;
+	} else {
+	    rename "$directory/$file", "$pkg/$file" or
+		die "rename $directory/$file $pkg/$file: $!";
+	}
+    }
+    closedir DIR;
+    rmdir $directory or die "rmdir $directory: $!";
+
+    # $tmpdir is automatically removed
+    return 1;
+}
+
 # Print information about a repository and quit.
 sub print_repo($$) {
     my ($repo_type, $repo_url) = @_;
@@ -826,6 +936,7 @@ sub main() {
     my $destdir = "";	  # destination directory
     my $pkg = "";		  # package name
     my $version = "";       # package version
+    my $origtgz_name = undef; # orig.tar.gz name (or "" when none; undef means unknown)
     my $print_mode = 0;	  # print only mode
     my $details_mode = 0;	  # details only mode
     my $repo_type = "svn";  # default repo typo, overridden by '-t'
@@ -833,6 +944,7 @@ sub main() {
     my $user = "";	  # login name (authenticated mode only)
     my $browse_url = "";    # online browsable repository URL
     my $git_track = "";     # list of remote GIT branches to --track
+    my $unpack_source = $config_vars{DEBCHECKOUT_SOURCE}; # retrieve and unpack orig.tar.gz
     GetOptions(
 	"auth|a" => \$auth,
 	"help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },
@@ -842,6 +954,7 @@ sub main() {
 	"user|u=s" => \$user,
 	"file|f=s" => sub { push(@files, $_[1]); },
 	"git-track=s" => \$git_track,
+	"source=s" => \$unpack_source,
 	) or pod2usage({-exitval => 3});
     pod2usage({-exitval => 3}) if ($#ARGV < 0 or $#ARGV > 1);
     pod2usage({-exitval => 3,
@@ -849,6 +962,10 @@ sub main() {
 		   "-d and -p are mutually exclusive.\n", })
 	if ($print_mode and $details_mode);
     my $dont_act = 1 if ($print_mode or $details_mode);
+    pod2usage({-exitval => 3,
+	       -message =>
+		   "--orig argument must be one of never, auto, download-only, and always\n", })
+	unless ($unpack_source =~ /^(never|auto|download-only|always)$/);
 
     # -u|--user implies -a|--auth
     $auth = 1 if length $user;
@@ -856,12 +973,20 @@ sub main() {
     $destdir = $ARGV[1] if $#ARGV > 0;
     ($pkg, $version) = split(/=/, $ARGV[0]);
     $version ||= "";
+
     if (not is_package($pkg)) {  # repo-url passed on the command line
 	$repo_url = $ARGV[0];
 	$repo_type = guess_repo_type($repo_url, $repo_type);
 	$pkg = ""; $version = "";
+	# guess package from url
+	if ($repo_url =~ m!([a-z0-9.+-]+)/trunk/?!) { # svn
+	    $pkg = $1;
+	} elsif ($repo_url =~ /([a-z0-9.+-]+)(?:\.git)?$/) { # git, and catch-all
+	    $pkg = $1;
+	}
+
     } else {  # package name passed on the command line
-	($repo_type, $repo_url) = find_repo($pkg, $version);
+	($version, $repo_type, $repo_url, $origtgz_name) = find_repo($pkg, $version);
 	unless ($repo_type) {
 	    my $vermsg = "";
 	    $vermsg = ", version $version" if length $version;
@@ -970,8 +1095,21 @@ EOF
 	    }
 	}
     }
+    die "post-checkout action failed\n"
+	if $rc != 0;
+
+    if ($unpack_source) {
+	unless ($pkg) {
+	    print STDERR "could not determine package name for orig.tar.gz retrieval\n";
+	    $rc ||= 1;
+	    exit($rc);
+	}
+	unpack_source($pkg, $version, $origtgz_name, $unpack_source) or $rc = 1;
+    }
+
     exit($rc);
 }
 
 main();
 
+# vim:sw=4

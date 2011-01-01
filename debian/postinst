@@ -689,6 +689,19 @@ EOF
 
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.70
+	then
+	    cat >> /etc/devscripts.conf << EOF
+#### debcheckout option added in 2.10.70
+#
+# For debian-dir-only repositories, also retrieve the source
+# package, unpack it, and move the missing files over.
+# (never auto download-only always)
+# DEBCHECKOUT_SOURCE=auto
+
+EOF
+	fi
     fi
 fi
 

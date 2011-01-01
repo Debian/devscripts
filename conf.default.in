@@ -210,9 +210,14 @@
 #
 # List of space-separated pairs REGEXP/REPLACEMENT_TEXT to define
 # custom rules to enable authenticated mode.
-# See debcheckout(1) for a more precise description of syntax and
-# semantics of this setting.
 # DEBCHECKOUT_AUTH_URLS=''
+#
+# For debian-dir-only repositories, also retrieve the source
+# package, unpack it, and move the missing files over.
+# DEBCHECKOUT_SOURCE=auto
+#
+# See debcheckout(1) for a more precise description of syntax and
+# semantics of these settings.
 
 ##### debclean
 # 
@@ -610,3 +615,4 @@
 ##### wnpp-check
 #
 # No variables currently
+

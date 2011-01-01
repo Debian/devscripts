@@ -35,7 +35,7 @@ install: all install_scripts
 	cp -a $(PERL_MODULES) $(DESTDIR)$(PERLMOD_DIR)
 	cp $(EXAMPLES) $(DESTDIR)$(EXAMPLES_DIR)
 
-make_scripts:
+make_scripts: version
 	$(MAKE) -C scripts/
 	touch $@
 clean_scripts: clean_translated_manpages
