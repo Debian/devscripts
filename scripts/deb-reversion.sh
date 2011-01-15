@@ -128,7 +128,7 @@ fi
 
 make_temp_dir()
 {
-  TMPDIR=$(mktemp -d /tmp/deb-reversion.XXXXXX)
+  TMPDIR=$(mktemp -d --tmpdir deb-reversion.XXXXXX)
   trap "rm -rf $TMPDIR" 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
   mkdir -p ${TMPDIR}/package
   TMPDIR=${TMPDIR}/package

@@ -62,8 +62,8 @@ if [ $# -lt 1 ]; then
 	exit 1
 fi
 
-OUT=`mktemp /tmp/annotate.XXXXXX` || exit 1
-ERR=`mktemp /tmp/annotate.XXXXXX` || exit 1
+OUT=`mktemp --tmpdir annotate.XXXXXX` || exit 1
+ERR=`mktemp --tmpdir annotate.XXXXXX` || exit 1
 
 rm -f $OUT $ERR
 mkfifo $OUT $ERR || exit 1

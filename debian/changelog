@@ -14,6 +14,8 @@ devscripts (2.10.70) UNRELEASED; urgency=low
     + Add “target” element to --dehs' XML, specifying the name of the
       downloaded file.  (Closes: #598514)
   * debcheckout: Use the correct prototype for set_destdir.  (Closes: #606053)
+  * Use “mktemp --tmpdir” instead of specifying an absolute path under /tmp.
+    (Closes: #610027)
 
   [ Christoph Berg ]
   * debcheckout: For debian-dir-only repositories, also retrieve the source
