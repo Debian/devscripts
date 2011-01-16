@@ -16,6 +16,7 @@ devscripts (2.10.70) UNRELEASED; urgency=low
   * debcheckout: Use the correct prototype for set_destdir.  (Closes: #606053)
   * Use “mktemp --tmpdir” instead of specifying an absolute path under /tmp.
     (Closes: #610027)
+  * Fix a typo in debchange(1).  (Closes: #610192)
 
   [ Christoph Berg ]
   * debcheckout: For debian-dir-only repositories, also retrieve the source

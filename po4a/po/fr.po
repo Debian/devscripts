@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2010-12-23 02:18-0500\n"
+"POT-Creation-Date: 2011-01-16 07:15+0000\n"
 "PO-Revision-Date: 2010-10-05 20:35-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -79,7 +79,7 @@ msgstr "DEBIAN"
 #: ../scripts/cvs-debc.1:2 ../scripts/cvs-debi.1:2
 #: ../scripts/cvs-debrelease.1:2 ../scripts/cvs-debuild.1:2
 #: ../scripts/dcmd.1:2 ../scripts/dcontrol.pl:199 ../scripts/dd-list.1:18
-#: ../scripts/debc.1:2 ../scripts/debchange.1:2 ../scripts/debcheckout.pl:23
+#: ../scripts/debc.1:2 ../scripts/debchange.1:2 ../scripts/debcheckout.pl:24
 #: ../scripts/debclean.1:2 ../scripts/debcommit.pl:3 ../scripts/debdiff.1:2
 #: ../scripts/debi.1:2 ../scripts/debpkg.1:2 ../scripts/debrelease.1:2
 #: ../scripts/debrsign.1:2 ../scripts/debsign.1:2 ../scripts/debsnap.1:3
@@ -115,7 +115,7 @@ msgstr ""
 #: ../scripts/cvs-debc.1:4 ../scripts/cvs-debi.1:4
 #: ../scripts/cvs-debrelease.1:4 ../scripts/cvs-debuild.1:4
 #: ../scripts/dcmd.1:4 ../scripts/dcontrol.pl:203 ../scripts/dd-list.1:21
-#: ../scripts/debc.1:4 ../scripts/debchange.1:4 ../scripts/debcheckout.pl:27
+#: ../scripts/debc.1:4 ../scripts/debchange.1:4 ../scripts/debcheckout.pl:28
 #: ../scripts/debclean.1:4 ../scripts/debcommit.pl:7 ../scripts/debdiff.1:4
 #: ../scripts/debi.1:4 ../scripts/debpkg.1:4 ../scripts/debrelease.1:4
 #: ../scripts/debrsign.1:4 ../scripts/debsign.1:4 ../scripts/debsnap.1:6
@@ -148,7 +148,7 @@ msgstr "B<annotate-output> [I<options>] I<programme> [I<paramètres> ...]"
 #: ../scripts/cvs-debc.1:6 ../scripts/cvs-debi.1:6
 #: ../scripts/cvs-debrelease.1:7 ../scripts/cvs-debuild.1:7
 #: ../scripts/dcmd.1:7 ../scripts/dcontrol.pl:211 ../scripts/dd-list.1:25
-#: ../scripts/debc.1:6 ../scripts/debchange.1:8 ../scripts/debcheckout.pl:39
+#: ../scripts/debc.1:6 ../scripts/debchange.1:8 ../scripts/debcheckout.pl:40
 #: ../scripts/debclean.1:6 ../scripts/debcommit.pl:11 ../scripts/debdiff.1:15
 #: ../scripts/debi.1:6 ../scripts/debpkg.1:6 ../scripts/debrelease.1:6
 #: ../scripts/deb-reversion.dbk:82 ../scripts/debrsign.1:7
@@ -189,7 +189,7 @@ msgstr ""
 #: ../scripts/cvs-debrelease.1:21 ../scripts/cvs-debuild.1:32
 #: ../scripts/dcmd.1:16 ../scripts/dcontrol.pl:245 ../scripts/dd-list.1:57
 #: ../scripts/debc.1:64 ../scripts/debchange.1:146
-#: ../scripts/debcheckout.pl:67 ../scripts/debclean.1:60
+#: ../scripts/debcheckout.pl:68 ../scripts/debclean.1:60
 #: ../scripts/debcommit.pl:19 ../scripts/debdiff.1:50 ../scripts/debi.1:65
 #: ../scripts/debrelease.1:56 ../scripts/deb-reversion.dbk:128
 #: ../scripts/debrsign.1:30 ../scripts/debsign.1:39 ../scripts/debsnap.1:26
@@ -226,7 +226,7 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/annotate-output.1:16 ../scripts/dcontrol.pl:257
-#: ../scripts/debcheckout.pl:92 ../scripts/debsnap.1:47 ../scripts/dget.pl:585
+#: ../scripts/debcheckout.pl:93 ../scripts/debsnap.1:47 ../scripts/dget.pl:585
 #: ../scripts/dpkg-depcheck.1:96 ../scripts/getbuildlog.1:25
 #: ../scripts/mk-build-deps.pl:79 ../scripts/rmadison.pl:226
 #, no-wrap
@@ -320,7 +320,7 @@ msgstr ""
 #: ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62
 #: ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53
 #: ../scripts/dcmd.1:98 ../scripts/dcontrol.pl:290 ../scripts/debc.1:115
-#: ../scripts/debchange.1:435 ../scripts/debcheckout.pl:181
+#: ../scripts/debchange.1:435 ../scripts/debcheckout.pl:211
 #: ../scripts/debclean.1:107 ../scripts/debcommit.pl:845
 #: ../scripts/debdiff.1:215 ../scripts/debi.1:122 ../scripts/debrelease.1:132
 #: ../scripts/deb-reversion.dbk:247 ../scripts/debrsign.1:66
@@ -367,7 +367,7 @@ msgstr ""
 #: ../scripts/cvs-debrelease.1:69 ../scripts/cvs-debuild.1:59
 #: ../scripts/dcmd.1:101 ../scripts/dcontrol.pl:283 ../scripts/dd-list.1:92
 #: ../scripts/debc.1:120 ../scripts/debchange.1:442
-#: ../scripts/debcheckout.pl:186 ../scripts/debclean.1:111
+#: ../scripts/debcheckout.pl:216 ../scripts/debclean.1:111
 #: ../scripts/debcommit.pl:841 ../scripts/debdiff.1:222 ../scripts/debi.1:126
 #: ../scripts/debpkg.1:23 ../scripts/debrelease.1:137
 #: ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:71
@@ -2731,7 +2731,7 @@ msgstr ""
 
 #. type: SH
 #: ../scripts/bts.pl:3966 ../scripts/dcontrol.pl:267 ../scripts/debc.1:92
-#: ../scripts/debchange.1:362 ../scripts/debcheckout.pl:142
+#: ../scripts/debchange.1:362 ../scripts/debcheckout.pl:172
 #: ../scripts/debclean.1:90 ../scripts/debcommit.pl:97
 #: ../scripts/debdiff.1:167 ../scripts/debi.1:99 ../scripts/debrelease.1:105
 #: ../scripts/debrsign.1:57 ../scripts/debsign.1:111 ../scripts/debuild.1:290
@@ -6268,11 +6268,10 @@ msgstr ""
 msgid "B<--no-force-save-on-release>"
 msgstr "B<--no-force-save-on-release>"
 
-# NOTE: made be => may be
 #. type: Plain text
 #: ../scripts/debchange.1:185
 msgid ""
-"Do not do so. Note that a dummy changelog entry made be supplied in order to "
+"Do not do so. Note that a dummy changelog entry may be supplied in order to "
 "achieve the same effect - e.g. B<debchange --release \"\">.  The entry will "
 "not be added to the changelog but its presence will suppress the editor."
 msgstr ""
@@ -7049,27 +7048,27 @@ msgstr ""
 "Julian Gilbey E<lt>jdg@debian.orgE<gt>."
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:25
+#: ../scripts/debcheckout.pl:26
 msgid "debcheckout - checkout the development repository of a Debian package"
 msgstr "debcheckout - Récupérer le contenu du dépôt d'un paquet Debian"
 
 #. type: =item
-#: ../scripts/debcheckout.pl:31
+#: ../scripts/debcheckout.pl:32
 msgid "B<debcheckout> [I<OPTIONS>] I<PACKAGE> [I<DESTDIR>]"
 msgstr "B<debcheckout> [I<OPTIONS>] I<PAQUET> [I<REP_DESTINATION>]"
 
 #. type: =item
-#: ../scripts/debcheckout.pl:33
+#: ../scripts/debcheckout.pl:34
 msgid "B<debcheckout> [I<OPTIONS>] I<REPOSITORY_URL> [I<DESTDIR>]"
 msgstr "B<debcheckout> [I<OPTIONS>] I<REP_DÉPÔT> [I<REP_DESTINATION>]"
 
 #. type: =item
-#: ../scripts/debcheckout.pl:35
+#: ../scripts/debcheckout.pl:36
 msgid "B<debcheckout> B<--help>"
 msgstr "B<debcheckout> B<--help>"
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:41
+#: ../scripts/debcheckout.pl:42
 msgid ""
 "B<debcheckout> retrieves the information about the Version Control System "
 "used to maintain a given Debian package (the I<PACKAGE> argument), and then "
@@ -7085,7 +7084,7 @@ msgstr ""
 "I<REP_DESTINATION>."
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:47
+#: ../scripts/debcheckout.pl:48
 msgid ""
 "The information about where the repository is available is expected to be "
 "found in B<Vcs-*> fields available in the source package record. For "
@@ -7099,7 +7098,7 @@ msgstr ""
 "vim/vim.git> que vous pouvez voir dans la sortie de C<apt-cache showsrc vim>."
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:53
+#: ../scripts/debcheckout.pl:54
 msgid ""
 "If more than one source package record containing B<Vcs-*> fields is "
 "available, B<debcheckout> will select the record with the highest version "
@@ -7113,7 +7112,7 @@ msgstr ""
 "nom de paquet."
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:58
+#: ../scripts/debcheckout.pl:59
 msgid ""
 "If you already know the URL of a given repository you can invoke debcheckout "
 "directly on it, but you will probably need to pass the appropriate B<-t> "
@@ -7128,7 +7127,7 @@ msgstr ""
 "pouvez remplacer le type deviné en utilisant B<-t>."
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:64
+#: ../scripts/debcheckout.pl:65
 msgid ""
 "The currently supported version control systems are: arch, bzr, cvs, darcs, "
 "git, hg, svn."
@@ -7137,17 +7136,17 @@ msgstr ""
 "bzr, cvs, darcs, git, hg, svn."
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:69
+#: ../scripts/debcheckout.pl:70
 msgid "B<GENERAL OPTIONS>"
 msgstr "B<OPTIONS GÉNÉRALES>"
 
 #. type: =item
-#: ../scripts/debcheckout.pl:73
+#: ../scripts/debcheckout.pl:74
 msgid "B<-a>, B<--auth>"
 msgstr "B<-a>, B<--auth>"
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:75
+#: ../scripts/debcheckout.pl:76
 msgid ""
 "Work in authenticated mode; this means that for known repositories (mainly "
 "those hosted on S<http://alioth.debian.org>) URL rewriting is attempted "
@@ -7165,12 +7164,12 @@ msgstr ""
 "debian.org/...>"
 
 #. type: =item
-#: ../scripts/debcheckout.pl:82
+#: ../scripts/debcheckout.pl:83
 msgid "B<-d>, B<--details>"
 msgstr "B<-d>, B<--details>"
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:84
+#: ../scripts/debcheckout.pl:85
 msgid ""
 "Only print a list of detailed information about the package repository, "
 "without checking it out; the output format is a list of fields, each field "
@@ -7185,24 +7184,24 @@ msgstr ""
 "réseau vers le dépôt distant."
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:90
+#: ../scripts/debcheckout.pl:91
 msgid "Also see B<-p>. This option and B<-p> are mutually exclusive."
 msgstr ""
 "Consultez également B<-p>. Cette option et l'option B<-p> sont mutuellement "
 "exclusives."
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:94
+#: ../scripts/debcheckout.pl:95
 msgid "Print a detailed help message and exit."
 msgstr "Affiche un message d'aide détaillé et quitte."
 
 #. type: =item
-#: ../scripts/debcheckout.pl:96
+#: ../scripts/debcheckout.pl:97
 msgid "B<-p>, B<--print>"
 msgstr "B<-p>, B<--print>"
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:98
+#: ../scripts/debcheckout.pl:99
 msgid ""
 "Only print a summary about package repository information, without checking "
 "it out; the output format is TAB-separated with two fields: repository type, "
@@ -7216,19 +7215,19 @@ msgstr ""
 "qu'elles sont connues du cache d'APT."
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:103
+#: ../scripts/debcheckout.pl:104
 msgid "Also see B<-d>. This option and B<-d> are mutually exclusive."
 msgstr ""
 "Consultez également B<-d>. Cette option et l'option B<-d> sont mutuellement "
 "exclusives."
 
 #. type: =item
-#: ../scripts/debcheckout.pl:105
+#: ../scripts/debcheckout.pl:106
 msgid "B<-t> I<TYPE>, B<--type> I<TYPE>"
 msgstr "B<-t> I<TYPE>, B<--type> I<TYPE>"
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:107
+#: ../scripts/debcheckout.pl:108
 msgid ""
 "Override the repository type (which defaults to some heuristics based on the "
 "URL or, in case of heuristic failure, the fallback \"svn\"); should be one "
@@ -7239,12 +7238,12 @@ msgstr ""
 "être un des types de dépôt gérés."
 
 #. type: =item
-#: ../scripts/debcheckout.pl:111
+#: ../scripts/debcheckout.pl:112
 msgid "B<-u> I<USERNAME>, B<--user> I<USERNAME>"
 msgstr "B<-u> I<NOM_UTILISATEUR>, B<--user> I<NOM_UTILISATEUR>"
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:113
+#: ../scripts/debcheckout.pl:114
 msgid ""
 "Specify the login name to be used in authenticated mode (see B<-a>). This "
 "option implies B<-a>: you don't need to specify both."
@@ -7254,12 +7253,12 @@ msgstr ""
 "les deux."
 
 #. type: =item
-#: ../scripts/debcheckout.pl:116
+#: ../scripts/debcheckout.pl:117
 msgid "B<-f>, B<--file>"
 msgstr "B<-f>, B<--file>"
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:118
+#: ../scripts/debcheckout.pl:119
 msgid ""
 "Specify that the named file should be extracted from the repository and "
 "placed in the destination directory. May be used more than once to extract "
@@ -7269,23 +7268,85 @@ msgstr ""
 "le répertoire de destination. Elle peut être utilisée plus d'une fois pour "
 "extraire plusieurs fichiers."
 
+#. type: =item
+#: ../scripts/debcheckout.pl:123
+msgid "B<--source=never|auto|download-only|always>"
+msgstr ""
+
 #. type: textblock
-#: ../scripts/debcheckout.pl:124
+#: ../scripts/debcheckout.pl:125
+msgid ""
+"Some packages only place the debian directory in version control.  "
+"B<debcheckout> can retrieve the remaining parts of the source using B<apt-"
+"get source> and move the files into the checkout."
+msgstr ""
+
+#. type: =item
+#: ../scripts/debcheckout.pl:131
+#, fuzzy
+#| msgid "B<--forever>"
+msgid "B<never>"
+msgstr "B<--forever>"
+
+#. type: textblock
+#: ../scripts/debcheckout.pl:133
+msgid "Only use the repository."
+msgstr ""
+
+#. type: =item
+#: ../scripts/debcheckout.pl:135
+msgid "B<auto> (default)"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/debcheckout.pl:137
+msgid ""
+"If the repository only contains the debian directory, retrieve the source "
+"package, unpack it, and also place the .orig.tar.gz file into the current "
+"directory. Else, do nothing."
+msgstr ""
+
+#. type: =item
+#: ../scripts/debcheckout.pl:141
+#, fuzzy
+#| msgid "B<-d>, B<--download-only>"
+msgid "B<download-only>"
+msgstr "B<-d>, B<--download-only>"
+
+#. type: textblock
+#: ../scripts/debcheckout.pl:143
+msgid "Always retrieve the .orig.tar.gz file, but do not unpack it."
+msgstr ""
+
+#. type: =item
+#: ../scripts/debcheckout.pl:145
+msgid "B<always>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/debcheckout.pl:147
+msgid ""
+"Always retrieve the .orig.tar.gz file, and if the repository only contains "
+"the debian directory, unpack it."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/debcheckout.pl:154
 msgid "B<VCS-SPECIFIC OPTIONS>"
 msgstr "B<VCS-SPECIFIC OPTIONS>"
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:126
+#: ../scripts/debcheckout.pl:156
 msgid "I<GIT-SPECIFIC OPTIONS>"
 msgstr "I<GIT-SPECIFIC OPTIONS>"
 
 #. type: =item
-#: ../scripts/debcheckout.pl:130
+#: ../scripts/debcheckout.pl:160
 msgid "B<--git-track> I<BRANCHES>"
 msgstr "B<--git-track> I<BRANCHES>"
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:132
+#: ../scripts/debcheckout.pl:162
 msgid ""
 "Specify a list of remote branches which will be set up for tracking (as in "
 "S<git branch --track>, see git-branch(1)) after the remote GIT repository "
@@ -7298,7 +7359,7 @@ msgstr ""
 "séparés par des espaces."
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:137
+#: ../scripts/debcheckout.pl:167
 msgid ""
 "As a shorthand, the string \"*\" can be given to require tracking of all "
 "remote branches."
@@ -7308,7 +7369,7 @@ msgstr ""
 
 # NOTE: presque identique
 #. type: textblock
-#: ../scripts/debcheckout.pl:144 ../scripts/rmadison.pl:268
+#: ../scripts/debcheckout.pl:174 ../scripts/rmadison.pl:268
 msgid ""
 "The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables. Command "
@@ -7324,12 +7385,12 @@ msgstr ""
 "cette fin. Les variables actuellement reconnues sont :"
 
 #. type: =item
-#: ../scripts/debcheckout.pl:152
+#: ../scripts/debcheckout.pl:182
 msgid "B<DEBCHECKOUT_AUTH_URLS>"
 msgstr "B<DEBCHECKOUT_AUTH_URLS>"
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:154
+#: ../scripts/debcheckout.pl:184
 msgid ""
 "This variable should be a space separated list of Perl regular expressions "
 "and replacement texts, which must come in pairs: REGEXP TEXT REGEXP TEXT ... "
@@ -7345,7 +7406,7 @@ msgstr ""
 "échoués."
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:160
+#: ../scripts/debcheckout.pl:190
 msgid ""
 "References to matching substrings in the replacement texts are allowed as "
 "usual in Perl by the means of $1, $2, ... and so on."
@@ -7354,7 +7415,7 @@ msgstr ""
 "remplacement comme d'habitude avec Perl en utilisant $1, $2, ..."
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:163
+#: ../scripts/debcheckout.pl:193
 msgid ""
 "This setting can be used to enable authenticated mode for most repositories "
 "out there.  Note that the Debian repositories on S<alioth.debian.org> (S<"
@@ -7365,13 +7426,13 @@ msgstr ""
 "$vcs.debian.org>) sont implicitement définis."
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:167
+#: ../scripts/debcheckout.pl:197
 msgid "Here is a sample snippet suitable for the configuration files:"
 msgstr ""
 "Voici un bout d'exemple qui conviendra pour les fichiers de configuration :"
 
 #. type: verbatim
-#: ../scripts/debcheckout.pl:169
+#: ../scripts/debcheckout.pl:199
 #, no-wrap
 msgid ""
 " DEBCHECKOUT_AUTH_URLS='\n"
@@ -7387,7 +7448,7 @@ msgstr ""
 "\n"
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:174
+#: ../scripts/debcheckout.pl:204
 msgid ""
 "Note that whitespace is not allowed in either regexps or replacement texts. "
 "Also, given that configuration files are sourced by a shell, you probably "
@@ -7400,7 +7461,7 @@ msgstr ""
 "valeur de cette variable."
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:183
+#: ../scripts/debcheckout.pl:213
 msgid ""
 "apt-cache(8), Section 6.2.5 of the Debian Developer's Reference (for more "
 "information about Vcs-* fields): S<http://www.debian.org/doc/developers-"
@@ -7411,7 +7472,7 @@ msgstr ""
 "reference/best-pkging-practices.html#bpp-vcs>"
 
 #. type: textblock
-#: ../scripts/debcheckout.pl:188
+#: ../scripts/debcheckout.pl:218
 msgid ""
 "debcheckout and this manpage have been written by Stefano Zacchiroli "
 "<zack@debian.org>"
@@ -10561,7 +10622,8 @@ msgid ""
 "dpkg-source is not being called because -b, -B, or -A is used.)"
 msgstr ""
 "S'exécute après le nettoyage du source et avant l'exécution de dpkg-source. "
-"(S'exécute même si dpkg-source n'est pas appelé car -b, -B, ou -A est utilisée.)"
+"(S'exécute même si dpkg-source n'est pas appelé car -b, -B, ou -A est "
+"utilisée.)"
 
 #. type: TP
 #: ../scripts/debuild.1:165
