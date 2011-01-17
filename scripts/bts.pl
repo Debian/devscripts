@@ -1268,19 +1268,18 @@ sub bts_retitle {
     mailbts("retitle $bug to $title", "retitle $bug $title");
 }
 
-=item summary <bug> <messagenum>
+=item summary <bug> [<messagenum>]
 
 Select a message number that should be used as
 the summary of a bug.
+
+If no message number is given, the summary is cleared.
 
 =cut
 
 sub bts_summary {
     my $bug=checkbug(shift) or die "bts summary: change summary of what bug?\n";
     my $msg=shift || '';
-    if (! length $msg) {
-	die "bts summary: set summary of $bug to what message number?\n";
-    }
     mailbts("summary $bug $msg", "summary $bug $msg");
 }
 
