@@ -25,6 +25,10 @@ devscripts (2.10.70) UNRELEASED; urgency=low
     package, unpack it, and move the missing files over. Add a new option
     --source (DEBCHECKOUT_SOURCE) to control this behavior. (Closes: #535767)
   * Makefiles: Fix parallelization for use with make -j N.
+  * rmadison: New configuration variable: RMADISON_ARCHITECTURE.
+    Set the default architecture to use unless overridden by a command line
+    option. To see any packages with a set B<RMADISON_ARCHITECTURE>, use
+    --architecture='*'. By Uli Martens.
 
  -- James Vega <jamessan@debian.org>  Thu, 02 Dec 2010 20:27:34 -0500
 

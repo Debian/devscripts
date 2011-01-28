@@ -1,7 +1,8 @@
 #!/usr/bin/perl -w
 # vim:sw=4:sta:
 
-# Copyright (C) 2006, 2007, 2008 Christoph Berg <myon@debian.org>
+# Copyright (C) 2006-2010 Christoph Berg <myon@debian.org>
+#           (C) 2010 Uli Martens <uli@youam.net>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -34,11 +35,15 @@ BEGIN {
     import URI::Escape;
 }
 
-my $VERSION = '0.3';
+my $VERSION = '0.4';
 
 sub version($) {
     my ($fd) = @_;
-    print $fd "rmadison $VERSION (devscripts ###VERSION###) (C) 2006, 2007 Christoph Berg <myon\@debian.org>\n";
+    print $fd <<EOT;
+rmadison $VERSION (devscripts ###VERSION###)
+(C) 2006-2010 Christoph Berg <myon\@debian.org>
+(C) 2010 Uli Martens <uli\@youam.net>
+EOT
 }
 
 sub usage($$) {
@@ -77,6 +82,7 @@ my %url_map = (
     'udd' => 'http://qa.debian.org/cgi-bin/madison.cgi',
 );
 my $default_url = "debian";
+my $default_arch;
 
 if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     shift;
@@ -102,6 +108,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	    $url_map{lc($1)}=$2;
 	} elsif ($envvar =~ /^RMADISON_DEFAULT_URL=(.*)$/) {
 	    $default_url=$1;
+	} elsif ($envvar =~ /^RMADISON_ARCHITECTURE=(.*)$/) {
+	    $default_arch=$1;
 	}
     }
 }
@@ -157,7 +165,12 @@ if ($params->{greaterorequal} and $params->{greaterthan}) {
 }
 
 my @args;
-push @args, "a=$params->{'architecture'}" if $params->{'architecture'};
+
+if ( $params->{'architecture'} ) {
+    push @args, "a=$params->{'architecture'}";
+} elsif ( $default_arch ) {
+    push @args, "a=$default_arch";
+}
 push @args, "b=$params->{'binary-type'}" if $params->{'binary-type'};
 push @args, "c=$params->{'component'}" if $params->{'component'};
 push @args, "g" if $params->{'greaterorequal'};
@@ -284,6 +297,12 @@ B<RMADISON_URL_MAP_*> variables.
 =item B<RMADISON_DEFAULT_URL>=I<URL>
 
 Set the default URL to use unless overridden by a command line option.
+
+=item B<RMADISON_ARCHITECTURE>=I<ARCH>
+
+Set the default architecture to use unless overridden by a command line option.
+To run an unrestricted query when B<RMADISON_ARCHITECTURE> is set, use
+B<--architecture='*'>.
 
 =back
 

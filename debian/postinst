@@ -700,6 +700,12 @@ EOF
 # (never auto download-only always)
 # DEBCHECKOUT_SOURCE=auto
 
+#### rmadison option added in 2.10.70
+#
+# Default architecture to use if none is specified on the command line.
+# use --architecture='*' to override RMADISON_ARCHITECTURE
+# RMADISON_ARCHITECTURE=source,i386,amd64,all
+
 EOF
 	fi
     fi
