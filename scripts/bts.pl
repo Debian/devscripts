@@ -124,6 +124,7 @@ our (@gTags, @valid_tags, %valid_tags);
            "confirmed", "ipv6", "lfs", "fixed-in-experimental",
            "fixed-upstream", "l10n", "etch", "etch-ignore",
            "lenny", "lenny-ignore", "squeeze", "squeeze-ignore",
+           "wheezy", "wheezy-ignore",
          );
 
 *valid_tags = \@gTags;
