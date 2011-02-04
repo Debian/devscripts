@@ -122,7 +122,7 @@ Options:
          Increment the Debian release number for a team upload
   --bpo
          Increment the Debian release number for a Backports.org upload
-	 to "lenny-backports"
+	 to "squeeze-backports"
   -l, --local <suffix>
          Add a suffix to the Debian version number for a local build
   -b, --force-bad-version
@@ -403,8 +403,8 @@ if (defined $opt_D) {
     $distributor ||= 'Debian';
 
     if ($distributor eq 'Debian') {
-	unless ($opt_D =~ /^(unstable|((old)?stable|testing)(-security)?|experimental|UNRELEASED|(etch|lenny)-volatile|lenny-backports|((oldstable|testing)-)?proposed-updates)$/) {
-	    warn "$progname warning: Recognised distributions are: unstable, testing, stable,\noldstable, experimental, UNRELEASED, {etch,lenny}-volatile, lenny-backports,\n{oldstable-,testing-,}proposed-updates and {testing,stable,oldstable}-security.\nUsing your request anyway.\n";
+	unless ($opt_D =~ /^(unstable|((old)?stable|testing)(-security)?|experimental|UNRELEASED|lenny-volatile|lenny-backports(-sloppy)?|squeeze-backports|((oldstable|testing)-)?proposed-updates)$/) {
+	    warn "$progname warning: Recognised distributions are: unstable, testing, stable,\noldstable, experimental, UNRELEASED, lenny-volatile, lenny-backports{-sloppy,}, squeeze-backports,\n{oldstable-,testing-,}proposed-updates and {testing,stable,oldstable}-security.\nUsing your request anyway.\n";
 	    $warnings++ if not $opt_force_dist;
 	}
     } elsif ($distributor eq 'Ubuntu') {
@@ -506,7 +506,7 @@ my $EMAIL = 'EMAIL';
 my $DISTRIBUTION = 'UNRELEASED';
 my $bpo_dist = '';
 my %bpo_dists = ( 50, 'lenny', 60, 'squeeze' );
-my $latest_bpo_dist = '50';
+my $latest_bpo_dist = '60';
 my $CHANGES = '';
 # Changelog urgency, possibly propogated to NEWS files
 my $CL_URGENCY = '';
