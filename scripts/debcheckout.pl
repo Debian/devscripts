@@ -981,7 +981,9 @@ sub main() {
 	# guess package from url
 	if ($repo_url =~ m!([a-z0-9.+-]+)/trunk/?!) { # svn
 	    $pkg = $1;
-	} elsif ($repo_url =~ /([a-z0-9.+-]+)(?:\.git)?$/) { # git, and catch-all
+	} elsif ($repo_url =~ /([a-z0-9.+-]+)\.git$/) { # git
+	    $pkg = $1;
+	} elsif ($repo_url =~ /([a-z0-9.+-]+)$/) { # catch-all
 	    $pkg = $1;
 	}
 
