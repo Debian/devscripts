@@ -19,6 +19,7 @@ devscripts (2.10.70) UNRELEASED; urgency=low
   * Fix a typo in debchange(1).  (Closes: #610192)
   * bts: Make the message number optional for the “summary” sub-command.  This
     allows clearing an already set summary.  (Closes: #610326)
+  * rmadison: Document udd url shorthand, added in 2.10.62.  (Closes: #589437)
 
   [ Christoph Berg ]
   * debcheckout: For debian-dir-only repositories, also retrieve the source

@@ -259,6 +259,7 @@ use I<URL> for the query. Supported shorthands are
  B<bpo> http://backports.debian.org/cgi-bin/madison.cgi
  B<debug> http://debug.debian.net/cgi-bin/madison.cgi
  B<ubuntu> http://people.canonical.com/~ubuntu-archive/madison.cgi
+ B<udd> http://qa.debian.org/cgi-bin/madison.cgi
 
 See the B<RMADISON_URL_MAP_> variable below for a method to add
 new shorthands.
