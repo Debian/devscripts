@@ -34,15 +34,15 @@ sub get_developers_given_package {
 	open (F, "apt-cache showsrc '$package_name' |");
 	while (<F>) {
 		chomp;
-		if (/^Maintainer: (.*)/) {
+		if (/^Maintainer:\s+(.*)/) {
 			$developer=$1;
 		}
-		elsif (/^Uploaders: (.*)/) {
+		elsif (/^Uploaders:\s+(.*)/) {
 			$uploaders=$1;
 			@uploaders = split /\s*,\s*/, $uploaders;
 			
 		}
-		elsif (/^Package: (.*)/) {
+		elsif (/^Package:\s+(.*)/) {
 			$print_name = $print_binary ? $package_name : $1 ;
 		}
 	}

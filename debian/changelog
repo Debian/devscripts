@@ -22,6 +22,7 @@ devscripts (2.10.70) UNRELEASED; urgency=low
   * rmadison: Document udd url shorthand, added in 2.10.62.  (Closes: #589437)
   * Use appropriate typography for literal vs. replacement text in man pages.
     Thanks to David Prévot for the patch.  (Closes: #600212)
+  * dd-list: Ignore extraneous whitespace.  (Closes: #595251)
 
   [ Christoph Berg ]
   * debcheckout: For debian-dir-only repositories, also retrieve the source
