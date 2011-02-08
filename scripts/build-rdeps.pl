@@ -251,13 +251,12 @@ sub findreversebuilddeps {
 			print STDERR "Ignoring package $depending_package because its not really build depending on $package.\n" if ($opt_debug);
 			next;
 		}
+		print $depending_package;
 		if ($opt_maintainer) {
-			$maintainer_info = "($packages{$depending_package}->{'Maintainer'})";
+			print " ($packages{$depending_package}->{'Maintainer'})";
 		}
-
+		print "\n";
 		$count+=1;
-		print "$depending_package $maintainer_info \n";
-
 	}
 
 	if ($count == 0) {
