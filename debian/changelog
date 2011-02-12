@@ -25,6 +25,10 @@ devscripts (2.10.71) UNRELEASED; urgency=low
     which apt began downloading in newer versions instead of the Release file.
     (Closes: #613941) 
 
+  [ Ron Lee ]
+  * cowpoke: try to rsync source files to the build host.  (Closes: #610072)
+    Thanks to Joachim Breitner for the idea and initial patch.
+
  -- Patrick Schoenfeld <schoenfeld@debian.org>  Fri, 18 Feb 2011 14:10:22 +0100
 
 devscripts (2.10.70) unstable; urgency=low

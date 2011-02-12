@@ -213,6 +213,9 @@ post-build sanity checking.  Upon completion, the build log and the results of
 automated checks will be recorded in the \fBINCOMING_DIR\fP.  If you wish to
 upload signed packages the build machine will also need \fBdput\fP(1) installed
 and configured to use the 'host' alias specified by \fBUPLOAD_QUEUE\fP.
+If \fBrsync\fP(1) is available on both the local and build machine, then it will
+be used to transfer the source package (this may save on some transfers of the
+orig.tar.* when building subsequent debian revisions).
 
 The user executing \fBcowpoke\fP must have ssh access to the build machine as
 the \fBBUILDD_USER\fP.  That user must be able to invoke cowbuilder as root by
