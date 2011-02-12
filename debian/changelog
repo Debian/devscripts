@@ -1,3 +1,11 @@
+devscripts (2.10.71) UNRELEASED; urgency=low
+
+  [ Christoph Berg ]
+  * debcommit (git): Don't treat "no files to commit" as an error when called
+    with --release, otherwise it is not possible to tag after the final build.
+
+ -- Christoph Berg <myon@debian.org>  Sat, 12 Feb 2011 14:26:10 +0100
+
 devscripts (2.10.70) unstable; urgency=low
 
   [ James Vega ]

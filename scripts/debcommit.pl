@@ -520,9 +520,9 @@ sub commit {
 	    : action($prog, "commit", "-m", $message, @files_to_commit);
     }
     elsif ($prog eq 'git') {
-	if (! @files_to_commit && $all) {
+	if (! @files_to_commit && ($all || $release)) {
 	    # check to see if the WC is clean. git-commit would exit
-	    # nonzero, so don't run it.
+	    # nonzero, so don't run it in --all or --release mode.
 	    my $status=`LANG=C git status`;
 	    if ($status=~/nothing to commit \(working directory clean\)/) {
 		    print $status;
