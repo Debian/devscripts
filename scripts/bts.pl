@@ -23,6 +23,19 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+# Use our own subclass of Pod::Text to
+# a) Strip the POD markup before displaying it via "bts help"
+# b) Automatically display the text which is supposed to be replaced by the
+#    user between <>, as per convention.
+package Pod::BTS;
+use strict;
+
+use base qw(Pod::Text);
+
+sub cmd_i { return '<' . $_[2] . '>' }
+
+package main;
+
 =head1 NAME
 
 bts - developers' command line interface to the BTS
@@ -2407,8 +2420,17 @@ EOF
 	next unless $inlist;
 	$insublist = 1 if /^=over [^4]/;
 	$insublist = 0 if /^=back/;
-	print "\t$1\n" if /^=item\s([^\-].*)/ and ! $insublist;
-	last if defined $1 and $1 eq 'help';
+	if (/^=item\sB<([^->].*)>/ and ! $insublist) {
+	    if ($1 eq 'help') {
+		last;
+	    }
+	    # Strip POD markup before displaying and ensure we don't wrap
+	    # longer lines
+	    my $parser = Pod::BTS->new(width => 100);
+	    $parser->no_whining(1);
+	    $parser->output_fh(\*STDOUT);
+	    $parser->parse_string_document($_);
+	}
     }
 }
 
