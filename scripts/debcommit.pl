@@ -336,6 +336,8 @@ if (@files_to_commit && !grep(/$changelog/,@files_to_commit)) {
     push @files_to_commit, $changelog;
 }
 
+# Main program
+
 my $prog=getprog();
 if (! defined $changelog) {
     die "debcommit: Could not find a Debian changelog\n";
@@ -382,6 +384,8 @@ if (not $confirm or confirm($message)) {
     commit($message);
     tag($version) if $release;
 }
+
+# End of code, only subs below
 
 sub getprog {
     if (-d "debian") {
@@ -831,6 +835,7 @@ sub git_repo_has_commits {
     system $command;
     return ($? >> 8 == 0) ? 1 : 0;
 }
+
 =head1 LICENSE
 
 This code is copyright by Joey Hess <joeyh@debian.org>, all rights reserved.
