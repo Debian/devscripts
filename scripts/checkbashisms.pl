@@ -569,6 +569,7 @@ sub init_hashes {
 	$LEADIN . qr'jobs\s' =>  q<jobs>,
 #	$LEADIN . qr'jobs\s+-[^lp]\s' =>  q<'jobs' with option other than -l or -p>,
 	$LEADIN . qr'command\s+-[^p]\s' =>  q<'command' with option other than -p>,
+	$LEADIN . qr'setvar\s' =>  q<setvar 'foo' 'bar' should be eval \$'foo' 'bar'>,
     );
 
     %string_bashisms = (
