@@ -165,8 +165,8 @@ sub get_file {
 	foreach my $path (@dget_path) {
 	    next unless -e "$path/$file";
 
+	    my $fh5 = new IO::File("$path/$file") or next;
 	    my $md5 = Digest::MD5->new;
-	    my $fh5 = new IO::File("$path/$file") or die "$path/$file: $!";
 	    my $md5sum_new = Digest::MD5->new->addfile($fh5)->hexdigest();
 	    close $fh5;
 
