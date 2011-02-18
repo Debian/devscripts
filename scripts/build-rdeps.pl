@@ -99,7 +99,7 @@ my $progname = basename($0);
 my $version = '1.0';
 my $dctrl = "/usr/bin/grep-dctrl";
 my $sources_path = "/var/lib/apt/lists/";
-my $release_pattern = '(.*_dists_(sid|unstable))_Release$';
+my $release_pattern = '(.*_dists_(sid|unstable))_(?:In)*Release$';
 my %seen_origins;
 my @source_files;
 my $opt_debug;
@@ -305,7 +305,7 @@ if ($opt_update) {
 
 if ($opt_distribution) {
 	print STDERR "DEBUG: Setting distribution to $opt_distribution\n" if ($opt_debug);
-	$release_pattern = '(.*_dists_' . $opt_distribution . ')_Release$';
+	$release_pattern = '(.*_dists_' . $opt_distribution . ')_(?:In)*Release$';
 }
 
 # Find sources files

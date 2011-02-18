@@ -11,7 +11,12 @@ devscripts (2.10.71) UNRELEASED; urgency=low
     The local cache should be used when accessible, but not prevent downloads
     when it isn't.  (Closes: #599354)
 
- -- Christoph Berg <myon@debian.org>  Sat, 12 Feb 2011 14:26:10 +0100
+  [ Patrick Schoenfeld ]
+  * build-rdeps: Update release_pattern for the new InRelease release files,
+    which apt began downloading in newer versions instead of the Release file.
+    (Closes: #613941) 
+
+ -- Patrick Schoenfeld <schoenfeld@debian.org>  Fri, 18 Feb 2011 14:10:22 +0100
 
 devscripts (2.10.70) unstable; urgency=low
 
