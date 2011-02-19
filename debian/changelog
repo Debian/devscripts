@@ -13,6 +13,7 @@ devscripts (2.10.71) UNRELEASED; urgency=low
   * dget: Ignore IO::File errors from local cache when a URL is given.
     The local cache should be used when accessible, but not prevent downloads
     when it isn't.  (Closes: #599354)
+  * build-rdeps: Remove hard-coded path for grep-dctrl.
 
   [ Patrick Schoenfeld ]
   * build-rdeps: Update release_pattern for the new InRelease release files,

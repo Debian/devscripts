@@ -97,7 +97,7 @@ use Pod::Usage;
 use Data::Dumper;
 my $progname = basename($0);
 my $version = '1.0';
-my $dctrl = "/usr/bin/grep-dctrl";
+my $dctrl = "grep-dctrl";
 my $sources_path = "/var/lib/apt/lists/";
 my $release_pattern = '(.*_dists_(sid|unstable))_(?:In)*Release$';
 my %seen_origins;
@@ -111,7 +111,7 @@ my $opt_distribution;
 my $opt_origin = 'Debian';
 my @opt_exclude_components;
 
-if (!(-x $dctrl)) {
+if (system('command -v grep-dctrl >/dev/null 2>&1')) {
 	die "$progname: Fatal error. grep-dctrl is not available.\nPlease install the 'dctrl-tools' package.\n";
 }
 
