@@ -5,8 +5,11 @@ devscripts (2.10.71) UNRELEASED; urgency=low
     with --release, otherwise it is not possible to tag after the final build.
 
   [ James Vega ]
-  * bts: Use Pod::Text to remove POD markup before displaying the help.
-    (Closes: #613502)
+  * bts:
+    + Use Pod::Text to remove POD markup before displaying the help.  (Closes:
+      #613502)
+    + Document that whitespace is required around the dot/comma separating
+      command stanzas.  (Closes: #595893)
   * dget: Ignore IO::File errors from local cache when a URL is given.
     The local cache should be used when accessible, but not prevent downloads
     when it isn't.  (Closes: #599354)

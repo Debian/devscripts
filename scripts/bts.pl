@@ -203,8 +203,9 @@ severity #85942 normal" will not be treated as a comment!)
 
 You can specify multiple commands by separating them with a single dot,
 rather like B<update-rc.d>; a single comma may also be used; all the
-commands will then be sent in a single mail. For example (quoting where
-necessary so that B<bts> sees the comment):
+commands will then be sent in a single mail. It is important the dot/comma is
+surrounded by whitespace so it is not mistaken for part of a command.  For
+example (quoting where necessary so that B<bts> sees the comment):
 
  % bts severity 95672 normal , merge 95672 95673 \#they are the same!
 
