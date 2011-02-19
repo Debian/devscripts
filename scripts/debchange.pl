@@ -128,9 +128,9 @@ Options:
   -b, --force-bad-version
          Force a version to be less than the current one (e.g., when
          backporting)
-  --allow-lower-version
+  --allow-lower-version <pattern>
          Allow a version to be less than the current one (e.g., when
-         backporting) if it matches a specified pattern
+         backporting) if it matches the specified pattern
   --force-distribution
          Force the provided distribution to be used, even if it doesn't match
          the list of known distributions
@@ -318,7 +318,7 @@ GetOptions("help|h" => \$opt_help,
 	   "package=s" => \$opt_package,
 	   "v|newversion=s" => \$opt_v,
 	   "b|force-bad-version" => \$opt_b,
-	   "allow-lower-version" => \$opt_allow_lower,
+	   "allow-lower-version=s" => \$opt_allow_lower,
 	   "force-distribution" => \$opt_force_dist,
 	   "d|fromdirname" => \$opt_d,
 	   "p" => \$opt_p,
