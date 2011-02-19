@@ -14,8 +14,11 @@ devscripts (2.10.71) UNRELEASED; urgency=low
     The local cache should be used when accessible, but not prevent downloads
     when it isn't.  (Closes: #599354)
   * build-rdeps: Remove hard-coded path for grep-dctrl.
-  * debchange: Require an argument for the --allow-lower-version option.
-    (Closes: #597675)
+  * debchange:
+    + Require an argument for the --allow-lower-version option.  (Closes:
+      #597675)
+    + Since the entry added by --closes requires editing anyway, require the
+      user to save the changelog for it update the original changelog.
 
   [ Patrick Schoenfeld ]
   * build-rdeps: Update release_pattern for the new InRelease release files,

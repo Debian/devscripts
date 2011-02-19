@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#! /usr/bin/perl
 
 # debchange: update the debian changelog using your favorite visual editor
 # For options, see the usage message below.
@@ -30,6 +30,7 @@
 
 use 5.008;  # We're using PerlIO layers
 use strict;
+use warnings;
 use open ':utf8';  # changelogs are written with UTF-8 encoding
 use filetest 'access';  # use access rather than stat for -w
 # for checking whether user names are valid and making format() behave
@@ -1398,16 +1399,14 @@ if ((!$TEXT and !$EMPTY_TEXT and ! ($opt_create and $opt_empty)) or @closes_text
     system("sensible-editor +$line $changelog_path.dch") == 0 or
 	fatal "Error editing $changelog_path";
 
-    if (! @closes_text) { # so must have a changelog added by hand
-	my $newmtime = (stat("$changelog_path.dch"))[9];
-	defined $newmtime or fatal
-	    "Error getting modification time of temporary $changelog_path: $!";
-	if ($mtime == $newmtime && ! $opt_create &&
-	    (!$opt_r || ($opt_r && $opt_force_save_on_release))) {
+    my $newmtime = (stat("$changelog_path.dch"))[9];
+    defined $newmtime or fatal
+	"Error getting modification time of temporary $changelog_path: $!";
+    if ($mtime == $newmtime && ! $opt_create &&
+	(!$opt_r || ($opt_r && $opt_force_save_on_release))) {
 
-	    warn "$progname: $changelog_path unmodified; exiting.\n";
-	    exit 0;
-	}
+	warn "$progname: $changelog_path unmodified; exiting.\n";
+	exit 0;
     }
 }
 
@@ -1457,21 +1456,23 @@ if ((basename(cwd()) =~ m%^\Q$PACKAGE\E-\Q$UVERSION\E$%) &&
 
 exit 0;
 
-
-# Format for standard Debian changelogs
-format CHANGELOG =
+{
+    no warnings 'uninitialized';
+    # Format for standard Debian changelogs
+    format CHANGELOG =
   * ^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     $CHGLINE
  ~~ ^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     $CHGLINE
 .
-# Format for NEWS files.
-format NEWS =
+    # Format for NEWS files.
+    format NEWS =
   ^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     $CHGLINE
 ~~^<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     $CHGLINE
 .
+}
 
 my $linecount=0;
 sub format_line {
