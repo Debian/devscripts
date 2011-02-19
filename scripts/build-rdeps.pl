@@ -169,7 +169,7 @@ sub test_for_valid_component {
 	return -1;
     }
 
-    print STDERR "DEBUG: Component ($_) may not be excluded.\n" if ($opt_debug);
+    print STDERR "DEBUG: Component ($filebase) may not be excluded.\n" if ($opt_debug);
     return 0;
 }
 
@@ -210,7 +210,7 @@ sub addsources {
     $filename = "${base}_${filename}";
     if (test_for_valid_component($filename) == 0) {
 	push(@source_files, $filename);
-	print STDERR "DEBUG: Added source file: $_\n" if ($opt_debug);
+	print STDERR "DEBUG: Added source file: $filename\n" if ($opt_debug);
     }
 }
 
