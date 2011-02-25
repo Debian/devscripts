@@ -256,11 +256,15 @@ if ($opt_install) {
 
     if($root_cmd) {
         system shellwords($root_cmd), 'dpkg', '--unpack', @deb_files;
+        die("dpkg call failed\n") if ( ($?>>8) != 0 );
         system shellwords($root_cmd), shellwords($install_tool), '-f', 'install';
+        die("install call failed\n") if ( ($?>>8) != 0 );
     }
     else {
         system 'dpkg', '--unpack', @deb_files;
+        die("dpkg call failed\n") if ( ($?>>8) != 0 );
         system shellwords($install_tool), '-f', 'install';
+        die("install call failed\n") if ( ($?>>8) != 0 );
     }
 
     if ($opt_remove) {
