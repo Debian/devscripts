@@ -84,6 +84,11 @@ Show a summary of options.
 
 Show version and copyright information.
 
+=item B<-s>, B<--root-cmd>
+
+Use the specified tool to gain root privileges before installing.
+Ignored if not used with the install switch.
+
 =back
 
 =head1 AUTHOR
@@ -110,6 +115,7 @@ my $opt_remove=0;
 my ($opt_help, $opt_version, $opt_arch, $opt_dep, $opt_indep);
 my $control;
 my $install_tool;
+my $root_cmd;
 my @packages;
 my @deb_files;
 
@@ -153,6 +159,7 @@ GetOptions("help|h" => \$opt_help,
            "arch|a=s" => \$opt_arch,
            "build-dep|B" => \$opt_dep,
            "build-indep|A" => \$opt_indep,
+           "root-cmd|s=s" => \$root_cmd,
            )
     or pod2usage({ -exitval => 1, -verbose => 0 });
 
@@ -247,8 +254,14 @@ if ($opt_install) {
 	push @deb_files, $file;
     }
 
-    system 'dpkg', '--unpack', @deb_files;
-    system shellwords($install_tool), '-f', 'install';
+    if($root_cmd) {
+        system shellwords($root_cmd), 'dpkg', '--unpack', @deb_files;
+        system shellwords($root_cmd), shellwords($install_tool), '-f', 'install';
+    }
+    else {
+        system 'dpkg', '--unpack', @deb_files;
+        system shellwords($install_tool), '-f', 'install';
+    }
 
     if ($opt_remove) {
 	foreach my $file (@deb_files) {
