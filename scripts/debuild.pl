@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#!/usr/bin/perl
 
 # Perl version of Christoph Lameter's build program, renamed debuild.
 # Written by Julian Gilbey, December 1998.
@@ -48,6 +48,7 @@
 # Please file a bug report if this is the case!
 
 use strict;
+use warnings;
 use 5.008;
 use File::Basename;
 use filetest 'access';
@@ -614,8 +615,8 @@ unless ($preserve_env) {
 umask 022;
 
 # Start by duping STDOUT and STDERR
-open OLDOUT, ">&STDOUT" or fatal "can't dup stdout: $!\n";
-open OLDERR, ">&STDERR" or fatal "can't dup stderr: $!\n";
+open OLDOUT, ">&", \*STDOUT or fatal "can't dup stdout: $!\n";
+open OLDERR, ">&", \*STDERR or fatal "can't dup stderr: $!\n";
 
 # Look for the debian changelog
 my $chdir = 0;
@@ -1278,8 +1279,8 @@ EOT
     close STDOUT;
     close STDERR;
     close BUILD;
-    open STDOUT, ">&OLDOUT";
-    open STDERR, ">&OLDERR";
+    open STDOUT, ">&", \*OLDOUT;
+    open STDERR, ">&", \*OLDERR;
     exit 0;
 }
 else {
@@ -1365,8 +1366,8 @@ sub fatal($) {
 	close STDOUT;
 	close STDERR;
 	close BUILD;
-	open STDOUT, ">&OLDOUT";
-	open STDERR, ">&OLDERR";
+	open STDOUT, ">&", \*OLDOUT;
+	open STDERR, ">&", \*OLDERR;
     }
     die $msg;
 }

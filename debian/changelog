@@ -1,3 +1,10 @@
+devscripts (2.10.72) UNRELEASED; urgency=low
+
+  * debuild: Use 3-argument form of open to suppress warnings about unused
+    symbols.  (Closes: #606054)
+
+ -- James Vega <jamessan@debian.org>  Wed, 02 Mar 2011 00:07:34 -0500
+
 devscripts (2.10.71) unstable; urgency=low
 
   [ Christoph Berg ]
