@@ -96,23 +96,23 @@ ignored for this purpose.  The currently recognised variables are:
 
 =item B<LICENSECHECK_VERBOSE>
 
-If this is set to I<yes>, then it is the same as the --verbose command
+If this is set to I<yes>, then it is the same as the B<--verbose> command
 line parameter being used. The default is I<no>.
 
 =item B<LICENSECHECK_PARSELINES>
 
 If this is set to a positive number then the specified number of lines
 at the start of each file will be read whilst attempting to determine
-the license(s) in use.  This is equivalent to the --lines command line
+the license(s) in use.  This is equivalent to the B<--lines> command line
 option.
 
 =back
 
 =head1 LICENSE
 
-This code is copyright by Adam D. Barratt <adam@adam-barratt.org.uk>, 
+This code is copyright by Adam D. Barratt <I<adam@adam-barratt.org.uk>>, 
 all rights reserved; based on a script of the same name from the KDE 
-SDK, which is copyright by <dfaure@kde.org>.
+SDK, which is copyright by <I<dfaure@kde.org>>.
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the GNU 
 General Public License, version 2 or later.

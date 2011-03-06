@@ -46,7 +46,7 @@ will use the source package name from I<debian/control>.
 =item B<-f>, B<--filename=>I<filename>
 
 Read a source package name from I<filename>, which should be a Debian
-package control file or .changes file, and add that package to the list
+package control file or I<.changes> file, and add that package to the list
 of packages to check.
 
 =back
@@ -71,7 +71,7 @@ At least one package examined is involved in a current transition.
 
 =head1 LICENSE
 
-This code is copyright by Adam D. Barratt <adam@adam-barratt.org.uk>,
+This code is copyright by Adam D. Barratt <I<adam@adam-barratt.org.uk>>,
 all rights reserved.
 
 This program comes with ABSOLUTELY NO WARRANTY.
@@ -80,7 +80,7 @@ General Public License, version 2 or later.
 
 =head1 AUTHOR
 
-Adam D. Barratt <adam@adam-barratt.org.uk>
+Adam D. Barratt <I<adam@adam-barratt.org.uk>>
 
 =cut
 

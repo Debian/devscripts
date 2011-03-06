@@ -46,10 +46,10 @@ repository.  By default the repository is checked out to the I<PACKAGE>
 directory; this can be overridden by providing the I<DESTDIR> argument.
 
 The information about where the repository is available is expected to be found
-in B<Vcs-*> fields available in the source package record. For example, the vim
-package exposes such information with a field like S<Vcs-Git:
-git://git.debian.org/git/pkg-vim/vim.git>, you can see it by grepping through
-C<apt-cache showsrc vim>.
+in B<Vcs-*> fields available in the source package record. For example, the B<vim>
+package exposes such information with a field like S<B<Vcs-Git:
+git://git.debian.org/git/pkg-vim/vim.git>>, you can see it by grepping through
+B<apt-cache showsrc vim>.
 
 If more than one source package record containing B<Vcs-*> fields is available,
 B<debcheckout> will select the record with the highest version number. 
@@ -57,13 +57,13 @@ Alternatively, a particular version may be selected from those available by
 specifying the package name as I<PACKAGE>=I<VERSION>.
 
 If you already know the URL of a given repository you can invoke
-debcheckout directly on it, but you will probably need to pass the
+B<debcheckout> directly on it, but you will probably need to pass the
 appropriate B<-t> flag. That is, some heuristics are in use to guess
 the repository type from the URL; if they fail, you might want to
 override the guessed type using B<-t>.
 
-The currently supported version control systems are: arch, bzr, cvs,
-darcs, git, hg, svn.
+The currently supported version control systems are: Arch (arch), Bazaar (bzr), CVS (cvs),
+Darcs (darcs), Git (git), Nercurial (hg) and Subversion (svn).
 
 =head1 OPTIONS
 
@@ -74,11 +74,11 @@ B<GENERAL OPTIONS>
 =item B<-a>, B<--auth>
 
 Work in authenticated mode; this means that for known repositories (mainly those
-hosted on S<http://alioth.debian.org>) URL rewriting is attempted before
+hosted on S<I<http://alioth.debian.org>>) URL rewriting is attempted before
 checking out, to ensure that the repository can be committed to. For example,
 for subversion repositories hosted on alioth this means that
-S<svn+ssh://svn.debian.org/...> will be used instead of
-S<svn://svn.debian.org/...>.
+S<I<svn+ssh://svn.debian.org/...>> will be used instead of
+S<I<svn://svn.debian.org/...>>.
 
 =item B<-d>, B<--details>
 
@@ -120,7 +120,7 @@ Specify that the named file should be extracted from the repository and placed
 in the destination directory. May be used more than once to extract mutliple
 files.
 
-=item B<--source=never|auto|download-only|always>
+=item B<--source=never>|B<auto>|B<download-only>|B<always>
 
 Some packages only place the debian directory in version control.
 B<debcheckout> can retrieve the remaining parts of the source using B<apt-get
@@ -134,17 +134,17 @@ Only use the repository.
 
 =item B<auto> (default)
 
-If the repository only contains the debian directory, retrieve the source
-package, unpack it, and also place the .orig.tar.gz file into the current
+If the repository only contains the F<debian> directory, retrieve the source
+package, unpack it, and also place the F<.orig.tar.gz> file into the current
 directory. Else, do nothing.
 
 =item B<download-only>
 
-Always retrieve the .orig.tar.gz file, but do not unpack it.
+Always retrieve the I<.orig.tar.gz> file, but do not unpack it.
 
 =item B<always>
 
-Always retrieve the .orig.tar.gz file, and if the repository only contains the
+Always retrieve the I<.orig.tar.gz> file, and if the repository only contains the
 debian directory, unpack it.
 
 =back
@@ -160,11 +160,11 @@ I<GIT-SPECIFIC OPTIONS>
 =item B<--git-track> I<BRANCHES>
 
 Specify a list of remote branches which will be set up for tracking
-(as in S<git branch --track>, see git-branch(1)) after the remote
-GIT repository has been cloned. The list should be given as a
+(as in S<B<git branch --track>>, see B<git-branch>(1)) after the remote
+Git repository has been cloned. The list should be given as a
 space-separated list of branch names.
 
-As a shorthand, the string "*" can be given to require tracking of all
+As a shorthand, the string "B<*>" can be given to require tracking of all
 remote branches.
 
 =back
@@ -182,13 +182,13 @@ for this purpose. The currently recognised variables are:
 =item B<DEBCHECKOUT_AUTH_URLS>
 
 This variable should be a space separated list of Perl regular
-expressions and replacement texts, which must come in pairs: REGEXP
-TEXT REGEXP TEXT ... and so on. Each pair denotes a substitution which
+expressions and replacement texts, which must come in pairs: I<REGEXP>
+I<TEXT> I<REGEXP> I<TEXT> ... and so on. Each pair denotes a substitution which
 is applied to repository URLs if other built-in means of building URLs
 for authenticated mode (see B<-a>) have failed.
 
 References to matching substrings in the replacement texts are
-allowed as usual in Perl by the means of $1, $2, ... and so on.
+allowed as usual in Perl by the means of B<$1>, B<$2>, ... and so on.
 
 This setting can be used to enable authenticated mode for most repositories
 out there.  Note that the Debian repositories on S<alioth.debian.org>
@@ -210,13 +210,13 @@ this variable.
 
 =head1 SEE ALSO
 
-apt-cache(8), Section 6.2.5 of the Debian Developer's Reference (for
-more information about Vcs-* fields): S<http://www.debian.org/doc/developers-reference/best-pkging-practices.html#bpp-vcs>
+B<apt-cache>(8), Section 6.2.5 of the Debian Developer's Reference (for
+more information about B<Vcs-*> fields): S<I<http://www.debian.org/doc/developers-reference/best-pkging-practices.html#bpp-vcs>>.
 
 =head1 AUTHOR
 
-debcheckout and this manpage have been written by Stefano Zacchiroli
-<zack@debian.org>
+B<debcheckout> and this manpage have been written by Stefano Zacchiroli
+<I<zack@debian.org>>.
 
 =cut
 

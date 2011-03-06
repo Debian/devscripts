@@ -26,11 +26,11 @@ options for stricter checking.
 Show a summary of options.
 .TP
 .BR \-\-newline ", " \-n
-Check for "echo \-n" usage (non POSIX but required by Debian Policy 10.4.)
+Check for "\fBecho \-n\fR" usage (non POSIX but required by Debian Policy 10.4.)
 .TP
 .BR \-\-posix ", " \-p
 Check for issues which are non POSIX but required to be supported by Debian
-Policy 10.4 (implies \-n).
+Policy 10.4 (implies \fB\-n\fR).
 .TP
 .BR \-\-force ", " \-f
 Force each script to be checked, even if it would normally not be (for 
@@ -41,8 +41,8 @@ shell wrapper).
 Highlight lines which, whilst they do not contain bashisms, may be
 useful in determining whether a particular issue is a false positive
 which may be ignored.
-For example, the use of "$BASH_ENV" may be preceded by checking
-whether "$BASH" is set.
+For example, the use of "\fB$BASH_ENV\fR" may be preceded by checking
+whether "\fB$BASH\fR" is set.
 .TP
 .BR \-\-version ", " \-v
 Show version and copyright information.
@@ -61,5 +61,5 @@ unreadable or not found.  The warning message will give details.
 .BR lintian (1).
 .SH AUTHOR
 \fBcheckbashisms\fR was originally written as a shell script by Yann Dirson
-<dirson@debian.org> and rewritten in Perl with many more features by
-Julian Gilbey <jdg@debian.org>.
+<\fIdirson@debian.org\fR> and rewritten in Perl with many more features by
+Julian Gilbey <\fIjdg@debian.org\fR>.
