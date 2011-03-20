@@ -1,5 +1,6 @@
 devscripts (2.10.72) UNRELEASED; urgency=low
 
+  [ James Vega ]
   * debuild: Use 3-argument form of open to suppress warnings about unused
     symbols.  (Closes: #606054)
   * Cleanup Recommends to avoid pulling in as many packages by default.  The
@@ -7,6 +8,10 @@ devscripts (2.10.72) UNRELEASED; urgency=low
     functionality.  Relationships removed from Recommends were either added to
     Suggests if it makes sense to call some attention to them or were removed
     from debian/control completely.  (Closes: #605102, #610310, LP: #485264)
+
+  [ Ron Lee ]
+  * cowpoke: add a --return option that copies the build results back to a
+    directory somewhere.  (Closes: #614268)
 
  -- James Vega <jamessan@debian.org>  Wed, 02 Mar 2011 00:07:34 -0500
 

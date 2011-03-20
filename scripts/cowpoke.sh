@@ -80,6 +80,10 @@ cowpoke [options] package.dsc
    --buildd="host"       Specify the remote host to build on.
    --buildd-user="name"  Specify the remote user to build as.
    --create              Create the remote cowbuilder root if necessary.
+   --return[="path"]     Copy results of the build to 'path'.  If path is
+                         not specified, return them to the current directory.
+   --no-return           Do not copy results of the build to RETURN_DIR
+                         (overriding a path set for it in the config files).
 
   The current default configuration is:
 
@@ -87,6 +91,7 @@ cowpoke [options] package.dsc
    BUILDD_USER = $BUILDD_USER
    BUILDD_ARCH = $BUILDD_ARCH
    BUILDD_DIST = $BUILDD_DIST
+   RETURN_DIR  = $RETURN_DIR
 
   The expected remote paths are:
 
@@ -128,6 +133,18 @@ for arg; do
 
 	--create)
 	    CREATE_COW="yes"
+	    ;;
+
+	--return=*)
+	    RETURN_DIR="${arg#*=}"
+	    ;;
+
+	--return)
+	    RETURN_DIR=.
+	    ;;
+
+	--no-return)
+	    RETURN_DIR=
 	    ;;
 
 	--dpkg-opts=*)
@@ -362,6 +379,37 @@ if [ -n "$SIGN_KEYID" ]; then
 		    ;;
 	    esac
 	done
+
+      done
+    done
+fi
+
+if [ -n "$RETURN_DIR" ]; then
+    for arch in $BUILDD_ARCH; do
+      CHANGES="$arch.changes"
+      for dist in $BUILDD_DIST; do
+
+	RESULT_DIR=$(eval echo "\$${arch}_${dist}_RESULT_DIR")
+	[ -n "$RESULT_DIR" ] || RESULT_DIR="$PBUILDER_BASE/$arch/$dist/result"
+
+
+	cache_dir="./cowpoke-return-cache"
+	mkdir -p $cache_dir
+
+	scp "$BUILDD_USER$BUILDD_HOST:$RESULT_DIR/${PACKAGE}_$CHANGES" $cache_dir
+
+	for f in $(cd $cache_dir && dcmd ${PACKAGE}_$CHANGES); do
+	    RESULTS="$RESULTS $RESULT_DIR/$f"
+	done
+
+	rm -f $cache_dir/${PACKAGE}_$CHANGES
+	rmdir $cache_dir
+
+
+	if ! rsync -vP "$BUILDD_USER$BUILDD_HOST:$RESULTS" "$RETURN_DIR" ;
+	then
+	    scp "$BUILDD_USER$BUILDD_HOST:$RESULTS" "$RETURN_DIR"
+	fi
 
       done
     done

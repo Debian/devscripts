@@ -60,6 +60,16 @@ is not passed it is an error for the specified \fB\-\-dist\fP or \fB\-\-arch\fP
 to not have an existing cowbuilder root in the expected location.
 
 .TP
+.BI \-\-return= [path]
+Copy results of the build to \fIpath\fP.  If path is not specified, then return
+them to the current directory. The given path must exist, it will not be created.
+
+.TP
+.B \-\-no\-return
+Do not copy results of the build to RETURN_DIR (overriding a path set for it in
+the config files).
+
+.TP
 .BI \-\-dpkg\-opts= "'opt1 opt2 ...'"
 Specify additional options to be passed to \fBdpkg-buildpackage\fP(1).  Multiple
 options are delimited with spaces.  This will override any options specified in
@@ -155,6 +165,13 @@ here due to its quoting requirements being different from all the rest.
 .B DEBOOTSTRAP
 The utility to use when creating a new build root.  Alternatives are
 .BR debootstrap " or " cdebootstrap .
+
+.TP
+.B RETURN_DIR
+If set, package files resulting from the build will be copied to the path
+(local or remote) that this is set to, after the build completes.  The path
+must exist, it will not be created.  This option is unset by default and can
+be overridden with --return or --no-return.
 
 
 .SS Arch and dist specific options
