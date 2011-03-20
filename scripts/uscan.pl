@@ -1025,22 +1025,24 @@ sub process_watchline ($$$$$$)
 	} else {
 	    # they all look like:
 	    # info info ... info filename [ -> linkname]
-	    while ($content =~ m/\s($filepattern)(\s+->\s+\S+)?$/mg) {
-		my $file = $1;
-		my $mangled_version = join(".", $file =~ m/^$filepattern$/);
-		foreach my $pat (@{$options{'uversionmangle'}}) {
-		    if (! safe_replace(\$mangled_version, $pat)) {
-			warn "$progname: In $watchfile, potentially"
-			  . " unsafe or malformed uversionmangle"
-			  . " pattern:\n  '$pat'"
-			  . " found. Skipping watchline\n"
-			  . "  $line\n";
-			return 1;
+	    for my $ln (split(/\n/, $content)) {
+		if ($ln =~ m/\s($filepattern)(\s+->\s+\S+)?$/) {
+		    my $file = $1;
+		    my $mangled_version = join(".", $file =~ m/^$filepattern$/);
+		    foreach my $pat (@{$options{'uversionmangle'}}) {
+			if (! safe_replace(\$mangled_version, $pat)) {
+			    warn "$progname: In $watchfile, potentially"
+			      . " unsafe or malformed uversionmangle"
+			      . " pattern:\n  '$pat'"
+			      . " found. Skipping watchline\n"
+			      . "  $line\n";
+			    return 1;
+			}
 		    }
+		    push @files, [$mangled_version, $file];
 		}
-		push @files, [$mangled_version, $file];
 	    }
-	}	    
+	}
 
 	if (@files) {
 	    if ($verbose) {
@@ -1627,12 +1629,14 @@ sub newest_dir ($$$$$) {
 	} else {
 	    # they all look like:
 	    # info info ... info filename [ -> linkname]
-	    while ($content =~ m/($pattern)(\s+->\s+\S+)?$/mg) {
-		my $dir = $1;
-		my $mangled_version = join(".", $dir =~ m/^$pattern$/);
-		push @dirs, [$mangled_version, $dir];
+	    foreach my $ln (split(/\n/, $content)) {
+		if ($ln =~ m/($pattern)(\s+->\s+\S+)?$/) {
+		    my $dir = $1;
+		    my $mangled_version = join(".", $dir =~ m/^$pattern$/);
+		    push @dirs, [$mangled_version, $dir];
+		}
 	    }
-	}	    
+	}
 	if (@dirs) {
 	    if ($debug) {
 		print STDERR "-- Found the following matching dirs:\n";

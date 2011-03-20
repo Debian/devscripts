@@ -14,6 +14,9 @@ devscripts (2.10.72) UNRELEASED; urgency=low
     + Avoid "Use of uninitialized value" warning when URL doesn't have
       "/" after the host.  Thanks to Mats Erik Andersson for the patch.
       (Closes: #600909)
+    + Parse responses from FTP sites on a line-by-line basis to help prevent
+      overly greedy regular expressions in watch files returning bad results.
+      (Closes: #597963)
   * Remove use of lzma command in favor of xz. (Closes: #599641)
     + debian/control: Remove lzma from Recommends.
     + uscan: Use xz to repack lzma tarballs.
