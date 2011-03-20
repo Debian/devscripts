@@ -8,6 +8,8 @@ devscripts (2.10.72) UNRELEASED; urgency=low
     functionality.  Relationships removed from Recommends were either added to
     Suggests if it makes sense to call some attention to them or were removed
     from debian/control completely.  (Closes: #605102, #610310, LP: #485264)
+  * uscan: Let unzip convert text files to native line endings when repacking.
+    Thanks to Daniel Kahn Gilmor for the suggestion.  (Closes: #618513)
 
   [ Ron Lee ]
   * cowpoke: add a --return option that copies the build results back to a
