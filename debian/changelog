@@ -8,8 +8,12 @@ devscripts (2.10.72) UNRELEASED; urgency=low
     functionality.  Relationships removed from Recommends were either added to
     Suggests if it makes sense to call some attention to them or were removed
     from debian/control completely.  (Closes: #605102, #610310, LP: #485264)
-  * uscan: Let unzip convert text files to native line endings when repacking.
-    Thanks to Daniel Kahn Gilmor for the suggestion.  (Closes: #618513)
+  * uscan:
+    + Let unzip convert text files to native line endings when repacking.
+      Thanks to Daniel Kahn Gilmor for the suggestion.  (Closes: #618513)
+    + Avoid "Use of uninitialized value" warning when URL doesn't have
+      "/" after the host.  Thanks to Mats Erik Andersson for the patch.
+      (Closes: #600909)
   * Remove use of lzma command in favor of xz. (Closes: #599641)
     + debian/control: Remove lzma from Recommends.
     + uscan: Use xz to repack lzma tarballs.

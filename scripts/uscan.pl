@@ -1499,7 +1499,10 @@ sub recursive_regex_dir ($$$) {
 
     $base =~ m%^(\w+://[^/]+)/(.*)$%;
     my $site = $1;
-    my @dirs = split /(\/)/, $2;
+    my @dirs = ();
+    if (defined $2) {
+	@dirs = split /(\/)/, $2;
+    }
     my $dir = '/';
 
     foreach my $dirpattern (@dirs) {
