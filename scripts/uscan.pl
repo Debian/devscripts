@@ -1372,8 +1372,14 @@ EOF
 
 	my $newfile_base_gz = "$1.tar.gz";
 	my $tempdir = tempdir ( "uscanXXXX", TMPDIR => 1, CLEANUP => 1 );
-	system("unzip -q -a -d $tempdir $destdir/$newfile_base; GZIP=-9 tar -C $tempdir -czf $destdir/$newfile_base_gz .") == 0 
-	  or die("Repacking from zip to tar.gz failed\n");
+	my $globpattern = "*";
+	system("unzip -q -a -d $tempdir $destdir/$newfile_base") == 0
+	  or die("Repacking from zip to tar.gz failed (could not unzip)\n");
+	if (system("ls -d $tempdir/.[!.]* >/dev/null 2>&1") == 0) {
+	    $globpattern .= " .[!.]*";
+	}
+	system("cd $tempdir; GZIP=-9 tar --owner=root --group=root --mode=a+rX -czf $destdir/$newfile_base_gz $globpattern") == 0
+	  or die("Repacking from zip to tar.gz failed (could not create tarball)\n");
 	unlink "$destdir/$newfile_base";
 	$newfile_base = $newfile_base_gz;
     }
