@@ -14,15 +14,13 @@ Package: devscripts
 Architecture: any
 Depends: dpkg-dev (>= 1.15.4.1), perl, ${shlibs:Depends}, ${misc:Depends}
 Recommends: at, curl | wget, dctrl-tools, debian-keyring, debian-maintainers,
- dput | dupload, equivs, fakeroot, gnupg, libauthen-sasl-perl,
- libcrypt-ssleay-perl, libparse-debcontrol-perl, libsoap-lite-perl,
- libterm-size-perl, libtimedate-perl, liburi-perl, libwww-perl,
- libyaml-syck-perl, lintian, lsb-release, bsd-mailx | mailx,
- man-db, patch, patchutils, ssh-client, strace, unzip, wdiff, www-browser,
- subversion | cvs | darcs | tla | bzr | git-core | mercurial, lzma,
- xz-utils, sensible-utils, libjson-perl
-Suggests: build-essential, cvs-buildpackage, devscripts-el, gnuplot,
- libfile-desktopentry-perl, libnet-smtp-ssl-perl (>= 1.01-2), mutt,
+ dput | dupload, equivs, fakeroot, gnupg, libcrypt-ssleay-perl,
+ libparse-debcontrol-perl, libsoap-lite-perl, liburi-perl, libwww-perl,
+ lintian, lsb-release, man-db, patch, patchutils, strace, unzip,
+ wdiff, lzma, xz-utils, sensible-utils, libjson-perl
+Suggests: bsd-mailx | mailx, build-essential, cvs-buildpackage, devscripts-el,
+ gnuplot, libauthen-sasl-perl, libtimedate-perl, libfile-desktopentry-perl,
+ libnet-smtp-ssl-perl, libterm-size-perl, libyaml-syck-perl, mutt, ssh-client,
  svn-buildpackage, w3m
 Description: scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in

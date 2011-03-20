@@ -2,6 +2,11 @@ devscripts (2.10.72) UNRELEASED; urgency=low
 
   * debuild: Use 3-argument form of open to suppress warnings about unused
     symbols.  (Closes: #606054)
+  * Cleanup Recommends to avoid pulling in as many packages by default.  The
+    remaining Recommends are relevant to the more commonly used scripts or
+    functionality.  Relationships removed from Recommends were either added to
+    Suggests if it makes sense to call some attention to them or were removed
+    from debian/control completely.  (Closes: #605102, #610310, LP: #485264)
 
  -- James Vega <jamessan@debian.org>  Wed, 02 Mar 2011 00:07:34 -0500
 
