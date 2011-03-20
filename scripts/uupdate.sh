@@ -265,7 +265,7 @@ if [ "$PATCH" ]; then
 	    case "$PATCH" in
 		*.gz)  CATPATCH="zcat $PATCH"; X=${X%.gz};;
 		*.bz2) CATPATCH="bzcat $PATCH"; X=${X%.bz2};;
-		*.lzma) CATPATCH="lzcat $PATCH"; X=${X%.lzma};;
+		*.lzma) CATPATCH="xz -F lzma -dc $PATCH"; X=${X%.lzma};;
 		*.xz) CATPATCH="xzcat $PATCH"; X=${X%.xz};;
 		*)     CATPATCH="cat $PATCH";;
 	    esac
@@ -294,9 +294,9 @@ if [ "$PATCH" ]; then
 		    ;;
 		*.lzma)
 		    if [ -r "$OPWD/$PATCH" ]; then
-			CATPATCH="lzcat $OPWD/$PATCH"
+			CATPATCH="xz -F lzma -dc $OPWD/$PATCH"
 		    else
-			CATPATCH="lzcat ../$PATCH"
+			CATPATCH="xz -F lzma -dc ../$PATCH"
 		    fi
 		    X=${X%.lzma}
 		    ;;
@@ -701,7 +701,7 @@ else
     elif [ -r "../${PACKAGE}_$SVERSION.diff.lzma" ]; then
 	DIFF="../${PACKAGE}_$SVERSION.diff.lzma"
 	DIFFTYPE=diff
-	DIFFCAT=lzcat
+	DIFFCAT="xz -F lzma -dc"
     elif [ -r "../${PACKAGE}_$SVERSION.diff.xz" ]; then
 	DIFF="../${PACKAGE}_$SVERSION.diff.xz"
 	DIFFTYPE=diff
