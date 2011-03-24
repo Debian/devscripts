@@ -23,6 +23,10 @@ devscripts (2.10.72) UNRELEASED; urgency=low
   * cowpoke: add a --return option that copies the build results back to a
     directory somewhere.  (Closes: #614268)
 
+  [ Christoph Berg ]
+  * debcheckout: Correctly extract package name from svn://.../trunk/$pkg
+    style URLs.
+
  -- James Vega <jamessan@debian.org>  Wed, 02 Mar 2011 00:07:34 -0500
 
 devscripts (2.10.71) unstable; urgency=low

@@ -979,7 +979,9 @@ sub main() {
 	$repo_type = guess_repo_type($repo_url, $repo_type);
 	$pkg = ""; $version = "";
 	# guess package from url
-	if ($repo_url =~ m!([a-z0-9.+-]+)/trunk/?!) { # svn
+	if ($repo_url =~ m!/trunk/([a-z0-9.+-]+)!) { # svn with {trunk,tags,branches}/$pkg
+	    $pkg = $1;
+	} elsif ($repo_url =~ m!([a-z0-9.+-]+)/trunk/?!) { # svn with $pkg/{trunk,tags,branches}
 	    $pkg = $1;
 	} elsif ($repo_url =~ /([a-z0-9.+-]+)\.git$/) { # git
 	    $pkg = $1;
