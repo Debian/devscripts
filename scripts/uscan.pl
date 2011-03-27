@@ -696,7 +696,7 @@ sub process_watchline ($$$$$$)
     %dehs_tags = ('package' => $pkg);
 
     if ($watch_version == 1) {
-	($site, $dir, $pattern, $lastversion, $action) = split ' ', $line, 5;
+	($site, $dir, $filepattern, $lastversion, $action) = split ' ', $line, 5;
 
 	if (! defined $lastversion or $site =~ /\(.*\)/ or $dir =~ /\(.*\)/) {
 	    warn "$progname warning: there appears to be a version 2 format line in\n  the version 1 watchfile $watchfile;\n  Have you forgotten a 'version=2' line at the start, perhaps?\n  Skipping the line: $line\n";
@@ -704,15 +704,15 @@ sub process_watchline ($$$$$$)
 	}
 	if ($site !~ m%\w+://%) {
 	    $site = "ftp://$site";
-	    if ($pattern !~ /\(.*\)/) {
+	    if ($filepattern !~ /\(.*\)/) {
 		# watch_version=1 and old style watchfile;
 		# pattern uses ? and * shell wildcards; everything from the
 		# first to last of these metachars is the pattern to match on
-		$pattern =~ s/(\?|\*)/($1/;
-		$pattern =~ s/(\?|\*)([^\?\*]*)$/$1)$2/;
-		$pattern =~ s/\./\\./g;
-		$pattern =~ s/\?/./g;
-		$pattern =~ s/\*/.*/g;
+		$filepattern =~ s/(\?|\*)/($1/;
+		$filepattern =~ s/(\?|\*)([^\?\*]*)$/$1)$2/;
+		$filepattern =~ s/\./\\./g;
+		$filepattern =~ s/\?/./g;
+		$filepattern =~ s/\*/.*/g;
 		$style='old';
 		warn "$progname warning: Using very old style of filename pattern in $watchfile\n  (this might lead to incorrect results): $3\n";
 	    }
@@ -723,6 +723,7 @@ sub process_watchline ($$$$$$)
 	$base =~ s%(?<!:)//%/%g;
 	$base =~ m%^(\w+://[^/]+)%;
 	$site = $1;
+	$pattern = $filepattern;
     } else {
 	# version 2/3 watchfile
 	if ($line =~ s/^opt(?:ion)?s=//) {
