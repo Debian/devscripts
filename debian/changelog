@@ -25,6 +25,8 @@ devscripts (2.10.72) UNRELEASED; urgency=low
     + uupdate: Use xz to handle lzma-compressed files.
   * More typography updates for man pages.  Thanks to David Prévot for the
     patch.  (Closes: #616630)
+  * pts-subscribe: Do not perform arithmetic comparison of --until argument.
+    Thanks to Stefano Rivera for the patch.  (Closes: #620194)
 
   [ Ron Lee ]
   * cowpoke: add a --return option that copies the build results back to a

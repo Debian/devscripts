@@ -154,7 +154,7 @@ if [ "$ACTION" = "unsubscribe" ]; then
     echo "$ACTION $pkg $DEBEMAIL" | mail pts@qa.debian.org
 else
     # Check for an "at" command
-    if [ "$PTS_UNTIL" != forever -a "$PTS_UNTIL" -ne 0 ]; then
+    if [ "$PTS_UNTIL" != forever -a "$PTS_UNTIL" != 0 ]; then
 	if ! command -v at >/dev/null 2>&1; then
 	    echo "$PROGNAME: Could not find the \"at\" command; you must have the" >&2
 	    echo "\"at\" package installed to run this script." >&2
