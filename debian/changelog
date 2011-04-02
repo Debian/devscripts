@@ -23,6 +23,8 @@ devscripts (2.10.72) UNRELEASED; urgency=low
     + debian/control: Remove lzma from Recommends.
     + uscan: Use xz to repack lzma tarballs.
     + uupdate: Use xz to handle lzma-compressed files.
+  * More typography updates for man pages.  Thanks to David Prévot for the
+    patch.  (Closes: #616630)
 
   [ Ron Lee ]
   * cowpoke: add a --return option that copies the build results back to a
