@@ -32,6 +32,8 @@ devscripts (2.10.72) UNRELEASED; urgency=low
       Sateler for the patch.  (Closes: #615135)
     + Add MKBUILDDEPS_ROOTCMD configuration variable.
     + Show modified configuration variables in usage.
+  * debchange: Correct the backport name in the man page.  Thanks to Salvatore
+    Bonaccorso for the patch.  (Closes: #617675)
 
   [ Ron Lee ]
   * cowpoke: add a --return option that copies the build results back to a
