@@ -708,6 +708,17 @@ EOF
 
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.72
+	then
+	    cat >> /etc/devscripts.conf << EOF
+#### mk-build-deps option added in 2.10.72
+#
+# Tool used to gain root privileges to install the deb
+# MKBUILDDEPS_ROOTCMD=''
+
+EOF
+	fi
     fi
 fi
 

@@ -27,6 +27,11 @@ devscripts (2.10.72) UNRELEASED; urgency=low
     patch.  (Closes: #616630)
   * pts-subscribe: Do not perform arithmetic comparison of --until argument.
     Thanks to Stefano Rivera for the patch.  (Closes: #620194)
+  * mk-build-deps:
+    + Add --root-cmd option to install the build-dep .deb.  Thanks to Felipe
+      Sateler for the patch.  (Closes: #615135)
+    + Add MKBUILDDEPS_ROOTCMD configuration variable.
+    + Show modified configuration variables in usage.
 
   [ Ron Lee ]
   * cowpoke: add a --return option that copies the build results back to a

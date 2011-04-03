@@ -108,6 +108,7 @@ use Getopt::Long;
 use File::Basename;
 use Pod::Usage;
 use Dpkg::Control;
+use Text::ParseWords;
 
 my $progname = basename($0);
 my $opt_install;
@@ -121,8 +122,9 @@ my @deb_files;
 
 my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
 my %config_vars = (
-		    'MKBUILDDEPS_TOOL' => 'apt-get',
-		    'MKBUILDDEPS_REMOVE_AFTER_INSTALL' => 'no'
+		    'MKBUILDDEPS_TOOL' => '/usr/bin/apt-get',
+		    'MKBUILDDEPS_REMOVE_AFTER_INSTALL' => 'no',
+		    'MKBUILDDEPS_ROOTCMD' => '',
 		    );
 my %config_default = %config_vars;
 
@@ -140,9 +142,11 @@ my $shell_out = `/bin/bash -c '$shell_cmd'`;
 
 # Check validity
 $config_vars{'MKBUILDDEPS_TOOL'} =~ /./
-	or $config_vars{'MKBUILDDEPS_TOOL'}='/usr/bin/apt-get';
+	or $config_vars{'MKBUILDDEPS_TOOL'}=$config_default{'MKBUILDDEPS_TOOL'};
 $config_vars{'MKBUILDDEPS_REMOVE_AFTER_INSTALL'} =~ /^(yes|no)$/
-	or $config_vars{'MKBUILDDEPS_REMOVE_AFTER_INSTALL'}='no';
+	or $config_vars{'MKBUILDDEPS_REMOVE_AFTER_INSTALL'}=$config_default{'MKBUILDDEPS_REMOVE_AFTER_INSTALL'};
+$config_vars{'MKBUILDDEPS_ROOTCMD'} =~ /./
+	or $config_vars{'MKBUILDDEPS_ROOTCMD'}=$config_default{'MKBUILDDEPS_ROOTCMD'};
 
 $install_tool = $config_vars{'MKBUILDDEPS_TOOL'};
 
@@ -150,6 +154,29 @@ if ($config_vars{'MKBUILDDEPS_REMOVE_AFTER_INSTALL'} =~ /yes/) {
 	$opt_remove=1;
 }
 
+sub usage {
+    my ($exitval) = @_;
+
+    my $verbose = $exitval ? 0 : 1;
+    pod2usage({ -exitval => 'NOEXIT', -verbose => $verbose });
+
+    if ($verbose) {
+	my $modified_conf_msg;
+	foreach my $var (sort keys %config_vars) {
+	    if ($config_vars{$var} ne $config_default{$var}) {
+		$modified_conf_msg .= "  $var=$config_vars{$var}\n";
+	    }
+	}
+	$modified_conf_msg ||= "  (none)\n";
+	chomp $modified_conf_msg;
+	print <<EOF;
+Default settings modified by devscripts configuration files:
+$modified_conf_msg
+EOF
+    }
+
+    exit $exitval;
+}
 
 GetOptions("help|h" => \$opt_help,
            "version|v" => \$opt_version,
@@ -161,9 +188,10 @@ GetOptions("help|h" => \$opt_help,
            "build-indep|A" => \$opt_indep,
            "root-cmd|s=s" => \$root_cmd,
            )
-    or pod2usage({ -exitval => 1, -verbose => 0 });
+    or usage(1);
 
-pod2usage({ -exitval => 0, -verbose => 1 }) if ($opt_help);
+usage(0) if ($opt_help);
+
 if ($opt_version) { version(); exit 0; }
 
 if (!@ARGV) {
@@ -172,7 +200,7 @@ if (!@ARGV) {
     }
 }
 
-pod2usage({ -exitval => 1, -verbose => 0 }) unless @ARGV;
+usage(1) unless @ARGV;
 
 system("command -v equivs-build >/dev/null 2>&1");
 if ($?) {
@@ -245,8 +273,6 @@ while ($control = shift) {
 	die "$progname: Unable to find package name in '$control'\n";
     }
 }
-
-use Text::ParseWords;
 
 if ($opt_install) {
     for my $package (@packages) {
