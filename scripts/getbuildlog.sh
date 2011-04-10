@@ -139,4 +139,3 @@ ver=$LASTVERSION&\arch=$ARCH&stamp=[[:digit:]]+"
 
 getbuildlog http://buildd.debian.org
 getbuildlog http://buildd.debian-ports.org
-getbuildlog http://experimental.debian.net

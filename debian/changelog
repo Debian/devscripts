@@ -34,6 +34,9 @@ devscripts (2.10.72) UNRELEASED; urgency=low
     + Show modified configuration variables in usage.
   * debchange: Correct the backport name in the man page.  Thanks to Salvatore
     Bonaccorso for the patch.  (Closes: #617675)
+  * getbuildlog:
+    + Remove experimental.debian.net, now that experimental logs show up on
+      the normal buildd site. (Closes: #621758)
 
   [ Ron Lee ]
   * cowpoke: add a --return option that copies the build results back to a
