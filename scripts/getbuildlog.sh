@@ -91,6 +91,8 @@ getbuildlog() {
     BASE=$1
     ALL_LOGS=`mktemp`
 
+    trap "rm -f $ALL_LOGS" EXIT INT QUIT TERM
+
     wget -q -O $ALL_LOGS "$BASE/build.php?&pkg=$PACKAGE"
 
     # Put each href in $ALL_LOGS on a separate line so that $PATTERN
