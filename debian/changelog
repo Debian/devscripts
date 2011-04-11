@@ -19,6 +19,12 @@ devscripts (2.10.72) UNRELEASED; urgency=low
       (Closes: #597963)
     + Fix "Use of uninitialized value" warnings when processing certain
       version 1 watch files.
+    + Fix various issues when repacking a zip to a tarball.  Thanks to
+      Christian Kastner for the patch.  (Closes: #615108)
+      - Run tar from within the temp directory to prevent getting a ‘./’
+        archive member.
+      - Use root/root as the owner for the archive members to prevent leaking
+        the user's login.
   * Remove use of lzma command in favor of xz. (Closes: #599641)
     + debian/control: Remove lzma from Recommends.
     + uscan: Use xz to repack lzma tarballs.
