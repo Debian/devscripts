@@ -44,6 +44,8 @@ devscripts (2.10.72) UNRELEASED; urgency=low
     + Remove experimental.debian.net, now that experimental logs show up on
       the normal buildd site. (Closes: #621758)
     + Remove temp file if the script exits early.
+  * licensecheck: Remove "(the License)" from check for Apache license.
+    Thanks to Dmitry Kurochkin for the suggestion.  (Closes: #620902)
 
   [ Ron Lee ]
   * cowpoke: add a --return option that copies the build results back to a
