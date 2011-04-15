@@ -63,7 +63,7 @@ the repository type from the URL; if they fail, you might want to
 override the guessed type using B<-t>.
 
 The currently supported version control systems are: Arch (arch), Bazaar (bzr), CVS (cvs),
-Darcs (darcs), Git (git), Nercurial (hg) and Subversion (svn).
+Darcs (darcs), Git (git), Mercurial (hg) and Subversion (svn).
 
 =head1 OPTIONS
 

@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2011-02-19 16:07+0000\n"
+"POT-Creation-Date: 2011-04-15 04:17+0000\n"
 "PO-Revision-Date: 2010-10-14 12:28-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -317,7 +317,7 @@ msgstr ""
 
 #. type: SH
 #: ../scripts/annotate-output.1:47 ../scripts/bts.pl:4092
-#: ../scripts/checkbashisms.1:60 ../scripts/cowpoke.1:244
+#: ../scripts/checkbashisms.1:60 ../scripts/cowpoke.1:263
 #: ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62
 #: ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53
 #: ../scripts/dcmd.1:98 ../scripts/dcontrol.pl:290 ../scripts/debc.1:115
@@ -364,7 +364,7 @@ msgstr ""
 #. type: SH
 #: ../scripts/annotate-output.1:55 ../scripts/archpath.1:54
 #: ../scripts/build-rdeps.pl:346 ../scripts/checkbashisms.1:62
-#: ../scripts/cowpoke.1:250 ../scripts/cvs-debc.1:64 ../scripts/cvs-debi.1:68
+#: ../scripts/cowpoke.1:269 ../scripts/cvs-debc.1:64 ../scripts/cvs-debi.1:68
 #: ../scripts/cvs-debrelease.1:69 ../scripts/cvs-debuild.1:59
 #: ../scripts/dcmd.1:101 ../scripts/dcontrol.pl:283 ../scripts/dd-list.1:92
 #: ../scripts/debc.1:120 ../scripts/debchange.1:442
@@ -379,7 +379,7 @@ msgstr ""
 #: ../scripts/grep-excuses.1:40 ../scripts/licensecheck.pl:120
 #: ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:20
 #: ../scripts/mass-bug.pl:520 ../scripts/mergechanges.1:18
-#: ../scripts/mk-build-deps.pl:89 ../scripts/namecheck.pl:30
+#: ../scripts/mk-build-deps.pl:94 ../scripts/namecheck.pl:30
 #: ../scripts/nmudiff.1:113 ../scripts/plotchangelog.1:126
 #: ../scripts/pts-subscribe.1:56 ../scripts/rc-alert.1:125
 #: ../scripts/rmadison.pl:333 ../scripts/svnpath.pl:97
@@ -1589,8 +1589,9 @@ msgstr ""
 "essayant un environnement graphique d'abord. Indiquer plusieurs commandes "
 "peut être utile à ceux qui partagent des fichiers, comme leur F<.profile>, "
 "entre plusieurs systèmes. B<%s> est nécessaire parce que la plupart des "
-"navigateurs ont une syntaxe qui l'exige. Enfin, B<%%> doit être transformé en "
-"%, sinon il ne serait pas possible d'avoir un B<%s> littéral dans la chaîne."
+"navigateurs ont une syntaxe qui l'exige. Enfin, B<%%> doit être transformé "
+"en %, sinon il ne serait pas possible d'avoir un B<%s> littéral dans la "
+"chaîne."
 
 #. type: textblock
 #: ../scripts/bts.pl:908
@@ -3211,7 +3212,7 @@ msgid "Run the debug mode"
 msgstr "Exécuter en mode débogue."
 
 #. type: TP
-#: ../scripts/build-rdeps.pl:66 ../scripts/cowpoke.1:68
+#: ../scripts/build-rdeps.pl:66 ../scripts/cowpoke.1:78
 #: ../scripts/debclean.1:84 ../scripts/grep-excuses.1:22
 #: ../scripts/mass-bug.pl:117 ../scripts/nmudiff.1:73
 #: ../scripts/plotchangelog.1:92 ../scripts/uscan.1:442
@@ -3226,7 +3227,7 @@ msgstr "Afficher les informations sur l'utilisation."
 
 #. type: TP
 #: ../scripts/build-rdeps.pl:70 ../scripts/chdist.pl:49
-#: ../scripts/cowpoke.1:72 ../scripts/debchange.1:359 ../scripts/debclean.1:87
+#: ../scripts/cowpoke.1:82 ../scripts/debchange.1:359 ../scripts/debclean.1:87
 #: ../scripts/debrelease.1:102 ../scripts/debsign.1:108
 #: ../scripts/debsnap.1:51 ../scripts/diff2patches.1:25
 #: ../scripts/dscverify.1:39 ../scripts/grep-excuses.1:25
@@ -3576,10 +3577,11 @@ msgstr "B<--newline>, B<-n>"
 #. type: Plain text
 #: ../scripts/checkbashisms.1:30
 msgid ""
-"Check for \"echo -n\" usage (non POSIX but required by Debian Policy 10.4.)"
+"Check for \"B<echo -n>\" usage (non POSIX but required by Debian Policy "
+"10.4.)"
 msgstr ""
-"Vérifier l'utilisation de « echo -n » (pas dans POSIX, mais permise par la "
-"politique Debian, section 10.4)."
+"Vérifier l'utilisation de « B<echo -n> » (pas dans POSIX, mais permise par "
+"la politique Debian, section 10.4)."
 
 #. type: TP
 #: ../scripts/checkbashisms.1:30
@@ -3591,10 +3593,10 @@ msgstr "B<--posix>, B<-p>"
 #: ../scripts/checkbashisms.1:34
 msgid ""
 "Check for issues which are non POSIX but required to be supported by Debian "
-"Policy 10.4 (implies -n)."
+"Policy 10.4 (implies B<-n>)."
 msgstr ""
 "Vérifier les points qui ne sont pas POSIX, mais dont le support est exigé "
-"par la politique Debian, section 10.4 (implique -n)."
+"par la politique Debian, section 10.4 (implique B<-n>)."
 
 #. type: TP
 #: ../scripts/checkbashisms.1:34
@@ -3625,14 +3627,14 @@ msgstr "B<--extra>, B<-x>"
 msgid ""
 "Highlight lines which, whilst they do not contain bashisms, may be useful in "
 "determining whether a particular issue is a false positive which may be "
-"ignored.  For example, the use of \"$BASH_ENV\" may be preceded by checking "
-"whether \"$BASH\" is set."
+"ignored.  For example, the use of \"B<$BASH_ENV>\" may be preceded by "
+"checking whether \"B<$BASH>\" is set."
 msgstr ""
 "Met en évidence les lignes qui, même si elles ne contiennent pas "
 "construction propre à bash, peuvent être utiles pour déterminer si certains "
 "problèmes particuliers sont des faux positifs qui peuvent être ignorés. Par "
-"exemple, l'utilisation de « $BASH_ENV » peut être précédée d'une "
-"vérification pour s'assurer que « $BASH » est définie."
+"exemple, l'utilisation de « B<$BASH_ENV> » peut être précédée d'une "
+"vérification pour s'assurer que « B<$BASH> » est définie."
 
 #. type: TP
 #: ../scripts/checkbashisms.1:46 ../scripts/debdiff.1:158
@@ -3704,12 +3706,13 @@ msgstr "B<lintian>(1)."
 #: ../scripts/checkbashisms.1:65
 msgid ""
 "B<checkbashisms> was originally written as a shell script by Yann Dirson "
-"E<lt>dirson@debian.orgE<gt> and rewritten in Perl with many more features by "
-"Julian Gilbey E<lt>jdg@debian.orgE<gt>."
+"E<lt>I<dirson@debian.org>E<gt> and rewritten in Perl with many more features "
+"by Julian Gilbey E<lt>I<jdg@debian.org>E<gt>."
 msgstr ""
 "B<checkbashisms> a été initialement écrit sous forme de script shell par "
-"Yann Dirson E<lt>dirson@debian.orgE<gt> et a été récrit en Perl avec "
-"beaucoup plus de fonctionnalités par Julian Gilbey E<lt>jdg@debian.orgE<gt>."
+"Yann Dirson E<lt>I<dirson@debian.org>E<gt> et a été récrit en Perl avec "
+"beaucoup plus de fonctionnalités par Julian Gilbey E<lt>I<jdg@debian."
+"org>E<gt>."
 
 #. type: TH
 #: ../scripts/cowpoke.1:5
@@ -3753,8 +3756,8 @@ msgstr "Les options suivantes sont disponibles :"
 #. type: TP
 #: ../scripts/cowpoke.1:32
 #, no-wrap
-msgid "B<--arch=>I<arch>"
-msgstr "B<--arch=>I<arch>"
+msgid "B<--arch=>I<architecture>"
+msgstr "B<--arch=>I<architecture>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:38
@@ -3773,27 +3776,27 @@ msgstr ""
 #. type: TP
 #: ../scripts/cowpoke.1:39
 #, no-wrap
-msgid "B<--dist=>I<dist>"
-msgstr "B<--dist=>I<dist>"
+msgid "B<--dist=>I<distribution>"
+msgstr "B<--dist=>I<distribution>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:47
 msgid ""
 "Specify the Debian distribution(s) to build for.  A space separated list of "
 "distributions may be used to build for all of them in a single pass.  Either "
-"codenames (such as sid, or lenny) or distribution names (such as unstable, "
-"or experimental) may be used, but you should usually stick to using one or "
-"the other consistently as this name may be used in file paths and to locate "
-"old packages for comparison reporting."
+"codenames (such as B<sid>, or B<squeeze>) or distribution names (such as "
+"B<unstable>, or B<experimental>) may be used, but you should usually stick "
+"to using one or the other consistently as this name may be used in file "
+"paths and to locate old packages for comparison reporting."
 msgstr ""
 "Indiquer la ou les distributions Debian pour lesquelles le paquet doit être "
 "construit. Une liste de distributions séparées par des espaces peut être "
 "utilisée pour construire le paquet pour toutes ces distributions en une "
-"seule passe. Des noms de code (comme sid ou lenny) ou des noms de "
-"distribution (comme unstable ou experimental) peuvent être utilisés, mais "
-"vous devriez toujours utiliser un type de noms ou l'autre parce que ce nom "
-"est utilisé pour les chemins de fichier et pour trouver les anciens paquets "
-"utilisés pour les rapports de comparaison."
+"seule passe. Des noms de code (comme B<sid> ou B<squeeze>) ou des noms de "
+"distribution (comme B<unstable> ou B<experimental>) peuvent être utilisés, "
+"mais vous devriez toujours utiliser un type de noms ou l'autre parce que ce "
+"nom est utilisé pour les chemins de fichier et pour trouver les anciens "
+"paquets utilisés pour les rapports de comparaison."
 
 #. type: TP
 #: ../scripts/cowpoke.1:48
@@ -3838,23 +3841,50 @@ msgstr ""
 #. type: TP
 #: ../scripts/cowpoke.1:62
 #, no-wrap
+msgid "B<--return=>[I<path>]"
+msgstr "B<--return=>[I<chemin>]"
+
+#. type: Plain text
+#: ../scripts/cowpoke.1:66
+msgid ""
+"Copy results of the build to I<path>.  If path is not specified, then return "
+"them to the current directory. The given path must exist, it will not be "
+"created."
+msgstr ""
+
+#. type: TP
+#: ../scripts/cowpoke.1:67
+#, no-wrap
+msgid "B<--no-return>"
+msgstr "B<--no-return>"
+
+#. type: Plain text
+#: ../scripts/cowpoke.1:71
+msgid ""
+"Do not copy results of the build to B<RETURN_DIR> (overriding a path set for "
+"it in the config files)."
+msgstr ""
+
+#. type: TP
+#: ../scripts/cowpoke.1:72
+#, no-wrap
 msgid "B<--dpkg-opts=>I<'opt1 opt2 ...'>"
 msgstr "B<--dpkg-opts=>I<'opt1 opt2 ...'>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:67
+#: ../scripts/cowpoke.1:77
 msgid ""
 "Specify additional options to be passed to B<dpkg-buildpackage>(1).  "
 "Multiple options are delimited with spaces.  This will override any options "
-"specified in DEBBUILDOPTS in the build host's pbuilderrc."
+"specified in B<DEBBUILDOPTS> in the build host's I<pbuilderrc>."
 msgstr ""
 "Indiquer des options supplémentaires à fournir à B<dpkg-buildpackage>(1). "
 "les différentes options sont séparées par des espaces. Ceci remplacera toute "
-"option fournie par la variable DEBBUILDOPTS du fichier pbuilderrc de la "
-"machine de construction."
+"option fournie par la variable B<DEBBUILDOPTS> du fichier I<pbuilderrc> de "
+"la machine de construction."
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:71
+#: ../scripts/cowpoke.1:81
 msgid ""
 "Display a brief summary of the available options and current configuration."
 msgstr ""
@@ -3862,53 +3892,53 @@ msgstr ""
 "cours."
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:75
+#: ../scripts/cowpoke.1:85
 msgid "Display the current version information."
 msgstr "Afficher les informations sur la version."
 
 #. type: SH
-#: ../scripts/cowpoke.1:77 ../scripts/debsnap.1:56
+#: ../scripts/cowpoke.1:87 ../scripts/debsnap.1:56
 #, no-wrap
 msgid "CONFIGURATION OPTIONS"
 msgstr "OPTIONS DE CONFIGURATION"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:83
+#: ../scripts/cowpoke.1:93
 msgid ""
 "When B<cowpoke> is run the following configuration options are read from "
 "global, per-user, and per-project configuration files if present.  File "
 "paths may be absolute or relative, the latter being relative to the "
-"BUILDD_USER's home directory.  Since the paths are typically quoted when "
+"B<BUILDD_USER>'s home directory.  Since the paths are typically quoted when "
 "used, tilde expansion will B<not> be performed on them."
 msgstr ""
 "Quand B<cowpoke> est exécuté, les options de configuration suivantes sont "
 "lues dans le fichier de configuration global, celui de l'utilisateur et du "
 "projet, s'ils sont présents. Les chemins peuvent être indiqués de façon "
 "absolue ou relative (les chemins étant alors relatifs au répertoire "
-"personnel de l'utilisateur BUILDD_USER). Les chemins étant généralement "
+"personnel de l'utilisateur B<BUILDD_USER>). Les chemins étant généralement "
 "fournis entre guillemets, l'expansion des tildes ne sera B<pas> réalisée."
 
 #. type: SS
-#: ../scripts/cowpoke.1:84
+#: ../scripts/cowpoke.1:94
 #, no-wrap
 msgid "Global defaults"
 msgstr "Valeurs par défaut globales"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:86
+#: ../scripts/cowpoke.1:96
 msgid "These apply to every arch and dist in a single cowpoke invocation."
 msgstr ""
 "Elles s'appliquent à chaque architecture et distribution lors d'une "
 "invocation de cowpoke."
 
 #. type: TP
-#: ../scripts/cowpoke.1:87
+#: ../scripts/cowpoke.1:97
 #, no-wrap
 msgid "B<BUILDD_HOST>"
 msgstr "B<BUILDD_HOST>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:91
+#: ../scripts/cowpoke.1:101
 msgid ""
 "The network address or fqdn of the build machine where cowbuilder is "
 "configured.  This may be overridden by the B<--buildd> command line option."
@@ -3918,33 +3948,33 @@ msgstr ""
 "l'option en ligne de commande B<--buildd>."
 
 #. type: TP
-#: ../scripts/cowpoke.1:91
+#: ../scripts/cowpoke.1:101
 #, no-wrap
 msgid "B<BUILDD_USER>"
 msgstr "B<BUILDD_USER>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:97
+#: ../scripts/cowpoke.1:107
 msgid ""
 "The unprivileged user name for operations on the build machine.  This "
 "defaults to the local name of the user executing B<cowpoke> (or to a "
-"username that is specified in your ssh config for BUILDD_HOST), and may be "
-"overridden by the B<--buildd-user> command line option."
+"username that is specified in your ssh config for B<BUILDD_HOST>), and may "
+"be overridden by the B<--buildd-user> command line option."
 msgstr ""
 "Le nom de l'utilisateur, non privilégié, sur la machine de construction. Le "
 "nom par défaut est le nom de l'utilisateur local qui exécute B<cowpoke> (ou "
-"le nom d'utilisateur précisé dans la configuration ssh pour BUILDD_HOST), et "
-"le nom fournit par la variable d'environnement peut être remplacé avec "
+"le nom d'utilisateur précisé dans la configuration ssh pour B<BUILDD_HOST>), "
+"et le nom fournit par la variable d'environnement peut être remplacé avec "
 "l'option B<--buildd-user> en ligne de commande."
 
 #. type: TP
-#: ../scripts/cowpoke.1:97
+#: ../scripts/cowpoke.1:107
 #, no-wrap
 msgid "B<BUILDD_ARCH>"
 msgstr "B<BUILDD_ARCH>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:104
+#: ../scripts/cowpoke.1:114
 msgid ""
 "The Debian architecture(s) to build for.  This must match the "
 "B<DEB_BUILD_ARCH> of the build chroot being used.  It defaults to the local "
@@ -3962,13 +3992,13 @@ msgstr ""
 "pour toutes ces architectures en une seule passe."
 
 #. type: TP
-#: ../scripts/cowpoke.1:104
+#: ../scripts/cowpoke.1:114
 #, no-wrap
 msgid "B<BUILDD_DIST>"
 msgstr "B<BUILDD_DIST>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:109
+#: ../scripts/cowpoke.1:119
 msgid ""
 "The Debian distribution(s) to build for.  A (quoted) space separated list of "
 "distributions may be used to build for all of them in a single pass.  This "
@@ -3982,13 +4012,13 @@ msgstr ""
 "ligne de commande."
 
 #. type: TP
-#: ../scripts/cowpoke.1:110
+#: ../scripts/cowpoke.1:120
 #, no-wrap
 msgid "B<INCOMING_DIR>"
 msgstr "B<INCOMING_DIR>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:114
+#: ../scripts/cowpoke.1:124
 msgid ""
 "The directory path on the build machine where the source package will "
 "initially be placed.  This must be writable by the B<BUILDD_USER>."
@@ -3998,13 +4028,13 @@ msgstr ""
 "l'utilisateur B<BUILDD_USER>."
 
 #. type: TP
-#: ../scripts/cowpoke.1:114
+#: ../scripts/cowpoke.1:124
 #, no-wrap
 msgid "B<PBUILDER_BASE>"
 msgstr "B<PBUILDER_BASE>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:119
+#: ../scripts/cowpoke.1:129
 msgid ""
 "The filesystem root for all pbuilder COW and result files.  Arch and dist "
 "specific subdirectories will normally be created under this.  The apt cache "
@@ -4017,13 +4047,13 @@ msgstr ""
 "chemin."
 
 #. type: TP
-#: ../scripts/cowpoke.1:120
+#: ../scripts/cowpoke.1:130
 #, no-wrap
 msgid "B<SIGN_KEYID>"
 msgstr "B<SIGN_KEYID>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:127
+#: ../scripts/cowpoke.1:137
 msgid ""
 "If this option is set, it is expected to contain the gpg key id to pass to "
 "B<debsign>(1) if the packages are to be remotely signed.  You will be "
@@ -4039,14 +4069,14 @@ msgstr ""
 "effectuée."
 
 #. type: TP
-#: ../scripts/cowpoke.1:127
+#: ../scripts/cowpoke.1:137
 #, no-wrap
 msgid "B<UPLOAD_QUEUE>"
 msgstr "B<UPLOAD_QUEUE>"
 
 # NOTE: "them" => packages
 #. type: Plain text
-#: ../scripts/cowpoke.1:134
+#: ../scripts/cowpoke.1:144
 msgid ""
 "If this option is set, it is expected to contain a 'host' specification for "
 "B<dput>(1) which will be used to upload them after they are signed.  You "
@@ -4063,13 +4093,13 @@ msgstr ""
 "Si B<SIGN_KEYID> n'est pas activée, cette option sera complètement ignorée."
 
 #. type: TP
-#: ../scripts/cowpoke.1:135
+#: ../scripts/cowpoke.1:145
 #, no-wrap
 msgid "B<BUILDD_ROOTCMD>"
 msgstr "B<BUILDD_ROOTCMD>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:143
+#: ../scripts/cowpoke.1:153
 msgid ""
 "The command to use to gain root privileges on the remote build machine.  If "
 "unset the default is B<sudo>(8).  This is only required to invoke cowbuilder "
@@ -4087,30 +4117,31 @@ msgstr ""
 "cowbuilder sans avoir à forunir de mot de passe :"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:147
+#: ../scripts/cowpoke.1:157
 msgid "youruser ALL = NOPASSWD: /usr/sbin/cowbuilder"
 msgstr "utilisateur ALL = NOPASSWD: /usr/sbin/cowbuilder"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:153
+#: ../scripts/cowpoke.1:164
 msgid ""
 "Alternatively you could use ssh with a forwarded key, or whatever other "
-"mechanism suits your local access policy.  su -c isn't really suitable here "
-"due to its quoting requirements being different from all the rest."
+"mechanism suits your local access policy.  Using B<su -c> isn't really "
+"suitable here due to its quoting requirements being somewhat different to "
+"the rest."
 msgstr ""
 "Autrement, vous pouvez utiliser ssh avec une clé ou tout autre mécanisme "
-"correspondant à votre politique locale. su -c n'est pas vraiment utilisable "
-"ici parce qu'il nécessite de placer des guillemets autour, contrairement aux "
-"autres."
+"correspondant à votre politique locale. Utiliser B<su -c> n'est pas vraiment "
+"utilisable ici parce qu'il nécessite de placer des guillemets autour, "
+"contrairement aux autres."
 
 #. type: TP
-#: ../scripts/cowpoke.1:154
+#: ../scripts/cowpoke.1:165
 #, no-wrap
 msgid "B<DEBOOTSTRAP>"
 msgstr "B<DEBOOTSTRAP>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:158
+#: ../scripts/cowpoke.1:169
 msgid ""
 "The utility to use when creating a new build root.  Alternatives are "
 "B<debootstrap> or B<cdebootstrap>."
@@ -4118,34 +4149,49 @@ msgstr ""
 "L'utilitaire à utiliser pour créer une nouvelle racine de construction. Les "
 "possibilités sont B<debootstrap> ou B<cdebootstrap>."
 
+#. type: TP
+#: ../scripts/cowpoke.1:170
+#, no-wrap
+msgid "B<RETURN_DIR>"
+msgstr "B<RETURN_DESTDIR>"
+
+#. type: Plain text
+#: ../scripts/cowpoke.1:176
+msgid ""
+"If set, package files resulting from the build will be copied to the path "
+"(local or remote) that this is set to, after the build completes.  The path "
+"must exist, it will not be created.  This option is unset by default and can "
+"be overridden with B<--return> or B<--no-return>."
+msgstr ""
+
 #. type: SS
-#: ../scripts/cowpoke.1:160
+#: ../scripts/cowpoke.1:178
 #, no-wrap
 msgid "Arch and dist specific options"
 msgstr "Options spécifiques à des architectures ou distributions"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:163
+#: ../scripts/cowpoke.1:181
 msgid ""
-"These are variables of the form: $arch_$dist_VAR which apply only for a "
+"These are variables of the form: $arch_$distB<_VAR> which apply only for a "
 "particular target arch/dist build."
 msgstr ""
-"Ce sont des variables de la forme $arch_$dist_VAR qui ne s'appliquent qu'à "
-"une cible de construction spécifique à une architecture et à une "
+"Ce sont des variables de la forme $arch_$distB<_VAR> qui ne s'appliquent "
+"qu'à une cible de construction spécifique à une architecture et à une "
 "distribution."
 
 #. type: TP
-#: ../scripts/cowpoke.1:164
+#: ../scripts/cowpoke.1:182
 #, no-wrap
-msgid "archB<_>distB<_RESULT_DIR>"
-msgstr "archB<_>distB<_RESULT_DIR>"
+msgid "I<arch>B<_>I<dist>B<_RESULT_DIR>"
+msgstr "I<arch>B<_>I<dist>B<_RESULT_DIR>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:175
+#: ../scripts/cowpoke.1:193
 msgid ""
 "The directory path on the build machine where the resulting packages (source "
 "and binary) will be found, and where older versions of the package that were "
-"built previously may be found.  If any such older packages exist, debdiff "
+"built previously may be found.  If any such older packages exist, B<debdiff> "
 "will be used to compare the new package with the previous version after the "
 "build is complete, and the result will be included in the build log.  Files "
 "in it must be readable by the B<BUILDD_USER> for sanity checking with "
@@ -4156,7 +4202,7 @@ msgstr ""
 "Le chemin du répertoire de la machine de construction où les paquets "
 "résultants (sources et binaires) seront trouvés, et où les versions "
 "ultérieures des paquets ayant été précédemment construits pourront être "
-"trouvées. Si des anciens paquets sont trouvés, debdiff sera utilisé pour "
+"trouvées. Si des anciens paquets sont trouvés, B<debdiff> sera utilisé pour "
 "comparer le nouveau paquet avec la version précédente une fois la "
 "construction finie, et le résultat se trouvera dans le journal de "
 "construction. Les fichiers du répertoire doivent être lisibles par "
@@ -4166,13 +4212,13 @@ msgstr ""
 "chemin par défaut sera I<$PBUILDER_BASE/$arch/$dist/result>"
 
 #. type: TP
-#: ../scripts/cowpoke.1:176
+#: ../scripts/cowpoke.1:194
 #, no-wrap
-msgid "archB<_>distB<_BASE_PATH>"
-msgstr "archB<_>distB<_BASE_PATH>"
+msgid "I<arch>B<_>I<dist>B<_BASE_PATH>"
+msgstr "I<arch>B<_>I<dist>B<_BASE_PATH>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:182
+#: ../scripts/cowpoke.1:200
 msgid ""
 "The directory where the COW master files are to be found (or created if the "
 "B<--create> command line option was passed).  If this option is not "
@@ -4186,32 +4232,32 @@ msgstr ""
 "base.cow>"
 
 #. type: SH
-#: ../scripts/cowpoke.1:184
+#: ../scripts/cowpoke.1:202
 #, no-wrap
 msgid "CONFIGURATION FILES"
 msgstr "FICHIERS DE CONFIGURATION"
 
 #. type: TP
-#: ../scripts/cowpoke.1:185
+#: ../scripts/cowpoke.1:203
 #, no-wrap
 msgid "I</etc/cowpoke.conf>"
 msgstr "I</etc/cowpoke.conf>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:188
+#: ../scripts/cowpoke.1:206
 msgid "Global configuration options.  Will override hardcoded defaults."
 msgstr ""
 "Options de configuration globales. Elles remplaceront les valeurs par défaut "
 "codées en dur."
 
 #. type: TP
-#: ../scripts/cowpoke.1:188
+#: ../scripts/cowpoke.1:206
 #, no-wrap
 msgid "I<~/.cowpoke>"
 msgstr "I<~/.cowpoke>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:191 ../scripts/debsnap.1:90
+#: ../scripts/cowpoke.1:209 ../scripts/debsnap.1:90
 msgid ""
 "Per-user configuration options.  Will override any global configuration."
 msgstr ""
@@ -4219,13 +4265,13 @@ msgstr ""
 "des options de configuration globales."
 
 #. type: TP
-#: ../scripts/cowpoke.1:191
+#: ../scripts/cowpoke.1:209
 #, no-wrap
 msgid "I<.cowpoke>"
 msgstr "I<.cowpoke>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:195
+#: ../scripts/cowpoke.1:213
 msgid ""
 "Per-project configuration options.  Will override any per-user or global "
 "configuration if B<cowpoke> is called from the directory where they exist."
@@ -4235,7 +4281,7 @@ msgstr ""
 "répertoire où se trouve le fichier."
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:199
+#: ../scripts/cowpoke.1:217
 msgid ""
 "If the environment variable B<COWPOKE_CONF> is set, it specifies an "
 "addtional configuration file which will override all of those above.  "
@@ -4248,17 +4294,17 @@ msgstr ""
 "options provenant des fichiers de configuration."
 
 #. type: SH
-#: ../scripts/cowpoke.1:201
+#: ../scripts/cowpoke.1:219
 #, no-wrap
 msgid "COWBUILDER CONFIGURATION"
 msgstr "CONFIGURATION DE COWBUILDER"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:210
+#: ../scripts/cowpoke.1:228
 msgid ""
 "There is nothing particularly special required to configure a cowbuilder "
 "instance for use with B<cowpoke>.  Simply create them in the flavour you "
-"require with `cowbuilder --create` according to the cowbuilder "
+"require with `B<cowbuilder --create>` according to the cowbuilder "
 "documentation, then configure B<cowpoke> with the user, arch, and path "
 "information required to access it, on the machines you wish to invoke it "
 "from (or alternatively configure B<cowpoke> with the path, arch and "
@@ -4268,7 +4314,7 @@ msgid ""
 msgstr ""
 "Il n'y a rien de particulier à faire pour configurer une instance de "
 "cowbuilder pour qu'elle puisse être utilisée avec B<cowpoke>. Créer la "
-"simplement telle que vous en avez besoin avec « cowbuilder --create » en "
+"simplement telle que vous en avez besoin avec « B<cowbuilder --create> » en "
 "suivant la documentation de cowbuilder, puis configurez B<cowpoke> avec les "
 "informations sur l'utilisateur, l'architecture et le chemin nécessaire pour "
 "y accéder sur les machines où vous souhaitez l'appeler (ou configurez "
@@ -4278,7 +4324,7 @@ msgstr ""
 "B<cowpoke> soit installé localement."
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:219
+#: ../scripts/cowpoke.1:238
 #, fuzzy
 #| msgid ""
 #| "The build machine should have the lintian and devscripts packages "
@@ -4288,15 +4334,15 @@ msgstr ""
 #| "will also need B<dput>(1) installed and configured to use the 'host' "
 #| "alias specified by B<UPLOAD_QUEUE>."
 msgid ""
-"The build machine should have the lintian and devscripts packages installed "
-"for post-build sanity checking.  Upon completion, the build log and the "
-"results of automated checks will be recorded in the B<INCOMING_DIR>.  If you "
-"wish to upload signed packages the build machine will also need B<dput>(1) "
-"installed and configured to use the 'host' alias specified by "
-"B<UPLOAD_QUEUE>.  If B<rsync>(1) is available on both the local and build "
-"machine, then it will be used to transfer the source package (this may save "
-"on some transfers of the orig.tar.* when building subsequent debian "
-"revisions)."
+"The build machine should have the B<lintian> and B<devscripts> packages "
+"installed for post-build sanity checking.  Upon completion, the build log "
+"and the results of automated checks will be recorded in the "
+"B<INCOMING_DIR>.  If you wish to upload signed packages the build machine "
+"will also need B<dput>(1) installed and configured to use the 'I<host>' "
+"alias specified by B<UPLOAD_QUEUE>.  If B<rsync>(1) is available on both the "
+"local and build machine, then it will be used to transfer the source package "
+"(this may save on some transfers of the I<orig.tar.*> when building "
+"subsequent Debian revisions)."
 msgstr ""
 "La machine de construction doit avoir les paquets lintian et devscripts "
 "installés pour les vérifications en fin de construction. Une fois la "
@@ -4307,7 +4353,7 @@ msgstr ""
 "B<UPLOAD_QUEUE>."
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:225
+#: ../scripts/cowpoke.1:244
 msgid ""
 "The user executing B<cowpoke> must have ssh access to the build machine as "
 "the B<BUILDD_USER>.  That user must be able to invoke cowbuilder as root by "
@@ -4325,7 +4371,7 @@ msgstr ""
 "B<cowpoke>."
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:232
+#: ../scripts/cowpoke.1:251
 msgid ""
 "When B<cowpoke> is invoked, it will first attempt to update the cowbuilder "
 "image if that has not already been done on the same day.  This is checked by "
@@ -4343,42 +4389,43 @@ msgstr ""
 "jour (ou la création) de la racine de construction."
 
 #. type: =head1
-#: ../scripts/cowpoke.1:234 ../scripts/rmadison.pl:317
+#: ../scripts/cowpoke.1:253 ../scripts/rmadison.pl:317
 #, no-wrap
 msgid "NOTES"
 msgstr "NOTES"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:243
+#: ../scripts/cowpoke.1:262
 msgid ""
-"Since cowbuilder creates a chroot, and to do that you need root, B<cowpoke> "
-"also requires some degree of root access.  So all the horrible things that "
-"can go wrong with that may well one day rain down upon you.  cowbuilder has "
-"been known to accidentally wipe out bind-mounted filesystems outside the "
-"chroot, and worse than that can easily happen.  So be careful, keep good "
-"backups of things you don't want to lose on your build machine, and use "
-"B<cowpoke> to keep all that on a machine that isn't your bleeding edge dev "
-"box with your last few hours of uncommitted work."
+"Since B<cowbuilder> creates a chroot, and to do that you need root, "
+"B<cowpoke> also requires some degree of root access.  So all the horrible "
+"things that can go wrong with that may well one day rain down upon you.  "
+"B<cowbuilder> has been known to accidentally wipe out bind-mounted "
+"filesystems outside the chroot, and worse than that can easily happen.  So "
+"be careful, keep good backups of things you don't want to lose on your build "
+"machine, and use B<cowpoke> to keep all that on a machine that isn't your "
+"bleeding edge dev box with your last few hours of uncommitted work."
 msgstr ""
 "Puisque cowbuilder crée un chroot, et qu'il faut pour cela être root, "
 "B<cowpoke> nécessite également certains des privilèges de root. Et toutes "
-"les horreurs qui peuvent arriver pourront vous arriver un jour. cowbuilder a "
-"été connu pour accidentellement écraser des systèmes de fichiers montés avec "
-"l'option « bind » en dehors de son chroot, et pire encore peut arriver. "
-"Soyez prudents, conservez des sauvegardes de ce que vous ne souhaitez pas "
-"perdre sur vos machines de construction et utilisez B<cowpoke> pour isoler "
-"tous ces problèmes sur une machine qui n'est pas votre machine de "
-"développement avec vos quelques heures de travail non committé."
+"les horreurs qui peuvent arriver pourront vous arriver un jour. "
+"B<cowbuilder> a été connu pour accidentellement écraser des systèmes de "
+"fichiers montés avec l'option « bind » en dehors de son chroot, et pire "
+"encore peut arriver. Soyez prudents, conservez des sauvegardes de ce que "
+"vous ne souhaitez pas perdre sur vos machines de construction et utilisez "
+"B<cowpoke> pour isoler tous ces problèmes sur une machine qui n'est pas "
+"votre machine de développement avec vos quelques heures de travail non "
+"committé."
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:249
+#: ../scripts/cowpoke.1:268
 msgid "B<cowbuilder>(1), B<pbuilder>(1), B<ssh-agent>(1), B<sudoers>(5)."
 msgstr "B<cowbuilder>(1), B<pbuilder>(1), B<ssh-agent>(1), B<sudoers>(5)."
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:253
-msgid "B<cowpoke> was written by Ron E<lt>ron@debian.orgE<gt>."
-msgstr "B<cowpoke> a été écrit par Ron E<lt>ron@debian.orgE<gt>."
+#: ../scripts/cowpoke.1:272
+msgid "B<cowpoke> was written by Ron E<lt>I<ron@debian.org>E<gt>."
+msgstr "B<cowpoke> a été écrit par Ron E<lt>I<ron@debian.org>E<gt>."
 
 #. type: TH
 #: ../scripts/cvs-debc.1:1 ../scripts/cvs-debrelease.1:1
@@ -5719,9 +5766,8 @@ msgstr ""
 "associées B<--check-dirname-level> et B<--check-dirname-regex>."
 
 #. type: Plain text
-#: ../scripts/debc.1:41 ../scripts/debchange.1:119 ../scripts/debclean.1:37
-#: ../scripts/debi.1:42 ../scripts/debrelease.1:33 ../scripts/debuild.1:63
-#: ../scripts/uscan.1:293
+#: ../scripts/debc.1:41 ../scripts/debclean.1:37 ../scripts/debi.1:42
+#: ../scripts/debrelease.1:33 ../scripts/debuild.1:63 ../scripts/uscan.1:293
 msgid "DEVSCRIPTS_CHECK_DIRNAME_LEVEL can take the following values:"
 msgstr "DEVSCRIPTS_CHECK_DIRNAME_LEVEL peut prendre les valeurs suivantes :"
 
@@ -5774,9 +5820,8 @@ msgid "Always check the directory name."
 msgstr "Vérifie toujours le nom du répertoire."
 
 #. type: Plain text
-#: ../scripts/debc.1:64 ../scripts/debchange.1:142 ../scripts/debclean.1:60
-#: ../scripts/debi.1:65 ../scripts/debrelease.1:56 ../scripts/debuild.1:86
-#: ../scripts/uscan.1:318
+#: ../scripts/debc.1:64 ../scripts/debclean.1:60 ../scripts/debi.1:65
+#: ../scripts/debrelease.1:56 ../scripts/debuild.1:86 ../scripts/uscan.1:318
 msgid ""
 "The directory name is checked by testing whether the current directory name "
 "(as determined by B<pwd>(1)) matches the regex given by the configuration "
@@ -5828,8 +5873,7 @@ msgid "B<--check-dirname-level> I<N>"
 msgstr "B<--check-dirname-level> I<N>"
 
 #. type: Plain text
-#: ../scripts/debc.1:81 ../scripts/debc.1:85 ../scripts/debchange.1:343
-#: ../scripts/debchange.1:347 ../scripts/debclean.1:73
+#: ../scripts/debc.1:81 ../scripts/debc.1:85 ../scripts/debclean.1:73
 #: ../scripts/debclean.1:77 ../scripts/debi.1:88 ../scripts/debi.1:92
 #: ../scripts/debrelease.1:91 ../scripts/debrelease.1:95
 #: ../scripts/debuild.1:280 ../scripts/debuild.1:284 ../scripts/uscan.1:431
@@ -5905,8 +5949,8 @@ msgid "B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL>, B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>"
 msgstr "B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL>, B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>"
 
 #. type: Plain text
-#: ../scripts/debc.1:115 ../scripts/debchange.1:383 ../scripts/debclean.1:107
-#: ../scripts/debi.1:122 ../scripts/debrelease.1:132 ../scripts/debuild.1:367
+#: ../scripts/debc.1:115 ../scripts/debclean.1:107 ../scripts/debi.1:122
+#: ../scripts/debrelease.1:132 ../scripts/debuild.1:367
 msgid ""
 "See the above section \"Directory name checking\" for an explanation of "
 "these variables.  Note that these are package-wide configuration variables, "
@@ -5976,8 +6020,8 @@ msgid ""
 "exit without touching the existing changelog.  B<Note that the changelog is "
 "assumed to be encoded with the UTF-8 encoding.  If it is not, problems may "
 "occur.> Please see the B<iconv>(1) manpage to find out how to convert "
-"changelogs from legacy encodings.  Finally, a changelog or NEWS file can be "
-"created from scratch using the B<--create> option described below."
+"changelogs from legacy encodings.  Finally, a I<changelog> or I<NEWS> file "
+"can be created from scratch using the B<--create> option described below."
 msgstr ""
 "B<debchange> ou son alias B<dch> ajoute une nouvelle ligne de commentaire au "
 "fichier debian/changelog dans le répertoire des sources. Cette commande doit "
@@ -5997,8 +6041,8 @@ msgstr ""
 "codés en UTF-8. Dans le cas contraire, des problèmes peuvent se produire.> "
 "Veuillez consulter la page de manuel de B<iconv>(1) pour trouver comment "
 "convertir les fichiers changelog codés autrement. Enfin, un fichier "
-"changelog ou debian/NEWS peut être créé à partir de rien en utilisant "
-"l'option B<--create> décrite ci-dessous."
+"I<changelog> ou I<NEWS> peut être créé à partir de rien en utilisant l'option "
+"B<--create> décrite ci-dessous."
 
 #. type: Plain text
 #: ../scripts/debchange.1:42
@@ -6054,9 +6098,9 @@ msgid ""
 "is found but a successful upload is not recorded. This may be because the "
 "previous upload was performed with a version of B<dupload> prior to 2.1 or "
 "because the upload failed. The alternate I<changelog> heuristic assumes the "
-"package has been released unless its changelog contains I<UNRELEASED> in the "
+"package has been released unless its changelog contains B<UNRELEASED> in the "
 "distribution field. If this heuristic is enabled then the distribution will "
-"default to I<UNRELEASED> in new changelog entries, and the B<--mainttrailer> "
+"default to B<UNRELEASED> in new changelog entries, and the B<--mainttrailer> "
 "option described below will be automatically enabled. This can be useful if "
 "a package can be released by different maintainers, or if you do not keep "
 "the upload logs."
@@ -6070,9 +6114,9 @@ msgstr ""
 "parce l'envoi précédent a été exécuté avec une version de B<dupload> "
 "inférieure à 2.1 ou parce que l'envoi a échoué. L'autre heuristique "
 "(I<changelog>) suppose que le paquet a été distribué à moins que le journal "
-"des modifications ne contienne I<UNRELEASED> dans le champ de la "
+"des modifications ne contienne B<UNRELEASED> dans le champ de la "
 "distribution. Si cette heuristique est activée alors la distribution sera "
-"changée en I<UNRELEASED> dans les nouvelles entrées du journal des "
+"changée en B<UNRELEASED> dans les nouvelles entrées du journal des "
 "modifications, et l'option B<--mainttrailer> décrite ci-dessus sera activée "
 "automatiquement. Ceci peut être utile si un paquet peut être distribué par "
 "différents responsables, ou si vous ne voulez pas garder les journaux "
@@ -6182,9 +6226,9 @@ msgid ""
 "problems, it will examine the name of the parent directory once it finds the "
 "I<debian/changelog> file, and check that the directory name corresponds to "
 "the package name.  Precisely how it does this is controlled by two "
-"configuration file variables DEVSCRIPTS_CHECK_DIRNAME_LEVEL and "
-"DEVSCRIPTS_CHECK_DIRNAME_REGEX, and their corresponding command-line options "
-"B<--check-dirname-level> and B<--check-dirname-regex>."
+"configuration file variables B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> and "
+"B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>, and their corresponding command-line "
+"options B<--check-dirname-level> and B<--check-dirname-regex>."
 msgstr ""
 "Comme certains autres scripts du paquet B<devscripts>, B<debchange> parcourt "
 "une arborescence de répertoires jusqu'à ce qu'il trouve un fichier I<debian/"
@@ -6192,20 +6236,52 @@ msgstr ""
 "examine le nom du répertoire parent une fois le fichier I<debian/changelog> "
 "trouvé, et vérifie que le nom du répertoire correspond au nom du paquet. La "
 "méthode précise utilisée est contrôlée par les deux variables du fichier de "
-"configuration DEVSCRIPTS_CHECK_DIRNAME_LEVEL et "
-"DEVSCRIPTS_CHECK_DIRNAME_REGEX, et les options en ligne de commande "
+"configuration B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> et "
+"B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>, et les options en ligne de commande "
 "associées B<--check-dirname-level> et B<--check-dirname-regex>."
+
+#. type: Plain text
+#: ../scripts/debchange.1:119
+msgid "B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> can take the following values:"
+msgstr "B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> peut prendre les valeurs suivantes :"
+
+#. type: Plain text
+#: ../scripts/debchange.1:142
+msgid ""
+"The directory name is checked by testing whether the current directory name "
+"(as determined by B<pwd>(1)) matches the regex given by the configuration "
+"file option B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> or by the command line option "
+"B<--check-dirname-regex> I<regex>.  Here I<regex> is a Perl regex (see "
+"B<perlre>(3perl)), which will be anchored at the beginning and the end.  If "
+"I<regex> contains a 'B</>', then it must match the full directory path.  If "
+"not, then it must match the full directory name.  If I<regex> contains the "
+"string \\'B<PACKAGE>', this will be replaced by the source package name, as "
+"determined from the changelog.  The default value for the regex is: "
+"\\'B<PACKAGE(-.+)?>', thus matching directory names such as B<PACKAGE> and "
+"B<PACKAGE->I<version>."
+msgstr ""
+"Le nom du répertoire est vérifié en testant si le nom du répertoire courant "
+"(donné par B<pwd>(1)) correspond à l'expression rationnelle donnée par la "
+"variable B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> du fichier de configuration ou "
+"par l'option B<--check-dirname-regex> I<regex>. Il s'agit d'une expression "
+"rationnelle Perl (voir B<perlre>(1)), qui sera ancrée à son début et à sa "
+"fin. Si elle contient un « B</> », alors elle doit correspondre au chemin "
+"complet. Si elle contient la chaîne « B<PACKAGE> », cette chaîne sera "
+"remplacée par le nom du paquet source déterminé par le fichier changelog. La "
+"valeur par défaut de cette expression rationnelle est « B<PACKAGE(-.+)?> », "
+"ce qui correspond aux répertoires nommés B<PACKAGE> ou B<PACKAGE->I<version>."
 
 #. type: Plain text
 #: ../scripts/debchange.1:146
 msgid ""
 "The default changelog to be edited is I<debian/changelog>; however, this can "
-"be changed using the B<--changelog> or B<--news> options or the CHANGELOG "
+"be changed using the B<--changelog> or B<--news> options or the B<CHANGELOG> "
 "environment variable, as described below."
 msgstr ""
 "Le journal des modifications par défaut à éditer est I<debian/changelog> ; "
 "cependant, ceci peut être changé en utilisant les options B<--changelog> ou "
-"B<--news>, ou la variable d'environnement CHANGELOG, comme décrit plus bas."
+"B<--news>, ou la variable d'environnement B<CHANGELOG>, comme décrit plus "
+"bas."
 
 #. type: TP
 #: ../scripts/debchange.1:147
@@ -6282,17 +6358,17 @@ msgstr "B<--release>, B<-r>"
 #: ../scripts/debchange.1:174
 msgid ""
 "Finalize the changelog for a release.  Update the changelog timestamp. If "
-"the distribution is set to I<UNRELEASED>, change it to the distribution from "
+"the distribution is set to B<UNRELEASED>, change it to the distribution from "
 "the previous changelog entry (or another distribution as specified by B<--"
 "distribution>).  If there are no previous changelog entries and an explicit "
-"distribution has not been specified, I<unstable> will be used."
+"distribution has not been specified, B<unstable> will be used."
 msgstr ""
 "Finaliser le fichier changelog pour un envoi. Ceci met à jour l'horodatage "
 "du fichier changelog. Si la distribution vaut I<UNRELEASED>, elle prend la "
 "valeur de l'entrée précédente du fichier (ou de la distribution indiquée par "
 "l'option B<--distribution>). S'il n'y a pas d'entrée précédente, et "
 "qu'aucune distribution n'a été indiquée explicitement, la distribution sera "
-"I<unstable>."
+"B<unstable>."
 
 #. type: TP
 #: ../scripts/debchange.1:174
@@ -6303,11 +6379,11 @@ msgstr "B<--force-save-on-release>"
 #. type: Plain text
 #: ../scripts/debchange.1:179
 msgid ""
-"When --release is used and an editor opened to allow inspection of the "
+"When B<--release> is used and an editor opened to allow inspection of the "
 "changelog, require the user to save the changelog their editor opened.  "
 "Otherwise, the original changelog will not be modified. (default)"
 msgstr ""
-"Quand l'option --release est utilisée et qu'un éditeur a été ouvert pour "
+"Quand l'option B<--release> est utilisée et qu'un éditeur a été ouvert pour "
 "permettre de vérifier le journal des modifications, l'utilisateur doit "
 "enregistrer le journal de modifications ouvert par l'éditeur. Sinon, le "
 "journal d'origine ne sera pas modifié. (option par défaut)"
@@ -6332,16 +6408,27 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debchange.1:197
+#, fuzzy
+#| msgid ""
+#| "This will create a new I<debian/changelog> file (or I<NEWS> if the B<--"
+#| "news> option is used).  You must be in the top-level directory to use "
+#| "this; no directory name checking will be performed.  The package name and "
+#| "version can either be specified using the B<--package> and B<--"
+#| "newversion> options, determined from the directory name using the B<--"
+#| "fromdirname> option or entered manually into the generated changelog "
+#| "file.  The maintainer name is determined from the environment if this is "
+#| "possible, and the distribution is specified either using the B<--"
+#| "distribution> option or in the generated changelog file."
 msgid ""
 "This will create a new I<debian/changelog> file (or I<NEWS> if the B<--news> "
 "option is used).  You must be in the top-level directory to use this; no "
 "directory name checking will be performed.  The package name and version can "
 "either be specified using the B<--package> and B<--newversion> options, "
 "determined from the directory name using the B<--fromdirname> option or "
-"entered manually into the generated changelog file.  The maintainer name is "
-"determined from the environment if this is possible, and the distribution is "
-"specified either using the B<--distribution> option or in the generated "
-"changelog file."
+"entered manually into the generated I<changelog> file.  The maintainer name "
+"is determined from the environment if this is possible, and the distribution "
+"is specified either using the B<--distribution> option or in the generated "
+"I<changelog> file."
 msgstr ""
 "Ceci créera un nouveau fichier I<debian/changelog> (ou I<debian/NEWS> si "
 "l'option B<--news> est utilisée). Vous devez être dans le répertoire de plus "
@@ -6364,14 +6451,14 @@ msgstr "B<--empty>"
 #: ../scripts/debchange.1:204
 msgid ""
 "When used in combination with B<--create>, suppress the automatic addition "
-"of an \"initial release\" changelog entry (so that the next invocation of "
+"of an \"B<initial release>\" changelog entry (so that the next invocation of "
 "B<debchange> adds the first entry).  Note that this will cause a B<dpkg-"
 "parsechangelog> warning on the next invocation due to the lack of changes."
 msgstr ""
 "Quand elle est utilisée avec l'option B<--create>, elle permet de supprimer "
-"l'ajout automatique d'une entrée « initial release » (de telle sorte que le "
-"prochain appel à B<debchange> ajoutera la première entrée). Notez que B<dpkg-"
-"parsechangelog> générera des avertissements du fait de l'absence de "
+"l'ajout automatique d'une entrée « B<initial release> » (de telle sorte que "
+"le prochain appel à B<debchange> ajoutera la première entrée). Notez que "
+"B<dpkg-parsechangelog> générera des avertissements du fait de l'absence de "
 "description de modifications."
 
 #. type: TP
@@ -6401,20 +6488,20 @@ msgstr "B<--nmu>, B<-n>"
 #: ../scripts/debchange.1:218
 msgid ""
 "Increment the Debian release number for a non-maintainer upload by either "
-"appending a \".1\" to a non-NMU version number (unless the package is Debian "
-"native, in which case \"+nmu1\" is appended) or by incrementing an NMU "
-"version number, and add an NMU changelog comment.  This happens "
+"appending a \"B<.1>\" to a non-NMU version number (unless the package is "
+"Debian native, in which case \"B<+nmu1>\" is appended) or by incrementing an "
+"NMU version number, and add an NMU changelog comment.  This happens "
 "automatically if the packager is neither in the Maintainer nor the Uploaders "
 "field in I<debian/control>, unless B<DEBCHANGE_AUTO_NMU> is set to I<no> or "
 "the B<--no-auto-nmu> option is used."
 msgstr ""
 "Incrémente le numéro de version Debian pour un envoi d'un non-responsable "
-"soit en ajoutant « .1 » à une version non-NMU (à moins qu'il s'agisse d'un "
-"paquet Debian natif, auquel cas « +nmu1 » est ajouté) soit en incrémentant "
-"un numéro de NMU. Ceci se produit automatiquement si l'auteur du paquet "
-"n'est pas dans les champs Maintainer ou Uploaders de I<debian/control>, à "
-"moins que B<DEBCHANGE_AUTO_NMU> soit définie à I<no> ou que l'option B<--no-"
-"auto-nmu> soit utilisée."
+"soit en ajoutant « B<.1> » à une version non-NMU (à moins qu'il s'agisse "
+"d'un paquet Debian natif, auquel cas « B<+nmu1> » est ajouté) soit en "
+"incrémentant un numéro de NMU. Ceci se produit automatiquement si l'auteur "
+"du paquet n'est pas dans les champs Maintainer ou Uploaders de I<debian/"
+"control>, à moins que B<DEBCHANGE_AUTO_NMU> soit définie à I<no> ou que "
+"l'option B<--no-auto-nmu> soit utilisée."
 
 #. type: TP
 #: ../scripts/debchange.1:218
@@ -6426,11 +6513,11 @@ msgstr "B<--bin-nmu>"
 #: ../scripts/debchange.1:223
 msgid ""
 "Increment the Debian release number for a binary non-maintainer upload by "
-"either appending a \"+b1\" to a non-binNMU version number or by incrementing "
-"a binNMU version number, and add a binNMU changelog comment."
+"either appending a \"B<+b1>\" to a non-binNMU version number or by "
+"incrementing a binNMU version number, and add a binNMU changelog comment."
 msgstr ""
 "Incrémente le numéro de version Debian pour un envoi binaire d'un non-"
-"responsable soit en ajoutant « +b1 » à une version non-binNMU soit en "
+"responsable soit en ajoutant « B<+b1> » à une version non-binNMU soit en "
 "incrémentant un numéro de binNMU, et ajoute un commentaire « binNMU » dans "
 "le changelog."
 
@@ -6444,10 +6531,10 @@ msgstr "B<--qa>, B<-q>"
 #: ../scripts/debchange.1:227
 msgid ""
 "Increment the Debian release number for a Debian QA Team upload, and add a "
-"QA upload changelog comment."
+"B<QA upload> changelog comment."
 msgstr ""
 "Incrémente le numéro de publication de Debian pour un envoi par l'équipe QA "
-"de Debian, et ajoute un commentaire « QA upload » dans le changelog."
+"de Debian, et ajoute un commentaire « B<QA upload> » dans le changelog."
 
 #. type: TP
 #: ../scripts/debchange.1:227
@@ -6459,11 +6546,11 @@ msgstr "B<--security>, B<-s>"
 #: ../scripts/debchange.1:231
 msgid ""
 "Increment the Debian release number for a Debian Security Team non-"
-"maintainer upload, and add a Security Team upload changelog comment."
+"maintainer upload, and add a B<Security Team upload> changelog comment."
 msgstr ""
 "Incrémente le numéro de publication de Debian pour un envoi par l'équipe "
-"Sécurité de Debian, et ajoute un commentaire « Security Team upload » dans "
-"le changelog."
+"Sécurité de Debian, et ajoute un commentaire « B<Security Team upload> » "
+"dans le changelog."
 
 #. type: TP
 #: ../scripts/debchange.1:231
@@ -6474,11 +6561,11 @@ msgstr "B<--team>"
 #. type: Plain text
 #: ../scripts/debchange.1:235
 msgid ""
-"Increment the Debian release number for a team upload, and add a team upload "
-"changelog comment."
+"Increment the Debian release number for a team upload, and add a B<Team "
+"upload> changelog comment."
 msgstr ""
 "Incrémente le numéro de publication de Debian pour un envoi par l'équipe, et "
-"ajoute un commentaire « Team upload » dans le changelog."
+"ajoute un commentaire « B<Team upload> » dans le changelog."
 
 #. type: TP
 #: ../scripts/debchange.1:235
@@ -6488,12 +6575,16 @@ msgstr "B<--bpo>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:239
+#, fuzzy
+#| msgid ""
+#| "Increment the Debian release number for an upload to lenny-backports, and "
+#| "add a backport upload changelog comment."
 msgid ""
-"Increment the Debian release number for an upload to lenny-backports, and "
+"Increment the Debian release number for an upload to squeeze-backports, and "
 "add a backport upload changelog comment."
 msgstr ""
 "Incrémente le numéro de publication de Debian pour un envoi d'un "
-"rétroportage pour Lenny, et ajoute un commentaire pour l'envoi du "
+"rétroportage pour Squeeze, et ajoute un commentaire pour l'envoi du "
 "rétroportage dans le changelog."
 
 #. type: TP
@@ -6596,17 +6687,17 @@ msgstr "B<--fromdirname>, B<-d>"
 #: ../scripts/debchange.1:272
 msgid ""
 "This will take the upstream version number from the directory name, which "
-"should be of the form I<package>-I<version>.  If the upstream version number "
-"has increased from the most recent changelog entry, then a new entry will be "
-"made with version number I<version>-1 (or I<version> if the package is "
-"Debian native), with the same epoch as the previous package version.  If the "
-"upstream version number is the same, this option will behave in the same way "
-"as B<-i>."
+"should be of the form I<package>B<->I<version>.  If the upstream version "
+"number has increased from the most recent changelog entry, then a new entry "
+"will be made with version number I<version>B<-1> (or I<version> if the "
+"package is Debian native), with the same epoch as the previous package "
+"version.  If the upstream version number is the same, this option will "
+"behave in the same way as B<-i>."
 msgstr ""
 "Le numéro de version amont sera déterminé en fonction du nom du répertoire, "
 "qui devra être de la forme I<paquet>-I<version>. Si le numéro de version "
 "amont a augmenté depuis l'entrée la plus récente du fichier changelog, la "
-"nouvelle entrée sera ajoutée avec pour numéro de version I<version>-1 (ou "
+"nouvelle entrée sera ajoutée avec pour numéro de version I<version>B<-1> (ou "
 "I<version> dans le cas d'un paquet Debian natif), avec le même temps absolu "
 "(« epoch ») que le paquet précédent. Si le numéro de version amont est le "
 "même, cette option se comporte de la même façon que B<-i>."
@@ -6702,11 +6793,11 @@ msgstr "B<--urgency> I<urgence>, B<-u> I<urgence>"
 #: ../scripts/debchange.1:299
 msgid ""
 "Use the specified urgency in the changelog entry being edited, instead of "
-"using the default \"low\" for new entries or the existing value for existing "
-"entries."
+"using the default \"B<low>\" for new entries or the existing value for "
+"existing entries."
 msgstr ""
 "Utilise le niveau d'urgence indiqué dans la nouvelle entrée du fichier "
-"changelog, s'il y en a une, au lieu du niveau d'urgence bas (« low ») par "
+"changelog, s'il y en a une, au lieu du niveau d'urgence bas (« B<low> ») par "
 "défaut ou de la valeur courante pour les entrées existantes."
 
 #. type: TP
@@ -6719,13 +6810,13 @@ msgstr "B<--changelog >I<fichier>, B<-c >I<fichier>"
 #: ../scripts/debchange.1:305
 msgid ""
 "This will edit the changelog I<file> instead of the standard I<debian/"
-"changelog>.  This option overrides any CHANGELOG environment variable "
+"changelog>.  This option overrides any B<CHANGELOG> environment variable "
 "setting.  Also, no directory traversing or checking will be performed when "
 "this option is used."
 msgstr ""
 "Ceci éditera le journal des modifications I<fichier> au lieu de I<debian/"
 "changelog>. Cette option remplace la valeur définie par la variable "
-"d'environnement CHANGELOG. De plus, aucune traversée ou contrôle de "
+"d'environnement B<CHANGELOG>. De plus, aucune traversée ou contrôle de "
 "répertoire ne sera fait quand cette option est utilisée."
 
 #. type: TP
@@ -6833,6 +6924,15 @@ msgstr ""
 "justifie, à l'exception de l'édition de la ligne de fin. Consultez aussi "
 "l'option du fichier de configuration B<DEBCHANGE_MAINTTRAILER> ci-dessous."
 
+#. type: Plain text
+#: ../scripts/debchange.1:343 ../scripts/debchange.1:347
+msgid ""
+"See the above section \"B<Directory name checking>\" for an explanation of "
+"this option."
+msgstr ""
+"Veuillez consulter la section ci-dessus « B<Vérification du nom du "
+"répertoire> » pour une explication de cette option."
+
 #. type: TP
 #: ../scripts/debchange.1:351
 #, no-wrap
@@ -6886,6 +6986,20 @@ msgid ""
 "line parameter being used."
 msgstr ""
 "Si elle est positionnée à I<no>, équivaut à utiliser l'option B<--noquery>."
+
+#. type: Plain text
+#: ../scripts/debchange.1:383
+msgid ""
+"See the above section \"B<Directory name checking>\" for an explanation of "
+"these variables.  Note that these are package-wide configuration variables, "
+"and will therefore affect all B<devscripts> scripts which check their value, "
+"as described in their respective manpages and in B<devscripts.conf>(5)."
+msgstr ""
+"Veuillez consulter la section « B<Vérification du nom du répertoire> » ci-"
+"dessus pour une explication de ces variables. Notez que ce sont des "
+"variables de configuration pour tous les outils du paquet B<devscripts> ; "
+"elles impacteront tous les scripts qui les utilisent, comme indiqué dans "
+"leurs pages de manuel respectives et dans B<devscripts.conf>(5)."
 
 #. type: TP
 #: ../scripts/debchange.1:383
@@ -6968,12 +7082,13 @@ msgstr "B<DEBCHANGE_TZ>"
 #: ../scripts/debchange.1:407
 msgid ""
 "Use this timezone for changelog entries.  Default is the user/system "
-"timezone as shown by `date -R` and affected by the environment variable TZ."
+"timezone as shown by `B<date -R>` and affected by the environment variable "
+"B<TZ>."
 msgstr ""
 "Utiliser ce fuseau horaire pour les entrées de journal des modifications. "
 "Par défaut, le fuseau horaire de l'utilisateur sur le système est utilisé, "
-"comme avec « date -R » avec prise en compte de la variable d'environnement "
-"TZ."
+"comme avec « B<date -R> » avec prise en compte de la variable "
+"d'environnement TZ."
 
 #. type: TP
 #: ../scripts/debchange.1:407
@@ -7138,14 +7253,14 @@ msgstr ""
 msgid ""
 "The information about where the repository is available is expected to be "
 "found in B<Vcs-*> fields available in the source package record. For "
-"example, the vim package exposes such information with a field like S<Vcs-"
-"Git: git://git.debian.org/git/pkg-vim/vim.git>, you can see it by grepping "
-"through C<apt-cache showsrc vim>."
+"example, the B<vim> package exposes such information with a field like "
+"S<B<Vcs-Git: git://git.debian.org/git/pkg-vim/vim.git>>, you can see it by "
+"grepping through B<apt-cache showsrc vim>."
 msgstr ""
 "Les informations indiquant où se trouve le dépôt sont recherchées dans les "
-"champs B<Vcs-*> du paquet source. Par exemple, le paquet vim fournit les "
+"champs B<Vcs-*> du paquet source. Par exemple, le paquet B<vim> fournit les "
 "informations en utilisant un champ S<Vcs-Git: git://git.debian.org/git/pkg-"
-"vim/vim.git> que vous pouvez voir dans la sortie de C<apt-cache showsrc vim>."
+"vim/vim.git> que vous pouvez voir dans la sortie de B<apt-cache showsrc vim>."
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:54
@@ -7164,14 +7279,14 @@ msgstr ""
 #. type: textblock
 #: ../scripts/debcheckout.pl:59
 msgid ""
-"If you already know the URL of a given repository you can invoke debcheckout "
-"directly on it, but you will probably need to pass the appropriate B<-t> "
-"flag. That is, some heuristics are in use to guess the repository type from "
-"the URL; if they fail, you might want to override the guessed type using B<-"
-"t>."
+"If you already know the URL of a given repository you can invoke "
+"B<debcheckout> directly on it, but you will probably need to pass the "
+"appropriate B<-t> flag. That is, some heuristics are in use to guess the "
+"repository type from the URL; if they fail, you might want to override the "
+"guessed type using B<-t>."
 msgstr ""
 "Si vous connaissez déjà l'URL d'un dépôt, vous pouvez appeler directement "
-"debcheckout avec celle-ci, mais vous aurez probablement à utiliser le "
+"B<debcheckout> avec celle-ci, mais vous aurez probablement à utiliser le "
 "paramètre B<-t> approprié. C'est-à-dire que des heuristiques sont utilisées "
 "pour deviner le type de dépôt à partir de l'URL ; si elles échouent, vous "
 "pouvez remplacer le type deviné en utilisant B<-t>."
@@ -7179,11 +7294,13 @@ msgstr ""
 #. type: textblock
 #: ../scripts/debcheckout.pl:65
 msgid ""
-"The currently supported version control systems are: arch, bzr, cvs, darcs, "
-"git, hg, svn."
+"The currently supported version control systems are: Arch (arch), Bazaar "
+"(bzr), CVS (cvs), Darcs (darcs), Git (git), Mercurial (hg) and Subversion "
+"(svn)."
 msgstr ""
-"Les systèmes de gestion de configuration gérés actuellement sont : arch, "
-"bzr, cvs, darcs, git, hg, svn."
+"Les systèmes de gestion de configuration gérés actuellement sont : Arch "
+"(arch), Bazaar (bzr), CVS (cvs), Darcs (darcs), Git (git), Mercurial (hg) et "
+"Subversion (svn)."
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:70
@@ -7199,19 +7316,19 @@ msgstr "B<-a>, B<--auth>"
 #: ../scripts/debcheckout.pl:76
 msgid ""
 "Work in authenticated mode; this means that for known repositories (mainly "
-"those hosted on S<http://alioth.debian.org>) URL rewriting is attempted "
+"those hosted on S<I<http://alioth.debian.org>>) URL rewriting is attempted "
 "before checking out, to ensure that the repository can be committed to. For "
-"example, for subversion repositories hosted on alioth this means that S<svn"
-"+ssh://svn.debian.org/...> will be used instead of S<svn://svn.debian.org/..."
-">."
+"example, for subversion repositories hosted on alioth this means that S<I<svn"
+"+ssh://svn.debian.org/...>> will be used instead of S<I<svn://svn.debian."
+"org/...>>."
 msgstr ""
 "Utiliser le mode authentifié ; ceci signifie que pour les dépôts connus "
-"(principalement ceux hébergés sur S<http://alioth.debian.org>), une ré-"
+"(principalement ceux hébergés sur S<I<http://alioth.debian.org>>), une ré-"
 "écriture de l'URL est tentée avant d'effectuer la récupération, pour "
 "s'assurer qu'il est possible d'envoyer les modifications dans le dépôt. Par "
 "exemple, pour les dépôts subversion hébergés sur Alioth, ceci signifie que "
-"S<svn+ssh://svn.debian.org/...> sera utilisé à la place de S<svn://svn."
-"debian.org/...>"
+"S<I<svn+ssh://svn.debian.org/...>> sera utilisé à la place de S<I<svn://svn."
+"debian.org/...>>"
 
 #. type: =item
 #: ../scripts/debcheckout.pl:83
@@ -7320,8 +7437,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/debcheckout.pl:123
-msgid "B<--source=never|auto|download-only|always>"
-msgstr "B<--source=never|auto|download-only|always>"
+msgid "B<--source=never>|B<auto>|B<download-only>|B<always>"
+msgstr "B<--source=never>|B<auto>|B<download-only>|B<always>"
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:125
@@ -7349,8 +7466,8 @@ msgstr "B<auto> (défaut)"
 #. type: textblock
 #: ../scripts/debcheckout.pl:137
 msgid ""
-"If the repository only contains the debian directory, retrieve the source "
-"package, unpack it, and also place the .orig.tar.gz file into the current "
+"If the repository only contains the F<debian> directory, retrieve the source "
+"package, unpack it, and also place the F<.orig.tar.gz> file into the current "
 "directory. Else, do nothing."
 msgstr ""
 
@@ -7361,7 +7478,7 @@ msgstr "B<download-only>"
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:143
-msgid "Always retrieve the .orig.tar.gz file, but do not unpack it."
+msgid "Always retrieve the I<.orig.tar.gz> file, but do not unpack it."
 msgstr ""
 
 #. type: =item
@@ -7372,8 +7489,8 @@ msgstr "B<always>"
 #. type: textblock
 #: ../scripts/debcheckout.pl:147
 msgid ""
-"Always retrieve the .orig.tar.gz file, and if the repository only contains "
-"the debian directory, unpack it."
+"Always retrieve the I<.orig.tar.gz> file, and if the repository only "
+"contains the debian directory, unpack it."
 msgstr ""
 
 #. type: textblock
@@ -7395,23 +7512,23 @@ msgstr "B<--git-track> I<BRANCHES>"
 #: ../scripts/debcheckout.pl:162
 msgid ""
 "Specify a list of remote branches which will be set up for tracking (as in "
-"S<git branch --track>, see git-branch(1)) after the remote GIT repository "
-"has been cloned. The list should be given as a space-separated list of "
-"branch names."
+"S<B<git branch --track>>, see B<git-branch>(1)) after the remote Git "
+"repository has been cloned. The list should be given as a space-separated "
+"list of branch names."
 msgstr ""
 "Indiquer une liste de branches qui seront configurées pour être suivies "
-"(comme avec S<git branch --track>, voir git-branch(1)) une fois que le dépôt "
-"GIT distant sera cloné. La liste doit être une liste de noms de branches, "
-"séparés par des espaces."
+"(comme avec S<B<git branch --track>>, voir B<git-branch>(1)) une fois que le "
+"dépôt GIT distant sera cloné. La liste doit être une liste de noms de "
+"branches, séparés par des espaces."
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:167
 msgid ""
-"As a shorthand, the string \"*\" can be given to require tracking of all "
+"As a shorthand, the string \"B<*>\" can be given to require tracking of all "
 "remote branches."
 msgstr ""
-"Comme raccourci, la chaîne « * » peut être fournie pour demander le suivi de "
-"toutes les branches distantes."
+"Comme raccourci, la chaîne « B<*> » peut être fournie pour demander le suivi "
+"de toutes les branches distantes."
 
 # NOTE: presque identique
 #. type: textblock
@@ -7439,15 +7556,15 @@ msgstr "B<DEBCHECKOUT_AUTH_URLS>"
 #: ../scripts/debcheckout.pl:184
 msgid ""
 "This variable should be a space separated list of Perl regular expressions "
-"and replacement texts, which must come in pairs: REGEXP TEXT REGEXP TEXT ... "
-"and so on. Each pair denotes a substitution which is applied to repository "
-"URLs if other built-in means of building URLs for authenticated mode (see B<-"
-"a>) have failed."
+"and replacement texts, which must come in pairs: I<REGEXP> I<TEXT> I<REGEXP> "
+"I<TEXT> ... and so on. Each pair denotes a substitution which is applied to "
+"repository URLs if other built-in means of building URLs for authenticated "
+"mode (see B<-a>) have failed."
 msgstr ""
 "Cette variable doit être une listes d'expression rationnelles Perl et de "
 "chaînes de remplacements séparées par des espaces, qui doivent être fournies "
-"par paires : REGEXP TEXTE REGEXP TEXTE... Chaque paire indique une "
-"substitution qui est appliquée aux URL des dépôts si les autres moyens "
+"par paires : I<REGEXP> I<TEXTE> I<REGEXP> I<TEXTE>... Chaque paire indique "
+"une substitution qui est appliquée aux URL des dépôts si les autres moyens "
 "internes pour construire des URLS pour le mode authentifié (voir B<-a>) ont "
 "échoués."
 
@@ -7455,10 +7572,10 @@ msgstr ""
 #: ../scripts/debcheckout.pl:190
 msgid ""
 "References to matching substrings in the replacement texts are allowed as "
-"usual in Perl by the means of $1, $2, ... and so on."
+"usual in Perl by the means of B<$1>, B<$2>, ... and so on."
 msgstr ""
 "Les références à des sous-chaînes sont autorisées dans les textes de "
-"remplacement comme d'habitude avec Perl en utilisant $1, $2, ..."
+"remplacement comme d'habitude avec Perl en utilisant B<$1>, B<$2>, ..."
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:193
@@ -7509,22 +7626,22 @@ msgstr ""
 #. type: textblock
 #: ../scripts/debcheckout.pl:213
 msgid ""
-"apt-cache(8), Section 6.2.5 of the Debian Developer's Reference (for more "
-"information about Vcs-* fields): S<http://www.debian.org/doc/developers-"
-"reference/best-pkging-practices.html#bpp-vcs>"
+"B<apt-cache>(8), Section 6.2.5 of the Debian Developer's Reference (for more "
+"information about B<Vcs-*> fields): S<I<http://www.debian.org/doc/developers-"
+"reference/best-pkging-practices.html#bpp-vcs>>."
 msgstr ""
-"apt-cache(8), Section 6.2.5 de la référence du développeur Debian (pour plus "
-"d'informations sur les champs Vcs-*): S<http://www.debian.org/doc/developers-"
-"reference/best-pkging-practices.html#bpp-vcs>"
+"B<apt-cache>(8), Section 6.2.5 de la référence du développeur Debian (pour "
+"plus d'informations sur les champs B<Vcs-*>): S<I<http://www.debian.org/doc/"
+"developers-reference/best-pkging-practices.html#bpp-vcs>>"
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:218
 msgid ""
-"debcheckout and this manpage have been written by Stefano Zacchiroli "
-"<zack@debian.org>"
+"B<debcheckout> and this manpage have been written by Stefano Zacchiroli "
+"<I<zack@debian.org>>."
 msgstr ""
-"debcheckout et cette page de manuel ont été écrits par Stefano Zacchiroli "
-"<zack@debian.org>."
+"B<debcheckout> et cette page de manuel ont été écrits par Stefano Zacchiroli "
+"<I<zack@debian.org>>."
 
 #. type: TH
 #: ../scripts/debclean.1:1
@@ -8070,10 +8187,10 @@ msgid ""
 "redistribute this code under the terms of the GNU General Public License, "
 "version 2 or later."
 msgstr ""
-"Ce code est copyright Joey Hess <joeyh@debian.org>, tous "
-"droits réservés. Ce programme est fourni SANS AUCUNE GARANTIE. Vous êtes "
-"libre de redistribuer ce code sous les termes de la licence publique "
-"générale GNU (GNU General Public Licence), version 2 ou ultérieure."
+"Ce code est copyright Joey Hess <joeyh@debian.org>, tous droits réservés. Ce "
+"programme est fourni SANS AUCUNE GARANTIE. Vous êtes libre de redistribuer "
+"ce code sous les termes de la licence publique générale GNU (GNU General "
+"Public Licence), version 2 ou ultérieure."
 
 #. type: textblock
 #: ../scripts/debcommit.pl:848 ../scripts/mass-bug.pl:522
@@ -13763,8 +13880,8 @@ msgstr "B<LICENSECHECK_VERBOSE>"
 #. type: textblock
 #: ../scripts/licensecheck.pl:99
 msgid ""
-"If this is set to I<yes>, then it is the same as the --verbose command line "
-"parameter being used. The default is I<no>."
+"If this is set to I<yes>, then it is the same as the B<--verbose> command "
+"line parameter being used. The default is I<no>."
 msgstr ""
 "Si elle est positionnée à I<yes>, équivaut à utiliser l'option B<--verbose> "
 "de la ligne de commande. La valeur par défaut est I<no>."
@@ -13779,30 +13896,30 @@ msgstr "B<LICENSECHECK_PARSELINES>"
 msgid ""
 "If this is set to a positive number then the specified number of lines at "
 "the start of each file will be read whilst attempting to determine the "
-"license(s) in use.  This is equivalent to the --lines command line option."
+"license(s) in use.  This is equivalent to the B<--lines> command line option."
 msgstr ""
 "Si elle est configurée avec un nombre positif, alors le nombre de lignes "
 "indiqué au début des fichiers sera lu pour essayer de déterminer la ou les "
-"licences utilisées. C'est équivalent à utiliser l'option --lines de la ligne "
-"de commande."
+"licences utilisées. C'est équivalent à utiliser l'option B<--lines> de la "
+"ligne de commande."
 
 #. type: textblock
 #: ../scripts/licensecheck.pl:113
 msgid ""
-"This code is copyright by Adam D. Barratt <adam@adam-barratt.org.uk>, all "
+"This code is copyright by Adam D. Barratt <I<adam@adam-barratt.org.uk>>, all "
 "rights reserved; based on a script of the same name from the KDE SDK, which "
-"is copyright by <dfaure@kde.org>.  This program comes with ABSOLUTELY NO "
+"is copyright by <I<dfaure@kde.org>>.  This program comes with ABSOLUTELY NO "
 "WARRANTY.  You are free to redistribute this code under the terms of the GNU "
 "General Public License, version 2 or later."
 msgstr ""
-"Ce code est copyright Adam D. Barratt <adam@adam-barratt.org.uk>, tous "
+"Ce code est copyright Adam D. Barratt <I<adam@adam-barratt.org.uk>>, tous "
 "droits réservés ; basé sur un script du même nom du SDK KDE, copyright "
-"<dfaure@kde.org>. Ce programme est fourni SANS AUCUNE GARANTIE. Vous êtes "
+"<I<dfaure@kde.org>>. Ce programme est fourni SANS AUCUNE GARANTIE. Vous êtes "
 "libre de redistribuer ce code sous les termes de la licence publique "
 "générale GNU (GNU General Public Licence), version 2 ou ultérieure."
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:122 ../scripts/transition-check.pl:83
+#: ../scripts/licensecheck.pl:122
 msgid "Adam D. Barratt <adam@adam-barratt.org.uk>"
 msgstr "Adam D. Barratt <adam@adam-barratt.org.uk>"
 
@@ -14365,8 +14482,26 @@ msgstr ""
 "Crée un paquet qui ne dépend que des dépendances Build-Depends-Indep du "
 "paquet source."
 
+#. type: =item
+#: ../scripts/mk-build-deps.pl:87
+msgid "B<-s>, B<--root-cmd>"
+msgstr "B<-s>, B<--root-cmd>"
+
 #. type: textblock
-#: ../scripts/mk-build-deps.pl:91
+#: ../scripts/mk-build-deps.pl:89
+#, fuzzy
+#| msgid ""
+#| "Remove the package file after installing it. Ignored if used without the "
+#| "install switch."
+msgid ""
+"Use the specified tool to gain root privileges before installing.  Ignored "
+"if not used with the install switch."
+msgstr ""
+"Supprimer le fichier du paquet après l'avoir installé. Cette option est "
+"ignorée si l'option B<--install> n'est pas utilisée."
+
+#. type: textblock
+#: ../scripts/mk-build-deps.pl:96
 msgid ""
 "B<mk-build-deps> is copyright by Vincent Fourmond and was modified for the "
 "devscripts package by Adam D. Barratt <adam@adam-barratt.org.uk>."
@@ -14375,7 +14510,7 @@ msgstr ""
 "pour le paquet devscripts par Adam D. Barratt <adam@adam-barratt.org.uk>."
 
 #. type: textblock
-#: ../scripts/mk-build-deps.pl:94 ../scripts/transition-check.pl:77
+#: ../scripts/mk-build-deps.pl:99 ../scripts/transition-check.pl:77
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY.  You are free to "
 "redistribute this code under the terms of the GNU General Public License, "
@@ -14764,7 +14899,7 @@ msgstr "B<plotchangelog> [I<options>] I<changelog> ..."
 #. type: Plain text
 #: ../scripts/plotchangelog.1:17
 msgid ""
-"B<plotchangelog> is a tool to aid in visualizing a Debian changelog. The "
+"B<plotchangelog> is a tool to aid in visualizing a Debian I<changelog>. The "
 "changelogs are graphed with B<gnuplot>(1)  , with the X axis of the graph "
 "denoting time of release and the Y axis denoting the debian version number "
 "of the package. Each individual release of the package is represented by a "
@@ -14773,7 +14908,7 @@ msgid ""
 "labeled on the graph."
 msgstr ""
 "B<plotchangelog> est un outil qui aide à visualiser les informations d'un "
-"fichier changelog. Ces informations sont affichées graphiquement avec "
+"fichier I<changelog>. Ces informations sont affichées graphiquement avec "
 "B<gnuplot>(1), avec sur l'axe des abscisses la date des versions, et sur "
 "l'axe des ordonnées le numéro de version Debian d'un paquet. Chaque version "
 "individuelle d'un paquet est représentée par un point, dont la couleur "
@@ -15015,19 +15150,19 @@ msgstr "Ne lit aucun fichier de configuration (voir ci-dessous)."
 #. type: TP
 #: ../scripts/plotchangelog.1:101
 #, no-wrap
-msgid "B<changelog >..."
-msgstr "B<changelog> ..."
+msgid "I<changelog >..."
+msgstr "I<changelog> ..."
 
 #. type: Plain text
 #: ../scripts/plotchangelog.1:106
 msgid ""
-"The changelog files to graph. If multiple files are specified they will all "
-"be display on the same graph. The files may be compressed with gzip. Any "
+"The I<changelog> files to graph. If multiple files are specified they will "
+"all be display on the same graph. The files may be compressed with gzip. Any "
 "text in them that is not in Debian changelog format will be ignored."
 msgstr ""
-"Le fichier changelog dont on veut le graphique. Si plusieurs fichiers sont "
-"indiqués, ils seront affichés sur le même graphique. Les fichiers peuvent "
-"être compressés avec gzip. Tout texte n'étant pas dans le format des "
+"Le fichier I<changelog> dont on veut le graphique. Si plusieurs fichiers "
+"sont indiqués, ils seront affichés sur le même graphique. Les fichiers "
+"peuvent être compressés avec gzip. Tout texte n'étant pas dans le format des "
 "fichiers changelog de Debian sera ignoré."
 
 # NOTE: presque identique, var env cleaned only when files are read
@@ -16272,12 +16407,12 @@ msgstr "B<-f>, B<--filename=>I<fichier>"
 #: ../scripts/transition-check.pl:48
 msgid ""
 "Read a source package name from I<filename>, which should be a Debian "
-"package control file or .changes file, and add that package to the list of "
-"packages to check."
+"package control file or I<.changes> file, and add that package to the list "
+"of packages to check."
 msgstr ""
 "Lire le nom de paquet source depuis I<fichier>, qui doit être un fichier de "
-"contrôle Debian ou un fichier .changes, et ajoute ce paquet à la liste des "
-"paquets à vérifier."
+"contrôle Debian ou un fichier I<.changes>, et ajoute ce paquet à la liste "
+"des paquets à vérifier."
 
 #. type: textblock
 #: ../scripts/transition-check.pl:56
@@ -16313,11 +16448,16 @@ msgstr ""
 #. type: textblock
 #: ../scripts/transition-check.pl:74
 msgid ""
-"This code is copyright by Adam D. Barratt <adam@adam-barratt.org.uk>, all "
+"This code is copyright by Adam D. Barratt <I<adam@adam-barratt.org.uk>>, all "
 "rights reserved."
 msgstr ""
-"Ce programme est soumis au copyright de Adam D. Barratt <adam@adam-barratt."
-"org.uk>, Tous droits réservés."
+"Ce programme est soumis au copyright de Adam D. Barratt <I<adam@adam-barratt."
+"org.uk>>, Tous droits réservés."
+
+#. type: textblock
+#: ../scripts/transition-check.pl:83
+msgid "Adam D. Barratt <I<adam@adam-barratt.org.uk>>"
+msgstr "Adam D. Barratt <I<adam@adam-barratt.org.uk>>"
 
 #. type: TH
 #: ../scripts/uscan.1:1
@@ -18681,6 +18821,9 @@ msgid ""
 msgstr ""
 "Cette page de manuel a été écrite pour le paquet B<devscripts> par le "
 "responsable du paquet, Julian Gilbey E<lt>jdg@debian.orgE<gt>."
+
+#~ msgid "B<--dist=>I<dist>"
+#~ msgstr "B<--dist=>I<dist>"
 
 #~ msgid "-n, --no-action"
 #~ msgstr "B<-n>, B<--no-action>"
