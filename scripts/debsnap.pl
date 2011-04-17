@@ -91,6 +91,11 @@ The following options are supported:
                                         Default is ./source-<package name>
     -f, --force                         Force overwriting an existing
                                         destdir
+    --binary                            Download binary packages instead of
+                                        source packages
+    -a <architecture>,
+    --architecture <architecture>       Specify architecture of binary packages,
+                                        implies --binary
 
 Default settings modified by devscripts configuration files or command-line
 options:
@@ -180,7 +185,7 @@ sub verbose($)
 read_conf(@ARGV);
 Getopt::Long::Configure('gnu_compat');
 Getopt::Long::Configure('no_ignore_case');
-GetOptions(\%opt, 'verbose|v', 'destdir|d=s', 'force|f', 'help|h', 'version') || exit 1;
+GetOptions(\%opt, 'verbose|v', 'destdir|d=s', 'force|f', 'help|h', 'version', 'binary', 'architecture|a=s') || exit 1;
 
 usage(0) if $opt{help};
 usage(1) unless @ARGV;
@@ -193,7 +198,13 @@ if (@ARGV) {
 
 $package eq '' && usage(1);
 
-$opt{destdir} ||= "source-$package";
+$opt{binary} ||= $opt{architecture};
+
+if ($opt{binary}) {
+    $opt{destdir} ||= "binary-$package";
+} else {
+    $opt{destdir} ||= "source-$package";
+}
 
 my $baseurl = "$opt{baseurl}/mr/package/$package/";
 if (-d $opt{destdir}) {
@@ -202,6 +213,43 @@ if (-d $opt{destdir}) {
     }
 }
 make_path($opt{destdir});
+
+if ($opt{binary}) {
+    $baseurl = "$opt{baseurl}/mr/binary/$package/";
+    
+    my $json_text = fetch_json_page($baseurl);
+    unless ($json_text && @{$json_text->{result}}) {
+	fatal "Unable to retrieve information for $package from $baseurl.";
+    }
+
+    foreach my $version (@{$json_text->{result}}) {
+	if ($pkgversion) {
+	    next if ($version->{binary_version} <=> $pkgversion);
+	}
+
+	my $src_json = fetch_json_page("$opt{baseurl}/mr/package/$version->{source}/$version->{version}/binfiles/$version->{name}/$version->{binary_version}?fileinfo=1");
+
+	unless ($src_json) {
+	    warn "$progname: No binary packages found for $package version $version->{binary_version}\n";
+	    $warnings++;
+	}
+
+	foreach my $result (@{$src_json->{result}}) {
+	    if ($opt{architecture}) {
+		next if ($result->{architecture} ne $opt{architecture});
+	    }
+	    my $fileinfo = @{$src_json->{fileinfo}{$result->{hash}}}[0];
+	    my $file_url = "$opt{baseurl}/file/$result->{hash}";
+	    my $file_name = basename($fileinfo->{name});
+	    verbose "Getting file $file_name: $file_url";
+	    LWP::Simple::getstore($file_url, "$opt{destdir}/$file_name");
+	}
+    }
+    if ($warnings) {
+	exit 2;
+    }
+    exit 0;
+}
 
 my $json_text = fetch_json_page($baseurl);
 unless ($json_text && @{$json_text->{result}}) {
