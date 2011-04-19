@@ -1,5 +1,6 @@
 devscripts (2.10.73) UNRELEASED; urgency=low
 
+  [ James Vega ]
   * uscan:
     + Use the correct path when repacking zip files.  (Closes: #622889)
     + Make file show all matched file types instead of just the first.
@@ -7,7 +8,10 @@ devscripts (2.10.73) UNRELEASED; urgency=low
   * uupdate: Handle hidden files when the upstream archive doesn't contain its
     files under one top-level directory.  (Closes: #601945)
 
- -- James Vega <jamessan@debian.org>  Tue, 19 Apr 2011 21:57:10 -0400
+  [ Benjamin Drung ]
+  * Wrap and sort lists in debian/control. (Closes: #577999)
+
+ -- Benjamin Drung <bdrung@debian.org>  Wed, 20 Apr 2011 11:12:51 +0200
 
 devscripts (2.10.72) unstable; urgency=low
 

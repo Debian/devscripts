@@ -2,26 +2,75 @@ Source: devscripts
 Section: devel
 Priority: optional
 Maintainer: Devscripts Devel Team <pkg-devscripts@teams.debian.net>
-Uploaders: Julian Gilbey <jdg@debian.org>, Joey Hess <joeyh@debian.org>, Mohammed Adnène Trojette <adn+deb@diwi.org>, Christoph Berg <myon@debian.org>, Stefano Zacchiroli <zack@debian.org>, James Vega <jamessan@debian.org>, Martin Zobel-Helas <zobel@debian.org>, Adam D. Barratt <adam@adam-barratt.org.uk>, Luk Claes <luk@debian.org>, Patrick Schoenfeld <schoenfeld@debian.org>, Ryan Niebur <ryanryan52@gmail.com>
+Uploaders: Julian Gilbey <jdg@debian.org>,
+           Joey Hess <joeyh@debian.org>,
+           Mohammed Adnène Trojette <adn+deb@diwi.org>,
+           Christoph Berg <myon@debian.org>,
+           Stefano Zacchiroli <zack@debian.org>,
+           James Vega <jamessan@debian.org>,
+           Martin Zobel-Helas <zobel@debian.org>,
+           Adam D. Barratt <adam@adam-barratt.org.uk>,
+           Luk Claes <luk@debian.org>,
+           Patrick Schoenfeld <schoenfeld@debian.org>,
+           Ryan Niebur <ryanryan52@gmail.com>
 Standards-Version: 3.9.1.0
-Build-Depends: perl, debhelper (>= 6.0.0), docbook-xsl, libtimedate-perl,
- libfile-desktopentry-perl, libterm-size-perl,  liburi-perl, libwww-perl,
- po4a (>= 0.40), xsltproc, libjson-perl
+Build-Depends: debhelper (>= 6.0.0),
+               docbook-xsl,
+               libfile-desktopentry-perl,
+               libjson-perl,
+               libterm-size-perl,
+               libtimedate-perl,
+               liburi-perl,
+               libwww-perl,
+               perl,
+               po4a (>= 0.40),
+               xsltproc
 Vcs-Browser: http://git.debian.org/?p=devscripts/devscripts.git
 Vcs-Git: git://git.debian.org/devscripts/devscripts.git
 
 Package: devscripts
 Architecture: any
-Depends: dpkg-dev (>= 1.15.4.1), perl, ${shlibs:Depends}, ${misc:Depends}
-Recommends: at, curl | wget, dctrl-tools, debian-keyring, debian-maintainers,
- dput | dupload, equivs, fakeroot, gnupg, libcrypt-ssleay-perl,
- libparse-debcontrol-perl, libsoap-lite-perl, liburi-perl, libwww-perl,
- lintian, lsb-release, man-db, patch, patchutils, strace, unzip,
- wdiff, xz-utils, sensible-utils, libjson-perl
-Suggests: bsd-mailx | mailx, build-essential, cvs-buildpackage, devscripts-el,
- gnuplot, libauthen-sasl-perl, libtimedate-perl, libfile-desktopentry-perl,
- libnet-smtp-ssl-perl, libterm-size-perl, libyaml-syck-perl, mutt, ssh-client,
- svn-buildpackage, w3m
+Depends: dpkg-dev (>= 1.15.4.1), perl, ${misc:Depends}, ${shlibs:Depends}
+Recommends: at,
+            curl | wget,
+            dctrl-tools,
+            debian-keyring,
+            debian-maintainers,
+            dput | dupload,
+            equivs,
+            fakeroot,
+            gnupg,
+            libcrypt-ssleay-perl,
+            libjson-perl,
+            libparse-debcontrol-perl,
+            libsoap-lite-perl,
+            liburi-perl,
+            libwww-perl,
+            lintian,
+            lsb-release,
+            man-db,
+            patch,
+            patchutils,
+            sensible-utils,
+            strace,
+            unzip,
+            wdiff,
+            xz-utils
+Suggests: bsd-mailx | mailx,
+          build-essential,
+          cvs-buildpackage,
+          devscripts-el,
+          gnuplot,
+          libauthen-sasl-perl,
+          libfile-desktopentry-perl,
+          libnet-smtp-ssl-perl,
+          libterm-size-perl,
+          libtimedate-perl,
+          libyaml-syck-perl,
+          mutt,
+          ssh-client,
+          svn-buildpackage,
+          w3m
 Description: scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
  brackets afterwards:
@@ -49,7 +98,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - cvs-debuild: A wrapper for cvs-buildpackage to use debuild as its package
     building program. [cvs-buildpackage, fakeroot, lintian, gnupg]
   - dcmd: run a given command replacing the name of a .changes or .dsc file
-    with each of the files referenced therein 
+    with each of the files referenced therein
   - dcontrol: remotely query package and source control files for all Debian
     distributions. [liburl-perl, libwww-perl]
   - dd-list: given a list of packages, pretty-print it ordered by maintainer
@@ -111,7 +160,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - rmadison: remotely query the Debian archive database about packages
     [wget | curl, liburi-perl]
   - svnpath: print svn repository paths [subversion]
-  - tagpending: runs from a Debian source tree and tags bugs that are to 
+  - tagpending: runs from a Debian source tree and tags bugs that are to
     be closed in the latest changelog as pending. [libsoap-lite-perl]
   - transition-check: Check a list of source packages for involvement in
     transitions for which uploads to unstable are currently blocked
