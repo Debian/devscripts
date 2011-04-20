@@ -1376,7 +1376,7 @@ EOF
 	my $hidden = ".[!.]*";
 	system("unzip -q -a -d $tempdir $destdir/$newfile_base") == 0
 	  or die("Repacking from zip to tar.gz failed (could not unzip)\n");
-	if (defined glob($hidden)) {
+	if (defined glob("$tempdir/$hidden")) {
 	    $globpattern .= " $hidden";
 	}
 	system("cd $tempdir; GZIP=-9 tar --owner=root --group=root --mode=a+rX -czf $destdir/$newfile_base_gz $globpattern") == 0
