@@ -7,6 +7,8 @@ DESTDIR =
 PERL_MODULES = Devscripts
 EXAMPLES = conf.default
 
+DOCDIR ?= /usr/share/doc/devscripts
+
 all: version make_scripts $(EXAMPLES) translated_manpages
 
 version:
@@ -34,6 +36,7 @@ clean: clean_scripts clean_translated_manpages
 install: all install_scripts
 	cp -a $(PERL_MODULES) $(DESTDIR)$(PERLMOD_DIR)
 	cp $(EXAMPLES) $(DESTDIR)$(EXAMPLES_DIR)
+	install -D README $(DESTDIR)$(DOCDIR)/README
 
 make_scripts: version
 	$(MAKE) -C scripts/
