@@ -1386,8 +1386,7 @@ EOF
     }
 
     if ($newfile_base =~ /\.(tar\.gz|tgz|tar\.bz2|tbz2?)$/) {
-	my $filetype = `file $destdir/$newfile_base`;
-	$filetype =~ s%^\.\./\Q$newfile_base\E: %%;
+	my $filetype = `file -b -k $destdir/$newfile_base`;
 	unless ($filetype =~ /compressed data/) {
 	    warn "$progname warning: $destdir/$newfile_base does not appear to be a compressed file;\nthe file command says: $filetype\nNot processing this file any further!\n";
 	    return 1;

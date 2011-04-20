@@ -1,6 +1,9 @@
 devscripts (2.10.73) UNRELEASED; urgency=low
 
-  * uscan: Use the correct path when repacking zip files.  (Closes: #622889)
+  * uscan:
+    + Use the correct path when repacking zip files.  (Closes: #622889)
+    + Make file show all matched file types instead of just the first.
+      (Closes: #574155)
 
  -- James Vega <jamessan@debian.org>  Tue, 19 Apr 2011 21:57:10 -0400
 
