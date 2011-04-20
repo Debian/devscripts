@@ -453,10 +453,13 @@ sub getprog {
 	}
     }
 
-    # .git may be in a parent directory, rather than the current
-    # directory, if multiple packages are kept in one git repository.
+    # .bzr or .git may be in a parent directory, rather than the current
+    # directory, if multiple packages are kept in one repository.
     my $dir=getcwd();
     while ($dir=~s/[^\/]*\/?$// && length $dir) {
+	if (-d "$dir/.bzr") {
+	    return "bzr";
+	}
 	if (-d "$dir/.git") {
 	    return "git";
 	}
