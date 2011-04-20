@@ -308,7 +308,8 @@ if [ "$PATCH" ]; then
 		    fi
 		    X=${X%.xz}
 		    ;;
-		*)    if [ -r "$OPWD/$PATCH" ]; then
+		*)
+		    if [ -r "$OPWD/$PATCH" ]; then
 			CATPATCH="cat $OPWD/$PATCH"
 		    else
 			CATPATCH="cat ../$PATCH"
@@ -685,6 +686,9 @@ else
 	# Otherwise, we put them into a new directory
 	mkdir $PACKAGE-$SNEW_VERSION
 	mv $TEMP_DIR/* $PACKAGE-$SNEW_VERSION
+	if ls $TEMP_DIR/.[!.]* >/dev/null 2>&1 ; then
+	    mv $TEMP_DIR/.[!.]* $PACKAGE-$SNEW_VERSION
+	fi
     fi
     rm -rf $TEMP_DIR
     cp -a $PACKAGE-$SNEW_VERSION $PACKAGE-$SNEW_VERSION.orig

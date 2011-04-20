@@ -4,6 +4,8 @@ devscripts (2.10.73) UNRELEASED; urgency=low
     + Use the correct path when repacking zip files.  (Closes: #622889)
     + Make file show all matched file types instead of just the first.
       (Closes: #574155)
+  * uupdate: Handle hidden files when the upstream archive doesn't contain its
+    files under one top-level directory.  (Closes: #601945)
 
  -- James Vega <jamessan@debian.org>  Tue, 19 Apr 2011 21:57:10 -0400
 
