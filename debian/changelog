@@ -15,7 +15,16 @@ devscripts (2.10.73) UNRELEASED; urgency=low
   * debcommit: Support for commiting from debian/ when using bzr. Thanks to
     Loïc Minier for the patch. (Closes: #580861)
 
- -- Benjamin Drung <bdrung@debian.org>  Wed, 20 Apr 2011 18:52:18 +0200
+  [ Patrick Schoenfeld ]
+  * checkbashisms:
+    - add code to detect weither STDIN is a pipe and if so, write the lines
+      passed via stdin to a tempfile
+    - add tempfile filename to the list of files to process
+    - add logic to detect if filename is a tempfile and if so, use the string
+    "(stdin)" for filename display instead of the real filename.
+    (Closes: #586500)
+
+ -- Patrick Schoenfeld <schoenfeld@debian.org>  Thu, 21 Apr 2011 13:13:43 +0200
 
 devscripts (2.10.72) unstable; urgency=low
 

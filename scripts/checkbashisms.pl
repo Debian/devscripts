@@ -22,6 +22,7 @@
 
 use strict;
 use Getopt::Long;
+use File::Temp qw/tempfile/;
 
 sub init_hashes;
 
@@ -47,6 +48,17 @@ EOF
 
 my ($opt_echo, $opt_force, $opt_extra, $opt_posix);
 my ($opt_help, $opt_version);
+my @filenames;
+
+# Detect if STDIN is a pipe
+if (-p STDIN or -f STDIN) {
+    my ($tmp_fh, $tmp_filename) = tempfile("chkbashisms_tmp.XXXX", TMPDIR => 1, UNLINK => 1);
+    while (my $line = <STDIN>) {
+        print $tmp_fh $line;
+    }
+    close($tmp_fh);
+    push(@ARGV, $tmp_filename);
+}
 
 ##
 ## handle command-line options
@@ -77,22 +89,27 @@ init_hashes;
 foreach my $filename (@ARGV) {
     my $check_lines_count = -1;
 
+    my $display_filename = $filename;
+    if ($filename =~ /chkbashisms_tmp\.....$/) {
+        $display_filename = "(stdin)";
+    }
+
     if (!$opt_force) {
 	$check_lines_count = script_is_evil_and_wrong($filename);
     }
 
     if ($check_lines_count == 0 or $check_lines_count == 1) {
-	warn "script $filename does not appear to be a /bin/sh script; skipping\n";
+	warn "script $display_filename does not appear to be a /bin/sh script; skipping\n";
 	next;
     }
 
     if ($check_lines_count != -1) {
-	warn "script $filename appears to be a shell wrapper; only checking the first "
+	warn "script $display_filename appears to be a shell wrapper; only checking the first "
 	     . "$check_lines_count lines\n";
     }
 
     unless (open C, '<', $filename) {
-	warn "cannot open script $filename for reading: $!\n";
+	warn "cannot open script $display_filename for reading: $!\n";
 	$status |= 2;
 	next;
     }
@@ -123,18 +140,18 @@ foreach my $filename (@ARGV) {
 		next if $opt_force;
 
 		if ($interpreter =~ m,/bash$,) {
-		    warn "script $filename is already a bash script; skipping\n";
+		    warn "script $display_filename is already a bash script; skipping\n";
 		    $status |= 2;
 		    last;  # end this file
 		}
 		elsif ($interpreter !~ m,/(sh|posh)$,) {
 ### ksh/zsh?
-		    warn "script $filename does not appear to be a /bin/sh script; skipping\n";
+		    warn "script $display_filename does not appear to be a /bin/sh script; skipping\n";
 		    $status |= 2;
 		    last;
 		}
 	    } else {
-		warn "script $filename does not appear to have a \#! interpreter line;\nyou may get strange results\n";
+		warn "script $display_filename does not appear to have a \#! interpreter line;\nyou may get strange results\n";
 	    }
 	}
 
@@ -314,7 +331,7 @@ foreach my $filename (@ARGV) {
 		    $found = 1;
 		    $match = $1;
 		    $explanation = "sourced script with arguments";
-		    output_explanation($filename, $orig_line, $explanation);
+		    output_explanation($display_filename, $orig_line, $explanation);
 		}
 	    }
 
@@ -330,7 +347,7 @@ foreach my $filename (@ARGV) {
 		    $found = 1;
 		    $match = $1;
 		    $explanation = $expl;
-		    output_explanation($filename, $orig_line, $explanation);
+		    output_explanation($display_filename, $orig_line, $explanation);
 		}
 	    }
 
@@ -338,7 +355,7 @@ foreach my $filename (@ARGV) {
 	    if ($line =~ m/(.*)($re)/){
 		my $count = () = $1 =~ /(^|[^\\])\'/g;
 		if( $count % 2 == 0 ) {
-		    output_explanation($filename, $orig_line, q<$'...' should be "$(printf '...')">);
+		    output_explanation($display_filename, $orig_line, q<$'...' should be "$(printf '...')">);
 		}
 	    }   
 
@@ -364,7 +381,7 @@ foreach my $filename (@ARGV) {
 	    if ($line =~ m/(.*)($re)/){
 		my $count = () = $1 =~ /(^|[^\\])\"/g;
 		if( $count % 2 == 0 ) {
-		    output_explanation($filename, $orig_line, q<$"foo" should be eval_gettext "foo">);
+		    output_explanation($display_filename, $orig_line, q<$"foo" should be eval_gettext "foo">);
 		}
 	    }   
 
@@ -373,7 +390,7 @@ foreach my $filename (@ARGV) {
 		    $found = 1;
 		    $match = $1;
 		    $explanation = $expl;
-		    output_explanation($filename, $orig_line, $explanation);
+		    output_explanation($display_filename, $orig_line, $explanation);
 		}
 	    }
 
@@ -386,7 +403,7 @@ foreach my $filename (@ARGV) {
 		    $found = 1;
 		    $match = $1;
 		    $explanation = $expl;
-		    output_explanation($filename, $orig_line, $explanation);
+		    output_explanation($display_filename, $orig_line, $explanation);
 		}
 	    }
 
