@@ -1209,7 +1209,7 @@ an explanation of why you have closed this bug.  Thank you!
 EOT
 }
 
-=item B<done> I<bug> I<version>
+=item B<done> I<bug> [I<version>]
 
 Mark a I<bug> as Done. This forces interactive mode since done messages should
 include an explanation why the bug is being closed.  You should specify which
