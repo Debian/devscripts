@@ -162,6 +162,22 @@ sub read_conf
     $opt{baseurl} = $config_vars{DEBSNAP_BASE_URL};
 }
 
+sub have_file($$)
+{
+    my ($path, $hash) = @_;
+
+    if (-e $path) {
+	open(HASH, '-|', 'sha1sum', $path) || fatal "Can't run sha1sum: $!";
+	while (<HASH>) {
+	    if (m/^([a-fA-F\d]{40}) /) {
+		close(HASH) || fatal "sha1sum problems: $! $?";
+		return $1 eq $hash;
+	    }
+	}
+    }
+    return 0;
+}
+
 sub fatal($)
 {
     my ($pack, $file, $line);
@@ -200,13 +216,15 @@ $package eq '' && usage(1);
 
 $opt{binary} ||= $opt{architecture};
 
+my $baseurl;
 if ($opt{binary}) {
     $opt{destdir} ||= "binary-$package";
+    $baseurl = "$opt{baseurl}/mr/binary/$package/";
 } else {
     $opt{destdir} ||= "source-$package";
+    $baseurl = "$opt{baseurl}/mr/package/$package/";
 }
 
-my $baseurl = "$opt{baseurl}/mr/package/$package/";
 if (-d $opt{destdir}) {
     unless ($opt{force} || cwd() eq abs_path($opt{destdir})) {
 	fatal "Destination dir $opt{destdir} already exists.\nPlease (re)move it first, or use --force to overwrite.";
@@ -214,14 +232,12 @@ if (-d $opt{destdir}) {
 }
 make_path($opt{destdir});
 
-if ($opt{binary}) {
-    $baseurl = "$opt{baseurl}/mr/binary/$package/";
-    
-    my $json_text = fetch_json_page($baseurl);
-    unless ($json_text && @{$json_text->{result}}) {
-	fatal "Unable to retrieve information for $package from $baseurl.";
-    }
+my $json_text = fetch_json_page($baseurl);
+unless ($json_text && @{$json_text->{result}}) {
+    fatal "Unable to retrieve information for $package from $baseurl.";
+}
 
+if ($opt{binary}) {
     foreach my $version (@{$json_text->{result}}) {
 	if ($pkgversion) {
 	    next if ($version->{binary_version} <=> $pkgversion);
@@ -238,60 +254,51 @@ if ($opt{binary}) {
 	    if ($opt{architecture}) {
 		next if ($result->{architecture} ne $opt{architecture});
 	    }
-	    my $fileinfo = @{$src_json->{fileinfo}{$result->{hash}}}[0];
-	    my $file_url = "$opt{baseurl}/file/$result->{hash}";
+	    my $hash = $result->{hash};
+	    my $fileinfo = @{$src_json->{fileinfo}{$hash}}[0];
+	    my $file_url = "$opt{baseurl}/file/$hash";
 	    my $file_name = basename($fileinfo->{name});
-	    verbose "Getting file $file_name: $file_url";
-	    LWP::Simple::getstore($file_url, "$opt{destdir}/$file_name");
-	}
-    }
-    if ($warnings) {
-	exit 2;
-    }
-    exit 0;
-}
-
-my $json_text = fetch_json_page($baseurl);
-unless ($json_text && @{$json_text->{result}}) {
-    fatal "Unable to retrieve information for $package from $baseurl.";
-}
-# Keep track of what's been downloaded so we don't download the same
-# orig.tar.gz multiple times
-my %fetched;
-# iterate over each available version in the JSON structure:
-foreach my $version (@{$json_text->{result}}) {
-    if ($pkgversion) {
-	next if ($version->{version} <=> $pkgversion);
-    }
-
-    my $src_json = fetch_json_page("$baseurl/$version->{version}/srcfiles?fileinfo=1");
-    unless ($src_json) {
-	warn "$progname: No source files found for $package version $version->{version}\n";
-	$warnings++;
-    }
-
-    foreach my $hash (keys %{$src_json->{fileinfo}}) {
-	my $fileinfo = $src_json->{fileinfo}{$hash};
-	my $file_name;
-	# fileinfo may match multiple files (e.g., orig tarball for iceweasel 3.0.12)
-	foreach my $info (@$fileinfo) {
-	    if ($info->{name} =~ m/^${package}/) {
-		$file_name = $info->{name};
-		last;
+	    if (!have_file("$opt{destdir}/$file_name", $hash)) {
+		verbose "Getting file $file_name: $file_url";
+		LWP::Simple::getstore($file_url, "$opt{destdir}/$file_name");
 	    }
 	}
-	unless ($file_name) {
-	    warn "$progname: No files with hash $hash matched '${package}'\n";
+    }
+}
+else {
+    foreach my $version (@{$json_text->{result}}) {
+	if ($pkgversion) {
+	    next if ($version->{version} <=> $pkgversion);
+	}
+
+	my $src_json = fetch_json_page("$baseurl/$version->{version}/srcfiles?fileinfo=1");
+	unless ($src_json) {
+	    warn "$progname: No source files found for $package version $version->{version}\n";
 	    $warnings++;
-	    next;
 	}
-	my $file_url = "$opt{baseurl}/file/$hash";
-	$file_name = basename($file_name);
-	if (!$fetched{$file_name}) {
-	    verbose "Getting file $file_name: $file_url";
-	    LWP::Simple::getstore($file_url, "$opt{destdir}/$file_name");
+
+	foreach my $hash (keys %{$src_json->{fileinfo}}) {
+	    my $fileinfo = $src_json->{fileinfo}{$hash};
+	    my $file_name;
+	    # fileinfo may match multiple files (e.g., orig tarball for iceweasel 3.0.12)
+	    foreach my $info (@$fileinfo) {
+		if ($info->{name} =~ m/^${package}/) {
+		    $file_name = $info->{name};
+		    last;
+		}
+	    }
+	    unless ($file_name) {
+		warn "$progname: No files with hash $hash matched '${package}'\n";
+		$warnings++;
+		next;
+	    }
+	    my $file_url = "$opt{baseurl}/file/$hash";
+	    $file_name = basename($file_name);
+	    if (!have_file("$opt{destdir}/$file_name", $hash)) {
+		verbose "Getting file $file_name: $file_url";
+		LWP::Simple::getstore($file_url, "$opt{destdir}/$file_name");
+	    }
 	}
-	$fetched{$file_name} = 1;
     }
 }
 

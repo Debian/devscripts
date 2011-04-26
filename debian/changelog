@@ -9,8 +9,11 @@ devscripts (2.10.73) UNRELEASED; urgency=low
     files under one top-level directory.  (Closes: #601945)
   * bts: Indicate version argument is optional for done command.  (Closes:
     #623567)
-  * debsnap: Add support for download binary packages.  Thanks to Timo Juhani
-    Lindfors for the patch.  (Closes: #587523)
+  * debsnap:
+    + Add support for downloading binary packages.  Thanks to Timo Juhani
+      Lindfors for the patch.  (Closes: #587523)
+    + Only download a file if it doesn't exist or its hashsum doesn't match
+      the one specified by snapshot.d.o.
 
   [ Benjamin Drung ]
   * Add myself to uploaders.
