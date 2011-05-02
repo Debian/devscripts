@@ -14,6 +14,8 @@ devscripts (2.10.73) UNRELEASED; urgency=low
       Lindfors for the patch.  (Closes: #587523)
     + Only download a file if it doesn't exist or its hashsum doesn't match
       the one specified by snapshot.d.o.
+  * debchange: Add -M option to use debian/control's Maintainer information.
+    Thanks to Modestas Vainius for the patch.  (Closes: #560900)
 
   [ Benjamin Drung ]
   * Add myself to uploaders.

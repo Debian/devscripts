@@ -164,6 +164,8 @@ Options:
          (default: do not)
   -m, --maintmaint
          Don\'t change (maintain) the maintainer details in the changelog entry
+  -M, --controlmaint
+         Use maintainer name and email from the debian/control Maintainer field
   -t, --mainttrailer
          Don\'t change (maintain) the trailer line in the changelog entry; i.e.
          maintain the maintainer and date/time details
@@ -304,7 +306,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # with older debchange versions.
 my ($opt_help, $opt_version);
 my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u, $opt_force_dist);
-my ($opt_n, $opt_bn, $opt_qa, $opt_s, $opt_team, $opt_bpo, $opt_l, $opt_c, $opt_m, $opt_create, $opt_package, @closes);
+my ($opt_n, $opt_bn, $opt_qa, $opt_s, $opt_team, $opt_bpo, $opt_l, $opt_c, $opt_m, $opt_M, $opt_create, $opt_package, @closes);
 my ($opt_news);
 my ($opt_level, $opt_regex, $opt_noconf, $opt_empty);
 
@@ -342,6 +344,7 @@ GetOptions("help|h" => \$opt_help,
 	   'multimaint-merge!' => \$opt_multimaint_merge,
 	   'multi-maint-merge!' => \$opt_multimaint_merge,
 	   "m|maintmaint" => \$opt_m,
+	   "M|controlmaint" => \$opt_M,
 	   "t|mainttrailer!" => \$opt_t,
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
@@ -671,7 +674,7 @@ if (! exists $env{'DEBEMAIL'} or ! exists $env{'DEBFULLNAME'}) {
 }
 
 # Now use the gleaned values to detemine our MAINTAINER and EMAIL values
-if (! $opt_m) {
+if (! $opt_m and ! $opt_M) {
     if (exists $env{'DEBFULLNAME'}) {
 	$MAINTAINER = $env{'DEBFULLNAME'};
     } elsif (exists $env{'NAME'}) {
@@ -716,13 +719,33 @@ if (! $opt_m) {
 	$EMAIL = $addr if $addr;
     }
     # Otherwise, $EMAIL retains its default value of the last changelog entry
-} # if (! $opt_m)
+} # if (! $opt_m and ! $opt_M)
+
+if ($opt_M) {
+    if (-f 'debian/control') {
+	if (have_lpdc()) {
+	    my $parser = Parse::DebControl->new;
+	    my $deb822 = $parser->parse_file('debian/control', {stripComments => 'true'});
+	    my $maintainer = decode_utf8($deb822->[0]->{'Maintainer'});
+	    if ($maintainer =~ /^(.*)\s+<(.*)>$/) {
+		$MAINTAINER = $1;
+		$EMAIL = $2;
+	    } else {
+		fatal "$progname: invalid debian/control Maintainer field value\n";
+	    }
+	} else {
+	    fatal "$progname: unable to get maintainer from debian/control: $lpdc_broken\n";
+	}
+    } else {
+	fatal "Missing file debian/control";
+    }
+}
 
 #####
 
 if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and 
     ! $opt_team and ! $opt_qa and ! $opt_bpo and ! $opt_bn and ! $opt_n and ! $opt_c and
-    ! (exists $ENV{'CHANGELOG'} and length $ENV{'CHANGELOG'}) and
+    ! (exists $ENV{'CHANGELOG'} and length $ENV{'CHANGELOG'}) and ! $opt_M and
     ! $opt_create and ! $opt_a_passed and ! $opt_r and ! $opt_e and
     ! ($opt_release_heuristic eq 'changelog' and
 	$changelog{'Distribution'} eq 'UNRELEASED' and ! $opt_i_passed)) {

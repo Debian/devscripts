@@ -327,6 +327,14 @@ Note that there may be some interesting interactions if
 multi-maintainer mode is in use; you will probably wish to check the
 changelog manually before uploading it in such cases.
 .TP
+.BR \-\-controlmaint ", " \-M
+Use maintainer details from the \fIdebian/control\fR \fBMaintainer\fR field
+rather than relevant environment variables (\fBDEBFULLNAME\fR, \fBDEBEMAIL\fR,
+etc.).  This option might be useful to restore details of the main maintainer
+in the changelog trailer after a bogus edit (e.g. when \fB\-m\fR was intended
+but forgot) or when releasing a package in the name of the main maintainer
+(e.g. the team).
+.TP
 .BR \-\-\fR[\fBno\fR]\fBmainttrailer ", " \-t
 If mainttrailer is set, it will avoid modifying the existing changelog
 trailer line (i.e. the maintainer and date-stamp details), unless
