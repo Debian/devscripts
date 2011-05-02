@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-04-15 04:17+0000\n"
+"POT-Creation-Date: 2011-05-02 02:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,13 +87,13 @@ msgid "Controls the timestamp format, as per B<date>(1).  Defaults to \"%H:%M:%S
 msgstr ""
 
 #. type: =item
-#: ../scripts/annotate-output.1:16 ../scripts/chdist.pl:37 ../scripts/dcontrol.pl:257 ../scripts/debcheckout.pl:93 ../scripts/debsnap.1:47 ../scripts/dget.pl:585 ../scripts/dpkg-depcheck.1:96 ../scripts/getbuildlog.1:25 ../scripts/mk-build-deps.pl:79 ../scripts/rmadison.pl:246
+#: ../scripts/annotate-output.1:16 ../scripts/chdist.pl:37 ../scripts/dcontrol.pl:257 ../scripts/debcheckout.pl:93 ../scripts/debsnap.1:55 ../scripts/dget.pl:585 ../scripts/dpkg-depcheck.1:96 ../scripts/getbuildlog.1:25 ../scripts/mk-build-deps.pl:79 ../scripts/rmadison.pl:246
 #, no-wrap
 msgid "B<-h>, B<--help>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/annotate-output.1:19 ../scripts/debchange.1:359 ../scripts/debclean.1:87 ../scripts/debrelease.1:102 ../scripts/debsign.1:108 ../scripts/dscverify.1:39 ../scripts/nmudiff.1:76 ../scripts/pts-subscribe.1:31 ../scripts/uupdate.1:85 ../scripts/who-uploads.1:47
+#: ../scripts/annotate-output.1:19 ../scripts/debchange.1:367 ../scripts/debclean.1:87 ../scripts/debrelease.1:102 ../scripts/debsign.1:108 ../scripts/dscverify.1:39 ../scripts/nmudiff.1:76 ../scripts/pts-subscribe.1:31 ../scripts/uupdate.1:85 ../scripts/who-uploads.1:47
 msgid "Display a help message and exit successfully."
 msgstr ""
 
@@ -117,7 +117,7 @@ msgid ""
 msgstr ""
 
 #. type: SH
-#: ../scripts/annotate-output.1:32 ../scripts/debsnap.1:109 ../scripts/rc-alert.1:119 ../scripts/whodepends.1:17
+#: ../scripts/annotate-output.1:32 ../scripts/debsnap.1:117 ../scripts/rc-alert.1:119 ../scripts/whodepends.1:17
 #, no-wrap
 msgid "BUGS"
 msgstr ""
@@ -149,7 +149,7 @@ msgid ""
 msgstr ""
 
 #. type: SH
-#: ../scripts/annotate-output.1:47 ../scripts/bts.pl:4092 ../scripts/checkbashisms.1:60 ../scripts/cowpoke.1:263 ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62 ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53 ../scripts/dcmd.1:98 ../scripts/dcontrol.pl:290 ../scripts/debc.1:115 ../scripts/debchange.1:435 ../scripts/debcheckout.pl:211 ../scripts/debclean.1:107 ../scripts/debcommit.pl:850 ../scripts/debdiff.1:215 ../scripts/debi.1:122 ../scripts/debrelease.1:132 ../scripts/deb-reversion.dbk:247 ../scripts/debrsign.1:66 ../scripts/debsign.1:140 ../scripts/debsnap.1:91 ../scripts/debuild.1:410 ../scripts/dget.pl:639 ../scripts/diff2patches.1:45 ../scripts/dpkg-depcheck.1:118 ../scripts/dpkg-genbuilddeps.1:30 ../scripts/dscverify.1:73 ../scripts/grep-excuses.1:38 ../scripts/list-unreleased.1:19 ../scripts/nmudiff.1:108 ../scripts/plotchangelog.1:124 ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:121 ../scripts/rmadison.pl:329 ../scripts/tagpending.pl:149 ../scripts/uscan.1:535 ../scripts/uupdate.1:170 ../scripts/wnpp-alert.1:29 ../scripts/wnpp-check.1:23 ../scripts/devscripts.conf.5:54
+#: ../scripts/annotate-output.1:47 ../scripts/bts.pl:4092 ../scripts/checkbashisms.1:60 ../scripts/cowpoke.1:263 ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62 ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53 ../scripts/dcmd.1:98 ../scripts/dcontrol.pl:290 ../scripts/debc.1:115 ../scripts/debchange.1:443 ../scripts/debcheckout.pl:211 ../scripts/debclean.1:107 ../scripts/debcommit.pl:853 ../scripts/debdiff.1:215 ../scripts/debi.1:122 ../scripts/debrelease.1:132 ../scripts/deb-reversion.dbk:247 ../scripts/debrsign.1:66 ../scripts/debsign.1:140 ../scripts/debsnap.1:99 ../scripts/debuild.1:410 ../scripts/dget.pl:639 ../scripts/diff2patches.1:45 ../scripts/dpkg-depcheck.1:118 ../scripts/dpkg-genbuilddeps.1:30 ../scripts/dscverify.1:73 ../scripts/grep-excuses.1:38 ../scripts/list-unreleased.1:19 ../scripts/nmudiff.1:108 ../scripts/plotchangelog.1:124 ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:121 ../scripts/rmadison.pl:329 ../scripts/tagpending.pl:149 ../scripts/uscan.1:535 ../scripts/uupdate.1:170 ../scripts/wnpp-alert.1:29 ../scripts/wnpp-check.1:23 ../scripts/devscripts.conf.5:54
 #, no-wrap
 msgid "SEE ALSO"
 msgstr ""
@@ -174,7 +174,7 @@ msgid ""
 msgstr ""
 
 #. type: SH
-#: ../scripts/annotate-output.1:55 ../scripts/archpath.1:54 ../scripts/build-rdeps.pl:346 ../scripts/checkbashisms.1:62 ../scripts/cowpoke.1:269 ../scripts/cvs-debc.1:64 ../scripts/cvs-debi.1:68 ../scripts/cvs-debrelease.1:69 ../scripts/cvs-debuild.1:59 ../scripts/dcmd.1:101 ../scripts/dcontrol.pl:283 ../scripts/dd-list.1:92 ../scripts/debc.1:120 ../scripts/debchange.1:442 ../scripts/debcheckout.pl:216 ../scripts/debclean.1:111 ../scripts/debcommit.pl:846 ../scripts/debdiff.1:222 ../scripts/debi.1:126 ../scripts/debpkg.1:23 ../scripts/debrelease.1:137 ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:71 ../scripts/debsign.1:153 ../scripts/debuild.1:423 ../scripts/desktop2menu.pl:52 ../scripts/dget.pl:631 ../scripts/diff2patches.1:48 ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscverify.1:78 ../scripts/getbuildlog.1:41 ../scripts/grep-excuses.1:40 ../scripts/licensecheck.pl:120 ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:20 ../scripts/mass-bug.pl:520 ../scripts/mergechanges.1:18 ../scripts/mk-build-deps.pl:94 ../scripts/namecheck.pl:30 ../scripts/nmudiff.1:113 ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56 ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:333 ../scripts/svnpath.pl:97 ../scripts/transition-check.pl:81 ../scripts/uscan.1:541 ../scripts/uupdate.1:177 ../scripts/whodepends.1:19 ../scripts/who-uploads.1:71 ../scripts/wnpp-alert.1:31 ../scripts/wnpp-check.1:33 ../scripts/devscripts.conf.5:58
+#: ../scripts/annotate-output.1:55 ../scripts/archpath.1:54 ../scripts/build-rdeps.pl:346 ../scripts/checkbashisms.1:62 ../scripts/cowpoke.1:269 ../scripts/cvs-debc.1:64 ../scripts/cvs-debi.1:68 ../scripts/cvs-debrelease.1:69 ../scripts/cvs-debuild.1:59 ../scripts/dcmd.1:101 ../scripts/dcontrol.pl:283 ../scripts/dd-list.1:92 ../scripts/debc.1:120 ../scripts/debchange.1:450 ../scripts/debcheckout.pl:216 ../scripts/debclean.1:111 ../scripts/debcommit.pl:849 ../scripts/debdiff.1:222 ../scripts/debi.1:126 ../scripts/debpkg.1:23 ../scripts/debrelease.1:137 ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:71 ../scripts/debsign.1:153 ../scripts/debuild.1:423 ../scripts/desktop2menu.pl:52 ../scripts/dget.pl:631 ../scripts/diff2patches.1:48 ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscverify.1:78 ../scripts/getbuildlog.1:41 ../scripts/grep-excuses.1:40 ../scripts/licensecheck.pl:120 ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:20 ../scripts/mass-bug.pl:520 ../scripts/mergechanges.1:18 ../scripts/mk-build-deps.pl:94 ../scripts/namecheck.pl:30 ../scripts/nmudiff.1:113 ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56 ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:333 ../scripts/svnpath.pl:97 ../scripts/transition-check.pl:81 ../scripts/uscan.1:541 ../scripts/uupdate.1:177 ../scripts/whodepends.1:19 ../scripts/who-uploads.1:71 ../scripts/wnpp-alert.1:31 ../scripts/wnpp-check.1:33 ../scripts/devscripts.conf.5:58
 #, no-wrap
 msgid "AUTHOR"
 msgstr ""
@@ -814,13 +814,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../scripts/bts.pl:413 ../scripts/cvs-debrelease.1:57 ../scripts/cvs-debuild.1:38 ../scripts/debc.1:85 ../scripts/debchange.1:347 ../scripts/debclean.1:77 ../scripts/debdiff.1:151 ../scripts/debi.1:92 ../scripts/debrelease.1:95 ../scripts/debsign.1:101 ../scripts/dpkg-depcheck.1:92 ../scripts/dscverify.1:24 ../scripts/grep-excuses.1:14 ../scripts/licensecheck.pl:80 ../scripts/mass-bug.pl:112 ../scripts/nmudiff.1:69 ../scripts/rmadison.pl:278 ../scripts/uscan.1:438 ../scripts/uupdate.1:78 ../scripts/who-uploads.1:40
+#: ../scripts/bts.pl:413 ../scripts/cvs-debrelease.1:57 ../scripts/cvs-debuild.1:38 ../scripts/debc.1:85 ../scripts/debchange.1:355 ../scripts/debclean.1:77 ../scripts/debdiff.1:151 ../scripts/debi.1:92 ../scripts/debrelease.1:95 ../scripts/debsign.1:101 ../scripts/dpkg-depcheck.1:92 ../scripts/dscverify.1:24 ../scripts/grep-excuses.1:14 ../scripts/licensecheck.pl:80 ../scripts/mass-bug.pl:112 ../scripts/nmudiff.1:69 ../scripts/rmadison.pl:278 ../scripts/uscan.1:438 ../scripts/uupdate.1:78 ../scripts/who-uploads.1:40
 #, no-wrap
 msgid "B<--no-conf>, B<--noconf>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/bts.pl:415 ../scripts/cvs-debrelease.1:61 ../scripts/debc.1:89 ../scripts/debchange.1:351 ../scripts/debclean.1:81 ../scripts/debdiff.1:155 ../scripts/debi.1:96 ../scripts/debrelease.1:99 ../scripts/debsign.1:105 ../scripts/debuild.1:225 ../scripts/dpkg-depcheck.1:96 ../scripts/dscverify.1:28 ../scripts/grep-excuses.1:18 ../scripts/mass-bug.pl:114 ../scripts/nmudiff.1:73 ../scripts/uscan.1:442 ../scripts/uupdate.1:82 ../scripts/who-uploads.1:44
+#: ../scripts/bts.pl:415 ../scripts/cvs-debrelease.1:61 ../scripts/debc.1:89 ../scripts/debchange.1:359 ../scripts/debclean.1:81 ../scripts/debdiff.1:155 ../scripts/debi.1:96 ../scripts/debrelease.1:99 ../scripts/debsign.1:105 ../scripts/debuild.1:225 ../scripts/dpkg-depcheck.1:96 ../scripts/dscverify.1:28 ../scripts/grep-excuses.1:18 ../scripts/mass-bug.pl:114 ../scripts/nmudiff.1:73 ../scripts/uscan.1:442 ../scripts/uupdate.1:82 ../scripts/who-uploads.1:44
 msgid ""
 "Do not read any configuration files.  This can only be used as the first "
 "option given on the command-line."
@@ -1335,7 +1335,7 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/bts.pl:1212
-msgid "B<done> I<bug> I<version>"
+msgid "B<done> I<bug> [I<version>]"
 msgstr ""
 
 #. type: textblock
@@ -2073,7 +2073,7 @@ msgid ""
 msgstr ""
 
 #. type: SH
-#: ../scripts/bts.pl:3989 ../scripts/dcontrol.pl:267 ../scripts/debc.1:92 ../scripts/debchange.1:362 ../scripts/debcheckout.pl:172 ../scripts/debclean.1:90 ../scripts/debcommit.pl:97 ../scripts/debdiff.1:167 ../scripts/debi.1:99 ../scripts/debrelease.1:105 ../scripts/debrsign.1:57 ../scripts/debsign.1:111 ../scripts/debuild.1:290 ../scripts/dget.pl:595 ../scripts/dpkg-depcheck.1:102 ../scripts/dscverify.1:42 ../scripts/grep-excuses.1:28 ../scripts/licensecheck.pl:87 ../scripts/mass-bug.pl:132 ../scripts/nmudiff.1:79 ../scripts/plotchangelog.1:106 ../scripts/pts-subscribe.1:42 ../scripts/rmadison.pl:287 ../scripts/uscan.1:448 ../scripts/uupdate.1:88 ../scripts/who-uploads.1:50
+#: ../scripts/bts.pl:3989 ../scripts/dcontrol.pl:267 ../scripts/debc.1:92 ../scripts/debchange.1:370 ../scripts/debcheckout.pl:172 ../scripts/debclean.1:90 ../scripts/debcommit.pl:97 ../scripts/debdiff.1:167 ../scripts/debi.1:99 ../scripts/debrelease.1:105 ../scripts/debrsign.1:57 ../scripts/debsign.1:111 ../scripts/debuild.1:290 ../scripts/dget.pl:595 ../scripts/dpkg-depcheck.1:102 ../scripts/dscverify.1:42 ../scripts/grep-excuses.1:28 ../scripts/licensecheck.pl:87 ../scripts/mass-bug.pl:132 ../scripts/nmudiff.1:79 ../scripts/plotchangelog.1:106 ../scripts/pts-subscribe.1:42 ../scripts/rmadison.pl:287 ../scripts/uscan.1:448 ../scripts/uupdate.1:88 ../scripts/who-uploads.1:50
 #, no-wrap
 msgid "CONFIGURATION VARIABLES"
 msgstr ""
@@ -2301,7 +2301,7 @@ msgid "reportbug(1), querybts(1)"
 msgstr ""
 
 #. type: =head1
-#: ../scripts/bts.pl:4100 ../scripts/chdist.pl:91 ../scripts/debsnap.1:99 ../scripts/mass-bug.pl:513 ../scripts/tagpending.pl:431
+#: ../scripts/bts.pl:4100 ../scripts/chdist.pl:91 ../scripts/debsnap.1:107 ../scripts/mass-bug.pl:513 ../scripts/tagpending.pl:431
 #, no-wrap
 msgid "COPYRIGHT"
 msgstr ""
@@ -2433,7 +2433,7 @@ msgid "Show the usage information."
 msgstr ""
 
 #. type: TP
-#: ../scripts/build-rdeps.pl:70 ../scripts/chdist.pl:49 ../scripts/cowpoke.1:82 ../scripts/debchange.1:359 ../scripts/debclean.1:87 ../scripts/debrelease.1:102 ../scripts/debsign.1:108 ../scripts/debsnap.1:51 ../scripts/diff2patches.1:25 ../scripts/dscverify.1:39 ../scripts/grep-excuses.1:25 ../scripts/mass-bug.pl:121 ../scripts/nmudiff.1:76 ../scripts/plotchangelog.1:95 ../scripts/pts-subscribe.1:31 ../scripts/rmadison.pl:274 ../scripts/uscan.1:445 ../scripts/uupdate.1:85 ../scripts/who-uploads.1:47
+#: ../scripts/build-rdeps.pl:70 ../scripts/chdist.pl:49 ../scripts/cowpoke.1:82 ../scripts/debchange.1:367 ../scripts/debclean.1:87 ../scripts/debrelease.1:102 ../scripts/debsign.1:108 ../scripts/debsnap.1:59 ../scripts/diff2patches.1:25 ../scripts/dscverify.1:39 ../scripts/grep-excuses.1:25 ../scripts/mass-bug.pl:121 ../scripts/nmudiff.1:76 ../scripts/plotchangelog.1:95 ../scripts/pts-subscribe.1:31 ../scripts/rmadison.pl:274 ../scripts/uscan.1:445 ../scripts/uupdate.1:85 ../scripts/who-uploads.1:47
 #, no-wrap
 msgid "B<--version>"
 msgstr ""
@@ -2475,7 +2475,7 @@ msgid "and run apt-get update afterwards or use the update option of this tool."
 msgstr ""
 
 #. type: =head1
-#: ../scripts/build-rdeps.pl:338 ../scripts/debcommit.pl:839 ../scripts/desktop2menu.pl:43 ../scripts/licensecheck.pl:111 ../scripts/namecheck.pl:36 ../scripts/svnpath.pl:93 ../scripts/transition-check.pl:72
+#: ../scripts/build-rdeps.pl:338 ../scripts/debcommit.pl:842 ../scripts/desktop2menu.pl:43 ../scripts/licensecheck.pl:111 ../scripts/namecheck.pl:36 ../scripts/svnpath.pl:93 ../scripts/transition-check.pl:72
 msgid "LICENSE"
 msgstr ""
 
@@ -2687,7 +2687,7 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../scripts/checkbashisms.1:24 ../scripts/debchange.1:356 ../scripts/debdiff.1:155 ../scripts/debrelease.1:99 ../scripts/debsign.1:105 ../scripts/dscverify.1:36 ../scripts/pts-subscribe.1:28 ../scripts/rc-alert.1:21 ../scripts/uupdate.1:82 ../scripts/whodepends.1:11 ../scripts/who-uploads.1:44 ../scripts/wnpp-alert.1:23 ../scripts/wnpp-check.1:17
+#: ../scripts/checkbashisms.1:24 ../scripts/debchange.1:364 ../scripts/debdiff.1:155 ../scripts/debrelease.1:99 ../scripts/debsign.1:105 ../scripts/dscverify.1:36 ../scripts/pts-subscribe.1:28 ../scripts/rc-alert.1:21 ../scripts/uupdate.1:82 ../scripts/whodepends.1:11 ../scripts/who-uploads.1:44 ../scripts/wnpp-alert.1:23 ../scripts/wnpp-check.1:17
 #, no-wrap
 msgid "B<--help>, B<-h>"
 msgstr ""
@@ -2967,7 +2967,7 @@ msgid "Display the current version information."
 msgstr ""
 
 #. type: SH
-#: ../scripts/cowpoke.1:87 ../scripts/debsnap.1:56
+#: ../scripts/cowpoke.1:87 ../scripts/debsnap.1:64
 #, no-wrap
 msgid "CONFIGURATION OPTIONS"
 msgstr ""
@@ -3242,7 +3242,7 @@ msgid "I<~/.cowpoke>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:209 ../scripts/debsnap.1:90
+#: ../scripts/cowpoke.1:209 ../scripts/debsnap.1:98
 msgid "Per-user configuration options.  Will override any global configuration."
 msgstr ""
 
@@ -4485,7 +4485,7 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../scripts/debc.1:77 ../scripts/debchange.1:339 ../scripts/debclean.1:69 ../scripts/debi.1:84 ../scripts/debrelease.1:87 ../scripts/debuild.1:276 ../scripts/uscan.1:427
+#: ../scripts/debc.1:77 ../scripts/debchange.1:347 ../scripts/debclean.1:69 ../scripts/debi.1:84 ../scripts/debrelease.1:87 ../scripts/debuild.1:276 ../scripts/uscan.1:427
 #, no-wrap
 msgid "B<--check-dirname-level> I<N>"
 msgstr ""
@@ -4498,13 +4498,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../scripts/debc.1:81 ../scripts/debchange.1:343 ../scripts/debclean.1:73 ../scripts/debi.1:88 ../scripts/debrelease.1:91 ../scripts/debuild.1:280 ../scripts/uscan.1:431
+#: ../scripts/debc.1:81 ../scripts/debchange.1:351 ../scripts/debclean.1:73 ../scripts/debi.1:88 ../scripts/debrelease.1:91 ../scripts/debuild.1:280 ../scripts/uscan.1:431
 #, no-wrap
 msgid "B<--check-dirname-regex> I<regex>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debc.1:98 ../scripts/debchange.1:368 ../scripts/debclean.1:96 ../scripts/debi.1:105 ../scripts/debrelease.1:111 ../scripts/debrsign.1:63 ../scripts/debsign.1:117 ../scripts/nmudiff.1:85 ../scripts/pts-subscribe.1:48 ../scripts/uupdate.1:94 ../scripts/who-uploads.1:56
+#: ../scripts/debc.1:98 ../scripts/debchange.1:376 ../scripts/debclean.1:96 ../scripts/debi.1:105 ../scripts/debrelease.1:111 ../scripts/debrsign.1:63 ../scripts/debsign.1:117 ../scripts/nmudiff.1:85 ../scripts/pts-subscribe.1:48 ../scripts/uupdate.1:94 ../scripts/who-uploads.1:56
 msgid ""
 "The two configuration files I</etc/devscripts.conf> and I<~/.devscripts> are "
 "sourced in that order to set configuration variables.  Command line options "
@@ -4532,7 +4532,7 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../scripts/debc.1:108 ../scripts/debchange.1:376 ../scripts/debclean.1:100 ../scripts/debi.1:115 ../scripts/debrelease.1:125 ../scripts/debuild.1:360 ../scripts/devscripts.conf.5:42
+#: ../scripts/debc.1:108 ../scripts/debchange.1:384 ../scripts/debclean.1:100 ../scripts/debi.1:115 ../scripts/debrelease.1:125 ../scripts/debuild.1:360 ../scripts/devscripts.conf.5:42
 #, no-wrap
 msgid "B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL>, B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>"
 msgstr ""
@@ -5222,11 +5222,28 @@ msgstr ""
 #. type: TP
 #: ../scripts/debchange.1:329
 #, no-wrap
+msgid "B<--controlmaint>, B<-M>"
+msgstr ""
+
+#. type: Plain text
+#: ../scripts/debchange.1:337
+msgid ""
+"Use maintainer details from the I<debian/control> B<Maintainer> field rather "
+"than relevant environment variables (B<DEBFULLNAME>, B<DEBEMAIL>, etc.).  "
+"This option might be useful to restore details of the main maintainer in the "
+"changelog trailer after a bogus edit (e.g. when B<-m> was intended but "
+"forgot) or when releasing a package in the name of the main maintainer "
+"(e.g. the team)."
+msgstr ""
+
+#. type: TP
+#: ../scripts/debchange.1:337
+#, no-wrap
 msgid "B<-->[B<no>]B<mainttrailer>, B<-t>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:339
+#: ../scripts/debchange.1:347
 msgid ""
 "If mainttrailer is set, it will avoid modifying the existing changelog "
 "trailer line (i.e. the maintainer and date-stamp details), unless used with "
@@ -5238,20 +5255,20 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:343 ../scripts/debchange.1:347
+#: ../scripts/debchange.1:351 ../scripts/debchange.1:355
 msgid ""
 "See the above section \"B<Directory name checking>\" for an explanation of "
 "this option."
 msgstr ""
 
 #. type: TP
-#: ../scripts/debchange.1:351
+#: ../scripts/debchange.1:359
 #, no-wrap
 msgid "B<--release-heuristic> I<log>|I<changelog>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:356
+#: ../scripts/debchange.1:364
 msgid ""
 "Controls how B<debchange> determines if a package has been released, when "
 "deciding whether to create a new changelog entry or append to an existing "
@@ -5259,38 +5276,38 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:362 ../scripts/debclean.1:90 ../scripts/debrelease.1:105 ../scripts/debsign.1:111 ../scripts/dscverify.1:42 ../scripts/nmudiff.1:79 ../scripts/pts-subscribe.1:34 ../scripts/uupdate.1:88 ../scripts/who-uploads.1:50
+#: ../scripts/debchange.1:370 ../scripts/debclean.1:90 ../scripts/debrelease.1:105 ../scripts/debsign.1:111 ../scripts/dscverify.1:42 ../scripts/nmudiff.1:79 ../scripts/pts-subscribe.1:34 ../scripts/uupdate.1:88 ../scripts/who-uploads.1:50
 msgid "Display version and copyright information and exit successfully."
 msgstr ""
 
 #. type: TP
-#: ../scripts/debchange.1:368
+#: ../scripts/debchange.1:376
 #, no-wrap
 msgid "B<DEBCHANGE_PRESERVE>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:372
+#: ../scripts/debchange.1:380
 msgid ""
 "If this is set to I<yes>, then it is the same as the B<--preserve> command "
 "line parameter being used."
 msgstr ""
 
 #. type: TP
-#: ../scripts/debchange.1:372
+#: ../scripts/debchange.1:380
 #, no-wrap
 msgid "B<DEBCHANGE_QUERY_BTS>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:376
+#: ../scripts/debchange.1:384
 msgid ""
 "If this is set to I<no>, then it is the same as the B<--noquery> command "
 "line parameter being used."
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:383
+#: ../scripts/debchange.1:391
 msgid ""
 "See the above section \"B<Directory name checking>\" for an explanation of "
 "these variables.  Note that these are package-wide configuration variables, "
@@ -5299,13 +5316,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../scripts/debchange.1:383
+#: ../scripts/debchange.1:391
 #, no-wrap
 msgid "B<DEBCHANGE_RELEASE_HEURISTIC>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:388
+#: ../scripts/debchange.1:396
 msgid ""
 "Controls how B<debchange> determines if a package has been released, when "
 "deciding whether to create a new changelog entry or append to an existing "
@@ -5313,13 +5330,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../scripts/debchange.1:388
+#: ../scripts/debchange.1:396
 #, no-wrap
 msgid "B<DEBCHANGE_MULTIMAINT>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:393
+#: ../scripts/debchange.1:401
 msgid ""
 "If set to I<no>, B<debchange> will not introduce multiple-maintainer "
 "distinctions when a different maintainer appends an entry to an existing "
@@ -5327,13 +5344,13 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../scripts/debchange.1:393
+#: ../scripts/debchange.1:401
 #, no-wrap
 msgid "B<DEBCHANGE_MULTIMAINT_MERGE>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:399
+#: ../scripts/debchange.1:407
 msgid ""
 "If set to I<yes>, when adding changes in multiple-maintainer mode "
 "B<debchange> will check whether previous changes by the current maintainer "
@@ -5342,26 +5359,26 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../scripts/debchange.1:399
+#: ../scripts/debchange.1:407
 #, no-wrap
 msgid "B<DEBCHANGE_MAINTTRAILER>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:403
+#: ../scripts/debchange.1:411
 msgid ""
 "If this is set to I<no>, then it is the same as the B<--nomainttrailer> "
 "command line parameter being used."
 msgstr ""
 
 #. type: TP
-#: ../scripts/debchange.1:403
+#: ../scripts/debchange.1:411
 #, no-wrap
 msgid "B<DEBCHANGE_TZ>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:407
+#: ../scripts/debchange.1:415
 msgid ""
 "Use this timezone for changelog entries.  Default is the user/system "
 "timezone as shown by `B<date -R>` and affected by the environment variable "
@@ -5369,26 +5386,26 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../scripts/debchange.1:407
+#: ../scripts/debchange.1:415
 #, no-wrap
 msgid "B<DEBCHANGE_LOWER_VERSION_PATTERN>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:411
+#: ../scripts/debchange.1:419
 msgid ""
 "If this is set, then it is the same as the B<--allow-lower-version> command "
 "line parameter being used."
 msgstr ""
 
 #. type: TP
-#: ../scripts/debchange.1:411
+#: ../scripts/debchange.1:419
 #, no-wrap
 msgid "B<DEBCHANGE_AUTO_NMU>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:417
+#: ../scripts/debchange.1:425
 msgid ""
 "If this is set to I<no> then B<debchange> will not attempt to automatically "
 "determine whether the current changelog stanza represents an NMU.  The "
@@ -5396,43 +5413,43 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../scripts/debchange.1:417
+#: ../scripts/debchange.1:425
 #, no-wrap
 msgid "B<DEBCHANGE_FORCE_SAVE_ON_RELEASE>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:421
+#: ../scripts/debchange.1:429
 msgid ""
 "If this is set to I<no>, then it is the same as the "
 "B<--no-force-save-on-release> command line parameter being used."
 msgstr ""
 
 #. type: =head1
-#: ../scripts/debchange.1:421 ../scripts/devscripts.1:16 ../scripts/devscripts.1:20 ../scripts/mass-bug.pl:127
+#: ../scripts/debchange.1:429 ../scripts/devscripts.1:16 ../scripts/devscripts.1:20 ../scripts/mass-bug.pl:127
 #, no-wrap
 msgid "ENVIRONMENT"
 msgstr ""
 
 #. type: TP
-#: ../scripts/debchange.1:422
+#: ../scripts/debchange.1:430
 #, no-wrap
 msgid "B<DEBEMAIL>, B<EMAIL>, B<DEBFULLNAME>, B<NAME>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:425
+#: ../scripts/debchange.1:433
 msgid "See the above description of the use of these environment variables."
 msgstr ""
 
 #. type: TP
-#: ../scripts/debchange.1:425
+#: ../scripts/debchange.1:433
 #, no-wrap
 msgid "B<CHANGELOG>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:431
+#: ../scripts/debchange.1:439
 msgid ""
 "This variable specifies the changelog to edit in place of "
 "I<debian/changelog>.  No directory traversal or checking is performed when "
@@ -5441,27 +5458,27 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../scripts/debchange.1:431
+#: ../scripts/debchange.1:439
 #, no-wrap
 msgid "B<VISUAL>, B<EDITOR>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:435
+#: ../scripts/debchange.1:443
 msgid ""
 "These environment variables (in this order) determine the editor used by "
 "B<sensible-editor>."
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:442
+#: ../scripts/debchange.1:450
 msgid ""
 "B<debclean>(1), B<dupload>(1), B<dput>(1), B<debc>(1)  and "
 "B<devscripts.conf>(5)."
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:445
+#: ../scripts/debchange.1:453
 msgid ""
 "The original author was Christoph Lameter E<lt>clameter@debian.orgE<gt>.  "
 "Many substantial changes and improvements were made by Julian Gilbey "
@@ -6232,7 +6249,7 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/debcommit.pl:841
+#: ../scripts/debcommit.pl:844
 msgid ""
 "This code is copyright by Joey Hess <joeyh@debian.org>, all rights "
 "reserved.  This program comes with ABSOLUTELY NO WARRANTY.  You are free to "
@@ -6241,12 +6258,12 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/debcommit.pl:848 ../scripts/mass-bug.pl:522
+#: ../scripts/debcommit.pl:851 ../scripts/mass-bug.pl:522
 msgid "Joey Hess <joeyh@debian.org>"
 msgstr ""
 
 #. type: textblock
-#: ../scripts/debcommit.pl:852
+#: ../scripts/debcommit.pl:855
 msgid "svnpath(1)."
 msgstr ""
 
@@ -7890,42 +7907,64 @@ msgid ""
 "download operation.  Please always use this option when reporting bugs."
 msgstr ""
 
+#. type: TP
+#: ../scripts/debsnap.1:47
+#, no-wrap
+msgid "B<--binary>"
+msgstr ""
+
 #. type: Plain text
 #: ../scripts/debsnap.1:50
-msgid "Show a summary of these options."
+msgid "Download binary packages instead of source packages."
+msgstr ""
+
+#. type: TP
+#: ../scripts/debsnap.1:51
+#, no-wrap
+msgid "B<-a>, B<--architecture>"
 msgstr ""
 
 #. type: Plain text
 #: ../scripts/debsnap.1:54
+msgid "Specify architecture of downloaded binary packages. Implies --binary."
+msgstr ""
+
+#. type: Plain text
+#: ../scripts/debsnap.1:58
+msgid "Show a summary of these options."
+msgstr ""
+
+#. type: Plain text
+#: ../scripts/debsnap.1:62
 msgid "Show the version of B<debsnap>."
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:59
+#: ../scripts/debsnap.1:67
 msgid ""
 "B<debsnap> may also be configured through the use of the following options "
 "in the devscripts configuration files:"
 msgstr ""
 
 #. type: TP
-#: ../scripts/debsnap.1:60
+#: ../scripts/debsnap.1:68
 #, no-wrap
 msgid "B<DEBSNAP_VERBOSE>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:63
+#: ../scripts/debsnap.1:71
 msgid "Same as the command line option B<--verbose>.  Set to \"yes\" to enable."
 msgstr ""
 
 #. type: TP
-#: ../scripts/debsnap.1:64
+#: ../scripts/debsnap.1:72
 #, no-wrap
 msgid "B<DEBSNAP_DESTDIR>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:69
+#: ../scripts/debsnap.1:77
 msgid ""
 "Set a default path for the destination directory.  If unset "
 "I<./source-E<lt>package_nameE<gt>> will be used.  The command line option "
@@ -7933,29 +7972,29 @@ msgid ""
 msgstr ""
 
 #. type: TP
-#: ../scripts/debsnap.1:70
+#: ../scripts/debsnap.1:78
 #, no-wrap
 msgid "B<DEBSNAP_BASE_URL>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:73
+#: ../scripts/debsnap.1:81
 msgid "The base url for the snapshots archive."
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:75
+#: ../scripts/debsnap.1:83
 msgid "If unset this defaults to I<http://snapshot.debian.org>"
 msgstr ""
 
 #. type: SH
-#: ../scripts/debsnap.1:76 ../scripts/transition-check.pl:54 ../scripts/uscan.1:498 ../scripts/wnpp-check.1:25
+#: ../scripts/debsnap.1:84 ../scripts/transition-check.pl:54 ../scripts/uscan.1:498 ../scripts/wnpp-check.1:25
 #, no-wrap
 msgid "EXIT STATUS"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:82
+#: ../scripts/debsnap.1:90
 msgid ""
 "B<debsnap> will return an exit status of 0 if all operations succeeded, 1 if "
 "a fatal error occurred, and 2 if some packages failed to be downloaded but "
@@ -7965,51 +8004,51 @@ msgid ""
 msgstr ""
 
 #. type: SH
-#: ../scripts/debsnap.1:83 ../scripts/diff2patches.1:28
+#: ../scripts/debsnap.1:91 ../scripts/diff2patches.1:28
 #, no-wrap
 msgid "FILES"
 msgstr ""
 
 #. type: TP
-#: ../scripts/debsnap.1:84
+#: ../scripts/debsnap.1:92
 #, no-wrap
 msgid "I</etc/devscripts.conf>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:87
+#: ../scripts/debsnap.1:95
 msgid "Global devscripts configuration options.  Will override hardcoded defaults."
 msgstr ""
 
 #. type: TP
-#: ../scripts/debsnap.1:87
+#: ../scripts/debsnap.1:95
 #, no-wrap
 msgid "I<~/.devscripts>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:95
+#: ../scripts/debsnap.1:103
 msgid "B<devscripts>(1), B<devscripts.conf>(5), B<git-debimport>(1)"
 msgstr ""
 
 #. type: SH
-#: ../scripts/debsnap.1:96
+#: ../scripts/debsnap.1:104
 #, no-wrap
 msgid "AUTHORS"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:98
+#: ../scripts/debsnap.1:106
 msgid "David Paleino E<lt>dapal@debian.orgE<gt>"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:101
+#: ../scripts/debsnap.1:109
 msgid "Copyright \\(co 2010 David Paleino"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:105
+#: ../scripts/debsnap.1:113
 msgid ""
 "Permission is granted to copy, distribute and/or modify this document under "
 "the terms of the GNU General Public License, Version 3 or (at your option)  "
@@ -8017,20 +8056,20 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:108
+#: ../scripts/debsnap.1:116
 msgid ""
 "On Debian systems, the complete text of the GNU General Public License can "
 "be found in I</usr/share/common-licenses/GPL>."
 msgstr ""
 
 #. type: SS
-#: ../scripts/debsnap.1:110
+#: ../scripts/debsnap.1:118
 #, no-wrap
 msgid "Reporting bugs"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsnap.1:113
+#: ../scripts/debsnap.1:121
 msgid ""
 "The program is part of the devscripts package.  Please report bugs using "
 "`B<reportbug devscripts>`"
