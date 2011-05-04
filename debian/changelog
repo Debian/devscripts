@@ -25,6 +25,7 @@ devscripts (2.10.73) UNRELEASED; urgency=low
   * Switch to simple dh 8 rule.
   * debcommit: Support for committing from debian/ when using bzr. Thanks to
     Loïc Minier for the patch. (Closes: #580861)
+  * debian/control: Bump Standards-Version to 3.9.2 (no changes needed).
 
   [ Patrick Schoenfeld ]
   * checkbashisms:
@@ -35,7 +36,7 @@ devscripts (2.10.73) UNRELEASED; urgency=low
     "(stdin)" for filename display instead of the real filename.
     (Closes: #586500)
 
- -- Patrick Schoenfeld <schoenfeld@debian.org>  Thu, 21 Apr 2011 13:13:43 +0200
+ -- Benjamin Drung <bdrung@debian.org>  Wed, 04 May 2011 10:28:27 +0200
 
 devscripts (2.10.72) unstable; urgency=low
 
