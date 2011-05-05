@@ -27,6 +27,7 @@
 # Later modifications: see debian/changelog
 
 use strict;
+use Cwd qw(abs_path);
 use IO::Dir;
 use IO::File;
 use Digest::MD5;
@@ -103,9 +104,14 @@ sub wget {
     my ($file, $url) = @_;
 
     # schemes not supported by all backends
-    if ($url =~ m!^(file|copy)://(/.+)!) {
-	if ($1 eq "copy" or not link($2, $file)) {
-	    system "cp -a $2 $file";
+    if ($url =~ m!^(file|copy):(.+)!) {
+	my $path = abs_path($2);
+	unless ($path) {
+	    warn "$progname: unable to resolve full path for $2: $!\n";
+	    return 1;
+	}
+	if ($1 eq "copy" or not link($path, $file)) {
+	    system 'cp', '-aL', $path, $file;
 	    return $? >> 8;
 	}
 	return;
@@ -175,7 +181,7 @@ sub get_file {
 		    print "$progname: using $path/$file (hardlink)\n" unless $opt->{'quiet'};
 		} else {
 		    print "$progname: using $path/$file (copy)\n" unless $opt->{'quiet'};
-		    system "cp -a $path/$file $file";
+		    system 'cp', '-aL', "$path/$file", $file;
 		}
 		last;
 	    }
@@ -193,8 +199,9 @@ sub get_file {
 
     # try apt-get if it is still not there
     if (not -e $file and $file =~ m!^([a-z0-9.+-]{2,})_[^/]+\.(?:diff\.gz|tar\.gz)$!) {
-	my $cmd = "apt-get source --print-uris $1";
-	my $apt = new IO::File("$cmd |") or die "$cmd: $!";
+	my @cmd = ('apt-get', 'source', '--print-uris', $1);
+	my $cmd = join ' ', @cmd;
+	open(my $apt, '-|', @cmd) or die "$cmd: $!";
 	while(<$apt>) {
 	    if (/'(\S+)'\s+\S+\s+\d+\s+([\da-f]+)/i and $2 eq $md5sum) {
 		if (wget($file, $1)) {

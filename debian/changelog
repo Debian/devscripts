@@ -18,6 +18,13 @@ devscripts (2.10.73) UNRELEASED; urgency=low
     + Add -M option to use debian/control's Maintainer information.  Thanks to
       Modestas Vainius for the patch.  (Closes: #560900)
     + Update recognized Ubuntu releases (- jaunty/karmic, + oneiric).
+  * dget: Improve wget()'s handling of file/copy URIs.  Thanks to Adam
+    Borowski for the suggestions.
+    + Allow relative paths for file/copy URIs.
+    + Follow symlinks when copying/hard linking files from a local cache.
+      (Closes: #515852)
+    + Call system() with a list of arguments to prevent shell interpolation of
+      the command.
 
   [ Benjamin Drung ]
   * Add myself to uploaders.
