@@ -57,7 +57,7 @@ When installing the generated package use the specified tool.
 =item B<-r>, B<--remove>
 
 Remove the package file after installing it. Ignored if used without
-the install switch.
+the B<--install> switch.
 
 =item B<-a> I<foo>, B<--arch> I<foo>
 
@@ -87,7 +87,7 @@ Show version and copyright information.
 =item B<-s>, B<--root-cmd>
 
 Use the specified tool to gain root privileges before installing.
-Ignored if not used with the install switch.
+Ignored if used without the B<--install> switch.
 
 =back
 

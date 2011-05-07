@@ -44,7 +44,7 @@ Choose data directory (default: $HOME/.chdist/).
 
 =item B<-a>, B<--arch> I<ARCH>
 
-Choose architecture (default: `B<dpkg --print-architecture>`)
+Choose architecture (default: `B<dpkg --print-architecture>`).
 
 =item B<--version>
 

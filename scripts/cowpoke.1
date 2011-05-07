@@ -22,7 +22,7 @@ cowpoke \- Build a Debian source package in a remote cowbuilder instance
 .RI [ options ] " packagename.dsc"
 
 .SH DESCRIPTION
-Uploads a Debian source package to a cowbuilder host and builds it,
+Uploads a Debian source package to a \fBcowbuilder\fR host and builds it,
 optionally also signing and uploading the result to an incoming queue.
 
 
@@ -55,19 +55,19 @@ Specify the remote user to build as.
 
 .TP
 .B \-\-create
-Create the remote cowbuilder root if it does not already exist.  If this option
+Create the remote \fBcowbuilder\fR root if it does not already exist.  If this option
 is not passed it is an error for the specified \fB\-\-dist\fP or \fB\-\-arch\fP
-to not have an existing cowbuilder root in the expected location.
+to not have an existing \fBcowbuilder\fR root in the expected location.
 
 .TP
 .BR \-\-return= [ \fIpath ]
-Copy results of the build to \fIpath\fP.  If path is not specified, then return
-them to the current directory. The given path must exist, it will not be created.
+Copy results of the build to \fIpath\fP.  If \fIpath\fP is not specified, then return
+them to the current directory. The given \fIpath\fP must exist, it will not be created.
 
 .TP
 .B \-\-no\-return
 Do not copy results of the build to \fBRETURN_DIR\fP (overriding a path set for
-it in the config files).
+it in the configuration files).
 
 .TP
 .BI \-\-dpkg\-opts= "'opt1 opt2 ...'"
@@ -96,13 +96,13 @@ These apply to every arch and dist in a single cowpoke invocation.
 
 .TP
 .B BUILDD_HOST
-The network address or fqdn of the build machine where cowbuilder is configured.
+The network address or fqdn of the build machine where \fBcowbuilder\fR is configured.
 This may be overridden by the \fB\-\-buildd\fP command line option.
 .TP
 .B BUILDD_USER
 The unprivileged user name for operations on the build machine.  This defaults
 to the local name of the user executing \fBcowpoke\fP (or to a username that is
-specified in your ssh config for \fBBUILDD_HOST\fR), and may be overridden by the
+specified in your SSH configuration for \fBBUILDD_HOST\fR), and may be overridden by the
 \fB\-\-buildd\-user\fP command line option.
 .TP
 .B BUILDD_ARCH
@@ -145,10 +145,10 @@ will be made.  If \fBSIGN_KEYID\fP is not set, this option will be ignored entir
 .TP
 .B BUILDD_ROOTCMD
 The command to use to gain root privileges on the remote build machine.  If
-unset the default is \fBsudo\fP(8).  This is only required to invoke cowbuilder
+unset the default is \fBsudo\fP(8).  This is only required to invoke \fBcowbuilder\fR
 and allow it to enter its chroot, so you may restrict this user to only being
 able to run that command with escalated privileges.  Something like this in
-sudoers will enable invoking cowbuilder without an additional password entry
+sudoers will enable invoking \fBcowbuilder\fR without an additional password entry
 required:
 .TP
 .B " "
@@ -157,7 +157,7 @@ youruser ALL = NOPASSWD: /usr/sbin/cowbuilder
 .RE
 .TP
 .B " "
-Alternatively you could use ssh with a forwarded key, or whatever other
+Alternatively you could use SSH with a forwarded key, or whatever other
 mechanism suits your local access policy.  Using \fBsu \-c\fR isn't really
 suitable here due to its quoting requirements being somewhat different to
 the rest.
@@ -217,14 +217,14 @@ explicitly on the command line override all configuration files.
 
 
 .SH COWBUILDER CONFIGURATION
-There is nothing particularly special required to configure a cowbuilder instance
+There is nothing particularly special required to configure a \fBcowbuilder\fR instance
 for use with \fBcowpoke\fP.  Simply create them in the flavour you require with
-`\fBcowbuilder \-\-create\fP` according to the cowbuilder documentation, then
+`\fBcowbuilder \-\-create\fP` according to the \fBcowbuilder\fR documentation, then
 configure \fBcowpoke\fP with the user, arch, and path information required to
 access it, on the machines you wish to invoke it from (or alternatively configure
 \fBcowpoke\fP with the path, arch and distribution information and pass the
 \fB\-\-create\fP option to it on the first invocation).  The build host running
-cowbuilder does not require \fBcowpoke\fP installed locally.
+\fBcowbuilder\fR does not require \fBcowpoke\fP installed locally.
 
 The build machine should have the \fBlintian\fP and \fBdevscripts\fR packages
 installed for post-build sanity checking.  Upon completion, the build log and
@@ -236,18 +236,18 @@ build machine, then it will be used to transfer the source package (this may
 save on some transfers of the \fIorig.tar.*\fP when building subsequent Debian
 revisions).
 
-The user executing \fBcowpoke\fP must have ssh access to the build machine as
-the \fBBUILDD_USER\fP.  That user must be able to invoke cowbuilder as root by
+The user executing \fBcowpoke\fP must have SSH access to the build machine as
+the \fBBUILDD_USER\fP.  That user must be able to invoke \fBcowbuilder\fR as root by
 using the \fBBUILDD_ROOTCMD\fP.  Signing keys are not required to be installed
 on the build machine (and will be ignored there if they are).  If the package
 is signed, keys will be expected on the machine that executes \fBcowpoke\fP.
 
-When \fBcowpoke\fP is invoked, it will first attempt to update the cowbuilder
+When \fBcowpoke\fP is invoked, it will first attempt to update the \fBcowbuilder\fR
 image if that has not already been done on the same day.  This is checked by
 the presence or absence of a \fIcowbuilder-$arch-$dist-update-log-$date\fP file
 in the \fBINCOMING_DIR\fP.  You may move, remove, or touch this file if you wish
 the image to be updated more or less often than that.  Its contents log the
-output of cowbuilder during the update (or creation) of the build root.
+output of \fBcowbuilder\fR during the update (or creation) of the build root.
 
 
 .SH NOTES

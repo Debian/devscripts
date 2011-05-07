@@ -34,7 +34,7 @@ Directory to place retrieved packages.
 .BR \-f ", " \-\-force
 Force writing into an existing \fIdestination\fP.  By default \fBdebsnap\fP will
 insist the destination directory does not exist yet unless it is explicitly
-specified to be '.' (the current working directory).  This is to avoid files
+specified to be '\fB.\fR' (the current working directory).  This is to avoid files
 being accidentally overwritten by what is fetched from the archive and to
 provide a guarantee for other scripts that only the files fetched will be
 present there upon completion.
@@ -50,7 +50,7 @@ Download binary packages instead of source packages.
 
 .TP
 .BR \-a ", " \-\-architecture
-Specify architecture of downloaded binary packages. Implies \-\-binary.
+Specify architecture of downloaded binary packages. Implies \fB\-\-binary\fP.
 
 .TP
 .BR \-h ", " \-\-help
@@ -67,7 +67,7 @@ in the devscripts configuration files:
 
 .TP
 .B DEBSNAP_VERBOSE
-Same as the command line option \fB\-\-verbose\fP.  Set to "yes" to enable.
+Same as the command line option \fB\-\-verbose\fP.  Set to \fIyes\fP to enable.
 
 .TP
 .B DEBSNAP_DESTDIR

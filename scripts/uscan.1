@@ -11,7 +11,7 @@ read from those control files and upstream ftp or http sites are
 inspected for newly available updates (as compared with the upstream
 version number retrieved from the \fIdebian/changelog\fR file in the
 same directory).  The newest updates are retrieved (as determined by
-their version numbers) and if specified in the watchfile, a program
+their version numbers) and if specified in the \fIwatch\fR file, a program
 may then be executed on the newly downloaded source.
 .PP
 The traditional \fIdebian/watch\fR files can still be used, but the
@@ -31,7 +31,7 @@ package.
 # format version number, currently 3; this line is compulsory!
 version=3
 
-# Line continuations are performed with \\
+# Line continuations are performed with \fB\\\fR
 
 # This is the format for an FTP site:
 # Full-site-with-pattern  [Version  [Action]]
@@ -50,9 +50,9 @@ ftp://ftp.nessus.org/pub/nessus/nessus-([\\d\\.]+)/src/nessus-core-([\\d\\.]+)\\
 # opts=pasv ftp://.../...
 
 # This is one format for an HTTP site, which is the same
-# as the FTP format.  uscan starts by downloading the homepage,
+# as the FTP format.  \fBuscan\fR starts by downloading the homepage,
 # obtained by removing the last component of the URL; in this case,
-# http://www.cpan.org/modules/by-module/Text/
+# \fIhttp://www.cpan.org/modules/by-module/Text/\fR
 http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-(.+)\\.tar\\.gz
 
 # This is a variant HTTP format which allows direct specification of
@@ -63,7 +63,7 @@ http://www.dataway.ch/~lukasl/amph/amph.html \\
 
 # This one shows that recursive directory scanning works, in either of
 # two forms, as long as the website can handle requests of the form
-# http://site/inter/mediate/dir/
+# \fIhttp://site/inter/mediate/dir/\fR
 http://tmrc.mit.edu/mirror/twisted/Twisted/(\\d\\.\\d)/ \\
   Twisted-([\\d\\.]*)\\.tar\\.bz2
 http://tmrc.mit.edu/mirror/twisted/Twisted/(\\d\\.\\d)/Twisted-([\\d\\.]*)\\.tar\\.bz2
@@ -96,7 +96,7 @@ opts=dversionmangle=s/\\.dfsg\\.\\d+$// \\
   http://some.site.org/some/path/foobar-(.+)\\.tar\\.gz
 
 # The filename is found by taking the last component of the URL and
-# removing everything after any '?'.  If this would not make a usable
+# removing everything after any '\fB?\fR'.  If this would not make a usable
 # filename, use filenamemangle.  For example,
 # <A href="http://foo.bar.org/download/?path=&download=foo-0.1.1.tar.gz">
 # could be handled as:
@@ -110,7 +110,7 @@ opts=dversionmangle=s/\\.dfsg\\.\\d+$// \\
 
 # The option downloadurlmangle can be used to mangle the URL of the file
 # to download.  This can only be used with http:// URLs.  This may be
-# necessary if the link given on the webpage needs to be transformed in
+# necessary if the link given on the web page needs to be transformed in
 # some way into one which will work automatically, for example:
 # opts=downloadurlmangle=s/prdownload/download/ \\
 #   http://developer.berlios.de/project/showfiles.php?group_id=2051 \\
@@ -118,7 +118,7 @@ opts=dversionmangle=s/\\.dfsg\\.\\d+$// \\
 
 .fi
 .PP
-Comment lines may be introduced with a `#' character.  Continuation
+Comment lines may be introduced with a `\fB#\fR' character.  Continuation
 lines may be indicated by terminating a line with a backslash
 character.
 .PP
@@ -126,7 +126,7 @@ The first (non-comment) line of the file must begin `version=3'.  This
 allows for future extensions without having to change the name of the
 file.
 .PP
-There are two possibilities for the syntax of an HTTP watchfile line,
+There are two possibilities for the syntax of an HTTP \fIwatch\fR file line,
 and only one for an FTP line.  We begin with the common (and simpler)
 format.  We describe the optional opts=... first field below, and
 ignore it in what follows.
@@ -134,17 +134,17 @@ ignore it in what follows.
 The first field gives the full pattern of URLs being searched for.  In
 the case of an FTP site, the directory listing for the requested
 directory will be requested and this will be scanned for files
-matching the basename (everything after the trailing `/').  In the
+matching the basename (everything after the trailing `\fB/\fR').  In the
 case of an HTTP site, the URL obtained by stripping everything after
 the trailing slash will be downloaded and searched for hrefs (links of
 the form <a href=...>) to either the full URL pattern given, or to the
 absolute part (everything without the http://host.name/ part), or to
-the basename (just the part after the final `/').  Everything up to
+the basename (just the part after the final `\fB/\fR').  Everything up to
 the final slash is taken as a verbatim URL, as long as there are no
-parentheses (`(' and ')') in this part of the URL: if it does, the
+parentheses (`\fB(\fR' and '\fB)\fR') in this part of the URL: if it does, the
 directory name will be matched in the same way as the final component
 of the URL as described below.  (Note that regex metacharacters such
-as `+' are regarded literally unless they are in a path component
+as `\fB+\fR' are regarded literally unless they are in a path component
 containing parentheses; see the Atlas-C++ example above.  Also, the
 parentheses must match within each path component.)
 .PP
@@ -159,17 +159,17 @@ least one Perl group as explained in the next paragraph.
 .PP
 Having got a list of `files' matching the pattern, their version
 numbers are extracted by treating the part matching the Perl regexp
-groups, demarcated by `(...)', joining them with `.' as a separator,
+groups, demarcated by `\fB(...)\fR', joining them with `\fB.\fR' as a separator,
 and using the result as the version number of the file.  The version
 number will then be mangled if required by the uversionmangle option
 described below.  Finally, the file versions are then compared to find
 the one with the greatest version number, as determined by \fBdpkg
 \-\-compare-versions\fR.  Note that if you need Perl groups which are
-not to be used in the version number, either use `(?:...)' or use the
+not to be used in the version number, either use `\fB(?:...)\fR' or use the
 uversionmangle option to clean up the mess!
 .PP
 The current (upstream) version can be specified as the second
-parameter in the watchfile line.  If this is \fIdebian\fR or absent,
+parameter in the \fIwatch\fR file line.  If this is \fIdebian\fR or absent,
 then the current Debian version (as determined by
 \fIdebian/changelog\fR) is used to determine the current upstream
 version.  The current upstream version may also be specified by the
@@ -187,21 +187,21 @@ or a \fI.tgz\fR suffix and from \fI<package>_<version>.orig.tar.bz2\fR
 if the file has a \fI.tar.bz2\fR or a \fI.tbz\fR or \fI.tbz2\fR
 suffix.
 .PP
-Finally, if a third parameter (an action) is given in the watchfile
+Finally, if a third parameter (an action) is given in the \fIwatch\fR file
 line, this is taken as the name of a command, and the command
 .nf
     \fIcommand \fB\-\-upstream-version\fI version filename\fR
 .fi
 is executed, using either the original file or the symlink name.  A
 common such command would be \fBuupdate\fR(1).  (Note that the calling
-syntax was slightly different when using watchfiles without a
-`version=...' line; there the command executed was `command filename
-version'.)  If the command is \fBuupdate\fR, then the
+syntax was slightly different when using \fIwatch\fR file without a
+`\fBversion=\fR...' line; there the command executed was `\fIcommand filename
+version\fR'.)  If the command is \fBuupdate\fR, then the
 \fB\-\-no\-symlink\fR option is given to \fBuupdate\fR as a first
 option, since any requested symlinking will already be done by
 \fBuscan\fR.
 .PP
-The alternative version of the watchfile syntax for HTTP URLs is as
+The alternative version of the \fIwatch\fR file syntax for HTTP URLs is as
 follows.  The first field is a homepage which should be downloaded and
 then searched for hrefs matching the pattern given in the second
 field.  (Again, this pattern will be anchored at the beginning and the
@@ -217,7 +217,7 @@ or relative to the base URL specified in the homepage itself with a
 <base href="..."> tag.  The third and fourth fields are the version
 number and action fields as before.
 .SH "PER-SITE OPTIONS"
-A watchfile line may be prefixed with `opts=\fIoptions\fR', where
+A \fIwatch\fR file line may be prefixed with `\fBopts=\fIoptions\fR', where
 \fIoptions\fR is a comma-separated list of options.  The whole
 \fIoptions\fR string may be enclosed in double quotes, which is
 necessary if \fIoptions\fR contains any spaces.  The recognised
@@ -231,27 +231,27 @@ site.
 \fBuversionmangle=\fIrules\fR
 This is used to mangle the upstream version number as matched by the
 ftp://... or http:// rules as follows.  First, the \fIrules\fR string
-is split into multiple rules at every `;'.  Then the upstream version
+is split into multiple rules at every `\fB;\fR'.  Then the upstream version
 number is mangled by applying \fIrule\fR to the version, in a similar
 way to executing the Perl command:
 .nf
     $version =~ \fIrule\fR;
 .fi
-for each rule.  Thus, suitable rules might be `s/^/0./' to prepend
-`0.' to the version number and `s/_/./g' to change underscores into
+for each rule.  Thus, suitable rules might be `\fBs/^/0./\fR' to prepend
+`\fB0.\fR' to the version number and `\fBs/_/./g\fR' to change underscores into
 periods.  Note that the \fIrules\fR string may not contain commas;
 this should not be a problem.
 
-\fIrule\fR may only use the 's', 'tr' and 'y' operations.  When the 's'
-operation is used, only the 'g', 'i' and 'x' flags are available and
+\fIrule\fR may only use the '\fBs\fR', '\fBtr\fR' and '\fBy\fR' operations.  When the '\fBs\fR'
+operation is used, only the '\fBg\fR', '\fBi\fR' and '\fBx\fR' flags are available and
 \fIrule\fR may not contain any expressions which have the potential to
 execute code (i.e. the (?{}) and (??{}) constructs are not supported).
 .TP
 \fBdversionmangle=\fIrules\fR
 This is used to mangle the Debian version number of the currently
 installed package in the same way as the \fBuversionmangle\fR option.
-Thus, a suitable rule might be `s/\\.dfsg\\.\\d+$//' to remove a
-`.dfsg.1' suffix from the Debian version number, or to handle `.pre6'
+Thus, a suitable rule might be `\fBs/\\.dfsg\\.\\d+$//\fR' to remove a
+`\fB.dfsg.1\fR' suffix from the Debian version number, or to handle `\fB.pre6\fR'
 type version numbers.  Again, the \fIrules\fR string may not contain
 commas; this should not be a problem.
 .TP
@@ -284,8 +284,8 @@ directory name corresponds to the package name.  It will only attempt
 to download newer versions of the package and then perform any
 requested action if the directory name matches the package name.
 Precisely how it does this is controlled by two configuration file
-variables DEVSCRIPTS_CHECK_DIRNAME_LEVEL and
-DEVSCRIPTS_CHECK_DIRNAME_REGEX, and their corresponding command-line
+variables \fBDEVSCRIPTS_CHECK_DIRNAME_LEVEL\fR and
+\fBDEVSCRIPTS_CHECK_DIRNAME_REGEX\fR, and their corresponding command-line
 options \fB\-\-check-dirname-level\fR and
 \fB\-\-check-dirname-regex\fR.
 .PP
@@ -305,14 +305,14 @@ Always check the directory name.
 .PP
 The directory name is checked by testing whether the current directory
 name (as determined by \fBpwd\fR(1)) matches the regex given by the
-configuration file option DEVSCRIPTS_CHECK_DIRNAME_REGEX or by the
+configuration file option \fBDEVSCRIPTS_CHECK_DIRNAME_REGEX\fR or by the
 command line option \fB\-\-check-dirname-regex\fR \fIregex\fR.  Here
 \fIregex\fR is a Perl regex (see \fBperlre\fR(3perl)), which will be
 anchored at the beginning and the end.  If \fIregex\fR contains a '/',
 then it must match the full directory path.  If not, then it must
 match the full directory name.  If \fIregex\fR contains the string
 \'PACKAGE', this will be replaced by the source package name, as
-determined from the changelog.  The default value for the regex is:
+determined from the \fIchangelog\fR.  The default value for the regex is:
 \'PACKAGE(-.+)?', thus matching directory names such as PACKAGE and
 PACKAGE-version.
 .SH EXAMPLE
@@ -365,8 +365,8 @@ default behaviour.)
 .TP
 .B \-\-rename
 Instead of symlinking, rename the downloaded files to their Debian
-orig.tar.gz names if their extensions are \fI.tar.gz\fR or \fI.tgz\fR,
-and similarly for tar.bz2 files.
+\fIorig.tar.gz\fR names if their extensions are \fI.tar.gz\fR or \fI.tgz\fR,
+and similarly for \fItar.bz2\fR files.
 .TP
 .B \-\-repack
 After having downloaded an lzma tar, xz tar, bzip tar or zip archive,
@@ -391,19 +391,19 @@ Use the traditional uscan output format.  (This is the default behaviour.)
 \fB\-\-package\fR \fIpackage\fR
 Specify the name of the package to check for rather than examining
 \fIdebian/changelog\fR; this requires the \fB\-\-upstream-version\fR
-(unless a version is specified in the watchfile)
+(unless a version is specified in the \fIwatch\fR file)
 and \fB\-\-watchfile\fR options as well.  Furthermore, no directory
 scanning will be done and nothing will be downloaded.  This option is
 probably most useful in conjunction with the DEHS system (and
 \fB\-\-dehs\fR).
 .TP
 \fB\-\-upstream-version\fR \fIupstream-version\fR
-Specify the current upstream version rather than examine the watchfile
-or changelog to determine it.  This is ignored if a directory scan is
-being performed and more than one watchfile is found.
+Specify the current upstream version rather than examine the \fIwatch\fR file
+or \fIchangelog\fR to determine it.  This is ignored if a directory scan is
+being performed and more than one \fIwatch\fR file is found.
 .TP
 \fB\-\-watchfile\fR \fIwatchfile\fR
-Specify the watchfile rather than perform a directory scan to
+Specify the \fIwatchfile\fR rather than perform a directory scan to
 determine it.  If this option is used without \fB\-\-package\fR, then
 \fBuscan\fR must be called from within the Debian package source tree
 (so that \fIdebian/changelog\fR can be found simply by stepping up
@@ -426,11 +426,11 @@ Don't give verbose output.  (This is the default behaviour.)
 Dump the downloaded web pages to stdout for debugging your watch file.
 .TP
 \fB\-\-check-dirname-level\fR \fIN\fR
-See the above section "Directory name checking" for an explanation of
+See the above section \fBDirectory name checking\fR for an explanation of
 this option.
 .TP
 \fB\-\-check-dirname-regex\fR \fIregex\fR
-See the above section "Directory name checking" for an explanation of
+See the above section \fBDirectory name checking\fR for an explanation of
 this option.
 .TP
 \fB\-\-user-agent\fR, \fB\-\-useragent\fR
@@ -461,8 +461,8 @@ downloaded; this is equivalent to the \fB\-\-report\fR or
 .B USCAN_PASV
 If this is set to \fIyes\fR or \fIno\fR, this will force FTP
 connections to use PASV mode or not to, respectively.  If this is set
-to \fIdefault\fR, then Net::FTP(3) make the choice (primarily based on
-the FTP_PASSIVE environment variable).
+to \fIdefault\fR, then \fBNet::FTP\fR(3) make the choice (primarily based on
+the \fBFTP_PASSIVE\fR environment variable).
 .TP
 .B USCAN_TIMEOUT
 If set to a number \fIN\fR, then set the timeout to \fIN\fR seconds. 
@@ -502,24 +502,24 @@ what happened and whether there were any warnings to be noted.
 .TP
 0
 Either \fB\-\-help\fR or \fB\-\-version\fR was used, or for some
-watchfile which was examined, a newer upstream version was located.
+\fIwatch\fR file which was examined, a newer upstream version was located.
 .TP
 1
-No newer upstream versions were located for any of the watchfiles
+No newer upstream versions were located for any of the \fIwatch\fR files
 examined.
 .SH "HISTORY AND UPGRADING"
-This section briefly describes the backwards-incompatible watchfile
-features which have been added in each watchfile version, and the
+This section briefly describes the backwards-incompatible \fIwatch\fR file
+features which have been added in each \fIwatch\fR file version, and the
 first version of the \fBdevscripts\fR package which understood them.
 .TP
 .I Pre-version 2
-The watchfile syntax was significantly different in those days.  Don't
-use it.  If you are upgrading from a pre-version 2 watchfile, you are
+The \fIwatch\fR file syntax was significantly different in those days.  Don't
+use it.  If you are upgrading from a pre-version 2 \fIwatch\fR file, you are
 advised to read this manpage and to start from scratch.
 .TP
 .I Version 2
 devscripts version 2.6.90: The first incarnation of the current style
-of watchfiles.
+of \fIwatch\fR files.
 .TP
 .I Version 3
 devscripts version 2.8.12: Introduced the following: correct handling

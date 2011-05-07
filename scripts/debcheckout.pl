@@ -122,7 +122,7 @@ files.
 
 =item B<--source=never>|B<auto>|B<download-only>|B<always>
 
-Some packages only place the debian directory in version control.
+Some packages only place the F<debian> directory in version control.
 B<debcheckout> can retrieve the remaining parts of the source using B<apt-get
 source> and move the files into the checkout.
 
@@ -145,7 +145,7 @@ Always retrieve the I<.orig.tar.gz> file, but do not unpack it.
 =item B<always>
 
 Always retrieve the I<.orig.tar.gz> file, and if the repository only contains the
-debian directory, unpack it.
+F<debian> directory, unpack it.
 
 =back
 

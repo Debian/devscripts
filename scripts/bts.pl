@@ -243,7 +243,7 @@ Do not send emails but print them to standard output.
 =item B<--cache>, B<--no-cache>
 
 Should we attempt to cache new versions of BTS pages when
-performing show/bugs commands?  Default is to cache.
+performing B<show>/B<bugs> commands?  Default is to cache.
 
 =item B<--cache-mode=>{B<min>|B<mbox>|B<full>}
 
@@ -261,7 +261,7 @@ web server. Default is 5 seconds.
 =item B<--mbox>
 
 Open a mail reader to read the mbox corresponding to a given bug number
-for show and bugs commands.
+for B<show> and B<bugs> commands.
 
 =item B<--mailreader=>I<READER>
 
@@ -269,7 +269,7 @@ Specify the command to read the mbox.  Must contain a "B<%s>" string
 (unquoted!), which will be replaced by the name of the mbox file.  The
 command will be split on white space and will not be passed to a
 shell.  Default is 'B<mutt -f %s>'.  (Also, B<%%> will be substituted by a
-single % if this is needed.)
+single B<%> if this is needed.)
 
 =item B<--cc-addr=>I<CC_EMAIL_ADDRESS>
 
@@ -293,7 +293,7 @@ Specify the B<sendmail> command.  The command will be split on white
 space and will not be passed to a shell.  Default is
 F</usr/sbin/sendmail>.  The B<-t> option will be automatically added if
 the command is F</usr/sbin/sendmail> or F</usr/sbin/exim*>.  For other
-mailers, if they require a -t option, this must be included in the
+mailers, if they require a B<-t> option, this must be included in the
 I<SENDMAILCMD>, for example: B<--sendmail="/usr/sbin/mymailer -t">.
 
 =item B<--mutt>
@@ -356,7 +356,7 @@ Use a debbugs server other than bugs.debian.org.
 =item B<-f>, B<--force-refresh>
 
 Download a bug report again, even if it does not appear to have
-changed since the last cache command.  Useful if a B<--cache-mode=full> is
+changed since the last B<cache> command.  Useful if a B<--cache-mode=full> is
 requested for the first time (otherwise unchanged bug reports will not
 be downloaded again, even if the boring bits have not been
 downloaded).
@@ -2124,7 +2124,7 @@ thus set up the cache, and update the whole thing once a week, while
 letting the automatic cache updates update the bugs you frequently
 refer to during the week.
 
-Some options affect the behaviour of the cache command.  The first is
+Some options affect the behaviour of the B<cache> command.  The first is
 the setting of B<--cache-mode>, which controls how much B<bts> downloads
 of the referenced links from the bug page, including boring bits such
 as the acknowledgement emails, emails to the control bot, and the mbox
@@ -3977,13 +3977,13 @@ B<mail>).
 
 =item B<DEBFULLNAME>
 
-If DEBEMAIL is set, DEBFULLNAME is examined to determine the full name
+If B<DEBEMAIL> is set, B<DEBFULLNAME> is examined to determine the full name
 to use; if this is not set, B<bts> attempts to determine a name from
-your passwd entry.
+your F<passwd> entry.
 
 =item B<BROWSER>
 
-If set, it specifies the browser to use for the 'show' and 'bugs'
+If set, it specifies the browser to use for the B<show> and B<bugs>
 options.  See the description above.
 
 =back
@@ -4002,14 +4002,14 @@ ignored for this purpose.  The currently recognised variables are:
 
 If this is set to B<yes>, then it is the same as the B<--offline> command
 line parameter being used.  Only has an effect on the B<show> and B<bugs>
-commands.  The default is B<no>.  See the description of the show
+commands.  The default is B<no>.  See the description of the B<show>
 command above for more information.
 
 =item B<BTS_CACHE>
 
 If this is set to B<no>, then it is the same as the B<--no-cache> command
 line parameter being used.  Only has an effect on the B<show> and B<bug>
-commands.  The default is B<yes>.  Again, see the show command above
+commands.  The default is B<yes>.  Again, see the B<show> command above
 for more information.
 
 =item B<BTS_CACHE_MODE=>{B<min>,B<mbox>,B<full>}
@@ -4023,8 +4023,8 @@ information.
 =item B<BTS_FORCE_REFRESH>
 
 If this is set to B<yes>, then it is the same as the B<--force-refresh>
-command line parameter being used.  Only has an effect on the cache
-command.  The default is B<no>.  See the cache command for more
+command line parameter being used.  Only has an effect on the B<cache>
+command.  The default is B<no>.  See the B<cache> command for more
 information.
 
 =item B<BTS_MAIL_READER>
@@ -4064,8 +4064,8 @@ Same as the B<--smtp-helo> command line option.
 =item B<BTS_INCLUDE_RESOLVED>
 
 If this is set to B<no>, then it is the same as the B<--no-include-resolved>
-command line parameter being used.  Only has an effect on the cache
-command.  The default is B<yes>.  See the cache command for more
+command line parameter being used.  Only has an effect on the B<cache>
+command.  The default is B<yes>.  See the B<cache> command for more
 information.
 
 =item B<BTS_SUPPRESS_ACKS>

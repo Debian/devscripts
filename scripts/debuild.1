@@ -41,7 +41,7 @@ run \fBdpkg-checkbuilddeps\fR first; this can be explicitly requested
 or switched off using the options \fB\-D\fR and \fB\-d\fR
 respectively.  Note also that if either of these or a \fB\-r\fR option
 is specified in the configuration file option
-DEBUILD_DPKG_BUILDPACKAGE_OPTS, then it will be recognised even in
+\fBDEBUILD_DPKG_BUILDPACKAGE_OPTS\fR, then it will be recognised even in
 this method of invocation of \fBdebuild\fR.
 .PP
 \fBdebuild\fR also reads the \fBdevscripts\fR configuration files as
@@ -55,11 +55,11 @@ examine the name of the parent directory once it finds the
 \fIdebian/changelog\fR file, and check that the directory name
 corresponds to the package name.  Precisely how it does this is
 controlled by two configuration file variables
-DEVSCRIPTS_CHECK_DIRNAME_LEVEL and DEVSCRIPTS_CHECK_DIRNAME_REGEX, and
+\fBDEVSCRIPTS_CHECK_DIRNAME_LEVEL\fR and \fBDEVSCRIPTS_CHECK_DIRNAME_REGEX\fR, and
 their corresponding command-line options \fB\-\-check-dirname-level\fR
 and \fB\-\-check-dirname-regex\fR.
 .PP
-DEVSCRIPTS_CHECK_DIRNAME_LEVEL can take the following values:
+\fBDEVSCRIPTS_CHECK_DIRNAME_LEVEL\fR can take the following values:
 .TP
 .B 0
 Never check the directory name.
@@ -73,39 +73,39 @@ Always check the directory name.
 .PP
 The directory name is checked by testing whether the current directory
 name (as determined by \fBpwd\fR(1)) matches the regex given by the
-configuration file option DEVSCRIPTS_CHECK_DIRNAME_REGEX or by the
+configuration file option \fBDEVSCRIPTS_CHECK_DIRNAME_REGEX\fR or by the
 command line option \fB\-\-check-dirname-regex\fR \fIregex\fR.  Here
 \fIregex\fR is a Perl regex (see \fBperlre\fR(3perl)), which will be
 anchored at the beginning and the end.  If \fIregex\fR contains a '/',
 then it must match the full directory path.  If not, then it must
 match the full directory name.  If \fIregex\fR contains the string
 \'PACKAGE', this will be replaced by the source package name, as
-determined from the changelog.  The default value for the regex is:
+determined from the \fIchangelog\fR.  The default value for the regex is:
 \'PACKAGE(-.+)?', thus matching directory names such as PACKAGE and
 PACKAGE-version.
 .SH ENVIRONMENT VARIABLES
 As environment variables can affect the building of a package, often
 unintentionally, \fBdebuild\fR sanitises the environment by removing
-all environment variables except for TERM, HOME, LOGNAME, GNUPGHOME,
-PGPPATH, GPG_AGENT_INFO, FAKEROOTKEY, DEB_*, the
-(C, CPP, CXX, LD and F)FLAGS variables and their _APPEND counterparts
-and the locale variables LANG and LC_*.  TERM is set to `dumb' if it
-is unset, and PATH is set to "/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11".
+all environment variables except for \fBTERM\fR, \fBHOME\fR, \fBLOGNAME\fR, \fBGNUPGHOME\fR,
+\fBPGPPATH\fR, \fBGPG_AGENT_INFO\fR, \fBFAKEROOTKEY\fR, \fBDEB_\fI*\fR, the
+(\fBC\fR, \fBCPP\fR, \fBCXX\fR, \fBLD\fR and \fBF\fR)\fBFLAGS\fR variables and their \fB_APPEND\fR counterparts
+and the locale variables \fBLANG\fR and \fBLC_\fI*\fR.  \fBTERM\fR is set to `dumb' if it
+is unset, and \fBPATH\fR is set to "/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11".
 .PP
 If a particular environment variable is required to be passed through
 untouched to the build process, this may be specified by using a
 \fB\-\-preserve-envvar\fR \fIenvvar\fR (which can also be written as
 \fB\-e\fR \fIenvvar\fR option).  The environment may be left untouched
 by using the \fB\-\-preserve-env\fR option.  However, even in this
-case, the PATH will be set to the sane value described above.  The
-\fBonly\fR way to prevent PATH from being reset is to specify a
+case, the \fBPATH\fR will be set to the sane value described above.  The
+\fBonly\fR way to prevent \fBPATH\fR from being reset is to specify a
 \fB\-\-preserve-envvar PATH\fR option.  But you are warned that using
 programs from non-standard locations can easily result in the package
 being broken, as it will not be able to be built on standard systems.
 .PP
 Note that one may add directories to the beginning of the sanitised
-PATH, using the \fB\-\-prepend\-path\fR option. This is useful when
-one wishes to use tools such as ccache or distcc for building.
+\fBPATH\fR, using the \fB\-\-prepend\-path\fR option. This is useful when
+one wishes to use tools such as \fBccache\fR or \fBdistcc\fR for building.
 .PP
 It is also possible to avoid having to type something like
 \fIFOO\fB=\fIbar \fBdebuild \-e \fIFOO\fR by writing \fBdebuild \-e
@@ -146,72 +146,72 @@ preserved across upgrades.
 .SH HOOKS
 \fBdebuild\fR supports a number of hooks when running
 \fBdpkg\-buildpackage\fR.  Note that if any of the hooks from
-clean-hook to final-clean (inclusive) are used, \fBdebuild\fR
+\fBclean-hook\fR to \fBfinal-clean\fR (inclusive) are used, \fBdebuild\fR
 will emulate some sections of the \fBdpkg-buildpackage\fR process
 rather than running them directly, as \fBdpkg-buildpackage\fR
 does not support hooks.  The available hooks are as follows:
 .TP
-dpkg-buildpackage-hook
-Run before dpkg-buildpackage begins by calling dpkg-checkbuilddeps.
+\fBdpkg-buildpackage-hook
+Run before \fBdpkg-buildpackage\fR begins by calling \fBdpkg-checkbuilddeps\fR.
 .TP
-clean-hook
-Run before dpkg-buildpackage runs debian/rules clean to clean the
-source tree.  (Run even if the tree is not being cleaned because \-nc
+\fBclean-hook
+Run before \fBdpkg-buildpackage\fR runs \fBdebian/rules clean\fR to clean the
+source tree.  (Run even if the tree is not being cleaned because \fB\-nc\fR
 is used.)
 .TP
-dpkg-source-hook
-Run after cleaning the tree and before running dpkg-source.  (Run even
-if dpkg-source is not being called because \-b, \-B, or \-A is used.)
+\fBdpkg-source-hook
+Run after cleaning the tree and before running \fBdpkg-source\fR.  (Run even
+if \fBdpkg-source\fR is not being called because \fB\-b\fR, \fB\-B\fR, or \fB\-A\fR is used.)
 .TP
-dpkg-build-hook
-Run after dpkg-source and before calling debian/rules build.  (Run
-even if this is a source-only build, so debian/rules build is not
+\fBdpkg-build-hook\fR
+Run after \fBdpkg-source\fR and before calling \fBdebian/rules build\fR.  (Run
+even if this is a source-only build, so \fBdebian/rules build\fR is not
 being called.)
 .TP
-dpkg-binary-hook
-Run between debian/rules build and debian/rules binary(\-arch).  Run
-ONLY if a binary package is being built.
+\fBdpkg-binary-hook
+Run between \fBdebian/rules build\fR and \fBdebian/rules binary\fR(\fB\-arch\fR).  Run
+\fBonly\fR if a binary package is being built.
 .TP
-dpkg-genchanges-hook
+\fBdpkg-genchanges-hook
 Run after the binary package is built and before calling
-dpkg-genchanges.
+\fBdpkg-genchanges\fR.
 .TP
-final-clean-hook
-Run after dpkg-genchanges and before the final debian/rules clean.
+\fBfinal-clean-hook
+Run after \fBdpkg-genchanges\fR and before the final \fBdebian/rules clean\fR.
 (Run even if we are not cleaning the tree post-build, which is the
 default.)
 .TP
-lintian-hook
-Run (once) before calling lintian.  (Run even if we are
-not calling lintian.)
+\fBlintian-hook
+Run (once) before calling \fBlintian\fR.  (Run even if we are
+not calling \fBlintian\fR.)
 .TP
-signing-hook
-Run after calling lintian before any signing takes place.
+\fBsigning-hook
+Run after calling \fBlintian\fR before any signing takes place.
 (Run even if we are not signing anything.)
 .TP
-post-dpkg-buildpackage-hook
+\fBpost-dpkg-buildpackage-hook
 Run after everything has finished.
 .PP
 A hook command can be specified either in the configuration file as,
 for example, DEBUILD_SIGNING_HOOK='foo' (note the hyphens change into
 underscores!) or as a command line option \fB\-\-signing\-hook-foo\fR.
-The command will have certain percent substitutions made on it: %%
-will be replaced by a single % sign, %p will be replaced by the
-package name, %v by the package version number, %s by the source
-version number, %u by the upstream version number.  Neither %s nor %u
-will contain an epoch.  %a will be 1 if the immediately following
-action is to be performed and 0 if not (for example, in the
-dpkg-source hook, %a will become 1 if dpkg-source is to be run and 0
+The command will have certain percent substitutions made on it: \fB%%\fR
+will be replaced by a single \fB%\fR sign, \fB%p\fR will be replaced by the
+package name, \fB%v\fR by the package version number, \fB%s\fR by the source
+version number, \fB%u\fR by the upstream version number.  Neither \fB%s\fR nor \fB%u\fR
+will contain an epoch.  \fB%a\fR will be \fB1\fR if the immediately following
+action is to be performed and \fB0\fR if not (for example, in the
+\fBdpkg-source\fR hook, \fB%a\fR will become \fB1\fR if \fBdpkg-source\fR is to be run and \fB0\fR
 if not).  Then it will be handed to the shell to deal with, so it can
 include redirections and stuff.  For example, to only run the
-dpkg-source hook if dpkg-source is to be run, the hook could be
+\fBdpkg-source\fR hook if \fBdpkg-source\fR is to be run, the hook could be
 something like: "if [ %a \-eq 1 ]; then ...; fi".
 .PP
 \fBPlease take care with hooks\fR, as misuse of them can lead to
 packages which FTBFS (fail to build from source).  They can be useful
 for taking snapshots of things or the like.
 .PP
-Finally, only dpkg-buildpackage-hook and the hooks from lintian-hook
+Finally, only \fBdpkg-buildpackage-hook\fR and the hooks from \fBlintian-hook\fR
 onwards can be used if \fBdpkg-cross\fR is installed.  (This is
 because internally, \fBdebuild\fR reimplements
 \fBdpkg\-buildpackage\fR, but it does not attempt to reimplement the
@@ -219,24 +219,24 @@ because internally, \fBdebuild\fR reimplements
 .SH "OPTIONS"
 For details, see above.
 .TP
-.B \-\-no-conf, \-\-noconf
+.B \-\-no-conf\fR, \fB\-\-noconf
 Do not read any configuration files.  This can only be used as the
 first option given on the command-line.
 .TP
-.BI \-\-rootcmd= "gain-root-command, " \-r gain-root-command
+.BI \-\-rootcmd= "gain-root-command\fR, " \-r gain-root-command
 Command to gain root (or fake root) privileges.
 .TP
 .B \-\-preserve\-env
 Do not clean the environment, except for PATH.
 .TP
-.BI \-\-preserve\-envvar= "var, " \-e var
+.BI \-\-preserve\-envvar= "var\fR, " \-e var
 Do not clean the \fIvar\fR variable from the environment.
 .IP
 If \fIvar\fR ends in an asterisk ("*") then all variables with names 
 that match the portion of \fIvar\fR before the asterisk will be 
 preserved.
 .TP
-.BI \-\-set\-envvar= var = "value, " \-e var = value
+.BI \-\-set\-envvar= var = "value\fR, " \-e var = value
 Set the environment variable \fIvar\fR to \fIvalue\fR and do not
 remove it from the environment.
 .TP
@@ -254,12 +254,12 @@ Do not run \fBlintian\fR after \fBdpkg-buildpackage\fR.
 .TP
 .B \-\-no\-tgz\-check
 Even if we're running \fBdpkg-buildpackage\fR and the version number
-has a Debian revision, do not check that the .orig.tar.gz file or .orig
+has a Debian revision, do not check that the \fI.orig.tar.gz\fR file or \fI.orig\fR
 directory exists before starting the build.
 .TP
 .B \-\-tgz\-check
 If we're running \fBdpkg-buildpackage\fR and the version number has a
-Debian revision, check that the .orig.tar.gz file or .orig directory
+Debian revision, check that the \fI.orig.tar.gz\fR file or \fI.orig\fR directory
 exists before starting the build.  This is the default behaviour.
 .TP
 \fB\-\-username\fR \fIusername\fR
@@ -275,11 +275,11 @@ Clears all hooks.  They may be reinstated by later command line
 options.
 .TP
 \fB\-\-check-dirname-level\fR \fIN\fR
-See the above section "Directory name checking" for an explanation of
+See the above section \fBDirectory name checking\fR for an explanation of
 this option.
 .TP
 \fB\-\-check-dirname-regex\fR \fIregex\fR
-See the above section "Directory name checking" for an explanation of
+See the above section \fBDirectory name checking\fR for an explanation of
 this option.
 .TP
 \fB\-d\fR
@@ -320,7 +320,7 @@ Setting this variable to \fIno\fR is the same as the
 \fB\-\-no\-tgz\-check\fR command line option.
 .TP
 .B DEBUILD_SIGNING_USERNAME
-Setting this variable is the same as using the \-\-username
+Setting this variable is the same as using the \fB\-\-username\fR
 command line option.
 .TP
 .B DEBUILD_DPKG_BUILDPACKAGE_OPTS
@@ -329,7 +329,7 @@ These are options which should be passed to the invocation of
 options.  Due to issues of shell quoting, if a word containing spaces
 is required as a single option, extra quotes will be required.  For
 example, to ensure that your own GPG key is always used, even for
-sponsored uploads, the config file might contain the line:
+sponsored uploads, the configuration file might contain the line:
 .IP
 .nf
 DEBUILD_DPKG_BUILDPACKAGE_OPTS="\-k'Julian Gilbey <jdg@debian.org>' \-sa"
@@ -337,12 +337,12 @@ DEBUILD_DPKG_BUILDPACKAGE_OPTS="\-k'Julian Gilbey <jdg@debian.org>' \-sa"
 .IP
 which gives precisely two options.  Without the extra single quotes,
 \fBdpkg-buildpackage\fR would reasonably complain that \fIGilbey\fR is
-an unrecognised option (it doesn't start with a `\-' sign).
+an unrecognised option (it doesn't start with a \fB\-\fR sign).
 .IP
 Also, if this option contains any \fB\-r\fR, \fB\-d\fR or \fB\-D\fR
 options, these will always be taken account of by \fBdebuild\fR.  Note
 that a \fB\-r\fR option in this variable will override the setting in
-DEBUILD_ROOTCMD.
+.BR DEBUILD_ROOTCMD .
 .TP
 \fBDEBUILD_\fIFOO\fB_HOOK
 The hook variable for the \fIfoo\fR hook.  See the section on hooks
@@ -359,7 +359,7 @@ the usage of this variable is as described for the
 \fBDEBUILD_DPKG_BUILDPACKAGE_OPTS\fR variable.
 .TP
 .BR DEVSCRIPTS_CHECK_DIRNAME_LEVEL ", " DEVSCRIPTS_CHECK_DIRNAME_REGEX
-See the above section "Directory name checking" for an explanation of
+See the above section \fBDirectory name checking\fR for an explanation of
 these variables.  Note that these are package-wide configuration
 variables, and will therefore affect all \fBdevscripts\fR scripts
 which check their value, as described in their respective manpages and
@@ -376,7 +376,7 @@ without signing the .changes file (or the non-existent .dsc file):
 debuild \-i \-us \-uc \-b
 .fi
 .PP
-Change the "\-b" to "\-S" to build only a source package.
+Change the \fB\-b\fR to \fB\-S\fR to build only a source package.
 .PP
 An example using \fBlintian\fR to check the
 resulting packages and passing options to it:
@@ -389,7 +389,7 @@ Note the order of options here: the \fBdebuild\fR options come first,
 then the \fBdpkg-buildpackage\fR ones, then finally the checker
 options.  (And \fBlintian\fR is called by default.)  If you find
 yourself using the same \fBdpkg-buildpackage\fR options repeatedly,
-consider using the DEBUILD_DPKG_BUILDPACKAGE_OPTS configuration file
+consider using the \fBDEBUILD_DPKG_BUILDPACKAGE_OPTS\fR configuration file
 option as described above.
 .PP
 To build a package for a sponsored upload, given
@@ -404,7 +404,7 @@ debuild \-k0x12345678
 .PP
 where 0x12345678 is replaced by your GPG key ID or other key
 identifier such as your email address.  Again, you could also use the
-DEBUILD_DPKG_BUILDPACKAGE_OPTS configuration file option as described
+\fBDEBUILD_DPKG_BUILDPACKAGE_OPTS\fR configuration file option as described
 above to avoid having to type the \fB\-k\fR option each time you do a
 sponsored upload.
 .SH "SEE ALSO"
