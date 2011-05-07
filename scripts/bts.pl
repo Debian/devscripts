@@ -1972,9 +1972,7 @@ sub bts_limit {
 Change the "owner" address of a I<bug>, with B<!> meaning
 `use the address on the current email as the new owner address'.
 
-The owner of a bug accepts responsibility for dealing with it. Note that
-the "owner" of a bug does not automatically receive all of the email
-corresponding to it; use B<subscribe> to achieve that.
+The owner of a bug accepts responsibility for dealing with it.
 
 =cut
 
