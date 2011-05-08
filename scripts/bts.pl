@@ -1997,7 +1997,7 @@ sub bts_noowner {
     mailbts("bug $bug has no owner", "noowner $bug");
 }
 
-=item B<subscribe> I<bug> I<email>
+=item B<subscribe> I<bug> [I<email>]
 
 Subscribe the given I<email> address to the specified B<bug> report.  If no email
 address is specified, the environment variable B<DEBEMAIL> or B<EMAIL> (in that
@@ -2012,7 +2012,8 @@ relevant emails and notifications.  Use the unsubscribe command to unsubscribe.
 
 sub bts_subscribe {
     my $bug=checkbug(shift) or die "bts subscribe: subscribe to what bug?\n";
-    my $email=lc(shift);
+    my $email=shift;
+    $email=lc($email) if defined $email;
     if (defined $email and $email eq '!') { $email = undef; }
     else {
 	$email ||= $ENV{'DEBEMAIL'};
@@ -2024,7 +2025,7 @@ sub bts_subscribe {
 	   $bug . '-subscribe@' . $btsserver, $email);
 }
 
-=item B<unsubscribe> I<bug> I<email>
+=item B<unsubscribe> I<bug> [I<email>]
 
 Unsubscribe the given email address from the specified bug report.  As with
 subscribe above, if no email address is specified, the environment variables
@@ -2038,7 +2039,8 @@ to which you have to reply. Use the B<subscribe> command to, well, subscribe.
 
 sub bts_unsubscribe {
     my $bug=checkbug(shift) or die "bts unsubscribe: unsubscribe from what bug?\n";
-    my $email=lc(shift);
+    my $email=shift;
+    $email = lc($email) if defined $email;
     if (defined $email and $email eq '!') { $email = undef; }
     else {
 	$email ||= $ENV{'DEBEMAIL'};
