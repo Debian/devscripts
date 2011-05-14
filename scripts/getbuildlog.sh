@@ -84,7 +84,7 @@ elif [ "$VERSION" = "last-all" ]; then
     VERSION=[:~+.[:alnum:]-]+
 fi
 
-PATTERN="fetch\.(cgi|php)\?&pkg=$ESCAPED_PACKAGE&ver=$VERSION&arch=$ARCH&\
+PATTERN="fetch\.(cgi|php)\?pkg=$ESCAPED_PACKAGE&arch=$ARCH&ver=$VERSION&\
 stamp=[[:digit:]]+"
 
 getbuildlog() {
@@ -93,13 +93,13 @@ getbuildlog() {
 
     trap "rm -f $ALL_LOGS" EXIT INT QUIT TERM
 
-    wget -q -O $ALL_LOGS "$BASE/build.php?&pkg=$PACKAGE"
+    wget -q -O $ALL_LOGS "$BASE/status/logs.php?pkg=$PACKAGE"
 
     # Put each href in $ALL_LOGS on a separate line so that $PATTERN
     # matches only one href. This is required because grep is greedy.
     sed -i -e "s/href=\"/\nhref=\"/g" $ALL_LOGS
     # Quick-and-dirty unescaping
-    sed -i -e "s/%2B/\+/g" -e "s/%3A/:/g" -e "s/%7E/~/g" $ALL_LOGS
+    sed -i -e "s/&amp;/\&/g" -e "s/%2B/\+/g" -e "s/%3A/:/g" -e "s/%7E/~/g" $ALL_LOGS
 
     # If only the last version was requested, extract and sort
     # the listed versions and determine the highest
@@ -116,8 +116,8 @@ getbuildlog() {
 		print $versions[0][0]; ' | sed -e "s/\+/\\\+/g"
 	)
 
-	NEWPATTERN="fetch\.(cgi|php)\?&pkg=$ESCAPED_PACKAGE&\
-ver=$LASTVERSION&\arch=$ARCH&stamp=[[:digit:]]+"
+	NEWPATTERN="fetch\.(cgi|php)\?pkg=$ESCAPED_PACKAGE&\
+arch=$ARCH&ver=$LASTVERSION&stamp=[[:digit:]]+"
     else
 	NEWPATTERN=$PATTERN
     fi
@@ -128,7 +128,7 @@ ver=$LASTVERSION&\arch=$ARCH&stamp=[[:digit:]]+"
 	arch=${match##*arch=}
 	arch=${arch%%&*}
 	match=`echo $match | sed -e 's/\+/%2B/g'`
-        wget -O "${PACKAGE}_${ver}_${arch}.log" "$BASE/$match&file=log"
+        wget -O "${PACKAGE}_${ver}_${arch}.log" "$BASE/status/$match&raw=1"
     done
 
     rm -f $ALL_LOGS
