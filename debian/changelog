@@ -3,6 +3,8 @@ devscripts (2.10.74) UNRELEASED; urgency=low
   * getbuildlog:
     + Query the updated build log status pages.
     + Request the raw log file when downloading.
+  * debcheckout: Use the destination directory, not package name, when
+    checking for where the checkout happened.  (Closes: #627030)
 
  -- James Vega <jamessan@debian.org>  Sat, 14 May 2011 16:05:10 -0400
 

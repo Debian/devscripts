@@ -782,20 +782,21 @@ sub checkout_files($$$$) {
 }
 
 # download source package, unpack it, and merge its contents into the checkout
-sub unpack_source($$$$) {
-    my ($pkg, $version, $origtgz_name, $unpack_source) = @_;
+sub unpack_source($$$$$) {
+    my ($pkg, $version, $destdir, $origtgz_name, $unpack_source) = @_;
 
     return 1 if ($unpack_source eq 'never');
     return 1 if (defined $origtgz_name and $origtgz_name eq ''); # only really relevant with URL on command line
 
+    $destdir ||= $pkg;
     # is this a debian-dir-only repository?
-    unless (-d $pkg) {
-	print STDERR "debcheckout did not create the $pkg directory - this is probably a bug\n";
+    unless (-d $destdir) {
+	print STDERR "debcheckout did not create the $destdir directory - this is probably a bug\n";
 	return 0;
     }
-    my @repo_files = glob "$pkg/*";
+    my @repo_files = glob "$destdir/*";
     my $debian_only = 0;
-    if (@repo_files == 1 and $repo_files[0] eq "$pkg/debian") {
+    if (@repo_files == 1 and $repo_files[0] eq "$destdir/debian") {
 	$debian_only = 1;
     }
 
@@ -1108,7 +1109,7 @@ EOF
 	    $rc ||= 1;
 	    exit($rc);
 	}
-	unpack_source($pkg, $version, $origtgz_name, $unpack_source) or $rc = 1;
+	unpack_source($pkg, $version, $destdir, $origtgz_name, $unpack_source) or $rc = 1;
     }
 
     exit($rc);
