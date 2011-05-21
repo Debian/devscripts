@@ -68,6 +68,7 @@ clean:
 install: all
 	install -dD $(DESTDIR)$(BINDIR) $(DESTDIR)$(LIBDIR)
 	cp $(SCRIPTS) $(DESTDIR)$(BINDIR)
+	ln -sf edit-patch $(DESTDIR)$(BINDIR)/add-patch
 	cp $(LIBS) $(DESTDIR)$(LIBDIR)
 	install -dD $(DESTDIR)/etc/bash_completion.d
 	cp $(COMPLETION) $(DESTDIR)/etc/bash_completion.d

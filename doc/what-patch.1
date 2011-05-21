@@ -1,0 +1,40 @@
+.TH WHAT\-PATCH "1" "Debian Utilities" "DEBIAN"
+.SH NAME
+what\-patch \- detects which patch system a Debian package uses
+
+.SH SYNOPSIS
+.B what\-patch [options]
+
+.SH DESCRIPTION
+\fBwhat\-patch\fR examines the debian/rules file to determine which patch
+system the Debian package is using.
+.PP
+\fBwhat\-patch\fR should be run from the root directory of the Debian source
+package.
+
+.SH OPTIONS
+Listed below are the command line options for what\-patch:
+.TP
+.B \-h or \-\-help
+Display a help message and exit.
+.TP
+.B \-v
+Enable verbose mode.
+This will include the listing of any files modified outside or the debian/
+directory and report any additional details about the patch system if
+available.
+
+.SH AUTHORS
+\fBwhat\-patch\fR was written by Kees Cook <kees@ubuntu.com>,
+Siegfried-A. Gevatter <rainct@ubuntu.com>, and Daniel Hahler
+<ubuntu@thequod.de>, among others.
+This manual page was written by Jonathan Patrick Davies <jpds@ubuntu.com>.
+.PP
+Both are released under the GNU General Public License, version 3 or later.
+
+.SH SEE ALSO
+The Ubuntu MOTU team has some documentation about patch systems at the Ubuntu
+wiki: \fBhttps://wiki.ubuntu.com/PackagingGuide/PatchSystems\fR
+
+.PP
+.B cdbs\-edit\-patch(1), dbs\-edit\-patch(1), dpatch\-edit\-patch(1)

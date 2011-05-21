@@ -72,6 +72,8 @@ Suggests: bsd-mailx | mailx,
           ssh-client,
           svn-buildpackage,
           w3m
+Breaks: ubuntu-dev-tools (<< 0.124~)
+Replaces: ubuntu-dev-tools (<< 0.124~)
 Description: scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
  brackets afterwards:

@@ -1,5 +1,6 @@
 devscripts (2.10.74) UNRELEASED; urgency=low
 
+  [ James Vega ]
   * getbuildlog:
     + Query the updated build log status pages.
     + Request the raw log file when downloading.
@@ -9,7 +10,11 @@ devscripts (2.10.74) UNRELEASED; urgency=low
     + dscverify: Use Ubuntu keyrings if on an Ubuntu-based system.
     + rmadison: Use Ubuntu's rmadison instance on Ubuntu.
 
- -- James Vega <jamessan@debian.org>  Sat, 14 May 2011 16:05:10 -0400
+  [ Benjamin Drung ]
+  * Move add-patch, edit-patch, and what-patch from ubuntu-dev-tools into
+    devscripts (Closes: #568481).
+
+ -- Benjamin Drung <bdrung@debian.org>  Sat, 21 May 2011 17:31:39 +0200
 
 devscripts (2.10.73) unstable; urgency=low
 
