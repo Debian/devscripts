@@ -94,15 +94,20 @@ sub xdie {
 
 sub get_rings {
     my @rings = @_;
-    for (qw(/org/keyring.debian.org/keyrings/debian-keyring.gpg
+    my @keyrings = qw(/org/keyring.debian.org/keyrings/debian-keyring.gpg
 	    /usr/share/keyrings/debian-keyring.gpg
 	    /org/keyring.debian.org/keyrings/debian-keyring.pgp
 	    /usr/share/keyrings/debian-keyring.pgp
-	    /usr/share/keyrings/debian-maintainers.gpg)) {
+	    /usr/share/keyrings/debian-maintainers.gpg);
+    if (system('dpkg-vendor', '--derives-from', 'Ubuntu') == 0) {
+        unshift(@keyrings, qw(/usr/share/keyrings/ubuntu-master-keyring.gpg
+			      /usr/share/keyrings/ubuntu-archive-keyring.gpg));
+    }
+    for (@keyrings) {
 	push @rings, $_ if -r;
     }
     return @rings if @rings;
-    xdie "can't find any Debian keyrings\n";
+    xdie "can't find any system keyrings\n";
 }
 
 sub check_signature {
