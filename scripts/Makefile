@@ -66,10 +66,12 @@ clean:
 		libvfork.o libvfork.so.0 $(COMPLETION)
 
 install: all
+	install -dD $(DESTDIR)$(BINDIR) $(DESTDIR)$(LIBDIR)
 	cp $(SCRIPTS) $(DESTDIR)$(BINDIR)
 	cp $(LIBS) $(DESTDIR)$(LIBDIR)
+	install -dD $(DESTDIR)/etc/bash_completion.d
 	cp $(COMPLETION) $(DESTDIR)/etc/bash_completion.d
 	# Special treatment for debpkg
+	install -dD $(DESTDIR)$(PERLMOD_DIR)
 	mv $(DESTDIR)$(BINDIR)/debpkg $(DESTDIR)$(PERLMOD_DIR)
 	cp debpkg-wrapper $(DESTDIR)$(BINDIR)/debpkg
-
