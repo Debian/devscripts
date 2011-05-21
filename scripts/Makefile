@@ -2,6 +2,11 @@
 include ../Makefile.common
 DESTDIR =
 
+define \n
+
+
+endef
+
 VERSION_FILE = ../version
 VERSION := $(shell cat $(VERSION_FILE))
 
@@ -61,11 +66,18 @@ libvfork.so.0: libvfork.o
 	$(CC) -shared $< -lc -Wl,-soname -Wl,libvfork.so.0 -o $@
 
 clean:
+	python setup.py clean -a
+	find -name '*.pyc' -delete
+	rm -rf devscripts.egg-info
 	rm -f $(SCRIPTS) $(patsubst %,%.tmp,$(SCRIPTS)) \
 		$(GEN_MAN1S) $(SCRIPT_LIBS) $(CWRAPPERS) \
 		libvfork.o libvfork.so.0 $(COMPLETION)
 
+test:
+	$(foreach python,$(shell pyversions -r ../debian/control),$(python) setup.py test$(\n))
+
 install: all
+	python setup.py install --root="$(DESTDIR)" --no-compile --install-layout=deb
 	install -dD $(DESTDIR)$(BINDIR) $(DESTDIR)$(LIBDIR)
 	cp $(SCRIPTS) $(DESTDIR)$(BINDIR)
 	ln -sf edit-patch $(DESTDIR)$(BINDIR)/add-patch
@@ -76,3 +88,5 @@ install: all
 	install -dD $(DESTDIR)$(PERLMOD_DIR)
 	mv $(DESTDIR)$(BINDIR)/debpkg $(DESTDIR)$(PERLMOD_DIR)
 	cp debpkg-wrapper $(DESTDIR)$(BINDIR)/debpkg
+
+.PHONY: test
