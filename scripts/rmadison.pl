@@ -46,6 +46,20 @@ rmadison $VERSION (devscripts ###VERSION###)
 EOT
 }
 
+my %url_map = (
+    'debian' => "http://qa.debian.org/madison.php",
+    'qa' => "http://qa.debian.org/madison.php",
+    'myon' => "http://qa.debian.org/~myon/madison.php",
+    'bpo' => "http://backports.debian.org/cgi-bin/madison.cgi",
+    'debug' => "http://debug.debian.net/cgi-bin/madison.cgi",
+    'ubuntu' => "http://people.canonical.com/~ubuntu-archive/madison.cgi",
+    'udd' => 'http://qa.debian.org/cgi-bin/madison.cgi',
+);
+my $default_url = 'debian';
+if (system('dpkg-vendor', '--is', 'ubuntu') == 0) {
+    $default_url = 'ubuntu';
+}
+
 sub usage($$) {
     my ($fd, $exit) = @_;
     print <<EOT;
@@ -61,7 +75,7 @@ Display information about PACKAGE(s).
   -s, --suite=SUITE          only show info for this suite
   -S, --source-and-binary    show info for the binary children of source pkgs
   -t, --time                 show projectb snapshot date
-  -u, --url=URL              use URL instead of http://qa.debian.org/madison.php
+  -u, --url=URL              use URL instead of $url_map{$default_url}
 
   --noconf, --no-conf        don\'t read devscripts configuration files
 
@@ -72,16 +86,6 @@ EOT
 }
 
 my $params;
-my %url_map = (
-    'debian' => "http://qa.debian.org/madison.php",
-    'qa' => "http://qa.debian.org/madison.php",
-    'myon' => "http://qa.debian.org/~myon/madison.php",
-    'bpo' => "http://backports.debian.org/cgi-bin/madison.cgi",
-    'debug' => "http://debug.debian.net/cgi-bin/madison.cgi",
-    'ubuntu' => "http://people.canonical.com/~ubuntu-archive/madison.cgi",
-    'udd' => 'http://qa.debian.org/cgi-bin/madison.cgi',
-);
-my $default_url = "debian";
 my $default_arch;
 
 if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
@@ -262,7 +266,7 @@ show projectb snapshot and reload time (not supported by all archives)
 =item B<-u>, B<--url=>I<URL>[B<,>I<URL> ...]
 
 use I<URL> for the query. Supported shorthands are
- B<debian> or B<qa> http://qa.debian.org/madison.php (the default)
+ B<debian> or B<qa> http://qa.debian.org/madison.php
  B<bpo> http://backports.debian.org/cgi-bin/madison.cgi
  B<debug> http://debug.debian.net/cgi-bin/madison.cgi
  B<ubuntu> http://people.canonical.com/~ubuntu-archive/madison.cgi
