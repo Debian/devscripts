@@ -70,7 +70,7 @@ it.
 
 =item B<-a>, B<--all>
 
-Commit all files. This is the default operation when using a VCS other 
+Commit all files. This is the default operation when using a VCS other
 than git.
 
 =item I<files to commit>
@@ -80,8 +80,8 @@ automatically.)
 
 =item B<-s>, B<--strip-message>, B<--no-strip-message>
 
-If this option is set and the commit message has been derived from the 
-changelog, the characters "* " will be stripped from the beginning of 
+If this option is set and the commit message has been derived from the
+changelog, the characters "* " will be stripped from the beginning of
 the message.
 
 This option is set by default and ignored if more than one line of
@@ -106,7 +106,7 @@ ignored for this purpose.  The currently recognised variables are:
 
 =item B<DEBCOMMIT_STRIP_MESSAGE>
 
-If this is set to I<no>, then it is the same as the --no-strip-message 
+If this is set to I<no>, then it is the same as the --no-strip-message
 command line parameter being used. The default is I<yes>.
 
 =item B<DEBCOMMIT_SIGN_TAGS>
@@ -592,13 +592,13 @@ sub commit {
 
 sub tag {
     my $tag=shift;
-    
+
     if ($prog eq 'svn' || $prog eq 'svk') {
 	my $svnpath=`svnpath`;
 	chomp $svnpath;
 	my $tagpath=`svnpath tags`;
 	chomp $tagpath;
-	
+
 	if (! action($prog, "copy", $svnpath, "$tagpath/$tag",
 		     "-m", "tagging version $tag")) {
 	    if (! action($prog, "mkdir", $tagpath,
@@ -628,7 +628,7 @@ sub tag {
 	} else {
 	    $subcommand="tag";
 	}
-	
+
 	if (! action($prog, $subcommand, $archpath, $tagpath)) {
 	    die "debcommit: failed tagging with $tag\n";
 	}
@@ -731,7 +731,7 @@ sub getmessage {
 	    next if /^\s*\[.*\]\s*$/; # maintainer name
 	    $ret .= $_;
 	}
-	
+
 	if (! length $ret) {
 	    if ($release) {
 		return;

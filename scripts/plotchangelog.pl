@@ -9,7 +9,7 @@
 #
 # Copyright 1999 by Joey Hess <joey@kitenet.net>
 # Modifications copyright 2003 by Julian Gilbey <jdg@debian.org>
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
@@ -60,7 +60,7 @@ Usage: plotchangelog [options] changelog ...
         -c        --cumulative    With -l or -b, graph the cumulative number
                                   of lines or bugs closed.
 	-g "commands"             Pass "commands" on to gnuplot, they will be
-	--gnuplot="commands"      added to the gnuplot script that is used to 
+	--gnuplot="commands"      added to the gnuplot script that is used to
 				  generate the graph.
 	-s file   --save=file     Save the graph to the specified file in
 	                          postscript format.
@@ -115,7 +115,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     foreach my $var (keys %config_vars) { $shell_cmd .= "echo \$$var;\n" }
     my $shell_out = `/bin/bash -c '$shell_cmd'`;
     @config_vars{keys %config_vars} = split /\n/, $shell_out, -1;
-    
+
     foreach my $var (sort keys %config_vars) {
 	if ($config_vars{$var} ne $config_default{$var}) {
 	    $modified_conf_msg .= "  $var=$config_vars{$var}\n";
@@ -342,16 +342,16 @@ foreach $package (keys %data) {
 	# any nonnumeric stuff. Otherwise, the "set label" command below could
 	# fail. Luckily, perl's string -> num conversion is perfect for this job.
 	$y=$y+0;
-		
+
 	if (lc($maintainer) ne lc($oldmaintainer)) {
 	    $oldmaintainer=$maintainer;
 	}
-		
+
 	my ($sec, $min, $hour, $mday, $mon, $year)=localtime($date);
 	my $x=($mon+1)."/$mday/".(1900+$year)." $hour:$min";
 	$data.="$x\t$y\n";
 	$maintdata{$oldmaintainer}{$urgency}.="$x\t$y\n";
-		
+
 	if ($oldversion ne $version && ! $no_version) {
 	    # Upstream version change. Label it.
 	    $header.="set label '$version' at '$x',$y left\n";
@@ -376,7 +376,7 @@ if (! $no_maintainer) {
 	    $data.=$maintdata{$maintainer}{$urgency}."\n\n";
 	    $script.="'$data_tmpfile' index $index using 1:3 title \"$maintainer\" with points pointsize ".(1.5 * $urgency).", ";
 	    $index++;
-	}	
+	}
     }
 }
 

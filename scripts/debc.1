@@ -15,9 +15,9 @@ corresponding to the current package version (by determining the name
 and version number from the changelog, and the architecture in the
 same way as \fBdpkg-buildpackage\fR(1) does).  It then runs
 \fBdpkg-deb \-I\fR and \fBdpkg-deb \-c\fR on every \fI.deb\fR and
-\fI.udeb\fR archive listed in the \fI.changes\fR file to display 
-information about the contents of the \fI.deb\fR / \fI.udeb\fR files.  
-It precedes every \fI.deb\fR or \fI.udeb\fR file with the name of the 
+\fI.udeb\fR archive listed in the \fI.changes\fR file to display
+information about the contents of the \fI.deb\fR / \fI.udeb\fR files.
+It precedes every \fI.deb\fR or \fI.udeb\fR file with the name of the
 file.  It assumes that all of the \fI.deb\fR / \fI.udeb\fR archives
 live  in the same directory as the \fI.changes\fR file.  It is
 useful for ensuring that the expected files have ended up in the
@@ -70,9 +70,9 @@ to mimic the behaviour of \fBdpkg-buildpackage\fR when determining the
 name of the \fI.changes\fR file.
 .TP
 \fB\-\-debs\-dir\fR \fIDIR\fR
-Look for the \fI.changes\fR, \fI.deb\fR and \fI.udeb\fR files in 
+Look for the \fI.changes\fR, \fI.deb\fR and \fI.udeb\fR files in
 directory \fIDIR\fR instead of the parent of the source directory.
-This should either be an absolute path or relative to the top of the 
+This should either be an absolute path or relative to the top of the
 source directory.
 .TP
 \fB\-\-check-dirname-level\fR \fIN\fR
@@ -98,7 +98,7 @@ purpose.  The currently recognised variables are:
 .TP
 .B DEBRELEASE_DEBS_DIR
 This specifies the directory in which to look for the \fI.changes\fR,
-\fI.deb\fR and \fI.udeb\fR files, and is either an absolute path or 
+\fI.deb\fR and \fI.udeb\fR files, and is either an absolute path or
 relative to the top of the source tree.  This corresponds to the
 \fB\-\-debs\-dir\fR command line option.  This directive could be
 used, for example, if you always use \fBpbuilder\fR or

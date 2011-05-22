@@ -2,7 +2,7 @@
 
 # desktop2menu: This program generates a skeleton menu file from a
 # freedesktop.org desktop file
-# 
+#
 # Written by Sune Vuorela <debian@pusling.com>
 # Modifications by Adam D. Barratt <adam@adam-barratt.org.uk>
 # Copyright 2007 Sune Vuorela <debian@pusling.com>
@@ -33,17 +33,17 @@ B<desktop2menu> I<desktop file> [I<package name>]
 
 =head1 DESCRIPTION
 
-B<desktop2menu> generates a skeleton menu file from the supplied 
+B<desktop2menu> generates a skeleton menu file from the supplied
 freedesktop.org desktop file.
 
-The package name to be used in the menu file may be passed as an additional 
-argument. If it is not supplied then B<desktop2menu> will attempt to derive 
+The package name to be used in the menu file may be passed as an additional
+argument. If it is not supplied then B<desktop2menu> will attempt to derive
 the package name from the data in the desktop file.
 
 =head1 LICENSE
 
-This program is Copyright (C) 2007 by Sune Vuorela <debian@pusling.com>. It 
-was modified by Adam D. Barratt <adam@adam-barratt.org.uk> for the devscripts 
+This program is Copyright (C) 2007 by Sune Vuorela <debian@pusling.com>. It
+was modified by Adam D. Barratt <adam@adam-barratt.org.uk> for the devscripts
 package.
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the GNU
@@ -51,7 +51,7 @@ General Public License, version 2 or later.
 
 =head1 AUTHOR
 
-Sune Vuorela <debian@pusling.com> with modifications by Adam D. Barratt 
+Sune Vuorela <debian@pusling.com> with modifications by Adam D. Barratt
 <adam@adam-barratt.org.uk>
 
 =cut
@@ -253,7 +253,7 @@ foreach (@categories ) {
     }
     if ($hintscategories{$_}) {
 	push(@hints,$_);
-    }	
+    }
 }
 
 die "Desktop file has invalid categories" unless $section;
@@ -264,7 +264,7 @@ if ($section =~ /!WARN/) {
     $warnings++;
 }
 
-# Let's just pretend that the wm and the vc needs don't exist. 
+# Let's just pretend that the wm and the vc needs don't exist.
 if ($category =~ /ConsoleOnly/) {
     $needs = "text";
 } else {

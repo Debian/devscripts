@@ -148,7 +148,7 @@ sub getSOAPError {
     }
     chomp $err;
     push @errors, $err;
-    
+
     return new SOAP::SOM;
 }
 

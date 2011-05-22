@@ -7,7 +7,7 @@ version="1.13.17"; # This line modified by Makefile
 progname="`basename \"$0\"`"
 usageversion () {
 	cat >&2 <<END
-Debian dpkg-buildpackage $version.  
+Debian dpkg-buildpackage $version.
 Copyright (C) 1996 Ian Jackson.
 Copyright (C) 2000 Wichert Akkerman
 This is free software; see the GNU General Public Licence version 2
@@ -20,16 +20,16 @@ Options: -r<gain-root-command>
 	 -D            check build dependencies and conflicts
 	 -k<keyid>     the key to use for signing
          -sgpg         the sign-command is called like GPG
-         -spgp         the sign-command is called like PGP 
+         -spgp         the sign-command is called like PGP
          -us           unsigned source
          -uc           unsigned changes
          -a<arch>      Debian architecture we build for (implies -d)
          -b            binary-only, do not build source } also passed to
          -B            binary-only, no arch-indep files } dpkg-genchanges
-         -S            source only, no binary files     } 
+         -S            source only, no binary files     }
          -t<system>    set GNU system type  } passed to dpkg-architecture
          -v<version>   changes since version <version>      }
-         -m<maint>     maintainer for package is <maint>    } 
+         -m<maint>     maintainer for package is <maint>    }
          -e<maint>     maintainer for release is <maint>    } only passed
          -C<descfile>  changes are described in <descfile>  }  to dpkg-
          -si (default) src includes orig for rev. 0 or 1    } genchanges
@@ -106,7 +106,7 @@ do
 	-e*)	changedby="$value" ;;
 	-C*)	desc="$value" ;;
 	-W)	warnable_error=1; passopts="$passopts -W";;
-	-E)	warnable_error=0; passopts="$passopts -E";;	
+	-E)	warnable_error=0; passopts="$passopts -E";;
 	*)	echo >&2 "$progname: unknown option or argument $1"
 		usageversion; exit 2 ;;
 	esac
@@ -161,7 +161,7 @@ signfile () {
 	if test "$signinterface" = "gpg" ; then
 		(cat "../$1" ; echo "") | \
 		$signcommand --local-user "${signkey:-$maintainer}" --clearsign --armor \
-			--textmode  > "../$1.asc" 
+			--textmode  > "../$1.asc"
 	else
 		$signcommand -u "${signkey:-$maintainer}" +clearsig=on -fast <"../$1" \
 			>"../$1.asc"
@@ -202,7 +202,7 @@ if [ x$binaryonly = x ]; then
 	cd ..; withecho dpkg-source $passopts $diffignore $tarignore -b "$dirn"; cd "$dirn"
 fi
 if [ x$sourceonly = x ]; then
-	withecho debian/rules build 
+	withecho debian/rules build
 	withecho $rootcommand debian/rules $binarytarget
 fi
 if [ "$usepause" = "true" ] && \
@@ -227,7 +227,7 @@ fileomitted () {
 	fir=$?
 	set -e
 	return $fir
-}	
+}
 
 
 if fileomitted '\.deb'; then

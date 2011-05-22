@@ -3,9 +3,9 @@
 #
 # by David Harris <dharris@drh.net>
 #
-# Copyright (c) 1999-2000 David R. Harris. All rights reserved. 
-# This program is free software; you can redistribute it and/or modify it 
-# under the same terms as Perl itself. 
+# Copyright (c) 1999-2000 David R. Harris. All rights reserved.
+# This program is free software; you can redistribute it and/or modify it
+# under the same terms as Perl itself.
 #
 
 # We rename the package so that we don't have to package it separately.
@@ -93,7 +93,7 @@ sub _lock_and_tie
 
 	## Determine the mode of the lockfile, if not given
 
-	# THEORY: if someone can read or write the database file, we must allow 
+	# THEORY: if someone can read or write the database file, we must allow
 	# them to read and write the lockfile.
 
 	if ( not defined $lockfile_mode ) {
@@ -253,17 +253,17 @@ The additional locking argument added to the tie call can be:
 
 =over 4
 
-=item mode 
+=item mode
 
 the locking mode, "read" or "write".
 
-=item lockfile_name 
+=item lockfile_name
 
 specifies the name of the lockfile to use. Default
 is "$filename.lock".  This is useful for locking multiple resources with
 the same lockfiles.
 
-=item nonblocking 
+=item nonblocking
 
 determines if the flock call on the lockfile should
 block waiting for a lock, or if it should return failure if a lock can
@@ -271,7 +271,7 @@ not be immediately attained. If "nonblocking" is set and a lock can not
 be attained, the tie command will fail.  Currently, I'm not sure how to
 differentiate this between a failure form the DB_File layer.
 
-=item lockfile_mode 
+=item lockfile_mode
 
 determines the mode for the sysopen call in opening
 the lockfile. The default mode will be formulated to allow anyone that
@@ -306,9 +306,9 @@ as:
   # open database file with lock
   # work with database
   # close database and release lock
-  
+
   # lots of processing not related to database
-  
+
   # open database file with lock
   # work with database
   # close database and release lock

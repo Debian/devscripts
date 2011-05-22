@@ -6,7 +6,7 @@
 # with contributions by: Goswin von Brederlow, Filippo Giunchedi
 # Released under the terms of the Artistic License 2.0
 #
-# TODO: 
+# TODO:
 #   - add debugging output.
 #   - allow to be used on dpkg-source and dpkg-deb unpacked source packages.
 #
@@ -28,7 +28,7 @@ usage()
   cat <<-_eousage
 	Usage: $PROGNAME [options] .deb-file [log message]
 	       $PROGNAME -o <version> -c
-	
+
 	Increase the .deb file's version number, noting the change in the
 	changelog with the specified log message.  You should run this
 	program either as root or under fakeroot.
@@ -153,7 +153,7 @@ bump_version()
       echo ${1%${VERSTR}*}${VERSTR}$((++REV));;
     *-*)
       echo ${1}${VERSTR}1;;
-    *) 
+    *)
       echo ${1}-0${VERSTR}1;;
   esac
 }

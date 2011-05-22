@@ -52,23 +52,23 @@ Default is to be quiet.
 
 =item B<-l=>I<N>, B<--lines=>I<N>
 
-Specify the number of lines of each file's header which should be parsed 
+Specify the number of lines of each file's header which should be parsed
 for license information. (Default is 60).
 
 =item B<-i=>I<regex>, B<--ignore=>I<regex>
 
-When processing the list of files and directories, the regular 
-expression specified by this option will be used to indicate those which 
-should not be considered (e.g. backup files, VCS metadata). 
+When processing the list of files and directories, the regular
+expression specified by this option will be used to indicate those which
+should not be considered (e.g. backup files, VCS metadata).
 
 =item B<-r>, B<--recursive>
 
-Specify that the contents of directories should be added 
+Specify that the contents of directories should be added
 recursively.
 
 =item B<-c=>I<regex>, B<--check=>I<regex>
 
-Specify a pattern against which filenames will be matched in order to 
+Specify a pattern against which filenames will be matched in order to
 decide which files to check the license of.
 
 The default includes common source files.
@@ -110,11 +110,11 @@ option.
 
 =head1 LICENSE
 
-This code is copyright by Adam D. Barratt <I<adam@adam-barratt.org.uk>>, 
-all rights reserved; based on a script of the same name from the KDE 
+This code is copyright by Adam D. Barratt <I<adam@adam-barratt.org.uk>>,
+all rights reserved; based on a script of the same name from the KDE
 SDK, which is copyright by <I<dfaure@kde.org>>.
 This program comes with ABSOLUTELY NO WARRANTY.
-You are free to redistribute this code under the terms of the GNU 
+You are free to redistribute this code under the terms of the GNU
 General Public License, version 2 or later.
 
 =head1 AUTHOR
@@ -376,7 +376,7 @@ on a script of the same name from the KDE SDK by <dfaure\@kde.org>.
 
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the
-GNU General Public License, version 2, or (at your option) any 
+GNU General Public License, version 2, or (at your option) any
 later version.
 EOF
 }
@@ -413,7 +413,7 @@ sub parselicense($) {
     if ($licensetext =~ /is free software.? you can redistribute it and\/or modify it under the terms of the (GNU (Library|Lesser) General Public License|LGPL)/i) {
 	$license = "LGPL$gplver$extrainfo $license";
     }
-    
+
     if ($licensetext =~ /is free software.? you can redistribute it and\/or modify it under the terms of the (GNU Affero General Public License|AGPL)/i) {
 	$license = "AGPL$gplver$extrainfo $license";
     }

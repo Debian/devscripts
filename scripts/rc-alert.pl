@@ -5,17 +5,17 @@
 # Modifications Copyright 2003 Julian Gilbey <jdg@debian.org>
 # Modifications Copyright 2008 Adam D. Barratt <adam@adam-barratt.org.uk>
 # Modifications copyright 2009 by Jan Hauke Rahm <info@jhr-online.de>
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
@@ -275,14 +275,14 @@ sub remove_duplicate_values($) {
 
 sub store_if_relevant(%) {
     my %args = @_;
-    
+
     if (exists($$package_list{$args{pkg}})) {
 	# potentially relevant
 	my ($flags, $flagsapply) = human_flags($args{tags});
 	my $distsapply = 1;
 	my $dists;
 	($dists, $distsapply) = human_dists($args{dists}) if defined $args{dists};
-	
+
 	return unless $flagsapply and $distsapply;
 
 	foreach (@dt_requests) {

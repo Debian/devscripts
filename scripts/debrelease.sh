@@ -4,7 +4,7 @@
 #             dupload/dput with the correct .changes file as parameter.
 #             All command line options are passed onto dupload.
 #
-# Written and copyright 1999-2003 by Julian Gilbey <jdg@debian.org> 
+# Written and copyright 1999-2003 by Julian Gilbey <jdg@debian.org>
 # Based on the original 'release' script by
 #  Christoph Lameter <clameter@debian.org>
 #

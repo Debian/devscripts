@@ -26,7 +26,7 @@ my $version='###VERSION###';
 
 sub get_developers_given_package {
 	my ($package_name,$print_binary) = @_;
-	
+
 	my $developer;
 	my $print_name;
 	my $uploaders;
@@ -40,7 +40,7 @@ sub get_developers_given_package {
 		elsif (/^Uploaders:\s+(.*)/) {
 			$uploaders=$1;
 			@uploaders = split /\s*,\s*/, $uploaders;
-			
+
 		}
 		elsif (/^Package:\s+(.*)/) {
 			$print_name = $print_binary ? $package_name : $1 ;
@@ -75,7 +75,7 @@ Usage: dd-list [options] [package ...]
 
     -h, --help
         Print this help text.
-        
+
     -i, --stdin
         Read package names from the standard input.
 
@@ -90,7 +90,7 @@ Usage: dd-list [options] [package ...]
         Only list package Maintainers, do not list Uploaders.
 
     -b, --print-binary
-        If binary package names are given as input, print these names 
+        If binary package names are given as input, print these names
 	in the output instead of corresponding source packages.
 
     -V, --version
@@ -178,7 +178,7 @@ else {
 		}
 	}
 }
-	
+
 foreach my $developer (sort_developers(keys %dict)) {
 	print "$developer\n";
 	my %seen;

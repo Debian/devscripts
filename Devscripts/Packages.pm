@@ -102,9 +102,9 @@ sub PackagesToFiles (@)
 
 
 # This basically runs a dpkg -S with a few bells and whistles
-# 
+#
 # input:  a list of files.
-# output: list of packages they belong to. 
+# output: list of packages they belong to.
 
 sub FilesToPackages (@)
 {
@@ -150,7 +150,7 @@ sub FilesToPackages (@)
     my ($curfile, $pkgfrom);
     undef $pkgfrom;
     $curfile = shift;
-    
+
     foreach (@dpkg_out) {
 	# We want to handle diversions nicely.
 	# Ignore local diversions
@@ -256,7 +256,7 @@ sub InstalledPackages ($)
     close PKG or croak("Problem reading grep pipe: $!");
 
     return \%matches;
-}    
+}
 
 1;
 

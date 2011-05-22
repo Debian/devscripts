@@ -4,7 +4,7 @@
 # Tells you who made the latest uploads of a source package.
 # NB: I'm encoded in UTF-8!!
 
-# Written and copyright 2006 by Julian Gilbey <jdg@debian.org> 
+# Written and copyright 2006 by Julian Gilbey <jdg@debian.org>
 # Based on an original script
 # copyright 2006 Adeodato Simó <dato@net.com.org.es>
 #
@@ -230,7 +230,7 @@ for package; do
 	           awk  -F: '/@debian\.org>/ { a = $10; exit} /^pub/ { a = $10 } END { print a }' )
 	if [ -z "$UPLOADER" ]; then UPLOADER="<unrecognised public key ($GPG_ID)>"; fi
 
-	output="$VERSION to $DISTRO: $UPLOADER" 
+	output="$VERSION to $DISTRO: $UPLOADER"
 	[ "$WANT_DATE" = "yes" ] && output="$output on $DATE"
 	echo $output | iconv -c -f UTF-8
 

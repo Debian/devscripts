@@ -1,33 +1,33 @@
 .TH "diff2patches" "1" "" "Raphael Geissert <atomo64@gmail.com>" ""
 .SH "NAME"
-.LP 
+.LP
 diff2patches \- Extract non\-debian/ patches from .diff.gz files
 .SH "SYNTAX"
-.LP 
+.LP
 \fBdiff2patches \fIfilename\fP
-.br 
+.br
 \fBdiff2patches \-\-help\fR|\fB\-\-version\fP
 .SH "DESCRIPTION"
-.LP 
+.LP
 Extracts patches from .diff.gz which apply to files outside the
 \*(lqdebian/\*(rq directory scope.  A patch is created for each modified file.
 Each patch is named according to the path of the modified file, with \*(lq/\*(rq
 replaced by \*(lq___\*(rq, and an extension of \*(lq.patch\*(rq.
 .SH "OPTIONS"
-.LP 
+.LP
 .TP 4
 \fB\fIfilename\fP\fR
 Extract patches from \fB\fIfilename\fP\fR which apply outside the
 \*(lqdebian/\*(rq directory.
-.TP 
-\fB\-\-help\fR 
+.TP
+\fB\-\-help\fR
 Output help information and exit.
-.TP 
+.TP
 \fB\-\-version\fR
 Output version information and exit.
 .SH "FILES"
 .TP
-\fIdebian/control\fP 
+\fIdebian/control\fP
 Existence of this file is tested before any patch is extracted.
 .TP
 \fIdebian/\fP
@@ -46,5 +46,5 @@ and not under \*(lqdebian/\*(rq nor \*(lqdebian/patches/\*(rq.
 .LP
 \fBcombinediff\fR(1)
 .SH "AUTHOR"
-.LP 
+.LP
 Raphael Geissert <atomo64@gmail.com>

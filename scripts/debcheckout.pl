@@ -8,18 +8,18 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
 # Created: Tue, 14 Aug 2007 10:20:55 +0200
-# Last-Modified: $Date$ 
+# Last-Modified: $Date$
 
 =head1 NAME
 
@@ -52,7 +52,7 @@ git://git.debian.org/git/pkg-vim/vim.git>>, you can see it by grepping through
 B<apt-cache showsrc vim>.
 
 If more than one source package record containing B<Vcs-*> fields is available,
-B<debcheckout> will select the record with the highest version number. 
+B<debcheckout> will select the record with the highest version number.
 Alternatively, a particular version may be selected from those available by
 specifying the package name as I<PACKAGE>=I<VERSION>.
 
@@ -364,7 +364,7 @@ sub find_browse($$) {
 	    $version = $1;
 	} elsif ($line =~ /^$/) {
 	    push(@browses, [$version, $browse])
-		if $version and $browse and 
+		if $version and $browse and
 		($desired_ver eq "" or $desired_ver eq $version);
 	    $version = "";
 	    $browse = "";
@@ -596,7 +596,7 @@ sub checkout_files($$$$) {
 		    chdir $oldcwd;
 		    return ($? >> 8);
 		} else {
-		    chdir $oldcwd; 
+		    chdir $oldcwd;
 		    if (copy("$tempdir/$module", $dir)) {
 			print "Copied to $destdir/$file\n";
 		    } else {
@@ -750,7 +750,7 @@ sub checkout_files($$$$) {
 
 		    my $oldcwd = getcwd();
 		    chdir $tempdir;
-		    
+
 		    @cmd = ($repo_type, "show", "HEAD:$file");
 		    print "@cmd ... > $dir/" . basename($file) . "\n";
 		    if (! open CAT, '-|', @cmd) {

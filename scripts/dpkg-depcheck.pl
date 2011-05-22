@@ -95,7 +95,7 @@ Options:
       trace-local            ($ed[$default_feature{'trace-local'}]) also try to identify file
                              accesses in /usr/local
       catch-alternatives     ($ed[$default_feature{'catch-alternatives'}]) catch access to alternatives
-      discard-sgml-catalogs  ($ed[$default_feature{'discard-sgml-catalogs'}]) discard access to SGML 
+      discard-sgml-catalogs  ($ed[$default_feature{'discard-sgml-catalogs'}]) discard access to SGML
                              catalogs; some SGML tools read all the
                              registered catalogs at startup.
 
@@ -169,7 +169,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     }
     $modified_conf_msg ||= "  (none)\n";
     chomp $modified_conf_msg;
-    
+
     if ($config_vars{'DPKG_DEPCHECK_OPTIONS'} ne '') {
 	unshift @ARGV, split(' ', $config_vars{'DPKG_DEPCHECK_OPTIONS'});
     }
@@ -402,7 +402,7 @@ sub getusedfiles (@)
 	if (defined $old_locale) { $ENV{'LC_ALL'} = $old_locale; }
 	else { delete $ENV{'LC_ALL'}; }
     }
-    
+
     my %openfiles=();
     open FILE, $file or die "Cannot open $file for reading: $!\n";
     while (<FILE>) {

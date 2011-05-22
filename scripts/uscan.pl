@@ -418,7 +418,7 @@ if (defined $opt_watchfile) {
 	if (! defined $package || ! defined $debversion) {
 	    die "$progname: Problems determining package name and/or version from\n  debian/changelog\n";
 	}
-	
+
 	# Check the directory is properly named for safety
 	my $good_dirname = 1;
 	if ($check_dirname_level ==  2 or
@@ -628,15 +628,15 @@ exit ($found ? 0 : 1);
 #
 # Correct handling of regex special characters in the path part:
 # ftp://ftp.worldforge.org/pub/worldforge/libs/Atlas-C++/transitional/Atlas-C\+\+-(.+)\.tar\.gz
-# 
+#
 # Directory pattern matching:
 # ftp://ftp.nessus.org/pub/nessus/nessus-([\d\.]+)/src/nessus-core-([\d\.]+)\.tar\.gz
-# 
+#
 # The pattern in each part may contain several (...) groups and
 # the version number is determined by joining all groups together
 # using "." as separator.  For example:
 #   ftp://site/dir/path/pattern-(\d+)_(\d+)_(\d+)\.tar\.gz
-# 
+#
 # This is another way of handling site with funny version numbers,
 # this time using mangling.  (Note that multiple groups will be
 # concatenated before mangling is performed, and that mangling will
@@ -644,15 +644,15 @@ exit ($found ? 0 : 1);
 # numbers.)
 # opts=uversionmangle=s/^/0.0./ \
 #   ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/Wine-(.+)\.tar\.gz
-# 
+#
 # Similarly, the upstream part of the Debian version number can be
 # mangled:
 # opts=dversionmangle=s/\.dfsg\.\d+$// \
 #   http://some.site.org/some/path/foobar-(.+)\.tar\.gz
-# 
+#
 # The versionmangle=... option is a shorthand for saying uversionmangle=...
 # and dversionmangle=... and applies to both upstream and Debian versions.
-# 
+#
 # The option filenamemangle can be used to mangle the name under which
 # the downloaded file will be saved:
 #   href="http://foo.bar.org/download/?path=&amp;download=foo-0.1.1.tar.gz"
@@ -664,7 +664,7 @@ exit ($found ? 0 : 1);
 # as:
 # opts=filenamemangle=s/.*=(.*)/foo-$1\.tar\.gz/ \
 #    http://foo.bar.org/download/\?path=&amp;download_version=(.+)
-# 
+#
 # The option downloadurlmangle can be used to mangle the URL of the file
 # to download.  This can only be used with http:// URLs.  This may be
 # necessary if the link given on the webpage needs to be transformed in
@@ -870,13 +870,13 @@ sub process_watchline ($$$$$$)
 	}
 
 	@redirections = @{$user_agent->get_redirections};
-	
+
 	print STDERR "$progname debug: redirections: @redirections\n"
 	    if $debug;
 
 	foreach my $_redir (@redirections) {
 	    my $base_dir = $_redir;
-	    
+
 	    $base_dir =~ s%^\w+://[^/]+/%/%;
 	    if ($_redir =~ m%^(\w+://[^/]+)%) {
 		my $base_site = $1;
@@ -1007,7 +1007,7 @@ sub process_watchline ($$$$$$)
 	# We separate out HTMLised listings from standard listings, so
 	# that we can target our search correctly
 	if ($content =~ /<\s*a\s+[^>]*href/i) {
-	    while ($content =~ 
+	    while ($content =~
 		m/(?:<\s*a\s+[^>]*href\s*=\s*\")((?-i)$pattern)\"/gi) {
 		my $file = $1;
 		my $mangled_version = join(".", $file =~ m/^$pattern$/);
@@ -1112,7 +1112,7 @@ EOF
 	    $newfile_base = "$pkg-$newversion.download";
 	}
     }
-    
+
     # So what have we got to report now?
     my $upstream_url;
     # Upstream URL?  Copying code from below - ugh.
@@ -1627,7 +1627,7 @@ sub newest_dir ($$$$$) {
 	# We separate out HTMLised listings from standard listings, so
 	# that we can target our search correctly
 	if ($content =~ /<\s*a\s+[^>]*href/i) {
-	    while ($content =~ 
+	    while ($content =~
 		m/(?:<\s*a\s+[^>]*href\s*=\s*\")((?-i)$pattern)\"/gi) {
 		my $dir = $1;
 		my $mangled_version = join(".", $dir =~ m/^$pattern$/);
@@ -1715,7 +1715,7 @@ sub process_watchfile ($$$$)
 	} elsif ($download == 0 and ! $dehs) {
 	    $pkg_report_header = "Processing watchfile line for package $package...\n";
 	}
-	    
+
 	$status +=
 	    process_watchline($_, $watch_version, $dir, $package, $version,
 			      $watchfile);
@@ -1881,7 +1881,7 @@ sub safe_replace($$) {
     if ($op eq 'tr' or $op eq 'y') {
 	$safeflags =~ tr/cds//cd;
 	return 0 if $safeflags ne $flags;
-	
+
 	$regexp =~ s/\\(.)/$1/g;
 	$replacement =~ s/\\(.)/$1/g;
 

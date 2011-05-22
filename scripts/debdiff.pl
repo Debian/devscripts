@@ -261,7 +261,7 @@ while (@ARGV) {
     elsif ($ARGV[0] eq '--from') { $type = 'debs'; last; }
     elsif ($ARGV[0] =~ /^--w([plt])$/) { $wdiff_opt = "-$1"; shift; }
     elsif ($ARGV[0] =~ /^(--ignore-space|-w)$/) {
-	push @diff_opts, "-w"; 
+	push @diff_opts, "-w";
 	shift;
     }
     elsif ($ARGV[0] eq '--diffstat') { $show_diffstat = 1; shift; }
@@ -575,7 +575,7 @@ elsif ($type eq 'dsc') {
 		    if ($_ =~ /tar.gz$/) {
 			$filename =~ s%(.*)\.tar\.gz$%$1%;
 			$tarballs++;
-		        system qq(cd ${"dir$i"}/${"sdir$i"} && tar zxf $_ >/dev/null && test -d $filename && mv $filename $unpacked); 
+		        system qq(cd ${"dir$i"}/${"sdir$i"} && tar zxf $_ >/dev/null && test -d $filename && mv $filename $unpacked);
 		    }
 		    if ($_ =~ /tar.bz$/ || $_ =~ /tar.bz2$/) {
 			$filename =~ s%(.*)\.tar\.bz2?$%$1%;
@@ -692,7 +692,7 @@ if ($show_moved and $type ne 'deb') {
 	print join("\n",@deblosses), "\n\n";
     }
 
-    # We start by determining which files are in the first set of debs, the 
+    # We start by determining which files are in the first set of debs, the
     # second set of debs or both.
     my %files;
     grep $files{$_}--, @D1;
@@ -734,7 +734,7 @@ if ($show_moved and $type ne 'deb') {
 	# list it separately.
 	my @fdebs1 = split (/:/, $files1{$file});
 	my @fdebs2 = split (/:/, $files2{$file});
-	
+
 	if (@fdebs1 == 1 && @fdebs2 == 1) {
 	    push @{$changes{$fdebs1[0]}{$fdebs2[0]}}, $file;
 	} else {

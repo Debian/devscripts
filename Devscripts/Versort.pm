@@ -20,7 +20,7 @@
 # versort, "version" is assumed to be an upstream version number only,
 # whereas in deb_versort, "version" is assumed to be a Debian version
 # number, possibly including an epoch and/or a Debian revision.
-# 
+#
 # The returned array has the greatest version as the 0th array element.
 
 package Devscripts::Versort;

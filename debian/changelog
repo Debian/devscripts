@@ -13,11 +13,12 @@ devscripts (2.10.74) UNRELEASED; urgency=low
   [ Benjamin Drung ]
   * Move add-patch, edit-patch, and what-patch from ubuntu-dev-tools into
     devscripts (Closes: #568481).
+  * Remove EOL whitespaces (Closes: #502525).
 
   [ David Prévot ]
   * Partial manual pages convention review (Closes: #626015).
 
- -- Benjamin Drung <bdrung@debian.org>  Sun, 22 May 2011 12:32:03 +0200
+ -- Benjamin Drung <bdrung@debian.org>  Sun, 22 May 2011 16:21:22 +0200
 
 devscripts (2.10.73) unstable; urgency=low
 
@@ -154,7 +155,7 @@ devscripts (2.10.71) unstable; urgency=low
   [ Patrick Schoenfeld ]
   * build-rdeps: Update release_pattern for the new InRelease release files,
     which apt began downloading in newer versions instead of the Release file.
-    (Closes: #613941) 
+    (Closes: #613941)
 
   [ Ron Lee ]
   * cowpoke: try to rsync source files to the build host.  (Closes: #610072)
@@ -235,7 +236,7 @@ devscripts (2.10.69) unstable; urgency=low
   [ Patrick Schoenfeld ]
   * Replace occurences of old FSF address with the FSF recommendation
     what should be written inside of source files.
-    (Closes: #502512) 
+    (Closes: #502512)
 
  -- James Vega <jamessan@debian.org>  Thu, 21 Oct 2010 07:36:42 -0400
 
@@ -1269,8 +1270,8 @@ devscripts (2.10.40) unstable; urgency=low
     + Update the Ubuntu distribution list. Add jaunty and remove the
       no-longer supported warty, hoary, edgy and fiesty. Also add
       "-backports" as a supported "extension".
-    + Modify the message produced by --closes to make it clearer that it 
-      is intended to be edited to add details of the bug and fix as 
+    + Modify the message produced by --closes to make it clearer that it
+      is intended to be edited to add details of the bug and fix as
       appropriate. (Closes: #495743)
   * debcommit:
     + Allow --release to be combined with --edit or --confirm. Based on
@@ -1281,7 +1282,7 @@ devscripts (2.10.40) unstable; urgency=low
     a diff against the previous version of the package. (Closes: #503950)
   * getbuildlog:
     + Apply some patches from Jörg Sommer (Closes: #496065)
-      - Unescape %7Es in log URLs to allow explicitly searching for 
+      - Unescape %7Es in log URLs to allow explicitly searching for
         package versions containing tildes.
       - Simplify a couple of variable assignments and use shell string
         operations to extract the version and architecture from the logs.
@@ -1363,8 +1364,8 @@ devscripts (2.10.39) unstable; urgency=low
 devscripts (2.10.38) unstable; urgency=low
 
   [ Adam D. Barratt ]
-  * When upgrading from devscripts 2.10.36, remove the incorrectly 
-    created /etc/devscripts.con if it is present and add the affected 
+  * When upgrading from devscripts 2.10.36, remove the incorrectly
+    created /etc/devscripts.con if it is present and add the affected
     section to /etc/devscripts.conf instead.
   * tagpending: Re-add an accidentally removed blank line at the end
     of the generated comments.
@@ -1646,7 +1647,7 @@ devscripts (2.10.30) unstable; urgency=low
       line. Thanks Steve Magoun.
   * debcheckout:
     + Produce the correct URL for "project-based" darcs.d.o repositories in
-      authenticated mode (Closes: #485044)   
+      authenticated mode (Closes: #485044)
     + Correctly handle absolute pathnames as the checkout path for a single
       file (Closes: #485888)
   * debdiff: When using --show-moved, indicate whether the two lists of
@@ -1876,9 +1877,9 @@ devscripts (2.10.26) unstable; urgency=low
       (Closes: #476985)
   * debcommit: Modify the "strip message" functionality so that:
     + Changelog lines beginning with any of *, + or - are considered to
-      indicate a "change" for the purposes of deciding whether to strip 
+      indicate a "change" for the purposes of deciding whether to strip
       the message
-    + When trimming leading whitespace on continuation lines, only spaces 
+    + When trimming leading whitespace on continuation lines, only spaces
       and tabs are considered rather than line breaks (Closes: #475337)
   * debdiff:
     + Make the diffstat header for comparisons between two Debian revisions
@@ -1957,8 +1958,8 @@ devscripts (2.10.24) unstable; urgency=low
       heuristics introduced in 2.10.21 to be disabled. Based on a patch by
       gregor herrmann
     + Fix and improve some manpage formatting. Thanks gregor herrmann
-    + Skip NMU detection when creating a new changelog 
-    + Fix NEWS files in combination with NMU versioning 
+    + Skip NMU detection when creating a new changelog
+    + Fix NEWS files in combination with NMU versioning
     + Do not trigger NMU detection if the current changelog was authored
       by the current user
     + Fix uninitialised variable warning if Uploaders is empty
@@ -1974,7 +1975,7 @@ devscripts (2.10.24) unstable; urgency=low
     + Move mutt to Suggests
   * README:
     + Add recommended packages to desktop2menu, dget and rmadison
-    + Add svk to the description of debcommit 
+    + Add svk to the description of debcommit
     + Add lsb-release to the description of debchange
     + Add unzip to the description of uscan
     + Replace references to ssh with ssh-client
@@ -2066,12 +2067,12 @@ devscripts (2.10.21) unstable; urgency=low
       support SMTP authentication
     + Add equivs to Suggests (for mk-build-deps)
     + Add libparse-debcontrol-perl to Suggests and the description of
-      debchange 
+      debchange
 
   [ Martin Zobel-Helas ]
   * debchange
     + Set urgency=high if NMU and no other urgency set (Closes: #474391)
-    + Set to NMU if packager is neither in Uploaders nor Maintainer 
+    + Set to NMU if packager is neither in Uploaders nor Maintainer
       (Closes: #474399)
     + Add abbreviation -q for --qa (Closes: #474434)
 
@@ -2149,7 +2150,7 @@ devscripts (2.10.19) unstable; urgency=low
     + Fix an unescaped hyphen in the manpage
     + If starting a changelog stanza for a new maintainer upload with
       the distribution set to UNRELEASED, check whether the previous
-      stanza is also UNRELEASED and, if so, merge them (assuming the 
+      stanza is also UNRELEASED and, if so, merge them (assuming the
       "changelog" release heuristic is in use) (Closes: #458130)
     + Add non-maintainer uploads (including security and QA uploads),
       backports and the use of local version strings to the list of
@@ -2206,7 +2207,7 @@ devscripts (2.10.19) unstable; urgency=low
       command line (Closes: #469663)
     + Fix reference to dpkg-deb(8) (should be section 1) and an unescaped
       hyphen in the manpage
-  * annotate-output.1, cvs-debi.1, dd-list.1, debuild.1, dpkg-depcheck.1, 
+  * annotate-output.1, cvs-debi.1, dd-list.1, debuild.1, dpkg-depcheck.1,
     dpkg-genbuilddeps.1, nmudiff.1, plotchangelog.1, uscan.1,
     devscripts.conf.5: Fix unescaped hyphens
   * nmudiff: Fix --nomutt's To: handling. Thanks Thomas Viehmann

@@ -4,9 +4,9 @@
 # (just Depends and Pre-Depends).
 # It can also calculate the total set of subdependencies using the
 # fulldepends method.
-# 
+#
 # Copyright 2002 Julian Gilbey <jdg@debian.org>
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
@@ -40,7 +40,7 @@ sub new ($$)
     my $self = {};
 
     if (! defined $filename) {
-	croak ("requires filename as parameter"); 
+	croak ("requires filename as parameter");
     }
 
     bless ($self, $class);
@@ -56,8 +56,8 @@ sub parse ($$)
     my $self = shift;
     my $filename = shift;
 
-    if (! defined $filename) { 
-	croak("requires filename as parameter"); 
+    if (! defined $filename) {
+	croak("requires filename as parameter");
     }
     open PACKAGE_FILE, $filename or
 	croak("Unable to load $filename: $!");
@@ -120,8 +120,8 @@ sub dependencies ($$)
     my $self = shift;
     my $pkg = shift;
 
-    if (! defined $pkg) { 
-	croak("requires package as parameter"); 
+    if (! defined $pkg) {
+	croak("requires package as parameter");
     }
 
     if (! exists $self->{$pkg}) {
@@ -135,7 +135,7 @@ sub dependencies ($$)
 
 # Get full dependency information for a specified package or packages,
 # including the packages themselves.
-# 
+#
 # This only follows the first of sets of alternatives, and ignores
 # dependencies on packages which do not appear to exist.
 # Returns an array or array ref
@@ -161,18 +161,18 @@ sub full_dependencies ($@)
 	$deps{$next} = 1;
 	push @toprocess, @{$self->{$next}};
     }
-	
+
     return wantarray ? keys %deps : [ keys %deps ];
 }
 
 
 # Given a set of packages, find a minimal set with respect to the
 # pre-partial order of dependency.
-# 
+#
 # This is vaguely based on the dpkg-mindep script by
 # Bill Allombert <ballombe@debian.org>.  It only follows direct
 # dependencies, and does not attempt to follow indirect dependencies.
-# 
+#
 # This respects the all packages in sets of alternatives.
 # Returns: (\@minimal_set, \%dependencies)
 # where the %dependencies hash is of the form

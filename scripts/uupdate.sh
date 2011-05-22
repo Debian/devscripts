@@ -500,7 +500,7 @@ else
 		echo "$PROGNAME: cannot read archive file $ARCHIVE!  Aborting." >&2
 		exit 1
 	    fi
-	    
+
 	    ;;
     esac
 
@@ -757,7 +757,7 @@ else
 		    echo "Please check that the diff is applied correctly." >&2
 		    echo "(This program will use the pristine upstream version and save the old .diff.gz" >&2
 		    echo "version as $file.debdiff .)" >&2
-		    
+
 		    if [ -e "$file.upstream" -o -e "$file.debdiff" ]; then
 			FILEEXISTERR=1
 		    fi
@@ -812,7 +812,7 @@ else
 	fi
 	if $DIFFUNPACK $DIFF; then
 	    echo "Unpacking the debian/ directory from version $VERSION worked fine."
-	else 
+	else
 	    echo "$PROGNAME: failed to unpack the debian/ directory from version $VERSION!" >&2
 	    exit 1
 	fi

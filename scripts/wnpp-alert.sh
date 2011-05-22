@@ -115,12 +115,12 @@ else
     > $INSTALLED
 fi
 
-if [ -f "$WNPP_DIFF" ]; then 
+if [ -f "$WNPP_DIFF" ]; then
     if [ -d "$CACHEDIR" ]; then
         wnppdiff
         exit 0
     else
-        echo "$PROGNAME: Unable to create diff; displaying full output" 
+        echo "$PROGNAME: Unable to create diff; displaying full output"
     fi
 fi
 

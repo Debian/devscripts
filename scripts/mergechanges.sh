@@ -1,5 +1,5 @@
 #! /bin/bash
-## 
+##
 ## mergechanges -- merge Architecture: and Files: fields of a set of .changes
 ## Copyright 2002 Gergely Nagy <algernon@debian.org>
 ## Changes copyright 2002,2003 by Julian Gilbey <jdg@debian.org>

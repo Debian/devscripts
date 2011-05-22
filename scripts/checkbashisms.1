@@ -12,13 +12,13 @@ possible presence of bashisms.  It takes the names of the shell
 scripts on the command line, and outputs warnings if possible bashisms
 are detected.
 .PP
-Note that the definition of a bashism in this context roughly equates 
-to "a shell feature that is not required to be supported by POSIX"; this 
-means that some issues flagged may be permitted under optional sections 
+Note that the definition of a bashism in this context roughly equates
+to "a shell feature that is not required to be supported by POSIX"; this
+means that some issues flagged may be permitted under optional sections
 of POSIX, such as XSI or User Portability.
 .PP
-In cases where POSIX and Debian Policy disagree, \fBcheckbashisms\fR by 
-default allows extensions permitted by Policy but may also provide 
+In cases where POSIX and Debian Policy disagree, \fBcheckbashisms\fR by
+default allows extensions permitted by Policy but may also provide
 options for stricter checking.
 .SH OPTIONS
 .TP
@@ -33,8 +33,8 @@ Check for issues which are non POSIX but required to be supported by Debian
 Policy 10.4 (implies \fB\-n\fR).
 .TP
 .BR \-\-force ", " \-f
-Force each script to be checked, even if it would normally not be (for 
-instance, it has a bash or non POSIX shell shebang or appears to be a 
+Force each script to be checked, even if it would normally not be (for
+instance, it has a bash or non POSIX shell shebang or appears to be a
 shell wrapper).
 .TP
 .BR \-\-extra ", " \-x

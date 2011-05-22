@@ -30,8 +30,8 @@ B<mass-bug> [I<options>] B<--subject=">I<bug subject>B<"> I<template package-lis
 
 mass-bug assists in filing a mass bug report in the Debian BTS on a set of
 packages. For each package in the package-list file (which should list one
-package per line together with an optional version number separated 
-from the package name by an underscore), it fills out the template, adds 
+package per line together with an optional version number separated
+from the package name by an underscore), it fills out the template, adds
 BTS pseudo-headers, and either displays or sends the bug report.
 
 Warning: Some care has been taken to avoid unpleasant and common mistakes,
@@ -43,7 +43,7 @@ Developer's Reference about mass filing of bug reports first.
 
 The template file is the body of the message that will be sent for each bug
 report, excluding the BTS pseudo-headers. In the template, #PACKAGE# is
-replaced with the name of the package. If a version was specified for 
+replaced with the name of the package. If a version was specified for
 the package, #VERSION# will be replaced by that version.
 
 The components of the version number may be specified using #EPOCH#,
@@ -229,7 +229,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'BTS_SENDMAIL_COMMAND' => '/usr/sbin/sendmail',
 		       );
     my %config_default = %config_vars;
-    
+
     my $shell_cmd;
     # Set defaults
     foreach my $var (keys %config_vars) {
@@ -292,13 +292,13 @@ sub gen_bug {
 
     my ($epoch, $upstream, $revision) = ($version =~ /^(\d+:)?(.+?)(-[^-]+)?$/);
     $epoch ||= "";
-    $revision ||= ""; 
+    $revision ||= "";
 
     $template_text=~s/#PACKAGE#/$package/g;
     $template_text=~s/#VERSION#/$version/g;
     $template_text=~s/#EPOCH#/$epoch/g;
     $template_text=~s/#UPSTREAM_VERSION#/$upstream/g;
-    $template_text=~s/#REVISION#/$revision/g;    
+    $template_text=~s/#REVISION#/$revision/g;
 
     $version = "Version: $version\n" if $version;
 
@@ -313,7 +313,7 @@ sub gen_bug {
     $bugtext = "$type: $package\n$version" . "Severity: $severity\n$tags$user$usertags\n$template_text";
     return $bugtext;
 }
-		
+
 sub div {
     print +("-" x 79)."\n";
 }
@@ -324,7 +324,7 @@ sub mailbts {
     if (defined $from) {
 	my $date = `date -R`;
 	chomp $date;
-	
+
 	my $pid = open(MAIL, "|-");
 	if (! defined $pid) {
 	    die "$progname: Couldn't fork: $!\n";
@@ -488,7 +488,7 @@ elsif ($mode eq 'send') {
     my $from;
     $from ||= $ENV{'DEBEMAIL'};
     $from ||= $ENV{'EMAIL'};
-    
+
     print "Preparing to send ".scalar(@packages)." bug reports like this one:\n";
     div();
     showsample($packages[0]);

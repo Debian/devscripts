@@ -4,7 +4,7 @@
 # to all of debuild's functionality.
 
 # Copyright 2003, Julian Gilbey <jdg@debian.org>
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
@@ -24,7 +24,7 @@
 #
 # cvs-debuild [<debuild options>] [<cvs-buildpackage options>]
 #           [--lintian-opts <lintian options>]
-# 
+#
 # cvs-debuild will run cvs-buildpackage, using debuild as the
 # package-building program, passing the debuild and lintian options to
 # it.  For details of these options, and more information on debuild in

@@ -93,7 +93,7 @@ if ! command -v cvs-buildpackage >/dev/null 2>&1; then
 fi
 
 # Long term variables, which may be set in the cvsdeb config file or the
-# environment: 
+# environment:
 # rootdir workdir (if all original sources are kept in one dir)
 
 TEMPDIR=$(mktemp -dt cvs-debrelease.XXXXXXXX) || {
@@ -183,7 +183,7 @@ if [ "x$opt_cvsmodule" = "x" -a "x$opt_package" = "x" -a \
       ! -e 'debian/changelog' ] ; then
     echo >&2 "$progname should be run in the top working directory of"
     echo >&2 "a Debian Package, or an explicit package (or CVS module) name"
-    echo >&2 "should be given." 
+    echo >&2 "should be given."
     exit 1
 fi
 

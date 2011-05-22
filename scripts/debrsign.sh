@@ -166,7 +166,7 @@ case $# in
 		fi
 	;;
 	esac
-	
+
 
 	mustsetvar package "`dpkg-parsechangelog | sed -n 's/^Source: //p'`" \
 	    "source package"
@@ -192,7 +192,7 @@ case $# in
 		    echo "$PROGNAME: could not find normal .changes file but found multiarch file:" >&2
 		    echo "  $changes" >&2
 		    echo "Using this changes file instead." >&2
-		else 
+		else
 		    echo "$PROGNAME: Can't find or can't read changes file $changes!" >&2
 		    exit 1
 		fi

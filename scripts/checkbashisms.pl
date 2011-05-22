@@ -6,7 +6,7 @@
 #   Copyright (C) 2002 Josip Rodin
 # This version is
 #   Copyright (C) 2003 Julian Gilbey
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
@@ -218,7 +218,7 @@ foreach my $filename (@ARGV) {
 	    if (/^[\w%-]+:+\s.*?;?(.*)$/ and !($last_continued and !$found_rules)) {
 		$found_rules = 1;
 		$_ = $1 if $1;
-	    } 
+	    }
 
 	    last if m%^\s*(override\s|export\s)?\s*SHELL\s*:?=\s*(/bin/)?bash\s*%;
 
@@ -357,7 +357,7 @@ foreach my $filename (@ARGV) {
 		if( $count % 2 == 0 ) {
 		    output_explanation($display_filename, $orig_line, q<$'...' should be "$(printf '...')">);
 		}
-	    }   
+	    }
 
 	    # $cat_line contains the version of the line we'll check
 	    # for heredoc delimiters later. Initially, remove any
@@ -383,7 +383,7 @@ foreach my $filename (@ARGV) {
 		if( $count % 2 == 0 ) {
 		    output_explanation($display_filename, $orig_line, q<$"foo" should be eval_gettext "foo">);
 		}
-	    }   
+	    }
 
 	    while (my ($re,$expl) = each %string_bashisms) {
 		if ($line =~ m/($re)/) {
@@ -471,8 +471,8 @@ sub script_is_evil_and_wrong {
 	    # Match expressions of the form '${1+$@}', '${1:+"$@"',
 	    # '"${1+$@', "$@", etc where the quotes (before the dollar
 	    # sign(s)) are optional and the second (or only if the $1
-	    # clause is omitted) parameter may be $@ or $*. 
-	    # 
+	    # clause is omitted) parameter may be $@ or $*.
+	    #
 	    # Finally the whole subexpression may be omitted for scripts
 	    # which do not pass on their parameters (i.e. after re-execing
 	    # they take their parameters (and potentially data) from stdin

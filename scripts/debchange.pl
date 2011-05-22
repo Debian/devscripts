@@ -13,7 +13,7 @@
 # Originally by Christoph Lameter <clameter@debian.org>
 # Modified extensively by Julian Gilbey <jdg@debian.org>
 #
-# Copyright 1999-2005 by Julian Gilbey 
+# Copyright 1999-2005 by Julian Gilbey
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -467,7 +467,7 @@ if (! $opt_create) {
 		fatal "Cannot find $changelog_path anywhere!\nAre you in the source code tree?\n(You could use --create if you wish to create this file.)";
 	    }
 	}
-	
+
 	# Can't write, so stop now.
 	if (! -w $changelog_path) {
 	    fatal "$changelog_path is not writable!";
@@ -593,7 +593,7 @@ if (! $opt_create || ($opt_create && $opt_news)) {
 	my $gooddir;
 	if ($re =~ m%/%) { $gooddir = eval "cwd() =~ /^$re\$/;"; }
 	else { $gooddir = eval "basename(cwd()) =~ /^$re\$/;"; }
-	
+
 	if (! $gooddir) {
 	    my $pwd = cwd();
 	    fatal <<"EOF";
@@ -743,7 +743,7 @@ if ($opt_M) {
 
 #####
 
-if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and 
+if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and
     ! $opt_team and ! $opt_qa and ! $opt_bpo and ! $opt_bn and ! $opt_n and ! $opt_c and
     ! (exists $ENV{'CHANGELOG'} and length $ENV{'CHANGELOG'}) and ! $opt_M and
     ! $opt_create and ! $opt_a_passed and ! $opt_r and ! $opt_e and
@@ -1227,7 +1227,7 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
     my $multimaint=0;
     if (! $opt_news) {
 	my $lastmultimaint;
-	
+
 	# Parse the changelog for multi-maintainer maintainer lines of
 	# the form [ Full Name ] and record the last of these.
 	while ($CHANGES=~/.*\n^\s+\[\s+([^\]]+)\s+]\s*$/mg) {
@@ -1242,7 +1242,7 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
 	    (defined $nextmaint)
 	   ) {
 	    $multimaint=1;
-	
+
 	    if (! $lastmultimaint) {
 		# Add a multi-maintainer header to the top of the existing
 		# changelog.

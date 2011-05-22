@@ -1,13 +1,13 @@
 #! /bin/bash
 # this script was downloaded from:
-# http://jeroen.a-eskwadraat.nl/sw/annotate 
+# http://jeroen.a-eskwadraat.nl/sw/annotate
 # and is part of devscripts ###VERSION###
 
 # Executes a program annotating the output linewise with time and stream
 # Version 1.2
 
 # Copyright 2003, 2004 Jeroen van Wolffelaar <jeroen@wolffelaar.nl>
-                                                                                
+
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; version 2 of the License

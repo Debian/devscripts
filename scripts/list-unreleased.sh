@@ -44,7 +44,7 @@ get_list() {
 	local path="$1"
 
 	for dir in $(
-		if [ "$RECURSE" ]; then 
+		if [ "$RECURSE" ]; then
 			find "$path" -type d | grep -v "\.svn"
 		else
 			find "$path" -maxdepth 1 -type d | grep -v "\.svn"

@@ -28,7 +28,7 @@ _chdist ()
         return 0
     ;;
     create|apt-get|apt-cache|apt-rdepends|src2bin|bin2src|compare-packages|compare-bin-packages|compare-versions|compare-bin-versions|grep-dctrl-packages|grep-dctrl-sources)
-        COMPREPLY=( $( compgen -W "$dists" -- $cur ) ) 
+        COMPREPLY=( $( compgen -W "$dists" -- $cur ) )
 	return 0
   esac
 

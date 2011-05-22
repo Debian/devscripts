@@ -133,7 +133,7 @@ my $new_cache_format_version = '2.9.6';
 our (@gTags, @valid_tags, %valid_tags);
 @gTags = ( "patch", "wontfix", "moreinfo", "unreproducible", "fixed",
            "potato", "woody", "sid", "help", "security", "upstream",
-           "pending", "sarge", "sarge-ignore", "experimental", "d-i", 
+           "pending", "sarge", "sarge-ignore", "experimental", "d-i",
            "confirmed", "ipv6", "lfs", "fixed-in-experimental",
            "fixed-upstream", "l10n", "etch", "etch-ignore",
            "lenny", "lenny-ignore", "squeeze", "squeeze-ignore",
@@ -167,12 +167,12 @@ B<bts> [I<options>] I<command> [I<args>] [B<#>I<comment>] [B<.>|B<,> I<command> 
 
 =head1 DESCRIPTION
 
-This is a command line interface to the Debian Bug Tracking System 
+This is a command line interface to the Debian Bug Tracking System
 (BTS), intended mainly
 for use by developers. It lets the BTS be manipulated using simple commands
 that can be run at the prompt or in a script, does various sanity checks on
 the input, and constructs and sends a mail to the BTS control address for
-you. A local cache of web pages and e-mails from the BTS may also be 
+you. A local cache of web pages and e-mails from the BTS may also be
 created and updated.
 
 In general, the command line interface is the same as what you would write
@@ -343,7 +343,7 @@ the password before sending the mail.
 =item B<--smtp-helo=>I<HELO>
 
 Specify the name to use in the I<HELO> command when connecting to the SMTP
-server; defaults to the contents of the file F</etc/mailname>, if it 
+server; defaults to the contents of the file F</etc/mailname>, if it
 exists.
 
 Note that some SMTP servers may reject the use of a I<HELO> which either
@@ -382,8 +382,8 @@ that are marked as resolved.
 
 =item B<--no-ack>
 
-Suppress acknowledgment mails from the BTS.  Note that this will only 
-affect the copies of messages CCed to bugs, not those sent to the 
+Suppress acknowledgment mails from the BTS.  Note that this will only
+affect the copies of messages CCed to bugs, not those sent to the
 control bot.
 
 =item B<--ack>
@@ -472,7 +472,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'BTS_SERVER' => 'bugs.debian.org',
 		       );
     my %config_default = %config_vars;
-    
+
     my $shell_cmd;
     # Set defaults
     foreach my $var (keys %config_vars) {
@@ -959,12 +959,12 @@ sub bts_bugs {
 
     # Are there any options?
     my $urlopts = '';
-    if (@_) { 
+    if (@_) {
 	$urlopts = join(";", '', @_); # so it'll be ";opt1=val1;opt2=val2"
 	$urlopts =~ s/:/=/g;
 	$urlopts =~ s/;tag=/;include=/;
     }
-    
+
     browse($url, $urlopts);
 
     # revert options
@@ -1043,12 +1043,12 @@ Users to use when looking up usertags.
 =item B<archive>
 
 Whether to search archived bugs or normal bugs; defaults to B<0>
-(i.e. only search normal bugs). As a special case, if archive is 
+(i.e. only search normal bugs). As a special case, if archive is
 B<both>, both archived and unarchived bugs are returned.
 
 =back
 
-For example, to select the set of bugs submitted by 
+For example, to select the set of bugs submitted by
 jrandomdeveloper@example.com and tagged B<wontfix>, one would use
 
 bts select submitter:jrandomdeveloper@example.com tag:wontfix
@@ -1194,7 +1194,7 @@ sub common_close {
 # sending an informative mail to nnnnn-done@bugs.debian.org is much better.
 # You should specify which I<version> of the package closed the I<bug>, if
 # possible.
-# 
+#
 # =cut
 
 sub bts_close {
@@ -1598,7 +1598,7 @@ sub bts_tags {
 Indicates that a I<bug> affects a I<package> other than that against which it is filed, causing
 the I<bug> to be listed by default in the I<package> list of the other I<package>.  This should
 generally be used where the I<bug> is severe enough to cause multiple reports from users to be
-assigned to the wrong package. 
+assigned to the wrong package.
 
 =cut
 
@@ -1972,8 +1972,8 @@ sub bts_limit {
 Change the "owner" address of a I<bug>, with B<!> meaning
 `use the address on the current email as the new owner address'.
 
-The owner of a bug accepts responsibility for dealing with it. Note that 
-the "owner" of a bug does not automatically receive all of the email 
+The owner of a bug accepts responsibility for dealing with it. Note that
+the "owner" of a bug does not automatically receive all of the email
 corresponding to it; use B<subscribe> to achieve that.
 
 =cut
@@ -2200,7 +2200,7 @@ sub bts_cache {
     my $tocache;
     if (@_ > 0) { $tocache=sanitizething(shift); }
     else { $tocache=''; }
-    
+
     if (! length $tocache) {
 	$tocache=$ENV{'DEBEMAIL'} || $ENV{'EMAIL'} || '';
 	if ($tocache =~ /^.*\s<(.*)>\s*$/) { $tocache = $1; }
@@ -2242,7 +2242,7 @@ sub bts_cache {
     }
 
     untie %timestamp;
-    
+
     # download bugs
     my $bugcount = 1;
     my $bugtotal = scalar keys %bugs;
@@ -2258,7 +2258,7 @@ sub bts_cache {
 	$bugcount++;
     }
 
-    # revert options    
+    # revert options
     if (defined $sub_refreshmode) {
 	$refreshmode = $sub_refreshmode;
     }
@@ -2300,7 +2300,7 @@ sub bts_cleancache {
 	}
 	return;
     }
-    
+
     # clean index
     tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	 O_RDWR()|O_CREAT(), 0600, $DB_HASH, "write")
@@ -2313,7 +2313,7 @@ sub bts_cleancache {
     } else {
 	my @bugs_to_clean = bugs_from_thing($toclean);
 	deletecache($toclean);
-	
+
 	# remove old bugs from cache
 	foreach my $bug (@bugs_to_clean) {
 	    deletecache($bug);
@@ -2880,7 +2880,7 @@ sub MIME_encode_mimewords {
 	if ($token =~ /[\015\012\t ]+/) {  # white-space
 	    $last_token = $token;
 	} else {
-	    if ($token !~ /[$NONPRINT]/o and $token !~ /\=\?/o) { 
+	    if ($token !~ /[$NONPRINT]/o and $token !~ /\=\?/o) {
 		# no unsafe bytes, leave as it is
 		$last_word_encoded = 0;
 		$last_token = $token;
@@ -2889,7 +2889,7 @@ sub MIME_encode_mimewords {
 		# white-space between two encoded words is skipped on
 		# decoding, so we should encode space in that case
 		$_ = $last_token =~ /[\015\012\t ]+/ && $last_word_encoded ? $last_token.$token : $token;
-		# We limit such words to about 18 bytes, to guarantee that the 
+		# We limit such words to about 18 bytes, to guarantee that the
 		# worst-case encoding give us no more than 54 + ~10 < 75 bytes
 		s{(.{1,15}[\x80-\xBF]{0,4})}{
 		    # don't split multibyte characters - this regexp should
@@ -2925,7 +2925,7 @@ sub fold_from_header {
 	# But this could only happen if someone deliberately uses a really
 	# long name with no spaces in it.
 	my @x;
-	
+
 	push @x, $1
 	    while($header =~ s/^\s*
 		  ([^\"]{1,$max}\s
@@ -3094,7 +3094,7 @@ sub download_attachments {
     #   .html if plain/html, no suffix otherwise (too much like hard work!)
     # Since messages are never modified retrospectively, we don't download
     # attachments which have already been downloaded
-    
+
     # Yuck, yuck, yuck.  This regex splits the $data string at every
     # occurrence of either "[<a " or plain "<a ", preserving any "[".
     my @data = split /(?:(?=\[<[Aa]\s)|(?<!\[)(?=<[Aa]\s))/, $toppage;
@@ -3230,7 +3230,7 @@ sub download_mbox {
 	}
 	print OUT_MBOX $response->content;
 	close OUT_MBOX;
-	    
+
 	return ($fh, $filename);
     } else {
 	die "$progname: failed to download mbox.\n";
@@ -3560,7 +3560,7 @@ sub browse {
     prunecache();
     my $thing=shift;
     my $thgopts=shift || '';
-    
+
     if ($thing eq '') {
 	if ($thgopts ne '') {
 	    die "$progname: you can only give options for a BTS page if you specify a bug/maint/... .\n";
@@ -3616,7 +3616,7 @@ sub browse {
 
 	$livedownload = 0;
 	my $live=download($thing, $thgopts, 0, $mboxmode);
-	
+
 	if ($mboxmode) {
 	    runmailreader($mboxfile);
 	} else {
@@ -3651,7 +3651,7 @@ sub browse {
 	    runmailreader($fn);
 	} else {
 	    if ($thgopts ne '') {
-		my $thingurl = thing_to_url($thing);		
+		my $thingurl = thing_to_url($thing);
 		runbrowser($thingurl.$thgopts);
 	    } else {
 		# let the BTS be intelligent
@@ -3710,7 +3710,7 @@ sub prunecache {
 	next unless /\.(html|css)$/;
 	push @oldfiles, $_ if -A $_ > 30;
     }
-    
+
     # We now remove the oldfiles if they're automatically downloaded
     tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
 	 O_RDWR()|O_CREAT(), 0600, $DB_HASH, "write")
@@ -3725,7 +3725,7 @@ sub prunecache {
 	    next;
 	}
 	next if is_manual(get_timestamp($thing, $thgopts));
-	
+
 	# Otherwise, it's automatic and we purge it
 	deletecache($thing, $thgopts);
     }
@@ -3743,7 +3743,7 @@ sub prunecache {
 # Determines which browser to use
 sub runbrowser {
     my $URL = shift;
-    
+
     if (system('sensible-browser', $URL) >> 8 != 0) {
 	warn "Problem running sensible-browser: $!\n";
     }
@@ -3768,7 +3768,7 @@ sub runmailreader {
 }
 
 # Timestamp handling
-# 
+#
 # We store a +ve timestamp to represent an automatic download and
 # a -ve one to represent a manual download.
 

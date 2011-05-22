@@ -1,6 +1,6 @@
 #! /bin/bash -e
 # Copyright 2006 by Steinar H. Gunderson
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of version 2 (only) of the GNU General Public License
 # as published by the Free Software Foundation.
@@ -362,7 +362,7 @@ if [ "$NMUDIFF_MUTT" = no ]; then
     cat <<EOF > "$TMPNAM"
 From: $FROM
 To: $TO_ADDRESSES_SENDMAIL
-Cc: 
+Cc:
 Bcc: $BCC_ADDRESS_SENDMAIL
 Subject: $SOURCE: diff for NMU version $VERSION
 Date: `date -R`

@@ -17,7 +17,7 @@ XP=xsltproc -''-nonet
 
 manpage.1: manpage.dbk
         $(XP) $(DB2MAN) $<
-    
+
 The xsltproc binary is found in the xsltproc package.  The
 XSL files are in docbook-xsl.  Please remember that if you
 create the nroff version in one of the debian/rules file
@@ -314,7 +314,7 @@ and docbook-xsl in your Build-Depends control field.
 </refentry>
 
 <!--
-  Local Variables: 
+  Local Variables:
   mode: xml
-  End: 
+  End:
 -->

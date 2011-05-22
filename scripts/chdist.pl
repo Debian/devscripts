@@ -431,7 +431,7 @@ sub dist_compare(\@;$;$) {
      foreach my $vers (@esc_vers) {
         $vers =~ s|\+|\\\+|;
      }
- 
+
      # Do compare
      if ($do_compare) {
         if ($#dists != 1) {
@@ -455,7 +455,7 @@ sub dist_compare(\@;$;$) {
         }
         $line .= " $status $details";
      }
-     
+
      print "$line\n";
   }
 }

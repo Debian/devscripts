@@ -4,7 +4,7 @@
 # Written by Julian Gilbey, December 1998.
 
 # Copyright 1999-2003, Julian Gilbey <jdg@debian.org>
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
@@ -33,7 +33,7 @@
 # then to run lintian on the resulting .changes file.
 # Lintian options may be specified after --lintian-opts; all following
 # options will be passed only to lintian.
-# 
+#
 # As this may be running setuid, we make sure to clean out the
 # environment before we perform the build, subject to any -e etc.
 # options.  Also wise for building the packages, anyway.
@@ -119,7 +119,7 @@ Second usage method:
         --no-lintian        Do not run lintian
         --[no-]tgz-check    Do [not] check for an .orig.tar.gz before running
                             dpkg-buildpackage if we have a Debian revision
-                            (Default: check) 
+                            (Default: check)
         --username          Run debrsign instead of debsign, using the
                             supplied credentials
 
@@ -661,7 +661,7 @@ if ($check_dirname_level ==  2 or
     my $gooddir;
     if ($re =~ m%/%) { $gooddir = eval "cwd() =~ /^$re\$/;"; }
     else { $gooddir = eval "basename(cwd()) =~ /^$re\$/;"; }
-    
+
     if (! $gooddir) {
 	my $pwd = cwd();
 	die <<"EOF";
@@ -744,7 +744,7 @@ if ($command_version eq 'dpkg') {
 			     final-clean)) {
 	    if ($hook{$hookname}) { push @skip_hooks, $hookname; }
 	}
-	if (@skip_hooks) {	
+	if (@skip_hooks) {
 	    $emulate_dpkgbp = 1;
 	    warn "$progname: emulating dpkg-buildpackage as the following hooks were defined:\n"
 		. "  " . join(", ", @skip_hooks) . "\n\n";
@@ -814,7 +814,7 @@ if ($command_version eq 'dpkg') {
 	/^-Z/ and $compression=$_, push(@dpkg_opts, $_), next;
 	/^-z/ and $comp_level=$_, push(@dpkg_opts, $_), next;
 	$_ eq '-tc' and $cleansource=1, push(@dpkg_opts, $_), next;
-	/^-t(.*)/ and $targetgnusystem=$1, push(@dpkg_opts, $_), next; # Ditto	
+	/^-t(.*)/ and $targetgnusystem=$1, push(@dpkg_opts, $_), next; # Ditto
 	$_ eq '-nc' and $noclean=1, push(@dpkg_opts, $_),
 	    next;
 	$_ eq '-b' and $binaryonly=$_, $binarytarget='binary',
@@ -1126,7 +1126,7 @@ EOT
 	# Next dpkg-buildpackage action: build and binary targets
 	if (! $sourceonly) {
 	    system_withecho('debian/rules', 'build');
-	
+
 	    run_hook('binary', 1);
 
 	    if ($< == 0) {
@@ -1155,7 +1155,7 @@ EOT
 	push @cmd, "-v$since" if $since;
 	push @cmd, "-C$desc" if $desc;
 	print STDERR " ", join(" ", @cmd), "\n";
-	
+
 	open GENCHANGES, "-|", @cmd or fatal "can't exec dpkg-genchanges: $!";
 	my @changefilecontents;
 	@changefilecontents = <GENCHANGES>;
@@ -1242,7 +1242,7 @@ EOT
     if ($signchanges) {
     foreach my $var (keys %store_vars) {
         $ENV{$var} = $store_vars{$var};
-    }  
+    }
 	print "Now signing changes and any dsc files...\n";
 	if ($username) {
 	    system('debrsign', @debsign_opts, $username, $changes) == 0

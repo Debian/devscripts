@@ -102,7 +102,7 @@ configuration file option as described below.
 .PP
 If \fB\-\-force\-bad\-version\fR or \fB\-\-allow\-lower\-version\fR is used,
 \fBdebchange\fR will not stop if the new version is less than the current one.
-This is especially useful while doing backports. 
+This is especially useful while doing backports.
 .SH "Directory name checking"
 In common with several other scripts in the \fBdevscripts\fR package,
 \fBdebchange\fR will climb the directory tree until it finds a
@@ -167,9 +167,9 @@ Edit the changelog in an editor.
 .BR \-\-release ", " \-r
 Finalize the changelog for a release.
 Update the changelog timestamp. If the distribution is set to
-\fBUNRELEASED\fR, change it to the distribution from the previous changelog entry 
-(or another distribution as specified by \fB\-\-distribution\fR).  If there are 
-no previous changelog entries and an explicit distribution has not been 
+\fBUNRELEASED\fR, change it to the distribution from the previous changelog entry
+(or another distribution as specified by \fB\-\-distribution\fR).  If there are
+no previous changelog entries and an explicit distribution has not been
 specified, \fBunstable\fR will be used.
 .TP
 .BR \-\-force\-save\-on\-release
@@ -249,7 +249,7 @@ Allow a version number to be less than the current one if the new version
 matches the specified pattern.
 .TP
 .BR \-\-force\-distribution
-Force the provided distribution to be used, even if it doesn't match the list of known 
+Force the provided distribution to be used, even if it doesn't match the list of known
 distributions (e.g. for unofficial distributions).
 .TP
 .BR \-\-auto\-nmu
@@ -306,7 +306,7 @@ checking will be performed when this option is used.
 \fB\-\-news\fR [\fInewsfile\fR]
 This will edit \fInewsfile\fR (by default, \fIdebian/NEWS\fR) instead
 of the regular changelog.  Directory searching will be performed.
-The changelog will be examined in order to determine the current package 
+The changelog will be examined in order to determine the current package
 version.
 .TP
 \fB\-\-\fR[\fBno\fR]\fBmultimaint\fR
@@ -320,7 +320,7 @@ changelog section?  Default is no; see the discussion above and also the
 \fBDEBCHANGE_MULTIMAINT_MERGE\fR configuration file option below.
 .TP
 .BR \-\-maintmaint ", " \-m
-Do not modify the maintainer details previously listed in the changelog. 
+Do not modify the maintainer details previously listed in the changelog.
 This is useful particularly for sponsors wanting to automatically add a
 sponsorship message without disrupting the other changelog details.
 Note that there may be some interesting interactions if
@@ -342,7 +342,7 @@ used with options that require the trailer to be modified
 (e.g. \fB\-\-create\fR, \fB\-\-release\fR, \fB\-i\fR, \fB\-\-qa\fR, etc.)
 This option differs from \fB\-\-maintmaint\fR in that it will use
 multi-maintainer mode if appropriate, with the exception of editing the
-trailer. See also the \fBDEBCHANGE_MAINTTRAILER\fR configuration file option 
+trailer. See also the \fBDEBCHANGE_MAINTTRAILER\fR configuration file option
 below.
 .TP
 \fB\-\-check-dirname-level\fR \fIN\fR
@@ -448,6 +448,6 @@ by \fBsensible-editor\fR.
 and
 .BR devscripts.conf (5).
 .SH AUTHOR
-The original author was Christoph Lameter <clameter@debian.org>. 
+The original author was Christoph Lameter <clameter@debian.org>.
 Many substantial changes and improvements were made by Julian Gilbey
 <jdg@debian.org>.
