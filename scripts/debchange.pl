@@ -400,8 +400,8 @@ if (defined $opt_u) {
 if (defined $opt_D) {
     # See if we're Debian, Ubuntu or someone else, if we can
     my $distributor;
-    if (system('command -v lsb_release >/dev/null 2>&1') >> 8 == 0) {
-	$distributor = `lsb_release -is 2>/dev/null`;
+    if (system('command -v dpkg-vendor >/dev/null 2>&1') >> 8 == 0) {
+	$distributor = `dpkg-vendor --query Vendor 2>/dev/null`;
 	chomp $distributor;
     }
     $distributor ||= 'Debian';

@@ -107,8 +107,8 @@ DEFAULT_UUPDATE_SYMLINK_ORIG=yes
 VARS="UUPDATE_ROOTCMD UUPDATE_PRISTINE UUPDATE_SYMLINK_ORIG"
 SUFFIX="1"
 
-if which lsb_release >/dev/null 2>&1; then
-    case "$(lsb_release --short --id 2>/dev/null)" in
+if which dpkg-vendor >/dev/null 2>&1; then
+    case "$(dpkg-vendor --query Vendor 2>/dev/null)" in
 	"Ubuntu")
 	    SUFFIX="0ubuntu1"
 	    ;;
