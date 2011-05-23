@@ -1,0 +1,145 @@
+#!/usr/bin/python
+
+# Copyright (c) 2010-2011, Benjamin Drung <bdrung@debian.org>
+#
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+import optparse
+import os
+import sys
+
+from devscripts.logger import Logger
+
+try:
+    import magic
+except ImportError:
+    Logger.error("Please install 'python-magic' in order to use this utility.")
+    sys.exit(1)
+
+DEFAULT_WHITELISTED_MIMETYPES = [
+    "application/vnd.font-fontforge-sfd", # font source: fontforge
+    "application/x-elc",
+    "application/x-empty",
+    "application/x-font-otf",             # font object and source
+    "application/x-font-ttf",             # font object and source
+    "application/x-font-woff",            # font object and source
+    "application/x-symlink",
+    "application/xml",
+    "audio/x-wav",
+    "font/otf",                           # font object and source
+    "font/ttf",                           # font object and source
+    "image/gif",
+    "image/jpeg",
+    "image/png",
+    "image/svg+xml",
+    "image/vnd.adobe.photoshop",
+    "image/x-icns",
+    "image/x-ico",
+    "image/x-ms-bmp",
+    "image/x-portable-pixmap",
+    "message/rfc822",
+    "text/html",
+    "text/plain",
+    "text/rtf",
+    "text/troff",
+    "text/x-asm",
+    "text/x-c",
+    "text/x-c++",
+    "text/x-diff",
+    "text/x-fortran",
+    "text/x-java",
+    "text/x-lisp",
+    "text/x-m4",
+    "text/x-makefile",
+    "text/x-msdos-batch",
+    "text/x-pascal",
+    "text/x-perl",
+    "text/x-php",
+    "text/x-po",
+    "text/x-python",
+    "text/x-shellscript",
+    "text/x-tex",
+    "text/x-texinfo",
+]
+
+DEFAULT_WHITELISTED_EXTENSIONS = [
+    ".fea",   # font source format: Adobe Font Development Kit for OpenType
+    ".fog",   # font source format: Fontographer
+    ".g2n",   # font source format: fontforge
+    ".gdh",   # font source format: Graphite (headers)
+    ".gdl",   # font source format: Graphite
+    ".glyph", # font source format: cross-toolkit UFO
+    ".icns",  # Apple Icon Image format
+    ".java",  # Java source files
+    ".plate", # font source format: Spiro
+    ".rsa",
+    ".sfd",   # font source format: fontforge
+    ".sfdir", # font source format: fontforge
+    ".ttx",   # font source format: fonttools
+    ".ufo",   # font source format: cross-toolkit UFO
+    ".vfb"    # font source format: FontLab
+    ".vtp",   # font source format: OpenType (VOLT)
+    ".xgf",   # font source format: Xgridfit
+]
+
+def suspicious_source(whitelisted_mimetypes, whitelisted_extensions, directory,
+                      verbose=False):
+    magic_cookie = magic.open(magic.MAGIC_MIME_TYPE)
+    magic_cookie.load()
+
+    for root, dirs, files in os.walk(directory):
+        for f in files:
+            mimetype = magic_cookie.file(os.path.join(root, f))
+            if mimetype not in whitelisted_mimetypes:
+                if not [x for x in whitelisted_extensions
+                        if f.lower().endswith(x)]:
+                    if verbose:
+                        print "%s (%s)" % (os.path.join(root, f), mimetype)
+                    else:
+                        print os.path.join(root, f)
+        for vcs_dir in (".bzr", "CVS", ".git", ".svn"):
+            if vcs_dir in dirs:
+                dirs.remove(vcs_dir)
+
+def main():
+    script_name = os.path.basename(sys.argv[0])
+    usage = "%s [options]" % (script_name)
+    epilog = "See %s(1) for more info." % (script_name)
+    parser = optparse.OptionParser(usage=usage, epilog=epilog)
+
+    parser.add_option("-v", "--verbose", help="print more information",
+                      dest="verbose", action="store_true", default=False)
+    parser.add_option("-d", "--directory",
+                      help="check the files in the specified directory",
+                      dest="directory", default=".")
+    parser.add_option("-m", "--mimetype", metavar="MIMETYPE",
+                      help="Add MIMETYPE to list of whitelisted mimetypes.",
+                      dest="whitelisted_mimetypes", action="append",
+                      default=DEFAULT_WHITELISTED_MIMETYPES)
+    parser.add_option("-e", "--extension", metavar="EXTENSION",
+                      help="Add EXTENSION to list of whitelisted extensions.",
+                      dest="whitelisted_extensions", action="append",
+                      default=DEFAULT_WHITELISTED_EXTENSIONS)
+
+    (options, args) = parser.parse_args()
+
+    if len(args) != 0:
+        Logger.error("This script does not take any additional parameters.")
+        sys.exit(1)
+
+    whitelisted_extensions = [x.lower() for x in options.whitelisted_extensions]
+    suspicious_source(options.whitelisted_mimetypes, whitelisted_extensions,
+                      options.directory, options.verbose)
+
+if __name__ == "__main__":
+    main()

@@ -35,6 +35,8 @@ clean_translated_manpages:
 clean: clean_scripts clean_translated_manpages
 	rm -f version conf.default make_scripts
 
+test: test_scripts
+
 install: all install_scripts
 	cp -a $(PERL_MODULES) $(DESTDIR)$(PERLMOD_DIR)
 	cp $(EXAMPLES) $(DESTDIR)$(EXAMPLES_DIR)
@@ -48,6 +50,9 @@ make_scripts: version
 	touch $@
 clean_scripts: clean_translated_manpages
 	$(MAKE) -C scripts/ clean
+test_scripts:
+	$(MAKE) -C scripts/ test
 install_scripts:
 	$(MAKE) -C scripts/ install DESTDIR=$(DESTDIR)
 
+.PHONY: test

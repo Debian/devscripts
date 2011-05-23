@@ -1,0 +1,74 @@
+.\" Copyright (c) 2010, Benjamin Drung <bdrung@debian.org>
+.\"
+.\" Permission to use, copy, modify, and/or distribute this software for any
+.\" purpose with or without fee is hereby granted, provided that the above
+.\" copyright notice and this permission notice appear in all copies.
+.\"
+.\" THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+.\" WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+.\" MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+.\" ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+.\" WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+.\" ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+.\" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+.\"
+.TH WRAP\-AND\-SORT 1 "Debian Utilities" "DEBIAN"
+.SH NAME
+wrap-and-sort \- wrap long lines and sort items in Debian packaging files
+.SH SYNOPSIS
+.B wrap-and-sort
+[\fIoptions\fR]
+
+.SH DESCRIPTION
+\fBwrap\-and\-sort\fP wraps the package lists in Debian control files. By
+default the lists will only split into multiple lines if the entries are longer
+than 80 characters. \fBwrap\-and\-sort\fP sorts the package lists in Debian
+control files and all .install files. Beside that \fBwrap\-and\-sort\fP removes
+trailing spaces in these files.
+.PP
+This script should be run in the root of a Debian package tree. It searches for
+control, control.in, copyright, copyright.in, install, and *.install in the
+debian directory.
+
+.SH OPTIONS
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+show this help message and exit
+.TP
+\fB\-a\fR, \fB\-\-wrap\-always\fR
+wrap all package lists in the Debian control file
+even if the entries are shorter than 80 characters and could fit in one line
+line
+.TP
+\fB\-s\fR, \fB\-\-short\-indent\fR
+only indent wrapped lines by one space (default is in\-line with the
+field name)
+.TP
+\fB\-b\fR, \fB\-\-sort\-binary\-packages\fR
+sort binary package paragraphs by name
+.TP
+\fB\-k\fR, \fB\-\-keep\-first\fR
+When sorting binary package paragraphs, leave the first one at the top.
+Unqualified
+.BR debhelper (7)
+configuration files are applied to the first package.
+.TP
+\fB\-n\fR, \fB\-\-no\-cleanup\fR
+do not remove trailing whitespaces
+.TP
+\fB\-d \fIPATH\fR, \fB\-\-debian\-directory\fR=\fIPATH\fR
+location of the \fIdebian\fR directory (default: \fB./debian\fR)
+.TP
+\fB\-f\fI FILE\fR, \fB\-\-file\fR=\fIFILE\fR
+Wrap and sort only the specified file.
+You can specify this parameter multiple times.
+All supported files will be processed if no files are specified.
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+print all files that are touched
+
+.SH AUTHORS
+\fBwrap\-and\-sort\fP and this manpage has been written by
+Benjamin Drung <bdrung@debian.org>.
+.PP
+Both are released under the ISC license.

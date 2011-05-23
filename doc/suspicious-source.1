@@ -1,0 +1,55 @@
+.\" Copyright (c) 2010, Benjamin Drung <bdrung@debian.org>
+.\"
+.\" Permission to use, copy, modify, and/or distribute this software for any
+.\" purpose with or without fee is hereby granted, provided that the above
+.\" copyright notice and this permission notice appear in all copies.
+.\"
+.\" THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+.\" WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+.\" MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+.\" ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+.\" WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+.\" ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+.\" OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+.\"
+.TH SUSPICIOUS\-SOURCE 1 "Debian Utilities" "DEBIAN"
+
+.SH NAME
+suspicious\-source \- search for files that are not the GPL's
+"preferred form of modification"
+
+.SH SYNOPSIS
+\fBsuspicious\-source\fP [\fIoptions\fR]
+
+.SH DESCRIPTION
+\fBsuspicious\-source\fP is a script that outputs a list of files which
+are not common source files.
+This should be run in the root of a source tree to find files which might
+not be the "preferred form of modification" that the GPL and other licenses
+require.
+.PP
+The files inside version control system directories (like
+".bzr/" or "CVS/") are not considered.
+
+.SH OPTIONS
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+show this help message and exit
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+print more information
+.TP
+\fB\-d\fR DIRECTORY, \fB\-\-directory\fR=\fIDIRECTORY\fR
+check the files in the specified directory instead of the current directory
+.TP
+\fB\-m\fR MIMETYPE, \fB\-\-mimetype\fR=\fIMIMETYPE\fR
+Add MIMETYPE to list of white-listed mime-types.
+.TP
+\fB\-e\fR EXTENSION, \fB\-\-extension\fR=\fIEXTENSION\fR
+Add EXTENSION to list of white-listed extensions.
+
+.SH AUTHORS
+\fBsuspicious\-source\fP and this manpage has been written by
+Benjamin Drung <bdrung@debian.org>.
+.PP
+Both are released under the ISC license.

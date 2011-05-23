@@ -11,8 +11,8 @@ devscripts (2.10.74) UNRELEASED; urgency=low
     + rmadison: Use Ubuntu's rmadison instance on Ubuntu.
 
   [ Benjamin Drung ]
-  * Move add-patch, edit-patch, and what-patch from ubuntu-dev-tools into
-    devscripts (Closes: #568481).
+  * Move add-patch, edit-patch, suspicious-source, what-patch, and wrap-and-sort
+    from ubuntu-dev-tools into devscripts (Closes: #568481).
   * Remove EOL whitespaces (Closes: #502525).
   * dget.1: Mention `debcheckout` under `SEE ALSO`. Thanks to Paul Menzel for
     the patch. (Closes: #596245)
