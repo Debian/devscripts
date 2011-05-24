@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2011-05-24 03:21+0000\n"
+"POT-Creation-Date: 2011-05-24 23:24+0300\n"
 "PO-Revision-Date: 2011-05-24 00:24-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -325,7 +325,7 @@ msgstr ""
 #: ../scripts/debclean.1:107 ../scripts/debcommit.pl:853
 #: ../scripts/debdiff.1:215 ../scripts/debi.1:122 ../scripts/debrelease.1:132
 #: ../scripts/deb-reversion.dbk:247 ../scripts/debrsign.1:66
-#: ../scripts/debsign.1:140 ../scripts/debsnap.1:99 ../scripts/debuild.1:410
+#: ../scripts/debsign.1:143 ../scripts/debsnap.1:99 ../scripts/debuild.1:410
 #: ../scripts/dget.pl:646 ../scripts/diff2patches.1:45
 #: ../scripts/dpkg-depcheck.1:118 ../scripts/dpkg-genbuilddeps.1:30
 #: ../scripts/dscverify.1:73 ../scripts/grep-excuses.1:38
@@ -372,7 +372,7 @@ msgstr ""
 #: ../scripts/debcommit.pl:849 ../scripts/debdiff.1:222 ../scripts/debi.1:126
 #: ../scripts/debpkg.1:23 ../scripts/debrelease.1:137
 #: ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:71
-#: ../scripts/debsign.1:153 ../scripts/debuild.1:423
+#: ../scripts/debsign.1:156 ../scripts/debuild.1:423
 #: ../scripts/desktop2menu.pl:52 ../scripts/dget.pl:638
 #: ../scripts/diff2patches.1:48 ../scripts/dpkg-genbuilddeps.1:36
 #: ../scripts/dscverify.1:78 ../scripts/getbuildlog.1:41
@@ -800,8 +800,8 @@ msgid ""
 "B<show> and B<bugs> commands."
 msgstr ""
 "Ouvrir un client de messagerie pour parcourir la boîte de messagerie "
-"(« mbox ») correspondant à un numéro de bogue donné, pour les commandes B<show> "
-"et B<bugs>."
+"(« mbox ») correspondant à un numéro de bogue donné, pour les commandes "
+"B<show> et B<bugs>."
 
 #. type: =item
 #: ../scripts/bts.pl:266
@@ -2893,8 +2893,8 @@ msgid ""
 msgstr ""
 "Si elle est positionnée à B<yes>, équivaut à utiliser le paramètre en ligne "
 "de commande B<--force-refresh>. Ceci n'affecte que la commande B<cache>. La "
-"valeur par défaut est B<no>. Veuillez consulter la commande B<cache> pour plus "
-"d'informations."
+"valeur par défaut est B<no>. Veuillez consulter la commande B<cache> pour "
+"plus d'informations."
 
 #. type: =item
 #: ../scripts/bts.pl:4030
@@ -3005,9 +3005,9 @@ msgid ""
 "information."
 msgstr ""
 "Si elle est positionnée à B<no>, équivaut à utiliser le paramètre en ligne "
-"de commande B<--no-include-resolved>. Ceci n'affecte que la commande B<cache>. "
-"La valeur par défaut est B<yes>. Veuillez consulter la commande B<cache> pour "
-"plus d'informations."
+"de commande B<--no-include-resolved>. Ceci n'affecte que la commande "
+"B<cache>. La valeur par défaut est B<yes>. Veuillez consulter la commande "
+"B<cache> pour plus d'informations."
 
 #. type: =item
 #: ../scripts/bts.pl:4071
@@ -3369,7 +3369,8 @@ msgstr "B<-a>, B<--arch> I<ARCH>"
 #. type: textblock
 #: ../scripts/chdist.pl:47
 msgid "Choose architecture (default: `B<dpkg --print-architecture>`)."
-msgstr "Choisir l'architecture (par défaut : « B<dpkg --print-architecture> »)."
+msgstr ""
+"Choisir l'architecture (par défaut : « B<dpkg --print-architecture> »)."
 
 #. type: Plain text
 #: ../scripts/chdist.pl:51 ../scripts/deb-reversion.dbk:239
@@ -3847,10 +3848,10 @@ msgid ""
 "option is not passed it is an error for the specified B<--dist> or B<--arch> "
 "to not have an existing B<cowbuilder> root in the expected location."
 msgstr ""
-"Créer la racine B<cowbuilder> distante si elle n'existe toujours pas. Si cette "
-"option n'est pas fournie, une distribution ou architecture (indiquées par "
-"B<--dist> ou B<--arch>) qui n'aurait pas de racine B<cowbuilder> sera considéré "
-"comme une erreur."
+"Créer la racine B<cowbuilder> distante si elle n'existe toujours pas. Si "
+"cette option n'est pas fournie, une distribution ou architecture (indiquées "
+"par B<--dist> ou B<--arch>) qui n'aurait pas de racine B<cowbuilder> sera "
+"considéré comme une erreur."
 
 #. type: TP
 #: ../scripts/cowpoke.1:62
@@ -4329,9 +4330,9 @@ msgstr ""
 "Il n'y a rien de particulier à faire pour configurer une instance de "
 "B<cowbuilder> pour qu'elle puisse être utilisée avec B<cowpoke>. Créer la "
 "simplement telle que vous en avez besoin avec « B<cowbuilder --create> » en "
-"suivant la documentation de B<cowbuilder>, puis configurez B<cowpoke> avec les "
-"informations sur l'utilisateur, l'architecture et le chemin nécessaire pour "
-"y accéder sur les machines où vous souhaitez l'appeler (ou configurez "
+"suivant la documentation de B<cowbuilder>, puis configurez B<cowpoke> avec "
+"les informations sur l'utilisateur, l'architecture et le chemin nécessaire "
+"pour y accéder sur les machines où vous souhaitez l'appeler (ou configurez "
 "B<cowpoke> avec les informations sur le chemin, l'architecture et la "
 "distribution et fournissez lui l'option B<--create> lors du premier appel). "
 "L'hôte de construction sur lequel B<cowbuilder> tourne n'a pas besoin que "
@@ -4396,12 +4397,12 @@ msgid ""
 "the build root."
 msgstr ""
 "Quand B<cowpoke> est appelé, il cherche d'abord à mettre à jour l'image "
-"B<cowbuilder> si cela n'a pas déjà été fait le même jour. Cette vérification se "
-"base sur la présence d'un fichier I<cowbuilder-$arch-$dist-update-log-$date> "
-"dans le répertoire B<INCOMING_DIR>. Vous pouvez déplacer, renommer ou "
+"B<cowbuilder> si cela n'a pas déjà été fait le même jour. Cette vérification "
+"se base sur la présence d'un fichier I<cowbuilder-$arch-$dist-update-log-"
+"$date> dans le répertoire B<INCOMING_DIR>. Vous pouvez déplacer, renommer ou "
 "toucher ce fichier si vous souhaitez que l'image soit mise à jour plus ou "
-"moins souvent. Son contenu liste les sorties de B<cowbuilder> pendant la mise à "
-"jour (ou la création) de la racine de construction."
+"moins souvent. Son contenu liste les sorties de B<cowbuilder> pendant la "
+"mise à jour (ou la création) de la racine de construction."
 
 #. type: =head1
 #: ../scripts/cowpoke.1:253 ../scripts/rmadison.pl:321
@@ -5929,7 +5930,7 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/debc.1:98 ../scripts/debi.1:105 ../scripts/debrelease.1:116
-#: ../scripts/debsign.1:130
+#: ../scripts/debsign.1:133
 #, no-wrap
 msgid "B<DEBRELEASE_DEBS_DIR>"
 msgstr "B<DEBRELEASE_DEBS_DIR>"
@@ -6512,9 +6513,9 @@ msgstr ""
 "soit en ajoutant « B<.1> » à une version non-NMU (à moins qu'il s'agisse "
 "d'un paquet Debian natif, auquel cas « B<+nmu1> » est ajouté) soit en "
 "incrémentant un numéro de NMU. Ceci se produit automatiquement si l'auteur "
-"du paquet n'est pas dans les champs B<Maintainer> ou B<Uploaders> de I<debian/"
-"control>, à moins que B<DEBCHANGE_AUTO_NMU> soit définie à I<no> ou que "
-"l'option B<--no-auto-nmu> soit utilisée."
+"du paquet n'est pas dans les champs B<Maintainer> ou B<Uploaders> de "
+"I<debian/control>, à moins que B<DEBCHANGE_AUTO_NMU> soit définie à I<no> ou "
+"que l'option B<--no-auto-nmu> soit utilisée."
 
 #. type: TP
 #: ../scripts/debchange.1:218
@@ -9880,7 +9881,7 @@ msgid "B<debsign>(1), B<dpkg-architecture>(1)  and B<ssh>(1)."
 msgstr "B<debsign>(1), B<dpkg-architecture>(1) et B<ssh>(1)."
 
 #. type: Plain text
-#: ../scripts/debrsign.1:73 ../scripts/debsign.1:155
+#: ../scripts/debrsign.1:73 ../scripts/debsign.1:158
 msgid ""
 "This program was written by Julian Gilbey E<lt>jdg@debian.orgE<gt> and is "
 "copyright under the GPL, version 2 or later."
@@ -10171,8 +10172,21 @@ msgstr "Équivaut à utiliser l'option B<-m>."
 msgid "And this is the B<-k> option."
 msgstr "Équivaut à utiliser l'option B<-k>."
 
+#. type: TP
+#: ../scripts/debsign.1:130
+#, fuzzy, no-wrap
+#| msgid "B<DEBSIGN_MAINT>"
+msgid "B<DEBSIGN_ALWAYS_RESIGN>"
+msgstr "B<DEBSIGN_MAINT>"
+
 #. type: Plain text
-#: ../scripts/debsign.1:140
+#: ../scripts/debsign.1:133
+msgid ""
+"Always re-sign files even if they are already signed, without prompting."
+msgstr ""
+
+#. type: Plain text
+#: ../scripts/debsign.1:143
 msgid ""
 "This specifies the directory in which to look for the I<.changes> and I<."
 "dsc> files, and is either an absolute path or relative to the top of the "
@@ -10190,7 +10204,7 @@ msgstr ""
 "le nom étrange de l'option."
 
 #. type: Plain text
-#: ../scripts/debsign.1:153
+#: ../scripts/debsign.1:156
 msgid ""
 "B<debrsign>(1), B<dpkg-buildpackage>(1), B<dpkg-architecture>(1), B<debuild>"
 "(1), B<md5sum>(1), B<sha1sum>(1), B<sha256sum>(1), B<gpg>(1), B<pgp>(1), "
@@ -10646,8 +10660,8 @@ msgstr ""
 "par les fichiers égarés, il examine le nom du répertoire parent une fois le "
 "fichier I<debian/changelog> trouvé, et vérifie que le nom du répertoire "
 "correspond au nom du paquet. La façon précise utilisée est contrôlée par les "
-"deux variables du fichier de configuration B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> et "
-"B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>, et les options en ligne de commande "
+"deux variables du fichier de configuration B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> "
+"et B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>, et les options en ligne de commande "
 "associées B<--check-dirname-level> et B<--check-dirname-regex>."
 
 #. type: Plain text
@@ -10667,8 +10681,8 @@ msgid ""
 msgstr ""
 "Le nom du répertoire est vérifié en testant si le nom du répertoire courant "
 "(donné par B<pwd>(1)) correspond à l'expression rationnelle donnée par la "
-"variable B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> du fichier de configuration ou par "
-"l'option B<--check-dirname-regex> I<regex>. Il s'agit d'une expression "
+"variable B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> du fichier de configuration ou "
+"par l'option B<--check-dirname-regex> I<regex>. Il s'agit d'une expression "
 "rationnelle Perl (voir B<perlre>(1)), qui sera ancrée à son début et à sa "
 "fin. Si elle contient un « / », alors elle doit correspondre au chemin "
 "complet. Si elle contient la chaîne « PACKAGE », cette chaîne sera remplacée "
@@ -10690,12 +10704,13 @@ msgid ""
 msgstr ""
 "Comme les variables d'environnement peuvent affecter la construction d'un "
 "paquet, souvent de façon involontaire, B<debuild> nettoie l'environnement en "
-"enlevant toutes les variables d'environnement, à l'exception de B<TERM>, B<HOME>, "
-"B<LOGNAME>, B<GNUPGHOME>, B<PGPPATH>, B<GPG_AGENT_INFO>, B<FAKEROOTKEY>, B<DEB_>I<*>, des "
-"variables (B<C>, B<CPP>, B<CXX>, B<LD> et B<F>)B<FLAGS> et les variables B<_APPEND> associées, "
-"ainsi que les variables pour les paramètres régionaux B<LANG> et B<LC_>I<*>. La "
-"variable B<TERM> vaut « dumb » si elle n'est pas positionnée, et B<PATH> est "
-"positionnée à « /usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11 »."
+"enlevant toutes les variables d'environnement, à l'exception de B<TERM>, "
+"B<HOME>, B<LOGNAME>, B<GNUPGHOME>, B<PGPPATH>, B<GPG_AGENT_INFO>, "
+"B<FAKEROOTKEY>, B<DEB_>I<*>, des variables (B<C>, B<CPP>, B<CXX>, B<LD> et "
+"B<F>)B<FLAGS> et les variables B<_APPEND> associées, ainsi que les variables "
+"pour les paramètres régionaux B<LANG> et B<LC_>I<*>. La variable B<TERM> "
+"vaut « dumb » si elle n'est pas positionnée, et B<PATH> est positionnée à « /"
+"usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11 »."
 
 #. type: Plain text
 #: ../scripts/debuild.1:105
@@ -10836,10 +10851,10 @@ msgid ""
 msgstr ""
 "B<debuild> gère un certain nombre de points d'accroche (« hook ») quand il "
 "exécute B<dpkg-buildpackage>. Notez que si un des points d'accroche entre "
-"B<clean-hook> et B<final-hook> (inclus) est utilisé, B<debuild> émulera certaines "
-"sections du processus B<dpkg-buildpackage> plutôt que de les exécuter "
-"directement, puisque B<dpkg-buildpackage> n'a pas de point d'accroche. Les "
-"points d'accroche suivants sont disponibles :"
+"B<clean-hook> et B<final-hook> (inclus) est utilisé, B<debuild> émulera "
+"certaines sections du processus B<dpkg-buildpackage> plutôt que de les "
+"exécuter directement, puisque B<dpkg-buildpackage> n'a pas de point "
+"d'accroche. Les points d'accroche suivants sont disponibles :"
 
 #. type: TP
 #: ../scripts/debuild.1:153
@@ -10888,9 +10903,9 @@ msgid ""
 "Run after cleaning the tree and before running B<dpkg-source>.  (Run even if "
 "B<dpkg-source> is not being called because B<-b>, B<-B>, or B<-A> is used.)"
 msgstr ""
-"S'exécute après le nettoyage du source et avant l'exécution de B<dpkg-source>. "
-"(S'exécute même si B<dpkg-source> n'est pas appelé car B<-b>, B<-B>, ou B<-A> est "
-"utilisée.)"
+"S'exécute après le nettoyage du source et avant l'exécution de B<dpkg-"
+"source>. (S'exécute même si B<dpkg-source> n'est pas appelé car B<-b>, B<-"
+"B>, ou B<-A> est utilisée.)"
 
 #. type: TP
 #: ../scripts/debuild.1:165
@@ -10944,8 +10959,8 @@ msgstr "B<dpkg-genchanges-hook>"
 msgid ""
 "Run after the binary package is built and before calling B<dpkg-genchanges>."
 msgstr ""
-"S'exécute seulement après la construction du paquet et avant l'appel à B<dpkg-"
-"genchanges>."
+"S'exécute seulement après la construction du paquet et avant l'appel à "
+"B<dpkg-genchanges>."
 
 #. type: TP
 #: ../scripts/debuild.1:178
@@ -11030,16 +11045,17 @@ msgstr ""
 "configuration, par exemple avec DEBUILD_SIGNING_HOOK='toto' (notez que les "
 "tirets ont été modifiés en caractères de soulignement), ou avec l'option en "
 "ligne de commande B<--signing-hook-foo>. La commande sera en partie "
-"modifiée : B<%%> deviendra un signe B<%> simple, B<%p> sera remplacé par le nom du "
-"paquet, B<%v> par le numéro de version du paquet, B<%s> par le numéro de version "
-"du source et B<%u> par le numéro de version amont. Ni B<%s> ni B<%u> ne contiendra de "
-"temps absolu (« epoch »). B<%a> sera B<1> si l'action suivante doit être effectuée "
-"et B<0> dans le cas contraire (par exemple, dans le crochet B<dpkg-source>, B<%a> "
-"sera B<1> si B<dpkg-source> doit être lancé et B<0> sinon). Elle sera alors passée à "
-"l'interpréteur de commandes pour être traitée, et peut donc inclure des "
-"redirections ou des choses du genre. Par exemple, pour ne lancer que le "
-"crochet B<dpkg-source> si B<dpkg-source> doit être exécutée, le crochet peut "
-"ressemble à ceci : « if [ %a -eq 1 ]; then ...; fi »."
+"modifiée : B<%%> deviendra un signe B<%> simple, B<%p> sera remplacé par le "
+"nom du paquet, B<%v> par le numéro de version du paquet, B<%s> par le numéro "
+"de version du source et B<%u> par le numéro de version amont. Ni B<%s> ni B<"
+"%u> ne contiendra de temps absolu (« epoch »). B<%a> sera B<1> si l'action "
+"suivante doit être effectuée et B<0> dans le cas contraire (par exemple, "
+"dans le crochet B<dpkg-source>, B<%a> sera B<1> si B<dpkg-source> doit être "
+"lancé et B<0> sinon). Elle sera alors passée à l'interpréteur de commandes "
+"pour être traitée, et peut donc inclure des redirections ou des choses du "
+"genre. Par exemple, pour ne lancer que le crochet B<dpkg-source> si B<dpkg-"
+"source> doit être exécutée, le crochet peut ressemble à ceci : « if [ %a -eq "
+"1 ]; then ...; fi »."
 
 #. type: Plain text
 #: ../scripts/debuild.1:213
@@ -11236,8 +11252,8 @@ msgid ""
 "See the above section B<Directory name checking> for an explanation of this "
 "option."
 msgstr ""
-"Veuillez consulter la section ci-dessus B<Vérification du nom du "
-"répertoire> pour une explication de cette option."
+"Veuillez consulter la section ci-dessus B<Vérification du nom du répertoire> "
+"pour une explication de cette option."
 
 #. type: Plain text
 #: ../scripts/debuild.1:287
@@ -11480,11 +11496,11 @@ msgid ""
 "will therefore affect all B<devscripts> scripts which check their value, as "
 "described in their respective manpages and in B<devscripts.conf>(5)."
 msgstr ""
-"Veuillez consulter la section B<Vérification du nom du répertoire> ci-"
-"dessus pour une explication de ces variables. Notez que ce sont des "
-"variables de configuration pour tous les outils du paquet B<devscripts> ; "
-"elles impacteront tous les scripts qui les utilisent, comme indiqué dans "
-"leurs pages de manuel respectives et dans B<devscripts.conf>(5)."
+"Veuillez consulter la section B<Vérification du nom du répertoire> ci-dessus "
+"pour une explication de ces variables. Notez que ce sont des variables de "
+"configuration pour tous les outils du paquet B<devscripts> ; elles "
+"impacteront tous les scripts qui les utilisent, comme indiqué dans leurs "
+"pages de manuel respectives et dans B<devscripts.conf>(5)."
 
 #. type: Plain text
 #: ../scripts/debuild.1:371
@@ -11545,8 +11561,9 @@ msgstr ""
 "Prenez note de l'ordre des options : d'abord les options de B<debuild>, puis "
 "celles de B<dpkg-buildpackage> et enfin celles de B<lintian> (B<lintian> est "
 "appelé par défaut). Si vous utilisez toujours les mêmes options de B<dpkg-"
-"buildpackage>, vous pouvez utiliser l'option B<DEBUILD_DPKG_BUILDPACKAGE_OPTS> "
-"du fichier de configuration, comme décrit plus haut."
+"buildpackage>, vous pouvez utiliser l'option "
+"B<DEBUILD_DPKG_BUILDPACKAGE_OPTS> du fichier de configuration, comme décrit "
+"plus haut."
 
 #. type: Plain text
 #: ../scripts/debuild.1:398
@@ -11589,9 +11606,9 @@ msgstr ""
 "où 0x12345678 est remplacé par l'identifiant de votre clé GPG ou un autre "
 "identifiant de clé tel que votre adresse de messagerie. De nouveau, Vous "
 "pouvez également utiliser l'option du fichier de configuration "
-"B<DEBUILD_DPKG_BUILDPACKAGE_OPTS> tel que cela est décrit plus haut pour éviter "
-"d'avoir à taper l'option B<-k> à chaque fois que vous effectuez un envoi "
-"sponsorisé."
+"B<DEBUILD_DPKG_BUILDPACKAGE_OPTS> tel que cela est décrit plus haut pour "
+"éviter d'avoir à taper l'option B<-k> à chaque fois que vous effectuez un "
+"envoi sponsorisé."
 
 #. type: Plain text
 #: ../scripts/debuild.1:423
@@ -12000,9 +12017,13 @@ msgstr "I<debchange/dch>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:61
+#, fuzzy
+#| msgid ""
+#| "automagically add entries to debian/changelog files [libparse-debcontrol-"
+#| "perl, libsoap-lite-perl, lsb-release]"
 msgid ""
 "automagically add entries to debian/changelog files [libparse-debcontrol-"
-"perl, libsoap-lite-perl, lsb-release]"
+"perl, libsoap-lite-perl]"
 msgstr ""
 "ajouter automatiquement des entrées aux fichiers debian/changelog [libparse-"
 "debcontrol-perl, libsoap-lite-perl, lsb-release]"
@@ -12825,7 +12846,8 @@ msgid ""
 "B<apt-get>(1), B<debcheckout>(1), B<debdiff>(1), B<dpkg-source>(1), B<curl>"
 "(1), B<wget>(1)."
 msgstr ""
-"B<apt-get>(1), B<debcheckout>(1), B<debdiff>(1), B<dpkg-source>(1), B<curl>(1), B<wget>(1)."
+"B<apt-get>(1), B<debcheckout>(1), B<debdiff>(1), B<dpkg-source>(1), B<curl>"
+"(1), B<wget>(1)."
 
 #. type: TH
 #: ../scripts/diff2patches.1:1
@@ -16936,8 +16958,8 @@ msgid ""
 "Comment lines may be introduced with a `B<#>' character.  Continuation lines "
 "may be indicated by terminating a line with a backslash character."
 msgstr ""
-"Des lignes de commentaire peuvent être ajoutées avec un caractère «B<#>». Les "
-"lignes peuvent se poursuivre à la ligne suivante en les terminant par un "
+"Des lignes de commentaire peuvent être ajoutées avec un caractère «B<#>». "
+"Les lignes peuvent se poursuivre à la ligne suivante en les terminant par un "
 "caractère backslash (« \\e »)."
 
 #. type: Plain text
@@ -19167,7 +19189,9 @@ msgstr ""
 #~ msgstr "B<--no-conf>, B<--noconf>"
 
 #~ msgid "B<--rootcmd=>I<gain-root-command, >B<-r>I<gain-root-command>"
-#~ msgstr "B<--rootcmd>=I<commande-pour-devenir-root>, B<-r>I<commande-pour-devenir-root>"
+#~ msgstr ""
+#~ "B<--rootcmd>=I<commande-pour-devenir-root>, B<-r>I<commande-pour-devenir-"
+#~ "root>"
 
 #~ msgid "B<--preserve-envvar=>I<var, >B<-e>I<var>"
 #~ msgstr "B<--preserve-envvar>=I<var>, B<-e>I<var>"
