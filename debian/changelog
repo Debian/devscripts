@@ -17,11 +17,13 @@ devscripts (2.10.74) UNRELEASED; urgency=low
   * dget.1: Mention `debcheckout` under `SEE ALSO`. Thanks to Paul Menzel for
     the patch. (Closes: #596245)
   * debchange, uupdate: Use dpkg-vendor instead of lsb_release.
+  * Merge from Ubuntu:
+    + debuild: Enforce Ubuntu merge policy.
 
   [ David Prévot ]
   * Partial manual pages convention review (Closes: #626015).
 
- -- Benjamin Drung <bdrung@debian.org>  Sun, 22 May 2011 19:37:52 +0200
+ -- Benjamin Drung <bdrung@debian.org>  Tue, 24 May 2011 12:09:19 +0200
 
 devscripts (2.10.73) unstable; urgency=low
 

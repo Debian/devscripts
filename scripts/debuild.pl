@@ -1167,6 +1167,16 @@ EOT
 	close CHANGES
 	    or fatal "problem writing to ../$changes: $!";
 
+	# check Ubuntu merge Policy: When merging with Debian, -v must be used
+	# and the remaining changes described
+	my $ch = join "\n", @changefilecontents;
+	if ($sourceonly && $version =~ /ubuntu1$/ && $ENV{'DEBEMAIL'} =~ /ubuntu/ &&
+	    $ch =~ /(merge|sync).*Debian/i) {
+	    push (@warnings, "Ubuntu merge policy: when merging Ubuntu packages with Debian, -v must be used") unless $since;
+	    push (@warnings, "Ubuntu merge policy: when merging Ubuntu packages with Debian, changelog must describe the remaining Ubuntu changes")
+		unless $ch =~ /Changes:.*(remaining|Ubuntu)(.|\n )*(differen|changes)/is;
+	}
+
 	run_hook('final-clean', $cleansource);
 
 	# Final dpkg-buildpackage action: clean target again
