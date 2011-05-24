@@ -719,6 +719,17 @@ EOF
 
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.10.74
+	then
+	    cat >> /etc/devscripts.conf << EOF
+#### debsign option added in 2.10.74
+#
+# Always re-sign files even if they are already signed, without prompting.
+# DEBSIGN_ALWAYS_RESIGN=yes
+
+EOF
+	fi
     fi
 fi
 

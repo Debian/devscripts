@@ -299,6 +299,9 @@
 # debsign recognises the DEBRELEASE_DEBS_DIR variable; see debrelease
 # above for more information.
 #
+# Always re-sign files even if they are already signed, without prompting.
+# DEBSIGN_ALWAYS_RESIGN=yes
+#
 # Which signing program to use?  gpg and pgp are the usual values; the
 # default is determined as described in the manpage.
 # Corresponds to -p option
