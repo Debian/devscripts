@@ -234,8 +234,11 @@ check_already_signed () {
     elif [ "$opt_re_sign" = "false" ]; then
 	resign="false"
     else
-	printf "The .$2 file is already signed.\nWould you like to use the current signature? [Yn]"
-	read response
+	response=n
+	if [ -z "$DEBSIGN_ALWAYS_RESIGN" ]; then
+	    printf "The .$2 file is already signed.\nWould you like to use the current signature? [Yn]"
+	    read response
+	fi
 	case $response in
 	[Nn]*) resign="true" ;;
 	*)     resign="false" ;;
@@ -258,13 +261,14 @@ check_already_signed () {
 unset GREP_OPTIONS
 
 # Boilerplate: set config variables
+DEFAULT_DEBSIGN_ALWAYS_RESIGN=
 DEFAULT_DEBSIGN_PROGRAM=
 DEFAULT_DEBSIGN_SIGNLIKE=
 DEFAULT_DEBSIGN_MAINT=
 DEFAULT_DEBSIGN_KEYID=
 DEFAULT_DEBRELEASE_DEBS_DIR=..
-VARS="DEBSIGN_PROGRAM DEBSIGN_SIGNLIKE DEBSIGN_MAINT DEBSIGN_KEYID"
-VARS="$VARS DEBRELEASE_DEBS_DIR"
+VARS="DEBSIGN_ALWAYS_RESIGN DEBSIGN_PROGRAM DEBSIGN_SIGNLIKE DEBSIGN_MAINT"
+VARS="$VARS DEBSIGN_KEYID DEBRELEASE_DEBS_DIR"
 
 if [ "$1" = "--no-conf" -o "$1" = "--noconf" ]; then
     shift
