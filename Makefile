@@ -35,7 +35,7 @@ clean_translated_manpages:
 clean: clean_scripts clean_translated_manpages
 	rm -f version conf.default make_scripts
 
-test: test_scripts
+test: test_test test_scripts
 
 install: all install_scripts
 	cp -a $(PERL_MODULES) $(DESTDIR)$(PERLMOD_DIR)
@@ -44,6 +44,9 @@ install: all install_scripts
 	install -dD $(DESTDIR)$(MAN1DIR)
 	cp doc/*.1 $(DESTDIR)$(MAN1DIR)
 	ln -sf edit-patch.1 $(DESTDIR)$(MAN1DIR)/add-patch.1
+
+test_test:
+	$(MAKE) -C test/ test
 
 make_scripts: version
 	$(MAKE) -C scripts/

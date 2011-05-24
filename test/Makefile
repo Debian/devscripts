@@ -1,0 +1,3 @@
+test:
+
+.PHONY: test

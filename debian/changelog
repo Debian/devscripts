@@ -21,11 +21,12 @@ devscripts (2.10.74) UNRELEASED; urgency=low
     + debuild: Enforce Ubuntu merge policy.
     + debsign: Implement DEBSIGN_ALWAYS_RESIGN variable to skip the
       "Would you like to use the current signature?" question. (Closes: #447955)
+  * Add test infrastructure.
 
   [ David Prévot ]
   * Partial manual pages convention review (Closes: #626015).
 
- -- Benjamin Drung <bdrung@debian.org>  Tue, 24 May 2011 12:21:48 +0200
+ -- Benjamin Drung <bdrung@debian.org>  Tue, 24 May 2011 14:03:16 +0200
 
 devscripts (2.10.73) unstable; urgency=low
 
