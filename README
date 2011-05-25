@@ -156,6 +156,9 @@ And now, in mostly alphabetical order, the scripts:
   current Debian keyring on your system. [gnupg, debian-keyring,
   libdigest-md5-perl]
 
+- edit-patch: add/edit a patch for a source package and commit the changes
+  [quilt | dpatch | cdbs]
+
 - getbuildlog: Download package build logs from Debian auto-builders. [wget]
 
 - grep-excuses: grep the update_excuses.html file to find out what is
@@ -195,6 +198,9 @@ And now, in mostly alphabetical order, the scripts:
 - rmadison: Remotely query the Debian archive database about packages.
   [liburi-perl, wget | curl]
 
+- suspicious-source: outputs a list of files which are not common source
+  files [python-magic]
+
 - svnpath: Prints the path to the suversion repository of a subversion
   checkout. Also supports calculating the paths for branches and
   tags in a repository independent fashion. Used by debcommit to generate
@@ -218,6 +224,9 @@ And now, in mostly alphabetical order, the scripts:
   package.  It will try to apply the latest diffs to your package and
   tell you how successful it was. [patch]
 
+- what-patch: determines what patch system, if any, a source package is using
+  [patchutils]
+
 - whodepends: check which maintainers' packages depend on a package
 
 - who-uploads: determine the most recent uploaders of a package to the
@@ -228,6 +237,9 @@ And now, in mostly alphabetical order, the scripts:
 
 - wnpp-check: check whether there is an open request for packaging or
   intention to package bug for a package [wget]
+
+- wrap-and-sort: wrap long lines and sort items in packaging files
+  [python-debian]
 
 - /usr/share/doc/devscripts/examples: This directory contains examples of
   procmail and exim scripts for sorting mail arriving to Debian

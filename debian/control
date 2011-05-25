@@ -152,6 +152,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
     debian/ or, if present, debian/patches [patchutils]
   - dscverify: verify the integrity of a Debian package from the
     .changes or .dsc files [gnupg, debian-keyring, libdigest-md5-perl]
+  - edit-patch: add/edit a patch for a source package and commit the changes
+    [quilt | dpatch | cdbs]
   - getbuildlog: download package build logs from Debian auto-builders [wget]
   - grep-excuses: grep the update_excuses.html file for your packages
     [libterm-size-perl, wget, w3m]
@@ -174,6 +176,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - rc-alert: list installed packages which have release-critical bugs [wget]
   - rmadison: remotely query the Debian archive database about packages
     [wget | curl, liburi-perl]
+  - suspicious-source: outputs a list of files which are not common source
+    files [python-magic].
   - svnpath: print svn repository paths [subversion]
   - tagpending: runs from a Debian source tree and tags bugs that are to
     be closed in the latest changelog as pending. [libsoap-lite-perl]
@@ -183,6 +187,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - uscan: scan upstream sites for new releases of packages
     [libcrypt-ssleay-perl, libwww-perl, unzip, xz-utils]
   - uupdate: integrate upstream changes into a source package [patch]
+  - what-patch: determines what patch system, if any, a source package is using
+    [patchutils]
   - whodepends: check which maintainers' packages depend on a package
   - who-uploads: determine the most recent uploaders of a package to the Debian
     archive [gnupg, debian-keyring, debian-maintainers, wget]
@@ -190,6 +196,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
     adoption [wget]
   - wnpp-check: check whether there is an open request for packaging or
     intention to package bug for a package [wget]
+  - wrap-and-sort: wrap long lines and sort items in packaging files
+    [python-debian]
  .
  Also included are a set of example mail filters for filtering mail
  from Debian mailing lists using exim, procmail, etc.
