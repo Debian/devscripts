@@ -11,6 +11,7 @@ devscripts (2.11.0) UNRELEASED; urgency=low
     + rmadison: Use Ubuntu's rmadison instance on Ubuntu.
   * namecheck: Update Alioth's "unknown project" pattern.  Thanks to Nelson A.
     de Oliveira for the patch.  (Closes: #627824)
+  * Add lintian overrides for the ldconfig calls dh adds to post{inst,rm}.
 
   [ Benjamin Drung ]
   * Move add-patch, edit-patch, suspicious-source, what-patch, and wrap-and-sort
