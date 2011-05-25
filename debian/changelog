@@ -9,6 +9,8 @@ devscripts (2.11.0) UNRELEASED; urgency=low
   * Merge from Ubuntu:
     + dscverify: Use Ubuntu keyrings if on an Ubuntu-based system.
     + rmadison: Use Ubuntu's rmadison instance on Ubuntu.
+  * namecheck: Update Alioth's "unknown project" pattern.  Thanks to Nelson A.
+    de Oliveira for the patch.  (Closes: #627824)
 
   [ Benjamin Drung ]
   * Move add-patch, edit-patch, suspicious-source, what-patch, and wrap-and-sort
