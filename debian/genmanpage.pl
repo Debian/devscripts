@@ -26,6 +26,11 @@ while(<CONTROL>) {
 	$package = $1;
 	$description = $2
     }
+    # Handle the last description
+    elsif (/^ \./ and $package and $description) {
+        print $ITEM_LEADIN . $package . $ITEM_LEADOUT . "\n";
+        print $description . "\n";
+    }
     else {
 	s/^.{3}//;
 	$description .= $_;
