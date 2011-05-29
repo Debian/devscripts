@@ -1,26 +1,26 @@
 .TH WHAT\-PATCH "1" "Debian Utilities" "DEBIAN"
 .SH NAME
-what\-patch \- detects which patch system a Debian package uses
+what\-patch \- detect which patch system a Debian package uses
 
 .SH SYNOPSIS
-.B what\-patch [options]
+.B what\-patch\fR [\fIoptions\fR]
 
 .SH DESCRIPTION
-\fBwhat\-patch\fR examines the debian/rules file to determine which patch
+\fBwhat\-patch\fR examines the \fIdebian/rules\fR file to determine which patch
 system the Debian package is using.
 .PP
 \fBwhat\-patch\fR should be run from the root directory of the Debian source
 package.
 
 .SH OPTIONS
-Listed below are the command line options for what\-patch:
+Listed below are the command line options for \fBwhat\-patch\fR:
 .TP
-.B \-h or \-\-help
+.BR \-h ", " \-\-help
 Display a help message and exit.
 .TP
 .B \-v
 Enable verbose mode.
-This will include the listing of any files modified outside or the debian/
+This will include the listing of any files modified outside or the \fIdebian/\fR
 directory and report any additional details about the patch system if
 available.
 
@@ -34,7 +34,9 @@ Both are released under the GNU General Public License, version 3 or later.
 
 .SH SEE ALSO
 The Ubuntu MOTU team has some documentation about patch systems at the Ubuntu
-wiki: \fBhttps://wiki.ubuntu.com/PackagingGuide/PatchSystems\fR
+wiki: \fIhttps://wiki.ubuntu.com/PackagingGuide/PatchSystems\fR
 
 .PP
-.B cdbs\-edit\-patch(1), dbs\-edit\-patch(1), dpatch\-edit\-patch(1)
+.BR cdbs\-edit\-patch (1),
+.BR dbs\-edit\-patch (1),
+.BR dpatch\-edit\-patch (1)

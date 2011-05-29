@@ -176,8 +176,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - rc-alert: list installed packages which have release-critical bugs [wget]
   - rmadison: remotely query the Debian archive database about packages
     [wget | curl, liburi-perl]
-  - suspicious-source: outputs a list of files which are not common source
-    files [python-magic].
+  - suspicious-source: output a list of files which are not common source
+    files [python-magic]
   - svnpath: print svn repository paths [subversion]
   - tagpending: runs from a Debian source tree and tags bugs that are to
     be closed in the latest changelog as pending. [libsoap-lite-perl]
@@ -187,7 +187,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - uscan: scan upstream sites for new releases of packages
     [libcrypt-ssleay-perl, libwww-perl, unzip, xz-utils]
   - uupdate: integrate upstream changes into a source package [patch]
-  - what-patch: determines what patch system, if any, a source package is using
+  - what-patch: determine what patch system, if any, a source package is using
     [patchutils]
   - whodepends: check which maintainers' packages depend on a package
   - who-uploads: determine the most recent uploaders of a package to the Debian

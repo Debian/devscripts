@@ -23,29 +23,29 @@ wrap-and-sort \- wrap long lines and sort items in Debian packaging files
 \fBwrap\-and\-sort\fP wraps the package lists in Debian control files. By
 default the lists will only split into multiple lines if the entries are longer
 than 80 characters. \fBwrap\-and\-sort\fP sorts the package lists in Debian
-control files and all .install files. Beside that \fBwrap\-and\-sort\fP removes
+control files and all \fI.install\fR files. Beside that \fBwrap\-and\-sort\fP removes
 trailing spaces in these files.
 .PP
 This script should be run in the root of a Debian package tree. It searches for
-control, control.in, copyright, copyright.in, install, and *.install in the
-debian directory.
+\fIcontrol\fR, \fIcontrol.in\fR, \fIcopyright\fR, \fIcopyright.in\fR, \fIinstall\fR, and \fI*.install\fR in the
+\fIdebian\fR directory.
 
 .SH OPTIONS
 .TP
 \fB\-h\fR, \fB\-\-help\fR
-show this help message and exit
+Show this help message and exit.
 .TP
 \fB\-a\fR, \fB\-\-wrap\-always\fR
-wrap all package lists in the Debian control file
+Wrap all package lists in the Debian \fIcontrol\fR file
 even if the entries are shorter than 80 characters and could fit in one line
-line
+line.
 .TP
 \fB\-s\fR, \fB\-\-short\-indent\fR
-only indent wrapped lines by one space (default is in\-line with the
-field name)
+Only indent wrapped lines by one space (default is in\-line with the
+field name).
 .TP
 \fB\-b\fR, \fB\-\-sort\-binary\-packages\fR
-sort binary package paragraphs by name
+Sort binary package paragraphs by name.
 .TP
 \fB\-k\fR, \fB\-\-keep\-first\fR
 When sorting binary package paragraphs, leave the first one at the top.
@@ -54,21 +54,21 @@ Unqualified
 configuration files are applied to the first package.
 .TP
 \fB\-n\fR, \fB\-\-no\-cleanup\fR
-do not remove trailing whitespaces
+Do not remove trailing whitespaces.
 .TP
-\fB\-d \fIPATH\fR, \fB\-\-debian\-directory\fR=\fIPATH\fR
-location of the \fIdebian\fR directory (default: \fB./debian\fR)
+\fB\-d \fIpath\fR, \fB\-\-debian\-directory=\fIpath\fR
+Location of the \fIdebian\fR directory (default: \fI./debian\fR).
 .TP
-\fB\-f\fI FILE\fR, \fB\-\-file\fR=\fIFILE\fR
-Wrap and sort only the specified file.
+\fB\-f \fIfile\fR, \fB\-\-file=\fIfile\fR
+Wrap and sort only the specified \fIfile\fR.
 You can specify this parameter multiple times.
 All supported files will be processed if no files are specified.
 .TP
 \fB\-v\fR, \fB\-\-verbose\fR
-print all files that are touched
+Print all files that are touched.
 
 .SH AUTHORS
-\fBwrap\-and\-sort\fP and this manpage has been written by
+\fBwrap\-and\-sort\fP and this manpage have been written by
 Benjamin Drung <bdrung@debian.org>.
 .PP
 Both are released under the ISC license.

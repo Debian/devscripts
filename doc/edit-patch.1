@@ -4,31 +4,31 @@
 source packages
 
 .SH SYNOPSIS
-\fBedit-patch\fR <path to patch>
+\fBedit-patch\fR \fIpath/to/patch\fR
 
-\fBadd-patch\fR <path to patch>
+\fBadd-patch\fR \fIpath/to/patch\fR
 
 .SH DESCRIPTION
-\fBedit-patch\fR is a wrapper script around the quilt, cdbs, and dpatch patch
+\fBedit-patch\fR is a wrapper script around the Quilt, CDBS, and dpatch patch
 systems. It simplifies the process of preparing and editing patches to Debian
 source packages and allows the user to not have to be concerned with which patch
 system is in use.
 Run from inside the root directory of the source package, \fBedit-patch\fR can
-be used to edit existing patches located in /debian/patches.
+be used to edit existing patches located in \fIdebian/patches\fR.
 
 It can also be used to incorporate new patches.
 If pointed at a patch not already present, it will copy the patch to
-/debian/patches in the correct format for the patch system in use.
+\fIdebian/patches\fR in the correct format for the patch system in use.
 Next, the patch is applied and a subshell is opened in order to edit the patch.
-Typing "exit" or pressing Ctrl-d will close the subshell and launch an editor
-to record the debian/changelog entry.
+Typing \fBexit\fR or pressing Ctrl-d will close the subshell and launch an editor
+to record the \fIdebian/changelog\fR entry.
 
-\fBedit-patch\fR is integrated with the bzr and git version control systems.
-The patch will be automatically added to the tree, and the debian/changelog
+\fBedit-patch\fR is integrated with the Bazaar and Git version control systems.
+The patch will be automatically added to the tree, and the \fIdebian/changelog\fR
 entry will be used as the commit message.
 
 If no patch system is present, the patch is applied inline,
-and a copy is stored in debian/patches-applied.
+and a copy is stored in \fIdebian/patches-applied\fR.
 
 \fBadd-patch\fR is the non-interactive version of \fBedit-patch\fR.
 The patch will be incorporated but no editor or subshell will be
