@@ -9,6 +9,8 @@ devscripts (2.11.1) UNRELEASED; urgency=low
 
   [ James Vega ]
   * debchange: Remove dapper from the list of recognized distributions.
+  * debcheckout: Handle Alioth's new anonymous access URLs when converting to
+    authenticated URLs. (Closes: #628674)
 
  -- Benjamin Drung <bdrung@debian.org>  Sun, 29 May 2011 18:41:13 +0200
 
