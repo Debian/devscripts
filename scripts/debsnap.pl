@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 # Copyright © 2010, David Paleino <d.paleino@gmail.com>,
 #
@@ -95,7 +95,8 @@ The following options are supported:
                                         source packages
     -a <architecture>,
     --architecture <architecture>       Specify architecture of binary packages,
-                                        implies --binary
+                                        implies --binary. May be given multiple
+                                        times
 
 Default settings modified by devscripts configuration files or command-line
 options:
@@ -201,7 +202,7 @@ sub verbose($)
 read_conf(@ARGV);
 Getopt::Long::Configure('gnu_compat');
 Getopt::Long::Configure('no_ignore_case');
-GetOptions(\%opt, 'verbose|v', 'destdir|d=s', 'force|f', 'help|h', 'version', 'binary', 'architecture|a=s') || exit 1;
+GetOptions(\%opt, 'verbose|v', 'destdir|d=s', 'force|f', 'help|h', 'version', 'binary', 'architecture|a=s@') || exit 1;
 
 usage(0) if $opt{help};
 usage(1) unless @ARGV;
@@ -251,8 +252,8 @@ if ($opt{binary}) {
 	}
 
 	foreach my $result (@{$src_json->{result}}) {
-	    if ($opt{architecture}) {
-		next if ($result->{architecture} ne $opt{architecture});
+	    if (@{$opt{architecture}}) {
+		next unless (grep { $_ eq $result->{architecture} } @{$opt{architecture}});
 	    }
 	    my $hash = $result->{hash};
 	    my $fileinfo = @{$src_json->{fileinfo}{$hash}}[0];

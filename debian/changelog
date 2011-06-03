@@ -11,6 +11,8 @@ devscripts (2.11.1) UNRELEASED; urgency=low
   * debchange: Remove dapper from the list of recognized distributions.
   * debcheckout: Handle Alioth's new anonymous access URLs when converting to
     authenticated URLs. (Closes: #628674)
+  * debsnap: Allow -a to be specified multiple times.  Thanks to Timo Juhani
+    Lindfors for the suggestion.
 
  -- Benjamin Drung <bdrung@debian.org>  Sun, 29 May 2011 18:41:13 +0200
 
