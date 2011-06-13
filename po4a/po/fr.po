@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2011-06-13 18:28-0400\n"
-"PO-Revision-Date: 2011-06-03 23:38-0400\n"
+"PO-Revision-Date: 2011-06-13 18:32-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -12220,21 +12220,14 @@ msgstr ""
 
 #. type: IP
 #: ../scripts/devscripts.1:91
-#, fuzzy, no-wrap
-#| msgid "I<dscverify>(1)"
+#, no-wrap
 msgid "I<dscextract>(1)"
-msgstr "I<dscverify>(1)"
+msgstr "I<dscextract>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:93
-#, fuzzy
-#| msgid ""
-#| "determine what patch system, if any, a source package is using "
-#| "[patchutils]"
 msgid "extract a single file from a Debian source package [patchutils]"
-msgstr ""
-"déterminer le système de correctifs, s'il existe, utilisé par un paquet "
-"source [patchutils]"
+msgstr "extraire un seul fichier d'un paquet source Debian [patchutils]"
 
 #. type: IP
 #: ../scripts/devscripts.1:93
@@ -13665,19 +13658,17 @@ msgstr ""
 #: ../scripts/dscextract.1:1
 #, no-wrap
 msgid "DSCEXTRACT"
-msgstr ""
+msgstr "DSCEXTRACT"
 
 #. type: Plain text
 #: ../scripts/dscextract.1:4
 msgid "dscextract - extract a single file from a Debian source package"
-msgstr ""
+msgstr "dscextract - Extraire un seul fichier d'un paquet source Debian"
 
 #. type: Plain text
 #: ../scripts/dscextract.1:6
-#, fuzzy
-#| msgid "B<debc> [I<options>] [I<changes file>] [I<package> ...]"
 msgid "B<dscextract> [I<options>] I<dscfile> I<file>"
-msgstr "B<debc> [I<options>] [I<fichier_changes>] [I<paquet> ...]"
+msgstr "B<dscextract> [I<options>] I<fichier_dsc> I<fichier>"
 
 #. type: Plain text
 #: ../scripts/dscextract.1:11
@@ -13687,6 +13678,11 @@ msgid ""
 "files (source format 3.0) where possible, hence avoiding to unpack large "
 "tarballs.  It is most useful for files in the debian/ subdirectory."
 msgstr ""
+"B<dscextract> lit un seul fichier à partir d'un paquet source Debian. L'idée "
+"est de regarder seulement les fichiers I<.diff.gz> (format source 1.0) ou I<."
+"debian.tar.gz/bz2> (format source 3.0) si possible, en évitant ainsi de "
+"dépaqueter de grosses archives. C'est particulièrement utile pour les "
+"fichiers du sous-répertoire I<debian/>."
 
 #. type: Plain text
 #: ../scripts/dscextract.1:14
@@ -13694,12 +13690,14 @@ msgid ""
 "I<file> is relative to the first level directory contained in the package, i."
 "e. with the first component stripped."
 msgstr ""
+"I<fichier> est relatif au répertoire de premier niveau contenu dans le "
+"paquet, c'est-à-dire une fois enlevé le premier répertoire."
 
 #. type: TP
 #: ../scripts/dscextract.1:15
 #, no-wrap
 msgid "B<-f>"
-msgstr ""
+msgstr "B<-f>"
 
 #. type: Plain text
 #: ../scripts/dscextract.1:20
@@ -13708,6 +13706,10 @@ msgid ""
 "tar.gz file if I<file> was not found in the .diff.gz.  (For 3.0 packages, it "
 "is assumed that debian/* are exactly the contents of debian.tar.gz/bz2.)"
 msgstr ""
+"Mode « rapide ». Pour le format source 1.0, éviter de se rabattre sur le "
+"balayage du fichier I<.orig.tar.gz> si I<fichier> n'a pas été trouvé dans le "
+"I<.diff.gz> (pour les paquets au format source 3.0, I<debian/*> est censé se "
+"trouver directement dans I<.debian.tar.gz/bz2>)."
 
 #. type: TP
 #: ../scripts/dscextract.1:21 ../scripts/transition-check.pl:61
@@ -13719,31 +13721,29 @@ msgstr "0"
 #. type: Plain text
 #: ../scripts/dscextract.1:24
 msgid "I<file> was extracted."
-msgstr ""
+msgstr "I<fichier> a été extrait."
 
 #. type: Plain text
 #: ../scripts/dscextract.1:27
-#, fuzzy
-#| msgid "Do not unpack tarballs inside source packages."
 msgid "I<file> was not found in the source package."
-msgstr "Ne pas ouvrir les archives tar se trouvant dans les paquets source."
+msgstr "I<fichier> n'a pas été trouvé dans le paquet source."
 
 #. type: Plain text
 #: ../scripts/dscextract.1:30
 msgid "An error occured, like I<dscfile> was not found."
 msgstr ""
+"Une erreur est survenue, I<fichier_dsc> n'a pas été trouvé par exemple."
 
 #. type: Plain text
 #: ../scripts/dscextract.1:32
 msgid "dscextract dds_2.1.1+ddd105-2.dsc debian/watch || test $? = 1"
-msgstr ""
+msgstr "dscextract dds_2.1.1+ddd105-2.dsc debian/watch || test $? = 1"
 
 #. type: Plain text
 #: ../scripts/dscextract.1:33
-#, fuzzy
-#| msgid "B<cowpoke> was written by Ron E<lt>I<ron@debian.org>E<gt>."
 msgid "B<dscextract> was written by Christoph Berg E<lt>myon@debian.orgE<gt>."
-msgstr "B<cowpoke> a été écrit par Ron E<lt>I<ron@debian.org>E<gt>."
+msgstr ""
+"B<dscextract> a été écrit par Christoph Berg E<lt>I<myon@debian.org>E<gt>."
 
 #. type: TH
 #: ../scripts/dscverify.1:1
