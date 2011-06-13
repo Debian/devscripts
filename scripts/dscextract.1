@@ -5,18 +5,18 @@ dscextract \- extract a single file from a Debian source package
 \fBdscextract\fR [\fIoptions\fR] \fIdscfile\fR \fIfile\fR
 .SH DESCRIPTION
 \fBdscextract\fR reads a single file from a Debian source package.  The idea is
-to only look into .diff.gz files (source format 1.0) or .debian.tar.gz/bz2
+to only look into \fI.diff.gz\fR files (source format 1.0) or \fI.debian.tar.gz/bz2\fR
 files (source format 3.0) where possible, hence avoiding to unpack large
-tarballs.  It is most useful for files in the debian/ subdirectory.
+tarballs.  It is most useful for files in the \fIdebian/\fR subdirectory.
 
 \fIfile\fP is relative to the first level directory contained in the package,
 i.e. with the first component stripped.
 .SH OPTIONS
 .TP
 .B \fB\-f
-"Fast" mode. For source format 1.0, avoid to fall back scanning the .orig.tar.gz
-file if \fIfile\fR was not found in the .diff.gz.  (For 3.0 packages, it is
-assumed that debian/* are exactly the contents of debian.tar.gz/bz2.)
+"Fast" mode. For source format 1.0, avoid to fall back scanning the \fI.orig.tar.gz\fR
+file if \fIfile\fR was not found in the \fI.diff.gz\fR.  (For 3.0 packages, it is
+assumed that \fIdebian/*\fR are exactly the contents of \fIdebian.tar.gz/bz2\fR.)
 .SH "EXIT STATUS"
 .TP
 0
