@@ -152,6 +152,8 @@ And now, in mostly alphabetical order, the scripts:
   when trying to determine the packages needed in the Build-Depends etc.
   lines in the debian/control file. [build-essential, strace]
 
+- dscextract: extracts a single file from a Debian source package. [patchutils]
+
 - dscverify: check the signature and MD5 sums of a dsc file against the most
   current Debian keyring on your system. [gnupg, debian-keyring,
   libdigest-md5-perl]
