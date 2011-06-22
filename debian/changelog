@@ -15,6 +15,8 @@ devscripts (2.11.1) UNRELEASED; urgency=low
     authenticated URLs. (Closes: #628674)
   * debsnap: Allow -a to be specified multiple times.  Thanks to Timo Juhani
     Lindfors for the suggestion.
+  * uscan: Fix --destdir regression when repacking zip archives.  Thanks to
+    Christian Kastner for the patch.  (Closes: #628076)
 
   [ Christoph Berg ]
   * dscextract: new script, extracts a single file from a Debian source
