@@ -191,8 +191,9 @@ fi
 # Replace the Architecture: field, nuke the value of Files:, and insert
 # the Description: field before the Changes: field
 eval "sed -e 's,^Architecture: .*,Architecture: ${ARCHS},' \
-    -e '/^Files: /,$ d; /^Checksums-.*: /,$ d' \
-    -e '/^Description:/,/^[^ ]/{/^Description:/d;/^[ ]/d}' \
+    -e '/^Checksums-.*:/,/^[^ ]/{/^Checksums-.*:/d;/^ /d}' \
+    -e '/^Files:/,/^[^ ]/{/^Files:/d;/^ /d}' \
+    -e '/^Description:/,/^[^ ]/{/^Description:/d;/^ /d}' \
     -e '/^Changes:/{r '${DESCFILE} -e ';aChanges: ' -e ';d}' \
     -e 's,^Format: .*,Format: ${FORMATS},' \
     ${OUTPUT} ${REDIR1}"
