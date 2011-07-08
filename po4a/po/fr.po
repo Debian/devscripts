@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2011-07-08 18:09-0400\n"
-"PO-Revision-Date: 2011-06-13 18:32-0400\n"
+"PO-Revision-Date: 2011-07-08 19:18-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -10468,7 +10468,7 @@ msgstr ""
 #: ../scripts/debsnap.1:94
 #, no-wrap
 msgid "B<debsnap -a amd64 xterm 256-1>"
-msgstr ""
+msgstr "B<debsnap -a amd64 xterm 256-1>"
 
 #. type: Plain text
 #: ../scripts/debsnap.1:97
@@ -10476,26 +10476,28 @@ msgid ""
 "Download the binary package of specific a xterm version for amd64 "
 "architecture."
 msgstr ""
+"Télécharger une version particulière du paquet binaire xterm pour "
+"l'architecture amd64."
 
 #. type: TP
 #: ../scripts/debsnap.1:97
 #, no-wrap
 msgid "B<debsnap -a armel xterm>"
-msgstr ""
+msgstr "B<debsnap -a armel xterm>"
 
 #. type: Plain text
 #: ../scripts/debsnap.1:100
-#, fuzzy
-#| msgid "Download binary packages instead of source packages."
 msgid ""
 "Download binary packages for all versions of xterm for armel architecture."
-msgstr "Télécharger les paquets binaires au lieu des paquets source. "
+msgstr ""
+"Télécharger toutes les versions des paquets binaires xterm pour "
+"l'architecture armel."
 
 #. type: TP
 #: ../scripts/debsnap.1:100
 #, no-wrap
 msgid "B<debsnap --binary xterm 256-1>"
-msgstr ""
+msgstr "B<debsnap --binary xterm 256-1>"
 
 #. type: Plain text
 #: ../scripts/debsnap.1:103
@@ -10503,36 +10505,37 @@ msgid ""
 "Download binary packages for a specific a xterm version but for all "
 "architectures."
 msgstr ""
+"Télécharger une version particulière des paquets binaires xterm pour toutes "
+"les architectures."
 
 #. type: TP
 #: ../scripts/debsnap.1:103
-#, fuzzy, no-wrap
-#| msgid "B<--binary>"
+#, no-wrap
 msgid "B<debsnap --binary xterm>"
-msgstr "B<--binary>"
+msgstr "B<debsnap --binary xterm>"
 
 #. type: Plain text
 #: ../scripts/debsnap.1:106
-#, fuzzy
-#| msgid "Download binary packages instead of source packages."
 msgid ""
 "Download binary packages for all version of xterm version for all "
 "architectures."
-msgstr "Télécharger les paquets binaires au lieu des paquets source. "
+msgstr ""
+"Télécharger toutes les versions des paquets binaires xterm pour toutes les "
+"architectures."
 
 #. type: TP
 #: ../scripts/debsnap.1:106
 #, no-wrap
 msgid "B<aptitude search '~i' -F '%p %V' | while read pkg ver; do debsnap -a $(dpkg-architecture -qDEB_HOST_ARCH) -a all $pkg $ver; done>"
-msgstr ""
+msgstr "B<aptitude search '~i' -F '%p %V' | while read pkg ver; do debsnap -a $(dpkg-architecture -qDEB_HOST_ARCH) -a all $pkg $ver; done>"
 
 #. type: Plain text
 #: ../scripts/debsnap.1:109
-#, fuzzy
-#| msgid "Download binary packages instead of source packages."
 msgid ""
 "Download binary packages of all packages that are installed on the system."
-msgstr "Télécharger les paquets binaires au lieu des paquets source. "
+msgstr ""
+"Télécharger les paquets binaires de tous les paquets installés sur le "
+"système."
 
 #. type: SH
 #: ../scripts/debsnap.1:110 ../scripts/diff2patches.1:28
