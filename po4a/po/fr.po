@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2011-06-13 18:28-0400\n"
+"POT-Creation-Date: 2011-07-08 18:09-0400\n"
 "PO-Revision-Date: 2011-06-13 18:32-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -286,7 +286,7 @@ msgstr ""
 "21:43:19 I: terminé avec un code de sortie 2\n"
 
 #. type: SH
-#: ../scripts/annotate-output.1:32 ../scripts/debsnap.1:119
+#: ../scripts/annotate-output.1:32 ../scripts/debsnap.1:136
 #: ../scripts/rc-alert.1:119 ../scripts/whodepends.1:17
 #, no-wrap
 msgid "BUGS"
@@ -341,7 +341,7 @@ msgstr ""
 #: ../scripts/debclean.1:107 ../scripts/debcommit.pl:853
 #: ../scripts/debdiff.1:215 ../scripts/debi.1:122 ../scripts/debrelease.1:132
 #: ../scripts/deb-reversion.dbk:247 ../scripts/debrsign.1:66
-#: ../scripts/debsign.1:143 ../scripts/debsnap.1:101 ../scripts/debuild.1:410
+#: ../scripts/debsign.1:143 ../scripts/debsnap.1:118 ../scripts/debuild.1:410
 #: ../scripts/dget.pl:646 ../scripts/diff2patches.1:45
 #: ../scripts/dpkg-depcheck.1:118 ../scripts/dpkg-genbuilddeps.1:30
 #: ../scripts/dscverify.1:73 ../scripts/grep-excuses.1:38
@@ -3084,7 +3084,7 @@ msgid "reportbug(1), querybts(1)"
 msgstr "reportbug(1), querybts(1)"
 
 #. type: =head1
-#: ../scripts/bts.pl:4102 ../scripts/chdist.pl:91 ../scripts/debsnap.1:109
+#: ../scripts/bts.pl:4102 ../scripts/chdist.pl:91 ../scripts/debsnap.1:126
 #: ../scripts/mass-bug.pl:513 ../scripts/tagpending.pl:431
 #, no-wrap
 msgid "COPYRIGHT"
@@ -4283,7 +4283,7 @@ msgid "I<~/.cowpoke>"
 msgstr "I<~/.cowpoke>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:209 ../scripts/debsnap.1:100
+#: ../scripts/cowpoke.1:209 ../scripts/debsnap.1:117
 msgid ""
 "Per-user configuration options.  Will override any global configuration."
 msgstr ""
@@ -5203,8 +5203,8 @@ msgid "If any of the requested files were not found, do not output an error."
 msgstr "Si un des fichiers demandés n'est pas trouvé, ne pas faire d'erreur."
 
 #. type: SH
-#: ../scripts/dcmd.1:66 ../scripts/debuild.1:367 ../scripts/getbuildlog.1:31
-#: ../scripts/rc-alert.1:96
+#: ../scripts/dcmd.1:66 ../scripts/debsnap.1:93 ../scripts/debuild.1:367
+#: ../scripts/getbuildlog.1:31 ../scripts/rc-alert.1:96
 #, no-wrap
 msgid "EXAMPLES"
 msgstr "EXEMPLES"
@@ -10464,20 +10464,90 @@ msgstr ""
 "échouer parce qu'ils ne sont plus disponibles sur le miroir, donc vous "
 "devriez vous attendre à ce que ça arrive en temps normal."
 
+#. type: TP
+#: ../scripts/debsnap.1:94
+#, no-wrap
+msgid "B<debsnap -a amd64 xterm 256-1>"
+msgstr ""
+
+#. type: Plain text
+#: ../scripts/debsnap.1:97
+msgid ""
+"Download the binary package of specific a xterm version for amd64 "
+"architecture."
+msgstr ""
+
+#. type: TP
+#: ../scripts/debsnap.1:97
+#, no-wrap
+msgid "B<debsnap -a armel xterm>"
+msgstr ""
+
+#. type: Plain text
+#: ../scripts/debsnap.1:100
+#, fuzzy
+#| msgid "Download binary packages instead of source packages."
+msgid ""
+"Download binary packages for all versions of xterm for armel architecture."
+msgstr "Télécharger les paquets binaires au lieu des paquets source. "
+
+#. type: TP
+#: ../scripts/debsnap.1:100
+#, no-wrap
+msgid "B<debsnap --binary xterm 256-1>"
+msgstr ""
+
+#. type: Plain text
+#: ../scripts/debsnap.1:103
+msgid ""
+"Download binary packages for a specific a xterm version but for all "
+"architectures."
+msgstr ""
+
+#. type: TP
+#: ../scripts/debsnap.1:103
+#, fuzzy, no-wrap
+#| msgid "B<--binary>"
+msgid "B<debsnap --binary xterm>"
+msgstr "B<--binary>"
+
+#. type: Plain text
+#: ../scripts/debsnap.1:106
+#, fuzzy
+#| msgid "Download binary packages instead of source packages."
+msgid ""
+"Download binary packages for all version of xterm version for all "
+"architectures."
+msgstr "Télécharger les paquets binaires au lieu des paquets source. "
+
+#. type: TP
+#: ../scripts/debsnap.1:106
+#, no-wrap
+msgid "B<aptitude search '~i' -F '%p %V' | while read pkg ver; do debsnap -a $(dpkg-architecture -qDEB_HOST_ARCH) -a all $pkg $ver; done>"
+msgstr ""
+
+#. type: Plain text
+#: ../scripts/debsnap.1:109
+#, fuzzy
+#| msgid "Download binary packages instead of source packages."
+msgid ""
+"Download binary packages of all packages that are installed on the system."
+msgstr "Télécharger les paquets binaires au lieu des paquets source. "
+
 #. type: SH
-#: ../scripts/debsnap.1:93 ../scripts/diff2patches.1:28
+#: ../scripts/debsnap.1:110 ../scripts/diff2patches.1:28
 #, no-wrap
 msgid "FILES"
 msgstr "FICHIERS"
 
 #. type: TP
-#: ../scripts/debsnap.1:94
+#: ../scripts/debsnap.1:111
 #, no-wrap
 msgid "I</etc/devscripts.conf>"
 msgstr "I</etc/devscripts.conf>"
 
 #. type: Plain text
-#: ../scripts/debsnap.1:97
+#: ../scripts/debsnap.1:114
 msgid ""
 "Global devscripts configuration options.  Will override hardcoded defaults."
 msgstr ""
@@ -10485,18 +10555,18 @@ msgstr ""
 "valeurs par défaut codées en dur."
 
 #. type: TP
-#: ../scripts/debsnap.1:97
+#: ../scripts/debsnap.1:114
 #, no-wrap
 msgid "I<~/.devscripts>"
 msgstr "I<~/.devscripts>"
 
 #. type: Plain text
-#: ../scripts/debsnap.1:105
+#: ../scripts/debsnap.1:122
 msgid "B<devscripts>(1), B<devscripts.conf>(5), B<git-debimport>(1)"
 msgstr "B<devscripts>(1), B<devscripts.conf>(5), B<git-debimport>(1)"
 
 #. type: SH
-#: ../scripts/debsnap.1:106 ../doc/edit-patch.1:37
+#: ../scripts/debsnap.1:123 ../doc/edit-patch.1:37
 #: ../doc/suspicious-source.1:51 ../doc/what-patch.1:27
 #: ../doc/wrap-and-sort.1:70
 #, no-wrap
@@ -10504,17 +10574,17 @@ msgid "AUTHORS"
 msgstr "AUTEURS"
 
 #. type: Plain text
-#: ../scripts/debsnap.1:108
+#: ../scripts/debsnap.1:125
 msgid "David Paleino E<lt>dapal@debian.orgE<gt>"
 msgstr "David Paleino E<lt>dapal@debian.orgE<gt>"
 
 #. type: Plain text
-#: ../scripts/debsnap.1:111
+#: ../scripts/debsnap.1:128
 msgid "Copyright \\(co 2010 David Paleino"
 msgstr "Copyright \\(co 2010 David Paleino"
 
 #. type: Plain text
-#: ../scripts/debsnap.1:115
+#: ../scripts/debsnap.1:132
 msgid ""
 "Permission is granted to copy, distribute and/or modify this document under "
 "the terms of the GNU General Public License, Version 3 or (at your option)  "
@@ -10525,7 +10595,7 @@ msgstr ""
 "toute version ultérieure publiée par la Free Software Foundation."
 
 #. type: Plain text
-#: ../scripts/debsnap.1:118
+#: ../scripts/debsnap.1:135
 msgid ""
 "On Debian systems, the complete text of the GNU General Public License can "
 "be found in I</usr/share/common-licenses/GPL>."
@@ -10534,13 +10604,13 @@ msgstr ""
 "peut être trouvé dans I</usr/share/common-licenses/GPL>."
 
 #. type: SS
-#: ../scripts/debsnap.1:120
+#: ../scripts/debsnap.1:137
 #, no-wrap
 msgid "Reporting bugs"
 msgstr "Soumettre des rapports de bogue"
 
 #. type: Plain text
-#: ../scripts/debsnap.1:123
+#: ../scripts/debsnap.1:140
 msgid ""
 "The program is part of the devscripts package.  Please report bugs using "
 "`B<reportbug devscripts>`"
