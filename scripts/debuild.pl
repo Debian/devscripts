@@ -787,6 +787,8 @@ if ($command_version eq 'dpkg') {
     my $compression='';
     my $comp_level='';
 
+    my $dirn = basename(cwd());
+
     # and one for us
     my @debsign_opts = ();
     # and one for dpkg-cross if needed
@@ -1075,6 +1077,10 @@ if ($command_version eq 'dpkg') {
 	    }
 	}
 
+	chdir '..' or fatal "can't chdir ..: $!";
+	system_withecho('dpkg-source', '--before-build', $dirn);
+	chdir $dirn or fatal "can't chdir $dirn: $!";
+
 	# First dpkg-buildpackage action: run dpkg-checkbuilddeps
 	if ($checkbuilddep) {
 	    if ($binarytarget eq 'binary-arch') {
@@ -1108,7 +1114,6 @@ EOT
 
 	# Next dpkg-buildpackage action: dpkg-source
 	if (! $binaryonly) {
-	    my $dirn = basename(cwd());
 	    my @cmd = (qw(dpkg-source));
 	    push @cmd, @passopts;
 	    push @cmd, $diffignore if $diffignore;
@@ -1188,6 +1193,9 @@ EOT
 	    }
 	}
 
+	chdir '..' or fatal "can't chdir ..: $!";
+	system_withecho('dpkg-source', '--after-build', $dirn);
+	chdir $dirn or fatal "can't chdir $dirn: $!";
 
 	# identify the files listed in $changes; this will be used for the
 	# emulation of the dpkg-buildpackage fileomitted() function

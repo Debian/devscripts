@@ -19,6 +19,8 @@ devscripts (2.11.1) UNRELEASED; urgency=low
     Christian Kastner for the patch.  (Closes: #628076)
   * mergechanges: Do not drop fields when the Files/Checksums-* fields are not
     at the end of the source files.  (Closes: #625620)
+  * debuild: Call dpkg-source --before-build/--after-build when emulating
+    dpkg-buildpackage.  (Closes: #628481)
 
   [ Christoph Berg ]
   * dscextract: new script, extracts a single file from a Debian source
