@@ -40,7 +40,7 @@ Provide a usage message.
 
 =item B<-d>, B<--data-dir> I<DIR>
 
-Choose data directory (default: $HOME/.chdist/).
+Choose data directory (default: F<$HOME/.chdist/>).
 
 =item B<-a>, B<--arch> I<ARCH>
 
@@ -56,35 +56,63 @@ Display version information.
 
 =over 4
 
-=item B<create> I<DIST> [I<URL> I<RELEASE> I<SECTIONS>] : prepare a new tree named I<DIST>
+=item B<create> I<DIST> [I<URL> I<RELEASE> I<SECTIONS>]
 
-=item B<apt-get> I<DIST> <B<update>|B<source>|...> : run B<apt-get> inside I<DIST>
+Prepares a new tree named I<DIST>
 
-=item B<apt-cache> I<DIST> <B<show>|B<showsrc>|...> : run B<apt-cache> inside I<DIST>
+=item B<apt-get> I<DIST> <B<update>|B<source>|...>
 
-=item B<apt-rdepends> I<DIST> [...] : run B<apt-rdepends> inside I<DIST>
+Runs B<apt-get> inside I<DIST>
 
-=item B<src2bin> I<DIST SRCPKG> : get binary packages for I<SRCPKG> in I<DIST>
+=item B<apt-cache> I<DIST> <B<show>|B<showsrc>|...>
 
-=item B<bin2src> I<DIST BINPKG> : get source package for I<BINPKG> in I<DIST>
+Runs B<apt-cache> inside I<DIST>
 
-=item B<compare-packages> I<DIST1 DIST2> [I<DIST3>, ...] : list versions of packages in several I<DIST>ributions
+=item B<apt-rdepends> I<DIST> [...]
+
+Runs B<apt-rdepends> inside I<DIST>
+
+=item B<src2bin> I<DIST SRCPKG>
+
+Lists binary packages for I<SRCPKG> in I<DIST>
+
+=item B<bin2src> I<DIST BINPKG>
+
+Lists source package for I<BINPKG> in I<DIST>
+
+=item B<compare-packages> I<DIST1 DIST2> [I<DIST3>, ...]
 
 =item B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]
 
-=item B<compare-versions> I<DIST1 DIST2> : same as B<compare-packages>, but also run B<dpkg --compare-versions> and display where the package is newer.
+Lists versions of packages in several I<DIST>ributions
+
+=item B<compare-versions> I<DIST1 DIST2>
 
 =item B<compare-bin-versions> I<DIST1 DIST2>
 
-=item B<compare-src-bin-packages> I<DIST> : compare sources and binaries for I<DIST>
+Same as B<compare-packages>/B<compare-bin-packages>, but also runs
+B<dpkg --compare-versions> and display where the package is newer.
 
-=item B<compare-src-bin-versions> I<DIST> : same as B<compare-src-bin-versions>, but also run B<dpkg --compare-versions> and display where the package is newer
+=item B<compare-src-bin-packages> I<DIST>
 
-=item B<grep-dctrl-packages> I<DIST> [...] : run B<grep-dctrl> on F<*_Packages> inside I<DIST>
+Compares sources and binaries for I<DIST>
 
-=item B<grep-dctrl-sources> I<DIST> [...] : run B<grep-dctrl> on F<*_Sources> inside I<DIST>
+=item B<compare-src-bin-versions> I<DIST>
 
-=item B<list> : list available I<DIST>s
+Same as B<compare-src-bin-packages>, but also run B<dpkg --compare-versions>
+and display where the package is newer
+
+=item B<grep-dctrl-packages> I<DIST> [...]
+
+Runs B<grep-dctrl> on F<*_Packages> inside I<DIST>
+
+=item B<grep-dctrl-sources> I<DIST> [...]
+
+Runs B<grep-dctrl> on F<*_Sources> inside I<DIST>
+
+=item B<list>
+
+Lists available I<DIST>s
 
 =back
 
@@ -104,39 +132,14 @@ use File::Basename;
 use Getopt::Long qw(:config require_order);
 use Cwd qw(abs_path cwd);
 use Dpkg::Version;
+use Pod::Usage;
 
 my $progname = basename($0);
 
 sub usage {
-  return <<EOF;
-Usage: chdist [options] [command] [command parameters]
-
-Options:
-    -h, --help                       Show this help
-    -d, --data-dir DIR               Choose data directory (default: \$HOME/.chdist/)
-    -a, --arch ARCH                  Choose architecture (default: `dpkg --print-architecture`)
-    -v, --version                    Display version and copyright information
-
-Commands:
-  create DIST : prepare a new tree named DIST
-  apt-get DIST (update|source|...) : run apt-get inside DIST
-  apt-cache DIST (show|showsrc|...) : run apt-cache inside DIST
-  apt-rdepends DIST [...] : run apt-rdepends inside DIST
-  src2bin DIST PKG : get binary packages for a source package in DIST
-  bin2src DIST PKG : get source package for a binary package in DIST
-  compare-packages DIST1 DIST2 [DIST3, ...] : list versions of packages in
-      several DISTributions
-  compare-bin-packages DIST1 DIST2 [DIST3, ...]
-  compare-versions DIST1 DIST2 : same as compare-packages, but also run
-      dpkg --compare-versions and display where the package is newer
-  compare-bin-versions DIST1 DIST2
-  compare-src-bin-packages DIST : compare sources and binaries for DIST
-  compare-src-bin-versions DIST : same as compare-src-bin-versions, but also
-      run dpkg --compare-versions and display where the package is newer
-  grep-dctrl-packages DIST [...] : run grep-dctrl on *_Packages inside DIST
-  grep-dctrl-sources DIST [...] : run grep-dctrl on *_Sources inside DIST
-  list : list available DISTs
-EOF
+    pod2usage(-verbose => 99,
+	      -exitval => $_[0],
+	      -sections => 'SYNOPSIS|OPTIONS|ARGUMENTS|COMMANDS');
 }
 
 # specify the options we accept and initialize
@@ -167,13 +170,12 @@ $datadir = cwd() . "/$datadir" unless $datadir =~ m!^/!;
 $datadir = abs_path($datadir);
 
 if ($help) {
-  print usage(0);
-  exit;
+    usage(0);
 }
 
 if ($version) {
-  print $versioninfo;
-  exit;
+    print $versioninfo;
+    exit 0;
 }
 
 
