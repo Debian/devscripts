@@ -128,6 +128,7 @@ License, or (at your option) any later version.
 
 use strict;
 use warnings;
+use feature 'switch';
 use File::Basename;
 use Getopt::Long qw(:config require_order);
 use Cwd qw(abs_path cwd);
@@ -183,6 +184,13 @@ if ($version) {
 ### Functions
 ########################################################
 
+sub fatal
+{
+    my ($msg) = @_;
+    print STDERR "$progname: $msg";
+    exit 1;
+}
+
 sub uniq (@) {
 	my %hash;
 	map { $hash{$_}++ == 0 ? $_ : () } @_;
@@ -207,50 +215,38 @@ sub type_check {
    }
 }
 
-sub aptopts {
-  # Build apt options
-  my ($dist) = @_;
-  my $opts = "";
-  if ($arch) {
-     print "W: Forcing arch $arch for this command only.\n";
-     $opts .= " -o Apt::Architecture=$arch";
-  }
-  return $opts;
+sub aptopts
+{
+    # Build apt options
+    my ($dist) = @_;
+    my @opts = ();
+    if ($arch) {
+	print "W: Forcing arch $arch for this command only.\n";
+	push(@opts, '-o', "Apt::Architecture=$arch");
+    }
+    return @opts;
 }
 
-sub aptconfig {
-  # Build APT_CONFIG override
-  my ($dist) = @_;
-  return "APT_CONFIG=$datadir/$dist/etc/apt/apt.conf";
+sub aptconfig
+{
+    # Build APT_CONFIG override
+    my ($dist) = @_;
+    my $aptconf = "$datadir/$dist/etc/apt/apt.conf";
+    if (! -r $aptconf) {
+	fatal("Unable to read $aptconf");
+    }
+    $ENV{'APT_CONFIG'} = $aptconf;
 }
 
 ###
 
-sub aptcache {
-  # Run apt-cache cmd
-  my ($dist, @args) = @_;
-  dist_check($dist);
-  my $args = aptopts($dist) . " @args";
-  my $aptconfig = aptconfig($dist);
-  system("$aptconfig /usr/bin/apt-cache $args");
-}
-
-sub aptget {
-  # Run apt-get cmd
-  my ($dist, @args) = @_;
-  dist_check($dist);
-  my $args = aptopts($dist) . " @args";
-  my $aptconfig = aptconfig($dist);
-  system("$aptconfig /usr/bin/apt-get $args");
-}
-
-sub aptrdepends {
-  # Run apt-rdepends cmd
-  my ($dist, @args) = @_;
-  dist_check($dist);
-  my $args = aptopts($dist) . " @args";
-  my $aptconfig = aptconfig($dist);
-  system("$aptconfig /usr/bin/apt-rdepends $args");
+sub aptcmd
+{
+    my ($cmd, $dist, @args) = @_;
+    dist_check($dist);
+    unshift(@args, aptopts($dist));
+    aptconfig($dist);
+    exec($cmd, @args);
 }
 
 sub bin2src {
@@ -630,51 +626,53 @@ sub parseFile {
 ########################################################
 
 my $command = shift @ARGV;
-if ($command eq 'create') {
-  dist_create(@ARGV);
-}
-elsif ($command eq 'apt-get') {
-  aptget(@ARGV);
-}
-elsif ($command eq 'apt-cache') {
-  aptcache(@ARGV);
-}
-elsif ($command eq 'apt-rdepends') {
-  aptrdepends(@ARGV);
-}
-elsif ($command eq 'bin2src') {
-  bin2src(@ARGV);
-}
-elsif ($command eq 'src2bin') {
-  src2bin(@ARGV);
-}
-elsif ($command eq 'compare-packages') {
-  dist_compare(@ARGV, 0, 'Sources');
-}
-elsif ($command eq 'compare-bin-packages') {
-  dist_compare(@ARGV, 0, 'Packages');
-}
-elsif ($command eq 'compare-versions') {
-  dist_compare(@ARGV, 1, 'Sources');
-}
-elsif ($command eq 'compare-bin-versions') {
-  dist_compare(@ARGV, 1, 'Packages');
-}
-elsif ($command eq 'grep-dctrl-packages') {
-  grep_file(@ARGV, 'Packages');
-}
-elsif ($command eq 'grep-dctrl-sources') {
-  grep_file(@ARGV, 'Sources');
-}
-elsif ($command eq 'compare-src-bin-packages') {
-  compare_src_bin(@ARGV, 0);
-}
-elsif ($command eq 'compare-src-bin-versions') {
-  compare_src_bin(@ARGV, 1);
-}
-elsif ($command eq 'list') {
-  list;
-}
-else {
-  die "Command unknown. Try $0 -h\n";
+given ($command) {
+    when ('create') {
+	dist_create(@ARGV);
+    }
+    when ('apt-get') {
+	aptcmd('apt-get', @ARGV);
+    }
+    when ('apt-cache') {
+	aptcmd('apt-cache', @ARGV);
+    }
+    when ('apt-rdepends') {
+	aptcmd('apt-rdepends', @ARGV);
+    }
+    when ('bin2src') {
+	bin2src(@ARGV);
+    }
+    when ('src2bin') {
+	src2bin(@ARGV);
+    }
+    when ('compare-packages') {
+	dist_compare(@ARGV, 0, 'Sources');
+    }
+    when ('compare-bin-packages') {
+	dist_compare(@ARGV, 0, 'Packages');
+    }
+    when ('compare-versions') {
+	dist_compare(@ARGV, 1, 'Sources');
+    }
+    when ('compare-bin-versions') {
+	dist_compare(@ARGV, 1, 'Packages');
+    }
+    when ('grep-dctrl-packages') {
+	grep_file(@ARGV, 'Packages');
+    }
+    when ('grep-dctrl-sources') {
+	grep_file(@ARGV, 'Sources');
+    }
+    when ('compare-src-bin-packages') {
+	compare_src_bin(@ARGV, 0);
+    }
+    when ('compare-src-bin-versions') {
+	compare_src_bin(@ARGV, 1);
+    }
+    when ('list') {
+	list;
+    }
+    default {
+	usage(1);
+    }
 }
