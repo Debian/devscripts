@@ -168,7 +168,7 @@ GetOptions(
 );
 
 # Fix-up relative paths
-$datadir = cwd() . "/$datadir" unless $datadir =~ m!^/!;
+$datadir = cwd() . "/$datadir" if $datadir !~ m!^/!;
 $datadir = abs_path($datadir);
 
 if ($help) {
@@ -193,27 +193,28 @@ sub fatal
 }
 
 sub uniq (@) {
-	my %hash;
-	map { $hash{$_}++ == 0 ? $_ : () } @_;
+    my %hash;
+    map { $hash{$_}++ == 0 ? $_ : () } @_;
 }
 
 sub dist_check {
-  # Check that dist exists in $datadir
-  my ($dist) = @_;
-  if ($dist) {
-     my $dir  = $datadir . '/' . $dist;
-     return 0 if (-d $dir);
-     die "E: Could not find $dist in $datadir. Run `$0 create $dist` first. Exiting.\n";
-  } else {
-     die "E: No dist provided. Exiting. \n";
-  }
+    # Check that dist exists in $datadir
+    my ($dist) = @_;
+    if ($dist) {
+	my $dir = "$datadir/$dist";
+	return 0 if (-d $dir);
+	fatal("Could not find $dist in $datadir. Run `$progname create $dist` first.");
+    }
+    else {
+	fatal('No dist provided.');
+    }
 }
 
 sub type_check {
-   my ($type) = @_;
-   if ( ($type ne 'Sources') && ($type ne 'Packages') ) {
-      die "E: Unknown type $type. Exiting.\n";
-   }
+    my ($type) = @_;
+    if (($type ne 'Sources') && ($type ne 'Packages')) {
+	fatal("Unknown type $type.");
+    }
 }
 
 sub aptopts
@@ -369,9 +370,6 @@ sub get_distfiles {
   # Takes a dist and a type
   my ($dist, $type) = @_;
 
-  # Let the above function check the type
-  #type_check($type);
-
   my @files;
 
   foreach my $file ( glob($datadir . '/' . $dist . "/var/lib/apt/lists/*_$type") ) {
@@ -437,8 +435,8 @@ sub dist_compare(\@$$) {
 
      # Do compare
      if ($do_compare) {
-        if ($#dists != 1) {
-           die "E: Can only compare versions if there are two distros.\n";
+        if (!@dists) {
+           fatal('Can only compare versions if there are two distros.');
         }
         if (!$status) {
           my $cmp = version_compare($versions[0], $versions[1]);
@@ -573,7 +571,7 @@ sub grep_file(\@$)
 }
 
 sub list {
-  opendir(DIR, $datadir) or die "can't open dir $datadir: $!";
+  opendir(DIR, $datadir) or fatal("can't open dir $datadir: $!");
   while (my $file = readdir(DIR)) {
      if ( (-d "$datadir/$file") && ($file =~ m|^\w+|) ) {
         print "$file\n";
@@ -589,7 +587,7 @@ sub parseFile {
 
    # Parse a source file and returns results as a hash
 
-   open(FILE, "$file") || die("Could not open $file : $!\n");
+   open(FILE, '<', $file) || fatal("Could not open $file : $!");
 
    # Use %tmp hash to store tmp data
    my %tmp;
