@@ -129,6 +129,7 @@ License, or (at your option) any later version.
 use strict;
 use warnings;
 use feature 'switch';
+use File::Copy qw(cp);
 use File::Path qw(make_path);
 use File::Basename;
 use Getopt::Long qw(:config require_order);
@@ -311,8 +312,8 @@ sub dist_create
     }
     make_path($datadir);
     foreach my $d (('/etc/apt', '/etc/apt/apt.conf.d', '/etc/apt/preferences.d',
-		    '/var/lib/apt/lists/partial', '/var/cache/apt/archives/partial',
-		    '/var/lib/dpkg')) {
+		    '/etc/apt/trusted.gpg.d', '/var/lib/apt/lists/partial',
+		    '/var/cache/apt/archives/partial', '/var/lib/dpkg')) {
 	make_path("$dir/$d");
     }
 
@@ -358,8 +359,14 @@ Dir "$dir";
 Dir::State::status "$dir/var/lib/dpkg/status";
 EOF
     close FH;
-    print "Now edit $dir/etc/apt/sources.list\n";
-    print "Then run chdist apt-get $dist update\n";
+    foreach my $keyring (qw(debian-archive-keyring.gpg
+			    debian-archive-removed-keys.gpg
+			    ubuntu-archive-keyring.gpg
+			    ubuntu-archive-removed-keys.gpg)) {
+	cp("/usr/share/keyrings/$keyring", "$dir/etc/apt/trusted.gpg.d/");
+    }
+    print "Now edit $dir/etc/apt/sources.list\n" unless $version;
+    print "Run chdist apt-get $dist update\n";
     print "And enjoy.\n";
 }
 
