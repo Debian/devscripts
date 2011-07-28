@@ -21,8 +21,11 @@ devscripts (2.11.1) UNRELEASED; urgency=low
     at the end of the source files.  (Closes: #625620)
   * debuild: Call dpkg-source --before-build/--after-build when emulating
     dpkg-buildpackage.  (Closes: #628481)
-  * chdist: Create /etc/apt/apt.conf.d and /etc/apt/preferences.d in the
-    chdist directory structure.  (Closes: #528274, LP: #566682)
+  * chdist:
+    + Create /etc/apt/apt.conf.d and /etc/apt/preferences.d in the chdist
+      directory structure.  (Closes: #528274, LP: #566682)
+    + When multiple binary versions exist, use newest version for
+      compare-src-bin-*.
 
   [ Christoph Berg ]
   * dscextract: new script, extracts a single file from a Debian source

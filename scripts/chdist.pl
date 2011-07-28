@@ -469,102 +469,97 @@ sub dist_compare(\@;$;$) {
 
 
 sub compare_src_bin {
-   my ($dist, $do_compare) = @_;
+    my ($dist, $do_compare) = @_;
 
-   $do_compare = 0 if $do_compare eq 'false';
+    dist_check($dist);
 
-   dist_check($dist);
+    # Get all packages
+    my %packages;
+    my @parse_types = ('Sources', 'Packages');
+    my @comp_types  = ('Sources_Bin', 'Packages');
 
+    foreach my $type (@parse_types) {
+	my $files = get_distfiles($dist, $type);
+	my @files = @$files;
+	foreach my $file ( @files ) {
+	    my $parsed_file = parseFile($file);
+	    foreach my $package ( keys(%{$parsed_file}) ) {
+		if ( $packages{$dist}{$package} ) {
+		    warn "W: Package $package is already listed for $dist. Not overriding.\n";
+		} else {
+		    $packages{$type}{$package} = $parsed_file->{$package};
+		}
+	    }
+	}
+    }
 
-   # Get all packages
-   my %packages;
-   my @parse_types = ('Sources', 'Packages');
-   my @comp_types  = ('Sources_Bin', 'Packages');
+    # Build 'Sources_Bin' hash
+    foreach my $package ( keys( %{$packages{Sources}} ) ) {
+	my $package_h = \%{$packages{Sources}{$package}};
+	if ( $package_h->{'Binary'} ) {
+	    my @binaries = split(", ", $package_h->{'Binary'});
+	    my $version  = $package_h->{'Version'};
+	    foreach my $binary (@binaries) {
+		if (defined $packages{Sources_Bin}{$binary}) {
+		    my $alt_ver = $packages{Sources_Bin}{$binary}{Version};
+		    # Skip this entry if it's an older version than we already
+		    # have
+		    if (version_compare($version, $alt_ver) < 0) {
+			next;
+		    }
+		}
+		$packages{Sources_Bin}{$binary}{Version} = $version;
+	    }
+	} else {
+	    warn "Source $package has no binaries!\n";
+	}
+    }
 
-   foreach my $type (@parse_types) {
-      my $files = get_distfiles($dist, $type);
-      my @files = @$files;
-      foreach my $file ( @files ) {
-         my $parsed_file = parseFile($file);
-         foreach my $package ( keys(%{$parsed_file}) ) {
-            if ( $packages{$dist}{$package} ) {
-               warn "W: Package $package is already listed for $dist. Not overriding.\n";
-            } else {
-               $packages{$type}{$package} = $parsed_file->{$package};
-            }
-         }
-      }
-   }
+    # Get entire list of packages
+    my @all_packages = uniq sort ( map { keys(%{$packages{$_}}) } @comp_types );
 
-   # Build 'Sources_Bin' hash
-   foreach my $package ( keys( %{$packages{Sources}} ) ) {
-      my $package_h = \%{$packages{Sources}{$package}};
-      if ( $package_h->{'Binary'} ) {
-         my @binaries = split(", ", $package_h->{'Binary'});
-         my $version  = $package_h->{'Version'};
-         foreach my $binary (@binaries) {
-            if ( $packages{Sources_Bin}{$binary} ) {
-               # TODO: replace if new version is newer (use dpkg --compare-version?)
-               warn "There is already a version for binary $binary. Not replacing.\n";
-            } else {
-               $packages{Sources_Bin}{$binary}{Version} = $version;
-            }
-         }
-      } else {
-         warn "Source $package has no binaries!\n";
-      }
-   }
+    foreach my $package (@all_packages) {
+	my $line = "$package ";
+	my $status = "";
+	my $details;
 
-   # Get entire list of packages
-   my @all_packages = uniq sort ( map { keys(%{$packages{$_}}) } @comp_types );
+	foreach my $type (@comp_types) {
+	    if ( $packages{$type}{$package} ) {
+		$line .= "$packages{$type}{$package}{'Version'} ";
+	    } else {
+		$line .= "UNAVAIL ";
+		$status = "not_in_$type";
+	    }
+	}
 
-  foreach my $package (@all_packages) {
-     my $line = "$package ";
-     my $status = "";
-     my $details;
+	my @versions = map { $packages{$_}{$package}{'Version'} } @comp_types;
 
-     foreach my $type (@comp_types) {
-        if ( $packages{$type}{$package} ) {
-           $line .= "$packages{$type}{$package}{'Version'} ";
-        } else {
-           $line .= "UNAVAIL ";
-           $status = "not_in_$type";
-        }
-     }
+	# Do compare
+	if ($do_compare) {
+	    if (!@comp_types) {
+		fatal('Can only compare versions if there are two types.');
+	    }
+	    if (!$status) {
+		my $cmp = version_compare($versions[0], $versions[1]);
+		if (!$cmp) {
+		    $status = "same_version";
+		} elsif ($cmp < 0) {
+		    $status = "newer_in_$comp_types[1]";
+		    if ( $versions[1] =~ m|^\Q$versions[0]\E| ) {
+			$details = " local_changes_in_$comp_types[1]";
+		    }
+		} else {
+		    $status = "newer_in_$comp_types[0]";
+		    if ( $versions[0] =~ m|^\Q$versions[1]\E| ) {
+			$details = " local_changes_in_$comp_types[0]";
+		    }
+		}
+	    }
+	    $line .= " $status $details";
+	}
 
-     my @versions = map { $packages{$_}{$package}{'Version'} } @comp_types;
-     # Escaped versions
-     my @esc_vers = @versions;
-     foreach my $vers (@esc_vers) {
-        $vers =~ s|\+|\\\+|;
-     }
-
-     # Do compare
-     if ($do_compare) {
-        if ($#comp_types != 1) {
-           die "E: Can only compare versions if there are two types.\n";
-        }
-        if (!$status) {
-          my $cmp = version_compare($versions[0], $versions[1]);
-          if (!$cmp) {
-            $status = "same_version";
-          } elsif ($cmp < 0) {
-            $status = "newer_in_$comp_types[1]";
-            if ( $versions[1] =~ m|^$esc_vers[0]| ) {
-               $details = " local_changes_in_$comp_types[1]";
-            }
-          } else {
-             $status = "newer_in_$comp_types[0]";
-             if ( $versions[0] =~ m|^$esc_vers[1]| ) {
-                $details = " local_changes_in_$comp_types[0]";
-             }
-          }
-        }
-        $line .= " $status $details";
-     }
-
-     print "$line\n";
-  }
+	print "$line\n";
+    }
 }
 
 sub grep_file(\@$)
