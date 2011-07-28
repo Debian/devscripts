@@ -250,32 +250,52 @@ sub aptcmd
     exec($cmd, @args);
 }
 
-sub bin2src {
-  my ($dist, $pkg) = @_;
-  dist_check($dist);
-  if (!$pkg) {
-     die "E: no package name provided. Exiting.\n";
-  }
-  my $args = aptopts($dist) . " show $pkg";
-  my $aptconfig = aptconfig($dist);
-  my $source = `$aptconfig /usr/bin/apt-cache $args|grep '^Source:'`;
-  exit($?) if($? != 0);
-  $source =~ s/Source: (.*)/$1/;
-  print $pkg if($source eq '');
-  print $source if($source ne '');
+sub bin2src
+{
+    my ($dist, $pkg) = @_;
+    dist_check($dist);
+    if (!defined($pkg)) {
+	fatal("No package name provided. Exiting.");
+    }
+    my @args = (aptopts($dist), 'show', $pkg);
+    aptconfig($dist);
+    my $src = $pkg;
+    my $pid = open(CACHE, '-|', 'apt-cache', @args);
+    if (!defined($pid)) {
+	fatal("Couldn't run apt-cache: $!");
+    }
+    if ($pid) {
+	while (<CACHE>) {
+	    if (m/^Source: (.*)/) {
+		$src = $1;
+		last;
+	    }
+	}
+	close CACHE || fatal("bad apt-cache $!: $?");
+	print "$src\n";
+    }
 }
 
 sub src2bin {
-  my ($dist, $pkg) = @_;
-  dist_check($dist);
-  if (!$pkg) {
-     die "E: no package name provided. Exiting.\n";
-  }
-  my $args = aptopts($dist) . " showsrc $pkg";
-  my $bins = `/usr/bin/apt-cache $args|sed -n '/^Package: $pkg/{N;p}' | sed -n 's/^Binary: \\(.*\\)/\\1/p'`;
-  exit($?) if ($? != 0);
-  my @bins = split /, /, $bins;
-  print join "\n", @bins;
+    my ($dist, $pkg) = @_;
+    dist_check($dist);
+    if (!defined($pkg)) {
+	fatal("no package name provided. Exiting.");
+    }
+    my @args = (aptopts($dist), 'showsrc', $pkg);
+    my $pid = open(CACHE, '-|', 'apt-cache', @args);
+    if (!defined($pid)) {
+	fatal("Couldn't run apt-cache: $!");
+    }
+    if ($pid) {
+	while (<CACHE>) {
+	    if (m/^Binary: (.*)/) {
+		print join("\n", split(/, /, $1)) . "\n";
+		last;
+	    }
+	}
+	close CACHE || fatal("bad apt-cache $!: $?");
+    }
 }
 
 sub dist_create
@@ -547,13 +567,18 @@ sub compare_src_bin {
   }
 }
 
-sub grep_file {
-  my (@argv, $file) = @_;
-  my $dist = shift @argv;
-  dist_check($dist);
-  my $f = glob($datadir . '/' . $dist . "/var/lib/apt/lists/*_$file");
-  # FIXME avoid shell invoc, potential quoting problems here
-  system("cat $f | grep-dctrl @argv");
+sub grep_file(\@$)
+{
+    my ($argv, $file) = @_;
+    my $dist = shift @{$argv};
+    dist_check($dist);
+    my @f = glob($datadir . '/' . $dist . "/var/lib/apt/lists/*_$file");
+    if (@f) {
+	exec('grep-dctrl', @{$argv}, @f);
+    }
+    else {
+	fatal("Couldn't find a $file for $dist.");
+    }
 }
 
 sub list {
