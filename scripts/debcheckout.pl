@@ -827,12 +827,12 @@ sub unpack_source($$$$$) {
 	return 0;
     }
 
-    # put orig.tar.gz in place
-    my @origtgz = glob "$tmpdir/${pkg}_*.orig.tar.gz";
-    if (@origtgz) {
-	my $base = $origtgz[0];
+    # put source package in place
+    foreach my $sourcefile (glob "$tmpdir/${pkg}_*") {
+	next unless (-f $sourcefile); # skip directories
+	my $base = $sourcefile;
 	$base =~ s!.*/!!;
-	rename $origtgz[0], $base or die "rename $origtgz[0] $base: $!";
+	rename $sourcefile, $base or die "rename $sourcefile $base: $!";
     }
 
     return 1 if ($unpack_source eq 'download-only' or not $debian_only);
