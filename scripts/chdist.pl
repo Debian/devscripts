@@ -384,14 +384,10 @@ sub get_distfiles {
 }
 
 
-sub dist_compare(\@;$;$) {
+sub dist_compare(\@$$) {
   # Takes a list of dists, a type of comparison and a do_compare flag
   my ($dists, $do_compare, $type) = @_;
-  # Type is 'Sources' by default
-  $type ||= 'Sources';
   type_check($type);
-
-  $do_compare = 0 if $do_compare eq 'false';
 
   # Get the list of dists from the referrence
   my @dists = @$dists;
