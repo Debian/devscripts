@@ -129,6 +129,7 @@ License, or (at your option) any later version.
 use strict;
 use warnings;
 use feature 'switch';
+use File::Path qw(make_path);
 use File::Basename;
 use Getopt::Long qw(:config require_order);
 use Cwd qw(abs_path cwd);
@@ -277,51 +278,39 @@ sub src2bin {
   print join "\n", @bins;
 }
 
+sub dist_create
+{
+    my ($dist, $method, $version, @sections) = @_;
+    if (!defined($dist)) {
+	fatal("you must provide a dist name.");
+    }
+    my $dir = "$datadir/$dist";
+    if (-d $dir) {
+	fatal("$dir already exists, exiting.");
+    }
+    make_path($datadir);
+    foreach my $d (('/etc/apt', '/etc/apt/apt.conf.d', '/etc/apt/preferences.d',
+		    '/var/lib/apt/lists/partial', '/var/cache/apt/archives/partial',
+		    '/var/lib/dpkg')) {
+	make_path("$dir/$d");
+    }
 
-sub recurs_mkdir {
-  my ($dir) = @_;
-  my @temp = split /\//, $dir;
-  my $createdir = "";
-  foreach my $piece (@temp) {
-     $createdir .= "/$piece";
-     if (! -d $createdir) {
-        mkdir($createdir);
-     }
-  }
-}
-
-sub dist_create {
-  my ($dist, $method, $version, @sections) = @_;
-  my $dir  = $datadir . '/' . $dist;
-  if ( ! $dist ) {
-     die "E: you must provide a dist name.\n";
-  }
-  if (-d $dir) {
-    die "E: $dir already exists, exiting.\n";
-  }
-  if (! -d $datadir) {
-    mkdir($datadir);
-  }
-  mkdir($dir);
-  foreach my $d (('/etc/apt', '/var/lib/apt/lists/partial', '/var/lib/dpkg', '/var/cache/apt/archives/partial')) {
-     recurs_mkdir("$dir/$d");
-  }
-
-  # Create sources.list
-  open(FH, ">$dir/etc/apt/sources.list");
-  if ($version) {
-     # Use provided method, version and sections
-     my $sections_str = join(' ', @sections);
-     print FH <<EOF;
+    # Create sources.list
+    open(FH, '>', "$dir/etc/apt/sources.list");
+    if ($version) {
+	# Use provided method, version and sections
+	my $sections_str = join(' ', @sections);
+	print FH <<EOF;
 deb $method $version $sections_str
 deb-src $method $version $sections_str
 EOF
-  } else {
-     if ($method) {
-        warn "W: method provided without a section. Using default content for sources.list\n";
-     }
-     # Fill in sources.list with example contents
-     print FH <<EOF;
+    }
+    else {
+	if ($method) {
+	    warn "W: method provided without a section. Using default content for sources.list\n";
+	}
+	# Fill in sources.list with example contents
+	print FH <<EOF;
 #deb http://ftp.debian.org/debian/ unstable main contrib non-free
 #deb-src http://ftp.debian.org/debian/ unstable main contrib non-free
 
@@ -330,27 +319,27 @@ EOF
 #deb-src http://archive.ubuntu.com/ubuntu dapper main restricted
 #deb-src http://archive.ubuntu.com/ubuntu dapper universe multiverse
 EOF
-  }
-  close FH;
-  # Create dpkg status
-  open(FH, ">$dir/var/lib/dpkg/status");
-  close FH; #empty file
-  # Create apt.conf
-  $arch ||= `dpkg --print-architecture`;
-  chomp $arch;
-  open(FH, ">$dir/etc/apt/apt.conf");
-  print FH <<EOF;
+    }
+    close FH;
+    # Create dpkg status
+    open(FH, '>', "$dir/var/lib/dpkg/status");
+    close FH; #empty file
+    # Create apt.conf
+    $arch ||= `dpkg --print-architecture`;
+    chomp $arch;
+    open(FH, ">$dir/etc/apt/apt.conf");
+    print FH <<EOF;
 Apt {
    Architecture "$arch";
-}
+};
 
 Dir "$dir";
 Dir::State::status "$dir/var/lib/dpkg/status";
 EOF
-  close FH;
-  print "Now edit $dir/etc/apt/sources.list\n";
-  print "Then run chdist apt-get $dist update\n";
-  print "And enjoy.\n";
+    close FH;
+    print "Now edit $dir/etc/apt/sources.list\n";
+    print "Then run chdist apt-get $dist update\n";
+    print "And enjoy.\n";
 }
 
 
