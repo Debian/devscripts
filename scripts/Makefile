@@ -27,8 +27,7 @@ BIN_LIBDIR = /usr/lib/devscripts
 all: $(SCRIPTS) $(GEN_MAN1S) $(LIBS) $(CWRAPPERS) $(COMPLETION)
 
 $(VERSION_FILE):
-	@echo "You need to 'make' the toplevel directory first"
-	@false
+	$(MAKE) -C .. version
 
 %: %.sh
 
@@ -53,7 +52,7 @@ $(VERSION_FILE):
 # from ../po4a/Makefile. Treat files with care.
 PID := $(shell echo $$$$-$$PPID)
 devscripts.1: devscripts.1.in
-	cat $+ > $@.$(PID)
+	cat $< > $@.$(PID)
 	perl ../debian/genmanpage.pl >> $@.$(PID)
 	mv $@.$(PID) $@
 
