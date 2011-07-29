@@ -785,7 +785,7 @@ sub process_watchline ($$$$$$)
 	}
 
 	# Check all's OK
-	if ($filepattern !~ /\(.*\)/) {
+	if (not $filepattern or $filepattern !~ /\(.*\)/) {
 	    warn "$progname warning: Filename pattern missing version delimiters ()\n  in $watchfile, skipping:\n  $line\n";
 	    return 1;
 	}

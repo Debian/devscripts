@@ -33,6 +33,7 @@ devscripts (2.11.1) UNRELEASED; urgency=low
     package.
   * debcheckout: When retrieving the source for debian/-only repositories,
     move all .dsc components to the current directory, not just .orig.tar.gz.
+  * uscan: Catch perl warning with incorrect watch files without ().
 
  -- David Prévot <taffit@debian.org>  Wed, 08 Jun 2011 12:16:32 -0400
 
