@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2011-07-08 18:09-0400\n"
+"POT-Creation-Date: 2011-07-29 01:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2302,7 +2302,7 @@ msgid "reportbug(1), querybts(1)"
 msgstr ""
 
 #. type: =head1
-#: ../scripts/bts.pl:4102 ../scripts/chdist.pl:91 ../scripts/debsnap.1:126 ../scripts/mass-bug.pl:513 ../scripts/tagpending.pl:431
+#: ../scripts/bts.pl:4102 ../scripts/chdist.pl:119 ../scripts/debsnap.1:126 ../scripts/mass-bug.pl:513 ../scripts/tagpending.pl:431
 #, no-wrap
 msgid "COPYRIGHT"
 msgstr ""
@@ -2317,7 +2317,7 @@ msgid ""
 msgstr ""
 
 #. type: textblock
-#: ../scripts/bts.pl:4109 ../scripts/chdist.pl:96 ../scripts/mass-bug.pl:517
+#: ../scripts/bts.pl:4109 ../scripts/chdist.pl:124 ../scripts/mass-bug.pl:517
 msgid ""
 "It is licensed under the terms of the GPL, either version 2 of the License, "
 "or (at your option) any later version."
@@ -2525,7 +2525,7 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/chdist.pl:43
-msgid "Choose data directory (default: $HOME/.chdist/)."
+msgid "Choose data directory (default: F<$HOME/.chdist/>)."
 msgstr ""
 
 #. type: =item
@@ -2545,96 +2545,150 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/chdist.pl:59
-msgid "B<create> I<DIST> : prepare a new tree named I<DIST>"
+msgid "B<create> I<DIST> [I<URL> I<RELEASE> I<SECTIONS>]"
 msgstr ""
 
-#. type: =item
+#. type: textblock
 #: ../scripts/chdist.pl:61
-msgid "B<apt-get> I<DIST> (B<update>|B<source>|...) : run B<apt-get> inside I<DIST>"
+msgid "Prepares a new tree named I<DIST>"
 msgstr ""
 
 #. type: =item
 #: ../scripts/chdist.pl:63
-msgid ""
-"B<apt-cache> I<DIST> (B<show>|B<showsrc>|...) : run B<apt-cache> inside "
-"I<DIST>"
+msgid "B<apt-get> I<DIST> <B<update>|B<source>|...>"
 msgstr ""
 
-#. type: =item
+#. type: textblock
 #: ../scripts/chdist.pl:65
-msgid "B<apt-rdepends> I<DIST> [...] : run B<apt-rdepends> inside I<DIST>"
+msgid "Runs B<apt-get> inside I<DIST>"
 msgstr ""
 
 #. type: =item
 #: ../scripts/chdist.pl:67
-msgid "B<src2bin> I<DIST PKG> : get binary packages for a source package in I<DIST>"
+msgid "B<apt-cache> I<DIST> <B<show>|B<showsrc>|...>"
 msgstr ""
 
-#. type: =item
+#. type: textblock
 #: ../scripts/chdist.pl:69
-msgid "B<bin2src> I<DIST PKG> : get source package for a binary package in I<DIST>"
+msgid "Runs B<apt-cache> inside I<DIST>"
 msgstr ""
 
 #. type: =item
 #: ../scripts/chdist.pl:71
-msgid ""
-"B<compare-packages> I<DIST1 DIST2> [I<DIST3>, ...] : list versions of "
-"packages in several I<DIST>ributions"
+msgid "B<apt-rdepends> I<DIST> [...]"
 msgstr ""
 
-#. type: =item
+#. type: textblock
 #: ../scripts/chdist.pl:73
-msgid "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
+msgid "Runs B<apt-rdepends> inside I<DIST>"
 msgstr ""
 
 #. type: =item
 #: ../scripts/chdist.pl:75
-msgid ""
-"B<compare-versions> I<DIST1 DIST2> : same as B<compare-packages>, but also "
-"run B<dpkg --compare-versions> and display where the package is newer."
+msgid "B<src2bin> I<DIST SRCPKG>"
 msgstr ""
 
-#. type: =item
+#. type: textblock
 #: ../scripts/chdist.pl:77
-msgid "B<compare-bin-versions> I<DIST1 DIST2>"
+msgid "Lists binary packages for I<SRCPKG> in I<DIST>"
 msgstr ""
 
 #. type: =item
 #: ../scripts/chdist.pl:79
-msgid ""
-"B<compare-src-bin-packages> I<DIST> : compare sources and binaries for "
-"I<DIST>"
+msgid "B<bin2src> I<DIST BINPKG>"
 msgstr ""
 
-#. type: =item
+#. type: textblock
 #: ../scripts/chdist.pl:81
-msgid ""
-"B<compare-src-bin-versions> I<DIST> : same as B<compare-src-bin-versions>, "
-"but also run I<dpkg --compare-versions> and display where the package is "
-"newer"
+msgid "Lists source package for I<BINPKG> in I<DIST>"
 msgstr ""
 
 #. type: =item
 #: ../scripts/chdist.pl:83
-msgid ""
-"B<grep-dctrl-packages> I<DIST> [...] : run B<grep-dctrl> on F<*_Packages> "
-"inside I<DIST>"
+msgid "B<compare-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
 msgstr ""
 
 #. type: =item
 #: ../scripts/chdist.pl:85
-msgid ""
-"B<grep-dctrl-sources> I<DIST> [...] : run B<grep-dctrl> on F<*_Sources> "
-"inside I<DIST>"
+msgid "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/chdist.pl:87
+msgid "Lists versions of packages in several I<DIST>ributions"
 msgstr ""
 
 #. type: =item
-#: ../scripts/chdist.pl:87
-msgid "B<list> : list available I<DIST>s"
+#: ../scripts/chdist.pl:89
+msgid "B<compare-versions> I<DIST1 DIST2>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/chdist.pl:91
+msgid "B<compare-bin-versions> I<DIST1 DIST2>"
 msgstr ""
 
 #. type: textblock
 #: ../scripts/chdist.pl:93
+msgid ""
+"Same as B<compare-packages>/B<compare-bin-packages>, but also runs B<dpkg "
+"--compare-versions> and display where the package is newer."
+msgstr ""
+
+#. type: =item
+#: ../scripts/chdist.pl:96
+msgid "B<compare-src-bin-packages> I<DIST>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/chdist.pl:98
+msgid "Compares sources and binaries for I<DIST>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/chdist.pl:100
+msgid "B<compare-src-bin-versions> I<DIST>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/chdist.pl:102
+msgid ""
+"Same as B<compare-src-bin-packages>, but also run B<dpkg --compare-versions> "
+"and display where the package is newer"
+msgstr ""
+
+#. type: =item
+#: ../scripts/chdist.pl:105
+msgid "B<grep-dctrl-packages> I<DIST> [...]"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/chdist.pl:107
+msgid "Runs B<grep-dctrl> on F<*_Packages> inside I<DIST>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/chdist.pl:109
+msgid "B<grep-dctrl-sources> I<DIST> [...]"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/chdist.pl:111
+msgid "Runs B<grep-dctrl> on F<*_Sources> inside I<DIST>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/chdist.pl:113
+msgid "B<list>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/chdist.pl:115
+msgid "Lists available I<DIST>s"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/chdist.pl:121
 msgid ""
 "This program is copyright 2007 by Lucas Nussbaum and Luk Claes. This program "
 "comes with ABSOLUTELY NO WARRANTY."

@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2011-07-08 18:09-0400\n"
+"POT-Creation-Date: 2011-07-29 01:53+0000\n"
 "PO-Revision-Date: 2011-07-08 19:18-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -3084,7 +3084,7 @@ msgid "reportbug(1), querybts(1)"
 msgstr "reportbug(1), querybts(1)"
 
 #. type: =head1
-#: ../scripts/bts.pl:4102 ../scripts/chdist.pl:91 ../scripts/debsnap.1:126
+#: ../scripts/bts.pl:4102 ../scripts/chdist.pl:119 ../scripts/debsnap.1:126
 #: ../scripts/mass-bug.pl:513 ../scripts/tagpending.pl:431
 #, no-wrap
 msgid "COPYRIGHT"
@@ -3103,7 +3103,7 @@ msgstr ""
 "<josh@freedesktop.org>."
 
 #. type: textblock
-#: ../scripts/bts.pl:4109 ../scripts/chdist.pl:96 ../scripts/mass-bug.pl:517
+#: ../scripts/bts.pl:4109 ../scripts/chdist.pl:124 ../scripts/mass-bug.pl:517
 msgid ""
 "It is licensed under the terms of the GPL, either version 2 of the License, "
 "or (at your option) any later version."
@@ -3358,7 +3358,9 @@ msgstr "B<-d>, B<--data-dir> I<REP>"
 
 #. type: textblock
 #: ../scripts/chdist.pl:43
-msgid "Choose data directory (default: $HOME/.chdist/)."
+#, fuzzy
+#| msgid "Choose data directory (default: $HOME/.chdist/)."
+msgid "Choose data directory (default: F<$HOME/.chdist/>)."
 msgstr "Choisir le répertoire des données (par défaut : $HOME/.chdist/)."
 
 #. type: =item
@@ -3380,121 +3382,222 @@ msgstr "Afficher les informations sur la version."
 
 #. type: =item
 #: ../scripts/chdist.pl:59
-msgid "B<create> I<DIST> : prepare a new tree named I<DIST>"
+msgid "B<create> I<DIST> [I<URL> I<RELEASE> I<SECTIONS>]"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/chdist.pl:61
+#, fuzzy
+#| msgid "B<create> I<DIST> : prepare a new tree named I<DIST>"
+msgid "Prepares a new tree named I<DIST>"
 msgstr "B<create> I<DIST> : préparer une nouvelle arborescence nommée I<DIST>"
 
 #. type: =item
-#: ../scripts/chdist.pl:61
-msgid ""
-"B<apt-get> I<DIST> (B<update>|B<source>|...) : run B<apt-get> inside I<DIST>"
+#: ../scripts/chdist.pl:63
+#, fuzzy
+#| msgid ""
+#| "B<apt-get> I<DIST> (B<update>|B<source>|...) : run B<apt-get> inside "
+#| "I<DIST>"
+msgid "B<apt-get> I<DIST> <B<update>|B<source>|...>"
 msgstr ""
 "B<apt-get> I<DIST> (B<update>|B<source>|...) : exécuter B<apt-get> dans "
 "I<DIST>"
 
+#. type: textblock
+#: ../scripts/chdist.pl:65
+msgid "Runs B<apt-get> inside I<DIST>"
+msgstr ""
+
 #. type: =item
-#: ../scripts/chdist.pl:63
-msgid ""
-"B<apt-cache> I<DIST> (B<show>|B<showsrc>|...) : run B<apt-cache> inside "
-"I<DIST>"
+#: ../scripts/chdist.pl:67
+#, fuzzy
+#| msgid ""
+#| "B<apt-cache> I<DIST> (B<show>|B<showsrc>|...) : run B<apt-cache> inside "
+#| "I<DIST>"
+msgid "B<apt-cache> I<DIST> <B<show>|B<showsrc>|...>"
 msgstr ""
 "B<apt-cache> I<DIST> (B<show>|B<showsrc>|...) : exécuter B<apt-cache> dans "
 "I<DIST>"
 
-#. type: =item
-#: ../scripts/chdist.pl:65
-msgid "B<apt-rdepends> I<DIST> [...] : run B<apt-rdepends> inside I<DIST>"
-msgstr "B<apt-rdepends> I<DIST> [...] : exécuter B<apt-rdepends> dans I<DIST>"
-
-#. type: =item
-#: ../scripts/chdist.pl:67
-msgid ""
-"B<src2bin> I<DIST PKG> : get binary packages for a source package in I<DIST>"
-msgstr ""
-"B<src2bin> I<DIST PKG> : récupérer les paquets binaires d'un paquet source "
-"de I<DIST>"
-
-#. type: =item
+#. type: textblock
 #: ../scripts/chdist.pl:69
-msgid ""
-"B<bin2src> I<DIST PKG> : get source package for a binary package in I<DIST>"
+msgid "Runs B<apt-cache> inside I<DIST>"
 msgstr ""
-"B<bin2src> I<DIST PKG> : récupérer le paquet source d'un paquet binaire de "
-"I<DIST>"
 
 #. type: =item
 #: ../scripts/chdist.pl:71
-msgid ""
-"B<compare-packages> I<DIST1 DIST2> [I<DIST3>, ...] : list versions of "
-"packages in several I<DIST>ributions"
+#, fuzzy
+#| msgid "B<apt-rdepends> I<DIST> [...] : run B<apt-rdepends> inside I<DIST>"
+msgid "B<apt-rdepends> I<DIST> [...]"
+msgstr "B<apt-rdepends> I<DIST> [...] : exécuter B<apt-rdepends> dans I<DIST>"
+
+#. type: textblock
+#: ../scripts/chdist.pl:73
+#, fuzzy
+#| msgid "B<apt-rdepends> I<DIST> [...] : run B<apt-rdepends> inside I<DIST>"
+msgid "Runs B<apt-rdepends> inside I<DIST>"
+msgstr "B<apt-rdepends> I<DIST> [...] : exécuter B<apt-rdepends> dans I<DIST>"
+
+#. type: =item
+#: ../scripts/chdist.pl:75
+msgid "B<src2bin> I<DIST SRCPKG>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/chdist.pl:77
+msgid "Lists binary packages for I<SRCPKG> in I<DIST>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/chdist.pl:79
+msgid "B<bin2src> I<DIST BINPKG>"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/chdist.pl:81
+msgid "Lists source package for I<BINPKG> in I<DIST>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/chdist.pl:83
+#, fuzzy
+#| msgid "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
+msgid "B<compare-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
+msgstr "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
+
+#. type: =item
+#: ../scripts/chdist.pl:85
+msgid "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
+msgstr "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
+
+#. type: textblock
+#: ../scripts/chdist.pl:87
+#, fuzzy
+#| msgid ""
+#| "B<compare-packages> I<DIST1 DIST2> [I<DIST3>, ...] : list versions of "
+#| "packages in several I<DIST>ributions"
+msgid "Lists versions of packages in several I<DIST>ributions"
 msgstr ""
 "B<compare-packages> I<DIST1 DIST2> [I<DIST3>, ...] : lister les versions de "
 "paquets de plusieurs I<DIST>ributions"
 
 #. type: =item
-#: ../scripts/chdist.pl:73
-msgid "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
-msgstr "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
+#: ../scripts/chdist.pl:89
+#, fuzzy
+#| msgid "B<compare-bin-versions> I<DIST1 DIST2>"
+msgid "B<compare-versions> I<DIST1 DIST2>"
+msgstr "B<compare-bin-versions> I<DIST1 DIST2>"
 
 #. type: =item
-#: ../scripts/chdist.pl:75
+#: ../scripts/chdist.pl:91
+msgid "B<compare-bin-versions> I<DIST1 DIST2>"
+msgstr "B<compare-bin-versions> I<DIST1 DIST2>"
+
+#. type: textblock
+#: ../scripts/chdist.pl:93
+#, fuzzy
+#| msgid ""
+#| "B<compare-versions> I<DIST1 DIST2> : same as B<compare-packages>, but "
+#| "also run B<dpkg --compare-versions> and display where the package is "
+#| "newer."
 msgid ""
-"B<compare-versions> I<DIST1 DIST2> : same as B<compare-packages>, but also "
-"run B<dpkg --compare-versions> and display where the package is newer."
+"Same as B<compare-packages>/B<compare-bin-packages>, but also runs B<dpkg --"
+"compare-versions> and display where the package is newer."
 msgstr ""
 "B<compare-versions> I<DIST1 DIST2> : comme pour B<compare-packages>, mais "
 "exécuter également B<dpkg --compare-versions> et afficher où se trouve le "
 "paquet le plus récent."
 
 #. type: =item
-#: ../scripts/chdist.pl:77
-msgid "B<compare-bin-versions> I<DIST1 DIST2>"
-msgstr "B<compare-bin-versions> I<DIST1 DIST2>"
+#: ../scripts/chdist.pl:96
+#, fuzzy
+#| msgid "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
+msgid "B<compare-src-bin-packages> I<DIST>"
+msgstr "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
 
-#. type: =item
-#: ../scripts/chdist.pl:79
-msgid ""
-"B<compare-src-bin-packages> I<DIST> : compare sources and binaries for "
-"I<DIST>"
+#. type: textblock
+#: ../scripts/chdist.pl:98
+#, fuzzy
+#| msgid ""
+#| "B<compare-src-bin-packages> I<DIST> : compare sources and binaries for "
+#| "I<DIST>"
+msgid "Compares sources and binaries for I<DIST>"
 msgstr ""
 "B<compare-src-bin-packages> I<DIST> : comparer les sources et binaires de "
 "I<DIST>"
 
 #. type: =item
-#: ../scripts/chdist.pl:81
+#: ../scripts/chdist.pl:100
+#, fuzzy
+#| msgid "B<compare-bin-versions> I<DIST1 DIST2>"
+msgid "B<compare-src-bin-versions> I<DIST>"
+msgstr "B<compare-bin-versions> I<DIST1 DIST2>"
+
+#. type: textblock
+#: ../scripts/chdist.pl:102
+#, fuzzy
+#| msgid ""
+#| "B<compare-versions> I<DIST1 DIST2> : same as B<compare-packages>, but "
+#| "also run B<dpkg --compare-versions> and display where the package is "
+#| "newer."
 msgid ""
-"B<compare-src-bin-versions> I<DIST> : same as B<compare-src-bin-versions>, "
-"but also run I<dpkg --compare-versions> and display where the package is "
-"newer"
+"Same as B<compare-src-bin-packages>, but also run B<dpkg --compare-versions> "
+"and display where the package is newer"
 msgstr ""
-"B<compare-src-bin-versions> I<DIST> : comme pour B<compare-src-bin-"
-"versions>, mais exécuter également B<dpkg --compare-versions> et afficher où "
-"se trouve le paquet le plus récent."
+"B<compare-versions> I<DIST1 DIST2> : comme pour B<compare-packages>, mais "
+"exécuter également B<dpkg --compare-versions> et afficher où se trouve le "
+"paquet le plus récent."
 
 #. type: =item
-#: ../scripts/chdist.pl:83
-msgid ""
-"B<grep-dctrl-packages> I<DIST> [...] : run B<grep-dctrl> on F<*_Packages> "
-"inside I<DIST>"
+#: ../scripts/chdist.pl:105
+#, fuzzy
+#| msgid "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
+msgid "B<grep-dctrl-packages> I<DIST> [...]"
+msgstr "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
+
+#. type: textblock
+#: ../scripts/chdist.pl:107
+#, fuzzy
+#| msgid ""
+#| "B<grep-dctrl-packages> I<DIST> [...] : run B<grep-dctrl> on F<*_Packages> "
+#| "inside I<DIST>"
+msgid "Runs B<grep-dctrl> on F<*_Packages> inside I<DIST>"
 msgstr ""
 "B<grep-dctrl-packages> I<DIST> [...] : exécuter B<grep-dctrl> sur tous les "
 "fichiers F<*_Packages> de I<DIST>"
 
 #. type: =item
-#: ../scripts/chdist.pl:85
-msgid ""
-"B<grep-dctrl-sources> I<DIST> [...] : run B<grep-dctrl> on F<*_Sources> "
-"inside I<DIST>"
+#: ../scripts/chdist.pl:109
+msgid "B<grep-dctrl-sources> I<DIST> [...]"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/chdist.pl:111
+#, fuzzy
+#| msgid ""
+#| "B<grep-dctrl-sources> I<DIST> [...] : run B<grep-dctrl> on F<*_Sources> "
+#| "inside I<DIST>"
+msgid "Runs B<grep-dctrl> on F<*_Sources> inside I<DIST>"
 msgstr ""
 "B<grep-dctrl-sources> I<DIST> [...] : exécuter B<grep-dctrl> sur tous les "
 "fichiers F<*_Sources> de I<DIST>"
 
 #. type: =item
-#: ../scripts/chdist.pl:87
-msgid "B<list> : list available I<DIST>s"
+#: ../scripts/chdist.pl:113
+#, fuzzy
+#| msgid "I<dd-list>(1)"
+msgid "B<list>"
+msgstr "I<dd-list>(1)"
+
+#. type: textblock
+#: ../scripts/chdist.pl:115
+#, fuzzy
+#| msgid "B<list> : list available I<DIST>s"
+msgid "Lists available I<DIST>s"
 msgstr "B<list> : lister les I<DIST>ributions disponibles"
 
 #. type: textblock
-#: ../scripts/chdist.pl:93
+#: ../scripts/chdist.pl:121
 msgid ""
 "This program is copyright 2007 by Lucas Nussbaum and Luk Claes. This program "
 "comes with ABSOLUTELY NO WARRANTY."
@@ -19663,6 +19766,29 @@ msgid ""
 msgstr ""
 "Cette page de manuel a été écrite pour le paquet B<devscripts> par le "
 "responsable du paquet, Julian Gilbey E<lt>jdg@debian.orgE<gt>."
+
+#~ msgid ""
+#~ "B<src2bin> I<DIST PKG> : get binary packages for a source package in "
+#~ "I<DIST>"
+#~ msgstr ""
+#~ "B<src2bin> I<DIST PKG> : récupérer les paquets binaires d'un paquet "
+#~ "source de I<DIST>"
+
+#~ msgid ""
+#~ "B<bin2src> I<DIST PKG> : get source package for a binary package in "
+#~ "I<DIST>"
+#~ msgstr ""
+#~ "B<bin2src> I<DIST PKG> : récupérer le paquet source d'un paquet binaire "
+#~ "de I<DIST>"
+
+#~ msgid ""
+#~ "B<compare-src-bin-versions> I<DIST> : same as B<compare-src-bin-"
+#~ "versions>, but also run I<dpkg --compare-versions> and display where the "
+#~ "package is newer"
+#~ msgstr ""
+#~ "B<compare-src-bin-versions> I<DIST> : comme pour B<compare-src-bin-"
+#~ "versions>, mais exécuter également B<dpkg --compare-versions> et afficher "
+#~ "où se trouve le paquet le plus récent."
 
 #~ msgid ""
 #~ "Specify architecture of downloaded binary packages. Implies B<--binary>."
