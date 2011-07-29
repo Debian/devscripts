@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2011-07-29 01:53+0000\n"
-"PO-Revision-Date: 2011-07-08 19:18-0400\n"
+"PO-Revision-Date: 2011-07-28 22:11-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -3358,10 +3358,8 @@ msgstr "B<-d>, B<--data-dir> I<REP>"
 
 #. type: textblock
 #: ../scripts/chdist.pl:43
-#, fuzzy
-#| msgid "Choose data directory (default: $HOME/.chdist/)."
 msgid "Choose data directory (default: F<$HOME/.chdist/>)."
-msgstr "Choisir le répertoire des données (par défaut : $HOME/.chdist/)."
+msgstr "Choisir le répertoire des données (par défaut : F<$HOME/.chdist/>)."
 
 #. type: =item
 #: ../scripts/chdist.pl:45
@@ -3460,10 +3458,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/chdist.pl:83
-#, fuzzy
-#| msgid "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
 msgid "B<compare-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
-msgstr "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
+msgstr "B<compare-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
 
 #. type: =item
 #: ../scripts/chdist.pl:85
@@ -3483,10 +3479,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/chdist.pl:89
-#, fuzzy
-#| msgid "B<compare-bin-versions> I<DIST1 DIST2>"
 msgid "B<compare-versions> I<DIST1 DIST2>"
-msgstr "B<compare-bin-versions> I<DIST1 DIST2>"
+msgstr "B<compare-versions> I<DIST1 DIST2>"
 
 #. type: =item
 #: ../scripts/chdist.pl:91
@@ -3495,25 +3489,18 @@ msgstr "B<compare-bin-versions> I<DIST1 DIST2>"
 
 #. type: textblock
 #: ../scripts/chdist.pl:93
-#, fuzzy
-#| msgid ""
-#| "B<compare-versions> I<DIST1 DIST2> : same as B<compare-packages>, but "
-#| "also run B<dpkg --compare-versions> and display where the package is "
-#| "newer."
 msgid ""
 "Same as B<compare-packages>/B<compare-bin-packages>, but also runs B<dpkg --"
 "compare-versions> and display where the package is newer."
 msgstr ""
-"B<compare-versions> I<DIST1 DIST2> : comme pour B<compare-packages>, mais "
-"exécuter également B<dpkg --compare-versions> et afficher où se trouve le "
-"paquet le plus récent."
+"Comme pour B<compare-packages>/B<compare-bin-packages>, mais exécuter "
+"également B<dpkg --compare-versions> et afficher où se trouve le paquet le "
+"plus récent."
 
 #. type: =item
 #: ../scripts/chdist.pl:96
-#, fuzzy
-#| msgid "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
 msgid "B<compare-src-bin-packages> I<DIST>"
-msgstr "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
+msgstr "B<compare-src-bin-packages> I<DIST>"
 
 #. type: textblock
 #: ../scripts/chdist.pl:98
@@ -3528,32 +3515,22 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/chdist.pl:100
-#, fuzzy
-#| msgid "B<compare-bin-versions> I<DIST1 DIST2>"
 msgid "B<compare-src-bin-versions> I<DIST>"
-msgstr "B<compare-bin-versions> I<DIST1 DIST2>"
+msgstr "B<compare-src-bin-versions> I<DIST>"
 
 #. type: textblock
 #: ../scripts/chdist.pl:102
-#, fuzzy
-#| msgid ""
-#| "B<compare-versions> I<DIST1 DIST2> : same as B<compare-packages>, but "
-#| "also run B<dpkg --compare-versions> and display where the package is "
-#| "newer."
 msgid ""
 "Same as B<compare-src-bin-packages>, but also run B<dpkg --compare-versions> "
 "and display where the package is newer"
 msgstr ""
-"B<compare-versions> I<DIST1 DIST2> : comme pour B<compare-packages>, mais "
-"exécuter également B<dpkg --compare-versions> et afficher où se trouve le "
-"paquet le plus récent."
+"Comme pour B<compare-src-bin-packages>, mais exécuter également B<dpkg --"
+"compare-versions> et afficher où se trouve le paquet le plus récent."
 
 #. type: =item
 #: ../scripts/chdist.pl:105
-#, fuzzy
-#| msgid "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
 msgid "B<grep-dctrl-packages> I<DIST> [...]"
-msgstr "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
+msgstr "B<grep-dctrl-packages> I<DIST> [...]"
 
 #. type: textblock
 #: ../scripts/chdist.pl:107
@@ -3569,7 +3546,7 @@ msgstr ""
 #. type: =item
 #: ../scripts/chdist.pl:109
 msgid "B<grep-dctrl-sources> I<DIST> [...]"
-msgstr ""
+msgstr "B<grep-dctrl-sources> I<DIST> [...]"
 
 #. type: textblock
 #: ../scripts/chdist.pl:111
@@ -3584,10 +3561,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/chdist.pl:113
-#, fuzzy
-#| msgid "I<dd-list>(1)"
 msgid "B<list>"
-msgstr "I<dd-list>(1)"
+msgstr "B<list>"
 
 #. type: textblock
 #: ../scripts/chdist.pl:115
