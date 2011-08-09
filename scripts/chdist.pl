@@ -137,6 +137,15 @@ use Cwd qw(abs_path cwd);
 use Dpkg::Version;
 use Pod::Usage;
 
+# Redefine Pod::Text's cmd_i so pod2usage converts I<...> to <...> instead of
+# *...*
+{
+    package Pod::Text;
+    no warnings qw(redefine);
+
+    sub cmd_i { '<'. $_[2] . '>' }
+}
+
 my $progname = basename($0);
 
 sub usage {
