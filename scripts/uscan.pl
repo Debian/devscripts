@@ -785,7 +785,7 @@ sub process_watchline ($$$$$$)
 	}
 
 	# Check all's OK
-	if ($filepattern !~ /\(.*\)/) {
+	if (not $filepattern or $filepattern !~ /\(.*\)/) {
 	    warn "$progname warning: Filename pattern missing version delimiters ()\n  in $watchfile, skipping:\n  $line\n";
 	    return 1;
 	}
@@ -1574,7 +1574,7 @@ sub newest_dir ($$$$$) {
 	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi) {
 	    my $href = $2;
 	    if ($href =~ m&^$dirpattern/?$&) {
-		my $mangled_version = join(".", $href =~ m&^$dirpattern/?$&);
+		my $mangled_version = join(".", map { $_ || '' } $href =~ m&^$dirpattern/?$&);
 		push @hrefs, [$mangled_version, $href];
 	    }
 	}
