@@ -1122,6 +1122,11 @@ EOF
 	if ($newfile =~ m%^\w+://%) {
 	    $upstream_url = $newfile;
 	}
+	elsif ($newfile =~ m%^//%) {
+	    $upstream_url = $site;
+	    $upstream_url =~ s/^(https?:).*/$1/;
+	    $upstream_url .= $newfile;
+	}
 	# absolute filename?
 	elsif ($newfile =~ m%^/%) {
 	    # Were there any redirections? If so try using those first
