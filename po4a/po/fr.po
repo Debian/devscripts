@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2011-07-29 01:53+0000\n"
+"POT-Creation-Date: 2011-08-22 23:38+0000\n"
 "PO-Revision-Date: 2011-07-28 22:11-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -3387,7 +3387,7 @@ msgstr ""
 #: ../scripts/chdist.pl:61
 #, fuzzy
 #| msgid "B<create> I<DIST> : prepare a new tree named I<DIST>"
-msgid "Prepares a new tree named I<DIST>"
+msgid "Prepare a new tree named I<DIST>"
 msgstr "B<create> I<DIST> : préparer une nouvelle arborescence nommée I<DIST>"
 
 #. type: =item
@@ -3403,8 +3403,10 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/chdist.pl:65
-msgid "Runs B<apt-get> inside I<DIST>"
-msgstr ""
+#, fuzzy
+#| msgid "B<apt-rdepends> I<DIST> [...] : run B<apt-rdepends> inside I<DIST>"
+msgid "Run B<apt-get> inside I<DIST>"
+msgstr "B<apt-rdepends> I<DIST> [...] : exécuter B<apt-rdepends> dans I<DIST>"
 
 #. type: =item
 #: ../scripts/chdist.pl:67
@@ -3419,8 +3421,10 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/chdist.pl:69
-msgid "Runs B<apt-cache> inside I<DIST>"
-msgstr ""
+#, fuzzy
+#| msgid "B<apt-rdepends> I<DIST> [...] : run B<apt-rdepends> inside I<DIST>"
+msgid "Run B<apt-cache> inside I<DIST>"
+msgstr "B<apt-rdepends> I<DIST> [...] : exécuter B<apt-rdepends> dans I<DIST>"
 
 #. type: =item
 #: ../scripts/chdist.pl:71
@@ -3433,7 +3437,7 @@ msgstr "B<apt-rdepends> I<DIST> [...] : exécuter B<apt-rdepends> dans I<DIST>"
 #: ../scripts/chdist.pl:73
 #, fuzzy
 #| msgid "B<apt-rdepends> I<DIST> [...] : run B<apt-rdepends> inside I<DIST>"
-msgid "Runs B<apt-rdepends> inside I<DIST>"
+msgid "Run B<apt-rdepends> inside I<DIST>"
 msgstr "B<apt-rdepends> I<DIST> [...] : exécuter B<apt-rdepends> dans I<DIST>"
 
 #. type: =item
@@ -3443,7 +3447,7 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/chdist.pl:77
-msgid "Lists binary packages for I<SRCPKG> in I<DIST>"
+msgid "List binary packages for I<SRCPKG> in I<DIST>"
 msgstr ""
 
 #. type: =item
@@ -3453,7 +3457,7 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/chdist.pl:81
-msgid "Lists source package for I<BINPKG> in I<DIST>"
+msgid "List source package for I<BINPKG> in I<DIST>"
 msgstr ""
 
 #. type: =item
@@ -3472,7 +3476,7 @@ msgstr "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
 #| msgid ""
 #| "B<compare-packages> I<DIST1 DIST2> [I<DIST3>, ...] : list versions of "
 #| "packages in several I<DIST>ributions"
-msgid "Lists versions of packages in several I<DIST>ributions"
+msgid "List versions of packages in several I<DIST>ributions"
 msgstr ""
 "B<compare-packages> I<DIST1 DIST2> [I<DIST3>, ...] : lister les versions de "
 "paquets de plusieurs I<DIST>ributions"
@@ -3508,7 +3512,7 @@ msgstr "B<compare-src-bin-packages> I<DIST>"
 #| msgid ""
 #| "B<compare-src-bin-packages> I<DIST> : compare sources and binaries for "
 #| "I<DIST>"
-msgid "Compares sources and binaries for I<DIST>"
+msgid "Compare sources and binaries for I<DIST>"
 msgstr ""
 "B<compare-src-bin-packages> I<DIST> : comparer les sources et binaires de "
 "I<DIST>"
@@ -3538,7 +3542,7 @@ msgstr "B<grep-dctrl-packages> I<DIST> [...]"
 #| msgid ""
 #| "B<grep-dctrl-packages> I<DIST> [...] : run B<grep-dctrl> on F<*_Packages> "
 #| "inside I<DIST>"
-msgid "Runs B<grep-dctrl> on F<*_Packages> inside I<DIST>"
+msgid "Run B<grep-dctrl> on F<*_Packages> inside I<DIST>"
 msgstr ""
 "B<grep-dctrl-packages> I<DIST> [...] : exécuter B<grep-dctrl> sur tous les "
 "fichiers F<*_Packages> de I<DIST>"
@@ -3554,7 +3558,7 @@ msgstr "B<grep-dctrl-sources> I<DIST> [...]"
 #| msgid ""
 #| "B<grep-dctrl-sources> I<DIST> [...] : run B<grep-dctrl> on F<*_Sources> "
 #| "inside I<DIST>"
-msgid "Runs B<grep-dctrl> on F<*_Sources> inside I<DIST>"
+msgid "Run B<grep-dctrl> on F<*_Sources> inside I<DIST>"
 msgstr ""
 "B<grep-dctrl-sources> I<DIST> [...] : exécuter B<grep-dctrl> sur tous les "
 "fichiers F<*_Sources> de I<DIST>"
@@ -3568,7 +3572,7 @@ msgstr "B<list>"
 #: ../scripts/chdist.pl:115
 #, fuzzy
 #| msgid "B<list> : list available I<DIST>s"
-msgid "Lists available I<DIST>s"
+msgid "List available I<DIST>s"
 msgstr "B<list> : lister les I<DIST>ributions disponibles"
 
 #. type: textblock
