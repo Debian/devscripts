@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2011-08-22 23:38+0000\n"
-"PO-Revision-Date: 2011-07-28 22:11-0400\n"
+"PO-Revision-Date: 2011-08-22 23:48+0000\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -3385,65 +3385,43 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/chdist.pl:61
-#, fuzzy
-#| msgid "B<create> I<DIST> : prepare a new tree named I<DIST>"
 msgid "Prepare a new tree named I<DIST>"
-msgstr "B<create> I<DIST> : préparer une nouvelle arborescence nommée I<DIST>"
+msgstr "Préparer une nouvelle arborescence nommée I<DIST>"
 
 #. type: =item
 #: ../scripts/chdist.pl:63
-#, fuzzy
-#| msgid ""
-#| "B<apt-get> I<DIST> (B<update>|B<source>|...) : run B<apt-get> inside "
-#| "I<DIST>"
 msgid "B<apt-get> I<DIST> <B<update>|B<source>|...>"
-msgstr ""
-"B<apt-get> I<DIST> (B<update>|B<source>|...) : exécuter B<apt-get> dans "
-"I<DIST>"
+msgstr "B<apt-get> I<DIST> <B<update>|B<source>|...>"
 
 #. type: textblock
 #: ../scripts/chdist.pl:65
-#, fuzzy
-#| msgid "B<apt-rdepends> I<DIST> [...] : run B<apt-rdepends> inside I<DIST>"
 msgid "Run B<apt-get> inside I<DIST>"
-msgstr "B<apt-rdepends> I<DIST> [...] : exécuter B<apt-rdepends> dans I<DIST>"
+msgstr "Exécuter B<apt-get> dans I<DIST>"
 
 #. type: =item
 #: ../scripts/chdist.pl:67
-#, fuzzy
-#| msgid ""
-#| "B<apt-cache> I<DIST> (B<show>|B<showsrc>|...) : run B<apt-cache> inside "
-#| "I<DIST>"
 msgid "B<apt-cache> I<DIST> <B<show>|B<showsrc>|...>"
-msgstr ""
-"B<apt-cache> I<DIST> (B<show>|B<showsrc>|...) : exécuter B<apt-cache> dans "
-"I<DIST>"
+msgstr "B<apt-cache> I<DIST> <B<show>|B<showsrc>|...>"
 
 #. type: textblock
 #: ../scripts/chdist.pl:69
-#, fuzzy
-#| msgid "B<apt-rdepends> I<DIST> [...] : run B<apt-rdepends> inside I<DIST>"
 msgid "Run B<apt-cache> inside I<DIST>"
-msgstr "B<apt-rdepends> I<DIST> [...] : exécuter B<apt-rdepends> dans I<DIST>"
+msgstr "Exécuter B<apt-cache> dans I<DIST>"
 
 #. type: =item
 #: ../scripts/chdist.pl:71
-#, fuzzy
-#| msgid "B<apt-rdepends> I<DIST> [...] : run B<apt-rdepends> inside I<DIST>"
 msgid "B<apt-rdepends> I<DIST> [...]"
-msgstr "B<apt-rdepends> I<DIST> [...] : exécuter B<apt-rdepends> dans I<DIST>"
+msgstr "B<apt-rdepends> I<DIST> [...]"
 
 #. type: textblock
 #: ../scripts/chdist.pl:73
-#, fuzzy
-#| msgid "B<apt-rdepends> I<DIST> [...] : run B<apt-rdepends> inside I<DIST>"
 msgid "Run B<apt-rdepends> inside I<DIST>"
-msgstr "B<apt-rdepends> I<DIST> [...] : exécuter B<apt-rdepends> dans I<DIST>"
+msgstr "Exécuter B<apt-rdepends> dans I<DIST>"
 
 #. type: =item
 #: ../scripts/chdist.pl:75
 msgid "B<src2bin> I<DIST SRCPKG>"
-msgstr ""
+msgstr "B<src2bin> I<DIST SRCPKG>"
 
 #. type: textblock
 #: ../scripts/chdist.pl:77
@@ -3453,7 +3431,7 @@ msgstr ""
 #. type: =item
 #: ../scripts/chdist.pl:79
 msgid "B<bin2src> I<DIST BINPKG>"
-msgstr ""
+msgstr "B<bin2src> I<DIST BINPKG>"
 
 #. type: textblock
 #: ../scripts/chdist.pl:81
@@ -3472,14 +3450,8 @@ msgstr "B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]"
 
 #. type: textblock
 #: ../scripts/chdist.pl:87
-#, fuzzy
-#| msgid ""
-#| "B<compare-packages> I<DIST1 DIST2> [I<DIST3>, ...] : list versions of "
-#| "packages in several I<DIST>ributions"
 msgid "List versions of packages in several I<DIST>ributions"
-msgstr ""
-"B<compare-packages> I<DIST1 DIST2> [I<DIST3>, ...] : lister les versions de "
-"paquets de plusieurs I<DIST>ributions"
+msgstr "Lister les versions de paquets de plusieurs I<DIST>ributions"
 
 #. type: =item
 #: ../scripts/chdist.pl:89
@@ -3508,14 +3480,8 @@ msgstr "B<compare-src-bin-packages> I<DIST>"
 
 #. type: textblock
 #: ../scripts/chdist.pl:98
-#, fuzzy
-#| msgid ""
-#| "B<compare-src-bin-packages> I<DIST> : compare sources and binaries for "
-#| "I<DIST>"
 msgid "Compare sources and binaries for I<DIST>"
-msgstr ""
-"B<compare-src-bin-packages> I<DIST> : comparer les sources et binaires de "
-"I<DIST>"
+msgstr "Comparer les sources et binaires de I<DIST>"
 
 #. type: =item
 #: ../scripts/chdist.pl:100
@@ -3538,14 +3504,8 @@ msgstr "B<grep-dctrl-packages> I<DIST> [...]"
 
 #. type: textblock
 #: ../scripts/chdist.pl:107
-#, fuzzy
-#| msgid ""
-#| "B<grep-dctrl-packages> I<DIST> [...] : run B<grep-dctrl> on F<*_Packages> "
-#| "inside I<DIST>"
 msgid "Run B<grep-dctrl> on F<*_Packages> inside I<DIST>"
-msgstr ""
-"B<grep-dctrl-packages> I<DIST> [...] : exécuter B<grep-dctrl> sur tous les "
-"fichiers F<*_Packages> de I<DIST>"
+msgstr "Exécuter B<grep-dctrl> sur tous les fichiers F<*_Packages> de I<DIST>"
 
 #. type: =item
 #: ../scripts/chdist.pl:109
@@ -3554,14 +3514,8 @@ msgstr "B<grep-dctrl-sources> I<DIST> [...]"
 
 #. type: textblock
 #: ../scripts/chdist.pl:111
-#, fuzzy
-#| msgid ""
-#| "B<grep-dctrl-sources> I<DIST> [...] : run B<grep-dctrl> on F<*_Sources> "
-#| "inside I<DIST>"
 msgid "Run B<grep-dctrl> on F<*_Sources> inside I<DIST>"
-msgstr ""
-"B<grep-dctrl-sources> I<DIST> [...] : exécuter B<grep-dctrl> sur tous les "
-"fichiers F<*_Sources> de I<DIST>"
+msgstr "Exécuter B<grep-dctrl> sur tous les fichiers F<*_Sources> de I<DIST>"
 
 #. type: =item
 #: ../scripts/chdist.pl:113
@@ -3570,10 +3524,8 @@ msgstr "B<list>"
 
 #. type: textblock
 #: ../scripts/chdist.pl:115
-#, fuzzy
-#| msgid "B<list> : list available I<DIST>s"
 msgid "List available I<DIST>s"
-msgstr "B<list> : lister les I<DIST>ributions disponibles"
+msgstr "Lister les I<DIST>ributions disponibles"
 
 #. type: textblock
 #: ../scripts/chdist.pl:121
