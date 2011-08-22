@@ -58,33 +58,33 @@ Display version information.
 
 =item B<create> I<DIST> [I<URL> I<RELEASE> I<SECTIONS>]
 
-Prepares a new tree named I<DIST>
+Prepare a new tree named I<DIST>
 
 =item B<apt-get> I<DIST> <B<update>|B<source>|...>
 
-Runs B<apt-get> inside I<DIST>
+Run B<apt-get> inside I<DIST>
 
 =item B<apt-cache> I<DIST> <B<show>|B<showsrc>|...>
 
-Runs B<apt-cache> inside I<DIST>
+Run B<apt-cache> inside I<DIST>
 
 =item B<apt-rdepends> I<DIST> [...]
 
-Runs B<apt-rdepends> inside I<DIST>
+Run B<apt-rdepends> inside I<DIST>
 
 =item B<src2bin> I<DIST SRCPKG>
 
-Lists binary packages for I<SRCPKG> in I<DIST>
+List binary packages for I<SRCPKG> in I<DIST>
 
 =item B<bin2src> I<DIST BINPKG>
 
-Lists source package for I<BINPKG> in I<DIST>
+List source package for I<BINPKG> in I<DIST>
 
 =item B<compare-packages> I<DIST1 DIST2> [I<DIST3>, ...]
 
 =item B<compare-bin-packages> I<DIST1 DIST2> [I<DIST3>, ...]
 
-Lists versions of packages in several I<DIST>ributions
+List versions of packages in several I<DIST>ributions
 
 =item B<compare-versions> I<DIST1 DIST2>
 
@@ -95,7 +95,7 @@ B<dpkg --compare-versions> and display where the package is newer.
 
 =item B<compare-src-bin-packages> I<DIST>
 
-Compares sources and binaries for I<DIST>
+Compare sources and binaries for I<DIST>
 
 =item B<compare-src-bin-versions> I<DIST>
 
@@ -104,15 +104,15 @@ and display where the package is newer
 
 =item B<grep-dctrl-packages> I<DIST> [...]
 
-Runs B<grep-dctrl> on F<*_Packages> inside I<DIST>
+Run B<grep-dctrl> on F<*_Packages> inside I<DIST>
 
 =item B<grep-dctrl-sources> I<DIST> [...]
 
-Runs B<grep-dctrl> on F<*_Sources> inside I<DIST>
+Run B<grep-dctrl> on F<*_Sources> inside I<DIST>
 
 =item B<list>
 
-Lists available I<DIST>s
+List available I<DIST>s
 
 =back
 
