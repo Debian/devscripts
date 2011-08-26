@@ -450,7 +450,7 @@ sub parselicense($) {
     if ($licensetext =~ /THIS SOFTWARE IS PROVIDED .*AS IS AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY/) {
 	if ($licensetext =~ /All advertising materials mentioning features or use of this software must display the following acknowledge?ment.*This product includes software developed by/i) {
 	    $license = "BSD (4 clause) $license";
-	} elsif ($licensetext =~ /(The name of .*? may not|Neither the names? of .*? nor the names of (its|their) contributors may) be used to endorse or promote products derived from this software/i) {
+	} elsif ($licensetext =~ /(The name .*? may not|Neither the names? .*? nor the names of (its|their) contributors may) be used to endorse or promote products derived from this software/i) {
 	    $license = "BSD (3 clause) $license";
 	} elsif ($licensetext =~ /Redistributions of source code must retain the above copyright notice/i) {
 	    $license = "BSD (2 clause) $license";
