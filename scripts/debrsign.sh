@@ -10,18 +10,6 @@
 # You should run this program from within the package directory on
 # the build machine.
 #
-# Usage: debrsign [options] [user@]remotehost [changes or dsc file]
-# You may also provide the following options, which will be passed
-# on to signchanges:
-#  -m<maintainer>  Sign using key of <maintainer>
-#  -k<key>     The PGP/GPG key ID to use; overrides -m
-#  -p<type>    <type> is either pgp or gpg to specify which to use
-#  -spgp,-sgpg The program takes arguments like pgp or gpg respectively
-#  -S          Source-only .changes file
-#  -a<arch>    Debian architecture
-#  -t<type>    GNU machine type
-#  --multi     Search for multiarch .changes files
-#  --help, --version
 
 # Debian GNU/Linux debrsign.
 # Copyright 1999 Mike Goldman, all rights reserved
@@ -50,8 +38,7 @@ usage () {
     echo \
 "Usage: debrsign [options] [username@]remotehost [changes or dsc]
   Options:
-    -sgpg, -spgp    Sign takes options like GPG, PGP respectively
-    -pgpg, -ppgp    Sign using GPG, PGP respectively
+    -p<sign-command> The command to use for signing
     -e<maintainer>  Sign using key of <maintainer> (takes precedence over -m)
     -m<maintainer>  The same as -e
     -k<keyid>       The key to use for signing
@@ -59,7 +46,7 @@ usage () {
     -a<arch>        Use changes file made for Debian target architecture <arch>
     -t<target>      Use changes file made for GNU target architecture <target>
     --multi         Use most recent multiarch .changes file found
-    --path          Specify directory GPG/PGP binary is located on remote host
+    --path          Specify directory GPG binary is located on remote host
     --help          Show this message
     --version       Show version and copyright information
   If a changes or dscfile is specified, it is signed, otherwise

@@ -1,6 +1,6 @@
 .TH DEBSIGN 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
 .SH NAME
-debsign \- sign a Debian changes and dsc file pair using GPG/PGP
+debsign \- sign a Debian changes and dsc file pair using GPG
 .SH SYNOPSIS
 \fBdebsign\fR [\fIoptions\fR] [\fIchanges-file\fR|\fIdsc-file\fR|\fIcommands-file\fR ...]
 .SH DESCRIPTION
@@ -9,7 +9,7 @@ debsign \- sign a Debian changes and dsc file pair using GPG/PGP
 file or an unsigned \fI.changes\fR file (along with the associated
 unsigned \fI.dsc\fR file found by replacing the architecture name and
 \fI.changes\fR by \fI.dsc\fR if it appears in the \fI.changes\fR
-file), and signs them using the GNU Privacy Guard or PGP.  It is
+file), and signs them using the GNU Privacy Guard.  It is
 careful to calculate the size and checksums of the newly signed
 \fI.dsc\fR file and replace the original values in the \fI.changes\fR
 file.
@@ -140,7 +140,6 @@ the option.
 .BR sha1sum (1),
 .BR sha256sum (1),
 .BR gpg (1),
-.BR pgp (1),
 .BR scp (1)
 and
 .BR devscripts.conf (5).

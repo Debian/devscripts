@@ -3,17 +3,7 @@
 # This program is designed to GPG sign a .dsc and .changes file pair
 # in the form needed for a legal Debian upload.  It is based in part
 # on dpkg-buildpackage.  It takes one argument: the name of the
-# .changes file.  It also takes some options:
-#  -e<maintainer>  Sign using key of <maintainer> (takes precedence over -m)
-#  -m<maintainer>  Sign using key of <maintainer>
-#  -k<key>     The GPG key ID to use; overrides -m
-#  -S          Source-only .changes file
-#  -a<arch>    Debian architecture
-#  -t<type>    GNU machine type
-#  --multi     Search for multiarch .changes files
-#  -r [username@]remotehost  The changes (and dsc) files live on remotehost
-#  --no-conf, --noconf  Don't read configuration files
-#  --help, --version
+# .changes file.
 
 # Debian GNU/Linux debsign.  Copyright (C) 1999 Julian Gilbey.
 # Modifications to work with GPG by Joseph Carter and Julian Gilbey
