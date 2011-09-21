@@ -4,6 +4,11 @@ devscripts (2.11.2) UNRELEASED; urgency=low
   * Remove the word "of" from the BSD 3 clause check, it might not be in
     there.
 
+  [ James Vega ]
+  * Remove support for PGP-style commands from debsign/debrsign.  (Closes:
+    #639204)
+    + DEBSIGN_SIGNLIKE config variable removed
+
  -- Gerfried Fuchs <rhonda@debian.org>  Fri, 26 Aug 2011 21:09:51 +0200
 
 devscripts (2.11.1) unstable; urgency=low

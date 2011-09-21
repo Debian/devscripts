@@ -1,3 +1,10 @@
+devscripts (2.11.2) UNRELEASED; urgency=low
+
+  Support for pgp-style commands has been removed from debsign/debrsign.  As
+  such, the DEBSIGN_SIGNLIKE configuration variable has also been removed.
+
+ -- James Vega <jamessan@debian.org>  Tue, 20 Sep 2011 20:53:10 -0400
+
 devscripts (2.10.54) unstable; urgency=low
 
     manpage-alert now, as originally intended, prints out the full path to the

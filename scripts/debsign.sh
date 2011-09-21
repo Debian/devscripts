@@ -1,14 +1,12 @@
 #! /bin/sh
 
-# This program is designed to PGP sign a .dsc and .changes file pair
+# This program is designed to GPG sign a .dsc and .changes file pair
 # in the form needed for a legal Debian upload.  It is based in part
 # on dpkg-buildpackage.  It takes one argument: the name of the
 # .changes file.  It also takes some options:
 #  -e<maintainer>  Sign using key of <maintainer> (takes precedence over -m)
 #  -m<maintainer>  Sign using key of <maintainer>
-#  -k<key>     The PGP/GPG key ID to use; overrides -m
-#  -p<type>    <type> is either pgp or gpg to specify which to use
-#  -spgp,-sgpg The program takes arguments like pgp or gpg respectively
+#  -k<key>     The GPG key ID to use; overrides -m
 #  -S          Source-only .changes file
 #  -a<arch>    Debian architecture
 #  -t<type>    GNU machine type
@@ -79,8 +77,6 @@ usage () {
                     such a case
     -k<keyid>       The key to use for signing
     -p<sign-command>  The command to use for signing
-    -sgpg           The sign-command is called like GPG
-    -spgp           The sign-command is called like PGP
     -e<maintainer>  Sign using key of <maintainer> (takes precedence over -m)
     -m<maintainer>  The same as -e
     -S              Use changes file made for source-only upload
@@ -176,37 +172,31 @@ signfile () {
     ASCII_SIGNED_FILE="${UNSIGNED_FILE}.asc"
     (cat "$1" ; echo "") > "$UNSIGNED_FILE"
 
-    if [ $signinterface = gpg ]
-    then
-	gpgversion=`gpg --version | head -n 1 | cut -d' ' -f3`
-	gpgmajorversion=`echo $gpgversion | cut -d. -f1`
-	gpgminorversion=`echo $gpgversion | cut -d. -f2`
+    gpgversion=`$signcommand --version | head -n 1 | cut -d' ' -f3`
+    gpgmajorversion=`echo $gpgversion | cut -d. -f1`
+    gpgminorversion=`echo $gpgversion | cut -d. -f2`
 
-	if [ $gpgmajorversion -gt 1 -o $gpgminorversion -ge 4 ]
-	then
-		$signcommand --local-user "$2" --clearsign \
-		    --list-options no-show-policy-urls \
-		    --armor --textmode --output "$ASCII_SIGNED_FILE"\
-		    "$UNSIGNED_FILE" || \
-		{ SAVESTAT=$?
-		  echo "$PROGNAME: gpg error occurred!  Aborting...." >&2
-		  stty $savestty 2>/dev/null || true
-		  exit $SAVESTAT
-		}
-	else
-		$signcommand --local-user "$2" --clearsign \
-		    --no-show-policy-url \
-		    --armor --textmode --output "$ASCII_SIGNED_FILE" \
-		    "$UNSIGNED_FILE" || \
-		{ SAVESTAT=$?
-		  echo "$PROGNAME: gpg error occurred!  Aborting...." >&2
-		  stty $savestty 2>/dev/null || true
-		  exit $SAVESTAT
-		}
-	fi
+    if [ $gpgmajorversion -gt 1 -o $gpgminorversion -ge 4 ]
+    then
+	    $signcommand --local-user "$2" --clearsign \
+		--list-options no-show-policy-urls \
+		--armor --textmode --output "$ASCII_SIGNED_FILE"\
+		"$UNSIGNED_FILE" || \
+	    { SAVESTAT=$?
+	      echo "$PROGNAME: $signcommand error occurred!  Aborting...." >&2
+	      stty $savestty 2>/dev/null || true
+	      exit $SAVESTAT
+	    }
     else
-	$signcommand -u "$2" +clearsig=on -fast \
-	    < "$UNSIGNED_FILE" > "$ASCII_SIGNED_FILE"
+	    $signcommand --local-user "$2" --clearsign \
+		--no-show-policy-url \
+		--armor --textmode --output "$ASCII_SIGNED_FILE" \
+		"$UNSIGNED_FILE" || \
+	    { SAVESTAT=$?
+	      echo "$PROGNAME: $signcommand error occurred!  Aborting...." >&2
+	      stty $savestty 2>/dev/null || true
+	      exit $SAVESTAT
+	    }
     fi
     stty $savestty 2>/dev/null || true
     echo
@@ -263,11 +253,10 @@ unset GREP_OPTIONS
 # Boilerplate: set config variables
 DEFAULT_DEBSIGN_ALWAYS_RESIGN=
 DEFAULT_DEBSIGN_PROGRAM=
-DEFAULT_DEBSIGN_SIGNLIKE=
 DEFAULT_DEBSIGN_MAINT=
 DEFAULT_DEBSIGN_KEYID=
 DEFAULT_DEBRELEASE_DEBS_DIR=..
-VARS="DEBSIGN_ALWAYS_RESIGN DEBSIGN_PROGRAM DEBSIGN_SIGNLIKE DEBSIGN_MAINT"
+VARS="DEBSIGN_ALWAYS_RESIGN DEBSIGN_PROGRAM DEBSIGN_MAINT"
 VARS="$VARS DEBSIGN_KEYID DEBRELEASE_DEBS_DIR"
 
 if [ "$1" = "--no-conf" -o "$1" = "--noconf" ]; then
@@ -294,12 +283,6 @@ else
 	done
 
 	set | egrep '^(DEBSIGN|DEBRELEASE|DEVSCRIPTS)_')
-
-    # check sanity
-    case "$DEBSIGN_SIGNLIKE" in
-	gpg|pgp) ;;
-	*) DEBSIGN_SIGNLIKE= ;;
-    esac
 
     # We do not replace this with a default directory to avoid accidentally
     # signing a broken package
@@ -332,24 +315,15 @@ signcommand=''
 if [ -n "$DEBSIGN_PROGRAM" ]; then
     signcommand="$DEBSIGN_PROGRAM"
 else
-    if [ \( -n "$GNUPGHOME" -a -e "$GNUPGHOME" \) -o -e $HOME/.gnupg ] && \
-	command -v gpg > /dev/null 2>&1; then
+    if command -v gpg > /dev/null 2>&1; then
 	signcommand=gpg
-    elif command -v pgp > /dev/null 2>&1; then
-	signcommand=pgp
     fi
-fi
-
-if [ -n "$DEBSIGN_SIGNLIKE" ]; then
-    forcesigninterface="$DEBSIGN_SIGNLIKE"
 fi
 
 while [ $# != 0 ]
 do
     value="`echo x\"$1\" | sed -e 's/^x-.//'`"
     case "$1" in
-	-spgp)	forcesigninterface=pgp ;;
-	-sgpg)	forcesigninterface=gpg ;;
 	-p*)	signcommand="$value" ;;
 	-m*)	maint="$value" ;;
 	-e*)	maint="$value" ;;     # Order matters: -m before -e!
@@ -408,18 +382,7 @@ if ! [ -d "$debsdir" ]; then
 fi
 
 if [ -z "$signcommand" ]; then
-    echo "Could not find a signing program (pgp or gpg)!" >&2
-    exit 1
-fi
-
-if test -n "$forcesigninterface" ; then
-    signinterface=$forcesigninterface
-else
-    signinterface=$signcommand
-fi
-
-if [ "$signinterface" != gpg -a "$signinterface" != pgp ]; then
-    echo "Unknown signing interface $signinterface; please specify -spgp or -sgpg" >&2
+    echo "Could not find a signing program!" >&2
     exit 1
 fi
 

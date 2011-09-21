@@ -47,9 +47,8 @@ directory.  \fBscp\fR will be used for the copying.  The
 permitted as an alternative.  Wildcards (\fB*\fR etc.) are allowed.
 .TP
 .B \-p\fIprogname\fR
-\fIprogname\fR is one of \fBpgp\fR or \fBgpg\fR, and specifies which
-signing program is to be called.  The default is \fBgpg\fR if
-\fI~/.gnupg/secring.gpg\fR exists and \fBpgp\fR otherwise.
+When \fBdebsign\fR needs to execute GPG to sign it will run \fIprogname\fR
+(searching the \fBPATH\fR if necessary), instead of gpg.
 .TP
 .B \-m\fImaintainer\fR
 Specify the maintainer name to be used for signing.  (See
@@ -66,10 +65,6 @@ Same as \fB\-m\fR but takes precedence over it.
 .B \-k\fIkeyid\fR
 Specify the key ID to be used for signing; overrides any \fB\-m\fR
 and \fB\-e\fR options.
-.TP
-\fB\-spgp\fR, \fB\-sgpg\fR
-Whether the signing program is to be called with command line
-arguments like those of \fBpgp\fR or \fBgpg\fR.
 .TP
 \fB\-S\fR
 Look for a source-only \fI.changes\fR file instead of a binary-build
@@ -117,10 +112,6 @@ purpose.  The currently recognised variables are:
 .TP
 .B DEBSIGN_PROGRAM
 Setting this is equivalent to giving a \fB\-p\fR option.
-.TP
-.B DEBSIGN_SIGNLIKE
-This must be \fIgpg\fR or \fIpgp\fR and is equivalent to using either
-\fB\-sgpg\fR or \fB\-spgp\fR respectively.
 .TP
 .B DEBSIGN_MAINT
 This is the \fB\-m\fR option.
