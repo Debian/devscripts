@@ -132,7 +132,7 @@ use feature 'switch';
 use File::Copy qw(cp);
 use File::Path qw(make_path);
 use File::Basename;
-use Getopt::Long qw(:config require_order);
+use Getopt::Long qw(:config gnu_compat bundling require_order);
 use Cwd qw(abs_path cwd);
 use Dpkg::Version;
 use Pod::Usage;

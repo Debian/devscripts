@@ -29,7 +29,7 @@ use FileHandle;
 use File::Basename;
 use File::Temp qw/ tempfile /;
 use Fcntl;
-use Getopt::Long;
+use Getopt::Long qw(:config gnu_getopt);
 
 BEGIN {
     eval { require Date::Parse; import Date::Parse (); };

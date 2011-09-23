@@ -92,7 +92,7 @@ use warnings;
 use strict;
 use File::Basename;
 use File::Find;
-use Getopt::Long;
+use Getopt::Long qw(:config gnu_getopt);
 use Pod::Usage;
 use Data::Dumper;
 my $progname = basename($0);
@@ -270,7 +270,6 @@ sub findreversebuilddeps {
 if ($#ARGV < 0) { usage; exit(0); }
 
 
-Getopt::Long::Configure('bundling');
 GetOptions(
 	"u|update" => \$opt_update,
 	"s|sudo" => \$opt_sudo,

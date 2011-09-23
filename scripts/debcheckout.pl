@@ -223,7 +223,7 @@ B<debcheckout> and this manpage have been written by Stefano Zacchiroli
 use feature 'switch';
 use strict;
 use warnings;
-use Getopt::Long;
+use Getopt::Long qw(:config gnu_getopt);
 use Pod::Usage;
 use File::Basename;
 use File::Copy qw/copy/;

@@ -149,7 +149,7 @@ F</usr/sbin/sendmail>.  Same as the B<--sendmail> command line option.
 =cut
 
 use strict;
-use Getopt::Long;
+use Getopt::Long qw(:config gnu_getopt);
 use Text::Wrap;
 use File::Basename;
 

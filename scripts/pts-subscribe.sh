@@ -1,4 +1,5 @@
-#! /bin/bash -e
+#! /bin/bash
+set -e
 
 # Subscribe to the PTS for a specified package for a limited length of time
 
@@ -100,7 +101,7 @@ fi
 TEMP=$(getopt -s bash -o "u:" \
 	--long until:,forever \
 	--long no-conf,noconf \
-	--long help,version -n "$PROGNAME" -- "$@")
+	--long help,version -n "$PROGNAME" -- "$@") || (usage >&2; exit 1)
 
 eval set -- $TEMP
 

@@ -20,7 +20,7 @@
 
 use strict;
 use File::Basename;
-use Getopt::Long;
+use Getopt::Long qw(:config gnu_getopt);
 
 BEGIN {
     # Load the URI::Escape module safely
@@ -118,7 +118,6 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     }
 }
 
-Getopt::Long::config('bundling');
 unless (GetOptions(
     '-a=s'                =>  \$params->{'architecture'},
     '--architecture=s'    =>  \$params->{'architecture'},

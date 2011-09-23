@@ -26,7 +26,7 @@
 
 use strict;
 use warnings;
-use Getopt::Long;
+use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
 use lib '/usr/share/devscripts';
 use Devscripts::Debbugs;
@@ -50,7 +50,6 @@ $opt_to = '';
 $opt_comments = 1;
 $opt_interactive = 0;
 
-Getopt::Long::Configure ("bundling");
 GetOptions("help|h" => \$opt_help,
 	   "version" => \$opt_version,
 	   "verbose|v!" => \$opt_verbose,

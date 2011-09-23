@@ -125,7 +125,7 @@ Adam D. Barratt <adam@adam-barratt.org.uk>
 
 use strict;
 use warnings;
-use Getopt::Long;
+use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
 
 sub fatal($);

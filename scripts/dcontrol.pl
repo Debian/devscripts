@@ -20,7 +20,7 @@
 
 use strict;
 use File::Basename;
-use Getopt::Long;
+use Getopt::Long qw(:config gnu_getopt);
 
 BEGIN {
     # Load the URI::Escape and LWP::UserAgent modules safely
@@ -169,7 +169,6 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 }
 
 # handle options
-Getopt::Long::Configure('bundling');
 GetOptions(
     "d|debug"      =>  \$opt->{'debug'},
     "s|show-suite" =>  \$opt->{'show-suite'},

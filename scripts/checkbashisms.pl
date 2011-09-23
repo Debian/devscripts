@@ -21,7 +21,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use strict;
-use Getopt::Long;
+use Getopt::Long qw(:config gnu_getopt);
 use File::Temp qw/tempfile/;
 
 sub init_hashes;

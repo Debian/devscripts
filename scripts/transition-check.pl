@@ -86,7 +86,7 @@ Adam D. Barratt <I<adam@adam-barratt.org.uk>>
 
 use warnings;
 use strict;
-use Getopt::Long;
+use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
 
 my $progname = basename($0);

@@ -8,6 +8,12 @@ devscripts (2.11.2) UNRELEASED; urgency=low
   * Remove support for PGP-style commands from debsign/debrsign.  (Closes:
     #639204)
     + DEBSIGN_SIGNLIKE config variable removed
+  * Update scripts to use GNU getopt-compatible option parsing. (Closes:
+    #641979)
+    + For Perl scripts, use Getopt::Long's "gnu_compat" and "bundling" modes.
+      When allowed, also use "permute" for full GNU getopt compatibility.
+    + For shell scripts, use getopt instead of manual option parsing.
+      - Update uses of getopt to show usage when getopt fails.
 
  -- Gerfried Fuchs <rhonda@debian.org>  Fri, 26 Aug 2011 21:09:51 +0200
 

@@ -310,40 +310,38 @@ else
     fi
 fi
 
-while [ $# != 0 ]
+TEMP=$(getopt -n "$PROGNAME" -o 'p:m:e:k:Sa:t:r:h' \
+	      -l 'multi,re-sign,no-re-sign,debs-dir:' \
+	      -l 'noconf,no-conf,help,version' \
+	      -- "$@") || (rc=$?; usage >&2; exit $rc)
+
+eval set -- "$TEMP"
+
+while true
 do
-    value="`echo x\"$1\" | sed -e 's/^x-.//'`"
     case "$1" in
-	-p*)	signcommand="$value" ;;
-	-m*)	maint="$value" ;;
-	-e*)	maint="$value" ;;     # Order matters: -m before -e!
-	-k*)	signkey="$value" ;;
-	-S)	sourceonly="true" ;;
-	-a*)	targetarch="$value" ;;
-	-t*)	targetgnusystem="$value" ;;
+	-p) signcommand="$2"; shift ;;
+	-m) maint="$2"; shift ;;
+	-e) maint="$2"; shift ;;
+	-k) signkey="$2"; shift ;;
+	-S) sourceonly="true" ;;
+	-a) targetarch="$2"; shift ;;
+	-t) targetgnusystem="$2"; shift ;;
 	--multi) multiarch="true" ;;
 	--re-sign)    opt_re_sign="true" ;;
 	--no-re-sign) opt_re_sign="false" ;;
-	-r*)	if [ -n "$value" ]; then remotehost=$value;
-		elif [ $# -lt 1 ]; then
-		    echo "$PROGNAME: -r option missing argument!" >&2
-		    usage >&2; exit 1;
-		else shift; remotehost=$1;
-		fi
+	-r)	remotehost=$2; shift
 		# Allow for the [user@]host:filename format
-		hostpart="`echo $remotehost | sed -e 's/:.*//'`"
-		filepart="`echo $remotehost | sed -e 's/[^:]*:\?//'`"
-		if [ -n "$filepart" ]; then
+		hostpart="${remotehost%:*}"
+		filepart="${remotehost#*:}"
+		if [ -n "$filepart" -a "$filepart" != "$remotehost" ]; then
 		    remotehost="$hostpart"
 		    set -- "$@" "$filepart"
 		fi
 		;;
-	--debs-dir=*)
-	    opt_debsdir="`echo \"$1\" | sed -e 's/^--debs-dir=//; s%/\+%/%g; s%\(.\)/$%\1%;'`"
-	    ;;
 	--debs-dir)
 	    shift
-	    opt_debsdir="`echo \"$1\" | sed -e 's%/\+%/%g; s%\(.\)/$%\1%;'`"
+	    opt_debsdir="$(echo \"${1%/}\" | sed -e 's%/\+%/%g')"
 	    ;;
 	--no-conf|--noconf)
 		echo "$PROGNAME: $1 is only acceptable as the first command-line option!" >&2
@@ -352,9 +350,7 @@ do
 		usage; exit 0 ;;
 	--version)
 		version; exit 0 ;;
-	-*)	echo "$PROGNAME: Unrecognised option: $1" >&2
-		usage >&2; exit 1 ;;
-	*)	break ;;
+	--)	shift; break ;;
     esac
     shift
 done

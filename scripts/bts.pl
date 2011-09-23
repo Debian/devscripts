@@ -561,7 +561,7 @@ my $opt_ccemail = "";
 my $use_default_cc = 1;
 my $ccsecurity="";
 
-Getopt::Long::Configure('require_order');
+Getopt::Long::Configure(qw(gnu_compat bundling require_order));
 GetOptions("help|h" => \$opt_help,
 	   "version" => \$opt_version,
 	   "o" => \$offlinemode,

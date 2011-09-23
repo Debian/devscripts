@@ -104,7 +104,7 @@ General Public License, version 2 or later.
 
 use strict;
 use warnings;
-use Getopt::Long;
+use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
 use Pod::Usage;
 use Dpkg::Control;

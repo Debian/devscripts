@@ -29,7 +29,7 @@ use File::Basename;
 use File::Copy;
 use File::Temp qw/tempdir/;
 use filetest 'access';
-use Getopt::Long;
+use Getopt::Long qw(:config gnu_getopt);
 use lib '/usr/share/devscripts';
 use Devscripts::Versort;
 use Text::ParseWords;

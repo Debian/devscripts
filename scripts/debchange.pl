@@ -35,7 +35,7 @@ use open ':utf8';  # changelogs are written with UTF-8 encoding
 use filetest 'access';  # use access rather than stat for -w
 # for checking whether user names are valid and making format() behave
 use Encode qw/decode_utf8 encode_utf8/;
-use Getopt::Long;
+use Getopt::Long qw(:config gnu_getopt);
 use File::Copy;
 use File::Basename;
 use Cwd;

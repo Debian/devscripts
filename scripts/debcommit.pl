@@ -170,7 +170,7 @@ options to "bzr commit" will be generated to associate the revision and the bugs
 
 use warnings;
 use strict;
-use Getopt::Long;
+use Getopt::Long qw(:config gnu_getopt);
 use Cwd;
 use Dpkg::Changelog;
 use File::Basename;
@@ -307,7 +307,6 @@ for (qw"debian/changelog changelog") {
 
 # Now read the command line arguments
 
-Getopt::Long::Configure("bundling");
 if (! GetOptions(
 		 "r|release" => \$release,
 		 "m|message=s" => \$message,

@@ -31,7 +31,7 @@ use Cwd qw(abs_path);
 use IO::Dir;
 use IO::File;
 use Digest::MD5;
-use Getopt::Long;
+use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
 
 # global variables

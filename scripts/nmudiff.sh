@@ -1,4 +1,4 @@
-#! /bin/bash -e
+#! /bin/bash
 # Copyright 2006 by Steinar H. Gunderson
 #
 # This program is free software; you can redistribute it and/or modify
@@ -12,6 +12,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+set -e
 
 PROGNAME=`basename $0`
 MODIFIED_CONF_MSG='Default settings modified by devscripts configuration files:'
@@ -145,8 +146,7 @@ TEMP=$(getopt -s bash -o "h" \
 	--long sendmail:,from:,new,old,mutt,no-mutt,nomutt \
 	--long delay:,no-delay,nodelay \
 	--long no-conf,noconf \
-	--long help,version -n "$PROGNAME" -- "$@")
-if [ $? != 0 ] ; then exit 1 ; fi
+        --long help,version -n "$PROGNAME" -- "$@") || (usage >&2; exit 1)
 
 eval set -- $TEMP
 

@@ -173,8 +173,7 @@ TEMP=$(getopt -s bash -o v:p:r:ubs \
 	--long pristine,no-pristine,nopristine \
 	--long symlink,no-symlink,nosymlink \
 	--long no-conf,noconf \
-	--long help,version -n "$PROGNAME" -- "$@")
-if [ $? != 0 ] ; then exit 1 ; fi
+	--long help,version -n "$PROGNAME" -- "$@") || (usage >&2; exit 1)
 
 eval set -- $TEMP
 

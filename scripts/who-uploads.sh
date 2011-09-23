@@ -148,8 +148,7 @@ TEMP=$(getopt -s bash -o 'h' \
 	--long date,nodate,no-date \
 	--long help,version \
 	--options M: \
-	-n "$PROGNAME" -- "$@")
-if [ $? != 0 ] ; then exit 1 ; fi
+	-n "$PROGNAME" -- "$@") || (usage >&2; exit 1)
 
 eval set -- $TEMP
 

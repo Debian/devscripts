@@ -24,7 +24,7 @@ use warnings;
 use lib '/usr/share/devscripts';
 use Devscripts::Packages;
 use File::Basename;
-use Getopt::Long;
+use Getopt::Long qw(:config gnu_getopt);
 
 sub remove_duplicate_values($);
 sub store_if_relevant(%);

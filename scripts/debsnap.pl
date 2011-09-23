@@ -18,7 +18,7 @@
 use strict;
 use warnings;
 
-use Getopt::Long;
+use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
 use Cwd qw/cwd abs_path/;
 use File::Path qw/make_path/;
