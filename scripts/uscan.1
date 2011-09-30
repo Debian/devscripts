@@ -246,6 +246,11 @@ this should not be a problem.
 operation is used, only the '\fBg\fR', '\fBi\fR' and '\fBx\fR' flags are available and
 \fIrule\fR may not contain any expressions which have the potential to
 execute code (i.e. the (?{}) and (??{}) constructs are not supported).
+
+If the '\fBs\fR' operation is used, the replacement can contain
+backreferences to expressions within parenthesis in the matching regexp,
+like `\fBs/-alpha(\\d*)/.a$1/\fR'. These backreferences must use the
+`\fB$1\fR' syntax, as the `\fB\\1\fR' syntax is not supported.
 .TP
 \fBdversionmangle=\fIrules\fR
 This is used to mangle the Debian version number of the currently
