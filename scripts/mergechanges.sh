@@ -25,7 +25,7 @@ PROGNAME=`basename $0`
 
 usage () {
     echo \
-"Usage: $PROGNAME [--help|--version] [-f] <file1> <file2> [<file> ...]
+"Usage: $PROGNAME [-h|--help|--version] [-f] <file1> <file2> [<file> ...]
   Merge the changes files <file1>, <file2>, ....  Output on stdout
   unless -f option given, in which case, output to
   <package>_<version>_multi.changes in the same directory as <file1>."
@@ -46,7 +46,7 @@ FILE=0
 
 while [ $# -gt 0 ]; do
     case "$1" in
-	--help)
+	-h|--help)
 	    usage
 	    exit 0
 	    ;;
@@ -188,14 +188,27 @@ else
     cp "$1" ${OUTPUT}
 fi
 
-# Replace the Architecture: field, nuke the value of Files:, and insert
-# the Description: field before the Changes: field
-eval "sed -e 's,^Architecture: .*,Architecture: ${ARCHS},' \
-    -e '/^Checksums-.*:/,/^[^ ]/{/^Checksums-.*:/d;/^ /d}' \
-    -e '/^Files:/,/^[^ ]/{/^Files:/d;/^ /d}' \
-    -e '/^Description:/,/^[^ ]/{/^Description:/d;/^ /d}' \
-    -e '/^Changes:/{r '${DESCFILE} -e ';aChanges: ' -e ';d}' \
-    -e 's,^Format: .*,Format: ${FORMATS},' \
+# Replace the Architecture: field, nuke the value of Checksums-*: and Files:,
+# and insert the Description: field before the Changes: field
+eval "awk -- '/^[^ ]/{ field=\"\" }
+    /^ /{
+        if (length(field) != 0) {
+            print
+        }
+        next
+    }
+    /^Architecture: /{printf \"%s ${ARCHS}\\n\", \$1; next}
+    /^Changes:/{
+        field=\$0
+        while ((getline < \"${DESCFILE}\") > 0) {
+            print
+        }
+        printf \"%s\\n\", field
+        next
+    }
+    /^Format: /{ printf \"%s ${FORMATS}\\n\", \$1; next}
+    /^(Checksums-.*|Files|Description):/{ next }
+    { print }' \
     ${OUTPUT} ${REDIR1}"
 
 # Voodoo magic to get the merged file and checksum lists into the output
