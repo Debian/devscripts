@@ -182,10 +182,8 @@ available is newer than the current version, then it is downloaded
 into the parent directory, unless the \fB\-\-report\fR or
 \fR\-\-report-status\fR option has been used.  Once the file has been
 downloaded, then a symlink to the file is made from
-\fI<package>_<version>.orig.tar.gz\fR if the file has a \fI.tar.gz\fR
-or a \fI.tgz\fR suffix and from \fI<package>_<version>.orig.tar.bz2\fR
-if the file has a \fI.tar.bz2\fR or a \fI.tbz\fR or \fI.tbz2\fR
-suffix.
+\fI<package>_<version>.orig.tar.{gz|bz2|lzma|xz}\fR as described by the help
+for the \fB\-\-symlink\fR option.
 .PP
 Finally, if a third parameter (an action) is given in the \fIwatch\fR file
 line, this is taken as the name of a command, and the command
@@ -364,25 +362,26 @@ Set timeout to N seconds (default 20 seconds).
 .TP
 .B \-\-symlink
 Make orig.tar.gz symlinks to any downloaded files if their extensions
-are \fI.tar.gz\fR or \fI.tgz\fR, and similarly for to orig.tar.bz2 for
-the suffixes \fI.tar.gz\fR, \fI.tbz\fR and \fI.tbz2\fR.  (This is the
+are \fI.tar.gz\fR or \fI.tgz\fR.  This is also handled for orig.tar.bz2 (for
+upstream \fI.tar.bz2\fR, \fI.tbz\fR, and \fI.tbz2\fR), orig.tar.lzma (for
+upstream \fI.tar.lzma\fR, \fI.tlz\fR, \fI.tlzm\fR, and \fI.tlzma\fR), and
+orig.tar.xz (for upstream \fI.tar.xz\fR and \fI.txz\fR).  (This is the
 default behaviour.)
 .TP
 .B \-\-rename
 Instead of symlinking, rename the downloaded files to their Debian
-\fIorig.tar.gz\fR names if their extensions are \fI.tar.gz\fR or \fI.tgz\fR,
-and similarly for \fItar.bz2\fR files.
+\fIorig.tar.gz\fR, \fIorig.tar.bz2\fR, \fIorig.tar.lzma\fR, or
+\fIorig.tar.xz\fR names as described above.
 .TP
 .B \-\-repack
 After having downloaded an lzma tar, xz tar, bzip tar or zip archive,
 repack it to a gzip tar archive, which is still currently required as a
 member of a Debian source package. Does nothing if the downloaded
 archive is not an lzma tar archive, xz tar archive, bzip tar archive or
-a zip archive (i.e. it doesn't match a .tlz, .tar.lzma, .txz, .tar.xz
-\^.tbz, .tbz2, .tar.bz2 or .zip extension). The unzip package must be
-installed in order to repack .zip archives, the lzma package must be
-installed to repack lzma tar archives, and the xz-utils package must be
-installed to repack xz tar archives.
+a zip archive (i.e. it doesn't match a .tlz, .tlzm, .tlzma, .tar.lzma, .txz,
+\^.tar.xz .tbz, .tbz2, .tar.bz2 or .zip extension). The unzip package must be
+installed in order to repack .zip archives, the xz-utils package must be
+installed to repack lzma or xz tar archives.
 .TP
 .B \-\-no\-symlink
 Don't make these symlinks and don't rename the files.
@@ -474,7 +473,7 @@ If set to a number \fIN\fR, then set the timeout to \fIN\fR seconds.
 This is equivalent to the \fB\-\-timeout\fR option.
 .TP
 .B USCAN_SYMLINK
-If this is set to \fIno\fR, then a pkg_version.orig.tar.{gz|bz2}
+If this is set to \fIno\fR, then a pkg_version.orig.tar.{gz|bz2|lzma|xz}
 symlink will not be made (equivalent to the \fB\-\-no\-symlink\fR
 option).  If it is set to \fIyes\fR or \fIsymlink\fR, then the
 symlinks will be made.  If it is set to \fIrename\fR, then the files

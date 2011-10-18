@@ -20,6 +20,8 @@ devscripts (2.11.2) UNRELEASED; urgency=low
     supported.  Thanks to Matthijs Kooijman for the patch.  (Closes: #639813)
   * mergechanges: Use awk instead of sed to handle massaging the final output
     so we can better control the processing.  (Closes: #640782)
+  * uscan: Fully support lzma and xz tarballs.  Based on a patch from Tanguy
+    Ortolo.  (Closes: #631713)
 
   [ Stefano Rivera ]
   * debchange: Add precise as a recognised Ubuntu distro.
