@@ -22,6 +22,8 @@ devscripts (2.11.2) UNRELEASED; urgency=low
     so we can better control the processing.  (Closes: #640782)
   * uscan: Fully support lzma and xz tarballs.  Based on a patch from Tanguy
     Ortolo.  (Closes: #631713)
+  * debi: Document --multi, --with-depends, and --tool in the man page.
+    (Closes: #644983)
 
   [ Stefano Rivera ]
   * debchange: Add precise as a recognised Ubuntu distro.
