@@ -26,6 +26,8 @@ devscripts (2.11.2) UNRELEASED; urgency=low
     (Closes: #644983)
   * dd-list:
     + Correctly handle maintainer names which have a comma.  (Closes: #646562)
+    + Sort results by full-name instead of trying to parse the names.
+      (Closes: #638602)
 
   [ Stefano Rivera ]
   * debchange: Add precise as a recognised Ubuntu distro.

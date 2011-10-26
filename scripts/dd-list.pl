@@ -50,23 +50,10 @@ sub get_developers_given_package {
 	return ($developer, \@uploaders, $print_name);
 }
 
-sub parse_developer {
-	my $developer=shift;
-
-	my ($name, $domain) = $developer=~/^(.*)\s+<.*@(.*)>\s*$/i;
-	if (defined $domain && $domain !~ /^(lists(\.alioth)?\.debian\.org|teams\.debian\.net)$/) {
-		return join " ", reverse split " ", $name;
-	}
-	elsif (defined $name) {
-		return $name;
-	}
-	else {
-		return $developer;
-	}
-}
-
 sub sort_developers {
-	sort { uc(parse_developer($a)) cmp uc(parse_developer($b)) } @_;
+    return map { $_->[0] }
+	   sort { $a->[1] cmp $b->[1] }
+	   map { [$_, uc] } @_;
 }
 
 sub help {
