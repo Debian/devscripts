@@ -39,7 +39,7 @@ sub get_developers_given_package {
 		}
 		elsif (/^Uploaders:\s+(.*)/) {
 			$uploaders=$1;
-			@uploaders = split /\s*,\s*/, $uploaders;
+			@uploaders = split /(?<=>)\s*,\s*/, $uploaders;
 
 		}
 		elsif (/^Package:\s+(.*)/) {
