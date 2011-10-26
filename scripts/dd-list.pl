@@ -118,7 +118,7 @@ if ($use_dctrl) {
 		}
 		if (/^Uploaders:\s+(.*)$/m) {
 			$uploaders=$1;
-			@uploaders = split /\s*,\s*/, $uploaders;
+			@uploaders = split /(?<=>)\s*,\s*/, $uploaders;
 		}
 
 		if (defined $maintainer && defined $package) {
