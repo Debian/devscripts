@@ -28,6 +28,8 @@ devscripts (2.11.2) UNRELEASED; urgency=low
     + Correctly handle maintainer names which have a comma.  (Closes: #646562)
     + Sort results by full-name instead of trying to parse the names.
       (Closes: #638602)
+    + Parse sources files directly instead of invoking apt-cache.  (Closes:
+      #376595)
 
   [ Stefano Rivera ]
   * debchange: Add precise as a recognised Ubuntu distro.

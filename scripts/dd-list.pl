@@ -3,6 +3,7 @@
 # dd-list: Generate a list of maintainers of packages.
 #
 # Written by Joey Hess <joeyh@debian.org>
+# Modifications by James McCoy <jamessan@debian.org>
 # Based on a python implementation by Lars Wirzenius.
 # Copyright 2005 Lars Wirzenius, Joey Hess
 #
@@ -20,35 +21,10 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 use strict;
+use FileHandle;
 use Getopt::Long qw(:config gnu_getopt);
 
 my $version='###VERSION###';
-
-sub get_developers_given_package {
-	my ($package_name,$print_binary) = @_;
-
-	my $developer;
-	my $print_name;
-	my $uploaders;
-	my @uploaders;
-	open (F, "apt-cache showsrc '$package_name' |");
-	while (<F>) {
-		chomp;
-		if (/^Maintainer:\s+(.*)/) {
-			$developer=$1;
-		}
-		elsif (/^Uploaders:\s+(.*)/) {
-			$uploaders=$1;
-			@uploaders = split /(?<=>)\s*,\s*/, $uploaders;
-
-		}
-		elsif (/^Package:\s+(.*)/) {
-			$print_name = $print_binary ? $package_name : $1 ;
-		}
-	}
-	close F;
-	return ($developer, \@uploaders, $print_name);
-}
 
 sub sort_developers {
     return map { $_->[0] }
@@ -78,7 +54,7 @@ Usage: dd-list [options] [package ...]
 
     -b, --print-binary
         If binary package names are given as input, print these names
-	in the output instead of corresponding source packages.
+        in the output instead of corresponding source packages.
 
     -V, --version
         Print version (it\'s $version by the way).
@@ -89,92 +65,104 @@ my $use_stdin=0;
 my $use_dctrl=0;
 my $show_uploaders=1;
 my $print_binary=0;
-if (! GetOptions(
-	"help" => sub { help(); exit },
-	"stdin|i" => \$use_stdin,
-	"dctrl|d" => \$use_dctrl,
-	"uploaders|u!" => \$show_uploaders,
-	"print-binary|b" => \$print_binary,
-	"version" => sub { print "dd-list version $version\n" })) {
-	exit(1);
-}
+GetOptions(
+    "help" => sub { help(); exit },
+    "stdin|i" => \$use_stdin,
+    "dctrl|d" => \$use_dctrl,
+    "uploaders|u!" => \$show_uploaders,
+    "print-binary|b" => \$print_binary,
+    "version" => sub { print "dd-list version $version\n" })
+or do {
+    help();
+    exit(1);
+};
 
 my %dict;
 my $errors=0;
+my %package_name;
 
-if ($use_dctrl) {
-	local $/="\n\n";
-	while (<>) {
-		my ($package, $maintainer, $uploaders, @uploaders);
+sub parsefh
+{
+    my ($fh, $fname, $check_package) = @_;
+    local $/="\n\n";
+    while (<$fh>) {
+	my ($package, $maintainer, $uploaders, @uploaders);
 
-		if (/^Package:\s+(.*)$/m) {
-			$package=$1;
-		}
-		if (/^Source:\s+(.*)$/m && ! $print_binary ) {
-			$package=$1;
-		}
-		if (/^Maintainer:\s+(.*)$/m) {
-			$maintainer=$1;
-		}
-		if (/^Uploaders:\s+(.*)$/m) {
-			$uploaders=$1;
-			@uploaders = split /(?<=>)\s*,\s*/, $uploaders;
-		}
-
-		if (defined $maintainer && defined $package) {
-			push @{$dict{$maintainer}}, $package;
-			if ($show_uploaders && defined $uploaders) {
-				foreach my $uploader (@uploaders) {
-					push @{$dict{$uploader}}, "$package (U)";
-				}
-			}
-		}
-		else {
-			print STDERR "E: parse error in stanza $.\n";
-			$errors=1;
-		}
+	if (/^Package:\s+(.*)$/m) {
+	    $package=$1;
 	}
-}
-else {
-	my @package_names;
-	if ($use_stdin) {
-		while (<>) {
-			chomp;
-			s/^\s+//;
-			s/\s+$//;
-			push @package_names, split ' ', $_;
+	if (/^Source:\s+(.*)$/m && ! $print_binary ) {
+	    $package=$1;
+	}
+	if (/^Maintainer:\s+(.*)$/m) {
+	    $maintainer=$1;
+	}
+	if (/^Uploaders:\s+(.*)$/m) {
+	    $uploaders=$1;
+	    @uploaders = split /(?<=>)\s*,\s*/, $uploaders;
+	}
+
+	if (defined $maintainer && defined $package) {
+	    if ($check_package && !exists $package_name{$package}) {
+		next;
+	    }
+	    push @{$dict{$maintainer}}, $package;
+	    if ($show_uploaders && defined $uploaders) {
+		foreach my $uploader (@uploaders) {
+		    push @{$dict{$uploader}}, "$package (U)";
 		}
+	    }
 	}
 	else {
-		@package_names=@ARGV;
+	    warn "E: parse error in stanza $. of $fname\n";
+	    $errors=1;
 	}
+    }
+}
 
-	foreach my $package_name (@package_names) {
-		my ($developer, $uploaders, $print_name)=get_developers_given_package($package_name,$print_binary);
-		if (defined $developer) {
-			push @{$dict{$developer}}, $print_name;
-			if ($show_uploaders && @$uploaders) {
-				foreach my $uploader (@$uploaders) {
-					push @{$dict{$uploader}}, "$print_name (U)";
-				}
-			}
-		}
-		else {
-			print STDERR "E: Unknown package: $package_name\n";
-			$errors=1;
-		}
+if ($use_dctrl) {
+    parsefh(\*STDIN, 'STDIN');
+}
+else {
+    if ($use_stdin) {
+	while (<STDIN>) {
+	    chomp;
+	    s/^\s+//;
+	    s/\s+$//;
+	    map { $package_name{lc($_)} = 1 } split ' ', $_;
 	}
+    }
+    else {
+	map { $package_name{lc($_)} = 1 } @ARGV;
+    }
+
+    foreach my $source (glob('/var/lib/apt/lists/*_source_Sources')) {
+	my $fh = FileHandle->new("<$source");
+	unless (defined $fh) {
+	    warn "E: Couldn't open $fh\n";
+	    $errors = 1;
+	    next;
+	}
+	parsefh($fh, $source, 1);
+	$fh->close;
+    }
 }
 
 foreach my $developer (sort_developers(keys %dict)) {
-	print "$developer\n";
-	my %seen;
-	foreach my $package (sort @{$dict{$developer}}) {
-		next if $seen{$package};
-		$seen{$package}=1;
-		print "   $package\n";
-	}
-	print "\n";
+    print "$developer\n";
+    my %seen;
+    foreach my $package (sort @{$dict{$developer}}) {
+	$package_name{$package}--;
+	next if $seen{$package};
+	$seen{$package}=1;
+	print "   $package\n";
+    }
+    print "\n";
+}
+
+foreach my $package (grep { $package_name{$_} > 0 } keys %package_name) {
+    warn "E: Unknown package: $package\n";
+    $errors = 1;
 }
 
 exit($errors);
