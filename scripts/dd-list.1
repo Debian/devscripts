@@ -13,13 +13,14 @@
 .\" You should have received a copy of the GNU General Public License
 .\" along with this program. If not, see <http://www.gnu.org/licenses/>.
 .\"
-.TH DD\-LIST 1 2005-06-28 "Debian"
+.TH DD\-LIST 1 2011-10-27 "Debian"
 .\" --------------------------------------------------------------------
 .SH NAME
 dd\-list \- nicely list .deb packages and their maintainers
 .\" --------------------------------------------------------------------
 .SH SYNOPSIS
-.BR dd\-list " [" \-hiuV "] [" \-\-help "] [" \-\-stdin "]"
+.BR dd\-list " [" \-hiusV "] [" \-\-help "] [" \-\-stdin "]"
+.BR "" "[" "\-\-sources \fIsources_file" "]
 .BR "" "[" \-\-dctrl "] [" \-\-version "] [" \-\-uploaders "] [" \fIpackage " ...]"
 .\" --------------------------------------------------------------------
 .SH DESCRIPTION
@@ -29,7 +30,7 @@ maintainers.
 .PP
 Input is a list of source or binary package names on the command line
 (or the standard input if
-.B --stdin
+.B \-\-stdin
 is given).
 Output is a list of the following format, where package names are source
 packages by default:
@@ -72,6 +73,13 @@ of each listed package.
 .IP
 If no \fISource:\fP line is given, the \fIPackage:\fP name is used for
 output, which might be a binary package name.
+.TP
+.BR \-s , \-\-sources \fISOURCES_FILE
+Read package information from the specified \fISOURCES_FILE\fRs.  This can be
+given multiple times.
+.IP
+If no \fISOURCES_FILES\fR are specified, any files matching
+\fI/var/lib/apt/lists/*_source_Sources\fR will be used.
 .TP
 .BR \-u , \-\-uploaders
 Also list developers who are named as uploaders of packages, not only

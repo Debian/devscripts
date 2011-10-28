@@ -45,6 +45,11 @@ Usage: dd-list [options] [package ...]
     -d, --dctrl
         Read package list in Debian control data from standard input.
 
+    -s, --sources SOURCES_FILE
+        Read package information from given SOURCES_FILE instead of all files
+        matching /var/lib/apt/lists/*_source_Sources.  Can be specified
+        multiple times.
+
     -u, --uploaders
         Also list Uploaders of packages, not only the listed Maintainers
         (this is the default behaviour, use --nouploaders to prevent this).
@@ -63,12 +68,14 @@ EOF
 
 my $use_stdin=0;
 my $use_dctrl=0;
+my $source_files=[];
 my $show_uploaders=1;
 my $print_binary=0;
 GetOptions(
     "help" => sub { help(); exit },
     "stdin|i" => \$use_stdin,
     "dctrl|d" => \$use_dctrl,
+    "sources|s:s@" => \$source_files,
     "uploaders|u!" => \$show_uploaders,
     "print-binary|b" => \$print_binary,
     "version" => sub { print "dd-list version $version\n" })
@@ -136,7 +143,11 @@ else {
 	map { $package_name{lc($_)} = 1 } @ARGV;
     }
 
-    foreach my $source (glob('/var/lib/apt/lists/*_source_Sources')) {
+    unless (@{$source_files}) {
+	$source_files = [glob('/var/lib/apt/lists/*_source_Sources')];
+    }
+
+    foreach my $source (@{$source_files}) {
 	my $fh = FileHandle->new("<$source");
 	unless (defined $fh) {
 	    warn "E: Couldn't open $fh\n";
