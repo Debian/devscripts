@@ -521,6 +521,8 @@ sub parselicense($) {
     if ($licensetext =~ /The origin of this software must not be misrepresented.*Altered source versions must be plainly marked as such.*This notice may not be removed or altered from any source distribution/ or
         $licensetext =~ /see copyright notice in zlib\.h/) {
 	$license = "zlib/libpng $license";
+    } elsif ($licensetext =~ /This code is released under the libpng license/) {
+        $license = "libpng $license";
     }
 
     if ($licensetext =~ /Do What The Fuck You Want To Public License, Version ([^, ]+)/i) {
