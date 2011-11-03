@@ -505,6 +505,10 @@ sub parselicense($) {
 	$license = "CDDL " . ($1 ? "(v$2) " : '') . $license;
     }
 
+    if ($licensetext =~ /Microsoft Permissive License \(Ms-PL\)/) {
+        $license = "Ms-PL $license";
+    }
+
     if ($licensetext =~ /Permission is hereby granted, free of charge, to any person or organization obtaining a copy of the software and accompanying documentation covered by this license \(the \"Software\"\)/ or
 	$licensetext =~ /Boost Software License([ ,-]+Version ([^ ]+)?(\.))/i) {
 	$license = "BSL " . ($1 ? "(v$2) " : '') . $license;
