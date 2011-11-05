@@ -25,7 +25,7 @@ uploader's GPG key.
 .TP
 \fB\-\-no\-default\-keyrings\fR
 By default, \fBwho\-uploads\fR uses the three Debian keyrings
-\fI/usr/share/keyrings/debian-keyring.{gpg,pgp}\fR and
+\fI/usr/share/keyrings/debian-keyring.gpg\fR and
 \fI/usr/share/keyrings/debian-maintainers.gpg\fR (although this
 default can be changed in the configuration file, see below).
 Specifying this option means that the default keyrings will not be
@@ -64,8 +64,8 @@ default, this is 3.
 .TP
 .B WHOUPLOADS_KEYRINGS
 This is a colon-separated list of the default keyrings to be used.  By
-default, it is the three Debian keyrings
-\fI/usr/share/keyrings/debian-keyring.{gpg,pgp}\fR
+default, it is the two Debian keyrings
+\fI/usr/share/keyrings/debian-keyring.gpg\fR
 and
 \fI/usr/share/keyrings/debian-maintainers.gpg\fR.
 .SH AUTHOR

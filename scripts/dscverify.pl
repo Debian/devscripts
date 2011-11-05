@@ -96,8 +96,6 @@ sub get_rings {
     my @rings = @_;
     my @keyrings = qw(/org/keyring.debian.org/keyrings/debian-keyring.gpg
 	    /usr/share/keyrings/debian-keyring.gpg
-	    /org/keyring.debian.org/keyrings/debian-keyring.pgp
-	    /usr/share/keyrings/debian-keyring.pgp
 	    /usr/share/keyrings/debian-maintainers.gpg);
     if (system('dpkg-vendor', '--derives-from', 'Ubuntu') == 0) {
         unshift(@keyrings, qw(/usr/share/keyrings/ubuntu-master-keyring.gpg

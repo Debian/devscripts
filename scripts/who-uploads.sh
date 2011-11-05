@@ -64,7 +64,7 @@ GNU General Public License, version 2 or later."
 
 
 # Boilerplate: set config variables
-DEFAULT_WHOUPLOADS_KEYRINGS=/usr/share/keyrings/debian-keyring.gpg:/usr/share/keyrings/debian-keyring.pgp:/usr/share/keyrings/debian-maintainers.gpg
+DEFAULT_WHOUPLOADS_KEYRINGS=/usr/share/keyrings/debian-keyring.gpg:/usr/share/keyrings/debian-maintainers.gpg
 DEFAULT_WHOUPLOADS_MAXUPLOADS=3
 DEFAULT_WHOUPLOADS_DATE=no
 VARS="WHOUPLOADS_KEYRINGS WHOUPLOADS_MAXUPLOADS WHOUPLOADS_DATE"

@@ -4,7 +4,7 @@ dscverify \- verify the validity of a Debian package
 .SH SYNOPSIS
 \fBdscverify\fR [\fB\-\-keyring \fIkeyring\fR] ... \fIchanges_or_dsc_filename\fR ...
 .SH DESCRIPTION
-\fBdscverify\fR checks that the GPG or PGP signatures on the given
+\fBdscverify\fR checks that the GPG signatures on the given
 \fI.changes\fR or \fI.dsc\fR files are good signatures made by keys in
 the current Debian keyrings, found in the \fIdebian-keyring\fR
 and \fIdebian-maintainers\fR
@@ -65,9 +65,9 @@ alias dscverify='dscverify \-\-keyring ~/.gnupg/pubring.gpg'
 By default dscverify searches for the debian-keyring in the following
 locations:
 
-- /org/keyring.debian.org/keyrings/debian-keyring.(gpg|pgp)
+- /org/keyring.debian.org/keyrings/debian-keyring.gpg
 
-- /usr/share/keyrings/debian-keyring.(pgp|gpg)
+- /usr/share/keyrings/debian-keyring.gpg
 
 - /usr/share/keyrings/debian-maintainers.gpg
 .SH "SEE ALSO"

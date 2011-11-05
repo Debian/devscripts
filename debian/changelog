@@ -31,6 +31,7 @@ devscripts (2.11.2) UNRELEASED; urgency=low
     + Parse sources files directly instead of invoking apt-cache.  (Closes:
       #376595)
     + Allow specifying which sources files to read.  (Closes: #509983)
+  * Remove references to obsolete PGP keyrings in who-uploads/dscverify.
 
   [ Stefano Rivera ]
   * debchange: Add precise as a recognised Ubuntu distro.
