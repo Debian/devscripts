@@ -126,19 +126,7 @@ fi
 MAXUPLOADS=$WHOUPLOADS_MAXUPLOADS
 WANT_DATE=$WHOUPLOADS_DATE
 
-OIFS="$IFS"
-IFS=:
 declare -a GPG_DEFAULT_KEYRINGS
-
-for keyring in $WHOUPLOADS_KEYRINGS; do
-    if [ -f "$keyring" ]; then
-	GPG_DEFAULT_KEYRINGS=("${GPG_DEFAULT_KEYRINGS[@]}" "--keyring" "$keyring")
-    elif [ -n "$keyring" ]; then
-	echo "Could not find keyring $keyring, skipping it" >&2
-    fi
-done
-IFS="${OIFS:- 	}"
-
 declare -a GPG_KEYRINGS
 
 # Command-line options
@@ -170,7 +158,8 @@ while [ "$1" ]; do
 	fi
 	;;
     --no-default-keyrings)
-	GPG_DEFAULT_KEYRINGS=( ) ;;
+	WHOUPLOADS_KEYRINGS=
+	;;
     --no-conf|--noconf)
 	echo "$PROGNAME: $1 is only acceptable as the first command-line option!" >&2
 	exit 1 ;;
@@ -183,6 +172,19 @@ while [ "$1" ]; do
     esac
     shift
 done
+
+OIFS="$IFS"
+IFS=:
+
+for keyring in $WHOUPLOADS_KEYRINGS; do
+    if [ -f "$keyring" ]; then
+	GPG_DEFAULT_KEYRINGS=("${GPG_DEFAULT_KEYRINGS[@]}" "--keyring" "$keyring")
+    elif [ -n "$keyring" ]; then
+	echo "Could not find keyring $keyring, skipping it" >&2
+    fi
+done
+
+IFS="${OIFS:- 	}"
 
 # Some useful abbreviations for gpg options
 GPG_NO_KEYRING="--no-options --no-auto-check-trustdb --no-default-keyring --keyring /dev/null"
