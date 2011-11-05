@@ -321,9 +321,10 @@ sub build_equiv
     if ($opts->{depends} =~ /\[|\]/) {
 	$arch = 'any';
 
-	if (defined $opt_arch) {
-	    $args = "--arch=$opt_arch ";
-	}
+    }
+    if (defined $opt_arch) {
+	$args = "--arch=$opt_arch ";
+	$arch = $opt_arch;
     }
 
     open EQUIVS, "| equivs-build $args-"
