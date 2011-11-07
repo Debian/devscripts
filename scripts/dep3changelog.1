@@ -1,0 +1,29 @@
+.TH DEP3CHANGELOG 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+dep3changelog \- Generate a changelog entry from a DEP3-style patch header
+.SH SYNOPSIS
+\fBdep3changelog\fR \fIpatch\fR [\fIpatch\fR ...] [\fIoptions\fR] [\-\- [\fIdch_options\fR]
+.SH DESCRIPTION
+\fBdep3changelog\fR extracts the DEP3 patch headers from the given \fIpatch\fR
+files and builds a changelog entry for each patch.  If the patch author
+differs from the one detected from the \fBDEBEMAIL\fR, \fBNAME\fR,
+\fBDEBEMAIL\fR, or \fBEMAIL\fR environment variables, \(lqThanks to
+\fIauthor\fR <\fIemail\fR>\(rq is added to the changelog entry for that patch.
+Any \fBbug-debian\fR or \fBbug-ubuntu\fR fields are added as \(lqCloses\(rq to
+the changelog entry.  The generated changelog entries are passed to
+\fBdebchange\fR as an argument along with the given \fIdch_options\fR.
+.SH OPTIONS
+.TP
+.BR \-\-help ", " \-h
+Display a help message and exit successfully.
+.TP
+.B \-\-version
+Display version and copyright information and exit successfully.
+.SH ENVIRONMENT
+.TP
+.BR DEBEMAIL ", " EMAIL ", " DEBFULLNAME ", " NAME
+See the above description of the use of these environment variables.
+.SH AUTHOR
+Steve Langasek <vorlon@debian.org>
+.SH "SEE ALSO"
+.BR debchange (1)
