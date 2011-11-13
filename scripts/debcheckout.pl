@@ -854,8 +854,8 @@ sub unpack_source($$$$$) {
 	} elsif ($file eq '.' or $file eq '..') {
 	    next;
 	} else {
-	    rename "$directory/$file", "$pkg/$file" or
-		die "rename $directory/$file $pkg/$file: $!";
+	    rename "$directory/$file", "$destdir/$file" or
+		die "rename $directory/$file $destdir/$file: $!";
 	}
     }
     closedir DIR;
