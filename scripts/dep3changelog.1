@@ -7,9 +7,9 @@ dep3changelog \- Generate a changelog entry from a DEP3-style patch header
 \fBdep3changelog\fR extracts the DEP3 patch headers from the given \fIpatch\fR
 files and builds a changelog entry for each patch.  If the patch author
 differs from the one detected from the \fBDEBEMAIL\fR, \fBNAME\fR,
-\fBDEBEMAIL\fR, or \fBEMAIL\fR environment variables, \(lqThanks to
-\fIauthor\fR <\fIemail\fR>\(rq is added to the changelog entry for that patch.
-Any \fBbug-debian\fR or \fBbug-ubuntu\fR fields are added as \(lqCloses\(rq to
+\fBDEBEMAIL\fR, or \fBEMAIL\fR environment variables, \*(lqThanks to
+\fIauthor\fR <\fIemail\fR>\*(rq is added to the changelog entry for that patch.
+Any \fBbug-debian\fR or \fBbug-ubuntu\fR fields are added as \*(lqCloses\*(rq to
 the changelog entry.  The generated changelog entries are passed to
 \fBdebchange\fR as an argument along with the given \fIdch_options\fR.
 .SH OPTIONS
