@@ -29,11 +29,11 @@ causing potential problems, it will examine the name of the parent
 directory once it finds a \fIdebian/changelog\fR file, and check
 that the directory name corresponds to the package name.  Precisely
 how it does this is controlled by two configuration file variables
-DEVSCRIPTS_CHECK_DIRNAME_LEVEL and DEVSCRIPTS_CHECK_DIRNAME_REGEX, and
+\fBDEVSCRIPTS_CHECK_DIRNAME_LEVEL\fR and \fBDEVSCRIPTS_CHECK_DIRNAME_REGEX\fR, and
 their corresponding command-line options \fB\-\-check-dirname-level\fR
 and \fB\-\-check-dirname-regex\fR.
 .PP
-DEVSCRIPTS_CHECK_DIRNAME_LEVEL can take the following values:
+\fBDEVSCRIPTS_CHECK_DIRNAME_LEVEL\fR can take the following values:
 .TP
 .B 0
 Never check the directory name.
@@ -47,7 +47,7 @@ Always check the directory name.
 .PP
 The directory name is checked by testing whether the current directory
 name (as determined by \fBpwd\fR(1)) matches the regex given by the
-configuration file option DEVSCRIPTS_CHECK_DIRNAME_REGEX or by the
+configuration file option \fBDEVSCRIPTS_CHECK_DIRNAME_REGEX\fR or by the
 command line option \fB\-\-check-dirname-regex\fR \fIregex\fR.  Here
 \fIregex\fR is a Perl regex (see \fBperlre\fR(3perl)), which will be
 anchored at the beginning and the end.  If \fIregex\fR contains a '/',
