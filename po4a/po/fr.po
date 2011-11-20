@@ -12,8 +12,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2011-11-16 02:53+0000\n"
-"PO-Revision-Date: 2011-11-20 16:44-0400\n"
+"POT-Creation-Date: 2011-11-20 19:38-0400\n"
+"PO-Revision-Date: 2011-11-20 19:41-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -243,8 +243,8 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/annotate-output.1:16 ../scripts/chdist.pl:37
-#: ../scripts/dcontrol.pl:256 ../scripts/debcheckout.pl:93
-#: ../scripts/debsnap.1:57 ../scripts/dget.pl:592
+#: ../scripts/dcontrol.pl:256 ../scripts/dd-list.1:59
+#: ../scripts/debcheckout.pl:93 ../scripts/debsnap.1:57 ../scripts/dget.pl:592
 #: ../scripts/dpkg-depcheck.1:96 ../scripts/getbuildlog.1:25
 #: ../scripts/mk-build-deps.pl:79 ../scripts/rmadison.pl:249
 #: ../doc/suspicious-source.1:35 ../doc/what-patch.1:17
@@ -5449,7 +5449,7 @@ msgid "Show a help message."
 msgstr "Afficher un message d'aide."
 
 #. type: TP
-#: ../scripts/dcontrol.pl:260 ../scripts/dget.pl:596
+#: ../scripts/dcontrol.pl:260 ../scripts/dd-list.1:96 ../scripts/dget.pl:596
 #: ../scripts/getbuildlog.1:28
 #, no-wrap
 msgid "B<-V>, B<--version>"
@@ -5538,7 +5538,7 @@ msgstr ""
 #: ../scripts/dd-list.1:26
 msgid ""
 "B<dd-list> [B<-hiusV>] [B<--help>] [B<--stdin>] [B<--sources "
-">I<sources_file>] [B<--dctrl>] [B<--version>] [B<--uploaders>] "
+">I<Sources_file>] [B<--dctrl>] [B<--version>] [B<--uploaders>] "
 "[I<package> ...]"
 msgstr ""
 "B<dd-list> [B<-hiusV>] [B<--help>] [B<--stdin>] [B<--sources> "
@@ -5610,12 +5610,6 @@ msgstr ""
 "qui demandent l'attention de leurs responsables, par exemple lorsqu'ils "
 "doivent être reconstruits suite à une transition de bibliothèque."
 
-#. type: TP
-#: ../scripts/dd-list.1:59
-#, no-wrap
-msgid "B<-h>,B<--help>"
-msgstr "B<-h>, B<--help>"
-
 #. type: Plain text
 #: ../scripts/dd-list.1:62
 msgid "Print brief help message."
@@ -5624,7 +5618,7 @@ msgstr "Afficher un bref message d'aide."
 #. type: TP
 #: ../scripts/dd-list.1:62
 #, no-wrap
-msgid "B<-i>,B<--stdin>"
+msgid "B<-i>, B<--stdin>"
 msgstr "B<-i>, B<--stdin>"
 
 #. type: Plain text
@@ -5640,7 +5634,7 @@ msgstr ""
 #. type: TP
 #: ../scripts/dd-list.1:66
 #, no-wrap
-msgid "B<-d>,B<--dctrl>"
+msgid "B<-d>, B<--dctrl>"
 msgstr "B<-d>, B<--dctrl>"
 
 #. type: Plain text
@@ -5669,13 +5663,13 @@ msgstr ""
 #. type: TP
 #: ../scripts/dd-list.1:76
 #, no-wrap
-msgid "B<-s>,B<--sources> I<SOURCES_FILE>"
+msgid "B<-s>, B<--sources> I<Sources_file>"
 msgstr "B<-s>, B<--sources> I<fichier_Sources>"
 
 #. type: Plain text
 #: ../scripts/dd-list.1:80
 msgid ""
-"Read package information from the specified I<SOURCES_FILE>s.  This can be "
+"Read package information from the specified I<Sources_file>s.  This can be "
 "given multiple times."
 msgstr ""
 "Lire les renseignements sur le paquet depuis le (ou les) I<fichier_Sources> "
@@ -5684,7 +5678,7 @@ msgstr ""
 #. type: Plain text
 #: ../scripts/dd-list.1:83
 msgid ""
-"If no I<SOURCES_FILES> are specified, any files matching I</var/lib/apt/"
+"If no I<Sources_file>s are specified, any files matching I</var/lib/apt/"
 "lists/*_source_Sources> will be used."
 msgstr ""
 "Si aucun I<fichier_Sources> n'est indiqué, tous les fichiers correspondant à "
@@ -5693,7 +5687,7 @@ msgstr ""
 #. type: TP
 #: ../scripts/dd-list.1:83
 #, no-wrap
-msgid "B<-u>,B<--uploaders>"
+msgid "B<-u>, B<--uploaders>"
 msgstr "B<-u>, B<--uploaders>"
 
 #. type: Plain text
@@ -5711,7 +5705,7 @@ msgstr ""
 #. type: TP
 #: ../scripts/dd-list.1:88
 #, no-wrap
-msgid "B<-nou>,B<--nouploaders>"
+msgid "B<-nou>, B<--nouploaders>"
 msgstr "B<-nou>, B<--nouploaders>"
 
 #. type: Plain text
@@ -5724,7 +5718,7 @@ msgstr ""
 #. type: TP
 #: ../scripts/dd-list.1:91
 #, no-wrap
-msgid "B<-b>,B<--print-binary>"
+msgid "B<-b>, B<--print-binary>"
 msgstr "B<-b>, B<--print-binary>"
 
 #. type: Plain text
@@ -5737,12 +5731,6 @@ msgstr ""
 "Utiliser des noms de paquets binaires pour la sortie, plutôt que des noms de "
 "paquets source (sans effet avec B<--dctrl> si la ligne I<Package:> contient "
 "des noms de paquets source)."
-
-#. type: TP
-#: ../scripts/dd-list.1:96
-#, no-wrap
-msgid "B<-V>,B<--version>"
-msgstr "B<-V>, B<--version>"
 
 #.  --------------------------------------------------------------------
 #. type: Plain text
@@ -5839,25 +5827,26 @@ msgid ""
 "the name of the parent directory once it finds the I<debian/changelog> file, "
 "and check that the directory name corresponds to the package name.  "
 "Precisely how it does this is controlled by two configuration file variables "
-"DEVSCRIPTS_CHECK_DIRNAME_LEVEL and DEVSCRIPTS_CHECK_DIRNAME_REGEX, and their "
-"corresponding command-line options B<--check-dirname-level> and B<--check-"
-"dirname-regex>."
+"B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> and B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>, and "
+"their corresponding command-line options B<--check-dirname-level> and B<--"
+"check-dirname-regex>."
 msgstr ""
-"Comme certains autres scripts du paquet B<devscripts>, B<debc> parcourt une "
+"Comme plusieurs autres scripts du paquet B<devscripts>, B<debc> parcourt une "
 "arborescence de répertoires jusqu'à trouver un fichier I<debian/changelog>. "
 "Pour éviter les problèmes posés par les fichiers égarés, il examine le nom "
 "du répertoire parent une fois qu'il a trouvé le fichier I<debian/changelog>, "
 "et vérifie que le nom du répertoire correspond au nom du paquet. La méthode "
 "précise utilisée est contrôlée par les deux variables du fichier de "
-"configuration DEVSCRIPTS_CHECK_DIRNAME_LEVEL et "
-"DEVSCRIPTS_CHECK_DIRNAME_REGEX, et les options en ligne de commande "
+"configuration B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> et "
+"B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>, et les options en ligne de commande "
 "associées B<--check-dirname-level> et B<--check-dirname-regex>."
 
 #. type: Plain text
-#: ../scripts/debc.1:41 ../scripts/debclean.1:37 ../scripts/debi.1:42
-#: ../scripts/debrelease.1:33 ../scripts/uscan.1:296
-msgid "DEVSCRIPTS_CHECK_DIRNAME_LEVEL can take the following values:"
-msgstr "DEVSCRIPTS_CHECK_DIRNAME_LEVEL peut prendre les valeurs suivantes :"
+#: ../scripts/debc.1:41 ../scripts/debchange.1:119 ../scripts/debclean.1:37
+#: ../scripts/debi.1:42 ../scripts/debrelease.1:33 ../scripts/debuild.1:63
+#: ../scripts/uscan.1:296
+msgid "B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> can take the following values:"
+msgstr "B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> peut prendre les valeurs suivantes :"
 
 #. type: TP
 #: ../scripts/debc.1:41 ../scripts/debchange.1:119 ../scripts/debclean.1:37
@@ -5913,44 +5902,43 @@ msgstr "Toujours vérifier le nom du répertoire."
 msgid ""
 "The directory name is checked by testing whether the current directory name "
 "(as determined by B<pwd>(1)) matches the regex given by the configuration "
-"file option DEVSCRIPTS_CHECK_DIRNAME_REGEX or by the command line option B<--"
-"check-dirname-regex> I<regex>.  Here I<regex> is a Perl regex (see B<perlre>"
-"(3perl)), which will be anchored at the beginning and the end.  If I<regex> "
-"contains a '/', then it must match the full directory path.  If not, then it "
-"must match the full directory name.  If I<regex> contains the string "
-"\\'PACKAGE', this will be replaced by the source package name, as determined "
-"from the changelog.  The default value for the regex is: \\'PACKAGE(-.+)?', "
-"thus matching directory names such as PACKAGE and PACKAGE-version."
+"file option B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> or by the command line option "
+"B<--check-dirname-regex> I<regex>.  Here I<regex> is a Perl regex (see "
+"B<perlre>(3perl)), which will be anchored at the beginning and the end.  If "
+"I<regex> contains a '/', then it must match the full directory path.  If "
+"not, then it must match the full directory name.  If I<regex> contains the "
+"string \\'PACKAGE', this will be replaced by the source package name, as "
+"determined from the changelog.  The default value for the regex is: "
+"\\'PACKAGE(-.+)?', thus matching directory names such as PACKAGE and PACKAGE-"
+"version."
 msgstr ""
 "Le nom du répertoire est vérifié en testant si le nom du répertoire courant "
 "(donné par B<pwd>(1)) correspond à l'expression rationnelle donnée par la "
-"variable DEVSCRIPTS_CHECK_DIRNAME_REGEX du fichier de configuration ou par "
-"l'option B<--check-dirname-regex> I<regex>. Il s'agit d'une expression "
+"variable B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> du fichier de configuration ou "
+"par l'option B<--check-dirname-regex> I<regex>. Il s'agit d'une expression "
 "rationnelle Perl (voir B<perlre>(1)), qui sera ancrée à son début et à sa "
 "fin. Si elle contient un « / », alors elle doit correspondre au chemin "
 "complet. Si elle contient la chaîne « PACKAGE », cette chaîne sera remplacée "
-"par le nom du paquet source déterminé par le fichier changelog. La valeur "
-"par défaut de cette expression rationnelle est « PACKAGE(-.+)? », ce qui "
-"correspond aux répertoires nommés PACKAGE ou PACKAGE-version."
+"par le nom du paquet source déterminé par le journal de modifications. La "
+"valeur par défaut de cette expression rationnelle est « PACKAGE(-.+)? », ce "
+"qui correspond aux répertoires nommés PACKAGE ou PACKAGE-version."
 
 #. type: TP
 #: ../scripts/debc.1:71 ../scripts/debi.1:72 ../scripts/debrelease.1:81
-#: ../scripts/debsign.1:90
 #, no-wrap
-msgid "B<--debs-dir> I<DIR>"
-msgstr "B<--debs-dir> I<RÉP>"
+msgid "B<--debs-dir> I<directory>"
+msgstr "B<--debs-dir> I<répertoire>"
 
 #. type: Plain text
 #: ../scripts/debc.1:77
 msgid ""
-"Look for the I<.changes>, I<.deb> and I<.udeb> files in directory I<DIR> "
-"instead of the parent of the source directory.  This should either be an "
-"absolute path or relative to the top of the source directory."
+"Look for the I<.changes>, I<.deb> and I<.udeb> files in I<directory> instead "
+"of the parent of the source directory.  This should either be an absolute "
+"path or relative to the top of the source directory."
 msgstr ""
-"Chercher les fichiers I<.changes>, I<.deb> et I<.udeb> dans le répertoire "
-"I<RÉP> au lieu du répertoire parent du répertoire source. Cela doit être "
-"soit un chemin absolu, soit un chemin relatif à la racine du répertoire "
-"source."
+"Chercher les fichiers I<.changes>, I<.deb> et I<.udeb> dans le I<répertoire> "
+"au lieu du répertoire parent du répertoire source. Cela doit être soit un "
+"chemin absolu, soit un chemin relatif à la racine du répertoire source."
 
 #. type: TP
 #: ../scripts/debc.1:77 ../scripts/debchange.1:347 ../scripts/debclean.1:69
@@ -5964,12 +5952,14 @@ msgstr "B<--check-dirname-level> I<N>"
 #: ../scripts/debc.1:81 ../scripts/debc.1:85 ../scripts/debclean.1:73
 #: ../scripts/debclean.1:77 ../scripts/debi.1:91 ../scripts/debi.1:95
 #: ../scripts/debrelease.1:91 ../scripts/debrelease.1:95
+#: ../scripts/debuild.1:280 ../scripts/debuild.1:284 ../scripts/uscan.1:435
+#: ../scripts/uscan.1:439
 msgid ""
-"See the above section \"Directory name checking\" for an explanation of this "
+"See the above section B<Directory name checking> for an explanation of this "
 "option."
 msgstr ""
-"Veuillez consulter la section ci-dessus « Vérification du nom du "
-"répertoire » pour une explication de cette option."
+"Veuillez consulter la section B<Vérification du nom du répertoire> ci-dessus "
+"pour une explication de cette option."
 
 #. type: TP
 #: ../scripts/debc.1:81 ../scripts/debchange.1:351 ../scripts/debclean.1:73
@@ -6036,18 +6026,18 @@ msgstr "B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL>, B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>"
 
 #. type: Plain text
 #: ../scripts/debc.1:115 ../scripts/debclean.1:107 ../scripts/debi.1:132
-#: ../scripts/debrelease.1:132
+#: ../scripts/debrelease.1:132 ../scripts/debuild.1:367
 msgid ""
-"See the above section \"Directory name checking\" for an explanation of "
-"these variables.  Note that these are package-wide configuration variables, "
-"and will therefore affect all B<devscripts> scripts which check their value, "
-"as described in their respective manpages and in B<devscripts.conf>(5)."
+"See the above section B<Directory name checking> for an explanation of these "
+"variables.  Note that these are package-wide configuration variables, and "
+"will therefore affect all B<devscripts> scripts which check their value, as "
+"described in their respective manpages and in B<devscripts.conf>(5)."
 msgstr ""
-"Veuillez consulter la section « Vérification du nom du répertoire » ci-"
-"dessus pour une explication de ces variables. Notez que ce sont des "
-"variables de configuration pour tous les outils du paquet B<devscripts> ; "
-"elles impacteront tous les scripts qui les utilisent, comme indiqué dans "
-"leurs pages de manuel respectives et dans B<devscripts.conf>(5)."
+"Veuillez consulter la section B<Vérification du nom du répertoire> ci-dessus "
+"pour une explication de ces variables. Notez que ce sont des variables de "
+"configuration pour tous les outils du paquet B<devscripts> ; elles "
+"impacteront tous les scripts qui les utilisent, comme indiqué dans leurs "
+"pages de manuel respectives et dans B<devscripts.conf>(5)."
 
 #. type: Plain text
 #: ../scripts/debc.1:120
@@ -6324,11 +6314,6 @@ msgstr ""
 "configuration B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> et "
 "B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>, et les options en ligne de commande "
 "associées B<--check-dirname-level> et B<--check-dirname-regex>."
-
-#. type: Plain text
-#: ../scripts/debchange.1:119 ../scripts/debuild.1:63
-msgid "B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> can take the following values:"
-msgstr "B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> peut prendre les valeurs suivantes :"
 
 #. type: Plain text
 #: ../scripts/debchange.1:142
@@ -7816,9 +7801,9 @@ msgid ""
 "problems, it will examine the name of the parent directory once it finds a "
 "I<debian/changelog> file, and check that the directory name corresponds to "
 "the package name.  Precisely how it does this is controlled by two "
-"configuration file variables DEVSCRIPTS_CHECK_DIRNAME_LEVEL and "
-"DEVSCRIPTS_CHECK_DIRNAME_REGEX, and their corresponding command-line options "
-"B<--check-dirname-level> and B<--check-dirname-regex>."
+"configuration file variables B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> and "
+"B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>, and their corresponding command-line "
+"options B<--check-dirname-level> and B<--check-dirname-regex>."
 msgstr ""
 "Comme certains autres scripts du paquet B<devscripts>, B<debclean> parcourt "
 "une arborescence de répertoires pour trouver des fichiers I<debian/"
@@ -7826,8 +7811,8 @@ msgstr ""
 "examine le nom du répertoire parent une fois qu'il a trouvé le fichier "
 "I<debian/changelog>, et vérifie que le nom du répertoire correspond au nom "
 "du paquet. La façon précise utilisée est contrôlée par les deux variables du "
-"fichier de configuration DEVSCRIPTS_CHECK_DIRNAME_LEVEL et "
-"DEVSCRIPTS_CHECK_DIRNAME_REGEX, et les options en ligne de commande "
+"fichier de configuration B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> et "
+"B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>, et les options en ligne de commande "
 "associées B<--check-dirname-level> et B<--check-dirname-regex>."
 
 #. type: TP
@@ -9011,9 +8996,9 @@ msgid ""
 "the name of the parent directory once it finds the I<debian/changelog> file, "
 "and check that the directory name corresponds to the package name.  "
 "Precisely how it does this is controlled by two configuration file variables "
-"DEVSCRIPTS_CHECK_DIRNAME_LEVEL and DEVSCRIPTS_CHECK_DIRNAME_REGEX, and their "
-"corresponding command-line options B<--check-dirname-level> and B<--check-"
-"dirname-regex>."
+"B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> and B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>, and "
+"their corresponding command-line options B<--check-dirname-level> and B<--"
+"check-dirname-regex>."
 msgstr ""
 "Comme plusieurs autres scripts du paquet B<devscripts>, B<debi> parcourt une "
 "arborescence de répertoires jusqu'à trouver un fichier I<debian/changelog>. "
@@ -9021,20 +9006,20 @@ msgstr ""
 "du répertoire parent une fois qu'il a trouvé le fichier I<debian/changelog>, "
 "et vérifie que le nom du répertoire correspond au nom du paquet. La méthode "
 "précise utilisée est contrôlée par les deux variables du fichier de "
-"configuration DEVSCRIPTS_CHECK_DIRNAME_LEVEL et "
-"DEVSCRIPTS_CHECK_DIRNAME_REGEX, et les options en ligne de commande "
+"configuration B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> et "
+"B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>, et les options en ligne de commande "
 "associées B<--check-dirname-level> et B<--check-dirname-regex>."
 
 #. type: Plain text
 #: ../scripts/debi.1:78 ../scripts/debrelease.1:87
 msgid ""
-"Look for the I<.changes> and I<.deb> files in directory I<DIR> instead of "
-"the parent of the source directory.  This should either be an absolute path "
-"or relative to the top of the source directory."
+"Look for the I<.changes> and I<.deb> files in I<directory> instead of the "
+"parent of the source directory.  This should either be an absolute path or "
+"relative to the top of the source directory."
 msgstr ""
-"Chercher les fichiers I<.changes> et I<.deb> dans le répertoire I<RÉP> au "
-"lieu du répertoire parent du répertoire source. Cela doit être soit un "
-"chemin absolu, soit un chemin relatif à la racine du répertoire source."
+"Chercher les fichiers I<.changes> et I<.deb> dans le I<répertoire> au lieu "
+"du répertoire parent du répertoire source. Cela doit être soit un chemin "
+"absolu, soit un chemin relatif à la racine du répertoire source."
 
 #. type: TP
 #: ../scripts/debi.1:78 ../scripts/debrelease.1:75 ../scripts/debrsign.1:41
@@ -9084,14 +9069,14 @@ msgstr ""
 #. type: TP
 #: ../scripts/debi.1:98
 #, no-wrap
-msgid "B<--tool> I<TOOL>"
+msgid "B<--tool> I<tool>"
 msgstr "B<--tool> I<outil>"
 
 #. type: Plain text
 #: ../scripts/debi.1:102
 msgid ""
-"Use the specified tool for installing the dependencies of the package(s) to "
-"be installed.  By default, B<apt-get> is used."
+"Use the specified I<tool> for installing the dependencies of the package(s) "
+"to be installed.  By default, B<apt-get> is used."
 msgstr ""
 "Utiliser l'I<outil> indiqué pour installer les dépendances des paquets à "
 "installer. Par défaut, B<apt-get> est utilisé."
@@ -9259,9 +9244,9 @@ msgid ""
 "problems, it will examine the name of the parent directory once it finds the "
 "I<debian/changelog> file, and check that the directory name corresponds to "
 "the package name.  Precisely how it does this is controlled by two "
-"configuration file variables DEVSCRIPTS_CHECK_DIRNAME_LEVEL and "
-"DEVSCRIPTS_CHECK_DIRNAME_REGEX, and their corresponding command-line options "
-"B<--check-dirname-level> and B<--check-dirname-regex>."
+"configuration file variables B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> and "
+"B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>, and their corresponding command-line "
+"options B<--check-dirname-level> and B<--check-dirname-regex>."
 msgstr ""
 "Comme plusieurs autres scripts du paquet B<devscripts>, B<debrelease> "
 "parcourt une arborescence de répertoires jusqu'à ce qu'il trouve un fichier "
@@ -9269,8 +9254,8 @@ msgstr ""
 "égarés, il examine le nom du répertoire parent une fois qu'il a trouvé le "
 "fichier I<debian/changelog>, et vérifie que le nom du répertoire correspond "
 "au nom du paquet. La façon précise utilisée est contrôlée par les deux "
-"variables du fichier de configuration DEVSCRIPTS_CHECK_DIRNAME_LEVEL et "
-"DEVSCRIPTS_CHECK_DIRNAME_REGEX, et les options en ligne de commande "
+"variables du fichier de configuration B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> et "
+"B<DEVSCRIPTS_CHECK_DIRNAME_REGEX>, et les options en ligne de commande "
 "associées B<--check-dirname-level> et B<--check-dirname-regex>."
 
 #. type: TP
@@ -10127,7 +10112,7 @@ msgstr "B<-p>I<programme>"
 #: ../scripts/debsign.1:52
 msgid ""
 "When B<debsign> needs to execute GPG to sign it will run I<progname> "
-"(searching the B<PATH> if necessary), instead of gpg."
+"(searching the B<PATH> if necessary), instead of B<gpg>."
 msgstr ""
 "Lorsque B<debsign> doit exécuter GPG pour signer, il exécutera I<programme> "
 "(en le cherchant dans B<PATH> si nécessaire), au lieu de B<gpg>."
@@ -10209,6 +10194,12 @@ msgstr ""
 "Respectivement recréer la signature ou utiliser celle existante si le "
 "fichier a déjà été signé. Si aucune option n'est fournie alors qu'un fichier "
 "signé est trouvé, il est demandé si la signature actuelle doit être utilisée."
+
+#. type: TP
+#: ../scripts/debsign.1:90
+#, no-wrap
+msgid "B<--debs-dir> I<DIR>"
+msgstr "B<--debs-dir> I<RÉP>"
 
 #. type: Plain text
 #: ../scripts/debsign.1:96
@@ -11377,16 +11368,6 @@ msgstr ""
 "options ultérieures en ligne de commande."
 
 #. type: Plain text
-#: ../scripts/debuild.1:280 ../scripts/debuild.1:284 ../scripts/uscan.1:435
-#: ../scripts/uscan.1:439
-msgid ""
-"See the above section B<Directory name checking> for an explanation of this "
-"option."
-msgstr ""
-"Veuillez consulter la section B<Vérification du nom du répertoire> ci-dessus "
-"pour une explication de cette option."
-
-#. type: Plain text
 #: ../scripts/debuild.1:287
 msgid "Do not run B<dpkg-checkbuilddeps> to check build dependencies."
 msgstr ""
@@ -11622,20 +11603,6 @@ msgstr ""
 "B<DEBUILD_DPKG_BUILDPACKAGE_OPTS>."
 
 #. type: Plain text
-#: ../scripts/debuild.1:367
-msgid ""
-"See the above section B<Directory name checking> for an explanation of these "
-"variables.  Note that these are package-wide configuration variables, and "
-"will therefore affect all B<devscripts> scripts which check their value, as "
-"described in their respective manpages and in B<devscripts.conf>(5)."
-msgstr ""
-"Veuillez consulter la section B<Vérification du nom du répertoire> ci-dessus "
-"pour une explication de ces variables. Notez que ce sont des variables de "
-"configuration pour tous les outils du paquet B<devscripts> ; elles "
-"impacteront tous les scripts qui les utilisent, comme indiqué dans leurs "
-"pages de manuel respectives et dans B<devscripts.conf>(5)."
-
-#. type: Plain text
 #: ../scripts/debuild.1:371
 msgid ""
 "To build your own package, simply run B<debuild> from inside the source "
@@ -11828,7 +11795,7 @@ msgstr "DEP3CHANGELOG"
 #. type: Plain text
 #: ../scripts/dep3changelog.1:4
 msgid ""
-"dep3changelog - Generate a changelog entry from a DEP3-style patch header"
+"dep3changelog - generate a changelog entry from a DEP3-style patch header"
 msgstr ""
 "dep3changelog - Préparer une entrée du journal de modifications à partir de "
 "l'en-tête d'un correctif compatible DEP3"
@@ -11836,7 +11803,7 @@ msgstr ""
 #. type: Plain text
 #: ../scripts/dep3changelog.1:6
 msgid ""
-"B<dep3changelog> I<patch> [I<patch> ...] [I<options>] [-- [I<dch_options>]"
+"B<dep3changelog> I<patch> [I<patch> ...] [I<options>] [-- [I<dch_options>]]"
 msgstr ""
 "B<dep3changelog> I<correctif> [I<correctif> ...] [I<options>] [-- "
 "[I<options_dch>]]"
@@ -18114,7 +18081,7 @@ msgid ""
 "it to a gzip tar archive, which is still currently required as a member of a "
 "Debian source package. Does nothing if the downloaded archive is not an lzma "
 "tar archive, xz tar archive, bzip tar archive or a zip archive (i.e. it "
-"doesn't match a .tlz, .tlzm, .tlzma, .tar.lzma, .txz, \\^.tar.xz .tbz, ."
+"doesn't match a .tlz, .tlzm, .tlzma, .tar.lzma, .txz, \\^.tar.xz, .tbz, ."
 "tbz2, .tar.bz2 or .zip extension). The unzip package must be installed in "
 "order to repack .zip archives, the xz-utils package must be installed to "
 "repack lzma or xz tar archives."
@@ -19806,6 +19773,92 @@ msgid ""
 msgstr ""
 "Cette page de manuel a été écrite pour le paquet B<devscripts> par le "
 "responsable du paquet, Julian Gilbey E<lt>jdg@debian.orgE<gt>."
+
+# NOTE: presque identique
+#~ msgid ""
+#~ "In common with several other scripts in the B<devscripts> package, "
+#~ "B<debc> will climb the directory tree until it finds a I<debian/"
+#~ "changelog> file.  As a safeguard against stray files causing potential "
+#~ "problems, it will examine the name of the parent directory once it finds "
+#~ "the I<debian/changelog> file, and check that the directory name "
+#~ "corresponds to the package name.  Precisely how it does this is "
+#~ "controlled by two configuration file variables "
+#~ "DEVSCRIPTS_CHECK_DIRNAME_LEVEL and DEVSCRIPTS_CHECK_DIRNAME_REGEX, and "
+#~ "their corresponding command-line options B<--check-dirname-level> and B<--"
+#~ "check-dirname-regex>."
+#~ msgstr ""
+#~ "Comme certains autres scripts du paquet B<devscripts>, B<debc> parcourt "
+#~ "une arborescence de répertoires jusqu'à trouver un fichier I<debian/"
+#~ "changelog>. Pour éviter les problèmes posés par les fichiers égarés, il "
+#~ "examine le nom du répertoire parent une fois qu'il a trouvé le fichier "
+#~ "I<debian/changelog>, et vérifie que le nom du répertoire correspond au "
+#~ "nom du paquet. La méthode précise utilisée est contrôlée par les deux "
+#~ "variables du fichier de configuration DEVSCRIPTS_CHECK_DIRNAME_LEVEL et "
+#~ "DEVSCRIPTS_CHECK_DIRNAME_REGEX, et les options en ligne de commande "
+#~ "associées B<--check-dirname-level> et B<--check-dirname-regex>."
+
+#~ msgid "DEVSCRIPTS_CHECK_DIRNAME_LEVEL can take the following values:"
+#~ msgstr "DEVSCRIPTS_CHECK_DIRNAME_LEVEL peut prendre les valeurs suivantes :"
+
+#~ msgid ""
+#~ "The directory name is checked by testing whether the current directory "
+#~ "name (as determined by B<pwd>(1)) matches the regex given by the "
+#~ "configuration file option DEVSCRIPTS_CHECK_DIRNAME_REGEX or by the "
+#~ "command line option B<--check-dirname-regex> I<regex>.  Here I<regex> is "
+#~ "a Perl regex (see B<perlre>(3perl)), which will be anchored at the "
+#~ "beginning and the end.  If I<regex> contains a '/', then it must match "
+#~ "the full directory path.  If not, then it must match the full directory "
+#~ "name.  If I<regex> contains the string \\'PACKAGE', this will be replaced "
+#~ "by the source package name, as determined from the changelog.  The "
+#~ "default value for the regex is: \\'PACKAGE(-.+)?', thus matching "
+#~ "directory names such as PACKAGE and PACKAGE-version."
+#~ msgstr ""
+#~ "Le nom du répertoire est vérifié en testant si le nom du répertoire "
+#~ "courant (donné par B<pwd>(1)) correspond à l'expression rationnelle "
+#~ "donnée par la variable DEVSCRIPTS_CHECK_DIRNAME_REGEX du fichier de "
+#~ "configuration ou par l'option B<--check-dirname-regex> I<regex>. Il "
+#~ "s'agit d'une expression rationnelle Perl (voir B<perlre>(1)), qui sera "
+#~ "ancrée à son début et à sa fin. Si elle contient un « / », alors elle "
+#~ "doit correspondre au chemin complet. Si elle contient la chaîne "
+#~ "« PACKAGE », cette chaîne sera remplacée par le nom du paquet source "
+#~ "déterminé par le fichier changelog. La valeur par défaut de cette "
+#~ "expression rationnelle est « PACKAGE(-.+)? », ce qui correspond aux "
+#~ "répertoires nommés PACKAGE ou PACKAGE-version."
+
+#~ msgid ""
+#~ "See the above section \"Directory name checking\" for an explanation of "
+#~ "this option."
+#~ msgstr ""
+#~ "Veuillez consulter la section ci-dessus « Vérification du nom du "
+#~ "répertoire » pour une explication de cette option."
+
+#~ msgid ""
+#~ "See the above section \"Directory name checking\" for an explanation of "
+#~ "these variables.  Note that these are package-wide configuration "
+#~ "variables, and will therefore affect all B<devscripts> scripts which "
+#~ "check their value, as described in their respective manpages and in "
+#~ "B<devscripts.conf>(5)."
+#~ msgstr ""
+#~ "Veuillez consulter la section « Vérification du nom du répertoire » ci-"
+#~ "dessus pour une explication de ces variables. Notez que ce sont des "
+#~ "variables de configuration pour tous les outils du paquet B<devscripts> ; "
+#~ "elles impacteront tous les scripts qui les utilisent, comme indiqué dans "
+#~ "leurs pages de manuel respectives et dans B<devscripts.conf>(5)."
+
+#~ msgid ""
+#~ "Look for the I<.changes> and I<.deb> files in directory I<DIR> instead of "
+#~ "the parent of the source directory.  This should either be an absolute "
+#~ "path or relative to the top of the source directory."
+#~ msgstr ""
+#~ "Chercher les fichiers I<.changes> et I<.deb> dans le répertoire I<RÉP> au "
+#~ "lieu du répertoire parent du répertoire source. Cela doit être soit un "
+#~ "chemin absolu, soit un chemin relatif à la racine du répertoire source."
+
+#~ msgid "B<-h>,B<--help>"
+#~ msgstr "B<-h>, B<--help>"
+
+#~ msgid "B<-V>,B<--version>"
+#~ msgstr "B<-V>, B<--version>"
 
 #~ msgid ""
 #~ "The owner of a bug accepts responsibility for dealing with it. Note that "
