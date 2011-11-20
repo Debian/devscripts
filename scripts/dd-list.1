@@ -57,14 +57,14 @@ a library version transition happens.
 .\" --------------------------------------------------------------------
 .SH OPTIONS
 .TP
-.BR \-h , \-\-help
+.BR \-h ", " \-\-help
 Print brief help message.
 .TP
-.BR \-i , \-\-stdin
+.BR \-i ", " \-\-stdin
 Read package names from the standard input, instead of taking them
 from the command line. Package names are whitespace delimited.
 .TP
-.BR \-d , \-\-dctrl
+.BR \-d ", " \-\-dctrl
 Read package list from standard input in the format of a Debian
 package control file. This includes the status file, or output of
 apt-cache. This is the fastest way to use dd-list, as it uses the
@@ -74,27 +74,27 @@ of each listed package.
 If no \fISource:\fP line is given, the \fIPackage:\fP name is used for
 output, which might be a binary package name.
 .TP
-\fB\-s\fR,\fB\-\-sources\fR \fISources_file\fR
+\fB\-s\fR, \fB\-\-sources\fR \fISources_file\fR
 Read package information from the specified \fISources_file\fRs.  This can be
 given multiple times.
 .IP
 If no \fISources_file\fRs are specified, any files matching
 \fI/var/lib/apt/lists/*_source_Sources\fR will be used.
 .TP
-.BR \-u , \-\-uploaders
+.BR \-u ", " \-\-uploaders
 Also list developers who are named as uploaders of packages, not only
 the maintainers; this is the default behaviour, use \-\-nouploaders to
 prevent it. Uploaders are indicated with "(U)" appended to the package name.
 .TP
-.BR \-nou , \-\-nouploaders
+.BR \-nou ", " \-\-nouploaders
 Only list package Maintainers, do not list Uploaders.
 .TP
-.BR \-b , \-\-print\-binary
+.BR \-b ", " \-\-print\-binary
 Use binary package names in the output instead of source package names
 (has no effect with \fB--dctrl\fP if the \fIPackage:\fP line contains
 source package names).
 .TP
-.BR \-V , \-\-version
+.BR \-V ", " \-\-version
 Print the version.
 .\" --------------------------------------------------------------------
 .SH AUTHOR
