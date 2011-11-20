@@ -70,9 +70,9 @@ They affect the search for the \fI.changes\fR file.  They are provided
 to mimic the behaviour of \fBdpkg-buildpackage\fR when determining the
 name of the \fI.changes\fR file.
 .TP
-\fB\-\-debs\-dir\fR \fIDIR\fR
-Look for the \fI.changes\fR and \fI.deb\fR files in directory
-\fIDIR\fR instead of the parent of the source directory.  This should
+\fB\-\-debs\-dir\fR \fIdirectory\fR
+Look for the \fI.changes\fR and \fI.deb\fR files in \fIdirectory\fR
+instead of the parent of the source directory.  This should
 either be an absolute path or relative to the top of the source
 directory.
 .TP
@@ -96,8 +96,8 @@ this option.
 \fB\-\-with-depends\fR
 Attempt to satisfy the \fIDepends\fR of a package when installing it.
 .TP
-\fB\-\-tool\fR \fITOOL\fR
-Use the specified tool for installing the dependencies of the package(s) to be
+\fB\-\-tool\fR \fItool\fR
+Use the specified \fItool\fR for installing the dependencies of the package(s) to be
 installed.  By default, \fBapt-get\fR is used.
 .TP
 \fB\-\-no-conf\fR, \fB\-\-noconf\fR
