@@ -94,7 +94,7 @@ Options:
          editor opened.  Otherwise, the original changelog will not be
          modified. (default)
   --no-force-save-on-release
-         Do not do so. Note that a dummy changelog entry made be supplied
+         Do not do so. Note that a dummy changelog entry may be supplied
          in order to achieve the same effect - e.g. $progname --release ""
          The entry will not be added to the changelog but its presence will
          suppress the editor
