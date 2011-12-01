@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2011-11-16 02:53+0000\n"
-"PO-Revision-Date: 2011-09-16 22:12-0400\n"
+"PO-Revision-Date: 2011-11-20 16:44-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -5518,7 +5518,7 @@ msgstr "DD-LIST"
 #: ../scripts/dd-list.1:16
 #, no-wrap
 msgid "2011-10-27"
-msgstr ""
+msgstr "27 octobre 2011"
 
 #. type: TH
 #: ../scripts/dd-list.1:16
@@ -5536,17 +5536,14 @@ msgstr ""
 #.  --------------------------------------------------------------------
 #. type: Plain text
 #: ../scripts/dd-list.1:26
-#, fuzzy
-#| msgid ""
-#| "B<dd-list> [B<-hiuV>] [B<--help>] [B<--stdin>] [B<--dctrl>] [B<--"
-#| "version>] [B<--uploaders>] [I<package> ...]"
 msgid ""
 "B<dd-list> [B<-hiusV>] [B<--help>] [B<--stdin>] [B<--sources "
 ">I<sources_file>] [B<--dctrl>] [B<--version>] [B<--uploaders>] "
 "[I<package> ...]"
 msgstr ""
-"B<dd-list> [B<-hiuV>] [B<--help>] [B<--stdin>] [B<--dctrl>] [B<--version>] "
-"[B<--uploaders>] [I<paquet> ...]"
+"B<dd-list> [B<-hiusV>] [B<--help>] [B<--stdin>] [B<--sources> "
+"I<fichier_Sources>] [B<--dctrl>] [B<--version>] [B<--uploaders>] "
+"[I<paquet> ...]"
 
 #. type: Plain text
 #: ../scripts/dd-list.1:30
@@ -5628,7 +5625,7 @@ msgstr "Afficher un bref message d'aide."
 #: ../scripts/dd-list.1:62
 #, no-wrap
 msgid "B<-i>,B<--stdin>"
-msgstr "B<-i>,B<--stdin>"
+msgstr "B<-i>, B<--stdin>"
 
 #. type: Plain text
 #: ../scripts/dd-list.1:66
@@ -5671,10 +5668,9 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/dd-list.1:76
-#, fuzzy, no-wrap
-#| msgid "B<-s>, B<--suite=>I<SUITE>"
+#, no-wrap
 msgid "B<-s>,B<--sources> I<SOURCES_FILE>"
-msgstr "B<-s>, B<--suite=>I<DISTRIBUTION>"
+msgstr "B<-s>, B<--sources> I<fichier_Sources>"
 
 #. type: Plain text
 #: ../scripts/dd-list.1:80
@@ -5682,6 +5678,8 @@ msgid ""
 "Read package information from the specified I<SOURCES_FILE>s.  This can be "
 "given multiple times."
 msgstr ""
+"Lire les renseignements sur le paquet depuis le (ou les) I<fichier_Sources> "
+"indiqué(s). Cette option peut être indiquée plusieurs fois."
 
 #. type: Plain text
 #: ../scripts/dd-list.1:83
@@ -5689,6 +5687,8 @@ msgid ""
 "If no I<SOURCES_FILES> are specified, any files matching I</var/lib/apt/"
 "lists/*_source_Sources> will be used."
 msgstr ""
+"Si aucun I<fichier_Sources> n'est indiqué, tous les fichiers correspondant à "
+"I</var/lib/apt/lists/*_source_Sources> seront utilisés."
 
 #. type: TP
 #: ../scripts/dd-list.1:83
@@ -5712,7 +5712,7 @@ msgstr ""
 #: ../scripts/dd-list.1:88
 #, no-wrap
 msgid "B<-nou>,B<--nouploaders>"
-msgstr "B<-nou>,B<--nouploaders>"
+msgstr "B<-nou>, B<--nouploaders>"
 
 #. type: Plain text
 #: ../scripts/dd-list.1:91
@@ -9047,6 +9047,8 @@ msgstr "B<--multi>"
 #: ../scripts/debi.1:81
 msgid "Search for a multiarch I<.changes> file, as created by B<dpkg-cross>."
 msgstr ""
+"Chercher un fichier I<.changes> multiarchitecture, tel que créé par B<dpkg-"
+"cross>."
 
 #. type: TP
 #: ../scripts/debi.1:81
@@ -9062,7 +9064,7 @@ msgid ""
 "binary packages when you don't want to have all the binaries installed at "
 "once."
 msgstr ""
-"Ne faire que mettre à jour les paquets déjà installés sur le système, plutôt "
+"Limiter les mises à jour aux paquets déjà installés sur le système, plutôt "
 "que d'installer tous les paquets listés dans le fichier I<.changes>. C'est "
 "utile pour les paquets qui produisent plusieurs paquets binaires quand vous "
 "ne souhaitez pas que tous les paquets binaires soient installés à la fois."
@@ -9077,13 +9079,13 @@ msgstr "B<--with-depends>"
 #: ../scripts/debi.1:98
 msgid "Attempt to satisfy the I<Depends> of a package when installing it."
 msgstr ""
+"Essayer de satisfaire les dépendances d'un paquet lors de son installation."
 
 #. type: TP
 #: ../scripts/debi.1:98
-#, fuzzy, no-wrap
-#| msgid "B<--timeout> I<N>"
+#, no-wrap
 msgid "B<--tool> I<TOOL>"
-msgstr "B<--timeout> I<N>"
+msgstr "B<--tool> I<outil>"
 
 #. type: Plain text
 #: ../scripts/debi.1:102
@@ -9091,6 +9093,8 @@ msgid ""
 "Use the specified tool for installing the dependencies of the package(s) to "
 "be installed.  By default, B<apt-get> is used."
 msgstr ""
+"Utiliser l'I<outil> indiqué pour installer les dépendances des paquets à "
+"installer. Par défaut, B<apt-get> est utilisé."
 
 #. type: Plain text
 #: ../scripts/debi.1:125
@@ -10110,7 +10114,7 @@ msgstr ""
 "Dans ce cas, un fichier I<.changes> doit être explicitement nommé, avec un "
 "nom de répertoire absolu ou relatif au répertoire personnel distant. B<scp> "
 "sera utilisé pour le transfert. La syntaxe [I<nom_utilisateur>@]"
-"I<hôte_distant>:I<fichier_changes> est également permise. Les jockers (B<*> "
+"I<hôte_distant>:I<fichier_changes> est également permise. Les jokers (B<*>, "
 "etc.) sont autorisés."
 
 #. type: TP
@@ -10125,6 +10129,8 @@ msgid ""
 "When B<debsign> needs to execute GPG to sign it will run I<progname> "
 "(searching the B<PATH> if necessary), instead of gpg."
 msgstr ""
+"Lorsque B<debsign> doit exécuter GPG pour signer, il exécutera I<programme> "
+"(en le cherchant dans B<PATH> si nécessaire), au lieu de B<gpg>."
 
 #. type: TP
 #: ../scripts/debsign.1:52
@@ -10429,7 +10435,7 @@ msgid ""
 "multiple architectures."
 msgstr ""
 "Indiquer l'architecture des paquets binaires téléchargés, ce qui implique "
-"l'option B<--binary>. Cette option peut-être indiquée plusieurs fois afin de "
+"l'option B<--binary>. Cette option peut être indiquée plusieurs fois afin de "
 "télécharger les paquets binaires pour plusieurs architectures."
 
 #. type: Plain text
@@ -11824,12 +11830,16 @@ msgstr "DEP3CHANGELOG"
 msgid ""
 "dep3changelog - Generate a changelog entry from a DEP3-style patch header"
 msgstr ""
+"dep3changelog - Préparer une entrée du journal de modifications à partir de "
+"l'en-tête d'un correctif compatible DEP3"
 
 #. type: Plain text
 #: ../scripts/dep3changelog.1:6
 msgid ""
 "B<dep3changelog> I<patch> [I<patch> ...] [I<options>] [-- [I<dch_options>]"
 msgstr ""
+"B<dep3changelog> I<correctif> [I<correctif> ...] [I<options>] [-- "
+"[I<options_dch>]]"
 
 #. type: Plain text
 #: ../scripts/dep3changelog.1:15
@@ -11843,6 +11853,16 @@ msgid ""
 "generated changelog entries are passed to B<debchange> as an argument along "
 "with the given I<dch_options>."
 msgstr ""
+"B<dep3changelog> extrait les en-têtes d'un correctif DEP3 à partir des "
+"fichiers I<correctif> donnés et construit une entrée du journal de "
+"modifications pour chaque correctif. Si l'auteur du correctif est différent "
+"de celui détecté par les variables d'environnement B<DEBEMAIL>, B<NAME>, "
+"B<DEBEMAIL> ou B<EMAIL>, « Thanks to I<auteur> E<lt>I<adresse>E<gt> » est "
+"ajouté à l'entrée du journal de modifications pour ce correctif. Tous les "
+"champs B<bug-debian> et B<bug-ubuntu> sont ajoutés en « Closes » de l'entrée "
+"du journal de modifications. Les entrées du journal de modifications "
+"préparées sont passées en argument à B<debchange> avec les I<options_dch> "
+"données."
 
 #. type: Plain text
 #: ../scripts/dep3changelog.1:28
@@ -12344,6 +12364,8 @@ msgstr "I<dep3changelog>(1)"
 #: ../scripts/devscripts.1:85
 msgid "generate a changelog entry from a DEP3-style patch header"
 msgstr ""
+"préparer une entrée du journal de modifications à partir de l'en-tête d'un "
+"correctif compatible DEP3"
 
 #. type: IP
 #: ../scripts/devscripts.1:85
@@ -17579,24 +17601,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/uscan.1:187
-#, fuzzy
-#| msgid ""
-#| "The current (upstream) version can be specified as the second parameter "
-#| "in the I<watch> file line.  If this is I<debian> or absent, then the "
-#| "current Debian version (as determined by I<debian/changelog>) is used to "
-#| "determine the current upstream version.  The current upstream version may "
-#| "also be specified by the command-line option B<--upstream-version>, which "
-#| "specifies the upstream version number of the currently installed package "
-#| "(i.e., the Debian version number without epoch and Debian revision).  The "
-#| "upstream version number will then be mangled using the dversionmangle "
-#| "option if one is specified, as described below.  If the newest version "
-#| "available is newer than the current version, then it is downloaded into "
-#| "the parent directory, unless the B<--report> or --report-status option "
-#| "has been used.  Once the file has been downloaded, then a symlink to the "
-#| "file is made from I<E<lt>packageE<gt>_E<lt>versionE<gt>.orig.tar.gz> if "
-#| "the file has a I<.tar.gz> or a I<.tgz> suffix and from "
-#| "I<E<lt>packageE<gt>_E<lt>versionE<gt>.orig.tar.bz2> if the file has a I<."
-#| "tar.bz2> or a I<.tbz> or I<.tbz2> suffix."
 msgid ""
 "The current (upstream) version can be specified as the second parameter in "
 "the I<watch> file line.  If this is I<debian> or absent, then the current "
@@ -17627,9 +17631,8 @@ msgstr ""
 "parent, sans que l'option B<--report> ou B<--report-status> ait été "
 "utilisée. Une fois que le fichier a été téléchargé, un lien symbolique vers "
 "le fichier est créé depuis le paquet I<E<lt>paquetE<gt>_E<lt>versionE<gt>."
-"orig.tar.gz> si le fichier a un suffixe I<.tar.gz> ou I<.tgz> et  "
-"I<E<lt>paquetE<gt>_E<lt>versionE<gt>.orig.tar.bz2> si le fichier a un "
-"suffixe I<.tar.bz2>, I<.tbz> ou I<.tbz2>."
+"orig.tar.{gz|bz2|lzma|xz}> conformément à l'aide décrite pour l'option B<--"
+"symlink>."
 
 #. type: Plain text
 #: ../scripts/uscan.1:190
@@ -17795,6 +17798,11 @@ msgid ""
 "(\\ed*)/.a$1/>'. These backreferences must use the `B<$1>' syntax, as the `B<"
 "\\e1>' syntax is not supported."
 msgstr ""
+"Si l'opération « B<s> » est utilisée, le remplacement peut contenir des "
+"références arrières aux expressions entre parenthèses de l'expression "
+"rationnelle correspondante, comme « B<s/-alpha(\\ed*)/.a$1/> ». Ces "
+"références arrières doivent utiliser la syntaxe « B<$1> », puisque la "
+"syntaxe « B<\\e1> » n'est pas permise."
 
 #. type: TP
 #: ../scripts/uscan.1:252
@@ -18062,11 +18070,6 @@ msgstr "B<--symlink>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:370
-#, fuzzy
-#| msgid ""
-#| "Make orig.tar.gz symlinks to any downloaded files if their extensions are "
-#| "I<.tar.gz> or I<.tgz>, and similarly for to orig.tar.bz2 for the suffixes "
-#| "I<.tar.gz>, I<.tbz> and I<.tbz2>.  (This is the default behaviour.)"
 msgid ""
 "Make orig.tar.gz symlinks to any downloaded files if their extensions are I<."
 "tar.gz> or I<.tgz>.  This is also handled for orig.tar.bz2 (for upstream I<."
@@ -18074,10 +18077,12 @@ msgid ""
 "I<.tlz>, I<.tlzm>, and I<.tlzma>), and orig.tar.xz (for upstream I<.tar.xz> "
 "and I<.txz>).  (This is the default behaviour.)"
 msgstr ""
-"Utiliser un lien symbolique pour orig.tar.gz (respectivement orig.tar.bz2) "
-"lorsque les fichiers téléchargés ont des extensions I<.tar.gz> ou I<.tgz> "
-"(respectivement I<.tar.bz2>, I<.tbz> et I<.tbz2>). C'est le comportement par "
-"défaut."
+"Faire des liens symboliques orig.tar.gz vers les fichiers téléchargés s'ils "
+"ont des extensions I<.tar.gz> ou I<.tgz>. Cela fonctionne aussi pour orig."
+"tar.bz2 (pour les fichiers amont en I<.tar.bz2>, I<.tbz> et I<.tbz2>), orig."
+"tar.lzma (pour les fichiers amont en I<.tar.lzma>, I<.tlz>, I<.tlzm> et I<."
+"tlzma>) et orig.tar.xz (pour les fichiers amont en I<.tar.xz> et I<.txz>). "
+"C'est le comportement par défaut."
 
 #. type: TP
 #: ../scripts/uscan.1:370
@@ -18087,19 +18092,14 @@ msgstr "B<--rename>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:375
-#, fuzzy
-#| msgid ""
-#| "Instead of symlinking, rename the downloaded files to their Debian I<orig."
-#| "tar.gz> names if their extensions are I<.tar.gz> or I<.tgz>, and "
-#| "similarly for I<tar.bz2> files."
 msgid ""
 "Instead of symlinking, rename the downloaded files to their Debian I<orig."
 "tar.gz>, I<orig.tar.bz2>, I<orig.tar.lzma>, or I<orig.tar.xz> names as "
 "described above."
 msgstr ""
 "Au lieu de créer des liens symboliques, renommer les fichiers téléchargés "
-"avec leur nom Debian I<orig.tar.gz> si leurs extensions sont I<.tar.gz> ou "
-"I<.tgz> et de manière semblable pour les fichiers d'extension I<tar.bz2>."
+"avec leur nom Debian I<orig.tar.gz>, I<orig.tar.bz2>, I<orig.tar.lzma> ou "
+"I<orig.tar.xz> conformément à la description ci-dessus."
 
 #. type: TP
 #: ../scripts/uscan.1:375
@@ -18109,17 +18109,6 @@ msgstr "B<--repack>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:385
-#, fuzzy
-#| msgid ""
-#| "After having downloaded an lzma tar, xz tar, bzip tar or zip archive, "
-#| "repack it to a gzip tar archive, which is still currently required as a "
-#| "member of a Debian source package. Does nothing if the downloaded archive "
-#| "is not an lzma tar archive, xz tar archive, bzip tar archive or a zip "
-#| "archive (i.e. it doesn't match a .tlz, .tar.lzma, .txz, .tar.xz \\^.tbz, ."
-#| "tbz2, .tar.bz2 or .zip extension). The unzip package must be installed in "
-#| "order to repack .zip archives, the lzma package must be installed to "
-#| "repack lzma tar archives, and the xz-utils package must be installed to "
-#| "repack xz tar archives."
 msgid ""
 "After having downloaded an lzma tar, xz tar, bzip tar or zip archive, repack "
 "it to a gzip tar archive, which is still currently required as a member of a "
@@ -18134,12 +18123,11 @@ msgstr ""
 "une archive zip, la rempaqueter dans une archive tar compressée avec gzip, "
 "ce qui est toujours nécessaire pour les paquets source Debian. Ne rien faire "
 "si l'archive téléchargée n'est ni une archive tar compressée avec lzma ou xz "
-"ou bzip ni une archive zip (c'est-à-dire si elle ne finie pas par "
-"l'extension .tlz, tar.lzma, .txz, .tar.xz \\^.tbz, .tbz2, .tar.bz2 ou .zip). "
-"Le paquet unzip doit être installé pour rempaqueter les archives .zip, le "
-"paquet lzma doit être installé pour rempaqueter les archives tar compressées "
-"avec lzma et le paquet xz-utils doit être installé pour rempaqueter les "
-"archives tar compressées avec xz."
+"ou bzip ni une archive zip (c'est-à-dire si elle ne finit pas par "
+"l'extension .tlz, .tlzm, .tlzma, tar.lzma, .txz, .tar.xz, .tbz, .tbz2, .tar."
+"bz2 ou .zip). Le paquet unzip doit être installé pour rempaqueter les "
+"archives .zip, le paquet xz-utils doit être installé pour rempaqueter les "
+"archives tar compressées avec lzma ou xz."
 
 #. type: TP
 #: ../scripts/uscan.1:385 ../scripts/uupdate.1:74
