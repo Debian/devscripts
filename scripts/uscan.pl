@@ -25,9 +25,10 @@ use 5.008;  # uses 'our' variables and filetest
 use strict;
 use Cwd;
 use Cwd 'abs_path';
+use Dpkg::IPC;
 use File::Basename;
 use File::Copy;
-use File::Temp qw/tempdir/;
+use File::Temp qw/tempfile tempdir/;
 use filetest 'access';
 use Getopt::Long qw(:config gnu_getopt);
 use lib '/usr/share/devscripts';
@@ -1344,8 +1345,14 @@ EOF
     if ($repack and $newfile_base =~ /^(.*)\.(tar\.bz2|tbz2?)$/) {
 	print "-- Repacking from bzip2 to gzip\n" if $verbose;
 	my $newfile_base_gz = "$1.tar.gz";
-	system("bunzip2 -c $destdir/$newfile_base | gzip -n -9 > $destdir/$newfile_base_gz") == 0
-	  or die "repacking from bzip2 to gzip failed\n";
+	my $fname = tempfile(UNLINK => 1);
+	spawn(exec => ['bunzip2', '-c', "$destdir/$newfile_base"],
+	      to_file => $fname,
+	      wait_child => 1);
+	spawn(exec => ['gzip', '-n', '-9'],
+	      from_file => $fname,
+	      to_file => "$destdir/$newfile_base_gz",
+	      wait_child => 1);
 	unlink "$destdir/$newfile_base";
 	$newfile_base = $newfile_base_gz;
     }
@@ -1353,8 +1360,14 @@ EOF
     if ($repack and $newfile_base =~ /^(.*)\.(tar\.lzma|tlz(?:ma?)?)$/) {
 	print "-- Repacking from lzma to gzip\n" if $verbose;
 	my $newfile_base_gz = "$1.tar.gz";
-	system("xz -F lzma -cd $destdir/$newfile_base | gzip -n -9 > $destdir/$newfile_base_gz") == 0
-	  or die "repacking from lzma to gzip failed\n";
+	my $fname = tempfile(UNLINK => 1);
+	spawn(exec => ['xz', '-F', 'lzma', '-cd', "$destdir/$newfile_base"],
+	      to_file => $fname,
+	      wait_child => 1);
+	spawn(exec => ['gzip', '-n', '-9'],
+	      from_file => $fname,
+	      to_file => "$destdir/$newfile_base_gz",
+	      wait_child => 1);
 	unlink "$destdir/$newfile_base";
 	$newfile_base = $newfile_base_gz;
     }
@@ -1362,8 +1375,14 @@ EOF
     if ($repack and $newfile_base =~ /^(.*)\.(tar\.xz|txz)$/) {
 	print "-- Repacking from xz to gzip\n" if $verbose;
 	my $newfile_base_gz = "$1.tar.gz";
-	system("xz -cd $destdir/$newfile_base | gzip -n -9 > $destdir/$newfile_base_gz") == 0
-	  or die "repacking from xz to gzip failed\n";
+	my $fname = tempfile(UNLINK => 1);
+	spawn(exec => ['xz', '-cd', "$destdir/$newfile_base"],
+	      to_file => $fname,
+	      wait_child => 1);
+	spawn(exec => ['gzip', '-n', '-9'],
+	      from_file => $fname,
+	      to_file => "$destdir/$newfile_base_gz",
+	      wait_child => 1);
 	unlink "$destdir/$newfile_base";
 	$newfile_base = $newfile_base_gz;
     }
@@ -1379,12 +1398,12 @@ EOF
 	my $globpattern = "*";
 	my $hidden = ".[!.]*";
 	my $absdestdir = abs_path($destdir);
-	system("unzip -q -a -d $tempdir $destdir/$newfile_base") == 0
+	system('unzip', '-q', '-a', '-d', $tempdir, "$destdir/$newfile_base") == 0
 	  or die("Repacking from zip to tar.gz failed (could not unzip)\n");
 	if (defined glob("$tempdir/$hidden")) {
 	    $globpattern .= " $hidden";
 	}
-	system("cd $tempdir; GZIP='-n -9' tar --owner=root --group=root --mode=a+rX -czf $absdestdir/$newfile_base_gz $globpattern") == 0
+	system("cd $tempdir; GZIP='-n -9' tar --owner=root --group=root --mode=a+rX -czf \"$absdestdir/$newfile_base_gz\" $globpattern") == 0
 	  or die("Repacking from zip to tar.gz failed (could not create tarball)\n");
 	unlink "$destdir/$newfile_base";
 	$newfile_base = $newfile_base_gz;
@@ -1394,7 +1413,7 @@ EOF
 			     |tar\.bz2|tbz2?
 			     |tar.lzma|tlz(?:ma?)?
 			     |tar.xz|txz)$/x) {
-	my $filetype = `file -b -k $destdir/$newfile_base`;
+	my $filetype = `file -b -k \"$destdir/$newfile_base\"`;
 	unless ($filetype =~ /compressed data/) {
 	    warn "$progname warning: $destdir/$newfile_base does not appear to be a compressed file;\nthe file command says: $filetype\nNot processing this file any further!\n";
 	    return 1;
