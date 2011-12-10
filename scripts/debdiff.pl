@@ -17,7 +17,9 @@
 use 5.006_000;
 use strict;
 use Cwd;
+use Dpkg::IPC;
 use Dpkg::Compression;
+use File::Copy qw(cp move);
 use File::Basename;
 use File::Temp qw/ tempdir tempfile /;
 use lib '/usr/share/devscripts';
@@ -504,30 +506,26 @@ elsif ($type eq 'dsc') {
 	and scalar(@excludes) == 0 and $use_interdiff and !$wdiff_source_control) {
 	# same orig tar ball, interdiff exists and not wdiffing
 
-	my $command = join( " ", ("interdiff", "-z", @diff_opts, "'$diffs[1]'",
-	    "'$diffs[2]'", ">", $filename) );
-	my $rv = system($command);
-	if ($rv) {
-	    fatal "interdiff -z $diffs[1] $diffs[2] failed!";
-	} else {
-	    if ($have_diffstat and $show_diffstat) {
-		my $header = "diffstat for " . basename($diffs[1])
-				. " " . basename($diffs[2]) . "\n\n";
-		$header =~ s/\.diff\.gz//g;
-		print $header;
-		system("diffstat $filename");
-		print "\n";
-	    }
+	spawn(exec => ['interdiff', '-z', @diff_opts, $diffs[1], $diffs[2]],
+	      to_file => $filename,
+	      wait_child => 1);
+	if ($have_diffstat and $show_diffstat) {
+	    my $header = "diffstat for " . basename($diffs[1])
+			    . " " . basename($diffs[2]) . "\n\n";
+	    $header =~ s/\.diff\.gz//g;
+	    print $header;
+	    system('diffstat', $filename);
+	    print "\n";
+	}
 
-	    if (-s $filename) {
-		open( INTERDIFF, '<', $filename );
-		while( <INTERDIFF> ) {
-		    print $_;
-		}
-		close INTERDIFF;
-
-		$exit_status = 1;
+	if (-s $filename) {
+	    open( INTERDIFF, '<', $filename );
+	    while( <INTERDIFF> ) {
+		print $_;
 	    }
+	    close INTERDIFF;
+
+	    $exit_status = 1;
 	}
     } else {
 	# Any other situation
@@ -544,30 +542,36 @@ elsif ($type eq 'dsc') {
 	    no strict 'refs';
 	    my @opts = ('-x');
 	    push (@opts, '--skip-patches') if $dscformats[$i] eq '3.0 (quilt)';
-	    my $cmd = qq(cd ${"dir$i"} && dpkg-source @opts $dscs[$i] >/dev/null);
-	    system $cmd;
-	    if ($? != 0) {
-		    my $dir = dirname $dscs[1] if $i == 2;
-		    $dir = dirname $dscs[2] if $i == 1;
-		    my $cmdx = qq(cp $dir/$origs[$i] ${"dir$i"} >/dev/null);
-		    system $cmdx;
-		    fatal "$cmd failed" if $? != 0;
-		    my $dscx = basename $dscs[$i];
-		    $cmdx = qq(cp $diffs[$i] ${"dir$i"} && cp $dscs[$i] ${"dir$i"} && cd ${"dir$i"} && dpkg-source @opts $dscx > /dev/null);
-		    system $cmdx;
-		    fatal "$cmd failed" if $? != 0;
+	    my $diri = ${"dir$i"};
+	    eval {
+		spawn(exec => ['dpkg-source', @opts, $dscs[$i]],
+		      to_file => '/dev/null',
+		      chdir => $diri,
+		      wait_child => 1);
+	    };
+	    if ($@) {
+		my $dir = dirname $dscs[1] if $i == 2;
+		$dir = dirname $dscs[2] if $i == 1;
+		cp "$dir/$origs[$i]", $diri || fatal "copy $dir/$origs[$i] $diri: $!";
+		my $dscx = basename $dscs[$i];
+		cp $diffs[$i], $diri || fatal "copy $diffs[$i] $diri: $!";
+		cp $dscs[$i], $diri || fatal "copy $dscs[$i] $diri: $!";
+		spawn(exec => ['dpkg-source', @opts, $dscx],
+		      to_file => '/dev/null',
+		      wait_child => 1);
 	    }
-	    opendir DIR,${"dir$i"};
+	    opendir DIR,$diri;
 	    while ($_ = readdir(DIR)) {
-		    next if $_ eq '.' || $_ eq '..' || ! -d ${"dir$i"}."/$_";
-		    ${"sdir$i"} = $_;
-		    last;
+		next if $_ eq '.' || $_ eq '..' || ! -d "$diri/$_";
+		${"sdir$i"} = $_;
+		last;
 	    }
 	    closedir(DIR);
+	    my $sdiri = ${"sdir$i"};
 
 	    # also unpack tarballs found in the top level source directory so we can compare their contents too
 	    next unless $unpack_tarballs;
-	    opendir DIR,${"dir$i"}.'/'.${"sdir$i"};
+	    opendir DIR,$diri.'/'.$sdiri;
 
 	    my $tarballs = 1;
 	    while ($_ = readdir(DIR)) {
@@ -575,9 +579,15 @@ elsif ($type eq 'dsc') {
 		    my $filename = $_;
 		    if ($filename =~ s/\.tar\.$compression_re_file_ext$//) {
 			my $comp = compression_guess_from_filename($_);
-			my $decomp = compression_get_property($comp, 'decomp_prog');
 			$tarballs++;
-			system qq(cd ${"dir$i"}/${"sdir$i"} && @$decomp $_ | tar xf >/dev/null && test -d $filename && mv $filename $unpacked);
+			spawn(exec => ['tar', "--$comp", '-xf', $_],
+			      to_file => '/dev/null',
+			      wait_child => 1,
+			      chdir => "$diri/$sdiri",
+			      nocheck => 1);
+			if (-d "$diri/$sdiri/$filename") {
+			    move "$diri/$sdiri/$filename", $unpacked;
+			}
 		    }
 	    }
 	    closedir(DIR);
@@ -587,12 +597,11 @@ elsif ($type eq 'dsc') {
 	for my $exclude (@excludes) {
 	    push @command, ("--exclude", "'$exclude'");
 	}
-	push @command, ("'$dir1/$sdir1'", "'$dir2/$sdir2'");
-	push @command, (">", $filename);
+	push @command, ("$dir1/$sdir1", "$dir2/$sdir2");
 
 	# Execute diff and remove the common prefixes $dir1/$dir2, so the patch can be used with -p1,
 	# as if when interdiff would have been used:
-	system(join(" ", @command));
+	spawn(exec => \@command, to_file => $filename, wait_child => 1, nocheck => 1);
 
 	if ($have_diffstat and $show_diffstat) {
 	    print "diffstat for $sdir1 $sdir2\n\n";
@@ -619,7 +628,7 @@ elsif ($type eq 'dsc') {
 	    no strict 'refs';
 	    for my $i (1,2) {
 		foreach my $file (@cf) {
-		    system qq(cp ${"dir$i"}/${"sdir$i"}/debian/$file ${"wdiffdir$i"});
+		    cp ${"dir$i"}.'/'.${"sdir$i"}."/debian/$file", ${"wdiffdir$i"};
 		}
 	    }
 	    use strict 'refs';

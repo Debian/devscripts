@@ -14,6 +14,7 @@ devscripts (2.11.3) UNRELEASED; urgency=low
     + Use "gzip -n" when repacking zip files.  Thanks to Franz Schrober for
       the patch.  (Closes: #646691)
     + Handle filenames with special characters.  (Closes: #648299)
+  * debdiff: Handle paths with special characters.  (Closes: #571528)
 
  -- David Prévot <taffit@debian.org>  Sat, 03 Dec 2011 11:39:52 -0400
 
