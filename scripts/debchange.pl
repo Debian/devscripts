@@ -39,6 +39,7 @@ use Getopt::Long qw(:config gnu_getopt);
 use File::Copy;
 use File::Basename;
 use Cwd;
+use Dpkg::Compression;
 use lib '/usr/share/devscripts';
 use Devscripts::Debbugs;
 
@@ -1470,7 +1471,7 @@ if ((basename(cwd()) =~ m%^\Q$PACKAGE\E-\Q$UVERSION\E$%) &&
 	}
 	# And check whether a new orig tarball exists
 	my @origs = glob("../$PACKAGE\_$new_uversion.*");
-	my $num_origs = grep { /^..\/\Q$PACKAGE\E_\Q$new_uversion\E\.orig\.tar\.(gz|bz2|lzma|xz)$/ } @origs;
+	my $num_origs = grep { /^..\/\Q$PACKAGE\E_\Q$new_uversion\E\.orig\.tar\.$compression_re_file_ext$/ } @origs;
 	if ($num_origs == 0) {
 	    warn "$progname warning: no orig tarball found for the new version.\n";
 	}

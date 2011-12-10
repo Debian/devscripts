@@ -31,6 +31,7 @@ use Cwd qw(abs_path);
 use IO::Dir;
 use IO::File;
 use Digest::MD5;
+use Dpkg::Compression;
 use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
 
@@ -198,7 +199,8 @@ sub get_file {
     }
 
     # try apt-get if it is still not there
-    if (not -e $file and $file =~ m!^([a-z0-9.+-]{2,})_[^/]+\.(?:diff\.gz|tar\.gz)$!) {
+    my $ext = $compression_re_file_ext;
+    if (not -e $file and $file =~ m!^([a-z0-9.+-]{2,})_[^/]+\.(?:diff|tar)\.$ext$!) {
 	my @cmd = ('apt-get', 'source', '--print-uris', $1);
 	my $cmd = join ' ', @cmd;
 	open(my $apt, '-|', @cmd) or die "$cmd: $!";

@@ -53,6 +53,7 @@ use 5.008;
 use File::Basename;
 use filetest 'access';
 use Cwd;
+use Dpkg::Compression;
 use IO::Handle;  # for flushing
 use vars qw(*BUILD *OLDOUT *OLDERR);  # prevent a warning
 
@@ -1212,11 +1213,12 @@ EOT
 
 	my $srcmsg;
 
+	my $ext = $compression_re_file_ext;
 	if (fileomitted @files, '\.deb') {
 	    # source only upload
-	    if (fileomitted @files, '\.diff\.gz') {
+	    if (fileomitted @files, "\\.diff\\.$ext" and fileomitted @files "\\.debian\\.tar\\.$ext") {
 		$srcmsg='source only upload: Debian-native package';
-	    } elsif (fileomitted @files, '\.orig\.tar\.gz') {
+	    } elsif (fileomitted @files, "\\.orig\\.tar\\.$ext") {
 		$srcmsg='source only, diff-only upload (original source NOT included)';
 	    } else {
 		$srcmsg='source only upload (original source is included)';
@@ -1224,9 +1226,9 @@ EOT
 	} else {
 	    if (fileomitted @files, '\.dsc') {
 		$srcmsg='binary only upload (no source included)'
-	    } elsif (fileomitted @files, '\.diff\.gz') {
+	    } elsif (fileomitted @files, "\\.diff\\.$ext" and fileomitted @files "\\.debian\\.tar\\.$ext") {
 		$srcmsg='full upload; Debian-native package (full source is included)';
-	    } elsif (fileomitted @files, '\.orig\.tar\.gz') {
+	    } elsif (fileomitted @files, "\\.orig\\.tar\\.$ext") {
 		$srcmsg='binary and diff upload (original source NOT included)';
 	    } else {
 		$srcmsg='full upload (original source is included)';

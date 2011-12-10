@@ -24,6 +24,15 @@ die () {
 	exit 2
 }
 
+setzip () {
+	case $1 in
+		*.gz) ZIP=--gzip ;;
+		*.xz) ZIP=--xz ;;
+		*.lzma) ZIP=--lzma ;;
+		*.bz2) ZIP=--bzip2 ;;
+	esac
+}
+
 FAST=""
 while getopts "f" opt ; do
 	case $opt in
@@ -43,7 +52,7 @@ DSCDIR=$(dirname "$DSC")
 WORKDIR=$(mktemp -d --tmpdir dscextract.XXXXXX)
 trap "rm -rf $WORKDIR" 0 2 3 15
 
-if DIFFGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.diff\.(gz|bz2)$' "$DSC") ; then
+if DIFFGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.diff\.(gz|xz|lzma|bz2)$' "$DSC") ; then
 	DIFFGZ=$(echo "$DIFFGZ" | cut -d ' ' -f 4 | head -n 1)
 	test -e "$DSCDIR/$DIFFGZ" || die "$DSCDIR/$DIFFGZ: not found"
 	filterdiff -p1 -i "$FILE" -z "$DSCDIR/$DIFFGZ" > "$WORKDIR/patch"
@@ -51,14 +60,11 @@ if DIFFGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.diff\.(gz|bz2)$' "$DSC") ; th
 		# case 1: file found in .diff.gz
 		if ! grep -q '^@@ -0,0 ' "$WORKDIR/patch" ; then
 			# case 1a: patch requires original file
-			ORIGTGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.orig\.tar\.(gz|bz2)$' "$DSC") || die "no orig.tar.gz found in $DSC"
+			ORIGTGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.orig\.tar\.(gz|xz|lzma|bz2)$' "$DSC") || die "no orig.tar.* found in $DSC"
 			ORIGTGZ=$(echo "$ORIGTGZ" | cut -d ' ' -f 4 | head -n 1)
-			case $ORIGTGZ in
-				*.gz) ZIP=--gzip ;;
-				*.bz2) ZIP=--bzip2 ;;
-			esac
+			setzip $ORIGTGZ
 			test -e "$DSCDIR/$ORIGTGZ" || die "$DSCDIR/$ORIGTGZ not found"
-			tar --extract --to-stdout --gzip --file "$DSCDIR/$ORIGTGZ" --wildcards "*/$FILE" > "$WORKDIR/output" 2>/dev/null || :
+			tar --extract --to-stdout $ZIP --file "$DSCDIR/$ORIGTGZ" --wildcards "*/$FILE" > "$WORKDIR/output" 2>/dev/null || :
 			test -s "$WORKDIR/output" || die "$FILE not found in $DSCDIR/$ORIGTGZ, but required by patch"
 		fi
 		patch --silent "$WORKDIR/output" < "$WORKDIR/patch"
@@ -71,15 +77,12 @@ if DIFFGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.diff\.(gz|bz2)$' "$DSC") ; th
 	fi
 fi
 
-if DEBIANTARGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.debian\.tar\.(gz|bz2)$' "$DSC") ; then
+if DEBIANTARGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.debian\.tar\.(gz|xz|lzma|bz2)$' "$DSC") ; then
 	case $FILE in
 		debian/*)
 			DEBIANTARGZ=$(echo "$DEBIANTARGZ" | cut -d ' ' -f 4 | head -n 1)
 			test -e "$DSCDIR/$DEBIANTARGZ" || die "$DSCDIR/$DEBIANTARGZ not found"
-			case $DEBIANTARGZ in
-				*.gz) ZIP=--gzip ;;
-				*.bz2) ZIP=--bzip2 ;;
-			esac
+			setzip $DEBIANTARGZ
 			tar --extract --to-stdout $ZIP --file "$DSCDIR/$DEBIANTARGZ" "$FILE" > "$WORKDIR/output" 2>/dev/null || :
 			test -s "$WORKDIR/output" || exit 1
 			# case 2a: file found in .debian.tar.gz
@@ -88,13 +91,10 @@ if DEBIANTARGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.debian\.tar\.(gz|bz2)$' 
 			# for 3.0 format, no need to look in other places here
 			;;
 		*)
-			ORIGTGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.orig\.tar\.(gz|bz2)$' "$DSC") || die "no orig.tar.gz found in $DSC"
+			ORIGTGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.orig\.tar\.(gz|xz|lzma|bz2)$' "$DSC") || die "no orig.tar.gz found in $DSC"
 			ORIGTGZ=$(echo "$ORIGTGZ" | cut -d ' ' -f 4 | head -n 1)
 			test -e "$DSCDIR/$ORIGTGZ" || die "$DSCDIR/$ORIGTGZ not found"
-			case $ORIGTGZ in
-				*.gz) ZIP=--gzip ;;
-				*.bz2) ZIP=--bzip2 ;;
-			esac
+			setzip $ORIGTGZ
 			tar --extract --to-stdout $ZIP --file "$DSCDIR/$ORIGTGZ" --wildcards --no-wildcards-match-slash "*/$FILE" > "$WORKDIR/output" 2>/dev/null || :
 			test -s "$WORKDIR/output" || exit 1
 			# case 2b: file found in .orig.tar.gz
@@ -105,13 +105,10 @@ if DEBIANTARGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.debian\.tar\.(gz|bz2)$' 
 	esac
 fi
 
-if TARGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.tar\.(gz|bz2)$' "$DSC") ; then
+if TARGZ=$(egrep '^ [0-9a-f]{32,64} [0-9]+ [^ ]+\.tar\.(gz|xz|lzma|bz2)$' "$DSC") ; then
 	TARGZ=$(echo "$TARGZ" | cut -d ' ' -f 4 | head -n 1)
 	test -e "$DSCDIR/$TARGZ" || die "$DSCDIR/$TARGZ not found"
-	case $TARGZ in
-		*.gz) ZIP=--gzip ;;
-		*.bz2) ZIP=--bzip2 ;;
-	esac
+	setzip $TARGZ
 	tar --extract --to-stdout $ZIP --file "$DSCDIR/$TARGZ" --wildcards --no-wildcards-match-slash "*/$FILE" > "$WORKDIR/output" 2>/dev/null || :
 	test -s "$WORKDIR/output" || exit 1
 	# case 3: file found in .tar.gz or .orig.tar.gz

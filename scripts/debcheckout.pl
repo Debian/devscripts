@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 #
 # debcheckout: checkout the development repository of a Debian package
 # Copyright (C) 2007-2009  Stefano Zacchiroli <zack@debian.org>
@@ -229,6 +229,7 @@ use File::Basename;
 use File::Copy qw/copy/;
 use File::Temp qw/tempdir/;
 use Cwd;
+use Dpkg::Compression;
 use lib '/usr/share/devscripts';
 use Devscripts::Versort;
 
@@ -322,7 +323,7 @@ sub find_repo($$) {
 	    ($type, $url) = (lc($2), $3);
 	} elsif ($line =~ /^Version:\s*(.*)$/i) {
 	    $version = $1;
-	} elsif ($line =~ /^ [a-f0-9]{32} \d+ (\S+)\.orig\.tar\.gz$/) {
+	} elsif ($line =~ /^ [a-f0-9]{32} \d+ (\S+)\.orig\.tar\.$compression_re_file_ext$/) {
 	    $origtgz_name = $1;
 	} elsif ($line =~ /^$/) {
 	    push (@repos, [$version, $type, $url, $origtgz_name])

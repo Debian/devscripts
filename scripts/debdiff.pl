@@ -17,6 +17,7 @@
 use 5.006_000;
 use strict;
 use Cwd;
+use Dpkg::Compression;
 use File::Basename;
 use File::Temp qw/ tempdir tempfile /;
 use lib '/usr/share/devscripts';
@@ -459,7 +460,7 @@ elsif ($type eq 'dsc') {
 		if ($file =~ /\.diff\.gz$/) {
 		    $diffs[$i] = cwd() . '/' . $file;
 		}
-		elsif ($file =~ /(\.orig)?\.tar\.(gz|bz2|lzma|xz)$/) {
+		elsif ($file =~ /(?:\.orig)?\.tar\.$compression_re_file_ext$/) {
 		    $origs[$i] = $file;
 		}
 	    } else {
@@ -546,9 +547,9 @@ elsif ($type eq 'dsc') {
 	    my $cmd = qq(cd ${"dir$i"} && dpkg-source @opts $dscs[$i] >/dev/null);
 	    system $cmd;
 	    if ($? != 0) {
-	    	    my $dir = dirname $dscs[1] if $i == 2;
-	    	    $dir = dirname $dscs[2] if $i == 1;
-	    	    my $cmdx = qq(cp $dir/$origs[$i] ${"dir$i"} >/dev/null);
+		    my $dir = dirname $dscs[1] if $i == 2;
+		    $dir = dirname $dscs[2] if $i == 1;
+		    my $cmdx = qq(cp $dir/$origs[$i] ${"dir$i"} >/dev/null);
 		    system $cmdx;
 		    fatal "$cmd failed" if $? != 0;
 		    my $dscx = basename $dscs[$i];
@@ -572,15 +573,11 @@ elsif ($type eq 'dsc') {
 	    while ($_ = readdir(DIR)) {
 		    my $unpacked = "=unpacked-tar" . $tarballs . "=";
 		    my $filename = $_;
-		    if ($_ =~ /tar.gz$/) {
-			$filename =~ s%(.*)\.tar\.gz$%$1%;
+		    if ($filename =~ s/\.tar\.$compression_re_file_ext$//) {
+			my $comp = compression_guess_from_filename($_);
+			my $decomp = compression_get_property($comp, 'decomp_prog');
 			$tarballs++;
-		        system qq(cd ${"dir$i"}/${"sdir$i"} && tar zxf $_ >/dev/null && test -d $filename && mv $filename $unpacked);
-		    }
-		    if ($_ =~ /tar.bz$/ || $_ =~ /tar.bz2$/) {
-			$filename =~ s%(.*)\.tar\.bz2?$%$1%;
-			$tarballs++;
-		        system qq(cd ${"dir$i"}/${"sdir$i"} && tar jxf $_ >/dev/null && test -d $filename && mv $filename $unpacked);
+			system qq(cd ${"dir$i"}/${"sdir$i"} && @$decomp $_ | tar xf >/dev/null && test -d $filename && mv $filename $unpacked);
 		    }
 	    }
 	    closedir(DIR);

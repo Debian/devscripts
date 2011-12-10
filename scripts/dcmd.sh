@@ -159,6 +159,8 @@ for arg in "$@"; do
 		[ "$ARCHUDEB" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
 		echo "SEEN_ARCHUDEB=1;"
 	    elif endswith "$THISARG" .tar.gz || \
+		 endswith "$THISARG" .tar.xz || \
+		 endswith "$THISARG" .tar.lzma || \
 		 endswith "$THISARG" .tar.bz2; then
 		[ "$TARBALL" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
 		echo "SEEN_TARBALL=1;"
