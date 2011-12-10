@@ -1384,7 +1384,7 @@ EOF
 	if (defined glob("$tempdir/$hidden")) {
 	    $globpattern .= " $hidden";
 	}
-	system("cd $tempdir; GZIP=-9 tar --owner=root --group=root --mode=a+rX -czf $absdestdir/$newfile_base_gz $globpattern") == 0
+	system("cd $tempdir; GZIP='-n -9' tar --owner=root --group=root --mode=a+rX -czf $absdestdir/$newfile_base_gz $globpattern") == 0
 	  or die("Repacking from zip to tar.gz failed (could not create tarball)\n");
 	unlink "$destdir/$newfile_base";
 	$newfile_base = $newfile_base_gz;
