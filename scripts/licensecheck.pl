@@ -394,7 +394,7 @@ sub parselicense($) {
 	$gplver = " (v$1)";
     } elsif ($licensetext =~ /GNU (?:Affero ?)General Public License, version ([^ ]+?)[ .]/) {
 	$gplver = " (v$1)";
-    } elsif ($licensetext =~ /either version ([^ ]+) of the License, or \(at your option\) any later version/) {
+    } elsif ($licensetext =~ /either version ([^ ]+)(?: of the License)?, or \(at your option\) any later version/) {
 	$gplver = " (v$1 or later)";
     }
 
