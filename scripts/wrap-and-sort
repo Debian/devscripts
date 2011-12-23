@@ -163,7 +163,9 @@ def get_files(debian_directory):
     """Returns a list of files that should be wrapped and sorted."""
     files = []
     for supported_files in SUPPORTED_FILES:
-        files.extend(glob.glob(os.path.join(debian_directory, supported_files)))
+        file_pattern = os.path.join(debian_directory, supported_files)
+        files.extend(file_name for file_name in glob.glob(file_pattern)
+                     if not os.access(file_name, os.X_OK))
     return files
 
 def main():
