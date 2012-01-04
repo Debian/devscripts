@@ -15,6 +15,7 @@ devscripts (2.11.3) UNRELEASED; urgency=low
       the patch.  (Closes: #646691)
     + Handle filenames with special characters.  (Closes: #648299)
   * debdiff: Handle paths with special characters.  (Closes: #571528)
+  * bts: Add minimal verification of email arguments.  (Closes: #654460)
 
   [ Benjamin Drung ]
   * wrap-and-sort: Do not sort executable files (executable .install files could

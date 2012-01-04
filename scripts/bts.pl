@@ -1307,8 +1307,8 @@ Change the submitter address of a I<bug> or a number of bugs, with B<!> meaning
 
 sub bts_submitter {
     @_ or die "bts submitter: change submitter of what bug?\n";
-    my $submitter=pop;
-    if ($submitter !~ /\@/ and $submitter ne '!') {
+    my $submitter=checkemail(pop, 1);
+    if (!defined $submitter) {
 	die "bts submitter: change submitter to what?\n";
     }
     foreach (@_) {
@@ -1638,7 +1638,7 @@ Specify a user I<email> address before using the B<usertags> command.
 =cut
 
 sub bts_user {
-    my $email=shift or die "bts user: set user to what email address?\n";
+    my $email=checkemail(shift) or die "bts user: set user to what email address?\n";
     if (! length $email) {
 	die "bts user: set user to what email address?\n";
     }
@@ -1729,7 +1729,7 @@ or B<EMAIL> (checked in that order) is used.
 
 sub bts_claim {
     my $bug=checkbug(shift) or die "bts claim: claim what bug?\n";
-    my $claim=shift || $ENV{'DEBEMAIL'} || $ENV{'EMAIL'} || "";
+    my $claim=checkemail(shift) || $ENV{'DEBEMAIL'} || $ENV{'EMAIL'} || "";
     if (! length $claim) {
 	die "bts claim: use what claim token?\n";
     }
@@ -1749,7 +1749,7 @@ or B<EMAIL> (checked in that order) is used.
 
 sub bts_unclaim {
     my $bug=checkbug(shift) or die "bts unclaim: unclaim what bug?\n";
-    my $claim=shift || $ENV{'DEBEMAIL'} || $ENV{'EMAIL'} || "";
+    my $claim=checkemail(shift) || $ENV{'DEBEMAIL'} || $ENV{'EMAIL'} || "";
     if (! length $claim) {
 	die "bts unclaim: use what claim token?\n";
     }
@@ -1978,7 +1978,7 @@ The owner of a bug accepts responsibility for dealing with it.
 
 sub bts_owner {
     my $bug=checkbug(shift) or die "bts owner: change owner of what bug?\n";
-    my $owner=shift or die "bts owner: change owner to what?\n";
+    my $owner=checkemail(shift, 1) or die "bts owner: change owner to what?\n";
     opts_done(@_);
     mailbts("owner $bug", "owner $bug $owner");
 }
@@ -2010,7 +2010,7 @@ relevant emails and notifications.  Use the unsubscribe command to unsubscribe.
 
 sub bts_subscribe {
     my $bug=checkbug(shift) or die "bts subscribe: subscribe to what bug?\n";
-    my $email=shift;
+    my $email=checkemail(shift, 1);
     $email=lc($email) if defined $email;
     if (defined $email and $email eq '!') { $email = undef; }
     else {
@@ -2037,7 +2037,7 @@ to which you have to reply. Use the B<subscribe> command to, well, subscribe.
 
 sub bts_unsubscribe {
     my $bug=checkbug(shift) or die "bts unsubscribe: unsubscribe from what bug?\n";
-    my $email=shift;
+    my $email=checkemail(shift, 1);
     $email = lc($email) if defined $email;
     if (defined $email and $email eq '!') { $email = undef; }
     else {
@@ -2446,6 +2446,19 @@ sub sanitizething {
     return 'release-critical/index.html' if $bug eq 'release-critical';
     $bug =~ s/^(?:(?:Bug)?\#)?(\d+):?$/$1/;
     return $bug;
+}
+
+# Perform basic validation of an argument which should be an email address,
+# handling ! if allowed
+sub checkemail {
+    my $email=$_[0] or return;
+    my $allowbang=$_[1];
+
+    if ($email !~ /\@/ && (!$allowbang || $email ne '!')) {
+	return;
+    }
+
+    return $email;
 }
 
 # Validate a bug number. Strips out extraneous leading junk, allowing
