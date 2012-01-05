@@ -16,6 +16,11 @@ devscripts (2.11.3) UNRELEASED; urgency=low
     + Handle filenames with special characters.  (Closes: #648299)
   * debdiff: Handle paths with special characters.  (Closes: #571528)
   * bts: Add minimal verification of email arguments.  (Closes: #654460)
+  * licensecheck:
+    + Recognize GPL version when "of the License" isn't present.  Thanks to
+      Ville Skyttä for the patch.
+    + Correctly capture license version for Affero when "as published by"
+      isn't present.  Thanks to Ville Skyttä for the patch.
 
   [ Benjamin Drung ]
   * wrap-and-sort: Do not sort executable files (executable .install files could
