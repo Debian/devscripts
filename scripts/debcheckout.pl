@@ -511,7 +511,13 @@ sub checkout_repo($$$) {
 	    @cmd = ("cvs", "-d", $root, "checkout", $module);
 	}
 	when ("darcs") { @cmd = ("darcs", "get", $repo_url); }
-	when ("git") { @cmd = ("git", "clone", $repo_url); }
+	when ("git") {
+	    if ($repo_url =~ m|(.*)\s+-b\s+(.*)|) {
+	      @cmd = ("git", "clone", $1, "-b", $2);
+	    } else {
+	      @cmd = ("git", "clone", $repo_url);
+	    }
+	}
 	when ("hg") { @cmd = ("hg", "clone", $repo_url); }
 	when ("svn") { @cmd = ("svn", "co", $repo_url); }
 	default { die "unsupported version control system '$repo_type'.\n"; }
@@ -877,6 +883,7 @@ sub print_repo($$) {
 sub git_ls_remote($$) {
     my ($url, $prefix) = @_;
 
+    $url =~ s|\s+-b\s+.*||;
     my $cmd = "git ls-remote '$url'";
     $cmd .= " '$prefix/*'" if length $prefix;
     open GIT, "$cmd |" or die "can't execute $cmd\n";
@@ -995,7 +1002,7 @@ sub main() {
 	    $pkg = $1;
 	} elsif ($repo_url =~ m!([a-z0-9.+-]+)/trunk/?!) { # svn with $pkg/{trunk,tags,branches}
 	    $pkg = $1;
-	} elsif ($repo_url =~ /([a-z0-9.+-]+)\.git$/) { # git
+	} elsif ($repo_url =~ /([a-z0-9.+-]+)\.git(\s+-b\s+.*)?$/) { # git
 	    $pkg = $1;
 	} elsif ($repo_url =~ /([a-z0-9.+-]+)$/) { # catch-all
 	    $pkg = $1;
