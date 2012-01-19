@@ -1,3 +1,10 @@
+devscripts (2.11.4) UNRELEASED; urgency=low
+
+  * bts: Revert usertags' handling of more than one +/-/=.  Only the first one
+    is relevant.
+
+ -- James McCoy <jamessan@debian.org>  Wed, 18 Jan 2012 20:25:01 -0500
+
 devscripts (2.11.3) unstable; urgency=low
 
   [ Adam D. Barratt ]

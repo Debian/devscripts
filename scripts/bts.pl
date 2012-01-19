@@ -1671,49 +1671,24 @@ sub bts_usertags {
 	die "bts usertags: set what user tag?\n";
     }
     # Parse the rest of the command line.
-    my $base_command="usertags $bug";
-    my $commands = [];
-
-    my $curop;
-    foreach my $tag (@_) {
-	if ($tag =~ s/^([-+=])//) {
-	    my $op = $1;
-	    if ($op eq '=') {
-		$curop = '=';
-		$commands = [];
-	    }
-	    elsif (!$curop || $curop ne $op) {
-		$curop = $op;
-	    }
-	    next unless $tag;
-	}
-	if (!$curop) {
-	    $curop = '+';
-	}
-	if (!@$commands || $curop ne $commands->[-1]{op}) {
-	    push(@$commands, { op => $curop, tags => [] });
-	}
-	if ($tag !~ m/^[-[:alnum:]@.+]+$/i) {
-	    die "bts usertag: \"$tag\" contains characters other than " .
-	        "alpha-numerics, '\@', '.', '+', and '-'.\n";
-	}
-	push(@{$commands->[-1]{tags}}, $tag);
+    my $command="usertags $bug";
+    my $flag="";
+    if ($_[0] =~ /^[-+=]$/) {
+	$flag = $_[0];
+	$command .= " $flag";
+	shift;
+    } elsif ($_[0] =~ s/^([-+=])//) {
+	$flag = $1;
+	$command .= " $flag";
     }
 
-    my $command = '';
-    foreach my $cmd (@$commands) {
-	if ($cmd->{op} ne '=' && !@{$cmd->{tags}}) {
-	    die "bts usertags: set what tag?\n";
-	}
-	$command .= " $cmd->{op} " . join(' ', @{$cmd->{tags}});
-    }
-    if (!$command && $curop eq '=') {
-	$command = " $curop";
+    if (! @_) {
+	die "bts usertags: set what user tag?\n";
     }
 
-    if ($command) {
-	mailbts("usertagging $bug", $base_command . $command);
-    }
+    $command .= sprintf(' %s', join(' ', @_));
+
+    mailbts("usertagging $bug", $command);
 }
 
 =item B<claim> I<bug> [I<claim>]
