@@ -38,6 +38,10 @@ devscripts (2.13.3) UNRELEASED; urgency=low
   * wnpp-check: Add bug URL to output and reorder columns to ease reading.
     (Closes: #715572)
 
+  [ Bernhard R. Link ]
+  * uscan: properly cope with colons and minus signs in upstream versions.
+    (Closes: #658999)
+
  -- Yaroslav Halchenko <debian@onerussian.com>  Thu, 06 Jun 2013 22:32:37 -0400
 
 devscripts (2.13.2) unstable; urgency=low

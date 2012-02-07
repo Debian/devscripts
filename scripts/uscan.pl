@@ -872,7 +872,7 @@ sub process_watchline ($$$$$$)
 
     # What is the most recent file, based on the filenames?
     # We first have to find the candidates, then we sort them using
-    # Devscripts::Versort::versort
+    # Devscripts::Versort::upstream_versort
     if ($site =~ m%^http(s)?://%) {
 	if (defined($1) and !$haveSSL) {
 	    uscan_die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n";
@@ -988,7 +988,7 @@ sub process_watchline ($$$$$$)
 		    return 1;
 		}
 	    } else {
-		@hrefs = Devscripts::Versort::versort(@hrefs);
+		@hrefs = Devscripts::Versort::upstream_versort(@hrefs);
 		($newversion, $newfile) = @{$hrefs[0]};
 	    }
 	} else {
@@ -1085,7 +1085,7 @@ sub process_watchline ($$$$$$)
 		    return 1;
 		}
 	    } else {
-		@files = Devscripts::Versort::versort(@files);
+		@files = Devscripts::Versort::upstream_versort(@files);
 		($newversion, $newfile) = @{$files[0]};
 	    }
 	} else {
@@ -1241,7 +1241,7 @@ EOF
 
     # Can't just use $lastversion eq $newversion, as then 0.01 and 0.1
     # compare different, whereas they are treated as equal by dpkg
-    if (system("dpkg", "--compare-versions", "$mangled_lastversion", "eq", "$newversion") == 0) {
+    if (system("dpkg", "--compare-versions", "1:${mangled_lastversion}-0", "eq", "1:${newversion}-0") == 0) {
 	if ($verbose or ($download == 0 and $report and ! $dehs)) {
 	    print $pkg_report_header;
 	    $pkg_report_header = '';
@@ -1268,7 +1268,7 @@ EOF
     # We use dpkg's rules to determine whether our current version
     # is newer or older than the remote version.
     if (!defined $download_version) {
-	if (system("dpkg", "--compare-versions", "$mangled_lastversion", "gt", "$newversion") == 0) {
+	if (system("dpkg", "--compare-versions", "1:${mangled_lastversion}-0", "gt", "1:${newversion}-0") == 0) {
 	    if ($verbose) {
 		print " => remote site does not even have current version\n";
 	    } elsif ($dehs) {
@@ -1636,7 +1636,7 @@ sub newest_dir ($$$$$) {
 	    }
 	}
 	if (@hrefs) {
-	    @hrefs = Devscripts::Versort::versort(@hrefs);
+	    @hrefs = Devscripts::Versort::upstream_versort(@hrefs);
 	    if ($debug) {
 		print "-- Found the following matching hrefs (newest first):\n";
 		foreach my $href (@hrefs) { print "     $$href[1] ($$href[0])\n"; }
@@ -1708,7 +1708,7 @@ sub newest_dir ($$$$$) {
 		print STDERR "-- Found the following matching dirs:\n";
 		foreach my $dir (@dirs) { print STDERR "     $$dir[1]\n"; }
 	    }
-	    @dirs = Devscripts::Versort::versort(@dirs);
+	    @dirs = Devscripts::Versort::upstream_versort(@dirs);
 	    my ($newversion, $newdir) = @{$dirs[0]};
 	    return $newdir;
 	} else {
