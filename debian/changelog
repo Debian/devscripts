@@ -1,7 +1,14 @@
 devscripts (2.11.4) UNRELEASED; urgency=low
 
+  [ James McCoy ]
   * bts: Revert usertags' handling of more than one +/-/=.  Only the first one
     is relevant.
+
+  [ Ryan Niebur ]
+  * dget: when finding the sources.list entry for the repository to
+    download a package from, match any port with the correct hostname
+    because apt-cache policy does not output port numbers in URLs
+    (Closes: #601951)
 
  -- James McCoy <jamessan@debian.org>  Wed, 18 Jan 2012 20:25:01 -0500
 
