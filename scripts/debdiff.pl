@@ -17,7 +17,10 @@
 use 5.006_000;
 use strict;
 use Cwd;
+use Dpkg::IPC;
 use File::Basename;
+use File::Copy qw/ cp move /;
+use File::Path qw/ rmtree /;
 use File::Temp qw/ tempdir tempfile /;
 use lib '/usr/share/devscripts';
 use Devscripts::Versort;
@@ -341,10 +344,27 @@ if ($type eq 'deb') {
     no strict 'refs';
     foreach my $i (1,2) {
 	my $deb = shift;
-	my $debc = `env LC_ALL=C dpkg-deb -c $deb`;
-	$? == 0 or fatal "dpkg-deb -c $deb failed!";
-	my $debI = `env LC_ALL=C dpkg-deb -I $deb`;
-	$? == 0 or fatal "dpkg-deb -I $deb failed!";
+	my ($debc, $debI) = ('', '');
+	my %dpkg_env = ( LC_ALL => 'C' );
+	eval {
+	    spawn(exec => ['dpkg-deb', '-c', $deb],
+		env => \%dpkg_env,
+		to_string => \$debc,
+		wait_child => 1);
+	};
+	if ($@) {
+	    fatal "dpkg-deb -c $deb failed!";
+	}
+
+	eval {
+	    spawn(exec => ['dpkg-deb', '-I', $deb],
+		env => \%dpkg_env,
+		to_string => \$debI,
+		wait_child => 1);
+	};
+	if ($@) {
+	    fatal "dpkg-deb -I $deb failed!";
+	}
 	# Store the name for later
 	$singledeb[$i] = $deb;
 	# get package name itself
@@ -381,7 +401,7 @@ elsif ($type eq 'changes' or $type eq 'debs') {
 		last if $infiles and /^[^ ]/;
 		/^Files:/ and $infiles=1, next;
 		next unless $infiles;
-		/ (\S*.u?deb)$/ and push @debs, dirname($changes) . '/' . $1;
+		/ (\S*.u?deb)$/) && push @debs, dirname($changes) . '/' . $1;
 	    }
 	    close CHANGES
 		or fatal "Problem reading $changes: $!";
@@ -395,10 +415,26 @@ elsif ($type eq 'changes' or $type eq 'debs') {
 	foreach my $deb (@debs) {
 	    no strict 'refs';
 	    fatal "Can't read file: $deb" unless -r $deb;
-	    my $debc = `env LC_ALL=C dpkg-deb -c $deb`;
-	    $? == 0 or fatal "dpkg-deb -c $deb failed!";
-	    my $debI = `env LC_ALL=C dpkg-deb -I $deb`;
-	    $? == 0 or fatal "dpkg-deb -I $deb failed!";
+	    my ($debc, $debI) = ('', '');
+	    my %dpkg_env = ( LC_ALL => 'C' );
+	    eval {
+		spawn(exec => ['dpkg-deb', '-c', $deb],
+		    to_string => \$debc,
+		    env => \%dpkg_env,
+		    wait_child => 1);
+	    };
+	    if ($@) {
+		fatal "dpkg-deb -c $deb failed!";
+	    }
+	    eval {
+		spawn(exec => ['dpkg-deb', '-I', $deb],
+		    to_string => \$debI,
+		    env => \%dpkg_env,
+		    wait_child => 1);
+	    };
+	    if ($@) {
+		fatal "dpkg-deb -I $deb failed!";
+	    }
 	    my $debpath = $deb;
 	    # get package name itself
 	    $deb =~ s,.*/,,; $deb =~ s/_.*//;
@@ -503,30 +539,27 @@ elsif ($type eq 'dsc') {
 	and scalar(@excludes) == 0 and $use_interdiff and !$wdiff_source_control) {
 	# same orig tar ball, interdiff exists and not wdiffing
 
-	my $command = join( " ", ("interdiff", "-z", @diff_opts, "'$diffs[1]'",
-	    "'$diffs[2]'", ">", $filename) );
-	my $rv = system($command);
-	if ($rv) {
-	    fatal "interdiff -z $diffs[1] $diffs[2] failed!";
-	} else {
-	    if ($have_diffstat and $show_diffstat) {
-		my $header = "diffstat for " . basename($diffs[1])
-				. " " . basename($diffs[2]) . "\n\n";
-		$header =~ s/\.diff\.gz//g;
-		print $header;
-		system("diffstat $filename");
-		print "\n";
-	    }
+	spawn(exec => ['interdiff', '-z', @diff_opts, $diffs[1], $diffs[2]],
+	      to_file => $filename,
+	      wait_child => 1);
+	if ($have_diffstat and $show_diffstat) {
+	    my $header = "diffstat for " . basename($diffs[1])
+			    . " " . basename($diffs[2]) . "\n\n";
+	    $header =~ s/\.diff\.gz//g;
+	    print $header;
+	    spawn(exec => ['diffstat', $filename],
+		wait_child => 1);
+	    print "\n";
+	}
 
-	    if (-s $filename) {
-		open( INTERDIFF, '<', $filename );
-		while( <INTERDIFF> ) {
-		    print $_;
-		}
-		close INTERDIFF;
-
-		$exit_status = 1;
+	if (-s $filename) {
+	    open( INTERDIFF, '<', $filename );
+	    while( <INTERDIFF> ) {
+		print $_;
 	    }
+	    close INTERDIFF;
+
+	    $exit_status = 1;
 	}
     } else {
 	# Any other situation
@@ -543,44 +576,67 @@ elsif ($type eq 'dsc') {
 	    no strict 'refs';
 	    my @opts = ('-x');
 	    push (@opts, '--skip-patches') if $dscformats[$i] eq '3.0 (quilt)';
-	    my $cmd = qq(cd ${"dir$i"} && dpkg-source @opts $dscs[$i] >/dev/null);
-	    system $cmd;
-	    if ($? != 0) {
-	    	    my $dir = dirname $dscs[1] if $i == 2;
-	    	    $dir = dirname $dscs[2] if $i == 1;
-	    	    my $cmdx = qq(cp $dir/$origs[$i] ${"dir$i"} >/dev/null);
-		    system $cmdx;
-		    fatal "$cmd failed" if $? != 0;
-		    my $dscx = basename $dscs[$i];
-		    $cmdx = qq(cp $diffs[$i] ${"dir$i"} && cp $dscs[$i] ${"dir$i"} && cd ${"dir$i"} && dpkg-source @opts $dscx > /dev/null);
-		    system $cmdx;
-		    fatal "$cmd failed" if $? != 0;
+	    my $diri = ${"dir$i"};
+	    eval {
+		spawn(exec => ['dpkg-source', @opts, $dscs[$i]],
+		      to_file => '/dev/null',
+		      chdir => $diri,
+		      wait_child => 1);
+	    };
+	    if ($@) {
+		my $dir = dirname $dscs[1] if $i == 2;
+		$dir = dirname $dscs[2] if $i == 1;
+		cp "$dir/$origs[$i]", $diri || fatal "copy $dir/$origs[$i] $diri: $!";
+		my $dscx = basename $dscs[$i];
+		cp $diffs[$i], $diri || fatal "copy $diffs[$i] $diri: $!";
+		cp $dscs[$i], $diri || fatal "copy $dscs[$i] $diri: $!";
+		spawn(exec => ['dpkg-source', @opts, $dscx],
+		      to_file => '/dev/null',
+		      chdir => $diri,
+		      wait_child => 1);
 	    }
-	    opendir DIR,${"dir$i"};
+	    opendir DIR,$diri;
 	    while ($_ = readdir(DIR)) {
-		    next if $_ eq '.' || $_ eq '..' || ! -d ${"dir$i"}."/$_";
-		    ${"sdir$i"} = $_;
-		    last;
+		next if $_ eq '.' || $_ eq '..' || ! -d "$diri/$_";
+		${"sdir$i"} = $_;
+		last;
 	    }
 	    closedir(DIR);
+	    my $sdiri = ${"sdir$i"};
 
 	    # also unpack tarballs found in the top level source directory so we can compare their contents too
 	    next unless $unpack_tarballs;
-	    opendir DIR,${"dir$i"}.'/'.${"sdir$i"};
+	    opendir DIR,$diri.'/'.$sdiri;
 
 	    my $tarballs = 1;
 	    while ($_ = readdir(DIR)) {
 		    my $unpacked = "=unpacked-tar" . $tarballs . "=";
 		    my $filename = $_;
+		    my $found = 0;
+		    my $comp = "";
+
 		    if ($_ =~ /tar.gz$/) {
 			$filename =~ s%(.*)\.tar\.gz$%$1%;
 			$tarballs++;
-		        system qq(cd ${"dir$i"}/${"sdir$i"} && tar zxf $_ >/dev/null && test -d $filename && mv $filename $unpacked); 
+			$found = 1;
+			$comp = "gzip";
 		    }
 		    if ($_ =~ /tar.bz$/ || $_ =~ /tar.bz2$/) {
 			$filename =~ s%(.*)\.tar\.bz2?$%$1%;
 			$tarballs++;
-		        system qq(cd ${"dir$i"}/${"sdir$i"} && tar jxf $_ >/dev/null && test -d $filename && mv $filename $unpacked);
+			$found = 1;
+			$comp = "bzip2";
+		    }
+
+		    if ($found) {
+			spawn(exec => ['tar', "--$comp", '-xf', $_],
+			    to_file => '/dev/null',
+			    wait_child => 1,
+			    chdir => "$diri/$sdiri",
+			    nocheck => 1);
+			if (-d "$diri/$sdiri/$filename") {
+			    move "$diri/$sdiri/$filename", "$diri/$sdiri/$unpacked";
+			}
 		    }
 	    }
 	    closedir(DIR);
@@ -588,18 +644,18 @@ elsif ($type eq 'dsc') {
 
 	my @command = ("diff", "-Nru", @diff_opts);
 	for my $exclude (@excludes) {
-	    push @command, ("--exclude", "'$exclude'");
+	    push @command, ("--exclude", $exclude);
 	}
-	push @command, ("'$dir1/$sdir1'", "'$dir2/$sdir2'");
-	push @command, (">", $filename);
+	push @command, ("$dir1/$sdir1", "$dir2/$sdir2");
 
 	# Execute diff and remove the common prefixes $dir1/$dir2, so the patch can be used with -p1,
 	# as if when interdiff would have been used:
-	system(join(" ", @command));
+	spawn(exec => \@command, to_file => $filename, wait_child => 1, nocheck => 1);
 
 	if ($have_diffstat and $show_diffstat) {
 	    print "diffstat for $sdir1 $sdir2\n\n";
-	    system("diffstat $filename");
+	    spawn(exec => ['diffstat', $filename],
+		wait_child => 1);
 	    print "\n";
 	}
 
@@ -622,7 +678,7 @@ elsif ($type eq 'dsc') {
 	    no strict 'refs';
 	    for my $i (1,2) {
 		foreach my $file (@cf) {
-		    system qq(cp ${"dir$i"}/${"sdir$i"}/debian/$file ${"wdiffdir$i"});
+		    cp ${"dir$i"}.'/'.${"sdir$i"}."/debian/$file", ${"wdiffdir$i"};
 		}
 	    }
 	    use strict 'refs';
@@ -635,7 +691,7 @@ elsif ($type eq 'dsc') {
 	    print "\n";
 
 	    # Clean up
-	    system ("rm", "-rf", $wdiffdir1, $wdiffdir2);
+	    rmtree([$wdiffdir1, $wdiffdir2]);
 	}
 
 	if (! -f $filename) {
@@ -848,9 +904,15 @@ for my $debname (@CommonDebs) {
     mktmpdirs();
 
     for my $i (1,2) {
-	if (system('dpkg-deb', '-e', "${\"DebPaths$i\"}{$debname}", ${"dir$i"})) {
+	my $debpath = "${\"DebPaths$i\"}{$debname}";
+	my $diri = ${"dir$i"};
+	eval {
+	    spawn(exec => ['dpkg-deb', '-e', $debpath, $diri],
+		wait_child => 1);
+	};
+	if ($@) {
 	    my $msg = "dpkg-deb -e ${\"DebPaths$i\"}{$debname} failed!";
-	    system ("rm", "-rf", $dir1, $dir2);
+	    rmtree([$dir1, $dir2]);
 	    fatal $msg;
 	}
     }
@@ -860,7 +922,7 @@ for my $debname (@CommonDebs) {
 	$exit_status);
 
     # Clean up
-    system ("rm", "-rf", $dir1, $dir2);
+    rmtree([$dir1, $dir2]);
 }
 
 exit $exit_status;
@@ -959,15 +1021,24 @@ sub wdiff_control_files($$$$$)
 		close $fd;
 	    }
 	}
-	my $wdiff = `wdiff -n $wdiff_opt $dir1/$cf $dir2/$cf`;
 	my $usepkgname = $debname eq $dummyname ? "" : " of package $debname";
-	if ($? >> 8 == 0) {
-	    if (! $quiet) {
-		print "\nNo differences were encountered between the $cf files$usepkgname\n";
-	    }
-	} elsif ($? >> 8 == 1) {
-	    print "\n";
-	    if ($wdiff_opt) {
+	my @opts = ('-n');
+	push @opts, $wdiff_opt if $wdiff_opt;
+	my $wdiff = '';
+	eval {
+	    spawn(exec => ['wdiff', @opts, "$dir1/$cf", "$dir2/$cf"],
+		to_string => \$wdiff,
+		wait_child => 1);
+	};
+	if ($@ and $@ !~ /gave error exit status 1/) {
+	    print "$@\n";
+	    warn "wdiff failed\n";
+	} else {
+	    if (!$@) {
+		if (! $quiet) {
+		    print "\nNo differences were encountered between the $cf files$usepkgname\n";
+		}
+	    } elsif ($wdiff_opt) {
 		# Don't try messing with control codes
 		my $msg = ucfirst($cf) . " files$usepkgname: wdiff output";
 		print $msg, "\n", '-' x length $msg, "\n";
@@ -977,13 +1048,10 @@ sub wdiff_control_files($$$$$)
 		@output = split /\n/, $wdiff;
 		@output = grep /(\[-|\{\+)/, @output;
 		my $msg = ucfirst($cf) . " files$usepkgname: lines which differ (wdiff format)";
-		print $msg, "\n", '-' x length $msg, "\n";
-		print join("\n",@output), "\n";
+		print "\n", $msg, "\n", '-' x length $msg, "\n";
+                print join("\n",@output), "\n";
 	    }
 	    $status = 1;
-	} else {
-	    warn "wdiff failed (exit status " . ($? >> 8) .
-		(($? & 0x7f) ? " with signal " . ($? & 0x7f) : "") . ")\n";
 	}
     }
 
