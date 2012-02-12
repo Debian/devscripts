@@ -586,7 +586,7 @@ elsif ($type eq 'dsc') {
 			      chdir => "$diri/$sdiri",
 			      nocheck => 1);
 			if (-d "$diri/$sdiri/$filename") {
-			    move "$diri/$sdiri/$filename", $unpacked;
+			    move "$diri/$sdiri/$filename", "$diri/$sdiri/$unpacked";
 			}
 		    }
 	    }

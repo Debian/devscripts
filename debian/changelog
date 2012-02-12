@@ -10,6 +10,10 @@ devscripts (2.11.4) UNRELEASED; urgency=low
     because apt-cache policy does not output port numbers in URLs
     (Closes: #601951)
 
+  [ Adam D. Barratt ]
+  * debdiff: Fix a regression in the handling of embedded tarballs (a side
+    effect of the changes introduced to resolve #571528).
+
  -- James McCoy <jamessan@debian.org>  Wed, 18 Jan 2012 20:25:01 -0500
 
 devscripts (2.11.3) unstable; urgency=low
