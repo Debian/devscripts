@@ -321,14 +321,11 @@ if (! $type) {
     elsif ($ARGV[0] =~ /\.udeb$/) { $type = 'deb'; }
     elsif ($ARGV[0] =~ /\.changes$/) { $type = 'changes'; }
     elsif ($ARGV[0] =~ /\.dsc$/) { $type = 'dsc'; }
-    elsif (`file $ARGV[0]` =~ /Debian/) { $type = 'deb'; }
     else {
 	fatal "Could not recognise files; the names should end .deb, .udeb, .changes or .dsc";
     }
-    if ($ARGV[1] !~ /\.$type$/) {
-	unless ($type eq 'deb' and `file $ARGV[0]` =~ /Debian/) {
-	    fatal "The two filenames must have the same suffix, either .deb, .udeb, .changes or .dsc";
-	}
+    if ($ARGV[1] !~ /\.$type$/ && ($type ne 'deb' || $ARGV[1] !~ /\.udeb$/)) {
+	fatal "The two filenames must have the same suffix, either .deb, .udeb, .changes or .dsc";
     }
 }
 
