@@ -1,9 +1,24 @@
+devscripts (2.10.69+squeeze2) squeeze-security; urgency=high
+
+  [ Adam D. Barratt ]
+  * debdiff: Fix CVE-2012-0211 and CVE-2012-0212 (argument injection /
+    modification)
+
+  [ Raphael Geissert ]
+  * debdiff:
+    + Fix CVE-2012-0210 (insufficient input sanitising reading .dsc
+      and .changes files)
+    + Remove undocumented feature treating extensionless files as if
+      they were packages (Closes: #659559)
+
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 14 Feb 2012 10:26:14 +0000
+
 devscripts (2.10.69+squeeze1) stable; urgency=low
 
   * bts: Accept the "wheezy" and "wheezy-ignore" tags.
   * debchange:
     + Set Squeeze as the default backports target.
-    + Recognize "lenny-backports-sloppy" and "squeeze-backports"
+    + Recognize "lenny-backports-squeeze" and "squeeze-backports"
       distributions.
     + Remove "etch-backports" and "etch-volatile" distributions.
 
