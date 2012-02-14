@@ -593,7 +593,7 @@ elsif ($type eq 'dsc') {
 
 	my @command = ("diff", "-Nru", @diff_opts);
 	for my $exclude (@excludes) {
-	    push @command, ("--exclude", "'$exclude'");
+	    push @command, ("--exclude", $exclude);
 	}
 	push @command, ("$dir1/$sdir1", "$dir2/$sdir2");
 

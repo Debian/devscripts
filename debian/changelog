@@ -26,7 +26,8 @@ devscripts (2.11.4) UNRELEASED; urgency=low
   * debdiff:
     + Remove undocumented feature treating extensionless files as if
       they were packages (Closes: #659559)
-    + Add missing chdir for dpkg-source
+    + Add missing chdir for dpkg-source and remove extraneous quoting
+      of --exclude parameters.
 
  -- Benjamin Drung <bdrung@debian.org>  Wed, 15 Feb 2012 15:56:19 +0100
 
