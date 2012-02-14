@@ -381,7 +381,12 @@ elsif ($type eq 'changes' or $type eq 'debs') {
 		last if $infiles and /^[^ ]/;
 		/^Files:/ and $infiles=1, next;
 		next unless $infiles;
-		/ (\S*.u?deb)$/ and push @debs, dirname($changes) . '/' . $1;
+		if (/ (\S*.u?deb)$/) {
+		    my $file = $1;
+		    $file !~ m,[/\x00],
+			or fatal "File name contains invalid characters: $file";
+		    push @debs, dirname($changes) . '/' . $file;
+		}
 	    }
 	    close CHANGES
 		or fatal "Problem reading $changes: $!";
@@ -456,6 +461,8 @@ elsif ($type eq 'dsc') {
 	    # This had better match
 	    if (/^\s+[0-9a-f]{32}\s+\d+\s+(\S+)$/) {
 		my $file = $1;
+		$file !~ m,[/\x00],
+		    or fatal "File name contains invalid characters: $file";
 		if ($file =~ /\.diff\.gz$/) {
 		    $diffs[$i] = cwd() . '/' . $file;
 		}
