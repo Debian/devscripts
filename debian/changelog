@@ -22,6 +22,10 @@ devscripts (2.11.4) UNRELEASED; urgency=low
   * suspicious-source: Add inode/x-empty to whitelist of MIME types
     (Closes: #659946).
 
+  [ Raphael Geissert ]
+  * debdiff: Remove undocumented feature treating extensionless files as if
+    they were packages (Closes: #659559)
+
  -- Benjamin Drung <bdrung@debian.org>  Wed, 15 Feb 2012 15:56:19 +0100
 
 devscripts (2.11.3) unstable; urgency=low
