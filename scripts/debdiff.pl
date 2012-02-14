@@ -555,6 +555,7 @@ elsif ($type eq 'dsc') {
 		cp $dscs[$i], $diri || fatal "copy $dscs[$i] $diri: $!";
 		spawn(exec => ['dpkg-source', @opts, $dscx],
 		      to_file => '/dev/null',
+		      chdir => $diri,
 		      wait_child => 1);
 	    }
 	    opendir DIR,$diri;
