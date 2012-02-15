@@ -14,7 +14,11 @@ devscripts (2.11.4) UNRELEASED; urgency=low
   * debdiff: Fix a regression in the handling of embedded tarballs (a side
     effect of the changes introduced to resolve #571528).
 
- -- James McCoy <jamessan@debian.org>  Wed, 18 Jan 2012 20:25:01 -0500
+  [ Paul Wise ]
+  * suspicious-source: Also ignore mercurial and darcs VCS directories
+    (Closes: #659966).
+
+ -- Benjamin Drung <bdrung@debian.org>  Wed, 15 Feb 2012 15:51:46 +0100
 
 devscripts (2.11.3) unstable; urgency=low
 
