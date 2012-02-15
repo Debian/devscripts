@@ -1,4 +1,6 @@
-devscripts (2.11.4) UNRELEASED; urgency=low
+devscripts (2.11.4) unstable; urgency=high
+
+  * Urgency "high" for security fixes.
 
   [ James McCoy ]
   * bts: Revert usertags' handling of more than one +/-/=.  Only the first one
@@ -36,7 +38,7 @@ devscripts (2.11.4) UNRELEASED; urgency=low
     + Fix CVE-2012-0210 (insufficient input sanitising reading .dsc
       and .changes files).
 
- -- Benjamin Drung <bdrung@debian.org>  Wed, 15 Feb 2012 15:56:19 +0100
+ -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 15 Feb 2012 19:19:31 +0000
 
 devscripts (2.11.3) unstable; urgency=low
 
