@@ -21,6 +21,7 @@ use Dpkg::IPC;
 use Dpkg::Compression;
 use File::Copy qw(cp move);
 use File::Basename;
+use File::Path qw/ rmtree /;
 use File::Temp qw/ tempdir tempfile /;
 use lib '/usr/share/devscripts';
 use Devscripts::Versort;
@@ -341,10 +342,27 @@ if ($type eq 'deb') {
     no strict 'refs';
     foreach my $i (1,2) {
 	my $deb = shift;
-	my $debc = `env LC_ALL=C dpkg-deb -c $deb`;
-	$? == 0 or fatal "dpkg-deb -c $deb failed!";
-	my $debI = `env LC_ALL=C dpkg-deb -I $deb`;
-	$? == 0 or fatal "dpkg-deb -I $deb failed!";
+	my ($debc, $debI) = ('', '');
+	my %dpkg_env = ( LC_ALL => 'C' );
+	eval {
+	    spawn(exec => ['dpkg-deb', '-c', $deb],
+		env => \%dpkg_env,
+		to_string => \$debc,
+		wait_child => 1);
+	};
+	if ($@) {
+	    fatal "dpkg-deb -c $deb failed!";
+	}
+
+	eval {
+	    spawn(exec => ['dpkg-deb', '-I', $deb],
+		env => \%dpkg_env,
+		to_string => \$debI,
+		wait_child => 1);
+	};
+	if ($@) {
+	    fatal "dpkg-deb -I $deb failed!";
+	}
 	# Store the name for later
 	$singledeb[$i] = $deb;
 	# get package name itself
@@ -400,10 +418,26 @@ elsif ($type eq 'changes' or $type eq 'debs') {
 	foreach my $deb (@debs) {
 	    no strict 'refs';
 	    fatal "Can't read file: $deb" unless -r $deb;
-	    my $debc = `env LC_ALL=C dpkg-deb -c $deb`;
-	    $? == 0 or fatal "dpkg-deb -c $deb failed!";
-	    my $debI = `env LC_ALL=C dpkg-deb -I $deb`;
-	    $? == 0 or fatal "dpkg-deb -I $deb failed!";
+	    my ($debc, $debI) = ('', '');
+	    my %dpkg_env = ( LC_ALL => 'C' );
+	    eval {
+		spawn(exec => ['dpkg-deb', '-c', $deb],
+		    to_string => \$debc,
+		    env => \%dpkg_env,
+		    wait_child => 1);
+	    };
+	    if ($@) {
+		fatal "dpkg-deb -c $deb failed!";
+	    }
+	    eval {
+		spawn(exec => ['dpkg-deb', '-I', $deb],
+		    to_string => \$debI,
+		    env => \%dpkg_env,
+		    wait_child => 1);
+	    };
+	    if ($@) {
+		fatal "dpkg-deb -I $deb failed!";
+	    }
 	    my $debpath = $deb;
 	    # get package name itself
 	    $deb =~ s,.*/,,; $deb =~ s/_.*//;
@@ -518,7 +552,8 @@ elsif ($type eq 'dsc') {
 			    . " " . basename($diffs[2]) . "\n\n";
 	    $header =~ s/\.diff\.gz//g;
 	    print $header;
-	    system('diffstat', $filename);
+	    spawn(exec => ['diffstat', $filename],
+		wait_child => 1);
 	    print "\n";
 	}
 
@@ -610,7 +645,8 @@ elsif ($type eq 'dsc') {
 
 	if ($have_diffstat and $show_diffstat) {
 	    print "diffstat for $sdir1 $sdir2\n\n";
-	    system("diffstat $filename");
+	    spawn(exec => ['diffstat', $filename],
+		wait_child => 1);
 	    print "\n";
 	}
 
@@ -646,7 +682,7 @@ elsif ($type eq 'dsc') {
 	    print "\n";
 
 	    # Clean up
-	    system ("rm", "-rf", $wdiffdir1, $wdiffdir2);
+	    rmtree([$wdiffdir1, $wdiffdir2]);
 	}
 
 	if (! -f $filename) {
@@ -859,9 +895,15 @@ for my $debname (@CommonDebs) {
     mktmpdirs();
 
     for my $i (1,2) {
-	if (system('dpkg-deb', '-e', "${\"DebPaths$i\"}{$debname}", ${"dir$i"})) {
+	my $debpath = "${\"DebPaths$i\"}{$debname}";
+	my $diri = ${"dir$i"};
+	eval {
+	    spawn(exec => ['dpkg-deb', '-e', $debpath, $diri],
+		wait_child => 1);
+	};
+	if ($@) {
 	    my $msg = "dpkg-deb -e ${\"DebPaths$i\"}{$debname} failed!";
-	    system ("rm", "-rf", $dir1, $dir2);
+	    rmtree([$dir1, $dir2]);
 	    fatal $msg;
 	}
     }
@@ -871,7 +913,7 @@ for my $debname (@CommonDebs) {
 	$exit_status);
 
     # Clean up
-    system ("rm", "-rf", $dir1, $dir2);
+    rmtree([$dir1, $dir2]);
 }
 
 exit $exit_status;
@@ -970,31 +1012,37 @@ sub wdiff_control_files($$$$$)
 		close $fd;
 	    }
 	}
-	my $wdiff = `wdiff -n $wdiff_opt $dir1/$cf $dir2/$cf`;
 	my $usepkgname = $debname eq $dummyname ? "" : " of package $debname";
-	if ($? >> 8 == 0) {
-	    if (! $quiet) {
-		print "\nNo differences were encountered between the $cf files$usepkgname\n";
-	    }
-	} elsif ($? >> 8 == 1) {
-	    print "\n";
-	    if ($wdiff_opt) {
+	my @opts = ('-n');
+	push @opts, $wdiff_opt if $wdiff_opt;
+	my $wdiff = '';
+	eval {
+	    spawn(exec => ['wdiff', @opts, "$dir1/$cf", "$dir2/$cf"],
+		to_string => \$wdiff,
+		wait_child => 1);
+	};
+	if ($@ and $@ !~ /gave error exit status 1/) {
+	    print "$@\n";
+	    warn "wdiff failed\n";
+	} else {
+	    if (!$@) {
+		if (! $quiet) {
+		    print "\nNo differences were encountered between the $cf files$usepkgname\n";
+		}
+	    } elsif ($wdiff_opt) {
 		# Don't try messing with control codes
 		my $msg = ucfirst($cf) . " files$usepkgname: wdiff output";
-		print $msg, "\n", '-' x length $msg, "\n";
+		print "\n", $msg, "\n", '-' x length $msg, "\n";
 		print $wdiff;
 	    } else {
 		my @output;
 		@output = split /\n/, $wdiff;
 		@output = grep /(\[-|\{\+)/, @output;
 		my $msg = ucfirst($cf) . " files$usepkgname: lines which differ (wdiff format)";
-		print $msg, "\n", '-' x length $msg, "\n";
+		print "\n", $msg, "\n", '-' x length $msg, "\n";
 		print join("\n",@output), "\n";
 	    }
 	    $status = 1;
-	} else {
-	    warn "wdiff failed (exit status " . ($? >> 8) .
-		(($? & 0x7f) ? " with signal " . ($? & 0x7f) : "") . ")\n";
 	}
     }
 

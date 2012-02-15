@@ -11,8 +11,13 @@ devscripts (2.11.4) UNRELEASED; urgency=low
     (Closes: #601951)
 
   [ Adam D. Barratt ]
-  * debdiff: Fix a regression in the handling of embedded tarballs (a side
-    effect of the changes introduced to resolve #571528).
+  * debdiff:
+    + Fix a regression in the handling of embedded tarballs (a side
+      effect of the changes introduced to resolve #571528).
+    + Extend the changes from #571528 to cover more situations where
+      user or file input is passed to an external program.  Fixes
+      CVE-2012-2012 (and any instance of CVE-2012-2011 not already
+      covered by #571528).
 
   [ Paul Wise ]
   * suspicious-source: Also ignore mercurial and darcs VCS directories
