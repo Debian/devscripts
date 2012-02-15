@@ -107,7 +107,7 @@ def suspicious_source(whitelisted_mimetypes, whitelisted_extensions, directory,
                         print "%s (%s)" % (os.path.join(root, f), mimetype)
                     else:
                         print os.path.join(root, f)
-        for vcs_dir in (".bzr", "CVS", ".git", ".svn"):
+        for vcs_dir in (".bzr", "CVS", ".git", ".svn", ".hg", "_darcs"):
             if vcs_dir in dirs:
                 dirs.remove(vcs_dir)
 
