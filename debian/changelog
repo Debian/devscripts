@@ -1,6 +1,8 @@
 devscripts (2.11.5) UNRELEASED; urgency=low
 
-  * 
+  * deb-reversion: Re-fix handling of multi-word hooks.  (Closes: #660782).
+    This was originally fixed in 2.9.14 but accidentally broken again in
+    2.9.26.
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 15 Feb 2012 19:40:58 +0000
 

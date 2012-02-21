@@ -63,13 +63,13 @@ err()
 CURDIR="$(pwd)"
 SHORTOPTS=hVo:v:ck:Ds:b
 LONGOPTS=help,version,old-version:new-version:,calculate-only,hook:,debug,string:,force-bad-version
-set -- $(getopt -s bash -o $SHORTOPTS -l $LONGOPTS --n $PROGNAME -- "$@")
+eval set -- "$(getopt -s bash -o $SHORTOPTS -l $LONGOPTS -n $PROGNAME -- "$@")"
 
 CALCULATE=0
 DPKGDEB_DEBUG=
 DEB=
 DCH_OPTIONS=
-for opt in $@; do
+for opt in "$@"; do
   case "${OPT_STATE:-}" in
     SET_OLD_VERSION) eval OLD_VERSION="$opt";;
     SET_NEW_VERSION) eval NEW_VERSION="$opt";;
