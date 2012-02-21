@@ -168,6 +168,7 @@ change_version()
 {
   PACKAGE=$(sed -ne 's,^Package: ,,p' DEBIAN/control)
   VERSION=$1
+  LOGFILE=
   for i in changelog{,.Debian}.gz; do
     [ -f usr/share/doc/${PACKAGE}/$i ] \
       && LOGFILE=usr/share/doc/${PACKAGE}/$i
