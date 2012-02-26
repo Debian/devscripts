@@ -252,7 +252,7 @@ if ($opt{binary}) {
 	}
 
 	foreach my $result (@{$src_json->{result}}) {
-	    if (@{$opt{architecture}}) {
+	    if ($opt{architecture} && @{$opt{architecture}}) {
 		next unless (grep { $_ eq $result->{architecture} } @{$opt{architecture}});
 	    }
 	    my $hash = $result->{hash};

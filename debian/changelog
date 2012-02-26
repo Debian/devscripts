@@ -17,6 +17,8 @@ devscripts (2.11.5) UNRELEASED; urgency=low
     source package name.  (Closes: #655854)
   * dcmd: Escape directory name so it doesn't interfere with sed command.
     (Closes: #649227)
+  * debsnap: Check whether architectures have been specified.  (Closes:
+    #655932)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 15 Feb 2012 19:40:58 +0000
 
