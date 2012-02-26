@@ -92,26 +92,56 @@ sub parsefh
 {
     my ($fh, $fname, $check_package) = @_;
     local $/="\n\n";
+    my $package_names;
+    if ($check_package) {
+	$package_names = sprintf '(?:^| )(%s)(?:,|$)',
+				 join '|',
+				 map { "\Q$_\E" }
+				 keys %package_name;
+    }
     while (<$fh>) {
-	my ($package, $maintainer, $uploaders, @uploaders);
+	my ($package, $source, $binaries, $maintainer, $uploaders, @uploaders);
 
+	# Binary is shown in _source_Sources and contains all binaries produced by
+	# that source package
+	if (/^Binary:\s+(.*(?:\n .*)*)$/m) {
+	    $binaries = $1;
+	    $binaries =~ s/\n//;
+	}
+	# Package is shown both in _source_Sources and _binary-*.  It is the
+	# name of the package, source or binary respectively, being described
+	# in that control stanza
 	if (/^Package:\s+(.*)$/m) {
 	    $package=$1;
 	}
-	if (/^Source:\s+(.*)$/m && ! $print_binary ) {
-	    $package=$1;
+	# Source is shown in _binary-* and specifies the source package which
+	# produced the binary being described
+	if (/^Source:\s+(.*)$/m) {
+	    $source=$1;
 	}
 	if (/^Maintainer:\s+(.*)$/m) {
 	    $maintainer=$1;
 	}
-	if (/^Uploaders:\s+(.*)$/m) {
+	if (/^Uploaders:\s+(.*(?:\n .*)*)$/m) {
 	    $uploaders=$1;
+	    $uploaders =~ s/\n//g;
 	    @uploaders = split /(?<=>)\s*,\s*/, $uploaders;
 	}
 
-	if (defined $maintainer && defined $package) {
-	    if ($check_package && !exists $package_name{$package}) {
-		next;
+	if (defined $maintainer
+	    && (defined $package || defined $source || defined $binaries)) {
+	    $source ||= $package;
+	    $binaries ||= $package;
+	    if ($check_package) {
+		if ($binaries =~ m/$package_names/) {
+		    $binaries = $1;
+		    $package_name{$binaries}--;
+		}
+		elsif ($source !~ m/$package_names/) {
+		    next;
+		}
+		$package_name{$source}--;
+		$package = $print_binary ? $binaries : $source;
 	    }
 	    push @{$dict{$maintainer}}, $package;
 	    if ($show_uploaders && defined $uploaders) {
@@ -163,7 +193,6 @@ foreach my $developer (sort_developers(keys %dict)) {
     print "$developer\n";
     my %seen;
     foreach my $package (sort @{$dict{$developer}}) {
-	$package_name{$package}--;
 	next if $seen{$package};
 	$seen{$package}=1;
 	print "   $package\n";
