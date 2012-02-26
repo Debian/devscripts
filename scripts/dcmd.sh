@@ -64,7 +64,9 @@ maybe_expand()
     local dir
     local sedre
     if [ -e "$1" ] && (endswith "$1" .changes || endswith "$1" .dsc); then
-	dir=$(dirname "$1")
+	# Need to escape whatever separator is being used in sed expression so
+	# it doesn't prematurely end the s command
+	dir=$(dirname "$1" | sed 's/,/\\,/g')
 	if [ "$(echo "$1" | cut -b1-2)" != "./" ]; then
 	    sedre="\."
 	fi

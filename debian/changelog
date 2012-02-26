@@ -15,6 +15,8 @@ devscripts (2.11.5) UNRELEASED; urgency=low
   [ James McCoy ]
   * dd-list: Fix correlation of given package name when it does not match the
     source package name.  (Closes: #655854)
+  * dcmd: Escape directory name so it doesn't interfere with sed command.
+    (Closes: #649227)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 15 Feb 2012 19:40:58 +0000
 
