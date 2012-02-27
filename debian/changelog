@@ -20,6 +20,8 @@ devscripts (2.11.5) UNRELEASED; urgency=low
   * debsnap: Check whether architectures have been specified.  (Closes:
     #655932)
   * pts-subscribe: Correct URL to Developer's Reference.  (Closes: #661337)
+  * mk-build-deps: Use the most recent version when multiple package versions
+    are available.  (Closes: #633143)
 
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Wed, 15 Feb 2012 19:40:58 +0000
 

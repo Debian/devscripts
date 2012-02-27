@@ -108,6 +108,7 @@ use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
 use Pod::Usage;
 use Dpkg::Control;
+use Dpkg::Version;
 use Text::ParseWords;
 
 my $progname = basename($0);
@@ -224,8 +225,12 @@ while ($control = shift) {
 	$name = 'Package';
     }
 
-    my $ctrl = Dpkg::Control->new(type => CTRL_INFO_SRC);
-    if ($ctrl->parse($fh, $control)) {
+    my (@pkgInfo, @versions);
+    until (eof $fh) {
+	my $ctrl = Dpkg::Control->new(type => CTRL_INFO_SRC);
+	unless ($ctrl->parse($fh, $control)) {
+	    die "$progname: Unable to find package name in '$control'\n";
+	}
 	my $args = '';
 	my $arch = 'all';
 	my ($build_deps, $build_dep, $build_indep);
@@ -244,34 +249,39 @@ while ($control = shift) {
 
 	die "$progname: Unable to find build-deps for $ctrl->{$name}\n" unless $build_deps;
 
+	push(@versions, $ctrl->{Version});
+
 	# Only build a package with both B-D and B-D-I in Depends if the
 	# B-D/B-D-I specific packages weren't requested
 	if (!($opt_dep || $opt_indep)) {
-	    push(@packages,
-		 build_equiv({ depends => $build_deps,
-			       name => $ctrl->{$name},
-			       type => 'build-deps',
-			       version => $ctrl->{Version} }));
+	    push(@pkgInfo,
+		 { depends => $build_deps,
+		   name => $ctrl->{$name},
+		   type => 'build-deps',
+		   version => $ctrl->{Version} });
 	    next;
 	}
 	if ($opt_dep) {
-	    push(@packages,
-		 build_equiv({ depends => $build_dep,
-			       name => $ctrl->{$name},
-			       type => 'build-deps-depends',
-			       version => $ctrl->{Version} }));
+	    push(@pkgInfo,
+		 { depends => $build_dep,
+		   name => $ctrl->{$name},
+		   type => 'build-deps-depends',
+		   version => $ctrl->{Version} });
 	}
 	if ($opt_indep) {
-	    push(@packages,
-		 build_equiv({ depends => $build_indep,
-			       name => $ctrl->{$name},
-			       type => 'build-deps-indep',
-			       version => $ctrl->{Version} }));
+	    push(@pkgInfo,
+		 { depends => $build_indep,
+		   name => $ctrl->{$name},
+		   type => 'build-deps-indep',
+		   version => $ctrl->{Version} });
 	}
     }
-    else {
-	die "$progname: Unable to find package name in '$control'\n";
-    }
+    # Only use the newest version
+    @versions = map { $_->[0] }
+		sort { $b->[1] <=> $a->[1] }
+		map { [$_, Dpkg::Version->new($_)] } @versions;
+    push(@packages, map { build_equiv($_) }
+		    grep { $versions[0] eq $_->{version} } @pkgInfo);
 }
 
 if ($opt_install) {
