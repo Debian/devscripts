@@ -121,6 +121,8 @@ edit_patch_dpatch() {
 
 edit_patch_quilt() {
     export QUILT_PATCHES=debian/patches
+    top_patch=$(quilt top)
+    echo "Top patch: $top_patch"
     if [ -e $PREFIX/$1 ]; then
         # if its a existing patch and we are at the end of the stack,
         # go back at the beginning
@@ -138,7 +140,8 @@ edit_patch_quilt() {
     # use a sub-shell
     quilt shell
     quilt refresh
-    quilt pop -a
+    echo "Reverting quilt back to $top_patch"
+    quilt pop $top_patch
     vcs_add $PREFIX/$1 $PREFIX/series
 }
 
