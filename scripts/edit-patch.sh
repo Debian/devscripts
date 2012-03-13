@@ -293,9 +293,9 @@ main() {
     normalize_patch_path
     normalize_patch_extension
     handle_file_patch
-    if [ "$(basename $0|sed -e s/.sh\$//)" = "edit-patch" ]; then
+    if [ "$(basename $0 .sh)" = "edit-patch" ]; then
         edit_patch_$PATCHSYSTEM $PATCHNAME
-    elif [ "$(basename $0|sed -e s/.sh\$//)" = "add-patch" ]; then
+    elif [ "$(basename $0 .sh)" = "add-patch" ]; then
         add_patch_$PATCHSYSTEM $1 $PATCHNAME
     else
         fatal_error "Unknown script name: $0"
