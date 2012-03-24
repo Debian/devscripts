@@ -227,9 +227,12 @@ while ($control = shift) {
 
     my (@pkgInfo, @versions);
     until (eof $fh) {
-	my $ctrl = Dpkg::Control->new(type => CTRL_INFO_SRC);
+	my $ctrl = Dpkg::Control->new(allow_pgp => 1, type => CTRL_UNKNOWN);
 	unless ($ctrl->parse($fh, $control)) {
 	    die "$progname: Unable to find package name in '$control'\n";
+	}
+	unless (exists $ctrl->{$name}) {
+	    next;
 	}
 	my $args = '';
 	my $arch = 'all';
@@ -249,7 +252,9 @@ while ($control = shift) {
 
 	die "$progname: Unable to find build-deps for $ctrl->{$name}\n" unless $build_deps;
 
-	push(@versions, $ctrl->{Version});
+	if (exists $ctrl->{Version}) {
+	    push(@versions, $ctrl->{Version});
+	}
 
 	# Only build a package with both B-D and B-D-I in Depends if the
 	# B-D/B-D-I specific packages weren't requested
@@ -276,12 +281,18 @@ while ($control = shift) {
 		   version => $ctrl->{Version} });
 	}
     }
-    # Only use the newest version
-    @versions = map { $_->[0] }
-		sort { $b->[1] <=> $a->[1] }
-		map { [$_, Dpkg::Version->new($_)] } @versions;
-    push(@packages, map { build_equiv($_) }
-		    grep { $versions[0] eq $_->{version} } @pkgInfo);
+    # Only use the newest version.  We'll only have this if processing showsrc
+    # output or a dsc file.
+    if (@versions) {
+	@versions = map { $_->[0] }
+		    sort { $b->[1] <=> $a->[1] }
+		    map { [$_, Dpkg::Version->new($_)] } @versions;
+	push(@packages, map { build_equiv($_) }
+			grep { $versions[0] eq $_->{version} } @pkgInfo);
+    }
+    else {
+	push(@packages, build_equiv($pkgInfo[0]));
+    }
 }
 
 if ($opt_install) {
