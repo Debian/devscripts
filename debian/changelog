@@ -3,7 +3,8 @@ devscripts (2.11.6) UNRELEASED; urgency=low
   * mk-build-deps: Fix handling of debian/control files.  (Closes: #665496)
   * uscan: Fix formatting in man page.  Thanks to Samuel Bronson for the
     patch.  (Closes: #665325)
-  * debsign: Fix quoting in handling of --debs-dir. (Closes: #666048)
+  * debsign: Fix quoting in handling of --debs-dir.
+    (Closes: #666048, LP: #966867)
 
  -- James McCoy <jamessan@debian.org>  Sat, 24 Mar 2012 15:24:59 -0400
 
