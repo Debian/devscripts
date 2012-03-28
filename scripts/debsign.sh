@@ -276,7 +276,7 @@ else
 
     # We do not replace this with a default directory to avoid accidentally
     # signing a broken package
-    DEBRELEASE_DEBS_DIR="`echo \"$DEBRELEASE_DEBS_DIR\" | sed -e 's%/\+%/%g; s%\(.\)/$%\1%;'`"
+    DEBRELEASE_DEBS_DIR="$(echo "${DEBRELEASE_DEBS_DIR%/}" | sed -e 's%/\+%/%g')"
     if ! [ -d "$DEBRELEASE_DEBS_DIR" ]; then
 	debsdir_warning="config file specified DEBRELEASE_DEBS_DIR directory $DEBRELEASE_DEBS_DIR does not exist!"
     fi
@@ -341,7 +341,7 @@ do
 		;;
 	--debs-dir)
 	    shift
-	    opt_debsdir="$(echo \"${1%/}\" | sed -e 's%/\+%/%g')"
+	    opt_debsdir="$(echo "${1%/}" | sed -e 's%/\+%/%g')"
 	    ;;
 	--no-conf|--noconf)
 		echo "$PROGNAME: $1 is only acceptable as the first command-line option!" >&2
