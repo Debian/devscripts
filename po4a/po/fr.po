@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2012-03-24 18:22-0400\n"
+"POT-Creation-Date: 2012-03-30 16:05+0300\n"
 "PO-Revision-Date: 2012-03-24 18:24-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -343,7 +343,7 @@ msgstr ""
 #: ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53
 #: ../scripts/dcmd.1:98 ../scripts/dcontrol.pl:289 ../scripts/debc.1:115
 #: ../scripts/debchange.1:443 ../scripts/debcheckout.pl:211
-#: ../scripts/debclean.1:107 ../scripts/debcommit.pl:852
+#: ../scripts/debclean.1:107 ../scripts/debcommit.pl:858
 #: ../scripts/debdiff.1:215 ../scripts/debi.1:132 ../scripts/debrelease.1:132
 #: ../scripts/deb-reversion.dbk:247 ../scripts/debrsign.1:66
 #: ../scripts/debsign.1:134 ../scripts/debsnap.1:118 ../scripts/debuild.1:410
@@ -391,7 +391,7 @@ msgstr ""
 #: ../scripts/dcmd.1:101 ../scripts/dcontrol.pl:282 ../scripts/dd-list.1:100
 #: ../scripts/debc.1:120 ../scripts/debchange.1:450
 #: ../scripts/debcheckout.pl:216 ../scripts/debclean.1:111
-#: ../scripts/debcommit.pl:848 ../scripts/debdiff.1:222 ../scripts/debi.1:136
+#: ../scripts/debcommit.pl:854 ../scripts/debdiff.1:222 ../scripts/debi.1:136
 #: ../scripts/debpkg.1:23 ../scripts/debrelease.1:137
 #: ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:71
 #: ../scripts/debsign.1:146 ../scripts/debuild.1:423
@@ -3299,7 +3299,7 @@ msgstr ""
 "de cet outil."
 
 #. type: =head1
-#: ../scripts/build-rdeps.pl:337 ../scripts/debcommit.pl:841
+#: ../scripts/build-rdeps.pl:337 ../scripts/debcommit.pl:847
 #: ../scripts/desktop2menu.pl:43 ../scripts/licensecheck.pl:111
 #: ../scripts/namecheck.pl:36 ../scripts/svnpath.pl:93
 #: ../scripts/transition-check.pl:72
@@ -4346,7 +4346,7 @@ msgstr ""
 #: ../scripts/cowpoke.1:217
 msgid ""
 "If the environment variable B<COWPOKE_CONF> is set, it specifies an "
-"addtional configuration file which will override all of those above.  "
+"additional configuration file which will override all of those above.  "
 "Options specified explicitly on the command line override all configuration "
 "files."
 msgstr ""
@@ -8269,7 +8269,7 @@ msgstr ""
 "pour associer la révision aux bogues."
 
 #. type: textblock
-#: ../scripts/debcommit.pl:843
+#: ../scripts/debcommit.pl:849
 msgid ""
 "This code is copyright by Joey Hess <joeyh@debian.org>, all rights "
 "reserved.  This program comes with ABSOLUTELY NO WARRANTY.  You are free to "
@@ -8282,12 +8282,12 @@ msgstr ""
 "Public Licence), version 2 ou ultérieure."
 
 #. type: textblock
-#: ../scripts/debcommit.pl:850 ../scripts/mass-bug.pl:522
+#: ../scripts/debcommit.pl:856 ../scripts/mass-bug.pl:522
 msgid "Joey Hess <joeyh@debian.org>"
 msgstr "Joey Hess <joeyh@debian.org>"
 
 #. type: textblock
-#: ../scripts/debcommit.pl:854
+#: ../scripts/debcommit.pl:860
 msgid "svnpath(1)."
 msgstr "svnpath(1)."
 
@@ -9793,7 +9793,7 @@ msgid ""
 "You are using this tool at your own risk and I shall not shed a tear if your "
 "gerbil goes up in flames, your microwave attacks the stereo, or the angry "
 "slamming of your fist spills your coffee into the keyboard, which sets off a "
-"chain reaction resulting in a vast amount of money transfered from your "
+"chain reaction resulting in a vast amount of money transferred from your "
 "account to mine."
 msgstr ""
 "Vous utilisez cet outil à vos risques et périls, et ne venez pas pleurer si "
@@ -13847,9 +13847,9 @@ msgstr "B<dscextract> [I<options>] I<fichier_dsc> I<fichier>"
 #: ../scripts/dscextract.1:11
 msgid ""
 "B<dscextract> reads a single file from a Debian source package.  The idea is "
-"to only look into .diff.gz files (source format 1.0) or .debian.tar.gz/bz2 "
-"files (source format 3.0) where possible, hence avoiding to unpack large "
-"tarballs.  It is most useful for files in the debian/ subdirectory."
+"to only look into I<.diff.gz> files (source format 1.0) or I<.debian.tar.gz/"
+"bz2> files (source format 3.0) where possible, hence avoiding to unpack "
+"large tarballs.  It is most useful for files in the I<debian/> subdirectory."
 msgstr ""
 "B<dscextract> lit un seul fichier à partir d'un paquet source Debian. L'idée "
 "est de regarder seulement les fichiers I<.diff.gz> (format source 1.0) ou I<."
@@ -13875,9 +13875,10 @@ msgstr "B<-f>"
 #. type: Plain text
 #: ../scripts/dscextract.1:20
 msgid ""
-"\"Fast\" mode. For source format 1.0, avoid to fall back scanning the .orig."
-"tar.gz file if I<file> was not found in the .diff.gz.  (For 3.0 packages, it "
-"is assumed that debian/* are exactly the contents of debian.tar.gz/bz2.)"
+"\"Fast\" mode. For source format 1.0, avoid to fall back scanning the I<."
+"orig.tar.gz> file if I<file> was not found in the I<.diff.gz>.  (For 3.0 "
+"packages, it is assumed that I<debian/*> are exactly the contents of "
+"I<debian.tar.gz/bz2>.)"
 msgstr ""
 "Mode « rapide ». Pour le format source 1.0, éviter de se rabattre sur le "
 "balayage du fichier I<.orig.tar.gz> si I<fichier> n'a pas été trouvé dans le "
@@ -13903,7 +13904,7 @@ msgstr "I<fichier> n'a pas été trouvé dans le paquet source."
 
 #. type: Plain text
 #: ../scripts/dscextract.1:30
-msgid "An error occured, like I<dscfile> was not found."
+msgid "An error occurred, like I<dscfile> was not found."
 msgstr ""
 "Une erreur est survenue, I<fichier_dsc> n'a pas été trouvé par exemple."
 
