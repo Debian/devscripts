@@ -1,12 +1,18 @@
 devscripts (2.11.6) UNRELEASED; urgency=low
 
+  [ James McCoy ]
   * mk-build-deps: Fix handling of debian/control files.  (Closes: #665496)
   * uscan: Fix formatting in man page.  Thanks to Samuel Bronson for the
     patch.  (Closes: #665325)
   * debsign: Fix quoting in handling of --debs-dir.
     (Closes: #666048, LP: #966867)
 
- -- James McCoy <jamessan@debian.org>  Sat, 24 Mar 2012 15:24:59 -0400
+  [ Benjamin Drung ]
+  * cowpoke.1, deb-reversion.dbk, dscextract.1: Fix typos "occured",
+    "transfered", and "addtional". Thanks to A. Costa for the patches.
+    (Closes: #655681)
+
+ -- Benjamin Drung <bdrung@debian.org>  Fri, 30 Mar 2012 15:08:27 +0200
 
 devscripts (2.11.5) unstable; urgency=low
 
