@@ -11,8 +11,10 @@ devscripts (2.11.6) UNRELEASED; urgency=low
   * cowpoke.1, deb-reversion.dbk, dscextract.1: Fix typos "occured",
     "transfered", and "addtional". Thanks to A. Costa for the patches.
     (Closes: #655681)
+  * debcommit: Subversion 1.7 has only one .svn folder per working copy.
+    Thanks to Simon Olofsson for the patch. (Closes: #645106)
 
- -- Benjamin Drung <bdrung@debian.org>  Fri, 30 Mar 2012 15:08:27 +0200
+ -- Benjamin Drung <bdrung@debian.org>  Fri, 30 Mar 2012 15:27:53 +0200
 
 devscripts (2.11.5) unstable; urgency=low
 
