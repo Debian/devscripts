@@ -452,8 +452,8 @@ sub getprog {
 	}
     }
 
-    # .bzr, .git, or .svn may be in a parent directory, rather than the current
-    # directory, if multiple packages are kept in one repository.
+    # .bzr, .git, .hg, or .svn may be in a parent directory, rather than the
+    # current directory, if multiple packages are kept in one repository.
     my $dir=getcwd();
     while ($dir=~s/[^\/]*\/?$// && length $dir) {
 	if (-d "$dir/.bzr") {
@@ -461,6 +461,9 @@ sub getprog {
 	}
 	if (-d "$dir/.git") {
 	    return "git";
+	}
+	if (-d "$dir/.hg") {
+	    return "hg";
 	}
 	if (-d "$dir/.svn") {
 	    return "svn";
