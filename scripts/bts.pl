@@ -2599,16 +2599,14 @@ sub send_mail {
 }
 
 sub generate_packages_cc {
-    my $ccs = '';
+    my @ccs;
     if (keys %ccpackages && $packagesserver) {
-	$ccs .= join("\@$packagesserver, ", sort (keys %ccpackages))
-	    . "\@$packagesserver";
+	push @ccs, map { "$_\@$packagesserver" } sort keys %ccpackages;
     }
     if (keys %ccsubmitters && $btsserver) {
-	$ccs .= join("\@$btsserver, ", sort (keys %ccsubmitters))
-	    . "\@$btsserver";
+	push @ccs, map { "$_\@$btsserver" } sort keys %ccsubmitters;
     }
-    return $ccs;
+    return join(', ', @ccs);
 }
 
 # Sends all cached mail to the bts (duh).
