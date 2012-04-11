@@ -979,6 +979,13 @@ if ($command_version eq 'dpkg') {
 	fatal "couldn't determine host architecture!?" if ! $arch;
     }
 
+    # Handle dpkg source format "3.0 (git)" packages (no tarballs)
+    if ( -r "debian/source/format" ) {
+        open FMT, "debian/source/format" or die $!;
+        my $srcfmt = <FMT>; close FMT; chomp $srcfmt;
+        if ( $srcfmt eq "3.0 (git)" ) { $tgz_check = 0; }
+    }
+
     $dsc = "${pkg}_${sversion}.dsc";
     my $orig_prefix = "${pkg}_${uversion}.orig.tar";
     my $origdir = basename(cwd()) . ".orig";
