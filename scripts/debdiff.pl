@@ -500,7 +500,7 @@ elsif ($type eq 'dsc') {
 		if ($file =~ /\.diff\.gz$/) {
 		    $diffs[$i] = cwd() . '/' . $file;
 		}
-		elsif ($file =~ /(?:\.orig)?\.tar\.$compression_re_file_ext$/) {
+		elsif ($file =~ /((?:\.orig)?\.tar\.$compression_re_file_ext|\.git)$/) {
 		    $origs[$i] = $file;
 		}
 	    } else {
