@@ -190,9 +190,9 @@ fi
 
 # Replace the Architecture: field, nuke the value of Checksums-*: and Files:,
 # and insert the Description: field before the Changes: field
-eval "awk -- '/^[^ ]/{ field=\"\" }
+eval "awk -- '/^[^ ]/{ deleting=0 }
     /^ /{
-        if (length(field) != 0) {
+        if (!deleting) {
             print
         }
         next
@@ -207,7 +207,7 @@ eval "awk -- '/^[^ ]/{ field=\"\" }
         next
     }
     /^Format: /{ printf \"%s ${FORMATS}\\n\", \$1; next}
-    /^(Checksums-.*|Files|Description):/{ next }
+    /^(Checksums-.*|Files|Description):/{ deleting=1; next }
     { print }' \
     ${OUTPUT} ${REDIR1}"
 

@@ -3,6 +3,8 @@ devscripts (2.11.7) UNRELEASED; urgency=low
   * bts: Generate a proper Cc field with "reassign … . done …".  (Closes:
     #668132)
   * debchange: Remove EOLed releases Lenny and Maverick.
+  * mergechanges: Handle continuation lines correctly.  Thanks to Ben
+    Hutchings for the patch.  (Closes: #656415)
 
  -- James McCoy <jamessan@debian.org>  Mon, 09 Apr 2012 19:27:24 -0400
 
