@@ -1,5 +1,6 @@
 devscripts (2.11.7) UNRELEASED; urgency=low
 
+  [ James McCoy ]
   * bts: Generate a proper Cc field with "reassign … . done …".  (Closes:
     #668132)
   * debchange: Remove EOLed releases Lenny and Maverick.
@@ -8,7 +9,10 @@ devscripts (2.11.7) UNRELEASED; urgency=low
   * debcheckout: Allow specifying a branch for Vcs-Git fields.  Thanks to
     Bernhard R. Link for the patch.  (Closes: #655085)
 
- -- James McCoy <jamessan@debian.org>  Mon, 09 Apr 2012 19:27:24 -0400
+  [ Benjamin Drung ]
+  * Introduce a test suite for the scripts based on shunit2.
+
+ -- Benjamin Drung <bdrung@debian.org>  Tue, 17 Apr 2012 22:01:16 +0200
 
 devscripts (2.11.6) unstable; urgency=low
 
