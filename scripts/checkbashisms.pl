@@ -50,16 +50,6 @@ my ($opt_echo, $opt_force, $opt_extra, $opt_posix);
 my ($opt_help, $opt_version);
 my @filenames;
 
-# Detect if STDIN is a pipe
-if (-p STDIN or -f STDIN) {
-    my ($tmp_fh, $tmp_filename) = tempfile("chkbashisms_tmp.XXXX", TMPDIR => 1, UNLINK => 1);
-    while (my $line = <STDIN>) {
-        print $tmp_fh $line;
-    }
-    close($tmp_fh);
-    push(@ARGV, $tmp_filename);
-}
-
 ##
 ## handle command-line options
 ##
@@ -78,6 +68,16 @@ if ($opt_help) { print $usage; exit 0; }
 if ($opt_version) { print $version; exit 0; }
 
 $opt_echo = 1 if $opt_posix;
+
+# Detect if STDIN is a pipe
+if (scalar(@ARGV) == 0 && (-p STDIN or -f STDIN)) {
+    my ($tmp_fh, $tmp_filename) = tempfile("chkbashisms_tmp.XXXX", TMPDIR => 1, UNLINK => 1);
+    while (my $line = <STDIN>) {
+        print $tmp_fh $line;
+    }
+    close($tmp_fh);
+    push(@ARGV, $tmp_filename);
+}
 
 my $status = 0;
 my $makefile = 0;
