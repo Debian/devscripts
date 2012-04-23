@@ -413,8 +413,8 @@ if (defined $opt_D) {
 	    $warnings++ if not $opt_force_dist;
 	}
     } elsif ($distributor eq 'Ubuntu') {
-	unless ($opt_D =~ /^((hardy|lucid|natty|oneiric|precise)(-updates|-security|-proposed|-backports)?|UNRELEASED)$/) {
-	    warn "$progname warning: Recognised distributions are:\n{hardy,lucid,natty,oneiric,precise}{,-updates,-security,-proposed,-backports} and UNRELEASED.\nUsing your request anyway.\n";
+	unless ($opt_D =~ /^((hardy|lucid|natty|oneiric|precise|quantal)(-updates|-security|-proposed|-backports)?|UNRELEASED)$/) {
+	    warn "$progname warning: Recognised distributions are:\n{hardy,lucid,natty,oneiric,precise,quantal}{,-updates,-security,-proposed,-backports} and UNRELEASED.\nUsing your request anyway.\n";
 	    $warnings++ if not $opt_force_dist;
 	}
     } else {
