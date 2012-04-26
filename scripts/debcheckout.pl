@@ -983,7 +983,7 @@ sub main() {
     my $dont_act = 1 if ($print_mode or $details_mode);
     pod2usage({-exitval => 3,
 	       -message =>
-		   "--orig argument must be one of never, auto, download-only, and always\n", })
+		   "--source argument must be one of never, auto, download-only, and always\n", })
 	unless ($unpack_source =~ /^(never|auto|download-only|always)$/);
 
     # -u|--user implies -a|--auth
