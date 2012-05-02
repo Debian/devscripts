@@ -50,18 +50,17 @@ released, or otherwise as if \fB\-\-append\fR has been specified.
 Two different sets of heuristics can be used, as controlled by the
 \fB\-\-release-heuristic\fR option or the
 \fBDEBCHANGE_RELEASE_HEURISTIC\fR configuration variable. The default
+\fIchangelog\fR heuristic assumes the package has been released unless its
+changelog contains \fBUNRELEASED\fR in the distribution field. If this heuristic
+is enabled then the distribution will default to \fBUNRELEASED\fR in new
+changelog entries, and the \fB\-\-mainttrailer\fR option described below will be
+automatically enabled. This can be useful if a package can be released by
+different maintainers, or if you do not keep the upload logs. The alternate
 \fIlog\fR heuristic determines if a package has been released by looking for an
-appropriate \fBdupload\fR(1) or \fBdput\fR(1) log file in the parent
-directory. A warning will be issued if the log file is found but a
-successful upload is not recorded. This may be because the previous upload
-was performed with a version of \fBdupload\fR prior to 2.1 or because the
-upload failed. The alternate \fIchangelog\fR heuristic assumes the package has
-been released unless its changelog contains \fBUNRELEASED\fR in the
-distribution field. If this heuristic is enabled then the distribution will
-default to \fBUNRELEASED\fR in new changelog entries, and the
-\fB\-\-mainttrailer\fR option described below will be automatically
-enabled. This can be useful if a package can be released by different
-maintainers, or if you do not keep the upload logs.
+appropriate \fBdupload\fR(1) or \fBdput\fR(1) log file in the parent directory.
+A warning will be issued if the log file is found but a successful upload is not
+recorded. This may be because the previous upload was performed with a version
+of \fBdupload\fR prior to 2.1 or because the upload failed.
 .PP
 If either \fB\-\-increment\fR or \fB\-\-newversion\fR is used, the
 name and email for the new version will be determined as follows.  If

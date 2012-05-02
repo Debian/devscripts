@@ -184,7 +184,7 @@ Options:
          Don\'t read devscripts config files; must be the first option given
   --release-heuristic log|changelog
          Select heuristic used to determine if a package has been released.
-         (default: log)
+         (default: changelog)
   --help, -h
          Display this help message and exit
   --version
@@ -215,7 +215,7 @@ my $check_dirname_level = 1;
 my $check_dirname_regex = 'PACKAGE(-.+)?';
 my $opt_p = 0;
 my $opt_query = 1;
-my $opt_release_heuristic = 'log';
+my $opt_release_heuristic = 'changelog';
 my $opt_multimaint = 1;
 my $opt_multimaint_merge = 0;
 my $opt_tz = undef;
@@ -237,7 +237,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBCHANGE_QUERY_BTS' => 'yes',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
 		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.+)?',
-		       'DEBCHANGE_RELEASE_HEURISTIC' => 'log',
+		       'DEBCHANGE_RELEASE_HEURISTIC' => 'changelog',
 		       'DEBCHANGE_MULTIMAINT' => 'yes',
 		       'DEBCHANGE_TZ' => $ENV{TZ}, # undef if TZ unset
 		       'DEBCHANGE_MULTIMAINT_MERGE' => 'no',
@@ -269,7 +269,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} =~ /^[012]$/
 	or $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'}=1;
     $config_vars{'DEBCHANGE_RELEASE_HEURISTIC'} =~ /^(log|changelog)$/
-	or $config_vars{'DEBCHANGE_RELEASE_HEURISTIC'}='log';
+	or $config_vars{'DEBCHANGE_RELEASE_HEURISTIC'}='changelog';
     $config_vars{'DEBCHANGE_MULTIMAINT'} =~ /^(yes|no)$/
 	or $config_vars{'DEBCHANGE_MULTIMAINT'}='yes';
     $config_vars{'DEBCHANGE_MULTIMAINT_MERGE'} =~ /^(yes|no)$/

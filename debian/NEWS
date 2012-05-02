@@ -1,3 +1,12 @@
+devscripts (2.11.7) UNRELEASED; urgency=low
+
+  The heuristic used to determine what action to perform when no options are
+  given to debchange now defaults to 'changelog'.  To stay with the previous
+  behavior, DEBCHANGE_RELEASE_HEURISTIC=log can be added to the configuration
+  file.
+
+ -- James McCoy <jamessan@debian.org>  Sun, 29 Apr 2012 18:38:46 -0400
+
 devscripts (2.11.2) unstable; urgency=low
 
   Support for pgp-style commands has been removed from debsign/debrsign.  As

@@ -3,7 +3,9 @@ devscripts (2.11.7) UNRELEASED; urgency=low
   [ James McCoy ]
   * bts: Generate a proper Cc field with "reassign … . done …".  (Closes:
     #668132)
-  * debchange: Remove EOLed releases Lenny and Maverick.
+  * debchange:
+    + Remove EOLed releases Lenny and Maverick.
+    + Change DEBCHANGE_RELEASE_HEURISTIC default to "changelog".
   * mergechanges: Handle continuation lines correctly.  Thanks to Ben
     Hutchings for the patch.  (Closes: #656415)
   * debcheckout: Allow specifying a branch for Vcs-Git fields.  Thanks to
