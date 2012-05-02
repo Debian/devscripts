@@ -6,6 +6,8 @@ devscripts (2.11.7) UNRELEASED; urgency=low
   * debchange:
     + Remove EOLed releases Lenny and Maverick.
     + Change DEBCHANGE_RELEASE_HEURISTIC default to "changelog".
+    + Correctly handle NMU detection when there is no whitespace after a comma
+      in Uploaders.  (Closes: #642342)
   * mergechanges: Handle continuation lines correctly.  Thanks to Ben
     Hutchings for the patch.  (Closes: #656415)
   * debcheckout: Allow specifying a branch for Vcs-Git fields.  Thanks to
@@ -20,7 +22,7 @@ devscripts (2.11.7) UNRELEASED; urgency=low
   [ Christoph Berg ]
   * debcheckout: Fix --source error message.
 
- -- Benjamin Drung <bdrung@debian.org>  Tue, 17 Apr 2012 22:01:16 +0200
+ -- James McCoy <jamessan@debian.org>  Tue, 01 May 2012 21:34:36 -0400
 
 devscripts (2.11.6) unstable; urgency=low
 
