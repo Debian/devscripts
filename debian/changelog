@@ -12,6 +12,7 @@ devscripts (2.11.7) UNRELEASED; urgency=low
     Hutchings for the patch.  (Closes: #656415)
   * debcheckout: Allow specifying a branch for Vcs-Git fields.  Thanks to
     Bernhard R. Link for the patch.  (Closes: #655085, #600745)
+  * d/control: Change Maintainer address to devscripts-devel@lists.alioth.d.o
 
   [ Benjamin Drung ]
   * Introduce a test suite for the scripts based on shunit2.
@@ -22,7 +23,7 @@ devscripts (2.11.7) UNRELEASED; urgency=low
   [ Christoph Berg ]
   * debcheckout: Fix --source error message.
 
- -- James McCoy <jamessan@debian.org>  Tue, 01 May 2012 21:34:36 -0400
+ -- James McCoy <jamessan@debian.org>  Fri, 04 May 2012 06:18:59 -0400
 
 devscripts (2.11.6) unstable; urgency=low
 
