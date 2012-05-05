@@ -179,6 +179,9 @@ sub FilesToPackages (@)
 	elsif (/^dpkg: \Q$curfile\E not found\.$/) {
 	    $curfile = shift;
 	}
+	elsif (/^dpkg-query: no path found matching pattern \Q$curfile\E\.$/) {
+	    $curfile = shift;
+	}
 	elsif (/^(.*): \Q$curfile\E$/) {
 	    my @pkgs = split /, /, $1;
 	    if (@pkgs==1) { $packages{$pkgs[0]} = 1; }
