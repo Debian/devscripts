@@ -25,6 +25,13 @@ devscripts (2.11.7) UNRELEASED; urgency=low
   [ Christoph Berg ]
   * debcheckout: Fix --source error message.
 
+  [ Raphael Geissert ]
+  * checkbashisms:
+    + detect the use of 'setvar'
+    + do not unconditionally swallow stdin (Closes: #669578)
+    + Allow stdin to be checked by accepting '-' as file name
+    + detect substr expansion with dynamic length (Closes: #610465)
+
  -- James McCoy <jamessan@debian.org>  Fri, 04 May 2012 06:18:59 -0400
 
 devscripts (2.11.6) unstable; urgency=low
