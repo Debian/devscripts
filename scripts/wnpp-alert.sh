@@ -108,11 +108,10 @@ cut -f3 -d' ' $WNPP | sort > $WNPP_PACKAGES
 if [ $# -gt 0 ]; then
     echo $* | tr ' ' '\n' | sort -u > $INSTALLED
 else
-    grep -B2 -A7 'Status: install ok installed' /var/lib/dpkg/status | \
-    grep '^\(Package\|Source\):' | \
-    cut -f2 -d' ' | \
-    sort -u \
-    > $INSTALLED
+    dpkg-query -W -f '${Package} ${Status}\n${Source} ${Status}\n' | \
+        awk '/^[^ ].*install ok installed/{print $1}' | \
+        sort -u \
+        > $INSTALLED
 fi
 
 if [ -f "$WNPP_DIFF" ]; then

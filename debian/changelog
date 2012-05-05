@@ -13,6 +13,8 @@ devscripts (2.11.7) UNRELEASED; urgency=low
   * debcheckout: Allow specifying a branch for Vcs-Git fields.  Thanks to
     Bernhard R. Link for the patch.  (Closes: #655085, #600745)
   * d/control: Change Maintainer address to devscripts-devel@lists.alioth.d.o
+  * wnpp-alert: Use dpkg-query instead of directly parsing dpkg's status file.
+    (Closes: #669579)
 
   [ Benjamin Drung ]
   * Introduce a test suite for the scripts based on shunit2.
