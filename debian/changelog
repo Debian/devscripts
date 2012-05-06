@@ -17,6 +17,8 @@ devscripts (2.11.7) UNRELEASED; urgency=low
     (Closes: #669579)
   * dpkg-depcheck: Match the new error message from “dpkg -S”.  Thanks to Bao
     Haojun for the patch.  (Closes: #667581)
+  * list-unreleased: Update excluded directories to include other common
+    VCSes.
 
   [ Benjamin Drung ]
   * Introduce a test suite for the scripts based on shunit2.
