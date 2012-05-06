@@ -109,6 +109,8 @@ use File::Basename;
 use Pod::Usage;
 use Dpkg::Control;
 use Dpkg::Version;
+use Dpkg::IPC;
+use FileHandle;
 use Text::ParseWords;
 
 my $progname = basename($0);
@@ -209,27 +211,40 @@ if ($?) {
 }
 
 while ($control = shift) {
-    my ($name, $fh);
+    my ($name, $fh, $descr, $pid);
     if (-r $control and -f $control) {
-	open $fh, $control || do {
+	open $fh, $control;
+	unless (defined $fh) {
 	    warn "Unable to open $control: $!\n";
 	    next;
-        };
+	}
 	$name = 'Source';
+	$descr = "control file `$control'";
     }
     else {
-	open $fh, "apt-cache showsrc $control |" || do {
+	$fh = FileHandle->new();
+	$pid = spawn(exec => ['apt-cache', 'showsrc', $control],
+		     from_file => '/dev/null',
+		     to_pipe => $fh);
+	unless (defined $pid) {
 	    warn "Unable to run apt-cache: $!\n";
 	    next;
-        };
+	}
 	$name = 'Package';
+	$descr = "`apt-cache showsrc $control'";
     }
 
     my (@pkgInfo, @versions);
     until (eof $fh) {
 	my $ctrl = Dpkg::Control->new(allow_pgp => 1, type => CTRL_UNKNOWN);
-	unless ($ctrl->parse($fh, $control)) {
-	    die "$progname: Unable to find package name in '$control'\n";
+	# parse() dies if the file isn't syntactically valid and returns undef
+	# if there simply weren't any fields parsed
+	unless ($ctrl->parse($fh, $descr)) {
+	    die "$progname: Unable to find package name in $descr\n";
+	}
+	if (defined $pid) {
+	    wait_child($pid, no_check => 1);
+	    undef $pid;
 	}
 	unless (exists $ctrl->{$name}) {
 	    next;
@@ -281,6 +296,7 @@ while ($control = shift) {
 		   version => $ctrl->{Version} });
 	}
     }
+    wait_child($pid, no_check => 1) if defined $pid;
     # Only use the newest version.  We'll only have this if processing showsrc
     # output or a dsc file.
     if (@versions) {
@@ -290,8 +306,11 @@ while ($control = shift) {
 	push(@packages, map { build_equiv($_) }
 			grep { $versions[0] eq $_->{version} } @pkgInfo);
     }
-    else {
+    elsif (@pkgInfo) {
 	push(@packages, build_equiv($pkgInfo[0]));
+    }
+    else {
+	die "$progname: Unable to find package name in $descr\n";
     }
 }
 

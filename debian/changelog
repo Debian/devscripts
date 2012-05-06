@@ -21,6 +21,11 @@ devscripts (2.11.7) UNRELEASED; urgency=low
     VCSes.
   * svnpath: Always run “svn info” instead of checking for .svn. (Closes:
     #645106)
+  * mk-build-deps:
+    + Make error messages more explicit about what went wrong.  (Closes:
+      #596561)
+    + Use Dpkg::IPC to run apt-cache.
+    + Don't run equivs if no package information was parsed.
 
   [ Benjamin Drung ]
   * Introduce a test suite for the scripts based on shunit2.
