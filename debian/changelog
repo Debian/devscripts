@@ -27,6 +27,8 @@ devscripts (2.11.7) UNRELEASED; urgency=low
     + Use Dpkg::IPC to run apt-cache.
     + Don't run equivs if no package information was parsed.
   * uscan: Clarify behavior of the --destdir option.  (Closes: #659389)
+  * debi: Add -u and -m as synonyms for --upgrade and --multi.  (Closes:
+    #662773)
 
   [ Benjamin Drung ]
   * Introduce a test suite for the scripts based on shunit2.
