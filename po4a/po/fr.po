@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2012-05-06 16:44-0400\n"
-"PO-Revision-Date: 2012-03-24 18:24-0400\n"
+"PO-Revision-Date: 2012-05-06 16:47-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -1354,15 +1354,6 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/bts.pl:803
-#, fuzzy
-#| msgid ""
-#| "Options may be specified after the B<bugs> command in addition to or "
-#| "instead of options at the start of the command line: recognised options "
-#| "at this point are: B<-o>/B<--offline>/B<--online>, B<--mbox>, B<--"
-#| "mailreader> and B<-->[B<no->]B<cache>.  These are described earlier in "
-#| "this manpage.  If either the B<-o> or B<--offline> option is used, or "
-#| "there is already an up-to-date copy in the local cache, the cached "
-#| "version will be used."
 msgid ""
 "Options may be specified after the B<bugs> command in addition to or instead "
 "of options at the start of the command line: recognised options at this "
@@ -1373,7 +1364,7 @@ msgid ""
 msgstr ""
 "Des options peuvent être indiquées après la commande B<bugs> en plus ou à la "
 "place des options au début de la ligne de commande. Les options reconnues "
-"pour l'instant sont : B<-o>/B<--offline>/B<--online>, B<--mbox>, B<--"
+"pour l'instant sont : B<-o>/B<--offline>/B<--online>, B<-m>/B<--mbox>, B<--"
 "mailreader> et B<-->[B<no->]B<cache>. Celles-ci sont expliquées plus haut "
 "dans cette page de manuel. Si B<-o> ou B<--offline> est utilisée, ou s'il y "
 "a déjà une copie à jour dans le cache local, les versions mises en cache "
@@ -6190,6 +6181,21 @@ msgid ""
 "previous upload was performed with a version of B<dupload> prior to 2.1 or "
 "because the upload failed."
 msgstr ""
+"Deux différents types d'heuristiques peuvent être utilisés, contrôlés par "
+"l'option B<--release-heuristic> ou la variable de configuration "
+"B<DEBCHANGE_RELEASE_HEURISTIC>. L'heuristique par défaut (I<changelog>) "
+"suppose que le paquet a été distribué à moins que le journal des "
+"modifications ne contienne B<UNRELEASED> dans le champ de la distribution. "
+"Si cette heuristique est activée, la distribution sera modifiée en "
+"B<UNRELEASED> dans les nouvelles entrées du journal des modifications, et "
+"l'option B<--mainttrailer> décrite précédemment sera activée "
+"automatiquement. Cela peut être utile si un paquet peut être distribué par "
+"différents responsables, ou si vous ne voulez pas garder les journaux "
+"d'envoi. L'autre heuristique (I<log>) détermine si un paquet a été distribué "
+"en cherchant un journal B<dupload>(1) ou B<dput>(1) approprié. Un message "
+"d'alerte sera affiché si le fichier du journal est détecté mais qu'aucun "
+"envoi réussi n'y est enregistré. Cela peut arriver si l'envoi précédent a "
+"été exécuté avec une version de B<dupload> inférieure à 2.1 ou s'il a échoué."
 
 #. type: Plain text
 #: ../scripts/debchange.1:82
@@ -9016,10 +9022,9 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/debi.1:78
-#, fuzzy, no-wrap
-#| msgid "B<-c>, B<--cumulative>"
+#, no-wrap
 msgid "B<-m>, B<--multi>"
-msgstr "B<-c>, B<--cumulative>"
+msgstr "B<-m>, B<--multi>"
 
 #. type: Plain text
 #: ../scripts/debi.1:81
@@ -9030,10 +9035,9 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/debi.1:81
-#, fuzzy, no-wrap
-#| msgid "B<-u>, B<--update>"
+#, no-wrap
 msgid "B<-u>, B<--upgrade>"
-msgstr "B<-u>, B<--update>"
+msgstr "B<-u>, B<--upgrade>"
 
 #. type: Plain text
 #: ../scripts/debi.1:87
@@ -17984,6 +17988,9 @@ msgid ""
 "absolute, it will be relative to one of the current directory or, if "
 "directory scanning is enabled, the package's source directory."
 msgstr ""
+"Chemin du répertoire où placer les fichiers téléchargés. Si le chemin "
+"indiqué n'est pas absolu, il sera relatif au répertoire actuel ou, si "
+"l'exploration de répertoires est activée, au répertoire du paquet source."
 
 #. type: TP
 #: ../scripts/uscan.1:352
