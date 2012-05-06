@@ -346,7 +346,9 @@ but do not download anything.
 Report and download.  (This is the default behaviour.)
 .TP
 .B \-\-destdir
-Path of directory to which to download.
+Path of directory to which to download.  If the specified path is not
+absolute, it will be relative to one of the current directory or, if directory
+scanning is enabled, the package's source directory.
 .TP
 .B \-\-force-download
 Download upstream even if up to date (will not overwrite local files, however)
