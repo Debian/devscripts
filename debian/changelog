@@ -1,8 +1,10 @@
 devscripts (2.11.7) UNRELEASED; urgency=low
 
   [ James McCoy ]
-  * bts: Generate a proper Cc field with "reassign … . done …".  (Closes:
-    #668132)
+  * bts:
+    + Generate a proper Cc field with "reassign … . done …".  (Closes:
+      #668132)
+    + Document -m as an alias for show's --mbox.  (Closes: #670107)
   * debchange:
     + Remove EOLed releases Lenny and Maverick.
     + Change DEBCHANGE_RELEASE_HEURISTIC default to "changelog".

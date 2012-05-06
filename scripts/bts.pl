@@ -802,7 +802,7 @@ sensible-browser(1).
 
 Options may be specified after the B<bugs> command in addition to or
 instead of options at the start of the command line: recognised
-options at this point are: B<-o>/B<--offline>/B<--online>, B<--mbox>, B<--mailreader>
+options at this point are: B<-o>/B<--offline>/B<--online>, B<-m>/B<--mbox>, B<--mailreader>
 and B<-->[B<no->]B<cache>.  These are described earlier in this manpage.  If
 either the B<-o> or B<--offline> option is used, or there is already an
 up-to-date copy in the local cache, the cached version will be used.
