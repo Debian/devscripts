@@ -65,12 +65,8 @@ if (length $path) {
 	chdir $path || die "$path: unreadable\n";
 }
 
-our $url;
-if (-d ".svn") {
-	# Get the svn url of the current directory.
-	$url = `svn info .| grep -i ^URL: | cut -d ' ' -f 2`;
-}
-else {
+our $url = `svn info . 2>/dev/null|grep -i ^URL: | cut -d ' ' -f 2`;
+if (! length $url) {
 	# Try svk instead.
 	$url = `svk info .| grep -i '^Depot Path:' | cut -d ' ' -f 3`;
 }

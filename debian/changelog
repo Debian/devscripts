@@ -19,6 +19,8 @@ devscripts (2.11.7) UNRELEASED; urgency=low
     Haojun for the patch.  (Closes: #667581)
   * list-unreleased: Update excluded directories to include other common
     VCSes.
+  * svnpath: Always run “svn info” instead of checking for .svn. (Closes:
+    #645106)
 
   [ Benjamin Drung ]
   * Introduce a test suite for the scripts based on shunit2.
