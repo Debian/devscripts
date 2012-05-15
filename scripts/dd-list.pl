@@ -72,7 +72,7 @@ my $source_files=[];
 my $show_uploaders=1;
 my $print_binary=0;
 GetOptions(
-    "help" => sub { help(); exit },
+    "help|h" => sub { help(); exit },
     "stdin|i" => \$use_stdin,
     "dctrl|d" => \$use_dctrl,
     "sources|s:s@" => \$source_files,
