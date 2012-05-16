@@ -5,6 +5,10 @@ devscripts (2.11.7) unstable; urgency=low
   behavior, DEBCHANGE_RELEASE_HEURISTIC=log can be added to the configuration
   file.
 
+  Enabling the changelog heuristic also enables DEBCHANGE_MAINTTRAILER.  This
+  can be disabled by adding DEBCHANGE_MAINTTRAILER=no to the configuration
+  file.
+
  -- James McCoy <jamessan@debian.org>  Sun, 29 Apr 2012 18:38:46 -0400
 
 devscripts (2.11.2) unstable; urgency=low
