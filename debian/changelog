@@ -10,6 +10,10 @@ devscripts (2.11.8) UNRELEASED; urgency=low
       (Closes: #672309)
   * Also note DEBCHANGE_MAINTTRAILER change in NEWS entry for 2.11.7.
     (Closes: #672973)
+  * dget:
+    + Fix handling of sources.list entries with a port. (Closes: 672460) Still
+      can't handle entries at the same domain but different ports until
+      #154868 is fixed.
 
  -- David Prévot <taffit@debian.org>  Sun, 06 May 2012 23:26:05 -0400
 
