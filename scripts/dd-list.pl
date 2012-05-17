@@ -100,7 +100,7 @@ sub parsefh
 				 keys %package_name;
     }
     while (<$fh>) {
-	my ($package, $source, $binaries, $maintainer, $uploaders, @uploaders);
+	my ($package, $source, $binaries, $maintainer, @uploaders);
 
 	# Binary is shown in _source_Sources and contains all binaries produced by
 	# that source package
@@ -123,30 +123,34 @@ sub parsefh
 	    $maintainer=$1;
 	}
 	if (/^Uploaders:\s+(.*(?:\n .*)*)$/m) {
-	    $uploaders=$1;
-	    $uploaders =~ s/\n//g;
-	    @uploaders = split /(?<=>)\s*,\s*/, $uploaders;
+	    my $matches=$1;
+	    $matches =~ s/\n//g;
+	    @uploaders = split /(?<=>)\s*,\s*/, $matches;
 	}
 
 	if (defined $maintainer
 	    && (defined $package || defined $source || defined $binaries)) {
 	    $source ||= $package;
 	    $binaries ||= $package;
+	    my @names;
 	    if ($check_package) {
-		if ($binaries =~ m/$package_names/) {
-		    $binaries = $1;
-		    $package_name{$binaries}--;
+		my @pkgs;
+		if (@pkgs = ($binaries =~ m/$package_names/g)) {
+		    map { $package_name{$_}-- } @pkgs;
 		}
 		elsif ($source !~ m/$package_names/) {
 		    next;
 		}
 		$package_name{$source}--;
-		$package = $print_binary ? $binaries : $source;
+		@names = $print_binary ? @pkgs : $source;
 	    }
-	    push @{$dict{$maintainer}}, $package;
-	    if ($show_uploaders && defined $uploaders) {
+	    else {
+		@names = $print_binary ? $binaries : $source;
+	    }
+	    push @{$dict{$maintainer}}, @names;
+	    if ($show_uploaders && @uploaders) {
 		foreach my $uploader (@uploaders) {
-		    push @{$dict{$uploader}}, "$package (U)";
+		    push @{$dict{$uploader}}, map "$_ (U)", @names;
 		}
 	    }
 	}
