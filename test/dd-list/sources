@@ -1,0 +1,28 @@
+Package: vim
+Binary: vim-common, vim-gui-common, vim-runtime, vim-doc, vim-tiny, vim, vim-dbg, vim-gtk, vim-nox, vim-athena, vim-lesstif, vim-gnome
+Version: 2:7.3.429-2
+Maintainer: Debian Vim Maintainers <pkg-vim-maintainers@lists.alioth.debian.org>
+Uploaders: James McCoy <jamessan@debian.org>
+Build-Depends: libacl1-dev, libgpmg1-dev [linux-any], debhelper (>= 7.2.3~), libtinfo-dev | libncurses5-dev, libselinux1-dev [linux-any], dpkg-dev (>= 1.15.1), libgtk2.0-dev, libxaw7-dev, libxt-dev, libxpm-dev, libgnomeui-dev [!m68k], libperl-dev, tcl-dev, python-dev, ruby1.8, ruby1.8-dev, lua5.1, liblua5.1-dev
+Build-Depends-Indep: docbook-xml, docbook-utils
+Architecture: any all
+Standards-Version: 3.9.2.0
+Format: 3.0 (quilt)
+Files:
+ c02fea331371614ac4ca4360e6fff789 1998 vim_7.3.429-2.dsc
+ 5e1b68e1d716e3e8a07775e7987b08c2 11009709 vim_7.3.429.orig.tar.gz
+ 6f58c13344d6cfbd3f62a2beb6c4147a 190039 vim_7.3.429-2.debian.tar.gz
+Vcs-Browser: http://hg.debian.org/hg/pkg-vim/vim
+Vcs-Hg: http://hg.debian.org/hg/pkg-vim/vim
+Checksums-Sha1:
+ a0dbb9cae1d926e6133c1293e8897570fa640eea 1998 vim_7.3.429-2.dsc
+ 984a42ad7f7e17c2e7543d1587e1f95500862587 11009709 vim_7.3.429.orig.tar.gz
+ bfe717bd260687098b230dcfa988d006662298a7 190039 vim_7.3.429-2.debian.tar.gz
+Checksums-Sha256:
+ dd4999aebb61e5c552b0495a155c25bc880da0bfd00a57db861890870dc1a693 1998 vim_7.3.429-2.dsc
+ 998bf2823a494d092b7c674d8499e2f94022fcac2ee7512a44a4d8b9409db077 11009709 vim_7.3.429.orig.tar.gz
+ ac3f78bfc56b8420de2d415c2288829abc5779305efd4a95079d4b5d2c960ae8 190039 vim_7.3.429-2.debian.tar.gz
+Homepage: http://www.vim.org/
+Directory: pool/main/v/vim
+Priority: source
+Section: editors
