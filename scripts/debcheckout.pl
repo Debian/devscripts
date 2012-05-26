@@ -206,6 +206,12 @@ replacement texts. Also, given that configuration files are sourced by
 a shell, you probably want to use single quotes around the value of
 this variable.
 
+=item B<DEBCHECKOUT_SOURCE>
+
+This variable determines under what scenarios the associated orig.tar.gz for a
+package will be downloaded.  See the B<--source> option for a description of
+the values.
+
 =back
 
 =head1 SEE ALSO
