@@ -19,6 +19,7 @@ devscripts (2.11.8) UNRELEASED; urgency=low
     + Determine the source package name when downloading the source tarball.
       This ensures the downloaded files aren't incorrectly removed after being
       downloaded.
+    + Adapt find_repo() to determine the tarball name for native packages.
 
  -- David Prévot <taffit@debian.org>  Sun, 06 May 2012 23:26:05 -0400
 

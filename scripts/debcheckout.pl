@@ -314,7 +314,7 @@ sub find_repo($$) {
     my ($pkg, $desired_ver) = @_;
     my @repo = ("", 0, "", "");
     my $found = 0;
-    my $version = "";
+    my ($nonepoch_version, $version) = ("", "");
     my $origtgz_name = "";
     my $type = "";
     my $url = "";
@@ -329,7 +329,8 @@ sub find_repo($$) {
 	    ($type, $url) = (lc($2), $3);
 	} elsif ($line =~ /^Version:\s*(.*)$/i) {
 	    $version = $1;
-	} elsif ($line =~ /^ [a-f0-9]{32} \d+ (\S+)\.orig\.tar\.$compression_re_file_ext$/) {
+	    ($nonepoch_version = $version) =~ s/^\d+://;
+	} elsif ($line =~ /^ [a-f0-9]{32} \d+ (\S+)(?:_\Q$nonepoch_version\E|\.orig)\.tar\.$compression_re_file_ext$/) {
 	    $origtgz_name = $1;
 	} elsif ($line =~ /^$/) {
 	    push (@repos, [$version, $type, $url, $origtgz_name])
