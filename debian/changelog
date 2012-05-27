@@ -16,6 +16,9 @@ devscripts (2.11.8) UNRELEASED; urgency=low
       #154868 is fixed.
   * debcheckout:
     + Document the DEBCHECKOUT_SOURCE configuration variable.
+    + Determine the source package name when downloading the source tarball.
+      This ensures the downloaded files aren't incorrectly removed after being
+      downloaded.
 
  -- David Prévot <taffit@debian.org>  Sun, 06 May 2012 23:26:05 -0400
 

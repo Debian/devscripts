@@ -810,6 +810,10 @@ sub unpack_source($$$$$) {
     return 1 if (defined $origtgz_name and $origtgz_name eq ''); # only really relevant with URL on command line
 
     $destdir ||= $pkg;
+    # Apt will auto-resolve binary package names to source package names.  We
+    # need to know the source package name to correctly identify the source
+    # package artifacts (dsc, orig.tar.*, etc)
+    (my $srcpkg = $origtgz_name) =~ s/_.*//;
     # is this a debian-dir-only repository?
     unless (-d $destdir) {
 	print STDERR "debcheckout did not create the $destdir directory - this is probably a bug\n";
@@ -826,22 +830,23 @@ sub unpack_source($$$$$) {
 	print "repository only contains the debian directory, using apt-get source\n";
     }
 
-    use File::Temp;
     my $tmpdir = File::Temp->newdir(DIR => ".");
 
     # unpack
-    my $cmd = "cd $tmpdir && apt-get source ";
-    $cmd .= "--download-only " if ($unpack_source eq 'download-only' or not $debian_only);
-    $cmd .= $pkg;
-    $cmd .= "=$version" if ($version);
-    system($cmd);
+    my $oldcwd = getcwd();
+    chdir $tmpdir;
+    my @args = ('source');
+    push @args, '--download-only' if ($unpack_source eq 'download-only' or not $debian_only);
+    push @args, $version ? "$srcpkg=$version" : $srcpkg;
+    system('apt-get', @args);
+    chdir $oldcwd;
     if ($? >> 8) {
 	print STDERR "apt-get source failed\n";
 	return 0;
     }
 
     # put source package in place
-    foreach my $sourcefile (glob "$tmpdir/${pkg}_*") {
+    foreach my $sourcefile (glob "$tmpdir/${srcpkg}_*") {
 	next unless (-f $sourcefile); # skip directories
 	my $base = $sourcefile;
 	$base =~ s!.*/!!;
@@ -851,9 +856,9 @@ sub unpack_source($$$$$) {
     return 1 if ($unpack_source eq 'download-only' or not $debian_only);
 
     # figure out which directory was created
-    my @dirs = glob "$tmpdir/$pkg-*/";
+    my @dirs = glob "$tmpdir/$srcpkg-*/";
     unless (@dirs) {
-	print STDERR "apt-get source did not create any $tmpdir/$pkg-* directory\n";
+	print STDERR "apt-get source did not create any $tmpdir/$srcpkg-* directory\n";
 	return 0;
     }
     my $directory = $dirs[0];
