@@ -20,11 +20,13 @@
 import os
 import sys
 
+
 def escape_arg(arg):
     "Shell-escpae arg, if necessary"
     if ' ' not in arg:
         return arg
     return '"%s"' % arg.replace('\\', r'\\').replace('"', r'\"')
+
 
 class Logger(object):
     script_name = os.path.basename(sys.argv[0])
