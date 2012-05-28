@@ -412,6 +412,9 @@ if (not $opt_vendor eq '') {
     chomp $vendor;
 }
 $vendor ||= 'Debian';
+if ($vendor eq 'Ubuntu' and ($opt_n or $opt_bn or $opt_qa or $opt_bpo)) {
+    $vendor = 'Debian';
+}
 
 # Check the distro name given.
 if (defined $opt_D) {
