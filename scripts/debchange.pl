@@ -404,29 +404,29 @@ if (defined $opt_u) {
 }
 
 # See if we're Debian, Ubuntu or someone else, if we can
-my $distributor;
+my $vendor;
 if (not $opt_vendor eq '') {
-    $distributor = $opt_vendor;
+    $vendor = $opt_vendor;
 } elsif (system('command -v dpkg-vendor >/dev/null 2>&1') >> 8 == 0) {
-    $distributor = `dpkg-vendor --query Vendor 2>/dev/null`;
-    chomp $distributor;
+    $vendor = `dpkg-vendor --query Vendor 2>/dev/null`;
+    chomp $vendor;
 }
-$distributor ||= 'Debian';
+$vendor ||= 'Debian';
 
 # Check the distro name given.
 if (defined $opt_D) {
-    if ($distributor eq 'Debian') {
+    if ($vendor eq 'Debian') {
 	unless ($opt_D =~ /^(unstable|((old)?stable|testing)(-security)?|experimental|UNRELEASED|squeeze-backports|((oldstable|testing)-)?proposed-updates)$/) {
 	    warn "$progname warning: Recognised distributions are: unstable, testing, stable,\noldstable, experimental, UNRELEASED, squeeze-backports,\n{oldstable-,testing-,}proposed-updates and {testing,stable,oldstable}-security.\nUsing your request anyway.\n";
 	    $warnings++ if not $opt_force_dist;
 	}
-    } elsif ($distributor eq 'Ubuntu') {
+    } elsif ($vendor eq 'Ubuntu') {
 	unless ($opt_D =~ /^((hardy|lucid|natty|oneiric|precise|quantal)(-updates|-security|-proposed|-backports)?|UNRELEASED)$/) {
 	    warn "$progname warning: Recognised distributions are:\n{hardy,lucid,natty,oneiric,precise,quantal}{,-updates,-security,-proposed,-backports} and UNRELEASED.\nUsing your request anyway.\n";
 	    $warnings++ if not $opt_force_dist;
 	}
     } else {
-	# Unknown distributor, skip check
+	# Unknown vendor, skip check
     }
 }
 
