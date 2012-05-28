@@ -286,6 +286,11 @@ the configuration variables section below.
 \fB \-\-no\-preserve\fR, \fB\-\-nopreserve\fR
 Do not preserve the source tree directory name (default).
 .TP
+\fB\-\-vendor \fIvendor\fR
+Override the distributor ID over the default returned by dpkg-vendor.
+This name is used for heuristics applied to new package versions and for
+sanity checking of the target distribution.
+.TP
 \fB\-\-distribution \fIdist\fR, \fB\-D \fIdist\fR
 Use the specified distribution in the changelog entry being edited,
 instead of using the previous changelog entry's distribution for new

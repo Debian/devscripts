@@ -147,6 +147,8 @@ Options:
          Preserve the directory name
   --no-preserve
          Do not preserve the directory name (default)
+  --vendor <vendor>
+         Override the distributor ID from dpkg-vendor.
   -D, --distribution <dist>
          Use the specified distribution in the changelog entry being edited
   -u, --urgency <urgency>
@@ -223,6 +225,7 @@ my $opt_t = '';
 my $opt_allow_lower = '';
 my $opt_auto_nmu = 'yes';
 my $opt_force_save_on_release = 1;
+my $opt_vendor = undef;
 
 # Next, read configuration files and then command line
 # The next stuff is boilerplate
@@ -245,6 +248,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBCHANGE_LOWER_VERSION_PATTERN' => '',
 		       'DEBCHANGE_AUTO_NMU' => 'yes',
 		       'DEBCHANGE_FORCE_SAVE_ON_RELEASE' => 'yes',
+		       'DEBCHANGE_VENDOR' => '',
 		       );
     $config_vars{'DEBCHANGE_TZ'} ||= '';
     my %config_default = %config_vars;
@@ -301,6 +305,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $opt_auto_nmu = $config_vars{'DEBCHANGE_AUTO_NMU'};
     $opt_force_save_on_release =
 	$config_vars{'DEBCHANGE_FORCE_SAVE_ON_RELEASE'} eq 'yes' ? 1 : 0;
+    $opt_vendor = $config_vars{'DEBCHANGE_VENDOR'};
 }
 
 # We use bundling so that the short option behaviour is the same as
@@ -355,6 +360,7 @@ GetOptions("help|h" => \$opt_help,
 	   "empty" => \$opt_empty,
 	   "auto-nmu!" => \$opt_auto_nmu,
 	   "force-save-on-release!" => \$opt_force_save_on_release,
+	   "vendor=s" => \$opt_vendor,
 	   )
     or die "Usage: $progname [options] [changelog entry]\nRun $progname --help for more details\n";
 
@@ -401,7 +407,9 @@ if (defined $opt_u) {
 if (defined $opt_D) {
     # See if we're Debian, Ubuntu or someone else, if we can
     my $distributor;
-    if (system('command -v dpkg-vendor >/dev/null 2>&1') >> 8 == 0) {
+    if (not $opt_vendor eq '') {
+	$distributor = $opt_vendor;
+    } elsif (system('command -v dpkg-vendor >/dev/null 2>&1') >> 8 == 0) {
 	$distributor = `dpkg-vendor --query Vendor 2>/dev/null`;
 	chomp $distributor;
     }

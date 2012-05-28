@@ -1,0 +1,46 @@
+#!/bin/sh
+
+# Copyright (C) 2012, Benjamin Drung <bdrung@debian.org>
+#
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+COMMAND="perl -I ${0%/*}/.. ${0%/*}/../scripts/debchange.pl"
+
+. "${0%/*}/shunit2-helper-functions.sh"
+
+success() {
+    runCommand "-c ${SHUNIT_TMPDIR}/changelog --package devscripts-test-package $1" "" "" 0
+}
+
+checkVersion() {
+    local start_param="$1"
+    local param="$2"
+    local start_version="$3"
+    local expected_version="$4"
+    rm -f ${SHUNIT_TMPDIR}/changelog
+    success "--create $start_param -v $start_version \"Devscripts Test Suite.\""
+    success "$param \"Version test.\""
+    local version=$(dpkg-parsechangelog -l${SHUNIT_TMPDIR}/changelog | sed -n 's/^Version: //p')
+    assertEquals "\"dch $param\" from version $start_version" "$expected_version" "$version"
+}
+
+checkDebianVersion() {
+    checkVersion "--vendor Debian -D unstable" "--vendor Debian $1" "$2" "$3"
+}
+
+testDebianIncrement() {
+    checkDebianVersion "-i" "1.0-1" "1.0-2"
+    checkDebianVersion "-i" "12" "13"
+}
+
+. shunit2
