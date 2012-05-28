@@ -1,3 +1,5 @@
+*.pyc
+
 build-stamp-arch
 build-stamp-indep
 conf.default
@@ -7,9 +9,9 @@ debian/devscripts/
 debian/files
 make_scripts
 po4a/fr/*.1
-po4a/fr/*.pl
-po4a/fr/*.dbk
 po4a/fr/*.5
+po4a/fr/*.dbk
+po4a/fr/*.pl
 po4a/translate
 scripts/annotate-output
 scripts/archpath
@@ -49,6 +51,7 @@ scripts/desktop2menu
 scripts/desktop2menu.1
 scripts/devscripts.1
 scripts/devscripts.chdist
+scripts/devscripts.egg-info
 scripts/devscripts.pkgnames
 scripts/dget
 scripts/dget.1
