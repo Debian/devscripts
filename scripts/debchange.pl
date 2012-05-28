@@ -124,7 +124,7 @@ Options:
          Increment the Debian release number for a team upload
   --bpo
          Increment the Debian release number for a Backports.org upload
-	 to "squeeze-backports"
+         to "squeeze-backports"
   -l, --local <suffix>
          Add a suffix to the Debian version number for a local build
   -b, --force-bad-version
