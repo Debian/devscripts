@@ -2,6 +2,7 @@
 build-stamp-arch
 build-stamp-indep
 conf.default
+debian/*.debhelper
 debian/devscripts.debhelper.log
 debian/devscripts.substvars
 debian/devscripts/
@@ -16,6 +17,7 @@ scripts/annotate-output
 scripts/archpath
 scripts/bts
 scripts/bts.1
+scripts/build
 scripts/build-rdeps
 scripts/build-rdeps.1
 scripts/chdist
@@ -46,6 +48,7 @@ scripts/debrsign
 scripts/debsign
 scripts/debsnap
 scripts/debuild
+scripts/dep3changelog
 scripts/desktop2menu
 scripts/desktop2menu.1
 scripts/devscripts.1
@@ -57,7 +60,9 @@ scripts/dget.1
 scripts/diff2patches
 scripts/dpkg-depcheck
 scripts/dpkg-genbuilddeps
+scripts/dscextract
 scripts/dscverify
+scripts/edit-patch
 scripts/getbuildlog
 scripts/grep-excuses
 scripts/libvfork.o
@@ -87,6 +92,7 @@ scripts/transition-check
 scripts/transition-check.1
 scripts/uscan
 scripts/uupdate
+scripts/what-patch
 scripts/who-uploads
 scripts/whodepends
 scripts/wnpp-alert
