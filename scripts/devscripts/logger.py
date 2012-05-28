@@ -22,7 +22,9 @@ import sys
 
 
 def escape_arg(arg):
-    "Shell-escpae arg, if necessary"
+    """Shell-escpae arg, if necessary.
+    Fairly simplistic, doesn't escape anything except whitespace.
+    """
     if ' ' not in arg:
         return arg
     return '"%s"' % arg.replace('\\', r'\\').replace('"', r'\"')
