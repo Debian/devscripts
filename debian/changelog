@@ -26,6 +26,10 @@ devscripts (2.11.8) UNRELEASED; urgency=low
     + Add --vendor= and DEBCHANGE_VENDOR to override the distributor ID
       returned by dpkg-vendor.
 
+  [ Stefano Rivera ]
+  * devscripts.Logger Don't substitute arguments into logged strings unless
+    they were provided. (LP: #968129)
+
  -- Benjamin Drung <bdrung@debian.org>  Mon, 28 May 2012 17:14:12 +0200
 
 devscripts (2.11.7) unstable; urgency=low

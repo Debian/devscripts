@@ -34,34 +34,38 @@ class Logger(object):
     stderr = sys.stderr
 
     @classmethod
+    def _print(cls, format_, message, args=None, stderr=False):
+        if args:
+            message = message % args
+        stream = cls.stderr if stderr else cls.stdout
+        print >> stream, format_ % (cls.script_name, message)
+
+    @classmethod
     def command(cls, cmd):
         if cls.verbose:
-            print >> cls.stdout, "%s: I: %s" % (cls.script_name,
-                                                " ".join(escape_arg(arg)
-                                                         for arg in cmd))
+            cls._print("%s: I: %s", " ".join(escape_arg(arg) for arg in cmd))
 
     @classmethod
     def debug(cls, message, *args):
         if cls.verbose:
-            print >> cls.stderr, "%s: D: %s" % (cls.script_name, message % args)
+            cls._print("%s: D: %s", message, args, stderr=True)
 
     @classmethod
     def error(cls, message, *args):
-        print >> cls.stderr, "%s: Error: %s" % (cls.script_name, message % args)
+        cls._print("%s: Error: %s", message, args, stderr=True)
 
     @classmethod
     def warn(cls, message, *args):
-        print >> cls.stderr, "%s: Warning: %s" % (cls.script_name,
-                                                  message % args)
+        cls._print("%s: Warning: %s", message, args, stderr=True)
 
     @classmethod
     def info(cls, message, *args):
         if cls.verbose:
-            print >> cls.stdout, "%s: I: %s" % (cls.script_name, message % args)
+            cls._print("%s: I: %s", message, args)
 
     @classmethod
     def normal(cls, message, *args):
-        print >> cls.stdout, "%s: %s" % (cls.script_name, message % args)
+        cls._print("%s: %s", message, args)
 
     @classmethod
     def set_verbosity(cls, verbose):
