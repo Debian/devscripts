@@ -124,6 +124,9 @@ Options:
          Increment the Debian release number for a Debian Security Team upload
   --team
          Increment the Debian release number for a team upload
+  -U, --upstream
+         Increment the Debian release number without any appended derivative
+         distribution name
   --bpo
          Increment the Debian release number for a Backports.org upload
          to "squeeze-backports"
@@ -314,7 +317,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # with older debchange versions.
 my ($opt_help, $opt_version);
 my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u, $opt_force_dist);
-my ($opt_n, $opt_bn, $opt_qa, $opt_R, $opt_s, $opt_team, $opt_bpo, $opt_l, $opt_c, $opt_m, $opt_M, $opt_create, $opt_package, @closes);
+my ($opt_n, $opt_bn, $opt_qa, $opt_R, $opt_s, $opt_team, $opt_U, $opt_bpo, $opt_l, $opt_c, $opt_m, $opt_M, $opt_create, $opt_package, @closes);
 my ($opt_news);
 my ($opt_level, $opt_regex, $opt_noconf, $opt_empty);
 
@@ -342,6 +345,7 @@ GetOptions("help|h" => \$opt_help,
 	   "R|rebuild" => \$opt_R,
 	   "s|security" => \$opt_s,
 	   "team" => \$opt_team,
+	   "U|upstream" => \$opt_U,
 	   "bpo" => \$opt_bpo,
 	   "l|local=s" => \$opt_l,
 	   "query!" => \$opt_query,
@@ -1081,7 +1085,13 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 	    } elsif (!$opt_news) {
 		# Don't bump the version of a NEWS file in this case as we're
 		# using the version from the changelog
-		$end++;
+		if (($opt_i or $opt_s) and $vendor eq 'Ubuntu' and
+		     $start !~ /(build|ubuntu|~ppa)(\d+\.)*$/ and not $opt_U) {
+
+		    $end .= "ubuntu1";
+		} else {
+		    $end++;
+		}
 
 		# Attempt to set the distribution for a backport correctly
 		# based on the version of the previous backport
@@ -1097,7 +1107,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 		    }
 		}
 
-		if(! ($opt_s or $opt_n)) {
+		if(! ($opt_s or $opt_n or $vendor eq 'Ubuntu')) {
 		    if ($start =~/(.*?)-(\d+)\.$/) {
 			# Drop NMU revision
 			my $upstream_version = $1;

@@ -30,6 +30,8 @@ devscripts (2.11.8) UNRELEASED; urgency=low
       has been supplied (--nmu, --qa, --bin-nmu, --bpo).
     + Adjust --security template for Ubuntu.
     + Add -R/--rebuild flag for Ubuntu's no-change rebuilds.
+    + Append ubuntu1 to version when incrementing on Ubuntu, unless a
+      -U/--upstream option is given.
 
   [ Stefano Rivera ]
   * devscripts.Logger Don't substitute arguments into logged strings unless
