@@ -1150,7 +1150,12 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_s || $opt_team || $opt_bpo |
 	    print O "  * QA upload.\n";
 	    $line = 1;
 	} elsif ($opt_s && ! $opt_news) {
-	    print O "  * Non-maintainer upload by the Security Team.\n";
+	    if ($vendor eq 'Ubuntu') {
+		print O "  * SECURITY UPDATE:\n";
+		print O "  * References\n";
+	    } else {
+		print O "  * Non-maintainer upload by the Security Team.\n";
+	    }
 	    $line = 1;
 	} elsif ($opt_team && ! $opt_news) {
 	    print O "  * Team upload.\n";
