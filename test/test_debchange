@@ -19,7 +19,7 @@ COMMAND="perl -I ${0%/*}/.. ${0%/*}/../scripts/debchange.pl"
 . "${0%/*}/shunit2-helper-functions.sh"
 
 success() {
-    runCommand "-c ${SHUNIT_TMPDIR}/changelog --package devscripts-test-package $1" "" "" 0
+    runCommand "-c ${SHUNIT_TMPDIR}/changelog $1" "" "" 0
 }
 
 checkVersion() {
@@ -28,7 +28,7 @@ checkVersion() {
     local start_version="$3"
     local expected_version="$4"
     rm -f ${SHUNIT_TMPDIR}/changelog
-    success "--create $start_param -v $start_version \"Devscripts Test Suite.\""
+    success "--create $start_param --package test-package -v $start_version \"Devscripts Test Suite.\""
     success "$param \"Version test.\""
     local version=$(dpkg-parsechangelog -l${SHUNIT_TMPDIR}/changelog | sed -n 's/^Version: //p')
     assertEquals "\"dch $param\" from version $start_version" "$expected_version" "$version"
@@ -38,9 +38,20 @@ checkDebianVersion() {
     checkVersion "--vendor Debian -D unstable" "--vendor Debian $1" "$2" "$3"
 }
 
+checkUbuntuVersion() {
+    checkVersion "--vendor Debian -D unstable" "--vendor Ubuntu $1" "$2" "$3"
+}
+
 testDebianIncrement() {
     checkDebianVersion "-i" "1.0-1" "1.0-2"
     checkDebianVersion "-i" "12" "13"
+}
+
+testUbuntuRebuild() {
+    checkUbuntuVersion "-R" "3.4" "3.4build1"
+    checkUbuntuVersion "-R" "2.0-4" "2.0-4build1"
+    checkUbuntuVersion "-R" "1.42-4ubuntu5" "1.42-4ubuntu6"
+    checkUbuntuVersion "-R" "0.1-2build3" "0.1-2build4"
 }
 
 . shunit2

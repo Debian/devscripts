@@ -29,6 +29,7 @@ devscripts (2.11.8) UNRELEASED; urgency=low
     + Fall back to Debian vendor when a Debian-specific command-line option
       has been supplied (--nmu, --qa, --bin-nmu, --bpo).
     + Adjust --security template for Ubuntu.
+    + Add -R/--rebuild flag for Ubuntu's no-change rebuilds.
 
   [ Stefano Rivera ]
   * devscripts.Logger Don't substitute arguments into logged strings unless
