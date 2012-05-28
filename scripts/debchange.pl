@@ -403,18 +403,18 @@ if (defined $opt_u) {
 	unless $opt_u =~ /^(low|medium|high|critical|emergency)$/;
 }
 
+# See if we're Debian, Ubuntu or someone else, if we can
+my $distributor;
+if (not $opt_vendor eq '') {
+    $distributor = $opt_vendor;
+} elsif (system('command -v dpkg-vendor >/dev/null 2>&1') >> 8 == 0) {
+    $distributor = `dpkg-vendor --query Vendor 2>/dev/null`;
+    chomp $distributor;
+}
+$distributor ||= 'Debian';
+
 # Check the distro name given.
 if (defined $opt_D) {
-    # See if we're Debian, Ubuntu or someone else, if we can
-    my $distributor;
-    if (not $opt_vendor eq '') {
-	$distributor = $opt_vendor;
-    } elsif (system('command -v dpkg-vendor >/dev/null 2>&1') >> 8 == 0) {
-	$distributor = `dpkg-vendor --query Vendor 2>/dev/null`;
-	chomp $distributor;
-    }
-    $distributor ||= 'Debian';
-
     if ($distributor eq 'Debian') {
 	unless ($opt_D =~ /^(unstable|((old)?stable|testing)(-security)?|experimental|UNRELEASED|squeeze-backports|((oldstable|testing)-)?proposed-updates)$/) {
 	    warn "$progname warning: Recognised distributions are: unstable, testing, stable,\noldstable, experimental, UNRELEASED, squeeze-backports,\n{oldstable-,testing-,}proposed-updates and {testing,stable,oldstable}-security.\nUsing your request anyway.\n";
