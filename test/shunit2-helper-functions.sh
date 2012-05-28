@@ -1,5 +1,3 @@
-#!/bin/sh
-
 # Copyright (C) 2012, Benjamin Drung <bdrung@debian.org>
 #
 # Permission to use, copy, modify, and/or distribute this software for any
@@ -14,20 +12,16 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-COMMAND="../scripts/checkbashisms.pl"
-WORKDIR="$(readlink -f "${0%/*}")"
-
-. "${0%/*}/shunit2-helper-functions.sh"
-
-found() {
-    cd "$WORKDIR"
-    runCommand "$1" "" "$2" 1
+runCommand() {
+    local param="$1"
+    local exp_stdout="$2"
+    local exp_stderr="$3"
+    local exp_retval=$4
+    local stdoutF="${SHUNIT_TMPDIR}/stdout"
+    local stderrF="${SHUNIT_TMPDIR}/stderr"
+    eval "${COMMAND} $param" > ${stdoutF} 2> ${stderrF}
+    retval=$?
+    assertEquals "standard output of ${COMMAND} $param\n" "$exp_stdout" "$(cat ${stdoutF})"
+    assertEquals "error output of ${COMMAND} $param\n" "$exp_stderr" "$(cat ${stderrF})"
+    assertEquals "return value of ${COMMAND} $param\n" $exp_retval $retval
 }
-
-testSource() {
-    local result="possible bashism in bashisms/source line 2 (should be '.', not 'source'):
-source foo.sh"
-    found "bashisms/source" "$result"
-}
-
-. shunit2
