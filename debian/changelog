@@ -40,6 +40,10 @@ devscripts (2.11.8) UNRELEASED; urgency=low
   * devscripts.Logger Don't substitute arguments into logged strings unless
     they were provided. (LP: #968129)
 
+  [ Salvatore Bonaccorso ]
+  * bts: When searching for usertags use tag= in the url (followed by
+    the options containing users=). (Closes: #675071).
+
  -- Benjamin Drung <bdrung@debian.org>  Mon, 28 May 2012 17:14:12 +0200
 
 devscripts (2.11.7) unstable; urgency=low

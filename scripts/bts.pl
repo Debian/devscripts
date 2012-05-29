@@ -3399,7 +3399,7 @@ sub thing_to_url {
 	($thingurl = $thing) =~ s/^tag:/tag=/;
 	$thingurl = $btscgipkgurl.'?'.$thingurl;
     } elsif ($thing =~ /^usertag:/) {
-	($thingurl = $thing) =~ s/^usertag:/usertag=/;
+	($thingurl = $thing) =~ s/^usertag:/tag=/;
 	$thingurl = $btscgipkgurl.'?'.$thingurl;
     } elsif ($thing =~ m%^release-critical(\.html|/(index\.html)?)?$%) {
 	$thingurl = $btsurl . 'release-critical/index.html';
