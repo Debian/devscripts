@@ -575,7 +575,13 @@ if (! $opt_create || ($opt_create && $opt_news)) {
     ($MAINTAINER,$EMAIL) = ($changelog{'Maintainer'} =~ /^([^<]+) <(.*)>/);
     fatal "No distribution in changelog!"
 	unless exists $changelog{'Distribution'};
-    $DISTRIBUTION=$changelog{'Distribution'};
+    if ($vendor eq 'Ubuntu') {
+	# In Ubuntu the development release regularly changes, don't just copy
+	# the previous name.
+	$DISTRIBUTION = 'quantal';
+    } else {
+	$DISTRIBUTION=$changelog{'Distribution'};
+    }
     fatal "No changes in changelog!"
 	unless exists $changelog{'Changes'};
 
@@ -1302,6 +1308,8 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
 	    if ($distribution eq "UNRELEASED") {
 		if ($dist_indicator and not $opt_D) {
 		    $distribution = $dist_indicator;
+		} elsif ($vendor eq 'Ubuntu') {
+		    $distribution = $opt_D || "quantal";
 		} else {
 		    $distribution = $opt_D || $lastdist || "unstable";
 		}

@@ -32,6 +32,8 @@ devscripts (2.11.8) UNRELEASED; urgency=low
     + Add -R/--rebuild flag for Ubuntu's no-change rebuilds.
     + Append ubuntu1 to version when incrementing on Ubuntu, unless a
       -U/--upstream option is given.
+    + On Ubuntu, don't copy the previous distribution name for a new changelog
+      entry. Use the Ubuntu devel release.
 
   [ Stefano Rivera ]
   * devscripts.Logger Don't substitute arguments into logged strings unless
