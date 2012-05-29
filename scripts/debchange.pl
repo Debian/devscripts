@@ -1058,7 +1058,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 	    # If it's not already an NMU make it so
 	    # otherwise we can be safe if we behave like dch -i
 
-	    if (($opt_n or $opt_s) and (
+	    if (($opt_n or $opt_s) and $vendor ne 'Ubuntu' and (
 		($VERSION eq $UVERSION and not $start =~ /\+nmu/)
 		or ($VERSION ne $UVERSION and not $start =~ /\.$/))) {
 

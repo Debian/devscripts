@@ -34,6 +34,7 @@ devscripts (2.11.8) UNRELEASED; urgency=low
       -U/--upstream option is given.
     + On Ubuntu, don't copy the previous distribution name for a new changelog
       entry. Use the Ubuntu devel release.
+    + Don't use NMU versioning for NMUs / Security uploads on Ubuntu.
 
   [ Stefano Rivera ]
   * devscripts.Logger Don't substitute arguments into logged strings unless
