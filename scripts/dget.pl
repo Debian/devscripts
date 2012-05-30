@@ -318,14 +318,14 @@ sub apt_get {
     }
 
     # find deb lines matching the hosts in the policy output
-    my @repositories;
+    my %repositories;
     # the regexp within the map below can be removed and replaced with only the quotemeta statement once bug #154868 is fixed
     my $host_re = '(?:' . (join '|', map { my $host = quotemeta; $host =~ s@^(\w+\\:\\/\\/[^:/]+)\\/@$1(?::[0-9]+)?\\/@; $host; } @hosts) . ')';
     if (-f "/etc/apt/sources.list") {
 	$apt = new IO::File("/etc/apt/sources.list") or die "/etc/apt/sources.list: $!";
 	while (<$apt>) {
 	    if (/^\s*deb\s*($host_re\b)/) {
-		push @repositories, $1;
+		$repositories{$1} = 1;
 	    }
 	}
 	close $apt;
@@ -338,17 +338,17 @@ sub apt_get {
 	$apt = new IO::File("$_") or die "$_: $!";
 	while (<$apt>) {
 	    if (/^\s*deb\s*($host_re\b)/) {
-		push @repositories, $1;
+		$repositories{$1} = 1;
 	    }
 	}
 	close $apt;
     }
-    unless (@repositories) {
+    unless (%repositories) {
 	die "no repository found in /etc/apt/sources.list or sources.list.d";
     }
 
     # try each repository in turn
-    foreach my $repository (@repositories) {
+    foreach my $repository (keys %repositories) {
 	my ($dir, $file) = ($repository, $filename);
 	if ($filename =~ /(.*)\/([^\/]*)$/) {
 	    ($dir, $file) = ("$repository/$1", $2);
