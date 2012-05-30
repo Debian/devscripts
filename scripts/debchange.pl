@@ -72,6 +72,22 @@ sub have_lpdc {
     return $lpdc_broken ? 0 : 1;
 }
 
+my $ubuntu_distro_info;
+sub get_ubuntu_distro_info {
+    return $ubuntu_distro_info if defined $ubuntu_distro_info;
+    eval {
+	require Debian::DistroInfo;
+    };
+    if ($@) {
+	printf "libdistro-info-perl is not installed, Ubuntu release names "
+	       . "are not known.\n";
+	$ubuntu_distro_info = 0;
+    } else {
+	$ubuntu_distro_info = UbuntuDistroInfo->new();
+    }
+    return $ubuntu_distro_info;
+}
+
 sub usage () {
     print <<"EOF";
 Usage: $progname [options] [changelog entry]
@@ -431,9 +447,24 @@ if (defined $opt_D) {
 	    $warnings++ if not $opt_force_dist;
 	}
     } elsif ($vendor eq 'Ubuntu') {
-	unless ($opt_D =~ /^((hardy|lucid|natty|oneiric|precise|quantal)(-updates|-security|-proposed|-backports)?|UNRELEASED)$/) {
-	    warn "$progname warning: Recognised distributions are:\n{hardy,lucid,natty,oneiric,precise,quantal}{,-updates,-security,-proposed,-backports} and UNRELEASED.\nUsing your request anyway.\n";
-	    $warnings++ if not $opt_force_dist;
+	if ($opt_D eq 'UNRELEASED') {
+	    ;
+	} else {
+	    my $ubu_release = $opt_D;
+	    $ubu_release =~ s/(-updates|-security|-proposed|-backports)$//;
+	    my $ubu_info = get_ubuntu_distro_info();
+	    if ($ubu_info == 0) {
+		warn "$progname warning: Unable to determine if $ubu_release "
+		     . "is a valid Ubuntu release";
+	    } elsif (! $ubu_info->valid($ubu_release)) {
+		printf STDERR "$progname warning: Recognised distributions "
+		              . "are:\n{"
+		              . join(',', $ubu_info->supported())
+		              . "}{,-updates,-security,-proposed,-backports} "
+		              . "and UNRELEASED.\n"
+		              . "Using your request anyway.\n";
+		$warnings++ if not $opt_force_dist;
+	    }
 	}
     } else {
 	# Unknown vendor, skip check
@@ -578,7 +609,14 @@ if (! $opt_create || ($opt_create && $opt_news)) {
     if ($vendor eq 'Ubuntu') {
 	# In Ubuntu the development release regularly changes, don't just copy
 	# the previous name.
-	$DISTRIBUTION = 'quantal';
+	my $ubu_info = get_ubuntu_distro_info();
+	if ($ubu_info == 0 or !$ubu_info->devel()) {
+	    warn "$progname warning: Unable to determine the current Ubuntu "
+	         . "development release. Using UNRELEASED instead.";
+	    $DISTRIBUTION = 'UNRELEASED';
+	} else {
+	    $DISTRIBUTION = $ubu_info->devel();
+	}
     } else {
 	$DISTRIBUTION=$changelog{'Distribution'};
     }
@@ -1309,7 +1347,19 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
 		if ($dist_indicator and not $opt_D) {
 		    $distribution = $dist_indicator;
 		} elsif ($vendor eq 'Ubuntu') {
-		    $distribution = $opt_D || "quantal";
+		    if ($opt_D) {
+			$distribution = $opt_D;
+		    } else {
+			my $ubu_info = get_ubuntu_distro_info();
+			if ($ubu_info == 0 or !$ubu_info->devel()) {
+			    warn "$progname warning: Unable to determine the "
+			         . "current Ubuntu development release. "
+			         . "Using UNRELEASED instead.";
+			    $distribution = 'UNRELEASED';
+			} else {
+			    $distribution = $ubu_info->devel();
+			}
+		    }
 		} else {
 		    $distribution = $opt_D || $lastdist || "unstable";
 		}
