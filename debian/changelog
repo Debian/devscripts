@@ -45,6 +45,9 @@ devscripts (2.11.8) UNRELEASED; urgency=low
   * bts: When searching for usertags use tag= in the url (followed by
     the options containing users=). (Closes: #675071).
 
+  [ Raphael Geissert ]
+  * dget: ignore duplicate repository URLs. (Closes: #675258)
+
  -- Benjamin Drung <bdrung@debian.org>  Mon, 28 May 2012 17:14:12 +0200
 
 devscripts (2.11.7) unstable; urgency=low
