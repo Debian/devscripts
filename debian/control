@@ -16,6 +16,7 @@ Uploaders: Julian Gilbey <jdg@debian.org>,
 Standards-Version: 3.9.3
 Build-Depends: debhelper (>= 8),
                docbook-xsl,
+               libdistro-info-perl,
                libfile-desktopentry-perl,
                libjson-perl,
                libterm-size-perl,
