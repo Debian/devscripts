@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2012-05-31 17:49+0300\n"
-"PO-Revision-Date: 2012-05-06 16:47-0400\n"
+"PO-Revision-Date: 2012-05-31 07:55-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -6188,14 +6188,14 @@ msgstr ""
 "modifications ne contienne B<UNRELEASED> dans le champ de la distribution. "
 "Si cette heuristique est activée, la distribution sera modifiée en "
 "B<UNRELEASED> dans les nouvelles entrées du journal des modifications, et "
-"l'option B<--mainttrailer> décrite précédemment sera activée "
-"automatiquement. Cela peut être utile si un paquet peut être distribué par "
-"différents responsables, ou si vous ne voulez pas garder les journaux "
-"d'envoi. L'autre heuristique (I<log>) détermine si un paquet a été distribué "
-"en cherchant un journal B<dupload>(1) ou B<dput>(1) approprié. Un message "
-"d'alerte sera affiché si le fichier du journal est détecté mais qu'aucun "
-"envoi réussi n'y est enregistré. Cela peut arriver si l'envoi précédent a "
-"été exécuté avec une version de B<dupload> inférieure à 2.1 ou s'il a échoué."
+"l'option B<--mainttrailer> décrite ci-dessous sera activée automatiquement. "
+"Cela peut être utile si un paquet peut être distribué par différents "
+"responsables, ou si vous ne voulez pas garder les journaux d'envoi. L'autre "
+"heuristique (I<log>) détermine si un paquet a été distribué en cherchant un "
+"journal B<dupload>(1) ou B<dput>(1) approprié. Un message d'alerte sera "
+"affiché si le fichier du journal est détecté mais qu'aucun envoi réussi n'y "
+"est enregistré. Cela peut arriver si l'envoi précédent a été exécuté avec "
+"une version de B<dupload> inférieure à 2.1 ou s'il a échoué."
 
 #. type: Plain text
 #: ../scripts/debchange.1:82
@@ -6374,13 +6374,6 @@ msgstr "B<--increment>, B<-i>"
 # NOTE: signature
 #. type: Plain text
 #: ../scripts/debchange.1:158
-#, fuzzy
-#| msgid ""
-#| "Increment either the final component of the Debian release number or, if "
-#| "this is a native Debian package, the version number.  This creates a new "
-#| "section at the beginning of the changelog with appropriate headers and "
-#| "footers.  Also, if this is a new version of a native Debian package, the "
-#| "directory name is changed to reflect this."
 msgid ""
 "Increment either the final component of the Debian release number or, if "
 "this is a native Debian package, the version number.  On Ubuntu, this will "
@@ -6391,10 +6384,12 @@ msgid ""
 "reflect this."
 msgstr ""
 "Incrémenter le numéro de version Debian ou, dans le cas d'un paquet Debian "
-"natif, le numéro de version. Cela crée une nouvelle section au début du "
-"fichier changelog avec le bon en-tête et la signature. De plus, dans le cas "
-"d'une nouvelle version d'un paquet natif Debian, le nom du répertoire est "
-"modifié de manière à refléter ce changement de version."
+"natif, le numéro de version. Sur Ubuntu, cela modifiera aussi le suffixe "
+"buildX en ubuntu1. Utiliser B<-R>, B<--rebuild> pour un incrément de "
+"reconstruction sans modification. Cela crée une nouvelle section au début du "
+"journal de modification avec le bon en-tête et la signature. De plus, dans "
+"le cas d'une nouvelle version d'un paquet natif Debian, le nom du répertoire "
+"est modifié de manière à refléter ce changement de version."
 
 #. type: TP
 #: ../scripts/debchange.1:158
@@ -6605,26 +6600,19 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/debchange.1:228
-#, fuzzy, no-wrap
-#| msgid "B<--help>, B<-h>"
+#, no-wrap
 msgid "B<--rebuild>, B<-R>"
-msgstr "B<--help>, B<-h>"
+msgstr "B<--rebuild>, B<-R>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:232
-#, fuzzy
-#| msgid ""
-#| "Increment the Debian release number for a binary non-maintainer upload by "
-#| "ether appending a \"+b1\" to a non-binNMU version number or by "
-#| "incrementing a binNMU version number, and add a binNMU changelog comment."
 msgid ""
 "Increment the Debian release number for an Ubuntu no-change rebuild by "
 "appending a \"build1\" or by incrementing a rebuild version number."
 msgstr ""
-"Incrémente le numéro de version Debian pour un envoi binaire d'un non-"
-"responsable soit en ajoutant « +b1 » à une version non-binNMU soit en "
-"incrémentant un numéro de binNMU, et ajoute un commentaire « binNMU » dans "
-"le changelog."
+"Incrémente le numéro de version Debian pour une reconstruction sans "
+"modification Ubuntu en ajoutant « build1 » ou en incrémentant un numéro de "
+"reconstruction."
 
 #. type: TP
 #: ../scripts/debchange.1:232
@@ -6659,10 +6647,9 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/debchange.1:240
-#, fuzzy, no-wrap
-#| msgid "B<--extra>, B<-x>"
+#, no-wrap
 msgid "B<--upstream>, B<-U>"
-msgstr "B<--extra>, B<-x>"
+msgstr "B<--upstream>, B<-U>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:244
@@ -6670,6 +6657,8 @@ msgid ""
 "Don't append B<distro-name1> to the version on a derived distribution. "
 "Increment the Debian version."
 msgstr ""
+"Ne pas ajouter I<nom-de-distribution1> à la version d'une distribution "
+"dérivée. Incrémenter le numéro de publication de Debian."
 
 #. type: TP
 #: ../scripts/debchange.1:244
@@ -6691,14 +6680,14 @@ msgstr ""
 #: ../scripts/debchange.1:248
 #, no-wrap
 msgid "B<--local>, B<-l>I<suffix>"
-msgstr "B<--local>, B<-l>I<suffix>"
+msgstr "B<--local>, B<-l>I<suffixe>"
 
 # NOTE: space
 #. type: Plain text
 #: ../scripts/debchange.1:251
 #, no-wrap
 msgid " Add a suffix to the Debian version number for a local build.\n"
-msgstr "Ajouter un suffixe au numéro de version Debian pour une construction locale.\n"
+msgstr "Ajouter un I<suffixe> au numéro de version Debian pour une construction locale.\n"
 
 #. type: TP
 #: ../scripts/debchange.1:251
@@ -6868,10 +6857,9 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/debchange.1:298
-#, fuzzy, no-wrap
-#| msgid "B<--forever>"
+#, no-wrap
 msgid "B<--vendor >I<vendor>"
-msgstr "B<--forever>"
+msgstr "B<--vendor> I<éditeur>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:303
@@ -6880,6 +6868,9 @@ msgid ""
 "name is used for heuristics applied to new package versions and for sanity "
 "checking of the target distribution."
 msgstr ""
+"Écraser l'identifiant de distributeur dont la valeur par défaut est renvoyée "
+"par B<dpkg-vendor>. Ce nom est utilisé pour les heuristiques appliquées aux "
+"nouvelles versions de paquet et aux vérifications de distribution cible."
 
 #. type: TP
 #: ../scripts/debchange.1:303
@@ -7279,10 +7270,9 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/debchange.1:443
-#, fuzzy, no-wrap
-#| msgid "B<DEBCHANGE_TZ>"
+#, no-wrap
 msgid "B<DEBCHANGE_VENDOR>"
-msgstr "B<DEBCHANGE_TZ>"
+msgstr "B<DEBCHANGE_VENDOR>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:447
@@ -7290,6 +7280,8 @@ msgid ""
 "Use this vendor instead of the default (dpkg-vendor output).  See B<--"
 "vendor> for details."
 msgstr ""
+"Utiliser cet éditeur à la place de celui par défaut (sortie de B<dpkg-"
+"vendor>). Consultez B<--vendor> pour plus de précisions."
 
 #. type: =head1
 #: ../scripts/debchange.1:447 ../scripts/dep3changelog.1:22
@@ -7789,10 +7781,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/debcheckout.pl:209
-#, fuzzy
-#| msgid "B<DEBCHECKOUT_AUTH_URLS>"
 msgid "B<DEBCHECKOUT_SOURCE>"
-msgstr "B<DEBCHECKOUT_AUTH_URLS>"
+msgstr "B<DEBCHECKOUT_SOURCE>"
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:211
@@ -7801,6 +7791,9 @@ msgid ""
 "a package will be downloaded.  See the B<--source> option for a description "
 "of the values."
 msgstr ""
+"Cette variable détermine le scenario pour télécharger ou non le fichier I<."
+"orig.tar.gz> associé à un paquet. Consultez l'option B<--source> pour une "
+"description des valeurs."
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:219
