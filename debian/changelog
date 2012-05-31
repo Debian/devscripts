@@ -35,6 +35,7 @@ devscripts (2.11.8) UNRELEASED; urgency=low
     + On Ubuntu, don't copy the previous distribution name for a new changelog
       entry. Use the Ubuntu devel release.
     + Don't use NMU versioning for NMUs / Security uploads on Ubuntu.
+    + dch --increment changes XbuildY to Xubuntu1 on Ubuntu (LP: #690230).
 
   [ Stefano Rivera ]
   * devscripts.Logger Don't substitute arguments into logged strings unless

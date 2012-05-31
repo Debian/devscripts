@@ -1130,8 +1130,13 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 		# Don't bump the version of a NEWS file in this case as we're
 		# using the version from the changelog
 		if (($opt_i or $opt_s) and $vendor eq 'Ubuntu' and
-		     $start !~ /(build|ubuntu|~ppa)(\d+\.)*$/ and not $opt_U) {
+		     $start !~ /(ubuntu|~ppa)(\d+\.)*$/ and not $opt_U) {
 
+		    if ($start =~ /build/) {
+			# Drop buildX suffix in favor of ubuntu1
+			$start =~ s/build//;
+			$end = "";
+		    }
 		    $end .= "ubuntu1";
 		} else {
 		    $end++;
