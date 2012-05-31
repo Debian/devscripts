@@ -39,6 +39,7 @@ devscripts (2.11.8) UNRELEASED; urgency=low
     + Try to guess the vendor based on the given distribution name (LP: #723715)
     + Prefer UBUMAIL over DEBEMAIL on Ubuntu (LP: #929846).
   * Add first tests for licensecheck.
+  * Add online test for uscan.
 
   [ Stefano Rivera ]
   * devscripts.Logger Don't substitute arguments into logged strings unless

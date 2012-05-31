@@ -4,4 +4,7 @@ test:
 	./test_debchange
 	./test_licensecheck
 
-.PHONY: test
+online-test:
+	./test_uscan
+
+.PHONY: test online-test

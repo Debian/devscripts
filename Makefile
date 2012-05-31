@@ -35,6 +35,9 @@ clean_translated_manpages:
 clean: clean_scripts clean_translated_manpages
 	rm -f version conf.default make_scripts
 
+online-test:
+	$(MAKE) -C test/ online-test
+
 test: test_test test_scripts
 
 install: all install_scripts
@@ -58,4 +61,4 @@ test_scripts:
 install_scripts:
 	$(MAKE) -C scripts/ install DESTDIR=$(DESTDIR)
 
-.PHONY: test
+.PHONY: online-test test
