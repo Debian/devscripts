@@ -72,6 +72,22 @@ sub have_lpdc {
     return $lpdc_broken ? 0 : 1;
 }
 
+my $debian_distro_info;
+sub get_debian_distro_info {
+    return $debian_distro_info if defined $debian_distro_info;
+    eval {
+	require Debian::DistroInfo;
+    };
+    if ($@) {
+	printf "libdistro-info-perl is not installed, Debian release names "
+	       . "are not known.\n";
+	$debian_distro_info = 0;
+    } else {
+	$debian_distro_info = DebianDistroInfo->new();
+    }
+    return $debian_distro_info;
+}
+
 my $ubuntu_distro_info;
 sub get_ubuntu_distro_info {
     return $ubuntu_distro_info if defined $ubuntu_distro_info;
@@ -430,9 +446,23 @@ if (defined $opt_u) {
 my $vendor;
 if (not $opt_vendor eq '') {
     $vendor = $opt_vendor;
-} elsif (system('command -v dpkg-vendor >/dev/null 2>&1') >> 8 == 0) {
-    $vendor = `dpkg-vendor --query Vendor 2>/dev/null`;
-    chomp $vendor;
+} else {
+    if (defined $opt_D) {
+	# Try to guess the vendor based on the given distribution name
+	my $distro = $opt_D;
+	$distro =~ s/-.*//;
+	my $deb_info = get_debian_distro_info();
+	my $ubu_info = get_ubuntu_distro_info();
+	if ($deb_info != 0 and $deb_info->valid($distro)) {
+	    $vendor = 'Debian';
+	} elsif ($ubu_info != 0 and $ubu_info->valid($distro)) {
+	    $vendor = 'Ubuntu';
+	}
+    }
+    if (not defined $vendor and system('command -v dpkg-vendor >/dev/null 2>&1') >> 8 == 0) {
+	$vendor = `dpkg-vendor --query Vendor 2>/dev/null`;
+	chomp $vendor;
+    }
 }
 $vendor ||= 'Debian';
 if ($vendor eq 'Ubuntu' and ($opt_n or $opt_bn or $opt_qa or $opt_bpo)) {
