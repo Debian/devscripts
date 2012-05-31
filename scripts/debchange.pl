@@ -612,7 +612,7 @@ if (! $opt_create || ($opt_create && $opt_news)) {
 	my $ubu_info = get_ubuntu_distro_info();
 	if ($ubu_info == 0 or !$ubu_info->devel()) {
 	    warn "$progname warning: Unable to determine the current Ubuntu "
-	         . "development release. Using UNRELEASED instead.";
+	         . "development release. Using UNRELEASED instead." if (!$opt_D);
 	    $DISTRIBUTION = 'UNRELEASED';
 	} else {
 	    $DISTRIBUTION = $ubu_info->devel();
