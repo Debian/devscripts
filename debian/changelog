@@ -64,6 +64,10 @@ devscripts (2.11.8) UNRELEASED; urgency=low
   * debuild: Do not warn for missing upstream tarball if package is source
     format 3.0 (git). (Closes: #668372)
 
+  [ Scott Moser ]
+  * uscan: Support watch files that reference S3 bucket listings.
+    (Closes: #630756, LP: #798293)
+
  -- Benjamin Drung <bdrung@debian.org>  Mon, 28 May 2012 17:14:12 +0200
 
 devscripts (2.11.7) unstable; urgency=low

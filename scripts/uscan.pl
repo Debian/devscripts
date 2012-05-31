@@ -902,6 +902,15 @@ sub process_watchline ($$$$$$)
 	my $content = $response->content;
 	print STDERR "$progname debug: received content:\n$content\[End of received content]\n"
 	    if $debug;
+
+	if ($content =~ m%^<[?]xml%i &&
+	    $content =~ m%xmlns="http://s3.amazonaws.com/doc/2006-03-01/"%) {
+	    # this is an S3 bucket listing.  Insert an 'a href' tag
+	    # into the content for each 'Key', so that it looks like html (LP: #798293)
+	    print STDERR "$progname debug: fixing s3 listing\n" if $debug;
+	    $content =~ s%<Key>([^<]*)</Key>%<Key><a href="$1">$1</a></Key>%g
+	}
+
 	# We need this horrid stuff to handle href=foo type
 	# links.  OK, bad HTML, but we have to handle it nonetheless.
 	# It's bug #89749.
