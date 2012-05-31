@@ -47,16 +47,12 @@ Depends: dpkg-dev (>= 1.15.4.1),
 Recommends: at,
             curl | wget,
             dctrl-tools,
-            debian-keyring,
             dput | dupload,
-            equivs,
             fakeroot,
             gnupg,
-            libcrypt-ssleay-perl,
             libdistro-info-perl,
             libjson-perl,
             libparse-debcontrol-perl,
-            libsoap-lite-perl,
             liburi-perl,
             libwww-perl,
             lintian,
@@ -69,7 +65,8 @@ Recommends: at,
             strace,
             unzip,
             wdiff,
-            xz-utils
+            xz-utils,
+            ${vendor:Recommends}
 Suggests: bsd-mailx | mailx,
           build-essential,
           cvs-buildpackage,
@@ -84,7 +81,8 @@ Suggests: bsd-mailx | mailx,
           mutt,
           ssh-client,
           svn-buildpackage,
-          w3m
+          w3m,
+          ${vendor:Suggests}
 Breaks: ubuntu-dev-tools (<< 0.124~)
 Replaces: ubuntu-dev-tools (<< 0.124~)
 Description: scripts to make the life of a Debian Package maintainer easier

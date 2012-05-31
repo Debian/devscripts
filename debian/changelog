@@ -40,6 +40,9 @@ devscripts (2.11.8) UNRELEASED; urgency=low
   * devscripts.Logger Don't substitute arguments into logged strings unless
     they were provided. (LP: #968129)
   * debchange: Use distro-info to determine Ubuntu release names.
+  * Incorporate Ubuntu's delta:
+    Move debian-keyring, equivs, libcrypt-ssleay-perl, and libsoap-lite-perl
+    to Suggests when building on Ubuntu.
 
   [ Salvatore Bonaccorso ]
   * bts: When searching for usertags use tag= in the url (followed by

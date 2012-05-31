@@ -1,4 +1,13 @@
 #!/usr/bin/make -f
 
+UBU_SUGGESTS=debian-keyring, equivs, libcrypt-ssleay-perl, libsoap-lite-perl
+
 %:
 	dh $@ --with python2
+
+override_dh_gencontrol:
+ifeq ($(shell dpkg-vendor --derives-from Ubuntu && echo ubuntu),ubuntu)
+	dh_gencontrol -- -V'vendor:Suggests=$(UBU_SUGGESTS)' -V'vendor:Recommends='
+else
+	dh_gencontrol -- -V'vendor:Suggests=' -V'vendor:Recommends=$(UBU_SUGGESTS)'
+endif
