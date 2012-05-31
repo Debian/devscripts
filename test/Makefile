@@ -2,5 +2,6 @@ test:
 	./test_checkbashisms
 	./test_dd-list
 	./test_debchange
+	./test_licensecheck
 
 .PHONY: test
