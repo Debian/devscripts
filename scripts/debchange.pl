@@ -755,6 +755,7 @@ check_env_utf8('DEBFULLNAME');
 check_env_utf8('NAME');
 check_env_utf8('DEBEMAIL');
 check_env_utf8('EMAIL');
+check_env_utf8('UBUMAIL');
 
 if (exists $env{'DEBEMAIL'} and $env{'DEBEMAIL'} =~ /^(.*)\s+<(.*)>$/) {
     $env{'DEBFULLNAME'} = $1 unless exists $env{'DEBFULLNAME'};
@@ -765,6 +766,10 @@ if (! exists $env{'DEBEMAIL'} or ! exists $env{'DEBFULLNAME'}) {
 	$env{'DEBFULLNAME'} = $1 unless exists $env{'DEBFULLNAME'};
 	$env{'EMAIL'} = $2;
     }
+}
+if (exists $env{'UBUMAIL'} and $env{'UBUMAIL'} =~ /^(.*)\s+<(.*)>$/) {
+    $env{'DEBFULLNAME'} = $1 unless exists $env{'DEBFULLNAME'};
+    $env{'UBUMAIL'} = $2;
 }
 
 # Now use the gleaned values to detemine our MAINTAINER and EMAIL values
@@ -789,7 +794,8 @@ if (! $opt_m and ! $opt_M) {
     # changelog entry
 
     # Email is easier
-    if (exists $env{'DEBEMAIL'}) { $EMAIL = $env{'DEBEMAIL'}; }
+    if ($vendor eq 'Ubuntu' and exists $env{'UBUMAIL'}) { $EMAIL = $env{'UBUMAIL'}; }
+    elsif (exists $env{'DEBEMAIL'}) { $EMAIL = $env{'DEBEMAIL'}; }
     elsif (exists $env{'EMAIL'}) { $EMAIL = $env{'EMAIL'}; }
     else {
 	my $addr;
