@@ -24,6 +24,10 @@ license() {
     runCommand "licensecheck/$1" "licensecheck/$1: $2 " "" 0
 }
 
+testBeerware() {
+    license "beerware.cpp" "Beerware"
+}
+
 testLGPL() {
     license "lgpl-2.1.c" "LGPL (v2.1)"
     license "lgpl-2.1.h" "LGPL (v2.1)"

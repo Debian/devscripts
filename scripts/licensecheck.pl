@@ -481,6 +481,10 @@ sub parselicense($) {
 	$license = "Apache (v$1) $license";
     }
 
+    if ($licensetext =~ /(THE BEER-WARE LICENSE)/i) {
+	$license = "Beerware $license";
+    }
+
     if ($licensetext =~ /This source file is subject to version ([^ ]+) of the PHP license/) {
 	$license = "PHP (v$1) $license";
     }
