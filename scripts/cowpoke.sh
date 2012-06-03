@@ -220,6 +220,16 @@ cat > "$REMOTE_SCRIPT" <<-EOF
 	# cowpoke generated remote worker script.
 	# Normally this should have been deleted already, you can safely remove it now.
 
+	compare_changes()
+	{
+	    p1="\${1%_*.changes}"
+	    p2="\${2%_*.changes}"
+	    p1="\${p1##*_}"
+	    p2="\${p2##*_}"
+
+	    dpkg --compare-versions "\$p1" gt "\$p2"
+	}
+
 	$(get_archdist_vars)
 
 	for arch in $BUILDD_ARCH; do
@@ -243,12 +253,11 @@ cat > "$REMOTE_SCRIPT" <<-EOF
 	                    | sort 2>/dev/null)"
 	    P=( \$OLD_CHANGES )
 	    count=\${#P[*]}
-	    COMPARE="dpkg --compare-versions"
 
 	    for(( i=1; i < count; ++i )) do
 	        j=i
 	        #echo "was \$i: \${P[i]}"
-	        while ((\$j)) && \$COMPARE "\${P[j-1]%_*.changes}" gt "\${P[i]%_*.changes}"; do ((--j)); done
+	        while ((\$j)) && compare_changes "\${P[j-1]}" "\${P[i]}"; do ((--j)); done
 	        ((i==j)) || P=( \${P[@]:0:j} \${P[i]} \${P[j]} \${P[@]:j+1:i-(j+1)} \${P[@]:i+1} )
 	    done
 	    #for(( i=1; i < count; ++i )) do echo "now \$i: \${P[i]}"; done
