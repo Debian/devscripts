@@ -6,6 +6,9 @@ devscripts (2.11.9) UNRELEASED; urgency=low
   [ Ron Lee ]
   * cowpoke: Properly strip the arguments to dpkg --compare-versions
 
+  [ Christoph Berg ]
+  * debcheckout: Also recognize bzr+ssh:// schema.
+
  -- David Prévot <taffit@debian.org>  Thu, 31 May 2012 12:12:02 -0400
 
 devscripts (2.11.8) unstable; urgency=low
