@@ -35,7 +35,7 @@
 
 # 1. Subscribe to debian-devel-changes and/or debian-changes using your Debian
 #    e-mail address so that mail goes to your account on master.
-# 2. Change the enviroment variables below to specify the:
+# 2. Change the environment variables below to specify the:
 #      a) e-mail address that you want mail to be forwarded to
 #      b) the architectures you are NOT interested in
 #      c) the packages you are interested in
@@ -63,7 +63,7 @@ FORWARD=edward@hairnet.demon.co.uk
 # listed here until you add it to this line.
 ARCHS=alpha|arm|powerpc|sparc|m68k
 
-# Packages changes on other architectures of interest. This is basicly a list
+# Packages changes on other architectures of interest. This is basically a list
 # of the binary packages that I maintain. As far as I see it most developers
 # will just want to change this to a list of packages that they maintain.
 PACKAGES=colortail|esh|vh|x2vnc|sniffit	# Packages on other archs of interest

@@ -193,7 +193,7 @@ fi
 
 # Command line, env variable, config file, or default
 # This anomalous position is in case we need to check out the changelog
-# below (anaomalous since we ahve not loaded the config file yet)
+# below (anomalous since we have not loaded the config file yet)
 if [ ! "x$opt_prefix" = "x" ]; then
     prefix="$opt_prefix"
 elif [ ! "x$CVSDEB_PREFIX" = "x" ]; then

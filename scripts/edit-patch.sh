@@ -213,7 +213,7 @@ add_changelog() {
 }
 
 add_patch_tagging() {
-    # check if we have a descripton already
+    # check if we have a description already
     if grep "## Description:" $PREFIX/$1; then
         return
     fi

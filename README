@@ -84,7 +84,7 @@ And now, in mostly alphabetical order, the scripts:
 
 - debdiff: A program which examines two .deb files or two .changes files and
   reports on any difference found in their file lists.  Useful for ensuring
-  that no files were inadvertantly lost between versions.  Can also examine
+  that no files were inadvertently lost between versions.  Can also examine
   two .dsc files and report on the changes between source versions.
   [wdiff, patchutils]
 
@@ -103,7 +103,7 @@ And now, in mostly alphabetical order, the scripts:
   the system, so this should be done with caution.)  Having debpkg as
   a wrapper for dpkg can be a Good Thing (TM), as it decreases the
   potential for damage by accidental wrong use of commands in
-  superuser mode (e.g., an inadvertant rm -rf * in the wrong directory
+  superuser mode (e.g., an inadvertent rm -rf * in the wrong directory
   is disastrous as many can attest to).
 
 - debrelease: A wrapper around dupload or dput which figures out which
