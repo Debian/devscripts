@@ -862,7 +862,8 @@ if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and
 
 	    my $packager = "$MAINTAINER <$EMAIL>";
 
-	    if (! grep { $_ eq $packager } ($maintainer, @uploaders) and
+	    if ($maintainer !~ m/<packages\@qa\.debian\.org>/ and
+		! grep { $_ eq $packager } ($maintainer, @uploaders) and
 		$packager ne $changelog{'Maintainer'} and ! $opt_team) {
 		$opt_n=1;
 		$opt_a=0;
