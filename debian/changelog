@@ -12,6 +12,10 @@ devscripts (2.11.9) UNRELEASED; urgency=low
   [ Bernhard R. Link ]
   * debchange: fix NMU detection to not NMU QA packages (Closes: #676881)
 
+  [ James McCoy ]
+  * debchange: Add more documentation about the effects of changelog
+    heuristic.  (Closes: #673974)
+
  -- David Prévot <taffit@debian.org>  Thu, 31 May 2012 12:12:02 -0400
 
 devscripts (2.11.8) unstable; urgency=low

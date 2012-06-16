@@ -155,12 +155,20 @@ this will also change the suffix from buildX to ubuntu1.  Use
 a new section at the beginning of the changelog with appropriate
 headers and footers.  Also, if this is a new version of a native
 Debian package, the directory name is changed to reflect this.
+If \fBDEBCHANGE_RELEASE_HEURISTIC\fR is \fIchangelog\fR (default) and the
+current release is \fIUNRELEASED\fR, this will only change the version of the
+current changelog stanza.  Otherwise, this will create a new changelog stanza
+with the new version.
 .TP
 \fB\-\-newversion \fIversion\fR, \fB\-v \fIversion\fR
 This specifies the version number (including the Debian release part)
 explicitly and behaves as the \fB\-\-increment\fR option in other
 respects.  It will also change the directory name if the upstream
 version number has changed.
+If \fBDEBCHANGE_RELEASE_HEURISTIC\fR is \fIchangelog\fR (default) and the
+current release is \fIUNRELEASED\fR, this will only change the version of the
+current changelog stanza.  Otherwise, this will create a new changelog stanza
+with the new version.
 .TP
 .BR \-\-edit ", " \-e
 Edit the changelog in an editor.

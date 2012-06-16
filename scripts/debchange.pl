@@ -230,8 +230,8 @@ Options:
          Display version information
   At most one of -a, -i, -e, -r, -v, -d, -n, --bin-nmu, -q, --qa, -R, -s,
   --team, --bpo, -l (or their long equivalents) may be used.
-  With no options, one of -i or -a is chosen by looking for a .upload
-  file in the parent directory and checking its contents.
+  With no options, one of -i or -a is chosen by looking at the release
+  specified in the changelog.
 
 Default settings modified by devscripts configuration files:
 $modified_conf_msg
