@@ -1,3 +1,10 @@
+devscripts (2.11.9) UNRELEASED; urgency=low
+
+  The default for mk-build-deps --tool option/MKBUILDDEPS_TOOL configuration
+  changed from "apt-get" to "apt-get --no-install-recommends".
+
+ -- James McCoy <jamessan@debian.org>  Sat, 16 Jun 2012 11:57:21 -0400
+
 devscripts (2.11.7) unstable; urgency=low
 
   The heuristic used to determine what action to perform when no options are

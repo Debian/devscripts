@@ -480,7 +480,7 @@
 #### mk-build-deps
 #
 # Which tool to use for installing build depends?
-# MKBUILDDEPS_TOOL=/usr/bin/apt-get
+# MKBUILDDEPS_TOOL="/usr/bin/apt-get --no-install-recommends"
 #
 # Remove package files after install?
 # MKBUILDDEPS_REMOVE_AFTER_INSTALL=yes

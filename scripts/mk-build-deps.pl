@@ -52,7 +52,7 @@ Install the generated packages and its build-dependencies.
 =item B<-t>, B<--tool>
 
 When installing the generated package use the specified tool.
-(default: apt-get)
+(default: apt-get --no-install-recommends)
 
 =item B<-r>, B<--remove>
 
@@ -125,7 +125,7 @@ my @deb_files;
 
 my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
 my %config_vars = (
-		    'MKBUILDDEPS_TOOL' => '/usr/bin/apt-get',
+		    'MKBUILDDEPS_TOOL' => '/usr/bin/apt-get --no-install-recommends',
 		    'MKBUILDDEPS_REMOVE_AFTER_INSTALL' => 'no',
 		    'MKBUILDDEPS_ROOTCMD' => '',
 		    );
@@ -320,18 +320,14 @@ if ($opt_install) {
 	push @deb_files, $file;
     }
 
-    if($root_cmd) {
-        system shellwords($root_cmd), 'dpkg', '--unpack', @deb_files;
-        die("dpkg call failed\n") if ( ($?>>8) != 0 );
-        system shellwords($root_cmd), shellwords($install_tool), '-f', 'install';
-        die("install call failed\n") if ( ($?>>8) != 0 );
+    my @root;
+    if ($root_cmd) {
+	push(@root, shellwords($root_cmd));
     }
-    else {
-        system 'dpkg', '--unpack', @deb_files;
-        die("dpkg call failed\n") if ( ($?>>8) != 0 );
-        system shellwords($install_tool), '-f', 'install';
-        die("install call failed\n") if ( ($?>>8) != 0 );
-    }
+    system @root, 'dpkg', '--unpack', @deb_files;
+    die("dpkg call failed\n") if ( ($?>>8) != 0 );
+    system @root, shellwords($install_tool), '-f', 'install';
+    die("install call failed\n") if ( ($?>>8) != 0 );
 
     if ($opt_remove) {
 	foreach my $file (@deb_files) {
