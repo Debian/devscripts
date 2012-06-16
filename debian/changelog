@@ -15,6 +15,8 @@ devscripts (2.11.9) UNRELEASED; urgency=low
   [ James McCoy ]
   * debchange: Add more documentation about the effects of changelog
     heuristic.  (Closes: #673974)
+  * mk-build-deps: Provide a more descriptive README.Debian for generated
+    packages.  Thanks to chrysn for the patch.  (Closes: #675337)
 
  -- David Prévot <taffit@debian.org>  Thu, 31 May 2012 12:12:02 -0400
 

@@ -5,7 +5,7 @@ include Makefile.common
 DESTDIR =
 
 PERL_MODULES = Devscripts
-EXAMPLES = conf.default
+EXAMPLES = conf.default README.mk-build-deps
 
 PREFIX ?= /usr
 DOCDIR ?= $(PREFIX)/share/doc/devscripts

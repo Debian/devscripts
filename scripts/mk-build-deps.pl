@@ -367,6 +367,7 @@ sub build_equiv
 	$arch = $opt_arch;
     }
 
+    my $readme = '/usr/share/devscripts/README.mk-build-deps';
     open EQUIVS, "| equivs-build $args-"
 	or die "$progname: Failed to execute equivs-build: $!\n";
     print EQUIVS "Section: devel\n" .
@@ -375,6 +376,10 @@ sub build_equiv
     "Package: $opts->{name}-$opts->{type}\n".
     "Architecture: $arch\n".
     "Depends: build-essential, $opts->{depends}\n";
+
+    # Allow the file not to exist to ease testing
+    print EQUIVS "Readme: $readme\n" if -r $readme;
+
     print EQUIVS "Version: $opts->{version}\n" if $opts->{version};
 
     print EQUIVS "Description: build-dependencies for $opts->{name}\n" .
