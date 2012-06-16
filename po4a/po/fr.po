@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2012-06-16 14:57-0400\n"
-"PO-Revision-Date: 2012-05-31 07:55-0400\n"
+"PO-Revision-Date: 2012-06-16 15:07-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -6374,15 +6374,6 @@ msgstr "B<--increment>, B<-i>"
 # NOTE: signature
 #. type: Plain text
 #: ../scripts/debchange.1:162
-#, fuzzy
-#| msgid ""
-#| "Increment either the final component of the Debian release number or, if "
-#| "this is a native Debian package, the version number.  On Ubuntu, this "
-#| "will also change the suffix from buildX to ubuntu1.  Use B<-R>, B<--"
-#| "rebuild> for a no change rebuild increment.  This creates a new section "
-#| "at the beginning of the changelog with appropriate headers and footers.  "
-#| "Also, if this is a new version of a native Debian package, the directory "
-#| "name is changed to reflect this."
 msgid ""
 "Increment either the final component of the Debian release number or, if "
 "this is a native Debian package, the version number.  On Ubuntu, this will "
@@ -6399,9 +6390,13 @@ msgstr ""
 "natif, le numéro de version. Sur Ubuntu, cela modifiera aussi le suffixe "
 "buildX en ubuntu1. Utiliser B<-R>, B<--rebuild> pour un incrément de "
 "reconstruction sans modification. Cela crée une nouvelle section au début du "
-"journal de modification avec le bon en-tête et la signature. De plus, dans "
+"journal de modifications avec le bon en-tête et la signature. De plus, dans "
 "le cas d'une nouvelle version d'un paquet natif Debian, le nom du répertoire "
-"est modifié de manière à refléter ce changement de version."
+"est modifié de manière à refléter ce changement de version. Si "
+"B<DEBCHANGE_RELEASE_HEURISTIC> est I<changelog> (par défaut) et que la "
+"version actuelle est I<UNRELEASED>, cela ne modifiera que la version du "
+"paragraphe actuel du journal de modifications. Sinon, cela créera un nouveau "
+"paragraphe du journal de modifications avec la nouvelle version."
 
 #. type: TP
 #: ../scripts/debchange.1:162
@@ -6411,12 +6406,6 @@ msgstr "B<--newversion >I<version>, B<-v >I<version>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:172
-#, fuzzy
-#| msgid ""
-#| "This specifies the version number (including the Debian release part)  "
-#| "explicitly and behaves as the B<--increment> option in other respects.  "
-#| "It will also change the directory name if the upstream version number has "
-#| "changed."
 msgid ""
 "This specifies the version number (including the Debian release part)  "
 "explicitly and behaves as the B<--increment> option in other respects.  It "
@@ -6429,7 +6418,11 @@ msgstr ""
 "Indiquer explicitement le numéro de version (avec la partie relative à la "
 "version Debian). Cette option se comporte comme l'option B<--increment> pour "
 "les autres aspects. Le nom du répertoire sera également modifié si le numéro "
-"de version amont a changé."
+"de version amont a changé. Si B<DEBCHANGE_RELEASE_HEURISTIC> est "
+"I<changelog> (par défaut) et que la version actuelle est I<UNRELEASED>, cela "
+"ne modifiera que la version du paragraphe actuel du journal de "
+"modifications. Sinon, cela créera un nouveau paragraphe du journal de "
+"modifications avec la nouvelle version."
 
 #. type: TP
 #: ../scripts/debchange.1:172
@@ -15103,16 +15096,12 @@ msgstr "B<-t>, B<--tool>"
 
 #. type: textblock
 #: ../scripts/mk-build-deps.pl:54
-#, fuzzy
-#| msgid ""
-#| "When installing the generated package use the specified tool.  (default: "
-#| "apt-get)"
 msgid ""
 "When installing the generated package use the specified tool.  (default: apt-"
 "get --no-install-recommends)"
 msgstr ""
 "Pour l'installation du paquet généré, utiliser l'outil indiqué (par défaut : "
-"apt-get)."
+"apt-get --no-install-recommends)."
 
 #. type: =item
 #: ../scripts/mk-build-deps.pl:57
