@@ -104,13 +104,13 @@ class Install(object):
     def open(self, filename):
         assert os.path.isfile(filename), "%s does not exist." % (filename)
         self.filename = filename
-        self.content = open(filename).readlines()
+        self.content = [l.strip() for l in open(filename).readlines()]
 
     def save(self, filename=None):
         if filename:
             self.filename = filename
         install_file = open(self.filename, "w")
-        install_file.write("".join(self.content))
+        install_file.write("\n".join(self.content) + "\n")
         install_file.close()
 
     def sort(self):
