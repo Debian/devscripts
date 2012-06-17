@@ -473,8 +473,9 @@ if ($vendor eq 'Ubuntu' and ($opt_n or $opt_bn or $opt_qa or $opt_bpo)) {
 # Check the distro name given.
 if (defined $opt_D) {
     if ($vendor eq 'Debian') {
-	unless ($opt_D =~ /^(unstable|((old)?stable|testing)(-security)?|experimental|UNRELEASED|squeeze-backports|((oldstable|testing)-)?proposed-updates)$/) {
-	    warn "$progname warning: Recognised distributions are: unstable, testing, stable,\noldstable, experimental, UNRELEASED, squeeze-backports,\n{oldstable-,testing-,}proposed-updates and {testing,stable,oldstable}-security.\nUsing your request anyway.\n";
+	my $stable = get_debian_distro_info()->stable();
+	unless ($opt_D =~ /^(unstable|((old)?stable|testing)(-security)?|experimental|UNRELEASED|$stable-backports|((oldstable|testing)-)?proposed-updates)$/) {
+	    warn "$progname warning: Recognised distributions are: unstable, testing, stable,\noldstable, experimental, UNRELEASED, $stable-backports,\n{oldstable-,testing-,}proposed-updates and {testing,stable,oldstable}-security.\nUsing your request anyway.\n";
 	    $warnings++ if not $opt_force_dist;
 	}
     } elsif ($vendor eq 'Ubuntu') {
