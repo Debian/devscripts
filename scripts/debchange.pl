@@ -40,6 +40,7 @@ use File::Copy;
 use File::Basename;
 use Cwd;
 use Dpkg::Compression;
+use Dpkg::Vendor qw(get_current_vendor);
 use lib '/usr/share/devscripts';
 use Devscripts::Debbugs;
 
@@ -459,9 +460,9 @@ if (not $opt_vendor eq '') {
 	    $vendor = 'Ubuntu';
 	}
     }
-    if (not defined $vendor and system('command -v dpkg-vendor >/dev/null 2>&1') >> 8 == 0) {
-	$vendor = `dpkg-vendor --query Vendor 2>/dev/null`;
-	chomp $vendor;
+    if (not defined $vendor) {
+	# Get the vendor from dpkg-vendor (dpkg-vendor --query Vendor)
+	$vendor = get_current_vendor();
     }
 }
 $vendor ||= 'Debian';

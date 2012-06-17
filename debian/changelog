@@ -20,6 +20,10 @@ devscripts (2.11.9) UNRELEASED; urgency=low
       to chrysn for the patch.  (Closes: #675337)
     + Do not install Recommends by default.  (Closes: #575245)
 
+  [ Benjamin Drung ]
+  * debchange: Use the Dpkg::Vendor Perl API directly to avoid the overhead
+    of the command line dpkg-vendor script.
+
  -- David Prévot <taffit@debian.org>  Thu, 31 May 2012 12:12:02 -0400
 
 devscripts (2.11.8) unstable; urgency=low
