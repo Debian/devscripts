@@ -13,6 +13,10 @@ VERSION := $(shell cat $(VERSION_FILE))
 PL_FILES := $(wildcard *.pl)
 SH_FILES = $(wildcard *.sh)
 LIBS = libvfork.so.0
+CPPFLAGS = $(shell dpkg-buildflags --get CPPFLAGS)
+CFLAGS = $(shell dpkg-buildflags --get CFLAGS)
+CFLAGS += -std=c99
+LDFLAGS = $(shell dpkg-buildflags --get LDFLAGS)
 CWRAPPERS = debpkg-wrapper
 SCRIPTS = $(patsubst %.pl,%,$(PL_FILES)) $(patsubst %.sh,%,$(SH_FILES))
 COMPL_FILES := $(wildcard *.bash_completion)
@@ -60,9 +64,9 @@ devscripts.%: %.bash_completion
 	cp $< $@
 
 libvfork.o: libvfork.c
-	$(CC) -fPIC -D_REENTRANT $(CFLAGS) -c $<
+	$(CC) $(CPPFLAGS) $(CFLAGS) -fPIC -D_REENTRANT -c $<
 libvfork.so.0: libvfork.o
-	$(CC) -shared $< -lc -Wl,-soname -Wl,libvfork.so.0 -o $@
+	$(CC) $(LDFLAGS) -shared $< -lc -Wl,-soname -Wl,libvfork.so.0 -o $@
 
 clean:
 	python setup.py clean -a

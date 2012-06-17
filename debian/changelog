@@ -23,6 +23,7 @@ devscripts (2.11.9) UNRELEASED; urgency=low
   [ Benjamin Drung ]
   * debchange: Use the Dpkg::Vendor Perl API directly to avoid the overhead
     of the command line dpkg-vendor script.
+  * Use dpkg-buildflags for C code.
 
  -- David Prévot <taffit@debian.org>  Thu, 31 May 2012 12:12:02 -0400
 
