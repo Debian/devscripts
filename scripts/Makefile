@@ -13,10 +13,10 @@ VERSION := $(shell cat $(VERSION_FILE))
 PL_FILES := $(wildcard *.pl)
 SH_FILES = $(wildcard *.sh)
 LIBS = libvfork.so.0
-CPPFLAGS = $(shell dpkg-buildflags --get CPPFLAGS)
-CFLAGS = $(shell dpkg-buildflags --get CFLAGS)
+CPPFLAGS := $(shell dpkg-buildflags --get CPPFLAGS)
+CFLAGS := $(shell dpkg-buildflags --get CFLAGS)
 CFLAGS += -std=c99
-LDFLAGS = $(shell dpkg-buildflags --get LDFLAGS)
+LDFLAGS := $(shell dpkg-buildflags --get LDFLAGS)
 CWRAPPERS = debpkg-wrapper
 SCRIPTS = $(patsubst %.pl,%,$(PL_FILES)) $(patsubst %.sh,%,$(SH_FILES))
 COMPL_FILES := $(wildcard *.bash_completion)
