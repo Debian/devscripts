@@ -105,6 +105,17 @@ sub get_ubuntu_distro_info {
     return $ubuntu_distro_info;
 }
 
+sub get_ubuntu_devel_distro {
+    my $ubu_info = get_ubuntu_distro_info();
+    if ($ubu_info == 0 or !$ubu_info->devel()) {
+	warn "$progname warning: Unable to determine the current Ubuntu "
+	     . "development release. Using UNRELEASED instead.";
+	return 'UNRELEASED';
+    } else {
+	return $ubu_info->devel();
+    }
+}
+
 sub usage () {
     print <<"EOF";
 Usage: $progname [options] [changelog entry]
@@ -641,14 +652,7 @@ if (! $opt_create || ($opt_create && $opt_news)) {
     if ($vendor eq 'Ubuntu') {
 	# In Ubuntu the development release regularly changes, don't just copy
 	# the previous name.
-	my $ubu_info = get_ubuntu_distro_info();
-	if ($ubu_info == 0 or !$ubu_info->devel()) {
-	    warn "$progname warning: Unable to determine the current Ubuntu "
-	         . "development release. Using UNRELEASED instead." if (!$opt_D);
-	    $DISTRIBUTION = 'UNRELEASED';
-	} else {
-	    $DISTRIBUTION = $ubu_info->devel();
-	}
+	$DISTRIBUTION=get_ubuntu_devel_distro();
     } else {
 	$DISTRIBUTION=$changelog{'Distribution'};
     }
@@ -1394,15 +1398,7 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
 		    if ($opt_D) {
 			$distribution = $opt_D;
 		    } else {
-			my $ubu_info = get_ubuntu_distro_info();
-			if ($ubu_info == 0 or !$ubu_info->devel()) {
-			    warn "$progname warning: Unable to determine the "
-			         . "current Ubuntu development release. "
-			         . "Using UNRELEASED instead.";
-			    $distribution = 'UNRELEASED';
-			} else {
-			    $distribution = $ubu_info->devel();
-			}
+			$distribution = get_ubuntu_devel_distro();
 		    }
 		} else {
 		    $distribution = $opt_D || $lastdist || "unstable";

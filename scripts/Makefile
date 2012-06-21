@@ -35,6 +35,17 @@ $(VERSION_FILE):
 
 %: %.sh
 
+debchange: debchange.pl $(VERSION_FILE)
+	cp $< $@
+	sed -i "s/###VERSION###/$(VERSION)/" $@
+ifeq ($(shell dpkg-vendor --query Vendor),Ubuntu)
+# On Ubuntu always default to targeting the release that it's run from,
+# not the current devel release, since its primary use on stable releases
+# will be for preparing PPA uploads.
+	sed -i 's/get_ubuntu_devel_distro()/"$(shell lsb_release -cs)"/' $@
+endif
+	perl -I.. -c $@
+
 %.tmp: %.sh $(VERSION_FILE)
 	sed -e "s/###VERSION###/$(VERSION)/" $<  > $@
 	bash -n $@
