@@ -13,6 +13,8 @@ devscripts (2.11.10) UNRELEASED; urgency=low
   * dscverify: Use GetOptions to handle argument parsing.  (Closes: #679148)
   * uscan: Properly use the File::Temp interface so files aren't being created
     with the stringified version of a file glob.  (Closes: #678193)
+  * rc-alert: Unset wget's continue option to ensure the bug list is properly
+    downloaded.  (Closes: #677229)
 
  -- Benjamin Drung <bdrung@debian.org>  Sun, 17 Jun 2012 23:33:41 +0200
 

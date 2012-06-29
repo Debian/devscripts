@@ -171,7 +171,9 @@ if (! -d $cachedir and $forcecache) {
 if (-d $cachedir) {
     chdir $cachedir or die "$progname: can't cd $cachedir: $!\n";
 
-    if (system("wget -qN $url") != 0) {
+    # Either use the cached version because the remote hasn't been updated
+    # (-N) or download a complete new copy (--no-continue)
+    if (system('wget', '-qN', '--no-continue', $url) != 0) {
 	die "$progname: wget failed!\n";
     }
     open BUGS, $cachefile or die "$progname: could not read $cachefile: $!\n";
