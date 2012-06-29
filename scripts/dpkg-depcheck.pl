@@ -180,31 +180,26 @@ $opts{"pkgs"} = 'all';
 $opts{"allpkgs"} = 0;
 
 Getopt::Long::Configure('bundling','require_order');
-my $opts_ret =
-    GetOptions("h|help" => sub { usage(); exit; },
-	       "v|version" => sub { version(); exit; },
-	       "a|all" => sub { $opts{"allpkgs"}=1; },
-	       "b|build-depends" => sub { $opts{"pkgs"}='build'; },
-	       "d|ignore-dev-deps" => sub { $opts{"pkgs"}='dev'; },
-	       "m|min-deps" => sub { $opts{"pkgs"}='min'; },
-	       "C|C-locale" => \$opts{"C"},
-	       "no-C-locale|noC-locale" => sub { $opts{"C"}=0; },
-	       "l|list-files" => \$opts{"l"},
-	       "no-list-files|nolist-files" => sub { $opts{"l"}=0; },
-	       "o|output=s" => \$opts{"o"},
-	       "O|strace-output=s" => \$opts{"strace-output"},
-	       "I|strace-input=s" => \$opts{"strace-input"},
-	       "f|features=s" => \&process_features,
-	       "no-conf" => \$opts{"noconf"},
-	       "noconf" => \$opts{"noconf"},
-	       );
+GetOptions("h|help" => sub { usage(); exit; },
+           "v|version" => sub { version(); exit; },
+           "a|all" => sub { $opts{"allpkgs"}=1; },
+           "b|build-depends" => sub { $opts{"pkgs"}='build'; },
+           "d|ignore-dev-deps" => sub { $opts{"pkgs"}='dev'; },
+           "m|min-deps" => sub { $opts{"pkgs"}='min'; },
+           "C|C-locale" => \$opts{"C"},
+           "no-C-locale|noC-locale" => sub { $opts{"C"}=0; },
+           "l|list-files" => \$opts{"l"},
+           "no-list-files|nolist-files" => sub { $opts{"l"}=0; },
+           "o|output=s" => \$opts{"o"},
+           "O|strace-output=s" => \$opts{"strace-output"},
+           "I|strace-input=s" => \$opts{"strace-input"},
+           "f|features=s" => \&process_features,
+           "no-conf" => \$opts{"noconf"},
+           "noconf" => \$opts{"noconf"},
+           ) or do { usage; exit 1; };
 
 if ($opts{"noconf"}) {
     die "$progname: --no-conf is only acceptable as the first command-line option!\n";
-}
-
-if (! $opts_ret) {
-    die "$progname: I didn't recognise some command-line option there;\nplease fix and try again.  (Use --help for more info.)\n";
 }
 
 if ($opts{"pkgs"} eq 'all') {

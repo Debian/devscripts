@@ -138,7 +138,7 @@ GetOptions("help|h" => \$opt_help,
 	   "popcon" => \$popcon,
 	   "pc-vote" => \$popcon_by_vote,
 	   "pc-local" => \$popcon_local,
-	   );
+	   ) or do { print $usage; exit 1; };
 
 if ($opt_help) { print $usage; exit 0; }
 if ($opt_version) { print $version; exit 0; }

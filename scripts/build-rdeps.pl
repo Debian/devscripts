@@ -281,7 +281,7 @@ GetOptions(
 	"d|debug" => \$opt_debug,
 	"h|help" => sub { usage; },
 	"v|version" => sub { version; }
-);
+) or do { usage; exit 1; };
 
 my $package = shift;
 

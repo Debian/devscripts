@@ -202,7 +202,7 @@ sub verbose($)
 read_conf(@ARGV);
 Getopt::Long::Configure('gnu_compat');
 Getopt::Long::Configure('no_ignore_case');
-GetOptions(\%opt, 'verbose|v', 'destdir|d=s', 'force|f', 'help|h', 'version', 'binary', 'architecture|a=s@') || exit 1;
+GetOptions(\%opt, 'verbose|v', 'destdir|d=s', 'force|f', 'help|h', 'version', 'binary', 'architecture|a=s@') || usage(1);
 
 usage(0) if $opt{help};
 usage(1) unless @ARGV;

@@ -1,10 +1,15 @@
 devscripts (2.11.10) UNRELEASED; urgency=low
 
+  [ Benjamin Drung ]
   * debchange:
     - Query name for stable-backport from distro-info.
     - On Ubuntu always default to targeting the release that it's run from,
       not the current devel release, since its primary use on stable releases
       will be for preparing PPA uploads. (LP: #1001068)
+
+  [ James McCoy ]
+  * build-rdeps, chdist, debsnap, dpkg-depcheck, rc-alert: Exit when unknown
+    options are provided.  (Closes: #679374)
 
  -- Benjamin Drung <bdrung@debian.org>  Sun, 17 Jun 2012 23:33:41 +0200
 

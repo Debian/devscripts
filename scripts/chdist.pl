@@ -175,7 +175,7 @@ GetOptions(
   "data-dir=s" => \$datadir,
   "arch=s"     => \$arch,
   "version"    => \$version,
-);
+) or usage(1);
 
 # Fix-up relative paths
 $datadir = cwd() . "/$datadir" if $datadir !~ m!^/!;
