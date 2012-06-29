@@ -1354,7 +1354,7 @@ EOF
     if ($repack and $newfile_base =~ /^(.*)\.(tar\.bz2|tbz2?)$/) {
 	print "-- Repacking from bzip2 to gzip\n" if $verbose;
 	my $newfile_base_gz = "$1.tar.gz";
-	my $fname = tempfile(UNLINK => 1);
+	my (undef, $fname) = tempfile(UNLINK => 1);
 	spawn(exec => ['bunzip2', '-c', "$destdir/$newfile_base"],
 	      to_file => $fname,
 	      wait_child => 1);
@@ -1369,7 +1369,7 @@ EOF
     if ($repack and $newfile_base =~ /^(.*)\.(tar\.lzma|tlz(?:ma?)?)$/) {
 	print "-- Repacking from lzma to gzip\n" if $verbose;
 	my $newfile_base_gz = "$1.tar.gz";
-	my $fname = tempfile(UNLINK => 1);
+	my (undef, $fname) = tempfile(UNLINK => 1);
 	spawn(exec => ['xz', '-F', 'lzma', '-cd', "$destdir/$newfile_base"],
 	      to_file => $fname,
 	      wait_child => 1);
@@ -1384,7 +1384,7 @@ EOF
     if ($repack and $newfile_base =~ /^(.*)\.(tar\.xz|txz)$/) {
 	print "-- Repacking from xz to gzip\n" if $verbose;
 	my $newfile_base_gz = "$1.tar.gz";
-	my $fname = tempfile(UNLINK => 1);
+	my (undef, $fname) = tempfile(UNLINK => 1);
 	spawn(exec => ['xz', '-cd', "$destdir/$newfile_base"],
 	      to_file => $fname,
 	      wait_child => 1);

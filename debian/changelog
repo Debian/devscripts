@@ -11,6 +11,8 @@ devscripts (2.11.10) UNRELEASED; urgency=low
   * build-rdeps, chdist, debsnap, dpkg-depcheck, rc-alert: Exit when unknown
     options are provided.  (Closes: #679374)
   * dscverify: Use GetOptions to handle argument parsing.  (Closes: #679148)
+  * uscan: Properly use the File::Temp interface so files aren't being created
+    with the stringified version of a file glob.  (Closes: #678193)
 
  -- Benjamin Drung <bdrung@debian.org>  Sun, 17 Jun 2012 23:33:41 +0200
 
