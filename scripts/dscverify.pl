@@ -26,6 +26,7 @@ use strict;
 use Cwd;
 use File::Basename;
 use POSIX	qw(:errno_h);
+use Getopt::Long qw(:config gnu_getopt);
 
 BEGIN {
     eval { require Digest::MD5; };
@@ -346,52 +347,22 @@ sub main {
 	@rings = split /\s*:\s*/, $config_vars{'DSCVERIFY_KEYRINGS'};
     }
 
-    ## handle command-line options
-    while (@ARGV > 0) {
-	if ($ARGV[0] eq '--help') { usage; exit 0; }
-	if ($ARGV[0] eq '--version') { print $version; exit 0; }
-	if ($ARGV[0] =~ /^(--no(sig|-sig-)check|-u)$/) { $verify_sigs = 0; shift @ARGV; }
-	if ($ARGV[0] =~ /^--no-?conf$/) {
-	    xdie "$ARGV[0] is only acceptable as the first command-line option!\n";
-	}
-	if ($ARGV[0] eq '--no-default-keyrings') {
-	    $use_default_keyrings = 0;
-	    shift @ARGV;
-	}
-	if ($ARGV[0] eq '--keyring') {
-	    shift @ARGV;
-	    if (@ARGV > 0) {
-		my $ring = shift @ARGV;
-		if (-r $ring) {
-		    push @rings, $ring;
-		}
-		else {
-		    xwarn "Keyring $ring unreadable\n";
-		}
-	    }
-	    # Don't need an 'else' here; a trailing --keyring will cause
-	    # the program to die anyway (no .changes file)
-	    next;
-	}
-	if ($ARGV[0] =~ s/^--keyring=//) {
-	    my $ring = shift @ARGV;
-	    if (-r $ring) {
-		push @rings, $ring;
-	    }
-	    else {
-		xwarn "Keyring $ring unreadable\n";
-	    }
-	    next;
-	}
-	if ($ARGV[0] eq '--verbose') {
-	    shift @ARGV;
-	    $verbose = 1;
-	}
-	if ($ARGV[0] eq '--') {
-	    shift @ARGV; last;
-	}
-	last;
-    }
+    GetOptions(
+	'help' => sub { usage; exit 0; },
+	'version' => sub { print $version; exit 0; },
+	'sigcheck|sig-check!' => \$verify_sigs,
+	'u' => sub { $verify_sigs = 0 },
+	'noconf|no-conf' => sub {
+	    die "--$_[0] is only acceptable as the first command-line option!\n";
+	},
+	'default-keyrings!' => \$use_default_keyrings,
+	'keyring=s@' => sub {
+	    my $ring = $_[1];
+	    if (-r $ring) { push @rings, $ring; }
+	    else { die "Keyring $ring unreadable\n" }
+	},
+	'verbose' => \$verbose,
+    ) or do { usage; exit 1 };
 
     @ARGV or xdie "no .changes or .dsc files specified\n";
 

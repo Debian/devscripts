@@ -10,6 +10,7 @@ devscripts (2.11.10) UNRELEASED; urgency=low
   [ James McCoy ]
   * build-rdeps, chdist, debsnap, dpkg-depcheck, rc-alert: Exit when unknown
     options are provided.  (Closes: #679374)
+  * dscverify: Use GetOptions to handle argument parsing.  (Closes: #679148)
 
  -- Benjamin Drung <bdrung@debian.org>  Sun, 17 Jun 2012 23:33:41 +0200
 
