@@ -99,11 +99,6 @@ sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\
 cut -f3 -d' ' $WNPP | sort > $WNPP_PACKAGES
 
 # A list of installed files.
-# This shouldn't use knowledge of the internal /var/lib/dpkg/status
-# format directly, but speed ...
-# For the correct settings of -B# -A#, keep up-to-date with
-# the dpkg source, defn of fieldinfos[] in lib/parse.c
-# (and should match Devscripts/Packages.pm)
 
 if [ $# -gt 0 ]; then
     echo $* | tr ' ' '\n' | sort -u > $INSTALLED
