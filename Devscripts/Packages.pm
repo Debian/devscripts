@@ -61,6 +61,16 @@ the corresponding source packages as well in the list.
 
 =cut
 
+my $multiarch;
+
+sub multiarch ()
+{
+    if (!defined $multiarch) {
+	$multiarch = (system('dpkg --assert-multi-arch >/dev/null 2>&1') >> 8) == 0;
+    }
+    return $multiarch;
+}
+
 # input: a list of packages names.
 # output: list of files they contain.
 
@@ -148,69 +158,66 @@ sub FilesToPackages (@)
 
 
     my %packages=();
-    my ($curfile, $pkgfrom);
-    undef $pkgfrom;
-    $curfile = shift;
-
-    foreach (@dpkg_out) {
-	# We want to handle diversions nicely.
-	# Ignore local diversions
-	if (/^local diversion from: /) {
-	    # Do nothing
-	}
-	elsif (/^local diversion to: (.+)$/) {
-	    if ($curfile eq $1) {
-		$curfile = shift;
+    foreach my $curfile (@_) {
+	my $pkgfrom;
+	foreach my $line (@dpkg_out) {
+	    # We want to handle diversions nicely.
+	    # Ignore local diversions
+	    if ($line =~ /^local diversion from: /) {
+		# Do nothing
 	    }
-	}
-	elsif (/^diversion by (\S+) from: (.+)$/) {
-	    if ($curfile eq $2) {
-		# So the file we're looking has been diverted
-		$pkgfrom=$1;
+	    elsif ($line =~ /^local diversion to: (.+)$/) {
+		if ($curfile eq $1) {
+		    last;
+		}
 	    }
-	}
-	elsif (/^diversion by (\S+) to: (.+)$/) {
-	    if ($curfile eq $2) {
-		# So the file we're looking is a diverted file
-		# We shouldn't see it again
-		$packages{$1} = 1;
-		$curfile = shift;
+	    elsif ($line =~ /^diversion by (\S+) from: (.+)$/) {
+		if ($curfile eq $2) {
+		    # So the file we're looking has been diverted
+		    $pkgfrom=$1;
+		}
 	    }
-	}
-	elsif (/^dpkg: \Q$curfile\E not found\.$/) {
-	    $curfile = shift;
-	}
-	elsif (/^dpkg-query: no path found matching pattern \Q$curfile\E\.$/) {
-	    $curfile = shift;
-	}
-	elsif (/^(.*): \Q$curfile\E$/) {
-	    my @pkgs = split /,\s+/, $1;
-	    if (@pkgs == 1 || !grep /:/, @pkgs) {
-		# Only one package, or all Multi-Arch packages
-		map { $packages{$_} = 1 } @pkgs;
+	    elsif ($line =~ /^diversion by (\S+) to: (.+)$/) {
+		if ($curfile eq $2) {
+		    # So the file we're looking is a diverted file
+		    # We shouldn't see it again
+		    $packages{$1} = 1;
+		    last;
+		}
 	    }
-	    else {
-		# We've got a file which has been diverted by some package
-		# or is Multi-Arch and so is listed in two packages.  If it
-		# was diverted, the *diverting* package is the one with the
-		# file that was actually used.
-		my $found=0;
-		foreach my $pkg (@pkgs) {
-		    if ($pkg eq $pkgfrom) {
-			$packages{$pkgfrom} = 1;
-			$found=1;
-			last;
+	    elsif ($line =~ /^dpkg: \Q$curfile\E not found\.$/) {
+		last;
+	    }
+	    elsif ($line =~ /^dpkg-query: no path found matching pattern \Q$curfile\E\.$/) {
+		last;
+	    }
+	    elsif ($line =~ /^(.*): \Q$curfile\E$/) {
+		my @pkgs = split /,\s+/, $1;
+		if (@pkgs == 1 || !grep /:/, @pkgs) {
+		    # Only one package, or all Multi-Arch packages
+		    map { $packages{$_} = 1 } @pkgs;
+		}
+		else {
+		    # We've got a file which has been diverted by some package
+		    # or is Multi-Arch and so is listed in two packages.  If it
+		    # was diverted, the *diverting* package is the one with the
+		    # file that was actually used.
+		    my $found=0;
+		    foreach my $pkg (@pkgs) {
+			if ($pkg eq $pkgfrom) {
+			    $packages{$pkgfrom} = 1;
+			    $found=1;
+			    last;
+			}
+		    }
+		    if (! $found) {
+			carp("Something wicked happened to the output of dpkg -S $curfile");
 		    }
 		}
-		if (! $found) {
-		    carp("Something wicked happened to the output of dpkg -S $curfile");
-		}
+		# Prepare for the next round
+		last;
 	    }
-	    # Prepare for the next round
-	    $curfile = shift;
-	    undef $pkgfrom;
 	}
-
     }
 
     return keys %packages;
@@ -232,6 +239,9 @@ sub PackagesMatch ($)
 	   && $ctrl->parse(\*STATUS, '/var/lib/dpkg/status')) {
 	if ("$ctrl" =~ m/$match/m) {
 	    my $package = $ctrl->{Package};
+	    if ($ctrl->{Architecture} ne 'all' && multiarch) {
+		$package .= ":$ctrl->{Architecture}";
+	    }
 	    push @matches, $package;
 	}
 	undef $ctrl;
@@ -264,6 +274,9 @@ sub InstalledPackages ($)
 	}
 	if (exists $ctrl->{Package}) {
 	    $matches{$ctrl->{Package}} = 1;
+	    if ($ctrl->{Architecture} ne 'all' && multiarch) {
+		$matches{"$ctrl->{Package}:$ctrl->{Architecture}"} = 1;
+	    }
 	}
 	undef $ctrl;
     }

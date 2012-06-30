@@ -49,8 +49,17 @@ sub new ($$)
     return $self;
 }
 
+# Internal functions
 
-# Internal function
+my $multiarch;
+
+sub multiarch ()
+{
+    if (!defined $multiarch) {
+	$multiarch = (system('dpkg --assert-multi-arch >/dev/null 2>&1') >> 8) == 0;
+    }
+    return $multiarch;
+}
 
 sub parse ($$)
 {
@@ -95,6 +104,11 @@ sub parse ($$)
 	}
 
 	$self->{$pkg} = \@deps;
+	if ($ctrl->{Architecture} ne 'all' && multiarch) {
+	    my $arch = $ctrl->{Architecture};
+	    @deps = map { "$_:$arch" } @deps;
+	    $self->{"$pkg:$arch"} = \@deps;
+	}
 	undef $ctrl;
     }
     close PACKAGE_FILE or

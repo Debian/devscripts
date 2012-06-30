@@ -17,8 +17,10 @@ devscripts (2.11.10) UNRELEASED; urgency=low
     + Unset wget's continue option to ensure the bug list is properly
       downloaded.  (Closes: #677229)
     + Handle rc bugs assigned to source packages.  (Closes: #576853)
-  * Devscripts/Packages.pm, Devscripts/PackageDeps.pm: Parse dpkg's status
-    file using Dpkg::Control.
+  * Devscripts/Packages.pm, Devscripts/PackageDeps.pm:
+    + Parse dpkg's status file using Dpkg::Control.
+    + Make functions Multi-Arch aware so they can handle $pkg:$arch naming.
+      (Closes: #664811)
 
  -- Benjamin Drung <bdrung@debian.org>  Sun, 17 Jun 2012 23:33:41 +0200
 
