@@ -19,6 +19,7 @@
 package Devscripts::Packages;
 
 use Carp;
+use Dpkg::Control;
 
 BEGIN{
   use Exporter   ();
@@ -183,12 +184,16 @@ sub FilesToPackages (@)
 	    $curfile = shift;
 	}
 	elsif (/^(.*): \Q$curfile\E$/) {
-	    my @pkgs = split /, /, $1;
-	    if (@pkgs==1) { $packages{$pkgs[0]} = 1; }
+	    my @pkgs = split /,\s+/, $1;
+	    if (@pkgs == 1 || !grep /:/, @pkgs) {
+		# Only one package, or all Multi-Arch packages
+		map { $packages{$_} = 1 } @pkgs;
+	    }
 	    else {
 		# We've got a file which has been diverted by some package
-		# and so is listed in two packages.  The *diverting* package
-		# is the one with the file that was actually used.
+		# or is Multi-Arch and so is listed in two packages.  If it
+		# was diverted, the *diverting* package is the one with the
+		# file that was actually used.
 		my $found=0;
 		foreach my $pkg (@pkgs) {
 		    if ($pkg eq $pkgfrom) {
@@ -216,21 +221,20 @@ sub FilesToPackages (@)
 
 sub PackagesMatch ($)
 {
-    my $package;
     my $match=$_[0];
     my @matches=();
 
     open STATUS, '/var/lib/dpkg/status'
 	or croak("Can't read /var/lib/dpkg/status: $!");
 
-    while(<STATUS>) {
-	chomp;
-	s/\s+$//;
-	if (/^Package: (.+)$/) { $package=$1; next; }
-	/$match/ or next;
-	push @matches, $package if $package;
-	# So we only pick up each package at most once
-	undef $package;
+    my $ctrl;
+    while (defined($ctrl = Dpkg::Control->new())
+	   && $ctrl->parse(\*STATUS, '/var/lib/dpkg/status')) {
+	if ("$ctrl" =~ m/$match/m) {
+	    my $package = $ctrl->{Package};
+	    push @matches, $package;
+	}
+	undef $ctrl;
     }
 
     close STATUS or croak("Problem reading /var/lib/dpkg/status: $!");
@@ -239,24 +243,32 @@ sub PackagesMatch ($)
 
 
 # Which packages are installed (Package and Source)?
-# This uses internal knowledge about the /var/lib/dpkg/status file
-# for efficiency - it runs 3 times faster than if it didn't use this
-# info....  And calling a shell script is faster still: thanks to
-# Arthur Korn <arthur@korn.ch> for this one ;-)
-# For the correct settings of -B# -A#, keep up-to-date with
-# the dpkg source, defn of fieldinfos[] in lib/parse.c
-# (and should match wnpp-alert.sh)
 
 sub InstalledPackages ($)
 {
-    my $grep_pattern = $_[0] ? '^\(Package\|Source\):' : '^Package:';
+    my $source = $_[0];
 
-    open (PKG, qq[grep -B2 -A7 'Status: install ok installed' /var/lib/dpkg/status | grep '$grep_pattern' | cut -f2 -d' ' |])
-	or croak("Problem opening grep pipe: $!");
+    open STATUS, '/var/lib/dpkg/status'
+	or croak("Can't read /var/lib/dpkg/status: $!");
 
-    my %matches = map { chomp; $_ => 1 } <PKG>;
+    my $ctrl;
+    while (defined($ctrl = Dpkg::Control->new(type => CTRL_FILE_STATUS))
+	   && $ctrl->parse(\*STATUS, '/var/lib/dpkg/status')) {
+	if ($ctrl->{Status} !~ /^install\s+ok\s+installed$/) {
+	    next;
+	}
+	if ($source) {
+	    if (exists $ctrl->{Source}) {
+		$matches{$ctrl->{Source}} = 1;
+	    }
+	}
+	if (exists $ctrl->{Package}) {
+	    $matches{$ctrl->{Package}} = 1;
+	}
+	undef $ctrl;
+    }
 
-    close PKG or croak("Problem reading grep pipe: $!");
+    close STATUS or croak("Problem reading /var/lib/dpkg/status: $!");
 
     return \%matches;
 }

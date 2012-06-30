@@ -20,11 +20,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+package Devscripts::PackageDeps;
 use strict;
 use Carp;
+use Dpkg::Control;
 require 5.006_000;
 
-package Devscripts::PackageDeps;
 
 # This reads in a package file list, such as /var/lib/dpkg/status,
 # and parses it.
@@ -62,27 +63,27 @@ sub parse ($$)
     open PACKAGE_FILE, $filename or
 	croak("Unable to load $filename: $!");
 
-    local $/;
-    $/="";  # Split on blank lines
-
+    my $ctrl;
  PACKAGE_ENTRY:
-    while (<PACKAGE_FILE>) {
-	if (/^\s*$/) { next; }
+    while (defined($ctrl = Dpkg::Control->new(type => CTRL_FILE_STATUS))
+	   && $ctrl->parse(\*PACKAGE_FILE, $filename)) {
 
 	# So we've got a package
-	my $pkg;
+	my $pkg = $ctrl->{Package};
 	my @deps = ();
 
-	chomp;
-	s/\n\s+/\376\377/g; # fix continuation lines
-	s/\376\377\s*\376\377/\376\377/og;
+	if ($ctrl->{Status} =~ /^\S+\s+\S+\s+(\S+)$/) {
+	    my $status = $1;
+	    unless ($status eq 'installed' or $status eq 'unpacked') {
+		undef $ctrl;
+		next PACKAGE_ENTRY;
+	    }
+	}
 
-	while (/^(\S+):\s*(.*?)\s*$/mg) {
-	    my ($key, $value) = (lc $1, $2);
-	    $value =~ s/\376\377/\n /g;
-	    if ($key eq 'package') { $pkg = $value; }
-	    elsif ($key =~ /^(pre-)?depends$/) {
-		$value =~ s/\(.*?\)//g;  # ignore versioning information
+	for my $dep (qw(Depends Pre-Depends)) {
+	    if (exists $ctrl->{$dep}) {
+		my $value = $ctrl->{$dep};
+		$value =~ s/\([^)]+\)//g;  # ignore versioning information
 		$value =~ tr/ \t//d;  # remove spaces
 		my @dep_pkgs = split /,/, $value;
 		foreach my $dep_pkg (@dep_pkgs) {
@@ -91,19 +92,10 @@ sub parse ($$)
 		    else { push @deps, \@dep_pkg_alts; }
 		}
 	    }
-	    elsif ($key eq 'status') {
-		unless ($value =~ /^\S+\s+\S+\s+(\S+)$/) {
-		    warn "Unrecognised Status line in $filename:\nStatus: $value\n";
-		}
-		my $status = $1;
-		# Hopefully, the system is in a nice state...
-		# Ignore broken packages and removed but not purged packages
-		next PACKAGE_ENTRY unless
-		    $status eq 'installed' or $status eq 'unpacked';
-	    }
 	}
 
 	$self->{$pkg} = \@deps;
+	undef $ctrl;
     }
     close PACKAGE_FILE or
 	croak("Problems encountered reading $filename: $!");
