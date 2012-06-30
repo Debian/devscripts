@@ -190,7 +190,7 @@ if (@ARGV) {
     $package_list = \%tmp;
 }
 else {
-    $package_list = InstalledPackages(0);
+    $package_list = InstalledPackages(1);
 }
 
 ## Get popcon information
@@ -278,7 +278,11 @@ sub remove_duplicate_values($) {
 sub store_if_relevant(%) {
     my %args = @_;
 
-    if (exists($$package_list{$args{pkg}})) {
+    my $pkgname = $args{pkg};
+    $args{pkg} =~ s/^src://;
+
+    if (exists($package_list->{$args{pkg}})
+        || exists($package_list->{$pkgname})) {
 	# potentially relevant
 	my ($flags, $flagsapply) = human_flags($args{tags});
 	my $distsapply = 1;
@@ -294,7 +298,7 @@ sub store_if_relevant(%) {
 	}
 
 	# yep, relevant
-	my $bug_string = "Package: $args{pkg}\n" .
+	my $bug_string = "Package: $pkgname\n" .
 	    $comment .  # non-empty comments always contain the trailing \n
 	    "Bug:     $args{num}\n" .
 	    "Title:   " . unhtmlsanit($args{name}) . "\n" .
