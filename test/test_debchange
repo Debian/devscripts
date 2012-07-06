@@ -34,12 +34,31 @@ checkVersion() {
     assertEquals "\"dch $param\" from version $start_version" "$expected_version" "$version"
 }
 
+checkDebianDistribution() {
+    checkVersion "--vendor Debian -D unstable" "--vendor Debian -i -D $1" "1.0-1" "1.0-2"
+}
+
 checkDebianVersion() {
     checkVersion "--vendor Debian -D unstable" "--vendor Debian $1" "$2" "$3"
 }
 
 checkUbuntuVersion() {
     checkVersion "--vendor Debian -D unstable" "--vendor Ubuntu $1" "$2" "$3"
+}
+
+testDebianDistributions() {
+    checkDebianDistribution "experimental"
+    checkDebianDistribution "oldstable"
+    checkDebianDistribution "oldstable-proposed-updates"
+    checkDebianDistribution "oldstable-security"
+    checkDebianDistribution "proposed-updates"
+    checkDebianDistribution "stable"
+    checkDebianDistribution "stable-proposed-updates"
+    checkDebianDistribution "stable-security"
+    checkDebianDistribution "testing"
+    checkDebianDistribution "testing-proposed-updates"
+    checkDebianDistribution "testing-security"
+    checkDebianDistribution "UNRELEASED"
 }
 
 testDebianIncrement() {
