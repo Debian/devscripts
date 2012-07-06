@@ -484,10 +484,19 @@ if ($vendor eq 'Ubuntu' and ($opt_n or $opt_bn or $opt_qa or $opt_bpo)) {
 # Check the distro name given.
 if (defined $opt_D) {
     if ($vendor eq 'Debian') {
-	my $stable = get_debian_distro_info()->stable();
-	unless ($opt_D =~ /^(unstable|((old)?stable|testing)(-security)?|experimental|UNRELEASED|$stable-backports|((oldstable|testing)-)?proposed-updates)$/) {
-	    warn "$progname warning: Recognised distributions are: unstable, testing, stable,\noldstable, experimental, UNRELEASED, $stable-backports,\n{oldstable-,testing-,}proposed-updates and {testing,stable,oldstable}-security.\nUsing your request anyway.\n";
-	    $warnings++ if not $opt_force_dist;
+	unless ($opt_D =~ /^(unstable|((old)?stable|testing)(-security)?|experimental|UNRELEASED|((oldstable|testing)-)?proposed-updates)$/) {
+	    my $deb_info = get_debian_distro_info();
+	    my $stable_backports = "";
+	    if ($deb_info == 0) {
+		warn "$progname warning: Unable to determine Debian's backport distributions.\n";
+	    } else {
+		$stable_backports = $deb_info->stable() . "-backports";
+	    }
+	    if ($deb_info == 0 || not $opt_D eq $stable_backports) {
+		$stable_backports = " " . $stable_backports . "," if not $stable_backports eq "";
+		warn "$progname warning: Recognised distributions are: unstable, testing, stable,\noldstable, experimental, UNRELEASED,$stable_backports\n{oldstable-,testing-,}proposed-updates and {testing,stable,oldstable}-security.\nUsing your request anyway.\n";
+		$warnings++ if not $opt_force_dist;
+	    }
 	}
     } elsif ($vendor eq 'Ubuntu') {
 	if ($opt_D eq 'UNRELEASED') {
