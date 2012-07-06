@@ -109,7 +109,7 @@ sub get_ubuntu_devel_distro {
     my $ubu_info = get_ubuntu_distro_info();
     if ($ubu_info == 0 or !$ubu_info->devel()) {
 	warn "$progname warning: Unable to determine the current Ubuntu "
-	     . "development release. Using UNRELEASED instead.";
+	     . "development release. Using UNRELEASED instead.\n";
 	return 'UNRELEASED';
     } else {
 	return $ubu_info->devel();
@@ -507,14 +507,12 @@ if (defined $opt_D) {
 	    my $ubu_info = get_ubuntu_distro_info();
 	    if ($ubu_info == 0) {
 		warn "$progname warning: Unable to determine if $ubu_release "
-		     . "is a valid Ubuntu release";
+		     . "is a valid Ubuntu release.\n";
 	    } elsif (! $ubu_info->valid($ubu_release)) {
-		printf STDERR "$progname warning: Recognised distributions "
-		              . "are:\n{"
-		              . join(',', $ubu_info->supported())
-		              . "}{,-updates,-security,-proposed,-backports} "
-		              . "and UNRELEASED.\n"
-		              . "Using your request anyway.\n";
+		warn "$progname warning: Recognised distributions are:\n{"
+		     . join(',', $ubu_info->supported())
+		     . "}{,-updates,-security,-proposed,-backports} and UNRELEASED.\n"
+		     . "Using your request anyway.\n";
 		$warnings++ if not $opt_force_dist;
 	    }
 	}
@@ -1021,7 +1019,7 @@ if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r &&
 			    "Please use an explicit -a, -i or -v option instead.";
 	    if (! $opt_i) {
 		warn "$progname warning: A successful upload of the current version was not logged\n" .
-		    "in the upload log file; adding log entry to current version.";
+		    "in the upload log file; adding log entry to current version.\n";
 		$opt_a = 1;
 	    }
 	}
@@ -1610,7 +1608,7 @@ if ((basename(cwd()) =~ m%^\Q$PACKAGE\E-\Q$UVERSION\E$%) &&
 	if (move(cwd(), "../$PACKAGE-$new_uversion")) {
 	    warn "$progname warning: your current directory has been renamed to:\n../$PACKAGE-$new_uversion\n";
 	} else {
-	    warn "$progname warning: Couldn't rename directory: $!";
+	    warn "$progname warning: Couldn't rename directory: $!\n";
 	}
 	# And check whether a new orig tarball exists
 	my @origs = glob("../$PACKAGE\_$new_uversion.*");
@@ -1677,7 +1675,7 @@ BEGIN {
 END {
     if ($tmpchk) {
 	unlink "$changelog_path.dch" or
-	    warn "$progname warning: Could not remove $changelog_path.dch";
+	    warn "$progname warning: Could not remove $changelog_path.dch\n";
 	unlink "$changelog_path.dch~";  # emacs backup file
     }
 }
