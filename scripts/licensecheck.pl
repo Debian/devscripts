@@ -358,7 +358,7 @@ Valid options are:
                              (Default: '$default_check_regex')
    --recursive, -r        Add the contents of directories recursively
    --copyright            Also display the file's copyright
-   --ignore, -i		  Specify that files / directories matching the
+   --ignore, -i           Specify that files / directories matching the
                             regular expression should be ignored when
                             checking files
                             (Default: '$default_ignore_regex')
