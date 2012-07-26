@@ -37,4 +37,8 @@ testGPL() {
     license "gpl-2" "GPL (v2)"
 }
 
+testDual() {
+    license "dual.c" "Public domain GPL (v3)"
+}
+
 . shunit2

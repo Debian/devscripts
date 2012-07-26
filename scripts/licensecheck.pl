@@ -502,7 +502,7 @@ sub parselicense($) {
     }
 
     if ($licensetext =~ /is in the public domain/i) {
-	$license = "Public domain";
+	$license = "Public domain $license";
     }
 
     if ($licensetext =~ /terms of the Common Development and Distribution License(, Version ([^(]+))? \(the License\)/) {
@@ -530,15 +530,15 @@ sub parselicense($) {
     }
 
     if ($licensetext =~ /Do What The Fuck You Want To Public License, Version ([^, ]+)/i) {
-        $license = "WTFPL (v$1)";
+        $license = "WTFPL (v$1) $license";
     }
 
     if ($licensetext =~ /Do what The Fuck You Want To Public License/i) {
-        $license = "WTFPL";
+        $license = "WTFPL $license";
     }
 
     if ($licensetext =~ /(License WTFPL|Under (the|a) WTFPL)/i) {
-        $license = "WTFPL";
+        $license = "WTFPL $license";
     }
 
     $license = "UNKNOWN" if (!length($license));
