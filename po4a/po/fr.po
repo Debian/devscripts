@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2012-06-16 14:57-0400\n"
+"POT-Creation-Date: 2012-07-26 16:35+0300\n"
 "PO-Revision-Date: 2012-06-16 15:07-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -170,7 +170,7 @@ msgstr "B<annotate-output> [I<options>] I<programme> [I<paramètres> ...]"
 #: ../scripts/dpkg-genbuilddeps.1:6 ../doc/edit-patch.1:11
 #: ../scripts/dscextract.1:6 ../scripts/dscverify.1:6
 #: ../scripts/getbuildlog.1:8 ../scripts/grep-excuses.1:6
-#: ../scripts/licensecheck.pl:33 ../scripts/list-unreleased.1:6
+#: ../scripts/licensecheck.pl:34 ../scripts/list-unreleased.1:6
 #: ../scripts/manpage-alert.1:8 ../scripts/mass-bug.pl:29
 #: ../scripts/mergechanges.1:6 ../scripts/mk-build-deps.pl:34
 #: ../scripts/nmudiff.1:6 ../scripts/plotchangelog.1:7
@@ -212,7 +212,7 @@ msgstr ""
 #: ../scripts/dget.pl:542 ../scripts/diff2patches.1:16
 #: ../scripts/dpkg-depcheck.1:15 ../scripts/dscextract.1:14
 #: ../scripts/dscverify.1:17 ../scripts/getbuildlog.1:24
-#: ../scripts/grep-excuses.1:13 ../scripts/licensecheck.pl:42
+#: ../scripts/grep-excuses.1:13 ../scripts/licensecheck.pl:43
 #: ../scripts/list-unreleased.1:12 ../scripts/manpage-alert.1:14
 #: ../scripts/mass-bug.pl:59 ../scripts/mk-build-deps.pl:44
 #: ../scripts/nmudiff.1:21 ../scripts/plotchangelog.1:43
@@ -399,7 +399,7 @@ msgstr ""
 #: ../scripts/dget.pl:641 ../scripts/diff2patches.1:48
 #: ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscextract.1:32
 #: ../scripts/dscverify.1:78 ../scripts/getbuildlog.1:41
-#: ../scripts/grep-excuses.1:40 ../scripts/licensecheck.pl:120
+#: ../scripts/grep-excuses.1:40 ../scripts/licensecheck.pl:128
 #: ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:20
 #: ../scripts/mass-bug.pl:520 ../scripts/mergechanges.1:18
 #: ../scripts/mk-build-deps.pl:94 ../scripts/namecheck.pl:30
@@ -1236,7 +1236,7 @@ msgstr ""
 #: ../scripts/debclean.1:77 ../scripts/debdiff.1:151 ../scripts/debi.1:102
 #: ../scripts/debrelease.1:95 ../scripts/debsign.1:96 ../scripts/debuild.1:221
 #: ../scripts/dpkg-depcheck.1:92 ../scripts/dscverify.1:24
-#: ../scripts/grep-excuses.1:14 ../scripts/licensecheck.pl:80
+#: ../scripts/grep-excuses.1:14 ../scripts/licensecheck.pl:88
 #: ../scripts/mass-bug.pl:112 ../scripts/nmudiff.1:69
 #: ../scripts/rmadison.pl:281 ../scripts/uscan.1:444 ../scripts/uupdate.1:78
 #: ../scripts/who-uploads.1:40
@@ -2797,7 +2797,7 @@ msgstr ""
 #: ../scripts/debrsign.1:57 ../scripts/debsign.1:106 ../scripts/debuild.1:290
 #: ../scripts/dget.pl:605 ../scripts/dpkg-depcheck.1:102
 #: ../scripts/dscverify.1:42 ../scripts/grep-excuses.1:28
-#: ../scripts/licensecheck.pl:87 ../scripts/mass-bug.pl:132
+#: ../scripts/licensecheck.pl:95 ../scripts/mass-bug.pl:132
 #: ../scripts/nmudiff.1:79 ../scripts/plotchangelog.1:106
 #: ../scripts/pts-subscribe.1:42 ../scripts/rmadison.pl:290
 #: ../scripts/uscan.1:454 ../scripts/uupdate.1:88 ../scripts/who-uploads.1:50
@@ -2808,7 +2808,7 @@ msgstr "VARIABLES DE CONFIGURATION"
 # NOTE: presque identique
 #. type: textblock
 #: ../scripts/bts.pl:3977 ../scripts/debcommit.pl:99
-#: ../scripts/licensecheck.pl:89 ../scripts/mass-bug.pl:134
+#: ../scripts/licensecheck.pl:97 ../scripts/mass-bug.pl:134
 msgid ""
 "The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  Command "
@@ -3300,7 +3300,7 @@ msgstr ""
 
 #. type: =head1
 #: ../scripts/build-rdeps.pl:337 ../scripts/debcommit.pl:847
-#: ../scripts/desktop2menu.pl:43 ../scripts/licensecheck.pl:111
+#: ../scripts/desktop2menu.pl:43 ../scripts/licensecheck.pl:119
 #: ../scripts/namecheck.pl:36 ../scripts/svnpath.pl:89
 #: ../scripts/transition-check.pl:72
 msgid "LICENSE"
@@ -14428,17 +14428,23 @@ msgstr "B<licensecheck> B<--help>|B<--version>"
 
 #. type: textblock
 #: ../scripts/licensecheck.pl:29
+#, fuzzy
+#| msgid ""
+#| "B<licensecheck> [B<--no-conf>] [B<--verbose>] [B<--copyright>] [B<-l>|B<--"
+#| "lines=>I<N>] [B<-i>|B<--ignore=>I<regex>] [B<-c>|B<--check=>I<regex>] [B<-"
+#| "r>|B<--recursive>] I<list of files and directories to check>"
 msgid ""
 "B<licensecheck> [B<--no-conf>] [B<--verbose>] [B<--copyright>] [B<-l>|B<--"
-"lines=>I<N>] [B<-i>|B<--ignore=>I<regex>] [B<-c>|B<--check=>I<regex>] [B<-r>|"
-"B<--recursive>] I<list of files and directories to check>"
+"lines=>I<N>] [B<-i>|B<--ignore=>I<regex>] [B<-c>|B<--check=>I<regex>] [B<-m>|"
+"B<--machine>] [B<-r>|B<--recursive>] I<list of files and directories to "
+"check>"
 msgstr ""
 "B<licensecheck> [B<--no-conf>] [B<--verbose>] [B<--copyright>] [B<-l>|B<--"
 "lines=>I<N>] [B<-i>|B<--ignore=>I<regex>] [B<-c>|B<--check=>I<regex>] [B<-r>|"
 "B<--recursive>] I<liste de fichiers ou répertoires à vérifier>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:35
+#: ../scripts/licensecheck.pl:36
 msgid ""
 "B<licensecheck> attempts to determine the license that applies to each file "
 "passed to it, by searching the start of the file for text belonging to "
@@ -14449,7 +14455,7 @@ msgstr ""
 "blocs de texte qui appartiennent à des licences."
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:39
+#: ../scripts/licensecheck.pl:40
 msgid ""
 "If any of the arguments passed are directories, B<licensecheck> will add the "
 "files contained within to the list of files to process."
@@ -14458,12 +14464,12 @@ msgstr ""
 "contenus dans ce répertoire à la liste des fichiers à analyser."
 
 #. type: =item
-#: ../scripts/licensecheck.pl:46
+#: ../scripts/licensecheck.pl:47
 msgid "B<--verbose>, B<--no-verbose>"
 msgstr "B<--verbose>, B<--no-verbose>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:48
+#: ../scripts/licensecheck.pl:49
 msgid ""
 "Specify whether to output the text being processed from each file before the "
 "corresponding license information."
@@ -14472,17 +14478,17 @@ msgstr ""
 "les informations sur la licence du fichier."
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:51
+#: ../scripts/licensecheck.pl:52
 msgid "Default is to be quiet."
 msgstr "Le comportement par défaut est d'être silencieux."
 
 #. type: =item
-#: ../scripts/licensecheck.pl:53
+#: ../scripts/licensecheck.pl:54
 msgid "B<-l=>I<N>, B<--lines=>I<N>"
 msgstr "B<-l=>I<N>, B<--lines=>I<N>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:55
+#: ../scripts/licensecheck.pl:56
 msgid ""
 "Specify the number of lines of each file's header which should be parsed for "
 "license information. (Default is 60)."
@@ -14492,12 +14498,12 @@ msgstr ""
 "60 lignes)."
 
 #. type: =item
-#: ../scripts/licensecheck.pl:58
+#: ../scripts/licensecheck.pl:59
 msgid "B<-i=>I<regex>, B<--ignore=>I<regex>"
 msgstr "B<-i=>I<regex>, B<--ignore=>I<regex>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:60
+#: ../scripts/licensecheck.pl:61
 msgid ""
 "When processing the list of files and directories, the regular expression "
 "specified by this option will be used to indicate those which should not be "
@@ -14510,23 +14516,23 @@ msgstr ""
 "configuration)."
 
 #. type: =item
-#: ../scripts/licensecheck.pl:64
+#: ../scripts/licensecheck.pl:65
 msgid "B<-r>, B<--recursive>"
 msgstr "B<-r>, B<--recursive>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:66
+#: ../scripts/licensecheck.pl:67
 msgid "Specify that the contents of directories should be added recursively."
 msgstr ""
 "Indiquer que le contenu des répertoires doit être ajouté récursivement."
 
 #. type: =item
-#: ../scripts/licensecheck.pl:69
+#: ../scripts/licensecheck.pl:70
 msgid "B<-c=>I<regex>, B<--check=>I<regex>"
 msgstr "B<-c=>I<regex>, B<--check=>I<regex>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:71
+#: ../scripts/licensecheck.pl:72
 msgid ""
 "Specify a pattern against which filenames will be matched in order to decide "
 "which files to check the license of."
@@ -14535,23 +14541,39 @@ msgstr ""
 "être vérifiée."
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:74
+#: ../scripts/licensecheck.pl:75
 msgid "The default includes common source files."
 msgstr "La valeur par défaut comprend différents fichiers source usuels."
 
 #. type: =item
-#: ../scripts/licensecheck.pl:76
+#: ../scripts/licensecheck.pl:77
 msgid "B<--copyright>"
 msgstr "B<--copyright>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:78
+#: ../scripts/licensecheck.pl:79
 msgid "Also display copyright text found within the file"
 msgstr ""
 "Afficher aussi les blocs de texte de copyright trouvés dans le fichier."
 
+#. type: =item
+#: ../scripts/licensecheck.pl:81
+#, fuzzy
+#| msgid "B<-m>, B<--min-deps>"
+msgid "B<-m>, B<--machine>"
+msgstr "B<-m>, B<--min-deps>"
+
 #. type: textblock
-#: ../scripts/licensecheck.pl:82
+#: ../scripts/licensecheck.pl:83
+msgid ""
+"Displays the information in a machine readable way, i.e. in the form "
+"<file><tab><license>[<tab><copyright>] so that it can be easily sorted and/"
+"or filtered, e.g. with the F<awk> and F<sort> commands.  Note that using the "
+"B<--verbose> option will kill the readibility."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/licensecheck.pl:90
 msgid ""
 "Do not read any configuration files. This can only be used as the first "
 "option given on the command-line."
@@ -14560,12 +14582,12 @@ msgstr ""
 "première position de la ligne de commande."
 
 #. type: =item
-#: ../scripts/licensecheck.pl:97
+#: ../scripts/licensecheck.pl:105
 msgid "B<LICENSECHECK_VERBOSE>"
 msgstr "B<LICENSECHECK_VERBOSE>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:99
+#: ../scripts/licensecheck.pl:107
 msgid ""
 "If this is set to I<yes>, then it is the same as the B<--verbose> command "
 "line parameter being used. The default is I<no>."
@@ -14574,12 +14596,12 @@ msgstr ""
 "la ligne de commande. La valeur par défaut est I<no>."
 
 #. type: =item
-#: ../scripts/licensecheck.pl:102
+#: ../scripts/licensecheck.pl:110
 msgid "B<LICENSECHECK_PARSELINES>"
 msgstr "B<LICENSECHECK_PARSELINES>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:104
+#: ../scripts/licensecheck.pl:112
 msgid ""
 "If this is set to a positive number then the specified number of lines at "
 "the start of each file will be read whilst attempting to determine the "
@@ -14591,7 +14613,7 @@ msgstr ""
 "ligne de commande."
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:113
+#: ../scripts/licensecheck.pl:121
 msgid ""
 "This code is copyright by Adam D. Barratt <I<adam@adam-barratt.org.uk>>, all "
 "rights reserved; based on a script of the same name from the KDE SDK, which "
@@ -14606,7 +14628,7 @@ msgstr ""
 "générale GNU (GNU General Public Licence), version 2 ou ultérieure."
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:122
+#: ../scripts/licensecheck.pl:130
 msgid "Adam D. Barratt <adam@adam-barratt.org.uk>"
 msgstr "Adam D. Barratt <adam@adam-barratt.org.uk>"
 
