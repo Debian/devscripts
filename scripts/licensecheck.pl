@@ -80,9 +80,9 @@ Also display copyright text found within the file
 
 =item B<-m>, B<--machine>
 
-Displays the information in a machine readable way, i.e. in the form
+Display the information in a machine readable way, i.e. in the form
 <file><tab><license>[<tab><copyright>] so that it can be easily sorted
-and/or filtered, e.g. with the F<awk> and F<sort> commands.
+and/or filtered, e.g. with the B<awk> and B<sort> commands.
 Note that using the B<--verbose> option will kill the readability.
 
 =item B<--no-conf>, B<--noconf>
