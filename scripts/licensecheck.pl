@@ -28,7 +28,8 @@ B<licensecheck> B<--help>|B<--version>
 
 B<licensecheck> [B<--no-conf>] [B<--verbose>] [B<--copyright>]
 [B<-l>|B<--lines=>I<N>] [B<-i>|B<--ignore=>I<regex>] [B<-c>|B<--check=>I<regex>]
-[B<-r>|B<--recursive>] I<list of files and directories to check>
+[B<-m>|B<--machine>] [B<-r>|B<--recursive>]
+I<list of files and directories to check>
 
 =head1 DESCRIPTION
 
@@ -76,6 +77,13 @@ The default includes common source files.
 =item B<--copyright>
 
 Also display copyright text found within the file
+
+=item B<-m>, B<--machine>
+
+Displays the information in a machine readable way, i.e. in the form
+<file><tab><license>[<tab><copyright>] so that it can be easily sorted
+and/or filtered, e.g. with the F<awk> and F<sort> commands.
+Note that using the B<--verbose> option will kill the readibility.
 
 =item B<--no-conf>, B<--noconf>
 
@@ -163,6 +171,7 @@ my ($opt_verbose, $opt_lines, $opt_noconf, $opt_ignore_regex, $opt_check_regex)
   = ('', '', '', '', '');
 my $opt_recursive = 0;
 my $opt_copyright = 0;
+my $opt_machine = 0;
 my ($opt_help, $opt_version);
 my $def_lines = 60;
 
@@ -218,6 +227,7 @@ GetOptions("help|h" => \$opt_help,
 	   "recursive|r" => \$opt_recursive,
 	   "check|c=s" => \$opt_check_regex,
 	   "copyright" => \$opt_copyright,
+	   "machine|m" => \$opt_machine,
 	   "noconf" => \$opt_noconf,
 	   "no-conf" => \$opt_noconf,
 	   )
@@ -297,12 +307,18 @@ while (@files) {
     $content =~ tr/ //s;
 
     $license = parselicense($content);
-    print "$file: ";
-    print "*No copyright* " unless $copyright;
-    print $license . "\n";
-    print "  [Copyright: " . $copyright . "]\n"
-      if $copyright and $opt_copyright;
-    print "\n" if $opt_copyright;
+    if ($opt_machine) {
+	print "$file\t$license";
+	print "\t" . ($copyright or "*No copyright*") if $opt_copyright;
+	print "\n";
+    } else {
+	print "$file: ";
+	print "*No copyright* " unless $copyright;
+	print $license . "\n";
+	print "  [Copyright: " . $copyright . "]\n"
+	  if $copyright and $opt_copyright;
+	print "\n" if $opt_copyright;
+    }
 }
 
 sub parse_copyright($) {
@@ -356,6 +372,7 @@ Valid options are:
    --check, -c            Specify a pattern indicating which files should
                              be checked
                              (Default: '$default_check_regex')
+   --machine, -m          Display in a machine readable way (good for awk)
    --recursive, -r        Add the contents of directories recursively
    --copyright            Also display the file's copyright
    --ignore, -i           Specify that files / directories matching the

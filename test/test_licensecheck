@@ -24,6 +24,11 @@ license() {
     runCommand "licensecheck/$1" "licensecheck/$1: $2" "" 0
 }
 
+license2() {
+    cd "$WORKDIR"
+    runCommand "$1 licensecheck/$2" "licensecheck/$2	$3" "" 0
+}
+
 testBeerware() {
     license "beerware.cpp" "Beerware"
 }
@@ -39,6 +44,12 @@ testGPL() {
 
 testDual() {
     license "dual.c" "Public domain GPL (v3)"
+}
+
+testMachine() {
+    license2 "-m" "beerware.cpp" "Beerware"
+    license2 "--machine" "lgpl-2.1.h" "LGPL (v2.1)"
+    license2 "-m --copyright" "gpl-2" "GPL (v2)	2012 Devscripts developers"
 }
 
 . shunit2
