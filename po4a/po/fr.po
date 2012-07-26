@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2012-07-26 16:27-0400\n"
-"PO-Revision-Date: 2012-06-16 15:07-0400\n"
+"PO-Revision-Date: 2012-07-26 16:33-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Lokalize 1.4\n"
 
 #. type: TH
 #: ../scripts/annotate-output.1:1
@@ -14428,11 +14428,6 @@ msgstr "B<licensecheck> B<--help>|B<--version>"
 
 #. type: textblock
 #: ../scripts/licensecheck.pl:29
-#, fuzzy
-#| msgid ""
-#| "B<licensecheck> [B<--no-conf>] [B<--verbose>] [B<--copyright>] [B<-l>|B<--"
-#| "lines=>I<N>] [B<-i>|B<--ignore=>I<regex>] [B<-c>|B<--check=>I<regex>] [B<-"
-#| "r>|B<--recursive>] I<list of files and directories to check>"
 msgid ""
 "B<licensecheck> [B<--no-conf>] [B<--verbose>] [B<--copyright>] [B<-l>|B<--"
 "lines=>I<N>] [B<-i>|B<--ignore=>I<regex>] [B<-c>|B<--check=>I<regex>] [B<-m>|"
@@ -14440,8 +14435,9 @@ msgid ""
 "check>"
 msgstr ""
 "B<licensecheck> [B<--no-conf>] [B<--verbose>] [B<--copyright>] [B<-l>|B<--"
-"lines=>I<N>] [B<-i>|B<--ignore=>I<regex>] [B<-c>|B<--check=>I<regex>] [B<-r>|"
-"B<--recursive>] I<liste de fichiers ou répertoires à vérifier>"
+"lines=>I<N>] [B<-i>|B<--ignore=>I<regex>] [B<-c>|B<--check=>I<regex>] [B<-m>|"
+"B<--machine>] [B<-r>|B<--recursive>] I<liste de fichiers ou répertoires à "
+"vérifier>"
 
 #. type: textblock
 #: ../scripts/licensecheck.pl:36
@@ -14558,10 +14554,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/licensecheck.pl:81
-#, fuzzy
-#| msgid "B<-m>, B<--min-deps>"
 msgid "B<-m>, B<--machine>"
-msgstr "B<-m>, B<--min-deps>"
+msgstr "B<-m>, B<--machine>"
 
 #. type: textblock
 #: ../scripts/licensecheck.pl:83
@@ -14571,6 +14565,11 @@ msgid ""
 "or filtered, e.g. with the B<awk> and B<sort> commands.  Note that using the "
 "B<--verbose> option will kill the readability."
 msgstr ""
+"Afficher les renseignements de façon lisible par une machine, c'est à dire "
+"sous la forme <fichier><tab><licence>[<tab><copyright>] afin d'être "
+"facilement triés ou filtrés, par exemple avec les commandes B<awk> et "
+"B<sort>. Remarquez que l'utilisation de l'option B<--verbose> va ruiner la "
+"lisibilité."
 
 #. type: textblock
 #: ../scripts/licensecheck.pl:90
@@ -14578,7 +14577,7 @@ msgid ""
 "Do not read any configuration files. This can only be used as the first "
 "option given on the command-line."
 msgstr ""
-"Ne lit aucun fichier de configuration. L'option ne peut être utilisée qu'en "
+"Ne lire aucun fichier de configuration. L'option ne peut être utilisée qu'en "
 "première position de la ligne de commande."
 
 #. type: =item
