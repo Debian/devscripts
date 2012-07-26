@@ -21,7 +21,7 @@ WORKDIR="$(readlink -f "${0%/*}")"
 
 license() {
     cd "$WORKDIR"
-    runCommand "licensecheck/$1" "licensecheck/$1: $2 " "" 0
+    runCommand "licensecheck/$1" "licensecheck/$1: $2" "" 0
 }
 
 testBeerware() {

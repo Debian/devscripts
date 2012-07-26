@@ -543,6 +543,9 @@ sub parselicense($) {
 
     $license = "UNKNOWN" if (!length($license));
 
+    # Remove trailing spaces.
+    $license =~ s/\s+$//;
+
     return $license;
 }
 
