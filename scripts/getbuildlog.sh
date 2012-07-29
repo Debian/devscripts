@@ -128,7 +128,17 @@ arch=$ARCH&ver=$LASTVERSION&stamp=[[:digit:]]+"
 	arch=${match##*arch=}
 	arch=${arch%%&*}
 	match=`echo $match | sed -e 's/\+/%2B/g'`
-        wget -O "${PACKAGE}_${ver}_${arch}.log" "$BASE/status/$match&raw=1"
+	# Mimick wget's behaviour, using a numerical suffix if needed,
+	# to support downloading several logs for a given tuple
+	# (unfortunately, -nc and -O means only the first file gets
+	# downloaded):
+	filename="${PACKAGE}_${ver}_${arch}.log"
+	if [ -f "$filename" ]; then
+	    suffix=1
+	    while [ -f "$filename.$suffix" ]; do suffix=$((suffix+1)); done
+	    filename="$filename.$suffix"
+	fi
+	wget -O "$filename" "$BASE/status/$match&raw=1"
     done
 
     rm -f $ALL_LOGS
