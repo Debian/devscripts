@@ -7,6 +7,7 @@ devscripts (2.12.2) UNRELEASED; urgency=low
     - Remove trailing spaces.
     - add --machine option that outputs results in a machine readable format.
       Thanks to Eric Lavarde for the patch. (Closes: #583750)
+    - Trim trailing period from some GPL notices' versions.
 
   [ Richard W.M. Jones ]
   * licensecheck: Check OCaml programs by default (*.ml, *.mli).
