@@ -42,7 +42,7 @@ class Logger(object):
         if args:
             message = message % args
         stream = cls.stderr if stderr else cls.stdout
-        print >> stream, format_ % (cls.script_name, message)
+        stream.write((format_ + "\n") % (cls.script_name, message))
 
     @classmethod
     def command(cls, cmd):
