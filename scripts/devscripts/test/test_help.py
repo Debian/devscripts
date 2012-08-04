@@ -76,5 +76,5 @@ class HelpTestCase(unittest.TestCase):
             self.assertEqual(process.poll(), 0,
                              "%s failed to return usage within %i seconds.\n"
                              "Output:\n%s"
-                             % (script, TIMEOUT, ''.join(out)))
+                             % (script, TIMEOUT, ''.encode('ascii').join(out)))
         return tester
