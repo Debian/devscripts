@@ -31,6 +31,8 @@ devscripts (2.12.2) UNRELEASED; urgency=low
     http://anonscm.debian.org/bzr/pkg-postgresql/postgresql-9.2/sid-pgapt/.
   * origtargz: New script: fetch the orig tarball of a Debian package from
     various sources, and unpack it
+  * po4a/Makefile: use po4a --keep=0 so the build system doesn't die with
+    untranslated scripts
 
  -- Benjamin Drung <bdrung@debian.org>  Thu, 26 Jul 2012 12:17:51 +0200
 

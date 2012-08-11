@@ -7,7 +7,7 @@ all: translate
 transform: $(GEN_TR_MAN1S)
 
 translate: ../scripts/devscripts.1
-	po4a --previous --no-backups devscripts-po4a.conf
+	po4a --previous --no-backups --keep=0 devscripts-po4a.conf
 	touch translate
 
 clean: ../scripts/devscripts.1
