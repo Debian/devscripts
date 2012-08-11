@@ -4,7 +4,7 @@ List of things to do when adding a new script to devscripts package:
    - the script should have .sh or .pl extension, otherwise have a look at
      scripts/Makefile and patch it
    - if the script is perl and uses embedded POD for documentation, add an
-     entry to the GEN_MAN1S variable in scripts/Makefile
+     entry to the GEN_MAN1S variable in Makefile
 2. Add an entry in README
 3. Add an entry in debian/control
 4. Add an entry in po4a/devscripts-po4a.conf
@@ -12,9 +12,5 @@ List of things to do when adding a new script to devscripts package:
    debian/control
 6. Modify conf.default.in and debian/postinst if necessary
 7. Modify debian/copyright if necessary
-8. Make the script executable
-   - "svn propset svn:executable '*' scripts/newscript" so that the
-     permissions are correct in a copy of the repository
+8. Add entries in .gitignore
 9. Add a changelog entry
-
-last modified: $Id$
