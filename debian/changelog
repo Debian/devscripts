@@ -25,6 +25,11 @@ devscripts (2.12.2) UNRELEASED; urgency=low
     instead of downloading them all but only keeping the oldest.  (Closes:
     #683231)
 
+  [ Christoph Berg ]
+  * debcheckout: When --package is given, use this package name rather than
+    trying to guess it from the url. Useful for URLs like
+    http://anonscm.debian.org/bzr/pkg-postgresql/postgresql-9.2/sid-pgapt/.
+
  -- Benjamin Drung <bdrung@debian.org>  Thu, 26 Jul 2012 12:17:51 +0200
 
 devscripts (2.12.1) unstable; urgency=low
