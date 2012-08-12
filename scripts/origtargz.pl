@@ -48,9 +48,9 @@ directories from the current directory, except the debian directory, and the
 VCS repository directories. Some files outside debian/ which are often stored
 in VCS even for debian-dir-only repositories are also preserved (.bzr-builddeb,
 .gitignore, .hgignore). I<Note that this will drop all non-committed changes>
-for the patch system in use (e.g. quilt or source format "3.0 (quilt)"), and
-will even remove all patches from the package when no patch system is in use
-(the original "1.0" source format).
+for the patch system in use (e.g. source format "3.0 (quilt)"), and will even
+remove all patches from the package when no patch system is in use (the
+original "1.0" source format).
 
 The default behavior is to unpack the orig tarball on the first invocation of
 B<origtargz> in a debian-dir-only checkout.
