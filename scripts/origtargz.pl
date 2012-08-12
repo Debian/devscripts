@@ -47,10 +47,28 @@ When asked to unpack the orig tarball, B<origtargz> will remove all files and
 directories from the current directory, except the debian directory, and the
 VCS repository directories. Some files outside debian/ which are often stored
 in VCS even for debian-dir-only repositories are also preserved (.bzr-builddeb,
-.gitignore, .hgignore).
+.gitignore, .hgignore). I<Note that this will drop all non-committed changes>
+for the patch system in use (e.g. quilt or source format "3.0 (quilt)"), and
+will even remove all patches from the package when no patch system is in use
+(the original "1.0" source format).
 
 The default behavior is to unpack the orig tarball on the first invocation of
 B<origtargz> in a debian-dir-only checkout.
+
+=head1 NOTES
+
+Despite B<origtargz> being called "targz", it will work with any compression
+scheme used for the tarball.
+
+A similar tool to unpack orig tarballs is B<uupdate>(1). B<uupdate> creates a
+new working directory, unpacks the tarball, and applies the Debian diff.gz
+changes. In contrast, B<origtargz> uses the current directory, keeping VCS
+metadata.
+
+For Debian package repositories that keep the full upstream source, other tools
+should be used to upgrade the repository from the new tarball. See
+B<git-import-orig>(1) and B<svn-upgrade>(1) for examples. B<origtargz> is still
+useful for downloading the current tarball.
 
 =head1 OPTIONS
 
@@ -94,7 +112,7 @@ and VCS files. Preserved are: B<.bzr .bzrignore .bzr-builddeb .git .gitignore
 
 =head1 SEE ALSO
 
-B<debcheckout>(1).
+B<debcheckout>(1), B<uupdate>(1), B<git-import-orig>(1), B<svn-upgrade>(1).
 
 =head1 AUTHOR
 
