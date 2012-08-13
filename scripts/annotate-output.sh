@@ -62,10 +62,14 @@ if [ $# -lt 1 ]; then
 	exit 1
 fi
 
-OUT=`mktemp --tmpdir annotate.XXXXXX` || exit 1
-ERR=`mktemp --tmpdir annotate.XXXXXX` || exit 1
+cleanup() { __st=$?; rm -rf "$tmp"; exit $__st; }
+trap cleanup 0
+trap 'exit $?' 1 2 13 15
 
-rm -f $OUT $ERR
+tmp=$(mktemp -d --tmpdir annotate.XXXXXX) || exit 1
+OUT=$tmp/out
+ERR=$tmp/err
+
 mkfifo $OUT $ERR || exit 1
 
 addtime O < $OUT &
