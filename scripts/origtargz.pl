@@ -150,8 +150,10 @@ unless ($line =~ /^(\S+) \((\S+)\)/) {
 	die "could not parse debian/changelog:1: $line";
 }
 ($package, $version) = ($1, $2);
-die "Version $version contains no dash, unable to download orig.tar.* file for native packages\n"
-	unless ($version =~ /-/);
+unless ($version =~ /-/) {
+	print "Package with native version number $version, skipping orig.tar.* download\n";
+	exit 0;
+}
 $origversion = $version;
 $origversion =~ s/(.*)-.*/$1/; # strip everything from the last dash
 $fileversion = $origversion;
