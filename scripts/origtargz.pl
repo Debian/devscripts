@@ -35,7 +35,7 @@ origtargz - fetch the orig tarball of a Debian package from various sources, and
 
 B<origtargz> downloads the orig tarball of a Debian package, and optionally
 unpacks it into the current directory. The version number to be used is
-determined from B<debian/changelog>. The main use for B<origtargz> is with
+determined from F<debian/changelog>. The main use for B<origtargz> is with
 debian-dir-only repository checkouts. It should be invoked from the top level
 directory of an unpacked Debian source package.
 
@@ -45,9 +45,9 @@ version. Finally, B<uscan --download-current-version> is tried.
 
 When asked to unpack the orig tarball, B<origtargz> will remove all files and
 directories from the current directory, except the debian directory, and the
-VCS repository directories. Some files outside debian/ which are often stored
-in VCS even for debian-dir-only repositories are also preserved (.bzr-builddeb,
-.gitignore, .hgignore). I<Note that this will drop all non-committed changes>
+VCS repository directories. Some files outside F<debian/> which are often stored
+in VCS even for debian-dir-only repositories are also preserved (F<.bzr-builddeb>,
+F<.gitignore>, F<.hgignore>). I<Note that this will drop all non-committed changes>
 for the patch system in use (e.g. source format "3.0 (quilt)"), and will even
 remove all patches from the package when no patch system is in use (the
 original "1.0" source format).
@@ -85,16 +85,16 @@ everything except the debian directory. Valid choices are:
 
 Do not unpack the orig tarball.
 
-=item B<once> (default when --unpack is not used)
+=item B<once> (default when B<--unpack> is not used)
 
-If the current directory contains only a debian directory (and possibly some
+If the current directory contains only a F<debian> directory (and possibly some
 dotfiles), unpack the orig tarball. This is the default behavior.
 
-=item B<yes> (default for --unpack without argument)
+=item B<yes> (default for B<--unpack> without argument)
 
-Always unpack the orig tarball. Existing files are removed, except for debian/
-and VCS files. Preserved are: B<.bzr .bzrignore .bzr-builddeb .git .gitignore
-.hg .hgignore .svn>.
+Always unpack the orig tarball. Existing files are removed, except for F<debian/>
+and VCS files. Preserved are: F<.bzr>, F<.bzrignore>, F<.bzr-builddeb>, F<.git>,
+F<.gitignore>, F<.hg>, F<.hgignore>, and F<.svn>.
 
 =back
 
@@ -112,7 +112,7 @@ and VCS files. Preserved are: B<.bzr .bzrignore .bzr-builddeb .git .gitignore
 
 =head1 SEE ALSO
 
-B<debcheckout>(1), B<uupdate>(1), B<git-import-orig>(1), B<svn-upgrade>(1).
+B<debcheckout>(1), B<git-import-orig>(1), B<svn-upgrade>(1), B<uupdate>(1)
 
 =head1 AUTHOR
 
