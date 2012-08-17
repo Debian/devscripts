@@ -39,9 +39,19 @@ determined from F<debian/changelog>. The main use for B<origtargz> is with
 debian-dir-only repository checkouts. It should be invoked from the top level
 directory of an unpacked Debian source package.
 
-Various download locations are tried. First, an existing file is looked for.
-Then, B<apt-get source> is tried when B<apt-cache showsrc> reports a matching
-version. Finally, B<uscan --download-current-version> is tried.
+Various download locations are tried:
+
+=over 4
+
+=item * First, an existing file is looked for.
+
+=item * Directories given with B<--dir> are searched.
+
+=item * B<apt-get source> is tried when B<apt-cache showsrc> reports a matching version.
+
+=item * Finally, B<uscan --download-current-version> is tried.
+
+=back
 
 When asked to unpack the orig tarball, B<origtargz> will remove all files and
 directories from the current directory, except the debian directory, and the
@@ -73,6 +83,11 @@ useful for downloading the current tarball.
 =head1 OPTIONS
 
 =over
+
+=item B<--dir> I<directory>
+
+Add I<directory> to the list of locations to search for an existing tarball.
+When found, a hardlink is created if possible, otherwise a symlink.
 
 =item B<-u>, B<--unpack>[=B<no>|B<once>|B<yes>]
 
@@ -140,10 +155,12 @@ use File::Temp qw/tempdir/;
 use Getopt::Long qw(:config gnu_getopt);
 use Pod::Usage;
 
+my @dirs = ();
 my $tar_only = 0;
 my $unpack = 'once'; # default when --unpack is not used
 
 GetOptions(
+	"dir=s" => \@dirs,
 	"download-only|d" => sub { $unpack = 'no' },
 	"help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },
 	"tar-only" => \$tar_only,
@@ -182,7 +199,21 @@ sub download_origtar ()
 		return $f[0];
 	}
 
-	# TODO: try other well-known file locations (../upstream/ ?) and move file in place
+	# try other directories
+
+	foreach my $dir (@dirs) {
+		$dir =~ s!/$!!;
+
+		if (my @f = glob "$dir/${package}_$fileversion.orig.tar.*") {
+			print "Using $f[0]\n";
+			my $basename = $f[0];
+			$basename =~ s!.*/!!;
+			link $f[0], "../$basename" or
+				symlink $f[0], "../$basename" or
+				die "symlink: $!";
+			return $f[0];
+		}
+	}
 
 	# TODO: try pristine-tar
 
