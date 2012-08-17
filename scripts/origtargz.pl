@@ -204,7 +204,6 @@ sub download_origtar ()
 		my $srcversion = $1;
 		my $srcorigversion = $srcversion;
 		$srcorigversion =~ s/(.*)-.*/$1/; # strip everything from the last dash
-		print "Looking at $package $srcversion, interpreted as $srcorigversion\n";
 
 		if ($srcorigversion eq $origversion) { # loop through all matching versions
 			$bestsrcversion = $srcversion;
