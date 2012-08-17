@@ -61,7 +61,7 @@ Despite B<origtargz> being called "targz", it will work with any compression
 scheme used for the tarball.
 
 A similar tool to unpack orig tarballs is B<uupdate>(1). B<uupdate> creates a
-new working directory, unpacks the tarball, and applies the Debian diff.gz
+new working directory, unpacks the tarball, and applies the Debian F<.diff.gz>
 changes. In contrast, B<origtargz> uses the current directory, keeping VCS
 metadata.
 
@@ -97,6 +97,10 @@ and VCS files. Preserved are: F<.bzr>, F<.bzrignore>, F<.bzr-builddeb>, F<.git>,
 F<.gitignore>, F<.hg>, F<.hgignore>, and F<.svn>.
 
 =back
+
+=item B<-d>, B<--download-only>
+
+Alias for B<--unpack=no>.
 
 =item B<--tar-only>
 
@@ -140,6 +144,7 @@ my $tar_only = 0;
 my $unpack = 'once'; # default when --unpack is not used
 
 GetOptions(
+	"download-only|d" => sub { $unpack = 'no' },
 	"help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },
 	"tar-only" => \$tar_only,
 	"unpack|u:s" => \$unpack,
