@@ -25,7 +25,7 @@ origtargz - fetch the orig tarball of a Debian package from various sources, and
 
 =over
 
-=item B<origtargz> [B<--unpack>[=B<no>|B<once>|B<yes>]]
+=item B<origtargz> [I<OPTIONS>] [B<--unpack>[=B<no>|B<once>|B<yes>]]
 
 =item B<origtargz> B<--help>
 
@@ -98,6 +98,13 @@ F<.gitignore>, F<.hg>, F<.hgignore>, and F<.svn>.
 
 =back
 
+=item B<--tar-only>
+
+When using B<apt-get source>, pass B<--tar-only> to it. The default is to
+download the full source package including F<.dsc> and F<.diff.gz> or
+F<.debian.tar.gz> components so B<debdiff> can be used to diff the last upload
+to the next one. With B<--tar-only>, only download the F<.orig.tar.*> file.
+
 =back
 
 =cut
@@ -129,10 +136,12 @@ use File::Temp qw/tempdir/;
 use Getopt::Long qw(:config gnu_getopt);
 use Pod::Usage;
 
+my $tar_only = 0;
 my $unpack = 'once'; # default when --unpack is not used
 
 GetOptions(
 	"help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },
+	"tar-only" => \$tar_only,
 	"unpack|u:s" => \$unpack,
 ) or pod2usage({-exitval => 3});
 
@@ -200,7 +209,8 @@ sub download_origtar ()
 
 	if ($bestsrcversion) {
 		print "Trying apt-get source $package=$bestsrcversion ...\n";
-		system "cd .. && apt-get source --only-source --download-only '$package=$bestsrcversion'";
+		my $t = $tar_only ? '--tar-only' : '';
+		system "cd .. && apt-get source --only-source --download-only $t '$package=$bestsrcversion'";
 	}
 
 	if (my @f = glob "../${package}_$fileversion.orig.tar.*") {
