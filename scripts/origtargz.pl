@@ -45,7 +45,7 @@ Various download locations are tried:
 
 =item * First, an existing file is looked for.
 
-=item * Directories given with B<--dir> are searched.
+=item * Directories given with B<--path> are searched.
 
 =item * B<apt-get source> is tried when B<apt-cache showsrc> reports a matching version.
 
@@ -84,7 +84,7 @@ useful for downloading the current tarball.
 
 =over
 
-=item B<--dir> I<directory>
+=item B<-p>, B<--path> I<directory>
 
 Add I<directory> to the list of locations to search for an existing tarball.
 When found, a hardlink is created if possible, otherwise a symlink.
@@ -117,7 +117,7 @@ F<.gitignore>, F<.hg>, F<.hgignore>, and F<.svn>.
 
 Alias for B<--unpack=no>.
 
-=item B<--tar-only>
+=item B<-t>, B<--tar-only>
 
 When using B<apt-get source>, pass B<--tar-only> to it. The default is to
 download the full source package including F<.dsc> and F<.diff.gz> or
@@ -160,10 +160,10 @@ my $tar_only = 0;
 my $unpack = 'once'; # default when --unpack is not used
 
 GetOptions(
-	"dir=s" => \@dirs,
+	"path|p=s" => \@dirs,
 	"download-only|d" => sub { $unpack = 'no' },
 	"help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },
-	"tar-only" => \$tar_only,
+	"tar-only|t" => \$tar_only,
 	"unpack|u:s" => \$unpack,
 ) or pod2usage({-exitval => 3});
 
