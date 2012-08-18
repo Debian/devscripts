@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2012-08-18 12:16-0400\n"
-"PO-Revision-Date: 2012-07-26 16:33-0400\n"
+"PO-Revision-Date: 2012-08-17 11:24-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -7383,12 +7383,12 @@ msgstr "debcheckout - Récupérer le contenu du dépôt d'un paquet Debian"
 #. type: =item
 #: ../scripts/debcheckout.pl:32
 msgid "B<debcheckout> [I<OPTIONS>] I<PACKAGE> [I<DESTDIR>]"
-msgstr "B<debcheckout> [I<OPTIONS>] I<PAQUET> [I<REP_DESTINATION>]"
+msgstr "B<debcheckout> [I<options>] I<paquet> [I<rép_destination>]"
 
 #. type: =item
 #: ../scripts/debcheckout.pl:34
 msgid "B<debcheckout> [I<OPTIONS>] I<REPOSITORY_URL> [I<DESTDIR>]"
-msgstr "B<debcheckout> [I<OPTIONS>] I<REP_DÉPÔT> [I<REP_DESTINATION>]"
+msgstr "B<debcheckout> [I<options>] I<URL_dépôt> [I<rép_destination>]"
 
 #. type: =item
 #: ../scripts/debcheckout.pl:36
@@ -7406,10 +7406,10 @@ msgid ""
 msgstr ""
 "B<debcheckout> récupère les informations sur le système de gestion de "
 "version utilisé pour la maintenance d'un paquet Debian (le paramètre "
-"I<PAQUET>), puis récupère la dernière version (potentiellement non "
+"I<paquet>), puis récupère la dernière version (potentiellement non "
 "officielle) du paquet depuis le dépôt. Par défaut le dépôt est récupéré dans "
-"le répertoire I<PAQUET> ; mais ça peut être changé à l'aide du paramètre "
-"I<REP_DESTINATION>."
+"le répertoire I<paquet> ; cela peut être modifié à l'aide du paramètre "
+"I<rép_destination>."
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:48
@@ -7423,7 +7423,7 @@ msgstr ""
 "Les informations indiquant où se trouve le dépôt sont recherchées dans les "
 "champs B<Vcs-*> du paquet source. Par exemple, le paquet B<vim> fournit les "
 "informations en utilisant un champ S<B<Vcs-Hg: http://hg.debian.org/hg/pkg-"
-"vim/vim>> que vous pouvez voir dans la sortie de B<apt-cache showsrc vim>."
+"vim/vim>> visible dans la sortie de B<apt-cache showsrc vim>."
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:54
@@ -7435,9 +7435,9 @@ msgid ""
 msgstr ""
 "Si plus d'un paquet source contenant des champs B<Vcs-*> est disponible, "
 "B<debcheckout> sélectionnera le paquet avec le numéro de version le plus "
-"élevé. Autrement, un numéro de version spécifique peut être sélectionné "
-"parmi ceux disponibles en utilisant la forme I<PAQUET>=I<VERSION> pour le "
-"nom de paquet."
+"élevé. Sinon, un numéro de version spécifique peut être sélectionné parmi "
+"ceux disponibles en utilisant la forme I<paquet>B<=>I<version> pour le nom "
+"de paquet."
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:59
@@ -7489,7 +7489,7 @@ msgstr ""
 "(principalement ceux hébergés sur S<I<http://alioth.debian.org>>), une ré-"
 "écriture de l'URL est tentée avant d'effectuer la récupération, pour "
 "s'assurer qu'il est possible d'envoyer les modifications dans le dépôt. Par "
-"exemple, pour les dépôts subversion hébergés sur Alioth, cela signifie que "
+"exemple, pour les dépôts Subversion hébergés sur Alioth, cela signifie que "
 "S<I<svn+ssh://svn.debian.org/...>> sera utilisé à la place de S<I<svn://svn."
 "debian.org/...>>"
 
@@ -7557,11 +7557,13 @@ msgid ""
 "When checking out a repository URL, instead of trying to guess the package "
 "name from the URL, use this package name."
 msgstr ""
+"Lors de la récupération d'un dépôt par son URL, utiliser ce nom de I<paquet> "
+"au lieu d'essayer de le deviner à partir de l'URL."
 
 #. type: =item
 #: ../scripts/debcheckout.pl:111
 msgid "B<-t> I<TYPE>, B<--type> I<TYPE>"
-msgstr "B<-t> I<TYPE>, B<--type> I<TYPE>"
+msgstr "B<-t> I<type>, B<--type> I<type>"
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:113
@@ -7577,7 +7579,7 @@ msgstr ""
 #. type: =item
 #: ../scripts/debcheckout.pl:117
 msgid "B<-u> I<USERNAME>, B<--user> I<USERNAME>"
-msgstr "B<-u> I<NOM_UTILISATEUR>, B<--user> I<NOM_UTILISATEUR>"
+msgstr "B<-u> I<nom_utilisateur>, B<--user> I<nom_utilisateur>"
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:119
@@ -7686,7 +7688,7 @@ msgstr "I<OPTIONS SPÉCIFIQUES À GIT>"
 #. type: =item
 #: ../scripts/debcheckout.pl:165
 msgid "B<--git-track> I<BRANCHES>"
-msgstr "B<--git-track> I<BRANCHES>"
+msgstr "B<--git-track> I<branches>"
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:167
@@ -7741,12 +7743,12 @@ msgid ""
 "repository URLs if other built-in means of building URLs for authenticated "
 "mode (see B<-a>) have failed."
 msgstr ""
-"Cette variable doit être une listes d'expression rationnelles Perl et de "
+"Cette variable doit être une liste d'expressions rationnelles Perl et de "
 "textes de remplacements séparées par des espaces, qui doivent être fournies "
-"par paires : I<REGEXP> I<TEXTE> I<REGEXP> I<TEXTE>... Chaque paire indique "
-"une substitution qui est appliquée aux URL des dépôts si les autres moyens "
-"internes pour construire des URLS pour le mode authentifié (voir B<-a>) ont "
-"échoués."
+"par paires : I<exp_rat> I<texte> I<exp_rat> I<texte> ... Chaque paire "
+"indique une substitution qui est appliquée aux URL des dépôts si les autres "
+"moyens internes pour construire des URL pour le mode authentifié (voir B<-"
+"a>) ont échoué."
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:195
@@ -7754,7 +7756,7 @@ msgid ""
 "References to matching substrings in the replacement texts are allowed as "
 "usual in Perl by the means of B<$1>, B<$2>, ... and so on."
 msgstr ""
-"Les références à des sous-chaînes sont autorisées dans les textes de "
+"Les références aux sous-chaînes sont autorisées dans les textes de "
 "remplacement comme d'habitude avec Perl en utilisant B<$1>, B<$2>, ..."
 
 #. type: textblock
@@ -7826,8 +7828,8 @@ msgid ""
 "information about B<Vcs-*> fields): S<I<http://www.debian.org/doc/developers-"
 "reference/best-pkging-practices.html#bpp-vcs>>."
 msgstr ""
-"B<apt-cache>(8), Section 6.2.5 de la référence du développeur Debian (pour "
-"plus d'informations sur les champs B<Vcs-*>): S<I<http://www.debian.org/doc/"
+"B<apt-cache>(8), Section 6.2.5 de la référence du développeur Debian (pour "
+"plus d'informations sur les champs B<Vcs-*>) : S<I<http://www.debian.org/doc/"
 "developers-reference/best-pkging-practices.html#bpp-vcs>>"
 
 #. type: textblock
@@ -15599,18 +15601,18 @@ msgid ""
 "origtargz - fetch the orig tarball of a Debian package from various sources, "
 "and unpack it"
 msgstr ""
+"origtargz - Récupérer l'archive amont d'un paquet Debian depuis divers "
+"sources, et la dépaqueter"
 
 #. type: =item
 #: ../scripts/origtargz.pl:28
 msgid "B<origtargz> [I<OPTIONS>] [B<--unpack>[=B<no>|B<once>|B<yes>]]"
-msgstr ""
+msgstr "B<origtargz> [I<options>] [B<--unpack>[=B<no>|B<once>|B<yes>]]"
 
 #. type: =item
 #: ../scripts/origtargz.pl:30
-#, fuzzy
-#| msgid "B<-h>, B<--help>"
 msgid "B<origtargz> B<--help>"
-msgstr "B<-h>, B<--help>"
+msgstr "B<origtargz> B<--help>"
 
 #. type: textblock
 #: ../scripts/origtargz.pl:36
@@ -15621,21 +15623,27 @@ msgid ""
 "debian-dir-only repository checkouts. It should be invoked from the top "
 "level directory of an unpacked Debian source package."
 msgstr ""
+"B<origtargz> télécharge l'archive amont (orig) d'un paquet Debian et la "
+"dépaquette facultativement dans le répertoire actuel. Le numéro de version à "
+"utiliser est déterminé par F<debian/changelog>. L'utilisation principale "
+"d'B<origtargz> est avec les dépôts ne contenant que le répertoire I<debian>. "
+"Il devrait être appelé depuis le répertoire de premier niveau d'un paquet "
+"source Debian non dépaqueté."
 
 #. type: textblock
 #: ../scripts/origtargz.pl:42
 msgid "Various download locations are tried:"
-msgstr ""
+msgstr "Plusieurs emplacements de téléchargement sont essayés :"
 
 #. type: =item
 #: ../scripts/origtargz.pl:46
 msgid "* First, an existing file is looked for."
-msgstr ""
+msgstr "- d'abord, un fichier existant est recherché ;"
 
 #. type: =item
 #: ../scripts/origtargz.pl:48
 msgid "* Directories given with B<--path> are searched."
-msgstr ""
+msgstr "- les répertoires donnés avec B<--path> sont explorés ;"
 
 #. type: =item
 #: ../scripts/origtargz.pl:50
@@ -15643,13 +15651,13 @@ msgid ""
 "* B<apt-get source> is tried when B<apt-cache showsrc> reports a matching "
 "version."
 msgstr ""
+"- B<apt-get source> est essayé si B<apt-cache showsrc> indique une version "
+"correspondante ;"
 
 #. type: =item
 #: ../scripts/origtargz.pl:52
-#, fuzzy
-#| msgid "B<--download-current-version>"
 msgid "* Finally, B<uscan --download-current-version> is tried."
-msgstr "B<--download-current-version>"
+msgstr "- enfin, B<uscan --download-current-version> est essayé."
 
 #. type: textblock
 #: ../scripts/origtargz.pl:56
@@ -15663,6 +15671,17 @@ msgid ""
 "\"3.0 (quilt)\"), and will even remove all patches from the package when no "
 "patch system is in use (the original \"1.0\" source format)."
 msgstr ""
+"Lorsqu'une archive amont doit être dépaquetée, B<origtargz> retirera tous "
+"les fichiers et répertoires du répertoire actuel sauf le répertoire "
+"F<debian> et les répertoires du dépôt de système de contrôle de versions. "
+"Certains fichiers hors de F<debian/> généralement gardés dans le système de "
+"contrôle de versions même pour les dépôts ne contenant que le répertoire "
+"F<debian> sont aussi conservés (par exemple F<.bzr-builddeb>, F<.gitignore> "
+"ou F<.hgignore>). I<Remarquez que toutes les modifications non prises en "
+"compte (committed) seront effacées> du système de correctifs utilisé (par "
+"exemple au format source « 3.0 (quilt) ») et que tous les correctifs seront "
+"retirés du paquet si aucun système n'est utilisé (pour le format source "
+"d'origine « 1.0 »)."
 
 #. type: textblock
 #: ../scripts/origtargz.pl:65
@@ -15670,6 +15689,9 @@ msgid ""
 "The default behavior is to unpack the orig tarball on the first invocation "
 "of B<origtargz> in a debian-dir-only checkout."
 msgstr ""
+"Le comportement par défaut est de dépaqueter l'archive amont la première "
+"fois que B<origtargz> est appelé depuis un répertoire issu d'un dépôt ne "
+"contenant que le répertoire F<debian>."
 
 #. type: textblock
 #: ../scripts/origtargz.pl:70
@@ -15677,6 +15699,8 @@ msgid ""
 "Despite B<origtargz> being called \"targz\", it will work with any "
 "compression scheme used for the tarball."
 msgstr ""
+"Malgré son nom, B<origtargz> fonctionne avec n'importe quel format de "
+"compression utilisé pour l'archive amont."
 
 #. type: textblock
 #: ../scripts/origtargz.pl:73
@@ -15686,6 +15710,11 @@ msgid ""
 "gz> changes. In contrast, B<origtargz> uses the current directory, keeping "
 "VCS metadata."
 msgstr ""
+"Un outil similaire pour dépaqueter les archives amont est B<uupdate>(1). "
+"B<uupdate> crée un nouveau répertoire de travail, dépaquette l'archive et "
+"applique les modifications Debian F<.diff.gz>. De son côté, B<origtargz> "
+"utilise le répertoire actuel, en gardant les métadonnées du système de "
+"gestion de versions."
 
 #. type: textblock
 #: ../scripts/origtargz.pl:78
@@ -15695,13 +15724,16 @@ msgid ""
 "B<git-import-orig>(1) and B<svn-upgrade>(1) for examples. B<origtargz> is "
 "still useful for downloading the current tarball."
 msgstr ""
+"Pour les dépôts de paquet Debian gardant l'intégralité des sources amont, "
+"d'autres outils devraient être utilisés pour mettre à niveau le dépôt à "
+"partir de l'archive amont. Consultez par exemple B<git-import-orig>(1) et "
+"B<svn-upgrade>(1). B<origtargz> est toujours utile pour télécharger "
+"l'archive amont actuelle."
 
 #. type: =item
 #: ../scripts/origtargz.pl:87
-#, fuzzy
-#| msgid "B<--debs-dir> I<directory>"
 msgid "B<-p>, B<--path> I<directory>"
-msgstr "B<--debs-dir> I<répertoire>"
+msgstr "B<-p>, B<--path> I<répertoire>"
 
 #. type: textblock
 #: ../scripts/origtargz.pl:89
@@ -15709,11 +15741,14 @@ msgid ""
 "Add I<directory> to the list of locations to search for an existing "
 "tarball.  When found, a hardlink is created if possible, otherwise a symlink."
 msgstr ""
+"Ajouter I<répertoire> à la liste des emplacement pour chercher une archive "
+"amont. Une fois trouvé, un lien matériel est créé si possible, un lien "
+"symbolique sinon."
 
 #. type: =item
 #: ../scripts/origtargz.pl:92
 msgid "B<-u>, B<--unpack>[=B<no>|B<once>|B<yes>]"
-msgstr ""
+msgstr "B<-u>, B<--unpack>[=B<no>|B<once>|B<yes>]"
 
 #. type: textblock
 #: ../scripts/origtargz.pl:94
@@ -15721,39 +15756,38 @@ msgid ""
 "Unpack the downloaded orig tarball to the current directory, replacing "
 "everything except the debian directory. Valid choices are:"
 msgstr ""
+"Dépaqueter l'archive amont téléchargée dans le répertoire actuel, en "
+"remplaçant tout sauf le répertoire I<debian>. Les choix possibles sont :"
 
 #. type: =item
 #: ../scripts/origtargz.pl:99
 msgid "B<no>"
-msgstr ""
+msgstr "B<no>"
 
 #. type: textblock
 #: ../scripts/origtargz.pl:101
 msgid "Do not unpack the orig tarball."
-msgstr ""
+msgstr "Ne pas dépaqueter l'archive amont."
 
 #. type: =item
 #: ../scripts/origtargz.pl:103
 msgid "B<once> (default when B<--unpack> is not used)"
-msgstr ""
+msgstr "B<once> (par défaut si B<--unpack> n'est pas utilisé)"
 
 #. type: textblock
 #: ../scripts/origtargz.pl:105
-#, fuzzy
-#| msgid ""
-#| "Only check the directory name if we have had to change directory in our "
-#| "search for I<debian/changelog>.  This is the default behaviour."
 msgid ""
 "If the current directory contains only a F<debian> directory (and possibly "
 "some dotfiles), unpack the orig tarball. This is the default behavior."
 msgstr ""
-"Ne vérifier le nom du répertoire que s'il a fallu changer de répertoire pour "
-"trouver le fichier I<debian/changelog>. C'est le comportement par défaut."
+"Si le répertoire actuel ne contient qu'un répertoire F<debian> (et "
+"éventuellement quelques fichiers F<.*>), dépaqueter l'archive amont. C'est "
+"le comportement par défaut."
 
 #. type: =item
 #: ../scripts/origtargz.pl:108
 msgid "B<yes> (default for B<--unpack> without argument)"
-msgstr ""
+msgstr "B<yes> (par défaut si B<--unpack> est utilisé sans argument)"
 
 #. type: textblock
 #: ../scripts/origtargz.pl:110
@@ -15762,18 +15796,20 @@ msgid ""
 "F<debian/> and VCS files. Preserved are: F<.bzr>, F<.bzrignore>, F<.bzr-"
 "builddeb>, F<.git>, F<.gitignore>, F<.hg>, F<.hgignore>, and F<.svn>."
 msgstr ""
+"Toujours dépaqueter l'archive amont. Les fichiers existants sont retirés, "
+"sauf le répertoire F<debian> et les fichiers du système de contrôle de "
+"versions. Sont gardés : F<.bzr>, F<.bzrignore>, F<.bzr-builddeb>, F<.git>, "
+"F<.gitignore>, F<.hg>, F<.hgignore> et F<.svn>."
 
 #. type: textblock
 #: ../scripts/origtargz.pl:118
 msgid "Alias for B<--unpack=no>."
-msgstr ""
+msgstr "Identique à B<--unpack=no>."
 
 #. type: =item
 #: ../scripts/origtargz.pl:120
-#, fuzzy
-#| msgid "B<-t>, B<--tool>"
 msgid "B<-t>, B<--tar-only>"
-msgstr "B<-t>, B<--tool>"
+msgstr "B<-t>, B<--tar-only>"
 
 #. type: textblock
 #: ../scripts/origtargz.pl:122
@@ -15783,25 +15819,27 @@ msgid ""
 "debian.tar.gz> components so B<debdiff> can be used to diff the last upload "
 "to the next one. With B<--tar-only>, only download the F<.orig.tar.*> file."
 msgstr ""
+"En utilisant B<apt-get source>, lui passer B<--tar-only>. L'action par "
+"défaut est de télécharger le paquet source complet, y compris les composants "
+"F<.dsc> et F<.diff.gz> ou F<.debian.tar.gz> pour que B<debdiff> puisse être "
+"utilisé pour comparer le dernier envoi au prochain. Avec B<--tar-only>, seul "
+"le fichier F<.orig.tar.*> est téléchargé."
 
 #. type: textblock
 #: ../scripts/origtargz.pl:141
 msgid ""
 "B<debcheckout>(1), B<git-import-orig>(1), B<svn-upgrade>(1), B<uupdate>(1)"
 msgstr ""
+"B<debcheckout>(1), B<git-import-orig>(1), B<svn-upgrade>(1), B<uupdate>(1)"
 
 #. type: textblock
 #: ../scripts/origtargz.pl:145
-#, fuzzy
-#| msgid ""
-#| "B<debcheckout> and this manpage have been written by Stefano Zacchiroli "
-#| "<I<zack@debian.org>>."
 msgid ""
 "B<origtargz> and this manpage have been written by Christoph Berg "
 "<I<myon@debian.org>>."
 msgstr ""
-"B<debcheckout> et cette page de manuel ont été écrits par Stefano Zacchiroli "
-"<I<zack@debian.org>>."
+"B<origtargz> et cette page de manuel ont été écrits par Christoph Berg "
+"<I<myon@debian.org>>."
 
 #. type: TH
 #: ../scripts/plotchangelog.1:1
@@ -20122,6 +20160,22 @@ msgid ""
 msgstr ""
 "Cette page de manuel a été écrite pour le paquet B<devscripts> par le "
 "responsable du paquet, Julian Gilbey E<lt>jdg@debian.orgE<gt>."
+
+#~ msgid "B<--tar-only>"
+#~ msgstr "B<--tar-only>"
+
+#~ msgid ""
+#~ "Various download locations are tried. First, an existing file is looked "
+#~ "for.  Then, B<apt-get source> is tried when B<apt-cache showsrc> reports "
+#~ "a matching version. Finally, B<uscan --download-current-version> is tried."
+#~ msgstr ""
+#~ "Plusieurs emplacements de téléchargement sont essayés. D'abord, un "
+#~ "fichier existant est recherché. Ensuite, B<apt-get source> est essayé si "
+#~ "B<apt-cache showsrc> indique une version correspondante. Enfin, B<uscan --"
+#~ "download-current-version> est essayé."
+
+#~ msgid "B<debcheckout>(1)."
+#~ msgstr "B<debcheckout>(1)"
 
 #~ msgid "B<--upgrade>"
 #~ msgstr "B<--upgrade>"
