@@ -51,7 +51,10 @@ usage()
 
 endswith()
 {
-    [ $(basename "$1" $2)$2 = $(basename "$1") ]
+    case $1 in
+	*$2) return 0 ;;
+	*) return 1;;
+    esac
 }
 
 # Instead of parsing the file completely as the previous Python

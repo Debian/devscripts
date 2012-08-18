@@ -33,6 +33,8 @@ devscripts (2.12.2) UNRELEASED; urgency=low
     various sources, and unpack it
   * po4a/Makefile: use po4a --keep=0 so the build system doesn't die with
     untranslated scripts
+  * dcmd: Reimplement endswith() with case. The original missed quoting and
+    made my brain hurt.
 
  -- Benjamin Drung <bdrung@debian.org>  Thu, 26 Jul 2012 12:17:51 +0200
 
