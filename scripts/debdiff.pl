@@ -1047,6 +1047,7 @@ sub wdiff_control_files($$$$$)
 		my $msg = ucfirst($cf) . " files$usepkgname: wdiff output";
 		print $msg, "\n", '-' x length $msg, "\n";
 		print $wdiff;
+		$status = 1;
 	    } else {
 		my @output;
 		@output = split /\n/, $wdiff;
@@ -1054,8 +1055,8 @@ sub wdiff_control_files($$$$$)
 		my $msg = ucfirst($cf) . " files$usepkgname: lines which differ (wdiff format)";
 		print "\n", $msg, "\n", '-' x length $msg, "\n";
                 print join("\n",@output), "\n";
+		$status = 1;
 	    }
-	    $status = 1;
 	}
     }
 
