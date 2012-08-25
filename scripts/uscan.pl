@@ -1491,6 +1491,7 @@ EOF
 	}
     }
 
+    my $excludesuffix = '+dfsg';
     if ($exclusion) {
 	my $data = Dpkg::Control::Hash->new();
 	$data->load('debian/copyright');
@@ -1511,7 +1512,6 @@ EOF
 		system('unzip', '-q', '-a', '-d', $tempdir, "$destdir/$newfile_base") == 0
 		    or uscan_die("Repacking from zip or jar to tar.gz failed (could not unzip)\n");
 	    }
-	    my $excludesuffix = '+dfsg';
 	    my $main_source_dir = get_main_source_dir($tempdir, $pkg, $newversion, $excludesuffix);
 	    unless ( -d $main_source_dir ) {
 		print STDERR "Error: $main_source_dir is no directory";
@@ -1534,7 +1534,7 @@ EOF
 		my $newfile_base_dfsg = "${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix" ;
 		system("cd $tempdir; GZIP='-n -9' tar --owner=root --group=root --mode=a+rX -czf \"$absdestdir/$newfile_base_dfsg\" $globpattern") == 0
 		    or die("Excluding files failed (could not create tarball)\n");
-		$symlink = 'no' # prevent symlinking or renaming
+		$symlink = 'files-excluded' # prevent symlinking or renaming
 	    }
 	}
     }
@@ -1565,6 +1565,8 @@ EOF
 		print "    and symlinked $renamed_base to it\n";
 	    } elsif ($symlink eq 'rename') {
 		print "    and renamed it as $renamed_base\n";
+	    } elsif ($symlink eq 'files-excluded') {
+		print "    and removed files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
 	    }
 	} elsif ($dehs) {
 	    my $msg = "Successfully downloaded updated package $newfile_base";
@@ -1573,6 +1575,8 @@ EOF
 		$msg .= " and symlinked $renamed_base to it";
 	    } elsif ($symlink eq 'rename') {
 		$msg .= " and renamed it as $renamed_base";
+	    } elsif ($symlink eq 'files-excluded') {
+		$msg .= " and removed files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
 	    } else {
 		$dehs_tags{'target'} = $newfile_base;
 	    }
@@ -1583,6 +1587,8 @@ EOF
 		print "    and symlinked $renamed_base to it\n";
 	    } elsif ($symlink eq 'rename') {
 		print "    and renamed it as $renamed_base\n";
+	    } elsif ($symlink eq 'files-excluded') {
+		print "    and removed files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
 	    }
 	}
 	last;
