@@ -74,7 +74,7 @@ sub uscan_die (@);
 sub dehs_output ();
 sub quoted_regex_replace ($);
 sub safe_replace ($$);
-sub get_main_source_dir($$$);
+sub get_main_source_dir($$$$);
 
 sub usage {
     print <<"EOF";
@@ -1511,7 +1511,8 @@ EOF
 		system('unzip', '-q', '-a', '-d', $tempdir, "$destdir/$newfile_base") == 0
 		    or uscan_die("Repacking from zip to tar.gz failed (could not unzip)\n");
 	    }
-	    my $main_source_dir = get_main_source_dir($tempdir, $pkg, $newversion);
+	    my $excludesuffix = '+dfsg';
+	    my $main_source_dir = get_main_source_dir($tempdir, $pkg, $newversion, $excludesuffix);
 	    unless ( -d $main_source_dir ) {
 		print STDERR "Error: $main_source_dir is no directory";
 	    }
@@ -1529,7 +1530,6 @@ EOF
 	    if ( $nfiles_before == $nfiles_after ) {
 		print "-- Source tree remains identical - no need for repacking.\n" if $verbose;
 	    } else {
-		my $excludesuffix = '+dfsg' ;
 		my $suffix = 'gz' ;
 		my $newfile_base_dfsg = "${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix" ;
 		system("cd $tempdir; GZIP='-n -9' tar --owner=root --group=root --mode=a+rX -czf \"$absdestdir/$newfile_base_dfsg\" $globpattern") == 0
@@ -2126,8 +2126,8 @@ sub safe_replace($$) {
     }
 }
 
-sub get_main_source_dir($$$) {
-    my ($tempdir, $pkg, $newversion) = @_;
+sub get_main_source_dir($$$$) {
+    my ($tempdir, $pkg, $newversion, $excludesuffix) = @_;
     my $fcount = 0;
     my $main_source_dir = '';
     my $any_dir = '';
@@ -2139,7 +2139,7 @@ sub get_main_source_dir($$$) {
 	    $fcount++;
 	    if (-d $tempdir.'/'.$file) {
 		$any_dir = $tempdir . '/' . $file;
-		$main_source_dir = $any_dir if $file =~ /^$pkg\w*$newversion$/i;
+		$main_source_dir = $any_dir if $file =~ /^$pkg\w*$newversion$excludesuffix\.orig$/i;
 	    }
 	}
     }
@@ -2148,7 +2148,7 @@ sub get_main_source_dir($$$) {
     }
     if ($fcount == 1 and $any_dir) {
 	# Unusual base dir in tarball - should be rather something like ${pkg}-${newversion}
-	$main_source_dir = $tempdir . '/' . $pkg . '-' . $newversion;
+	$main_source_dir = $tempdir . '/' . $pkg . '-' . $newversion . $excludesuffix . '.orig';
 	move($any_dir, $main_source_dir) or uscan_die("Unable to move $any_dir directory $main_source_dir\n");
 	return $main_source_dir;
     }
@@ -2158,7 +2158,7 @@ sub get_main_source_dir($$$) {
 	return $tempdir;
     }
     print "-- Move files to subdirectory $pkg-$newversion.\n" if $verbose;
-    $main_source_dir = $tempdir . '/' . $pkg . '-' . $newversion;
+    $main_source_dir = $tempdir . '/' . $pkg . '-' . $newversion . $excludesuffix . '.orig';
     mkdir($main_source_dir) or uscan_die("Unable to create temporary source directory $main_source_dir\n");
     foreach my $file (@files) {
 	unless ($file =~ /^\.\.?/) {
