@@ -1458,7 +1458,7 @@ EOF
 	$newfile_base = $newfile_base_gz;
     }
 
-    if ($repack and $newfile_base =~ /^(.*)\.zip$/) {
+    if ($repack and $newfile_base =~ /^(.*)\.(zip|jar)$/) {
 	print "-- Repacking from zip to .tar.gz\n" if $verbose;
 
 	system('command -v unzip >/dev/null 2>&1') >> 8 == 0
@@ -1470,12 +1470,12 @@ EOF
 	my $hidden = ".[!.]*";
 	my $absdestdir = abs_path($destdir);
 	system('unzip', '-q', '-a', '-d', $tempdir, "$destdir/$newfile_base") == 0
-	  or uscan_die("Repacking from zip to tar.gz failed (could not unzip)\n");
+	  or uscan_die("Repacking from zip or jar to tar.gz failed (could not unzip)\n");
 	if (defined glob("$tempdir/$hidden")) {
 	    $globpattern .= " $hidden";
 	}
 	system("cd $tempdir; GZIP='-n -9' tar --owner=root --group=root --mode=a+rX -czf \"$absdestdir/$newfile_base_gz\" $globpattern") == 0
-	  or uscan_die("Repacking from zip to tar.gz failed (could not create tarball)\n");
+	  or uscan_die("Repacking from zip or jar to tar.gz failed (could not create tarball)\n");
 	unlink "$destdir/$newfile_base";
 	$newfile_base = $newfile_base_gz;
     }
@@ -1509,7 +1509,7 @@ EOF
 		system('command -v unzip >/dev/null 2>&1') >> 8 == 0
 		    or uscan_die("unzip binary not found. This would serve as fallback because tar just failed.\n");
 		system('unzip', '-q', '-a', '-d', $tempdir, "$destdir/$newfile_base") == 0
-		    or uscan_die("Repacking from zip to tar.gz failed (could not unzip)\n");
+		    or uscan_die("Repacking from zip or jar to tar.gz failed (could not unzip)\n");
 	    }
 	    my $excludesuffix = '+dfsg';
 	    my $main_source_dir = get_main_source_dir($tempdir, $pkg, $newversion, $excludesuffix);
