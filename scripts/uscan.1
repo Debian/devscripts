@@ -444,6 +444,10 @@ Give verbose output.
 .B \-\-no\-verbose
 Don't give verbose output.  (This is the default behaviour.)
 .TP
+.B \-\-no\-exclusion
+Do not automatically exclude files mentioned in
+\fIdebian/copyright\fR field \fBFiles-Excluded\fR
+.TP
 .B \-\-debug
 Dump the downloaded web pages to stdout for debugging your watch file.
 .TP
@@ -517,6 +521,10 @@ equivalent to the \fB\-\-destdir\fR option.
 If this is set to \fIyes\fR, then after having downloaded a bzip tar,
 lzma tar, xz tar, or zip archive, \fBuscan\fR will repack it to a gzip tar.
 This is equivalent to the \fB\-\-repack\fR option.
+.B USCAN_NO_EXCLUSION
+If this is set to \fIyes\fR, files mentioned in the field \fBFiles-Excluded\fR
+of \fIdebian/copyright\fR will be ignored and no exclusion of files will be
+tried.  This is equivalent to the \fB\-\-no-exclusion\fR option.
 .SH "EXIT STATUS"
 The exit status gives some indication of whether a newer version was
 found or not; one is advised to read the output to determine exactly

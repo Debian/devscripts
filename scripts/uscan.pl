@@ -46,6 +46,8 @@ BEGIN {
 	}
     }
 }
+use Dpkg::Control::Hash;
+
 my $CURRENT_WATCHFILE_VERSION = 3;
 
 my $progname = basename($0);
@@ -72,6 +74,7 @@ sub uscan_die (@);
 sub dehs_output ();
 sub quoted_regex_replace ($);
 sub safe_replace ($$);
+sub get_main_source_dir($$$);
 
 sub usage {
     print <<"EOF";
@@ -138,6 +141,8 @@ Options:
     --no-conf, --noconf
                    Don\'t read devscripts config files;
                    must be the first option given
+    --no-exclusion no automatic exclusion of files mentioned in
+                   debian/copyright field Files-Excluded
     --help         Show this message
     --version      Show version information
 
@@ -180,6 +185,7 @@ my $dehs_start_output = 0;
 my $pkg_report_header = '';
 my $timeout = 20;
 my $user_agent_string = 'Debian uscan ###VERSION###';
+my $exclusion = 1;
 
 if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg = "  (no configuration files read)";
@@ -196,6 +202,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'USCAN_DEHS_OUTPUT' => 'no',
 		       'USCAN_USER_AGENT' => '',
 		       'USCAN_REPACK' => 'no',
+		       'USCAN_EXCLUSION' => 'yes',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
 		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.+)?',
 		       );
@@ -233,6 +240,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'USCAN_DEHS_OUTPUT'}='no';
     $config_vars{'USCAN_REPACK'} =~ /^(yes|no)$/
 	or $config_vars{'USCAN_REPACK'}='no';
+    $config_vars{'USCAN_EXCLUSION'} =~ /^(yes|no)$/
+	or $config_vars{'USCAN_EXCLUSION'}='yes';
     $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} =~ /^[012]$/
 	or $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'}=1;
 
@@ -263,7 +272,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # Now read the command line arguments
 my $debug = 0;
 my ($opt_h, $opt_v, $opt_destdir, $opt_download, $opt_force_download,
-    $opt_report, $opt_passive, $opt_symlink, $opt_repack);
+    $opt_report, $opt_passive, $opt_symlink, $opt_repack, $opt_exclusion);
 my ($opt_verbose, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
 my $opt_download_version;
@@ -295,6 +304,7 @@ GetOptions("help" => \$opt_h,
 	   "useragent=s" => \$opt_user_agent,
 	   "noconf" => \$opt_noconf,
 	   "no-conf" => \$opt_noconf,
+	   "exclusion!" => \$opt_exclusion,
 	   "download-current-version" => \$opt_download_current_version,
 	   )
     or die "Usage: $progname [options] [directories]\nRun $progname --help for more details\n";
@@ -318,6 +328,7 @@ $timeout = 20 unless defined $timeout and $timeout > 0;
 $symlink = $opt_symlink if defined $opt_symlink;
 $verbose = $opt_verbose if defined $opt_verbose;
 $dehs = $opt_dehs if defined $opt_dehs;
+$exclusion = $opt_exclusion if defined $opt_exclusion;
 $user_agent_string = $opt_user_agent if defined $opt_user_agent;
 $download_version = $opt_download_version if defined $opt_download_version;
 
@@ -1480,6 +1491,54 @@ EOF
 	}
     }
 
+    if ($exclusion) {
+	my $data = Dpkg::Control::Hash->new();
+	$data->load('debian/copyright');
+	my $okformat = qr'http://www.debian.org/doc/packaging-manuals/copyright-format/1.0';
+	if ($data->{'format'} =~ m{^$okformat/?$} and $data->{'files-excluded'} ) {
+	    my $tempdir = tempdir ( "uscanXXXX", TMPDIR => 1, CLEANUP => 1 );
+	    my $globpattern = "*";
+	    my $hidden = ".[!.]*";
+	    if (defined glob("$tempdir/$hidden")) {
+		$globpattern .= " $hidden";
+	    }
+	    my $absdestdir = abs_path($destdir);
+	    unless (system("cd $tempdir; tar -xaf \"$absdestdir/$newfile_base\" 2>/dev/null") == 0) {
+		print "-- $newfile_base is no tarball.  Try unzip.\n" if $verbose;
+		# try unzip if tar fails - we do want to do something sensible even if no --repack was specified
+		system('command -v unzip >/dev/null 2>&1') >> 8 == 0
+		    or uscan_die("unzip binary not found. This would serve as fallback because tar just failed.\n");
+		system('unzip', '-q', '-a', '-d', $tempdir, "$destdir/$newfile_base") == 0
+		    or uscan_die("Repacking from zip to tar.gz failed (could not unzip)\n");
+	    }
+	    my $main_source_dir = get_main_source_dir($tempdir, $pkg, $newversion);
+	    unless ( -d $main_source_dir ) {
+		print STDERR "Error: $main_source_dir is no directory";
+	    }
+	    my $nfiles_before = `find $main_source_dir | wc -l`;
+	    foreach (grep {/\//} split /\s+/, $data->{"files-excluded"}) {
+		# delete trailing '/' because otherwise find -path will fail
+		s?/+$?? ;
+		# use rm -rf to enable deleting non-empty directories
+		`find $main_source_dir -path "$main_source_dir/$_" | xargs rm -rf`;
+	    };
+	    foreach (grep {/^[^\/]+$/} split /\s+/, $data->{"files-excluded"}) {
+		`find $main_source_dir -type f -name $_ -delete`;
+	    };
+	    my $nfiles_after = `find $main_source_dir | wc -l`;
+	    if ( $nfiles_before == $nfiles_after ) {
+		print "-- Source tree remains identical - no need for repacking.\n" if $verbose;
+	    } else {
+		my $excludesuffix = '+dfsg' ;
+		my $suffix = 'gz' ;
+		my $newfile_base_dfsg = "${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix" ;
+		system("cd $tempdir; GZIP='-n -9' tar --owner=root --group=root --mode=a+rX -czf \"$absdestdir/$newfile_base_dfsg\" $globpattern") == 0
+		    or die("Excluding files failed (could not create tarball)\n");
+		$symlink = 'no' # prevent symlinking or renaming
+	    }
+	}
+    }
+
     my @renames = (
 	[qr/\.(tar\.gz|tgz)$/, 'gz'],
 	[qr/\.(tar\.bz2|tbz2?)$/, 'bz2'],
@@ -2065,4 +2124,51 @@ sub safe_replace($$) {
 
 	return 1;
     }
+}
+
+sub get_main_source_dir($$$) {
+    my ($tempdir, $pkg, $newversion) = @_;
+    my $fcount = 0;
+    my $main_source_dir = '';
+    my $any_dir = '';
+    opendir DIR, $tempdir or uscan_die "opendir $tempdir: $!";
+    my @files = readdir DIR;
+    closedir DIR;
+    foreach my $file (@files) {
+	unless ($file =~ /^\.\.?$/) {
+	    $fcount++;
+	    if (-d $tempdir.'/'.$file) {
+		$any_dir = $tempdir . '/' . $file;
+		$main_source_dir = $any_dir if $file =~ /^$pkg\w*$newversion$/i;
+	    }
+	}
+    }
+    if ($fcount == 1 and $main_source_dir) {
+	return $main_source_dir;
+    }
+    if ($fcount == 1 and $any_dir) {
+	# Unusual base dir in tarball - should be rather something like ${pkg}-${newversion}
+	$main_source_dir = $tempdir . '/' . $pkg . '-' . $newversion;
+	move($any_dir, $main_source_dir) or uscan_die("Unable to move $any_dir directory $main_source_dir\n");
+	return $main_source_dir;
+    }
+    print "-- Dirty tarball found.\n" if $verbose;
+    if ($main_source_dir) { # if tarball is dirty but does contain a $pkg-$newversion dir we will not undirty but leave it as is
+	print "-- No idea how to create proper tarball structure - leaving as is.\n" if $verbose;
+	return $tempdir;
+    }
+    print "-- Move files to subdirectory $pkg-$newversion.\n" if $verbose;
+    $main_source_dir = $tempdir . '/' . $pkg . '-' . $newversion;
+    mkdir($main_source_dir) or uscan_die("Unable to create temporary source directory $main_source_dir\n");
+    foreach my $file (@files) {
+	unless ($file =~ /^\.\.?/) {
+	    # move("${tempdir}/$file", $main_source_dir) or die("Unable to move ${tempdir}/$file directory $main_source_dir\n");
+	    unless (move("${tempdir}/$file", $main_source_dir)) {
+		# HELP: why can't perl move not move directories????
+		print "Perl move seems to be not able to ` move(\"${tempdir}/$file\", $main_source_dir) ` ... trying system mv\n" if $debug;
+		system('mv', "${tempdir}/$file", $main_source_dir);
+	    }
+	}
+    }
+    return $main_source_dir;
 }
