@@ -2145,7 +2145,9 @@ sub get_main_source_dir($$$$) {
 	    $fcount++;
 	    if (-d $tempdir.'/'.$file) {
 		$any_dir = $tempdir . '/' . $file;
-		$main_source_dir = $any_dir if $file =~ /^$pkg\w*$newversion$excludesuffix\.orig$/i;
+		# check whether there is some dir in upstream source which looks reasonable
+		# If such dir exists, we do not try to undirty the directory structure
+		$main_source_dir = $any_dir if $file =~ /^$pkg\w*$newversion$/i;
 	    }
 	}
     }
