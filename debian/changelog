@@ -1,3 +1,13 @@
+devscripts (2.10.69+squeeze3) stable-security; urgency=high
+
+  * annotate-output: Fix to prevent symlink attack: don't delete
+    safely-created file and reuse its name.  Instead, create temporary
+    directory and create FIFOs therein.  Also, be sure to remove temporaries
+    upon catchable signal.  Thanks to Jim Meyering for the patch.  Fixes
+    CVE-2012-3500.
+
+ -- James McCoy <jamessan@debian.org>  Sun, 26 Aug 2012 11:38:43 -0400
+
 devscripts (2.10.69+squeeze2) squeeze-security; urgency=high
 
   [ Adam D. Barratt ]
