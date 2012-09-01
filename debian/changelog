@@ -1,4 +1,4 @@
-devscripts (2.12.2) UNRELEASED; urgency=low
+devscripts (2.12.3) UNRELEASED; urgency=low
 
   [ Benjamin Drung ]
   * licensecheck:
@@ -37,6 +37,16 @@ devscripts (2.12.2) UNRELEASED; urgency=low
     made my brain hurt.
 
  -- Benjamin Drung <bdrung@debian.org>  Thu, 26 Jul 2012 12:17:51 +0200
+
+devscripts (2.12.2) unstable; urgency=high
+
+  * annotate-output: Fix to prevent symlink attack: don't delete
+    safely-created file and reuse its name.  Instead, create temporary
+    directory and create FIFOs therein.  Also, be sure to remove temporaries
+    upon catchable signal.  Thanks to Jim Meyering for the patch.  Fixes
+    CVE-2012-3500.
+
+ -- James McCoy <jamessan@debian.org>  Sun, 26 Aug 2012 11:16:17 -0400
 
 devscripts (2.12.1) unstable; urgency=low
 
