@@ -60,7 +60,7 @@ endswith()
 # Instead of parsing the file completely as the previous Python
 # implementation did (using python-debian), let's just select lines
 # that look like they might be part of the file list.
-RE="^ [0-9a-f]{32} [0-9]+ ((([a-zA-Z-]+/)?[a-zA-Z1-]+|-) ([a-zA-Z]+|-) )?(.*)$"
+RE="^ [0-9a-f]{32} [0-9]+ ((([a-zA-Z0-9_.-]+/)?[a-zA-Z0-9_.-]+|-) ([a-zA-Z]+|-) )?(.*)$"
 
 maybe_expand()
 {
