@@ -24,6 +24,7 @@
 use 5.004;	# correct pipe close behavior
 use strict;
 use Cwd;
+use Dpkg::IPC;
 use File::Basename;
 use POSIX	qw(:errno_h);
 
@@ -108,14 +109,23 @@ sub get_rings {
 sub check_signature {
     my ($file, @rings) = @_;
 
-    my $cmd = 'gpg --batch --no-options --no-default-keyring --always-trust';
-    foreach (@rings) { $cmd .= " --keyring $_"; }
-    $cmd .= " <$file";
-    $cmd .= " 2>&1 >/dev/null" if not ($verbose);
+    my @cmd = qw(gpg --batch --no-options --no-default-keyring --always-trust);
+    foreach (@rings) { push @cmd, '--keyring'; push @cmd, $_; }
 
-    my $out=`$cmd`;
-    if ($? == 0) { return ""; }
-    else { return $out; }
+    my ($out, $err) = ('', '');
+    eval {
+	spawn(exec => \@cmd,
+	    from_file => $file,
+	    to_string => \$out,
+	    error_to_string => \$err,
+	    wait_child => 1);
+    };
+
+    if ($@) {
+	print $out if ($verbose);
+	return $err || $@;
+    }
+    return '';
 }
 
 sub process_file {
@@ -138,7 +148,7 @@ sub process_file {
 	$filebase = $file;
     }
 
-    if (!open SIGNED, $filebase) {
+    if (!open SIGNED, '<', $filebase) {
 	xwarn "can't open $file:";
 	return;
     }
@@ -200,6 +210,8 @@ sub process_file {
 	}
 	my ($md5, $size, $filename) = ($1, $2, $3);
 	my ($sha1, $sha1size, $sha256, $sha256size);
+	$filename !~ m,[/\x00],
+	    or xdie "File name contains invalid characters: $file";
 
 	if (keys %sha1s) {
 	    $sha1 = $sha1s{$filename};
@@ -231,7 +243,7 @@ sub process_file {
 	    $sha256size = $size;
 	}
 
-	unless (open FILE, $filename) {
+	unless (open FILE, '<', $filename) {
 	    if ($! == ENOENT) {
 		print STDERR "   skipping  $filename (not present)\n";
 	    }
@@ -267,18 +279,32 @@ sub process_file {
 	$md5o->reset;
 	$md5o->addfile(*FILE);
 	my $this_md5 = $md5o->hexdigest;
-	my $this_sha1 = `sha1sum $filename | cut -d' ' -f1`;
-	chomp $this_sha1;
-	my $this_sha256 =`sha256sum $filename | cut -d' ' -f1`;
-	chomp $this_sha256;
 	unless ($this_md5 eq $md5) {
 	    xwarn "MD5 mismatch for $filename (wanted $md5 got $this_md5)\n";
 	    next;
 	}
+
+	my $this_sha1;
+	eval {
+	    spawn(exec => ['sha1sum', $filename],
+		to_string => \$this_sha1,
+		wait_child => 1);
+	};
+	($this_sha1) = split /\s/,$this_sha1,2;
+	$this_sha1 ||= '';
 	unless (! keys %sha1s or $this_sha1 eq $sha1) {
 	    xwarn "SHA1 mismatch for $filename (wanted $sha1 got $this_sha1)\n";
 	    next;
 	}
+
+	my $this_sha256;
+	eval {
+	    spawn(exec => ['sha256sum', $filename],
+		to_string => \$this_sha256,
+		wait_child => 1);
+	};
+	($this_sha256) = split /\s/,$this_sha256,2;
+	$this_sha256 ||= '';
 	unless (! keys %sha256s or $this_sha256 eq $sha256) {
 	    xwarn "SHA256 mismatch for $filename (wanted $sha256 got $this_sha256)\n";
 	    next;
