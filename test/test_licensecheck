@@ -48,6 +48,12 @@ testDual() {
     license "dual.c" "Public domain GPL (v3)"
 }
 
+testMPL() {
+	license "mpl-1.1.sh" "MPL (v1.1)"
+	license "mpl-2.0.sh" "MPL (v2.0)"
+	license "mpl-2.0-comma.sh" "MPL (v2.0)"
+}
+
 testMachine() {
     license2 "-m" "beerware.cpp" "Beerware"
     license2 "--machine" "lgpl-2.1.h" "LGPL (v2.1)"
