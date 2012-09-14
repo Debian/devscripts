@@ -220,6 +220,8 @@ sub get_file {
 	return 0;
     }
 
+    $seen{$file} = 1;
+
     if ($file =~ /\.(?:changes|dsc)$/) {
 	parse_file($dir, $file);
     }
@@ -227,7 +229,6 @@ sub get_file {
 	$found_dsc = $file;
     }
 
-    $seen{$file} = 1;
     return 1;
 }
 
