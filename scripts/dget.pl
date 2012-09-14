@@ -105,7 +105,7 @@ sub wget {
     # schemes not supported by all backends
     if ($url =~ m!^(file|copy)://(/.+)!) {
 	if ($1 eq "copy" or not link($2, $file)) {
-	    system "cp -a $2 $file";
+	    system ('cp', '-a', $2, $file);
 	    return $? >> 8;
 	}
 	return;
@@ -175,7 +175,7 @@ sub get_file {
 		    print "$progname: using $path/$file (hardlink)\n" unless $opt->{'quiet'};
 		} else {
 		    print "$progname: using $path/$file (copy)\n" unless $opt->{'quiet'};
-		    system "cp -a $path/$file $file";
+		    system ('cp', '-a', "$path/$file", $file);
 		}
 		last;
 	    }
@@ -192,7 +192,7 @@ sub get_file {
     }
 
     # try apt-get if it is still not there
-    if (not -e $file and $file =~ m!^([a-z0-9.+-]{2,})_[^/]+\.(?:diff\.gz|tar\.gz)$!) {
+    if (not -e $file and $file =~ m!^([a-z0-9][a-z0-9.+-]+)_[^/]+\.(?:diff\.gz|tar\.gz)$!) {
 	my $cmd = "apt-get source --print-uris $1";
 	my $apt = new IO::File("$cmd |") or die "$cmd: $!";
 	while(<$apt>) {
@@ -444,7 +444,7 @@ for my $arg (@ARGV) {
 	    if ($dget_verify) { # We are duplicating work here a bit as
 		# dpkg-source -x will also verify signatures. Still, we
 		# also want to barf with -d, and on unsigned packages.
-		system 'dscverify', $found_dsc;
+		system ('dscverify', $found_dsc);
 		exit $? >> 8 if $? >> 8 != 0;
 	    }
 	    my @cmd = qw(dpkg-source -x);
