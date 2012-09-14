@@ -238,7 +238,10 @@ sub parse_file {
     open $fh, $file or die "$file: $!";
     while (<$fh>) {
 	if (/^ ([0-9a-f]{32}) (?:\S+ )*(\S+)$/) {
-	    get_file($dir, $2, $1) or return;
+	    my ($_sum, $_file) = ($1, $2);
+	    $_file !~ m,[/\x00],
+		or die "File name contains invalid characters: $_file";
+            get_file($dir, $_file, $_sum) or return;
 	}
     }
     close $fh;
