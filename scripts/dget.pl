@@ -200,7 +200,7 @@ sub get_file {
 
     # try apt-get if it is still not there
     my $ext = $compression_re_file_ext;
-    if (not -e $file and $file =~ m!^([a-z0-9.+-]{2,})_[^/]+\.(?:diff|tar)\.$ext$!) {
+    if (not -e $file and $file =~ m!^([a-z0-9][a-z0-9.+-]+)_[^/]+\.(?:diff|tar)\.$ext$!) {
 	my @cmd = ('apt-get', 'source', '--print-uris', $1);
 	my $cmd = join ' ', @cmd;
 	open(my $apt, '-|', @cmd) or die "$cmd: $!";

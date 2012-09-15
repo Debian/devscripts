@@ -41,7 +41,9 @@ devscripts (2.12.3) UNRELEASED; urgency=low
   [ James McCoy ]
   * debdiff: Fix regression in exit code, introduced in 2.11.4.  (Closes:
     #686247)
-  * dget: Fix CVE-2012-2241 (arbitrary file deletion)
+  * dget:
+    + Fix CVE-2012-2241 (arbitrary file deletion)
+    + Only match policy-compliant source package names.
   * dscverify: Fix CVE-2012-2240 (arbitrary code execution)
 
  -- Benjamin Drung <bdrung@debian.org>  Thu, 26 Jul 2012 12:17:51 +0200
