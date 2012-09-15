@@ -133,12 +133,20 @@ while [ $# -gt 0 ]; do
     shift
 done
 
+cmd=
 args=""
-for arg in "$@"; do
+while [ $# -gt 0 ]; do
+    arg="$1"
+    shift
     temparg="$(maybe_expand "$arg")"
     if [ -z "$temparg" ]; then
+	if [ -z "$cmd" ]; then
+	    cmd="$arg"
+	    continue
+	fi
 	# Not expanded, so simply add to argument list
-	args="$args $arg"
+	args="$args
+$arg"
     else
 	SEEN_INDEPDEB=0; SEEN_ARCHDEB=0; SEEN_SCHANGES=0; SEEN_BCHANGES=0
 	SEEN_INDEPUDEB=0; SEEN_ARCHUDEB=0; SEEN_UDEB=0;
@@ -147,45 +155,55 @@ for arg in "$@"; do
 	newarg=""
 	# Output those items from the expanded list which were
 	# requested, and record which files are contained in the list
-	eval $(echo "$temparg" | while read THISARG; do
+	eval "$(echo "$temparg" | while read THISARG; do
 	    if [ -z "$THISARG" ]; then
 		# Skip
 		:
 	    elif endswith "$THISARG" _all.deb; then
-		[ "$INDEPDEB" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
+		[ "$INDEPDEB" = "0" ] || echo "newarg=\"\$newarg
+$THISARG\";"
 		echo "SEEN_INDEPDEB=1;"
 	    elif endswith "$THISARG" .deb; then
-		[ "$ARCHDEB" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
+		[ "$ARCHDEB" = "0" ] || echo "newarg=\"\$newarg
+$THISARG\";"
 		echo "SEEN_ARCHDEB=1;"
 	    elif endswith "$THISARG" _all.udeb; then
-		[ "$INDEPUDEB" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
+		[ "$INDEPUDEB" = "0" ] || echo "newarg=\"\$newarg
+$THISARG\";"
 		echo "SEEN_INDEPUDEB=1;"
 	    elif endswith "$THISARG" .udeb; then
-		[ "$ARCHUDEB" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
+		[ "$ARCHUDEB" = "0" ] || echo "newarg=\"\$newarg
+$THISARG\";"
 		echo "SEEN_ARCHUDEB=1;"
 	    elif endswith "$THISARG" .tar.gz || \
 		 endswith "$THISARG" .tar.xz || \
 		 endswith "$THISARG" .tar.lzma || \
 		 endswith "$THISARG" .tar.bz2; then
-		[ "$TARBALL" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
+		[ "$TARBALL" = "0" ] || echo "newarg=\"\$newarg
+$THISARG\";"
 		echo "SEEN_TARBALL=1;"
 	    elif endswith "$THISARG" _source.changes; then
-		[ "$SCHANGES" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
+		[ "$SCHANGES" = "0" ] || echo "newarg=\"\$newarg
+$THISARG\";"
 		echo "SEEN_SCHANGES=1;"
 	    elif endswith "$THISARG" .changes; then
-		[ "$BCHANGES" = "0" ] || echo "newarg\"\$newarg $THISARG\";"
+		[ "$BCHANGES" = "0" ] || echo "newarg\"\$newarg
+$THISARG\";"
 		echo "SEEN_BCHANGES=1;"
 	    elif endswith "$THISARG" .dsc; then
-		[ "$DSC" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
+		[ "$DSC" = "0" ] || echo "newarg=\"\$newarg
+$THISARG\";"
 		echo "SEEN_DSC=1;"
 	    elif endswith "$THISARG" .diff.gz; then
-		[ "$DIFF" = "0" ] || echo "newarg=\"\$newarg $THISARG\";"
+		[ "$DIFF" = "0" ] || echo "newarg=\"\$newarg
+$THISARG\";"
 		echo "SEEN_DIFF=1;"
 	    elif [ "$FILTERED" != "1" ]; then
 		# What is it? Output anyway
-		echo "newarg=\"\$newarg $THISARG\";"
+		echo "newarg=\"\$newarg
+$THISARG\";"
 	    fi
-	done)
+	done)"
 
 	INCLUDEARG=1
 	if endswith "$arg" _source.changes; then
@@ -253,17 +271,20 @@ for arg in "$@"; do
 	    [ "$MISSING" = "0" ] || exit 1
 	fi
 
-	args="$args $newarg"
-	[ "$INCLUDEARG" = "0" ] || args="$args $arg"
+	args="$args
+$newarg"
+	[ "$INCLUDEARG" = "0" ] || args="$args
+$arg"
     fi
 done
 
-if [ -e "$1" ] && (endswith "$1" .changes || endswith "$1" .dsc); then
-    set -- $args
+IFS='
+'
+if [ -z "$cmd" ]; then
     for arg in $args; do
 	echo $arg
     done
     exit 0
 fi
 
-exec $args
+exec $cmd -- $args
