@@ -4,6 +4,10 @@ devscripts (2.12.3+exp1) UNRELEASED; urgency=low
   * origtargz: New script: fetch the orig tarball of a Debian package from
     various sources, and unpack it
 
+  [ James McCoy ]
+  * licensecheck: Recognize MPL 2.0 licenses.  Thanks to Ryan Pavlik for the
+    patch.  (Closes: #687664)
+
  -- James McCoy <jamessan@debian.org>  Sat, 15 Sep 2012 16:12:16 -0400
 
 devscripts (2.12.3) unstable; urgency=medium
