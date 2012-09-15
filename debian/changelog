@@ -2,6 +2,9 @@ devscripts (2.12.4) UNRELEASED; urgency=low
 
   * dget: Avoid an infinite loop when a .changes/.dsc file references itself.
     (Closes: #687670)
+  * interdiff:
+    + Set $TMPDIR when running interdiff so its temp files get cleaned up on
+      exit.
 
  -- James McCoy <jamessan@debian.org>  Sat, 15 Sep 2012 16:26:28 -0400
 

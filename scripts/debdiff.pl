@@ -21,6 +21,7 @@ use Dpkg::IPC;
 use Dpkg::Compression;
 use File::Copy qw(cp move);
 use File::Basename;
+use File::Spec;
 use File::Path qw/ rmtree /;
 use File::Temp qw/ tempdir tempfile /;
 use lib '/usr/share/devscripts';
@@ -544,9 +545,13 @@ elsif ($type eq 'dsc') {
 	and scalar(@excludes) == 0 and $use_interdiff and !$wdiff_source_control) {
 	# same orig tar ball, interdiff exists and not wdiffing
 
+	my $tmpdir = tempdir(CLEANUP => 1);
 	spawn(exec => ['interdiff', '-z', @diff_opts, $diffs[1], $diffs[2]],
 	      to_file => $filename,
-	      wait_child => 1);
+	      wait_child => 1,
+	      # Make interdiff put its tempfiles in $tmpdir, so they're
+	      # automatically cleaned up
+	      env => { TMPDIR => $tmpdir });
 	if ($have_diffstat and $show_diffstat) {
 	    my $header = "diffstat for " . basename($diffs[1])
 			    . " " . basename($diffs[2]) . "\n\n";
