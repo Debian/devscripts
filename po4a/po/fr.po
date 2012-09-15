@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2012-08-18 12:16-0400\n"
+"POT-Creation-Date: 2012-09-15 15:20-0300\n"
 "PO-Revision-Date: 2012-08-17 11:24-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -90,14 +90,14 @@ msgstr "DEBIAN"
 #: ../scripts/debrsign.1:2 ../scripts/debsign.1:2 ../scripts/debsnap.1:3
 #: ../scripts/debuild.1:2 ../scripts/desktop2menu.pl:24
 #: ../scripts/dep3changelog.1:2 ../scripts/devscripts.1:2
-#: ../scripts/dget.pl:489 ../scripts/diff2patches.1:2
+#: ../scripts/dget.pl:492 ../scripts/diff2patches.1:2
 #: ../scripts/dpkg-depcheck.1:2 ../scripts/dpkg-genbuilddeps.1:2
 #: ../doc/edit-patch.1:2 ../scripts/dscextract.1:2 ../scripts/dscverify.1:2
 #: ../scripts/getbuildlog.1:2 ../scripts/grep-excuses.1:2
 #: ../scripts/licensecheck.pl:21 ../scripts/list-unreleased.1:2
 #: ../scripts/manpage-alert.1:2 ../scripts/mass-bug.pl:21
 #: ../scripts/mergechanges.1:2 ../scripts/mk-build-deps.pl:24
-#: ../scripts/namecheck.pl:3 ../scripts/nmudiff.1:2 ../scripts/origtargz.pl:20
+#: ../scripts/namecheck.pl:3 ../scripts/nmudiff.1:2
 #: ../scripts/plotchangelog.1:2 ../scripts/pts-subscribe.1:2
 #: ../scripts/rc-alert.1:2 ../scripts/rmadison.pl:204
 #: ../doc/suspicious-source.1:17 ../scripts/svnpath.pl:3
@@ -128,22 +128,21 @@ msgstr ""
 #: ../scripts/debi.1:4 ../scripts/debpkg.1:4 ../scripts/debrelease.1:4
 #: ../scripts/debrsign.1:4 ../scripts/debsign.1:4 ../scripts/debsnap.1:6
 #: ../scripts/debuild.1:4 ../scripts/desktop2menu.pl:28
-#: ../scripts/dep3changelog.1:4 ../scripts/dget.pl:493
+#: ../scripts/dep3changelog.1:4 ../scripts/dget.pl:496
 #: ../scripts/dpkg-depcheck.1:4 ../scripts/dpkg-genbuilddeps.1:4
 #: ../doc/edit-patch.1:6 ../scripts/dscextract.1:4 ../scripts/dscverify.1:4
 #: ../scripts/getbuildlog.1:4 ../scripts/grep-excuses.1:4
 #: ../scripts/licensecheck.pl:25 ../scripts/list-unreleased.1:4
 #: ../scripts/manpage-alert.1:4 ../scripts/mass-bug.pl:25
 #: ../scripts/mergechanges.1:4 ../scripts/mk-build-deps.pl:28
-#: ../scripts/nmudiff.1:4 ../scripts/origtargz.pl:24
-#: ../scripts/plotchangelog.1:4 ../scripts/pts-subscribe.1:4
-#: ../scripts/rc-alert.1:4 ../scripts/rmadison.pl:208
-#: ../doc/suspicious-source.1:21 ../scripts/svnpath.pl:7
-#: ../scripts/tagpending.pl:83 ../scripts/transition-check.pl:27
-#: ../scripts/uscan.1:4 ../scripts/uupdate.1:4 ../doc/what-patch.1:5
-#: ../scripts/whodepends.1:4 ../scripts/who-uploads.1:4
-#: ../scripts/wnpp-alert.1:4 ../scripts/wnpp-check.1:4
-#: ../doc/wrap-and-sort.1:18
+#: ../scripts/nmudiff.1:4 ../scripts/plotchangelog.1:4
+#: ../scripts/pts-subscribe.1:4 ../scripts/rc-alert.1:4
+#: ../scripts/rmadison.pl:208 ../doc/suspicious-source.1:21
+#: ../scripts/svnpath.pl:7 ../scripts/tagpending.pl:83
+#: ../scripts/transition-check.pl:27 ../scripts/uscan.1:4
+#: ../scripts/uupdate.1:4 ../doc/what-patch.1:5 ../scripts/whodepends.1:4
+#: ../scripts/who-uploads.1:4 ../scripts/wnpp-alert.1:4
+#: ../scripts/wnpp-check.1:4 ../doc/wrap-and-sort.1:18
 #, no-wrap
 msgid "SYNOPSIS"
 msgstr "SYNOPSIS"
@@ -166,7 +165,7 @@ msgstr "B<annotate-output> [I<options>] I<programme> [I<paramètres> ...]"
 #: ../scripts/deb-reversion.dbk:82 ../scripts/debrsign.1:7
 #: ../scripts/debsign.1:6 ../scripts/debsnap.1:14 ../scripts/debuild.1:10
 #: ../scripts/desktop2menu.pl:34 ../scripts/dep3changelog.1:6
-#: ../scripts/devscripts.1:4 ../scripts/dget.pl:503
+#: ../scripts/devscripts.1:4 ../scripts/dget.pl:506
 #: ../scripts/diff2patches.1:10 ../scripts/dpkg-depcheck.1:6
 #: ../scripts/dpkg-genbuilddeps.1:6 ../doc/edit-patch.1:11
 #: ../scripts/dscextract.1:6 ../scripts/dscverify.1:6
@@ -174,15 +173,15 @@ msgstr "B<annotate-output> [I<options>] I<programme> [I<paramètres> ...]"
 #: ../scripts/licensecheck.pl:34 ../scripts/list-unreleased.1:6
 #: ../scripts/manpage-alert.1:8 ../scripts/mass-bug.pl:29
 #: ../scripts/mergechanges.1:6 ../scripts/mk-build-deps.pl:34
-#: ../scripts/nmudiff.1:6 ../scripts/origtargz.pl:34
-#: ../scripts/plotchangelog.1:7 ../scripts/pts-subscribe.1:8
-#: ../scripts/rc-alert.1:8 ../scripts/rmadison.pl:216
-#: ../doc/suspicious-source.1:24 ../scripts/svnpath.pl:17
-#: ../scripts/tagpending.pl:87 ../scripts/transition-check.pl:33
-#: ../scripts/uscan.1:6 ../scripts/uupdate.1:8 ../doc/what-patch.1:8
-#: ../scripts/whodepends.1:6 ../scripts/who-uploads.1:6
-#: ../scripts/wnpp-alert.1:8 ../scripts/wnpp-check.1:8
-#: ../doc/wrap-and-sort.1:22 ../scripts/devscripts.conf.5:4
+#: ../scripts/nmudiff.1:6 ../scripts/plotchangelog.1:7
+#: ../scripts/pts-subscribe.1:8 ../scripts/rc-alert.1:8
+#: ../scripts/rmadison.pl:216 ../doc/suspicious-source.1:24
+#: ../scripts/svnpath.pl:17 ../scripts/tagpending.pl:87
+#: ../scripts/transition-check.pl:33 ../scripts/uscan.1:6
+#: ../scripts/uupdate.1:8 ../doc/what-patch.1:8 ../scripts/whodepends.1:6
+#: ../scripts/who-uploads.1:6 ../scripts/wnpp-alert.1:8
+#: ../scripts/wnpp-check.1:8 ../doc/wrap-and-sort.1:22
+#: ../scripts/devscripts.conf.5:4
 #, no-wrap
 msgid "DESCRIPTION"
 msgstr "DESCRIPTION"
@@ -210,20 +209,20 @@ msgstr ""
 #: ../scripts/debrelease.1:56 ../scripts/deb-reversion.dbk:128
 #: ../scripts/debrsign.1:30 ../scripts/debsign.1:39 ../scripts/debsnap.1:26
 #: ../scripts/debuild.1:219 ../scripts/dep3changelog.1:15
-#: ../scripts/dget.pl:542 ../scripts/diff2patches.1:16
+#: ../scripts/dget.pl:545 ../scripts/diff2patches.1:16
 #: ../scripts/dpkg-depcheck.1:15 ../scripts/dscextract.1:14
 #: ../scripts/dscverify.1:17 ../scripts/getbuildlog.1:24
 #: ../scripts/grep-excuses.1:13 ../scripts/licensecheck.pl:43
 #: ../scripts/list-unreleased.1:12 ../scripts/manpage-alert.1:14
 #: ../scripts/mass-bug.pl:59 ../scripts/mk-build-deps.pl:44
-#: ../scripts/nmudiff.1:21 ../scripts/origtargz.pl:83
-#: ../scripts/plotchangelog.1:43 ../scripts/pts-subscribe.1:18
-#: ../scripts/rc-alert.1:17 ../scripts/rmadison.pl:225
-#: ../doc/suspicious-source.1:34 ../scripts/tagpending.pl:93
-#: ../scripts/transition-check.pl:42 ../scripts/uscan.1:336
-#: ../scripts/uupdate.1:52 ../doc/what-patch.1:15 ../scripts/whodepends.1:10
-#: ../scripts/who-uploads.1:15 ../scripts/wnpp-alert.1:17
-#: ../scripts/wnpp-check.1:16 ../doc/wrap-and-sort.1:33
+#: ../scripts/nmudiff.1:21 ../scripts/plotchangelog.1:43
+#: ../scripts/pts-subscribe.1:18 ../scripts/rc-alert.1:17
+#: ../scripts/rmadison.pl:225 ../doc/suspicious-source.1:34
+#: ../scripts/tagpending.pl:93 ../scripts/transition-check.pl:42
+#: ../scripts/uscan.1:336 ../scripts/uupdate.1:52 ../doc/what-patch.1:15
+#: ../scripts/whodepends.1:10 ../scripts/who-uploads.1:15
+#: ../scripts/wnpp-alert.1:17 ../scripts/wnpp-check.1:16
+#: ../doc/wrap-and-sort.1:33
 #, no-wrap
 msgid "OPTIONS"
 msgstr "OPTIONS"
@@ -245,7 +244,7 @@ msgstr ""
 #. type: TP
 #: ../scripts/annotate-output.1:16 ../scripts/chdist.pl:37
 #: ../scripts/dcontrol.pl:256 ../scripts/dd-list.1:59
-#: ../scripts/debcheckout.pl:93 ../scripts/debsnap.1:57 ../scripts/dget.pl:595
+#: ../scripts/debcheckout.pl:93 ../scripts/debsnap.1:57 ../scripts/dget.pl:598
 #: ../scripts/dpkg-depcheck.1:96 ../scripts/getbuildlog.1:25
 #: ../scripts/mk-build-deps.pl:79 ../scripts/rmadison.pl:249
 #: ../doc/suspicious-source.1:35 ../doc/what-patch.1:17
@@ -348,16 +347,16 @@ msgstr ""
 #: ../scripts/debdiff.1:215 ../scripts/debi.1:132 ../scripts/debrelease.1:132
 #: ../scripts/deb-reversion.dbk:247 ../scripts/debrsign.1:66
 #: ../scripts/debsign.1:134 ../scripts/debsnap.1:118 ../scripts/debuild.1:410
-#: ../scripts/dep3changelog.1:28 ../scripts/dget.pl:649
+#: ../scripts/dep3changelog.1:28 ../scripts/dget.pl:652
 #: ../scripts/diff2patches.1:45 ../scripts/dpkg-depcheck.1:118
 #: ../scripts/dpkg-genbuilddeps.1:30 ../scripts/dscverify.1:73
 #: ../scripts/grep-excuses.1:38 ../scripts/list-unreleased.1:19
-#: ../scripts/nmudiff.1:108 ../scripts/origtargz.pl:139
-#: ../scripts/plotchangelog.1:124 ../scripts/pts-subscribe.1:51
-#: ../scripts/rc-alert.1:121 ../scripts/rmadison.pl:332
-#: ../scripts/tagpending.pl:148 ../scripts/uscan.1:541
-#: ../scripts/uupdate.1:170 ../doc/what-patch.1:35 ../scripts/wnpp-alert.1:29
-#: ../scripts/wnpp-check.1:23 ../scripts/devscripts.conf.5:54
+#: ../scripts/nmudiff.1:108 ../scripts/plotchangelog.1:124
+#: ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:121
+#: ../scripts/rmadison.pl:332 ../scripts/tagpending.pl:148
+#: ../scripts/uscan.1:541 ../scripts/uupdate.1:170 ../doc/what-patch.1:35
+#: ../scripts/wnpp-alert.1:29 ../scripts/wnpp-check.1:23
+#: ../scripts/devscripts.conf.5:54
 #, no-wrap
 msgid "SEE ALSO"
 msgstr "VOIR AUSSI"
@@ -397,18 +396,18 @@ msgstr ""
 #: ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:71
 #: ../scripts/debsign.1:146 ../scripts/debuild.1:423
 #: ../scripts/desktop2menu.pl:52 ../scripts/dep3changelog.1:26
-#: ../scripts/dget.pl:641 ../scripts/diff2patches.1:48
+#: ../scripts/dget.pl:644 ../scripts/diff2patches.1:48
 #: ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscextract.1:32
 #: ../scripts/dscverify.1:78 ../scripts/getbuildlog.1:41
 #: ../scripts/grep-excuses.1:40 ../scripts/licensecheck.pl:128
 #: ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:20
 #: ../scripts/mass-bug.pl:520 ../scripts/mergechanges.1:18
 #: ../scripts/mk-build-deps.pl:94 ../scripts/namecheck.pl:30
-#: ../scripts/nmudiff.1:113 ../scripts/origtargz.pl:143
-#: ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56
-#: ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:336
-#: ../scripts/svnpath.pl:93 ../scripts/transition-check.pl:81
-#: ../scripts/uscan.1:547 ../scripts/uupdate.1:177 ../scripts/whodepends.1:19
+#: ../scripts/nmudiff.1:113 ../scripts/plotchangelog.1:126
+#: ../scripts/pts-subscribe.1:56 ../scripts/rc-alert.1:125
+#: ../scripts/rmadison.pl:336 ../scripts/svnpath.pl:93
+#: ../scripts/transition-check.pl:81 ../scripts/uscan.1:547
+#: ../scripts/uupdate.1:177 ../scripts/whodepends.1:19
 #: ../scripts/who-uploads.1:71 ../scripts/wnpp-alert.1:31
 #: ../scripts/wnpp-check.1:33 ../scripts/devscripts.conf.5:58
 #, no-wrap
@@ -1215,7 +1214,7 @@ msgstr ""
 "par défaut."
 
 #. type: =item
-#: ../scripts/bts.pl:407 ../scripts/dget.pl:550
+#: ../scripts/bts.pl:407 ../scripts/dget.pl:553
 msgid "B<-q>, B<--quiet>"
 msgstr "B<-q>, B<--quiet>"
 
@@ -2796,7 +2795,7 @@ msgstr ""
 #: ../scripts/debclean.1:90 ../scripts/debcommit.pl:97
 #: ../scripts/debdiff.1:167 ../scripts/debi.1:109 ../scripts/debrelease.1:105
 #: ../scripts/debrsign.1:57 ../scripts/debsign.1:106 ../scripts/debuild.1:290
-#: ../scripts/dget.pl:605 ../scripts/dpkg-depcheck.1:102
+#: ../scripts/dget.pl:608 ../scripts/dpkg-depcheck.1:102
 #: ../scripts/dscverify.1:42 ../scripts/grep-excuses.1:28
 #: ../scripts/licensecheck.pl:95 ../scripts/mass-bug.pl:132
 #: ../scripts/nmudiff.1:79 ../scripts/plotchangelog.1:106
@@ -4449,8 +4448,7 @@ msgstr ""
 "mise à jour (ou la création) de la racine de construction."
 
 #. type: =head1
-#: ../scripts/cowpoke.1:253 ../scripts/origtargz.pl:68
-#: ../scripts/rmadison.pl:320
+#: ../scripts/cowpoke.1:253 ../scripts/rmadison.pl:320
 #, no-wrap
 msgid "NOTES"
 msgstr "NOTES"
@@ -5446,25 +5444,25 @@ msgid "Print URL queried."
 msgstr "Afficher l'URL demandée."
 
 #. type: textblock
-#: ../scripts/dcontrol.pl:258 ../scripts/dget.pl:597
+#: ../scripts/dcontrol.pl:258 ../scripts/dget.pl:600
 msgid "Show a help message."
 msgstr "Afficher un message d'aide."
 
 #. type: TP
-#: ../scripts/dcontrol.pl:260 ../scripts/dd-list.1:96 ../scripts/dget.pl:599
+#: ../scripts/dcontrol.pl:260 ../scripts/dd-list.1:96 ../scripts/dget.pl:602
 #: ../scripts/getbuildlog.1:28
 #, no-wrap
 msgid "B<-V>, B<--version>"
 msgstr "B<-V>, B<--version>"
 
 #. type: textblock
-#: ../scripts/dcontrol.pl:262 ../scripts/dget.pl:601
+#: ../scripts/dcontrol.pl:262 ../scripts/dget.pl:604
 msgid "Show version information."
 msgstr "Afficher les informations sur la version."
 
 # NOTE: presque identique
 #. type: textblock
-#: ../scripts/dcontrol.pl:268 ../scripts/dget.pl:607
+#: ../scripts/dcontrol.pl:268 ../scripts/dget.pl:610
 msgid ""
 "The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  Command "
@@ -5496,7 +5494,7 @@ msgid "This program is Copyright (C) 2009 by Christoph Berg <myon@debian.org>."
 msgstr "Ce programme est Copyright (C) 2009 Christoph Berg <myon@debian.org>."
 
 #. type: textblock
-#: ../scripts/dcontrol.pl:286 ../scripts/dget.pl:646
+#: ../scripts/dcontrol.pl:286 ../scripts/dget.pl:649
 #: ../scripts/tagpending.pl:439
 msgid ""
 "This program is licensed under the terms of the GPL, either version 2 of the "
@@ -12891,22 +12889,22 @@ msgstr ""
 "[python-debian]"
 
 #. type: textblock
-#: ../scripts/dget.pl:491
+#: ../scripts/dget.pl:494
 msgid "dget -- Download Debian source and binary packages"
 msgstr "dget - Télécharger des paquets Debian source et binaires"
 
 #. type: =item
-#: ../scripts/dget.pl:497
+#: ../scripts/dget.pl:500
 msgid "B<dget> [I<options>] I<URL> ..."
 msgstr "B<dget> [I<options>] I<URL> ..."
 
 #. type: =item
-#: ../scripts/dget.pl:499
+#: ../scripts/dget.pl:502
 msgid "B<dget> [I<options>] I<package>[B<=>I<version>]"
 msgstr "B<dget> [I<options>] I<paquet>[B<=>I<version>]"
 
 #. type: textblock
-#: ../scripts/dget.pl:505
+#: ../scripts/dget.pl:508
 msgid ""
 "B<dget> downloads Debian packages.  In the first form, B<dget> fetches the "
 "requested URLs.  If this is a .dsc or .changes file, then B<dget> acts as a "
@@ -12922,7 +12920,7 @@ msgstr ""
 "B<dscverify> puis dépaqueté avec B<dpkg-source> si la vérification a réussi."
 
 #. type: textblock
-#: ../scripts/dget.pl:512
+#: ../scripts/dget.pl:515
 msgid ""
 "In the second form, B<dget> downloads a I<binary> package (i.e., a I<.deb> "
 "file) from the Debian mirror configured in /etc/apt/sources.list(.d).  "
@@ -12938,7 +12936,7 @@ msgstr ""
 "version du paquet est téléchargée."
 
 #. type: textblock
-#: ../scripts/dget.pl:519
+#: ../scripts/dget.pl:522
 msgid ""
 "In both cases dget is capable of getting several packages and/or URLs at "
 "once."
@@ -12946,7 +12944,7 @@ msgstr ""
 "Dans tous les cas, dget peut récupérer plusieurs paquets et/ou URL à la fois."
 
 #. type: textblock
-#: ../scripts/dget.pl:522
+#: ../scripts/dget.pl:525
 msgid ""
 "(Note that I<.udeb> packages used by debian-installer are located in "
 "separate packages files from I<.deb> packages. In order to use I<.udebs> "
@@ -12959,7 +12957,7 @@ msgstr ""
 "utiliser des fichiers de paquets pour I<composante>/I<debian-installer>)."
 
 #. type: textblock
-#: ../scripts/dget.pl:527
+#: ../scripts/dget.pl:530
 msgid ""
 "Before downloading files listed in .dsc and .changes files, and before "
 "downloading binary packages, B<dget> checks to see whether any of these "
@@ -12983,7 +12981,7 @@ msgstr ""
 "recherchés dans cet ordre."
 
 #. type: textblock
-#: ../scripts/dget.pl:537
+#: ../scripts/dget.pl:540
 msgid ""
 "B<dget> was written to make it easier to retrieve source packages from the "
 "web for sponsor uploads.  For checking the package with B<debdiff>, the last "
@@ -12996,27 +12994,27 @@ msgstr ""
 "dernière version source via B<apt-get source> I<package>."
 
 #. type: =item
-#: ../scripts/dget.pl:546
+#: ../scripts/dget.pl:549
 msgid "B<-b>, B<--backup>"
 msgstr "B<-b>, B<--backup>"
 
 #. type: textblock
-#: ../scripts/dget.pl:548
+#: ../scripts/dget.pl:551
 msgid "Move files that would be overwritten to I<./backup>."
 msgstr "Déplacer les fichiers qui devraient être écrasés dans I<./backup>."
 
 #. type: textblock
-#: ../scripts/dget.pl:552
+#: ../scripts/dget.pl:555
 msgid "Suppress B<wget>/B<curl> non-error output."
 msgstr "Supprimer la sortie de B<wget>/B<curl> (sauf les erreurs)."
 
 #. type: =item
-#: ../scripts/dget.pl:554 ../scripts/origtargz.pl:116
+#: ../scripts/dget.pl:557
 msgid "B<-d>, B<--download-only>"
 msgstr "B<-d>, B<--download-only>"
 
 #. type: textblock
-#: ../scripts/dget.pl:556
+#: ../scripts/dget.pl:559
 msgid ""
 "Do not run B<dpkg-source -x> on the downloaded source package.  This can "
 "only be used with the first method of calling B<dget>."
@@ -13026,12 +13024,12 @@ msgstr ""
 "B<dget>."
 
 #. type: =item
-#: ../scripts/dget.pl:559
+#: ../scripts/dget.pl:562
 msgid "B<-x>, B<--extract>"
 msgstr "B<-x>, B<--extract>"
 
 #. type: textblock
-#: ../scripts/dget.pl:561
+#: ../scripts/dget.pl:564
 msgid ""
 "Run B<dpkg-source -x> on the downloaded source package to unpack it.  This "
 "option is the default and can only be used with the first method of calling "
@@ -13042,12 +13040,12 @@ msgstr ""
 "première méthode d'invocation de B<dget>."
 
 #. type: =item
-#: ../scripts/dget.pl:565
+#: ../scripts/dget.pl:568
 msgid "B<-u>, B<--allow-unauthenticated>"
 msgstr "B<-u>, B<--allow-unauthenticated>"
 
 #. type: textblock
-#: ../scripts/dget.pl:567
+#: ../scripts/dget.pl:570
 msgid ""
 "Do not attempt to verify the integrity of downloaded source packages using "
 "B<dscverify>."
@@ -13056,22 +13054,22 @@ msgstr ""
 "utilisant B<dscverify>."
 
 #. type: =item
-#: ../scripts/dget.pl:570
+#: ../scripts/dget.pl:573
 msgid "B<--build>"
 msgstr "B<--build>"
 
 #. type: textblock
-#: ../scripts/dget.pl:572
+#: ../scripts/dget.pl:575
 msgid "Run B<dpkg-buildpackage -b -uc> on the downloaded source package."
 msgstr "Exécuter B<dpkg-buildpackage -b -uc> sur le paquet source téléchargé."
 
 #. type: =item
-#: ../scripts/dget.pl:574
+#: ../scripts/dget.pl:577
 msgid "B<--path> I<DIR>[B<:>I<DIR> ...]"
 msgstr "B<--path> I<RÉP>[B<:>I<RÉP> ...]"
 
 #. type: textblock
-#: ../scripts/dget.pl:576
+#: ../scripts/dget.pl:579
 msgid ""
 "In addition to I</var/cache/apt/archives>, B<dget> uses the colon-separated "
 "list given as argument to B<--path> to find files with a matching md5sum.  "
@@ -13093,36 +13091,36 @@ msgstr ""
 "UploadQueue »."
 
 #. type: =item
-#: ../scripts/dget.pl:587
+#: ../scripts/dget.pl:590
 msgid "B<--insecure>"
 msgstr "B<--insecure>"
 
 #. type: textblock
-#: ../scripts/dget.pl:589
+#: ../scripts/dget.pl:592
 msgid "Allow SSL connections to untrusted hosts."
 msgstr ""
 "Autoriser les connexions SSL vers des hôtes dont l'authenticité n'est pas "
 "certifiée."
 
 #. type: =item
-#: ../scripts/dget.pl:591
+#: ../scripts/dget.pl:594
 msgid "B<--no-cache>"
 msgstr "B<--no-cache>"
 
 #. type: textblock
-#: ../scripts/dget.pl:593
+#: ../scripts/dget.pl:596
 msgid "Bypass server-side HTTP caches by sending a B<Pragma: no-cache> header."
 msgstr ""
 "Éviter les caches HTTP côté serveur en envoyant un en-tête B<Pragma: no-"
 "cache>."
 
 #. type: =item
-#: ../scripts/dget.pl:615
+#: ../scripts/dget.pl:618
 msgid "B<DGET_PATH>"
 msgstr "B<DGET_PATH>"
 
 #. type: textblock
-#: ../scripts/dget.pl:617
+#: ../scripts/dget.pl:620
 msgid ""
 "This can be set to a colon-separated list of directories in which to search "
 "for files in addition to the default I</var/cache/apt/archives>.  It has the "
@@ -13134,12 +13132,12 @@ msgstr ""
 "pas définie."
 
 #. type: =item
-#: ../scripts/dget.pl:622
+#: ../scripts/dget.pl:625
 msgid "B<DGET_UNPACK>"
 msgstr "B<DGET_UNPACK>"
 
 #. type: textblock
-#: ../scripts/dget.pl:624
+#: ../scripts/dget.pl:627
 msgid ""
 "Set to 'no' to disable extracting downloaded source packages.  Default is "
 "'yes'."
@@ -13148,12 +13146,12 @@ msgstr ""
 "téléchargés. La valeur par défaut est « yes »."
 
 #. type: =item
-#: ../scripts/dget.pl:627
+#: ../scripts/dget.pl:630
 msgid "B<DGET_VERIFY>"
 msgstr "B<DGET_VERIFY>"
 
 #. type: textblock
-#: ../scripts/dget.pl:629
+#: ../scripts/dget.pl:632
 msgid ""
 "Set to 'no' to disable checking signatures of downloaded source packages.  "
 "Default is 'yes'."
@@ -13162,17 +13160,17 @@ msgstr ""
 "paquets source téléchargés. La valeur par défaut est « yes »."
 
 #. type: =head1
-#: ../scripts/dget.pl:634
+#: ../scripts/dget.pl:637
 msgid "BUGS AND COMPATIBILITY"
 msgstr "BOGUES ET COMPATIBILITÉ"
 
 #. type: textblock
-#: ../scripts/dget.pl:636
+#: ../scripts/dget.pl:639
 msgid "B<dget> I<package> should be implemented in B<apt-get install -d>."
 msgstr "B<dget> I<package> devrait être implémenté dans B<apt-get install -d>."
 
 #. type: textblock
-#: ../scripts/dget.pl:638
+#: ../scripts/dget.pl:641
 msgid ""
 "Before devscripts version 2.10.17, the default was not to extract the "
 "downloaded source. Set DGET_UNPACK=no to revert to the old behaviour."
@@ -13182,7 +13180,7 @@ msgstr ""
 "« no » pour retrouver cet ancien comportement."
 
 #. type: textblock
-#: ../scripts/dget.pl:643
+#: ../scripts/dget.pl:646
 msgid ""
 "This program is Copyright (C) 2005-08 by Christoph Berg <myon@debian.org>.  "
 "Modifications are Copyright (C) 2005-06 by Julian Gilbey <jdg@debian.org>."
@@ -13192,7 +13190,7 @@ msgstr ""
 "org>."
 
 #. type: textblock
-#: ../scripts/dget.pl:651
+#: ../scripts/dget.pl:654
 msgid ""
 "B<apt-get>(1), B<debcheckout>(1), B<debdiff>(1), B<dpkg-source>(1), B<curl>"
 "(1), B<wget>(1)."
@@ -15594,252 +15592,6 @@ msgstr ""
 "modifié par Julian Gilbey E<lt>jdg@debian.orgE<gt>. Ce logiciel peut être "
 "redistribué suivant les termes de la licence publique générale GNU, version "
 "2."
-
-#. type: textblock
-#: ../scripts/origtargz.pl:22
-msgid ""
-"origtargz - fetch the orig tarball of a Debian package from various sources, "
-"and unpack it"
-msgstr ""
-"origtargz - Récupérer l'archive amont d'un paquet Debian depuis divers "
-"sources, et la dépaqueter"
-
-#. type: =item
-#: ../scripts/origtargz.pl:28
-msgid "B<origtargz> [I<OPTIONS>] [B<--unpack>[=B<no>|B<once>|B<yes>]]"
-msgstr "B<origtargz> [I<options>] [B<--unpack>[=B<no>|B<once>|B<yes>]]"
-
-#. type: =item
-#: ../scripts/origtargz.pl:30
-msgid "B<origtargz> B<--help>"
-msgstr "B<origtargz> B<--help>"
-
-#. type: textblock
-#: ../scripts/origtargz.pl:36
-msgid ""
-"B<origtargz> downloads the orig tarball of a Debian package, and optionally "
-"unpacks it into the current directory. The version number to be used is "
-"determined from F<debian/changelog>. The main use for B<origtargz> is with "
-"debian-dir-only repository checkouts. It should be invoked from the top "
-"level directory of an unpacked Debian source package."
-msgstr ""
-"B<origtargz> télécharge l'archive amont (orig) d'un paquet Debian et la "
-"dépaquette facultativement dans le répertoire actuel. Le numéro de version à "
-"utiliser est déterminé par F<debian/changelog>. L'utilisation principale "
-"d'B<origtargz> est avec les dépôts ne contenant que le répertoire I<debian>. "
-"Il devrait être appelé depuis le répertoire de premier niveau d'un paquet "
-"source Debian non dépaqueté."
-
-#. type: textblock
-#: ../scripts/origtargz.pl:42
-msgid "Various download locations are tried:"
-msgstr "Plusieurs emplacements de téléchargement sont essayés :"
-
-#. type: =item
-#: ../scripts/origtargz.pl:46
-msgid "* First, an existing file is looked for."
-msgstr "- d'abord, un fichier existant est recherché ;"
-
-#. type: =item
-#: ../scripts/origtargz.pl:48
-msgid "* Directories given with B<--path> are searched."
-msgstr "- les répertoires donnés avec B<--path> sont explorés ;"
-
-#. type: =item
-#: ../scripts/origtargz.pl:50
-msgid ""
-"* B<apt-get source> is tried when B<apt-cache showsrc> reports a matching "
-"version."
-msgstr ""
-"- B<apt-get source> est essayé si B<apt-cache showsrc> indique une version "
-"correspondante ;"
-
-#. type: =item
-#: ../scripts/origtargz.pl:52
-msgid "* Finally, B<uscan --download-current-version> is tried."
-msgstr "- enfin, B<uscan --download-current-version> est essayé."
-
-#. type: textblock
-#: ../scripts/origtargz.pl:56
-msgid ""
-"When asked to unpack the orig tarball, B<origtargz> will remove all files "
-"and directories from the current directory, except the debian directory, and "
-"the VCS repository directories. Some files outside F<debian/> which are "
-"often stored in VCS even for debian-dir-only repositories are also preserved "
-"(F<.bzr-builddeb>, F<.gitignore>, F<.hgignore>). I<Note that this will drop "
-"all non-committed changes> for the patch system in use (e.g. source format "
-"\"3.0 (quilt)\"), and will even remove all patches from the package when no "
-"patch system is in use (the original \"1.0\" source format)."
-msgstr ""
-"Lorsqu'une archive amont doit être dépaquetée, B<origtargz> retirera tous "
-"les fichiers et répertoires du répertoire actuel sauf le répertoire "
-"F<debian> et les répertoires du dépôt de système de contrôle de versions. "
-"Certains fichiers hors de F<debian/> généralement gardés dans le système de "
-"contrôle de versions même pour les dépôts ne contenant que le répertoire "
-"F<debian> sont aussi conservés (par exemple F<.bzr-builddeb>, F<.gitignore> "
-"ou F<.hgignore>). I<Remarquez que toutes les modifications non prises en "
-"compte (committed) seront effacées> du système de correctifs utilisé (par "
-"exemple au format source « 3.0 (quilt) ») et que tous les correctifs seront "
-"retirés du paquet si aucun système n'est utilisé (pour le format source "
-"d'origine « 1.0 »)."
-
-#. type: textblock
-#: ../scripts/origtargz.pl:65
-msgid ""
-"The default behavior is to unpack the orig tarball on the first invocation "
-"of B<origtargz> in a debian-dir-only checkout."
-msgstr ""
-"Le comportement par défaut est de dépaqueter l'archive amont la première "
-"fois que B<origtargz> est appelé depuis un répertoire issu d'un dépôt ne "
-"contenant que le répertoire F<debian>."
-
-#. type: textblock
-#: ../scripts/origtargz.pl:70
-msgid ""
-"Despite B<origtargz> being called \"targz\", it will work with any "
-"compression scheme used for the tarball."
-msgstr ""
-"Malgré son nom, B<origtargz> fonctionne avec n'importe quel format de "
-"compression utilisé pour l'archive amont."
-
-#. type: textblock
-#: ../scripts/origtargz.pl:73
-msgid ""
-"A similar tool to unpack orig tarballs is B<uupdate>(1). B<uupdate> creates "
-"a new working directory, unpacks the tarball, and applies the Debian F<.diff."
-"gz> changes. In contrast, B<origtargz> uses the current directory, keeping "
-"VCS metadata."
-msgstr ""
-"Un outil similaire pour dépaqueter les archives amont est B<uupdate>(1). "
-"B<uupdate> crée un nouveau répertoire de travail, dépaquette l'archive et "
-"applique les modifications Debian F<.diff.gz>. De son côté, B<origtargz> "
-"utilise le répertoire actuel, en gardant les métadonnées du système de "
-"gestion de versions."
-
-#. type: textblock
-#: ../scripts/origtargz.pl:78
-msgid ""
-"For Debian package repositories that keep the full upstream source, other "
-"tools should be used to upgrade the repository from the new tarball. See "
-"B<git-import-orig>(1) and B<svn-upgrade>(1) for examples. B<origtargz> is "
-"still useful for downloading the current tarball."
-msgstr ""
-"Pour les dépôts de paquet Debian gardant l'intégralité des sources amont, "
-"d'autres outils devraient être utilisés pour mettre à niveau le dépôt à "
-"partir de l'archive amont. Consultez par exemple B<git-import-orig>(1) et "
-"B<svn-upgrade>(1). B<origtargz> est toujours utile pour télécharger "
-"l'archive amont actuelle."
-
-#. type: =item
-#: ../scripts/origtargz.pl:87
-msgid "B<-p>, B<--path> I<directory>"
-msgstr "B<-p>, B<--path> I<répertoire>"
-
-#. type: textblock
-#: ../scripts/origtargz.pl:89
-msgid ""
-"Add I<directory> to the list of locations to search for an existing "
-"tarball.  When found, a hardlink is created if possible, otherwise a symlink."
-msgstr ""
-"Ajouter I<répertoire> à la liste des emplacement pour chercher une archive "
-"amont. Une fois trouvé, un lien matériel est créé si possible, un lien "
-"symbolique sinon."
-
-#. type: =item
-#: ../scripts/origtargz.pl:92
-msgid "B<-u>, B<--unpack>[=B<no>|B<once>|B<yes>]"
-msgstr "B<-u>, B<--unpack>[=B<no>|B<once>|B<yes>]"
-
-#. type: textblock
-#: ../scripts/origtargz.pl:94
-msgid ""
-"Unpack the downloaded orig tarball to the current directory, replacing "
-"everything except the debian directory. Valid choices are:"
-msgstr ""
-"Dépaqueter l'archive amont téléchargée dans le répertoire actuel, en "
-"remplaçant tout sauf le répertoire I<debian>. Les choix possibles sont :"
-
-#. type: =item
-#: ../scripts/origtargz.pl:99
-msgid "B<no>"
-msgstr "B<no>"
-
-#. type: textblock
-#: ../scripts/origtargz.pl:101
-msgid "Do not unpack the orig tarball."
-msgstr "Ne pas dépaqueter l'archive amont."
-
-#. type: =item
-#: ../scripts/origtargz.pl:103
-msgid "B<once> (default when B<--unpack> is not used)"
-msgstr "B<once> (par défaut si B<--unpack> n'est pas utilisé)"
-
-#. type: textblock
-#: ../scripts/origtargz.pl:105
-msgid ""
-"If the current directory contains only a F<debian> directory (and possibly "
-"some dotfiles), unpack the orig tarball. This is the default behavior."
-msgstr ""
-"Si le répertoire actuel ne contient qu'un répertoire F<debian> (et "
-"éventuellement quelques fichiers F<.*>), dépaqueter l'archive amont. C'est "
-"le comportement par défaut."
-
-#. type: =item
-#: ../scripts/origtargz.pl:108
-msgid "B<yes> (default for B<--unpack> without argument)"
-msgstr "B<yes> (par défaut si B<--unpack> est utilisé sans argument)"
-
-#. type: textblock
-#: ../scripts/origtargz.pl:110
-msgid ""
-"Always unpack the orig tarball. Existing files are removed, except for "
-"F<debian/> and VCS files. Preserved are: F<.bzr>, F<.bzrignore>, F<.bzr-"
-"builddeb>, F<.git>, F<.gitignore>, F<.hg>, F<.hgignore>, and F<.svn>."
-msgstr ""
-"Toujours dépaqueter l'archive amont. Les fichiers existants sont retirés, "
-"sauf le répertoire F<debian> et les fichiers du système de contrôle de "
-"versions. Sont gardés : F<.bzr>, F<.bzrignore>, F<.bzr-builddeb>, F<.git>, "
-"F<.gitignore>, F<.hg>, F<.hgignore> et F<.svn>."
-
-#. type: textblock
-#: ../scripts/origtargz.pl:118
-msgid "Alias for B<--unpack=no>."
-msgstr "Identique à B<--unpack=no>."
-
-#. type: =item
-#: ../scripts/origtargz.pl:120
-msgid "B<-t>, B<--tar-only>"
-msgstr "B<-t>, B<--tar-only>"
-
-#. type: textblock
-#: ../scripts/origtargz.pl:122
-msgid ""
-"When using B<apt-get source>, pass B<--tar-only> to it. The default is to "
-"download the full source package including F<.dsc> and F<.diff.gz> or F<."
-"debian.tar.gz> components so B<debdiff> can be used to diff the last upload "
-"to the next one. With B<--tar-only>, only download the F<.orig.tar.*> file."
-msgstr ""
-"En utilisant B<apt-get source>, lui passer B<--tar-only>. L'action par "
-"défaut est de télécharger le paquet source complet, y compris les composants "
-"F<.dsc> et F<.diff.gz> ou F<.debian.tar.gz> pour que B<debdiff> puisse être "
-"utilisé pour comparer le dernier envoi au prochain. Avec B<--tar-only>, seul "
-"le fichier F<.orig.tar.*> est téléchargé."
-
-#. type: textblock
-#: ../scripts/origtargz.pl:141
-msgid ""
-"B<debcheckout>(1), B<git-import-orig>(1), B<svn-upgrade>(1), B<uupdate>(1)"
-msgstr ""
-"B<debcheckout>(1), B<git-import-orig>(1), B<svn-upgrade>(1), B<uupdate>(1)"
-
-#. type: textblock
-#: ../scripts/origtargz.pl:145
-msgid ""
-"B<origtargz> and this manpage have been written by Christoph Berg "
-"<I<myon@debian.org>>."
-msgstr ""
-"B<origtargz> et cette page de manuel ont été écrits par Christoph Berg "
-"<I<myon@debian.org>>."
 
 #. type: TH
 #: ../scripts/plotchangelog.1:1
@@ -20160,6 +19912,199 @@ msgid ""
 msgstr ""
 "Cette page de manuel a été écrite pour le paquet B<devscripts> par le "
 "responsable du paquet, Julian Gilbey E<lt>jdg@debian.orgE<gt>."
+
+#~ msgid ""
+#~ "origtargz - fetch the orig tarball of a Debian package from various "
+#~ "sources, and unpack it"
+#~ msgstr ""
+#~ "origtargz - Récupérer l'archive amont d'un paquet Debian depuis divers "
+#~ "sources, et la dépaqueter"
+
+#~ msgid "B<origtargz> [I<OPTIONS>] [B<--unpack>[=B<no>|B<once>|B<yes>]]"
+#~ msgstr "B<origtargz> [I<options>] [B<--unpack>[=B<no>|B<once>|B<yes>]]"
+
+#~ msgid "B<origtargz> B<--help>"
+#~ msgstr "B<origtargz> B<--help>"
+
+#~ msgid ""
+#~ "B<origtargz> downloads the orig tarball of a Debian package, and "
+#~ "optionally unpacks it into the current directory. The version number to "
+#~ "be used is determined from F<debian/changelog>. The main use for "
+#~ "B<origtargz> is with debian-dir-only repository checkouts. It should be "
+#~ "invoked from the top level directory of an unpacked Debian source package."
+#~ msgstr ""
+#~ "B<origtargz> télécharge l'archive amont (orig) d'un paquet Debian et la "
+#~ "dépaquette facultativement dans le répertoire actuel. Le numéro de "
+#~ "version à utiliser est déterminé par F<debian/changelog>. L'utilisation "
+#~ "principale d'B<origtargz> est avec les dépôts ne contenant que le "
+#~ "répertoire I<debian>. Il devrait être appelé depuis le répertoire de "
+#~ "premier niveau d'un paquet source Debian non dépaqueté."
+
+#~ msgid "Various download locations are tried:"
+#~ msgstr "Plusieurs emplacements de téléchargement sont essayés :"
+
+#~ msgid "* First, an existing file is looked for."
+#~ msgstr "- d'abord, un fichier existant est recherché ;"
+
+#~ msgid "* Directories given with B<--path> are searched."
+#~ msgstr "- les répertoires donnés avec B<--path> sont explorés ;"
+
+#~ msgid ""
+#~ "* B<apt-get source> is tried when B<apt-cache showsrc> reports a matching "
+#~ "version."
+#~ msgstr ""
+#~ "- B<apt-get source> est essayé si B<apt-cache showsrc> indique une "
+#~ "version correspondante ;"
+
+#~ msgid "* Finally, B<uscan --download-current-version> is tried."
+#~ msgstr "- enfin, B<uscan --download-current-version> est essayé."
+
+#~ msgid ""
+#~ "When asked to unpack the orig tarball, B<origtargz> will remove all files "
+#~ "and directories from the current directory, except the debian directory, "
+#~ "and the VCS repository directories. Some files outside F<debian/> which "
+#~ "are often stored in VCS even for debian-dir-only repositories are also "
+#~ "preserved (F<.bzr-builddeb>, F<.gitignore>, F<.hgignore>). I<Note that "
+#~ "this will drop all non-committed changes> for the patch system in use (e."
+#~ "g. source format \"3.0 (quilt)\"), and will even remove all patches from "
+#~ "the package when no patch system is in use (the original \"1.0\" source "
+#~ "format)."
+#~ msgstr ""
+#~ "Lorsqu'une archive amont doit être dépaquetée, B<origtargz> retirera tous "
+#~ "les fichiers et répertoires du répertoire actuel sauf le répertoire "
+#~ "F<debian> et les répertoires du dépôt de système de contrôle de versions. "
+#~ "Certains fichiers hors de F<debian/> généralement gardés dans le système "
+#~ "de contrôle de versions même pour les dépôts ne contenant que le "
+#~ "répertoire F<debian> sont aussi conservés (par exemple F<.bzr-builddeb>, "
+#~ "F<.gitignore> ou F<.hgignore>). I<Remarquez que toutes les modifications "
+#~ "non prises en compte (committed) seront effacées> du système de "
+#~ "correctifs utilisé (par exemple au format source « 3.0 (quilt) ») et que "
+#~ "tous les correctifs seront retirés du paquet si aucun système n'est "
+#~ "utilisé (pour le format source d'origine « 1.0 »)."
+
+#~ msgid ""
+#~ "The default behavior is to unpack the orig tarball on the first "
+#~ "invocation of B<origtargz> in a debian-dir-only checkout."
+#~ msgstr ""
+#~ "Le comportement par défaut est de dépaqueter l'archive amont la première "
+#~ "fois que B<origtargz> est appelé depuis un répertoire issu d'un dépôt ne "
+#~ "contenant que le répertoire F<debian>."
+
+#~ msgid ""
+#~ "Despite B<origtargz> being called \"targz\", it will work with any "
+#~ "compression scheme used for the tarball."
+#~ msgstr ""
+#~ "Malgré son nom, B<origtargz> fonctionne avec n'importe quel format de "
+#~ "compression utilisé pour l'archive amont."
+
+#~ msgid ""
+#~ "A similar tool to unpack orig tarballs is B<uupdate>(1). B<uupdate> "
+#~ "creates a new working directory, unpacks the tarball, and applies the "
+#~ "Debian F<.diff.gz> changes. In contrast, B<origtargz> uses the current "
+#~ "directory, keeping VCS metadata."
+#~ msgstr ""
+#~ "Un outil similaire pour dépaqueter les archives amont est B<uupdate>(1). "
+#~ "B<uupdate> crée un nouveau répertoire de travail, dépaquette l'archive et "
+#~ "applique les modifications Debian F<.diff.gz>. De son côté, B<origtargz> "
+#~ "utilise le répertoire actuel, en gardant les métadonnées du système de "
+#~ "gestion de versions."
+
+#~ msgid ""
+#~ "For Debian package repositories that keep the full upstream source, other "
+#~ "tools should be used to upgrade the repository from the new tarball. See "
+#~ "B<git-import-orig>(1) and B<svn-upgrade>(1) for examples. B<origtargz> is "
+#~ "still useful for downloading the current tarball."
+#~ msgstr ""
+#~ "Pour les dépôts de paquet Debian gardant l'intégralité des sources amont, "
+#~ "d'autres outils devraient être utilisés pour mettre à niveau le dépôt à "
+#~ "partir de l'archive amont. Consultez par exemple B<git-import-orig>(1) et "
+#~ "B<svn-upgrade>(1). B<origtargz> est toujours utile pour télécharger "
+#~ "l'archive amont actuelle."
+
+#~ msgid "B<-p>, B<--path> I<directory>"
+#~ msgstr "B<-p>, B<--path> I<répertoire>"
+
+#~ msgid ""
+#~ "Add I<directory> to the list of locations to search for an existing "
+#~ "tarball.  When found, a hardlink is created if possible, otherwise a "
+#~ "symlink."
+#~ msgstr ""
+#~ "Ajouter I<répertoire> à la liste des emplacement pour chercher une "
+#~ "archive amont. Une fois trouvé, un lien matériel est créé si possible, un "
+#~ "lien symbolique sinon."
+
+#~ msgid "B<-u>, B<--unpack>[=B<no>|B<once>|B<yes>]"
+#~ msgstr "B<-u>, B<--unpack>[=B<no>|B<once>|B<yes>]"
+
+#~ msgid ""
+#~ "Unpack the downloaded orig tarball to the current directory, replacing "
+#~ "everything except the debian directory. Valid choices are:"
+#~ msgstr ""
+#~ "Dépaqueter l'archive amont téléchargée dans le répertoire actuel, en "
+#~ "remplaçant tout sauf le répertoire I<debian>. Les choix possibles sont :"
+
+#~ msgid "B<no>"
+#~ msgstr "B<no>"
+
+#~ msgid "Do not unpack the orig tarball."
+#~ msgstr "Ne pas dépaqueter l'archive amont."
+
+#~ msgid "B<once> (default when B<--unpack> is not used)"
+#~ msgstr "B<once> (par défaut si B<--unpack> n'est pas utilisé)"
+
+#~ msgid ""
+#~ "If the current directory contains only a F<debian> directory (and "
+#~ "possibly some dotfiles), unpack the orig tarball. This is the default "
+#~ "behavior."
+#~ msgstr ""
+#~ "Si le répertoire actuel ne contient qu'un répertoire F<debian> (et "
+#~ "éventuellement quelques fichiers F<.*>), dépaqueter l'archive amont. "
+#~ "C'est le comportement par défaut."
+
+#~ msgid "B<yes> (default for B<--unpack> without argument)"
+#~ msgstr "B<yes> (par défaut si B<--unpack> est utilisé sans argument)"
+
+#~ msgid ""
+#~ "Always unpack the orig tarball. Existing files are removed, except for "
+#~ "F<debian/> and VCS files. Preserved are: F<.bzr>, F<.bzrignore>, F<.bzr-"
+#~ "builddeb>, F<.git>, F<.gitignore>, F<.hg>, F<.hgignore>, and F<.svn>."
+#~ msgstr ""
+#~ "Toujours dépaqueter l'archive amont. Les fichiers existants sont retirés, "
+#~ "sauf le répertoire F<debian> et les fichiers du système de contrôle de "
+#~ "versions. Sont gardés : F<.bzr>, F<.bzrignore>, F<.bzr-builddeb>, F<."
+#~ "git>, F<.gitignore>, F<.hg>, F<.hgignore> et F<.svn>."
+
+#~ msgid "Alias for B<--unpack=no>."
+#~ msgstr "Identique à B<--unpack=no>."
+
+#~ msgid "B<-t>, B<--tar-only>"
+#~ msgstr "B<-t>, B<--tar-only>"
+
+#~ msgid ""
+#~ "When using B<apt-get source>, pass B<--tar-only> to it. The default is to "
+#~ "download the full source package including F<.dsc> and F<.diff.gz> or F<."
+#~ "debian.tar.gz> components so B<debdiff> can be used to diff the last "
+#~ "upload to the next one. With B<--tar-only>, only download the F<.orig.tar."
+#~ "*> file."
+#~ msgstr ""
+#~ "En utilisant B<apt-get source>, lui passer B<--tar-only>. L'action par "
+#~ "défaut est de télécharger le paquet source complet, y compris les "
+#~ "composants F<.dsc> et F<.diff.gz> ou F<.debian.tar.gz> pour que "
+#~ "B<debdiff> puisse être utilisé pour comparer le dernier envoi au "
+#~ "prochain. Avec B<--tar-only>, seul le fichier F<.orig.tar.*> est "
+#~ "téléchargé."
+
+#~ msgid ""
+#~ "B<debcheckout>(1), B<git-import-orig>(1), B<svn-upgrade>(1), B<uupdate>(1)"
+#~ msgstr ""
+#~ "B<debcheckout>(1), B<git-import-orig>(1), B<svn-upgrade>(1), B<uupdate>(1)"
+
+#~ msgid ""
+#~ "B<origtargz> and this manpage have been written by Christoph Berg "
+#~ "<I<myon@debian.org>>."
+#~ msgstr ""
+#~ "B<origtargz> et cette page de manuel ont été écrits par Christoph Berg "
+#~ "<I<myon@debian.org>>."
 
 #~ msgid "B<--tar-only>"
 #~ msgstr "B<--tar-only>"
