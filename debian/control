@@ -171,8 +171,6 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - namecheck: Check project names are not already taken.
   - nmudiff: mail a diff of the current package against the previous version
     to the BTS to assist in tracking NMUs [patchutils, mutt]
-  - origtargz: fetch the orig tarball of a Debian package from various sources,
-    and unpack it
   - plotchangelog: view a nice plot of the data in a changelog file
     [libtimedate-perl, gnuplot]
   - pts-subscribe: subscribe to the PTS for a limited period of time

@@ -29,8 +29,6 @@ devscripts (2.12.3) UNRELEASED; urgency=low
   * debcheckout: When --package is given, use this package name rather than
     trying to guess it from the url. Useful for URLs like
     http://anonscm.debian.org/bzr/pkg-postgresql/postgresql-9.2/sid-pgapt/.
-  * origtargz: New script: fetch the orig tarball of a Debian package from
-    various sources, and unpack it
   * po4a/Makefile: use po4a --keep=0 so the build system doesn't die with
     untranslated scripts
   * dcmd: Reimplement endswith() with case. The original missed quoting and
