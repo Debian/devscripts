@@ -546,166 +546,172 @@ elsif ($type eq 'dsc') {
 	# same orig tar ball, interdiff exists and not wdiffing
 
 	my $tmpdir = tempdir(CLEANUP => 1);
-	spawn(exec => ['interdiff', '-z', @diff_opts, $diffs[1], $diffs[2]],
-	      to_file => $filename,
-	      wait_child => 1,
-	      # Make interdiff put its tempfiles in $tmpdir, so they're
-	      # automatically cleaned up
-	      env => { TMPDIR => $tmpdir });
-	if ($have_diffstat and $show_diffstat) {
-	    my $header = "diffstat for " . basename($diffs[1])
-			    . " " . basename($diffs[2]) . "\n\n";
-	    $header =~ s/\.diff\.gz//g;
-	    print $header;
-	    spawn(exec => ['diffstat', $filename],
-		wait_child => 1);
-	    print "\n";
-	}
+	eval {
+	    spawn(exec => ['interdiff', '-z', @diff_opts, $diffs[1], $diffs[2]],
+		  to_file => $filename,
+		  wait_child => 1,
+		  # Make interdiff put its tempfiles in $tmpdir, so they're
+		  # automatically cleaned up
+		  env => { TMPDIR => $tmpdir });
+	};
 
-	if (-s $filename) {
-	    open( INTERDIFF, '<', $filename );
-	    while( <INTERDIFF> ) {
-		print $_;
-	    }
-	    close INTERDIFF;
-
-	    $exit_status = 1;
-	}
-    } else {
-	# Any other situation
-	if ($origs[1] eq $origs[2] and
-	    defined $diffs[1] and defined $diffs[2] and
-	    scalar(@excludes) == 0 and !$wdiff_source_control) {
-	    warn "Warning: You do not seem to have interdiff (in the patchutils package)\ninstalled; this program would use it if it were available.\n";
-	}
-	# possibly different orig tarballs, or no interdiff installed,
-	# or wdiffing debian/control
-	our ($sdir1, $sdir2);
-	mktmpdirs();
-	for my $i (1,2) {
-	    no strict 'refs';
-	    my @opts = ('-x');
-	    push (@opts, '--skip-patches') if $dscformats[$i] eq '3.0 (quilt)';
-	    my $diri = ${"dir$i"};
-	    eval {
-		spawn(exec => ['dpkg-source', @opts, $dscs[$i]],
-		      to_file => '/dev/null',
-		      chdir => $diri,
-		      wait_child => 1);
-	    };
-	    if ($@) {
-		my $dir = dirname $dscs[1] if $i == 2;
-		$dir = dirname $dscs[2] if $i == 1;
-		cp "$dir/$origs[$i]", $diri || fatal "copy $dir/$origs[$i] $diri: $!";
-		my $dscx = basename $dscs[$i];
-		cp $diffs[$i], $diri || fatal "copy $diffs[$i] $diri: $!";
-		cp $dscs[$i], $diri || fatal "copy $dscs[$i] $diri: $!";
-		spawn(exec => ['dpkg-source', @opts, $dscx],
-		      to_file => '/dev/null',
-		      chdir => $diri,
-		      wait_child => 1);
-	    }
-	    opendir DIR,$diri;
-	    while ($_ = readdir(DIR)) {
-		next if $_ eq '.' || $_ eq '..' || ! -d "$diri/$_";
-		${"sdir$i"} = $_;
-		last;
-	    }
-	    closedir(DIR);
-	    my $sdiri = ${"sdir$i"};
-
-	    # also unpack tarballs found in the top level source directory so we can compare their contents too
-	    next unless $unpack_tarballs;
-	    opendir DIR,$diri.'/'.$sdiri;
-
-	    my $tarballs = 1;
-	    while ($_ = readdir(DIR)) {
-		    my $unpacked = "=unpacked-tar" . $tarballs . "=";
-		    my $filename = $_;
-		    if ($filename =~ s/\.tar\.$compression_re_file_ext$//) {
-			my $comp = compression_guess_from_filename($_);
-			$tarballs++;
-			spawn(exec => ['tar', "--$comp", '-xf', $_],
-			      to_file => '/dev/null',
-			      wait_child => 1,
-			      chdir => "$diri/$sdiri",
-			      nocheck => 1);
-			if (-d "$diri/$sdiri/$filename") {
-			    move "$diri/$sdiri/$filename", "$diri/$sdiri/$unpacked";
-			}
-		    }
-	    }
-	    closedir(DIR);
-	}
-
-	my @command = ("diff", "-Nru", @diff_opts);
-	for my $exclude (@excludes) {
-	    push @command, ("--exclude", $exclude);
-	}
-	push @command, ("$dir1/$sdir1", "$dir2/$sdir2");
-
-	# Execute diff and remove the common prefixes $dir1/$dir2, so the patch can be used with -p1,
-	# as if when interdiff would have been used:
-	spawn(exec => \@command, to_file => $filename, wait_child => 1, nocheck => 1);
-
-	if ($have_diffstat and $show_diffstat) {
-	    print "diffstat for $sdir1 $sdir2\n\n";
-	    spawn(exec => ['diffstat', $filename],
-		wait_child => 1);
-	    print "\n";
-	}
-
-	if ($have_wdiff and $wdiff_source_control) {
-	    # Abuse global variables slightly to create some temporary directories
-	    my $tempdir1 = $dir1;
-	    my $tempdir2 = $dir2;
-	    mktmpdirs();
-	    our $wdiffdir1 = $dir1;
-	    our $wdiffdir2 = $dir2;
-	    $dir1 = $tempdir1;
-	    $dir2 = $tempdir2;
-	    our @cf;
-	    if ($controlfiles eq 'ALL') {
-		@cf = ('control');
-	    } else {
-		@cf = split /,/, $controlfiles;
+	# If interdiff fails for some reason, we'll fall back to our manual
+	# diffing.
+	unless ($@) {
+	    if ($have_diffstat and $show_diffstat) {
+		my $header = "diffstat for " . basename($diffs[1])
+				. " " . basename($diffs[2]) . "\n\n";
+		$header =~ s/\.diff\.gz//g;
+		print $header;
+		spawn(exec => ['diffstat', $filename],
+		    wait_child => 1);
+		print "\n";
 	    }
 
-	    no strict 'refs';
-	    for my $i (1,2) {
-		foreach my $file (@cf) {
-		    cp ${"dir$i"}.'/'.${"sdir$i"}."/debian/$file", ${"wdiffdir$i"};
+	    if (-s $filename) {
+		open( INTERDIFF, '<', $filename );
+		while( <INTERDIFF> ) {
+		    print $_;
 		}
+		close INTERDIFF;
+
+		$exit_status = 1;
 	    }
-	    use strict 'refs';
+	    exit $exit_status;
+	}
+    }
 
-	    # We don't support "ALL" for source packages as that would
-	    # wdiff debian/*
-	    $exit_status = wdiff_control_files($wdiffdir1, $wdiffdir2, $dummyname,
-		$controlfiles eq 'ALL' ? 'control' : $controlfiles,
-		$exit_status);
-	    print "\n";
+    # interdiff ran and failed, or any other situation
+    if (!$use_interdiff) {
+	warn "Warning: You do not seem to have interdiff (in the patchutils package)\ninstalled; this program would use it if it were available.\n";
+    }
+    # possibly different orig tarballs, or no interdiff installed,
+    # or wdiffing debian/control
+    our ($sdir1, $sdir2);
+    mktmpdirs();
+    for my $i (1,2) {
+	no strict 'refs';
+	my @opts = ('-x');
+	push (@opts, '--skip-patches') if $dscformats[$i] eq '3.0 (quilt)';
+	my $diri = ${"dir$i"};
+	eval {
+	    spawn(exec => ['dpkg-source', @opts, $dscs[$i]],
+		  to_file => '/dev/null',
+		  chdir => $diri,
+		  wait_child => 1);
+	};
+	if ($@) {
+	    my $dir = dirname $dscs[1] if $i == 2;
+	    $dir = dirname $dscs[2] if $i == 1;
+	    cp "$dir/$origs[$i]", $diri || fatal "copy $dir/$origs[$i] $diri: $!";
+	    my $dscx = basename $dscs[$i];
+	    cp $diffs[$i], $diri || fatal "copy $diffs[$i] $diri: $!";
+	    cp $dscs[$i], $diri || fatal "copy $dscs[$i] $diri: $!";
+	    spawn(exec => ['dpkg-source', @opts, $dscx],
+		  to_file => '/dev/null',
+		  chdir => $diri,
+		  wait_child => 1);
+	}
+	opendir DIR,$diri;
+	while ($_ = readdir(DIR)) {
+	    next if $_ eq '.' || $_ eq '..' || ! -d "$diri/$_";
+	    ${"sdir$i"} = $_;
+	    last;
+	}
+	closedir(DIR);
+	my $sdiri = ${"sdir$i"};
 
-	    # Clean up
-	    rmtree([$wdiffdir1, $wdiffdir2]);
+	# also unpack tarballs found in the top level source directory so we can compare their contents too
+	next unless $unpack_tarballs;
+	opendir DIR,$diri.'/'.$sdiri;
+
+	my $tarballs = 1;
+	while ($_ = readdir(DIR)) {
+		my $unpacked = "=unpacked-tar" . $tarballs . "=";
+		my $filename = $_;
+		if ($filename =~ s/\.tar\.$compression_re_file_ext$//) {
+		    my $comp = compression_guess_from_filename($_);
+		    $tarballs++;
+		    spawn(exec => ['tar', "--$comp", '-xf', $_],
+			  to_file => '/dev/null',
+			  wait_child => 1,
+			  chdir => "$diri/$sdiri",
+			  nocheck => 1);
+		    if (-d "$diri/$sdiri/$filename") {
+			move "$diri/$sdiri/$filename", "$diri/$sdiri/$unpacked";
+		    }
+		}
+	}
+	closedir(DIR);
+    }
+
+    my @command = ("diff", "-Nru", @diff_opts);
+    for my $exclude (@excludes) {
+	push @command, ("--exclude", $exclude);
+    }
+    push @command, ("$dir1/$sdir1", "$dir2/$sdir2");
+
+    # Execute diff and remove the common prefixes $dir1/$dir2, so the patch can be used with -p1,
+    # as if when interdiff would have been used:
+    spawn(exec => \@command, to_file => $filename, wait_child => 1, nocheck => 1);
+
+    if ($have_diffstat and $show_diffstat) {
+	print "diffstat for $sdir1 $sdir2\n\n";
+	spawn(exec => ['diffstat', $filename],
+	    wait_child => 1);
+	print "\n";
+    }
+
+    if ($have_wdiff and $wdiff_source_control) {
+	# Abuse global variables slightly to create some temporary directories
+	my $tempdir1 = $dir1;
+	my $tempdir2 = $dir2;
+	mktmpdirs();
+	our $wdiffdir1 = $dir1;
+	our $wdiffdir2 = $dir2;
+	$dir1 = $tempdir1;
+	$dir2 = $tempdir2;
+	our @cf;
+	if ($controlfiles eq 'ALL') {
+	    @cf = ('control');
+	} else {
+	    @cf = split /,/, $controlfiles;
 	}
 
-	if (! -f $filename) {
-	    fatal "Creation of diff file $filename failed!";
-	} elsif (-s $filename) {
-	    open( DIFF, '<', $filename ) or fatal "Opening diff file $filename failed!";
-
-	    while(<DIFF>) {
-		s/^--- $dir1\//--- /;
-		s/^\+\+\+ $dir2\//+++ /;
-		s/^(diff .*) $dir1\/\Q$sdir1\E/$1 $sdir1/;
-		s/^(diff .*) $dir2\/\Q$sdir2\E/$1 $sdir2/;
-		print;
+	no strict 'refs';
+	for my $i (1,2) {
+	    foreach my $file (@cf) {
+		cp ${"dir$i"}.'/'.${"sdir$i"}."/debian/$file", ${"wdiffdir$i"};
 	    }
-	    close DIFF;
-
-	    $exit_status = 1;
 	}
+	use strict 'refs';
+
+	# We don't support "ALL" for source packages as that would
+	# wdiff debian/*
+	$exit_status = wdiff_control_files($wdiffdir1, $wdiffdir2, $dummyname,
+	    $controlfiles eq 'ALL' ? 'control' : $controlfiles,
+	    $exit_status);
+	print "\n";
+
+	# Clean up
+	rmtree([$wdiffdir1, $wdiffdir2]);
+    }
+
+    if (! -f $filename) {
+	fatal "Creation of diff file $filename failed!";
+    } elsif (-s $filename) {
+	open( DIFF, '<', $filename ) or fatal "Opening diff file $filename failed!";
+
+	while(<DIFF>) {
+	    s/^--- $dir1\//--- /;
+	    s/^\+\+\+ $dir2\//+++ /;
+	    s/^(diff .*) $dir1\/\Q$sdir1\E/$1 $sdir1/;
+	    s/^(diff .*) $dir2\/\Q$sdir2\E/$1 $sdir2/;
+	    print;
+	}
+	close DIFF;
+
+	$exit_status = 1;
     }
 
     exit $exit_status;

@@ -5,6 +5,8 @@ devscripts (2.12.4) UNRELEASED; urgency=low
   * interdiff:
     + Set $TMPDIR when running interdiff so its temp files get cleaned up on
       exit.
+    + Fallback to manual diff of source package if interdiff fails.  (Closes:
+      #685202)
 
  -- James McCoy <jamessan@debian.org>  Sat, 15 Sep 2012 16:26:28 -0400
 
