@@ -287,4 +287,4 @@ if [ -z "$cmd" ]; then
     exit 0
 fi
 
-exec $cmd -- $args
+exec $cmd $args

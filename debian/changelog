@@ -7,6 +7,8 @@ devscripts (2.12.4) UNRELEASED; urgency=low
       exit.
     + Fallback to manual diff of source package if interdiff fails.  (Closes:
       #685202)
+  * dcmd: Don't add "--" to the command being executed.  The user has to know
+    where this should be used/if it can be used.  (Closes: #687964)
 
  -- James McCoy <jamessan@debian.org>  Sat, 15 Sep 2012 16:26:28 -0400
 
