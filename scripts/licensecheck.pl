@@ -4,6 +4,7 @@
 #
 # This version is
 #   Copyright (C) 2007, 2008 Adam D. Barratt
+#   Copyright (C) 2012 Francesco Poli
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -299,11 +300,12 @@ while (@files) {
     print qq(----- $file header -----\n$content----- end header -----\n\n)
 	if $opt_verbose;
 
+    # Remove Fortran comments
+    $content =~ s/^[cC] //gm;
     $content =~ tr/\t\r\n/ /;
     # Remove C / C++ comments
     $content =~ s#(\*/|/[/*])##g;
     $content =~ tr% A-Za-z.,@;0-9\(\)/-%%cd;
-    $content =~ s/ c //g; # Remove fortran comments
     $content =~ tr/ //s;
 
     $license = parselicense($content);

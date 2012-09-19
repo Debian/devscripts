@@ -54,4 +54,8 @@ testMachine() {
     license2 "-m --copyright" "gpl-2" "GPL (v2)	2012 Devscripts developers"
 }
 
+testFortranComments() {
+    license "bsd.f" "BSD (2 clause)"
+}
+
 . shunit2
