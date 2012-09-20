@@ -10,6 +10,8 @@ devscripts (2.12.4) UNRELEASED; urgency=low
       #685202)
   * dcmd: Don't add "--" to the command being executed.  The user has to know
     where this should be used/if it can be used.  (Closes: #687964)
+  * debcheckout: Fix collision in short options.  Use -P for --package.
+    (Closes: #688150)
 
   [ Benjamin Drung ]
   * licensecheck: Recognize licenses in (fixed-form) Fortran code. Thanks to
