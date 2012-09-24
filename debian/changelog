@@ -1,4 +1,4 @@
-devscripts (2.12.4) UNRELEASED; urgency=low
+devscripts (2.12.4) unstable; urgency=low
 
   [ James McCoy ]
   * dget: Avoid an infinite loop when a .changes/.dsc file references itself.
@@ -17,7 +17,7 @@ devscripts (2.12.4) UNRELEASED; urgency=low
   * licensecheck: Recognize licenses in (fixed-form) Fortran code. Thanks to
     Francesco Poli for the patch and the example. (Closes: #687452)
 
- -- James McCoy <jamessan@debian.org>  Sat, 15 Sep 2012 16:26:28 -0400
+ -- James McCoy <jamessan@debian.org>  Mon, 24 Sep 2012 18:51:12 -0400
 
 devscripts (2.12.3) unstable; urgency=medium
 
