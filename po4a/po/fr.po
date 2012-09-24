@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2012-09-15 15:20-0300\n"
+"POT-Creation-Date: 2012-09-24 18:43-0300\n"
 "PO-Revision-Date: 2012-08-17 11:24-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -90,11 +90,11 @@ msgstr "DEBIAN"
 #: ../scripts/debrsign.1:2 ../scripts/debsign.1:2 ../scripts/debsnap.1:3
 #: ../scripts/debuild.1:2 ../scripts/desktop2menu.pl:24
 #: ../scripts/dep3changelog.1:2 ../scripts/devscripts.1:2
-#: ../scripts/dget.pl:492 ../scripts/diff2patches.1:2
+#: ../scripts/dget.pl:493 ../scripts/diff2patches.1:2
 #: ../scripts/dpkg-depcheck.1:2 ../scripts/dpkg-genbuilddeps.1:2
 #: ../doc/edit-patch.1:2 ../scripts/dscextract.1:2 ../scripts/dscverify.1:2
 #: ../scripts/getbuildlog.1:2 ../scripts/grep-excuses.1:2
-#: ../scripts/licensecheck.pl:21 ../scripts/list-unreleased.1:2
+#: ../scripts/licensecheck.pl:22 ../scripts/list-unreleased.1:2
 #: ../scripts/manpage-alert.1:2 ../scripts/mass-bug.pl:21
 #: ../scripts/mergechanges.1:2 ../scripts/mk-build-deps.pl:24
 #: ../scripts/namecheck.pl:3 ../scripts/nmudiff.1:2
@@ -128,11 +128,11 @@ msgstr ""
 #: ../scripts/debi.1:4 ../scripts/debpkg.1:4 ../scripts/debrelease.1:4
 #: ../scripts/debrsign.1:4 ../scripts/debsign.1:4 ../scripts/debsnap.1:6
 #: ../scripts/debuild.1:4 ../scripts/desktop2menu.pl:28
-#: ../scripts/dep3changelog.1:4 ../scripts/dget.pl:496
+#: ../scripts/dep3changelog.1:4 ../scripts/dget.pl:497
 #: ../scripts/dpkg-depcheck.1:4 ../scripts/dpkg-genbuilddeps.1:4
 #: ../doc/edit-patch.1:6 ../scripts/dscextract.1:4 ../scripts/dscverify.1:4
 #: ../scripts/getbuildlog.1:4 ../scripts/grep-excuses.1:4
-#: ../scripts/licensecheck.pl:25 ../scripts/list-unreleased.1:4
+#: ../scripts/licensecheck.pl:26 ../scripts/list-unreleased.1:4
 #: ../scripts/manpage-alert.1:4 ../scripts/mass-bug.pl:25
 #: ../scripts/mergechanges.1:4 ../scripts/mk-build-deps.pl:28
 #: ../scripts/nmudiff.1:4 ../scripts/plotchangelog.1:4
@@ -165,12 +165,12 @@ msgstr "B<annotate-output> [I<options>] I<programme> [I<paramètres> ...]"
 #: ../scripts/deb-reversion.dbk:82 ../scripts/debrsign.1:7
 #: ../scripts/debsign.1:6 ../scripts/debsnap.1:14 ../scripts/debuild.1:10
 #: ../scripts/desktop2menu.pl:34 ../scripts/dep3changelog.1:6
-#: ../scripts/devscripts.1:4 ../scripts/dget.pl:506
+#: ../scripts/devscripts.1:4 ../scripts/dget.pl:507
 #: ../scripts/diff2patches.1:10 ../scripts/dpkg-depcheck.1:6
 #: ../scripts/dpkg-genbuilddeps.1:6 ../doc/edit-patch.1:11
 #: ../scripts/dscextract.1:6 ../scripts/dscverify.1:6
 #: ../scripts/getbuildlog.1:8 ../scripts/grep-excuses.1:6
-#: ../scripts/licensecheck.pl:34 ../scripts/list-unreleased.1:6
+#: ../scripts/licensecheck.pl:35 ../scripts/list-unreleased.1:6
 #: ../scripts/manpage-alert.1:8 ../scripts/mass-bug.pl:29
 #: ../scripts/mergechanges.1:6 ../scripts/mk-build-deps.pl:34
 #: ../scripts/nmudiff.1:6 ../scripts/plotchangelog.1:7
@@ -209,10 +209,10 @@ msgstr ""
 #: ../scripts/debrelease.1:56 ../scripts/deb-reversion.dbk:128
 #: ../scripts/debrsign.1:30 ../scripts/debsign.1:39 ../scripts/debsnap.1:26
 #: ../scripts/debuild.1:219 ../scripts/dep3changelog.1:15
-#: ../scripts/dget.pl:545 ../scripts/diff2patches.1:16
+#: ../scripts/dget.pl:546 ../scripts/diff2patches.1:16
 #: ../scripts/dpkg-depcheck.1:15 ../scripts/dscextract.1:14
 #: ../scripts/dscverify.1:17 ../scripts/getbuildlog.1:24
-#: ../scripts/grep-excuses.1:13 ../scripts/licensecheck.pl:43
+#: ../scripts/grep-excuses.1:13 ../scripts/licensecheck.pl:44
 #: ../scripts/list-unreleased.1:12 ../scripts/manpage-alert.1:14
 #: ../scripts/mass-bug.pl:59 ../scripts/mk-build-deps.pl:44
 #: ../scripts/nmudiff.1:21 ../scripts/plotchangelog.1:43
@@ -244,7 +244,7 @@ msgstr ""
 #. type: TP
 #: ../scripts/annotate-output.1:16 ../scripts/chdist.pl:37
 #: ../scripts/dcontrol.pl:256 ../scripts/dd-list.1:59
-#: ../scripts/debcheckout.pl:93 ../scripts/debsnap.1:57 ../scripts/dget.pl:598
+#: ../scripts/debcheckout.pl:93 ../scripts/debsnap.1:57 ../scripts/dget.pl:599
 #: ../scripts/dpkg-depcheck.1:96 ../scripts/getbuildlog.1:25
 #: ../scripts/mk-build-deps.pl:79 ../scripts/rmadison.pl:249
 #: ../doc/suspicious-source.1:35 ../doc/what-patch.1:17
@@ -347,7 +347,7 @@ msgstr ""
 #: ../scripts/debdiff.1:215 ../scripts/debi.1:132 ../scripts/debrelease.1:132
 #: ../scripts/deb-reversion.dbk:247 ../scripts/debrsign.1:66
 #: ../scripts/debsign.1:134 ../scripts/debsnap.1:118 ../scripts/debuild.1:410
-#: ../scripts/dep3changelog.1:28 ../scripts/dget.pl:652
+#: ../scripts/dep3changelog.1:28 ../scripts/dget.pl:653
 #: ../scripts/diff2patches.1:45 ../scripts/dpkg-depcheck.1:118
 #: ../scripts/dpkg-genbuilddeps.1:30 ../scripts/dscverify.1:73
 #: ../scripts/grep-excuses.1:38 ../scripts/list-unreleased.1:19
@@ -396,10 +396,10 @@ msgstr ""
 #: ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:71
 #: ../scripts/debsign.1:146 ../scripts/debuild.1:423
 #: ../scripts/desktop2menu.pl:52 ../scripts/dep3changelog.1:26
-#: ../scripts/dget.pl:644 ../scripts/diff2patches.1:48
+#: ../scripts/dget.pl:645 ../scripts/diff2patches.1:48
 #: ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscextract.1:32
 #: ../scripts/dscverify.1:78 ../scripts/getbuildlog.1:41
-#: ../scripts/grep-excuses.1:40 ../scripts/licensecheck.pl:128
+#: ../scripts/grep-excuses.1:40 ../scripts/licensecheck.pl:129
 #: ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:20
 #: ../scripts/mass-bug.pl:520 ../scripts/mergechanges.1:18
 #: ../scripts/mk-build-deps.pl:94 ../scripts/namecheck.pl:30
@@ -1214,7 +1214,7 @@ msgstr ""
 "par défaut."
 
 #. type: =item
-#: ../scripts/bts.pl:407 ../scripts/dget.pl:553
+#: ../scripts/bts.pl:407 ../scripts/dget.pl:554
 msgid "B<-q>, B<--quiet>"
 msgstr "B<-q>, B<--quiet>"
 
@@ -1236,7 +1236,7 @@ msgstr ""
 #: ../scripts/debclean.1:77 ../scripts/debdiff.1:151 ../scripts/debi.1:102
 #: ../scripts/debrelease.1:95 ../scripts/debsign.1:96 ../scripts/debuild.1:221
 #: ../scripts/dpkg-depcheck.1:92 ../scripts/dscverify.1:24
-#: ../scripts/grep-excuses.1:14 ../scripts/licensecheck.pl:88
+#: ../scripts/grep-excuses.1:14 ../scripts/licensecheck.pl:89
 #: ../scripts/mass-bug.pl:112 ../scripts/nmudiff.1:69
 #: ../scripts/rmadison.pl:281 ../scripts/uscan.1:444 ../scripts/uupdate.1:78
 #: ../scripts/who-uploads.1:40
@@ -2795,9 +2795,9 @@ msgstr ""
 #: ../scripts/debclean.1:90 ../scripts/debcommit.pl:97
 #: ../scripts/debdiff.1:167 ../scripts/debi.1:109 ../scripts/debrelease.1:105
 #: ../scripts/debrsign.1:57 ../scripts/debsign.1:106 ../scripts/debuild.1:290
-#: ../scripts/dget.pl:608 ../scripts/dpkg-depcheck.1:102
+#: ../scripts/dget.pl:609 ../scripts/dpkg-depcheck.1:102
 #: ../scripts/dscverify.1:42 ../scripts/grep-excuses.1:28
-#: ../scripts/licensecheck.pl:95 ../scripts/mass-bug.pl:132
+#: ../scripts/licensecheck.pl:96 ../scripts/mass-bug.pl:132
 #: ../scripts/nmudiff.1:79 ../scripts/plotchangelog.1:106
 #: ../scripts/pts-subscribe.1:42 ../scripts/rmadison.pl:290
 #: ../scripts/uscan.1:454 ../scripts/uupdate.1:88 ../scripts/who-uploads.1:50
@@ -2808,7 +2808,7 @@ msgstr "VARIABLES DE CONFIGURATION"
 # NOTE: presque identique
 #. type: textblock
 #: ../scripts/bts.pl:3977 ../scripts/debcommit.pl:99
-#: ../scripts/licensecheck.pl:97 ../scripts/mass-bug.pl:134
+#: ../scripts/licensecheck.pl:98 ../scripts/mass-bug.pl:134
 msgid ""
 "The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  Command "
@@ -3300,7 +3300,7 @@ msgstr ""
 
 #. type: =head1
 #: ../scripts/build-rdeps.pl:337 ../scripts/debcommit.pl:847
-#: ../scripts/desktop2menu.pl:43 ../scripts/licensecheck.pl:119
+#: ../scripts/desktop2menu.pl:43 ../scripts/licensecheck.pl:120
 #: ../scripts/namecheck.pl:36 ../scripts/svnpath.pl:89
 #: ../scripts/transition-check.pl:72
 msgid "LICENSE"
@@ -5444,25 +5444,25 @@ msgid "Print URL queried."
 msgstr "Afficher l'URL demandée."
 
 #. type: textblock
-#: ../scripts/dcontrol.pl:258 ../scripts/dget.pl:600
+#: ../scripts/dcontrol.pl:258 ../scripts/dget.pl:601
 msgid "Show a help message."
 msgstr "Afficher un message d'aide."
 
 #. type: TP
-#: ../scripts/dcontrol.pl:260 ../scripts/dd-list.1:96 ../scripts/dget.pl:602
+#: ../scripts/dcontrol.pl:260 ../scripts/dd-list.1:96 ../scripts/dget.pl:603
 #: ../scripts/getbuildlog.1:28
 #, no-wrap
 msgid "B<-V>, B<--version>"
 msgstr "B<-V>, B<--version>"
 
 #. type: textblock
-#: ../scripts/dcontrol.pl:262 ../scripts/dget.pl:604
+#: ../scripts/dcontrol.pl:262 ../scripts/dget.pl:605
 msgid "Show version information."
 msgstr "Afficher les informations sur la version."
 
 # NOTE: presque identique
 #. type: textblock
-#: ../scripts/dcontrol.pl:268 ../scripts/dget.pl:610
+#: ../scripts/dcontrol.pl:268 ../scripts/dget.pl:611
 msgid ""
 "The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  Command "
@@ -5494,7 +5494,7 @@ msgid "This program is Copyright (C) 2009 by Christoph Berg <myon@debian.org>."
 msgstr "Ce programme est Copyright (C) 2009 Christoph Berg <myon@debian.org>."
 
 #. type: textblock
-#: ../scripts/dcontrol.pl:286 ../scripts/dget.pl:649
+#: ../scripts/dcontrol.pl:286 ../scripts/dget.pl:650
 #: ../scripts/tagpending.pl:439
 msgid ""
 "This program is licensed under the terms of the GPL, either version 2 of the "
@@ -6538,8 +6538,7 @@ msgstr ""
 "description de modifications."
 
 #. type: TP
-#: ../scripts/debchange.1:213 ../scripts/debcheckout.pl:106
-#: ../scripts/uscan.1:396
+#: ../scripts/debchange.1:213 ../scripts/uscan.1:396
 #, no-wrap
 msgid "B<--package> I<package>"
 msgstr "B<--package> I<paquet>"
@@ -7548,6 +7547,11 @@ msgid "Also see B<-d>. This option and B<-d> are mutually exclusive."
 msgstr ""
 "Consultez également B<-d>. Cette option et l'option B<-d> sont mutuellement "
 "exclusives."
+
+#. type: =item
+#: ../scripts/debcheckout.pl:106
+msgid "B<-P> I<package>, B<--package> I<package>"
+msgstr "B<-P> I<paquet>, B<--package> I<paquet>"
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:108
@@ -12889,22 +12893,22 @@ msgstr ""
 "[python-debian]"
 
 #. type: textblock
-#: ../scripts/dget.pl:494
+#: ../scripts/dget.pl:495
 msgid "dget -- Download Debian source and binary packages"
 msgstr "dget - Télécharger des paquets Debian source et binaires"
 
 #. type: =item
-#: ../scripts/dget.pl:500
+#: ../scripts/dget.pl:501
 msgid "B<dget> [I<options>] I<URL> ..."
 msgstr "B<dget> [I<options>] I<URL> ..."
 
 #. type: =item
-#: ../scripts/dget.pl:502
+#: ../scripts/dget.pl:503
 msgid "B<dget> [I<options>] I<package>[B<=>I<version>]"
 msgstr "B<dget> [I<options>] I<paquet>[B<=>I<version>]"
 
 #. type: textblock
-#: ../scripts/dget.pl:508
+#: ../scripts/dget.pl:509
 msgid ""
 "B<dget> downloads Debian packages.  In the first form, B<dget> fetches the "
 "requested URLs.  If this is a .dsc or .changes file, then B<dget> acts as a "
@@ -12920,7 +12924,7 @@ msgstr ""
 "B<dscverify> puis dépaqueté avec B<dpkg-source> si la vérification a réussi."
 
 #. type: textblock
-#: ../scripts/dget.pl:515
+#: ../scripts/dget.pl:516
 msgid ""
 "In the second form, B<dget> downloads a I<binary> package (i.e., a I<.deb> "
 "file) from the Debian mirror configured in /etc/apt/sources.list(.d).  "
@@ -12936,7 +12940,7 @@ msgstr ""
 "version du paquet est téléchargée."
 
 #. type: textblock
-#: ../scripts/dget.pl:522
+#: ../scripts/dget.pl:523
 msgid ""
 "In both cases dget is capable of getting several packages and/or URLs at "
 "once."
@@ -12944,7 +12948,7 @@ msgstr ""
 "Dans tous les cas, dget peut récupérer plusieurs paquets et/ou URL à la fois."
 
 #. type: textblock
-#: ../scripts/dget.pl:525
+#: ../scripts/dget.pl:526
 msgid ""
 "(Note that I<.udeb> packages used by debian-installer are located in "
 "separate packages files from I<.deb> packages. In order to use I<.udebs> "
@@ -12957,7 +12961,7 @@ msgstr ""
 "utiliser des fichiers de paquets pour I<composante>/I<debian-installer>)."
 
 #. type: textblock
-#: ../scripts/dget.pl:530
+#: ../scripts/dget.pl:531
 msgid ""
 "Before downloading files listed in .dsc and .changes files, and before "
 "downloading binary packages, B<dget> checks to see whether any of these "
@@ -12981,7 +12985,7 @@ msgstr ""
 "recherchés dans cet ordre."
 
 #. type: textblock
-#: ../scripts/dget.pl:540
+#: ../scripts/dget.pl:541
 msgid ""
 "B<dget> was written to make it easier to retrieve source packages from the "
 "web for sponsor uploads.  For checking the package with B<debdiff>, the last "
@@ -12994,27 +12998,27 @@ msgstr ""
 "dernière version source via B<apt-get source> I<package>."
 
 #. type: =item
-#: ../scripts/dget.pl:549
+#: ../scripts/dget.pl:550
 msgid "B<-b>, B<--backup>"
 msgstr "B<-b>, B<--backup>"
 
 #. type: textblock
-#: ../scripts/dget.pl:551
+#: ../scripts/dget.pl:552
 msgid "Move files that would be overwritten to I<./backup>."
 msgstr "Déplacer les fichiers qui devraient être écrasés dans I<./backup>."
 
 #. type: textblock
-#: ../scripts/dget.pl:555
+#: ../scripts/dget.pl:556
 msgid "Suppress B<wget>/B<curl> non-error output."
 msgstr "Supprimer la sortie de B<wget>/B<curl> (sauf les erreurs)."
 
 #. type: =item
-#: ../scripts/dget.pl:557
+#: ../scripts/dget.pl:558
 msgid "B<-d>, B<--download-only>"
 msgstr "B<-d>, B<--download-only>"
 
 #. type: textblock
-#: ../scripts/dget.pl:559
+#: ../scripts/dget.pl:560
 msgid ""
 "Do not run B<dpkg-source -x> on the downloaded source package.  This can "
 "only be used with the first method of calling B<dget>."
@@ -13024,12 +13028,12 @@ msgstr ""
 "B<dget>."
 
 #. type: =item
-#: ../scripts/dget.pl:562
+#: ../scripts/dget.pl:563
 msgid "B<-x>, B<--extract>"
 msgstr "B<-x>, B<--extract>"
 
 #. type: textblock
-#: ../scripts/dget.pl:564
+#: ../scripts/dget.pl:565
 msgid ""
 "Run B<dpkg-source -x> on the downloaded source package to unpack it.  This "
 "option is the default and can only be used with the first method of calling "
@@ -13040,12 +13044,12 @@ msgstr ""
 "première méthode d'invocation de B<dget>."
 
 #. type: =item
-#: ../scripts/dget.pl:568
+#: ../scripts/dget.pl:569
 msgid "B<-u>, B<--allow-unauthenticated>"
 msgstr "B<-u>, B<--allow-unauthenticated>"
 
 #. type: textblock
-#: ../scripts/dget.pl:570
+#: ../scripts/dget.pl:571
 msgid ""
 "Do not attempt to verify the integrity of downloaded source packages using "
 "B<dscverify>."
@@ -13054,22 +13058,22 @@ msgstr ""
 "utilisant B<dscverify>."
 
 #. type: =item
-#: ../scripts/dget.pl:573
+#: ../scripts/dget.pl:574
 msgid "B<--build>"
 msgstr "B<--build>"
 
 #. type: textblock
-#: ../scripts/dget.pl:575
+#: ../scripts/dget.pl:576
 msgid "Run B<dpkg-buildpackage -b -uc> on the downloaded source package."
 msgstr "Exécuter B<dpkg-buildpackage -b -uc> sur le paquet source téléchargé."
 
 #. type: =item
-#: ../scripts/dget.pl:577
+#: ../scripts/dget.pl:578
 msgid "B<--path> I<DIR>[B<:>I<DIR> ...]"
 msgstr "B<--path> I<RÉP>[B<:>I<RÉP> ...]"
 
 #. type: textblock
-#: ../scripts/dget.pl:579
+#: ../scripts/dget.pl:580
 msgid ""
 "In addition to I</var/cache/apt/archives>, B<dget> uses the colon-separated "
 "list given as argument to B<--path> to find files with a matching md5sum.  "
@@ -13091,36 +13095,36 @@ msgstr ""
 "UploadQueue »."
 
 #. type: =item
-#: ../scripts/dget.pl:590
+#: ../scripts/dget.pl:591
 msgid "B<--insecure>"
 msgstr "B<--insecure>"
 
 #. type: textblock
-#: ../scripts/dget.pl:592
+#: ../scripts/dget.pl:593
 msgid "Allow SSL connections to untrusted hosts."
 msgstr ""
 "Autoriser les connexions SSL vers des hôtes dont l'authenticité n'est pas "
 "certifiée."
 
 #. type: =item
-#: ../scripts/dget.pl:594
+#: ../scripts/dget.pl:595
 msgid "B<--no-cache>"
 msgstr "B<--no-cache>"
 
 #. type: textblock
-#: ../scripts/dget.pl:596
+#: ../scripts/dget.pl:597
 msgid "Bypass server-side HTTP caches by sending a B<Pragma: no-cache> header."
 msgstr ""
 "Éviter les caches HTTP côté serveur en envoyant un en-tête B<Pragma: no-"
 "cache>."
 
 #. type: =item
-#: ../scripts/dget.pl:618
+#: ../scripts/dget.pl:619
 msgid "B<DGET_PATH>"
 msgstr "B<DGET_PATH>"
 
 #. type: textblock
-#: ../scripts/dget.pl:620
+#: ../scripts/dget.pl:621
 msgid ""
 "This can be set to a colon-separated list of directories in which to search "
 "for files in addition to the default I</var/cache/apt/archives>.  It has the "
@@ -13132,12 +13136,12 @@ msgstr ""
 "pas définie."
 
 #. type: =item
-#: ../scripts/dget.pl:625
+#: ../scripts/dget.pl:626
 msgid "B<DGET_UNPACK>"
 msgstr "B<DGET_UNPACK>"
 
 #. type: textblock
-#: ../scripts/dget.pl:627
+#: ../scripts/dget.pl:628
 msgid ""
 "Set to 'no' to disable extracting downloaded source packages.  Default is "
 "'yes'."
@@ -13146,12 +13150,12 @@ msgstr ""
 "téléchargés. La valeur par défaut est « yes »."
 
 #. type: =item
-#: ../scripts/dget.pl:630
+#: ../scripts/dget.pl:631
 msgid "B<DGET_VERIFY>"
 msgstr "B<DGET_VERIFY>"
 
 #. type: textblock
-#: ../scripts/dget.pl:632
+#: ../scripts/dget.pl:633
 msgid ""
 "Set to 'no' to disable checking signatures of downloaded source packages.  "
 "Default is 'yes'."
@@ -13160,17 +13164,17 @@ msgstr ""
 "paquets source téléchargés. La valeur par défaut est « yes »."
 
 #. type: =head1
-#: ../scripts/dget.pl:637
+#: ../scripts/dget.pl:638
 msgid "BUGS AND COMPATIBILITY"
 msgstr "BOGUES ET COMPATIBILITÉ"
 
 #. type: textblock
-#: ../scripts/dget.pl:639
+#: ../scripts/dget.pl:640
 msgid "B<dget> I<package> should be implemented in B<apt-get install -d>."
 msgstr "B<dget> I<package> devrait être implémenté dans B<apt-get install -d>."
 
 #. type: textblock
-#: ../scripts/dget.pl:641
+#: ../scripts/dget.pl:642
 msgid ""
 "Before devscripts version 2.10.17, the default was not to extract the "
 "downloaded source. Set DGET_UNPACK=no to revert to the old behaviour."
@@ -13180,7 +13184,7 @@ msgstr ""
 "« no » pour retrouver cet ancien comportement."
 
 #. type: textblock
-#: ../scripts/dget.pl:646
+#: ../scripts/dget.pl:647
 msgid ""
 "This program is Copyright (C) 2005-08 by Christoph Berg <myon@debian.org>.  "
 "Modifications are Copyright (C) 2005-06 by Julian Gilbey <jdg@debian.org>."
@@ -13190,7 +13194,7 @@ msgstr ""
 "org>."
 
 #. type: textblock
-#: ../scripts/dget.pl:654
+#: ../scripts/dget.pl:655
 msgid ""
 "B<apt-get>(1), B<debcheckout>(1), B<debdiff>(1), B<dpkg-source>(1), B<curl>"
 "(1), B<wget>(1)."
@@ -14427,17 +14431,17 @@ msgstr ""
 "E<lt>jdg@debian.orgE<gt>."
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:23
+#: ../scripts/licensecheck.pl:24
 msgid "licensecheck - simple license checker for source files"
 msgstr "licensecheck - Vérificateur de licence pour fichiers source"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:27
+#: ../scripts/licensecheck.pl:28
 msgid "B<licensecheck> B<--help>|B<--version>"
 msgstr "B<licensecheck> B<--help>|B<--version>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:29
+#: ../scripts/licensecheck.pl:30
 msgid ""
 "B<licensecheck> [B<--no-conf>] [B<--verbose>] [B<--copyright>] [B<-l>|B<--"
 "lines=>I<N>] [B<-i>|B<--ignore=>I<regex>] [B<-c>|B<--check=>I<regex>] [B<-m>|"
@@ -14450,7 +14454,7 @@ msgstr ""
 "vérifier>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:36
+#: ../scripts/licensecheck.pl:37
 msgid ""
 "B<licensecheck> attempts to determine the license that applies to each file "
 "passed to it, by searching the start of the file for text belonging to "
@@ -14461,7 +14465,7 @@ msgstr ""
 "blocs de texte qui appartiennent à des licences."
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:40
+#: ../scripts/licensecheck.pl:41
 msgid ""
 "If any of the arguments passed are directories, B<licensecheck> will add the "
 "files contained within to the list of files to process."
@@ -14470,12 +14474,12 @@ msgstr ""
 "contenus dans ce répertoire à la liste des fichiers à analyser."
 
 #. type: =item
-#: ../scripts/licensecheck.pl:47
+#: ../scripts/licensecheck.pl:48
 msgid "B<--verbose>, B<--no-verbose>"
 msgstr "B<--verbose>, B<--no-verbose>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:49
+#: ../scripts/licensecheck.pl:50
 msgid ""
 "Specify whether to output the text being processed from each file before the "
 "corresponding license information."
@@ -14484,17 +14488,17 @@ msgstr ""
 "les informations sur la licence du fichier."
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:52
+#: ../scripts/licensecheck.pl:53
 msgid "Default is to be quiet."
 msgstr "Le comportement par défaut est d'être silencieux."
 
 #. type: =item
-#: ../scripts/licensecheck.pl:54
+#: ../scripts/licensecheck.pl:55
 msgid "B<-l=>I<N>, B<--lines=>I<N>"
 msgstr "B<-l=>I<N>, B<--lines=>I<N>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:56
+#: ../scripts/licensecheck.pl:57
 msgid ""
 "Specify the number of lines of each file's header which should be parsed for "
 "license information. (Default is 60)."
@@ -14504,12 +14508,12 @@ msgstr ""
 "60 lignes)."
 
 #. type: =item
-#: ../scripts/licensecheck.pl:59
+#: ../scripts/licensecheck.pl:60
 msgid "B<-i=>I<regex>, B<--ignore=>I<regex>"
 msgstr "B<-i=>I<regex>, B<--ignore=>I<regex>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:61
+#: ../scripts/licensecheck.pl:62
 msgid ""
 "When processing the list of files and directories, the regular expression "
 "specified by this option will be used to indicate those which should not be "
@@ -14522,23 +14526,23 @@ msgstr ""
 "configuration)."
 
 #. type: =item
-#: ../scripts/licensecheck.pl:65
+#: ../scripts/licensecheck.pl:66
 msgid "B<-r>, B<--recursive>"
 msgstr "B<-r>, B<--recursive>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:67
+#: ../scripts/licensecheck.pl:68
 msgid "Specify that the contents of directories should be added recursively."
 msgstr ""
 "Indiquer que le contenu des répertoires doit être ajouté récursivement."
 
 #. type: =item
-#: ../scripts/licensecheck.pl:70
+#: ../scripts/licensecheck.pl:71
 msgid "B<-c=>I<regex>, B<--check=>I<regex>"
 msgstr "B<-c=>I<regex>, B<--check=>I<regex>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:72
+#: ../scripts/licensecheck.pl:73
 msgid ""
 "Specify a pattern against which filenames will be matched in order to decide "
 "which files to check the license of."
@@ -14547,28 +14551,28 @@ msgstr ""
 "être vérifiée."
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:75
+#: ../scripts/licensecheck.pl:76
 msgid "The default includes common source files."
 msgstr "La valeur par défaut comprend différents fichiers source usuels."
 
 #. type: =item
-#: ../scripts/licensecheck.pl:77
+#: ../scripts/licensecheck.pl:78
 msgid "B<--copyright>"
 msgstr "B<--copyright>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:79
+#: ../scripts/licensecheck.pl:80
 msgid "Also display copyright text found within the file"
 msgstr ""
 "Afficher aussi les blocs de texte de copyright trouvés dans le fichier."
 
 #. type: =item
-#: ../scripts/licensecheck.pl:81
+#: ../scripts/licensecheck.pl:82
 msgid "B<-m>, B<--machine>"
 msgstr "B<-m>, B<--machine>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:83
+#: ../scripts/licensecheck.pl:84
 msgid ""
 "Display the information in a machine readable way, i.e. in the form "
 "<file><tab><license>[<tab><copyright>] so that it can be easily sorted and/"
@@ -14582,7 +14586,7 @@ msgstr ""
 "lisibilité."
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:90
+#: ../scripts/licensecheck.pl:91
 msgid ""
 "Do not read any configuration files. This can only be used as the first "
 "option given on the command-line."
@@ -14591,12 +14595,12 @@ msgstr ""
 "première position de la ligne de commande."
 
 #. type: =item
-#: ../scripts/licensecheck.pl:105
+#: ../scripts/licensecheck.pl:106
 msgid "B<LICENSECHECK_VERBOSE>"
 msgstr "B<LICENSECHECK_VERBOSE>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:107
+#: ../scripts/licensecheck.pl:108
 msgid ""
 "If this is set to I<yes>, then it is the same as the B<--verbose> command "
 "line parameter being used. The default is I<no>."
@@ -14605,12 +14609,12 @@ msgstr ""
 "la ligne de commande. La valeur par défaut est I<no>."
 
 #. type: =item
-#: ../scripts/licensecheck.pl:110
+#: ../scripts/licensecheck.pl:111
 msgid "B<LICENSECHECK_PARSELINES>"
 msgstr "B<LICENSECHECK_PARSELINES>"
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:112
+#: ../scripts/licensecheck.pl:113
 msgid ""
 "If this is set to a positive number then the specified number of lines at "
 "the start of each file will be read whilst attempting to determine the "
@@ -14622,7 +14626,7 @@ msgstr ""
 "ligne de commande."
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:121
+#: ../scripts/licensecheck.pl:122
 msgid ""
 "This code is copyright by Adam D. Barratt <I<adam@adam-barratt.org.uk>>, all "
 "rights reserved; based on a script of the same name from the KDE SDK, which "
@@ -14637,7 +14641,7 @@ msgstr ""
 "générale GNU (GNU General Public Licence), version 2 ou ultérieure."
 
 #. type: textblock
-#: ../scripts/licensecheck.pl:130
+#: ../scripts/licensecheck.pl:131
 msgid "Adam D. Barratt <adam@adam-barratt.org.uk>"
 msgstr "Adam D. Barratt <adam@adam-barratt.org.uk>"
 
