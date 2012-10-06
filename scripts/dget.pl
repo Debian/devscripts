@@ -200,7 +200,7 @@ sub get_file {
 
     # try apt-get if it is still not there
     my $ext = $compression_re_file_ext;
-    if (not -e $file and $file =~ m!^([a-z0-9.+-]{2,})_[^/]+\.(?:diff|tar)\.$ext$!) {
+    if (not -e $file and $file =~ m!^([a-z0-9][a-z0-9.+-]+)_[^/]+\.(?:diff|tar)\.$ext$!) {
 	my @cmd = ('apt-get', 'source', '--print-uris', $1);
 	my $cmd = join ' ', @cmd;
 	open(my $apt, '-|', @cmd) or die "$cmd: $!";
@@ -220,6 +220,8 @@ sub get_file {
 	return 0;
     }
 
+    $seen{$file} = 1;
+
     if ($file =~ /\.(?:changes|dsc)$/) {
 	parse_file($dir, $file);
     }
@@ -227,7 +229,6 @@ sub get_file {
 	$found_dsc = $file;
     }
 
-    $seen{$file} = 1;
     return 1;
 }
 
@@ -238,7 +239,10 @@ sub parse_file {
     open $fh, $file or die "$file: $!";
     while (<$fh>) {
 	if (/^ ([0-9a-f]{32}) (?:\S+ )*(\S+)$/) {
-	    get_file($dir, $2, $1) or return;
+	    my ($_sum, $_file) = ($1, $2);
+	    $_file !~ m,[/\x00],
+		or die "File name contains invalid characters: $_file";
+            get_file($dir, $_file, $_sum) or return;
 	}
     }
     close $fh;

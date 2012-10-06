@@ -103,6 +103,11 @@ uses "static" information as known by APT's cache.
 
 Also see B<-d>. This option and B<-d> are mutually exclusive.
 
+=item B<-P> I<package>, B<--package> I<package>
+
+When checking out a repository URL, instead of trying to guess the package name
+from the URL, use this package name.
+
 =item B<-t> I<TYPE>, B<--type> I<TYPE>
 
 Override the repository type (which defaults to some heuristics based
@@ -970,6 +975,7 @@ sub main() {
     my $origtgz_name = undef; # orig.tar.gz name (or "" when none; undef means unknown)
     my $print_mode = 0;	  # print only mode
     my $details_mode = 0;	  # details only mode
+    my $use_package = ''; # use this package instead of guessing from the URL
     my $repo_type = "svn";  # default repo typo, overridden by '-t'
     my $repo_url = "";	  # repository URL
     my $user = "";	  # login name (authenticated mode only)
@@ -981,6 +987,7 @@ sub main() {
 	"help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },
 	"print|p" => \$print_mode,
 	"details|d" => \$details_mode,
+	"package|P=s" => \$use_package,
 	"type|t=s" => \$repo_type,
 	"user|u=s" => \$user,
 	"file|f=s" => sub { push(@files, $_[1]); },
@@ -1009,8 +1016,12 @@ sub main() {
 	$repo_url = $ARGV[0];
 	$repo_type = guess_repo_type($repo_url, $repo_type);
 	$pkg = ""; $version = "";
-	# guess package from url
-	if ($repo_url =~ m!/trunk/([a-z0-9.+-]+)!) { # svn with {trunk,tags,branches}/$pkg
+	# when --package is given, use it
+	if ($use_package) {
+	    $pkg = $use_package;
+	    $origtgz_name = $use_package; # FIXME: this should rather set srcpkg in unpack_source() directly
+	# else guess package from url
+	} elsif ($repo_url =~ m!/trunk/([a-z0-9.+-]+)!) { # svn with {trunk,tags,branches}/$pkg
 	    $pkg = $1;
 	} elsif ($repo_url =~ m!([a-z0-9.+-]+)/trunk/?!) { # svn with $pkg/{trunk,tags,branches}
 	    $pkg = $1;

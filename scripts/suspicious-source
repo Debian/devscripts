@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Copyright (c) 2010-2011, Benjamin Drung <bdrung@debian.org>
+# Copyright (c) 2010-2012, Benjamin Drung <bdrung@debian.org>
 #
 # Permission to use, copy, modify, and/or distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -104,10 +104,10 @@ def suspicious_source(whitelisted_mimetypes, whitelisted_extensions, directory,
             if mimetype not in whitelisted_mimetypes:
                 if not [x for x in whitelisted_extensions
                         if f.lower().endswith(x)]:
+                    output = os.path.join(root, f)
                     if verbose:
-                        print "%s (%s)" % (os.path.join(root, f), mimetype)
-                    else:
-                        print os.path.join(root, f)
+                        output += " (" + mimetype + ")"
+                    sys.stdout.write(output + "\n")
         for vcs_dir in (".bzr", "CVS", ".git", ".svn", ".hg", "_darcs"):
             if vcs_dir in dirs:
                 dirs.remove(vcs_dir)

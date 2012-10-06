@@ -475,7 +475,7 @@ if [ "$PATCH" ]; then
 	exit 1
     fi
 else
-# This is an orginal sourcearchive
+# This is an original sourcearchive
     if [ "$ARCHIVE" = "" ]; then
 	echo "$PROGNAME: upstream source archive not specified" >&2
 	exit 1

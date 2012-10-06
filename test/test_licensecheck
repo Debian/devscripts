@@ -21,7 +21,12 @@ WORKDIR="$(readlink -f "${0%/*}")"
 
 license() {
     cd "$WORKDIR"
-    runCommand "licensecheck/$1" "licensecheck/$1: $2 " "" 0
+    runCommand "licensecheck/$1" "licensecheck/$1: $2" "" 0
+}
+
+license2() {
+    cd "$WORKDIR"
+    runCommand "$1 licensecheck/$2" "licensecheck/$2	$3" "" 0
 }
 
 testBeerware() {
@@ -35,6 +40,22 @@ testLGPL() {
 
 testGPL() {
     license "gpl-2" "GPL (v2)"
+    license "gpl-2-comma.sh" "GPL (v2)"
+    license "gpl-3.sh" "GPL (v3)"
+}
+
+testDual() {
+    license "dual.c" "Public domain GPL (v3)"
+}
+
+testMachine() {
+    license2 "-m" "beerware.cpp" "Beerware"
+    license2 "--machine" "lgpl-2.1.h" "LGPL (v2.1)"
+    license2 "-m --copyright" "gpl-2" "GPL (v2)	2012 Devscripts developers"
+}
+
+testFortranComments() {
+    license "bsd.f" "BSD (2 clause)"
 }
 
 . shunit2

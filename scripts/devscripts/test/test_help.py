@@ -24,8 +24,6 @@ import time
 import setup
 from devscripts.test import unittest
 
-BLACKLIST = {
-}
 TIMEOUT = 5
 
 def load_tests(loader, tests, pattern):
@@ -44,9 +42,6 @@ class HelpTestCase(unittest.TestCase):
     @classmethod
     def make_help_tester(cls, script):
         def tester(self):
-            if script in BLACKLIST:
-                raise unittest.SkipTest("Blacklisted: " + BLACKLIST[script])
-
             null = open('/dev/null', 'r')
             process = subprocess.Popen(['./' + script, '--help'],
                                        close_fds=True, stdin=null,
@@ -76,5 +71,5 @@ class HelpTestCase(unittest.TestCase):
             self.assertEqual(process.poll(), 0,
                              "%s failed to return usage within %i seconds.\n"
                              "Output:\n%s"
-                             % (script, TIMEOUT, ''.join(out)))
+                             % (script, TIMEOUT, ''.encode('ascii').join(out)))
         return tester

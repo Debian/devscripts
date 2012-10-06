@@ -403,7 +403,7 @@ sub dist_compare(\@$$) {
   my ($dists, $do_compare, $type) = @_;
   type_check($type);
 
-  # Get the list of dists from the referrence
+  # Get the list of dists from the reference
   my @dists = @$dists;
   map { dist_check($_) } @dists;
 
