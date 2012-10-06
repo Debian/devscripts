@@ -1,5 +1,5 @@
 # French translation of devscripts manual pages.
-# Copyright (C) 2004-2011 Debian French l10n team <debian-l10n-french@lists.debian.org>.
+# Copyright (C) 2004-2012 Debian French l10n team <debian-l10n-french@lists.debian.org>.
 # This file is distributed under the same license as the devscripts package.
 #
 # Nicolas François <nicolas.francois@centraliens.net>, 2004-2009.
@@ -12,8 +12,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2012-10-06 15:49-0400\n"
-"PO-Revision-Date: 2012-08-17 11:24-0400\n"
+"POT-Creation-Date: 2012-10-06 16:07-0400\n"
+"PO-Revision-Date: 2012-10-06 16:09-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -6465,20 +6465,15 @@ msgstr "B<--force-save-on-release>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:188
-#, fuzzy
-#| msgid ""
-#| "When B<--release> is used and an editor opened to allow inspection of the "
-#| "changelog, require the user to save the changelog their editor opened.  "
-#| "Otherwise, the original changelog will not be modified. (default)"
 msgid ""
 "When B<--release> is used, an editor is opened to allow inspection of the "
-"changelog.  Require the user to save the file to accept the modified "
+"changelog.  The user is required to save the file to accept the modified "
 "changelog, otherwise the original will be kept (default)."
 msgstr ""
-"Quand l'option B<--release> est utilisée et qu'un éditeur a été ouvert pour "
-"permettre de vérifier le journal des modifications, l'utilisateur doit "
-"enregistrer le journal de modifications ouvert par l'éditeur. Sinon, le "
-"journal d'origine ne sera pas modifié (option par défaut)."
+"Quand l'option B<--release> est utilisée, un éditeur est ouvert pour "
+"permettre de vérifier le journal des modifications. L'utilisateur doit "
+"enregistrer le journal de modifications pour accepter les modifications du "
+"fichier, sinon l'original sera conservé (option par défaut)."
 
 #. type: TP
 #: ../scripts/debchange.1:188
@@ -19887,17 +19882,6 @@ msgstr "Les options globales au paquet actuellement reconnues sont :"
 
 #. type: Plain text
 #: ../scripts/devscripts.conf.5:54
-#, fuzzy
-#| msgid ""
-#| "These control scripts which change directory to find a I<debian/"
-#| "changelog> file or suchlike, and some other miscellaneous cases.  In "
-#| "order to prevent unwanted, even possibly dangerous, behaviour, these "
-#| "variables control when actions will be performed.  The scripts which "
-#| "currently make use of these variables are: B<debc>, B<debchange>/B<dch>, "
-#| "B<debclean>, B<debi>, B<debrelease>, B<debuild> and B<uscan>, but this "
-#| "list may change with time (and I may not remember to update this "
-#| "manpage).  Please see the manpages of individual scripts for details of "
-#| "the specific behaviour for each script."
 msgid ""
 "These variables control scripts which change directory to find a I<debian/"
 "changelog> file or suchlike, and some other miscellaneous cases.  In order "
@@ -19909,11 +19893,11 @@ msgid ""
 "manpages of individual scripts for details of the specific behaviour for "
 "each script."
 msgstr ""
-"Permet de contrôler les scripts qui changent de répertoire afin de trouver "
-"un fichier I<debian/changelog> ou un fichier y ressemblant, et quelques "
-"autres cas. Pour empêcher des comportements non souhaités, et pouvant être "
-"dangereux, ces variables contrôlent le moment où les actions sont "
-"effectuées. Les scripts qui utilisent actuellement ces variables sont : "
+"Ces variables permettent de contrôler les scripts qui changent de répertoire "
+"afin de trouver un fichier I<debian/changelog> ou un fichier y ressemblant, "
+"et quelques autres cas. Pour empêcher des comportements indésirables, et "
+"pouvant être dangereux, ces variables contrôlent le moment où les actions "
+"sont effectuées. Les scripts qui utilisent actuellement ces variables sont : "
 "B<debc>, B<debchange>/B<dch>, B<debclean>, B<debi>, B<debrelease>, "
 "B<debuild> et B<uscan>, mais cette liste peut être amenée à être modifiée "
 "(et il se peut que cette page de manuel ne soit pas mise à jour). Veuillez "
