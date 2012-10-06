@@ -69,6 +69,7 @@ my $it = undef;
 my $last_user = '';
 my $lwp_broken = undef;
 my $smtp_ssl_broken = undef;
+my $authen_sasl_broken;
 my $ua;
 
 sub have_lwp() {
@@ -106,6 +107,23 @@ sub have_smtp_ssl() {
     }
     else { $smtp_ssl_broken=''; }
     return $smtp_ssl_broken ? 0 : 1;
+}
+
+sub have_authen_sasl() {
+    return ($authen_sasl_broken ? 0 : 1) if defined $authen_sasl_broken;
+    eval {
+	require Authen::SASL;
+    };
+
+    if ($@) {
+	if ($@ =~ m%^Can't locate Authen/SASL%) {
+	    $authen_sasl_broken='the libauthen-sasl-perl package is not installed';
+	} else {
+	    $authen_sasl_broken="couldn't load Authen::SASL: $@";
+	}
+    }
+    else { $authen_sasl_broken=''; }
+    return $authen_sasl_broken ? 0 : 1;
 }
 
 # Constants
@@ -2545,7 +2563,7 @@ sub send_mail {
 		$smtp = Net::SMTP::SSL->new($host, Port => $port,
 		    Hello => $smtphelo) or die "$progname: failed to open SMTPS connection to $smtphost\n($@)\n";
 	    } else {
-		die "$progname: Unable to establish SMTPS connection: $smtp_ssl_broken\n($@)\n";
+		die "$progname: Unable to establish SMTPS connection: $smtp_ssl_broken\n";
 	    }
 	} else {
 	    my ($host, $port) = split(/:/, $smtphost);
@@ -2555,9 +2573,13 @@ sub send_mail {
 		or die "$progname: failed to open SMTP connection to $smtphost\n($@)\n";
 	}
 	if ($smtpuser) {
-	    $smtppass = getpass() if not $smtppass;
-	    $smtp->auth($smtpuser, $smtppass)
-		or die "$progname: failed to authenticate to $smtphost\n($@)\n";
+	    if (have_authen_sasl) {
+		$smtppass = getpass() if not $smtppass;
+		$smtp->auth($smtpuser, $smtppass)
+		    or die "$progname: failed to authenticate to $smtphost\n($@)\n";
+	    } else {
+		die "$progname: failed to authenticate to $smtphost: $authen_sasl_broken\n";
+	    }
 	}
 	$smtp->mail($fromaddress)
 	    or die "$progname: failed to set SMTP from address $fromaddress\n($@)\n";
