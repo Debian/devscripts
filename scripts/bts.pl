@@ -1700,7 +1700,7 @@ sub bts_usertags {
 	$command .= " $flag";
     }
 
-    if (! @_) {
+    if ($flag ne '=' && ! @_) {
 	die "bts usertags: set what user tag?\n";
     }
 

@@ -3,6 +3,7 @@ devscripts (2.12.5) UNRELEASED; urgency=low
   * bts:
     + Provide a clearer error message when Authen::SASL isn't installed.
       (Closes: #689816)
+    + Don't require a usertag after a `=' operator.  (Closes: #689815)
 
  -- James McCoy <jamessan@debian.org>  Sat, 06 Oct 2012 15:19:58 -0400
 
