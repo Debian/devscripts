@@ -76,7 +76,7 @@ B<GENERAL OPTIONS>
 Work in authenticated mode; this means that for known repositories (mainly those
 hosted on S<I<http://alioth.debian.org>>) URL rewriting is attempted before
 checking out, to ensure that the repository can be committed to. For example,
-for subversion repositories hosted on alioth this means that
+for Subversion repositories hosted on alioth this means that
 S<I<svn+ssh://svn.debian.org/...>> will be used instead of
 S<I<svn://svn.debian.org/...>>.
 

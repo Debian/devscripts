@@ -13,7 +13,7 @@ B<debcommit> [B<--release>] [B<--release-use-changelog>] [B<--message=>I<text>] 
 B<debcommit> generates a commit message based on new text in B<debian/changelog>,
 and commits the change to a package's repository. It must be run in a working
 copy for the package. Supported version control systems are:
-B<cvs>, B<git>, B<hg> (mercurial), B<svk>, B<svn> (subversion),
+B<cvs>, B<git>, B<hg> (mercurial), B<svk>, B<svn> (Subversion),
 B<baz>, B<bzr>, B<tla> (arch), B<darcs>.
 
 =head1 OPTIONS
@@ -470,7 +470,7 @@ sub getprog {
 	}
     }
 
-    die "debcommit: not in a cvs, subversion, baz, bzr, git, hg, svk or darcs working copy\n";
+    die "debcommit: not in a cvs, Subversion, baz, bzr, git, hg, svk or darcs working copy\n";
 }
 
 sub action {
