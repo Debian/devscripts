@@ -258,17 +258,17 @@ while (@ARGV) {
     my $file = shift @ARGV;
 
     if (-d $file) {
-	open FIND, '-|', 'find', $file, @find_args
+	open my $FIND, '-|', 'find', $file, @find_args
 	    or die "$progname: couldn't exec find: $!\n";
 
-	while (<FIND>) {
+	while (<$FIND>) {
 	    chomp;
 	    next unless m%$opt_check_regex%;
 	    # Skip empty files
 	    next if (-z $_);
 	    push @files, $_ unless m%$opt_ignore_regex%;
 	}
-	close FIND;
+	close $FIND;
     } else {
 	next unless ($files_count == 1) or $file =~ m%$opt_check_regex%;
 	push @files, $file unless $file =~ m%$opt_ignore_regex%;
@@ -283,8 +283,8 @@ while (@files) {
     my $license = '';
     my %copyrights;
 
-    open (F, "<$file") or die "Unable to access $file\n";
-    while (<F>) {
+    open (my $F, '<' ,$file) or die "Unable to access $file\n";
+    while (<$F>) {
         last if ($. > $opt_lines);
         $content .= $_;
 	$copyright_match = parse_copyright($_);
@@ -292,7 +292,7 @@ while (@files) {
 	    $copyrights{lc("$copyright_match")} = "$copyright_match";
 	}
     }
-    close(F);
+    close($F);
 
     $copyright = join(" / ", values %copyrights);
 
