@@ -136,10 +136,6 @@ use warnings;
 use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
 
-sub fatal($);
-sub parse_copyright($);
-sub parselicense($);
-
 my $progname = basename($0);
 
 # From dpkg-source
@@ -238,7 +234,7 @@ $opt_ignore_regex = $default_ignore_regex if ! length $opt_ignore_regex;
 $opt_check_regex = $default_check_regex if ! length $opt_check_regex;
 
 if ($opt_noconf) {
-    fatal "--no-conf is only acceptable as the first command-line option!";
+    fatal("--no-conf is only acceptable as the first command-line option!");
 }
 if ($opt_help) { help(); exit 0; }
 if ($opt_version) { version(); exit 0; }
@@ -321,7 +317,7 @@ while (@files) {
     }
 }
 
-sub parse_copyright($) {
+sub parse_copyright {
     my $copyright = '';
     my $match;
 
@@ -398,7 +394,7 @@ later version.
 EOF
 }
 
-sub parselicense($) {
+sub parselicense {
     my ($licensetext) = @_;
 
     my $gplver = "";
@@ -566,7 +562,7 @@ sub parselicense($) {
     return $license;
 }
 
-sub fatal($) {
+sub fatal {
     my ($pack,$file,$line);
     ($pack,$file,$line) = caller();
     (my $msg = "$progname: fatal error at line $line:\n@_\n") =~ tr/\0//d;
