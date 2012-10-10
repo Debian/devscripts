@@ -163,12 +163,17 @@ my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|f(77|90)?|p(l|m)|xs|sh|php
 
 my $modified_conf_msg;
 
-my ($opt_verbose, $opt_lines, $opt_noconf, $opt_ignore_regex, $opt_check_regex)
-  = ('', '', '', '', '');
-my $opt_recursive = 0;
-my $opt_copyright = 0;
-my $opt_machine = 0;
-my ($opt_help, $opt_version);
+my %OPT=(
+    verbose        => '',
+    lines          => '',
+    noconf         => '',
+    ignore_regex   => '',
+    check_regex    => '',
+    recursive      => 0,
+    copyright      => 0,
+    machine        => 0,
+);
+
 my $def_lines = 60;
 
 # Read configuration files and then command line
@@ -211,43 +216,42 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg ||= "  (none)\n";
     chomp $modified_conf_msg;
 
-    $opt_verbose = $config_vars{'LICENSECHECK_VERBOSE'} eq 'yes' ? 1 : 0;
-    $opt_lines = $config_vars{'LICENSECHECK_PARSELINES'};
+    $OPT{'verbose'} = $config_vars{'LICENSECHECK_VERBOSE'} eq 'yes' ? 1 : 0;
+    $OPT{'lines'} = $config_vars{'LICENSECHECK_PARSELINES'};
 }
 
-GetOptions("help|h" => \$opt_help,
-	   "version|v" => \$opt_version,
-	   "verbose!" => \$opt_verbose,
-	   "lines|l=i" => \$opt_lines,
-	   "ignore|i=s" => \$opt_ignore_regex,
-	   "recursive|r" => \$opt_recursive,
-	   "check|c=s" => \$opt_check_regex,
-	   "copyright" => \$opt_copyright,
-	   "machine|m" => \$opt_machine,
-	   "noconf" => \$opt_noconf,
-	   "no-conf" => \$opt_noconf,
-	   )
-    or die "Usage: $progname [options] filelist\nRun $progname --help for more details\n";
+GetOptions(\%OPT,
+           "help|h",
+           "check|c=s",
+           "copyright",
+           "ignore|i=s",
+           "lines|l=i",
+           "machine|m",
+           "noconf|no-conf",
+           "recursive|r",
+           "verbose!",
+           "version|v",
+) or die "Usage: $progname [options] filelist\nRun $progname --help for more details\n";
 
-$opt_lines = $def_lines if $opt_lines !~ /^[1-9][0-9]*$/;
-$opt_ignore_regex = $default_ignore_regex if ! length $opt_ignore_regex;
-$opt_check_regex = $default_check_regex if ! length $opt_check_regex;
+$OPT{'lines'} = $def_lines if $OPT{'lines'} !~ /^[1-9][0-9]*$/;
+$OPT{'ignore_regex'} = $default_ignore_regex if ! length $OPT{'ignore_regex'};
+$OPT{'check_regex'} = $default_check_regex if ! length $OPT{'check_regex'};
 
-if ($opt_noconf) {
+if ($OPT{'noconf'}) {
     fatal("--no-conf is only acceptable as the first command-line option!");
 }
-if ($opt_help) { help(); exit 0; }
-if ($opt_version) { version(); exit 0; }
+if ($OPT{'help'}) { help(); exit 0; }
+if ($OPT{'version'}) { version(); exit 0; }
 
 die "Usage: $progname [options] filelist\nRun $progname --help for more details\n" unless @ARGV;
 
-$opt_lines = $def_lines if not defined $opt_lines;
+$OPT{'lines'} = $def_lines if not defined $OPT{'lines'};
 
 my @files = ();
 my @find_args = ();
 my $files_count = @ARGV;
 
-push @find_args, qw(-maxdepth 1) unless $opt_recursive;
+push @find_args, qw(-maxdepth 1) unless $OPT{'recursive'};
 push @find_args, qw(-follow -type f -print);
 
 while (@ARGV) {
@@ -259,15 +263,15 @@ while (@ARGV) {
 
 	while (<$FIND>) {
 	    chomp;
-	    next unless m%$opt_check_regex%;
+	    next unless m%$OPT{'check_regex'}%;
 	    # Skip empty files
 	    next if (-z $_);
-	    push @files, $_ unless m%$opt_ignore_regex%;
+	    push @files, $_ unless m%$OPT{'ignore_regex'}%;
 	}
 	close $FIND;
     } else {
-	next unless ($files_count == 1) or $file =~ m%$opt_check_regex%;
-	push @files, $file unless $file =~ m%$opt_ignore_regex%;
+	next unless ($files_count == 1) or $file =~ m%$OPT{'check_regex'}%;
+	push @files, $file unless $file =~ m%$OPT{'ignore_regex'}%;
     }
 }
 
@@ -281,7 +285,7 @@ while (@files) {
 
     open (my $F, '<' ,$file) or die "Unable to access $file\n";
     while (<$F>) {
-        last if ($. > $opt_lines);
+        last if ($. > $OPT{'lines'});
         $content .= $_;
 	$copyright_match = parse_copyright($_);
 	if ($copyright_match) {
@@ -293,7 +297,7 @@ while (@files) {
     $copyright = join(" / ", values %copyrights);
 
     print qq(----- $file header -----\n$content----- end header -----\n\n)
-	if $opt_verbose;
+	if $OPT{'verbose'};
 
     $content =~ tr/\t\r\n/ /;
     # Remove C / C++ comments
@@ -303,17 +307,17 @@ while (@files) {
     $content =~ tr/ //s;
 
     $license = parselicense($content);
-    if ($opt_machine) {
+    if ($OPT{'machine'}) {
 	print "$file\t$license";
-	print "\t" . ($copyright or "*No copyright*") if $opt_copyright;
+	print "\t" . ($copyright or "*No copyright*") if $OPT{'copyright'};
 	print "\n";
     } else {
 	print "$file: ";
 	print "*No copyright* " unless $copyright;
 	print $license . "\n";
 	print "  [Copyright: " . $copyright . "]\n"
-	  if $copyright and $opt_copyright;
-	print "\n" if $opt_copyright;
+	  if $copyright and $OPT{'copyright'};
+	print "\n" if $OPT{'copyright'};
     }
 }
 
