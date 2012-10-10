@@ -299,14 +299,8 @@ while (@files) {
     print qq(----- $file header -----\n$content----- end header -----\n\n)
 	if $OPT{'verbose'};
 
-    $content =~ tr/\t\r\n/ /;
-    # Remove C / C++ comments
-    $content =~ s#(\*/|/[/*])##g;
-    $content =~ tr% A-Za-z.,@;0-9\(\)/-%%cd;
-    $content =~ s/ c //g; # Remove fortran comments
-    $content =~ tr/ //s;
+    $license = parselicense(clean_comments($content));
 
-    $license = parselicense($content);
     if ($OPT{'machine'}) {
 	print "$file\t$license";
 	print "\t" . ($copyright or "*No copyright*") if $OPT{'copyright'};
@@ -354,6 +348,34 @@ sub parse_copyright {
     }
 
     return $copyright;
+}
+
+sub clean_comments {
+    local $_ = shift or return q{};
+
+    # Remove generic comments: look for 4 or more lines beginning with
+    # regular comment pattern and trim it. Fall back to old algorithm
+    # if no such pattern found.
+    if( 4 <= scalar(()=m{ ^\s*
+                           ([^a-zA-Z0-9\s]{1,3})
+                           \s\w
+                       }xmg)
+    ){
+        my $comment_length=length($1);
+        my $comment_re=qr{\s*  [$1]{${comment_length}}  \s*}x;
+        s/^$comment_re//mg;
+    }
+
+    # Remove Fortran comments
+    s/^[cC] //gm;
+    tr/\t\r\n/ /;
+
+    # Remove C / C++ comments
+    s#(\*/|/[/*])##g;
+    tr% A-Za-z.,@;0-9\(\)/-%%cd;
+    tr/ //s;
+
+    return $_;
 }
 
 sub help {
