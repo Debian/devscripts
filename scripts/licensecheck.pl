@@ -429,7 +429,7 @@ sub parselicense {
     my $license = "";
 
     if ($licensetext =~ /version ([^, ]+?)[.,]? (?:\(?only\)?.? )?(?:of the GNU (Affero )?(Lesser |Library )?General Public License )?(as )?published by the Free Software Foundation/i or
-	$licensetext =~ /GNU (?:Affero )?(?:Lesser |Library )?General Public License (?:as )?published by the Free Software Foundation; version ([^, ]+?)[.,]? /i) {
+	$licensetext =~ /GNU (?:Affero )?(?:Lesser |Library )?General Public License (?:as )?published by the Free Software Foundation[;,] version ([^, ]+?)[.,]? /i) {
 
 	$gplver = " (v$1)";
     } elsif ($licensetext =~ /GNU (?:Affero )?(?:Lesser |Library )?General Public License, version (\d+(?:\.\d+)?)[ \.]/) {
