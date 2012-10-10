@@ -1616,7 +1616,12 @@ sub bts_tags {
 Indicates that a I<bug> affects a I<package> other than that against which it is filed, causing
 the I<bug> to be listed by default in the I<package> list of the other I<package>.  This should
 generally be used where the I<bug> is severe enough to cause multiple reports from users to be
-assigned to the wrong package.
+assigned to the wrong package.  At least one I<package> must be specified, unless
+the B<=> flag is used, where the command
+
+  bts affects <bug> =
+
+will remove all indications that B<bug> affects other packages.
 
 =cut
 
@@ -1638,7 +1643,7 @@ sub bts_affects {
 	$command .= " $flag";
     }
 
-    if (! @_) {
+    if ($flag ne '=' && ! @_) {
 	die "bts affects: mark which package as affected?\n";
     }
 
