@@ -222,7 +222,7 @@ sub download_origtar ()
 	open S, "apt-cache showsrc '$package' |";
 	my @showsrc;
 	{
-		local $/;
+		local $/ = ""; # slurp paragraphs
 		@showsrc = <S>;
 	}
 	close S;
