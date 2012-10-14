@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2012-10-13 19:46-0300\n"
-"PO-Revision-Date: 2012-10-06 16:09-0400\n"
+"PO-Revision-Date: 2012-10-14 19:50-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -2184,13 +2184,6 @@ msgstr "B<affects> I<bogue> [B<+>|B<->|B<=>] I<paquet> [I<paquet> ...]"
 # NOTE: package list -> bug list
 #. type: textblock
 #: ../scripts/bts.pl:1616
-#, fuzzy
-#| msgid ""
-#| "Indicates that a I<bug> affects a I<package> other than that against "
-#| "which it is filed, causing the I<bug> to be listed by default in the "
-#| "I<package> list of the other I<package>.  This should generally be used "
-#| "where the I<bug> is severe enough to cause multiple reports from users to "
-#| "be assigned to the wrong package."
 msgid ""
 "Indicates that a I<bug> affects a I<package> other than that against which "
 "it is filed, causing the I<bug> to be listed by default in the I<package> "
@@ -2203,10 +2196,12 @@ msgstr ""
 "est enregistré ; le I<bogue> sera listé par défaut dans la liste des bogues "
 "de l'autre I<paquet>. Ce n'est généralement à utiliser que si le I<bogue> "
 "est suffisamment important et si de nombreux bogues sont remontés sur le "
-"mauvais paquet par des utilisateurs."
+"mauvais paquet par des utilisateurs. Au moins un I<paquet> doit être "
+"indiqué, sauf si l'attribut B<=> est utilisé, où la commande"
 
 #. type: verbatim
 #: ../scripts/bts.pl:1622
+#, no-wrap
 msgid ""
 "  bts affects <bug> =\n"
 "\n"
@@ -2218,6 +2213,7 @@ msgstr ""
 #: ../scripts/bts.pl:1624
 msgid "will remove all indications that B<bug> affects other packages."
 msgstr ""
+"va supprimer toutes les indications que le I<bogue> affecte d'autres paquets."
 
 #. type: =item
 #: ../scripts/bts.pl:1657
