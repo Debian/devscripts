@@ -124,6 +124,7 @@ foreach my $filename (@ARGV) {
     my $found_rules = 0;
     my $buffered_orig_line = "";
     my $buffered_line = "";
+    my %start_lines;
 
     while (<C>) {
 	next unless ($check_lines_count == -1 or $. <= $check_lines_count);
@@ -314,6 +315,7 @@ foreach my $filename (@ARGV) {
 		    # start of a quoted block.
 		    if ($count % 2 == 1) {
 			$quote_string = $quote;
+			$start_lines{'quote_string'} = $.;
 			$line =~ s/^(.*)$quote.*$/$1/;
 			last;
 		    }
@@ -415,13 +417,14 @@ foreach my $filename (@ARGV) {
 		$cat_indented = ($1 && $1 eq '-')? 1 : 0;
 		$cat_string = $2;
 		$cat_string = $3 if not defined $cat_string;
+		$start_lines{'cat_string'} = $.;
             }
 	}
     }
 
-    warn "error: $filename:  Unterminated heredoc found, EOF reached. Wanted: <$cat_string>\n"
+    warn "error: $filename:  Unterminated heredoc found, EOF reached. Wanted: <$cat_string>, opened in line $start_lines{'cat_string'}\n"
 	if ($cat_string ne '');
-    warn "error: $filename: Unterminated quoted string found, EOF reached. Wanted: <$quote_string>\n"
+    warn "error: $filename: Unterminated quoted string found, EOF reached. Wanted: <$quote_string>, opened in line $start_lines{'quote_string'}\n"
 	if ($quote_string ne '');
     warn "error: $filename: EOF reached while on line continuation.\n"
 	if ($buffered_line ne '');
