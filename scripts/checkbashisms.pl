@@ -366,9 +366,11 @@ foreach my $filename (@ARGV) {
 	    # $cat_line contains the version of the line we'll check
 	    # for heredoc delimiters later. Initially, remove any
 	    # spaces between << and the delimiter to make the following
-	    # updates to $cat_line easier.
+	    # updates to $cat_line easier. However, don't remove the
+	    # spaces if the delimiter starts with a -, as that changes
+	    # how the delimiter is searched.
 	    my $cat_line = $line;
-	    $cat_line =~ s/(<\<-?)\s+/$1/g;
+	    $cat_line =~ s/(<\<-?)\s+(?!-)/$1/g;
 
 	    # Ignore anything inside single quotes; it could be an
 	    # argument to grep or the like.
@@ -413,7 +415,7 @@ foreach my $filename (@ARGV) {
 
 	    # Only look for the beginning of a heredoc here, after we've
 	    # stripped out quoted material, to avoid false positives.
-	    if ($cat_line =~ m/(?:^|[^<])\<\<(\-?)\s*(?:[\\]?(\w+)|[\'\"](.*?)[\'\"])/) {
+	    if ($cat_line =~ m/(?:^|[^<])\<\<(\-?)\s*(?:[\\]?([\w-]+)|[\'\"](.*?)[\'\"])/) {
 		$cat_indented = ($1 && $1 eq '-')? 1 : 0;
 		$cat_string = $2;
 		$cat_string = $3 if not defined $cat_string;
