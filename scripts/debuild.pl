@@ -129,6 +129,7 @@ Second usage method:
         --dpkg-source-hook=HOOK
         --build-hook=HOOK
         --binary-hook=HOOK
+        --dpkg-genchanges-hook=HOOK
         --final-clean-hook=HOOK
         --lintian-hook=HOOK
         --signing-hook=HOOK
@@ -185,8 +186,8 @@ my $tgz_check=1;
 my $prepend_path='';
 my $username='';
 my $emulate_dpkgbp = 0;
-my @hooks = (qw(dpkg-buildpackage clean dpkg-source build binary final-clean
-		lintian signing post-dpkg-buildpackage));
+my @hooks = (qw(dpkg-buildpackage clean dpkg-source build binary dpkg-genchanges
+		final-clean lintian signing post-dpkg-buildpackage));
 my %hook;
 $hook{@hooks} = ('') x @hooks;
 
@@ -247,6 +248,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBUILD_DPKG_SOURCE_HOOK' => '',
 		       'DEBUILD_BUILD_HOOK' => '',
 		       'DEBUILD_BINARY_HOOK' => '',
+		       'DEBUILD_DPKG_GENCHANGES_HOOK' => '',
 		       'DEBUILD_FINAL_CLEAN_HOOK' => '',
 		       'DEBUILD_LINTIAN_HOOK' => '',
 		       'DEBUILD_SIGNING_HOOK' => '',
