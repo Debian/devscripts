@@ -138,7 +138,7 @@ Second usage method:
                             dpkg-buildpackage run.  For details, see the
                             debuild manpage.  They default to nothing, and
                             can be reset to nothing with --foo-hook=''
-	--clear-hooks       Clear all hooks
+        --clear-hooks       Clear all hooks
 
     For available dpkg-buildpackage and lintian options, see their
     respective manpages.
