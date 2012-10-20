@@ -631,9 +631,9 @@ until (-r 'debian/changelog') {
 
 # Find the source package name and version number
 my %changelog;
-open PARSED, q[dpkg-parsechangelog | grep '^\(Source\|Version\):' |]
+my @parsed = grep {/^(Source|Version):/} `dpkg-parsechangelog`
     or fatal "cannot execute dpkg-parsechangelog | grep: $!";
-while (<PARSED>) {
+foreach (@parsed) {
     chomp;
     if (/^(\S+):\s(.+?)\s*$/) { $changelog{$1}=$2; }
     else {
@@ -641,8 +641,6 @@ while (<PARSED>) {
     }
 }
 
-close PARSED
-    or fatal "problem executing dpkg-parsechangelog | grep: $!";
 if ($?) { fatal "dpkg-parsechangelog | grep failed!" }
 
 fatal "no package name in changelog!"

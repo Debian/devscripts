@@ -12,6 +12,8 @@ devscripts (2.12.5) UNRELEASED; urgency=low
   [ Benjamin Drung ]
   * Fix Subversion typo and write all instances of it with an capital initial
     letter. Thanks to Regid Ichira for the finding. (Closes: #689953)
+  * debuild: Fix failure if called with --preserve-env and GREP_OPTIONS is set.
+    Thanks to Aaron Culich for the patch.  (Closes: #501056, LP: #581319)
 
   [ David Prévot ]
   * French translation update.
