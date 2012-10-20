@@ -76,7 +76,7 @@ B<GENERAL OPTIONS>
 Work in authenticated mode; this means that for known repositories (mainly those
 hosted on S<I<http://alioth.debian.org>>) URL rewriting is attempted before
 checking out, to ensure that the repository can be committed to. For example,
-for subversion repositories hosted on alioth this means that
+for Subversion repositories hosted on alioth this means that
 S<I<svn+ssh://svn.debian.org/...>> will be used instead of
 S<I<svn://svn.debian.org/...>>.
 
@@ -103,7 +103,7 @@ uses "static" information as known by APT's cache.
 
 Also see B<-d>. This option and B<-d> are mutually exclusive.
 
-=item B<--package> I<package>
+=item B<-P> I<package>, B<--package> I<package>
 
 When checking out a repository URL, instead of trying to guess the package name
 from the URL, use this package name.
@@ -987,7 +987,7 @@ sub main() {
 	"help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },
 	"print|p" => \$print_mode,
 	"details|d" => \$details_mode,
-	"package|p=s" => \$use_package,
+	"package|P=s" => \$use_package,
 	"type|t=s" => \$repo_type,
 	"user|u=s" => \$user,
 	"file|f=s" => sub { push(@files, $_[1]); },

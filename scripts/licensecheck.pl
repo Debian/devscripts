@@ -4,6 +4,7 @@
 #
 # This version is
 #   Copyright (C) 2007, 2008 Adam D. Barratt
+#   Copyright (C) 2012 Francesco Poli
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

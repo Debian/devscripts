@@ -69,6 +69,7 @@ my $it = undef;
 my $last_user = '';
 my $lwp_broken = undef;
 my $smtp_ssl_broken = undef;
+my $authen_sasl_broken;
 my $ua;
 
 sub have_lwp() {
@@ -106,6 +107,23 @@ sub have_smtp_ssl() {
     }
     else { $smtp_ssl_broken=''; }
     return $smtp_ssl_broken ? 0 : 1;
+}
+
+sub have_authen_sasl() {
+    return ($authen_sasl_broken ? 0 : 1) if defined $authen_sasl_broken;
+    eval {
+	require Authen::SASL;
+    };
+
+    if ($@) {
+	if ($@ =~ m%^Can't locate Authen/SASL%) {
+	    $authen_sasl_broken='the libauthen-sasl-perl package is not installed';
+	} else {
+	    $authen_sasl_broken="couldn't load Authen::SASL: $@";
+	}
+    }
+    else { $authen_sasl_broken=''; }
+    return $authen_sasl_broken ? 0 : 1;
 }
 
 # Constants
@@ -1598,7 +1616,12 @@ sub bts_tags {
 Indicates that a I<bug> affects a I<package> other than that against which it is filed, causing
 the I<bug> to be listed by default in the I<package> list of the other I<package>.  This should
 generally be used where the I<bug> is severe enough to cause multiple reports from users to be
-assigned to the wrong package.
+assigned to the wrong package.  At least one I<package> must be specified, unless
+the B<=> flag is used, where the command
+
+  bts affects <bug> =
+
+will remove all indications that B<bug> affects other packages.
 
 =cut
 
@@ -1620,7 +1643,7 @@ sub bts_affects {
 	$command .= " $flag";
     }
 
-    if (! @_) {
+    if ($flag ne '=' && ! @_) {
 	die "bts affects: mark which package as affected?\n";
     }
 
@@ -1682,7 +1705,7 @@ sub bts_usertags {
 	$command .= " $flag";
     }
 
-    if (! @_) {
+    if ($flag ne '=' && ! @_) {
 	die "bts usertags: set what user tag?\n";
     }
 
@@ -2545,7 +2568,7 @@ sub send_mail {
 		$smtp = Net::SMTP::SSL->new($host, Port => $port,
 		    Hello => $smtphelo) or die "$progname: failed to open SMTPS connection to $smtphost\n($@)\n";
 	    } else {
-		die "$progname: Unable to establish SMTPS connection: $smtp_ssl_broken\n($@)\n";
+		die "$progname: Unable to establish SMTPS connection: $smtp_ssl_broken\n";
 	    }
 	} else {
 	    my ($host, $port) = split(/:/, $smtphost);
@@ -2555,9 +2578,13 @@ sub send_mail {
 		or die "$progname: failed to open SMTP connection to $smtphost\n($@)\n";
 	}
 	if ($smtpuser) {
-	    $smtppass = getpass() if not $smtppass;
-	    $smtp->auth($smtpuser, $smtppass)
-		or die "$progname: failed to authenticate to $smtphost\n($@)\n";
+	    if (have_authen_sasl) {
+		$smtppass = getpass() if not $smtppass;
+		$smtp->auth($smtpuser, $smtppass)
+		    or die "$progname: failed to authenticate to $smtphost\n($@)\n";
+	    } else {
+		die "$progname: failed to authenticate to $smtphost: $authen_sasl_broken\n";
+	    }
 	}
 	$smtp->mail($fromaddress)
 	    or die "$progname: failed to set SMTP from address $fromaddress\n($@)\n";

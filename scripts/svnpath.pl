@@ -16,7 +16,7 @@ B<svnpath trunk>
 
 =head1 DESCRIPTION
 
-B<svnpath> is intended to be run in a subversion working copy.
+B<svnpath> is intended to be run in a Subversion working copy.
 
 In its simplest usage, B<svnpath> with no parameters outputs the svn url for
 the repository associated with the working copy.
@@ -25,7 +25,7 @@ If a parameter is given, B<svnpath> attempts to instead output the url that
 would be used for the tags, branches, or trunk. This will only work if it's
 run in the top-level directory that is subject to tagging or branching.
 
-For example, if you want to tag what's checked into subversion as version
+For example, if you want to tag what's checked into Subversion as version
 1.0, you could use a command like this:
 
   svn cp $(svnpath) $(svnpath tags)/1.0
@@ -39,7 +39,7 @@ something like this:
 svnpath uses a simple heuristic to convert between the trunk, tags, and
 branches paths. It replaces the first occurrence of B<trunk>, B<tags>, or
 B<branches> with the name of what you're looking for. This will work ok for
-most typical subversion repository layouts.
+most typical Subversion repository layouts.
 
 If you have an atypical layout and it does not work, you can add a
 F<~/.svnpath> file. This file is perl code, which can modify the path in $url.
