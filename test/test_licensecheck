@@ -36,12 +36,14 @@ testBeerware() {
 testLGPL() {
     license "lgpl-2.1.c" "LGPL (v2.1)"
     license "lgpl-2.1.h" "LGPL (v2.1)"
+    license "lgpl-2.s" "LGPL (v2)"
 }
 
 testGPL() {
     license "gpl-1" "GPL (v1 or later)"
     license "gpl-2" "GPL (v2)"
     license "gpl-2+" "GPL (v2 or later)"
+    license "gpl-2+.scm" "GPL (v2 or later)"
     license "gpl-2-comma.sh" "GPL (v2)"
     license "gpl-2-incorrect-address" "GPL (v2) (with incorrect FSF address)"
     license "gpl-3.sh" "GPL (v3)"
