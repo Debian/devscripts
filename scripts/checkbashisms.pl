@@ -298,8 +298,26 @@ foreach my $filename (@ARGV) {
 		    my $otherquote = ($quote eq "\"" ? "\'" : "\"");
 
 		    # Remove balanced quotes and their content
-		    $templine =~ s/(^|[^\\\"](?:\\\\)*)\'[^\']*\'/$1/g;
-		    $templine =~ s/(^|[^\\\'](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1/g;
+		    while (1) {
+			my ($length_single, $length_double) = (0, 0);
+
+			# Determine which one would match first:
+			if ($templine =~ m/(^.+?(?:^|[^\\\"](?:\\\\)*)\')[^\']*\'/) {
+			    $length_single = length($1);
+			}
+			if ($templine =~ m/(^.*?(?:^|[^\\\'](?:\\\\)*)\")(?:\\.|[^\\\"])+\"/) {
+			    $length_double = length($1);
+			}
+
+			# Now simplify accordingly (shorter is preferred):
+			if ($length_single != 0 && ($length_single < $length_double || $length_double == 0)) {
+			    $templine =~ s/(^|[^\\\"](?:\\\\)*)\'[^\']*\'/$1/;
+			} elsif ($length_double != 0) {
+			    $templine =~ s/(^|[^\\\'](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1/;
+			} else {
+			    last;
+			}
+		    }
 
 		    # Don't flag quotes that are themselves quoted
 		    # "a'b"
