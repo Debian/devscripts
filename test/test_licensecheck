@@ -33,6 +33,10 @@ testBeerware() {
     license "beerware.cpp" "Beerware"
 }
 
+testBSD() {
+    license "bsd-3-clause.cpp" "BSD (3 clause)"
+}
+
 testLGPL() {
     license "lgpl-2.1.c" "LGPL (v2.1)"
     license "lgpl-2.1.h" "LGPL (v2.1)"
