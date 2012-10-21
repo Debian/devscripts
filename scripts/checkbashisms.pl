@@ -433,10 +433,23 @@ foreach my $filename (@ARGV) {
 
 	    # Only look for the beginning of a heredoc here, after we've
 	    # stripped out quoted material, to avoid false positives.
-	    if ($cat_line =~ m/(?:^|[^<])\<\<(\-?)\s*(?:[\\]?([\w-]+)|[\'\"](.*?)[\'\"])/) {
+	    if ($cat_line =~ m/(?:^|[^<])\<\<(\-?)\s*(?:(?!<|'|")((?:[^\s;]+(?:(?<=\\)[\s;])?)+)|[\'\"](.*?)[\'\"])/) {
 		$cat_indented = ($1 && $1 eq '-')? 1 : 0;
-		$cat_string = $2;
-		$cat_string = $3 if not defined $cat_string;
+		my $quoted = defined($3);
+		$cat_string = $quoted? $3 : $2;
+		unless ($quoted) {
+		    # Now strip backslashes. Keep the position of the
+		    # last match in a variable, as s/// resets it back
+		    # to undef, but we don't want that.
+		    my $pos = 0;
+		    pos($cat_string) = $pos;
+		    while ($cat_string =~ s/\G(.*?)\\/$1/) {
+			# postition += length of match + the character
+			# that followed the backslash:
+			$pos += length($1)+1;
+			pos($cat_string) = $pos;
+		    }
+		}
 		$start_lines{'cat_string'} = $.;
             }
 	}
