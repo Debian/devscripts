@@ -439,8 +439,8 @@ foreach my $filename (@ARGV) {
 	    # This check requires the value to be compared, which could
 	    # be done in the regex itself but requires "use re 'eval'".
 	    # So it's better done in its own
-	    if ($line =~ m/$LEADIN(exit\s+(\d{3,}))/o && $2 > 255) {
-		$explanation = 'exit status code greater than 255';
+	    if ($line =~ m/$LEADIN((?:exit|return)\s+(\d{3,}))/o && $2 > 255) {
+		$explanation = 'exit|return status code greater than 255';
 		output_explanation($display_filename, $orig_line, $explanation);
 	    }
 
@@ -622,8 +622,8 @@ sub init_hashes {
 	$LEADIN . qr'command\s+-[^p]\s' =>  q<'command' with option other than -p>,
 	$LEADIN . qr'setvar\s' =>  q<setvar 'foo' 'bar' should be eval 'foo="'"$bar"'"'>,
 	$LEADIN . qr'trap\s+["\']?.*["\']?\s+.*(?:ERR|DEBUG|RETURN)' => q<trap with ERR|DEBUG|RETURN>,
-	$LEADIN . qr'exit\s+-\d' => q<exit with negative status code>,
-	$LEADIN . qr'exit\s+--' => q<'exit --' should be 'exit'>,
+	$LEADIN . qr'(?:exit|return)\s+-\d' => q<exit|return with negative status code>,
+	$LEADIN . qr'(?:exit|return)\s+--' => q<'exit --' should be 'exit' (idem for return)>,
     );
 
     %string_bashisms = (
