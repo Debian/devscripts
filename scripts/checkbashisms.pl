@@ -344,8 +344,8 @@ foreach my $filename (@ARGV) {
 	    # detect source (.) trying to pass args to the command it runs
 	    # The first expression weeds out '. "foo bar"'
 	    if (not $found and
-		not m/$LEADIN\.\s+(\"[^\"]+\"|\'[^\']+\'|\$\([^)]+\)+(?:\/[^\s;]+)?)\s*(\&|\||\d?>|<|;|\Z)/
-		and m/$LEADIN(\.\s+[^\s;\`:]+\s+([^\s;]+))/) {
+		not m/$LEADIN\.\s+(\"[^\"]+\"|\'[^\']+\'|\$\([^)]+\)+(?:\/[^\s;]+)?)\s*(\&|\||\d?>|<|;|\Z)/o
+		and m/$LEADIN(\.\s+[^\s;\`:]+\s+([^\s;]+))/o) {
 		if ($2 =~ /^(\&|\||\d?>|<)/) {
 		    # everything is ok
 		    ;
@@ -374,7 +374,7 @@ foreach my $filename (@ARGV) {
 	    }
 
 	    my $re='(?<![\$\\\])\$\'[^\']+\'';
-	    if ($line =~ m/(.*)($re)/){
+	    if ($line =~ m/(.*)($re)/o){
 		my $count = () = $1 =~ /(^|[^\\])\'/g;
 		if( $count % 2 == 0 ) {
 		    output_explanation($display_filename, $orig_line, q<$'...' should be "$(printf '...')">);
@@ -402,7 +402,7 @@ foreach my $filename (@ARGV) {
 	    $cat_line =~ s/(^|[^<\\\"-](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
 
 	    $re='(?<![\$\\\])\$\"[^\"]+\"';
-	    if ($line =~ m/(.*)($re)/){
+	    if ($line =~ m/(.*)($re)/o){
 		my $count = () = $1 =~ /(^|[^\\])\"/g;
 		if( $count % 2 == 0 ) {
 		    output_explanation($display_filename, $orig_line, q<$"foo" should be eval_gettext "foo">);
@@ -433,7 +433,7 @@ foreach my $filename (@ARGV) {
 	    # This check requires the value to be compared, which could
 	    # be done in the regex itself but requires "use re 'eval'".
 	    # So it's better done in its own
-	    if ($line =~ m/$LEADIN(exit\s+(\d{3,}))/ && $2 > 255) {
+	    if ($line =~ m/$LEADIN(exit\s+(\d{3,}))/o && $2 > 255) {
 		$explanation = 'exit status code greater than 255';
 		output_explanation($display_filename, $orig_line, $explanation);
 	    }
