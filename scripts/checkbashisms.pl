@@ -430,6 +430,13 @@ foreach my $filename (@ARGV) {
 		    output_explanation($display_filename, $orig_line, $explanation);
 		}
 	    }
+	    # This check requires the value to be compared, which could
+	    # be done in the regex itself but requires "use re 'eval'".
+	    # So it's better done in its own
+	    if ($line =~ m/$LEADIN(exit\s+(\d{3,}))/ && $2 > 255) {
+		$explanation = 'exit status code greater than 255';
+		output_explanation($display_filename, $orig_line, $explanation);
+	    }
 
 	    # Only look for the beginning of a heredoc here, after we've
 	    # stripped out quoted material, to avoid false positives.
@@ -609,6 +616,8 @@ sub init_hashes {
 	$LEADIN . qr'command\s+-[^p]\s' =>  q<'command' with option other than -p>,
 	$LEADIN . qr'setvar\s' =>  q<setvar 'foo' 'bar' should be eval 'foo="'"$bar"'"'>,
 	$LEADIN . qr'trap\s+["\']?.*["\']?\s+.*(?:ERR|DEBUG|RETURN)' => q<trap with ERR|DEBUG|RETURN>,
+	$LEADIN . qr'exit\s+-\d' => q<exit with negative status code>,
+	$LEADIN . qr'exit\s+--' => q<'exit --' should be 'exit'>,
     );
 
     %string_bashisms = (
