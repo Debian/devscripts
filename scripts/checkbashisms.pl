@@ -446,7 +446,7 @@ foreach my $filename (@ARGV) {
 
 	    # Only look for the beginning of a heredoc here, after we've
 	    # stripped out quoted material, to avoid false positives.
-	    if ($cat_line =~ m/(?:^|[^<])\<\<(\-?)\s*(?:(?!<|'|")((?:[^\s;|]+(?:(?<=\\)[\s;|])?)+)|[\'\"](.*?)[\'\"])/) {
+	    if ($cat_line =~ m/(?:^|[^<])\<\<(\-?)\s*(?:(?!<|'|")((?:[^\s;>|]+(?:(?<=\\)[\s;>|])?)+)|[\'\"](.*?)[\'\"])/) {
 		$cat_indented = ($1 && $1 eq '-')? 1 : 0;
 		my $quoted = defined($3);
 		$cat_string = $quoted? $3 : $2;
