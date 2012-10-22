@@ -4,9 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: devscripts 2.11.4\n"
+"Project-Id-Version: devscripts 2.12.4\n"
+"Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
 "POT-Creation-Date: 2012-10-13 19:46-0300\n"
-"PO-Revision-Date: 2012-09-17 22:14+0100\n"
+"PO-Revision-Date: 2012-10-15 20:14+0100\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
 "Language: de\n"
@@ -1339,15 +1340,6 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/bts.pl:821
-#, fuzzy
-#| msgid ""
-#| "Options may be specified after the B<bugs> command in addition to or "
-#| "instead of options at the start of the command line: recognised options "
-#| "at this point are: B<-o>/B<--offline>/B<--online>, B<--mbox>, B<--"
-#| "mailreader> and B<-->[B<no->]B<cache>.  These are described earlier in "
-#| "this manpage.  If either the B<-o> or B<--offline> option is used, or "
-#| "there is already an up-to-date copy in the local cache, the cached "
-#| "version will be used."
 msgid ""
 "Options may be specified after the B<bugs> command in addition to or instead "
 "of options at the start of the command line: recognised options at this "
@@ -1358,8 +1350,8 @@ msgid ""
 msgstr ""
 "Optionen könnten nach dem Befehl B<bugs> zusätzlich oder anstelle von "
 "Optionen am Anfang der Befehlszeile angegeben werden: An diesem Punkt "
-"erkannte Optionen sind: B<-o>/B<--offline>/B<--online>, B<--mbox>, B<--"
-"mailreader> und B<-->[B<no->]B<cache>. Diese wurden an früherer Stelle in "
+"erkannte Optionen sind: B<-o>/B<--offline>/B<--online>, B<-m>/B<--mbox>, "
+"B<--mailreader> und B<-->[B<no->]B<cache>. Diese wurden an früherer Stelle in "
 "dieser Handbuchseite beschrieben. Falls Sie entweder die Option B<-o> oder "
 "B<--offline> benutzt haben oder es bereits eine aktuelle Kopie des lokalen "
 "Zwischenspeichers gibt, wird die zwischengespeicherte Version benutzt."
@@ -2182,13 +2174,6 @@ msgstr "B<affects> I<Fehler> [B<+>|B<->|B<=>] I<Paket> [I<Paket> …]"
 
 #. type: textblock
 #: ../scripts/bts.pl:1616
-#, fuzzy
-#| msgid ""
-#| "Indicates that a I<bug> affects a I<package> other than that against "
-#| "which it is filed, causing the I<bug> to be listed by default in the "
-#| "I<package> list of the other I<package>.  This should generally be used "
-#| "where the I<bug> is severe enough to cause multiple reports from users to "
-#| "be assigned to the wrong package."
 msgid ""
 "Indicates that a I<bug> affects a I<package> other than that against which "
 "it is filed, causing the I<bug> to be listed by default in the I<package> "
@@ -2197,11 +2182,13 @@ msgid ""
 "to the wrong package.  At least one I<package> must be specified, unless the "
 "B<=> flag is used, where the command"
 msgstr ""
-"zeigt an, dass ein I<Fehler> ein anderes I<Paket>, als das, gegen das er "
-"eingereicht wurde, beeinflusst, was dazu führt, dass der I<Fehler> "
-"standardmäßig in der I<Paket>liste des anderen Pakets aufgeführt wird. Dies "
-"sollte üblicherweise benutzt werden, wo der I<Fehler> ernst genug ist, um "
-"mehrere Berichte von Benutzern dem falschen Paket zuzuweisen."
+"zeigt an, dass ein I<Fehler> ein anderes I<Paket> betrifft, als das, gegen "
+"das er eingereicht wurde, was dazu führt, dass der I<Fehler> standardmäßig in "
+"der I<Paket>liste des anderen Pakets aufgeführt wird. Dies sollte "
+"üblicherweise benutzt werden, wo der I<Fehler> ernst genug ist, um mehrere "
+"Berichte von Benutzern dem falschen Paket zuzuweisen. Es muss mindestens ein "
+"I<Paket> angegeben werden, sogar, wenn der Schalter B<=> benutzt wird, wobei "
+"der Befehl"
 
 #. type: verbatim
 #: ../scripts/bts.pl:1622
@@ -2212,10 +2199,11 @@ msgstr ""
 "  bts affects <Fehler> =\n"
 "\n"
 
+# FIXME s/B<bug>/I<bug>/
 #. type: textblock
 #: ../scripts/bts.pl:1624
 msgid "will remove all indications that B<bug> affects other packages."
-msgstr ""
+msgstr "alle Hinweise entfernt, dass I<Fehler> andere Pakete beeinflusst."
 
 #. type: =item
 #: ../scripts/bts.pl:1657
@@ -4368,12 +4356,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:217
-#, fuzzy
-#| msgid ""
-#| "If the environment variable B<COWPOKE_CONF> is set, it specifies an "
-#| "addtional configuration file which will override all of those above.  "
-#| "Options specified explicitly on the command line override all "
-#| "configuration files."
 msgid ""
 "If the environment variable B<COWPOKE_CONF> is set, it specifies an "
 "additional configuration file which will override all of those above.  "
@@ -6166,8 +6148,8 @@ msgstr ""
 "Konfigurationsvariablen B<DEBCHANGE_QUERY_BTS> auf I<no> beendet werden, wie "
 "nachfolgend beschrieben beendet werden. In beiden Fällen wird der Editor "
 "(wie oben beschrieben) immer aufgerufen, um Gelegenheit zu geben, die "
-"Einträge zu ändern, und das Changlog wird akzeptiert, egal, ob Änderungen "
-"gemacht wurden oder nicht. Ein zusätzlicher Changlog-Eintrag kann auf der "
+"Einträge zu ändern, und das Changelog wird akzeptiert, egal, ob Änderungen "
+"gemacht wurden oder nicht. Ein zusätzlicher Changelog-Eintrag kann auf der "
 "Befehlszeile zu den Einträgen zum Schließen angegeben werden."
 
 #. type: Plain text
@@ -6205,6 +6187,23 @@ msgid ""
 "previous upload was performed with a version of B<dupload> prior to 2.1 or "
 "because the upload failed."
 msgstr ""
+"Es können zwei verschiedene Zusammenstellungen von Entscheidungsregeln "
+"benutzt werden, was durch die Option B<--release-heuristic> oder die "
+"Konfigurationsdateivariable B<DEBCHANGE_RELEASE_HEURISTIC> gesteuert wird. "
+"Die Standard-I<Changelog>-Entscheidungsregel geht davon aus, dass das Paket "
+"veröffentlicht wurde, wenn sein Changelog im Feld »distribution« nicht "
+"B<UNRELEASED> enthält. Falls diese Entscheidungsregel aktiviert ist, wird die "
+"Distribution B<UNRELEASED> in neuen Changelog-Einträgen vorgeben und die "
+"nachfolgend beschriebene Option B<--mainttrailer> wird automatisch aktiviert. "
+"Dies kann nützlich sein, falls ein Paket durch verschiedene Paketbetreuer "
+"veröffentlicht werden kann oder falls Sie die Üpload-Protokolle nicht "
+"aufbewahren. Die alternative I<Protokoll>-Entscheidungsregel bestimmt, ob ein "
+"Paket veröffentlicht wurde, indem es im übergeordneten Verzeichnis eine "
+"geeignete B<dupload>(1)- oder B<dput>(1)-Protokolldatei sucht. Falls die "
+"Protokolldatei gefunden aber kein erfolgreiches Hochladen aufgezeichnet "
+"wurde, wird eine Warnung ausgegeben. Dies kann daher rühren, dass das "
+"vorhergehende Hochladen von einer Version von B<dupload> vor 2.1 durchgeführt "
+"wurde oder das Hochladen fehlschlug."
 
 #. type: Plain text
 #: ../scripts/debchange.1:82
@@ -6386,13 +6385,6 @@ msgstr "B<--increment>, B<-i>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:162
-#, fuzzy
-#| msgid ""
-#| "Increment either the final component of the Debian release number or, if "
-#| "this is a native Debian package, the version number.  This creates a new "
-#| "section at the beginning of the changelog with appropriate headers and "
-#| "footers.  Also, if this is a new version of a native Debian package, the "
-#| "directory name is changed to reflect this."
 msgid ""
 "Increment either the final component of the Debian release number or, if "
 "this is a native Debian package, the version number.  On Ubuntu, this will "
@@ -6406,11 +6398,16 @@ msgid ""
 "changelog stanza with the new version."
 msgstr ""
 "Erhöht entweder den letzten Bestandteil der Debian-Veröffentlichungsnummer "
-"oder, falls dies ein natives Debian-Paket ist, die Versionsnummer. Dies "
-"erstellt einen neuen Abschnitt am Anfang des Changelogs mit angemessenen "
-"Kopf- und Fußzeilen. Falls dies eine neue Version eines nativen Debian-"
-"Pakets ist, wird außerdem der Verzeichnisname geändert, um dies "
-"widerzuspiegeln."
+"oder, falls dies ein natives Debian-Paket ist, die Versionsnummer. Für Ubuntu "
+"wird dies außerdem die Endung von »buildX« in »ubuntu1« ändern. Benutzen Sie "
+"B<-R> oder B<--rebuild> für ein Erhöhen ohne Änderung beim Neubauen. Dies "
+"erstellt am Anfang des Changelogs einen neuen Abschnitt mit geeigneten Kopf- "
+"und Fußzeilen. Falls dies eine neue Version eines nativen Debian-Pakets ist, "
+"wird außerdem der Verzeichnisname geändert, um dies widerzuspiegeln. Falls "
+"B<DEBCHANGE_RELEASE_HEURISTIC> I<changelog> (Vorgabe) und die aktuelle "
+"Veröffentlichung I<UNRELEASED> ist, wird dies nur die Version des aktuellen "
+"Changelog-Eintrags ändern. Andernfalls wird dies einen neuen "
+"Changelog-Eintrag mit der neuen Version erstellen."
 
 #. type: TP
 #: ../scripts/debchange.1:162
@@ -6420,12 +6417,6 @@ msgstr "B<--newversion >I<Version>, B<-v >I<Version>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:172
-#, fuzzy
-#| msgid ""
-#| "This specifies the version number (including the Debian release part)  "
-#| "explicitly and behaves as the B<--increment> option in other respects.  "
-#| "It will also change the directory name if the upstream version number has "
-#| "changed."
 msgid ""
 "This specifies the version number (including the Debian release part)  "
 "explicitly and behaves as the B<--increment> option in other respects.  It "
@@ -6435,10 +6426,14 @@ msgid ""
 "the current changelog stanza.  Otherwise, this will create a new changelog "
 "stanza with the new version."
 msgstr ""
-"Dies gibt die Versionsnummer (einschließlich des Debian-"
-"Veröffentlichungsteils) explizit an und verhält sich ansonsten wie die "
+"Dies gibt die Versionsnummer (einschließlich des "
+"Debian-Veröffentlichungsteils) explizit an und verhält sich ansonsten wie die "
 "Option B<--increment>. Es wird außerdem den Verzeichnisnamen ändern, falls "
-"sich die Versionsnummer der Originalautoren geändert hat."
+"sich die Versionsnummer des Originalpakets geändert hat. Falls "
+"B<DEBCHANGE_RELEASE_HEURISTIC> I<changelog> (Vorgabe) und die aktuelle "
+"Veröffentlichung I<UNRELEASED> ist, wird dies nur die Version des aktuellen "
+"Changelog-Eintrags ändern. Andernfalls wird dies einen neuen "
+"Changelog-Eintrag mit der neuen Version erstellen."
 
 #. type: TP
 #: ../scripts/debchange.1:172
@@ -6479,24 +6474,17 @@ msgstr ""
 msgid "B<--force-save-on-release>"
 msgstr "B<--force-save-on-release>"
 
-# FIXME s/an editor opened/an editor is opened/
-# FIXME s/their/in their/
 #. type: Plain text
 #: ../scripts/debchange.1:188
-#, fuzzy
-#| msgid ""
-#| "When B<--release> is used and an editor opened to allow inspection of the "
-#| "changelog, require the user to save the changelog their editor opened.  "
-#| "Otherwise, the original changelog will not be modified. (default)"
 msgid ""
 "When B<--release> is used, an editor is opened to allow inspection of the "
 "changelog.  The user is required to save the file to accept the modified "
 "changelog, otherwise the original will be kept (default)."
 msgstr ""
-"Wenn B<--release> benutzt und ein Editor geöffnet ist, um die Prüfung des "
-"Changelogs zu ermöglichen, benötigt der Benutzer zum Sichern des Changelogs "
-"seinen geöffneten Editor. Andernfalls wird das Original-Changelog nicht "
-"verändert. (Vorgabe)"
+"Wenn B<--release> benutzt wird, wird ein Editor geöffnet, um die Prüfung des "
+"Changelogs zu ermöglichen. Der Benutzer wird aufgefordert, die Datei zu "
+"sichern, um das geänderte Changelog zu akzeptieren, andernfalls wird das "
+"Original beibehalten (Vorgabe)."
 
 #. type: TP
 #: ../scripts/debchange.1:188
@@ -6635,7 +6623,7 @@ msgid ""
 "B<QA upload> changelog comment."
 msgstr ""
 "erhöht die Debian-Veröffentlichungsnummer für ein Hochladen durch das Debian-"
-"QA-Team und fügt einen Changlog-Kommentar B<QA upload> hinzu."
+"QA-Team und fügt einen Changelog-Kommentar B<QA upload> hinzu."
 
 #. type: TP
 #: ../scripts/debchange.1:236
@@ -6644,19 +6632,13 @@ msgstr "B<--rebuild>, B<-R>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:240
-#, fuzzy
-#| msgid ""
-#| "Increment the Debian release number for a binary non-maintainer upload by "
-#| "either appending a \"B<+b1>\" to a non-binNMU version number or by "
-#| "incrementing a binNMU version number, and add a binNMU changelog comment."
 msgid ""
 "Increment the Debian release number for an Ubuntu no-change rebuild by "
 "appending a \"build1\" or by incrementing a rebuild version number."
 msgstr ""
-"erhöht die Debian-Veröffentlichungsnummer für ein binäres Hochladen durch "
-"jemanden, der nicht Betreuer des Pakets ist (NMU) entweder durch Anhängen "
-"von »B<+b1>« an eine nicht binär-NMU-Versionsnummer oder durch Erhöhen einer "
-"binär-NMU-Versionsnummer und Hinzufügen eines binär-NMU-Changelog-Kommentars."
+"erhöht die Debian-Veröffentlichungsnummer für ein Neubauen unter Ubuntu ohne "
+"Änderungen, indem ein »build1« angehängt oder die Versionsnummer eines neu "
+"gebauten Pakets."
 
 #. type: TP
 #: ../scripts/debchange.1:240
@@ -6671,7 +6653,7 @@ msgid ""
 "maintainer upload, and add a B<Security Team upload> changelog comment."
 msgstr ""
 "erhöht die Debian-Veröffentlichungsnummer für ein Hochladen durch das Debian-"
-"Sicherheits-Team als NMU und fügt einen Changlog-Kommentar B<Security Team "
+"Sicherheits-Team als NMU und fügt einen Changelog-Kommentar B<Security Team "
 "upload> hinzu."
 
 #. type: TP
@@ -6687,7 +6669,7 @@ msgid ""
 "upload> changelog comment."
 msgstr ""
 "erhöht die Debian-Veröffentlichungsnummer für ein Hochladen durch ein Team "
-"und fügt einen Changlog-Kommentar B<Team upload> hinzu."
+"und fügt einen Changelog-Kommentar B<Team upload> hinzu."
 
 #. type: TP
 #: ../scripts/debchange.1:248
@@ -6700,6 +6682,8 @@ msgid ""
 "Don't append B<distro-name1> to the version on a derived distribution. "
 "Increment the Debian version."
 msgstr ""
+"hängt nicht B<distro-name1> an die Version einer abgeleiteten Distribution "
+"an, erhöht die Debian-Version."
 
 #. type: TP
 #: ../scripts/debchange.1:252
@@ -6714,7 +6698,7 @@ msgid ""
 "add a backport upload changelog comment."
 msgstr ""
 "erhöht die Debian-Veröffentlichungsnummer für ein Hochladen nach squeeze-"
-"backports und fügt einen Changlog-Kommentar »backport upload« hinzu."
+"backports und fügt einen Changelog-Kommentar »backport upload« hinzu."
 
 #. type: TP
 #: ../scripts/debchange.1:256
@@ -6847,7 +6831,7 @@ msgid ""
 "be contacted (and B<--noquery> has not been specified), or if there are "
 "problems with the bug report located."
 msgstr ""
-"fügt Changlog-Einträge zum Schließen der angegebenen Fehlernummern hinzu. "
+"fügt Changelog-Einträge zum Schließen der angegebenen Fehlernummern hinzu. "
 "Außerdem ruft es den Editor nach dem Hinzufügen dieser Einträge auf. Dies "
 "wird Warnungen erzeugen, falls die Fehlerdatenbank nicht kontaktiert werden "
 "kann (und B<--noquery> nicht angegeben wurde) oder falls es Probleme mit dem "
@@ -6896,10 +6880,9 @@ msgstr "erhält den Namen des Quellverzeichnisbaums nicht (Vorgabe)."
 
 #. type: TP
 #: ../scripts/debchange.1:306
-#, fuzzy, no-wrap
-#| msgid "B<--forever>"
+#, no-wrap
 msgid "B<--vendor >I<vendor>"
-msgstr "B<--forever>"
+msgstr "B<--vendor >I<vendor>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:311
@@ -6908,6 +6891,10 @@ msgid ""
 "name is used for heuristics applied to new package versions and for sanity "
 "checking of the target distribution."
 msgstr ""
+"überschreibt die durch Dpkg-vendor zurückgegebene Vorgabekennung mit der des "
+"Distributors. Dieser Name wird für Entscheidungsregeln benutzt, die auf neue "
+"Paketversionen und Plausibilitätsprüfungen der Zieldistribution angewendet "
+"werden."
 
 #. type: TP
 #: ../scripts/debchange.1:311
@@ -7315,6 +7302,8 @@ msgid ""
 "Use this vendor instead of the default (dpkg-vendor output).  See B<--"
 "vendor> for details."
 msgstr ""
+"benutzt diesen Anbieter statt der Vorgabe (Ausgabe von Dpkg-vendor). "
+"Einzelheiten finden Sie unter <--vendor>."
 
 #. type: =head1
 #: ../scripts/debchange.1:455 ../scripts/dep3changelog.1:22
@@ -7496,14 +7485,6 @@ msgstr "B<-a>, B<--auth>"
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:76
-#, fuzzy
-#| msgid ""
-#| "Work in authenticated mode; this means that for known repositories "
-#| "(mainly those hosted on S<I<http://alioth.debian.org>>) URL rewriting is "
-#| "attempted before checking out, to ensure that the repository can be "
-#| "committed to. For example, for subversion repositories hosted on alioth "
-#| "this means that S<I<svn+ssh://svn.debian.org/...>> will be used instead "
-#| "of S<I<svn://svn.debian.org/...>>."
 msgid ""
 "Work in authenticated mode; this means that for known repositories (mainly "
 "those hosted on S<I<http://alioth.debian.org>>) URL rewriting is attempted "
@@ -7574,10 +7555,8 @@ msgstr "Siehe auch B<-d>. Diese Option und B<-d> sind wechselseitig exklusiv."
 
 #. type: =item
 #: ../scripts/debcheckout.pl:106
-#, fuzzy
-#| msgid "B<--package> I<package>"
 msgid "B<-P> I<package>, B<--package> I<package>"
-msgstr "B<--package> I<Paket>"
+msgstr "B<-P> I<Paket>, B<--package> I<Paket>"
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:108
@@ -7585,6 +7564,9 @@ msgid ""
 "When checking out a repository URL, instead of trying to guess the package "
 "name from the URL, use this package name."
 msgstr ""
+"Wenn ein Depot von einer URL heruntergeladen wird, anstatt zu versuchen, den "
+"Paketnamen anhand des Namens der URL zu erraten, wird dieser Paketname "
+"benutzt."
 
 #. type: =item
 #: ../scripts/debcheckout.pl:111
@@ -7842,6 +7824,9 @@ msgid ""
 "a package will be downloaded.  See the B<--source> option for a description "
 "of the values."
 msgstr ""
+"Diese Variable bestimmt, in welchen Szenarien die zugehörige orig.tar.gz für "
+"ein Paket heruntergeladen wird. Eine Beschreibung der Werte finden Sie unter "
+"der Option B<--source>."
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:224
@@ -8035,13 +8020,6 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/debcommit.pl:13
-#, fuzzy
-#| msgid ""
-#| "B<debcommit> generates a commit message based on new text in B<debian/"
-#| "changelog>, and commits the change to a package's repository. It must be "
-#| "run in a working copy for the package. Supported version control systems "
-#| "are: B<cvs>, B<git>, B<hg> (mercurial), B<svk>, B<svn> (subversion), "
-#| "B<baz>, B<bzr>, B<tla> (arch), B<darcs>."
 msgid ""
 "B<debcommit> generates a commit message based on new text in B<debian/"
 "changelog>, and commits the change to a package's repository. It must be run "
@@ -9946,13 +9924,6 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
 #: ../scripts/deb-reversion.dbk:283
-#, fuzzy
-#| msgid ""
-#| "You are using this tool at your own risk and I shall not shed a tear if "
-#| "your gerbil goes up in flames, your microwave attacks the stereo, or the "
-#| "angry slamming of your fist spills your coffee into the keyboard, which "
-#| "sets off a chain reaction resulting in a vast amount of money transfered "
-#| "from your account to mine."
 msgid ""
 "You are using this tool at your own risk and I shall not shed a tear if your "
 "gerbil goes up in flames, your microwave attacks the stereo, or the angry "
@@ -12002,7 +11973,7 @@ msgstr ""
 "B<DEBEMAIL> oder B<EMAIL> angegebenen unterschiedet, wird »Thanks to "
 "I<Autor> E<lt>I<E-Mail>E<gt>« zum Changelog-Eintrag für den Patch "
 "hinzugefügt. Alle B<bug-debian>- oder B<bug-ubuntu>-Felder werden dem "
-"Changlelog-Eintrag als »Closes« hinzugefügt. Die erzeugten Einträge werden "
+"Changelog-Eintrag als »Closes« hinzugefügt. Die erzeugten Einträge werden "
 "an B<debchange> als Argument neben den angegebenen I<Dch_Optionen> übergeben."
 
 #. type: Plain text
@@ -14022,12 +13993,6 @@ msgstr "B<dscextract> [I<Optionen>] I<dsc-Datei> I<Datei>"
 
 #. type: Plain text
 #: ../scripts/dscextract.1:11
-#, fuzzy
-#| msgid ""
-#| "B<dscextract> reads a single file from a Debian source package.  The idea "
-#| "is to only look into .diff.gz files (source format 1.0) or .debian.tar.gz/"
-#| "bz2 files (source format 3.0) where possible, hence avoiding to unpack "
-#| "large tarballs.  It is most useful for files in the debian/ subdirectory."
 msgid ""
 "B<dscextract> reads a single file from a Debian source package.  The idea is "
 "to only look into I<.diff.gz> files (source format 1.0) or I<.debian.tar.gz/"
@@ -14038,7 +14003,7 @@ msgstr ""
 "Idee besteht darin, nur in .diff.gz-Dateien (Quellformat 1.0) oder .debian."
 "tar.gz/bz2-Dateien (Quellformat 3.0) zu schauen, wo dies möglich ist, "
 "infolgedessen wird das Entpacken großer Tarballs vermieden. Es ist für die "
-"meisten Dateien im Unterverzeichnis debian/ nützlich."
+"meisten Dateien im Unterverzeichnis I<debian/> nützlich."
 
 #. type: Plain text
 #: ../scripts/dscextract.1:14
@@ -14057,22 +14022,16 @@ msgstr "B<-f>"
 
 #. type: Plain text
 #: ../scripts/dscextract.1:20
-#, fuzzy
-#| msgid ""
-#| "\"Fast\" mode. For source format 1.0, avoid to fall back scanning the ."
-#| "orig.tar.gz file if I<file> was not found in the .diff.gz.  (For 3.0 "
-#| "packages, it is assumed that debian/* are exactly the contents of debian."
-#| "tar.gz/bz2.)"
 msgid ""
 "\"Fast\" mode. For source format 1.0, avoid to fall back scanning the I<."
 "orig.tar.gz> file if I<file> was not found in the I<.diff.gz>.  (For 3.0 "
 "packages, it is assumed that I<debian/*> are exactly the contents of "
 "I<debian.tar.gz/bz2>.)"
 msgstr ""
-"»Schneller« Modus. Vermeidet für das Quellformat 1.0 den Rückfall zum "
-"Scannen der .orig.tar.gz-Datei, falls I<Datei> nicht im .diff.gz gefunden "
-"wurde. (Für 3.0-Pakete wird davon ausgegangen, dass debian/* exakt der "
-"Inhalt von debian.tar.gz/bz2 ist.)"
+"»schneller« Modus. Vermeidet für das Quellformat 1.0 den Rückfall zum "
+"Scannen der I<.orig.tar.gz>-Datei, falls I<Datei> nicht im .diff.gz gefunden "
+"wurde. (Für 3.0-Pakete wird davon ausgegangen, dass I<debian/*> exakt der "
+"Inhalt von I<debian.tar.gz/bz2> ist.)"
 
 #. type: TP
 #: ../scripts/dscextract.1:21 ../scripts/transition-check.pl:61
@@ -14506,11 +14465,6 @@ msgstr "B<licensecheck> B<--help>|B<--version>"
 
 #. type: textblock
 #: ../scripts/licensecheck.pl:30
-#, fuzzy
-#| msgid ""
-#| "B<licensecheck> [B<--no-conf>] [B<--verbose>] [B<--copyright>] [B<-l>|B<--"
-#| "lines=>I<N>] [B<-i>|B<--ignore=>I<regex>] [B<-c>|B<--check=>I<regex>] [B<-"
-#| "r>|B<--recursive>] I<list of files and directories to check>"
 msgid ""
 "B<licensecheck> [B<--no-conf>] [B<--verbose>] [B<--copyright>] [B<-l>|B<--"
 "lines=>I<N>] [B<-i>|B<--ignore=>I<regex>] [B<-c>|B<--check=>I<regex>] [B<-m>|"
@@ -14519,8 +14473,8 @@ msgid ""
 msgstr ""
 "B<licensecheck> [B<--no-conf>] [B<--verbose>] [B<--copyright>] [B<-l>|B<--"
 "lines=>I<N>] [B<-i>|B<--ignore=>I<regulärer Ausdruck>] [B<-c>|B<--"
-"check=>I<regulärer Ausdruck>] [B<-r>|B<--recursive>] I<Liste zu prüfender "
-"Dateien und Verzeichnissen>"
+"check=>I<regulärer Ausdruck>] [B<-m>|B<--machine>] [B<-r>|B<--recursive>] "
+"I<Liste zu prüfender Dateien und Verzeichnisse>"
 
 #. type: textblock
 #: ../scripts/licensecheck.pl:37
@@ -14646,6 +14600,11 @@ msgid ""
 "or filtered, e.g. with the B<awk> and B<sort> commands.  Note that using the "
 "B<--verbose> option will kill the readability."
 msgstr ""
+"zeigt die Informationen auf eine maschinenlesbare Art, d.h. in der Form "
+"<Datei><Tabulator><Lizenz>[<Tabulator><Copyright>], so dass sie einfach "
+"sortiert und/oder gefiltert werden können, z.B. mit den Befehlen B<awk> und "
+"B<sort>. Beachten Sie, dass die Verwendung der Option B<--verbose> die "
+"Lesbarkeit zunichte macht."
 
 # FIXME s/command-line/command line/
 #. type: textblock
@@ -15955,7 +15914,7 @@ msgstr ""
 "die Changelog-Dateien, die gezeichnet werden. Falls mehrere Dateien "
 "angegeben wurden, werden sie alle auf dem gleichen Graph angezeigt. Die "
 "Dateien können mit Gzip komprimiert werden. Jeglicher darin enthaltene Text, "
-"der nicht im Debian-Changlelog-Format vorliegt, wird ignoriert."
+"der nicht im Debian-Changelog-Format vorliegt, wird ignoriert."
 
 #. type: Plain text
 #: ../scripts/plotchangelog.1:113
@@ -16125,14 +16084,8 @@ msgstr "B<PTS_UNTIL>"
 msgid "Setting this is equivalent to giving a B<--until> option."
 msgstr "diese Einstellung entspricht der Option B<--until>."
 
-# FIXME dangling link (see translation)
 #. type: Plain text
 #: ../scripts/pts-subscribe.1:56
-#, fuzzy
-#| msgid ""
-#| "B<at>(1), information about the Package Tracking System in the "
-#| "Developer's Reference at http://www.debian.org/doc/developers-reference/"
-#| "ch-resources#s-pkg-tracking-system"
 msgid ""
 "B<at>(1), information about the Package Tracking System in the Developer's "
 "Reference at http://www.debian.org/doc/developers-reference/resources."
@@ -17163,7 +17116,7 @@ msgid ""
 "Include the changelog header line and the entries relating to the tagged "
 "bugs as comments in the generated mail.  This is the default."
 msgstr ""
-"fügt der erzeugten E-Mail die Changlog-Kopfzeile und die Einträge, die sich "
+"fügt der erzeugten E-Mail die Changelog-Kopfzeile und die Einträge, die sich "
 "auf die markierten Fehler beziehen, als Kommentare hinzu. Dies ist die "
 "Voreinstellung."
 
@@ -17207,7 +17160,7 @@ msgstr "B<-t>, B<--to> I<Version>"
 #: ../scripts/tagpending.pl:131
 msgid "Parse changelogs for all versions strictly greater than I<version>."
 msgstr ""
-"wertet Changlogs für alle Versionen aus, die echt größer als I<Version> sind."
+"wertet Changelogs für alle Versionen aus, die echt größer als I<Version> sind."
 
 #. type: textblock
 #: ../scripts/tagpending.pl:133
@@ -18032,19 +17985,14 @@ msgstr "B<versionmangle=>I<Regeln>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:265
-#, fuzzy
-#| msgid ""
-#| "This is a syntactic shorthand for B<uversionmangle=>I<rules>B<,"
-#| "dversionmangle=>I<rules>B<, applying the same rules to both the upstream "
-#| "and Debian version numbers.>"
 msgid ""
 "This is a syntactic shorthand for B<uversionmangle=>I<rules>B<,"
 "dversionmangle=>I<rules>, applying the same rules to both the upstream and "
 "Debian version numbers."
 msgstr ""
 "Dies ist eine syntaktisches Abkürzung für B<uversionmangle=>I<Regeln>B<,"
-"dversionmangle=>I<Regeln>B<, es wendet die selben Regeln sowohl auf die "
-"Versionsnummern der Ursprungsautoren als auch auf die von Debian an.>"
+"dversionmangle=>I<Regeln>, es wendet die selben Regeln sowohl auf die "
+"Versionsnummern der Ursprungsautoren als auch auf die von Debian an."
 
 #. type: TP
 #: ../scripts/uscan.1:265
@@ -18217,6 +18165,10 @@ msgid ""
 "absolute, it will be relative to one of the current directory or, if "
 "directory scanning is enabled, the package's source directory."
 msgstr ""
+"Pfad des Verzeichnisses in das heruntergeladen werden soll. Falls der "
+"angegebene Pfad nicht absolut ist, wird er entweder relativ zum aktuellen "
+"Verzeichnis oder, falls Verzeichnisauswertung aktiviert ist, zum "
+"Quellverzeichnis des Pakets sein."
 
 #. type: TP
 #: ../scripts/uscan.1:352
@@ -19971,20 +19923,8 @@ msgstr "PAKETWEITE VARIABLEN"
 msgid "The currently recognised package-wide variables are:"
 msgstr "Die derzeit erkannten paketweiten Variablen sind:"
 
-# FIXME s/which/will/
 #. type: Plain text
 #: ../scripts/devscripts.conf.5:54
-#, fuzzy
-#| msgid ""
-#| "These control scripts which change directory to find a I<debian/"
-#| "changelog> file or suchlike, and some other miscellaneous cases.  In "
-#| "order to prevent unwanted, even possibly dangerous, behaviour, these "
-#| "variables control when actions will be performed.  The scripts which "
-#| "currently make use of these variables are: B<debc>, B<debchange>/B<dch>, "
-#| "B<debclean>, B<debi>, B<debrelease>, B<debuild> and B<uscan>, but this "
-#| "list may change with time (and I may not remember to update this "
-#| "manpage).  Please see the manpages of individual scripts for details of "
-#| "the specific behaviour for each script."
 msgid ""
 "These variables control scripts which change directory to find a I<debian/"
 "changelog> file or suchlike, and some other miscellaneous cases.  In order "
@@ -19996,16 +19936,16 @@ msgid ""
 "manpages of individual scripts for details of the specific behaviour for "
 "each script."
 msgstr ""
-"Diese Steuerskripte werden, um eine I<debian/changelog>-Datei oder "
-"dergleichen zu finden und in verschiedenen anderen Fällen das Verzeichnis "
-"ändern. Um unerwünschtes und möglicherweise sogar gefährliches Verhalten zu "
-"verhindern, steuern diese Variablen, wenn Aktionen durchgeführt werden. Die "
-"Skripte, die diese Variablen derzeit verwenden sind: B<debc>, B<debchange>/"
-"B<dch>, B<debclean>, B<debi>, B<debrelease>, B<debuild> und B<uscan>, aber "
-"diese Liste kann sich im Lauf der Zeit ändern (und die Aktualisierung dieser "
-"Handbuchseite könnte vergessen werden). Bitte lesen Sie die Handbuchseiten "
-"der jeweiligen Skripte, um Einzelheiten über das spezielle Verhalten für "
-"jedes Skript zu erfahren."
+"Diese Variablen steuern Skripte, die das Verzeichnis ändern, um eine "
+"I<debian/changelog>-Datei oder dergleichen zu finden und in verschiedenen "
+"anderen Fällen das Verzeichnis ändern. Um unerwünschtes und möglicherweise "
+"sogar gefährliches Verhalten zu verhindern, steuern diese Variablen, wann "
+"Aktionen durchgeführt werden. Derzeit werden diese Variablen von folgenden "
+"Skripten verwendet: B<debc>, B<debchange>/B<dch>, B<debclean>, B<debi>, "
+"B<debrelease>, B<debuild> und B<uscan>, aber diese Liste kann sich im Lauf "
+"der Zeit ändern (und die Aktualisierung dieser Handbuchseite könnte vergessen "
+"werden). Bitte lesen Sie die Handbuchseiten der jeweiligen Skripte, um "
+"Einzelheiten über das spezielle Verhalten für jedes Skript zu erfahren."
 
 #. type: Plain text
 #: ../scripts/devscripts.conf.5:58
@@ -20021,44 +19961,3 @@ msgstr ""
 "Diese Handbuchseite wurde für das Paket B<devscripts> durch den "
 "Paketbetreuer Julian Gilbey E<lt>jdg@debian.orgE<gt> geschrieben. Die "
 "deutsche Übersetzung verfasste Chris Leick E<lt>c.leick@vollbio.deE<gt>."
-
-#~ msgid ""
-#~ "Two different sets of heuristics can be used, as controlled by the B<--"
-#~ "release-heuristic> option or the B<DEBCHANGE_RELEASE_HEURISTIC> "
-#~ "configuration variable. The default I<log> heuristic determines if a "
-#~ "package has been released by looking for an appropriate B<dupload>(1) or "
-#~ "B<dput>(1) log file in the parent directory. A warning will be issued if "
-#~ "the log file is found but a successful upload is not recorded. This may "
-#~ "be because the previous upload was performed with a version of B<dupload> "
-#~ "prior to 2.1 or because the upload failed. The alternate I<changelog> "
-#~ "heuristic assumes the package has been released unless its changelog "
-#~ "contains B<UNRELEASED> in the distribution field. If this heuristic is "
-#~ "enabled then the distribution will default to B<UNRELEASED> in new "
-#~ "changelog entries, and the B<--mainttrailer> option described below will "
-#~ "be automatically enabled. This can be useful if a package can be released "
-#~ "by different maintainers, or if you do not keep the upload logs."
-#~ msgstr ""
-#~ "Es können zwei unterschiedliche Gruppen von Entscheidungsregeln verwendet "
-#~ "werden. Dies wird durch die Option B<--release-heuristic> oder die "
-#~ "Konfigurationsvariable B<DEBCHANGE_RELEASE_HEURISTIC> gesteuert. Die "
-#~ "Standardentscheidungsregel I<log> entscheidet, ob ein Paket "
-#~ "veröffentlicht wurde, indem sie im übergeordneten Verzeichnis nach einer "
-#~ "geeigneten B<dupload>(1)- oder B<dput>(1)-Protokolldatei sucht. Falls die "
-#~ "Protokolldatei gefunden wird, aber kein erfolgreiches Hochladen "
-#~ "aufgezeichnet wurde, wird eine Warnung ausgegeben. Dies könnte daher "
-#~ "kommen, dass ein früheres Hochladen mit einer Version von B<dupload> "
-#~ "älter als 2.1 durchgeführt wurde oder weil das Hochladen fehlschlug. Die "
-#~ "alternative I<changelog>-Entscheidungsregel geht davon aus, das Paket sei "
-#~ "veröffentlicht, es sei denn, sein Changelog enthält im Distributionsfeld "
-#~ "B<UNRELEASED>. Falls diese Entscheidungsregel aktiviert ist, dann wird "
-#~ "die Distribution in neuen Einträgen standardmäßig B<UNRELEASED> sein und "
-#~ "die nachfolgend beschriebene Option B<--mainttrailer> wird automatisch "
-#~ "aktiviert. Dies kann nützlich sein, falls ein Paket durch "
-#~ "unterschiedliche Betreuer veröffentlicht werden kann oder falls Sie die "
-#~ "Hochladeprotokolle nicht aufbewahren."
-
-#~ msgid "B<--upgrade>"
-#~ msgstr "B<--upgrade>"
-
-#~ msgid "Path of directory to which to download."
-#~ msgstr "Pfad des Verzeichnisses, in das heruntergeladen wird"
