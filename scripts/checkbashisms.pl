@@ -183,6 +183,12 @@ foreach my $filename (@ARGV) {
 	s/(^|[^\\](?:\\\\)*)\'(?:\\.|[^\\\'])+\'/$1''/g;
 	s/(^|[^\\](?:\\\\)*)\"(?:\\.|[^\\\"])+\"/$1""/g;
 
+	# If inside a quoted string, remove everything before the quote
+	s/^.+?\'//
+	    if ($quote_string eq "'");
+	s/^.+?[^\\]\"//
+	    if ($quote_string eq '"');
+
 	# If the remaining string contains what looks like a comment,
 	# eat it. In either case, swap the unmodified script line
 	# back in for processing.
