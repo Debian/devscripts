@@ -563,7 +563,7 @@ sub script_is_evil_and_wrong {
 sub init_hashes {
 
     %bashisms = (
-	qr'(?:^|\s+)function \w+(\s|\(|\Z)' => q<'function' is useless>,
+	qr'(?:^|\s+)function [^<>\(\)\[\]\{\};|\s]+(\s|\(|\Z)' => q<'function' is useless>,
 	$LEADIN . qr'select\s+\w+' =>     q<'select' is not POSIX>,
 	qr'(test|-o|-a)\s*[^\s]+\s+==\s' => q<should be 'b = a'>,
 	qr'\[\s+[^\]]+\s+==\s' =>        q<should be 'b = a'>,
