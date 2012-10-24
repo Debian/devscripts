@@ -627,6 +627,7 @@ sub init_hashes {
 	$LEADIN . qr'trap\s+["\']?.*["\']?\s+.*(?:ERR|DEBUG|RETURN)' => q<trap with ERR|DEBUG|RETURN>,
 	$LEADIN . qr'(?:exit|return)\s+-\d' => q<exit|return with negative status code>,
 	$LEADIN . qr'(?:exit|return)\s+--' => q<'exit --' should be 'exit' (idem for return)>,
+	$LEADIN . qr'sleep\s+(?:-|\d+(?:[.a-z]|\s+\d))' => q<sleep only takes one integer>,
     );
 
     %string_bashisms = (
