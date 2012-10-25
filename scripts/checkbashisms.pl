@@ -468,11 +468,11 @@ foreach my $filename (@ARGV) {
 	}
     }
 
-    warn "error: $filename:  Unterminated heredoc found, EOF reached. Wanted: <$cat_string>, opened in line $start_lines{'cat_string'}\n"
+    warn "error: $display_filename:  Unterminated heredoc found, EOF reached. Wanted: <$cat_string>, opened in line $start_lines{'cat_string'}\n"
 	if ($cat_string ne '');
-    warn "error: $filename: Unterminated quoted string found, EOF reached. Wanted: <$quote_string>, opened in line $start_lines{'quote_string'}\n"
+    warn "error: $display_filename: Unterminated quoted string found, EOF reached. Wanted: <$quote_string>, opened in line $start_lines{'quote_string'}\n"
 	if ($quote_string ne '');
-    warn "error: $filename: EOF reached while on line continuation.\n"
+    warn "error: $display_filename: EOF reached while on line continuation.\n"
 	if ($buffered_line ne '');
 
     close C;
