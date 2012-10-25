@@ -89,6 +89,10 @@ test_heredocs() {
     found "bashisms/heredocs.sh" "$(cat bashisms/heredocs.sh.out)"
 }
 
+test_heredoc_with_dash() {
+    clean "bashisms/heredoc-with-dash.sh"
+}
+
 test_jobs() {
     found "bashisms/jobs.sh" "$(cat bashisms/jobs.sh.out)"
 }
