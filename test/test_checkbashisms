@@ -117,6 +117,10 @@ test_negations() {
     found "bashisms/negations.sh" "$(cat bashisms/negations.sh.out)"
 }
 
+test_other_vars() {
+    found "bashisms/other-vars.sh" "$(cat bashisms/other-vars.sh.out)"
+}
+
 test_printf() {
     found "bashisms/printf.sh" "$(cat bashisms/printf.sh.out)"
 }

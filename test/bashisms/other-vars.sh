@@ -1,0 +1,15 @@
+#!/bin/sh
+
+test() {
+    echo $FUNCNAME BASHISM
+}
+
+test
+
+echo $DIRSTACK BASHISM
+echo $SECONDS BASHISM
+echo $TMOUT BASHISM
+echo $TIMEFORMAT BASHISM
+TMOUT=2 # BASHISM
+read REPLY
+TIMEFORMAT='' # BASHISM
