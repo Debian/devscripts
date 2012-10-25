@@ -133,4 +133,12 @@ test_unknown_fns() {
     found "bashisms/unknown-fns.sh" "$(cat bashisms/unknown-fns.sh.out)"
 }
 
+test_unterminated_string() {
+    clean "bashisms/unterminated-string.sh"
+}
+
+test_unterminated_string2() {
+    clean "bashisms/unterminated-string2.sh"
+}
+
 . shunit2
