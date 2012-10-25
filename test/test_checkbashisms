@@ -133,6 +133,10 @@ test_quoted_strings() {
     found "bashisms/quoted-strings.sh" "$(cat bashisms/quoted-strings.sh.out)"
 }
 
+test_return() {
+    found "bashisms/return.sh" "$(cat bashisms/return.sh.out)"
+}
+
 test_shell_vars() {
     clean "-f bashisms/shell-vars.mk"
 }
