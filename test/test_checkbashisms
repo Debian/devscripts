@@ -57,6 +57,14 @@ test_basic_bash_override() {
     clean "-f bashisms/basic-bash-override.mk"
 }
 
+test_comments_in_quoted_strings1() {
+    clean "bashisms/comments-in-quoted-strings1.sh"
+}
+
+test_comments_in_quoted_strings2() {
+    clean "bashisms/comments-in-quoted-strings2.sh"
+}
+
 test_command() {
     found "bashisms/command.sh" "$(cat bashisms/command.sh.out)"
 }
