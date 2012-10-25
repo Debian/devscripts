@@ -105,6 +105,10 @@ test_heredoc_with_dash() {
     clean "bashisms/heredoc-with-dash.sh"
 }
 
+test_heredoc_with_others() {
+    clean "bashisms/heredoc-with-others.sh"
+}
+
 test_jobs() {
     found "bashisms/jobs.sh" "$(cat bashisms/jobs.sh.out)"
 }
