@@ -1,2 +1,2 @@
-possible bashism in bashisms/ash-setvar.sh line 3 (setvar 'foo' 'bar' should be eval \$'foo' 'bar'):
+possible bashism in bashisms/ash-setvar.sh line 3 (setvar 'foo' 'bar' should be eval 'foo="'"$bar"'"'):
 setvar foo bar # BASHISM
