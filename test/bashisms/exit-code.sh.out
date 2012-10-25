@@ -1,0 +1,6 @@
+possible bashism in bashisms/exit-code.sh line 4 ('exit --' should be 'exit'):
+exit -- 2 # BASHISM
+possible bashism in bashisms/exit-code.sh line 6 (exit status code greater than 255):
+exit 256 # BASHISM
+possible bashism in bashisms/exit-code.sh line 7 (exit with negative status code):
+exit -1 # BASHISM

@@ -73,6 +73,10 @@ test_dynamic_length() {
     found "bashisms/dynamic-length.sh" "$(cat bashisms/dynamic-length.sh.out)"
 }
 
+test_exit_code() {
+    found "bashisms/exit-code.sh" "$(cat bashisms/exit-code.sh.out)"
+}
+
 test_fail2ban() {
     clean "bashisms/fail2ban.sh"
 }
