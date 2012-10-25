@@ -129,6 +129,10 @@ test_subshell_no_arith() {
     clean "bashisms/subshell-no-arith.sh"
 }
 
+test_traps() {
+    found "bashisms/traps.sh" "$(cat bashisms/traps.sh.out)"
+}
+
 test_unknown_fns() {
     found "bashisms/unknown-fns.sh" "$(cat bashisms/unknown-fns.sh.out)"
 }
