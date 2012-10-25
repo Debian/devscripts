@@ -1,0 +1,16 @@
+possible bashism in bashisms/jobs.sh line 4 (jobs):
+jobs # BASHISM
+possible bashism in bashisms/jobs.sh line 5 (jobs):
+jobs -l # BASHISM
+possible bashism in bashisms/jobs.sh line 6 (jobs):
+jobs -p # BASHISM
+possible bashism in bashisms/jobs.sh line 11 (jobs):
+j=$(jobs -p) # possible BASHISM (context changes because of subshell)
+possible bashism in bashisms/jobs.sh line 12 (jobs):
+jobs -r # BASHISM
+possible bashism in bashisms/jobs.sh line 13 (jobs):
+jobs -s # BASHISM
+possible bashism in bashisms/jobs.sh line 14 (jobs):
+jobs -n # BASHISM
+possible bashism in bashisms/jobs.sh line 15 (jobs):
+jobs -x # BASHISM

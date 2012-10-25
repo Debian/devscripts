@@ -1,0 +1,16 @@
+possible bashism in bashisms/arith.sh line 7 ('$((n++))' should be '$n; $((n=n+1))'):
+echo $((n-m++)) # BASHISM
+possible bashism in bashisms/arith.sh line 8 ('$((++n))' should be '$((n=n+1))'):
+echo $((++m))   # BASHISM
+possible bashism in bashisms/arith.sh line 9 ('$((n--))' should be '$n; $((n=n-1))'):
+echo $(( m-- )) # BASHISM
+possible bashism in bashisms/arith.sh line 10 ('$((--n))' should be '$((n=n-1))'):
+echo $((--m))   # BASHISM
+possible bashism in bashisms/arith.sh line 13 ('$((n++))' should be '$n; $((n=n+1))'):
+echo $((foo_bar++)) # BASHISM
+possible bashism in bashisms/arith.sh line 17 ('$((n++))' should be '$n; $((n=n+1))'):
+echo $((2*n++)) # BASHISM
+possible bashism in bashisms/arith.sh line 19 ('$((n++))' should be '$n; $((n=n+1))'):
+echo $(($n*n++)) # BASHISM
+possible bashism in bashisms/arith.sh line 21 (exponentiation is not POSIX):
+echo $((3**2)) # BASHISM

@@ -19,15 +19,116 @@ WORKDIR="$(readlink -f "${0%/*}")"
 
 . "${0%/*}/shunit2-helper-functions.sh"
 
+clean() {
+    cd "$WORKDIR"
+    runCommand "$1" "" "" 0
+}
+
 found() {
     cd "$WORKDIR"
     runCommand "$1" "" "$2" 1
 }
 
-testSource() {
+test_531327() {
+    clean "bashisms/531327.sh"
+}
+
+test_535368() {
+    clean "-f bashisms/535368.mk"
+}
+
+test_arith() {
+    found "bashisms/arith.sh" "$(cat bashisms/arith.sh.out)"
+}
+
+test_ash_setvar() {
+    found "bashisms/ash-setvar.sh" "$(cat bashisms/ash-setvar.sh.out)"
+}
+
+test_basic() {
+    found "-f bashisms/basic.mk" "$(cat bashisms/basic.mk.out)"
+}
+
+test_basic_bash() {
+    clean "-f bashisms/basic-bash.mk"
+}
+
+test_basic_bash_override() {
+    clean "-f bashisms/basic-bash-override.mk"
+}
+
+test_command() {
+    found "bashisms/command.sh" "$(cat bashisms/command.sh.out)"
+}
+
+test_comments_parsing_fns() {
+    found "bashisms/comments-parsing-fns.sh" "$(cat bashisms/comments-parsing-fns.sh.out)"
+}
+
+test_coproc() {
+    found "bashisms/coproc.sh" "$(cat bashisms/coproc.sh.out)"
+}
+
+test_dynamic_length() {
+    found "bashisms/dynamic-length.sh" "$(cat bashisms/dynamic-length.sh.out)"
+}
+
+test_fail2ban() {
+    clean "bashisms/fail2ban.sh"
+}
+
+test_fps() {
+    found "bashisms/fps.sh" "$(cat bashisms/fps.sh.out)"
+}
+
+test_gettext() {
+    found "bashisms/gettext.sh" "$(cat bashisms/gettext.sh.out)"
+}
+
+test_heredocs() {
+    found "bashisms/heredocs.sh" "$(cat bashisms/heredocs.sh.out)"
+}
+
+test_jobs() {
+    found "bashisms/jobs.sh" "$(cat bashisms/jobs.sh.out)"
+}
+
+test_line_continuation() {
+    found "bashisms/line-continuation.sh" "$(cat bashisms/line-continuation.sh.out)"
+}
+
+test_negations() {
+    found "bashisms/negations.sh" "$(cat bashisms/negations.sh.out)"
+}
+
+test_printf() {
+    found "bashisms/printf.sh" "$(cat bashisms/printf.sh.out)"
+}
+
+test_quoted_strings() {
+    found "bashisms/quoted-strings.sh" "$(cat bashisms/quoted-strings.sh.out)"
+}
+
+test_shell_vars() {
+    clean "-f bashisms/shell-vars.mk"
+}
+
+test_source() {
     local result="possible bashism in bashisms/source line 2 (should be '.', not 'source'):
 source foo.sh"
     found "bashisms/source" "$result"
+}
+
+test_special_case() {
+    found "bashisms/special-case.sh" "$(cat bashisms/special-case.sh.out)"
+}
+
+test_subshell_no_arith() {
+    clean "bashisms/subshell-no-arith.sh"
+}
+
+test_unknown_fns() {
+    found "bashisms/unknown-fns.sh" "$(cat bashisms/unknown-fns.sh.out)"
 }
 
 . shunit2

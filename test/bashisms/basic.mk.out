@@ -1,0 +1,10 @@
+possible bashism in bashisms/basic.mk line 7 (echo -e):
+	-echo -e "foo BASHISM"
+possible bashism in bashisms/basic.mk line 8 (echo -e):
+	@echo -e "bar BASHISM"
+possible bashism in bashisms/basic.mk line 9 (echo -e):
+	@-echo -e "bar BASHISM" && false
+possible bashism in bashisms/basic.mk line 10 (echo -e):
+	-@echo -e "bar BASHISM" && false
+possible bashism in bashisms/basic.mk line 20 (brace expansion):
+foo: $(shell echo dir/BASHISM/{foo,bar})

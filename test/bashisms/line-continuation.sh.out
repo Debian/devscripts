@@ -1,0 +1,6 @@
+possible bashism in bashisms/line-continuation.sh line 4 (shopt):
+echo foo; \
+shopt something # BASHISM
+possible bashism in bashisms/line-continuation.sh line 10 (should be >word 2>&1):
+cat <<EOF \
+&>/dev/null #BASHISM
