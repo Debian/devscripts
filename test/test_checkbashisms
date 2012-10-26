@@ -145,6 +145,10 @@ test_shell_vars() {
     clean "-f bashisms/shell-vars.mk"
 }
 
+test_sleep() {
+    found "bashisms/sleep.sh" "$(cat bashisms/sleep.sh.out)"
+}
+
 test_source() {
     found "bashisms/source" "$(cat bashisms/source.out)"
 }
