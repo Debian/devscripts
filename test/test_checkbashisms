@@ -93,6 +93,10 @@ test_fps() {
     found "bashisms/fps.sh" "$(cat bashisms/fps.sh.out)"
 }
 
+test_functions() {
+    found "bashisms/functions.sh" "$(cat bashisms/functions.sh.out)"
+}
+
 test_gettext() {
     found "bashisms/gettext.sh" "$(cat bashisms/gettext.sh.out)"
 }
