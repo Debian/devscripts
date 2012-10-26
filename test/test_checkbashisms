@@ -101,6 +101,10 @@ test_gettext() {
     found "bashisms/gettext.sh" "$(cat bashisms/gettext.sh.out)"
 }
 
+test_hash() {
+    found "bashisms/hash.sh" "$(cat bashisms/hash.sh.out)"
+}
+
 test_heredocs() {
     found "bashisms/heredocs.sh" "$(cat bashisms/heredocs.sh.out)"
 }
