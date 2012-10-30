@@ -15,10 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-COMMAND="../scripts/dd-list.pl"
+if test "$1" = --installed; then
+    COMMAND=dd-list
+    shift
+else
+    COMMAND="../scripts/dd-list.pl"
+fi
+
+WORKDIR="$(readlink -f "${0%/*}")"
 
 testBinariesFromSameSource() {
-  $COMMAND -s dd-list/sources vim-gtk vim-nox 2>&1 >/dev/null
+  $COMMAND -s ${WORKDIR}/dd-list/sources vim-gtk vim-nox 2>&1 >/dev/null
   rc=$?
   assertEquals 'packages found' 0 $rc
 }

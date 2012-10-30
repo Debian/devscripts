@@ -14,7 +14,13 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-COMMAND="../scripts/checkbashisms.pl"
+if test "$1" = --installed; then
+    COMMAND=checkbashisms
+    shift
+else
+    COMMAND="../scripts/checkbashisms.pl"
+fi
+
 WORKDIR="$(readlink -f "${0%/*}")"
 
 . "${0%/*}/shunit2-helper-functions.sh"
