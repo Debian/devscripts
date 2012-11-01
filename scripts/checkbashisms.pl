@@ -630,6 +630,7 @@ sub init_hashes {
 	$LEADIN . qr'(?:exit|return)\s+--' => q<'exit --' should be 'exit' (idem for return)>,
 	$LEADIN . qr'sleep\s+(?:-|\d+(?:[.a-z]|\s+\d))' => q<sleep only takes one integer>,
 	$LEADIN . qr'hash(\s|\Z)' =>     q<hash>,
+	qr'(?:[:=\s])~(?:[+-]|[+-]?\d+)(?:[/\s]|\Z)' => q<non-standard tilde expansion>,
     );
 
     %string_bashisms = (
