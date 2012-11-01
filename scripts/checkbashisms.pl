@@ -569,7 +569,8 @@ sub init_hashes {
 	qr'\[\s+[^\]]+\s+==\s' =>        q<should be 'b = a'>,
 	qr'\s\|\&' =>                    q<pipelining is not POSIX>,
 	qr'[^\\\$]\{([^\s\\\}]*?,)+[^\\\}\s]*\}' => q<brace expansion>,
-	qr'\{\d+\.\.\d+\}' =>          q<brace expansion, should be $(seq a b)>,
+	qr'\{\d+\.\.\d+(?:\.\.\d+)?\}' =>          q<brace expansion, {a..b[..c]}should be $(seq a [c] b)>,
+	qr'(?i)\{[a-z]\.\.[a-z](?:\.\.\d+)?\}' =>          q<brace expansion>,
 	qr'(?:^|\s+)\w+\[\d+\]=' =>      q<bash arrays, H[0]>,
 	$LEADIN . qr'read\s+(?:-[a-qs-zA-Z\d-]+)' => q<read with option other than -r>,
 	$LEADIN . qr'read\s*(?:-\w+\s*)*(?:\".*?\"|[\'].*?[\'])?\s*(?:;|$)'
