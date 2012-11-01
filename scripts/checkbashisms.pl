@@ -642,7 +642,7 @@ sub init_hashes {
 	qr'\$\{[@*]([#%]{1,2}.*?)\}' =>   q<${[@|*]#[#]pat} or ${[@|*]%[%]pat}>,
 	qr'\$\{#[@*]\}'			=>   q<${#@} or ${#*}>,
 	qr'\$\{(?:\w+|@|\*)(/.+?){1,2}\}' =>      q<${parm/?/pat[/str]}>,
-	qr'\$\{\#?\w+\[[0-9\*\@]+\]\}' => q<bash arrays, ${name[0|*|@]}>,
+	qr'\$\{\#?\w+\[.+\](?:[/,:#%^].+?)?\}' => q<bash arrays, ${name[0|*|@]}>,
 	qr'\$\{?RANDOM\}?\b' =>          q<$RANDOM>,
 	qr'\$\{?(OS|MACH)TYPE\}?\b'   => q<$(OS|MACH)TYPE>,
 	qr'\$\{?HOST(TYPE|NAME)\}?\b' => q<$HOST(TYPE|NAME)>,
