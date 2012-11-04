@@ -215,7 +215,18 @@ sub download_origtar ()
 		}
 	}
 
-	# TODO: try pristine-tar
+	# try pristine-tar
+
+	my @files = grep { /^\Q${package}_$fileversion.orig.tar.\E/ }
+		map { chomp; $_; } # remove newlines
+		`pristine-tar list 2>&1`;
+	if (@files) {
+		system "pristine-tar checkout ../$files[0]";
+	}
+
+	if (my @f = glob "../${package}_$fileversion.orig.tar.*") {
+		return $f[0];
+	}
 
 	# try apt-get source
 
