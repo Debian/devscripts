@@ -267,7 +267,7 @@ sub download_origtar ()
 
 	if (-f "debian/watch") {
 		print "Trying uscan --download-current-version ...\n";
-		system "uscan --download-current-version\n";
+		system "uscan --download-current-version --rename\n";
 	}
 
 	if (my @f = glob "../${package}_$fileversion.orig.tar.*") {
