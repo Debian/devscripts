@@ -47,6 +47,10 @@ test_arith() {
     found "bashisms/arith.sh" "$(cat bashisms/arith.sh.out)"
 }
 
+test_array_expansion() {
+    found "bashisms/array-expansion.sh" "$(cat bashisms/array-expansion.sh.out)"
+}
+
 test_ash_setvar() {
     found "bashisms/ash-setvar.sh" "$(cat bashisms/ash-setvar.sh.out)"
 }

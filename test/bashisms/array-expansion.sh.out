@@ -1,0 +1,80 @@
+possible bashism in bashisms/array-expansion.sh line 8 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${foo[1]%r}
+possible bashism in bashisms/array-expansion.sh line 9 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${foo[$n]%r}
+possible bashism in bashisms/array-expansion.sh line 10 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${foo[*]%o}
+possible bashism in bashisms/array-expansion.sh line 11 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${foo[@]%o}
+possible bashism in bashisms/array-expansion.sh line 13 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${foo[1]%%r}
+possible bashism in bashisms/array-expansion.sh line 14 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${foo[$n]%%r}
+possible bashism in bashisms/array-expansion.sh line 15 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${foo[*]%%o}
+possible bashism in bashisms/array-expansion.sh line 16 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${foo[@]%%o}
+possible bashism in bashisms/array-expansion.sh line 18 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${foo[1]#*a}
+possible bashism in bashisms/array-expansion.sh line 19 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${foo[$n]#*a}
+possible bashism in bashisms/array-expansion.sh line 20 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${foo[*]#*o}
+possible bashism in bashisms/array-expansion.sh line 21 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${foo[@]#*o}
+possible bashism in bashisms/array-expansion.sh line 23 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${foo[1]##*a}
+possible bashism in bashisms/array-expansion.sh line 24 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${foo[$n]##*a}
+possible bashism in bashisms/array-expansion.sh line 25 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${foo[*]##*o}
+possible bashism in bashisms/array-expansion.sh line 26 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${foo[@]##*o}
+possible bashism in bashisms/array-expansion.sh line 28 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${#foo[1]}
+possible bashism in bashisms/array-expansion.sh line 29 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${#foo[$n]}
+possible bashism in bashisms/array-expansion.sh line 30 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${#foo[*]}
+possible bashism in bashisms/array-expansion.sh line 31 (bash arrays, ${name[0|*|@]}):
+echo BASHISM ${#foo[@]}
+possible bashism in bashisms/array-expansion.sh line 37 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[1]^*a}
+possible bashism in bashisms/array-expansion.sh line 38 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[$n]^*a}
+possible bashism in bashisms/array-expansion.sh line 39 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[*]^*o}
+possible bashism in bashisms/array-expansion.sh line 40 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[@]^*o}
+possible bashism in bashisms/array-expansion.sh line 42 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[1]^^*a}
+possible bashism in bashisms/array-expansion.sh line 43 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[$n]^^*a}
+possible bashism in bashisms/array-expansion.sh line 44 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[*]^^*o}
+possible bashism in bashisms/array-expansion.sh line 45 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[@]^^*o}
+possible bashism in bashisms/array-expansion.sh line 47 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[1],*a}
+possible bashism in bashisms/array-expansion.sh line 48 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[$n],*a}
+possible bashism in bashisms/array-expansion.sh line 49 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[*],*a}
+possible bashism in bashisms/array-expansion.sh line 50 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[@],*a}
+possible bashism in bashisms/array-expansion.sh line 52 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[1],,*a}
+possible bashism in bashisms/array-expansion.sh line 53 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[$n],,*a}
+possible bashism in bashisms/array-expansion.sh line 54 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[*],,*a}
+possible bashism in bashisms/array-expansion.sh line 55 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[@],,*a}
+possible bashism in bashisms/array-expansion.sh line 57 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[1]/a/R}
+possible bashism in bashisms/array-expansion.sh line 58 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[$n]/a/R}
+possible bashism in bashisms/array-expansion.sh line 59 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[*]/a/R}
+possible bashism in bashisms/array-expansion.sh line 60 (bash arrays, ${name[0|*|@]}):
+echo BASHISM BASH ISMS ${foo[@]/a/R}
