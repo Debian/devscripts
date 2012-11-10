@@ -175,6 +175,10 @@ test_special_case() {
     found "bashisms/special-case.sh" "$(cat bashisms/special-case.sh.out)"
 }
 
+test_special_expansions() {
+    found "bashisms/special-expansions.sh" "$(cat bashisms/special-expansions.sh.out)"
+}
+
 test_subshell_no_arith() {
     clean "bashisms/subshell-no-arith.sh"
 }
