@@ -59,6 +59,10 @@ test_basic_bash() {
     clean "-f bashisms/basic-bash.mk"
 }
 
+test_brace_expansion() {
+    found "-f bashisms/brace-expansion.sh" "$(cat bashisms/brace-expansion.sh.out)"
+}
+
 test_basic_bash_override() {
     clean "-f bashisms/basic-bash-override.mk"
 }
