@@ -67,6 +67,10 @@ test_basic_bash_override() {
     clean "-f bashisms/basic-bash-override.mk"
 }
 
+test_case_modification() {
+    found "-f bashisms/case-modification.sh" "$(cat bashisms/case-modification.sh.out)"
+}
+
 test_comments_in_quoted_strings1() {
     clean "bashisms/comments-in-quoted-strings1.sh"
 }
