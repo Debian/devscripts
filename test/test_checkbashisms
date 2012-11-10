@@ -119,6 +119,10 @@ test_gettext() {
     found "bashisms/gettext.sh" "$(cat bashisms/gettext.sh.out)"
 }
 
+test_glob_ignore() {
+    found "bashisms/glob-ignore.sh" "$(cat bashisms/glob-ignore.sh.out)"
+}
+
 test_hash() {
     found "bashisms/hash.sh" "$(cat bashisms/hash.sh.out)"
 }
