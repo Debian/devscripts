@@ -179,6 +179,10 @@ test_traps() {
     found "bashisms/traps.sh" "$(cat bashisms/traps.sh.out)"
 }
 
+test_underscore_var() {
+    found "bashisms/underscore-var.sh" "$(cat bashisms/underscore-var.sh.out)"
+}
+
 test_unknown_fns() {
     found "bashisms/unknown-fns.sh" "$(cat bashisms/unknown-fns.sh.out)"
 }
