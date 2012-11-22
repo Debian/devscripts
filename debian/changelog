@@ -12,6 +12,10 @@ devscripts (2.12.6+exp1) UNRELEASED; urgency=low
   [ Dmitry Smirnov ]
   * licensecheck: Remove any regular comments pattern. (Closes: #526698)
 
+  [ Paul Wise ]
+  * checkbashisms:
+    + When examining a bash script, indicate the lack of use of bashisms.
+
  -- James McCoy <jamessan@debian.org>  Sat, 15 Sep 2012 16:12:16 -0400
 
 devscripts (2.12.6) unstable; urgency=low
