@@ -79,6 +79,10 @@ http://sf.net/audacity/audacity-src-(.+)\\.tar\\.gz
 # For GitHub projects you can use the tags page:
 https://github.com/<user>/<project>/tags .*/(\\d[\\d\\.]*)\\.tar\\.gz
 
+# For Google Code projects you should use the downloads page like this:
+http://code.google.com/p/<project>/downloads/list?can=1 \\
+  .*/<project>-(\\d[\\d.]*)\\.tar\\.gz
+
 # This is the format for a site which has funny version numbers;
 # the parenthesised groups will be joined with dots to make a
 # sanitised version number
