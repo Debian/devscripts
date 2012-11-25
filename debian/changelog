@@ -9,6 +9,9 @@ devscripts (2.12.6+exp1) UNRELEASED; urgency=low
   * licensecheck: Recognize MPL 2.0 licenses.  Thanks to Ryan Pavlik for the
     patch.  (Closes: #687664)
   * namecheck: Check Apache's projects page for names.  (Closes: #686862)
+  * debcommit: Drop checks for old dpkg versions and always use the necessary
+    Perl modules (Dpkg::Changelog::Parse, Dpkg::Vendor::Ubuntu,
+    Dpkg::Changelog::Entry::Debian).
 
   [ Dmitry Smirnov ]
   * licensecheck: Remove any regular comments pattern. (Closes: #526698)

@@ -172,7 +172,6 @@ use warnings;
 use strict;
 use Getopt::Long qw(:config gnu_getopt);
 use Cwd;
-use Dpkg::Changelog;
 use File::Basename;
 use File::Temp;
 my $progname = basename($0);
@@ -351,48 +350,23 @@ if (! -e $changelog) {
 
 $message=getmessage() if ! defined $message and (not $release or $release_use_changelog);
 
-if ($release) {
-    eval {
-	require Dpkg::Changelog::Parse;
-    };
-    if (not $@) {
-	# dpkg >= 1.15.5.2
-	my $log = Dpkg::Changelog::Parse::changelog_parse(file => $changelog);
+if ($release || $changelog_info) {
+    require Dpkg::Changelog::Parse;
+    my $log = Dpkg::Changelog::Parse::changelog_parse(file => $changelog);
+    if ($release) {
 	if ($log->{Distribution} =~ /UNRELEASED/) {
 	    die "debcommit: $changelog says it's UNRELEASED\nTry running dch --release first\n";
 	}
 	$version = $log->{Version};
-    }
-    else {
-	open (C, "<$changelog" ) || die "debcommit: cannot read $changelog: $!";
-	my $top=<C>;
-	if ($top=~/UNRELEASED/) {
-	    die "debcommit: $changelog says it's UNRELEASED\nTry running dch --release first\n";
-	}
-	close C;
 
-	$version=`dpkg-parsechangelog -l\Q$changelog\E | grep '^Version:' | cut -f 2 -d ' '`;
+	$message="releasing version $version" if ! defined $message;
     }
-
-    $message="releasing version $version" if ! defined $message;
-}
-if ($changelog_info) {
-    eval {
-	require Dpkg::Changelog::Parse;
-    };
-    if (not $@) {
-	# dpkg >= 1.15.5.2
-	my $log = Dpkg::Changelog::Parse::changelog_parse(file => $changelog);
+    if ($changelog_info) {
 	$maintainer = $log->{Maintainer};
 	$date = $log->{Date};
     }
-    else {
-	$maintainer=`dpkg-parsechangelog -l\Q$changelog\E | grep '^Maintainer:' | cut -f 2- -d ' '`;
-	chomp $maintainer;
-	$date=`dpkg-parsechangelog -l\Q$changelog\E | grep '^Date:' | cut -f 2- -d ' '`;
-	chomp $date;
-    }
 }
+
 if ($edit) {
     my $modified = 0;
     ($message, $modified) = edit($message);
@@ -507,31 +481,14 @@ sub action {
 sub bzr_find_fixes {
     my $message=shift;
 
-    my $debian_closes = [];
-    eval {
-	require Dpkg::Changelog::Entry::Debian;
-    };
-    if (not $@) {
-	# dpkg >= 1.15.5.2
-	push(@$debian_closes,
-	     Dpkg::Changelog::Entry::Debian::find_closes($message));
-    } else {
-	$debian_closes = Dpkg::Changelog::find_closes($message);
-    }
-    my $launchpad_closes = [];
-    eval {
-	require Dpkg::Vendor::Ubuntu;
-    };
-    if (not $@) {
-	# dpkg >= 1.15.0
-	$launchpad_closes = Dpkg::Vendor::Ubuntu::find_launchpad_closes($message);
-    } elsif (exists &Dpkg::Changelog::find_launchpad_closes) {
-	# Ubuntu dpkg << 1.15.0
-	$launchpad_closes = Dpkg::Changelog::find_launchpad_closes($message);
-    }
+    require Dpkg::Changelog::Entry::Debian;
+    require Dpkg::Vendor::Ubuntu;
+
+    my @debian_closes = Dpkg::Changelog::Entry::Debian::find_closes($message);
+    my $launchpad_closes = Dpkg::Vendor::Ubuntu::find_launchpad_closes($message);
 
     my @fixes_arg = ();
-    map { push(@fixes_arg, ("--fixes", "deb:".$_)) } @$debian_closes;
+    map { push(@fixes_arg, ("--fixes", "deb:".$_)) } @debian_closes;
     map { push(@fixes_arg, ("--fixes", "lp:".$_)) } @$launchpad_closes;
     return @fixes_arg;
 }
