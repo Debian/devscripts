@@ -504,9 +504,13 @@ sub commit {
 	if (!@files_to_commit && $onlydebian) {
 	    @files_to_commit = ("debian");
 	}
+	my @extra_args;
+	if ($changelog_info && $prog eq 'hg') {
+	    push(@extra_args, '-u', $maintainer, '-d', $date);
+	}
 	$action_rc = $diffmode
 	    ? action($prog, "diff", @files_to_commit)
-	    : action($prog, "commit", "-m", $message, @files_to_commit);
+	    : action($prog, "commit", "-m", $message, @extra_args, @files_to_commit);
     }
     elsif ($prog eq 'git') {
 	if (! @files_to_commit && ($all || $release)) {
@@ -525,7 +529,7 @@ sub commit {
 		@files_to_commit=("-a")
 	    }
 	    my @extra_args = ();
-	    if ($changelog_info and $prog eq 'git') { # --use-author
+	    if ($changelog_info) {
 		@extra_args = ("--author=$maintainer", "--date=$date");
 	    }
 	    $action_rc = action($prog, "commit", "-m", $message, @extra_args, @files_to_commit);
