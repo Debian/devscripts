@@ -1,0 +1,24 @@
+possible bashism in bashisms/case-modification.sh line 6 (${parm,[,][pat]} or ${parm^[^][pat]}):
+echo BASHISM: ${foo^f}
+possible bashism in bashisms/case-modification.sh line 7 (${parm,[,][pat]} or ${parm^[^][pat]}):
+echo BASHISM: ${foo^^o}
+possible bashism in bashisms/case-modification.sh line 8 (${parm,[,][pat]} or ${parm^[^][pat]}):
+echo BASHISM: ${bar,B}
+possible bashism in bashisms/case-modification.sh line 9 (${parm,[,][pat]} or ${parm^[^][pat]}):
+echo BASHISM: ${bar,,R}
+possible bashism in bashisms/case-modification.sh line 11 (${parm,[,][pat]} or ${parm^[^][pat]}):
+echo BASHISM: ${foo^}
+possible bashism in bashisms/case-modification.sh line 12 (${parm,[,][pat]} or ${parm^[^][pat]}):
+echo BASHISM: ${foo^^}
+possible bashism in bashisms/case-modification.sh line 13 (${parm,[,][pat]} or ${parm^[^][pat]}):
+echo BASHISM: ${bar,}
+possible bashism in bashisms/case-modification.sh line 14 (${parm,[,][pat]} or ${parm^[^][pat]}):
+echo BASHISM: ${bar,,}
+possible bashism in bashisms/case-modification.sh line 16 (${parm,[,][pat]} or ${parm^[^][pat]}):
+echo BASHISM: ${@^}
+possible bashism in bashisms/case-modification.sh line 17 (${parm,[,][pat]} or ${parm^[^][pat]}):
+echo BASHISM: ${*^^}
+possible bashism in bashisms/case-modification.sh line 18 (${parm,[,][pat]} or ${parm^[^][pat]}):
+echo BASHISM: ${@,}
+possible bashism in bashisms/case-modification.sh line 19 (${parm,[,][pat]} or ${parm^[^][pat]}):
+echo BASHISM: ${*,,}

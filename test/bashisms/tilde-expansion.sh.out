@@ -1,0 +1,28 @@
+possible bashism in bashisms/tilde-expansion.sh line 8 (non-standard tilde expansion):
+echo BASHISM: tilde plus: ~+
+possible bashism in bashisms/tilde-expansion.sh line 9 (non-standard tilde expansion):
+echo BASHISM: tilde minus: ~-
+possible bashism in bashisms/tilde-expansion.sh line 11 ((push|pop)d):
+pushd ~ >/dev/null 2>&1	    # BASHISM
+possible bashism in bashisms/tilde-expansion.sh line 13 ((push|pop)d):
+    pushd / >/dev/null 2>&1 # BASHISM
+possible bashism in bashisms/tilde-expansion.sh line 16 (non-standard tilde expansion):
+echo BASHISM: tilde plus n: ~+1
+possible bashism in bashisms/tilde-expansion.sh line 17 (non-standard tilde expansion):
+echo BASHISM: tilde implicit plus n: ~1
+possible bashism in bashisms/tilde-expansion.sh line 18 (non-standard tilde expansion):
+echo BASHISM: tilde minus n: ~-1
+possible bashism in bashisms/tilde-expansion.sh line 20 (non-standard tilde expansion):
+echo BASHISM: tilde plus 10: ~+10
+possible bashism in bashisms/tilde-expansion.sh line 21 (non-standard tilde expansion):
+echo BASHISM: tilde implicit plus 10: ~10
+possible bashism in bashisms/tilde-expansion.sh line 22 (non-standard tilde expansion):
+echo BASHISM: tilde minus 10: ~-10
+possible bashism in bashisms/tilde-expansion.sh line 24 (non-standard tilde expansion):
+echo BASHISM=~-/bin
+possible bashism in bashisms/tilde-expansion.sh line 25 (non-standard tilde expansion):
+echo BASHISM=/:~+/bin/
+possible bashism in bashisms/tilde-expansion.sh line 26 (non-standard tilde expansion):
+BASHISM=~-/bin ; echo $BASHISM
+possible bashism in bashisms/tilde-expansion.sh line 27 (non-standard tilde expansion):
+BASHISM=/:~+/bin/ ; echo $BASHISM

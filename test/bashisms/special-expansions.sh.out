@@ -1,0 +1,36 @@
+possible bashism in bashisms/special-expansions.sh line 5 (${#@} or ${#*}):
+echo BASHISM: ${#@}
+possible bashism in bashisms/special-expansions.sh line 6 (${#@} or ${#*}):
+echo BASHISM: ${#*}
+possible bashism in bashisms/special-expansions.sh line 8 (${[@|*]#[#]pat} or ${[@|*]%[%]pat}):
+echo BASHISM: ${@%f*}
+possible bashism in bashisms/special-expansions.sh line 9 (${[@|*]#[#]pat} or ${[@|*]%[%]pat}):
+echo BASHISM: ${*%f*}
+possible bashism in bashisms/special-expansions.sh line 10 (${[@|*]#[#]pat} or ${[@|*]%[%]pat}):
+echo BASHISM: ${@%%f*}
+possible bashism in bashisms/special-expansions.sh line 11 (${[@|*]#[#]pat} or ${[@|*]%[%]pat}):
+echo BASHISM: ${*%%f*}
+possible bashism in bashisms/special-expansions.sh line 13 (${[@|*]#[#]pat} or ${[@|*]%[%]pat}):
+echo BASHISM: ${@#*o}
+possible bashism in bashisms/special-expansions.sh line 14 (${[@|*]#[#]pat} or ${[@|*]%[%]pat}):
+echo BASHISM: ${*#*o}
+possible bashism in bashisms/special-expansions.sh line 15 (${[@|*]#[#]pat} or ${[@|*]%[%]pat}):
+echo BASHISM: ${@##*o}
+possible bashism in bashisms/special-expansions.sh line 16 (${[@|*]#[#]pat} or ${[@|*]%[%]pat}):
+echo BASHISM: ${*##*o}
+possible bashism in bashisms/special-expansions.sh line 18 (${parm/?/pat[/str]}):
+echo BASHISM: ${@/?/u}
+possible bashism in bashisms/special-expansions.sh line 19 (${parm/?/pat[/str]}):
+echo BASHISM: ${*/?/u}
+possible bashism in bashisms/special-expansions.sh line 20 (${parm/?/pat[/str]}):
+echo BASHISM: ${@/?/}
+possible bashism in bashisms/special-expansions.sh line 21 (${parm/?/pat[/str]}):
+echo BASHISM: ${*/?/}
+possible bashism in bashisms/special-expansions.sh line 23 (${foo:3[:1]}):
+echo BASHISM: ${@:2}
+possible bashism in bashisms/special-expansions.sh line 24 (${foo:3[:1]}):
+echo BASHISM: ${*:2}
+possible bashism in bashisms/special-expansions.sh line 25 (${foo:3[:1]}):
+echo BASHISM: ${@:1:1}
+possible bashism in bashisms/special-expansions.sh line 26 (${foo:3[:1]}):
+echo BASHISM: ${*:1:1}

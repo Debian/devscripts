@@ -1,0 +1,18 @@
+possible bashism in bashisms/traps.sh line 3 (trap with ERR|DEBUG|RETURN):
+trap foo ERR # BASHISM
+possible bashism in bashisms/traps.sh line 4 (trap with ERR|DEBUG|RETURN):
+trap foo RETURN # BASHISM
+possible bashism in bashisms/traps.sh line 5 (trap with ERR|DEBUG|RETURN):
+trap foo DEBUG # BASHISM
+possible bashism in bashisms/traps.sh line 7 (trap with ERR|DEBUG|RETURN):
+trap "echo BASHISM" ERR
+possible bashism in bashisms/traps.sh line 8 (trap with ERR|DEBUG|RETURN):
+trap "echo BASHISM" RETURN
+possible bashism in bashisms/traps.sh line 9 (trap with ERR|DEBUG|RETURN):
+trap "echo BASHISM" DEBUG
+possible bashism in bashisms/traps.sh line 15 (trap with ERR|DEBUG|RETURN):
+trap $(foo BASHISM) ERR
+possible bashism in bashisms/traps.sh line 16 (trap with ERR|DEBUG|RETURN):
+trap "$(foo BASHISM)" RETURN
+possible bashism in bashisms/traps.sh line 17 (trap with ERR|DEBUG|RETURN):
+trap "echo $foo BASHISM" DEBUG

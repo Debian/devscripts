@@ -14,7 +14,12 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-COMMAND="perl -I ${0%/*}/.. ${0%/*}/../scripts/debchange.pl"
+if test "$1" = --installed; then
+    COMMAND=dch
+    shift
+else
+    COMMAND="perl -I ${0%/*}/.. ${0%/*}/../scripts/debchange.pl"
+fi
 
 . "${0%/*}/shunit2-helper-functions.sh"
 

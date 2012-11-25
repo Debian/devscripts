@@ -14,20 +14,205 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-COMMAND="../scripts/checkbashisms.pl"
+if test "$1" = --installed; then
+    COMMAND=checkbashisms
+    shift
+else
+    COMMAND="../scripts/checkbashisms.pl"
+fi
+
 WORKDIR="$(readlink -f "${0%/*}")"
 
 . "${0%/*}/shunit2-helper-functions.sh"
+
+clean() {
+    cd "$WORKDIR"
+    runCommand "$1" "" "" 0
+}
 
 found() {
     cd "$WORKDIR"
     runCommand "$1" "" "$2" 1
 }
 
-testSource() {
-    local result="possible bashism in bashisms/source line 2 (should be '.', not 'source'):
-source foo.sh"
-    found "bashisms/source" "$result"
+test_531327() {
+    clean "bashisms/531327.sh"
+}
+
+test_535368() {
+    clean "-f bashisms/535368.mk"
+}
+
+test_arith() {
+    found "bashisms/arith.sh" "$(cat bashisms/arith.sh.out)"
+}
+
+test_array_expansion() {
+    found "bashisms/array-expansion.sh" "$(cat bashisms/array-expansion.sh.out)"
+}
+
+test_ash_setvar() {
+    found "bashisms/ash-setvar.sh" "$(cat bashisms/ash-setvar.sh.out)"
+}
+
+test_basic() {
+    found "-f bashisms/basic.mk" "$(cat bashisms/basic.mk.out)"
+}
+
+test_basic_bash() {
+    clean "-f bashisms/basic-bash.mk"
+}
+
+test_brace_expansion() {
+    found "-f bashisms/brace-expansion.sh" "$(cat bashisms/brace-expansion.sh.out)"
+}
+
+test_basic_bash_override() {
+    clean "-f bashisms/basic-bash-override.mk"
+}
+
+test_case_modification() {
+    found "-f bashisms/case-modification.sh" "$(cat bashisms/case-modification.sh.out)"
+}
+
+test_comments_in_quoted_strings1() {
+    clean "bashisms/comments-in-quoted-strings1.sh"
+}
+
+test_comments_in_quoted_strings2() {
+    clean "bashisms/comments-in-quoted-strings2.sh"
+}
+
+test_command() {
+    found "bashisms/command.sh" "$(cat bashisms/command.sh.out)"
+}
+
+test_comments_parsing_fns() {
+    found "bashisms/comments-parsing-fns.sh" "$(cat bashisms/comments-parsing-fns.sh.out)"
+}
+
+test_coproc() {
+    found "bashisms/coproc.sh" "$(cat bashisms/coproc.sh.out)"
+}
+
+test_dynamic_length() {
+    found "bashisms/dynamic-length.sh" "$(cat bashisms/dynamic-length.sh.out)"
+}
+
+test_exit_code() {
+    found "bashisms/exit-code.sh" "$(cat bashisms/exit-code.sh.out)"
+}
+
+test_fail2ban() {
+    clean "bashisms/fail2ban.sh"
+}
+
+test_fps() {
+    found "bashisms/fps.sh" "$(cat bashisms/fps.sh.out)"
+}
+
+test_functions() {
+    found "bashisms/functions.sh" "$(cat bashisms/functions.sh.out)"
+}
+
+test_gettext() {
+    found "bashisms/gettext.sh" "$(cat bashisms/gettext.sh.out)"
+}
+
+test_glob_ignore() {
+    found "bashisms/glob-ignore.sh" "$(cat bashisms/glob-ignore.sh.out)"
+}
+
+test_hash() {
+    found "bashisms/hash.sh" "$(cat bashisms/hash.sh.out)"
+}
+
+test_heredocs() {
+    found "bashisms/heredocs.sh" "$(cat bashisms/heredocs.sh.out)"
+}
+
+test_heredoc_with_dash() {
+    clean "bashisms/heredoc-with-dash.sh"
+}
+
+test_heredoc_with_others() {
+    clean "bashisms/heredoc-with-others.sh"
+}
+
+test_jobs() {
+    found "bashisms/jobs.sh" "$(cat bashisms/jobs.sh.out)"
+}
+
+test_line_continuation() {
+    found "bashisms/line-continuation.sh" "$(cat bashisms/line-continuation.sh.out)"
+}
+
+test_negations() {
+    found "bashisms/negations.sh" "$(cat bashisms/negations.sh.out)"
+}
+
+test_other_vars() {
+    found "bashisms/other-vars.sh" "$(cat bashisms/other-vars.sh.out)"
+}
+
+test_printf() {
+    found "bashisms/printf.sh" "$(cat bashisms/printf.sh.out)"
+}
+
+test_quoted_strings() {
+    found "bashisms/quoted-strings.sh" "$(cat bashisms/quoted-strings.sh.out)"
+}
+
+test_return() {
+    found "bashisms/return.sh" "$(cat bashisms/return.sh.out)"
+}
+
+test_shell_vars() {
+    clean "-f bashisms/shell-vars.mk"
+}
+
+test_sleep() {
+    found "bashisms/sleep.sh" "$(cat bashisms/sleep.sh.out)"
+}
+
+test_source() {
+    found "bashisms/source" "$(cat bashisms/source.out)"
+}
+
+test_special_case() {
+    found "bashisms/special-case.sh" "$(cat bashisms/special-case.sh.out)"
+}
+
+test_special_expansions() {
+    found "bashisms/special-expansions.sh" "$(cat bashisms/special-expansions.sh.out)"
+}
+
+test_subshell_no_arith() {
+    clean "bashisms/subshell-no-arith.sh"
+}
+
+test_tilde_expansion() {
+    found "bashisms/tilde-expansion.sh" "$(cat bashisms/tilde-expansion.sh.out)"
+}
+
+test_traps() {
+    found "bashisms/traps.sh" "$(cat bashisms/traps.sh.out)"
+}
+
+test_underscore_var() {
+    found "bashisms/underscore-var.sh" "$(cat bashisms/underscore-var.sh.out)"
+}
+
+test_unknown_fns() {
+    found "bashisms/unknown-fns.sh" "$(cat bashisms/unknown-fns.sh.out)"
+}
+
+test_unterminated_string() {
+    clean "bashisms/unterminated-string.sh"
+}
+
+test_unterminated_string2() {
+    clean "bashisms/unterminated-string2.sh"
 }
 
 . shunit2

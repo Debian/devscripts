@@ -1,0 +1,10 @@
+possible bashism in bashisms/brace-expansion.sh line 3 (brace expansion, {a..b[..c]}should be $(seq a [c] b)):
+echo BASHISM{1..10}
+possible bashism in bashisms/brace-expansion.sh line 4 (brace expansion, {a..b[..c]}should be $(seq a [c] b)):
+echo BASHISM{1..10..2}
+possible bashism in bashisms/brace-expansion.sh line 5 (brace expansion):
+echo BASHISM{a..z}
+possible bashism in bashisms/brace-expansion.sh line 6 (brace expansion):
+echo BASHISM{Z..a}
+possible bashism in bashisms/brace-expansion.sh line 7 (brace expansion):
+echo BASHISM{a..z..2}

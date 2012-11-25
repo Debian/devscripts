@@ -1,0 +1,32 @@
+possible bashism in bashisms/functions.sh line 15 ('function' is useless):
+function BASHISM() {
+possible bashism in bashisms/functions.sh line 19 ('function' is useless):
+function BASHISM {
+possible bashism in bashisms/functions.sh line 23 ('function' is useless):
+function BASHISM {
+possible bashism in bashisms/functions.sh line 25 (should be >word 2>&1):
+} &>/dev/null # BASHISM
+possible bashism in bashisms/functions.sh line 27 (function names should only contain [a-z0-9_]):
+,() { # BASHISM
+possible bashism in bashisms/functions.sh line 31 ('function' is useless):
+function foo:bar:BASHISM { # BASHISMS
+possible bashism in bashisms/functions.sh line 31 (function names should only contain [a-z0-9_]):
+function foo:bar:BASHISM { # BASHISMS
+possible bashism in bashisms/functions.sh line 35 ('function' is useless):
+function foo-bar-BASHISM() { # BASHISMS
+possible bashism in bashisms/functions.sh line 35 (function names should only contain [a-z0-9_]):
+function foo-bar-BASHISM() { # BASHISMS
+possible bashism in bashisms/functions.sh line 39 (function names should only contain [a-z0-9_]):
+foo-bar-BASHISM ( ) {
+possible bashism in bashisms/functions.sh line 47 ('function' is useless):
+function _ { #BASHISM
+possible bashism in bashisms/functions.sh line 51 (function names should only contain [a-z0-9_]):
+=() { #BASHISM
+possible bashism in bashisms/functions.sh line 55 ('function' is useless):
+function BASHISM=() { #BASHISMS
+possible bashism in bashisms/functions.sh line 55 (function names should only contain [a-z0-9_]):
+function BASHISM=() { #BASHISMS
+possible bashism in bashisms/functions.sh line 59 ('function' is useless):
+function BASHISM= { #BASHISMS
+possible bashism in bashisms/functions.sh line 59 (function names should only contain [a-z0-9_]):
+function BASHISM= { #BASHISMS

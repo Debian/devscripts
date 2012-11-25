@@ -1,0 +1,12 @@
+possible bashism in bashisms/sleep.sh line 3 (sleep only takes one integer):
+sleep 0.1 # BASHISM
+possible bashism in bashisms/sleep.sh line 4 (sleep only takes one integer):
+sleep 1s # BASHISM
+possible bashism in bashisms/sleep.sh line 5 (sleep only takes one integer):
+sleep 1d # BASHISM
+possible bashism in bashisms/sleep.sh line 6 (sleep only takes one integer):
+sleep -- 1 # BASHISM
+possible bashism in bashisms/sleep.sh line 7 (sleep only takes one integer):
+sleep 1.5s # BASHISM
+possible bashism in bashisms/sleep.sh line 8 (sleep only takes one integer):
+sleep 1 2 3 # BASHISM

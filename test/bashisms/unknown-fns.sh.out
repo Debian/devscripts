@@ -1,0 +1,10 @@
+possible bashism in bashisms/unknown-fns.sh line 100 ('$((n++))' should be '$n; $((n=n+1))'):
+	: $((TST_COUNT++)) #BASHISM
+possible bashism in bashisms/unknown-fns.sh line 215 ('((' should be '$(('):
+		((TST_COUNT++)) #BASHISM
+possible bashism in bashisms/unknown-fns.sh line 224 ('((' should be '$(('):
+		((TST_COUNT++)) # BASHISM
+possible bashism in bashisms/unknown-fns.sh line 247 (should be >word 2>&1):
+	/bin/kill $pid &> /dev/null # BASHISM
+possible bashism in bashisms/unknown-fns.sh line 252 ('((' should be '$(('):
+	((TST_COUNT++)) # BASHISM
