@@ -125,7 +125,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - debclean: purge a Debian source tree [fakeroot]
   - debcommit: commit changes to cvs, darcs, svn, svk, tla, bzr, git, or hg,
     basing commit message on changelog
-    [cvs | darcs | subversion | svk | tla | bzr | git-core | mercurial]
+    [cvs | darcs | subversion | svk | tla | bzr | git-core | mercurial,
+    libtimedate-perl]
   - debdiff: compare two versions of a Debian package to check for
     added and removed files [wdiff, patchutils]
   - debi: install a just-built package

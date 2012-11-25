@@ -559,9 +559,27 @@ sub commit {
 	if ($diffmode) {
 	    $action_rc = action($prog, "diff", @files_to_commit);
 	} else {
-	    my @fixes_arg = bzr_find_fixes($message);
+	    my @extra_args = bzr_find_fixes($message);
+	    if ($changelog_info) {
+		eval {
+		    require Date::Format;
+		    require Date::Parse;
+		};
+		if ($@) {
+		    my $error = "$progname: Couldn't format the changelog date: ";
+		    if ($@ =~ m%^Can\'t locate Date%) {
+			$error .= "the libtimedate-perl package is not installed";
+		    } else {
+			$error .= "couldn't load Date::Format/Date::Parse: $@";
+		    }
+		    die "$error\n";
+		}
+		my @time = Date::Parse::strptime($date);
+		my $time = Date::Format::strftime('%Y-%m-%d %H:%M:%S %z', \@time);
+		push(@extra_args, "--author=$maintainer", "--commit-time=$time");
+	    }
 	    $action_rc = action($prog, "commit", "-m", $message,
-		@fixes_arg, @files_to_commit);
+		@extra_args, @files_to_commit);
 	}
     }
     elsif ($prog eq 'darcs') {
