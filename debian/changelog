@@ -3,6 +3,7 @@ devscripts (2.12.5+exp1) UNRELEASED; urgency=low
   [ Christoph Berg ]
   * origtargz: New script: fetch the orig tarball of a Debian package from
     various sources, and unpack it
+  * debchange: --changelog-info will pass --author and --date for git commits.
 
   [ James McCoy ]
   * licensecheck: Recognize MPL 2.0 licenses.  Thanks to Ryan Pavlik for the

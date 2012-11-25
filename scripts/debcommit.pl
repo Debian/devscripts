@@ -205,6 +205,8 @@ Options:
    --no-strip-message  Do not strip a leading '* ' (default)
    --sign-tags         Enable signing of tags (git only)
    --no-sign-tags      Do not sign tags (default)
+   --changelog-info    Use author and date information from the changelog
+                       for the commit (git only)
    -h --help           This message
    -v --version        Version information
 
@@ -239,8 +241,9 @@ my $all=0;
 my $stripmessage=1;
 my $signtags=0;
 my $changelog;
+my $changelog_info=0;
 my $keyid;
-my $version;
+my ($version, $date, $maintainer);
 my $onlydebian=0;
 
 # Now start by reading configuration files and then command line
@@ -318,6 +321,7 @@ if (! GetOptions(
 		 "c|changelog=s" => \$changelog,
 		 "s|strip-message!" => \$stripmessage,
 		 "sign-tags!" => \$signtags,
+		 "changelog-info!" => \$changelog_info,
 		 "R|release-use-changelog!" => \$release_use_changelog,
 		 "h|help" => sub { usage(); exit 0; },
 		 "v|version" => sub { version(); exit 0; },
@@ -368,10 +372,26 @@ if ($release) {
 	close C;
 
 	$version=`dpkg-parsechangelog -l\Q$changelog\E | grep '^Version:' | cut -f 2 -d ' '`;
-	chomp $version;
     }
 
     $message="releasing version $version" if ! defined $message;
+}
+if ($changelog_info) {
+    eval {
+	require Dpkg::Changelog::Parse;
+    };
+    if (not $@) {
+	# dpkg >= 1.15.5.2
+	my $log = Dpkg::Changelog::Parse::changelog_parse(file => $changelog);
+	$maintainer = $log->{Maintainer};
+	$date = $log->{Date};
+    }
+    else {
+	$maintainer=`dpkg-parsechangelog -l\Q$changelog\E | grep '^Maintainer:' | cut -f 2- -d ' '`;
+	chomp $maintainer;
+	$date=`dpkg-parsechangelog -l\Q$changelog\E | grep '^Date:' | cut -f 2- -d ' '`;
+	chomp $date;
+    }
 }
 if ($edit) {
     my $modified = 0;
@@ -547,7 +567,11 @@ sub commit {
 	    if ($all) {
 		@files_to_commit=("-a")
 	    }
-	    $action_rc = action($prog, "commit", "-m", $message, @files_to_commit);
+	    my @extra_args = ();
+	    if ($changelog_info and $prog eq 'git') { # --use-author
+		@extra_args = ("--author=$maintainer", "--date=$date");
+	    }
+	    $action_rc = action($prog, "commit", "-m", $message, @extra_args, @files_to_commit);
 	}
     }
     elsif ($prog eq 'tla' || $prog eq 'baz') {
