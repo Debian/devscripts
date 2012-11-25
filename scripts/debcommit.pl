@@ -6,7 +6,7 @@ debcommit - commit changes to a package
 
 =head1 SYNOPSIS
 
-B<debcommit> [B<--release>] [B<--release-use-changelog>] [B<--message=>I<text>] [B<--noact>] [B<--diff>] [B<--confirm>] [B<--edit>] [B<--changelog=>I<path>] [B<--all> | I<files to commit>]
+B<debcommit> [I<options>] [B<--all> | I<files to commit>]
 
 =head1 DESCRIPTION
 
@@ -73,11 +73,6 @@ it.
 Commit all files. This is the default operation when using a VCS other
 than git.
 
-=item I<files to commit>
-
-Specify which files to commit (debian/changelog is added to the list
-automatically.)
-
 =item B<-s>, B<--strip-message>, B<--no-strip-message>
 
 If this option is set and the commit message has been derived from the
@@ -91,6 +86,13 @@ the message begins with "[*+-] ".
 
 If this option is set, then tags that debcommit creates will be signed
 using gnupg. Currently this is only supported by git.
+
+=item B<--changelog-info>
+
+If this option is set, the commit author and date will be determined from
+the Maintainer and Date field of the first paragraph in debian/changelog.
+This is mainly useful when using debchange(1) with the --no-mainttrailer
+option.
 
 =back
 
@@ -205,7 +207,7 @@ Options:
    --sign-tags         Enable signing of tags (git only)
    --no-sign-tags      Do not sign tags (default)
    --changelog-info    Use author and date information from the changelog
-                       for the commit (git only)
+                       for the commit (git, hg, and bzr)
    -h --help           This message
    -v --version        Version information
 
@@ -325,7 +327,7 @@ if (! GetOptions(
 		 "h|help" => sub { usage(); exit 0; },
 		 "v|version" => sub { version(); exit 0; },
 		 )) {
-    die "Usage: debcommit [--release] [--release-use-changelog] [--message=text] [--noact] [--diff] [--confirm] [--edit] [--changelog=path] [--all | files to commit]\n";
+    die "Usage: $progname [options] [--all | files to commit]\n";
 }
 
 if ($diffmode) {
@@ -860,6 +862,6 @@ Joey Hess <joeyh@debian.org>
 
 =head1 SEE ALSO
 
-svnpath(1).
+svnpath(1), debchange(1).
 
 =cut
