@@ -27,6 +27,10 @@ devscripts (2.12.6+exp1) UNRELEASED; urgency=low
       by common archive formats.
     + Add an example watch URL for Google Code projects.
 
+  [ Benjamin Drung ]
+  * debian/control: Mark devscripts Multi-Arch: foreign.
+    Thanks to Colin Watson. (Closes: #694760)
+
  -- James McCoy <jamessan@debian.org>  Sat, 15 Sep 2012 16:12:16 -0400
 
 devscripts (2.12.6) unstable; urgency=low

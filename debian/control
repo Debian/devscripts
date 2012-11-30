@@ -41,6 +41,7 @@ Vcs-Git: git://anonscm.debian.org/devscripts/devscripts.git
 
 Package: devscripts
 Architecture: any
+Multi-Arch: foreign
 Depends: dpkg-dev (>= 1.15.4.1),
          ${misc:Depends},
          ${perl:Depends},
