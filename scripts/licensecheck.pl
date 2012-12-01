@@ -168,8 +168,8 @@ my %OPT=(
     verbose        => '',
     lines          => '',
     noconf         => '',
-    ignore_regex   => '',
-    check_regex    => '',
+    ignore         => '',
+    check          => '',
     recursive      => 0,
     copyright      => 0,
     machine        => 0,
@@ -235,8 +235,8 @@ GetOptions(\%OPT,
 ) or die "Usage: $progname [options] filelist\nRun $progname --help for more details\n";
 
 $OPT{'lines'} = $def_lines if $OPT{'lines'} !~ /^[1-9][0-9]*$/;
-$OPT{'ignore_regex'} = $default_ignore_regex if ! length $OPT{'ignore_regex'};
-$OPT{'check_regex'} = $default_check_regex if ! length $OPT{'check_regex'};
+$OPT{'ignore'} = $default_ignore_regex if ! length $OPT{'ignore'};
+$OPT{'check'} = $default_check_regex if ! length $OPT{'check'};
 
 if ($OPT{'noconf'}) {
     fatal("--no-conf is only acceptable as the first command-line option!");
@@ -264,15 +264,15 @@ while (@ARGV) {
 
 	while (<$FIND>) {
 	    chomp;
-	    next unless m%$OPT{'check_regex'}%;
+	    next unless m%$OPT{'check'}%;
 	    # Skip empty files
 	    next if (-z $_);
-	    push @files, $_ unless m%$OPT{'ignore_regex'}%;
+	    push @files, $_ unless m%$OPT{'ignore'}%;
 	}
 	close $FIND;
     } else {
-	next unless ($files_count == 1) or $file =~ m%$OPT{'check_regex'}%;
-	push @files, $file unless $file =~ m%$OPT{'ignore_regex'}%;
+	next unless ($files_count == 1) or $file =~ m%$OPT{'check'}%;
+	push @files, $file unless $file =~ m%$OPT{'ignore'}%;
     }
 }
 
