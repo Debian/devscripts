@@ -92,7 +92,9 @@ When found, a hardlink is created if possible, otherwise a symlink.
 =item B<-u>, B<--unpack>[=B<no>|B<once>|B<yes>]
 
 Unpack the downloaded orig tarball to the current directory, replacing
-everything except the debian directory. Valid choices are:
+everything except the debian directory. Existing files are removed, except for
+F<debian/> and VCS files. Preserved are: F<.bzr>, F<.bzrignore>,
+F<.bzr-builddeb>, F<.git>, F<.gitignore>, F<.hg>, F<.hgignore>, and F<.svn>.
 
 =over
 
@@ -107,9 +109,7 @@ dotfiles), unpack the orig tarball. This is the default behavior.
 
 =item B<yes> (default for B<--unpack> without argument)
 
-Always unpack the orig tarball. Existing files are removed, except for F<debian/>
-and VCS files. Preserved are: F<.bzr>, F<.bzrignore>, F<.bzr-builddeb>, F<.git>,
-F<.gitignore>, F<.hg>, F<.hgignore>, and F<.svn>.
+Always unpack the orig tarball.
 
 =back
 
@@ -123,6 +123,11 @@ When using B<apt-get source>, pass B<--tar-only> to it. The default is to
 download the full source package including F<.dsc> and F<.diff.gz> or
 F<.debian.tar.gz> components so B<debdiff> can be used to diff the last upload
 to the next one. With B<--tar-only>, only download the F<.orig.tar.*> file.
+
+=item B<--clean>
+
+Remove existing files as with B<--unpack>. Note that like B<--unpack>, this
+will remove upstream files even if they are stored in VCS.
 
 =back
 
@@ -158,6 +163,7 @@ use Pod::Usage;
 my @dirs = ();
 my $tar_only = 0;
 my $unpack = 'once'; # default when --unpack is not used
+my $clean = 0;
 
 GetOptions(
 	"path|p=s" => \@dirs,
@@ -165,6 +171,7 @@ GetOptions(
 	"help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },
 	"tar-only|t" => \$tar_only,
 	"unpack|u:s" => \$unpack,
+	"clean" => \$clean,
 ) or pod2usage({-exitval => 3});
 
 $unpack = 'yes' if (defined $unpack and $unpack eq ''); # default for --unpack without argument
@@ -189,6 +196,8 @@ $origversion = $version;
 $origversion =~ s/(.*)-.*/$1/; # strip everything from the last dash
 $fileversion = $origversion;
 $fileversion =~ s/^\d+://; # strip epoch
+
+# functions
 
 sub download_origtar ()
 {
@@ -341,6 +350,13 @@ sub unpack_tarball ($)
 	rmdir $directory;
 
 	return 1;
+}
+
+# main
+
+if ($clean) {
+	clean_checkout;
+	exit 0;
 }
 
 my $origtar = download_origtar;
