@@ -27,6 +27,9 @@ addtime ()
 	while read line; do
 		echo "`date ${FMT}` $1: $line"
 	done
+	if [ ! -z "$line" ]; then
+		echo -n "`date ${FMT}` $1: $line"
+	fi
 }
 
 usage ()

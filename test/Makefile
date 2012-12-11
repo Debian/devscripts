@@ -1,4 +1,5 @@
 test:
+	./test_annotate-output
 	./test_checkbashisms
 	./test_dd-list
 	./test_debchange

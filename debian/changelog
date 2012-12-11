@@ -14,6 +14,8 @@ devscripts (2.12.6+exp1) UNRELEASED; urgency=low
       modules (Dpkg::Changelog::Parse, Dpkg::Vendor::Ubuntu,
       Dpkg::Changelog::Entry::Debian).
     + Add changelog info support for hg and bzr.
+  * annotate-output:
+    + Handle an incomplete line of output.  (Closes: #695609)
 
   [ Dmitry Smirnov ]
   * licensecheck: Remove any regular comments pattern. (Closes: #526698)

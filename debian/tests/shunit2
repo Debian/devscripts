@@ -1,6 +1,7 @@
 #!/bin/sh
 set -e
 
+test/test_annotate-output --installed
 test/test_checkbashisms --installed
 test/test_dd-list --installed
 test/test_debchange --installed
