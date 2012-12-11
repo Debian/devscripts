@@ -30,4 +30,10 @@ testSwallowedNewline() {
   assertEquals 'incomplete line found' "${expected}" "${actual}"
 }
 
+testBackslashes() {
+  expected='% O: \f\o\o'
+  actual="$($COMMAND +%% printf '%s\n' '\f\o\o' | grep O:)"
+  assertEquals 'backslashes echoed' "${expected}" "${actual}"
+}
+
 . shunit2

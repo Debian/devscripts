@@ -16,6 +16,8 @@ devscripts (2.12.6+exp1) UNRELEASED; urgency=low
     + Add changelog info support for hg and bzr.
   * annotate-output:
     + Handle an incomplete line of output.  (Closes: #695609)
+    + Don't treat backslashes in the command's output as an escape.  (Closes:
+      #695613)
 
   [ Dmitry Smirnov ]
   * licensecheck: Remove any regular comments pattern. (Closes: #526698)
