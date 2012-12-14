@@ -516,7 +516,7 @@ elsif ($type eq 'dsc') {
 
     @versions = Devscripts::Versort::versort(@versions);
     # If the versions are currently out of order, should we swap them?
-    if ($auto_ver_sort and !$guessed_version and $versions[0][1] == 1) {
+    if ($auto_ver_sort and !$guessed_version and $versions[0][1] == 1 and $versions[0][0] ne $versions[1][0]) {
 	foreach my $var ((\@origs, \@diffs, \@dscs, \@dscformats)) {
 	    my $temp = @{$var}[1];
 	    @{$var}[1] = @{$var}[2];
