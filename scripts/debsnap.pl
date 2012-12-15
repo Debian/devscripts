@@ -283,7 +283,7 @@ else {
 	    my $file_name;
 	    # fileinfo may match multiple files (e.g., orig tarball for iceweasel 3.0.12)
 	    foreach my $info (@$fileinfo) {
-		if ($info->{name} =~ m/^${package}/) {
+		if ($info->{name} =~ m/^\Q${package}\E/) {
 		    $file_name = $info->{name};
 		    last;
 		}

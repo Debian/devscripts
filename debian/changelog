@@ -39,6 +39,9 @@ devscripts (2.12.6+exp1) UNRELEASED; urgency=low
   * Don't auto reverse diffs when DEBDIFF_AUTO_VER_SORT is set to yes, and
     when the version in both packages is the same. (Closes: #650732)
 
+  [ tony mancill ]
+  * debsnap: Escape the package name when used in regex.  (Closes: #696018)
+
  -- James McCoy <jamessan@debian.org>  Sat, 15 Sep 2012 16:12:16 -0400
 
 devscripts (2.12.6) unstable; urgency=low
