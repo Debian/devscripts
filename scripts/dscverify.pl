@@ -24,7 +24,10 @@
 use 5.004;	# correct pipe close behavior
 use strict;
 use Cwd;
+use Fcntl;
 use Dpkg::IPC;
+use File::Spec;
+use File::Temp;
 use File::Basename;
 use POSIX	qw(:errno_h);
 use Getopt::Long qw(:config gnu_getopt);
@@ -113,7 +116,15 @@ sub get_rings {
 sub check_signature($\@;\$) {
     my ($file, $rings, $outref) = @_;
 
-    my @cmd = qw(gpg --status-fd 1 --batch --no-options --no-default-keyring --always-trust);
+    my $tempdir = File::Temp->newdir();
+    # Allow the status file descriptor to pass on to the child process
+    local $^F = 3;
+    open(my $fh, '+>', File::Spec->catfile($tempdir, 'status'))
+	    or xdie "unable to open status file for gpg: $!\n";
+    my $fd = fileno $fh;
+    my @cmd;
+    push @cmd, qw(gpg --status-fd), $fd,
+	       qw(--batch --no-options --no-default-keyring --always-trust);
     foreach (@$rings) { push @cmd, '--keyring'; push @cmd, $_; }
 
     my ($out, $err) = ('', '');
@@ -129,15 +140,18 @@ sub check_signature($\@;\$) {
 	print $out if ($verbose);
 	return $err || $@;
     }
-    if ($out !~ m/^\[GNUPG:\] VALIDSIG/m) {
-	$out = join("\n", grep /^(?!\[GNUPG:\] )/, split(/\n/, $out))."\n";
+
+    seek($fh, 0, SEEK_SET);
+    my $status;
+    $status .= $_ while <$fh>;
+    close $fh;
+
+    if ($status !~ m/^\[GNUPG:\] VALIDSIG/m) {
 	return $out;
     }
 
     if (defined $outref) {
-	my @lines = split(/\n/, $out);
-	while ($lines[0] =~ m/^\[GNUPG:\] PLAINTEXT/) { shift @lines; }
-	while ($lines[0] !~ m/^\[GNUPG:\]/) { $$outref .= "$lines[0]\n"; shift @lines; }
+	$$outref = $out;
     }
 
     return '';
