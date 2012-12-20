@@ -90,8 +90,8 @@ using gnupg. Currently this is only supported by git.
 =item B<--changelog-info>
 
 If this option is set, the commit author and date will be determined from
-the Maintainer and Date field of the first paragraph in debian/changelog.
-This is mainly useful when using debchange(1) with the --no-mainttrailer
+the Maintainer and Date field of the first paragraph in F<debian/changelog>.
+This is mainly useful when using B<debchange>(1) with the B<--no-mainttrailer>
 option.
 
 =back
