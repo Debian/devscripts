@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2012-12-20 20:37-0400\n"
-"PO-Revision-Date: 2012-08-17 11:24-0400\n"
+"PO-Revision-Date: 2012-12-20 10:37-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -3101,7 +3101,7 @@ msgstr ""
 #. type: textblock
 #: ../scripts/bts.pl:4111
 msgid "reportbug(1), querybts(1)"
-msgstr "reportbug(1), querybts(1)"
+msgstr "B<reportbug>(1), B<querybts>(1)"
 
 #. type: =head1
 #: ../scripts/bts.pl:4113 ../scripts/chdist.pl:119 ../scripts/debsnap.1:126
@@ -3772,19 +3772,18 @@ msgstr ""
 #: ../scripts/checkbashisms.1:60
 #, no-wrap
 msgid "4"
-msgstr ""
+msgstr "4"
 
 #. type: Plain text
 #: ../scripts/checkbashisms.1:63
 msgid "No bashisms were detected in a bash script."
 msgstr ""
+"Aucune construction spécifique à bash n'a été détectée dans un script bash."
 
 #. type: Plain text
 #: ../scripts/checkbashisms.1:65
-#, fuzzy
-#| msgid "B<lintian>(1)."
 msgid "B<lintian>(1)"
-msgstr "B<lintian>(1)."
+msgstr "B<lintian>(1)"
 
 #. type: Plain text
 #: ../scripts/checkbashisms.1:68
@@ -4511,10 +4510,8 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:268
-#, fuzzy
-#| msgid "B<cowbuilder>(1), B<pbuilder>(1), B<ssh-agent>(1), B<sudoers>(5)."
 msgid "B<cowbuilder>(1), B<pbuilder>(1), B<ssh-agent>(1), B<sudoers>(5)"
-msgstr "B<cowbuilder>(1), B<pbuilder>(1), B<ssh-agent>(1), B<sudoers>(5)."
+msgstr "B<cowbuilder>(1), B<pbuilder>(1), B<ssh-agent>(1), B<sudoers>(5)"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:272
@@ -4727,12 +4724,8 @@ msgstr "Afficher respectivement le message d'aide et la version."
 
 #. type: Plain text
 #: ../scripts/cvs-debc.1:63
-#, fuzzy
-#| msgid ""
-#| "B<cvs-buildpackage>(1), B<cvs-debi>(1), B<cvs-debuild>(1)  and B<debc>(1)."
 msgid "B<cvs-buildpackage>(1), B<cvs-debi>(1), B<cvs-debuild>(1), B<debc>(1)"
-msgstr ""
-"B<cvs-buildpackage>(1), B<cvs-debi>(1), B<cvs-debuild>(1) et B<debc>(1)."
+msgstr "B<cvs-buildpackage>(1), B<cvs-debi>(1), B<cvs-debuild>(1), B<debc>(1)"
 
 #. type: Plain text
 #: ../scripts/cvs-debc.1:67 ../scripts/cvs-debi.1:71
@@ -4809,12 +4802,8 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/cvs-debi.1:67
-#, fuzzy
-#| msgid ""
-#| "B<cvs-buildpackage>(1), B<cvs-debc>(1)  B<cvs-debuild>(1)  and B<debi>(1)."
 msgid "B<cvs-buildpackage>(1), B<cvs-debc>(1), B<cvs-debuild>(1), B<debi>(1)"
-msgstr ""
-"B<cvs-buildpackage>(1), B<cvs-debc>(1) B<cvs-debuild>(1) et B<debi>(1)."
+msgstr "B<cvs-buildpackage>(1), B<cvs-debc>(1), B<cvs-debuild>(1), B<debi>(1)"
 
 #. type: Plain text
 #: ../scripts/cvs-debrelease.1:4
@@ -4885,10 +4874,8 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/cvs-debrelease.1:68
-#, fuzzy
-#| msgid "B<cvs-buildpackage>(1), B<debrelease>(1)  and B<cvs-debuild>(1)."
 msgid "B<cvs-buildpackage>(1), B<debrelease>(1), B<cvs-debuild>(1)"
-msgstr "B<cvs-buildpackage>(1), B<debrelease>(1) et B<cvs-debuild>(1)."
+msgstr "B<cvs-buildpackage>(1), B<debrelease>(1), B<cvs-debuild>(1)"
 
 #. type: Plain text
 #: ../scripts/cvs-debrelease.1:72
@@ -5037,15 +5024,10 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/cvs-debuild.1:58
-#, fuzzy
-#| msgid ""
-#| "B<cvs-buildpackage>(1), B<debuild>(1), B<dpkg-buildpackage>(1)  and "
-#| "B<lintian>(1)."
 msgid ""
 "B<cvs-buildpackage>(1), B<debuild>(1), B<dpkg-buildpackage>(1), B<lintian>(1)"
 msgstr ""
-"B<cvs-buildpackage>(1), B<debuild>(1), B<dpkg-buildpackage>(1) et B<lintian>"
-"(1)."
+"B<cvs-buildpackage>(1), B<debuild>(1), B<dpkg-buildpackage>(1), B<lintian>(1)"
 
 #. type: Plain text
 #: ../scripts/cvs-debuild.1:59
@@ -5364,10 +5346,8 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/dcmd.1:101
-#, fuzzy
-#| msgid "B<dpkg-source>(1), B<dpkg-genchanges>(1)."
 msgid "B<dpkg-source>(1), B<dpkg-genchanges>(1)"
-msgstr "B<dpkg-source>(1), B<dpkg-genchanges>(1)."
+msgstr "B<dpkg-source>(1), B<dpkg-genchanges>(1)"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:103
@@ -5547,14 +5527,12 @@ msgid ""
 "License, or (at your option) any later version."
 msgstr ""
 "Ce programme est publié sous les termes de la Licence Publique Générale "
-"(GPL) version 2 ou toute version ultérieure (à votre discrétion)."
+"(GPL) version 2 ou toute version ultérieure (à votre discrétion)."
 
 #. type: textblock
 #: ../scripts/dcontrol.pl:291
-#, fuzzy
-#| msgid "B<apt-cache>(1)."
 msgid "B<apt-cache>(1)"
-msgstr "B<apt-cache>(1)."
+msgstr "B<apt-cache>(1)"
 
 #. type: TH
 #: ../scripts/dd-list.1:16
@@ -6089,10 +6067,8 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debc.1:119
-#, fuzzy
-#| msgid "B<dpkg-deb>(1), B<debdiff>(1)  and B<devscripts.conf>(5)."
 msgid "B<dpkg-deb>(1), B<debdiff>(1), B<devscripts.conf>(5)"
-msgstr "B<dpkg-deb>(1), B<debdiff>(1) et B<devscripts.conf>(5)."
+msgstr "B<dpkg-deb>(1), B<debdiff>(1), B<devscripts.conf>(5)"
 
 #. type: Plain text
 #: ../scripts/debc.1:121
@@ -7404,15 +7380,10 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debchange.1:475
-#, fuzzy
-#| msgid ""
-#| "B<debclean>(1), B<dupload>(1), B<dput>(1), B<debc>(1)  and B<devscripts."
-#| "conf>(5)."
 msgid ""
 "B<debclean>(1), B<dupload>(1), B<dput>(1), B<debc>(1), B<devscripts.conf>(5)"
 msgstr ""
-"B<debclean>(1), B<dupload>(1), B<dput>(1), B<debc>(1) et B<devscripts.conf>"
-"(5)."
+"B<debclean>(1), B<dupload>(1), B<dput>(1), B<debc>(1), B<devscripts.conf>(5)"
 
 #. type: Plain text
 #: ../scripts/debchange.1:478
@@ -8036,10 +8007,8 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debclean.1:110
-#, fuzzy
-#| msgid "B<debuild>(1)  and B<devscripts.conf>(5)."
 msgid "B<debuild>(1), B<devscripts.conf>(5)"
-msgstr "B<debuild>(1) et B<devscripts.conf>(5)."
+msgstr "B<debuild>(1), B<devscripts.conf>(5)"
 
 #. type: Plain text
 #: ../scripts/debclean.1:112
@@ -8057,10 +8026,8 @@ msgstr "debcommit - Soumettre les changements à un paquet"
 
 #. type: textblock
 #: ../scripts/debcommit.pl:9
-#, fuzzy
-#| msgid "B<dscextract> [I<options>] I<dscfile> I<file>"
 msgid "B<debcommit> [I<options>] [B<--all> | I<files to commit>]"
-msgstr "B<dscextract> [I<options>] I<fichier_dsc> I<fichier>"
+msgstr "B<debcommit> [I<options>] [B<--all> | I<fichiers à commiter>]"
 
 #. type: textblock
 #: ../scripts/debcommit.pl:13
@@ -8263,14 +8230,12 @@ msgid ""
 "gnupg. Currently this is only supported by git."
 msgstr ""
 "Si cette option est activée, alors les étiquettes créées par debcommit "
-"seront signées avec gnupg. Ce n'est actuellement géré que par git."
+"seront signées avec GnuPG. Ce n'est actuellement géré que par Git."
 
 #. type: =item
 #: ../scripts/debcommit.pl:90
-#, fuzzy
-#| msgid "B<--changes>"
 msgid "B<--changelog-info>"
-msgstr "B<--changes>"
+msgstr "B<--changelog-info>"
 
 #. type: textblock
 #: ../scripts/debcommit.pl:92
@@ -8280,6 +8245,10 @@ msgid ""
 "changelog>.  This is mainly useful when using B<debchange>(1) with the B<--"
 "no-mainttrailer> option."
 msgstr ""
+"Si cette option est définie, l'auteur et la date de commit seront déterminés "
+"à partir des champs Maintainer et Date du premier paragraphe de F<debian/"
+"changelog>. C'est surtout pratique en utilisant B<debchange>(1) avec "
+"l'option B<--no-mainttrailer>."
 
 #. type: =item
 #: ../scripts/debcommit.pl:109
@@ -8451,10 +8420,8 @@ msgstr "Joey Hess <joeyh@debian.org>"
 
 #. type: textblock
 #: ../scripts/debcommit.pl:865
-#, fuzzy
-#| msgid "svnpath(1)."
 msgid "B<svnpath>(1), B<debchange>(1)"
-msgstr "svnpath(1)."
+msgstr "B<svnpath>(1), B<debchange>(1)"
 
 #. type: TH
 #: ../scripts/debdiff.1:1
@@ -9082,16 +9049,12 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debdiff.1:221
-#, fuzzy
-#| msgid ""
-#| "B<dpkg-deb>(1), B<wdiff>(1), B<interdiff>(1), B<diffstat>(1)  and "
-#| "B<devscripts.conf>(5)."
 msgid ""
 "B<dpkg-deb>(1), B<wdiff>(1), B<interdiff>(1), B<diffstat>(1), B<devscripts."
 "conf>(5)"
 msgstr ""
-"B<dpkg-deb>(1), B<wdiff>(1), B<interdiff>(1), B<diffstat>(1) et B<devscripts."
-"conf>(5)."
+"B<dpkg-deb>(1), B<wdiff>(1), B<interdiff>(1), B<diffstat>(1), B<devscripts."
+"conf>(5)"
 
 #. type: Plain text
 #: ../scripts/debdiff.1:226
@@ -9269,10 +9232,8 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debi.1:135
-#, fuzzy
-#| msgid "B<debpkg>(1)  and B<devscripts.conf>(5)."
 msgid "B<debpkg>(1), B<devscripts.conf>(5)"
-msgstr "B<debpkg>(1) et B<devscripts.conf>(5)."
+msgstr "B<debpkg>(1), B<devscripts.conf>(5)"
 
 #. type: Plain text
 #: ../scripts/debi.1:140
@@ -9518,10 +9479,8 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debrelease.1:136
-#, fuzzy
-#| msgid "B<dupload>(1), B<dput>(1)  and B<devscripts.conf>(5)."
 msgid "B<dupload>(1), B<dput>(1), B<devscripts.conf>(5)"
-msgstr "B<dupload>(1), B<dput>(1) et B<devscripts.conf>(5)."
+msgstr "B<dupload>(1), B<dput>(1), B<devscripts.conf>(5)"
 
 #. type: Plain text
 #: ../scripts/debrelease.1:138
@@ -10150,10 +10109,8 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debrsign.1:70
-#, fuzzy
-#| msgid "B<debsign>(1), B<dpkg-architecture>(1)  and B<ssh>(1)."
 msgid "B<debsign>(1), B<dpkg-architecture>(1), B<ssh>(1)"
-msgstr "B<debsign>(1), B<dpkg-architecture>(1) et B<ssh>(1)."
+msgstr "B<debsign>(1), B<dpkg-architecture>(1), B<ssh>(1)"
 
 #. type: Plain text
 #: ../scripts/debrsign.1:72 ../scripts/debsign.1:147
@@ -10453,19 +10410,14 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debsign.1:145
-#, fuzzy
-#| msgid ""
-#| "B<debrsign>(1), B<dpkg-buildpackage>(1), B<dpkg-architecture>(1), "
-#| "B<debuild>(1), B<md5sum>(1), B<sha1sum>(1), B<sha256sum>(1), B<gpg>(1), "
-#| "B<scp>(1)  and B<devscripts.conf>(5)."
 msgid ""
 "B<debrsign>(1), B<dpkg-buildpackage>(1), B<dpkg-architecture>(1), B<debuild>"
 "(1), B<md5sum>(1), B<sha1sum>(1), B<sha256sum>(1), B<gpg>(1), B<scp>(1), "
 "B<devscripts.conf>(5)"
 msgstr ""
 "B<debrsign>(1), B<dpkg-buildpackage>(1), B<dpkg-architecture>(1), B<debuild>"
-"(1), B<md5sum>(1), B<sha1sum>(1), B<sha256sum>(1), B<gpg>(1), B<scp>(1) et "
-"B<devscripts.conf>(5)."
+"(1), B<md5sum>(1), B<sha1sum>(1), B<sha256sum>(1), B<gpg>(1), B<scp>(1), "
+"B<devscripts.conf>(5)"
 
 #. type: TH
 #: ../scripts/debsnap.1:2
@@ -11890,11 +11842,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debuild.1:422
-#, fuzzy
-#| msgid ""
-#| "B<dpkg-buildpackage>(1), B<dpkg-checkbuilddeps>(1), B<debsign>(1), "
-#| "B<fakeroot>(1), B<lintian>(1), B<chmod>(1), B<dpkg-statoverride>(8), B<su>"
-#| "(1), B<sudo>(1), B<super>(1)  and B<devscripts.conf>(5)."
 msgid ""
 "B<dpkg-buildpackage>(1), B<dpkg-checkbuilddeps>(1), B<debsign>(1), "
 "B<fakeroot>(1), B<lintian>(1), B<chmod>(1), B<dpkg-statoverride>(8), B<su>"
@@ -11902,7 +11849,7 @@ msgid ""
 msgstr ""
 "B<dpkg-buildpackage>(1), B<dpkg-checkbuilddeps>(1), B<debsign>(1), "
 "B<fakeroot>(1), B<lintian>(1), B<chmod>(1), B<dpkg-statoverride>(8), B<su>"
-"(1), B<sudo>(1), B<super>(1) et B<devscripts.conf>(5)."
+"(1), B<sudo>(1), B<super>(1), B<devscripts.conf>(5)"
 
 #. type: Plain text
 #: ../scripts/debuild.1:425
@@ -12154,7 +12101,7 @@ msgstr ""
 #: ../scripts/devscripts.1:31
 #, no-wrap
 msgid "I<annotate-output>(1)"
-msgstr "I<annotate-output>(1)"
+msgstr "B<annotate-output>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:33
@@ -12170,7 +12117,7 @@ msgstr ""
 #: ../scripts/devscripts.1:33
 #, no-wrap
 msgid "I<archpath>(1)"
-msgstr "I<archpath>(1)"
+msgstr "B<archpath>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:35
@@ -12181,7 +12128,7 @@ msgstr "afficher les noms de paquets tla ou Bazaar [tla | bazaar]"
 #: ../scripts/devscripts.1:35
 #, no-wrap
 msgid "I<bts>(1)"
-msgstr "I<bts>(1)"
+msgstr "B<bts>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:37
@@ -12198,7 +12145,7 @@ msgstr ""
 #: ../scripts/devscripts.1:37
 #, no-wrap
 msgid "I<build-rdeps>(1)"
-msgstr "I<build-rdeps>(1)"
+msgstr "B<build-rdeps>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:39
@@ -12213,7 +12160,7 @@ msgstr ""
 #: ../scripts/devscripts.1:39
 #, no-wrap
 msgid "I<chdist>(1)"
-msgstr "I<chdist>(1)"
+msgstr "B<chdist>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:41
@@ -12225,7 +12172,7 @@ msgstr ""
 #: ../scripts/devscripts.1:41
 #, no-wrap
 msgid "I<checkbashisms>(1)"
-msgstr "I<checkbashisms>(1)"
+msgstr "B<checkbashisms>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:43
@@ -12237,7 +12184,7 @@ msgstr "rechercher des constructions spécifiques à bash dans un script /bin/sh
 #: ../scripts/devscripts.1:43
 #, no-wrap
 msgid "I<cowpoke>(1)"
-msgstr "I<cowpoke>(1)"
+msgstr "B<cowpoke>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:45
@@ -12253,7 +12200,7 @@ msgstr ""
 #: ../scripts/devscripts.1:45
 #, no-wrap
 msgid "I<cvs-debi, cvs-debc>(1)"
-msgstr "I<cvs-debi, cvs-debc>(1)"
+msgstr "B<cvs-debi>, B<cvs-debc>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:47
@@ -12268,7 +12215,7 @@ msgstr ""
 #: ../scripts/devscripts.1:47
 #, no-wrap
 msgid "I<cvs-debrelease>(1)"
-msgstr "I<cvs-debrelease>(1)"
+msgstr "B<cvs-debrelease>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:49
@@ -12283,7 +12230,7 @@ msgstr ""
 #: ../scripts/devscripts.1:49
 #, no-wrap
 msgid "I<cvs-debuild>(1)"
-msgstr "I<cvs-debuild>(1)"
+msgstr "B<cvs-debuild>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:51
@@ -12298,7 +12245,7 @@ msgstr ""
 #: ../scripts/devscripts.1:51
 #, no-wrap
 msgid "I<dcmd>(1)"
-msgstr "I<dcmd>(1)"
+msgstr "B<dcmd>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:53
@@ -12313,7 +12260,7 @@ msgstr ""
 #: ../scripts/devscripts.1:53
 #, no-wrap
 msgid "I<dcontrol>(1)"
-msgstr "I<dcontrol>(1)"
+msgstr "B<dcontrol>(1)"
 
 # NOTE: -- -> -
 #. type: Plain text
@@ -12329,7 +12276,7 @@ msgstr ""
 #: ../scripts/devscripts.1:55
 #, no-wrap
 msgid "I<dd-list>(1)"
-msgstr "I<dd-list>(1)"
+msgstr "B<dd-list>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:57
@@ -12340,7 +12287,7 @@ msgstr "ordonner joliment une liste de paquets par responsable"
 #: ../scripts/devscripts.1:57
 #, no-wrap
 msgid "I<debc>(1)"
-msgstr "I<debc>(1)"
+msgstr "B<debc>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:59
@@ -12351,7 +12298,7 @@ msgstr "afficher le contenu des paquets venant d'être construits"
 #: ../scripts/devscripts.1:59
 #, no-wrap
 msgid "I<debchange/dch>(1)"
-msgstr "I<debchange/dch>(1)"
+msgstr "B<debchange>/B<dch>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:61
@@ -12366,7 +12313,7 @@ msgstr ""
 #: ../scripts/devscripts.1:61
 #, no-wrap
 msgid "I<debcheckout>(1)"
-msgstr "I<debcheckout>(1)"
+msgstr "B<debcheckout>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:63
@@ -12377,7 +12324,7 @@ msgstr "récupérer le contenu du dépôt d'un paquet Debian"
 #: ../scripts/devscripts.1:63
 #, no-wrap
 msgid "I<debclean>(1)"
-msgstr "I<debclean>(1)"
+msgstr "B<debclean>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:65
@@ -12388,15 +12335,10 @@ msgstr "nettoyer une arborescence source [fakeroot]"
 #: ../scripts/devscripts.1:65
 #, no-wrap
 msgid "I<debcommit>(1)"
-msgstr "I<debcommit>(1)"
+msgstr "B<debcommit>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:67
-#, fuzzy
-#| msgid ""
-#| "commit changes to cvs, darcs, svn, svk, tla, bzr, git, or hg, basing "
-#| "commit message on changelog [cvs | darcs | subversion | svk | tla | bzr | "
-#| "git-core | mercurial]"
 msgid ""
 "commit changes to cvs, darcs, svn, svk, tla, bzr, git, or hg, basing commit "
 "message on changelog [cvs | darcs | subversion | svk | tla | bzr | git-core "
@@ -12405,13 +12347,13 @@ msgstr ""
 "soumettre les changements vers CVS, Darcs, Subversion, SVK, GNU Arch, "
 "Bazaar, Git ou Mercurial en basant le message de modification sur le journal "
 "de modifications [cvs | darcs | subversion | svk | tla | bzr | git | "
-"mercurial]"
+"mercurial, libtimedate-perl]"
 
 #. type: IP
 #: ../scripts/devscripts.1:67
 #, no-wrap
 msgid "I<debdiff>(1)"
-msgstr "I<debdiff>(1)"
+msgstr "B<debdiff>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:69
@@ -12426,7 +12368,7 @@ msgstr ""
 #: ../scripts/devscripts.1:69
 #, no-wrap
 msgid "I<debi>(1)"
-msgstr "I<debi>(1)"
+msgstr "B<debi>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:71
@@ -12437,7 +12379,7 @@ msgstr "installer un paquet venant d'être construit"
 #: ../scripts/devscripts.1:71
 #, no-wrap
 msgid "I<debpkg>(1)"
-msgstr "I<debpkg>(1)"
+msgstr "B<debpkg>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:73
@@ -12448,7 +12390,7 @@ msgstr "encapsulation de dpkg pour gérer et essayer les paquets sans su"
 #: ../scripts/devscripts.1:73
 #, no-wrap
 msgid "I<debrelease>(1)"
-msgstr "I<debrelease>(1)"
+msgstr "B<debrelease>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:75
@@ -12459,7 +12401,7 @@ msgstr "encapsulation de dupload ou dput [dupload | dput, ssh-client]"
 #: ../scripts/devscripts.1:75
 #, no-wrap
 msgid "I<debsign, debrsign>(1)"
-msgstr "I<debsign, debrsign>(1)"
+msgstr "B<debsign>, B<debrsign>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:77
@@ -12477,7 +12419,7 @@ msgstr ""
 #: ../scripts/devscripts.1:77
 #, no-wrap
 msgid "I<debsnap>(1)"
-msgstr "I<debsnap>(1)"
+msgstr "B<debsnap>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:79
@@ -12491,7 +12433,7 @@ msgstr ""
 #: ../scripts/devscripts.1:79
 #, no-wrap
 msgid "I<debuild>(1)"
-msgstr "I<debuild>(1)"
+msgstr "B<debuild>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:81
@@ -12508,7 +12450,7 @@ msgstr ""
 #: ../scripts/devscripts.1:81
 #, no-wrap
 msgid "I<deb-reversion>(1)"
-msgstr "I<deb-reversion>(1)"
+msgstr "B<deb-reversion>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:83
@@ -12520,7 +12462,7 @@ msgstr ""
 #: ../scripts/devscripts.1:83
 #, no-wrap
 msgid "I<dep3changelog>(1)"
-msgstr "I<dep3changelog>(1)"
+msgstr "B<dep3changelog>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:85
@@ -12533,7 +12475,7 @@ msgstr ""
 #: ../scripts/devscripts.1:85
 #, no-wrap
 msgid "I<desktop2menu>(1)"
-msgstr "I<desktop2menu>(1)"
+msgstr "B<desktop2menu>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:87
@@ -12548,7 +12490,7 @@ msgstr ""
 #: ../scripts/devscripts.1:87
 #, no-wrap
 msgid "I<dget>(1)"
-msgstr "I<dget>(1)"
+msgstr "B<dget>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:89
@@ -12559,7 +12501,7 @@ msgstr "télécharger des paquets Debian source et binaires [wget | curl]"
 #: ../scripts/devscripts.1:89
 #, no-wrap
 msgid "I<dpkg-depcheck, dpkg-genbuilddeps>(1)"
-msgstr "I<dpkg-depcheck, dpkg-genbuilddeps>(1)"
+msgstr "B<dpkg-depcheck>, B<dpkg-genbuilddeps>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:91
@@ -12575,7 +12517,7 @@ msgstr ""
 #: ../scripts/devscripts.1:91
 #, no-wrap
 msgid "I<diff2patches>(1)"
-msgstr "I<diff2patches>(1)"
+msgstr "B<diff2patches>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:93
@@ -12590,7 +12532,7 @@ msgstr ""
 #: ../scripts/devscripts.1:93
 #, no-wrap
 msgid "I<dscextract>(1)"
-msgstr "I<dscextract>(1)"
+msgstr "B<dscextract>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:95
@@ -12601,7 +12543,7 @@ msgstr "extraire un seul fichier d'un paquet source Debian [patchutils]"
 #: ../scripts/devscripts.1:95
 #, no-wrap
 msgid "I<dscverify>(1)"
-msgstr "I<dscverify>(1)"
+msgstr "B<dscverify>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:97
@@ -12616,7 +12558,7 @@ msgstr ""
 #: ../scripts/devscripts.1:97
 #, no-wrap
 msgid "I<edit-patch>(1)"
-msgstr "I<edit-patch>(1)"
+msgstr "B<edit-patch>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:99
@@ -12631,7 +12573,7 @@ msgstr ""
 #: ../scripts/devscripts.1:99
 #, no-wrap
 msgid "I<getbuildlog>(1)"
-msgstr "I<getbuildlog>(1)"
+msgstr "B<getbuildlog>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:101
@@ -12644,7 +12586,7 @@ msgstr ""
 #: ../scripts/devscripts.1:101
 #, no-wrap
 msgid "I<grep-excuses>(1)"
-msgstr "I<grep-excuses>(1)"
+msgstr "B<grep-excuses>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:103
@@ -12659,7 +12601,7 @@ msgstr ""
 #: ../scripts/devscripts.1:103
 #, no-wrap
 msgid "I<licensecheck>(1)"
-msgstr "I<licensecheck>(1)"
+msgstr "B<licensecheck>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:105
@@ -12670,7 +12612,7 @@ msgstr "essayer de déterminer la licence des fichiers source"
 #: ../scripts/devscripts.1:105
 #, no-wrap
 msgid "I<list-unreleased>(1)"
-msgstr "I<list-unreleased>(1)"
+msgstr "B<list-unreleased>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:107
@@ -12681,7 +12623,7 @@ msgstr "rechercher les paquets qui ne sont pas encore envoyés (UNRELEASED)"
 #: ../scripts/devscripts.1:107
 #, no-wrap
 msgid "I<manpage-alert>(1)"
-msgstr "I<manpage-alert>(1)"
+msgstr "B<manpage-alert>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:109
@@ -12692,7 +12634,7 @@ msgstr "trouver des programmes sans page de manuel [man-db]"
 #: ../scripts/devscripts.1:109
 #, no-wrap
 msgid "I<mass-bug>(1)"
-msgstr "I<mass-bug>(1)"
+msgstr "B<mass-bug>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:111
@@ -12703,7 +12645,7 @@ msgstr "soumettre en masse des rapports de bogue [bsd-mailx | mailx]"
 #: ../scripts/devscripts.1:111
 #, no-wrap
 msgid "I<mergechanges>(1)"
-msgstr "I<mergechanges>(1)"
+msgstr "B<mergechanges>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:113
@@ -12716,7 +12658,7 @@ msgstr ""
 #: ../scripts/devscripts.1:113
 #, no-wrap
 msgid "I<mk-build-deps>(1)"
-msgstr "I<mk-build-deps>(1)"
+msgstr "B<mk-build-deps>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:115
@@ -12733,7 +12675,7 @@ msgstr ""
 #: ../scripts/devscripts.1:115
 #, no-wrap
 msgid "I<namecheck>(1)"
-msgstr "I<namecheck>(1)"
+msgstr "B<namecheck>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:117
@@ -12744,7 +12686,7 @@ msgstr "vérifier la disponibilité des noms de projet."
 #: ../scripts/devscripts.1:117
 #, no-wrap
 msgid "I<nmudiff>(1)"
-msgstr "I<nmudiff>(1)"
+msgstr "B<nmudiff>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:119
@@ -12757,29 +12699,24 @@ msgstr ""
 
 #. type: IP
 #: ../scripts/devscripts.1:119
-#, fuzzy, no-wrap
-#| msgid "I<dget>(1)"
+#, no-wrap
 msgid "I<origtargz>(1)"
-msgstr "I<dget>(1)"
+msgstr "B<origtargz>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:121
-#, fuzzy
-#| msgid ""
-#| "origtargz - fetch the orig tarball of a Debian package from various "
-#| "sources, and unpack it"
 msgid ""
 "fetch the orig tarball of a Debian package from various sources, and unpack "
 "it"
 msgstr ""
-"origtargz - Récupérer l'archive amont d'un paquet Debian depuis divers "
-"sources, et la dépaqueter"
+"récupérer l'archive amont d'un paquet Debian depuis divers sources, et la "
+"dépaqueter"
 
 #. type: IP
 #: ../scripts/devscripts.1:121
 #, no-wrap
 msgid "I<plotchangelog>(1)"
-msgstr "I<plotchangelog>(1)"
+msgstr "B<plotchangelog>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:123
@@ -12793,7 +12730,7 @@ msgstr ""
 #: ../scripts/devscripts.1:123
 #, no-wrap
 msgid "I<pts-subscribe>(1)"
-msgstr "I<pts-subscribe>(1)"
+msgstr "B<pts-subscribe>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:125
@@ -12805,7 +12742,7 @@ msgstr "s'abonner au PTS pendant un temps limité [bsd-mailx | mailx, at]"
 #: ../scripts/devscripts.1:125
 #, no-wrap
 msgid "I<rc-alert>(1)"
-msgstr "I<rc-alert>(1)"
+msgstr "B<rc-alert>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:127
@@ -12818,7 +12755,7 @@ msgstr ""
 #: ../scripts/devscripts.1:127
 #, no-wrap
 msgid "I<rmadison>(1)"
-msgstr "I<rmadison>(1)"
+msgstr "B<rmadison>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:129
@@ -12833,7 +12770,7 @@ msgstr ""
 #: ../scripts/devscripts.1:129
 #, no-wrap
 msgid "I<suspicious-source>(1)"
-msgstr "I<suspicious-source>(1)"
+msgstr "B<suspicious-source>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:131
@@ -12846,7 +12783,7 @@ msgstr ""
 #: ../scripts/devscripts.1:131
 #, no-wrap
 msgid "I<svnpath>(1)"
-msgstr "I<svnpath>(1)"
+msgstr "B<svnpath>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:133
@@ -12857,7 +12794,7 @@ msgstr "afficher les chemins de dépôt Subversion [subversion]"
 #: ../scripts/devscripts.1:133
 #, no-wrap
 msgid "I<tagpending>(1)"
-msgstr "I<tagpending>(1)"
+msgstr "B<tagpending>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:135
@@ -12873,7 +12810,7 @@ msgstr ""
 #: ../scripts/devscripts.1:135
 #, no-wrap
 msgid "I<transition-check>(1)"
-msgstr "I<transition-check>(1)"
+msgstr "B<transition-check>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:137
@@ -12889,7 +12826,7 @@ msgstr ""
 #: ../scripts/devscripts.1:137
 #, no-wrap
 msgid "I<uscan>(1)"
-msgstr "I<uscan>(1)"
+msgstr "B<uscan>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:139
@@ -12904,7 +12841,7 @@ msgstr ""
 #: ../scripts/devscripts.1:139
 #, no-wrap
 msgid "I<uupdate>(1)"
-msgstr "I<uupdate>(1)"
+msgstr "B<uupdate>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:141
@@ -12915,7 +12852,7 @@ msgstr "intégrer les modifications amont à un paquet source [patch]"
 #: ../scripts/devscripts.1:141
 #, no-wrap
 msgid "I<what-patch>(1)"
-msgstr "I<what-patch>(1)"
+msgstr "B<what-patch>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:143
@@ -12929,7 +12866,7 @@ msgstr ""
 #: ../scripts/devscripts.1:143
 #, no-wrap
 msgid "I<whodepends>(1)"
-msgstr "I<whodepends>(1)"
+msgstr "B<whodepends>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:145
@@ -12940,7 +12877,7 @@ msgstr "vérifier quels paquets (et responsables) dépendent d'un autre paquet"
 #: ../scripts/devscripts.1:145
 #, no-wrap
 msgid "I<who-uploads>(1)"
-msgstr "I<who-uploads>(1)"
+msgstr "B<who-uploads>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:147
@@ -12955,7 +12892,7 @@ msgstr ""
 #: ../scripts/devscripts.1:147
 #, no-wrap
 msgid "I<wnpp-alert>(1)"
-msgstr "I<wnpp-alert>(1)"
+msgstr "B<wnpp-alert>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:149
@@ -12968,7 +12905,7 @@ msgstr ""
 #: ../scripts/devscripts.1:149
 #, no-wrap
 msgid "I<wnpp-check>(1)"
-msgstr "I<wnpp-check>(1)"
+msgstr "B<wnpp-check>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:151
@@ -12983,7 +12920,7 @@ msgstr ""
 #: ../scripts/devscripts.1:151
 #, no-wrap
 msgid "I<wrap-and-sort>(1)"
-msgstr "I<wrap-and-sort>(1)"
+msgstr "B<wrap-and-sort>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:152
@@ -13295,16 +13232,12 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/dget.pl:655
-#, fuzzy
-#| msgid ""
-#| "B<apt-get>(1), B<debcheckout>(1), B<debdiff>(1), B<dpkg-source>(1), "
-#| "B<curl>(1), B<wget>(1)."
 msgid ""
 "B<apt-get>(1), B<debcheckout>(1), B<debdiff>(1), B<dpkg-source>(1), B<curl>"
 "(1), B<wget>(1)"
 msgstr ""
 "B<apt-get>(1), B<debcheckout>(1), B<debdiff>(1), B<dpkg-source>(1), B<curl>"
-"(1), B<wget>(1)."
+"(1), B<wget>(1)"
 
 #. type: TH
 #: ../scripts/diff2patches.1:1
@@ -13801,14 +13734,10 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/dpkg-depcheck.1:123
-#, fuzzy
-#| msgid ""
-#| "B<dpkg>(1), B<strace>(1), B<update-alternatives>(8)  and B<devscripts."
-#| "conf>(5)."
 msgid ""
 "B<dpkg>(1), B<strace>(1), B<update-alternatives>(8), B<devscripts.conf>(5)"
 msgstr ""
-"B<dpkg>(1), B<strace>(1), B<update-alternatives>(8) et B<devscripts.conf>(5)."
+"B<dpkg>(1), B<strace>(1), B<update-alternatives>(8), B<devscripts.conf>(5)"
 
 #. type: SH
 #: ../scripts/dpkg-depcheck.1:123
@@ -13910,21 +13839,13 @@ msgstr "  dpkg-depcheck -b dpkg-buildpackage -us -uc -b -rfakeroot [arg ...]\n"
 
 #. type: Plain text
 #: ../scripts/dpkg-genbuilddeps.1:33
-#, fuzzy
-#| msgid "B<dpkg-source>(1), B<dpkg-genchanges>(1)."
 msgid "B<dpkg-depcheck>(1), B<fakeroot>(1)"
-msgstr "B<dpkg-source>(1), B<dpkg-genchanges>(1)."
+msgstr "B<dpkg-depcheck>(1), B<fakeroot>(1)"
 
 #. type: Plain text
 #: ../scripts/dpkg-genbuilddeps.1:36
-#, fuzzy
-#| msgid ""
-#| "B<The Debian Policy Manual,> sections on Build-Depends etc., B<dpkg-"
-#| "depcheck>(1)  and B<fakeroot>(1)."
 msgid "B<The Debian Policy Manual,> sections on Build-Depends etc."
-msgstr ""
-"B<La Charte Debian>, sections Build-Depends etc., B<dpkg-depcheck>(1) et  "
-"B<fakeroot>(1)."
+msgstr "La B<Charte Debian>, sections Build-Depends, etc."
 
 #. type: Plain text
 #: ../scripts/dpkg-genbuilddeps.1:40
@@ -14341,10 +14262,8 @@ msgstr "- /usr/share/keyrings/debian-maintainers.gpg"
 
 #. type: Plain text
 #: ../scripts/dscverify.1:76
-#, fuzzy
-#| msgid "B<gpg>(1)  and B<devscripts.conf>(5)."
 msgid "B<gpg>(1), B<devscripts.conf>(5)"
-msgstr "B<gpg>(1) et B<devscripts.conf>(5)."
+msgstr "B<gpg>(1), B<devscripts.conf>(5)"
 
 #. type: Plain text
 #: ../scripts/dscverify.1:80
@@ -14536,10 +14455,8 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/grep-excuses.1:40 ../scripts/plotchangelog.1:126
-#, fuzzy
-#| msgid "B<devscripts.conf>(5)."
 msgid "B<devscripts.conf>(5)"
-msgstr "B<devscripts.conf>(5)."
+msgstr "B<devscripts.conf>(5)"
 
 #. type: Plain text
 #: ../scripts/grep-excuses.1:42
@@ -15701,10 +15618,8 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/nmudiff.1:112
-#, fuzzy
-#| msgid "B<debdiff>(1), B<sensible-editor>(1)  and B<devscripts.conf>(5)."
 msgid "B<debdiff>(1), B<sensible-editor>(1), B<devscripts.conf>(5)"
-msgstr "B<debdiff>(1), B<sensible-editor>(1) et B<devscripts.conf>(5)."
+msgstr "B<debdiff>(1), B<sensible-editor>(1), B<devscripts.conf>(5)"
 
 #. type: Plain text
 #: ../scripts/nmudiff.1:116
@@ -15876,21 +15791,17 @@ msgstr "B<-u>, B<--unpack>[=B<no>|B<once>|B<yes>]"
 
 #. type: textblock
 #: ../scripts/origtargz.pl:94
-#, fuzzy
-#| msgid ""
-#| "Always unpack the orig tarball. Existing files are removed, except for "
-#| "F<debian/> and VCS files. Preserved are: F<.bzr>, F<.bzrignore>, F<.bzr-"
-#| "builddeb>, F<.git>, F<.gitignore>, F<.hg>, F<.hgignore>, and F<.svn>."
 msgid ""
 "Unpack the downloaded orig tarball to the current directory, replacing "
 "everything except the debian directory. Existing files are removed, except "
 "for F<debian/> and VCS files. Preserved are: F<.bzr>, F<.bzrignore>, F<.bzr-"
 "builddeb>, F<.git>, F<.gitignore>, F<.hg>, F<.hgignore>, and F<.svn>."
 msgstr ""
-"Toujours dépaqueter l'archive amont. Les fichiers existants sont retirés, "
-"sauf le répertoire F<debian> et les fichiers du système de contrôle de "
-"versions. Sont gardés : F<.bzr>, F<.bzrignore>, F<.bzr-builddeb>, F<.git>, "
-"F<.gitignore>, F<.hg>, F<.hgignore> et F<.svn>."
+"Dépaqueter l'archive amont téléchargée dans le répertoire actuel, en "
+"remplaçant tout sauf le répertoire I<debian>. Les fichiers existants sont "
+"supprimés, sauf le répertoire F<debian> et les fichiers du système de "
+"contrôle de versions. Sont gardés : F<.bzr>, F<.bzrignore>, F<.bzr-"
+"builddeb>, F<.git>, F<.gitignore>, F<.hg>, F<.hgignore> et F<.svn>."
 
 #. type: =item
 #: ../scripts/origtargz.pl:101
@@ -15924,10 +15835,8 @@ msgstr "B<yes> (par défaut si B<--unpack> est utilisé sans argument)"
 
 #. type: textblock
 #: ../scripts/origtargz.pl:112
-#, fuzzy
-#| msgid "Do not unpack the orig tarball."
 msgid "Always unpack the orig tarball."
-msgstr "Ne pas dépaqueter l'archive amont."
+msgstr "Toujours dépaqueter l'archive amont."
 
 #. type: textblock
 #: ../scripts/origtargz.pl:118
@@ -15955,10 +15864,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/origtargz.pl:127
-#, fuzzy
-#| msgid "B<--cleandebs>"
 msgid "B<--clean>"
-msgstr "B<--cleandebs>"
+msgstr "B<--clean>"
 
 #. type: textblock
 #: ../scripts/origtargz.pl:129
@@ -15966,6 +15873,9 @@ msgid ""
 "Remove existing files as with B<--unpack>. Note that like B<--unpack>, this "
 "will remove upstream files even if they are stored in VCS."
 msgstr ""
+"Supprimer les fichiers existants comme avec B<--unpack>. Remarquez que comme "
+"B<--unpack>, cela supprimera les fichiers amonts même s'ils sont stockés "
+"dans un système de contrôle de versions."
 
 #. type: textblock
 #: ../scripts/origtargz.pl:146
@@ -17130,10 +17040,8 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/rmadison.pl:334
-#, fuzzy
-#| msgid "madison-lite(1), dak(1)."
 msgid "B<madison-lite>(1), B<dak>(1)"
-msgstr "madison-lite(1), dak(1)."
+msgstr "B<madison-lite>(1), B<dak>(1)"
 
 #. type: textblock
 #: ../scripts/rmadison.pl:338
@@ -17552,7 +17460,7 @@ msgstr ""
 #. type: textblock
 #: ../scripts/tagpending.pl:150
 msgid "B<bts>(1) and B<dpkg-parsechangelog>(1)"
-msgstr "B<bts>(1) et B<dpkg-parsechangelog>(1)"
+msgstr "B<bts>(1), B<dpkg-parsechangelog>(1)"
 
 #. type: textblock
 #: ../scripts/tagpending.pl:432
@@ -17855,6 +17763,8 @@ msgid ""
 "# For maximum flexibility with upstream tarball formats, use this:\n"
 "http://example.com/example-(\\d[\\d.]*)\\e.(?:zip|tgz|tbz2|txz|tar\\e.(?:gz|bz2|xz))\n"
 msgstr ""
+"# Pour une flexibilité maximale avec les formats d'archive amont :\n"
+"http://example.com/example-(\\d[\\d.]*)\\e.(?:zip|tgz|tbz2|txz|tar\\e.(?:gz|bz2|xz))\n"
 
 #. type: Plain text
 #: ../scripts/uscan.1:78
@@ -17872,18 +17782,13 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/uscan.1:81
-#, fuzzy, no-wrap
-#| msgid ""
-#| "# githubredir.debian.net is a redirector for GitHub projects\n"
-#| "# It can be used as following:\n"
-#| "http://githubredir.debian.net/github/E<lt>userE<gt>/E<lt>projectE<gt> (.+).tar.gz\n"
+#, no-wrap
 msgid ""
 "# For GitHub projects you can use the tags page:\n"
 "https://github.com/E<lt>userE<gt>/E<lt>projectE<gt>/tags .*/(\\ed[\\ed\\e.]*)\\e.tar\\e.gz\n"
 msgstr ""
-"# githubredir.debian.net est un redirecteur pour les projets GitHub\n"
-"# Il peut être utilisé de la façon suivante :\n"
-"http://githubredir.debian.net/github/E<lt>utilisateurE<gt>/E<lt>projetE<gt> (.+).tar.gz\n"
+"# Pour les projets GitHub, la page des marques peut être utilisée :\n"
+"https://github.com/E<lt>utilisateurE<gt>/E<lt>projetE<gt>/tags .*/(\\ed[\\ed\\e.]*)\\e.tar\\e.gz\n"
 
 #. type: Plain text
 #: ../scripts/uscan.1:85
@@ -17893,6 +17798,10 @@ msgid ""
 "http://code.google.com/p/E<lt>projectE<gt>/downloads/list?can=1 \\e\n"
 "  .*/E<lt>projectE<gt>-(\\ed[\\ed.]*)\\e.tar\\e.gz\n"
 msgstr ""
+"# Pour les projets Google Code, la page de téléchargement devrait être\n"
+"# utilisée comme ceci :\n"
+"http://code.google.com/p/E<lt>projetE<gt>/downloads/list?can=1 \\e\n"
+"  .*/E<lt>projetE<gt>-(\\ed[\\ed.]*)\\e.tar\\e.gz\n"
 
 #. type: Plain text
 #: ../scripts/uscan.1:90
@@ -19095,10 +19004,8 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/uscan.1:552
-#, fuzzy
-#| msgid "B<dpkg>(1), B<perlre>(1), B<uupdate>(1)  and B<devscripts.conf>(5)."
 msgid "B<dpkg>(1), B<perlre>(1), B<uupdate>(1), B<devscripts.conf>(5)"
-msgstr "B<dpkg>(1), B<perlre>(1), B<uupdate>(1) et B<devscripts.conf>(5)."
+msgstr "B<dpkg>(1), B<perlre>(1), B<uupdate>(1), B<devscripts.conf>(5)"
 
 #. type: Plain text
 #: ../scripts/uscan.1:557
@@ -19535,19 +19442,13 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/uupdate.1:175
-#, fuzzy
-#| msgid ""
-#| "B<debuild>(1), B<fakeroot>(1), B<patch>(1), I<The Debian Policy Manual> "
-#| "and B<devscripts.conf>(5)."
 msgid "B<debuild>(1), B<fakeroot>(1), B<patch>(1), B<devscripts.conf>(5)"
-msgstr ""
-"B<debuild>(1), B<fakeroot>(1), B<patch>(1), I<la Charte Debian> et "
-"B<devscripts.conf>(5)."
+msgstr "B<debuild>(1), B<fakeroot>(1), B<patch>(1), B<devscripts.conf>(5)"
 
 #. type: Plain text
 #: ../scripts/uupdate.1:177
 msgid "B<The Debian Policy Manual>"
-msgstr ""
+msgstr "La B<Charte Debian>"
 
 #. type: Plain text
 #: ../scripts/uupdate.1:180
