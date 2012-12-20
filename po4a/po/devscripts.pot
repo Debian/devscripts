@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-12-19 22:36-0500\n"
+"POT-Creation-Date: 2012-12-20 20:37-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -174,7 +174,7 @@ msgid ""
 msgstr ""
 
 #. type: SH
-#: ../scripts/annotate-output.1:55 ../scripts/archpath.1:54 ../scripts/build-rdeps.pl:345 ../scripts/checkbashisms.1:65 ../scripts/cowpoke.1:269 ../scripts/cvs-debc.1:64 ../scripts/cvs-debi.1:68 ../scripts/cvs-debrelease.1:69 ../scripts/cvs-debuild.1:59 ../scripts/dcmd.1:101 ../scripts/dcontrol.pl:282 ../scripts/dd-list.1:100 ../scripts/debc.1:120 ../scripts/debchange.1:476 ../scripts/debcheckout.pl:227 ../scripts/debclean.1:111 ../scripts/debcommit.pl:859 ../scripts/debdiff.1:222 ../scripts/debi.1:136 ../scripts/debpkg.1:23 ../scripts/debrelease.1:137 ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:71 ../scripts/debsign.1:146 ../scripts/debuild.1:423 ../scripts/desktop2menu.pl:52 ../scripts/dep3changelog.1:26 ../scripts/dget.pl:645 ../scripts/diff2patches.1:48 ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscextract.1:32 ../scripts/dscverify.1:78 ../scripts/getbuildlog.1:41 ../scripts/grep-excuses.1:40 ../scripts/licensecheck.pl:129 ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:20 ../scripts/mass-bug.pl:520 ../scripts/mergechanges.1:18 ../scripts/mk-build-deps.pl:94 ../scripts/namecheck.pl:30 ../scripts/nmudiff.1:113 ../scripts/origtargz.pl:148 ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56 ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:336 ../scripts/svnpath.pl:93 ../scripts/transition-check.pl:81 ../scripts/uscan.1:553 ../scripts/uupdate.1:177 ../scripts/whodepends.1:19 ../scripts/who-uploads.1:71 ../scripts/wnpp-alert.1:31 ../scripts/wnpp-check.1:33 ../scripts/devscripts.conf.5:58
+#: ../scripts/annotate-output.1:55 ../scripts/archpath.1:54 ../scripts/build-rdeps.pl:345 ../scripts/checkbashisms.1:65 ../scripts/cowpoke.1:269 ../scripts/cvs-debc.1:63 ../scripts/cvs-debi.1:67 ../scripts/cvs-debrelease.1:68 ../scripts/cvs-debuild.1:58 ../scripts/dcmd.1:101 ../scripts/dcontrol.pl:282 ../scripts/dd-list.1:100 ../scripts/debc.1:119 ../scripts/debchange.1:475 ../scripts/debcheckout.pl:227 ../scripts/debclean.1:110 ../scripts/debcommit.pl:859 ../scripts/debdiff.1:221 ../scripts/debi.1:135 ../scripts/debpkg.1:23 ../scripts/debrelease.1:136 ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:70 ../scripts/debsign.1:145 ../scripts/debuild.1:422 ../scripts/desktop2menu.pl:52 ../scripts/dep3changelog.1:26 ../scripts/dget.pl:645 ../scripts/diff2patches.1:48 ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscextract.1:32 ../scripts/dscverify.1:77 ../scripts/getbuildlog.1:41 ../scripts/grep-excuses.1:40 ../scripts/licensecheck.pl:129 ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:20 ../scripts/mass-bug.pl:520 ../scripts/mergechanges.1:18 ../scripts/mk-build-deps.pl:94 ../scripts/namecheck.pl:30 ../scripts/nmudiff.1:112 ../scripts/origtargz.pl:148 ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56 ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:336 ../scripts/svnpath.pl:93 ../scripts/transition-check.pl:81 ../scripts/uscan.1:552 ../scripts/uupdate.1:177 ../scripts/whodepends.1:19 ../scripts/who-uploads.1:71 ../scripts/wnpp-alert.1:31 ../scripts/wnpp-check.1:33 ../scripts/devscripts.conf.5:58
 #, no-wrap
 msgid "AUTHOR"
 msgstr ""
@@ -2879,7 +2879,7 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/checkbashisms.1:65
-msgid "B<lintian>(1)."
+msgid "B<lintian>(1)"
 msgstr ""
 
 #. type: Plain text
@@ -3423,7 +3423,7 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:268
-msgid "B<cowbuilder>(1), B<pbuilder>(1), B<ssh-agent>(1), B<sudoers>(5)."
+msgid "B<cowbuilder>(1), B<pbuilder>(1), B<ssh-agent>(1), B<sudoers>(5)"
 msgstr ""
 
 #. type: Plain text
@@ -3587,12 +3587,12 @@ msgid "Show help message and version information respectively."
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/cvs-debc.1:64
-msgid "B<cvs-buildpackage>(1), B<cvs-debi>(1), B<cvs-debuild>(1)  and B<debc>(1)."
+#: ../scripts/cvs-debc.1:63
+msgid "B<cvs-buildpackage>(1), B<cvs-debi>(1), B<cvs-debuild>(1), B<debc>(1)"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/cvs-debc.1:68 ../scripts/cvs-debi.1:72
+#: ../scripts/cvs-debc.1:67 ../scripts/cvs-debi.1:71
 msgid ""
 "B<cvs-buildpackage> was written by Manoj Srivastava, and the current version "
 "of B<debi> was written by Julian Gilbey E<lt>jdg@debian.orgE<gt>.  They have "
@@ -3645,8 +3645,8 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/cvs-debi.1:68
-msgid "B<cvs-buildpackage>(1), B<cvs-debc>(1)  B<cvs-debuild>(1)  and B<debi>(1)."
+#: ../scripts/cvs-debi.1:67
+msgid "B<cvs-buildpackage>(1), B<cvs-debc>(1), B<cvs-debuild>(1), B<debi>(1)"
 msgstr ""
 
 #. type: Plain text
@@ -3695,12 +3695,12 @@ msgid "This specifies which uploader program to use; the default is B<dupload>."
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/cvs-debrelease.1:69
-msgid "B<cvs-buildpackage>(1), B<debrelease>(1)  and B<cvs-debuild>(1)."
+#: ../scripts/cvs-debrelease.1:68
+msgid "B<cvs-buildpackage>(1), B<debrelease>(1), B<cvs-debuild>(1)"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/cvs-debrelease.1:73
+#: ../scripts/cvs-debrelease.1:72
 msgid ""
 "B<cvs-buildpackage> was written by Manoj Srivastava, and the current version "
 "of B<debrelease> was written by Julian Gilbey E<lt>jdg@debian.orgE<gt>.  "
@@ -3814,14 +3814,14 @@ msgid "These should not be needed, but it is provided nevertheless."
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/cvs-debuild.1:59
+#: ../scripts/cvs-debuild.1:58
 msgid ""
-"B<cvs-buildpackage>(1), B<debuild>(1), B<dpkg-buildpackage>(1)  and "
-"B<lintian>(1)."
+"B<cvs-buildpackage>(1), B<debuild>(1), B<dpkg-buildpackage>(1), "
+"B<lintian>(1)"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/cvs-debuild.1:60
+#: ../scripts/cvs-debuild.1:59
 msgid "This program was written by Julian Gilbey E<lt>jdg@debian.orgE<gt>."
 msgstr ""
 
@@ -4085,7 +4085,7 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/dcmd.1:101
-msgid "B<dpkg-source>(1), B<dpkg-genchanges>(1)."
+msgid "B<dpkg-source>(1), B<dpkg-genchanges>(1)"
 msgstr ""
 
 #. type: Plain text
@@ -4235,7 +4235,7 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/dcontrol.pl:291
-msgid "B<apt-cache>(1)."
+msgid "B<apt-cache>(1)"
 msgstr ""
 
 #. type: TH
@@ -4634,12 +4634,12 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debc.1:120
-msgid "B<dpkg-deb>(1), B<debdiff>(1)  and B<devscripts.conf>(5)."
+#: ../scripts/debc.1:119
+msgid "B<dpkg-deb>(1), B<debdiff>(1), B<devscripts.conf>(5)"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debc.1:122
+#: ../scripts/debc.1:121
 msgid ""
 "Julian Gilbey E<lt>jdg@debian.orgE<gt>, based on an original script by "
 "Christoph Lameter E<lt>clameter@debian.orgE<gt>."
@@ -5614,14 +5614,12 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:476
-msgid ""
-"B<debclean>(1), B<dupload>(1), B<dput>(1), B<debc>(1)  and "
-"B<devscripts.conf>(5)."
+#: ../scripts/debchange.1:475
+msgid "B<debclean>(1), B<dupload>(1), B<dput>(1), B<debc>(1), B<devscripts.conf>(5)"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debchange.1:479
+#: ../scripts/debchange.1:478
 msgid ""
 "The original author was Christoph Lameter E<lt>clameter@debian.orgE<gt>.  "
 "Many substantial changes and improvements were made by Julian Gilbey "
@@ -6097,12 +6095,12 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debclean.1:111
-msgid "B<debuild>(1)  and B<devscripts.conf>(5)."
+#: ../scripts/debclean.1:110
+msgid "B<debuild>(1), B<devscripts.conf>(5)"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debclean.1:113
+#: ../scripts/debclean.1:112
 msgid ""
 "Christoph Lameter E<lt>clameter@debian.orgE<gt>; modifications by Julian "
 "Gilbey E<lt>jdg@debian.orgE<gt>."
@@ -6289,9 +6287,9 @@ msgstr ""
 #: ../scripts/debcommit.pl:92
 msgid ""
 "If this option is set, the commit author and date will be determined from "
-"the Maintainer and Date field of the first paragraph in debian/changelog.  "
-"This is mainly useful when using debchange(1) with the --no-mainttrailer "
-"option."
+"the Maintainer and Date field of the first paragraph in "
+"F<debian/changelog>.  This is mainly useful when using B<debchange>(1) with "
+"the B<--no-mainttrailer> option."
 msgstr ""
 
 #. type: =item
@@ -6431,7 +6429,7 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/debcommit.pl:865
-msgid "svnpath(1), debchange(1)."
+msgid "B<svnpath>(1), B<debchange>(1)"
 msgstr ""
 
 #. type: TH
@@ -6943,14 +6941,14 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debdiff.1:222
+#: ../scripts/debdiff.1:221
 msgid ""
-"B<dpkg-deb>(1), B<wdiff>(1), B<interdiff>(1), B<diffstat>(1)  and "
-"B<devscripts.conf>(5)."
+"B<dpkg-deb>(1), B<wdiff>(1), B<interdiff>(1), B<diffstat>(1), "
+"B<devscripts.conf>(5)"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debdiff.1:227
+#: ../scripts/debdiff.1:226
 msgid ""
 "B<debdiff> was originally written as a shell script by Yann Dirson "
 "E<lt>dirson@debian.orgE<gt> and rewritten in Perl with many more features by "
@@ -7076,12 +7074,12 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debi.1:136
-msgid "B<debpkg>(1)  and B<devscripts.conf>(5)."
+#: ../scripts/debi.1:135
+msgid "B<debpkg>(1), B<devscripts.conf>(5)"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debi.1:141
+#: ../scripts/debi.1:140
 msgid ""
 "B<debi> was originally written by Christoph Lameter "
 "E<lt>clameter@debian.orgE<gt>.  The now-defunct script B<debit> was "
@@ -7257,12 +7255,12 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debrelease.1:137
-msgid "B<dupload>(1), B<dput>(1)  and B<devscripts.conf>(5)."
+#: ../scripts/debrelease.1:136
+msgid "B<dupload>(1), B<dput>(1), B<devscripts.conf>(5)"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debrelease.1:139
+#: ../scripts/debrelease.1:138
 msgid ""
 "Julian Gilbey E<lt>jdg@debian.orgE<gt>, based on the original B<release> "
 "script by Christoph Lameter E<lt>clameter@debian.orgE<gt>."
@@ -7758,12 +7756,12 @@ msgid "Equivalent to passing B<--path> on the command line (see above.)"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debrsign.1:71
-msgid "B<debsign>(1), B<dpkg-architecture>(1)  and B<ssh>(1)."
+#: ../scripts/debrsign.1:70
+msgid "B<debsign>(1), B<dpkg-architecture>(1), B<ssh>(1)"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debrsign.1:73 ../scripts/debsign.1:148
+#: ../scripts/debrsign.1:72 ../scripts/debsign.1:147
 msgid ""
 "This program was written by Julian Gilbey E<lt>jdg@debian.orgE<gt> and is "
 "copyright under the GPL, version 2 or later."
@@ -7990,11 +7988,11 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debsign.1:146
+#: ../scripts/debsign.1:145
 msgid ""
 "B<debrsign>(1), B<dpkg-buildpackage>(1), B<dpkg-architecture>(1), "
 "B<debuild>(1), B<md5sum>(1), B<sha1sum>(1), B<sha256sum>(1), B<gpg>(1), "
-"B<scp>(1)  and B<devscripts.conf>(5)."
+"B<scp>(1), B<devscripts.conf>(5)"
 msgstr ""
 
 #. type: TH
@@ -9105,15 +9103,15 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debuild.1:423
+#: ../scripts/debuild.1:422
 msgid ""
 "B<dpkg-buildpackage>(1), B<dpkg-checkbuilddeps>(1), B<debsign>(1), "
 "B<fakeroot>(1), B<lintian>(1), B<chmod>(1), B<dpkg-statoverride>(8), "
-"B<su>(1), B<sudo>(1), B<super>(1)  and B<devscripts.conf>(5)."
+"B<su>(1), B<sudo>(1), B<super>(1), B<devscripts.conf>(5)"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/debuild.1:426
+#: ../scripts/debuild.1:425
 msgid ""
 "The original B<debuild> program was written by Christoph Lameter "
 "E<lt>clameter@debian.orgE<gt>.  The current version has been written by "
@@ -10277,7 +10275,7 @@ msgstr ""
 #: ../scripts/dget.pl:655
 msgid ""
 "B<apt-get>(1), B<debcheckout>(1), B<debdiff>(1), B<dpkg-source>(1), "
-"B<curl>(1), B<wget>(1)."
+"B<curl>(1), B<wget>(1)"
 msgstr ""
 
 #. type: TH
@@ -10698,20 +10696,18 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/dpkg-depcheck.1:124
-msgid ""
-"B<dpkg>(1), B<strace>(1), B<update-alternatives>(8)  and "
-"B<devscripts.conf>(5)."
+#: ../scripts/dpkg-depcheck.1:123
+msgid "B<dpkg>(1), B<strace>(1), B<update-alternatives>(8), B<devscripts.conf>(5)"
 msgstr ""
 
 #. type: SH
-#: ../scripts/dpkg-depcheck.1:124
+#: ../scripts/dpkg-depcheck.1:123
 #, no-wrap
 msgid "COPYING"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/dpkg-depcheck.1:131
+#: ../scripts/dpkg-depcheck.1:130
 msgid ""
 "Copyright 2001 Bill Allombert E<lt>ballombe@debian.orgE<gt>.  Modifications "
 "copyright 2002,2003 Julian Gilbey E<lt>jdg@debian.orgE<gt>.  "
@@ -10778,10 +10774,13 @@ msgid "  dpkg-depcheck -b dpkg-buildpackage -us -uc -b -rfakeroot [arg ...]\n"
 msgstr ""
 
 #. type: Plain text
+#: ../scripts/dpkg-genbuilddeps.1:33
+msgid "B<dpkg-depcheck>(1), B<fakeroot>(1)"
+msgstr ""
+
+#. type: Plain text
 #: ../scripts/dpkg-genbuilddeps.1:36
-msgid ""
-"B<The Debian Policy Manual,> sections on Build-Depends etc., "
-"B<dpkg-depcheck>(1)  and B<fakeroot>(1)."
+msgid "B<The Debian Policy Manual,> sections on Build-Depends etc."
 msgstr ""
 
 #. type: Plain text
@@ -11117,12 +11116,12 @@ msgid "- /usr/share/keyrings/debian-maintainers.gpg"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/dscverify.1:77
-msgid "B<gpg>(1)  and B<devscripts.conf>(5)."
+#: ../scripts/dscverify.1:76
+msgid "B<gpg>(1), B<devscripts.conf>(5)"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/dscverify.1:81
+#: ../scripts/dscverify.1:80
 msgid ""
 "B<dscverify> was written by Roderick Schertler E<lt>roderick@argon.orgE<gt> "
 "and posted on the debian-devel@lists.debian.org mailing list, with several "
@@ -11274,7 +11273,7 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/grep-excuses.1:40 ../scripts/plotchangelog.1:126
-msgid "B<devscripts.conf>(5)."
+msgid "B<devscripts.conf>(5)"
 msgstr ""
 
 #. type: Plain text
@@ -12204,12 +12203,12 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:113
-msgid "B<debdiff>(1), B<sensible-editor>(1)  and B<devscripts.conf>(5)."
+#: ../scripts/nmudiff.1:112
+msgid "B<debdiff>(1), B<sensible-editor>(1), B<devscripts.conf>(5)"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:117
+#: ../scripts/nmudiff.1:116
 msgid ""
 "B<nmudiff> was written and is copyright 2006 by Steinar H. Gunderson and "
 "modified by Julian Gilbey E<lt>jdg@debian.orgE<gt>.  The software may be "
@@ -13350,7 +13349,7 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/rmadison.pl:334
-msgid "madison-lite(1), dak(1)."
+msgid "B<madison-lite>(1), B<dak>(1)"
 msgstr ""
 
 #. type: textblock
@@ -14860,12 +14859,12 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/uscan.1:553
-msgid "B<dpkg>(1), B<perlre>(1), B<uupdate>(1)  and B<devscripts.conf>(5)."
+#: ../scripts/uscan.1:552
+msgid "B<dpkg>(1), B<perlre>(1), B<uupdate>(1), B<devscripts.conf>(5)"
 msgstr ""
 
 #. type: Plain text
-#: ../scripts/uscan.1:558
+#: ../scripts/uscan.1:557
 msgid ""
 "The original version of B<uscan> was written by Christoph Lameter "
 "E<lt>clameter@debian.orgE<gt>.  Significant improvements, changes and "
@@ -15199,10 +15198,13 @@ msgid ""
 msgstr ""
 
 #. type: Plain text
+#: ../scripts/uupdate.1:175
+msgid "B<debuild>(1), B<fakeroot>(1), B<patch>(1), B<devscripts.conf>(5)"
+msgstr ""
+
+#. type: Plain text
 #: ../scripts/uupdate.1:177
-msgid ""
-"B<debuild>(1), B<fakeroot>(1), B<patch>(1), I<The Debian Policy Manual> and "
-"B<devscripts.conf>(5)."
+msgid "B<The Debian Policy Manual>"
 msgstr ""
 
 #. type: Plain text
