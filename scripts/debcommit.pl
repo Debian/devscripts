@@ -862,6 +862,6 @@ Joey Hess <joeyh@debian.org>
 
 =head1 SEE ALSO
 
-svnpath(1), debchange(1).
+B<svnpath>(1), B<debchange>(1)
 
 =cut

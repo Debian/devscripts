@@ -653,4 +653,4 @@ of the License, or (at your option) any later version.
 =head1 SEE ALSO
 
 B<apt-get>(1), B<debcheckout>(1), B<debdiff>(1), B<dpkg-source>(1), B<curl>(1),
-B<wget>(1).
+B<wget>(1)

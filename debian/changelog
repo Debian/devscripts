@@ -45,6 +45,10 @@ devscripts (2.12.6+exp1) UNRELEASED; urgency=low
   [ tony mancill ]
   * debsnap: Escape the package name when used in regex.  (Closes: #696018)
 
+  [ David Prévot ]
+  * Minor manpages convention fix: do not terminate the SEE ALSO lists with a
+    period. (Closes: #696416)
+
  -- James McCoy <jamessan@debian.org>  Sat, 15 Sep 2012 16:12:16 -0400
 
 devscripts (2.12.6) unstable; urgency=low

@@ -288,4 +288,4 @@ of the License, or (at your option) any later version.
 
 =head1 SEE ALSO
 
-B<apt-cache>(1).
+B<apt-cache>(1)
