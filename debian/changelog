@@ -20,6 +20,7 @@ devscripts (2.12.6+exp1) UNRELEASED; urgency=low
       #695613)
   * dscverify: Use "gpg --status-fd" to determine if a valid signature is
     found and only use the signed content.  (Closes: #695914)
+  * wrap-and-sort: Fix repeated word in man page.  (Closes: #696363)
 
   [ Dmitry Smirnov ]
   * licensecheck: Remove any regular comments pattern. (Closes: #526698)
