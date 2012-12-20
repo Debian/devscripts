@@ -110,11 +110,11 @@ sub get_rings {
     xdie "can't find any system keyrings\n";
 }
 
-sub check_signature {
-    my ($file, @rings) = @_;
+sub check_signature($\@;\$) {
+    my ($file, $rings, $outref) = @_;
 
-    my @cmd = qw(gpg --batch --no-options --no-default-keyring --always-trust);
-    foreach (@rings) { push @cmd, '--keyring'; push @cmd, $_; }
+    my @cmd = qw(gpg --status-fd 1 --batch --no-options --no-default-keyring --always-trust);
+    foreach (@$rings) { push @cmd, '--keyring'; push @cmd, $_; }
 
     my ($out, $err) = ('', '');
     eval {
@@ -129,6 +129,17 @@ sub check_signature {
 	print $out if ($verbose);
 	return $err || $@;
     }
+    if ($out !~ m/^\[GNUPG:\] VALIDSIG/m) {
+	$out = join("\n", grep /^(?!\[GNUPG:\] )/, split(/\n/, $out))."\n";
+	return $out;
+    }
+
+    if (defined $outref) {
+	my @lines = split(/\n/, $out);
+	while ($lines[0] =~ m/^\[GNUPG:\] PLAINTEXT/) { shift @lines; }
+	while ($lines[0] !~ m/^\[GNUPG:\]/) { $$outref .= "$lines[0]\n"; shift @lines; }
+    }
+
     return '';
 }
 
@@ -152,14 +163,26 @@ sub process_file {
 	$filebase = $file;
     }
 
-    if (!open SIGNED, '<', $filebase) {
-	xwarn "can't open $file:";
-	return;
+    my $out;
+    if ($verify_sigs) {
+	$sigcheck = check_signature $filebase, @rings, $out;
+	if ($sigcheck) {
+	    xwarn "$file failed signature check:\n$sigcheck";
+	    return;
+	} else {
+	    print "      Good signature found\n";
+	}
     }
-    my $out = do { local $/; <SIGNED> };
-    if (!close SIGNED) {
-	xwarn "problem reading $file:";
-	return;
+    else {
+	if (!open SIGNED, '<', $filebase) {
+	    xwarn "can't open $file:";
+	    return;
+	}
+	$out = do { local $/; <SIGNED> };
+	if (!close SIGNED) {
+	    xwarn "problem reading $file:";
+	    return;
+	}
     }
 
     if ($file =~ /\.changes$/ and $out =~ /^Format:\s*(.*)$/mi) {
@@ -174,16 +197,6 @@ sub process_file {
 	unless ($major == 1 and $minor <= 8) {
 	    xwarn "$file is an unsupported format: $format\n";
 	    return;
-	}
-    }
-
-    if ($verify_sigs == 1) {
-	$sigcheck = check_signature $filebase, @rings;
-	if ($sigcheck) {
-	    xwarn "$file failed signature check:\n$sigcheck";
-	    return;
-	} else {
-	    print "      Good signature found\n";
 	}
     }
 
@@ -316,7 +329,7 @@ sub process_file {
 
 	close FILE;
 
-	if ($filename =~ /\.dsc$/ && $verify_sigs == 1) {
+	if ($filename =~ /\.dsc$/ && $verify_sigs) {
 	    $sigcheck = check_signature $filename, @rings;
 	    if ($sigcheck) {
 		xwarn "$filename failed signature check:\n$sigcheck";

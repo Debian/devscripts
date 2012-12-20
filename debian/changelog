@@ -18,6 +18,8 @@ devscripts (2.12.6+exp1) UNRELEASED; urgency=low
     + Handle an incomplete line of output.  (Closes: #695609)
     + Don't treat backslashes in the command's output as an escape.  (Closes:
       #695613)
+  * dscverify: Use "gpg --status-fd" to determine if a valid signature is
+    found and only use the signed content.  (Closes: #695914)
 
   [ Dmitry Smirnov ]
   * licensecheck: Remove any regular comments pattern. (Closes: #526698)
