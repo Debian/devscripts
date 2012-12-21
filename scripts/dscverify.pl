@@ -116,11 +116,13 @@ sub get_rings {
 sub check_signature($\@;\$) {
     my ($file, $rings, $outref) = @_;
 
-    my $tempdir = File::Temp->newdir();
+    my $fh = eval { File::Temp->new() }
+	or xdie "unable to open status file for gpg: $@\n";
+
     # Allow the status file descriptor to pass on to the child process
-    local $^F = 3;
-    open(my $fh, '+>', File::Spec->catfile($tempdir, 'status'))
-	    or xdie "unable to open status file for gpg: $!\n";
+    my $flags = fcntl($fh, F_GETFD, 0);
+    fcntl($fh, F_SETFD, $flags & ~FD_CLOEXEC);
+
     my $fd = fileno $fh;
     my @cmd;
     push @cmd, qw(gpg --status-fd), $fd,
