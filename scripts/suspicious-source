@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Copyright (c) 2010-2012, Benjamin Drung <bdrung@debian.org>
+# Copyright (c) 2010-2013, Benjamin Drung <bdrung@debian.org>
 #
 # Permission to use, copy, modify, and/or distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -47,6 +47,7 @@ DEFAULT_WHITELISTED_MIMETYPES = [
     "image/x-ico",
     "image/x-ms-bmp",
     "image/x-portable-pixmap",
+    "inode/symlink",
     "inode/x-empty",
     "message/rfc822",
     "text/html",
