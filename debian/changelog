@@ -26,7 +26,8 @@ devscripts (2.12.6+exp1) UNRELEASED; urgency=low
   * licensecheck: Remove any regular comments pattern. (Closes: #526698)
 
   [ Paul Wise ]
-  * checkbashisms: When examining a bash script, indicate the lack of use of bashisms.
+  * checkbashisms: When examining a bash script, indicate the lack of use of
+    bashisms.
   * uscan:
     + Access GitHub directly instead of using githubredir.debian.net in
       example GitHub watch URL.
