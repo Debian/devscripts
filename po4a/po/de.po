@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: devscripts 2.12.4\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
 "POT-Creation-Date: 2012-12-20 20:37-0400\n"
-"PO-Revision-Date: 2013-01-09 19:21+0100\n"
+"PO-Revision-Date: 2013-01-10 22:47+0100\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
 "Language: de\n"
@@ -5925,12 +5925,12 @@ msgstr ""
 "Verzeichnisname (wie er durch B<pwd>(1) bestimmt wurde) zum regulären "
 "Ausdruck passt, der durch die Konfigurationsdateioption "
 "B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> oder die Befehlszeilenoption B<--check-"
-"dirname-regex> I<regulärer_Ausdruck> angegeben wurde. Hierbei ist "
-"I<regulärer_Ausdruck> ein regulärer Perl-Ausdruck (siehe B<perlre>(3perl)), "
-"der an den Anfang und das Ende verankert wird. Falls I<regulärer_Ausdruck> "
+"dirname-regex> I<regulärer Ausdruck> angegeben wurde. Hierbei ist "
+"I<regulärer Ausdruck> ein regulärer Perl-Ausdruck (siehe B<perlre>(3perl)), "
+"der an den Anfang und das Ende verankert wird. Falls I<regulärer Ausdruck> "
 "ein »/« enthält, muss er auf den vollständigen Verzeichnispfad passen. Wenn "
 "nicht, dann muss er auf den vollständigen Verzeichnisnamen passen. Falls "
-"I<regulärer_Ausdruck> die Zeichenkette »PACKAGE« beinhaltet, wird diese "
+"I<regulärer Ausdruck> die Zeichenkette »PACKAGE« beinhaltet, wird diese "
 "durch den Namen des Quellpakets ersetzt, wie er aus dem Changelog bestimmt "
 "wird. Der vorgegebene Wert für den regulären Ausdruck ist: »PACKAGE(-.+)?«, "
 "daher entspricht er Verzeichnisnamen wie PACKAGE und PACKAGE-Version."
@@ -5980,7 +5980,7 @@ msgstr ""
 #: ../scripts/uscan.1:443
 #, no-wrap
 msgid "B<--check-dirname-regex> I<regex>"
-msgstr "B<--check-dirname-regex> I<regulärer_Ausdruck>"
+msgstr "B<--check-dirname-regex> I<regulärer Ausdruck>"
 
 #. type: Plain text
 #: ../scripts/debc.1:98 ../scripts/debchange.1:398 ../scripts/debclean.1:96
@@ -5998,9 +5998,9 @@ msgstr ""
 "Die beiden Konfigurationsdateien I</etc/devscripts.conf> und I<~/."
 "devscripts> werden in dieser Reihenfolge eingelesen, um "
 "Konfigurationsvariablen zu setzen. Befehlszeilenoptionen können benutzt "
-"werden, um Einstellungen in Konfigurationsdateien zu setzen. Einstellungen in "
-"Umgebungsvariablen werden zu diesem Zweck ignoriert. Die derzeit bekannten "
-"Variablen sind:"
+"werden, um Einstellungen in Konfigurationsdateien zu setzen. Einstellungen "
+"in Umgebungsvariablen werden zu diesem Zweck ignoriert. Die derzeit "
+"bekannten Variablen sind:"
 
 #. type: TP
 #: ../scripts/debc.1:98 ../scripts/debi.1:115 ../scripts/debrelease.1:116
@@ -6353,12 +6353,12 @@ msgstr ""
 "Verzeichnisname (wie er durch B<pwd>(1) bestimmt wurde) zum regulären "
 "Ausdruck passt, der durch die Konfigurationsdateioption "
 "B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> oder die Befehlszeilenoption B<--check-"
-"dirname-regex> I<regulärer_Ausdruck> angegeben wurde. Hierbei ist "
-"I<regulärer_Ausdruck> ein regulärer Perl-Ausdruck (siehe B<perlre>(3perl)), "
-"der an den Anfang und das Ende verankert wird. Falls I<regulärer_Ausdruck> "
+"dirname-regex> I<regulärer Ausdruck> angegeben wurde. Hierbei ist "
+"I<regulärer Ausdruck> ein regulärer Perl-Ausdruck (siehe B<perlre>(3perl)), "
+"der an den Anfang und das Ende verankert wird. Falls I<regulärer Ausdruck> "
 "ein »/« enthält, muss er auf den vollständigen Verzeichnispfad passen. Falls "
 "nicht, dann muss er auf den vollständigen Verzeichnisnamen passen. Falls "
-"I<regulärer_Ausdruck> die Zeichenkette »B<PACKAGE>« beinhaltet, wird diese "
+"I<regulärer Ausdruck> die Zeichenkette »B<PACKAGE>« beinhaltet, wird diese "
 "durch den Namen des Quellpakets ersetzt, wie er aus dem Changelog bestimmt "
 "wird. Der vorgegebene Wert für den regulären Ausdruck ist: »B<PACKAGE(-.+)?"
 ">«, daher entspricht er Verzeichnisnamen wie B<PACKAGE> und B<PACKAGE-"
@@ -8034,7 +8034,7 @@ msgid ""
 "B<bzr>, B<tla> (arch), B<darcs>."
 msgstr ""
 "B<debcommit> erzeugt, basierend auf neuem Text in B<debian/changelog>, eine "
-"Übergabenachricht und übergibt die Änderungen an das Depot eines Pakets. Es "
+"Commit-Nachricht und übergibt die Änderungen an das Depot eines Pakets. Es "
 "muss in einer Arbeitskopie für das Paket ausgeführt werden. Folgende "
 "Versionskontrollsysteme werden unterstützt: B<cvs>, B<git>, B<hg> "
 "(Mercurial), B<svk>, B<svn> (Subversion), B<baz>, B<bzr>, B<tla> (Arch), "
@@ -8092,9 +8092,8 @@ msgid ""
 "using the default message."
 msgstr ""
 "Wenn dies in Verbindung mit --release benutzt wird, dann wird die "
-"Übergabenachricht, falls es nicht übertragene Änderungen am Changelog "
-"gibt, aus diesen Änderungen abgeleitet, statt die Standardnachricht zu "
-"verwenden."
+"Commit-Nachricht, falls es nicht übertragene Änderungen am Changelog gibt, "
+"aus diesen Änderungen abgeleitet, statt die Standardnachricht zu verwenden."
 
 #. type: =item
 #: ../scripts/debcommit.pl:43
@@ -8108,10 +8107,10 @@ msgid ""
 "commit message on its own based on debian/changelog, or if you want to "
 "override the default message."
 msgstr ""
-"gibt die Übergabenachricht an, die verwendet werden soll; nützlich, falls das "
-"Programm von allein keine auf debian/changelog basierende Übergabenachricht "
-"festlegen kann oder falls Sie die Standardnachricht außer Kraft setzen "
-"möchten."
+"gibt die Commit-Nachricht an, die verwendet werden soll; nützlich, falls "
+"das Programm von allein keine auf debian/changelog basierende "
+"Commit-Nachricht festlegen kann oder falls Sie die Standardnachricht außer "
+"Kraft setzen möchten."
 
 #. type: =item
 #: ../scripts/debcommit.pl:49 ../scripts/tagpending.pl:97
@@ -8138,10 +8137,10 @@ msgid ""
 "the generation of patches against the current working copy (e.g. when you "
 "don't have commit access right)."
 msgstr ""
-"druckt anstelle der Übergabe das Diff, das übergeben worden wäre, falls "
-"diese Option nicht angegeben gewesen wäre. Eine typisches "
+"druckt statt ein Commit durchzuführen das Diff, das übergeben worden wäre, "
+"falls diese Option nicht angegeben gewesen wäre. Eine typisches "
 "Verwendungsszenario dieser Option ist das Erzeugen von Patches für die "
-"aktuelle Arbeitskopie (z.B. wenn Sie keine Rechte für die Übergabe haben)."
+"aktuelle Arbeitskopie (z.B. wenn Sie keine Commit-Rechte haben)."
 
 #. type: =item
 #: ../scripts/debcommit.pl:60
@@ -8156,7 +8155,7 @@ msgid ""
 "this case, the confirmation prompt will be re-displayed after the editing "
 "has been performed."
 msgstr ""
-"zeigt die erzeugte Übergabenachricht an und erbittet vor der Übergabe eine "
+"zeigt die erzeugte Commit-Nachricht an und erbittet vor dem Commit eine "
 "Bestätigung. Es ist auch möglich, die Nachricht an dieser Stelle zu "
 "bearbeiten; in diesem Fall wird die Bestätigungsanfrage erneut angezeigt, "
 "nachdem die Bearbeitung durchgeführt wurde."
@@ -8172,8 +8171,8 @@ msgid ""
 "Edit the generated commit message in your favorite editor before committing "
 "it."
 msgstr ""
-"bearbeitet die erzeugte Übergabenachricht in Ihrem Lieblingseditor, bevor sie "
-"übergeben wird."
+"bearbeitet die erzeugte Commit-Nachricht in Ihrem Lieblingseditor, bevor ein "
+"Commit davon durchgeführt wird."
 
 #. type: TP
 #: ../scripts/debcommit.pl:71 ../scripts/dpkg-depcheck.1:16
@@ -8187,8 +8186,8 @@ msgid ""
 "Commit all files. This is the default operation when using a VCS other than "
 "git."
 msgstr ""
-"übergibt alle Dateien. Dies ist die Standardtransaktion, wenn ein anderes "
-"Versionskontrollsystem als Git verwendet wird."
+"führt ein Commit aller Dateien durch. Dies ist die Standardtransaktion, wenn "
+"ein anderes Versionskontrollsystem als Git verwendet wird."
 
 #. type: =item
 #: ../scripts/debcommit.pl:76
@@ -8202,7 +8201,7 @@ msgid ""
 "changelog, the characters \"* \" will be stripped from the beginning of the "
 "message."
 msgstr ""
-"Falls diese Option gesetzt ist und die Übergabenachricht aus dem Changelog "
+"Falls diese Option gesetzt ist und die Commit-Nachricht aus dem Changelog "
 "abgeleitet wurde, werden die »*«-Zeichen vom Anfang der Nachricht entfernt."
 
 #. type: textblock
@@ -8242,8 +8241,8 @@ msgid ""
 "no-mainttrailer> option."
 msgstr ""
 "Falls diese Option gesetzt ist, werden der Autor und das Datum, die "
-"übertragen werden, anhand der Felder »Maintainer« und »Date« des benutzten "
-"ersten Absatzes in F<debian/changelog> bestimmt. Dies ist hauptsächlich dann "
+"übertragen werden, anhand der Felder »Maintainer« und »Date« des ersten "
+"Absatzes in F<debian/changelog> bestimmt. Dies ist hauptsächlich dann "
 "nützlich, wenn B<debchange>(1) mit der Option B<--no-mainttrailer> verwendet "
 "wird."
 
@@ -8323,7 +8322,7 @@ msgid ""
 "created containing as many full words from the message as will fit within 72 "
 "characters, followed by an ellipsis."
 msgstr ""
-"Falls die Übergabenachricht mehr als 72 Zeichen enthält, wird eine "
+"Falls die Commit-Nachricht mehr als 72 Zeichen enthält, wird eine "
 "Zusammenfassung erstellt, die so viele vollständige Worte aus der Nachricht "
 "enthält, wie in 72 Zeichen hineinpassen, gefolgt von Auslassungspunkten."
 
@@ -8334,7 +8333,7 @@ msgid ""
 "message has been automatically determined from the changelog."
 msgstr ""
 "Jede der unten beschriebenen Funktionalitäten ist nur anwendbar, falls die "
-"Übergabenachricht automatisch aus dem Changelog bestimmt wurde."
+"Commit-Nachricht automatisch aus dem Changelog bestimmt wurde."
 
 #. type: =item
 #: ../scripts/debcommit.pl:148
@@ -8360,10 +8359,10 @@ msgid ""
 "spawn an editor so that the message may be fine-tuned before committing."
 msgstr ""
 "Andernfalls wird die erste Änderung entfaltet und bereinigt, um eine "
-"Zusammenfassungszeile und damit eine Übergabenachricht, gefolgt von einer "
-"leeren Zeile und den Änderungen, wie sie aus dem Changelog extrahiert wurden, "
-"zu bilden. B<debcommit> wird dann einen Editor öffnen, so dass die Nachricht "
-"vor der Übergabe abgestimmt werden kann."
+"Zusammenfassungszeile und damit eine Commit-Nachricht, gefolgt von einer "
+"leeren Zeile und den Änderungen, wie sie aus dem Changelog extrahiert "
+"wurden, zu bilden. B<debcommit> wird dann einen Editor öffnen, so dass die "
+"Nachricht vor dem Commit abgestimmt werden kann."
 
 #. type: =item
 #: ../scripts/debcommit.pl:158
@@ -8393,7 +8392,7 @@ msgid ""
 "fixes options to \"bzr commit\" will be generated to associate the revision "
 "and the bugs."
 msgstr ""
-"Falls der für die Übergabenachricht benutzte Changelog-Eintrag irgendwelche "
+"Falls der für die Commit-Nachricht benutzte Changelog-Eintrag irgendwelche "
 "Fehler schließt, werden --fixes-Optionen für »bzr commit« generiert, um die "
 "Revision und die Fehler zu verknüpfen."
 
@@ -8415,9 +8414,9 @@ msgstr ""
 msgid "Joey Hess <joeyh@debian.org>"
 msgstr "Joey Hess <joeyh@debian.org>"
 
+# FIXME wrong order
 #. type: textblock
 #: ../scripts/debcommit.pl:865
-# FIXME wrong order
 msgid "B<svnpath>(1), B<debchange>(1)"
 msgstr "B<debchange>(1) und B<svnpath>(1)"
 
@@ -9120,9 +9119,9 @@ msgstr ""
 "Dann führt es B<debpkg -i>zur Installation für jedes I<.deb>-Archiv aus, das "
 "in der I<.changes>-Datei aufgeführt ist. Dabei wird davon ausgegangen, dass "
 "alle I<.deb>-Archive im selben Verzeichnis wie die I<.changes>-Datei liegen. "
-"Beachten Sie, dass Sie dieses Programm vermutlich nicht für eine "
-"I<.changes>-Datei ausführen möchten, die sich auf eine andere Architektur "
-"nach dem Cross-Kompilieren des Pakets bezieht."
+"Beachten Sie, dass Sie dieses Programm vermutlich nicht für eine I<.changes>-"
+"Datei ausführen möchten, die sich auf eine andere Architektur nach dem Cross-"
+"Kompilieren des Pakets bezieht."
 
 #. type: Plain text
 #: ../scripts/debi.1:40
@@ -9142,8 +9141,8 @@ msgstr ""
 "findet. Als eine Schutzmaßnahme gegen verirrte Dateien, die möglicherweise "
 "Probleme bereiten, wird es den Namen des übergeordneten Verzeichnisses "
 "untersuchen, sobald es eine I<debian/changelog>-Datei findet und prüfen, ob "
-"der Verzeichnisname dem Paketnamen entspricht. Wie dies genau geschieht, wird "
-"durch die beiden Konfigurationsdateivariablen "
+"der Verzeichnisname dem Paketnamen entspricht. Wie dies genau geschieht, "
+"wird durch die beiden Konfigurationsdateivariablen "
 "B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> und B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> "
 "sowie ihre entsprechenden Befehlszeilenoptionen B<--check-dirname-level> und "
 "B<--check-dirname-regex> gesteuert."
@@ -10061,8 +10060,8 @@ msgid ""
 msgstr ""
 "Um es andersherum durchzuführen,d.h. sich mit einem unsicheren Rechner zu "
 "verbinden, um die I<.dsc>- und I<.changes>-Dateien herunterzuladen, sie "
-"lokal zu signieren und dann zurückzuübertragen, siehe das Programm "
-"B<debsign>(1), das diese Aufgabe erledigen kann."
+"lokal zu signieren und dann zurückzuübertragen, siehe das Programm B<debsign>"
+"(1), das diese Aufgabe erledigen kann."
 
 #. type: Plain text
 #: ../scripts/debrsign.1:35 ../scripts/debsign.1:72
@@ -10981,12 +10980,12 @@ msgstr ""
 "Verzeichnisname (wie er durch B<pwd>(1) bestimmt wurde) zum regulären "
 "Ausdruck passt, der durch die Konfigurationsdateioption "
 "B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> oder die Befehlszeilenoption B<--check-"
-"dirname-regex> I<regulärer_Ausdruck> angegeben wurde. Hierbei ist "
-"I<regulärer_Ausdruck> ein regulärer Perl-Ausdruck (siehe B<perlre>(3perl)), "
-"der an den Anfang und das Ende verankert wird. Falls I<regulärer_Ausdruck> "
+"dirname-regex> I<regulärer Ausdruck> angegeben wurde. Hierbei ist "
+"I<regulärer Ausdruck> ein regulärer Perl-Ausdruck (siehe B<perlre>(3perl)), "
+"der an den Anfang und das Ende verankert wird. Falls I<regulärer Ausdruck> "
 "ein »/« enthält, muss er auf den vollständigen Verzeichnispfad passen. Wenn "
 "nicht, dann muss er auf den vollständigen Verzeichnisnamen passen. Falls "
-"I<regulärer_Ausdruck> die Zeichenkette »PACKAGE« beinhaltet, wird diese "
+"I<regulärer Ausdruck> die Zeichenkette »PACKAGE« beinhaltet, wird diese "
 "durch den Namen des Quellpakets ersetzt, wie er aus dem I<Changelog> "
 "bestimmt wird. Der vorgegebene Wert für den regulären Ausdruck ist: »PACKAGE"
 "(-.+)?«, daher entspricht er Verzeichnisnamen wie PACKAGE und PACKAGE-"
@@ -12356,17 +12355,17 @@ msgstr "säubert einen Debian-Quellverzeichnisbaum vollständig. [fakeroot]"
 msgid "I<debcommit>(1)"
 msgstr "I<debcommit>(1)"
 
+# FIXME s/mercurial,/mercurial |/
 #. type: Plain text
 #: ../scripts/devscripts.1:67
-# FIXME s/mercurial,/mercurial |/
 msgid ""
 "commit changes to cvs, darcs, svn, svk, tla, bzr, git, or hg, basing commit "
 "message on changelog [cvs | darcs | subversion | svk | tla | bzr | git-core "
 "| mercurial, libtimedate-perl]"
 msgstr ""
 "übergibt Änderungen an cvs, darcs, svn, svk, tla, bzr, git oder hg, "
-"basierend auf Übergabenachrichten des Changelogs. [cvs | darcs | subversion | "
-"svk | tla | bzr | git-core | mercurial, libtimedate-perl]"
+"basierend auf Commit-Nachrichten des Changelogs. [cvs | darcs | subversion "
+"| svk | tla | bzr | git-core | mercurial, libtimedate-perl]"
 
 #. type: IP
 #: ../scripts/devscripts.1:67
@@ -13819,9 +13818,9 @@ msgstr ""
 "Bestimmung, welche I<Build-Depends>-Steuerfelder enthalten sein sollen, "
 "nützlich sein. Es bestimmt weder welche Pakete für die "
 "architekturunabhängigen Teile des Bauens verwendet werden und welche für die "
-"architekturabhängigen Teile, noch versucht es, zu bestimmen, welche Versionen "
-"von Paketen benötigt werden. Es sollte in der Lage sein, unter B<fakeroot> "
-"ausgeführt zu werden, als B<fakeroot dpkg-genbuilddeps> oder "
+"architekturabhängigen Teile, noch versucht es, zu bestimmen, welche "
+"Versionen von Paketen benötigt werden. Es sollte in der Lage sein, unter "
+"B<fakeroot> ausgeführt zu werden, als B<fakeroot dpkg-genbuilddeps> oder "
 "B<dpkg-genbuilddeps -rfakeroot> anstatt als Root."
 
 #. type: Plain text
@@ -13946,7 +13945,7 @@ msgid ""
 msgstr ""
 "B<edit-patch> ist in die Versionskontrollsysteme Bazaar und Git integriert. "
 "Der Patch wird dem Baum automatisch hinzugefügt und der I<debian/changelog>-"
-"Eintrag wird als Übergabenachricht verwendet."
+"Eintrag wird als Commit-Nachricht verwendet."
 
 #. type: Plain text
 #: ../doc/edit-patch.1:32
@@ -14021,10 +14020,10 @@ msgid ""
 "bz2> files (source format 3.0) where possible, hence avoiding to unpack "
 "large tarballs.  It is most useful for files in the I<debian/> subdirectory."
 msgstr ""
-"B<dscextract> liest eine einzelne Datei aus einem Debian-Quellpaket. Die Idee "
-"besteht darin, nur in I<.diff.gz>-Dateien (Quellformat 1.0) oder I<.debian."
-"tar.gz/bz2>-Dateien (Quellformat 3.0) zu schauen, wo dies möglich ist, "
-"infolgedessen wird das Entpacken großer Tarballs vermieden. Es ist am "
+"B<dscextract> liest eine einzelne Datei aus einem Debian-Quellpaket. Die "
+"Idee besteht darin, nur in I<.diff.gz>-Dateien (Quellformat 1.0) oder I<."
+"debian.tar.gz/bz2>-Dateien (Quellformat 3.0) zu schauen, wo dies möglich "
+"ist, infolgedessen wird das Entpacken großer Tarballs vermieden. Es ist am "
 "nützlichsten für die Dateien im Unterverzeichnis I<debian/>."
 
 #. type: Plain text
@@ -14104,8 +14103,8 @@ msgstr "dscverify - überprüft die Gültigkeit eines Debian-Pakets"
 msgid ""
 "B<dscverify> [B<--keyring >I<keyring>] ... I<changes_or_dsc_filename> ..."
 msgstr ""
-"B<dscverify> [B<--keyring >I<Schlüsselbund>] … I<changes-"
-"_oder_dsc-Dateiname> …"
+"B<dscverify> [B<--keyring >I<Schlüsselbund>] … I<changes-_oder_dsc-"
+"Dateiname> …"
 
 #. type: Plain text
 #: ../scripts/dscverify.1:17
@@ -14126,8 +14125,8 @@ msgstr ""
 "können beliebig oft mittels der Option B<--keyring> angegeben werden.) Dann "
 "prüft es, ob die anderen in den I<.changes>- oder I<.dsc>-Dateien "
 "aufgeführten Dateien die korrekten Größen und Prüfsummen aufweisen (MD5 plus "
-"SHA1 und SHA256, falls letzteres vorhanden ist). Der Exit-Status ist 0, falls "
-"es keine Probleme gibt, andernfalls ungleich 0,"
+"SHA1 und SHA256, falls letzteres vorhanden ist). Der Exit-Status ist 0, "
+"falls es keine Probleme gibt, andernfalls ungleich 0,"
 
 #. type: TP
 #: ../scripts/dscverify.1:18
@@ -14300,8 +14299,8 @@ msgstr "GETBUILDLOG"
 #: ../scripts/getbuildlog.1:4
 msgid "getbuildlog - download build logs from Debian auto-builders"
 msgstr ""
-"getbuildlog - lädt Bauprotokolle von den automatischen "
-"Debian-Paketbaumaschinen herunter"
+"getbuildlog - lädt Bauprotokolle von den automatischen Debian-"
+"Paketbaumaschinen herunter"
 
 #. type: Plain text
 #: ../scripts/getbuildlog.1:8
@@ -14402,8 +14401,8 @@ msgstr "GREP-EXCUSES"
 msgid ""
 "grep-excuses - search the testing excuses files for a specific maintainer"
 msgstr ""
-"grep-excuses - sucht für einen bestimmten Paketbetreuer nach den Dateien mit "
-"Entschuldigungen für eine fehlende/nicht erfolgte Migration nach Testing"
+"grep-excuses - durchsucht die Testing-Excuses-Dateien nach einem bestimmten "
+"Betreuer"
 
 #. type: Plain text
 #: ../scripts/grep-excuses.1:6
@@ -14583,7 +14582,7 @@ msgstr ""
 #. type: =item
 #: ../scripts/licensecheck.pl:71
 msgid "B<-c=>I<regex>, B<--check=>I<regex>"
-msgstr "B<-c=>I<regulärer_Ausdruck>, B<--check=>I<regulärer_Ausdruck>"
+msgstr "B<-c=>I<regulärer Ausdruck>, B<--check=>I<regulärer Ausdruck>"
 
 #. type: textblock
 #: ../scripts/licensecheck.pl:73
@@ -14636,7 +14635,7 @@ msgid ""
 "option given on the command-line."
 msgstr ""
 "liest keine Konfigurationsdateien. Dies kann nur als erste Option auf der "
-"angegebenen Befehlszeile benutzt werden."
+"Befehlszeile benutzt werden."
 
 #. type: =item
 #: ../scripts/licensecheck.pl:106
@@ -14835,7 +14834,7 @@ msgid ""
 "B<mass-bug> [I<options>] B<--subject=\">I<bug subject>B<\"> I<template "
 "package-list>"
 msgstr ""
-"B<mass-bug> [I<Optionen>] B<--subject=\">I<Betreff_des_Fehlerberichts>B<\"> "
+"B<mass-bug> [I<Optionen>] B<--subject=\">I<Betreff des Fehlerberichts>B<\"> "
 "I<Schablonenpaketliste>"
 
 #. type: textblock
@@ -14848,11 +14847,11 @@ msgid ""
 "headers, and either displays or sends the bug report."
 msgstr ""
 "Mass-bug hilft bei der Masseneinreichung von Fehlerberichten in der Debian-"
-"Fehlerdatenbank gegen einen Satz von Paketen. Für jedes Paket in der "
+"Fehlerdatenbank gegen eine Gruppe von Paketen. Für jedes Paket in der "
 "Paketliste (die ein Paket pro Zeile mit einer optionalen Versionsnummer, die "
 "per Unterstrich vom Paketnamen getrennt ist, aufführen sollte), füllt es die "
-"Schablone aus, fügt Pseudokopfzeilen der Fehlerdatenbank hinzu und zeigt den "
-"Fehlerbericht an oder versendet ihn."
+"Schablone aus, fügt Pseudokopfzeilen der Fehlerdatenbank hinzu und zeigt "
+"entweder den Fehlerbericht an oder versendet ihn."
 
 #. type: textblock
 #: ../scripts/mass-bug.pl:37
@@ -14862,10 +14861,10 @@ msgid ""
 "report mails. Use it with care, and read the documentation in the "
 "Developer's Reference about mass filing of bug reports first."
 msgstr ""
-"Warnung: Es wurde darauf geachtet unangenehme und häufige Fehler zu "
+"Warnung: Es wurde darauf geachtet, unangenehme und häufige Fehler zu "
 "vermeiden, aber dies ist immer noch ein Werkzeug für Fortgeschrittene, das "
 "massenhaft E-Mails mit Fehlerberichten erzeugen kann. Benutzen Sie es mit "
-"Vorsicht und lesen Sie zuerst die Dokumentation in der Debian Entwickler-"
+"Vorsicht und lesen Sie zuerst die Dokumentation in der Debian-Entwickler-"
 "Referenz über die Masseneinreichung von Fehlern."
 
 #. type: =head1
@@ -14896,7 +14895,7 @@ msgid ""
 "always the same as #VERSION#."
 msgstr ""
 "Die Bestandteile der Versionsnummer können mittels #EPOCH#, "
-"#UPSTREAM_VERSION# und #REVISION# angegebene werden. #EPOCH# beinhaltet den "
+"#UPSTREAM_VERSION# und #REVISION# angegeben werden. #EPOCH# beinhaltet den "
 "Doppelpunkt am Ende und #REVISION# den führenden Bindestrich, so dass "
 "#EPOCH#UPSTREAM_VERSION##REVISION# immer dasselbe wie #VERSION# ist."
 
@@ -14908,10 +14907,11 @@ msgid ""
 "of a line on its own). This is another reason to avoid including BTS pseudo-"
 "headers in your template."
 msgstr ""
-"Beachten Sie, dass Text in der Schablone bei 70 Zeichen umbrochen wird bis "
+"Beachten Sie, dass Text in der Schablone bei 70 Zeichen umgebrochen wird bis "
 "zum Anfang einer Signatur (also bis zu einer Zeile, die genau S<'-- '> "
-"enthält). Dies ist ein weiterer Grund, das Einschließen von Pseudokopfzeilen "
-"der Fehlerdatenbank in Ihre Schablone zu vermeiden."
+"alleine am Anfang der Zeile enthält). Dies ist ein weiterer Grund, das "
+"Einschließen von Pseudokopfzeilen der Fehlerdatenbank in Ihre Schablone zu "
+"vermeiden."
 
 #. type: textblock
 #: ../scripts/mass-bug.pl:61
@@ -14921,8 +14921,8 @@ msgid ""
 "though."
 msgstr ""
 "B<mass-bug> untersucht die B<devscripts>-Konfigurationsdateien wie "
-"nachfolgend beschrieben. Befehlszeilenoptionen setzen sich jedoch über die "
-"Einstellungen von Konfigurationsdateien hinweg."
+"nachfolgend beschrieben. Befehlszeilenoptionen setzen jedoch die "
+"Einstellungen von Konfigurationsdateien außer Kraft."
 
 #. type: =item
 #: ../scripts/mass-bug.pl:67
@@ -14968,7 +14968,7 @@ msgstr "sendet die Fehlerberichte tatsächlich."
 #. type: =item
 #: ../scripts/mass-bug.pl:81
 msgid "B<--subject=\">I<bug subject>B<\">"
-msgstr "B<--subject=\">I<Betreff_des_Fehlerberichts>B<\">"
+msgstr "B<--subject=\">I<Betreff des Fehlerberichts>B<\">"
 
 #. type: textblock
 #: ../scripts/mass-bug.pl:83
@@ -15001,7 +15001,7 @@ msgstr "B<--user>"
 msgid "Set the BTS pseudo-header for a usertags' user."
 msgstr ""
 "erzeugt die Pseudokopfzeile »User« der Fehlerdatenbank (Benutzer der "
-"Benutzermarkierungen."
+"Benutzermarkierungen)."
 
 #. type: =item
 #: ../scripts/mass-bug.pl:94
@@ -15033,7 +15033,7 @@ msgid ""
 "Specify the B<sendmail> command.  The command will be split on white space "
 "and will not be passed to a shell.  Default is F</usr/sbin/sendmail>."
 msgstr ""
-"gibt den Sendmail-Befehl an. Der Befehl wird bei Leerräumen unterteilt und "
+"gibt den B<sendmail>-Befehl an. Der Befehl wird bei Leerräumen unterteilt und "
 "nicht an eine Shell übergeben. Vorgabe ist F</usr/sbin/sendmail>."
 
 #. type: =item
@@ -15653,7 +15653,7 @@ msgid ""
 "origtargz - fetch the orig tarball of a Debian package from various sources, "
 "and unpack it"
 msgstr ""
-"origtargz -ruft den Original-Tarball eines Debian-Pakets aus verschiedenen "
+"origtargz - ruft den Original-Tarball eines Debian-Pakets aus verschiedenen "
 "Quellen ab und entpackt ihn."
 
 #. type: =item
@@ -15677,10 +15677,10 @@ msgid ""
 msgstr ""
 "B<origtargz> lädt den Original-Tarball eines Debian-Pakets herunter und "
 "entpackt ihn optional in das aktuelle Verzeichnis. Die Versionsnummer, die "
-"benutzt werden soll, wird von F<debian/changelog> bestimmt. B<origtargz> wird "
-"hauptsächlich beim Auschecken von reinen Debian-Verzeichnissen benutzt. Es "
-"sollte von der obersten Verzeichnisebene des entpackten Debian-Quellpakets "
-"aufgerufen werden."
+"benutzt werden soll, wird von F<debian/changelog> bestimmt. B<origtargz> "
+"wird hauptsächlich beim Auschecken von reinen Debian-Verzeichnissen benutzt. "
+"Es sollte von der obersten Verzeichnisebene eines entpackten Debian-"
+"Quellpakets aufgerufen werden."
 
 #. type: textblock
 #: ../scripts/origtargz.pl:42
@@ -15724,15 +15724,14 @@ msgid ""
 "patch system is in use (the original \"1.0\" source format)."
 msgstr ""
 "Wenn B<origtargz> den Original-Tarball entpacken soll, wird es alle Dateien "
-"und Verzeichnisse außer dem Debian-Verzeichnis und den "
-"VCS-Depotverzeichnissen aus dem aktuellen Verzeichnis entfernen. Einige "
-"Dateien außerhalb von F<debian/>, die oft im VCS gespeichert werden, sogar "
-"für Depots aus reinen Debian-Verzeichnissen, werden ebenso aufbewahrt "
-"(F<.bzr-builddeb>, F<.gitignore>, F<.hgignore>). I<Beachten Sie, dass dadurch "
-"alle nicht übergebenen Änderungen verworfen werden> für das benutzte "
-"Patch-System (z.B. Quellformat »3.0 (quilt)«). Wenn kein Patch-System benutzt "
-"wird (das Originalquellformat »1.0«), werden sogar alle Patches des Pakets "
-"entfernt ."
+"und Verzeichnisse außer dem Debian-Verzeichnis und den VCS-"
+"Depotverzeichnissen aus dem aktuellen Verzeichnis entfernen. Einige Dateien "
+"außerhalb von F<debian/>, die oft im VCS gespeichert werden, auch für Depots "
+"aus reinen Debian-Verzeichnissen, werden ebenso aufbewahrt (F<.bzr-builddeb>, "
+"F<.gitignore>, F<.hgignore>). I<Beachten Sie, dass dadurch alle nicht "
+"übergebenen Änderungen> für das benutzte Patch-System (z.B. Quellformat »3.0 "
+"(quilt)«) I<verworfen werden>. Wenn kein Patch-System benutzt wird (das "
+"Originalquellformat »1.0«), werden sogar alle Patches des Pakets entfernt ."
 
 #. type: textblock
 #: ../scripts/origtargz.pl:65
@@ -15763,7 +15762,7 @@ msgstr ""
 "Ein ähnliches Werkzeug zum Entpacken von Tarballs ist B<uupdate>(1). "
 "B<uupdate> erstellt ein neues Arbeitsverzeichnis, entpackt den Tarball und "
 "wendet die Debian-F<.diff.gz>-Änderungen an. Demgegenüber benutzt "
-"B<origtargz> das aktuelle Verzeichnis und behält die VCS-Metadaten."
+"B<origtargz> das aktuelle Verzeichnis und behält die VCS-Metadaten bei."
 
 #. type: textblock
 #: ../scripts/origtargz.pl:78
@@ -15773,11 +15772,11 @@ msgid ""
 "B<git-import-orig>(1) and B<svn-upgrade>(1) for examples. B<origtargz> is "
 "still useful for downloading the current tarball."
 msgstr ""
-"Für Debian-Paketdepots, die die ganze Ursprungsquelle behalten, sollten "
+"Für Debian-Paketdepots, die die ganze Ursprungsquelle beibehalten, sollten "
 "andere Werkzeuge benutzt werden, um ein Upgrade des Depots von dem neuen "
-"Tarball durchzuführen. Siehe zum Beispiel B<git-import-orig>(1) und "
-"B<svn-upgrade>(1). B<origtargz> ist immer noch nützlich zum Herunterladen des "
-"aktuellen Tarballs."
+"Tarball durchzuführen. Siehe zum Beispiel B<git-import-orig>(1) und B<svn-"
+"upgrade>(1). B<origtargz> ist immer noch zum Herunterladen des aktuellen "
+"Tarballs nützlich."
 
 #. type: =item
 #: ../scripts/origtargz.pl:87
@@ -15809,9 +15808,9 @@ msgid ""
 msgstr ""
 "entpackt den heruntergeladenen Original-Tarball in das aktuelle Verzeichnis "
 "und ersetzt alles außer dem Debian-Verzeichnis. Existierende Dateien werden "
-"entfernt mit Ausnahme der F<debian/> und VCS-Dateien. Aufbewahrt werden: "
-"F<.bzr>, F<.bzrignore>, F<.bzr-builddeb>, F<.git>, F<.gitignore>, F<.hg>, "
-"F<.hgignore> und F<.svn>."
+"entfernt, mit Ausnahme der F<debian/> und VCS-Dateien. Aufbewahrt werden: F<."
+"bzr>, F<.bzrignore>, F<.bzr-builddeb>, F<.git>, F<.gitignore>, F<.hg>, F<."
+"hgignore> und F<.svn>."
 
 #. type: =item
 #: ../scripts/origtargz.pl:101
@@ -15869,8 +15868,8 @@ msgstr ""
 "Wenn B<apt-get source> benutzt wird, wird B<--tar-only> daran übergeben. "
 "Standardmäßig wird die vollständige Quelle einschließlich der F<.dsc>- und "
 "F<.diff.gz>- oder F<.debian.tar.gz>-Bestandteile heruntergeladen. Daher kann "
-"B<debdiff> verwendet werden, um mit Diff den Unterschied zwischen dem letzten "
-"Upload und dem nächsten zu ermitteln. Mit B<--tar-only> wird nur die "
+"B<debdiff> verwendet werden, um den Unterschied zwischen dem letzten Upload "
+"und dem nächsten zu ermitteln. Mit B<--tar-only> wird nur die "
 "F<.orig.tar.*>-Datei heruntergeladen."
 
 #. type: =item
@@ -15884,8 +15883,8 @@ msgid ""
 "Remove existing files as with B<--unpack>. Note that like B<--unpack>, this "
 "will remove upstream files even if they are stored in VCS."
 msgstr ""
-"entfernt existierende Dateien wie mit B<--unpack>. Beachten Sie, dass dies "
-"wie B<--unpack> die Ursprungsdateien sogar dann entfernt, wenn sie im VCS "
+"entfernt existierende Dateien wie bei B<--unpack>. Beachten Sie, dass dies "
+"wie B<--unpack> die Ursprungsdateien auch dann entfernt, wenn sie im VCS "
 "gespeichert sind."
 
 #. type: textblock
@@ -17783,8 +17782,7 @@ msgid ""
 msgstr ""
 "# Um bei Tarballs der Ursprungsautoren maximale Flexibilität zu erreichen,\n"
 "# nutzen Sie dies:\n"
-"http://example.com/example-(\\d[\\d.]*)\\e.(?:zip|tgz|tbz2|txz|tar\\e."
-"(?:gz|bz2|xz))\n"
+"http://example.com/example-(\\d[\\d.]*)\\e.(?:zip|tgz|tbz2|txz|tar\\e.(?:gz|bz2|xz))\n"
 
 #. type: Plain text
 #: ../scripts/uscan.1:78
@@ -17808,8 +17806,7 @@ msgid ""
 "https://github.com/E<lt>userE<gt>/E<lt>projectE<gt>/tags .*/(\\ed[\\ed\\e.]*)\\e.tar\\e.gz\n"
 msgstr ""
 "# Für GitHub-Projekte können Sie die Seite »Tags« verwenden:\n"
-"https://github.com/E<lt>userE<gt>/E<lt>projectE<gt>/tags "
-".*/(\\ed[\\ed\\e.]*)\\e.tar\\e.gz\n"
+"https://github.com/E<lt>userE<gt>/E<lt>projectE<gt>/tags .*/(\\ed[\\ed\\e.]*)\\e.tar\\e.gz\n"
 
 #. type: Plain text
 #: ../scripts/uscan.1:85
@@ -17819,8 +17816,7 @@ msgid ""
 "http://code.google.com/p/E<lt>projectE<gt>/downloads/list?can=1 \\e\n"
 "  .*/E<lt>projectE<gt>-(\\ed[\\ed.]*)\\e.tar\\e.gz\n"
 msgstr ""
-"# Für Google-Code-Projekte sollten Sie die Downloads-Seite wie folgt "
-"benutzen:\n"
+"# Für Google-Code-Projekte sollten Sie die Downloads-Seite wie folgt benutzen:\n"
 "http://code.google.com/p/E<lt>projectE<gt>/downloads/list?can=1 \\e\n"
 "  .*/E<lt>projectE<gt>-(\\ed[\\ed.]*)\\e.tar\\e.gz\n"
 
@@ -19474,9 +19470,9 @@ msgstr ""
 msgid "B<debuild>(1), B<fakeroot>(1), B<patch>(1), B<devscripts.conf>(5)"
 msgstr "B<debuild>(1), B<fakeroot>(1), B<patch>(1) und B<devscripts.conf>(5)"
 
+# ist noch nicht übersetzt
 #. type: Plain text
 #: ../scripts/uupdate.1:177
-# ist noch nicht übersetzt
 msgid "B<The Debian Policy Manual>"
 msgstr "B<The Debian Policy Manual>"
 
@@ -19699,8 +19695,8 @@ msgid ""
 "Add I<keyring> to the list of keyrings to be searched for the uploader's GPG "
 "key."
 msgstr ""
-"fügt I<Schlüsselbund> der Liste der Schlüsselbünde hinzu, die nach dem "
-"GPG-Schlüssel des Hochladenden durchsucht werden."
+"fügt I<Schlüsselbund> der Liste der Schlüsselbünde hinzu, die nach dem GPG-"
+"Schlüssel des Hochladenden durchsucht werden."
 
 #. type: Plain text
 #: ../scripts/who-uploads.1:33
@@ -19789,9 +19785,9 @@ msgid ""
 "gpg> and I</usr/share/keyrings/debian-maintainers.gpg>."
 msgstr ""
 "Dies ist eine durch Doppelpunkte getrennte Liste der Standardschlüsselbünde, "
-"die benutzt werden sollen. Standardmäßig sind das die beiden "
-"Debian-Schlüsselbünde I</usr/share/keyrings/debian-keyring.gpg> und "
-"I</usr/share/keyrings/debian-maintainers.gpg>."
+"die benutzt werden sollen. Standardmäßig sind das die beiden Debian-"
+"Schlüsselbünde I</usr/share/keyrings/debian-keyring.gpg> und I</usr/share/"
+"keyrings/debian-maintainers.gpg>."
 
 #. type: Plain text
 #: ../scripts/who-uploads.1:74
@@ -19864,8 +19860,8 @@ msgid ""
 "the differences."
 msgstr ""
 "vergleicht die Ausgabe von B<wnpp-alert>, falls das Verzeichnis I<~/."
-"devscripts_cache> existiert, mit der vorherigen Ausgabe (in der Datei "
-"I<wnpp-diff> zwischengespeichert) und gibt die Unterschiede aus."
+"devscripts_cache> existiert, mit der vorherigen Ausgabe (in der Datei I<wnpp-"
+"diff> zwischengespeichert) und gibt die Unterschiede aus."
 
 #. type: Plain text
 #: ../scripts/wnpp-alert.1:31 ../scripts/wnpp-check.1:25
@@ -20059,9 +20055,9 @@ msgid ""
 "Unqualified B<debhelper>(7)  configuration files are applied to the first "
 "package."
 msgstr ""
-"Belässt, wenn Binärpaketabsätze sortiert werden, den ersten oben. "
-"Nicht spezifizierte B<debhelper>(7)-Konfigurationsdateien werden auf das "
-"erste Paket angewandt."
+"Belässt, wenn Binärpaketabsätze sortiert werden, den ersten oben. Nicht "
+"spezifizierte B<debhelper>(7)-Konfigurationsdateien werden auf das erste "
+"Paket angewandt."
 
 #. type: TP
 #: ../doc/wrap-and-sort.1:54
@@ -20241,11 +20237,11 @@ msgstr ""
 "anderen Fällen. Um unerwünschtes und möglicherweise sogar gefährliches "
 "Verhalten zu verhindern, steuern diese Variablen, wann Aktionen durchgeführt "
 "werden. Derzeit werden diese Variablen von folgenden Skripten verwendet: "
-"B<debc>, B<debchange>/B<dch>, B<debclean>, B<debi>, B<debrelease>, B<debuild> "
-"und B<uscan>, aber diese Liste kann sich im Lauf der Zeit ändern (und die "
-"Aktualisierung dieser Handbuchseite könnte vergessen werden). Bitte lesen Sie "
-"die Handbuchseiten der jeweiligen Skripte, um Einzelheiten über das spezielle "
-"Verhalten für jedes Skript zu erfahren."
+"B<debc>, B<debchange>/B<dch>, B<debclean>, B<debi>, B<debrelease>, "
+"B<debuild> und B<uscan>, aber diese Liste kann sich im Lauf der Zeit ändern "
+"(und die Aktualisierung dieser Handbuchseite könnte vergessen werden). Bitte "
+"lesen Sie die Handbuchseiten der jeweiligen Skripte, um Einzelheiten über "
+"das spezielle Verhalten für jedes Skript zu erfahren."
 
 #. type: Plain text
 #: ../scripts/devscripts.conf.5:58
