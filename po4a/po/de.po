@@ -8091,9 +8091,9 @@ msgid ""
 "the changelog then derive the commit message from those changes rather than "
 "using the default message."
 msgstr ""
-"Wenn dies in Verbindung mit --release benutzt wird, dann wird die "
-"Commit-Nachricht, falls es nicht übertragene Änderungen am Changelog gibt, "
-"aus diesen Änderungen abgeleitet, statt die Standardnachricht zu verwenden."
+"Wenn dies in Verbindung mit --release benutzt wird, dann wird die Commit-"
+"Nachricht, falls es nicht übertragene Änderungen am Changelog gibt, aus "
+"diesen Änderungen abgeleitet, statt die Standardnachricht zu verwenden."
 
 #. type: =item
 #: ../scripts/debcommit.pl:43
@@ -8107,10 +8107,10 @@ msgid ""
 "commit message on its own based on debian/changelog, or if you want to "
 "override the default message."
 msgstr ""
-"gibt die Commit-Nachricht an, die verwendet werden soll; nützlich, falls "
-"das Programm von allein keine auf debian/changelog basierende "
-"Commit-Nachricht festlegen kann oder falls Sie die Standardnachricht außer "
-"Kraft setzen möchten."
+"gibt die Commit-Nachricht an, die verwendet werden soll; nützlich, falls das "
+"Programm von allein keine auf debian/changelog basierende Commit-Nachricht "
+"festlegen kann oder falls Sie die Standardnachricht außer Kraft setzen "
+"möchten."
 
 #. type: =item
 #: ../scripts/debcommit.pl:49 ../scripts/tagpending.pl:97
@@ -10165,11 +10165,10 @@ msgstr ""
 "buildpackage>(1) nach. Es nimmt entweder eine nicht signierte I<.dsc>-Datei "
 "oder eine nicht signierte I<.changes>-Datei entgegen (neben der zugehörigen "
 "nicht signierten I<.dsc>-Datei, die durch Ersetzen des Architekturnamens und "
-"I<.changes> durch I<.dsc>, falls es sich um eine I<.changes>-Datei zu "
-"handeln scheint, gefunden wird) und signiert sie mittels des GNU Privacy "
-"Guards. Es ist achtsam, die Größe der Prüfsummen der neu signierten I<.dsc>-"
-"Datei zu berechnen und die Originalwerte in der I<.changes>-Datei zu "
-"ersetzen."
+"I<.changes> durch I<.dsc>, falls sie in der I<.changes>-Datei auftaucht) und "
+"signiert sie mittels des GNU Privacy Guards. Es ist achtsam, die Größe der "
+"Prüfsummen der neu signierten I<.dsc>-Datei zu berechnen und die "
+"Originalwerte in der I<.changes>-Datei zu ersetzen."
 
 #. type: Plain text
 #: ../scripts/debsign.1:21
@@ -10263,7 +10262,7 @@ msgid ""
 "(searching the B<PATH> if necessary), instead of B<gpg>."
 msgstr ""
 "Wenn B<debsign> zum Signieren GPG ausführen muss, wird es I<Programmname> "
-"(dabei durchsucht es B<PATH>, falls nötig) anstelle von GPG ausführen."
+"(dabei durchsucht es B<PATH>, falls nötig) anstelle von B<gpg> ausführen."
 
 #. type: TP
 #: ../scripts/debsign.1:52
@@ -10282,12 +10281,12 @@ msgid ""
 "expected when called by B<debuild>(1).)"
 msgstr ""
 "gibt den Namen des Paketbetreuers an, der zum Signieren verwendet werden "
-"soll. (weitere Informationen über die Unterschiede zwischen B<-m>, B<-e> und "
+"soll. (Weitere Informationen über die Unterschiede zwischen B<-m>, B<-e> und "
 "B<-k> beim Paketbau finden Sie unter B<dpkg-buildpackage>(1); B<debsign> "
 "macht keinen Gebrauch von diesen Unterschieden, außer dass es "
 "berücksichtigt, dass die verschiedenen Optionen Vorrang haben. Diese "
 "Mehrfachoptionen werden bereitgestellt, so dass sich das Programm wie "
-"erwartet verhält, wenn es durch B<debuild>(1) aufgerufen wird."
+"erwartet verhält, wenn es durch B<debuild>(1) aufgerufen wird.)"
 
 #. type: TP
 #: ../scripts/debsign.1:61
@@ -10323,7 +10322,7 @@ msgid ""
 "changes file, allowing for the changes files produced by B<dpkg-cross>."
 msgstr ""
 "Multiarch-Änderungsmodus: Dies bedeutet, dass B<debsign> die aktuellste "
-"Datei mit dem Namensmuster I<package_version_*+*.changes> als Changes-Datei "
+"Datei mit dem Namensmuster I<Paket_Version_*+*.changes> als Changes-Datei "
 "verwenden soll, was durch B<dpkg-cross> erstellte Changes-Dateien ermöglicht."
 
 #. type: TP
@@ -10342,7 +10341,8 @@ msgstr ""
 "erstellt die Signatur neu, beziehungsweise benutzt die existierende "
 "Signatur, falls die Datei bereits signiert ist. Falls keine der beiden "
 "Optionen angegeben wurde, und eine bereits signierte Datei gefunden wird, "
-"wird der Benutzer gefragt, ob er die aktuelle Signatur verwenden möchte."
+"wird der Benutzer gefragt, ob er oder sie die aktuelle Signatur verwenden "
+"möchte."
 
 #. type: TP
 #: ../scripts/debsign.1:90
@@ -10460,7 +10460,7 @@ msgstr "DebSnap-Anwenderhandbuch"
 #. type: Plain text
 #: ../scripts/debsnap.1:5
 msgid "debsnap - retrieve old snapshots of Debian packages"
-msgstr "debsnap - fragt alte Momentaufnahmen von Debian-Paketen ab"
+msgstr "debsnap - ruft alte Momentaufnahmen von Debian-Paketen ab"
 
 #. type: Plain text
 #: ../scripts/debsnap.1:9
@@ -10479,7 +10479,7 @@ msgid ""
 "a daily archive repository."
 msgstr ""
 "B<debsnap> ist ein Werkzeug, das hilft, Momentaufnahmen von alten Debian-"
-"Paketen aus einen täglichen Archivedepot abzufragen."
+"Paketen aus einen täglichen Archivedepot abzurufen."
 
 #. type: Plain text
 #: ../scripts/debsnap.1:20
@@ -10511,7 +10511,7 @@ msgstr "B<-d>I< Bestimmungsort>,I< >B<--destdir>I< Bestimmungsort>"
 #. type: Plain text
 #: ../scripts/debsnap.1:32
 msgid "Directory to place retrieved packages."
-msgstr "Verzeichnis, in das abgefragte Pakete platziert werden soll"
+msgstr "Verzeichnis, in das abgefragte Pakete platziert werden sollen"
 
 #. type: =item
 #: ../scripts/debsnap.1:33 ../scripts/tagpending.pl:109
@@ -10531,11 +10531,11 @@ msgid ""
 msgstr ""
 "erzwingt das Schreiben an einen existierenden I<Bestimmungsort>. "
 "Standardmäßig wird B<debsnap> darauf beharren, dass das Zielverzeichnis noch "
-"nicht existiert, bis es explizit als »B<.>« (das Arbeitsverzeichnis) "
-"angegeben wird. Dies dient der Vermeidung von versehentlichem Überschreiben "
-"von Dateien durch das, was vom Archiv abgeholt wird, und um allen anderen "
-"Skripten zu garantieren, dass nur die abgeholten Dateien nach Beendigung "
-"vorhanden sein werden."
+"nicht existiert, es sei denn, es wird explizit als »B<.>« (das "
+"Arbeitsverzeichnis) angegeben. Dies dient der Vermeidung von versehentlichem "
+"Überschreiben von Dateien durch das, was vom Archiv abgeholt wird, und um "
+"allen anderen Skripten zu garantieren, dass nur die abgeholten Dateien nach "
+"Beendigung vorhanden sein werden."
 
 #. type: TP
 #: ../scripts/debsnap.1:42 ../doc/suspicious-source.1:38
@@ -10599,7 +10599,7 @@ msgid ""
 "in the devscripts configuration files:"
 msgstr ""
 "B<debsnap> kann auch mittels der folgenden Optionen in den "
-"Konfigurationsdateien der Entwicklerskripte konfiguriert werden."
+"Konfigurationsdateien der Devscripts konfiguriert werden."
 
 #. type: TP
 #: ../scripts/debsnap.1:70
@@ -10611,7 +10611,7 @@ msgstr "B<DEBSNAP_VERBOSE>"
 #: ../scripts/debsnap.1:73
 msgid "Same as the command line option B<--verbose>.  Set to I<yes> to enable."
 msgstr ""
-"entspricht der Befehlszeilenoption B<--verbose>. Setzen Sie es auf I<yes>, "
+"entspricht der Befehlszeilenoption B<--verbose>. Setzen Sie sie auf I<yes>, "
 "um es zu aktivieren."
 
 #. type: TP
@@ -10627,7 +10627,7 @@ msgid ""
 "E<lt>package_nameE<gt>> will be used.  The command line option B<--destdir> "
 "will override this."
 msgstr ""
-"setzt einen Standardpfad für das Zielverzeichnis. Falls es nicht gesetzt "
+"setzt einen Standardpfad für das Zielverzeichnis. Falls sie nicht gesetzt "
 "wird, wird I<./source-E<lt>PaketnameE<gt>> verwendet. Die "
 "Befehlszeilenoption B<--destdir> wird dies außer Kraft setzen."
 
@@ -12364,8 +12364,8 @@ msgid ""
 "| mercurial, libtimedate-perl]"
 msgstr ""
 "übergibt Änderungen an cvs, darcs, svn, svk, tla, bzr, git oder hg, "
-"basierend auf Commit-Nachrichten des Changelogs. [cvs | darcs | subversion "
-"| svk | tla | bzr | git-core | mercurial, libtimedate-perl]"
+"basierend auf Commit-Nachrichten des Changelogs. [cvs | darcs | subversion | "
+"svk | tla | bzr | git-core | mercurial, libtimedate-perl]"
 
 #. type: IP
 #: ../scripts/devscripts.1:67
@@ -15033,8 +15033,8 @@ msgid ""
 "Specify the B<sendmail> command.  The command will be split on white space "
 "and will not be passed to a shell.  Default is F</usr/sbin/sendmail>."
 msgstr ""
-"gibt den B<sendmail>-Befehl an. Der Befehl wird bei Leerräumen unterteilt und "
-"nicht an eine Shell übergeben. Vorgabe ist F</usr/sbin/sendmail>."
+"gibt den B<sendmail>-Befehl an. Der Befehl wird bei Leerräumen unterteilt "
+"und nicht an eine Shell übergeben. Vorgabe ist F</usr/sbin/sendmail>."
 
 #. type: =item
 #: ../scripts/mass-bug.pl:108
@@ -15089,8 +15089,8 @@ msgid ""
 "later ones is merged into it."
 msgstr ""
 "B<mergechanges> fügt zwei oder mehr I<.changes>-Dateien zusammen und "
-"vermischt dabei die Felder »Architecture«, »Description« und »Files« (und "
-"»Checksums-*«, falls vorhanden) der beiden. Es werden Prüfungen "
+"fügt dabei die Felder »Architecture«, »Description« und »Files« (und "
+"»Checksums-*«, falls vorhanden) der beiden zusammen. Es werden Prüfungen "
 "durchgeführt, um sicherzustellen, dass die Changes-Dateien vom gleichen "
 "Quellpaket und der gleichen Version sind und dasselbe Changes-Dateiformat "
 "besitzen. Die erste Changes-Datei wird als Basis verwendet und die "
@@ -15146,8 +15146,8 @@ msgid ""
 msgstr ""
 "Bei einem angegebenen I<Paketname>n und/oder einer I<Steuerungsdatei> wird "
 "B<mk-build-deps> B<equivs> verwenden, um ein Binärpaket zu erstellen, das "
-"installiert werden kann, um die Bauabhängigkeiten des angegebenen Pakets zu "
-"erfüllen."
+"installiert werden kann, um die gesamten Bauabhängigkeiten des angegebenen "
+"Pakets zu erfüllen."
 
 #. type: textblock
 #: ../scripts/mk-build-deps.pl:40
@@ -15403,14 +15403,14 @@ msgid ""
 msgstr ""
 "B<nmudiff> sollte im Quellverzeichnisbaum des Pakets ausgeführt werden, von "
 "dem ein NMU durchgeführt wird, nachdem es gebaut wurde. Es geht davon aus, "
-"dass das Quellpaket (speziell die .dsc-Datei und irgendwelche zugehörigen "
-"I<tar>- und I<diff>-Dateien) sowohl für die vorherige Version des Pakets als "
-"auch für die neu gebaute Version im übergeordneten Verzeichnis liegt. Dann "
-"benutzt es B<debdiff>, um ein Diff zwischen der vorherigen Version und dem "
-"aktuellen NMU zu erstellen und führt entweder Mutt oder einen Editor aus (es "
-"wird B<sensible-editor> verwendet), so dass die E-Mail (einschließlich des "
-"Diffs) untersucht und geändert werden kann. Sobald Sie den Editor schließen, "
-"wird das Diff per E-Mail an die Debian-Fehlerdatenbank gesandt."
+"dass das Quellpaket (speziell die I<.dsc>-Datei und alle zugehörigen I<tar>- "
+"und I<diff>-Dateien) sowohl für die vorherige Version des Pakets als auch für "
+"die neu gebaute Version im übergeordneten Verzeichnis liegt. Dann benutzt es "
+"B<debdiff>, um ein Diff zwischen der vorherigen Version und dem aktuellen NMU "
+"zu erstellen und führt entweder Mutt oder einen Editor aus (es wird "
+"B<sensible-editor> verwendet), so dass die E-Mail (einschließlich des Diffs) "
+"untersucht und geändert werden kann. Sobald Sie den Editor schließen, wird "
+"das Diff per E-Mail an die Debian-Fehlerdatenbank gesandt."
 
 #. type: Plain text
 #: ../scripts/nmudiff.1:21
@@ -15421,9 +15421,9 @@ msgid ""
 "options."
 msgstr ""
 "Das Standardverhalten ist, falls genau ein Fehler durch diesen NMU "
-"geschlossen wird, dass der Fehlerbericht per E-Mails versandt wird, "
-"andernfalls wird ein neuer Fehlerbericht eingereicht. Dieses Verhalten kann "
-"durch Befehlszeilen- und Konfigurationsdateioptionen geändert werden."
+"geschlossen wird, dass eine E-Mails an den Fehler versandt wird, andernfalls "
+"wird ein neuer Fehlerbericht eingereicht. Dieses Verhalten kann durch "
+"Befehlszeilen- und Konfigurationsdateioptionen geändert werden."
 
 #. type: TP
 #: ../scripts/nmudiff.1:22
@@ -15437,8 +15437,8 @@ msgid ""
 "Instead of mailing the bug reports which are to be closed by this NMU, a new "
 "bug report is submitted directly to the BTS."
 msgstr ""
-"Anstatt die Fehlerberichte, die durch diesen NMU geschlossen wurden, per E-"
-"Mail zu versenden, wird ein neuer Fehlerbericht direkt an die "
+"Anstatt E-Mails an die Fehlerberichte zu versenden, die durch diesen NMU "
+"geschlossen wurden, wird ein neuer Fehlerbericht direkt an die "
 "Fehlerdatenbank eingereicht."
 
 #. type: TP
@@ -15476,7 +15476,7 @@ msgid ""
 "using I</usr/bin/sendmail>.  This can be controlled using a configuration "
 "file option (see below)."
 msgstr ""
-"benutzt B<sensible-editor>(1) um die Nachricht zu bearbeiten und versendet "
+"benutzt B<sensible-editor>(1), um die Nachricht zu bearbeiten und versendet "
 "sie per E-Mail mittels I</usr/bin/sendmail>. Dies kann über eine "
 "Konfigurationsdateioption gesteuert werden (siehe unten)."
 
@@ -15526,7 +15526,7 @@ msgstr ""
 "B<DEBFULLNAME> verwendet. Falls diese nicht gesetzt sind, werden stattdessen "
 "die Variablen B<EMAIL> und B<NAME> benutzt. Diese können mittels der Option "
 "B<--from> außer Kraft gesetzt werden. Das Programm wird in diesem Fall nicht "
-"funktionieren, falls keine E-Mail-Adresse bestimmt werden kann."
+"funktionieren, falls eine E-Mail-Adresse nicht bestimmt werden kann."
 
 #. type: TP
 #: ../scripts/nmudiff.1:59
@@ -15536,6 +15536,7 @@ msgstr "B<--delay> I<VERZÖGERUNG>"
 
 #. type: Plain text
 #: ../scripts/nmudiff.1:66
+# FIXME s/not been delayed/not been sent to a delayed queue/
 msgid ""
 "Indicate in the generated mail that the NMU has been uploaded to the DELAYED "
 "queue, with a delay of I<DELAY> days.  The default value is I<XX> which adds "
@@ -15576,8 +15577,8 @@ msgid ""
 msgstr ""
 "Falls dies auf eine Zahl gesetzt ist, werden E-Mails, die durch B<nmudiff> "
 "erzeugt wurden, standardmäßig ein Hochladen in die DELAYED-Warteschlange "
-"vermerken, das für die angegebene Zahl von Tagen verzögert wird. Der Wert "
-"B<0> gibt an, dass die DELAYED-Warteschlange nicht benutzt wurde."
+"vermerken, die für die angegebene Zahl von Tagen verzögert. Der Wert B<0> "
+"gibt an, dass die DELAYED-Warteschlange nicht benutzt wurde."
 
 #. type: TP
 #: ../scripts/nmudiff.1:91
@@ -15625,7 +15626,7 @@ msgid ""
 "If this is set, specifies a B<sendmail> command to use instead of I</usr/"
 "sbin/sendmail>.  Same as the B<--sendmail> command line option."
 msgstr ""
-"Falls dies gesetzt ist, gibt geben Sie einen B<sendmail>-Befehl an, anstatt "
+"Falls dies gesetzt ist, gibt es einen B<sendmail>-Befehl an, anstatt "
 "I</usr/sbin/sendmail> zu benutzen. Entspricht der Befehlszeilenoption B<--"
 "sendmail>."
 
@@ -15644,7 +15645,7 @@ msgid ""
 msgstr ""
 "B<nmudiff> wurde geschrieben und unterliegt dem Copyright 2006 von Steinar "
 "H. Gunderson und wurde von Julian Gilbey E<lt>jdg@debian.orgE<gt> angepasst. "
-"Die Software kann frei unter den Bedingungen und Konditionen der GNU General "
+"Die Software kann frei unter den Bedingungen und Bestimmungen der GNU General "
 "Public License, Version 2, weitergegeben werden."
 
 #. type: textblock
@@ -15727,11 +15728,12 @@ msgstr ""
 "und Verzeichnisse außer dem Debian-Verzeichnis und den VCS-"
 "Depotverzeichnissen aus dem aktuellen Verzeichnis entfernen. Einige Dateien "
 "außerhalb von F<debian/>, die oft im VCS gespeichert werden, auch für Depots "
-"aus reinen Debian-Verzeichnissen, werden ebenso aufbewahrt (F<.bzr-builddeb>, "
-"F<.gitignore>, F<.hgignore>). I<Beachten Sie, dass dadurch alle nicht "
-"übergebenen Änderungen> für das benutzte Patch-System (z.B. Quellformat »3.0 "
-"(quilt)«) I<verworfen werden>. Wenn kein Patch-System benutzt wird (das "
-"Originalquellformat »1.0«), werden sogar alle Patches des Pakets entfernt ."
+"aus reinen Debian-Verzeichnissen, werden ebenso aufbewahrt (F<.bzr-"
+"builddeb>, F<.gitignore>, F<.hgignore>). I<Beachten Sie, dass dadurch alle "
+"nicht übergebenen Änderungen> für das benutzte Patch-System (z.B. "
+"Quellformat »3.0 (quilt)«) I<verworfen werden>. Wenn kein Patch-System "
+"benutzt wird (das Originalquellformat »1.0«), werden sogar alle Patches des "
+"Pakets entfernt ."
 
 #. type: textblock
 #: ../scripts/origtargz.pl:65
@@ -15869,8 +15871,8 @@ msgstr ""
 "Standardmäßig wird die vollständige Quelle einschließlich der F<.dsc>- und "
 "F<.diff.gz>- oder F<.debian.tar.gz>-Bestandteile heruntergeladen. Daher kann "
 "B<debdiff> verwendet werden, um den Unterschied zwischen dem letzten Upload "
-"und dem nächsten zu ermitteln. Mit B<--tar-only> wird nur die "
-"F<.orig.tar.*>-Datei heruntergeladen."
+"und dem nächsten zu ermitteln. Mit B<--tar-only> wird nur die F<.orig.tar.*>-"
+"Datei heruntergeladen."
 
 #. type: =item
 #: ../scripts/origtargz.pl:127
