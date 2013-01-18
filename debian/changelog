@@ -38,7 +38,8 @@ devscripts (2.12.6+exp1) UNRELEASED; urgency=low
   [ Benjamin Drung ]
   * debian/control: Mark devscripts Multi-Arch: foreign.
     Thanks to Colin Watson. (Closes: #694760)
-  * suspicious-source: Add inode/symlink to whitelisted mime-types.
+  * suspicious-source: Add inode/symlink and image/x-xpmi to whitelisted
+    mime-types.
 
   [ Cyril Brulebois ]
   * Don't auto reverse diffs when DEBDIFF_AUTO_VER_SORT is set to yes, and
