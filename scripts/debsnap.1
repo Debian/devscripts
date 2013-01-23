@@ -93,16 +93,16 @@ mirror, so any caller should expect this may occur in normal use.
 .SH EXAMPLES
 .TP
 .BR "debsnap -a amd64 xterm 256-1"
-Download the binary package of specific a xterm version for amd64 architecture.
+Download the binary package of a specific xterm version for amd64 architecture.
 .TP
 .BR "debsnap -a armel xterm"
 Download binary packages for all versions of xterm for armel architecture.
 .TP
 .BR "debsnap --binary xterm 256-1"
-Download binary packages for a specific a xterm version but for all architectures.
+Download binary packages for a specific xterm version but for all architectures.
 .TP
 .BR "debsnap --binary xterm"
-Download binary packages for all version of xterm version for all architectures.
+Download binary packages for all versions of xterm for all architectures.
 .TP
 .BR "aptitude search '~i' -F '%p %V' | while read pkg ver; do debsnap -a $(dpkg-architecture -qDEB_HOST_ARCH) -a all $pkg $ver; done" 
 Download binary packages of all packages that are installed on the system.

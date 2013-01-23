@@ -89,7 +89,7 @@ Note that using the B<--verbose> option will kill the readability.
 =item B<--no-conf>, B<--noconf>
 
 Do not read any configuration files. This can only be used as the first
-option given on the command-line.
+option given on the command line.
 
 =back
 

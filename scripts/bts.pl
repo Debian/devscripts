@@ -292,7 +292,7 @@ single B<%> if this is needed.)
 =item B<--cc-addr=>I<CC_EMAIL_ADDRESS>
 
 Send carbon copies to a list of users. I<CC_EMAIL_ADDRESS> should be a
-comma-separated list of emails.
+comma-separated list of email addresses.
 
 =item B<--use-default-cc>
 
@@ -892,7 +892,7 @@ If caching has been enabled (that is, B<--no-cache> has not been used,
 and B<BTS_CACHE> has not been set to B<no>), then any page requested by
 B<bts show> will automatically be cached, and be available offline
 thereafter.  Pages which are automatically cached in this way will be
-deleted on subsequent B<bts show>|B<bugs>|B<cache>" invocations if they have
+deleted on subsequent "B<bts show>|B<bugs>|B<cache>" invocations if they have
 not been accessed in 30 days.  Warning: on a filesystem mounted with
 the "noatime" option, running "B<bts show>|B<bugs>" does not update the cache
 files' access times; a cached bug will then be subject to auto-cleaning
@@ -1431,7 +1431,7 @@ sub bts_notfixed {
 
 =item B<block> I<bug> B<by>|B<with> I<bug> [I<bug> ...]
 
-Note that a B<bug> is blocked from being fixed by a set of other bugs.
+Note that a I<bug> is blocked from being fixed by a set of other bugs.
 
 =cut
 
@@ -1452,7 +1452,7 @@ sub bts_block {
 
 =item B<unblock> I<bug> B<by>|B<with> I<bug> [I<bug> ...]
 
-Note that a B<bug> is no longer blocked from being fixed by a set of other bugs.
+Note that a I<bug> is no longer blocked from being fixed by a set of other bugs.
 
 =cut
 
@@ -1621,7 +1621,7 @@ the B<=> flag is used, where the command
 
   bts affects <bug> =
 
-will remove all indications that B<bug> affects other packages.
+will remove all indications that I<bug> affects other packages.
 
 =cut
 
@@ -1684,7 +1684,7 @@ command
 
   bts usertags <bug> =
 
-will remove all user tags from the specified B<bug>.
+will remove all user tags from the specified I<bug>.
 
 =cut
 
@@ -1758,7 +1758,7 @@ sub bts_unclaim {
 
 =item B<severity> I<bug> I<severity>
 
-Change the I<severity> of a B<bug>. Available severities are: B<wishlist>, B<minor>, B<normal>,
+Change the I<severity> of a I<bug>. Available severities are: B<wishlist>, B<minor>, B<normal>,
 B<important>, B<serious>, B<grave>, B<critical>. The severity may be abbreviated to any
 unique substring.
 
@@ -1995,7 +1995,7 @@ sub bts_noowner {
 
 =item B<subscribe> I<bug> [I<email>]
 
-Subscribe the given I<email> address to the specified B<bug> report.  If no email
+Subscribe the given I<email> address to the specified I<bug> report.  If no email
 address is specified, the environment variable B<DEBEMAIL> or B<EMAIL> (in that
 order) is used.  If those are not set, or B<!> is given as email address,
 your default address will be used.
@@ -2107,7 +2107,7 @@ variable if B<DEBEMAIL> is unset). This command may be repeated to cache
 bugs belonging to several people or packages. If multiple packages or
 addresses are supplied, bugs belonging to any of the arguments will be
 cached; those belonging to more than one of the arguments will only be
-downloaded once. The cached bugs are stored in F<~/.devscripts_cache/bts/>
+downloaded once. The cached bugs are stored in F<~/.devscripts_cache/bts/>.
 
 You can use the cached bugs with the B<-o> switch. For example:
 
@@ -4108,7 +4108,7 @@ Please see L<http://www.debian.org/Bugs/server-control> for
 more details on how to control the BTS using emails and
 L<http://www.debian.org/Bugs/> for more information about the BTS.
 
-reportbug(1), querybts(1)
+querybts(1), reportbug(1)
 
 =head1 COPYRIGHT
 

@@ -331,7 +331,7 @@ enable plain-text output.
 
 =head1 SEE ALSO
 
-B<madison-lite>(1), B<dak>(1)
+B<dak>(1), B<madison-lite>(1)
 
 =head1 AUTHOR
 

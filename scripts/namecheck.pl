@@ -15,7 +15,7 @@ time-consuming - unless you have a tool such as this one.
 
 =head1 CUSTOMIZATION
 
-The script, as-is, contains a list of sites, and patterns, to test against.
+The script, as is, contains a list of sites, and patterns, to test against.
 
 If those patterns aren't sufficient then you may create your own additions and
 add them to the script.  If you wish to have your own version of the patterns

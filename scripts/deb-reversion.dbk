@@ -74,7 +74,7 @@ and docbook-xsl in your Build-Depends control field.
         <replaceable>options</replaceable>
       </arg>
       <replaceable> .deb-file</replaceable>
-      <arg choice="opt" rep="repeat">log message</arg>
+      <arg choice="opt" rep="repeat"><replaceable>log message</replaceable></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
 
@@ -251,13 +251,13 @@ and docbook-xsl in your Build-Depends control field.
 	<manvolnum>1</manvolnum>
       </citerefentry>,
       <citerefentry>
-	<refentrytitle>fakeroot</refentrytitle>
+	<refentrytitle>dpkg-deb</refentrytitle>
 	<manvolnum>1</manvolnum>
       </citerefentry>,
       <citerefentry>
-	<refentrytitle>dpkg-deb</refentrytitle>
+	<refentrytitle>fakeroot</refentrytitle>
 	<manvolnum>1</manvolnum>
-      </citerefentry>.
+      </citerefentry>
     </para>
   </refsect1>
 
@@ -299,7 +299,7 @@ and docbook-xsl in your Build-Depends control field.
     <para>
       Permission is granted to copy, distribute and/or modify this document
       under the terms of the Artistic License:
-      <ulink>http://www.opensource.org/licenses/artistic-license.php</ulink>
+      <ulink>http://www.opensource.org/licenses/artistic-license.php</ulink>.
       On Debian systems, the complete text of the Artistic License can be
       found
       in <filename>/usr/share/common-licenses/Artistic</filename>.

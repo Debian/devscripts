@@ -122,7 +122,7 @@ implies B<-a>: you don't need to specify both.
 =item B<-f>, B<--file>
 
 Specify that the named file should be extracted from the repository and placed
-in the destination directory. May be used more than once to extract mutliple
+in the destination directory. May be used more than once to extract multiple
 files.
 
 =item B<--source=never>|B<auto>|B<download-only>|B<always>

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: devscripts 2.12.4\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
 "POT-Creation-Date: 2012-12-20 20:37-0400\n"
-"PO-Revision-Date: 2013-01-22 22:19+0100\n"
+"PO-Revision-Date: 2013-01-23 21:26+0100\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
 "Language: de\n"
@@ -405,7 +405,6 @@ msgstr ""
 msgid "AUTHOR"
 msgstr "AUTOR"
 
-# FIXME s/<gt>/<gt>./
 #. type: Plain text
 #: ../scripts/annotate-output.1:59
 msgid ""
@@ -837,7 +836,6 @@ msgstr ""
 msgid "B<--cc-addr=>I<CC_EMAIL_ADDRESS>"
 msgstr "B<--cc-addr=>I<CC_E-MAIL_ADRESSE>"
 
-# FIXME s/emails/email addresses/
 #. type: textblock
 #: ../scripts/bts.pl:294
 msgid ""
@@ -1508,7 +1506,6 @@ msgstr ""
 "sehen, die diese Version des Pakets beeinflussen oder »reverse=yes«, um die "
 "neusten Nachrichten im Fehlerprotokoll zuerst zu sehen."
 
-# FIXME s/B<cache>\"/B<cache>/
 #. type: textblock
 #: ../scripts/bts.pl:891
 msgid ""
@@ -2201,7 +2198,6 @@ msgstr ""
 "  bts affects <Fehler> =\n"
 "\n"
 
-# FIXME s/B<bug>/I<bug>/
 #. type: textblock
 #: ../scripts/bts.pl:1624
 msgid "will remove all indications that B<bug> affects other packages."
@@ -2256,7 +2252,6 @@ msgstr ""
 "  bts usertags <Fehler> =\n"
 "\n"
 
-# FIXME s/B<bug>/I<bug>/
 #. type: textblock
 #: ../scripts/bts.pl:1687
 msgid "will remove all user tags from the specified B<bug>."
@@ -2581,7 +2576,6 @@ msgid ""
 msgstr ""
 "B<cache> [I<Optionen>] [B<release-critical> | B<release-critical/> … | B<RC>]"
 
-# FIXME s#bts/>#bts/>.#
 #. type: textblock
 #: ../scripts/bts.pl:2103
 msgid ""
@@ -3104,7 +3098,6 @@ msgstr ""
 "Mails gesteuert wird und L<http://www.debian.org/Bugs/>, um weitere "
 "Informationen über die Fehlerdatenbank zu erhalten."
 
-# FIXME wrong order
 #. type: textblock
 #: ../scripts/bts.pl:4111
 msgid "reportbug(1), querybts(1)"
@@ -4274,7 +4267,6 @@ msgstr ""
 msgid "I<arch>B<_>I<dist>B<_RESULT_DIR>"
 msgstr "I<Architektur>B<_>I<Distribution>B<_RESULT_DIR>"
 
-# FIXME s/$dist/result>/$dist/result>./
 #. type: Plain text
 #: ../scripts/cowpoke.1:193
 msgid ""
@@ -4867,7 +4859,6 @@ msgstr ""
 "Dies gibt an, welches Programm zum Hochladen benutzt wird. Die Vorgabe ist "
 "B<dupload>."
 
-# FIXME wrong order
 #. type: Plain text
 #: ../scripts/cvs-debrelease.1:68
 msgid "B<cvs-buildpackage>(1), B<debrelease>(1), B<cvs-debuild>(1)"
@@ -5332,7 +5323,6 @@ msgstr ""
 "5241db1e231b1f43ae5514b63d2523f8  rcs_5.7-23.dsc\n"
 "$\n"
 
-# FIXME wrong order
 #. type: Plain text
 #: ../scripts/dcmd.1:101
 msgid "B<dpkg-source>(1), B<dpkg-genchanges>(1)"
@@ -6052,7 +6042,6 @@ msgstr ""
 "beeinflussen, die ihren Wert prüfen. Dies wird in ihren jeweiligen "
 "Handbuchseiten und in B<devscripts.conf>(5) beschrieben."
 
-# FIXME wrong order
 #. type: Plain text
 #: ../scripts/debc.1:119
 msgid "B<dpkg-deb>(1), B<debdiff>(1), B<devscripts.conf>(5)"
@@ -7374,7 +7363,6 @@ msgstr ""
 "Diese Umgebungsvariablen legen (in dieser Reihenfolge) fest, welcher Editor "
 "durch B<sensible-editor> benutzt wird."
 
-# FIXME wrong order
 #. type: Plain text
 #: ../scripts/debchange.1:475
 msgid ""
@@ -7618,7 +7606,6 @@ msgstr ""
 msgid "B<-f>, B<--file>"
 msgstr "B<-f>, B<--file>"
 
-# FIXME s/mutliple/multiple/
 #. type: textblock
 #: ../scripts/debcheckout.pl:124
 msgid ""
@@ -8415,7 +8402,6 @@ msgstr ""
 msgid "Joey Hess <joeyh@debian.org>"
 msgstr "Joey Hess <joeyh@debian.org>"
 
-# FIXME wrong order
 #. type: textblock
 #: ../scripts/debcommit.pl:865
 msgid "B<svnpath>(1), B<debchange>(1)"
@@ -9052,7 +9038,6 @@ msgstr ""
 "werden und 1, falls doch. Falls es irgendeinen schwerwiegenden Fehler gibt, "
 "wird der Rückgabewert 255 sein."
 
-# FIXME wrong order
 #. type: Plain text
 #: ../scripts/debdiff.1:221
 msgid ""
@@ -9487,7 +9472,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debrelease.1:136
-# FIXME wrong order
 msgid "B<dupload>(1), B<dput>(1), B<devscripts.conf>(5)"
 msgstr "B<dput>(1), B<dupload>(1) und B<devscripts.conf>(5)"
 
@@ -9602,7 +9586,6 @@ msgstr "einfaches Skript, um die Version einer .deb-Datei zu ändern"
 
 #. type: Content of: <refentry><refsynopsisdiv><cmdsynopsis>
 #: ../scripts/deb-reversion.dbk:72
-# CHECKME log message in <replaceable>-Tags?
 msgid ""
 "<command>&dhcommand;</command> <arg choice=\"opt\"> <replaceable>options</"
 "replaceable> </arg> <replaceable> .deb-file</replaceable> <arg choice=\"opt"
@@ -9887,7 +9870,6 @@ msgstr "<option>--version</option>"
 
 #. type: Content of: <refentry><refsect1><para>
 #: ../scripts/deb-reversion.dbk:249
-# FIXME wrong order
 msgid ""
 "<citerefentry> <refentrytitle>dch</refentrytitle> <manvolnum>1</manvolnum> </"
 "citerefentry>, <citerefentry> <refentrytitle>fakeroot</refentrytitle> "
@@ -9963,7 +9945,6 @@ msgstr ""
 "Das Copyright 2004/2005 liegt bei &dhusername; &dhemail; und Änderungen "
 "unterliegen dem Copyright 2006 von &dhmaintusername; &dhmaintemail;."
 
-# FIXME s/</ulink>/</ulink>./
 #. type: Content of: <refentry><refsect1><para>
 #: ../scripts/deb-reversion.dbk:300
 msgid ""
@@ -10426,7 +10407,6 @@ msgstr ""
 "Ihre Pakete zu bauen. Beachten Sie, dass es außerdem B<debrelease>(1) auf "
 "die gleiche Weise beeinflusst, daher der merkwürdige Name der Option."
 
-# FIXME wrong order
 #. type: Plain text
 #: ../scripts/debsign.1:145
 msgid ""
@@ -10683,7 +10663,6 @@ msgstr ""
 msgid "B<debsnap -a amd64 xterm 256-1>"
 msgstr "B<debsnap -a amd64 xterm 256-1>"
 
-# FIXME s/specific a/a specific/
 #. type: Plain text
 #: ../scripts/debsnap.1:97
 msgid ""
@@ -10714,7 +10693,6 @@ msgstr "B<debsnap --binary xterm 256-1>"
 
 #. type: Plain text
 #: ../scripts/debsnap.1:103
-# FIXME s/specific a/a specific/
 msgid ""
 "Download binary packages for a specific a xterm version but for all "
 "architectures."
@@ -10728,8 +10706,6 @@ msgstr ""
 msgid "B<debsnap --binary xterm>"
 msgstr "B<debsnap --binary xterm>"
 
-# FIXME s/all version/all versions/
-# FIXME s/xterm version/xterm/
 #. type: Plain text
 #: ../scripts/debsnap.1:106
 msgid ""
@@ -11865,7 +11841,6 @@ msgstr ""
 "wie oben beschrieben verwenden, um zu vermeiden, dass Sie die Option B<-k> "
 "jedes Mal tippen müssen, wenn Sie ein gesonsortes Hochladen durchführen."
 
-# FIXME wrong order
 #. type: Plain text
 #: ../scripts/debuild.1:422
 msgid ""
@@ -12039,7 +12014,6 @@ msgstr ""
 "Beispiele von B<procmail>- und B<exim>-Skripten zum Sortieren ankommender E-"
 "Mails zu Debian-Mailinglisten."
 
-# FIXME s/man page/man pages/
 #. type: Plain text
 #: ../scripts/devscripts.1:20
 msgid ""
@@ -12362,7 +12336,6 @@ msgstr "säubert einen Debian-Quellverzeichnisbaum vollständig. [fakeroot]"
 msgid "I<debcommit>(1)"
 msgstr "I<debcommit>(1)"
 
-# FIXME s/mercurial,/mercurial |/
 #. type: Plain text
 #: ../scripts/devscripts.1:67
 msgid ""
@@ -13252,7 +13225,6 @@ msgstr ""
 "<myon@debian.org>. Änderungen unterliegen dem Copyright (C) 2005-06 von "
 "Julian Gilbey <jdg@debian.org>."
 
-# FIXME wrong order and no full stop
 #. type: textblock
 #: ../scripts/dget.pl:655
 msgid ""
@@ -13753,7 +13725,6 @@ msgstr ""
 "Befehlszeilenoptionen verarbeitet werden. Sie sind gut beraten, wegen den "
 "Launen der Shell-Klammersetzung, keine knifflige Klammersetzung zu verwenden!"
 
-# FIXME wrong order
 #. type: Plain text
 #: ../scripts/dpkg-depcheck.1:123
 msgid ""
@@ -14636,7 +14607,6 @@ msgstr ""
 "B<sort>. Beachten Sie, dass die Verwendung der Option B<--verbose> die "
 "Lesbarkeit zunichte macht."
 
-# FIXME s/command-line/command line/
 #. type: textblock
 #: ../scripts/licensecheck.pl:91
 msgid ""
@@ -15326,7 +15296,6 @@ msgstr ""
 msgid "CUSTOMIZATION"
 msgstr "ANPASSUNG"
 
-# FIXME s/as-is/as is/
 #. type: textblock
 #: ../scripts/namecheck.pl:18
 msgid ""
@@ -15545,7 +15514,6 @@ msgstr "B<--delay> I<VERZÖGERUNG>"
 
 #. type: Plain text
 #: ../scripts/nmudiff.1:66
-# FIXME s/not been delayed/not been sent to a delayed queue/
 msgid ""
 "Indicate in the generated mail that the NMU has been uploaded to the DELAYED "
 "queue, with a delay of I<DELAY> days.  The default value is I<XX> which adds "
@@ -15920,7 +15888,6 @@ msgstr ""
 msgid "PLOTCHANGELOG"
 msgstr "PLOTCHANGELOG"
 
-# FIXME s/debian/Debian/
 #. type: Plain text
 #: ../scripts/plotchangelog.1:4
 msgid "plotchangelog - graph debian changelogs"
@@ -15981,7 +15948,6 @@ msgstr "DEN GRAPH LESEN"
 
 #. type: Plain text
 #: ../scripts/plotchangelog.1:33
-# FIXME s/wrong../wrong.../
 msgid ""
 "The general outline of a package's graph is typically a series of peaks, "
 "starting at 1, going up to n, and then returning abruptly to 1. The higher "
@@ -16111,7 +16077,6 @@ msgstr "unterscheidet nicht zwischen verschiedenen Betreuern des Pakets."
 msgid "B<-s file>, B<--save=>I<file>"
 msgstr "B<-s Datei>, B<--save=>I<Datei>"
 
-# FIXME s/postscript/PostScript/ (see http://en.wikipedia.org/wiki/PostScript)
 #. type: Plain text
 #: ../scripts/plotchangelog.1:75
 msgid ""
@@ -16195,7 +16160,6 @@ msgstr "I<Changelog > …"
 
 #. type: Plain text
 #: ../scripts/plotchangelog.1:106
-# FIXME s/display/displayed/
 msgid ""
 "The I<changelog> files to graph. If multiple files are specified they will "
 "all be display on the same graph. The files may be compressed with gzip. Any "
@@ -16916,7 +16880,6 @@ msgstr "zeigt Informationen über die binären Kindpakete von Quellpaketen."
 msgid "B<-t>, B<--time>"
 msgstr "B<-t>, B<--time>"
 
-# FIXME: shows »version|distribution|arch«
 #. type: textblock
 #: ../scripts/rmadison.pl:263
 msgid "show projectb snapshot and reload time (not supported by all archives)"
@@ -17058,7 +17021,6 @@ msgstr ""
 "die Parameter »a«, »b«, »c«, »g«, »G«, »s«, »S«, »t« und »package«. Der "
 "Parameter »text« wird übergeben, um Klartextausgabe zu aktivieren."
 
-# FIXME wrong order
 #. type: textblock
 #: ../scripts/rmadison.pl:334
 msgid "B<madison-lite>(1), B<dak>(1)"
@@ -18052,7 +18014,6 @@ msgstr ""
 "Versionsnummer verwendet werden, dass Sie entweder »B<(?:...)>« oder die "
 "Option »uversionmangle« verwenden, um die Unordnung zu beseitigen."
 
-# FIXME: s/--report-status/B<--report-status>/
 #. type: Plain text
 #: ../scripts/uscan.1:193
 msgid ""
@@ -18224,7 +18185,6 @@ msgstr ""
 msgid "    $version =~ I<rule>;\n"
 msgstr "    $version =~ I<Regel>;\n"
 
-# FIXME s/I<rules>/I<rule>/
 #. type: Plain text
 #: ../scripts/uscan.1:248
 msgid ""
@@ -18803,7 +18763,6 @@ msgstr "B<USCAN_PASV>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:478
-# FIXME s/make/makes/
 msgid ""
 "If this is set to I<yes> or I<no>, this will force FTP connections to use "
 "PASV mode or not to, respectively.  If this is set to I<default>, then "

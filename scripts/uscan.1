@@ -186,7 +186,7 @@ upstream version number will then be mangled using the dversionmangle
 option if one is specified, as described below.  If the newest version
 available is newer than the current version, then it is downloaded
 into the parent directory, unless the \fB\-\-report\fR or
-\fR\-\-report-status\fR option has been used.  Once the file has been
+\fB\-\-report-status\fR option has been used.  Once the file has been
 downloaded, then a symlink to the file is made from
 \fI<package>_<version>.orig.tar.{gz|bz2|lzma|xz}\fR as described by the help
 for the \fB\-\-symlink\fR option.
@@ -243,7 +243,7 @@ way to executing the Perl command:
 .fi
 for each rule.  Thus, suitable rules might be `\fBs/^/0./\fR' to prepend
 `\fB0.\fR' to the version number and `\fBs/_/./g\fR' to change underscores into
-periods.  Note that the \fIrules\fR string may not contain commas;
+periods.  Note that the \fIrule\fR string may not contain commas;
 this should not be a problem.
 
 \fIrule\fR may only use the '\fBs\fR', '\fBtr\fR' and '\fBy\fR' operations.  When the '\fBs\fR'
@@ -473,7 +473,7 @@ downloaded; this is equivalent to the \fB\-\-report\fR or
 .B USCAN_PASV
 If this is set to \fIyes\fR or \fIno\fR, this will force FTP
 connections to use PASV mode or not to, respectively.  If this is set
-to \fIdefault\fR, then \fBNet::FTP\fR(3) make the choice (primarily based on
+to \fIdefault\fR, then \fBNet::FTP\fR(3) makes the choice (primarily based on
 the \fBFTP_PASSIVE\fR environment variable).
 .TP
 .B USCAN_TIMEOUT

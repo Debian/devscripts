@@ -1,6 +1,6 @@
 .TH PLOTCHANGELOG 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
 .SH NAME
-plotchangelog \- graph debian changelogs
+plotchangelog \- graph Debian changelogs
 .SH SYNOPSIS
 .B plotchangelog
 .I "\fR[\fPoptions\fR]\fP changelog \fR...\fP"
@@ -10,7 +10,7 @@ is a tool to aid in visualizing a Debian \fIchangelog\fR. The changelogs are
 graphed with
 .BR gnuplot (1)
 , with the X axis of the graph denoting time of release and the Y axis
-denoting the debian version number of the package. Each individual release
+denoting the Debian version number of the package. Each individual release
 of the package is represented by a point, and the points are color coded to
 indicate who released that version of the package. The upstream version
 number of the package can also be labeled on the graph.
@@ -19,7 +19,7 @@ Alternatively, the Y axis can be configured to display the size of the
 changelog entry for each new version. Or it can be configured to display
 approximately how many bugs were fixed for each new version.
 .PP
-Note that if the package is a debian-specific package, the entire package
+Note that if the package is a Debian-specific package, the entire package
 version will be used for the Y axis. This does not always work perfectly.
 .PP
 .SH "READING THE GRAPH"
@@ -27,12 +27,12 @@ The general outline of a package's
 graph is typically a series of peaks, starting at 1, going up to n, and then
 returning abruptly to 1. The higher the peaks, the more releases the
 maintainer made between new upstream versions of the package. If a package
-is debian-only, it's graph will just grow upwards without ever falling
+is Debian-only, it's graph will just grow upwards without ever falling
 (although a bug in this program may cause it to fall sometimes, if the
-version number goes from say, 0.9 to say, 0.10 - this is interpreted wrong..)
+version number goes from say, 0.9 to say, 0.10 - this is interpreted wrong...)
 .PP
 If the graph dips below 1, someone made a NMU of the package and upgraded it
-to a new upstream version, thus setting the debian version to 0. NMU's in
+to a new upstream version, thus setting the Debian version to 0. NMU's in
 general appear as fractional points like 1.1, 2.1, etc. A NMU can also be
 easily detected by looking at the points that represent which maintainer
 uploaded the package -- a solitary point of a different type than the points
@@ -43,13 +43,13 @@ maintainers.
 .SH OPTIONS
 .TP
 .B \-l\fR, \fP\-\-linecount
-Instead of using the debian version number as the Y axis, use the number of
+Instead of using the Debian version number as the Y axis, use the number of
 lines in the changelog entry for each version.  Cannot be used
 together with
 .BR \-\-bugcount .
 .TP
 .B \-b\fR, \fP\-\-bugcount
-Instead of using the debian version number as the Y axis, use the number of
+Instead of using the Debian version number as the Y axis, use the number of
 bugs that were closed by each changelog entry. Note that this number is
 obtained by searching for "#dddd" in the changelog, and so it may be
 inaccurate.  Cannot be used together with
@@ -70,7 +70,7 @@ Do not show upstream version labels. Useful if the graph gets too crowded.
 Do not differentiate between different maintainers of the package.
 .TP
 .B \-s file\fR, \fP\-\-save=\fIfile
-Save the graph to \fIfile\fR in postscript format instead of immediately
+Save the graph to \fIfile\fR in PostScript format instead of immediately
 displaying it.
 .TP
 .B \-u\fR, \fP\-\-urgency
@@ -101,7 +101,7 @@ Do not read any configuration files (see below).
 .TP
 .I changelog \fR...
 The \fIchangelog\fR files to graph. If multiple files are specified they will all
-be display on the same graph. The files may be compressed with gzip. Any
+be displayed on the same graph. The files may be compressed with gzip. Any
 text in them that is not in Debian changelog format will be ignored.
 .SH "CONFIGURATION VARIABLES"
 The two configuration files \fI/etc/devscripts.conf\fR and
