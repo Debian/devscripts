@@ -129,9 +129,9 @@ def remove_trailing_whitespaces(filename):
     f.close()
 
 def sort_list(unsorted_list):
-    normal = [x for x in unsorted_list if not x.startswith("${")]
-    param = [x for x in unsorted_list if x.startswith("${")]
-    return sorted(normal) + sorted(param)
+    packages = [x for x in unsorted_list if re.match("[a-z0-9]", x)]
+    special = [x for x in unsorted_list if not re.match("[a-z0-9]", x)]
+    return sorted(packages) + sorted(special)
 
 def wrap_and_sort(options):
     control_files = [f for f in options.files if re.search("/control[^/]*$", f)]
