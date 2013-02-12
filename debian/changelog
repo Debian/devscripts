@@ -42,6 +42,7 @@ devscripts (2.12.6+exp1) UNRELEASED; urgency=low
     mime-types.
   * wrap-and-sort:
     - Put special entries (variables and placeholders) at the end of the list.
+    - Sort debian/control*.in files too.
 
   [ Cyril Brulebois ]
   * Don't auto reverse diffs when DEBDIFF_AUTO_VER_SORT is set to yes, and
