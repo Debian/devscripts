@@ -247,19 +247,19 @@ if ! [ -f debian/changelog ]; then
     exit 1
 fi
 
-SOURCE=$( dpkg-parsechangelog | grep ^Source: | cut -d" " -f2 )
+SOURCE=$(dpkg-parsechangelog | grep ^Source: | cut -d" " -f2)
 if [ -z "$SOURCE" ]; then
     echo "nmudiff: could not determine source package name from changelog!" >&2
     exit 1
 fi
 
-VERSION=$( dpkg-parsechangelog | grep ^Version: | cut -d" " -f2 )
+VERSION=$(dpkg-parsechangelog | grep ^Version: | cut -d" " -f2)
 if [ -z "$VERSION" ]; then
     echo "nmudiff: could not determine source package version from changelog!" >&2
     exit 1
 fi
 
-CLOSES=$( dpkg-parsechangelog | grep ^Closes: | cut -d" " -f2- )
+CLOSES=$(dpkg-parsechangelog | grep ^Closes: | cut -d" " -f2-)
 
 if [ -z "$CLOSES" ]; then
     # no bug reports, so make a new report in any event
@@ -281,8 +281,8 @@ if [ -z "$OLDVERSION" ]; then
     exit 1
 fi
 
-VERSION_NO_EPOCH=$( echo "$VERSION" | sed "s/^[0-9]\+://" )
-OLDVERSION_NO_EPOCH=$( echo "$OLDVERSION" | sed "s/^[0-9]\+://" )
+VERSION_NO_EPOCH=$(echo "$VERSION" | sed "s/^[0-9]\+://")
+OLDVERSION_NO_EPOCH=$(echo "$OLDVERSION" | sed "s/^[0-9]\+://")
 
 if [ ! -r ../${SOURCE}_${OLDVERSION_NO_EPOCH}.dsc ]; then
     echo "nmudiff: could not read ../${SOURCE}_${OLDVERSION_NO_EPOCH}.dsc" >&2
@@ -339,7 +339,7 @@ thanks"
     fi
 fi
 
-TMPNAM="$( tempfile )"
+TMPNAM="$(tempfile)"
 
 if [ "$NMUDIFF_DELAY" = "XX" ]; then
     DELAY_HEADER="
