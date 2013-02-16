@@ -56,6 +56,9 @@ devscripts (2.12.6+exp1) UNRELEASED; urgency=low
     period. (Closes: #696416)
   * French translation update.
 
+  [ Josselin Mouette ]
+  * nmudiff: Use dpkg-parsechangelog to fix manual parsing bug (Closes: #700584)
+
  -- James McCoy <jamessan@debian.org>  Sat, 15 Sep 2012 16:12:16 -0400
 
 devscripts (2.12.6) unstable; urgency=low

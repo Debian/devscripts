@@ -275,8 +275,7 @@ if [ "$NMUDIFF_NEWREPORT" = "maybe" ]; then
     fi
 fi
 
-OLDVERSION=$( sed -n "s/^[^ .][^ ]* (\(.*\)).*$/\1/p" debian/changelog | \
-  head -2 | tail -1 )
+OLDVERSION=$(dpkg-parsechangelog -o1 -c1 | grep ^Version: | cut -d" " -f2)
 if [ -z "$OLDVERSION" ]; then
     echo "nmudiff: could not determine previous package version from changelog!" >&2
     exit 1
