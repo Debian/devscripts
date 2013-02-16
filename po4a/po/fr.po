@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2012-12-20 20:37-0400\n"
+"POT-Creation-Date: 2013-02-16 19:23-0400\n"
 "PO-Revision-Date: 2012-12-20 10:37-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -339,7 +339,7 @@ msgstr ""
 
 #. type: SH
 #: ../scripts/annotate-output.1:47 ../scripts/bts.pl:4105
-#: ../scripts/checkbashisms.1:63 ../scripts/cowpoke.1:263
+#: ../scripts/checkbashisms.1:63 ../scripts/cowpoke.1:264
 #: ../scripts/cvs-debc.1:58 ../scripts/cvs-debi.1:62
 #: ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53
 #: ../scripts/dcmd.1:98 ../scripts/dcontrol.pl:289 ../scripts/debc.1:115
@@ -387,7 +387,7 @@ msgstr ""
 #. type: SH
 #: ../scripts/annotate-output.1:55 ../scripts/archpath.1:54
 #: ../scripts/build-rdeps.pl:345 ../scripts/checkbashisms.1:65
-#: ../scripts/cowpoke.1:269 ../scripts/cvs-debc.1:63 ../scripts/cvs-debi.1:67
+#: ../scripts/cowpoke.1:270 ../scripts/cvs-debc.1:63 ../scripts/cvs-debi.1:67
 #: ../scripts/cvs-debrelease.1:68 ../scripts/cvs-debuild.1:58
 #: ../scripts/dcmd.1:101 ../scripts/dcontrol.pl:282 ../scripts/dd-list.1:100
 #: ../scripts/debc.1:119 ../scripts/debchange.1:475
@@ -417,9 +417,15 @@ msgstr "AUTEUR"
 
 #. type: Plain text
 #: ../scripts/annotate-output.1:59
+#, fuzzy
+#| msgid ""
+#| "B<annotate-output> was written by Jeroen van Wolffelaar "
+#| "E<lt>jeroen@wolffelaar.nlE<gt> This manpage comes under the same "
+#| "copyright as annotate-output itself, read /usr/bin/annotate-output (or "
+#| "wherever you install it) for the details."
 msgid ""
 "B<annotate-output> was written by Jeroen van Wolffelaar "
-"E<lt>jeroen@wolffelaar.nlE<gt> This manpage comes under the same copyright "
+"E<lt>jeroen@wolffelaar.nlE<gt>. This manpage comes under the same copyright "
 "as annotate-output itself, read /usr/bin/annotate-output (or wherever you "
 "install it) for the details."
 msgstr ""
@@ -851,9 +857,13 @@ msgstr "B<--cc-addr=>I<CC_ADRESSES_ÉLECTRONIQUES>"
 
 #. type: textblock
 #: ../scripts/bts.pl:294
+#, fuzzy
+#| msgid ""
+#| "Send carbon copies to a list of users. I<CC_EMAIL_ADDRESS> should be a "
+#| "comma-separated list of emails."
 msgid ""
 "Send carbon copies to a list of users. I<CC_EMAIL_ADDRESS> should be a comma-"
-"separated list of emails."
+"separated list of email addresses."
 msgstr ""
 "Envoyer une copie conforme du message à une liste d'utilisateurs. "
 "I<CC_ADRESSES_ÉLECTRONIQUES> doit être une liste d'adresses séparées par des "
@@ -1529,16 +1539,29 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/bts.pl:891
+#, fuzzy
+#| msgid ""
+#| "If caching has been enabled (that is, B<--no-cache> has not been used, "
+#| "and B<BTS_CACHE> has not been set to B<no>), then any page requested by "
+#| "B<bts show> will automatically be cached, and be available offline "
+#| "thereafter.  Pages which are automatically cached in this way will be "
+#| "deleted on subsequent B<bts show>|B<bugs>|B<cache>\" invocations if they "
+#| "have not been accessed in 30 days.  Warning: on a filesystem mounted with "
+#| "the \"noatime\" option, running \"B<bts show>|B<bugs>\" does not update "
+#| "the cache files' access times; a cached bug will then be subject to auto-"
+#| "cleaning 30 days after its initial download, even if it has been accessed "
+#| "in the meantime."
 msgid ""
 "If caching has been enabled (that is, B<--no-cache> has not been used, and "
 "B<BTS_CACHE> has not been set to B<no>), then any page requested by B<bts "
 "show> will automatically be cached, and be available offline thereafter.  "
 "Pages which are automatically cached in this way will be deleted on "
-"subsequent B<bts show>|B<bugs>|B<cache>\" invocations if they have not been "
-"accessed in 30 days.  Warning: on a filesystem mounted with the \"noatime\" "
-"option, running \"B<bts show>|B<bugs>\" does not update the cache files' "
-"access times; a cached bug will then be subject to auto-cleaning 30 days "
-"after its initial download, even if it has been accessed in the meantime."
+"subsequent \"B<bts show>|B<bugs>|B<cache>\" invocations if they have not "
+"been accessed in 30 days.  Warning: on a filesystem mounted with the "
+"\"noatime\" option, running \"B<bts show>|B<bugs>\" does not update the "
+"cache files' access times; a cached bug will then be subject to auto-"
+"cleaning 30 days after its initial download, even if it has been accessed in "
+"the meantime."
 msgstr ""
 "Si la mise en cache a été activée (c'est-à-dire si B<--no-cache> n'a pas été "
 "utilisée et si la variable B<BTS_CACHE> ne vaut pas B<no>), alors toute page "
@@ -2062,7 +2085,10 @@ msgstr "B<block> I<bogue> B<by>|B<with> I<bogue> [I<bogue> ...]"
 
 #. type: textblock
 #: ../scripts/bts.pl:1434
-msgid "Note that a B<bug> is blocked from being fixed by a set of other bugs."
+#, fuzzy
+#| msgid ""
+#| "Note that a B<bug> is blocked from being fixed by a set of other bugs."
+msgid "Note that a I<bug> is blocked from being fixed by a set of other bugs."
 msgstr ""
 "Enregistrer que la résolution d'un I<bogue> est bloquée par un ensemble "
 "d'autres bogues."
@@ -2074,8 +2100,12 @@ msgstr "B<unblock> I<bogue> B<by>|B<with> I<bogue> [I<bogue> ...]"
 
 #. type: textblock
 #: ../scripts/bts.pl:1455
+#, fuzzy
+#| msgid ""
+#| "Note that a B<bug> is no longer blocked from being fixed by a set of "
+#| "other bugs."
 msgid ""
-"Note that a B<bug> is no longer blocked from being fixed by a set of other "
+"Note that a I<bug> is no longer blocked from being fixed by a set of other "
 "bugs."
 msgstr ""
 "Enregistrer que la résolution d'un I<bogue> n'est plus bloquée par un "
@@ -2212,7 +2242,9 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/bts.pl:1624
-msgid "will remove all indications that B<bug> affects other packages."
+#, fuzzy
+#| msgid "will remove all indications that B<bug> affects other packages."
+msgid "will remove all indications that I<bug> affects other packages."
 msgstr ""
 "va supprimer toutes les indications que le I<bogue> affecte d'autres paquets."
 
@@ -2267,7 +2299,9 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/bts.pl:1687
-msgid "will remove all user tags from the specified B<bug>."
+#, fuzzy
+#| msgid "will remove all user tags from the specified B<bug>."
+msgid "will remove all user tags from the specified I<bug>."
 msgstr "va supprimer toutes les étiquettes utilisateur du I<bogue> indiqué."
 
 #. type: =item
@@ -2313,8 +2347,13 @@ msgstr "B<severity> I<bogue> I<sévérité>"
 
 #. type: textblock
 #: ../scripts/bts.pl:1761
+#, fuzzy
+#| msgid ""
+#| "Change the I<severity> of a B<bug>. Available severities are: "
+#| "B<wishlist>, B<minor>, B<normal>, B<important>, B<serious>, B<grave>, "
+#| "B<critical>. The severity may be abbreviated to any unique substring."
 msgid ""
-"Change the I<severity> of a B<bug>. Available severities are: B<wishlist>, "
+"Change the I<severity> of a I<bug>. Available severities are: B<wishlist>, "
 "B<minor>, B<normal>, B<important>, B<serious>, B<grave>, B<critical>. The "
 "severity may be abbreviated to any unique substring."
 msgstr ""
@@ -2488,8 +2527,14 @@ msgstr "B<subscribe> I<bogue> [I<adresse>]"
 
 #. type: textblock
 #: ../scripts/bts.pl:1998
+#, fuzzy
+#| msgid ""
+#| "Subscribe the given I<email> address to the specified B<bug> report.  If "
+#| "no email address is specified, the environment variable B<DEBEMAIL> or "
+#| "B<EMAIL> (in that order) is used.  If those are not set, or B<!> is given "
+#| "as email address, your default address will be used."
 msgid ""
-"Subscribe the given I<email> address to the specified B<bug> report.  If no "
+"Subscribe the given I<email> address to the specified I<bug> report.  If no "
 "email address is specified, the environment variable B<DEBEMAIL> or B<EMAIL> "
 "(in that order) is used.  If those are not set, or B<!> is given as email "
 "address, your default address will be used."
@@ -2586,6 +2631,16 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/bts.pl:2103
+#, fuzzy
+#| msgid ""
+#| "Generate or update a cache of bug reports for the given email address or "
+#| "package. By default it downloads all bugs belonging to the email address "
+#| "in the B<DEBEMAIL> environment variable (or the B<EMAIL> environment "
+#| "variable if B<DEBEMAIL> is unset). This command may be repeated to cache "
+#| "bugs belonging to several people or packages. If multiple packages or "
+#| "addresses are supplied, bugs belonging to any of the arguments will be "
+#| "cached; those belonging to more than one of the arguments will only be "
+#| "downloaded once. The cached bugs are stored in F<~/.devscripts_cache/bts/>"
 msgid ""
 "Generate or update a cache of bug reports for the given email address or "
 "package. By default it downloads all bugs belonging to the email address in "
@@ -2594,7 +2649,7 @@ msgid ""
 "belonging to several people or packages. If multiple packages or addresses "
 "are supplied, bugs belonging to any of the arguments will be cached; those "
 "belonging to more than one of the arguments will only be downloaded once. "
-"The cached bugs are stored in F<~/.devscripts_cache/bts/>"
+"The cached bugs are stored in F<~/.devscripts_cache/bts/>."
 msgstr ""
 "Créer ou mettre à jour le cache des rapports de bogue pour l'adresse "
 "électronique ou le paquet indiqué. Par défaut, cela télécharge tous les "
@@ -3100,8 +3155,8 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/bts.pl:4111
-msgid "reportbug(1), querybts(1)"
-msgstr "B<reportbug>(1), B<querybts>(1)"
+msgid "querybts(1), reportbug(1)"
+msgstr ""
 
 #. type: =head1
 #: ../scripts/bts.pl:4113 ../scripts/chdist.pl:119 ../scripts/debsnap.1:126
@@ -4305,13 +4360,13 @@ msgstr ""
 "chemin par défaut sera I<$PBUILDER_BASE/$arch/$dist/result>"
 
 #. type: TP
-#: ../scripts/cowpoke.1:194
+#: ../scripts/cowpoke.1:195
 #, no-wrap
 msgid "I<arch>B<_>I<dist>B<_BASE_PATH>"
 msgstr "I<arch>B<_>I<dist>B<_BASE_PATH>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:200
+#: ../scripts/cowpoke.1:201
 msgid ""
 "The directory where the COW master files are to be found (or created if the "
 "B<--create> command line option was passed).  If this option is not "
@@ -4325,32 +4380,32 @@ msgstr ""
 "base.cow>"
 
 #. type: SH
-#: ../scripts/cowpoke.1:202
+#: ../scripts/cowpoke.1:203
 #, no-wrap
 msgid "CONFIGURATION FILES"
 msgstr "FICHIERS DE CONFIGURATION"
 
 #. type: TP
-#: ../scripts/cowpoke.1:203
+#: ../scripts/cowpoke.1:204
 #, no-wrap
 msgid "I</etc/cowpoke.conf>"
 msgstr "I</etc/cowpoke.conf>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:206
+#: ../scripts/cowpoke.1:207
 msgid "Global configuration options.  Will override hardcoded defaults."
 msgstr ""
 "Options de configuration globales. Elles remplaceront les valeurs par défaut "
 "codées en dur."
 
 #. type: TP
-#: ../scripts/cowpoke.1:206
+#: ../scripts/cowpoke.1:207
 #, no-wrap
 msgid "I<~/.cowpoke>"
 msgstr "I<~/.cowpoke>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:209 ../scripts/debsnap.1:117
+#: ../scripts/cowpoke.1:210 ../scripts/debsnap.1:117
 msgid ""
 "Per-user configuration options.  Will override any global configuration."
 msgstr ""
@@ -4358,13 +4413,13 @@ msgstr ""
 "des options de configuration globales."
 
 #. type: TP
-#: ../scripts/cowpoke.1:209
+#: ../scripts/cowpoke.1:210
 #, no-wrap
 msgid "I<.cowpoke>"
 msgstr "I<.cowpoke>"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:213
+#: ../scripts/cowpoke.1:214
 msgid ""
 "Per-project configuration options.  Will override any per-user or global "
 "configuration if B<cowpoke> is called from the directory where they exist."
@@ -4374,7 +4429,7 @@ msgstr ""
 "appelé depuis le répertoire où se trouve le fichier."
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:217
+#: ../scripts/cowpoke.1:218
 msgid ""
 "If the environment variable B<COWPOKE_CONF> is set, it specifies an "
 "additional configuration file which will override all of those above.  "
@@ -4387,13 +4442,13 @@ msgstr ""
 "options provenant des fichiers de configuration."
 
 #. type: SH
-#: ../scripts/cowpoke.1:219
+#: ../scripts/cowpoke.1:220
 #, no-wrap
 msgid "COWBUILDER CONFIGURATION"
 msgstr "CONFIGURATION DE COWBUILDER"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:228
+#: ../scripts/cowpoke.1:229
 msgid ""
 "There is nothing particularly special required to configure a B<cowbuilder> "
 "instance for use with B<cowpoke>.  Simply create them in the flavour you "
@@ -4417,7 +4472,7 @@ msgstr ""
 "B<cowpoke> soit installé localement."
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:238
+#: ../scripts/cowpoke.1:239
 msgid ""
 "The build machine should have the B<lintian> and B<devscripts> packages "
 "installed for post-build sanity checking.  Upon completion, the build log "
@@ -4442,7 +4497,7 @@ msgstr ""
 "suivantes)."
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:244
+#: ../scripts/cowpoke.1:245
 msgid ""
 "The user executing B<cowpoke> must have SSH access to the build machine as "
 "the B<BUILDD_USER>.  That user must be able to invoke B<cowbuilder> as root "
@@ -4460,7 +4515,7 @@ msgstr ""
 "machine qui exécute B<cowpoke>."
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:251
+#: ../scripts/cowpoke.1:252
 msgid ""
 "When B<cowpoke> is invoked, it will first attempt to update the "
 "B<cowbuilder> image if that has not already been done on the same day.  This "
@@ -4479,14 +4534,14 @@ msgstr ""
 "mise à jour (ou la création) de la racine de construction."
 
 #. type: =head1
-#: ../scripts/cowpoke.1:253 ../scripts/origtargz.pl:68
+#: ../scripts/cowpoke.1:254 ../scripts/origtargz.pl:68
 #: ../scripts/rmadison.pl:320
 #, no-wrap
 msgid "NOTES"
 msgstr "NOTES"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:262
+#: ../scripts/cowpoke.1:263
 msgid ""
 "Since B<cowbuilder> creates a chroot, and to do that you need root, "
 "B<cowpoke> also requires some degree of root access.  So all the horrible "
@@ -4509,12 +4564,12 @@ msgstr ""
 "vos quelques heures de travail non committé."
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:268
+#: ../scripts/cowpoke.1:269
 msgid "B<cowbuilder>(1), B<pbuilder>(1), B<ssh-agent>(1), B<sudoers>(5)"
 msgstr "B<cowbuilder>(1), B<pbuilder>(1), B<ssh-agent>(1), B<sudoers>(5)"
 
 #. type: Plain text
-#: ../scripts/cowpoke.1:272
+#: ../scripts/cowpoke.1:273
 msgid "B<cowpoke> was written by Ron E<lt>I<ron@debian.org>E<gt>."
 msgstr "B<cowpoke> a été écrit par Ron E<lt>I<ron@debian.org>E<gt>."
 
@@ -4874,8 +4929,11 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/cvs-debrelease.1:68
-msgid "B<cvs-buildpackage>(1), B<debrelease>(1), B<cvs-debuild>(1)"
-msgstr "B<cvs-buildpackage>(1), B<debrelease>(1), B<cvs-debuild>(1)"
+#, fuzzy
+#| msgid ""
+#| "B<cvs-buildpackage>(1), B<cvs-debi>(1), B<cvs-debuild>(1), B<debc>(1)"
+msgid "B<cvs-buildpackage>(1), B<cvs-debuild>(1), B<debrelease>(1)"
+msgstr "B<cvs-buildpackage>(1), B<cvs-debi>(1), B<cvs-debuild>(1), B<debc>(1)"
 
 #. type: Plain text
 #: ../scripts/cvs-debrelease.1:72
@@ -5346,7 +5404,9 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/dcmd.1:101
-msgid "B<dpkg-source>(1), B<dpkg-genchanges>(1)"
+#, fuzzy
+#| msgid "B<dpkg-source>(1), B<dpkg-genchanges>(1)"
+msgid "B<dpkg-genchanges>(1), B<dpkg-source>(1)"
 msgstr "B<dpkg-source>(1), B<dpkg-genchanges>(1)"
 
 #. type: Plain text
@@ -6067,8 +6127,10 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debc.1:119
-msgid "B<dpkg-deb>(1), B<debdiff>(1), B<devscripts.conf>(5)"
-msgstr "B<dpkg-deb>(1), B<debdiff>(1), B<devscripts.conf>(5)"
+#, fuzzy
+#| msgid "B<debdiff>(1), B<sensible-editor>(1), B<devscripts.conf>(5)"
+msgid "B<debdiff>(1), B<dpkg-deb>(1), B<devscripts.conf>(5)"
+msgstr "B<debdiff>(1), B<sensible-editor>(1), B<devscripts.conf>(5)"
 
 #. type: Plain text
 #: ../scripts/debc.1:121
@@ -7380,8 +7442,12 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debchange.1:475
+#, fuzzy
+#| msgid ""
+#| "B<debclean>(1), B<dupload>(1), B<dput>(1), B<debc>(1), B<devscripts.conf>"
+#| "(5)"
 msgid ""
-"B<debclean>(1), B<dupload>(1), B<dput>(1), B<debc>(1), B<devscripts.conf>(5)"
+"B<debc>(1), B<debclean>(1), B<dput>(1), B<dupload>(1), B<devscripts.conf>(5)"
 msgstr ""
 "B<debclean>(1), B<dupload>(1), B<dput>(1), B<debc>(1), B<devscripts.conf>(5)"
 
@@ -7624,10 +7690,15 @@ msgstr "B<-f>, B<--file>"
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:124
+#, fuzzy
+#| msgid ""
+#| "Specify that the named file should be extracted from the repository and "
+#| "placed in the destination directory. May be used more than once to "
+#| "extract mutliple files."
 msgid ""
 "Specify that the named file should be extracted from the repository and "
 "placed in the destination directory. May be used more than once to extract "
-"mutliple files."
+"multiple files."
 msgstr ""
 "Indiquer que le fichier mentionné doit être extrait du dépôt et placé dans "
 "le répertoire de destination. Elle peut être utilisée plus d'une fois pour "
@@ -8420,8 +8491,10 @@ msgstr "Joey Hess <joeyh@debian.org>"
 
 #. type: textblock
 #: ../scripts/debcommit.pl:865
-msgid "B<svnpath>(1), B<debchange>(1)"
-msgstr "B<svnpath>(1), B<debchange>(1)"
+#, fuzzy
+#| msgid "B<debchange>(1)"
+msgid "B<debchange>(1), B<svnpath>(1)"
+msgstr "B<debchange>(1)"
 
 #. type: TH
 #: ../scripts/debdiff.1:1
@@ -9049,8 +9122,12 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debdiff.1:221
+#, fuzzy
+#| msgid ""
+#| "B<dpkg-deb>(1), B<wdiff>(1), B<interdiff>(1), B<diffstat>(1), "
+#| "B<devscripts.conf>(5)"
 msgid ""
-"B<dpkg-deb>(1), B<wdiff>(1), B<interdiff>(1), B<diffstat>(1), B<devscripts."
+"B<diffstat>(1), B<dpkg-deb>(1), B<interdiff>(1), B<wdiff>(1), B<devscripts."
 "conf>(5)"
 msgstr ""
 "B<dpkg-deb>(1), B<wdiff>(1), B<interdiff>(1), B<diffstat>(1), B<devscripts."
@@ -9479,7 +9556,9 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debrelease.1:136
-msgid "B<dupload>(1), B<dput>(1), B<devscripts.conf>(5)"
+#, fuzzy
+#| msgid "B<dupload>(1), B<dput>(1), B<devscripts.conf>(5)"
+msgid "B<dput>(1), B<dupload>(1), B<devscripts.conf>(5)"
 msgstr "B<dupload>(1), B<dput>(1), B<devscripts.conf>(5)"
 
 #. type: Plain text
@@ -9593,10 +9672,15 @@ msgstr "script pour changer la version d'un fichier .deb"
 
 #. type: Content of: <refentry><refsynopsisdiv><cmdsynopsis>
 #: ../scripts/deb-reversion.dbk:72
+#, fuzzy
+#| msgid ""
+#| "<command>&dhcommand;</command> <arg choice=\"opt\"> <replaceable>options</"
+#| "replaceable> </arg> <replaceable> .deb-file</replaceable> <arg choice="
+#| "\"opt\" rep=\"repeat\">log message</arg>"
 msgid ""
 "<command>&dhcommand;</command> <arg choice=\"opt\"> <replaceable>options</"
 "replaceable> </arg> <replaceable> .deb-file</replaceable> <arg choice=\"opt"
-"\" rep=\"repeat\">log message</arg>"
+"\" rep=\"repeat\"><replaceable>log message</replaceable></arg>"
 msgstr ""
 "<command>&dhcommand;</command> <arg choice=\"opt\"> <replaceable>options</"
 "replaceable> </arg> <replaceable> .deb-file</replaceable> <arg choice=\"opt"
@@ -9876,11 +9960,19 @@ msgstr "<option>--version</option>"
 
 #. type: Content of: <refentry><refsect1><para>
 #: ../scripts/deb-reversion.dbk:249
+#, fuzzy
+#| msgid ""
+#| "<citerefentry> <refentrytitle>dch</refentrytitle> <manvolnum>1</"
+#| "manvolnum> </citerefentry>, <citerefentry> <refentrytitle>fakeroot</"
+#| "refentrytitle> <manvolnum>1</manvolnum> </citerefentry>, <citerefentry> "
+#| "<refentrytitle>dpkg-deb</refentrytitle> <manvolnum>1</manvolnum> </"
+#| "citerefentry>."
 msgid ""
 "<citerefentry> <refentrytitle>dch</refentrytitle> <manvolnum>1</manvolnum> </"
-"citerefentry>, <citerefentry> <refentrytitle>fakeroot</refentrytitle> "
-"<manvolnum>1</manvolnum> </citerefentry>, <citerefentry> <refentrytitle>dpkg-"
-"deb</refentrytitle> <manvolnum>1</manvolnum> </citerefentry>."
+"citerefentry>, <citerefentry> <refentrytitle>dpkg-deb</refentrytitle> "
+"<manvolnum>1</manvolnum> </citerefentry>, <citerefentry> "
+"<refentrytitle>fakeroot</refentrytitle> <manvolnum>1</manvolnum> </"
+"citerefentry>"
 msgstr ""
 "<citerefentry> <refentrytitle>dch</refentrytitle> <manvolnum>1</manvolnum> </"
 "citerefentry>, <citerefentry> <refentrytitle>fakeroot</refentrytitle> "
@@ -9950,10 +10042,17 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
 #: ../scripts/deb-reversion.dbk:300
+#, fuzzy
+#| msgid ""
+#| "Permission is granted to copy, distribute and/or modify this document "
+#| "under the terms of the Artistic License: <ulink>http://www.opensource.org/"
+#| "licenses/artistic-license.php</ulink> On Debian systems, the complete "
+#| "text of the Artistic License can be found in <filename>/usr/share/common-"
+#| "licenses/Artistic</filename>."
 msgid ""
 "Permission is granted to copy, distribute and/or modify this document under "
 "the terms of the Artistic License: <ulink>http://www.opensource.org/licenses/"
-"artistic-license.php</ulink> On Debian systems, the complete text of the "
+"artistic-license.php</ulink>.  On Debian systems, the complete text of the "
 "Artistic License can be found in <filename>/usr/share/common-licenses/"
 "Artistic</filename>."
 msgstr ""
@@ -10410,9 +10509,14 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debsign.1:145
+#, fuzzy
+#| msgid ""
+#| "B<debrsign>(1), B<dpkg-buildpackage>(1), B<dpkg-architecture>(1), "
+#| "B<debuild>(1), B<md5sum>(1), B<sha1sum>(1), B<sha256sum>(1), B<gpg>(1), "
+#| "B<scp>(1), B<devscripts.conf>(5)"
 msgid ""
-"B<debrsign>(1), B<dpkg-buildpackage>(1), B<dpkg-architecture>(1), B<debuild>"
-"(1), B<md5sum>(1), B<sha1sum>(1), B<sha256sum>(1), B<gpg>(1), B<scp>(1), "
+"B<debrsign>(1), B<debuild>(1), B<dpkg-architecture>(1), B<dpkg-buildpackage>"
+"(1), B<gpg>(1), B<md5sum>(1), B<sha1sum>(1), B<sha256sum>(1), B<scp>(1), "
 "B<devscripts.conf>(5)"
 msgstr ""
 "B<debrsign>(1), B<dpkg-buildpackage>(1), B<dpkg-architecture>(1), B<debuild>"
@@ -10665,8 +10769,12 @@ msgstr "B<debsnap -a amd64 xterm 256-1>"
 
 #. type: Plain text
 #: ../scripts/debsnap.1:97
+#, fuzzy
+#| msgid ""
+#| "Download the binary package of specific a xterm version for amd64 "
+#| "architecture."
 msgid ""
-"Download the binary package of specific a xterm version for amd64 "
+"Download the binary package of a specific xterm version for amd64 "
 "architecture."
 msgstr ""
 "Télécharger une version particulière du paquet binaire xterm pour "
@@ -10694,8 +10802,12 @@ msgstr "B<debsnap --binary xterm 256-1>"
 
 #. type: Plain text
 #: ../scripts/debsnap.1:103
+#, fuzzy
+#| msgid ""
+#| "Download binary packages for a specific a xterm version but for all "
+#| "architectures."
 msgid ""
-"Download binary packages for a specific a xterm version but for all "
+"Download binary packages for a specific xterm version but for all "
 "architectures."
 msgstr ""
 "Télécharger une version particulière des paquets binaires xterm pour toutes "
@@ -10709,12 +10821,14 @@ msgstr "B<debsnap --binary xterm>"
 
 #. type: Plain text
 #: ../scripts/debsnap.1:106
+#, fuzzy
+#| msgid ""
+#| "Download binary packages for all versions of xterm for armel architecture."
 msgid ""
-"Download binary packages for all version of xterm version for all "
-"architectures."
+"Download binary packages for all versions of xterm for all architectures."
 msgstr ""
-"Télécharger toutes les versions des paquets binaires xterm pour toutes les "
-"architectures."
+"Télécharger toutes les versions des paquets binaires xterm pour "
+"l'architecture armel."
 
 #. type: TP
 #: ../scripts/debsnap.1:106
@@ -11842,10 +11956,15 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debuild.1:422
+#, fuzzy
+#| msgid ""
+#| "B<dpkg-buildpackage>(1), B<dpkg-checkbuilddeps>(1), B<debsign>(1), "
+#| "B<fakeroot>(1), B<lintian>(1), B<chmod>(1), B<dpkg-statoverride>(8), B<su>"
+#| "(1), B<sudo>(1), B<super>(1), B<devscripts.conf>(5)"
 msgid ""
-"B<dpkg-buildpackage>(1), B<dpkg-checkbuilddeps>(1), B<debsign>(1), "
-"B<fakeroot>(1), B<lintian>(1), B<chmod>(1), B<dpkg-statoverride>(8), B<su>"
-"(1), B<sudo>(1), B<super>(1), B<devscripts.conf>(5)"
+"B<chmod>(1), B<debsign>(1), B<dpkg-buildpackage>(1), B<dpkg-checkbuilddeps>"
+"(1), B<fakeroot>(1), B<lintian>(1), B<su>(1), B<sudo>(1), B<super>(1), "
+"B<devscripts.conf>(5), B<dpkg-statoverride>(8)"
 msgstr ""
 "B<dpkg-buildpackage>(1), B<dpkg-checkbuilddeps>(1), B<debsign>(1), "
 "B<fakeroot>(1), B<lintian>(1), B<chmod>(1), B<dpkg-statoverride>(8), B<su>"
@@ -12021,9 +12140,14 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/devscripts.1:20
+#, fuzzy
+#| msgid ""
+#| "Several scripts of the devscripts suite use the following environment "
+#| "variables. Check the man page of individual scripts for more details on "
+#| "how the variables are used."
 msgid ""
 "Several scripts of the devscripts suite use the following environment "
-"variables. Check the man page of individual scripts for more details on how "
+"variables. Check the man pages of individual scripts for more details on how "
 "the variables are used."
 msgstr ""
 "Plusieurs scripts de l'ensemble devscripts utilisent les variables "
@@ -13232,8 +13356,12 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/dget.pl:655
+#, fuzzy
+#| msgid ""
+#| "B<apt-get>(1), B<debcheckout>(1), B<debdiff>(1), B<dpkg-source>(1), "
+#| "B<curl>(1), B<wget>(1)"
 msgid ""
-"B<apt-get>(1), B<debcheckout>(1), B<debdiff>(1), B<dpkg-source>(1), B<curl>"
+"B<apt-get>(1), B<curl>(1), B<debcheckout>(1), B<debdiff>(1), B<dpkg-source>"
 "(1), B<wget>(1)"
 msgstr ""
 "B<apt-get>(1), B<debcheckout>(1), B<debdiff>(1), B<dpkg-source>(1), B<curl>"
@@ -13734,8 +13862,11 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/dpkg-depcheck.1:123
+#, fuzzy
+#| msgid ""
+#| "B<dpkg>(1), B<strace>(1), B<update-alternatives>(8), B<devscripts.conf>(5)"
 msgid ""
-"B<dpkg>(1), B<strace>(1), B<update-alternatives>(8), B<devscripts.conf>(5)"
+"B<dpkg>(1), B<strace>(1), B<devscripts.conf>(5), B<update-alternatives>(8)"
 msgstr ""
 "B<dpkg>(1), B<strace>(1), B<update-alternatives>(8), B<devscripts.conf>(5)"
 
@@ -14624,9 +14755,13 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/licensecheck.pl:91
+#, fuzzy
+#| msgid ""
+#| "Do not read any configuration files. This can only be used as the first "
+#| "option given on the command-line."
 msgid ""
 "Do not read any configuration files. This can only be used as the first "
-"option given on the command-line."
+"option given on the command line."
 msgstr ""
 "Ne lire aucun fichier de configuration. L'option ne peut être utilisée qu'en "
 "première position de la ligne de commande."
@@ -15308,8 +15443,12 @@ msgstr "PERSONNALISATION"
 
 #. type: textblock
 #: ../scripts/namecheck.pl:18
+#, fuzzy
+#| msgid ""
+#| "The script, as-is, contains a list of sites, and patterns, to test "
+#| "against."
 msgid ""
-"The script, as-is, contains a list of sites, and patterns, to test against."
+"The script, as is, contains a list of sites, and patterns, to test against."
 msgstr "Ce script contient déjà une liste de sites et de motifs à vérifier."
 
 #. type: textblock
@@ -15525,12 +15664,19 @@ msgstr "B<--delay> I<DÉLAI>"
 
 #. type: Plain text
 #: ../scripts/nmudiff.1:66
+#, fuzzy
+#| msgid ""
+#| "Indicate in the generated mail that the NMU has been uploaded to the "
+#| "DELAYED queue, with a delay of I<DELAY> days.  The default value is I<XX> "
+#| "which adds a placeholder to the e-mail.  A value of B<0> indicates that "
+#| "the upload has not been delayed.  This can also be set using the "
+#| "devscripts configuration files; see below."
 msgid ""
 "Indicate in the generated mail that the NMU has been uploaded to the DELAYED "
 "queue, with a delay of I<DELAY> days.  The default value is I<XX> which adds "
 "a placeholder to the e-mail.  A value of B<0> indicates that the upload has "
-"not been delayed.  This can also be set using the devscripts configuration "
-"files; see below."
+"not been sent to a delayed queue.  This can also be set using the devscripts "
+"configuration files; see below."
 msgstr ""
 "Indiquer dans le message créé que la NMU a été envoyée dans la file "
 "d'attente différée, avec un délai de I<DÉLAI> jours. La valeur par défaut "
@@ -15901,7 +16047,9 @@ msgstr "PLOTCHANGELOG"
 
 #. type: Plain text
 #: ../scripts/plotchangelog.1:4
-msgid "plotchangelog - graph debian changelogs"
+#, fuzzy
+#| msgid "plotchangelog - graph debian changelogs"
+msgid "plotchangelog - graph Debian changelogs"
 msgstr "plotchangelog - Représenter les changements sous forme de graphique"
 
 #. type: Plain text
@@ -15911,10 +16059,19 @@ msgstr "B<plotchangelog> [I<options>] I<changelog> ..."
 
 #. type: Plain text
 #: ../scripts/plotchangelog.1:17
+#, fuzzy
+#| msgid ""
+#| "B<plotchangelog> is a tool to aid in visualizing a Debian I<changelog>. "
+#| "The changelogs are graphed with B<gnuplot>(1)  , with the X axis of the "
+#| "graph denoting time of release and the Y axis denoting the debian version "
+#| "number of the package. Each individual release of the package is "
+#| "represented by a point, and the points are color coded to indicate who "
+#| "released that version of the package. The upstream version number of the "
+#| "package can also be labeled on the graph."
 msgid ""
 "B<plotchangelog> is a tool to aid in visualizing a Debian I<changelog>. The "
 "changelogs are graphed with B<gnuplot>(1)  , with the X axis of the graph "
-"denoting time of release and the Y axis denoting the debian version number "
+"denoting time of release and the Y axis denoting the Debian version number "
 "of the package. Each individual release of the package is represented by a "
 "point, and the points are color coded to indicate who released that version "
 "of the package. The upstream version number of the package can also be "
@@ -15942,8 +16099,12 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/plotchangelog.1:24
+#, fuzzy
+#| msgid ""
+#| "Note that if the package is a debian-specific package, the entire package "
+#| "version will be used for the Y axis. This does not always work perfectly."
 msgid ""
-"Note that if the package is a debian-specific package, the entire package "
+"Note that if the package is a Debian-specific package, the entire package "
 "version will be used for the Y axis. This does not always work perfectly."
 msgstr ""
 "Notez que s'il s'agit d'un paquet spécifique à Debian, l'axe des Y utilisera "
@@ -15957,14 +16118,23 @@ msgstr "LECTURE DU GRAPHIQUE"
 
 #. type: Plain text
 #: ../scripts/plotchangelog.1:33
+#, fuzzy
+#| msgid ""
+#| "The general outline of a package's graph is typically a series of peaks, "
+#| "starting at 1, going up to n, and then returning abruptly to 1. The "
+#| "higher the peaks, the more releases the maintainer made between new "
+#| "upstream versions of the package. If a package is debian-only, it's graph "
+#| "will just grow upwards without ever falling (although a bug in this "
+#| "program may cause it to fall sometimes, if the version number goes from "
+#| "say, 0.9 to say, 0.10 - this is interpreted wrong..)"
 msgid ""
 "The general outline of a package's graph is typically a series of peaks, "
 "starting at 1, going up to n, and then returning abruptly to 1. The higher "
 "the peaks, the more releases the maintainer made between new upstream "
-"versions of the package. If a package is debian-only, it's graph will just "
+"versions of the package. If a package is Debian-only, it's graph will just "
 "grow upwards without ever falling (although a bug in this program may cause "
 "it to fall sometimes, if the version number goes from say, 0.9 to say, 0.10 "
-"- this is interpreted wrong..)"
+"- this is interpreted wrong...)"
 msgstr ""
 "La silhouette du graphique d'un paquet est en règle générale une série de "
 "pics, démarrant à 1, allant jusqu'à n, et retournant à 1 juste après. Plus "
@@ -15976,9 +16146,17 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/plotchangelog.1:40
+#, fuzzy
+#| msgid ""
+#| "If the graph dips below 1, someone made a NMU of the package and upgraded "
+#| "it to a new upstream version, thus setting the debian version to 0. NMU's "
+#| "in general appear as fractional points like 1.1, 2.1, etc. A NMU can also "
+#| "be easily detected by looking at the points that represent which "
+#| "maintainer uploaded the package -- a solitary point of a different type "
+#| "than the points before and after it is typically a NMU."
 msgid ""
 "If the graph dips below 1, someone made a NMU of the package and upgraded it "
-"to a new upstream version, thus setting the debian version to 0. NMU's in "
+"to a new upstream version, thus setting the Debian version to 0. NMU's in "
 "general appear as fractional points like 1.1, 2.1, etc. A NMU can also be "
 "easily detected by looking at the points that represent which maintainer "
 "uploaded the package -- a solitary point of a different type than the points "
@@ -16009,8 +16187,13 @@ msgstr "B<-l>, B<--linecount>"
 
 #. type: Plain text
 #: ../scripts/plotchangelog.1:50
+#, fuzzy
+#| msgid ""
+#| "Instead of using the debian version number as the Y axis, use the number "
+#| "of lines in the changelog entry for each version.  Cannot be used "
+#| "together with B<--bugcount>."
 msgid ""
-"Instead of using the debian version number as the Y axis, use the number of "
+"Instead of using the Debian version number as the Y axis, use the number of "
 "lines in the changelog entry for each version.  Cannot be used together with "
 "B<--bugcount>."
 msgstr ""
@@ -16027,8 +16210,14 @@ msgstr "B<-b>, B<--bugcount>"
 
 #. type: Plain text
 #: ../scripts/plotchangelog.1:57
+#, fuzzy
+#| msgid ""
+#| "Instead of using the debian version number as the Y axis, use the number "
+#| "of bugs that were closed by each changelog entry. Note that this number "
+#| "is obtained by searching for \"#dddd\" in the changelog, and so it may be "
+#| "inaccurate.  Cannot be used together with B<--linecount>."
 msgid ""
-"Instead of using the debian version number as the Y axis, use the number of "
+"Instead of using the Debian version number as the Y axis, use the number of "
 "bugs that were closed by each changelog entry. Note that this number is "
 "obtained by searching for \"#dddd\" in the changelog, and so it may be "
 "inaccurate.  Cannot be used together with B<--linecount>."
@@ -16088,8 +16277,12 @@ msgstr "B<-s> I<fichier>, B<--save=>I<fichier>"
 
 #. type: Plain text
 #: ../scripts/plotchangelog.1:75
+#, fuzzy
+#| msgid ""
+#| "Save the graph to I<file> in postscript format instead of immediately "
+#| "displaying it."
 msgid ""
-"Save the graph to I<file> in postscript format instead of immediately "
+"Save the graph to I<file> in PostScript format instead of immediately "
 "displaying it."
 msgstr ""
 "Sauver le graphe dans le I<fichier> au format PostScript, au lieu de "
@@ -16168,10 +16361,16 @@ msgstr "I<changelog> ..."
 
 #. type: Plain text
 #: ../scripts/plotchangelog.1:106
+#, fuzzy
+#| msgid ""
+#| "The I<changelog> files to graph. If multiple files are specified they "
+#| "will all be display on the same graph. The files may be compressed with "
+#| "gzip. Any text in them that is not in Debian changelog format will be "
+#| "ignored."
 msgid ""
 "The I<changelog> files to graph. If multiple files are specified they will "
-"all be display on the same graph. The files may be compressed with gzip. Any "
-"text in them that is not in Debian changelog format will be ignored."
+"all be displayed on the same graph. The files may be compressed with gzip. "
+"Any text in them that is not in Debian changelog format will be ignored."
 msgstr ""
 "Le fichier I<changelog> dont on veut le graphique. Si plusieurs fichiers "
 "sont indiqués, ils seront affichés sur le même graphique. Les fichiers "
@@ -17040,8 +17239,10 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/rmadison.pl:334
-msgid "B<madison-lite>(1), B<dak>(1)"
-msgstr "B<madison-lite>(1), B<dak>(1)"
+#, fuzzy
+#| msgid "B<debpkg>(1), B<devscripts.conf>(5)"
+msgid "B<dak>(1), B<madison-lite>(1)"
+msgstr "B<debpkg>(1), B<devscripts.conf>(5)"
 
 #. type: textblock
 #: ../scripts/rmadison.pl:338
@@ -18022,6 +18223,22 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/uscan.1:193
+#, fuzzy
+#| msgid ""
+#| "The current (upstream) version can be specified as the second parameter "
+#| "in the I<watch> file line.  If this is I<debian> or absent, then the "
+#| "current Debian version (as determined by I<debian/changelog>) is used to "
+#| "determine the current upstream version.  The current upstream version may "
+#| "also be specified by the command-line option B<--upstream-version>, which "
+#| "specifies the upstream version number of the currently installed package "
+#| "(i.e., the Debian version number without epoch and Debian revision).  The "
+#| "upstream version number will then be mangled using the dversionmangle "
+#| "option if one is specified, as described below.  If the newest version "
+#| "available is newer than the current version, then it is downloaded into "
+#| "the parent directory, unless the B<--report> or --report-status option "
+#| "has been used.  Once the file has been downloaded, then a symlink to the "
+#| "file is made from I<E<lt>packageE<gt>_E<lt>versionE<gt>.orig.tar.{gz|bz2|"
+#| "lzma|xz}> as described by the help for the B<--symlink> option."
 msgid ""
 "The current (upstream) version can be specified as the second parameter in "
 "the I<watch> file line.  If this is I<debian> or absent, then the current "
@@ -18033,7 +18250,7 @@ msgid ""
 "version number will then be mangled using the dversionmangle option if one "
 "is specified, as described below.  If the newest version available is newer "
 "than the current version, then it is downloaded into the parent directory, "
-"unless the B<--report> or --report-status option has been used.  Once the "
+"unless the B<--report> or B<--report-status> option has been used.  Once the "
 "file has been downloaded, then a symlink to the file is made from "
 "I<E<lt>packageE<gt>_E<lt>versionE<gt>.orig.tar.{gz|bz2|lzma|xz}> as "
 "described by the help for the B<--symlink> option."
@@ -18185,10 +18402,16 @@ msgstr "    $version =~ I<règle>;\n"
 
 #. type: Plain text
 #: ../scripts/uscan.1:248
+#, fuzzy
+#| msgid ""
+#| "for each rule.  Thus, suitable rules might be `B<s/^/0./>' to prepend "
+#| "`B<0.>' to the version number and `B<s/_/./g>' to change underscores into "
+#| "periods.  Note that the I<rules> string may not contain commas; this "
+#| "should not be a problem."
 msgid ""
 "for each rule.  Thus, suitable rules might be `B<s/^/0./>' to prepend `B<0."
 ">' to the version number and `B<s/_/./g>' to change underscores into "
-"periods.  Note that the I<rules> string may not contain commas; this should "
+"periods.  Note that the I<rule> string may not contain commas; this should "
 "not be a problem."
 msgstr ""
 "pour chaque règle. Ainsi, la règle « B<s/^/0./> » permet d'ajouter « B<0.> » "
@@ -18761,10 +18984,16 @@ msgstr "B<USCAN_PASV>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:478
+#, fuzzy
+#| msgid ""
+#| "If this is set to I<yes> or I<no>, this will force FTP connections to use "
+#| "PASV mode or not to, respectively.  If this is set to I<default>, then "
+#| "B<Net::FTP>(3) make the choice (primarily based on the B<FTP_PASSIVE> "
+#| "environment variable)."
 msgid ""
 "If this is set to I<yes> or I<no>, this will force FTP connections to use "
 "PASV mode or not to, respectively.  If this is set to I<default>, then "
-"B<Net::FTP>(3) make the choice (primarily based on the B<FTP_PASSIVE> "
+"B<Net::FTP>(3) makes the choice (primarily based on the B<FTP_PASSIVE> "
 "environment variable)."
 msgstr ""
 "Si elle est définie à I<yes> ou I<no>, cela force respectivement à utiliser "
@@ -20235,6 +20464,28 @@ msgid ""
 msgstr ""
 "Cette page de manuel a été écrite pour le paquet B<devscripts> par le "
 "responsable du paquet, Julian Gilbey E<lt>jdg@debian.orgE<gt>."
+
+#~ msgid "reportbug(1), querybts(1)"
+#~ msgstr "B<reportbug>(1), B<querybts>(1)"
+
+#~ msgid "B<cvs-buildpackage>(1), B<debrelease>(1), B<cvs-debuild>(1)"
+#~ msgstr "B<cvs-buildpackage>(1), B<debrelease>(1), B<cvs-debuild>(1)"
+
+#~ msgid "B<dpkg-deb>(1), B<debdiff>(1), B<devscripts.conf>(5)"
+#~ msgstr "B<dpkg-deb>(1), B<debdiff>(1), B<devscripts.conf>(5)"
+
+#~ msgid "B<svnpath>(1), B<debchange>(1)"
+#~ msgstr "B<svnpath>(1), B<debchange>(1)"
+
+#~ msgid ""
+#~ "Download binary packages for all version of xterm version for all "
+#~ "architectures."
+#~ msgstr ""
+#~ "Télécharger toutes les versions des paquets binaires xterm pour toutes "
+#~ "les architectures."
+
+#~ msgid "B<madison-lite>(1), B<dak>(1)"
+#~ msgstr "B<madison-lite>(1), B<dak>(1)"
 
 #~ msgid ""
 #~ "B<debcommit> [B<--release>] [B<--release-use-changelog>] [B<--"
