@@ -1,4 +1,4 @@
-devscripts (2.12.6+exp1) UNRELEASED; urgency=low
+devscripts (2.13.0) UNRELEASED; urgency=low
 
   [ Christoph Berg ]
   * origtargz: New script: fetch the orig tarball of a Debian package from
@@ -23,7 +23,11 @@ devscripts (2.12.6+exp1) UNRELEASED; urgency=low
   * wrap-and-sort: Fix repeated word in man page.  (Closes: #696363)
 
   [ Dmitry Smirnov ]
-  * licensecheck: Remove any regular comments pattern. (Closes: #526698)
+  * licensecheck:
+    + Remove any regular comments pattern. (Closes: #526698)
+    + Improve command line parsing.
+    + Fix GPL license version detection bug.
+    + Fix BSD-3-clause detection.
 
   [ Paul Wise ]
   * checkbashisms: When examining a bash script, indicate the lack of use of
@@ -36,19 +40,21 @@ devscripts (2.12.6+exp1) UNRELEASED; urgency=low
     + Add an example watch URL for Google Code projects.
 
   [ Benjamin Drung ]
+  * Add bashism test cases from Raphael Geissert.
+  * Add autopkgtest support. (LP: #1073330)
   * debian/control: Mark devscripts Multi-Arch: foreign.
     Thanks to Colin Watson. (Closes: #694760)
   * suspicious-source: Add inode/symlink and image/x-xpmi to whitelisted
     mime-types.
   * wrap-and-sort:
-    - Put special entries (variables and placeholders) at the end of the list.
-    - Sort debian/control*.in files too.
+    + Put special entries (variables and placeholders) at the end of the list.
+    + Sort debian/control*.in files too.
 
   [ Cyril Brulebois ]
   * Don't auto reverse diffs when DEBDIFF_AUTO_VER_SORT is set to yes, and
     when the version in both packages is the same. (Closes: #650732)
 
-  [ tony mancill ]
+  [ Tony Mancill ]
   * debsnap: Escape the package name when used in regex.  (Closes: #696018)
 
   [ David Prévot ]
@@ -58,6 +64,22 @@ devscripts (2.12.6+exp1) UNRELEASED; urgency=low
 
   [ Josselin Mouette ]
   * nmudiff: Use dpkg-parsechangelog to fix manual parsing bug (Closes: #700584)
+
+  [ Raphael Geissert ]
+  * checkbashisms:
+    + allow -FOO- as heredoc delimiter
+    + simplify mixed single/double balanced quotes correctly
+    + correct description of 'setvar'
+    + detect traps for DEBUG, ERRNO, or RETURN
+    + check for incorrect args. to 'exit' (Closes: #687450)
+    + fix handling of # characters in quoted strings
+    + detect use of $FUNCNAME, $TMOUT, and $TIMEFORMAT
+    + detect uses of sleep with anything other than an int.
+    + detect the use of the hash utility and $_
+    + check for other forms of brace expansion
+    + check for use of non-standard tilde expansion
+    + check for case modification expansions
+    + check for the use of $GLOBIGNORE
 
  -- James McCoy <jamessan@debian.org>  Sat, 15 Sep 2012 16:12:16 -0400
 
