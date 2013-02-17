@@ -82,6 +82,9 @@ devscripts (2.13.0) UNRELEASED; urgency=low
     + check for case modification expansions
     + check for the use of $GLOBIGNORE
 
+  [ Regid Ichira ]
+  * wnpp-check: Support using curl as alternative to wget. (Closes: #690059)
+
  -- James McCoy <jamessan@debian.org>  Sat, 15 Sep 2012 16:12:16 -0400
 
 devscripts (2.12.6) unstable; urgency=low

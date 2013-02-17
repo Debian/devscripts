@@ -10,6 +10,8 @@
 
 PROGNAME=`basename $0`
 PACKAGES="$@"
+CURLORWGET=""
+GETCOMMAND=""
 
 usage () { echo \
 "Usage: $PROGNAME <package name> [...]
@@ -33,8 +35,14 @@ if [ "x$1" = "x--help" -o "x$1" = "x-h" ]; then usage; exit 0; fi
 if [ "x$1" = "x--version" -o "x$1" = "x-v" ]; then version; exit 0; fi
 if [ "x$1" = "x" ]; then usage; exit 1; fi
 
-if ! command -v wget >/dev/null 2>&1; then
-    echo "$PROGNAME: need the wget package installed to run this" >&2
+if command -v wget >/dev/null 2>&1; then
+    CURLORWGET="wget"
+    GETCOMMAND="wget -q -O"
+elif command -v curl >/dev/null 2>&1; then
+    CURLORWGET="curl"
+    GETCOMMAND="curl -qs -o"
+else
+    echo "$PROGNAME: need either the wget or curl package installed to run this" >&2
     exit 1
 fi
 
@@ -50,12 +58,12 @@ trap "rm -f '$WNPP' '$WNPPTMP' '$WNPP_PACKAGES'" \
 # every line; those which succeed execute the 'p' command, those
 # which don't skip over it to the label 'd'
 
-wget -q -O $WNPPTMP http://www.debian.org/devel/wnpp/being_packaged || \
-    { echo "wnpp-check: wget http://www.debian.org/devel/wnpp/being_packaged failed" >&2; exit 1; }
+$GETCOMMAND $WNPPTMP http://www.debian.org/devel/wnpp/help_requested || \
+    { echo "wnpp-alert: $CURLORWGET http://www.debian.org/devel/wnpp/help_requested failed." >&2; exit 1; }
 sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/ITP \1 \2 -- \3/; T d; p; : d' $WNPPTMP > $WNPP
 
-wget -q -O $WNPPTMP http://www.debian.org/devel/wnpp/requested || \
-    { echo "wnpp-check: wget http://www.debian.org/devel/wnpp/requested" >&2; exit 1; }
+$GETCOMMAND $WNPPTMP http://www.debian.org/devel/wnpp/help_requested || \
+    { echo "wnpp-alert: $CURLORWGET http://www.debian.org/devel/wnpp/help_requested failed." >&2; exit 1; }
 sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/RFP \1 \2 -- \3/; T d; p; : d' $WNPPTMP >> $WNPP
 
 awk -F' ' '{print $3" ("$1" - #"$2")"}' $WNPP | sort > $WNPP_PACKAGES
