@@ -15516,13 +15516,6 @@ msgstr "B<--delay> I<VERZÖGERUNG>"
 
 #. type: Plain text
 #: ../scripts/nmudiff.1:66
-#, fuzzy
-#| msgid ""
-#| "Indicate in the generated mail that the NMU has been uploaded to the "
-#| "DELAYED queue, with a delay of I<DELAY> days.  The default value is I<XX> "
-#| "which adds a placeholder to the e-mail.  A value of B<0> indicates that "
-#| "the upload has not been delayed.  This can also be set using the "
-#| "devscripts configuration files; see below."
 msgid ""
 "Indicate in the generated mail that the NMU has been uploaded to the DELAYED "
 "queue, with a delay of I<DELAY> days.  The default value is I<XX> which adds "
@@ -15533,9 +15526,9 @@ msgstr ""
 "gibt in der erzeugten E-Mail an, dass der NMU in die DELAYED-Warteschlange "
 "mit einer Verzögerung von I<VERZÖGERUNG> Tagen hochgeladen wurde. Der "
 "Vorgabewert ist I<XX>, wodurch der E-Mail ein Platzhalter hinzugefügt wird. "
-"Ein Wert von B<0> gibt an, dass das Hochladen nicht verzögert wurde. Dies "
-"kann auch mittels der Devscripts-Konfigurationsdateien gesetzt werden; siehe "
-"unten."
+"Ein Wert von B<0> gibt an, dass nichts an eine Warteschlange hochgeladen "
+"wurde. Dies kann auch mittels der Devscripts-Konfigurationsdateien gesetzt "
+"werden; siehe unten."
 
 #. type: TP
 #: ../scripts/nmudiff.1:66
