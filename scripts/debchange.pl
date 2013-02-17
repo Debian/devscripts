@@ -1563,6 +1563,8 @@ if ((!$TEXT and !$EMPTY_TEXT and ! ($opt_create and $opt_empty)) or @closes_text
     my $mtime = (stat("$changelog_path.dch"))[9];
     defined $mtime or fatal
 	"Error getting modification time of temporary $changelog_path: $!";
+    $mtime--;
+    utime $mtime, $mtime, "$changelog_path.dch";
 
     system("sensible-editor +$line $changelog_path.dch") == 0 or
 	fatal "Error editing $changelog_path";

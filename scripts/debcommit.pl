@@ -830,6 +830,8 @@ sub edit {
     $fh->close();
     my $mtime = (stat("$fh"))[9];
     defined $mtime || die "$progname: unable to retrieve modification time for temporary file: $!\n";
+    $mtime--;
+    utime $mtime, $mtime, $fh->filename;
     system("sensible-editor $fh");
     open(FH, '<', "$fh") || die "$progname: unable to open temporary file for reading\n";
     $message = "";

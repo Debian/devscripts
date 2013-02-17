@@ -43,8 +43,6 @@ devscripts (2.13.0) UNRELEASED; urgency=low
   [ Benjamin Drung ]
   * Add bashism test cases from Raphael Geissert.
   * Add autopkgtest support. (LP: #1073330)
-  * debian/control: Mark devscripts Multi-Arch: foreign.
-    Thanks to Colin Watson. (Closes: #694760)
   * suspicious-source: Add inode/symlink and image/x-xpmi to whitelisted
     mime-types.
   * wrap-and-sort:
@@ -86,6 +84,12 @@ devscripts (2.13.0) UNRELEASED; urgency=low
   * rc-alert: Support using curl as alternative to wget. (Closes: #690024)
   * wnpp-alert: Support using curl as alternative to wget. (Closes: #690056)
   * wnpp-check: Support using curl as alternative to wget. (Closes: #690059)
+
+  [ Colin Watson ]
+  * debian/control: Mark devscripts Multi-Arch: foreign. (Closes: #694760)
+  * debchange, debcommit: Set the timestamp of temporary editor files back
+    one second, to make modification detection more reliable in the absence
+    of subsecond granularity. (Closes: #697923)
 
  -- James McCoy <jamessan@debian.org>  Sat, 15 Sep 2012 16:12:16 -0400
 
