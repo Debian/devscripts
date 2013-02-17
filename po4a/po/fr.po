@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2013-02-16 19:23-0400\n"
+"POT-Creation-Date: 2013-02-17 15:13-0400\n"
 "PO-Revision-Date: 2013-02-16 19:17-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -344,7 +344,7 @@ msgstr ""
 #: ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53
 #: ../scripts/dcmd.1:98 ../scripts/dcontrol.pl:289 ../scripts/debc.1:115
 #: ../scripts/debchange.1:469 ../scripts/debcheckout.pl:222
-#: ../scripts/debclean.1:107 ../scripts/debcommit.pl:863
+#: ../scripts/debclean.1:107 ../scripts/debcommit.pl:865
 #: ../scripts/debdiff.1:215 ../scripts/debi.1:132 ../scripts/debrelease.1:132
 #: ../scripts/deb-reversion.dbk:247 ../scripts/debrsign.1:66
 #: ../scripts/debsign.1:134 ../scripts/debsnap.1:118 ../scripts/debuild.1:410
@@ -392,7 +392,7 @@ msgstr ""
 #: ../scripts/dcmd.1:101 ../scripts/dcontrol.pl:282 ../scripts/dd-list.1:100
 #: ../scripts/debc.1:119 ../scripts/debchange.1:475
 #: ../scripts/debcheckout.pl:227 ../scripts/debclean.1:110
-#: ../scripts/debcommit.pl:859 ../scripts/debdiff.1:221 ../scripts/debi.1:135
+#: ../scripts/debcommit.pl:861 ../scripts/debdiff.1:221 ../scripts/debi.1:135
 #: ../scripts/debpkg.1:23 ../scripts/debrelease.1:136
 #: ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:70
 #: ../scripts/debsign.1:145 ../scripts/debuild.1:422
@@ -3319,7 +3319,7 @@ msgstr ""
 "de cet outil."
 
 #. type: =head1
-#: ../scripts/build-rdeps.pl:337 ../scripts/debcommit.pl:852
+#: ../scripts/build-rdeps.pl:337 ../scripts/debcommit.pl:854
 #: ../scripts/desktop2menu.pl:43 ../scripts/licensecheck.pl:120
 #: ../scripts/namecheck.pl:36 ../scripts/svnpath.pl:89
 #: ../scripts/transition-check.pl:72
@@ -8402,7 +8402,7 @@ msgstr ""
 "pour associer la révision aux bogues."
 
 #. type: textblock
-#: ../scripts/debcommit.pl:854
+#: ../scripts/debcommit.pl:856
 msgid ""
 "This code is copyright by Joey Hess <joeyh@debian.org>, all rights "
 "reserved.  This program comes with ABSOLUTELY NO WARRANTY.  You are free to "
@@ -8415,12 +8415,12 @@ msgstr ""
 "Public Licence), version 2 ou ultérieure."
 
 #. type: textblock
-#: ../scripts/debcommit.pl:861 ../scripts/mass-bug.pl:522
+#: ../scripts/debcommit.pl:863 ../scripts/mass-bug.pl:522
 msgid "Joey Hess <joeyh@debian.org>"
 msgstr "Joey Hess <joeyh@debian.org>"
 
 #. type: textblock
-#: ../scripts/debcommit.pl:865
+#: ../scripts/debcommit.pl:867
 msgid "B<debchange>(1), B<svnpath>(1)"
 msgstr "B<debchange>(1), B<svnpath>(1)"
 
@@ -12152,8 +12152,12 @@ msgstr "B<build-rdeps>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:39
+#, fuzzy
+#| msgid ""
+#| "Searches for all packages that build-depend on a given package [dctrl-"
+#| "tools]"
 msgid ""
-"Searches for all packages that build-depend on a given package [dctrl-tools]"
+"search for all packages that build-depend on a given package [dctrl-tools]"
 msgstr ""
 "rechercher tous les paquets qui dépendent du paquet indiqué pour leur "
 "construction (« reverse build depends » : dépendances de construction "
@@ -12207,9 +12211,13 @@ msgstr "B<cvs-debi>, B<cvs-debc>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:47
+#, fuzzy
+#| msgid ""
+#| "wrappers around debi and debc respectively (see below) which allow them "
+#| "to be called from the CVS working directory. [cvs-buildpackage]"
 msgid ""
 "wrappers around debi and debc respectively (see below) which allow them to "
-"be called from the CVS working directory. [cvs-buildpackage]"
+"be called from the CVS working directory [cvs-buildpackage]"
 msgstr ""
 "encapsulations (« wrappers ») respectivement de debi et debc (voir plus bas) "
 "pouvant être appelées depuis un répertoire de travail CVS [cvs-buildpackage]"
@@ -12222,9 +12230,13 @@ msgstr "B<cvs-debrelease>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:49
+#, fuzzy
+#| msgid ""
+#| "wrapper around debrelease which allows it to be called from the CVS "
+#| "working directory. [cvs-buildpackage, dupload | dput, ssh-client]"
 msgid ""
 "wrapper around debrelease which allows it to be called from the CVS working "
-"directory. [cvs-buildpackage, dupload | dput, ssh-client]"
+"directory [cvs-buildpackage, dupload | dput, ssh-client]"
 msgstr ""
 "encapsulation de debrelease pouvant être appelée depuis un répertoire de "
 "travail CVS [cvs-buildpackage, dupload | dput, ssh-client]"
@@ -12237,9 +12249,13 @@ msgstr "B<cvs-debuild>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:51
+#, fuzzy
+#| msgid ""
+#| "A wrapper for cvs-buildpackage to use debuild as its package building "
+#| "program. [cvs-buildpackage, fakeroot, lintian, gnupg]"
 msgid ""
-"A wrapper for cvs-buildpackage to use debuild as its package building "
-"program. [cvs-buildpackage, fakeroot, lintian, gnupg]"
+"wrapper for cvs-buildpackage to use debuild as its package building program "
+"[cvs-buildpackage, fakeroot, lintian, gnupg]"
 msgstr ""
 "encapsulation de debuild pour construire les paquets avec cvs-buildpackage "
 "[cvs-buildpackage, fakeroot, lintian, gnupg]"
@@ -12268,9 +12284,13 @@ msgstr "B<dcontrol>(1)"
 # NOTE: -- -> -
 #. type: Plain text
 #: ../scripts/devscripts.1:55
+#, fuzzy
+#| msgid ""
+#| "remotely query package and source control files for all Debian "
+#| "distributions. [liburl-perl, libwww-perl]"
 msgid ""
-"remotely query package and source control files for all Debian "
-"distributions. [liburl-perl, libwww-perl]"
+"remotely query package and source control files for all Debian distributions "
+"[liburl-perl, libwww-perl]"
 msgstr ""
 "interroger les fichiers de contrôle des paquets source et binaires pour "
 "toutes les distributions Debian [liburl-perl, libwww-perl]"
@@ -12331,7 +12351,9 @@ msgstr "B<debclean>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:65
-msgid "purge a Debian source tree [fakeroot]"
+#, fuzzy
+#| msgid "purge a Debian source tree [fakeroot]"
+msgid "clean a Debian source tree [fakeroot]"
 msgstr "nettoyer une arborescence source [fakeroot]"
 
 #. type: IP
@@ -12457,7 +12479,11 @@ msgstr "B<deb-reversion>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:83
-msgid "increases a binary package version number and repacks the archive"
+#, fuzzy
+#| msgid "increases a binary package version number and repacks the archive"
+msgid ""
+"increase a binary package version number and repacks the package, useful for "
+"porters and the like"
 msgstr ""
 "augmenter le numéro de version d'un paquet binaire et reconstruire l'archive."
 
@@ -12482,9 +12508,13 @@ msgstr "B<desktop2menu>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:87
+#, fuzzy
+#| msgid ""
+#| "produce a skeleton menu file from a freedesktop.org desktop file [libfile-"
+#| "desktopentry-perl]"
 msgid ""
-"produce a skeleton menu file from a freedesktop.org desktop file [libfile-"
-"desktopentry-perl]"
+"given a freedesktop.org desktop file, generate a skeleton for a menu file "
+"[libfile-desktopentry-perl]"
 msgstr ""
 "produire un corps de fichier menu à partir d'un fichier desktop freedesktop."
 "org [libfile-desktopentry-perl]"
@@ -12497,17 +12527,38 @@ msgstr "B<dget>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:89
-msgid "downloads Debian source and binary packages [wget | curl]"
+#, fuzzy
+#| msgid "downloads Debian source and binary packages [wget | curl]"
+msgid "download Debian source and binary packages [wget | curl]"
 msgstr "télécharger des paquets Debian source et binaires [wget | curl]"
 
 #. type: IP
 #: ../scripts/devscripts.1:89
 #, no-wrap
+msgid "I<diff2patches>(1)"
+msgstr "B<diff2patches>(1)"
+
+#. type: Plain text
+#: ../scripts/devscripts.1:91
+#, fuzzy
+#| msgid ""
+#| "extract patches from a .diff.gz file placing them under debian/ or, if "
+#| "present, debian/patches [patchutils]"
+msgid ""
+"extract patches from a .diff.gz file placing them under debian/ or, if "
+"present, debian/patches [patchutils]"
+msgstr ""
+"extraire les correctifs d'un fichier .diff.gz en les plaçant dans debian/ ou "
+"debian/patches s'il existe [patchutils]"
+
+#. type: IP
+#: ../scripts/devscripts.1:91
+#, no-wrap
 msgid "I<dpkg-depcheck, dpkg-genbuilddeps>(1)"
 msgstr "B<dpkg-depcheck>, B<dpkg-genbuilddeps>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:91
+#: ../scripts/devscripts.1:93
 msgid ""
 "determine the packages used during the build of a Debian package; useful for "
 "determining the Build-Depends control field needed [build-essential, strace]"
@@ -12515,21 +12566,6 @@ msgstr ""
 "déterminer les paquets utilisés pendant la construction du paquet Debian. "
 "Pratique pour déterminer les champs de contrôle Build-Depends nécessaires "
 "[build-essential, strace]"
-
-#. type: IP
-#: ../scripts/devscripts.1:91
-#, no-wrap
-msgid "I<diff2patches>(1)"
-msgstr "B<diff2patches>(1)"
-
-#. type: Plain text
-#: ../scripts/devscripts.1:93
-msgid ""
-"extract patches from a .diff.gz file placing them under debian/ or, if "
-"present, debian/patches [patchutils]"
-msgstr ""
-"extraire les correctifs d'un fichier .diff.gz en les plaçant dans debian/ ou "
-"debian/patches s'il existe [patchutils]"
 
 #. type: IP
 #: ../scripts/devscripts.1:93
@@ -12619,7 +12655,9 @@ msgstr "B<list-unreleased>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:107
-msgid "searches for unreleased packages"
+#, fuzzy
+#| msgid "searches for unreleased packages"
+msgid "search for unreleased packages"
 msgstr "rechercher les paquets qui ne sont pas encore envoyés (UNRELEASED)"
 
 #. type: IP
@@ -12652,7 +12690,11 @@ msgstr "B<mergechanges>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:113
-msgid "merge .changes files from a package built on different architectures"
+#, fuzzy
+#| msgid "merge .changes files from a package built on different architectures"
+msgid ""
+"merge .changes files from the same release but built on different "
+"architectures"
 msgstr ""
 "fusionner les fichiers .changes d'un paquet construit sur plusieurs "
 "architectures"
@@ -12665,9 +12707,14 @@ msgstr "B<mk-build-deps>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:115
+#, fuzzy
+#| msgid ""
+#| "Given a package name and/or control file, generate a binary package which "
+#| "may be installed to satisfy the build-dependencies of the given packages. "
+#| "[equivs]"
 msgid ""
-"Given a package name and/or control file, generate a binary package which "
-"may be installed to satisfy the build-dependencies of the given packages. "
+"given a package name and/or control file, generate a binary package which "
+"may be installed to satisfy the build-dependencies of the given package "
 "[equivs]"
 msgstr ""
 "à partir d'un nom de paquet ou d'un fichier « control », créer un paquet "
@@ -12682,7 +12729,9 @@ msgstr "B<namecheck>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:117
-msgid "Check project names are not already taken."
+#, fuzzy
+#| msgid "Check project names are not already taken."
+msgid "check project names are not already taken"
 msgstr "vérifier la disponibilité des noms de projet."
 
 #. type: IP
@@ -12749,7 +12798,9 @@ msgstr "B<rc-alert>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:127
-msgid "list installed packages which have release-critical bugs [wget]"
+#, fuzzy
+#| msgid "list installed packages which have release-critical bugs [wget]"
+msgid "list installed packages which have release-critical bugs [wget | curl]"
 msgstr ""
 "afficher la liste des paquets installés ayant des bogues empêchant leur "
 "intégration dans la prochaine distribution [wget]"
@@ -12762,9 +12813,13 @@ msgstr "B<rmadison>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:129
+#, fuzzy
+#| msgid ""
+#| "remotely query the Debian archive database about packages [wget | curl, "
+#| "liburi-perl]"
 msgid ""
-"remotely query the Debian archive database about packages [wget | curl, "
-"liburi-perl]"
+"remotely query the Debian archive database about packages [liburi-perl, wget "
+"| curl]"
 msgstr ""
 "interroger à distance la base de données de l'archive Debian [wget | curl, "
 "liburi-perl]"
@@ -12790,7 +12845,9 @@ msgstr "B<svnpath>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:133
-msgid "print svn repository paths [subversion]"
+#, fuzzy
+#| msgid "print svn repository paths [subversion]"
+msgid "print Subversion repository paths [subversion]"
 msgstr "afficher les chemins de dépôt Subversion [subversion]"
 
 #. type: IP
@@ -12801,9 +12858,13 @@ msgstr "B<tagpending>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:135
+#, fuzzy
+#| msgid ""
+#| "runs from a Debian source tree and tags bugs that are to be closed in the "
+#| "latest changelog as pending. [libsoap-lite-perl]"
 msgid ""
-"runs from a Debian source tree and tags bugs that are to be closed in the "
-"latest changelog as pending. [libsoap-lite-perl]"
+"run from a Debian source tree and tag bugs that are to be closed in the "
+"latest changelog as pending [libsoap-lite-perl]"
 msgstr ""
 "exécuter depuis une arborescence source Debian et placer l'étiquette "
 "« pending » sur tous les bogues à fermer dans le dernier groupe d'entrée du "
@@ -12817,8 +12878,12 @@ msgstr "B<transition-check>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:137
+#, fuzzy
+#| msgid ""
+#| "Check a list of source packages for involvement in transitions for which "
+#| "uploads to unstable are currently blocked [libwww-perl, libyaml-syck-perl]"
 msgid ""
-"Check a list of source packages for involvement in transitions for which "
+"check a list of source packages for involvement in transitions for which "
 "uploads to unstable are currently blocked [libwww-perl, libyaml-syck-perl]"
 msgstr ""
 "vérifier si l'un des paquets source listés est impliqué dans une transition "
@@ -12833,9 +12898,13 @@ msgstr "B<uscan>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:139
+#, fuzzy
+#| msgid ""
+#| "scan upstream sites for new releases of packages [libcrypt-ssleay-perl, "
+#| "libwww-perl, unzip, xz-utils]"
 msgid ""
 "scan upstream sites for new releases of packages [libcrypt-ssleay-perl, "
-"libwww-perl, unzip, xz-utils]"
+"libwww-perl, unzip, lzma, xz-utils]"
 msgstr ""
 "surveiller la disponibilité d'une nouvelle version amont [libcrypt-ssleay-"
 "perl, libwww-perl, unzip, xz-utils]"
@@ -12884,9 +12953,13 @@ msgstr "B<who-uploads>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:147
+#, fuzzy
+#| msgid ""
+#| "determine the most recent uploaders of a package to the Debian archive "
+#| "[gnupg, debian-keyring, wget]"
 msgid ""
 "determine the most recent uploaders of a package to the Debian archive "
-"[gnupg, debian-keyring, wget]"
+"[gnupg, debian-keyring, debian-maintainers, wget]"
 msgstr ""
 "identifier les dernières personnes ayant envoyé un paquet donné vers "
 "l'archive Debian [gnupg, debian-keyring, wget]"
@@ -12899,7 +12972,10 @@ msgstr "B<wnpp-alert>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:149
-msgid "list installed packages which are orphaned or up for adoption [wget]"
+#, fuzzy
+#| msgid "list installed packages which are orphaned or up for adoption [wget]"
+msgid ""
+"list installed packages which are orphaned or up for adoption [wget | curl]"
 msgstr ""
 "afficher la liste des paquets installés offerts à l'adoption ou orphelins "
 "[wget]"
@@ -12912,9 +12988,13 @@ msgstr "B<wnpp-check>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:151
+#, fuzzy
+#| msgid ""
+#| "check whether there is an open request for packaging or intention to "
+#| "package bug for a package [wget]"
 msgid ""
 "check whether there is an open request for packaging or intention to package "
-"bug for a package [wget]"
+"bug for a package [wget | curl]"
 msgstr ""
 "Vérifier si un bogue du type paquet demandé (RFP) ou paquet en cours de "
 "travail (ITP) est ouvert pour un paquet [wget]"
