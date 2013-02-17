@@ -8,13 +8,12 @@
 #
 # Adapted from wnpp-alert, by Arthur Korn <arthur@korn.ch>
 
-PROGNAME=`basename $0`
 PACKAGES="$@"
 CURLORWGET=""
 GETCOMMAND=""
 
 usage () { echo \
-"Usage: $PROGNAME <package name> [...]
+"Usage: ${0##*/} <package name> [...]
   -h,--help          Show this help message
   -v,--version       Show a version message
 
@@ -24,7 +23,7 @@ usage () { echo \
 }
 
 version () { echo \
-"This is $PROGNAME, from the Debian devscripts package, version ###VERSION###
+"This is ${0##*/}, from the Debian devscripts package, version ###VERSION###
 This script is in the PUBLIC DOMAIN.
 Authors: David Paleino <d.paleino@gmail.com>
 Adapted from wnpp-alert, by Arthur Korn <arthur@korn.ch>,
@@ -42,7 +41,7 @@ elif command -v curl >/dev/null 2>&1; then
     CURLORWGET="curl"
     GETCOMMAND="curl -qs -o"
 else
-    echo "$PROGNAME: need either the wget or curl package installed to run this" >&2
+    echo "${0##*/}: need either the wget or curl package installed to run this" >&2
     exit 1
 fi
 
@@ -59,11 +58,11 @@ trap "rm -f '$WNPP' '$WNPPTMP' '$WNPP_PACKAGES'" \
 # which don't skip over it to the label 'd'
 
 $GETCOMMAND $WNPPTMP http://www.debian.org/devel/wnpp/help_requested || \
-    { echo "wnpp-alert: $CURLORWGET http://www.debian.org/devel/wnpp/help_requested failed." >&2; exit 1; }
+    { echo "${0##*/}: $CURLORWGET http://www.debian.org/devel/wnpp/help_requested failed." >&2; exit 1; }
 sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/ITP \1 \2 -- \3/; T d; p; : d' $WNPPTMP > $WNPP
 
 $GETCOMMAND $WNPPTMP http://www.debian.org/devel/wnpp/help_requested || \
-    { echo "wnpp-alert: $CURLORWGET http://www.debian.org/devel/wnpp/help_requested failed." >&2; exit 1; }
+    { echo "${0##*/}: $CURLORWGET http://www.debian.org/devel/wnpp/help_requested failed." >&2; exit 1; }
 sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/RFP \1 \2 -- \3/; T d; p; : d' $WNPPTMP >> $WNPP
 
 awk -F' ' '{print $3" ("$1" - #"$2")"}' $WNPP | sort > $WNPP_PACKAGES
