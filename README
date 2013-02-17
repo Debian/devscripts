@@ -18,11 +18,11 @@ the Description field in the control file.
 
 And now, in mostly alphabetical order, the scripts:
 
-- annotate-output: prepend time and stream (O for stdout E for sterr)
-  for every line of output
+- annotate-output: run a command and prepend time and stream (O for stdout,
+  E for stderr) for every line of output
 
 - archpath: Prints arch (tla/Bazaar) package names. Also supports
-  calculating the package names for other branches.
+  calculating the package names for other branches. [tla | bazaar]
 
 - bts: A command-line tool for accessing the BTS, both to
   send mails to control@bts.debian.org and to access the web pages and
@@ -32,10 +32,10 @@ And now, in mostly alphabetical order, the scripts:
 - build-rdeps: Searches for all packages that build-depend on a given package
   [dctrl-tools]
 
-- chdist: A tool to easily play with several distributions. [dctrl-tools]
+- chdist: tool to easily play with several distributions [dctrl-tools]
 
-- checkbashisms: checks whether a /bin/sh script uses any common
-  bash-specific features
+- checkbashisms: check whether a /bin/sh script contains any common
+  bash-specific contructs
 
 - cowpoke: upload a Debian source package to a cowbuilder host and build it,
   optionally also signing and uploading the result to an incoming queue
@@ -52,13 +52,13 @@ And now, in mostly alphabetical order, the scripts:
 - cvs-debuild: A wrapper for cvs-buildpackage to use debuild as its package
   building program. [cvs-buildpackage, fakeroot, lintian, gnupg]
 
-- dcmd: Run a given command replacing the name of a .changes or .dsc
-  file with each of the files referenced therein
+- dcmd: run a given command replacing the name of a .changes or .dsc file
+  with each of the files referenced therein
 
-- dcontrol: Remotely query package and source control files for all Debian
+- dcontrol: remotely query package and source control files for all Debian
   distributions. [liburl-perl, libwww-perl]
 
-- dd-list: Given a list of packages, pretty-print it ordered by maintainer.
+- dd-list: given a list of packages, pretty-print it ordered by maintainer
 
 - debc: List contents of current package.  Do this after a successful
   "debuild" to see if the package looks all right.
@@ -68,7 +68,7 @@ And now, in mostly alphabetical order, the scripts:
   entry for the current version, depending upon the options given to it.
   [libparse-debcontrol-perl, libsoap-lite-perl]
 
-- debcheckout: checkout the development repository of a debian package
+- debcheckout: checkout the development repository of a Debian package
 
 - debclean: Clean a Debian source tree.  Debclean will clean all Debian
   source trees below the current directory, and if requested, also remove
@@ -121,7 +121,8 @@ And now, in mostly alphabetical order, the scripts:
   .changes and .dsc files from a remote machine. [gnupg, debian-keyring,
   ssh-client]
 
-- debsnap: Grabs packages from http://snapshot.debian.net [wget]
+- debsnap: grab packages from http://snapshot.debian.org [libwww-perl,
+  libjson-perl]
 
 - debuild: A wrapper for building a package (i.e., dpkg-buildpackage) to
   avoid problems with insufficient permissions and wrong paths etc.
@@ -133,8 +134,8 @@ And now, in mostly alphabetical order, the scripts:
   Debuild will also run lintian to check that the package does not
   have any major policy violations. [fakeroot, lintian, gnupg]
 
-- deb-reversion: Increases a binary package version number and repacks
-  the package, useful for porters and the like.
+- deb-reversion: increases a binary package version number and repacks the
+  package, useful for porters and the like
 
 - dep3changelog: generate a changelog entry from a DEP3-style patch header
 
@@ -145,8 +146,8 @@ And now, in mostly alphabetical order, the scripts:
   .dsc to download all references files. Specify a package name to download
   it from the configured apt repository. [wget | curl]
 
-- diff2patches: Extracts patches from a .diff.gz file placing them under
-  debian/ or, if present, debian/patches. [patchutils]
+- diff2patches: extracts patches from a .diff.gz file placing them under
+  debian/ or, if present, debian/patches [patchutils]
 
 - dpkg-depcheck, dpkg-genbuilddeps: Runs a specified command (such as
   debian/rules build) or dpkg-buildpackage, respectively, to determine the
@@ -154,7 +155,7 @@ And now, in mostly alphabetical order, the scripts:
   when trying to determine the packages needed in the Build-Depends etc.
   lines in the debian/control file. [build-essential, strace]
 
-- dscextract: extracts a single file from a Debian source package. [patchutils]
+- dscextract: extract a single file from a Debian source package [patchutils]
 
 - dscverify: check the signature and MD5 sums of a dsc file against the most
   current Debian keyring on your system. [gnupg, debian-keyring,
@@ -163,7 +164,7 @@ And now, in mostly alphabetical order, the scripts:
 - edit-patch: add/edit a patch for a source package and commit the changes
   [quilt | dpatch | cdbs]
 
-- getbuildlog: Download package build logs from Debian auto-builders. [wget]
+- getbuildlog: download package build logs from Debian auto-builders [wget]
 
 - grep-excuses: grep the update_excuses.html file to find out what is
   happening to your packages. [libterm-size-perl, wget, w3m]
@@ -174,16 +175,16 @@ And now, in mostly alphabetical order, the scripts:
 - list-unreleased: searches for packages marked UNRELEASED in their
   changelog
 
-- manpage-alert: locate binaries without corresponding manpages. [man-db]
+- manpage-alert: locate binaries without corresponding manpages [man-db]
 
 - mass-bug: mass-file bug reports [bsd-mailx | mailx]
 
 - mergechanges: merge .changes files from the same release but built
-  on different architectures.
+  on different architectures
 
-- mk-build-deps: Given a package name and/or control file, generate a
-  binary package which may be installed to satisfy the build-dependencies
-  of the given package. [equivs]
+- mk-build-deps: Given a package name and/or control file, generate a binary
+  package which may be installed to satisfy the build-dependencies of the
+  given package. [equivs]
 
 - namecheck: Check project names are not already taken.
 
@@ -198,14 +199,14 @@ And now, in mostly alphabetical order, the scripts:
   gnuplot. [libtimedate-perl, gnuplot]
 
 - pts-subscribe: subscribe to the PTS (Package Tracking System) for a
-  limited period of time. [bsd-mailx | mailx, at]
+  limited period of time [bsd-mailx | mailx, at]
 
 - rc-alert: list installed packages which have release-critical bugs [wget]
 
-- rmadison: Remotely query the Debian archive database about packages.
+- rmadison: remotely query the Debian archive database about packages
   [liburi-perl, wget | curl]
 
-- suspicious-source: outputs a list of files which are not common source
+- suspicious-source: output a list of files which are not common source
   files [python-magic]
 
 - svnpath: Prints the path to the Subversion repository of a Subversion
@@ -213,7 +214,7 @@ And now, in mostly alphabetical order, the scripts:
   tags in a repository independent fashion. Used by debcommit to generate
   svn tags. [subversion]
 
-- tagpending: Runs from a Debian source tree and tags bugs that are to be
+- tagpending: runs from a Debian source tree and tags bugs that are to be
   closed in the latest changelog as pending. [libsoap-lite-perl]
 
 - transition-check: Check a list of source packages for involvement in
@@ -231,13 +232,13 @@ And now, in mostly alphabetical order, the scripts:
   package.  It will try to apply the latest diffs to your package and
   tell you how successful it was. [patch]
 
-- what-patch: determines what patch system, if any, a source package is using
+- what-patch: determine what patch system, if any, a source package is using
   [patchutils]
 
 - whodepends: check which maintainers' packages depend on a package
 
-- who-uploads: determine the most recent uploaders of a package to the
-  Debian archive [gnupg, debian-keyring, debian-maintainers, wget]
+- who-uploads: determine the most recent uploaders of a package to the Debian
+  archive [gnupg, debian-keyring, debian-maintainers, wget]
 
 - wnpp-alert: list installed packages which are orphaned or up for adoption
   [wget]
