@@ -36,4 +36,10 @@ testBackslashes() {
   assertEquals 'backslashes echoed' "${expected}" "${actual}"
 }
 
+testLeadingWhitespace() {
+  expected='% O:     foo'
+  actual="$($COMMAND +%% printf '%s\n' '    foo' | grep O:)"
+  assertEquals 'leading whitespace preserved' "${expected}" "${actual}"
+}
+
 . shunit2
