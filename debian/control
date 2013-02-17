@@ -98,7 +98,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - bts: a command-line tool for manipulating the BTS [www-browser,
     libauthen-sasl-perl, libnet-smtp-ssl-perl, libsoap-lite-perl, libwww-perl,
     bsd-mailx | mailx]
-  - build-rdeps: Searches for all packages that build-depend on a given package
+  - build-rdeps: search for all packages that build-depend on a given package
     [dctrl-tools]
   - chdist: tool to easily play with several distributions [dctrl-tools]
   - checkbashisms: check whether a /bin/sh script contains any common
@@ -107,17 +107,17 @@ Description: scripts to make the life of a Debian Package maintainer easier
     optionally also signing and uploading the result to an incoming queue
     [ssh-client]
   - cvs-debi, cvs-debc: wrappers around debi and debc respectively (see below)
-    which allow them to be called from the CVS working directory.
+    which allow them to be called from the CVS working directory
     [cvs-buildpackage]
   - cvs-debrelease: wrapper around debrelease which allows it to be called
-    from the CVS working directory. [cvs-buildpackage, dupload | dput,
+    from the CVS working directory [cvs-buildpackage, dupload | dput,
     ssh-client]
-  - cvs-debuild: A wrapper for cvs-buildpackage to use debuild as its package
-    building program. [cvs-buildpackage, fakeroot, lintian, gnupg]
+  - cvs-debuild: wrapper for cvs-buildpackage to use debuild as its package
+    building program [cvs-buildpackage, fakeroot, lintian, gnupg]
   - dcmd: run a given command replacing the name of a .changes or .dsc file
     with each of the files referenced therein
   - dcontrol: remotely query package and source control files for all Debian
-    distributions. [liburl-perl, libwww-perl]
+    distributions [liburl-perl, libwww-perl]
   - dd-list: given a list of packages, pretty-print it ordered by maintainer
   - debc: display the contents of just-built .debs
   - debchange/dch: automagically add entries to debian/changelog files
@@ -141,13 +141,13 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - debuild: wrapper to build a package without having to su or worry
     about how to invoke dpkg to build using fakeroot.  Also deals
     with common environment problems, umask etc. [fakeroot, lintian, gnupg]
-  - deb-reversion: increases a binary package version number and repacks the
+  - deb-reversion: increase a binary package version number and repacks the
     package, useful for porters and the like
   - dep3changelog: generate a changelog entry from a DEP3-style patch header
   - desktop2menu: given a freedesktop.org desktop file, generate a skeleton
     for a menu file [libfile-desktopentry-perl]
-  - dget: downloads Debian source and binary packages [wget | curl]
-  - diff2patches: extracts patches from a .diff.gz file placing them under
+  - dget: download Debian source and binary packages [wget | curl]
+  - diff2patches: extract patches from a .diff.gz file placing them under
     debian/ or, if present, debian/patches [patchutils]
   - dpkg-depcheck, dpkg-genbuilddeps: determine the packages used during
     the build of a Debian package; useful for determining the Build-Depends
@@ -161,15 +161,15 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - grep-excuses: grep the update_excuses.html file for your packages
     [libterm-size-perl, wget, w3m]
   - licensecheck: attempt to determine the license of source files
-  - list-unreleased: searches for unreleased packages
+  - list-unreleased: search for unreleased packages
   - manpage-alert: locate binaries without corresponding manpages [man-db]
   - mass-bug: mass-file bug reports [bsd-mailx | mailx]
   - mergechanges: merge .changes files from the same release but built
     on different architectures
-  - mk-build-deps: Given a package name and/or control file, generate a binary
+  - mk-build-deps: given a package name and/or control file, generate a binary
     package which may be installed to satisfy the build-dependencies of the
-    given package. [equivs]
-  - namecheck: Check project names are not already taken.
+    given package [equivs]
+  - namecheck: check project names are not already taken
   - nmudiff: mail a diff of the current package against the previous version
     to the BTS to assist in tracking NMUs [patchutils, mutt]
   - origtargz: fetch the orig tarball of a Debian package from various sources,
@@ -184,10 +184,10 @@ Description: scripts to make the life of a Debian Package maintainer easier
     [liburi-perl, wget | curl]
   - suspicious-source: output a list of files which are not common source
     files [python-magic]
-  - svnpath: print svn repository paths [subversion]
-  - tagpending: runs from a Debian source tree and tags bugs that are to be
-    closed in the latest changelog as pending. [libsoap-lite-perl]
-  - transition-check: Check a list of source packages for involvement in
+  - svnpath: print Subversion repository paths [subversion]
+  - tagpending: run from a Debian source tree and tag bugs that are to be
+    closed in the latest changelog as pending [libsoap-lite-perl]
+  - transition-check: check a list of source packages for involvement in
     transitions for which uploads to unstable are currently blocked
     [libwww-perl, libyaml-syck-perl]
   - uscan: scan upstream sites for new releases of packages
