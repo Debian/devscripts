@@ -198,7 +198,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - who-uploads: determine the most recent uploaders of a package to the Debian
     archive [gnupg, debian-keyring, debian-maintainers, wget]
   - wnpp-alert: list installed packages which are orphaned or up for adoption
-    [wget]
+    [wget | curl]
   - wnpp-check: check whether there is an open request for packaging or
     intention to package bug for a package [wget | curl]
   - wrap-and-sort: wrap long lines and sort items in packaging files
