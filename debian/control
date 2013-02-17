@@ -178,7 +178,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
     [libtimedate-perl, gnuplot]
   - pts-subscribe: subscribe to the PTS for a limited period of time
     [bsd-mailx | mailx, at]
-  - rc-alert: list installed packages which have release-critical bugs [wget]
+  - rc-alert: list installed packages which have release-critical bugs
+    [wget | curl]
   - rmadison: remotely query the Debian archive database about packages
     [liburi-perl, wget | curl]
   - suspicious-source: output a list of files which are not common source

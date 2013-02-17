@@ -158,8 +158,16 @@ $excludedists = remove_duplicate_values(uc($excludedists));
 
 ## First download the RC bugs page
 
-unless (system("command -v wget >/dev/null 2>&1") == 0) {
-    die "$progname: this program requires the wget package to be installed\n";
+my $curl_or_wget;
+my $getcommand;
+if (system("command -v wget >/dev/null 2>&1") == 0) {
+    $curl_or_wget = "wget";
+    $getcommand = "wget -q -O -";
+} elsif (system("command -v curl >/dev/null 2>&1") == 0) {
+    $curl_or_wget = "curl";
+    $getcommand = "curl -qs";
+} else {
+    die "$progname: this program requires either the wget or curl package to be installed\n";
 }
 
 
@@ -171,16 +179,24 @@ if (! -d $cachedir and $forcecache) {
 if (-d $cachedir) {
     chdir $cachedir or die "$progname: can't cd $cachedir: $!\n";
 
-    # Either use the cached version because the remote hasn't been updated
-    # (-N) or download a complete new copy (--no-continue)
-    if (system('wget', '-qN', '--no-continue', $url) != 0) {
-	die "$progname: wget failed!\n";
+    if ("$curl_or_wget" eq "wget") {
+        # Either use the cached version because the remote hasn't been
+        # updated (-N) or download a complete new copy (--no-continue)
+	if (system('wget', '-qN', '--no-continue', $url) != 0) {
+	    die "$progname: wget failed!\n";
+	}
+    } elsif ("$curl_or_wget" eq "curl") {
+	if (system('curl', '-qsR', $url) != 0) {
+	    die "$progname: curl failed!\n";
+	}
+    } else {
+	die "$progname: Unknown download program $curl_or_wget!\n";
     }
     open BUGS, $cachefile or die "$progname: could not read $cachefile: $!\n";
 }
 else {
-    open BUGS, "wget -q -O - $url |" or
-	die "$progname: could not run wget: $!\n";
+    open BUGS, "$getcommand $url |" or
+	die "$progname: could not run $curl_or_wget: $!\n";
 }
 
 ## Get list of installed packages (not source packages)
@@ -204,7 +220,7 @@ if ($popcon) {
 	    or die "$progname: Unable to access popcon data: $!";
 	$pc_regex = '(\d+)\s\d+\s(\S+)';
     } else {
-	open POPCON, "wget -q -O - http://popcon.debian.org/by_$pc_by.gz | gunzip -c |"
+	open POPCON, "$getcommand http://popcon.debian.org/by_$pc_by.gz | gunzip -c |"
 	    or die "$progname: Not able to receive remote popcon data!";
 	$pc_regex = '(\d+)\s+(\S+)\s+(\d+\s+){5}\(.*\)';
     }

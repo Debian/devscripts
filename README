@@ -201,7 +201,8 @@ And now, in mostly alphabetical order, the scripts:
 - pts-subscribe: subscribe to the PTS (Package Tracking System) for a
   limited period of time [bsd-mailx | mailx, at]
 
-- rc-alert: list installed packages which have release-critical bugs [wget]
+- rc-alert: list installed packages which have release-critical bugs
+  [wget | curl]
 
 - rmadison: remotely query the Debian archive database about packages
   [liburi-perl, wget | curl]
