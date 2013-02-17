@@ -18,6 +18,7 @@ devscripts (2.13.0) UNRELEASED; urgency=low
     + Handle an incomplete line of output.  (Closes: #695609)
     + Don't treat backslashes in the command's output as an escape.  (Closes:
       #695613)
+    + Don't swallow leading whitespace.  (Closes: #695612, LP: #1120917)
   * dscverify: Use "gpg --status-fd" to determine if a valid signature is
     found and only use the signed content.  (Closes: #695914)
   * wrap-and-sort: Fix repeated word in man page.  (Closes: #696363)

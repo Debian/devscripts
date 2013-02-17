@@ -24,7 +24,7 @@ progname=$(basename $0)
 
 addtime ()
 {
-	while read -r line; do
+	while IFS= read -r line; do
 		echo "`date ${FMT}` $1: $line"
 	done
 	if [ ! -z "$line" ]; then
