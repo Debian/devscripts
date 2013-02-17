@@ -12135,9 +12135,9 @@ msgid ""
 "perl, libnet-smtp-ssl-perl, libsoap-lite-perl, libwww-perl, bsd-mailx | "
 "mailx]"
 msgstr ""
-"ein Befehlszeilenwerkzeug zum Manipulieren der Fehlerdatenbank [www-browser, "
-"libauthen-sasl-perl, libnet-smtp-ssl-perl, libsoap-lite-perl, libwww-perl, "
-"bsd-mailx | mailx]"
+"ein Befehlszeilenwerkzeug zum Manipulieren der Fehlerdatenbank. [www-"
+"browser, libauthen-sasl-perl, libnet-smtp-ssl-perl, libsoap-lite-perl, "
+"libwww-perl, bsd-mailx | mailx]"
 
 #. type: IP
 #: ../scripts/devscripts.1:37
@@ -12167,7 +12167,7 @@ msgstr "I<chdist>(1)"
 #: ../scripts/devscripts.1:41
 msgid "tool to easily play with several distributions [dctrl-tools]"
 msgstr ""
-"Werkzeug zum einfachen Umgang mit mehreren Distributionen [dctrl-tools]"
+"Werkzeug zum einfachen Umgang mit mehreren Distributionen. [dctrl-tools]"
 
 #. type: IP
 #: ../scripts/devscripts.1:41
@@ -12197,7 +12197,7 @@ msgid ""
 msgstr ""
 "lädt ein Debian-Quellpaket auf einen Cowbuilder-Rechner und baut es, "
 "signiert es wahlweise und lädt das Ergebnis in eine Incoming-Warteschlange."
-"ssh [ssh-client]"
+"ssh. [ssh-client]"
 
 #. type: IP
 #: ../scripts/devscripts.1:45
@@ -12207,10 +12207,6 @@ msgstr "I<cvs-debi, cvs-debc>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:47
-#, fuzzy
-#| msgid ""
-#| "wrappers around debi and debc respectively (see below) which allow them "
-#| "to be called from the CVS working directory. [cvs-buildpackage]"
 msgid ""
 "wrappers around debi and debc respectively (see below) which allow them to "
 "be called from the CVS working directory [cvs-buildpackage]"
@@ -12226,10 +12222,6 @@ msgstr "I<cvs-debrelease>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:49
-#, fuzzy
-#| msgid ""
-#| "wrapper around debrelease which allows it to be called from the CVS "
-#| "working directory. [cvs-buildpackage, dupload | dput, ssh-client]"
 msgid ""
 "wrapper around debrelease which allows it to be called from the CVS working "
 "directory [cvs-buildpackage, dupload | dput, ssh-client]"
@@ -12245,16 +12237,12 @@ msgstr "I<cvs-debuild>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:51
-#, fuzzy
-#| msgid ""
-#| "A wrapper for cvs-buildpackage to use debuild as its package building "
-#| "program. [cvs-buildpackage, fakeroot, lintian, gnupg]"
 msgid ""
 "wrapper for cvs-buildpackage to use debuild as its package building program "
 "[cvs-buildpackage, fakeroot, lintian, gnupg]"
 msgstr ""
-"ein Wrapper für CVS-Buildpackage, um Debuild als Paketbauprogramm zu "
-"benutzen. [cvs-buildpackage, fakeroot, lintian, gnupg]"
+"Wrapper für CVS-Buildpackage, um Debuild als Paketbauprogramm zu benutzen. "
+"[cvs-buildpackage, fakeroot, lintian, gnupg]"
 
 #. type: IP
 #: ../scripts/devscripts.1:51
@@ -12279,10 +12267,6 @@ msgstr "I<dcontrol>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:55
-#, fuzzy
-#| msgid ""
-#| "remotely query package and source control files for all Debian "
-#| "distributions. [liburl-perl, libwww-perl]"
 msgid ""
 "remotely query package and source control files for all Debian distributions "
 "[liburl-perl, libwww-perl]"
@@ -12416,7 +12400,7 @@ msgstr "I<debrelease>(1)"
 #. type: Plain text
 #: ../scripts/devscripts.1:75
 msgid "wrapper around dupload or dput [dupload | dput, ssh-client]"
-msgstr "Wrapper um Dupload oder Dput [dupload | dput, ssh-client]"
+msgstr "Wrapper um Dupload oder Dput. [dupload | dput, ssh-client]"
 
 #. type: IP
 #: ../scripts/devscripts.1:75
@@ -12491,7 +12475,7 @@ msgstr "I<dep3changelog>(1)"
 #. type: Plain text
 #: ../scripts/devscripts.1:85
 msgid "generate a changelog entry from a DEP3-style patch header"
-msgstr "erzeugt einen Changelog-Eintrag aus Patch-Kopfzeilen im DEP3-Stil"
+msgstr "erzeugt einen Changelog-Eintrag aus Patch-Kopfzeilen im DEP3-Stil."
 
 #. type: IP
 #: ../scripts/devscripts.1:85
@@ -12533,10 +12517,6 @@ msgstr "I<diff2patches>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:91
-#, fuzzy
-#| msgid ""
-#| "extract patches from a .diff.gz file placing them under debian/ or, if "
-#| "present, debian/patches [patchutils]"
 msgid ""
 "extract patches from a .diff.gz file placing them under debian/ or, if "
 "present, debian/patches [patchutils]"
@@ -12674,7 +12654,7 @@ msgstr "I<mass-bug>(1)"
 #. type: Plain text
 #: ../scripts/devscripts.1:111
 msgid "mass-file bug reports [bsd-mailx | mailx]"
-msgstr "reicht größere Anzahl von Fehlerberichten ein [bsd-mailx | mailx]"
+msgstr "reicht größere Anzahl von Fehlerberichten ein. [bsd-mailx | mailx]"
 
 #. type: IP
 #: ../scripts/devscripts.1:111
@@ -12701,11 +12681,6 @@ msgstr "I<mk-build-deps>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:115
-#, fuzzy
-#| msgid ""
-#| "Given a package name and/or control file, generate a binary package which "
-#| "may be installed to satisfy the build-dependencies of the given packages. "
-#| "[equivs]"
 msgid ""
 "given a package name and/or control file, generate a binary package which "
 "may be installed to satisfy the build-dependencies of the given package "
@@ -12723,8 +12698,6 @@ msgstr "I<namecheck>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:117
-#, fuzzy
-#| msgid "Check project names are not already taken."
 msgid "check project names are not already taken"
 msgstr "prüft, ob Projektnamen bereits vergeben sind."
 
@@ -12792,12 +12765,10 @@ msgstr "I<rc-alert>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:127
-#, fuzzy
-#| msgid "list installed packages which have release-critical bugs [wget]"
 msgid "list installed packages which have release-critical bugs [wget | curl]"
 msgstr ""
 "führt alle installierten Pakete auf, die release-kritische Fehler enthalten. "
-"[wget]"
+"[wget | curl]"
 
 #. type: IP
 #: ../scripts/devscripts.1:127
@@ -12807,16 +12778,12 @@ msgstr "I<rmadison>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:129
-#, fuzzy
-#| msgid ""
-#| "remotely query the Debian archive database about packages [wget | curl, "
-#| "liburi-perl]"
 msgid ""
 "remotely query the Debian archive database about packages [liburi-perl, wget "
 "| curl]"
 msgstr ""
-"fragt aus der Ferne die Debian-Archivdatenbank über Pakete ab. [wget | curl, "
-"liburi-perl]"
+"fragt aus der Ferne die Debian-Archivdatenbank über Pakete ab. [liburi-perl, "
+"wget | curl]"
 
 #. type: IP
 #: ../scripts/devscripts.1:129
@@ -12839,10 +12806,8 @@ msgstr "I<svnpath>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:133
-#, fuzzy
-#| msgid "print svn repository paths [subversion]"
 msgid "print Subversion repository paths [subversion]"
-msgstr "gibt SVN-Depotpfade aus. [subversion]"
+msgstr "gibt Subversion-Depotpfade aus. [subversion]"
 
 #. type: IP
 #: ../scripts/devscripts.1:133
@@ -12872,10 +12837,6 @@ msgstr "I<transition-check>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:137
-#, fuzzy
-#| msgid ""
-#| "Check a list of source packages for involvement in transitions for which "
-#| "uploads to unstable are currently blocked [libwww-perl, libyaml-syck-perl]"
 msgid ""
 "check a list of source packages for involvement in transitions for which "
 "uploads to unstable are currently blocked [libwww-perl, libyaml-syck-perl]"
@@ -12892,16 +12853,12 @@ msgstr "I<uscan>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:139
-#, fuzzy
-#| msgid ""
-#| "scan upstream sites for new releases of packages [libcrypt-ssleay-perl, "
-#| "libwww-perl, unzip, xz-utils]"
 msgid ""
 "scan upstream sites for new releases of packages [libcrypt-ssleay-perl, "
 "libwww-perl, unzip, lzma, xz-utils]"
 msgstr ""
-"durchucht Seiten der Originalautoren auf neue Veröffentlichungen von Paketen "
-"[libcrypt-ssleay-perl, libwww-perl, unzip, xz-utils]"
+"durchucht Seiten der Originalautoren auf neue Veröffentlichungen von "
+"Paketen. [libcrypt-ssleay-perl, libwww-perl, unzip, lzma, xz-utils]"
 
 #. type: IP
 #: ../scripts/devscripts.1:139
@@ -12912,7 +12869,7 @@ msgstr "I<uupdate>(1)"
 #. type: Plain text
 #: ../scripts/devscripts.1:141
 msgid "integrate upstream changes into a source package [patch]"
-msgstr "integriert Änderungen der Originalautoren in ein Quellpaket [patch]"
+msgstr "integriert Änderungen der Originalautoren in ein Quellpaket. [patch]"
 
 #. type: IP
 #: ../scripts/devscripts.1:141
@@ -12947,16 +12904,12 @@ msgstr "I<who-uploads>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:147
-#, fuzzy
-#| msgid ""
-#| "determine the most recent uploaders of a package to the Debian archive "
-#| "[gnupg, debian-keyring, wget]"
 msgid ""
 "determine the most recent uploaders of a package to the Debian archive "
 "[gnupg, debian-keyring, debian-maintainers, wget]"
 msgstr ""
 "bestimmt diejenigen, die ein Paket kürzlich in das Debian-Archiv hochgeladen "
-"haben. [gnupg, debian-keyring, wget]"
+"haben. [gnupg, debian-keyring, debian-maintainers, wget]"
 
 #. type: IP
 #: ../scripts/devscripts.1:147
@@ -12966,13 +12919,11 @@ msgstr "I<wnpp-alert>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:149
-#, fuzzy
-#| msgid "list installed packages which are orphaned or up for adoption [wget]"
 msgid ""
 "list installed packages which are orphaned or up for adoption [wget | curl]"
 msgstr ""
 "führt installierte Pakete auf, die verwaist oder zur Adoption freigegeben "
-"sind. [wget]"
+"sind. [wget | curl]"
 
 #. type: IP
 #: ../scripts/devscripts.1:149
@@ -12982,16 +12933,12 @@ msgstr "I<wnpp-check>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:151
-#, fuzzy
-#| msgid ""
-#| "check whether there is an open request for packaging or intention to "
-#| "package bug for a package [wget]"
 msgid ""
 "check whether there is an open request for packaging or intention to package "
 "bug for a package [wget | curl]"
 msgstr ""
 "prüft, ob es eine offene Anfrage zum Paketieren oder einen Fehlerbericht "
-"über die Absicht zum Packen für ein Paket gibt. [wget]"
+"über die Absicht zum Packen für ein Paket gibt. [wget | curl]"
 
 #. type: IP
 #: ../scripts/devscripts.1:151
