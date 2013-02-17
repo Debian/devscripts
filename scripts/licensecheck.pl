@@ -450,7 +450,7 @@ sub parselicense {
 	$license = "GENERATED FILE";
     }
 
-    if ($licensetext =~ /is (free software.? you can redistribute it and\/or modify it|licensed) under the terms of (version [^ ]+ of )?the (GNU (Library |Lesser )General Public License|LGPL)/i) {
+    if ($licensetext =~ /((is free software.? )?[Yy]ou can redistribute it and\/or modify it|is licensed) under the terms of (version [^ ]+ of )?the (GNU (Library |Lesser )General Public License|LGPL)/i) {
 	$license = "LGPL$gplver$extrainfo $license";
     }
 
@@ -458,7 +458,7 @@ sub parselicense {
 	$license = "AGPL$gplver$extrainfo $license";
     }
 
-    if ($licensetext =~ /is free software.? you (can|may) redistribute it and\/or modify it under the terms of (?:version [^ ]+ (?:\(?only\)? )?of )?the GNU General Public License/i) {
+    if ($licensetext =~ /(is free software.? )?you (can|may) redistribute it and\/or modify it under the terms of (?:version [^ ]+ (?:\(?only\)? )?of )?the GNU General Public License/i) {
 	$license = "GPL$gplver$extrainfo $license";
     }
 
@@ -473,7 +473,7 @@ sub parselicense {
 
     if ($licensetext =~ /This file is part of the .*Qt GUI Toolkit. This file may be distributed under the terms of the Q Public License as defined/) {
 	$license = "QPL (part of Qt) $license";
-    } elsif ($licensetext =~ /may be distributed under the terms of the Q Public License as defined/) {
+    } elsif ($licensetext =~ /may (be distributed|redistribute it) under the terms of the Q Public License/) {
 	$license = "QPL $license";
     }
 
