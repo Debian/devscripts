@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: devscripts 2.12.4\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
 "POT-Creation-Date: 2013-02-17 15:13-0400\n"
-"PO-Revision-Date: 2013-01-23 21:26+0100\n"
+"PO-Revision-Date: 2013-02-18 20:44+0100\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
 "Language: de\n"
@@ -12147,10 +12147,6 @@ msgstr "I<build-rdeps>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:39
-#, fuzzy
-#| msgid ""
-#| "Searches for all packages that build-depend on a given package [dctrl-"
-#| "tools]"
 msgid ""
 "search for all packages that build-depend on a given package [dctrl-tools]"
 msgstr ""
@@ -12332,10 +12328,8 @@ msgstr "I<debclean>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:65
-#, fuzzy
-#| msgid "purge a Debian source tree [fakeroot]"
 msgid "clean a Debian source tree [fakeroot]"
-msgstr "säubert einen Debian-Quellverzeichnisbaum vollständig. [fakeroot]"
+msgstr "säubert einen Debian-Quellverzeichnisbaum. [fakeroot]"
 
 #. type: IP
 #: ../scripts/devscripts.1:65
@@ -12459,12 +12453,12 @@ msgstr "I<deb-reversion>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:83
-#, fuzzy
-#| msgid "increases a binary package version number and repacks the archive"
 msgid ""
 "increase a binary package version number and repacks the package, useful for "
 "porters and the like"
-msgstr "erhöht die Versionsnummer eines Binärpakets und packt das Archiv neu."
+msgstr ""
+"erhöht die Versionsnummer eines Binärpakets und packt das Paket neu. Dies ist "
+"nützlich für Portierer und dergleichen."
 
 #. type: IP
 #: ../scripts/devscripts.1:83
@@ -12485,16 +12479,12 @@ msgstr "I<desktop2menu>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:87
-#, fuzzy
-#| msgid ""
-#| "produce a skeleton menu file from a freedesktop.org desktop file [libfile-"
-#| "desktopentry-perl]"
 msgid ""
 "given a freedesktop.org desktop file, generate a skeleton for a menu file "
 "[libfile-desktopentry-perl]"
 msgstr ""
-"erstellt eine Gerüstmenüdatei aus einer freedesktop.org-Desktopdatei. "
-"[libfile-desktopentry-perl]"
+"erzeugt eine Gerüstmenüdatei aus einer gegebenen "
+"freedesktop.org-Desktopdatei. [libfile-desktopentry-perl]"
 
 #. type: IP
 #: ../scripts/devscripts.1:87
@@ -12504,8 +12494,6 @@ msgstr "I<dget>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:89
-#, fuzzy
-#| msgid "downloads Debian source and binary packages [wget | curl]"
 msgid "download Debian source and binary packages [wget | curl]"
 msgstr "lädt Debian-Quell- und -Binärpakete herunter. [wget | curl]"
 
@@ -12629,8 +12617,6 @@ msgstr "I<list-unreleased>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:107
-#, fuzzy
-#| msgid "searches for unreleased packages"
 msgid "search for unreleased packages"
 msgstr "sucht nach unveröffentlichten Paketen."
 
@@ -12664,14 +12650,12 @@ msgstr "I<mergechanges>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:113
-#, fuzzy
-#| msgid "merge .changes files from a package built on different architectures"
 msgid ""
 "merge .changes files from the same release but built on different "
 "architectures"
 msgstr ""
-"führt .changes-Dateien vom Bau eines Pakets auf unterschiedlichen "
-"Architekturen zusammen."
+"führt .changes-Dateien der gleichen Veröffentlichung zusammen, die aber auf "
+"unterschiedlichen Architekturen gebaut wurden."
 
 #. type: IP
 #: ../scripts/devscripts.1:113
@@ -12817,10 +12801,6 @@ msgstr "I<tagpending>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:135
-#, fuzzy
-#| msgid ""
-#| "runs from a Debian source tree and tags bugs that are to be closed in the "
-#| "latest changelog as pending. [libsoap-lite-perl]"
 msgid ""
 "run from a Debian source tree and tag bugs that are to be closed in the "
 "latest changelog as pending [libsoap-lite-perl]"
