@@ -1,4 +1,4 @@
-devscripts (2.13.0) UNRELEASED; urgency=low
+devscripts (2.13.0) experimental; urgency=low
 
   [ Christoph Berg ]
   * origtargz: New script: fetch the orig tarball of a Debian package from
@@ -94,7 +94,7 @@ devscripts (2.13.0) UNRELEASED; urgency=low
     one second, to make modification detection more reliable in the absence
     of subsecond granularity. (Closes: #697923)
 
- -- James McCoy <jamessan@debian.org>  Sat, 15 Sep 2012 16:12:16 -0400
+ -- Benjamin Drung <bdrung@debian.org>  Mon, 18 Feb 2013 21:50:11 +0100
 
 devscripts (2.12.6) unstable; urgency=low
 
