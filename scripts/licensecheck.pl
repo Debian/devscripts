@@ -333,6 +333,11 @@ sub parse_copyright {
 	|and|or                 # Part of a sentence
 	|(holder|owner)s?       # Part of a sentence
 	)\b';
+    my $copyright_predisindicator_regex = '(
+    ^[#]define\s+.*\(c\)    # #define foo(c) -- not copyright
+	)';
+
+    if ( ! m%$copyright_predisindicator_regex%ix) {
 
     if (m%$copyright_indicator_regex(?::\s*|\s+)(\S.*)$%ix) {
 	$match = $1;
@@ -347,6 +352,7 @@ sub parse_copyright {
 	    $match =~ s/\\@/@/g;
 	    $copyright = $match;
 	}
+    }
     }
 
     return $copyright;
