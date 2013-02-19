@@ -331,6 +331,7 @@ sub parse_copyright {
 	\b(?:info(?:rmation)?	# Discussing copyright information
 	|notices?		# Discussing the notice
 	|and|or                 # Part of a sentence
+	|(holder|owner)s?       # Part of a sentence
 	)\b';
 
     if (m%$copyright_indicator_regex(?::\s*|\s+)(\S.*)$%ix) {
