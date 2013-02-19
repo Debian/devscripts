@@ -10,3 +10,6 @@
  *    without specific prior written permission.
  * ...
  */
+
+# from freeswitch/libs/sofia-sip/libsofia-sip-ua/msg/msg_date.c
+#define is_digit(c) ((c) >= '0' && (c) <= '9')
