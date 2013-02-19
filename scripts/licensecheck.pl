@@ -329,7 +329,7 @@ sub parse_copyright {
 	)';
     my $copyright_disindicator_regex = '
 	\b(?:info(?:rmation)?	# Discussing copyright information
-	|notice			# Discussing the notice
+	|notices?		# Discussing the notice
 	|and|or                 # Part of a sentence
 	)\b';
 
