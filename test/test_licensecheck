@@ -84,4 +84,8 @@ testFortranComments() {
     license "bsd.f" "BSD (2 clause)"
 }
 
+testCommentsDetection() {
+    license "comments-detection.h" "GPL (v3 or later)"
+}
+
 . shunit2

@@ -1,7 +1,9 @@
 devscripts (2.13.1) UNRELEASED; urgency=low
 
   [ Laurent Rineau ]
-  * Fix the detection of (L|A)GPL. (Closes: #700938)
+  * licensecheck:
+    - Fix the detection of (L|A)GPL. (Closes: #700938)
+    - Fix comments pattern detection. (Closes: #700944)
 
  -- Benjamin Drung <bdrung@debian.org>  Tue, 19 Feb 2013 17:22:32 +0100
 
