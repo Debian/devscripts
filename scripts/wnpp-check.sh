@@ -57,12 +57,12 @@ trap "rm -f '$WNPP' '$WNPPTMP' '$WNPP_PACKAGES'" \
 # every line; those which succeed execute the 'p' command, those
 # which don't skip over it to the label 'd'
 
-$GETCOMMAND $WNPPTMP http://www.debian.org/devel/wnpp/help_requested || \
-    { echo "${0##*/}: $CURLORWGET http://www.debian.org/devel/wnpp/help_requested failed." >&2; exit 1; }
+$GETCOMMAND $WNPPTMP http://www.debian.org/devel/wnpp/being_packaged || \
+    { echo "${0##*/}: $CURLORWGET http://www.debian.org/devel/wnpp/being_packaged failed." >&2; exit 1; }
 sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/ITP \1 \2 -- \3/; T d; p; : d' $WNPPTMP > $WNPP
 
-$GETCOMMAND $WNPPTMP http://www.debian.org/devel/wnpp/help_requested || \
-    { echo "${0##*/}: $CURLORWGET http://www.debian.org/devel/wnpp/help_requested failed." >&2; exit 1; }
+$GETCOMMAND $WNPPTMP http://www.debian.org/devel/wnpp/requested || \
+    { echo "${0##*/}: $CURLORWGET http://www.debian.org/devel/wnpp/requested failed." >&2; exit 1; }
 sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/RFP \1 \2 -- \3/; T d; p; : d' $WNPPTMP >> $WNPP
 
 awk -F' ' '{print $3" ("$1" - #"$2")"}' $WNPP | sort > $WNPP_PACKAGES
