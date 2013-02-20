@@ -332,6 +332,7 @@ sub parse_copyright {
 	|notices?		# Discussing the notice
 	|and|or                 # Part of a sentence
 	|(holder|owner)s?       # Part of a sentence
+	|ownership              # Part of a sentence
 	)\b';
     my $copyright_predisindicator_regex = '(
     ^[#]define\s+.*\(c\)    # #define foo(c) -- not copyright
