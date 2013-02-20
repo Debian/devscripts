@@ -90,4 +90,8 @@ testCommentsDetection() {
     license "comments-detection.txt" "*No copyright* LGPL (v2.1 or later)"
 }
 
+testFalsePositives() {
+    license2 "-m --copyright" "false-positives" "UNKNOWN	2013 Devscripts developers"
+}
+
 . shunit2
