@@ -95,4 +95,8 @@ testFalsePositives() {
     license2 "-m --copyright" "false-positives" "UNKNOWN	2013 Devscripts developers"
 }
 
+testRegexpKiller() {
+    license "regexp-killer.c" "UNKNOWN"
+}
+
 . shunit2
