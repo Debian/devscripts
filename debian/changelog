@@ -8,6 +8,10 @@ devscripts (2.13.1) UNRELEASED; urgency=low
   [ Benjamin Drung ]
   * wnpp-check: Correct download links to fix regression from previous release.
 
+  [ James McCoy ]
+  * debdiff: Handle control files with odd permissions.  Thanks to Julian
+    Gilbey for the patch.  (Closes: #702610)
+
  -- Benjamin Drung <bdrung@debian.org>  Tue, 19 Feb 2013 17:22:32 +0100
 
 devscripts (2.13.0) experimental; urgency=low

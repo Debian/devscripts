@@ -3,6 +3,7 @@ test:
 	./test_checkbashisms
 	./test_dd-list
 	./test_debchange
+	./test_debdiff
 	./test_licensecheck
 
 online-test:

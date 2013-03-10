@@ -1018,6 +1018,7 @@ sub wdiff_control_files($$$$$)
 		    }
 		}
 		close $fd;
+		chmod 0644, $file;
 		open $fd, '>', $file or fatal "Cannot write $file: $!";
 		print $fd sort @hdrs;
 		close $fd;
