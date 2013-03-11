@@ -19,7 +19,7 @@ if test "$1" = --installed; then
     COMMAND=debdiff
     shift
 else
-    COMMAND="../scripts/debdiff.pl"
+    COMMAND="perl -I ${0%/*}/.. ${0%/*}/../scripts/debdiff.pl"
 fi
 
 WORKDIR="$(readlink -f "${0%/*}")"
