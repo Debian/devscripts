@@ -24,7 +24,7 @@ from devscripts.logger import Logger
 try:
     import debian.deb822
 except ImportError:
-    Logger.error("Please install 'python-debian' in order to use this utility.")
+    Logger.error("Please install 'python3-debian' in order to use this utility.")
     sys.exit(1)
 
 def _insert_after(paragraph, item_before, new_item, new_value):
@@ -65,8 +65,8 @@ class Control(object):
         """Saves the control file."""
         if filename:
             self.filename = filename
-        content = u"\n".join([x.dump() for x in self.paragraphs])
-        control_file = open(self.filename, "w")
+        content = "\n".join([x.dump() for x in self.paragraphs])
+        control_file = open(self.filename, "wb")
         control_file.write(content.encode("utf-8"))
         control_file.close()
 

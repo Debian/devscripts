@@ -27,15 +27,13 @@ Build-Depends: debhelper (>= 9),
                perl,
                po4a (>= 0.40),
                pylint,
-               python-all,
-               python-debian (>= 0.1.15),
-               python-magic,
-               python-setuptools,
-               python-unittest2,
+               python3-all,
+               python3-debian (>= 0.1.15),
+               python3-magic,
+               python3-setuptools,
                shunit2 (>= 2.1.6),
                wdiff,
                xsltproc
-X-Python-Version: >= 2.6
 XS-Testsuite: autopkgtest
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=devscripts/devscripts.git
 Vcs-Git: git://anonscm.debian.org/devscripts/devscripts.git
@@ -46,7 +44,7 @@ Multi-Arch: foreign
 Depends: dpkg-dev (>= 1.15.4.1),
          ${misc:Depends},
          ${perl:Depends},
-         ${python:Depends},
+         ${python3:Depends},
          ${shlibs:Depends}
 Recommends: at,
             dctrl-tools,
@@ -62,8 +60,8 @@ Recommends: at,
             man-db,
             patch,
             patchutils,
-            python-debian (>= 0.1.15),
-            python-magic,
+            python3-debian (>= 0.1.15),
+            python3-magic,
             sensible-utils,
             strace,
             unzip,
@@ -87,7 +85,7 @@ Suggests: bsd-mailx | mailx,
           svn-buildpackage,
           w3m,
           ${vendor:Suggests}
-Breaks: ubuntu-dev-tools (<< 0.124~)
+Breaks: ubuntu-dev-tools (<< 0.147~)
 Replaces: ubuntu-dev-tools (<< 0.124~)
 Description: scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
@@ -184,7 +182,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - rmadison: remotely query the Debian archive database about packages
     [liburi-perl, wget | curl]
   - suspicious-source: output a list of files which are not common source
-    files [python-magic]
+    files [python3-magic]
   - svnpath: print Subversion repository paths [subversion]
   - tagpending: run from a Debian source tree and tag bugs that are to be
     closed in the latest changelog as pending [libsoap-lite-perl]
@@ -204,7 +202,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - wnpp-check: check whether there is an open request for packaging or
     intention to package bug for a package [wget | curl]
   - wrap-and-sort: wrap long lines and sort items in packaging files
-    [python-debian]
+    [python3-debian]
  .
  Also included are a set of example mail filters for filtering mail
  from Debian mailing lists using exim, procmail, etc.

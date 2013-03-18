@@ -3,7 +3,7 @@
 UBU_SUGGESTS=debian-keyring, equivs, libcrypt-ssleay-perl, libsoap-lite-perl
 
 %:
-	dh $@ --with python2
+	dh $@ --with python3
 
 override_dh_gencontrol:
 ifeq ($(shell dpkg-vendor --derives-from Ubuntu && echo ubuntu),ubuntu)

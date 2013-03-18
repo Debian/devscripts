@@ -14,7 +14,7 @@
 # OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
-import StringIO
+import io
 import sys
 
 from devscripts.logger import Logger
@@ -23,8 +23,8 @@ from devscripts.test import unittest
 
 class LoggerTestCase(unittest.TestCase):
     def setUp(self):
-        Logger.stdout = StringIO.StringIO()
-        Logger.stderr = StringIO.StringIO()
+        Logger.stdout = io.StringIO()
+        Logger.stderr = io.StringIO()
         self._script_name = Logger.script_name
         Logger.script_name = 'test'
         self._verbose = Logger.verbose

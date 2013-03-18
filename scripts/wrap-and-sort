@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 #
 # Copyright (C) 2010-2013, Benjamin Drung <bdrung@debian.org>
 #               2010, Stefano Rivera <stefanor@ubuntu.com>
@@ -137,7 +137,7 @@ def wrap_and_sort(options):
     control_files = [f for f in options.files if re.search("/control[^/]*$", f)]
     for control_file in control_files:
         if options.verbose:
-            sys.stdout.write(control_file + "\n")
+            print(control_file)
         control = WrapAndSortControl(control_file)
         if options.cleanup:
             control.strip_trailing_spaces()
@@ -149,13 +149,13 @@ def wrap_and_sort(options):
                        if re.search("/copyright[^/]*$", f)]
     for copyright_file in copyright_files:
         if options.verbose:
-            sys.stdout.write(copyright_file + "\n")
+            print(copyright_file)
         remove_trailing_whitespaces(copyright_file)
 
     install_files = [f for f in options.files if re.search("install$", f)]
     for install_file in sorted(install_files):
         if options.verbose:
-            sys.stdout.write(install_file + "\n")
+            print(install_file)
         install = Install(install_file)
         install.sort()
         install.save()

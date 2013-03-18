@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 from setuptools import setup
 import glob
@@ -8,7 +8,7 @@ import re
 # look/set what version we have
 changelog = "../debian/changelog"
 if os.path.exists(changelog):
-    head=open(changelog).readline()
+    head = open(changelog, encoding="utf8").readline()
     match = re.compile(".*\((.*)\).*").match(head)
     if match:
         version = match.group(1)

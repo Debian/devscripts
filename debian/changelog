@@ -8,6 +8,7 @@ devscripts (2.13.1) UNRELEASED; urgency=low
   [ Benjamin Drung ]
   * wnpp-check: Correct download links to fix regression from previous release.
   * Switch to debhelper 9.
+  * Convert Python scripts to python3 (Closes: #680313).
 
   [ James McCoy ]
   * debdiff: Handle control files with odd permissions.  Thanks to Julian

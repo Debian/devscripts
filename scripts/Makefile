@@ -80,7 +80,7 @@ libvfork.so.0: libvfork.o
 	$(CC) $(LDFLAGS) -shared $< -lc -Wl,-soname -Wl,libvfork.so.0 -o $@
 
 clean:
-	python setup.py clean -a
+	python3 setup.py clean -a
 	find -name '*.pyc' -delete
 	rm -rf devscripts.egg-info
 	rm -f $(SCRIPTS) $(patsubst %,%.tmp,$(SCRIPTS)) \
@@ -88,10 +88,10 @@ clean:
 		libvfork.o libvfork.so.0 $(COMPLETION)
 
 test:
-	$(foreach python,$(shell pyversions -r ../debian/control),$(python) setup.py test$(\n))
+	$(foreach python,$(shell py3versions -r ../debian/control),$(python) setup.py test$(\n))
 
 install: all
-	python setup.py install --root="$(DESTDIR)" --no-compile --install-layout=deb
+	python3 setup.py install --root="$(DESTDIR)" --no-compile --install-layout=deb
 	install -dD $(DESTDIR)$(BINDIR) $(DESTDIR)$(LIBDIR)
 	cp $(SCRIPTS) $(DESTDIR)$(BINDIR)
 	ln -sf edit-patch $(DESTDIR)$(BINDIR)/add-patch

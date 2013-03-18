@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # Copyright (c) 2010-2013, Benjamin Drung <bdrung@debian.org>
 #
@@ -109,7 +109,7 @@ def suspicious_source(whitelisted_mimetypes, whitelisted_extensions, directory,
                     output = os.path.join(root, f)
                     if verbose:
                         output += " (" + mimetype + ")"
-                    sys.stdout.write(output + "\n")
+                    print(output)
         for vcs_dir in (".bzr", "CVS", ".git", ".svn", ".hg", "_darcs"):
             if vcs_dir in dirs:
                 dirs.remove(vcs_dir)
