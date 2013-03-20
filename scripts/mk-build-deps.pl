@@ -240,7 +240,8 @@ while ($control = shift) {
 	# parse() dies if the file isn't syntactically valid and returns undef
 	# if there simply weren't any fields parsed
 	unless ($ctrl->parse($fh, $descr)) {
-	    die "$progname: Unable to find package name in $descr\n";
+	    warn "$progname: Unable to find package name in $descr\n";
+	    next;
 	}
 	if (defined $pid) {
 	    wait_child($pid, no_check => 1);

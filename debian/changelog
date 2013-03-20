@@ -14,6 +14,8 @@ devscripts (2.13.1) UNRELEASED; urgency=low
   [ James McCoy ]
   * debdiff: Handle control files with odd permissions.  Thanks to Julian
     Gilbey for the patch.  (Closes: #702610)
+  * mk-build-deps: Skip malformed stanzas instead of outright failing.
+    (Closes: #679631)
 
   [ Dmitrijs Ledkovs ]
   * wrap-and-sort: Add trailing comma option (Closes: #703323).
