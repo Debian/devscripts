@@ -50,15 +50,15 @@ SUPPORTED_FILES = (
 
 class WrapAndSortControl(Control):
     def wrap_and_sort(self, wrap_always, short_indent, sort_paragraphs,
-                      keep_first):
+                      keep_first, trailing_comma):
         for paragraph in self.paragraphs:
             for field in CONTROL_LIST_FIELDS:
                 if field in paragraph:
                     self._wrap_field(paragraph, field, wrap_always,
-                                     short_indent)
+                                     short_indent, trailing_comma)
             if "Uploaders" in paragraph:
                 self._wrap_field(paragraph, "Uploaders", wrap_always,
-                                 short_indent, False)
+                                 short_indent, trailing_comma, False)
             if "Architecture" in paragraph:
                 archs = set(paragraph["Architecture"].split())
                 # Sort, with wildcard entries (such as linux-any) first:
@@ -71,7 +71,8 @@ class WrapAndSortControl(Control):
             key = lambda x: x.get("Package")
             self.paragraphs = first + sorted(sortable, key=key)
 
-    def _wrap_field(self, control, entry, wrap_always, short_indent, sort=True):
+    def _wrap_field(self, control, entry, wrap_always, short_indent,
+                    trailing_comma, sort=True):
         packages = [x.strip() for x in control[entry].split(",")]
         if sort:
             # Remove duplicate entries
@@ -88,6 +89,8 @@ class WrapAndSortControl(Control):
                 indentation *= len(entry) + 2
             packages_with_indention = [indentation + x for x in packages]
             packages_with_indention = ",\n".join(packages_with_indention)
+            if trailing_comma:
+                packages_with_indention += ','
             if short_indent:
                 control[entry] = "\n" + packages_with_indention
             else:
@@ -142,7 +145,8 @@ def wrap_and_sort(options):
         if options.cleanup:
             control.strip_trailing_spaces()
         control.wrap_and_sort(options.wrap_always, options.short_indent,
-                              options.sort_binary_packages, options.keep_first)
+                              options.sort_binary_packages, options.keep_first,
+                              options.trailing_comma)
         control.save()
 
     copyright_files = [f for f in options.files
@@ -194,6 +198,9 @@ def main():
                       dest="keep_first", action="store_true", default=False)
     parser.add_option("-n", "--no-cleanup", help="don't cleanup whitespaces",
                       dest="cleanup", action="store_false", default=True)
+    parser.add_option("-t", "--trailing-comma", help="add trailing comma",
+                      dest="trailing_comma", action="store_true",
+                      default=False)
     parser.add_option("-d", "--debian-directory", dest="debian_directory",
                       help="location of the 'debian' directory (default: "
                            "./debian)", metavar="PATH", default="debian")
