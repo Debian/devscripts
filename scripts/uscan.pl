@@ -963,7 +963,7 @@ sub process_watchline ($$$$$$)
 	if (@hrefs) {
 	    if ($verbose) {
 		print "-- Found the following matching hrefs:\n";
-		foreach my $href (@hrefs) { print "     $$href[1]\n"; }
+		foreach my $href (@hrefs) { print "     $$href[1] ($$href[0])\n"; }
 	    }
 	    if (defined $download_version) {
 		my @vhrefs = grep { $$_[0] eq $download_version } @hrefs;
@@ -1060,7 +1060,7 @@ sub process_watchline ($$$$$$)
 	if (@files) {
 	    if ($verbose) {
 		print "-- Found the following matching files:\n";
-		foreach my $file (@files) { print "     $$file[1]\n"; }
+		foreach my $file (@files) { print "     $$file[1] ($$file[0])\n"; }
 	    }
 	    if (defined $download_version) {
 		my @vfiles = grep { $$_[0] eq $download_version } @files;
@@ -1588,7 +1588,7 @@ sub newest_dir ($$$$$) {
 	    @hrefs = Devscripts::Versort::versort(@hrefs);
 	    if ($debug) {
 		print "-- Found the following matching hrefs (newest first):\n";
-		foreach my $href (@hrefs) { print "     $$href[1]\n"; }
+		foreach my $href (@hrefs) { print "     $$href[1] ($$href[0])\n"; }
 	    }
 	    my $newdir = $hrefs[0][1];
 	    # just give the final directory component
