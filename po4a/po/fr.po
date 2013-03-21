@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2013-02-17 15:13-0400\n"
+"POT-Creation-Date: 2013-03-20 22:14-0400\n"
 "PO-Revision-Date: 2013-02-17 15:39-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -10526,7 +10526,7 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/debsnap.1:42 ../doc/suspicious-source.1:38
-#: ../scripts/tagpending.pl:105 ../doc/wrap-and-sort.1:65
+#: ../scripts/tagpending.pl:105 ../doc/wrap-and-sort.1:70
 #, no-wrap
 msgid "B<-v>, B<--verbose>"
 msgstr "B<-v>, B<--verbose>"
@@ -10766,7 +10766,7 @@ msgstr "B<devscripts>(1), B<devscripts.conf>(5), B<git-debimport>(1)"
 #. type: SH
 #: ../scripts/debsnap.1:123 ../doc/edit-patch.1:37
 #: ../doc/suspicious-source.1:51 ../doc/what-patch.1:27
-#: ../doc/wrap-and-sort.1:69
+#: ../doc/wrap-and-sort.1:74
 #, no-wrap
 msgid "AUTHORS"
 msgstr "AUTEURS"
@@ -17164,7 +17164,7 @@ msgstr ""
 "Drung E<lt>I<bdrung@debian.org>E<gt>."
 
 #. type: Plain text
-#: ../doc/suspicious-source.1:55 ../doc/wrap-and-sort.1:73
+#: ../doc/suspicious-source.1:55 ../doc/wrap-and-sort.1:78
 msgid "Both are released under the ISC license."
 msgstr "Toutes deux sont publiées sous la License ISC."
 
@@ -19976,9 +19976,14 @@ msgstr ""
 
 #. type: Plain text
 #: ../doc/wrap-and-sort.1:32
+#, fuzzy
+#| msgid ""
+#| "This script should be run in the root of a Debian package tree. It "
+#| "searches for I<control>, I<control.in>, I<copyright>, I<copyright.in>, "
+#| "I<install>, and I<*.install> in the I<debian> directory."
 msgid ""
 "This script should be run in the root of a Debian package tree. It searches "
-"for I<control>, I<control.in>, I<copyright>, I<copyright.in>, I<install>, "
+"for I<control>, I<control*.in>, I<copyright>, I<copyright.in>, I<install>, "
 "and I<*.install> in the I<debian> directory."
 msgstr ""
 "Cette commande devrait être exécutée depuis la racine d'un paquet source "
@@ -20057,23 +20062,38 @@ msgstr "Ne pas supprimer les blancs."
 
 #. type: TP
 #: ../doc/wrap-and-sort.1:57
+#, fuzzy, no-wrap
+#| msgid "B<-t>, B<--time>"
+msgid "B<-t>, B<--trailing-comma>"
+msgstr "B<-t>, B<--time>"
+
+#. type: Plain text
+#: ../doc/wrap-and-sort.1:62
+msgid ""
+"Add a trailing comma at the end of the sorted fields. This minimizes future "
+"differences in the VCS commits when additional dependencies are appended or "
+"removed."
+msgstr ""
+
+#. type: TP
+#: ../doc/wrap-and-sort.1:62
 #, no-wrap
 msgid "B<-d >I<path>, B<--debian-directory=>I<path>"
 msgstr "B<-d> I<chemin>, B<--directory=>I<chemin>"
 
 #. type: Plain text
-#: ../doc/wrap-and-sort.1:60
+#: ../doc/wrap-and-sort.1:65
 msgid "Location of the I<debian> directory (default: I<./debian>)."
 msgstr "Emplacement du répertoire I<debian> (I<./debian> par défaut)."
 
 #. type: TP
-#: ../doc/wrap-and-sort.1:60
+#: ../doc/wrap-and-sort.1:65
 #, no-wrap
 msgid "B<-f >I<file>, B<--file=>I<file>"
 msgstr "B<-f> I<fichier>, B<--file=>I<fichier>"
 
 #. type: Plain text
-#: ../doc/wrap-and-sort.1:65
+#: ../doc/wrap-and-sort.1:70
 msgid ""
 "Wrap and sort only the specified I<file>.  You can specify this parameter "
 "multiple times.  All supported files will be processed if no files are "
@@ -20084,12 +20104,12 @@ msgstr ""
 "aucun fichier n'est indiqué."
 
 #. type: Plain text
-#: ../doc/wrap-and-sort.1:68
+#: ../doc/wrap-and-sort.1:73
 msgid "Print all files that are touched."
 msgstr "Afficher tous les fichiers modifiés."
 
 #. type: Plain text
-#: ../doc/wrap-and-sort.1:72
+#: ../doc/wrap-and-sort.1:77
 msgid ""
 "B<wrap-and-sort> and this manpage have been written by Benjamin Drung "
 "E<lt>bdrung@debian.orgE<gt>."
