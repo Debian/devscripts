@@ -19976,18 +19976,13 @@ msgstr ""
 
 #. type: Plain text
 #: ../doc/wrap-and-sort.1:32
-#, fuzzy
-#| msgid ""
-#| "This script should be run in the root of a Debian package tree. It "
-#| "searches for I<control>, I<control.in>, I<copyright>, I<copyright.in>, "
-#| "I<install>, and I<*.install> in the I<debian> directory."
 msgid ""
 "This script should be run in the root of a Debian package tree. It searches "
 "for I<control>, I<control*.in>, I<copyright>, I<copyright.in>, I<install>, "
 "and I<*.install> in the I<debian> directory."
 msgstr ""
 "Cette commande devrait être exécutée depuis la racine d'un paquet source "
-"Debian. Elle cherche les fichiers I<control>, I<control.in>, I<copyright>, "
+"Debian. Elle cherche les fichiers I<control>, I<control*.in>, I<copyright>, "
 "I<copyright.in>, I<install> et I<*.install> dans le répertoire I<debian>."
 
 #. type: TP
@@ -20062,10 +20057,8 @@ msgstr "Ne pas supprimer les blancs."
 
 #. type: TP
 #: ../doc/wrap-and-sort.1:57
-#, fuzzy, no-wrap
-#| msgid "B<-t>, B<--time>"
 msgid "B<-t>, B<--trailing-comma>"
-msgstr "B<-t>, B<--time>"
+msgstr "B<-t>, B<--trailing-comma>"
 
 #. type: Plain text
 #: ../doc/wrap-and-sort.1:62

@@ -19975,11 +19975,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../doc/wrap-and-sort.1:32
-#, fuzzy
-#| msgid ""
-#| "This script should be run in the root of a Debian package tree. It "
-#| "searches for I<control>, I<control.in>, I<copyright>, I<copyright.in>, "
-#| "I<install>, and I<*.install> in the I<debian> directory."
 msgid ""
 "This script should be run in the root of a Debian package tree. It searches "
 "for I<control>, I<control*.in>, I<copyright>, I<copyright.in>, I<install>, "
@@ -19987,7 +19982,7 @@ msgid ""
 msgstr ""
 "Dieses Skript sollte im Wurzelverzeichnis eines Debian-Paketverzeichnisbaums "
 "ausgeführt werden. Es sucht im I<debian>-Verzeichnis nach I<control>, "
-"I<control.in>, I<copyright>, I<copyright.in>, I<install> und I<*.install>."
+"I<control*.in>, I<copyright>, I<copyright.in>, I<install> und I<*.install>."
 
 #. type: TP
 #: ../doc/wrap-and-sort.1:37
@@ -20060,10 +20055,8 @@ msgstr "entfernt nicht die abschließenden Leerräume."
 
 #. type: TP
 #: ../doc/wrap-and-sort.1:57
-#, fuzzy, no-wrap
-#| msgid "B<-t>, B<--time>"
 msgid "B<-t>, B<--trailing-comma>"
-msgstr "B<-t>, B<--time>"
+msgstr "B<-t>, B<--trailing-comma>"
 
 #. type: Plain text
 #: ../doc/wrap-and-sort.1:62
