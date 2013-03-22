@@ -82,6 +82,7 @@ libvfork.so.0: libvfork.o
 clean:
 	python3 setup.py clean -a
 	find -name '*.pyc' -delete
+	find -name __pycache__ -delete
 	rm -rf devscripts.egg-info
 	rm -f $(SCRIPTS) $(patsubst %,%.tmp,$(SCRIPTS)) \
 		$(GEN_MAN1S) $(SCRIPT_LIBS) $(CWRAPPERS) \
