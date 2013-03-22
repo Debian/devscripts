@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2013-03-20 22:14-0400\n"
+"POT-Creation-Date: 2013-03-22 12:09+0100\n"
 "PO-Revision-Date: 2013-03-20 22:34-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -12782,10 +12782,11 @@ msgstr "B<suspicious-source>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:131
-msgid "output a list of files which are not common source files [python-magic]"
+msgid ""
+"output a list of files which are not common source files [python3-magic]"
 msgstr ""
 "afficher une liste de fichiers qui ne sont pas des fichiers source usuels "
-"[python-magic]"
+"[python3-magic]"
 
 #. type: IP
 #: ../scripts/devscripts.1:131
@@ -12933,10 +12934,10 @@ msgstr "B<wrap-and-sort>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:152
-msgid "wrap long lines and sort items in packaging files [python-debian]"
+msgid "wrap long lines and sort items in packaging files [python3-debian]"
 msgstr ""
 "couper les lignes longues et trier les items des fichiers d'empaquetage "
-"[python-debian]"
+"[python3-debian]"
 
 #. type: textblock
 #: ../scripts/dget.pl:495
@@ -20057,6 +20058,7 @@ msgstr "Ne pas supprimer les blancs."
 
 #. type: TP
 #: ../doc/wrap-and-sort.1:57
+#, no-wrap
 msgid "B<-t>, B<--trailing-comma>"
 msgstr "B<-t>, B<--trailing-comma>"
 

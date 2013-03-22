@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.12.4\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
-"POT-Creation-Date: 2013-03-20 22:14-0400\n"
+"POT-Creation-Date: 2013-03-22 12:09+0100\n"
 "PO-Revision-Date: 2013-02-18 20:44+0100\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
@@ -12777,10 +12777,11 @@ msgstr "I<suspicious-source>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:131
-msgid "output a list of files which are not common source files [python-magic]"
+msgid ""
+"output a list of files which are not common source files [python3-magic]"
 msgstr ""
 "gibt eine Liste der Dateien aus, die keine üblichen Quelldateien sind. "
-"[python-magic]"
+"[python3-magic]"
 
 #. type: IP
 #: ../scripts/devscripts.1:131
@@ -12928,9 +12929,9 @@ msgstr "I<wrap-and-sort>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:152
-msgid "wrap long lines and sort items in packaging files [python-debian]"
+msgid "wrap long lines and sort items in packaging files [python3-debian]"
 msgstr ""
-"bricht lange Zeilen um und sortiert Elemente in Paketierungsdateien. [python-"
+"bricht lange Zeilen um und sortiert Elemente in Paketierungsdateien. [python3-"
 "debian]"
 
 #. type: textblock
@@ -20055,6 +20056,7 @@ msgstr "entfernt nicht die abschließenden Leerräume."
 
 #. type: TP
 #: ../doc/wrap-and-sort.1:57
+#, no-wrap
 msgid "B<-t>, B<--trailing-comma>"
 msgstr "B<-t>, B<--trailing-comma>"
 
