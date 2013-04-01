@@ -363,9 +363,9 @@ sub clean_comments {
                            \s\w
                        }xmg)
     ){
-        my $comment_length=length($first_match);
-        my $comment_re=qr{\s*  [$1]{${comment_length}}  \s*}x;
-        s/^$comment_re//mg;
+	my $comment_length=length($first_match);
+	my $comment_re=qr{\s*  [\Q$1\E]{${comment_length}}  \s*}x;
+	s/^$comment_re//mg;
     }
 
     # Remove Fortran comments
