@@ -2,7 +2,7 @@
 # vim:sw=4:sta:
 
 #   dget - Download Debian source and binary packages
-#   Copyright (C) 2005-08 Christoph Berg <myon@debian.org>
+#   Copyright (C) 2005-2013 Christoph Berg <myon@debian.org>
 #   Modifications Copyright (C) 2005-06 Julian Gilbey <jdg@debian.org>
 #
 #   This program is free software; you can redistribute it and/or modify
@@ -59,12 +59,13 @@ if (system("command -v curl >/dev/null 2>&1") == 0) {
 sub usage {
     print <<"EOT";
 Usage: $progname [options] URL ...
-       $progname [options] package[=version]
+       $progname [options] [--all] package[=version] ...
 
 Downloads Debian packages (source and binary) from the specified URLs (first form),
 or using the mirror configured in /etc/apt/sources.list(.d) (second form).
 It is capable of downloading several packages at once.
 
+   -a, --all       Package is a source package; download all binary packages
    -b, --backup    Move files that would be overwritten to ./backup
    -q, --quiet     Suppress wget/curl output
    -d, --download-only
@@ -286,7 +287,7 @@ sub apt_get {
 	die "$progname: $package has no installation candidate\n";
     }
     unless (@hosts) {
-	die "$progname: no hostnames in apt-cache policy $package for $version found\n";
+	die "$progname: no hostnames in apt-cache policy $package for version $version found\n";
     }
 
     $apt = new IO::File("LC_ALL=C apt-cache show $package=$version |")
@@ -410,6 +411,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # handle options
 Getopt::Long::Configure('bundling');
 GetOptions(
+    "a|all"      =>  \$opt->{'all'},
     "b|backup"   =>  \$opt->{'backup'},
     "q|quiet"    =>  \$opt->{'quiet'},
     "build"      =>  \$opt->{'build'},
@@ -475,12 +477,24 @@ for my $arg (@ARGV) {
 	    }
 	}
 
-    # case 2a: package
-    } elsif ($arg =~ /^[a-z0-9.+-]{2,}$/) {
-	apt_get($arg);
+    # case 2a: --all srcpackage[=version]
+    } elsif ($opt->{'all'} and $arg =~ /^([a-z0-9.+-]{2,})(?:=([a-zA-Z0-9.:~+-]+))?$/) {
+	my ($source, $version) = ($1, $2);
+	my $cmd = "apt-cache showsrc $source";
+	#$cmd .= "=$version" if ($version); # unfortunately =version doesn't work here
+	open A, '-|', $cmd;
+	while (<A>) {
+	    next unless /^Binary: (.*)/;
+	    my @packages = split (/, /, $1);
+	    foreach my $package (@packages) {
+		eval { apt_get ($package, $version) } or print "$@";
+	    }
+	    last;
+	}
+	close A;
 
-    # case 2b: package=version
-    } elsif ($arg =~ /^([a-z0-9.+-]{2,})=([a-zA-Z0-9.:~+-]+)$/) {
+    # case 2b: package[=version]
+    } elsif ($arg =~ /^([a-z0-9.+-]{2,})(?:=([a-zA-Z0-9.:~+-]+))?$/) {
 	apt_get($1, $2);
 
     } else {
@@ -500,7 +514,7 @@ dget -- Download Debian source and binary packages
 
 =item B<dget> [I<options>] I<URL> ...
 
-=item B<dget> [I<options>] I<package>[B<=>I<version>]
+=item B<dget> [I<options>] [B<--all>] I<package>[B<=>I<version>] ...
 
 =back
 
@@ -518,7 +532,9 @@ I<.deb> file) from the Debian mirror configured in
 /etc/apt/sources.list(.d).  Unlike B<apt-get install -d>, it does not
 require root privileges, writes to the current directory, and does not
 download dependencies.  If a version number is specified, this version
-of the package is requested.
+of the package is requested.  With B<--all>, the list of all binaries for the
+source package I<package> is extracted from the output of
+C<apt-cache showsrc package>.
 
 In both cases dget is capable of getting several packages and/or URLs
 at once.
@@ -546,6 +562,11 @@ I<package>, the last source version via B<apt-get source> I<package>.
 =head1 OPTIONS
 
 =over 4
+
+=item B<-a>, B<--all>
+
+Interpret I<package> as a source package name, and download all binaries as
+found in the output of "apt-cache showsrc I<package>".
 
 =item B<-b>, B<--backup>
 
@@ -635,6 +656,14 @@ packages.  Default is 'yes'.
 
 =back
 
+=head1 EXAMPLES
+
+Download all .deb files for the previous version of a package and run debdiff
+on them:
+
+  dget --all mypackage=1.2-1
+  debdiff --from *_1.2-1_*.deb --to *_1.2-2_*.deb
+
 =head1 BUGS AND COMPATIBILITY
 
 B<dget> I<package> should be implemented in B<apt-get install -d>.
@@ -644,7 +673,7 @@ downloaded source. Set DGET_UNPACK=no to revert to the old behaviour.
 
 =head1 AUTHOR
 
-This program is Copyright (C) 2005-08 by Christoph Berg <myon@debian.org>.
+This program is Copyright (C) 2005-2013 by Christoph Berg <myon@debian.org>.
 Modifications are Copyright (C) 2005-06 by Julian Gilbey <jdg@debian.org>.
 
 This program is licensed under the terms of the GPL, either version 2
