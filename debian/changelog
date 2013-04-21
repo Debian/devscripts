@@ -7,6 +7,9 @@ devscripts (2.13.2) UNRELEASED; urgency=low
   * licensecheck: Regex-escape file contents that are used as part of a
     pattern.  (Closes: #704434, LP: #1164261)
   * bts: Accept the "jessie" and "jessie-ignore" tags.  (Closes: #705817)
+  * uscan: Define local replacements for die/warn instead of setting
+    $SIG{__DIE__}/$SIG{__WARN__} to prevent breaking die/warn in other
+    modules.  (Closes: #669942)
 
   [ Christoph Berg ]
   * dget: "--all pkg" will download all binaries for source package pkg.

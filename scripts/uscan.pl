@@ -65,8 +65,8 @@ sub process_watchfile ($$$$);
 sub recursive_regex_dir ($$$);
 sub newest_dir ($$$$$);
 sub dehs_msg ($);
-sub dehs_warn ($);
-sub dehs_die ($);
+sub uscan_warn (@);
+sub uscan_die (@);
 sub dehs_output ();
 sub quoted_regex_replace ($);
 sub safe_replace ($$);
@@ -318,36 +318,32 @@ $verbose = $opt_verbose if defined $opt_verbose;
 $dehs = $opt_dehs if defined $opt_dehs;
 $user_agent_string = $opt_user_agent if defined $opt_user_agent;
 $download_version = $opt_download_version if defined $opt_download_version;
-if ($dehs) {
-    $SIG{'__WARN__'} = \&dehs_warn;
-    $SIG{'__DIE__'} = \&dehs_die;
-}
 
 if (defined $opt_level) {
     if ($opt_level =~ /^[012]$/) { $check_dirname_level = $opt_level; }
     else {
-	die "$progname: unrecognised --check-dirname-level value (allowed are 0,1,2)\n";
+	uscan_die "$progname: unrecognised --check-dirname-level value (allowed are 0,1,2)\n";
     }
 }
 
 $check_dirname_regex = $opt_regex if defined $opt_regex;
 
 if (defined $opt_package) {
-    die "$progname: --package requires the use of --watchfile\nas well; run $progname --help for more details\n"
+    uscan_die "$progname: --package requires the use of --watchfile\nas well; run $progname --help for more details\n"
 	unless defined $opt_watchfile;
     $download = -$download unless defined $opt_download;
 }
 
-die "$progname: Can't use --verbose if you're using --dehs!\n"
+uscan_die "$progname: Can't use --verbose if you're using --dehs!\n"
     if $verbose and $dehs;
 
-die "$progname: Can't use --report-status if you're using --verbose!\n"
+uscan_die "$progname: Can't use --report-status if you're using --verbose!\n"
     if $verbose and $report;
 
-die "$progname: Can't use --report-status if you're using --download!\n"
+uscan_die "$progname: Can't use --report-status if you're using --download!\n"
     if $download and $report;
 
-warn "$progname: You're going to get strange (non-XML) output using --debug and --dehs together!\n"
+uscan_warn "$progname: You're going to get strange (non-XML) output using --debug and --dehs together!\n"
     if $debug and $dehs;
 
 # We'd better be verbose if we're debugging
@@ -394,7 +390,7 @@ $user_agent->timeout($timeout);
 $user_agent->agent($user_agent_string);
 
 if (defined $opt_watchfile) {
-    die "Can't have directory arguments if using --watchfile" if @ARGV;
+    uscan_die "Can't have directory arguments if using --watchfile" if @ARGV;
 
     # no directory traversing then, and things are very simple
     if (defined $opt_package) {
@@ -403,23 +399,23 @@ if (defined $opt_watchfile) {
     } else {
 	# Check for debian/changelog file
 	until (-r 'debian/changelog') {
-	    chdir '..' or die "$progname: can't chdir ..: $!\n";
+	    chdir '..' or uscan_die "$progname: can't chdir ..: $!\n";
 	    if (cwd() eq '/') {
-		die "$progname: cannot find readable debian/changelog anywhere!\nAre you in the source code tree?\n";
+		uscan_die "$progname: cannot find readable debian/changelog anywhere!\nAre you in the source code tree?\n";
 	    }
 	}
 
 	# Figure out package info we need
 	my $changelog = `dpkg-parsechangelog`;
 	unless ($? == 0) {
-	    die "$progname: Problems running dpkg-parsechangelog\n";
+	    uscan_die "$progname: Problems running dpkg-parsechangelog\n";
 	}
 
 	my ($package, $debversion, $uversion);
 	$changelog =~ /^Source: (.*?)$/m and $package=$1;
 	$changelog =~ /^Version: (.*?)$/m and $debversion=$1;
 	if (! defined $package || ! defined $debversion) {
-	    die "$progname: Problems determining package name and/or version from\n  debian/changelog\n";
+	    uscan_die "$progname: Problems determining package name and/or version from\n  debian/changelog\n";
 	}
 
 	# Check the directory is properly named for safety
@@ -435,7 +431,7 @@ if (defined $opt_watchfile) {
 	    }
 	}
 	if (! $good_dirname) {
-	    die "$progname: not processing watchfile because this directory does not match the package name\n" .
+	    uscan_die "$progname: not processing watchfile because this directory does not match the package name\n" .
 		"   or the settings of the--check-dirname-level and --check-dirname-regex options if any.\n";
 	}
 
@@ -466,7 +462,7 @@ print "-- Scanning for watchfiles in @ARGV\n" if $verbose;
 # otherwise.
 my @dirs;
 open FIND, '-|', 'find', @ARGV, qw(-follow -type d -name debian -print)
-    or die "$progname: couldn't exec find: $!\n";
+    or uscan_die "$progname: couldn't exec find: $!\n";
 
 while (<FIND>) {
     chomp;
@@ -474,19 +470,19 @@ while (<FIND>) {
 }
 close FIND;
 
-die "$progname: No debian directories found\n" unless @dirs;
+uscan_die "$progname: No debian directories found\n" unless @dirs;
 
 my @debdirs = ();
 
 my $origdir = cwd;
 for my $dir (@dirs) {
     unless (chdir $origdir) {
-	warn "$progname warning: Couldn't chdir back to $origdir, skipping: $!\n";
+	uscan_warn "$progname warning: Couldn't chdir back to $origdir, skipping: $!\n";
 	next;
     }
     $dir =~ s%/debian$%%;
     unless (chdir $dir) {
-	warn "$progname warning: Couldn't chdir $dir, skipping: $!\n";
+	uscan_warn "$progname warning: Couldn't chdir $dir, skipping: $!\n";
 	next;
     }
 
@@ -495,7 +491,7 @@ for my $dir (@dirs) {
 	# Figure out package info we need
 	my $changelog = `dpkg-parsechangelog`;
 	unless ($? == 0) {
-	    warn "$progname warning: Problems running dpkg-parsechangelog in $dir, skipping\n";
+	    uscan_warn "$progname warning: Problems running dpkg-parsechangelog in $dir, skipping\n";
 	    next;
 	}
 
@@ -503,7 +499,7 @@ for my $dir (@dirs) {
 	$changelog =~ /^Source: (.*?)$/m and $package=$1;
 	$changelog =~ /^Version: (.*?)$/m and $debversion=$1;
 	if (! defined $package || ! defined $debversion) {
-	    warn "$progname warning: Problems determining package name and/or version from\n  $dir/debian/changelog, skipping\n";
+	    uscan_warn "$progname warning: Problems determining package name and/or version from\n  $dir/debian/changelog, skipping\n";
 	    next;
 	}
 
@@ -536,23 +532,23 @@ for my $dir (@dirs) {
 	push @debdirs, [$debversion, $dir, $package, $uversion];
     }
     elsif (-r 'debian/watch') {
-	warn "$progname warning: Found watchfile in $dir,\n  but couldn't find/read changelog; skipping\n";
+	uscan_warn "$progname warning: Found watchfile in $dir,\n  but couldn't find/read changelog; skipping\n";
 	next;
     }
     elsif (-f 'debian/watch') {
-	warn "$progname warning: Found watchfile in $dir,\n  but it is not readable; skipping\n";
+	uscan_warn "$progname warning: Found watchfile in $dir,\n  but it is not readable; skipping\n";
 	next;
     }
 }
 
-warn "$progname: no watch file found\n" if (@debdirs == 0 and $report);
+uscan_warn "$progname: no watch file found\n" if (@debdirs == 0 and $report);
 
 # Was there a --uversion option?
 if (defined $opt_uversion) {
     if (@debdirs == 1) {
 	$debdirs[0][3] = $opt_uversion;
     } else {
-	warn "$progname warning: ignoring --uversion as more than one debian/watch file found\n";
+	uscan_warn "$progname warning: ignoring --uversion as more than one debian/watch file found\n";
     }
 }
 
@@ -573,16 +569,16 @@ for my $debdir (@debdirs) {
     my $version = $$debdir[2];
 
     if (exists $donepkgs{$parentdir}{$package}) {
-	warn "$progname warning: Skipping $dir/debian/watch\n  as this package has already been scanned successfully\n";
+	uscan_warn "$progname warning: Skipping $dir/debian/watch\n  as this package has already been scanned successfully\n";
 	next;
     }
 
     unless (chdir $origdir) {
-	warn "$progname warning: Couldn't chdir back to $origdir, skipping: $!\n";
+	uscan_warn "$progname warning: Couldn't chdir back to $origdir, skipping: $!\n";
 	next;
     }
     unless (chdir $dir) {
-	warn "$progname warning: Couldn't chdir $dir, skipping: $!\n";
+	uscan_warn "$progname warning: Couldn't chdir $dir, skipping: $!\n";
 	next;
     }
 
@@ -702,7 +698,7 @@ sub process_watchline ($$$$$$)
 	($site, $dir, $filepattern, $lastversion, $action) = split ' ', $line, 5;
 
 	if (! defined $lastversion or $site =~ /\(.*\)/ or $dir =~ /\(.*\)/) {
-	    warn "$progname warning: there appears to be a version 2 format line in\n  the version 1 watchfile $watchfile;\n  Have you forgotten a 'version=2' line at the start, perhaps?\n  Skipping the line: $line\n";
+	    uscan_warn "$progname warning: there appears to be a version 2 format line in\n  the version 1 watchfile $watchfile;\n  Have you forgotten a 'version=2' line at the start, perhaps?\n  Skipping the line: $line\n";
 	    return 1;
 	}
 	if ($site !~ m%\w+://%) {
@@ -717,7 +713,7 @@ sub process_watchline ($$$$$$)
 		$filepattern =~ s/\?/./g;
 		$filepattern =~ s/\*/.*/g;
 		$style='old';
-		warn "$progname warning: Using very old style of filename pattern in $watchfile\n  (this might lead to incorrect results): $3\n";
+		uscan_warn "$progname warning: Using very old style of filename pattern in $watchfile\n  (this might lead to incorrect results): $3\n";
 	    }
 	}
 
@@ -736,7 +732,7 @@ sub process_watchline ($$$$$$)
 	    } elsif ($line =~ s/^(\S+)\s+//) {
 		$opts=$1;
 	    } else {
-		warn "$progname warning: malformed opts=... in watchfile, skipping line:\n$origline\n";
+		uscan_warn "$progname warning: malformed opts=... in watchfile, skipping line:\n$origline\n";
 		return 1;
 	    }
 
@@ -766,7 +762,7 @@ sub process_watchline ($$$$$$)
 		    @{$options{'downloadurlmangle'}} = split /;/, $1;
 		}
 		else {
-		    warn "$progname warning: unrecognised option $opt\n";
+		    uscan_warn "$progname warning: unrecognised option $opt\n";
 		}
 	    }
 	}
@@ -782,19 +778,19 @@ sub process_watchline ($$$$$$)
 	}
 
 	if ((!$lastversion or $lastversion eq 'debian') and not defined $pkg_version) {
-	    warn "$progname warning: Unable to determine current version\n  in $watchfile, skipping:\n  $line\n";
+	    uscan_warn "$progname warning: Unable to determine current version\n  in $watchfile, skipping:\n  $line\n";
 	    return 1;
 	}
 
 	# Check all's OK
 	if (not $filepattern or $filepattern !~ /\(.*\)/) {
-	    warn "$progname warning: Filename pattern missing version delimiters ()\n  in $watchfile, skipping:\n  $line\n";
+	    uscan_warn "$progname warning: Filename pattern missing version delimiters ()\n  in $watchfile, skipping:\n  $line\n";
 	    return 1;
 	}
 
 	# Check validity of options
 	if ($base =~ /^ftp:/ and exists $options{'downloadurlmangle'}) {
-	    warn "$progname warning: downloadurlmangle option invalid for ftp sites,\n  ignoring in $watchfile:\n  $line\n";
+	    uscan_warn "$progname warning: downloadurlmangle option invalid for ftp sites,\n  ignoring in $watchfile:\n  $line\n";
 	}
 
 	# Handle sf.net addresses specially
@@ -805,7 +801,7 @@ sub process_watchline ($$$$$$)
 	if ($base =~ m%^(\w+://[^/]+)%) {
 	    $site = $1;
 	} else {
-	    warn "$progname warning: Can't determine protocol and site in\n  $watchfile, skipping:\n  $line\n";
+	    uscan_warn "$progname warning: Can't determine protocol and site in\n  $watchfile, skipping:\n  $line\n";
 	    return 1;
 	}
 
@@ -825,7 +821,7 @@ sub process_watchline ($$$$$$)
 	if (defined $pkg_version) {
 	    $lastversion=$pkg_version;
 	} else {
-	    warn "$progname warning: Unable to determine current version\n  in $watchfile, skipping:\n  $line\n";
+	    uscan_warn "$progname warning: Unable to determine current version\n  in $watchfile, skipping:\n  $line\n";
 	    return 1;
 	}
     }
@@ -834,7 +830,7 @@ sub process_watchline ($$$$$$)
     $mangled_lastversion = $lastversion;
     foreach my $pat (@{$options{'dversionmangle'}}) {
 	if (! safe_replace(\$mangled_lastversion, $pat)) {
-	    warn "$progname: In $watchfile, potentially"
+	    uscan_warn "$progname: In $watchfile, potentially"
 	      . " unsafe or malformed dversionmangle"
 	      . " pattern:\n  '$pat'"
 	      . " found. Skipping watchline\n"
@@ -849,7 +845,7 @@ sub process_watchline ($$$$$$)
 
     # Check all's OK
     if ($pattern !~ /\(.*\)/) {
-	warn "$progname warning: Filename pattern missing version delimiters ()\n  in $watchfile, skipping:\n  $line\n";
+	uscan_warn "$progname warning: Filename pattern missing version delimiters ()\n  in $watchfile, skipping:\n  $line\n";
 	return 1;
     }
 
@@ -862,13 +858,13 @@ sub process_watchline ($$$$$$)
     # Devscripts::Versort::versort
     if ($site =~ m%^http(s)?://%) {
 	if (defined($1) and !$haveSSL) {
-	    die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n";
+	    uscan_die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n";
 	}
 	print STDERR "$progname debug: requesting URL $base\n" if $debug;
 	$request = HTTP::Request->new('GET', $base, $headers);
 	$response = $user_agent->request($request);
 	if (! $response->is_success) {
-	    warn "$progname warning: In watchfile $watchfile, reading webpage\n  $base failed: " . $response->status_line . "\n";
+	    uscan_warn "$progname warning: In watchfile $watchfile, reading webpage\n  $base failed: " . $response->status_line . "\n";
 	    return 1;
 	}
 
@@ -947,7 +943,7 @@ sub process_watchline ($$$$$$)
 			 	$href =~ m&^$_pattern$&);
 			foreach my $pat (@{$options{'uversionmangle'}}) {
 			    if (! safe_replace(\$mangled_version, $pat)) {
-				warn "$progname: In $watchfile, potentially"
+				uscan_warn "$progname: In $watchfile, potentially"
 			 	 . " unsafe or malformed uversionmangle"
 				  . " pattern:\n  '$pat'"
 				  . " found. Skipping watchline\n"
@@ -970,7 +966,7 @@ sub process_watchline ($$$$$$)
 		if (@vhrefs) {
 		    ($newversion, $newfile) = @{$vhrefs[0]};
 		} else {
-		    warn "$progname warning: In $watchfile no matching hrefs for version $download_version"
+		    uscan_warn "$progname warning: In $watchfile no matching hrefs for version $download_version"
 			. " in watch line\n  $line\n";
 		    return 1;
 		}
@@ -979,14 +975,14 @@ sub process_watchline ($$$$$$)
 		($newversion, $newfile) = @{$hrefs[0]};
 	    }
 	} else {
-	    warn "$progname warning: In $watchfile,\n  no matching hrefs for watch line\n  $line\n";
+	    uscan_warn "$progname warning: In $watchfile,\n  no matching hrefs for watch line\n  $line\n";
 	    return 1;
 	}
     }
     else {
 	# Better be an FTP site
 	if ($site !~ m%^ftp://%) {
-	    warn "$progname warning: Unknown protocol in $watchfile, skipping:\n  $site\n";
+	    uscan_warn "$progname warning: Unknown protocol in $watchfile, skipping:\n  $site\n";
 	    return 1;
 	}
 
@@ -1001,7 +997,7 @@ sub process_watchline ($$$$$$)
 	    else { delete $ENV{'FTP_PASSIVE'}; }
 	}
 	if (! $response->is_success) {
-	    warn "$progname warning: In watchfile $watchfile, reading FTP directory\n  $base failed: " . $response->status_line . "\n";
+	    uscan_warn "$progname warning: In watchfile $watchfile, reading FTP directory\n  $base failed: " . $response->status_line . "\n";
 	    return 1;
 	}
 
@@ -1025,7 +1021,7 @@ sub process_watchline ($$$$$$)
 		my $mangled_version = join(".", $file =~ m/^$pattern$/);
 		foreach my $pat (@{$options{'uversionmangle'}}) {
 		    if (! safe_replace(\$mangled_version, $pat)) {
-			warn "$progname: In $watchfile, potentially"
+			uscan_warn "$progname: In $watchfile, potentially"
 			  . " unsafe or malformed uversionmangle"
 			  . " pattern:\n  '$pat'"
 			  . " found. Skipping watchline\n"
@@ -1044,7 +1040,7 @@ sub process_watchline ($$$$$$)
 		    my $mangled_version = join(".", $file =~ m/^$filepattern$/);
 		    foreach my $pat (@{$options{'uversionmangle'}}) {
 			if (! safe_replace(\$mangled_version, $pat)) {
-			    warn "$progname: In $watchfile, potentially"
+			    uscan_warn "$progname: In $watchfile, potentially"
 			      . " unsafe or malformed uversionmangle"
 			      . " pattern:\n  '$pat'"
 			      . " found. Skipping watchline\n"
@@ -1067,7 +1063,7 @@ sub process_watchline ($$$$$$)
 		if (@vfiles) {
 		    ($newversion, $newfile) = @{$vfiles[0]};
 		} else {
-		    warn "$progname warning: In $watchfile no matching files for version $download_version"
+		    uscan_warn "$progname warning: In $watchfile no matching files for version $download_version"
 			. " in watch line\n  $line\n";
 		    return 1;
 		}
@@ -1076,7 +1072,7 @@ sub process_watchline ($$$$$$)
 		($newversion, $newfile) = @{$files[0]};
 	    }
 	} else {
-	    warn "$progname warning: In $watchfile no matching files for watch line\n  $line\n";
+	    uscan_warn "$progname warning: In $watchfile no matching files for watch line\n  $line\n";
 	    return 1;
 	}
     }
@@ -1091,7 +1087,7 @@ sub process_watchline ($$$$$$)
 	if ($newversion =~ /^\D*(\d+\.(?:\d+\.)*\d+)\D*$/) {
 	    $newversion = $1;
 	} else {
-	    warn <<"EOF";
+	    uscan_warn <<"EOF";
 $progname warning: In $watchfile, couldn\'t determine a
   pure numeric version number from the file name for watch line
   $line
@@ -1108,7 +1104,7 @@ EOF
     }
     foreach my $pat (@{$options{'filenamemangle'}}) {
 	if (! safe_replace(\$newfile_base, $pat)) {
-	    warn "$progname: In $watchfile, potentially"
+	    uscan_warn "$progname: In $watchfile, potentially"
 	      . " unsafe or malformed filenamemangle"
 	      . " pattern:\n  '$pat'"
 	      . " found. Skipping watchline\n"
@@ -1151,7 +1147,7 @@ EOF
 		}
 		if (!defined($upstream_url)) {
 		    if ($debug) {
-			warn "$progname warning: Unable to determine upstream url from redirections,\n" .
+			uscan_warn "$progname warning: Unable to determine upstream url from redirections,\n" .
 			    "defaulting to using site specified in watchfile\n";
 		    }
 		    $upstream_url = "$sites[0]$newfile";
@@ -1176,7 +1172,7 @@ EOF
 		}
 		if (!defined($upstream_url)) {
 		    if ($debug) {
-			warn "$progname warning: Unable to determine upstream url from redirections,\n" .
+			uscan_warn "$progname warning: Unable to determine upstream url from redirections,\n" .
 			    "defaulting to using site specified in watchfile\n";
 		    }
 		    $upstream_url = "$urlbase$newfile";
@@ -1191,7 +1187,7 @@ EOF
 	if (exists $options{'downloadurlmangle'}) {
 	    foreach my $pat (@{$options{'downloadurlmangle'}}) {
 		if (! safe_replace(\$upstream_url, $pat)) {
-		    warn "$progname: In $watchfile, potentially"
+		    uscan_warn "$progname: In $watchfile, potentially"
 		      . " unsafe or malformed downloadurlmangle"
 		      . " pattern:\n  '$pat'"
 		      . " found. Skipping watchline\n"
@@ -1313,7 +1309,7 @@ EOF
     # Download newer package
     if ($upstream_url =~ m%^http(s)?://%) {
 	if (defined($1) and !$haveSSL) {
-	    die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n";
+	    uscan_die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n";
 	}
 	# substitute HTML entities
 	# Is anything else than "&amp;" required?  I doubt it.
@@ -1322,9 +1318,9 @@ EOF
 	$response = $user_agent->request($request, "$destdir/$newfile_base");
 	if (! $response->is_success) {
 	    if (defined $pkg_dir) {
-		warn "$progname warning: In directory $pkg_dir, downloading\n  $upstream_url failed: " . $response->status_line . "\n";
+		uscan_warn "$progname warning: In directory $pkg_dir, downloading\n  $upstream_url failed: " . $response->status_line . "\n";
 	    } else {
-		warn "$progname warning: Downloading\n $upstream_url failed:\n" . $response->status_line . "\n";
+		uscan_warn "$progname warning: Downloading\n $upstream_url failed:\n" . $response->status_line . "\n";
 	    }
 	    return 1;
 	}
@@ -1343,9 +1339,9 @@ EOF
 	}
 	if (! $response->is_success) {
 	    if (defined $pkg_dir) {
-		warn "$progname warning: In directory $pkg_dir, downloading\n  $upstream_url failed: " . $response->status_line . "\n";
+		uscan_warn "$progname warning: In directory $pkg_dir, downloading\n  $upstream_url failed: " . $response->status_line . "\n";
 	    } else {
-		warn "$progname warning: Downloading\n $upstream_url failed:\n" . $response->status_line . "\n";
+		uscan_warn "$progname warning: Downloading\n $upstream_url failed:\n" . $response->status_line . "\n";
 	    }
 	    return 1;
 	}
@@ -1400,7 +1396,7 @@ EOF
 	print "-- Repacking from zip to .tar.gz\n" if $verbose;
 
 	system('command -v unzip >/dev/null 2>&1') >> 8 == 0
-	  or die("unzip binary not found. You need to install the package unzip to be able to repack .zip upstream archives.\n");
+	  or uscan_die("unzip binary not found. You need to install the package unzip to be able to repack .zip upstream archives.\n");
 
 	my $newfile_base_gz = "$1.tar.gz";
 	my $tempdir = tempdir ( "uscanXXXX", TMPDIR => 1, CLEANUP => 1 );
@@ -1408,12 +1404,12 @@ EOF
 	my $hidden = ".[!.]*";
 	my $absdestdir = abs_path($destdir);
 	system('unzip', '-q', '-a', '-d', $tempdir, "$destdir/$newfile_base") == 0
-	  or die("Repacking from zip to tar.gz failed (could not unzip)\n");
+	  or uscan_die("Repacking from zip to tar.gz failed (could not unzip)\n");
 	if (defined glob("$tempdir/$hidden")) {
 	    $globpattern .= " $hidden";
 	}
 	system("cd $tempdir; GZIP='-n -9' tar --owner=root --group=root --mode=a+rX -czf \"$absdestdir/$newfile_base_gz\" $globpattern") == 0
-	  or die("Repacking from zip to tar.gz failed (could not create tarball)\n");
+	  or uscan_die("Repacking from zip to tar.gz failed (could not create tarball)\n");
 	unlink "$destdir/$newfile_base";
 	$newfile_base = $newfile_base_gz;
     }
@@ -1424,7 +1420,7 @@ EOF
 			     |tar.xz|txz)$/x) {
 	my $filetype = `file -b -k \"$destdir/$newfile_base\"`;
 	unless ($filetype =~ /compressed data/) {
-	    warn "$progname warning: $destdir/$newfile_base does not appear to be a compressed file;\nthe file command says: $filetype\nNot processing this file any further!\n";
+	    uscan_warn "$progname warning: $destdir/$newfile_base does not appear to be a compressed file;\nthe file command says: $filetype\nNot processing this file any further!\n";
 	    return 1;
 	}
     }
@@ -1552,13 +1548,13 @@ sub newest_dir ($$$$$) {
 
     if ($site =~ m%^http(s)?://%) {
 	if (defined($1) and !$haveSSL) {
-	    die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n";
+	    uscan_die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n";
 	}
 	print STDERR "$progname debug: requesting URL $base\n" if $debug;
 	$request = HTTP::Request->new('GET', $base);
 	$response = $user_agent->request($request);
 	if (! $response->is_success) {
-	    warn "$progname warning: In watchfile $watchfile, reading webpage\n  $base failed: " . $response->status_line . "\n";
+	    uscan_warn "$progname warning: In watchfile $watchfile, reading webpage\n  $base failed: " . $response->status_line . "\n";
 	    return 1;
 	}
 
@@ -1596,7 +1592,7 @@ sub newest_dir ($$$$$) {
 	    $newdir =~ s%^.*/%%;
 	    return $newdir;
 	} else {
-	    warn "$progname warning: In $watchfile,\n  no matching hrefs for pattern\n  $site$dir$pattern";
+	    uscan_warn "$progname warning: In $watchfile,\n  no matching hrefs for pattern\n  $site$dir$pattern";
 	    return 1;
 	}
     }
@@ -1617,7 +1613,7 @@ sub newest_dir ($$$$$) {
 	    else { delete $ENV{'FTP_PASSIVE'}; }
 	}
 	if (! $response->is_success) {
-	    warn "$progname warning: In watchfile $watchfile, reading webpage\n  $base failed: " . $response->status_line . "\n";
+	    uscan_warn "$progname warning: In watchfile $watchfile, reading webpage\n  $base failed: " . $response->status_line . "\n";
 	    return '';
 	}
 
@@ -1661,7 +1657,7 @@ sub newest_dir ($$$$$) {
 	    my ($newversion, $newdir) = @{$dirs[0]};
 	    return $newdir;
 	} else {
-	    warn "$progname warning: In $watchfile no matching dirs for pattern\n  $base$pattern\n";
+	    uscan_warn "$progname warning: In $watchfile no matching dirs for pattern\n  $base$pattern\n";
 	    return '';
 	}
     }
@@ -1677,7 +1673,7 @@ sub process_watchfile ($$$$)
     %dehs_tags = ();
 
     unless (open WATCH, $watchfile) {
-	warn "$progname warning: could not open $watchfile: $!\n";
+	uscan_warn "$progname warning: could not open $watchfile: $!\n";
 	return 1;
     }
 
@@ -1690,7 +1686,7 @@ sub process_watchfile ($$$$)
 	chomp;
 	if (s/(?<!\\)\\$//) {
 	    if (eof(WATCH)) {
-		warn "$progname warning: $watchfile ended with \\; skipping last line\n";
+		uscan_warn "$progname warning: $watchfile ended with \\; skipping last line\n";
 		$status=1;
 		last;
 	    }
@@ -1703,12 +1699,12 @@ sub process_watchfile ($$$$)
 		$watch_version=$1;
 		if ($watch_version < 2 or
 		    $watch_version > $CURRENT_WATCHFILE_VERSION) {
-		    warn "$progname ERROR: $watchfile version number is unrecognised; skipping watchfile\n";
+		    uscan_warn "$progname ERROR: $watchfile version number is unrecognised; skipping watchfile\n";
 		    last;
 		}
 		next;
 	    } else {
-		warn "$progname warning: $watchfile is an obsolete version 1 watchfile;\n  please upgrade to a higher version\n  (see uscan(1) for details).\n";
+		uscan_warn "$progname warning: $watchfile is an obsolete version 1 watchfile;\n  please upgrade to a higher version\n  (see uscan(1) for details).\n";
 		$watch_version=1;
 	    }
 	}
@@ -1731,7 +1727,7 @@ sub process_watchfile ($$$$)
     }
 
     close WATCH or
-	$status=1, warn "$progname warning: problems reading $watchfile: $!\n";
+	$status=1, uscan_warn "$progname warning: problems reading $watchfile: $!\n";
 
     return $status;
 }
@@ -1745,21 +1741,31 @@ sub dehs_msg ($)
     push @{$dehs_tags{'messages'}}, $msg;
 }
 
-sub dehs_warn ($)
+sub uscan_warn (@)
 {
-    my $warning = $_[0];
-    $warning =~ s/\s*$//;
-    push @{$dehs_tags{'warnings'}}, $warning;
+    if ($dehs) {
+	my $warning = $_[0];
+	$warning =~ s/\s*$//;
+	push @{$dehs_tags{'warnings'}}, $warning;
+    }
+    else {
+	warn @_;
+    }
 }
 
-sub dehs_die ($)
+sub uscan_die (@)
 {
-    my $msg = $_[0];
-    $msg =~ s/\s*$//;
-    %dehs_tags = ('errors' => "$msg");
-    $dehs_end_output=1;
-    dehs_output;
-    exit 1;
+    if ($dehs) {
+	my $msg = $_[0];
+	$msg =~ s/\s*$//;
+	%dehs_tags = ('errors' => "$msg");
+	$dehs_end_output=1;
+	dehs_output;
+	exit 1;
+    }
+    else {
+	die @_;
+    }
 }
 
 sub dehs_output ()
