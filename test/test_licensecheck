@@ -69,9 +69,9 @@ testDual() {
 }
 
 testMPL() {
-	license "mpl-1.1.sh" "MPL (v1.1)"
-	license "mpl-2.0.sh" "MPL (v2.0)"
-	license "mpl-2.0-comma.sh" "MPL (v2.0)"
+    license "mpl-1.1.sh" "MPL (v1.1)"
+    license "mpl-2.0.sh" "MPL (v2.0)"
+    license "mpl-2.0-comma.sh" "MPL (v2.0)"
 }
 
 testMachine() {
@@ -86,6 +86,7 @@ testFortranComments() {
 
 testCommentsDetection() {
     license "comments-detection.h" "GPL (v3 or later)"
+    license "comments-detection.txt" "*No copyright* LGPL (v2.1 or later)"
 }
 
 . shunit2

@@ -10,6 +10,7 @@ devscripts (2.13.2) UNRELEASED; urgency=low
   * uscan: Define local replacements for die/warn instead of setting
     $SIG{__DIE__}/$SIG{__WARN__} to prevent breaking die/warn in other
     modules.  (Closes: #669942)
+  * licensecheck: Fix invalid regular expression syntax.  (Closes: #706232)
 
   [ Christoph Berg ]
   * dget: "--all pkg" will download all binaries for source package pkg.

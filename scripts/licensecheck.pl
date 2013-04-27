@@ -353,18 +353,14 @@ sub parse_copyright {
 
 sub clean_comments {
     local $_ = shift or return q{};
-    my $first_match;
 
     # Remove generic comments: look for 4 or more lines beginning with
     # regular comment pattern and trim it. Fall back to old algorithm
     # if no such pattern found.
-    if( 4 <= scalar(($first_match)=m{ ^\s*
-                           ([^a-zA-Z0-9\s]{1,3})
-                           \s\w
-                       }xmg)
-    ){
-	my $comment_length=length($first_match);
-	my $comment_re=qr{\s*  [\Q$1\E]{${comment_length}}  \s*}x;
+    my @matches = m/^\s*([^a-zA-Z0-9\s]{1,3})\s\w/mg;
+    if (@matches >= 4) {
+	my $comment_length = length($matches[0]);
+	my $comment_re = qr/\s*[\Q$matches[0]\E]{${comment_length}}\s*/;
 	s/^$comment_re//mg;
     }
 
