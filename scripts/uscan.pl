@@ -57,6 +57,7 @@ eval { require Crypt::SSLeay; };
 if ($@) {
     $haveSSL = 0;
 }
+my $havegpgv = (-x '/usr/bin/gpgv');
 
 # Did we find any new upstream versions on our wanderings?
 our $found = 0;
@@ -762,6 +763,9 @@ sub process_watchline ($$$$$$)
 		elsif ($opt =~ /^downloadurlmangle\s*=\s*(.+)/) {
 		    @{$options{'downloadurlmangle'}} = split /;/, $1;
 		}
+		elsif ($opt =~ /^pgpsigurlmangle\s*=\s*(.+)/) {
+		    @{$options{'pgpsigurlmangle'}} = split /;/, $1;
+		}
 		else {
 		    uscan_warn "$progname warning: unrecognised option $opt\n";
 		}
@@ -792,6 +796,17 @@ sub process_watchline ($$$$$$)
 	# Check validity of options
 	if ($base =~ /^ftp:/ and exists $options{'downloadurlmangle'}) {
 	    uscan_warn "$progname warning: downloadurlmangle option invalid for ftp sites,\n  ignoring in $watchfile:\n  $line\n";
+	}
+
+	# Check validity of options
+	if (exists $options{'pgpsigurlmangle'}) {
+	    if (not (-r 'debian/upstream-signing-key.pgp')) {
+		uscan_warn "$progname warning: pgpsigurlmangle option exists, but debian/upstream-signing-key.pgp does not exist,\n  ignoring in $watchfile:\n  $line\n";
+		delete $options{'pgpsigurlmangle'};
+	    } elsif (! $havegpgv) {
+		uscan_warn "$progname warning: pgpsignurlmangle option exists, but you must have gpgv installed to verify\n  in $watchfile, skipping:\n  $line\n";
+		return 1;
+	    }
 	}
 
 	# Handle sf.net addresses specially
@@ -1124,6 +1139,7 @@ EOF
 
     # So what have we got to report now?
     my $upstream_url;
+    my $pgpsig_url;
     # Upstream URL?  Copying code from below - ugh.
     if ($site =~ m%^https?://%) {
 	# absolute URL?
@@ -1201,6 +1217,20 @@ EOF
     else {
 	# FTP site
 	$upstream_url = "$base$newfile";
+    }
+
+    if (exists $options{'pgpsigurlmangle'}) {
+	$pgpsig_url = $upstream_url;
+	foreach my $pat (@{$options{'pgpsigurlmangle'}}) {
+	    if (! safe_replace(\$pgpsig_url, $pat)) {
+		uscan_warn "$progname: In $watchfile, potentially"
+		  . " unsafe or malformed pgpsigurlmangle"
+		  . " pattern:\n  '$pat'"
+		  . " found. Skipping watchline\n"
+		  . "  $line\n";
+		return 1;
+	    }
+	}
     }
 
     $dehs_tags{'debian-uversion'} = $lastversion;
@@ -1346,6 +1376,27 @@ EOF
 	    }
 	    return 1;
 	}
+    }
+
+    if (defined $pgpsig_url) {
+	print "-- Downloading OpenPGP signature for package as $newfile_base.pgp\n" if $verbose;
+	my $sigrequest = HTTP::Request->new('GET', "$pgpsig_url");
+	my $sigresponse = $user_agent->request($sigrequest, "$destdir/$newfile_base.pgp");
+
+	if (! $sigresponse->is_success) {
+	    if (defined $pkg_dir) {
+		uscan_warn "$progname warning: In directory $pkg_dir, downloading OpenPGP signature\n  $upstream_url failed: " . $sigresponse->status_line . "\n";
+	    } else {
+		uscan_warn "$progname warning: Downloading OpenPGP signature\n $pgpsig_url failed:\n" . $sigresponse->status_line . "\n";
+	    }
+	    return 1;
+	}
+
+	print "-- Verifying OpenPGP signature $newfile_base.pgp for $newfile_base\n" if $verbose;
+	system('/usr/bin/gpgv', '--homedir', '/dev/null',
+	       '--keyring', 'debian/upstream-signing-key.pgp',
+	       "$destdir/$newfile_base.pgp", "$destdir/$newfile_base") >> 8 == 0
+		 or uscan_die("$progname warning: OpenPGP signature did not verify.\n");
     }
 
     if ($repack and $newfile_base =~ /^(.*)\.(tar\.bz2|tbz2?)$/) {

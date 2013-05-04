@@ -282,6 +282,16 @@ matched, then the version number is determined from this URL.
 Finally, any rules given by this option are applied before the actual
 download attempt is made. An example of its use is given in the
 examples section above.
+.TP
+\fBpgpsigurlmangle=\fIrules\fR
+If present, the supplied rules will be applied to the downloaded URL
+(after any downloadurlmangle rules, if present) to craft a new URL
+that will be used to fetch the detached OpenPGP signature file for the
+upstream tarball.  Some common rules might be `\fBs/$/.asc/\fR' or
+`\fBs/$/.pgp/\fR' or `\fBs/$/.gpg/\fR'.  This signature must be made
+by a key found in the keyring \fBdebian/upstream-signing-key.pgp\fR.
+If it is not valid, or not made by one of the listed keys, uscan will
+report an error.
 .SH "Directory name checking"
 Similarly to several other scripts in the \fBdevscripts\fR package,
 \fBuscan\fR explores the requested directory trees looking for
