@@ -103,7 +103,7 @@ Note that this is an expensive operation which may take some time.
 A case sensitive argument to be looked up in the ACL permission file. The exact
 interpretation of this argument is dependent by the B<--search> argument.
 
-This argument can be reapeated.
+This argument can be repeated.
 
 =back
 
@@ -155,9 +155,9 @@ under the terms of the General Public License (GPL) version 2 or later.
 
 =head1 SEE ALSO
 
-L<who-uploads(1)>, L<gpg(1)>
+B<who-uploads>(1), B<gpg>(1)
 
-https://lists.debian.org/debian-devel-announce/2012/09/msg00008.html
+S<I<https://lists.debian.org/debian-devel-announce/2012/09/msg00008.html>>
 
 =cut
 

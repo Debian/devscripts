@@ -14,6 +14,9 @@ devscripts (2.13.2) UNRELEASED; urgency=low
   * debchange: Set Wheezy as the default --bpo target.  (Closes: #703633)
   * rc-alert: Change description of I flag to reference wheezy instead of
     lenny.  (Closes: #683491)
+  * who-permits-upload:
+    + Use consistent formatting in the "SEE ALSO" section of the POD.
+    + Fix spelling mistakes.
 
   [ Christoph Berg ]
   * dget: "--all pkg" will download all binaries for source package pkg.
