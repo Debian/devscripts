@@ -195,6 +195,9 @@ Description: scripts to make the life of a Debian Package maintainer easier
     [wget | curl]
   - wnpp-check: check whether there is an open request for packaging or
     intention to package bug for a package [wget | curl]
+  - who-permits-upload: Retrieve information about Debian Maintainer access
+    control lists [gnupg, libparse-debcontrol-perl, libwww-perl,
+    debian-keyring]
   - wrap-and-sort: wrap long lines and sort items in packaging files
     [python3-debian]
  .

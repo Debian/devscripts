@@ -238,6 +238,9 @@ And now, in mostly alphabetical order, the scripts:
 
 - whodepends: check which maintainers' packages depend on a package
 
+- who-permits-upload: Retrieve information about Debian Maintainer access
+  control lists [gnupg, libparse-debcontrol-perl, libwww-perl, debian-keyring]
+
 - who-uploads: determine the most recent uploaders of a package to the Debian
   archive [gnupg, debian-keyring, debian-maintainers, wget]
 
