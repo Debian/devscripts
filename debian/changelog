@@ -18,6 +18,9 @@ devscripts (2.13.2) UNRELEASED; urgency=low
   [ Christoph Berg ]
   * dget: "--all pkg" will download all binaries for source package pkg.
 
+  [ Raphael Geissert ]
+  * checkbashisms: Fix false positives in $_ checks.  (Closes: #691389)
+
  -- Julian Gilbey <jdg@debian.org>  Sun, 24 Mar 2013 22:27:57 +0000
 
 devscripts (2.13.1) experimental; urgency=low
