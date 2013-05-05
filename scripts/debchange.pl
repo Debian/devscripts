@@ -172,8 +172,8 @@ Options:
          Increment the Debian release number without any appended derivative
          distribution name
   --bpo
-         Increment the Debian release number for a Backports.org upload
-         to "squeeze-backports"
+         Increment the Debian release number for a backports upload
+         to "wheezy-backports"
   -l, --local <suffix>
          Add a suffix to the Debian version number for a local build
   -b, --force-bad-version
@@ -613,8 +613,8 @@ my $MAINTAINER = 'MAINTAINER';
 my $EMAIL = 'EMAIL';
 my $DISTRIBUTION = 'UNRELEASED';
 my $bpo_dist = '';
-my %bpo_dists = ( 60, 'squeeze' );
-my $latest_bpo_dist = '60';
+my %bpo_dists = ( 60, 'squeeze', 70, 'wheezy' );
+my $latest_bpo_dist = '70';
 my $CHANGES = '';
 # Changelog urgency, possibly propogated to NEWS files
 my $CL_URGENCY = '';

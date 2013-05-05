@@ -11,6 +11,7 @@ devscripts (2.13.2) UNRELEASED; urgency=low
     $SIG{__DIE__}/$SIG{__WARN__} to prevent breaking die/warn in other
     modules.  (Closes: #669942)
   * licensecheck: Fix invalid regular expression syntax.  (Closes: #706232)
+  * debchange: Set Wheezy as the default --bpo target.  (Closes: #703633)
 
   [ Christoph Berg ]
   * dget: "--all pkg" will download all binaries for source package pkg.
