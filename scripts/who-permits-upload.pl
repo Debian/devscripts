@@ -21,6 +21,8 @@
 use strict;
 use Parse::DebControl;
 use LWP::UserAgent;
+use Encode::Locale;
+use Encode;
 use Getopt::Long;
 use constant {TYPE_PACKAGE => "package", TYPE_UID => "uid", TYPE_SPONSOR => "sponsor"};
 use constant {SPONSOR_FINGERPRINT => 0, SPONSOR_NAME => 1};
@@ -31,6 +33,9 @@ our $TYPE = "package";
 our $GPG = "/usr/bin/gpg";
 our ($HELP, @ARGUMENTS, @DM_DATA, %GPG_CACHE);
 
+binmode STDIN, ':encoding(console_in)';
+binmode STDOUT, ':encoding(console_out)';
+binmode STDERR, ':encoding(console_out)';
 
 =encoding utf8
 
@@ -246,8 +251,9 @@ sub lookup_fingerprint
         }
         push(@gpg_arguments, ("--keyring", $keyring));
     }
-    push(@gpg_arguments, ("--no-options", "--no-auto-check-trustdb", "--no-default-keyring", "--list-key", "--with-colons", "$fingerprint"));
+    push(@gpg_arguments, ("--no-options", "--no-auto-check-trustdb", "--no-default-keyring", "--list-key", "--with-colons", encode(locale => $fingerprint)));
     open(CMD, '-|', $GPG, @gpg_arguments) || leave "$GPG: $!\n";
+    binmode CMD, ':encoding(UTF-8)';
     while (my $l = <CMD>)
     {
         if ($l =~ /^pub/)
@@ -332,6 +338,7 @@ else
 
 foreach my $argument (@ARGUMENTS)
 {
+    $argument = decode(locale => $argument);
     my @rows = find_matching_row($argument, $TYPE);
     if (not @rows)
     {

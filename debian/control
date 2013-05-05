@@ -46,6 +46,7 @@ Recommends: at,
             fakeroot,
             gnupg,
             libdistro-info-perl,
+            libencode-locale-perl,
             libjson-perl,
             libparse-debcontrol-perl,
             liburi-perl,
@@ -196,8 +197,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - wnpp-check: check whether there is an open request for packaging or
     intention to package bug for a package [wget | curl]
   - who-permits-upload: Retrieve information about Debian Maintainer access
-    control lists [gnupg, libparse-debcontrol-perl, libwww-perl,
-    debian-keyring]
+    control lists [gnupg, libencode-locale-perl, libparse-debcontrol-perl,
+    libwww-perl, debian-keyring]
   - wrap-and-sort: wrap long lines and sort items in packaging files
     [python3-debian]
  .
