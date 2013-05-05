@@ -12,6 +12,8 @@ devscripts (2.13.2) UNRELEASED; urgency=low
     modules.  (Closes: #669942)
   * licensecheck: Fix invalid regular expression syntax.  (Closes: #706232)
   * debchange: Set Wheezy as the default --bpo target.  (Closes: #703633)
+  * rc-alert: Change description of I flag to reference wheezy instead of
+    lenny.  (Closes: #683491)
 
   [ Christoph Berg ]
   * dget: "--all pkg" will download all binaries for source package pkg.
