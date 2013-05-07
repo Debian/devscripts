@@ -50,8 +50,8 @@ B<who-permits-upload> [B<-h>] [B<-s> I<keyring>] [B<-d> I<dm_url>] [B<-s> I<sear
 =head1 DESCRIPTION
 
 B<who-permits-upload> looks up the given Debian Maintainer (DM) upload permissions
-from Debian's ftpmaster and parses them in a human readable way. The tool can
-search by DM name, sponsor (the person granted the permission) and by package.
+from ftp-master.debian.org and parses them in a human readable way. The tool can
+search by DM name, sponsor (the person who granted the permission) and by package.
 
 =head1 OPTIONS
 
@@ -78,7 +78,7 @@ Separate keyrings with a colon ":".
 
 =item B<--search=>I<search_type>, B<-s> I<search_type>
 
-Modify the look-up behavior instead of using the default. This influences the
+Modify the look-up behavior. This influences the
 interpretation of the I<query> argument. Supported search types are:
 
 =over 4
