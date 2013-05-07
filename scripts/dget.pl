@@ -658,7 +658,7 @@ packages.  Default is 'yes'.
 
 =head1 EXAMPLES
 
-Download all .deb files for the previous version of a package and run debdiff
+Download all I<.deb> files for the previous version of a package and run B<debdiff>
 on them:
 
   dget --all mypackage=1.2-1

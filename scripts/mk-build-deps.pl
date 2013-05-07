@@ -52,7 +52,7 @@ Install the generated packages and its build-dependencies.
 =item B<-t>, B<--tool>
 
 When installing the generated package use the specified tool.
-(default: apt-get --no-install-recommends)
+(default: B<apt-get --no-install-recommends>)
 
 =item B<-r>, B<--remove>
 

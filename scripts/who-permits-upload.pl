@@ -57,16 +57,16 @@ search by DM name, sponsor (the person granted the permission) and by package.
 
 =over 4
 
-=item B<--dmfile=>I<url>, B<-d> I<url>
+=item B<--dmfile=>I<dm_url>, B<-d> I<dm_url>
 
 Retrieve the DM permission file from the supplied URL. When this option is not
 present, the default value I<http://ftp-master.debian.org/dm.txt> is used.
 
 =item B<--help>, B<-h>
 
-Display an usage summary and exit
+Display an usage summary and exit.
 
-=item B<--keyring=>I<file>, B<-s> I<file>
+=item B<--keyring=>I<keyring>, B<-s> I<keyring>
 
 Use the supplied GnuPG keyrings to look-up GPG fingerprints from the DM permission
 file. When not present, the default Debian Developer and Maintainer keyrings are used
@@ -83,18 +83,18 @@ interpretation of the I<query> argument. Supported search types are:
 
 =over 4
 
-=item I<package>
+=item B<package>
 
 Search for a source package name. This is also the default when B<--search> is omitted.
 Since package names are unique, this will return given ACLs - if any - for a
 single package.
 
-=item I<uid>
+=item B<uid>
 
 Search for a Debian Maintainer. This should be (a fraction of) a name. It will
 return all ACLs assigned to matching maintainers.
 
-=item I<sponsor>
+=item B<sponsor>
 
 Search for a sponsor (i.e. a Debian Developer) who granted DM permissions. This
 will return all ACLs given by the supplied developer.
@@ -160,7 +160,7 @@ under the terms of the General Public License (GPL) version 2 or later.
 
 =head1 SEE ALSO
 
-B<who-uploads>(1), B<gpg>(1)
+B<gpg>(1), B<who-uploads>(1)
 
 S<I<https://lists.debian.org/debian-devel-announce/2012/09/msg00008.html>>
 

@@ -36,7 +36,7 @@ repository.
 
 =item B<-R>, B<--release-use-changelog>
 
-When used in conjunction with --release, if there are uncommited
+When used in conjunction with B<--release>, if there are uncommited
 changes to the changelog then derive the commit message from those
 changes rather than using the default message.
 
@@ -108,17 +108,17 @@ ignored for this purpose.  The currently recognised variables are:
 
 =item B<DEBCOMMIT_STRIP_MESSAGE>
 
-If this is set to I<no>, then it is the same as the --no-strip-message
+If this is set to I<no>, then it is the same as the B<--no-strip-message>
 command line parameter being used. The default is I<yes>.
 
 =item B<DEBCOMMIT_SIGN_TAGS>
 
-If this is set to I<yes>, then it is the same as the --sign-tags command
+If this is set to I<yes>, then it is the same as the B<--sign-tags> command
 line parameter being used. The default is I<no>.
 
 =item B<DEBCOMMIT_RELEASE_USE_CHANGELOG>
 
-If this is set to I<yes>, then it is the same as the --release-use-changelog
+If this is set to I<yes>, then it is the same as the B<--release-use-changelog>
 command line parameter being used. The default is I<no>.
 
 =item B<DEBSIGN_KEYID>
@@ -148,7 +148,7 @@ has been automatically determined from the changelog.
 =item B<git>
 
 If only a single change is detected in the changelog, B<debcommit> will unfold
-it to a single line and behave as if --strip-message was used.
+it to a single line and behave as if B<--strip-message> was used.
 
 Otherwise, the first change will be unfolded and stripped to form a summary line
 and a commit message formed using the summary line followed by a blank line and
@@ -163,7 +163,7 @@ allow the message to be fine-tuned.
 
 =item B<bzr>
 
-If the changelog entry used for the commit message closes any bugs then --fixes
+If the changelog entry used for the commit message closes any bugs then B<--fixes>
 options to "bzr commit" will be generated to associate the revision and the bugs.
 
 =back

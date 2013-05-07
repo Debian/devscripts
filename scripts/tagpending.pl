@@ -135,7 +135,7 @@ Equivalent to B<dpkg-parsechangelog>'s B<-v> option.
 =item B<-i>, B<--interactive>
 
 Display the message which would be sent to the BTS and, except when
---noact was used, prompt for confirmation before sending it.
+B<--noact> was used, prompt for confirmation before sending it.
 
 =item B<-w>, B<--wnpp>
 

@@ -2,63 +2,62 @@
 .SH NAME
 dcmd \- expand file lists of .dsc/.changes files in the command line
 .SH SYNOPSIS
-\fBdcmd\fR [\fIoptions\fR] [\fIcommand\fR] [\fIchanges-file\fR|\fIdsc-file\fR]
-[\fI...\fR]
+\fBdcmd\fR [\fIoptions\fR] [\fIcommand\fR] [\fIchanges-file\fR|\fIdsc-file\fR] ...
 .SH DESCRIPTION
-\fBdcmd\fR replaces any reference to a .dsc or .changes file in the
+\fBdcmd\fR replaces any reference to a \fI.dsc\fR or \fI.changes\fR file in the
 command line with the list of files in its 'Files' section, plus the
 file itself.  It allows easy manipulation of all the files involved in
-an upload (for changes files) or a source package (for dsc files).
+an upload (for \fI.changes\fR files) or a source package (for \fI.dsc\fR files).
 
-If \fIcommand\fR is omitted (that is the first argument is an existing .dsc
-or .changes file), the expanded list of files is printed to stdout, one file
+If \fIcommand\fR is omitted (that is the first argument is an existing \fI.dsc\fR
+or \fI.changes\fR file), the expanded list of files is printed to stdout, one file
 by line. Useful for usage in backticks.
 .SH OPTIONS
 There are a number of options which may be used in order to select only a
-subset of the files listed in the .dsc or .changes file. If a requested file
+subset of the files listed in the \fI.dsc\fR or \fI.changes\fR file. If a requested file
 is not found, an error message will be printed.
 .TP 14
 .B \-\-dsc
-Select the .dsc file.
+Select the \fI.dsc\fR file.
 .TP
 .B \-\-schanges
-Select .changes files for the 'source' architecture.
+Select \fI.changes\fR files for the 'source' architecture.
 .TP
 .B \-\-bchanges
-Select .changes files for binary architectures.
+Select \fI.changes\fR files for binary architectures.
 .TP
 .B \-\-changes
-Select .changes files. Implies \-\-schanges and \-\-bchanges.
+Select \fI.changes\fR files. Implies \fB\-\-schanges\fR and \fB\-\-bchanges\fR.
 .TP
 .B \-\-archdeb
-Select architecture-dependent binary packages (.deb files).
+Select architecture-dependent binary packages (\fI.deb\fR files).
 .TP
 .B \-\-indepdeb
-Select architecture-independent binary packages (.deb files).
+Select architecture-independent binary packages (\fI.deb\fR files).
 .TP
 .B \-\-deb
-Select binary packages (.deb files). Implies \-\-archdeb and \-\-indepdeb.
+Select binary packages (\fI.deb\fR files). Implies \fB\-\-archdeb\fR and \fB\-\-indepdeb\fR.
 .TP
 .B \-\-archudeb
-Select architecture-dependent udeb binary packages.
+Select architecture-dependent \fI.udeb\fR binary packages.
 .TP
 .B \-\-indepudeb
-Select architecture-independent udeb binary packages.
+Select architecture-independent \fI.udeb\fR binary packages.
 .TP
 .B \-\-udeb
-Select udeb binary packages. Implies \-\-archudeb and \-\-indepudeb.
+Select \fI.udeb\fR binary packages. Implies \fB\-\-archudeb\fR and \fB\-\-indepudeb\fR.
 .TP
-.B \-\-tar, \-\-orig
-Select the tar file.
+.BR \-\-tar ,\  \-\-orig
+Select the \fI.tar\fR file.
 .TP
 .B \-\-diff
-Select the Debian diff file.
+Select the Debian \fI.diff\fR file.
 .PP
 Each option may be prefixed by \fB\-\-no\fR to indicate that all files
 \fInot\fR matching the specification should be selected.
 .PP
-It is not possible to combine positive filtering options (e.g. \-\-dsc)
-and negative filtering options (e.g. \-\-no\-changes) in the same
+It is not possible to combine positive filtering options (e.g. \fB\-\-dsc\fR)
+and negative filtering options (e.g. \fB\-\-no\-changes\fR) in the same
 \fBdcmd\fR invocation.
 .TP
 .B \-\-no\-fail\-on\-missing\fR, \fB\-r

@@ -1,6 +1,6 @@
 .TH DEBRSIGN 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
 .SH NAME
-debrsign \- remotely sign a Debian changes and dsc file pair using SSH
+debrsign \- remotely sign a Debian .changes and .dsc file pair using SSH
 .SH SYNOPSIS
 \fBdebrsign\fR [\fIoptions\fR] [\fIuser\fB@\fR]\fIremotehost\fR
 [\fIchanges-file\fR|\fIdsc-file\fR]
@@ -31,7 +31,7 @@ program, which can do this task.
 .TP
 \fB\-S\fR
 Look for a source-only \fI.changes\fR file instead of a binary-build
-changes file.
+\fI.changes\fR file.
 .TP
 \fB\-a\fIdebian-architecture\fR, \fB\-t\fIGNU-system-type\fR
 See \fBdpkg-architecture\fR(1) for a description of these options.
@@ -40,10 +40,10 @@ to mimic the behaviour of \fBdpkg-buildpackage\fR when determining the
 name of the \fI.changes\fR file.
 .TP
 \fB\-\-multi\fR
-Multiarch changes mode: This signifies that \fBdebrsign\fR should
+Multiarch \fI.changes\fR mode: This signifies that \fBdebrsign\fR should
 use the most recent file with the name pattern
-\fIpackage_version_*+*.changes\fR as the changes file, allowing for the
-changes files produced by \fBdpkg-cross\fR.
+\fIpackage_version_*+*.changes\fR as the \fI.changes\fR file, allowing for the
+\fI.changes\fR files produced by \fBdpkg-cross\fR.
 .TP
 \fB\-\-path \fIremote-path\fR
 Specify a path to the GPG binary on the remote host.
