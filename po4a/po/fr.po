@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2013-05-05 22:24-0400\n"
-"PO-Revision-Date: 2013-03-20 22:34-0400\n"
+"PO-Revision-Date: 2013-05-07 19:10-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -683,7 +683,7 @@ msgid ""
 " % bts severity 95672 normal , merge 95672 95673 \\#they are the same!\n"
 "\n"
 msgstr ""
-" % bts severity 95672 normal , merge 95672 95673 \\#Il s\\'agit des mêmes !\n"
+" % bts severity 95672 normal , merge 95672 95673 \\#Il s\\'agit des mêmes !\n"
 "\n"
 
 #. type: textblock
@@ -702,7 +702,7 @@ msgid ""
 " % bts severity 95672 wishlist , retitle it \"bts: please add a --foo option\"\n"
 "\n"
 msgstr ""
-" % bts severity 95672 wishlist , retitle it \"bts: SVP ajoutez une option --toto\"\n"
+" % bts severity 95672 wishlist , retitle it \"bts : veuillez ajouter une option --toto\"\n"
 "\n"
 
 #. type: textblock
@@ -1551,11 +1551,11 @@ msgstr ""
 "demandée via B<bts show> va être automatiquement mise en cache et sera donc "
 "disponible pour être visualisée plus tard tout en étant hors ligne. Les "
 "pages mises en cache automatiquement de cette manière seront supprimées lors "
-"d'invocations ultérieures de « B<bts show>|B<bugs>|B<cache> » si on n'y "
+"d'invocations ultérieures de « B<bts> B<show>|B<bugs>|B<cache> » si on n'y "
 "accède pas dans les 30 jours. Attention : sur un système de fichiers monté "
-"avec l'option « noatime », l'exécution de « B<bts show>|B<bugs> » ne met pas "
-"à jour les heures et dates d'accès aux fichiers du cache ; un bogue mis en "
-"cache sera donc nettoyé automatiquement 30 jours après son téléchargement "
+"avec l'option « noatime », l'exécution de « B<bts> B<show>|B<bugs> » ne met "
+"pas à jour les heures et dates d'accès aux fichiers du cache ; un bogue mis "
+"en cache sera donc nettoyé automatiquement 30 jours après son téléchargement "
 "initial, même si on y accède entre temps."
 
 #. type: textblock
@@ -1886,7 +1886,7 @@ msgstr ""
 "sont des nombres négatifs, séparés par des espaces, qui peuvent être "
 "utilisés dans les commandes de contrôle suivantes pour se référer aux "
 "rapports de bogue nouvellement dupliqués. Un nouveau rapport de bogue est "
-"généré pour chaque nouvel identifiant."
+"produit pour chaque nouvel identifiant."
 
 #. type: =item
 #: ../scripts/bts.pl:1230
@@ -3076,7 +3076,7 @@ msgid ""
 "mail to the control bot should automatically be sent."
 msgstr ""
 "Indiquer une liste d'adresses électroniques auxquelles une copie conforme "
-"des courriers, générés pour le robot « control », doit être envoyée "
+"des courriers, créés pour le robot « control », doit être envoyée "
 "automatiquement."
 
 #. type: =item
@@ -4536,7 +4536,7 @@ msgstr "CVS-DEBC"
 msgid ""
 "cvs-debc - view contents of a cvs-buildpackage/cvs-debuild generated package"
 msgstr ""
-"cvs-debc - Visualiser le contenu d'un paquet Debian généré par cvs-"
+"cvs-debc - Visualiser le contenu d'un paquet Debian créé par cvs-"
 "buildpackage ou cvs-debuild"
 
 #. type: Plain text
@@ -4558,9 +4558,9 @@ msgid ""
 msgstr ""
 "B<cvs-debc> est exécuté après B<cvs-buildpackage> ou B<cvs-debuild> depuis "
 "le répertoire de travail CVS. Il utilise le système B<cvs-buildpackage> pour "
-"trouver le fichier I<.changes> généré au cours de cette exécution. Il "
-"affiche ensuite les informations des fichiers .deb générés au cours de cette "
-"exécution. Pour cela, il exécute B<dpkg-deb -I> et B<dpkg-deb -c> pour "
+"trouver le fichier I<.changes> produit au cours de cette exécution. Il "
+"affiche ensuite les informations des fichiers I<.deb> produits au cours de "
+"cette exécution. Pour cela, il exécute B<dpkg-deb -I> et B<dpkg-deb -c> pour "
 "toutes les archives I<.deb> listées dans le fichier I<.changes>, en "
 "supposant que toutes ces archives I<.deb> se trouvent dans le même "
 "répertoire que le fichier I<.changes>. C'est utile pour s'assurer que les "
@@ -4755,7 +4755,7 @@ msgstr "CVS-DEBI"
 #: ../scripts/cvs-debi.1:4
 msgid "cvs-debi - install cvs-buildpackage/cvs-debuild generated package"
 msgstr ""
-"cvs-debi - Installer un paquet généré par cvs-buildpackage ou cvs-debuild"
+"cvs-debi - Installer un paquet créé par cvs-buildpackage ou cvs-debuild"
 
 #. type: Plain text
 #: ../scripts/cvs-debi.1:6
@@ -4776,7 +4776,7 @@ msgid ""
 msgstr ""
 "B<cvs-debi> est exécuté après B<cvs-buildpackage> ou B<cvs-debuild> depuis "
 "le répertoire de travail CVS. Il utilise le système B<cvs-buildpackage> pour "
-"trouver le fichier I<.changes> généré au cours de cette exécution. Il "
+"trouver le fichier I<.changes> produit au cours de cette exécution. Il "
 "installe ensuite avec B<debpkg -i> toutes les archives I<.deb> listées dans "
 "le fichier I<.changes>, en supposant que toutes ces archives I<.deb> se "
 "trouvent dans le même répertoire que le fichier I<.changes>. Notez que vous "
@@ -4817,7 +4817,7 @@ msgstr "B<cvs-buildpackage>(1), B<cvs-debc>(1), B<cvs-debuild>(1), B<debi>(1)"
 msgid ""
 "cvs-debrelease - upload a cvs-buildpackage/cvs-debuild generated package"
 msgstr ""
-"cvs-debrelease - Envoyer à l'archive Debian un paquet généré par cvs-"
+"cvs-debrelease - Envoyer à l'archive Debian un paquet créé par cvs-"
 "buildpackage ou cvs-debuild"
 
 #. type: Plain text
@@ -4843,7 +4843,7 @@ msgid ""
 msgstr ""
 "B<cvs-debrelease> est exécuté après B<cvs-buildpackage> ou B<cvs-debuild> "
 "depuis le répertoire de travail CVS. Il utilise le système B<cvs-"
-"buildpackage> pour trouver le fichier I<.changes> généré au cours de cette "
+"buildpackage> pour trouver le fichier I<.changes> produit au cours de cette "
 "exécution. Il envoie ensuite le paquet à l'archive Debian en utilisant "
 "B<debrelease>(1), qui appelle soit B<dupload> soit B<dput>. Notez que "
 "l'option B<--dopts> doit être utilisée pour différencier les options de "
@@ -5059,8 +5059,7 @@ msgstr ""
 msgid ""
 "B<dcmd> [I<options>] [I<command>] [I<changes-file>|I<dsc-file>] [I<...>]"
 msgstr ""
-"B<dcmd> [I<options>] [I<commande>] [I<fichier-changes>|I<fichier-dsc>] [I<..."
-">]"
+"B<dcmd> [I<options>] [I<commande>] [I<fichier-changes>|I<fichier-dsc>] ..."
 
 #. type: Plain text
 #: ../scripts/dcmd.1:12
@@ -5070,11 +5069,11 @@ msgid ""
 "It allows easy manipulation of all the files involved in an upload (for "
 "changes files) or a source package (for dsc files)."
 msgstr ""
-"B<dcmd> remplace toutes les références à un fichier .dsc ou .changes sur la "
-"ligne de commande par la liste des fichiers de sa section « Files », plus le "
-"fichier lui-même. Cela facilite la manipulation de tous les fichiers "
-"impliqués dans un upload (pour les fichiers .changes) ou un paquet source "
-"(pour les fichiers .dsc)."
+"B<dcmd> remplace toutes les références à un fichier I<.dsc> ou I<.changes> "
+"sur la ligne de commande par la liste des fichiers de sa section « Files », "
+"plus le fichier lui-même. Cela facilite la manipulation de tous les fichiers "
+"impliqués dans un envoi (pour les fichiers I<.changes>) ou un paquet source "
+"(pour les fichiers I<.dsc>)."
 
 #. type: Plain text
 #: ../scripts/dcmd.1:16
@@ -5084,9 +5083,9 @@ msgid ""
 "line. Useful for usage in backticks."
 msgstr ""
 "Si aucune I<commande> n'est fournie (c'est-à-dire le premier paramètre est "
-"un fichier .dsc ou .changes), la liste des fichiers est affichée sur la "
-"sortie standard, un fichier par ligne. C'est utile pour l'utilisation dans "
-"une autre commande."
+"un fichier I<.dsc> ou I<.changes>), la liste des fichiers est affichée sur "
+"la sortie standard, un fichier par ligne. C'est utile pour l'utilisation "
+"dans une autre commande."
 
 #. type: Plain text
 #: ../scripts/dcmd.1:20
@@ -5096,8 +5095,8 @@ msgid ""
 "is not found, an error message will be printed."
 msgstr ""
 "Différentes options permettent de ne sélectionner qu'une partie des fichiers "
-"listés dans le fichier .dsc ou .changes. Si un fichier demandé n'est pas "
-"trouvé, un message d'erreur est affiché."
+"listés dans le fichier I<.dsc> ou I<.changes>. Si un fichier demandé n'est "
+"pas trouvé, un message d'erreur est affiché."
 
 #. type: TP
 #: ../scripts/dcmd.1:20
@@ -5108,7 +5107,7 @@ msgstr "B<--dsc>"
 #. type: Plain text
 #: ../scripts/dcmd.1:23
 msgid "Select the .dsc file."
-msgstr "Sélectionner le fichier .dsc."
+msgstr "Sélectionner le fichier I<.dsc>."
 
 #. type: TP
 #: ../scripts/dcmd.1:23
@@ -5119,7 +5118,7 @@ msgstr "B<--schanges>"
 #. type: Plain text
 #: ../scripts/dcmd.1:26
 msgid "Select .changes files for the 'source' architecture."
-msgstr "Sélectionner les fichiers .changes pour l'architecture « source »."
+msgstr "Sélectionner les fichiers I<.changes> pour l'architecture « source »."
 
 #. type: TP
 #: ../scripts/dcmd.1:26
@@ -5130,7 +5129,7 @@ msgstr "B<--bchanges>"
 #. type: Plain text
 #: ../scripts/dcmd.1:29
 msgid "Select .changes files for binary architectures."
-msgstr "Sélectionner les fichiers .changes pour les architectures binaires."
+msgstr "Sélectionner les fichiers I<.changes> pour les architectures binaires."
 
 #. type: TP
 #: ../scripts/dcmd.1:29
@@ -5141,7 +5140,9 @@ msgstr "B<--changes>"
 #. type: Plain text
 #: ../scripts/dcmd.1:32
 msgid "Select .changes files. Implies --schanges and --bchanges."
-msgstr "Sélectionner les fichiers .changes. Implique --schanges et --bchanges."
+msgstr ""
+"Sélectionner les fichiers I<.changes>. Implique B<--schanges> et B<--"
+"bchanges>."
 
 #. type: TP
 #: ../scripts/dcmd.1:32
@@ -5153,7 +5154,7 @@ msgstr "B<--archdeb>"
 #: ../scripts/dcmd.1:35
 msgid "Select architecture-dependent binary packages (.deb files)."
 msgstr ""
-"Sélectionner les paquets binaires (fichiers .deb) spécifiques à une "
+"Sélectionner les paquets binaires (fichiers I<.deb>) spécifiques à une "
 "architecture."
 
 #. type: TP
@@ -5166,7 +5167,7 @@ msgstr "B<--indepdeb>"
 #: ../scripts/dcmd.1:38
 msgid "Select architecture-independent binary packages (.deb files)."
 msgstr ""
-"Sélectionner les paquets binaires (fichiers .deb) non spécifiques à une "
+"Sélectionner les paquets binaires (fichiers I<.deb>) non spécifiques à une "
 "architecture."
 
 #. type: TP
@@ -5179,8 +5180,8 @@ msgstr "B<--deb>"
 #: ../scripts/dcmd.1:41
 msgid "Select binary packages (.deb files). Implies --archdeb and --indepdeb."
 msgstr ""
-"Sélectionner les paquets binaires (fichiers .deb). Implique --archdeb et --"
-"indepdeb."
+"Sélectionner les paquets binaires (fichiers I<.deb>). Implique B<--archdeb> "
+"et B<--indepdeb>."
 
 #. type: TP
 #: ../scripts/dcmd.1:41
@@ -5191,7 +5192,8 @@ msgstr "B<--archudeb>"
 #. type: Plain text
 #: ../scripts/dcmd.1:44
 msgid "Select architecture-dependent udeb binary packages."
-msgstr "Sélectionner les paquets udeb binaires spécifiques à une architecture."
+msgstr ""
+"Sélectionner les paquets I<.udeb> binaires spécifiques à une architecture."
 
 #. type: TP
 #: ../scripts/dcmd.1:44
@@ -5203,7 +5205,8 @@ msgstr "B<--indepudeb>"
 #: ../scripts/dcmd.1:47
 msgid "Select architecture-independent udeb binary packages."
 msgstr ""
-"Sélectionner les paquets udeb binaires non spécifiques à une architecture."
+"Sélectionner les paquets I<.udeb> binaires non spécifiques à une "
+"architecture."
 
 #. type: TP
 #: ../scripts/dcmd.1:47
@@ -5215,18 +5218,19 @@ msgstr "B<--udeb>"
 #: ../scripts/dcmd.1:50
 msgid "Select udeb binary packages. Implies --archudeb and --indepudeb."
 msgstr ""
-"Sélectionner les paquets udeb binaires. Implique --archudeb et --indepudeb."
+"Sélectionner les paquets I<.udeb> binaires. Implique B<--archudeb> et B<--"
+"indepudeb>."
 
 #. type: TP
 #: ../scripts/dcmd.1:50
 #, no-wrap
 msgid "B<--tar, --orig>"
-msgstr "B<--tar, --orig>"
+msgstr "B<--tar>, B<--orig>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:53
 msgid "Select the tar file."
-msgstr "Sélectionner le fichier tar."
+msgstr "Sélectionner le fichier I<.tar>."
 
 #. type: TP
 #: ../scripts/dcmd.1:53
@@ -5237,7 +5241,7 @@ msgstr "B<--diff>"
 #. type: Plain text
 #: ../scripts/dcmd.1:56
 msgid "Select the Debian diff file."
-msgstr "Sélectionner le fichier diff Debian."
+msgstr "Sélectionner le fichier I<.diff> Debian."
 
 #. type: Plain text
 #: ../scripts/dcmd.1:59
@@ -5257,8 +5261,8 @@ msgid ""
 "invocation."
 msgstr ""
 "Il n'est pas possible de combiner les options de filtrage positives (par "
-"exemple --dsc) et négatives (par exemple --no-changes) dans le même appel à "
-"B<dcmd>."
+"exemple B<--dsc>) et négatives (par exemple B<--no-changes>) dans le même "
+"appel à B<dcmd>."
 
 #. type: TP
 #: ../scripts/dcmd.1:63
@@ -5269,7 +5273,8 @@ msgstr "B<--no-fail-on-missing>, B<-r>"
 #. type: Plain text
 #: ../scripts/dcmd.1:66
 msgid "If any of the requested files were not found, do not output an error."
-msgstr "Si un des fichiers demandés n'est pas trouvé, ne pas faire d'erreur."
+msgstr ""
+"Si un des fichiers demandés n'est pas trouvé, ne pas afficher d'erreur."
 
 #. type: =head1
 #: ../scripts/dcmd.1:66 ../scripts/debsnap.1:93 ../scripts/debuild.1:367
@@ -5791,7 +5796,7 @@ msgstr "DEBC"
 #. type: Plain text
 #: ../scripts/debc.1:4
 msgid "debc - view contents of a generated Debian package"
-msgstr "debc - Visualiser le contenu d'un paquet Debian généré"
+msgstr "debc - Visualiser le contenu d'un paquet Debian créé"
 
 #. type: Plain text
 #: ../scripts/debc.1:6
@@ -5818,20 +5823,21 @@ msgid ""
 "for ensuring that the expected files have ended up in the Debian package."
 msgstr ""
 "B<debc> détermine la version d'un paquet et affiche des informations "
-"concernant les fichiers .deb et .udeb générés. Si un fichier I<.changes> est "
-"indiqué en ligne de commande, le nom du fichier doit se terminer par I<."
-"changes>, puisque c'est comme cela que le programme le différencie d'un nom "
-"de paquet. Sinon, B<debc> doit être appelé depuis le répertoire du code "
-"source. Dans ce cas, il recherchera un fichier I<.changes> correspondant à "
-"la version du paquet ; pour cela, il détermine le nom et la version grâce au "
-"fichier changelog, et l'architecture est cherchée comme B<dpkg-buildpackage>"
-"(1) le ferait. Il exécute ensuite B<dpkg-deb -I> et B<dpkg-deb -c> pour "
-"toutes les archives I<.deb> listées dans le fichier I<.changes> pour "
-"afficher des informations sur le contenu des fichiers I<.deb> et I<.udeb>. "
-"Il place devant tous les fichiers I<.deb> ou I<.udeb> le nom du fichier. Il "
-"suppose que toutes ces archives I<.deb> / I<.udeb> se trouvent dans le même "
-"répertoire que le fichier I<.changes>. C'est utile pour s'assurer que tous "
-"les fichiers attendus se trouvent dans le paquet Debian."
+"concernant les fichiers I<.deb> et I<.udeb> produits. Si un fichier I<."
+"changes> est indiqué en ligne de commande, le nom du fichier doit se "
+"terminer par I<.changes>, puisque c'est comme cela que le programme le "
+"différencie d'un nom de paquet. Sinon, B<debc> doit être appelé depuis le "
+"répertoire du code source. Dans ce cas, il recherchera un fichier I<."
+"changes> correspondant à la version du paquet ; pour cela, il détermine le "
+"nom et la version grâce au fichier I<changelog>, et l'architecture est "
+"cherchée comme B<dpkg-buildpackage>(1) le ferait. Il exécute ensuite B<dpkg-"
+"deb -I> et B<dpkg-deb -c> pour toutes les archives I<.deb> listées dans le "
+"fichier I<.changes> pour afficher des informations sur le contenu des "
+"fichiers I<.deb> et I<.udeb>. Il place devant tous les fichiers I<.deb> ou "
+"I<.udeb> le nom du fichier. Il suppose que toutes ces archives I<.deb> ou I<."
+"udeb> se trouvent dans le même répertoire que le fichier I<.changes>. C'est "
+"utile pour s'assurer que tous les fichiers attendus se trouvent dans le "
+"paquet Debian."
 
 #. type: Plain text
 #: ../scripts/debc.1:28
@@ -6147,11 +6153,11 @@ msgstr ""
 "l'option I<+n> pour démarrer l'édition à une ligne donnée, cette option sera "
 "utilisée pour positionner l'édition à la bonne ligne. Si l'éditeur est "
 "quitté sans avoir modifié le fichier temporaire, B<debchange> quittera sans "
-"modifier le fichier changelog. B<Notez que les fichiers changelog sont "
-"supposés être codés en UTF-8. Dans le cas contraire, des problèmes peuvent "
-"se produire.> Veuillez consulter la page de manuel de B<iconv>(1) pour "
-"trouver comment convertir les fichiers I<changelog> codés autrement. Enfin, "
-"un fichier I<changelog> ou I<NEWS> peut être créé à partir de rien en "
+"modifier le fichier I<changelog>. B<Remarquez que les fichiers changelog "
+"sont supposés être codés en UTF-8. Dans le cas contraire, des problèmes "
+"peuvent se produire.> Veuillez consulter la page de manuel de B<iconv>(1) "
+"pour trouver comment convertir les fichiers I<changelog> codés autrement. "
+"Enfin, un fichier I<changelog> ou I<NEWS> peut être créé à partir de rien en "
 "utilisant l'option B<--create> décrite ci-dessous."
 
 #. type: Plain text
@@ -6176,7 +6182,7 @@ msgstr ""
 "B<--noquery> ou en positionnant la variable de configuration "
 "B<DEBCHANGE_QUERY_BTS> à I<no>, comme décrit ci-dessus. Dans tous les cas, "
 "l'éditeur (voir ci-dessus) est toujours appelé pour permettre une "
-"modification de l'entrée, mais le fichier changelog est créé, que des "
+"modification de l'entrée, mais le fichier I<changelog> est créé, que des "
 "modifications aient été faites ou non. Une entrée supplémentaire peut être "
 "fournie en ligne de commande en plus de l'entrée fermant le bogue."
 
@@ -6261,10 +6267,10 @@ msgstr ""
 "pas définie, le même test est réalisé sur B<EMAIL>. Puis, si le nom complet "
 "n'est pas encore déterminé, B<getpwuid>(3) est utilisé pour déterminer le "
 "nom grâce au fichier des mots de passe. En cas d'échec, l'entrée précédente "
-"du fichier changelog est utilisée. Pour l'adresse électronique, si elle n'a "
-"pas été déterminée avec B<DEBEMAIL> ou B<EMAIL>, I</etc/mailname> est "
+"du fichier I<changelog> est utilisée. Pour l'adresse électronique, si elle "
+"n'a pas été déterminée avec B<DEBEMAIL> ou B<EMAIL>, I</etc/mailname> est "
 "utilisé, puis il tente de la construire à partir du nom d'utilisateur et du "
-"FQDN, sinon, l'adresse de l'entrée précédente du fichier changelog est "
+"FQDN, sinon, l'adresse de l'entrée précédente du fichier I<changelog> est "
 "utilisée. Pour simplifier, il est préférable de définir les variables "
 "d'environnement B<DEBEMAIL> et B<DEBFULLNAME> lorsque ce script est utilisé."
 
@@ -6370,9 +6376,10 @@ msgstr ""
 "rationnelle Perl (voir B<perlre>(1)), qui sera ancrée à son début et à sa "
 "fin. Si elle contient un « B</> », alors elle doit correspondre au chemin "
 "complet. Si elle contient la chaîne « B<PACKAGE> », cette chaîne sera "
-"remplacée par le nom du paquet source déterminé par le fichier changelog. La "
-"valeur par défaut de cette expression rationnelle est « B<PACKAGE(-.+)?> », "
-"ce qui correspond aux répertoires nommés B<PACKAGE> ou B<PACKAGE->I<version>."
+"remplacée par le nom du paquet source déterminé par le fichier I<changelog>. "
+"La valeur par défaut de cette expression rationnelle est « B<PACKAGE(-.+)?"
+"> », ce qui correspond aux répertoires nommés B<PACKAGE> ou B<PACKAGE-"
+">I<version>."
 
 #. type: Plain text
 #: ../scripts/debchange.1:145
@@ -6396,8 +6403,8 @@ msgstr "B<--append>, B<-a>"
 #: ../scripts/debchange.1:149
 msgid "Add a new changelog entry at the end of the current version's entries."
 msgstr ""
-"Ajouter une nouvelle entrée au fichier changelog à la fin des entrées de la "
-"version actuelle."
+"Ajouter une nouvelle entrée au fichier I<changelog> à la fin des entrées de "
+"la version actuelle."
 
 #. type: TP
 #: ../scripts/debchange.1:149
@@ -6484,12 +6491,12 @@ msgid ""
 "distribution>).  If there are no previous changelog entries and an explicit "
 "distribution has not been specified, B<unstable> will be used."
 msgstr ""
-"Finaliser le fichier changelog pour un envoi. Cela met à jour l'horodatage "
-"du fichier changelog. Si la distribution vaut I<UNRELEASED>, elle prend la "
-"valeur de l'entrée précédente du fichier (ou de la distribution indiquée par "
-"l'option B<--distribution>). S'il n'y a pas d'entrée précédente, et "
-"qu'aucune distribution n'a été indiquée explicitement, la distribution sera "
-"B<unstable>."
+"Finaliser le fichier I<changelog> pour un envoi. Cela met à jour "
+"l'horodatage du fichier I<changelog>. Si la distribution vaut I<UNRELEASED>, "
+"elle prend la valeur de l'entrée précédente du fichier (ou de la "
+"distribution indiquée par l'option B<--distribution>). S'il n'y a pas "
+"d'entrée précédente, et qu'aucune distribution n'a été indiquée "
+"explicitement, la distribution sera B<unstable>."
 
 #. type: TP
 #: ../scripts/debchange.1:183
@@ -6568,7 +6575,7 @@ msgstr ""
 "Quand elle est utilisée avec l'option B<--create>, elle permet de supprimer "
 "l'ajout automatique d'une entrée « B<initial release> » (de telle sorte que "
 "le prochain appel à B<debchange> ajoutera la première entrée). Notez que "
-"B<dpkg-parsechangelog> générera des avertissements du fait de l'absence de "
+"B<dpkg-parsechangelog> produira des avertissements du fait de l'absence de "
 "description de modifications."
 
 #. type: TP
@@ -6716,16 +6723,12 @@ msgstr "B<--bpo>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:256
-#, fuzzy
-#| msgid ""
-#| "Increment the Debian release number for an upload to squeeze-backports, "
-#| "and add a backport upload changelog comment."
 msgid ""
 "Increment the Debian release number for an upload to wheezy-backports, and "
 "add a backport upload changelog comment."
 msgstr ""
 "Incrémenter le numéro de publication de Debian pour un envoi d'un "
-"rétroportage pour Squeeze, et ajouter un commentaire pour l'envoi du "
+"rétroportage pour Wheezy, et ajouter un commentaire pour l'envoi du "
 "rétroportage dans le changelog."
 
 #. type: TP
@@ -6837,8 +6840,8 @@ msgid ""
 msgstr ""
 "Déterminer le numéro de version amont à partir du nom du répertoire, qui "
 "devra être de la forme I<paquet>-I<version>. Si le numéro de version amont a "
-"augmenté depuis l'entrée la plus récente du fichier changelog, la nouvelle "
-"entrée sera ajoutée avec pour numéro de version I<version>B<-1> (ou "
+"augmenté depuis l'entrée la plus récente du fichier I<changelog>, la "
+"nouvelle entrée sera ajoutée avec pour numéro de version I<version>B<-1> (ou "
 "I<version> dans le cas d'un paquet Debian natif), avec le même temps absolu "
 "(« epoch ») que le paquet précédent. Si le numéro de version amont est le "
 "même, cette option se comporte de la même façon que B<-i>."
@@ -6857,9 +6860,9 @@ msgid ""
 "be contacted (and B<--noquery> has not been specified), or if there are "
 "problems with the bug report located."
 msgstr ""
-"Ajouter des entrées au fichier changelog pour fermer les bogues indiqués. Un "
-"éditeur est également lancé après avoir ajouté ces entrées. Il générera des "
-"avertissements si le BTS ne peut pas être contacté (et que l'option B<--"
+"Ajouter des entrées au fichier I<changelog> pour fermer les bogues indiqués. "
+"Un éditeur est également lancé après avoir ajouté ces entrées. Il produira "
+"des avertissements si le BTS ne peut pas être contacté (et que l'option B<--"
 "noquery> n'a pas été utilisée) ou s'il y a un problème avec un rapport de "
 "bogue."
 
@@ -6874,7 +6877,7 @@ msgstr "B<-->[B<no>]B<query>"
 msgid "Should we attempt to query the BTS when generating closes entries?"
 msgstr ""
 "Indiquer si le BTS doit être interrogé lorsqu'une fermeture de bogue est "
-"générée."
+"produite."
 
 #. type: TP
 #: ../scripts/debchange.1:298
@@ -8171,10 +8174,10 @@ msgid ""
 "this case, the confirmation prompt will be re-displayed after the editing "
 "has been performed."
 msgstr ""
-"Afficher le message d'envoi généré et demander une confirmation avant "
-"l'envoi. Il est aussi possible d'éditer le message à ce moment ; dans ce "
-"cas, la demande de confirmation sera affichée de nouveau après que le "
-"message a été édité."
+"Afficher le message d'envoi créé et demander une confirmation avant l'envoi. "
+"Il est aussi possible d'éditer le message à ce moment ; dans ce cas, la "
+"demande de confirmation sera affichée de nouveau après que le message a été "
+"édité."
 
 #. type: =item
 #: ../scripts/debcommit.pl:66
@@ -8187,7 +8190,7 @@ msgid ""
 "Edit the generated commit message in your favorite editor before committing "
 "it."
 msgstr ""
-"Éditer le message d'envoi généré dans votre éditeur préféré avant l'envoi."
+"Éditer le message d'envoi créé dans votre éditeur préféré avant l'envoi."
 
 #. type: TP
 #: ../scripts/debcommit.pl:71 ../scripts/dget.pl:566
@@ -8365,7 +8368,7 @@ msgid ""
 msgstr ""
 "Si une seule modification est détectée dans le journal des modifications, "
 "B<debcommit> rassemblera le message sur une unique ligne et se comportera "
-"comme si l'option --strip-message était utilisée."
+"comme si l'option B<--strip-message> était utilisée."
 
 #. type: textblock
 #: ../scripts/debcommit.pl:153
@@ -8410,7 +8413,7 @@ msgid ""
 "and the bugs."
 msgstr ""
 "Si l'entrée du journal des modifications utilisée pour le message de commit "
-"ferme des bogues, des options --fixes pour « bzr commit » seront générées "
+"ferme des bogues, des options B<--fixes> pour « bzr commit » seront produits "
 "pour associer la révision aux bogues."
 
 #. type: textblock
@@ -8811,7 +8814,7 @@ msgstr "B<--diffstat>"
 #. type: Plain text
 #: ../scripts/debdiff.1:130
 msgid "Include the result of B<diffstat> before the generated diff."
-msgstr "Inclure le résultat de B<diffstat> avant de générer le diff."
+msgstr "Inclure le résultat de B<diffstat> avant de produire le différentiel."
 
 #. type: TP
 #: ../scripts/debdiff.1:130
@@ -9093,7 +9096,7 @@ msgstr "DEBI"
 #. type: Plain text
 #: ../scripts/debi.1:4
 msgid "debi - install current version of generated Debian package"
-msgstr "debi - Installer la version actuelle d'un paquet Debian généré"
+msgstr "debi - Installer la version actuelle d'un paquet Debian créé"
 
 #. type: Plain text
 #: ../scripts/debi.1:6
@@ -9123,13 +9126,13 @@ msgstr ""
 "le différencie d'un nom de paquet. Sinon, B<debi> doit être appelé depuis le "
 "répertoire du code source. Dans ce cas, il recherchera un fichier I<."
 "changes> correspondant à la version du paquet ; pour cela, il détermine le "
-"nom et la version grâce au fichier changelog, et l'architecture est cherchée "
-"comme B<dpkg-buildpackage>(1) le ferait. Il installe ensuite avec B<debpkg -"
-"i> toutes les archives I<.deb> listées dans le fichier I<.changes>, en "
-"supposant que toutes ces archives I<.deb> se trouvent dans le même "
-"répertoire que le fichier I<.changes>. Notez que vous ne voulez sûrement pas "
-"utiliser ce programme pour le fichier I<.changes> d'une autre architecture "
-"qui aurait été créé après avoir cross-compilé le paquet !"
+"nom et la version grâce au fichier I<changelog>, et l'architecture est "
+"cherchée comme B<dpkg-buildpackage>(1) le ferait. Il installe ensuite avec "
+"B<debpkg -i> toutes les archives I<.deb> listées dans le fichier I<."
+"changes>, en supposant que toutes ces archives I<.deb> se trouvent dans le "
+"même répertoire que le fichier I<.changes>. Remarquez que vous ne voulez "
+"sûrement pas utiliser ce programme pour le fichier I<.changes> d'une autre "
+"architecture qui aurait été créé après intercompilation du paquet."
 
 # NOTE: presque identique
 #. type: Plain text
@@ -9450,10 +9453,10 @@ msgid ""
 "most recent file with the name pattern I<package_version_*+*.changes> as the "
 "changes file, allowing for the changes files produced by B<dpkg-cross>."
 msgstr ""
-"Mode des fichiers changes multiarchitecture : cela signifie que "
+"Mode des fichiers I<.changes> multiarchitecture : cela signifie que "
 "B<debrelease> doit utiliser le fichier le plus récent respectant le modèle "
-"I<paquet_version_*+*.changes>, autorisant ainsi les fichiers changes générés "
-"par B<dpkg-cross>."
+"I<paquet_version_*+*.changes>, autorisant ainsi les fichiers I<.changes> "
+"produits par B<dpkg-cross>."
 
 #. type: TP
 #: ../scripts/debrelease.1:111
@@ -9602,7 +9605,7 @@ msgstr "&dhcommand;"
 #. type: Content of: <refentry><refnamediv><refpurpose>
 #: ../scripts/deb-reversion.dbk:67
 msgid "simple script to change the version of a .deb file."
-msgstr "script pour changer la version d'un fichier .deb"
+msgstr "Script pour changer la version d'un fichier .deb"
 
 #. type: Content of: <refentry><refsynopsisdiv><cmdsynopsis>
 #: ../scripts/deb-reversion.dbk:72
@@ -9623,9 +9626,10 @@ msgid ""
 "entry with the specified contents, and creates a new .deb file with the "
 "updated version."
 msgstr ""
-"&dhcommand; dépaquette le fichier .deb indiqué, change le numéro de version "
-"aux endroits appropriés, ajoute une entrée de <filename>changelog</filename> "
-"Debian avec le contenu indiqué, et crée un nouveau fichier .deb avec la "
+"<command>&dhcommand;</command> dépaquette le fichier <filename>.deb</"
+"filename> indiqué, change le numéro de version aux endroits appropriés, "
+"ajoute une entrée de <filename>changelog</filename> Debian avec le contenu "
+"indiqué, et crée un nouveau fichier <filename>.deb</filename> avec la "
 "version mise à jour."
 
 #. type: Content of: <refentry><refsect1><para>
@@ -9658,10 +9662,11 @@ msgid ""
 msgstr ""
 "Lors de la construction d'un paquet, les droits du superutilisateur sont "
 "nécessaires pour obtenir les permissions et les propriétaires adéquats pour "
-"le contenu du fichier .deb. Cela peut être réalisé soit en lançant la "
-"commande <command>&dhcommand;</command> comme superutilisateur soit en "
-"lançant <citerefentry><refentrytitle>fakeroot</refentrytitle> <manvolnum>1</"
-"manvolnum></citerefentry>, comme « fakeroot &dhcommand; toto.deb »."
+"le contenu du fichier <filename>.deb</filename>. Cela peut être réalisé soit "
+"en lançant la commande <command>&dhcommand;</command> comme superutilisateur "
+"soit en lançant <citerefentry><refentrytitle>fakeroot</refentrytitle> "
+"<manvolnum>1</manvolnum></citerefentry>, comme « fakeroot &dhcommand; toto."
+"deb »."
 
 #. type: Content of: <refentry><refsect1><para>
 #: ../scripts/deb-reversion.dbk:113
@@ -9679,13 +9684,14 @@ msgstr ""
 "Avec <option>-k <replaceable class=\"parameter\">hook</replaceable></"
 "option>, un script crochet (« hook ») peut être précisé, et lancé sur les "
 "paquets binaires dépaquetés juste avant qu'ils soient réempaquetés. Si vous "
-"voulez écrire les entrées du fichier changelog avec ce script, utilisez la "
-"commande « <command>dch -a -- <replaceable class=\"parameter\">votre "
-"message</replaceable></command> ». (Alternativement, vous pouvez ne pas "
-"indiquer l'entrée du changelog dans la ligne de commande <command>&dhcommand;"
-"</command>, <command>dch</command> sera alors appelé automatiquement.) La "
-"commande crochet doit être placée entre guillemets s'il y a plus d'un mot ; "
-"elle est appelée avec la commande <command>sh -c</command>."
+"voulez écrire les entrées du fichier <filename>changelog</filename> avec ce "
+"script, utilisez la commande « <command>dch -a -- <replaceable class="
+"\"parameter\">votre message</replaceable></command> ». (Alternativement, "
+"vous pouvez ne pas indiquer l'entrée du <filename>changelog</filename> dans "
+"la ligne de commande <command>&dhcommand;</command>, <command>dch</command> "
+"sera alors appelé automatiquement.) La commande crochet doit être placée "
+"entre guillemets s'il y a plus d'un mot ; elle est appelée avec la commande "
+"<command>sh -c</command>."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: ../scripts/deb-reversion.dbk:131
@@ -9741,7 +9747,8 @@ msgid ""
 "version stored in the .deb's control file."
 msgstr ""
 "Indiquer le numéro de version à utiliser comme ancienne version à la place "
-"de la version indiquée dans le fichier control du paquet .deb."
+"de la version indiquée dans le fichier <filename>control</filename> du "
+"paquet <filename>.deb</filename>."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: ../scripts/deb-reversion.dbk:157
@@ -9761,8 +9768,8 @@ msgid ""
 "option>."
 msgstr ""
 "Se contenter de calculer et d'afficher le nouveau numéro de version qui "
-"serait utilisé ; ne pas construire de nouveau paquet .deb. Ne peut pas être "
-"utilisé en même temps que <option>-v</option>."
+"serait utilisé ; ne pas construire de nouveau paquet <filename>.deb</"
+"filename>. Ne peut pas être utilisé en même temps que <option>-v</option>."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: ../scripts/deb-reversion.dbk:169
@@ -9816,11 +9823,12 @@ msgid ""
 "you want to perform more than this, you could specify 'bash' as the hook "
 "command, and you will then be given a shell to work in."
 msgstr ""
-"Une commande de crochet à lancer après avoir dépaqueté l'ancien fichier ."
-"deb, avoir modifié le changelog et avant de construire le nouveau fichier ."
-"deb. Doit être placée entre guillemets si elle est constituée de plus d'un "
-"mot (du point de vue de l'interpréteur). Une seule commande de crochet peut "
-"être précisée ; si vous voulez effectuer plus de choses, vous pouvez "
+"Une commande de crochet à lancer après avoir dépaqueté l'ancien fichier "
+"<filename>.deb</filename>, avoir modifié le fichier <filename>changelog</"
+"filename> et avant de construire le nouveau fichier <filename>.deb</"
+"filename>. Doit être placée entre guillemets si elle est constituée de plus "
+"d'un mot (du point de vue de l'interpréteur). Une seule commande de crochet "
+"peut être précisée ; si vous voulez effectuer plus de choses, vous pouvez "
 "indiquer « bash » comme commande de crochet, vous aurez ainsi une invite de "
 "commandes pour travailler."
 
@@ -9936,8 +9944,8 @@ msgstr ""
 "Veuillez noter que &dhpackage; ne vient pas sans problèmes. Il fonctionne "
 "bien dans la plupart des cas, mais peut ne pas fonctionner dans les vôtres. "
 "En particulier, veuillez noter qu'il ne change (que) des paquets binaires et "
-"donc peut casser des dépendances versionnées entre des paquets générés "
-"depuis la même source."
+"donc peut casser des dépendances versionnées entre des paquets produits à "
+"partir de la même source."
 
 #. type: Content of: <refentry><refsect1><para>
 #: ../scripts/deb-reversion.dbk:283
@@ -9973,10 +9981,10 @@ msgid ""
 "Artistic</filename>."
 msgstr ""
 "Il est permis de copier, distribuer et/ou modifier ce document selon les "
-"termes de l'Artistic License : <ulink>http://www.opensource.org/licenses/"
+"termes de la licence Artistic : <ulink>http://www.opensource.org/licenses/"
 "artistic-license.php</ulink>. Sur les systèmes Debian, le texte complet de "
-"l'Artistic License peut être trouvé dans <filename>/usr/share/common-"
-"licenses/Artistic</filename>."
+"la licence Artistic est disponible dans <filename>/usr/share/common-licenses/"
+"Artistic</filename>."
 
 #. type: Content of: <refentry><refsect1><para>
 #: ../scripts/deb-reversion.dbk:309
@@ -9997,8 +10005,7 @@ msgstr "DEBRSIGN"
 #: ../scripts/debrsign.1:4
 msgid "debrsign - remotely sign a Debian changes and dsc file pair using SSH"
 msgstr ""
-"debrsign - Signer des fichiers « changes » et « dsc » Debian à distance avec "
-"SSH"
+"debrsign - Signer des fichiers .changes et .dsc Debian à distance avec SSH"
 
 #. type: Plain text
 #: ../scripts/debrsign.1:7
@@ -10073,7 +10080,7 @@ msgid ""
 "file."
 msgstr ""
 "Chercher un fichier I<.changes> uniquement pour le source plutôt qu'un "
-"fichier « changes » correspondant à un paquet binaire."
+"fichier I<.changes> correspondant à un paquet binaire."
 
 #. type: Plain text
 #: ../scripts/debrsign.1:47
@@ -10082,10 +10089,10 @@ msgid ""
 "recent file with the name pattern I<package_version_*+*.changes> as the "
 "changes file, allowing for the changes files produced by B<dpkg-cross>."
 msgstr ""
-"Mode des fichiers changes multiarchitecture : cela signifie que B<debrsign> "
-"doit utiliser le fichier le plus récent respectant le modèle "
-"I<paquet_version_*+*.changes>, autorisant ainsi les fichiers changes générés "
-"par B<dpkg-cross>."
+"Mode des fichiers I<.changes> multiarchitecture : cela signifie que "
+"B<debrsign> doit utiliser le fichier le plus récent respectant le modèle "
+"I<paquet_version_*+*.changes>, autorisant ainsi les fichiers I<.changes> "
+"produits par B<dpkg-cross>."
 
 #. type: TP
 #: ../scripts/debrsign.1:47
@@ -10146,7 +10153,7 @@ msgstr "DEBSIGN"
 #: ../scripts/debsign.1:4
 msgid "debsign - sign a Debian changes and dsc file pair using GPG"
 msgstr ""
-"debsign - Signer une paire de fichiers « changes » et « dsc » Debian avec GPG"
+"debsign - Signer une paire de fichiers .changes et .dsc Debian avec GPG"
 
 #. type: Plain text
 #: ../scripts/debsign.1:6
@@ -10325,10 +10332,10 @@ msgid ""
 "recent file with the name pattern I<package_version_*+*.changes> as the "
 "changes file, allowing for the changes files produced by B<dpkg-cross>."
 msgstr ""
-"Mode des fichiers changes multiarchitecture : cela signifie que B<debsign> "
-"doit utiliser le fichier le plus récent respectant le modèle "
-"I<paquet_version_*+*.changes>, autorisant ainsi les fichiers changes générés "
-"par B<dpkg-cross>."
+"Mode des fichiers I<.changes> multiarchitecture : cela signifie que "
+"B<debsign> doit utiliser le fichier le plus récent respectant le modèle "
+"I<paquet_version_*+*.changes>, autorisant ainsi les fichiers I<.changes> "
+"produits par B<dpkg-cross>."
 
 #. type: TP
 #: ../scripts/debsign.1:84
@@ -12743,7 +12750,7 @@ msgstr "B<plotchangelog>(1)"
 msgid ""
 "view a nice plot of the data in a changelog file [libtimedate-perl, gnuplot]"
 msgstr ""
-"afficher sous forme graphique les données d'un fichier changelog "
+"afficher sous forme graphique les données d'un fichier I<changelog> "
 "[libtimedate-perl, gnuplot]"
 
 #. type: IP
@@ -12794,9 +12801,6 @@ msgstr "B<suspicious-source>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:131
-#, fuzzy
-#| msgid ""
-#| "output a list of files which are not common source files [python3-magic]"
 msgid ""
 "output a list of files which are not common source files [python3-magic]"
 msgstr ""
@@ -12943,10 +12947,9 @@ msgstr ""
 
 #. type: IP
 #: ../scripts/devscripts.1:151
-#, fuzzy, no-wrap
-#| msgid "I<who-uploads>(1)"
+#, no-wrap
 msgid "I<who-permits-upload>(1)"
-msgstr "B<who-uploads>(1)"
+msgstr "B<who-permits-upload>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:153
@@ -12954,6 +12957,9 @@ msgid ""
 "Retrieve information about Debian Maintainer access control lists [gnupg, "
 "libencode-locale-perl, libparse-debcontrol-perl, libwww-perl, debian-keyring]"
 msgstr ""
+"Récupérer des renseignements sur les listes de contrôle d’accès de "
+"mainteneurs Debian [gnupg, libencode-locale-perl, libparse-debcontrol-perl, "
+"libwww-perl, debian-keyring]"
 
 #. type: IP
 #: ../scripts/devscripts.1:153
@@ -12963,8 +12969,6 @@ msgstr "B<wrap-and-sort>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:154
-#, fuzzy
-#| msgid "wrap long lines and sort items in packaging files [python3-debian]"
 msgid "wrap long lines and sort items in packaging files [python3-debian]"
 msgstr ""
 "couper les lignes longues et trier les items des fichiers d'empaquetage "
@@ -12982,10 +12986,8 @@ msgstr "B<dget> [I<options>] I<URL> ..."
 
 #. type: =item
 #: ../scripts/dget.pl:517
-#, fuzzy
-#| msgid "B<dget> [I<options>] I<package>[B<=>I<version>]"
 msgid "B<dget> [I<options>] [B<--all>] I<package>[B<=>I<version>] ..."
-msgstr "B<dget> [I<options>] I<paquet>[B<=>I<version>]"
+msgstr "B<dget> [I<options>] [B<--all>] I<paquet>[B<=>I<version>] ..."
 
 #. type: textblock
 #: ../scripts/dget.pl:523
@@ -13005,13 +13007,6 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/dget.pl:530
-#, fuzzy
-#| msgid ""
-#| "In the second form, B<dget> downloads a I<binary> package (i.e., a I<."
-#| "deb> file) from the Debian mirror configured in /etc/apt/sources.list(."
-#| "d).  Unlike B<apt-get install -d>, it does not require root privileges, "
-#| "writes to the current directory, and does not download dependencies.  If "
-#| "a version number is specified, this version of the package is requested."
 msgid ""
 "In the second form, B<dget> downloads a I<binary> package (i.e., a I<.deb> "
 "file) from the Debian mirror configured in /etc/apt/sources.list(.d).  "
@@ -13026,7 +13021,9 @@ msgstr ""
 "lists(.d). À la différence d'B<apt-get install -d>, il ne nécessite pas les "
 "droits du superutilisateur, écrit dans le répertoire courant et ne "
 "télécharge pas les dépendances. Si un numéro de version est indiqué, cette "
-"version du paquet est téléchargée."
+"version du paquet est téléchargée. Avec B<--all>, la liste de tous les "
+"binaires pour le paquet source I<paquet> est extraite de la sortie de C<apt-"
+"cache showsrc paquet>."
 
 #. type: textblock
 #: ../scripts/dget.pl:539
@@ -13034,7 +13031,7 @@ msgid ""
 "In both cases dget is capable of getting several packages and/or URLs at "
 "once."
 msgstr ""
-"Dans tous les cas, dget peut récupérer plusieurs paquets et/ou URL à la fois."
+"Dans tous les cas, dget peut récupérer plusieurs paquets ou URL à la fois."
 
 #. type: textblock
 #: ../scripts/dget.pl:542
@@ -13044,10 +13041,10 @@ msgid ""
 "with B<dget>, you will need to have configured B<apt> to use a packages file "
 "for I<component>/I<debian-installer>)."
 msgstr ""
-"(Notez que les paquets I<.udeb> utilisés par l'installateur Debian sont "
+"(Remarquez que les paquets I<.udeb> utilisés par l'installateur Debian sont "
 "situés dans des fichiers de paquets distincts des paquets I<.deb>. Pour "
 "utiliser des I<.udeb> avec B<dget>, vous devrez configurer B<apt> pour "
-"utiliser des fichiers de paquets pour I<composante>/I<debian-installer>)."
+"utiliser des fichiers de paquets pour I<composante>/I<debian-installer>.)"
 
 #. type: textblock
 #: ../scripts/dget.pl:547
@@ -13092,6 +13089,8 @@ msgid ""
 "Interpret I<package> as a source package name, and download all binaries as "
 "found in the output of \"apt-cache showsrc I<package>\"."
 msgstr ""
+"Interpréter I<paquet> comme un nom de paquet source, et télécharger tous les "
+"binaires trouvés dans la sortie de « apt-cache showsrc I<paquet> »."
 
 #. type: =item
 #: ../scripts/dget.pl:571
@@ -13265,6 +13264,8 @@ msgid ""
 "Download all .deb files for the previous version of a package and run "
 "debdiff on them:"
 msgstr ""
+"Télécharger tous les fichiers I<.deb> pour la version précédente d’un paquet "
+"et exécuter B<debdiff> avec eux :"
 
 #. type: verbatim
 #: ../scripts/dget.pl:664
@@ -13274,6 +13275,9 @@ msgid ""
 "  debdiff --from *_1.2-1_*.deb --to *_1.2-2_*.deb\n"
 "\n"
 msgstr ""
+"  dget --all monpaquet=1.2-1\n"
+"  debdiff --from *_1.2-1_*.deb --to *_1.2-2_*.deb\n"
+"\n"
 
 #. type: =head1
 #: ../scripts/dget.pl:667
@@ -13297,17 +13301,12 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/dget.pl:676
-#, fuzzy
-#| msgid ""
-#| "This program is Copyright (C) 2005-08 by Christoph Berg <myon@debian."
-#| "org>.  Modifications are Copyright (C) 2005-06 by Julian Gilbey "
-#| "<jdg@debian.org>."
 msgid ""
 "This program is Copyright (C) 2005-2013 by Christoph Berg <myon@debian."
 "org>.  Modifications are Copyright (C) 2005-06 by Julian Gilbey <jdg@debian."
 "org>."
 msgstr ""
-"Ce programme est Copyright (C) 2005-2008 Christoph Berg <myon@debian.org>. "
+"Ce programme est Copyright (C) 2005-2013 Christoph Berg <myon@debian.org>. "
 "Les modifications sont Copyright (C) 2005-2006 Julian Gilbey <jdg@debian."
 "org>."
 
@@ -14938,8 +14937,8 @@ msgid ""
 "Developer's Reference about mass filing of bug reports first."
 msgstr ""
 "Attention : il faut être prudent pour éviter des erreurs déplaisantes et "
-"habituelles, mais il s'agit toujours d'un outil puissant qui peut générer un "
-"grand nombre de messages pour un rapport de bogue. Utilisez-le avec "
+"habituelles, mais il s'agit toujours d'un outil puissant qui peut produire "
+"un grand nombre de messages pour un rapport de bogue. Utilisez-le avec "
 "précautions, et lisez d'abord la documentation dans la référence du "
 "développeur sur l'envoi de rapports de bogue en masse."
 
@@ -15219,7 +15218,7 @@ msgid ""
 "the build dependencies of the given package."
 msgstr ""
 "À partir d'un I<nom de paquet> ou d'un I<fichier de contrôle>, B<mk-build-"
-"deps> utilisera B<equivs> pour générer un paquet binaire qui peut être "
+"deps> utilisera B<equivs> pour produire un paquet binaire qui peut être "
 "installé pour satisfaire les dépendances de construction d'un paquet."
 
 #. type: textblock
@@ -15241,7 +15240,7 @@ msgstr "B<-i>, B<--install>"
 #. type: textblock
 #: ../scripts/mk-build-deps.pl:50
 msgid "Install the generated packages and its build-dependencies."
-msgstr "Installer les paquets générés et leurs dépendances de construction."
+msgstr "Installer les paquets créés et leurs dépendances de construction."
 
 #. type: =item
 #: ../scripts/mk-build-deps.pl:52
@@ -15254,8 +15253,8 @@ msgid ""
 "When installing the generated package use the specified tool.  (default: apt-"
 "get --no-install-recommends)"
 msgstr ""
-"Pour l'installation du paquet généré, utiliser l'outil indiqué (par défaut : "
-"apt-get --no-install-recommends)."
+"Pour l'installation du paquet créé, utiliser l'outil indiqué (par défaut : "
+"B<apt-get --no-install-recommends>)."
 
 #. type: =item
 #: ../scripts/mk-build-deps.pl:57
@@ -15475,7 +15474,7 @@ msgstr ""
 "à-dire le fichier I<.dsc> et éventuellement les fichiers I<tar> et I<diff> "
 "correspondants) pour la version précédente du paquet et pour la version "
 "nouvellement construite soient dans le répertoire parent. B<debdiff> est "
-"ensuite utilisé pour générer un différentiel de la NMU, puis B<mutt> ou un "
+"ensuite utilisé pour créer un différentiel de la NMU, puis B<mutt> ou un "
 "éditeur (choisi par B<sensible-editor>) est utilisé pour lancer un éditeur "
 "de sorte que le message (y compris le différentiel) puisse être examiné et "
 "modifié ; une fois que vous avez quitté l'éditeur, le différentiel est "
@@ -16019,7 +16018,7 @@ msgid ""
 "approximately how many bugs were fixed for each new version."
 msgstr ""
 "L'axe des ordonnées peut également être configuré de manière à indiquer la "
-"taille de l'entrée du fichier changelog pour chaque nouvelle version. Il "
+"taille de l'entrée du fichier I<changelog> pour chaque nouvelle version. Il "
 "peut aussi être configuré de manière à indiquer approximativement combien de "
 "bogues ont été corrigés par chaque nouvelle version."
 
@@ -16098,7 +16097,7 @@ msgid ""
 "B<--bugcount>."
 msgstr ""
 "Au lieu d'utiliser le numéro de version Debian pour l'axe des ordonnées, "
-"utilise le nombre de lignes de l'entrée du fichier changelog pour chaque "
+"utilise le nombre de lignes de l'entrée du fichier I<changelog> pour chaque "
 "version. Cette option ne peut pas être utilisée en même temps que B<--"
 "bugcount>."
 
@@ -16117,10 +16116,10 @@ msgid ""
 "inaccurate.  Cannot be used together with B<--linecount>."
 msgstr ""
 "Au lieu d'utiliser le numéro de version Debian pour l'axe des ordonnées, "
-"utilise le nombre de bogues fermés par chaque entrée du fichier changelog. "
-"Notez que ce nombre de bogues est trouvé en recherchant « #dddd » dans le "
-"fichier changelog, et peut donc être imprécis. Cette option ne peut pas être "
-"utilisée avec B<--linecount>."
+"utilise le nombre de bogues fermés par chaque entrée du fichier "
+"I<changelog>. Remarquez que ce nombre de bogues est trouvé en recherchant "
+"« #dddd » dans le fichier I<changelog>, et peut donc être imprécis. Cette "
+"option ne peut pas être utilisée avec B<--linecount>."
 
 #. type: TP
 #: ../scripts/plotchangelog.1:57
@@ -16136,7 +16135,7 @@ msgid ""
 msgstr ""
 "Lorsqu'elle est utilisée avec les options B<--bugcount> ou B<--linecount>, "
 "effectue un décompte incrémental plutôt qu'un décompte individuel pour "
-"chaque entrée du fichier changelog."
+"chaque entrée du fichier I<changelog>."
 
 #. type: TP
 #: ../scripts/plotchangelog.1:65
@@ -16215,7 +16214,7 @@ msgid ""
 "file type, which is useful in conjunction with the -s option."
 msgstr ""
 "Ces options vous permettent d'insérer des commandes B<gnuplot>(1) dans le "
-"script gnuplot utilisé pour générer le graphique. Les commandes sont placées "
+"script gnuplot utilisé pour créér le graphique. Les commandes sont placées "
 "après l'initialisation, mais avant la commande B<plot> finale. Elles peuvent "
 "être utilisées pour remplacer l'apparence par défaut fournie par ce "
 "programme de façon arbitraire. Vous pouvez également utiliser quelque chose "
@@ -17405,7 +17404,7 @@ msgid ""
 "pending"
 msgstr ""
 "tagpending - Placer l'étiquette « pending » sur tous les bogues à fermer "
-"dans le dernier groupe d'entrée du changelog"
+"dans le dernier groupe d'entrée du fichier changelog"
 
 #. type: textblock
 #: ../scripts/tagpending.pl:85
@@ -17419,7 +17418,7 @@ msgid ""
 "closed if the package were uploaded. Each bug is then marked as pending, "
 "using B<bts>(1) if it is not already so."
 msgstr ""
-"B<tagpending> analyse les fichiers debian/changelog afin de trouver quels "
+"B<tagpending> analyse les fichiers I<debian/changelog> afin de trouver quels "
 "bogues seront fermés si le paquet était envoyé. Chaque bogue est ensuite "
 "marqué avec une étiquette « pending », en utilisant B<bts>(1), si elle n'est "
 "pas déjà présente."
@@ -17451,7 +17450,7 @@ msgstr "Lister tous les bogues vérifiés et qui ont l'étiquette."
 msgid "Do not query the BTS, but (re)tag all bugs closed in the changelog."
 msgstr ""
 "Ne pas interroger le BTS, mais (re)placer l'étiquette sur les bogues fermés "
-"dans le changelog."
+"dans le I<changelog>."
 
 #. type: =item
 #: ../scripts/tagpending.pl:113
@@ -17465,8 +17464,8 @@ msgid ""
 "bugs as comments in the generated mail.  This is the default."
 msgstr ""
 "Inclure l'en-tête du journal des modifications et les entrées liées aux "
-"bogues à marquer, en tant que commentaires, dans le courrier généré. C'est "
-"le comportement par défaut."
+"bogues à marquer, en tant que commentaires, dans le courrier créé. C'est le "
+"comportement par défaut."
 
 #. type: textblock
 #: ../scripts/tagpending.pl:118
@@ -17485,7 +17484,8 @@ msgstr "B<--no-comments>"
 #. type: textblock
 #: ../scripts/tagpending.pl:123
 msgid "Do not include changelog entries in the generated mail."
-msgstr "Ne pas inclure les entrées du changelog dans le courrier généré."
+msgstr ""
+"Ne pas inclure les entrées du fichier I<changelog> dans le courrier créé."
 
 #. type: =item
 #: ../scripts/tagpending.pl:125
@@ -17506,8 +17506,8 @@ msgstr "B<-t>, B<--to> I<version>"
 #: ../scripts/tagpending.pl:131
 msgid "Parse changelogs for all versions strictly greater than I<version>."
 msgstr ""
-"Analyser les entrées du changelog plus récentes (strictement) que la "
-"I<version>."
+"Analyser les entrées du fichier I<changelog> plus récentes (strictement) que "
+"la I<version>."
 
 #. type: textblock
 #: ../scripts/tagpending.pl:133
@@ -17520,8 +17520,8 @@ msgid ""
 "Display the message which would be sent to the BTS and, except when --noact "
 "was used, prompt for confirmation before sending it."
 msgstr ""
-"Afficher le message qui sera envoyé au BTS et, à moins que l'option --noact "
-"ne soit utilisée, demander une confirmation avant de l'envoyer."
+"Afficher le message qui sera envoyé au BTS et, à moins que l'option B<--"
+"noact> ne soit utilisée, demander une confirmation avant de l'envoyer."
 
 #. type: =item
 #: ../scripts/tagpending.pl:140
@@ -19147,7 +19147,7 @@ msgstr ""
 "l'ancien répertoire des sources, et si un nom relatif est donné pour la "
 "nouvelle archive ou rustine, la recherche démarrera par le répertoire "
 "d'exécution puis relativement au répertoire parent de l'arborescence des "
-"sources. (Par exemple, si le fichier changelog est I</usr/local/src/toto/"
+"sources. (Par exemple, si le fichier I<changelog> est I</usr/local/src/toto/"
 "toto-1.1/debian/changelog>, alors l'archive ou la rustine sera recherchée "
 "relativement à I</usr/local/src/toto>). Notez que l'archive ou la rustine ne "
 "peuvent pas se trouver dans l'arborescence des sources elle-même. Les "
@@ -19449,8 +19449,8 @@ msgid ""
 "A changelog entry with the new version number is generated with the text "
 "``New upstream release''."
 msgstr ""
-"Une entrée du fichier changelog avec la nouvelle version est générée avec le "
-"texte « New upstream release » (nouvelle version amont)."
+"Une entrée du fichier I<changelog> avec la nouvelle version est créée avec "
+"le texte « New upstream release » (nouvelle version amont)."
 
 #. type: Plain text
 #: ../scripts/uupdate.1:138 ../scripts/uupdate.1:170
@@ -19859,6 +19859,8 @@ msgstr ""
 #: ../scripts/who-permits-upload.pl:44
 msgid "who-permits-upload - look-up Debian Maintainer access control lists"
 msgstr ""
+"who-permits-upload - Rechercher dans les listes de contrôle d’accès de "
+"mainteneurs Debian"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:48
@@ -19866,6 +19868,8 @@ msgid ""
 "B<who-permits-upload> [B<-h>] [B<-s> I<keyring>] [B<-d> I<dm_url>] [B<-s> "
 "I<search_type>] I<query> [I<query> ...]"
 msgstr ""
+"B<who-permits-upload> [B<-h>] [B<-s> I<trousseau>] [B<-d> I<url_dm>] [B<-s> "
+"I<type_de_recherche>] I<requête> [I<requête> ...]"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:52
@@ -19875,13 +19879,15 @@ msgid ""
 "The tool can search by DM name, sponsor (the person granted the permission) "
 "and by package."
 msgstr ""
+"B<who-permits-upload> recherche les droits d’envoi du mainteneur Debian (DM) "
+"donné sur ftp-master.debian.org et les analyse de façon lisible. L’outil "
+"permet de rechercher par nom de DM, parrain (la personne ayant octroyé les "
+"droits) et par paquet."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:60
-#, fuzzy
-#| msgid "B<--dirs>, B<-d>"
 msgid "B<--dmfile=>I<url>, B<-d> I<url>"
-msgstr "B<--dirs>, B<-d>"
+msgstr "B<--dmfile=>I<url_dm>, B<-d> I<url_dm>"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:62
@@ -19890,28 +19896,22 @@ msgid ""
 "not present, the default value I<http://ftp-master.debian.org/dm.txt> is "
 "used."
 msgstr ""
+"Récupérer le fichiers de droits de DM depuis l’URL fournie. Quand cette "
+"option n’est pas présente, la valeur par défaut I<http://ftp-master.debian."
+"org/dm.txt> est utilisée."
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:67
-#, fuzzy
-#| msgid "Display usage information and exit."
 msgid "Display an usage summary and exit"
-msgstr "Afficher un message d'aide et quitter."
+msgstr "Afficher une description de l'utilisation et quitter."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:69
-#, fuzzy
-#| msgid "B<--changelog >I<file>, B<-c >I<file>"
 msgid "B<--keyring=>I<file>, B<-s> I<file>"
-msgstr "B<--changelog >I<fichier>, B<-c >I<fichier>"
+msgstr "B<--keyring=>I<trousseau>, B<-s> I<trousseau>"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:71
-#, fuzzy
-#| msgid ""
-#| "This is a colon-separated list of the default keyrings to be used.  By "
-#| "default, it is the two Debian keyrings I</usr/share/keyrings/debian-"
-#| "keyring.gpg> and I</usr/share/keyrings/debian-maintainers.gpg>."
 msgid ""
 "Use the supplied GnuPG keyrings to look-up GPG fingerprints from the DM "
 "permission file. When not present, the default Debian Developer and "
@@ -19919,22 +19919,21 @@ msgid ""
 "I</usr/share/keyrings/debian-maintainers.gpg>, installed by the I<debian-"
 "keyring> package)."
 msgstr ""
-"Il s'agit d'une liste séparée par des deux-points des trousseaux par défaut "
-"à utiliser. Par défaut, il s'agit des deux trousseaux Debian I</usr/share/"
-"keyrings/debian-keyring.gpg> et I</usr/share/keyrings/debian-maintainers."
-"gpg>."
+"Utiliser les trousseaux GnuPG fournis pour rechercher les empreintes GPG du "
+"fichier de droits de DM. En absence, les trousseaux de développeurs et "
+"mainteneurs Debian par défaut sont utilisés (I</usr/share/keyrings/debian-"
+"keyring.gpg> et I</usr/share/keyrings/debian-maintainers.gpg>, installés par "
+"le paquet I<debian-keyring>)."
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:77
 msgid "Separate keyrings with a colon \":\"."
-msgstr ""
+msgstr "Séparez les trousseaux par un deux-points « : »."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:79
-#, fuzzy
-#| msgid "B<--arch=>I<architecture>"
 msgid "B<--search=>I<search_type>, B<-s> I<search_type>"
-msgstr "B<--arch=>I<architecture>"
+msgstr "B<--search=>I<type_de_recherche>, B<-s> I<type_de_recherche>"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:81
@@ -19942,6 +19941,8 @@ msgid ""
 "Modify the look-up behavior instead of using the default. This influences "
 "the interpretation of the I<query> argument. Supported search types are:"
 msgstr ""
+"Modifier le comportement de recherche. Cela influence l’interprétation de "
+"l’argument I<requête>. Les types de recherche possibles sont :"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:88
@@ -19950,11 +19951,14 @@ msgid ""
 "is omitted.  Since package names are unique, this will return given ACLs - "
 "if any - for a single package."
 msgstr ""
+"Rechercher un nom de paquet source. C’est aussi le comportement par défaut "
+"quand B<--search> est omis. Puisque les noms de paquets sont uniques, cela "
+"renverra les listes de contrôle d’accés – s’il y en a – pour un seul paquet."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:92
 msgid "I<uid>"
-msgstr ""
+msgstr "B<uid>"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:94
@@ -19962,11 +19966,14 @@ msgid ""
 "Search for a Debian Maintainer. This should be (a fraction of) a name. It "
 "will return all ACLs assigned to matching maintainers."
 msgstr ""
+"Rechercher un mainteneur Debian. Cela devrait être un(e partie de) nom. Cela "
+"renverra toutes les listes de contrôle d’accés associées aux mainteneurs "
+"correspondants."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:97
 msgid "I<sponsor>"
-msgstr ""
+msgstr "B<sponsor>"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:99
@@ -19974,16 +19981,21 @@ msgid ""
 "Search for a sponsor (i.e. a Debian Developer) who granted DM permissions. "
 "This will return all ACLs given by the supplied developer."
 msgstr ""
+"Rechercher un parrain (c’est-à-dire un développeur Debian) qui a octroyé des "
+"droits de DM. Cela renverra toutes les listes de contrôle d’accés données "
+"par le développeur indiqué."
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:102
 msgid "Note that this is an expensive operation which may take some time."
 msgstr ""
+"Remarquez qu’il s’agit d’une opération coûteuse qui pourrait prendre un peu "
+"de temps."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:106
 msgid "I<query>"
-msgstr ""
+msgstr "I<requête>"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:108
@@ -19992,38 +20004,39 @@ msgid ""
 "exact interpretation of this argument is dependent by the B<--search> "
 "argument."
 msgstr ""
+"Un argument sensible à la casse à rechercher dans le fichier de droits de "
+"liste de contrôle d’accés. L’interprétation exacte de cet argument dépend de "
+"l’argument de B<--search>."
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:111
 msgid "This argument can be repeated."
-msgstr ""
+msgstr "Cet argument peut être répété."
 
 #. type: =head1
 #: ../scripts/who-permits-upload.pl:115
-#, fuzzy
-#| msgid "EXIT VALUES"
 msgid "EXIT VALUE"
-msgstr "VALEURS DE RETOUR"
+msgstr "VALEUR DE RETOUR"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:121
 msgid "Success"
-msgstr ""
+msgstr "Réussite"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:125
 msgid "An error occurred"
-msgstr ""
+msgstr "Une erreur s'est produite"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:129
 msgid "The command line was not understood"
-msgstr ""
+msgstr "La ligne de commande n’a pas été comprise"
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:137
 msgid "who-permits-upload --search=sponsor arno@debian.org"
-msgstr ""
+msgstr "who-permits-upload --search=sponsor arno@debian.org"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:139
@@ -20031,63 +20044,63 @@ msgid ""
 "Search for all DM upload permissions given by the UID \"arno@debian.org\". "
 "Note, that only primary UIDs will match."
 msgstr ""
+"Rechercher tous les droits de DM donnés par l’identifiant utilisateur "
+"« arno@debian.org ». Remarquez que seuls les identifiants utilisateur "
+"primaires correspondront."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:142
 msgid "who-permits-upload -s=sponsor \"Arno Töll\""
-msgstr ""
+msgstr "who-permits-upload -s=sponsor \"Arno Töll\""
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:144
 msgid "Same as above, but use a full name instead."
-msgstr ""
+msgstr "Comme précédemment, mais en utilisant un nom complet à la place."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:146
 msgid "who-permits-upload apache2"
-msgstr ""
+msgstr "who-permits-upload apache2"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:148
 msgid "Look up who gave upload permissions for the apache2 source package."
 msgstr ""
+"Rechercher qui a donné les droits d’envoi pour le paquet source apache2."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:150
 msgid "who-permits-upload --search=uid \"Paul Tagliamonte\""
-msgstr ""
+msgstr "who-permits-upload --search=uid \"Paul Tagliamonte\""
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:152
 msgid "Look up all DM upload permissions given to \"Paul Tagliamonte\"."
 msgstr ""
+"Rechercher tous les droits d’envoi de DM donnés à « Paul Tagliamonte »."
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:158
-#, fuzzy
-#| msgid ""
-#| "This program was written by Romain Francoise E<lt>rfrancoise@debian."
-#| "orgE<gt> and is released under the GPL, version 2 or later."
 msgid ""
 "B<who-permits-upload> was written by Arno Töll <arno@debian.org> and is "
 "licensed under the terms of the General Public License (GPL) version 2 or "
 "later."
 msgstr ""
-"Ce programme a été écrit par Romain Françoise E<lt>rfrancoise@debian."
-"orgE<gt> et est distribué sous licence GPL, version 2 ou ultérieure."
+"B<who-permits-upload> a été écrit par Arno Töll E<lt>arno@debian.orgE<gt> et "
+"est distribué sous licence publique générale (GPL), version 2 ou ultérieure."
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:163
-#, fuzzy
-#| msgid "I<who-uploads>(1)"
 msgid "B<who-uploads>(1), B<gpg>(1)"
-msgstr "B<who-uploads>(1)"
+msgstr "B<gpg>(1), B<who-uploads>(1)"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:165
 msgid ""
 "S<I<https://lists.debian.org/debian-devel-announce/2012/09/msg00008.html>>"
 msgstr ""
+"S<I<https://lists.debian.org/debian-devel-announce/2012/09/msg00008.html>>"
 
 #. type: TH
 #: ../scripts/wnpp-alert.1:1
