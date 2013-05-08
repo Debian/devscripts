@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: devscripts 2.12.4\n"
+"Project-Id-Version: devscripts 2.13.2\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
 "POT-Creation-Date: 2013-05-05 22:24-0400\n"
-"PO-Revision-Date: 2013-03-21 21:15+0100\n"
+"PO-Revision-Date: 2013-05-06 20:51+0100\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
 "Language: de\n"
@@ -6703,16 +6703,12 @@ msgstr "B<--bpo>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:256
-#, fuzzy
-#| msgid ""
-#| "Increment the Debian release number for an upload to squeeze-backports, "
-#| "and add a backport upload changelog comment."
 msgid ""
 "Increment the Debian release number for an upload to wheezy-backports, and "
 "add a backport upload changelog comment."
 msgstr ""
-"erhöht die Debian-Veröffentlichungsnummer für ein Hochladen nach squeeze-"
-"backports und fügt einen Changelog-Kommentar »backport upload« hinzu."
+"erhöht die Debian-Veröffentlichungsnummer für ein Hochladen nach "
+"wheezy-backports und fügt einen Changelog-Kommentar »backport upload« hinzu."
 
 #. type: TP
 #: ../scripts/debchange.1:256
@@ -12789,9 +12785,6 @@ msgstr "I<suspicious-source>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:131
-#, fuzzy
-#| msgid ""
-#| "output a list of files which are not common source files [python3-magic]"
 msgid ""
 "output a list of files which are not common source files [python3-magic]"
 msgstr ""
@@ -12938,10 +12931,9 @@ msgstr ""
 
 #. type: IP
 #: ../scripts/devscripts.1:151
-#, fuzzy, no-wrap
-#| msgid "I<who-uploads>(1)"
+#, no-wrap
 msgid "I<who-permits-upload>(1)"
-msgstr "I<who-uploads>(1)"
+msgstr "I<who-permits-upload>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:153
@@ -12949,6 +12941,8 @@ msgid ""
 "Retrieve information about Debian Maintainer access control lists [gnupg, "
 "libencode-locale-perl, libparse-debcontrol-perl, libwww-perl, debian-keyring]"
 msgstr ""
+"ruft Informationen über ACLs (Zugriffssteuerungslisten) ab [gnupg, "
+"libencode-locale-perl, libparse-debcontrol-perl, libwww-perl, debian-keyring]"
 
 #. type: IP
 #: ../scripts/devscripts.1:153
@@ -12958,8 +12952,6 @@ msgstr "I<wrap-and-sort>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:154
-#, fuzzy
-#| msgid "wrap long lines and sort items in packaging files [python3-debian]"
 msgid "wrap long lines and sort items in packaging files [python3-debian]"
 msgstr ""
 "bricht lange Zeilen um und sortiert Elemente in Paketierungsdateien. "
@@ -12977,10 +12969,8 @@ msgstr "B<dget> [I<Optionen>] I<URL> …"
 
 #. type: =item
 #: ../scripts/dget.pl:517
-#, fuzzy
-#| msgid "B<dget> [I<options>] I<package>[B<=>I<version>]"
 msgid "B<dget> [I<options>] [B<--all>] I<package>[B<=>I<version>] ..."
-msgstr "B<dget> [I<Optionen>] I<Paket>[B<=>I<Version>]"
+msgstr "B<dget> [I<Optionen>] [B<--all>] I<Paket>[B<=>I<Version>] …"
 
 #. type: textblock
 #: ../scripts/dget.pl:523
@@ -13000,13 +12990,6 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/dget.pl:530
-#, fuzzy
-#| msgid ""
-#| "In the second form, B<dget> downloads a I<binary> package (i.e., a I<."
-#| "deb> file) from the Debian mirror configured in /etc/apt/sources.list(."
-#| "d).  Unlike B<apt-get install -d>, it does not require root privileges, "
-#| "writes to the current directory, and does not download dependencies.  If "
-#| "a version number is specified, this version of the package is requested."
 msgid ""
 "In the second form, B<dget> downloads a I<binary> package (i.e., a I<.deb> "
 "file) from the Debian mirror configured in /etc/apt/sources.list(.d).  "
@@ -13021,7 +13004,8 @@ msgstr ""
 "konfiguriert wurde. Anders als B<apt-get install -d> benötigt es keine Root-"
 "Rechte, schreibt ins aktuelle Verzeichnis und lädt keine Abhängigkeiten "
 "herunter. Falls eine Versionsnummer angegeben wurde, wird diese Version des "
-"Pakets abgerufen."
+"Pakets abgerufen. Mit B<--all> wird die Liste aller Binärpakete für das "
+"Quellpaket I<Paket> aus der Ausgabe von C<apt-cache showsrc Paket> extrahiert."
 
 #. type: textblock
 #: ../scripts/dget.pl:539
@@ -13088,6 +13072,8 @@ msgid ""
 "Interpret I<package> as a source package name, and download all binaries as "
 "found in the output of \"apt-cache showsrc I<package>\"."
 msgstr ""
+"Deutet I<Paket> als einen Quellpaketnamen und lädt alle Binärdateien, die in "
+"der Ausgabe von »apt-cache showsrc I<Paket>« gefunden werden."
 
 #. type: =item
 #: ../scripts/dget.pl:571
@@ -13259,6 +13245,8 @@ msgid ""
 "Download all .deb files for the previous version of a package and run "
 "debdiff on them:"
 msgstr ""
+"lädt alle .deb-Dateien für die verhergehende Version eines Pakets herunter "
+"und für Debdiff für sie aus:"
 
 #. type: verbatim
 #: ../scripts/dget.pl:664
@@ -13268,6 +13256,9 @@ msgid ""
 "  debdiff --from *_1.2-1_*.deb --to *_1.2-2_*.deb\n"
 "\n"
 msgstr ""
+"  dget --all meinpaket=1.2-1\n"
+"  debdiff --from *_1.2-1_*.deb --to *_1.2-2_*.deb\n"
+"\n"
 
 #. type: =head1
 #: ../scripts/dget.pl:667
@@ -13291,17 +13282,12 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/dget.pl:676
-#, fuzzy
-#| msgid ""
-#| "This program is Copyright (C) 2005-08 by Christoph Berg <myon@debian."
-#| "org>.  Modifications are Copyright (C) 2005-06 by Julian Gilbey "
-#| "<jdg@debian.org>."
 msgid ""
 "This program is Copyright (C) 2005-2013 by Christoph Berg <myon@debian."
 "org>.  Modifications are Copyright (C) 2005-06 by Julian Gilbey <jdg@debian."
 "org>."
 msgstr ""
-"Dieses Programm unterliegt dem Copyright (C) 2005-08 von Christoph Berg "
+"Dieses Programm unterliegt dem Copyright (C) 2005-13 von Christoph Berg "
 "<myon@debian.org>. Änderungen unterliegen dem Copyright (C) 2005-06 von "
 "Julian Gilbey <jdg@debian.org>."
 
@@ -19860,6 +19846,8 @@ msgstr ""
 #: ../scripts/who-permits-upload.pl:44
 msgid "who-permits-upload - look-up Debian Maintainer access control lists"
 msgstr ""
+"who-permits-upload - schlägt Debian-Paketbetreuer-ACLs "
+"(Zugriffssteuerungslisten) nach"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:48
@@ -19867,6 +19855,8 @@ msgid ""
 "B<who-permits-upload> [B<-h>] [B<-s> I<keyring>] [B<-d> I<dm_url>] [B<-s> "
 "I<search_type>] I<query> [I<query> ...]"
 msgstr ""
+"B<who-permits-upload> [B<-h>] [B<-s> I<Schlüsselbund>] [B<-d> I<DM_URL>] "
+"[B<-s> I<Suchtyp>] I<Abfrage> [I<Abfrage> …]"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:52
@@ -19876,13 +19866,15 @@ msgid ""
 "The tool can search by DM name, sponsor (the person granted the permission) "
 "and by package."
 msgstr ""
+"B<who-permits-upload> schlägt die Rechte zum Hochladen des angegebenen "
+"Debian-Paketbetreuers von Debian Ftpmaster nach und wertet sie in einer für "
+"Menschen lesbaren Art aus. Das Werkzeug kann anhand von Paketbetreuername, "
+"Sponsor (die Person, die das Recht gewährt) oder Paket suchen."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:60
-#, fuzzy
-#| msgid "B<--dirs>, B<-d>"
 msgid "B<--dmfile=>I<url>, B<-d> I<url>"
-msgstr "B<--dirs>, B<-d>"
+msgstr "B<--dmfile=>I<URL>, B<-d> I<URL>"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:62
@@ -19891,28 +19883,22 @@ msgid ""
 "not present, the default value I<http://ftp-master.debian.org/dm.txt> is "
 "used."
 msgstr ""
+"ruft die Rechtedatei des Debian-Paketbetreuers von der mitgegebenen URL ab. "
+"Wenn diese Option nicht vorhanden ist, wird der Vorgabewert "
+"I<http://ftp-master.debian.org/dm.txt> benutzt."
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:67
-#, fuzzy
-#| msgid "Display usage information and exit."
 msgid "Display an usage summary and exit"
-msgstr "zeigt Aufrufinformationen und wird beendet."
+msgstr "zeigt eine Aufrufinformationen und wird beendet."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:69
-#, fuzzy
-#| msgid "B<--changelog >I<file>, B<-c >I<file>"
 msgid "B<--keyring=>I<file>, B<-s> I<file>"
-msgstr "B<--changelog >I<Datei>, B<-c >I<Datei>"
+msgstr "B<--keyring=>I<Datei>, B<-s >I<Datei>"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:71
-#, fuzzy
-#| msgid ""
-#| "This is a colon-separated list of the default keyrings to be used.  By "
-#| "default, it is the two Debian keyrings I</usr/share/keyrings/debian-"
-#| "keyring.gpg> and I</usr/share/keyrings/debian-maintainers.gpg>."
 msgid ""
 "Use the supplied GnuPG keyrings to look-up GPG fingerprints from the DM "
 "permission file. When not present, the default Debian Developer and "
@@ -19920,22 +19906,22 @@ msgid ""
 "I</usr/share/keyrings/debian-maintainers.gpg>, installed by the I<debian-"
 "keyring> package)."
 msgstr ""
-"Dies ist eine durch Doppelpunkte getrennte Liste der Standardschlüsselbünde, "
-"die benutzt werden sollen. Standardmäßig sind das die beiden Debian-"
-"Schlüsselbünde I</usr/share/keyrings/debian-keyring.gpg> und I</usr/share/"
-"keyrings/debian-maintainers.gpg>."
+"verwendet die mitgegebenen GnuPG-Schlüsselbünde, um GPG-Fingerabdrücke in der "
+"Rechtedatei des Debian-Paketbetreuers nachzuschlagen. Wenn sie nicht "
+"vorhanden sind, werden die Standardschlüsselbünde der Debian-Entwickler und "
+"-Paketbetreuer benutzt (I</usr/share/keyrings/debian-keyring.gpg> und "
+"I</usr/share/keyrings/debian-maintainers.gpg>, die durch das Paket "
+"I<debian-keyring> installiert wurden."
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:77
 msgid "Separate keyrings with a colon \":\"."
-msgstr ""
+msgstr "trennt Schlüsselbünde durch einen Doppelpunkt »:«."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:79
-#, fuzzy
-#| msgid "B<--arch=>I<architecture>"
 msgid "B<--search=>I<search_type>, B<-s> I<search_type>"
-msgstr "B<--arch=>I<Architektur>"
+msgstr "B<--search=>I<Suchtyp>, B<-s> I<Suchtyp>"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:81
@@ -19943,6 +19929,9 @@ msgid ""
 "Modify the look-up behavior instead of using the default. This influences "
 "the interpretation of the I<query> argument. Supported search types are:"
 msgstr ""
+"ändert das Nachschlagverhalten statt die Voreinstellung zu verwenden. Dies "
+"beeinflusst die Interpretation des Arguments I<Abfrage>. Folgende Suchtypen "
+"werden unterstützt:"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:88
@@ -19951,11 +19940,14 @@ msgid ""
 "is omitted.  Since package names are unique, this will return given ACLs - "
 "if any - for a single package."
 msgstr ""
+"sucht nach einem Quellpaketnamen. Dies ist auch die Voreinstellung, wenn "
+"B<--search> weggelassen wird. Da Paketnamen eindeutig sind, wird dies, falls "
+"vorhanden, die gegebenen ACLs eines einzigen Pakets zurückgeben."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:92
 msgid "I<uid>"
-msgstr ""
+msgstr "I<UID>"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:94
@@ -19963,11 +19955,14 @@ msgid ""
 "Search for a Debian Maintainer. This should be (a fraction of) a name. It "
 "will return all ACLs assigned to matching maintainers."
 msgstr ""
+"sucht nach einem Debian-Paketbetreuer. Dies sollte ein Name (oder ein Teil "
+"davon) sein. Es wird alle zugewiesenen ACLs des zugehörigen Paketbetreuers "
+"zurückgeben."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:97
 msgid "I<sponsor>"
-msgstr ""
+msgstr "I<Sponsor>"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:99
@@ -19975,16 +19970,21 @@ msgid ""
 "Search for a sponsor (i.e. a Debian Developer) who granted DM permissions. "
 "This will return all ACLs given by the supplied developer."
 msgstr ""
+"sucht nach einem Sponsor (d.h. einem Debian-Entwickler) der "
+"Debian-Paketbetreuerrechte gewährt. Dies wird alle angegebene ACLs des "
+"mitgelieferten Paketbetreuers zurückgeben."
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:102
 msgid "Note that this is an expensive operation which may take some time."
 msgstr ""
+"Beachten Sie, dass dies eine aufwendige Transaktion ist, die lange dauern "
+"kann."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:106
 msgid "I<query>"
-msgstr ""
+msgstr "I<Abfrage>"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:108
@@ -19993,38 +19993,39 @@ msgid ""
 "exact interpretation of this argument is dependent by the B<--search> "
 "argument."
 msgstr ""
+"ein Argument zum Nachschlagen der ACL-Rechtedatei, bei dem die Groß- und "
+"Kleinschreibung beachtet wird. Die exakte Interpretation dieses Arguments "
+"ist vom Argument B<--search> abhängig."
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:111
 msgid "This argument can be repeated."
-msgstr ""
+msgstr "Dieses Argument kann wiederholt werden."
 
 #. type: =head1
 #: ../scripts/who-permits-upload.pl:115
-#, fuzzy
-#| msgid "EXIT VALUES"
 msgid "EXIT VALUE"
-msgstr "RÜCKGABEWERTE"
+msgstr "RÜCKGABEWERT"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:121
 msgid "Success"
-msgstr ""
+msgstr "Erfolgreich"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:125
 msgid "An error occurred"
-msgstr ""
+msgstr "Ein Fehler ist aufgetreten."
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:129
 msgid "The command line was not understood"
-msgstr ""
+msgstr "Die Befehlszeile wurde nicht verstanden."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:137
 msgid "who-permits-upload --search=sponsor arno@debian.org"
-msgstr ""
+msgstr "who-permits-upload --search=sponsor arno@debian.org"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:139
@@ -20032,63 +20033,66 @@ msgid ""
 "Search for all DM upload permissions given by the UID \"arno@debian.org\". "
 "Note, that only primary UIDs will match."
 msgstr ""
+"sucht nach allen Rechten von Debian-Paketbetreuern zum Hochladen, die durch "
+"die UID »arno@debian.org« gegeben sind. Beachten Sie, dass nur die erste UID "
+"passen wird."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:142
 msgid "who-permits-upload -s=sponsor \"Arno Töll\""
-msgstr ""
+msgstr "who-permits-upload -s=sponsor \"Arno Töll\""
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:144
 msgid "Same as above, but use a full name instead."
 msgstr ""
+"dasselbe wie oben, nur dass stattdessen ein vollständiger Name benutzt wird"
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:146
 msgid "who-permits-upload apache2"
-msgstr ""
+msgstr "who-permits-upload apache2"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:148
 msgid "Look up who gave upload permissions for the apache2 source package."
 msgstr ""
+"schlägt nach, wer Rechte zum Hochladen für das Quellpaket »apache2« vergab."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:150
 msgid "who-permits-upload --search=uid \"Paul Tagliamonte\""
-msgstr ""
+msgstr "who-permits-upload --search=uid \"Paul Tagliamonte\""
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:152
 msgid "Look up all DM upload permissions given to \"Paul Tagliamonte\"."
 msgstr ""
+"schlägt alle Debian-Paketbetreuerrechte zum Hochladen nach, die »Paul "
+"Tagliamonte« gegeben wurden."
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:158
-#, fuzzy
-#| msgid ""
-#| "This program was written by Romain Francoise E<lt>rfrancoise@debian."
-#| "orgE<gt> and is released under the GPL, version 2 or later."
 msgid ""
 "B<who-permits-upload> was written by Arno Töll <arno@debian.org> and is "
 "licensed under the terms of the General Public License (GPL) version 2 or "
 "later."
 msgstr ""
-"Dieses Programm wurde von Romain Francoise E<lt>rfrancoise@debian.orgE<gt> "
-"geschrieben und wird unter der GPL, Version 2 oder später, veröffentlicht."
+"B<who-permits-upload> wurde von Arno Töll <arno@debian.org> geschrieben und "
+"ist unter den Bedingungnen der General Public License (GPL), Version 2 oder "
+"später, lizensiert."
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:163
-#, fuzzy
-#| msgid "I<who-uploads>(1)"
 msgid "B<who-uploads>(1), B<gpg>(1)"
-msgstr "I<who-uploads>(1)"
+msgstr "B<who-uploads>(1), B<gpg>(1)"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:165
 msgid ""
 "S<I<https://lists.debian.org/debian-devel-announce/2012/09/msg00008.html>>"
 msgstr ""
+"S<I<https://lists.debian.org/debian-devel-announce/2012/09/msg00008.html>>"
 
 #. type: TH
 #: ../scripts/wnpp-alert.1:1
