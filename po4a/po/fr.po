@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2013-05-08 21:46-0400\n"
-"PO-Revision-Date: 2013-05-07 19:10-0400\n"
+"PO-Revision-Date: 2013-05-08 21:55-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -4547,16 +4547,6 @@ msgstr "B<cvs-debc> [I<options>] [I<paquet> ...]"
 
 #. type: Plain text
 #: ../scripts/cvs-debc.1:17
-#, fuzzy
-#| msgid ""
-#| "B<cvs-debc> is run from the CVS working directory after B<cvs-"
-#| "buildpackage> or B<cvs-debuild>.  It uses the B<cvs-buildpackage> system "
-#| "to locate the I<.changes> file generated in that run.  It then displays "
-#| "information about the .deb files which were generated in that run, by "
-#| "running B<dpkg-deb -I> and B<dpkg-deb -c> on every I<.deb> archive listed "
-#| "in the I<.changes> file, assuming that all of the I<.deb> archives live "
-#| "in the same directory as the I<.changes> file.  It is useful for ensuring "
-#| "that the expected files have ended up in the Debian package."
 msgid ""
 "B<cvs-debc> is run from the CVS working directory after B<cvs-buildpackage> "
 "or B<cvs-debuild>.  It uses the B<cvs-buildpackage> system to locate the I<."
@@ -5067,21 +5057,12 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/dcmd.1:6
-#, fuzzy
-#| msgid ""
-#| "B<dcmd> [I<options>] [I<command>] [I<changes-file>|I<dsc-file>] [I<...>]"
 msgid "B<dcmd> [I<options>] [I<command>] [I<changes-file>|I<dsc-file>] ..."
 msgstr ""
 "B<dcmd> [I<options>] [I<commande>] [I<fichier-changes>|I<fichier-dsc>] ..."
 
 #. type: Plain text
 #: ../scripts/dcmd.1:11
-#, fuzzy
-#| msgid ""
-#| "B<dcmd> replaces any reference to a .dsc or .changes file in the command "
-#| "line with the list of files in its 'Files' section, plus the file "
-#| "itself.  It allows easy manipulation of all the files involved in an "
-#| "upload (for changes files) or a source package (for dsc files)."
 msgid ""
 "B<dcmd> replaces any reference to a I<.dsc> or I<.changes> file in the "
 "command line with the list of files in its 'Files' section, plus the file "
@@ -5096,11 +5077,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/dcmd.1:15
-#, fuzzy
-#| msgid ""
-#| "If I<command> is omitted (that is the first argument is an existing .dsc "
-#| "or .changes file), the expanded list of files is printed to stdout, one "
-#| "file by line. Useful for usage in backticks."
 msgid ""
 "If I<command> is omitted (that is the first argument is an existing I<.dsc> "
 "or I<.changes> file), the expanded list of files is printed to stdout, one "
@@ -5113,11 +5089,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/dcmd.1:19
-#, fuzzy
-#| msgid ""
-#| "There are a number of options which may be used in order to select only a "
-#| "subset of the files listed in the .dsc or .changes file. If a requested "
-#| "file is not found, an error message will be printed."
 msgid ""
 "There are a number of options which may be used in order to select only a "
 "subset of the files listed in the I<.dsc> or I<.changes> file. If a "
@@ -5135,8 +5106,6 @@ msgstr "B<--dsc>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:22
-#, fuzzy
-#| msgid "Select the .dsc file."
 msgid "Select the I<.dsc> file."
 msgstr "Sélectionner le fichier I<.dsc>."
 
@@ -5148,8 +5117,6 @@ msgstr "B<--schanges>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:25
-#, fuzzy
-#| msgid "Select .changes files for the 'source' architecture."
 msgid "Select I<.changes> files for the 'source' architecture."
 msgstr "Sélectionner les fichiers I<.changes> pour l'architecture « source »."
 
@@ -5161,8 +5128,6 @@ msgstr "B<--bchanges>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:28
-#, fuzzy
-#| msgid "Select .changes files for binary architectures."
 msgid "Select I<.changes> files for binary architectures."
 msgstr "Sélectionner les fichiers I<.changes> pour les architectures binaires."
 
@@ -5174,8 +5139,6 @@ msgstr "B<--changes>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:31
-#, fuzzy
-#| msgid "Select .changes files. Implies --schanges and --bchanges."
 msgid "Select I<.changes> files. Implies B<--schanges> and B<--bchanges>."
 msgstr ""
 "Sélectionner les fichiers I<.changes>. Implique B<--schanges> et B<--"
@@ -5189,8 +5152,6 @@ msgstr "B<--archdeb>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:34
-#, fuzzy
-#| msgid "Select architecture-dependent binary packages (.deb files)."
 msgid "Select architecture-dependent binary packages (I<.deb> files)."
 msgstr ""
 "Sélectionner les paquets binaires (fichiers I<.deb>) spécifiques à une "
@@ -5204,8 +5165,6 @@ msgstr "B<--indepdeb>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:37
-#, fuzzy
-#| msgid "Select architecture-independent binary packages (.deb files)."
 msgid "Select architecture-independent binary packages (I<.deb> files)."
 msgstr ""
 "Sélectionner les paquets binaires (fichiers I<.deb>) non spécifiques à une "
@@ -5219,9 +5178,6 @@ msgstr "B<--deb>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:40
-#, fuzzy
-#| msgid ""
-#| "Select binary packages (.deb files). Implies --archdeb and --indepdeb."
 msgid ""
 "Select binary packages (I<.deb> files). Implies B<--archdeb> and B<--"
 "indepdeb>."
@@ -5237,8 +5193,6 @@ msgstr "B<--archudeb>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:43
-#, fuzzy
-#| msgid "Select architecture-dependent udeb binary packages."
 msgid "Select architecture-dependent I<.udeb> binary packages."
 msgstr ""
 "Sélectionner les paquets I<.udeb> binaires spécifiques à une architecture."
@@ -5251,8 +5205,6 @@ msgstr "B<--indepudeb>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:46
-#, fuzzy
-#| msgid "Select architecture-independent udeb binary packages."
 msgid "Select architecture-independent I<.udeb> binary packages."
 msgstr ""
 "Sélectionner les paquets I<.udeb> binaires non spécifiques à une "
@@ -5266,8 +5218,6 @@ msgstr "B<--udeb>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:49
-#, fuzzy
-#| msgid "Select udeb binary packages. Implies --archudeb and --indepudeb."
 msgid ""
 "Select I<.udeb> binary packages. Implies B<--archudeb> and B<--indepudeb>."
 msgstr ""
@@ -5276,15 +5226,12 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/dcmd.1:49
-#, fuzzy, no-wrap
-#| msgid "B<--tar, --orig>"
+#, no-wrap
 msgid "B<--tar>,\\ B<--orig>"
 msgstr "B<--tar>, B<--orig>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:52
-#, fuzzy
-#| msgid "Select the tar file."
 msgid "Select the I<.tar> file."
 msgstr "Sélectionner le fichier I<.tar>."
 
@@ -5296,8 +5243,6 @@ msgstr "B<--diff>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:55
-#, fuzzy
-#| msgid "Select the Debian diff file."
 msgid "Select the Debian I<.diff> file."
 msgstr "Sélectionner le fichier I<.diff> Debian."
 
@@ -5313,11 +5258,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/dcmd.1:62
-#, fuzzy
-#| msgid ""
-#| "It is not possible to combine positive filtering options (e.g. --dsc)  "
-#| "and negative filtering options (e.g. --no-changes) in the same B<dcmd> "
-#| "invocation."
 msgid ""
 "It is not possible to combine positive filtering options (e.g. B<--dsc>)  "
 "and negative filtering options (e.g. B<--no-changes>) in the same B<dcmd> "
@@ -5868,24 +5808,6 @@ msgstr "B<debc> [I<options>] [I<fichier_changes>] [I<paquet> ...]"
 
 #. type: Plain text
 #: ../scripts/debc.1:25
-#, fuzzy
-#| msgid ""
-#| "B<debc> figures out the current version of a package and displays "
-#| "information about the .deb and .udeb files which have been generated in "
-#| "the current build process.  If a I<.changes> file is specified on the "
-#| "command line, the filename must end with I<.changes>, as this is how the "
-#| "program distinguishes it from package names.  If not, then B<debc> has to "
-#| "be called from within the source code directory tree.  In this case, it "
-#| "will look for the I<.changes> file corresponding to the current package "
-#| "version (by determining the name and version number from the changelog, "
-#| "and the architecture in the same way as B<dpkg-buildpackage>(1) does).  "
-#| "It then runs B<dpkg-deb -I> and B<dpkg-deb -c> on every I<.deb> and I<."
-#| "udeb> archive listed in the I<.changes> file to display information about "
-#| "the contents of the I<.deb> / I<.udeb> files.  It precedes every I<.deb> "
-#| "or I<.udeb> file with the name of the file.  It assumes that all of the "
-#| "I<.deb> / I<.udeb> archives live in the same directory as the I<.changes> "
-#| "file.  It is useful for ensuring that the expected files have ended up in "
-#| "the Debian package."
 msgid ""
 "B<debc> figures out the current version of a package and displays "
 "information about the I<.deb> and I<.udeb> files which have been generated "
@@ -8186,11 +8108,6 @@ msgstr "B<-R>, B<--release-use-changelog>"
 
 #. type: textblock
 #: ../scripts/debcommit.pl:39
-#, fuzzy
-#| msgid ""
-#| "When used in conjunction with --release, if there are uncommited changes "
-#| "to the changelog then derive the commit message from those changes rather "
-#| "than using the default message."
 msgid ""
 "When used in conjunction with B<--release>, if there are uncommited changes "
 "to the changelog then derive the commit message from those changes rather "
@@ -8359,10 +8276,6 @@ msgstr "B<DEBCOMMIT_STRIP_MESSAGE>"
 
 #. type: textblock
 #: ../scripts/debcommit.pl:111
-#, fuzzy
-#| msgid ""
-#| "If this is set to I<no>, then it is the same as the --no-strip-message "
-#| "command line parameter being used. The default is I<yes>."
 msgid ""
 "If this is set to I<no>, then it is the same as the B<--no-strip-message> "
 "command line parameter being used. The default is I<yes>."
@@ -8377,10 +8290,6 @@ msgstr "B<DEBCOMMIT_SIGN_TAGS>"
 
 #. type: textblock
 #: ../scripts/debcommit.pl:116
-#, fuzzy
-#| msgid ""
-#| "If this is set to I<yes>, then it is the same as the --sign-tags command "
-#| "line parameter being used. The default is I<no>."
 msgid ""
 "If this is set to I<yes>, then it is the same as the B<--sign-tags> command "
 "line parameter being used. The default is I<no>."
@@ -8395,10 +8304,6 @@ msgstr "B<DEBCOMMIT_RELEASE_USE_CHANGELOG>"
 
 #. type: textblock
 #: ../scripts/debcommit.pl:121
-#, fuzzy
-#| msgid ""
-#| "If this is set to I<yes>, then it is the same as the --release-use-"
-#| "changelog command line parameter being used. The default is I<no>."
 msgid ""
 "If this is set to I<yes>, then it is the same as the B<--release-use-"
 "changelog> command line parameter being used. The default is I<no>."
@@ -8460,10 +8365,6 @@ msgstr "B<git>"
 
 #. type: textblock
 #: ../scripts/debcommit.pl:150
-#, fuzzy
-#| msgid ""
-#| "If only a single change is detected in the changelog, B<debcommit> will "
-#| "unfold it to a single line and behave as if --strip-message was used."
 msgid ""
 "If only a single change is detected in the changelog, B<debcommit> will "
 "unfold it to a single line and behave as if B<--strip-message> was used."
@@ -8509,11 +8410,6 @@ msgstr "B<bzr>"
 
 #. type: textblock
 #: ../scripts/debcommit.pl:166
-#, fuzzy
-#| msgid ""
-#| "If the changelog entry used for the commit message closes any bugs then --"
-#| "fixes options to \"bzr commit\" will be generated to associate the "
-#| "revision and the bugs."
 msgid ""
 "If the changelog entry used for the commit message closes any bugs then B<--"
 "fixes> options to \"bzr commit\" will be generated to associate the revision "
@@ -9555,12 +9451,6 @@ msgstr "B<--multi>"
 
 #. type: Plain text
 #: ../scripts/debrelease.1:81
-#, fuzzy
-#| msgid ""
-#| "Multiarch changes mode: This signifies that B<debrelease> should use the "
-#| "most recent file with the name pattern I<package_version_*+*.changes> as "
-#| "the changes file, allowing for the changes files produced by B<dpkg-"
-#| "cross>."
 msgid ""
 "Multiarch I<.changes> mode: This signifies that B<debrelease> should use the "
 "most recent file with the name pattern I<package_version_*+*.changes> as the "
@@ -9718,8 +9608,6 @@ msgstr "&dhcommand;"
 
 #. type: Content of: <refentry><refnamediv><refpurpose>
 #: ../scripts/deb-reversion.dbk:67
-#, fuzzy
-#| msgid "simple script to change the version of a .deb file."
 msgid "simple script to change the version of a .deb file"
 msgstr "Script pour changer la version d'un fichier .deb"
 
@@ -9736,12 +9624,6 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
 #: ../scripts/deb-reversion.dbk:85
-#, fuzzy
-#| msgid ""
-#| "&dhcommand; unpacks the specified .deb file, changes the version number "
-#| "in the relevant locations, appends a Debian <filename>changelog</"
-#| "filename> entry with the specified contents, and creates a new .deb file "
-#| "with the updated version."
 msgid ""
 "<command>&dhcommand;</command> unpacks the specified <filename>.deb</"
 "filename> file, changes the version number in the relevant locations, "
@@ -9776,14 +9658,6 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><para>
 #: ../scripts/deb-reversion.dbk:103
-#, fuzzy
-#| msgid ""
-#| "When building a .deb file, root privileges are required in order to have "
-#| "the correct permissions and ownerships in the resulting .deb file.  This "
-#| "can be achieved either by running <command>&dhcommand;</command> as root "
-#| "or running under <citerefentry><refentrytitle>fakeroot</refentrytitle> "
-#| "<manvolnum>1</manvolnum></citerefentry>, as 'fakeroot &dhcommand; foo."
-#| "deb'."
 msgid ""
 "When building a <filename>.deb</filename> file, root privileges are required "
 "in order to have the correct permissions and ownerships in the resulting "
@@ -9874,10 +9748,6 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: ../scripts/deb-reversion.dbk:149
-#, fuzzy
-#| msgid ""
-#| "Specifies the version number to be used as the old version instead of the "
-#| "version stored in the .deb's control file."
 msgid ""
 "Specifies the version number to be used as the old version instead of the "
 "version stored in the <filename>.deb</filename>'s <filename>control</"
@@ -9899,11 +9769,6 @@ msgstr "<option>--calculate-only</option>"
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: ../scripts/deb-reversion.dbk:161
-#, fuzzy
-#| msgid ""
-#| "Only calculate and display the new version number which would be used; do "
-#| "not build a new .deb file.  Cannot be used in conjunction with <option>-"
-#| "v</option>."
 msgid ""
 "Only calculate and display the new version number which would be used; do "
 "not build a new <filename>.deb</filename> file.  Cannot be used in "
@@ -9958,13 +9823,6 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: ../scripts/deb-reversion.dbk:185
-#, fuzzy
-#| msgid ""
-#| "A hook command to run after unpacking the old .deb file and modifying the "
-#| "changelog, and before packing up the new .deb file.  Must be in quotes if "
-#| "it is more than one (shell)  word.  Only one hook command may be "
-#| "specified; if you want to perform more than this, you could specify "
-#| "'bash' as the hook command, and you will then be given a shell to work in."
 msgid ""
 "A hook command to run after unpacking the old <filename>.deb</filename> file "
 "and modifying the <filename>changelog</filename>, and before packing up the "
@@ -10153,9 +10011,6 @@ msgstr "DEBRSIGN"
 
 #. type: Plain text
 #: ../scripts/debrsign.1:4
-#, fuzzy
-#| msgid ""
-#| "debrsign - remotely sign a Debian changes and dsc file pair using SSH"
 msgid "debrsign - remotely sign a Debian .changes and .dsc file pair using SSH"
 msgstr ""
 "debrsign - Signer des fichiers .changes et .dsc Debian à distance avec SSH"
@@ -10228,10 +10083,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debrsign.1:35 ../scripts/debsign.1:72
-#, fuzzy
-#| msgid ""
-#| "Look for a source-only I<.changes> file instead of a binary-build changes "
-#| "file."
 msgid ""
 "Look for a source-only I<.changes> file instead of a binary-build I<."
 "changes> file."
@@ -10241,12 +10092,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debrsign.1:47
-#, fuzzy
-#| msgid ""
-#| "Multiarch changes mode: This signifies that B<debrsign> should use the "
-#| "most recent file with the name pattern I<package_version_*+*.changes> as "
-#| "the changes file, allowing for the changes files produced by B<dpkg-"
-#| "cross>."
 msgid ""
 "Multiarch I<.changes> mode: This signifies that B<debrsign> should use the "
 "most recent file with the name pattern I<package_version_*+*.changes> as the "
@@ -10315,8 +10160,6 @@ msgstr "DEBSIGN"
 
 #. type: Plain text
 #: ../scripts/debsign.1:4
-#, fuzzy
-#| msgid "debsign - sign a Debian changes and dsc file pair using GPG"
 msgid "debsign - sign a Debian .changes and .dsc file pair using GPG"
 msgstr ""
 "debsign - Signer une paire de fichiers .changes et .dsc Debian avec GPG"
@@ -10493,12 +10336,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debsign.1:84
-#, fuzzy
-#| msgid ""
-#| "Multiarch changes mode: This signifies that B<debsign> should use the "
-#| "most recent file with the name pattern I<package_version_*+*.changes> as "
-#| "the changes file, allowing for the changes files produced by B<dpkg-"
-#| "cross>."
 msgid ""
 "Multiarch I<.changes> mode: This signifies that B<debsign> should use the "
 "most recent file with the name pattern I<package_version_*+*.changes> as the "
@@ -13433,10 +13270,6 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/dget.pl:661
-#, fuzzy
-#| msgid ""
-#| "Download all .deb files for the previous version of a package and run "
-#| "debdiff on them:"
 msgid ""
 "Download all I<.deb> files for the previous version of a package and run "
 "B<debdiff> on them:"
@@ -15426,10 +15259,6 @@ msgstr "B<-t>, B<--tool>"
 
 #. type: textblock
 #: ../scripts/mk-build-deps.pl:54
-#, fuzzy
-#| msgid ""
-#| "When installing the generated package use the specified tool.  (default: "
-#| "apt-get --no-install-recommends)"
 msgid ""
 "When installing the generated package use the specified tool.  (default: "
 "B<apt-get --no-install-recommends>)"
@@ -17697,10 +17526,6 @@ msgstr "C'est équivalent à l'option B<-v> de B<dpkg-parsechangelog>."
 
 #. type: textblock
 #: ../scripts/tagpending.pl:137
-#, fuzzy
-#| msgid ""
-#| "Display the message which would be sent to the BTS and, except when --"
-#| "noact was used, prompt for confirmation before sending it."
 msgid ""
 "Display the message which would be sent to the BTS and, except when B<--"
 "noact> was used, prompt for confirmation before sending it."
@@ -20058,12 +19883,6 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:52
-#, fuzzy
-#| msgid ""
-#| "B<who-permits-upload> looks up the given Debian Maintainer (DM) upload "
-#| "permissions from Debian's ftpmaster and parses them in a human readable "
-#| "way. The tool can search by DM name, sponsor (the person granted the "
-#| "permission) and by package."
 msgid ""
 "B<who-permits-upload> looks up the given Debian Maintainer (DM) upload "
 "permissions from ftp-master.debian.org and parses them in a human readable "
@@ -20077,8 +19896,6 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:60
-#, fuzzy
-#| msgid "B<--dmfile=>I<url>, B<-d> I<url>"
 msgid "B<--dmfile=>I<dm_url>, B<-d> I<dm_url>"
 msgstr "B<--dmfile=>I<url_dm>, B<-d> I<url_dm>"
 
@@ -20095,17 +19912,13 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:67
-#, fuzzy
-#| msgid "Display an usage summary and exit"
 msgid "Display an usage summary and exit."
 msgstr "Afficher une description de l'utilisation et quitter."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:69
-#, fuzzy
-#| msgid "B<--keyring>I< >I<keyring>"
 msgid "B<--keyring=>I<keyring>, B<-s> I<keyring>"
-msgstr "B<--keyring> I<trousseau>"
+msgstr "B<--keyring=>I<trousseau>, B<-s> I<trousseau>"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:71
@@ -20134,10 +19947,6 @@ msgstr "B<--search=>I<type_de_recherche>, B<-s> I<type_de_recherche>"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:81
-#, fuzzy
-#| msgid ""
-#| "Modify the look-up behavior instead of using the default. This influences "
-#| "the interpretation of the I<query> argument. Supported search types are:"
 msgid ""
 "Modify the look-up behavior. This influences the interpretation of the "
 "I<query> argument. Supported search types are:"
@@ -20158,8 +19967,6 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:92
-#, fuzzy
-#| msgid "I<uid>"
 msgid "B<uid>"
 msgstr "B<uid>"
 
@@ -20175,8 +19982,6 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:97
-#, fuzzy
-#| msgid "I<sponsor>"
 msgid "B<sponsor>"
 msgstr "B<sponsor>"
 
@@ -20297,10 +20102,8 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:163
-#, fuzzy
-#| msgid "I<who-uploads>(1)"
 msgid "B<gpg>(1), B<who-uploads>(1)"
-msgstr "B<who-uploads>(1)"
+msgstr "B<gpg>(1), B<who-uploads>(1)"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:165
