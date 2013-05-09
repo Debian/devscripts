@@ -105,7 +105,7 @@ and docbook-xsl in your Build-Depends control field.
       <filename>.deb</filename> file.  This can be achieved either by running
       <command>&dhcommand;</command> as root or running under
       <citerefentry><refentrytitle>fakeroot</refentrytitle>
-	<manvolnum>1</manvolnum></citerefentry>, as 'fakeroot
+        <manvolnum>1</manvolnum></citerefentry>, as 'fakeroot
       &dhcommand; foo.deb'.
     </para>
 
@@ -128,117 +128,117 @@ and docbook-xsl in your Build-Depends control field.
     <title>OPTIONS</title>
     <variablelist>
       <varlistentry>
-	<term><option>-v</option> <replaceable class="parameter">new-version</replaceable></term>
-	<term><option>--new-version</option> <replaceable class="parameter">new-version</replaceable></term>
-	<listitem>
-	  <para>
+        <term><option>-v</option> <replaceable class="parameter">new-version</replaceable></term>
+        <term><option>--new-version</option> <replaceable class="parameter">new-version</replaceable></term>
+        <listitem>
+          <para>
             Specifies the version number to be used for the new
             version.  Passed to <citerefentry>
-	      <refentrytitle>dch</refentrytitle>
-	      <manvolnum>1</manvolnum>
-	    </citerefentry>.
+              <refentrytitle>dch</refentrytitle>
+              <manvolnum>1</manvolnum>
+            </citerefentry>.
           </para>
-	</listitem>
+        </listitem>
       </varlistentry>
 
       <varlistentry>
-	<term><option>-o</option> <replaceable class="parameter">old-version</replaceable></term>
-	<term><option>--old-version</option> <replaceable class="parameter">old-version</replaceable></term>
-	<listitem>
-	  <para>
+        <term><option>-o</option> <replaceable class="parameter">old-version</replaceable></term>
+        <term><option>--old-version</option> <replaceable class="parameter">old-version</replaceable></term>
+        <listitem>
+          <para>
             Specifies the version number to be used as the old
-	    version instead of the version stored in the <filename>.deb</filename>'s
-	    <filename>control</filename> file.
+            version instead of the version stored in the <filename>.deb</filename>'s
+            <filename>control</filename> file.
           </para>
-	</listitem>
+        </listitem>
       </varlistentry>
 
       <varlistentry>
-	<term><option>-c</option></term>
-	<term><option>--calculate-only</option></term>
-	<listitem>
-	  <para>
+        <term><option>-c</option></term>
+        <term><option>--calculate-only</option></term>
+        <listitem>
+          <para>
             Only calculate and display the new version number which
-	    would be used; do not build a new <filename>.deb</filename> file.  Cannot be
+            would be used; do not build a new <filename>.deb</filename> file.  Cannot be
             used in conjunction with <option>-v</option>.
           </para>
-	</listitem>
+        </listitem>
       </varlistentry>
 
       <varlistentry>
-	<term><option>-s</option> <replaceable class="parameter">string</replaceable></term>
-	<term><option>--string</option> <replaceable class="parameter">string</replaceable></term>
-	<listitem>
-	  <para>
+        <term><option>-s</option> <replaceable class="parameter">string</replaceable></term>
+        <term><option>--string</option> <replaceable class="parameter">string</replaceable></term>
+        <listitem>
+          <para>
             Instead of using 'LOCAL.' as the version string to append
             to the old version number, use <replaceable
             class="parameter">string</replaceable> instead.
           </para>
-	</listitem>
+        </listitem>
       </varlistentry>
 
       <varlistentry>
-	<term><option>-k</option> <replaceable class="parameter">hook-command</replaceable></term>
-	<term><option>--hook</option> <replaceable class="parameter">hook-command</replaceable></term>
-	<listitem>
-	  <para>
+        <term><option>-k</option> <replaceable class="parameter">hook-command</replaceable></term>
+        <term><option>--hook</option> <replaceable class="parameter">hook-command</replaceable></term>
+        <listitem>
+          <para>
             A hook command to run after unpacking the old <filename>.deb</filename> file and
-	    modifying the <filename>changelog</filename>, and before packing up the new <filename>.deb</filename>
+            modifying the <filename>changelog</filename>, and before packing up the new <filename>.deb</filename>
             file.  Must be in quotes if it is more than one (shell)
             word.  Only one hook command may be specified; if you want
             to perform more than this, you could specify 'bash' as the
             hook command, and you will then be given a shell to work
             in.
           </para>
-	</listitem>
+        </listitem>
       </varlistentry>
 
       <varlistentry>
-	<term><option>-D</option></term>
-	<term><option>--debug</option></term>
-	<listitem>
-	  <para>
+        <term><option>-D</option></term>
+        <term><option>--debug</option></term>
+        <listitem>
+          <para>
             Pass <option>--debug</option> to
             <citerefentry>
-	      <refentrytitle>dpkg-deb</refentrytitle>
-	      <manvolnum>1</manvolnum>
-	    </citerefentry>.
+              <refentrytitle>dpkg-deb</refentrytitle>
+              <manvolnum>1</manvolnum>
+            </citerefentry>.
           </para>
-	</listitem>
+        </listitem>
       </varlistentry>
 
       <varlistentry>
-	<term><option>-b</option></term>
-	<term><option>--force-bad-version</option></term>
-	<listitem>
-	  <para>
-	    Pass <option>--force-bad-version</option> to
-	    <citerefentry>
-	      <refentrytitle>dch</refentrytitle>
-	      <manvolnum>1</manvolnum>
-	    </citerefentry>
-	  </para>
-	</listitem>
+        <term><option>-b</option></term>
+        <term><option>--force-bad-version</option></term>
+        <listitem>
+          <para>
+            Pass <option>--force-bad-version</option> to
+            <citerefentry>
+              <refentrytitle>dch</refentrytitle>
+              <manvolnum>1</manvolnum>
+            </citerefentry>
+          </para>
+        </listitem>
       </varlistentry>
 
       <varlistentry>
-	<term><option>-h</option></term>
-	<term><option>--help</option></term>
-	<listitem>
-	  <para>
+        <term><option>-h</option></term>
+        <term><option>--help</option></term>
+        <listitem>
+          <para>
             Display usage information.
           </para>
-	</listitem>
+        </listitem>
       </varlistentry>
 
       <varlistentry>
-	<term><option>-V</option></term>
-	<term><option>--version</option></term>
-	<listitem>
-	  <para>
+        <term><option>-V</option></term>
+        <term><option>--version</option></term>
+        <listitem>
+          <para>
             Display version information.
           </para>
-	</listitem>
+        </listitem>
       </varlistentry>
     </variablelist>
   </refsect1>
@@ -247,16 +247,16 @@ and docbook-xsl in your Build-Depends control field.
     <title>SEE ALSO</title>
     <para>
       <citerefentry>
-	<refentrytitle>dch</refentrytitle>
-	<manvolnum>1</manvolnum>
+        <refentrytitle>dch</refentrytitle>
+        <manvolnum>1</manvolnum>
       </citerefentry>,
       <citerefentry>
-	<refentrytitle>dpkg-deb</refentrytitle>
-	<manvolnum>1</manvolnum>
+        <refentrytitle>dpkg-deb</refentrytitle>
+        <manvolnum>1</manvolnum>
       </citerefentry>,
       <citerefentry>
-	<refentrytitle>fakeroot</refentrytitle>
-	<manvolnum>1</manvolnum>
+        <refentrytitle>fakeroot</refentrytitle>
+        <manvolnum>1</manvolnum>
       </citerefentry>
     </para>
   </refsect1>
