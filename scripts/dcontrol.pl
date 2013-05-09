@@ -203,7 +203,7 @@ dcontrol -- Query package and source control files for all Debian distributions
 
 =over
 
-=item B<dcontrol> [I<options>] I<package>[I<modifiers>] [I<...>]
+=item B<dcontrol> [I<options>] I<package>[I<modifiers>] ...
 
 =back
 
