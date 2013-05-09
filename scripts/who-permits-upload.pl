@@ -253,7 +253,7 @@ sub lookup_fingerprint
     }
     push(@gpg_arguments, ("--no-options", "--no-auto-check-trustdb", "--no-default-keyring", "--list-key", "--with-colons", encode(locale => $fingerprint)));
     open(CMD, '-|', $GPG, @gpg_arguments) || leave "$GPG: $!\n";
-    binmode CMD, ':encoding(UTF-8)';
+    binmode CMD, ':utf8';
     while (my $l = <CMD>)
     {
         if ($l =~ /^pub/)
