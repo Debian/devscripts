@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: devscripts 2.13.2\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
 "POT-Creation-Date: 2013-05-08 21:46-0400\n"
-"PO-Revision-Date: 2013-05-08 22:16-0400\n"
+"PO-Revision-Date: 2013-05-10 17:01-0100\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
 "Language: de\n"
@@ -9735,18 +9735,14 @@ msgstr ""
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><listitem><para>
 #: ../scripts/deb-reversion.dbk:149
-#, fuzzy
-#| msgid ""
-#| "Specifies the version number to be used as the old version instead of the "
-#| "version stored in the .deb's control file."
 msgid ""
 "Specifies the version number to be used as the old version instead of the "
 "version stored in the <filename>.deb</filename>'s <filename>control</"
 "filename> file."
 msgstr ""
-"gibt die Versionsnummer an, die als alte Version anstelle der in der "
-"Steuerdatei des <filename>.deb</filename>s gespeicherten Version verwendet "
-"werden soll."
+"gibt die Versionsnummer an, die als alte Version anstelle der in der Datei "
+"<filename>control</filename> des <filename>.deb</filename>s gespeicherten "
+"Version verwendet werden soll."
 
 #. type: Content of: <refentry><refsect1><variablelist><varlistentry><term>
 #: ../scripts/deb-reversion.dbk:157
@@ -19885,12 +19881,6 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:52
-#, fuzzy
-#| msgid ""
-#| "B<who-permits-upload> looks up the given Debian Maintainer (DM) upload "
-#| "permissions from Debian's ftpmaster and parses them in a human readable "
-#| "way. The tool can search by DM name, sponsor (the person granted the "
-#| "permission) and by package."
 msgid ""
 "B<who-permits-upload> looks up the given Debian Maintainer (DM) upload "
 "permissions from ftp-master.debian.org and parses them in a human readable "
@@ -19898,10 +19888,9 @@ msgid ""
 "permission) and by package."
 msgstr ""
 "B<who-permits-upload> schlägt die Rechte zum Hochladen des angegebenen "
-"Debian-Paketbetreuers von ftp-master.debian.org nach und wertet sie in einer "
-"für Menschen lesbaren Art aus. Das Werkzeug kann anhand von "
-"Paketbetreuername, Sponsor (die Person, die das Recht gewährt) oder Paket "
-"suchen."
+"Debian-Paketbetreuers von Debians Ftp-master nach und wertet sie in einer für "
+"Menschen lesbaren Art aus. Das Werkzeug kann anhand von Paketbetreuername, "
+"Sponsor (die Person, die das Recht gewährt) oder Paket suchen."
 
 #. type: =item
 #: ../scripts/who-permits-upload.pl:60
@@ -19957,17 +19946,12 @@ msgstr "B<--search=>I<Suchtyp>, B<-s> I<Suchtyp>"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:81
-#, fuzzy
-#| msgid ""
-#| "Modify the look-up behavior instead of using the default. This influences "
-#| "the interpretation of the I<query> argument. Supported search types are:"
 msgid ""
 "Modify the look-up behavior. This influences the interpretation of the "
 "I<query> argument. Supported search types are:"
 msgstr ""
-"ändert das Nachschlagverhalten statt die Voreinstellung zu verwenden. Dies "
-"beeinflusst die Interpretation des Arguments I<Abfrage>. Folgende Suchtypen "
-"werden unterstützt:"
+"ändert das Nachschlagverhalten. Dies beeinflusst die Interpretation des "
+"Arguments I<Abfrage>. Folgende Suchtypen werden unterstützt:"
 
 #. type: textblock
 #: ../scripts/who-permits-upload.pl:88
