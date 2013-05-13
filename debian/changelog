@@ -1,4 +1,4 @@
-devscripts (2.13.2) UNRELEASED; urgency=low
+devscripts (2.13.2) unstable; urgency=low
 
   [ Julian Gilbey ]
   * Correct git location in debian/copyright file (Closes: #703853)
@@ -25,6 +25,7 @@ devscripts (2.13.2) UNRELEASED; urgency=low
     + Fix spelling mistakes.
     + Fix handling of encoding.
   * Move debian/bug/* so dh_bugfiles handles installing them.
+  * Upload to unstable.
 
   [ Christoph Berg ]
   * dget: "--all pkg" will download all binaries for source package pkg.
@@ -43,7 +44,7 @@ devscripts (2.13.2) UNRELEASED; urgency=low
   * French, David Prévot.
   * German, Chris Leick.
 
- -- Julian Gilbey <jdg@debian.org>  Sun, 24 Mar 2013 22:27:57 +0000
+ -- James McCoy <jamessan@debian.org>  Sun, 12 May 2013 23:05:26 -0400
 
 devscripts (2.13.1) experimental; urgency=low
 
