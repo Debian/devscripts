@@ -1363,6 +1363,7 @@ sub bts_reassign {
     }
 
     foreach my $packagename (split /,/, $package) {
+	$packagename =~ s/^src://;
 	$ccpackages{$packagename} = 1;
     }
 }
