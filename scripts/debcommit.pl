@@ -244,7 +244,7 @@ my $signtags=0;
 my $changelog;
 my $changelog_info=0;
 my $keyid;
-my ($version, $date, $maintainer);
+my ($package, $version, $date, $maintainer);
 my $onlydebian=0;
 
 # Now start by reading configuration files and then command line
@@ -359,9 +359,10 @@ if ($release || $changelog_info) {
 	if ($log->{Distribution} =~ /UNRELEASED/) {
 	    die "debcommit: $changelog says it's UNRELEASED\nTry running dch --release first\n";
 	}
+	$package = $log->{Source};
 	$version = $log->{Version};
 
-	$message="releasing version $version" if ! defined $message;
+	$message="releasing package $package version $version" if ! defined $message;
     }
     if ($changelog_info) {
 	$maintainer = $log->{Maintainer};
@@ -377,7 +378,7 @@ if ($edit) {
 
 if (not $confirm or confirm($message)) {
     commit($message);
-    tag($version) if $release;
+    tag($package, $version) if $release;
 }
 
 # End of code, only subs below
@@ -601,7 +602,7 @@ sub commit {
 }
 
 sub tag {
-    my $tag=shift;
+    my ($package, $tag) = @_;
 
     if ($prog eq 'svn' || $prog eq 'svk') {
 	my $svnpath=`svnpath`;
@@ -610,11 +611,11 @@ sub tag {
 	chomp $tagpath;
 
 	if (! action($prog, "copy", $svnpath, "$tagpath/$tag",
-		     "-m", "tagging version $tag")) {
+		     "-m", "tagging package $package version $tag")) {
 	    if (! action($prog, "mkdir", $tagpath,
 			 "-m", "create tag directory") ||
 		! action($prog, "copy", $svnpath, "$tagpath/$tag",
-			 "-m", "tagging version $tag")) {
+			 "-m", "tagging package $package version $tag")) {
 		die "debcommit: failed tagging with $tag\n";
 	    }
 	}
@@ -663,13 +664,13 @@ sub tag {
 	if ($signtags) {
 		if (defined $keyid) {
 			if (! action($prog, "tag", "-u", $keyid, "-m",
-			             "tagging version $tag", $tag)) {
+			             "tagging package $package version $tag", $tag)) {
 	        		die "debcommit: failed tagging with $tag\n";
 			}
 		}
 		else {
 			if (! action($prog, "tag", "-s", "-m",
-			             "tagging version $tag", $tag)) {
+			             "tagging package $package version $tag", $tag)) {
 	        		die "debcommit: failed tagging with $tag\n";
 			}
 		}
@@ -681,7 +682,7 @@ sub tag {
     elsif ($prog eq 'hg') {
 	$tag=~s/^[0-9]+://; # strip epoch
 	$tag="debian-$tag";
-    	if (! action($prog, "tag", "-m", "tagging version $tag", $tag)) {
+	if (! action($prog, "tag", "-m", "tagging package $package version $tag", $tag)) {
 	        die "debcommit: failed tagging with $tag\n";
     	}
     }
