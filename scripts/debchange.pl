@@ -486,17 +486,22 @@ if (defined $opt_D) {
     if ($vendor eq 'Debian') {
 	unless ($opt_D =~ /^(experimental|unstable|UNRELEASED|((old)?stable|testing)(-proposed-updates|-security)?|proposed-updates)$/) {
 	    my $deb_info = get_debian_distro_info();
-	    my $stable_backports = "";
+	    my ($oldstable_backports, $stable_backports) = ("", "");
 	    if ($deb_info == 0) {
 		warn "$progname warning: Unable to determine Debian's backport distributions.\n";
 	    } else {
 		$stable_backports = $deb_info->stable() . "-backports";
+		# Silence any potential warnings $deb_info emits when oldstable is no longer supported
+		local $SIG{__WARN__} = sub {};
+		my $oldstable = $deb_info->old();
+		$oldstable_backports = "$oldstable-backports" if $oldstable;
 	    }
-	    if ($deb_info == 0 || not $opt_D eq $stable_backports) {
-		$stable_backports = ", " . $stable_backports if not $stable_backports eq "";
+	    if ($deb_info == 0 || $opt_D !~ m/^(\Q$stable_backports\E|\Q$oldstable_backports\E)$/) {
+		$stable_backports = ", " . $stable_backports if $stable_backports;
+		$oldstable_backports = ", " . $oldstable_backports if $oldstable_backports;
 		warn "$progname warning: Recognised distributions are: unstable, testing, stable,\n"
 		     . "oldstable, experimental, {testing-,stable-,oldstable-,}proposed-updates,\n"
-		     . "{testing,stable,oldstable}-security$stable_backports and UNRELEASED.\n"
+		     . "{testing,stable,oldstable}-security$oldstable_backports$stable_backports and UNRELEASED.\n"
 		     . "Using your request anyway.\n";
 		$warnings++ if not $opt_force_dist;
 	    }
