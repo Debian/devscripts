@@ -117,7 +117,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - dd-list: given a list of packages, pretty-print it ordered by maintainer
   - debc: display the contents of just-built .debs
   - debchange/dch: automagically add entries to debian/changelog files
-    [libparse-debcontrol-perl, libsoap-lite-perl]
+    [libdistro-info-perl, libparse-debcontrol-perl, libsoap-lite-perl]
   - debcheckout: checkout the development repository of a Debian package
   - debclean: clean a Debian source tree [fakeroot]
   - debcommit: commit changes to cvs, darcs, svn, svk, tla, bzr, git, or hg,
