@@ -11,6 +11,9 @@ devscripts (2.13.3) UNRELEASED; urgency=low
   * dpkg-buildpackage: Use "dpkg-checkbuilddeps -A" for arch-indep builds.
     Bump dpkg-dev Depends to 1.16.4 accordingly.
 
+  [ Chris Boot ]
+  * bts: Fix no-mutt option. (Closes: #709999)
+
  -- James McCoy <jamessan@debian.org>  Mon, 13 May 2013 22:43:59 -0400
 
 devscripts (2.13.2) unstable; urgency=low
