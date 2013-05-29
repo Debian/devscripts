@@ -4,6 +4,9 @@ devscripts (2.13.3) UNRELEASED; urgency=low
   * debcommit: Add the source package name to commit/tag messages.  (Closes:
     #704236)
 
+  [ Paul Wise ]
+  * In chdist bash completion, don't print warnings if ~/.chdist is missing
+
  -- James McCoy <jamessan@debian.org>  Mon, 13 May 2013 22:43:59 -0400
 
 devscripts (2.13.2) unstable; urgency=low
