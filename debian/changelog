@@ -7,6 +7,10 @@ devscripts (2.13.3) UNRELEASED; urgency=low
   [ Paul Wise ]
   * In chdist bash completion, don't print warnings if ~/.chdist is missing
 
+  [ James McCoy ]
+  * dpkg-buildpackage: Use "dpkg-checkbuilddeps -A" for arch-indep builds.
+    Bump dpkg-dev Depends to 1.16.4 accordingly.
+
  -- James McCoy <jamessan@debian.org>  Mon, 13 May 2013 22:43:59 -0400
 
 devscripts (2.13.2) unstable; urgency=low
