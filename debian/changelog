@@ -13,11 +13,14 @@ devscripts (2.13.3) UNRELEASED; urgency=low
 
   [ Chris Boot ]
   * bts: Fix no-mutt option. (Closes: #709999)
-  
+
   [ Daniel Kahn Gillmor ]
   * Enable OpenPGP signature verification (Closes: #610712)
 
- -- James McCoy <jamessan@debian.org>  Mon, 13 May 2013 22:43:59 -0400
+  [ Yaroslav Halchenko ]
+  * licensecheck: Check .go (Go) files (Closes: #711467)
+
+ -- Yaroslav Halchenko <debian@onerussian.com>  Thu, 06 Jun 2013 22:32:37 -0400
 
 devscripts (2.13.2) unstable; urgency=low
 
