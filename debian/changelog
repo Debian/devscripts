@@ -10,6 +10,7 @@ devscripts (2.13.3) UNRELEASED; urgency=low
   [ James McCoy ]
   * dpkg-buildpackage: Use "dpkg-checkbuilddeps -A" for arch-indep builds.
     Bump dpkg-dev Depends to 1.16.4 accordingly.
+  * Suppress "given/when is experimental" warnings when using Perl 5.18.
 
   [ Chris Boot ]
   * bts: Fix no-mutt option. (Closes: #709999)

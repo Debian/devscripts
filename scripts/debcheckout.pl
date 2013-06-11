@@ -231,9 +231,10 @@ B<debcheckout> and this manpage have been written by Stefano Zacchiroli
 
 =cut
 
-use feature 'switch';
 use strict;
 use warnings;
+no if $] >= 5.018, 'warnings', 'experimental::smartmatch';
+use feature 'switch';
 use Getopt::Long qw(:config gnu_getopt);
 use Pod::Usage;
 use File::Basename;
