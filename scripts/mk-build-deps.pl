@@ -253,6 +253,7 @@ while ($control = shift) {
 	my $args = '';
 	my $arch = 'all';
 	my ($build_deps, $build_dep, $build_indep);
+	my ($build_conflicts, $conflict_arch, $conflict_indep);
 
 	if (exists $ctrl->{'Build-Depends'}) {
 	    $build_dep = $ctrl->{'Build-Depends'};
@@ -264,6 +265,17 @@ while ($control = shift) {
 	    $build_indep =~ s/\n/ /g;
 	    $build_deps .= ', ' if $build_deps;
 	    $build_deps .= $build_indep;
+	}
+	if (exists $ctrl->{'Build-Conflicts'}) {
+	    $conflict_arch = $ctrl->{'Build-Conflicts'};
+	    $conflict_arch =~ s/\n/ /g;
+	    $build_conflicts = $conflict_arch;
+	}
+	if (exists $ctrl->{'Build-Conflicts-Indep'}) {
+	    $conflict_indep = $ctrl->{'Build-Conflicts-Indep'};
+	    $conflict_indep =~ s/\n/ /g;
+	    $build_conflicts .= ', ' if $build_conflicts;
+	    $build_conflicts .= $conflict_indep;
 	}
 
 	die "$progname: Unable to find build-deps for $ctrl->{$name}\n" unless $build_deps;
@@ -277,6 +289,7 @@ while ($control = shift) {
 	if (!($opt_dep || $opt_indep)) {
 	    push(@pkgInfo,
 		 { depends => $build_deps,
+		   conflicts => $build_conflicts,
 		   name => $ctrl->{$name},
 		   type => 'build-deps',
 		   version => $ctrl->{Version} });
@@ -285,6 +298,7 @@ while ($control = shift) {
 	if ($opt_dep) {
 	    push(@pkgInfo,
 		 { depends => $build_dep,
+		   conflicts => $conflict_arch,
 		   name => $ctrl->{$name},
 		   type => 'build-deps-depends',
 		   version => $ctrl->{Version} });
@@ -292,6 +306,7 @@ while ($control = shift) {
 	if ($opt_indep) {
 	    push(@pkgInfo,
 		 { depends => $build_indep,
+		   conflicts => $conflict_indep,
 		   name => $ctrl->{$name},
 		   type => 'build-deps-indep',
 		   version => $ctrl->{Version} });
@@ -373,6 +388,8 @@ sub build_equiv
     "Package: $opts->{name}-$opts->{type}\n".
     "Architecture: $arch\n".
     "Depends: build-essential, $opts->{depends}\n";
+
+    print EQUIVS "Conflicts: $opts->{conflicts}\n" if $opts->{conflicts};
 
     # Allow the file not to exist to ease testing
     print EQUIVS "Readme: $readme\n" if -r $readme;
