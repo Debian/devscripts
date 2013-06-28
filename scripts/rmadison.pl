@@ -54,6 +54,7 @@ my %url_map = (
     'debug' => "http://debug.debian.net/cgi-bin/madison.cgi",
     'ubuntu' => "http://people.canonical.com/~ubuntu-archive/madison.cgi",
     'udd' => 'http://qa.debian.org/cgi-bin/madison.cgi',
+    'new' => 'http://qa.debian.org/cgi-bin/madison.cgi?table=new',
 );
 my $default_url = 'debian';
 if (system('dpkg-vendor', '--is', 'ubuntu') == 0) {
@@ -270,6 +271,7 @@ use I<URL> for the query. Supported shorthands are
  B<debug> http://debug.debian.net/cgi-bin/madison.cgi
  B<ubuntu> http://people.canonical.com/~ubuntu-archive/madison.cgi
  B<udd> http://qa.debian.org/cgi-bin/madison.cgi
+ B<new> http://qa.debian.org/cgi-bin/madison.cgi?table=new
 
 See the B<RMADISON_URL_MAP_> variable below for a method to add
 new shorthands.
