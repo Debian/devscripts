@@ -14,6 +14,8 @@ devscripts (2.13.3) UNRELEASED; urgency=low
   * Suppress "given/when is experimental" warnings when using Perl 5.18.
   * mk-build-deps: Take Build-Conflicts(-Indep) into account.  (Closes:
     #712227)
+  * debcommit: Use "git status --porcelain" to check for a dirty working
+    directory.  (Closes: #712166)
 
   [ Chris Boot ]
   * bts: Fix no-mutt option. (Closes: #709999)
