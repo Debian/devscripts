@@ -694,6 +694,7 @@ sub process_watchline ($$$$$$)
     # Comma-separated list of features that sites being queried might
     # want to be aware of
     $headers->header('X-uscan-features' => 'enhanced-matching');
+    $headers->header('Accept' => '*/*');
     %dehs_tags = ('package' => $pkg);
 
     if ($watch_version == 1) {
@@ -1345,7 +1346,9 @@ EOF
 	# substitute HTML entities
 	# Is anything else than "&amp;" required?  I doubt it.
 	print STDERR "$progname debug: requesting URL $upstream_url\n" if $debug;
-	$request = HTTP::Request->new('GET', $upstream_url);
+	my $headers = HTTP::Headers->new;
+	$headers->header('Accept' => '*/*');
+	$request = HTTP::Request->new('GET', $upstream_url, $headers);
 	$response = $user_agent->request($request, "$destdir/$newfile_base");
 	if (! $response->is_success) {
 	    if (defined $pkg_dir) {

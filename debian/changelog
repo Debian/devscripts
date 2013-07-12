@@ -16,6 +16,8 @@ devscripts (2.13.3) UNRELEASED; urgency=low
     #712227)
   * debcommit: Use "git status --porcelain" to check for a dirty working
     directory.  (Closes: #712166)
+  * uscan: Add "Accept: */*" header to fix downloading from Alioth.  Thanks to
+    Dmitry Smirnov for the patch.  (Closes: #712261)
 
   [ Chris Boot ]
   * bts: Fix no-mutt option. (Closes: #709999)
