@@ -58,12 +58,12 @@ be involved in a transition.
 
 =over 4
 
-=item 0
+=item 0Z<>
 
 Either B<--help> or B<--version> was used, or none of the packages examined
 was involved in a transition.
 
-=item 1
+=item 1Z<>
 
 At least one package examined is involved in a current transition.
 

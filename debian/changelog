@@ -18,6 +18,8 @@ devscripts (2.13.3) UNRELEASED; urgency=low
     directory.  (Closes: #712166)
   * uscan: Add "Accept: */*" header to fix downloading from Alioth.  Thanks to
     Dmitry Smirnov for the patch.  (Closes: #712261)
+  * transition-check: Work around Pod::Simple change which causes Perl 5.18's
+    pod2man to fail.  (Closes: #714599)
 
   [ Chris Boot ]
   * bts: Fix no-mutt option. (Closes: #709999)
