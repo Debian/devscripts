@@ -65,7 +65,7 @@ $GETCOMMAND $WNPPTMP http://www.debian.org/devel/wnpp/requested || \
     { echo "${0##*/}: $CURLORWGET http://www.debian.org/devel/wnpp/requested failed." >&2; exit 1; }
 sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/RFP \1 \2 -- \3/; T d; p; : d' $WNPPTMP >> $WNPP
 
-awk -F' ' '{print $3" ("$1" - #"$2")"}' $WNPP | sort > $WNPP_PACKAGES
+awk -F' ' '{print "("$1" - #"$2") http://bugs.debian.org/"$2" "$3}' $WNPP | sort -k 5 > $WNPP_PACKAGES
 
 FOUND=0
 for pkg in $PACKAGES
