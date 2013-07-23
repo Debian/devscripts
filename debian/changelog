@@ -20,6 +20,7 @@ devscripts (2.13.3) UNRELEASED; urgency=low
     Dmitry Smirnov for the patch.  (Closes: #712261)
   * transition-check: Work around Pod::Simple change which causes Perl 5.18's
     pod2man to fail.  (Closes: #714599)
+  * licensecheck: Check haskell files.  Thanks to Jens Petersen for the patch.
 
   [ Chris Boot ]
   * bts: Fix no-mutt option. (Closes: #709999)
