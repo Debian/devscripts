@@ -160,7 +160,7 @@ my $default_ignore_regex = '
 $default_ignore_regex =~ s/^#.*$//mg;
 $default_ignore_regex =~ s/\n//sg;
 
-my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|f(77|90)?|go|p(l|m)|xs|sh|php|py(|x)|rb|java|vala|el|sc(i|e)|cs|pas|inc|dtd|xsl|mod|m|tex|mli?)$';
+my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|f(77|90)?|go|p(l|m)|xs|sh|php|py(|x)|rb|java|vala|el|sc(i|e)|cs|pas|inc|dtd|xsl|mod|m|tex|mli?|(c|l)?hs)$';
 
 my $modified_conf_msg;
 
