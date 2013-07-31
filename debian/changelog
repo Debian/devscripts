@@ -21,6 +21,8 @@ devscripts (2.13.3) UNRELEASED; urgency=low
   * transition-check: Work around Pod::Simple change which causes Perl 5.18's
     pod2man to fail.  (Closes: #714599)
   * licensecheck: Check haskell files.  Thanks to Jens Petersen for the patch.
+  * uscan/rc-alert: Fix roff errors in man pages.  Thanks to Eric S. Raymond
+    for the patch.  (Closes: #712701)
 
   [ Chris Boot ]
   * bts: Fix no-mutt option. (Closes: #709999)
