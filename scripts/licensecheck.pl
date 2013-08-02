@@ -359,8 +359,7 @@ sub clean_comments {
     # if no such pattern found.
     my @matches = m/^\s*([^a-zA-Z0-9\s]{1,3})\s\w/mg;
     if (@matches >= 4) {
-	my $comment_length = length($matches[0]);
-	my $comment_re = qr/\s*[\Q$matches[0]\E]{${comment_length}}\s*/;
+	my $comment_re = qr/\s*[\Q$matches[0]\E]{1,3}\s*/;
 	s/^$comment_re//mg;
     }
 
