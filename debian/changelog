@@ -26,6 +26,7 @@ devscripts (2.13.3) UNRELEASED; urgency=low
       (Closes: #714835)
   * uscan/rc-alert: Fix roff errors in man pages.  Thanks to Eric S. Raymond
     for the patch.  (Closes: #712701)
+  * dscverify: Use ~/.gnupg/trustedkeys.gpg, if available.  (Closes: #600048)
 
   [ Chris Boot ]
   * bts: Fix no-mutt option. (Closes: #709999)
