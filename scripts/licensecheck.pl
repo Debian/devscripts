@@ -329,9 +329,16 @@ sub parse_copyright {
 	)';
     my $copyright_disindicator_regex = '
 	\b(?:info(?:rmation)?	# Discussing copyright information
-	|notice			# Discussing the notice
-	|and|or                 # Part of a sentence
+	|(notice|statement|claim|string)s?	# Discussing the notice
+	|and|or|is|in|to        # Part of a sentence
+	|(holder|owner)s?       # Part of a sentence
+	|ownership              # Part of a sentence
 	)\b';
+    my $copyright_predisindicator_regex = '(
+    ^[#]define\s+.*\(c\)    # #define foo(c) -- not copyright
+	)';
+
+    if ( ! m%$copyright_predisindicator_regex%ix) {
 
     if (m%$copyright_indicator_regex(?::\s*|\s+)(\S.*)$%ix) {
 	$match = $1;
@@ -346,6 +353,7 @@ sub parse_copyright {
 	    $match =~ s/\\@/@/g;
 	    $copyright = $match;
 	}
+    }
     }
 
     return $copyright;
@@ -488,7 +496,7 @@ sub parselicense {
     if ($licensetext =~ /THIS SOFTWARE IS PROVIDED .*AS IS AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY/) {
 	if ($licensetext =~ /All advertising materials mentioning features or use of this software must display the following acknowledge?ment.*This product includes software developed by/i) {
 	    $license = "BSD (4 clause) $license";
-	} elsif ($licensetext =~ /(The name .*? may not|Neither the names? .*? nor the names of (its|their|other) contributors may) be used to endorse or promote products derived from this software/i) {
+	} elsif ($licensetext =~ /(The name .*? may not|Neither the (names? .*?|authors?) nor the names of( (its|their|other|any))? contributors may) be used to endorse or promote products derived from this software/i) {
 	    $license = "BSD (3 clause) $license";
 	} elsif ($licensetext =~ /Redistributions of source code must retain the above copyright notice/i) {
 	    $license = "BSD (2 clause) $license";

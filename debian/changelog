@@ -43,6 +43,18 @@ devscripts (2.13.3) UNRELEASED; urgency=low
   * uscan: properly cope with colons and minus signs in upstream versions.
     (Closes: #658999)
 
+  [ Phillip Hands ]
+  * licensecheck:
+    + allow plural: copyright notices
+    + ignore "copyright holders"
+    + alternative BSD-3 wording "authors" and "_any_ contributors"
+    + ignore #defines containing (c)
+    + fix "copyright ownership"
+    + ignore "copyright statement"
+    + ignore "copyright string"
+    + ignore coyright (claim|is|in), and fix test
+    + ignore "copyright to"
+
  -- Yaroslav Halchenko <debian@onerussian.com>  Thu, 06 Jun 2013 22:32:37 -0400
 
 devscripts (2.13.2) unstable; urgency=low
