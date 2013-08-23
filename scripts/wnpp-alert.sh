@@ -59,7 +59,7 @@ if command -v wget >/dev/null 2>&1; then
     GETCOMMAND="wget -q -O"
 elif command -v curl >/dev/null 2>&1; then
     CURLORWGET="curl"
-    GETCOMMAND="curl -qs -o"
+    GETCOMMAND="curl -qfs -o"
 else
     echo "$PROGNAME: need either the wget or curl package installed to run this" >&2
     exit 1

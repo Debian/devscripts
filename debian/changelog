@@ -1,6 +1,7 @@
 devscripts (2.13.4) UNRELEASED; urgency=low
 
   * Document which scripts use libdistro-info-perl.  (Closes: #708311)
+  * Make curl return a proper exit code for HTTP errors.  (Closes: #720508)
 
  -- James McCoy <jamessan@debian.org>  Sun, 18 Aug 2013 07:17:51 -0400
 
