@@ -283,6 +283,17 @@ while ($control = shift) {
 	if (exists $ctrl->{Version}) {
 	    push(@versions, $ctrl->{Version});
 	}
+	elsif ($name eq 'Source') {
+	    (my $changelog = $control) =~ s@control$@changelog@;
+	    if (-f $changelog) {
+		require Dpkg::Changelog::Parse;
+		my $log = Dpkg::Changelog::Parse::changelog_parse(file => $changelog);
+		if ($ctrl->{$name} eq $log->{$name}) {
+		    $ctrl->{Version} = $log->{Version};
+		    push(@versions, $log->{Version});
+		}
+	    }
+	}
 
 	# Only build a package with both B-D and B-D-I in Depends if the
 	# B-D/B-D-I specific packages weren't requested
