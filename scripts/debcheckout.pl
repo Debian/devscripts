@@ -217,6 +217,12 @@ This variable determines under what scenarios the associated orig.tar.gz for a
 package will be downloaded.  See the B<--source> option for a description of
 the values.
 
+=item B<DEBCHECKOUT_USER>
+
+This variable sets the username for authenticated mode. It can be overridden
+with the B<--user> option. Setting this variable does not imply the use of
+authenticated mode, it still has to be activated with B<--auth>.
+
 =back
 
 =head1 SEE ALSO
@@ -254,6 +260,7 @@ my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
 my %config_vars = (
     'DEBCHECKOUT_AUTH_URLS' => '',
     'DEBCHECKOUT_SOURCE' => 'auto',
+    'DEBCHECKOUT_USER' => '',
     );
 my %config_default = %config_vars;
 my $shell_cmd;
@@ -1008,6 +1015,9 @@ sub main() {
 
     # -u|--user implies -a|--auth
     $auth = 1 if length $user;
+
+    # set user from the config file to be used with -a|--auth without -u|--user
+    $user = $config_vars{DEBCHECKOUT_USER} unless $user;
 
     $destdir = $ARGV[1] if $#ARGV > 0;
     ($pkg, $version) = split(/=/, $ARGV[0]);

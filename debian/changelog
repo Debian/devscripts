@@ -1,7 +1,12 @@
 devscripts (2.13.5) UNRELEASED; urgency=low
 
+  [ James McCoy ]
   * namecheck: Fix “406 Not Acceptable” error when querying Alioth.  (Closes:
     #725228)
+
+  [ Evgeni Golov ]
+  * debcheckout: allow setting the user for auth mode in the config.  (Closes:
+    #722171)
 
  -- James McCoy <jamessan@debian.org>  Mon, 07 Oct 2013 22:21:31 -0400
 
