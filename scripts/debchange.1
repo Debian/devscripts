@@ -149,8 +149,8 @@ Add a new changelog entry at the end of the current version's entries.
 .TP
 .BR \-\-increment ", " \-i
 Increment either the final component of the Debian release number or,
-if this is a native Debian package, the version number.  On Ubuntu,
-this will also change the suffix from buildX to ubuntu1.  Use
+if this is a native Debian package, the version number.  On Ubuntu or Tanglu,
+this will also change the suffix from buildX to ubuntu1/tanglu1.  Use
 \fB\-R\fR, \fB\-\-rebuild\fR for a no change rebuild increment.  This creates
 a new section at the beginning of the changelog with appropriate
 headers and footers.  Also, if this is a new version of a native
@@ -235,7 +235,7 @@ Increment the Debian release number for a Debian QA Team upload, and
 add a \fBQA upload\fR changelog comment.
 .TP
 .BR \-\-rebuild ", " \-R
-Increment the Debian release number for an Ubuntu no-change rebuild by
+Increment the Debian release number for a no-change rebuild by
 appending a "build1" or by incrementing a rebuild version number.
 .TP
 .BR \-\-security ", " \-s
