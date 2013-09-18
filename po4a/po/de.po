@@ -12876,16 +12876,12 @@ msgstr "I<uscan>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:139
-#, fuzzy
-#| msgid ""
-#| "scan upstream sites for new releases of packages [libcrypt-ssleay-perl, "
-#| "libwww-perl, unzip, lzma, xz-utils]"
 msgid ""
 "scan upstream sites for new releases of packages [libcrypt-ssleay-perl, "
 "gpgv, libwww-perl, unzip, lzma, xz-utils]"
 msgstr ""
 "durchucht Seiten der Originalautoren auf neue Veröffentlichungen von "
-"Paketen. [libcrypt-ssleay-perl, libwww-perl, unzip, lzma, xz-utils]"
+"Paketen. [libcrypt-ssleay-perl, gpgv, libwww-perl, unzip, lzma, xz-utils]"
 
 #. type: IP
 #: ../scripts/devscripts.1:139
@@ -14347,7 +14343,7 @@ msgstr ""
 #. type: Plain text
 #: ../scripts/dscverify.1:69
 msgid "- ~/.gnupg/trustedkeys.gpg"
-msgstr ""
+msgstr "- ~/.gnupg/trustedkeys.gpg"
 
 #. type: Plain text
 #: ../scripts/dscverify.1:71
@@ -16485,16 +16481,12 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/rc-alert.1:6
-#, fuzzy
-#| msgid ""
-#| "B<rc-alert> [I<inclusion options>] [B<--debtags> [I<tag>[B<,>I<tag> ...]] "
-#| "[B<--popcon>] [I<package> ...]"
 msgid ""
 "B<rc-alert> [I<inclusion options>] [B<--debtags> [I<tag>[B<,>I<tag> ...]]] "
 "[B<--popcon>] [I<package> ...]"
 msgstr ""
 "B<rc-alert> [I<Aufnahmeoptionen>] [B<--debtags> [I<Markierung>[B<,"
-">I<Markierung> …]] [B<--popcon>] [I<Paket> …]"
+">I<Markierung> …]]] [B<--popcon>] [I<Paket> …]"
 
 #. type: Plain text
 #: ../scripts/rc-alert.1:8
@@ -17008,15 +17000,7 @@ msgstr "B<-u>, B<--url=>I<URL>[B<,>I<URL> …]"
 
 #. type: verbatim
 #: ../scripts/rmadison.pl:266
-#, fuzzy, no-wrap
-#| msgid ""
-#| "use I<URL> for the query. Supported shorthands are\n"
-#| " B<debian> or B<qa> http://qa.debian.org/madison.php\n"
-#| " B<bpo> http://backports.debian.org/cgi-bin/madison.cgi\n"
-#| " B<debug> http://debug.debian.net/cgi-bin/madison.cgi\n"
-#| " B<ubuntu> http://people.canonical.com/~ubuntu-archive/madison.cgi\n"
-#| " B<udd> http://qa.debian.org/cgi-bin/madison.cgi\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "use I<URL> for the query. Supported shorthands are\n"
 " B<debian> or B<qa> http://qa.debian.org/madison.php\n"
@@ -17033,6 +17017,7 @@ msgstr ""
 " B<debug> http://debug.debian.net/cgi-bin/madison.cgi\n"
 " B<ubuntu> http://people.canonical.com/~ubuntu-archive/madison.cgi\n"
 " B<udd> http://qa.debian.org/cgi-bin/madison.cgi\n"
+" B<new> http://qa.debian.org/cgi-bin/madison.cgi?table=new\n"
 "\n"
 
 #. type: textblock
@@ -17884,17 +17869,14 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/uscan.1:73
-#, fuzzy, no-wrap
-#| msgid ""
-#| "# For maximum flexibility with upstream tarball formats, use this:\n"
-#| "http://example.com/example-(\\d[\\d.]*)\\e.(?:zip|tgz|tbz2|txz|tar\\e.(?:gz|bz2|xz))\n"
+#, no-wrap
 msgid ""
 "# For maximum flexibility with upstream tarball formats, use this:\n"
 "http://example.com/example-(\\ed[\\ed.]*)\\e.(?:zip|tgz|tbz2|txz|tar\\e.(?:gz|bz2|xz))\n"
 msgstr ""
 "# Um bei Tarballs der Ursprungsautoren maximale Flexibilität zu erreichen,\n"
 "# nutzen Sie dies:\n"
-"http://example.com/example-(\\d[\\d.]*)\\e.(?:zip|tgz|tbz2|txz|tar\\e.(?:gz|bz2|xz))\n"
+"http://example.com/example-(\\ed[\\ed.]*)\\e.(?:zip|tgz|tbz2|txz|tar\\e.(?:gz|bz2|xz))\n"
 
 #. type: Plain text
 #: ../scripts/uscan.1:78
@@ -18443,10 +18425,9 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/uscan.1:285
-#, fuzzy, no-wrap
-#| msgid "B<versionmangle=>I<rules>"
+#, no-wrap
 msgid "B<pgpsigurlmangle=>I<rules>"
-msgstr "B<versionmangle=>I<Regeln>"
+msgstr "B<pgpsigurlmangle=>I<Regeln>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:295
