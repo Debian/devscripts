@@ -116,15 +116,15 @@ This argument can be repeated.
 
 =over 4
 
-=item 0
+=item 0Z<>
 
 Success
 
-=item 1
+=item 1Z<>
 
 An error occurred
 
-=item 2
+=item 2Z<>
 
 The command line was not understood
 
