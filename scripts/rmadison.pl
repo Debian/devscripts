@@ -200,8 +200,6 @@ exit $status;
 
 __END__
 
-=pod
-
 =head1 NAME
 
 rmadison -- Remotely query the Debian archive database about packages

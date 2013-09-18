@@ -502,8 +502,6 @@ for my $arg (@ARGV) {
     }
 }
 
-=pod
-
 =head1 NAME
 
 dget -- Download Debian source and binary packages
