@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2013-09-18 12:02-0400\n"
-"PO-Revision-Date: 2013-05-08 21:55-0400\n"
+"PO-Revision-Date: 2013-09-18 12:17-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.4\n"
+"X-Generator: Lokalize 1.5\n"
 
 #. type: TH
 #: ../scripts/annotate-output.1:1
@@ -6417,18 +6417,6 @@ msgstr "B<--increment>, B<-i>"
 # NOTE: signature
 #. type: Plain text
 #: ../scripts/debchange.1:162
-#, fuzzy
-#| msgid ""
-#| "Increment either the final component of the Debian release number or, if "
-#| "this is a native Debian package, the version number.  On Ubuntu, this "
-#| "will also change the suffix from buildX to ubuntu1.  Use B<-R>, B<--"
-#| "rebuild> for a no change rebuild increment.  This creates a new section "
-#| "at the beginning of the changelog with appropriate headers and footers.  "
-#| "Also, if this is a new version of a native Debian package, the directory "
-#| "name is changed to reflect this.  If B<DEBCHANGE_RELEASE_HEURISTIC> is "
-#| "I<changelog> (default) and the current release is I<UNRELEASED>, this "
-#| "will only change the version of the current changelog stanza.  Otherwise, "
-#| "this will create a new changelog stanza with the new version."
 msgid ""
 "Increment either the final component of the Debian release number or, if "
 "this is a native Debian package, the version number.  On Ubuntu or Tanglu, "
@@ -6442,16 +6430,16 @@ msgid ""
 "will create a new changelog stanza with the new version."
 msgstr ""
 "Incrémenter le numéro de version Debian ou, dans le cas d'un paquet Debian "
-"natif, le numéro de version. Sur Ubuntu, cela modifiera aussi le suffixe "
-"buildX en ubuntu1. Utiliser B<-R>, B<--rebuild> pour un incrément de "
-"reconstruction sans modification. Cela crée une nouvelle section au début du "
-"journal de modifications avec le bon en-tête et la signature. De plus, dans "
-"le cas d'une nouvelle version d'un paquet natif Debian, le nom du répertoire "
-"est modifié de manière à refléter ce changement de version. Si "
-"B<DEBCHANGE_RELEASE_HEURISTIC> est I<changelog> (par défaut) et que la "
-"version actuelle est I<UNRELEASED>, cela ne modifiera que la version du "
-"paragraphe actuel du journal de modifications. Sinon, cela créera un nouveau "
-"paragraphe du journal de modifications avec la nouvelle version."
+"natif, le numéro de version. Sur Ubuntu ou Tanglu, cela modifiera aussi le "
+"suffixe buildX en ubuntu1 ou tanglu1. Utiliser B<-R>, B<--rebuild> pour un "
+"incrément de reconstruction sans modification. Cela crée une nouvelle "
+"section au début du journal de modifications avec le bon en-tête et la "
+"signature. De plus, dans le cas d'une nouvelle version d'un paquet natif "
+"Debian, le nom du répertoire est modifié de manière à refléter ce changement "
+"de version. Si B<DEBCHANGE_RELEASE_HEURISTIC> est I<changelog> (par défaut) "
+"et que la version actuelle est I<UNRELEASED>, cela ne modifiera que la "
+"version du paragraphe actuel du journal de modifications. Sinon, cela créera "
+"un nouveau paragraphe du journal de modifications avec la nouvelle version."
 
 #. type: TP
 #: ../scripts/debchange.1:162
@@ -6675,16 +6663,12 @@ msgstr "B<--rebuild>, B<-R>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:240
-#, fuzzy
-#| msgid ""
-#| "Increment the Debian release number for an Ubuntu no-change rebuild by "
-#| "appending a \"build1\" or by incrementing a rebuild version number."
 msgid ""
 "Increment the Debian release number for a no-change rebuild by appending a "
 "\"build1\" or by incrementing a rebuild version number."
 msgstr ""
 "Incrémente le numéro de version Debian pour une reconstruction sans "
-"modification Ubuntu en ajoutant « build1 » ou en incrémentant un numéro de "
+"modification en ajoutant « build1 » ou en incrémentant un numéro de "
 "reconstruction."
 
 #. type: TP
@@ -12884,16 +12868,12 @@ msgstr "B<uscan>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:139
-#, fuzzy
-#| msgid ""
-#| "scan upstream sites for new releases of packages [libcrypt-ssleay-perl, "
-#| "libwww-perl, unzip, lzma, xz-utils]"
 msgid ""
 "scan upstream sites for new releases of packages [libcrypt-ssleay-perl, "
 "gpgv, libwww-perl, unzip, lzma, xz-utils]"
 msgstr ""
 "surveiller la disponibilité d'une nouvelle version amont [libcrypt-ssleay-"
-"perl, libwww-perl, unzip, lzma, xz-utils]"
+"perl, gpgv, libwww-perl, unzip, lzma, xz-utils]"
 
 #. type: IP
 #: ../scripts/devscripts.1:139
@@ -14358,7 +14338,7 @@ msgstr ""
 #. type: Plain text
 #: ../scripts/dscverify.1:69
 msgid "- ~/.gnupg/trustedkeys.gpg"
-msgstr ""
+msgstr "- ~/.gnupg/trustedkeys.gpg"
 
 #. type: Plain text
 #: ../scripts/dscverify.1:71
@@ -16505,16 +16485,12 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/rc-alert.1:6
-#, fuzzy
-#| msgid ""
-#| "B<rc-alert> [I<inclusion options>] [B<--debtags> [I<tag>[B<,>I<tag> ...]] "
-#| "[B<--popcon>] [I<package> ...]"
 msgid ""
 "B<rc-alert> [I<inclusion options>] [B<--debtags> [I<tag>[B<,>I<tag> ...]]] "
 "[B<--popcon>] [I<package> ...]"
 msgstr ""
 "B<rc-alert> [I<options d'inclusion>] [B<--debtags> [I<étiquette>[B<,"
-">I<étiquette> ...]] [B<--popcon>] [I<paquet> ...]"
+">I<étiquette> ...]]] [B<--popcon>] [I<paquet> ...]"
 
 #. type: Plain text
 #: ../scripts/rc-alert.1:8
@@ -17031,15 +17007,7 @@ msgstr "B<-u>, B<--url=>I<URL>[B<,>I<URL> ...]"
 
 #. type: verbatim
 #: ../scripts/rmadison.pl:266
-#, fuzzy, no-wrap
-#| msgid ""
-#| "use I<URL> for the query. Supported shorthands are\n"
-#| " B<debian> or B<qa> http://qa.debian.org/madison.php\n"
-#| " B<bpo> http://backports.debian.org/cgi-bin/madison.cgi\n"
-#| " B<debug> http://debug.debian.net/cgi-bin/madison.cgi\n"
-#| " B<ubuntu> http://people.canonical.com/~ubuntu-archive/madison.cgi\n"
-#| " B<udd> http://qa.debian.org/cgi-bin/madison.cgi\n"
-#| "\n"
+#, no-wrap
 msgid ""
 "use I<URL> for the query. Supported shorthands are\n"
 " B<debian> or B<qa> http://qa.debian.org/madison.php\n"
@@ -17056,6 +17024,7 @@ msgstr ""
 " B<debug> http://debug.debian.net/cgi-bin/madison.cgi\n"
 " B<ubuntu> http://people.ubuntu.com/~ubuntu-archive/madison.cgi\n"
 " B<udd> http://qa.debian.org/cgi-bin/madison.cgi\n"
+" B<new> http://qa.debian.org/cgi-bin/madison.cgi?table=new\n"
 "\n"
 
 #. type: textblock
@@ -17899,16 +17868,13 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/uscan.1:73
-#, fuzzy, no-wrap
-#| msgid ""
-#| "# For maximum flexibility with upstream tarball formats, use this:\n"
-#| "http://example.com/example-(\\d[\\d.]*)\\e.(?:zip|tgz|tbz2|txz|tar\\e.(?:gz|bz2|xz))\n"
+#, no-wrap
 msgid ""
 "# For maximum flexibility with upstream tarball formats, use this:\n"
 "http://example.com/example-(\\ed[\\ed.]*)\\e.(?:zip|tgz|tbz2|txz|tar\\e.(?:gz|bz2|xz))\n"
 msgstr ""
 "# Pour une flexibilité maximale avec les formats d'archive amont :\n"
-"http://example.com/example-(\\d[\\d.]*)\\e.(?:zip|tgz|tbz2|txz|tar\\e.(?:gz|bz2|xz))\n"
+"http://example.com/example-(\\ed[\\ed.]*)\\e.(?:zip|tgz|tbz2|txz|tar\\e.(?:gz|bz2|xz))\n"
 
 #. type: Plain text
 #: ../scripts/uscan.1:78
@@ -18451,10 +18417,9 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/uscan.1:285
-#, fuzzy, no-wrap
-#| msgid "B<versionmangle=>I<rules>"
+#, no-wrap
 msgid "B<pgpsigurlmangle=>I<rules>"
-msgstr "B<versionmangle=>I<règles>"
+msgstr "B<pgpsigurlmangle=>I<règles>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:295
@@ -18467,6 +18432,14 @@ msgid ""
 "upstream-signing-key.pgp>.  If it is not valid, or not made by one of the "
 "listed keys, uscan will report an error."
 msgstr ""
+"En cas de présence, les règles fournie seront appliquée à l’URL téléchargée "
+"(après les règles downloadurlmangle s’il y en a) pour préparer une nouvelle "
+"URL qui sera utilisée pour récupérer le fichier de signature OpenPGP "
+"détachée pour l’archive amont. Certaines règles habituelles pourraient être "
+"« B<s/$/.asc/>, « B<s/$/.pgp/> 3 ou « B<s/$/.gpg/> ». Cette signature doit "
+"être réalisée avec une clef du trousseau B<debian/upstream-signing-key.pgp>. "
+"Si elle n’est pas valable, ou que la clef ne fait pas partie du trousseau, "
+"uscan signalera une erreur."
 
 # NOTE: "and in order to promote efficiency" ?
 #. type: Plain text
