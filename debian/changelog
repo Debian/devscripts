@@ -5,6 +5,9 @@ devscripts (2.13.4) UNRELEASED; urgency=low
   * Make curl return a proper exit code for HTTP errors.  (Closes: #720508)
   * mk-build-deps: Define the deb's version when parsing a debian/control
     file.  (Closes: #721939)
+  * checkbashisms: Sort the keys of the bashisms hashes to provide
+    consistently ordered output.  This avoids false positive failures in the
+    test suite.
 
   [ Charles Pigott ]
   * Fix POD issues.  (LP: #1226318, Closes: #719828)
