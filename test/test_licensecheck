@@ -41,6 +41,7 @@ testBeerware() {
 
 testBSD() {
     license "bsd-3-clause.cpp" "BSD (3 clause)"
+    license "bsd-3-clause-authorsany.c" "BSD (3 clause)"
 }
 
 testLGPL() {
@@ -62,6 +63,7 @@ testGPL() {
     license "gpl-3+" "GPL (v3 or later)"
     license "gpl-3-only.c" "GPL (v3)"
     license "gpl-variation.c" "GPL (v3 or later)"
+    license "gpl-3+.el" "GPL (v3 or later)"
 }
 
 testDual() {
@@ -87,6 +89,14 @@ testFortranComments() {
 testCommentsDetection() {
     license "comments-detection.h" "GPL (v3 or later)"
     license "comments-detection.txt" "*No copyright* LGPL (v2.1 or later)"
+}
+
+testFalsePositives() {
+    license2 "-m --copyright" "false-positives" "Public domain	2013 Devscripts developers"
+}
+
+testRegexpKiller() {
+    license "regexp-killer.c" "UNKNOWN"
 }
 
 . shunit2

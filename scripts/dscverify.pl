@@ -99,9 +99,12 @@ sub xdie {
 
 sub get_rings {
     my @rings = @_;
-    my @keyrings = qw(/org/keyring.debian.org/keyrings/debian-keyring.gpg
-	    /usr/share/keyrings/debian-keyring.gpg
+    my @keyrings = qw(/usr/share/keyrings/debian-keyring.gpg
 	    /usr/share/keyrings/debian-maintainers.gpg);
+    if (defined $ENV{HOME} && -r "$ENV{HOME}/.gnupg/trustedkeys.gpg") {
+	unshift(@keyrings, "$ENV{HOME}/.gnupg/trustedkeys.gpg");
+    }
+    unshift(@keyrings, '/org/keyring.debian.org/keyrings/debian-keyring.gpg');
     if (system('dpkg-vendor', '--derives-from', 'Ubuntu') == 0) {
         unshift(@keyrings, qw(/usr/share/keyrings/ubuntu-master-keyring.gpg
 			      /usr/share/keyrings/ubuntu-archive-keyring.gpg));

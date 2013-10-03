@@ -1,4 +1,5 @@
 #! /usr/bin/perl -w
+# -*- tab-width: 8; indent-tabs-mode: t; cperl-indent-level: 4 -*-
 
 # uscan: This program looks for watchfiles and checks upstream ftp sites
 # for later versions of the software.
@@ -56,6 +57,7 @@ eval { require Crypt::SSLeay; };
 if ($@) {
     $haveSSL = 0;
 }
+my $havegpgv = (-x '/usr/bin/gpgv');
 
 # Did we find any new upstream versions on our wanderings?
 our $found = 0;
@@ -692,6 +694,7 @@ sub process_watchline ($$$$$$)
     # Comma-separated list of features that sites being queried might
     # want to be aware of
     $headers->header('X-uscan-features' => 'enhanced-matching');
+    $headers->header('Accept' => '*/*');
     %dehs_tags = ('package' => $pkg);
 
     if ($watch_version == 1) {
@@ -761,6 +764,9 @@ sub process_watchline ($$$$$$)
 		elsif ($opt =~ /^downloadurlmangle\s*=\s*(.+)/) {
 		    @{$options{'downloadurlmangle'}} = split /;/, $1;
 		}
+		elsif ($opt =~ /^pgpsigurlmangle\s*=\s*(.+)/) {
+		    @{$options{'pgpsigurlmangle'}} = split /;/, $1;
+		}
 		else {
 		    uscan_warn "$progname warning: unrecognised option $opt\n";
 		}
@@ -791,6 +797,17 @@ sub process_watchline ($$$$$$)
 	# Check validity of options
 	if ($base =~ /^ftp:/ and exists $options{'downloadurlmangle'}) {
 	    uscan_warn "$progname warning: downloadurlmangle option invalid for ftp sites,\n  ignoring in $watchfile:\n  $line\n";
+	}
+
+	# Check validity of options
+	if (exists $options{'pgpsigurlmangle'}) {
+	    if (not (-r 'debian/upstream-signing-key.pgp')) {
+		uscan_warn "$progname warning: pgpsigurlmangle option exists, but debian/upstream-signing-key.pgp does not exist,\n  ignoring in $watchfile:\n  $line\n";
+		delete $options{'pgpsigurlmangle'};
+	    } elsif (! $havegpgv) {
+		uscan_warn "$progname warning: pgpsignurlmangle option exists, but you must have gpgv installed to verify\n  in $watchfile, skipping:\n  $line\n";
+		return 1;
+	    }
 	}
 
 	# Handle sf.net addresses specially
@@ -855,7 +872,7 @@ sub process_watchline ($$$$$$)
 
     # What is the most recent file, based on the filenames?
     # We first have to find the candidates, then we sort them using
-    # Devscripts::Versort::versort
+    # Devscripts::Versort::upstream_versort
     if ($site =~ m%^http(s)?://%) {
 	if (defined($1) and !$haveSSL) {
 	    uscan_die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n";
@@ -971,7 +988,7 @@ sub process_watchline ($$$$$$)
 		    return 1;
 		}
 	    } else {
-		@hrefs = Devscripts::Versort::versort(@hrefs);
+		@hrefs = Devscripts::Versort::upstream_versort(@hrefs);
 		($newversion, $newfile) = @{$hrefs[0]};
 	    }
 	} else {
@@ -1068,7 +1085,7 @@ sub process_watchline ($$$$$$)
 		    return 1;
 		}
 	    } else {
-		@files = Devscripts::Versort::versort(@files);
+		@files = Devscripts::Versort::upstream_versort(@files);
 		($newversion, $newfile) = @{$files[0]};
 	    }
 	} else {
@@ -1123,6 +1140,7 @@ EOF
 
     # So what have we got to report now?
     my $upstream_url;
+    my $pgpsig_url;
     # Upstream URL?  Copying code from below - ugh.
     if ($site =~ m%^https?://%) {
 	# absolute URL?
@@ -1202,6 +1220,20 @@ EOF
 	$upstream_url = "$base$newfile";
     }
 
+    if (exists $options{'pgpsigurlmangle'}) {
+	$pgpsig_url = $upstream_url;
+	foreach my $pat (@{$options{'pgpsigurlmangle'}}) {
+	    if (! safe_replace(\$pgpsig_url, $pat)) {
+		uscan_warn "$progname: In $watchfile, potentially"
+		  . " unsafe or malformed pgpsigurlmangle"
+		  . " pattern:\n  '$pat'"
+		  . " found. Skipping watchline\n"
+		  . "  $line\n";
+		return 1;
+	    }
+	}
+    }
+
     $dehs_tags{'debian-uversion'} = $lastversion;
     $dehs_tags{'debian-mangled-uversion'} = $mangled_lastversion;
     $dehs_tags{'upstream-version'} = $newversion;
@@ -1209,7 +1241,7 @@ EOF
 
     # Can't just use $lastversion eq $newversion, as then 0.01 and 0.1
     # compare different, whereas they are treated as equal by dpkg
-    if (system("dpkg", "--compare-versions", "$mangled_lastversion", "eq", "$newversion") == 0) {
+    if (system("dpkg", "--compare-versions", "1:${mangled_lastversion}-0", "eq", "1:${newversion}-0") == 0) {
 	if ($verbose or ($download == 0 and $report and ! $dehs)) {
 	    print $pkg_report_header;
 	    $pkg_report_header = '';
@@ -1236,7 +1268,7 @@ EOF
     # We use dpkg's rules to determine whether our current version
     # is newer or older than the remote version.
     if (!defined $download_version) {
-	if (system("dpkg", "--compare-versions", "$mangled_lastversion", "gt", "$newversion") == 0) {
+	if (system("dpkg", "--compare-versions", "1:${mangled_lastversion}-0", "gt", "1:${newversion}-0") == 0) {
 	    if ($verbose) {
 		print " => remote site does not even have current version\n";
 	    } elsif ($dehs) {
@@ -1314,7 +1346,9 @@ EOF
 	# substitute HTML entities
 	# Is anything else than "&amp;" required?  I doubt it.
 	print STDERR "$progname debug: requesting URL $upstream_url\n" if $debug;
-	$request = HTTP::Request->new('GET', $upstream_url);
+	my $headers = HTTP::Headers->new;
+	$headers->header('Accept' => '*/*');
+	$request = HTTP::Request->new('GET', $upstream_url, $headers);
 	$response = $user_agent->request($request, "$destdir/$newfile_base");
 	if (! $response->is_success) {
 	    if (defined $pkg_dir) {
@@ -1345,6 +1379,27 @@ EOF
 	    }
 	    return 1;
 	}
+    }
+
+    if (defined $pgpsig_url) {
+	print "-- Downloading OpenPGP signature for package as $newfile_base.pgp\n" if $verbose;
+	my $sigrequest = HTTP::Request->new('GET', "$pgpsig_url");
+	my $sigresponse = $user_agent->request($sigrequest, "$destdir/$newfile_base.pgp");
+
+	if (! $sigresponse->is_success) {
+	    if (defined $pkg_dir) {
+		uscan_warn "$progname warning: In directory $pkg_dir, downloading OpenPGP signature\n  $upstream_url failed: " . $sigresponse->status_line . "\n";
+	    } else {
+		uscan_warn "$progname warning: Downloading OpenPGP signature\n $pgpsig_url failed:\n" . $sigresponse->status_line . "\n";
+	    }
+	    return 1;
+	}
+
+	print "-- Verifying OpenPGP signature $newfile_base.pgp for $newfile_base\n" if $verbose;
+	system('/usr/bin/gpgv', '--homedir', '/dev/null',
+	       '--keyring', 'debian/upstream-signing-key.pgp',
+	       "$destdir/$newfile_base.pgp", "$destdir/$newfile_base") >> 8 == 0
+		 or uscan_die("$progname warning: OpenPGP signature did not verify.\n");
     }
 
     if ($repack and $newfile_base =~ /^(.*)\.(tar\.bz2|tbz2?)$/) {
@@ -1581,7 +1636,7 @@ sub newest_dir ($$$$$) {
 	    }
 	}
 	if (@hrefs) {
-	    @hrefs = Devscripts::Versort::versort(@hrefs);
+	    @hrefs = Devscripts::Versort::upstream_versort(@hrefs);
 	    if ($debug) {
 		print "-- Found the following matching hrefs (newest first):\n";
 		foreach my $href (@hrefs) { print "     $$href[1] ($$href[0])\n"; }
@@ -1653,7 +1708,7 @@ sub newest_dir ($$$$$) {
 		print STDERR "-- Found the following matching dirs:\n";
 		foreach my $dir (@dirs) { print STDERR "     $$dir[1]\n"; }
 	    }
-	    @dirs = Devscripts::Versort::versort(@dirs);
+	    @dirs = Devscripts::Versort::upstream_versort(@dirs);
 	    my ($newversion, $newdir) = @{$dirs[0]};
 	    return $newdir;
 	} else {

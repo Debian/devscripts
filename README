@@ -66,7 +66,7 @@ And now, in mostly alphabetical order, the scripts:
 - debchange (abbreviation dch): Modifies debian/changelog and manages version
   numbers for you.  It will either increment the version number or add a
   entry for the current version, depending upon the options given to it.
-  [libparse-debcontrol-perl, libsoap-lite-perl]
+  [libdistro-info-perl, libparse-debcontrol-perl, libsoap-lite-perl]
 
 - debcheckout: checkout the development repository of a Debian package
 
@@ -226,7 +226,9 @@ And now, in mostly alphabetical order, the scripts:
   also call a program such as uupdate to attempt to update the Debianised
   version based on the new update.  Whilst uscan could be used to release
   the updated version automatically, it is probably better not to without
-  testing it first. [libcrypt-ssleay-perl, libwww-perl, unzip, lzma, xz-utils]
+  testing it first.  Uscan can also verify detached OpenPGP signatures if 
+  upstream's signing key is known. [libcrypt-ssleay-perl, gpgv,
+  libwww-perl, unzip, lzma, xz-utils]
 
 - uupdate: Update the package with an archive or patches from
   an upstream author.  This will be of help if you have to update your

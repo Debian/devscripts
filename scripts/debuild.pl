@@ -1093,6 +1093,8 @@ if ($command_version eq 'dpkg') {
 	if ($checkbuilddep) {
 	    if ($binarytarget eq 'binary-arch') {
 		system('dpkg-checkbuilddeps -B');
+	    } elsif ($binarytarget eq 'binary-indep') {
+		system('dpkg-checkbuilddeps -A');
 	    } else {
 		system('dpkg-checkbuilddeps');
 	    }
@@ -1315,6 +1317,8 @@ else {
     if ($checkbuilddep) {
 	if ($ARGV[0] eq 'binary-arch') {
 	    system('dpkg-checkbuilddeps -B');
+	} elsif ($ARGV[0] eq 'binary-indep') {
+	    system('dpkg-checkbuilddeps -A');
 	} else {
 	    system('dpkg-checkbuilddeps');
 	}

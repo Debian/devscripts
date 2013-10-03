@@ -193,8 +193,6 @@ while (my $arg = shift @ARGV) {
     apt_get ($arg);
 }
 
-=pod
-
 =head1 NAME
 
 dcontrol -- Query package and source control files for all Debian distributions

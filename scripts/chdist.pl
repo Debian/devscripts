@@ -128,6 +128,7 @@ License, or (at your option) any later version.
 
 use strict;
 use warnings;
+no if $] >= 5.018, 'warnings', 'experimental::smartmatch';
 use feature 'switch';
 use File::Copy qw(cp);
 use File::Path qw(make_path);

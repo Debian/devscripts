@@ -163,7 +163,7 @@ Options:
   -q, --qa
          Increment the Debian release number for a Debian QA Team upload
   -R, --rebuild
-         Increment the Debian release number for an Ubuntu no-change rebuild
+         Increment the Debian release number for a no-change rebuild
   -s, --security
          Increment the Debian release number for a Debian Security Team upload
   --team
@@ -869,7 +869,7 @@ if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and
     ! $opt_n and ! $opt_c and
     ! (exists $ENV{'CHANGELOG'} and length $ENV{'CHANGELOG'}) and ! $opt_M and
     ! $opt_create and ! $opt_a_passed and ! $opt_r and ! $opt_e and
-    $vendor ne 'Ubuntu' and
+    $vendor ne 'Ubuntu' and $vendor ne 'Tanglu' and
     ! ($opt_release_heuristic eq 'changelog' and
        $changelog{'Distribution'} eq 'UNRELEASED' and ! $opt_i_passed)) {
 
@@ -1154,7 +1154,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 	    # If it's not already an NMU make it so
 	    # otherwise we can be safe if we behave like dch -i
 
-	    if (($opt_n or $opt_s) and $vendor ne 'Ubuntu' and (
+	    if (($opt_n or $opt_s) and $vendor ne 'Ubuntu' and $vendor ne 'Tanglu' and (
 		($VERSION eq $UVERSION and not $start =~ /\+nmu/)
 		or ($VERSION ne $UVERSION and not $start =~ /\.$/))) {
 
@@ -1176,6 +1176,9 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 	    } elsif ($opt_R and $vendor eq 'Ubuntu' and
 	             not $start =~ /build/ and not $start =~ /ubuntu/) {
 		$end .= "build1";
+	    } elsif ($opt_R and $vendor eq 'Tanglu' and
+	             not $start =~ /b/ and not $start =~ /tanglu/) {
+		$end .= "b1";
 	    } elsif ($opt_bpo and not $start =~ /~bpo[0-9]+\+$/) {
 		# If it's not already a backport make it so
 		# otherwise we can be safe if we behave like dch -i
@@ -1196,6 +1199,15 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 			$end = "";
 		    }
 		    $end .= "ubuntu1";
+		} elsif (($opt_i or $opt_s) and $vendor eq 'Tanglu' and
+		     $start !~ /(tanglu)(\d+\.)*$/ and not $opt_U) {
+
+		    if ($start =~ /b/) {
+			# Drop bX suffix in favor of tanglu1
+			$start =~ s/b//;
+			$end = "";
+		    }
+		    $end .= "tanglu1";
 		} else {
 		    $end++;
 		}
@@ -1214,7 +1226,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 		    }
 		}
 
-		if(! ($opt_s or $opt_n or $vendor eq 'Ubuntu')) {
+		if(! ($opt_s or $opt_n or $vendor eq 'Ubuntu' or $vendor eq 'Tanglu')) {
 		    if ($start =~/(.*?)-(\d+)\.$/) {
 			# Drop NMU revision
 			my $upstream_version = $1;
@@ -1277,7 +1289,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 	    print O "  * QA upload.\n";
 	    $line = 1;
 	} elsif ($opt_s && ! $opt_news) {
-	    if ($vendor eq 'Ubuntu') {
+	    if ($vendor eq 'Ubuntu' or $vendor eq 'Tanglu') {
 		print O "  * SECURITY UPDATE:\n";
 		print O "  * References\n";
 	    } else {

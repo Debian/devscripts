@@ -54,6 +54,7 @@ my %url_map = (
     'debug' => "http://debug.debian.net/cgi-bin/madison.cgi",
     'ubuntu' => "http://people.canonical.com/~ubuntu-archive/madison.cgi",
     'udd' => 'http://qa.debian.org/cgi-bin/madison.cgi',
+    'new' => 'http://qa.debian.org/cgi-bin/madison.cgi?table=new',
 );
 my $default_url = 'debian';
 if (system('dpkg-vendor', '--is', 'ubuntu') == 0) {
@@ -190,7 +191,7 @@ my $status = 0;
 foreach my $url (@url) {
     print "$url:\n" if @url > 1;
     $url = $url_map{$url} if $url_map{$url};
-    my @cmd = -x "/usr/bin/curl" ? qw/curl -s -S -L/ : qw/wget -q -O -/;
+    my @cmd = -x "/usr/bin/curl" ? qw/curl -f -s -S -L/ : qw/wget -q -O -/;
     system @cmd, $url . (($url =~ m/\?/)?'&':'?')."package=" . join("+", map { uri_escape($_) } @ARGV) . "&text=on&" . join ("&", @args);
     $status = 1 if ($? >> 8 != 0);
 }
@@ -198,8 +199,6 @@ foreach my $url (@url) {
 exit $status;
 
 __END__
-
-=pod
 
 =head1 NAME
 
@@ -270,6 +269,7 @@ use I<URL> for the query. Supported shorthands are
  B<debug> http://debug.debian.net/cgi-bin/madison.cgi
  B<ubuntu> http://people.canonical.com/~ubuntu-archive/madison.cgi
  B<udd> http://qa.debian.org/cgi-bin/madison.cgi
+ B<new> http://qa.debian.org/cgi-bin/madison.cgi?table=new
 
 See the B<RMADISON_URL_MAP_> variable below for a method to add
 new shorthands.

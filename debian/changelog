@@ -1,3 +1,81 @@
+devscripts (2.13.4) unstable; urgency=low
+
+  [ James McCoy ]
+  * Document which scripts use libdistro-info-perl.  (Closes: #708311)
+  * Make curl return a proper exit code for HTTP errors.  (Closes: #720508)
+  * mk-build-deps: Define the deb's version when parsing a debian/control
+    file.  (Closes: #721939)
+  * checkbashisms: Sort the keys of the bashisms hashes to provide
+    consistently ordered output.  This avoids false positive failures in the
+    test suite.
+
+  [ Charles Pigott ]
+  * Fix POD issues.  (LP: #1226318, Closes: #719828)
+
+  [ Translation updates ]
+  * French, David Prévot.
+
+ -- James McCoy <jamessan@debian.org>  Thu, 19 Sep 2013 18:53:57 -0400
+
+devscripts (2.13.3) unstable; urgency=low
+
+  [ gregor herrmann ]
+  * debcommit: Add the source package name to commit/tag messages.  (Closes:
+    #704236)
+
+  [ Paul Wise ]
+  * In chdist bash completion, don't print warnings if ~/.chdist is missing
+  * Support 'new' in the rmadison URL list.
+
+  [ James McCoy ]
+  * dpkg-buildpackage: Use "dpkg-checkbuilddeps -A" for arch-indep builds.
+    Bump dpkg-dev Depends to 1.16.4 accordingly.
+  * Suppress "given/when is experimental" warnings when using Perl 5.18.
+  * mk-build-deps: Take Build-Conflicts(-Indep) into account.  (Closes:
+    #712227)
+  * debcommit: Use "git status --porcelain" to check for a dirty working
+    directory.  (Closes: #712166)
+  * uscan: Add "Accept: */*" header to fix downloading from Alioth.  Thanks to
+    Dmitry Smirnov for the patch.  (Closes: #712261)
+  * transition-check: Work around Pod::Simple change which causes Perl 5.18's
+    pod2man to fail.  (Closes: #714599)
+  * licensecheck:
+    + Check haskell files.  Thanks to Jens Petersen for the patch.
+    + Handle differing lengths of comment leaders when autodetecting comments.
+      (Closes: #714835)
+  * uscan/rc-alert: Fix roff errors in man pages.  Thanks to Eric S. Raymond
+    for the patch.  (Closes: #712701)
+  * dscverify: Use ~/.gnupg/trustedkeys.gpg, if available.  (Closes: #600048)
+
+  [ Chris Boot ]
+  * bts: Fix no-mutt option. (Closes: #709999)
+
+  [ Daniel Kahn Gillmor ]
+  * Enable OpenPGP signature verification (Closes: #610712)
+
+  [ Yaroslav Halchenko ]
+  * licensecheck: Check .go (Go) files (Closes: #711467)
+  * wnpp-check: Add bug URL to output and reorder columns to ease reading.
+    (Closes: #715572)
+
+  [ Bernhard R. Link ]
+  * uscan: properly cope with colons and minus signs in upstream versions.
+    (Closes: #658999)
+
+  [ Phillip Hands ]
+  * licensecheck:
+    + allow plural: copyright notices
+    + ignore "copyright holders"
+    + alternative BSD-3 wording "authors" and "_any_ contributors"
+    + ignore #defines containing (c)
+    + fix "copyright ownership"
+    + ignore "copyright statement"
+    + ignore "copyright string"
+    + ignore coyright (claim|is|in), and fix test
+    + ignore "copyright to"
+
+ -- James McCoy <jamessan@debian.org>  Thu, 15 Aug 2013 20:00:57 -0400
+
 devscripts (2.13.2~bpo70+1) wheezy-backports; urgency=low
 
   * Rebuild for wheezy-backports.

@@ -610,7 +610,7 @@ GetOptions("help|h" => \$opt_help,
 	   "use-default-cc!" => \$use_default_cc,
 	   "toolname=s" => \$toolname,
 	   "bts-server=s" => \$btsserver,
-	   "mutt" => \$opt_mutt,
+	   "mutt!" => \$opt_mutt,
 	   )
     or die "Usage: $progname [options]\nRun $progname --help for more details\n";
 
