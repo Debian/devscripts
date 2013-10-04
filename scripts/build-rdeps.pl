@@ -99,7 +99,7 @@ my $progname = basename($0);
 my $version = '1.0';
 my $dctrl = "grep-dctrl";
 my $sources_path = "/var/lib/apt/lists/";
-my $release_pattern = '(.*_dists_(sid|unstable))_(?:In)*Release$';
+my $release_pattern = '(.*_dists_(wheezy|stable))_(?:In)*Release$';
 my %seen_origins;
 my @source_files;
 my $opt_debug;
