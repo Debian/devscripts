@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: devscripts 2.13.2\n"
+"Project-Id-Version: devscripts 2.13.4\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
 "POT-Creation-Date: 2013-09-18 12:02-0400\n"
-"PO-Revision-Date: 2013-05-10 17:01-0100\n"
+"PO-Revision-Date: 2013-10-07 23:11-0100\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
 "Language: de\n"
@@ -6397,18 +6397,6 @@ msgstr "B<--increment>, B<-i>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:162
-#, fuzzy
-#| msgid ""
-#| "Increment either the final component of the Debian release number or, if "
-#| "this is a native Debian package, the version number.  On Ubuntu, this "
-#| "will also change the suffix from buildX to ubuntu1.  Use B<-R>, B<--"
-#| "rebuild> for a no change rebuild increment.  This creates a new section "
-#| "at the beginning of the changelog with appropriate headers and footers.  "
-#| "Also, if this is a new version of a native Debian package, the directory "
-#| "name is changed to reflect this.  If B<DEBCHANGE_RELEASE_HEURISTIC> is "
-#| "I<changelog> (default) and the current release is I<UNRELEASED>, this "
-#| "will only change the version of the current changelog stanza.  Otherwise, "
-#| "this will create a new changelog stanza with the new version."
 msgid ""
 "Increment either the final component of the Debian release number or, if "
 "this is a native Debian package, the version number.  On Ubuntu or Tanglu, "
@@ -6423,15 +6411,16 @@ msgid ""
 msgstr ""
 "Erhöht entweder den letzten Bestandteil der Debian-Veröffentlichungsnummer "
 "oder, falls dies ein natives Debian-Paket ist, die Versionsnummer. Für "
-"Ubuntu wird dies außerdem die Endung von »buildX« in »ubuntu1« ändern. "
-"Benutzen Sie B<-R> oder B<--rebuild> für ein Erhöhen ohne Änderung beim "
-"Neubauen. Dies erstellt am Anfang des Changelogs einen neuen Abschnitt mit "
-"geeigneten Kopf- und Fußzeilen. Falls dies eine neue Version eines nativen "
-"Debian-Pakets ist, wird außerdem der Verzeichnisname geändert, um dies "
-"widerzuspiegeln. Falls B<DEBCHANGE_RELEASE_HEURISTIC> I<changelog> (Vorgabe) "
-"und die aktuelle Veröffentlichung I<UNRELEASED> ist, wird dies nur die "
-"Version des aktuellen Changelog-Eintrags ändern. Andernfalls wird dies einen "
-"neuen Changelog-Eintrag mit der neuen Version erstellen."
+"Ubuntu oder Tanglu wird dies außerdem die Endung von »buildX« in »ubuntu1« "
+"beziehungsweise »tanglu1« ändern. Benutzen Sie B<-R> oder B<--rebuild> für "
+"ein Erhöhen ohne Änderung beim Neubauen. Dies erstellt am Anfang des "
+"Changelogs einen neuen Abschnitt mit geeigneten Kopf- und Fußzeilen. Falls "
+"dies eine neue Version eines nativen Debian-Pakets ist, wird außerdem der "
+"Verzeichnisname geändert, um dies widerzuspiegeln. Falls "
+"B<DEBCHANGE_RELEASE_HEURISTIC> I<changelog> (Vorgabe) und die aktuelle "
+"Veröffentlichung I<UNRELEASED> ist, wird dies nur die Version des aktuellen "
+"Changelog-Eintrags ändern. Andernfalls wird dies einen neuen "
+"Changelog-Eintrag mit der neuen Version erstellen."
 
 #. type: TP
 #: ../scripts/debchange.1:162
@@ -6657,17 +6646,13 @@ msgstr "B<--rebuild>, B<-R>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:240
-#, fuzzy
-#| msgid ""
-#| "Increment the Debian release number for an Ubuntu no-change rebuild by "
-#| "appending a \"build1\" or by incrementing a rebuild version number."
 msgid ""
 "Increment the Debian release number for a no-change rebuild by appending a "
 "\"build1\" or by incrementing a rebuild version number."
 msgstr ""
-"erhöht die Debian-Veröffentlichungsnummer für ein Neubauen unter Ubuntu ohne "
-"Änderungen, indem ein »build1« angehängt oder die Versionsnummer eines neu "
-"gebauten Pakets."
+"erhöht die Debian-Veröffentlichungsnummer für ein Neubauen ohne Änderungen, "
+"indem ein »build1« angehängt oder die Versionsnummer eines neu gebauten "
+"Pakets erhöht wird."
 
 #. type: TP
 #: ../scripts/debchange.1:240
@@ -18440,6 +18425,15 @@ msgid ""
 "upstream-signing-key.pgp>.  If it is not valid, or not made by one of the "
 "listed keys, uscan will report an error."
 msgstr ""
+"Falls vorhanden, werden die mitgelieferten Regeln auf die heruntergeladene "
+"URL angewandt (nach irgendwelchen Downloadurlmangle-Regeln), um eine neue URL "
+"zu erstellen, die zum Abholen der separaten OpenPGP-Signaturdatei für den "
+"Tarball der Ursprungsautoren benutzt wird. Einige gebräuchliche Regeln "
+"könnten »B<s/$/.asc/>«, »B<s/$/.pgp/>« oder »B<s/$/.gpg/>« lauten. Diese "
+"Signatur muss durch einen Schlüssel erstellt worden sein, der im "
+"Schlüsselbund B<debian/upstream-signing-key.pgp> zu finden ist. Falls sie "
+"ungültig ist oder nicht durch einen der aufgeführten Schlüssel erstellt "
+"wurde, wird Uscan einen Fehler melden."
 
 #. type: Plain text
 #: ../scripts/uscan.1:310
