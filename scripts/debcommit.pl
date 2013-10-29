@@ -586,6 +586,14 @@ sub commit {
 	}
     }
     elsif ($prog eq 'darcs') {
+	if (! @files_to_commit && ($all || $release)) {
+	    # check to see if the WC is clean. darcs record would exit
+	    # nonzero, so don't run it in --all or --release mode.
+	    $action_rc = action($prog, "status");
+	    if (!$action_rc) {
+		    return;
+	    }
+	}
 	if ($diffmode) {
 	    $action_rc = action($prog, "diff", @files_to_commit);
 	} else {

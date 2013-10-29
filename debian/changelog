@@ -8,6 +8,10 @@ devscripts (2.13.5) UNRELEASED; urgency=low
   * debcheckout: allow setting the user for auth mode in the config.  (Closes:
     #722171)
 
+  [ Joachim Breitner ]
+  * debcommit: Fix --release with darcs when the repository is clean. (Closes:
+    #728177)
+
  -- James McCoy <jamessan@debian.org>  Mon, 07 Oct 2013 22:21:31 -0400
 
 devscripts (2.13.4) unstable; urgency=low
