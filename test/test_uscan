@@ -1,38 +1,86 @@
 #!/bin/sh
 
-# Copyright (C) 2012, Benjamin Drung <bdrung@debian.org>
+# Copyright (C) 2013, Rafael Laboissiere <rafael@laboissiere.net>
 #
-# Permission to use, copy, modify, and/or distribute this software for any
-# purpose with or without fee is hereby granted, provided that the above
-# copyright notice and this permission notice appear in all copies.
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 3 of the License, or (at your
+# option) any later version.
 #
-# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+# Public License for more details.
+#
+# On Debian systems, the complete text of the GNU General Public License
+# version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
 
-COMMAND="${0%/*}/../scripts/uscan.pl"
+COMMAND="$(pwd)/../scripts/uscan.pl"
+
+cleanup(){
+    kill -9 $(cat $TMPDIR/repo/pid)
+    rm -rf $TMPDIR
+
+}
+
+trap cleanup 1 2 3 13 15
 
 . "${0%/*}/shunit2-helper-functions.sh"
 
-found() {
-    runCommand "--report --watchfile ${0%/*}/uscan/$1 --package $2 --upstream-version $3" "$4" "" 0
-}
+# The following function tests the Files-Excluded feature of uscan, which
+# allows the selective exclusion of files from the upstream tarball before
+# repacking it.
+#
+# This function does the following: (1) create a minimal Debian package
+# directory, containing minimal files debian/{changelog,watch,copyright},
+# (2) create a minimal repository, containing a tarball (built on the fly),
+# (3) start an HTTP server that works offline, using the SimpleHTTPServer
+# module of Python, and (4) run uscan inside that minimal universe.
 
-testS3Bucket() {
-    local latest=$(curl -s http://s3.amazonaws.com/rds-downloads | \
-                   sed 's@\(</[A-Za-z]*>\)@\1\n@g' | grep '<Key>RDSCli-' | \
-                   sed 's@.*<Key>RDSCli-\([0-9.]*\)\.zip</Key>.*@\1@g' | \
-                   sort -n | tail -n 1)
-    local result="Processing watchfile line for package rdscli...
-Newest version on remote site is ${latest}, local version is 1.4.007
-rdscli: Newer version (${latest}) available on remote site:
-  http://s3.amazonaws.com/rds-downloads/RDSCli-${latest}.zip
-  (local version is 1.4.007)"
-    found "s3bucket" "rdscli" "1.4.007" "$result"
+testFileExclusion() {
+
+    PKG=foo
+    PORT=8000
+    TMPDIR=$(mktemp -d)
+
+    mkdir -p $TMPDIR/$PKG/debian
+
+    cat <<END > $TMPDIR/$PKG/debian/watch
+version=3
+http://localhost:$PORT/$PKG-(\d).tar.gz
+END
+
+    cat <<END > $TMPDIR/$PKG/debian/changelog
+$PKG (0-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
+END
+
+    cat <<END > $TMPDIR/$PKG/debian/copyright
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Files-Excluded: exclude-this
+END
+
+    mkdir -p $TMPDIR/repo/$PKG
+    touch $TMPDIR/repo/$PKG/include-this
+    touch $TMPDIR/repo/$PKG/exclude-this
+
+    ( cd $TMPDIR/repo ;
+      tar cfz $PKG-1.tar.gz $PKG ;
+      python -m SimpleHTTPServer $PORT &
+      echo $! > pid )
+
+    ( cd $TMPDIR/$PKG ; $COMMAND )
+
+    TARBALL=${PKG}_1+dfsg.orig.tar.gz
+    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
+    assertNull 'file that must be excluded is present in the tarball'	\
+               "$( tar tzf $TMPDIR/$TARBALL  | grep exclude-this )"
+
+    cleanup
+
 }
 
 . shunit2
