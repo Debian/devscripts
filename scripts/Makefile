@@ -24,10 +24,6 @@ COMPLETION = $(patsubst %.bash_completion,devscripts.%,$(COMPL_FILES))
 
 GEN_MAN1S += devscripts.1 mk-origtargz.1
 
-BINDIR = /usr/bin
-LIBDIR = /usr/lib/devscripts
-BIN_LIBDIR = /usr/lib/devscripts
-
 all: $(SCRIPTS) $(GEN_MAN1S) $(LIBS) $(CWRAPPERS) $(COMPLETION)
 
 $(VERSION_FILE):
@@ -96,12 +92,12 @@ test:
 
 install: all
 	python3 setup.py install --root="$(DESTDIR)" --no-compile --install-layout=deb
-	install -dD $(DESTDIR)$(BINDIR) $(DESTDIR)$(LIBDIR)
+	install -dD $(DESTDIR)$(BINDIR) $(DESTDIR)$(PKGLIBDIR)
 	cp $(SCRIPTS) $(DESTDIR)$(BINDIR)
 	ln -sf edit-patch $(DESTDIR)$(BINDIR)/add-patch
-	cp $(LIBS) $(DESTDIR)$(LIBDIR)
-	install -dD $(DESTDIR)/etc/bash_completion.d
-	cp $(COMPLETION) $(DESTDIR)/etc/bash_completion.d
+	cp $(LIBS) $(DESTDIR)$(PKGLIBDIR)
+	install -dD $(DESTDIR)$(SYSCONFDIR)/bash_completion.d
+	cp $(COMPLETION) $(DESTDIR)$(SYSCONFDIR)/bash_completion.d
 	# Special treatment for debpkg
 	install -dD $(DESTDIR)$(PERLMOD_DIR)
 	mv $(DESTDIR)$(BINDIR)/debpkg $(DESTDIR)$(PERLMOD_DIR)

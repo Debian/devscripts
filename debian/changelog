@@ -64,6 +64,10 @@ devscripts (2.15.1+exp1) UNRELEASED; urgency=medium
   * Add bash completion for dch, debsign, and uupdate.  (Closes: #774544,
     #778963, #779279)
 
+  [ Peter Eisenstraut ]
+  * Consistently use Makefile variables to control the installation layout.
+    (Closes: #728607)
+
  -- James McCoy <jamessan@debian.org>  Sat, 03 Jan 2015 00:47:36 -0500
 
 devscripts (2.15.1) unstable; urgency=medium

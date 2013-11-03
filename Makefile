@@ -7,10 +7,6 @@ DESTDIR =
 PERL_MODULES = Devscripts
 EXAMPLES = conf.default README.mk-build-deps
 
-PREFIX ?= /usr
-DOCDIR ?= $(PREFIX)/share/doc/devscripts
-MAN1DIR ?= $(PREFIX)/share/man/man1
-
 all: version make_scripts $(EXAMPLES) translated_manpages
 
 version:
