@@ -15,10 +15,10 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 if test "$1" = --installed; then
-    COMMAND=dch
+    COMMAND="dch --no-conf"
     shift
 else
-    COMMAND="perl -I ${0%/*}/.. ${0%/*}/../scripts/debchange.pl"
+    COMMAND="perl -I ${0%/*}/.. ${0%/*}/../scripts/debchange.pl --no-conf"
 fi
 
 . "${0%/*}/shunit2-helper-functions.sh"

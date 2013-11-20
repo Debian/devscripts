@@ -14,7 +14,7 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-COMMAND="${0%/*}/../scripts/uscan.pl"
+COMMAND="${0%/*}/../scripts/uscan.pl --no-conf"
 
 . "${0%/*}/shunit2-helper-functions.sh"
 
@@ -25,7 +25,7 @@ found() {
 testS3Bucket() {
     local latest=$(curl -s http://s3.amazonaws.com/rds-downloads | \
                    sed 's@\(</[A-Za-z]*>\)@\1\n@g' | grep '<Key>RDSCli-' | \
-                   sed 's@.*<Key>RDSCli-\([0-9.]*\)\.zip</Key>.*@\1@g' | \
+                   sed 's@.*<Key>RDSCli-\([-0-9.]*\)\.zip</Key>.*@\1@g' | \
                    sort -n | tail -n 1)
     local result="Processing watchfile line for package rdscli...
 Newest version on remote site is ${latest}, local version is 1.4.007

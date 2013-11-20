@@ -16,10 +16,10 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
 if test "$1" = --installed; then
-    COMMAND=debdiff
+    COMMAND="debdiff --no-conf"
     shift
 else
-    COMMAND="perl -I ${0%/*}/.. ${0%/*}/../scripts/debdiff.pl"
+    COMMAND="perl -I ${0%/*}/.. ${0%/*}/../scripts/debdiff.pl --no-conf"
 fi
 
 WORKDIR="$(readlink -f "${0%/*}")"

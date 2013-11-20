@@ -7,6 +7,9 @@ devscripts (2.13.5) UNRELEASED; urgency=low
     automatically repack upstream archives which contain non-DFSG content.
     Thanks to Andreas Tille, gregor herrmann, and Rafael Laboissiere for the
     patches.  (Closes: #685787)
+  * test/*:
+    + Pass --no-conf to commands which may be influenced by ~/.devscripts
+    + Fix a test failure in test_uscan_online due to different version format.
 
   [ Evgeni Golov ]
   * debcheckout: allow setting the user for auth mode in the config.  (Closes:
