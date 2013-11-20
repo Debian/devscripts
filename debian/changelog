@@ -3,6 +3,10 @@ devscripts (2.13.5) UNRELEASED; urgency=low
   [ James McCoy ]
   * namecheck: Fix “406 Not Acceptable” error when querying Alioth.  (Closes:
     #725228)
+  * uscan: Allow specifying file exclusion rules in d/copyright so uscan can
+    automatically repack upstream archives which contain non-DFSG content.
+    Thanks to Andreas Tille, gregor herrmann, and Rafael Laboissiere for the
+    patches.  (Closes: #685787)
 
   [ Evgeni Golov ]
   * debcheckout: allow setting the user for auth mode in the config.  (Closes:
