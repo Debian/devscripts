@@ -180,8 +180,8 @@ if (-d $cachedir) {
     chdir $cachedir or die "$progname: can't cd $cachedir: $!\n";
 
     if ("$curl_or_wget" eq "wget") {
-        # Either use the cached version because the remote hasn't been
-        # updated (-N) or download a complete new copy (--no-continue)
+	# Either use the cached version because the remote hasn't been
+	# updated (-N) or download a complete new copy (--no-continue)
 	if (system('wget', '-qN', '--no-continue', $url) != 0) {
 	    die "$progname: wget failed!\n";
 	}
@@ -259,20 +259,23 @@ if ($debtags) {
 my $found_bugs_start;
 my ($current_package, $comment);
 
+my $html;
+{
+    local $/;
+    $html = <BUGS>;
+}
+
+my @stanzas = $html =~ m%<div class="package">(.*?)</div>%gs;
 my %pkg_store;
-while (defined(my $line = <BUGS>)) {
-    if( $line =~ /^<div class="package">/) {
-	$found_bugs_start = 1;
-    }
-    if( ! defined($found_bugs_start)) {
-	next;
-    } elsif ($line =~ m%<a name="([^\"]+)"><strong>Package:</strong></a> <a href="[^\"]+">%i) {
+foreach my $stanza (@stanzas) {
+    if ($stanza =~ m%<a name="([^\"]+)"><strong>Package:</strong></a> <a href="[^\"]+">%i) {
 	$current_package = $1;
 	$comment = '';
-    } elsif ($line =~ m%<a name="(\d+)"></a>\s*<a href="[^\"]+">\d+</a> (\[[^\]]+\])( \[[^\]]+\])? ([^<]+)%i) {
-	my ($num, $tags, $dists, $name) = ($1, $2, $3, $4);
-	chomp $name;
-	store_if_relevant(pkg => $current_package, num => $num, tags => $tags, dists => $dists, name => $name, comment => $comment);
+	while ($stanza =~ m%<a name="(\d+)"></a>\s*<a href="[^\"]+">\d+</a> (\[[^\]]+\])( \[[^\]]+\])? ([^<]+)%igc) {
+	    my ($num, $tags, $dists, $name) = ($1, $2, $3, $4);
+	    chomp $name;
+	    store_if_relevant(pkg => $current_package, num => $num, tags => $tags, dists => $dists, name => $name, comment => $comment);
+	}
     }
 }
 for (sort {$a <=> $b } keys %pkg_store) { print $pkg_store{$_}; }
