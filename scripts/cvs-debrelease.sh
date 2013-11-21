@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # cvs-debrelease: Call dupload/dput to upload package built with
 #                 cvs-buildpackage or cvs-debuild
@@ -20,6 +20,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+set -e
 
 PROGNAME=`basename $0 .sh`  # .sh for debugging purposes
 

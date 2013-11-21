@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # wnpp-alert -- check for installed packages which have been orphaned
 #               or put up for adoption
@@ -12,6 +12,8 @@
 # is _much_ faster.
 # And I (Julian) tried it with Perl's LWP, but this is _much_ faster
 # (startup time is huge).  And even Perl with wget is slower by 50%....
+
+set -e
 
 PROGNAME="${0##*/}"
 CACHEDIR=~/.devscripts_cache

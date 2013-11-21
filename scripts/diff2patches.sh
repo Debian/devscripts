@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 ####################
 #    Copyright (C) 2007, 2008 by Raphael Geissert <atomo64@gmail.com>
@@ -19,6 +19,8 @@
 #    On Debian systems, the complete text of the GNU General
 #    Public License 3 can be found in '/usr/share/common-licenses/GPL-3'.
 ####################
+
+set -e
 
 PROGNAME=$(basename "$0")
 

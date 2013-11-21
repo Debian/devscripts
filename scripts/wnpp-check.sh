@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # wnpp-check -- check for software being packaged or requested
 
@@ -7,6 +7,8 @@
 # David Paleino <d.paleino@gmail.com>
 #
 # Adapted from wnpp-alert, by Arthur Korn <arthur@korn.ch>
+
+set -e
 
 PACKAGES="$@"
 CURLORWGET=""
