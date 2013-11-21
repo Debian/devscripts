@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#!/usr/bin/perl -w
 
 # Copyright Bill Allombert <ballombe@debian.org> 2001.
 # Modifications copyright 2002-2005 Julian Gilbey <jdg@debian.org>

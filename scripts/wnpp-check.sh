@@ -1,4 +1,4 @@
-#! /bin/bash -e
+#!/bin/bash -e
 
 # wnpp-check -- check for software being packaged or requested
 

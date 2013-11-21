@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#!/usr/bin/perl -w
 
 # mass-bug: mass-file a bug report against a list of packages
 # For options, see the usage message below.

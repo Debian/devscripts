@@ -1,4 +1,4 @@
-#! /bin/bash -e
+#!/bin/bash -e
 
 # wnpp-alert -- check for installed packages which have been orphaned
 #               or put up for adoption

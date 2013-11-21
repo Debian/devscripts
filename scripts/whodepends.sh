@@ -1,4 +1,4 @@
-#! /bin/bash -e
+#!/bin/bash -e
 # whodepends - show maintainers a package depends upon
 # by Moshe Zadka <moshez@debian.org> and
 # modified by Joshua Kwan <joshk@triplehelix.org>

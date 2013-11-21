@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#!/usr/bin/perl -w
 
 # This program takes .changes or .dsc files as arguments and verifies
 # that they're properly signed by a Debian developer, and that the local

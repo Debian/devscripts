@@ -1,4 +1,4 @@
-#! /bin/bash -e
+#!/bin/bash -e
 
 # Output arch (tla/Bazaar) archive names, with support for branches
 

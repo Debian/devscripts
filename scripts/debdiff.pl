@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#!/usr/bin/perl -w
 
 # Original shell script version:
 # Copyright 1998,1999 Yann Dirson <dirson@debian.org>

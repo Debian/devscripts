@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#!/usr/bin/perl -w
 # Grep debian testing excuses file.
 #
 # Copyright 2002 Joey Hess <joeyh@debian.org>

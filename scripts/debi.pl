@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#!/usr/bin/perl -w
 
 # debi:  Install current version of deb package
 # debc:  List contents of current version of deb package

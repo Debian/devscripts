@@ -1,4 +1,4 @@
-#! /bin/bash -e
+#!/bin/bash -e
 
 # cvs-debrelease: Call dupload/dput to upload package built with
 #                 cvs-buildpackage or cvs-debuild

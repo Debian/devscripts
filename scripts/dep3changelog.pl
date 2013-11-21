@@ -1,4 +1,4 @@
-#! /usr/bin/perl
+#!/usr/bin/perl
 
 # dep3changelog: extract a DEP3 patch header from the named file and
 # automatically update debian/changelog with a suitable entry

@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#!/usr/bin/perl -w
 
 # bts: This program provides a convenient interface to the Debian
 # Bug Tracking System.

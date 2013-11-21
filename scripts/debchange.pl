@@ -1,4 +1,4 @@
-#! /usr/bin/perl
+#!/usr/bin/perl
 
 # debchange: update the debian changelog using your favorite visual editor
 # For options, see the usage message below.

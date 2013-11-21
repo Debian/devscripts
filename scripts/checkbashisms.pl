@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#!/usr/bin/perl -w
 
 # This script is essentially copied from /usr/share/lintian/checks/scripts,
 # which is:

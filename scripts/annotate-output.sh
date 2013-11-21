@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 # this script was downloaded from:
 # http://jeroen.a-eskwadraat.nl/sw/annotate
 # and is part of devscripts ###VERSION###

@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 # Copyright 2006 by Steinar H. Gunderson
 #
 # This program is free software; you can redistribute it and/or modify

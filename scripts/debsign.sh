@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/sh
 
 # This program is designed to GPG sign a .dsc and .changes file pair
 # in the form needed for a legal Debian upload.  It is based in part

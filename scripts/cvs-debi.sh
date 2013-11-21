@@ -1,4 +1,4 @@
-#! /bin/bash -e
+#!/bin/bash -e
 
 # cvs-debi:  Install current version of deb package
 # cvs-debc:  List contents of current version of deb package

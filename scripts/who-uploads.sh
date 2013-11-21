@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # who-uploads sourcepkg [ sourcepkg ... ]
 # Tells you who made the latest uploads of a source package.

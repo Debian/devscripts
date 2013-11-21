@@ -1,4 +1,4 @@
-#! /bin/bash -e
+#!/bin/bash -e
 
 PROGNAME=`basename $0`
 

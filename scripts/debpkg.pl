@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#!/usr/bin/perl -w
 
 # Perl version of Christoph Lameter's debpkg program.
 # Written by Julian Gilbey, December 1998.
