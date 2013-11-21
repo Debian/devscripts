@@ -43,15 +43,25 @@ Various download locations are tried:
 
 =over 4
 
-=item * First, an existing file is looked for.
+=item *
 
-=item * Directories given with B<--path> are searched.
+First, an existing file is looked for.
 
-=item * B<pristine-tar> is tried.
+=item *
 
-=item * B<apt-get source> is tried when B<apt-cache showsrc> reports a matching version.
+Directories given with B<--path> are searched.
 
-=item * Finally, B<uscan --download-current-version> is tried.
+=item *
+
+B<pristine-tar> is tried.
+
+=item *
+
+B<apt-get source> is tried when B<apt-cache showsrc> reports a matching version.
+
+=item *
+
+Finally, B<uscan --download-current-version> is tried.
 
 =back
 
