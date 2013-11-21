@@ -15,7 +15,13 @@
 # On Debian systems, the complete text of the GNU General Public License
 # version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
 
-COMMAND="$(pwd)/../scripts/uscan.pl --no-conf"
+if test "$1" = --installed; then
+    COMMAND="uscan --no-conf"
+    shift
+else
+    top_srcdir=$(readlink -f "${0%/*}/..")
+    COMMAND="perl -I $top_srcdir $top_srcdir/scripts/uscan.pl --no-conf"
+fi
 
 cleanup(){
     kill -9 $(cat $TMPDIR/repo/pid)
