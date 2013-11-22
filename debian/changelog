@@ -24,6 +24,10 @@ devscripts (2.13.5) UNRELEASED; urgency=low
   [ Christoph Berg ]
   * origtargz: Document pristine-tar support in the manpage.
 
+  [ Benjamin Drung ]
+  * test/test_debchange: Strip distribution data outdated warnings. (Closes:
+    #726694)
+
  -- Christoph Berg <christoph.berg@credativ.de>  Wed, 20 Nov 2013 14:15:29 +0100
 
 devscripts (2.13.4) unstable; urgency=low

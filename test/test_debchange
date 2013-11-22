@@ -23,8 +23,27 @@ fi
 
 . "${0%/*}/shunit2-helper-functions.sh"
 
+runCommand2() {
+    local param="$1"
+    local exp_stdout="$2"
+    local exp_stderr="$3"
+    local exp_retval=$4
+    local stdoutF="${SHUNIT_TMPDIR}/stdout"
+    local stderrF="${SHUNIT_TMPDIR}/stderr"
+    eval "${COMMAND} $param" > ${stdoutF} 2> ${stderrF}
+    # Strip distribution data outdated warnings (caused by outdate distro-info-data).
+    cat $stderrF | \
+        grep -v "^Distribution data outdated. Please check for an update for distro-info-data. See /usr/share/doc/distro-info-data/README.Debian for details." | \
+        grep -v '^debchange[^ ]* warning: Unable to determine the current Ubuntu development release. Using UNRELEASED instead.$' > ${stderrF}.tmp
+    mv ${stderrF}.tmp ${stderrF}
+    retval=$?
+    assertEquals "standard output of ${COMMAND} $param\n" "$exp_stdout" "$(cat ${stdoutF})"
+    assertEquals "error output of ${COMMAND} $param\n" "$exp_stderr" "$(cat ${stderrF})"
+    assertEquals "return value of ${COMMAND} $param\n" $exp_retval $retval
+}
+
 success() {
-    runCommand "-c ${SHUNIT_TMPDIR}/changelog $1" "" "" 0
+    runCommand2 "-c ${SHUNIT_TMPDIR}/changelog $1" "" "" 0
 }
 
 checkVersion() {
