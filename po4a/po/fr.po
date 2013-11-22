@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2013-11-21 22:37-0400\n"
+"POT-Creation-Date: 2013-11-22 19:06-0400\n"
 "PO-Revision-Date: 2013-11-21 22:43-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -19071,17 +19071,17 @@ msgstr ""
 #. type: TP
 #: ../scripts/uscan.1:524
 #, no-wrap
-msgid "B<USCAN_NO_EXCLUSION>"
-msgstr "B<USCAN_NO_EXCLUSION>"
+msgid "B<USCAN_EXCLUSION>"
+msgstr "B<USCAN_EXCLUSION>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:529
 msgid ""
-"If this is set to I<yes>, files mentioned in the field B<Files-Excluded> of "
+"If this is set to I<no>, files mentioned in the field B<Files-Excluded> of "
 "I<debian/copyright> will be ignored and no exclusion of files will be "
 "tried.  This is equivalent to the B<--no-exclusion> option."
 msgstr ""
-"Si elle est définie à I<yes>, les fichiers mentionnés dans le champ B<Files-"
+"Si elle est définie à I<no>, les fichiers mentionnés dans le champ B<Files-"
 "Excluded> de I<debian/copyright> seront ignorés et aucune exclusion de "
 "fichiers ne sera tentée. C'est équivalent à l'option B<--no-exclusion>."
 
