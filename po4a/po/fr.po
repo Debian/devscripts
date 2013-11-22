@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2013-11-21 22:37-0400\n"
-"PO-Revision-Date: 2013-09-18 12:17-0400\n"
+"PO-Revision-Date: 2013-11-21 22:43-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -7866,10 +7866,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/debcheckout.pl:220
-#, fuzzy
-#| msgid "B<DEBCHECKOUT_SOURCE>"
 msgid "B<DEBCHECKOUT_USER>"
-msgstr "B<DEBCHECKOUT_SOURCE>"
+msgstr "B<DEBCHECKOUT_USER>"
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:222
@@ -7878,6 +7876,10 @@ msgid ""
 "with the B<--user> option. Setting this variable does not imply the use of "
 "authenticated mode, it still has to be activated with B<--auth>."
 msgstr ""
+"Cette variable définit l’identifiant pour le mode authentifié. Il peut être "
+"modifié avec l’option B<--user>. La définition de cette variable n’implique "
+"pas l’utilisation du mode authentifié, il doit toujours être activé avec B<--"
+"auth>."
 
 #. type: textblock
 #: ../scripts/debcheckout.pl:230
@@ -15790,46 +15792,36 @@ msgstr "Plusieurs emplacements de téléchargement sont essayés :"
 #: ../scripts/origtargz.pl:54 ../scripts/origtargz.pl:58
 #: ../scripts/origtargz.pl:62
 msgid "*"
-msgstr ""
+msgstr "-"
 
 #. type: textblock
 #: ../scripts/origtargz.pl:48
-#, fuzzy
-#| msgid "* First, an existing file is looked for."
 msgid "First, an existing file is looked for."
-msgstr "- d'abord, un fichier existant est recherché ;"
+msgstr "d'abord, un fichier existant est recherché ;"
 
 #. type: textblock
 #: ../scripts/origtargz.pl:52
-#, fuzzy
-#| msgid "* Directories given with B<--path> are searched."
 msgid "Directories given with B<--path> are searched."
-msgstr "- les répertoires donnés avec B<--path> sont explorés ;"
+msgstr "les répertoires donnés avec B<--path> sont explorés ;"
 
 #. type: textblock
 #: ../scripts/origtargz.pl:56
 msgid "B<pristine-tar> is tried."
-msgstr ""
+msgstr "B<pristine-tar> est essayé ;"
 
 #. type: textblock
 #: ../scripts/origtargz.pl:60
-#, fuzzy
-#| msgid ""
-#| "* B<apt-get source> is tried when B<apt-cache showsrc> reports a matching "
-#| "version."
 msgid ""
 "B<apt-get source> is tried when B<apt-cache showsrc> reports a matching "
 "version."
 msgstr ""
-"- B<apt-get source> est essayé si B<apt-cache showsrc> indique une version "
+"B<apt-get source> est essayé si B<apt-cache showsrc> indique une version "
 "correspondante ;"
 
 #. type: textblock
 #: ../scripts/origtargz.pl:64
-#, fuzzy
-#| msgid "* Finally, B<uscan --download-current-version> is tried."
 msgid "Finally, B<uscan --download-current-version> is tried."
-msgstr "- enfin, B<uscan --download-current-version> est essayé."
+msgstr "enfin, B<uscan --download-current-version> est essayé."
 
 #. type: textblock
 #: ../scripts/origtargz.pl:68
@@ -16012,14 +16004,12 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/origtargz.pl:158
-#, fuzzy
-#| msgid ""
-#| "B<debcheckout>(1), B<git-import-orig>(1), B<svn-upgrade>(1), B<uupdate>(1)"
 msgid ""
 "B<debcheckout>(1), B<git-import-orig>(1), B<pristine-tar>(1), B<svn-"
 "upgrade>(1), B<uupdate>(1)"
 msgstr ""
-"B<debcheckout>(1), B<git-import-orig>(1), B<svn-upgrade>(1), B<uupdate>(1)"
+"B<debcheckout>(1), B<git-import-orig>(1), B<pristine-tar>(1), B<svn-"
+"upgrade>(1), B<uupdate>(1)"
 
 #. type: textblock
 #: ../scripts/origtargz.pl:162
@@ -18477,7 +18467,7 @@ msgstr ""
 "(après les règles downloadurlmangle s’il y en a) pour préparer une nouvelle "
 "URL qui sera utilisée pour récupérer le fichier de signature OpenPGP "
 "détachée pour l’archive amont. Certaines règles habituelles pourraient être "
-"« B<s/$/.asc/>, « B<s/$/.pgp/> 3 ou « B<s/$/.gpg/> ». Cette signature doit "
+"« B<s/$/.asc/>, « B<s/$/.pgp/> » ou « B<s/$/.gpg/> ». Cette signature doit "
 "être réalisée avec une clef du trousseau B<debian/upstream-signing-key.pgp>. "
 "Si elle n’est pas valable, ou que la clef ne fait pas partie du trousseau, "
 "uscan signalera une erreur."
@@ -18867,10 +18857,9 @@ msgstr "Ne pas donner de sortie bavarde (c'est le comportement par défaut)."
 
 #. type: TP
 #: ../scripts/uscan.1:446
-#, fuzzy, no-wrap
-#| msgid "B<--no-return>"
+#, no-wrap
 msgid "B<--no-exclusion>"
-msgstr "B<--no-return>"
+msgstr "B<--no-exclusion>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:450
@@ -18878,6 +18867,8 @@ msgid ""
 "Do not automatically exclude files mentioned in I<debian/copyright> field "
 "B<Files-Excluded>"
 msgstr ""
+"Ne pas exclure automatiquement les fichiers mentionnés dans le champ B<Files-"
+"Excluded> de I<debian/copyright>."
 
 #. type: TP
 #: ../scripts/uscan.1:450
@@ -19079,24 +19070,20 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/uscan.1:524
-#, fuzzy, no-wrap
-#| msgid "B<USCAN_SYMLINK>"
+#, no-wrap
 msgid "B<USCAN_NO_EXCLUSION>"
-msgstr "B<USCAN_SYMLINK>"
+msgstr "B<USCAN_NO_EXCLUSION>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:529
-#, fuzzy
-#| msgid ""
-#| "If this is set to I<yes>, then DEHS-style output will be used.  This is "
-#| "equivalent to the B<--dehs> option."
 msgid ""
 "If this is set to I<yes>, files mentioned in the field B<Files-Excluded> of "
 "I<debian/copyright> will be ignored and no exclusion of files will be "
 "tried.  This is equivalent to the B<--no-exclusion> option."
 msgstr ""
-"Si cette option est à I<yes>, alors la sortie sera de type DEHS, comme si "
-"l'option B<--dehs> était utilisée."
+"Si elle est définie à I<yes>, les fichiers mentionnés dans le champ B<Files-"
+"Excluded> de I<debian/copyright> seront ignorés et aucune exclusion de "
+"fichiers ne sera tentée. C'est équivalent à l'option B<--no-exclusion>."
 
 #. type: Plain text
 #: ../scripts/uscan.1:533
