@@ -592,6 +592,10 @@
 #
 # Automatically repack bzipped tar or zip archives to gzipped tars?
 # USCAN_REPACK=no
+#
+# Use the Files-Excluded field in debian/copyright to determine whether
+# the orig tarball needs to be repacked to remove non-DFSG content?
+# USCAN_EXCLUSION=yes
 
 ##### uupdate
 #
