@@ -1268,7 +1268,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
     if ($opt_news) {
 	$urgency ||= $CL_URGENCY;
     }
-    $urgency ||= 'low';
+    $urgency ||= 'medium';
 
     if (($opt_v or $opt_i or $opt_l or $opt_d) and
 	$opt_release_heuristic eq "changelog" and
@@ -1537,7 +1537,7 @@ elsif ($opt_create) {
     if ($opt_news) {
 	$urgency ||= $CL_URGENCY;
     }
-    $urgency ||= 'low';
+    $urgency ||= 'medium';
     print O "$PACKAGE ($VERSION) $DISTRIBUTION; urgency=$urgency\n\n";
 
     if (@closes_text or $TEXT) {
