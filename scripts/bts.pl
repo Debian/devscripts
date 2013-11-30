@@ -61,6 +61,9 @@ use Getopt::Long;
 use Encode;
 
 use Scalar::Util qw(looks_like_number);
+use POSIX qw(locale_h strftime);
+
+setlocale(LC_TIME, "C"); # so that strftime is locale independent
 
 # Funny UTF-8 warning messages from HTML::Parse should be ignorable (#292671)
 $SIG{'__WARN__'} = sub { warn $_[0] unless $_[0] =~ /^Parsing of undecoded UTF-8 will give garbage when decoding entities/; };
@@ -2521,8 +2524,7 @@ sub send_mail {
     my $fromaddress = $fromaddresses[0];
     # Message-ID algorithm from git-send-email
     my $msgid = sprintf("%s-%s", time(), int(rand(4200)))."-bts-$fromaddress";
-    my $date = `date -R`;
-    chomp $date;
+    my $date = strftime "%a, %d %b %Y %T %z", localtime;
 
     my $message = fold_from_header("From: $from") . "\n";
     $message   .= "To: $to\n" if length $to;
