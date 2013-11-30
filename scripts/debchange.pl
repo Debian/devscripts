@@ -43,6 +43,9 @@ use Dpkg::Compression;
 use Dpkg::Vendor qw(get_current_vendor);
 use lib '/usr/share/devscripts';
 use Devscripts::Debbugs;
+use POSIX qw(locale_h strftime);
+
+setlocale(LC_TIME, "C"); # so that strftime is locale independent
 
 # Predeclare functions
 sub fatal($);
@@ -989,8 +992,7 @@ if (@ARGV and ! $TEXT) {
 }
 
 # Get the date
-my $date_cmd = ($opt_tz ? "TZ=$opt_tz " : "") . "date -R";
-chomp(my $DATE=`$date_cmd`);
+my $DATE=strftime "%a, %d %b %Y %T %z", localtime();
 
 if ($opt_news && !$opt_i && !$opt_a) {
     if ($VERSION eq $changelog{'Version'} && !$opt_v && !$opt_l) {
