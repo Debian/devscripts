@@ -152,6 +152,9 @@ use strict;
 use Getopt::Long qw(:config gnu_getopt);
 use Text::Wrap;
 use File::Basename;
+use POSIX qw(locale_h strftime);
+
+setlocale(LC_TIME, "C"); # so that strftime is locale independent
 
 my $progname = basename($0);
 $Text::Wrap::columns=70;
@@ -322,8 +325,7 @@ sub mailbts {
     my ($subject, $body, $to, $from) = @_;
 
     if (defined $from) {
-	my $date = `date -R`;
-	chomp $date;
+	my $date = strftime "%a, %d %b %Y %T %z", localtime;
 
 	my $pid = open(MAIL, "|-");
 	if (! defined $pid) {
