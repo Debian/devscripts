@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 # vim:sw=4:sta:
 
-# Copyright (C) 2006-2010 Christoph Berg <myon@debian.org>
+# Copyright (C) 2006-2013 Christoph Berg <myon@debian.org>
 #           (C) 2010 Uli Martens <uli@youam.net>
 #
 # This program is free software; you can redistribute it and/or modify
@@ -73,6 +73,7 @@ Display information about PACKAGE(s).
   -g, --greaterorequal       show buildd 'dep-wait pkg >= {highest version}' info
   -G, --greaterthan          show buildd 'dep-wait pkg >> {highest version}' info
   -h, --help                 show this help and exit
+  -r, --regex                treat PACKAGE as a regex [not supported everywhere]
   -s, --suite=SUITE          only show info for this suite
   -S, --source-and-binary    show info for the binary children of source pkgs
   -t, --time                 show projectb snapshot date
@@ -159,10 +160,6 @@ unless (@ARGV) {
     print STDERR "E: need at least one package name as an argument.\n";
     exit 1;
 }
-if ($params->{regex}) {
-    print STDERR "E: rmadison does not support the -r --regex option.\n";
-    exit 1;
-}
 if ($params->{greaterorequal} and $params->{greaterthan}) {
     print STDERR "E: -g/--greaterorequal and -G/--greaterthan are mutually exclusive.\n";
     exit 1;
@@ -179,6 +176,7 @@ push @args, "b=$params->{'binary-type'}" if $params->{'binary-type'};
 push @args, "c=$params->{'component'}" if $params->{'component'};
 push @args, "g" if $params->{'greaterorequal'};
 push @args, "G" if $params->{'greaterthan'};
+push @args, "r" if $params->{'regex'};
 push @args, "s=$params->{'suite'}" if $params->{'suite'};
 push @args, "S" if $params->{'source-and-binary'};
 push @args, "t" if $params->{'time'};
@@ -253,6 +251,13 @@ show this help and exit
 
 only show info for this suite
 
+=item B<-s>, B<--regex>
+
+treat PACKAGE as a regex
+
+B<Note:> Since B<-r> can easily DoS the database ("-r ."), this option is not
+supported by the CGI on qa.debian.org and most other installations.
+
 =item B<-S>, B<--source-and-binary>
 
 show info for the binary children of source pkgs
@@ -319,14 +324,10 @@ B<--architecture='*'>.
 
 =head1 NOTES
 
-B<dak ls> also supports B<-r>, B<--regex> to treat I<PACKAGE> as a regex. Since
-that can easily DoS the database ("-r ."), this option is not supported by the
-CGI and rmadison.
-
 B<dak ls> was formerly called B<madison>.
 
 The protocol used by rmadison is fairly simple, the CGI accepts query the
-parameters a, b, c, g, G, s, S, t, and package. The parameter text is passed to
+parameters a, b, c, g, G, r, s, S, t, and package. The parameter text is passed to
 enable plain-text output.
 
 =head1 SEE ALSO
