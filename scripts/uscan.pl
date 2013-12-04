@@ -55,7 +55,7 @@ my $modified_conf_msg;
 my $opwd = cwd();
 
 my $haveSSL = 1;
-eval { require Crypt::SSLeay; };
+eval { require LWP::Protocol::https; };
 if ($@) {
     $haveSSL = 0;
 }
@@ -886,7 +886,7 @@ sub process_watchline ($$$$$$)
     # Devscripts::Versort::upstream_versort
     if ($site =~ m%^http(s)?://%) {
 	if (defined($1) and !$haveSSL) {
-	    uscan_die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n";
+	    uscan_die "$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
 	}
 	print STDERR "$progname debug: requesting URL $base\n" if $debug;
 	$request = HTTP::Request->new('GET', $base, $headers);
@@ -1352,7 +1352,7 @@ EOF
     # Download newer package
     if ($upstream_url =~ m%^http(s)?://%) {
 	if (defined($1) and !$haveSSL) {
-	    uscan_die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n";
+	    uscan_die "$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
 	}
 	# substitute HTML entities
 	# Is anything else than "&amp;" required?  I doubt it.
@@ -1668,7 +1668,7 @@ sub newest_dir ($$$$$) {
 
     if ($site =~ m%^http(s)?://%) {
 	if (defined($1) and !$haveSSL) {
-	    uscan_die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n";
+	    uscan_die "$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
 	}
 	print STDERR "$progname debug: requesting URL $base\n" if $debug;
 	$request = HTTP::Request->new('GET', $base);

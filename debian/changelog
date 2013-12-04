@@ -3,10 +3,13 @@ devscripts (2.13.5) UNRELEASED; urgency=low
   [ James McCoy ]
   * namecheck: Fix “406 Not Acceptable” error when querying Alioth.  (Closes:
     #725228)
-  * uscan: Allow specifying file exclusion rules in d/copyright so uscan can
-    automatically repack upstream archives which contain non-DFSG content.
-    Thanks to Andreas Tille, gregor herrmann, and Rafael Laboissiere for the
-    patches.  (Closes: #685787)
+  * uscan:
+    + Allow specifying file exclusion rules in d/copyright so uscan can
+      automatically repack upstream archives which contain non-DFSG content.
+      Thanks to Andreas Tille, gregor herrmann, and Rafael Laboissiere for the
+      patches.  (Closes: #685787)
+    + Require LWP::Protocol::https instead of Crypt::SSLeay to access https
+      sites.  (Closes: #624317)
   * test/*:
     + Pass --no-conf to commands which may be influenced by ~/.devscripts
     + Fix a test failure in test_uscan_online due to different version format.
