@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 
-UBU_SUGGESTS=debian-keyring, equivs, libcrypt-ssleay-perl, libsoap-lite-perl
+UBU_SUGGESTS=debian-keyring, equivs, liblwp-protocol-https-perl, libsoap-lite-perl
 
 %:
 	dh $@ --with python3
