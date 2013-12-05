@@ -15,6 +15,7 @@ devscripts (2.13.5) UNRELEASED; urgency=low
     + Fix a test failure in test_uscan_online due to different version format.
   * rc-alert: Be more flexible in the formatting of the HTML being parsed.
     (Closes: #729779)
+  * who-uploads: Use long keyid format to avoid ambiguity.  (Closes: #674579)
 
   [ Evgeni Golov ]
   * debcheckout: allow setting the user for auth mode in the config.  (Closes:
