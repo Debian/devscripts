@@ -627,7 +627,7 @@ sub parseFile {
 	 }
       } elsif ( $line =~ m|^[a-zA-Z]| ) {
          # Gather data
-         my ($field, $data) = $line =~ m|([a-zA-z-]+): (.*)$|;
+         my ($field, $data) = $line =~ m|([a-zA-Z-]+): (.*)$|;
 	 if ($data) {
 	    $tmp{$field} = $data;
 	 }
