@@ -1,5 +1,6 @@
 devscripts (2.13.6) UNRELEASED; urgency=medium
 
+  [ James McCoy ]
   * chdist: Fix a [A-z] regex typo.
   * uscan: Properly handle a non-machine readable d/copyright file.  (Closes:
     #731537)
@@ -7,6 +8,10 @@ devscripts (2.13.6) UNRELEASED; urgency=medium
     (Closes: #731553)
   * bts: Document that “bts tag nnn security” will Cc the security team.
     (Closes: #684301)
+
+  [ Louis Bettens ]
+  * debchange, mass-bug, bts: Replace call to date -R with strftime().
+    (Closes: #486594)
 
  -- James McCoy <jamessan@debian.org>  Thu, 05 Dec 2013 22:47:37 -0500
 
