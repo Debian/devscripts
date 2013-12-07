@@ -13,6 +13,7 @@ devscripts (2.13.6) UNRELEASED; urgency=medium
       (Closes: #683480)
   * build-rdeps: Only match against package names instead of any substring of
     Build-Depends(-Indep).  (Closes: #649165)
+  * debchange: Correct description of -e in --help output.  (Closes: #712030)
 
   [ Louis Bettens ]
   * debchange, mass-bug, bts: Replace call to date -R with strftime().

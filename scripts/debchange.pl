@@ -131,7 +131,7 @@ Options:
          Add a new changelog entry with version number specified
   -e, --edit
          Don't change version number or add a new changelog entry, just
-         update the changelog's stamp and open up an editor
+         opens an editor
   -r, --release
          Update the changelog timestamp. If the distribution is set to
          "UNRELEASED", change it to unstable (or another distribution as
