@@ -1,6 +1,8 @@
 devscripts (2.13.6) UNRELEASED; urgency=medium
 
   * chdist: Fix a [A-z] regex typo.
+  * uscan: Properly handle a non-machine readable d/copyright file.  (Closes:
+    #731537)
 
  -- James McCoy <jamessan@debian.org>  Thu, 05 Dec 2013 22:47:37 -0500
 

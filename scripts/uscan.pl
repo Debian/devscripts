@@ -1494,9 +1494,14 @@ EOF
     my $excludesuffix = '+dfsg';
     if ($exclusion) {
 	my $data = Dpkg::Control::Hash->new();
-	$data->load('debian/copyright');
 	my $okformat = qr'http://www.debian.org/doc/packaging-manuals/copyright-format/[.\d]+';
-	if ($data->{'format'} =~ m{^$okformat/?$} and $data->{'files-excluded'} ) {
+	eval {
+	  $data->load('debian/copyright');
+	  1;
+	} or do {
+	  undef $data;
+	};
+	if ($data && $data->{'format'} =~ m{^$okformat/?$} && $data->{'files-excluded'} ) {
 	    my $tempdir = tempdir ( "uscanXXXX", TMPDIR => 1, CLEANUP => 1 );
 	    my $globpattern = "*";
 	    my $hidden = ".[!.]*";
