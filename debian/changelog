@@ -11,6 +11,8 @@ devscripts (2.13.6) UNRELEASED; urgency=medium
       (Closes: #684301)
     + Document the behavior of leaving the version out of the found command.
       (Closes: #683480)
+  * build-rdeps: Only match against package names instead of any substring of
+    Build-Depends(-Indep).  (Closes: #649165)
 
   [ Louis Bettens ]
   * debchange, mass-bug, bts: Replace call to date -R with strftime().
