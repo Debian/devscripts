@@ -1374,6 +1374,8 @@ sub bts_reassign {
 =item B<found> I<bug> [I<version>]
 
 Indicate that a I<bug> was found to exist in a particular package version.
+Without I<version>, the list of fixed versions is cleared and the bug is
+reopened.
 
 =cut
 

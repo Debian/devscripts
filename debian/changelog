@@ -6,8 +6,11 @@ devscripts (2.13.6) UNRELEASED; urgency=medium
     #731537)
   * suspicious-source: Correct message when python3-magic isn't installed.
     (Closes: #731553)
-  * bts: Document that “bts tag nnn security” will Cc the security team.
-    (Closes: #684301)
+  * bts:
+    + Document that “bts tag nnn security” will Cc the security team.
+      (Closes: #684301)
+    + Document the behavior of leaving the version out of the found command.
+      (Closes: #683480)
 
   [ Louis Bettens ]
   * debchange, mass-bug, bts: Replace call to date -R with strftime().
