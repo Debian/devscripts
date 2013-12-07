@@ -992,7 +992,11 @@ if (@ARGV and ! $TEXT) {
 }
 
 # Get the date
-my $DATE=strftime "%a, %d %b %Y %T %z", localtime();
+my $DATE;
+{
+    local $ENV{TZ} = $opt_tz if $opt_tz;
+    $DATE = strftime "%a, %d %b %Y %T %z", localtime();
+}
 
 if ($opt_news && !$opt_i && !$opt_a) {
     if ($VERSION eq $changelog{'Version'} && !$opt_v && !$opt_l) {
