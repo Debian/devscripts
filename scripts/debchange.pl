@@ -39,9 +39,9 @@ use Getopt::Long qw(:config gnu_getopt);
 use File::Copy;
 use File::Basename;
 use Cwd;
-use Devscripts::Compression;
 use Dpkg::Vendor qw(get_current_vendor);
 use lib '/usr/share/devscripts';
+use Devscripts::Compression;
 use Devscripts::Debbugs;
 use POSIX qw(locale_h strftime);
 

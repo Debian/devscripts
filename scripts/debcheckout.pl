@@ -247,8 +247,8 @@ use File::Basename;
 use File::Copy qw/copy/;
 use File::Temp qw/tempdir/;
 use Cwd;
-use Devscripts::Compression;
 use lib '/usr/share/devscripts';
+use Devscripts::Compression;
 use Devscripts::Versort;
 
 my @files = ();	  # files to checkout

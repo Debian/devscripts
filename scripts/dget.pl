@@ -31,6 +31,7 @@ use Cwd qw(abs_path);
 use IO::Dir;
 use IO::File;
 use Digest::MD5;
+use lib '/usr/share/devscripts';
 use Devscripts::Compression;
 use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;

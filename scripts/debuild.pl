@@ -53,6 +53,7 @@ use 5.008;
 use File::Basename;
 use filetest 'access';
 use Cwd;
+use lib '/usr/share/devscripts';
 use Devscripts::Compression;
 use IO::Handle;  # for flushing
 use vars qw(*BUILD *OLDOUT *OLDERR);  # prevent a warning

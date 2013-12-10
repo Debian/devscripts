@@ -18,13 +18,13 @@ use 5.006_000;
 use strict;
 use Cwd;
 use Dpkg::IPC;
-use Devscripts::Compression;
 use File::Copy qw(cp move);
 use File::Basename;
 use File::Spec;
 use File::Path qw/ rmtree /;
 use File::Temp qw/ tempdir tempfile /;
 use lib '/usr/share/devscripts';
+use Devscripts::Compression;
 use Devscripts::Versort;
 
 # Predeclare functions
