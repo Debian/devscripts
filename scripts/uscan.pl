@@ -267,6 +267,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $user_agent_string = $config_vars{'USCAN_USER_AGENT'}
 	if $config_vars{'USCAN_USER_AGENT'};
     $repack = $config_vars{'USCAN_REPACK'} eq 'yes' ? 1 : 0;
+    $exclusion = $config_vars{'USCAN_EXCLUSION'} eq 'yes' ? 1 : 0;
 }
 
 # Now read the command line arguments
