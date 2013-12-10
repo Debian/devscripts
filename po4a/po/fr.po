@@ -12,8 +12,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2013-12-10 18:10-0400\n"
-"PO-Revision-Date: 2013-11-21 22:43-0400\n"
+"POT-Creation-Date: 2013-12-10 18:26-0400\n"
+"PO-Revision-Date: 2013-12-10 18:23-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -2006,17 +2006,14 @@ msgstr "B<found> I<bogue> [I<version>]"
 
 #. type: textblock
 #: ../scripts/bts.pl:1376
-#, fuzzy
-#| msgid ""
-#| "Indicate that a I<bug> was fixed in a particular package version, without "
-#| "affecting the I<bug>'s open/closed status."
 msgid ""
 "Indicate that a I<bug> was found to exist in a particular package version.  "
 "Without I<version>, the list of fixed versions is cleared and the bug is "
 "reopened."
 msgstr ""
-"Indiquer qu'un I<bogue> a été corrigé dans une version particulière d'un "
-"paquet, sans changer l'état ouvert ou fermé du I<bogue>."
+"Indiquer qu'un I<bogue> a été découvert dans une version particulière d'un "
+"paquet. Sans I<version>, la liste des versions corrigées est effacée et le "
+"bogue est rouvert."
 
 #. type: =item
 #: ../scripts/bts.pl:1393
@@ -2194,8 +2191,10 @@ msgstr ""
 #: ../scripts/bts.pl:1550
 msgid ""
 "Adding/removing the B<security> tag will add \"team\\@security.debian.org\" "
-"to the Cc list of the contol email."
+"to the Cc list of the control email."
 msgstr ""
+"L’ajout ou suppression de l’étiquette B<security> ajoutera « team\\@security."
+"debian.org » en copie du message de contrôle."
 
 #. type: =item
 #: ../scripts/bts.pl:1623
@@ -12898,16 +12897,12 @@ msgstr "B<uscan>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:139
-#, fuzzy
-#| msgid ""
-#| "scan upstream sites for new releases of packages [libcrypt-ssleay-perl, "
-#| "gpgv, libwww-perl, unzip, lzma, xz-utils]"
 msgid ""
 "scan upstream sites for new releases of packages [gpgv, liblwp-protocol-"
 "https-perl, libwww-perl, unzip, lzma, xz-utils]"
 msgstr ""
-"surveiller la disponibilité d'une nouvelle version amont [libcrypt-ssleay-"
-"perl, gpgv, libwww-perl, unzip, lzma, xz-utils]"
+"surveiller la disponibilité d'une nouvelle version amont [gpgv, liblwp-"
+"protocol-https-perl, libwww-perl, unzip, lzma, xz-utils]"
 
 #. type: IP
 #: ../scripts/devscripts.1:139
@@ -17028,31 +17023,24 @@ msgstr "N'afficher des informations que pour cette distribution."
 
 #. type: =item
 #: ../scripts/rmadison.pl:254
-#, fuzzy
-#| msgid "B<-r>, B<--remove>"
 msgid "B<-s>, B<--regex>"
-msgstr "B<-r>, B<--remove>"
+msgstr "B<-s>, B<--regex>"
 
 #. type: textblock
 #: ../scripts/rmadison.pl:256
 msgid "treat PACKAGE as a regex"
-msgstr ""
+msgstr "Traiter I<PAQUET> comme une expression rationnelle."
 
 #. type: textblock
 #: ../scripts/rmadison.pl:258
-#, fuzzy
-#| msgid ""
-#| "B<dak ls> also supports B<-r>, B<--regex> to treat I<PACKAGE> as a regex. "
-#| "Since that can easily DoS the database (\"-r .\"), this option is not "
-#| "supported by the CGI and rmadison."
 msgid ""
 "B<Note:> Since B<-r> can easily DoS the database (\"-r .\"), this option is "
 "not supported by the CGI on qa.debian.org and most other installations."
 msgstr ""
-"B<dak ls> a aussi l'option B<-r> ou B<--regex> pour considérer PAQUET comme "
-"une expression rationnelle. Étant donné que cela peut facilement créer un "
-"déni de service sur la base de données (« B<-r> B<.> »), cette option n'est "
-"pas prise en charge par le script CGI ni par B<rmadison>."
+"B<Remarque :> Étant donné que l'option B<-r> peut facilement créer un déni "
+"de service sur la base de données (« B<-r> B<.> »), cette option n'est pas "
+"prise en charge par le script CGI sur qa.debian.org ni sur la plupart des "
+"autres installations."
 
 #. type: =item
 #: ../scripts/rmadison.pl:261
@@ -17192,19 +17180,14 @@ msgstr "B<dak ls> s'appelait précédemment B<madison>."
 
 #. type: textblock
 #: ../scripts/rmadison.pl:329
-#, fuzzy
-#| msgid ""
-#| "The protocol used by rmadison is fairly simple, the CGI accepts query the "
-#| "parameters a, b, c, g, G, s, S, t, and package. The parameter text is "
-#| "passed to enable plain-text output."
 msgid ""
 "The protocol used by rmadison is fairly simple, the CGI accepts query the "
 "parameters a, b, c, g, G, r, s, S, t, and package. The parameter text is "
 "passed to enable plain-text output."
 msgstr ""
 "Le protocole utilisé par rmadison est assez simple, le script CGI accepte en "
-"entrée les paramètres a, b, c, g, s, S, t et package. Le paramètre text est "
-"utilisé pour permettre une sortie textuelle."
+"entrée les paramètres a, b, c, g, G, r, s, S, t et package. Le paramètre "
+"text est utilisé pour permettre une sortie textuelle."
 
 #. type: textblock
 #: ../scripts/rmadison.pl:335
