@@ -1548,7 +1548,7 @@ Adding/removing the B<gift> tag will add/remove the B<gift> usertag,
 belonging to the "debian-qa@lists.debian.org" user.
 
 Adding/removing the B<security> tag will add "team\@security.debian.org"
-to the Cc list of the contol email.
+to the Cc list of the control email.
 
 =cut
 
