@@ -12891,16 +12891,13 @@ msgstr "I<uscan>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:139
-#, fuzzy
-#| msgid ""
-#| "scan upstream sites for new releases of packages [libcrypt-ssleay-perl, "
-#| "gpgv, libwww-perl, unzip, lzma, xz-utils]"
 msgid ""
 "scan upstream sites for new releases of packages [gpgv, liblwp-protocol-"
 "https-perl, libwww-perl, unzip, lzma, xz-utils]"
 msgstr ""
 "durchucht Seiten der Originalautoren auf neue Veröffentlichungen von "
-"Paketen. [libcrypt-ssleay-perl, gpgv, libwww-perl, unzip, lzma, xz-utils]"
+"Paketen. [gpgv, liblwp-protocol-https-perl, libwww-perl, unzip, lzma, xz-"
+"utils]"
 
 #. type: IP
 #: ../scripts/devscripts.1:139
@@ -17006,10 +17003,8 @@ msgstr "zeigt nur Informationen für diese Suite."
 
 #. type: =item
 #: ../scripts/rmadison.pl:254
-#, fuzzy
-#| msgid "B<-r>, B<--remove>"
 msgid "B<-s>, B<--regex>"
-msgstr "B<-r>, B<--remove>"
+msgstr "B<-s>, B<--regex>"
 
 #. type: textblock
 #: ../scripts/rmadison.pl:256
@@ -17169,18 +17164,13 @@ msgstr "B<dak ls> wurde früher B<madison> genannt."
 
 #. type: textblock
 #: ../scripts/rmadison.pl:329
-#, fuzzy
-#| msgid ""
-#| "The protocol used by rmadison is fairly simple, the CGI accepts query the "
-#| "parameters a, b, c, g, G, s, S, t, and package. The parameter text is "
-#| "passed to enable plain-text output."
 msgid ""
 "The protocol used by rmadison is fairly simple, the CGI accepts query the "
 "parameters a, b, c, g, G, r, s, S, t, and package. The parameter text is "
 "passed to enable plain-text output."
 msgstr ""
 "Das von Rmadison benutzte Protokoll ist recht einfach, das CGI akzeptiert "
-"die Parameter »a«, »b«, »c«, »g«, »G«, »s«, »S«, »t« und »package«. Der "
+"die Parameter »a«, »b«, »c«, »g«, »G«, »r«, »s«, »S«, »t« und »package«. Der "
 "Parameter »text« wird übergeben, um Klartextausgabe zu aktivieren."
 
 #. type: textblock
