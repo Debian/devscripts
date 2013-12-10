@@ -14,6 +14,7 @@ devscripts (2.13.6) UNRELEASED; urgency=medium
   * build-rdeps: Only match against package names instead of any substring of
     Build-Depends(-Indep).  (Closes: #649165)
   * debchange: Correct description of -e in --help output.  (Closes: #712030)
+  * Update scripts to use Dpkg::Compression's compression_get_file_extension_regex().
 
   [ Louis Bettens ]
   * debchange, mass-bug, bts: Replace call to date -R with strftime().

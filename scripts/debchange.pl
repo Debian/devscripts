@@ -39,7 +39,7 @@ use Getopt::Long qw(:config gnu_getopt);
 use File::Copy;
 use File::Basename;
 use Cwd;
-use Dpkg::Compression;
+use Devscripts::Compression;
 use Dpkg::Vendor qw(get_current_vendor);
 use lib '/usr/share/devscripts';
 use Devscripts::Debbugs;
@@ -56,6 +56,8 @@ my $progname = basename($0);
 my $modified_conf_msg;
 my %env;
 my $CHGLINE;  # used by the format O section at the end
+
+my $compression_re = compression_get_file_extension_regex();
 
 my $lpdc_broken;
 
@@ -1640,7 +1642,7 @@ if ((basename(cwd()) =~ m%^\Q$PACKAGE\E-\Q$UVERSION\E$%) &&
 	}
 	# And check whether a new orig tarball exists
 	my @origs = glob("../$PACKAGE\_$new_uversion.*");
-	my $num_origs = grep { /^..\/\Q$PACKAGE\E_\Q$new_uversion\E\.orig\.tar\.$compression_re_file_ext$/ } @origs;
+	my $num_origs = grep { /^..\/\Q$PACKAGE\E_\Q$new_uversion\E\.orig\.tar\.$compression_re$/ } @origs;
 	if ($num_origs == 0) {
 	    warn "$progname warning: no orig tarball found for the new version.\n";
 	}

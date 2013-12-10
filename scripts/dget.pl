@@ -31,7 +31,7 @@ use Cwd qw(abs_path);
 use IO::Dir;
 use IO::File;
 use Digest::MD5;
-use Dpkg::Compression;
+use Devscripts::Compression;
 use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
 
@@ -44,6 +44,8 @@ my $opt;
 my $backup_dir = "backup";
 my @dget_path = ("/var/cache/apt/archives");
 my $modified_conf_msg;
+
+my $compression_re = compression_get_file_extension_regex();
 
 # use curl if installed, wget otherwise
 if (system("command -v curl >/dev/null 2>&1") == 0) {
@@ -200,7 +202,7 @@ sub get_file {
     }
 
     # try apt-get if it is still not there
-    my $ext = $compression_re_file_ext;
+    my $ext = $compression_re;
     if (not -e $file and $file =~ m!^([a-z0-9][a-z0-9.+-]+)_[^/]+\.(?:diff|tar)\.$ext$!) {
 	my @cmd = ('apt-get', 'source', '--print-uris', $1);
 	my $cmd = join ' ', @cmd;

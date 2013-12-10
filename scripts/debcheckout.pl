@@ -247,11 +247,13 @@ use File::Basename;
 use File::Copy qw/copy/;
 use File::Temp qw/tempdir/;
 use Cwd;
-use Dpkg::Compression;
+use Devscripts::Compression;
 use lib '/usr/share/devscripts';
 use Devscripts::Versort;
 
 my @files = ();	  # files to checkout
+
+my $compression_re = compression_get_file_extension_regex();
 
 # <snippet from="bts.pl">
 # <!-- TODO we really need to factor out in a Perl module the
@@ -343,7 +345,7 @@ sub find_repo($$) {
 	} elsif ($line =~ /^Version:\s*(.*)$/i) {
 	    $version = $1;
 	    ($nonepoch_version = $version) =~ s/^\d+://;
-	} elsif ($line =~ /^ [a-f0-9]{32} \d+ (\S+)(?:_\Q$nonepoch_version\E|\.orig)\.tar\.$compression_re_file_ext$/) {
+	} elsif ($line =~ /^ [a-f0-9]{32} \d+ (\S+)(?:_\Q$nonepoch_version\E|\.orig)\.tar\.$compression_re$/) {
 	    $origtgz_name = $1;
 	} elsif ($line =~ /^$/) {
 	    push (@repos, [$version, $type, $url, $origtgz_name])

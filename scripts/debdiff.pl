@@ -18,7 +18,7 @@ use 5.006_000;
 use strict;
 use Cwd;
 use Dpkg::IPC;
-use Dpkg::Compression;
+use Devscripts::Compression;
 use File::Copy qw(cp move);
 use File::Basename;
 use File::Spec;
@@ -38,6 +38,8 @@ my $progname = basename($0);
 my $modified_conf_msg;
 my $exit_status = 0;
 my $dummyname = "---DUMMY---";
+
+my $compression_re = compression_get_file_extension_regex();
 
 sub usage {
     print <<"EOF";
@@ -501,7 +503,7 @@ elsif ($type eq 'dsc') {
 		if ($file =~ /\.diff\.gz$/) {
 		    $diffs[$i] = cwd() . '/' . $file;
 		}
-		elsif ($file =~ /((?:\.orig)?\.tar\.$compression_re_file_ext|\.git)$/) {
+		elsif ($file =~ /((?:\.orig)?\.tar\.$compression_re|\.git)$/) {
 		    $origs[$i] = $file;
 		}
 	    } else {
@@ -629,7 +631,7 @@ elsif ($type eq 'dsc') {
 	while ($_ = readdir(DIR)) {
 		my $unpacked = "=unpacked-tar" . $tarballs . "=";
 		my $filename = $_;
-		if ($filename =~ s/\.tar\.$compression_re_file_ext$//) {
+		if ($filename =~ s/\.tar\.$compression_re$//) {
 		    my $comp = compression_guess_from_filename($_);
 		    $tarballs++;
 		    spawn(exec => ['tar', "--$comp", '-xf', $_],
