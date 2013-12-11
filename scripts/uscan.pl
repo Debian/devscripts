@@ -2177,12 +2177,12 @@ sub get_main_source_dir($$$$) {
     foreach my $file (@files) {
 	unless ($file =~ /^\.\.?/) {
 	    if ( -d "${tempdir}/$file" ) {
-                # HELP: why can't perl move not move directories????
-                system( "mv ${tempdir}/$file $main_source_dir" ) ;
-            } else {
-                move("${tempdir}/$file", $main_source_dir) or die("Unable to move ${tempdir}/$file directory $main_source_dir\n");
-            }
-        }
+		# HELP: why can't perl move not move directories????
+		system('mv', "${tempdir}/$file", $main_source_dir);
+	    } else {
+		move("${tempdir}/$file", $main_source_dir) or die("Unable to move ${tempdir}/$file directory $main_source_dir\n");
+	    }
+	}
     }
     return $main_source_dir;
 }

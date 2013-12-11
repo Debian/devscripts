@@ -1,10 +1,17 @@
-devscripts (2.13.7) unstable; urgency=medium
+devscripts (2.13.8) UNRELEASED; urgency=medium
 
   [ James McCoy ]
-  * Fix imports of Devscripts::Compression.  (Closes: #731847)
+  * uscan: Fix arbitrary command execution when using USCAN_EXCLUSION.
+    (Closes: #731849)
 
   [ Adam D. Barratt ]
   * Honour USCAN_EXCLUSION.  (Closes: #731885)
+
+ -- James McCoy <jamessan@debian.org>  Tue, 10 Dec 2013 19:02:04 -0500
+
+devscripts (2.13.7) unstable; urgency=medium
+
+  * Fix imports of Devscripts::Compression.  (Closes: #731847)
 
  -- James McCoy <jamessan@debian.org>  Tue, 10 Dec 2013 07:49:54 -0500
 
