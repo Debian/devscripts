@@ -1525,13 +1525,13 @@ EOF
 	    my $nfiles_before = `find $main_source_dir | wc -l`;
 	    foreach (grep {/\//} split /\s+/, $data->{"files-excluded"}) {
 		# delete trailing '/' because otherwise find -path will fail
-		s?/+$?? ;
+		s?/+$??;
 		# use rm -rf to enable deleting non-empty directories
-		`find $main_source_dir -path "$main_source_dir/$_" | xargs rm -rf`;
-	    };
+		system('find', $main_source_dir, '-path', "$main_source_dir/$_", '-exec', 'rm', '-rf', '{}', '+');
+	    }
 	    foreach (grep {/^[^\/]+$/} split /\s+/, $data->{"files-excluded"}) {
-		`find $main_source_dir -type f -name $_ -delete`;
-	    };
+		system('find', $main_source_dir, '-type', 'f', '-name', $_, '-delete');
+	    }
 	    my $nfiles_after = `find $main_source_dir | wc -l`;
 	    if ( $nfiles_before == $nfiles_after ) {
 		print "-- Source tree remains identical - no need for repacking.\n" if $verbose;
