@@ -1467,16 +1467,20 @@ EOF
 
 	my $newfile_base_gz = "$1.tar.gz";
 	my $tempdir = tempdir ( "uscanXXXX", TMPDIR => 1, CLEANUP => 1 );
-	my $globpattern = "*";
-	my $hidden = ".[!.]*";
 	my $absdestdir = abs_path($destdir);
 	system('unzip', '-q', '-a', '-d', $tempdir, "$destdir/$newfile_base") == 0
-	  or uscan_die("Repacking from zip or jar to tar.gz failed (could not unzip)\n");
-	if (defined glob("$tempdir/$hidden")) {
-	    $globpattern .= " $hidden";
+	    or uscan_die("Repacking from zip or jar to tar.gz failed (could not unzip)\n");
+	my $cwd = cwd();
+	chdir($tempdir) or uscan_die("Unable to chdir($tempdir): $!\n");
+	eval {
+	    spawn(exec => ['tar', '--owner=root', '--group=root', '--mode=a+rX', '-czf', "$absdestdir/$newfile_base_gz", glob('* .[!.]*')],
+		  env => { GZIP => '-n -9' },
+		  wait_child => 1);
+	};
+	if ($@) {
+	    uscan_die("Repacking from zip or jar to tar.gz failed (could not create tarball)\n");
 	}
-	system("cd $tempdir; GZIP='-n -9' tar --owner=root --group=root --mode=a+rX -czf \"$absdestdir/$newfile_base_gz\" $globpattern") == 0
-	  or uscan_die("Repacking from zip or jar to tar.gz failed (could not create tarball)\n");
+	chdir($cwd);
 	unlink "$destdir/$newfile_base";
 	$newfile_base = $newfile_base_gz;
     }
@@ -1485,8 +1489,13 @@ EOF
 			     |tar\.bz2|tbz2?
 			     |tar.lzma|tlz(?:ma?)?
 			     |tar.xz|txz)$/x) {
-	my $filetype = `file -b -k \"$destdir/$newfile_base\"`;
-	unless ($filetype =~ /compressed data/) {
+	my $filetype;
+	eval {
+	    spawn(exec => ['file', '-b', '-k', "$destdir/$newfile_base"],
+		  to_string => \$filetype,
+		  wait_child => 1);
+	};
+	unless (defined $filetype && $filetype =~ /compressed data/) {
 	    uscan_warn "$progname warning: $destdir/$newfile_base does not appear to be a compressed file;\nthe file command says: $filetype\nNot processing this file any further!\n";
 	    return 1;
 	}
@@ -1504,13 +1513,12 @@ EOF
 	};
 	if ($data && $data->{'format'} =~ m{^$okformat/?$} && $data->{'files-excluded'} ) {
 	    my $tempdir = tempdir ( "uscanXXXX", TMPDIR => 1, CLEANUP => 1 );
-	    my $globpattern = "*";
-	    my $hidden = ".[!.]*";
-	    if (defined glob("$tempdir/$hidden")) {
-		$globpattern .= " $hidden";
-	    }
 	    my $absdestdir = abs_path($destdir);
-	    unless (system("cd $tempdir; tar -xaf \"$absdestdir/$newfile_base\" 2>/dev/null") == 0) {
+	    eval {
+		spawn(exec => ['tar', '-xa', '-C', $tempdir, '-f', "$absdestdir/$newfile_base"],
+		      wait_child => 1);
+	    };
+	    if ($@) {
 		print "-- $newfile_base is no tarball.  Try unzip.\n" if $verbose;
 		# try unzip if tar fails - we do want to do something sensible even if no --repack was specified
 		system('command -v unzip >/dev/null 2>&1') >> 8 == 0
@@ -1538,8 +1546,17 @@ EOF
 	    } else {
 		my $suffix = 'gz' ;
 		my $newfile_base_dfsg = "${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix" ;
-		system("cd $tempdir; GZIP='-n -9' tar --owner=root --group=root --mode=a+rX -czf \"$absdestdir/$newfile_base_dfsg\" $globpattern") == 0
-		    or die("Excluding files failed (could not create tarball)\n");
+		my $cwd = cwd();
+		chdir($tempdir) or uscan_die("Unable to chdir($tempdir): $!\n");
+		eval {
+		    spawn(exec => ['tar', '--owner=root', '--group=root', '--mode=a+rX', '-czf', "$absdestdir/$newfile_base_dfsg", glob('* .[!.]*')],
+			  env => { GZIP => '-n -9' },
+			  wait_child => 1);
+		};
+		if ($@) {
+		    uscan_die("Excluding files failed (could not create tarball)\n");
+		}
+		chdir($cwd);
 		$symlink = 'files-excluded' # prevent symlinking or renaming
 	    }
 	}
