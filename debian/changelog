@@ -1,3 +1,10 @@
+devscripts (2.12.6+deb7u2) stable-security; urgency=high
+
+  * uscan: Repack the tarball and verify it is a compressed archive without
+    allowing arbitrary code execution.  Fixes CVE-2013-6888.
+
+ -- James McCoy <jamessan@debian.org>  Mon, 16 Dec 2013 23:19:38 -0500
+
 devscripts (2.12.6+deb7u1) stable; urgency=low
 
   * Fix build-rdeps to work with Wheezy being stable (Closes: #695975)
