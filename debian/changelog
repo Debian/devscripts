@@ -1,7 +1,15 @@
 devscripts (2.13.9) UNRELEASED; urgency=low
 
+  [ Martin Pitt ]
   * autopkgtest: Add "allow-stderr" restriction to avoid failing tests because
     of the HTTP server log on stderr.
+
+  [ James McCoy ]
+  * uscan:
+    + Repack the tarball and verify it is a compressed archive without
+      allowing arbitrary code execution.  Fixes CVE-2013-6888.
+    + Use find's -exec to call rm directly instead of piping to xargs.
+      (Closes: #732006, CVE-2013-7085)
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 12 Dec 2013 11:08:27 +0100
 
