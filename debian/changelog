@@ -10,6 +10,10 @@ devscripts (2.13.9) UNRELEASED; urgency=low
       allowing arbitrary code execution.  Fixes CVE-2013-6888.
     + Use find's -exec to call rm directly instead of piping to xargs.
       (Closes: #732006, CVE-2013-7085)
+    + Follow tar's recommended security practices
+      - Use --keep-old-files --no-overwrite-dir
+      - Ensure parent directory of directory used for repacking archive isn't
+        accessible to other users.
 
  -- Martin Pitt <mpitt@debian.org>  Thu, 12 Dec 2013 11:08:27 +0100
 

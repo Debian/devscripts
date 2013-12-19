@@ -1466,7 +1466,10 @@ EOF
 	  or uscan_die("unzip binary not found. You need to install the package unzip to be able to repack .zip upstream archives.\n");
 
 	my $newfile_base_gz = "$1.tar.gz";
-	my $tempdir = tempdir ( "uscanXXXX", TMPDIR => 1, CLEANUP => 1 );
+	my $tempdir = tempdir ("uscanXXXX", TMPDIR => 1, CLEANUP => 1);
+	# Parent of the target directory should be under our control
+	$tempdir .= '/repack';
+	mkdir $tempdir or uscan_die("Unable to mkdir($tempdir): $!\n");
 	my $absdestdir = abs_path($destdir);
 	system('unzip', '-q', '-a', '-d', $tempdir, "$destdir/$newfile_base") == 0
 	    or uscan_die("Repacking from zip or jar to tar.gz failed (could not unzip)\n");
@@ -1512,10 +1515,13 @@ EOF
 	  undef $data;
 	};
 	if ($data && $data->{'format'} =~ m{^$okformat/?$} && $data->{'files-excluded'} ) {
-	    my $tempdir = tempdir ( "uscanXXXX", TMPDIR => 1, CLEANUP => 1 );
+	    my $tempdir = tempdir ("uscanXXXX", TMPDIR => 1, CLEANUP => 1);
+	    # Parent of the target directory should be under our control
+	    $tempdir .= '/repack';
+	    mkdir $tempdir or uscan_die("Unable to mkdir($tempdir): $!\n");
 	    my $absdestdir = abs_path($destdir);
 	    eval {
-		spawn(exec => ['tar', '-xa', '-C', $tempdir, '-f', "$absdestdir/$newfile_base"],
+		spawn(exec => ['tar', '-xa', '-k', '--no-overwrite-dir', '-C', $tempdir, '-f', "$absdestdir/$newfile_base"],
 		      wait_child => 1);
 	    };
 	    if ($@) {
