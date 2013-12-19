@@ -1536,7 +1536,9 @@ EOF
 	    unless ( -d $main_source_dir ) {
 		print STDERR "Error: $main_source_dir is no directory";
 	    }
-	    my $nfiles_before = `find $main_source_dir | wc -l`;
+	    my $file_list;
+	    spawn(exec => ['find', $main_source_dir], wait_child => 1, to_string => \$file_list);
+	    my $nfiles_before = split /\n/, $file_list;
 	    foreach (grep {/\//} split /\s+/, $data->{"files-excluded"}) {
 		# delete trailing '/' because otherwise find -path will fail
 		s?/+$??;
@@ -1546,7 +1548,9 @@ EOF
 	    foreach (grep {/^[^\/]+$/} split /\s+/, $data->{"files-excluded"}) {
 		system('find', $main_source_dir, '-type', 'f', '-name', $_, '-delete');
 	    }
-	    my $nfiles_after = `find $main_source_dir | wc -l`;
+	    undef $file_list;
+	    spawn(exec => ['find', $main_source_dir], wait_child => 1, to_string => \$file_list);
+	    my $nfiles_after = split /\n/, $file_list;
 	    if ( $nfiles_before == $nfiles_after ) {
 		print "-- Source tree remains identical - no need for repacking.\n" if $verbose;
 	    } else {
