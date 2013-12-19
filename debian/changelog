@@ -1,7 +1,12 @@
 devscripts (2.12.6+deb7u2) stable-security; urgency=high
 
-  * uscan: Repack the tarball and verify it is a compressed archive without
-    allowing arbitrary code execution.  Fixes CVE-2013-6888.
+  * uscan:
+    + Repack the tarball and verify it is a compressed archive without
+      allowing arbitrary code execution.  Fixes CVE-2013-6888.
+    + Follow tar's recommended security practices
+      - Use --keep-old-files --no-overwrite-dir
+      - Ensure parent directory of directory used for repacking archive isn't
+        accessible to other users.
 
  -- James McCoy <jamessan@debian.org>  Mon, 16 Dec 2013 23:19:38 -0500
 
