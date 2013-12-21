@@ -1514,7 +1514,11 @@ EOF
 	} or do {
 	  undef $data;
 	};
-	if ($data && $data->{'format'} =~ m{^$okformat/?$} && $data->{'files-excluded'} ) {
+	if (   $data
+	    && defined $data->{'format'}
+	    && $data->{'format'} =~ m{^$okformat/?$}
+	    && $data->{'files-excluded'})
+	{
 	    my $tempdir = tempdir ("uscanXXXX", TMPDIR => 1, CLEANUP => 1);
 	    # Parent of the target directory should be under our control
 	    $tempdir .= '/repack';

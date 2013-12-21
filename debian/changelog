@@ -16,6 +16,10 @@ devscripts (2.13.9) UNRELEASED; urgency=low
         accessible to other users.
     + Fix handling of 'dirname' exclusions, so 'dirname/*' isn't required.
 
+  [ Salvatore Bonaccorso ]
+  * uscan: Fix unitialized value warning when copyright is not in
+    copyright-format 1.0.  (Closes: #732807)
+
  -- Martin Pitt <mpitt@debian.org>  Thu, 12 Dec 2013 11:08:27 +0100
 
 devscripts (2.13.8) unstable; urgency=medium
