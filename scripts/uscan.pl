@@ -1539,14 +1539,12 @@ EOF
 	    my $file_list;
 	    spawn(exec => ['find', $main_source_dir], wait_child => 1, to_string => \$file_list);
 	    my $nfiles_before = split /\n/, $file_list;
-	    foreach (grep {/\//} split /\s+/, $data->{"files-excluded"}) {
+	    foreach (grep { $_ } split /\s+/, $data->{"files-excluded"}) {
 		# delete trailing '/' because otherwise find -path will fail
 		s?/+$??;
 		# use rm -rf to enable deleting non-empty directories
-		system('find', $main_source_dir, '-path', "$main_source_dir/$_", '-exec', 'rm', '-rf', '{}', '+');
-	    }
-	    foreach (grep {/^[^\/]+$/} split /\s+/, $data->{"files-excluded"}) {
-		system('find', $main_source_dir, '-type', 'f', '-name', $_, '-delete');
+		spawn(exec => ['find', $main_source_dir, '-path', "$main_source_dir/$_", '-exec', 'rm', '-rf', '{}', '+'],
+		      wait_child => 1);
 	    }
 	    undef $file_list;
 	    spawn(exec => ['find', $main_source_dir], wait_child => 1, to_string => \$file_list);
