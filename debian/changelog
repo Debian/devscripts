@@ -1,4 +1,4 @@
-devscripts (2.13.9) UNRELEASED; urgency=low
+devscripts (2.13.9) unstable; urgency=low
 
   [ Martin Pitt ]
   * autopkgtest: Add "allow-stderr" restriction to avoid failing tests because
@@ -20,7 +20,7 @@ devscripts (2.13.9) UNRELEASED; urgency=low
   * uscan: Fix unitialized value warning when copyright is not in
     copyright-format 1.0.  (Closes: #732807)
 
- -- Martin Pitt <mpitt@debian.org>  Thu, 12 Dec 2013 11:08:27 +0100
+ -- James McCoy <jamessan@debian.org>  Mon, 23 Dec 2013 15:28:45 -0500
 
 devscripts (2.13.8) unstable; urgency=medium
 
