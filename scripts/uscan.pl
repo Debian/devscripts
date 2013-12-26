@@ -1541,7 +1541,11 @@ EOF
 	    my $file_list;
 	    spawn(exec => ['find', $main_source_dir], wait_child => 1, to_string => \$file_list);
 	    my $nfiles_before = split /\n/, $file_list;
-	    foreach (grep { $_ } split /\s+/, $data->{"files-excluded"}) {
+	    # see the thread for details http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=635920#127
+	    my @excluded = ($data->{"files-excluded"} =~ /(?:\A|\G\s+)((?:\\.|[^\\\s])+)/g);
+	    # un-escape
+	    @excluded = map { s/\\(.)/$1/g; $_ } @excluded;
+	    foreach (@excluded) {
 		# delete trailing '/' because otherwise find -path will fail
 		s?/+$??;
 		# use rm -rf to enable deleting non-empty directories
