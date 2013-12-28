@@ -59,6 +59,9 @@ endif
 %.1: %.pl
 	podchecker $<
 	pod2man --utf8 --center=" " --release="Debian Utilities" $< > $@
+%.1: %.pod
+	podchecker $<
+	pod2man --utf8 --center=" " --release="Debian Utilities" $< > $@
 %.1: %.dbk
 	xsltproc --nonet -o $@ \
 	  /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl $<

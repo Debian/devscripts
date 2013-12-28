@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.13.4\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
-"POT-Creation-Date: 2013-12-10 18:26-0400\n"
+"POT-Creation-Date: 2013-12-28 19:00+0100\n"
 "PO-Revision-Date: 2013-10-07 23:11-0100\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
@@ -91,7 +91,7 @@ msgstr "DEBIAN"
 #: ../scripts/mergechanges.1:2 ../scripts/mk-build-deps.pl:24
 #: ../scripts/namecheck.pl:3 ../scripts/nmudiff.1:2 ../scripts/origtargz.pl:20
 #: ../scripts/plotchangelog.1:2 ../scripts/pts-subscribe.1:2
-#: ../scripts/rc-alert.1:2 ../scripts/rmadison.pl:201
+#: ../scripts/rc-alert.1:2 ../scripts/rmadison.pl:201 ../scripts/sadt.pod:17
 #: ../doc/suspicious-source.1:17 ../scripts/svnpath.pl:3
 #: ../scripts/tagpending.pl:79 ../scripts/transition-check.pl:23
 #: ../scripts/uscan.1:2 ../scripts/uupdate.1:2 ../doc/what-patch.1:2
@@ -129,7 +129,7 @@ msgstr "annotate-output - versieht Programmausgaben mit Zeit und Datenstrom"
 #: ../scripts/mergechanges.1:4 ../scripts/mk-build-deps.pl:28
 #: ../scripts/nmudiff.1:4 ../scripts/origtargz.pl:24
 #: ../scripts/plotchangelog.1:4 ../scripts/pts-subscribe.1:4
-#: ../scripts/rc-alert.1:4 ../scripts/rmadison.pl:205
+#: ../scripts/rc-alert.1:4 ../scripts/rmadison.pl:205 ../scripts/sadt.pod:21
 #: ../doc/suspicious-source.1:21 ../scripts/svnpath.pl:7
 #: ../scripts/tagpending.pl:83 ../scripts/transition-check.pl:27
 #: ../scripts/uscan.1:4 ../scripts/uupdate.1:4 ../doc/what-patch.1:5
@@ -168,7 +168,7 @@ msgstr "B<annotate-output> [I<Optionen>] I<Programm> [I<Argumente> …]"
 #: ../scripts/mergechanges.1:6 ../scripts/mk-build-deps.pl:34
 #: ../scripts/nmudiff.1:6 ../scripts/origtargz.pl:34
 #: ../scripts/plotchangelog.1:7 ../scripts/pts-subscribe.1:8
-#: ../scripts/rc-alert.1:8 ../scripts/rmadison.pl:213
+#: ../scripts/rc-alert.1:8 ../scripts/rmadison.pl:213 ../scripts/sadt.pod:25
 #: ../doc/suspicious-source.1:24 ../scripts/svnpath.pl:17
 #: ../scripts/tagpending.pl:87 ../scripts/transition-check.pl:33
 #: ../scripts/uscan.1:6 ../scripts/uupdate.1:8 ../doc/what-patch.1:8
@@ -211,7 +211,7 @@ msgstr ""
 #: ../scripts/mass-bug.pl:59 ../scripts/mk-build-deps.pl:44
 #: ../scripts/nmudiff.1:21 ../scripts/origtargz.pl:95
 #: ../scripts/plotchangelog.1:43 ../scripts/pts-subscribe.1:18
-#: ../scripts/rc-alert.1:17 ../scripts/rmadison.pl:222
+#: ../scripts/rc-alert.1:17 ../scripts/rmadison.pl:222 ../scripts/sadt.pod:42
 #: ../doc/suspicious-source.1:34 ../scripts/tagpending.pl:93
 #: ../scripts/transition-check.pl:42 ../scripts/uscan.1:352
 #: ../scripts/uupdate.1:52 ../doc/what-patch.1:15 ../scripts/whodepends.1:10
@@ -241,7 +241,7 @@ msgstr ""
 #: ../scripts/debcheckout.pl:93 ../scripts/debsnap.1:57 ../scripts/dget.pl:621
 #: ../scripts/dpkg-depcheck.1:96 ../scripts/getbuildlog.1:25
 #: ../scripts/mk-build-deps.pl:79 ../scripts/rmadison.pl:246
-#: ../doc/suspicious-source.1:35 ../doc/what-patch.1:17
+#: ../scripts/sadt.pod:59 ../doc/suspicious-source.1:35 ../doc/what-patch.1:17
 #: ../doc/wrap-and-sort.1:34
 #, no-wrap
 msgid "B<-h>, B<--help>"
@@ -347,7 +347,7 @@ msgstr ""
 #: ../scripts/grep-excuses.1:38 ../scripts/list-unreleased.1:19
 #: ../scripts/nmudiff.1:108 ../scripts/origtargz.pl:156
 #: ../scripts/plotchangelog.1:124 ../scripts/pts-subscribe.1:51
-#: ../scripts/rc-alert.1:121 ../scripts/rmadison.pl:333
+#: ../scripts/rc-alert.1:121 ../scripts/rmadison.pl:333 ../scripts/sadt.pod:65
 #: ../scripts/tagpending.pl:148 ../scripts/uscan.1:566
 #: ../scripts/uupdate.1:170 ../doc/what-patch.1:35
 #: ../scripts/who-permits-upload.pl:161 ../scripts/wnpp-alert.1:29
@@ -10581,8 +10581,9 @@ msgstr ""
 "Beendigung vorhanden sein werden."
 
 #. type: TP
-#: ../scripts/debsnap.1:42 ../doc/suspicious-source.1:38
-#: ../scripts/tagpending.pl:105 ../doc/wrap-and-sort.1:70
+#: ../scripts/debsnap.1:42 ../scripts/sadt.pod:46
+#: ../doc/suspicious-source.1:38 ../scripts/tagpending.pl:105
+#: ../doc/wrap-and-sort.1:70
 #, no-wrap
 msgid "B<-v>, B<--verbose>"
 msgstr "B<-v>, B<--verbose>"
@@ -12828,12 +12829,24 @@ msgstr ""
 
 #. type: IP
 #: ../scripts/devscripts.1:129
+#, fuzzy, no-wrap
+#| msgid "I<dget>(1)"
+msgid "I<sadt>(1)"
+msgstr "I<dget>(1)"
+
+#. type: Plain text
+#: ../scripts/devscripts.1:131
+msgid "run DEP-8 tests [python3-debian]"
+msgstr ""
+
+#. type: IP
+#: ../scripts/devscripts.1:131
 #, no-wrap
 msgid "I<suspicious-source>(1)"
 msgstr "I<suspicious-source>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:131
+#: ../scripts/devscripts.1:133
 msgid ""
 "output a list of files which are not common source files [python3-magic]"
 msgstr ""
@@ -12841,24 +12854,24 @@ msgstr ""
 "[python3-magic]"
 
 #. type: IP
-#: ../scripts/devscripts.1:131
+#: ../scripts/devscripts.1:133
 #, no-wrap
 msgid "I<svnpath>(1)"
 msgstr "I<svnpath>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:133
+#: ../scripts/devscripts.1:135
 msgid "print Subversion repository paths [subversion]"
 msgstr "gibt Subversion-Depotpfade aus. [subversion]"
 
 #. type: IP
-#: ../scripts/devscripts.1:133
+#: ../scripts/devscripts.1:135
 #, no-wrap
 msgid "I<tagpending>(1)"
 msgstr "I<tagpending>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:135
+#: ../scripts/devscripts.1:137
 msgid ""
 "run from a Debian source tree and tag bugs that are to be closed in the "
 "latest changelog as pending [libsoap-lite-perl]"
@@ -12868,13 +12881,13 @@ msgstr ""
 "lite-perl]"
 
 #. type: IP
-#: ../scripts/devscripts.1:135
+#: ../scripts/devscripts.1:137
 #, no-wrap
 msgid "I<transition-check>(1)"
 msgstr "I<transition-check>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:137
+#: ../scripts/devscripts.1:139
 msgid ""
 "check a list of source packages for involvement in transitions for which "
 "uploads to unstable are currently blocked [libwww-perl, libyaml-syck-perl]"
@@ -12884,13 +12897,13 @@ msgstr ""
 "syck-perl]"
 
 #. type: IP
-#: ../scripts/devscripts.1:137
+#: ../scripts/devscripts.1:139
 #, no-wrap
 msgid "I<uscan>(1)"
 msgstr "I<uscan>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:139
+#: ../scripts/devscripts.1:141
 msgid ""
 "scan upstream sites for new releases of packages [gpgv, liblwp-protocol-"
 "https-perl, libwww-perl, unzip, lzma, xz-utils]"
@@ -12900,24 +12913,24 @@ msgstr ""
 "utils]"
 
 #. type: IP
-#: ../scripts/devscripts.1:139
+#: ../scripts/devscripts.1:141
 #, no-wrap
 msgid "I<uupdate>(1)"
 msgstr "I<uupdate>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:141
+#: ../scripts/devscripts.1:143
 msgid "integrate upstream changes into a source package [patch]"
 msgstr "integriert Änderungen der Originalautoren in ein Quellpaket. [patch]"
 
 #. type: IP
-#: ../scripts/devscripts.1:141
+#: ../scripts/devscripts.1:143
 #, no-wrap
 msgid "I<what-patch>(1)"
 msgstr "I<what-patch>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:143
+#: ../scripts/devscripts.1:145
 msgid ""
 "determine what patch system, if any, a source package is using [patchutils]"
 msgstr ""
@@ -12925,24 +12938,24 @@ msgstr ""
 "[patchutils]"
 
 #. type: IP
-#: ../scripts/devscripts.1:143
+#: ../scripts/devscripts.1:145
 #, no-wrap
 msgid "I<whodepends>(1)"
 msgstr "I<whodepends>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:145
+#: ../scripts/devscripts.1:147
 msgid "check which maintainers' packages depend on a package"
 msgstr "prüft die Pakete welches Betreuers von einem Paket abhängen."
 
 #. type: IP
-#: ../scripts/devscripts.1:145
+#: ../scripts/devscripts.1:147
 #, no-wrap
 msgid "I<who-uploads>(1)"
 msgstr "I<who-uploads>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:147
+#: ../scripts/devscripts.1:149
 msgid ""
 "determine the most recent uploaders of a package to the Debian archive "
 "[gnupg, debian-keyring, debian-maintainers, wget]"
@@ -12951,13 +12964,13 @@ msgstr ""
 "haben. [gnupg, debian-keyring, debian-maintainers, wget]"
 
 #. type: IP
-#: ../scripts/devscripts.1:147
+#: ../scripts/devscripts.1:149
 #, no-wrap
 msgid "I<wnpp-alert>(1)"
 msgstr "I<wnpp-alert>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:149
+#: ../scripts/devscripts.1:151
 msgid ""
 "list installed packages which are orphaned or up for adoption [wget | curl]"
 msgstr ""
@@ -12965,13 +12978,13 @@ msgstr ""
 "sind. [wget | curl]"
 
 #. type: IP
-#: ../scripts/devscripts.1:149
+#: ../scripts/devscripts.1:151
 #, no-wrap
 msgid "I<wnpp-check>(1)"
 msgstr "I<wnpp-check>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:151
+#: ../scripts/devscripts.1:153
 msgid ""
 "check whether there is an open request for packaging or intention to package "
 "bug for a package [wget | curl]"
@@ -12980,13 +12993,13 @@ msgstr ""
 "über die Absicht zum Packen für ein Paket gibt. [wget | curl]"
 
 #. type: IP
-#: ../scripts/devscripts.1:151
+#: ../scripts/devscripts.1:153
 #, no-wrap
 msgid "I<who-permits-upload>(1)"
 msgstr "I<who-permits-upload>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:153
+#: ../scripts/devscripts.1:155
 msgid ""
 "Retrieve information about Debian Maintainer access control lists [gnupg, "
 "libencode-locale-perl, libparse-debcontrol-perl, libwww-perl, debian-keyring]"
@@ -12995,13 +13008,13 @@ msgstr ""
 "locale-perl, libparse-debcontrol-perl, libwww-perl, debian-keyring]"
 
 #. type: IP
-#: ../scripts/devscripts.1:153
+#: ../scripts/devscripts.1:155
 #, no-wrap
 msgid "I<wrap-and-sort>(1)"
 msgstr "I<wrap-and-sort>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:154
+#: ../scripts/devscripts.1:156
 msgid "wrap long lines and sort items in packaging files [python3-debian]"
 msgstr ""
 "bricht lange Zeilen um und sortiert Elemente in Paketierungsdateien. "
@@ -17188,6 +17201,94 @@ msgstr ""
 "Rmadison und http://qa.debian.org/madison.php wurden von Christoph Berg "
 "<myon@debian.org> geschrieben. Dak wurde von James Troup <james@nocrew.org>, "
 "Anthony Towns <ajt@debian.org> und anderen verfasst."
+
+#. type: textblock
+#: ../scripts/sadt.pod:19
+msgid "sadt - simple DEP-8 test runner"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/sadt.pod:23
+#, fuzzy
+#| msgid "B<dch> [I<options>] [I<text> ...]"
+msgid "B<sadt> [I<options>] [I<test-name>...]"
+msgstr "B<dch> [I<Optionen>] [I<Text> …]"
+
+#. type: textblock
+#: ../scripts/sadt.pod:27
+msgid ""
+"B<sadt> is a simple implementation of DEP-8 (“automatic as-installed package "
+"testing”) test runner."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/sadt.pod:30
+msgid ""
+"It is your responsibility to satisfy tests' dependencies.  B<sadt> won't "
+"attempt to install any missing packages.  If a test's dependencies cannot be "
+"satisfied by packages that are currently installed, the test will be skipped."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/sadt.pod:34
+msgid ""
+"B<sadt> won't build the package even if a test declares the B<build-needed> "
+"restriction.  Instead, such a test will be skipped.  However, you can build "
+"the package manually, and then tell B<sadt> to assume that the package is "
+"already built using the B<-b>/B<--built-source-tree>."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/sadt.pod:39
+msgid ""
+"B<sadt> doesn't implement any virtualisation arrangements, therefore it "
+"skips tests that declare the B<breaks-testbed> restriction."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/sadt.pod:48
+msgid "Make the output more verbose."
+msgstr ""
+
+#. type: =item
+#: ../scripts/sadt.pod:50
+#, fuzzy
+#| msgid "B<-b>, B<--build-depends>"
+msgid "B<-b>, B<--built-source-tree>"
+msgstr "B<-b>, B<--build-depends>"
+
+#. type: textblock
+#: ../scripts/sadt.pod:52
+msgid ""
+"Assume that the source tree is already built.  This is equivalent to B<--"
+"ignore-restriction=build-needed>."
+msgstr ""
+
+#. type: =item
+#: ../scripts/sadt.pod:55
+#, fuzzy
+#| msgid "B<--dist=>I<distribution>"
+msgid "B<--ignore-restriction>=I<restriction>"
+msgstr "B<--dist=>I<Distribution>"
+
+#. type: textblock
+#: ../scripts/sadt.pod:57
+msgid "Don't skip tests that declare the I<restriction>."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/sadt.pod:61
+#, fuzzy
+#| msgid "Show this help message and exit."
+msgid "Show a help message and exit."
+msgstr "zeigt diese Hilfenachricht und wird beendet."
+
+#. type: textblock
+#: ../scripts/sadt.pod:67
+#, fuzzy
+#| msgid "B<date>(1)"
+msgid "B<adt-run>(1)"
+msgstr "B<date>(1)"
 
 #. type: TH
 #: ../doc/suspicious-source.1:15

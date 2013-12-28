@@ -1,0 +1,444 @@
+#!/usr/bin/python3
+# encoding=UTF-8
+
+# Copyright © 2012, 2013 Jakub Wilk <jwilk@debian.org>
+
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED “AS IS” AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+# REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+# AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+# INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+# LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+# OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+# PERFORMANCE OF THIS SOFTWARE.
+
+'''
+simple DEP-8 test runner
+'''
+
+import argparse
+import errno
+import gettext
+import os
+import queue as queuemod
+import re
+import shutil
+import stat
+import subprocess as ipc
+import sys
+import tempfile
+import threading
+
+import debian.deb822 as deb822
+
+def chmod_x(path):
+    '''
+    chmod a+X <path>
+    '''
+    old_mode = stat.S_IMODE(os.stat(path).st_mode)
+    new_mode = old_mode | ((old_mode & 0o444) >> 2)
+    if old_mode != new_mode:
+        os.chmod(path, new_mode)
+
+def annotate_output(child):
+    queue = queuemod.Queue()
+    def reader(fd, tag):
+        buf = b''
+        while True:
+            assert b'\n' not in buf
+            chunk = os.read(fd, 1024)
+            if chunk == b'':
+                break
+            lines = (buf + chunk).split(b'\n')
+            buf = lines.pop()
+            for line in lines:
+                queue.put((tag, line + b'\n'))
+        if buf != b'':
+            queue.put((tag, buf))
+        queue.put(None)
+    queue = queuemod.Queue()
+    threads = []
+    for pipe, tag in [(child.stdout, 'O'), (child.stderr, 'E')]:
+        thread = threading.Thread(target=reader, args=(pipe.fileno(), tag))
+        thread.start()
+        threads += [thread]
+    nthreads = len(threads)
+    while nthreads > 0:
+        item = queue.get()
+        if item is None:
+            nthreads -= 1
+            continue
+        yield item
+    for thread in threads:
+        thread.join()
+
+class Skip(Exception):
+    pass
+
+class Fail(Exception):
+    pass
+
+class Progress(object):
+
+    _hourglass = r'/-\|'
+
+    def __init__(self):
+        self._counter = 0
+        if sys.stdout.isatty():
+            self._back = '\b'
+        else:
+            self._back = ''
+
+    def _write(self, s):
+        sys.stdout.write(s)
+        sys.stdout.flush()
+
+    def ping(self):
+        if not self._back:
+            return
+        hourglass = self._hourglass
+        c = self._counter + 1
+        self._write(self._back + hourglass[c % len(hourglass)])
+        self._counter = c
+
+    def start(self, name):
+        pass
+
+    def skip(self, reason):
+        raise NotImplementedError
+
+    def fail(self, reason):
+        raise NotImplementedError
+
+    def ok(self):
+        raise NotImplementedError
+
+    def close(self):
+        pass
+
+class DefaultProgress(Progress):
+
+    def start(self, name):
+        if self._back:
+            self._write(' ')
+        self.ping()
+
+    def skip(self, reason):
+        self._write(self._back + 'S')
+
+    def fail(self, reason):
+        self._write(self._back + 'F')
+
+    def ok(self):
+        self._write(self._back + '.')
+
+    def close(self):
+        self._write('\n')
+
+class VerboseProgress(Progress):
+
+    def start(self, name):
+        self._write('{test} ... '.format(test=name) + (' ' if self._back else ''))
+        self.ping()
+
+    def skip(self, reason):
+        self._write(self._back + 'SKIP ({reason})\n'.format(reason=reason))
+
+    def fail(self, reason):
+        self._write(self._back + 'FAIL ({reason})\n'.format(reason=reason))
+
+    def ok(self):
+        self._write(self._back + 'ok\n')
+
+class TestGroup(object):
+
+    def __init__(self):
+        self.tests = []
+        self.restrictions = frozenset()
+        self.features = frozenset()
+        self.depends = '@'
+        self.tests_directory = 'debian/tests'
+        self._check_depends_cache = None
+
+    def __iter__(self):
+        return iter(self.tests)
+
+    def expand_depends(self, packages):
+        if '@' not in self.depends:
+            return
+        or_clauses = []
+        # deb822 prints a warning on stderr: http://bugs.debian.org/712513
+        # We don't want the user to see the warning, because the unusual
+        # character in the relation is intentional.
+        orig_sys_stderr = sys.stderr
+        sys.stderr = open(os.devnull, 'wt', errors='ignore')
+        try:
+            parsed_depends = deb822.PkgRelation.parse_relations(self.depends)
+        finally:
+            try:
+                sys.stderr.close()
+            finally:
+                sys.stderr = orig_sys_stderr
+        for or_clause in parsed_depends:
+            stripped_or_clause = [r for r in or_clause if r['name'] != '@']
+            if len(stripped_or_clause) < len(or_clause):
+                for package in packages:
+                    or_clauses += [
+                        stripped_or_clause +
+                        [dict(name=package, version=None, arch=None)]
+                    ]
+            else:
+                or_clauses += [or_clause]
+        self.depends = deb822.PkgRelation.str(or_clauses)
+
+    def check_depends(self):
+        assert '@' not in self.depends
+        if self._check_depends_cache is not None:
+            if isinstance(self._depends_cache, Exception):
+                raise self._check_depends_cache
+            return
+        child = ipc.Popen(['dpkg-checkbuilddeps', '-d', self.depends],
+            stderr=ipc.PIPE,
+            env={}
+        )
+        error = child.stderr.read().decode('ASCII')
+        child.stderr.close()
+        if child.wait() != 0:
+            error = re.sub('^dpkg-checkbuilddeps: Unmet build dependencies', 'unmet dependencies', error)
+            error = error.rstrip()
+            skip = Skip(error)
+            self._depends_cache = skip
+            raise skip
+        else:
+            self._depends_cache = True
+
+    def check_restrictions(self, ignored_restrictions):
+        restrictions = self.restrictions - frozenset(ignored_restrictions)
+        class options:
+            rw_build_tree_needed = False
+            allow_stderr = False
+        for r in restrictions:
+            if r == 'rw-build-tree':
+                options.needs_rw_build_tree = True
+            elif r == 'needs-root':
+                if os.getuid() != 0:
+                    raise Skip('this test needs root privileges')
+            elif r == 'breaks-testbed':
+                raise Skip('breaks-testbed restriction is not implemented; use adt-run')
+            elif r == 'build-needed':
+                raise Skip('source tree not built')
+            elif r == 'allow-stderr':
+                options.allow_stderr = True
+            else:
+                raise Skip('unknown restriction: {restr}'.format(restr=r))
+        return options
+
+    def check(self, ignored_restrictions=()):
+        options = self.check_restrictions(ignored_restrictions)
+        self.check_depends()
+        return options
+
+    def run(self, test, progress, ignored_restrictions=(), rw_build_tree=None, built_source_tree=None):
+        progress.start(test)
+        ignored_restrictions = set(ignored_restrictions)
+        if rw_build_tree:
+            ignored_restrictions.add('rw-build-tree')
+        if built_source_tree:
+            ignored_restrictions.add('build-needed')
+        try:
+            options = self.check(ignored_restrictions)
+        except Skip as exc:
+            progress.skip(str(exc))
+            raise
+        if rw_build_tree:
+            cwd = os.getcwd()
+            os.chdir(rw_build_tree)
+        else:
+            cwd = None
+        try:
+            self._run(test, progress, allow_stderr=options.allow_stderr)
+        finally:
+            if cwd is not None:
+                os.chdir(cwd)
+
+    def _run(self, test, progress, allow_stderr=False):
+        path = os.path.join(self.tests_directory, test)
+        chmod_x(path)
+        tmpdir1 = tempfile.mkdtemp(prefix='sadt.')
+        tmpdir2 = tempfile.mkdtemp(prefix='sadt.')
+        environ = dict(os.environ)
+        environ['ADTTMP'] = tmpdir1
+        environ['TMPDIR'] = tmpdir2 # only for compatibility with old DEP-8 spec.
+        child = ipc.Popen([path],
+            stdout=ipc.PIPE,
+            stderr=ipc.PIPE,
+            env=environ,
+        )
+        output = []
+        stderr = False
+        for tag, line in annotate_output(child):
+            progress.ping()
+            if tag == 'E':
+                stderr = True
+            output += ['{tag}: {line}'.format(
+                tag=tag,
+                line=line.decode(sys.stdout.encoding, 'replace'),
+            )]
+        for fp in child.stdout, child.stderr:
+            fp.close()
+        rc = child.wait()
+        shutil.rmtree(tmpdir1)
+        shutil.rmtree(tmpdir2)
+        if rc == 0:
+            if stderr and not allow_stderr:
+                rc = -1
+                fail_reason = 'stderr non-empty'
+                progress.fail(fail_reason)
+            else:
+                progress.ok()
+        else:
+            fail_reason = 'exit code: {rc}'.format(rc=rc)
+            progress.fail(fail_reason)
+        if rc != 0:
+            raise Fail(fail_reason, ''.join(output))
+
+    def add_tests(self, tests):
+        tests = tests.split()
+        self.tests = frozenset(tests)
+
+    def add_restrictions(self, restrictions):
+        restrictions = restrictions.split()
+        self.restrictions = frozenset(restrictions)
+
+    def add_features(self, features):
+        features = features.split()
+        self.features = frozenset(features)
+
+    def add_depends(self, depends):
+        self.depends = depends
+
+    def add_tests_directory(self, path):
+        self.tests_directory = path
+
+def copy_build_tree():
+    rw_build_tree = tempfile.mkdtemp(prefix='sadt-rwbt.')
+    print('sadt: info: copying build tree to {tree}'.format(tree=rw_build_tree), file=sys.stderr)
+    ipc.check_call(['cp', '-a', '.', rw_build_tree])
+    return rw_build_tree
+
+def main():
+    for description in __doc__.splitlines():
+        if description: break
+    parser = argparse.ArgumentParser(description=description)
+    parser.add_argument('-v', '--verbose', action='store_true', help='verbose output')
+    parser.add_argument('-b', '--built-source-tree', action='store_true', help='assume built source tree')
+    parser.add_argument('--ignore-restrictions', metavar='<restr>[,<restr>...]', help='ignore specified restrictions', default='')
+    parser.add_argument('tests', metavar='<test-name>', nargs='*', help='tests to run')
+    options = parser.parse_args()
+    options.tests = frozenset(options.tests)
+    options.ignore_restrictions = frozenset(options.ignore_restrictions.split(','))
+    binary_packages = set()
+    try:
+        file = open('debian/control', encoding='UTF-8')
+    except IOError as exc:
+        if exc.errno == errno.ENOENT:
+            print('sadt: error: cannot find debian/control', file=sys.stderr)
+            sys.exit(1)
+        raise
+    with file:
+        for n, para in enumerate(deb822.Packages.iter_paragraphs(file)):
+            if n == 0:
+                para['Source']
+            else:
+                binary_packages.add(para['Package'])
+    test_groups = []
+    try:
+        file = open('debian/tests/control', encoding='UTF-8')
+    except IOError as exc:
+        if exc.errno == errno.ENOENT:
+            print('sadt: error: cannot find debian/tests/control', file=sys.stderr)
+            sys.exit(1)
+        raise
+    with file:
+        for para in deb822.Packages.iter_paragraphs(file):
+            group = TestGroup()
+            for key, value in para.items():
+                lkey = key.lower().replace('-', '_')
+                try:
+                    method = getattr(group, 'add_' + lkey)
+                except AttributeError:
+                    print('sadt: warning: unknown field {field}, skipping the whole paragraph'.format(field=key), file=sys.stderr)
+                    group = None
+                    break
+                method(value)
+            if group is not None:
+                group.expand_depends(binary_packages)
+                test_groups += [group]
+    failures = []
+    n_skip = n_ok = 0
+    progress = VerboseProgress() if options.verbose else DefaultProgress()
+    rw_build_tree = None
+    try:
+        for group in test_groups:
+            for name in group:
+                if options.tests and name not in options.tests:
+                    continue
+                try:
+                    if rw_build_tree is None:
+                        try:
+                            group_options = group.check()
+                        except Skip:
+                            pass
+                        else:
+                            if group_options.rw_build_tree_needed:
+                                rw_build_tree = copy_build_tree()
+                                assert rw_build_tree is not None
+                    group.run(name,
+                        progress=progress,
+                        ignored_restrictions=options.ignore_restrictions,
+                        rw_build_tree=rw_build_tree,
+                        built_source_tree=options.built_source_tree
+                    )
+                except Skip:
+                    n_skip += 1
+                except Fail as exc:
+                    failures += [(name, exc)]
+                else:
+                    n_ok += 1
+    finally:
+        progress.close()
+    n_fail = len(failures)
+    n_test = n_fail + n_skip + n_ok
+    separator1 = '-' * 70
+    separator2 = '=' * 70
+    if failures:
+        for name, exception in failures:
+            print(separator2)
+            print('FAIL: {test}'.format(test=name))
+            print(separator1)
+            print(exception.args[1])
+    print(separator1)
+    print(gettext.ngettext('Ran {n} test', 'Ran {n} tests', n_test).format(n=n_test))
+    print()
+    extra_message = []
+    if n_skip > 0:
+        extra_message += ['skipped={n}'.format(n=n_skip)]
+    if n_fail > 0:
+        extra_message += ['failures={n}'.format(n=n_fail)]
+    if extra_message:
+        extra_message = ' ({msg})'.format(msg=', '.join(extra_message))
+    else:
+        extra_message = ''
+    message = ('OK' if n_fail == 0 else 'FAILED') + extra_message
+    print(message)
+    if rw_build_tree is not None:
+        shutil.rmtree(rw_build_tree)
+    sys.exit(n_fail > 0)
+
+if __name__ == '__main__':
+    main()
+
+# vim:ts=4 sw=4 et
