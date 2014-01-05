@@ -199,6 +199,7 @@ if ($version) {
 sub fatal
 {
     my ($msg) = @_;
+    $msg =~ s/\n?$/\n/;
     print STDERR "$progname: $msg";
     exit 1;
 }
