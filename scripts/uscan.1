@@ -405,6 +405,12 @@ a zip archive (i.e. it doesn't match a .tlz, .tlzm, .tlzma, .tar.lzma, .txz,
 installed in order to repack .zip archives, the xz-utils package must be
 installed to repack lzma or xz tar archives.
 .TP
+\fB\-\-repack-compression\fR \fICOMP\fR
+In the case where the upstream sources are repacked (either because
+\fB\-\-repack\fR option is given or \fIdebian/copyright\fR contains the
+field \fBFiles-Excluded\fR), it is possible to control the compression
+method via the \fICOMP\fR parameter (defaults to \fBgz\fR).
+.TP
 .B \-\-no\-symlink
 Don't make these symlinks and don't rename the files.
 .TP

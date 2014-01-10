@@ -34,6 +34,7 @@ use List::Util qw/first/;
 use filetest 'access';
 use Getopt::Long qw(:config gnu_getopt);
 use lib '/usr/share/devscripts';
+use Devscripts::Compression qw/compression_get_file_extension_regex compression_get_property/;
 use Devscripts::Versort;
 use Text::ParseWords;
 BEGIN {
@@ -77,6 +78,7 @@ sub dehs_output ();
 sub quoted_regex_replace ($);
 sub safe_replace ($$);
 sub get_main_source_dir($$$$);
+sub compress_archive($$$);
 
 sub usage {
     print <<"EOF";
@@ -105,6 +107,9 @@ Options:
     --repack       Repack downloaded archives from orig.tar.bz2, orig.tar.lzma,
                    orig.tar.xz or orig.zip to orig.tar.gz
                    (does nothing if downloaded archive orig.tar.gz)
+    --repack-compression COMP
+                   When the upstream sources are repacked, use compression COMP
+                   for the resulting tarball
     --no-symlink   Don\'t make symlink or rename
     --verbose      Give verbose output
     --no-verbose   Don\'t give verbose output (default)
@@ -176,6 +181,8 @@ my $download_version;
 my $force_download = 0;
 my $report = 0; # report even on up-to-date packages?
 my $repack = 0; # repack .tar.bz2, .tar.lzma, .tar.xz or .zip to .tar.gz
+my $default_compression = 'gz' ;
+my $repack_compression = $default_compression;
 my $symlink = 'symlink';
 my $verbose = 0;
 my $check_dirname_level = 1;
@@ -275,7 +282,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # Now read the command line arguments
 my $debug = 0;
 my ($opt_h, $opt_v, $opt_destdir, $opt_download, $opt_force_download,
-    $opt_report, $opt_passive, $opt_symlink, $opt_repack, $opt_exclusion);
+    $opt_report, $opt_passive, $opt_symlink, $opt_repack,
+    $opt_repack_compression, $opt_exclusion);
 my ($opt_verbose, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
 my $opt_download_version;
@@ -295,6 +303,7 @@ GetOptions("help" => \$opt_h,
 	   "symlink!" => sub { $opt_symlink = $_[1] ? 'symlink' : 'no'; },
 	   "rename" => sub { $opt_symlink = 'rename'; },
 	   "repack" => sub { $opt_repack = 1; },
+	   "repack-compression=s" => \$opt_repack_compression,
 	   "package=s" => \$opt_package,
 	   "upstream-version=s" => \$opt_uversion,
 	   "watchfile=s" => \$opt_watchfile,
@@ -318,6 +327,8 @@ if ($opt_noconf) {
 if ($opt_h) { usage(); exit 0; }
 if ($opt_v) { version(); exit 0; }
 
+my $supported_compressions = compression_get_file_extension_regex();
+
 # Now we can set the other variables according to the command line options
 
 $destdir = $opt_destdir if defined $opt_destdir;
@@ -330,6 +341,13 @@ $timeout = $opt_timeout if defined $opt_timeout;
 $timeout = 20 unless defined $timeout and $timeout > 0;
 $symlink = $opt_symlink if defined $opt_symlink;
 $verbose = $opt_verbose if defined $opt_verbose;
+if (defined $opt_repack_compression) {
+    if ($opt_repack_compression =~ /^$supported_compressions$/) {
+        $repack_compression = $opt_repack_compression;
+    } else {
+        uscan_die "$progname: invalid compression $opt_repack_compression given.\n";
+    }
+}
 $dehs = $opt_dehs if defined $opt_dehs;
 $exclusion = $opt_exclusion if defined $opt_exclusion;
 $user_agent_string = $opt_user_agent if defined $opt_user_agent;
@@ -1428,78 +1446,70 @@ EOF
 		 or uscan_die("$progname warning: OpenPGP signature did not verify.\n");
     }
 
-    if ($repack and $newfile_base =~ /^(.*)\.(tar\.bz2|tbz2?)$/) {
-	print "-- Repacking from bzip2 to gzip\n" if $verbose;
-	my $newfile_base_gz = "$1.tar.gz";
+    if ($repack and $newfile_base =~ /^(.*)\.(tar\.bz2|tbz2?)$/ and
+        $repack_compression !~ /^bz2$/ ) {
+	print "-- Repacking from bzip2 to $repack_compression\n" if $verbose;
+	my $newfile_base_compression = "$1.tar.$repack_compression";
 	my (undef, $fname) = tempfile(UNLINK => 1);
 	spawn(exec => ['bunzip2', '-c', "$destdir/$newfile_base"],
 	      to_file => $fname,
 	      wait_child => 1);
 	spawn(exec => ['gzip', '-n', '-9'],
 	      from_file => $fname,
-	      to_file => "$destdir/$newfile_base_gz",
 	      wait_child => 1);
 	unlink "$destdir/$newfile_base";
-	$newfile_base = $newfile_base_gz;
+	$newfile_base = $newfile_base_compression;
     }
 
-    if ($repack and $newfile_base =~ /^(.*)\.(tar\.lzma|tlz(?:ma?)?)$/) {
-	print "-- Repacking from lzma to gzip\n" if $verbose;
-	my $newfile_base_gz = "$1.tar.gz";
+    if ($repack and $newfile_base =~ /^(.*)\.(tar\.lzma|tlz(?:ma?)?)$/ and
+        $repack_compression !~ /^lzma$/ ) {
+	print "-- Repacking from lzma to $repack_compression\n" if $verbose;
+	my $newfile_base_compression = "$1.tar.$repack_compression";
 	my (undef, $fname) = tempfile(UNLINK => 1);
 	spawn(exec => ['xz', '-F', 'lzma', '-cd', "$destdir/$newfile_base"],
 	      to_file => $fname,
 	      wait_child => 1);
-	spawn(exec => ['gzip', '-n', '-9'],
-	      from_file => $fname,
-	      to_file => "$destdir/$newfile_base_gz",
-	      wait_child => 1);
-	unlink "$destdir/$newfile_base";
-	$newfile_base = $newfile_base_gz;
+	compress_archive("$fname", "$destdir/$newfile_base_compression", $repack_compression);
+	$newfile_base = $newfile_base_compression;
     }
 
-    if ($repack and $newfile_base =~ /^(.*)\.(tar\.xz|txz)$/) {
-	print "-- Repacking from xz to gzip\n" if $verbose;
-	my $newfile_base_gz = "$1.tar.gz";
+    if ($repack and $newfile_base =~ /^(.*)\.(tar\.xz|txz)$/ and
+        $repack_compression !~ /^xz$/ ) {
+	print "-- Repacking from xz to $repack_compression\n" if $verbose;
+	my $newfile_base_compression = "$1.tar.$repack_compression";
 	my (undef, $fname) = tempfile(UNLINK => 1);
 	spawn(exec => ['xz', '-cd', "$destdir/$newfile_base"],
 	      to_file => $fname,
 	      wait_child => 1);
-	spawn(exec => ['gzip', '-n', '-9'],
-	      from_file => $fname,
-	      to_file => "$destdir/$newfile_base_gz",
-	      wait_child => 1);
-	unlink "$destdir/$newfile_base";
-	$newfile_base = $newfile_base_gz;
+	compress_archive("$fname", "$destdir/$newfile_base_compression", $repack_compression);
+	$newfile_base = $newfile_base_compression;
     }
 
     if ($repack and $newfile_base =~ /^(.*)\.(zip|jar)$/) {
-	print "-- Repacking from zip to .tar.gz\n" if $verbose;
+	print "-- Repacking from zip to .tar.$repack_compression\n" if $verbose;
 
 	system('command -v unzip >/dev/null 2>&1') >> 8 == 0
 	  or uscan_die("unzip binary not found. You need to install the package unzip to be able to repack .zip upstream archives.\n");
 
-	my $newfile_base_gz = "$1.tar.gz";
+	my $compress_file_base = "$1.tar" ;
+	my $newfile_base_compression = "$compress_file_base.$repack_compression";
 	my $tempdir = tempdir ("uscanXXXX", TMPDIR => 1, CLEANUP => 1);
 	# Parent of the target directory should be under our control
 	$tempdir .= '/repack';
 	mkdir $tempdir or uscan_die("Unable to mkdir($tempdir): $!\n");
 	my $absdestdir = abs_path($destdir);
 	system('unzip', '-q', '-a', '-d', $tempdir, "$destdir/$newfile_base") == 0
-	    or uscan_die("Repacking from zip or jar to tar.gz failed (could not unzip)\n");
+	    or uscan_die("Repacking from zip or jar to tar.$repack_compression failed (could not unzip)\n");
 	my $cwd = cwd();
 	chdir($tempdir) or uscan_die("Unable to chdir($tempdir): $!\n");
 	eval {
-	    spawn(exec => ['tar', '--owner=root', '--group=root', '--mode=a+rX', '-czf', "$absdestdir/$newfile_base_gz", glob('* .[!.]*')],
-		  env => { GZIP => '-n -9' },
-		  wait_child => 1);
+	    compress_archive("$absdestdir/$compress_file_base", "$absdestdir/$newfile_base_compression", $repack_compression);
 	};
 	if ($@) {
-	    uscan_die("Repacking from zip or jar to tar.gz failed (could not create tarball)\n");
+	    uscan_die("Repacking from zip or jar to tar.$repack_compression failed (could not create tarball)\n");
 	}
 	chdir($cwd);
-	unlink "$destdir/$newfile_base";
-	$newfile_base = $newfile_base_gz;
+	$newfile_base = $newfile_base_compression;
     }
 
     if ($newfile_base =~ /\.(tar\.gz|tgz
@@ -1574,14 +1584,13 @@ EOF
 	    if ( $nfiles_before == $nfiles_after ) {
 		print "-- Source tree remains identical - no need for repacking.\n" if $verbose;
 	    } else {
-		my $suffix = 'gz' ;
-		my $newfile_base_dfsg = "${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix" ;
+		my $newfile_base_dfsg = "${pkg}_${newversion}${excludesuffix}.orig.tar" ;
 		my $cwd = cwd();
 		chdir($tempdir) or uscan_die("Unable to chdir($tempdir): $!\n");
 		eval {
-		    spawn(exec => ['tar', '--owner=root', '--group=root', '--mode=a+rX', '-czf', "$absdestdir/$newfile_base_dfsg", glob('* .[!.]*')],
-			  env => { GZIP => '-n -9' },
-			  wait_child => 1);
+		    spawn(exec => ['tar', '--owner=root', '--group=root', '--mode=a+rX', '-cf', "$absdestdir/$newfile_base_dfsg", glob('* .[!.]*')],
+			wait_child => 1);
+		    compress_archive("$absdestdir/$newfile_base_dfsg", "$absdestdir/$newfile_base_dfsg.$repack_compression", $repack_compression);
 		};
 		if ($@) {
 		    uscan_die("Excluding files failed (could not create tarball)\n");
@@ -2232,4 +2241,27 @@ sub get_main_source_dir($$$$) {
 	}
     }
     return $main_source_dir;
+}
+
+sub compress_archive($$$) {
+    my ($from_file, $to_file, $compression) = @_;
+    my %ext2comp = (
+	gz => 'gzip',
+	bz2 => 'bzip2',
+	xz => 'xz',
+	lzma => 'lzma',
+    );
+    if (!exists $ext2comp{$compression}) {
+	uscan_die "$progname: unknown compression method $compression.";
+    }
+
+    my $comp = $ext2comp{$compression};
+
+    my $cmd = compression_get_property($comp, 'comp_prog');
+    push(@{$cmd}, '-'.compression_get_property($comp, 'default_level'));
+    spawn(exec => $cmd,
+	from_file => $from_file,
+	to_file => $to_file,
+	wait_child => 1);
+    unlink $from_file;
 }

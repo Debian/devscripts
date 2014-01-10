@@ -20,7 +20,7 @@ if test "$1" = --installed; then
     shift
 else
     top_srcdir=$(readlink -f "${0%/*}/..")
-    COMMAND="perl -I $top_srcdir $top_srcdir/scripts/uscan.pl --no-conf"
+    COMMAND="perl -I $top_srcdir $top_srcdir/scripts/uscan.pl --no-conf --repack-compression=xz"
 fi
 
 cleanup(){
@@ -92,8 +92,10 @@ END
 
     OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND) | grep baz)
 
-    TARBALL=${PKG}_1+dfsg.orig.tar.gz
+    TARBALL=${PKG}_1+dfsg.orig.tar.xz
     assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
+    assertNotNull 'pristine tarball is not xz-compressed' \
+                  "$( file $TMPDIR/$TARBALL | grep 'XZ compressed data' )"
     CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
     assertFalse 'file that must be excluded is present in the tarball'	\
                 $(containsName "$CONTENTS" exclude-this)
