@@ -38,21 +38,24 @@ my $cachefile = $cachedir . basename($url);
 my $forcecache = 0;
 my $usecache = 0;
 
-my %flagmap = ( '(P)' => "pending",
-		'.(\+)' => "patch",
-		'..(H)' => "help [wanted]",
-		'...(M)' => "moreinfo [needed]",
-		'....(R)' => "unreproducible",
-		'.....(S)' => "security",
-		'......(U)' => "upstream",
-		'.......(I)' => "wheezy-ignore or squeeze-ignore",
-	      );
+my @flags = (
+    [qr/P/ => 'pending'],
+    [qr/\+/ => 'patch'],
+    [qr/H/ => 'help [wanted]'],
+    [qr/M/ => 'moreinfo [needed]'],
+    [qr/R/ => 'unreproducible'],
+    [qr/S/ => 'security'],
+    [qr/U/ => 'upstream'],
+    [qr/I/ => 'wheezy-ignore or squeeze-ignore'],
+);
 # A little hacky but allows us to sort the list by length
-my %distmap = ( '(O)' => "oldstable",
-		'.?(S)' => "stable",
-		'.?.?(T)' => "testing",
-		'.?.?.?(U)' => "unstable",
-		'.?.?.?.?(E)' => "experimental");
+my @dists = (
+    [qr/O/ => 'oldstable'],
+    [qr/S/ => 'stable'],
+    [qr/T/ => 'testing'],
+    [qr/U/ => 'unstable'],
+    [qr/E/ => 'experimental'],
+);
 
 my $includetags = "";
 my $excludetags = "";
@@ -349,14 +352,15 @@ sub human_flags($) {
     my $matchedexcludes = 0;
     my $applies = 1;
 
-    foreach my $flag ( sort { length $a <=> length $b } keys %flagmap ) {
-	if ($mrf =~ /^\[(?:$flag)/) {
-	    if ($excludetags =~ /\Q$1\E/) {
+    foreach my $flagref (@flags) {
+	my ($flag, $desc) = @{$flagref};
+	if ($mrf =~ $flag) {
+	    if ($excludetags =~ $flag) {
 		$matchedexcludes++;
-	    } elsif ($includetags =~ /\Q$1\E/ or ! $includetags) {
+	    } elsif ($includetags =~ $flag or ! $includetags) {
 		$matchedflags++;
 	    }
-	    push @hrf, $flagmap{$flag};
+	    push @hrf, $desc;
 	}
     }
     if ($excludetags and $tagexcoperation eq 'and' and
@@ -387,14 +391,15 @@ sub human_dists($) {
     my $matchedexcludes = 0;
     my $applies = 1;
 
-    foreach my $dist ( sort { length $a <=> length $b } keys %distmap ) {
-	if ($mrf =~ /(?:$dist)/) {
-	    if ($excludedists =~ /$dist/) {
+    foreach my $distref (@dists) {
+	my ($dist, $desc) = @{$distref};
+	if ($mrf =~ $dist) {
+	    if ($excludedists =~ $dist) {
 		$matchedexcludes++;
-	    } elsif ($includedists =~ /$dist/ or ! $includedists) {
+	    } elsif ($includedists =~ $dist or ! $includedists) {
 		$matcheddists++;
 	    }
-	    push @hrf, $distmap{$dist};
+	    push @hrf, $desc;
 	}
     }
     if ($excludedists and $distexcoperation eq 'and' and
