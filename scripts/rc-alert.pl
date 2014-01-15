@@ -46,7 +46,6 @@ my @flags = (
     [qr/R/ => 'unreproducible'],
     [qr/S/ => 'security'],
     [qr/U/ => 'upstream'],
-    [qr/I/ => 'wheezy-ignore or squeeze-ignore'],
 );
 # A little hacky but allows us to sort the list by length
 my @dists = (
@@ -267,6 +266,9 @@ my $html;
     local $/;
     $html = <BUGS>;
 }
+
+my ($ignore) = $html =~ m%<strong>I</strong>: ([^<]*)%;
+push(@flags, [qr/I/ => $ignore]);
 
 my @stanzas = $html =~ m%<div class="package">(.*?)</div>%gs;
 my %pkg_store;

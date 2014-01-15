@@ -8,6 +8,8 @@ devscripts (2.13.10) UNRELEASED; urgency=low
   * licensecheck: Add handling for a variation of 3 clause BSD.
   * rc-alert:
     + Ensure the tag/dist description order is stable.  (Closes: #735286)
+    + Automatically determine what the ignore tag means, instead of
+      hard-coding dist names.
 
  -- Jakub Wilk <jwilk@debian.org>  Fri, 27 Dec 2013 18:39:11 +0100
 
