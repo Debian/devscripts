@@ -1350,60 +1350,58 @@ EOF
         print "Package directory '$destdir to store downloaded file is not existing\n";
         return 1;
     }
+    my $downloader = sub {
+	my ($url, $fname) = @_;
+	if ($url =~ m%^http(s)?://%) {
+	    if (defined($1) and !$haveSSL) {
+		uscan_die "$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
+	    }
+	    # substitute HTML entities
+	    # Is anything else than "&amp;" required?  I doubt it.
+	    print STDERR "$progname debug: requesting URL $url\n" if $debug;
+	    my $headers = HTTP::Headers->new;
+	    $headers->header('Accept' => '*/*');
+	    $request = HTTP::Request->new('GET', $url, $headers);
+	    $response = $user_agent->request($request, $fname);
+	    if (! $response->is_success) {
+		if (defined $pkg_dir) {
+		    uscan_warn "$progname warning: In directory $pkg_dir, downloading\n  $url failed: " . $response->status_line . "\n";
+		} else {
+		    uscan_warn "$progname warning: Downloading\n $url failed:\n" . $response->status_line . "\n";
+		}
+		return 0;
+	    }
+	}
+	else {
+	    # FTP site
+	    if (exists $options{'pasv'}) {
+		$ENV{'FTP_PASSIVE'}=$options{'pasv'};
+	    }
+	    print STDERR "$progname debug: requesting URL $url\n" if $debug;
+	    $request = HTTP::Request->new('GET', "$url");
+	    $response = $user_agent->request($request, $fname);
+	    if (exists $options{'pasv'}) {
+		if (defined $passive) { $ENV{'FTP_PASSIVE'}=$passive; }
+		else { delete $ENV{'FTP_PASSIVE'}; }
+	    }
+	    if (! $response->is_success) {
+		if (defined $pkg_dir) {
+		    uscan_warn "$progname warning: In directory $pkg_dir, downloading\n  $url failed: " . $response->status_line . "\n";
+		} else {
+		    uscan_warn "$progname warning: Downloading\n $url failed:\n" . $response->status_line . "\n";
+		}
+		return 0;
+	    }
+	}
+	return 1;
+    };
     # Download newer package
-    if ($upstream_url =~ m%^http(s)?://%) {
-	if (defined($1) and !$haveSSL) {
-	    uscan_die "$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
-	}
-	# substitute HTML entities
-	# Is anything else than "&amp;" required?  I doubt it.
-	print STDERR "$progname debug: requesting URL $upstream_url\n" if $debug;
-	my $headers = HTTP::Headers->new;
-	$headers->header('Accept' => '*/*');
-	$request = HTTP::Request->new('GET', $upstream_url, $headers);
-	$response = $user_agent->request($request, "$destdir/$newfile_base");
-	if (! $response->is_success) {
-	    if (defined $pkg_dir) {
-		uscan_warn "$progname warning: In directory $pkg_dir, downloading\n  $upstream_url failed: " . $response->status_line . "\n";
-	    } else {
-		uscan_warn "$progname warning: Downloading\n $upstream_url failed:\n" . $response->status_line . "\n";
-	    }
-	    return 1;
-	}
+    if (!$downloader->($upstream_url, "$destdir/$newfile_base")) {
+	return 1;
     }
-    else {
-	# FTP site
-	if (exists $options{'pasv'}) {
-	    $ENV{'FTP_PASSIVE'}=$options{'pasv'};
-	}
-	print STDERR "$progname debug: requesting URL $upstream_url\n" if $debug;
-	$request = HTTP::Request->new('GET', "$upstream_url");
-	$response = $user_agent->request($request, "$destdir/$newfile_base");
-	if (exists $options{'pasv'}) {
-	    if (defined $passive) { $ENV{'FTP_PASSIVE'}=$passive; }
-	    else { delete $ENV{'FTP_PASSIVE'}; }
-	}
-	if (! $response->is_success) {
-	    if (defined $pkg_dir) {
-		uscan_warn "$progname warning: In directory $pkg_dir, downloading\n  $upstream_url failed: " . $response->status_line . "\n";
-	    } else {
-		uscan_warn "$progname warning: Downloading\n $upstream_url failed:\n" . $response->status_line . "\n";
-	    }
-	    return 1;
-	}
-    }
-
     if (defined $pgpsig_url) {
 	print "-- Downloading OpenPGP signature for package as $newfile_base.pgp\n" if $verbose;
-	my $sigrequest = HTTP::Request->new('GET', "$pgpsig_url");
-	my $sigresponse = $user_agent->request($sigrequest, "$destdir/$newfile_base.pgp");
-
-	if (! $sigresponse->is_success) {
-	    if (defined $pkg_dir) {
-		uscan_warn "$progname warning: In directory $pkg_dir, downloading OpenPGP signature\n  $upstream_url failed: " . $sigresponse->status_line . "\n";
-	    } else {
-		uscan_warn "$progname warning: Downloading OpenPGP signature\n $pgpsig_url failed:\n" . $sigresponse->status_line . "\n";
-	    }
+	if (!$downloader->($pgpsig_url, "$destdir/$newfile_base.pgp")) {
 	    return 1;
 	}
 
