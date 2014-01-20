@@ -75,6 +75,9 @@ Files-Excluded: exclude-this
  exclude-dir
 END
 
+    # Test matching with escaped characters
+    printf ' ;\ echo\ baz;\ #\n' >> $TMPDIR/$PKG/debian/copyright
+
     mkdir -p $TMPDIR/repo
     touch $TMPDIR/repo/include-this
     touch $TMPDIR/repo/exclude-this
@@ -96,6 +99,8 @@ END
                 $(containsName "$CONTENTS" exclude-this)
     assertFalse "dir that must be excluded is present in the tarball"	\
                 $(containsName "$CONTENTS" exclude-dir)
+    assertFalse "path with whitespace that must be excluded is present"	\
+                $(containsName "$CONTENTS" "; echo baz; #/")
     # 731849
     assertNull 'dirty root directory allowed command execution' "$OUTPUT"
 
