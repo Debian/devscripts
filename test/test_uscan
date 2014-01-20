@@ -31,6 +31,11 @@ cleanup(){
 
 trap cleanup 1 2 3 13 15
 
+containsName(){
+  expr "$1" : ".*/$2" > /dev/null
+  echo $?
+}
+
 . "${0%/*}/shunit2-helper-functions.sh"
 
 # The following function tests the Files-Excluded feature of uscan, which
@@ -86,10 +91,11 @@ END
 
     TARBALL=${PKG}_1+dfsg.orig.tar.gz
     assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
-    assertNull 'file that must be excluded is present in the tarball'	\
-               "$( tar tzf $TMPDIR/$TARBALL  | grep exclude-this )"
-    assertNull "dir that must be excluded is present in the tarball"	\
-               "$(tar atf $TMPDIR/$TARBALL | grep exclude-dir)"
+    CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
+    assertFalse 'file that must be excluded is present in the tarball'	\
+                $(containsName "$CONTENTS" exclude-this)
+    assertFalse "dir that must be excluded is present in the tarball"	\
+                $(containsName "$CONTENTS" exclude-dir)
     # 731849
     assertNull 'dirty root directory allowed command execution' "$OUTPUT"
 
