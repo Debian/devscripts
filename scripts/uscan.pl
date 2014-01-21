@@ -817,7 +817,7 @@ sub process_watchline ($$$$$$)
 		uscan_warn "$progname warning: pgpsigurlmangle option exists, but debian/upstream-signing-key.pgp does not exist\n  in $watchfile, skipping:\n  $line\n";
 		return 1;
 	    } elsif (! $havegpgv) {
-		uscan_warn "$progname warning: pgpsignurlmangle option exists, but you must have gpgv installed to verify\n  in $watchfile, skipping:\n  $line\n";
+		uscan_warn "$progname warning: pgpsigurlmangle option exists, but you must have gpgv installed to verify\n  in $watchfile, skipping:\n  $line\n";
 		return 1;
 	    }
 	}
