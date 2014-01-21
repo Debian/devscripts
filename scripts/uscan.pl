@@ -30,6 +30,7 @@ use Dpkg::IPC;
 use File::Basename;
 use File::Copy;
 use File::Temp qw/tempfile tempdir/;
+use List::Util qw/first/;
 use filetest 'access';
 use Getopt::Long qw(:config gnu_getopt);
 use lib '/usr/share/devscripts';
@@ -702,6 +703,7 @@ sub process_watchline ($$$$$$)
     my $style='new';
     my $urlbase;
     my $headers = HTTP::Headers->new;
+    my $keyring;
 
     # Comma-separated list of features that sites being queried might
     # want to be aware of
@@ -813,8 +815,9 @@ sub process_watchline ($$$$$$)
 
 	# Check validity of options
 	if (exists $options{'pgpsigurlmangle'}) {
-	    if (not (-r 'debian/upstream-signing-key.pgp')) {
-		uscan_warn "$progname warning: pgpsigurlmangle option exists, but debian/upstream-signing-key.pgp does not exist\n  in $watchfile, skipping:\n  $line\n";
+	    $keyring = first { -r $_ } qw(debian/upstream/signing-key.pgp debian/upstream-signing-key.pgp);
+	    if (!defined $keyring) {
+		uscan_warn "$progname warning: pgpsigurlmangle option exists, but the upstream keyring does not exist\n  in $watchfile, skipping:\n  $line\n";
 		return 1;
 	    } elsif (! $havegpgv) {
 		uscan_warn "$progname warning: pgpsigurlmangle option exists, but you must have gpgv installed to verify\n  in $watchfile, skipping:\n  $line\n";
@@ -1407,7 +1410,7 @@ EOF
 
 	print "-- Verifying OpenPGP signature $newfile_base.pgp for $newfile_base\n" if $verbose;
 	system('/usr/bin/gpgv', '--homedir', '/dev/null',
-	       '--keyring', 'debian/upstream-signing-key.pgp',
+	       '--keyring', $keyring,
 	       "$destdir/$newfile_base.pgp", "$destdir/$newfile_base") >> 8 == 0
 		 or uscan_die("$progname warning: OpenPGP signature did not verify.\n");
     }

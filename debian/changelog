@@ -1,4 +1,4 @@
-devscripts (2.14.1) UNRELEASED; urgency=low
+devscripts (2.14.0) UNRELEASED; urgency=low
 
   [ Jakub Wilk ]
   * Add sadt, a simple implementation of DEP-8 test runner (closes: #712095).
@@ -19,6 +19,7 @@ devscripts (2.14.1) UNRELEASED; urgency=low
       (Closes: #728182)
     + Support escaped characters in the Files-Excluded patterns.  Thanks to
       Csillag Tamas and Russ Albery for the patch.  (Closes: #733111)
+    + Move keyring location for signature verification under debian/upstream/.
 
  -- Jakub Wilk <jwilk@debian.org>  Fri, 27 Dec 2013 18:39:11 +0100
 
