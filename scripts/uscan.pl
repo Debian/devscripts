@@ -2222,7 +2222,7 @@ sub get_main_source_dir($$$$) {
     $main_source_dir = $tempdir . '/' . $pkg . '-' . $newversion . $excludesuffix . '.orig';
     mkdir($main_source_dir) or uscan_die("Unable to create temporary source directory $main_source_dir\n");
     foreach my $file (@files) {
-	unless ($file =~ /^\.\.?/) {
+	unless ($file =~ /^\.\.?$/) {
 	    if ( -d "${tempdir}/$file" ) {
 		# HELP: why can't perl move not move directories????
 		system('mv', "${tempdir}/$file", $main_source_dir);

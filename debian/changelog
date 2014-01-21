@@ -22,6 +22,7 @@ devscripts (2.14.0) UNRELEASED; urgency=low
     + Move keyring location for signature verification under debian/upstream/.
     + Use the armored keyring debian/upstream/signing-key.asc for signature
       verification if the unarmored keyring doesn't exist.  (Closes: #720957)
+    + Fix regex in get_main_source_dir.  (Closes: #735906)
 
  -- Jakub Wilk <jwilk@debian.org>  Fri, 27 Dec 2013 18:39:11 +0100
 
