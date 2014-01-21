@@ -20,6 +20,8 @@ devscripts (2.14.0) UNRELEASED; urgency=low
     + Support escaped characters in the Files-Excluded patterns.  Thanks to
       Csillag Tamas and Russ Albery for the patch.  (Closes: #733111)
     + Move keyring location for signature verification under debian/upstream/.
+    + Use the armored keyring debian/upstream/signing-key.asc for signature
+      verification if the unarmored keyring doesn't exist.  (Closes: #720957)
 
  -- Jakub Wilk <jwilk@debian.org>  Fri, 27 Dec 2013 18:39:11 +0100
 

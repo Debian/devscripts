@@ -292,9 +292,10 @@ If present, the supplied rules will be applied to the downloaded URL
 that will be used to fetch the detached OpenPGP signature file for the
 upstream tarball.  Some common rules might be `\fBs/$/.asc/\fR' or
 `\fBs/$/.pgp/\fR' or `\fBs/$/.gpg/\fR'.  This signature must be made
-by a key found in the keyring \fBdebian/upstream/signing-key.pgp\fR.
-If it is not valid, or not made by one of the listed keys, uscan will
-report an error.
+by a key found in the keyring \fBdebian/upstream/signing-key.pgp\fR or
+the armored keyring \fBdebian/upstream/signing-key.asc\fR.  If it is not
+valid, or not made by one of the listed keys, uscan will report an
+error.
 .SH "Directory name checking"
 Similarly to several other scripts in the \fBdevscripts\fR package,
 \fBuscan\fR explores the requested directory trees looking for

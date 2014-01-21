@@ -61,6 +61,7 @@ if ($@) {
     $haveSSL = 0;
 }
 my $havegpgv = (-x '/usr/bin/gpgv');
+my $havegpg = first { -x $_ } qw(/usr/bin/gpg2 /usr/bin/gpg);
 
 # Did we find any new upstream versions on our wanderings?
 our $found = 0;
@@ -703,7 +704,7 @@ sub process_watchline ($$$$$$)
     my $style='new';
     my $urlbase;
     my $headers = HTTP::Headers->new;
-    my $keyring;
+    my ($keyring, $gpghome);
 
     # Comma-separated list of features that sites being queried might
     # want to be aware of
@@ -815,12 +816,24 @@ sub process_watchline ($$$$$$)
 
 	# Check validity of options
 	if (exists $options{'pgpsigurlmangle'}) {
-	    $keyring = first { -r $_ } qw(debian/upstream/signing-key.pgp debian/upstream-signing-key.pgp);
+	    if (! $havegpgv) {
+		uscan_warn "$progname warning: pgpsigurlmangle option exists, but you must have gpgv installed to verify\n  in $watchfile, skipping:\n  $line\n";
+		return 1;
+	    }
+	    $keyring = first { -r $_ } qw(debian/upstream/signing-key.pgp debian/upstream/signing-key.asc debian/upstream-signing-key.pgp);
+	    if ($keyring =~ m/\.asc$/) {
+		if (!$havegpg) {
+		    uscan_warn "$progname warning: $keyring is armored but gpg/gpg2 is not available to dearmor it\n  in $watchfile, skipping:\n $line\n";
+		    return 1;
+		}
+		# Need to convert an armored key to binary for use by gpgv
+		$gpghome = tempdir(CLEANUP => 1);
+		spawn(exec => [$havegpg, '--homedir', $gpghome, '--no-options', '-q', '--batch', '--no-default-keyring', '--import', $keyring],
+		      wait_child => 1);
+		$keyring = "$gpghome/pubring.gpg";
+	    }
 	    if (!defined $keyring) {
 		uscan_warn "$progname warning: pgpsigurlmangle option exists, but the upstream keyring does not exist\n  in $watchfile, skipping:\n  $line\n";
-		return 1;
-	    } elsif (! $havegpgv) {
-		uscan_warn "$progname warning: pgpsigurlmangle option exists, but you must have gpgv installed to verify\n  in $watchfile, skipping:\n  $line\n";
 		return 1;
 	    }
 	}

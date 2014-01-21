@@ -1,8 +1,9 @@
 devscripts (2.14.0) unstable; urgency=low
 
-  uscan now looks for upstream's keyring as debian/upstream/signing-key.pgp.
-  The previously used location, debian/upstream-signing-key.pgp, will be
-  checked as a last resort for a transition period.
+  uscan now looks for upstream's keyring under debian/upstream/ as either
+  signing-key.pgp or, for an armored keyring, signing-key.asc.  The previously
+  used location, debian/upstream-signing-key.pgp, will be checked as a last
+  resort for a transition period.
 
  -- James McCoy <jamessan@debian.org>  Mon, 20 Jan 2014 22:21:16 -0500
 
