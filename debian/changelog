@@ -11,8 +11,8 @@ devscripts (2.14.0) UNRELEASED; urgency=low
     + Automatically determine what the ignore tag means, instead of
       hard-coding dist names.
   * uscan:
-    + Honor declared options when downloading the PGP signature.  (Closes:
-      #735085)
+    + Download the PGP signature the same way the archive was downloaded.
+      (Closes: #735085, #736476)
     + Skip the watchfile line if pgpsigurlmangle is defined but
       upstream-signing-key.pgp is missing.  (Closes: #735084)
     + Update the GitHub example.  Based on a patch by YABUKI Yukiharu.
