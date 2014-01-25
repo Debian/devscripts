@@ -1,4 +1,4 @@
-devscripts (2.14.0) UNRELEASED; urgency=low
+devscripts (2.14.0) unstable; urgency=medium
 
   [ Jakub Wilk ]
   * Add sadt, a simple implementation of DEP-8 test runner (closes: #712095).
@@ -26,7 +26,7 @@ devscripts (2.14.0) UNRELEASED; urgency=low
       verification if the unarmored keyring doesn't exist.  (Closes: #720957)
     + Fix regex in get_main_source_dir.  (Closes: #735906)
 
- -- Jakub Wilk <jwilk@debian.org>  Fri, 27 Dec 2013 18:39:11 +0100
+ -- James McCoy <jamessan@debian.org>  Sat, 25 Jan 2014 10:19:02 -0500
 
 devscripts (2.13.9) unstable; urgency=low
 
