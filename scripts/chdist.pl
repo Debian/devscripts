@@ -172,9 +172,9 @@ my $arch;
 my $datadir = $ENV{'HOME'} . '/.chdist';
 
 GetOptions(
-  "help"       => \$help,
-  "data-dir=s" => \$datadir,
-  "arch=s"     => \$arch,
+  "h|help"       => \$help,
+  "d|data-dir=s" => \$datadir,
+  "a|arch=s"     => \$arch,
   "version"    => \$version,
 ) or usage(1);
 

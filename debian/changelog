@@ -4,7 +4,9 @@ devscripts (2.14.0) UNRELEASED; urgency=low
   * Add sadt, a simple implementation of DEP-8 test runner (closes: #712095).
 
   [ James McCoy ]
-  * chdist: Ensure error messages end with an EOL.  (Closes: #734307)
+  * chdist:
+    + Ensure error messages end with an EOL.  (Closes: #734307)
+    + Make short options (-d, -a, -h) work.  (Closes: #736504)
   * licensecheck: Add handling for a variation of 3 clause BSD.
   * rc-alert:
     + Ensure the tag/dist description order is stable.  (Closes: #735286)
