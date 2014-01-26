@@ -166,7 +166,7 @@ class TestGroup(object):
     def __iter__(self):
         return iter(self.tests)
 
-    def expand_depends(self, packages):
+    def expand_depends(self, packages, build_depends):
         if '@' not in self.depends:
             return
         or_clauses = []
@@ -183,6 +183,9 @@ class TestGroup(object):
             finally:
                 sys.stderr = orig_sys_stderr
         for or_clause in parsed_depends:
+            if len(or_clause) == 1 and or_clause[0]['name'] == '@builddeps@':
+                or_clauses += build_depends
+                continue
             stripped_or_clause = [r for r in or_clause if r['name'] != '@']
             if len(stripped_or_clause) < len(or_clause):
                 for package in packages:
@@ -195,7 +198,6 @@ class TestGroup(object):
         self.depends = deb822.PkgRelation.str(or_clauses)
 
     def check_depends(self):
-        assert '@' not in self.depends
         if self._check_depends_cache is not None:
             if isinstance(self._depends_cache, Exception):
                 raise self._check_depends_cache
@@ -341,6 +343,7 @@ def main():
     options.tests = frozenset(options.tests)
     options.ignore_restrictions = frozenset(options.ignore_restrictions.split(','))
     binary_packages = set()
+    build_depends = []
     try:
         file = open('debian/control', encoding='UTF-8')
     except IOError as exc:
@@ -352,6 +355,11 @@ def main():
         for n, para in enumerate(deb822.Packages.iter_paragraphs(file)):
             if n == 0:
                 para['Source']
+                for field in 'Build-Depends', 'Build-Depends-Indep':
+                    try:
+                        build_depends += deb822.PkgRelation.parse_relations(para[field])
+                    except KeyError:
+                        continue
             else:
                 binary_packages.add(para['Package'])
     test_groups = []
@@ -375,7 +383,7 @@ def main():
                     break
                 method(value)
             if group is not None:
-                group.expand_depends(binary_packages)
+                group.expand_depends(binary_packages, build_depends)
                 test_groups += [group]
     failures = []
     n_skip = n_ok = 0

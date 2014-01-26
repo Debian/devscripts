@@ -1,3 +1,11 @@
+devscripts (2.14.2) UNRELEASED; urgency=medium
+
+  [ Jakub Wilk ]
+  * sadt:
+    + Add support for @builddeps@ in tests' Depends.  (Closes: #736798)
+
+ -- Jakub Wilk <jwilk@debian.org>  Sun, 26 Jan 2014 21:50:35 +0100
+
 devscripts (2.14.1) unstable; urgency=medium
 
   * Actually install sadt.  (Closes: #736683)
