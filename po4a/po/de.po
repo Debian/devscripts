@@ -1,13 +1,14 @@
 # Translation of the devscripts documentation to German.
 # This file is distributed under the same license as the devscripts package.
-# Copyright (C) of this file Chris Leick <c.leick@vollbio.de>, 2012, 2013.
+# Copyright (C) Christoph Lameter, Julian Gilbey, Klee Dienes.
+# Copyright (C) of this file Chris Leick <c.leick@vollbio.de>, 2012-2014.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: devscripts 2.13.4\n"
+"Project-Id-Version: devscripts 2.14.1\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
 "POT-Creation-Date: 2013-12-28 19:00+0100\n"
-"PO-Revision-Date: 2013-10-07 23:11-0100\n"
+"PO-Revision-Date: 2014-01-28 19:11-0100\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
 "Language: de\n"
@@ -1992,17 +1993,14 @@ msgstr "B<found> I<Fehler> [I<Version>]"
 
 #. type: textblock
 #: ../scripts/bts.pl:1376
-#, fuzzy
-#| msgid ""
-#| "Indicate that a I<bug> was fixed in a particular package version, without "
-#| "affecting the I<bug>'s open/closed status."
 msgid ""
 "Indicate that a I<bug> was found to exist in a particular package version.  "
 "Without I<version>, the list of fixed versions is cleared and the bug is "
 "reopened."
 msgstr ""
-"zeigt an, dass ein I<Fehler> in einer bestimmten Paketversion behoben wurde "
-"ohne den Offen-/Geschlossenstatus des I<Fehler>s zu beeinflussen."
+"zeigt an, dass ein I<Fehler> in einer bestimmten Paketversion gefunden wurde. "
+"Ohne I<Version> wird die Liste reparierter Versionen bereinigt und der Fehler "
+"wird erneut geöffnet."
 
 #. type: =item
 #: ../scripts/bts.pl:1393
@@ -2184,6 +2182,8 @@ msgid ""
 "Adding/removing the B<security> tag will add \"team\\@security.debian.org\" "
 "to the Cc list of the control email."
 msgstr ""
+"Das Hinzufügen/Entfernen der B<security>-Markierung wird der Cc-Liste der "
+"Steuerungs-E-Mail »team\\@security.debian.org« hinzufügen."
 
 #. type: =item
 #: ../scripts/bts.pl:1623
@@ -12829,15 +12829,14 @@ msgstr ""
 
 #. type: IP
 #: ../scripts/devscripts.1:129
-#, fuzzy, no-wrap
-#| msgid "I<dget>(1)"
+#, no-wrap
 msgid "I<sadt>(1)"
-msgstr "I<dget>(1)"
+msgstr "I<sadt>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:131
 msgid "run DEP-8 tests [python3-debian]"
-msgstr ""
+msgstr "führt DEP-8-Tests durch. [python3-debian]"
 
 #. type: IP
 #: ../scripts/devscripts.1:131
@@ -17022,23 +17021,17 @@ msgstr "B<-s>, B<--regex>"
 #. type: textblock
 #: ../scripts/rmadison.pl:256
 msgid "treat PACKAGE as a regex"
-msgstr ""
+msgstr "betrachtet PAKET als regulären Ausdruck."
 
 #. type: textblock
 #: ../scripts/rmadison.pl:258
-#, fuzzy
-#| msgid ""
-#| "B<dak ls> also supports B<-r>, B<--regex> to treat I<PACKAGE> as a regex. "
-#| "Since that can easily DoS the database (\"-r .\"), this option is not "
-#| "supported by the CGI and rmadison."
 msgid ""
 "B<Note:> Since B<-r> can easily DoS the database (\"-r .\"), this option is "
 "not supported by the CGI on qa.debian.org and most other installations."
 msgstr ""
-"B<dak ls> unterstützt außerdem B<-r>, B<--regex>, um I<PAKET> als einen "
-"regulären Ausdruck zu behandeln. Da dies leicht für einen "
-"Diensteverweigerungsangriff auf die Datenbank benutzt werden kann (»-r .«), "
-"wird diese Option nicht durch CGI und Rmadison unterstützt."
+"B<Hinweis:> Da B<-r> leicht für einen Diensteverweigerungsangriff auf die "
+"Datenbank benutzt werden kann (»-r .«), wird diese Option nicht durch das CGI "
+"auf qa.debian.org und die meisten anderen Installationen unterstützt."
 
 #. type: =item
 #: ../scripts/rmadison.pl:261
@@ -17205,14 +17198,12 @@ msgstr ""
 #. type: textblock
 #: ../scripts/sadt.pod:19
 msgid "sadt - simple DEP-8 test runner"
-msgstr ""
+msgstr "sadt - einfaches DEP-8-Test-Ausführungsprogramm"
 
 #. type: textblock
 #: ../scripts/sadt.pod:23
-#, fuzzy
-#| msgid "B<dch> [I<options>] [I<text> ...]"
 msgid "B<sadt> [I<options>] [I<test-name>...]"
-msgstr "B<dch> [I<Optionen>] [I<Text> …]"
+msgstr "B<sadt> [I<Optionen>] [I<Testname> …]"
 
 #. type: textblock
 #: ../scripts/sadt.pod:27
@@ -17220,6 +17211,9 @@ msgid ""
 "B<sadt> is a simple implementation of DEP-8 (“automatic as-installed package "
 "testing”) test runner."
 msgstr ""
+"B<sadt> ist eine einfache Implementierung eines "
+"DEP-8-Test-Ausführungsprogramms (»automatische installationsartige "
+"Paketprüfung«)."
 
 #. type: textblock
 #: ../scripts/sadt.pod:30
@@ -17228,6 +17222,10 @@ msgid ""
 "attempt to install any missing packages.  If a test's dependencies cannot be "
 "satisfied by packages that are currently installed, the test will be skipped."
 msgstr ""
+"Sie sind verantwortlich dafür, dass die Abhängigkeiten der Tests erfüllt "
+"sind. B<sadt> wird nicht versuchen, die fehlenden Pakete zu installieren. "
+"Falls Abhängigkeiten eines Tests nicht durch derzeit installierte Pakete "
+"erfüllt werden können, wird der Test übersprungen."
 
 #. type: textblock
 #: ../scripts/sadt.pod:34
@@ -17237,6 +17235,11 @@ msgid ""
 "the package manually, and then tell B<sadt> to assume that the package is "
 "already built using the B<-b>/B<--built-source-tree>."
 msgstr ""
+"B<sadt> wird das Paket nicht einmal dann bauen, wenn ein Test die Restiktion "
+"B<build-needed> deklariert. Stattdessen wird ein derartiger Test "
+"übersprungen. Sie können jedoch das Paket manuell bauen und B<sadt> dann "
+"mitteilen, dass das es davon ausgehen kann, dass das Paket bereits mittels "
+"B<-b>/B<--built-source-tree> gebaut wurde."
 
 #. type: textblock
 #: ../scripts/sadt.pod:39
@@ -17244,18 +17247,18 @@ msgid ""
 "B<sadt> doesn't implement any virtualisation arrangements, therefore it "
 "skips tests that declare the B<breaks-testbed> restriction."
 msgstr ""
+"B<sadt> implementiert keine Virtualisierungsmaßnahmen, daher überspringt es "
+"Tests, die die Restriktion B<breaks-testbed> deklarieren."
 
 #. type: textblock
 #: ../scripts/sadt.pod:48
 msgid "Make the output more verbose."
-msgstr ""
+msgstr "erzeugt eine detailiertere Ausgabe."
 
 #. type: =item
 #: ../scripts/sadt.pod:50
-#, fuzzy
-#| msgid "B<-b>, B<--build-depends>"
 msgid "B<-b>, B<--built-source-tree>"
-msgstr "B<-b>, B<--build-depends>"
+msgstr "B<-b>, B<--build-source-tree>"
 
 #. type: textblock
 #: ../scripts/sadt.pod:52
@@ -17263,32 +17266,28 @@ msgid ""
 "Assume that the source tree is already built.  This is equivalent to B<--"
 "ignore-restriction=build-needed>."
 msgstr ""
+"Es wird angenommen, dass der Quellverzeichnisbaum bereits gebaut wurde. Dies "
+"entspricht B<--ignore-restriction=build-needed>."
 
 #. type: =item
 #: ../scripts/sadt.pod:55
-#, fuzzy
-#| msgid "B<--dist=>I<distribution>"
 msgid "B<--ignore-restriction>=I<restriction>"
-msgstr "B<--dist=>I<Distribution>"
+msgstr "B<--ignore-restriction>=I<Restriktion>"
 
 #. type: textblock
 #: ../scripts/sadt.pod:57
 msgid "Don't skip tests that declare the I<restriction>."
-msgstr ""
+msgstr "überspringt keine Tests, die die I<Restriktion> deklarieren."
 
 #. type: textblock
 #: ../scripts/sadt.pod:61
-#, fuzzy
-#| msgid "Show this help message and exit."
 msgid "Show a help message and exit."
-msgstr "zeigt diese Hilfenachricht und wird beendet."
+msgstr "zeigt eine Hilfenachricht und wird beendet."
 
 #. type: textblock
 #: ../scripts/sadt.pod:67
-#, fuzzy
-#| msgid "B<date>(1)"
 msgid "B<adt-run>(1)"
-msgstr "B<date>(1)"
+msgstr "B<adt-run>(1)"
 
 #. type: TH
 #: ../doc/suspicious-source.1:15
