@@ -1,5 +1,5 @@
 # French translation of devscripts manual pages.
-# Copyright (C) 2004-2013 Debian French l10n team <debian-l10n-french@lists.debian.org>.
+# Copyright (C) 2004-2014 Debian French l10n team <debian-l10n-french@lists.debian.org>.
 # This file is distributed under the same license as the devscripts package.
 #
 # Nicolas François <nicolas.francois@centraliens.net>, 2004-2009.
@@ -8,12 +8,12 @@
 # Thomas Huriaux <thomas.huriaux@gmail.com>, 2006.
 # Julien Cristau <jcristau@debian.org>, 2006-2007.
 # PHAN Thi Thanh <pthanh2003@hotmail.com>, 2009.
-# David Prévot <david@tilapin.org>, 2010-2013.
+# David Prévot <david@tilapin.org>, 2010-2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2014-01-31 12:25-0400\n"
-"PO-Revision-Date: 2013-12-10 18:23-0400\n"
+"PO-Revision-Date: 2014-01-31 13:10-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -12835,15 +12835,14 @@ msgstr ""
 
 #. type: IP
 #: ../scripts/devscripts.1:129
-#, fuzzy, no-wrap
-#| msgid "I<dget>(1)"
+#, no-wrap
 msgid "I<sadt>(1)"
-msgstr "B<dget>(1)"
+msgstr "B<sadt>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:131
 msgid "run DEP-8 tests [python3-debian]"
-msgstr ""
+msgstr "exécuter des tests DEP-8 [python3-debian]"
 
 #. type: IP
 #: ../scripts/devscripts.1:131
@@ -12910,16 +12909,12 @@ msgstr "B<uscan>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:141
-#, fuzzy
-#| msgid ""
-#| "scan upstream sites for new releases of packages [gpgv, liblwp-protocol-"
-#| "https-perl, libwww-perl, unzip, lzma, xz-utils]"
 msgid ""
 "scan upstream sites for new releases of packages [gpgv, gnupg, liblwp-"
 "protocol-https-perl, libwww-perl, unzip, lzma, xz-utils]"
 msgstr ""
-"surveiller la disponibilité d'une nouvelle version amont [gpgv, liblwp-"
-"protocol-https-perl, libwww-perl, unzip, lzma, xz-utils]"
+"surveiller la disponibilité d'une nouvelle version amont [gpgv, gnupg, "
+"liblwp-protocol-https-perl, libwww-perl, unzip, lzma, xz-utils]"
 
 #. type: IP
 #: ../scripts/devscripts.1:141
@@ -17225,14 +17220,12 @@ msgstr ""
 #. type: textblock
 #: ../scripts/sadt.pod:19
 msgid "sadt - simple DEP-8 test runner"
-msgstr ""
+msgstr "sadt - Simple exécution de test DEP-8"
 
 #. type: textblock
 #: ../scripts/sadt.pod:23
-#, fuzzy
-#| msgid "B<dch> [I<options>] [I<text> ...]"
 msgid "B<sadt> [I<options>] [I<test-name>...]"
-msgstr "B<dch> [I<options>] [I<texte> ...]"
+msgstr "B<sadt> [I<options>] [I<nom-test> ...]"
 
 #. type: textblock
 #: ../scripts/sadt.pod:27
@@ -17240,6 +17233,8 @@ msgid ""
 "B<sadt> is a simple implementation of DEP-8 (“automatic as-installed package "
 "testing”) test runner."
 msgstr ""
+"B<sadt> permet simplement d’exécuter des tests DEP-8 (« test automatique de "
+"paquet tel qu’il est installé »)."
 
 #. type: textblock
 #: ../scripts/sadt.pod:30
@@ -17248,6 +17243,10 @@ msgid ""
 "attempt to install any missing packages.  If a test's dependencies cannot be "
 "satisfied by packages that are currently installed, the test will be skipped."
 msgstr ""
+"Les dépendances à satisfaire pour les tests sont de votre responsabilité. "
+"B<sadt> n’essayera pas d’installer les paquets manquants. Si des dépendances "
+"d’un test ne peuvent pas être satisfaites par les paquets actuellement "
+"installés, le test sera ignoré."
 
 #. type: textblock
 #: ../scripts/sadt.pod:34
@@ -17257,6 +17256,11 @@ msgid ""
 "the package manually, and then tell B<sadt> to assume that the package is "
 "already built using the B<-b>/B<--built-source-tree>."
 msgstr ""
+"B<sadt> ne construira pas le paquet même si un test déclare la restriction "
+"B<build-needed>. À la place, ce genre de test sera ignoré. Cependant, vous "
+"pouvez construire le paquet vous-même et indiquer ensuite à B<sadt> de "
+"considérer que le paquet est déjà construit à l’aide de l’option B<-b> ou "
+"B<--built-source-tree>."
 
 #. type: textblock
 #: ../scripts/sadt.pod:39
@@ -17264,18 +17268,18 @@ msgid ""
 "B<sadt> doesn't implement any virtualisation arrangements, therefore it "
 "skips tests that declare the B<breaks-testbed> restriction."
 msgstr ""
+"B<sadt> ne permet pas de gérer la virtualisation, par conséquent les tests "
+"qui déclarent la restriction B<breaks-testbed> sont ignorés."
 
 #. type: textblock
 #: ../scripts/sadt.pod:48
 msgid "Make the output more verbose."
-msgstr ""
+msgstr "Rendre la sortie plus bavarde."
 
 #. type: =item
 #: ../scripts/sadt.pod:50
-#, fuzzy
-#| msgid "B<-b>, B<--build-depends>"
 msgid "B<-b>, B<--built-source-tree>"
-msgstr "B<-b>, B<--build-depends>"
+msgstr "B<-b>, B<--built-source-tree>"
 
 #. type: textblock
 #: ../scripts/sadt.pod:52
@@ -17283,42 +17287,38 @@ msgid ""
 "Assume that the source tree is already built.  This is equivalent to B<--"
 "ignore-restriction=build-needed>."
 msgstr ""
+"Supposer que l’arborescence source est déjà construite. C’est équivalent à "
+"B<--ignore-restriction=build-needed>."
 
 #. type: =item
 #: ../scripts/sadt.pod:55
-#, fuzzy
-#| msgid "B<--dist=>I<distribution>"
 msgid "B<--ignore-restriction>=I<restriction>"
-msgstr "B<--dist=>I<distribution>"
+msgstr "B<--ignore-restriction=>I<restriction>"
 
 #. type: textblock
 #: ../scripts/sadt.pod:57
 msgid "Don't skip tests that declare the I<restriction>."
-msgstr ""
+msgstr "Ne pas ignorer les tests qui déclarent la I<restriction>"
 
 #. type: textblock
 #: ../scripts/sadt.pod:61
-#, fuzzy
-#| msgid "Show this help message and exit."
 msgid "Show a help message and exit."
-msgstr "Afficher ce message d'aide et quitter."
+msgstr "Afficher un message d'aide et quitter."
 
 #. type: =head1
 #: ../scripts/sadt.pod:65
 msgid "CONFORMING TO"
-msgstr ""
+msgstr "CONFORMITÉ"
 
 #. type: textblock
 #: ../scripts/sadt.pod:67
 msgid "README.package-tests shipped by autopkgtest 2.6"
-msgstr ""
+msgstr "README.package-tests distribué dans autopkgtest 2.6."
 
 #. type: textblock
 #: ../scripts/sadt.pod:71
-#, fuzzy
-#| msgid "B<date>(1)"
 msgid "B<adt-run>(1)"
-msgstr "B<date>(1)"
+msgstr "B<adt-run>(1)"
 
 #. type: TH
 #: ../doc/suspicious-source.1:15
@@ -18041,7 +18041,7 @@ msgid ""
 "http://example.com/example-(\\ed[\\ed.]*)\\e.(?:zip|tgz|tbz2|txz|tar\\e.(?:gz|bz2|xz))\n"
 msgstr ""
 "# Pour une flexibilité maximale avec les formats d'archive amont :\n"
-"http://example.com/example-(\\ed[\\ed.]*)\\e.(?:zip|tgz|tbz2|txz|tar\\e.(?:gz|bz2|xz))\n"
+"http://example.com/exemple-(\\ed[\\ed.]*)\\e.(?:zip|tgz|tbz2|txz|tar\\e.(?:gz|bz2|xz))\n"
 
 #. type: Plain text
 #: ../scripts/uscan.1:78
@@ -18067,6 +18067,12 @@ msgid ""
 "opts=\"filenamemangle=s/(?:.*\\/)?v?(\\ed[\\ed\\e.]*)\\e.tar\\e.gz/E<lt>projectE<gt>-$1.tar.gz/\" \\e\n"
 "  https://github.com/E<lt>userE<gt>/E<lt>projectE<gt>/tags (?:.*/)?v?(\\ed[\\ed\\e.]*)\\e.tar\\e.gz\n"
 msgstr ""
+"# Pour les projets GitHub, les pages de marques ou de publications\n"
+"# peuvent être utilisées. Puisque les URL de l’archive n’utilisent que la\n"
+"# version pour le nom, l’utilisation de filenamemangle est recommandée\n"
+"# pour ajuster le nom du fichier téléchargé :\n"
+"opts=\"filenamemangle=s/(?:.*\\/)?v?(\\ed[\\ed\\e.]*)\\e.tar\\e.gz/E<lt>projetE<gt>-$1.tar.gz/\" \\e\n"
+"  https://github.com/E<lt>utilisateurE<gt>/E<lt>projetE<gt>/tags (?:.*/)?v?(\\ed[\\ed\\e.]*)\\e.tar\\e.gz\n"
 
 #. type: Plain text
 #: ../scripts/uscan.1:88
@@ -18092,7 +18098,7 @@ msgid ""
 msgstr ""
 "# Ceci est le format pour un site qui possède des numéros de\n"
 "# version exotiques ; le groupe entre parenthèses devra être joint\n"
-"# par des points pour créer un numéro de version sain\n"
+"# par des points pour créer un numéro de version sain :\n"
 "http://www.site.com/pub/toto/toto_v(\\ed+)_(\\ed+)\\e.tar\\e.gz\n"
 
 # NOTE: Ca reste encore cryptique
@@ -18591,15 +18597,6 @@ msgstr "B<pgpsigurlmangle=>I<règles>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:299
-#, fuzzy
-#| msgid ""
-#| "If present, the supplied rules will be applied to the downloaded URL "
-#| "(after any downloadurlmangle rules, if present) to craft a new URL that "
-#| "will be used to fetch the detached OpenPGP signature file for the "
-#| "upstream tarball.  Some common rules might be `B<s/$/.asc/>' or `B<s/$/."
-#| "pgp/>' or `B<s/$/.gpg/>'.  This signature must be made by a key found in "
-#| "the keyring B<debian/upstream-signing-key.pgp>.  If it is not valid, or "
-#| "not made by one of the listed keys, uscan will report an error."
 msgid ""
 "If present, the supplied rules will be applied to the downloaded URL (after "
 "any downloadurlmangle rules, if present) to craft a new URL that will be "
@@ -18610,14 +18607,15 @@ msgid ""
 "key.asc>.  If it is not valid, or not made by one of the listed keys, uscan "
 "will report an error."
 msgstr ""
-"En cas de présence, les règles fournie seront appliquée à l’URL téléchargée "
-"(après les règles downloadurlmangle s’il y en a) pour préparer une nouvelle "
-"URL qui sera utilisée pour récupérer le fichier de signature OpenPGP "
-"détachée pour l’archive amont. Certaines règles habituelles pourraient être "
-"« B<s/$/.asc/>, « B<s/$/.pgp/> » ou « B<s/$/.gpg/> ». Cette signature doit "
-"être réalisée avec une clef du trousseau B<debian/upstream-signing-key.pgp>. "
-"Si elle n’est pas valable, ou que la clef ne fait pas partie du trousseau, "
-"uscan signalera une erreur."
+"En cas de présence, les règles fournies seront appliquées à l’URL "
+"téléchargée (après les règles downloadurlmangle s’il y en a) pour préparer "
+"une nouvelle URL qui sera utilisée pour récupérer le fichier de signature "
+"OpenPGP détachée pour l’archive amont. Certaines règles habituelles "
+"pourraient être « B<s/$/.asc/> », « B<s/$/.pgp/> » ou « B<s/$/.gpg/> ». "
+"Cette signature doit être réalisée avec une clef du trousseau B<debian/"
+"upstream/signing-key.pgp> ou du trousseau avec armure ASCII B<debian/"
+"upstream/signing-key.asc>. Si elle n’est pas valable, ou si la clef ne fait "
+"pas partie du trousseau, uscan signalera une erreur."
 
 # NOTE: "and in order to promote efficiency" ?
 #. type: Plain text
@@ -20853,10 +20851,12 @@ msgstr ""
 
 #~ msgid ""
 #~ "# For GitHub projects you can use the tags page:\n"
-#~ "https://github.com/E<lt>userE<gt>/E<lt>projectE<gt>/tags .*/(\\ed[\\ed\\e.]*)\\e.tar\\e.gz\n"
+#~ "https://github.com/E<lt>userE<gt>/E<lt>projectE<gt>/tags .*/(\\ed[\\ed"
+#~ "\\e.]*)\\e.tar\\e.gz\n"
 #~ msgstr ""
 #~ "# Pour les projets GitHub, la page des marques peut être utilisée :\n"
-#~ "https://github.com/E<lt>utilisateurE<gt>/E<lt>projetE<gt>/tags .*/(\\ed[\\ed\\e.]*)\\e.tar\\e.gz\n"
+#~ "https://github.com/E<lt>utilisateurE<gt>/E<lt>projetE<gt>/tags .*/"
+#~ "(\\ed[\\ed\\e.]*)\\e.tar\\e.gz\n"
 
 #~ msgid ""
 #~ "Indicate that a I<bug> was found to exist in a particular package version."
