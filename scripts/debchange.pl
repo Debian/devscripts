@@ -1185,7 +1185,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 	             not $start =~ /build/ and not $start =~ /ubuntu/) {
 		$end .= "build1";
 	    } elsif ($opt_R and $vendor eq 'Tanglu' and
-	             not $start =~ /b/ and not $start =~ /tanglu/) {
+	             not "$start$end" =~ /(b\d+)$/ and not $start =~ /tanglu/) {
 		$end .= "b1";
 	    } elsif ($opt_bpo and not $start =~ /~bpo[0-9]+\+$/) {
 		# If it's not already a backport make it so
@@ -1210,10 +1210,10 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 		} elsif (($opt_i or $opt_s) and $vendor eq 'Tanglu' and
 		     $start !~ /(tanglu)(\d+\.)*$/ and not $opt_U) {
 
-		    if ($start =~ /b/) {
-			# Drop bX suffix in favor of tanglu1
-			$start =~ s/b//;
-			$end = "";
+		    if ("$start$end" =~ /(b\d+)$/) {
+				# Drop bX suffix in favor of tanglu1
+				$start =~ s/b$//;
+				$end = "";
 		    }
 		    $end .= "tanglu1";
 		} else {
