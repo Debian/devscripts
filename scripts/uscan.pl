@@ -1407,6 +1407,7 @@ EOF
 	    print STDERR "$progname debug: requesting URL $url\n" if $debug;
 	    my $headers = HTTP::Headers->new;
 	    $headers->header('Accept' => '*/*');
+	    $headers->header('Referer' => $base);
 	    $request = HTTP::Request->new('GET', $url, $headers);
 	    $response = $user_agent->request($request, $fname);
 	    if (! $response->is_success) {
