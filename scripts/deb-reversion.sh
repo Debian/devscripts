@@ -168,18 +168,23 @@ change_version()
 {
   PACKAGE=$(sed -ne 's,^Package: ,,p' DEBIAN/control)
   VERSION=$1
-  LOGFILE=
-  for i in changelog{,.Debian}.gz; do
-    [ -f usr/share/doc/${PACKAGE}/$i ] \
-      && LOGFILE=usr/share/doc/${PACKAGE}/$i
-  done
-  [ -z "$LOGFILE" ] && { echo "changelog file not found"; return 1; }
-  mkdir -p debian
-  zcat $LOGFILE > debian/changelog
-  shift
-  dch $DCH_OPTIONS -v $VERSION -- $@
-  call_hook
-  gzip -9 -c debian/changelog >| $LOGFILE
+
+  # changelog massaging is only needed in the deb (not-udeb) case:
+  if [ "$DEB_TYPE" = "deb" ]; then
+    LOGFILE=
+    for i in changelog{,.Debian}.gz; do
+      [ -f usr/share/doc/${PACKAGE}/$i ] \
+        && LOGFILE=usr/share/doc/${PACKAGE}/$i
+    done
+    [ -z "$LOGFILE" ] && { echo "changelog file not found"; return 1; }
+    mkdir -p debian
+    zcat $LOGFILE > debian/changelog
+    shift
+    dch $DCH_OPTIONS -v $VERSION -- $@
+    call_hook
+    gzip -9 -c debian/changelog >| $LOGFILE
+  fi
+
   sed -i -e "s,^Version: .*,Version: $VERSION," DEBIAN/control
   rm -rf debian
 }
@@ -188,7 +193,16 @@ repack_file()
 {
   cd ..
   dpkg-deb -b package >/dev/null
-  dpkg-name package.deb | sed -e "s,.*['\`]\(.*\).,\1,"
+  debfile=$(dpkg-name package.deb | sed -e "s,.*['\`]\(.*\).,\1,")
+  # if Package-Type: udeb is absent, dpkg-name can't rename into *.udeb,
+  # so we're left to an extra rename afterwards:
+  if [ "$DEB_TYPE" = udeb ]; then
+    udebfile=${debfile%%.deb}.udeb
+    mv $debfile $udebfile
+    echo $udebfile
+  else
+    echo $debfile
+  fi
 }
 
 [ -z "${OLD_VERSION:-}" ] && OLD_VERSION="$(get_version $DEB)"
@@ -207,6 +221,7 @@ fi
 make_temp_dir
 cd "$TMPDIR"
 
+DEB_TYPE=$(echo "$DEB"|sed 's/.*[.]//')
 extract_deb_file "$DEB"
 change_version "$NEW_VERSION" "${LOG:-Bumped version with $PROGNAME}"
 FILE="$(repack_file)"
