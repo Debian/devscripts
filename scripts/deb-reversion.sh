@@ -97,8 +97,8 @@ for opt in "$@"; do
           exit 1
         else
           case "$opt" in
-            /*.deb) DEB="$opt";;
-             *.deb) DEB="${CURDIR}/$opt";;
+            /*.deb|/*.udeb) DEB="$opt";;
+             *.deb| *.udeb) DEB="${CURDIR}/$opt";;
             *)
               err "not a .deb file: $opt";
               exit 2
