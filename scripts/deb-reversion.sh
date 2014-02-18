@@ -173,7 +173,7 @@ change_version()
     [ -f usr/share/doc/${PACKAGE}/$i ] \
       && LOGFILE=usr/share/doc/${PACKAGE}/$i
   done
-  [ -z "$LOGFILE" ] && return 1
+  [ -z "$LOGFILE" ] && { echo "changelog file not found"; return 1; }
   mkdir -p debian
   zcat $LOGFILE > debian/changelog
   shift
