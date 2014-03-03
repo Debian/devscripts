@@ -128,5 +128,22 @@ if [ -f "$WNPP_DIFF" ]; then
     fi
 fi
 
-comm -12 $WNPP_PACKAGES $INSTALLED | sed -e 's/+/\\+/g' | \
-xargs -i egrep '^[A-Z]+ [0-9]+ {} ' $WNPP
+#  - The AWK line-up's the columns.
+#  - The sort groups packages with similar WNPP status together, then
+#  - sorts by package name
+
+comm -12 $WNPP_PACKAGES $INSTALLED |
+sed -e 's/+/\\+/g' |
+xargs -i egrep '^[A-Z]+ [0-9]+ {} ' $WNPP |
+awk '{
+    type = $1
+    bug  = $2
+    pkg  = $3
+    bts  = "http://bugs.debian.org/"
+
+    re = "^.*" pkg " --"
+    sub(re, "");
+
+    printf( "%3s %s%d %-25s -- ", type, bts, bug, pkg);
+    print
+}' | sort --ignore-case -k 1,1  -k 3
