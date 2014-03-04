@@ -17212,7 +17212,7 @@ msgid ""
 "testing”) test runner."
 msgstr ""
 "B<sadt> ist eine einfache Implementierung eines DEP-8-Test-"
-"Ausführungsprogramms (»automatische installationsartige Paketprüfung«)."
+"Ausführungsprogramms (»automatische, installationsartige Paketprüfung«)."
 
 #. type: textblock
 #: ../scripts/sadt.pod:30
@@ -17234,10 +17234,10 @@ msgid ""
 "the package manually, and then tell B<sadt> to assume that the package is "
 "already built using the B<-b>/B<--built-source-tree>."
 msgstr ""
-"B<sadt> wird das Paket nicht einmal dann bauen, wenn ein Test die Restiktion "
+"B<sadt> wird das Paket nicht einmal dann bauen, wenn ein Test die Restriktion "
 "B<build-needed> deklariert. Stattdessen wird ein derartiger Test "
 "übersprungen. Sie können jedoch das Paket manuell bauen und B<sadt> dann "
-"mitteilen, dass das es davon ausgehen kann, dass das Paket bereits mittels "
+"mitteilen, dass es davon ausgehen kann, dass das Paket bereits mittels "
 "B<-b>/B<--built-source-tree> gebaut wurde."
 
 #. type: textblock
@@ -17252,7 +17252,7 @@ msgstr ""
 #. type: textblock
 #: ../scripts/sadt.pod:48
 msgid "Make the output more verbose."
-msgstr "erzeugt eine detailiertere Ausgabe."
+msgstr "erzeugt eine detailliertere Ausgabe."
 
 #. type: =item
 #: ../scripts/sadt.pod:50
@@ -17286,12 +17286,12 @@ msgstr "zeigt eine Hilfenachricht und wird beendet."
 #. type: =head1
 #: ../scripts/sadt.pod:65
 msgid "CONFORMING TO"
-msgstr ""
+msgstr "KONFORM ZU"
 
 #. type: textblock
 #: ../scripts/sadt.pod:67
 msgid "README.package-tests shipped by autopkgtest 2.6"
-msgstr ""
+msgstr "README.package-tests, bei Autopkgtest 2.6 mitgeliefert"
 
 #. type: textblock
 #: ../scripts/sadt.pod:71
@@ -18055,6 +18055,16 @@ msgid ""
 "opts=\"filenamemangle=s/(?:.*\\/)?v?(\\ed[\\ed\\e.]*)\\e.tar\\e.gz/E<lt>projectE<gt>-$1.tar.gz/\" \\e\n"
 "  https://github.com/E<lt>userE<gt>/E<lt>projectE<gt>/tags (?:.*/)?v?(\\ed[\\ed\\e.]*)\\e.tar\\e.gz\n"
 msgstr ""
+"# Für GitHub-Projekte können Sie die Markierungs- oder "
+"Veröffentlichungsseite\n"
+"# verwenden. Da die Archiv-URLs nur die Version als Name benutzen, wird\n"
+"# empfohlen, ein Filenamemangle zum Anpassen des Namens der "
+"heruntergeladenen\n"
+"# Datei zu verwenden:\n"
+"opts=\"filenamemangle=s/(?:.*\\/)?v?(\\ed[\\ed\\e.]*)\\e.tar\\e.gz/E<lt>"
+"projectE<gt>-$1.tar.gz/\" \\e\n"
+"  https://github.com/E<lt>userE<gt>/E<lt>projectE<gt>/tags (?:.*/)?v?"
+"(\\ed[\\ed\\e.]*)\\e.tar\\e.gz\n"
 
 #. type: Plain text
 #: ../scripts/uscan.1:88
@@ -18585,15 +18595,6 @@ msgstr "B<pgpsigurlmangle=>I<Regeln>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:299
-#, fuzzy
-#| msgid ""
-#| "If present, the supplied rules will be applied to the downloaded URL "
-#| "(after any downloadurlmangle rules, if present) to craft a new URL that "
-#| "will be used to fetch the detached OpenPGP signature file for the "
-#| "upstream tarball.  Some common rules might be `B<s/$/.asc/>' or `B<s/$/."
-#| "pgp/>' or `B<s/$/.gpg/>'.  This signature must be made by a key found in "
-#| "the keyring B<debian/upstream-signing-key.pgp>.  If it is not valid, or "
-#| "not made by one of the listed keys, uscan will report an error."
 msgid ""
 "If present, the supplied rules will be applied to the downloaded URL (after "
 "any downloadurlmangle rules, if present) to craft a new URL that will be "
@@ -18610,7 +18611,8 @@ msgstr ""
 "den Tarball der Ursprungsautoren benutzt wird. Einige gebräuchliche Regeln "
 "könnten »B<s/$/.asc/>«, »B<s/$/.pgp/>« oder »B<s/$/.gpg/>« lauten. Diese "
 "Signatur muss durch einen Schlüssel erstellt worden sein, der im "
-"Schlüsselbund B<debian/upstream-signing-key.pgp> zu finden ist. Falls sie "
+"Schlüsselbund B<debian/upstream-signing-key.pgp> oder im gehärteten "
+"Schlüsselbund B<debian/upstream/signing-key.asc> zu finden ist. Falls sie "
 "ungültig ist oder nicht durch einen der aufgeführten Schlüssel erstellt "
 "wurde, wird Uscan einen Fehler melden."
 
@@ -20846,24 +20848,3 @@ msgid ""
 msgstr ""
 "Diese Handbuchseite wurde für das Paket B<devscripts> durch den "
 "Paketbetreuer Julian Gilbey E<lt>jdg@debian.orgE<gt> geschrieben."
-
-#~ msgid ""
-#~ "# For GitHub projects you can use the tags page:\n"
-#~ "https://github.com/E<lt>userE<gt>/E<lt>projectE<gt>/tags .*/(\\ed[\\ed"
-#~ "\\e.]*)\\e.tar\\e.gz\n"
-#~ msgstr ""
-#~ "# Für GitHub-Projekte können Sie die Seite »Tags« verwenden:\n"
-#~ "https://github.com/E<lt>userE<gt>/E<lt>projectE<gt>/tags .*/(\\ed[\\ed"
-#~ "\\e.]*)\\e.tar\\e.gz\n"
-
-#~ msgid ""
-#~ "Indicate that a I<bug> was found to exist in a particular package version."
-#~ msgstr ""
-#~ "gibt an, dass ein I<Fehler> gefunden wurde, der in einer bestimmten "
-#~ "Paketversion existiert."
-
-#~ msgid "B<--keyring=>I<file>, B<-s> I<file>"
-#~ msgstr "B<--keyring=>I<Datei>, B<-s >I<Datei>"
-
-#~ msgid "B<who-uploads>(1), B<gpg>(1)"
-#~ msgstr "B<who-uploads>(1), B<gpg>(1)"
