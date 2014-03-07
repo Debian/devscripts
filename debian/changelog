@@ -14,6 +14,10 @@ devscripts (2.14.2) UNRELEASED; urgency=medium
   [ Cyril Brulebois ]
   * deb-reversion: Add support for udebs.  (Closes: #739437)
 
+  [ Gunnar Wolf ]
+  * debcommit: Add switch+conf.setting allowing to specify Git to sign
+    every single commit (Closes: #741040)
+
  -- Jakub Wilk <jwilk@debian.org>  Sun, 26 Jan 2014 21:50:35 +0100
 
 devscripts (2.14.1) unstable; urgency=medium

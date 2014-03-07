@@ -82,6 +82,11 @@ the message.
 This option is set by default and ignored if more than one line of
 the message begins with "[*+-] ".
 
+=item B<--sign-commit>, B<--no-sign-commit>
+
+If this option is set, then the commits that debcommit creates will be
+signed using gnupg. Currently this is only supported by git.
+
 =item B<--sign-tags>, B<--no-sign-tags>
 
 If this option is set, then tags that debcommit creates will be signed
@@ -115,6 +120,11 @@ command line parameter being used. The default is I<yes>.
 
 If this is set to I<yes>, then it is the same as the B<--sign-tags> command
 line parameter being used. The default is I<no>.
+
+=item B<DEBCOMMIT_SIGN_COMMITS>
+
+If this is set to I<yes>, then it is the same as the B<--sign-commit>
+command line parameter being used. The default is I<no>.
 
 =item B<DEBCOMMIT_RELEASE_USE_CHANGELOG>
 
@@ -204,6 +214,8 @@ Options:
    -a --all            Commit all files (default except for git)
    -s --strip-message  Strip the leading '* ' from the commit message
    --no-strip-message  Do not strip a leading '* ' (default)
+   --sign-commit       Enable signing of the commit (git only)
+   --no-sign-commit    Do not sign the commit (default)
    --sign-tags         Enable signing of tags (git only)
    --no-sign-tags      Do not sign tags (default)
    --changelog-info    Use author and date information from the changelog
@@ -240,6 +252,7 @@ my $confirm=0;
 my $edit=0;
 my $all=0;
 my $stripmessage=1;
+my $signcommit=0;
 my $signtags=0;
 my $changelog;
 my $changelog_info=0;
@@ -257,6 +270,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
     my %config_vars = (
 		       'DEBCOMMIT_STRIP_MESSAGE' => 'yes',
+		       'DEBCOMMIT_SIGN_COMMITS' => 'no',
 		       'DEBCOMMIT_SIGN_TAGS' => 'no',
 		       'DEBCOMMIT_RELEASE_USE_CHANGELOG' => 'no',
 		       'DEBSIGN_KEYID' => '',
@@ -278,6 +292,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     # Check validity
     $config_vars{'DEBCOMMIT_STRIP_MESSAGE'} =~ /^(yes|no)$/
 	or $config_vars{'DEBCOMMIT_STRIP_MESSAGE'}='yes';
+    $config_vars{'DEBCOMMIT_SIGN_COMMITS'} =~ /^(yes|no)$/
+	or $config_vars{'DEBCOMMIT_SIGN_COMMITS'}='no';
     $config_vars{'DEBCOMMIT_SIGN_TAGS'} =~ /^(yes|no)$/
 	or $config_vars{'DEBCOMMIT_SIGN_TAGS'}='no';
     $config_vars{'DEBCOMMIT_RELEASE_USE_CHANGELOG'} =~ /^(yes|no)$/
@@ -292,6 +308,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     chomp $modified_conf_msg;
 
     $stripmessage = $config_vars{'DEBCOMMIT_STRIP_MESSAGE'} eq 'no' ? 0 : 1;
+    $signcommit = $config_vars{'DEBCOMMIT_SIGN_COMMITS'} eq 'no' ? 0 : 1;
     $signtags = $config_vars{'DEBCOMMIT_SIGN_TAGS'} eq 'no' ? 0 : 1;
     $release_use_changelog = $config_vars{'DEBCOMMIT_RELEASE_USE_CHANGELOG'} eq 'no' ? 0 : 1;
     if (exists $config_vars{'DEBSIGN_KEYID'} &&
@@ -321,6 +338,7 @@ if (! GetOptions(
 		 "a|all" => \$all,
 		 "c|changelog=s" => \$changelog,
 		 "s|strip-message!" => \$stripmessage,
+		 "sign-commit!" => \$signcommit,
 		 "sign-tags!" => \$signtags,
 		 "changelog-info!" => \$changelog_info,
 		 "R|release-use-changelog!" => \$release_use_changelog,
@@ -534,6 +552,11 @@ sub commit {
 	    my @extra_args = ();
 	    if ($changelog_info) {
 		@extra_args = ("--author=$maintainer", "--date=$date");
+	    }
+	    if ($signcommit) {
+		my $sign = '-gpg--sign';
+		$sign .= "=$keyid" if $keyid;
+		push(@extra_args, $sign);
 	    }
 	    $action_rc = action($prog, "commit", "-m", $message, @extra_args, @files_to_commit);
 	}
