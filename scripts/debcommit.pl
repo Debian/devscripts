@@ -554,7 +554,7 @@ sub commit {
 		@extra_args = ("--author=$maintainer", "--date=$date");
 	    }
 	    if ($signcommit) {
-		my $sign = '-gpg--sign';
+		my $sign = '--gpg-sign';
 		$sign .= "=$keyid" if $keyid;
 		push(@extra_args, $sign);
 	    }
