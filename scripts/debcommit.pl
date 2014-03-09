@@ -85,7 +85,7 @@ the message begins with "[*+-] ".
 =item B<--sign-commit>, B<--no-sign-commit>
 
 If this option is set, then the commits that debcommit creates will be
-signed using gnupg. Currently this is only supported by git and bzr.
+signed using gnupg. Currently this is only supported by git, hg, and bzr.
 
 =item B<--sign-tags>, B<--no-sign-tags>
 
@@ -214,7 +214,7 @@ Options:
    -a --all            Commit all files (default except for git)
    -s --strip-message  Strip the leading '* ' from the commit message
    --no-strip-message  Do not strip a leading '* ' (default)
-   --sign-commit       Enable signing of the commit (git and bzr)
+   --sign-commit       Enable signing of the commit (git, hg, and bzr)
    --no-sign-commit    Do not sign the commit (default)
    --sign-tags         Enable signing of tags (git only)
    --no-sign-tags      Do not sign tags (default)
@@ -532,6 +532,14 @@ sub commit {
 	$action_rc = $diffmode
 	    ? action($prog, "diff", @files_to_commit)
 	    : action($prog, "commit", "-m", $message, @extra_args, @files_to_commit);
+	if ($prog eq 'hg' && $action_rc && $signcommit) {
+	   my @sign_args;
+	   push(@sign_args, '-k', $keyid) if $keyid;
+	   push(@sign_args, '-u', $maintainer, '-d', $date) if $changelog_info;
+	   if (!action($prog, 'sign', @sign_args)) {
+	      die "$progname: failed to sign commit\n";
+	   }
+	}
     }
     elsif ($prog eq 'git') {
 	if (! @files_to_commit && ($all || $release)) {
