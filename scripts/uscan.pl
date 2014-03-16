@@ -34,7 +34,7 @@ use List::Util qw/first/;
 use filetest 'access';
 use Getopt::Long qw(:config gnu_getopt);
 use lib '/usr/share/devscripts';
-use Devscripts::Compression qw/compression_guess_from_filename compression_get_file_extension_regex compression_get_property/;
+use Devscripts::Compression qw/compression_is_supported compression_guess_from_filename compression_get_property/;
 use Devscripts::Versort;
 use Text::ParseWords;
 BEGIN {
@@ -45,6 +45,17 @@ BEGIN {
 	    die "$progname: you must have the libwww-perl package installed\nto use this script\n";
 	} else {
 	    die "$progname: problem loading the LWP::UserAgent module:\n  $@\nHave you installed the libwww-perl package?\n";
+	}
+    }
+}
+BEGIN {
+    eval { require Text::Glob; };
+    if ($@) {
+	my $progname = basename($0);
+	if ($@ =~ /^Can\'t locate Text\/Glob\.pm/) {
+	    die "$progname: you must have the libtext-glob-perl package installed\nto use this script\n";
+	} else {
+	    die "$progname: problem loading the Text::Glob module:\n  $@\nHave you installed the libtext-glob-perl package?\n";
 	}
     }
 }
@@ -328,8 +339,6 @@ if ($opt_noconf) {
 if ($opt_h) { usage(); exit 0; }
 if ($opt_v) { version(); exit 0; }
 
-my $supported_compressions = compression_get_file_extension_regex();
-
 # This makes more sense in Dpkg:Compression
 my $tarbase_regex = qr/^(.*)\.(tar\.gz  |tgz
 			      |tar\.bz2 |tbz2?
@@ -349,8 +358,18 @@ $timeout = 20 unless defined $timeout and $timeout > 0;
 $symlink = $opt_symlink if defined $opt_symlink;
 $verbose = $opt_verbose if defined $opt_verbose;
 if (defined $opt_repack_compression) {
-    if ($opt_repack_compression =~ /^$supported_compressions$/) {
+    my %ext2comp = (
+	gz => 'gzip',
+	bz2 => 'bzip2',
+	xz => 'xz',
+	lzma => 'lzma',
+    );
+
+    # Normalize compression methods to the names used by Dpkg.Compression
+    if (compression_is_supported($opt_repack_compression)) {
         $repack_compression = $opt_repack_compression;
+    } elsif (exists $ext2comp{$opt_repack_compression}) {
+	$repack_compression = $ext2comp{$opt_repack_compression};
     } else {
         uscan_die "$progname: invalid compression $opt_repack_compression given.\n";
     }
@@ -1454,27 +1473,28 @@ EOF
     }
 
     if ($repack and $newfile_base =~ /^(.*)\.(zip|jar)$/) {
-	print "-- Repacking from zip to .tar.$repack_compression\n" if $verbose;
+        my $suffix = compression_get_property($repack_compression, "file_ext");
+	print "-- Repacking from zip to .tar.$suffix\n" if $verbose;
 
 	system('command -v unzip >/dev/null 2>&1') >> 8 == 0
 	  or uscan_die("unzip binary not found. You need to install the package unzip to be able to repack .zip upstream archives.\n");
 
 	my $compress_file_base = "$1.tar" ;
-	my $newfile_base_compression = "$compress_file_base.$repack_compression";
+	my $newfile_base_compression = "$compress_file_base.$suffix";
 	my $tempdir = tempdir ("uscanXXXX", TMPDIR => 1, CLEANUP => 1);
 	# Parent of the target directory should be under our control
 	$tempdir .= '/repack';
 	mkdir $tempdir or uscan_die("Unable to mkdir($tempdir): $!\n");
 	my $absdestdir = abs_path($destdir);
 	system('unzip', '-q', '-a', '-d', $tempdir, "$destdir/$newfile_base") == 0
-	    or uscan_die("Repacking from zip or jar to tar.$repack_compression failed (could not unzip)\n");
+	    or uscan_die("Repacking from zip or jar to tar.$suffix failed (could not unzip)\n");
 	my $cwd = cwd();
 	chdir($tempdir) or uscan_die("Unable to chdir($tempdir): $!\n");
 	eval {
 	    compress_archive("$absdestdir/$compress_file_base", "$absdestdir/$newfile_base_compression", $repack_compression);
 	};
 	if ($@) {
-	    uscan_die("Repacking from zip or jar to tar.$repack_compression failed (could not create tarball)\n");
+	    uscan_die("Repacking from zip or jar to tar.$suffix failed (could not create tarball)\n");
 	}
 	chdir($cwd);
 	$newfile_base = $newfile_base_compression;
@@ -1487,7 +1507,8 @@ EOF
 	if ($comp ne $repack_compression) {
 	    print "-- Repacking from $comp to $repack_compression\n" if $verbose;
 	    my ($tarbase) = ($newfile_base =~ $tarbase_regex);
-	    my $newfile_base_compression = "$1.tar.$repack_compression";
+	    my $suffix = compression_get_property($repack_compression, "file_ext");
+	    my $newfile_base_compression = "$1.tar.$suffix";
 
 	    my (undef, $fname) = tempfile(UNLINK => 1);
 	    decompress_archive("$destdir/$newfile_base", $fname);
@@ -1525,60 +1546,47 @@ EOF
 	    && $data->{'format'} =~ m{^$okformat/?$}
 	    && $data->{'files-excluded'})
 	{
-	    my $tempdir = tempdir ("uscanXXXX", TMPDIR => 1, CLEANUP => 1);
-	    # Parent of the target directory should be under our control
-	    $tempdir .= '/repack';
-	    mkdir $tempdir or uscan_die("Unable to mkdir($tempdir): $!\n");
-	    my $absdestdir = abs_path($destdir);
-	    eval {
-		spawn(exec => ['tar', '-xa', '-k', '--no-overwrite-dir', '-C', $tempdir, '-f', "$absdestdir/$newfile_base"],
-		      wait_child => 1);
-	    };
-	    if ($@) {
-		print "-- $newfile_base is no tarball.  Try unzip.\n" if $verbose;
-		# try unzip if tar fails - we do want to do something sensible even if no --repack was specified
-		system('command -v unzip >/dev/null 2>&1') >> 8 == 0
-		    or uscan_die("unzip binary not found. This would serve as fallback because tar just failed.\n");
-		system('unzip', '-q', '-a', '-d', $tempdir, "$destdir/$newfile_base") == 0
-		    or uscan_die("Repacking from zip or jar to tar.gz failed (could not unzip)\n");
-	    }
-	    my $main_source_dir = get_main_source_dir($tempdir, $pkg, $newversion, $excludesuffix);
-	    unless ( -d $main_source_dir ) {
-		print STDERR "Error: $main_source_dir is no directory";
-	    }
-	    my $file_list;
-	    spawn(exec => ['find', $main_source_dir], wait_child => 1, to_string => \$file_list);
-	    my $nfiles_before = split /\n/, $file_list;
-	    # see the thread for details http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=635920#127
+
 	    my @excluded = ($data->{"files-excluded"} =~ /(?:\A|\G\s+)((?:\\.|[^\\\s])+)/g);
 	    # un-escape
-	    @excluded = map { s/\\(.)/$1/g; $_ } @excluded;
-	    foreach (@excluded) {
-		# delete trailing '/' because otherwise find -path will fail
-		s?/+$??;
-		# use rm -rf to enable deleting non-empty directories
-		spawn(exec => ['find', $main_source_dir, '-path', "$main_source_dir/$_", '-exec', 'rm', '-rf', '{}', '+'],
-		      wait_child => 1);
-	    }
-	    undef $file_list;
-	    spawn(exec => ['find', $main_source_dir], wait_child => 1, to_string => \$file_list);
-	    my $nfiles_after = split /\n/, $file_list;
-	    if ( $nfiles_before == $nfiles_after ) {
-		print "-- Source tree remains identical - no need for repacking.\n" if $verbose;
-	    } else {
-		my $newfile_base_dfsg = "${pkg}_${newversion}${excludesuffix}.orig.tar" ;
-		my $cwd = cwd();
-		chdir($tempdir) or uscan_die("Unable to chdir($tempdir): $!\n");
-		eval {
-		    spawn(exec => ['tar', '--owner=root', '--group=root', '--mode=a+rX', '-cf', "$absdestdir/$newfile_base_dfsg", glob('* .[!.]*')],
-			wait_child => 1);
-		    compress_archive("$absdestdir/$newfile_base_dfsg", "$absdestdir/$newfile_base_dfsg.$repack_compression", $repack_compression);
-		};
-		if ($@) {
-		    uscan_die("Excluding files failed (could not create tarball)\n");
+	    @excluded = map { s/\\(.)/$1/g; s?/+$??; $_ } @excluded;
+
+	    # get list of files contained in the tarball
+	    my $files;
+	    spawn(exec => ['tar', '-t', '-a', '-f', "$destdir/$newfile_base"],
+		  to_string => \$files,
+		  wait_child => 1);
+
+	    my @to_delete;
+	    for my $filename (split /^/, $files) {
+		chomp($filename);
+		$filename =~ s!/+$!!;
+		my $do_exclude = 0;
+		for my $exclude (@excluded) {
+		    if (Text::Glob::match_glob($exclude, $filename)) {
+			$do_exclude = 1;
+		    }
 		}
-		chdir($cwd);
-		$symlink = 'files-excluded' # prevent symlinking or renaming
+		push @to_delete, $filename if $do_exclude;
+	    }
+
+	    if (@to_delete) {
+		my $newfile_base_dfsg = "${pkg}_${newversion}${excludesuffix}.orig.tar" ;
+		$symlink = 'files-excluded'; # prevent symlinking or renaming
+
+		my $comp = compression_guess_from_filename($newfile_base);
+		unless ($comp) {
+		   uscan_die("Cannot determine compression method of $newfile_base");
+		}
+		my ($tarbase) = ($newfile_base =~ $tarbase_regex);
+		my (undef, $fname) = tempfile(UNLINK => 1);
+		decompress_archive("$destdir/$newfile_base", $fname);
+		spawn(exec => ['tar', '--delete', '--file', $fname, @to_delete ]
+		     ,wait_child => 1);
+		my $suffix = compression_get_property($comp, "file_ext");
+		compress_archive("$fname", "$destdir/$newfile_base_dfsg.$suffix", $comp);
+	    } else {
+		print "-- No files to be excluded -- no need for repacking.\n" if $verbose;
 	    }
 	}
     }
@@ -2218,18 +2226,7 @@ sub get_main_source_dir($$$$) {
 }
 
 sub compress_archive($$$) {
-    my ($from_file, $to_file, $compression) = @_;
-    my %ext2comp = (
-	gz => 'gzip',
-	bz2 => 'bzip2',
-	xz => 'xz',
-	lzma => 'lzma',
-    );
-    if (!exists $ext2comp{$compression}) {
-	uscan_die "$progname: unknown compression method $compression.";
-    }
-
-    my $comp = $ext2comp{$compression};
+    my ($from_file, $to_file, $comp) = @_;
 
     my $cmd = compression_get_property($comp, 'comp_prog');
     push(@{$cmd}, '-'.compression_get_property($comp, 'default_level'));

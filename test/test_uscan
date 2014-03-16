@@ -154,10 +154,10 @@ END
 
     OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND) | grep baz)
 
-    TARBALL=${PKG}_1+dfsg.orig.tar.xz
+    TARBALL=${PKG}_1+dfsg.orig.tar.gz
     assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
-    assertNotNull 'pristine tarball is not xz-compressed' \
-                  "$( file $TMPDIR/$TARBALL | grep 'XZ compressed data' )"
+    assertNotNull 'pristine tarball is not gzip-compressed' \
+                  "$( file $TMPDIR/$TARBALL | grep 'gzip compressed data' )"
     CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
     assertTrue 'file that must be present is excluded in the tarball'	\
                 $(containsName "$CONTENTS" include-this)
