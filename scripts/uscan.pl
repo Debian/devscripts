@@ -34,7 +34,7 @@ use List::Util qw/first/;
 use filetest 'access';
 use Getopt::Long qw(:config gnu_getopt);
 use lib '/usr/share/devscripts';
-use Devscripts::Compression qw/compression_get_file_extension_regex compression_get_property/;
+use Devscripts::Compression qw/compression_guess_from_filename compression_get_file_extension_regex compression_get_property/;
 use Devscripts::Versort;
 use Text::ParseWords;
 BEGIN {
@@ -1598,59 +1598,48 @@ EOF
 	}
     }
 
-    my @renames = (
-	[qr/\.(tar\.gz|tgz)$/, 'gz'],
-	[qr/\.(tar\.bz2|tbz2?)$/, 'bz2'],
-	[qr/\.tar\.lzma|tlz(?:ma?)?$/, 'lzma'],
-	[qr/\.(tar\.xz|txz)$/, 'xz'],
-    );
-
-    my ($renamed_base);
-    foreach my $pair (@renames) {
-	if ($newfile_base !~ $pair->[0]) {
-	    next;
-	}
-
-	my ($pattern, $suffix) = @{$pair};
-	$renamed_base = "${pkg}_${newversion}.orig.tar.$suffix";
+    my $compression = compression_guess_from_filename($newfile_base);
+    unless ($compression) {
+	uscan_die("Cannot determine compression method of $newfile_base");
+    }
+    my $suffix = compression_get_property($compression, "file_ext");
+    my 	$renamed_base = "${pkg}_${newversion}.orig.tar.$suffix";
+    if ($symlink eq 'symlink') {
+	symlink $newfile_base, "$destdir/$renamed_base";
+    } elsif ($symlink eq 'rename') {
+	move "$destdir/$newfile_base", "$destdir/$renamed_base";
+    }
+    if ($verbose) {
+	print "-- Successfully downloaded updated package $newfile_base\n";
 	if ($symlink eq 'symlink') {
-	    symlink $newfile_base, "$destdir/$renamed_base";
+	    print "    and symlinked $renamed_base to it\n";
 	} elsif ($symlink eq 'rename') {
-	    move "$destdir/$newfile_base", "$destdir/$renamed_base";
+	    print "    and renamed it as $renamed_base\n";
+	} elsif ($symlink eq 'files-excluded') {
+	    print "    and removed files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
 	}
-	if ($verbose) {
-	    print "-- Successfully downloaded updated package $newfile_base\n";
-	    if ($symlink eq 'symlink') {
-		print "    and symlinked $renamed_base to it\n";
-	    } elsif ($symlink eq 'rename') {
-		print "    and renamed it as $renamed_base\n";
-	    } elsif ($symlink eq 'files-excluded') {
-		print "    and removed files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
-	    }
-	} elsif ($dehs) {
-	    my $msg = "Successfully downloaded updated package $newfile_base";
-	    $dehs_tags{'target'} = "$renamed_base";
-	    if ($symlink eq 'symlink') {
-		$msg .= " and symlinked $renamed_base to it";
-	    } elsif ($symlink eq 'rename') {
-		$msg .= " and renamed it as $renamed_base";
-	    } elsif ($symlink eq 'files-excluded') {
-		$msg .= " and removed files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
-	    } else {
-		$dehs_tags{'target'} = $newfile_base;
-	    }
-	    dehs_msg($msg);
+    } elsif ($dehs) {
+	my $msg = "Successfully downloaded updated package $newfile_base";
+	$dehs_tags{'target'} = "$renamed_base";
+	if ($symlink eq 'symlink') {
+	    $msg .= " and symlinked $renamed_base to it";
+	} elsif ($symlink eq 'rename') {
+	    $msg .= " and renamed it as $renamed_base";
+	} elsif ($symlink eq 'files-excluded') {
+	    $msg .= " and removed files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
 	} else {
-	    print "$pkg: Successfully downloaded updated package $newfile_base\n";
-	    if ($symlink eq 'symlink') {
-		print "    and symlinked $renamed_base to it\n";
-	    } elsif ($symlink eq 'rename') {
-		print "    and renamed it as $renamed_base\n";
-	    } elsif ($symlink eq 'files-excluded') {
-		print "    and removed files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
-	    }
+	    $dehs_tags{'target'} = $newfile_base;
 	}
-	last;
+	dehs_msg($msg);
+    } else {
+	print "$pkg: Successfully downloaded updated package $newfile_base\n";
+	if ($symlink eq 'symlink') {
+	    print "    and symlinked $renamed_base to it\n";
+	} elsif ($symlink eq 'rename') {
+	    print "    and renamed it as $renamed_base\n";
+	} elsif ($symlink eq 'files-excluded') {
+	    print "    and removed files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
+	}
     }
 
     # Do whatever the user wishes to do
