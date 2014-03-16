@@ -1583,47 +1583,50 @@ EOF
 	}
     }
 
-    my $compression = compression_guess_from_filename($newfile_base);
-    unless ($compression) {
-	uscan_die("Cannot determine compression method of $newfile_base");
-    }
-    my $suffix = compression_get_property($compression, "file_ext");
-    my 	$renamed_base = "${pkg}_${newversion}.orig.tar.$suffix";
-    if ($symlink eq 'symlink') {
-	symlink $newfile_base, "$destdir/$renamed_base";
-    } elsif ($symlink eq 'rename') {
-	move "$destdir/$newfile_base", "$destdir/$renamed_base";
-    }
-    if ($verbose) {
-	print "-- Successfully downloaded updated package $newfile_base\n";
-	if ($symlink eq 'symlink') {
-	    print "    and symlinked $renamed_base to it\n";
-	} elsif ($symlink eq 'rename') {
-	    print "    and renamed it as $renamed_base\n";
-	} elsif ($symlink eq 'files-excluded') {
-	    print "    and removed files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
+    my ($renamed_base);
+    if ($newfile_base =~ $tarbase_regex) {
+	my $compression = compression_guess_from_filename($newfile_base);
+	unless ($compression) {
+	    uscan_die("Cannot determine compression method of $newfile_base");
 	}
-    } elsif ($dehs) {
-	my $msg = "Successfully downloaded updated package $newfile_base";
-	$dehs_tags{'target'} = "$renamed_base";
+	my $suffix = compression_get_property($compression, "file_ext");
+	$renamed_base = "${pkg}_${newversion}.orig.tar.$suffix";
 	if ($symlink eq 'symlink') {
-	    $msg .= " and symlinked $renamed_base to it";
+	    symlink $newfile_base, "$destdir/$renamed_base";
 	} elsif ($symlink eq 'rename') {
-	    $msg .= " and renamed it as $renamed_base";
-	} elsif ($symlink eq 'files-excluded') {
-	    $msg .= " and removed files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
+	    move "$destdir/$newfile_base", "$destdir/$renamed_base";
+	}
+	if ($verbose) {
+	    print "-- Successfully downloaded updated package $newfile_base\n";
+	    if ($symlink eq 'symlink') {
+		print "    and symlinked $renamed_base to it\n";
+	    } elsif ($symlink eq 'rename') {
+		print "    and renamed it as $renamed_base\n";
+	    } elsif ($symlink eq 'files-excluded') {
+		print "    and removed files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
+	    }
+	} elsif ($dehs) {
+	    my $msg = "Successfully downloaded updated package $newfile_base";
+	    $dehs_tags{'target'} = "$renamed_base";
+	    if ($symlink eq 'symlink') {
+		$msg .= " and symlinked $renamed_base to it";
+	    } elsif ($symlink eq 'rename') {
+		$msg .= " and renamed it as $renamed_base";
+	    } elsif ($symlink eq 'files-excluded') {
+		$msg .= " and removed files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
+	    } else {
+		$dehs_tags{'target'} = $newfile_base;
+	    }
+	    dehs_msg($msg);
 	} else {
-	    $dehs_tags{'target'} = $newfile_base;
-	}
-	dehs_msg($msg);
-    } else {
-	print "$pkg: Successfully downloaded updated package $newfile_base\n";
-	if ($symlink eq 'symlink') {
-	    print "    and symlinked $renamed_base to it\n";
-	} elsif ($symlink eq 'rename') {
-	    print "    and renamed it as $renamed_base\n";
-	} elsif ($symlink eq 'files-excluded') {
-	    print "    and removed files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
+	    print "$pkg: Successfully downloaded updated package $newfile_base\n";
+	    if ($symlink eq 'symlink') {
+		print "    and symlinked $renamed_base to it\n";
+	    } elsif ($symlink eq 'rename') {
+		print "    and renamed it as $renamed_base\n";
+	    } elsif ($symlink eq 'files-excluded') {
+		print "    and removed files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
+	    }
 	}
     }
 
