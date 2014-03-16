@@ -1541,52 +1541,56 @@ EOF
 	} or do {
 	  undef $data;
 	};
+
 	if (   $data
 	    && defined $data->{'format'}
 	    && $data->{'format'} =~ m{^$okformat/?$}
 	    && $data->{'files-excluded'})
 	{
-
-	    my @excluded = ($data->{"files-excluded"} =~ /(?:\A|\G\s+)((?:\\.|[^\\\s])+)/g);
-	    # un-escape
-	    @excluded = map { s/\\(.)/$1/g; s?/+$??; $_ } @excluded;
-
-	    # get list of files contained in the tarball
-	    my $files;
-	    spawn(exec => ['tar', '-t', '-a', '-f', "$destdir/$newfile_base"],
-		  to_string => \$files,
-		  wait_child => 1);
-
-	    my @to_delete;
-	    for my $filename (split /^/, $files) {
-		chomp($filename);
-		$filename =~ s!/+$!!;
-		my $do_exclude = 0;
-		for my $exclude (@excluded) {
-		    if (Text::Glob::match_glob($exclude, $filename)) {
-			$do_exclude = 1;
-		    }
-		}
-		push @to_delete, $filename if $do_exclude;
-	    }
-
-	    if (@to_delete) {
-		my $newfile_base_dfsg = "${pkg}_${newversion}${excludesuffix}.orig.tar" ;
-		$symlink = 'files-excluded'; # prevent symlinking or renaming
-
-		my $comp = compression_guess_from_filename($newfile_base);
-		unless ($comp) {
-		   uscan_die("Cannot determine compression method of $newfile_base");
-		}
-		my ($tarbase) = ($newfile_base =~ $tarbase_regex);
-		my (undef, $fname) = tempfile(UNLINK => 1);
-		decompress_archive("$destdir/$newfile_base", $fname);
-		spawn(exec => ['tar', '--delete', '--file', $fname, @to_delete ]
-		     ,wait_child => 1);
-		my $suffix = compression_get_property($comp, "file_ext");
-		compress_archive("$fname", "$destdir/$newfile_base_dfsg.$suffix", $comp);
+	    if ( $newfile_base =~ /^(.*)\.(zip|jar)$/ ) {
+		uscan_warn "$progname: $destdir/$newfile_base is not a tarfile, cannot exclude files from it. Consider running uscan with \"--repack\"\n";
 	    } else {
-		print "-- No files to be excluded -- no need for repacking.\n" if $verbose;
+		my @excluded = ($data->{"files-excluded"} =~ /(?:\A|\G\s+)((?:\\.|[^\\\s])+)/g);
+		# un-escape
+		@excluded = map { s/\\(.)/$1/g; s?/+$??; $_ } @excluded;
+
+		# get list of files contained in the tarball
+		my $files;
+		spawn(exec => ['tar', '-t', '-a', '-f', "$destdir/$newfile_base"],
+		      to_string => \$files,
+		      wait_child => 1);
+
+		my @to_delete;
+		for my $filename (split /^/, $files) {
+		    chomp($filename);
+		    $filename =~ s!/+$!!;
+		    my $do_exclude = 0;
+		    for my $exclude (@excluded) {
+			if (Text::Glob::match_glob($exclude, $filename)) {
+			    $do_exclude = 1;
+			}
+		    }
+		    push @to_delete, $filename if $do_exclude;
+		}
+
+		if (@to_delete) {
+		    my $newfile_base_dfsg = "${pkg}_${newversion}${excludesuffix}.orig.tar" ;
+		    $symlink = 'files-excluded'; # prevent symlinking or renaming
+
+		    my $comp = compression_guess_from_filename($newfile_base);
+		    unless ($comp) {
+		       uscan_die("Cannot determine compression method of $newfile_base");
+		    }
+		    my ($tarbase) = ($newfile_base =~ $tarbase_regex);
+		    my (undef, $fname) = tempfile(UNLINK => 1);
+		    decompress_archive("$destdir/$newfile_base", $fname);
+		    spawn(exec => ['tar', '--delete', '--file', $fname, @to_delete ]
+			 ,wait_child => 1);
+		    my $suffix = compression_get_property($comp, "file_ext");
+		    compress_archive("$fname", "$destdir/$newfile_base_dfsg.$suffix", $comp);
+		} else {
+		    print "-- No files to be excluded -- no need for repacking.\n" if $verbose;
+		}
 	    }
 	}
     }

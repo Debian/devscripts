@@ -102,12 +102,6 @@ testRepackXZ_XZ() { helperTestRepack "xz" "xz" "XZ compressed data" ; }
 # The following function tests the Files-Excluded feature of uscan, which
 # allows the selective exclusion of files from the upstream tarball before
 # repacking it.
-#
-# This function does the following: (1) create a minimal Debian package
-# directory, containing minimal files debian/{changelog,watch,copyright},
-# (2) create a minimal repository, containing a tarball (built on the fly),
-# (3) start an HTTP server that works offline, using the SimpleHTTPServer
-# module of Python, and (4) run uscan inside that minimal universe.
 
 testFileExclusion() {
 
@@ -169,6 +163,59 @@ END
                 $(containsName "$CONTENTS" "; echo baz; #/")
     # 731849
     assertNull 'dirty root directory allowed command execution' "$OUTPUT"
+
+    cleanup
+
+}
+
+# The same, for a zip file
+
+testFileExclusionZip() {
+
+    PKG=foo
+    PORT=8000
+    TMPDIR=$(mktemp -d)
+
+    mkdir -p $TMPDIR/$PKG/debian
+
+    cat <<END > $TMPDIR/$PKG/debian/watch
+version=3
+http://localhost:$PORT/$PKG-(\d).zip
+END
+
+    cat <<END > $TMPDIR/$PKG/debian/changelog
+$PKG (0-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
+END
+
+    cat <<END > $TMPDIR/$PKG/debian/copyright
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Files-Excluded: exclude-this
+ exclude-dir
+END
+
+    # Test matching with escaped characters
+    printf ' ;\ echo\ baz;\ #\n' >> $TMPDIR/$PKG/debian/copyright
+
+
+    mkdir -p $TMPDIR/repo
+    touch $TMPDIR/repo/include-this
+    touch $TMPDIR/repo/exclude-this
+    mkdir -p "$TMPDIR/repo/; echo baz; #/"
+    mkdir -p $TMPDIR/repo/exclude-dir
+    touch $TMPDIR/repo/exclude-dir/file
+
+    ( cd $TMPDIR/repo ;
+      zip $PKG-1.zip * ;
+      python -m SimpleHTTPServer $PORT &
+      echo $! > pid )
+
+    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND) 2>&1 | fgrep 'cannot exclude files from it')
+    assertTrue 'zipfile not downloaded' "[ -f $TMPDIR/$PKG-1.zip ]"
+    assertNotNull 'Expected error message missing' "$OUTPUT"
 
     cleanup
 
