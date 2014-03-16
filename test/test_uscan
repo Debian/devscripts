@@ -32,7 +32,7 @@ cleanup(){
 trap cleanup 1 2 3 13 15
 
 containsName(){
-  expr "$1" : ".*/$2" > /dev/null
+  echo "$1" | fgrep -q "$2"
   echo $?
 }
 
@@ -159,6 +159,8 @@ END
     assertNotNull 'pristine tarball is not xz-compressed' \
                   "$( file $TMPDIR/$TARBALL | grep 'XZ compressed data' )"
     CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
+    assertTrue 'file that must be present is excluded in the tarball'	\
+                $(containsName "$CONTENTS" include-this)
     assertFalse 'file that must be excluded is present in the tarball'	\
                 $(containsName "$CONTENTS" exclude-this)
     assertFalse "dir that must be excluded is present in the tarball"	\
