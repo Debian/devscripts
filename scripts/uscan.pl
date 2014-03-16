@@ -79,6 +79,7 @@ sub quoted_regex_replace ($);
 sub safe_replace ($$);
 sub get_main_source_dir($$$$);
 sub compress_archive($$$);
+sub decompress_archive($$);
 
 sub usage {
     print <<"EOF";
@@ -328,6 +329,12 @@ if ($opt_h) { usage(); exit 0; }
 if ($opt_v) { version(); exit 0; }
 
 my $supported_compressions = compression_get_file_extension_regex();
+
+# This makes more sense in Dpkg:Compression
+my $tarbase_regex = qr/^(.*)\.(tar\.gz  |tgz
+			      |tar\.bz2 |tbz2?
+			      |tar.lzma |tlz(?:ma?)?
+			      |tar.xz   |txz)$/x;
 
 # Now we can set the other variables according to the command line options
 
@@ -1446,42 +1453,6 @@ EOF
 		 or uscan_die("$progname warning: OpenPGP signature did not verify.\n");
     }
 
-    if ($repack and $newfile_base =~ /^(.*)\.(tar\.bz2|tbz2?)$/ and
-        $repack_compression !~ /^bz2$/ ) {
-	print "-- Repacking from bzip2 to $repack_compression\n" if $verbose;
-	my $newfile_base_compression = "$1.tar.$repack_compression";
-	my (undef, $fname) = tempfile(UNLINK => 1);
-	spawn(exec => ['bunzip2', '-c', "$destdir/$newfile_base"],
-	      to_file => $fname,
-	      wait_child => 1);
-	compress_archive("$fname", "$destdir/$newfile_base_compression", $repack_compression);
-	$newfile_base = $newfile_base_compression;
-    }
-
-    if ($repack and $newfile_base =~ /^(.*)\.(tar\.lzma|tlz(?:ma?)?)$/ and
-        $repack_compression !~ /^lzma$/ ) {
-	print "-- Repacking from lzma to $repack_compression\n" if $verbose;
-	my $newfile_base_compression = "$1.tar.$repack_compression";
-	my (undef, $fname) = tempfile(UNLINK => 1);
-	spawn(exec => ['xz', '-F', 'lzma', '-cd', "$destdir/$newfile_base"],
-	      to_file => $fname,
-	      wait_child => 1);
-	compress_archive("$fname", "$destdir/$newfile_base_compression", $repack_compression);
-	$newfile_base = $newfile_base_compression;
-    }
-
-    if ($repack and $newfile_base =~ /^(.*)\.(tar\.xz|txz)$/ and
-        $repack_compression !~ /^xz$/ ) {
-	print "-- Repacking from xz to $repack_compression\n" if $verbose;
-	my $newfile_base_compression = "$1.tar.$repack_compression";
-	my (undef, $fname) = tempfile(UNLINK => 1);
-	spawn(exec => ['xz', '-cd', "$destdir/$newfile_base"],
-	      to_file => $fname,
-	      wait_child => 1);
-	compress_archive("$fname", "$destdir/$newfile_base_compression", $repack_compression);
-	$newfile_base = $newfile_base_compression;
-    }
-
     if ($repack and $newfile_base =~ /^(.*)\.(zip|jar)$/) {
 	print "-- Repacking from zip to .tar.$repack_compression\n" if $verbose;
 
@@ -1507,12 +1478,26 @@ EOF
 	}
 	chdir($cwd);
 	$newfile_base = $newfile_base_compression;
+
+    } elsif ($repack) { # Repacking from tar to tar, so just change the compression
+	my $comp = compression_guess_from_filename($newfile_base);
+	unless ($comp) {
+	   uscan_die("Cannot determine compression method of $newfile_base");
+	}
+	if ($comp ne $repack_compression) {
+	    print "-- Repacking from $comp to $repack_compression\n" if $verbose;
+	    my ($tarbase) = ($newfile_base =~ $tarbase_regex);
+	    my $newfile_base_compression = "$1.tar.$repack_compression";
+
+	    my (undef, $fname) = tempfile(UNLINK => 1);
+	    decompress_archive("$destdir/$newfile_base", $fname);
+	    compress_archive("$fname", "$destdir/$newfile_base_compression", $repack_compression);
+	    $newfile_base = $newfile_base_compression;
+	}
     }
 
-    if ($newfile_base =~ /\.(tar\.gz|tgz
-			     |tar\.bz2|tbz2?
-			     |tar.lzma|tlz(?:ma?)?
-			     |tar.xz|txz)$/x) {
+
+    if ($newfile_base =~ $tarbase_regex){
 	my $filetype;
 	eval {
 	    spawn(exec => ['file', '-b', '-k', "$destdir/$newfile_base"],
@@ -2250,4 +2235,18 @@ sub compress_archive($$$) {
 	to_file => $to_file,
 	wait_child => 1);
     unlink $from_file;
+}
+
+sub decompress_archive($$) {
+    my ($from_file, $to_file) = @_;
+    my $comp = compression_guess_from_filename($from_file);
+    unless ($comp) {
+       uscan_die("Cannot determine compression method of $from_file");
+    }
+
+    my $cmd = compression_get_property($comp, 'decomp_prog');
+    spawn(exec => $cmd,
+	from_file => $from_file,
+	to_file => $to_file,
+	wait_child => 1);
 }

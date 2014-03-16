@@ -38,6 +38,67 @@ containsName(){
 
 . "${0%/*}/shunit2-helper-functions.sh"
 
+# The following tests do the following: (1) create a minimal Debian package
+# directory, containing minimal files debian/{changelog,watch,copyright},
+# (2) create a minimal repository, containing a tarball (built on the fly),
+# (3) start an HTTP server that works offline, using the SimpleHTTPServer
+# module of Python, and (4) run uscan inside that minimal universe.
+
+
+# The following function tests the --repack feature
+helperTestRepack() {
+    from_comp="$1"
+    to_comp="$2"
+    file_output="$3"
+
+    PKG=foo
+    PORT=8000
+    TMPDIR=$(mktemp -d)
+
+    mkdir -p $TMPDIR/$PKG/debian
+
+    cat <<END > $TMPDIR/$PKG/debian/watch
+version=3
+http://localhost:$PORT/$PKG-(\d).tar.$from_comp
+END
+
+    cat <<END > $TMPDIR/$PKG/debian/changelog
+$PKG (0-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
+END
+
+    mkdir -p $TMPDIR/repo/foo
+    touch $TMPDIR/repo/foo/content
+
+    ( cd $TMPDIR/repo ;
+      tar cfa $PKG-1.tar.$from_comp * ;
+      python -m SimpleHTTPServer $PORT &
+      echo $! > pid )
+
+    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND --verbose --repack --repack-compression=$to_comp) )
+
+    TARBALL=${PKG}_1.orig.tar.$to_comp
+    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
+    assertNotNull "pristine tarball is not $to_comp-compressed" \
+                  "$( file -L $TMPDIR/$TARBALL | grep "$file_output" )"
+    CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
+    assertTrue 'file contents missing'	\
+                $(containsName "$CONTENTS" content)
+
+    cleanup
+
+}
+
+testRepackGZ_XZ() { helperTestRepack "gz" "xz" "XZ compressed data" ; }
+testRepackGZ_BZ2() { helperTestRepack "gz" "bz2" "bzip2 compressed data" ; }
+testRepackBZ2_GZ() { helperTestRepack "bz2" "gz" "gzip compressed data" ; }
+testRepackGZ_GZ() { helperTestRepack "gz" "gz" "gzip compressed data" ; }
+testRepackXZ_XZ() { helperTestRepack "xz" "xz" "XZ compressed data" ; }
+
+
 # The following function tests the Files-Excluded feature of uscan, which
 # allows the selective exclusion of files from the upstream tarball before
 # repacking it.
