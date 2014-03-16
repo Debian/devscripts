@@ -1454,10 +1454,7 @@ EOF
 	spawn(exec => ['bunzip2', '-c', "$destdir/$newfile_base"],
 	      to_file => $fname,
 	      wait_child => 1);
-	spawn(exec => ['gzip', '-n', '-9'],
-	      from_file => $fname,
-	      wait_child => 1);
-	unlink "$destdir/$newfile_base";
+	compress_archive("$fname", "$destdir/$newfile_base_compression", $repack_compression);
 	$newfile_base = $newfile_base_compression;
     }
 
