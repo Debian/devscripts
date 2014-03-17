@@ -1547,33 +1547,52 @@ EOF
 	    && $data->{'format'} =~ m{^$okformat/?$}
 	    && $data->{'files-excluded'})
 	{
-	    if ( $newfile_base =~ /^(.*)\.(zip|jar)$/ ) {
-		uscan_warn "$progname: $destdir/$newfile_base is not a tarfile, cannot exclude files from it. Consider running uscan with \"--repack\"\n";
-	    } else {
-		my @excluded = ($data->{"files-excluded"} =~ /(?:\A|\G\s+)((?:\\.|[^\\\s])+)/g);
-		# un-escape
-		@excluded = map { s/\\(.)/$1/g; s?/+$??; $_ } @excluded;
+	    my @excluded = ($data->{"files-excluded"} =~ /(?:\A|\G\s+)((?:\\.|[^\\\s])+)/g);
+	    # un-escape
+	    @excluded = map { s/\\(.)/$1/g; s?/+$??; $_ } @excluded;
 
-		# get list of files contained in the tarball
+	    # get list of files contained in the tarball
+	    my @files;
+	    if ( $newfile_base =~ /^(.*)\.(zip|jar)$/ ) {
+		my $files;
+		spawn(exec => ['zipinfo','-1',"$destdir/$newfile_base"],
+		      to_string => \$files,
+		      wait_child => 1);
+		@files = split /^/, $files;
+		chomp @files;
+	    } else {
 		my $files;
 		spawn(exec => ['tar', '-t', '-a', '-f', "$destdir/$newfile_base"],
 		      to_string => \$files,
 		      wait_child => 1);
+		@files = split /^/, $files;
+		chomp @files;
+	    }
 
-		my @to_delete;
-		for my $filename (split /^/, $files) {
-		    chomp($filename);
-		    $filename =~ s!/+$!!;
-		    my $do_exclude = 0;
-		    for my $exclude (@excluded) {
-			if (Text::Glob::match_glob($exclude, $filename)) {
-			    $do_exclude = 1;
-			}
-		    }
-		    push @to_delete, $filename if $do_exclude;
+	    # find out what to delete
+	    my @to_delete;
+	    for my $filename (@files) {
+		my $do_exclude = 0;
+		for my $exclude (@excluded) {
+		    $do_exclude ||=
+			Text::Glob::match_glob($exclude,     $filename) ||
+			Text::Glob::match_glob($exclude."/", $filename) ||
+			Text::Glob::match_glob($exclude."/*", $filename);
 		}
+		push @to_delete, $filename if $do_exclude;
+	    }
+	    # ensure files are mentioned before the directory they live in
+	    # (otherwise tar complains)
+	    @to_delete = sort {$b cmp $a}  @to_delete;
 
-		if (@to_delete) {
+	    # actually delete something
+	    if (@to_delete) {
+		if ( $newfile_base =~ /^(.*)\.(zip|jar)$/ ) {
+		    my $newfile_base_dfsg = "$1${excludesuffix}.$2" ;
+		    copy "$destdir/$newfile_base", "$destdir/$newfile_base_dfsg";
+		    spawn(exec => ['zip','-d','--no-wild',"$destdir/$newfile_base_dfsg", @to_delete],
+			  wait_child => 1);
+		} else {
 		    my $newfile_base_dfsg = "${pkg}_${newversion}${excludesuffix}.orig.tar" ;
 		    $symlink = 'files-excluded'; # prevent symlinking or renaming
 
@@ -1588,9 +1607,9 @@ EOF
 			 ,wait_child => 1);
 		    my $suffix = compression_get_property($comp, "file_ext");
 		    compress_archive("$fname", "$destdir/$newfile_base_dfsg.$suffix", $comp);
-		} else {
-		    print "-- No files to be excluded -- no need for repacking.\n" if $verbose;
 		}
+	    } else {
+		print "-- No files to be excluded -- no need for repacking.\n" if $verbose;
 	    }
 	}
     }
