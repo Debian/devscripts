@@ -1473,13 +1473,13 @@ EOF
     }
 
     if ($repack and $newfile_base =~ /^(.*)\.(zip|jar)$/) {
+	my $compress_file_base = "$1.tar" ;
         my $suffix = compression_get_property($repack_compression, "file_ext");
 	print "-- Repacking from zip to .tar.$suffix\n" if $verbose;
 
 	system('command -v unzip >/dev/null 2>&1') >> 8 == 0
 	  or uscan_die("unzip binary not found. You need to install the package unzip to be able to repack .zip upstream archives.\n");
 
-	my $compress_file_base = "$1.tar" ;
 	my $newfile_base_compression = "$compress_file_base.$suffix";
 	my $tempdir = tempdir ("uscanXXXX", TMPDIR => 1, CLEANUP => 1);
 	# Parent of the target directory should be under our control
@@ -1488,15 +1488,12 @@ EOF
 	my $absdestdir = abs_path($destdir);
 	system('unzip', '-q', '-a', '-d', $tempdir, "$destdir/$newfile_base") == 0
 	    or uscan_die("Repacking from zip or jar to tar.$suffix failed (could not unzip)\n");
-	my $cwd = cwd();
-	chdir($tempdir) or uscan_die("Unable to chdir($tempdir): $!\n");
-	eval {
-	    compress_archive("$absdestdir/$compress_file_base", "$absdestdir/$newfile_base_compression", $repack_compression);
-	};
-	if ($@) {
+        spawn(exec => ['tar', '--owner=root', '--group=root', '--mode=a+rX', '--create', '--file', "$absdestdir/$compress_file_base", '--directory', $tempdir, '.'],
+              wait_child => 1);
+        unless (-e "$absdestdir/$compress_file_base") {
 	    uscan_die("Repacking from zip or jar to tar.$suffix failed (could not create tarball)\n");
 	}
-	chdir($cwd);
+	compress_archive("$absdestdir/$compress_file_base", "$absdestdir/$newfile_base_compression", $repack_compression);
 	$newfile_base = $newfile_base_compression;
 
     } elsif ($repack) { # Repacking from tar to tar, so just change the compression
