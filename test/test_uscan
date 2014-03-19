@@ -97,6 +97,52 @@ testRepackBZ2_GZ() { helperTestRepack "bz2" "gz" "gzip compressed data" ; }
 testRepackGZ_GZ() { helperTestRepack "gz" "gz" "gzip compressed data" ; }
 testRepackXZ_XZ() { helperTestRepack "xz" "xz" "XZ compressed data" ; }
 
+# The following function tests the --repack feature, with a zip file
+testRepackZip_XZ() {
+    to_comp=xz
+    file_output="XZ compressed data"
+
+    PKG=foo
+    PORT=8000
+    TMPDIR=$(mktemp -d)
+
+    mkdir -p $TMPDIR/$PKG/debian
+
+    cat <<END > $TMPDIR/$PKG/debian/watch
+version=3
+http://localhost:$PORT/$PKG-(\d).zip
+END
+
+    cat <<END > $TMPDIR/$PKG/debian/changelog
+$PKG (0-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
+END
+
+    mkdir -p $TMPDIR/repo/foo
+    touch $TMPDIR/repo/foo/content
+
+    ( cd $TMPDIR/repo ;
+      zip -r $PKG-1.zip * ;
+      python -m SimpleHTTPServer $PORT &
+      echo $! > pid )
+
+    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND --verbose --repack --repack-compression=$to_comp) )
+
+    TARBALL=${PKG}_1.orig.tar.$to_comp
+    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
+    assertNotNull "pristine tarball is not $to_comp-compressed" \
+                  "$( file -L $TMPDIR/$TARBALL | grep "$file_output" )"
+    CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
+    assertTrue 'file contents missing'	\
+                $(containsName "$CONTENTS" content)
+
+    cleanup
+
+}
+
 
 # The following function tests the Files-Excluded feature of uscan, which
 # allows the selective exclusion of files from the upstream tarball before
