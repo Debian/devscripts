@@ -1567,14 +1567,19 @@ EOF
 	    }
 
 	    # find out what to delete
+	    $Text::Glob::strict_leading_dot = 0;
+	    $Text::Glob::strict_wildcard_slash = 0;
 	    my @to_delete;
 	    for my $filename (@files) {
 		my $do_exclude = 0;
 		for my $exclude (@excluded) {
 		    $do_exclude ||=
-			Text::Glob::match_glob($exclude,     $filename) ||
-			Text::Glob::match_glob($exclude."/", $filename) ||
-			Text::Glob::match_glob($exclude."/*", $filename);
+			Text::Glob::match_glob("$exclude",     $filename) ||
+			Text::Glob::match_glob("$exclude/",    $filename) ||
+			Text::Glob::match_glob("$exclude/*",   $filename) ||
+			Text::Glob::match_glob("*/$exclude",   $filename) ||
+			Text::Glob::match_glob("*/$exclude/",  $filename) ||
+			Text::Glob::match_glob("*/$exclude/*", $filename);
 		}
 		push @to_delete, $filename if $do_exclude;
 	    }
