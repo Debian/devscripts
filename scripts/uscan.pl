@@ -1488,7 +1488,18 @@ EOF
 	my $absdestdir = abs_path($destdir);
 	system('unzip', '-q', '-a', '-d', $tempdir, "$destdir/$newfile_base") == 0
 	    or uscan_die("Repacking from zip or jar to tar.$suffix failed (could not unzip)\n");
-        spawn(exec => ['tar', '--owner=root', '--group=root', '--mode=a+rX', '--create', '--file', "$absdestdir/$compress_file_base", '--directory', $tempdir, '.'],
+
+	# Figure out the top-level contents of the tarball.
+	# If we'd pass "." to tar we'd get the same contents, but the filenames would
+	# start with ./, which is confusing later.
+	# This should also be more reliable than, say, changing directories and globbing.
+	opendir(TMPDIR, $tempdir) || uscan_die("Can't open $tempdir $!\n");
+	my @files = grep {$_ ne "." && $_ ne ".."} readdir(TMPDIR);
+	close TMPDIR;
+
+
+	# tar it all up
+        spawn(exec => ['tar', '--owner=root', '--group=root', '--mode=a+rX', '--create', '--file', "$absdestdir/$compress_file_base", '--directory', $tempdir, @files],
               wait_child => 1);
         unless (-e "$absdestdir/$compress_file_base") {
 	    uscan_die("Repacking from zip or jar to tar.$suffix failed (could not create tarball)\n");
