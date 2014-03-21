@@ -144,24 +144,20 @@ END
 }
 
 
+
 # The following function tests the Files-Excluded feature of uscan, which
 # allows the selective exclusion of files from the upstream tarball before
 # repacking it.
 
-testFileExclusion() {
+helperCreateRepo () {
+    mkdir -p $PKG/debian
 
-    PKG=foo
-    PORT=8000
-    TMPDIR=$(mktemp -d)
-
-    mkdir -p $TMPDIR/$PKG/debian
-
-    cat <<END > $TMPDIR/$PKG/debian/watch
+    cat <<END > $PKG/debian/watch
 version=3
 http://localhost:$PORT/$PKG-(\d).tar.gz
 END
 
-    cat <<END > $TMPDIR/$PKG/debian/changelog
+    cat <<END > $PKG/debian/changelog
 $PKG (0-1) unstable; urgency=low
 
   * Initial release
@@ -169,42 +165,30 @@ $PKG (0-1) unstable; urgency=low
  -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
 END
 
-    cat <<END > $TMPDIR/$PKG/debian/copyright
+    cat <<'END' > $PKG/debian/copyright
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Files-Excluded: exclude-this
  exclude-dir
  .*
  js/jquery.js
+ ;\ echo\ baz;\ #
 END
 
-    # Test matching with escaped characters
-    printf ' ;\ echo\ baz;\ #\n' >> $TMPDIR/$PKG/debian/copyright
+    mkdir -p repo
+    touch repo/include-this
+    touch repo/exclude-this
+    touch repo/.hidden
+    mkdir -p "repo/; echo baz; #/"
+    mkdir -p repo/exclude-dir
+    touch repo/exclude-dir/file
+    mkdir -p repo/exclude-dir/subdir
+    touch repo/exclude-dir/subdir/file2
+    mkdir -p repo/docs/html/js/
+    touch repo/docs/html/js/jquery.js
 
+}
 
-    mkdir -p $TMPDIR/repo
-    touch $TMPDIR/repo/include-this
-    touch $TMPDIR/repo/exclude-this
-    touch $TMPDIR/repo/.hidden
-    mkdir -p "$TMPDIR/repo/; echo baz; #/"
-    mkdir -p $TMPDIR/repo/exclude-dir
-    touch $TMPDIR/repo/exclude-dir/file
-    mkdir -p $TMPDIR/repo/exclude-dir/subdir
-    touch $TMPDIR/repo/exclude-dir/subdir/file2
-    mkdir -p $TMPDIR/repo/docs/html/js/
-    touch $TMPDIR/repo/docs/html/js/jquery.js
-
-    ( cd $TMPDIR/repo ;
-      tar cfz $PKG-1.tar.gz * ;
-      python -m SimpleHTTPServer $PORT &
-      echo $! > pid )
-
-    (cd $TMPDIR/$PKG ; $COMMAND)
-
-    TARBALL=${PKG}_1+dfsg.orig.tar.gz
-    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
-    assertNotNull 'pristine tarball is not gzip-compressed' \
-                  "$( file $TMPDIR/$TARBALL | grep 'gzip compressed data' )"
-    CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
+helperTestContent() {
     assertTrue 'file that must be present is excluded in the tarball'	\
                 $(containsName "$CONTENTS" include-this)
     assertFalse 'file that must be excluded is present in the tarball'	\
@@ -219,6 +203,31 @@ END
                 $(containsName "$CONTENTS" .hidden)
     assertFalse "path with whitespace that must be excluded is present"	\
                 $(containsName "$CONTENTS" "; echo baz; #/")
+}
+
+testFileExclusion() {
+
+    PKG=foo
+    PORT=8000
+    TMPDIR=$(mktemp -d)
+
+    (
+      cd $TMPDIR
+      helperCreateRepo
+      cd repo
+      tar cfz $PKG-1.tar.gz * .hidden
+      python -m SimpleHTTPServer $PORT &
+      echo $! > pid )
+
+    (cd $TMPDIR/$PKG ; $COMMAND)
+
+    TARBALL=${PKG}_1+dfsg.orig.tar.gz
+    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
+    assertNotNull 'pristine tarball is not gzip-compressed' \
+                  "$( file $TMPDIR/$TARBALL | grep 'gzip compressed data' )"
+    CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
+
+    helperTestContent
 
     cleanup
 
@@ -232,43 +241,16 @@ testFileExclusionZip() {
     PORT=8000
     TMPDIR=$(mktemp -d)
 
-    mkdir -p $TMPDIR/$PKG/debian
-
-    cat <<END > $TMPDIR/$PKG/debian/watch
+    (
+      cd $TMPDIR
+      helperCreateRepo
+      cat <<END > $PKG/debian/watch
 version=3
 http://localhost:$PORT/$PKG-(\d).zip
 END
 
-    cat <<END > $TMPDIR/$PKG/debian/changelog
-$PKG (0-1) unstable; urgency=low
-
-  * Initial release
-
- -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
-END
-
-    cat <<END > $TMPDIR/$PKG/debian/copyright
-Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Files-Excluded: exclude-this
- exclude-dir
- .*
-END
-
-    # Test matching with escaped characters
-    printf ' ;\ echo\ baz;\ #\n' >> $TMPDIR/$PKG/debian/copyright
-
-
-    mkdir -p $TMPDIR/repo
-    touch $TMPDIR/repo/include-this
-    touch $TMPDIR/repo/exclude-this
-    touch $TMPDIR/repo/.hidden
-    mkdir -p "$TMPDIR/repo/; echo baz; #/"
-    mkdir -p $TMPDIR/repo/exclude-dir/subdir
-    touch $TMPDIR/repo/exclude-dir/file
-    touch $TMPDIR/repo/exclude-dir/subdir/file2
-
-    ( cd $TMPDIR/repo ;
-      zip -r $PKG-1.zip * ;
+      cd repo
+      zip -r $PKG-1.zip * .hidden;
       python -m SimpleHTTPServer $PORT &
       echo $! > pid )
 
@@ -276,18 +258,41 @@ END
     assertTrue 'zipfile not downloaded' "[ -f $TMPDIR/$PKG-1.zip ]"
     assertTrue 'zipfile not copied to +dfsg' "[ -f $TMPDIR/$PKG-1+dfsg.zip ]"
     CONTENTS="$(zipinfo -1 $TMPDIR/$PKG-1+dfsg.zip)"
-    assertTrue 'file that must be present is excluded in the zip file'	\
-                $(containsName "$CONTENTS" include-this)
-    assertFalse 'file that must be excluded is present in the zip file'	\
-                $(containsName "$CONTENTS" exclude-this)
-    assertFalse "dir that must be excluded is present in the zip file"	\
-                $(containsName "$CONTENTS" exclude-dir)
-    assertFalse "subdir that must be excluded is present in the zip file"	\
-                $(containsName "$CONTENTS" subdir)
-    assertFalse "hidden file that must be excluded is present in the zip file"	\
-                $(containsName "$CONTENTS" .hidden)
-    assertFalse "path with whitespace that must be excluded is present"	\
-                $(containsName "$CONTENTS" "; echo baz; #/")
+    helperTestContent
+
+    cleanup
+
+}
+
+# The same, for a zip file that is being repacked
+
+testFileExclusionZipToTar() {
+
+    PKG=foo
+    PORT=8000
+    TMPDIR=$(mktemp -d)
+
+    (
+      cd $TMPDIR
+      helperCreateRepo
+      cat <<END > $PKG/debian/watch
+version=3
+http://localhost:$PORT/$PKG-(\d).zip
+END
+
+      cd repo
+      zip -r $PKG-1.zip * .hidden;
+      python -m SimpleHTTPServer $PORT &
+      echo $! > pid )
+
+    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND --repack) 2>&1)
+
+    TARBALL=${PKG}_1+dfsg.orig.tar.xz
+    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
+    assertNotNull 'pristine tarball is not xz-compressed' \
+                  "$( file $TMPDIR/$TARBALL | grep 'XZ compressed data' )"
+    CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
+    helperTestContent
 
     cleanup
 
