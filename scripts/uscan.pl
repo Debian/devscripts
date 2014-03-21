@@ -1529,6 +1529,7 @@ EOF
     }
 
     my $excludesuffix = '+dfsg';
+    my $deletecount = 0;
     if ($exclusion) {
 	my $data = Dpkg::Control::Hash->new();
 	my $okformat = qr'http://www.debian.org/doc/packaging-manuals/copyright-format/[.\d]+';
@@ -1569,7 +1570,6 @@ EOF
 	    # find out what to delete
 	    $Text::Glob::strict_leading_dot = 0;
 	    $Text::Glob::strict_wildcard_slash = 0;
-	    my @to_delete;
 	    for my $filename (@files) {
 		my $do_exclude = 0;
 		for my $exclude (@excluded) {
@@ -1583,12 +1583,14 @@ EOF
 		}
 		push @to_delete, $filename if $do_exclude;
 	    }
+	    print "@to_delete\n";
 	    # ensure files are mentioned before the directory they live in
 	    # (otherwise tar complains)
 	    @to_delete = sort {$b cmp $a}  @to_delete;
 
 	    # actually delete something
 	    if (@to_delete) {
+		$deletecount = scalar(@to_delete);
 		if ( $newfile_base =~ /^(.*)\.(zip|jar)$/ ) {
 		    my $newfile_base_dfsg = "$1${excludesuffix}.$2" ;
 		    copy "$destdir/$newfile_base", "$destdir/$newfile_base_dfsg";
@@ -1636,7 +1638,7 @@ EOF
 	    } elsif ($symlink eq 'rename') {
 		print "    and renamed it as $renamed_base\n";
 	    } elsif ($symlink eq 'files-excluded') {
-		print "    and removed files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
+		print "    and removed ${deletecount} files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
 	    }
 	} elsif ($dehs) {
 	    my $msg = "Successfully downloaded updated package $newfile_base";
@@ -1646,7 +1648,7 @@ EOF
 	    } elsif ($symlink eq 'rename') {
 		$msg .= " and renamed it as $renamed_base";
 	    } elsif ($symlink eq 'files-excluded') {
-		$msg .= " and removed files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
+		$msg .= " and removed ${deletecount} files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
 	    } else {
 		$dehs_tags{'target'} = $newfile_base;
 	    }
@@ -1658,7 +1660,7 @@ EOF
 	    } elsif ($symlink eq 'rename') {
 		print "    and renamed it as $renamed_base\n";
 	    } elsif ($symlink eq 'files-excluded') {
-		print "    and removed files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
+		print "    and removed ${deletecount} files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
 	    }
 	}
     }
