@@ -1570,6 +1570,7 @@ EOF
 	    # find out what to delete
 	    $Text::Glob::strict_leading_dot = 0;
 	    $Text::Glob::strict_wildcard_slash = 0;
+	    my @to_delete;
 	    for my $filename (@files) {
 		my $do_exclude = 0;
 		for my $exclude (@excluded) {
@@ -1583,7 +1584,6 @@ EOF
 		}
 		push @to_delete, $filename if $do_exclude;
 	    }
-	    print "@to_delete\n";
 	    # ensure files are mentioned before the directory they live in
 	    # (otherwise tar complains)
 	    @to_delete = sort {$b cmp $a}  @to_delete;
