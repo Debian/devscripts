@@ -173,6 +173,7 @@ END
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Files-Excluded: exclude-this
  exclude-dir
+ .*
  js/jquery.js
 END
 
@@ -183,6 +184,7 @@ END
     mkdir -p $TMPDIR/repo
     touch $TMPDIR/repo/include-this
     touch $TMPDIR/repo/exclude-this
+    touch $TMPDIR/repo/.hidden
     mkdir -p "$TMPDIR/repo/; echo baz; #/"
     mkdir -p $TMPDIR/repo/exclude-dir
     touch $TMPDIR/repo/exclude-dir/file
@@ -213,6 +215,8 @@ END
                 $(containsName "$CONTENTS" subdir)
     assertFalse "non-root-file that must be excluded is present in the tarball"	\
                 $(containsName "$CONTENTS" jquery.js)
+    assertFalse "hidden file that must be excluded is present in the zip file"	\
+                $(containsName "$CONTENTS" .hidden)
     assertFalse "path with whitespace that must be excluded is present"	\
                 $(containsName "$CONTENTS" "; echo baz; #/")
 
@@ -247,6 +251,7 @@ END
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Files-Excluded: exclude-this
  exclude-dir
+ .*
 END
 
     # Test matching with escaped characters
@@ -256,6 +261,7 @@ END
     mkdir -p $TMPDIR/repo
     touch $TMPDIR/repo/include-this
     touch $TMPDIR/repo/exclude-this
+    touch $TMPDIR/repo/.hidden
     mkdir -p "$TMPDIR/repo/; echo baz; #/"
     mkdir -p $TMPDIR/repo/exclude-dir/subdir
     touch $TMPDIR/repo/exclude-dir/file
@@ -278,6 +284,8 @@ END
                 $(containsName "$CONTENTS" exclude-dir)
     assertFalse "subdir that must be excluded is present in the zip file"	\
                 $(containsName "$CONTENTS" subdir)
+    assertFalse "hidden file that must be excluded is present in the zip file"	\
+                $(containsName "$CONTENTS" .hidden)
     assertFalse "path with whitespace that must be excluded is present"	\
                 $(containsName "$CONTENTS" "; echo baz; #/")
 
