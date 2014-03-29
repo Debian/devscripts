@@ -1505,6 +1505,7 @@ EOF
 	    uscan_die("Repacking from zip or jar to tar.$suffix failed (could not create tarball)\n");
 	}
 	compress_archive("$absdestdir/$compress_file_base", "$absdestdir/$newfile_base_compression", $repack_compression);
+	unlink("$destdir/$newfile_base");
 	$newfile_base = $newfile_base_compression;
 
     } elsif ($repack) { # Repacking from tar to tar, so just change the compression
@@ -1641,6 +1642,8 @@ EOF
 	    symlink $newfile_base, "$destdir/$renamed_base";
 	} elsif ($symlink eq 'rename') {
 	    move "$destdir/$newfile_base", "$destdir/$renamed_base";
+	} elsif ($symlink eq 'files-excluded') {
+	    unlink("$destdir/$newfile_base");
 	}
 	if ($verbose) {
 	    print "-- Successfully downloaded updated package $newfile_base\n";
