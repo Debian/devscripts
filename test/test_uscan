@@ -77,7 +77,7 @@ END
       python -m SimpleHTTPServer $PORT &
       echo $! > pid )
 
-    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND --verbose --repack --repack-compression=$to_comp) )
+    (cd $TMPDIR/$PKG ; $COMMAND --verbose --repack --repack-compression=$to_comp)
 
     TARBALL=${PKG}_1.orig.tar.$to_comp
     assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"

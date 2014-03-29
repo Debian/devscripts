@@ -17,9 +17,13 @@
 package Devscripts::Compression;
 
 use Dpkg::Compression;
+use Dpkg::IPC;
 use Exporter qw(import);
 
-our @EXPORT = (@Dpkg::Compression::EXPORT, qw(compression_get_file_extension_regex));
+our @EXPORT = (
+	@Dpkg::Compression::EXPORT,
+	qw(compression_get_file_extension_regex compression_guess_from_file),
+	);
 
 eval {
     Dpkg::Compression->VERSION(1.02);
@@ -32,5 +36,27 @@ eval {
 	return $compression_re_file_ext;
     };
 };
+
+# This can potentially be moved to Dpkg::Compression
+
+my %mime2comp = (
+    "application/gzip"    => "gzip",
+    "application/x-bzip2" => "bzip2",
+    "application/x-xz"    => "xz",
+);
+
+sub compression_guess_from_file {
+    my $filename = shift;
+    my $mimetype;
+    spawn(exec => ['file', '--brief', '--mime-type', $filename],
+	  to_string => \$mimetype,
+	  wait_child => 1);
+    chomp($mimetype);
+    if (exists $mime2comp{$mimetype}) {
+	return $mime2comp{$mimetype};
+    } else {
+	return;
+    }
+}
 
 1;

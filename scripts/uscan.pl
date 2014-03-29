@@ -33,8 +33,8 @@ use File::Temp qw/tempfile tempdir/;
 use List::Util qw/first/;
 use filetest 'access';
 use Getopt::Long qw(:config gnu_getopt);
-use lib '/usr/share/devscripts';
-use Devscripts::Compression qw/compression_is_supported compression_guess_from_filename compression_get_property/;
+BEGIN { push(@INC, '/usr/share/devscripts') } # append to @INC, so that -I . has precedence
+use Devscripts::Compression qw/compression_is_supported compression_guess_from_file compression_get_property/;
 use Devscripts::Versort;
 use Text::ParseWords;
 BEGIN {
@@ -365,7 +365,7 @@ if (defined $opt_repack_compression) {
 	lzma => 'lzma',
     );
 
-    # Normalize compression methods to the names used by Dpkg.Compression
+    # Normalize compression methods to the names used by Dpkg::Compression
     if (compression_is_supported($opt_repack_compression)) {
         $repack_compression = $opt_repack_compression;
     } elsif (exists $ext2comp{$opt_repack_compression}) {
@@ -1508,7 +1508,7 @@ EOF
 	$newfile_base = $newfile_base_compression;
 
     } elsif ($repack) { # Repacking from tar to tar, so just change the compression
-	my $comp = compression_guess_from_filename($newfile_base);
+	my $comp = compression_guess_from_file("$destdir/$newfile_base");
 	unless ($comp) {
 	   uscan_die("Cannot determine compression method of $newfile_base");
 	}
@@ -1611,7 +1611,7 @@ EOF
 		    my $newfile_base_dfsg = "${pkg}_${newversion}${excludesuffix}.orig.tar" ;
 		    $symlink = 'files-excluded'; # prevent symlinking or renaming
 
-		    my $comp = compression_guess_from_filename($newfile_base);
+		    my $comp = compression_guess_from_file("$destdir/$newfile_base");
 		    unless ($comp) {
 		       uscan_die("Cannot determine compression method of $newfile_base");
 		    }
@@ -1631,7 +1631,7 @@ EOF
 
     my ($renamed_base);
     if ($newfile_base =~ $tarbase_regex) {
-	my $compression = compression_guess_from_filename($newfile_base);
+	my $compression = compression_guess_from_file("$destdir/$newfile_base");
 	unless ($compression) {
 	    uscan_die("Cannot determine compression method of $newfile_base");
 	}
@@ -2277,7 +2277,7 @@ sub compress_archive($$$) {
 
 sub decompress_archive($$) {
     my ($from_file, $to_file) = @_;
-    my $comp = compression_guess_from_filename($from_file);
+    my $comp = compression_guess_from_file($from_file);
     unless ($comp) {
        uscan_die("Cannot determine compression method of $from_file");
     }
