@@ -46,7 +46,7 @@ containsName(){
 
 # The following function tests the --repack feature
 helperTestRepack() {
-    from_comp="$1"
+    from_ext="$1"
     to_comp="$2"
     file_output="$3"
 
@@ -58,7 +58,7 @@ helperTestRepack() {
 
     cat <<END > $TMPDIR/$PKG/debian/watch
 version=3
-http://localhost:$PORT/$PKG-(\d).tar.$from_comp
+http://localhost:$PORT/$PKG-(\d).$from_ext
 END
 
     cat <<END > $TMPDIR/$PKG/debian/changelog
@@ -73,7 +73,7 @@ END
     touch $TMPDIR/repo/foo/content
 
     ( cd $TMPDIR/repo ;
-      tar cfa $PKG-1.tar.$from_comp * ;
+      tar cfa $PKG-1.$from_ext * ;
       python -m SimpleHTTPServer $PORT &
       echo $! > pid )
 
@@ -91,11 +91,12 @@ END
 
 }
 
-testRepackGZ_XZ() { helperTestRepack "gz" "xz" "XZ compressed data" ; }
-testRepackGZ_BZ2() { helperTestRepack "gz" "bz2" "bzip2 compressed data" ; }
-testRepackBZ2_GZ() { helperTestRepack "bz2" "gz" "gzip compressed data" ; }
-testRepackGZ_GZ() { helperTestRepack "gz" "gz" "gzip compressed data" ; }
-testRepackXZ_XZ() { helperTestRepack "xz" "xz" "XZ compressed data" ; }
+testRepackGZ_XZ() { helperTestRepack "tar.gz" "xz" "XZ compressed data" ; }
+testRepackGZ_BZ2() { helperTestRepack "tar.gz" "bz2" "bzip2 compressed data" ; }
+testRepackBZ2_GZ() { helperTestRepack "tar.bz2" "gz" "gzip compressed data" ; }
+testRepackGZ_GZ() { helperTestRepack "tar.gz" "gz" "gzip compressed data" ; }
+testRepackXZ_XZ() { helperTestRepack "tar.xz" "xz" "XZ compressed data" ; }
+testRepackTGZ_XZ() { helperTestRepack "tgz" "xz" "XZ compressed data" ; }
 
 # The following function tests the --repack feature, with a zip file
 testRepackZip_XZ() {
