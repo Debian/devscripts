@@ -20,6 +20,8 @@ devscripts (2.14.2) UNRELEASED; urgency=medium
 
   [ James McCoy ]
   * debcommit: Add hg and bzr support to DEBCOMMIT_SIGN_COMMITS.
+  * mk-build-deps: Uninstall the build-dep packages if apt isn't able to
+    complete their install.  (Closes: #743462)
 
   [ Andreas Tille ]
   * uscan: Allow a different compression scheme when repacking upstream
