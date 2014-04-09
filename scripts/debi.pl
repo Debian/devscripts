@@ -308,7 +308,7 @@ EOF
   my $pva="${package}_${sversion}_${arch}";
   $changes="$debsdir/$pva.changes";
 
-  if (! -e $changes and -d ".svn" and -d "../build-area") {
+  if (! -e $changes and -d "../build-area") {
     # Try out default svn-buildpackage structure in case
     # we were going to fail anyway...
     $changes = "../build-area/$pva.changes";
