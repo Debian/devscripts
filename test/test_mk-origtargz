@@ -117,4 +117,38 @@ testRename() {
 	assertTrue "result is not readable" "[ -r $TMPDIR/foo_0.1.orig.tar.gz ]"
 }
 
+testSymlinkExplicit() {
+	TMPDIR=$(mktemp -d)
+	makeTarBall gz
+	( cd $TMPDIR ; $MK_ORIGTARGZ --package foo --version 0.1 foo-0.1.tar.gz )
+	assertTrue "original tarball does not exist" "[ -e $TMPDIR/foo-0.1.tar.gz ]"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertTrue "result is not a symlink" "[ -L $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertTrue "result is not readable" "[ -r $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertEquals "final symlink" foo-0.1.tar.gz "$(readlink $TMPDIR/foo_0.1.orig.tar.gz)"
+}
+
+testCopyExplicit() {
+	TMPDIR=$(mktemp -d)
+	makeTarBall gz
+	( cd $TMPDIR ; $MK_ORIGTARGZ --package foo --version 0.1 --copy foo-0.1.tar.gz )
+	assertTrue "original tarball does not exist" "[ -e $TMPDIR/foo-0.1.tar.gz ]"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertFalse "result is a symlink" "[ -L $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertTrue "result is not readable" "[ -r $TMPDIR/foo_0.1.orig.tar.gz ]"
+}
+
+testRenameExplicit() {
+	TMPDIR=$(mktemp -d)
+	makeTarBall gz
+	( cd $TMPDIR ; $MK_ORIGTARGZ --package foo --version 0.1 --rename foo-0.1.tar.gz )
+	assertFalse "original tarball does exist" "[ -e $TMPDIR/foo-0.1.tar.gz ]"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertFalse "result is a symlink" "[ -L $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertTrue "result is not readable" "[ -r $TMPDIR/foo_0.1.orig.tar.gz ]"
+}
+
+
+
+
 . shunit2
