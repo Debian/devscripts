@@ -461,13 +461,13 @@ my $upstream_nice = File::Spec->canonpath($upstream);
 my $destfile_nice = File::Spec->canonpath($destfile);
 
 if ($is_zipfile or $do_repack or $deletecount) {
-	print "Succesfully repacked $upstream_nice as $destfile_nice";
+	print "Successfully repacked $upstream_nice as $destfile_nice";
 } elsif ($mode eq "symlink") {
-	print "Succesfully symlinked $upstream_nice to $destfile_nice";
+	print "Successfully symlinked $upstream_nice to $destfile_nice";
 } elsif ($mode eq "copy") {
-	print "Succesfully copied $upstream_nice to $destfile_nice";
+	print "Successfully copied $upstream_nice to $destfile_nice";
 } elsif ($mode eq "rename") {
-	print "Succesfully renamed $upstream_nice to $destfile_nice";
+	print "Successfully renamed $upstream_nice to $destfile_nice";
 } else {
 	die "Unknown mode $mode."
 }
