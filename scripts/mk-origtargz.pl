@@ -200,16 +200,17 @@ sub setmode {
 }
 
 GetOptions(
-        "package=s" => \$package,
-        "version|v=s" => \$version,
-        "exclude-file=s" => \@exclude_globs,
-        "compression=s" => \$compression,
-        "symlink" => \&setmode,
-        "rename" => \&setmode,
-        "copy" => \&setmode,
-        "repack" => \$repack,
-        "help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },
-) or pod2usage({-exitval => 3});
+	"package=s" => \$package,
+	"version|v=s" => \$version,
+	"exclude-file=s" => \@exclude_globs,
+	"compression=s" => \$compression,
+	"symlink" => \&setmode,
+	"rename" => \&setmode,
+	"copy" => \&setmode,
+	"repack" => \$repack,
+	"directory|C=s" => \$destdir,
+	"help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },
+) or pod2usage({-exitval => 3, -verbose=>1});
 
 $mode ||= "symlink";
 

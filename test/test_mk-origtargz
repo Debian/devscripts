@@ -148,6 +148,18 @@ testRenameExplicit() {
 	assertTrue "result is not readable" "[ -r $TMPDIR/foo_0.1.orig.tar.gz ]"
 }
 
+testSymlinkExplicitSubidr() {
+	TMPDIR=$(mktemp -d)
+	makeTarBall gz
+	mkdir -p $TMPDIR/destdir
+	( cd $TMPDIR ; $MK_ORIGTARGZ --package foo --version 0.1 -C destdir foo-0.1.tar.gz )
+	assertTrue "original tarball does not exist" "[ -e $TMPDIR/foo-0.1.tar.gz ]"
+	assertTrue "result does not exist" "[ -e $TMPDIR/destdir/foo_0.1.orig.tar.gz ]"
+	assertTrue "result is not a symlink" "[ -L $TMPDIR/destdir/foo_0.1.orig.tar.gz ]"
+	assertTrue "result is not readable" "[ -r $TMPDIR/destdir/foo_0.1.orig.tar.gz ]"
+	assertEquals "final symlink" ../foo-0.1.tar.gz "$(readlink $TMPDIR/destdir/foo_0.1.orig.tar.gz)"
+}
+
 
 
 
