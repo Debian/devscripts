@@ -64,10 +64,9 @@ The default is to use the package name of the first entry in F<debian/changelog>
 
 =item B<-v>, B<--version> I<version>
 
-Use I<version> as the version of the package. If I<version> is a full Debian
-version, i.e. contains a dash, the upstream component is used.
+Use I<version> as the version of the package. This needs to be the upstream version portion of a full Debian version, i.e. no Debian revision, no epoch.
 
-The default is to use the version of the first entry in F<debian/changelog>.
+The default is to use the upstream portion of the version of the first entry in F<debian/changelog>.
 
 =item B<--exclude-file> I<glob>
 
@@ -139,5 +138,309 @@ B<mk-origtargz> and this manpage have been written by Joachim Breitner
 <I<nomeata@debian.org>>.
 
 =cut
+
+
+use strict;
+use warnings;
+use File::Temp qw/tempdir/;
+use Getopt::Long qw(:config gnu_getopt);
+use Pod::Usage;
+
+use File::Temp qw/tempfile/;
+use Devscripts::Compression qw/compression_is_supported compression_guess_from_file compression_get_property/;
+use Cwd 'abs_path';
+use File::Copy;
+
+
+my $package = undef;
+my $version = undef;
+my @exclude_globs = ();
+
+my $destdir = undef;
+my $compression = "gzip";
+my $mode = undef; # can be symlink, rename or copy;
+my $repack = 0;
+
+my $upstream = undef;
+
+# option parsing
+
+sub die_opts ($) {
+	pod2usage({-exitval => 3, -verbose => 1, -msg => shift @_});
+}
+
+sub setmode {
+	my $newmode = shift @_;
+	if (defined $mode and $mode ne $newmode) {
+		die_opts (sprintf "--%s and --%s are mutually exclusive", $mode, $newmode);
+	}
+	$mode = $newmode;
+}
+
+GetOptions(
+        "package=s" => \$package,
+        "version|v=s" => \$version,
+        "exclude-file=s" => \@exclude_globs,
+        "compression=s" => \$compression,
+        "symlink" => \&setmode,
+        "rename" => \&setmode,
+        "copy" => \&setmode,
+        "repack" => \$repack,
+        "help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },
+) or pod2usage({-exitval => 3});
+
+$mode ||= "symlink";
+
+# sanity checks
+unless (compression_is_supported($compression)) {
+	die_opts (sprintf "Unknown compression scheme %s", $compression);
+}
+
+if (defined $package and not defined $version) {
+	die_opts "If you use --package, you also have to specify --version."
+}
+
+if (@ARGV != 1) {
+	die_opts "Please specify original tarball."
+}
+$upstream = $ARGV[0];
+
+# get information from debian/
+
+unless (defined $package) {
+	# get package name
+	open F, "debian/changelog" or die "debian/changelog: $!\n";
+	my $line = <F>;
+	close F;
+	unless ($line =~ /^(\S+) \((\S+)\)/) {
+		die "could not parse debian/changelog:1: $line";
+	}
+	$package = $1;
+
+	# get version number
+	unless (defined $version) {
+		$version = $2;
+		unless ($version =~ /-/) {
+			print "Package with native version number $version; mk-origtargz makes no sense for native packages.\n";
+			exit 0;
+		}
+		$version =~ s/(.*)-.*/$1/; # strip everything from the last dash
+		$version =~ s/^\d+://; # strip epoch
+	}
+
+	# get files-excluded
+	my $data = Dpkg::Control::Hash->new();
+	my $okformat = qr'http://www.debian.org/doc/packaging-manuals/copyright-format/[.\d]+';
+        eval {
+		$data->load('debian/copyright');
+		1;
+        } or do {
+		undef $data;
+        };
+        if (   $data
+            && defined $data->{'format'}
+            && $data->{'format'} =~ m{^$okformat/?$}
+            && $data->{'files-excluded'})
+        {
+		my @rawexcluded = ($data->{"files-excluded"} =~ /(?:\A|\G\s+)((?:\\.|[^\\\s])+)/g);
+		# un-escape
+		push @exclude_globs, map { s/\\(.)/$1/g; s?/+$??; $_ } @rawexcluded;
+	 }
+
+	 # set destination directory
+	 unless (defined $destdir) {
+		$destdir = "..";
+	 }
+} else {
+	 unless (defined $destdir) {
+		$destdir = ".";
+	 }
+}
+
+# Gather information about the upstream file.
+
+my $zip_regex = qr/\.(zip|jar)$/;
+# This makes more sense in Dpkg:Compression
+my $tar_regex = qr/\.(tar\.gz  |tgz
+                     |tar\.bz2 |tbz2?
+                     |tar.lzma |tlz(?:ma?)?
+                     |tar.xz   |txz)$/x;
+
+my $is_zipfile = $upstream =~ $zip_regex;
+my $is_tarfile = $upstream =~ $tar_regex;
+
+unless (-e $upstream) {
+	die "Could not read $upstream: $!"
+}
+
+unless ($is_zipfile or $is_tarfile) {
+	# TODO: Should we ignore the name and only look at what file knows?
+	die "Parameter $upstream does not look like a tar archive or a zip file."
+}
+
+if ($is_tarfile and not $repack) {
+	# If we are not explicitly repacking, but need to generate a file
+	# (usually due to Files-Excluded), then we want to use the original
+	# compression scheme.
+	$compression = compression_guess_from_file ($upstream);
+
+	if (not defined $compression) {
+		die "Unknown or no compression used in $upstream."
+	}
+}
+
+
+# Now we know what the final filename will be
+my $destfilebase = sprintf "%s_%s.orig.tar", $package, $version;
+my $destfiletar = sprintf "%s/%s", $destdir, $destfilebase;
+my $suffix = compression_get_property($compression, "file_ext");
+my $destfile = sprintf "%s.%s", $destfiletar, $suffix;
+
+
+# The upstream file may change a few times, $upstream_tar is alway the current
+# version
+my $upstream_tar = $upstream;
+
+#	if (abs_path($destfile) eq abs_path($upstream)) {
+#		# We should move the file to itself? That makes no sense!
+#		# But maybe the user wants us to remove files.
+#		# So rename the file, and adjust the $mode sensibly.
+#		my (undef, $upstream_tar) = tempfile ( "$destfilebase.XXXXXX.$suffix", DIR => $destdir );
+#		move $destfile, $upstream_tar;
+#		# Only rename makes sense: There was only one file before, so there
+#		# should be only one afterwards
+#		$mode = "rename";
+#	}
+
+# If the file is a zipfile, we need to create a tarfile from it.
+if ($is_zipfile) {
+	system('command -v unzip >/dev/null 2>&1') >> 8 == 0
+		or die("unzip binary not found. You need to install the package unzip to be able to repack .zip upstream archives.\n");
+
+        my $tempdir = tempdir ("uscanXXXX", TMPDIR => 1, CLEANUP => 1);
+        # Parent of the target directory should be under our control
+        $tempdir .= '/repack';
+        mkdir $tempdir or uscan_die("Unable to mkdir($tempdir): $!\n");
+        system('unzip', '-q', '-a', '-d', $tempdir, $upstream_tar) == 0
+            or uscan_die("Repacking from zip or jar failed (could not unzip)\n");
+
+        # Figure out the top-level contents of the tarball.
+        # If we'd pass "." to tar we'd get the same contents, but the filenames would
+        # start with ./, which is confusing later.
+        # This should also be more reliable than, say, changing directories and globbing.
+        opendir(TMPDIR, $tempdir) || uscan_die("Can't open $tempdir $!\n");
+        my @files = grep {$_ ne "." && $_ ne ".."} readdir(TMPDIR);
+        close TMPDIR;
+
+
+        # tar it all up
+        spawn(exec => ['tar',
+		'--owner=root', '--group=root', '--mode=a+rX',
+		'--create', '--file', "$destfiletar",
+		'--directory', $tempdir,
+		@files],
+              wait_child => 1);
+        unless (-e "$destfiletar") {
+            uscan_die("Repacking from zip or jar to tar.$suffix failed (could not create tarball)\n");
+        }
+        compress_archive($destfiletar, $destfile, $compression);
+	unlink($destfiletar);
+	$upstream_tar = $destfile;
+
+	# adjust mode (symlink no longer makes sense)
+	$mode = "copy" if $mode eq "symlink";
+}
+
+# From now on, $upstream_tar is guaranteed to be a compressed tarball. It is always
+# a full (possibly relative) path, and distinct from $destfile.
+
+# Find out if we have to repack
+my $do_repack = 0;
+if ($repack) {
+	my $comp = compression_guess_from_file($upstream_tar);
+        unless ($comp) {
+           uscan_die("Cannot determine compression method of $upstream_tar");
+        }
+	$do_repack = $comp ne $compression;
+
+}
+
+# Removing files
+my $deletecount = 0;
+my @to_delete;
+
+if (scalar @exclude_globs > 0) {
+	my @files;
+	my $files;
+	spawn(exec => ['tar', '-t', '-a', '-f', $upstream_tar],
+	      to_string => \$files,
+	      wait_child => 1);
+	@files = split /^/, $files;
+	chomp @files;
+
+	# find out what to delete
+	{
+		no warnings 'once';
+		$Text::Glob::strict_leading_dot = 0;
+		$Text::Glob::strict_wildcard_slash = 0;
+	}
+	for my $filename (@files) {
+		my $do_exclude = 0;
+		for my $exclude (@exclude_globs) {
+			$do_exclude ||=
+				Text::Glob::match_glob("$exclude",     $filename) ||
+				Text::Glob::match_glob("*/$exclude",   $filename);
+		}
+		push @to_delete, $filename if $do_exclude;
+	}
+
+	# ensure files are mentioned before the directory they live in
+	# (otherwise tar complains)
+	@to_delete = sort {$b cmp $a}  @to_delete;
+
+	$deletecount = scalar(@to_delete);
+}
+
+# Actually do the unpack, remove, pack cycle
+if ($do_repack || $deletecount) {
+	decompress_archive($destfile, $destfiletar);
+	spawn(exec => ['tar', '--delete', '--file', $destfiletar, @to_delete ]
+		,wait_child => 1) if (@to_delete);
+	compress_archive($destfiletar, $destfile, $compression);
+	unlink($destfiletar);
+
+	# Symlink no longer makes sense
+	$mode = "copy" if $mode eq "symlink";
+}
+
+# Final step: symlink, copy or rename.
+
+my $same_name = abs_path($destfile) eq abs_path($upstream_tar);
+unless ($same_name) {
+	if ($mode eq "symlink") {
+		symlink $upstream_tar, $destfile;
+	} elsif ($mode eq "copy") {
+		copy $upstream_tar, $destfile;
+	} elsif ($mode eq "rename") {
+		move $upstream_tar, $destfile;
+	}
+}
+
+# Tell the use what wae did
+
+if ($is_zipfile or $do_repack or $deletecount) {
+	print "Succesfully repacked $upstream as $destfile";
+} elsif ($mode eq "symlink") {
+	print "Succesfully symlinked $upstream to $destfile";
+} elsif ($mode eq "copy") {
+	print "Succesfully copied $upstream to $destfile";
+} elsif ($mode eq "renamed") {
+	print "Succesfully renamed $upstream to $destfile";
+}
+
+if ($deletecount) {
+	print ", deleting ${deletecount} files from it";
+}
+print ".\n";
 
 exit 0;
