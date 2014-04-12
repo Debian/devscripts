@@ -22,7 +22,7 @@ SCRIPTS = $(patsubst %.pl,%,$(PL_FILES)) $(patsubst %.sh,%,$(SH_FILES))
 COMPL_FILES := $(wildcard *.bash_completion)
 COMPLETION = $(patsubst %.bash_completion,devscripts.%,$(COMPL_FILES))
 
-GEN_MAN1S += devscripts.1
+GEN_MAN1S += devscripts.1 mk-origtargz.1
 
 BINDIR = /usr/bin
 LIBDIR = /usr/lib/devscripts

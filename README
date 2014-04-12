@@ -186,6 +186,9 @@ And now, in mostly alphabetical order, the scripts:
   package which may be installed to satisfy the build-dependencies of the
   given package. [equivs]
 
+- mk-origtargz: Rename upstream tarball, optionally changing the compression
+  and removing unwanted files.
+
 - namecheck: Check project names are not already taken.
 
 - nmudiff: prepare a diff of this version (presumably an NMU against the
