@@ -150,6 +150,7 @@ use Getopt::Long qw(:config gnu_getopt);
 use Pod::Usage;
 
 use Dpkg::IPC;
+use File::Spec;
 use File::Temp qw/tempfile/;
 use Devscripts::Compression qw/compression_is_supported compression_guess_from_file compression_get_property/;
 use Cwd 'abs_path';
@@ -444,8 +445,8 @@ if ($same_name) {
 	}
 } else {
 	if ($mode eq "symlink") {
-		# TODO: Make symbolic link as relative as possible
-		symlink abs_path($curfile), $destfile;
+		my $rel = File::Spec->abs2rel( $curfile, $destdir );
+		symlink $rel, $destfile;
 	} elsif ($mode eq "copy") {
 		copy $curfile, $destfile;
 	} elsif ($mode eq "rename") {
