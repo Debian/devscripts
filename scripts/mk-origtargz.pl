@@ -146,10 +146,14 @@ use File::Temp qw/tempdir/;
 use Getopt::Long qw(:config gnu_getopt);
 use Pod::Usage;
 
+use Dpkg::IPC;
 use File::Temp qw/tempfile/;
 use Devscripts::Compression qw/compression_is_supported compression_guess_from_file compression_get_property/;
 use Cwd 'abs_path';
 use File::Copy;
+
+sub decompress_archive($$);
+sub compress_archive($$$);
 
 
 my $package = undef;
@@ -403,7 +407,7 @@ if (scalar @exclude_globs > 0) {
 
 # Actually do the unpack, remove, pack cycle
 if ($do_repack || $deletecount) {
-	decompress_archive($destfile, $destfiletar);
+	decompress_archive($upstream_tar, $destfiletar);
 	spawn(exec => ['tar', '--delete', '--file', $destfiletar, @to_delete ]
 		,wait_child => 1) if (@to_delete);
 	compress_archive($destfiletar, $destfile, $compression);
@@ -444,3 +448,29 @@ if ($deletecount) {
 print ".\n";
 
 exit 0;
+
+sub decompress_archive($$) {
+    my ($from_file, $to_file) = @_;
+    my $comp = compression_guess_from_file($from_file);
+    unless ($comp) {
+       uscan_die("Cannot determine compression method of $from_file");
+    }
+
+    my $cmd = compression_get_property($comp, 'decomp_prog');
+    spawn(exec => $cmd,
+        from_file => $from_file,
+        to_file => $to_file,
+        wait_child => 1);
+}
+
+sub compress_archive($$$) {
+    my ($from_file, $to_file, $comp) = @_;
+
+    my $cmd = compression_get_property($comp, 'comp_prog');
+    push(@{$cmd}, '-'.compression_get_property($comp, 'default_level'));
+    spawn(exec => $cmd,
+        from_file => $from_file,
+        to_file => $to_file,
+        wait_child => 1);
+    unlink $from_file;
+}
