@@ -1,0 +1,120 @@
+#!/bin/sh
+
+# Copyright 2014, Rafael Laboissiere <rafael@laboissiere.net>
+
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 3 of the License, or (at your
+# option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+# Public License for more details.
+#
+# On Debian systems, the complete text of the GNU General Public License
+# version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
+
+if test "$1" = --installed; then
+    MK_ORIGTARGZ="mk-origtargz"
+    shift
+else
+    top_srcdir=$(readlink -f "${0%/*}/..")
+    MK_ORIGTARGZ="perl -I $top_srcdir $top_srcdir/scripts/mk-origtargz.pl"
+fi
+
+cleanup(){
+    kill -9 $(cat $TMPDIR/repo/pid)
+    rm -rf $TMPDIR
+}
+
+trap cleanup 1 2 3 13 15
+
+
+makeSubDir () {
+	dir=$1
+	shift
+
+	mkdir -p "$TMPDIR/foo-0.1/$dir"
+	touch    "$TMPDIR/foo-0.1/$dir/a-file"
+	mkdir    "$TMPDIR/foo-0.1/$dir/a-subdir"
+	touch    "$TMPDIR/foo-0.1/$dir/a-subdir/a-file"
+}
+
+
+makeUpstreamFiles () {
+	mkdir -p "$TMPDIR/foo-0.1"
+	touch "$TMPDIR/foo-0.1/include-this-file"
+	touch "$TMPDIR/foo-0.1/exclude-this-file"
+	touch "$TMPDIR/foo-0.1/.include-this-hidden-file"
+	touch "$TMPDIR/foo-0.1/.exclude-this-hidden-file"
+
+	makeSubDir "include-this-dir"
+	makeSubDir "exclude-this-dir"
+	makeSubDir ".include-this-hidden-dir"
+	makeSubDir ".exclude-this-hidden-dir"
+	makeSubDir "a-dir/include-this-subdir"
+	makeSubDir "a-dir/exclude-this-subdir"
+
+	touch "$TMPDIR/foo-0.1/; echo exclude-this-strange-file; #"
+
+}
+makeTarBall () {
+	comp="$1";
+	makeUpstreamFiles
+	tar --create --auto-compress --file "$TMPDIR/foo-0.1.tar.$comp" --directory "$TMPDIR" foo-0.1
+	rm -rf "$TMPDIR/foo-0.1"
+}
+
+makeZipFile () {
+	makeUpstreamFiles
+	(cd $TMPDIR; zip -q -r "foo-0.1.zip" foo-0.1 )
+	rm -rf "$TMPDIR/foo-0.1"
+}
+
+makeDebanDir() {
+	mkdir -p $TMPDIR/foo/debian
+	cat <<END > $TMPDIR/foo/debian/changelog
+foo (0.1-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
+END
+}
+
+testSymlink() {
+	TMPDIR=$(mktemp -d)
+	makeTarBall gz
+	makeDebanDir
+	( cd $TMPDIR/foo ; $MK_ORIGTARGZ ../foo-0.1.tar.gz )
+	assertTrue "original tarball does not exist" "[ -e $TMPDIR/foo-0.1.tar.gz ]"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertTrue "result is not a symlink" "[ -L $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertTrue "result is not readable" "[ -r $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertEquals "final symlink" foo-0.1.tar.gz "$(readlink $TMPDIR/foo_0.1.orig.tar.gz)"
+}
+
+testCopy() {
+	TMPDIR=$(mktemp -d)
+	makeTarBall gz
+	makeDebanDir
+	( cd $TMPDIR/foo ; $MK_ORIGTARGZ --copy ../foo-0.1.tar.gz )
+	assertTrue "original tarball does not exist" "[ -e $TMPDIR/foo-0.1.tar.gz ]"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertFalse "result is a symlink" "[ -L $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertTrue "result is not readable" "[ -r $TMPDIR/foo_0.1.orig.tar.gz ]"
+}
+
+testRename() {
+	TMPDIR=$(mktemp -d)
+	makeTarBall gz
+	makeDebanDir
+	( cd $TMPDIR/foo ; $MK_ORIGTARGZ --rename ../foo-0.1.tar.gz )
+	assertFalse "original tarball does exist" "[ -e $TMPDIR/foo-0.1.tar.gz ]"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertFalse "result is a symlink" "[ -L $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertTrue "result is not readable" "[ -r $TMPDIR/foo_0.1.orig.tar.gz ]"
+}
+
+. shunit2

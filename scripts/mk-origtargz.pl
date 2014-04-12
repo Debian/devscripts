@@ -4,6 +4,9 @@
 # and removing unwanted files.
 # Copyright (C) 2014 Joachim Breitner <nomeata@debian.org>
 #
+# It contains code formerly found in uscan.
+# Copyright (C) 2002-2006, Julian Gilbey
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 2 of the License, or
@@ -151,6 +154,7 @@ use File::Temp qw/tempfile/;
 use Devscripts::Compression qw/compression_is_supported compression_guess_from_file compression_get_property/;
 use Cwd 'abs_path';
 use File::Copy;
+use Dpkg::Control::Hash;
 
 BEGIN {
     eval { require Text::Glob; };
@@ -440,7 +444,8 @@ if ($same_name) {
 	}
 } else {
 	if ($mode eq "symlink") {
-		symlink $curfile, $destfile;
+		# TODO: Make symbolic link as relative as possible
+		symlink abs_path($curfile), $destfile;
 	} elsif ($mode eq "copy") {
 		copy $curfile, $destfile;
 	} elsif ($mode eq "rename") {
@@ -448,7 +453,7 @@ if ($same_name) {
 	}
 }
 
-# Tell the use what wae did
+# Tell the use what we did
 
 if ($is_zipfile or $do_repack or $deletecount) {
 	print "Succesfully repacked $upstream as $destfile";
@@ -456,8 +461,10 @@ if ($is_zipfile or $do_repack or $deletecount) {
 	print "Succesfully symlinked $upstream to $destfile";
 } elsif ($mode eq "copy") {
 	print "Succesfully copied $upstream to $destfile";
-} elsif ($mode eq "renamed") {
+} elsif ($mode eq "rename") {
 	print "Succesfully renamed $upstream to $destfile";
+} else {
+	die "Unknown mode $mode."
 }
 
 if ($deletecount) {
