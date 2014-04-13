@@ -24,8 +24,15 @@ else
 fi
 
 cleanup(){
-    kill -9 $(cat $TMPDIR/repo/pid)
     rm -rf $TMPDIR
+}
+
+setUp () {
+	TMPDIR=$(mktemp -d test_mk-origtargz.XXXX)
+}
+
+tearDown () {
+	cleanup
 }
 
 trap cleanup 1 2 3 13 15
@@ -56,7 +63,7 @@ makeUpstreamFiles () {
 	makeSubDir "a-dir/include-this-subdir"
 	makeSubDir "a-dir/exclude-this-subdir"
 
-	touch "$TMPDIR/foo-0.1/; echo exclude-this-strange-file; #"
+	touch "$TMPDIR/foo-0.1/; echo strange-file; #"
 
 }
 makeTarBall () {
@@ -83,8 +90,37 @@ foo (0.1-1) unstable; urgency=low
 END
 }
 
+makeDebianCopyright() {
+    cat <<'END' > $TMPDIR/foo/debian/copyright
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Files-Excluded: exclude-this*
+ .exclude-this*
+ ;\ echo\ strange-file;\ #
+END
+
+}
+
+expected_files_after_removal=$(cat <<END
+foo-0.1/
+foo-0.1/a-dir/
+foo-0.1/a-dir/include-this-subdir/
+foo-0.1/a-dir/include-this-subdir/a-file
+foo-0.1/a-dir/include-this-subdir/a-subdir/
+foo-0.1/a-dir/include-this-subdir/a-subdir/a-file
+foo-0.1/include-this-dir/
+foo-0.1/include-this-dir/a-file
+foo-0.1/include-this-dir/a-subdir/
+foo-0.1/include-this-dir/a-subdir/a-file
+foo-0.1/include-this-file
+foo-0.1/.include-this-hidden-dir/
+foo-0.1/.include-this-hidden-dir/a-file
+foo-0.1/.include-this-hidden-dir/a-subdir/
+foo-0.1/.include-this-hidden-dir/a-subdir/a-file
+foo-0.1/.include-this-hidden-file
+END
+)
+
 testSymlink() {
-	TMPDIR=$(mktemp -d)
 	makeTarBall gz
 	makeDebanDir
 	( cd $TMPDIR/foo ; $MK_ORIGTARGZ ../foo-0.1.tar.gz )
@@ -96,7 +132,6 @@ testSymlink() {
 }
 
 testCopy() {
-	TMPDIR=$(mktemp -d)
 	makeTarBall gz
 	makeDebanDir
 	( cd $TMPDIR/foo ; $MK_ORIGTARGZ --copy ../foo-0.1.tar.gz )
@@ -107,7 +142,6 @@ testCopy() {
 }
 
 testRename() {
-	TMPDIR=$(mktemp -d)
 	makeTarBall gz
 	makeDebanDir
 	( cd $TMPDIR/foo ; $MK_ORIGTARGZ --rename ../foo-0.1.tar.gz )
@@ -118,7 +152,6 @@ testRename() {
 }
 
 testSymlinkExplicit() {
-	TMPDIR=$(mktemp -d)
 	makeTarBall gz
 	( cd $TMPDIR ; $MK_ORIGTARGZ --package foo --version 0.1 foo-0.1.tar.gz )
 	assertTrue "original tarball does not exist" "[ -e $TMPDIR/foo-0.1.tar.gz ]"
@@ -129,7 +162,6 @@ testSymlinkExplicit() {
 }
 
 testCopyExplicit() {
-	TMPDIR=$(mktemp -d)
 	makeTarBall gz
 	( cd $TMPDIR ; $MK_ORIGTARGZ --package foo --version 0.1 --copy foo-0.1.tar.gz )
 	assertTrue "original tarball does not exist" "[ -e $TMPDIR/foo-0.1.tar.gz ]"
@@ -139,7 +171,6 @@ testCopyExplicit() {
 }
 
 testRenameExplicit() {
-	TMPDIR=$(mktemp -d)
 	makeTarBall gz
 	( cd $TMPDIR ; $MK_ORIGTARGZ --package foo --version 0.1 --rename foo-0.1.tar.gz )
 	assertFalse "original tarball does exist" "[ -e $TMPDIR/foo-0.1.tar.gz ]"
@@ -148,8 +179,7 @@ testRenameExplicit() {
 	assertTrue "result is not readable" "[ -r $TMPDIR/foo_0.1.orig.tar.gz ]"
 }
 
-testSymlinkExplicitSubidr() {
-	TMPDIR=$(mktemp -d)
+testSymlinkExplicitSubdir() {
 	makeTarBall gz
 	mkdir -p $TMPDIR/destdir
 	( cd $TMPDIR ; $MK_ORIGTARGZ --package foo --version 0.1 -C destdir foo-0.1.tar.gz )
@@ -160,7 +190,88 @@ testSymlinkExplicitSubidr() {
 	assertEquals "final symlink" ../foo-0.1.tar.gz "$(readlink $TMPDIR/destdir/foo_0.1.orig.tar.gz)"
 }
 
+assertType () {
+	mime="$1"
+	file="$2"
+	assertEquals "filetype for $(basename "$file")" "$mime" "$(file --brief --mime-type "$file")"
+}
 
 
+testRepackGZ2GZ() {
+	makeTarBall gz
+	( cd $TMPDIR ; $MK_ORIGTARGZ --package foo --version 0.1 --copy foo-0.1.tar.gz --repack )
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertType application/gzip $TMPDIR/foo_0.1.orig.tar.gz
+}
+
+testRepackGZ2XZ() {
+	makeTarBall gz
+	( cd $TMPDIR ; $MK_ORIGTARGZ --package foo --version 0.1 --copy foo-0.1.tar.gz --repack --compression xz )
+	assertFalse "wrong result does exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
+	assertType application/x-xz $TMPDIR/foo_0.1.orig.tar.xz
+}
+
+testRepackXZ2GZ() {
+	makeTarBall xz
+	( cd $TMPDIR ; $MK_ORIGTARGZ --package foo --version 0.1 --copy foo-0.1.tar.xz --repack )
+	assertFalse "wrong result does exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertType application/gzip $TMPDIR/foo_0.1.orig.tar.gz
+}
+
+testRepackZip2GZ() {
+	makeZipFile
+	( cd $TMPDIR ; $MK_ORIGTARGZ --package foo --version 0.1 foo-0.1.zip )
+	assertTrue "original zip file does not exist" "[ -e $TMPDIR/foo-0.1.zip ]"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertType application/gzip $TMPDIR/foo_0.1.orig.tar.gz
+}
+
+testRepackZip2GZRename() {
+	makeZipFile
+	( cd $TMPDIR ; $MK_ORIGTARGZ --package foo --version 0.1 --rename foo-0.1.zip )
+	assertFalse "original zip file does exist" "[ -e $TMPDIR/foo-0.1.zip ]"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertType application/gzip $TMPDIR/foo_0.1.orig.tar.gz
+}
+
+testRepackZip2XZ() {
+	makeZipFile
+	( cd $TMPDIR ; $MK_ORIGTARGZ --package foo --version 0.1 foo-0.1.zip --compression xz )
+	assertTrue "original zip file does not exist" "[ -e $TMPDIR/foo-0.1.zip ]"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
+	assertType application/x-xz $TMPDIR/foo_0.1.orig.tar.xz
+}
+
+testExclude() {
+	makeTarBall gz
+	makeDebanDir
+	makeDebianCopyright
+	( cd $TMPDIR/foo ; $MK_ORIGTARGZ ../foo-0.1.tar.gz )
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertType application/gzip $TMPDIR/foo_0.1.orig.tar.gz
+	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1.orig.tar.gz | sort)"
+}
+
+testExcludeXZ() {
+	makeTarBall xz
+	makeDebanDir
+	makeDebianCopyright
+	( cd $TMPDIR/foo ; $MK_ORIGTARGZ ../foo-0.1.tar.xz )
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
+	assertType application/x-xz $TMPDIR/foo_0.1.orig.tar.xz
+	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1.orig.tar.xz | sort)"
+}
+
+testExcludeZip() {
+	makeZipFile
+	makeDebanDir
+	makeDebianCopyright
+	( cd $TMPDIR/foo ; $MK_ORIGTARGZ ../foo-0.1.zip --compression xz )
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
+	assertType application/x-xz $TMPDIR/foo_0.1.orig.tar.xz
+	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1.orig.tar.xz | sort)"
+}
 
 . shunit2
