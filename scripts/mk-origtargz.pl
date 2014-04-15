@@ -439,8 +439,9 @@ if ($do_repack || $deletecount) {
 
 # Final step: symlink, copy or rename.
 
-my $same_name = abs_path($destfile) eq abs_path($curfile);
-if ($same_name) {
+my $same_name = abs_path($destfile) eq abs_path($upstream);
+my $nothing_todo = abs_path($destfile) eq abs_path($curfile);
+if ($nothing_todo) {
 	# we were asked to rename, but had to repack. Remove
 	# the original upstream (unless it is the destfile)
 	if ($mode eq "rename" and not (abs_path($upstream) eq abs_path($destfile))) {
@@ -462,16 +463,20 @@ if ($same_name) {
 my $upstream_nice = File::Spec->canonpath($upstream);
 my $destfile_nice = File::Spec->canonpath($destfile);
 
-if ($is_zipfile or $do_repack or $deletecount) {
-	print "Successfully repacked $upstream_nice as $destfile_nice";
-} elsif ($mode eq "symlink") {
-	print "Successfully symlinked $upstream_nice to $destfile_nice";
-} elsif ($mode eq "copy") {
-	print "Successfully copied $upstream_nice to $destfile_nice";
-} elsif ($mode eq "rename") {
-	print "Successfully renamed $upstream_nice to $destfile_nice";
+if ($same_name) {
+	print "Leaving $destfile_nice where it is";
 } else {
-	die "Unknown mode $mode."
+	if ($is_zipfile or $do_repack or $deletecount) {
+		print "Successfully repacked $upstream_nice as $destfile_nice";
+	} elsif ($mode eq "symlink") {
+		print "Successfully symlinked $upstream_nice to $destfile_nice";
+	} elsif ($mode eq "copy") {
+		print "Successfully copied $upstream_nice to $destfile_nice";
+	} elsif ($mode eq "rename") {
+		print "Successfully renamed $upstream_nice to $destfile_nice";
+	} else {
+		die "Unknown mode $mode."
+	}
 }
 
 if ($deletecount) {
