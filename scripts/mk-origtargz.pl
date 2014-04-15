@@ -182,7 +182,7 @@ my @exclude_globs = ();
 
 my $destdir = undef;
 my $compression = "gzip";
-my $mode = undef; # can be symlink, rename or copy;
+my $mode = undef; # can be symlink, rename or copy. Can internally be repacked if the file was repacked.
 my $repack = 0;
 
 my $upstream = undef;
@@ -322,20 +322,11 @@ my $suffix = compression_get_property($compression, "file_ext");
 my $destfile = sprintf "%s.%s", $destfiletar, $suffix;
 
 
-# The upstream file may change a few times, $curfile is alway the current
-# version
-my $curfile = $upstream;
+# $upstream_tar is $upstream, unless the latter was a zip file.
+my $upstream_tar = $upstream;
 
-#	if (abs_path($destfile) eq abs_path($upstream)) {
-#		# We should move the file to itself? That makes no sense!
-#		# But maybe the user wants us to remove files.
-#		# So rename the file, and adjust the $mode sensibly.
-#		my (undef, $curfile) = tempfile ( "$destfilebase.XXXXXX.$suffix", DIR => $destdir );
-#		move $destfile, $curfile;
-#		# Only rename makes sense: There was only one file before, so there
-#		# should be only one afterwards
-#		$mode = "rename";
-#	}
+# Remember this for the final report
+my $zipfile_deleted = 0;
 
 # If the file is a zipfile, we need to create a tarfile from it.
 if ($is_zipfile) {
@@ -346,7 +337,7 @@ if ($is_zipfile) {
         # Parent of the target directory should be under our control
         $tempdir .= '/repack';
         mkdir $tempdir or uscan_die("Unable to mkdir($tempdir): $!\n");
-        system('unzip', '-q', '-a', '-d', $tempdir, $curfile) == 0
+        system('unzip', '-q', '-a', '-d', $tempdir, $upstream_tar) == 0
             or uscan_die("Repacking from zip or jar failed (could not unzip)\n");
 
         # Figure out the top-level contents of the tarball.
@@ -369,21 +360,26 @@ if ($is_zipfile) {
             uscan_die("Repacking from zip or jar to tar.$suffix failed (could not create tarball)\n");
         }
         compress_archive($destfiletar, $destfile, $compression);
-	$curfile = $destfile;
 
-	# adjust mode (symlink no longer makes sense)
-	$mode = "copy" if $mode eq "symlink";
+	# rename means the user did not want this file to exit afterwards
+	if ($mode eq "rename") {
+		unlink $upstream_tar;
+		$zipfile_deleted++;
+	}
+
+	$mode = "repack";
+	$upstream_tar = $destfile;
 }
 
-# From now on, $curfile is guaranteed to be a compressed tarball. It is always
+# From now on, $upstream_tar is guaranteed to be a compressed tarball. It is always
 # a full (possibly relative) path, and distinct from $destfile.
 
 # Find out if we have to repack
 my $do_repack = 0;
 if ($repack) {
-	my $comp = compression_guess_from_file($curfile);
+	my $comp = compression_guess_from_file($upstream_tar);
         unless ($comp) {
-           uscan_die("Cannot determine compression method of $curfile");
+           uscan_die("Cannot determine compression method of $upstream_tar");
         }
 	$do_repack = $comp ne $compression;
 
@@ -396,7 +392,7 @@ my @to_delete;
 if (scalar @exclude_globs > 0) {
 	my @files;
 	my $files;
-	spawn(exec => ['tar', '-t', '-a', '-f', $curfile],
+	spawn(exec => ['tar', '-t', '-a', '-f', $upstream_tar],
 	      to_string => \$files,
 	      wait_child => 1);
 	@files = split /^/, $files;
@@ -427,34 +423,30 @@ if (scalar @exclude_globs > 0) {
 
 # Actually do the unpack, remove, pack cycle
 if ($do_repack || $deletecount) {
-	decompress_archive($curfile, $destfiletar);
+	decompress_archive($upstream_tar, $destfiletar);
+	unlink $upstream_tar if $mode eq "rename";
 	spawn(exec => ['tar', '--delete', '--file', $destfiletar, @to_delete ]
 		,wait_child => 1) if scalar(@to_delete) > 0;
 	compress_archive($destfiletar, $destfile, $compression);
 
 	# Symlink no longer makes sense
-	$mode = "copy" if $mode eq "symlink";
-	$curfile = $destfile;
+	$mode = "repack";
+	$upstream_tar = $destfile;
 }
 
 # Final step: symlink, copy or rename.
 
 my $same_name = abs_path($destfile) eq abs_path($upstream);
-my $nothing_todo = abs_path($destfile) eq abs_path($curfile);
-if ($nothing_todo) {
-	# we were asked to rename, but had to repack. Remove
-	# the original upstream (unless it is the destfile)
-	if ($mode eq "rename" and not (abs_path($upstream) eq abs_path($destfile))) {
-		unlink $upstream;
-	}
-} else {
+unless ($same_name) {
+	if ($mode ne "repack") { die "Assertion failed" unless $upstream_tar eq $upstream; }
+
 	if ($mode eq "symlink") {
-		my $rel = File::Spec->abs2rel( $curfile, $destdir );
+		my $rel = File::Spec->abs2rel( $upstream_tar, $destdir );
 		symlink $rel, $destfile;
 	} elsif ($mode eq "copy") {
-		copy $curfile, $destfile;
+		copy $upstream_tar, $destfile;
 	} elsif ($mode eq "rename") {
-		move $curfile, $destfile;
+		move $upstream_tar, $destfile;
 	}
 }
 
@@ -482,7 +474,7 @@ if ($same_name) {
 if ($deletecount) {
 	print ", deleting ${deletecount} files from it";
 }
-if (($is_zipfile or $do_repack or $deletecount) and $mode eq "rename") {
+if ($zipfile_deleted) {
 	print ", and removed the original file"
 }
 print ".\n";
