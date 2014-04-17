@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2014-04-17 18:29-0400\n"
-"PO-Revision-Date: 2014-04-17 13:52-0400\n"
+"PO-Revision-Date: 2014-04-17 18:28-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -12778,7 +12778,7 @@ msgstr ""
 #: ../scripts/devscripts.1:115
 #, no-wrap
 msgid "I<mk-origtargz>(1)"
-msgstr "I<mk-origtargz>(1)"
+msgstr "B<mk-origtargz>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:117
@@ -15492,7 +15492,7 @@ msgid ""
 msgstr ""
 "B<mk-origtargz> renomme le fichier donné pour correspondre à ce qui est "
 "attendu par B<dpkg-buildpackage>, à partir du nom de paquet source et de la "
-"version dans F<debian/changelog>. Il peut convertir du B<zip> en B<tar>, et "
+"version dans F<debian/changelog>. Il peut convertir du B<ZIP> en B<tar>, et "
 "éventuellement modifier la compression et supprimer les fichiers "
 "conformément à B<Files-Excluded> dans F<debian/copyright>. Le fichier "
 "résultant est placé dans F<debian/../..>."
@@ -15650,7 +15650,7 @@ msgid ""
 "If the file has to be modified (because it is a B<zip> file, because of B<--"
 "repack> or B<Files-Excluded>), this option behaves like B<--copy>."
 msgstr ""
-"Si le fichier a été modifié (parce qu’il s’agit d’un fichier B<zip>, à cause "
+"Si le fichier a été modifié (parce qu’il s’agit d’un fichier B<ZIP>, à cause "
 "de B<--repack> ou B<Files-Excluded>), cette option se comporte comme B<--"
 "copy>."
 
@@ -15677,10 +15677,8 @@ msgstr "B<--rename>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:110
-#, fuzzy
-#| msgid "Rename the original file. (This is the default behaviour.)"
 msgid "Rename the original file."
-msgstr "Renommer le fichier d’origine (c'est le comportement par défaut)."
+msgstr "Renommer le fichier d’origine."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:112
@@ -15689,7 +15687,7 @@ msgid ""
 "repack> or B<Files-Excluded>), this implies that the original file is "
 "deleted afterwards."
 msgstr ""
-"Si le fichier a été modifié (parce qu’il s’agit d’un fichier B<zip>, à cause "
+"Si le fichier a été modifié (parce qu’il s’agit d’un fichier B<ZIP>, à cause "
 "de B<--repack> ou B<Files-Excluded>), cela implique la suppression du "
 "fichier d’origine à la fin."
 
@@ -15721,7 +15719,7 @@ msgid ""
 "the resulting file is compressed using the given scheme. The default is "
 "B<gzip>."
 msgstr ""
-"Si B<--repack> est utilisé ou si le fichier donné est un fichier B<zip>, "
+"Si B<--repack> est utilisé ou si le fichier donné est un fichier B<ZIP>, "
 "s’assurer que le fichier résultant est compressé un utilisant le format "
 "donné. Par défaut, B<gzip> est utilisé."
 
@@ -19150,68 +19148,50 @@ msgstr "B<--no-symlink>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:387
-#, fuzzy
-#| msgid "I<mk-origtargz>(1)"
 msgid "Do not call B<mk-origtargz>."
-msgstr "I<mk-origtargz>(1)"
+msgstr "Ne pas appeler B<mk-origtargz>."
 
 #. type: Plain text
 #: ../scripts/uscan.1:389
-#, fuzzy
-#| msgid "The following options are available:"
 msgid "The following options are passed to B<mk-origtargz>:"
-msgstr "Les options suivantes sont disponibles :"
+msgstr "Les options suivantes sont passées à B<mk-origtargz> :"
 
 #. type: Plain text
 #: ../scripts/uscan.1:395
-#, fuzzy
-#| msgid ""
-#| "Make the resulting file a symlink to the given original file. (This is "
-#| "the default behaviour.)"
 msgid ""
 "Make I<orig.tar.gz> (with the appropriate extension) symlinks to the "
 "downloaded files.  (This is the default behaviour.)"
 msgstr ""
-"Faire du fichier résultant un lien symbolique vers le fichier d’origine "
-"donné (c'est le comportement par défaut)."
+"Rendre les fichiers résultants (I<*.orig.tar.{gz|bz2|lzma|xz}> des liens "
+"symboliques vers les fichiers téléchargés (c'est le comportement par défaut)."
 
 #. type: Plain text
 #: ../scripts/uscan.1:398
 msgid "Instead of symlinking as described above, copy the downloaded files."
 msgstr ""
+"Au lieu de créer des liens symboliques comme décrit précédemment, copier les "
+"fichiers téléchargés."
 
 #. type: Plain text
 #: ../scripts/uscan.1:401
 msgid "Instead of symlinking as described above, rename the downloaded files."
 msgstr ""
+"Au lieu de créer des liens symboliques comme décrit précédemment, renommer "
+"les fichiers téléchargés."
 
 #. type: Plain text
 #: ../scripts/uscan.1:407
-#, fuzzy
-#| msgid ""
-#| "After having downloaded an lzma tar, xz tar, bzip tar or zip archive, "
-#| "repack it to a gzip tar archive, which is still currently required as a "
-#| "member of a Debian source package. Does nothing if the downloaded archive "
-#| "is not an lzma tar archive, xz tar archive, bzip tar archive or a zip "
-#| "archive (i.e. it doesn't match a .tlz, .tlzm, .tlzma, .tar.lzma, .txz, "
-#| "\\^.tar.xz, .tbz, .tbz2, .tar.bz2 or .zip extension). The unzip package "
-#| "must be installed in order to repack .zip archives, the xz-utils package "
-#| "must be installed to repack lzma or xz tar archives."
 msgid ""
 "After having downloaded an lzma tar, xz tar, bzip tar or zip archive, repack "
 "it to a gzip tar archive, if required.  The B<unzip> package must be "
 "installed in order to repack .zip archives, the B<xz-utils> package must be "
 "installed to repack lzma or xz tar archives."
 msgstr ""
-"Après avoir téléchargé une archive tar compressée avec lzma ou xz ou bzip ou "
-"une archive zip, la rempaqueter dans une archive tar compressée avec gzip, "
-"ce qui est toujours nécessaire pour les paquets source Debian. Ne rien faire "
-"si l'archive téléchargée n'est ni une archive tar compressée avec lzma ou xz "
-"ou bzip ni une archive zip (c'est-à-dire si elle ne finit pas par "
-"l'extension .tlz, .tlzm, .tlzma, tar.lzma, .txz, .tar.xz, .tbz, .tbz2, .tar."
-"bz2 ou .zip). Le paquet unzip doit être installé pour rempaqueter les "
-"archives .zip, le paquet xz-utils doit être installé pour rempaqueter les "
-"archives tar compressées avec lzma ou xz."
+"Après avoir téléchargé une archive tar compressée avec lzma ou xz ou bzip, "
+"ou une archive ZIP, la rempaqueter dans une archive tar compressée avec "
+"gzip, si nécessaire. Le paquet B<unzip> doit être installé pour rempaqueter "
+"les archives ZIP, le paquet B<xz-utils> doit être installé pour rempaqueter "
+"les archives tar compressées avec lzma ou xz."
 
 #. type: Plain text
 #: ../scripts/uscan.1:413
@@ -19557,7 +19537,7 @@ msgid ""
 "equivalent to the B<--repack> option."
 msgstr ""
 "Si elle est définie à I<yes>, alors après avoir téléchargé une archive tar "
-"compressée avec bzip ou lzma ou xz ou une archive zip, B<uscan> recréera une "
+"compressée avec bzip ou lzma ou xz ou une archive ZIP, B<uscan> recréera une "
 "archive tar compressée avec gzip. C'est équivalent à l'option B<--repack>."
 
 #. type: TP
@@ -19695,12 +19675,12 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/uscan.1:580
-#, fuzzy
-#| msgid "B<dpkg>(1), B<perlre>(1), B<uupdate>(1), B<devscripts.conf>(5)"
 msgid ""
 "B<dpkg>(1), B<mk-origtargz>(1), B<perlre>(1), B<uupdate>(1), B<devscripts."
 "conf>(5)"
-msgstr "B<dpkg>(1), B<perlre>(1), B<uupdate>(1), B<devscripts.conf>(5)"
+msgstr ""
+"B<dpkg>(1), B<mk-origtargz>(1), B<perlre>(1), B<uupdate>(1), B<devscripts."
+"conf>(5)"
 
 #. type: Plain text
 #: ../scripts/uscan.1:585
