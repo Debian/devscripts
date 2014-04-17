@@ -8253,10 +8253,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/debcommit.pl:85
-#, fuzzy
-#| msgid "B<--sign-tags>, B<--no-sign-tags>"
 msgid "B<--sign-commit>, B<--no-sign-commit>"
-msgstr "B<--sign-tags>, B<--no-sign-tags>"
+msgstr "B<--sign-commit>, B<--no-sign-commit>"
 
 #. type: textblock
 #: ../scripts/debcommit.pl:87
@@ -8334,23 +8332,17 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/debcommit.pl:124
-#, fuzzy
-#| msgid "B<DEBCOMMIT_SIGN_TAGS>"
 msgid "B<DEBCOMMIT_SIGN_COMMITS>"
-msgstr "B<DEBCOMMIT_SIGN_TAGS>"
+msgstr "B<DEBCOMMIT_SIGN_COMMITS>"
 
 #. type: textblock
 #: ../scripts/debcommit.pl:126
-#, fuzzy
-#| msgid ""
-#| "If this is set to I<yes>, then it is the same as the B<--sign-tags> "
-#| "command line parameter being used. The default is I<no>."
 msgid ""
 "If this is set to I<yes>, then it is the same as the B<--sign-commit> "
 "command line parameter being used. The default is I<no>."
 msgstr ""
 "Falls dies auf I<yes> gesetzt ist, ist es so, als ob der "
-"Befehlszeilenparameter B<--sign-tags> benutzt würde. Die Vorgabe ist I<no>."
+"Befehlszeilenparameter B<--sign-commit> benutzt würde. Die Vorgabe ist I<no>."
 
 #. type: =item
 #: ../scripts/debcommit.pl:129
@@ -9989,14 +9981,6 @@ msgstr "HAFTUNGSAUSSCHLUSS"
 
 #. type: Content of: <refentry><refsect1><para>
 #: ../scripts/deb-reversion.dbk:267
-#, fuzzy
-#| msgid ""
-#| "&dhpackage; is a tool intended to help porters (e.g. amd64) with "
-#| "modifying packages for other architectures, and to augment deb-repack, "
-#| "which creates modified packages with identical version numbers as the "
-#| "official packages. Chaos will ensue! With &dhpackage;, a proper version "
-#| "number can be selected, which does not obstruct the next official release "
-#| "but can be specifically pinned with APT or held with dpkg."
 msgid ""
 "&dhpackage; is a tool intended to help porters with modifying packages for "
 "other architectures, and to augment deb-repack, which creates modified "
@@ -10005,13 +9989,12 @@ msgid ""
 "not obstruct the next official release but can be specifically pinned with "
 "APT or held with dpkg."
 msgstr ""
-"&dhpackage; ist ein Werkzeug, das Portierern (z.B. AMD64) helfen soll, "
-"Pakete für andere Architekturen zu ändern und deb-repack zu ergänzen, das "
-"veränderte Pakete mit identischen Versionsnummern als offizielle Pakete "
-"erstellt. Chaos wird folgen! Mit &dhpackage; kann eine ordnungsgemäße "
-"Versionsnummer ausgewählt werden, die die nächste offizielle "
-"Veröffentlichung nicht behindert, aber eigens mit APT-Pinning behandelt oder "
-"mit Dpkg gehalten werden kann."
+"&dhpackage; ist ein Werkzeug, das Portierern helfen soll, Pakete für andere "
+"Architekturen zu ändern und deb-repack zu ergänzen, das veränderte Pakete "
+"mit identischen Versionsnummern als offizielle Pakete erstellt. Chaos wird "
+"folgen! Mit &dhpackage; kann eine ordnungsgemäße Versionsnummer ausgewählt "
+"werden, die die nächste offizielle Veröffentlichung nicht behindert, aber "
+"eigens mit APT-Pinning behandelt oder mit Dpkg gehalten werden kann."
 
 #. type: Content of: <refentry><refsect1><para>
 #: ../scripts/deb-reversion.dbk:276
@@ -12789,10 +12772,9 @@ msgstr ""
 
 #. type: IP
 #: ../scripts/devscripts.1:115
-#, fuzzy, no-wrap
-#| msgid "I<origtargz>(1)"
+#, no-wrap
 msgid "I<mk-origtargz>(1)"
-msgstr "I<origtargz>(1)"
+msgstr "I<mk-origtargz>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:117
@@ -12972,18 +12954,14 @@ msgstr "I<uscan>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:143
-#, fuzzy
-#| msgid ""
-#| "scan upstream sites for new releases of packages [gpgv, gnupg, liblwp-"
-#| "protocol-https-perl, libwww-perl, unzip, lzma, xz-utils]"
 msgid ""
 "scan upstream sites for new releases of packages [gpgv, gnupg, liblwp-"
 "protocol-https-perl, libwww-perl, libtext-glob-perl, unzip, lzma, xz-utils, "
 "file]"
 msgstr ""
 "durchucht Seiten der Originalautoren auf neue Veröffentlichungen von "
-"Paketen. [gpgv, gnupg, liblwp-protocol-https-perl, libwww-perl, unzip, lzma, "
-"xz-utils]"
+"Paketen. [gpgv, gnupg, liblwp-protocol-https-perl, libwww-perl, libtext-glob-"
+"perl, unzip, lzma, xz-utils, file]"
 
 #. type: IP
 #: ../scripts/devscripts.1:143
@@ -15483,10 +15461,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:34
-#, fuzzy
-#| msgid "B<origtargz> B<--help>"
 msgid "B<mk-origtargz> B<--help>"
-msgstr "B<origtargz> B<--help>"
+msgstr "B<mk-origtargz> B<--help>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:40
@@ -15540,10 +15516,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:68
-#, fuzzy
-#| msgid "B<-t>, B<--to> I<version>"
 msgid "B<-v>, B<--version> I<version>"
-msgstr "B<-t>, B<--to> I<Version>"
+msgstr "B<-v>, B<--version> I<Version>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:70
@@ -15575,10 +15549,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:79
-#, fuzzy
-#| msgid "B<-f>, B<--filename=>I<filename>"
 msgid "B<--copyright-file> I<filename>"
-msgstr "B<-f>, B<--filename=>I<Dateiname>"
+msgstr "B--copyright-file> I<Dateiname>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:81
@@ -15637,10 +15609,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:104
-#, fuzzy
-#| msgid "B<--copyright>"
 msgid "B<--copy>"
-msgstr "B<--copyright>"
+msgstr "B<--copy>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:106
@@ -15686,7 +15656,7 @@ msgstr ""
 #. type: =item
 #: ../scripts/mk-origtargz.pl:119
 msgid "B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]"
-msgstr ""
+msgstr "B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:121
@@ -15698,10 +15668,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:123
-#, fuzzy
-#| msgid "B<-p>, B<--path> I<directory>"
 msgid "B<-C>, B<--directory> I<directory>"
-msgstr "B<-p>, B<--path> I<Verzeichnis>"
+msgstr "B<-C>, B<--directory> I<Verzeichnis>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:125
@@ -15710,23 +15678,17 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:141
-#, fuzzy
-#| msgid "B<debchange>(1), B<svnpath>(1)"
 msgid "B<uscan>(1), B<uupdate>(1)"
-msgstr "B<debchange>(1), B<svnpath>(1)"
+msgstr "B<uscan>(1), B<uupdate>(1)"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:145
-#, fuzzy
-#| msgid ""
-#| "B<origtargz> and this manpage have been written by Christoph Berg "
-#| "<I<myon@debian.org>>."
 msgid ""
 "B<mk-origtargz> and this manpage have been written by Joachim Breitner "
 "<I<nomeata@debian.org>>."
 msgstr ""
-"B<origtargz> und diese Handbuchseite wurden von Christoph Berg "
-"<I<myon@debian.org>> geschrieben."
+"B<mk-origtargz> und diese Handbuchseite wurden von Joachim Breitner "
+"<I<nomeata@debian.org>> geschrieben."
 
 #. type: textblock
 #: ../scripts/namecheck.pl:5
@@ -17623,10 +17585,8 @@ msgstr "KONFORM ZU"
 
 #. type: textblock
 #: ../scripts/sadt.pod:67
-#, fuzzy
-#| msgid "README.package-tests shipped by autopkgtest 2.6"
 msgid "README.package-tests shipped by autopkgtest 2.7.2"
-msgstr "README.package-tests, bei Autopkgtest 2.6 mitgeliefert"
+msgstr "README.package-tests, bei Autopkgtest 2.7.2 mitgeliefert"
 
 #. type: textblock
 #: ../scripts/sadt.pod:71
