@@ -107,7 +107,7 @@ Make the resulting file a copy of the original file (unless it has to be modifie
 
 =item B<--rename>
 
-Rename the original file. (This is the default behaviour.)
+Rename the original file.
 
 If the file has to be modified (because it is a B<zip> file, because of B<--repack> or B<Files-Excluded>), this implies that the original file is deleted afterwards.
 
