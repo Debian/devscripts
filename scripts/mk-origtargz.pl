@@ -76,8 +76,13 @@ The default is to use the upstream portion of the version of the first entry in 
 Remove files matching the given glob from the tarball, as if it was listed in
 B<Fiels-Excluded>.
 
-This option amends the list of patterns found if F<debian/copyright>. If you do
-not want to read that file, you will have to use B<--package>.
+=item B<--copyright-file> I<filename>
+
+Remove files matching the patterns found in I<file>, which should have the format of a Debian F<copyright> file. Errors parsing that file are silently ignored, exactly as it is the case with F<debian/copyright>.
+
+Both the B<--exclude-file> and B<--copyright-file> options amend the list of
+patterns found in F<debian/copyright>. If you do not want to read that file,
+you will have to use B<--package>.
 
 =back
 
@@ -179,6 +184,7 @@ sub compress_archive($$$);
 my $package = undef;
 my $version = undef;
 my @exclude_globs = ();
+my @copyright_files = ();
 
 my $destdir = undef;
 my $compression = "gzip";
@@ -205,6 +211,7 @@ GetOptions(
 	"package=s" => \$package,
 	"version|v=s" => \$version,
 	"exclude-file=s" => \@exclude_globs,
+	"copyright-file=s" => \@copyright_files,
 	"compression=s" => \$compression,
 	"symlink" => \&setmode,
 	"rename" => \&setmode,
@@ -253,11 +260,24 @@ unless (defined $package) {
 		$version =~ s/^\d+://; # strip epoch
 	}
 
+	unshift @copyright_files, "debian/copyright";
+
+	# set destination directory
+	unless (defined $destdir) {
+		$destdir = "..";
+	}
+} else {
+	unless (defined $destdir) {
+		$destdir = ".";
+	}
+}
+
+for my $copyright_file (@copyright_files) {
 	# get files-excluded
 	my $data = Dpkg::Control::Hash->new();
 	my $okformat = qr'http://www.debian.org/doc/packaging-manuals/copyright-format/[.\d]+';
         eval {
-		$data->load('debian/copyright');
+		$data->load($copyright_file);
 		1;
         } or do {
 		undef $data;
@@ -271,16 +291,8 @@ unless (defined $package) {
 		# un-escape
 		push @exclude_globs, map { s/\\(.)/$1/g; s?/+$??; $_ } @rawexcluded;
 	 }
-
-	 # set destination directory
-	 unless (defined $destdir) {
-		$destdir = "..";
-	 }
-} else {
-	 unless (defined $destdir) {
-		$destdir = ".";
-	 }
 }
+
 
 # Gather information about the upstream file.
 
