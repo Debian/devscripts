@@ -104,7 +104,7 @@ END
 
 }
 
-expected_files_after_removal=$(cat <<END
+expected_files_after_removal=$(sort <<END
 foo-0.1/
 foo-0.1/a-dir/
 foo-0.1/a-dir/include-this-subdir/
