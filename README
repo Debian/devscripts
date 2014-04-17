@@ -188,6 +188,7 @@ And now, in mostly alphabetical order, the scripts:
 
 - mk-origtargz: Rename upstream tarball, optionally changing the compression
   and removing unwanted files.
+  [unzip, lzma, xz-utils, file, libtext-glob-perl]
 
 - namecheck: Check project names are not already taken.
 
@@ -231,9 +232,9 @@ And now, in mostly alphabetical order, the scripts:
   also call a program such as uupdate to attempt to update the Debianised
   version based on the new update.  Whilst uscan could be used to release
   the updated version automatically, it is probably better not to without
-  testing it first.  Uscan can also verify detached OpenPGP signatures if 
+  testing it first.  Uscan can also verify detached OpenPGP signatures if
   upstream's signing key is known. [gpgv, gnupg, liblwp-protocol-https-perl,
-  libwww-perl, unzip, lzma, xz-utils]
+  libwww-perl, libtext-glob-perl, unzip, lzma, xz-utils, file]
 
 - uupdate: Update the package with an archive or patches from
   an upstream author.  This will be of help if you have to update your

@@ -173,7 +173,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
     package which may be installed to satisfy the build-dependencies of the
     given package [equivs]
   - mk-origtargz: rename upstream tarball, optionally changing the compression
-    and removing unwanted files.
+    and removing unwanted files. [unzip, lzma, xz-utils, file, libtext-glob-perl]
   - namecheck: check project names are not already taken
   - nmudiff: mail a diff of the current package against the previous version
     to the BTS to assist in tracking NMUs [patchutils, mutt]
@@ -197,7 +197,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
     transitions for which uploads to unstable are currently blocked
     [libwww-perl, libyaml-syck-perl]
   - uscan: scan upstream sites for new releases of packages [gpgv, gnupg,
-    liblwp-protocol-https-perl, libwww-perl, unzip, lzma, xz-utils]
+    liblwp-protocol-https-perl, libwww-perl, libtext-glob-perl, unzip, lzma,
+    xz-utils, file]
   - uupdate: integrate upstream changes into a source package [patch]
   - what-patch: determine what patch system, if any, a source package is using
     [patchutils]
