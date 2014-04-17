@@ -58,6 +58,8 @@ makeUpstreamFiles () {
 
 	makeSubDir "include-this-dir"
 	makeSubDir "exclude-this-dir"
+	makeSubDir "exclude-dir1"
+	makeSubDir "exclude-dir2"
 	makeSubDir ".include-this-hidden-dir"
 	makeSubDir ".exclude-this-hidden-dir"
 	makeSubDir "a-dir/include-this-subdir"
@@ -95,6 +97,8 @@ makeDebianCopyright() {
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Files-Excluded: exclude-this*
  .exclude-this*
+ exclude-dir1
+ exclude-dir2/
  ;\ echo\ strange-file;\ #
 END
 
@@ -286,7 +290,7 @@ testExclude() {
 	makeDebanDir
 	makeDebianCopyright
 	run_mk_origtargz foo \
-		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.gz, deleting 15 files from it." \
+		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.gz, deleting 17 files from it." \
 		 ../foo-0.1.tar.gz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
 	assertType application/gzip $TMPDIR/foo_0.1.orig.tar.gz
@@ -298,7 +302,7 @@ testExcludeXZ() {
 	makeDebanDir
 	makeDebianCopyright
 	run_mk_origtargz foo \
-		"Successfully repacked ../foo-0.1.tar.xz as ../foo_0.1.orig.tar.xz, deleting 15 files from it." \
+		"Successfully repacked ../foo-0.1.tar.xz as ../foo_0.1.orig.tar.xz, deleting 17 files from it." \
 		 ../foo-0.1.tar.xz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
 	assertType application/x-xz $TMPDIR/foo_0.1.orig.tar.xz
@@ -310,7 +314,7 @@ testExcludeZip() {
 	makeDebanDir
 	makeDebianCopyright
 	run_mk_origtargz foo \
-		"Successfully repacked ../foo-0.1.zip as ../foo_0.1.orig.tar.xz, deleting 15 files from it." \
+		"Successfully repacked ../foo-0.1.zip as ../foo_0.1.orig.tar.xz, deleting 17 files from it." \
 		 ../foo-0.1.zip --compression xz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
 	assertType application/x-xz $TMPDIR/foo_0.1.orig.tar.xz
@@ -356,7 +360,7 @@ testSameNameExclude() {
 	makeDebanDir
 	makeDebianCopyright
 	run_mk_origtargz foo \
-		"Leaving ../foo_0.1.orig.tar.gz where it is, deleting 15 files from it." \
+		"Leaving ../foo_0.1.orig.tar.gz where it is, deleting 17 files from it." \
 		 ../foo_0.1.orig.tar.gz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
 	assertFalse "result is a symlink" "[ -L $TMPDIR/foo_0.1.orig.tar.gz ]"

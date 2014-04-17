@@ -409,7 +409,9 @@ if (scalar @exclude_globs > 0) {
 		for my $exclude (@exclude_globs) {
 			$do_exclude ||=
 				Text::Glob::match_glob("$exclude",     $filename) ||
-				Text::Glob::match_glob("*/$exclude",   $filename);
+				Text::Glob::match_glob("$exclude/",    $filename) ||
+				Text::Glob::match_glob("*/$exclude",   $filename) ||
+				Text::Glob::match_glob("*/$exclude/",  $filename);
 		}
 		push @to_delete, $filename if $do_exclude;
 	}
