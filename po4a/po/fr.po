@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2014-01-31 12:25-0400\n"
+"POT-Creation-Date: 2014-04-17 15:34-0400\n"
 "PO-Revision-Date: 2014-01-31 13:10-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -97,7 +97,8 @@ msgstr "DEBIAN"
 #: ../scripts/licensecheck.pl:22 ../scripts/list-unreleased.1:2
 #: ../scripts/manpage-alert.1:2 ../scripts/mass-bug.pl:21
 #: ../scripts/mergechanges.1:2 ../scripts/mk-build-deps.pl:24
-#: ../scripts/namecheck.pl:3 ../scripts/nmudiff.1:2 ../scripts/origtargz.pl:20
+#: ../scripts/mk-origtargz.pl:24 ../scripts/namecheck.pl:3
+#: ../scripts/nmudiff.1:2 ../scripts/origtargz.pl:20
 #: ../scripts/plotchangelog.1:2 ../scripts/pts-subscribe.1:2
 #: ../scripts/rc-alert.1:2 ../scripts/rmadison.pl:201 ../scripts/sadt.pod:17
 #: ../doc/suspicious-source.1:17 ../scripts/svnpath.pl:3
@@ -136,9 +137,10 @@ msgstr ""
 #: ../scripts/licensecheck.pl:26 ../scripts/list-unreleased.1:4
 #: ../scripts/manpage-alert.1:4 ../scripts/mass-bug.pl:25
 #: ../scripts/mergechanges.1:4 ../scripts/mk-build-deps.pl:28
-#: ../scripts/nmudiff.1:4 ../scripts/origtargz.pl:24
-#: ../scripts/plotchangelog.1:4 ../scripts/pts-subscribe.1:4
-#: ../scripts/rc-alert.1:4 ../scripts/rmadison.pl:205 ../scripts/sadt.pod:21
+#: ../scripts/mk-origtargz.pl:28 ../scripts/nmudiff.1:4
+#: ../scripts/origtargz.pl:24 ../scripts/plotchangelog.1:4
+#: ../scripts/pts-subscribe.1:4 ../scripts/rc-alert.1:4
+#: ../scripts/rmadison.pl:205 ../scripts/sadt.pod:21
 #: ../doc/suspicious-source.1:21 ../scripts/svnpath.pl:7
 #: ../scripts/tagpending.pl:83 ../scripts/transition-check.pl:27
 #: ../scripts/uscan.1:4 ../scripts/uupdate.1:4 ../doc/what-patch.1:5
@@ -175,9 +177,10 @@ msgstr "B<annotate-output> [I<options>] I<programme> [I<paramètres> ...]"
 #: ../scripts/licensecheck.pl:35 ../scripts/list-unreleased.1:6
 #: ../scripts/manpage-alert.1:8 ../scripts/mass-bug.pl:29
 #: ../scripts/mergechanges.1:6 ../scripts/mk-build-deps.pl:34
-#: ../scripts/nmudiff.1:6 ../scripts/origtargz.pl:34
-#: ../scripts/plotchangelog.1:7 ../scripts/pts-subscribe.1:8
-#: ../scripts/rc-alert.1:8 ../scripts/rmadison.pl:213 ../scripts/sadt.pod:25
+#: ../scripts/mk-origtargz.pl:38 ../scripts/nmudiff.1:6
+#: ../scripts/origtargz.pl:34 ../scripts/plotchangelog.1:7
+#: ../scripts/pts-subscribe.1:8 ../scripts/rc-alert.1:8
+#: ../scripts/rmadison.pl:213 ../scripts/sadt.pod:25
 #: ../doc/suspicious-source.1:24 ../scripts/svnpath.pl:17
 #: ../scripts/tagpending.pl:87 ../scripts/transition-check.pl:33
 #: ../scripts/uscan.1:6 ../scripts/uupdate.1:8 ../doc/what-patch.1:8
@@ -218,9 +221,10 @@ msgstr ""
 #: ../scripts/grep-excuses.1:13 ../scripts/licensecheck.pl:44
 #: ../scripts/list-unreleased.1:12 ../scripts/manpage-alert.1:14
 #: ../scripts/mass-bug.pl:59 ../scripts/mk-build-deps.pl:44
-#: ../scripts/nmudiff.1:21 ../scripts/origtargz.pl:95
-#: ../scripts/plotchangelog.1:43 ../scripts/pts-subscribe.1:18
-#: ../scripts/rc-alert.1:17 ../scripts/rmadison.pl:222 ../scripts/sadt.pod:42
+#: ../scripts/mk-origtargz.pl:52 ../scripts/nmudiff.1:21
+#: ../scripts/origtargz.pl:95 ../scripts/plotchangelog.1:43
+#: ../scripts/pts-subscribe.1:18 ../scripts/rc-alert.1:17
+#: ../scripts/rmadison.pl:222 ../scripts/sadt.pod:42
 #: ../doc/suspicious-source.1:34 ../scripts/tagpending.pl:93
 #: ../scripts/transition-check.pl:42 ../scripts/uscan.1:356
 #: ../scripts/uupdate.1:52 ../doc/what-patch.1:15 ../scripts/whodepends.1:10
@@ -347,7 +351,7 @@ msgstr ""
 #: ../scripts/cvs-debrelease.1:64 ../scripts/cvs-debuild.1:53
 #: ../scripts/dcmd.1:97 ../scripts/dcontrol.pl:287 ../scripts/debc.1:115
 #: ../scripts/debchange.1:469 ../scripts/debcheckout.pl:228
-#: ../scripts/debclean.1:107 ../scripts/debcommit.pl:874
+#: ../scripts/debclean.1:107 ../scripts/debcommit.pl:912
 #: ../scripts/debdiff.1:215 ../scripts/debi.1:132 ../scripts/debrelease.1:132
 #: ../scripts/deb-reversion.dbk:247 ../scripts/debrsign.1:66
 #: ../scripts/debsign.1:134 ../scripts/debsnap.1:118 ../scripts/debuild.1:410
@@ -355,10 +359,11 @@ msgstr ""
 #: ../scripts/diff2patches.1:45 ../scripts/dpkg-depcheck.1:118
 #: ../scripts/dpkg-genbuilddeps.1:30 ../scripts/dscverify.1:75
 #: ../scripts/grep-excuses.1:38 ../scripts/list-unreleased.1:19
-#: ../scripts/nmudiff.1:108 ../scripts/origtargz.pl:156
-#: ../scripts/plotchangelog.1:124 ../scripts/pts-subscribe.1:51
-#: ../scripts/rc-alert.1:121 ../scripts/rmadison.pl:333 ../scripts/sadt.pod:69
-#: ../scripts/tagpending.pl:148 ../scripts/uscan.1:570
+#: ../scripts/mk-origtargz.pl:139 ../scripts/nmudiff.1:108
+#: ../scripts/origtargz.pl:156 ../scripts/plotchangelog.1:124
+#: ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:121
+#: ../scripts/rmadison.pl:333 ../scripts/sadt.pod:69
+#: ../scripts/tagpending.pl:148 ../scripts/uscan.1:576
 #: ../scripts/uupdate.1:170 ../doc/what-patch.1:35
 #: ../scripts/who-permits-upload.pl:161 ../scripts/wnpp-alert.1:29
 #: ../scripts/wnpp-check.1:23 ../scripts/devscripts.conf.5:54
@@ -396,7 +401,7 @@ msgstr ""
 #: ../scripts/dcmd.1:100 ../scripts/dcontrol.pl:280 ../scripts/dd-list.1:100
 #: ../scripts/debc.1:119 ../scripts/debchange.1:475
 #: ../scripts/debcheckout.pl:233 ../scripts/debclean.1:110
-#: ../scripts/debcommit.pl:870 ../scripts/debdiff.1:221 ../scripts/debi.1:135
+#: ../scripts/debcommit.pl:908 ../scripts/debdiff.1:221 ../scripts/debi.1:135
 #: ../scripts/debpkg.1:23 ../scripts/debrelease.1:136
 #: ../scripts/deb-reversion.dbk:292 ../scripts/debrsign.1:70
 #: ../scripts/debsign.1:145 ../scripts/debuild.1:422
@@ -407,12 +412,13 @@ msgstr ""
 #: ../scripts/grep-excuses.1:40 ../scripts/licensecheck.pl:129
 #: ../scripts/list-unreleased.1:21 ../scripts/manpage-alert.1:20
 #: ../scripts/mass-bug.pl:522 ../scripts/mergechanges.1:18
-#: ../scripts/mk-build-deps.pl:94 ../scripts/namecheck.pl:30
-#: ../scripts/nmudiff.1:112 ../scripts/origtargz.pl:160
-#: ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56
-#: ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:337
-#: ../scripts/svnpath.pl:93 ../scripts/transition-check.pl:81
-#: ../scripts/uscan.1:575 ../scripts/uupdate.1:177 ../scripts/whodepends.1:19
+#: ../scripts/mk-build-deps.pl:94 ../scripts/mk-origtargz.pl:143
+#: ../scripts/namecheck.pl:30 ../scripts/nmudiff.1:112
+#: ../scripts/origtargz.pl:160 ../scripts/plotchangelog.1:126
+#: ../scripts/pts-subscribe.1:56 ../scripts/rc-alert.1:125
+#: ../scripts/rmadison.pl:337 ../scripts/svnpath.pl:93
+#: ../scripts/transition-check.pl:81 ../scripts/uscan.1:581
+#: ../scripts/uupdate.1:177 ../scripts/whodepends.1:19
 #: ../scripts/who-uploads.1:71 ../scripts/who-permits-upload.pl:156
 #: ../scripts/wnpp-alert.1:31 ../scripts/wnpp-check.1:33
 #: ../scripts/devscripts.conf.5:58
@@ -1244,7 +1250,7 @@ msgstr ""
 #: ../scripts/dpkg-depcheck.1:92 ../scripts/dscverify.1:24
 #: ../scripts/grep-excuses.1:14 ../scripts/licensecheck.pl:89
 #: ../scripts/mass-bug.pl:112 ../scripts/nmudiff.1:69
-#: ../scripts/rmadison.pl:286 ../scripts/uscan.1:468 ../scripts/uupdate.1:78
+#: ../scripts/rmadison.pl:286 ../scripts/uscan.1:474 ../scripts/uupdate.1:78
 #: ../scripts/who-uploads.1:40
 #, no-wrap
 msgid "B<--no-conf>, B<--noconf>"
@@ -1257,7 +1263,7 @@ msgstr "B<--no-conf>, B<--noconf>"
 #: ../scripts/debsign.1:100 ../scripts/debuild.1:225
 #: ../scripts/dpkg-depcheck.1:96 ../scripts/dscverify.1:28
 #: ../scripts/grep-excuses.1:18 ../scripts/mass-bug.pl:114
-#: ../scripts/nmudiff.1:73 ../scripts/uscan.1:472 ../scripts/uupdate.1:82
+#: ../scripts/nmudiff.1:73 ../scripts/uscan.1:478 ../scripts/uupdate.1:82
 #: ../scripts/who-uploads.1:44
 msgid ""
 "Do not read any configuration files.  This can only be used as the first "
@@ -2830,7 +2836,7 @@ msgstr ""
 #. type: SH
 #: ../scripts/bts.pl:4010 ../scripts/dcontrol.pl:264 ../scripts/debc.1:92
 #: ../scripts/debchange.1:392 ../scripts/debcheckout.pl:177
-#: ../scripts/debclean.1:90 ../scripts/debcommit.pl:99
+#: ../scripts/debclean.1:90 ../scripts/debcommit.pl:104
 #: ../scripts/debdiff.1:167 ../scripts/debi.1:109 ../scripts/debrelease.1:105
 #: ../scripts/debrsign.1:57 ../scripts/debsign.1:106 ../scripts/debuild.1:290
 #: ../scripts/dget.pl:631 ../scripts/dpkg-depcheck.1:102
@@ -2838,14 +2844,14 @@ msgstr ""
 #: ../scripts/licensecheck.pl:96 ../scripts/mass-bug.pl:132
 #: ../scripts/nmudiff.1:79 ../scripts/plotchangelog.1:106
 #: ../scripts/pts-subscribe.1:42 ../scripts/rmadison.pl:295
-#: ../scripts/uscan.1:478 ../scripts/uupdate.1:88 ../scripts/who-uploads.1:50
+#: ../scripts/uscan.1:484 ../scripts/uupdate.1:88 ../scripts/who-uploads.1:50
 #, no-wrap
 msgid "CONFIGURATION VARIABLES"
 msgstr "VARIABLES DE CONFIGURATION"
 
 # NOTE: presque identique
 #. type: textblock
-#: ../scripts/bts.pl:4012 ../scripts/debcommit.pl:101
+#: ../scripts/bts.pl:4012 ../scripts/debcommit.pl:106
 #: ../scripts/licensecheck.pl:98 ../scripts/mass-bug.pl:134
 msgid ""
 "The two configuration files F</etc/devscripts.conf> and F<~/.devscripts> are "
@@ -3269,7 +3275,7 @@ msgstr "Exécuter en mode débogue."
 #: ../scripts/debclean.1:84 ../scripts/diff2patches.1:22
 #: ../scripts/grep-excuses.1:22 ../scripts/mass-bug.pl:117
 #: ../scripts/nmudiff.1:73 ../scripts/plotchangelog.1:92
-#: ../scripts/uscan.1:472
+#: ../scripts/uscan.1:478
 #, no-wrap
 msgid "B<--help>"
 msgstr "B<--help>"
@@ -3288,7 +3294,7 @@ msgstr "Afficher les informations sur l'utilisation."
 #: ../scripts/grep-excuses.1:25 ../scripts/mass-bug.pl:121
 #: ../scripts/nmudiff.1:76 ../scripts/plotchangelog.1:95
 #: ../scripts/pts-subscribe.1:31 ../scripts/rmadison.pl:282
-#: ../scripts/uscan.1:475 ../scripts/uupdate.1:85 ../scripts/who-uploads.1:47
+#: ../scripts/uscan.1:481 ../scripts/uupdate.1:85 ../scripts/who-uploads.1:47
 #, no-wrap
 msgid "B<--version>"
 msgstr "B<--version>"
@@ -3338,7 +3344,7 @@ msgstr ""
 "de cet outil."
 
 #. type: =head1
-#: ../scripts/build-rdeps.pl:337 ../scripts/debcommit.pl:863
+#: ../scripts/build-rdeps.pl:337 ../scripts/debcommit.pl:901
 #: ../scripts/desktop2menu.pl:43 ../scripts/licensecheck.pl:120
 #: ../scripts/namecheck.pl:36 ../scripts/svnpath.pl:89
 #: ../scripts/transition-check.pl:72
@@ -3414,7 +3420,7 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/chdist.pl:51 ../scripts/deb-reversion.dbk:239
-#: ../scripts/mass-bug.pl:123 ../scripts/uscan.1:478
+#: ../scripts/mass-bug.pl:123 ../scripts/uscan.1:484
 msgid "Display version information."
 msgstr "Afficher les informations sur la version."
 
@@ -3762,7 +3768,7 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/checkbashisms.1:53 ../scripts/dscextract.1:24
-#: ../scripts/uscan.1:541 ../scripts/wnpp-check.1:29
+#: ../scripts/uscan.1:547 ../scripts/wnpp-check.1:29
 #, no-wrap
 msgid "1"
 msgstr "1"
@@ -5997,7 +6003,7 @@ msgstr ""
 #. type: TP
 #: ../scripts/debc.1:77 ../scripts/debchange.1:369 ../scripts/debclean.1:69
 #: ../scripts/debi.1:87 ../scripts/debrelease.1:87 ../scripts/debuild.1:276
-#: ../scripts/uscan.1:457
+#: ../scripts/uscan.1:463
 #, no-wrap
 msgid "B<--check-dirname-level> I<N>"
 msgstr "B<--check-dirname-level> I<N>"
@@ -6006,8 +6012,8 @@ msgstr "B<--check-dirname-level> I<N>"
 #: ../scripts/debc.1:81 ../scripts/debc.1:85 ../scripts/debclean.1:73
 #: ../scripts/debclean.1:77 ../scripts/debi.1:91 ../scripts/debi.1:95
 #: ../scripts/debrelease.1:91 ../scripts/debrelease.1:95
-#: ../scripts/debuild.1:280 ../scripts/debuild.1:284 ../scripts/uscan.1:461
-#: ../scripts/uscan.1:465
+#: ../scripts/debuild.1:280 ../scripts/debuild.1:284 ../scripts/uscan.1:467
+#: ../scripts/uscan.1:471
 msgid ""
 "See the above section B<Directory name checking> for an explanation of this "
 "option."
@@ -6018,7 +6024,7 @@ msgstr ""
 #. type: TP
 #: ../scripts/debc.1:81 ../scripts/debchange.1:373 ../scripts/debclean.1:73
 #: ../scripts/debi.1:91 ../scripts/debrelease.1:91 ../scripts/debuild.1:280
-#: ../scripts/uscan.1:461
+#: ../scripts/uscan.1:467
 #, no-wrap
 msgid "B<--check-dirname-regex> I<regex>"
 msgstr "B<--check-dirname-regex> I<regex>"
@@ -6593,7 +6599,8 @@ msgstr ""
 "description de modifications."
 
 #. type: TP
-#: ../scripts/debchange.1:213 ../scripts/uscan.1:416
+#: ../scripts/debchange.1:213 ../scripts/mk-origtargz.pl:60
+#: ../scripts/uscan.1:422
 #, no-wrap
 msgid "B<--package> I<package>"
 msgstr "B<--package> I<paquet>"
@@ -8267,11 +8274,31 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/debcommit.pl:85
-msgid "B<--sign-tags>, B<--no-sign-tags>"
+#, fuzzy
+#| msgid "B<--sign-tags>, B<--no-sign-tags>"
+msgid "B<--sign-commit>, B<--no-sign-commit>"
 msgstr "B<--sign-tags>, B<--no-sign-tags>"
 
 #. type: textblock
 #: ../scripts/debcommit.pl:87
+#, fuzzy
+#| msgid ""
+#| "If this option is set, then tags that debcommit creates will be signed "
+#| "using gnupg. Currently this is only supported by git."
+msgid ""
+"If this option is set, then the commits that debcommit creates will be "
+"signed using gnupg. Currently this is only supported by git, hg, and bzr."
+msgstr ""
+"Si cette option est activée, alors les étiquettes créées par debcommit "
+"seront signées avec GnuPG. Ce n'est actuellement géré que par Git."
+
+#. type: =item
+#: ../scripts/debcommit.pl:90
+msgid "B<--sign-tags>, B<--no-sign-tags>"
+msgstr "B<--sign-tags>, B<--no-sign-tags>"
+
+#. type: textblock
+#: ../scripts/debcommit.pl:92
 msgid ""
 "If this option is set, then tags that debcommit creates will be signed using "
 "gnupg. Currently this is only supported by git."
@@ -8280,12 +8307,12 @@ msgstr ""
 "seront signées avec GnuPG. Ce n'est actuellement géré que par Git."
 
 #. type: =item
-#: ../scripts/debcommit.pl:90
+#: ../scripts/debcommit.pl:95
 msgid "B<--changelog-info>"
 msgstr "B<--changelog-info>"
 
 #. type: textblock
-#: ../scripts/debcommit.pl:92
+#: ../scripts/debcommit.pl:97
 msgid ""
 "If this option is set, the commit author and date will be determined from "
 "the Maintainer and Date field of the first paragraph in F<debian/"
@@ -8298,12 +8325,12 @@ msgstr ""
 "l'option B<--no-mainttrailer>."
 
 #. type: =item
-#: ../scripts/debcommit.pl:109
+#: ../scripts/debcommit.pl:114
 msgid "B<DEBCOMMIT_STRIP_MESSAGE>"
 msgstr "B<DEBCOMMIT_STRIP_MESSAGE>"
 
 #. type: textblock
-#: ../scripts/debcommit.pl:111
+#: ../scripts/debcommit.pl:116
 msgid ""
 "If this is set to I<no>, then it is the same as the B<--no-strip-message> "
 "command line parameter being used. The default is I<yes>."
@@ -8312,12 +8339,12 @@ msgstr ""
 "message>. La valeur par défaut est I<yes>."
 
 #. type: =item
-#: ../scripts/debcommit.pl:114
+#: ../scripts/debcommit.pl:119
 msgid "B<DEBCOMMIT_SIGN_TAGS>"
 msgstr "B<DEBCOMMIT_SIGN_TAGS>"
 
 #. type: textblock
-#: ../scripts/debcommit.pl:116
+#: ../scripts/debcommit.pl:121
 msgid ""
 "If this is set to I<yes>, then it is the same as the B<--sign-tags> command "
 "line parameter being used. The default is I<no>."
@@ -8326,12 +8353,32 @@ msgstr ""
 "La valeur par défaut est I<no>."
 
 #. type: =item
-#: ../scripts/debcommit.pl:119
+#: ../scripts/debcommit.pl:124
+#, fuzzy
+#| msgid "B<DEBCOMMIT_SIGN_TAGS>"
+msgid "B<DEBCOMMIT_SIGN_COMMITS>"
+msgstr "B<DEBCOMMIT_SIGN_TAGS>"
+
+#. type: textblock
+#: ../scripts/debcommit.pl:126
+#, fuzzy
+#| msgid ""
+#| "If this is set to I<yes>, then it is the same as the B<--sign-tags> "
+#| "command line parameter being used. The default is I<no>."
+msgid ""
+"If this is set to I<yes>, then it is the same as the B<--sign-commit> "
+"command line parameter being used. The default is I<no>."
+msgstr ""
+"Lui attribuer la valeur I<yes> équivaut à utiliser l'option B<--sign-tags>. "
+"La valeur par défaut est I<no>."
+
+#. type: =item
+#: ../scripts/debcommit.pl:129
 msgid "B<DEBCOMMIT_RELEASE_USE_CHANGELOG>"
 msgstr "B<DEBCOMMIT_RELEASE_USE_CHANGELOG>"
 
 #. type: textblock
-#: ../scripts/debcommit.pl:121
+#: ../scripts/debcommit.pl:131
 msgid ""
 "If this is set to I<yes>, then it is the same as the B<--release-use-"
 "changelog> command line parameter being used. The default is I<no>."
@@ -8340,13 +8387,13 @@ msgstr ""
 "changelog>. La valeur par défaut est I<no>."
 
 #. type: TP
-#: ../scripts/debcommit.pl:124 ../scripts/debsign.1:118
+#: ../scripts/debcommit.pl:134 ../scripts/debsign.1:118
 #, no-wrap
 msgid "B<DEBSIGN_KEYID>"
 msgstr "B<DEBSIGN_KEYID>"
 
 #. type: textblock
-#: ../scripts/debcommit.pl:126
+#: ../scripts/debcommit.pl:136
 msgid ""
 "This is the key id used for signing tags. If not set, a default will be "
 "chosen by the revision control system."
@@ -8356,17 +8403,17 @@ msgstr ""
 "de contrôle de versions."
 
 #. type: =head1
-#: ../scripts/debcommit.pl:131
+#: ../scripts/debcommit.pl:141
 msgid "VCS SPECIFIC FEATURES"
 msgstr "FONCTIONNALITÉS SPÉCIFIQUES AUX SYSTÈMES DE CONTRÔLE DE VERSIONS"
 
 #. type: =item
-#: ../scripts/debcommit.pl:135
+#: ../scripts/debcommit.pl:145
 msgid "B<tla> / B<baz>"
 msgstr "B<tla> / B<baz>"
 
 #. type: textblock
-#: ../scripts/debcommit.pl:137
+#: ../scripts/debcommit.pl:147
 msgid ""
 "If the commit message contains more than 72 characters, a summary will be "
 "created containing as many full words from the message as will fit within 72 "
@@ -8377,7 +8424,7 @@ msgstr ""
 "caractères, suivi de points de suspension."
 
 #. type: textblock
-#: ../scripts/debcommit.pl:143
+#: ../scripts/debcommit.pl:153
 msgid ""
 "Each of the features described below is applicable only if the commit "
 "message has been automatically determined from the changelog."
@@ -8387,12 +8434,12 @@ msgstr ""
 "modifications."
 
 #. type: =item
-#: ../scripts/debcommit.pl:148
+#: ../scripts/debcommit.pl:158
 msgid "B<git>"
 msgstr "B<git>"
 
 #. type: textblock
-#: ../scripts/debcommit.pl:150
+#: ../scripts/debcommit.pl:160
 msgid ""
 "If only a single change is detected in the changelog, B<debcommit> will "
 "unfold it to a single line and behave as if B<--strip-message> was used."
@@ -8402,7 +8449,7 @@ msgstr ""
 "comme si l'option B<--strip-message> était utilisée."
 
 #. type: textblock
-#: ../scripts/debcommit.pl:153
+#: ../scripts/debcommit.pl:163
 msgid ""
 "Otherwise, the first change will be unfolded and stripped to form a summary "
 "line and a commit message formed using the summary line followed by a blank "
@@ -8416,12 +8463,12 @@ msgstr ""
 "message puisse être retouché avant l'envoi."
 
 #. type: =item
-#: ../scripts/debcommit.pl:158
+#: ../scripts/debcommit.pl:168
 msgid "B<hg> / B<darcs>"
 msgstr "B<hg> / B<darcs>"
 
 #. type: textblock
-#: ../scripts/debcommit.pl:160
+#: ../scripts/debcommit.pl:170
 msgid ""
 "The first change detected in the changelog will be unfolded to form a single "
 "line summary. If multiple changes were detected then an editor will be "
@@ -8432,12 +8479,12 @@ msgstr ""
 "détectées alors un éditeur sera lancé pour permettre de retoucher le message."
 
 #. type: =item
-#: ../scripts/debcommit.pl:164
+#: ../scripts/debcommit.pl:174
 msgid "B<bzr>"
 msgstr "B<bzr>"
 
 #. type: textblock
-#: ../scripts/debcommit.pl:166
+#: ../scripts/debcommit.pl:176
 msgid ""
 "If the changelog entry used for the commit message closes any bugs then B<--"
 "fixes> options to \"bzr commit\" will be generated to associate the revision "
@@ -8448,7 +8495,7 @@ msgstr ""
 "pour associer la révision aux bogues."
 
 #. type: textblock
-#: ../scripts/debcommit.pl:865
+#: ../scripts/debcommit.pl:903
 msgid ""
 "This code is copyright by Joey Hess <joeyh@debian.org>, all rights "
 "reserved.  This program comes with ABSOLUTELY NO WARRANTY.  You are free to "
@@ -8461,12 +8508,12 @@ msgstr ""
 "Public Licence), version 2 ou ultérieure."
 
 #. type: textblock
-#: ../scripts/debcommit.pl:872 ../scripts/mass-bug.pl:524
+#: ../scripts/debcommit.pl:910 ../scripts/mass-bug.pl:524
 msgid "Joey Hess <joeyh@debian.org>"
 msgstr "Joey Hess <joeyh@debian.org>"
 
 #. type: textblock
-#: ../scripts/debcommit.pl:876
+#: ../scripts/debcommit.pl:914
 msgid "B<debchange>(1), B<svnpath>(1)"
 msgstr "B<debchange>(1), B<svnpath>(1)"
 
@@ -9953,13 +10000,21 @@ msgstr "AVERTISSEMENT"
 
 #. type: Content of: <refentry><refsect1><para>
 #: ../scripts/deb-reversion.dbk:267
+#, fuzzy
+#| msgid ""
+#| "&dhpackage; is a tool intended to help porters (e.g. amd64) with "
+#| "modifying packages for other architectures, and to augment deb-repack, "
+#| "which creates modified packages with identical version numbers as the "
+#| "official packages. Chaos will ensue! With &dhpackage;, a proper version "
+#| "number can be selected, which does not obstruct the next official release "
+#| "but can be specifically pinned with APT or held with dpkg."
 msgid ""
-"&dhpackage; is a tool intended to help porters (e.g. amd64) with modifying "
-"packages for other architectures, and to augment deb-repack, which creates "
-"modified packages with identical version numbers as the official packages. "
-"Chaos will ensue! With &dhpackage;, a proper version number can be selected, "
-"which does not obstruct the next official release but can be specifically "
-"pinned with APT or held with dpkg."
+"&dhpackage; is a tool intended to help porters with modifying packages for "
+"other architectures, and to augment deb-repack, which creates modified "
+"packages with identical version numbers as the official packages. Chaos will "
+"ensue! With &dhpackage;, a proper version number can be selected, which does "
+"not obstruct the next official release but can be specifically pinned with "
+"APT or held with dpkg."
 msgstr ""
 "&dhpackage; est un outil censé aider les porteurs (par ex. amd64) à modifier "
 "les paquets pour d'autres architectures et épauler deb-repack, qui crée des "
@@ -10696,7 +10751,7 @@ msgstr ""
 
 #. type: SH
 #: ../scripts/debsnap.1:86 ../scripts/dscextract.1:20
-#: ../scripts/transition-check.pl:54 ../scripts/uscan.1:533
+#: ../scripts/transition-check.pl:54 ../scripts/uscan.1:539
 #: ../scripts/wnpp-check.1:25
 #, no-wrap
 msgid "EXIT STATUS"
@@ -12740,23 +12795,37 @@ msgstr ""
 
 #. type: IP
 #: ../scripts/devscripts.1:115
+#, fuzzy, no-wrap
+#| msgid "I<origtargz>(1)"
+msgid "I<mk-origtargz>(1)"
+msgstr "B<origtargz>(1)"
+
+#. type: Plain text
+#: ../scripts/devscripts.1:117
+msgid ""
+"rename upstream tarball, optionally changing the compression and removing "
+"unwanted files [unzip, lzma, xz-utils, file, libtext-glob-perl]"
+msgstr ""
+
+#. type: IP
+#: ../scripts/devscripts.1:117
 #, no-wrap
 msgid "I<namecheck>(1)"
 msgstr "B<namecheck>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:117
+#: ../scripts/devscripts.1:119
 msgid "check project names are not already taken"
 msgstr "vérifier la disponibilité des noms de projet"
 
 #. type: IP
-#: ../scripts/devscripts.1:117
+#: ../scripts/devscripts.1:119
 #, no-wrap
 msgid "I<nmudiff>(1)"
 msgstr "B<nmudiff>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:119
+#: ../scripts/devscripts.1:121
 msgid ""
 "mail a diff of the current package against the previous version to the BTS "
 "to assist in tracking NMUs [patchutils, mutt]"
@@ -12765,13 +12834,13 @@ msgstr ""
 "vers le BTS pour aider au suivi des NMU [patchutils, mutt]"
 
 #. type: IP
-#: ../scripts/devscripts.1:119
+#: ../scripts/devscripts.1:121
 #, no-wrap
 msgid "I<origtargz>(1)"
 msgstr "B<origtargz>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:121
+#: ../scripts/devscripts.1:123
 msgid ""
 "fetch the orig tarball of a Debian package from various sources, and unpack "
 "it"
@@ -12780,13 +12849,13 @@ msgstr ""
 "dépaqueter"
 
 #. type: IP
-#: ../scripts/devscripts.1:121
+#: ../scripts/devscripts.1:123
 #, no-wrap
 msgid "I<plotchangelog>(1)"
 msgstr "B<plotchangelog>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:123
+#: ../scripts/devscripts.1:125
 msgid ""
 "view a nice plot of the data in a changelog file [libtimedate-perl, gnuplot]"
 msgstr ""
@@ -12794,38 +12863,38 @@ msgstr ""
 "[libtimedate-perl, gnuplot]"
 
 #. type: IP
-#: ../scripts/devscripts.1:123
+#: ../scripts/devscripts.1:125
 #, no-wrap
 msgid "I<pts-subscribe>(1)"
 msgstr "B<pts-subscribe>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:125
+#: ../scripts/devscripts.1:127
 msgid ""
 "subscribe to the PTS for a limited period of time [bsd-mailx | mailx, at]"
 msgstr "s'abonner au PTS pendant un temps limité [bsd-mailx | mailx, at]"
 
 #. type: IP
-#: ../scripts/devscripts.1:125
+#: ../scripts/devscripts.1:127
 #, no-wrap
 msgid "I<rc-alert>(1)"
 msgstr "B<rc-alert>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:127
+#: ../scripts/devscripts.1:129
 msgid "list installed packages which have release-critical bugs [wget | curl]"
 msgstr ""
 "afficher la liste des paquets installés ayant des bogues empêchant leur "
 "intégration dans la prochaine distribution [wget | curl]"
 
 #. type: IP
-#: ../scripts/devscripts.1:127
+#: ../scripts/devscripts.1:129
 #, no-wrap
 msgid "I<rmadison>(1)"
 msgstr "B<rmadison>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:129
+#: ../scripts/devscripts.1:131
 msgid ""
 "remotely query the Debian archive database about packages [liburi-perl, wget "
 "| curl]"
@@ -12834,24 +12903,24 @@ msgstr ""
 "wget | curl]"
 
 #. type: IP
-#: ../scripts/devscripts.1:129
+#: ../scripts/devscripts.1:131
 #, no-wrap
 msgid "I<sadt>(1)"
 msgstr "B<sadt>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:131
+#: ../scripts/devscripts.1:133
 msgid "run DEP-8 tests [python3-debian]"
 msgstr "exécuter des tests DEP-8 [python3-debian]"
 
 #. type: IP
-#: ../scripts/devscripts.1:131
+#: ../scripts/devscripts.1:133
 #, no-wrap
 msgid "I<suspicious-source>(1)"
 msgstr "B<suspicious-source>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:133
+#: ../scripts/devscripts.1:135
 msgid ""
 "output a list of files which are not common source files [python3-magic]"
 msgstr ""
@@ -12859,24 +12928,24 @@ msgstr ""
 "[python3-magic]"
 
 #. type: IP
-#: ../scripts/devscripts.1:133
+#: ../scripts/devscripts.1:135
 #, no-wrap
 msgid "I<svnpath>(1)"
 msgstr "B<svnpath>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:135
+#: ../scripts/devscripts.1:137
 msgid "print Subversion repository paths [subversion]"
 msgstr "afficher les chemins de dépôt Subversion [subversion]"
 
 #. type: IP
-#: ../scripts/devscripts.1:135
+#: ../scripts/devscripts.1:137
 #, no-wrap
 msgid "I<tagpending>(1)"
 msgstr "B<tagpending>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:137
+#: ../scripts/devscripts.1:139
 msgid ""
 "run from a Debian source tree and tag bugs that are to be closed in the "
 "latest changelog as pending [libsoap-lite-perl]"
@@ -12886,13 +12955,13 @@ msgstr ""
 "changelog [libsoap-lite-perl]"
 
 #. type: IP
-#: ../scripts/devscripts.1:137
+#: ../scripts/devscripts.1:139
 #, no-wrap
 msgid "I<transition-check>(1)"
 msgstr "B<transition-check>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:139
+#: ../scripts/devscripts.1:141
 msgid ""
 "check a list of source packages for involvement in transitions for which "
 "uploads to unstable are currently blocked [libwww-perl, libyaml-syck-perl]"
@@ -12902,39 +12971,44 @@ msgstr ""
 "syck-perl]"
 
 #. type: IP
-#: ../scripts/devscripts.1:139
+#: ../scripts/devscripts.1:141
 #, no-wrap
 msgid "I<uscan>(1)"
 msgstr "B<uscan>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:141
+#: ../scripts/devscripts.1:143
+#, fuzzy
+#| msgid ""
+#| "scan upstream sites for new releases of packages [gpgv, gnupg, liblwp-"
+#| "protocol-https-perl, libwww-perl, unzip, lzma, xz-utils]"
 msgid ""
 "scan upstream sites for new releases of packages [gpgv, gnupg, liblwp-"
-"protocol-https-perl, libwww-perl, unzip, lzma, xz-utils]"
+"protocol-https-perl, libwww-perl, libtext-glob-perl, unzip, lzma, xz-utils, "
+"file]"
 msgstr ""
 "surveiller la disponibilité d'une nouvelle version amont [gpgv, gnupg, "
 "liblwp-protocol-https-perl, libwww-perl, unzip, lzma, xz-utils]"
 
 #. type: IP
-#: ../scripts/devscripts.1:141
+#: ../scripts/devscripts.1:143
 #, no-wrap
 msgid "I<uupdate>(1)"
 msgstr "B<uupdate>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:143
+#: ../scripts/devscripts.1:145
 msgid "integrate upstream changes into a source package [patch]"
 msgstr "intégrer les modifications amont à un paquet source [patch]"
 
 #. type: IP
-#: ../scripts/devscripts.1:143
+#: ../scripts/devscripts.1:145
 #, no-wrap
 msgid "I<what-patch>(1)"
 msgstr "B<what-patch>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:145
+#: ../scripts/devscripts.1:147
 msgid ""
 "determine what patch system, if any, a source package is using [patchutils]"
 msgstr ""
@@ -12942,24 +13016,24 @@ msgstr ""
 "source [patchutils]"
 
 #. type: IP
-#: ../scripts/devscripts.1:145
+#: ../scripts/devscripts.1:147
 #, no-wrap
 msgid "I<whodepends>(1)"
 msgstr "B<whodepends>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:147
+#: ../scripts/devscripts.1:149
 msgid "check which maintainers' packages depend on a package"
 msgstr "vérifier quels paquets (et responsables) dépendent d'un autre paquet"
 
 #. type: IP
-#: ../scripts/devscripts.1:147
+#: ../scripts/devscripts.1:149
 #, no-wrap
 msgid "I<who-uploads>(1)"
 msgstr "B<who-uploads>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:149
+#: ../scripts/devscripts.1:151
 msgid ""
 "determine the most recent uploaders of a package to the Debian archive "
 "[gnupg, debian-keyring, debian-maintainers, wget]"
@@ -12968,13 +13042,13 @@ msgstr ""
 "l'archive Debian [gnupg, debian-keyring, debian-maintainers, wget]"
 
 #. type: IP
-#: ../scripts/devscripts.1:149
+#: ../scripts/devscripts.1:151
 #, no-wrap
 msgid "I<wnpp-alert>(1)"
 msgstr "B<wnpp-alert>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:151
+#: ../scripts/devscripts.1:153
 msgid ""
 "list installed packages which are orphaned or up for adoption [wget | curl]"
 msgstr ""
@@ -12982,13 +13056,13 @@ msgstr ""
 "[wget | curl]"
 
 #. type: IP
-#: ../scripts/devscripts.1:151
+#: ../scripts/devscripts.1:153
 #, no-wrap
 msgid "I<wnpp-check>(1)"
 msgstr "B<wnpp-check>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:153
+#: ../scripts/devscripts.1:155
 msgid ""
 "check whether there is an open request for packaging or intention to package "
 "bug for a package [wget | curl]"
@@ -12997,13 +13071,13 @@ msgstr ""
 "travail (ITP) est ouvert pour un paquet [wget | curl]"
 
 #. type: IP
-#: ../scripts/devscripts.1:153
+#: ../scripts/devscripts.1:155
 #, no-wrap
 msgid "I<who-permits-upload>(1)"
 msgstr "B<who-permits-upload>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:155
+#: ../scripts/devscripts.1:157
 msgid ""
 "Retrieve information about Debian Maintainer access control lists [gnupg, "
 "libencode-locale-perl, libparse-debcontrol-perl, libwww-perl, debian-keyring]"
@@ -13013,13 +13087,13 @@ msgstr ""
 "libwww-perl, debian-keyring]"
 
 #. type: IP
-#: ../scripts/devscripts.1:155
+#: ../scripts/devscripts.1:157
 #, no-wrap
 msgid "I<wrap-and-sort>(1)"
 msgstr "B<wrap-and-sort>(1)"
 
 #. type: Plain text
-#: ../scripts/devscripts.1:156
+#: ../scripts/devscripts.1:158
 msgid "wrap long lines and sort items in packaging files [python3-debian]"
 msgstr ""
 "couper les lignes longues et trier les items des fichiers d'empaquetage "
@@ -14169,7 +14243,7 @@ msgstr ""
 "trouver directement dans I<.debian.tar.gz/bz2>)."
 
 #. type: TP
-#: ../scripts/dscextract.1:21 ../scripts/uscan.1:537
+#: ../scripts/dscextract.1:21 ../scripts/uscan.1:543
 #: ../scripts/wnpp-check.1:26
 #, no-wrap
 msgid "0"
@@ -14283,7 +14357,7 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/dscverify.1:32 ../scripts/plotchangelog.1:78
-#: ../scripts/uscan.1:444
+#: ../scripts/uscan.1:450
 #, no-wrap
 msgid "B<--verbose>"
 msgstr "B<--verbose>"
@@ -15407,6 +15481,266 @@ msgstr ""
 "Ce programme est fourni SANS AUCUNE GARANTIE. Vous êtes libre de "
 "redistribuer ce code sous les termes de la licence publique générale GNU "
 "(GNU General Public Licence), version 2 ou ultérieure."
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:26
+msgid ""
+"mk-origtargz - rename upstream tarball, optionally changing the compression "
+"and removing unwanted files"
+msgstr ""
+
+#. type: =item
+#: ../scripts/mk-origtargz.pl:32
+msgid "B<mk-origtargz> [I<options>] F<foo-1.0.tar.gz>"
+msgstr ""
+
+#. type: =item
+#: ../scripts/mk-origtargz.pl:34
+#, fuzzy
+#| msgid "B<origtargz> B<--help>"
+msgid "B<mk-origtargz> B<--help>"
+msgstr "B<origtargz> B<--help>"
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:40
+msgid ""
+"B<mk-origtargz> renames the given file to match what is expected by B<dpkg-"
+"buildpackage>, based on the source package name and version in F<debian/"
+"changelog>. It can convert B<zip> to B<tar>, optionally change the "
+"compression scheme and remove files according to B<Files-Excluded> in "
+"F<debian/copyright>. The resulting file is placed in F<debian/../..>."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:46
+msgid ""
+"If the package name is given via the B<--package> option, no information is "
+"read from F<debian/>, and the result file is placed in the current directory."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:49
+msgid ""
+"B<mk-origtargz> is commonly called via B<uscan>, which first obtains the "
+"upstream tarball."
+msgstr ""
+
+#. type: =head2
+#: ../scripts/mk-origtargz.pl:54
+msgid "Metadata options"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:56
+msgid ""
+"The following options extend or replace information taken from F<debian/>."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:62
+msgid ""
+"Use I<package> as the name of the Debian source package, and do not require "
+"or use a F<debian/> directory. This option can only be used together with "
+"B<--version>."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:66
+msgid ""
+"The default is to use the package name of the first entry in F<debian/"
+"changelog>."
+msgstr ""
+
+#. type: =item
+#: ../scripts/mk-origtargz.pl:68
+#, fuzzy
+#| msgid "B<-t>, B<--to> I<version>"
+msgid "B<-v>, B<--version> I<version>"
+msgstr "B<-t>, B<--to> I<version>"
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:70
+msgid ""
+"Use I<version> as the version of the package. This needs to be the upstream "
+"version portion of a full Debian version, i.e. no Debian revision, no epoch."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:72
+msgid ""
+"The default is to use the upstream portion of the version of the first entry "
+"in F<debian/changelog>."
+msgstr ""
+
+#. type: =item
+#: ../scripts/mk-origtargz.pl:74
+#, fuzzy
+#| msgid "B<--exclude-tag-op>"
+msgid "B<--exclude-file> I<glob>"
+msgstr "B<--exclude-tag-op>"
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:76
+msgid ""
+"Remove files matching the given I<glob> from the tarball, as if it was "
+"listed in B<Files-Excluded>."
+msgstr ""
+
+#. type: =item
+#: ../scripts/mk-origtargz.pl:79
+#, fuzzy
+#| msgid "B<-f>, B<--filename=>I<filename>"
+msgid "B<--copyright-file> I<filename>"
+msgstr "B<-f>, B<--filename=>I<fichier>"
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:81
+msgid ""
+"Remove files matching the patterns found in I<filename>, which should have "
+"the format of a Debian F<copyright> file. Errors parsing that file are "
+"silently ignored, exactly as it is the case with F<debian/copyright>."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:83
+msgid ""
+"Both the B<--exclude-file> and B<--copyright-file> options amend the list of "
+"patterns found in F<debian/copyright>. If you do not want to read that file, "
+"you will have to use B<--package>."
+msgstr ""
+
+#. type: =head2
+#: ../scripts/mk-origtargz.pl:89
+#, fuzzy
+#| msgid "<option>-c</option>"
+msgid "Action options"
+msgstr "<option>-c</option>"
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:91
+msgid ""
+"These options specify what exactly B<mk-origtargz> should do. The options "
+"B<--copy>, B<--rename> and B<--symlink> are mutually exclusive."
+msgstr ""
+
+#. type: TP
+#: ../scripts/mk-origtargz.pl:96 ../scripts/uscan.1:384
+#, no-wrap
+msgid "B<--symlink>"
+msgstr "B<--symlink>"
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:98
+#, fuzzy
+#| msgid ""
+#| "Use the traditional uscan output format.  (This is the default behaviour.)"
+msgid ""
+"Make the resulting file a symlink to the given original file. (This is the "
+"default behaviour.)"
+msgstr ""
+"Utiliser le format de sortie traditionnel de uscan (c'est le comportement "
+"par défaut)."
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:101
+msgid ""
+"If the file has to be modified (because it is a B<zip> file, because of B<--"
+"repack> or B<Files-Excluded>), this option behaves like B<--copy>."
+msgstr ""
+
+#. type: =item
+#: ../scripts/mk-origtargz.pl:104
+#, fuzzy
+#| msgid "B<--copyright>"
+msgid "B<--copy>"
+msgstr "B<--copyright>"
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:106
+msgid ""
+"Make the resulting file a copy of the original file (unless it has to be "
+"modified, of course)."
+msgstr ""
+
+#. type: TP
+#: ../scripts/mk-origtargz.pl:108 ../scripts/uscan.1:392
+#, no-wrap
+msgid "B<--rename>"
+msgstr "B<--rename>"
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:110
+#, fuzzy
+#| msgid "Report and download.  (This is the default behaviour.)"
+msgid "Rename the original file. (This is the default behaviour.)"
+msgstr ""
+"Fournir un rapport puis télécharger (c'est le comportement par défaut)."
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:112
+msgid ""
+"If the file has to be modified (because it is a B<zip> file, because of B<--"
+"repack> or B<Files-Excluded>), this implies that the original file is "
+"deleted afterwards."
+msgstr ""
+
+#. type: TP
+#: ../scripts/mk-origtargz.pl:114 ../scripts/uscan.1:397
+#, no-wrap
+msgid "B<--repack>"
+msgstr "B<--repack>"
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:116
+msgid ""
+"If the given file is not in compressed using the desired format (see B<--"
+"compression>), recompress it."
+msgstr ""
+
+#. type: =item
+#: ../scripts/mk-origtargz.pl:119
+msgid "B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:121
+msgid ""
+"If B<--repack> is used, or if the given file is a B<zip> file, ensure that "
+"the resulting file is compressed using the given scheme. The default is "
+"B<gzip>."
+msgstr ""
+
+#. type: =item
+#: ../scripts/mk-origtargz.pl:123
+#, fuzzy
+#| msgid "B<-p>, B<--path> I<directory>"
+msgid "B<-C>, B<--directory> I<directory>"
+msgstr "B<-p>, B<--path> I<répertoire>"
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:125
+msgid "Put the resulting file in the given directory."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:141
+#, fuzzy
+#| msgid "B<debchange>(1), B<svnpath>(1)"
+msgid "B<uscan>(1), B<uupdate>(1)"
+msgstr "B<debchange>(1), B<svnpath>(1)"
+
+#. type: textblock
+#: ../scripts/mk-origtargz.pl:145
+#, fuzzy
+#| msgid ""
+#| "B<origtargz> and this manpage have been written by Christoph Berg "
+#| "<I<myon@debian.org>>."
+msgid ""
+"B<mk-origtargz> and this manpage have been written by Joachim Breitner "
+"<I<nomeata@debian.org>>."
+msgstr ""
+"B<origtargz> et cette page de manuel ont été écrits par Christoph Berg "
+"<I<myon@debian.org>>."
 
 #. type: textblock
 #: ../scripts/namecheck.pl:5
@@ -17312,7 +17646,9 @@ msgstr "CONFORMITÉ"
 
 #. type: textblock
 #: ../scripts/sadt.pod:67
-msgid "README.package-tests shipped by autopkgtest 2.6"
+#, fuzzy
+#| msgid "README.package-tests shipped by autopkgtest 2.6"
+msgid "README.package-tests shipped by autopkgtest 2.7.2"
 msgstr "README.package-tests distribué dans autopkgtest 2.6."
 
 #. type: textblock
@@ -18801,12 +19137,6 @@ msgstr "B<--timeout> I<N>"
 msgid "Set timeout to N seconds (default 20 seconds)."
 msgstr "Définir le temps d'attente à N secondes (20 secondes par défaut)."
 
-#. type: TP
-#: ../scripts/uscan.1:384
-#, no-wrap
-msgid "B<--symlink>"
-msgstr "B<--symlink>"
-
 #. type: Plain text
 #: ../scripts/uscan.1:392
 msgid ""
@@ -18823,12 +19153,6 @@ msgstr ""
 "tlzma>) et orig.tar.xz (pour les fichiers amont en I<.tar.xz> et I<.txz>). "
 "C'est le comportement par défaut."
 
-#. type: TP
-#: ../scripts/uscan.1:392
-#, no-wrap
-msgid "B<--rename>"
-msgstr "B<--rename>"
-
 #. type: Plain text
 #: ../scripts/uscan.1:397
 msgid ""
@@ -18839,12 +19163,6 @@ msgstr ""
 "Au lieu de créer des liens symboliques, renommer les fichiers téléchargés "
 "avec leur nom Debian I<orig.tar.gz>, I<orig.tar.bz2>, I<orig.tar.lzma> ou "
 "I<orig.tar.xz> conformément à la description ci-dessus."
-
-#. type: TP
-#: ../scripts/uscan.1:397
-#, no-wrap
-msgid "B<--repack>"
-msgstr "B<--repack>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:407
@@ -18869,35 +19187,50 @@ msgstr ""
 "archives tar compressées avec lzma ou xz."
 
 #. type: TP
-#: ../scripts/uscan.1:407 ../scripts/uupdate.1:74
+#: ../scripts/uscan.1:407
+#, no-wrap
+msgid "B<--repack-compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]"
+msgstr ""
+
+#. type: Plain text
+#: ../scripts/uscan.1:413
+msgid ""
+"In the case where the upstream sources are repacked (either because B<--"
+"repack> option is given or I<debian/copyright> contains the field B<Files-"
+"Excluded>), it is possible to control the compression method via the "
+"parameter (defaults to B<gzip>)."
+msgstr ""
+
+#. type: TP
+#: ../scripts/uscan.1:413 ../scripts/uupdate.1:74
 #, no-wrap
 msgid "B<--no-symlink>"
 msgstr "B<--no-symlink>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:410
+#: ../scripts/uscan.1:416
 msgid "Don't make these symlinks and don't rename the files."
 msgstr "Ne pas créer ces liens symboliques et ne pas renommer les fichiers."
 
 #. type: TP
-#: ../scripts/uscan.1:410
+#: ../scripts/uscan.1:416
 #, no-wrap
 msgid "B<--dehs>"
 msgstr "B<--dehs>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:413
+#: ../scripts/uscan.1:419
 msgid "Use an XML format for output, as required by the DEHS system."
 msgstr "Utiliser le format XML pour la sortie, requis par le système DEHS."
 
 #. type: TP
-#: ../scripts/uscan.1:413
+#: ../scripts/uscan.1:419
 #, no-wrap
 msgid "B<--no-dehs>"
 msgstr "B<--no-dehs>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:416
+#: ../scripts/uscan.1:422
 msgid ""
 "Use the traditional uscan output format.  (This is the default behaviour.)"
 msgstr ""
@@ -18905,7 +19238,7 @@ msgstr ""
 "par défaut)."
 
 #. type: Plain text
-#: ../scripts/uscan.1:425
+#: ../scripts/uscan.1:431
 msgid ""
 "Specify the name of the package to check for rather than examining I<debian/"
 "changelog>; this requires the B<--upstream-version> (unless a version is "
@@ -18922,13 +19255,13 @@ msgstr ""
 "(et B<--dehs>)."
 
 #. type: TP
-#: ../scripts/uscan.1:425
+#: ../scripts/uscan.1:431
 #, no-wrap
 msgid "B<--upstream-version> I<upstream-version>"
 msgstr "B<--upstream-version> I<version-amont>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:430
+#: ../scripts/uscan.1:436
 msgid ""
 "Specify the current upstream version rather than examine the I<watch> file "
 "or I<changelog> to determine it.  This is ignored if a directory scan is "
@@ -18939,13 +19272,13 @@ msgstr ""
 "de répertoire est fait et que plus d'un fichier I<watch> est trouvé."
 
 #. type: TP
-#: ../scripts/uscan.1:430
+#: ../scripts/uscan.1:436
 #, no-wrap
 msgid "B<--watchfile> I<watchfile>"
 msgstr "B<--watchfile> I<watchfile>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:437
+#: ../scripts/uscan.1:443
 msgid ""
 "Specify the I<watchfile> rather than perform a directory scan to determine "
 "it.  If this option is used without B<--package>, then B<uscan> must be "
@@ -18959,13 +19292,13 @@ msgstr ""
 "l'arborescence)."
 
 #. type: TP
-#: ../scripts/uscan.1:437
+#: ../scripts/uscan.1:443
 #, no-wrap
 msgid "B<--download-version> I<version>"
 msgstr "B<--download-version> I<version>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:441
+#: ../scripts/uscan.1:447
 msgid ""
 "Specify the version which the upstream release must match in order to be "
 "considered, rather than using the release with the highest version."
@@ -18974,40 +19307,40 @@ msgstr ""
 "de version le plus important."
 
 #. type: TP
-#: ../scripts/uscan.1:441
+#: ../scripts/uscan.1:447
 #, no-wrap
 msgid "B<--download-current-version>"
 msgstr "B<--download-current-version>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:444
+#: ../scripts/uscan.1:450
 msgid "Download the currently packaged version"
 msgstr "Télécharger la version du paquet actuel"
 
 #. type: Plain text
-#: ../scripts/uscan.1:447
+#: ../scripts/uscan.1:453
 msgid "Give verbose output."
 msgstr "Donner une sortie bavarde."
 
 #. type: TP
-#: ../scripts/uscan.1:447
+#: ../scripts/uscan.1:453
 #, no-wrap
 msgid "B<--no-verbose>"
 msgstr "B<--no-verbose>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:450
+#: ../scripts/uscan.1:456
 msgid "Don't give verbose output.  (This is the default behaviour.)"
 msgstr "Ne pas donner de sortie bavarde (c'est le comportement par défaut)."
 
 #. type: TP
-#: ../scripts/uscan.1:450
+#: ../scripts/uscan.1:456
 #, no-wrap
 msgid "B<--no-exclusion>"
 msgstr "B<--no-exclusion>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:454
+#: ../scripts/uscan.1:460
 msgid ""
 "Do not automatically exclude files mentioned in I<debian/copyright> field "
 "B<Files-Excluded>"
@@ -19016,37 +19349,37 @@ msgstr ""
 "Excluded> de I<debian/copyright>."
 
 #. type: TP
-#: ../scripts/uscan.1:454
+#: ../scripts/uscan.1:460
 #, no-wrap
 msgid "B<--debug>"
 msgstr "B<--debug>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:457
+#: ../scripts/uscan.1:463
 msgid "Dump the downloaded web pages to stdout for debugging your watch file."
 msgstr ""
 "Afficher les pages web téléchargées sur la sortie standard afin de déboguer "
 "le fichier « watch »."
 
 #. type: TP
-#: ../scripts/uscan.1:465
+#: ../scripts/uscan.1:471
 #, no-wrap
 msgid "B<--user-agent>, B<--useragent>"
 msgstr "B<--user-agent>, B<--useragent>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:468
+#: ../scripts/uscan.1:474
 msgid "Override the default user agent header."
 msgstr "Utiliser un champ « user agent » différent de celui par défaut."
 
 #. type: Plain text
-#: ../scripts/uscan.1:475
+#: ../scripts/uscan.1:481
 msgid "Give brief usage information."
 msgstr "Afficher un bref message d'aide."
 
 # NOTE: presque identique à un autre ?
 #. type: Plain text
-#: ../scripts/uscan.1:485
+#: ../scripts/uscan.1:491
 msgid ""
 "The two configuration files I</etc/devscripts.conf> and I<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  These may "
@@ -19065,13 +19398,13 @@ msgstr ""
 "actuellement identifiées sont :"
 
 #. type: TP
-#: ../scripts/uscan.1:485
+#: ../scripts/uscan.1:491
 #, no-wrap
 msgid "B<USCAN_DOWNLOAD>"
 msgstr "B<USCAN_DOWNLOAD>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:490
+#: ../scripts/uscan.1:496
 msgid ""
 "If this is set to I<no>, then newer upstream files will not be downloaded; "
 "this is equivalent to the B<--report> or B<--no-download> options."
@@ -19081,13 +19414,13 @@ msgstr ""
 "download>."
 
 #. type: TP
-#: ../scripts/uscan.1:490
+#: ../scripts/uscan.1:496
 #, no-wrap
 msgid "B<USCAN_PASV>"
 msgstr "B<USCAN_PASV>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:496
+#: ../scripts/uscan.1:502
 msgid ""
 "If this is set to I<yes> or I<no>, this will force FTP connections to use "
 "PASV mode or not to, respectively.  If this is set to I<default>, then "
@@ -19100,13 +19433,13 @@ msgstr ""
 "principalement sur la variable d'environnement B<FTP_PASSIVE>)."
 
 #. type: TP
-#: ../scripts/uscan.1:496
+#: ../scripts/uscan.1:502
 #, no-wrap
 msgid "B<USCAN_TIMEOUT>"
 msgstr "B<USCAN_TIMEOUT>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:500
+#: ../scripts/uscan.1:506
 msgid ""
 "If set to a number I<N>, then set the timeout to I<N> seconds.  This is "
 "equivalent to the B<--timeout> option."
@@ -19115,13 +19448,13 @@ msgstr ""
 "à I<N> secondes. C'est équivalent à l'option B<--timeout>."
 
 #. type: TP
-#: ../scripts/uscan.1:500
+#: ../scripts/uscan.1:506
 #, no-wrap
 msgid "B<USCAN_SYMLINK>"
 msgstr "B<USCAN_SYMLINK>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:507
+#: ../scripts/uscan.1:513
 msgid ""
 "If this is set to I<no>, then a pkg_version.orig.tar.{gz|bz2|lzma|xz} "
 "symlink will not be made (equivalent to the B<--no-symlink> option).  If it "
@@ -19136,13 +19469,13 @@ msgstr ""
 "l'option B<--rename>)."
 
 #. type: TP
-#: ../scripts/uscan.1:507
+#: ../scripts/uscan.1:513
 #, no-wrap
 msgid "B<USCAN_DEHS_OUTPUT>"
 msgstr "B<USCAN_DEHS_OUTPUT>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:511
+#: ../scripts/uscan.1:517
 msgid ""
 "If this is set to I<yes>, then DEHS-style output will be used.  This is "
 "equivalent to the B<--dehs> option."
@@ -19151,13 +19484,13 @@ msgstr ""
 "l'option B<--dehs> était utilisée."
 
 #. type: TP
-#: ../scripts/uscan.1:511
+#: ../scripts/uscan.1:517
 #, no-wrap
 msgid "B<USCAN_VERBOSE>"
 msgstr "B<USCAN_VERBOSE>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:515
+#: ../scripts/uscan.1:521
 msgid ""
 "If this is set to I<yes>, then verbose output will be given.  This is "
 "equivalent to the B<--verbose> option."
@@ -19166,13 +19499,13 @@ msgstr ""
 "l'option B<--verbose> était utilisée."
 
 #. type: TP
-#: ../scripts/uscan.1:515
+#: ../scripts/uscan.1:521
 #, no-wrap
 msgid "B<USCAN_USER_AGENT>"
 msgstr "B<USCAN_USER_AGENT>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:519
+#: ../scripts/uscan.1:525
 msgid ""
 "If set, the specified user agent string will be used in place of the "
 "default.  This is equivalent to the B<--user-agent> option."
@@ -19182,13 +19515,13 @@ msgstr ""
 "équivalent à l'option B<--user-agent>."
 
 #. type: TP
-#: ../scripts/uscan.1:519
+#: ../scripts/uscan.1:525
 #, no-wrap
 msgid "B<USCAN_DESTDIR>"
 msgstr "B<USCAN_DESTDIR>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:523
+#: ../scripts/uscan.1:529
 msgid ""
 "If set, the downloaded files will be placed in this directory.  This is "
 "equivalent to the B<--destdir> option."
@@ -19197,13 +19530,13 @@ msgstr ""
 "seront placés. C'est équivalent à l'option B<--destdir>."
 
 #. type: TP
-#: ../scripts/uscan.1:523
+#: ../scripts/uscan.1:529
 #, no-wrap
 msgid "B<USCAN_REPACK>"
 msgstr "B<USCAN_REPACK>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:528
+#: ../scripts/uscan.1:534
 msgid ""
 "If this is set to I<yes>, then after having downloaded a bzip tar, lzma tar, "
 "xz tar, or zip archive, B<uscan> will repack it to a gzip tar.  This is "
@@ -19214,13 +19547,13 @@ msgstr ""
 "archive tar compressée avec gzip. C'est équivalent à l'option B<--repack>."
 
 #. type: TP
-#: ../scripts/uscan.1:528
+#: ../scripts/uscan.1:534
 #, no-wrap
 msgid "B<USCAN_EXCLUSION>"
 msgstr "B<USCAN_EXCLUSION>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:533
+#: ../scripts/uscan.1:539
 msgid ""
 "If this is set to I<no>, files mentioned in the field B<Files-Excluded> of "
 "I<debian/copyright> will be ignored and no exclusion of files will be "
@@ -19231,7 +19564,7 @@ msgstr ""
 "fichiers ne sera tentée. C'est équivalent à l'option B<--no-exclusion>."
 
 #. type: Plain text
-#: ../scripts/uscan.1:537
+#: ../scripts/uscan.1:543
 msgid ""
 "The exit status gives some indication of whether a newer version was found "
 "or not; one is advised to read the output to determine exactly what happened "
@@ -19242,7 +19575,7 @@ msgstr ""
 "et pour voir s'il n'y a pas eu d'avertissement."
 
 #. type: Plain text
-#: ../scripts/uscan.1:541
+#: ../scripts/uscan.1:547
 msgid ""
 "Either B<--help> or B<--version> was used, or for some I<watch> file which "
 "was examined, a newer upstream version was located."
@@ -19251,7 +19584,7 @@ msgstr ""
 "nouvelle version amont a été trouvée pour un des fichiers I<watch> examinés."
 
 #. type: Plain text
-#: ../scripts/uscan.1:545
+#: ../scripts/uscan.1:551
 msgid ""
 "No newer upstream versions were located for any of the I<watch> files "
 "examined."
@@ -19260,13 +19593,13 @@ msgstr ""
 "examinés."
 
 #. type: SH
-#: ../scripts/uscan.1:545
+#: ../scripts/uscan.1:551
 #, no-wrap
 msgid "HISTORY AND UPGRADING"
 msgstr "HISTORIQUE ET MISE À NIVEAU"
 
 #. type: Plain text
-#: ../scripts/uscan.1:549
+#: ../scripts/uscan.1:555
 msgid ""
 "This section briefly describes the backwards-incompatible I<watch> file "
 "features which have been added in each I<watch> file version, and the first "
@@ -19278,13 +19611,13 @@ msgstr ""
 "comprenait."
 
 #. type: TP
-#: ../scripts/uscan.1:549
+#: ../scripts/uscan.1:555
 #, no-wrap
 msgid "I<Pre-version 2>"
 msgstr "I<Versions antérieures à 2>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:554
+#: ../scripts/uscan.1:560
 msgid ""
 "The I<watch> file syntax was significantly different in those days.  Don't "
 "use it.  If you are upgrading from a pre-version 2 I<watch> file, you are "
@@ -19296,13 +19629,13 @@ msgstr ""
 "recommencer à zéro."
 
 #. type: TP
-#: ../scripts/uscan.1:554
+#: ../scripts/uscan.1:560
 #, no-wrap
 msgid "I<Version 2>"
 msgstr "I<Version 2>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:558
+#: ../scripts/uscan.1:564
 msgid ""
 "devscripts version 2.6.90: The first incarnation of the current style of "
 "I<watch> files."
@@ -19311,13 +19644,13 @@ msgstr ""
 "fichier I<watch>."
 
 #. type: TP
-#: ../scripts/uscan.1:558
+#: ../scripts/uscan.1:564
 #, no-wrap
 msgid "I<Version 3>"
 msgstr "I<Version 3>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:564
+#: ../scripts/uscan.1:570
 msgid ""
 "devscripts version 2.8.12: Introduced the following: correct handling of "
 "regex special characters in the path part, directory/path pattern matching, "
@@ -19331,7 +19664,7 @@ msgstr ""
 "modification des liens."
 
 #. type: Plain text
-#: ../scripts/uscan.1:570
+#: ../scripts/uscan.1:576
 msgid ""
 "If you are upgrading from version 2, the key incompatibility is if you have "
 "multiple groups in the pattern part; whereas only the first one would be "
@@ -19347,12 +19680,12 @@ msgstr ""
 "groupe ordinaire (...)."
 
 #. type: Plain text
-#: ../scripts/uscan.1:575
+#: ../scripts/uscan.1:581
 msgid "B<dpkg>(1), B<perlre>(1), B<uupdate>(1), B<devscripts.conf>(5)"
 msgstr "B<dpkg>(1), B<perlre>(1), B<uupdate>(1), B<devscripts.conf>(5)"
 
 #. type: Plain text
-#: ../scripts/uscan.1:580
+#: ../scripts/uscan.1:586
 msgid ""
 "The original version of B<uscan> was written by Christoph Lameter "
 "E<lt>clameter@debian.orgE<gt>.  Significant improvements, changes and "
