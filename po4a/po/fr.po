@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2014-04-17 15:34-0400\n"
-"PO-Revision-Date: 2014-01-31 13:10-0400\n"
+"PO-Revision-Date: 2014-04-17 13:52-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -199,7 +199,7 @@ msgid ""
 "every line with the current time and O for stdout and E for stderr."
 msgstr ""
 "B<annotate-output> va lancer le programme indiqué en ajoutant au début de "
-"chaque ligne l'heure courante ainsi qu'un O pour la sortie standard "
+"chaque ligne l'heure actuelle ainsi qu'un O pour la sortie standard "
 "(« stdout ») et un E pour la sortie d'erreur (« stderr »)."
 
 #. type: SH
@@ -495,10 +495,10 @@ msgid ""
 "and category and with the same version as the current working copy."
 msgstr ""
 "Si un paramètre est passé, il peut être soit branche--version, auquel cas "
-"B<archpath> affiche le nom du paquet correspondant à l'archive courante et "
+"B<archpath> affiche le nom du paquet correspondant à l'archive actuelle et "
 "la catégorie, soit un nom de branche complet (sans « -- »), auquel cas "
 "B<archpath> affiche le nom du paquet correspondant dans la même archive, la "
-"même catégorie, et à la même version que la copie de travail courante."
+"même catégorie, et à la même version que la copie de travail actuelle."
 
 #. type: Plain text
 #: ../scripts/archpath.1:32
@@ -1986,7 +1986,7 @@ msgid ""
 "meaning `use the address on the current email as the new submitter address'."
 msgstr ""
 "Changer l'adresse électronique du rapporteur du ou des I<bogue>s, où B<!> "
-"signifie « utiliser l'adresse électronique courante en tant que nouvelle "
+"signifie « utiliser l'adresse électronique actuelle en tant que nouvelle "
 "adresse du rapporteur »."
 
 #. type: =item
@@ -2488,7 +2488,7 @@ msgid ""
 "on the current email as the new owner address'."
 msgstr ""
 "Changer l'adresse électronique du « propriétaire » du I<bogue>, où B<!> "
-"signifie « utiliser l'adresse électronique courante comme nouvelle adresse "
+"signifie « utiliser l'adresse électronique actuelle comme nouvelle adresse "
 "de propriétaire »."
 
 #. type: textblock
@@ -5972,7 +5972,7 @@ msgid ""
 "\\'PACKAGE(-.+)?', thus matching directory names such as PACKAGE and PACKAGE-"
 "version."
 msgstr ""
-"Le nom du répertoire est vérifié en testant si le nom du répertoire courant "
+"Le nom du répertoire est vérifié en testant si le nom du répertoire actuel "
 "(donné par B<pwd>(1)) correspond à l'expression rationnelle donnée par la "
 "variable B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> du fichier de configuration ou "
 "par l'option B<--check-dirname-regex> I<regex>. Il s'agit d'une expression "
@@ -6310,19 +6310,19 @@ msgid ""
 "entry has already been marked in this way, then this option will be silently "
 "ignored."
 msgstr ""
-"Les changelogs qui enregistrent les modifications des différents co-"
-"responsables d'un paquet sont gérés. Si une entrée est ajoutée à celles de "
-"la version courante, et que le responsable est différent du responsable qui "
-"est mentionné comme ayant créé les entrées précédentes, alors des lignes "
-"seront ajoutées au changelog pour indiquer quel responsable a fait quelle "
-"modification. Pour le moment, seulement un des différents styles "
-"d'enregistrement de ces informations est supporté, dans lequel le nom du "
-"responsable qui a fait quelques modifications apparaît sur une ligne avant "
-"les modifications, entre crochets. Cela peut-être activé ou désactivé en "
-"utilisant l'option B<-->[B<no>]B<multimaint> ou la variable de configuration "
-"B<DEBCHANGE_MULTIMAINT> ; le comportement par défaut est de l'activer. À "
-"noter : si une entrée a déjà été marquée dans ce but, alors cette option "
-"sera ignorée de façon silencieuse."
+"Les journaux de modification qui enregistrent les modifications des "
+"différents coresponsables d'un paquet sont gérés. Si une entrée est ajoutée "
+"à celles de la version actuelle et que le responsable est différent du "
+"responsable qui est mentionné comme ayant créé les entrées précédentes, "
+"alors des lignes seront ajoutées au changelog pour indiquer quel responsable "
+"a fait quelle modification. Pour le moment, seulement un des différents "
+"styles d'enregistrement de ces informations est supporté, dans lequel le nom "
+"du responsable qui a fait quelques modifications apparaît sur une ligne "
+"avant les modifications, entre crochets. Cela peut-être activé ou désactivé "
+"en utilisant l'option B<-->[B<no>]B<multimaint> ou la variable de "
+"configuration B<DEBCHANGE_MULTIMAINT> ; le comportement par défaut est de "
+"l'activer. À noter : si une entrée a déjà été marquée dans ce but, alors "
+"cette option sera ignorée de façon silencieuse."
 
 #. type: Plain text
 #: ../scripts/debchange.1:101
@@ -6347,7 +6347,7 @@ msgid ""
 msgstr ""
 "Si B<--force-bad-version> ou B<--allow-lower-version> est utilisée, "
 "B<debchange> ne s'arrêtera pas si une nouvelle version est inférieure à la "
-"version courante. C'est particulièrement utile lors de la conception de "
+"version actuelle. C'est particulièrement utile lors de la conception de "
 "rétroportages."
 
 # NOTE: presque identique
@@ -6389,7 +6389,7 @@ msgid ""
 "\\'B<PACKAGE(-.+)?>', thus matching directory names such as B<PACKAGE> and "
 "B<PACKAGE->I<version>."
 msgstr ""
-"Le nom du répertoire est vérifié en testant si le nom du répertoire courant "
+"Le nom du répertoire est vérifié en testant si le nom du répertoire actuel "
 "(donné par B<pwd>(1)) correspond à l'expression rationnelle donnée par la "
 "variable B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> du fichier de configuration ou "
 "par l'option B<--check-dirname-regex> I<regex>. Il s'agit d'une expression "
@@ -6778,7 +6778,7 @@ msgid ""
 "backporting)."
 msgstr ""
 "Forcer un numéro de version à être moins élevé que le numéro de version "
-"courant (comme c'est le cas par exemple dans le cas d'un rétroportage)."
+"actuel (comme c'est le cas par exemple dans le cas d'un rétroportage)."
 
 #. type: TP
 #: ../scripts/debchange.1:263
@@ -6979,8 +6979,8 @@ msgid ""
 "existing entries."
 msgstr ""
 "Utiliser le niveau d'urgence indiqué dans la nouvelle entrée du fichier "
-"changelog, s'il y en a une, au lieu du niveau d'urgence bas (« B<low> ») par "
-"défaut ou de la valeur courante pour les entrées existantes."
+"I<changelog>, s'il y en a une, au lieu du niveau d'urgence bas (« B<low> ») "
+"par défaut ou de la valeur actuelle pour les entrées existantes."
 
 #. type: TP
 #: ../scripts/debchange.1:321
@@ -8092,7 +8092,7 @@ msgid ""
 "B<bzr>, B<tla> (arch), B<darcs>."
 msgstr ""
 "B<debcommit> génère un message de commit basé sur le nouveau texte dans le "
-"fichier debian/changelog, et commite le changement dans un dépôt du paquet. "
+"fichier debian/changelog, et envoie la modification dans un dépôt du paquet. "
 "Il doit être lancé dans une copie de travail du paquet. Les systèmes de "
 "contrôle de versions pris en charge sont B<cvs>, B<git>, B<hg> (mercurial), "
 "B<svk>, B<svn> (Subversion), B<baz>, B<bzr>, B<tla> (arch), B<darcs>."
@@ -8274,23 +8274,18 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/debcommit.pl:85
-#, fuzzy
-#| msgid "B<--sign-tags>, B<--no-sign-tags>"
 msgid "B<--sign-commit>, B<--no-sign-commit>"
-msgstr "B<--sign-tags>, B<--no-sign-tags>"
+msgstr "B<--sign-commit>, B<--no-sign-commit>"
 
 #. type: textblock
 #: ../scripts/debcommit.pl:87
-#, fuzzy
-#| msgid ""
-#| "If this option is set, then tags that debcommit creates will be signed "
-#| "using gnupg. Currently this is only supported by git."
 msgid ""
 "If this option is set, then the commits that debcommit creates will be "
 "signed using gnupg. Currently this is only supported by git, hg, and bzr."
 msgstr ""
-"Si cette option est activée, alors les étiquettes créées par debcommit "
-"seront signées avec GnuPG. Ce n'est actuellement géré que par Git."
+"Si cette option est activée, alors les messages créés par debcommit seront "
+"signées avec GnuPG. Ce n'est actuellement géré que par Git, mercurial et "
+"Bazaar."
 
 #. type: =item
 #: ../scripts/debcommit.pl:90
@@ -8354,23 +8349,17 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/debcommit.pl:124
-#, fuzzy
-#| msgid "B<DEBCOMMIT_SIGN_TAGS>"
 msgid "B<DEBCOMMIT_SIGN_COMMITS>"
-msgstr "B<DEBCOMMIT_SIGN_TAGS>"
+msgstr "B<DEBCOMMIT_SIGN_COMMITS>"
 
 #. type: textblock
 #: ../scripts/debcommit.pl:126
-#, fuzzy
-#| msgid ""
-#| "If this is set to I<yes>, then it is the same as the B<--sign-tags> "
-#| "command line parameter being used. The default is I<no>."
 msgid ""
 "If this is set to I<yes>, then it is the same as the B<--sign-commit> "
 "command line parameter being used. The default is I<no>."
 msgstr ""
-"Lui attribuer la valeur I<yes> équivaut à utiliser l'option B<--sign-tags>. "
-"La valeur par défaut est I<no>."
+"Lui attribuer la valeur I<yes> équivaut à utiliser l'option B<--sign-"
+"commit>. La valeur par défaut est I<no>."
 
 #. type: =item
 #: ../scripts/debcommit.pl:129
@@ -8585,7 +8574,7 @@ msgid ""
 "current source directory with the last version of the package."
 msgstr ""
 "Si aucun paramètre n'est donné, B<debdiff> essaie de comparer le contenu du "
-"répertoire source courant avec la dernière version du paquet."
+"répertoire source actuel avec la dernière version du paquet."
 
 #. type: Plain text
 #: ../scripts/debdiff.1:38
@@ -9725,7 +9714,7 @@ msgid ""
 msgstr ""
 "Par défaut, cet outil crée un numéro de version convenable pour les "
 "changements locaux, de manière à ce que le nouveau paquet soit considéré "
-"plus récent que le paquet courant, mais moins récent que tout futur paquet "
+"plus récent que le paquet actuel, mais moins récent que tout futur paquet "
 "Debian officiel. Avec <option>-v <replaceable class=\"parameter\">version</"
 "replaceable></option>, le numéro de version peut être indiqué directement. "
 "D'un autre côté, l'option <option>-c</option> se contente de calculer le "
@@ -10000,14 +9989,6 @@ msgstr "AVERTISSEMENT"
 
 #. type: Content of: <refentry><refsect1><para>
 #: ../scripts/deb-reversion.dbk:267
-#, fuzzy
-#| msgid ""
-#| "&dhpackage; is a tool intended to help porters (e.g. amd64) with "
-#| "modifying packages for other architectures, and to augment deb-repack, "
-#| "which creates modified packages with identical version numbers as the "
-#| "official packages. Chaos will ensue! With &dhpackage;, a proper version "
-#| "number can be selected, which does not obstruct the next official release "
-#| "but can be specifically pinned with APT or held with dpkg."
 msgid ""
 "&dhpackage; is a tool intended to help porters with modifying packages for "
 "other architectures, and to augment deb-repack, which creates modified "
@@ -10016,12 +9997,12 @@ msgid ""
 "not obstruct the next official release but can be specifically pinned with "
 "APT or held with dpkg."
 msgstr ""
-"&dhpackage; est un outil censé aider les porteurs (par ex. amd64) à modifier "
-"les paquets pour d'autres architectures et épauler deb-repack, qui crée des "
-"paquets modifiés avec des numéros de version identiques aux paquets "
-"officiels. Le chaos arrive. Avec &dhpackage;, un numéro de version adéquat "
-"est choisi, qui ne génère pas de conflit avec la prochaine publication "
-"officielle, mais qui peut être ajouté avec APT ou gelé avec dpkg."
+"&dhpackage; est un outil censé aider les porteurs à modifier les paquets "
+"pour d'autres architectures et épauler deb-repack, qui crée des paquets "
+"modifiés avec des numéros de version identiques aux paquets officiels. Le "
+"chaos arrive. Avec &dhpackage;, un numéro de version adéquat est choisi, qui "
+"ne génère pas de conflit avec la prochaine publication officielle, mais qui "
+"peut être ajouté avec APT ou gelé avec dpkg."
 
 #. type: Content of: <refentry><refsect1><para>
 #: ../scripts/deb-reversion.dbk:276
@@ -11076,7 +11057,7 @@ msgid ""
 "\\'PACKAGE(-.+)?', thus matching directory names such as PACKAGE and PACKAGE-"
 "version."
 msgstr ""
-"Le nom du répertoire est vérifié en testant si le nom du répertoire courant "
+"Le nom du répertoire est vérifié en testant si le nom du répertoire actuel "
 "(donné par B<pwd>(1)) correspond à l'expression rationnelle donnée par la "
 "variable B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> du fichier de configuration ou "
 "par l'option B<--check-dirname-regex> I<regex>. Il s'agit d'une expression "
@@ -12795,10 +12776,9 @@ msgstr ""
 
 #. type: IP
 #: ../scripts/devscripts.1:115
-#, fuzzy, no-wrap
-#| msgid "I<origtargz>(1)"
+#, no-wrap
 msgid "I<mk-origtargz>(1)"
-msgstr "B<origtargz>(1)"
+msgstr "I<mk-origtargz>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:117
@@ -12806,6 +12786,9 @@ msgid ""
 "rename upstream tarball, optionally changing the compression and removing "
 "unwanted files [unzip, lzma, xz-utils, file, libtext-glob-perl]"
 msgstr ""
+"Renommer l’archive amont, en modifiant éventuellement la compression et en "
+"supprimant les fichiers non désirés [unzip, lzma, xz-utils, file, libtext-"
+"glob-perl]"
 
 #. type: IP
 #: ../scripts/devscripts.1:117
@@ -12978,17 +12961,14 @@ msgstr "B<uscan>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:143
-#, fuzzy
-#| msgid ""
-#| "scan upstream sites for new releases of packages [gpgv, gnupg, liblwp-"
-#| "protocol-https-perl, libwww-perl, unzip, lzma, xz-utils]"
 msgid ""
 "scan upstream sites for new releases of packages [gpgv, gnupg, liblwp-"
 "protocol-https-perl, libwww-perl, libtext-glob-perl, unzip, lzma, xz-utils, "
 "file]"
 msgstr ""
 "surveiller la disponibilité d'une nouvelle version amont [gpgv, gnupg, "
-"liblwp-protocol-https-perl, libwww-perl, unzip, lzma, xz-utils]"
+"liblwp-protocol-https-perl, libwww-perl, libtext-glob-perl, unzip, lzma, xz-"
+"utils, file]"
 
 #. type: IP
 #: ../scripts/devscripts.1:143
@@ -13144,11 +13124,11 @@ msgstr ""
 "Avec la seconde forme, B<dget> télécharge un paquet I<binaire> (c'est-à-dire "
 "un fichier I<.deb>) depuis le miroir Debian configuré dans /etc/apt/sources."
 "lists(.d). À la différence d'B<apt-get install -d>, il ne nécessite pas les "
-"droits du superutilisateur, écrit dans le répertoire courant et ne "
-"télécharge pas les dépendances. Si un numéro de version est indiqué, cette "
-"version du paquet est téléchargée. Avec B<--all>, la liste de tous les "
-"binaires pour le paquet source I<paquet> est extraite de la sortie de C<apt-"
-"cache showsrc paquet>."
+"droits du superutilisateur, écrit dans le répertoire actuel et ne télécharge "
+"pas les dépendances. Si un numéro de version est indiqué, cette version du "
+"paquet est téléchargée. Avec B<--all>, la liste de tous les binaires pour le "
+"paquet source I<paquet> est extraite de la sortie de C<apt-cache showsrc "
+"paquet>."
 
 #. type: textblock
 #: ../scripts/dget.pl:540
@@ -15488,18 +15468,18 @@ msgid ""
 "mk-origtargz - rename upstream tarball, optionally changing the compression "
 "and removing unwanted files"
 msgstr ""
+"mk-origtargz - Renommer l’archive amont, en modifiant éventuellement la "
+"compression et en supprimant les fichiers non désirés"
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:32
 msgid "B<mk-origtargz> [I<options>] F<foo-1.0.tar.gz>"
-msgstr ""
+msgstr "B<mk-origtargz> [I<options>] F<truc-1.0.tar.gz>"
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:34
-#, fuzzy
-#| msgid "B<origtargz> B<--help>"
 msgid "B<mk-origtargz> B<--help>"
-msgstr "B<origtargz> B<--help>"
+msgstr "B<mk-origtargz> B<--help>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:40
@@ -15510,6 +15490,12 @@ msgid ""
 "compression scheme and remove files according to B<Files-Excluded> in "
 "F<debian/copyright>. The resulting file is placed in F<debian/../..>."
 msgstr ""
+"B<mk-origtargz> renomme le fichier donné pour correspondre à ce qui est "
+"attendu par B<dpkg-buildpackage>, à partir du nom de paquet source et de la "
+"version dans F<debian/changelog>. Il peut convertir du B<zip> en B<tar>, et "
+"éventuellement modifier la compression et supprimer les fichiers "
+"conformément à B<Files-Excluded> dans F<debian/copyright>. Le fichier "
+"résultant est placé dans F<debian/../..>."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:46
@@ -15517,6 +15503,9 @@ msgid ""
 "If the package name is given via the B<--package> option, no information is "
 "read from F<debian/>, and the result file is placed in the current directory."
 msgstr ""
+"Si le nom de paquet est donné à l’aide de l’option B<--package>, aucun "
+"renseignement n’est lu dans F<debian/> et le fichier résultant est placé "
+"dans le répertoire actuel."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:49
@@ -15524,17 +15513,21 @@ msgid ""
 "B<mk-origtargz> is commonly called via B<uscan>, which first obtains the "
 "upstream tarball."
 msgstr ""
+"B<mk-origtargz> est normalement appelé par B<uscan>, qui obtient d’abord "
+"l’archive amont."
 
 #. type: =head2
 #: ../scripts/mk-origtargz.pl:54
 msgid "Metadata options"
-msgstr ""
+msgstr "Options de métadonnées"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:56
 msgid ""
 "The following options extend or replace information taken from F<debian/>."
 msgstr ""
+"Les options suivantes étendent ou remplacent les renseignements pris dans "
+"F<debian/>."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:62
@@ -15543,6 +15536,9 @@ msgid ""
 "or use a F<debian/> directory. This option can only be used together with "
 "B<--version>."
 msgstr ""
+"Utiliser I<paquet> comme nom de paquet source Debian et ne pas nécessiter ni "
+"utiliser de répertoire F<debian/>. Cette option ne peut être utilisée "
+"qu’avec B<--version>."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:66
@@ -15550,13 +15546,13 @@ msgid ""
 "The default is to use the package name of the first entry in F<debian/"
 "changelog>."
 msgstr ""
+"Par défaut, le nom de paquet est pris dans la première entrée de F<debian/"
+"changelog>."
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:68
-#, fuzzy
-#| msgid "B<-t>, B<--to> I<version>"
 msgid "B<-v>, B<--version> I<version>"
-msgstr "B<-t>, B<--to> I<version>"
+msgstr "B<-v>, B<--version> I<version>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:70
@@ -15564,6 +15560,9 @@ msgid ""
 "Use I<version> as the version of the package. This needs to be the upstream "
 "version portion of a full Debian version, i.e. no Debian revision, no epoch."
 msgstr ""
+"Utiliser I<version> comme version du paquet. Cela doit être la partie de "
+"version amont d’une version Debian complète, c’est-à-dire sans révision "
+"Debian ni epoch."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:72
@@ -15571,13 +15570,13 @@ msgid ""
 "The default is to use the upstream portion of the version of the first entry "
 "in F<debian/changelog>."
 msgstr ""
+"Par défaut, la partie amont de la version est prise dans la première entrée "
+"de F<debian/changelog>."
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:74
-#, fuzzy
-#| msgid "B<--exclude-tag-op>"
 msgid "B<--exclude-file> I<glob>"
-msgstr "B<--exclude-tag-op>"
+msgstr "B<--exclude-file> I<joker>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:76
@@ -15585,13 +15584,13 @@ msgid ""
 "Remove files matching the given I<glob> from the tarball, as if it was "
 "listed in B<Files-Excluded>."
 msgstr ""
+"Supprimer les fichiers correspondant au I<joker> donné de l’archive amont, "
+"comme s’il était indiqué dans B<Files-Excluded>."
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:79
-#, fuzzy
-#| msgid "B<-f>, B<--filename=>I<filename>"
 msgid "B<--copyright-file> I<filename>"
-msgstr "B<-f>, B<--filename=>I<fichier>"
+msgstr "B<--copyright-file> I<fichier>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:81
@@ -15600,6 +15599,10 @@ msgid ""
 "the format of a Debian F<copyright> file. Errors parsing that file are "
 "silently ignored, exactly as it is the case with F<debian/copyright>."
 msgstr ""
+"Supprimer les fichiers correspondant aux motifs de I<fichier> qui devrait "
+"être au format d’un fichier I<copyright> Debian. Les erreurs d’analyse de ce "
+"fichier sont ignorées silencieusement, comme c’est le cas avec F<debian/"
+"copyright>."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:83
@@ -15608,13 +15611,14 @@ msgid ""
 "patterns found in F<debian/copyright>. If you do not want to read that file, "
 "you will have to use B<--package>."
 msgstr ""
+"Les options B<--exclude-file> et B<--copyright-file> modifient toutes les "
+"deux la liste des motifs trouvés dans F<debian/copyright>. Si vous ne voulez "
+"pas lire ce fichier, vous devez utiliser B<--package>."
 
 #. type: =head2
 #: ../scripts/mk-origtargz.pl:89
-#, fuzzy
-#| msgid "<option>-c</option>"
 msgid "Action options"
-msgstr "<option>-c</option>"
+msgstr "Option d’action"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:91
@@ -15622,6 +15626,8 @@ msgid ""
 "These options specify what exactly B<mk-origtargz> should do. The options "
 "B<--copy>, B<--rename> and B<--symlink> are mutually exclusive."
 msgstr ""
+"Ces options indiquent exactement ce que B<mk-origtargz> devrait faire. Les "
+"options B<--copy>, B<--rename> et B<--symlink> s’excluent mutuellement."
 
 #. type: TP
 #: ../scripts/mk-origtargz.pl:96 ../scripts/uscan.1:384
@@ -15631,15 +15637,12 @@ msgstr "B<--symlink>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:98
-#, fuzzy
-#| msgid ""
-#| "Use the traditional uscan output format.  (This is the default behaviour.)"
 msgid ""
 "Make the resulting file a symlink to the given original file. (This is the "
 "default behaviour.)"
 msgstr ""
-"Utiliser le format de sortie traditionnel de uscan (c'est le comportement "
-"par défaut)."
+"Faire du fichier résultant un lien symbolique vers le fichier d’origine "
+"donné (c'est le comportement par défaut)."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:101
@@ -15647,13 +15650,14 @@ msgid ""
 "If the file has to be modified (because it is a B<zip> file, because of B<--"
 "repack> or B<Files-Excluded>), this option behaves like B<--copy>."
 msgstr ""
+"Si le fichier a été modifié (parce qu’il s’agit d’un fichier B<zip>, à cause "
+"de B<--repack> ou B<Files-Excluded>), cette option se comporte comme B<--"
+"copy>."
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:104
-#, fuzzy
-#| msgid "B<--copyright>"
 msgid "B<--copy>"
-msgstr "B<--copyright>"
+msgstr "B<--copy>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:106
@@ -15661,6 +15665,8 @@ msgid ""
 "Make the resulting file a copy of the original file (unless it has to be "
 "modified, of course)."
 msgstr ""
+"Faire du fichier résultant une copie du fichier d’origine (sauf bien sûr "
+"s’il a été modifié)."
 
 #. type: TP
 #: ../scripts/mk-origtargz.pl:108 ../scripts/uscan.1:392
@@ -15670,11 +15676,8 @@ msgstr "B<--rename>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:110
-#, fuzzy
-#| msgid "Report and download.  (This is the default behaviour.)"
 msgid "Rename the original file. (This is the default behaviour.)"
-msgstr ""
-"Fournir un rapport puis télécharger (c'est le comportement par défaut)."
+msgstr "Renommer le fichier d’origine (c'est le comportement par défaut)."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:112
@@ -15683,6 +15686,9 @@ msgid ""
 "repack> or B<Files-Excluded>), this implies that the original file is "
 "deleted afterwards."
 msgstr ""
+"Si le fichier a été modifié (parce qu’il s’agit d’un fichier B<zip>, à cause "
+"de B<--repack> ou B<Files-Excluded>), cela implique la suppression du "
+"fichier d’origine à la fin."
 
 #. type: TP
 #: ../scripts/mk-origtargz.pl:114 ../scripts/uscan.1:397
@@ -15696,11 +15702,13 @@ msgid ""
 "If the given file is not in compressed using the desired format (see B<--"
 "compression>), recompress it."
 msgstr ""
+"Si le fichier donné n’est pas compressé au format voulu (consultez B<--"
+"compression>), le recompresser."
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:119
 msgid "B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]"
-msgstr ""
+msgstr "B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:121
@@ -15709,38 +15717,33 @@ msgid ""
 "the resulting file is compressed using the given scheme. The default is "
 "B<gzip>."
 msgstr ""
+"Si B<--repack> est utilisé ou si le fichier donné est un fichier B<zip>, "
+"s’assurer que le fichier résultant est compressé un utilisant le format "
+"donné. Par défaut, B<gzip> est utilisé."
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:123
-#, fuzzy
-#| msgid "B<-p>, B<--path> I<directory>"
 msgid "B<-C>, B<--directory> I<directory>"
-msgstr "B<-p>, B<--path> I<répertoire>"
+msgstr "B<-C>, B<--directory> I<répertoire>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:125
 msgid "Put the resulting file in the given directory."
-msgstr ""
+msgstr "Placer le fichier résultant dans le répertoire donné."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:141
-#, fuzzy
-#| msgid "B<debchange>(1), B<svnpath>(1)"
 msgid "B<uscan>(1), B<uupdate>(1)"
-msgstr "B<debchange>(1), B<svnpath>(1)"
+msgstr "B<uscan>(1), B<uupdate>(1)"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:145
-#, fuzzy
-#| msgid ""
-#| "B<origtargz> and this manpage have been written by Christoph Berg "
-#| "<I<myon@debian.org>>."
 msgid ""
 "B<mk-origtargz> and this manpage have been written by Joachim Breitner "
 "<I<nomeata@debian.org>>."
 msgstr ""
-"B<origtargz> et cette page de manuel ont été écrits par Christoph Berg "
-"<I<myon@debian.org>>."
+"B<mk-origtargz> et cette page de manuel ont été écrits par Joachim Breitner "
+"<I<nomeata@debian.org>>."
 
 #. type: textblock
 #: ../scripts/namecheck.pl:5
@@ -17646,10 +17649,8 @@ msgstr "CONFORMITÉ"
 
 #. type: textblock
 #: ../scripts/sadt.pod:67
-#, fuzzy
-#| msgid "README.package-tests shipped by autopkgtest 2.6"
 msgid "README.package-tests shipped by autopkgtest 2.7.2"
-msgstr "README.package-tests distribué dans autopkgtest 2.6."
+msgstr "README.package-tests distribué dans autopkgtest 2.7.2."
 
 #. type: textblock
 #: ../scripts/sadt.pod:71
@@ -18215,7 +18216,7 @@ msgid ""
 "(as determined by their version numbers) and if specified in the I<watch> "
 "file, a program may then be executed on the newly downloaded source."
 msgstr ""
-"B<uscan> parcourt les répertoires donnés (ou le répertoire courant si aucun "
+"B<uscan> parcourt les répertoires donnés (ou le répertoire actuel si aucun "
 "n'est indiqué) et tous leurs sous-répertoires à la recherche de paquets "
 "contenant un fichier de contrôle I<debian/watch>. Les paramètres de ces "
 "fichiers de contrôle sont ensuite analysés, et les sites FTP ou HTTP amont "
@@ -18250,10 +18251,9 @@ msgid ""
 "I<debian/watch> file.  Obviously, not all of these would appear in one such "
 "file; usually, one would have one line for the current package."
 msgstr ""
-"L'exemple suivant montre le type d'entrée que l'on peut trouver dans un "
-"fichier I<debian/watch>. Bien sûr, toutes ces entrées n'apparaîtront pas "
-"dans un seul fichier. Il y a d'habitude une seule ligne pour le paquet "
-"courant."
+"L'exemple suivant montre le type d'entrée trouvable dans un fichier I<debian/"
+"watch>. Bien sûr, toutes ces entrées n'apparaîtront pas dans un seul "
+"fichier. Une seule ligne existe généralement pour le paquet actuel."
 
 #. type: Plain text
 #: ../scripts/uscan.1:33
@@ -18658,17 +18658,17 @@ msgid ""
 "I<E<lt>packageE<gt>_E<lt>versionE<gt>.orig.tar.{gz|bz2|lzma|xz}> as "
 "described by the help for the B<--symlink> option."
 msgstr ""
-"La version courante (amont) peut être indiquée comme le second paramètre "
+"La version actuelle (amont) peut être indiquée comme le second paramètre "
 "dans la ligne du fichier I<watch>. Si elle vaut I<debian> ou est absente, "
-"alors la version courante Debian (telle qu'elle est déterminée par I<debian/"
-"changelog>) est utilisée pour déterminer la version amont courante. La "
-"version amont courante peut aussi être indiquée par l'option B<--upstream-"
+"alors la version Debian actuelle (telle qu'elle est déterminée par I<debian/"
+"changelog>) est utilisée pour déterminer la version amont actuelle. La "
+"version amont actuelle peut aussi être indiquée par l'option B<--upstream-"
 "version> en ligne de commande, qui spécifie le numéro de version amont du "
 "paquet actuellement installé (c'est-à-dire, le numéro de version Debian sans "
 "epoch ni version Debian). Le numéro de version amont sera alors modifié en "
 "utilisant l'option B<dversionmangle> si elle est indiquée, tel que cela est "
 "décrit plus bas. Si la version la plus récente disponible est plus récente "
-"que la version courante, alors elle sera téléchargée dans le répertoire "
+"que la version actuelle, alors elle sera téléchargée dans le répertoire "
 "parent, sans que l'option B<--report> ou B<--report-status> ait été "
 "utilisée. Une fois que le fichier a été téléchargé, un lien symbolique vers "
 "le fichier est créé depuis le paquet I<E<lt>paquetE<gt>_E<lt>versionE<gt>."
@@ -18861,12 +18861,13 @@ msgid ""
 "numbers.  Again, the I<rules> string may not contain commas; this should not "
 "be a problem."
 msgstr ""
-"Utilisé pour modifier le numéro de version Debian du paquet courant installé "
-"dans la même optique que l'option B<uversionmangle>. Ainsi, une règle "
-"appropriée peut être « B<s/\\e.dfsg\\e.\\ed+$//> » pour supprimer le suffixe "
-"« B<.dfsg.1> » dans un numéro de version Debian ou pour gérer les numéros de "
-"version de type « B<.pre6> ». Ici encore, la chaîne de caractères I<règles> "
-"ne doit pas contenir de virgule ; cela ne devrait pas être un problème."
+"Utilisé pour modifier le numéro de version Debian du paquet actuellement "
+"installé dans la même optique que l'option B<uversionmangle>. Ainsi, une "
+"règle appropriée peut être « B<s/\\e.dfsg\\e.\\ed+$//> » pour supprimer le "
+"suffixe « B<.dfsg.1> » dans un numéro de version Debian ou pour gérer les "
+"numéros de version de type « B<.pre6> ». Ici encore, la chaîne de caractères "
+"I<règles> ne doit pas contenir de virgule ; cela ne devrait pas être un "
+"problème."
 
 #. type: TP
 #: ../scripts/uscan.1:269
@@ -19190,7 +19191,7 @@ msgstr ""
 #: ../scripts/uscan.1:407
 #, no-wrap
 msgid "B<--repack-compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]"
-msgstr ""
+msgstr "B<--repack-compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]"
 
 #. type: Plain text
 #: ../scripts/uscan.1:413
@@ -19200,6 +19201,10 @@ msgid ""
 "Excluded>), it is possible to control the compression method via the "
 "parameter (defaults to B<gzip>)."
 msgstr ""
+"Au cas où les sources amont sont rempaquetés (soit parce que l’option B<--"
+"repack> est donnée, soit parce que I<debian/copyright> contient le champ "
+"B<Files-Excluded>), la méthode de compression peut être contrôlée avec le "
+"paramètre I<comp> (B<gzip> par défaut)."
 
 #. type: TP
 #: ../scripts/uscan.1:413 ../scripts/uupdate.1:74
@@ -19267,7 +19272,7 @@ msgid ""
 "or I<changelog> to determine it.  This is ignored if a directory scan is "
 "being performed and more than one I<watch> file is found."
 msgstr ""
-"Indiquer la version amont courante plutôt qu'examiner le fichier I<watch> ou "
+"Indiquer la version amont actuelle plutôt qu'examiner le fichier I<watch> ou "
 "le journal des modifications pour le déterminer. C'est ignoré si un balayage "
 "de répertoire est fait et que plus d'un fichier I<watch> est trouvé."
 
@@ -19640,7 +19645,7 @@ msgid ""
 "devscripts version 2.6.90: The first incarnation of the current style of "
 "I<watch> files."
 msgstr ""
-"devscripts version 2.6.90 : la première incarnation du style courant de "
+"devscripts version 2.6.90 : la première incarnation du style actuel de "
 "fichier I<watch>."
 
 #. type: TP
@@ -21181,6 +21186,9 @@ msgid ""
 msgstr ""
 "Cette page de manuel a été écrite pour le paquet B<devscripts> par le "
 "responsable du paquet, Julian Gilbey E<lt>jdg@debian.orgE<gt>."
+
+#~ msgid "B<--repack-compression> I<comp>"
+#~ msgstr "B<--repack-compression> I<comp>"
 
 #~ msgid ""
 #~ "# For GitHub projects you can use the tags page:\n"
