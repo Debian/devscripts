@@ -116,7 +116,7 @@ If the file has to be modified (because it is a B<zip> file, because of B<--repa
 If the given file is not in compressed using the desired format (see
 B<--compression>), recompress it.
 
-=item B<--compression> [ B<gz> | B<bzip2> | B<lzma> | B<xz> ]
+=item B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]
 
 If B<--repack> is used, or if the given file is a B<zip> file, ensure that the resulting file is compressed using the given scheme. The default is B<gz>.
 
