@@ -31,6 +31,12 @@ devscripts (2.14.2) UNRELEASED; urgency=medium
   * debi/debc: always try ../build-area/ when the changes file is not found
     under ../ (even when not using svn)
 
+  [ Joachim Breitner ]
+  * mk-origtargz: New script to rename (or symlink or copy) a downloaded
+    upstream tarball to the correct name, possibly changing the compression
+    scheme and removing files listed in debian/copyright's Excluded-Files.
+    This is now also used by uscan, where most of the code comes from.
+
  -- Jakub Wilk <jwilk@debian.org>  Sun, 26 Jan 2014 21:50:35 +0100
 
 devscripts (2.14.1) unstable; urgency=medium
