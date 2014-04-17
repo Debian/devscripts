@@ -34,7 +34,6 @@ use List::Util qw/first/;
 use filetest 'access';
 use Getopt::Long qw(:config gnu_getopt);
 BEGIN { push(@INC, '/usr/share/devscripts') } # append to @INC, so that -I . has precedence
-use Devscripts::Compression qw/compression_is_supported compression_guess_from_file compression_get_property/;
 use Devscripts::Versort;
 use Text::ParseWords;
 BEGIN {
@@ -88,9 +87,6 @@ sub uscan_die (@);
 sub dehs_output ();
 sub quoted_regex_replace ($);
 sub safe_replace ($$);
-sub get_main_source_dir($$$$);
-sub compress_archive($$$);
-sub decompress_archive($$);
 
 sub usage {
     print <<"EOF";
@@ -112,17 +108,7 @@ Options:
     --no-pasv      Do not use PASV mode for FTP connections (default)
     --timeout N    Specifies how much time, in seconds, we give remote
                    servers to respond (default 20 seconds)
-    --symlink      Make an orig.tar.gz symlink to downloaded file (default)
-    --rename       Rename to orig.tar.gz instead of symlinking
-                   (Both will use orig.tar.bz2, orig.tar.lzma, or orig.tar.xz
-                   if appropriate)
-    --repack       Repack downloaded archives from orig.tar.bz2, orig.tar.lzma,
-                   orig.tar.xz or orig.zip to orig.tar.gz
-                   (does nothing if downloaded archive orig.tar.gz)
-    --repack-compression COMP
-                   When the upstream sources are repacked, use compression COMP
-                   for the resulting tarball
-    --no-symlink   Don\'t make symlink or rename
+    --no-symlink   Do not call mk-origtargz
     --verbose      Give verbose output
     --no-verbose   Don\'t give verbose output (default)
     --check-dirname-level N
@@ -165,6 +151,14 @@ Options:
     --help         Show this message
     --version      Show version information
 
+Options passed on to mk-origtargz:
+    --symlink      Create a correctly named symlink to downloaded file (default)
+    --rename       Rename instead of symlinking
+    --repack       Repack downloaded archives to change compression
+    --compression [ gzip | bzip2 | lzma | xz ]
+                   When the upstream sources are repacked, use compression COMP
+                   for the resulting tarball (default: gzip)
+
 Default settings modified by devscripts configuration files:
 $modified_conf_msg
 EOF
@@ -193,7 +187,7 @@ my $download_version;
 my $force_download = 0;
 my $report = 0; # report even on up-to-date packages?
 my $repack = 0; # repack .tar.bz2, .tar.lzma, .tar.xz or .zip to .tar.gz
-my $default_compression = 'gz' ;
+my $default_compression = 'gzip' ;
 my $repack_compression = $default_compression;
 my $symlink = 'symlink';
 my $verbose = 0;
@@ -315,7 +309,7 @@ GetOptions("help" => \$opt_h,
 	   "symlink!" => sub { $opt_symlink = $_[1] ? 'symlink' : 'no'; },
 	   "rename" => sub { $opt_symlink = 'rename'; },
 	   "repack" => sub { $opt_repack = 1; },
-	   "repack-compression=s" => \$opt_repack_compression,
+	   "compression=s" => \$opt_repack_compression,
 	   "package=s" => \$opt_package,
 	   "upstream-version=s" => \$opt_uversion,
 	   "watchfile=s" => \$opt_watchfile,
@@ -339,12 +333,6 @@ if ($opt_noconf) {
 if ($opt_h) { usage(); exit 0; }
 if ($opt_v) { version(); exit 0; }
 
-# This makes more sense in Dpkg:Compression
-my $tarbase_regex = qr/^(.*)\.(tar\.gz  |tgz
-			      |tar\.bz2 |tbz2?
-			      |tar.lzma |tlz(?:ma?)?
-			      |tar.xz   |txz)$/x;
-
 # Now we can set the other variables according to the command line options
 
 $destdir = $opt_destdir if defined $opt_destdir;
@@ -358,18 +346,19 @@ $timeout = 20 unless defined $timeout and $timeout > 0;
 $symlink = $opt_symlink if defined $opt_symlink;
 $verbose = $opt_verbose if defined $opt_verbose;
 if (defined $opt_repack_compression) {
-    my %ext2comp = (
+    # be liberal in what you accept...
+    my %opt2comp = (
 	gz => 'gzip',
+	gzip => 'gzip',
 	bz2 => 'bzip2',
-	xz => 'xz',
+	bzip2 => 'bzip2',
 	lzma => 'lzma',
+	xz => 'xz',
     );
 
     # Normalize compression methods to the names used by Dpkg::Compression
-    if (compression_is_supported($opt_repack_compression)) {
-        $repack_compression = $opt_repack_compression;
-    } elsif (exists $ext2comp{$opt_repack_compression}) {
-	$repack_compression = $ext2comp{$opt_repack_compression};
+    if (exists $opt2comp{$opt_repack_compression}) {
+	$repack_compression = $opt2comp{$opt_repack_compression};
     } else {
         uscan_die "$progname: invalid compression $opt_repack_compression given.\n";
     }
@@ -1459,6 +1448,7 @@ EOF
     if (!$downloader->($upstream_url, "$destdir/$newfile_base")) {
 	return 1;
     }
+    # Check GPG
     if (defined $pgpsig_url) {
 	print "-- Downloading OpenPGP signature for package as $newfile_base.pgp\n" if $verbose;
 	if (!$downloader->($pgpsig_url, "$destdir/$newfile_base.pgp")) {
@@ -1472,220 +1462,43 @@ EOF
 		 or uscan_die("$progname warning: OpenPGP signature did not verify.\n");
     }
 
-    if ($repack and $newfile_base =~ /^(.*)\.(zip|jar)$/) {
-	my $compress_file_base = "$1.tar" ;
-        my $suffix = compression_get_property($repack_compression, "file_ext");
-	print "-- Repacking from zip to .tar.$suffix\n" if $verbose;
+    # Call mk-origtargz (renames, repacks, etc.)
+    my $mk_origtargz_out;
+    my $target = $newfile_base;
+    unless ($symlink eq "no") {
+	my @cmd = ("mk-origtargz");
+	push @cmd, "--package", $pkg;
+	push @cmd, "--version", $newversion;
+	push @cmd, "--rename" if $symlink eq "rename";
+	push @cmd, "--copy"   if $symlink eq "copy";
+	push @cmd, "--repack" if $repack;
+	push @cmd, "--compression", $repack_compression;
+	push @cmd, "--directory", $destdir;
+	push @cmd, "--copyright-file", "debian/copyright"
+	    if ($exclusion && -e "debian/copyright");
+	push @cmd, "$destdir/$newfile_base";
 
-	system('command -v unzip >/dev/null 2>&1') >> 8 == 0
-	  or uscan_die("unzip binary not found. You need to install the package unzip to be able to repack .zip upstream archives.\n");
-
-	my $newfile_base_compression = "$compress_file_base.$suffix";
-	my $tempdir = tempdir ("uscanXXXX", TMPDIR => 1, CLEANUP => 1);
-	# Parent of the target directory should be under our control
-	$tempdir .= '/repack';
-	mkdir $tempdir or uscan_die("Unable to mkdir($tempdir): $!\n");
-	my $absdestdir = abs_path($destdir);
-	system('unzip', '-q', '-a', '-d', $tempdir, "$destdir/$newfile_base") == 0
-	    or uscan_die("Repacking from zip or jar to tar.$suffix failed (could not unzip)\n");
-
-	# Figure out the top-level contents of the tarball.
-	# If we'd pass "." to tar we'd get the same contents, but the filenames would
-	# start with ./, which is confusing later.
-	# This should also be more reliable than, say, changing directories and globbing.
-	opendir(TMPDIR, $tempdir) || uscan_die("Can't open $tempdir $!\n");
-	my @files = grep {$_ ne "." && $_ ne ".."} readdir(TMPDIR);
-	close TMPDIR;
-
-
-	# tar it all up
-        spawn(exec => ['tar', '--owner=root', '--group=root', '--mode=a+rX', '--create', '--file', "$absdestdir/$compress_file_base", '--directory', $tempdir, @files],
-              wait_child => 1);
-        unless (-e "$absdestdir/$compress_file_base") {
-	    uscan_die("Repacking from zip or jar to tar.$suffix failed (could not create tarball)\n");
-	}
-	compress_archive("$absdestdir/$compress_file_base", "$absdestdir/$newfile_base_compression", $repack_compression);
-	unlink("$destdir/$newfile_base");
-	$newfile_base = $newfile_base_compression;
-
-    } elsif ($repack) { # Repacking from tar to tar, so just change the compression
-	my $comp = compression_guess_from_file("$destdir/$newfile_base");
-	unless ($comp) {
-	   uscan_die("Cannot determine compression method of $newfile_base");
-	}
-	if ($comp ne $repack_compression) {
-	    print "-- Repacking from $comp to $repack_compression\n" if $verbose;
-	    my ($tarbase) = ($newfile_base =~ $tarbase_regex);
-	    my $suffix = compression_get_property($repack_compression, "file_ext");
-	    my $newfile_base_compression = "$1.tar.$suffix";
-
-	    my (undef, $fname) = tempfile(UNLINK => 1);
-	    decompress_archive("$destdir/$newfile_base", $fname);
-	    compress_archive("$fname", "$destdir/$newfile_base_compression", $repack_compression);
-	    $newfile_base = $newfile_base_compression;
-	}
+	spawn(exec => \@cmd,
+	      to_string => \$mk_origtargz_out,
+	      wait_child => 1);
+	chomp($mk_origtargz_out);
+	$target = $1 if  $mk_origtargz_out =~ /Successfully .* to ([^,]+)\.$/;
+	$target = $1 if  $mk_origtargz_out =~ /Leaving (.*) where it is/;
     }
 
-
-    if ($newfile_base =~ $tarbase_regex){
-	my $filetype;
-	eval {
-	    spawn(exec => ['file', '-b', '-k', "$destdir/$newfile_base"],
-		  to_string => \$filetype,
-		  wait_child => 1);
-	};
-	unless (defined $filetype && $filetype =~ /compressed data/) {
-	    uscan_warn "$progname warning: $destdir/$newfile_base does not appear to be a compressed file;\nthe file command says: $filetype\nNot processing this file any further!\n";
-	    return 1;
-	}
-    }
-
-    my $excludesuffix = '+dfsg';
-    my $deletecount = 0;
-    if ($exclusion) {
-	my $data = Dpkg::Control::Hash->new();
-	my $okformat = qr'http://www.debian.org/doc/packaging-manuals/copyright-format/[.\d]+';
-	eval {
-	  $data->load('debian/copyright');
-	  1;
-	} or do {
-	  undef $data;
-	};
-
-	if (   $data
-	    && defined $data->{'format'}
-	    && $data->{'format'} =~ m{^$okformat/?$}
-	    && $data->{'files-excluded'})
-	{
-	    my @excluded = ($data->{"files-excluded"} =~ /(?:\A|\G\s+)((?:\\.|[^\\\s])+)/g);
-	    # un-escape
-	    @excluded = map { s/\\(.)/$1/g; s?/+$??; $_ } @excluded;
-
-	    # get list of files contained in the tarball
-	    my @files;
-	    if ( $newfile_base =~ /^(.*)\.(zip|jar)$/ ) {
-		my $files;
-		spawn(exec => ['zipinfo','-1',"$destdir/$newfile_base"],
-		      to_string => \$files,
-		      wait_child => 1);
-		@files = split /^/, $files;
-		chomp @files;
-	    } else {
-		my $files;
-		spawn(exec => ['tar', '-t', '-a', '-f', "$destdir/$newfile_base"],
-		      to_string => \$files,
-		      wait_child => 1);
-		@files = split /^/, $files;
-		chomp @files;
-	    }
-
-	    # find out what to delete
-	    $Text::Glob::strict_leading_dot = 0;
-	    $Text::Glob::strict_wildcard_slash = 0;
-	    my @to_delete;
-	    for my $filename (@files) {
-		my $do_exclude = 0;
-		for my $exclude (@excluded) {
-		    $do_exclude ||=
-			Text::Glob::match_glob("$exclude",     $filename) ||
-			Text::Glob::match_glob("$exclude/",    $filename) ||
-			Text::Glob::match_glob("$exclude/*",   $filename) ||
-			Text::Glob::match_glob("*/$exclude",   $filename) ||
-			Text::Glob::match_glob("*/$exclude/",  $filename) ||
-			Text::Glob::match_glob("*/$exclude/*", $filename);
-		}
-		push @to_delete, $filename if $do_exclude;
-	    }
-	    # ensure files are mentioned before the directory they live in
-	    # (otherwise tar complains)
-	    @to_delete = sort {$b cmp $a}  @to_delete;
-
-	    # actually delete something
-	    if (@to_delete) {
-		$deletecount = scalar(@to_delete);
-		if ( $newfile_base =~ /^(.*)\.(zip|jar)$/ ) {
-		    my $newfile_base_dfsg = "$1${excludesuffix}.$2" ;
-		    copy "$destdir/$newfile_base", "$destdir/$newfile_base_dfsg";
-		    spawn(exec => ['zip','-d','--no-wild',"$destdir/$newfile_base_dfsg", @to_delete],
-			  wait_child => 1);
-		} else {
-		    my $newfile_base_dfsg = "${pkg}_${newversion}${excludesuffix}.orig.tar" ;
-		    $symlink = 'files-excluded'; # prevent symlinking or renaming
-
-		    my $comp = compression_guess_from_file("$destdir/$newfile_base");
-		    unless ($comp) {
-		       uscan_die("Cannot determine compression method of $newfile_base");
-		    }
-		    my ($tarbase) = ($newfile_base =~ $tarbase_regex);
-		    my (undef, $fname) = tempfile(UNLINK => 1);
-		    decompress_archive("$destdir/$newfile_base", $fname);
-		    spawn(exec => ['tar', '--delete', '--file', $fname, @to_delete ]
-			 ,wait_child => 1);
-		    my $suffix = compression_get_property($comp, "file_ext");
-		    compress_archive("$fname", "$destdir/$newfile_base_dfsg.$suffix", $comp);
-		}
-	    } else {
-		print "-- No files to be excluded -- no need for repacking.\n" if $verbose;
-	    }
-	}
-    }
-
-    my ($renamed_base);
-    if ($newfile_base =~ $tarbase_regex) {
-	my $compression = compression_guess_from_file("$destdir/$newfile_base");
-	unless ($compression) {
-	    uscan_die("Cannot determine compression method of $newfile_base");
-	}
-	my $suffix = compression_get_property($compression, "file_ext");
-	$renamed_base = "${pkg}_${newversion}.orig.tar.$suffix";
-	if ($symlink eq 'symlink') {
-	    symlink $newfile_base, "$destdir/$renamed_base";
-	} elsif ($symlink eq 'rename') {
-	    move "$destdir/$newfile_base", "$destdir/$renamed_base";
-	} elsif ($symlink eq 'files-excluded') {
-	    unlink("$destdir/$newfile_base");
-	}
-	if ($verbose) {
-	    print "-- Successfully downloaded updated package $newfile_base\n";
-	    if ($symlink eq 'symlink') {
-		print "    and symlinked $renamed_base to it\n";
-	    } elsif ($symlink eq 'rename') {
-		print "    and renamed it as $renamed_base\n";
-	    } elsif ($symlink eq 'files-excluded') {
-		print "    and removed ${deletecount} files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
-	    }
-	} elsif ($dehs) {
-	    my $msg = "Successfully downloaded updated package $newfile_base";
-	    $dehs_tags{'target'} = "$renamed_base";
-	    if ($symlink eq 'symlink') {
-		$msg .= " and symlinked $renamed_base to it";
-	    } elsif ($symlink eq 'rename') {
-		$msg .= " and renamed it as $renamed_base";
-	    } elsif ($symlink eq 'files-excluded') {
-		$msg .= " and removed ${deletecount} files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
-	    } else {
-		$dehs_tags{'target'} = $newfile_base;
-	    }
-	    dehs_msg($msg);
-	} else {
-	    print "$pkg: Successfully downloaded updated package $newfile_base\n";
-	    if ($symlink eq 'symlink') {
-		print "    and symlinked $renamed_base to it\n";
-	    } elsif ($symlink eq 'rename') {
-		print "    and renamed it as $renamed_base\n";
-	    } elsif ($symlink eq 'files-excluded') {
-		print "    and removed ${deletecount} files from it in ${pkg}_${newversion}${excludesuffix}.orig.tar.$suffix\n";
-	    }
-	}
+    if ($verbose) {
+	print "-- Successfully downloaded updated package $newfile_base\n";
+	print "-- $mk_origtargz_out\n";
+    } elsif ($dehs) {
+	my $msg = "Successfully downloaded updated package $newfile_base\n".
+	          "$mk_origtargz_out\n";
+	$dehs_tags{target} = $target;
+	dehs_msg($msg);
     }
 
     # Do whatever the user wishes to do
     if ($action) {
-	my $usefile = "$destdir/$newfile_base";
 	my @cmd = shellwords($action);
-	if ($symlink =~ /^(symlink|rename)$/ && $renamed_base) {
-	    $usefile = "$destdir/$renamed_base";
-	}
 
 	# Any symlink requests are already handled by uscan
 	if ($action =~ /^uupdate(\s|$)/) {
@@ -1693,9 +1506,9 @@ EOF
 	}
 
 	if ($watch_version > 1) {
-	    push @cmd, ("--upstream-version", "$newversion", "$usefile");
+	    push @cmd, "--upstream-version", $newversion, $target;
 	} else {
-	    push @cmd, ("$usefile", "$newversion");
+	    push @cmd, $target, $newversion;
 	}
 	my $actioncmd = join(" ", @cmd);
 	print "-- Executing user specified script\n     $actioncmd\n" if $verbose;
@@ -2211,83 +2024,8 @@ sub safe_replace($$) {
 	    } else {
 		last;
 	    }
- 	}
+	}
 
 	return 1;
     }
-}
-
-sub get_main_source_dir($$$$) {
-    my ($tempdir, $pkg, $newversion, $excludesuffix) = @_;
-    my $fcount = 0;
-    my $main_source_dir = '';
-    my $any_dir = '';
-    opendir DIR, $tempdir or uscan_die "opendir $tempdir: $!";
-    my @files = readdir DIR;
-    closedir DIR;
-    foreach my $file (@files) {
-	unless ($file =~ /^\.\.?$/) {
-	    $fcount++;
-	    if (-d $tempdir.'/'.$file) {
-		$any_dir = $tempdir . '/' . $file;
-		# check whether there is some dir in upstream source which looks reasonable
-		# If such dir exists, we do not try to undirty the directory structure
-		$main_source_dir = $any_dir if $file =~ /^$pkg\w*$newversion$/i;
-	    }
-	}
-    }
-    if ($fcount == 1 and $main_source_dir) {
-	return $main_source_dir;
-    }
-    if ($fcount == 1 and $any_dir) {
-	# Unusual base dir in tarball - should be rather something like ${pkg}-${newversion}
-	$main_source_dir = $tempdir . '/' . $pkg . '-' . $newversion . $excludesuffix . '.orig';
-	move($any_dir, $main_source_dir) or uscan_die("Unable to move $any_dir directory $main_source_dir\n");
-	return $main_source_dir;
-    }
-    print "-- Dirty tarball found.\n" if $verbose;
-    if ($main_source_dir) { # if tarball is dirty but does contain a $pkg-$newversion dir we will not undirty but leave it as is
-	print "-- No idea how to create proper tarball structure - leaving as is.\n" if $verbose;
-	return $tempdir;
-    }
-    print "-- Move files to subdirectory $pkg-$newversion.\n" if $verbose;
-    $main_source_dir = $tempdir . '/' . $pkg . '-' . $newversion . $excludesuffix . '.orig';
-    mkdir($main_source_dir) or uscan_die("Unable to create temporary source directory $main_source_dir\n");
-    foreach my $file (@files) {
-	unless ($file =~ /^\.\.?$/) {
-	    if ( -d "${tempdir}/$file" ) {
-		# HELP: why can't perl move not move directories????
-		system('mv', "${tempdir}/$file", $main_source_dir);
-	    } else {
-		move("${tempdir}/$file", $main_source_dir) or die("Unable to move ${tempdir}/$file directory $main_source_dir\n");
-	    }
-	}
-    }
-    return $main_source_dir;
-}
-
-sub compress_archive($$$) {
-    my ($from_file, $to_file, $comp) = @_;
-
-    my $cmd = compression_get_property($comp, 'comp_prog');
-    push(@{$cmd}, '-'.compression_get_property($comp, 'default_level'));
-    spawn(exec => $cmd,
-	from_file => $from_file,
-	to_file => $to_file,
-	wait_child => 1);
-    unlink $from_file;
-}
-
-sub decompress_archive($$) {
-    my ($from_file, $to_file) = @_;
-    my $comp = compression_guess_from_file($from_file);
-    unless ($comp) {
-       uscan_die("Cannot determine compression method of $from_file");
-    }
-
-    my $cmd = compression_get_property($comp, 'decomp_prog');
-    spawn(exec => $cmd,
-	from_file => $from_file,
-	to_file => $to_file,
-	wait_child => 1);
 }

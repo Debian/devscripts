@@ -20,7 +20,15 @@ if test "$1" = --installed; then
     shift
 else
     top_srcdir=$(readlink -f "${0%/*}/..")
-    COMMAND="perl -I $top_srcdir $top_srcdir/scripts/uscan.pl --no-conf --repack-compression=xz"
+    if ! [ -x $top_srcdir/scripts/uscan -a -x $top_srcdir/scripts/mk-origtargz ]
+    then
+        echo "Please run make in scripts/"
+	exit 1
+    fi
+    PATH="$top_srcdir/scripts:$PATH"
+    PERLLIB="$top_srcdir"
+    export PERLLIB
+    COMMAND="uscan --no-conf --compression=xz"
 fi
 
 cleanup(){
@@ -77,7 +85,7 @@ END
       python -m SimpleHTTPServer $PORT &
       echo $! > pid )
 
-    (cd $TMPDIR/$PKG ; $COMMAND --repack --repack-compression=$to_comp)
+    (cd $TMPDIR/$PKG ; $COMMAND --repack --compression=$to_comp)
 
     TARBALL=${PKG}_1.orig.tar.$to_comp
     if [ "$from_ext" != "tar.$to_comp" ]
@@ -134,10 +142,10 @@ END
       python -m SimpleHTTPServer $PORT &
       echo $! > pid )
 
-    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND --repack --repack-compression=$to_comp) )
+    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND --repack --compression=$to_comp) )
 
     TARBALL=${PKG}_1.orig.tar.$to_comp
-    assertFalse 'unrepacked zipfile still present' "[ -f $TMPDIR/${PKG}-1.zip ]"
+    assertTrue 'unrepacked zipfile present' "[ -f $TMPDIR/${PKG}-1.zip ]"
     assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
     assertNotNull "pristine tarball is not $to_comp-compressed" \
                   "$( file -L $TMPDIR/$TARBALL | grep "$file_output" )"
@@ -227,44 +235,14 @@ testFileExclusion() {
 
     (cd $TMPDIR/$PKG ; $COMMAND)
 
-    TARBALL=${PKG}_1+dfsg.orig.tar.gz
-    assertFalse 'unrepacked tarfile still present' "[ -f $TMPDIR/${PKG}-1.tar.gz ]"
+    TARBALL=${PKG}_1.orig.tar.gz
+    assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-1.tar.gz ]"
     assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
+    assertFalse 'pristine tarball is a symlink (nothing repacked?)' "[ -L $TMPDIR/$TARBALL ]"
     assertNotNull 'pristine tarball is not gzip-compressed' \
                   "$( file $TMPDIR/$TARBALL | grep 'gzip compressed data' )"
     CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
 
-    helperTestContent
-
-    cleanup
-
-}
-
-# The same, for a zip file
-
-testFileExclusionZip() {
-
-    PKG=foo
-    PORT=8000
-    TMPDIR=$(mktemp -d)
-
-    (
-      cd $TMPDIR
-      helperCreateRepo
-      cat <<END > $PKG/debian/watch
-version=3
-http://localhost:$PORT/$PKG-(\d).zip
-END
-
-      cd repo
-      zip -q -r $PKG-1.zip * .hidden;
-      python -m SimpleHTTPServer $PORT &
-      echo $! > pid )
-
-    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND) 2>&1)
-    assertTrue 'zipfile not downloaded' "[ -f $TMPDIR/$PKG-1.zip ]"
-    assertTrue 'zipfile not copied to +dfsg' "[ -f $TMPDIR/$PKG-1+dfsg.zip ]"
-    CONTENTS="$(zipinfo -1 $TMPDIR/$PKG-1+dfsg.zip)"
     helperTestContent
 
     cleanup
@@ -294,9 +272,8 @@ END
 
     OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND --repack) 2>&1)
 
-    TARBALL=${PKG}_1+dfsg.orig.tar.xz
-    assertFalse 'unrepacked zipfile still present' "[ -f $TMPDIR/${PKG}-1.zip ]"
-    assertFalse 'unrepacked tarfile still present' "[ -f $TMPDIR/${PKG}-1.tar.xz ]"
+    TARBALL=${PKG}_1.orig.tar.xz
+    assertTrue 'unrepacked zipfile not present' "[ -f $TMPDIR/${PKG}-1.zip ]"
     assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
     assertNotNull 'pristine tarball is not xz-compressed' \
                   "$( file $TMPDIR/$TARBALL | grep 'XZ compressed data' )"
