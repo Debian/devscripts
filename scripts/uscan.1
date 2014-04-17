@@ -382,37 +382,35 @@ Do not use PASV mode for FTP connections.
 \fB\-\-timeout\fR \fIN\fR
 Set timeout to N seconds (default 20 seconds).
 .TP
+.B \-\-no\-symlink
+Do not call \fBmk\-origtargz\fR.
+.P
+The following options are passed to \fBmk\-origtargz\fR:
+.RS
+.TP
 .B \-\-symlink
-Make orig.tar.gz symlinks to any downloaded files if their extensions
-are \fI.tar.gz\fR or \fI.tgz\fR.  This is also handled for orig.tar.bz2 (for
-upstream \fI.tar.bz2\fR, \fI.tbz\fR, and \fI.tbz2\fR), orig.tar.lzma (for
-upstream \fI.tar.lzma\fR, \fI.tlz\fR, \fI.tlzm\fR, and \fI.tlzma\fR), and
-orig.tar.xz (for upstream \fI.tar.xz\fR and \fI.txz\fR).  (This is the
-default behaviour.)
+Make \fIorig.tar.gz\fR (with the appropriate extension) symlinks to the
+downloaded files.
+(This is the default behaviour.)
+.TP
+.B \-\-copy
+Instead of symlinking as described above, copy the downloaded files.
 .TP
 .B \-\-rename
-Instead of symlinking, rename the downloaded files to their Debian
-\fIorig.tar.gz\fR, \fIorig.tar.bz2\fR, \fIorig.tar.lzma\fR, or
-\fIorig.tar.xz\fR names as described above.
+Instead of symlinking as described above, rename the downloaded files.
 .TP
 .B \-\-repack
 After having downloaded an lzma tar, xz tar, bzip tar or zip archive,
-repack it to a gzip tar archive, which is still currently required as a
-member of a Debian source package. Does nothing if the downloaded
-archive is not an lzma tar archive, xz tar archive, bzip tar archive or
-a zip archive (i.e. it doesn't match a .tlz, .tlzm, .tlzma, .tar.lzma, .txz,
-\^.tar.xz, .tbz, .tbz2, .tar.bz2 or .zip extension). The unzip package must be
-installed in order to repack .zip archives, the xz-utils package must be
-installed to repack lzma or xz tar archives.
+repack it to a gzip tar archive, if required.
+he \fBunzip\fR package must be installed in order to repack .zip archives, the
+\fBxz-utils\fR package must be installed to repack lzma or xz tar archives.
 .TP
-\fB\-\-repack-compression\fR [ \fBgzip\fR | \fBbzip2\fR | \fBlzma\fR | \fBxz\fR ]
+\fB\-\-compression\fR [ \fBgzip\fR | \fBbzip2\fR | \fBlzma\fR | \fBxz\fR ]
 In the case where the upstream sources are repacked (either because
 \fB\-\-repack\fR option is given or \fIdebian/copyright\fR contains the
 field \fBFiles-Excluded\fR), it is possible to control the compression
 method via the parameter (defaults to \fBgzip\fR).
-.TP
-.B \-\-no\-symlink
-Don't make these symlinks and don't rename the files.
+.RE
 .TP
 .B \-\-dehs
 Use an XML format for output, as required by the DEHS system.
@@ -577,6 +575,7 @@ avoid this behaviour, change the non-version-number groups to be
 .BR dpkg (1),
 .BR perlre (1),
 .BR uupdate (1),
+.BR mk\-origtargz (1),
 .BR devscripts.conf (5)
 .SH AUTHOR
 The original version of \fBuscan\fR was written by Christoph Lameter
