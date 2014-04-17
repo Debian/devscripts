@@ -23,13 +23,13 @@
 
 =head1 NAME
 
-mk-origtargz - Rename upstream tarball, optionally changing the compression and removing unwanted files.
+mk-origtargz - rename upstream tarball, optionally changing the compression and removing unwanted files
 
 =head1 SYNOPSIS
 
 =over
 
-=item B<mk-origtargz> [I<OPTIONS>] F<foo-1.0.tar.gz>
+=item B<mk-origtargz> [I<options>] F<foo-1.0.tar.gz>
 
 =item B<mk-origtargz> B<--help>
 
@@ -73,12 +73,12 @@ The default is to use the upstream portion of the version of the first entry in 
 
 =item B<--exclude-file> I<glob>
 
-Remove files matching the given glob from the tarball, as if it was listed in
-B<Fiels-Excluded>.
+Remove files matching the given I<glob> from the tarball, as if it was listed in
+B<Files-Excluded>.
 
 =item B<--copyright-file> I<filename>
 
-Remove files matching the patterns found in I<file>, which should have the format of a Debian F<copyright> file. Errors parsing that file are silently ignored, exactly as it is the case with F<debian/copyright>.
+Remove files matching the patterns found in I<filename>, which should have the format of a Debian F<copyright> file. Errors parsing that file are silently ignored, exactly as it is the case with F<debian/copyright>.
 
 Both the B<--exclude-file> and B<--copyright-file> options amend the list of
 patterns found in F<debian/copyright>. If you do not want to read that file,
@@ -107,7 +107,7 @@ Make the resulting file a copy of the original file (unless it has to be modifie
 
 =item B<--rename>
 
-Rename the original file (This is the default behaviour.)
+Rename the original file. (This is the default behaviour.)
 
 If the file has to be modified (because it is a B<zip> file, because of B<--repack> or B<Files-Excluded>), this implies that the original file is deleted afterwards.
 
@@ -118,7 +118,7 @@ B<--compression>), recompress it.
 
 =item B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]
 
-If B<--repack> is used, or if the given file is a B<zip> file, ensure that the resulting file is compressed using the given scheme. The default is B<gz>.
+If B<--repack> is used, or if the given file is a B<zip> file, ensure that the resulting file is compressed using the given scheme. The default is B<gzip>.
 
 =item B<-C>, B<--directory> I<directory>
 
