@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2014-04-17 15:34-0400\n"
+"POT-Creation-Date: 2014-04-17 18:29-0400\n"
 "PO-Revision-Date: 2014-04-17 13:52-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -363,7 +363,7 @@ msgstr ""
 #: ../scripts/origtargz.pl:156 ../scripts/plotchangelog.1:124
 #: ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:121
 #: ../scripts/rmadison.pl:333 ../scripts/sadt.pod:69
-#: ../scripts/tagpending.pl:148 ../scripts/uscan.1:576
+#: ../scripts/tagpending.pl:148 ../scripts/uscan.1:574
 #: ../scripts/uupdate.1:170 ../doc/what-patch.1:35
 #: ../scripts/who-permits-upload.pl:161 ../scripts/wnpp-alert.1:29
 #: ../scripts/wnpp-check.1:23 ../scripts/devscripts.conf.5:54
@@ -417,7 +417,7 @@ msgstr ""
 #: ../scripts/origtargz.pl:160 ../scripts/plotchangelog.1:126
 #: ../scripts/pts-subscribe.1:56 ../scripts/rc-alert.1:125
 #: ../scripts/rmadison.pl:337 ../scripts/svnpath.pl:93
-#: ../scripts/transition-check.pl:81 ../scripts/uscan.1:581
+#: ../scripts/transition-check.pl:81 ../scripts/uscan.1:580
 #: ../scripts/uupdate.1:177 ../scripts/whodepends.1:19
 #: ../scripts/who-uploads.1:71 ../scripts/who-permits-upload.pl:156
 #: ../scripts/wnpp-alert.1:31 ../scripts/wnpp-check.1:33
@@ -1250,7 +1250,7 @@ msgstr ""
 #: ../scripts/dpkg-depcheck.1:92 ../scripts/dscverify.1:24
 #: ../scripts/grep-excuses.1:14 ../scripts/licensecheck.pl:89
 #: ../scripts/mass-bug.pl:112 ../scripts/nmudiff.1:69
-#: ../scripts/rmadison.pl:286 ../scripts/uscan.1:474 ../scripts/uupdate.1:78
+#: ../scripts/rmadison.pl:286 ../scripts/uscan.1:472 ../scripts/uupdate.1:78
 #: ../scripts/who-uploads.1:40
 #, no-wrap
 msgid "B<--no-conf>, B<--noconf>"
@@ -1263,7 +1263,7 @@ msgstr "B<--no-conf>, B<--noconf>"
 #: ../scripts/debsign.1:100 ../scripts/debuild.1:225
 #: ../scripts/dpkg-depcheck.1:96 ../scripts/dscverify.1:28
 #: ../scripts/grep-excuses.1:18 ../scripts/mass-bug.pl:114
-#: ../scripts/nmudiff.1:73 ../scripts/uscan.1:478 ../scripts/uupdate.1:82
+#: ../scripts/nmudiff.1:73 ../scripts/uscan.1:476 ../scripts/uupdate.1:82
 #: ../scripts/who-uploads.1:44
 msgid ""
 "Do not read any configuration files.  This can only be used as the first "
@@ -2844,7 +2844,7 @@ msgstr ""
 #: ../scripts/licensecheck.pl:96 ../scripts/mass-bug.pl:132
 #: ../scripts/nmudiff.1:79 ../scripts/plotchangelog.1:106
 #: ../scripts/pts-subscribe.1:42 ../scripts/rmadison.pl:295
-#: ../scripts/uscan.1:484 ../scripts/uupdate.1:88 ../scripts/who-uploads.1:50
+#: ../scripts/uscan.1:482 ../scripts/uupdate.1:88 ../scripts/who-uploads.1:50
 #, no-wrap
 msgid "CONFIGURATION VARIABLES"
 msgstr "VARIABLES DE CONFIGURATION"
@@ -3275,7 +3275,7 @@ msgstr "Exécuter en mode débogue."
 #: ../scripts/debclean.1:84 ../scripts/diff2patches.1:22
 #: ../scripts/grep-excuses.1:22 ../scripts/mass-bug.pl:117
 #: ../scripts/nmudiff.1:73 ../scripts/plotchangelog.1:92
-#: ../scripts/uscan.1:478
+#: ../scripts/uscan.1:476
 #, no-wrap
 msgid "B<--help>"
 msgstr "B<--help>"
@@ -3294,7 +3294,7 @@ msgstr "Afficher les informations sur l'utilisation."
 #: ../scripts/grep-excuses.1:25 ../scripts/mass-bug.pl:121
 #: ../scripts/nmudiff.1:76 ../scripts/plotchangelog.1:95
 #: ../scripts/pts-subscribe.1:31 ../scripts/rmadison.pl:282
-#: ../scripts/uscan.1:481 ../scripts/uupdate.1:85 ../scripts/who-uploads.1:47
+#: ../scripts/uscan.1:479 ../scripts/uupdate.1:85 ../scripts/who-uploads.1:47
 #, no-wrap
 msgid "B<--version>"
 msgstr "B<--version>"
@@ -3420,7 +3420,7 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/chdist.pl:51 ../scripts/deb-reversion.dbk:239
-#: ../scripts/mass-bug.pl:123 ../scripts/uscan.1:484
+#: ../scripts/mass-bug.pl:123 ../scripts/uscan.1:482
 msgid "Display version information."
 msgstr "Afficher les informations sur la version."
 
@@ -3768,7 +3768,7 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/checkbashisms.1:53 ../scripts/dscextract.1:24
-#: ../scripts/uscan.1:547 ../scripts/wnpp-check.1:29
+#: ../scripts/uscan.1:545 ../scripts/wnpp-check.1:29
 #, no-wrap
 msgid "1"
 msgstr "1"
@@ -6003,7 +6003,7 @@ msgstr ""
 #. type: TP
 #: ../scripts/debc.1:77 ../scripts/debchange.1:369 ../scripts/debclean.1:69
 #: ../scripts/debi.1:87 ../scripts/debrelease.1:87 ../scripts/debuild.1:276
-#: ../scripts/uscan.1:463
+#: ../scripts/uscan.1:461
 #, no-wrap
 msgid "B<--check-dirname-level> I<N>"
 msgstr "B<--check-dirname-level> I<N>"
@@ -6012,8 +6012,8 @@ msgstr "B<--check-dirname-level> I<N>"
 #: ../scripts/debc.1:81 ../scripts/debc.1:85 ../scripts/debclean.1:73
 #: ../scripts/debclean.1:77 ../scripts/debi.1:91 ../scripts/debi.1:95
 #: ../scripts/debrelease.1:91 ../scripts/debrelease.1:95
-#: ../scripts/debuild.1:280 ../scripts/debuild.1:284 ../scripts/uscan.1:467
-#: ../scripts/uscan.1:471
+#: ../scripts/debuild.1:280 ../scripts/debuild.1:284 ../scripts/uscan.1:465
+#: ../scripts/uscan.1:469
 msgid ""
 "See the above section B<Directory name checking> for an explanation of this "
 "option."
@@ -6024,7 +6024,7 @@ msgstr ""
 #. type: TP
 #: ../scripts/debc.1:81 ../scripts/debchange.1:373 ../scripts/debclean.1:73
 #: ../scripts/debi.1:91 ../scripts/debrelease.1:91 ../scripts/debuild.1:280
-#: ../scripts/uscan.1:467
+#: ../scripts/uscan.1:465
 #, no-wrap
 msgid "B<--check-dirname-regex> I<regex>"
 msgstr "B<--check-dirname-regex> I<regex>"
@@ -6600,7 +6600,7 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/debchange.1:213 ../scripts/mk-origtargz.pl:60
-#: ../scripts/uscan.1:422
+#: ../scripts/uscan.1:420
 #, no-wrap
 msgid "B<--package> I<package>"
 msgstr "B<--package> I<paquet>"
@@ -10732,7 +10732,7 @@ msgstr ""
 
 #. type: SH
 #: ../scripts/debsnap.1:86 ../scripts/dscextract.1:20
-#: ../scripts/transition-check.pl:54 ../scripts/uscan.1:539
+#: ../scripts/transition-check.pl:54 ../scripts/uscan.1:537
 #: ../scripts/wnpp-check.1:25
 #, no-wrap
 msgid "EXIT STATUS"
@@ -14223,7 +14223,7 @@ msgstr ""
 "trouver directement dans I<.debian.tar.gz/bz2>)."
 
 #. type: TP
-#: ../scripts/dscextract.1:21 ../scripts/uscan.1:543
+#: ../scripts/dscextract.1:21 ../scripts/uscan.1:541
 #: ../scripts/wnpp-check.1:26
 #, no-wrap
 msgid "0"
@@ -14337,7 +14337,7 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/dscverify.1:32 ../scripts/plotchangelog.1:78
-#: ../scripts/uscan.1:450
+#: ../scripts/uscan.1:448
 #, no-wrap
 msgid "B<--verbose>"
 msgstr "B<--verbose>"
@@ -15630,7 +15630,7 @@ msgstr ""
 "options B<--copy>, B<--rename> et B<--symlink> s’excluent mutuellement."
 
 #. type: TP
-#: ../scripts/mk-origtargz.pl:96 ../scripts/uscan.1:384
+#: ../scripts/mk-origtargz.pl:96 ../scripts/uscan.1:390
 #, no-wrap
 msgid "B<--symlink>"
 msgstr "B<--symlink>"
@@ -15654,8 +15654,9 @@ msgstr ""
 "de B<--repack> ou B<Files-Excluded>), cette option se comporte comme B<--"
 "copy>."
 
-#. type: =item
-#: ../scripts/mk-origtargz.pl:104
+#. type: TP
+#: ../scripts/mk-origtargz.pl:104 ../scripts/uscan.1:395
+#, no-wrap
 msgid "B<--copy>"
 msgstr "B<--copy>"
 
@@ -15669,14 +15670,16 @@ msgstr ""
 "s’il a été modifié)."
 
 #. type: TP
-#: ../scripts/mk-origtargz.pl:108 ../scripts/uscan.1:392
+#: ../scripts/mk-origtargz.pl:108 ../scripts/uscan.1:398
 #, no-wrap
 msgid "B<--rename>"
 msgstr "B<--rename>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:110
-msgid "Rename the original file. (This is the default behaviour.)"
+#, fuzzy
+#| msgid "Rename the original file. (This is the default behaviour.)"
+msgid "Rename the original file."
 msgstr "Renommer le fichier d’origine (c'est le comportement par défaut)."
 
 #. type: textblock
@@ -15691,7 +15694,7 @@ msgstr ""
 "fichier d’origine à la fin."
 
 #. type: TP
-#: ../scripts/mk-origtargz.pl:114 ../scripts/uscan.1:397
+#: ../scripts/mk-origtargz.pl:114 ../scripts/uscan.1:401
 #, no-wrap
 msgid "B<--repack>"
 msgstr "B<--repack>"
@@ -15705,8 +15708,9 @@ msgstr ""
 "Si le fichier donné n’est pas compressé au format voulu (consultez B<--"
 "compression>), le recompresser."
 
-#. type: =item
-#: ../scripts/mk-origtargz.pl:119
+#. type: TP
+#: ../scripts/mk-origtargz.pl:119 ../scripts/uscan.1:407
+#, no-wrap
 msgid "B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]"
 msgstr "B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]"
 
@@ -19138,44 +19142,66 @@ msgstr "B<--timeout> I<N>"
 msgid "Set timeout to N seconds (default 20 seconds)."
 msgstr "Définir le temps d'attente à N secondes (20 secondes par défaut)."
 
-#. type: Plain text
-#: ../scripts/uscan.1:392
-msgid ""
-"Make orig.tar.gz symlinks to any downloaded files if their extensions are I<."
-"tar.gz> or I<.tgz>.  This is also handled for orig.tar.bz2 (for upstream I<."
-"tar.bz2>, I<.tbz>, and I<.tbz2>), orig.tar.lzma (for upstream I<.tar.lzma>, "
-"I<.tlz>, I<.tlzm>, and I<.tlzma>), and orig.tar.xz (for upstream I<.tar.xz> "
-"and I<.txz>).  (This is the default behaviour.)"
-msgstr ""
-"Faire des liens symboliques orig.tar.gz vers les fichiers téléchargés s'ils "
-"ont des extensions I<.tar.gz> ou I<.tgz>. Cela fonctionne aussi pour orig."
-"tar.bz2 (pour les fichiers amont en I<.tar.bz2>, I<.tbz> et I<.tbz2>), orig."
-"tar.lzma (pour les fichiers amont en I<.tar.lzma>, I<.tlz>, I<.tlzm> et I<."
-"tlzma>) et orig.tar.xz (pour les fichiers amont en I<.tar.xz> et I<.txz>). "
-"C'est le comportement par défaut."
+#. type: TP
+#: ../scripts/uscan.1:384 ../scripts/uupdate.1:74
+#, no-wrap
+msgid "B<--no-symlink>"
+msgstr "B<--no-symlink>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:397
+#: ../scripts/uscan.1:387
+#, fuzzy
+#| msgid "I<mk-origtargz>(1)"
+msgid "Do not call B<mk-origtargz>."
+msgstr "I<mk-origtargz>(1)"
+
+#. type: Plain text
+#: ../scripts/uscan.1:389
+#, fuzzy
+#| msgid "The following options are available:"
+msgid "The following options are passed to B<mk-origtargz>:"
+msgstr "Les options suivantes sont disponibles :"
+
+#. type: Plain text
+#: ../scripts/uscan.1:395
+#, fuzzy
+#| msgid ""
+#| "Make the resulting file a symlink to the given original file. (This is "
+#| "the default behaviour.)"
 msgid ""
-"Instead of symlinking, rename the downloaded files to their Debian I<orig."
-"tar.gz>, I<orig.tar.bz2>, I<orig.tar.lzma>, or I<orig.tar.xz> names as "
-"described above."
+"Make I<orig.tar.gz> (with the appropriate extension) symlinks to the "
+"downloaded files.  (This is the default behaviour.)"
 msgstr ""
-"Au lieu de créer des liens symboliques, renommer les fichiers téléchargés "
-"avec leur nom Debian I<orig.tar.gz>, I<orig.tar.bz2>, I<orig.tar.lzma> ou "
-"I<orig.tar.xz> conformément à la description ci-dessus."
+"Faire du fichier résultant un lien symbolique vers le fichier d’origine "
+"donné (c'est le comportement par défaut)."
+
+#. type: Plain text
+#: ../scripts/uscan.1:398
+msgid "Instead of symlinking as described above, copy the downloaded files."
+msgstr ""
+
+#. type: Plain text
+#: ../scripts/uscan.1:401
+msgid "Instead of symlinking as described above, rename the downloaded files."
+msgstr ""
 
 #. type: Plain text
 #: ../scripts/uscan.1:407
+#, fuzzy
+#| msgid ""
+#| "After having downloaded an lzma tar, xz tar, bzip tar or zip archive, "
+#| "repack it to a gzip tar archive, which is still currently required as a "
+#| "member of a Debian source package. Does nothing if the downloaded archive "
+#| "is not an lzma tar archive, xz tar archive, bzip tar archive or a zip "
+#| "archive (i.e. it doesn't match a .tlz, .tlzm, .tlzma, .tar.lzma, .txz, "
+#| "\\^.tar.xz, .tbz, .tbz2, .tar.bz2 or .zip extension). The unzip package "
+#| "must be installed in order to repack .zip archives, the xz-utils package "
+#| "must be installed to repack lzma or xz tar archives."
 msgid ""
 "After having downloaded an lzma tar, xz tar, bzip tar or zip archive, repack "
-"it to a gzip tar archive, which is still currently required as a member of a "
-"Debian source package. Does nothing if the downloaded archive is not an lzma "
-"tar archive, xz tar archive, bzip tar archive or a zip archive (i.e. it "
-"doesn't match a .tlz, .tlzm, .tlzma, .tar.lzma, .txz, \\^.tar.xz, .tbz, ."
-"tbz2, .tar.bz2 or .zip extension). The unzip package must be installed in "
-"order to repack .zip archives, the xz-utils package must be installed to "
-"repack lzma or xz tar archives."
+"it to a gzip tar archive, if required.  The B<unzip> package must be "
+"installed in order to repack .zip archives, the B<xz-utils> package must be "
+"installed to repack lzma or xz tar archives."
 msgstr ""
 "Après avoir téléchargé une archive tar compressée avec lzma ou xz ou bzip ou "
 "une archive zip, la rempaqueter dans une archive tar compressée avec gzip, "
@@ -19186,12 +19212,6 @@ msgstr ""
 "bz2 ou .zip). Le paquet unzip doit être installé pour rempaqueter les "
 "archives .zip, le paquet xz-utils doit être installé pour rempaqueter les "
 "archives tar compressées avec lzma ou xz."
-
-#. type: TP
-#: ../scripts/uscan.1:407
-#, no-wrap
-msgid "B<--repack-compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]"
-msgstr "B<--repack-compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]"
 
 #. type: Plain text
 #: ../scripts/uscan.1:413
@@ -19207,35 +19227,24 @@ msgstr ""
 "paramètre I<comp> (B<gzip> par défaut)."
 
 #. type: TP
-#: ../scripts/uscan.1:413 ../scripts/uupdate.1:74
-#, no-wrap
-msgid "B<--no-symlink>"
-msgstr "B<--no-symlink>"
-
-#. type: Plain text
-#: ../scripts/uscan.1:416
-msgid "Don't make these symlinks and don't rename the files."
-msgstr "Ne pas créer ces liens symboliques et ne pas renommer les fichiers."
-
-#. type: TP
-#: ../scripts/uscan.1:416
+#: ../scripts/uscan.1:414
 #, no-wrap
 msgid "B<--dehs>"
 msgstr "B<--dehs>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:419
+#: ../scripts/uscan.1:417
 msgid "Use an XML format for output, as required by the DEHS system."
 msgstr "Utiliser le format XML pour la sortie, requis par le système DEHS."
 
 #. type: TP
-#: ../scripts/uscan.1:419
+#: ../scripts/uscan.1:417
 #, no-wrap
 msgid "B<--no-dehs>"
 msgstr "B<--no-dehs>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:422
+#: ../scripts/uscan.1:420
 msgid ""
 "Use the traditional uscan output format.  (This is the default behaviour.)"
 msgstr ""
@@ -19243,7 +19252,7 @@ msgstr ""
 "par défaut)."
 
 #. type: Plain text
-#: ../scripts/uscan.1:431
+#: ../scripts/uscan.1:429
 msgid ""
 "Specify the name of the package to check for rather than examining I<debian/"
 "changelog>; this requires the B<--upstream-version> (unless a version is "
@@ -19260,13 +19269,13 @@ msgstr ""
 "(et B<--dehs>)."
 
 #. type: TP
-#: ../scripts/uscan.1:431
+#: ../scripts/uscan.1:429
 #, no-wrap
 msgid "B<--upstream-version> I<upstream-version>"
 msgstr "B<--upstream-version> I<version-amont>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:436
+#: ../scripts/uscan.1:434
 msgid ""
 "Specify the current upstream version rather than examine the I<watch> file "
 "or I<changelog> to determine it.  This is ignored if a directory scan is "
@@ -19277,13 +19286,13 @@ msgstr ""
 "de répertoire est fait et que plus d'un fichier I<watch> est trouvé."
 
 #. type: TP
-#: ../scripts/uscan.1:436
+#: ../scripts/uscan.1:434
 #, no-wrap
 msgid "B<--watchfile> I<watchfile>"
 msgstr "B<--watchfile> I<watchfile>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:443
+#: ../scripts/uscan.1:441
 msgid ""
 "Specify the I<watchfile> rather than perform a directory scan to determine "
 "it.  If this option is used without B<--package>, then B<uscan> must be "
@@ -19297,13 +19306,13 @@ msgstr ""
 "l'arborescence)."
 
 #. type: TP
-#: ../scripts/uscan.1:443
+#: ../scripts/uscan.1:441
 #, no-wrap
 msgid "B<--download-version> I<version>"
 msgstr "B<--download-version> I<version>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:447
+#: ../scripts/uscan.1:445
 msgid ""
 "Specify the version which the upstream release must match in order to be "
 "considered, rather than using the release with the highest version."
@@ -19312,40 +19321,40 @@ msgstr ""
 "de version le plus important."
 
 #. type: TP
-#: ../scripts/uscan.1:447
+#: ../scripts/uscan.1:445
 #, no-wrap
 msgid "B<--download-current-version>"
 msgstr "B<--download-current-version>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:450
+#: ../scripts/uscan.1:448
 msgid "Download the currently packaged version"
 msgstr "Télécharger la version du paquet actuel"
 
 #. type: Plain text
-#: ../scripts/uscan.1:453
+#: ../scripts/uscan.1:451
 msgid "Give verbose output."
 msgstr "Donner une sortie bavarde."
 
 #. type: TP
-#: ../scripts/uscan.1:453
+#: ../scripts/uscan.1:451
 #, no-wrap
 msgid "B<--no-verbose>"
 msgstr "B<--no-verbose>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:456
+#: ../scripts/uscan.1:454
 msgid "Don't give verbose output.  (This is the default behaviour.)"
 msgstr "Ne pas donner de sortie bavarde (c'est le comportement par défaut)."
 
 #. type: TP
-#: ../scripts/uscan.1:456
+#: ../scripts/uscan.1:454
 #, no-wrap
 msgid "B<--no-exclusion>"
 msgstr "B<--no-exclusion>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:460
+#: ../scripts/uscan.1:458
 msgid ""
 "Do not automatically exclude files mentioned in I<debian/copyright> field "
 "B<Files-Excluded>"
@@ -19354,37 +19363,37 @@ msgstr ""
 "Excluded> de I<debian/copyright>."
 
 #. type: TP
-#: ../scripts/uscan.1:460
+#: ../scripts/uscan.1:458
 #, no-wrap
 msgid "B<--debug>"
 msgstr "B<--debug>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:463
+#: ../scripts/uscan.1:461
 msgid "Dump the downloaded web pages to stdout for debugging your watch file."
 msgstr ""
 "Afficher les pages web téléchargées sur la sortie standard afin de déboguer "
 "le fichier « watch »."
 
 #. type: TP
-#: ../scripts/uscan.1:471
+#: ../scripts/uscan.1:469
 #, no-wrap
 msgid "B<--user-agent>, B<--useragent>"
 msgstr "B<--user-agent>, B<--useragent>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:474
+#: ../scripts/uscan.1:472
 msgid "Override the default user agent header."
 msgstr "Utiliser un champ « user agent » différent de celui par défaut."
 
 #. type: Plain text
-#: ../scripts/uscan.1:481
+#: ../scripts/uscan.1:479
 msgid "Give brief usage information."
 msgstr "Afficher un bref message d'aide."
 
 # NOTE: presque identique à un autre ?
 #. type: Plain text
-#: ../scripts/uscan.1:491
+#: ../scripts/uscan.1:489
 msgid ""
 "The two configuration files I</etc/devscripts.conf> and I<~/.devscripts> are "
 "sourced by a shell in that order to set configuration variables.  These may "
@@ -19403,13 +19412,13 @@ msgstr ""
 "actuellement identifiées sont :"
 
 #. type: TP
-#: ../scripts/uscan.1:491
+#: ../scripts/uscan.1:489
 #, no-wrap
 msgid "B<USCAN_DOWNLOAD>"
 msgstr "B<USCAN_DOWNLOAD>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:496
+#: ../scripts/uscan.1:494
 msgid ""
 "If this is set to I<no>, then newer upstream files will not be downloaded; "
 "this is equivalent to the B<--report> or B<--no-download> options."
@@ -19419,13 +19428,13 @@ msgstr ""
 "download>."
 
 #. type: TP
-#: ../scripts/uscan.1:496
+#: ../scripts/uscan.1:494
 #, no-wrap
 msgid "B<USCAN_PASV>"
 msgstr "B<USCAN_PASV>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:502
+#: ../scripts/uscan.1:500
 msgid ""
 "If this is set to I<yes> or I<no>, this will force FTP connections to use "
 "PASV mode or not to, respectively.  If this is set to I<default>, then "
@@ -19438,13 +19447,13 @@ msgstr ""
 "principalement sur la variable d'environnement B<FTP_PASSIVE>)."
 
 #. type: TP
-#: ../scripts/uscan.1:502
+#: ../scripts/uscan.1:500
 #, no-wrap
 msgid "B<USCAN_TIMEOUT>"
 msgstr "B<USCAN_TIMEOUT>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:506
+#: ../scripts/uscan.1:504
 msgid ""
 "If set to a number I<N>, then set the timeout to I<N> seconds.  This is "
 "equivalent to the B<--timeout> option."
@@ -19453,13 +19462,13 @@ msgstr ""
 "à I<N> secondes. C'est équivalent à l'option B<--timeout>."
 
 #. type: TP
-#: ../scripts/uscan.1:506
+#: ../scripts/uscan.1:504
 #, no-wrap
 msgid "B<USCAN_SYMLINK>"
 msgstr "B<USCAN_SYMLINK>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:513
+#: ../scripts/uscan.1:511
 msgid ""
 "If this is set to I<no>, then a pkg_version.orig.tar.{gz|bz2|lzma|xz} "
 "symlink will not be made (equivalent to the B<--no-symlink> option).  If it "
@@ -19474,13 +19483,13 @@ msgstr ""
 "l'option B<--rename>)."
 
 #. type: TP
-#: ../scripts/uscan.1:513
+#: ../scripts/uscan.1:511
 #, no-wrap
 msgid "B<USCAN_DEHS_OUTPUT>"
 msgstr "B<USCAN_DEHS_OUTPUT>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:517
+#: ../scripts/uscan.1:515
 msgid ""
 "If this is set to I<yes>, then DEHS-style output will be used.  This is "
 "equivalent to the B<--dehs> option."
@@ -19489,13 +19498,13 @@ msgstr ""
 "l'option B<--dehs> était utilisée."
 
 #. type: TP
-#: ../scripts/uscan.1:517
+#: ../scripts/uscan.1:515
 #, no-wrap
 msgid "B<USCAN_VERBOSE>"
 msgstr "B<USCAN_VERBOSE>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:521
+#: ../scripts/uscan.1:519
 msgid ""
 "If this is set to I<yes>, then verbose output will be given.  This is "
 "equivalent to the B<--verbose> option."
@@ -19504,13 +19513,13 @@ msgstr ""
 "l'option B<--verbose> était utilisée."
 
 #. type: TP
-#: ../scripts/uscan.1:521
+#: ../scripts/uscan.1:519
 #, no-wrap
 msgid "B<USCAN_USER_AGENT>"
 msgstr "B<USCAN_USER_AGENT>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:525
+#: ../scripts/uscan.1:523
 msgid ""
 "If set, the specified user agent string will be used in place of the "
 "default.  This is equivalent to the B<--user-agent> option."
@@ -19520,13 +19529,13 @@ msgstr ""
 "équivalent à l'option B<--user-agent>."
 
 #. type: TP
-#: ../scripts/uscan.1:525
+#: ../scripts/uscan.1:523
 #, no-wrap
 msgid "B<USCAN_DESTDIR>"
 msgstr "B<USCAN_DESTDIR>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:529
+#: ../scripts/uscan.1:527
 msgid ""
 "If set, the downloaded files will be placed in this directory.  This is "
 "equivalent to the B<--destdir> option."
@@ -19535,13 +19544,13 @@ msgstr ""
 "seront placés. C'est équivalent à l'option B<--destdir>."
 
 #. type: TP
-#: ../scripts/uscan.1:529
+#: ../scripts/uscan.1:527
 #, no-wrap
 msgid "B<USCAN_REPACK>"
 msgstr "B<USCAN_REPACK>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:534
+#: ../scripts/uscan.1:532
 msgid ""
 "If this is set to I<yes>, then after having downloaded a bzip tar, lzma tar, "
 "xz tar, or zip archive, B<uscan> will repack it to a gzip tar.  This is "
@@ -19552,13 +19561,13 @@ msgstr ""
 "archive tar compressée avec gzip. C'est équivalent à l'option B<--repack>."
 
 #. type: TP
-#: ../scripts/uscan.1:534
+#: ../scripts/uscan.1:532
 #, no-wrap
 msgid "B<USCAN_EXCLUSION>"
 msgstr "B<USCAN_EXCLUSION>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:539
+#: ../scripts/uscan.1:537
 msgid ""
 "If this is set to I<no>, files mentioned in the field B<Files-Excluded> of "
 "I<debian/copyright> will be ignored and no exclusion of files will be "
@@ -19569,7 +19578,7 @@ msgstr ""
 "fichiers ne sera tentée. C'est équivalent à l'option B<--no-exclusion>."
 
 #. type: Plain text
-#: ../scripts/uscan.1:543
+#: ../scripts/uscan.1:541
 msgid ""
 "The exit status gives some indication of whether a newer version was found "
 "or not; one is advised to read the output to determine exactly what happened "
@@ -19580,7 +19589,7 @@ msgstr ""
 "et pour voir s'il n'y a pas eu d'avertissement."
 
 #. type: Plain text
-#: ../scripts/uscan.1:547
+#: ../scripts/uscan.1:545
 msgid ""
 "Either B<--help> or B<--version> was used, or for some I<watch> file which "
 "was examined, a newer upstream version was located."
@@ -19589,7 +19598,7 @@ msgstr ""
 "nouvelle version amont a été trouvée pour un des fichiers I<watch> examinés."
 
 #. type: Plain text
-#: ../scripts/uscan.1:551
+#: ../scripts/uscan.1:549
 msgid ""
 "No newer upstream versions were located for any of the I<watch> files "
 "examined."
@@ -19598,13 +19607,13 @@ msgstr ""
 "examinés."
 
 #. type: SH
-#: ../scripts/uscan.1:551
+#: ../scripts/uscan.1:549
 #, no-wrap
 msgid "HISTORY AND UPGRADING"
 msgstr "HISTORIQUE ET MISE À NIVEAU"
 
 #. type: Plain text
-#: ../scripts/uscan.1:555
+#: ../scripts/uscan.1:553
 msgid ""
 "This section briefly describes the backwards-incompatible I<watch> file "
 "features which have been added in each I<watch> file version, and the first "
@@ -19616,13 +19625,13 @@ msgstr ""
 "comprenait."
 
 #. type: TP
-#: ../scripts/uscan.1:555
+#: ../scripts/uscan.1:553
 #, no-wrap
 msgid "I<Pre-version 2>"
 msgstr "I<Versions antérieures à 2>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:560
+#: ../scripts/uscan.1:558
 msgid ""
 "The I<watch> file syntax was significantly different in those days.  Don't "
 "use it.  If you are upgrading from a pre-version 2 I<watch> file, you are "
@@ -19634,13 +19643,13 @@ msgstr ""
 "recommencer à zéro."
 
 #. type: TP
-#: ../scripts/uscan.1:560
+#: ../scripts/uscan.1:558
 #, no-wrap
 msgid "I<Version 2>"
 msgstr "I<Version 2>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:564
+#: ../scripts/uscan.1:562
 msgid ""
 "devscripts version 2.6.90: The first incarnation of the current style of "
 "I<watch> files."
@@ -19649,13 +19658,13 @@ msgstr ""
 "fichier I<watch>."
 
 #. type: TP
-#: ../scripts/uscan.1:564
+#: ../scripts/uscan.1:562
 #, no-wrap
 msgid "I<Version 3>"
 msgstr "I<Version 3>"
 
 #. type: Plain text
-#: ../scripts/uscan.1:570
+#: ../scripts/uscan.1:568
 msgid ""
 "devscripts version 2.8.12: Introduced the following: correct handling of "
 "regex special characters in the path part, directory/path pattern matching, "
@@ -19669,7 +19678,7 @@ msgstr ""
 "modification des liens."
 
 #. type: Plain text
-#: ../scripts/uscan.1:576
+#: ../scripts/uscan.1:574
 msgid ""
 "If you are upgrading from version 2, the key incompatibility is if you have "
 "multiple groups in the pattern part; whereas only the first one would be "
@@ -19685,12 +19694,16 @@ msgstr ""
 "groupe ordinaire (...)."
 
 #. type: Plain text
-#: ../scripts/uscan.1:581
-msgid "B<dpkg>(1), B<perlre>(1), B<uupdate>(1), B<devscripts.conf>(5)"
+#: ../scripts/uscan.1:580
+#, fuzzy
+#| msgid "B<dpkg>(1), B<perlre>(1), B<uupdate>(1), B<devscripts.conf>(5)"
+msgid ""
+"B<dpkg>(1), B<mk-origtargz>(1), B<perlre>(1), B<uupdate>(1), B<devscripts."
+"conf>(5)"
 msgstr "B<dpkg>(1), B<perlre>(1), B<uupdate>(1), B<devscripts.conf>(5)"
 
 #. type: Plain text
-#: ../scripts/uscan.1:586
+#: ../scripts/uscan.1:585
 msgid ""
 "The original version of B<uscan> was written by Christoph Lameter "
 "E<lt>clameter@debian.orgE<gt>.  Significant improvements, changes and "
@@ -21186,6 +21199,35 @@ msgid ""
 msgstr ""
 "Cette page de manuel a été écrite pour le paquet B<devscripts> par le "
 "responsable du paquet, Julian Gilbey E<lt>jdg@debian.orgE<gt>."
+
+#~ msgid ""
+#~ "Make orig.tar.gz symlinks to any downloaded files if their extensions are "
+#~ "I<.tar.gz> or I<.tgz>.  This is also handled for orig.tar.bz2 (for "
+#~ "upstream I<.tar.bz2>, I<.tbz>, and I<.tbz2>), orig.tar.lzma (for upstream "
+#~ "I<.tar.lzma>, I<.tlz>, I<.tlzm>, and I<.tlzma>), and orig.tar.xz (for "
+#~ "upstream I<.tar.xz> and I<.txz>).  (This is the default behaviour.)"
+#~ msgstr ""
+#~ "Faire des liens symboliques orig.tar.gz vers les fichiers téléchargés "
+#~ "s'ils ont des extensions I<.tar.gz> ou I<.tgz>. Cela fonctionne aussi "
+#~ "pour orig.tar.bz2 (pour les fichiers amont en I<.tar.bz2>, I<.tbz> et I<."
+#~ "tbz2>), orig.tar.lzma (pour les fichiers amont en I<.tar.lzma>, I<.tlz>, "
+#~ "I<.tlzm> et I<.tlzma>) et orig.tar.xz (pour les fichiers amont en I<.tar."
+#~ "xz> et I<.txz>). C'est le comportement par défaut."
+
+#~ msgid ""
+#~ "Instead of symlinking, rename the downloaded files to their Debian I<orig."
+#~ "tar.gz>, I<orig.tar.bz2>, I<orig.tar.lzma>, or I<orig.tar.xz> names as "
+#~ "described above."
+#~ msgstr ""
+#~ "Au lieu de créer des liens symboliques, renommer les fichiers téléchargés "
+#~ "avec leur nom Debian I<orig.tar.gz>, I<orig.tar.bz2>, I<orig.tar.lzma> ou "
+#~ "I<orig.tar.xz> conformément à la description ci-dessus."
+
+#~ msgid "B<--repack-compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]"
+#~ msgstr "B<--repack-compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]"
+
+#~ msgid "Don't make these symlinks and don't rename the files."
+#~ msgstr "Ne pas créer ces liens symboliques et ne pas renommer les fichiers."
 
 #~ msgid "B<--repack-compression> I<comp>"
 #~ msgstr "B<--repack-compression> I<comp>"
