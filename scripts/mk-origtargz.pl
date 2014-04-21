@@ -154,7 +154,9 @@ use File::Temp qw/tempdir/;
 use Getopt::Long qw(:config gnu_getopt);
 use Pod::Usage;
 
+use Dpkg::Changelog::Debian;
 use Dpkg::IPC;
+use Dpkg::Version;
 use File::Spec;
 
 BEGIN { push(@INC, '/usr/share/devscripts') } # append to @INC, so that -I . has precedence
@@ -240,23 +242,19 @@ $upstream = $ARGV[0];
 
 unless (defined $package) {
     # get package name
-    open F, "debian/changelog" or die "debian/changelog: $!\n";
-    my $line = <F>;
-    close F;
-    unless ($line =~ /^(\S+) \((\S+)\)/) {
-	die "could not parse debian/changelog:1: $line";
-    }
-    $package = $1;
+    my $c = Dpkg::Changelog::Debian->new(range => { count => 1 });
+    $c->load('debian/changelog');
+    my ($entry) = @{$c};
+    $package = $entry->get_source();
 
     # get version number
     unless (defined $version) {
-	$version = $2;
-	unless ($version =~ /-/) {
-	    print "Package with native version number $version; mk-origtargz makes no sense for native packages.\n";
+	my $debversion = Dpkg::Version->new($entry->get_version());
+	if ($debversion->is_native()) {
+	    print "Package with native version number $debversion; mk-origtargz makes no sense for native packages.\n";
 	    exit 0;
 	}
-	$version =~ s/(.*)-.*/$1/; # strip everything from the last dash
-	$version =~ s/^\d+://; # strip epoch
+	$version = $debversion->version();
     }
 
     unshift @copyright_files, "debian/copyright";
