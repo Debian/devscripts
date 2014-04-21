@@ -348,15 +348,15 @@ if ($is_zipfile) {
     my $tempdir = tempdir ("uscanXXXX", TMPDIR => 1, CLEANUP => 1);
     # Parent of the target directory should be under our control
     $tempdir .= '/repack';
-    mkdir $tempdir or uscan_die("Unable to mkdir($tempdir): $!\n");
+    mkdir $tempdir or die("Unable to mkdir($tempdir): $!\n");
     system('unzip', '-q', '-a', '-d', $tempdir, $upstream_tar) == 0
-	or uscan_die("Repacking from zip or jar failed (could not unzip)\n");
+	or die("Repacking from zip or jar failed (could not unzip)\n");
 
     # Figure out the top-level contents of the tarball.
     # If we'd pass "." to tar we'd get the same contents, but the filenames would
     # start with ./, which is confusing later.
     # This should also be more reliable than, say, changing directories and globbing.
-    opendir(TMPDIR, $tempdir) || uscan_die("Can't open $tempdir $!\n");
+    opendir(TMPDIR, $tempdir) || die("Can't open $tempdir $!\n");
     my @files = grep {$_ ne "." && $_ ne ".."} readdir(TMPDIR);
     close TMPDIR;
 
@@ -368,7 +368,7 @@ if ($is_zipfile) {
 		   @files],
 	wait_child => 1);
     unless (-e "$destfiletar") {
-	uscan_die("Repacking from zip or jar to tar.$suffix failed (could not create tarball)\n");
+	die("Repacking from zip or jar to tar.$suffix failed (could not create tarball)\n");
     }
     compress_archive($destfiletar, $destfile, $compression);
 
@@ -390,7 +390,7 @@ my $do_repack = 0;
 if ($repack) {
     my $comp = compression_guess_from_file($upstream_tar);
     unless ($comp) {
-	uscan_die("Cannot determine compression method of $upstream_tar");
+	die("Cannot determine compression method of $upstream_tar");
     }
     $do_repack = $comp ne $compression;
 
@@ -498,7 +498,7 @@ sub decompress_archive($$) {
     my ($from_file, $to_file) = @_;
     my $comp = compression_guess_from_file($from_file);
     unless ($comp) {
-	uscan_die("Cannot determine compression method of $from_file");
+	die("Cannot determine compression method of $from_file");
     }
 
     my $cmd = compression_get_property($comp, 'decomp_prog');
