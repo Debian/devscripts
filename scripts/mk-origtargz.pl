@@ -165,6 +165,7 @@ use Cwd 'abs_path';
 use File::Copy;
 use Dpkg::Control::Hash;
 
+use File::Basename;
 BEGIN {
     eval { require Text::Glob; };
     if ($@) {
