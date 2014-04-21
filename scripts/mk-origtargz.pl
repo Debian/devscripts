@@ -156,7 +156,6 @@ use Pod::Usage;
 
 use Dpkg::IPC;
 use File::Spec;
-use File::Temp qw/tempfile/;
 
 BEGIN { push(@INC, '/usr/share/devscripts') } # append to @INC, so that -I . has precedence
 use Devscripts::Compression qw/compression_is_supported compression_guess_from_file compression_get_property/;
