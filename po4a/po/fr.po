@@ -6314,15 +6314,15 @@ msgstr ""
 "différents coresponsables d'un paquet sont gérés. Si une entrée est ajoutée "
 "à celles de la version actuelle et que le responsable est différent du "
 "responsable qui est mentionné comme ayant créé les entrées précédentes, "
-"alors des lignes seront ajoutées au changelog pour indiquer quel responsable "
-"a fait quelle modification. Pour le moment, seulement un des différents "
-"styles d'enregistrement de ces informations est supporté, dans lequel le nom "
-"du responsable qui a fait quelques modifications apparaît sur une ligne "
-"avant les modifications, entre crochets. Cela peut-être activé ou désactivé "
-"en utilisant l'option B<-->[B<no>]B<multimaint> ou la variable de "
-"configuration B<DEBCHANGE_MULTIMAINT> ; le comportement par défaut est de "
-"l'activer. À noter : si une entrée a déjà été marquée dans ce but, alors "
-"cette option sera ignorée de façon silencieuse."
+"alors des lignes seront ajoutées au journal pour indiquer le responsable "
+"ayant fait cette modification. Pour le moment, seul un des différents styles "
+"d'enregistrement de ces informations est géré, dans lequel le nom du "
+"responsable ayant fait quelques modifications apparaît sur une ligne avant "
+"les modifications, entre crochets. Cela peut-être activé ou désactivé en "
+"utilisant l'option B<-->[B<no>]B<multimaint> ou la variable de configuration "
+"B<DEBCHANGE_MULTIMAINT> ; le comportement par défaut est de l'activer. À "
+"noter : si une entrée a déjà été marquée dans ce but, alors cette option "
+"sera ignorée de façon silencieuse."
 
 #. type: Plain text
 #: ../scripts/debchange.1:101
@@ -7948,9 +7948,9 @@ msgstr ""
 "B<debclean> parcourt l'arborescence des répertoires en commençant par "
 "l'arborescence du répertoire d'où il a été appelé, et exécute B<debian/rules "
 "clean> pour chaque répertoire source Debian rencontré. Ces répertoires sont "
-"reconnus parce qu'ils contiennent un fichier debian/changelog pour le paquet "
-"dont le nom correspond au nom du répertoire. La correspondance des noms est "
-"décrite plus bas."
+"reconnus parce qu'ils contiennent un fichier I<debian/changelog> pour le "
+"paquet dont le nom correspond au nom du répertoire. La correspondance des "
+"noms est décrite plus bas."
 
 #. type: Plain text
 #: ../scripts/debclean.1:22
@@ -8284,7 +8284,7 @@ msgid ""
 "signed using gnupg. Currently this is only supported by git, hg, and bzr."
 msgstr ""
 "Si cette option est activée, alors les messages créés par debcommit seront "
-"signées avec GnuPG. Ce n'est actuellement géré que par Git, mercurial et "
+"signés avec GnuPG. Ce n'est actuellement géré que par Git, mercurial et "
 "Bazaar."
 
 #. type: =item
@@ -15618,7 +15618,7 @@ msgstr ""
 #. type: =head2
 #: ../scripts/mk-origtargz.pl:89
 msgid "Action options"
-msgstr "Option d’action"
+msgstr "Options d’action"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:91
@@ -15667,7 +15667,7 @@ msgid ""
 "modified, of course)."
 msgstr ""
 "Faire du fichier résultant une copie du fichier d’origine (sauf bien sûr "
-"s’il a été modifié)."
+"s’il doit être modifié)."
 
 #. type: TP
 #: ../scripts/mk-origtargz.pl:108 ../scripts/uscan.1:398
@@ -15687,8 +15687,8 @@ msgid ""
 "repack> or B<Files-Excluded>), this implies that the original file is "
 "deleted afterwards."
 msgstr ""
-"Si le fichier a été modifié (parce qu’il s’agit d’un fichier B<ZIP>, à cause "
-"de B<--repack> ou B<Files-Excluded>), cela implique la suppression du "
+"Si le fichier doit être modifié (parce qu’il s’agit d’un fichier B<ZIP>, à "
+"cause de B<--repack> ou B<Files-Excluded>), cela implique la suppression du "
 "fichier d’origine à la fin."
 
 #. type: TP
@@ -18253,8 +18253,8 @@ msgid ""
 "I<debian/watch> file.  Obviously, not all of these would appear in one such "
 "file; usually, one would have one line for the current package."
 msgstr ""
-"L'exemple suivant montre le type d'entrée trouvable dans un fichier I<debian/"
-"watch>. Bien sûr, toutes ces entrées n'apparaîtront pas dans un seul "
+"L'exemple suivant montre les types d'entrée trouvables dans un fichier "
+"I<debian/watch>. Bien sûr, toutes ces entrées n'apparaîtront pas dans un tel "
 "fichier. Une seule ligne existe généralement pour le paquet actuel."
 
 #. type: Plain text
