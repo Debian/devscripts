@@ -22,6 +22,9 @@ devscripts (2.14.2) UNRELEASED; urgency=medium
   * debcommit: Add hg and bzr support to DEBCOMMIT_SIGN_COMMITS.
   * mk-build-deps: Uninstall the build-dep packages if apt isn't able to
     complete their install.  (Closes: #743462)
+  * dpkg-depcheck: Convert relative paths to absolute before filtering, so
+    filters properly match the path.  Thanks to William King for the patch.
+    (Closes: #744320)
 
   [ Andreas Tille ]
   * uscan: Allow a different compression scheme when repacking upstream
