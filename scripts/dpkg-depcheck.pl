@@ -431,6 +431,7 @@ sub filterfiles (@)
 
     foreach my $file (@_) {
 	next unless -f $file;
+	$file = Cwd::abs_path($file);
 
 	my @links=();
 	my $prevlink='';
