@@ -260,7 +260,8 @@ unless (defined $package) {
 		$version =~ s/^\d+://; # strip epoch
 	}
 
-	unshift @copyright_files, "debian/copyright";
+	unshift @copyright_files, "debian/copyright"
+		if -r "debian/copyright";
 
 	# set destination directory
 	unless (defined $destdir) {
@@ -282,7 +283,9 @@ for my $copyright_file (@copyright_files) {
         } or do {
 		undef $data;
         };
-        if (   $data
+	if (not -e $copyright_file) {
+		uscan_die ("File $copyright_file not found.");
+	} elsif (   $data
             && defined $data->{'format'}
             && $data->{'format'} =~ m{^$okformat/?$})
         {
@@ -291,7 +294,7 @@ for my $copyright_file (@copyright_files) {
 			# un-escape
 			push @exclude_globs, map { s/\\(.)/$1/g; s?/+$??; $_ } @rawexcluded;
 		}
-	} elsif (-r $copyright_file) {
+	} else {
 		# be helpful
 		my $has_files_excluded = 0;
 		open COPYRIGHT, "debian/copyright" or die "debian/copyright $!\n";
