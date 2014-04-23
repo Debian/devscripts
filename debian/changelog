@@ -25,6 +25,8 @@ devscripts (2.14.2) UNRELEASED; urgency=medium
   * dpkg-depcheck: Convert relative paths to absolute before filtering, so
     filters properly match the path.  Thanks to William King for the patch.
     (Closes: #744320)
+  * debchange: Document the default urgency is medium.  Thanks to Anders
+    Kaseorg for the patch.  (Closes: #745565)
 
   [ Andreas Tille ]
   * uscan: Allow a different compression scheme when repacking upstream
