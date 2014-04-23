@@ -78,7 +78,7 @@ B<Files-Excluded>.
 
 =item B<--copyright-file> I<filename>
 
-Remove files matching the patterns found in I<filename>, which should have the format of a Debian F<copyright> file. Errors parsing that file are silently ignored, exactly as it is the case with F<debian/copyright>.
+Remove files matching the patterns found in I<filename>, which should have the format of a Debian F<copyright> file (B<Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/> to be precise). Errors parsing that file are silently ignored, exactly as it is the case with F<debian/copyright>.
 
 Both the B<--exclude-file> and B<--copyright-file> options amend the list of
 patterns found in F<debian/copyright>. If you do not want to read that file,
@@ -284,13 +284,26 @@ for my $copyright_file (@copyright_files) {
         };
         if (   $data
             && defined $data->{'format'}
-            && $data->{'format'} =~ m{^$okformat/?$}
-            && $data->{'files-excluded'})
+            && $data->{'format'} =~ m{^$okformat/?$})
         {
-		my @rawexcluded = ($data->{"files-excluded"} =~ /(?:\A|\G\s+)((?:\\.|[^\\\s])+)/g);
-		# un-escape
-		push @exclude_globs, map { s/\\(.)/$1/g; s?/+$??; $_ } @rawexcluded;
-	 }
+		if ($data->{'files-excluded'}) {
+			my @rawexcluded = ($data->{"files-excluded"} =~ /(?:\A|\G\s+)((?:\\.|[^\\\s])+)/g);
+			# un-escape
+			push @exclude_globs, map { s/\\(.)/$1/g; s?/+$??; $_ } @rawexcluded;
+		}
+	} elsif (-r $copyright_file) {
+		# be helpful
+		my $has_files_excluded = 0;
+		open COPYRIGHT, '<', $copyright_file;
+		$has_files_excluded ||= /Files-Excluded/i while (<COPYRIGHT>);
+		close COPYRIGHT;
+		print STDERR
+		      "WARNING: The file debian/copyright mentions Files-Excluded, but its ".
+		      "format is not recognized. Specify Format: ".
+		      "http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/ ".
+		      "in order to remove files from the tarball with mk_origtargz.\n"
+					if ($has_files_excluded);
+	}
 }
 
 

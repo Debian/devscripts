@@ -104,6 +104,18 @@ END
 
 }
 
+makeWrongDebianCopyright() {
+    cat <<'END' > $TMPDIR/foo/debian/copyright
+Format: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=174
+Files-Excluded: exclude-this*
+ .exclude-this*
+ exclude-dir1
+ exclude-dir2/
+ ;\ echo\ strange-file;\ #
+END
+
+}
+
 expected_files_after_removal=$(sort <<END
 foo-0.1/
 foo-0.1/a-dir/
@@ -126,12 +138,17 @@ END
 
 run_mk_origtargz() {
 	local dir="$1"
-	local exp_stdout="$2"
+	local exp_stderr="$2"
+	local exp_stdout="$3"
+	local stderrF="${SHUNIT_TMPDIR}/stderr"
 	shift
 	shift
-	output="$( cd $TMPDIR/$dir; $MK_ORIGTARGZ "$@" )"
+	shift
+	output="$( cd $TMPDIR/$dir; $MK_ORIGTARGZ "$@" 2> $stderrF )"
+	stderr="$(cat $stderrF)"
 	retval=$?
 	assertEquals "standard output of mk-origtargz $*\n" "$exp_stdout" "$output"
+	assertEquals "error output of mk-origtargz $*\n" "$exp_stderr" "$stderr"
 	assertEquals "return valueof mk-origtargz $*\n" "0" "$retval"
 }
 
@@ -145,7 +162,7 @@ assertType () {
 testSymlink() {
 	makeTarBall gz
 	makeDebanDir
-	run_mk_origtargz foo \
+	run_mk_origtargz foo "" \
 		"Successfully symlinked ../foo-0.1.tar.gz to ../foo_0.1.orig.tar.gz." \
 		../foo-0.1.tar.gz
 	assertTrue "original tarball does not exist" "[ -e $TMPDIR/foo-0.1.tar.gz ]"
@@ -158,7 +175,7 @@ testSymlink() {
 testCopy() {
 	makeTarBall gz
 	makeDebanDir
-	run_mk_origtargz foo \
+	run_mk_origtargz foo "" \
 		"Successfully copied ../foo-0.1.tar.gz to ../foo_0.1.orig.tar.gz." \
 		--copy ../foo-0.1.tar.gz
 	assertTrue "original tarball does not exist" "[ -e $TMPDIR/foo-0.1.tar.gz ]"
@@ -170,7 +187,7 @@ testCopy() {
 testRename() {
 	makeTarBall gz
 	makeDebanDir
-	run_mk_origtargz foo \
+	run_mk_origtargz foo "" \
 		"Successfully renamed ../foo-0.1.tar.gz to ../foo_0.1.orig.tar.gz." \
 		--rename ../foo-0.1.tar.gz
 	assertFalse "original tarball does exist" "[ -e $TMPDIR/foo-0.1.tar.gz ]"
@@ -181,7 +198,7 @@ testRename() {
 
 testSymlinkExplicit() {
 	makeTarBall gz
-	run_mk_origtargz "" \
+	run_mk_origtargz "" "" \
 		"Successfully symlinked foo-0.1.tar.gz to foo_0.1.orig.tar.gz." \
 		--package foo --version 0.1 foo-0.1.tar.gz
 	assertTrue "original tarball does not exist" "[ -e $TMPDIR/foo-0.1.tar.gz ]"
@@ -193,7 +210,7 @@ testSymlinkExplicit() {
 
 testCopyExplicit() {
 	makeTarBall gz
-	run_mk_origtargz "" \
+	run_mk_origtargz "" "" \
 		"Successfully copied foo-0.1.tar.gz to foo_0.1.orig.tar.gz." \
 		--package foo --version 0.1 --copy foo-0.1.tar.gz
 	assertTrue "original tarball does not exist" "[ -e $TMPDIR/foo-0.1.tar.gz ]"
@@ -204,7 +221,7 @@ testCopyExplicit() {
 
 testRenameExplicit() {
 	makeTarBall gz
-	run_mk_origtargz "" \
+	run_mk_origtargz "" "" \
 		"Successfully renamed foo-0.1.tar.gz to foo_0.1.orig.tar.gz." \
 		--package foo --version 0.1 --rename foo-0.1.tar.gz
 	assertFalse "original tarball does exist" "[ -e $TMPDIR/foo-0.1.tar.gz ]"
@@ -216,7 +233,7 @@ testRenameExplicit() {
 testSymlinkExplicitSubdir() {
 	makeTarBall gz
 	mkdir -p $TMPDIR/destdir
-	run_mk_origtargz "" \
+	run_mk_origtargz "" "" \
 		"Successfully symlinked foo-0.1.tar.gz to destdir/foo_0.1.orig.tar.gz." \
 		--package foo --version 0.1 -C destdir foo-0.1.tar.gz
 	assertTrue "original tarball does not exist" "[ -e $TMPDIR/foo-0.1.tar.gz ]"
@@ -228,7 +245,7 @@ testSymlinkExplicitSubdir() {
 
 testRepackGZ2GZ() {
 	makeTarBall gz
-	run_mk_origtargz "" \
+	run_mk_origtargz "" "" \
 		"Successfully copied foo-0.1.tar.gz to foo_0.1.orig.tar.gz." \
 		--package foo --version 0.1 --copy foo-0.1.tar.gz --repack
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
@@ -237,7 +254,7 @@ testRepackGZ2GZ() {
 
 testRepackGZ2XZ() {
 	makeTarBall gz
-	run_mk_origtargz "" \
+	run_mk_origtargz "" ""\
 		"Successfully repacked foo-0.1.tar.gz as foo_0.1.orig.tar.xz." \
 		--package foo --version 0.1 --copy foo-0.1.tar.gz --repack --compression xz
 	assertFalse "wrong result does exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
@@ -247,7 +264,7 @@ testRepackGZ2XZ() {
 
 testRepackXZ2GZ() {
 	makeTarBall xz
-	run_mk_origtargz "" \
+	run_mk_origtargz "" "" \
 		"Successfully repacked foo-0.1.tar.xz as foo_0.1.orig.tar.gz." \
 		--package foo --version 0.1 --copy foo-0.1.tar.xz --repack
 	assertFalse "wrong result does exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
@@ -257,7 +274,7 @@ testRepackXZ2GZ() {
 
 testRepackZip2GZ() {
 	makeZipFile
-	run_mk_origtargz "" \
+	run_mk_origtargz "" "" \
 		"Successfully repacked foo-0.1.zip as foo_0.1.orig.tar.gz." \
 		--package foo --version 0.1 --copy foo-0.1.zip
 	assertTrue "original zip file does not exist" "[ -e $TMPDIR/foo-0.1.zip ]"
@@ -267,7 +284,7 @@ testRepackZip2GZ() {
 
 testRepackZip2GZRename() {
 	makeZipFile
-	run_mk_origtargz "" \
+	run_mk_origtargz "" "" \
 		"Successfully repacked foo-0.1.zip as foo_0.1.orig.tar.gz, and removed the original file." \
 		--package foo --version 0.1 --rename foo-0.1.zip
 	assertFalse "original zip file does exist" "[ -e $TMPDIR/foo-0.1.zip ]"
@@ -277,7 +294,7 @@ testRepackZip2GZRename() {
 
 testRepackZip2XZ() {
 	makeZipFile
-	run_mk_origtargz "" \
+	run_mk_origtargz "" "" \
 		"Successfully repacked foo-0.1.zip as foo_0.1.orig.tar.xz." \
 		--package foo --version 0.1 foo-0.1.zip --compression xz
 	assertTrue "original zip file does not exist" "[ -e $TMPDIR/foo-0.1.zip ]"
@@ -289,7 +306,7 @@ testExclude() {
 	makeTarBall gz
 	makeDebanDir
 	makeDebianCopyright
-	run_mk_origtargz foo \
+	run_mk_origtargz foo "" \
 		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.gz, deleting 17 files from it." \
 		 ../foo-0.1.tar.gz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
@@ -301,7 +318,7 @@ testExcludeXZ() {
 	makeTarBall xz
 	makeDebanDir
 	makeDebianCopyright
-	run_mk_origtargz foo \
+	run_mk_origtargz foo "" \
 		"Successfully repacked ../foo-0.1.tar.xz as ../foo_0.1.orig.tar.xz, deleting 17 files from it." \
 		 ../foo-0.1.tar.xz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
@@ -313,7 +330,7 @@ testExcludeZip() {
 	makeZipFile
 	makeDebanDir
 	makeDebianCopyright
-	run_mk_origtargz foo \
+	run_mk_origtargz foo "" \
 		"Successfully repacked ../foo-0.1.zip as ../foo_0.1.orig.tar.xz, deleting 17 files from it." \
 		 ../foo-0.1.zip --compression xz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
@@ -325,7 +342,7 @@ testSameNameSymlink() {
 	makeTarBall gz
 	mv $TMPDIR/foo-0.1.tar.gz $TMPDIR/foo_0.1.orig.tar.gz
 	makeDebanDir
-	run_mk_origtargz foo \
+	run_mk_origtargz foo "" \
 		"Leaving ../foo_0.1.orig.tar.gz where it is." \
 		 --symlink ../foo_0.1.orig.tar.gz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
@@ -336,7 +353,7 @@ testSameNameCopy() {
 	makeTarBall gz
 	mv $TMPDIR/foo-0.1.tar.gz $TMPDIR/foo_0.1.orig.tar.gz
 	makeDebanDir
-	run_mk_origtargz foo \
+	run_mk_origtargz foo "" \
 		"Leaving ../foo_0.1.orig.tar.gz where it is." \
 		 --copy ../foo_0.1.orig.tar.gz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
@@ -347,7 +364,7 @@ testSameNameRename() {
 	makeTarBall gz
 	mv $TMPDIR/foo-0.1.tar.gz $TMPDIR/foo_0.1.orig.tar.gz
 	makeDebanDir
-	run_mk_origtargz foo \
+	run_mk_origtargz foo "" \
 		"Leaving ../foo_0.1.orig.tar.gz where it is." \
 		 --rename ../foo_0.1.orig.tar.gz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
@@ -359,7 +376,7 @@ testSameNameExclude() {
 	mv $TMPDIR/foo-0.1.tar.gz $TMPDIR/foo_0.1.orig.tar.gz
 	makeDebanDir
 	makeDebianCopyright
-	run_mk_origtargz foo \
+	run_mk_origtargz foo "" \
 		"Leaving ../foo_0.1.orig.tar.gz where it is, deleting 17 files from it." \
 		 ../foo_0.1.orig.tar.gz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
@@ -367,5 +384,15 @@ testSameNameExclude() {
 	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1.orig.tar.gz | sort)"
 }
 
+testCopyrightFormatWarning() {
+	makeTarBall gz
+	makeDebanDir
+	makeWrongDebianCopyright
+	run_mk_origtargz foo \
+		"WARNING: The file debian/copyright mentions Files-Excluded, but its format is not recognized. Specify Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/ in order to remove files from the tarball with mk_origtargz." \
+		"Successfully symlinked ../foo-0.1.tar.gz to ../foo_0.1.orig.tar.gz." \
+		 ../foo-0.1.tar.gz
+
+}
 
 . shunit2
