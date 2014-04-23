@@ -294,7 +294,7 @@ for my $copyright_file (@copyright_files) {
 	} elsif (-r $copyright_file) {
 		# be helpful
 		my $has_files_excluded = 0;
-		open COPYRIGHT, '<', $copyright_file;
+		open COPYRIGHT, "debian/copyright" or die "debian/copyright $!\n";
 		$has_files_excluded ||= /Files-Excluded/i while (<COPYRIGHT>);
 		close COPYRIGHT;
 		print STDERR
