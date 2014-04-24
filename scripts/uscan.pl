@@ -47,17 +47,6 @@ BEGIN {
 	}
     }
 }
-BEGIN {
-    eval { require Text::Glob; };
-    if ($@) {
-	my $progname = basename($0);
-	if ($@ =~ /^Can\'t locate Text\/Glob\.pm/) {
-	    die "$progname: you must have the libtext-glob-perl package installed\nto use this script\n";
-	} else {
-	    die "$progname: problem loading the Text::Glob module:\n  $@\nHave you installed the libtext-glob-perl package?\n";
-	}
-    }
-}
 use Dpkg::Control::Hash;
 
 my $CURRENT_WATCHFILE_VERSION = 3;

@@ -165,20 +165,6 @@ use Cwd 'abs_path';
 use File::Copy;
 use Dpkg::Control::Hash;
 
-use File::Basename;
-BEGIN {
-    eval { require Text::Glob; };
-    if ($@) {
-	my $progname = basename($0);
-	if ($@ =~ /^Can\'t locate Text\/Glob\.pm/) {
-	    die "$progname: you must have the libtext-glob-perl package installed\nto use this script\n";
-	} else {
-	    die "$progname: problem loading the Text::Glob module:\n  $@\nHave you installed the libtext-glob-perl package?\n";
-	}
-    }
-}
-
-
 sub decompress_archive($$);
 sub compress_archive($$$);
 
@@ -410,7 +396,7 @@ if ($repack) {
 my $deletecount = 0;
 my @to_delete;
 
-if (scalar @exclude_globs > 0) {
+if (@exclude_globs) {
     my @files;
     my $files;
     spawn(exec => ['tar', '-t', '-a', '-f', $upstream_tar],
@@ -420,21 +406,14 @@ if (scalar @exclude_globs > 0) {
     chomp @files;
 
     # find out what to delete
-    {
-	no warnings 'once';
-	$Text::Glob::strict_leading_dot = 0;
-	$Text::Glob::strict_wildcard_slash = 0;
-    }
+    my @exclude_regexes = map { glob_to_regex($_) } @exclude_globs;
+    my $regex = '^(?:[^/]*/)?' # Possible leading directory, ignore it
+	      . '(?:' . join('|', @exclude_regexes) . ')' # User patterns
+	      . '(?:/.*)?$'; # Possible trailing / for a directory
     for my $filename (@files) {
-	my $do_exclude = 0;
-	for my $exclude (@exclude_globs) {
-	    $do_exclude ||=
-		Text::Glob::match_glob("$exclude",     $filename) ||
-		Text::Glob::match_glob("$exclude/",    $filename) ||
-		Text::Glob::match_glob("*/$exclude",   $filename) ||
-		Text::Glob::match_glob("*/$exclude/",  $filename);
+	if ($filename =~ m/$regex/) {
+	    push @to_delete, $filename;
 	}
-	push @to_delete, $filename if $do_exclude;
     }
 
     # ensure files are mentioned before the directory they live in
@@ -528,4 +507,49 @@ sub compress_archive($$$) {
 	  to_file => $to_file,
 	  wait_child => 1);
     unlink $from_file;
+}
+
+# Adapted from Text::Glob::glob_to_regex_string
+sub glob_to_regex {
+    my ($glob) = @_;
+
+    if ($glob =~ m@/$@) {
+	warn "WARNING: Files-Excluded pattern ($glob) should not have a trailing /\n";
+	chop($glob);
+    }
+    if ($glob =~ m/(?<!\\)(?:\\{2})*\\(?![\\*?])/) {
+	die "Invalid Files-Excluded pattern ($glob), \\ can only escape \\, *, or ? characters\n";
+    }
+
+    my ($regex, $escaping);
+    for my $c ($glob =~ m/(.)/gs) {
+	if ($c eq '.' || $c eq '(' || $c eq ')' || $c eq '|' ||
+	    $c eq '+' || $c eq '^' || $c eq '$' || $c eq '@' || $c eq '%' ||
+	    $c eq '{' || $c eq '}' || $c eq '[' || $c eq ']') {
+	    $regex .= "\\$c";
+	}
+	elsif ($c eq '*') {
+	    $regex .= $escaping ? "\\*" : ".*";
+	}
+	elsif ($c eq '?') {
+	    $regex .= $escaping ? "\\?" : ".";
+	}
+	elsif ($c eq "\\") {
+	    if ($escaping) {
+		$regex .= "\\\\";
+		$escaping = 0;
+	    }
+	    else {
+		$escaping = 1;
+	    }
+	    next;
+	}
+	else {
+	    $regex .= $c;
+	    $escaping = 0;
+	}
+	$escaping = 0;
+    }
+
+    return $regex;
 }

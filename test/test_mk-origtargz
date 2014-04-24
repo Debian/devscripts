@@ -63,6 +63,7 @@ makeUpstreamFiles () {
 	makeSubDir ".include-this-hidden-dir"
 	makeSubDir ".exclude-this-hidden-dir"
 	makeSubDir "a-dir/include-this-subdir"
+	# Expected not to be removed since exclusion is anchored to top-level
 	makeSubDir "a-dir/exclude-this-subdir"
 
 	touch "$TMPDIR/foo-0.1/; echo strange-file; #"
@@ -99,7 +100,7 @@ Files-Excluded: exclude-this*
  .exclude-this*
  exclude-dir1
  exclude-dir2/
- ;\ echo\ strange-file;\ #
+ ;?echo?strange-file;?#
 END
 
 }
@@ -111,14 +112,20 @@ Files-Excluded: exclude-this*
  .exclude-this*
  exclude-dir1
  exclude-dir2/
- ;\ echo\ strange-file;\ #
+ ;?echo?strange-file;?#
 END
 
 }
 
+expected_stderr_after_removal="WARNING: Files-Excluded pattern (exclude-dir2/) should not have a trailing /"
+
 expected_files_after_removal=$(sort <<END
 foo-0.1/
 foo-0.1/a-dir/
+foo-0.1/a-dir/exclude-this-subdir/
+foo-0.1/a-dir/exclude-this-subdir/a-file
+foo-0.1/a-dir/exclude-this-subdir/a-subdir/
+foo-0.1/a-dir/exclude-this-subdir/a-subdir/a-file
 foo-0.1/a-dir/include-this-subdir/
 foo-0.1/a-dir/include-this-subdir/a-file
 foo-0.1/a-dir/include-this-subdir/a-subdir/
@@ -306,8 +313,8 @@ testExclude() {
 	makeTarBall gz
 	makeDebanDir
 	makeDebianCopyright
-	run_mk_origtargz foo "" \
-		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.gz, deleting 17 files from it." \
+	run_mk_origtargz foo "$expected_stderr_after_removal" \
+		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.gz, deleting 19 files from it." \
 		 ../foo-0.1.tar.gz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
 	assertType application/gzip $TMPDIR/foo_0.1.orig.tar.gz
@@ -318,8 +325,8 @@ testExcludeXZ() {
 	makeTarBall xz
 	makeDebanDir
 	makeDebianCopyright
-	run_mk_origtargz foo "" \
-		"Successfully repacked ../foo-0.1.tar.xz as ../foo_0.1.orig.tar.xz, deleting 17 files from it." \
+	run_mk_origtargz foo "$expected_stderr_after_removal" \
+		"Successfully repacked ../foo-0.1.tar.xz as ../foo_0.1.orig.tar.xz, deleting 19 files from it." \
 		 ../foo-0.1.tar.xz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
 	assertType application/x-xz $TMPDIR/foo_0.1.orig.tar.xz
@@ -330,8 +337,8 @@ testExcludeZip() {
 	makeZipFile
 	makeDebanDir
 	makeDebianCopyright
-	run_mk_origtargz foo "" \
-		"Successfully repacked ../foo-0.1.zip as ../foo_0.1.orig.tar.xz, deleting 17 files from it." \
+	run_mk_origtargz foo "$expected_stderr_after_removal" \
+		"Successfully repacked ../foo-0.1.zip as ../foo_0.1.orig.tar.xz, deleting 19 files from it." \
 		 ../foo-0.1.zip --compression xz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
 	assertType application/x-xz $TMPDIR/foo_0.1.orig.tar.xz
@@ -376,8 +383,8 @@ testSameNameExclude() {
 	mv $TMPDIR/foo-0.1.tar.gz $TMPDIR/foo_0.1.orig.tar.gz
 	makeDebanDir
 	makeDebianCopyright
-	run_mk_origtargz foo "" \
-		"Leaving ../foo_0.1.orig.tar.gz where it is, deleting 17 files from it." \
+	run_mk_origtargz foo "$expected_stderr_after_removal" \
+		"Leaving ../foo_0.1.orig.tar.gz where it is, deleting 19 files from it." \
 		 ../foo_0.1.orig.tar.gz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
 	assertFalse "result is a symlink" "[ -L $TMPDIR/foo_0.1.orig.tar.gz ]"

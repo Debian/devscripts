@@ -16,7 +16,6 @@ Build-Depends: debhelper (>= 9),
                libjson-perl,
                libparse-debcontrol-perl,
                libterm-size-perl,
-               libtext-glob-perl,
                libtimedate-perl,
                liburi-perl,
                libwww-perl,
@@ -56,7 +55,6 @@ Recommends: at,
             libencode-locale-perl,
             libjson-perl,
             libparse-debcontrol-perl,
-            libtext-glob-perl,
             liburi-perl,
             libwww-perl,
             lintian,
@@ -173,7 +171,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
     package which may be installed to satisfy the build-dependencies of the
     given package [equivs]
   - mk-origtargz: rename upstream tarball, optionally changing the compression
-    and removing unwanted files [unzip, xz-utils, file, libtext-glob-perl]
+    and removing unwanted files [unzip, xz-utils, file]
   - namecheck: check project names are not already taken
   - nmudiff: mail a diff of the current package against the previous version
     to the BTS to assist in tracking NMUs [patchutils, mutt]
@@ -197,8 +195,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
     transitions for which uploads to unstable are currently blocked
     [libwww-perl, libyaml-syck-perl]
   - uscan: scan upstream sites for new releases of packages [gpgv, gnupg,
-    liblwp-protocol-https-perl, libwww-perl, libtext-glob-perl, unzip,
-    xz-utils, file]
+    liblwp-protocol-https-perl, libwww-perl, unzip, xz-utils, file]
   - uupdate: integrate upstream changes into a source package [patch]
   - what-patch: determine what patch system, if any, a source package is using
     [patchutils]
