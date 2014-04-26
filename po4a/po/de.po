@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.14.1\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
-"POT-Creation-Date: 2014-04-17 18:29-0400\n"
+"POT-Creation-Date: 2014-04-26 12:23-0400\n"
 "PO-Revision-Date: 2014-01-28 19:11-0100\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
@@ -6956,9 +6956,14 @@ msgstr "B<--urgency >I<Dringlichkeit>, B<-u >I<Dringlichkeit>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:321
+#, fuzzy
+#| msgid ""
+#| "Use the specified urgency in the changelog entry being edited, instead of "
+#| "using the default \"B<low>\" for new entries or the existing value for "
+#| "existing entries."
 msgid ""
 "Use the specified urgency in the changelog entry being edited, instead of "
-"using the default \"B<low>\" for new entries or the existing value for "
+"using the default \"B<medium>\" for new entries or the existing value for "
 "existing entries."
 msgstr ""
 "benutzt die angegebene Dringlichkeit in dem Changelog-Eintrag, der "
@@ -12780,7 +12785,7 @@ msgstr "I<mk-origtargz>(1)"
 #: ../scripts/devscripts.1:117
 msgid ""
 "rename upstream tarball, optionally changing the compression and removing "
-"unwanted files [unzip, lzma, xz-utils, file, libtext-glob-perl]"
+"unwanted files [unzip, xz-utils, file, libtext-glob-perl]"
 msgstr ""
 
 #. type: IP
@@ -12954,10 +12959,14 @@ msgstr "I<uscan>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:143
+#, fuzzy
+#| msgid ""
+#| "scan upstream sites for new releases of packages [gpgv, gnupg, liblwp-"
+#| "protocol-https-perl, libwww-perl, libtext-glob-perl, unzip, lzma, xz-"
+#| "utils, file]"
 msgid ""
 "scan upstream sites for new releases of packages [gpgv, gnupg, liblwp-"
-"protocol-https-perl, libwww-perl, libtext-glob-perl, unzip, lzma, xz-utils, "
-"file]"
+"protocol-https-perl, libwww-perl, libtext-glob-perl, unzip, xz-utils, file]"
 msgstr ""
 "durchucht Seiten der Originalautoren auf neue Veröffentlichungen von "
 "Paketen. [gpgv, gnupg, liblwp-protocol-https-perl, libwww-perl, libtext-glob-"
@@ -15556,8 +15565,10 @@ msgstr "B--copyright-file> I<Dateiname>"
 #: ../scripts/mk-origtargz.pl:81
 msgid ""
 "Remove files matching the patterns found in I<filename>, which should have "
-"the format of a Debian F<copyright> file. Errors parsing that file are "
-"silently ignored, exactly as it is the case with F<debian/copyright>."
+"the format of a Debian F<copyright> file (B<Format: https://www.debian.org/"
+"doc/packaging-manuals/copyright-format/1.0/> to be precise). Errors parsing "
+"that file are silently ignored, exactly as it is the case with F<debian/"
+"copyright>."
 msgstr ""
 
 #. type: textblock

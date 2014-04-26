@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2014-04-17 18:29-0400\n"
+"POT-Creation-Date: 2014-04-26 12:23-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -5284,7 +5284,7 @@ msgstr ""
 #: ../scripts/debchange.1:321
 msgid ""
 "Use the specified urgency in the changelog entry being edited, instead of "
-"using the default \"B<low>\" for new entries or the existing value for "
+"using the default \"B<medium>\" for new entries or the existing value for "
 "existing entries."
 msgstr ""
 
@@ -9881,7 +9881,7 @@ msgstr ""
 #: ../scripts/devscripts.1:117
 msgid ""
 "rename upstream tarball, optionally changing the compression and removing "
-"unwanted files [unzip, lzma, xz-utils, file, libtext-glob-perl]"
+"unwanted files [unzip, xz-utils, file, libtext-glob-perl]"
 msgstr ""
 
 #. type: IP
@@ -10036,8 +10036,8 @@ msgstr ""
 #: ../scripts/devscripts.1:143
 msgid ""
 "scan upstream sites for new releases of packages [gpgv, gnupg, "
-"liblwp-protocol-https-perl, libwww-perl, libtext-glob-perl, unzip, lzma, "
-"xz-utils, file]"
+"liblwp-protocol-https-perl, libwww-perl, libtext-glob-perl, unzip, xz-utils, "
+"file]"
 msgstr ""
 
 #. type: IP
@@ -12170,8 +12170,10 @@ msgstr ""
 #: ../scripts/mk-origtargz.pl:81
 msgid ""
 "Remove files matching the patterns found in I<filename>, which should have "
-"the format of a Debian F<copyright> file. Errors parsing that file are "
-"silently ignored, exactly as it is the case with F<debian/copyright>."
+"the format of a Debian F<copyright> file (B<Format: "
+"https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/> to be "
+"precise). Errors parsing that file are silently ignored, exactly as it is "
+"the case with F<debian/copyright>."
 msgstr ""
 
 #. type: textblock
