@@ -6973,19 +6973,15 @@ msgstr "B<--urgency> I<urgence>, B<-u> I<urgence>"
 
 #. type: Plain text
 #: ../scripts/debchange.1:321
-#, fuzzy
-#| msgid ""
-#| "Use the specified urgency in the changelog entry being edited, instead of "
-#| "using the default \"B<low>\" for new entries or the existing value for "
-#| "existing entries."
 msgid ""
 "Use the specified urgency in the changelog entry being edited, instead of "
 "using the default \"B<medium>\" for new entries or the existing value for "
 "existing entries."
 msgstr ""
 "Utiliser le niveau d'urgence indiqué dans la nouvelle entrée du fichier "
-"I<changelog>, s'il y en a une, au lieu du niveau d'urgence bas (« B<low> ») "
-"par défaut ou de la valeur actuelle pour les entrées existantes."
+"I<changelog>, s'il y en a une, au lieu du niveau d'urgence moyen "
+"(« B<medium> ») par défaut ou de la valeur actuelle pour les entrées "
+"existantes."
 
 #. type: TP
 #: ../scripts/debchange.1:321
@@ -12787,17 +12783,13 @@ msgstr "B<mk-origtargz>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:117
-#, fuzzy
-#| msgid ""
-#| "rename upstream tarball, optionally changing the compression and removing "
-#| "unwanted files [unzip, lzma, xz-utils, file, libtext-glob-perl]"
 msgid ""
 "rename upstream tarball, optionally changing the compression and removing "
 "unwanted files [unzip, xz-utils, file, libtext-glob-perl]"
 msgstr ""
 "Renommer l’archive amont, en modifiant éventuellement la compression et en "
-"supprimant les fichiers non désirés [unzip, lzma, xz-utils, file, libtext-"
-"glob-perl]"
+"supprimant les fichiers non désirés [unzip, xz-utils, file, libtext-glob-"
+"perl]"
 
 #. type: IP
 #: ../scripts/devscripts.1:117
@@ -12970,18 +12962,13 @@ msgstr "B<uscan>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:143
-#, fuzzy
-#| msgid ""
-#| "scan upstream sites for new releases of packages [gpgv, gnupg, liblwp-"
-#| "protocol-https-perl, libwww-perl, libtext-glob-perl, unzip, lzma, xz-"
-#| "utils, file]"
 msgid ""
 "scan upstream sites for new releases of packages [gpgv, gnupg, liblwp-"
 "protocol-https-perl, libwww-perl, libtext-glob-perl, unzip, xz-utils, file]"
 msgstr ""
 "surveiller la disponibilité d'une nouvelle version amont [gpgv, gnupg, "
-"liblwp-protocol-https-perl, libwww-perl, libtext-glob-perl, unzip, lzma, xz-"
-"utils, file]"
+"liblwp-protocol-https-perl, libwww-perl, libtext-glob-perl, unzip, xz-utils, "
+"file]"
 
 #. type: IP
 #: ../scripts/devscripts.1:143
@@ -15607,11 +15594,6 @@ msgstr "B<--copyright-file> I<fichier>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:81
-#, fuzzy
-#| msgid ""
-#| "Remove files matching the patterns found in I<filename>, which should "
-#| "have the format of a Debian F<copyright> file. Errors parsing that file "
-#| "are silently ignored, exactly as it is the case with F<debian/copyright>."
 msgid ""
 "Remove files matching the patterns found in I<filename>, which should have "
 "the format of a Debian F<copyright> file (B<Format: https://www.debian.org/"
@@ -15620,9 +15602,10 @@ msgid ""
 "copyright>."
 msgstr ""
 "Supprimer les fichiers correspondant aux motifs de I<fichier> qui devrait "
-"être au format d’un fichier I<copyright> Debian. Les erreurs d’analyse de ce "
-"fichier sont ignorées silencieusement, comme c’est le cas avec F<debian/"
-"copyright>."
+"être au format d’un fichier I<copyright> Debian (B<Format: https://www."
+"debian.org/doc/packaging-manuals/copyright-format/1.0/> pour être exact). "
+"Les erreurs d’analyse de ce fichier sont ignorées silencieusement, comme "
+"c’est le cas avec F<debian/copyright>."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:83
