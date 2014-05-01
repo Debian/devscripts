@@ -1285,7 +1285,9 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 
 	$merge = 1;
     } else {
-	print O "$PACKAGE ($NEW_VERSION) $distribution; urgency=$urgency\n\n";
+	print O "$PACKAGE ($NEW_VERSION) $distribution; urgency=$urgency";
+	print O ", binary-only=yes" if ($opt_bn);
+	print O "\n\n";
 	if ($opt_n && ! $opt_news) {
 	    print O "  * Non-maintainer upload.\n";
 	    $line = 1;
