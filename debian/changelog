@@ -10,6 +10,7 @@ devscripts (2.14.2) UNRELEASED; urgency=medium
 
   [ Paul Wise ]
   * Use HTTPS for the buildd logs to avoid a redirect
+  * Fix scraping of the wnpp web pages due to https links
 
   [ Cyril Brulebois ]
   * deb-reversion: Add support for udebs.  (Closes: #739437)
