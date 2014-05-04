@@ -272,17 +272,24 @@ for my $copyright_file (@copyright_files) {
     if (not -e $copyright_file) {
 	die "File $copyright_file not found.";
     } elsif (   $data
-	&& defined $data->{format}
-	&& $data->{'files-excluded'})
+	     && defined $data->{format}
+	     && $data->{format} =~ m@^$okformat/?$@)
     {
-	if ($data->{format} =~ m{^$okformat/?$}) {
+	if ($data->{'files-excluded'}) {
 	    push(@exclude_globs, grep { $_ } split(/\s+/, $data->{'files-excluded'}));
-	} else {
-	    warn "WARNING: The file $copyright_file mentions Files-Excluded, but its ".
-		 "format is not recognized. Specify Format: ".
-		 "http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/ ".
-		 "in order to remove files from the tarball with mk-origtargz.\n";
 	}
+    } else {
+	open my $file, '<', $copyright_file or die "Unable to read $copyright_file: $!\n";
+	while (my $line = <$file>) {
+	    if ($line =~ m/\bFiles-Excluded:/i) {
+		warn "WARNING: The file $copyright_file mentions Files-Excluded, but its ".
+		     "format is not recognized. Specify Format: ".
+		     "http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/ ".
+		     "in order to remove files from the tarball with mk-origtargz.\n";
+		last;
+	    }
+	}
+	close $file;
     }
 }
 
