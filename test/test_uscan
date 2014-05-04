@@ -184,8 +184,8 @@ Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Files-Excluded: exclude-this
  exclude-dir
  .*
- js/jquery.js
- ;\ echo\ baz;\ #
+ */js/jquery.js
+ ;?echo?baz;?#
 END
 
     mkdir -p repo
