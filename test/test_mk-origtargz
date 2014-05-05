@@ -391,6 +391,19 @@ testSameNameExclude() {
 	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1.orig.tar.gz | sort)"
 }
 
+testSameNameExcludeSymlink() {
+	makeTarBall gz
+	ln -s foo-0.1.tar.gz $TMPDIR/foo_0.1.orig.tar.gz
+	makeDebanDir
+	makeDebianCopyright
+	run_mk_origtargz foo "$expected_stderr_after_removal" \
+		"Leaving ../foo_0.1.orig.tar.gz where it is, deleting 19 files from it." \
+		 ../foo_0.1.orig.tar.gz
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertTrue "result is not a symlink" "[ -L $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1.orig.tar.gz | sort)"
+}
+
 testCopyrightFormatWarning() {
 	makeTarBall gz
 	makeDebanDir

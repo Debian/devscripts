@@ -48,7 +48,7 @@ my %mime2comp = (
 sub compression_guess_from_file {
     my $filename = shift;
     my $mimetype;
-    spawn(exec => ['file', '--brief', '--mime-type', $filename],
+    spawn(exec => ['file', '--dereference', '--brief', '--mime-type', $filename],
 	  to_string => \$mimetype,
 	  wait_child => 1);
     chomp($mimetype);
