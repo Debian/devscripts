@@ -113,7 +113,7 @@ If the file has to be modified (because it is a B<zip> file, because of B<--repa
 
 =item B<--repack>
 
-If the given file is not in compressed using the desired format (see
+If the given file is not compressed using the desired format (see
 B<--compression>), recompress it.
 
 =item B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]
