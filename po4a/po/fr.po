@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2014-04-26 12:23-0400\n"
+"POT-Creation-Date: 2014-05-05 22:34-0400\n"
 "PO-Revision-Date: 2014-04-17 18:28-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -12783,9 +12783,13 @@ msgstr "B<mk-origtargz>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:117
+#, fuzzy
+#| msgid ""
+#| "rename upstream tarball, optionally changing the compression and removing "
+#| "unwanted files [unzip, xz-utils, file, libtext-glob-perl]"
 msgid ""
 "rename upstream tarball, optionally changing the compression and removing "
-"unwanted files [unzip, xz-utils, file, libtext-glob-perl]"
+"unwanted files [unzip, xz-utils, file]"
 msgstr ""
 "Renommer l’archive amont, en modifiant éventuellement la compression et en "
 "supprimant les fichiers non désirés [unzip, xz-utils, file, libtext-glob-"
@@ -12962,9 +12966,14 @@ msgstr "B<uscan>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:143
+#, fuzzy
+#| msgid ""
+#| "scan upstream sites for new releases of packages [gpgv, gnupg, liblwp-"
+#| "protocol-https-perl, libwww-perl, libtext-glob-perl, unzip, xz-utils, "
+#| "file]"
 msgid ""
 "scan upstream sites for new releases of packages [gpgv, gnupg, liblwp-"
-"protocol-https-perl, libwww-perl, libtext-glob-perl, unzip, xz-utils, file]"
+"protocol-https-perl, libwww-perl, unzip, xz-utils, file]"
 msgstr ""
 "surveiller la disponibilité d'une nouvelle version amont [gpgv, gnupg, "
 "liblwp-protocol-https-perl, libwww-perl, libtext-glob-perl, unzip, xz-utils, "
@@ -15702,8 +15711,12 @@ msgstr "B<--repack>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:116
+#, fuzzy
+#| msgid ""
+#| "If the given file is not in compressed using the desired format (see B<--"
+#| "compression>), recompress it."
 msgid ""
-"If the given file is not in compressed using the desired format (see B<--"
+"If the given file is not compressed using the desired format (see B<--"
 "compression>), recompress it."
 msgstr ""
 "Si le fichier donné n’est pas compressé au format voulu (consultez B<--"

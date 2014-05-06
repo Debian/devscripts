@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.14.1\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
-"POT-Creation-Date: 2014-04-26 12:23-0400\n"
+"POT-Creation-Date: 2014-05-05 22:34-0400\n"
 "PO-Revision-Date: 2014-01-28 19:11-0100\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
@@ -12780,7 +12780,7 @@ msgstr "I<mk-origtargz>(1)"
 #: ../scripts/devscripts.1:117
 msgid ""
 "rename upstream tarball, optionally changing the compression and removing "
-"unwanted files [unzip, xz-utils, file, libtext-glob-perl]"
+"unwanted files [unzip, xz-utils, file]"
 msgstr ""
 
 #. type: IP
@@ -12954,9 +12954,14 @@ msgstr "I<uscan>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:143
+#, fuzzy
+#| msgid ""
+#| "scan upstream sites for new releases of packages [gpgv, gnupg, liblwp-"
+#| "protocol-https-perl, libwww-perl, libtext-glob-perl, unzip, xz-utils, "
+#| "file]"
 msgid ""
 "scan upstream sites for new releases of packages [gpgv, gnupg, liblwp-"
-"protocol-https-perl, libwww-perl, libtext-glob-perl, unzip, xz-utils, file]"
+"protocol-https-perl, libwww-perl, unzip, xz-utils, file]"
 msgstr ""
 "durchucht Seiten der Originalautoren auf neue Veröffentlichungen von "
 "Paketen. [gpgv, gnupg, liblwp-protocol-https-perl, libwww-perl, libtext-glob-"
@@ -15651,7 +15656,7 @@ msgstr "B<--repack>"
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:116
 msgid ""
-"If the given file is not in compressed using the desired format (see B<--"
+"If the given file is not compressed using the desired format (see B<--"
 "compression>), recompress it."
 msgstr ""
 
