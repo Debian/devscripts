@@ -12,6 +12,9 @@ devscripts (2.14.2) UNRELEASED; urgency=medium
   * Use HTTPS for the buildd logs to avoid a redirect
   * Fix scraping of the wnpp web pages due to https links
 
+  [ Daniel Kahn Gillmor ]
+  * uscan: check for likely upstream signatures if none are known (Closes: #732449)
+
   [ Cyril Brulebois ]
   * deb-reversion: Add support for udebs.  (Closes: #739437)
 

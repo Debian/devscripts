@@ -1449,6 +1449,16 @@ EOF
 	       '--keyring', $keyring,
 	       "$destdir/$newfile_base.pgp", "$destdir/$newfile_base") >> 8 == 0
 		 or uscan_die("$progname warning: OpenPGP signature did not verify.\n");
+    } else {
+	print "-- Checking for common possible upsteam OpenPGP signatures\n" if $verbose;
+	foreach my $suffix (qw(asc gpg pgp sig)) {
+	    my $sigrequest = HTTP::Request->new('GET' => "$upstream_url.$suffix");
+	    my $sigresponse = $user_agent->request($sigrequest);
+	    if ($sigresponse->is_success()) {
+		uscan_warn "$pkg: Possible OpenPGP signature found at:\n   $upstream_url.$suffix.\n  Please consider adding opts=pgpsigurlmangle=s/\$/.$suffix/\n  to debian/watch.  see uscan(1) for more details.\n";
+		last;
+	    }
+	}
     }
 
     # Call mk-origtargz (renames, repacks, etc.)
