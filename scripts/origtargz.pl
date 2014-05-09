@@ -106,7 +106,8 @@ When found, a hardlink is created if possible, otherwise a symlink.
 Unpack the downloaded orig tarball to the current directory, replacing
 everything except the debian directory. Existing files are removed, except for
 F<debian/> and VCS files. Preserved are: F<.bzr>, F<.bzrignore>,
-F<.bzr-builddeb>, F<.git>, F<.gitignore>, F<.hg>, F<.hgignore>, and F<.svn>.
+F<.bzr-builddeb>, F<.git>, F<.gitignore>, F<.hg>, F<.hgignore>, F<_darcs> and
+F<.svn>.
 
 =over
 
@@ -308,7 +309,7 @@ sub clean_checkout ()
 	while (my $file = readdir DIR) {
 		next if ($file eq '.' or $file eq '..');
 		next if ($file eq 'debian');
-		next if ($file =~ /^(\.bzr|\.git|\.hg|\.svn|CVS)$/);
+		next if ($file =~ /^(\.bzr|\.git|\.hg|\.svn|CVS|_darcs)$/);
 		if ($file =~ /^(\.bzr(ignore|-builddeb)|\.gitignore|\.hgignore)$/) {
 			print "Notice: not deleting $file (likely to come from VCS checkout)\n";
 			next;
