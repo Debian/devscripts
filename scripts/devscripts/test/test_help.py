@@ -42,31 +42,30 @@ class HelpTestCase(unittest.TestCase):
     @classmethod
     def make_help_tester(cls, script):
         def tester(self):
-            null = open('/dev/null', 'r')
-            process = subprocess.Popen(['./' + script, '--help'],
-                                       close_fds=True, stdin=null,
-                                       stdout=subprocess.PIPE,
-                                       stderr=subprocess.PIPE)
-            started = time.time()
-            out = []
+            with open('/dev/null', 'r') as null:
+                process = subprocess.Popen(['./' + script, '--help'],
+                                           close_fds=True, stdin=null,
+                                           stdout=subprocess.PIPE,
+                                           stderr=subprocess.PIPE)
+                started = time.time()
+                out = []
 
-            fds = [process.stdout.fileno(), process.stderr.fileno()]
-            for fd in fds:
-                fcntl.fcntl(fd, fcntl.F_SETFL,
-                            fcntl.fcntl(fd, fcntl.F_GETFL) | os.O_NONBLOCK)
+                fds = [process.stdout.fileno(), process.stderr.fileno()]
+                for fd in fds:
+                    fcntl.fcntl(fd, fcntl.F_SETFL,
+                                fcntl.fcntl(fd, fcntl.F_GETFL) | os.O_NONBLOCK)
 
-            while time.time() - started < TIMEOUT:
-                for fd in select.select(fds, [], fds, TIMEOUT)[0]:
-                    out.append(os.read(fd, 1024))
-                if process.poll() is not None:
-                    break
+                while time.time() - started < TIMEOUT:
+                    for fd in select.select(fds, [], fds, TIMEOUT)[0]:
+                        out.append(os.read(fd, 1024))
+                    if process.poll() is not None:
+                        break
 
-            if process.poll() is None:
-                os.kill(process.pid, signal.SIGTERM)
-                time.sleep(1)
                 if process.poll() is None:
-                    os.kill(process.pid, signal.SIGKILL)
-            null.close()
+                    os.kill(process.pid, signal.SIGTERM)
+                    time.sleep(1)
+                    if process.poll() is None:
+                        os.kill(process.pid, signal.SIGKILL)
 
             self.assertEqual(process.poll(), 0,
                              "%s failed to return usage within %i seconds.\n"
