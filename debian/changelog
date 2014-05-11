@@ -1,4 +1,4 @@
-devscripts (2.14.2) UNRELEASED; urgency=medium
+devscripts (2.14.2) unstable; urgency=medium
 
   [ Jakub Wilk ]
   * sadt:
@@ -13,7 +13,8 @@ devscripts (2.14.2) UNRELEASED; urgency=medium
   * Fix scraping of the wnpp web pages due to https links
 
   [ Daniel Kahn Gillmor ]
-  * uscan: check for likely upstream signatures if none are known (Closes: #732449)
+  * uscan: check for likely upstream signatures if none are known (Closes:
+    #732449)
 
   [ Cyril Brulebois ]
   * deb-reversion: Add support for udebs.  (Closes: #739437)
@@ -49,7 +50,7 @@ devscripts (2.14.2) UNRELEASED; urgency=medium
     scheme and removing files listed in debian/copyright's Excluded-Files.
     This is now also used by uscan, where most of the code comes from.
 
- -- Jakub Wilk <jwilk@debian.org>  Sun, 26 Jan 2014 21:50:35 +0100
+ -- James McCoy <jamessan@debian.org>  Sun, 11 May 2014 13:15:22 -0400
 
 devscripts (2.14.1) unstable; urgency=medium
 
