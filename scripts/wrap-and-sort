@@ -48,6 +48,7 @@ SUPPORTED_FILES = (
     "*.install",
 )
 
+
 class WrapAndSortControl(Control):
     def wrap_and_sort(self, wrap_always, short_indent, sort_paragraphs,
                       keep_first, trailing_comma):
@@ -135,10 +136,12 @@ def remove_trailing_whitespaces(filename):
     f.write(new_content)
     f.close()
 
+
 def sort_list(unsorted_list):
     packages = [x for x in unsorted_list if re.match("[a-z0-9]", x)]
     special = [x for x in unsorted_list if not re.match("[a-z0-9]", x)]
     return sorted(packages) + sorted(special)
+
 
 def wrap_and_sort(options):
     control_files = [f for f in options.files if re.search("/control[^/]*$", f)]
@@ -168,6 +171,7 @@ def wrap_and_sort(options):
         install.sort()
         install.save()
 
+
 def get_files(debian_directory):
     """Returns a list of files that should be wrapped and sorted."""
     files = []
@@ -176,6 +180,7 @@ def get_files(debian_directory):
         files.extend(file_name for file_name in glob.glob(file_pattern)
                      if not os.access(file_name, os.X_OK))
     return files
+
 
 def main():
     script_name = os.path.basename(sys.argv[0])
@@ -218,11 +223,11 @@ def main():
     (options, args) = parser.parse_args()
 
     if len(args) != 0:
-        parser.error("Unsupported additional parameters specified: %s" % \
+        parser.error("Unsupported additional parameters specified: %s" %
                      ", ".join(args))
 
     if not os.path.isdir(options.debian_directory):
-        parser.error('Debian directory not found, expecting "%s".' % \
+        parser.error('Debian directory not found, expecting "%s".' %
                      options.debian_directory)
 
     not_found = [f for f in options.files if not os.path.isfile(f)]
