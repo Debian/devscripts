@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 #
-# Copyright (C) 2010-2013, Benjamin Drung <bdrung@debian.org>
+# Copyright (C) 2010-2014, Benjamin Drung <bdrung@debian.org>
 #               2010, Stefano Rivera <stefanor@ubuntu.com>
 #
 # Permission to use, copy, modify, and/or distribute this software for any
@@ -74,6 +74,10 @@ class WrapAndSortControl(Control):
     def _wrap_field(self, control, entry, wrap_always, short_indent,
                     trailing_comma, sort=True):
         packages = [x.strip() for x in control[entry].split(",")]
+
+        # Sanitize alternative packages. E.g. "a|b  |c" -> "a | b | c"
+        packages = [" | ".join([x.strip() for x in p.split("|")]) for p in packages]
+
         if sort:
             # Remove duplicate entries
             packages = set(packages)
