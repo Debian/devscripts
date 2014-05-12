@@ -40,9 +40,12 @@ eval {
 # This can potentially be moved to Dpkg::Compression
 
 my %mime2comp = (
+    "application/x-gzip"  => "gzip",
     "application/gzip"    => "gzip",
     "application/x-bzip2" => "bzip2",
+    "application/bzip2  " => "bzip2",
     "application/x-xz"    => "xz",
+    "application/xz"      => "xz",
 );
 
 sub compression_guess_from_file {
