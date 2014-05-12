@@ -240,7 +240,9 @@ unless (defined $package) {
     # get version number
     unless (defined $version) {
 	my $debversion = Dpkg::Version->new($entry->get_version());
-	if ($debversion->is_native()) {
+	# In the following line, use $debversion->is_native() as soon as
+	# we need to depend on dpkg-dev >= 1.17.0 anyways
+	if ($debversion->{no_revision}) {
 	    print "Package with native version number $debversion; mk-origtargz makes no sense for native packages.\n";
 	    exit 0;
 	}
