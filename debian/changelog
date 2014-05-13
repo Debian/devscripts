@@ -7,6 +7,8 @@ devscripts (2.14.3) UNRELEASED; urgency=medium
   [ Martin Pitt ]
   * Install recommends for the autopkgtest, otherwise a lot of necessary tools
     like wdiff are missing.
+  * test_uscan: Add missing --compression in --installed mode, to fix the
+    autopkgtest.
 
  -- Benjamin Drung <bdrung@debian.org>  Mon, 12 May 2014 22:01:14 +0200
 

@@ -16,7 +16,7 @@
 # version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
 
 if test "$1" = --installed; then
-    COMMAND="uscan --no-conf"
+    COMMAND="uscan --no-conf --compression=xz"
     shift
 else
     top_srcdir=$(readlink -f "${0%/*}/..")
