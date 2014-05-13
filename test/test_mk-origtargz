@@ -162,7 +162,8 @@ run_mk_origtargz() {
 assertType () {
 	mime="$1"
 	file="$2"
-	assertEquals "filetype for $(basename "$file")" "$mime" "$(file --brief --mime-type "$file")"
+	actual="$(file --brief --mime-type "$file" | sed -e 's,/x-,/,')"
+	assertEquals "filetype for $(basename "$file")" "$mime" "$actual"
 }
 
 
@@ -266,7 +267,7 @@ testRepackGZ2XZ() {
 		--package foo --version 0.1 --copy foo-0.1.tar.gz --repack --compression xz
 	assertFalse "wrong result does exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
-	assertType application/x-xz $TMPDIR/foo_0.1.orig.tar.xz
+	assertType application/xz $TMPDIR/foo_0.1.orig.tar.xz
 }
 
 testRepackXZ2GZ() {
@@ -306,7 +307,7 @@ testRepackZip2XZ() {
 		--package foo --version 0.1 foo-0.1.zip --compression xz
 	assertTrue "original zip file does not exist" "[ -e $TMPDIR/foo-0.1.zip ]"
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
-	assertType application/x-xz $TMPDIR/foo_0.1.orig.tar.xz
+	assertType application/xz $TMPDIR/foo_0.1.orig.tar.xz
 }
 
 testExclude() {
@@ -329,7 +330,7 @@ testExcludeXZ() {
 		"Successfully repacked ../foo-0.1.tar.xz as ../foo_0.1.orig.tar.xz, deleting 19 files from it." \
 		 ../foo-0.1.tar.xz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
-	assertType application/x-xz $TMPDIR/foo_0.1.orig.tar.xz
+	assertType application/xz $TMPDIR/foo_0.1.orig.tar.xz
 	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1.orig.tar.xz | sort)"
 }
 
@@ -341,7 +342,7 @@ testExcludeZip() {
 		"Successfully repacked ../foo-0.1.zip as ../foo_0.1.orig.tar.xz, deleting 19 files from it." \
 		 ../foo-0.1.zip --compression xz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
-	assertType application/x-xz $TMPDIR/foo_0.1.orig.tar.xz
+	assertType application/xz $TMPDIR/foo_0.1.orig.tar.xz
 	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1.orig.tar.xz | sort)"
 }
 
