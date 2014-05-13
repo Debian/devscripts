@@ -1,7 +1,12 @@
 devscripts (2.14.3) UNRELEASED; urgency=medium
 
+  [ Benjamin Drung ]
   * wrap-and-sort: Sanitize spaces between alternative package names.
     (Closes: #747818)
+
+  [ Martin Pitt ]
+  * Install recommends for the autopkgtest, otherwise a lot of necessary tools
+    like wdiff are missing.
 
  -- Benjamin Drung <bdrung@debian.org>  Mon, 12 May 2014 22:01:14 +0200
 
