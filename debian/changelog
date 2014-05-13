@@ -9,6 +9,7 @@ devscripts (2.14.3) UNRELEASED; urgency=medium
     like wdiff are missing.
   * test_uscan: Add missing --compression in --installed mode, to fix the
     autopkgtest.
+  * Add missing zip autopkgtest dependency (used by test_uscan).
 
  -- Benjamin Drung <bdrung@debian.org>  Mon, 12 May 2014 22:01:14 +0200
 
