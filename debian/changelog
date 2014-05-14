@@ -11,6 +11,10 @@ devscripts (2.14.3) UNRELEASED; urgency=medium
     autopkgtest.
   * Add missing zip autopkgtest dependency (used by test_uscan).
 
+  [ James McCoy ]
+  * uscan: Specify file name instead of path in --dehs mode's target node.
+    (Closes: #747901)
+
  -- Benjamin Drung <bdrung@debian.org>  Mon, 12 May 2014 22:01:14 +0200
 
 devscripts (2.14.2) unstable; urgency=medium

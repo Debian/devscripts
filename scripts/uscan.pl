@@ -1481,17 +1481,21 @@ EOF
 	      to_string => \$mk_origtargz_out,
 	      wait_child => 1);
 	chomp($mk_origtargz_out);
-	$target = $1 if  $mk_origtargz_out =~ /Successfully .* to ([^,]+)\.$/;
-	$target = $1 if  $mk_origtargz_out =~ /Leaving (.*) where it is/;
+	$target = $1 if $mk_origtargz_out =~ /Successfully .* (?:to|as) ([^,]+)\.$/;
+	$target = $1 if $mk_origtargz_out =~ /Leaving (.*) where it is/;
     }
 
     if ($verbose) {
 	print "-- Successfully downloaded updated package $newfile_base\n";
-	print "-- $mk_origtargz_out\n";
+	if (defined $mk_origtargz_out) {
+	    print "-- $mk_origtargz_out\n";
+	}
     } elsif ($dehs) {
-	my $msg = "Successfully downloaded updated package $newfile_base\n".
-	          "$mk_origtargz_out\n";
-	$dehs_tags{target} = $target;
+	my $msg = "Successfully downloaded updated package $newfile_base\n";
+	if (defined $mk_origtargz_out) {
+	    $msg .= "$mk_origtargz_out\n";
+	}
+	$dehs_tags{target} = basename($target);
 	dehs_msg($msg);
     }
 

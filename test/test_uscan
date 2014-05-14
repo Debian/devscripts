@@ -85,7 +85,7 @@ END
       python -m SimpleHTTPServer $PORT &
       echo $! > pid )
 
-    (cd $TMPDIR/$PKG ; $COMMAND --repack --compression=$to_comp)
+    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND --dehs --repack --compression=$to_comp) 2>&1 )
 
     TARBALL=${PKG}_1.orig.tar.$to_comp
     if [ "$from_ext" != "tar.$to_comp" ]
@@ -98,6 +98,8 @@ END
     CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
     assertTrue 'file contents missing'	\
                 $(containsName "$CONTENTS" content)
+    assertTrue "malfored target in dehs output: $OUTPUT" \
+               $(containsName "$OUTPUT" "<target>$TARBALL</target>")
 
     cleanup
 
@@ -142,7 +144,7 @@ END
       python -m SimpleHTTPServer $PORT &
       echo $! > pid )
 
-    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND --repack --compression=$to_comp) )
+    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND --dehs --repack --compression=$to_comp) )
 
     TARBALL=${PKG}_1.orig.tar.$to_comp
     assertTrue 'unrepacked zipfile present' "[ -f $TMPDIR/${PKG}-1.zip ]"
@@ -152,6 +154,8 @@ END
     CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
     assertTrue 'file contents missing'	\
                 $(containsName "$CONTENTS" content)
+    assertTrue "malfored target in dehs output: $OUTPUT" \
+               $(containsName "$OUTPUT" "<target>$TARBALL</target>")
 
     cleanup
 
@@ -270,7 +274,7 @@ END
       python -m SimpleHTTPServer $PORT &
       echo $! > pid )
 
-    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND --repack) 2>&1)
+    (cd $TMPDIR/$PKG ; $COMMAND --repack)
 
     TARBALL=${PKG}_1.orig.tar.xz
     assertTrue 'unrepacked zipfile not present' "[ -f $TMPDIR/${PKG}-1.zip ]"
