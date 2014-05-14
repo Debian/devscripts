@@ -1496,6 +1496,7 @@ EOF
 	    $msg .= "$mk_origtargz_out\n";
 	}
 	$dehs_tags{target} = basename($target);
+	$dehs_tags{'target-path'} = $target;
 	dehs_msg($msg);
     }
 
@@ -1800,7 +1801,7 @@ sub dehs_output ()
 
     for my $tag (qw(package debian-uversion debian-mangled-uversion
 		    upstream-version upstream-url
-		    status target messages warnings errors)) {
+		    status target target-path messages warnings errors)) {
 	if (exists $dehs_tags{$tag}) {
 	    if (ref $dehs_tags{$tag} eq "ARRAY") {
 		foreach my $entry (@{$dehs_tags{$tag}}) {
