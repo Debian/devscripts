@@ -458,6 +458,14 @@ unless ($same_name) {
     }
 }
 
+# Final check: Is the tarball usable
+
+# We are lazy and rely on Dpkg::IPC to report an error message (spawn does not report back the error code).
+# We don't expect this to occur often anyways.
+my $ret = spawn(exec => ['tar', '--list', '--auto-compress', '--file', $destfile ],
+      wait_child => 1,
+      to_file => '/dev/null');
+
 # Tell the use what we did
 
 my $upstream_nice = File::Spec->canonpath($upstream);
