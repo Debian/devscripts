@@ -1450,7 +1450,7 @@ EOF
 	       "$destdir/$newfile_base.pgp", "$destdir/$newfile_base") >> 8 == 0
 		 or uscan_die("$progname warning: OpenPGP signature did not verify.\n");
     } else {
-	print "-- Checking for common possible upsteam OpenPGP signatures\n" if $verbose;
+	print "-- Checking for common possible upstream OpenPGP signatures\n" if $verbose;
 	foreach my $suffix (qw(asc gpg pgp sig)) {
 	    my $sigrequest = HTTP::Request->new('GET' => "$upstream_url.$suffix");
 	    my $sigresponse = $user_agent->request($sigrequest);
