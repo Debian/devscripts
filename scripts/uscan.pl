@@ -1485,12 +1485,7 @@ EOF
 	$target = $1 if $mk_origtargz_out =~ /Leaving (.*) where it is/;
     }
 
-    if ($verbose) {
-	print "-- Successfully downloaded updated package $newfile_base\n";
-	if (defined $mk_origtargz_out) {
-	    print "-- $mk_origtargz_out\n";
-	}
-    } elsif ($dehs) {
+    if ($dehs) {
 	my $msg = "Successfully downloaded updated package $newfile_base\n";
 	if (defined $mk_origtargz_out) {
 	    $msg .= "$mk_origtargz_out\n";
@@ -1498,6 +1493,13 @@ EOF
 	$dehs_tags{target} = basename($target);
 	$dehs_tags{'target-path'} = $target;
 	dehs_msg($msg);
+    }
+    else {
+	my $prefix = $verbose ? "-- " : "";
+	print $prefix ."Successfully downloaded updated package $newfile_base\n";
+	if (defined $mk_origtargz_out) {
+	    print $prefix ."$mk_origtargz_out\n";
+	}
     }
 
     # Do whatever the user wishes to do
