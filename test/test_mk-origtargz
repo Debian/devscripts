@@ -99,7 +99,7 @@ END
 
 makeDebianCopyright() {
     cat <<'END' > $TMPDIR/foo/debian/copyright
-Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Files-Excluded: exclude-this*
  .exclude-this*
  exclude-dir1
@@ -414,7 +414,7 @@ testCopyrightFormatWarning() {
 	makeDebanDir
 	makeWrongDebianCopyright
 	run_mk_origtargz foo \
-		"WARNING: The file debian/copyright mentions Files-Excluded, but its format is not recognized. Specify Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/ in order to remove files from the tarball with mk-origtargz." \
+		"WARNING: The file debian/copyright mentions Files-Excluded, but its format is not recognized. Specify Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/ in order to remove files from the tarball with mk-origtargz." \
 		"Successfully symlinked ../foo-0.1.tar.gz to ../foo_0.1.orig.tar.gz." \
 		 ../foo-0.1.tar.gz
 

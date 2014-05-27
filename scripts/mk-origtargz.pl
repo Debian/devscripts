@@ -264,7 +264,7 @@ unless (defined $package) {
 for my $copyright_file (@copyright_files) {
     # get files-excluded
     my $data = Dpkg::Control::Hash->new();
-    my $okformat = qr'http://www.debian.org/doc/packaging-manuals/copyright-format/[.\d]+';
+    my $okformat = qr'https?://www.debian.org/doc/packaging-manuals/copyright-format/[.\d]+';
     eval {
 	$data->load($copyright_file);
 	1;
@@ -286,7 +286,7 @@ for my $copyright_file (@copyright_files) {
 	    if ($line =~ m/\bFiles-Excluded:/i) {
 		warn "WARNING: The file $copyright_file mentions Files-Excluded, but its ".
 		     "format is not recognized. Specify Format: ".
-		     "http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/ ".
+		     "https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/ ".
 		     "in order to remove files from the tarball with mk-origtargz.\n";
 		last;
 	    }
