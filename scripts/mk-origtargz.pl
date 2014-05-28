@@ -298,19 +298,22 @@ for my $copyright_file (@copyright_files) {
 
 # Gather information about the upstream file.
 
-my $zip_regex = qr/\.(zip|jar)$/;
 # This makes more sense in Dpkg:Compression
-my $tar_regex = qr/\.(tar\.gz  |tgz
-		     |tar\.bz2 |tbz2?
-		     |tar.lzma |tlz(?:ma?)?
-		     |tar.xz   |txz)$/x;
-
-my $is_zipfile = $upstream =~ $zip_regex;
-my $is_tarfile = $upstream =~ $tar_regex;
+my $tar_regex = qr/\.(tar\.gz   |tgz
+		     |tar\.bz2  |tbz2?
+		     |tar\.lzma |tlz(?:ma?)?
+		     |tar\.xz   |txz
+		     |tar\.Z
+		     )$/x;
 
 unless (-e $upstream) {
     die "Could not read $upstream: $!"
 }
+
+my $mime = compression_guess_from_file($upstream);
+
+my $is_zipfile = $mime eq 'zip';
+my $is_tarfile = $upstream =~ $tar_regex;
 
 unless ($is_zipfile or $is_tarfile) {
     # TODO: Should we ignore the name and only look at what file knows?
@@ -395,7 +398,6 @@ if ($repack) {
 	die("Cannot determine compression method of $upstream_tar");
     }
     $do_repack = $comp ne $compression;
-
 }
 
 # Removing files
