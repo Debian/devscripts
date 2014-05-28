@@ -16,7 +16,7 @@
 
 package Devscripts::Compression;
 
-use Dpkg::Compression;
+use Dpkg::Compression qw(!compression_get_property);
 use Dpkg::IPC;
 use Exporter qw(import);
 
@@ -46,6 +46,8 @@ my %mime2comp = (
     "application/bzip2  " => "bzip2",
     "application/x-xz"    => "xz",
     "application/xz"      => "xz",
+    "application/zip"     => "zip",
+    "application/x-compress" => "compress",
 );
 
 sub compression_guess_from_file {
@@ -60,6 +62,33 @@ sub compression_guess_from_file {
     } else {
 	return;
     }
+}
+
+# comp_prog and default_level aren't provided because a) they aren't needed in
+# devscripts and b) the Dpkg::Compression API isn't rich enough to support
+# these as compressors
+my %comp_properties = (
+    compress => {
+	file_ext => 'Z',
+	decomp_prog => ['uncompress'],
+    },
+    zip => {
+	file_ext => 'zip',
+	decomp_prog => ['unzip'],
+    }
+);
+
+sub compression_get_property
+{
+    my ($compression, $property) = @_;
+    if (!exists $comp_properties{$compression}) {
+	return Dpkg::Compression::compression_get_property($compression, $property);
+    }
+
+    if (exists $comp_properties{$compression}{$property}) {
+	return $comp_properties{$compression}{$property};
+    }
+    return;
 }
 
 1;
