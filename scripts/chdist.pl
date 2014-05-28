@@ -281,6 +281,9 @@ sub bin2src
 	while (<CACHE>) {
 	    if (m/^Source: (.*)/) {
 		$src = $1;
+		# Slurp remaining output to avoid SIGPIPE
+		local $/ = undef;
+		my $junk = <CACHE>;
 		last;
 	    }
 	}
@@ -304,6 +307,9 @@ sub src2bin {
 	while (<CACHE>) {
 	    if (m/^Binary: (.*)/) {
 		print join("\n", split(/, /, $1)) . "\n";
+		# Slurp remaining output to avoid SIGPIPE
+		local $/ = undef;
+		my $junk = <CACHE>;
 		last;
 	    }
 	}
