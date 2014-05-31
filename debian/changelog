@@ -1,9 +1,11 @@
-devscripts (2.14.4) UNRELEASED; urgency=medium
+devscripts (2.14.4) unstable; urgency=medium
 
   * mk-origtargz: Fix DEP8 test failures due to differences in how the script
     is named when it's run.
+  * debchange: Use Dpkg::Changelog::Parse to parse the changelog instead of
+    performing manual parsing in debchange.  (Closes: #749980)
 
- -- James McCoy <jamessan@debian.org>  Sat, 31 May 2014 08:42:31 -0400
+ -- James McCoy <jamessan@debian.org>  Sat, 31 May 2014 09:47:19 -0400
 
 devscripts (2.14.3) unstable; urgency=medium
 

@@ -40,6 +40,7 @@ use File::Copy;
 use File::Basename;
 use Cwd;
 use Dpkg::Vendor qw(get_current_vendor);
+use Dpkg::Changelog::Parse;
 use lib '/usr/share/devscripts';
 use Devscripts::Compression;
 use Devscripts::Debbugs;
@@ -616,7 +617,7 @@ else {  # $opt_create
 #####
 
 # Find the current version number etc.
-my %changelog;
+my $changelog;
 my $PACKAGE = 'PACKAGE';
 my $VERSION = 'VERSION';
 my $MAINTAINER = 'MAINTAINER';
@@ -630,79 +631,41 @@ my $CHANGES = '';
 my $CL_URGENCY = '';
 
 if (! $opt_create || ($opt_create && $opt_news)) {
-    if (! $opt_create) {
-	open PARSED, qq[dpkg-parsechangelog -l"$changelog_path" | ]
-	    or fatal "Cannot execute dpkg-parsechangelog: $!";
-    } elsif ($opt_create && $opt_news) {
-	open PARSED, qq[dpkg-parsechangelog | ]
-	    or fatal "Cannot execute dpkg-parsechangelog: $!";
-    } else {
-	fatal "This can't happen: what am I parsing?";
-    }
-
-    my $last;
-    while (<PARSED>) {
-	chomp;
-	if (/^(\S+):\s(.+?)\s*$/) { $changelog{$1}=$2; $last=$1; }
-	elsif (/^(\S+):\s$/) { $changelog{$1}=''; $last=$1; }
-	elsif (/^\s\.$/) { $changelog{$last}.="\n"; }
-	elsif (/^\s(.+)$/) { $changelog{$last}.="$1\n"; }
-	else {
-	    fatal "Don't understand dpkg-parsechangelog output: $_";
-	}
-    }
-
-    close PARSED
-	or fatal "Problem executing dpkg-parsechangelog: $!";
-    if ($?) { fatal "dpkg-parsechangelog failed!"; }
+    my $file = $opt_create ? 'debian/changelog' : $changelog_path;
+    $changelog = Dpkg::Changelog::Parse::changelog_parse(file => $file);
 
     # Now we've read the changelog, set some variables and then
     # let's check the directory name is sensible
     fatal "No package name in changelog!"
-	unless exists $changelog{'Source'};
-    $PACKAGE = $changelog{'Source'};
+	unless exists $changelog->{Source};
+    $PACKAGE = $changelog->{Source};
     fatal "No version number in changelog!"
-	unless exists $changelog{'Version'};
-    $VERSION=$changelog{'Version'};
+	unless exists $changelog->{Version};
+    $VERSION=$changelog->{Version};
     fatal "No maintainer in changelog!"
-	unless exists $changelog{'Maintainer'};
-    ($MAINTAINER,$EMAIL) = ($changelog{'Maintainer'} =~ /^([^<]+) <(.*)>/);
+	unless exists $changelog->{Maintainer};
+    ($MAINTAINER,$EMAIL) = ($changelog->{Maintainer} =~ /^([^<]+) <(.*)>/);
     fatal "No distribution in changelog!"
-	unless exists $changelog{'Distribution'};
+	unless exists $changelog->{Distribution};
     if ($vendor eq 'Ubuntu') {
 	# In Ubuntu the development release regularly changes, don't just copy
 	# the previous name.
 	$DISTRIBUTION=get_ubuntu_devel_distro();
     } else {
-	$DISTRIBUTION=$changelog{'Distribution'};
+	$DISTRIBUTION=$changelog->{Distribution};
     }
     fatal "No changes in changelog!"
-	unless exists $changelog{'Changes'};
+	unless exists $changelog->{Changes};
 
     # Find the current package version
     if ($opt_news) {
 	my $found_version = 0;
 	my $found_urgency = 0;
-	open PARSED, qq[dpkg-parsechangelog -l"$real_changelog_path" | ]
-	    or fatal "Cannot execute dpkg-parsechangelog: $!";
-	while (<PARSED>) {
-	    chomp;
-	    if (m%^Version:\s+(\S+)$%) {
-		$VERSION = $1;
-		$VERSION =~ s/~$//;
-		$found_version = 1;
-		last if $found_urgency;
-	    } elsif (m%^Urgency:\s+(\S+)(\s|$)%) {
-		$CL_URGENCY = $1;
-		$found_urgency = 1;
-		last if $found_version;
-	    } elsif (m%^$%) {
-		last;
-	    }
-	}
-	close PARSED
-	    or fatal "Problem executing dpkg-parsechangelog: $!";
-	if ($?) { fatal "dpkg-parsechangelog failed!"; }
+	my $clog = Dpkg::Changelog::Parse::changelog_parse(file => $real_changelog_path);
+	$VERSION = $clog->{Version};
+	$VERSION =~ s/~$//;
+
+	$CL_URGENCY = $clog->{Urgency};
     }
 
     # Is the directory name acceptable?
@@ -876,7 +839,7 @@ if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and
     ! $opt_create and ! $opt_a_passed and ! $opt_r and ! $opt_e and
     $vendor ne 'Ubuntu' and $vendor ne 'Tanglu' and
     ! ($opt_release_heuristic eq 'changelog' and
-       $changelog{'Distribution'} eq 'UNRELEASED' and ! $opt_i_passed)) {
+       $changelog->{Distribution} eq 'UNRELEASED' and ! $opt_i_passed)) {
 
     if (-f 'debian/control') {
 	if (have_lpdc()) {
@@ -890,7 +853,7 @@ if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and
 
 	    if ($maintainer !~ m/<packages\@qa\.debian\.org>/ and
 		! grep { $_ eq $packager } ($maintainer, @uploaders) and
-		$packager ne $changelog{'Maintainer'} and ! $opt_team) {
+		$packager ne $changelog->{Maintainer} and ! $opt_team) {
 		$opt_n=1;
 		$opt_a=0;
 	    }
@@ -1001,7 +964,7 @@ my $DATE;
 }
 
 if ($opt_news && !$opt_i && !$opt_a) {
-    if ($VERSION eq $changelog{'Version'} && !$opt_v && !$opt_l) {
+    if ($VERSION eq $changelog->{Version} && !$opt_v && !$opt_l) {
 	$opt_a = 1;
     } else {
 	$opt_i = 1;
@@ -1041,7 +1004,7 @@ if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r &&
 	}
     }
     elsif ($opt_release_heuristic eq 'changelog') {
-	if ($changelog{'Distribution'} eq 'UNRELEASED') {
+	if ($changelog->{Distribution} eq 'UNRELEASED') {
 		$opt_a = 1;
 	}
 	elsif ($EMPTY_TEXT==1) {
@@ -1060,7 +1023,7 @@ unless ($opt_create) {
     open S, $changelog_path or fatal "Cannot open existing $changelog_path: $!";
 
     # Read the first stanza from the changelog file
-    # We do this directly rather than reusing $changelog{'Changes'}
+    # We do this directly rather than reusing $changelog->{Changes}
     # so that we have the verbatim changes rather than a (albeit very
     # slightly) reformatted version. See Debian bug #452806
 
@@ -1089,7 +1052,7 @@ my $merge=0;
 
 if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
      $opt_bpo || $opt_l || $opt_v || $opt_d ||
-    ($opt_news && $VERSION ne $changelog{'Version'})) && ! $opt_create) {
+    ($opt_news && $VERSION ne $changelog->{Version})) && ! $opt_create) {
 
     $optionsok=1;
 
@@ -1230,7 +1193,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 			$bpo_dist = $bpo_dists{$previous_dist} . '-backports';
 		    } else {
 			# Fallback to using the previous distribution
-			$bpo_dist = $changelog{'Distribution'};
+			$bpo_dist = $changelog->{Distribution};
 		    }
 		}
 
@@ -1279,9 +1242,9 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
     $urgency ||= 'medium';
 
     if (($opt_v or $opt_i or $opt_l or $opt_d) and
-	$opt_release_heuristic eq "changelog" and
-	$changelog{'Distribution'} eq "UNRELEASED" and
-	$distribution eq "UNRELEASED") {
+	$opt_release_heuristic eq 'changelog' and
+	$changelog->{Distribution} eq 'UNRELEASED' and
+	$distribution eq 'UNRELEASED') {
 
 	$merge = 1;
     } else {
@@ -1501,7 +1464,7 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
     }
 
     if ($opt_t && $opt_a) {
-	print O "\n -- $changelog{'Maintainer'}  $changelog{'Date'}\n";
+	print O "\n -- $changelog->{Maintainer}  $changelog->{Date}\n";
     } else {
 	print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n";
     }
@@ -1522,7 +1485,7 @@ elsif ($opt_e && ! $opt_create) {
     print O $CHANGES;
 
     if ($opt_t) {
-	print O "\n -- $changelog{'Maintainer'}  $changelog{'Date'}\n";
+	print O "\n -- $changelog->{Maintainer}  $changelog->{Date}\n";
     } else {
 	print O "\n -- $MAINTAINER <$EMAIL>  $DATE\n";
     }
