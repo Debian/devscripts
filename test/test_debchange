@@ -23,6 +23,17 @@ fi
 
 . "${0%/*}/shunit2-helper-functions.sh"
 
+setUp() {
+    CHANGELOG="${SHUNIT_TMPDIR}/changelog"
+    DEBFULLNAME="Raphaël Hertzog"
+    DEBEMAIL="hertzog@debian.org"
+    export DEBFULLNAME DEBEMAIL
+}
+
+tearDown() {
+    unset CHANGELOG DEBFULLNAME DEBEMAIL
+}
+
 runCommand2() {
     local param="$1"
     local exp_stdout="$2"
@@ -43,7 +54,7 @@ runCommand2() {
 }
 
 success() {
-    runCommand2 "-c ${SHUNIT_TMPDIR}/changelog $1" "" "" 0
+    runCommand2 "-c \"$CHANGELOG\" $1" "" "" 0
 }
 
 checkVersion() {
@@ -51,10 +62,10 @@ checkVersion() {
     local param="$2"
     local start_version="$3"
     local expected_version="$4"
-    rm -f ${SHUNIT_TMPDIR}/changelog
+    rm -f "$CHANGELOG"
     success "--create $start_param --package test-package -v $start_version \"Devscripts Test Suite.\""
     success "$param \"Version test.\""
-    local version=$(dpkg-parsechangelog -l${SHUNIT_TMPDIR}/changelog | sed -n 's/^Version: //p')
+    local version=$(dpkg-parsechangelog -l"$CHANGELOG" | sed -n 's/^Version: //p')
     assertEquals "\"dch $param\" from version $start_version" "$expected_version" "$version"
 }
 
@@ -108,6 +119,44 @@ testUbuntuRebuild() {
     checkUbuntuVersion "-R" "2.0-4" "2.0-4build1"
     checkUbuntuVersion "-R" "1.42-4ubuntu5" "1.42-4ubuntu6"
     checkUbuntuVersion "-R" "0.1-2build3" "0.1-2build4"
+}
+
+verifyMaintainer() {
+    local maintainer="$(dpkg-parsechangelog -l"$CHANGELOG" | sed -n 's/^Maintainer: //p')"
+    assertEquals "\"$1\"" "$DEBFULLNAME <$DEBEMAIL>" "$maintainer"
+}
+
+testEncoding() {
+    rm -f "$CHANGELOG"
+    success "--create -D unstable --package test-package -v 1.0-1 \"First upload\""
+    verifyMaintainer "dch --create"
+
+    success "-a \"Some change\""
+    verifyMaintainer "dch -a"
+
+    success "-i \"Second upload\""
+    verifyMaintainer "dch -i"
+
+    success "-e \"Another change\""
+    verifyMaintainer "dch -e"
+
+    success "-n NMU"
+    verifyMaintainer "dch -n"
+
+    success "-v 1.1-1 \"New upstream\""
+    verifyMaintainer "dch -v"
+
+    success "--bin-nmu \"Rebuild against libfoo\""
+    verifyMaintainer "dch --bin-nmu"
+
+    success "-q \"QA upload\""
+    verifyMaintainer "dch -q"
+
+    success "-s \"Security upload\""
+    verifyMaintainer "dch -s"
+
+    success "--bpo \"Backporrts upload\""
+    verifyMaintainer "dch --bpo"
 }
 
 . shunit2

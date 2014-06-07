@@ -644,6 +644,7 @@ if (! $opt_create || ($opt_create && $opt_news)) {
     $VERSION=$changelog->{Version};
     fatal "No maintainer in changelog!"
 	unless exists $changelog->{Maintainer};
+    $changelog->{Maintainer} = decode_utf8($changelog->{Maintainer});
     ($MAINTAINER,$EMAIL) = ($changelog->{Maintainer} =~ /^([^<]+) <(.*)>/);
     fatal "No distribution in changelog!"
 	unless exists $changelog->{Distribution};
