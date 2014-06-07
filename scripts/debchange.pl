@@ -462,7 +462,7 @@ if (defined $opt_u) {
 
 # See if we're Debian, Ubuntu or someone else, if we can
 my $vendor;
-if (not $opt_vendor eq '') {
+if (defined $opt_vendor && $opt_vendor) {
     $vendor = $opt_vendor;
 } else {
     if (defined $opt_D) {
