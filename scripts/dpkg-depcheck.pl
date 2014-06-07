@@ -22,7 +22,7 @@ use Cwd;
 use File::Basename;
 use Getopt::Long;
 
-use lib '/usr/share/devscripts';
+BEGIN { push @INC, '/usr/share/devscripts'; }
 use Devscripts::Set;
 use Devscripts::Packages;
 use Devscripts::PackageDeps;

@@ -41,7 +41,7 @@ use File::Basename;
 use Cwd;
 use Dpkg::Vendor qw(get_current_vendor);
 use Dpkg::Changelog::Parse;
-use lib '/usr/share/devscripts';
+BEGIN { push @INC, '/usr/share/devscripts'; }
 use Devscripts::Compression;
 use Devscripts::Debbugs;
 use POSIX qw(locale_h strftime);

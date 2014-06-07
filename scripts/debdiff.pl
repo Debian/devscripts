@@ -23,7 +23,7 @@ use File::Basename;
 use File::Spec;
 use File::Path qw/ rmtree /;
 use File::Temp qw/ tempdir tempfile /;
-use lib '/usr/share/devscripts';
+BEGIN { push @INC, '/usr/share/devscripts'; }
 use Devscripts::Compression;
 use Devscripts::Versort;
 

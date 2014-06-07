@@ -53,7 +53,7 @@ use Net::SMTP;
 use Cwd;
 use IO::File;
 use IO::Handle;
-use lib '/usr/share/devscripts';
+BEGIN { push @INC, '/usr/share/devscripts'; }
 use Devscripts::DB_File_Lock;
 use Devscripts::Debbugs;
 use Fcntl qw(O_RDWR O_RDONLY O_CREAT F_SETFD);
