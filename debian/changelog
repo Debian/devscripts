@@ -1,4 +1,4 @@
-devscripts (2.14.5) UNRELEASED; urgency=medium
+devscripts (2.14.5) unstable; urgency=medium
 
   * debchange:
     + Verify $opt_vendor is defined before trying to use it to avoid a warning
@@ -10,7 +10,7 @@ devscripts (2.14.5) UNRELEASED; urgency=medium
   * debcheckout: Handle more variations of Alioth URLs when attempting to
     perform an authenticated checkout.  (Closes: #750542)
 
- -- James McCoy <jamessan@debian.org>  Sat, 07 Jun 2014 15:31:54 -0400
+ -- James McCoy <jamessan@debian.org>  Tue, 10 Jun 2014 21:16:02 -0400
 
 devscripts (2.14.4) unstable; urgency=medium
 
