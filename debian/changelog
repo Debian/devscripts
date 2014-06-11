@@ -5,6 +5,8 @@ devscripts (2.14.5) UNRELEASED; urgency=medium
       about an unitialized variable.
     + utf-8 decode the maintainer name when reading it from the changelog.
       (Closes: #750855)
+  * uscan: Use HEAD instead of GET to check for possible GPG signature URLs.
+    (Closes: #750929)
 
  -- James McCoy <jamessan@debian.org>  Sat, 07 Jun 2014 15:31:54 -0400
 

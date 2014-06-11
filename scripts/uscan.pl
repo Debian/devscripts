@@ -1452,7 +1452,7 @@ EOF
     } else {
 	print "-- Checking for common possible upstream OpenPGP signatures\n" if $verbose;
 	foreach my $suffix (qw(asc gpg pgp sig)) {
-	    my $sigrequest = HTTP::Request->new('GET' => "$upstream_url.$suffix");
+	    my $sigrequest = HTTP::Request->new('HEAD' => "$upstream_url.$suffix");
 	    my $sigresponse = $user_agent->request($sigrequest);
 	    if ($sigresponse->is_success()) {
 		uscan_warn "$pkg: Possible OpenPGP signature found at:\n   $upstream_url.$suffix.\n  Please consider adding opts=pgpsigurlmangle=s/\$/.$suffix/\n  to debian/watch.  see uscan(1) for more details.\n";
