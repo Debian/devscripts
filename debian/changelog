@@ -7,6 +7,8 @@ devscripts (2.14.5) UNRELEASED; urgency=medium
       (Closes: #750855)
   * uscan: Use HEAD instead of GET to check for possible GPG signature URLs.
     (Closes: #750929)
+  * debcheckout: Handle more variations of Alioth URLs when attempting to
+    perform an authenticated checkout.  (Closes: #750542)
 
  -- James McCoy <jamessan@debian.org>  Sat, 07 Jun 2014 15:31:54 -0400
 

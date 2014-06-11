@@ -450,12 +450,12 @@ sub set_auth($$$$) {
 
     # Adjust urls from new-style anonymous access to old-style and then deal
     # with adjusting for authentication
-    $url =~ s@anonscm\.debian\.org/bzr@bzr.debian.org@;
-    $url =~ s@anonscm\.debian\.org/darcs@darcs.debian.org/darcs@;
+    $url =~ s@(?:alioth\.debian\.org/(?:anonscm/bzr|scm/loggerhead/bzr)|anonscm\.debian\.org/bzr(?:/bzr)?)@bzr.debian.org/bzr@;
+    $url =~ s@(?:alioth\.debian\.org/anonscm/darcs|anonscm\.debian\.org/darcs)@darcs.debian.org/darcs@;
     $url =~ s@git://anonscm\.debian\.org@git://git.debian.org@;
-    $url =~ s@anonscm\.debian\.org/git@git.debian.org/git@;
-    $url =~ s@anonscm\.debian\.org/hg@hg.debian.org/hg@;
-    $url =~ s@svn://anonscm\.debian\.org@svn://svn.debian.org@;
+    $url =~ s@(?:alioth\.debian\.org/anonscm/git|anonscm\.debian\.org/git)@git.debian.org/git@;
+    $url =~ s@(?:alioth\.debian\.org/anonscm/hg|anonscm\.debian\.org/hg)@hg.debian.org/hg@;
+    $url =~ s@svn://(?:scm\.alioth|anonscm)\.debian\.org@svn://svn.debian.org@;
     given ($repo_type) {
 	when ("bzr") {
 	    $url =~ s|^[\w+]+://(bzr\.debian\.org)/(.*)|bzr+ssh://$user$1/bzr/$2|;
