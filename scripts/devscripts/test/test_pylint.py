@@ -35,7 +35,7 @@ class PylintTestCase(unittest.TestCase):
         "Test: Run pylint on Python source code"
         files = ['devscripts']
         for script in setup.scripts:
-            f = open(script, 'r')
+            f = open(script, 'r', encoding='utf-8')
             if 'python' in f.readline():
                 files.append(script)
             f.close()

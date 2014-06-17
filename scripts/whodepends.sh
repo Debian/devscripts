@@ -1,8 +1,10 @@
-#! /bin/bash -e
+#!/bin/bash
 # whodepends - show maintainers a package depends upon
 # by Moshe Zadka <moshez@debian.org> and
 # modified by Joshua Kwan <joshk@triplehelix.org>
 # This script is in the public domain.
+
+set -e
 
 PROGNAME=`basename $0`
 

@@ -21,7 +21,7 @@
 
 use strict;
 use warnings;
-use lib '/usr/share/devscripts';
+BEGIN { push @INC, '/usr/share/devscripts'; }
 use Devscripts::Packages;
 use File::Basename;
 use Getopt::Long qw(:config gnu_getopt);
@@ -38,21 +38,23 @@ my $cachefile = $cachedir . basename($url);
 my $forcecache = 0;
 my $usecache = 0;
 
-my %flagmap = ( '(P)' => "pending",
-		'.(\+)' => "patch",
-		'..(H)' => "help [wanted]",
-		'...(M)' => "moreinfo [needed]",
-		'....(R)' => "unreproducible",
-		'.....(S)' => "security",
-		'......(U)' => "upstream",
-		'.......(I)' => "wheezy-ignore or squeeze-ignore",
-	      );
+my @flags = (
+    [qr/P/ => 'pending'],
+    [qr/\+/ => 'patch'],
+    [qr/H/ => 'help [wanted]'],
+    [qr/M/ => 'moreinfo [needed]'],
+    [qr/R/ => 'unreproducible'],
+    [qr/S/ => 'security'],
+    [qr/U/ => 'upstream'],
+);
 # A little hacky but allows us to sort the list by length
-my %distmap = ( '(O)' => "oldstable",
-		'.?(S)' => "stable",
-		'.?.?(T)' => "testing",
-		'.?.?.?(U)' => "unstable",
-		'.?.?.?.?(E)' => "experimental");
+my @dists = (
+    [qr/O/ => 'oldstable'],
+    [qr/S/ => 'stable'],
+    [qr/T/ => 'testing'],
+    [qr/U/ => 'unstable'],
+    [qr/E/ => 'experimental'],
+);
 
 my $includetags = "";
 my $excludetags = "";
@@ -180,8 +182,8 @@ if (-d $cachedir) {
     chdir $cachedir or die "$progname: can't cd $cachedir: $!\n";
 
     if ("$curl_or_wget" eq "wget") {
-        # Either use the cached version because the remote hasn't been
-        # updated (-N) or download a complete new copy (--no-continue)
+	# Either use the cached version because the remote hasn't been
+	# updated (-N) or download a complete new copy (--no-continue)
 	if (system('wget', '-qN', '--no-continue', $url) != 0) {
 	    die "$progname: wget failed!\n";
 	}
@@ -259,20 +261,26 @@ if ($debtags) {
 my $found_bugs_start;
 my ($current_package, $comment);
 
+my $html;
+{
+    local $/;
+    $html = <BUGS>;
+}
+
+my ($ignore) = $html =~ m%<strong>I</strong>: ([^<]*)%;
+push(@flags, [qr/I/ => $ignore]);
+
+my @stanzas = $html =~ m%<div class="package">(.*?)</div>%gs;
 my %pkg_store;
-while (defined(my $line = <BUGS>)) {
-    if( $line =~ /^<div class="package">/) {
-	$found_bugs_start = 1;
-    }
-    if( ! defined($found_bugs_start)) {
-	next;
-    } elsif ($line =~ m%<a name="([^\"]+)"><strong>Package:</strong></a> <a href="[^\"]+">%i) {
+foreach my $stanza (@stanzas) {
+    if ($stanza =~ m%<a name="([^\"]+)"><strong>Package:</strong></a> <a href="[^\"]+">%i) {
 	$current_package = $1;
 	$comment = '';
-    } elsif ($line =~ m%<a name="(\d+)"></a>\s*<a href="[^\"]+">\d+</a> (\[[^\]]+\])( \[[^\]]+\])? ([^<]+)%i) {
-	my ($num, $tags, $dists, $name) = ($1, $2, $3, $4);
-	chomp $name;
-	store_if_relevant(pkg => $current_package, num => $num, tags => $tags, dists => $dists, name => $name, comment => $comment);
+	while ($stanza =~ m%<a name="(\d+)"></a>\s*<a href="[^\"]+">\d+</a> (\[[^\]]+\])( \[[^\]]+\])? ([^<]+)%igc) {
+	    my ($num, $tags, $dists, $name) = ($1, $2, $3, $4);
+	    chomp $name;
+	    store_if_relevant(pkg => $current_package, num => $num, tags => $tags, dists => $dists, name => $name, comment => $comment);
+	}
     }
 }
 for (sort {$a <=> $b } keys %pkg_store) { print $pkg_store{$_}; }
@@ -346,14 +354,15 @@ sub human_flags($) {
     my $matchedexcludes = 0;
     my $applies = 1;
 
-    foreach my $flag ( sort { length $a <=> length $b } keys %flagmap ) {
-	if ($mrf =~ /^\[(?:$flag)/) {
-	    if ($excludetags =~ /\Q$1\E/) {
+    foreach my $flagref (@flags) {
+	my ($flag, $desc) = @{$flagref};
+	if ($mrf =~ $flag) {
+	    if ($excludetags =~ $flag) {
 		$matchedexcludes++;
-	    } elsif ($includetags =~ /\Q$1\E/ or ! $includetags) {
+	    } elsif ($includetags =~ $flag or ! $includetags) {
 		$matchedflags++;
 	    }
-	    push @hrf, $flagmap{$flag};
+	    push @hrf, $desc;
 	}
     }
     if ($excludetags and $tagexcoperation eq 'and' and
@@ -384,14 +393,15 @@ sub human_dists($) {
     my $matchedexcludes = 0;
     my $applies = 1;
 
-    foreach my $dist ( sort { length $a <=> length $b } keys %distmap ) {
-	if ($mrf =~ /(?:$dist)/) {
-	    if ($excludedists =~ /$dist/) {
+    foreach my $distref (@dists) {
+	my ($dist, $desc) = @{$distref};
+	if ($mrf =~ $dist) {
+	    if ($excludedists =~ $dist) {
 		$matchedexcludes++;
-	    } elsif ($includedists =~ /$dist/ or ! $includedists) {
+	    } elsif ($includedists =~ $dist or ! $includedists) {
 		$matcheddists++;
 	    }
-	    push @hrf, $distmap{$dist};
+	    push @hrf, $desc;
 	}
     }
     if ($excludedists and $distexcoperation eq 'and' and

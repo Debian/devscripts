@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#!/usr/bin/perl -w
 
 # bts: This program provides a convenient interface to the Debian
 # Bug Tracking System.
@@ -53,7 +53,7 @@ use Net::SMTP;
 use Cwd;
 use IO::File;
 use IO::Handle;
-use lib '/usr/share/devscripts';
+BEGIN { push @INC, '/usr/share/devscripts'; }
 use Devscripts::DB_File_Lock;
 use Devscripts::Debbugs;
 use Fcntl qw(O_RDWR O_RDONLY O_CREAT F_SETFD);
@@ -61,6 +61,9 @@ use Getopt::Long;
 use Encode;
 
 use Scalar::Util qw(looks_like_number);
+use POSIX qw(locale_h strftime);
+
+setlocale(LC_TIME, "C"); # so that strftime is locale independent
 
 # Funny UTF-8 warning messages from HTML::Parse should be ignorable (#292671)
 $SIG{'__WARN__'} = sub { warn $_[0] unless $_[0] =~ /^Parsing of undecoded UTF-8 will give garbage when decoding entities/; };
@@ -1371,6 +1374,8 @@ sub bts_reassign {
 =item B<found> I<bug> [I<version>]
 
 Indicate that a I<bug> was found to exist in a particular package version.
+Without I<version>, the list of fixed versions is cleared and the bug is
+reopened.
 
 =cut
 
@@ -1541,6 +1546,9 @@ addition to official tag names. B<gift> is used as a shorthand for the
 B<gift> usertag; see L<http://wiki.debian.org/qa.debian.org/GiftTag>.
 Adding/removing the B<gift> tag will add/remove the B<gift> usertag,
 belonging to the "debian-qa@lists.debian.org" user.
+
+Adding/removing the B<security> tag will add "team\@security.debian.org"
+to the Cc list of the control email.
 
 =cut
 
@@ -2521,8 +2529,7 @@ sub send_mail {
     my $fromaddress = $fromaddresses[0];
     # Message-ID algorithm from git-send-email
     my $msgid = sprintf("%s-%s", time(), int(rand(4200)))."-bts-$fromaddress";
-    my $date = `date -R`;
-    chomp $date;
+    my $date = strftime "%a, %d %b %Y %T %z", localtime;
 
     my $message = fold_from_header("From: $from") . "\n";
     $message   .= "To: $to\n" if length $to;

@@ -221,7 +221,7 @@ sub findreversebuilddeps {
 	my $count=0;
 	my $maintainer_info='';
 
-	open(PACKAGES, "$dctrl -F Build-Depends,Build-Depends-Indep $package -s Package,Build-Depends,Build-Depends-Indep,Maintainer $source_file|");
+	open(PACKAGES, '-|', $dctrl, '-r', '-F', 'Build-Depends,Build-Depends-Indep', "\\(^\\|, \\)$package", '-s', 'Package,Build-Depends,Build-Depends-Indep,Maintainer', $source_file);
 
 	while(<PACKAGES>) {
 		chomp;

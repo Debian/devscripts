@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#!/usr/bin/perl -w
 # -*- tab-width: 8; indent-tabs-mode: t; cperl-indent-level: 4 -*-
 
 # uscan: This program looks for watchfiles and checks upstream ftp sites
@@ -30,9 +30,10 @@ use Dpkg::IPC;
 use File::Basename;
 use File::Copy;
 use File::Temp qw/tempfile tempdir/;
+use List::Util qw/first/;
 use filetest 'access';
 use Getopt::Long qw(:config gnu_getopt);
-use lib '/usr/share/devscripts';
+BEGIN { push(@INC, '/usr/share/devscripts') } # append to @INC, so that -I . has precedence
 use Devscripts::Versort;
 use Text::ParseWords;
 BEGIN {
@@ -46,6 +47,8 @@ BEGIN {
 	}
     }
 }
+use Dpkg::Control::Hash;
+
 my $CURRENT_WATCHFILE_VERSION = 3;
 
 my $progname = basename($0);
@@ -53,11 +56,12 @@ my $modified_conf_msg;
 my $opwd = cwd();
 
 my $haveSSL = 1;
-eval { require Crypt::SSLeay; };
+eval { require LWP::Protocol::https; };
 if ($@) {
     $haveSSL = 0;
 }
 my $havegpgv = (-x '/usr/bin/gpgv');
+my $havegpg = first { -x $_ } qw(/usr/bin/gpg2 /usr/bin/gpg);
 
 # Did we find any new upstream versions on our wanderings?
 our $found = 0;
@@ -93,14 +97,7 @@ Options:
     --no-pasv      Do not use PASV mode for FTP connections (default)
     --timeout N    Specifies how much time, in seconds, we give remote
                    servers to respond (default 20 seconds)
-    --symlink      Make an orig.tar.gz symlink to downloaded file (default)
-    --rename       Rename to orig.tar.gz instead of symlinking
-                   (Both will use orig.tar.bz2, orig.tar.lzma, or orig.tar.xz
-                   if appropriate)
-    --repack       Repack downloaded archives from orig.tar.bz2, orig.tar.lzma,
-                   orig.tar.xz or orig.zip to orig.tar.gz
-                   (does nothing if downloaded archive orig.tar.gz)
-    --no-symlink   Don\'t make symlink or rename
+    --no-symlink   Do not call mk-origtargz
     --verbose      Give verbose output
     --no-verbose   Don\'t give verbose output (default)
     --check-dirname-level N
@@ -138,8 +135,18 @@ Options:
     --no-conf, --noconf
                    Don\'t read devscripts config files;
                    must be the first option given
+    --no-exclusion no automatic exclusion of files mentioned in
+                   debian/copyright field Files-Excluded
     --help         Show this message
     --version      Show version information
+
+Options passed on to mk-origtargz:
+    --symlink      Create a correctly named symlink to downloaded file (default)
+    --rename       Rename instead of symlinking
+    --repack       Repack downloaded archives to change compression
+    --compression [ gzip | bzip2 | lzma | xz ]
+                   When the upstream sources are repacked, use compression COMP
+                   for the resulting tarball (default: gzip)
 
 Default settings modified by devscripts configuration files:
 $modified_conf_msg
@@ -169,6 +176,8 @@ my $download_version;
 my $force_download = 0;
 my $report = 0; # report even on up-to-date packages?
 my $repack = 0; # repack .tar.bz2, .tar.lzma, .tar.xz or .zip to .tar.gz
+my $default_compression = 'gzip' ;
+my $repack_compression = $default_compression;
 my $symlink = 'symlink';
 my $verbose = 0;
 my $check_dirname_level = 1;
@@ -180,6 +189,7 @@ my $dehs_start_output = 0;
 my $pkg_report_header = '';
 my $timeout = 20;
 my $user_agent_string = 'Debian uscan ###VERSION###';
+my $exclusion = 1;
 
 if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg = "  (no configuration files read)";
@@ -196,6 +206,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'USCAN_DEHS_OUTPUT' => 'no',
 		       'USCAN_USER_AGENT' => '',
 		       'USCAN_REPACK' => 'no',
+		       'USCAN_EXCLUSION' => 'yes',
 		       'DEVSCRIPTS_CHECK_DIRNAME_LEVEL' => 1,
 		       'DEVSCRIPTS_CHECK_DIRNAME_REGEX' => 'PACKAGE(-.+)?',
 		       );
@@ -233,6 +244,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'USCAN_DEHS_OUTPUT'}='no';
     $config_vars{'USCAN_REPACK'} =~ /^(yes|no)$/
 	or $config_vars{'USCAN_REPACK'}='no';
+    $config_vars{'USCAN_EXCLUSION'} =~ /^(yes|no)$/
+	or $config_vars{'USCAN_EXCLUSION'}='yes';
     $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} =~ /^[012]$/
 	or $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'}=1;
 
@@ -258,12 +271,14 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $user_agent_string = $config_vars{'USCAN_USER_AGENT'}
 	if $config_vars{'USCAN_USER_AGENT'};
     $repack = $config_vars{'USCAN_REPACK'} eq 'yes' ? 1 : 0;
+    $exclusion = $config_vars{'USCAN_EXCLUSION'} eq 'yes' ? 1 : 0;
 }
 
 # Now read the command line arguments
 my $debug = 0;
 my ($opt_h, $opt_v, $opt_destdir, $opt_download, $opt_force_download,
-    $opt_report, $opt_passive, $opt_symlink, $opt_repack);
+    $opt_report, $opt_passive, $opt_symlink, $opt_repack,
+    $opt_repack_compression, $opt_exclusion);
 my ($opt_verbose, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
 my $opt_download_version;
@@ -283,6 +298,7 @@ GetOptions("help" => \$opt_h,
 	   "symlink!" => sub { $opt_symlink = $_[1] ? 'symlink' : 'no'; },
 	   "rename" => sub { $opt_symlink = 'rename'; },
 	   "repack" => sub { $opt_repack = 1; },
+	   "compression=s" => \$opt_repack_compression,
 	   "package=s" => \$opt_package,
 	   "upstream-version=s" => \$opt_uversion,
 	   "watchfile=s" => \$opt_watchfile,
@@ -295,6 +311,7 @@ GetOptions("help" => \$opt_h,
 	   "useragent=s" => \$opt_user_agent,
 	   "noconf" => \$opt_noconf,
 	   "no-conf" => \$opt_noconf,
+	   "exclusion!" => \$opt_exclusion,
 	   "download-current-version" => \$opt_download_current_version,
 	   )
     or die "Usage: $progname [options] [directories]\nRun $progname --help for more details\n";
@@ -317,7 +334,26 @@ $timeout = $opt_timeout if defined $opt_timeout;
 $timeout = 20 unless defined $timeout and $timeout > 0;
 $symlink = $opt_symlink if defined $opt_symlink;
 $verbose = $opt_verbose if defined $opt_verbose;
+if (defined $opt_repack_compression) {
+    # be liberal in what you accept...
+    my %opt2comp = (
+	gz => 'gzip',
+	gzip => 'gzip',
+	bz2 => 'bzip2',
+	bzip2 => 'bzip2',
+	lzma => 'lzma',
+	xz => 'xz',
+    );
+
+    # Normalize compression methods to the names used by Dpkg::Compression
+    if (exists $opt2comp{$opt_repack_compression}) {
+	$repack_compression = $opt2comp{$opt_repack_compression};
+    } else {
+        uscan_die "$progname: invalid compression $opt_repack_compression given.\n";
+    }
+}
 $dehs = $opt_dehs if defined $opt_dehs;
+$exclusion = $opt_exclusion if defined $opt_exclusion;
 $user_agent_string = $opt_user_agent if defined $opt_user_agent;
 $download_version = $opt_download_version if defined $opt_download_version;
 
@@ -690,6 +726,7 @@ sub process_watchline ($$$$$$)
     my $style='new';
     my $urlbase;
     my $headers = HTTP::Headers->new;
+    my ($keyring, $gpghome);
 
     # Comma-separated list of features that sites being queried might
     # want to be aware of
@@ -801,11 +838,24 @@ sub process_watchline ($$$$$$)
 
 	# Check validity of options
 	if (exists $options{'pgpsigurlmangle'}) {
-	    if (not (-r 'debian/upstream-signing-key.pgp')) {
-		uscan_warn "$progname warning: pgpsigurlmangle option exists, but debian/upstream-signing-key.pgp does not exist,\n  ignoring in $watchfile:\n  $line\n";
-		delete $options{'pgpsigurlmangle'};
-	    } elsif (! $havegpgv) {
-		uscan_warn "$progname warning: pgpsignurlmangle option exists, but you must have gpgv installed to verify\n  in $watchfile, skipping:\n  $line\n";
+	    if (! $havegpgv) {
+		uscan_warn "$progname warning: pgpsigurlmangle option exists, but you must have gpgv installed to verify\n  in $watchfile, skipping:\n  $line\n";
+		return 1;
+	    }
+	    $keyring = first { -r $_ } qw(debian/upstream/signing-key.pgp debian/upstream/signing-key.asc debian/upstream-signing-key.pgp);
+	    if ($keyring =~ m/\.asc$/) {
+		if (!$havegpg) {
+		    uscan_warn "$progname warning: $keyring is armored but gpg/gpg2 is not available to dearmor it\n  in $watchfile, skipping:\n $line\n";
+		    return 1;
+		}
+		# Need to convert an armored key to binary for use by gpgv
+		$gpghome = tempdir(CLEANUP => 1);
+		spawn(exec => [$havegpg, '--homedir', $gpghome, '--no-options', '-q', '--batch', '--no-default-keyring', '--import', $keyring],
+		      wait_child => 1);
+		$keyring = "$gpghome/pubring.gpg";
+	    }
+	    if (!defined $keyring) {
+		uscan_warn "$progname warning: pgpsigurlmangle option exists, but the upstream keyring does not exist\n  in $watchfile, skipping:\n  $line\n";
 		return 1;
 	    }
 	}
@@ -875,7 +925,7 @@ sub process_watchline ($$$$$$)
     # Devscripts::Versort::upstream_versort
     if ($site =~ m%^http(s)?://%) {
 	if (defined($1) and !$haveSSL) {
-	    uscan_die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n";
+	    uscan_die "$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
 	}
 	print STDERR "$progname debug: requesting URL $base\n" if $debug;
 	$request = HTTP::Request->new('GET', $base, $headers);
@@ -1338,204 +1388,123 @@ EOF
         print "Package directory '$destdir to store downloaded file is not existing\n";
         return 1;
     }
+    my $downloader = sub {
+	my ($url, $fname) = @_;
+	if ($url =~ m%^http(s)?://%) {
+	    if (defined($1) and !$haveSSL) {
+		uscan_die "$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
+	    }
+	    # substitute HTML entities
+	    # Is anything else than "&amp;" required?  I doubt it.
+	    print STDERR "$progname debug: requesting URL $url\n" if $debug;
+	    my $headers = HTTP::Headers->new;
+	    $headers->header('Accept' => '*/*');
+	    $request = HTTP::Request->new('GET', $url, $headers);
+	    $response = $user_agent->request($request, $fname);
+	    if (! $response->is_success) {
+		if (defined $pkg_dir) {
+		    uscan_warn "$progname warning: In directory $pkg_dir, downloading\n  $url failed: " . $response->status_line . "\n";
+		} else {
+		    uscan_warn "$progname warning: Downloading\n $url failed:\n" . $response->status_line . "\n";
+		}
+		return 0;
+	    }
+	}
+	else {
+	    # FTP site
+	    if (exists $options{'pasv'}) {
+		$ENV{'FTP_PASSIVE'}=$options{'pasv'};
+	    }
+	    print STDERR "$progname debug: requesting URL $url\n" if $debug;
+	    $request = HTTP::Request->new('GET', "$url");
+	    $response = $user_agent->request($request, $fname);
+	    if (exists $options{'pasv'}) {
+		if (defined $passive) { $ENV{'FTP_PASSIVE'}=$passive; }
+		else { delete $ENV{'FTP_PASSIVE'}; }
+	    }
+	    if (! $response->is_success) {
+		if (defined $pkg_dir) {
+		    uscan_warn "$progname warning: In directory $pkg_dir, downloading\n  $url failed: " . $response->status_line . "\n";
+		} else {
+		    uscan_warn "$progname warning: Downloading\n $url failed:\n" . $response->status_line . "\n";
+		}
+		return 0;
+	    }
+	}
+	return 1;
+    };
     # Download newer package
-    if ($upstream_url =~ m%^http(s)?://%) {
-	if (defined($1) and !$haveSSL) {
-	    uscan_die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n";
-	}
-	# substitute HTML entities
-	# Is anything else than "&amp;" required?  I doubt it.
-	print STDERR "$progname debug: requesting URL $upstream_url\n" if $debug;
-	my $headers = HTTP::Headers->new;
-	$headers->header('Accept' => '*/*');
-	$request = HTTP::Request->new('GET', $upstream_url, $headers);
-	$response = $user_agent->request($request, "$destdir/$newfile_base");
-	if (! $response->is_success) {
-	    if (defined $pkg_dir) {
-		uscan_warn "$progname warning: In directory $pkg_dir, downloading\n  $upstream_url failed: " . $response->status_line . "\n";
-	    } else {
-		uscan_warn "$progname warning: Downloading\n $upstream_url failed:\n" . $response->status_line . "\n";
-	    }
-	    return 1;
-	}
+    if (!$downloader->($upstream_url, "$destdir/$newfile_base")) {
+	return 1;
     }
-    else {
-	# FTP site
-	if (exists $options{'pasv'}) {
-	    $ENV{'FTP_PASSIVE'}=$options{'pasv'};
-	}
-	print STDERR "$progname debug: requesting URL $upstream_url\n" if $debug;
-	$request = HTTP::Request->new('GET', "$upstream_url");
-	$response = $user_agent->request($request, "$destdir/$newfile_base");
-	if (exists $options{'pasv'}) {
-	    if (defined $passive) { $ENV{'FTP_PASSIVE'}=$passive; }
-	    else { delete $ENV{'FTP_PASSIVE'}; }
-	}
-	if (! $response->is_success) {
-	    if (defined $pkg_dir) {
-		uscan_warn "$progname warning: In directory $pkg_dir, downloading\n  $upstream_url failed: " . $response->status_line . "\n";
-	    } else {
-		uscan_warn "$progname warning: Downloading\n $upstream_url failed:\n" . $response->status_line . "\n";
-	    }
-	    return 1;
-	}
-    }
-
+    # Check GPG
     if (defined $pgpsig_url) {
 	print "-- Downloading OpenPGP signature for package as $newfile_base.pgp\n" if $verbose;
-	my $sigrequest = HTTP::Request->new('GET', "$pgpsig_url");
-	my $sigresponse = $user_agent->request($sigrequest, "$destdir/$newfile_base.pgp");
-
-	if (! $sigresponse->is_success) {
-	    if (defined $pkg_dir) {
-		uscan_warn "$progname warning: In directory $pkg_dir, downloading OpenPGP signature\n  $upstream_url failed: " . $sigresponse->status_line . "\n";
-	    } else {
-		uscan_warn "$progname warning: Downloading OpenPGP signature\n $pgpsig_url failed:\n" . $sigresponse->status_line . "\n";
-	    }
+	if (!$downloader->($pgpsig_url, "$destdir/$newfile_base.pgp")) {
 	    return 1;
 	}
 
 	print "-- Verifying OpenPGP signature $newfile_base.pgp for $newfile_base\n" if $verbose;
 	system('/usr/bin/gpgv', '--homedir', '/dev/null',
-	       '--keyring', 'debian/upstream-signing-key.pgp',
+	       '--keyring', $keyring,
 	       "$destdir/$newfile_base.pgp", "$destdir/$newfile_base") >> 8 == 0
 		 or uscan_die("$progname warning: OpenPGP signature did not verify.\n");
-    }
-
-    if ($repack and $newfile_base =~ /^(.*)\.(tar\.bz2|tbz2?)$/) {
-	print "-- Repacking from bzip2 to gzip\n" if $verbose;
-	my $newfile_base_gz = "$1.tar.gz";
-	my (undef, $fname) = tempfile(UNLINK => 1);
-	spawn(exec => ['bunzip2', '-c', "$destdir/$newfile_base"],
-	      to_file => $fname,
-	      wait_child => 1);
-	spawn(exec => ['gzip', '-n', '-9'],
-	      from_file => $fname,
-	      to_file => "$destdir/$newfile_base_gz",
-	      wait_child => 1);
-	unlink "$destdir/$newfile_base";
-	$newfile_base = $newfile_base_gz;
-    }
-
-    if ($repack and $newfile_base =~ /^(.*)\.(tar\.lzma|tlz(?:ma?)?)$/) {
-	print "-- Repacking from lzma to gzip\n" if $verbose;
-	my $newfile_base_gz = "$1.tar.gz";
-	my (undef, $fname) = tempfile(UNLINK => 1);
-	spawn(exec => ['xz', '-F', 'lzma', '-cd', "$destdir/$newfile_base"],
-	      to_file => $fname,
-	      wait_child => 1);
-	spawn(exec => ['gzip', '-n', '-9'],
-	      from_file => $fname,
-	      to_file => "$destdir/$newfile_base_gz",
-	      wait_child => 1);
-	unlink "$destdir/$newfile_base";
-	$newfile_base = $newfile_base_gz;
-    }
-
-    if ($repack and $newfile_base =~ /^(.*)\.(tar\.xz|txz)$/) {
-	print "-- Repacking from xz to gzip\n" if $verbose;
-	my $newfile_base_gz = "$1.tar.gz";
-	my (undef, $fname) = tempfile(UNLINK => 1);
-	spawn(exec => ['xz', '-cd', "$destdir/$newfile_base"],
-	      to_file => $fname,
-	      wait_child => 1);
-	spawn(exec => ['gzip', '-n', '-9'],
-	      from_file => $fname,
-	      to_file => "$destdir/$newfile_base_gz",
-	      wait_child => 1);
-	unlink "$destdir/$newfile_base";
-	$newfile_base = $newfile_base_gz;
-    }
-
-    if ($repack and $newfile_base =~ /^(.*)\.zip$/) {
-	print "-- Repacking from zip to .tar.gz\n" if $verbose;
-
-	system('command -v unzip >/dev/null 2>&1') >> 8 == 0
-	  or uscan_die("unzip binary not found. You need to install the package unzip to be able to repack .zip upstream archives.\n");
-
-	my $newfile_base_gz = "$1.tar.gz";
-	my $tempdir = tempdir ( "uscanXXXX", TMPDIR => 1, CLEANUP => 1 );
-	my $globpattern = "*";
-	my $hidden = ".[!.]*";
-	my $absdestdir = abs_path($destdir);
-	system('unzip', '-q', '-a', '-d', $tempdir, "$destdir/$newfile_base") == 0
-	  or uscan_die("Repacking from zip to tar.gz failed (could not unzip)\n");
-	if (defined glob("$tempdir/$hidden")) {
-	    $globpattern .= " $hidden";
-	}
-	system("cd $tempdir; GZIP='-n -9' tar --owner=root --group=root --mode=a+rX -czf \"$absdestdir/$newfile_base_gz\" $globpattern") == 0
-	  or uscan_die("Repacking from zip to tar.gz failed (could not create tarball)\n");
-	unlink "$destdir/$newfile_base";
-	$newfile_base = $newfile_base_gz;
-    }
-
-    if ($newfile_base =~ /\.(tar\.gz|tgz
-			     |tar\.bz2|tbz2?
-			     |tar.lzma|tlz(?:ma?)?
-			     |tar.xz|txz)$/x) {
-	my $filetype = `file -b -k \"$destdir/$newfile_base\"`;
-	unless ($filetype =~ /compressed data/) {
-	    uscan_warn "$progname warning: $destdir/$newfile_base does not appear to be a compressed file;\nthe file command says: $filetype\nNot processing this file any further!\n";
-	    return 1;
-	}
-    }
-
-    my @renames = (
-	[qr/\.(tar\.gz|tgz)$/, 'gz'],
-	[qr/\.(tar\.bz2|tbz2?)$/, 'bz2'],
-	[qr/\.tar\.lzma|tlz(?:ma?)?$/, 'lzma'],
-	[qr/\.(tar\.xz|txz)$/, 'xz'],
-    );
-
-    my ($renamed_base);
-    foreach my $pair (@renames) {
-	if ($newfile_base !~ $pair->[0]) {
-	    next;
-	}
-
-	my ($pattern, $suffix) = @{$pair};
-	$renamed_base = "${pkg}_${newversion}.orig.tar.$suffix";
-	if ($symlink eq 'symlink') {
-	    symlink $newfile_base, "$destdir/$renamed_base";
-	} elsif ($symlink eq 'rename') {
-	    move "$destdir/$newfile_base", "$destdir/$renamed_base";
-	}
-	if ($verbose) {
-	    print "-- Successfully downloaded updated package $newfile_base\n";
-	    if ($symlink eq 'symlink') {
-		print "    and symlinked $renamed_base to it\n";
-	    } elsif ($symlink eq 'rename') {
-		print "    and renamed it as $renamed_base\n";
-	    }
-	} elsif ($dehs) {
-	    my $msg = "Successfully downloaded updated package $newfile_base";
-	    $dehs_tags{'target'} = "$renamed_base";
-	    if ($symlink eq 'symlink') {
-		$msg .= " and symlinked $renamed_base to it";
-	    } elsif ($symlink eq 'rename') {
-		$msg .= " and renamed it as $renamed_base";
-	    } else {
-		$dehs_tags{'target'} = $newfile_base;
-	    }
-	    dehs_msg($msg);
-	} else {
-	    print "$pkg: Successfully downloaded updated package $newfile_base\n";
-	    if ($symlink eq 'symlink') {
-		print "    and symlinked $renamed_base to it\n";
-	    } elsif ($symlink eq 'rename') {
-		print "    and renamed it as $renamed_base\n";
+    } else {
+	print "-- Checking for common possible upstream OpenPGP signatures\n" if $verbose;
+	foreach my $suffix (qw(asc gpg pgp sig)) {
+	    my $sigrequest = HTTP::Request->new('HEAD' => "$upstream_url.$suffix");
+	    my $sigresponse = $user_agent->request($sigrequest);
+	    if ($sigresponse->is_success()) {
+		uscan_warn "$pkg: Possible OpenPGP signature found at:\n   $upstream_url.$suffix.\n  Please consider adding opts=pgpsigurlmangle=s/\$/.$suffix/\n  to debian/watch.  see uscan(1) for more details.\n";
+		last;
 	    }
 	}
-	last;
+    }
+
+    # Call mk-origtargz (renames, repacks, etc.)
+    my $mk_origtargz_out;
+    my $target = $newfile_base;
+    unless ($symlink eq "no") {
+	my @cmd = ("mk-origtargz");
+	push @cmd, "--package", $pkg;
+	push @cmd, "--version", $newversion;
+	push @cmd, "--rename" if $symlink eq "rename";
+	push @cmd, "--copy"   if $symlink eq "copy";
+	push @cmd, "--repack" if $repack;
+	push @cmd, "--compression", $repack_compression;
+	push @cmd, "--directory", $destdir;
+	push @cmd, "--copyright-file", "debian/copyright"
+	    if ($exclusion && -e "debian/copyright");
+	push @cmd, "$destdir/$newfile_base";
+
+	spawn(exec => \@cmd,
+	      to_string => \$mk_origtargz_out,
+	      wait_child => 1);
+	chomp($mk_origtargz_out);
+	$target = $1 if $mk_origtargz_out =~ /Successfully .* (?:to|as) ([^,]+)\.$/;
+	$target = $1 if $mk_origtargz_out =~ /Leaving (.*) where it is/;
+    }
+
+    if ($dehs) {
+	my $msg = "Successfully downloaded updated package $newfile_base\n";
+	if (defined $mk_origtargz_out) {
+	    $msg .= "$mk_origtargz_out\n";
+	}
+	$dehs_tags{target} = basename($target);
+	$dehs_tags{'target-path'} = $target;
+	dehs_msg($msg);
+    }
+    else {
+	my $prefix = $verbose ? "-- " : "";
+	print $prefix ."Successfully downloaded updated package $newfile_base\n";
+	if (defined $mk_origtargz_out) {
+	    print $prefix ."$mk_origtargz_out\n";
+	}
     }
 
     # Do whatever the user wishes to do
     if ($action) {
-	my $usefile = "$destdir/$newfile_base";
 	my @cmd = shellwords($action);
-	if ($symlink =~ /^(symlink|rename)$/ && $renamed_base) {
-	    $usefile = "$destdir/$renamed_base";
-	}
 
 	# Any symlink requests are already handled by uscan
 	if ($action =~ /^uupdate(\s|$)/) {
@@ -1543,9 +1512,9 @@ EOF
 	}
 
 	if ($watch_version > 1) {
-	    push @cmd, ("--upstream-version", "$newversion", "$usefile");
+	    push @cmd, "--upstream-version", $newversion, $target;
 	} else {
-	    push @cmd, ("$usefile", "$newversion");
+	    push @cmd, $target, $newversion;
 	}
 	my $actioncmd = join(" ", @cmd);
 	print "-- Executing user specified script\n     $actioncmd\n" if $verbose;
@@ -1603,7 +1572,7 @@ sub newest_dir ($$$$$) {
 
     if ($site =~ m%^http(s)?://%) {
 	if (defined($1) and !$haveSSL) {
-	    uscan_die "$progname: you must have the libcrypt-ssleay-perl package installed\nto use https URLs\n";
+	    uscan_die "$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
 	}
 	print STDERR "$progname debug: requesting URL $base\n" if $debug;
 	$request = HTTP::Request->new('GET', $base);
@@ -1834,7 +1803,7 @@ sub dehs_output ()
 
     for my $tag (qw(package debian-uversion debian-mangled-uversion
 		    upstream-version upstream-url
-		    status target messages warnings errors)) {
+		    status target target-path messages warnings errors)) {
 	if (exists $dehs_tags{$tag}) {
 	    if (ref $dehs_tags{$tag} eq "ARRAY") {
 		foreach my $entry (@{$dehs_tags{$tag}}) {
@@ -2061,7 +2030,7 @@ sub safe_replace($$) {
 	    } else {
 		last;
 	    }
- 	}
+	}
 
 	return 1;
     }

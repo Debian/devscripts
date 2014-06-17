@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 set -e
 
 # Subscribe to the PTS for a specified package for a limited length of time

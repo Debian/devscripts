@@ -730,6 +730,17 @@ EOF
 
 EOF
 	fi
+
+	if dpkg --compare-versions "$2" lt 2.14.2
+	then
+	    cat >> /etc/devscripts.conf << EOF
+### debcommit option added in 2.14.2
+#
+# Sign commits using gnupg?
+# DEBCOMMIT_SIGN_COMMITS=no
+
+EOF
+	fi
     fi
 fi
 

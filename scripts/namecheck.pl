@@ -142,6 +142,8 @@ sub testSites
     $ua->timeout(10);
     $ua->env_proxy();
 
+    my $headers = HTTP::Headers->new();
+    $headers->header('Accept' => '*/*');
 
     foreach my $entry (@patterns)
     {
@@ -186,7 +188,8 @@ sub testSites
         #
         #  Get the URL
         #
-        my $response = $ua->get($url);
+        my $request = HTTP::Request->new('GET', $url, $headers);
+        my $response = $ua->request($request);
 
         #
         #  If success we look at the returned text.
@@ -256,7 +259,7 @@ __DATA__
 # file ~/.namecheckrc with your own contents in the same format.
 #
 http://%s.tuxfamily.org/             | Not Found
-http://alioth.debian.org/projects/%s | project does not exist
+http://alioth.debian.org/projects/%s | Software Map
 http://developer.berlios.de/projects/%s | Invalid Project
 http://freshmeat.net/projects/%s     | We encounted an error
 http://launchpad.net/%s              | no page with this address

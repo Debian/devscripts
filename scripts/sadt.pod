@@ -1,0 +1,71 @@
+# Copyright © 2013 Jakub Wilk <jwilk@debian.org>
+
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+#
+# THE SOFTWARE IS PROVIDED “AS IS” AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+# REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+# AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+# INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+# LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+# OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+# PERFORMANCE OF THIS SOFTWARE.
+
+=encoding utf8
+
+=head1 NAME
+
+sadt - simple DEP-8 test runner
+
+=head1 SYNOPSIS
+
+B<sadt> [I<options>] [I<test-name>...]
+
+=head1 DESCRIPTION
+
+B<sadt> is a simple implementation of DEP-8 (“automatic as-installed package
+testing”) test runner.
+
+It is your responsibility to satisfy tests' dependencies.  B<sadt> won't
+attempt to install any missing packages.  If a test's dependencies cannot be
+satisfied by packages that are currently installed, the test will be skipped.
+
+B<sadt> won't build the package even if a test declares the B<build-needed>
+restriction.  Instead, such a test will be skipped.  However, you can build the
+package manually, and then tell B<sadt> to assume that the package is already
+built using the B<-b>/B<--built-source-tree>.
+
+B<sadt> doesn't implement any virtualisation arrangements, therefore it skips
+tests that declare the B<breaks-testbed> restriction.
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<-v>, B<--verbose>
+
+Make the output more verbose.
+
+=item B<-b>, B<--built-source-tree>
+
+Assume that the source tree is already built.
+This is equivalent to B<--ignore-restriction=build-needed>.
+
+=item B<--ignore-restriction>=I<restriction>
+
+Don't skip tests that declare the I<restriction>.
+
+=item B<-h>, B<--help>
+
+Show a help message and exit.
+
+=back
+
+=head1 CONFORMING TO
+
+README.package-tests shipped by autopkgtest 2.7.2
+
+=head1 SEE ALSO
+
+B<adt-run>(1)

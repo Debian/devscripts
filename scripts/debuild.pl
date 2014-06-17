@@ -53,13 +53,16 @@ use 5.008;
 use File::Basename;
 use filetest 'access';
 use Cwd;
-use Dpkg::Compression;
+BEGIN { push @INC, '/usr/share/devscripts'; }
+use Devscripts::Compression;
 use IO::Handle;  # for flushing
 use vars qw(*BUILD *OLDOUT *OLDERR);  # prevent a warning
 
 my $progname=basename($0);
 my $modified_conf_msg;
 my @warnings;
+
+my $compression_re = compression_get_file_extension_regex();
 
 # Predeclare functions
 sub system_withecho(@);
@@ -1222,7 +1225,7 @@ EOT
 
 	my $srcmsg;
 
-	my $ext = $compression_re_file_ext;
+	my $ext = $compression_re;
 	if (fileomitted @files, '\.deb') {
 	    # source only upload
 	    if (fileomitted @files, "\\.diff\\.$ext" and fileomitted @files, "\\.debian\\.tar\\.$ext") {

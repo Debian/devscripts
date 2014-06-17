@@ -1,3 +1,260 @@
+devscripts (2.14.5) unstable; urgency=medium
+
+  * debchange:
+    + Verify $opt_vendor is defined before trying to use it to avoid a warning
+      about an unitialized variable.
+    + utf-8 decode the maintainer name when reading it from the changelog.
+      (Closes: #750855)
+  * uscan: Use HEAD instead of GET to check for possible GPG signature URLs.
+    (Closes: #750929)
+  * debcheckout: Handle more variations of Alioth URLs when attempting to
+    perform an authenticated checkout.  (Closes: #750542)
+
+ -- James McCoy <jamessan@debian.org>  Tue, 10 Jun 2014 21:16:02 -0400
+
+devscripts (2.14.4) unstable; urgency=medium
+
+  * mk-origtargz: Fix DEP8 test failures due to differences in how the script
+    is named when it's run.
+  * debchange: Use Dpkg::Changelog::Parse to parse the changelog instead of
+    performing manual parsing in debchange.  (Closes: #749980)
+
+ -- James McCoy <jamessan@debian.org>  Sat, 31 May 2014 09:47:19 -0400
+
+devscripts (2.14.3) unstable; urgency=medium
+
+  [ Benjamin Drung ]
+  * wrap-and-sort: Sanitize spaces between alternative package names.
+    (Closes: #747818)
+
+  [ Martin Pitt ]
+  * Install recommends for the autopkgtest, otherwise a lot of necessary tools
+    like wdiff are missing.
+  * test_uscan: Add missing --compression in --installed mode, to fix the
+    autopkgtest.
+  * Add missing zip autopkgtest dependency (used by test_uscan).
+
+  [ James McCoy ]
+  * uscan:
+    + Specify file name instead of path in --dehs mode's target node.
+      (Closes: #747901)
+    + Add target-path node to dehs output for those who care about the actual
+      path to the file.
+    + Restore display of final file name after file is downloaded.
+  * mk-origtargz: Use file's mime detection to detect zip files.  (Closes:
+    #748462)
+  * chdist: Finish reading output from child processes to avoid getting a
+    SIGPIPE when closing their read handle.  (Closes: #749504)
+
+  [ Christoph Berg ]
+  * uscan: Fix "upsteam" typo.  (Closes: #749343)
+
+  [ Paul Wise ]
+  * uscan: Also accept https for copyright-format URLs (Closes: #749498)
+
+ -- James McCoy <jamessan@debian.org>  Tue, 27 May 2014 23:24:01 -0400
+
+devscripts (2.14.2) unstable; urgency=medium
+
+  [ Jakub Wilk ]
+  * sadt:
+    + Add support for @builddeps@ in tests' Depends.  (Closes: #736798)
+
+  [ Benjamin Drung ]
+  * Bump Standard-Version to 3.9.5.
+  * Wrap long line in extended description.
+
+  [ Paul Wise ]
+  * Use HTTPS for the buildd logs to avoid a redirect
+  * Fix scraping of the wnpp web pages due to https links
+
+  [ Daniel Kahn Gillmor ]
+  * uscan: check for likely upstream signatures if none are known (Closes:
+    #732449)
+
+  [ Cyril Brulebois ]
+  * deb-reversion: Add support for udebs.  (Closes: #739437)
+
+  [ Gunnar Wolf ]
+  * debcommit: Add switch+conf.setting allowing to specify Git to sign
+    every single commit (Closes: #741040)
+
+  [ James McCoy ]
+  * debcommit: Add hg and bzr support to DEBCOMMIT_SIGN_COMMITS.
+  * mk-build-deps: Uninstall the build-dep packages if apt isn't able to
+    complete their install.  (Closes: #743462)
+  * dpkg-depcheck: Convert relative paths to absolute before filtering, so
+    filters properly match the path.  Thanks to William King for the patch.
+    (Closes: #744320)
+  * debchange:
+    + Document the default urgency is medium.  Thanks to Anders Kaseorg for
+      the patch.  (Closes: #745565)
+    + Add “binary-only=yes” to binNMU changelog stanzas.  Thanks to Thorsten
+      Glaser for the patch.  (Closes: #746612)
+
+  [ Andreas Tille ]
+  * uscan: Allow a different compression scheme when repacking upstream
+    tarballs.  (Closes: #730768)
+
+  [ Antonio Terceiro ]
+  * debi/debc: always try ../build-area/ when the changes file is not found
+    under ../ (even when not using svn)
+
+  [ Joachim Breitner ]
+  * mk-origtargz: New script to rename (or symlink or copy) a downloaded
+    upstream tarball to the correct name, possibly changing the compression
+    scheme and removing files listed in debian/copyright's Excluded-Files.
+    This is now also used by uscan, where most of the code comes from.
+
+ -- James McCoy <jamessan@debian.org>  Sun, 11 May 2014 13:15:22 -0400
+
+devscripts (2.14.1) unstable; urgency=medium
+
+  * Actually install sadt.  (Closes: #736683)
+
+ -- James McCoy <jamessan@debian.org>  Sat, 25 Jan 2014 22:15:46 -0500
+
+devscripts (2.14.0) unstable; urgency=medium
+
+  [ Jakub Wilk ]
+  * Add sadt, a simple implementation of DEP-8 test runner (closes: #712095).
+
+  [ James McCoy ]
+  * chdist:
+    + Ensure error messages end with an EOL.  (Closes: #734307)
+    + Make short options (-d, -a, -h) work.  (Closes: #736504)
+  * licensecheck: Add handling for a variation of 3 clause BSD.
+  * rc-alert:
+    + Ensure the tag/dist description order is stable.  (Closes: #735286)
+    + Automatically determine what the ignore tag means, instead of
+      hard-coding dist names.
+  * uscan:
+    + Download the PGP signature the same way the archive was downloaded.
+      (Closes: #735085, #736476)
+    + Skip the watchfile line if pgpsigurlmangle is defined but
+      upstream-signing-key.pgp is missing.  (Closes: #735084)
+    + Update the GitHub example.  Based on a patch by YABUKI Yukiharu.
+      (Closes: #728182)
+    + Support escaped characters in the Files-Excluded patterns.  Thanks to
+      Csillag Tamas and Russ Albery for the patch.  (Closes: #733111)
+    + Move keyring location for signature verification under debian/upstream/.
+    + Use the armored keyring debian/upstream/signing-key.asc for signature
+      verification if the unarmored keyring doesn't exist.  (Closes: #720957)
+    + Fix regex in get_main_source_dir.  (Closes: #735906)
+
+ -- James McCoy <jamessan@debian.org>  Sat, 25 Jan 2014 10:19:02 -0500
+
+devscripts (2.13.9) unstable; urgency=low
+
+  [ Martin Pitt ]
+  * autopkgtest: Add "allow-stderr" restriction to avoid failing tests because
+    of the HTTP server log on stderr.
+
+  [ James McCoy ]
+  * uscan:
+    + Repack the tarball and verify it is a compressed archive without
+      allowing arbitrary code execution.  Fixes CVE-2013-6888.
+    + Use find's -exec to call rm directly instead of piping to xargs.
+      (Closes: #732006, CVE-2013-7085)
+    + Follow tar's recommended security practices
+      - Use --keep-old-files --no-overwrite-dir
+      - Ensure parent directory of directory used for repacking archive isn't
+        accessible to other users.
+    + Fix handling of 'dirname' exclusions, so 'dirname/*' isn't required.
+
+  [ Salvatore Bonaccorso ]
+  * uscan: Fix unitialized value warning when copyright is not in
+    copyright-format 1.0.  (Closes: #732807)
+
+ -- James McCoy <jamessan@debian.org>  Mon, 23 Dec 2013 15:28:45 -0500
+
+devscripts (2.13.8) unstable; urgency=medium
+
+  [ James McCoy ]
+  * uscan: Fix arbitrary command execution when using USCAN_EXCLUSION.
+    (Closes: #731849)
+
+  [ Adam D. Barratt ]
+  * Honour USCAN_EXCLUSION.  (Closes: #731885)
+
+ -- James McCoy <jamessan@debian.org>  Tue, 10 Dec 2013 20:26:42 -0500
+
+devscripts (2.13.7) unstable; urgency=medium
+
+  * Fix imports of Devscripts::Compression.  (Closes: #731847)
+
+ -- James McCoy <jamessan@debian.org>  Tue, 10 Dec 2013 07:49:54 -0500
+
+devscripts (2.13.6) unstable; urgency=medium
+
+  [ James McCoy ]
+  * chdist: Fix a [A-z] regex typo.
+  * uscan: Properly handle a non-machine readable d/copyright file.  (Closes:
+    #731537)
+  * suspicious-source: Correct message when python3-magic isn't installed.
+    (Closes: #731553)
+  * bts:
+    + Document that “bts tag nnn security” will Cc the security team.
+      (Closes: #684301)
+    + Document the behavior of leaving the version out of the found command.
+      (Closes: #683480)
+  * build-rdeps: Only match against package names instead of any substring of
+    Build-Depends(-Indep).  (Closes: #649165)
+  * debchange: Correct description of -e in --help output.  (Closes: #712030)
+  * Update scripts to use Dpkg::Compression's compression_get_file_extension_regex().
+
+  [ Louis Bettens ]
+  * debchange, mass-bug, bts: Replace call to date -R with strftime().
+    (Closes: #486594)
+
+ -- James McCoy <jamessan@debian.org>  Mon, 09 Dec 2013 20:42:09 -0500
+
+devscripts (2.13.5) unstable; urgency=low
+
+  [ James McCoy ]
+  * namecheck: Fix “406 Not Acceptable” error when querying Alioth.  (Closes:
+    #725228)
+  * uscan:
+    + Allow specifying file exclusion rules in d/copyright so uscan can
+      automatically repack upstream archives which contain non-DFSG content.
+      Thanks to Andreas Tille, gregor herrmann, and Rafael Laboissiere for the
+      patches.  (Closes: #685787)
+    + Require LWP::Protocol::https instead of Crypt::SSLeay to access https
+      sites.  (Closes: #624317)
+  * test/*:
+    + Pass --no-conf to commands which may be influenced by ~/.devscripts
+    + Fix a test failure in test_uscan_online due to different version format.
+  * rc-alert: Be more flexible in the formatting of the HTML being parsed.
+    (Closes: #729779)
+  * who-uploads: Use long keyid format to avoid ambiguity.  (Closes: #674579)
+
+  [ Evgeni Golov ]
+  * debcheckout: allow setting the user for auth mode in the config.  (Closes:
+    #722171)
+
+  [ Joachim Breitner ]
+  * debcommit: Fix --release with darcs when the repository is clean. (Closes:
+    #728177)
+
+  [ Christoph Berg ]
+  * origtargz: Document pristine-tar support in the manpage.
+  * rmadison: Support -r (--regex) parameter. (This is still unsupported on
+    qa.debian.org, but possible on some 3rd-party repositories like
+    apt.postgresql.org.)
+
+  [ Benjamin Drung ]
+  * test/test_debchange: Strip distribution data outdated warnings. (Closes:
+    #726694)
+
+  [ Translation updates ]
+  * German, Chris Leick.
+  * French, David Prévot.
+
+  [ Julien Cristau ]
+  * debchange: the default setting for urgency is now 'medium' (Closes: #730343)
+
+ -- James McCoy <jamessan@debian.org>  Wed, 04 Dec 2013 22:27:45 -0500
+
 devscripts (2.13.4~bpo70+1) wheezy-backports; urgency=low
 
   * Rebuild for wheezy-backports.
@@ -17,6 +274,9 @@ devscripts (2.13.4) unstable; urgency=low
 
   [ Charles Pigott ]
   * Fix POD issues.  (LP: #1226318, Closes: #719828)
+
+  [ Matthias Klumpp ]
+  * debchange: Add support for Tanglu.  (Closes: #722547)
 
   [ Translation updates ]
   * French, David Prévot.

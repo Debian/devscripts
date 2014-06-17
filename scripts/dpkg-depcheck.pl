@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#!/usr/bin/perl -w
 
 # Copyright Bill Allombert <ballombe@debian.org> 2001.
 # Modifications copyright 2002-2005 Julian Gilbey <jdg@debian.org>
@@ -22,7 +22,7 @@ use Cwd;
 use File::Basename;
 use Getopt::Long;
 
-use lib '/usr/share/devscripts';
+BEGIN { push @INC, '/usr/share/devscripts'; }
 use Devscripts::Set;
 use Devscripts::Packages;
 use Devscripts::PackageDeps;
@@ -431,6 +431,7 @@ sub filterfiles (@)
 
     foreach my $file (@_) {
 	next unless -f $file;
+	$file = Cwd::abs_path($file);
 
 	my @links=();
 	my $prevlink='';

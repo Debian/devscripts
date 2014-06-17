@@ -1,38 +1,291 @@
 #!/bin/sh
 
-# Copyright (C) 2012, Benjamin Drung <bdrung@debian.org>
+# Copyright (C) 2013, Rafael Laboissiere <rafael@laboissiere.net>
 #
-# Permission to use, copy, modify, and/or distribute this software for any
-# purpose with or without fee is hereby granted, provided that the above
-# copyright notice and this permission notice appear in all copies.
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 3 of the License, or (at your
+# option) any later version.
 #
-# THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-# WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-# MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-# ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-# WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-# ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-# OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+# Public License for more details.
+#
+# On Debian systems, the complete text of the GNU General Public License
+# version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
 
-COMMAND="${0%/*}/../scripts/uscan.pl"
+if test "$1" = --installed; then
+    COMMAND="uscan --no-conf --compression=xz"
+    shift
+else
+    top_srcdir=$(readlink -f "${0%/*}/..")
+    if ! [ -x $top_srcdir/scripts/uscan -a -x $top_srcdir/scripts/mk-origtargz ]
+    then
+        echo "Please run make in scripts/"
+	exit 1
+    fi
+    PATH="$top_srcdir/scripts:$PATH"
+    PERLLIB="$top_srcdir"
+    export PERLLIB
+    COMMAND="uscan --no-conf --compression=xz"
+fi
+
+cleanup(){
+    kill -9 $(cat $TMPDIR/repo/pid)
+    rm -rf $TMPDIR
+}
+
+trap cleanup 1 2 3 13 15
+
+containsName(){
+  echo "$1" | fgrep -q "$2"
+  echo $?
+}
 
 . "${0%/*}/shunit2-helper-functions.sh"
 
-found() {
-    runCommand "--report --watchfile ${0%/*}/uscan/$1 --package $2 --upstream-version $3" "$4" "" 0
+# The following tests do the following: (1) create a minimal Debian package
+# directory, containing minimal files debian/{changelog,watch,copyright},
+# (2) create a minimal repository, containing a tarball (built on the fly),
+# (3) start an HTTP server that works offline, using the SimpleHTTPServer
+# module of Python, and (4) run uscan inside that minimal universe.
+
+
+# The following function tests the --repack feature
+helperTestRepack() {
+    from_ext="$1"
+    to_comp="$2"
+    file_output="$3"
+
+    PKG=foo
+    PORT=8000
+    TMPDIR=$(mktemp -d)
+
+    mkdir -p $TMPDIR/$PKG/debian
+
+    cat <<END > $TMPDIR/$PKG/debian/watch
+version=3
+http://localhost:$PORT/$PKG-(\d).$from_ext
+END
+
+    cat <<END > $TMPDIR/$PKG/debian/changelog
+$PKG (0-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
+END
+
+    mkdir -p $TMPDIR/repo/foo
+    touch $TMPDIR/repo/foo/content
+
+    ( cd $TMPDIR/repo ;
+      tar cfa $PKG-1.$from_ext * ;
+      python -m SimpleHTTPServer $PORT &
+      echo $! > pid )
+
+    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND --dehs --repack --compression=$to_comp) 2>&1 )
+
+    TARBALL=${PKG}_1.orig.tar.$to_comp
+    if [ "$from_ext" != "tar.$to_comp" ]
+    then
+	assertFalse 'unrepacked tarball still present' "[ -f $TMPDIR/${PKG}_1.orig.$from_ext ]"
+    fi
+    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
+    assertNotNull "pristine tarball is not $to_comp-compressed" \
+                  "$( file -L $TMPDIR/$TARBALL | grep "$file_output" )"
+    CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
+    assertTrue 'file contents missing'	\
+                $(containsName "$CONTENTS" content)
+    assertTrue "malfored target in dehs output: $OUTPUT" \
+               $(containsName "$OUTPUT" "<target>$TARBALL</target>")
+
+    cleanup
+
 }
 
-testS3Bucket() {
-    local latest=$(curl -s http://s3.amazonaws.com/rds-downloads | \
-                   sed 's@\(</[A-Za-z]*>\)@\1\n@g' | grep '<Key>RDSCli-' | \
-                   sed 's@.*<Key>RDSCli-\([0-9.]*\)\.zip</Key>.*@\1@g' | \
-                   sort -n | tail -n 1)
-    local result="Processing watchfile line for package rdscli...
-Newest version on remote site is ${latest}, local version is 1.4.007
-rdscli: Newer version (${latest}) available on remote site:
-  http://s3.amazonaws.com/rds-downloads/RDSCli-${latest}.zip
-  (local version is 1.4.007)"
-    found "s3bucket" "rdscli" "1.4.007" "$result"
+testRepackGZ_XZ() { helperTestRepack "tar.gz" "xz" "XZ compressed data" ; }
+testRepackGZ_BZ2() { helperTestRepack "tar.gz" "bz2" "bzip2 compressed data" ; }
+testRepackBZ2_GZ() { helperTestRepack "tar.bz2" "gz" "gzip compressed data" ; }
+testRepackGZ_GZ() { helperTestRepack "tar.gz" "gz" "gzip compressed data" ; }
+testRepackXZ_XZ() { helperTestRepack "tar.xz" "xz" "XZ compressed data" ; }
+testRepackTGZ_XZ() { helperTestRepack "tgz" "xz" "XZ compressed data" ; }
+
+# The following function tests the --repack feature, with a zip file
+testRepackZip_XZ() {
+    to_comp=xz
+    file_output="XZ compressed data"
+
+    PKG=foo
+    PORT=8000
+    TMPDIR=$(mktemp -d)
+
+    mkdir -p $TMPDIR/$PKG/debian
+
+    cat <<END > $TMPDIR/$PKG/debian/watch
+version=3
+http://localhost:$PORT/$PKG-(\d).zip
+END
+
+    cat <<END > $TMPDIR/$PKG/debian/changelog
+$PKG (0-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
+END
+
+    mkdir -p $TMPDIR/repo/foo
+    touch $TMPDIR/repo/foo/content
+
+    ( cd $TMPDIR/repo ;
+      zip -q -r $PKG-1.zip * ;
+      python -m SimpleHTTPServer $PORT &
+      echo $! > pid )
+
+    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND --dehs --repack --compression=$to_comp) )
+
+    TARBALL=${PKG}_1.orig.tar.$to_comp
+    assertTrue 'unrepacked zipfile present' "[ -f $TMPDIR/${PKG}-1.zip ]"
+    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
+    assertNotNull "pristine tarball is not $to_comp-compressed" \
+                  "$( file -L $TMPDIR/$TARBALL | grep "$file_output" )"
+    CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
+    assertTrue 'file contents missing'	\
+                $(containsName "$CONTENTS" content)
+    assertTrue "malfored target in dehs output: $OUTPUT" \
+               $(containsName "$OUTPUT" "<target>$TARBALL</target>")
+
+    cleanup
+
+}
+
+
+
+# The following function tests the Files-Excluded feature of uscan, which
+# allows the selective exclusion of files from the upstream tarball before
+# repacking it.
+
+helperCreateRepo () {
+    mkdir -p $PKG/debian
+
+    cat <<END > $PKG/debian/watch
+version=3
+http://localhost:$PORT/$PKG-(\d).tar.gz
+END
+
+    cat <<END > $PKG/debian/changelog
+$PKG (0-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
+END
+
+    cat <<'END' > $PKG/debian/copyright
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Files-Excluded: exclude-this
+ exclude-dir
+ .*
+ */js/jquery.js
+ ;?echo?baz;?#
+END
+
+    mkdir -p repo
+    touch repo/include-this
+    touch repo/exclude-this
+    touch repo/.hidden
+    mkdir -p "repo/; echo baz; #/"
+    mkdir -p repo/exclude-dir
+    touch repo/exclude-dir/file
+    mkdir -p repo/exclude-dir/subdir
+    touch repo/exclude-dir/subdir/file2
+    mkdir -p repo/docs/html/js/
+    touch repo/docs/html/js/jquery.js
+
+}
+
+helperTestContent() {
+    assertTrue 'file that must be present is excluded in the tarball'	\
+                $(containsName "$CONTENTS" include-this)
+    assertFalse 'file that must be excluded is present in the tarball'	\
+                $(containsName "$CONTENTS" exclude-this)
+    assertFalse "dir that must be excluded is present in the tarball"	\
+                $(containsName "$CONTENTS" exclude-dir)
+    assertFalse "subdir that must be excluded is present in the tarball"	\
+                $(containsName "$CONTENTS" subdir)
+    assertFalse "non-root-file that must be excluded is present in the tarball"	\
+                $(containsName "$CONTENTS" jquery.js)
+    assertFalse "hidden file that must be excluded is present in the zip file"	\
+                $(containsName "$CONTENTS" .hidden)
+    assertFalse "path with whitespace that must be excluded is present"	\
+                $(containsName "$CONTENTS" "; echo baz; #/")
+}
+
+testFileExclusion() {
+
+    PKG=foo
+    PORT=8000
+    TMPDIR=$(mktemp -d)
+
+    (
+      cd $TMPDIR
+      helperCreateRepo
+      cd repo
+      tar cfz $PKG-1.tar.gz * .hidden
+      python -m SimpleHTTPServer $PORT &
+      echo $! > pid )
+
+    (cd $TMPDIR/$PKG ; $COMMAND)
+
+    TARBALL=${PKG}_1.orig.tar.gz
+    assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-1.tar.gz ]"
+    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
+    assertFalse 'pristine tarball is a symlink (nothing repacked?)' "[ -L $TMPDIR/$TARBALL ]"
+    assertNotNull 'pristine tarball is not gzip-compressed' \
+                  "$( file $TMPDIR/$TARBALL | grep 'gzip compressed data' )"
+    CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
+
+    helperTestContent
+
+    cleanup
+
+}
+
+# The same, for a zip file that is being repacked
+
+testFileExclusionZipToTar() {
+
+    PKG=foo
+    PORT=8000
+    TMPDIR=$(mktemp -d)
+
+    (
+      cd $TMPDIR
+      helperCreateRepo
+      cat <<END > $PKG/debian/watch
+version=3
+http://localhost:$PORT/$PKG-(\d).zip
+END
+
+      cd repo
+      zip -q -r $PKG-1.zip * .hidden;
+      python -m SimpleHTTPServer $PORT &
+      echo $! > pid )
+
+    (cd $TMPDIR/$PKG ; $COMMAND --repack)
+
+    TARBALL=${PKG}_1.orig.tar.xz
+    assertTrue 'unrepacked zipfile not present' "[ -f $TMPDIR/${PKG}-1.zip ]"
+    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
+    assertNotNull 'pristine tarball is not xz-compressed' \
+                  "$( file $TMPDIR/$TARBALL | grep 'XZ compressed data' )"
+    CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
+    helperTestContent
+
+    cleanup
+
 }
 
 . shunit2

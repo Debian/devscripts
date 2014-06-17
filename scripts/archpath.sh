@@ -1,4 +1,4 @@
-#! /bin/bash -e
+#!/bin/bash
 
 # Output arch (tla/Bazaar) archive names, with support for branches
 
@@ -16,6 +16,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+set -e
 
 # Which arch implementation should we use?
 if type baz >/dev/null 2>&1; then

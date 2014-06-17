@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 #
 # Upgrade an existing package
 # Christoph Lameter, December 24, 1996

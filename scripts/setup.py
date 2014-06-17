@@ -13,7 +13,8 @@ if os.path.exists(changelog):
     if match:
         version = match.group(1)
 
-scripts = ['suspicious-source',
+scripts = ['sadt',
+           'suspicious-source',
            'wrap-and-sort',
           ]
 

@@ -216,6 +216,9 @@
 # package, unpack it, and move the missing files over.
 # DEBCHECKOUT_SOURCE=auto
 #
+# Username for authenticated mode, can be overriden with -u|--user.
+# DEBCHECKOUT_USER=''
+#
 # See debcheckout(1) for a more precise description of syntax and
 # semantics of these settings.
 
@@ -236,6 +239,9 @@
 # to account when determining the commit message
 # for a release?
 # DEBCOMMIT_RELEASE_USE_CHANGELOG=no
+#
+# Sign commits using gnupg?
+# DEBCOMMIT_SIGN_COMMITS=no
 
 ##### debdiff
 #
@@ -329,7 +335,7 @@
 # DEBSNAP_VERBOSE=no
 #
 # The base URL of the archive to download from
-# DEBSNAP_BASE_URL=http://snapshot.debian.net/archive
+# DEBSNAP_BASE_URL=http://snapshot.debian.org
 #
 # A sed regexp to transform pool/<component>/f/foo into the desired layout
 # default: make the directory from pool/<component>/f/foo to pool/f/foo
@@ -589,6 +595,10 @@
 #
 # Automatically repack bzipped tar or zip archives to gzipped tars?
 # USCAN_REPACK=no
+#
+# Use the Files-Excluded field in debian/copyright to determine whether
+# the orig tarball needs to be repacked to remove non-DFSG content?
+# USCAN_EXCLUSION=yes
 
 ##### uupdate
 #

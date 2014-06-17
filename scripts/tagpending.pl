@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#!/usr/bin/perl -w
 #
 # tagpending: Parse a Debian changelog for a list of bugs closed
 # and tag any that are not already pending as such.
@@ -28,7 +28,7 @@ use strict;
 use warnings;
 use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
-use lib '/usr/share/devscripts';
+BEGIN { push @INC, '/usr/share/devscripts'; }
 use Devscripts::Debbugs;
 
 sub bugs_info;

@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#!/usr/bin/perl -w
 
 # A wrapper for cvs-buildpackage to use debuild, still giving access
 # to all of debuild's functionality.

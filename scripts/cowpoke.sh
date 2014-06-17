@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 # Simple shell script for driving a remote cowbuilder via ssh
 #
 # Copyright(C) 2007, 2008, 2009, Ron <ron@debian.org>
@@ -216,7 +216,7 @@ DATE="$(date +%Y%m%d 2>/dev/null)"
 
 
 cat > "$REMOTE_SCRIPT" <<-EOF
-	#! /bin/bash
+	#!/bin/bash
 	# cowpoke generated remote worker script.
 	# Normally this should have been deleted already, you can safely remove it now.
 

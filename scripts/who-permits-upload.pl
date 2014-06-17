@@ -1,4 +1,4 @@
-#! /usr/bin/perl
+#!/usr/bin/perl
 
 # who-permits-upload - Retrieve permissions granted to Debian Maintainers (DM)
 # Copyright (C) 2012 Arno Töll <arno@debian.org>

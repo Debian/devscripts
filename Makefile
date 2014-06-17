@@ -40,6 +40,9 @@ online-test:
 
 test: test_test test_scripts
 
+test-installed:
+	$(MAKE) -C test/ $@
+
 install: all install_scripts
 	cp -a $(PERL_MODULES) $(DESTDIR)$(PERLMOD_DIR)
 	cp $(EXAMPLES) $(DESTDIR)$(EXAMPLES_DIR)
@@ -61,4 +64,4 @@ test_scripts:
 install_scripts:
 	$(MAKE) -C scripts/ install DESTDIR=$(DESTDIR)
 
-.PHONY: online-test test
+.PHONY: online-test test test-installed

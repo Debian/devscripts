@@ -172,9 +172,9 @@ my $arch;
 my $datadir = $ENV{'HOME'} . '/.chdist';
 
 GetOptions(
-  "help"       => \$help,
-  "data-dir=s" => \$datadir,
-  "arch=s"     => \$arch,
+  "h|help"       => \$help,
+  "d|data-dir=s" => \$datadir,
+  "a|arch=s"     => \$arch,
   "version"    => \$version,
 ) or usage(1);
 
@@ -199,6 +199,7 @@ if ($version) {
 sub fatal
 {
     my ($msg) = @_;
+    $msg =~ s/\n?$/\n/;
     print STDERR "$progname: $msg";
     exit 1;
 }
@@ -280,6 +281,9 @@ sub bin2src
 	while (<CACHE>) {
 	    if (m/^Source: (.*)/) {
 		$src = $1;
+		# Slurp remaining output to avoid SIGPIPE
+		local $/ = undef;
+		my $junk = <CACHE>;
 		last;
 	    }
 	}
@@ -303,6 +307,9 @@ sub src2bin {
 	while (<CACHE>) {
 	    if (m/^Binary: (.*)/) {
 		print join("\n", split(/, /, $1)) . "\n";
+		# Slurp remaining output to avoid SIGPIPE
+		local $/ = undef;
+		my $junk = <CACHE>;
 		last;
 	    }
 	}
@@ -627,7 +634,7 @@ sub parseFile {
 	 }
       } elsif ( $line =~ m|^[a-zA-Z]| ) {
          # Gather data
-         my ($field, $data) = $line =~ m|([a-zA-z-]+): (.*)$|;
+         my ($field, $data) = $line =~ m|([a-zA-Z-]+): (.*)$|;
 	 if ($data) {
 	    $tmp{$field} = $data;
 	 }

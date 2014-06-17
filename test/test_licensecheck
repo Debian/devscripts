@@ -15,10 +15,10 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 if test "$1" = --installed; then
-    COMMAND=licensecheck
+    COMMAND="licensecheck --no-conf"
     shift
 else
-    COMMAND="../scripts/licensecheck.pl"
+    COMMAND="../scripts/licensecheck.pl --no-conf"
 fi
 
 WORKDIR="$(readlink -f "${0%/*}")"

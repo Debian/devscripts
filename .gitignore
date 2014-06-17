@@ -12,10 +12,12 @@ po4a/fr/*.1
 po4a/fr/*.5
 po4a/fr/*.dbk
 po4a/fr/*.pl
+po4a/fr/*.pod
 po4a/de/*.1
 po4a/de/*.5
 po4a/de/*.dbk
 po4a/de/*.pl
+po4a/de/*.pod
 po4a/translate
 scripts/annotate-output
 scripts/archpath
@@ -78,6 +80,8 @@ scripts/manpage-alert
 scripts/mass-bug
 scripts/mass-bug.1
 scripts/mergechanges
+scripts/mk-origtargz
+scripts/mk-origtargz.1
 scripts/mk-build-deps
 scripts/mk-build-deps.1
 scripts/namecheck
@@ -90,6 +94,7 @@ scripts/pts-subscribe
 scripts/rc-alert
 scripts/rmadison
 scripts/rmadison.1
+scripts/sadt.1
 scripts/svnpath
 scripts/svnpath.1
 scripts/tagpending

@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # who-uploads sourcepkg [ sourcepkg ... ]
 # Tells you who made the latest uploads of a source package.
@@ -222,8 +222,8 @@ for package; do
 	    DATE=$(echo "$HTML_TEXT" |  sed -ne 's%<li><em>Date</em>: \(.*\)</li>%\1%p')
 	fi
 
-	GPG_ID=$(echo "$GPG_TEXT" | LC_ALL=C gpg $GPG_NO_KEYRING --verify 2>&1 |
-	         sed -rne 's/.*ID ([0-9A-Z]+).*/\1/p')
+	GPG_ID=$(echo "$GPG_TEXT" | LC_ALL=C gpg $GPG_NO_KEYRING --keyid-format long --verify 2>&1 |
+	         sed -rne 's/using [^ ]* key ([0-9A-Z]+).*/\1/p')
 
 	UPLOADER=$(gpg $GPG_OPTIONS \
 	           "${GPG_DEFAULT_KEYRINGS[@]}" "${GPG_KEYRINGS[@]}" \

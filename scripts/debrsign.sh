@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # This program is used to REMOTELY sign a .dsc and .changes file
 # pair in the form needed for a legal Debian upload.  It is based on

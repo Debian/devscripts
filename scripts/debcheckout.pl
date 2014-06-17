@@ -217,6 +217,12 @@ This variable determines under what scenarios the associated orig.tar.gz for a
 package will be downloaded.  See the B<--source> option for a description of
 the values.
 
+=item B<DEBCHECKOUT_USER>
+
+This variable sets the username for authenticated mode. It can be overridden
+with the B<--user> option. Setting this variable does not imply the use of
+authenticated mode, it still has to be activated with B<--auth>.
+
 =back
 
 =head1 SEE ALSO
@@ -241,11 +247,13 @@ use File::Basename;
 use File::Copy qw/copy/;
 use File::Temp qw/tempdir/;
 use Cwd;
-use Dpkg::Compression;
-use lib '/usr/share/devscripts';
+BEGIN { push @INC, '/usr/share/devscripts'; }
+use Devscripts::Compression;
 use Devscripts::Versort;
 
 my @files = ();	  # files to checkout
+
+my $compression_re = compression_get_file_extension_regex();
 
 # <snippet from="bts.pl">
 # <!-- TODO we really need to factor out in a Perl module the
@@ -254,6 +262,7 @@ my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
 my %config_vars = (
     'DEBCHECKOUT_AUTH_URLS' => '',
     'DEBCHECKOUT_SOURCE' => 'auto',
+    'DEBCHECKOUT_USER' => '',
     );
 my %config_default = %config_vars;
 my $shell_cmd;
@@ -336,7 +345,7 @@ sub find_repo($$) {
 	} elsif ($line =~ /^Version:\s*(.*)$/i) {
 	    $version = $1;
 	    ($nonepoch_version = $version) =~ s/^\d+://;
-	} elsif ($line =~ /^ [a-f0-9]{32} \d+ (\S+)(?:_\Q$nonepoch_version\E|\.orig)\.tar\.$compression_re_file_ext$/) {
+	} elsif ($line =~ /^ [a-f0-9]{32} \d+ (\S+)(?:_\Q$nonepoch_version\E|\.orig)\.tar\.$compression_re$/) {
 	    $origtgz_name = $1;
 	} elsif ($line =~ /^$/) {
 	    push (@repos, [$version, $type, $url, $origtgz_name])
@@ -441,12 +450,12 @@ sub set_auth($$$$) {
 
     # Adjust urls from new-style anonymous access to old-style and then deal
     # with adjusting for authentication
-    $url =~ s@anonscm\.debian\.org/bzr@bzr.debian.org@;
-    $url =~ s@anonscm\.debian\.org/darcs@darcs.debian.org/darcs@;
+    $url =~ s@(?:alioth\.debian\.org/(?:anonscm/bzr|scm/loggerhead/bzr)|anonscm\.debian\.org/bzr(?:/bzr)?)@bzr.debian.org/bzr@;
+    $url =~ s@(?:alioth\.debian\.org/anonscm/darcs|anonscm\.debian\.org/darcs)@darcs.debian.org/darcs@;
     $url =~ s@git://anonscm\.debian\.org@git://git.debian.org@;
-    $url =~ s@anonscm\.debian\.org/git@git.debian.org/git@;
-    $url =~ s@anonscm\.debian\.org/hg@hg.debian.org/hg@;
-    $url =~ s@svn://anonscm\.debian\.org@svn://svn.debian.org@;
+    $url =~ s@(?:alioth\.debian\.org/anonscm/git|anonscm\.debian\.org/git)@git.debian.org/git@;
+    $url =~ s@(?:alioth\.debian\.org/anonscm/hg|anonscm\.debian\.org/hg)@hg.debian.org/hg@;
+    $url =~ s@svn://(?:scm\.alioth|anonscm)\.debian\.org@svn://svn.debian.org@;
     given ($repo_type) {
 	when ("bzr") {
 	    $url =~ s|^[\w+]+://(bzr\.debian\.org)/(.*)|bzr+ssh://$user$1/bzr/$2|;
@@ -1008,6 +1017,9 @@ sub main() {
 
     # -u|--user implies -a|--auth
     $auth = 1 if length $user;
+
+    # set user from the config file to be used with -a|--auth without -u|--user
+    $user = $config_vars{DEBCHECKOUT_USER} unless $user;
 
     $destdir = $ARGV[1] if $#ARGV > 0;
     ($pkg, $version) = split(/=/, $ARGV[0]);

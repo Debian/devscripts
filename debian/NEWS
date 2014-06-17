@@ -1,3 +1,12 @@
+devscripts (2.14.0) unstable; urgency=medium
+
+  uscan now looks for upstream's keyring under debian/upstream/ as either
+  signing-key.pgp or, for an armored keyring, signing-key.asc.  The previously
+  used location, debian/upstream-signing-key.pgp, will be checked as a last
+  resort for a transition period.
+
+ -- James McCoy <jamessan@debian.org>  Sat, 25 Jan 2014 10:19:02 -0500
+
 devscripts (2.11.9) unstable; urgency=low
 
   The default for mk-build-deps --tool option/MKBUILDDEPS_TOOL configuration

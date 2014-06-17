@@ -1,4 +1,4 @@
-#! /bin/bash -e
+#!/bin/bash
 
 # wnpp-alert -- check for installed packages which have been orphaned
 #               or put up for adoption
@@ -12,6 +12,8 @@
 # is _much_ faster.
 # And I (Julian) tried it with Perl's LWP, but this is _much_ faster
 # (startup time is huge).  And even Perl with wget is slower by 50%....
+
+set -e
 
 PROGNAME="${0##*/}"
 CACHEDIR=~/.devscripts_cache
@@ -94,15 +96,15 @@ fi
 # which don't skip over it to the label 'd'
 $GETCOMMAND $WNPPTMP http://www.debian.org/devel/wnpp/orphaned || \
     { echo "$PROGNAME: $CURLORWGET http://www.debian.org/devel/wnpp/orphaned failed" >&2; exit 1; }
-sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/O \1 \2 -- \3/; T d; p; : d' $WNPPTMP > $WNPP
+sed -ne 's/.*<li><a href="https\?:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/O \1 \2 -- \3/; T d; p; : d' $WNPPTMP > $WNPP
 
 $GETCOMMAND $WNPPTMP http://www.debian.org/devel/wnpp/rfa_bypackage || \
     { echo "$PROGNAME: $CURLORWGET http://www.debian.org/devel/wnpp/rfa_bypackage" >&2; exit 1; }
-sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/RFA \1 \2 -- \3/; T d; p; : d' $WNPPTMP >> $WNPP
+sed -ne 's/.*<li><a href="https\?:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/RFA \1 \2 -- \3/; T d; p; : d' $WNPPTMP >> $WNPP
 
 $GETCOMMAND $WNPPTMP http://www.debian.org/devel/wnpp/help_requested || \
     { echo "$PROGNAME: $CURLORWGET http://www.debian.org/devel/wnpp/help_requested" >&2; exit 1; }
-sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/RFH \1 \2 -- \3/; T d; p; : d' $WNPPTMP >> $WNPP
+sed -ne 's/.*<li><a href="https\?:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/RFH \1 \2 -- \3/; T d; p; : d' $WNPPTMP >> $WNPP
 
 cut -f3 -d' ' $WNPP | sort > $WNPP_PACKAGES
 

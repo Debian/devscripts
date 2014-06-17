@@ -23,6 +23,9 @@ clean: ../scripts/devscripts.1
 de/%.de.1: de/%.de.pl translate
 	podchecker $<
 	pod2man --utf8 --center=" " --release="Debian-Hilfswerkzeuge" $< > $@
+de/%.de.1: de/%.de.pod translate
+	podchecker $<
+	pod2man --utf8 --center=" " --release="Debian-Hilfswerkzeuge" $< > $@
 de/%.de.1: de/%.de.dbk translate
 	xsltproc --nonet -o $@ \
 	  /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl $<
@@ -31,6 +34,9 @@ de/%.de.1: de/%.de.dbk translate
 	mv de/$*.1 $@
 
 fr/%.fr.1: fr/%.fr.pl translate
+	podchecker $<
+	pod2man --utf8 --center=" " --release="Utilitaires Debian" $< > $@
+fr/%.fr.1: fr/%.fr.pod translate
 	podchecker $<
 	pod2man --utf8 --center=" " --release="Utilitaires Debian" $< > $@
 fr/%.fr.1: fr/%.fr.dbk translate

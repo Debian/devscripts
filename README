@@ -186,6 +186,10 @@ And now, in mostly alphabetical order, the scripts:
   package which may be installed to satisfy the build-dependencies of the
   given package. [equivs]
 
+- mk-origtargz: Rename upstream tarball, optionally changing the compression
+  and removing unwanted files.
+  [unzip, xz-utils, file]
+
 - namecheck: Check project names are not already taken.
 
 - nmudiff: prepare a diff of this version (presumably an NMU against the
@@ -207,6 +211,8 @@ And now, in mostly alphabetical order, the scripts:
 - rmadison: remotely query the Debian archive database about packages
   [liburi-perl, wget | curl]
 
+- sadt: run DEP-8 tests [python3-debian]
+
 - suspicious-source: output a list of files which are not common source
   files [python3-magic]
 
@@ -226,9 +232,9 @@ And now, in mostly alphabetical order, the scripts:
   also call a program such as uupdate to attempt to update the Debianised
   version based on the new update.  Whilst uscan could be used to release
   the updated version automatically, it is probably better not to without
-  testing it first.  Uscan can also verify detached OpenPGP signatures if 
-  upstream's signing key is known. [libcrypt-ssleay-perl, gpgv,
-  libwww-perl, unzip, lzma, xz-utils]
+  testing it first.  Uscan can also verify detached OpenPGP signatures if
+  upstream's signing key is known. [gpgv, gnupg, liblwp-protocol-https-perl,
+  libwww-perl, unzip, xz-utils, file]
 
 - uupdate: Update the package with an archive or patches from
   an upstream author.  This will be of help if you have to update your

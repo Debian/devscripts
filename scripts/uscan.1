@@ -76,8 +76,11 @@ http://example.com/example-(\ed[\ed\.]*)\e.(?:zip|tgz|tbz2|txz|tar\e.(?:gz|bz2|x
 # be rewritten to use the redirector.
 http://sf.net/audacity/audacity-src-(.+)\e.tar\e.gz
 
-# For GitHub projects you can use the tags page:
-https://github.com/<user>/<project>/tags .*/(\ed[\ed\e.]*)\e.tar\e.gz
+# For GitHub projects you can use the tags or releases page.  Since the archive
+# URLs use only the version as the name, it is recommended to use a
+# filenamemangle to adjust the name of the downloaded file:
+opts="filenamemangle=s/(?:.*\/)?v?(\ed[\ed\e.]*)\e.tar\e.gz/<project>-$1.tar.gz/" \e
+  https://github.com/<user>/<project>/tags (?:.*/)?v?(\ed[\ed\e.]*)\e.tar\e.gz
 
 # For Google Code projects you should use the downloads page like this:
 http://code.google.com/p/<project>/downloads/list?can=1 \e
@@ -289,9 +292,10 @@ If present, the supplied rules will be applied to the downloaded URL
 that will be used to fetch the detached OpenPGP signature file for the
 upstream tarball.  Some common rules might be `\fBs/$/.asc/\fR' or
 `\fBs/$/.pgp/\fR' or `\fBs/$/.gpg/\fR'.  This signature must be made
-by a key found in the keyring \fBdebian/upstream-signing-key.pgp\fR.
-If it is not valid, or not made by one of the listed keys, uscan will
-report an error.
+by a key found in the keyring \fBdebian/upstream/signing-key.pgp\fR or
+the armored keyring \fBdebian/upstream/signing-key.asc\fR.  If it is not
+valid, or not made by one of the listed keys, uscan will report an
+error.
 .SH "Directory name checking"
 Similarly to several other scripts in the \fBdevscripts\fR package,
 \fBuscan\fR explores the requested directory trees looking for
@@ -378,31 +382,35 @@ Do not use PASV mode for FTP connections.
 \fB\-\-timeout\fR \fIN\fR
 Set timeout to N seconds (default 20 seconds).
 .TP
+.B \-\-no\-symlink
+Do not call \fBmk\-origtargz\fR.
+.P
+The following options are passed to \fBmk\-origtargz\fR:
+.RS
+.TP
 .B \-\-symlink
-Make orig.tar.gz symlinks to any downloaded files if their extensions
-are \fI.tar.gz\fR or \fI.tgz\fR.  This is also handled for orig.tar.bz2 (for
-upstream \fI.tar.bz2\fR, \fI.tbz\fR, and \fI.tbz2\fR), orig.tar.lzma (for
-upstream \fI.tar.lzma\fR, \fI.tlz\fR, \fI.tlzm\fR, and \fI.tlzma\fR), and
-orig.tar.xz (for upstream \fI.tar.xz\fR and \fI.txz\fR).  (This is the
-default behaviour.)
+Make \fIorig.tar.gz\fR (with the appropriate extension) symlinks to the
+downloaded files.
+(This is the default behaviour.)
+.TP
+.B \-\-copy
+Instead of symlinking as described above, copy the downloaded files.
 .TP
 .B \-\-rename
-Instead of symlinking, rename the downloaded files to their Debian
-\fIorig.tar.gz\fR, \fIorig.tar.bz2\fR, \fIorig.tar.lzma\fR, or
-\fIorig.tar.xz\fR names as described above.
+Instead of symlinking as described above, rename the downloaded files.
 .TP
 .B \-\-repack
 After having downloaded an lzma tar, xz tar, bzip tar or zip archive,
-repack it to a gzip tar archive, which is still currently required as a
-member of a Debian source package. Does nothing if the downloaded
-archive is not an lzma tar archive, xz tar archive, bzip tar archive or
-a zip archive (i.e. it doesn't match a .tlz, .tlzm, .tlzma, .tar.lzma, .txz,
-\^.tar.xz, .tbz, .tbz2, .tar.bz2 or .zip extension). The unzip package must be
-installed in order to repack .zip archives, the xz-utils package must be
-installed to repack lzma or xz tar archives.
+repack it to a gzip tar archive, if required.
+The \fBunzip\fR package must be installed in order to repack .zip archives, the
+\fBxz-utils\fR package must be installed to repack lzma or xz tar archives.
 .TP
-.B \-\-no\-symlink
-Don't make these symlinks and don't rename the files.
+\fB\-\-compression\fR [ \fBgzip\fR | \fBbzip2\fR | \fBlzma\fR | \fBxz\fR ]
+In the case where the upstream sources are repacked (either because
+\fB\-\-repack\fR option is given or \fIdebian/copyright\fR contains the
+field \fBFiles-Excluded\fR), it is possible to control the compression
+method via the parameter (defaults to \fBgzip\fR).
+.RE
 .TP
 .B \-\-dehs
 Use an XML format for output, as required by the DEHS system.
@@ -443,6 +451,10 @@ Give verbose output.
 .TP
 .B \-\-no\-verbose
 Don't give verbose output.  (This is the default behaviour.)
+.TP
+.B \-\-no\-exclusion
+Do not automatically exclude files mentioned in
+\fIdebian/copyright\fR field \fBFiles-Excluded\fR
 .TP
 .B \-\-debug
 Dump the downloaded web pages to stdout for debugging your watch file.
@@ -517,6 +529,11 @@ equivalent to the \fB\-\-destdir\fR option.
 If this is set to \fIyes\fR, then after having downloaded a bzip tar,
 lzma tar, xz tar, or zip archive, \fBuscan\fR will repack it to a gzip tar.
 This is equivalent to the \fB\-\-repack\fR option.
+.TP
+.B USCAN_EXCLUSION
+If this is set to \fIno\fR, files mentioned in the field \fBFiles-Excluded\fR
+of \fIdebian/copyright\fR will be ignored and no exclusion of files will be
+tried.  This is equivalent to the \fB\-\-no-exclusion\fR option.
 .SH "EXIT STATUS"
 The exit status gives some indication of whether a newer version was
 found or not; one is advised to read the output to determine exactly
@@ -556,6 +573,7 @@ avoid this behaviour, change the non-version-number groups to be
 (?:...) instead of a plain (...) group.
 .SH "SEE ALSO"
 .BR dpkg (1),
+.BR mk\-origtargz (1),
 .BR perlre (1),
 .BR uupdate (1),
 .BR devscripts.conf (5)

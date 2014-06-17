@@ -2,7 +2,7 @@
 #
 # origtargz: fetch the orig tarball of a Debian package from various sources,
 # and unpack it
-# Copyright (C) 2012  Christoph Berg <myon@debian.org>
+# Copyright (C) 2012-2013  Christoph Berg <myon@debian.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -43,13 +43,25 @@ Various download locations are tried:
 
 =over 4
 
-=item * First, an existing file is looked for.
+=item *
 
-=item * Directories given with B<--path> are searched.
+First, an existing file is looked for.
 
-=item * B<apt-get source> is tried when B<apt-cache showsrc> reports a matching version.
+=item *
 
-=item * Finally, B<uscan --download-current-version> is tried.
+Directories given with B<--path> are searched.
+
+=item *
+
+B<pristine-tar> is tried.
+
+=item *
+
+B<apt-get source> is tried when B<apt-cache showsrc> reports a matching version.
+
+=item *
+
+Finally, B<uscan --download-current-version> is tried.
 
 =back
 
@@ -94,7 +106,8 @@ When found, a hardlink is created if possible, otherwise a symlink.
 Unpack the downloaded orig tarball to the current directory, replacing
 everything except the debian directory. Existing files are removed, except for
 F<debian/> and VCS files. Preserved are: F<.bzr>, F<.bzrignore>,
-F<.bzr-builddeb>, F<.git>, F<.gitignore>, F<.hg>, F<.hgignore>, and F<.svn>.
+F<.bzr-builddeb>, F<.git>, F<.gitignore>, F<.hg>, F<.hgignore>, F<_darcs> and
+F<.svn>.
 
 =over
 
@@ -143,7 +156,7 @@ will remove upstream files even if they are stored in VCS.
 
 =head1 SEE ALSO
 
-B<debcheckout>(1), B<git-import-orig>(1), B<svn-upgrade>(1), B<uupdate>(1)
+B<debcheckout>(1), B<git-import-orig>(1), B<pristine-tar>(1), B<svn-upgrade>(1), B<uupdate>(1)
 
 =head1 AUTHOR
 
@@ -296,7 +309,7 @@ sub clean_checkout ()
 	while (my $file = readdir DIR) {
 		next if ($file eq '.' or $file eq '..');
 		next if ($file eq 'debian');
-		next if ($file =~ /^(\.bzr|\.git|\.hg|\.svn|CVS)$/);
+		next if ($file =~ /^(\.bzr|\.git|\.hg|\.svn|CVS|_darcs)$/);
 		if ($file =~ /^(\.bzr(ignore|-builddeb)|\.gitignore|\.hgignore)$/) {
 			print "Notice: not deleting $file (likely to come from VCS checkout)\n";
 			next;

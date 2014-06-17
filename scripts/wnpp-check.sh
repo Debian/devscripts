@@ -1,4 +1,4 @@
-#! /bin/bash -e
+#!/bin/bash
 
 # wnpp-check -- check for software being packaged or requested
 
@@ -7,6 +7,8 @@
 # David Paleino <d.paleino@gmail.com>
 #
 # Adapted from wnpp-alert, by Arthur Korn <arthur@korn.ch>
+
+set -e
 
 PACKAGES="$@"
 CURLORWGET=""
@@ -59,11 +61,11 @@ trap "rm -f '$WNPP' '$WNPPTMP' '$WNPP_PACKAGES'" \
 
 $GETCOMMAND $WNPPTMP http://www.debian.org/devel/wnpp/being_packaged || \
     { echo "${0##*/}: $CURLORWGET http://www.debian.org/devel/wnpp/being_packaged failed." >&2; exit 1; }
-sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/ITP \1 \2 -- \3/; T d; p; : d' $WNPPTMP > $WNPP
+sed -ne 's/.*<li><a href="https\?:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/ITP \1 \2 -- \3/; T d; p; : d' $WNPPTMP > $WNPP
 
 $GETCOMMAND $WNPPTMP http://www.debian.org/devel/wnpp/requested || \
     { echo "${0##*/}: $CURLORWGET http://www.debian.org/devel/wnpp/requested failed." >&2; exit 1; }
-sed -ne 's/.*<li><a href="http:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/RFP \1 \2 -- \3/; T d; p; : d' $WNPPTMP >> $WNPP
+sed -ne 's/.*<li><a href="https\?:\/\/bugs.debian.org\/\([0-9]*\)">\([^:<]*\)[: ]*\([^<]*\)<\/a>.*/RFP \1 \2 -- \3/; T d; p; : d' $WNPPTMP >> $WNPP
 
 awk -F' ' '{print "("$1" - #"$2") http://bugs.debian.org/"$2" "$3}' $WNPP | sort -k 5 > $WNPP_PACKAGES
 

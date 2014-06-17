@@ -354,7 +354,12 @@ if ($opt_install) {
     system @root, 'dpkg', '--unpack', @deb_files;
     die("dpkg call failed\n") if ( ($?>>8) != 0 );
     system @root, shellwords($install_tool), '-f', 'install';
-    die("install call failed\n") if ( ($?>>8) != 0 );
+    if ( ($?>>8) != 0 ) {
+	# Restore system to previous state, since apt wasn't able to resolve a
+	# proper way to get the build-dep packages installed
+	system @root, 'dpkg', '--remove', @deb_files;
+	die("install call failed\n");
+    }
 
     if ($opt_remove) {
 	foreach my $file (@deb_files) {

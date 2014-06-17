@@ -1,4 +1,4 @@
-#! /usr/bin/perl
+#!/usr/bin/perl
 #
 # Plot the history of a debian package from the changelog, displaying
 # when each release of the package occurred, and who made each release.

@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # debrelease: a devscripts wrapper around dupload/dput which calls
 #             dupload/dput with the correct .changes file as parameter.
