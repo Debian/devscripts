@@ -312,6 +312,7 @@ B<RMADISON_URL_MAP_*> variables.
 =item B<RMADISON_DEFAULT_URL>=I<URL>
 
 Set the default URL to use unless overridden by a command line option.
+For Debian this defaults to debian,new. For Ubuntu this defaults to ubuntu.
 
 =item B<RMADISON_ARCHITECTURE>=I<ARCH>
 
