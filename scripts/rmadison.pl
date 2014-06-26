@@ -55,7 +55,7 @@ my %url_map = (
     'udd' => 'http://qa.debian.org/cgi-bin/madison.cgi',
     'new' => 'http://qa.debian.org/cgi-bin/madison.cgi?table=new',
 );
-my $default_url = 'debian';
+my $default_url = 'debian,new';
 if (system('dpkg-vendor', '--is', 'ubuntu') == 0) {
     $default_url = 'ubuntu';
 }
