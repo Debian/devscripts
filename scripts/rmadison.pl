@@ -50,7 +50,6 @@ my %url_map = (
     'debian' => "http://qa.debian.org/madison.php",
     'qa' => "http://qa.debian.org/madison.php",
     'myon' => "http://qa.debian.org/~myon/madison.php",
-    'bpo' => "http://backports.debian.org/cgi-bin/madison.cgi",
     'debug' => "http://debug.debian.net/cgi-bin/madison.cgi",
     'ubuntu' => "http://people.canonical.com/~ubuntu-archive/madison.cgi",
     'udd' => 'http://qa.debian.org/cgi-bin/madison.cgi',
