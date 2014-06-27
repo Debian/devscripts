@@ -410,6 +410,10 @@ In the case where the upstream sources are repacked (either because
 \fB\-\-repack\fR option is given or \fIdebian/copyright\fR contains the
 field \fBFiles-Excluded\fR), it is possible to control the compression
 method via the parameter (defaults to \fBgzip\fR).
+.TP
+.B \-\-copyright\-file \fIcopyright-file\fR
+Exclude files mentioned in \fBFiles-Excluded\fR in the given copyright file.
+This is useful when running uscan not within a source package directory.
 .RE
 .TP
 .B \-\-dehs

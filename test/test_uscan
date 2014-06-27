@@ -253,6 +253,40 @@ testFileExclusion() {
 
 }
 
+# the same, but run from a separate directory
+testFileExclusionSeparateDir() {
+
+    PKG=foo
+    PORT=8000
+    TMPDIR=$(mktemp -d)
+
+    (
+      cd $TMPDIR
+      helperCreateRepo
+      cd repo
+      tar cfz $PKG-1.tar.gz * .hidden
+      python -m SimpleHTTPServer $PORT &
+      echo $! > pid )
+
+    mkdir $TMPDIR/otherdir
+    (
+    	cd $TMPDIR/otherdir; $COMMAND --package $PKG --force-download --upstream-version 1 --watchfile ../$PKG/debian/watch --copyright-file ../$PKG/debian/copyright
+   )
+
+    TARBALL=${PKG}_1.orig.tar.gz
+    assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-1.tar.gz ]"
+    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
+    assertFalse 'pristine tarball is a symlink (nothing repacked?)' "[ -L $TMPDIR/$TARBALL ]"
+    assertNotNull 'pristine tarball is not gzip-compressed' \
+                  "$( file $TMPDIR/$TARBALL | grep 'gzip compressed data' )"
+    CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
+
+    helperTestContent
+
+    cleanup
+
+}
+
 # The same, for a zip file that is being repacked
 
 testFileExclusionZipToTar() {

@@ -147,6 +147,8 @@ Options passed on to mk-origtargz:
     --compression [ gzip | bzip2 | lzma | xz ]
                    When the upstream sources are repacked, use compression COMP
                    for the resulting tarball (default: gzip)
+    --copyright-file FILE
+                   Remove files matching the patterns found in FILE
 
 Default settings modified by devscripts configuration files:
 $modified_conf_msg
@@ -178,6 +180,7 @@ my $report = 0; # report even on up-to-date packages?
 my $repack = 0; # repack .tar.bz2, .tar.lzma, .tar.xz or .zip to .tar.gz
 my $default_compression = 'gzip' ;
 my $repack_compression = $default_compression;
+my $copyright_file = undef;
 my $symlink = 'symlink';
 my $verbose = 0;
 my $check_dirname_level = 1;
@@ -278,7 +281,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 my $debug = 0;
 my ($opt_h, $opt_v, $opt_destdir, $opt_download, $opt_force_download,
     $opt_report, $opt_passive, $opt_symlink, $opt_repack,
-    $opt_repack_compression, $opt_exclusion);
+    $opt_repack_compression, $opt_exclusion, $opt_copyright_file);
 my ($opt_verbose, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
 my $opt_download_version;
@@ -312,6 +315,7 @@ GetOptions("help" => \$opt_h,
 	   "noconf" => \$opt_noconf,
 	   "no-conf" => \$opt_noconf,
 	   "exclusion!" => \$opt_exclusion,
+	   "copyright-file=s" => \$opt_copyright_file,
 	   "download-current-version" => \$opt_download_current_version,
 	   )
     or die "Usage: $progname [options] [directories]\nRun $progname --help for more details\n";
@@ -354,6 +358,7 @@ if (defined $opt_repack_compression) {
 }
 $dehs = $opt_dehs if defined $opt_dehs;
 $exclusion = $opt_exclusion if defined $opt_exclusion;
+$copyright_file = $opt_copyright_file if defined $opt_copyright_file;
 $user_agent_string = $opt_user_agent if defined $opt_user_agent;
 $download_version = $opt_download_version if defined $opt_download_version;
 
@@ -1475,6 +1480,8 @@ EOF
 	push @cmd, "--directory", $destdir;
 	push @cmd, "--copyright-file", "debian/copyright"
 	    if ($exclusion && -e "debian/copyright");
+	push @cmd, "--copyright-file", $copyright_file
+	    if ($exclusion && defined $copyright_file);
 	push @cmd, "$destdir/$newfile_base";
 
 	spawn(exec => \@cmd,
