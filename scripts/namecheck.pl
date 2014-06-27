@@ -260,7 +260,6 @@ __DATA__
 #
 http://%s.tuxfamily.org/             | Not Found
 http://alioth.debian.org/projects/%s | Software Map
-http://developer.berlios.de/projects/%s | Invalid Project
 http://freshmeat.net/projects/%s     | We encounted an error
 http://launchpad.net/%s              | no page with this address
 http://savannah.gnu.org/projects/%s  | Invalid Group
