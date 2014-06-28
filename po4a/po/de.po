@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: devscripts 2.14.1\n"
+"Project-Id-Version: devscripts 2.14.5\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
 "POT-Creation-Date: 2014-05-05 22:34-0400\n"
-"PO-Revision-Date: 2014-01-28 19:11-0100\n"
+"PO-Revision-Date: 2014-06-19 19:11-0100\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
 "Language: de\n"
@@ -8258,16 +8258,12 @@ msgstr "B<--sign-commit>, B<--no-sign-commit>"
 
 #. type: textblock
 #: ../scripts/debcommit.pl:87
-#, fuzzy
-#| msgid ""
-#| "If this option is set, then tags that debcommit creates will be signed "
-#| "using gnupg. Currently this is only supported by git."
 msgid ""
 "If this option is set, then the commits that debcommit creates will be "
 "signed using gnupg. Currently this is only supported by git, hg, and bzr."
 msgstr ""
-"Falls diese Option gesetzt ist, dann werden Markierungen, die Debcommit "
-"erstellt, mittels GnuPG signiert. Derzeit wird dies nur von Git unterstützt."
+"Falls diese Option gesetzt ist, dann werden Commits, die Debcommit erstellt, "
+"mittels GnuPG signiert. Derzeit wird dies nur von Git, Hg und Bzr unterstützt."
 
 #. type: =item
 #: ../scripts/debcommit.pl:90
@@ -12782,6 +12778,8 @@ msgid ""
 "rename upstream tarball, optionally changing the compression and removing "
 "unwanted files [unzip, xz-utils, file]"
 msgstr ""
+"benennt den Tarball der Originalautoren um, ändert wahlweise die "
+"Komprimierung und entfernt unerwünschte Dateien. [unzip, xz-utils, file]"
 
 #. type: IP
 #: ../scripts/devscripts.1:117
@@ -15452,11 +15450,13 @@ msgid ""
 "mk-origtargz - rename upstream tarball, optionally changing the compression "
 "and removing unwanted files"
 msgstr ""
+"mk-origtargz - benennt den Tarball der Originalautoren um, ändert wahlweise "
+"die Komprimierung und entfernt unerwünschte Dateien."
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:32
 msgid "B<mk-origtargz> [I<options>] F<foo-1.0.tar.gz>"
-msgstr ""
+msgstr "B<mk-origtargz> [I<Optionen>] F<foo-1.0.tar.gz>"
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:34
@@ -15472,6 +15472,12 @@ msgid ""
 "compression scheme and remove files according to B<Files-Excluded> in "
 "F<debian/copyright>. The resulting file is placed in F<debian/../..>."
 msgstr ""
+"B<mk-origtargz> benennt die angegebene Datei auf Basis des Quellpaketnamens "
+"und der Version in F<debian/changelog> so um, dass sie den Anforderungen von "
+"B<dpkg-buildpackage> entspricht. Es kann B<zip> in B<tar> umwandeln, "
+"wahlweise das Komprimierungsverfahren ändern und Dateien entsprechend "
+"B<Files-Excluded> in F<debian/copyright> entfernen. Die daraus resultierende "
+"Datei wird in F<debian/../..> abgelegt."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:46
@@ -15479,6 +15485,9 @@ msgid ""
 "If the package name is given via the B<--package> option, no information is "
 "read from F<debian/>, and the result file is placed in the current directory."
 msgstr ""
+"Falls der Paketname über die Option B<--package> angegeben wurde, werden "
+"keine Informationen von F<debian/> gelesen und die resultierende Datei wird "
+"im aktuellen Verzeichnis abgelegt."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:49
@@ -15486,17 +15495,21 @@ msgid ""
 "B<mk-origtargz> is commonly called via B<uscan>, which first obtains the "
 "upstream tarball."
 msgstr ""
+"B<mk-origtargz> wird üblicherweise über B<uscan> aufgerufen. Es erhält zuerst "
+"den Tarball der Originalautoren."
 
 #. type: =head2
 #: ../scripts/mk-origtargz.pl:54
 msgid "Metadata options"
-msgstr ""
+msgstr "Metadatenoptionen"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:56
 msgid ""
 "The following options extend or replace information taken from F<debian/>."
 msgstr ""
+"Die folgenden Optionen erweitern oder ersetzen die von F<debian/> entnommenen "
+"Informationen."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:62
@@ -15505,6 +15518,9 @@ msgid ""
 "or use a F<debian/> directory. This option can only be used together with "
 "B<--version>."
 msgstr ""
+"benutzt I<Paket> als Namen des Debian-Quellpakets und erfordert oder "
+"verwendet daher nicht das Verzeichnis F<debian/>. Diese Option kann nur "
+"zusammen mit B<--version> benutzt werden."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:66
@@ -15512,6 +15528,8 @@ msgid ""
 "The default is to use the package name of the first entry in F<debian/"
 "changelog>."
 msgstr ""
+"Standardmäßig wird der Paketname des ersten Eintrags in F<debian/changelog> "
+"verwendet."
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:68
@@ -15524,6 +15542,9 @@ msgid ""
 "Use I<version> as the version of the package. This needs to be the upstream "
 "version portion of a full Debian version, i.e. no Debian revision, no epoch."
 msgstr ""
+"benutzt I<Version> als Version des Pakets. Dies muss der Teil einer "
+"vollständigen Debian-Version sein, der von den Originalautoren stammt, d.h. "
+"keine Debian-Revision, keine Epoche."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:72
@@ -15531,13 +15552,13 @@ msgid ""
 "The default is to use the upstream portion of the version of the first entry "
 "in F<debian/changelog>."
 msgstr ""
+"Standardmäßig wird der Teil der Version von den Originalautoren des ersten "
+"Eintrags in F<debian/changelog> benutzt."
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:74
-#, fuzzy
-#| msgid "B<--exclude-tag-op>"
 msgid "B<--exclude-file> I<glob>"
-msgstr "B<--exclude-tag-op>"
+msgstr "B<--exclude-file> I<Glob>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:76
@@ -15545,6 +15566,8 @@ msgid ""
 "Remove files matching the given I<glob> from the tarball, as if it was "
 "listed in B<Files-Excluded>."
 msgstr ""
+"entfernt Dateien, die zum angegebenen I<Glob> des Tarballs passen, als ob er "
+"in B<Files-Excluded> aufgeführt wäre."
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:79
@@ -15560,6 +15583,11 @@ msgid ""
 "that file are silently ignored, exactly as it is the case with F<debian/"
 "copyright>."
 msgstr ""
+"entfernt Dateien, die den in I<Dateiname> gefunden Mustern entsprechen. Diese "
+"sollten im Format einer Debian-F<Copyright>-Datei (genaugenommen B<Format: "
+"https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/>) "
+"vorliegen. Fehler beim Auswerten dieser Datei werden stillschweigend "
+"ignoriert, genau wie dies bei F<debian/copyright> der Fall ist."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:83
@@ -15568,13 +15596,14 @@ msgid ""
 "patterns found in F<debian/copyright>. If you do not want to read that file, "
 "you will have to use B<--package>."
 msgstr ""
+"Sowohl die B<--exclude-file>- als auch B<--copyright-file>-Optionen ergänzen "
+"die Liste der in F<debian/copyright> gefundenen Muster . Falls Sie diese "
+"Datei nicht auslesen wollen, müssen Sie B<--package> verwenden."
 
 #. type: =head2
 #: ../scripts/mk-origtargz.pl:89
-#, fuzzy
-#| msgid "<option>-c</option>"
 msgid "Action options"
-msgstr "<option>-c</option>"
+msgstr "Aktionsoptionen"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:91
@@ -15582,6 +15611,8 @@ msgid ""
 "These options specify what exactly B<mk-origtargz> should do. The options "
 "B<--copy>, B<--rename> and B<--symlink> are mutually exclusive."
 msgstr ""
+"Diese Optionen geben an, was genau B<mk-origtargz> tun soll. Die Optionen "
+"B<--copy>, B<--rename> und B<--symlink> schließen sich gegenseitig aus."
 
 #. type: TP
 #: ../scripts/mk-origtargz.pl:96 ../scripts/uscan.1:390
@@ -15591,15 +15622,12 @@ msgstr "B<--symlink>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:98
-#, fuzzy
-#| msgid ""
-#| "Use the traditional uscan output format.  (This is the default behaviour.)"
 msgid ""
 "Make the resulting file a symlink to the given original file. (This is the "
 "default behaviour.)"
 msgstr ""
-"verwendet das traditionelle Uscan-Ausgabeformat. (Dies ist das "
-"Standardverhalten.)"
+"liefert als Ergebnis einen symbolischen Verweis auf die Originaldatei. (Dies "
+"ist das Standardverhalten.)"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:101
@@ -15607,6 +15635,9 @@ msgid ""
 "If the file has to be modified (because it is a B<zip> file, because of B<--"
 "repack> or B<Files-Excluded>), this option behaves like B<--copy>."
 msgstr ""
+"Falls die Datei verändert wurde (da es aufgrund von B<--repack> oder "
+"B<Files-Excluded> eine B<Zip>-Datei ist), verhält sich diese Option wie "
+"B<--copy>."
 
 #. type: TP
 #: ../scripts/mk-origtargz.pl:104 ../scripts/uscan.1:395
@@ -15620,6 +15651,8 @@ msgid ""
 "Make the resulting file a copy of the original file (unless it has to be "
 "modified, of course)."
 msgstr ""
+"liefert als Ergebnis eine Kopie der Originaldatei (natürlich nur, wenn sie "
+"nicht verändert werden muss)."
 
 #. type: TP
 #: ../scripts/mk-origtargz.pl:108 ../scripts/uscan.1:398
@@ -15629,10 +15662,8 @@ msgstr "B<--rename>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:110
-#, fuzzy
-#| msgid "Report and download.  (This is the default behaviour.)"
 msgid "Rename the original file."
-msgstr "berichtet und lädt herunter. (Dies ist das Standardverhalten.)"
+msgstr "benennt die Originaldatei um."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:112
@@ -15641,6 +15672,9 @@ msgid ""
 "repack> or B<Files-Excluded>), this implies that the original file is "
 "deleted afterwards."
 msgstr ""
+"Falls die Datei verändert wurde (da es aufgrund von B<--repack> oder "
+"B<Files-Excluded> eine B<Zip>-Datei ist), impliziert das, dass die "
+"Originaldatei hinterher gelöscht wird."
 
 #. type: TP
 #: ../scripts/mk-origtargz.pl:114 ../scripts/uscan.1:401
@@ -15654,6 +15688,8 @@ msgid ""
 "If the given file is not compressed using the desired format (see B<--"
 "compression>), recompress it."
 msgstr ""
+"Falls die angegebene Datei nicht im gewünschten Format vorliegt, (siehe "
+"B<--compression>) komprimieren Sie sie erneut."
 
 #. type: TP
 #: ../scripts/mk-origtargz.pl:119 ../scripts/uscan.1:407
@@ -15668,6 +15704,9 @@ msgid ""
 "the resulting file is compressed using the given scheme. The default is "
 "B<gzip>."
 msgstr ""
+"Falls B<--repack> benutzt wird oder die angegebene Datei eine B<Zip>-Datei "
+"ist, müssen Sie sicherstellen, dass resultierende Datei das angegebene Schema "
+"verwendet. Voreinstellung ist B<gzip>."
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:123
@@ -15677,7 +15716,7 @@ msgstr "B<-C>, B<--directory> I<Verzeichnis>"
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:125
 msgid "Put the resulting file in the given directory."
-msgstr ""
+msgstr "legt die resultierende Datei im angegebenen Verzeichnis ab."
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:141
@@ -19102,52 +19141,39 @@ msgstr "B<--no-symlink>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:387
-#, fuzzy
-#| msgid "I<mk-origtargz>(1)"
 msgid "Do not call B<mk-origtargz>."
-msgstr "I<mk-origtargz>(1)"
+msgstr "ruft nicht B<mk-origtargz> auf."
 
 #. type: Plain text
 #: ../scripts/uscan.1:389
-#, fuzzy
-#| msgid "The following options are available:"
 msgid "The following options are passed to B<mk-origtargz>:"
-msgstr "Die folgenden Optionen sind verfügbar:"
+msgstr "Die folgenden Optionen werden an B<mk-origtargz> übergeben:"
 
 #. type: Plain text
 #: ../scripts/uscan.1:395
-#, fuzzy
-#| msgid ""
-#| "Use the traditional uscan output format.  (This is the default behaviour.)"
 msgid ""
 "Make I<orig.tar.gz> (with the appropriate extension) symlinks to the "
 "downloaded files.  (This is the default behaviour.)"
 msgstr ""
-"verwendet das traditionelle Uscan-Ausgabeformat. (Dies ist das "
-"Standardverhalten.)"
+"erstellt symbolische I<orig.tar.gz>-Verweise (mit passender Endung) auf die "
+"heruntergeladenen Dateien. (Dies ist das Standardverhalten.)"
 
 #. type: Plain text
 #: ../scripts/uscan.1:398
 msgid "Instead of symlinking as described above, copy the downloaded files."
 msgstr ""
+"kopiert die heruntergeladenen Dateien, statt, wie oben beschrieben, "
+"symbolische Verweise darauf zu erstellen."
 
 #. type: Plain text
 #: ../scripts/uscan.1:401
 msgid "Instead of symlinking as described above, rename the downloaded files."
 msgstr ""
+"benennt die heruntergeladenen Dateien um, statt, wie oben beschrieben, "
+"symbolische Verweise darauf zu erstellen."
 
 #. type: Plain text
 #: ../scripts/uscan.1:407
-#, fuzzy
-#| msgid ""
-#| "After having downloaded an lzma tar, xz tar, bzip tar or zip archive, "
-#| "repack it to a gzip tar archive, which is still currently required as a "
-#| "member of a Debian source package. Does nothing if the downloaded archive "
-#| "is not an lzma tar archive, xz tar archive, bzip tar archive or a zip "
-#| "archive (i.e. it doesn't match a .tlz, .tlzm, .tlzma, .tar.lzma, .txz, "
-#| "\\^.tar.xz, .tbz, .tbz2, .tar.bz2 or .zip extension). The unzip package "
-#| "must be installed in order to repack .zip archives, the xz-utils package "
-#| "must be installed to repack lzma or xz tar archives."
 msgid ""
 "After having downloaded an lzma tar, xz tar, bzip tar or zip archive, repack "
 "it to a gzip tar archive, if required.  The B<unzip> package must be "
@@ -19155,13 +19181,10 @@ msgid ""
 "installed to repack lzma or xz tar archives."
 msgstr ""
 "Nachdem ein LZMA-Tar-, Xz-Tar, Bzip-Tar oder Zip-Archiv heruntergeladen "
-"wurde, wird es neu als Gzip-Tar-Archiv gepackt, das derzeit immer noch als "
-"Teil eines Debian-Quell-Pakets benötigt wird. Falls das heruntergeladene "
-"Archiv kein LZMA-Tar-, Xz-Tar, Bzip-Tar oder Zip-Archiv ist (d.h. es hat "
-"keine .tlz-, .tlzm-, .tlzma-, .tar.lzma-, .txz-, \\^.tar.xz-, .tbz-, ."
-"tbz2-, .tar.bz2- oder .zip-Endung), wird nichts getan. Das Paket Unzip muss "
-"installiert sein, um .zip-Archive neu zu packen, das Paket xz-utils muss "
-"installiert seinum LZMA- oder Xz-Archive neu zu packen."
+"wurde, wird es neu als Gzip-Tar-Archiv gepackt, fall nötig. Um die "
+".zip-Archive neu zu packen, muss das Paket B<unzip> installiert sein, um "
+"LZMA- oder XZ-Archive neu zu packen, muss das Paket B<xz-utils> installiert "
+"sein."
 
 #. type: Plain text
 #: ../scripts/uscan.1:413
@@ -19171,6 +19194,10 @@ msgid ""
 "Excluded>), it is possible to control the compression method via the "
 "parameter (defaults to B<gzip>)."
 msgstr ""
+"Falls die Quellen der Originalautoren neu gepackt wurden (entweder weil die "
+"Option B<--repack> angegeben wurde oder I<debian/copyright> das Feld "
+"B<Files-Excluded> enthält), ist es möglich, die Komprimierungsmethode über "
+"den Parameter zu steuern (Voreinstellung ist B<gzip>)."
 
 #. type: TP
 #: ../scripts/uscan.1:414
