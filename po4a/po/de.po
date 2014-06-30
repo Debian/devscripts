@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: devscripts 2.14.5\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
 "POT-Creation-Date: 2014-05-05 22:34-0400\n"
-"PO-Revision-Date: 2014-06-19 19:11-0100\n"
+"PO-Revision-Date: 2014-06-30 10:59-0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
 "Language: de\n"
@@ -15486,7 +15486,7 @@ msgid ""
 "read from F<debian/>, and the result file is placed in the current directory."
 msgstr ""
 "Falls der Paketname über die Option B<--package> angegeben wurde, werden "
-"keine Informationen von F<debian/> gelesen und die resultierende Datei wird "
+"keine Informationen aus F<debian/> gelesen und die resultierende Datei wird "
 "im aktuellen Verzeichnis abgelegt."
 
 #. type: textblock
@@ -15508,7 +15508,7 @@ msgstr "Metadatenoptionen"
 msgid ""
 "The following options extend or replace information taken from F<debian/>."
 msgstr ""
-"Die folgenden Optionen erweitern oder ersetzen die von F<debian/> entnommenen "
+"Die folgenden Optionen erweitern oder ersetzen die aus F<debian/> entnommenen "
 "Informationen."
 
 #. type: textblock
@@ -15519,7 +15519,7 @@ msgid ""
 "B<--version>."
 msgstr ""
 "benutzt I<Paket> als Namen des Debian-Quellpakets und erfordert oder "
-"verwendet daher nicht das Verzeichnis F<debian/>. Diese Option kann nur "
+"verwendet daher nicht ein F<debian/>-Verzeichnis. Diese Option kann nur "
 "zusammen mit B<--version> benutzt werden."
 
 #. type: textblock
@@ -15597,8 +15597,8 @@ msgid ""
 "you will have to use B<--package>."
 msgstr ""
 "Sowohl die B<--exclude-file>- als auch B<--copyright-file>-Optionen ergänzen "
-"die Liste der in F<debian/copyright> gefundenen Muster . Falls Sie diese "
-"Datei nicht auslesen wollen, müssen Sie B<--package> verwenden."
+"die Liste der in F<debian/copyright> gefundenen Muster. Falls Sie diese Datei "
+"nicht auslesen wollen, müssen Sie B<--package> verwenden."
 
 #. type: =head2
 #: ../scripts/mk-origtargz.pl:89
@@ -15635,7 +15635,7 @@ msgid ""
 "If the file has to be modified (because it is a B<zip> file, because of B<--"
 "repack> or B<Files-Excluded>), this option behaves like B<--copy>."
 msgstr ""
-"Falls die Datei verändert wurde (da es aufgrund von B<--repack> oder "
+"Falls die Datei verändert werden muss (da es aufgrund von B<--repack> oder "
 "B<Files-Excluded> eine B<Zip>-Datei ist), verhält sich diese Option wie "
 "B<--copy>."
 
@@ -15672,8 +15672,8 @@ msgid ""
 "repack> or B<Files-Excluded>), this implies that the original file is "
 "deleted afterwards."
 msgstr ""
-"Falls die Datei verändert wurde (da es aufgrund von B<--repack> oder "
-"B<Files-Excluded> eine B<Zip>-Datei ist), impliziert das, dass die "
+"Falls die Datei verändert werden muss (da es aufgrund von B<--repack> oder "
+"B<Files-Excluded> eine B<Zip>-Datei ist), impliziert dies, dass die "
 "Originaldatei hinterher gelöscht wird."
 
 #. type: TP
@@ -15688,8 +15688,8 @@ msgid ""
 "If the given file is not compressed using the desired format (see B<--"
 "compression>), recompress it."
 msgstr ""
-"Falls die angegebene Datei nicht im gewünschten Format vorliegt, (siehe "
-"B<--compression>) komprimieren Sie sie erneut."
+"Falls die angegebene Datei nicht im gewünschten Format komprimiert vorliegt, "
+"(siehe B<--compression>) wird sie erneut komprimiert."
 
 #. type: TP
 #: ../scripts/mk-origtargz.pl:119 ../scripts/uscan.1:407
@@ -19197,7 +19197,7 @@ msgstr ""
 "Falls die Quellen der Originalautoren neu gepackt wurden (entweder weil die "
 "Option B<--repack> angegeben wurde oder I<debian/copyright> das Feld "
 "B<Files-Excluded> enthält), ist es möglich, die Komprimierungsmethode über "
-"den Parameter zu steuern (Voreinstellung ist B<gzip>)."
+"diesen Parameter zu steuern (Voreinstellung ist B<gzip>)."
 
 #. type: TP
 #: ../scripts/uscan.1:414
