@@ -141,7 +141,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 } else {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
     my %config_vars = (
-		       'DCONTROL_URL' => 'http://qa.debian.org/cgi-bin/dcontrol',
+		       'DCONTROL_URL' => 'https://qa.debian.org/cgi-bin/dcontrol',
 		       );
     my %config_default = %config_vars;
 
@@ -237,7 +237,7 @@ experimental), and/or I<component> (main, updates/main, ...). Use two slashes
 =back
 
 By default, all versions, suites, and architectures are queried. Refer to
-B<http://qa.debian.org/cgi-bin/dcontrol> for currently supported values.
+B<https://qa.debian.org/cgi-bin/dcontrol> for currently supported values.
 
 =head1 OPTIONS
 
@@ -273,7 +273,7 @@ ignored for this purpose.  The currently recognised variable is:
 
 =item DCONTROL_URL
 
-URL to query. Default is B<http://qa.debian.org/cgi-bin/dcontrol>.
+URL to query. Default is B<https://qa.debian.org/cgi-bin/dcontrol>.
 
 =back
 

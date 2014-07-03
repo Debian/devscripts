@@ -201,8 +201,8 @@ for package; do
     echo "Uploads for $package:"
 
     prefix=$(echo $package | sed -re 's/^((lib)?.).*$/\1/')
-    pkgurl="http://packages.qa.debian.org/${prefix}/${package}.html"
-    baseurl="http://packages.qa.debian.org/${prefix}/"
+    pkgurl="https://packages.qa.debian.org/${prefix}/${package}.html"
+    baseurl="https://packages.qa.debian.org/${prefix}/"
 
     # only grab the actual "Accepted" news announcements; hopefully this
     # won't pick up many false positives

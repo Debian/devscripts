@@ -47,13 +47,13 @@ EOT
 }
 
 my %url_map = (
-    'debian' => "http://qa.debian.org/madison.php",
-    'qa' => "http://qa.debian.org/madison.php",
-    'myon' => "http://qa.debian.org/~myon/madison.php",
+    'debian' => "https://qa.debian.org/madison.php",
+    'qa' => "https://qa.debian.org/madison.php",
+    'myon' => "https://qa.debian.org/~myon/madison.php",
     'debug' => "http://debug.debian.net/cgi-bin/madison.cgi",
     'ubuntu' => "http://people.canonical.com/~ubuntu-archive/madison.cgi",
-    'udd' => 'http://qa.debian.org/cgi-bin/madison.cgi',
-    'new' => 'http://qa.debian.org/cgi-bin/madison.cgi?table=new',
+    'udd' => 'https://qa.debian.org/cgi-bin/madison.cgi',
+    'new' => 'https://qa.debian.org/cgi-bin/madison.cgi?table=new',
 );
 my $default_url = 'debian,new';
 if (system('dpkg-vendor', '--is', 'ubuntu') == 0) {
@@ -213,7 +213,7 @@ rmadison -- Remotely query the Debian archive database about packages
 
 B<dak ls> queries the Debian archive database ("projectb") and
 displays which package version is registered per architecture/component/suite.
-The CGI at B<http://qa.debian.org/madison.php> provides that service without
+The CGI at B<https://qa.debian.org/madison.php> provides that service without
 requiring SSH access to ftp-master.debian.org or the mirror on
 ries.debian.org. This script, B<rmadison>, is a command line frontend to
 this CGI.
@@ -268,12 +268,12 @@ show projectb snapshot and reload time (not supported by all archives)
 =item B<-u>, B<--url=>I<URL>[B<,>I<URL> ...]
 
 use I<URL> for the query. Supported shorthands are
- B<debian> or B<qa> http://qa.debian.org/madison.php
+ B<debian> or B<qa> https://qa.debian.org/madison.php
  B<bpo> http://backports.debian.org/cgi-bin/madison.cgi
  B<debug> http://debug.debian.net/cgi-bin/madison.cgi
  B<ubuntu> http://people.canonical.com/~ubuntu-archive/madison.cgi
- B<udd> http://qa.debian.org/cgi-bin/madison.cgi
- B<new> http://qa.debian.org/cgi-bin/madison.cgi?table=new
+ B<udd> https://qa.debian.org/cgi-bin/madison.cgi
+ B<new> https://qa.debian.org/cgi-bin/madison.cgi?table=new
 
 See the B<RMADISON_URL_MAP_> variable below for a method to add
 new shorthands.
@@ -336,7 +336,7 @@ B<dak>(1), B<madison-lite>(1)
 
 =head1 AUTHOR
 
-rmadison and http://qa.debian.org/madison.php were written by Christoph Berg
+rmadison and https://qa.debian.org/madison.php were written by Christoph Berg
 <myon@debian.org>. dak was written by
 James Troup <james@nocrew.org>, Anthony Towns <ajt@debian.org>, and others.
 

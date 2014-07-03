@@ -1543,7 +1543,7 @@ will remove all tags from the specified I<bug>.
 
 As a special case, the unofficial B<gift> tag name is supported in
 addition to official tag names. B<gift> is used as a shorthand for the
-B<gift> usertag; see L<http://wiki.debian.org/qa.debian.org/GiftTag>.
+B<gift> usertag; see L<https://wiki.debian.org/qa.debian.org/GiftTag>.
 Adding/removing the B<gift> tag will add/remove the B<gift> usertag,
 belonging to the "debian-qa@lists.debian.org" user.
 
