@@ -357,7 +357,7 @@ if ($opt_install) {
     if ( ($?>>8) != 0 ) {
 	# Restore system to previous state, since apt wasn't able to resolve a
 	# proper way to get the build-dep packages installed
-	system @root, 'dpkg', '--remove', @deb_files;
+	system @root, 'dpkg', '--remove', @packages;
 	die("install call failed\n");
     }
 
