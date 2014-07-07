@@ -243,10 +243,6 @@ while ($control = shift) {
 	    warn "$progname: Unable to find package name in $descr\n";
 	    next;
 	}
-	if (defined $pid) {
-	    wait_child($pid, no_check => 1);
-	    undef $pid;
-	}
 	unless (exists $ctrl->{$name}) {
 	    next;
 	}
@@ -323,7 +319,7 @@ while ($control = shift) {
 		   version => $ctrl->{Version} });
 	}
     }
-    wait_child($pid, no_check => 1) if defined $pid;
+    wait_child($pid, nocheck => 1) if defined $pid;
     # Only use the newest version.  We'll only have this if processing showsrc
     # output or a dsc file.
     if (@versions) {
