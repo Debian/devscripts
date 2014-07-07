@@ -19,6 +19,8 @@ devscripts (2.14.6) UNRELEASED; urgency=medium
       install fails.
     + Read all of the output from “apt-cache showsrc” to ensure mk-build-deps
       doesn't get stuck waiting for apt-cache to exit.
+    + Pass the name of the .deb file out of build_equiv to ensure the correct
+      .deb is installed.  (Closes: #753657)
 
   [ Christoph Berg ]
   * Update all qa.debian.org URLs to https://.
