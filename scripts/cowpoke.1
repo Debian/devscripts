@@ -45,6 +45,14 @@ codenames (such as \fBsid\fP, or \fBsqueeze\fP) or distribution names (such as
 to using one or the other consistently as this name may be used in file paths
 and to locate old packages for comparison reporting.
 
+It is now also possible to use locally defined names with this option, when
+used in conjunction with the \fBBASE_DIST\fP option in a configuration file.
+This permits the maintenance and use of specially configured build chroots,
+which can source package dependencies from the backports archives or a local
+repository, or have other unusual configuration options set, without polluting
+the chroots you use for clean package builds intended for upload to the main
+repositories.  See the description of \fBBASE_DIST\fP below.
+
 .TP
 .BI \-\-buildd= host
 Specify the remote host to build on.
@@ -58,6 +66,11 @@ Specify the remote user to build as.
 Create the remote \fBcowbuilder\fR root if it does not already exist.  If this option
 is not passed it is an error for the specified \fB\-\-dist\fP or \fB\-\-arch\fP
 to not have an existing \fBcowbuilder\fR root in the expected location.
+
+The \fB\-\-buildd\-user\fP must have permission to create the \fBRESULT_DIR\fP
+on the build host, or an admin with the necessary permission must first create
+it and give that user (or some group they are in) write access to it, for this
+option to succeed.
 
 .TP
 .BR \-\-return= [ \fIpath ]
@@ -76,6 +89,36 @@ options are delimited with spaces.  This will override any options specified in
 \fBDEBBUILDOPTS\fP in the build host's \fIpbuilderrc\fP.
 
 .TP
+.BI \-\-create\-opts= "'cowbuilder option'"
+Specify additional arguments to be passed verbatim to \fBcowbuilder\fR when a
+chroot is first created (using the \fB\-\-create\fP option above). If multiple
+arguments need to be passed, this option should be specified separately for
+each of them.
+
+eg. \fB\-\-create\-opts "--othermirror" \-\-create\-opts "deb http:// ..."\fP
+
+This option will override any \fBCREATE_OPTS\fP specified for a chroot in the
+cowpoke configuration files.
+
+.TP
+.BI \-\-update\-opts= "'cowbuilder option'"
+Specify additional arguments to be passed verbatim to \fBcowbuilder\fR if the
+base of the chroot is updated.  If multiple arguments need to be passed, this
+option should be specified separately for each of them.
+
+This option will override any \fBUPDATE_OPTS\fP specified for a chroot in the
+cowpoke configuration files.
+
+.TP
+.BI \-\-build\-opts= "'cowbuilder option'"
+Specify additional arguments to be passed verbatim to \fBcowbuilder\fR when
+a package build is performed.  If multiple arguments need to be passed, this
+option should be specified separately for each of them.
+
+This option will override any \fBBUILD_OPTS\fP specified for a chroot in the
+cowpoke configuration files.
+
+.TP
 .B \-\-help
 Display a brief summary of the available options and current configuration.
 
@@ -92,7 +135,7 @@ home directory.  Since the paths are typically quoted when used, tilde expansion
 will \fBnot\fP be performed on them.
 
 .SS Global defaults
-These apply to every arch and dist in a single cowpoke invocation.
+These apply to every \fIarch\fP and \fIdist\fP in a single cowpoke invocation.
 
 .TP
 .B BUILDD_HOST
@@ -123,17 +166,21 @@ The directory path on the build machine where the source package will initially
 be placed.  This must be writable by the \fBBUILDD_USER\fP.
 .TP
 .B PBUILDER_BASE
-The filesystem root for all pbuilder COW and result files.  Arch and dist
+The filesystem root for all pbuilder CoW and result files.  \fIArch\fP and \fIdist\fP
 specific subdirectories will normally be created under this.  The apt cache
 and temporary build directory will also be located under this path.
 
 .TP
 .B SIGN_KEYID
-If this option is set, it is expected to contain the gpg key id to pass to
+If this option is set, it is expected to contain the gpg key ID to pass to
 \fBdebsign\fP(1) if the packages are to be remotely signed.  You will be prompted
 to confirm whether you wish to sign the packages after all builds are complete.
 If this option is unset or an empty string, no attempt to sign packages will be
-made.
+made.  It may be overridden on an \fIarch\fP and \fIdist\fP specific basis using
+the
+.IB arch _ dist _SIGN_KEYID
+option described below.
+
 .TP
 .B UPLOAD_QUEUE
 If this option is set, it is expected to contain a 'host' specification for
@@ -141,6 +188,10 @@ If this option is set, it is expected to contain a 'host' specification for
 be prompted to confirm whether you wish to upload the packages after they are
 signed.  If this option is unset or an empty string, no attempt to upload packages
 will be made.  If \fBSIGN_KEYID\fP is not set, this option will be ignored entirely.
+It may be overridden on an \fIarch\fP and \fIdist\fP specific basis using the
+.IB arch _ dist _UPLOAD_QUEUE
+option described below.
+
 
 .TP
 .B BUILDD_ROOTCMD
@@ -190,14 +241,64 @@ readable by the \fBBUILDD_USER\fP for sanity checking with \fBlintian\fP(1) and
 \fBdebdiff\fP(1), and for upload with \fBdput\fP(1).  If this option is not
 specified for some arch and dist combination then it will default to
 .I $PBUILDER_BASE/$arch/$dist/result
-.
 
 .TP
 .IB arch _ dist _BASE_PATH
-The directory where the COW master files are to be found (or created if the
+The directory where the CoW master files are to be found (or created if the
 \fB\-\-create\fP command line option was passed).  If this option is not specified
 for some arch or dist then it will default to
 .I $PBUILDER_BASE/$arch/$dist/base.cow
+
+.TP
+.IB arch _ dist _BASE_DIST
+The code name to pass as the \fB\-\-distribution\fP option for cowbuilder instead
+of \fIdist\fP.  This is necessary when \fIdist\fP is a locally significant name
+assigned to some specially configured build chroot, such as 'wheezy_backports',
+and not the formal suite name of a distro release known to debootstrap.  This
+option cannot be overridden on the command line, since it would rarely, if ever,
+make any sense to change it for individual invocations of \fBcowpoke\fP. If this
+option is not specified for an arch and dist combination then it will default to
+.IR dist .
+
+.TP
+.IB arch _ dist _CREATE_OPTS
+A bash array containing additional options to pass verbatim to \fBcowbuilder\fP
+when this chroot is created for the first time (using the \fB\-\-create\fP option).
+This is useful when options like \fB\-\-othermirror\fP are wanted to create
+specialised chroot configurations such as 'wheezy_backports'.  By default this
+is unset.  All values set in it will be overridden if the \fB\-\-create\-opts\fP
+option is passed on the command line.
+
+Each element in this array corresponds to a single argument (in the ARGV sense)
+that will be passed to cowbuilder.  This ensures that arguments which may contain
+whitespace or have strange quoting requirements or other special characters will
+not be mangled before they get to cowbuilder.
+
+Bash arrays are initialised using the following form:
+
+    OPTS=( "arg1" "arg 2" "--option" "value" "--opt=val" "etc. etc." )
+
+.TP
+.IB arch _ dist _UPDATE_OPTS
+A bash array containing additional options to pass verbatim to \fBcowbuilder\fP
+each time the base of this chroot is updated.  It behaves similarly to the
+\fBCREATE_OPTS\fP option above, except for acting when the chroot is updated.
+
+.TP
+.IB arch _ dist _BUILD_OPTS
+A bash array containing additional options to pass verbatim to \fBcowbuilder\fP
+each time a package build is performed in this chroot.  This is useful when you
+want to use some option like \fB\-\-twice\fP which cowpoke does not directly
+need to care about.  It otherwise behaves similarly to \fBUPDATE_OPTS\fP above
+except that it acts during the build phase of \fBcowbuilder\fP.
+
+.TP
+.IB arch _ dist _SIGN_KEYID
+An optional arch and dist specific override for the global SIGN_KEYID option.
+
+.TP
+.IB arch _ dist _UPLOAD_QUEUE
+An optional arch and dist specific override for the global UPLOAD_QUEUE option.
 
 
 .SH CONFIGURATION FILES

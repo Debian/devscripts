@@ -1,7 +1,7 @@
 #!/bin/bash
 # Simple shell script for driving a remote cowbuilder via ssh
 #
-# Copyright(C) 2007, 2008, 2009, Ron <ron@debian.org>
+# Copyright(C) 2007, 2008, 2009, 2011, 2012, 2014, Ron <ron@debian.org>
 # This script is distributed according to the terms of the GNU GPL.
 
 set -e
@@ -28,37 +28,85 @@ for f in /etc/cowpoke.conf ~/.cowpoke .cowpoke "$COWPOKE_CONF"; do [ -r "$f" ] &
 
 get_archdist_vars()
 {
-    _ARCHDIST_OPTIONS="RESULT_DIR BASE_PATH"
+    _ARCHDIST_OPTIONS="RESULT_DIR BASE_PATH BASE_DIST CREATE_OPTS UPDATE_OPTS BUILD_OPTS SIGN_KEYID UPLOAD_QUEUE"
     _RESULT_DIR="result"
     _BASE_PATH="base.cow"
 
     for arch in $BUILDD_ARCH; do
 	for dist in $BUILDD_DIST; do
 	    for var in $_ARCHDIST_OPTIONS; do
+		eval "val=( \"\${${arch}_${dist}_${var}[@]}\" )"
+
 		if [ "$1" = "display" ]; then
-		    if [ -z "$(eval echo "\$${arch}_${dist}_${var}")" ]; then
-			echo "   ${arch}_${dist}_${var} = $PBUILDER_BASE/$arch/$dist/$(eval echo "\$_$var")"
-		    else
-			echo "   ${arch}_${dist}_${var} = $(eval echo "\$${arch}_${dist}_${var}")"
-		    fi
+		    case $var in
+			RESULT_DIR | BASE_PATH )
+			    [ ${#val[@]} -gt 0 ] || eval "val=\"$PBUILDER_BASE/$arch/$dist/\$_$var\""
+			    echo "   ${arch}_${dist}_${var} = $val"
+			    ;;
+
+			*_OPTS )
+			    # Don't display these if they are overridden on the command line.
+			    eval "override=( \"\${OVERRIDE_${var}[@]}\" )"
+			    [ ${#override[@]} -gt 0 ] || [ ${#val[@]} -eq 0 ] ||
+				echo "   ${arch}_${dist}_${var} =$(printf " '%s'" "${val[@]}")"
+			    ;;
+
+			* )
+			    [ ${#val[@]} -eq 0 ] || echo "   ${arch}_${dist}_${var} = $val"
+			    ;;
+		    esac
 		else
-		    if [ -z "$(eval echo "\$${arch}_${dist}_${var}")" ]; then
-			echo "${arch}_${dist}_${var}=\"$PBUILDER_BASE/$arch/$dist/$(eval echo "\$_$var")\""
-		    else
-			echo "${arch}_${dist}_${var}=\"$(eval echo "\$${arch}_${dist}_${var}")\""
-		    fi
+		    case $var in
+			RESULT_DIR | BASE_PATH )
+			    # These are always a single value, and must always be set,
+			    # either by the user or to their default value.
+			    [ ${#val[@]} -gt 0 ] || eval "val=\"$PBUILDER_BASE/$arch/$dist/\$_$var\""
+			    echo "${arch}_${dist}_${var}='$val'"
+			    ;;
+
+			*_OPTS )
+			    # These may have zero, one, or many values which we must not word-split.
+			    # They can safely remain unset if there are no values.
+			    #
+			    # We don't need to worry about the command line overrides here,
+			    # they will be taken care of in the remote script.
+			    [ ${#val[@]} -eq 0 ] ||
+				echo "${arch}_${dist}_${var}=($(printf " %q" "${val[@]}") )"
+			    ;;
+
+			SIGN_KEYID | UPLOAD_QUEUE )
+			    # We don't need these in the remote script
+			    ;;
+
+			* )
+			    # These may have zero or one value.
+			    # They can safely remain unset if there are no values.
+			    [ ${#val[@]} -eq 0 ] || echo "${arch}_${dist}_${var}='$val'"
+			    ;;
+		    esac
 		fi
 	    done
 	done
     done
 }
 
+display_override_vars()
+{
+    _OVERRIDE_OPTIONS="CREATE_OPTS UPDATE_OPTS BUILD_OPTS"
+
+    for var in $_OVERRIDE_OPTIONS; do
+	eval "override=( \"\${OVERRIDE_${var}[@]}\" )"
+	[ ${#override[@]} -eq 0 ] || echo "   $var =$(printf " '%s'" "${override[@]}")"
+    done
+}
+
+
 PROGNAME="$(basename $0)"
 version ()
 {
     echo \
 "This is $PROGNAME, from the Debian devscripts package, version ###VERSION###
-This code is copyright 2007-9 by Ron <ron@debian.org>, all rights reserved.
+This code is Copyright 2007-2014, Ron <ron@debian.org>.
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the
 GNU General Public License."
@@ -87,11 +135,13 @@ cowpoke [options] package.dsc
 
   The current default configuration is:
 
-   BUILDD_HOST = $BUILDD_HOST
-   BUILDD_USER = $BUILDD_USER
-   BUILDD_ARCH = $BUILDD_ARCH
-   BUILDD_DIST = $BUILDD_DIST
-   RETURN_DIR  = $RETURN_DIR
+   BUILDD_HOST   = $BUILDD_HOST
+   BUILDD_USER   = $BUILDD_USER
+   BUILDD_ARCH   = $BUILDD_ARCH
+   BUILDD_DIST   = $BUILDD_DIST
+   RETURN_DIR    = $RETURN_DIR
+   SIGN_KEYID    = $SIGN_KEYID
+   UPLOAD_QUEUE  = $UPLOAD_QUEUE
 
   The expected remote paths are:
 
@@ -99,6 +149,7 @@ cowpoke [options] package.dsc
    PBUILDER_BASE = ${PBUILDER_BASE:-/}
 
 $(get_archdist_vars display)
+$(display_override_vars)
 
   The cowbuilder image must have already been created on the build host
   and the expected remote paths must already exist if the --create option
@@ -148,7 +199,43 @@ for arg; do
 	    ;;
 
 	--dpkg-opts=*)
-	    DEBBUILDOPTS="--debbuildopts \"${arg#*=}\""
+	    # This one is a bit tricky, given the combination of the calling convention here,
+	    # the calling convention for cowbuilder, and the behaviour of things that might
+	    # pass this option to us.  Some things, like when we are called from the gitpkg
+	    # hook using options from git-config, will preserve any quoting that was used in
+	    # the .gitconfig file, which is natural for anyone to want to use in a construct
+	    # like: options = --dpkg-opts='-uc -us -j6'.  People are going to cringe if we
+	    # tell them they must not use quotes there no matter how much it may 'make sense'
+	    # if you know too much about the internals.  And it will only get worse when we
+	    # then tell them they must quote it like that if they type it directly in their
+	    # shell ...
+	    #
+	    # So we do the only thing that seems sensible, and try to Deal With It here.
+	    # If the outermost characters are paired quotes, we manually strip them off.
+	    # We don't want to let the shell do quote removal, since that might change a
+	    # part of this which we don't want modified.
+	    # We collect however many sets of those we are passed in an array, which we'll
+	    # then combine back into a single argument at the final point of use.
+	    #
+	    # Which _should_ DTRT for anyone who isn't trying to blow this up deliberately
+	    # any maybe will still do it for them too in spite of their efforts. But unless
+	    # someone finds a sensible case this fails on, I'm not going to cry over people
+	    # who want to stuff up their own system with input they created themselves.
+	    val=${arg#*=}
+	    [[ $val == \'*\' || $val == \"*\" ]] && val=${val:1:-1}
+	    DEBBUILDOPTS[${#DEBBUILDOPTS[@]}]=$val
+	    ;;
+
+	--create-opts=*)
+	    OVERRIDE_CREATE_OPTS[${#OVERRIDE_CREATE_OPTS[@]}]="${arg#*=}"
+	    ;;
+
+	--update-opts=*)
+	    OVERRIDE_UPDATE_OPTS[${#OVERRIDE_UPDATE_OPTS[@]}]="${arg#*=}"
+	    ;;
+
+	--build-opts=*)
+	    OVERRIDE_BUILD_OPTS[${#OVERRIDE_BUILD_OPTS[@]}]="${arg#*=}"
 	    ;;
 
 	*.dsc)
@@ -240,8 +327,19 @@ cat > "$REMOTE_SCRIPT" <<-EOF
 	    CHANGES="\$arch.changes"
 	    LOGFILE="$INCOMING_DIR/build.${PACKAGE}_\$arch.\$dist.log"
 	    UPDATELOG="$INCOMING_DIR/cowbuilder-\${arch}-\${dist}-update-log-$DATE"
-	    RESULT_DIR="\$(eval echo "\\\$\${arch}_\${dist}_RESULT_DIR")"
-	    BASE_PATH="\$(eval echo "\\\$\${arch}_\${dist}_BASE_PATH")"
+	    eval "RESULT_DIR=\"\\\$\${arch}_\${dist}_RESULT_DIR\""
+	    eval "BASE_PATH=\"\\\$\${arch}_\${dist}_BASE_PATH\""
+	    eval "BASE_DIST=\"\\\$\${arch}_\${dist}_BASE_DIST\""
+	    eval "CREATE_OPTS=( \"\\\${\${arch}_\${dist}_CREATE_OPTS[@]}\" )"
+	    eval "UPDATE_OPTS=( \"\\\${\${arch}_\${dist}_UPDATE_OPTS[@]}\" )"
+	    eval "BUILD_OPTS=( \"\\\${\${arch}_\${dist}_BUILD_OPTS[@]}\" )"
+
+	    [ -n "\$BASE_DIST" ]                  || BASE_DIST=\$dist
+	    [ ${#OVERRIDE_CREATE_OPTS[@]} -eq 0 ] || CREATE_OPTS=("${OVERRIDE_CREATE_OPTS[@]}")
+	    [ ${#OVERRIDE_UPDATE_OPTS[@]} -eq 0 ] || UPDATE_OPTS=("${OVERRIDE_UPDATE_OPTS[@]}")
+	    [ ${#OVERRIDE_BUILD_OPTS[@]}  -eq 0 ] || BUILD_OPTS=("${OVERRIDE_BUILD_OPTS[@]}")
+	    [ ${#DEBBUILDOPTS[*]} -eq 0 ]         || DEBBUILDOPTS=("--debbuildopts" "${DEBBUILDOPTS[*]}")
+
 
 	    # Sort the list of old changes files for this package to try and
 	    # determine the most recent one preceding this version.  We will
@@ -278,11 +376,12 @@ cat > "$REMOTE_SCRIPT" <<-EOF
 	            mkdir -p "\$RESULT_DIR"
 	            mkdir -p "\$(dirname \$BASE_PATH)"
 	            mkdir -p "$PBUILDER_BASE/aptcache"
-	            $BUILDD_ROOTCMD cowbuilder --create --distribution \$dist       \\
+	            $BUILDD_ROOTCMD cowbuilder --create --distribution \$BASE_DIST  \\
 	                                       --basepath "\$BASE_PATH"             \\
 	                                       --aptcache "$PBUILDER_BASE/aptcache" \\
 	                                       --debootstrap "$DEBOOTSTRAP"         \\
 	                                       --debootstrapopts --arch="\$arch"    \\
+	                                       "\${CREATE_OPTS[@]}"                 \\
 	            2>&1 | tee "\$UPDATELOG"
 	        else
 	            echo "SKIPPING \$dist/\$arch build, '\$BASE_PATH' does not exist" | tee "\$LOGFILE"
@@ -293,13 +392,15 @@ cat > "$REMOTE_SCRIPT" <<-EOF
 	        $BUILDD_ROOTCMD cowbuilder --update --basepath "\$BASE_PATH"    \\
 	                                   --aptcache "$PBUILDER_BASE/aptcache" \\
 	                                   --autocleanaptcache                  \\
+	                                   "\${UPDATE_OPTS[@]}"                 \\
 	        2>&1 | tee "\$UPDATELOG"
 	    fi
 	    $BUILDD_ROOTCMD cowbuilder --build --basepath "\$BASE_PATH"      \\
 	                               --aptcache "$PBUILDER_BASE/aptcache"  \\
 	                               --buildplace "$PBUILDER_BASE/build"   \\
 	                               --buildresult "\$RESULT_DIR"          \\
-	                               $DEBBUILDOPTS                         \\
+	                               "\${DEBBUILDOPTS[@]}"                 \\
+	                               "\${BUILD_OPTS[@]}"                   \\
 	                               "$INCOMING_DIR/$(basename $DSC)" 2>&1 \\
 	    | tee "\$LOGFILE"
 
@@ -337,32 +438,38 @@ ssh -t "$BUILDD_USER$BUILDD_HOST" "\"$INCOMING_DIR/$REMOTE_SCRIPT\" && rm -f \"$
 echo
 echo "Build completed."
 
-if [ -n "$SIGN_KEYID" ]; then
-    for arch in $BUILDD_ARCH; do
-      CHANGES="$arch.changes"
-      for dist in $BUILDD_DIST; do
+for arch in $BUILDD_ARCH; do
+    CHANGES="$arch.changes"
+    for dist in $BUILDD_DIST; do
 
-	RESULT_DIR="$(eval echo "\$${arch}_${dist}_RESULT_DIR")"
+	eval "sign_keyid=\"\$${arch}_${dist}_SIGN_KEYID\""
+	[ -n "$sign_keyid" ] || sign_keyid="$SIGN_KEYID"
+	[ -n "$sign_keyid" ] || continue
+
+	eval "RESULT_DIR=\"\$${arch}_${dist}_RESULT_DIR\""
 	[ -n "$RESULT_DIR" ] || RESULT_DIR="$PBUILDER_BASE/$arch/$dist/result"
 
 	_desc="$dist/$arch"
 	[ "$dist" != "default" ] || _desc="$arch"
 
 	while true; do
-	    echo -n "Sign $_desc $PACKAGE with key '$SIGN_KEYID' (yes/no)? "
+	    echo -n "Sign $_desc $PACKAGE with key '$sign_keyid' (yes/no)? "
 	    read -e yesno
 	    case "$yesno" in
 		YES | yes)
-		    debsign "-k$SIGN_KEYID" -r "$BUILDD_USER$BUILDD_HOST" "$RESULT_DIR/${PACKAGE}_$CHANGES"
+		    debsign "-k$sign_keyid" -r "$BUILDD_USER$BUILDD_HOST" "$RESULT_DIR/${PACKAGE}_$CHANGES"
 
-		    if [ -n "$UPLOAD_QUEUE" ]; then
+		    eval "upload_queue=\"\$${arch}_${dist}_UPLOAD_QUEUE\""
+		    [ -n "$upload_queue" ] || upload_queue="$UPLOAD_QUEUE"
+
+		    if [ -n "$upload_queue" ]; then
 			while true; do
-			    echo -n "Upload $_desc $PACKAGE to '$UPLOAD_QUEUE' (yes/no)? "
+			    echo -n "Upload $_desc $PACKAGE to '$upload_queue' (yes/no)? "
 			    read -e upload
 			    case "$upload" in
 				YES | yes)
 				    ssh "$BUILDD_USER$BUILDD_HOST" \
-					"cd \"$RESULT_DIR/\" && dput \"$UPLOAD_QUEUE\" \"${PACKAGE}_$CHANGES\""
+					"cd \"$RESULT_DIR/\" && dput \"$upload_queue\" \"${PACKAGE}_$CHANGES\""
 				    break 2
 				    ;;
 
@@ -388,17 +495,15 @@ if [ -n "$SIGN_KEYID" ]; then
 		    ;;
 	    esac
 	done
-
-      done
     done
-fi
+done
 
 if [ -n "$RETURN_DIR" ]; then
     for arch in $BUILDD_ARCH; do
       CHANGES="$arch.changes"
       for dist in $BUILDD_DIST; do
 
-	RESULT_DIR=$(eval echo "\$${arch}_${dist}_RESULT_DIR")
+	eval "RESULT_DIR=\"\$${arch}_${dist}_RESULT_DIR\""
 	[ -n "$RESULT_DIR" ] || RESULT_DIR="$PBUILDER_BASE/$arch/$dist/result"
 
 
