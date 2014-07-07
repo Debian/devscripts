@@ -223,19 +223,19 @@ for arg; do
 	    # who want to stuff up their own system with input they created themselves.
 	    val=${arg#*=}
 	    [[ $val == \'*\' || $val == \"*\" ]] && val=${val:1:-1}
-	    DEBBUILDOPTS[${#DEBBUILDOPTS[@]}]=$val
+	    DEBBUILDOPTS+=( "$val" )
 	    ;;
 
 	--create-opts=*)
-	    OVERRIDE_CREATE_OPTS[${#OVERRIDE_CREATE_OPTS[@]}]="${arg#*=}"
+	    OVERRIDE_CREATE_OPTS+=( "${arg#*=}" )
 	    ;;
 
 	--update-opts=*)
-	    OVERRIDE_UPDATE_OPTS[${#OVERRIDE_UPDATE_OPTS[@]}]="${arg#*=}"
+	    OVERRIDE_UPDATE_OPTS+=( "${arg#*=}" )
 	    ;;
 
 	--build-opts=*)
-	    OVERRIDE_BUILD_OPTS[${#OVERRIDE_BUILD_OPTS[@]}]="${arg#*=}"
+	    OVERRIDE_BUILD_OPTS+=( "${arg#*=}" )
 	    ;;
 
 	*.dsc)
