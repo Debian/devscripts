@@ -389,7 +389,8 @@ cat > "$REMOTE_SCRIPT" <<-EOF
 	            continue
 	        fi
 	    elif ! [ -e "\$UPDATELOG" ]; then
-	        $BUILDD_ROOTCMD cowbuilder --update --basepath "\$BASE_PATH"    \\
+	        $BUILDD_ROOTCMD cowbuilder --update --distribution \$BASE_DIST  \\
+	                                   --basepath "\$BASE_PATH"             \\
 	                                   --aptcache "$PBUILDER_BASE/aptcache" \\
 	                                   --autocleanaptcache                  \\
 	                                   "\${UPDATE_OPTS[@]}"                 \\
