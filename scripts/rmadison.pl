@@ -269,7 +269,6 @@ show projectb snapshot and reload time (not supported by all archives)
 
 use I<URL> for the query. Supported shorthands are
  B<debian> or B<qa> https://qa.debian.org/madison.php
- B<bpo> http://backports.debian.org/cgi-bin/madison.cgi
  B<debug> http://debug.debian.net/cgi-bin/madison.cgi
  B<ubuntu> http://people.canonical.com/~ubuntu-archive/madison.cgi
  B<udd> https://qa.debian.org/cgi-bin/madison.cgi
