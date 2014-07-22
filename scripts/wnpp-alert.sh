@@ -26,7 +26,7 @@ usage () { echo \
   List all installed (or listed) packages with Request for
   Adoption (RFA), Request for Help (RHF), or Orphaned (O)
   bugs against them, as determined from the WNPP website.
-  http://www.debian.org/devel/wnpp"
+  https://www.debian.org/devel/wnpp"
 }
 
 version () { echo \

@@ -21,7 +21,7 @@ usage () { echo \
 
   Check whether a package is listed as being packaged (ITPed) or has an
   outstanding request for packaging (RFP) on the WNPP website
-  http://www.debian.org/devel/wnpp/"
+  https://www.debian.org/devel/wnpp/"
 }
 
 version () { echo \

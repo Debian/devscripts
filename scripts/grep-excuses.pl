@@ -63,7 +63,7 @@ Usage: $progname [options] [<maintainer>|<package>]
 Options:
   --no-conf, --noconf Don\'t read devscripts config files;
                       must be the first option given
-  --wipnity, -w       Check <http://release.debian.org/migration/>.  A package
+  --wipnity, -w       Check <https://release.debian.org/migration/>.  A package
                       name must be given when using this option.
   --help              Show this help
   --version           Give version information

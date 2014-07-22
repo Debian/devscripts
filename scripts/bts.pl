@@ -791,7 +791,7 @@ exit 0;
 =head1 COMMANDS
 
 For full details about the commands, see the BTS documentation.
-L<http://www.debian.org/Bugs/server-control>
+L<https://www.debian.org/Bugs/server-control>
 
 =over 4
 
@@ -873,13 +873,13 @@ use of a B<users=>I<email> option.
 
 Details of the bug tracking system itself, along with a bug-request
 page with more options than this script, can be found on
-http://bugs.debian.org/.  This page itself will be opened if the
+https://bugs.debian.org/.  This page itself will be opened if the
 command 'bts bugs :' is used.
 
 =item B<release-critical>, B<RC>
 
 Display the front page of the release-critical pages on the BTS.  This
-is a synonym for http://bugs.debian.org/release-critical/index.html.
+is a synonym for https://bugs.debian.org/release-critical/index.html.
 It is also possible to say release-critical/debian/main.html and the like.
 RC is a synonym for release-critical/other/all.html.
 
@@ -1343,7 +1343,7 @@ sub bts_submitter {
 
 Reassign a I<bug> or a number of bugs to a different I<package>.
 The I<version> field is optional; see the explanation at
-L<http://www.debian.org/Bugs/server-control>.
+L<https://www.debian.org/Bugs/server-control>.
 
 =cut
 
@@ -4112,9 +4112,9 @@ bugs.debian.org.
 
 =head1 SEE ALSO
 
-Please see L<http://www.debian.org/Bugs/server-control> for
+Please see L<https://www.debian.org/Bugs/server-control> for
 more details on how to control the BTS using emails and
-L<http://www.debian.org/Bugs/> for more information about the BTS.
+L<https://www.debian.org/Bugs/> for more information about the BTS.
 
 querybts(1), reportbug(1)
 

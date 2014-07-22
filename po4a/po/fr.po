@@ -1280,11 +1280,11 @@ msgstr "COMMANDES"
 #. type: textblock
 #: ../scripts/bts.pl:792
 msgid ""
-"For full details about the commands, see the BTS documentation.  L<http://"
+"For full details about the commands, see the BTS documentation.  L<https://"
 "www.debian.org/Bugs/server-control>"
 msgstr ""
 "Pour tous les détails sur les commandes, veuillez consulter la documentation "
-"du BTS. L<http://bugs.debian.org/Bugs/server-control>"
+"du BTS. L<https://bugs.debian.org/Bugs/server-control>"
 
 #. type: =item
 #: ../scripts/bts.pl:797
@@ -1493,12 +1493,12 @@ msgstr "B<:>"
 #: ../scripts/bts.pl:873
 msgid ""
 "Details of the bug tracking system itself, along with a bug-request page "
-"with more options than this script, can be found on http://bugs.debian."
+"with more options than this script, can be found on https://bugs.debian."
 "org/.  This page itself will be opened if the command 'bts bugs :' is used."
 msgstr ""
 "Les détails concernant le système de suivi de bogues, ainsi qu'une page de "
 "recherche dans les bogues contenant plus d'options que ce script, peuvent "
-"être trouvés à http://bugs.debian.org/. Cette page peut être ouverte par la "
+"être trouvés à https://bugs.debian.org/. Cette page peut être ouverte par la "
 "commande B<bts bugs:>."
 
 #. type: =item
@@ -1510,12 +1510,12 @@ msgstr "B<release-critical>, B<RC>"
 #: ../scripts/bts.pl:880
 msgid ""
 "Display the front page of the release-critical pages on the BTS.  This is a "
-"synonym for http://bugs.debian.org/release-critical/index.html.  It is also "
+"synonym for https://bugs.debian.org/release-critical/index.html.  It is also "
 "possible to say release-critical/debian/main.html and the like.  RC is a "
 "synonym for release-critical/other/all.html."
 msgstr ""
 "Afficher le sommaire des pages du BTS concernant les rapports de bogues "
-"critiques pour la prochaine publication. C'est un synonyme pour http://bugs."
+"critiques pour la prochaine publication. C'est un synonyme pour https://bugs."
 "debian.org/release-critical/index.html. Il est aussi possible d'indiquer "
 "release-critical/debian/main.html et de même RC est synonyme de release-"
 "critical/other/all.html."
@@ -1998,12 +1998,12 @@ msgstr "B<reassign> I<bogue> [I<bogue> ...] I<paquet> [I<version>]"
 #: ../scripts/bts.pl:1343
 msgid ""
 "Reassign a I<bug> or a number of bugs to a different I<package>.  The "
-"I<version> field is optional; see the explanation at L<http://www.debian.org/"
+"I<version> field is optional; see the explanation at L<https://www.debian.org/"
 "Bugs/server-control>."
 msgstr ""
 "Réassigner un I<bogue> ou un ensemble de bogues à un I<paquet> différent. Le "
 "champ I<version> est optionnel ; veuillez consulter les explications sur "
-"L<http://www.debian.org/Bugs/server-control>."
+"L<https://www.debian.org/Bugs/server-control>."
 
 #. type: =item
 #: ../scripts/bts.pl:1374
@@ -3116,12 +3116,12 @@ msgstr ""
 #. type: textblock
 #: ../scripts/bts.pl:4115
 msgid ""
-"Please see L<http://www.debian.org/Bugs/server-control> for more details on "
-"how to control the BTS using emails and L<http://www.debian.org/Bugs/> for "
+"Please see L<https://www.debian.org/Bugs/server-control> for more details on "
+"how to control the BTS using emails and L<https://www.debian.org/Bugs/> for "
 "more information about the BTS."
 msgstr ""
-"Veuillez consulter L<http://www.debian.org/Bugs/server-control> pour plus de "
-"détails sur comment contrôler le BTS avec des courriers et L<http://www."
+"Veuillez consulter L<https://www.debian.org/Bugs/server-control> pour plus de "
+"détails sur comment contrôler le BTS avec des courriers et L<https://www."
 "debian.org/Bugs/> pour plus d'informations sur le BTS."
 
 #. type: textblock
@@ -6497,7 +6497,7 @@ msgstr ""
 msgid ""
 "B<debchange> also supports automatically producing bug-closing changelog "
 "entries, using the B<--closes> option.  This will usually query the BTS, the "
-"Debian Bug Tracking System (see http://bugs.debian.org/) to determine the "
+"Debian Bug Tracking System (see https://bugs.debian.org/) to determine the "
 "title of the bug and the package in which it occurs.  This behaviour can be "
 "stopped by giving a B<--noquery> option or by setting the configuration "
 "variable B<DEBCHANGE_QUERY_BTS> to I<no>, as described below.  In either "
@@ -6508,7 +6508,7 @@ msgid ""
 msgstr ""
 "B<debchange> peut également créer des entrées de changelog permettant de "
 "fermer des bogues, en utilisant l'option B<--closes>. Le BTS, ou Debian Bug "
-"Tracking System (système de suivi de bogues Debian, http://bugs.debian."
+"Tracking System (système de suivi de bogues Debian, https://bugs.debian."
 "org/), est interrogé pour déterminer le titre du bogue et le paquet dans "
 "lequel il apparaît. Ce comportement peut être modifié en utilisant l'option "
 "B<--noquery> ou en positionnant la variable de configuration "
@@ -7849,14 +7849,14 @@ msgstr "B<-a>, B<--auth>"
 #: ../scripts/debcheckout.pl:76
 msgid ""
 "Work in authenticated mode; this means that for known repositories (mainly "
-"those hosted on S<I<http://alioth.debian.org>>) URL rewriting is attempted "
+"those hosted on S<I<https://alioth.debian.org>>) URL rewriting is attempted "
 "before checking out, to ensure that the repository can be committed to. For "
 "example, for Subversion repositories hosted on alioth this means that S<I<svn"
 "+ssh://svn.debian.org/...>> will be used instead of S<I<svn://svn.debian."
 "org/...>>."
 msgstr ""
 "Utiliser le mode authentifié ; cela signifie que pour les dépôts connus "
-"(principalement ceux hébergés sur S<I<http://alioth.debian.org>>), une ré-"
+"(principalement ceux hébergés sur S<I<https://alioth.debian.org>>), une ré-"
 "écriture de l'URL est tentée avant d'effectuer la récupération, pour "
 "s'assurer qu'il est possible d'envoyer les modifications dans le dépôt. Par "
 "exemple, pour les dépôts Subversion hébergés sur Alioth, cela signifie que "
@@ -8217,11 +8217,11 @@ msgstr ""
 #: ../scripts/debcheckout.pl:230
 msgid ""
 "B<apt-cache>(8), Section 6.2.5 of the Debian Developer's Reference (for more "
-"information about B<Vcs-*> fields): S<I<http://www.debian.org/doc/developers-"
+"information about B<Vcs-*> fields): S<I<https://www.debian.org/doc/developers-"
 "reference/best-pkging-practices.html#bpp-vcs>>."
 msgstr ""
 "B<apt-cache>(8), Section 6.2.5 de la référence du développeur Debian (pour "
-"plus d'informations sur les champs B<Vcs-*>) : S<I<http://www.debian.org/doc/"
+"plus d'informations sur les champs B<Vcs-*>) : S<I<https://www.debian.org/doc/"
 "developers-reference/best-pkging-practices.html#bpp-vcs>>"
 
 #. type: textblock
@@ -14928,10 +14928,10 @@ msgstr "B<--wipnity>, B<-w>"
 #. type: Plain text
 #: ../scripts/grep-excuses.1:22
 msgid ""
-"Get information from E<lt>http://release.debian.org/migration/E<gt>.  A "
+"Get information from E<lt>https://release.debian.org/migration/E<gt>.  A "
 "package name must be given when using this option."
 msgstr ""
-"Récupérer les informations de E<lt>http://release.debian.org/migration/"
+"Récupérer les informations de E<lt>https://release.debian.org/migration/"
 "E<gt>. Un nom de paquet doit être fourni quand on utilise cette option."
 
 #. type: Plain text
@@ -17174,11 +17174,11 @@ msgstr "Équivaut à fournir une option B<--until>."
 #: ../scripts/pts-subscribe.1:56
 msgid ""
 "B<at>(1), information about the Package Tracking System in the Developer's "
-"Reference at http://www.debian.org/doc/developers-reference/resources."
+"Reference at https://www.debian.org/doc/developers-reference/resources."
 "html#pkg-tracking-system"
 msgstr ""
 "B<at>(1), informations à propos du système de suivi des paquets (PTS) dans "
-"la Référence du Développeur à http://www.debian.org/doc/manuals/developers-"
+"la Référence du Développeur à https://www.debian.org/doc/manuals/developers-"
 "reference/resources.html#pkg-tracking-system"
 
 #. type: Plain text
@@ -18747,12 +18747,12 @@ msgstr ""
 #, no-wrap
 msgid ""
 "# For Google Code projects you should use the downloads page like this:\n"
-"http://code.google.com/p/E<lt>projectE<gt>/downloads/list?can=1 \\e\n"
+"https://code.google.com/p/E<lt>projectE<gt>/downloads/list?can=1 \\e\n"
 "  .*/E<lt>projectE<gt>-(\\ed[\\ed.]*)\\e.tar\\e.gz\n"
 msgstr ""
 "# Pour les projets Google Code, la page de téléchargement devrait être\n"
 "# utilisée comme ceci :\n"
-"http://code.google.com/p/E<lt>projetE<gt>/downloads/list?can=1 \\e\n"
+"https://code.google.com/p/E<lt>projetE<gt>/downloads/list?can=1 \\e\n"
 "  .*/E<lt>projetE<gt>-(\\ed[\\ed.]*)\\e.tar\\e.gz\n"
 
 #. type: Plain text
@@ -20851,11 +20851,11 @@ msgstr "B<--dmfile=>I<url_dm>, B<-d> I<url_dm>"
 #: ../scripts/who-permits-upload.pl:62
 msgid ""
 "Retrieve the DM permission file from the supplied URL. When this option is "
-"not present, the default value I<http://ftp-master.debian.org/dm.txt> is "
+"not present, the default value I<https://ftp-master.debian.org/dm.txt> is "
 "used."
 msgstr ""
 "Récupérer le fichier de droits de DM depuis l’URL fournie. Quand cette "
-"option n’est pas présente, la valeur par défaut I<http://ftp-master.debian."
+"option n’est pas présente, la valeur par défaut I<https://ftp-master.debian."
 "org/dm.txt> est utilisée."
 
 #. type: textblock
@@ -21130,8 +21130,8 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/wnpp-alert.1:31 ../scripts/wnpp-check.1:25
-msgid "http://www.debian.org/devel/wnpp"
-msgstr "http://www.debian.org/devel/wnpp"
+msgid "https://www.debian.org/devel/wnpp"
+msgstr "https://www.debian.org/devel/wnpp"
 
 #. type: Plain text
 #: ../scripts/wnpp-alert.1:34

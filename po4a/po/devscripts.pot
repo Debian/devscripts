@@ -835,7 +835,7 @@ msgstr ""
 #: ../scripts/bts.pl:792
 msgid ""
 "For full details about the commands, see the BTS documentation.  "
-"L<http://www.debian.org/Bugs/server-control>"
+"L<https://www.debian.org/Bugs/server-control>"
 msgstr ""
 
 #. type: =item
@@ -1014,7 +1014,7 @@ msgstr ""
 msgid ""
 "Details of the bug tracking system itself, along with a bug-request page "
 "with more options than this script, can be found on "
-"http://bugs.debian.org/.  This page itself will be opened if the command "
+"https://bugs.debian.org/.  This page itself will be opened if the command "
 "'bts bugs :' is used."
 msgstr ""
 
@@ -1027,7 +1027,7 @@ msgstr ""
 #: ../scripts/bts.pl:880
 msgid ""
 "Display the front page of the release-critical pages on the BTS.  This is a "
-"synonym for http://bugs.debian.org/release-critical/index.html.  It is also "
+"synonym for https://bugs.debian.org/release-critical/index.html.  It is also "
 "possible to say release-critical/debian/main.html and the like.  RC is a "
 "synonym for release-critical/other/all.html."
 msgstr ""
@@ -1427,7 +1427,7 @@ msgstr ""
 msgid ""
 "Reassign a I<bug> or a number of bugs to a different I<package>.  The "
 "I<version> field is optional; see the explanation at "
-"L<http://www.debian.org/Bugs/server-control>."
+"L<https://www.debian.org/Bugs/server-control>."
 msgstr ""
 
 #. type: =item
@@ -2313,8 +2313,8 @@ msgstr ""
 #. type: textblock
 #: ../scripts/bts.pl:4115
 msgid ""
-"Please see L<http://www.debian.org/Bugs/server-control> for more details on "
-"how to control the BTS using emails and L<http://www.debian.org/Bugs/> for "
+"Please see L<https://www.debian.org/Bugs/server-control> for more details on "
+"how to control the BTS using emails and L<https://www.debian.org/Bugs/> for "
 "more information about the BTS."
 msgstr ""
 
@@ -4951,7 +4951,7 @@ msgstr ""
 msgid ""
 "B<debchange> also supports automatically producing bug-closing changelog "
 "entries, using the B<--closes> option.  This will usually query the BTS, the "
-"Debian Bug Tracking System (see http://bugs.debian.org/) to determine the "
+"Debian Bug Tracking System (see https://bugs.debian.org/) to determine the "
 "title of the bug and the package in which it occurs.  This behaviour can be "
 "stopped by giving a B<--noquery> option or by setting the configuration "
 "variable B<DEBCHANGE_QUERY_BTS> to I<no>, as described below.  In either "
@@ -5962,7 +5962,7 @@ msgstr ""
 #: ../scripts/debcheckout.pl:76
 msgid ""
 "Work in authenticated mode; this means that for known repositories (mainly "
-"those hosted on S<I<http://alioth.debian.org>>) URL rewriting is attempted "
+"those hosted on S<I<https://alioth.debian.org>>) URL rewriting is attempted "
 "before checking out, to ensure that the repository can be committed to. For "
 "example, for Subversion repositories hosted on alioth this means that "
 "S<I<svn+ssh://svn.debian.org/...>> will be used instead of "
@@ -6247,7 +6247,7 @@ msgstr ""
 msgid ""
 "B<apt-cache>(8), Section 6.2.5 of the Debian Developer's Reference (for more "
 "information about B<Vcs-*> fields): "
-"S<I<http://www.debian.org/doc/developers-reference/best-pkging-practices.html#bpp-vcs>>."
+"S<I<https://www.debian.org/doc/developers-reference/best-pkging-practices.html#bpp-vcs>>."
 msgstr ""
 
 #. type: textblock
@@ -11621,7 +11621,7 @@ msgstr ""
 #. type: Plain text
 #: ../scripts/grep-excuses.1:22
 msgid ""
-"Get information from E<lt>http://release.debian.org/migration/E<gt>.  A "
+"Get information from E<lt>https://release.debian.org/migration/E<gt>.  A "
 "package name must be given when using this option."
 msgstr ""
 
@@ -13418,7 +13418,7 @@ msgstr ""
 msgid ""
 "B<at>(1), information about the Package Tracking System in the Developer's "
 "Reference at "
-"http://www.debian.org/doc/developers-reference/resources.html#pkg-tracking-system"
+"https://www.debian.org/doc/developers-reference/resources.html#pkg-tracking-system"
 msgstr ""
 
 #. type: Plain text
@@ -14706,7 +14706,7 @@ msgstr ""
 #, no-wrap
 msgid ""
 "# For Google Code projects you should use the downloads page like this:\n"
-"http://code.google.com/p/E<lt>projectE<gt>/downloads/list?can=1 \\e\n"
+"https://code.google.com/p/E<lt>projectE<gt>/downloads/list?can=1 \\e\n"
 "  .*/E<lt>projectE<gt>-(\\ed[\\ed.]*)\\e.tar\\e.gz\n"
 msgstr ""
 
@@ -16317,7 +16317,7 @@ msgstr ""
 #: ../scripts/who-permits-upload.pl:62
 msgid ""
 "Retrieve the DM permission file from the supplied URL. When this option is "
-"not present, the default value I<http://ftp-master.debian.org/dm.txt> is "
+"not present, the default value I<https://ftp-master.debian.org/dm.txt> is "
 "used."
 msgstr ""
 
@@ -16551,7 +16551,7 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/wnpp-alert.1:31 ../scripts/wnpp-check.1:25
-msgid "http://www.debian.org/devel/wnpp"
+msgid "https://www.debian.org/devel/wnpp"
 msgstr ""
 
 #. type: Plain text
