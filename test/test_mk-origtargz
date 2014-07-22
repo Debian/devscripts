@@ -80,6 +80,7 @@ makeTarBall () {
 makeBrokenTarBall () {
 	echo foo > foo.txt
 	tar cf - foo.txt | tr 6 7 | gzip > "$TMPDIR/foo-0.1.tar.gz"
+	rm -f foo.txt
 }
 
 makeZipFile () {
