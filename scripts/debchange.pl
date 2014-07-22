@@ -26,7 +26,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use 5.008;  # We're using PerlIO layers
 use strict;
@@ -1643,7 +1643,7 @@ sub format_line {
 
     # Work around the fact that write() with formats
     # seems to assume that characters are single-byte
-    # See http://rt.perl.org/rt3/Public/Bug/Display.html?id=33832
+    # See https://rt.perl.org/Public/Bug/Display.html?id=33832
     # and Debian bugs #473769 and #541484
     # This relies on $CHGLINE being a sequence of unicode characters.  We can
     # compare how many unicode characters we have to how many bytes we have

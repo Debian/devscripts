@@ -23,7 +23,7 @@ from devscripts.test import unittest
 WHITELIST = [re.compile(': %s$' % x) for x in (
     # Wildcard import:
     r"No name '\w+Error' in module 'launchpadlib\.errors'",
-    # http://www.logilab.org/ticket/51250:
+    # https://www.logilab.org/ticket/51250:
     r"Module 'hashlib' has no '(md5|sha(1|224|256|384|512))' member",
     # mox:
     r"Instance of '.+' has no '(WithSideEffects|MultipleTimes|AndReturn)' "

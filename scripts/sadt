@@ -171,7 +171,7 @@ class TestGroup(object):
         if '@' not in self.depends:
             return
         or_clauses = []
-        # deb822 prints a warning on stderr: http://bugs.debian.org/712513
+        # deb822 prints a warning on stderr: https://bugs.debian.org/712513
         # We don't want the user to see the warning, because the unusual
         # character in the relation is intentional.
         orig_sys_stderr = sys.stderr
