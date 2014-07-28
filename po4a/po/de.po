@@ -12639,10 +12639,6 @@ msgstr "I<debchange/dch>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:61
-#, fuzzy
-#| msgid ""
-#| "automagically add entries to debian/changelog files [libdistro-info-perl, "
-#| "libparse-debcontrol-perl, libsoap-lite-perl]"
 msgid ""
 "automagically add entries to debian/changelog files [libdistro-info-perl, "
 "libparse-debcontrol-perl, libsoap-lite-perl]"
@@ -13201,16 +13197,12 @@ msgstr "I<uscan>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:143
-#, fuzzy
-#| msgid ""
-#| "scan upstream sites for new releases of packages [gpgv, gnupg, liblwp-"
-#| "protocol-https-perl, libwww-perl, unzip, xz-utils, file]"
 msgid ""
 "scan upstream sites for new releases of packages [gpgv, gnupg, liblwp-"
 "protocol-https-perl, libwww-perl, unzip, xz-utils, file]"
 msgstr ""
 "durchucht Seiten der Originalautoren auf neue Veröffentlichungen von "
-"Paketen. [gpgv, gnupg, liblwp-protocol-https-perl, libwww-perl,unzip, xz-"
+"Paketen. [gpgv, gnupg, liblwp-protocol-https-perl, libwww-perl, unzip, xz-"
 "utils, file]"
 
 #. type: IP
@@ -16515,13 +16507,6 @@ msgstr "B<-u>, B<--unpack>[=B<no>|B<once>|B<yes>]"
 
 #. type: textblock
 #: ../scripts/origtargz.pl:106
-#, fuzzy
-#| msgid ""
-#| "Unpack the downloaded orig tarball to the current directory, replacing "
-#| "everything except the debian directory. Existing files are removed, "
-#| "except for F<debian/> and VCS files. Preserved are: F<.bzr>, F<."
-#| "bzrignore>, F<.bzr-builddeb>, F<.git>, F<.gitignore>, F<.hg>, F<."
-#| "hgignore>, and F<.svn>."
 msgid ""
 "Unpack the downloaded orig tarball to the current directory, replacing "
 "everything except the debian directory. Existing files are removed, except "
@@ -16533,7 +16518,7 @@ msgstr ""
 "und ersetzt alles außer dem Debian-Verzeichnis. Existierende Dateien werden "
 "entfernt, mit Ausnahme der F<debian/> und VCS-Dateien. Aufbewahrt werden: F<."
 "bzr>, F<.bzrignore>, F<.bzr-builddeb>, F<.git>, F<.gitignore>, F<.hg>, F<."
-"hgignore> und F<.svn>."
+"hgignore>, F<_darcs> und F<.svn>."
 
 #. type: =item
 #: ../scripts/origtargz.pl:114
@@ -18711,12 +18696,7 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/uscan.1:106
-#, fuzzy, no-wrap
-#| msgid ""
-#| "# Similarly, the upstream part of the Debian version number can be\n"
-#| "# mangled:\n"
-#| "opts=dversionmangle=s/\\e.dfsg\\e.\\ed+$// \\e\n"
-#| "  http://some.site.org/some/path/foobar-(.+)\\e.tar\\e.gz\n"
+#, no-wrap
 msgid ""
 "# Similarly, the upstream part of the Debian version number can be\n"
 "# mangled:\n"
@@ -18725,7 +18705,7 @@ msgid ""
 msgstr ""
 "# Genauso kann ein Mangling des Teils der Debian-Versionsnummer der\n"
 "# Ursprungsautoren durchgeführt werden:\n"
-"opts=dversionmangle=s/\\e.dfsg\\e.\\ed+$// \\e\n"
+"opts=dversionmangle=s/\\e+dfsg\\ed*$// \\e\n"
 "  http://some.site.org/some/path/foobar-(.+)\\e.tar\\e.gz\n"
 
 #. type: Plain text
@@ -19116,14 +19096,6 @@ msgstr "B<dversionmangle=>I<Regeln>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:269
-#, fuzzy
-#| msgid ""
-#| "This is used to mangle the Debian version number of the currently "
-#| "installed package in the same way as the B<uversionmangle> option.  Thus, "
-#| "a suitable rule might be `B<s/\\e.dfsg\\e.\\ed+$//>' to remove a `B<."
-#| "dfsg.1>' suffix from the Debian version number, or to handle `B<.pre6>' "
-#| "type version numbers.  Again, the I<rules> string may not contain commas; "
-#| "this should not be a problem."
 msgid ""
 "This is used to mangle the Debian version number of the currently installed "
 "package in the same way as the B<uversionmangle> option.  Thus, a suitable "
@@ -19133,11 +19105,11 @@ msgid ""
 msgstr ""
 "Dies wird für das Mangling der Debian-Versionsnummer des aktuell "
 "installierten Pakets auf die gleiche Art wie bei der Option "
-"B<uversionmangle> benutzt. Daher könnte eine geeignete Regel »B<s/\\e.dfsg"
-"\\e.\\ed+$//>« lauten, um eine »B<.dfsg.1>«-Endung von der Debian-"
-"Versionsnummer zu entfernen oder Versionsnummern des Typs »B<.pre6>« zu "
-"handhaben. Die I<Regeln>-Zeichenkette darf wieder Kommas enthalten; dies "
-"sollte kein Problem sein."
+"B<uversionmangle> benutzt. Daher könnte eine geeignete Regel »B<s/\\e+dfsg"
+"\\ed*$//>« lauten, um eine »B<+dfsg1>«-Endung von der Debian-Versionsnummer "
+"zu entfernen oder Versionsnummern des Typs »B<.pre6>« zu handhaben. Die "
+"I<Regeln>-Zeichenkette darf wieder Kommas enthalten; dies sollte kein "
+"Problem sein."
 
 #. type: TP
 #: ../scripts/uscan.1:269
