@@ -50,6 +50,10 @@ SUPPORTED_FILES = (
 
 
 class WrapAndSortControl(Control):
+    def __init__(self, filename, max_line_length):
+        super().__init__(filename)
+        self.max_line_length = max_line_length
+
     def wrap_and_sort(self, wrap_always, short_indent, sort_paragraphs,
                       keep_first, trailing_comma):
         for paragraph in self.paragraphs:
@@ -88,7 +92,7 @@ class WrapAndSortControl(Control):
             packages = sort_list(packages)
 
         length = len(entry) + sum([2 + len(package) for package in packages])
-        if wrap_always or length > 80:
+        if wrap_always or length > self.max_line_length:
             indentation = " "
             if not short_indent:
                 indentation *= len(entry) + 2
@@ -148,7 +152,7 @@ def wrap_and_sort(options):
     for control_file in control_files:
         if options.verbose:
             print(control_file)
-        control = WrapAndSortControl(control_file)
+        control = WrapAndSortControl(control_file, options.max_line_length)
         if options.cleanup:
             control.strip_trailing_spaces()
         control.wrap_and_sort(options.wrap_always, options.short_indent,
@@ -188,9 +192,8 @@ def main():
     epilog = "See %s(1) for more info." % (script_name)
     parser = optparse.OptionParser(usage=usage, epilog=epilog)
 
-    parser.add_option("-a", "--wrap-always", dest="wrap_always",
-                      help="wrap lists even if they fit into one 80 character "
-                           "long line", action="store_true", default=False)
+    parser.add_option("-a", "--wrap-always", action="store_true", default=False,
+                      help="wrap lists even if they do not exceed the line length limit")
     parser.add_option("-s", "--short-indent", dest="short_indent",
                       help="only indent wrapped lines by one space (default is "
                            "in-line with the field name)",
@@ -219,6 +222,8 @@ def main():
     parser.add_option("-v", "--verbose",
                       help="print all files that are touched",
                       dest="verbose", action="store_true", default=False)
+    parser.add_option("--max-line-length", type='int', default=79,
+                      help="set maximum allowed line length before wrapping (default: %default)")
 
     (options, args) = parser.parse_args()
 

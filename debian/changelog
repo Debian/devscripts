@@ -2,6 +2,8 @@ devscripts (2.14.6) UNRELEASED; urgency=medium
 
   [ Benjamin Drung ]
   * suspicious-source: Add image/tiff to whitelisted mime-types.
+  * wrap-and-sort: Add --max-line-length option with a default of 79 characters
+    (it was previously hard-coded to 80 characters).  (Closes: #756067)
 
   [ Guillem Jover ]
   * nmudiff: Send control messages inline.  (Closes: #752152)
