@@ -95,7 +95,7 @@ chroot is first created (using the \fB\-\-create\fP option above). If multiple
 arguments need to be passed, this option should be specified separately for
 each of them.
 
-eg. \fB\-\-create\-opts "--othermirror" \-\-create\-opts "deb http:// ..."\fP
+eg. \fB\-\-create\-opts "\-\-othermirror" \-\-create\-opts "deb http:// ..."\fP
 
 This option will override any \fBCREATE_OPTS\fP specified for a chroot in the
 cowpoke configuration files.
@@ -276,7 +276,7 @@ not be mangled before they get to cowbuilder.
 
 Bash arrays are initialised using the following form:
 
-    OPTS=( "arg1" "arg 2" "--option" "value" "--opt=val" "etc. etc." )
+    OPTS=( "arg1" "arg 2" "\-\-option" "value" "\-\-opt=val" "etc. etc." )
 
 .TP
 .IB arch _ dist _UPDATE_OPTS
