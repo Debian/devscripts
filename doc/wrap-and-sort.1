@@ -22,9 +22,9 @@ wrap-and-sort \- wrap long lines and sort items in Debian packaging files
 .SH DESCRIPTION
 \fBwrap\-and\-sort\fP wraps the package lists in Debian control files. By
 default the lists will only split into multiple lines if the entries are longer
-than 80 characters. \fBwrap\-and\-sort\fP sorts the package lists in Debian
-control files and all \fI.install\fR files. Beside that \fBwrap\-and\-sort\fP removes
-trailing spaces in these files.
+than the maximum line length limit of 79 characters. \fBwrap\-and\-sort\fP sorts
+the package lists in Debian control files and all \fI.install\fR files. Beside
+that \fBwrap\-and\-sort\fP removes trailing spaces in these files.
 .PP
 This script should be run in the root of a Debian package tree. It searches for
 \fIcontrol\fR, \fIcontrol*.in\fR, \fIcopyright\fR, \fIcopyright.in\fR,
@@ -37,7 +37,7 @@ Show this help message and exit.
 .TP
 \fB\-a\fR, \fB\-\-wrap\-always\fR
 Wrap all package lists in the Debian \fIcontrol\fR file
-even if the entries are shorter than 80 characters and could fit in one line.
+even if they do not exceed the line length limit and could fit in one line.
 .TP
 \fB\-s\fR, \fB\-\-short\-indent\fR
 Only indent wrapped lines by one space (default is in\-line with the
@@ -70,6 +70,11 @@ All supported files will be processed if no files are specified.
 .TP
 \fB\-v\fR, \fB\-\-verbose\fR
 Print all files that are touched.
+.TP
+\fB\-\-max\-line\-length=\fImax_line_length\fR
+Set the maximum allowed line length. Package lists in the Debian \fIcontrol\fR
+file that exceed this length limit will be wrapped. The default maximum line
+length is 79 characters.
 
 .SH AUTHORS
 \fBwrap\-and\-sort\fP and this manpage have been written by
