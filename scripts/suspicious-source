@@ -27,6 +27,7 @@ except ImportError:
     sys.exit(1)
 
 DEFAULT_WHITELISTED_MIMETYPES = [
+    "application/pgp-keys",
     "application/vnd.font-fontforge-sfd", # font source: fontforge
     "application/x-elc",
     "application/x-empty",
@@ -46,6 +47,7 @@ DEFAULT_WHITELISTED_MIMETYPES = [
     "image/vnd.adobe.photoshop",
     "image/x-icns",
     "image/x-ico",
+    "image/x-icon",
     "image/x-ms-bmp",
     "image/x-portable-pixmap",
     "image/x-xpmi",
@@ -83,6 +85,7 @@ DEFAULT_WHITELISTED_EXTENSIONS = [
     ".gdh",   # font source format: Graphite (headers)
     ".gdl",   # font source format: Graphite
     ".glyph", # font source format: cross-toolkit UFO
+    ".gmo",   # GNU Machine Object File (for translations with gettext)
     ".icns",  # Apple Icon Image format
     ".java",  # Java source files
     ".plate", # font source format: Spiro
