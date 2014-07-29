@@ -101,7 +101,7 @@ opts="uversionmangle=s/^/0.0./" \e
 
 # Similarly, the upstream part of the Debian version number can be
 # mangled:
-opts=dversionmangle=s/\e.dfsg\e.\ed+$// \e
+opts=dversionmangle=s/\e+dfsg\ed*$// \e
   http://some.site.org/some/path/foobar-(.+)\e.tar\e.gz
 
 # The filename is found by taking the last component of the URL and
@@ -262,8 +262,8 @@ like `\fBs/-alpha(\ed*)/.a$1/\fR'. These backreferences must use the
 \fBdversionmangle=\fIrules\fR
 This is used to mangle the Debian version number of the currently
 installed package in the same way as the \fBuversionmangle\fR option.
-Thus, a suitable rule might be `\fBs/\e.dfsg\e.\ed+$//\fR' to remove a
-`\fB.dfsg.1\fR' suffix from the Debian version number, or to handle `\fB.pre6\fR'
+Thus, a suitable rule might be `\fBs/\+dfsg\ed*$//\fR' to remove a
+`\fB+dfsg1\fR' suffix from the Debian version number, or to handle `\fB.pre6\fR'
 type version numbers.  Again, the \fIrules\fR string may not contain
 commas; this should not be a problem.
 .TP
