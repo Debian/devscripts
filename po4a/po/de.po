@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: devscripts 2.14.5\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
 "POT-Creation-Date: 2014-07-29 14:12-0400\n"
-"PO-Revision-Date: 2014-07-04 10:37+0200\n"
+"PO-Revision-Date: 2014-07-29 21:36+0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
 "Language: de\n"
@@ -695,10 +695,12 @@ msgstr ""
 #: ../scripts/bts.pl:236
 #, no-wrap
 msgid ""
-" % bts severity 95672 wishlist , retitle it \"bts: please add a --foo option\"\n"
+" % bts severity 95672 wishlist , retitle it \"bts: please add a --foo "
+"option\"\n"
 "\n"
 msgstr ""
-" % bts severity 95672 wishlist , retitle it \"bts: please add a --foo option\"\n"
+" % bts severity 95672 wishlist , retitle it \"bts: please add a --foo "
+"option\"\n"
 "\n"
 
 #. type: textblock
@@ -3912,6 +3914,14 @@ msgid ""
 "polluting the chroots you use for clean package builds intended for upload "
 "to the main repositories.  See the description of B<BASE_DIST> below."
 msgstr ""
+"Es ist nun auch möglich, mit dieser Option lokal definierte Namen zu "
+"benutzen, wenn sie zusammen mit der Option B<BASE_DIST> in einer "
+"Konfigurationsdatei verwendet wird. Dies erlaubt die Verwaltung und Benutzung "
+"eigens konfigurierter Bau-Chroots, die Paketabhängigkeiten aus den "
+"Backports-Archiven oder einem lokalen Depot beziehen können. Außerdem sind "
+"andere ungewöhnliche Optionszusammenstellungen möglich, ohne die Chroots zu "
+"verunreinigen, die zum sauberen Bauen und Hochladen der Hauptdepots gedacht "
+"sind. Siehe die Beschreibung von B<BASE_DIST> weiter unten."
 
 #. type: TP
 #: ../scripts/cowpoke.1:56
@@ -3961,6 +3971,10 @@ msgid ""
 "and give that user (or some group they are in) write access to it, for this "
 "option to succeed."
 msgstr ""
+"Der B<--buildd-user> muss das Recht haben, auf dem Baurechner das "
+"B<RESULT_DIR> zu erstellen oder ein Administrator mit den nötigen Rechten "
+"muss es zuerst erstellen und diesem Benutzer (oder einer Gruppe, der er "
+"angehört) Schreibzugriff darauf geben, damit diese Option Erfolg hat."
 
 #. type: TP
 #: ../scripts/cowpoke.1:75
@@ -4016,7 +4030,7 @@ msgstr ""
 #: ../scripts/cowpoke.1:91
 #, no-wrap
 msgid "B<--create-opts=>I<'cowbuilder option'>"
-msgstr ""
+msgstr "B<--create-opts=>I<'Cowbuilder-Option'>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:97
@@ -4026,12 +4040,16 @@ msgid ""
 "arguments need to be passed, this option should be specified separately for "
 "each of them."
 msgstr ""
+"gibt zusätzliche Argumente an, die wörtlich an B<Cowbuilder> weitergereicht "
+"werden, wenn eine Chroot zum ersten Mal (mittels der obigen Option "
+"B<--create>) erstellt wird. Falls mehrere Optionen weitergereicht werden "
+"müssen, sollte diese Option separat für jede einzelne angegeben werden."
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:99
 msgid ""
 "E.g., B<--create-opts \"--othermirror\" --create-opts \"deb http:// ...\">"
-msgstr ""
+msgstr "Z.B. B<--create-opts \"--othermirror\" --create-opts \"deb http://…\">"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:102
@@ -4039,13 +4057,14 @@ msgid ""
 "This option will override any B<CREATE_OPTS> specified for a chroot in the "
 "cowpoke configuration files."
 msgstr ""
+"Diese Option wird jede für eine Chroot in den Cowpoke-Konfigurationsdateien "
+"angegebene B<CREATE_OPTS> außer Kraft setzen."
 
 #. type: TP
 #: ../scripts/cowpoke.1:103
-#, fuzzy, no-wrap
-#| msgid "B<--dpkg-opts=>I<'opt1 opt2 ...'>"
+#, no-wrap
 msgid "B<--update-opts=>I<'cowbuilder option'>"
-msgstr "B<--dpkg-opts=>I<'Option1 Option2 …'>"
+msgstr "B<--update-opts=>I<'Cowbuilder-Option'>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:108
@@ -4054,6 +4073,10 @@ msgid ""
 "base of the chroot is updated.  If multiple arguments need to be passed, "
 "this option should be specified separately for each of them."
 msgstr ""
+"gibt zusätzliche Argumente an, die wörtlich an B<Cowbuilder> weitergereicht "
+"werden, wenn die Chroot aktualisiert wird. Falls mehrere Optionen "
+"weitergereicht werden müssen, sollte diese Option separat für jede einzelne "
+"angegeben werden."
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:111
@@ -4061,13 +4084,14 @@ msgid ""
 "This option will override any B<UPDATE_OPTS> specified for a chroot in the "
 "cowpoke configuration files."
 msgstr ""
+"Diese Option wird jede für eine Chroot in den Cowpoke-Konfigurationsdateien "
+"angegebene B<UPDATE_OPTS> außer Kraft setzen."
 
 #. type: TP
 #: ../scripts/cowpoke.1:112
-#, fuzzy, no-wrap
-#| msgid "B<--dpkg-opts=>I<'opt1 opt2 ...'>"
+#, no-wrap
 msgid "B<--build-opts=>I<'cowbuilder option'>"
-msgstr "B<--dpkg-opts=>I<'Option1 Option2 …'>"
+msgstr "B<--build-opts=>I<'Cowbuilder-Option'>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:117
@@ -4076,6 +4100,9 @@ msgid ""
 "package build is performed.  If multiple arguments need to be passed, this "
 "option should be specified separately for each of them."
 msgstr ""
+"gibt zusätzliche Argumente an, die wörtlich an B<Cowbuilder> weitergereicht "
+"werden, wenn ein Paket gebaut wird. Falls mehrere Optionen weitergereicht "
+"werden müssen, sollte diese Option separat für jede einzelne angegeben werden."
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:120
@@ -4083,6 +4110,8 @@ msgid ""
 "This option will override any B<BUILD_OPTS> specified for a chroot in the "
 "cowpoke configuration files."
 msgstr ""
+"Diese Option wird jede für eine Chroot in den Cowpoke-Konfigurationsdateien "
+"angegebene B<BUILD_OPTS> außer Kraft setzen."
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:124
@@ -4127,13 +4156,11 @@ msgstr "Globale Vorgaben"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:139
-#, fuzzy
-#| msgid "These apply to every arch and dist in a single cowpoke invocation."
 msgid ""
 "These apply to every I<arch> and I<dist> in a single cowpoke invocation."
 msgstr ""
-"Dies gilt für jede Architektur und Distribution in einem einzelnen Cowpoke-"
-"Aufruf."
+"Dies gilt für jede I<Architektur> und I<Distribution> in einem einzelnen "
+"Cowpoke-Aufruf."
 
 #. type: TP
 #: ../scripts/cowpoke.1:140
@@ -4235,18 +4262,13 @@ msgstr "B<PBUILDER_BASE>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:172
-#, fuzzy
-#| msgid ""
-#| "The filesystem root for all pbuilder COW and result files.  Arch and dist "
-#| "specific subdirectories will normally be created under this.  The apt "
-#| "cache and temporary build directory will also be located under this path."
 msgid ""
 "The filesystem root for all pbuilder CoW and result files.  I<Arch> and "
 "I<dist> specific subdirectories will normally be created under this.  The "
 "apt cache and temporary build directory will also be located under this path."
 msgstr ""
 "die Wurzel des Dateisystems für alle Pbuilder-COW- und Ergebnisdateien. "
-"Architektur- und distributionsspezifische Unterverzeichnisse werden "
+"I<Architektur>- und I<distribution>sspezifische Unterverzeichnisse werden "
 "normalerweise darunter erstellt. Der APT-Zwischenspeicher und die temporären "
 "Bauverzeichnisse werden ebenso unterhalb dieses Pfads liegen."
 
@@ -4258,13 +4280,6 @@ msgstr "B<SIGN_KEYID>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:183
-#, fuzzy
-#| msgid ""
-#| "If this option is set, it is expected to contain the gpg key id to pass "
-#| "to B<debsign>(1) if the packages are to be remotely signed.  You will be "
-#| "prompted to confirm whether you wish to sign the packages after all "
-#| "builds are complete.  If this option is unset or an empty string, no "
-#| "attempt to sign packages will be made."
 msgid ""
 "If this option is set, it is expected to contain the gpg key ID to pass to "
 "B<debsign>(1) if the packages are to be remotely signed.  You will be "
@@ -4279,7 +4294,10 @@ msgstr ""
 "der Ferne signiert wurden. Sie werden um Bestätigung gebeten, ob Sie die "
 "Pakete signieren möchten, nachdem das Bauen abgeschlossen ist. Falls diese "
 "Option nicht gesetzt oder eine leere Zeichenkette ist, wird kein Versuch "
-"unternommen, Pakete zu signieren."
+"unternommen, Pakete zu signieren. Sie kann auf einer I<architektur>- oder "
+"I<distribution>sspezifischen Basis mittels der weiter unten beschriebenen "
+"Option I<Architektur>B<_>I<Distribution>B<_SIGN_KEYID> außer Kraft gesetzt "
+"werden."
 
 #. type: TP
 #: ../scripts/cowpoke.1:184
@@ -4289,14 +4307,6 @@ msgstr "B<UPLOAD_QUEUE>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:194
-#, fuzzy
-#| msgid ""
-#| "If this option is set, it is expected to contain a 'host' specification "
-#| "for B<dput>(1) which will be used to upload them after they are signed.  "
-#| "You will be prompted to confirm whether you wish to upload the packages "
-#| "after they are signed.  If this option is unset or an empty string, no "
-#| "attempt to upload packages will be made.  If B<SIGN_KEYID> is not set, "
-#| "this option will be ignored entirely."
 msgid ""
 "If this option is set, it is expected to contain a 'host' specification for "
 "B<dput>(1) which will be used to upload them after they are signed.  You "
@@ -4313,7 +4323,10 @@ msgstr ""
 "Signieren hochladen möchten. Falls diese Option nicht gesetzt oder eine "
 "leere Zeichenkette ist, wird kein Versuch unternommen, diese Pakete "
 "hochzuladen. Falls B<SIGN_KEYID> nicht gesetzt ist, wird diese Option ganz "
-"ignoriert."
+"ignoriert. Sie kann auf einer I<architektur>- oder "
+"I<distribution>sspezifischen Basis mittels der weiter unten beschriebenen "
+"Option I<Architektur>B<_>I<Distribution>B<_SIGN_KEYID> außer Kraft gesetzt "
+"werden."
 
 #. type: TP
 #: ../scripts/cowpoke.1:196
@@ -4445,29 +4458,22 @@ msgstr "I<Architektur>B<_>I<Distribution>B<_BASE_PATH>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:251
-#, fuzzy
-#| msgid ""
-#| "The directory where the COW master files are to be found (or created if "
-#| "the B<--create> command line option was passed).  If this option is not "
-#| "specified for some arch or dist then it will default to I<$PBUILDER_BASE/"
-#| "$arch/$dist/base.cow>"
 msgid ""
 "The directory where the CoW master files are to be found (or created if the "
 "B<--create> command line option was passed).  If this option is not "
 "specified for some arch or dist then it will default to I<$PBUILDER_BASE/"
 "$arch/$dist/base.cow>"
 msgstr ""
-"das Verzeichnis, in dem die COW-Master-Dateien vorliegen werden (oder "
+"das Verzeichnis, in dem die CoW-Master-Dateien vorliegen werden (oder "
 "erzeugt werden, falls die Befehlszeilenoption B<--create> übergeben wurde). "
 "Falls diese Option für irgendwelche Architekturen und Distributionen nicht "
 "angegeben wurde, dann wird I<$PBUILDER_BASE/$arch/$dist/base.cow> vorgegeben."
 
 #. type: TP
 #: ../scripts/cowpoke.1:252
-#, fuzzy, no-wrap
-#| msgid "I<arch>B<_>I<dist>B<_BASE_PATH>"
+#, no-wrap
 msgid "I<arch>B<_>I<dist>B<_BASE_DIST>"
-msgstr "I<Architektur>B<_>I<Distribution>B<_BASE_PATH>"
+msgstr "I<Architektur>B<_>I<Distribution>B<_BASE_DIST>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:262
@@ -4481,13 +4487,21 @@ msgid ""
 "invocations of B<cowpoke>. If this option is not specified for an arch and "
 "dist combination then it will default to I<dist>."
 msgstr ""
+"der Codename, der anstelle von I<Distribution> als Option B<--distribution> "
+"an Cowbuilder übergeben wird. Dies ist nötig, wenn I<Distribution> ein lokal "
+"bedeutsamer Name ist, der irgendeiner speziell konfigurierten Bau-Chroot wie "
+"»wheezy_backports« zugewiesen wurde und nicht der Debootstrap bekannte "
+"offizielle Suite-Name einer Distributionsveröffentlichung ist. Diese Option "
+"kann nicht auf der Befehlszeile außer Kraft gesetzt werden, da dies selten, "
+"wenn nicht sogar nie, für einzelne Aufrufe von B<Cowpoke> sinnvoll wäre. "
+"Falls diese Option nicht für eine Architektur- und Distributionskombination "
+"angegeben wurde, wird als Voreinstellung I<Distribution> genommen."
 
 #. type: TP
 #: ../scripts/cowpoke.1:263
-#, fuzzy, no-wrap
-#| msgid "I<arch>B<_>I<dist>B<_BASE_PATH>"
+#, no-wrap
 msgid "I<arch>B<_>I<dist>B<_CREATE_OPTS>"
-msgstr "I<Architektur>B<_>I<Distribution>B<_BASE_PATH>"
+msgstr "I<Architektur>B<_>I<Distribution>B<_CREATE_OPTS>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:271
@@ -4499,6 +4513,13 @@ msgid ""
 "default this is unset.  All values set in it will be overridden if the B<--"
 "create-opts> option is passed on the command line."
 msgstr ""
+"ein Bash-Feld, das zusätzliche Optionen enthält, die an B<Cowbuilder> "
+"weitergegeben werden, wenn diese Chroot zum ersten Mal (mittels der Option "
+"B<--create> erstellt wird. Dies ist nützlich, wenn Optionen wie "
+"B<--othermirror> zum Erstellen spezialisierter Chroots wie »wheezy_backports« "
+"gesucht werden. Standardmäßig ist dies nicht gesetzt. Alle darin gesetzten "
+"Werte werden außer Kraft gesetzt, falls auf der Befehlszeile die Option "
+"B<--create-opts> übergeben wird."
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:276
@@ -4508,24 +4529,32 @@ msgid ""
 "which may contain whitespace or have strange quoting requirements or other "
 "special characters will not be mangled before they get to cowbuilder."
 msgstr ""
+"Jedes Element dieses Feldes entspricht einem einzelnen Argument (im Sinne von "
+"ARGV), das an Cowbuilder übergeben wird. Dadurch wird sichergestellt, dass "
+"Argumente, die Leerräume enthalten oder fremdartige Maskierungsanforderungen "
+"oder andere Sonderzeichen haben, keinem Mangling unterzogen werden, ehe "
+"Cowbuilder sie bekommt."
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:278
 msgid "Bash arrays are initialised using the following form:"
-msgstr ""
+msgstr "Die Initialisierung von Bash-Feldern geschieht in folgender Form:"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:280
 #, no-wrap
-msgid "    OPTS=( \"arg1\" \"arg 2\" \"--option\" \"value\" \"--opt=val\" \"etc. etc.\" )\n"
+msgid ""
+"    OPTS=( \"arg1\" \"arg 2\" \"--option\" \"value\" \"--opt=val\" \"etc. "
+"etc.\" )\n"
 msgstr ""
+"    OPTS=( \"Arg1\" \"Arg 2\" \"--option\" \"Wert\" \"--opt=Wert\" \"etc. "
+"etc.\" )\n"
 
 #. type: TP
 #: ../scripts/cowpoke.1:281
-#, fuzzy, no-wrap
-#| msgid "I<arch>B<_>I<dist>B<_BASE_PATH>"
+#, no-wrap
 msgid "I<arch>B<_>I<dist>B<_UPDATE_OPTS>"
-msgstr "I<Architektur>B<_>I<Distribution>B<_BASE_PATH>"
+msgstr "I<Architektur>B<_>I<Distribution>B<_UPDATE_OPTS>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:286
@@ -4534,13 +4563,16 @@ msgid ""
 "each time the base of this chroot is updated.  It behaves similarly to the "
 "B<CREATE_OPTS> option above, except for acting when the chroot is updated."
 msgstr ""
+"ein Bash-Feld, das zusätzliche Optionen enthält, die jedesmal, wenn die Basis "
+"dieser Chroot aktualisiert wird, wortwörtlich an B<Cowbuilder> weitergereicht "
+"werden. Es verhält sich ähnlich den oben beschriebenen "
+"B<CREATE_OPTS>-Optionen, außer dass es Aktualisieren der Chroot tätig wird."
 
 #. type: TP
 #: ../scripts/cowpoke.1:287
-#, fuzzy, no-wrap
-#| msgid "I<arch>B<_>I<dist>B<_BASE_PATH>"
+#, no-wrap
 msgid "I<arch>B<_>I<dist>B<_BUILD_OPTS>"
-msgstr "I<Architektur>B<_>I<Distribution>B<_BASE_PATH>"
+msgstr "I<Architektur>B<_>I<Distribution>B<_BUILD_OPTS>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:294
@@ -4551,26 +4583,32 @@ msgid ""
 "need to care about.  It otherwise behaves similarly to B<UPDATE_OPTS> above "
 "except that it acts during the build phase of B<cowbuilder>."
 msgstr ""
+"ein Bash-Feld, das zusätzliche Optionen enthält, die jedesmal, wenn in dieser "
+"Chroot ein Paket gebaut wird, wortwörtlich an B<Cowbuilder> weitergereicht "
+"werden. Dies ist nützlich, wenn Sie Optionen wie B<--twice> verwenden, um die "
+"sich Cowpoke nicht direkt kümmern muss. In anderen Fällen verhält es sich "
+"ähnlich den oben beschriebenen B<CREATE_OPTS>-Optionen, außer dass es während "
+"der Bauphase von B<Cowbuilder> tätig wird."
 
 #. type: TP
 #: ../scripts/cowpoke.1:295
-#, fuzzy, no-wrap
-#| msgid "I<arch>B<_>I<dist>B<_RESULT_DIR>"
+#, no-wrap
 msgid "I<arch>B<_>I<dist>B<_SIGN_KEYID>"
-msgstr "I<Architektur>B<_>I<Distribution>B<_RESULT_DIR>"
+msgstr "I<Architektur>B<_>I<Distribution>B<_SIGN_KEYID>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:298
 msgid ""
 "An optional arch and dist specific override for the global SIGN_KEYID option."
 msgstr ""
+"eine optionale Architektur und ein distributionsspezifisches außer Kraft "
+"setzen für die globale Option SIGN_KEYID."
 
 #. type: TP
 #: ../scripts/cowpoke.1:299
-#, fuzzy, no-wrap
-#| msgid "I<arch>B<_>I<dist>B<_RESULT_DIR>"
+#, no-wrap
 msgid "I<arch>B<_>I<dist>B<_UPLOAD_QUEUE>"
-msgstr "I<Architektur>B<_>I<Distribution>B<_RESULT_DIR>"
+msgstr "I<Architektur>B<_>I<Distribution>B<_UPLOAD_QUEUE>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:302
@@ -4578,6 +4616,8 @@ msgid ""
 "An optional arch and dist specific override for the global UPLOAD_QUEUE "
 "option."
 msgstr ""
+"eine optionale Architektur und ein distributionsspezifisches außer Kraft "
+"setzen für die globale Option UPLOAD_QUEUE"
 
 #. type: SH
 #: ../scripts/cowpoke.1:304
@@ -5240,7 +5280,9 @@ msgstr ""
 #: ../scripts/cvs-debuild.1:40 ../scripts/debuild.1:225
 #, no-wrap
 msgid "B<--rootcmd=>I<gain-root-command>, B<-r>I<gain-root-command>"
-msgstr "B<--rootcmd=>I<Befehl-zum-Erlangen-von-Root-Rechten>, B<-r>I<Befehl-zum-Erlangen-von-Root-Rechten>"
+msgstr ""
+"B<--rootcmd=>I<Befehl-zum-Erlangen-von-Root-Rechten>, B<-r>I<"
+"Befehl-zum-Erlangen-von-Root-Rechten>"
 
 #. type: TP
 #: ../scripts/cvs-debuild.1:42 ../scripts/debuild.1:228
@@ -11054,8 +11096,12 @@ msgstr ""
 #. type: TP
 #: ../scripts/debsnap.1:106
 #, no-wrap
-msgid "B<aptitude search '~i' -F '%p %V' | while read pkg ver; do debsnap -a $(dpkg-architecture -qDEB_HOST_ARCH) -a all $pkg $ver; done>"
-msgstr "B<aptitude search '~i' -F '%p %V' | while read pkg ver; do debsnap -a $(dpkg-architecture -qDEB_HOST_ARCH) -a all $pkg $ver; done>"
+msgid ""
+"B<aptitude search '~i' -F '%p %V' | while read pkg ver; do debsnap -a "
+"$(dpkg-architecture -qDEB_HOST_ARCH) -a all $pkg $ver; done>"
+msgstr ""
+"B<aptitude search '~i' -F '%p %V' | while read pkg ver; do debsnap -a "
+"$(dpkg-architecture -qDEB_HOST_ARCH) -a all $pkg $ver; done>"
 
 #. type: Plain text
 #: ../scripts/debsnap.1:109
@@ -12004,8 +12050,12 @@ msgstr ""
 #. type: Plain text
 #: ../scripts/debuild.1:336
 #, no-wrap
-msgid "DEBUILD_DPKG_BUILDPACKAGE_OPTS=\"-k'Julian Gilbey E<lt>jdg@debian.orgE<gt>' -sa\"\n"
-msgstr "DEBUILD_DPKG_BUILDPACKAGE_OPTS=\"-k'Julian Gilbey E<lt>jdg@debian.orgE<gt>' -sa\"\n"
+msgid ""
+"DEBUILD_DPKG_BUILDPACKAGE_OPTS=\"-k'Julian Gilbey E<lt>jdg@debian.orgE<gt>' "
+"-sa\"\n"
+msgstr ""
+"DEBUILD_DPKG_BUILDPACKAGE_OPTS=\"-k'Julian Gilbey E<lt>jdg@debian.orgE<gt>' "
+"-sa\"\n"
 
 #. type: Plain text
 #: ../scripts/debuild.1:341
@@ -17722,15 +17772,13 @@ msgstr "B<RMADISON_DEFAULT_URL>=I<URL>"
 
 #. type: textblock
 #: ../scripts/rmadison.pl:313
-#, fuzzy
-#| msgid ""
-#| "Set the default URL to use unless overridden by a command line option."
 msgid ""
 "Set the default URL to use unless overridden by a command line option.  For "
 "Debian this defaults to debian,new. For Ubuntu this defaults to ubuntu."
 msgstr ""
 "setzt die Standard-URL, die benutzt werden soll, solange sie nicht durch "
-"eine Befehlszeilenoption außer Kraft gesetzt wird."
+"eine Befehlszeilenoption außer Kraft gesetzt wird. Für Debian ist die "
+"Voreinstellung »debian,new«, für Ubuntu ist es »ubuntu«."
 
 #. type: =item
 #: ../scripts/rmadison.pl:316
@@ -18077,10 +18125,12 @@ msgstr ""
 #: ../scripts/svnpath.pl:37
 #, no-wrap
 msgid ""
-"  svn cp svn+ssh://my.server.example/svn/project/trunk svn+ssh://my.server.example/svn/project/tags/1.0\n"
+"  svn cp svn+ssh://my.server.example/svn/project/trunk "
+"svn+ssh://my.server.example/svn/project/tags/1.0\n"
 "\n"
 msgstr ""
-"  svn cp svn+ssh://my.server.example/svn/project/trunk svn+ssh://my.server.example/svn/project/tags/1.0\n"
+"  svn cp svn+ssh://my.server.example/svn/project/trunk "
+"svn+ssh://my.server.example/svn/project/tags/1.0\n"
 "\n"
 
 #. type: textblock
@@ -18528,21 +18578,25 @@ msgstr ""
 msgid ""
 "# This is the format for an FTP site with regex special characters in\n"
 "# the filename part\n"
-"ftp://ftp.worldforge.org/pub/worldforge/libs/Atlas-C++/transitional/Atlas-C\\e+\\e+-(.+)\\e.tar\\e.gz\n"
+"ftp://ftp.worldforge.org/pub/worldforge/libs/Atlas-C++/transitional/Atlas-C\\e"
+"+\\e+-(.+)\\e.tar\\e.gz\n"
 msgstr ""
 "# Dies ist das Format einer FTP-Site mit Metazeichen regulärer Ausdrücke im\n"
 "# Dateinamensteil.\n"
-"ftp://ftp.worldforge.org/pub/worldforge/libs/Atlas-C++/transitional/Atlas-C\\e+\\e+-(.+)\\e.tar\\e.gz\n"
+"ftp://ftp.worldforge.org/pub/worldforge/libs/Atlas-C++/transitional/Atlas-C\\e"
+"+\\e+-(.+)\\e.tar\\e.gz\n"
 
 #. type: Plain text
 #: ../scripts/uscan.1:47
 #, no-wrap
 msgid ""
 "# This is the format for an FTP site with directory pattern matching\n"
-"ftp://ftp.nessus.org/pub/nessus/nessus-([\\ed\\e.]+)/src/nessus-core-([\\ed\\e.]+)\\e.tar\\e.gz\n"
+"ftp://ftp.nessus.org/pub/nessus/nessus-([\\ed\\e.]+)/src/nessus-core-([\\ed\\e"
+".]+)\\e.tar\\e.gz\n"
 msgstr ""
 "# Dies ist das Format für eine FTP-Site mit Verzeichnismusterabgleich\n"
-"ftp://ftp.nessus.org/pub/nessus/nessus-([\\ed\\e.]+)/src/nessus-core-([\\ed\\e.]+)\\e.tar\\e.gz\n"
+"ftp://ftp.nessus.org/pub/nessus/nessus-([\\ed\\e.]+)/src/nessus-core-([\\ed\\e"
+".]+)\\e.tar\\e.gz\n"
 
 #. type: Plain text
 #: ../scripts/uscan.1:51
@@ -18597,25 +18651,29 @@ msgid ""
 "# I<http://site/inter/mediate/dir/>\n"
 "http://tmrc.mit.edu/mirror/twisted/Twisted/(\\ed\\e.\\ed)/ \\e\n"
 "  Twisted-([\\ed\\e.]*)\\e.tar\\e.bz2\n"
-"http://tmrc.mit.edu/mirror/twisted/Twisted/(\\ed\\e.\\ed)/Twisted-([\\ed\\e.]*)\\e.tar\\e.bz2\n"
+"http://tmrc.mit.edu/mirror/twisted/Twisted/(\\ed\\e.\\ed)/Twisted-([\\ed\\e.]*"
+")\\e.tar\\e.bz2\n"
 msgstr ""
 "# Dies zeigt, dass rekursives Durchsuchen von Verzeichnissen in beiden\n"
 "# Formen funktioniert, solange die Website Anfragen der Form\n"
 "# I<http://site/inter/mediate/dir/> handhaben kann\n"
 "http://tmrc.mit.edu/mirror/twisted/Twisted/(\\ed\\e.\\ed)/ \\e\n"
 "  Twisted-([\\ed\\e.]*)\\e.tar\\e.bz2\n"
-"http://tmrc.mit.edu/mirror/twisted/Twisted/(\\ed\\e.\\ed)/Twisted-([\\ed\\e.]*)\\e.tar\\e.bz2\n"
+"http://tmrc.mit.edu/mirror/twisted/Twisted/(\\ed\\e.\\ed)/Twisted-([\\ed\\e.]*"
+")\\e.tar\\e.bz2\n"
 
 #. type: Plain text
 #: ../scripts/uscan.1:73
 #, no-wrap
 msgid ""
 "# For maximum flexibility with upstream tarball formats, use this:\n"
-"http://example.com/example-(\\ed[\\ed.]*)\\e.(?:zip|tgz|tbz2|txz|tar\\e.(?:gz|bz2|xz))\n"
+"http://example.com/example-(\\ed[\\ed.]*)\\e.(?:zip|tgz|tbz2|txz|tar\\e.(?:gz|"
+"bz2|xz))\n"
 msgstr ""
 "# Um bei Tarballs der Ursprungsautoren maximale Flexibilität zu erreichen,\n"
 "# nutzen Sie dies:\n"
-"http://example.com/example-(\\ed[\\ed.]*)\\e.(?:zip|tgz|tbz2|txz|tar\\e.(?:gz|bz2|xz))\n"
+"http://example.com/example-(\\ed[\\ed.]*)\\e.(?:zip|tgz|tbz2|txz|tar\\e.(?:gz|"
+"bz2|xz))\n"
 
 #. type: Plain text
 #: ../scripts/uscan.1:78
@@ -18635,18 +18693,25 @@ msgstr ""
 #: ../scripts/uscan.1:84
 #, no-wrap
 msgid ""
-"# For GitHub projects you can use the tags or releases page.  Since the archive\n"
+"# For GitHub projects you can use the tags or releases page.  Since the "
+"archive\n"
 "# URLs use only the version as the name, it is recommended to use a\n"
 "# filenamemangle to adjust the name of the downloaded file:\n"
-"opts=\"filenamemangle=s/(?:.*\\/)?v?(\\ed[\\ed\\e.]*)\\e.tar\\e.gz/E<lt>projectE<gt>-$1.tar.gz/\" \\e\n"
-"  https://github.com/E<lt>userE<gt>/E<lt>projectE<gt>/tags (?:.*/)?v?(\\ed[\\ed\\e.]*)\\e.tar\\e.gz\n"
+"opts=\"filenamemangle=s/(?:.*\\/)?v?(\\ed[\\ed\\e.]*)\\e.tar\\e.gz/E<lt>"
+"projectE<gt>-$1.tar.gz/\" \\e\n"
+"  https://github.com/E<lt>userE<gt>/E<lt>projectE<gt>/tags "
+"(?:.*/)?v?(\\ed[\\ed\\e.]*)\\e.tar\\e.gz\n"
 msgstr ""
-"# Für GitHub-Projekte können Sie die Markierungs- oder Veröffentlichungsseite\n"
+"# Für GitHub-Projekte können Sie die Markierungs- oder "
+"Veröffentlichungsseite\n"
 "# verwenden. Da die Archiv-URLs nur die Version als Name benutzen, wird\n"
-"# empfohlen, ein Filenamemangle zum Anpassen des Namens der heruntergeladenen\n"
+"# empfohlen, ein Filenamemangle zum Anpassen des Namens der "
+"heruntergeladenen\n"
 "# Datei zu verwenden:\n"
-"opts=\"filenamemangle=s/(?:.*\\/)?v?(\\ed[\\ed\\e.]*)\\e.tar\\e.gz/E<lt>projectE<gt>-$1.tar.gz/\" \\e\n"
-"  https://github.com/E<lt>userE<gt>/E<lt>projectE<gt>/tags (?:.*/)?v?(\\ed[\\ed\\e.]*)\\e.tar\\e.gz\n"
+"opts=\"filenamemangle=s/(?:.*\\/)?v?(\\ed[\\ed\\e.]*)\\e.tar\\e.gz/E<lt>"
+"projectE<gt>-$1.tar.gz/\" \\e\n"
+"  https://github.com/E<lt>userE<gt>/E<lt>projectE<gt>/tags "
+"(?:.*/)?v?(\\ed[\\ed\\e.]*)\\e.tar\\e.gz\n"
 
 #. type: Plain text
 #: ../scripts/uscan.1:88
@@ -18656,7 +18721,8 @@ msgid ""
 "http://code.google.com/p/E<lt>projectE<gt>/downloads/list?can=1 \\e\n"
 "  .*/E<lt>projectE<gt>-(\\ed[\\ed.]*)\\e.tar\\e.gz\n"
 msgstr ""
-"# Für Google-Code-Projekte sollten Sie die Downloads-Seite wie folgt benutzen:\n"
+"# Für Google-Code-Projekte sollten Sie die Downloads-Seite wie folgt "
+"benutzen:\n"
 "http://code.google.com/p/E<lt>projectE<gt>/downloads/list?can=1 \\e\n"
 "  .*/E<lt>projectE<gt>-(\\ed[\\ed.]*)\\e.tar\\e.gz\n"
 
@@ -18684,7 +18750,8 @@ msgid ""
 "# only be performed on the basename version number, not any path\n"
 "# version numbers.)\n"
 "opts=\"uversionmangle=s/^/0.0./\" \\e\n"
-"  ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/Wine-(.+)\\e.tar\\e.gz\n"
+"  ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/Wine-(.+)\\e.tar\\e.g"
+"z\n"
 msgstr ""
 "# Dies ist eine weitere Art, eine Site mit komischen Versionsnummern zu\n"
 "# handhaben, diesmal mittels Mangling (Anpassen von Paketnamen). (Beachten\n"
@@ -18692,7 +18759,8 @@ msgstr ""
 "# dieses Mangling nur für die Versionsnummer des Basispfads und nicht für\n"
 "# die Versionsnummern aller Pfade durchgeführt wird.)\n"
 "opts=\"uversionmangle=s/^/0.0./\" \\e\n"
-"  ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/Wine-(.+)\\e.tar\\e.gz\n"
+"  ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/development/Wine-(.+)\\e.tar\\e.g"
+"z\n"
 
 #. type: Plain text
 #: ../scripts/uscan.1:106
@@ -18715,12 +18783,14 @@ msgid ""
 "# The filename is found by taking the last component of the URL and\n"
 "# removing everything after any 'B<?>'.  If this would not make a usable\n"
 "# filename, use filenamemangle.  For example,\n"
-"# E<lt>A href=\"http://foo.bar.org/download/?path=&download=foo-0.1.1.tar.gz\"E<gt>\n"
+"# E<lt>A href=\"http://foo.bar.org/download/?path=&download=foo-0.1.1.tar.gz\""
+"E<gt>\n"
 "# could be handled as:\n"
 "# opts=filenamemangle=s/.*=(.*)/$1/ \\e\n"
 "#     http://foo.bar.org/download/\\e?path=&download=foo-(.+)\\e.tar\\e.gz\n"
 "#\n"
-"# E<lt>A href=\"http://foo.bar.org/download/?path=&download_version=0.1.1\"E<gt>\n"
+"# E<lt>A href=\"http://foo.bar.org/download/?path=&download_version=0.1.1\"E<g"
+"t>\n"
 "# could be handled as:\n"
 "# opts=filenamemangle=s/.*=(.*)/foo-$1\\e.tar\\e.gz/ \\e\n"
 "#    http://foo.bar.org/download/\\e?path=&download_version=(.+)\n"
@@ -18729,12 +18799,14 @@ msgstr ""
 "# genommen und alles nach einem »B<?>« entfernt wird. Falls dies nicht zu\n"
 "# einem brauchbaren Dateinamen führt, soll Filenamemangle verwendet werden.\n"
 "# Zum Beispiel könnte\n"
-"# E<lt>A href=\"http://foo.bar.org/download/?path=&download=foo-0.1.1.tar.gz\"E<gt>\n"
+"# E<lt>A href=\"http://foo.bar.org/download/?path=&download=foo-0.1.1.tar.gz\""
+"E<gt>\n"
 "# gehandhabt werden wie\n"
 "# opts=filenamemangle=s/.*=(.*)/$1/ \\e\n"
 "#     http://foo.bar.org/download/\\e?path=&download=foo-(.+)\\e.tar\\e.gz.\n"
 "#\n"
-"# E<lt>A href=\"http://foo.bar.org/download/?path=&download_version=0.1.1\"E<gt>\n"
+"# E<lt>A href=\"http://foo.bar.org/download/?path=&download_version=0.1.1\"E<g"
+"t>\n"
 "# könnte wie\n"
 "# opts=filenamemangle=s/.*=(.*)/foo-$1\\e.tar\\e.gz/ \\e\n"
 "#    http://foo.bar.org/download/\\e?path=&download_version=(.+)\n"
@@ -19448,10 +19520,9 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/uscan.1:413
-#, fuzzy, no-wrap
-#| msgid "B<--copyright-file> I<filename>"
+#, no-wrap
 msgid "B<--copyright-file >I<copyright-file>"
-msgstr "B<--copyright-file> I<Dateiname>"
+msgstr "B<--copyright-file> I<Copyright-Datei>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:417
@@ -19459,6 +19530,9 @@ msgid ""
 "Exclude files mentioned in B<Files-Excluded> in the given copyright file.  "
 "This is useful when running uscan not within a source package directory."
 msgstr ""
+"schließt Dateien aus, die in B<Files-Excluded> in der angegebenen "
+"Copyright-Datei erwähnt werden. Dies ist nützlich, wenn Uscan nicht innerhalb "
+"eines Quellpaketverzeichnisses ausgeführt wird."
 
 #. type: TP
 #: ../scripts/uscan.1:418
@@ -20091,7 +20165,8 @@ msgstr "gibt die Versionsnummer des Pakets der Ursprungsautoren explizit an."
 #: ../scripts/uupdate.1:57
 #, no-wrap
 msgid "B<--rootcmd >I<gain-root-command>, B<-r >I<gain-root-command>"
-msgstr "B<--rootcmd >I<Befehl_um_Root_zu_werden>, B<-r >I<Befehl_um_Root_zu_werden>"
+msgstr ""
+"B<--rootcmd >I<Befehl_um_Root_zu_werden>, B<-r >I<Befehl_um_Root_zu_werden>"
 
 #. type: Plain text
 #: ../scripts/uupdate.1:61
@@ -21138,13 +21213,6 @@ msgstr "B<wrap-and-sort> [I<Optionen>]"
 
 #. type: Plain text
 #: ../doc/wrap-and-sort.1:28
-#, fuzzy
-#| msgid ""
-#| "B<wrap-and-sort> wraps the package lists in Debian control files. By "
-#| "default the lists will only split into multiple lines if the entries are "
-#| "longer than 80 characters. B<wrap-and-sort> sorts the package lists in "
-#| "Debian control files and all I<.install> files. Beside that B<wrap-and-"
-#| "sort> removes trailing spaces in these files."
 msgid ""
 "B<wrap-and-sort> wraps the package lists in Debian control files. By default "
 "the lists will only split into multiple lines if the entries are longer than "
@@ -21154,9 +21222,10 @@ msgid ""
 msgstr ""
 "B<wrap-and-sort> bricht die Paketlisten in Debian-Steuerdateien um. "
 "Standardmäßig werden die Listen nur in mehrere Zeilen aufgeteilt, falls die "
-"Einträge länger als 80 Zeichen sind. B<wrap-and-sort> sortiert die "
-"Paketlisten in Debian-Steuerdateien und allen I<.install>-Dateien. Daneben "
-"entfernt B<wrap-and-sort> abschließende Leerzeichen in diesen Dateien."
+"Einträge länger als die maximale Längenbeschränkung von 79 Zeichen sind. "
+"B<wrap-and-sort> sortiert die Paketlisten in Debian-Steuerdateien und allen "
+"I<.install>-Dateien. Daneben entfernt B<wrap-and-sort> abschließende "
+"Leerzeichen in diesen Dateien."
 
 #. type: Plain text
 #: ../doc/wrap-and-sort.1:32
@@ -21177,16 +21246,13 @@ msgstr "B<-a>, B<--wrap-always>"
 
 #. type: Plain text
 #: ../doc/wrap-and-sort.1:41
-#, fuzzy
-#| msgid ""
-#| "Wrap all package lists in the Debian I<control> file even if the entries "
-#| "are shorter than 80 characters and could fit in one line."
 msgid ""
 "Wrap all package lists in the Debian I<control> file even if they do not "
 "exceed the line length limit and could fit in one line."
 msgstr ""
 "bricht alle Paketlisten in der Debian-Datei I<control> um, sogar dann, wenn "
-"die Einträge kürzer als 80 Zeichen sind und in eine Zeile passen."
+"sie die Zeilenlängenbeschränkung nicht überschreiten und in eine Zeile passen "
+"würden."
 
 #. type: TP
 #: ../doc/wrap-and-sort.1:41
@@ -21296,7 +21362,7 @@ msgstr "gibt alle Dateien aus, die angefasst wurden."
 #: ../doc/wrap-and-sort.1:73
 #, no-wrap
 msgid "B<--max-line-length=>I<max_line_length>"
-msgstr ""
+msgstr "B<--max-line-length=>I<maximale_Zeilenlänge>"
 
 #. type: Plain text
 #: ../doc/wrap-and-sort.1:78
@@ -21305,6 +21371,9 @@ msgid ""
 "file that exceed this length limit will be wrapped. The default maximum line "
 "length is 79 characters."
 msgstr ""
+"setzt die maximal erlaubte Zeilenlänge. Paketlisten in der "
+"Debian-I<control>-Datei, die diese Längenbeschränkung überschreiten, werden "
+"umgebrochen. Die voreingestellte maximale Zeilenlänge beträgt 79 Zeichen."
 
 #. type: Plain text
 #: ../doc/wrap-and-sort.1:82
