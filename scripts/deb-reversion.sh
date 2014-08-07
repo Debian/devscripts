@@ -183,6 +183,8 @@ change_version()
     dch $DCH_OPTIONS -v $VERSION -- $@
     call_hook
     gzip -9 -c debian/changelog >| $LOGFILE
+  else
+    call_hook
   fi
 
   sed -i -e "s,^Version: .*,Version: $VERSION," DEBIAN/control
