@@ -277,9 +277,6 @@ else
     # We do not replace this with a default directory to avoid accidentally
     # signing a broken package
     DEBRELEASE_DEBS_DIR="$(echo "${DEBRELEASE_DEBS_DIR%/}" | sed -e 's%/\+%/%g')"
-    if ! [ -d "$DEBRELEASE_DEBS_DIR" ]; then
-	debsdir_warning="config file specified DEBRELEASE_DEBS_DIR directory $DEBRELEASE_DEBS_DIR does not exist!"
-    fi
 
     # set config message
     MODIFIED_CONF=''
@@ -300,6 +297,7 @@ fi
 maint="$DEBSIGN_MAINT"
 signkey="$DEBSIGN_KEYID"
 debsdir="$DEBRELEASE_DEBS_DIR"
+debsdir_warning="config file specified DEBRELEASE_DEBS_DIR directory $DEBRELEASE_DEBS_DIR does not exist!"
 
 signcommand=''
 if [ -n "$DEBSIGN_PROGRAM" ]; then
@@ -342,6 +340,7 @@ do
 	--debs-dir)
 	    shift
 	    opt_debsdir="$(echo "${1%/}" | sed -e 's%/\+%/%g')"
+	    debsdir_warning="could not find directory $opt_debsdir!"
 	    ;;
 	--no-conf|--noconf)
 		echo "$PROGNAME: $1 is only acceptable as the first command-line option!" >&2
@@ -356,16 +355,6 @@ do
 done
 
 debsdir=${opt_debsdir:-$debsdir}
-# check sanity of debsdir
-if ! [ -d "$debsdir" ]; then
-    if [ -n "$debsdir_warning" ]; then
-        echo "$PROGNAME: $debsdir_warning" >&2
-        exit 1
-    else
-        echo "$PROGNAME: could not find directory $debsdir!" >&2
-        exit 1
-    fi
-fi
 
 if [ -z "$signcommand" ]; then
     echo "Could not find a signing program!" >&2
@@ -627,6 +616,11 @@ for valid format" >&2;
 # out its name from debian/changelog
 case $# in
     0)	# We have to parse debian/changelog to find the current version
+	# check sanity of debsdir
+	if ! [ -d "$debsdir" ]; then
+	    echo "$PROGNAME: $debsdir_warning" >&2
+	    exit 1
+	fi
 	if [ -n "$remotehost" ]; then
 	    echo "$PROGNAME: Need to specify a .changes, .dsc or .commands file location with -r!" >&2
 	    exit 1

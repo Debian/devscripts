@@ -119,7 +119,7 @@ the GNU General Public License, version 2 or later.
 EOF
 
 # Start by setting default values
-my $debsdir = '..';
+my $debsdir;
 my $debsdir_warning;
 my $check_dirname_level = 1;
 my $check_dirname_regex = 'PACKAGE(-.+)?';
@@ -159,9 +159,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     # installing a broken package
     $config_vars{'DEBRELEASE_DEBS_DIR'} =~ s%/+%/%;
     $config_vars{'DEBRELEASE_DEBS_DIR'} =~ s%(.)/$%$1%;
-    if (! -d $config_vars{'DEBRELEASE_DEBS_DIR'}) {
-	$debsdir_warning = "config file specified DEBRELEASE_DEBS_DIR directory $config_vars{'DEBRELEASE_DEBS_DIR'} does not exist!";
-    }
+    $debsdir_warning = "config file specified DEBRELEASE_DEBS_DIR directory $config_vars{'DEBRELEASE_DEBS_DIR'} does not exist!";
 
     foreach my $var (sort keys %config_vars) {
 	if ($config_vars{$var} ne $config_default{$var}) {
@@ -207,19 +205,6 @@ my ($targetarch, $targetgnusystem);
 $targetarch = $opt_a ? "-a$opt_a" : "";
 $targetgnusystem = $opt_t ? "-t$opt_t" : "";
 
-if ($opt_debsdir) {
-    $opt_debsdir =~ s%/+%/%;
-    $opt_debsdir =~ s%(.)/$%$1%;
-    if (! -d $opt_debsdir) {
-	$debsdir_warning = "--debs-dir directory $opt_debsdir does not exist!";
-    }
-    $debsdir = $opt_debsdir;
-}
-
-if ($debsdir_warning) {
-    die "$progname: $debsdir_warning\n";
-}
-
 if (defined $opt_level) {
     if ($opt_level =~ /^[012]$/) { $check_dirname_level = $opt_level; }
     else {
@@ -249,6 +234,17 @@ chomp $arch;
 my $chdir = 0;
 
 if (! defined $changes) {
+    if ($opt_debsdir) {
+	$opt_debsdir =~ s%/+%/%;
+	$opt_debsdir =~ s%(.)/$%$1%;
+	$debsdir_warning = "--debs-dir directory $opt_debsdir does not exist!";
+	$debsdir = $opt_debsdir;
+    }
+
+    if (! -d $debsdir) {
+	die "$progname: $debsdir_warning\n";
+    }
+
     # Look for .changes file via debian/changelog
     until (-r 'debian/changelog') {
 	$chdir = 1;
