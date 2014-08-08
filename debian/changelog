@@ -4,7 +4,7 @@ devscripts (2.14.7) UNRELEASED; urgency=low
   * deb-reversion: update change_version(), fixing the missing call_hook
     statement in the udeb case. That was overlooked when the changelog
     massaging was made conditional, and causes hooks to be ignored for
-    udebs.
+    udebs. (Closes: #757425)
 
   [ James McCoy ]
   * debsign/debi/debc: Delay checking for the existence of the
