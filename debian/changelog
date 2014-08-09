@@ -10,6 +10,8 @@ devscripts (2.14.7) UNRELEASED; urgency=low
   * debsign/debi/debc: Delay checking for the existence of the
     --debs-dir/DEBRELEASE_DEBS_DIR directory until we get to code that
     actually uses said directory.  (Closes: #544366)
+  * mk-build-deps: Pass the file, not package, names to unlink when --remove
+    is given.  (Closes: #757481)
 
  -- Cyril Brulebois <kibi@debian.org>  Fri, 08 Aug 2014 01:27:12 +0200
 

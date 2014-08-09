@@ -361,7 +361,7 @@ if ($opt_install) {
     }
 
     if ($opt_remove) {
-	foreach my $file (map { $_->{package} } @packages) {
+	foreach my $file (@deb_files) {
 	    unlink $file;
 	}
     }
