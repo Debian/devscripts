@@ -48,10 +48,10 @@ Select architecture-independent \fI.udeb\fR binary packages.
 Select \fI.udeb\fR binary packages. Implies \fB\-\-archudeb\fR and \fB\-\-indepudeb\fR.
 .TP
 .BR \-\-tar ,\  \-\-orig
-Select the \fI.tar\fR file.
+Select the upstream \fI.tar\fR file.
 .TP
-.B \-\-diff
-Select the Debian \fI.diff\fR file.
+.BR \-\-diff ,\  \-\-debtar
+Select the Debian \fI.debian.tar\fR or \fI.diff\fR file.
 .PP
 Each option may be prefixed by \fB\-\-no\fR to indicate that all files
 \fInot\fR matching the specification should be selected.
@@ -62,6 +62,16 @@ and negative filtering options (e.g. \fB\-\-no\-changes\fR) in the same
 .TP
 .B \-\-no\-fail\-on\-missing\fR, \fB\-r
 If any of the requested files were not found, do not output an error.
+.TP
+.B \-\-package\fR, \fB\-p
+Output package name part only.
+.TP
+.B \-\-sort\fR, \fB\-s
+Sort output alphabetically.
+.TP
+.B \-\-tac\fR, \fB\-t
+Reverse output order.
+
 .SH "EXAMPLES"
 Copy the result of a build to another machine:
 
