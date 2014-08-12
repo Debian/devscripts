@@ -1032,7 +1032,6 @@ sub main() {
 	# when --package is given, use it
 	if ($use_package) {
 	    $pkg = $use_package;
-	    $origtgz_name = $use_package; # FIXME: this should rather set srcpkg in unpack_source() directly
 	# else guess package from url
 	} elsif ($repo_url =~ m!/trunk/([a-z0-9.+-]+)!) { # svn with {trunk,tags,branches}/$pkg
 	    $pkg = $1;
@@ -1043,7 +1042,7 @@ sub main() {
 	} elsif ($repo_url =~ /([a-z0-9.+-]+)$/) { # catch-all
 	    $pkg = $1;
 	}
-
+	$origtgz_name = $pkg; # FIXME: this should rather set srcpkg in unpack_source() directly
     } else {  # package name passed on the command line
 	($version, $repo_type, $repo_url, $origtgz_name) = find_repo($pkg, $version);
 	unless ($repo_type) {
