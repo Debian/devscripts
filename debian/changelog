@@ -16,6 +16,7 @@ devscripts (2.14.7) UNRELEASED; urgency=low
     command line.  (Closes: #757614)
   * dcmd: Add --debtar option and restrict --tar/--orig to orig.tar.*.  Thanks
     to Osamu Aoki for the patch.  (Closes: #622561)
+  * grep-excuses: Remove useless call to “hostname --fqdn”.  (Closes: #758668)
 
   [ Benjamin Drung ]
   * Remove unused build-dependencies libjson-perl and libterm-size-perl

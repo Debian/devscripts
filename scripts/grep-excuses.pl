@@ -172,9 +172,6 @@ if (@ARGV) {
     die "$progname: too many arguments!  Try $progname --help for help.\n";
 }
 
-my $hostname = `hostname --fqdn`;
-chomp $hostname;
-
 if (system("command -v wget >/dev/null 2>&1") != 0) {
     die "$progname: this program requires the wget package to be installed\n";
 }
