@@ -23,6 +23,9 @@ devscripts (2.14.7) UNRELEASED; urgency=low
   [ Benjamin Drung ]
   * Remove unused build-dependencies libjson-perl and libterm-size-perl
 
+  [ Joachim Breitner ]
+  * mk-origtargz: Treat jars like zip files (Closes: #754203)
+
  -- Cyril Brulebois <kibi@debian.org>  Fri, 08 Aug 2014 01:27:12 +0200
 
 devscripts (2.14.6) unstable; urgency=medium

@@ -89,6 +89,16 @@ makeZipFile () {
 	rm -rf "$TMPDIR/foo-0.1"
 }
 
+makeJarFile () {
+	makeUpstreamFiles
+	cat > "$TMPDIR/MANIFEST.MF" <<END
+Manifest-Version: 1.0
+Main-Class: foo.bar
+END
+	(cd $TMPDIR; jar cf "foo-0.1.jar" MANIFEST.MF foo-0.1 )
+	rm -rf "$TMPDIR/foo-0.1" "$TMPDIR/MANIFEST.MF"
+}
+
 makeDebanDir() {
 	mkdir -p $TMPDIR/foo/debian
 	cat <<END > $TMPDIR/foo/debian/changelog
@@ -293,6 +303,21 @@ testRepackZip2GZ() {
 		"Successfully repacked foo-0.1.zip as foo_0.1.orig.tar.gz." \
 		--package foo --version 0.1 --copy foo-0.1.zip
 	assertTrue "original zip file does not exist" "[ -e $TMPDIR/foo-0.1.zip ]"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertType application/gzip $TMPDIR/foo_0.1.orig.tar.gz
+}
+
+testRepackJar2GZ() {
+	if ! which jar >/dev/null
+	then
+          # skip to avoid dependency on java-jdk
+	  return
+	fi
+	makeJarFile
+	run_mk_origtargz "" "" \
+		"Successfully repacked foo-0.1.jar as foo_0.1.orig.tar.gz." \
+		--package foo --version 0.1 --copy foo-0.1.jar
+	assertTrue "original zip file does not exist" "[ -e $TMPDIR/foo-0.1.jar ]"
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
 	assertType application/gzip $TMPDIR/foo_0.1.orig.tar.gz
 }

@@ -312,7 +312,7 @@ unless (-e $upstream) {
 
 my $mime = compression_guess_from_file($upstream);
 
-my $is_zipfile = $mime eq 'zip';
+my $is_zipfile = (defined $mime and $mime eq 'zip');
 my $is_tarfile = $upstream =~ $tar_regex;
 
 unless ($is_zipfile or $is_tarfile) {
