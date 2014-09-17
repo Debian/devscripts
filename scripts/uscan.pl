@@ -1468,6 +1468,7 @@ EOF
 
     # Call mk-origtargz (renames, repacks, etc.)
     my $mk_origtargz_out;
+    my $path = "$destdir/$newfile_base";
     my $target = $newfile_base;
     unless ($symlink eq "no") {
 	my @cmd = ("mk-origtargz");
@@ -1482,14 +1483,15 @@ EOF
 	    if ($exclusion && -e "debian/copyright");
 	push @cmd, "--copyright-file", $copyright_file
 	    if ($exclusion && defined $copyright_file);
-	push @cmd, "$destdir/$newfile_base";
+	push @cmd, $path;
 
 	spawn(exec => \@cmd,
 	      to_string => \$mk_origtargz_out,
 	      wait_child => 1);
 	chomp($mk_origtargz_out);
-	$target = $1 if $mk_origtargz_out =~ /Successfully .* (?:to|as) ([^,]+)\.$/;
-	$target = $1 if $mk_origtargz_out =~ /Leaving (.*) where it is/;
+	$path = $1 if $mk_origtargz_out =~ /Successfully .* (?:to|as) ([^,]+)\.$/;
+	$path = $1 if $mk_origtargz_out =~ /Leaving (.*) where it is/;
+	$target = basename($path);
     }
 
     if ($dehs) {
@@ -1497,8 +1499,8 @@ EOF
 	if (defined $mk_origtargz_out) {
 	    $msg .= "$mk_origtargz_out\n";
 	}
-	$dehs_tags{target} = basename($target);
-	$dehs_tags{'target-path'} = $target;
+	$dehs_tags{target} = $target;
+	$dehs_tags{'target-path'} = $path;
 	dehs_msg($msg);
     }
     else {
@@ -1519,9 +1521,9 @@ EOF
 	}
 
 	if ($watch_version > 1) {
-	    push @cmd, "--upstream-version", $newversion, $target;
+	    push @cmd, "--upstream-version", $newversion, $path;
 	} else {
-	    push @cmd, $target, $newversion;
+	    push @cmd, $path, $newversion;
 	}
 	my $actioncmd = join(" ", @cmd);
 	print "-- Executing user specified script\n     $actioncmd\n" if $verbose;
