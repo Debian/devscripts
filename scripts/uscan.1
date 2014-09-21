@@ -296,6 +296,11 @@ by a key found in the keyring \fBdebian/upstream/signing-key.pgp\fR or
 the armored keyring \fBdebian/upstream/signing-key.asc\fR.  If it is not
 valid, or not made by one of the listed keys, uscan will report an
 error.
+.TP
+\fBrepacksuffix=\fIsuffix\fR
+If the upstream sources are modified because \fBdebian/copyright\fR contains
+the \fBFiles-Excluded\fR field, \fIsuffix\fR will be appended to the upstream
+version of the repacked tar archive.
 .SH "Directory name checking"
 Similarly to several other scripts in the \fBdevscripts\fR package,
 \fBuscan\fR explores the requested directory trees looking for

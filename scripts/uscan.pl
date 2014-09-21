@@ -790,6 +790,9 @@ sub process_watchline ($$$$$$)
 		       or $opt eq 'nopassive') {
 		    $options{'pasv'}=0;
 		}
+		elsif ($opt =~ /^repacksuffix\s*=\s*(.+)/) {
+		    $options{'repacksuffix'} = $1;
+		}
 		elsif ($opt =~ /^uversionmangle\s*=\s*(.+)/) {
 		    @{$options{'uversionmangle'}} = split /;/, $1;
 		}
@@ -1474,6 +1477,7 @@ EOF
 	my @cmd = ("mk-origtargz");
 	push @cmd, "--package", $pkg;
 	push @cmd, "--version", $newversion;
+	push @cmd, '--repack-suffix', $options{repacksuffix} if defined $options{repacksuffix};
 	push @cmd, "--rename" if $symlink eq "rename";
 	push @cmd, "--copy"   if $symlink eq "copy";
 	push @cmd, "--repack" if $repack;
