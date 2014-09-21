@@ -25,6 +25,8 @@ devscripts (2.14.7) UNRELEASED; urgency=low
       command.
     + Add support for a repacksuffix option to the watch file.  This is passed
       through to mk-origtargz.  (Closes: #753772)
+    + Specify Referer header when traversing http(s) sites.  Thanks to David
+      Prévot for the patch.  (Closes: #739137)
   * mk-origtargz: Add a --repack-suffix option to adjust the upstream version
     when the upstream sources are modified (e.g., due to Files-Excluded).
 
