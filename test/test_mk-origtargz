@@ -99,7 +99,7 @@ END
 	rm -rf "$TMPDIR/foo-0.1" "$TMPDIR/MANIFEST.MF"
 }
 
-makeDebanDir() {
+makeDebianDir() {
 	mkdir -p $TMPDIR/foo/debian
 	cat <<END > $TMPDIR/foo/debian/changelog
 foo (0.1-1) unstable; urgency=low
@@ -186,7 +186,7 @@ assertType () {
 
 testSymlink() {
 	makeTarBall gz
-	makeDebanDir
+	makeDebianDir
 	run_mk_origtargz foo "" \
 		"Successfully symlinked ../foo-0.1.tar.gz to ../foo_0.1.orig.tar.gz." \
 		../foo-0.1.tar.gz
@@ -199,7 +199,7 @@ testSymlink() {
 
 testCopy() {
 	makeTarBall gz
-	makeDebanDir
+	makeDebianDir
 	run_mk_origtargz foo "" \
 		"Successfully copied ../foo-0.1.tar.gz to ../foo_0.1.orig.tar.gz." \
 		--copy ../foo-0.1.tar.gz
@@ -211,7 +211,7 @@ testCopy() {
 
 testRename() {
 	makeTarBall gz
-	makeDebanDir
+	makeDebianDir
 	run_mk_origtargz foo "" \
 		"Successfully renamed ../foo-0.1.tar.gz to ../foo_0.1.orig.tar.gz." \
 		--rename ../foo-0.1.tar.gz
@@ -355,7 +355,7 @@ testRepackXpi2XZ() {
 
 testExclude() {
 	makeTarBall gz
-	makeDebanDir
+	makeDebianDir
 	makeDebianCopyright
 	run_mk_origtargz foo "$expected_stderr_after_removal" \
 		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.gz, deleting 19 files from it." \
@@ -367,7 +367,7 @@ testExclude() {
 
 testExcludeXZ() {
 	makeTarBall xz
-	makeDebanDir
+	makeDebianDir
 	makeDebianCopyright
 	run_mk_origtargz foo "$expected_stderr_after_removal" \
 		"Successfully repacked ../foo-0.1.tar.xz as ../foo_0.1.orig.tar.xz, deleting 19 files from it." \
@@ -379,7 +379,7 @@ testExcludeXZ() {
 
 testExcludeZip() {
 	makeZipFile
-	makeDebanDir
+	makeDebianDir
 	makeDebianCopyright
 	run_mk_origtargz foo "$expected_stderr_after_removal" \
 		"Successfully repacked ../foo-0.1.zip as ../foo_0.1.orig.tar.xz, deleting 19 files from it." \
@@ -392,7 +392,7 @@ testExcludeZip() {
 testSameNameSymlink() {
 	makeTarBall gz
 	mv $TMPDIR/foo-0.1.tar.gz $TMPDIR/foo_0.1.orig.tar.gz
-	makeDebanDir
+	makeDebianDir
 	run_mk_origtargz foo "" \
 		"Leaving ../foo_0.1.orig.tar.gz where it is." \
 		 --symlink ../foo_0.1.orig.tar.gz
@@ -403,7 +403,7 @@ testSameNameSymlink() {
 testSameNameCopy() {
 	makeTarBall gz
 	mv $TMPDIR/foo-0.1.tar.gz $TMPDIR/foo_0.1.orig.tar.gz
-	makeDebanDir
+	makeDebianDir
 	run_mk_origtargz foo "" \
 		"Leaving ../foo_0.1.orig.tar.gz where it is." \
 		 --copy ../foo_0.1.orig.tar.gz
@@ -414,7 +414,7 @@ testSameNameCopy() {
 testSameNameRename() {
 	makeTarBall gz
 	mv $TMPDIR/foo-0.1.tar.gz $TMPDIR/foo_0.1.orig.tar.gz
-	makeDebanDir
+	makeDebianDir
 	run_mk_origtargz foo "" \
 		"Leaving ../foo_0.1.orig.tar.gz where it is." \
 		 --rename ../foo_0.1.orig.tar.gz
@@ -425,7 +425,7 @@ testSameNameRename() {
 testSameNameExclude() {
 	makeTarBall gz
 	mv $TMPDIR/foo-0.1.tar.gz $TMPDIR/foo_0.1.orig.tar.gz
-	makeDebanDir
+	makeDebianDir
 	makeDebianCopyright
 	run_mk_origtargz foo "$expected_stderr_after_removal" \
 		"Leaving ../foo_0.1.orig.tar.gz where it is, deleting 19 files from it." \
@@ -438,7 +438,7 @@ testSameNameExclude() {
 testSameNameExcludeSymlink() {
 	makeTarBall gz
 	ln -s foo-0.1.tar.gz $TMPDIR/foo_0.1.orig.tar.gz
-	makeDebanDir
+	makeDebianDir
 	makeDebianCopyright
 	run_mk_origtargz foo "$expected_stderr_after_removal" \
 		"Leaving ../foo_0.1.orig.tar.gz where it is, deleting 19 files from it." \
@@ -450,7 +450,7 @@ testSameNameExcludeSymlink() {
 
 testCopyrightFormatWarning() {
 	makeTarBall gz
-	makeDebanDir
+	makeDebianDir
 	makeWrongDebianCopyright
 	run_mk_origtargz foo \
 		"WARNING: The file debian/copyright mentions Files-Excluded, but its format is not recognized. Specify Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/ in order to remove files from the tarball with mk-origtargz." \
@@ -461,7 +461,7 @@ testCopyrightFormatWarning() {
 
 testBrokenTarWarning() {
 	makeBrokenTarBall
-	makeDebanDir
+	makeDebianDir
 	run_mk_origtargz foo \
 		"tar: This does not look like a tar archive
 tar: Skipping to next header
