@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.14.5\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
-"POT-Creation-Date: 2014-09-21 22:58-0400\n"
+"POT-Creation-Date: 2014-09-22 21:19-0400\n"
 "PO-Revision-Date: 2014-08-03 21:50+0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
@@ -5515,10 +5515,9 @@ msgstr "wählt die I<.tar>-Datei aus."
 
 #. type: TP
 #: ../scripts/dcmd.1:52
-#, fuzzy, no-wrap
-#| msgid "B<--diff>, B<-d>"
+#, no-wrap
 msgid "B<--diff>,\\ B<--debtar>"
-msgstr "B<--diff>, B<-d>"
+msgstr "B<--diff>, B<--debtar>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:55
@@ -5562,10 +5561,9 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/dcmd.1:65
-#, fuzzy, no-wrap
-#| msgid "B<--package> I<package>"
+#, no-wrap
 msgid "B<--package>, B<-p>"
-msgstr "B<--package> I<Paket>"
+msgstr "B<--package>, B<-p>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:68
@@ -5576,10 +5574,9 @@ msgstr "Name des Quellpakets"
 
 #. type: TP
 #: ../scripts/dcmd.1:68
-#, fuzzy, no-wrap
-#| msgid "B<--security>, B<-s>"
+#, no-wrap
 msgid "B<--sort>, B<-s>"
-msgstr "B<--security>, B<-s>"
+msgstr "B<--sort>, B<-s>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:71
@@ -5588,10 +5585,9 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/dcmd.1:71
-#, fuzzy, no-wrap
-#| msgid "B<--qa>, B<-q>"
+#, no-wrap
 msgid "B<--tac>, B<-t>"
-msgstr "B<--qa>, B<-q>"
+msgstr "B<--tac>, B<-t>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:74
@@ -16020,10 +16016,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:119
-#, fuzzy
-#| msgid "B<--local>, B<-l>I<suffix>"
 msgid "B<-S>, B<--repack-suffix> I<suffix>"
-msgstr "B<--local>, B<-l>I<Endung>"
+msgstr "B<-S>, B<--repack-suffix> I<Endung>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:121
@@ -19302,12 +19296,12 @@ msgstr ""
 #: ../scripts/uscan.1:299
 #, no-wrap
 msgid "B<repacksuffix=>I<suffix>"
-msgstr ""
+msgstr "B<repacksuffix=>I<Endung>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:306
 msgid ""
-"If the upstream sources are modified because B<debian/copyright> contains "
+"If the upstream sources are modified because I<debian/copyright> contains "
 "the B<Files-Excluded> field, I<suffix> will be appended to the upstream "
 "version of the repacked tar archive.  Common suffixes might be B<+dfsg1> to "
 "indicate the removal of non-DFSG code or B<+ds1> to indicate the removal of "
