@@ -12,8 +12,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2014-09-21 22:58-0400\n"
-"PO-Revision-Date: 2014-07-29 14:28-0400\n"
+"POT-Creation-Date: 2014-09-22 21:19-0400\n"
+"PO-Revision-Date: 2014-09-22 20:53-0400\n"
 "Last-Translator: David Prévot <david@tilapin.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
@@ -5528,24 +5528,19 @@ msgstr "B<--tar>, B<--orig>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:52
-#, fuzzy
-#| msgid "Select the I<.tar> file."
 msgid "Select the upstream I<.tar> file."
-msgstr "Sélectionner le fichier I<.tar>."
+msgstr "Sélectionner le fichier I<.tar> amont."
 
 #. type: TP
 #: ../scripts/dcmd.1:52
-#, fuzzy, no-wrap
-#| msgid "B<--diff>, B<-d>"
+#, no-wrap
 msgid "B<--diff>,\\ B<--debtar>"
-msgstr "B<--diff>, B<-d>"
+msgstr "B<--diff>, B<--debtar>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:55
-#, fuzzy
-#| msgid "Select the Debian I<.diff> file."
 msgid "Select the Debian I<.debian.tar> or I<.diff> file."
-msgstr "Sélectionner le fichier I<.diff> Debian."
+msgstr "Sélectionner le fichier Debian I<.debian.tar> ou I<.diff>."
 
 #. type: Plain text
 #: ../scripts/dcmd.1:58
@@ -5582,43 +5577,36 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/dcmd.1:65
-#, fuzzy, no-wrap
-#| msgid "B<--package> I<package>"
+#, no-wrap
 msgid "B<--package>, B<-p>"
-msgstr "B<--package> I<paquet>"
+msgstr "B<--package>, B<-p>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:68
-#, fuzzy
-#| msgid "Source package name."
 msgid "Output package name part only."
-msgstr "Nom d'un paquet source."
+msgstr "N’afficher que la partie du nom de paquet."
 
 #. type: TP
 #: ../scripts/dcmd.1:68
-#, fuzzy, no-wrap
-#| msgid "B<--security>, B<-s>"
+#, no-wrap
 msgid "B<--sort>, B<-s>"
-msgstr "B<--security>, B<-s>"
+msgstr "B<--sort>, B<-s>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:71
 msgid "Sort output alphabetically."
-msgstr ""
+msgstr "Trier alphabétiquement en sortie."
 
 #. type: TP
 #: ../scripts/dcmd.1:71
-#, fuzzy, no-wrap
-#| msgid "B<--qa>, B<-q>"
+#, no-wrap
 msgid "B<--tac>, B<-t>"
-msgstr "B<--qa>, B<-q>"
+msgstr "B<--tac>, B<-t>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:74
-#, fuzzy
-#| msgid "Give verbose output."
 msgid "Reverse output order."
-msgstr "Donner une sortie bavarde."
+msgstr "Inverser l’ordre de sortie."
 
 #. type: =head1
 #: ../scripts/dcmd.1:75 ../scripts/debsnap.1:93 ../scripts/debuild.1:367
@@ -10078,7 +10066,7 @@ msgid ""
 msgstr ""
 "Avec <option>-k <replaceable class=\"parameter\">hook</replaceable></"
 "option>, un script crochet (« hook ») peut être précisé, et lancé sur les "
-"paquets binaires dépaquetés juste avant qu'ils soient réempaquetés. Si vous "
+"paquets binaires dépaquetés juste avant qu'ils soient rempaquetés. Si vous "
 "voulez écrire les entrées du fichier <filename>changelog</filename> avec ce "
 "script, utilisez la commande « <command>dch -a -- <replaceable class="
 "\"parameter\">votre message</replaceable></command> ». (Alternativement, "
@@ -15975,9 +15963,9 @@ msgid ""
 "If the file has to be modified (because it is a B<zip> file, because of B<--"
 "repack> or B<Files-Excluded>), this option behaves like B<--copy>."
 msgstr ""
-"Si le fichier a été modifié (parce qu’il s’agit d’un fichier B<ZIP>, à cause "
-"de B<--repack> ou B<Files-Excluded>), cette option se comporte comme B<--"
-"copy>."
+"Si le fichier doit être modifié (parce qu’il s’agit d’un fichier B<ZIP>, à "
+"cause de B<--repack> ou à cause de B<Files-Excluded>), cette option se "
+"comporte comme B<--copy>."
 
 #. type: TP
 #: ../scripts/mk-origtargz.pl:104 ../scripts/uscan.1:402
@@ -16013,8 +16001,8 @@ msgid ""
 "deleted afterwards."
 msgstr ""
 "Si le fichier doit être modifié (parce qu’il s’agit d’un fichier B<ZIP>, à "
-"cause de B<--repack> ou B<Files-Excluded>), cela implique la suppression du "
-"fichier d’origine à la fin."
+"cause de B<--repack> ou à cause de B<Files-Excluded>), cela implique la "
+"suppression du fichier d’origine à la fin."
 
 #. type: TP
 #: ../scripts/mk-origtargz.pl:114 ../scripts/uscan.1:408
@@ -16033,24 +16021,17 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:119
-#, fuzzy
-#| msgid "B<--local>, B<-l>I<suffix>"
 msgid "B<-S>, B<--repack-suffix> I<suffix>"
-msgstr "B<--local>, B<-l>I<suffixe>"
+msgstr "B<-S>, B<--repack-suffix> I<suffixe>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:121
-#, fuzzy
-#| msgid ""
-#| "If the file has to be modified (because it is a B<zip> file, because of "
-#| "B<--repack> or B<Files-Excluded>), this option behaves like B<--copy>."
 msgid ""
 "If the file has to be modified, because of B<Files-Excluded>, append "
 "I<suffix> to the upstream version."
 msgstr ""
-"Si le fichier a été modifié (parce qu’il s’agit d’un fichier B<ZIP>, à cause "
-"de B<--repack> ou B<Files-Excluded>), cette option se comporte comme B<--"
-"copy>."
+"Si le fichier doit être modifié, à cause de B<Files-Excluded>, ajouter "
+"I<suffixe> à la version amont."
 
 #. type: TP
 #: ../scripts/mk-origtargz.pl:123 ../scripts/uscan.1:414
@@ -19308,17 +19289,22 @@ msgstr ""
 #: ../scripts/uscan.1:299
 #, no-wrap
 msgid "B<repacksuffix=>I<suffix>"
-msgstr ""
+msgstr "B<repacksuffix=>I<suffixe>"
 
 #. type: Plain text
 #: ../scripts/uscan.1:306
 msgid ""
-"If the upstream sources are modified because B<debian/copyright> contains "
+"If the upstream sources are modified because I<debian/copyright> contains "
 "the B<Files-Excluded> field, I<suffix> will be appended to the upstream "
 "version of the repacked tar archive.  Common suffixes might be B<+dfsg1> to "
 "indicate the removal of non-DFSG code or B<+ds1> to indicate the removal of "
 "embedded (DFSG) code copies."
 msgstr ""
+"Si les sources amont sont modifiées parce que I<debian/copyright> contient "
+"le champ B<Files-Excluded>, I<suffixe> sera ajouté à la version amont de "
+"l’archive tar rempaquetée. Par exemple, le suffixe peut être B<+dfsg1> pour "
+"indiquer la suppression de code non compatible avec les DFSG ou B<+ds1> pour "
+"indiquer la suppression de copies de code (DFSG) embarquées."
 
 # NOTE: "and in order to promote efficiency" ?
 #. type: Plain text
