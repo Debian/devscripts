@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: devscripts 2.14.5\n"
+"Project-Id-Version: devscripts 2.14.6\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
 "POT-Creation-Date: 2014-09-22 21:19-0400\n"
-"PO-Revision-Date: 2014-08-03 21:50+0200\n"
+"PO-Revision-Date: 2014-09-23 21:32+0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
 "Language: de\n"
@@ -5508,10 +5508,8 @@ msgstr "B<--tar>, B<--orig>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:52
-#, fuzzy
-#| msgid "Select the I<.tar> file."
 msgid "Select the upstream I<.tar> file."
-msgstr "wählt die I<.tar>-Datei aus."
+msgstr "wählt die I<.tar>-Datei der Originalautoren aus."
 
 #. type: TP
 #: ../scripts/dcmd.1:52
@@ -5521,10 +5519,8 @@ msgstr "B<--diff>, B<--debtar>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:55
-#, fuzzy
-#| msgid "Select the Debian I<.diff> file."
 msgid "Select the Debian I<.debian.tar> or I<.diff> file."
-msgstr "wählt die Debian-I<.diff>-Datei aus."
+msgstr "wählt die Debian-I<.debian.tar> oder Debian-I<.diff>-Datei aus."
 
 #. type: Plain text
 #: ../scripts/dcmd.1:58
@@ -5567,10 +5563,8 @@ msgstr "B<--package>, B<-p>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:68
-#, fuzzy
-#| msgid "Source package name."
 msgid "Output package name part only."
-msgstr "Name des Quellpakets"
+msgstr "gibt nur den Paketnamensteil aus."
 
 #. type: TP
 #: ../scripts/dcmd.1:68
@@ -5581,7 +5575,7 @@ msgstr "B<--sort>, B<-s>"
 #. type: Plain text
 #: ../scripts/dcmd.1:71
 msgid "Sort output alphabetically."
-msgstr ""
+msgstr "sortiert die Ausgabe alphabetisch."
 
 #. type: TP
 #: ../scripts/dcmd.1:71
@@ -5591,10 +5585,8 @@ msgstr "B<--tac>, B<-t>"
 
 #. type: Plain text
 #: ../scripts/dcmd.1:74
-#, fuzzy
-#| msgid "Give verbose output."
 msgid "Reverse output order."
-msgstr "erzeugt eine detaillierte Ausgabe."
+msgstr "kehrt die Reihenfolge der Ausgabe um."
 
 #. type: =head1
 #: ../scripts/dcmd.1:75 ../scripts/debsnap.1:93 ../scripts/debuild.1:367
@@ -16021,17 +16013,12 @@ msgstr "B<-S>, B<--repack-suffix> I<Endung>"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:121
-#, fuzzy
-#| msgid ""
-#| "If the file has to be modified (because it is a B<zip> file, because of "
-#| "B<--repack> or B<Files-Excluded>), this option behaves like B<--copy>."
 msgid ""
 "If the file has to be modified, because of B<Files-Excluded>, append "
 "I<suffix> to the upstream version."
 msgstr ""
-"Falls die Datei verändert werden muss (da es aufgrund von B<--repack> oder "
-"B<Files-Excluded> eine B<Zip>-Datei ist), verhält sich diese Option wie B<--"
-"copy>."
+"Falls die Datei aufgrund von B<Files-Excluded> verändert werden muss, wird "
+"I<Endung> an die Version der Originalautoren angehängt."
 
 #. type: TP
 #: ../scripts/mk-origtargz.pl:123 ../scripts/uscan.1:414
@@ -19307,6 +19294,12 @@ msgid ""
 "indicate the removal of non-DFSG code or B<+ds1> to indicate the removal of "
 "embedded (DFSG) code copies."
 msgstr ""
+"Falls die Quellen der Originalautoren verändert wurden, weil "
+"I<debian/copyright> das Feld B<Files-Excluded> enthält, wird I<Endung> an die "
+"Version der Originalautoren des neu gepackten Tar-Archivs gehängt. "
+"Gebräuchliche Endungen könnten B<+dfsg1> zum Anzeigen von Nicht-DFSG-Code "
+"oder B<+ds1> sein, das anzeigt, dass eingebettete (DFSG-)Kopien des Codes "
+"entfernt wurden."
 
 #. type: Plain text
 #: ../scripts/uscan.1:321
