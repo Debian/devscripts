@@ -3973,7 +3973,7 @@ sub edit {
     system("sensible-editor $filename");
     open(OUT_MAIL, "<$filename")
 	or die "$progname: reading from temporary file: $!\n";
-    $message = "";
+    undef $message;
     while(<OUT_MAIL>) {
 	$message .= $_;
     }

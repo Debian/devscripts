@@ -29,6 +29,8 @@ devscripts (2.14.7) UNRELEASED; urgency=low
       Prévot for the patch.  (Closes: #739137)
   * mk-origtargz: Add a --repack-suffix option to adjust the upstream version
     when the upstream sources are modified (e.g., due to Files-Excluded).
+  * bts: Don't send the email when the user saves an empty body for the email.
+    (Closes: #762888)
 
   [ Benjamin Drung ]
   * Remove unused build-dependencies libjson-perl and libterm-size-perl
