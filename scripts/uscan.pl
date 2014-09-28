@@ -851,6 +851,10 @@ sub process_watchline ($$$$$$)
 		return 1;
 	    }
 	    $keyring = first { -r $_ } qw(debian/upstream/signing-key.pgp debian/upstream/signing-key.asc debian/upstream-signing-key.pgp);
+	    if (!defined $keyring) {
+		uscan_warn "$progname warning: pgpsigurlmangle option exists, but the upstream keyring does not exist\n  in $watchfile, skipping:\n  $line\n";
+		return 1;
+	    }
 	    if ($keyring =~ m/\.asc$/) {
 		if (!$havegpg) {
 		    uscan_warn "$progname warning: $keyring is armored but gpg/gpg2 is not available to dearmor it\n  in $watchfile, skipping:\n $line\n";
@@ -861,10 +865,6 @@ sub process_watchline ($$$$$$)
 		spawn(exec => [$havegpg, '--homedir', $gpghome, '--no-options', '-q', '--batch', '--no-default-keyring', '--import', $keyring],
 		      wait_child => 1);
 		$keyring = "$gpghome/pubring.gpg";
-	    }
-	    if (!defined $keyring) {
-		uscan_warn "$progname warning: pgpsigurlmangle option exists, but the upstream keyring does not exist\n  in $watchfile, skipping:\n  $line\n";
-		return 1;
 	    }
 	}
 

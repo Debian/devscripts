@@ -1,3 +1,10 @@
+devscripts (2.14.8) UNRELEASED; urgency=medium
+
+  * uscan: Ensure $keyring is defined before trying to use it when checking
+    whether the upstream keyring exists.
+
+ -- James McCoy <jamessan@debian.org>  Sun, 28 Sep 2014 18:44:12 -0400
+
 devscripts (2.14.7) unstable; urgency=low
 
   [ Cyril Brulebois ]
