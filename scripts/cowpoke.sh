@@ -92,11 +92,11 @@ get_archdist_vars()
 
 display_override_vars()
 {
-    _OVERRIDE_OPTIONS="CREATE_OPTS UPDATE_OPTS BUILD_OPTS"
+    _OVERRIDE_OPTIONS="CREATE_OPTS UPDATE_OPTS BUILD_OPTS SIGN_KEYID UPLOAD_QUEUE"
 
     for var in $_OVERRIDE_OPTIONS; do
 	eval "override=( \"\${OVERRIDE_${var}[@]}\" )"
-	[ ${#override[@]} -eq 0 ] || echo "   $var =$(printf " '%s'" "${override[@]}")"
+	[ ${#override[@]} -eq 0 ] || echo "   override: $var =$(printf " '%s'" "${override[@]}")"
     done
 }
 
@@ -132,6 +132,8 @@ cowpoke [options] package.dsc
                          not specified, return them to the current directory.
    --no-return           Do not copy results of the build to RETURN_DIR
                          (overriding a path set for it in the config files).
+   --sign="keyid"        Specify the key to sign packages with.
+   --upload="queue"      Specify the dput queue to upload signed packages to.
 
   The current default configuration is:
 
@@ -218,7 +220,7 @@ for arg; do
 	    # then combine back into a single argument at the final point of use.
 	    #
 	    # Which _should_ DTRT for anyone who isn't trying to blow this up deliberately
-	    # any maybe will still do it for them too in spite of their efforts. But unless
+	    # and maybe will still do it for them too in spite of their efforts. But unless
 	    # someone finds a sensible case this fails on, I'm not going to cry over people
 	    # who want to stuff up their own system with input they created themselves.
 	    val=${arg#*=}
@@ -236,6 +238,14 @@ for arg; do
 
 	--build-opts=*)
 	    OVERRIDE_BUILD_OPTS+=( "${arg#*=}" )
+	    ;;
+
+	--sign=*)
+	    OVERRIDE_SIGN_KEYID=${arg#*=}
+	    ;;
+
+	--upload=*)
+	    OVERRIDE_UPLOAD_QUEUE=${arg#*=}
 	    ;;
 
 	*.dsc)
@@ -443,7 +453,8 @@ for arch in $BUILDD_ARCH; do
     CHANGES="$arch.changes"
     for dist in $BUILDD_DIST; do
 
-	eval "sign_keyid=\"\$${arch}_${dist}_SIGN_KEYID\""
+	sign_keyid=$OVERRIDE_SIGN_KEYID
+	[ -n "$sign_keyid" ] || eval "sign_keyid=\"\$${arch}_${dist}_SIGN_KEYID\""
 	[ -n "$sign_keyid" ] || sign_keyid="$SIGN_KEYID"
 	[ -n "$sign_keyid" ] || continue
 
@@ -460,7 +471,8 @@ for arch in $BUILDD_ARCH; do
 		YES | yes)
 		    debsign "-k$sign_keyid" -r "$BUILDD_USER$BUILDD_HOST" "$RESULT_DIR/${PACKAGE}_$CHANGES"
 
-		    eval "upload_queue=\"\$${arch}_${dist}_UPLOAD_QUEUE\""
+		    upload_queue=$OVERRIDE_UPLOAD_QUEUE
+		    [ -n "$upload_queue" ] || eval "upload_queue=\"\$${arch}_${dist}_UPLOAD_QUEUE\""
 		    [ -n "$upload_queue" ] || upload_queue="$UPLOAD_QUEUE"
 
 		    if [ -n "$upload_queue" ]; then

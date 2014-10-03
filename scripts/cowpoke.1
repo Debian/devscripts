@@ -119,6 +119,16 @@ This option will override any \fBBUILD_OPTS\fP specified for a chroot in the
 cowpoke configuration files.
 
 .TP
+.BI \-\-sign= keyid
+Specify the key to sign packages with.  This will override any \fBSIGN_KEYID\fP
+specified for a chroot in the cowpoke configuration files.
+
+.TP
+.BI \-\-upload= queue
+Specify the dput queue to upload signed packages to.  This will override any
+\fBUPLOAD_QUEUE\fP specified for a chroot in the cowpoke configuration files.
+
+.TP
 .B \-\-help
 Display a brief summary of the available options and current configuration.
 
@@ -179,7 +189,8 @@ If this option is unset or an empty string, no attempt to sign packages will be
 made.  It may be overridden on an \fIarch\fP and \fIdist\fP specific basis using
 the
 .IB arch _ dist _SIGN_KEYID
-option described below.
+option described below, or per-invocation with the \fB\-\-sign\fP command line
+option.
 
 .TP
 .B UPLOAD_QUEUE
@@ -190,7 +201,8 @@ signed.  If this option is unset or an empty string, no attempt to upload packag
 will be made.  If \fBSIGN_KEYID\fP is not set, this option will be ignored entirely.
 It may be overridden on an \fIarch\fP and \fIdist\fP specific basis using the
 .IB arch _ dist _UPLOAD_QUEUE
-option described below.
+option described below, or per-invocation with the \fB\-\-upload\fP command line
+option.
 
 
 .TP
@@ -294,11 +306,13 @@ except that it acts during the build phase of \fBcowbuilder\fP.
 
 .TP
 .IB arch _ dist _SIGN_KEYID
-An optional arch and dist specific override for the global SIGN_KEYID option.
+An optional arch and dist specific override for the global \fBSIGN_KEYID\fP
+option.
 
 .TP
 .IB arch _ dist _UPLOAD_QUEUE
-An optional arch and dist specific override for the global UPLOAD_QUEUE option.
+An optional arch and dist specific override for the global \fBUPLOAD_QUEUE\fP
+option.
 
 
 .SH CONFIGURATION FILES
