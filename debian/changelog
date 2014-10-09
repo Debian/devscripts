@@ -1,8 +1,14 @@
 devscripts (2.14.8) UNRELEASED; urgency=medium
 
   [ James McCoy ]
-  * uscan: Ensure $keyring is defined before trying to use it when checking
-    whether the upstream keyring exists.
+  * uscan:
+    + Ensure $keyring is defined before trying to use it when checking whether
+      the upstream keyring exists.
+    + Strip the Referer header when using qa.debian.org's Sourceforge
+      redirector.  When there's a foreign Referer header, Sourceforge responds
+      with a web page containing a <meta refresh=...> redirect to the actual
+      file, causing uscan to save the web page rather than the file.  (Closes:
+      #764367)
 
   [ Ron Lee ]
   * cowpoke: Add --sign and --upload command line overrides.
