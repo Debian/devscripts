@@ -9,6 +9,12 @@ devscripts (2.14.8) UNRELEASED; urgency=medium
       with a web page containing a <meta refresh=...> redirect to the actual
       file, causing uscan to save the web page rather than the file.  (Closes:
       #764367)
+  * uupdate: When updating a 1.0 source format package, remove any symlinks in
+    the new upstream source before applying the Debian diff, restoring the
+    symlinks after.  This prevents patch from following the symlinks, which
+    may point to targets outside of the source tree, when applying the diff.
+    Thanks to Jakub Wilk for the discovery and suggested fix.
+    (Closes: #737160, CVE-2014-1833)
 
   [ Ron Lee ]
   * cowpoke: Add --sign and --upload command line overrides.
