@@ -798,7 +798,7 @@ else
 	    STATUS=1
 	fi
 
-	# Reinstate symlinks, warning if the
+	# Reinstate symlinks, warning for any which fail
 	for (( i=0; $i < ${#LINKS[@]}; i=$(($i+2)) )); do
 	    target="${LINKS[$i]}"
 	    link="${LINKS[$(($i+1))]}"
