@@ -55,6 +55,7 @@ use filetest 'access';
 use Cwd;
 BEGIN { push @INC, '/usr/share/devscripts'; }
 use Devscripts::Compression;
+use Dpkg::IPC;
 use IO::Handle;  # for flushing
 use vars qw(*BUILD *OLDOUT *OLDERR);  # prevent a warning
 
@@ -967,7 +968,17 @@ if ($command_version eq 'dpkg') {
     # to debsign or dpkg-sig
     # Call to dpkg-architecture to set DEB_{BUILD,HOST}_* environment
     # variables
-    foreach (split /\n/, `dpkg-architecture -a${targetarch} -t${targetgnusystem} -f`) {
+    my @dpkgarch = 'dpkg-architecture';
+    if ($targetarch && $targetgnusystem) {
+	push @dpkgarch, "-a${targetarch}", "-t${targetgnusystem}";
+    }
+    push @dpkgarch, '-f';
+
+    my $archinfo;
+    spawn(exec => [@dpkgarch],
+	  to_string => \$archinfo,
+	  wait_child => 1);
+    foreach (split /\n/, $archinfo) {
 	/^(.*)=(.*)$/ and $ENV{$1} = $2;
     }
 
@@ -977,9 +988,7 @@ if ($command_version eq 'dpkg') {
     if ($sourceonly) {
 	$arch = 'source';
     } else {
-	$arch=`dpkg-architecture -a${targetarch} -t${targetgnusystem} -qDEB_HOST_ARCH`;
-	chomp $arch;
-	fatal "couldn't determine host architecture!?" if ! $arch;
+	$arch = $ENV{DEB_HOST_ARCH};
     }
 
     # Handle dpkg source format "3.0 (git)" packages (no tarballs)
