@@ -637,7 +637,11 @@ case $# in
 
 	if [ "x$sourceonly" = x ]
 	then
-	    mustsetvar arch "`dpkg-architecture -a${targetarch} -t${targetgnusystem} -qDEB_HOST_ARCH`" "build architecture"
+	    if [ -n "$targetarch" ] && [ -n "$targetgnusystem" ]; then
+		mustsetvar arch "$(dpkg-architecture "-a${targetarch}" "-t${targetgnusystem}" -qDEB_HOST_ARCH)" "build architecture"
+	    else
+		mustsetvar arch "$(dpkg-architecture -qDEB_HOST_ARCH)" "build architecture"
+	    fi
 	else
 	    arch=source
 	fi

@@ -340,7 +340,11 @@ fi
 
 # The next part is based on debi
 
-setq arch "`dpkg-architecture -a${targetarch} -t${targetgnusystem} -qDEB_HOST_ARCH`" "build architecture"
+if [ -n "$targetarch" ] && [ -n "$targetgnusystem" ]; then
+    setq arch "$(dpkg-architecture "-a${targetarch}" "-t${targetgnusystem}" -qDEB_HOST_ARCH)" "build architecture"
+else
+    setq arch "$(dpkg-architecture -qDEB_HOST_ARCH)" "build architecture"
+fi
 
 pva="${package}_${non_epoch_version}_${arch}"
 changes="$pva.changes"

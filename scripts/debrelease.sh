@@ -287,8 +287,10 @@ fi
 
 if [ "x$sourceonly" = "xsource" ]; then
     arch=source
+elif [ -n "$targetarch" ] && [ -n "$targetgnusystem" ]; then
+    mustsetvar arch "$(dpkg-architecture "-a${targetarch}" "-t${targetgnusystem}" -qDEB_HOST_ARCH)" "build architecture"
 else
-    mustsetvar arch "`dpkg-architecture -a${targetarch} -t${targetgnusystem} -qDEB_HOST_ARCH`" "build architecture"
+    mustsetvar arch "$(dpkg-architecture -qDEB_HOST_ARCH)" "build architecture"
 fi
 
 sversion=`echo "$version" | perl -pe 's/^\d+://'`

@@ -1,3 +1,10 @@
+devscripts (2.14.10) UNRELEASED; urgency=medium
+
+  * Fix all the other calls to dpkg-architecture in devscripts.
+    (Closes: #764963 ... again)
+
+ -- James McCoy <jamessan@debian.org>  Mon, 13 Oct 2014 22:33:10 -0400
+
 devscripts (2.14.9) unstable; urgency=medium
 
   * debuild: Only pass -a/-t to dpkg-architecture when the user has specified
