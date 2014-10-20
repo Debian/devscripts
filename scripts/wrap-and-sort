@@ -44,8 +44,22 @@ SUPPORTED_FILES = (
     "control*.in",
     "copyright",
     "copyright.in",
+    "dirs",
+    "*.dirs",
+    "docs",
+    "*.docs",
+    "examples",
+    "*.examples",
+    "info",
+    "*.info",
     "install",
     "*.install",
+    "links",
+    "*.links",
+    "mainscript",
+    "*.maintscript",
+    "manpages",
+    "*.manpages",
 )
 
 
@@ -167,7 +181,8 @@ def wrap_and_sort(options):
             print(copyright_file)
         remove_trailing_whitespaces(copyright_file)
 
-    install_files = [f for f in options.files if re.search("install$", f)]
+    pattern = "(dirs|docs|examples|info|install|links|maintscript|manpages)$"
+    install_files = [f for f in options.files if re.search(pattern, f)]
     for install_file in sorted(install_files):
         if options.verbose:
             print(install_file)

@@ -28,6 +28,11 @@ devscripts (2.15.1+exp1) UNRELEASED; urgency=medium
   [ Iain Lane ]
   * rmadison: The short option for --regex is -r, not -s.
 
+  [ Fabian Greffrath ]
+  * wrap-and-sort: Add dirs, docs, examples, info, links, maintscript and
+    manpages (all can also be prefixed by the binary package name) to the
+    files in the debian/ directory that get sorted alphabetically.  (Closes: #765338)
+
  -- James McCoy <jamessan@debian.org>  Sat, 03 Jan 2015 00:47:36 -0500
 
 devscripts (2.15.1) unstable; urgency=medium
