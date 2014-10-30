@@ -645,7 +645,8 @@ if (! $opt_create || ($opt_create && $opt_news)) {
     fatal "No maintainer in changelog!"
 	unless exists $changelog->{Maintainer};
     $changelog->{Maintainer} = decode_utf8($changelog->{Maintainer});
-    ($MAINTAINER,$EMAIL) = ($changelog->{Maintainer} =~ /^([^<]+) <(.*)>/);
+    ($MAINTAINER,$EMAIL) = ($changelog->{Maintainer} =~ /^([^<]*) <(.*)>/);
+    $MAINTAINER ||= '';
     fatal "No distribution in changelog!"
 	unless exists $changelog->{Distribution};
     if ($vendor eq 'Ubuntu') {
@@ -1342,7 +1343,7 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
 	    ($dist_indicator = $1) =~ s/[!:.,;]$//;
 	    chomp $dist_indicator;
 	}
-	elsif (/^ --\s+([^<]+)\s+/) {
+	elsif (/^ --\s+([^<]+)\s+/ || /^ --\s+<(.+?)>/) {
 	    $lastmaint=$1;
 	    # Remember where we are so we can skip back afterwards
 	    $savedline = $line;

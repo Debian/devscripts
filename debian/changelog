@@ -19,6 +19,10 @@ devscripts (2.14.11) UNRELEASED; urgency=medium
       (skipping the test on failure) and restore the original permissions on
       completion.  (Closes: #749729)
 
+  [ Adam D. Barratt ]
+  * debchange: Fix handling of changelogs where the most recent trailer line
+    does not include a maintainer name.  (Closes: #766516)
+
  -- Paul Wise <pabs@debian.org>  Sun, 19 Oct 2014 17:27:24 +0800
 
 devscripts (2.14.10) unstable; urgency=medium
