@@ -225,7 +225,7 @@ class TestGroup(object):
             allow_stderr = False
         for r in restrictions:
             if r == 'rw-build-tree':
-                options.needs_rw_build_tree = True
+                options.rw_build_tree_needed = True
             elif r == 'needs-root':
                 if os.getuid() != 0:
                     raise Skip('this test needs root privileges')
