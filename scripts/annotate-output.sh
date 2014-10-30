@@ -25,10 +25,10 @@ progname=$(basename $0)
 addtime ()
 {
 	while IFS= read -r line; do
-		echo "`date ${FMT}` $1: $line"
+		printf "%s %s: %s\n" "$(date "${FMT}")" "$1" "$line"
 	done
 	if [ ! -z "$line" ]; then
-		echo -n "`date ${FMT}` $1: $line"
+		printf "%s %s: %s" "$(date "${FMT}")" "$1" "$line"
 	fi
 }
 
@@ -78,11 +78,11 @@ mkfifo $OUT $ERR || exit 1
 addtime O < $OUT &
 addtime E < $ERR &
 
-echo "`date ${FMT}` I: Started $@"
+echo "Started $@" | addtime I
 "$@" > $OUT 2> $ERR ; EXIT=$?
 rm -f $OUT $ERR
 wait
 
-echo "`date ${FMT}` I: Finished with exitcode $EXIT"
+echo "Finished with exitcode $EXIT" | addtime I
 
 exit $EXIT

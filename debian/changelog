@@ -8,6 +8,8 @@ devscripts (2.14.11) UNRELEASED; urgency=medium
     (Closes: #766885)
   * mk-origtargz: Warn about unmatched Files-Excluded patterns.  (Closes:
     #766641)
+  * annotate-output: Fix handling of a date format that contains whitespace.
+    (Closes: #766180)
 
   [ Jakub Wilk ]
   * sadt:
