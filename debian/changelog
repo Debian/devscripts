@@ -6,6 +6,8 @@ devscripts (2.14.11) UNRELEASED; urgency=medium
   [ James McCoy ]
   * debcommit: Correctly show --strip-message is the default in --help.
     (Closes: #766885)
+  * mk-origtargz: Warn about unmatched Files-Excluded patterns.  (Closes:
+    #766641)
 
  -- Paul Wise <pabs@debian.org>  Sun, 19 Oct 2014 17:27:24 +0800
 

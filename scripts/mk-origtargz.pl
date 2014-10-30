@@ -420,13 +420,22 @@ if (@exclude_globs) {
     chomp @files;
 
     # find out what to delete
-    my @exclude_regexes = map { glob_to_regex($_) } @exclude_globs;
-    my $regex = '^(?:[^/]*/)?' # Possible leading directory, ignore it
-	      . '(?:' . join('|', @exclude_regexes) . ')' # User patterns
-	      . '(?:/.*)?$'; # Possible trailing / for a directory
+    my @exclude_info = map { { glob => $_, used => 0, regex => glob_to_regex($_) } } @exclude_globs;
     for my $filename (@files) {
-	if ($filename =~ m/$regex/) {
-	    push @to_delete, $filename;
+	for my $info (@exclude_info) {
+	    if ($filename =~ m@^(?:[^/]*/)?        # Possible leading directory, ignore it
+				(?:$info->{regex}) # User pattern
+				(?:/.*)?$          # Possible trailing / for a directory
+			      @x) {
+		push @to_delete, $filename;
+		$info->{used} = 1;
+	    }
+	}
+    }
+
+    for my $info (@exclude_info) {
+	if (!$info->{used}) {
+	    warn "No files matched excluded pattern: $info->{glob}\n";
 	}
     }
 
@@ -559,7 +568,9 @@ sub glob_to_regex {
     for my $c ($glob =~ m/(.)/gs) {
 	if ($c eq '.' || $c eq '(' || $c eq ')' || $c eq '|' ||
 	    $c eq '+' || $c eq '^' || $c eq '$' || $c eq '@' || $c eq '%' ||
-	    $c eq '{' || $c eq '}' || $c eq '[' || $c eq ']') {
+	    $c eq '{' || $c eq '}' || $c eq '[' || $c eq ']' ||
+	    # Escape '#' since we're using /x in the pattern match
+	    $c eq '#') {
 	    $regex .= "\\$c";
 	}
 	elsif ($c eq '*') {
