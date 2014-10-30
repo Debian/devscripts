@@ -212,8 +212,8 @@ Options:
    -C --confirm        Ask for confirmation of the message before commit
    -e --edit           Edit the message in EDITOR before commit
    -a --all            Commit all files (default except for git)
-   -s --strip-message  Strip the leading '* ' from the commit message
-   --no-strip-message  Do not strip a leading '* ' (default)
+   -s --strip-message  Strip the leading '* ' from the commit message (default)
+   --no-strip-message  Do not strip a leading '* '
    --sign-commit       Enable signing of the commit (git, hg, and bzr)
    --no-sign-commit    Do not sign the commit (default)
    --sign-tags         Enable signing of tags (git only)
