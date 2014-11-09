@@ -624,7 +624,7 @@ my $MAINTAINER = 'MAINTAINER';
 my $EMAIL = 'EMAIL';
 my $DISTRIBUTION = 'UNRELEASED';
 my $bpo_dist = '';
-my %bpo_dists = ( 60, 'squeeze', 70, 'wheezy' );
+my %bpo_dists = ( 60, 'squeeze', 70, 'wheezy', 80, 'jessie' );
 my $latest_bpo_dist = '70';
 my $CHANGES = '';
 # Changelog urgency, possibly propogated to NEWS files

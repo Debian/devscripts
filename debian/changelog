@@ -20,8 +20,10 @@ devscripts (2.14.11) UNRELEASED; urgency=medium
       completion.  (Closes: #749729)
 
   [ Adam D. Barratt ]
-  * debchange: Fix handling of changelogs where the most recent trailer line
-    does not include a maintainer name.  (Closes: #766516)
+  * debchange:
+    + Fix handling of changelogs where the most recent trailer line does not
+      include a maintainer name.  (Closes: #766516)
+    + Add jessie-backports to the version mapping for --bpo.
   * bts: Support the "stretch", "buster", "stretch-ignore" and "buster-ignore"
     tags.
 
