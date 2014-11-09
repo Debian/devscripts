@@ -22,6 +22,7 @@ devscripts (2.14.11) UNRELEASED; urgency=medium
   [ Adam D. Barratt ]
   * debchange: Fix handling of changelogs where the most recent trailer line
     does not include a maintainer name.  (Closes: #766516)
+  * bts: Support the "stretch" and "stretch-ignore" tags.
 
  -- Paul Wise <pabs@debian.org>  Sun, 19 Oct 2014 17:27:24 +0800
 

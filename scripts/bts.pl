@@ -159,6 +159,7 @@ our (@gTags, @valid_tags, %valid_tags);
            "fixed-upstream", "l10n", "etch", "etch-ignore",
            "lenny", "lenny-ignore", "squeeze", "squeeze-ignore",
            "wheezy", "wheezy-ignore", "jessie", "jessie-ignore",
+           "stretch", "stretch-ignore",
          );
 
 *valid_tags = \@gTags;
