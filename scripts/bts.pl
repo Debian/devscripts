@@ -156,7 +156,7 @@ our (@gTags, @valid_tags, %valid_tags);
            "potato", "woody", "sid", "help", "security", "upstream",
            "pending", "sarge", "sarge-ignore", "experimental", "d-i",
            "confirmed", "ipv6", "lfs", "fixed-in-experimental",
-           "fixed-upstream", "l10n", "etch", "etch-ignore",
+           "fixed-upstream", "l10n", "newcomer", "etch", "etch-ignore",
            "lenny", "lenny-ignore", "squeeze", "squeeze-ignore",
            "wheezy", "wheezy-ignore", "jessie", "jessie-ignore",
            "stretch", "stretch-ignore", "buster", "buster-ignore",
@@ -1542,12 +1542,6 @@ must be specified, unless the B<=> flag is used, where the command
 
 will remove all tags from the specified I<bug>.
 
-As a special case, the unofficial B<gift> tag name is supported in
-addition to official tag names. B<gift> is used as a shorthand for the
-B<gift> usertag; see L<https://wiki.debian.org/qa.debian.org/GiftTag>.
-Adding/removing the B<gift> tag will add/remove the B<gift> usertag,
-belonging to the "debian-qa@lists.debian.org" user.
-
 Adding/removing the B<security> tag will add "team\@security.debian.org"
 to the Cc list of the control email.
 
@@ -1584,6 +1578,11 @@ sub bts_tags {
 	    if ($gift_flag eq '=') {
 		$gift_flag = '+';
 	    }
+	    # Backward compatibility: do both gift usertagging and newcomer
+	    # tagging. Gifting should be removed after a suitable migration
+	    # time.  See https://wiki.debian.org/qa.debian.org/GiftTag header
+	    # for more info.
+	    mailbts("tagging $bug", "tags $bug + newcomer");
 	    mailbts("gifting $bug",
 		"user debian-qa\@lists.debian.org\nusertag $bug $gift_flag gift");
 	    next;

@@ -27,6 +27,13 @@ devscripts (2.14.11) UNRELEASED; urgency=medium
   * bts: Support the "stretch", "buster", "stretch-ignore" and "buster-ignore"
     tags.
 
+  [ Stefano Zacchiroli ]
+  * bts:
+    + Support for the "newcomer" tag
+    + Backward compatibility for the old "gift" usertag: drop
+      documentation for it, but do both gift and newcomer (user)tagging for
+      the time being
+
  -- Paul Wise <pabs@debian.org>  Sun, 19 Oct 2014 17:27:24 +0800
 
 devscripts (2.14.10) unstable; urgency=medium
