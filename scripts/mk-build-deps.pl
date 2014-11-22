@@ -444,7 +444,7 @@ sub build_equiv
     print EQUIVS "Version: $version\n";
 
     print EQUIVS "Description: build-dependencies for $opts->{name}\n" .
-    " Depencency package to build the '$opts->{name}' package\n";
+    " Dependency package to build the '$opts->{name}' package\n";
 
     close EQUIVS;
 
