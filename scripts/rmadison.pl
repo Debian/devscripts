@@ -215,8 +215,8 @@ B<dak ls> queries the Debian archive database ("projectb") and
 displays which package version is registered per architecture/component/suite.
 The CGI at B<https://qa.debian.org/madison.php> provides that service without
 requiring SSH access to ftp-master.debian.org or the mirror on
-ries.debian.org. This script, B<rmadison>, is a command line frontend to
-this CGI.
+mirror.ftp-master.debian.org. This script, B<rmadison>, is a command line
+frontend to this CGI.
 
 =head1 OPTIONS
 
