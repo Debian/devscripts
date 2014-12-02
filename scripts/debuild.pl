@@ -969,8 +969,11 @@ if ($command_version eq 'dpkg') {
     # Call to dpkg-architecture to set DEB_{BUILD,HOST}_* environment
     # variables
     my @dpkgarch = 'dpkg-architecture';
-    if ($targetarch && $targetgnusystem) {
-	push @dpkgarch, "-a${targetarch}", "-t${targetgnusystem}";
+    if ($targetarch) {
+	push @dpkgarch, "-a${targetarch}";
+    }
+    if ($targetgnusystem) {
+	push @dpkgarch, "-t${targetgnusystem}";
     }
     push @dpkgarch, '-f';
 

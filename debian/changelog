@@ -11,6 +11,8 @@ devscripts (2.14.11) UNRELEASED; urgency=medium
     #766641)
   * annotate-output: Fix handling of a date format that contains whitespace.
     (Closes: #766180)
+  * Fix regression in dpkg-architecture using scripts when only -a or -t is
+    specified, rather than both or neither.  (Closes: #768587)
 
   [ Jakub Wilk ]
   * sadt:

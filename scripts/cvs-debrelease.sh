@@ -355,6 +355,10 @@ fi
 
 if [ -n "$targetarch" ] && [ -n "$targetgnusystem" ]; then
     setq arch "$(dpkg-architecture "-a${targetarch}" "-t${targetgnusystem}" -qDEB_HOST_ARCH)" "build architecture"
+elif [ -n "$targetarch" ]; then
+    setq arch "$(dpkg-architecture "-a${targetarch}" -qDEB_HOST_ARCH)" "build architecture"
+elif [ -n "$targetgnusystem" ]; then
+    setq arch "$(dpkg-architecture "-t${targetgnusystem}" -qDEB_HOST_ARCH)" "build architecture"
 else
     setq arch "$(dpkg-architecture -qDEB_HOST_ARCH)" "build architecture"
 fi

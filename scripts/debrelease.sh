@@ -284,11 +284,14 @@ EOF
     fi
 fi
 
-
 if [ "x$sourceonly" = "xsource" ]; then
     arch=source
 elif [ -n "$targetarch" ] && [ -n "$targetgnusystem" ]; then
     mustsetvar arch "$(dpkg-architecture "-a${targetarch}" "-t${targetgnusystem}" -qDEB_HOST_ARCH)" "build architecture"
+elif [ -n "$targetarch" ]; then
+    mustsetvar arch "$(dpkg-architecture "-a${targetarch}" -qDEB_HOST_ARCH)" "build architecture"
+elif [ -n "$targetgnusystem" ]; then
+    mustsetvar arch "$(dpkg-architecture "-t${targetgnusystem}" -qDEB_HOST_ARCH)" "build architecture"
 else
     mustsetvar arch "$(dpkg-architecture -qDEB_HOST_ARCH)" "build architecture"
 fi
