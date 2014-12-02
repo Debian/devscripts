@@ -4106,10 +4106,8 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/cowpoke.1:121
-#, fuzzy, no-wrap
-#| msgid "B<-k>I<keyid>"
 msgid "B<--sign=>I<keyid>"
-msgstr "B<-k>I<identifiant_clef>"
+msgstr "B<--sign=>I<identifiant_clef>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:125
@@ -4650,15 +4648,11 @@ msgstr "I<arch>B<_>I<dist>B<_SIGN_KEYID>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:311
-#, fuzzy
-#| msgid ""
-#| "An optional arch and dist specific override for the global SIGN_KEYID "
-#| "option."
 msgid ""
 "An optional arch and dist specific override for the global B<SIGN_KEYID> "
 "option."
 msgstr ""
-"Un remplacement facultatif de l’option SIGN_KEYID globale, spécifique à une "
+"Un remplacement facultatif de l’option B<SIGN_KEYID> globale, spécifique à une "
 "I<arch>itecture et une I<dist>ribution."
 
 #. type: TP
@@ -4669,15 +4663,11 @@ msgstr "I<arch>B<_>I<dist>B<_UPLOAD_QUEUE>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:316
-#, fuzzy
-#| msgid ""
-#| "An optional arch and dist specific override for the global UPLOAD_QUEUE "
-#| "option."
 msgid ""
 "An optional arch and dist specific override for the global B<UPLOAD_QUEUE> "
 "option."
 msgstr ""
-"Un remplacement facultatif de l’option UPLOAD_QUEUE globale, spécifique à "
+"Un remplacement facultatif de l’option B<UPLOAD_QUEUE> globale, spécifique à "
 "une I<arch>itecture et une I<dist>ribution."
 
 #. type: SH
@@ -9508,16 +9498,12 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debdiff.1:224
-#, fuzzy
-#| msgid ""
-#| "B<diffstat>(1), B<dpkg-deb>(1), B<interdiff>(1), B<wdiff>(1), "
-#| "B<devscripts.conf>(5)"
 msgid ""
 "B<diffstat>(1), B<dpkg-deb>(1), B<interdiff>(1), B<wdiff>(1), B<devscripts."
-"conf>(5)  B<debbindiff>(1),"
+"conf>(5), B<debbindiff>(1)"
 msgstr ""
 "B<diffstat>(1), B<dpkg-deb>(1), B<interdiff>(1), B<wdiff>(1), B<devscripts."
-"conf>(5)"
+"conf>(5), B<debbindiff>"
 
 #. type: Plain text
 #: ../scripts/debdiff.1:229
