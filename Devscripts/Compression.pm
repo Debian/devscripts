@@ -12,7 +12,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 package Devscripts::Compression;
 
@@ -48,6 +48,7 @@ my %mime2comp = (
     "application/xz"      => "xz",
     "application/zip"     => "zip",
     "application/x-compress" => "compress",
+    "application/java-archive" => "zip",
 );
 
 sub compression_guess_from_file {

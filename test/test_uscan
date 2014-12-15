@@ -172,7 +172,7 @@ helperCreateRepo () {
 
     cat <<END > $PKG/debian/watch
 version=3
-http://localhost:$PORT/$PKG-(\d).tar.gz
+${OPTS}http://localhost:$PORT/$PKG-(\d).tar.gz
 END
 
     cat <<END > $PKG/debian/changelog
@@ -231,6 +231,7 @@ testFileExclusion() {
 
     (
       cd $TMPDIR
+      OPTS="opts=repacksuffix=+dfsg1 "
       helperCreateRepo
       cd repo
       tar cfz $PKG-1.tar.gz * .hidden
@@ -239,7 +240,42 @@ testFileExclusion() {
 
     (cd $TMPDIR/$PKG ; $COMMAND)
 
-    TARBALL=${PKG}_1.orig.tar.gz
+    TARBALL=${PKG}_1+dfsg1.orig.tar.gz
+    assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-1.tar.gz ]"
+    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
+    assertFalse 'pristine tarball is a symlink (nothing repacked?)' "[ -L $TMPDIR/$TARBALL ]"
+    assertNotNull 'pristine tarball is not gzip-compressed' \
+                  "$( file $TMPDIR/$TARBALL | grep 'gzip compressed data' )"
+    CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
+
+    helperTestContent
+
+    cleanup
+
+}
+
+# the same, but run from a separate directory
+testFileExclusionSeparateDir() {
+
+    PKG=foo
+    PORT=8000
+    TMPDIR=$(mktemp -d)
+
+    (
+      cd $TMPDIR
+      OPTS="opts=repacksuffix=+dfsg1 "
+      helperCreateRepo
+      cd repo
+      tar cfz $PKG-1.tar.gz * .hidden
+      python -m SimpleHTTPServer $PORT &
+      echo $! > pid )
+
+    mkdir $TMPDIR/otherdir
+    (
+    	cd $TMPDIR/otherdir; $COMMAND --package $PKG --force-download --upstream-version 1 --watchfile ../$PKG/debian/watch --copyright-file ../$PKG/debian/copyright
+   )
+
+    TARBALL=${PKG}_1+dfsg1.orig.tar.gz
     assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-1.tar.gz ]"
     assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
     assertFalse 'pristine tarball is a symlink (nothing repacked?)' "[ -L $TMPDIR/$TARBALL ]"
@@ -266,7 +302,7 @@ testFileExclusionZipToTar() {
       helperCreateRepo
       cat <<END > $PKG/debian/watch
 version=3
-http://localhost:$PORT/$PKG-(\d).zip
+opts=repacksuffix=+dfsg1 http://localhost:$PORT/$PKG-(\d).zip
 END
 
       cd repo
@@ -276,7 +312,7 @@ END
 
     (cd $TMPDIR/$PKG ; $COMMAND --repack)
 
-    TARBALL=${PKG}_1.orig.tar.xz
+    TARBALL=${PKG}_1+dfsg1.orig.tar.xz
     assertTrue 'unrepacked zipfile not present' "[ -f $TMPDIR/${PKG}-1.zip ]"
     assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
     assertNotNull 'pristine tarball is not xz-compressed' \

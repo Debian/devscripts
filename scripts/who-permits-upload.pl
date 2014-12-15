@@ -60,7 +60,7 @@ search by DM name, sponsor (the person who granted the permission) and by packag
 =item B<--dmfile=>I<dm_url>, B<-d> I<dm_url>
 
 Retrieve the DM permission file from the supplied URL. When this option is not
-present, the default value I<http://ftp-master.debian.org/dm.txt> is used.
+present, the default value I<https://ftp-master.debian.org/dm.txt> is used.
 
 =item B<--help>, B<-h>
 
@@ -215,7 +215,7 @@ sub usage
     print STDERR "\t\t\tkeyring. Separate arguments by a colon (\":\")\n";
     print STDERR "-d, --dmfile=DM_URL\n";
     print STDERR "\t\t\tRetrieve DM permissions from the supplied URL.\n";
-    print STDERR "\t\t\tDefault is http://ftp-master.debian.org/dm.txt\n";
+    print STDERR "\t\t\tDefault is https://ftp-master.debian.org/dm.txt\n";
     print STDERR "-s, --search=SEARCH_TYPE\n";
     print STDERR "\t\t\tSupplied QUERY arguments are interpreted as:\n";
     print STDERR "\t\t\tpackage name when SEARCH_TYPE is \"package\" (default)\n";

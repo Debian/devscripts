@@ -19,7 +19,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 set -e
 
@@ -353,7 +353,15 @@ if [ ! -d "$pkgdir" ]; then
     exit 1
 fi
 
-setq arch "`dpkg-architecture -a${targetarch} -t${targetgnusystem} -qDEB_HOST_ARCH`" "build architecture"
+if [ -n "$targetarch" ] && [ -n "$targetgnusystem" ]; then
+    setq arch "$(dpkg-architecture "-a${targetarch}" "-t${targetgnusystem}" -qDEB_HOST_ARCH)" "build architecture"
+elif [ -n "$targetarch" ]; then
+    setq arch "$(dpkg-architecture "-a${targetarch}" -qDEB_HOST_ARCH)" "build architecture"
+elif [ -n "$targetgnusystem" ]; then
+    setq arch "$(dpkg-architecture "-t${targetgnusystem}" -qDEB_HOST_ARCH)" "build architecture"
+else
+    setq arch "$(dpkg-architecture -qDEB_HOST_ARCH)" "build architecture"
+fi
 
 pva="${package}_${non_epoch_version}_${arch}"
 changes="$pva.changes"

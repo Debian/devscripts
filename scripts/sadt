@@ -42,6 +42,7 @@ def chmod_x(path):
     new_mode = old_mode | ((old_mode & 0o444) >> 2)
     if old_mode != new_mode:
         os.chmod(path, new_mode)
+    return old_mode
 
 def annotate_output(child):
     queue = queuemod.Queue()
@@ -170,7 +171,7 @@ class TestGroup(object):
         if '@' not in self.depends:
             return
         or_clauses = []
-        # deb822 prints a warning on stderr: http://bugs.debian.org/712513
+        # deb822 prints a warning on stderr: https://bugs.debian.org/712513
         # We don't want the user to see the warning, because the unusual
         # character in the relation is intentional.
         orig_sys_stderr = sys.stderr
@@ -225,7 +226,7 @@ class TestGroup(object):
             allow_stderr = False
         for r in restrictions:
             if r == 'rw-build-tree':
-                options.needs_rw_build_tree = True
+                options.rw_build_tree_needed = True
             elif r == 'needs-root':
                 if os.getuid() != 0:
                     raise Skip('this test needs root privileges')
@@ -256,20 +257,30 @@ class TestGroup(object):
         except Skip as exc:
             progress.skip(str(exc))
             raise
+        path = os.path.join(self.tests_directory, test)
+        original_mode = None
         if rw_build_tree:
             cwd = os.getcwd()
             os.chdir(rw_build_tree)
+            chmod_x(path)
         else:
             cwd = None
+            if not os.access(path, os.X_OK):
+                try:
+                    original_mode = chmod_x(path)
+                except OSError as exc:
+                    progress.skip('{path} could not be made executable: {exc}'.format(path=path, exc=exc))
+                    raise Skip
         try:
             self._run(test, progress, allow_stderr=options.allow_stderr)
         finally:
+            if original_mode is not None:
+                os.chmod(path, original_mode)
             if cwd is not None:
                 os.chdir(cwd)
 
     def _run(self, test, progress, allow_stderr=False):
         path = os.path.join(self.tests_directory, test)
-        chmod_x(path)
         tmpdir1 = tempfile.mkdtemp(prefix='sadt.')
         tmpdir2 = tempfile.mkdtemp(prefix='sadt.')
         environ = dict(os.environ)

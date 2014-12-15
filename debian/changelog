@@ -1,3 +1,184 @@
+devscripts (2.14.11) unstable; urgency=medium
+
+  [ Paul Wise ]
+  * Suggest debbindiff for deep .deb comparisons
+  * Use mirror.ftp-master instead of specific hostnames
+
+  [ James McCoy ]
+  * debcommit: Correctly show --strip-message is the default in --help.
+    (Closes: #766885)
+  * mk-origtargz: Warn about unmatched Files-Excluded patterns.  (Closes:
+    #766641)
+  * annotate-output: Fix handling of a date format that contains whitespace.
+    (Closes: #766180)
+  * Fix regression in dpkg-architecture using scripts when only -a or -t is
+    specified, rather than both or neither.  (Closes: #768587)
+
+  [ Jakub Wilk ]
+  * sadt:
+    + Fix handling of rw-build-tree restriction
+    + Improve handling of non-executable test files.  When rw-build-tree is in
+      effect, simply chmod the file.  Otherwise, attempt to chmod the file
+      (skipping the test on failure) and restore the original permissions on
+      completion.  (Closes: #749729)
+
+  [ Adam D. Barratt ]
+  * debchange:
+    + Fix handling of changelogs where the most recent trailer line does not
+      include a maintainer name.  (Closes: #766516)
+    + Add jessie-backports to the version mapping for --bpo.
+  * bts: Support the "stretch", "buster", "stretch-ignore" and "buster-ignore"
+    tags.
+
+  [ Stefano Zacchiroli ]
+  * bts:
+    + Support for the "newcomer" tag
+    + Backward compatibility for the old "gift" usertag: drop
+      documentation for it, but do both gift and newcomer (user)tagging for
+      the time being
+
+ -- James McCoy <jamessan@debian.org>  Wed, 03 Dec 2014 23:01:48 -0500
+
+devscripts (2.14.10) unstable; urgency=medium
+
+  * Fix all the other calls to dpkg-architecture in devscripts.
+    (Closes: #764963 ... again)
+
+ -- James McCoy <jamessan@debian.org>  Mon, 13 Oct 2014 22:35:31 -0400
+
+devscripts (2.14.9) unstable; urgency=medium
+
+  * debuild: Only pass -a/-t to dpkg-architecture when the user has specified
+    values for them.  (Closes: #764963)
+
+ -- James McCoy <jamessan@debian.org>  Sun, 12 Oct 2014 21:32:05 -0400
+
+devscripts (2.14.8) unstable; urgency=medium
+
+  [ James McCoy ]
+  * uscan:
+    + Ensure $keyring is defined before trying to use it when checking whether
+      the upstream keyring exists.
+    + Strip the Referer header when using qa.debian.org's Sourceforge
+      redirector.  When there's a foreign Referer header, Sourceforge responds
+      with a web page containing a <meta refresh=...> redirect to the actual
+      file, causing uscan to save the web page rather than the file.  (Closes:
+      #764367)
+  * uupdate: When updating a 1.0 source format package, remove any symlinks in
+    the new upstream source before applying the Debian diff, restoring the
+    symlinks after.  This prevents patch from following the symlinks, which
+    may point to targets outside of the source tree, when applying the diff.
+    Thanks to Jakub Wilk for the discovery and suggested fix.
+    (Closes: #737160, CVE-2014-1833)
+
+  [ Ron Lee ]
+  * cowpoke: Add --sign and --upload command line overrides.
+
+ -- James McCoy <jamessan@debian.org>  Sat, 11 Oct 2014 00:22:34 -0400
+
+devscripts (2.14.7) unstable; urgency=low
+
+  [ Cyril Brulebois ]
+  * deb-reversion: update change_version(), fixing the missing call_hook
+    statement in the udeb case. That was overlooked when the changelog
+    massaging was made conditional, and causes hooks to be ignored for
+    udebs. (Closes: #757425)
+
+  [ James McCoy ]
+  * debsign/debi/debc: Delay checking for the existence of the
+    --debs-dir/DEBRELEASE_DEBS_DIR directory until we get to code that
+    actually uses said directory.  (Closes: #544366)
+  * mk-build-deps: Pass the file, not package, names to unlink when --remove
+    is given.  (Closes: #757481)
+  * debcheckout: Always define $origtgz_name when a URL is specified on the
+    command line.  (Closes: #757614)
+  * dcmd: Add --debtar option and restrict --tar/--orig to orig.tar.*.  Thanks
+    to Osamu Aoki for the patch.  (Closes: #622561)
+  * grep-excuses: Remove useless call to “hostname --fqdn”.  (Closes: #758668)
+  * build-rdeps: Recognize arch-qualified package names.  Thanks to Stuart
+    Prescott for the patch.  (Closes: #757807)
+  * uscan:
+    + Consistently pass the path to the downloaded (and possibly
+      renamed/symlinked/…) file as an argument to the watch file's action
+      command.
+    + Add support for a repacksuffix option to the watch file.  This is passed
+      through to mk-origtargz.  (Closes: #753772)
+    + Specify Referer header when traversing http(s) sites.  Thanks to David
+      Prévot for the patch.  (Closes: #739137)
+  * mk-origtargz: Add a --repack-suffix option to adjust the upstream version
+    when the upstream sources are modified (e.g., due to Files-Excluded).
+  * bts: Don't send the email when the user saves an empty body for the email.
+    (Closes: #762888)
+
+  [ Benjamin Drung ]
+  * Remove unused build-dependencies libjson-perl and libterm-size-perl
+
+  [ Joachim Breitner ]
+  * mk-origtargz: Treat jars like zip files (Closes: #754203)
+
+  [ Dominique Dumont ]
+  * licensecheck: Check javascript files.  (Closes: #762070)
+
+ -- James McCoy <jamessan@debian.org>  Thu, 25 Sep 2014 20:49:15 -0400
+
+devscripts (2.14.6) unstable; urgency=medium
+
+  [ Benjamin Drung ]
+  * suspicious-source: Add image/tiff, application/pgp-keys, and image/x-icon
+    to whitelisted mime-types. Add .gmo to whitelisted file extensions.
+  * wrap-and-sort: Add --max-line-length option with a default of 79 characters
+    (it was previously hard-coded to 80 characters).  (Closes: #756067)
+
+  [ Guillem Jover ]
+  * nmudiff: Send control messages inline.  (Closes: #752152)
+
+  [ Paul Wise ]
+  * rmadison: bpo madison is dead, remove it
+  * rmadison: add new to the defaults for Debian
+  * rmadison: document the defaults in the manual page
+
+  [ James McCoy ]
+  * namecheck: Remove berlios, since it no longer hosts code.  (Closes:
+    #752382)
+  * mk-build-deps:
+    + Provide the package name, not file name, to “dpkg --remove” when package
+      install fails.
+    + Read all of the output from “apt-cache showsrc” to ensure mk-build-deps
+      doesn't get stuck waiting for apt-cache to exit.
+    + Pass the name of the .deb file out of build_equiv to ensure the correct
+      .deb is installed.  (Closes: #753657)
+
+  [ Christoph Berg ]
+  * Update all qa.debian.org URLs to https://.
+
+  [ Ron Lee ]
+  * cowpoke:
+    + Allow more flexibility for specialised build chroots.
+      It's now possible to specify arbitrary 'dist' names, with arbitrary
+      special configurations on top of the real BASE_DIST suite.  This means
+      it's easy to have things like a chroot for wheezy-backports which will
+      be able to pull other deps from the backports repo, while still having
+      a pristine wheezy build chroot on the same build host.  Or to have a
+      staging chroot for unstable, with extra build deps pulled in from a
+      local repository, or installed manually, while still having a pristine
+      sid chroot for building other packages to upload.  And it all works the
+      same as normal, you just pass --dist=wheezy_bpo to select the chroot.
+    + Allow SIGN_KEYID and UPLOAD_QUEUE to be overridden per arch/dist.
+      This makes a lot more sense now that the above is easily possible.
+      People can use that for private or work (in progress) builds too, and
+      this can reduce the chance of accidentally uploading to the wrong place,
+      or signing some package not intended for upload with a key that would
+      would let it be accepted by dak.
+    + Better handling of --debbuildopts.  There were some corner cases for
+      this where the required quoting of options could be rather weird in the
+      intersection of all the layers it might get passed through. This should
+      make it more forgiving and better able to always DTRT.
+
+  [ David Prévot ]
+  * uscan.1: Use +dfsg suffix in examples
+
+ -- James McCoy <jamessan@debian.org>  Mon, 04 Aug 2014 22:34:17 -0400
+
 devscripts (2.14.5~bpo70+2) wheezy-backports; urgency=medium
 
   * Rebuild for wheezy-backports, and include previous changelog entries.

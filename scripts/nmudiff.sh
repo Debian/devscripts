@@ -11,7 +11,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 set -e
 
 PROGNAME=`basename $0`
@@ -322,20 +322,16 @@ else
 	TO_ADDRESSES_MUTT="$TO_ADDRESSES_MUTT $b@bugs.debian.org"
 	if [ "`bts select bugs:$b tag:patch`" != "$b" ]; then
 	    TAGS="$TAGS
-tags $b + patch"
+Control: tags $b + patch"
 	fi
 	if [ "$NMUDIFF_DELAY" != "0" ] && [ "`bts select bugs:$b tag:pending`" != "$b" ]; then
 	    TAGS="$TAGS
-tags $b + pending"
+Control: tags $b + pending"
 	fi
     done
     TO_ADDRESSES_SENDMAIL=$(echo "$TO_ADDRESSES_SENDMAIL" | tail -n +2)
     if [ "$TAGS" != "" ]; then
         TAGS=$(echo "$TAGS" | tail -n +2)
-        TAGS="$TAGS
-thanks"
-        BCC_ADDRESS_SENDMAIL="control@bugs.debian.org"
-        BCC_ADDRESS_MUTT="-b control@bugs.debian.org"
     fi
 fi
 

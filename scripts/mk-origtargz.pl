@@ -18,7 +18,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
 =head1 NAME
@@ -116,6 +116,10 @@ If the file has to be modified (because it is a B<zip> file, because of B<--repa
 If the given file is not compressed using the desired format (see
 B<--compression>), recompress it.
 
+=item B<-S>, B<--repack-suffix> I<suffix>
+
+If the file has to be modified, because of B<Files-Excluded>, append I<suffix> to the upstream version.
+
 =item B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]
 
 If B<--repack> is used, or if the given file is a B<zip> file, ensure that the resulting file is compressed using the given scheme. The default is B<gzip>.
@@ -178,6 +182,7 @@ my $destdir = undef;
 my $compression = "gzip";
 my $mode = undef; # can be symlink, rename or copy. Can internally be repacked if the file was repacked.
 my $repack = 0;
+my $suffix = '';
 
 my $upstream = undef;
 
@@ -205,6 +210,7 @@ GetOptions(
     "rename" => \&setmode,
     "copy" => \&setmode,
     "repack" => \$repack,
+    'repack-suffix|S=s' => \$suffix,
     "directory|C=s" => \$destdir,
     "help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },
 ) or pod2usage({-exitval => 3, -verbose=>1});
@@ -312,7 +318,7 @@ unless (-e $upstream) {
 
 my $mime = compression_guess_from_file($upstream);
 
-my $is_zipfile = $mime eq 'zip';
+my $is_zipfile = (defined $mime and $mime eq 'zip');
 my $is_tarfile = $upstream =~ $tar_regex;
 
 unless ($is_zipfile or $is_tarfile) {
@@ -335,8 +341,8 @@ if ($is_tarfile and not $repack) {
 # Now we know what the final filename will be
 my $destfilebase = sprintf "%s_%s.orig.tar", $package, $version;
 my $destfiletar = sprintf "%s/%s", $destdir, $destfilebase;
-my $suffix = compression_get_property($compression, "file_ext");
-my $destfile = sprintf "%s.%s", $destfiletar, $suffix;
+my $destext = compression_get_property($compression, "file_ext");
+my $destfile = sprintf "%s.%s", $destfiletar, $destext;
 
 
 # $upstream_tar is $upstream, unless the latter was a zip file.
@@ -373,7 +379,7 @@ if ($is_zipfile) {
 		   @files],
 	wait_child => 1);
     unless (-e "$destfiletar") {
-	die("Repacking from zip or jar to tar.$suffix failed (could not create tarball)\n");
+	die("Repacking from zip or jar to tar.$destext failed (could not create tarball)\n");
     }
     compress_archive($destfiletar, $destfile, $compression);
 
@@ -414,13 +420,22 @@ if (@exclude_globs) {
     chomp @files;
 
     # find out what to delete
-    my @exclude_regexes = map { glob_to_regex($_) } @exclude_globs;
-    my $regex = '^(?:[^/]*/)?' # Possible leading directory, ignore it
-	      . '(?:' . join('|', @exclude_regexes) . ')' # User patterns
-	      . '(?:/.*)?$'; # Possible trailing / for a directory
+    my @exclude_info = map { { glob => $_, used => 0, regex => glob_to_regex($_) } } @exclude_globs;
     for my $filename (@files) {
-	if ($filename =~ m/$regex/) {
-	    push @to_delete, $filename;
+	for my $info (@exclude_info) {
+	    if ($filename =~ m@^(?:[^/]*/)?        # Possible leading directory, ignore it
+				(?:$info->{regex}) # User pattern
+				(?:/.*)?$          # Possible trailing / for a directory
+			      @x) {
+		push @to_delete, $filename;
+		$info->{used} = 1;
+	    }
+	}
+    }
+
+    for my $info (@exclude_info) {
+	if (!$info->{used}) {
+	    warn "No files matched excluded pattern: $info->{glob}\n";
 	}
     }
 
@@ -429,6 +444,18 @@ if (@exclude_globs) {
     @to_delete = sort {$b cmp $a}  @to_delete;
 
     $deletecount = scalar(@to_delete);
+}
+
+if ($deletecount) {
+    $destfilebase = sprintf "%s_%s%s.orig.tar", $package, $version, $suffix;
+    $destfiletar = sprintf "%s/%s", $destdir, $destfilebase;
+    $destfile = sprintf "%s.%s", $destfiletar, $destext;
+
+    # Zip -> tar process already created $destfile, so need to rename it
+    if ($is_zipfile) {
+	move $upstream_tar, $destfile;
+	$upstream_tar = $destfile;
+    }
 }
 
 # Actually do the unpack, remove, pack cycle
@@ -541,7 +568,9 @@ sub glob_to_regex {
     for my $c ($glob =~ m/(.)/gs) {
 	if ($c eq '.' || $c eq '(' || $c eq ')' || $c eq '|' ||
 	    $c eq '+' || $c eq '^' || $c eq '$' || $c eq '@' || $c eq '%' ||
-	    $c eq '{' || $c eq '}' || $c eq '[' || $c eq ']') {
+	    $c eq '{' || $c eq '}' || $c eq '[' || $c eq ']' ||
+	    # Escape '#' since we're using /x in the pattern match
+	    $c eq '#') {
 	    $regex .= "\\$c";
 	}
 	elsif ($c eq '*') {

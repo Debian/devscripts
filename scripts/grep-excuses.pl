@@ -16,7 +16,7 @@
 #
 
 # You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use 5.006;
 use strict;
@@ -63,7 +63,7 @@ Usage: $progname [options] [<maintainer>|<package>]
 Options:
   --no-conf, --noconf Don\'t read devscripts config files;
                       must be the first option given
-  --wipnity, -w       Check <http://release.debian.org/migration/>.  A package
+  --wipnity, -w       Check <https://release.debian.org/migration/>.  A package
                       name must be given when using this option.
   --help              Show this help
   --version           Give version information
@@ -171,9 +171,6 @@ if ($string eq '') {
 if (@ARGV) {
     die "$progname: too many arguments!  Try $progname --help for help.\n";
 }
-
-my $hostname = `hostname --fqdn`;
-chomp $hostname;
 
 if (system("command -v wget >/dev/null 2>&1") != 0) {
     die "$progname: this program requires the wget package to be installed\n";

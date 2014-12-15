@@ -121,7 +121,6 @@ my $control;
 my $install_tool;
 my $root_cmd;
 my @packages;
-my @deb_files;
 
 my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
 my %config_vars = (
@@ -243,10 +242,6 @@ while ($control = shift) {
 	    warn "$progname: Unable to find package name in $descr\n";
 	    next;
 	}
-	if (defined $pid) {
-	    wait_child($pid, no_check => 1);
-	    undef $pid;
-	}
 	unless (exists $ctrl->{$name}) {
 	    next;
 	}
@@ -323,7 +318,7 @@ while ($control = shift) {
 		   version => $ctrl->{Version} });
 	}
     }
-    wait_child($pid, no_check => 1) if defined $pid;
+    wait_child($pid, nocheck => 1) if defined $pid;
     # Only use the newest version.  We'll only have this if processing showsrc
     # output or a dsc file.
     if (@versions) {
@@ -342,23 +337,27 @@ while ($control = shift) {
 }
 
 if ($opt_install) {
-    for my $package (@packages) {
-	my $file = glob "${package}_*.deb";
-	push @deb_files, $file;
-    }
-
     my @root;
     if ($root_cmd) {
 	push(@root, shellwords($root_cmd));
     }
+
+    my (@pkg_names, @deb_files, %uniq);
+    for my $package (@packages) {
+	if ($uniq{$package->{deb_file}}++ == 0) {
+	    push @pkg_names, $package->{package};
+	    push @deb_files, $package->{deb_file};
+	}
+    }
+
     system @root, 'dpkg', '--unpack', @deb_files;
-    die("dpkg call failed\n") if ( ($?>>8) != 0 );
+    die("$progname: dpkg --unpack failed\n") if ( ($?>>8) != 0 );
     system @root, shellwords($install_tool), '-f', 'install';
     if ( ($?>>8) != 0 ) {
 	# Restore system to previous state, since apt wasn't able to resolve a
 	# proper way to get the build-dep packages installed
-	system @root, 'dpkg', '--remove', @deb_files;
-	die("install call failed\n");
+	system @root, 'dpkg', '--remove', @pkg_names;
+	die("$progname: apt-get install call failed\n");
     }
 
     if ($opt_remove) {
@@ -386,13 +385,15 @@ sub build_equiv
     my $args = '';
     my $arch = 'all';
 
-    if ($opts->{depends} =~ /\[|\]/) {
-	$arch = 'any';
-
-    }
     if (defined $opt_arch) {
 	$args = "--arch=$opt_arch ";
 	$arch = $opt_arch;
+    }
+    elsif ($opts->{depends} =~ m/\[|\]/) {
+	spawn(exec => ['dpkg-architecture', '-qDEB_HOST_ARCH'],
+	      to_string => \$arch,
+	      wait_child => 1);
+	chomp($arch);
     }
 
     my $readme = '/usr/share/devscripts/README.mk-build-deps';
@@ -410,11 +411,21 @@ sub build_equiv
     # Allow the file not to exist to ease testing
     print EQUIVS "Readme: $readme\n" if -r $readme;
 
-    print EQUIVS "Version: $opts->{version}\n" if $opts->{version};
+    my $version = $opts->{version} || '1.0';
+    print EQUIVS "Version: $version\n";
 
     print EQUIVS "Description: build-dependencies for $opts->{name}\n" .
     " Depencency package to build the '$opts->{name}' package\n";
 
     close EQUIVS;
-    return "$opts->{name}-$opts->{type}";
+
+    my $v = Dpkg::Version->new($version);
+    # The version in the .deb filename will not contain the epoch
+    $version = $v->as_string(omit_epoch => 1);
+    my $package = "$opts->{name}-$opts->{type}";
+    my $deb_file = "${package}_${version}_${arch}.deb";
+    return {
+	package => $package,
+	deb_file => $deb_file
+    };
 }

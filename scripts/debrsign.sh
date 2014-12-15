@@ -27,7 +27,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 # Abort if anything goes wrong
 set -e
@@ -162,7 +162,15 @@ case $# in
 
 	if [ "x$sourceonly" = x ]
 	then
-	    mustsetvar arch "`dpkg-architecture -a${targetarch} -t${targetgnusystem} -qDEB_HOST_ARCH`" "build architecture"
+	    if [ -n "$targetarch" ] && [ -n "$targetgnusystem" ]; then
+		mustsetvar arch "$(dpkg-architecture "-a${targetarch}" "-t${targetgnusystem}" -qDEB_HOST_ARCH)" "build architecture"
+	    elif [ -n "$targetarch" ]; then
+		mustsetvar arch "$(dpkg-architecture "-a${targetarch}" -qDEB_HOST_ARCH)" "build architecture"
+	    elif [ -n "$targetgnusystem" ]; then
+		mustsetvar arch "$(dpkg-architecture "-t${targetgnusystem}" -qDEB_HOST_ARCH)" "build architecture"
+	    else
+		mustsetvar arch "$(dpkg-architecture -qDEB_HOST_ARCH)" "build architecture"
+	    fi
 	else
 	    arch=source
 	fi

@@ -14,7 +14,7 @@
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with this file  If not, see <http://www.gnu.org/licenses/>.
+#    along with this file  If not, see <https://www.gnu.org/licenses/>.
 #
 #    On Debian systems, the complete text of the GNU General
 #    Public License 3 can be found in '/usr/share/common-licenses/GPL-3'.

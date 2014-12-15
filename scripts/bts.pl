@@ -21,7 +21,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 # Use our own subclass of Pod::Text to
 # a) Strip the POD markup before displaying it via "bts help"
@@ -156,9 +156,10 @@ our (@gTags, @valid_tags, %valid_tags);
            "potato", "woody", "sid", "help", "security", "upstream",
            "pending", "sarge", "sarge-ignore", "experimental", "d-i",
            "confirmed", "ipv6", "lfs", "fixed-in-experimental",
-           "fixed-upstream", "l10n", "etch", "etch-ignore",
+           "fixed-upstream", "l10n", "newcomer", "etch", "etch-ignore",
            "lenny", "lenny-ignore", "squeeze", "squeeze-ignore",
            "wheezy", "wheezy-ignore", "jessie", "jessie-ignore",
+           "stretch", "stretch-ignore", "buster", "buster-ignore",
          );
 
 *valid_tags = \@gTags;
@@ -790,7 +791,7 @@ exit 0;
 =head1 COMMANDS
 
 For full details about the commands, see the BTS documentation.
-L<http://www.debian.org/Bugs/server-control>
+L<https://www.debian.org/Bugs/server-control>
 
 =over 4
 
@@ -872,13 +873,13 @@ use of a B<users=>I<email> option.
 
 Details of the bug tracking system itself, along with a bug-request
 page with more options than this script, can be found on
-http://bugs.debian.org/.  This page itself will be opened if the
+https://bugs.debian.org/.  This page itself will be opened if the
 command 'bts bugs :' is used.
 
 =item B<release-critical>, B<RC>
 
 Display the front page of the release-critical pages on the BTS.  This
-is a synonym for http://bugs.debian.org/release-critical/index.html.
+is a synonym for https://bugs.debian.org/release-critical/index.html.
 It is also possible to say release-critical/debian/main.html and the like.
 RC is a synonym for release-critical/other/all.html.
 
@@ -1342,7 +1343,7 @@ sub bts_submitter {
 
 Reassign a I<bug> or a number of bugs to a different I<package>.
 The I<version> field is optional; see the explanation at
-L<http://www.debian.org/Bugs/server-control>.
+L<https://www.debian.org/Bugs/server-control>.
 
 =cut
 
@@ -1541,12 +1542,6 @@ must be specified, unless the B<=> flag is used, where the command
 
 will remove all tags from the specified I<bug>.
 
-As a special case, the unofficial B<gift> tag name is supported in
-addition to official tag names. B<gift> is used as a shorthand for the
-B<gift> usertag; see L<http://wiki.debian.org/qa.debian.org/GiftTag>.
-Adding/removing the B<gift> tag will add/remove the B<gift> usertag,
-belonging to the "debian-qa@lists.debian.org" user.
-
 Adding/removing the B<security> tag will add "team\@security.debian.org"
 to the Cc list of the control email.
 
@@ -1583,6 +1578,11 @@ sub bts_tags {
 	    if ($gift_flag eq '=') {
 		$gift_flag = '+';
 	    }
+	    # Backward compatibility: do both gift usertagging and newcomer
+	    # tagging. Gifting should be removed after a suitable migration
+	    # time.  See https://wiki.debian.org/qa.debian.org/GiftTag header
+	    # for more info.
+	    mailbts("tagging $bug", "tags $bug + newcomer");
 	    mailbts("gifting $bug",
 		"user debian-qa\@lists.debian.org\nusertag $bug $gift_flag gift");
 	    next;
@@ -3973,7 +3973,7 @@ sub edit {
     system("sensible-editor $filename");
     open(OUT_MAIL, "<$filename")
 	or die "$progname: reading from temporary file: $!\n";
-    $message = "";
+    undef $message;
     while(<OUT_MAIL>) {
 	$message .= $_;
     }
@@ -4112,9 +4112,9 @@ bugs.debian.org.
 
 =head1 SEE ALSO
 
-Please see L<http://www.debian.org/Bugs/server-control> for
+Please see L<https://www.debian.org/Bugs/server-control> for
 more details on how to control the BTS using emails and
-L<http://www.debian.org/Bugs/> for more information about the BTS.
+L<https://www.debian.org/Bugs/> for more information about the BTS.
 
 querybts(1), reportbug(1)
 

@@ -19,7 +19,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 PROGNAME=`basename $0`
 MODIFIED_CONF_MSG='Default settings modified by devscripts configuration files:'
@@ -201,8 +201,8 @@ for package; do
     echo "Uploads for $package:"
 
     prefix=$(echo $package | sed -re 's/^((lib)?.).*$/\1/')
-    pkgurl="http://packages.qa.debian.org/${prefix}/${package}.html"
-    baseurl="http://packages.qa.debian.org/${prefix}/"
+    pkgurl="https://packages.qa.debian.org/${prefix}/${package}.html"
+    baseurl="https://packages.qa.debian.org/${prefix}/"
 
     # only grab the actual "Accepted" news announcements; hopefully this
     # won't pick up many false positives

@@ -15,7 +15,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
 # Created: Tue, 14 Aug 2007 10:20:55 +0200
@@ -74,7 +74,7 @@ B<GENERAL OPTIONS>
 =item B<-a>, B<--auth>
 
 Work in authenticated mode; this means that for known repositories (mainly those
-hosted on S<I<http://alioth.debian.org>>) URL rewriting is attempted before
+hosted on S<I<https://alioth.debian.org>>) URL rewriting is attempted before
 checking out, to ensure that the repository can be committed to. For example,
 for Subversion repositories hosted on alioth this means that
 S<I<svn+ssh://svn.debian.org/...>> will be used instead of
@@ -228,7 +228,7 @@ authenticated mode, it still has to be activated with B<--auth>.
 =head1 SEE ALSO
 
 B<apt-cache>(8), Section 6.2.5 of the Debian Developer's Reference (for
-more information about B<Vcs-*> fields): S<I<http://www.debian.org/doc/developers-reference/best-pkging-practices.html#bpp-vcs>>.
+more information about B<Vcs-*> fields): S<I<https://www.debian.org/doc/developers-reference/best-pkging-practices.html#bpp-vcs>>.
 
 =head1 AUTHOR
 
@@ -1032,7 +1032,6 @@ sub main() {
 	# when --package is given, use it
 	if ($use_package) {
 	    $pkg = $use_package;
-	    $origtgz_name = $use_package; # FIXME: this should rather set srcpkg in unpack_source() directly
 	# else guess package from url
 	} elsif ($repo_url =~ m!/trunk/([a-z0-9.+-]+)!) { # svn with {trunk,tags,branches}/$pkg
 	    $pkg = $1;
@@ -1043,7 +1042,7 @@ sub main() {
 	} elsif ($repo_url =~ /([a-z0-9.+-]+)$/) { # catch-all
 	    $pkg = $1;
 	}
-
+	$origtgz_name = $pkg; # FIXME: this should rather set srcpkg in unpack_source() directly
     } else {  # package name passed on the command line
 	($version, $repo_type, $repo_url, $origtgz_name) = find_repo($pkg, $version);
 	unless ($repo_type) {
@@ -1054,7 +1053,7 @@ No repository found for package $pkg$vermsg.
 
 A Vcs-* field is missing in its source record. See Debian Developer's
 Reference 6.2.5:
- `http://www.debian.org/doc/developers-reference/best-pkging-practices.html#bpp-vcs'
+ `https://www.debian.org/doc/developers-reference/best-pkging-practices.html#bpp-vcs'
 If you know that the package is maintained via a version control
 system consider asking the maintainer to expose such information.
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 # this script was downloaded from:
-# http://jeroen.a-eskwadraat.nl/sw/annotate
+# https://jeroen.a-eskwadraat.nl/sw/annotate
 # and is part of devscripts ###VERSION###
 
 # Executes a program annotating the output linewise with time and stream
@@ -18,17 +18,17 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 progname=$(basename $0)
 
 addtime ()
 {
 	while IFS= read -r line; do
-		echo "`date ${FMT}` $1: $line"
+		printf "%s %s: %s\n" "$(date "${FMT}")" "$1" "$line"
 	done
 	if [ ! -z "$line" ]; then
-		echo -n "`date ${FMT}` $1: $line"
+		printf "%s %s: %s" "$(date "${FMT}")" "$1" "$line"
 	fi
 }
 
@@ -78,11 +78,11 @@ mkfifo $OUT $ERR || exit 1
 addtime O < $OUT &
 addtime E < $ERR &
 
-echo "`date ${FMT}` I: Started $@"
+echo "Started $@" | addtime I
 "$@" > $OUT 2> $ERR ; EXIT=$?
 rm -f $OUT $ERR
 wait
 
-echo "`date ${FMT}` I: Finished with exitcode $EXIT"
+echo "Finished with exitcode $EXIT" | addtime I
 
 exit $EXIT

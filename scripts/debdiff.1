@@ -21,6 +21,8 @@ between the two package files, and is therefore useful for spotting
 files which may have been inadvertently lost between revisions of the
 package.  It also checks the file owners and permissions, and compares
 the control files of the two packages using the \fBwdiff\fR program.
+If you want a deeper comparison of two Debian package files you can
+use the \fBdebbindiff\fR tool.
 .PP
 If no arguments are given, \fBdebdiff\fR tries to compare the content
 of the current source directory with the last version of the package.
@@ -217,7 +219,8 @@ be 255.
 .BR dpkg-deb (1),
 .BR interdiff (1),
 .BR wdiff (1),
-.BR devscripts.conf (5)
+.BR devscripts.conf (5),
+.BR debbindiff (1)
 .SH AUTHOR
 \fBdebdiff\fR was originally written as a shell script by Yann Dirson
 <dirson@debian.org> and rewritten in Perl with many more features by

@@ -83,7 +83,7 @@ opts="filenamemangle=s/(?:.*\/)?v?(\ed[\ed\e.]*)\e.tar\e.gz/<project>-$1.tar.gz/
   https://github.com/<user>/<project>/tags (?:.*/)?v?(\ed[\ed\e.]*)\e.tar\e.gz
 
 # For Google Code projects you should use the downloads page like this:
-http://code.google.com/p/<project>/downloads/list?can=1 \e
+https://code.google.com/p/<project>/downloads/list?can=1 \e
   .*/<project>-(\ed[\ed.]*)\e.tar\e.gz
 
 # This is the format for a site which has funny version numbers;
@@ -101,7 +101,7 @@ opts="uversionmangle=s/^/0.0./" \e
 
 # Similarly, the upstream part of the Debian version number can be
 # mangled:
-opts=dversionmangle=s/\e.dfsg\e.\ed+$// \e
+opts=dversionmangle=s/\e+dfsg\ed*$// \e
   http://some.site.org/some/path/foobar-(.+)\e.tar\e.gz
 
 # The filename is found by taking the last component of the URL and
@@ -262,8 +262,8 @@ like `\fBs/-alpha(\ed*)/.a$1/\fR'. These backreferences must use the
 \fBdversionmangle=\fIrules\fR
 This is used to mangle the Debian version number of the currently
 installed package in the same way as the \fBuversionmangle\fR option.
-Thus, a suitable rule might be `\fBs/\e.dfsg\e.\ed+$//\fR' to remove a
-`\fB.dfsg.1\fR' suffix from the Debian version number, or to handle `\fB.pre6\fR'
+Thus, a suitable rule might be `\fBs/\+dfsg\ed*$//\fR' to remove a
+`\fB+dfsg1\fR' suffix from the Debian version number, or to handle `\fB.pre6\fR'
 type version numbers.  Again, the \fIrules\fR string may not contain
 commas; this should not be a problem.
 .TP
@@ -296,6 +296,13 @@ by a key found in the keyring \fBdebian/upstream/signing-key.pgp\fR or
 the armored keyring \fBdebian/upstream/signing-key.asc\fR.  If it is not
 valid, or not made by one of the listed keys, uscan will report an
 error.
+.TP
+\fBrepacksuffix=\fIsuffix\fR
+If the upstream sources are modified because \fIdebian/copyright\fR contains
+the \fBFiles-Excluded\fR field, \fIsuffix\fR will be appended to the upstream
+version of the repacked tar archive.  Common suffixes might be \fB+dfsg1\fR to
+indicate the removal of non-DFSG code or \fB+ds1\fR to indicate the removal of
+embedded (DFSG) code copies.
 .SH "Directory name checking"
 Similarly to several other scripts in the \fBdevscripts\fR package,
 \fBuscan\fR explores the requested directory trees looking for
@@ -410,6 +417,10 @@ In the case where the upstream sources are repacked (either because
 \fB\-\-repack\fR option is given or \fIdebian/copyright\fR contains the
 field \fBFiles-Excluded\fR), it is possible to control the compression
 method via the parameter (defaults to \fBgzip\fR).
+.TP
+.B \-\-copyright\-file \fIcopyright-file\fR
+Exclude files mentioned in \fBFiles-Excluded\fR in the given copyright file.
+This is useful when running uscan not within a source package directory.
 .RE
 .TP
 .B \-\-dehs

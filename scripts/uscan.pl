@@ -20,7 +20,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use 5.008;  # uses 'our' variables and filetest
 use strict;
@@ -147,6 +147,8 @@ Options passed on to mk-origtargz:
     --compression [ gzip | bzip2 | lzma | xz ]
                    When the upstream sources are repacked, use compression COMP
                    for the resulting tarball (default: gzip)
+    --copyright-file FILE
+                   Remove files matching the patterns found in FILE
 
 Default settings modified by devscripts configuration files:
 $modified_conf_msg
@@ -178,6 +180,7 @@ my $report = 0; # report even on up-to-date packages?
 my $repack = 0; # repack .tar.bz2, .tar.lzma, .tar.xz or .zip to .tar.gz
 my $default_compression = 'gzip' ;
 my $repack_compression = $default_compression;
+my $copyright_file = undef;
 my $symlink = 'symlink';
 my $verbose = 0;
 my $check_dirname_level = 1;
@@ -278,7 +281,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 my $debug = 0;
 my ($opt_h, $opt_v, $opt_destdir, $opt_download, $opt_force_download,
     $opt_report, $opt_passive, $opt_symlink, $opt_repack,
-    $opt_repack_compression, $opt_exclusion);
+    $opt_repack_compression, $opt_exclusion, $opt_copyright_file);
 my ($opt_verbose, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
 my $opt_download_version;
@@ -312,6 +315,7 @@ GetOptions("help" => \$opt_h,
 	   "noconf" => \$opt_noconf,
 	   "no-conf" => \$opt_noconf,
 	   "exclusion!" => \$opt_exclusion,
+	   "copyright-file=s" => \$opt_copyright_file,
 	   "download-current-version" => \$opt_download_current_version,
 	   )
     or die "Usage: $progname [options] [directories]\nRun $progname --help for more details\n";
@@ -354,6 +358,7 @@ if (defined $opt_repack_compression) {
 }
 $dehs = $opt_dehs if defined $opt_dehs;
 $exclusion = $opt_exclusion if defined $opt_exclusion;
+$copyright_file = $opt_copyright_file if defined $opt_copyright_file;
 $user_agent_string = $opt_user_agent if defined $opt_user_agent;
 $download_version = $opt_download_version if defined $opt_download_version;
 
@@ -426,6 +431,16 @@ package main;
 my $user_agent = LWP::UserAgent::UscanCatchRedirections->new(env_proxy => 1);
 $user_agent->timeout($timeout);
 $user_agent->agent($user_agent_string);
+# Strip Referer header for the sf.net redirector to avoid SF sending back a
+# 200 OK with a <meta refresh=...> redirect
+$user_agent->add_handler(
+    'request_prepare' => sub {
+	my ($request, $ua, $h) = @_;
+	$request->remove_header('Referer');
+    },
+    m_hostname => 'qa.debian.org',
+    m_path_prefix => '/watch/sf.php',
+);
 
 if (defined $opt_watchfile) {
     uscan_die "Can't have directory arguments if using --watchfile" if @ARGV;
@@ -785,6 +800,9 @@ sub process_watchline ($$$$$$)
 		       or $opt eq 'nopassive') {
 		    $options{'pasv'}=0;
 		}
+		elsif ($opt =~ /^repacksuffix\s*=\s*(.+)/) {
+		    $options{'repacksuffix'} = $1;
+		}
 		elsif ($opt =~ /^uversionmangle\s*=\s*(.+)/) {
 		    @{$options{'uversionmangle'}} = split /;/, $1;
 		}
@@ -843,6 +861,10 @@ sub process_watchline ($$$$$$)
 		return 1;
 	    }
 	    $keyring = first { -r $_ } qw(debian/upstream/signing-key.pgp debian/upstream/signing-key.asc debian/upstream-signing-key.pgp);
+	    if (!defined $keyring) {
+		uscan_warn "$progname warning: pgpsigurlmangle option exists, but the upstream keyring does not exist\n  in $watchfile, skipping:\n  $line\n";
+		return 1;
+	    }
 	    if ($keyring =~ m/\.asc$/) {
 		if (!$havegpg) {
 		    uscan_warn "$progname warning: $keyring is armored but gpg/gpg2 is not available to dearmor it\n  in $watchfile, skipping:\n $line\n";
@@ -854,15 +876,11 @@ sub process_watchline ($$$$$$)
 		      wait_child => 1);
 		$keyring = "$gpghome/pubring.gpg";
 	    }
-	    if (!defined $keyring) {
-		uscan_warn "$progname warning: pgpsigurlmangle option exists, but the upstream keyring does not exist\n  in $watchfile, skipping:\n  $line\n";
-		return 1;
-	    }
 	}
 
 	# Handle sf.net addresses specially
 	if ($base =~ m%^http://sf\.net/%) {
-	    $base =~ s%^http://sf\.net/%http://qa.debian.org/watch/sf.php/%;
+	    $base =~ s%^http://sf\.net/%https://qa.debian.org/watch/sf.php/%;
 	    $filepattern .= '(?:\?.*)?';
 	}
 	if ($base =~ m%^(\w+://[^/]+)%) {
@@ -1399,6 +1417,7 @@ EOF
 	    print STDERR "$progname debug: requesting URL $url\n" if $debug;
 	    my $headers = HTTP::Headers->new;
 	    $headers->header('Accept' => '*/*');
+	    $headers->header('Referer' => $base);
 	    $request = HTTP::Request->new('GET', $url, $headers);
 	    $response = $user_agent->request($request, $fname);
 	    if (! $response->is_success) {
@@ -1463,11 +1482,13 @@ EOF
 
     # Call mk-origtargz (renames, repacks, etc.)
     my $mk_origtargz_out;
+    my $path = "$destdir/$newfile_base";
     my $target = $newfile_base;
     unless ($symlink eq "no") {
 	my @cmd = ("mk-origtargz");
 	push @cmd, "--package", $pkg;
 	push @cmd, "--version", $newversion;
+	push @cmd, '--repack-suffix', $options{repacksuffix} if defined $options{repacksuffix};
 	push @cmd, "--rename" if $symlink eq "rename";
 	push @cmd, "--copy"   if $symlink eq "copy";
 	push @cmd, "--repack" if $repack;
@@ -1475,14 +1496,17 @@ EOF
 	push @cmd, "--directory", $destdir;
 	push @cmd, "--copyright-file", "debian/copyright"
 	    if ($exclusion && -e "debian/copyright");
-	push @cmd, "$destdir/$newfile_base";
+	push @cmd, "--copyright-file", $copyright_file
+	    if ($exclusion && defined $copyright_file);
+	push @cmd, $path;
 
 	spawn(exec => \@cmd,
 	      to_string => \$mk_origtargz_out,
 	      wait_child => 1);
 	chomp($mk_origtargz_out);
-	$target = $1 if $mk_origtargz_out =~ /Successfully .* (?:to|as) ([^,]+)\.$/;
-	$target = $1 if $mk_origtargz_out =~ /Leaving (.*) where it is/;
+	$path = $1 if $mk_origtargz_out =~ /Successfully .* (?:to|as) ([^,]+)\.$/;
+	$path = $1 if $mk_origtargz_out =~ /Leaving (.*) where it is/;
+	$target = basename($path);
     }
 
     if ($dehs) {
@@ -1490,8 +1514,8 @@ EOF
 	if (defined $mk_origtargz_out) {
 	    $msg .= "$mk_origtargz_out\n";
 	}
-	$dehs_tags{target} = basename($target);
-	$dehs_tags{'target-path'} = $target;
+	$dehs_tags{target} = $target;
+	$dehs_tags{'target-path'} = $path;
 	dehs_msg($msg);
     }
     else {
@@ -1512,9 +1536,9 @@ EOF
 	}
 
 	if ($watch_version > 1) {
-	    push @cmd, "--upstream-version", $newversion, $target;
+	    push @cmd, "--upstream-version", $newversion, $path;
 	} else {
-	    push @cmd, $target, $newversion;
+	    push @cmd, $path, $newversion;
 	}
 	my $actioncmd = join(" ", @cmd);
 	print "-- Executing user specified script\n     $actioncmd\n" if $verbose;

@@ -26,7 +26,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use 5.008;  # We're using PerlIO layers
 use strict;
@@ -624,7 +624,7 @@ my $MAINTAINER = 'MAINTAINER';
 my $EMAIL = 'EMAIL';
 my $DISTRIBUTION = 'UNRELEASED';
 my $bpo_dist = '';
-my %bpo_dists = ( 60, 'squeeze', 70, 'wheezy' );
+my %bpo_dists = ( 60, 'squeeze', 70, 'wheezy', 80, 'jessie' );
 my $latest_bpo_dist = '70';
 my $CHANGES = '';
 # Changelog urgency, possibly propogated to NEWS files
@@ -645,7 +645,8 @@ if (! $opt_create || ($opt_create && $opt_news)) {
     fatal "No maintainer in changelog!"
 	unless exists $changelog->{Maintainer};
     $changelog->{Maintainer} = decode_utf8($changelog->{Maintainer});
-    ($MAINTAINER,$EMAIL) = ($changelog->{Maintainer} =~ /^([^<]+) <(.*)>/);
+    ($MAINTAINER,$EMAIL) = ($changelog->{Maintainer} =~ /^([^<]*) <(.*)>/);
+    $MAINTAINER ||= '';
     fatal "No distribution in changelog!"
 	unless exists $changelog->{Distribution};
     if ($vendor eq 'Ubuntu') {
@@ -1342,7 +1343,7 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
 	    ($dist_indicator = $1) =~ s/[!:.,;]$//;
 	    chomp $dist_indicator;
 	}
-	elsif (/^ --\s+([^<]+)\s+/) {
+	elsif (/^ --\s+([^<]+)\s+/ || /^ --\s+<(.+?)>/) {
 	    $lastmaint=$1;
 	    # Remember where we are so we can skip back afterwards
 	    $savedline = $line;
@@ -1642,7 +1643,7 @@ sub format_line {
 
     # Work around the fact that write() with formats
     # seems to assume that characters are single-byte
-    # See http://rt.perl.org/rt3/Public/Bug/Display.html?id=33832
+    # See https://rt.perl.org/Public/Bug/Display.html?id=33832
     # and Debian bugs #473769 and #541484
     # This relies on $CHGLINE being a sequence of unicode characters.  We can
     # compare how many unicode characters we have to how many bytes we have

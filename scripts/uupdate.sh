@@ -17,7 +17,7 @@
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 
 # Command line syntax is one of:
@@ -779,6 +779,14 @@ else
 	    done
 	fi
 
+	# Remove all existing symlinks before applying the patch.  We'll
+	# restore them afterwards, but this avoids patch following symlinks,
+	# which may point outside of the source tree
+	declare -a LINKS
+	while IFS= read -d '' -r link; do
+	    LINKS+=("$link")
+	done < <(find -type l -printf '%l\0%p\0' -delete)
+
 	if $DIFFCAT $DIFF | patch -sNp1 ; then
 	    echo "Success!  The diffs from version $VERSION worked fine."
 	else
@@ -789,6 +797,16 @@ else
 	    fi
 	    STATUS=1
 	fi
+
+	# Reinstate symlinks, warning for any which fail
+	for (( i=0; $i < ${#LINKS[@]}; i=$(($i+2)) )); do
+	    target="${LINKS[$i]}"
+	    link="${LINKS[$(($i+1))]}"
+	    if ! ln -s -T "$target" "$link"; then
+		echo "$PROGNAME: warning: Unable to restore the '$link' -> '$target' symlink." >&2
+		STATUS=1
+	    fi
+	done
 
 	for file in "${MOVEDFILES[@]}"; do
 	    if [ -e "$file.upstream" ]; then

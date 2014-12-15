@@ -80,6 +80,9 @@ maybe_expand()
 DSC=1; BCHANGES=1; SCHANGES=1; ARCHDEB=1; INDEPDEB=1; TARBALL=1; DIFF=1
 CHANGES=1; DEB=1; ARCHUDEB=1; INDEPUDEB=1; UDEB=1;
 FILTERED=0; FAIL_MISSING=1
+EXTRACT_PACKAGE_NAME=0
+SORT=0
+TAC=0
 
 while [ $# -gt 0 ]; do
     TYPE=""
@@ -88,6 +91,9 @@ while [ $# -gt 0 ]; do
 	--help|-h) usage; exit 0;;
 	--no-fail-on-missing|-r) FAIL_MISSING=0;;
 	--fail-on-missing) FAIL_MISSING=1;;
+	--package|-p) EXTRACT_PACKAGE_NAME=1;;
+	--sort|-s) SORT=1;;
+	--tac|-t) TAC=1;;
 	--) shift; break;;
 	--no-*)
 	    TYPE=${1#--no-}
@@ -127,7 +133,7 @@ while [ $# -gt 0 ]; do
 	archudeb) [ "$FILTERED" = "1" ] && ARCHUDEB=1 || ARCHUDEB=0;;
 	indepudeb) [ "$FILTERED" = "1" ] && INDEPUDEB=1 || INDEPUDEB=0;;
 	tar|orig) [ "$FILTERED" = "1" ] && TARBALL=1 || TARBALL=0;;
-	diff) [ "$FILTERED" = "1" ] && DIFF=1 || DIFF=0;;
+	diff|debtar) [ "$FILTERED" = "1" ] && DIFF=1 || DIFF=0;;
 	*) echo "$PROGNAME: Unknown option '$1'" >&2; exit 1;;
     esac
     shift
@@ -175,6 +181,12 @@ $THISARG\";"
 		[ "$ARCHUDEB" = "0" ] || echo "newarg=\"\$newarg
 $THISARG\";"
 		echo "SEEN_ARCHUDEB=1;"
+	    elif endswith "$THISARG" .debian.tar.gz || \
+		 endswith "$THISARG" .debian.tar.xz || \
+		 endswith "$THISARG" .debian.tar.bz2; then
+		[ "$DIFF" = "0" ] || echo "newarg=\"\$newarg
+$THISARG\";"
+		echo "SEEN_DIFF=1;"
 	    elif endswith "$THISARG" .tar.gz || \
 		 endswith "$THISARG" .tar.xz || \
 		 endswith "$THISARG" .tar.lzma || \
@@ -265,7 +277,7 @@ $THISARG\";"
 		MISSING=1; echo "$arg: upstream tar not found" >&2
 	    fi
 	    if [ "$DIFF" = "1" ] && [ "$SEEN_DIFF" = "0" ]; then
-		MISSING=1; echo "$arg: Debian diff not found" >&2
+		MISSING=1; echo "$arg: Debian debian.tar/diff not found" >&2
 	    fi
 
 	    [ "$MISSING" = "0" ] || exit 1
@@ -280,6 +292,20 @@ done
 
 IFS='
 '
+if [ "$EXTRACT_PACKAGE_NAME" = "1" ]; then
+    packages=""
+    for arg in $args; do
+        packages="$packages
+$(echo "$arg" |sed s/_.*//)"
+    done
+    args="$packages"
+fi
+if [ "$SORT" = "1" ]; then
+    args="$(echo "$args"| sort -)"
+fi
+if [ "$TAC" = "1" ]; then
+    args="$(echo "$args"| tac -)"
+fi
 if [ -z "$cmd" ]; then
     for arg in $args; do
 	echo $arg
