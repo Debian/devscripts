@@ -46,7 +46,7 @@ sub have_term_size {
 my $progname = basename($0);
 my $modified_conf_msg;
 
-my $url='http://ftp-master.debian.org/testing/update_excuses.html.gz';
+my $url='https://release.debian.org/britney/update_excuses.html.gz';
 
 # No longer use these - see bug#309802
 my $cachedir = $ENV{'HOME'}."/.devscripts_cache/";
@@ -92,7 +92,7 @@ if (system("command -v w3m >/dev/null 2>&1") != 0) {
 }
 
 while( my $package=shift ) {
-    my $dump = `w3m -dump -cols $columns "http://release.debian.org/migration/testing.pl?package=$package"`;
+    my $dump = `w3m -dump -cols $columns "https://release.debian.org/migration/testing.pl?package=$package"`;
     $dump =~ s/^.*?(?=Checking)//s;
     $dump =~ s/^\[.*//ms;
     print($dump);
