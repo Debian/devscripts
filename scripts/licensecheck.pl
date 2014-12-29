@@ -440,6 +440,8 @@ sub parselicense {
 	$gplver = " (v$1)";
     } elsif ($licensetext =~ /either version ([^ ]+)(?: of the License)?, or \(at your option\) any later version/) {
 	$gplver = " (v$1 or later)";
+    } elsif ($licensetext =~ /either version ([^ ]+)(?: of the License)?, or \(at your option\) version (\d(?:[\.-]\d+)*)/) {
+	$gplver = " (v$1 or v$2)";
     }
 
     if ($licensetext =~ /(?:675 Mass Ave|59 Temple Place|51 Franklin Steet|02139|02111-1307)/i) {
