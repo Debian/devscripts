@@ -872,9 +872,10 @@ sub process_watchline ($$$$$$)
 		}
 		# Need to convert an armored key to binary for use by gpgv
 		$gpghome = tempdir(CLEANUP => 1);
-		spawn(exec => [$havegpg, '--homedir', $gpghome, '--no-options', '-q', '--batch', '--no-default-keyring', '--import', $keyring],
+		my $newkeyring = "$gpghome/trustedkeys.gpg";
+		spawn(exec => [$havegpg, '--homedir', $gpghome, '--no-options', '-q', '--batch', '--no-default-keyring', '--output', $newkeyring, '--dearmor', $keyring],
 		      wait_child => 1);
-		$keyring = "$gpghome/pubring.gpg";
+		$keyring = $newkeyring
 	    }
 	}
 
