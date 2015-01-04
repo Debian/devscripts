@@ -1,0 +1,30 @@
+have debsign &&
+_debsign()
+{
+    local cur prev options
+
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+    options='-r -p -m -e -k -S -a -t --multi -h --help -version \
+             --re-sign --no-re-sign --debs-dir --no-conf --noconf'
+
+    case $prev in
+	-k)
+	    keyid_options=`gpg -K|grep ^sec|cut -d'/' -f2|cut -d' ' -f1`
+	    COMPREPLY=( $( compgen -W "$keyid_options" | grep ^$cur ) )
+	    ;;
+	*)
+	    COMPREPLY=( $(
+		    compgen -G "${cur}*.changes"
+		    compgen -G "${cur}*.dsc"
+		    compgen -G "${cur}*.commands"
+		    compgen -W "$options" | grep "^$cur"
+		) )
+	    ;;
+    esac
+
+    return 0
+
+}
+[ "$have" ] && complete -F _debsign -o filenames debsign
