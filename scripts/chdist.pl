@@ -237,6 +237,7 @@ sub aptopts
     if ($arch) {
 	print "W: Forcing arch $arch for this command only.\n";
 	push(@opts, '-o', "Apt::Architecture=$arch");
+	push(@opts, '-o', "Apt::Architectures=$arch");
     }
     return @opts;
 }
@@ -370,6 +371,7 @@ EOF
     print FH <<EOF;
 Apt {
    Architecture "$arch";
+   Architectures "$arch";
 };
 
 Dir "$dir";

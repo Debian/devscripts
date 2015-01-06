@@ -13,6 +13,10 @@ devscripts (2.15.1+exp1) UNRELEASED; urgency=medium
   * debsnap: When specified version or architectures aren't available, warn
     and exit with error code 2.  (Closes: #774276)
 
+  [ Johannes Schauer ]
+  * chdist: Also set Apt::Architectures to prevent foreign architectures from
+    the host leaking into the apt tree (Closes: #774685)
+
  -- James McCoy <jamessan@debian.org>  Sat, 03 Jan 2015 00:47:36 -0500
 
 devscripts (2.15.1) unstable; urgency=medium
