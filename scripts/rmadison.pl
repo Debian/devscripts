@@ -250,7 +250,7 @@ show this help and exit
 
 only show info for this suite
 
-=item B<-s>, B<--regex>
+=item B<-r>, B<--regex>
 
 treat PACKAGE as a regex
 

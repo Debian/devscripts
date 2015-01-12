@@ -17,6 +17,9 @@ devscripts (2.15.1+exp1) UNRELEASED; urgency=medium
   * chdist: Also set Apt::Architectures to prevent foreign architectures from
     the host leaking into the apt tree (Closes: #774685)
 
+  [ Iain Lane ]
+  * rmadison: The short option for --regex is -r, not -s.
+
  -- James McCoy <jamessan@debian.org>  Sat, 03 Jan 2015 00:47:36 -0500
 
 devscripts (2.15.1) unstable; urgency=medium
