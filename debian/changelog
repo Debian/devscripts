@@ -12,6 +12,8 @@ devscripts (2.15.1+exp1) UNRELEASED; urgency=medium
   [ James McCoy ]
   * debsnap: When specified version or architectures aren't available, warn
     and exit with error code 2.  (Closes: #774276)
+  * rmadison:
+    + Display the usage to the specified fd instead of ignoring it.
 
   [ Johannes Schauer ]
   * chdist: Also set Apt::Architectures to prevent foreign architectures from

@@ -62,7 +62,7 @@ if (system('dpkg-vendor', '--is', 'ubuntu') == 0) {
 
 sub usage($$) {
     my ($fd, $exit) = @_;
-    print <<EOT;
+    print $fd <<EOT;
 Usage: rmadison [OPTION] PACKAGE[...]
 Display information about PACKAGE(s).
 
