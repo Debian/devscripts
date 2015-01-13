@@ -47,13 +47,13 @@ EOT
 }
 
 my %url_map = (
-    'debian' => "https://qa.debian.org/madison.php",
+    'debian' => "https://api.ftp-master.debian.org/madison",
+    'new' => "https://api.ftp-master.debian.org/madison?s=new",
     'qa' => "https://qa.debian.org/madison.php",
     'ubuntu' => "http://people.canonical.com/~ubuntu-archive/madison.cgi",
     'udd' => 'https://qa.debian.org/cgi-bin/madison.cgi',
-    'new' => 'https://qa.debian.org/cgi-bin/madison.cgi?table=new',
 );
-my $default_url = 'debian,new';
+my $default_url = 'debian';
 if (system('dpkg-vendor', '--is', 'ubuntu') == 0) {
     $default_url = 'ubuntu';
 }
@@ -275,10 +275,11 @@ show projectb snapshot and reload time (not supported by all archives)
 =item B<-u>, B<--url=>I<URL>[B<,>I<URL> ...]
 
 use I<URL> for the query. Supported shorthands are
- B<debian> or B<qa> https://qa.debian.org/madison.php
+ B<debian> https://api.ftp-master.debian.org/madison
+ B<new> https://api.ftp-master.debian.org/madison?s=new
+ B<qa> https://qa.debian.org/madison.php
  B<ubuntu> http://people.canonical.com/~ubuntu-archive/madison.cgi
  B<udd> https://qa.debian.org/cgi-bin/madison.cgi
- B<new> https://qa.debian.org/cgi-bin/madison.cgi?table=new
 
 See the B<RMADISON_URL_MAP_> variable below for a method to add
 new shorthands.
@@ -317,7 +318,7 @@ B<RMADISON_URL_MAP_*> variables.
 =item B<RMADISON_DEFAULT_URL>=I<URL>
 
 Set the default URL to use unless overridden by a command line option.
-For Debian this defaults to debian,new. For Ubuntu this defaults to ubuntu.
+For Debian this defaults to debian. For Ubuntu this defaults to ubuntu.
 
 =item B<RMADISON_ARCHITECTURE>=I<ARCH>
 
