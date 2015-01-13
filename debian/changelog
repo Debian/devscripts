@@ -15,6 +15,8 @@ devscripts (2.15.1+exp1) UNRELEASED; urgency=medium
   * rmadison:
     + Display the usage to the specified fd instead of ignoring it.
     + Display the known URL aliases in the usage.
+    + Display all the URLs in --help when $default_url is a comma-separated
+      list.
 
   [ Johannes Schauer ]
   * chdist: Also set Apt::Architectures to prevent foreign architectures from

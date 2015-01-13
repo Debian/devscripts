@@ -62,6 +62,10 @@ if (system('dpkg-vendor', '--is', 'ubuntu') == 0) {
 
 sub usage($$) {
     my ($fd, $exit) = @_;
+    my @urls = split /,/, $default_url;
+    my $url = (@urls > 1) ? join(', and ', join(', ', @urls[0..$#urls-1]), $urls[-1])
+                          : $urls[0];
+
     print $fd <<EOT;
 Usage: rmadison [OPTION] PACKAGE[...]
 Display information about PACKAGE(s).
@@ -76,7 +80,7 @@ Display information about PACKAGE(s).
   -s, --suite=SUITE          only show info for this suite
   -S, --source-and-binary    show info for the binary children of source pkgs
   -t, --time                 show projectb snapshot date
-  -u, --url=URL              use URL instead of $url_map{$default_url}
+  -u, --url=URL              use URL instead of $url
 
   --noconf, --no-conf        don\'t read devscripts configuration files
 
