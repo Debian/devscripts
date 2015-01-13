@@ -82,7 +82,12 @@ Display information about PACKAGE(s).
 
 ARCH, COMPONENT and SUITE can be comma (or space) separated lists, e.g.
     --architecture=m68k,i386
+
+Aliases for URLs:
 EOT
+    foreach my $alias (sort keys %url_map) {
+	print $fd "\t$alias\t$url_map{$alias}\n";
+    }
     exit $exit;
 }
 
