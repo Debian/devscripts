@@ -27,6 +27,7 @@ except ImportError:
     Logger.error("Please install 'python3-debian' in order to use this utility.")
     sys.exit(1)
 
+
 def _insert_after(paragraph, item_before, new_item, new_value):
     """Insert new_item into directly after item_before
 
@@ -41,6 +42,7 @@ def _insert_after(paragraph, item_before, new_item, new_value):
             paragraph[new_item] = new_value
     if not item_found:
         paragraph[new_item] = new_value
+
 
 class Control(object):
     """Represents a debian/control file"""
