@@ -4,6 +4,7 @@ devscripts (2.15.1+exp1) UNRELEASED; urgency=medium
   * licensecheck:
     + Handle license like GPL version 2 or 3 (which is not GPL-2+)
     + Ignore .pc directories
+    + print copyrights in a non random-order
 
   [ Daniel Kahn Gillmor ]
   * uscan: explicitly dearmor, rather than --import upstream signing key

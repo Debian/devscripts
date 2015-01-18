@@ -295,7 +295,7 @@ while (@files) {
     }
     close($F);
 
-    $copyright = join(" / ", values %copyrights);
+    $copyright = join(" / ", reverse sort values %copyrights);
 
     print qq(----- $file header -----\n$content----- end header -----\n\n)
 	if $OPT{'verbose'};
