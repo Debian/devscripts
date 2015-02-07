@@ -5,7 +5,7 @@ grep-excuses \- search the testing excuses files for a specific maintainer
 \fBgrep-excuses\fR [\fIoptions\fR] [\fImaintainer\fR|\fIpackage\fR]
 .SH DESCRIPTION
 \fBgrep-excuses\fR downloads the update_excuses.html file and greps it
-for the specified maintainer name.  The \fBlibwww-perl\fR package is
+for the specified maintainer or package name.  The \fBwget\fR package is
 required for this script.  If no name is given on the command line,
 first the environment variable \fBDEBFULLNAME\fR is used if it is
 defined, and failing that, the configuration variable described below
