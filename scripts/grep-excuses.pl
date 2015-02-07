@@ -24,6 +24,8 @@ use File::Basename;
 
 # Needed for --wipnity option
 
+open DEBUG, ">/dev/null" or die $!;
+
 my $term_size_broken;
 
 sub have_term_size {
@@ -67,6 +69,7 @@ Options:
                       name must be given when using this option.
   --help              Show this help
   --version           Give version information
+  --debug             Print debugging output to stderr
 
 Default settings modified by devscripts configuration files:
 $modified_conf_msg
@@ -150,6 +153,10 @@ while (@ARGV and $ARGV[0] =~ /^-/) {
 	    die "$progname: too many arguments!  Try $progname --help for help.\n";
 	} else { wipnity($string); exit 0; }
     }
+    if ($ARGV[0] eq '--debug') {
+	open DEBUG, ">&STDERR" or die $!;
+	shift; next;
+    }
     if ($ARGV[0] eq '--help') { usage(); exit 0; }
     if ($ARGV[0] eq '--version') { print $version; exit 0; }
     if ($ARGV[0] =~ /^--no-?conf$/) {
@@ -175,6 +182,8 @@ if (@ARGV) {
 if (system("command -v wget >/dev/null 2>&1") != 0) {
     die "$progname: this program requires the wget package to be installed\n";
 }
+
+print DEBUG "Fetching $url\n";
 
 open EXCUSES, "wget -q -O - $url | zcat |" or
     die "$progname: wget | zcat failed: $!\n";
