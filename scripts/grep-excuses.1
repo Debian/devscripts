@@ -4,7 +4,8 @@ grep-excuses \- search the testing excuses files for a specific maintainer
 .SH SYNOPSIS
 \fBgrep-excuses\fR [\fIoptions\fR] [\fImaintainer\fR|\fIpackage\fR]
 .SH DESCRIPTION
-\fBgrep-excuses\fR downloads the update_excuses.html file and greps it
+\fBgrep-excuses\fR downloads the autoremovals and update_excuses.html files
+and greps them
 for the specified maintainer or package name.  The \fBwget\fR package is
 required for this script.  If no name is given on the command line,
 first the environment variable \fBDEBFULLNAME\fR is used if it is
@@ -25,6 +26,9 @@ Show a brief usage message.
 .TP
 .B \-\-version
 Show version and copyright information.
+.TP
+.B \-\-no\-autoremovals
+Investigate and show only testing propagation excuses, not autoremovals.
 .TP
 .B \-\-debug
 Print debugging output to stderr (including url(s) fetched).

@@ -25,6 +25,7 @@ use File::Basename;
 # Needed for --wipnity option
 
 open DEBUG, ">/dev/null" or die $!;
+my $do_autoremovals = 1;
 
 my $term_size_broken;
 
@@ -50,6 +51,9 @@ my $modified_conf_msg;
 
 my $url='https://release.debian.org/britney/update_excuses.html.gz';
 
+my $rmurl='https://udd.debian.org/cgi-bin/autoremovals.cgi';
+my $rmurl_yaml='https://udd.debian.org/cgi-bin/autoremovals.yaml.cgi';
+
 # No longer use these - see bug#309802
 my $cachedir = $ENV{'HOME'}."/.devscripts_cache/";
 my $cachefile = $cachedir . basename($url);
@@ -67,6 +71,7 @@ Options:
                       must be the first option given
   --wipnity, -w       Check <https://release.debian.org/migration/>.  A package
                       name must be given when using this option.
+  --no-autoremovals   Do not investigate and report autoremovals
   --help              Show this help
   --version           Give version information
   --debug             Print debugging output to stderr
@@ -157,6 +162,7 @@ while (@ARGV and $ARGV[0] =~ /^-/) {
 	open DEBUG, ">&STDERR" or die $!;
 	shift; next;
     }
+    if ($ARGV[0] eq '--no-autoremovals') { $do_autoremovals=0; shift; next; }
     if ($ARGV[0] eq '--help') { usage(); exit 0; }
     if ($ARGV[0] eq '--version') { print $version; exit 0; }
     if ($ARGV[0] =~ /^--no-?conf$/) {
@@ -182,6 +188,78 @@ if (@ARGV) {
 if (system("command -v wget >/dev/null 2>&1") != 0) {
     die "$progname: this program requires the wget package to be installed\n";
 }
+
+sub grep_autoremovals () {
+    print DEBUG "Fetching $rmurl\n";
+
+    open REMOVALS, "wget -q -O - $rmurl |" or
+	die "$progname: wget $rmurl failed: $!\n";
+
+    my $wantmaint = 0;
+    my %reportpkgs;
+
+    while (<REMOVALS>) {
+	if (m%^https?:%) {
+	    next;
+	}
+	if (m%^\S%) {
+	    $wantmaint = m%^\Q$string\E\b%;
+	    next;
+	}
+	if (m%^$%) {
+	    $wantmaint = undef;
+	    next;
+	}
+	if (defined $wantmaint && m%^\s+([0-9a-z][-.+0-9a-z]*):\s*(.*)%) {
+	    next unless $wantmaint || $1 eq $string;
+	    warn "$progname: package $1 repeated in $rmurl at line $.:\n$_"
+		if defined $reportpkgs{$1};
+	    $reportpkgs{$1} = $2;
+	    next;
+	}
+	warn "$progname: unprocessed line $. in $rmurl:\n$_";
+    }
+    $?=0; close REMOVALS or die "$progname: fetch $rmurl failed ($? $!)\n";
+
+    return unless %reportpkgs;
+
+    print DEBUG "Fetching $rmurl_yaml\n";
+
+    open REMOVALS, "wget -q -O - $rmurl_yaml |" or
+	die "$progname: wget $rmurl_yaml failed: $!\n";
+
+    my $reporting = 0;
+    while (<REMOVALS>) {
+	if (m%^([0-9a-z][-.+0-9a-z]*):$%) {
+	    my $pkg = $1;
+	    my $human = $reportpkgs{$pkg};
+	    delete $reportpkgs{$pkg};
+	    $reporting = !!defined $human;
+	    if ($reporting) {
+		print"$pkg (AUTOREMOVAL)\n  $human\n" or die $!;
+	    }
+	    next;
+	}
+	if (m%^[ \t]%) {
+	    if ($reporting) {
+		print "    ", $_ or die $!;
+	    }
+	    next;
+	}
+	if (m%^$% || m%^\#%) {
+	    next;
+	}
+	warn "$progname: unprocessed line $. in $rmurl_yaml:\n$_";
+    }
+
+    $?=0; close REMOVALS or die "$progname: fetch $rmurl_yaml failed ($? $!)\n";
+
+    foreach my $pkg (keys %reportpkgs) {
+	print "$pkg (AUTOREMOVAL)\n  $reportpkgs{$pkg}\n" or die $!;
+    }
+}
+
+grep_autoremovals() if $do_autoremovals;
 
 print DEBUG "Fetching $url\n";
 
