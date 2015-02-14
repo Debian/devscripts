@@ -21,6 +21,9 @@ devscripts (2.15.1+exp1) UNRELEASED; urgency=medium
     + Remove 404ing myon and debug URLs
     + Use https://api.ftp-master.debian.org/madison for debian and new URLs.
       This also fixes support for the -b option.  (Closes: #775084)
+  * mk-origtargz: Avoid adding the same file to the "to be deleted" list
+    multiple times.  This may also cause patterns to be declared as unused if
+    a file is matched by multiple patterns.  (Closes: #776318)
 
   [ Johannes Schauer ]
   * chdist: Also set Apt::Architectures to prevent foreign architectures from
