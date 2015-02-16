@@ -38,6 +38,12 @@ devscripts (2.15.1+exp1) UNRELEASED; urgency=medium
     files in the debian/ directory that get sorted alphabetically.
     (Closes: #765338)
 
+  [ Ian Jackson ]
+  * grep-excuses:
+    + Minor manpage corrections.  (Closes: #777344)
+    + Add --debug option.  (Closes: #777345)
+    + Search for autoremovals too, by default.  (Closes: #777346)
+
  -- James McCoy <jamessan@debian.org>  Sat, 03 Jan 2015 00:47:36 -0500
 
 devscripts (2.15.1) unstable; urgency=medium
