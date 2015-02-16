@@ -187,7 +187,7 @@ done
 IFS="${OIFS:- 	}"
 
 GNUPGHOME=$(mktemp -d)
-trap 'rm -r "$GNUPGHOME"' HUP INT QUIT PIPE ALRM TERM
+trap '[ ! -d "$GNUPGHOME" ] ||  rm -r "$GNUPGHOME"' HUP INT QUIT PIPE ALRM TERM
 export GNUPGHOME
 
 # Some useful abbreviations for gpg options
@@ -245,5 +245,5 @@ for package; do
     test $# -eq 1 || echo
 done
 
-rm -r "$GNUPGHOME"
+[ ! -d "$GNUPGHOME" ] || rm -r "$GNUPGHOME"
 exit 0
