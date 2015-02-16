@@ -186,9 +186,13 @@ done
 
 IFS="${OIFS:- 	}"
 
+GNUPGHOME=$(mktemp -d)
+trap 'rm -r "$GNUPGHOME"' HUP INT QUIT PIPE ALRM TERM
+export GNUPGHOME
+
 # Some useful abbreviations for gpg options
-GPG_NO_KEYRING="--no-options --no-auto-check-trustdb --no-default-keyring --keyring /dev/null"
 GPG_OPTIONS="--no-options --no-auto-check-trustdb --no-default-keyring"
+GPG_NO_KEYRING="$GPG_OPTIONS --keyring /dev/null"
 
 if [ $# -eq 0 ]; then
     usage;
@@ -241,4 +245,5 @@ for package; do
     test $# -eq 1 || echo
 done
 
+rm -r "$GNUPGHOME"
 exit 0
