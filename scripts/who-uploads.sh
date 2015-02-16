@@ -223,7 +223,7 @@ for package; do
 	fi
 
 	GPG_ID=$(echo "$GPG_TEXT" | LC_ALL=C gpg $GPG_NO_KEYRING --keyid-format long --verify 2>&1 |
-	         sed -rne 's/using [^ ]* key ([0-9A-Z]+).*/\1/p')
+	         sed -rne 's/.*using [^ ]* key ([0-9A-Z]+).*/\1/p')
 
 	UPLOADER=$(gpg $GPG_OPTIONS \
 	           "${GPG_DEFAULT_KEYRINGS[@]}" "${GPG_KEYRINGS[@]}" \

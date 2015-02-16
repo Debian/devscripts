@@ -24,6 +24,8 @@ devscripts (2.15.1+exp1) UNRELEASED; urgency=medium
   * mk-origtargz: Avoid adding the same file to the "to be deleted" list
     multiple times.  This may also cause patterns to be declared as unused if
     a file is matched by multiple patterns.  (Closes: #776318)
+  * who-uploads:
+    + Fix extraction of uploader's key id.
 
   [ Johannes Schauer ]
   * chdist: Also set Apt::Architectures to prevent foreign architectures from
