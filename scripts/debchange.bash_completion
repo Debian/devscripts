@@ -1,0 +1,80 @@
+have debchange &&
+_debchange()
+{
+    local cur prev options
+
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+    options='-a --append -i --increment -v --newversion -e --edit\
+             -r --release --force-save-on-release --no-force-save-on-release\
+             --create --empty --package --auto-nmu --no-auto-nmu -n --nmu\
+             --bin-nmu -q --qa -R --rebuild -s --security --team -U --upstream\
+             --bpo -l --local -b --force-bad-version --allow-lower-version\
+             --force-distribution --closes --noquery --query -d --fromdirname\
+             -p --preserve --no-preserve --vendor -D --distribution\
+             -u --urgency -c --changelog --news --nomultimaint --multimaint\
+             --nomultimaint-merge --multimaint-merge -m --maintmaint\
+             -M --controlmaint -t --mainttrailer --check-dirname-level\
+             --check-dirname-regex --no-conf --noconf --release-heuristic\
+             --help -h --version'
+
+#--------------------------------------------------------------------------
+#FIXME: I don't want hard-coding codename...
+#--------------------------------------------------------------------------
+    oldstable_codename='squeeze'
+    stable_codename='wheezy'
+    testing_codename='jessie'
+
+    lts='squeeze-lts'
+
+    distro="oldstable-security oldstable-proposed-updates\
+            "$oldstable_codename"-security\
+            "$oldstable_codename"-backports\
+            "$oldstable_codename"-backports-sloppy\
+            stable-security stable-proposed-updates\
+            "$stable_codename"-security\
+            "$stable_codename"-backports\
+            "$stable_codename"-updates\
+            testing-security testing-proposed-updates\
+            "$testing_codename"-security\
+            unstable experimental $lts"
+
+    urgency='low medium high critical'
+
+    case $prev in
+	--changelog | -c | --news)
+	    COMPREPLY=( $( compgen -G "${cur}*" ) )
+	    ;;
+	--check-dirname-level)
+	    COMPREPLY=( $( compgen -W [0 1 2] ) )
+	    ;;
+#FIXME: we need "querybts --list" option with no verbose output
+#	--closes)
+#	     package=`dpkg-parsechangelog |grep ^Source|cut -d':' -f2|sed -e s/\ //`
+#	     bugnumber=`querybts --list -b $package|grep ^#|cut -d' ' -f1`
+#	     COMPREPLY=( $( compgen -W "$bugnumber" ) )
+#	    ;;
+	-D | --distribution)
+	    COMPREPLY=( $( compgen -W "$distro" ) )
+	    ;;
+	--newversion | -v | --package | --local | -l | --allow-lower-version)
+	    ;;
+	--release-heuristic)
+	    COMPREPLY=( $( compgen -W 'log changelog' ) )
+	    ;;
+	-u | --urgency)
+	    COMPREPLY=( $( compgen -W "$urgency" ) )
+	    ;;
+	*)
+            COMPREPLY=( $(
+                    compgen -W "$options" | grep "^$cur"
+                ) )
+            ;;
+    esac
+
+    return 0
+
+}
+[ "$have" ] && complete -F _debchange debchange
+[ "$have" ] && complete -F _debchange dch
