@@ -28,6 +28,9 @@ devscripts (2.15.1+exp1) UNRELEASED; urgency=medium
     + Fix extraction of uploader's key id.
     * Create a temporary GNUPGHOME to avoid “gpg --list-key” erroring when no
       ~/.gnupg exists.  (Closes: #776209)
+  * bts: Cancel the mail if the spawned editor exits with a non-zero exit
+    code.  This is an alternative way to cancel a command, rather than saving
+    an empty message.  (Closes: #778648)
 
   [ Johannes Schauer ]
   * chdist: Also set Apt::Architectures to prevent foreign architectures from

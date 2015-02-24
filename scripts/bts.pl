@@ -3970,14 +3970,16 @@ sub edit {
 	or die "$progname: writing to temporary file: $!\n";
     print OUT_MAIL $message;
     close OUT_MAIL;
-    system("sensible-editor $filename");
-    open(OUT_MAIL, "<$filename")
-	or die "$progname: reading from temporary file: $!\n";
+    my $rc = system("sensible-editor $filename");
     undef $message;
-    while(<OUT_MAIL>) {
-	$message .= $_;
+    if ($rc == 0) {
+	open(OUT_MAIL, "<$filename")
+	    or die "$progname: reading from temporary file: $!\n";
+	while(<OUT_MAIL>) {
+	    $message .= $_;
+	}
+	close OUT_MAIL;
     }
-    close OUT_MAIL;
     unlink($filename);
     return $message;
 }
