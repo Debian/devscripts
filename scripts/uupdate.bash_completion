@@ -1,0 +1,32 @@
+have uupdate &&
+_uupdate()
+{
+    local cur prev options
+
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+    options='--upstream-version -v --rootcmd -r --pristine -u --no-pristine\
+             --symlink -s --no-symlink --no-conf --noconf --help -h --version'
+
+    case $prev in
+	--pristine | -u)
+            COMPREPLY=( $(
+	        compgen -G "${cur}*[!debian].tar.gz"
+	        compgen -G "${cur}*[!debian].tar.bz2"
+	        compgen -G "${cur}*[!debian].tar.xz"
+	        compgen -G "${cur}*.tgz"
+	        compgen -G "${cur}*.zip"
+	        compgen -G "${cur}*.lzma" ) )
+	    ;;
+        --help | -h | --version)
+           ;;
+	*)
+	    COMPREPLY=( $( compgen -W "$options" | grep "^$cur" ) )
+	    ;;
+    esac
+
+    return 0
+
+}
+[ "$have" ] && complete -F _uupdate -o filenames uupdate
