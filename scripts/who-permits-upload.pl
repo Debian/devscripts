@@ -27,7 +27,7 @@ use Getopt::Long;
 use constant {TYPE_PACKAGE => "package", TYPE_UID => "uid", TYPE_SPONSOR => "sponsor"};
 use constant {SPONSOR_FINGERPRINT => 0, SPONSOR_NAME => 1};
 
-our $DM_URL = "http://ftp-master.debian.org/dm.txt";
+our $DM_URL = "https://ftp-master.debian.org/dm.txt";
 our $KEYRING = "/usr/share/keyrings/debian-keyring.gpg:/usr/share/keyrings/debian-maintainers.gpg";
 our $TYPE = "package";
 our $GPG = "/usr/bin/gpg";

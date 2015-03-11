@@ -31,6 +31,7 @@ devscripts (2.15.1+exp1) UNRELEASED; urgency=medium
   * bts: Cancel the mail if the spawned editor exits with a non-zero exit
     code.  This is an alternative way to cancel a command, rather than saving
     an empty message.  (Closes: #778648)
+  * who-permits-upload: Update URL to use https.
 
   [ Johannes Schauer ]
   * chdist: Also set Apt::Architectures to prevent foreign architectures from
