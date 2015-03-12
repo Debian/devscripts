@@ -13,7 +13,6 @@ Build-Depends: debhelper (>= 9),
                file,
                libdistro-info-perl,
                libfile-desktopentry-perl,
-               libparse-debcontrol-perl,
                libtimedate-perl,
                liburi-perl,
                libwww-perl,
@@ -52,7 +51,6 @@ Recommends: at,
             libdistro-info-perl,
             libencode-locale-perl,
             libjson-perl,
-            libparse-debcontrol-perl,
             liburi-perl,
             libwww-perl,
             lintian,
@@ -121,7 +119,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - dd-list: given a list of packages, pretty-print it ordered by maintainer
   - debc: display the contents of just-built .debs
   - debchange/dch: automagically add entries to debian/changelog files
-    [libdistro-info-perl, libparse-debcontrol-perl, libsoap-lite-perl]
+    [libdistro-info-perl, libsoap-lite-perl]
   - debcheckout: checkout the development repository of a Debian package
   - debclean: clean a Debian source tree [fakeroot]
   - debcommit: commit changes to cvs, darcs, svn, svk, tla, bzr, git, or hg,
@@ -207,8 +205,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - wnpp-check: check whether there is an open request for packaging or
     intention to package bug for a package [wget | curl]
   - who-permits-upload: Retrieve information about Debian Maintainer access
-    control lists [gnupg, libencode-locale-perl, libparse-debcontrol-perl,
-    libwww-perl, debian-keyring]
+    control lists [gnupg, libencode-locale-perl, libwww-perl, debian-keyring]
   - wrap-and-sort: wrap long lines and sort items in packaging files
     [python3-debian]
  .

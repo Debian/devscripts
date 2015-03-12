@@ -32,6 +32,8 @@ devscripts (2.15.1+exp1) UNRELEASED; urgency=medium
     code.  This is an alternative way to cancel a command, rather than saving
     an empty message.  (Closes: #778648)
   * who-permits-upload: Update URL to use https.
+  * Replace use of Parse::DebControl with Dpkg::Control to work around
+    #780138 and remove a dependency.
 
   [ Johannes Schauer ]
   * chdist: Also set Apt::Architectures to prevent foreign architectures from

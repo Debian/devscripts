@@ -66,7 +66,7 @@ And now, in mostly alphabetical order, the scripts:
 - debchange (abbreviation dch): Modifies debian/changelog and manages version
   numbers for you.  It will either increment the version number or add a
   entry for the current version, depending upon the options given to it.
-  [libdistro-info-perl, libparse-debcontrol-perl, libsoap-lite-perl]
+  [libdistro-info-perl, libsoap-lite-perl]
 
 - debcheckout: checkout the development repository of a Debian package
 
@@ -248,8 +248,7 @@ And now, in mostly alphabetical order, the scripts:
 - whodepends: check which maintainers' packages depend on a package
 
 - who-permits-upload: Retrieve information about Debian Maintainer access
-  control lists [gnupg, libencode-locale-perl, libparse-debcontrol-perl,
-  libwww-perl, debian-keyring]
+  control lists [gnupg, libencode-locale-perl, libwww-perl, debian-keyring]
 
 - who-uploads: determine the most recent uploaders of a package to the Debian
   archive [gnupg, debian-keyring, debian-maintainers, wget]
