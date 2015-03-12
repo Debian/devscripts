@@ -266,7 +266,7 @@ sub lookup_fingerprint
     }
     my @fields = split(":", $uid);
     $uid = $fields[9];
-    close(CMD) || leave("gpg returned an error looking for $fingerprint: $?");
+    close(CMD) || leave("gpg returned an error looking for $fingerprint: ". ($? >> 8));
 
     $GPG_CACHE{$fingerprint} = $uid;
 
