@@ -54,6 +54,10 @@ devscripts (2.15.1+exp1) UNRELEASED; urgency=medium
     + Add --debug option.  (Closes: #777345)
     + Search for autoremovals too, by default.  (Closes: #777346)
 
+  [ Hideki Yamane ]
+  * Add bash completion for dch, debsign, and uupdate.  (Closes: #774544,
+    #778963, #779279)
+
  -- James McCoy <jamessan@debian.org>  Sat, 03 Jan 2015 00:47:36 -0500
 
 devscripts (2.15.1) unstable; urgency=medium
