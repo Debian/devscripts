@@ -34,6 +34,8 @@ devscripts (2.15.1+exp1) UNRELEASED; urgency=medium
   * who-permits-upload: Update URL to use https.
   * Replace use of Parse::DebControl with Dpkg::Control to work around
     #780138 and remove a dependency.
+  * uscan: Always remove the Referer header for Sourceforge, not just when
+    going via the redirector.  (Closes: #778860)
 
   [ Johannes Schauer ]
   * chdist: Also set Apt::Architectures to prevent foreign architectures from

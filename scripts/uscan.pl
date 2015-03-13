@@ -431,15 +431,14 @@ package main;
 my $user_agent = LWP::UserAgent::UscanCatchRedirections->new(env_proxy => 1);
 $user_agent->timeout($timeout);
 $user_agent->agent($user_agent_string);
-# Strip Referer header for the sf.net redirector to avoid SF sending back a
-# 200 OK with a <meta refresh=...> redirect
+# Strip Referer header for Sourceforge to avoid SF sending back a 200 OK with a
+# <meta refresh=...> redirect
 $user_agent->add_handler(
     'request_prepare' => sub {
 	my ($request, $ua, $h) = @_;
 	$request->remove_header('Referer');
     },
-    m_hostname => 'qa.debian.org',
-    m_path_prefix => '/watch/sf.php',
+    m_hostname => 'sourceforge.net',
 );
 
 if (defined $opt_watchfile) {
