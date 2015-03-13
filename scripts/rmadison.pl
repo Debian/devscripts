@@ -192,6 +192,10 @@ my @url = split /,/, $url;
 
 my $status = 0;
 
+# Strip arch qualifiers from the package name, to help those that are feeding
+# in output from other commands
+s/:.*// for (@ARGV);
+
 foreach my $url (@url) {
     print "$url:\n" if @url > 1;
     $url = $url_map{$url} if $url_map{$url};
