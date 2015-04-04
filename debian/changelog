@@ -1,3 +1,10 @@
+devscripts (2.15.3) unstable; urgency=medium
+
+  * debchange: Use bpo8 instead of bpo80 for jessie-backports, per
+    https://lists.debian.org/debian-backports/2014/11/msg00031.html.
+
+ -- James McCoy <jamessan@debian.org>  Fri, 03 Apr 2015 21:47:54 -0400
+
 devscripts (2.15.2) unstable; urgency=medium
 
   * debchange: Make jessie default backports release.
