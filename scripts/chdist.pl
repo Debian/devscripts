@@ -330,7 +330,8 @@ sub dist_create
     }
     make_path($datadir);
     foreach my $d (('/etc/apt', '/etc/apt/apt.conf.d', '/etc/apt/preferences.d',
-		    '/etc/apt/trusted.gpg.d', '/var/lib/apt/lists/partial',
+		    '/etc/apt/trusted.gpg.d', '/etc/apt/sources.list.d',
+		    '/var/lib/apt/lists/partial',
 		    '/var/cache/apt/archives/partial', '/var/lib/dpkg')) {
 	make_path("$dir/$d");
     }

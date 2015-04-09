@@ -68,6 +68,9 @@ devscripts (2.15.4) UNRELEASED; urgency=medium
   * Consistently use Makefile variables to control the installation layout.
     (Closes: #728607)
 
+  [ Antonio Terceiro ]
+  * chdist: also create /etc/apt/sources.list.d
+
  -- James McCoy <jamessan@debian.org>  Thu, 02 Apr 2015 21:45:22 -0400
 
 devscripts (2.15.3) unstable; urgency=medium
