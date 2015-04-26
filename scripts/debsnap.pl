@@ -31,6 +31,7 @@ eval {
     require LWP::UserAgent;
     no warnings;
     $LWP::Simple::ua = LWP::UserAgent->new(agent => 'LWP::UserAgent/Devscripts/###VERSION###');
+    $LWP::Simple::ua->env_proxy();
 };
 if ($@) {
     if ($@ =~ m/Can\'t locate LWP/) {

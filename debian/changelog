@@ -40,6 +40,8 @@ devscripts (2.15.4) UNRELEASED; urgency=medium
       via the redirector.  (Closes: #778860)
     + Let the OS assign a port to the test's HTTP server so tests don't fail
       when something is already using port 8000.
+  * Ensure all LWP-using scripts honor a proxy set in the environment.
+    (Closes: #781611)
 
   [ Johannes Schauer ]
   * chdist: Also set Apt::Architectures to prevent foreign architectures from

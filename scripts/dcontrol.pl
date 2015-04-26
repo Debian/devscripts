@@ -53,6 +53,7 @@ my $dcontrol_url;
 my $opt;
 
 my $ua = LWP::UserAgent->new(agent => "$progname ###VERSION###");
+$ua->env_proxy();
 
 # functions
 
