@@ -71,6 +71,10 @@ devscripts (2.15.4) UNRELEASED; urgency=medium
   [ Antonio Terceiro ]
   * chdist: also create /etc/apt/sources.list.d
 
+  [ Simon McVittie ]
+  * mergechanges: Add --indep option to skip architecture-specific packages.
+    (Closes: #782354)
+
  -- James McCoy <jamessan@debian.org>  Thu, 02 Apr 2015 21:45:22 -0400
 
 devscripts (2.15.3) unstable; urgency=medium
