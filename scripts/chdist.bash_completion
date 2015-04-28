@@ -9,7 +9,9 @@ _chdist ()
 	   compare-versions compare-bin-versions
 	   grep-dctrl-packages grep-dctrl-sources
 	   list'
-  local archs='i386 amd64 powerpc m68k sparc alpha hppa arm mips mipsel ia64 armel s390 ppc64 sh armeb m32r'
+  # Sync'd with buildd.debian.org and buildd.debian-ports.org on 2015-04-28:
+  local archs="amd64 arm64 armel armhf hurd-i386 i386 ia64 kfreebsd-amd64 kfreebsd-i386 mips mipsel powerpc ppc64el s390 s390x sparc \
+    alpha hppa m68k powerpcspe ppc64 sh4 sparc64 x32"
   local dists=$(ls $HOME/.chdist 2>/dev/null)
 
   COMPREPLY=()
