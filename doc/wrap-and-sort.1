@@ -23,8 +23,10 @@ wrap-and-sort \- wrap long lines and sort items in Debian packaging files
 \fBwrap\-and\-sort\fP wraps the package lists in Debian control files. By
 default the lists will only split into multiple lines if the entries are longer
 than the maximum line length limit of 79 characters. \fBwrap\-and\-sort\fP sorts
-the package lists in Debian control files and all \fI.install\fR files. Beside
-that \fBwrap\-and\-sort\fP removes trailing spaces in these files.
+the package lists in Debian control files and all \fI.dirs\fR, \fI.docs\fR,
+\fI.examples\fR, \fI.info\fR, \fI.install\fR, \fI.links\fR, \fI.maintscript\fR,
+and \fI.manpages\fR files. Beside that \fBwrap\-and\-sort\fP removes trailing
+spaces in these files.
 .PP
 This script should be run in the root of a Debian package tree. It searches for
 \fIcontrol\fR, \fIcontrol*.in\fR, \fIcopyright\fR, \fIcopyright.in\fR,
