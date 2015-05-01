@@ -25,10 +25,12 @@ PROGNAME=`basename $0`
 
 usage () {
     echo \
-"Usage: $PROGNAME [-h|--help|--version] [-f] <file1> <file2> [<file> ...]
+"Usage: $PROGNAME [-h|--help|--version] [-i|--indep] [-f] <file1> <file2> [<file> ...]
   Merge the changes files <file1>, <file2>, ....  Output on stdout
   unless -f option given, in which case, output to
-  <package>_<version>_multi.changes in the same directory as <file1>."
+  <package>_<version>_multi.changes in the same directory as <file1>.
+  If -i is given, only source and architecture-independent packages
+  are included in the output."
 }
 
 version () {
