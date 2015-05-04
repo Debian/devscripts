@@ -53,7 +53,6 @@ use 5.008;
 use File::Basename;
 use filetest 'access';
 use Cwd;
-BEGIN { push @INC, '/usr/share/devscripts'; }
 use Devscripts::Compression;
 use Dpkg::IPC;
 use IO::Handle;  # for flushing

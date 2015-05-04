@@ -18,7 +18,7 @@ if test "$1" = --installed; then
     COMMAND="dch --no-conf"
     shift
 else
-    COMMAND="perl -I ${0%/*}/.. ${0%/*}/../scripts/debchange.pl --no-conf"
+    COMMAND="perl -I ${0%/*}/../lib ${0%/*}/../scripts/debchange.pl --no-conf"
 fi
 
 . "${0%/*}/shunit2-helper-functions.sh"

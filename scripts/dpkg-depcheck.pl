@@ -22,7 +22,6 @@ use Cwd;
 use File::Basename;
 use Getopt::Long;
 
-BEGIN { push @INC, '/usr/share/devscripts'; }
 use Devscripts::Set;
 use Devscripts::Packages;
 use Devscripts::PackageDeps;

@@ -33,7 +33,6 @@ use File::Temp qw/tempfile tempdir/;
 use List::Util qw/first/;
 use filetest 'access';
 use Getopt::Long qw(:config gnu_getopt);
-BEGIN { push(@INC, '/usr/share/devscripts') } # append to @INC, so that -I . has precedence
 use Devscripts::Versort;
 use Text::ParseWords;
 BEGIN {

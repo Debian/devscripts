@@ -40,14 +40,14 @@ ifeq ($(shell dpkg-vendor --query Vendor),Ubuntu)
 # will be for preparing PPA uploads.
 	sed -i 's/get_ubuntu_devel_distro()/"$(shell lsb_release -cs)"/' $@
 endif
-	perl -I.. -c $@
+	perl -I ../lib -c $@
 
 %.tmp: %.sh $(VERSION_FILE)
 	sed -e "s/###VERSION###/$(VERSION)/" $<  > $@
 	bash -n $@
 %.tmp: %.pl $(VERSION_FILE)
 	sed -e "s/###VERSION###/$(VERSION)/" $<  > $@
-	perl -I.. -c $@
+	perl -I ../lib -c $@
 %: %.tmp
 	cp $< $@
 	chmod +x $@
@@ -99,8 +99,8 @@ install: all
 	install -dD $(DESTDIR)$(SYSCONFDIR)/bash_completion.d
 	cp $(COMPLETION) $(DESTDIR)$(SYSCONFDIR)/bash_completion.d
 	# Special treatment for debpkg
-	install -dD $(DESTDIR)$(PERLMOD_DIR)
-	mv $(DESTDIR)$(BINDIR)/debpkg $(DESTDIR)$(PERLMOD_DIR)
+	install -d $(DESTDIR)$(DATA_DIR)
+	mv $(DESTDIR)$(BINDIR)/debpkg $(DESTDIR)$(DATA_DIR)
 	cp debpkg-wrapper $(DESTDIR)$(BINDIR)/debpkg
 
 .PHONY: test

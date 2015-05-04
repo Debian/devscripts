@@ -10,6 +10,8 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
     + Always remove empty elements from lists so “-t” doesn't add a new, empty
       element.  (Closes: #783630)
     + Remove empty lines in debhelper-related files.  (Closes: #780667)
+  * Install Perl modules into $Config{vendorlib} and remove the hacks in
+    various scripts to make them see devscript's modules.
 
  -- Cyril Brulebois <kibi@debian.org>  Tue, 28 Apr 2015 16:58:36 +0200
 

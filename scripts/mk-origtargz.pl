@@ -168,7 +168,6 @@ use Dpkg::IPC;
 use Dpkg::Version;
 use File::Spec;
 
-BEGIN { push(@INC, '/usr/share/devscripts') } # append to @INC, so that -I . has precedence
 use Devscripts::Compression qw/compression_is_supported compression_guess_from_file compression_get_property/;
 use Cwd 'abs_path';
 use File::Copy;

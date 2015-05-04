@@ -21,13 +21,9 @@ if test "$1" = --installed; then
     shift
 else
     top_srcdir=$(readlink -f "${0%/*}/..")
-    if ! [ -x $top_srcdir/scripts/uscan -a -x $top_srcdir/scripts/mk-origtargz ]
-    then
-        echo "Please run make in scripts/"
-	exit 1
-    fi
+    make -C "$top_srcdir/scripts" uscan mk-origtargz
     PATH="$top_srcdir/scripts:$PATH"
-    PERLLIB="$top_srcdir"
+    PERLLIB="$top_srcdir/lib"
     export PERLLIB
     COMMAND="uscan --no-conf --compression=xz"
 fi

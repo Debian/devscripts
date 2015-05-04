@@ -247,7 +247,6 @@ use File::Basename;
 use File::Copy qw/copy/;
 use File::Temp qw/tempdir/;
 use Cwd;
-BEGIN { push @INC, '/usr/share/devscripts'; }
 use Devscripts::Compression;
 use Devscripts::Versort;
 

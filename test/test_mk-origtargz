@@ -22,7 +22,7 @@ if test "$1" = --installed; then
     shift
 else
     top_srcdir=$(readlink -f "${0%/*}/..")
-    MK_ORIGTARGZ="perl -I $top_srcdir $top_srcdir/scripts/mk-origtargz.pl"
+    MK_ORIGTARGZ="perl -I $top_srcdir/lib $top_srcdir/scripts/mk-origtargz.pl"
     PROGNAME="mk-origtargz.pl"
 fi
 

@@ -21,7 +21,6 @@
 
 use strict;
 use warnings;
-BEGIN { push @INC, '/usr/share/devscripts'; }
 use Devscripts::Packages;
 use File::Basename;
 use Getopt::Long qw(:config gnu_getopt);
