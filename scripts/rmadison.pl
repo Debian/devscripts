@@ -95,6 +95,8 @@ EOT
 
 my $params;
 my $default_arch;
+my $ssl_ca_file;
+my $ssl_ca_path;
 
 if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     shift;
@@ -122,6 +124,10 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	    $default_url=$1;
 	} elsif ($envvar =~ /^RMADISON_ARCHITECTURE=(.*)$/) {
 	    $default_arch=$1;
+	} elsif ($envvar =~ /^RMADISON_SSL_CA_FILE=(.*)$/) {
+	    $ssl_ca_file=$1;
+	} elsif ($envvar =~ /^RMADISON_SSL_CA_PATH=(.*)$/) {
+	    $ssl_ca_path=$1;
 	}
     }
 }
@@ -199,7 +205,17 @@ s/:.*// for (@ARGV);
 foreach my $url (@url) {
     print "$url:\n" if @url > 1;
     $url = $url_map{$url} if $url_map{$url};
-    my @cmd = -x "/usr/bin/curl" ? qw/curl -f -s -S -L/ : qw/wget -q -O -/;
+    my @cmd;
+    if ( -x "/usr/bin/curl" ) {
+        @cmd = qw/curl -f -s -S -L/;
+        push @cmd, "--cacert", $ssl_ca_file if $ssl_ca_file;
+        push @cmd, "--capath", $ssl_ca_path if $ssl_ca_path;
+
+    } else {
+        @cmd = qw/wget -q -O -/;
+        push @cmd, "--ca-certificate=$ssl_ca_file" if $ssl_ca_file;
+        push @cmd, "--ca-directory=$ssl_ca_path"   if $ssl_ca_path;
+    }
     system @cmd, $url . (($url =~ m/\?/)?'&':'?')."package=" . join("+", map { uri_escape($_) } @ARGV) . "&text=on&" . join ("&", @args);
     $status = 1 if ($? >> 8 != 0);
 }
@@ -329,6 +345,16 @@ For Debian this defaults to debian. For Ubuntu this defaults to ubuntu.
 Set the default architecture to use unless overridden by a command line option.
 To run an unrestricted query when B<RMADISON_ARCHITECTURE> is set, use
 B<--architecture='*'>.
+
+=item B<RMADISON_SSL_CA_FILE>=I<FILE>
+
+Use the specified CA file instead of the default CA bundle for curl/wget,
+passed as --cacert to curl, and as --ca-certificate to wget.
+
+=item B<RMADISON_SSL_CA_PATH>=I<PATH>
+
+Use the specified CA directory instead of the default CA bundle for curl/wget,
+passed as --capath to curl, and as --ca-directory to wget.
 
 =back
 
