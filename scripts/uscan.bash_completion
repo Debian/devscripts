@@ -1,0 +1,55 @@
+# /etc/bash_completion.d/uscan
+# Programmable Bash command completion for the ‘uscan’ command.
+
+shopt -s progcomp
+
+_uscan_completion () {
+    COMPREPLY=()
+
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    local prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    local opts="--help --verbose"
+    opts+=" --download --report --report-status"
+    opts+=" --no-download --force-download"
+    opts+=" --upstream-version --download-version --download-current-version"
+    opts+=" --check-dirname-level --check-dirname-regex"
+    opts+=" --no-pasv --pasv --timeout --user-agent --useragent"
+    opts+=" --no-verbose --verbose --debug --no-dehs --dehs"
+    opts+=" --no-conf --noconf --watchfile --destdir"
+    opts+=" --package --no-exclusion"
+    opts+=" --symlink --rename --repack --compression --copyright-file"
+
+    case "${prev}" in
+        --compression)
+            local formats=(gzip bzip2 lzma xz)
+            COMPREPLY=( $(compgen -W "${formats[*]}" -- ${cur}) )
+            ;;
+
+        --check-dirname-level)
+            local levels=(0 1 2)
+            COMPREPLY=( $(compgen -W "${levels[*]}" -- ${cur}) )
+            ;;
+
+        --watchfile)
+            COMPREPLY=( $(compgen -A file -- ${cur}) )
+            ;;
+
+        --copyright-file)
+            COMPREPLY=( $(compgen -A file -- ${cur}) )
+            ;;
+
+        *)
+            COMPREPLY=($(compgen -W "${opts}" -- ${cur}))  
+            ;;
+    esac
+}
+
+complete -F _uscan_completion uscan
+
+
+# Local variables:
+# coding: utf-8
+# mode: shell-script
+# End:
+# vim: fileencoding=utf-8 filetype=sh :

@@ -15,6 +15,8 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
     + Remove empty lines in debhelper-related files.  (Closes: #780667)
   * Install Perl modules into $Config{vendorlib} and remove the hacks in
     various scripts to make them see devscript's modules.
+  * Add bash completion scripts for uscan (thanks to Ben Finney) and
+    mk-origtargz.  (Closes: #784394)
 
  -- Cyril Brulebois <kibi@debian.org>  Tue, 28 Apr 2015 16:58:36 +0200
 
