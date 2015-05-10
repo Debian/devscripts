@@ -369,8 +369,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     }
 
     # And what is left should be any ENV settings
-    foreach my $envvar (@othervars) {
-	$envvar =~ /^DEBUILD_SET_ENVVAR_([^=]*)=(.*)$/ or next;
+    foreach my $confvar (@othervars) {
+	$confvar =~ /^DEBUILD_SET_ENVVAR_([^=]*)=(.*)$/ or next;
 	$ENV{$1}=$2;
 	$save_vars{$1}=1;
 	$modified_conf_msg .= "  $1='$2'\n";

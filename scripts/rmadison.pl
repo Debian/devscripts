@@ -117,16 +117,16 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     my $shell_out = `/bin/bash -c '$shell_cmd'`;
     @config_vars = split /\n/, $shell_out, -1;
 
-    foreach my $envvar (@config_vars) {
-	if ($envvar =~ /^RMADISON_URL_MAP_([^=]*)=(.*)$/) {
+    foreach my $confvar (@config_vars) {
+	if ($confvar =~ /^RMADISON_URL_MAP_([^=]*)=(.*)$/) {
 	    $url_map{lc($1)}=$2;
-	} elsif ($envvar =~ /^RMADISON_DEFAULT_URL=(.*)$/) {
+	} elsif ($confvar =~ /^RMADISON_DEFAULT_URL=(.*)$/) {
 	    $default_url=$1;
-	} elsif ($envvar =~ /^RMADISON_ARCHITECTURE=(.*)$/) {
+	} elsif ($confvar =~ /^RMADISON_ARCHITECTURE=(.*)$/) {
 	    $default_arch=$1;
-	} elsif ($envvar =~ /^RMADISON_SSL_CA_FILE=(.*)$/) {
+	} elsif ($confvar =~ /^RMADISON_SSL_CA_FILE=(.*)$/) {
 	    $ssl_ca_file=$1;
-	} elsif ($envvar =~ /^RMADISON_SSL_CA_PATH=(.*)$/) {
+	} elsif ($confvar =~ /^RMADISON_SSL_CA_PATH=(.*)$/) {
 	    $ssl_ca_path=$1;
 	}
     }
