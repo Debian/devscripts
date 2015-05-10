@@ -17,6 +17,8 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
     various scripts to make them see devscript's modules.
   * Add bash completion scripts for uscan (thanks to Ben Finney) and
     mk-origtargz.  (Closes: #784394)
+  * Stop building and shipping libvfork.so since strace has handled vforks for
+    at least a decade.
 
  -- Cyril Brulebois <kibi@debian.org>  Tue, 28 Apr 2015 16:58:36 +0200
 
