@@ -3,7 +3,7 @@ set -e
 
 if [ "$1" = purge ]
 then
-    rm -f /etc/devscripts.conf*
+    rm -f /etc/devscripts.conf* /etc/cowpoke.conf
 fi
 
 for cf in chdist debchange debsign pkgnames uupdate; do
