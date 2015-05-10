@@ -19,6 +19,8 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
     mk-origtargz.  (Closes: #784394)
   * Stop building and shipping libvfork.so since strace has handled vforks for
     at least a decade.
+  * Move bash-completion scripts from /etc/bash_completion.d (compat
+    directory) to /usr/share/bash-completion/completions.
 
  -- Cyril Brulebois <kibi@debian.org>  Tue, 28 Apr 2015 16:58:36 +0200
 

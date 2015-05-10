@@ -20,6 +20,7 @@ CWRAPPERS = debpkg-wrapper
 SCRIPTS = $(patsubst %.pl,%,$(PL_FILES)) $(patsubst %.sh,%,$(SH_FILES))
 COMPL_FILES := $(wildcard *.bash_completion)
 COMPLETION = $(patsubst %.bash_completion,devscripts.%,$(COMPL_FILES))
+COMPL_DIR := $(shell pkg-config --variable=completionsdir bash-completion)
 
 GEN_MAN1S += devscripts.1 mk-origtargz.1
 
@@ -89,7 +90,8 @@ install: all
 	cp $(SCRIPTS) $(DESTDIR)$(BINDIR)
 	ln -sf edit-patch $(DESTDIR)$(BINDIR)/add-patch
 	install -dD $(DESTDIR)$(SYSCONFDIR)/bash_completion.d
-	cp $(COMPLETION) $(DESTDIR)$(SYSCONFDIR)/bash_completion.d
+	install -d $(DESTDIR)$(COMPL_DIR)
+	cp $(COMPLETION) $(DESTDIR)$(COMPL_DIR)
 	# Special treatment for debpkg
 	install -d $(DESTDIR)$(DATA_DIR)
 	mv $(DESTDIR)$(BINDIR)/debpkg $(DESTDIR)$(DATA_DIR)
