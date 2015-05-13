@@ -348,8 +348,7 @@ sub parse_copyright {
     my $copyright_indicator_regex = '
 	(?:copyright	# The full word
 	|copr\.		# Legally-valid abbreviation
-	|\x{00a9}	# Unicode character COPYRIGHT SIGN
-	|\xc2\xa9	# Unicode copyright sign encoded in iso8859
+	|©	# Unicode character COPYRIGHT SIGN
 	|\(c\)		# Legally-null representation of sign
 	)';
     my $copyright_disindicator_regex = '
