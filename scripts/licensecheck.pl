@@ -317,6 +317,7 @@ while (@files) {
 }
 
 sub parse_copyright {
+    my $data = shift ;
     my $copyright = '';
     my $match;
 
@@ -338,22 +339,22 @@ sub parse_copyright {
     ^[#]define\s+.*\(c\)    # #define foo(c) -- not copyright
 	)';
 
-    if ( ! m%$copyright_predisindicator_regex%ix) {
+    if ( $data !~ m%$copyright_predisindicator_regex%ix) {
 
-    if (m%$copyright_indicator_regex(?::\s*|\s+)(\S.*)$%ix) {
-	$match = $1;
+        if ($data =~ m%$copyright_indicator_regex(?::\s*|\s+)(\S.*)$%lix) {
+            $match = $1;
 
-	# Ignore lines matching "see foo for copyright information" etc.
-	if ($match !~ m%^\s*$copyright_disindicator_regex%ix) {
-	    # De-cruft
-	    $match =~ s/([,.])?\s*$//;
-	    $match =~ s/$copyright_indicator_regex//igx;
-	    $match =~ s/^\s+//;
-	    $match =~ s/\s{2,}/ /g;
-	    $match =~ s/\\@/@/g;
-	    $copyright = $match;
-	}
-    }
+            # Ignore lines matching "see foo for copyright information" etc.
+            if ($match !~ m%^\s*$copyright_disindicator_regex%ix) {
+                # De-cruft
+                $match =~ s/([,.])?\s*$//;
+                $match =~ s/$copyright_indicator_regex//igx;
+                $match =~ s/^\s+//;
+                $match =~ s/\s{2,}/ /g;
+                $match =~ s/\\@/@/g;
+                $copyright = $match;
+            }
+        }
     }
 
     return $copyright;
