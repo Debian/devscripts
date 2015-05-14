@@ -51,6 +51,7 @@ testLGPL() {
     license "lgpl-2-3.c" "LGPL (v2 or v3)"
     license "lgpl-3+.h" "LGPL (v3 or later)"
     license "lgpl-variation.c" "LGPL (v3 or later)"
+    license "lgpl-no-version.h" "LGPL (unversioned/unknown version)"
 }
 
 testGPL() {
@@ -65,6 +66,7 @@ testGPL() {
     license "gpl-3-only.c" "GPL (v3)"
     license "gpl-variation.c" "GPL (v3 or later)"
     license "gpl-3+.el" "GPL (v3 or later)"
+    license "gpl-no-version.h" "GPL (unversioned/unknown version)"
 }
 
 testDual() {
