@@ -242,8 +242,9 @@ GetOptions(\%OPT,
 ) or die "Usage: $progname [options] filelist\nRun $progname --help for more details\n";
 
 $OPT{'lines'} = $def_lines if $OPT{'lines'} !~ /^[1-9][0-9]*$/;
-my $ignore_regex = length($OPT{ignore}) ? $OPT{ignore} : $default_ignore_regex;
+my $ignore_regex = length($OPT{ignore}) ? qr/$OPT{ignore}/ : $default_ignore_regex;
 $OPT{'check'} = $default_check_regex if ! length $OPT{'check'};
+my $check_regex = qr/$OPT{check}/;
 
 if ($OPT{'noconf'}) {
     fatal("--no-conf is only acceptable as the first command-line option!");
@@ -269,16 +270,16 @@ while (@ARGV) {
 	open my $FIND, '-|', 'find', $file, @find_args
 	    or die "$progname: couldn't exec find: $!\n";
 
-	while (<$FIND>) {
-	    chomp;
-	    next unless m%$OPT{'check'}%;
+	while (my $found = <$FIND>) {
+	    chomp ($found);
+	    next unless $found =~ $check_regex;
 	    # Skip empty files
-	    next if (-z $_);
-	    push @files, $_ unless $ignore_regex;
+	    next if (-z $found);
+	    push @files, $found unless $found =~ $ignore_regex;
 	}
 	close $FIND;
     } else {
-	next unless ($files_count == 1) or $file =~ m%$OPT{'check'}%;
+	next unless ($files_count == 1) or $file =~ $check_regex;
 	push @files, $file unless $file =~ $ignore_regex;
     }
 }
