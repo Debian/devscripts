@@ -170,22 +170,23 @@ my $default_ignore_regex = qr!
 my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|f(77|90)?|go|p(l|m)|xs|sh|php|py(|x)|rb|java|js|vala|el|sc(i|e)|cs|pas|inc|dtd|xsl|mod|m|tex|mli?|(c|l)?hs)$';
 
 
-my $copyright_indicator_regex = '
+my $copyright_indicator_regex = qr!
 (?:copyright	# The full word
 |copr\.		# Legally-valid abbreviation
 |©	# Unicode character COPYRIGHT SIGN
 |\(c\)		# Legally-null representation of sign
-)';
-my $copyright_disindicator_regex = '
-\b(?:info(?:rmation)?	# Discussing copyright information
+)!lix;
+my $copyright_indicator_regex_with_capture = qr!$copyright_indicator_regex(?::\s*|\s+)(\S.*)$!lix;
+my $copyright_disindicator_regex = qr!
+^\s*(?:info(?:rmation)?	# Discussing copyright information
 |(notice|statement|claim|string)s?	# Discussing the notice
 |and|or|is|in|to        # Part of a sentence
 |(holder|owner)s?       # Part of a sentence
 |ownership              # Part of a sentence
-)\b';
-my $copyright_predisindicator_regex = '(
+)\b!ix;
+my $copyright_predisindicator_regex = qr!(
 ^[#]define\s+.*\(c\)    # #define foo(c) -- not copyright
-)';
+)!ix;
 
 my $modified_conf_msg;
 
@@ -360,13 +361,13 @@ sub parse_copyright {
     my $copyright = '';
     my $match;
 
-    if ( $data !~ m%$copyright_predisindicator_regex%ix) {
+    if ( $data !~ $copyright_predisindicator_regex) {
 
-        if ($data =~ m%$copyright_indicator_regex(?::\s*|\s+)(\S.*)$%lix) {
+        if ($data =~ $copyright_indicator_regex_with_capture) {
             $match = $1;
 
             # Ignore lines matching "see foo for copyright information" etc.
-            if ($match !~ m%^\s*$copyright_disindicator_regex%ix) {
+            if ($match !~ $copyright_disindicator_regex) {
                 # De-cruft
                 $match =~ s/([,.])?\s*$//;
                 $match =~ s/$copyright_indicator_regex//igx;
