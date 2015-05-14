@@ -13,6 +13,16 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
   * Install Perl modules into $Config{vendorlib} and remove the hacks in
     various scripts to make them see devscript's modules.
 
+  [ Dominique Dumont ]
+  * licensecheck:
+    * check file encoding and decode properly when reading file
+     (Closes: #784821)
+    * improve GPL LGPL extraction
+    * optimize regex used to extract © info
+    * check Groovy, Scala and Clojure files (Closes: #771119)
+    * fixed regexp used to detect discussion about © (Closes: #723723)
+    * fix BSL parser (Closes: #690375)
+
  -- Cyril Brulebois <kibi@debian.org>  Tue, 28 Apr 2015 16:58:36 +0200
 
 devscripts (2.15.4) unstable; urgency=medium
