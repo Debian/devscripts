@@ -151,11 +151,11 @@ binmode STDOUT, ':utf8';
 my $progname = basename($0);
 
 # From dpkg-source
-my $default_ignore_regex = '
+my $default_ignore_regex = qr!
 # Ignore general backup files
-(?:^|/).*~$|
+~$|
 # Ignore emacs recovery files
-(?:^|/)\.#.*$|
+(?:^|/)\.#|
 # Ignore vi swap files
 (?:^|/)\..*\.swp$|
 # Ignore baz-style junk files or directories
@@ -165,11 +165,7 @@ my $default_ignore_regex = '
 # File or directory names that should be ignored
 (?:^|/)(?:CVS|RCS|\.pc|\.deps|\{arch\}|\.arch-ids|\.svn|\.hg|_darcs|\.git|
 \.shelf|_MTN|\.bzr(?:\.backup|tags)?)(?:$|/.*$)
-';
-
-# Take out comments and newlines
-$default_ignore_regex =~ s/^#.*$//mg;
-$default_ignore_regex =~ s/\n//sg;
+!x;
 
 my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|f(77|90)?|go|p(l|m)|xs|sh|php|py(|x)|rb|java|js|vala|el|sc(i|e)|cs|pas|inc|dtd|xsl|mod|m|tex|mli?|(c|l)?hs)$';
 
@@ -246,7 +242,7 @@ GetOptions(\%OPT,
 ) or die "Usage: $progname [options] filelist\nRun $progname --help for more details\n";
 
 $OPT{'lines'} = $def_lines if $OPT{'lines'} !~ /^[1-9][0-9]*$/;
-$OPT{'ignore'} = $default_ignore_regex if ! length $OPT{'ignore'};
+my $ignore_regex = length($OPT{ignore}) ? $OPT{ignore} : $default_ignore_regex;
 $OPT{'check'} = $default_check_regex if ! length $OPT{'check'};
 
 if ($OPT{'noconf'}) {
@@ -278,12 +274,12 @@ while (@ARGV) {
 	    next unless m%$OPT{'check'}%;
 	    # Skip empty files
 	    next if (-z $_);
-	    push @files, $_ unless m%$OPT{'ignore'}%;
+	    push @files, $_ unless $ignore_regex;
 	}
 	close $FIND;
     } else {
 	next unless ($files_count == 1) or $file =~ m%$OPT{'check'}%;
-	push @files, $file unless $file =~ m%$OPT{'ignore'}%;
+	push @files, $file unless $file =~ $ignore_regex;
     }
 }
 
