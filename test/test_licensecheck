@@ -79,6 +79,10 @@ testMPL() {
     license "mpl-2.0-comma.sh" "MPL (v2.0)"
 }
 
+testCDDL() {
+    license2 "-m --copyright" "cddl.h" "CDDL	2006 Sun Microsystems, Inc. All rights reserved"
+}
+
 testMachine() {
     license2 "-m" "beerware.cpp" "Beerware"
     license2 "--machine" "lgpl-2.1.h" "LGPL (v2.1)"
