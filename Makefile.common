@@ -5,7 +5,6 @@ GEN_MAN1S := bts.1 build-rdeps.1 chdist.1 dcontrol.1 debcheckout.1 debcommit.1 \
 
 PREFIX = /usr
 BINDIR = $(PREFIX)/bin
-PKGLIBDIR = $(PREFIX)/lib/devscripts
 DOCDIR = $(PREFIX)/share/doc/devscripts
 MAN1DIR = $(PREFIX)/share/man/man1
 PERLMOD_DIR = $(shell perl -MConfig -e 'print $$Config{vendorlib}')

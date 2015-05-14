@@ -1,10 +1,5 @@
-#! /bin/sh
+#!/bin/sh
 set -e
-
-if [ "$1" = purge ]
-then
-    rm -f /etc/devscripts.conf* /etc/cowpoke.conf
-fi
 
 for cf in chdist debchange debsign pkgnames uupdate; do
     dpkg-maintscript-helper rm_conffile /etc/bash_completion.d/devscripts."$cf" 2.15.5~ devscripts -- "$@"

@@ -4,6 +4,9 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
   * Update chdist bash-completion file with the architectures currently (as
     of 2015-04-28) listed on buildd.debian.org and buildd.debian-ports.org.
     (Closes: #783634)
+  * Add support for RMADISON_SSL_CA_FILE and RMADISON_SSL_CA_PATH, so that
+    one can point to system-specific locations for CA-related files, and pass
+    them to curl/wget via the appropriate options.  (Closes: #784812)
 
   [ James McCoy ]
   * wrap-and-sort:
@@ -12,6 +15,12 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
     + Remove empty lines in debhelper-related files.  (Closes: #780667)
   * Install Perl modules into $Config{vendorlib} and remove the hacks in
     various scripts to make them see devscript's modules.
+  * Add bash completion scripts for uscan (thanks to Ben Finney) and
+    mk-origtargz.  (Closes: #784394)
+  * Stop building and shipping libvfork.so since strace has handled vforks for
+    at least a decade.
+  * Move bash-completion scripts from /etc/bash_completion.d (compat
+    directory) to /usr/share/bash-completion/completions.
 
   [ Dominique Dumont ]
   * licensecheck:
