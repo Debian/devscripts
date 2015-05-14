@@ -100,4 +100,8 @@ testRegexpKiller() {
     license "regexp-killer.c" "UNKNOWN"
 }
 
+testEncoding () {
+    license2 "-m --copyright" "copr-iso8859.h" "GPL (v2) (with incorrect FSF address)	2011 Heinrich Müller <henmull@src.gnome.org>"
+    license2 "-m --copyright" "copr-utf8.h" "GPL (v2 or later)	2004-2015 Oliva 'f00' Oberto / 2001-2010 Paul 'bar' Stevénsön"
+}
 . shunit2
