@@ -170,23 +170,31 @@ my $default_ignore_regex = qr!
 my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|f(77|90)?|go|p(l|m)|xs|sh|php|py(|x)|rb|java|js|vala|el|sc(i|e)|cs|pas|inc|dtd|xsl|mod|m|tex|mli?|(c|l)?hs)$';
 
 
-my $copyright_indicator_regex = qr!
-(?:copyright	# The full word
-|copr\.		# Legally-valid abbreviation
-|©	# Unicode character COPYRIGHT SIGN
-|\(c\)		# Legally-null representation of sign
-)!lix;
+my $copyright_indicator_regex
+    = qr!
+         (?:copyright	# The full word
+            |copr\.		# Legally-valid abbreviation
+            |©	# Unicode character COPYRIGHT SIGN
+            |\(c\)		# Legally-null representation of sign
+         )
+        !lix;
+
 my $copyright_indicator_regex_with_capture = qr!$copyright_indicator_regex(?::\s*|\s+)(\S.*)$!lix;
-my $copyright_disindicator_regex = qr!
-^\s*(?:info(?:rmation)?	# Discussing copyright information
-|(notice|statement|claim|string)s?	# Discussing the notice
-|and|or|is|in|to        # Part of a sentence
-|(holder|owner)s?       # Part of a sentence
-|ownership              # Part of a sentence
-)\b!ix;
-my $copyright_predisindicator_regex = qr!(
-^[#]define\s+.*\(c\)    # #define foo(c) -- not copyright
-)!ix;
+
+my $copyright_disindicator_regex
+    = qr!
+     ^\s*(?:info(?:rmation)?	# Discussing copyright information
+            |(notice|statement|claim|string)s?	# Discussing the notice
+            |and|or|is|in|to        # Part of a sentence
+            |(holder|owner)s?       # Part of a sentence
+            |ownership              # Part of a sentence
+            )\b
+        !ix;
+
+my $copyright_predisindicator_regex
+    = qr!(
+             ^[#]define\s+.*\(c\)    # #define foo(c) -- not copyright
+         )!ix;
 
 my $modified_conf_msg;
 
