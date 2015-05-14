@@ -132,10 +132,21 @@ Adam D. Barratt <adam@adam-barratt.org.uk>
 
 =cut
 
+# see http://stackoverflow.com/questions/6162484/why-does-modern-perl-avoid-utf-8-by-default/6163129#6163129
+use v5.14;
+use utf8;
+
 use strict;
+use autodie;
 use warnings;
+use warnings    qw< FATAL  utf8     >;
+use Encode qw/decode/;
+
 use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
+
+
+binmode STDOUT, ':utf8';
 
 my $progname = basename($0);
 
@@ -284,14 +295,27 @@ while (@files) {
     my $license = '';
     my %copyrights;
 
+    # Encode::Guess does not work well, use good old file command to get file encoding
+    my $mime = `file -bi $file`;
+    my $charset ;
+    if ($mime =~ /charset=([\w-]+)/) {
+        $charset = $1;
+    }
+    else {
+        die "can't find charset of $file\n";
+    }
+
     open (my $F, '<' ,$file) or die "Unable to access $file\n";
-    while (<$F>) {
+    binmode $F, ':raw';
+
+    while ( <$F>) {
         last if ($. > $OPT{'lines'});
-        $content .= $_;
-	$copyright_match = parse_copyright($_);
-	if ($copyright_match) {
-	    $copyrights{lc("$copyright_match")} = "$copyright_match";
-	}
+        my $data = decode($charset,$_);
+        $content .= $data;
+        $copyright_match = parse_copyright($data);
+        if ($copyright_match) {
+            $copyrights{lc("$copyright_match")} = "$copyright_match";
+        }
     }
     close($F);
 
