@@ -47,6 +47,9 @@ testAcademic() {
     license "academic.h" "AFL-3.0"
 }
 
+testEclipse() {
+    license2 "-m --copyright" "epl.h" "EPL-1.0	2004, 2006 IBM Corporation and others"
+}
 
 testBSD() {
     license "bsd-3-clause.cpp" "BSD (3 clause)"

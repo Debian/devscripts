@@ -601,6 +601,10 @@ sub parselicense {
         $license = $1 ? "AFL-$1" : "AFL";
     }
 
+    if ($licensetext =~ /This program and the accompanying materials are made available under the terms of the Eclipse Public License v?([\d.]+)/) {
+        $license = $1 ? "EPL-$1" : "EPL";
+    }
+
     # quotes were removed by clean_comments function
     if ($licensetext =~ /Permission is hereby granted, free of charge, to any person or organization obtaining a copy of the software and accompanying documentation covered by this license \(the Software\)/ or
 	$licensetext =~ /Boost Software License([ ,-]+Version ([^ ]+)?(\.))/i) {
