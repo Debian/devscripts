@@ -597,6 +597,10 @@ sub parselicense {
         $license = "Ms-PL $license";
     }
 
+    if ($licensetext =~ /Licensed under the Academic Free License version ([\d.]+)/) {
+        $license = $1 ? "AFL-$1" : "AFL";
+    }
+
     # quotes were removed by clean_comments function
     if ($licensetext =~ /Permission is hereby granted, free of charge, to any person or organization obtaining a copy of the software and accompanying documentation covered by this license \(the Software\)/ or
 	$licensetext =~ /Boost Software License([ ,-]+Version ([^ ]+)?(\.))/i) {

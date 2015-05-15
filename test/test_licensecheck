@@ -43,6 +43,10 @@ testBoost() {
     license "boost.h" "BSL"
 }
 
+testAcademic() {
+    license "academic.h" "AFL-3.0"
+}
+
 
 testBSD() {
     license "bsd-3-clause.cpp" "BSD (3 clause)"
