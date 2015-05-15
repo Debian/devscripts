@@ -469,7 +469,7 @@ sub parselicense {
 	$licensetext =~ /GNU (?:Affero )?(?:Lesser |Library )?General Public License (?:as )?published by the Free Software Foundation[;,] version ([^, ]+?)[.,]? /i) {
 
 	$gplver = " (v$1)";
-    } elsif ($licensetext =~ /GNU (?:Affero )?(?:Lesser |Library )?General Public License, version (\d+(?:\.\d+)?)[ \.]/) {
+    } elsif ($licensetext =~ /GNU (?:Affero )?(?:Lesser |Library )?General Public License\s*(?:[(),GPL]+)\s*version (\d+(?:\.\d+)?)[ \.]/i) {
 	$gplver = " (v$1)";
     } elsif ($licensetext =~ /either version ([^ ]+)(?: of the License)?, or \(at your option\) any later version/) {
 	$gplver = " (v$1 or later)";
@@ -478,6 +478,7 @@ sub parselicense {
     } elsif ($licensetext =~ /GPL\sas\spublished\sby\sthe\sFree\sSoftware\sFoundation,\sversion\s([\d.]+)/i ) {
 	$gplver = " (v$1)";
     }
+
 
     if ($licensetext =~ /(?:675 Mass Ave|59 Temple Place|51 Franklin Steet|02139|02111-1307)/i) {
 	$extrainfo = " (with incorrect FSF address)$extrainfo";
@@ -493,7 +494,7 @@ sub parselicense {
 	$license = "GENERATED FILE";
     }
 
-    if ($licensetext =~ /((is free software.? )?you can redistribute (it|them) and\/or modify (it|them)|is licensed) under the terms of (version [^ ]+ of )?the (GNU (Library |Lesser )General Public License|LGPL)/i) {
+    if ($licensetext =~ /(are made available|(is free software.? )?you can redistribute (it|them) and\/or modify (it|them)|is licensed) under the terms of (version [^ ]+ of )?the (GNU (Library |Lesser )General Public License|LGPL)/i) {
 	$license = "LGPL$gplver$extrainfo $license";
     }
 
