@@ -155,6 +155,12 @@ Do not unpack tarballs inside source packages.
 Do not read any configuration files.  This can only be used as the
 first option given on the command-line.
 .TP
+\fB\-\-debs\-dir\fR \fIdirectory\fR
+Look for the \fI.dsc\fR files in \fIdirectory\fR
+instead of the parent of the source directory.  This should
+either be an absolute path or relative to the top of the source
+directory.
+.TP
 .BR \-\-help ", " \-h
 Show a summary of options.
 .TP
@@ -210,6 +216,16 @@ If this is set to \fIyes\fR, then it is the same as the
 .B DEBDIFF_UNPACK_TARBALLS
 If this is set to \fIno\fR, then it is the same as the
 \fB\-\-no\-unpack\-tarballs\fR command line parameter being used.
+.TP
+.B DEBRELEASE_DEBS_DIR
+This specifies the directory in which to look for the \fI.dsc\fR
+and files, and is either an absolute path or relative to
+the top of the source tree.  This corresponds to the
+\fB\-\-debs\-dir\fR command line option.  This directive could be
+used, for example, if you always use \fBpbuilder\fR or
+\fBsvn-buildpackage\fR to build your packages.  Note that it also
+affects \fBdebrelease\fR(1) in the same way, hence the strange name of
+the option.
 .SH "EXIT VALUES"
 Normally the exit value will be 0 if no differences are reported and 1
 if any are reported.  If there is some fatal error, the exit code will

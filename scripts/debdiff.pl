@@ -112,6 +112,8 @@ EOF
 
 # Start by setting default values
 
+my $debsdir;
+my $debsdir_warning;
 my $ignore_dirs = 1;
 my $compare_control = 1;
 my $controlfiles = 'control';
@@ -143,6 +145,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'DEBDIFF_WDIFF_SOURCE_CONTROL' => 'no',
 		       'DEBDIFF_AUTO_VER_SORT' => 'no',
 		       'DEBDIFF_UNPACK_TARBALLS' => 'yes',
+		       'DEBRELEASE_DEBS_DIR' => '..',
 		       );
     my %config_default = %config_vars;
 
@@ -173,6 +176,11 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'DEBDIFF_AUTO_VER_SORT'}='no';
     $config_vars{'DEBDIFF_UNPACK_TARBALLS'} =~ /^(yes|no)$/
 	or $config_vars{'DEBDIFF_UNPACK_TARBALLS'}='yes';
+    # We do not replace this with a default directory to avoid accidentally
+    # installing a broken package
+    $config_vars{'DEBRELEASE_DEBS_DIR'} =~ s%/+%/%;
+    $config_vars{'DEBRELEASE_DEBS_DIR'} =~ s%(.)/$%$1%;
+    $debsdir_warning = "config file specified DEBRELEASE_DEBS_DIR directory $config_vars{'DEBRELEASE_DEBS_DIR'} does not exist!";
 
     foreach my $var (sort keys %config_vars) {
 	if ($config_vars{$var} ne $config_default{$var}) {
@@ -182,6 +190,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg ||= "  (none)\n";
     chomp $modified_conf_msg;
 
+    $debsdir = $config_vars{'DEBRELEASE_DEBS_DIR'};
     $ignore_dirs = $config_vars{'DEBDIFF_DIRS'} eq 'yes' ? 0 : 1;
     $compare_control = $config_vars{'DEBDIFF_CONTROL'} eq 'no' ? 0 : 1;
     $controlfiles = $config_vars{'DEBDIFF_CONTROLFILES'};
@@ -200,6 +209,7 @@ my $type = '';
 my @excludes = ();
 my @move = ();
 my %renamed = ();
+my $opt_debsdir;
 
 
 # handle command-line options
@@ -260,6 +270,16 @@ while (@ARGV) {
     elsif ($ARGV[0] =~ s/^--controlfiles=//) {
 	$controlfiles = shift;
     }
+    elsif ($ARGV[0] eq '--debs-dir') {
+	fatal "Malformed command-line option $ARGV[0]; run $progname --help for more info"
+	    unless @ARGV >= 2;
+	shift @ARGV;
+
+	$opt_debsdir = shift;
+    }
+    elsif ($ARGV[0] =~ s/^--debs-dir=//) {
+	$opt_debsdir = shift;
+    }
     elsif ($ARGV[0] =~ /^(--dirs|-d)$/) { $ignore_dirs = 0; shift; }
     elsif ($ARGV[0] eq '--nodirs') { $ignore_dirs = 1; shift; }
     elsif ($ARGV[0] =~ /^(--quiet|-q)$/) { $quiet = 1; shift; }
@@ -297,16 +317,25 @@ while (@ARGV) {
 
 my $guessed_version = 0;
 
+if ($opt_debsdir) {
+    $opt_debsdir =~ s%^/+%/%;
+    $opt_debsdir =~ s%(.)/$%$1%;
+    $debsdir_warning = "--debs-dir directory $opt_debsdir does not exist!";
+    $debsdir = $opt_debsdir;
+}
+
 # If no file is given, assume that we are in a source directory
 # and try to create a diff with the previous version
 if(@ARGV == 0) {
     my $namepat = qr/[-+0-9a-z.]/i;
 
+    fatal $debsdir_warning unless -d $debsdir;
+
     fatal "Can't read file: debian/changelog" unless -r "debian/changelog";
     open CHL, "debian/changelog";
     while(<CHL>) {
 	if(/^(\w$namepat*)\s\((\d+:)?(.+)\)((\s+$namepat+)+)\;\surgency=.+$/) {
-	    unshift @ARGV, "../".$1."_".$3.".dsc";
+	    unshift @ARGV, $debsdir."/".$1."_".$3.".dsc";
 	    $guessed_version++;
 	}
 	last if $guessed_version > 1;
