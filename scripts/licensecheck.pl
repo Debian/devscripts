@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# -*- tab-width: 8; indent-tabs-mode: t; cperl-indent-level: 4 -*-
 # This script was originally based on the script of the same name from
 # the KDE SDK (by dfaure@kde.org)
 #
@@ -397,7 +398,7 @@ sub clean_comments {
     # Remove generic comments: look for 4 or more lines beginning with
     # regular comment pattern and trim it. Fall back to old algorithm
     # if no such pattern found.
-    my @matches = m/^\s*([^a-zA-Z0-9\s]{1,3})\s\w/mg;
+    my @matches = m/^\s*((?:[^a-zA-Z0-9\s]{1,3}|\bREM\b))\s\w/mg;
     if (@matches >= 4) {
 	my $comment_re = qr/\s*[\Q$matches[0]\E]{1,3}\s*/;
 	s/^$comment_re//mg;
@@ -471,7 +472,7 @@ sub parselicense {
 	$gplver = " (v$1)";
     } elsif ($licensetext =~ /GNU (?:Affero )?(?:Lesser |Library )?General Public License\s*(?:[(),GPL]+)\s*version (\d+(?:\.\d+)?)[ \.]/i) {
 	$gplver = " (v$1)";
-    } elsif ($licensetext =~ /either version ([^ ]+)(?: of the License)?, or \(at your option\) any later version/) {
+    } elsif ($licensetext =~ /either version ([^ ]+)(?: of the License)?, or (?:\(at your option\) )?any later version/) {
 	$gplver = " (v$1 or later)";
     } elsif ($licensetext =~ /either version ([^ ]+)(?: of the License)?, or \(at your option\) version (\d(?:[\.-]\d+)*)/) {
 	$gplver = " (v$1 or v$2)";
