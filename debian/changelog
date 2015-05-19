@@ -37,6 +37,10 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
     * handle LGPL as written by IBM (Closes: #587970)
     * handle REM style comments (Closes: #748611)
 
+  [ Piotr Ożarowski ]
+  * uscan: Use pypi.debian.net redirector instead of
+    pypi.debian.org/packages/source URLs.  (Closes: #785746)
+
  -- Cyril Brulebois <kibi@debian.org>  Tue, 28 Apr 2015 16:58:36 +0200
 
 devscripts (2.15.4) unstable; urgency=medium
