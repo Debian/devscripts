@@ -21,6 +21,8 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
     at least a decade.
   * Move bash-completion scripts from /etc/bash_completion.d (compat
     directory) to /usr/share/bash-completion/completions.
+  * debdiff: Inspect wdiff's return code rather than Dpkg::IPC::spawn's
+    exception to determine if wdiff found differences.  (Closes: #786518)
 
   [ Dominique Dumont ]
   * licensecheck:

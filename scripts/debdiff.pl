@@ -1030,17 +1030,17 @@ sub wdiff_control_files($$$$$)
 	my $usepkgname = $debname eq $dummyname ? "" : " of package $debname";
 	my @opts = ('-n');
 	push @opts, $wdiff_opt if $wdiff_opt;
-	my $wdiff = '';
-	eval {
-	    spawn(exec => ['wdiff', @opts, "$dir1/$cf", "$dir2/$cf"],
-		to_string => \$wdiff,
-		wait_child => 1);
-	};
-	if ($@ and $@ !~ /gave error exit status 1/) {
-	    print "$@\n";
+	my ($wdiff, $wdiff_error) = ('', '');
+	spawn(exec => ['wdiff', @opts, "$dir1/$cf", "$dir2/$cf"],
+	    to_string => \$wdiff,
+	    error_to_string => \$wdiff_error,
+	    wait_child => 1,
+	    nocheck => 1);
+	if ($? && ($? >> 8) != 1) {
+	    print "$wdiff_error\n";
 	    warn "wdiff failed\n";
 	} else {
-	    if (!$@) {
+	    if (!$?) {
 		if (! $quiet) {
 		    print "\nNo differences were encountered between the $cf files$usepkgname\n";
 		}
