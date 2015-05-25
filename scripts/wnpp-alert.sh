@@ -16,7 +16,11 @@
 set -e
 
 PROGNAME="${0##*/}"
-CACHEDIR=~/.devscripts_cache
+# TODO: Remove use of OLDCACHEDDIR post-Stretch
+OLDCACHEDIR=~/.devscripts_cache
+OLDCACHEDDIFF="${OLDCACHEDIR}/wnpp-diff"
+CACHEDIR=${XDG_CACHE_HOME:-$HOME/.cache}
+CACHEDIR=${CACHEDIR%/}/devscripts
 CACHEDDIFF="${CACHEDIR}/wnpp-diff"
 CURLORWGET=""
 GETCOMMAND=""
@@ -37,6 +41,9 @@ Modifications: Julian Gilbey <jdg@debian.org>"
 }
 
 wnppdiff () {
+    if [ -f "$OLDCACHEDDIFF" ]; then
+        mv "$OLDCACHEDDIFF" "$CACHEDDIFF"
+    fi
     if [ ! -f "$CACHEDDIFF" ]; then
         # First use
         comm -12 $WNPP_PACKAGES $INSTALLED | sed -e 's/+/\\+/g' | \
@@ -120,7 +127,10 @@ else
 fi
 
 if [ -f "$WNPP_DIFF" ]; then
-    if [ -d "$CACHEDIR" ]; then
+    # This may fail when run from a cronjob (c.f., #309802), so just ignore it
+    # and carry on.
+    mkdir -p "$CACHEDIR" >/dev/null 2>&1 || true
+    if [ -d "$CACHEDIR" ] || [ -d "$OLDCACHEDIR" ]; then
         wnppdiff
         exit 0
     else

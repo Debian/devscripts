@@ -46,7 +46,7 @@ use 5.006_000;
 use strict;
 use File::Basename;
 use File::Copy;
-use File::Path;
+use File::Path qw(mkpath make_path rmtree);
 use File::Spec;
 use File::Temp qw/tempfile/;
 use Net::SMTP;
@@ -168,9 +168,11 @@ my @valid_severities=qw(wishlist minor normal important
 
 my $browser;  # Will set if necessary
 
-my $cachedir=$ENV{'HOME'}."/.devscripts_cache/bts/";
-my $timestampdb=$cachedir."bts_timestamps.db";
-my $prunestamp=$cachedir."bts_prune.timestamp";
+my $cachedir = $ENV{XDG_CACHE_HOME} || File::Spec->catdir($ENV{HOME}, '.cache');
+$cachedir = File::Spec->catdir($cachedir, 'devscripts', 'bts');
+
+my $timestampdb = File::Spec->catfile($cachedir, 'bts_timestamps.db');
+my $prunestamp = File::Spec->catfile($cachedir, 'bts_prune.timestamp');
 
 my %timestamp;
 END {
@@ -3684,6 +3686,15 @@ sub browse {
 # this at most once per day for efficiency.
 
 sub prunecache {
+    # TODO: Remove handling of $oldcache post-Stretch
+    my $oldcache = File::Spec->catdir($ENV{HOME}, '.devscripts_cache', 'bts');
+    if (-d $oldcache && ! -d $cachedir) {
+	my $err;
+	make_path(dirname($cachedir), { error => \$err });
+	if (!@$err) {
+	    system('mv', $oldcache, $cachedir);
+	}
+    }
     return unless -d $cachedir;
     return if -f $prunestamp and -M _ < 1;
 

@@ -10,14 +10,14 @@ rc-alert \- check for installed packages with release-critical bugs
 Debian BTS webpages, and then outputs a list of packages installed on
 the system, or given on the command-line, which are in that list.
 .P
-If the directory \fI~/.devscripts_cache\fP exists or the
+If the directory \fI$XDG_CACHE_HOME/devscripts/rc-alert\fP exists or the
 \fB\-\-cache\fP option is given, then the (sizable) downloaded list
 will be cached, and will only be downloaded again on a second
 invocation if it has changed.
 .SH OPTIONS
 .TP
 .BR \-\-cache
-Force the creation of the \fI~/.devscripts_cache\fP cache directory.
+Force the creation of the \fI$XDG_CACHE_HOME/devscripts/rc-alert\fP cache directory.
 .TP
 .BR \-\-help ", " \-h
 Show a summary of options.

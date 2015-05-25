@@ -23,6 +23,8 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
     directory) to /usr/share/bash-completion/completions.
   * debdiff: Inspect wdiff's return code rather than Dpkg::IPC::spawn's
     exception to determine if wdiff found differences.  (Closes: #786518)
+  * Store cached files in $XDG_CACHE_HOME instead of ~/.devscripts_cache.
+    (Closes: #659330)
 
   [ Dominique Dumont ]
   * licensecheck:

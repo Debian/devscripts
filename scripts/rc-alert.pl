@@ -23,6 +23,9 @@ use strict;
 use warnings;
 use Devscripts::Packages;
 use File::Basename;
+use File::Copy qw(move);
+use File::Path qw(make_path);
+use File::Spec;
 use Getopt::Long qw(:config gnu_getopt);
 
 sub remove_duplicate_values($);
@@ -31,9 +34,11 @@ sub human_flags($);
 sub unhtmlsanit($);
 sub dt_parse_request($);
 
-my $cachedir = $ENV{'HOME'}."/.devscripts_cache/";
+my $cachedir = $ENV{XDG_CACHE_HOME} || File::Spec->catdir($ENV{HOME}, '.cache');
+$cachedir = File::Spec->catdir($cachedir, 'devscripts', 'rc-alert');
+
 my $url = "http://bugs.debian.org/release-critical/other/all.html";
-my $cachefile = $cachedir . basename($url);
+my $cachefile = File::Spec->catfile($cachedir, basename($url));
 my $forcecache = 0;
 my $usecache = 0;
 
@@ -171,10 +176,15 @@ if (system("command -v wget >/dev/null 2>&1") == 0) {
     die "$progname: this program requires either the wget or curl package to be installed\n";
 }
 
-
-if (! -d $cachedir and $forcecache) {
-    mkdir $cachedir
-	or die "$progname: can't make cache directory $cachedir: $!\n";
+# TODO: Remove oldcache handling post-Stretch
+my $oldcache = File::Spec->catfile($ENV{HOME}, '.devscripts_cache', 'all.html');
+if (! -d $cachedir) {
+    if (-f $oldcache || $forcecache) {
+	make_path($cachedir);
+	if (-f $oldcache) {
+	    move($oldcache, $cachefile);
+	}
+    }
 }
 
 if (-d $cachedir) {
