@@ -374,7 +374,7 @@ does not resolve or does not appear to belong to the host using it.
 
 =item B<--bts-server>
 
-Use a debbugs server other than bugs.debian.org.
+Use a debbugs server other than https://bugs.debian.org.
 
 =item B<-f>, B<--force-refresh>
 
@@ -465,7 +465,7 @@ my $interactive=0;
 my $forceinteractive=0;
 my $ccemail="";
 my $toolname="";
-my $btsserver='bugs.debian.org';
+my $btsserver='https://bugs.debian.org';
 my $use_mutt = 0;
 
 # Next, read read configuration files and then command line
@@ -2397,7 +2397,7 @@ Valid options are:
    --smtp-helo=helo       HELO to use when connecting to the SMTP server;
                             (defaults to the content of /etc/mailname)
    --bts-server           The name of the debbugs server to use
-                            (default bugs.debian.org)
+                            (default https://bugs.debian.org)
    -f, --force-refresh    Reload all bug reports being cached, even unchanged
                           ones
    --no-force-refresh     Do not do so (default)
@@ -4118,7 +4118,7 @@ e-mail to the control bot should automatically be sent.
 =item B<BTS_SERVER>
 
 Specify the name of a debbugs server which should be used instead of
-bugs.debian.org.
+https://bugs.debian.org.
 
 =back
 

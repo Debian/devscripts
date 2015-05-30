@@ -25,6 +25,8 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
     exception to determine if wdiff found differences.  (Closes: #786518)
   * Store cached files in $XDG_CACHE_HOME instead of ~/.devscripts_cache.
     (Closes: #659330)
+  * bts:
+    + Use https to talk to bugs.debian.org
 
   [ Dominique Dumont ]
   * licensecheck:
