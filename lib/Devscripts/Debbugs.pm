@@ -253,18 +253,23 @@ sub status {
 
     my $soap = init_soap();
 
-    my $bugs = $soap->get_status(@args);
+    my $result = {};
+    while (my @slice = splice(@args, 0, 500)) {
+	my $bugs = $soap->get_status(@slice);
 
-    if (@errors or not defined $bugs) {
-	my $error = join("\n", @errors);
-	die "Error while retrieving bug statuses from SOAP server: $error\n";
-    }
+	if (@errors or not defined $bugs) {
+	    my $error = join("\n", @errors);
+	    die "Error while retrieving bug statuses from SOAP server: $error\n";
+	}
 
-    my $result = $bugs->result();
+	my $tmp = $bugs->result();
 
-    if (@errors or not defined $result) {
-	my $error = join("\n", @errors);
-	die "Error while retrieving bug statuses from SOAP server: $error\n";
+	if (@errors or not defined $tmp) {
+	    my $error = join("\n", @errors);
+	    die "Error while retrieving bug statuses from SOAP server: $error\n";
+	}
+
+	%$result = (%$result, %$tmp);
     }
 
     return $result;

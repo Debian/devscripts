@@ -30,6 +30,8 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
   * debuild: Recognize -jauto as a valid option. Based on a patch by Reiner
     Herrmann.  (Closes: #787276)
   * uscan: Fix Github example in man page.  (Closes: #757194)
+  * Devscripts::Debbugs: Retrieve bug status in chunks to avoid building large
+    responses on bugs.d.o.
 
   [ Dominique Dumont ]
   * licensecheck:
