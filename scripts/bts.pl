@@ -3384,20 +3384,20 @@ sub cachefile {
     $thing =~ s%/%_%g;
     $thgopts =~ s/;/_3B/g;
     $thgopts =~ s/=/_3D/g;
-    return $cachedir.$thing.$thgopts.($thing =~ /\.html$/ ? "" : ".html");
+    return File::Spec->catfile($cachedir, $thing.$thgopts.($thing =~ /\.html$/ ? "" : ".html"));
 }
 
 # Given a thing, returns the filename for its mbox in the cache.
 sub mboxfile {
     my $thing=shift;
-    return $thing =~ /^\d+$/ ? $cachedir.$thing.".mbox" : undef;
+    return $thing =~ /^\d+$/ ? File::Spec->catfile($cachedir, $thing.".mbox") : undef;
 }
 
 # Given a bug number, returns the dirname for it in the cache.
 sub cachebugdir {
     my $thing=shift;
     if ($thing !~ /^\d+$/) { die "$progname: cachebugdir given faulty argument: $thing\n"; }
-    return $cachedir.$thing;
+    return File::Spec->catdir($cachedir, $thing);
 }
 
 # And the reverse: Given a filename in the cache, returns the corresponding
@@ -3783,7 +3783,7 @@ sub runbrowser {
 sub runmailreader {
     my $file = shift;
     my $quotedfile;
-    die "$progname: could not read mbox file!\n" unless -r $file;
+    die "$progname: could not read mbox file $file!\n" unless -r $file;
 
     if ($file !~ /\'/) { $quotedfile = qq['$file']; }
     elsif ($file !~ /[\"\\\$\'\!]/) { $quotedfile = qq["$file"]; }
