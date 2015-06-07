@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 # Original shell script version:
 # Copyright 1998,1999 Yann Dirson <dirson@debian.org>
@@ -16,6 +16,7 @@
 
 use 5.006_000;
 use strict;
+use warnings;
 use Cwd;
 use Dpkg::IPC;
 use File::Copy qw(cp move);

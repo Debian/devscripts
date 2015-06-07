@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 # A wrapper for cvs-buildpackage to use debuild, still giving access
 # to all of debuild's functionality.
@@ -32,6 +32,7 @@
 
 use 5.006;
 use strict;
+use warnings;
 use FileHandle;
 use File::Basename;
 use File::Temp qw/ tempfile /;

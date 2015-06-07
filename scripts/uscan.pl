@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 # -*- tab-width: 8; indent-tabs-mode: t; cperl-indent-level: 4 -*-
 
 # uscan: This program looks for watchfiles and checks upstream ftp sites
@@ -24,6 +24,7 @@
 
 use 5.008;  # uses 'our' variables and filetest
 use strict;
+use warnings;
 use Cwd;
 use Cwd 'abs_path';
 use Dpkg::IPC;

@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 # bts: This program provides a convenient interface to the Debian
 # Bug Tracking System.
@@ -44,6 +44,7 @@ bts - developers' command line interface to the BTS
 
 use 5.006_000;
 use strict;
+use warnings;
 use File::Basename;
 use File::Copy;
 use File::Path qw(mkpath make_path rmtree);

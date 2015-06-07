@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 #
 # dd-list: Generate a list of maintainers of packages.
 #
@@ -21,6 +21,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use strict;
+use warnings;
 use FileHandle;
 use Getopt::Long qw(:config gnu_getopt);
 

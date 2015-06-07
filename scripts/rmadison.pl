@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 # vim:sw=4:sta:
 
 # Copyright (C) 2006-2013 Christoph Berg <myon@debian.org>
@@ -19,6 +19,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 
 use strict;
+use warnings;
 use File::Basename;
 use Getopt::Long qw(:config gnu_getopt);
 

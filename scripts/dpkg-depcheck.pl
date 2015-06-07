@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 # Copyright Bill Allombert <ballombe@debian.org> 2001.
 # Modifications copyright 2002-2005 Julian Gilbey <jdg@debian.org>
@@ -17,6 +17,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use strict;
+use warnings;
 use 5.006_000;  # our() commands
 use Cwd;
 use File::Basename;

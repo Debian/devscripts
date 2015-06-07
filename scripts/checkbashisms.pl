@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 # This script is essentially copied from /usr/share/lintian/checks/scripts,
 # which is:
@@ -21,6 +21,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use strict;
+use warnings;
 use Getopt::Long qw(:config gnu_getopt);
 use File::Temp qw/tempfile/;
 

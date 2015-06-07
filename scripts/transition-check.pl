@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 # transition-check: Check whether a given source package is involved
 # in a current transition for which uploads have been blocked by the

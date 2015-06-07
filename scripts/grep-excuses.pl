@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 # Grep debian testing excuses file.
 #
 # Copyright 2002 Joey Hess <joeyh@debian.org>
@@ -20,6 +20,7 @@
 
 use 5.006;
 use strict;
+use warnings;
 use File::Basename;
 
 # Needed for --wipnity option

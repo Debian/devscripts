@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 #
 # tagpending: Parse a Debian changelog for a list of bugs closed
 # and tag any that are not already pending as such.
