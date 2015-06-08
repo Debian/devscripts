@@ -837,7 +837,7 @@ if ($command_version eq 'dpkg') {
 	/^-e(.*)/ and $changedby=$1, push(@debsign_opts, $_),
 	    push(@dpkg_opts, $_), next;
 	/^-C(.*)/ and $desc=$1, push(@dpkg_opts, $_), next;
-	/^-j(\d*)$/ and $parallel=($1 || '-1'), push(@dpkg_opts, $_), next;
+	/^-j(auto|\d*)$/ and $parallel=($1 || '-1'), push(@dpkg_opts, $_), next;
 	$_ eq '-W' and $warnable_error=1, push(@passopts, $_),
 	    push(@dpkg_opts, $_), next;
 	$_ eq '-E' and $warnable_error=0, push(@passopts, $_),
@@ -889,7 +889,7 @@ if ($command_version eq 'dpkg') {
 	/^-e(.*)/ and $changedby=$1, push(@debsign_opts, $_),
 	    push(@dpkg_opts, $_), next;
 	/^-C(.*)/ and $desc=$1, push(@dpkg_opts, $_), next;
-	/^-j(\d*)$/ and $parallel=($1 || '-1'), push(@dpkg_opts, $_), next;
+	/^-j(auto|\d*)$/ and $parallel=($1 || '-1'), push(@dpkg_opts, $_), next;
 	$_ eq '-W' and $warnable_error=1, push(@passopts, $_),
 	    push(@dpkg_opts, $_), next;
 	$_ eq '-E' and $warnable_error=0, push(@passopts, $_),
@@ -1067,6 +1067,13 @@ if ($command_version eq 'dpkg') {
 		if (defined $build_opts->{parallel});
 	    $ENV{MAKEFLAGS} ||= '';
 
+	    if ($parallel eq 'auto') {
+		# Most Unices.
+		$parallel = qx(getconf _NPROCESSORS_ONLN 2>/dev/null);
+		# Fallback for at least Irix.
+		$parallel = qx(getconf _NPROC_ONLN 2>/dev/null) if $?;
+		chomp $parallel;
+	    }
 	    if ($parallel eq '-1') {
 		$ENV{MAKEFLAGS} .= " -j";
 	    } else {

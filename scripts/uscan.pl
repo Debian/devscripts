@@ -882,6 +882,9 @@ sub process_watchline ($$$$$$)
 	    $base =~ s%^http://sf\.net/%https://qa.debian.org/watch/sf.php/%;
 	    $filepattern .= '(?:\?.*)?';
 	}
+	# Handle pypi.python.org addresses specially
+	$base =~ s%^https?://pypi\.python\.org/packages/source/./%http://pypi.debian.net/%;
+
 	if ($base =~ m%^(\w+://[^/]+)%) {
 	    $site = $1;
 	} else {

@@ -46,7 +46,7 @@ use 5.006_000;
 use strict;
 use File::Basename;
 use File::Copy;
-use File::Path;
+use File::Path qw(mkpath make_path rmtree);
 use File::Spec;
 use File::Temp qw/tempfile/;
 use Net::SMTP;
@@ -168,9 +168,11 @@ my @valid_severities=qw(wishlist minor normal important
 
 my $browser;  # Will set if necessary
 
-my $cachedir=$ENV{'HOME'}."/.devscripts_cache/bts/";
-my $timestampdb=$cachedir."bts_timestamps.db";
-my $prunestamp=$cachedir."bts_prune.timestamp";
+my $cachedir = $ENV{XDG_CACHE_HOME} || File::Spec->catdir($ENV{HOME}, '.cache');
+$cachedir = File::Spec->catdir($cachedir, 'devscripts', 'bts');
+
+my $timestampdb = File::Spec->catfile($cachedir, 'bts_timestamps.db');
+my $prunestamp = File::Spec->catfile($cachedir, 'bts_prune.timestamp');
 
 my %timestamp;
 END {
@@ -372,7 +374,7 @@ does not resolve or does not appear to belong to the host using it.
 
 =item B<--bts-server>
 
-Use a debbugs server other than bugs.debian.org.
+Use a debbugs server other than https://bugs.debian.org.
 
 =item B<-f>, B<--force-refresh>
 
@@ -463,7 +465,7 @@ my $interactive=0;
 my $forceinteractive=0;
 my $ccemail="";
 my $toolname="";
-my $btsserver='bugs.debian.org';
+my $btsserver='https://bugs.debian.org';
 my $use_mutt = 0;
 
 # Next, read read configuration files and then command line
@@ -2395,7 +2397,7 @@ Valid options are:
    --smtp-helo=helo       HELO to use when connecting to the SMTP server;
                             (defaults to the content of /etc/mailname)
    --bts-server           The name of the debbugs server to use
-                            (default bugs.debian.org)
+                            (default https://bugs.debian.org)
    -f, --force-refresh    Reload all bug reports being cached, even unchanged
                           ones
    --no-force-refresh     Do not do so (default)
@@ -3684,6 +3686,15 @@ sub browse {
 # this at most once per day for efficiency.
 
 sub prunecache {
+    # TODO: Remove handling of $oldcache post-Stretch
+    my $oldcache = File::Spec->catdir($ENV{HOME}, '.devscripts_cache', 'bts');
+    if (-d $oldcache && ! -d $cachedir) {
+	my $err;
+	make_path(dirname($cachedir), { error => \$err });
+	if (!@$err) {
+	    system('mv', $oldcache, $cachedir);
+	}
+    }
     return unless -d $cachedir;
     return if -f $prunestamp and -M _ < 1;
 
@@ -4107,7 +4118,7 @@ e-mail to the control bot should automatically be sent.
 =item B<BTS_SERVER>
 
 Specify the name of a debbugs server which should be used instead of
-bugs.debian.org.
+https://bugs.debian.org.
 
 =back
 

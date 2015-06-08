@@ -21,6 +21,17 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
     at least a decade.
   * Move bash-completion scripts from /etc/bash_completion.d (compat
     directory) to /usr/share/bash-completion/completions.
+  * debdiff: Inspect wdiff's return code rather than Dpkg::IPC::spawn's
+    exception to determine if wdiff found differences.  (Closes: #786518)
+  * Store cached files in $XDG_CACHE_HOME instead of ~/.devscripts_cache.
+    (Closes: #659330)
+  * bts:
+    + Use https to talk to bugs.debian.org
+  * debuild: Recognize -jauto as a valid option. Based on a patch by Reiner
+    Herrmann.  (Closes: #787276)
+  * uscan: Fix Github example in man page.  (Closes: #757194)
+  * Devscripts::Debbugs: Retrieve bug status in chunks to avoid building large
+    responses on bugs.d.o.
 
   [ Dominique Dumont ]
   * licensecheck:
@@ -38,6 +49,13 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
     * handle REM style comments (Closes: #748611)
   * uscan: use defined-or (//) instead of "||" to avoid loosing
     '0' version field (Closes: #787767)
+
+  [ Piotr Ożarowski ]
+  * uscan: Use pypi.debian.net redirector instead of
+    pypi.debian.org/packages/source URLs.  (Closes: #785746)
+
+  [ Hideki Yamane ]
+  * Add bash completion for dcut.  (Closes: #787321)
 
  -- Cyril Brulebois <kibi@debian.org>  Tue, 28 Apr 2015 16:58:36 +0200
 

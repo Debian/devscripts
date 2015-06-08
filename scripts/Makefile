@@ -89,7 +89,6 @@ install: all
 	python3 setup.py install --root="$(DESTDIR)" --no-compile --install-layout=deb
 	cp $(SCRIPTS) $(DESTDIR)$(BINDIR)
 	ln -sf edit-patch $(DESTDIR)$(BINDIR)/add-patch
-	install -dD $(DESTDIR)$(SYSCONFDIR)/bash_completion.d
 	install -d $(DESTDIR)$(COMPL_DIR)
 	cp $(COMPLETION) $(DESTDIR)$(COMPL_DIR)
 	# Special treatment for debpkg

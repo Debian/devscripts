@@ -1,0 +1,46 @@
+have dcut &&
+_dcut()
+{
+    local cur prev options commands
+
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+    prev=${COMP_WORDS[COMP_CWORD-1]}
+    options='-c --config -d -h --host -s -m --maintainer -k --keyid
+             -t -O --output -P --passive -s --simulate -U --upload
+             -i --input -v --version'
+    commands='mv rm cancel'
+
+    case $prev in
+	-k | --keyid)
+	    keyid_options=`gpg -K|grep ^sec|cut -d'/' -f2|cut -d' ' -f1`
+	    COMPREPLY=( $( compgen -W "$keyid_options" | grep ^$cur ) )
+	    ;;
+	mv | rm | cancel)
+	    COMPREPLY=( $(
+		    compgen -G "${cur}*.changes"
+		    compgen -G "${cur}*.commands"
+		) )
+	    ;;
+	-*)
+	    COMPREPLY=( $(
+		    compgen -G "${cur}*.changes"
+		    compgen -G "${cur}*.dsc"
+		    compgen -G "${cur}*.commands"
+		) )
+	    ;;
+	*)
+	    COMPREPLY=( $(
+		    compgen -G "${cur}*.changes"
+		    compgen -G "${cur}*.dsc"
+		    compgen -G "${cur}*.commands"
+		    compgen -W "$commands" | grep "^$cur"
+		    compgen -W "$options" | grep "^$cur"
+		) )
+	    ;;
+    esac
+
+    return 0
+
+}
+[ "$have" ] && complete -F _dcut -o filenames dcut
