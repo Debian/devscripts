@@ -36,6 +36,8 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
     * support eclipse public license (Closes: #587892)
     * handle LGPL as written by IBM (Closes: #587970)
     * handle REM style comments (Closes: #748611)
+  * uscan: use defined-or (//) instead of "||" to avoid loosing
+    '0' version field (Closes: #787767)
 
  -- Cyril Brulebois <kibi@debian.org>  Tue, 28 Apr 2015 16:58:36 +0200
 

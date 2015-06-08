@@ -1623,7 +1623,7 @@ sub newest_dir ($$$$$) {
 	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi) {
 	    my $href = $2;
 	    if ($href =~ m&^$dirpattern/?$&) {
-		my $mangled_version = join(".", map { $_ || '' } $href =~ m&^$dirpattern/?$&);
+		my $mangled_version = join(".", map { $_ // '' } $href =~ m&^$dirpattern/?$&);
 		push @hrefs, [$mangled_version, $href];
 	    }
 	}
