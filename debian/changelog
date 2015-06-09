@@ -27,6 +27,9 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
     (Closes: #659330)
   * bts:
     + Use https to talk to bugs.debian.org
+    + Use URI & URI::QueryParam to parse URIs rather than regexps.  This fixes
+      issues with not detecting BTS URLs as valid due to ordering of query
+      parameters.  (Closes: #786706)
   * debuild: Recognize -jauto as a valid option. Based on a patch by Reiner
     Herrmann.  (Closes: #787276)
   * uscan: Fix Github example in man page.  (Closes: #757194)

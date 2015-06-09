@@ -27,7 +27,8 @@ And now, in mostly alphabetical order, the scripts:
 - bts: A command-line tool for accessing the BTS, both to
   send mails to control@bts.debian.org and to access the web pages and
   SOAP interface of the BTS. [www-browser, libauthen-sasl-perl,
-  libnet-smtp-ssl-perl, libsoap-lite-perl, libwww-perl, bsd-mailx | mailx]
+  libnet-smtp-ssl-perl, libsoap-lite-perl, liburi-perl, libwww-perl,
+  bsd-mailx | mailx]
 
 - build-rdeps: Searches for all packages that build-depend on a given package
   [dctrl-tools]
