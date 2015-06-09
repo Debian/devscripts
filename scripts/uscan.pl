@@ -22,7 +22,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-use 5.008;  # uses 'our' variables and filetest
+use 5.010;  # defined-or (//)
 use strict;
 use warnings;
 use Cwd;
