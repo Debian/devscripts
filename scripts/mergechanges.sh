@@ -24,7 +24,7 @@ set -e
 PROGNAME=`basename $0`
 
 synopsis () {
-    echo "Usage: $PROGNAME [-h|--help|--version] [-i|--indep] [-f] <file1> <file2> [<file> ...]"
+    echo "Usage: $PROGNAME [-h|--help|--version] [-d] [-i|--indep] [-f] <file1> <file2> [<file> ...]"
 }
 
 usage () {
@@ -50,6 +50,7 @@ GNU General Public License, version 2 or later."
 
 # Commandline parsing
 FILE=0
+DELETE=0
 INDEP_ONLY=0
 
 while [ $# -gt 0 ]; do
@@ -64,6 +65,10 @@ while [ $# -gt 0 ]; do
 	    ;;
 	-f)
 	    FILE=1
+	    shift
+	    ;;
+	-d)
+	    DELETE=1
 	    shift
 	    ;;
 	-i|--indep)
@@ -260,5 +265,9 @@ if test -n "${SHA256S}"; then
 fi
 eval "echo 'Files: ' ${REDIR2}"
 eval "echo '${FILES}' ${REDIR2}"
+
+if test ${DELETE} = 1; then
+    rm "$@"
+fi
 
 exit 0

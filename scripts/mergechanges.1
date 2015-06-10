@@ -2,7 +2,7 @@
 .SH NAME
 mergechanges \- merge multiple changes files
 .SH SYNOPSIS
-\fBmergechanges\fR [\fB\-f\fR] [\fB\-i\fR] \fIfile1 file2\fR [\fIfile\fR...]
+\fBmergechanges\fR [\fB\-d\fR] [\fB\-f\fR] [\fB\-i\fR] \fIfile1 file2\fR [\fIfile\fR...]
 .SH DESCRIPTION
 \fBmergechanges\fR merges two or more \fI.changes\fR files, merging
 the Architecture, Description and Files (and Checksums-*, if present)
@@ -16,11 +16,15 @@ option is given, the output is written to
 \fIpackage\fR_\fIversion\fR_multi.changes instead, in the same
 directory as the first changes file listed.
 .PP
+If the \fB\-d\fR option is given and the output is generated successfully, the
+input files will be deleted.
+.PP
 If the \fB\-i\fR or \fB\-\-indep\fR option is given, source packages
 and architecture-independent (Architecture: all) packages are included
 in the output, but architecture-dependent packages are not.
 .SH AUTHOR
 Gergely Nagy <algernon@debian.org>,
 modifications by Julian Gilbey <jdg@debian.org>,
-Adam D. Barratt <adam@adam-barratt.org.uk> and
+Mark Hymers <mhy@debian.org>,
+Adam D. Barratt <adam@adam-barratt.org.uk>, and
 Simon McVittie <smcv@debian.org>.

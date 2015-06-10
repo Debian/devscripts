@@ -43,6 +43,9 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
     + Verify build-dep package was installed since the install tool may exit
       successfully even if the package couldn't be installed.  Based on a
       patch by Dima Kogan.  (Closes: #755371)
+  * mergechanges:
+    + Add -d option to delete input files on success.  Thanks to Mark Hymers
+      for the patch.  (Closes: #640068)
 
   [ Dominique Dumont ]
   * licensecheck:
