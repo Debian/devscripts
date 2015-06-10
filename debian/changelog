@@ -32,7 +32,11 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
       parameters.  (Closes: #786706)
   * debuild: Recognize -jauto as a valid option. Based on a patch by Reiner
     Herrmann.  (Closes: #787276)
-  * uscan: Fix Github example in man page.  (Closes: #757194)
+  * uscan:
+    + Fix Github example in man page.  (Closes: #757194)
+    + Clear cached redirection URLs every time a watch line is processed.
+      This ensures any relative URLs are built into absolute URLs using
+      relevant sites.  (Closes: #736063)
   * Devscripts::Debbugs: Retrieve bug status in chunks to avoid building large
     responses on bugs.d.o.
 
