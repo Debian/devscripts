@@ -39,6 +39,10 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
       relevant sites.  (Closes: #736063)
   * Devscripts::Debbugs: Retrieve bug status in chunks to avoid building large
     responses on bugs.d.o.
+  * mk-build-deps:
+    + Verify build-dep package was installed since the install tool may exit
+      successfully even if the package couldn't be installed.  Based on a
+      patch by Dima Kogan.  (Closes: #755371)
 
   [ Dominique Dumont ]
   * licensecheck:
