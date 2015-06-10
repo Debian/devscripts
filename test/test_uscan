@@ -23,8 +23,8 @@ else
     top_srcdir=$(readlink -f "${0%/*}/..")
     make -C "$top_srcdir/scripts" uscan mk-origtargz
     PATH="$top_srcdir/scripts:$PATH"
-    PERLLIB="$top_srcdir/lib"
-    export PERLLIB
+    PERL5LIB="$top_srcdir/lib"
+    export PERL5LIB
     COMMAND="uscan --no-conf --compression=xz"
 fi
 
