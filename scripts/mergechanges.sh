@@ -23,14 +23,19 @@ set -e
 
 PROGNAME=`basename $0`
 
+synopsis () {
+    echo "Usage: $PROGNAME [-h|--help|--version] [-i|--indep] [-f] <file1> <file2> [<file> ...]"
+}
+
 usage () {
-    echo \
-"Usage: $PROGNAME [-h|--help|--version] [-i|--indep] [-f] <file1> <file2> [<file> ...]
+    synopsis
+    echo <<EOT
   Merge the changes files <file1>, <file2>, ....  Output on stdout
   unless -f option given, in which case, output to
   <package>_<version>_multi.changes in the same directory as <file1>.
   If -i is given, only source and architecture-independent packages
   are included in the output."
+EOT
 }
 
 version () {
@@ -78,7 +83,7 @@ done
 # Sanity check #0: Do we have enough parameters?
 if [ $# -lt 2 ]; then
     echo "Not enough parameters." >&2
-    echo "Usage: mergechanges [--help|--version] [-f] <file1> <file2> [<file...>]" >&2
+    synopsis >&2
     exit 1
 fi
 
