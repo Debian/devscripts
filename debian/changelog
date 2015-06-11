@@ -46,6 +46,8 @@ devscripts (2.15.5) UNRELEASED; urgency=medium
   * mergechanges:
     + Add -d option to delete input files on success.  Thanks to Mark Hymers
       for the patch.  (Closes: #640068)
+  * dd-list:
+    + Strip arch-qualifiers from given package names.  (Closes: #788367)
 
   [ Dominique Dumont ]
   * licensecheck:
