@@ -540,7 +540,7 @@ sub parselicense {
 	    $license = "BSD (4 clause) $license";
 	} elsif ($licensetext =~ /(The name(?:\(s\))? .*? may not|Neither the (names? .*?|authors?) nor the names of( (its|their|other|any))? contributors may) be used to endorse or promote products derived from this software/i) {
 	    $license = "BSD (3 clause) $license";
-	} elsif ($licensetext =~ /Redistributions of source code must retain the above copyright notice/i) {
+	} elsif ($licensetext =~ /Redistributions in binary form must reproduce the above copyright notice/i) {
 	    $license = "BSD (2 clause) $license";
 	} else {
 	    $license = "BSD $license";

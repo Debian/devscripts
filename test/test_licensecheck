@@ -52,6 +52,7 @@ testEclipse() {
 }
 
 testBSD() {
+    license "bsd-1-clause-1.c" "BSD"
     license "bsd-3-clause.cpp" "BSD (3 clause)"
     license "bsd-3-clause-authorsany.c" "BSD (3 clause)"
 }
