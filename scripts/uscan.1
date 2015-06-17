@@ -301,8 +301,8 @@ error.
 If the upstream sources are modified because \fIdebian/copyright\fR contains
 the \fBFiles-Excluded\fR field, \fIsuffix\fR will be appended to the upstream
 version of the repacked tar archive.  Common suffixes might be \fB+dfsg1\fR to
-indicate the removal of non-DFSG code or \fB+ds1\fR to indicate the removal of
-embedded (DFSG) code copies.
+indicate the removal of files that are not DFSG-compliant or \fB+ds1\fR for
+other reasons such as removal of prebuilt files or large embedded code copies.
 .SH "Directory name checking"
 Similarly to several other scripts in the \fBdevscripts\fR package,
 \fBuscan\fR explores the requested directory trees looking for
