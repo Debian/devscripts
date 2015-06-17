@@ -6,6 +6,9 @@ devscripts (2.15.6) UNRELEASED; urgency=medium
   [ James McCoy ]
   * debcheckout: Handle Launchpad Git URLs.  Thanks to Colin Watson for the
     patch.  (Closes: #788777)
+  * checkbashisms: Fix unescaped, literal curly brace in regex, causing FTBFS
+    with Perl 5.22.  Thanks to Roderich Schupp for the patch.  (Closes:
+    #788707)
 
  -- Paul Wise <pabs@debian.org>  Wed, 17 Jun 2015 09:51:15 +0800
 
