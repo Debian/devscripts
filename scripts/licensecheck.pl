@@ -318,7 +318,6 @@ while (@files) {
     my $copyright_match;
     my $copyright = '';
     my $license = '';
-    my %copyrights;
 
     # Encode::Guess does not work well, use good old file command to get file encoding
     my $mime = `file -bi $file`;
@@ -337,13 +336,10 @@ while (@files) {
         last if ($. > $OPT{'lines'});
         my $data = decode($charset,$_);
         $content .= $data;
-        $copyright_match = parse_copyright($data);
-        if ($copyright_match) {
-            $copyrights{lc("$copyright_match")} = "$copyright_match";
-        }
     }
     close($F);
 
+    my %copyrights = extract_copyright($content);
     $copyright = join(" / ", reverse sort values %copyrights);
 
     print qq(----- $file header -----\n$content----- end header -----\n\n)
@@ -365,13 +361,34 @@ while (@files) {
     }
 }
 
+sub extract_copyright {
+    my $content = shift;
+    my @c = split /\n/, clean_comments($content);
+
+    my %copyrights;
+
+    while (@c) {
+	my $line = shift @c ;
+	my $copyright_match = parse_copyright($line) ;
+        if ($copyright_match) {
+	    if ($copyright_match =~ /\d[,.]?\s*$/) {
+		# looks like copyright end with a year, assume the owner is on next line
+		$copyright_match .= ' '. shift @c;
+	    }
+	    $copyright_match =~ s/\s+/ /g;
+	    $copyrights{lc("$copyright_match")} = "$copyright_match";
+        }
+    }
+    return %copyrights;
+}
+
 sub parse_copyright {
     my $data = shift ;
     my $copyright = '';
     my $match;
 
     if ( $data !~ $copyright_predisindicator_regex) {
-
+	#print "match against ->$data<-\n";
         if ($data =~ $copyright_indicator_regex_with_capture) {
             $match = $1;
 
