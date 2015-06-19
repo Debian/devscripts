@@ -349,7 +349,7 @@ while (@files) {
     print qq(----- $file header -----\n$content----- end header -----\n\n)
 	if $OPT{'verbose'};
 
-    $license = parselicense(clean_comments($content));
+    $license = parselicense(clean_cruft_and_spaces(clean_comments($content)));
 
     if ($OPT{'machine'}) {
 	print "$file\t$license";
@@ -406,10 +406,18 @@ sub clean_comments {
 
     # Remove Fortran comments
     s/^[cC] //gm;
-    tr/\t\r\n/ /;
 
     # Remove C / C++ comments
     s#(\*/|/[/*])##g;
+
+    return $_;
+}
+
+sub clean_cruft_and_spaces {
+    local $_ = shift or return q{};
+
+    tr/\t\r\n/ /;
+
     # this also removes quotes
     tr% A-Za-z.,@;0-9\(\)/-%%cd;
     tr/ //s;

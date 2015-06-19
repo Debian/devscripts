@@ -55,6 +55,7 @@ testBSD() {
     license "bsd-1-clause-1.c" "BSD"
     license "bsd-3-clause.cpp" "BSD (3 clause)"
     license "bsd-3-clause-authorsany.c" "BSD (3 clause)"
+    license2 "-m --copyright" "bsd-regents.c" "BSD (3 clause)	1987, 1993, 1994  The Regents of the University of California.  All rights reserved."
 }
 
 testLGPL() {
