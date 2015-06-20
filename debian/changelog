@@ -13,6 +13,11 @@ devscripts (2.15.6) UNRELEASED; urgency=medium
   [ Dominique Dumont ]
   * licensecheck: fix BSD-2-clause detection
 
+  [ Mattia Rizzolo ]
+  * uscan: Suggest the correct syntax in the manpage for the dversionmangle
+    option, escaping a '+'. Thanks to Martin Erik Werner for reporting.
+    (Closes: #789389)
+
  -- Paul Wise <pabs@debian.org>  Wed, 17 Jun 2015 09:51:15 +0800
 
 devscripts (2.15.5) unstable; urgency=low
