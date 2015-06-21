@@ -171,6 +171,7 @@ my $default_ignore_regex = qr!
 my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|f(77|90)?|go|groovy|scala|clj|p(l|m)|xs|sh|php|py(|x)|rb|java|js|vala|el|sc(i|e)|cs|pas|inc|dtd|xsl|mod|m|tex|mli?|(c|l)?hs)$';
 
 
+# also used to cleanup
 my $copyright_indicator_regex
     = qr!
          (?:copyright	# The full word
@@ -184,9 +185,9 @@ my $copyright_indicator_regex_with_capture = qr!$copyright_indicator_regex(?::\s
 
 my $copyright_disindicator_regex
     = qr!
-     \b(?:info(?:rmation)?	# Discussing copyright information
+	    \b(?:info(?:rmation)?	# Discussing copyright information
             |(notice|statement|claim|string)s?	# Discussing the notice
-            |or|is|in|to        # Part of a sentence
+            |is|in|to        # Part of a sentence
             |(holder|owner)s?       # Part of a sentence
             |ownership              # Part of a sentence
             )\b
@@ -391,10 +392,9 @@ sub parse_copyright {
 	#print "match against ->$data<-\n";
         if ($data =~ $copyright_indicator_regex_with_capture) {
             $match = $1;
-
             # Ignore lines matching "see foo for copyright information" etc.
             if ($match !~ $copyright_disindicator_regex) {
-                # De-cruft
+		# De-cruft
                 $match =~ s/([,.])?\s*$//;
                 $match =~ s/$copyright_indicator_regex//igx;
                 $match =~ s/^\s+//;
@@ -491,7 +491,9 @@ sub parselicense {
     my $extrainfo = "";
     my $license = "";
 
-    if ($licensetext =~ /version ([^, ]+?)[.,]? (?:\(?only\)?.? )?(?:of the GNU (Affero )?(Lesser |Library )?General Public License )?(as )?published by the Free Software Foundation/i or
+    if ($licensetext =~ /version ([^ ]+)(?: of the License)?,? or(?: \(at your option\))? version (\d(?:[.-]\d+)*)/) {
+	$gplver = " (v$1 or v$2)";
+    } elsif ($licensetext =~ /version ([^, ]+?)[.,]? (?:\(?only\)?.? )?(?:of the GNU (Affero )?(Lesser |Library )?General Public License )?(as )?published by the Free Software Foundation/i or
 	$licensetext =~ /GNU (?:Affero )?(?:Lesser |Library )?General Public License (?:as )?published by the Free Software Foundation[;,] version ([^, ]+?)[.,]? /i) {
 
 	$gplver = " (v$1)";
@@ -499,8 +501,6 @@ sub parselicense {
 	$gplver = " (v$1)";
     } elsif ($licensetext =~ /either version ([^ ]+)(?: of the License)?, or (?:\(at your option\) )?any later version/) {
 	$gplver = " (v$1 or later)";
-    } elsif ($licensetext =~ /either version ([^ ]+)(?: of the License)?, or \(at your option\) version (\d(?:[\.-]\d+)*)/) {
-	$gplver = " (v$1 or v$2)";
     } elsif ($licensetext =~ /GPL\sas\spublished\sby\sthe\sFree\sSoftware\sFoundation,\sversion\s([\d.]+)/i ) {
 	$gplver = " (v$1)";
     }
@@ -537,7 +537,7 @@ sub parselicense {
 	$license = "GPL$gplver$extrainfo $license";
     }
 
-    if ($licensetext =~ /is\s(?:distributed.*?terms|being\s+released).*?\b(L?GPL)\b/) {
+    if ($licensetext =~ /(?:is|may be)\s(?:(?:distributed|used).*?terms|being\s+released).*?\b(L?GPL)\b/) {
         my $v = $gplver || ' (unversioned/unknown version)';
         $license = "$1$v $license";
     }

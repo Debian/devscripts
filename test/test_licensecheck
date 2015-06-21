@@ -67,6 +67,7 @@ testLGPL() {
     license "lgpl-variation.c" "LGPL (v3 or later)"
     license "lgpl-no-version.h" "LGPL (unversioned/unknown version)"
     license2  "-m --copyright" "lgpl-big-blue.h" "LGPL (v2.1)	2000, 2010 IBM Corporation and others. All rights reserved"
+    license2  "-m --copyright" "lgpl-digia.c" "LGPL (v2.1 or v3)	2014 Digia Plc and/or its subsidiary(-ies)"
 }
 
 testGPL() {
