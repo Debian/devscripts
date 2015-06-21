@@ -1,10 +1,27 @@
-devscripts (2.15.6) UNRELEASED; urgency=low
+devscripts (2.15.6) UNRELEASED; urgency=medium
 
+  [ Paul Wise ]
+  * Adjust wording of common suffixes passed to repacksuffix
+
+  [ James McCoy ]
+  * debcheckout: Handle Launchpad Git URLs.  Thanks to Colin Watson for the
+    patch.  (Closes: #788777)
+  * checkbashisms: Fix unescaped, literal curly brace in regex, causing FTBFS
+    with Perl 5.22.  Thanks to Roderich Schupp for the patch.  (Closes:
+    #788707)
+
+  [ Dominique Dumont ]
   * licensecheck:
     * extract © owner when © and owners are specified on 2 lines.
     * fix digia © and license extraction (Closes: #789074)
+    * fix BSD-2-clause detection
 
- -- Dominique Dumont <dod@debian.org>  Fri, 19 Jun 2015 07:42:55 +0200
+  [ Mattia Rizzolo ]
+  * uscan: Suggest the correct syntax in the manpage for the dversionmangle
+    option, escaping a '+'. Thanks to Martin Erik Werner for reporting.
+    (Closes: #789389)
+
+ -- Paul Wise <pabs@debian.org>  Wed, 17 Jun 2015 09:51:15 +0800
 
 devscripts (2.15.5) unstable; urgency=low
 

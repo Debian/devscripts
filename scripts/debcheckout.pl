@@ -482,6 +482,7 @@ sub set_auth($$$$) {
 	    } else {
 		$url =~ s|^\w+://(git\.debian\.org)/(?:git/)?(.*)|git+ssh://$user$1/git/$2|;
 	    }
+	    $url =~ s[^\w+://(?:(git|code)\.)?(launchpad\.net/.*)][git+ssh://${user}git.$2];
 	}
 	# "hg ssh://" needs an extra slash so paths are not based in the user's $HOME
 	when ("hg") {

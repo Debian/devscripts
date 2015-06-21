@@ -548,7 +548,7 @@ sub script_is_evil_and_wrong {
 	    # Finally the whole subexpression may be omitted for scripts
 	    # which do not pass on their parameters (i.e. after re-execing
 	    # they take their parameters (and potentially data) from stdin
-	    .?(\${1:?\+.?)?(\$(\@|\*))?~x) {
+	    .?(\$\{1:?\+.?)?(\$(\@|\*))?~x) {
             $ret = $. - 1;
             last;
         } elsif (/^\s*(\w+)=\$0;/) {
@@ -561,7 +561,7 @@ sub script_is_evil_and_wrong {
 	    # As above
 	    .?\$$var.?\s*
 	    (--\s*)?
-	    .?(\${1:?\+.?)?(\$(\@|\*))?.?\s*\&~x) {
+	    .?(\$\{1:?\+.?)?(\$(\@|\*))?.?\s*\&~x) {
 
 	    $backgrounded = 1;
 	} elsif ($backgrounded and m~
