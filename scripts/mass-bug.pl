@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 # mass-bug: mass-file a bug report against a list of packages
 # For options, see the usage message below.
@@ -149,6 +149,7 @@ F</usr/sbin/sendmail>.  Same as the B<--sendmail> command line option.
 =cut
 
 use strict;
+use warnings;
 use Getopt::Long qw(:config gnu_getopt);
 use Text::Wrap;
 use File::Basename;

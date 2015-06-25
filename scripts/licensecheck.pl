@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# -*- tab-width: 8; indent-tabs-mode: t; cperl-indent-level: 4 -*-
 # This script was originally based on the script of the same name from
 # the KDE SDK (by dfaure@kde.org)
 #
@@ -132,19 +133,30 @@ Adam D. Barratt <adam@adam-barratt.org.uk>
 
 =cut
 
+# see http://stackoverflow.com/questions/6162484/why-does-modern-perl-avoid-utf-8-by-default/6163129#6163129
+use v5.14;
+use utf8;
+
 use strict;
+use autodie;
 use warnings;
+use warnings    qw< FATAL  utf8     >;
+use Encode qw/decode/;
+
 use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
+
+
+binmode STDOUT, ':utf8';
 
 my $progname = basename($0);
 
 # From dpkg-source
-my $default_ignore_regex = '
+my $default_ignore_regex = qr!
 # Ignore general backup files
-(?:^|/).*~$|
+~$|
 # Ignore emacs recovery files
-(?:^|/)\.#.*$|
+(?:^|/)\.#|
 # Ignore vi swap files
 (?:^|/)\..*\.swp$|
 # Ignore baz-style junk files or directories
@@ -152,15 +164,38 @@ my $default_ignore_regex = '
 # File-names that should be ignored (never directories)
 (?:^|/)(?:DEADJOE|\.cvsignore|\.arch-inventory|\.bzrignore|\.gitignore)$|
 # File or directory names that should be ignored
-(?:^|/)(?:CVS|RCS|\.deps|\{arch\}|\.arch-ids|\.svn|\.hg|_darcs|\.git|
+(?:^|/)(?:CVS|RCS|\.pc|\.deps|\{arch\}|\.arch-ids|\.svn|\.hg|_darcs|\.git|
 \.shelf|_MTN|\.bzr(?:\.backup|tags)?)(?:$|/.*$)
-';
+!x;
 
-# Take out comments and newlines
-$default_ignore_regex =~ s/^#.*$//mg;
-$default_ignore_regex =~ s/\n//sg;
+my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|f(77|90)?|go|groovy|scala|clj|p(l|m)|xs|sh|php|py(|x)|rb|java|js|vala|el|sc(i|e)|cs|pas|inc|dtd|xsl|mod|m|tex|mli?|(c|l)?hs)$';
 
-my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|f(77|90)?|go|p(l|m)|xs|sh|php|py(|x)|rb|java|js|vala|el|sc(i|e)|cs|pas|inc|dtd|xsl|mod|m|tex|mli?|(c|l)?hs)$';
+
+my $copyright_indicator_regex
+    = qr!
+         (?:copyright	# The full word
+            |copr\.		# Legally-valid abbreviation
+            |©	# Unicode character COPYRIGHT SIGN
+            |\(c\)		# Legally-null representation of sign
+         )
+        !lix;
+
+my $copyright_indicator_regex_with_capture = qr!$copyright_indicator_regex(?::\s*|\s+)(\S.*)$!lix;
+
+my $copyright_disindicator_regex
+    = qr!
+     \b(?:info(?:rmation)?	# Discussing copyright information
+            |(notice|statement|claim|string)s?	# Discussing the notice
+            |or|is|in|to        # Part of a sentence
+            |(holder|owner)s?       # Part of a sentence
+            |ownership              # Part of a sentence
+            )\b
+        !ix;
+
+my $copyright_predisindicator_regex
+    = qr!(
+             ^[#]define\s+.*\(c\)    # #define foo(c) -- not copyright
+         )!ix;
 
 my $modified_conf_msg;
 
@@ -235,8 +270,9 @@ GetOptions(\%OPT,
 ) or die "Usage: $progname [options] filelist\nRun $progname --help for more details\n";
 
 $OPT{'lines'} = $def_lines if $OPT{'lines'} !~ /^[1-9][0-9]*$/;
-$OPT{'ignore'} = $default_ignore_regex if ! length $OPT{'ignore'};
+my $ignore_regex = length($OPT{ignore}) ? qr/$OPT{ignore}/ : $default_ignore_regex;
 $OPT{'check'} = $default_check_regex if ! length $OPT{'check'};
+my $check_regex = qr/$OPT{check}/;
 
 if ($OPT{'noconf'}) {
     fatal("--no-conf is only acceptable as the first command-line option!");
@@ -262,17 +298,17 @@ while (@ARGV) {
 	open my $FIND, '-|', 'find', $file, @find_args
 	    or die "$progname: couldn't exec find: $!\n";
 
-	while (<$FIND>) {
-	    chomp;
-	    next unless m%$OPT{'check'}%;
+	while (my $found = <$FIND>) {
+	    chomp ($found);
+	    next unless $found =~ $check_regex;
 	    # Skip empty files
-	    next if (-z $_);
-	    push @files, $_ unless m%$OPT{'ignore'}%;
+	    next if (-z $found);
+	    push @files, $found unless $found =~ $ignore_regex;
 	}
 	close $FIND;
     } else {
-	next unless ($files_count == 1) or $file =~ m%$OPT{'check'}%;
-	push @files, $file unless $file =~ m%$OPT{'ignore'}%;
+	next unless ($files_count == 1) or $file =~ $check_regex;
+	push @files, $file unless $file =~ $ignore_regex;
     }
 }
 
@@ -284,18 +320,31 @@ while (@files) {
     my $license = '';
     my %copyrights;
 
+    # Encode::Guess does not work well, use good old file command to get file encoding
+    my $mime = `file -bi $file`;
+    my $charset ;
+    if ($mime =~ /charset=([\w-]+)/) {
+        $charset = $1;
+    }
+    else {
+        die "can't find charset of $file\n";
+    }
+
     open (my $F, '<' ,$file) or die "Unable to access $file\n";
-    while (<$F>) {
+    binmode $F, ':raw';
+
+    while ( <$F>) {
         last if ($. > $OPT{'lines'});
-        $content .= $_;
-	$copyright_match = parse_copyright($_);
-	if ($copyright_match) {
-	    $copyrights{lc("$copyright_match")} = "$copyright_match";
-	}
+        my $data = decode($charset,$_);
+        $content .= $data;
+        $copyright_match = parse_copyright($data);
+        if ($copyright_match) {
+            $copyrights{lc("$copyright_match")} = "$copyright_match";
+        }
     }
     close($F);
 
-    $copyright = join(" / ", values %copyrights);
+    $copyright = join(" / ", reverse sort values %copyrights);
 
     print qq(----- $file header -----\n$content----- end header -----\n\n)
 	if $OPT{'verbose'};
@@ -317,43 +366,27 @@ while (@files) {
 }
 
 sub parse_copyright {
+    my $data = shift ;
     my $copyright = '';
     my $match;
 
-    my $copyright_indicator_regex = '
-	(?:copyright	# The full word
-	|copr\.		# Legally-valid abbreviation
-	|\x{00a9}	# Unicode character COPYRIGHT SIGN
-	|\xc2\xa9	# Unicode copyright sign encoded in iso8859
-	|\(c\)		# Legally-null representation of sign
-	)';
-    my $copyright_disindicator_regex = '
-	\b(?:info(?:rmation)?	# Discussing copyright information
-	|(notice|statement|claim|string)s?	# Discussing the notice
-	|and|or|is|in|to        # Part of a sentence
-	|(holder|owner)s?       # Part of a sentence
-	|ownership              # Part of a sentence
-	)\b';
-    my $copyright_predisindicator_regex = '(
-    ^[#]define\s+.*\(c\)    # #define foo(c) -- not copyright
-	)';
+    if ( $data !~ $copyright_predisindicator_regex) {
 
-    if ( ! m%$copyright_predisindicator_regex%ix) {
+        if ($data =~ $copyright_indicator_regex_with_capture) {
+            $match = $1;
 
-    if (m%$copyright_indicator_regex(?::\s*|\s+)(\S.*)$%ix) {
-	$match = $1;
-
-	# Ignore lines matching "see foo for copyright information" etc.
-	if ($match !~ m%^\s*$copyright_disindicator_regex%ix) {
-	    # De-cruft
-	    $match =~ s/([,.])?\s*$//;
-	    $match =~ s/$copyright_indicator_regex//igx;
-	    $match =~ s/^\s+//;
-	    $match =~ s/\s{2,}/ /g;
-	    $match =~ s/\\@/@/g;
-	    $copyright = $match;
-	}
-    }
+            # Ignore lines matching "see foo for copyright information" etc.
+            if ($match !~ $copyright_disindicator_regex) {
+                # De-cruft
+                $match =~ s/([,.])?\s*$//;
+                $match =~ s/$copyright_indicator_regex//igx;
+                $match =~ s/^\s+//;
+                $match =~ s/\s{2,}/ /g;
+                $match =~ s/\\@/@/g;
+                $match =~ s/\s*\*\s*$//;
+                $copyright = $match;
+            }
+        }
     }
 
     return $copyright;
@@ -365,7 +398,7 @@ sub clean_comments {
     # Remove generic comments: look for 4 or more lines beginning with
     # regular comment pattern and trim it. Fall back to old algorithm
     # if no such pattern found.
-    my @matches = m/^\s*([^a-zA-Z0-9\s]{1,3})\s\w/mg;
+    my @matches = m/^\s*((?:[^a-zA-Z0-9\s]{1,3}|\bREM\b))\s\w/mg;
     if (@matches >= 4) {
 	my $comment_re = qr/\s*[\Q$matches[0]\E]{1,3}\s*/;
 	s/^$comment_re//mg;
@@ -377,6 +410,7 @@ sub clean_comments {
 
     # Remove C / C++ comments
     s#(\*/|/[/*])##g;
+    # this also removes quotes
     tr% A-Za-z.,@;0-9\(\)/-%%cd;
     tr/ //s;
 
@@ -436,11 +470,16 @@ sub parselicense {
 	$licensetext =~ /GNU (?:Affero )?(?:Lesser |Library )?General Public License (?:as )?published by the Free Software Foundation[;,] version ([^, ]+?)[.,]? /i) {
 
 	$gplver = " (v$1)";
-    } elsif ($licensetext =~ /GNU (?:Affero )?(?:Lesser |Library )?General Public License, version (\d+(?:\.\d+)?)[ \.]/) {
+    } elsif ($licensetext =~ /GNU (?:Affero )?(?:Lesser |Library )?General Public License\s*(?:[(),GPL]+)\s*version (\d+(?:\.\d+)?)[ \.]/i) {
 	$gplver = " (v$1)";
-    } elsif ($licensetext =~ /either version ([^ ]+)(?: of the License)?, or \(at your option\) any later version/) {
+    } elsif ($licensetext =~ /either version ([^ ]+)(?: of the License)?, or (?:\(at your option\) )?any later version/) {
 	$gplver = " (v$1 or later)";
+    } elsif ($licensetext =~ /either version ([^ ]+)(?: of the License)?, or \(at your option\) version (\d(?:[\.-]\d+)*)/) {
+	$gplver = " (v$1 or v$2)";
+    } elsif ($licensetext =~ /GPL\sas\spublished\sby\sthe\sFree\sSoftware\sFoundation,\sversion\s([\d.]+)/i ) {
+	$gplver = " (v$1)";
     }
+
 
     if ($licensetext =~ /(?:675 Mass Ave|59 Temple Place|51 Franklin Steet|02139|02111-1307)/i) {
 	$extrainfo = " (with incorrect FSF address)$extrainfo";
@@ -450,11 +489,13 @@ sub parselicense {
 	$extrainfo = " (with Qt exception)$extrainfo"
     }
 
-    if ($licensetext =~ /(All changes made in this file will be lost|DO NOT (EDIT|delete this file)|Generated (automatically|by|from)|generated.*file)/i) {
+    # exclude blurb found in boost license text
+    if ($licensetext =~ /(All changes made in this file will be lost|DO NOT (EDIT|delete this file)|Generated (automatically|by|from)|generated.*file)/i
+        and $licensetext !~  /unless such copies or derivative works are solely in the form of machine-executable object code generated by a source language processor/) {
 	$license = "GENERATED FILE";
     }
 
-    if ($licensetext =~ /((is free software.? )?you can redistribute (it|them) and\/or modify (it|them)|is licensed) under the terms of (version [^ ]+ of )?the (GNU (Library |Lesser )General Public License|LGPL)/i) {
+    if ($licensetext =~ /(are made available|(is free software.? )?you can redistribute (it|them) and\/or modify (it|them)|is licensed) under the terms of (version [^ ]+ of )?the (GNU (Library |Lesser )General Public License|LGPL)/i) {
 	$license = "LGPL$gplver$extrainfo $license";
     }
 
@@ -471,8 +512,9 @@ sub parselicense {
 	$license = "GPL$gplver$extrainfo $license";
     }
 
-    if ($licensetext =~ /is distributed.*terms.*GPL/) {
-	$license = "GPL (unversioned/unknown version) $license";
+    if ($licensetext =~ /is\s(?:distributed.*?terms|being\s+released).*?\b(L?GPL)\b/) {
+        my $v = $gplver || ' (unversioned/unknown version)';
+        $license = "$1$v $license";
     }
 
     if ($licensetext =~ /This file is part of the .*Qt GUI Toolkit. This file may be distributed under the terms of the Q Public License as defined/) {
@@ -557,7 +599,16 @@ sub parselicense {
         $license = "Ms-PL $license";
     }
 
-    if ($licensetext =~ /Permission is hereby granted, free of charge, to any person or organization obtaining a copy of the software and accompanying documentation covered by this license \(the \"Software\"\)/ or
+    if ($licensetext =~ /Licensed under the Academic Free License version ([\d.]+)/) {
+        $license = $1 ? "AFL-$1" : "AFL";
+    }
+
+    if ($licensetext =~ /This program and the accompanying materials are made available under the terms of the Eclipse Public License v?([\d.]+)/) {
+        $license = $1 ? "EPL-$1" : "EPL";
+    }
+
+    # quotes were removed by clean_comments function
+    if ($licensetext =~ /Permission is hereby granted, free of charge, to any person or organization obtaining a copy of the software and accompanying documentation covered by this license \(the Software\)/ or
 	$licensetext =~ /Boost Software License([ ,-]+Version ([^ ]+)?(\.))/i) {
 	$license = "BSL " . ($1 ? "(v$2) " : '') . $license;
     }

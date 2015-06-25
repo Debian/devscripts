@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # Copyright 2014, Rafael Laboissiere <rafael@laboissiere.net>
+# Copyright 2015, James McCoy <jamessan@debian.org>
 
 # This program is free software; you can redistribute it and/or modify it
 # under the terms of the GNU General Public License as published by the
@@ -21,7 +22,7 @@ if test "$1" = --installed; then
     shift
 else
     top_srcdir=$(readlink -f "${0%/*}/..")
-    MK_ORIGTARGZ="perl -I $top_srcdir $top_srcdir/scripts/mk-origtargz.pl"
+    MK_ORIGTARGZ="perl -I $top_srcdir/lib $top_srcdir/scripts/mk-origtargz.pl"
     PROGNAME="mk-origtargz.pl"
 fi
 
@@ -143,6 +144,17 @@ Files-Excluded: exclude-this*
  exclude-dir2
  ;?echo?strange-file;?#
  nomatch
+END
+}
+
+makeDuplicatePatternCopyright() {
+	cat <<'END' > $TMPDIR/foo/debian/copyright
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Files-Excluded: exclude-this*
+ .exclude-this*
+ exclude-dir1
+ exclude-dir*
+ ;?echo?strange-file;?#
 END
 }
 
@@ -533,6 +545,18 @@ testUnmatchedExclusion() {
 	makeDebianDir
 	makeUnmatchedExcludeCopyright
 	run_mk_origtargz foo "No files matched excluded pattern: nomatch" \
+		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.gz, deleting 19 files from it." \
+		 ../foo-0.1.tar.gz
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
+	assertType application/gzip $TMPDIR/foo_0.1.orig.tar.gz
+	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1.orig.tar.gz | sort)"
+}
+
+testDuplicatePattern() {
+	makeTarBall gz
+	makeDebianDir
+	makeDuplicatePatternCopyright
+	run_mk_origtargz foo "No files matched excluded pattern: exclude-dir1" \
 		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.gz, deleting 19 files from it." \
 		 ../foo-0.1.tar.gz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"

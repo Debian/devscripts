@@ -1,4 +1,4 @@
-#! /usr/bin/perl -w
+#! /usr/bin/perl
 
 # Copyright Bill Allombert <ballombe@debian.org> 2001.
 # Modifications copyright 2002 Julian Gilbey <jdg@debian.org>
@@ -18,6 +18,8 @@
 
 package Devscripts::Packages;
 
+use strict;
+use warnings;
 use Carp;
 use Dpkg::Control;
 
@@ -262,6 +264,7 @@ sub InstalledPackages ($)
 	or croak("Can't read /var/lib/dpkg/status: $!");
 
     my $ctrl;
+    my %matches;
     while (defined($ctrl = Dpkg::Control->new(type => CTRL_FILE_STATUS))
 	   && $ctrl->parse(\*STATUS, '/var/lib/dpkg/status')) {
 	if ($ctrl->{Status} !~ /^install\s+ok\s+installed$/) {

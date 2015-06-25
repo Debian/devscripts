@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 # desktop2menu: This program generates a skeleton menu file from a
 # freedesktop.org desktop file

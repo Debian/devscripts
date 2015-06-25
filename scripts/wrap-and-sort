@@ -44,8 +44,22 @@ SUPPORTED_FILES = (
     "control*.in",
     "copyright",
     "copyright.in",
+    "dirs",
+    "*.dirs",
+    "docs",
+    "*.docs",
+    "examples",
+    "*.examples",
+    "info",
+    "*.info",
     "install",
     "*.install",
+    "links",
+    "*.links",
+    "mainscript",
+    "*.maintscript",
+    "manpages",
+    "*.manpages",
 )
 
 
@@ -78,7 +92,9 @@ class WrapAndSortControl(Control):
 
     def _wrap_field(self, control, entry, wrap_always, short_indent,
                     trailing_comma, sort=True):
-        packages = [x.strip() for x in control[entry].split(",")]
+        # An empty element is not explicitly disallowed by Policy but known to
+        # break QA tools, so remove any
+        packages = list(filter(None, [x.strip() for x in control[entry].split(",")]))
 
         # Sanitize alternative packages. E.g. "a|b  |c" -> "a | b | c"
         packages = [" | ".join([x.strip() for x in p.split("|")]) for p in packages]
@@ -86,9 +102,6 @@ class WrapAndSortControl(Control):
         if sort:
             # Remove duplicate entries
             packages = set(packages)
-            # Not explicitly disallowed by Policy but known to break QA tools:
-            if "" in packages:
-                packages.remove("")
             packages = sort_list(packages)
 
         length = len(entry) + sum([2 + len(package) for package in packages])
@@ -117,7 +130,7 @@ class Install(object):
     def open(self, filename):
         assert os.path.isfile(filename), "%s does not exist." % (filename)
         self.filename = filename
-        self.content = [l.strip() for l in open(filename).readlines()]
+        self.content = list(filter(None, [l.strip() for l in open(filename).readlines()]))
 
     def save(self, filename=None):
         if filename:
@@ -167,7 +180,8 @@ def wrap_and_sort(options):
             print(copyright_file)
         remove_trailing_whitespaces(copyright_file)
 
-    install_files = [f for f in options.files if re.search("install$", f)]
+    pattern = "(dirs|docs|examples|info|install|links|maintscript|manpages)$"
+    install_files = [f for f in options.files if re.search(pattern, f)]
     for install_file in sorted(install_files):
         if options.verbose:
             print(install_file)

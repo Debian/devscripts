@@ -4,12 +4,7 @@ include Makefile.common
 
 DESTDIR =
 
-PERL_MODULES = Devscripts
 EXAMPLES = conf.default README.mk-build-deps
-
-PREFIX ?= /usr
-DOCDIR ?= $(PREFIX)/share/doc/devscripts
-MAN1DIR ?= $(PREFIX)/share/man/man1
 
 all: version make_scripts $(EXAMPLES) translated_manpages
 
@@ -44,12 +39,13 @@ test-installed:
 	$(MAKE) -C test/ $@
 
 install: all install_scripts
-	cp -a $(PERL_MODULES) $(DESTDIR)$(PERLMOD_DIR)
-	cp $(EXAMPLES) $(DESTDIR)$(EXAMPLES_DIR)
-	install -D README $(DESTDIR)$(DOCDIR)/README
-	install -dD $(DESTDIR)$(MAN1DIR)
-	cp doc/*.1 $(DESTDIR)$(MAN1DIR)
-	ln -sf edit-patch.1 $(DESTDIR)$(MAN1DIR)/add-patch.1
+	install -d "$(DESTDIR)$(EXAMPLES_DIR)" "$(DESTDIR)$(PERLMOD_DIR)" \
+	    "$(DESTDIR)$(DATA_DIR)" "$(DESTDIR)$(DOCDIR)" "$(DESTDIR)$(MAN1DIR)"
+	for f in lib/*; do cp -a "$$f" "$(DESTDIR)$(PERLMOD_DIR)"; done
+	install -m0644 $(EXAMPLES) "$(DESTDIR)$(DATA_DIR)"
+	install -m0644 README "$(DESTDIR)$(DOCDIR)"
+	install -m0644 doc/*.1 "$(DESTDIR)$(MAN1DIR)"
+	ln -sf edit-patch.1 "$(DESTDIR)$(MAN1DIR)/add-patch.1"
 
 test_test:
 	$(MAKE) -C test/ test

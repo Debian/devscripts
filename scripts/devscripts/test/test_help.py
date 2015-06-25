@@ -26,12 +26,14 @@ from devscripts.test import unittest
 
 TIMEOUT = 5
 
+
 def load_tests(loader, tests, pattern):
     "Give HelpTestCase a chance to populate before loading its test cases"
     suite = unittest.TestSuite()
     HelpTestCase.populate()
     suite.addTests(loader.loadTestsFromTestCase(HelpTestCase))
     return suite
+
 
 class HelpTestCase(unittest.TestCase):
     @classmethod

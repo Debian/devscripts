@@ -23,12 +23,19 @@ set -e
 
 PROGNAME=`basename $0`
 
+synopsis () {
+    echo "Usage: $PROGNAME [-h|--help|--version] [-d] [-i|--indep] [-f] <file1> <file2> [<file> ...]"
+}
+
 usage () {
-    echo \
-"Usage: $PROGNAME [-h|--help|--version] [-f] <file1> <file2> [<file> ...]
+    synopsis
+    echo <<EOT
   Merge the changes files <file1>, <file2>, ....  Output on stdout
   unless -f option given, in which case, output to
-  <package>_<version>_multi.changes in the same directory as <file1>."
+  <package>_<version>_multi.changes in the same directory as <file1>.
+  If -i is given, only source and architecture-independent packages
+  are included in the output."
+EOT
 }
 
 version () {
@@ -43,6 +50,8 @@ GNU General Public License, version 2 or later."
 
 # Commandline parsing
 FILE=0
+DELETE=0
+INDEP_ONLY=0
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -58,6 +67,14 @@ while [ $# -gt 0 ]; do
 	    FILE=1
 	    shift
 	    ;;
+	-d)
+	    DELETE=1
+	    shift
+	    ;;
+	-i|--indep)
+	    INDEP_ONLY=1
+	    shift
+	    ;;
 	-*)
 	    echo "Unrecognised option $1.  Use $progname --help for help" >&2
 	    exit 1
@@ -71,7 +88,7 @@ done
 # Sanity check #0: Do we have enough parameters?
 if [ $# -lt 2 ]; then
     echo "Not enough parameters." >&2
-    echo "Usage: mergechanges [--help|--version] [-f] <file1> <file2> [<file...>]" >&2
+    synopsis >&2
     exit 1
 fi
 
@@ -84,11 +101,37 @@ for f in "$@"; do
 done
 
 # Extract the Architecture: field from all .changes files,
-# and merge them, sorting out duplicates
-ARCHS=$(grep -h "^Architecture: " "$@" | sed -e "s,^Architecture: ,," | tr ' ' '\n' | sort -u | tr '\n' ' ' | sed 's/ $//')
+# and merge them, sorting out duplicates. Skip architectures
+# other than all and source if desired.
+ARCHS=$(grep -h "^Architecture: " "$@" | sed -e "s,^Architecture: ,," | tr ' ' '\n' | sort -u)
+if test ${INDEP_ONLY} = 1; then
+    ARCHS=$(echo "$ARCHS" | grep -E '^(all|source)$')
+fi
+ARCHS=$(echo "$ARCHS" | tr '\n' ' ' | sed 's/ $//')
 
 checksum_uniq() {
-    awk '{if(arr[$NF] != 1){arr[$NF] = 1; print;}}'
+    local line
+    local IFS=
+    if test ${INDEP_ONLY} = 1; then
+        while read line; do
+            case "$line" in
+                (*.dsc|*.diff.gz|*.tar.*|*_all.deb|*_all.udeb)
+                    # source or architecture-independent
+                    echo "$line"
+                    ;;
+                (*.deb|*.udeb)
+                    # architecture-specific, ignore
+                    ;;
+                (*)
+                    echo "Unrecognised file, is it architecture-dependent?" >&2
+                    echo "$line" >&2
+                    exit 1
+                    ;;
+            esac
+        done | awk '{if(arr[$NF] != 1){arr[$NF] = 1; print;}}'
+    else
+        awk '{if(arr[$NF] != 1){arr[$NF] = 1; print;}}'
+    fi
 }
 
 # Extract & merge the Version: field from all files..
@@ -222,5 +265,9 @@ if test -n "${SHA256S}"; then
 fi
 eval "echo 'Files: ' ${REDIR2}"
 eval "echo '${FILES}' ${REDIR2}"
+
+if test ${DELETE} = 1; then
+    rm "$@"
+fi
 
 exit 0

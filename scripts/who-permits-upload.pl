@@ -19,7 +19,7 @@
 
 
 use strict;
-use Parse::DebControl;
+use Dpkg::Control;
 use LWP::UserAgent;
 use Encode::Locale;
 use Encode;
@@ -27,7 +27,7 @@ use Getopt::Long;
 use constant {TYPE_PACKAGE => "package", TYPE_UID => "uid", TYPE_SPONSOR => "sponsor"};
 use constant {SPONSOR_FINGERPRINT => 0, SPONSOR_NAME => 1};
 
-our $DM_URL = "http://ftp-master.debian.org/dm.txt";
+our $DM_URL = "https://ftp-master.debian.org/dm.txt";
 our $KEYRING = "/usr/share/keyrings/debian-keyring.gpg:/usr/share/keyrings/debian-maintainers.gpg";
 our $TYPE = "package";
 our $GPG = "/usr/bin/gpg";
@@ -266,7 +266,7 @@ sub lookup_fingerprint
     }
     my @fields = split(":", $uid);
     $uid = $fields[9];
-    close(CMD) || leave("gpg returned an error looking for $fingerprint: $?");
+    close(CMD) || leave("gpg returned an error looking for $fingerprint: ". ($? >> 8));
 
     $GPG_CACHE{$fingerprint} = $uid;
 
@@ -276,22 +276,21 @@ sub lookup_fingerprint
 sub parse_data
 {
     my $raw_data = shift;
-    my $parser = new Parse::DebControl;
-    my $parsed_dm_data = $parser->parse_mem($raw_data, { discardCase=>1 });
+    my $parser = Dpkg::Control->new(type => CTRL_UNKNOWN, allow_duplicate => 1);
+    open(my $fh, '+<:utf8', \$raw_data) || leave('unable to read dm data: '.$!);
     my @dm_data = ();
 
-    foreach my $stanza (@{$parsed_dm_data})
+    while ($parser->parse($fh))
     {
-        foreach my $package (split(/,/, $stanza->{'allow'}))
+        foreach my $package (split(/,/, $parser->{Allow}))
         {
             if ($package =~ m/([a-z0-9\+\-\.]+)\s+\((\w+)\)/s)
             {
-                my @package_row = ($1, $stanza->{'fingerprint'}, $stanza->{'uid'}, $2, SPONSOR_FINGERPRINT);
+                my @package_row = ($1, $parser->{Fingerprint}, $parser->{Uid}, $2, SPONSOR_FINGERPRINT);
                 push(@dm_data, \@package_row);
             }
         }
     }
-    undef($parsed_dm_data);
     return @dm_data;
 }
 
@@ -329,7 +328,7 @@ $http->env_proxy;
 my $response = $http->get($DM_URL);
 if ($response->is_success)
 {
-    @DM_DATA = parse_data($response->decoded_content);
+    @DM_DATA = parse_data($response->content);
 }
 else
 {

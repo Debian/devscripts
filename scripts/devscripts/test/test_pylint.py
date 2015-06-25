@@ -30,6 +30,7 @@ WHITELIST = [re.compile(': %s$' % x) for x in (
     r"member",
 )]
 
+
 class PylintTestCase(unittest.TestCase):
     def test_pylint(self):
         "Test: Run pylint on Python source code"

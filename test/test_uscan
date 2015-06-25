@@ -15,25 +15,34 @@
 # On Debian systems, the complete text of the GNU General Public License
 # version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
 
+test_dir=$(readlink -f "${0%/*}")
 if test "$1" = --installed; then
     COMMAND="uscan --no-conf --compression=xz"
     shift
 else
     top_srcdir=$(readlink -f "${0%/*}/..")
-    if ! [ -x $top_srcdir/scripts/uscan -a -x $top_srcdir/scripts/mk-origtargz ]
-    then
-        echo "Please run make in scripts/"
-	exit 1
-    fi
+    make -C "$top_srcdir/scripts" uscan mk-origtargz
     PATH="$top_srcdir/scripts:$PATH"
-    PERLLIB="$top_srcdir"
-    export PERLLIB
+    PERL5LIB="$top_srcdir/lib"
+    export PERL5LIB
     COMMAND="uscan --no-conf --compression=xz"
 fi
 
 cleanup(){
     kill -9 $(cat $TMPDIR/repo/pid)
     rm -rf $TMPDIR
+}
+
+spawnHttpServer(){
+    (
+	mkdir -p $TMPDIR/repo
+	cd $TMPDIR/repo
+	python "$test_dir/uscan/server.py" &
+	echo $! > pid
+	while ! [ -s port ]; do
+	    :
+	done
+    )
 }
 
 trap cleanup 1 2 3 13 15
@@ -59,10 +68,11 @@ helperTestRepack() {
     file_output="$3"
 
     PKG=foo
-    PORT=8000
     TMPDIR=$(mktemp -d)
 
     mkdir -p $TMPDIR/$PKG/debian
+    spawnHttpServer
+    PORT=$(cat $TMPDIR/repo/port)
 
     cat <<END > $TMPDIR/$PKG/debian/watch
 version=3
@@ -81,9 +91,7 @@ END
     touch $TMPDIR/repo/foo/content
 
     ( cd $TMPDIR/repo ;
-      tar cfa $PKG-1.$from_ext * ;
-      python -m SimpleHTTPServer $PORT &
-      echo $! > pid )
+      tar cfa $PKG-1.$from_ext * )
 
     OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND --dehs --repack --compression=$to_comp) 2>&1 )
 
@@ -118,8 +126,9 @@ testRepackZip_XZ() {
     file_output="XZ compressed data"
 
     PKG=foo
-    PORT=8000
     TMPDIR=$(mktemp -d)
+    spawnHttpServer
+    PORT=$(cat $TMPDIR/repo/port)
 
     mkdir -p $TMPDIR/$PKG/debian
 
@@ -140,9 +149,7 @@ END
     touch $TMPDIR/repo/foo/content
 
     ( cd $TMPDIR/repo ;
-      zip -q -r $PKG-1.zip * ;
-      python -m SimpleHTTPServer $PORT &
-      echo $! > pid )
+      zip -q -r $PKG-1.zip * )
 
     OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND --dehs --repack --compression=$to_comp) )
 
@@ -226,17 +233,16 @@ helperTestContent() {
 testFileExclusion() {
 
     PKG=foo
-    PORT=8000
     TMPDIR=$(mktemp -d)
+    spawnHttpServer
+    PORT=$(cat $TMPDIR/repo/port)
 
     (
       cd $TMPDIR
       OPTS="opts=repacksuffix=+dfsg1 "
       helperCreateRepo
       cd repo
-      tar cfz $PKG-1.tar.gz * .hidden
-      python -m SimpleHTTPServer $PORT &
-      echo $! > pid )
+      tar cfz $PKG-1.tar.gz * .hidden )
 
     (cd $TMPDIR/$PKG ; $COMMAND)
 
@@ -258,17 +264,16 @@ testFileExclusion() {
 testFileExclusionSeparateDir() {
 
     PKG=foo
-    PORT=8000
     TMPDIR=$(mktemp -d)
+    spawnHttpServer
+    PORT=$(cat $TMPDIR/repo/port)
 
     (
       cd $TMPDIR
       OPTS="opts=repacksuffix=+dfsg1 "
       helperCreateRepo
       cd repo
-      tar cfz $PKG-1.tar.gz * .hidden
-      python -m SimpleHTTPServer $PORT &
-      echo $! > pid )
+      tar cfz $PKG-1.tar.gz * .hidden )
 
     mkdir $TMPDIR/otherdir
     (
@@ -294,8 +299,9 @@ testFileExclusionSeparateDir() {
 testFileExclusionZipToTar() {
 
     PKG=foo
-    PORT=8000
     TMPDIR=$(mktemp -d)
+    spawnHttpServer
+    PORT=$(cat $TMPDIR/repo/port)
 
     (
       cd $TMPDIR
@@ -306,9 +312,7 @@ opts=repacksuffix=+dfsg1 http://localhost:$PORT/$PKG-(\d).zip
 END
 
       cd repo
-      zip -q -r $PKG-1.zip * .hidden;
-      python -m SimpleHTTPServer $PORT &
-      echo $! > pid )
+      zip -q -r $PKG-1.zip * .hidden )
 
     (cd $TMPDIR/$PKG ; $COMMAND --repack)
 

@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 # debi:  Install current version of deb package
 # debc:  List contents of current version of deb package
@@ -25,6 +25,7 @@
 
 use 5.008;
 use strict;
+use warnings;
 use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
 use filetest 'access';

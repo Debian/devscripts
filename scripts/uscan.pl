@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 # -*- tab-width: 8; indent-tabs-mode: t; cperl-indent-level: 4 -*-
 
 # uscan: This program looks for watchfiles and checks upstream ftp sites
@@ -22,8 +22,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-use 5.008;  # uses 'our' variables and filetest
+use 5.010;  # defined-or (//)
 use strict;
+use warnings;
 use Cwd;
 use Cwd 'abs_path';
 use Dpkg::IPC;
@@ -33,7 +34,6 @@ use File::Temp qw/tempfile tempdir/;
 use List::Util qw/first/;
 use filetest 'access';
 use Getopt::Long qw(:config gnu_getopt);
-BEGIN { push(@INC, '/usr/share/devscripts') } # append to @INC, so that -I . has precedence
 use Devscripts::Versort;
 use Text::ParseWords;
 BEGIN {
@@ -426,20 +426,24 @@ sub get_redirections {
     return \@uscan_redirections;
 }
 
+sub clear_redirections {
+    undef @uscan_redirections;
+    return;
+}
+
 package main;
 
 my $user_agent = LWP::UserAgent::UscanCatchRedirections->new(env_proxy => 1);
 $user_agent->timeout($timeout);
 $user_agent->agent($user_agent_string);
-# Strip Referer header for the sf.net redirector to avoid SF sending back a
-# 200 OK with a <meta refresh=...> redirect
+# Strip Referer header for Sourceforge to avoid SF sending back a 200 OK with a
+# <meta refresh=...> redirect
 $user_agent->add_handler(
     'request_prepare' => sub {
 	my ($request, $ua, $h) = @_;
 	$request->remove_header('Referer');
     },
-    m_hostname => 'qa.debian.org',
-    m_path_prefix => '/watch/sf.php',
+    m_hostname => 'sourceforge.net',
 );
 
 if (defined $opt_watchfile) {
@@ -743,6 +747,10 @@ sub process_watchline ($$$$$$)
     my $headers = HTTP::Headers->new;
     my ($keyring, $gpghome);
 
+    # Need to clear remembered redirection URLs so we don't try to build URLs
+    # from previous watch files or watch lines
+    $user_agent->clear_redirections;
+
     # Comma-separated list of features that sites being queried might
     # want to be aware of
     $headers->header('X-uscan-features' => 'enhanced-matching');
@@ -872,9 +880,10 @@ sub process_watchline ($$$$$$)
 		}
 		# Need to convert an armored key to binary for use by gpgv
 		$gpghome = tempdir(CLEANUP => 1);
-		spawn(exec => [$havegpg, '--homedir', $gpghome, '--no-options', '-q', '--batch', '--no-default-keyring', '--import', $keyring],
+		my $newkeyring = "$gpghome/trustedkeys.gpg";
+		spawn(exec => [$havegpg, '--homedir', $gpghome, '--no-options', '-q', '--batch', '--no-default-keyring', '--output', $newkeyring, '--dearmor', $keyring],
 		      wait_child => 1);
-		$keyring = "$gpghome/pubring.gpg";
+		$keyring = $newkeyring
 	    }
 	}
 
@@ -883,6 +892,9 @@ sub process_watchline ($$$$$$)
 	    $base =~ s%^http://sf\.net/%https://qa.debian.org/watch/sf.php/%;
 	    $filepattern .= '(?:\?.*)?';
 	}
+	# Handle pypi.python.org addresses specially
+	$base =~ s%^https?://pypi\.python\.org/packages/source/./%http://pypi.debian.net/%;
+
 	if ($base =~ m%^(\w+://[^/]+)%) {
 	    $site = $1;
 	} else {
@@ -1624,7 +1636,7 @@ sub newest_dir ($$$$$) {
 	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi) {
 	    my $href = $2;
 	    if ($href =~ m&^$dirpattern/?$&) {
-		my $mangled_version = join(".", map { $_ || '' } $href =~ m&^$dirpattern/?$&);
+		my $mangled_version = join(".", map { $_ // '' } $href =~ m&^$dirpattern/?$&);
 		push @hrefs, [$mangled_version, $href];
 	    }
 	}

@@ -27,7 +27,8 @@ And now, in mostly alphabetical order, the scripts:
 - bts: A command-line tool for accessing the BTS, both to
   send mails to control@bts.debian.org and to access the web pages and
   SOAP interface of the BTS. [www-browser, libauthen-sasl-perl,
-  libnet-smtp-ssl-perl, libsoap-lite-perl, libwww-perl, bsd-mailx | mailx]
+  libnet-smtp-ssl-perl, libsoap-lite-perl, liburi-perl, libwww-perl,
+  bsd-mailx | mailx]
 
 - build-rdeps: Searches for all packages that build-depend on a given package
   [dctrl-tools]
@@ -66,7 +67,7 @@ And now, in mostly alphabetical order, the scripts:
 - debchange (abbreviation dch): Modifies debian/changelog and manages version
   numbers for you.  It will either increment the version number or add a
   entry for the current version, depending upon the options given to it.
-  [libdistro-info-perl, libparse-debcontrol-perl, libsoap-lite-perl]
+  [libdistro-info-perl, libsoap-lite-perl]
 
 - debcheckout: checkout the development repository of a Debian package
 
@@ -248,8 +249,7 @@ And now, in mostly alphabetical order, the scripts:
 - whodepends: check which maintainers' packages depend on a package
 
 - who-permits-upload: Retrieve information about Debian Maintainer access
-  control lists [gnupg, libencode-locale-perl, libparse-debcontrol-perl,
-  libwww-perl, debian-keyring]
+  control lists [gnupg, libencode-locale-perl, libwww-perl, debian-keyring]
 
 - who-uploads: determine the most recent uploaders of a package to the Debian
   archive [gnupg, debian-keyring, debian-maintainers, wget]

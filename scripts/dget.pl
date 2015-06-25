@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 # vim:sw=4:sta:
 
 #   dget - Download Debian source and binary packages
@@ -27,11 +27,11 @@
 # Later modifications: see debian/changelog
 
 use strict;
+use warnings;
 use Cwd qw(abs_path);
 use IO::Dir;
 use IO::File;
 use Digest::MD5;
-BEGIN { push @INC, '/usr/share/devscripts'; }
 use Devscripts::Compression;
 use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;

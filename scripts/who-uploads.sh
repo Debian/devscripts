@@ -186,9 +186,13 @@ done
 
 IFS="${OIFS:- 	}"
 
+GNUPGHOME=$(mktemp -d)
+trap '[ ! -d "$GNUPGHOME" ] ||  rm -r "$GNUPGHOME"' HUP INT QUIT PIPE ALRM TERM
+export GNUPGHOME
+
 # Some useful abbreviations for gpg options
-GPG_NO_KEYRING="--no-options --no-auto-check-trustdb --no-default-keyring --keyring /dev/null"
 GPG_OPTIONS="--no-options --no-auto-check-trustdb --no-default-keyring"
+GPG_NO_KEYRING="$GPG_OPTIONS --keyring /dev/null"
 
 if [ $# -eq 0 ]; then
     usage;
@@ -223,7 +227,7 @@ for package; do
 	fi
 
 	GPG_ID=$(echo "$GPG_TEXT" | LC_ALL=C gpg $GPG_NO_KEYRING --keyid-format long --verify 2>&1 |
-	         sed -rne 's/using [^ ]* key ([0-9A-Z]+).*/\1/p')
+	         sed -rne 's/.*using [^ ]* key ([0-9A-Z]+).*/\1/p')
 
 	UPLOADER=$(gpg $GPG_OPTIONS \
 	           "${GPG_DEFAULT_KEYRINGS[@]}" "${GPG_KEYRINGS[@]}" \
@@ -241,4 +245,5 @@ for package; do
     test $# -eq 1 || echo
 done
 
+[ ! -d "$GNUPGHOME" ] || rm -r "$GNUPGHOME"
 exit 0

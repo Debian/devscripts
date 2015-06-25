@@ -237,6 +237,7 @@ sub aptopts
     if ($arch) {
 	print "W: Forcing arch $arch for this command only.\n";
 	push(@opts, '-o', "Apt::Architecture=$arch");
+	push(@opts, '-o', "Apt::Architectures=$arch");
     }
     return @opts;
 }
@@ -329,7 +330,8 @@ sub dist_create
     }
     make_path($datadir);
     foreach my $d (('/etc/apt', '/etc/apt/apt.conf.d', '/etc/apt/preferences.d',
-		    '/etc/apt/trusted.gpg.d', '/var/lib/apt/lists/partial',
+		    '/etc/apt/trusted.gpg.d', '/etc/apt/sources.list.d',
+		    '/var/lib/apt/lists/partial',
 		    '/var/cache/apt/archives/partial', '/var/lib/dpkg')) {
 	make_path("$dir/$d");
     }
@@ -370,6 +372,7 @@ EOF
     print FH <<EOF;
 Apt {
    Architecture "$arch";
+   Architectures "$arch";
 };
 
 Dir "$dir";

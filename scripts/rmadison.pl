@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 # vim:sw=4:sta:
 
 # Copyright (C) 2006-2013 Christoph Berg <myon@debian.org>
@@ -19,6 +19,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 
 use strict;
+use warnings;
 use File::Basename;
 use Getopt::Long qw(:config gnu_getopt);
 
@@ -47,22 +48,24 @@ EOT
 }
 
 my %url_map = (
-    'debian' => "https://qa.debian.org/madison.php",
+    'debian' => "https://api.ftp-master.debian.org/madison",
+    'new' => "https://api.ftp-master.debian.org/madison?s=new",
     'qa' => "https://qa.debian.org/madison.php",
-    'myon' => "https://qa.debian.org/~myon/madison.php",
-    'debug' => "http://debug.debian.net/cgi-bin/madison.cgi",
     'ubuntu' => "http://people.canonical.com/~ubuntu-archive/madison.cgi",
     'udd' => 'https://qa.debian.org/cgi-bin/madison.cgi',
-    'new' => 'https://qa.debian.org/cgi-bin/madison.cgi?table=new',
 );
-my $default_url = 'debian,new';
+my $default_url = 'debian';
 if (system('dpkg-vendor', '--is', 'ubuntu') == 0) {
     $default_url = 'ubuntu';
 }
 
 sub usage($$) {
     my ($fd, $exit) = @_;
-    print <<EOT;
+    my @urls = split /,/, $default_url;
+    my $url = (@urls > 1) ? join(', and ', join(', ', @urls[0..$#urls-1]), $urls[-1])
+                          : $urls[0];
+
+    print $fd <<EOT;
 Usage: rmadison [OPTION] PACKAGE[...]
 Display information about PACKAGE(s).
 
@@ -76,18 +79,25 @@ Display information about PACKAGE(s).
   -s, --suite=SUITE          only show info for this suite
   -S, --source-and-binary    show info for the binary children of source pkgs
   -t, --time                 show projectb snapshot date
-  -u, --url=URL              use URL instead of $url_map{$default_url}
+  -u, --url=URL              use URL instead of $url
 
   --noconf, --no-conf        don\'t read devscripts configuration files
 
 ARCH, COMPONENT and SUITE can be comma (or space) separated lists, e.g.
     --architecture=m68k,i386
+
+Aliases for URLs:
 EOT
+    foreach my $alias (sort keys %url_map) {
+	print $fd "\t$alias\t$url_map{$alias}\n";
+    }
     exit $exit;
 }
 
 my $params;
 my $default_arch;
+my $ssl_ca_file;
+my $ssl_ca_path;
 
 if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     shift;
@@ -108,13 +118,17 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     my $shell_out = `/bin/bash -c '$shell_cmd'`;
     @config_vars = split /\n/, $shell_out, -1;
 
-    foreach my $envvar (@config_vars) {
-	if ($envvar =~ /^RMADISON_URL_MAP_([^=]*)=(.*)$/) {
+    foreach my $confvar (@config_vars) {
+	if ($confvar =~ /^RMADISON_URL_MAP_([^=]*)=(.*)$/) {
 	    $url_map{lc($1)}=$2;
-	} elsif ($envvar =~ /^RMADISON_DEFAULT_URL=(.*)$/) {
+	} elsif ($confvar =~ /^RMADISON_DEFAULT_URL=(.*)$/) {
 	    $default_url=$1;
-	} elsif ($envvar =~ /^RMADISON_ARCHITECTURE=(.*)$/) {
+	} elsif ($confvar =~ /^RMADISON_ARCHITECTURE=(.*)$/) {
 	    $default_arch=$1;
+	} elsif ($confvar =~ /^RMADISON_SSL_CA_FILE=(.*)$/) {
+	    $ssl_ca_file=$1;
+	} elsif ($confvar =~ /^RMADISON_SSL_CA_PATH=(.*)$/) {
+	    $ssl_ca_path=$1;
 	}
     }
 }
@@ -185,10 +199,24 @@ my @url = split /,/, $url;
 
 my $status = 0;
 
+# Strip arch qualifiers from the package name, to help those that are feeding
+# in output from other commands
+s/:.*// for (@ARGV);
+
 foreach my $url (@url) {
     print "$url:\n" if @url > 1;
     $url = $url_map{$url} if $url_map{$url};
-    my @cmd = -x "/usr/bin/curl" ? qw/curl -f -s -S -L/ : qw/wget -q -O -/;
+    my @cmd;
+    if ( -x "/usr/bin/curl" ) {
+        @cmd = qw/curl -f -s -S -L/;
+        push @cmd, "--cacert", $ssl_ca_file if $ssl_ca_file;
+        push @cmd, "--capath", $ssl_ca_path if $ssl_ca_path;
+
+    } else {
+        @cmd = qw/wget -q -O -/;
+        push @cmd, "--ca-certificate=$ssl_ca_file" if $ssl_ca_file;
+        push @cmd, "--ca-directory=$ssl_ca_path"   if $ssl_ca_path;
+    }
     system @cmd, $url . (($url =~ m/\?/)?'&':'?')."package=" . join("+", map { uri_escape($_) } @ARGV) . "&text=on&" . join ("&", @args);
     $status = 1 if ($? >> 8 != 0);
 }
@@ -250,7 +278,7 @@ show this help and exit
 
 only show info for this suite
 
-=item B<-s>, B<--regex>
+=item B<-r>, B<--regex>
 
 treat PACKAGE as a regex
 
@@ -268,11 +296,11 @@ show projectb snapshot and reload time (not supported by all archives)
 =item B<-u>, B<--url=>I<URL>[B<,>I<URL> ...]
 
 use I<URL> for the query. Supported shorthands are
- B<debian> or B<qa> https://qa.debian.org/madison.php
- B<debug> http://debug.debian.net/cgi-bin/madison.cgi
+ B<debian> https://api.ftp-master.debian.org/madison
+ B<new> https://api.ftp-master.debian.org/madison?s=new
+ B<qa> https://qa.debian.org/madison.php
  B<ubuntu> http://people.canonical.com/~ubuntu-archive/madison.cgi
  B<udd> https://qa.debian.org/cgi-bin/madison.cgi
- B<new> https://qa.debian.org/cgi-bin/madison.cgi?table=new
 
 See the B<RMADISON_URL_MAP_> variable below for a method to add
 new shorthands.
@@ -311,13 +339,23 @@ B<RMADISON_URL_MAP_*> variables.
 =item B<RMADISON_DEFAULT_URL>=I<URL>
 
 Set the default URL to use unless overridden by a command line option.
-For Debian this defaults to debian,new. For Ubuntu this defaults to ubuntu.
+For Debian this defaults to debian. For Ubuntu this defaults to ubuntu.
 
 =item B<RMADISON_ARCHITECTURE>=I<ARCH>
 
 Set the default architecture to use unless overridden by a command line option.
 To run an unrestricted query when B<RMADISON_ARCHITECTURE> is set, use
 B<--architecture='*'>.
+
+=item B<RMADISON_SSL_CA_FILE>=I<FILE>
+
+Use the specified CA file instead of the default CA bundle for curl/wget,
+passed as --cacert to curl, and as --ca-certificate to wget.
+
+=item B<RMADISON_SSL_CA_PATH>=I<PATH>
+
+Use the specified CA directory instead of the default CA bundle for curl/wget,
+passed as --capath to curl, and as --ca-directory to wget.
 
 =back
 

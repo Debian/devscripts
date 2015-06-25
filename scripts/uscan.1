@@ -79,8 +79,8 @@ http://sf.net/audacity/audacity-src-(.+)\e.tar\e.gz
 # For GitHub projects you can use the tags or releases page.  Since the archive
 # URLs use only the version as the name, it is recommended to use a
 # filenamemangle to adjust the name of the downloaded file:
-opts="filenamemangle=s/(?:.*\/)?v?(\ed[\ed\e.]*)\e.tar\e.gz/<project>-$1.tar.gz/" \e
-  https://github.com/<user>/<project>/tags (?:.*/)?v?(\ed[\ed\e.]*)\e.tar\e.gz
+opts="filenamemangle=s/(?:.*?\/)?v?(\ed[\ed.]*)\e.tar\e.gz/<project>-$1.tar.gz/" \e
+  https://github.com/<user>/<project>/tags (?:.*?/)?v?(\ed[\ed.]*)\e.tar\e.gz
 
 # For Google Code projects you should use the downloads page like this:
 https://code.google.com/p/<project>/downloads/list?can=1 \e

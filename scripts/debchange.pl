@@ -41,7 +41,7 @@ use File::Basename;
 use Cwd;
 use Dpkg::Vendor qw(get_current_vendor);
 use Dpkg::Changelog::Parse;
-BEGIN { push @INC, '/usr/share/devscripts'; }
+use Dpkg::Control;
 use Devscripts::Compression;
 use Devscripts::Debbugs;
 use POSIX qw(locale_h strftime);
@@ -59,25 +59,6 @@ my %env;
 my $CHGLINE;  # used by the format O section at the end
 
 my $compression_re = compression_get_file_extension_regex();
-
-my $lpdc_broken;
-
-sub have_lpdc {
-    return ($lpdc_broken ? 0 : 1) if defined $lpdc_broken;
-    eval {
-	require Parse::DebControl;
-    };
-
-    if ($@) {
-	if ($@ =~ m%^Can\'t locate Parse/DebControl%) {
-	    $lpdc_broken="the libparse-debcontrol-perl package is not installed";
-	} else {
-	    $lpdc_broken="couldn't load Parse::DebControl: $@";
-	}
-    }
-    else { $lpdc_broken=''; }
-    return $lpdc_broken ? 0 : 1;
-}
 
 my $debian_distro_info;
 sub get_debian_distro_info {
@@ -814,18 +795,14 @@ if (! $opt_m and ! $opt_M) {
 
 if ($opt_M) {
     if (-f 'debian/control') {
-	if (have_lpdc()) {
-	    my $parser = Parse::DebControl->new;
-	    my $deb822 = $parser->parse_file('debian/control', {stripComments => 'true'});
-	    my $maintainer = decode_utf8($deb822->[0]->{'Maintainer'});
-	    if ($maintainer =~ /^(.*)\s+<(.*)>$/) {
-		$MAINTAINER = $1;
-		$EMAIL = $2;
-	    } else {
-		fatal "$progname: invalid debian/control Maintainer field value\n";
-	    }
+	my $parser = Dpkg::Control->new(type => CTRL_INFO_SRC);
+	$parser->load('debian/control');
+	my $maintainer = decode_utf8($parser->{Maintainer});
+	if ($maintainer =~ /^(.*)\s+<(.*)>$/) {
+	    $MAINTAINER = $1;
+	    $EMAIL = $2;
 	} else {
-	    fatal "$progname: unable to get maintainer from debian/control: $lpdc_broken\n";
+	    fatal "$progname: invalid debian/control Maintainer field value\n";
 	}
     } else {
 	fatal "Missing file debian/control";
@@ -844,23 +821,19 @@ if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and
        $changelog->{Distribution} eq 'UNRELEASED' and ! $opt_i_passed)) {
 
     if (-f 'debian/control') {
-	if (have_lpdc()) {
-	    my $parser = new Parse::DebControl;
-	    my $deb822 = $parser->parse_file('debian/control', {stripComments => 'true'});
-	    my $uploader = decode_utf8($deb822->[0]->{'Uploaders'}) || '';
-	    my $maintainer = decode_utf8($deb822->[0]->{'Maintainer'});
-	    my @uploaders = split(/,\s*/, $uploader);
+	my $parser = Dpkg::Control->new(type => CTRL_INFO_SRC);
+	$parser->load('debian/control');
+	my $uploader = decode_utf8($parser->{Uploaders}) || '';
+	my $maintainer = decode_utf8($parser->{Maintainer});
+	my @uploaders = split(/,\s*/, $uploader);
 
-	    my $packager = "$MAINTAINER <$EMAIL>";
+	my $packager = "$MAINTAINER <$EMAIL>";
 
-	    if ($maintainer !~ m/<packages\@qa\.debian\.org>/ and
-		! grep { $_ eq $packager } ($maintainer, @uploaders) and
-		$packager ne $changelog->{Maintainer} and ! $opt_team) {
-		$opt_n=1;
-		$opt_a=0;
-	    }
-	} else {
-	    warn "$progname: skipping automatic NMU detection: $lpdc_broken\n";
+	if ($maintainer !~ m/<packages\@qa\.debian\.org>/ and
+	    ! grep { $_ eq $packager } ($maintainer, @uploaders) and
+	    $packager ne $changelog->{Maintainer} and ! $opt_team) {
+	    $opt_n=1;
+	    $opt_a=0;
 	}
     } else {
 	fatal "Missing file debian/control";

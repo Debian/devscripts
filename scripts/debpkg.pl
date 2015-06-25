@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 # Perl version of Christoph Lameter's debpkg program.
 # Written by Julian Gilbey, December 1998.
@@ -31,6 +31,8 @@
 # get any unexpected behaviour.
 
 use 5.003;
+use strict;
+use warnings;
 use File::Basename;
 
 my $progname = basename($0);
@@ -60,7 +62,7 @@ if ($ARGV[0] eq '--version') { print $version; exit 0; }
 # them, and anyone running this with root privileges has total power
 # over the system anyway, so doesn't really need to worry about forging
 # locale data.  We don't try to preserve TEXTDOMAIN and the like.
-foreach $var (keys %ENV) {
+foreach my $var (keys %ENV) {
 	delete $ENV{$var} unless
 		$var =~ /^(PATH|TERM|HOME|LOGNAME|LANG)$/ or
 			$var =~ /^LC_[A-Z]+$/;

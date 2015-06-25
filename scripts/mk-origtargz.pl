@@ -3,6 +3,7 @@
 # mk-origtargz: Rename upstream tarball, optionally changing the compression
 # and removing unwanted files.
 # Copyright (C) 2014 Joachim Breitner <nomeata@debian.org>
+# Copyright (C) 2015 James McCoy <jamessan@debian.org>
 #
 # It contains code formerly found in uscan.
 # Copyright (C) 2002-2006, Julian Gilbey
@@ -78,7 +79,11 @@ B<Files-Excluded>.
 
 =item B<--copyright-file> I<filename>
 
-Remove files matching the patterns found in I<filename>, which should have the format of a Debian F<copyright> file (B<Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/> to be precise). Errors parsing that file are silently ignored, exactly as it is the case with F<debian/copyright>.
+Remove files matching the patterns found in I<filename>, which should have the format of a Debian F<copyright> file (B<Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/> to be precise). Errors parsing that file are silently ignored, exactly as is the case with F<debian/copyright>.
+
+Unmatched patterns will emit a warning so the user can verify whether it is
+correct.  If there are multiple patterns which match a file, only the last one
+will count as being matched.
 
 Both the B<--exclude-file> and B<--copyright-file> options amend the list of
 patterns found in F<debian/copyright>. If you do not want to read that file,
@@ -163,7 +168,6 @@ use Dpkg::IPC;
 use Dpkg::Version;
 use File::Spec;
 
-BEGIN { push(@INC, '/usr/share/devscripts') } # append to @INC, so that -I . has precedence
 use Devscripts::Compression qw/compression_is_supported compression_guess_from_file compression_get_property/;
 use Cwd 'abs_path';
 use File::Copy;
@@ -422,14 +426,18 @@ if (@exclude_globs) {
     # find out what to delete
     my @exclude_info = map { { glob => $_, used => 0, regex => glob_to_regex($_) } } @exclude_globs;
     for my $filename (@files) {
+	my $last_match;
 	for my $info (@exclude_info) {
 	    if ($filename =~ m@^(?:[^/]*/)?        # Possible leading directory, ignore it
 				(?:$info->{regex}) # User pattern
 				(?:/.*)?$          # Possible trailing / for a directory
 			      @x) {
-		push @to_delete, $filename;
-		$info->{used} = 1;
+		push @to_delete, $filename if !$last_match;
+		$last_match = $info;
 	    }
+	}
+	if ($last_match) {
+	    $last_match->{used} = 1;
 	}
     }
 

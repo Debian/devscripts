@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 from setuptools import setup
-import glob
 import os
 import re
 
@@ -13,17 +12,17 @@ if os.path.exists(changelog):
     if match:
         version = match.group(1)
 
-scripts = ['sadt',
-           'suspicious-source',
-           'wrap-and-sort',
-          ]
+scripts = [
+    'sadt',
+    'suspicious-source',
+    'wrap-and-sort',
+]
 
 if __name__ == '__main__':
-    setup(name='devscripts',
-          version=version,
-          scripts=scripts,
-          packages=['devscripts',
-                    'devscripts/test',
-                   ],
-          test_suite='devscripts.test.discover',
+    setup(
+        name='devscripts',
+        version=version,
+        scripts=scripts,
+        packages=['devscripts', 'devscripts/test'],
+        test_suite='devscripts.test.discover',
     )

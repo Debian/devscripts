@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 #
 # dd-list: Generate a list of maintainers of packages.
 #
@@ -21,10 +21,18 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use strict;
+use warnings;
 use FileHandle;
 use Getopt::Long qw(:config gnu_getopt);
 
 my $version='###VERSION###';
+
+sub normalize_package {
+    my $name = shift;
+    # Remove any arch-qualifier
+    $name =~ s/:.*//;
+    return lc($name);
+}
 
 sub sort_developers {
     return map { $_->[0] }
@@ -165,16 +173,19 @@ if ($use_dctrl) {
     parsefh(\*STDIN, 'STDIN');
 }
 else {
+    my @packages;
     if ($use_stdin) {
-	while (<STDIN>) {
-	    chomp;
-	    s/^\s+//;
-	    s/\s+$//;
-	    map { $package_name{lc($_)} = 1 } split ' ', $_;
+	while (my $line = <STDIN>) {
+	    chomp $line;
+	    $line =~ s/^\s+|\s+$//g;
+	    push @packages, split(' ', $line);
 	}
     }
     else {
-	map { $package_name{lc($_)} = 1 } @ARGV;
+	@packages = @ARGV;
+    }
+    for my $name (@packages) {
+	$package_name{normalize_package($name)} = 1;
     }
 
     unless (@{$source_files}) {

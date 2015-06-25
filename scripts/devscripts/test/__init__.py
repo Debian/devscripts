@@ -22,6 +22,7 @@ if sys.version_info < (2, 7):
 else:
     import unittest
 
+
 def discover():
     # import __main__ triggers code re-execution
     __main__ = sys.modules['__main__']

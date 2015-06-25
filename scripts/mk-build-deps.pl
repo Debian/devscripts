@@ -353,16 +353,45 @@ if ($opt_install) {
     system @root, 'dpkg', '--unpack', @deb_files;
     die("$progname: dpkg --unpack failed\n") if ( ($?>>8) != 0 );
     system @root, shellwords($install_tool), '-f', 'install';
-    if ( ($?>>8) != 0 ) {
-	# Restore system to previous state, since apt wasn't able to resolve a
-	# proper way to get the build-dep packages installed
-	system @root, 'dpkg', '--remove', @pkg_names;
-	die("$progname: apt-get install call failed\n");
+    my $err = $? >> 8;
+    if (!$err) {
+	# $install_tool succeeded. Did the packages get installed? It's
+	# possible that they didn't because $install_tool may have realized
+	# that installation was impossible, and it could have given up,
+	# successfully.
+	for (my $i = 0; $i < @pkg_names; $i++) {
+	    my $pkg = $pkg_names[$i];
+	    my $status;
+	    spawn(exec => ['dpkg-query', '-W', '-f', '${db:Status-Status}', $pkg],
+	          to_string => \$status,
+	          error_to_file => '/dev/null',
+	          nocheck => 1,
+	          wait_child => 1);
+	    if ($status ne 'installed' || ($? >> 8)) {
+		# Restore system to previous state, since $install_tool wasn't
+		# able to resolve a proper way to get the build-dep packages
+		# installed
+		warn "$progname: Unable to install $pkg";
+		$err = 1;
+	    }
+	    else {
+		unlink $deb_files[$i];
+	    }
+	}
+	if ($err) {
+	    die "$progname: Unable to install all build-dep packages\n";
+	}
     }
+    else {
+	# Restore system to previous state, since $install_tool wasn't able to
+	# resolve a proper way to get the build-dep packages installed
+	system @root, 'dpkg', '--remove', @pkg_names;
+	die("$progname: Unable to install all build-dep packages\n");
 
-    if ($opt_remove) {
-	foreach my $file (@deb_files) {
-	    unlink $file;
+	if ($opt_remove) {
+	    foreach my $file (@deb_files) {
+		unlink $file;
+	    }
 	}
     }
 }

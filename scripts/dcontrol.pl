@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 # vim:sw=4:sta:
 
 #   dcontrol - Query Debian control files across releases and architectures
@@ -19,6 +19,7 @@
 #   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 
 use strict;
+use warnings;
 use File::Basename;
 use Getopt::Long qw(:config gnu_getopt);
 
@@ -53,6 +54,7 @@ my $dcontrol_url;
 my $opt;
 
 my $ua = LWP::UserAgent->new(agent => "$progname ###VERSION###");
+$ua->env_proxy();
 
 # functions
 

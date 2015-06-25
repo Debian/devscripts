@@ -31,6 +31,7 @@ eval {
     require LWP::UserAgent;
     no warnings;
     $LWP::Simple::ua = LWP::UserAgent->new(agent => 'LWP::UserAgent/Devscripts/###VERSION###');
+    $LWP::Simple::ua->env_proxy();
 };
 if ($@) {
     if ($@ =~ m/Can\'t locate LWP/) {
@@ -54,7 +55,7 @@ if ($@) {
 my $modified_conf_msg = '';
 my %config_vars = ();
 
-my %opt;
+my %opt = (architecture => []);
 my $package = '';
 my $pkgversion = '';
 my $warnings = 0;
@@ -215,7 +216,7 @@ if (@ARGV) {
 
 $package eq '' && usage(1);
 
-$opt{binary} ||= $opt{architecture};
+$opt{binary} ||= @{$opt{architecture}};
 
 my $baseurl;
 if ($opt{binary}) {
@@ -238,23 +239,37 @@ unless ($json_text && @{$json_text->{result}}) {
     fatal "Unable to retrieve information for $package from $baseurl.";
 }
 
+my @versions = @{$json_text->{result}};
+if ($pkgversion) {
+    @versions = $opt{binary} ? grep { !($_->{binary_version} <=> $pkgversion) } @versions
+                             : grep { !($_->{version} <=> $pkgversion) } @versions;
+    unless (@versions) {
+	warn "$progname: No matching versions found for $package\n";
+	$warnings++;
+    }
+}
 if ($opt{binary}) {
-    foreach my $version (@{$json_text->{result}}) {
-	if ($pkgversion) {
-	    next if ($version->{binary_version} <=> $pkgversion);
-	}
-
+    foreach my $version (@versions) {
 	my $src_json = fetch_json_page("$opt{baseurl}/mr/package/$version->{source}/$version->{version}/binfiles/$version->{name}/$version->{binary_version}?fileinfo=1");
 
 	unless ($src_json) {
 	    warn "$progname: No binary packages found for $package version $version->{binary_version}\n";
 	    $warnings++;
+	    next;
 	}
 
-	foreach my $result (@{$src_json->{result}}) {
-	    if ($opt{architecture} && @{$opt{architecture}}) {
-		next unless (grep { $_ eq $result->{architecture} } @{$opt{architecture}});
+	my @results = @{$src_json->{result}};
+	if (@{$opt{architecture}})
+	{
+	    my %archs = map { ($_ => 1) } @{$opt{architecture}};
+	    @results = grep { $archs{$_->{architecture}}-- } @results;
+	    my @missing = grep { $archs{$_} == 1 } sort keys %archs;
+	    if (@missing) {
+		warn "$progname: No binary packages found for $package version $version->{binary_version} on " . join(', ', @missing) . "\n";
+		$warnings++;
 	    }
+	}
+	foreach my $result (@results) {
 	    my $hash = $result->{hash};
 	    my $fileinfo = @{$src_json->{fileinfo}{$hash}}[0];
 	    my $file_url = "$opt{baseurl}/file/$hash";
@@ -267,15 +282,12 @@ if ($opt{binary}) {
     }
 }
 else {
-    foreach my $version (@{$json_text->{result}}) {
-	if ($pkgversion) {
-	    next if ($version->{version} <=> $pkgversion);
-	}
-
+    foreach my $version (@versions) {
 	my $src_json = fetch_json_page("$baseurl/$version->{version}/srcfiles?fileinfo=1");
 	unless ($src_json) {
 	    warn "$progname: No source files found for $package version $version->{version}\n";
 	    $warnings++;
+	    next;
 	}
 
 	foreach my $hash (keys %{$src_json->{fileinfo}}) {

@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 # bts: This program provides a convenient interface to the Debian
 # Bug Tracking System.
@@ -42,23 +42,26 @@ bts - developers' command line interface to the BTS
 
 =cut
 
-use 5.006_000;
+use 5.010; # for defined-or
 use strict;
+use warnings;
 use File::Basename;
 use File::Copy;
-use File::Path;
+use File::Path qw(mkpath make_path rmtree);
 use File::Spec;
 use File::Temp qw/tempfile/;
 use Net::SMTP;
 use Cwd;
 use IO::File;
 use IO::Handle;
-BEGIN { push @INC, '/usr/share/devscripts'; }
 use Devscripts::DB_File_Lock;
 use Devscripts::Debbugs;
 use Fcntl qw(O_RDWR O_RDONLY O_CREAT F_SETFD);
 use Getopt::Long;
 use Encode;
+# Need support for ; as query param separator
+use URI 1.37;
+use URI::QueryParam;
 
 use Scalar::Util qw(looks_like_number);
 use POSIX qw(locale_h strftime);
@@ -169,9 +172,11 @@ my @valid_severities=qw(wishlist minor normal important
 
 my $browser;  # Will set if necessary
 
-my $cachedir=$ENV{'HOME'}."/.devscripts_cache/bts/";
-my $timestampdb=$cachedir."bts_timestamps.db";
-my $prunestamp=$cachedir."bts_prune.timestamp";
+my $cachedir = $ENV{XDG_CACHE_HOME} || File::Spec->catdir($ENV{HOME}, '.cache');
+$cachedir = File::Spec->catdir($cachedir, 'devscripts', 'bts');
+
+my $timestampdb = File::Spec->catfile($cachedir, 'bts_timestamps.db');
+my $prunestamp = File::Spec->catfile($cachedir, 'bts_prune.timestamp');
 
 my %timestamp;
 END {
@@ -373,7 +378,7 @@ does not resolve or does not appear to belong to the host using it.
 
 =item B<--bts-server>
 
-Use a debbugs server other than bugs.debian.org.
+Use a debbugs server other than https://bugs.debian.org.
 
 =item B<-f>, B<--force-refresh>
 
@@ -464,7 +469,7 @@ my $interactive=0;
 my $forceinteractive=0;
 my $ccemail="";
 my $toolname="";
-my $btsserver='bugs.debian.org';
+my $btsserver='https://bugs.debian.org';
 my $use_mutt = 0;
 
 # Next, read read configuration files and then command line
@@ -2396,7 +2401,7 @@ Valid options are:
    --smtp-helo=helo       HELO to use when connecting to the SMTP server;
                             (defaults to the content of /etc/mailname)
    --bts-server           The name of the debbugs server to use
-                            (default bugs.debian.org)
+                            (default https://bugs.debian.org)
    -f, --force-refresh    Reload all bug reports being cached, even unchanged
                           ones
    --no-force-refresh     Do not do so (default)
@@ -3382,20 +3387,20 @@ sub cachefile {
     $thing =~ s%/%_%g;
     $thgopts =~ s/;/_3B/g;
     $thgopts =~ s/=/_3D/g;
-    return $cachedir.$thing.$thgopts.($thing =~ /\.html$/ ? "" : ".html");
+    return File::Spec->catfile($cachedir, $thing.$thgopts.($thing =~ /\.html$/ ? "" : ".html"));
 }
 
 # Given a thing, returns the filename for its mbox in the cache.
 sub mboxfile {
     my $thing=shift;
-    return $thing =~ /^\d+$/ ? $cachedir.$thing.".mbox" : undef;
+    return $thing =~ /^\d+$/ ? File::Spec->catfile($cachedir, $thing.".mbox") : undef;
 }
 
 # Given a bug number, returns the dirname for it in the cache.
 sub cachebugdir {
     my $thing=shift;
     if ($thing !~ /^\d+$/) { die "$progname: cachebugdir given faulty argument: $thing\n"; }
-    return $cachedir.$thing;
+    return File::Spec->catdir($cachedir, $thing);
 }
 
 # And the reverse: Given a filename in the cache, returns the corresponding
@@ -3474,24 +3479,25 @@ sub href_to_filename {
     my $href = $_[0];
     my ($msg, $filename);
 
-    if ($href =~ m%\[<a(?: class=\".*?\")? href="(?:/cgi-bin/)?bugreport\.cgi([^\?]*)\?([^\"]*);bug=(\d+)">.*?\(([^,]*), .*?\)\]%) {
+    if ($href =~ m%\[<a(?: class=\".*?\")? href="((?:/cgi-bin/)?bugreport\.cgi([^\?]*)\?[^\"]*)">.*?\(([^,]*), .*?\)\]%) {
 	# this looks like an attachment; $4 should give the MIME-type
-	my $urlfilename = $1;
-	my $ref = $2;
-	my $bug = $3;
-	my $mimetype = $4;
-	$ref =~ s/&(?:amp;)?/;/g;  # normalise all hrefs
+	my $uri = URI->new($1);
+	my $urlfilename = $2;
+	my $bug = $uri->query_param_delete('bug');
+	my $mimetype = $3;
 
-	return undef unless $ref =~ /msg=(\d+);(filename=[^;]*;)?att=(\d+)/;
-	$msg = "$1-$3";
-	$urlfilename ||= "$2" if defined $2;
-	$urlfilename ||= "";
+	my $ref = $uri->query();
+	$ref =~ s/&(?:amp;)?/;/g;  # normalise all hrefs
+	$uri->query($ref);
+
+	$msg = $uri->query_param('msg');
+	my $att = $uri->query_param('att');
+	return undef unless $msg && $att;
+	$msg .= "-$att";
+	$urlfilename ||= $att // '';
 
 	my $fileext = '';
 	if ($urlfilename =~ m%^/%) {
-	    $filename = basename($urlfilename);
-	} elsif ($urlfilename =~ m%^filename=([^;]*?);%) {
-	    $urlfilename = $1;
 	    $filename = basename($urlfilename);
 	} else {
 	    $filename = '';
@@ -3504,36 +3510,45 @@ sub href_to_filename {
 	    $filename = "$bug/$msg$fileext";
 	}
     }
-    elsif ($href =~ m%<a(?: class=\".*?\")? href="(?:/cgi-bin/)?bugreport\.cgi([^\?]*)\?([^"]*);?bug=(\d+)(.*?)".*?>%) {
-	my $urlfilename = $1;
-	my $ref = $2;
-	my $bug = $3;
-	$ref .= $4 if defined $4;
+    elsif ($href =~ m%<a(?: class=\".*?\")? href="((?:/cgi-bin/)?bugreport\.cgi([^\?]*)\?([^"]*))".*?>%) {
+	my $uri = URI->new($1);
+	my $urlfilename = $2;
+	my $bug = $uri->query_param_delete('bug');
+	$msg = $uri->query_param_delete('msg');
+
+	my $ref = $uri->query // '';
 	$ref =~ s/&(?:amp;)?/;/g;  # normalise all hrefs
 	$ref =~ s/;archive=(yes|no)\b//;
 	$ref =~ s/%3D/=/g;
+	$uri->query($ref);
 
-	if ($ref =~ /msg=(\d+);$/) {
-	    $msg = $1;
-	    $filename = "$bug/$1.html";
+	my %params = (
+	    mboxstatus => '', mboxstat => '', mboxmaint => '', mbox => '',
+	    $uri->query_form(),
+	);
+
+	if ($msg && !%params) {
+	    $filename = File::Spec->catfile($bug, "$msg.html");
 	}
-	elsif ($ref =~ /msg=(\d+);mbox=yes;$/) {
-	    $msg = "$1-mbox";
-	    $filename = "$bug/$1.mbox";
-	}
-	elsif ($ref =~ /^mbox=yes;$/) {
-	    $msg = 'rawmbox';
-	    $filename = "$bug.raw.mbox";
-	}
-	elsif ($ref =~ /mboxstat(us)?=yes/) {
+	elsif (($params{mboxstat} || $params{mboxstatus}) eq 'yes') {
 	    $msg = 'statusmbox';
 	    $filename = "$bug.status.mbox";
 	}
-	elsif ($ref =~ /mboxmaint=yes/) {
+	elsif ($params{mboxmaint} eq 'yes') {
 	    $msg = 'mbox';
 	    $filename = "$bug.mbox";
 	}
-	elsif ($ref eq '') {
+	elsif ($params{mbox} eq 'yes') {
+	    if ($msg) {
+		$filename = "$bug/$msg.mbox";
+		$msg .= '-mbox';
+	    }
+	    else {
+		$filename = "$bug.raw.mbox";
+		$msg = 'rawmbox';
+	    }
+	}
+	elsif (!$ref) {
 	    return undef;
 	}
 	else {
@@ -3542,29 +3557,30 @@ sub href_to_filename {
 	    return undef;
 	}
     }
-    elsif ($href =~ m%<a[^>]* href=\"(?:/cgi-bin/)?version\.cgi([^>]+><img[^>]* src=\"(?:/cgi-bin/)?version\.cgi)?\?([^\"]+)\">%i) {
-	my $refs = $2;
-	$refs = $1 if not defined $refs;
+    elsif ($href =~ m%<(?:a[^>]* href|img [^>]* src)="((?:/cgi-bin/)?version\.cgi\?[^"]+)"[^>]*>%i) {
+	my $uri = URI->new($1);
+	my %params = $uri->query_form();
 
-	# Remove package= and make sure the package name is at the
-	# start of the filename
-	$refs =~ s/(.*?)package=(.*?)(;.*?|)$/$2;$1$3/;
-	# Package versions
-	$refs =~ s/;found=/.f./g;
-	$refs =~ s/;fixed=/.fx./g;
+	if ($params{package}) {
+	    $filename .= $params{package};
+	}
+	if ($params{found}) {
+	    $filename .= ".f.$params{found}";
+	}
+	if ($params{fixed}) {
+	    $filename .= ".fx.$params{fixed}";
+	}
+	if ($params{collapse}) {
+	    $filename .= '.co';
+	}
+
 	# Replace encoded "/" and "," characters with "."
-	$refs =~ s/%2[FC]/./g;
+	$filename =~ s@(?:%2[FC]|/|,)@.@gi;
 	# Remove encoded spaces
-	$refs =~ s/\+//g;
-	# Is this a "collapsed" graph?
-	$refs =~ s/;collapse=1(.*)/$1.co/;
-	# Remove any other parameters
-	$refs =~ s/(^|;)(\w+)=\d+//g;
-	# and tidy up any remaining separators
-	$refs =~ s/;//g;
+	$filename =~ s/\+//g;
 
 	$msg = 'versions';
-	$filename = "$refs.png";
+	$filename .= '.png';
     }
     else {
 	return undef;
@@ -3685,6 +3701,15 @@ sub browse {
 # this at most once per day for efficiency.
 
 sub prunecache {
+    # TODO: Remove handling of $oldcache post-Stretch
+    my $oldcache = File::Spec->catdir($ENV{HOME}, '.devscripts_cache', 'bts');
+    if (-d $oldcache && ! -d $cachedir) {
+	my $err;
+	make_path(dirname($cachedir), { error => \$err });
+	if (!@$err) {
+	    system('mv', $oldcache, $cachedir);
+	}
+    }
     return unless -d $cachedir;
     return if -f $prunestamp and -M _ < 1;
 
@@ -3772,7 +3797,7 @@ sub runbrowser {
 sub runmailreader {
     my $file = shift;
     my $quotedfile;
-    die "$progname: could not read mbox file!\n" unless -r $file;
+    die "$progname: could not read mbox file $file!\n" unless -r $file;
 
     if ($file !~ /\'/) { $quotedfile = qq['$file']; }
     elsif ($file !~ /[\"\\\$\'\!]/) { $quotedfile = qq["$file"]; }
@@ -3970,14 +3995,16 @@ sub edit {
 	or die "$progname: writing to temporary file: $!\n";
     print OUT_MAIL $message;
     close OUT_MAIL;
-    system("sensible-editor $filename");
-    open(OUT_MAIL, "<$filename")
-	or die "$progname: reading from temporary file: $!\n";
+    my $rc = system("sensible-editor $filename");
     undef $message;
-    while(<OUT_MAIL>) {
-	$message .= $_;
+    if ($rc == 0) {
+	open(OUT_MAIL, "<$filename")
+	    or die "$progname: reading from temporary file: $!\n";
+	while(<OUT_MAIL>) {
+	    $message .= $_;
+	}
+	close OUT_MAIL;
     }
-    close OUT_MAIL;
     unlink($filename);
     return $message;
 }
@@ -4106,7 +4133,7 @@ e-mail to the control bot should automatically be sent.
 =item B<BTS_SERVER>
 
 Specify the name of a debbugs server which should be used instead of
-bugs.debian.org.
+https://bugs.debian.org.
 
 =back
 

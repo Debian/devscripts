@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 # Copyright Bill Allombert <ballombe@debian.org> 2001.
 # Modifications copyright 2002-2005 Julian Gilbey <jdg@debian.org>
@@ -17,12 +17,12 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 use strict;
+use warnings;
 use 5.006_000;  # our() commands
 use Cwd;
 use File::Basename;
 use Getopt::Long;
 
-BEGIN { push @INC, '/usr/share/devscripts'; }
 use Devscripts::Set;
 use Devscripts::Packages;
 use Devscripts::PackageDeps;
@@ -35,13 +35,9 @@ sub filterfiles (@);
 # Global options
 our %opts;
 
-# libvfork is taken from dpkg-genbuilddeps, written by
-# Ben Collins <bcollins@debian.org>
-our $vforklib = "/usr/lib/devscripts/libvfork.so.0";
-
 # A list of files that do not belong to a Debian package but are known
 # to never create a dependency
-our @known_files = ($vforklib, "/etc/ld.so.cache", "/etc/dpkg/shlibs.default",
+our @known_files = ("/etc/ld.so.cache", "/etc/dpkg/shlibs.default",
 		    "/etc/dpkg/dpkg.cfg", "/etc/devscripts.conf");
 
 # This will be given information about features later on
@@ -378,22 +374,16 @@ sub getusedfiles (@)
 	$file=$opts{"strace-input"};
     }
     else {
-	my $old_preload = $ENV{'LD_PRELOAD'} || undef;
 	my $old_locale = $ENV{'LC_ALL'} || undef;
-	my $trace_preload = defined $old_preload ?
-	    "$old_preload $vforklib" : $vforklib;
 	$file = $opts{"strace-output"} || `tempfile -p depcheck`;
 	chomp $file;
 	$file =~ s%^(\s)%./$1%;
 	my @strace_cmd=('strace', '-e', 'trace=open,execve',  '-f',
 			'-q', '-o', $file, @_);
-	$ENV{'LD_PRELOAD'} = $trace_preload;
 	$ENV{'LC_ALL'}="C" if $opts{"C"};
 	system(@strace_cmd);
 	$? >> 8 == 0 or
 	    die "Running strace failed (command line:\n@strace_cmd\n";
-	if (defined $old_preload) { $ENV{'LD_PRELOAD'} = $old_preload; }
-	else { delete $ENV{'LD_PRELOAD'}; }
 	if (defined $old_locale) { $ENV{'LC_ALL'} = $old_locale; }
 	else { delete $ENV{'LC_ALL'}; }
     }

@@ -39,6 +39,18 @@ testBeerware() {
     license "beerware.cpp" "Beerware"
 }
 
+testBoost() {
+    license "boost.h" "BSL"
+}
+
+testAcademic() {
+    license "academic.h" "AFL-3.0"
+}
+
+testEclipse() {
+    license2 "-m --copyright" "epl.h" "EPL-1.0	2004, 2006 IBM Corporation and others"
+}
+
 testBSD() {
     license "bsd-3-clause.cpp" "BSD (3 clause)"
     license "bsd-3-clause-authorsany.c" "BSD (3 clause)"
@@ -48,8 +60,11 @@ testLGPL() {
     license "lgpl-2.1.c" "LGPL (v2.1)"
     license "lgpl-2.1.h" "LGPL (v2.1)"
     license "lgpl-2.s" "LGPL (v2)"
+    license "lgpl-2-3.c" "LGPL (v2 or v3)"
     license "lgpl-3+.h" "LGPL (v3 or later)"
     license "lgpl-variation.c" "LGPL (v3 or later)"
+    license "lgpl-no-version.h" "LGPL (unversioned/unknown version)"
+    license2  "-m --copyright" "lgpl-big-blue.h" "LGPL (v2.1)	2000, 2010 IBM Corporation and others. All rights reserved"
 }
 
 testGPL() {
@@ -61,9 +76,11 @@ testGPL() {
     license "gpl-2-incorrect-address" "GPL (v2) (with incorrect FSF address)"
     license "gpl-3.sh" "GPL (v3)"
     license "gpl-3+" "GPL (v3 or later)"
+    license "gpl-3+-with-rem-comment.xml" "GPL (v3 or later)"
     license "gpl-3-only.c" "GPL (v3)"
     license "gpl-variation.c" "GPL (v3 or later)"
     license "gpl-3+.el" "GPL (v3 or later)"
+    license "gpl-no-version.h" "GPL (unversioned/unknown version)"
 }
 
 testDual() {
@@ -74,6 +91,10 @@ testMPL() {
     license "mpl-1.1.sh" "MPL (v1.1)"
     license "mpl-2.0.sh" "MPL (v2.0)"
     license "mpl-2.0-comma.sh" "MPL (v2.0)"
+}
+
+testCDDL() {
+    license2 "-m --copyright" "cddl.h" "CDDL	2006 Sun Microsystems, Inc. All rights reserved"
 }
 
 testMachine() {
@@ -99,4 +120,8 @@ testRegexpKiller() {
     license "regexp-killer.c" "UNKNOWN"
 }
 
+testEncoding () {
+    license2 "-m --copyright" "copr-iso8859.h" "GPL (v2) (with incorrect FSF address)	2011 Heinrich Müller <henmull@src.gnome.org>"
+    license2 "-m --copyright" "copr-utf8.h" "GPL (v2 or later)	2004-2015 Oliva 'f00' Oberto / 2001-2010 Paul 'bar' Stevénsön"
+}
 . shunit2
