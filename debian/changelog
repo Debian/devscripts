@@ -4,8 +4,11 @@ devscripts (2.15.6) UNRELEASED; urgency=medium
   * Adjust wording of common suffixes passed to repacksuffix
 
   [ James McCoy ]
-  * debcheckout: Handle Launchpad Git URLs.  Thanks to Colin Watson for the
-    patch.  (Closes: #788777)
+  * debcheckout:
+    + Handle Launchpad Git URLs.  Thanks to Colin Watson for the patch.
+      (Closes: #788777)
+    + Handle authenticated checkout when Vcs-Darcs is missing the root /darcs
+      directory.
   * checkbashisms: Fix unescaped, literal curly brace in regex, causing FTBFS
     with Perl 5.22.  Thanks to Roderich Schupp for the patch.  (Closes:
     #788707)
