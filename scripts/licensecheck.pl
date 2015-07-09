@@ -321,13 +321,15 @@ while (@files) {
     my $license = '';
 
     # Encode::Guess does not work well, use good old file command to get file encoding
-    my $mime = `file -bi $file`;
+    my $mime = `file --brief --mime --dereference $file`;
     my $charset ;
-    if ($mime =~ /charset=([\w-]+)/) {
-        $charset = $1;
+    if ($mime =~ m!text/\w+; charset=([\w-]+)!) {
+	$charset = $1;
     }
     else {
-        die "can't find charset of $file\n";
+	chomp $mime;
+	warn "$0 warning: cannot parse file '$file' with mime type '$mime'\n";
+	next;
     }
 
     open (my $F, '<' ,$file) or die "Unable to access $file\n";
