@@ -323,7 +323,7 @@ while (@files) {
     # Encode::Guess does not work well, use good old file command to get file encoding
     my $mime = `file --brief --mime --dereference $file`;
     my $charset ;
-    if ($mime =~ m!text/\w+; charset=([\w-]+)!) {
+    if ($mime =~ m!(?:text/[\w-]+|application/xml); charset=([\w-]+)!) {
 	$charset = $1;
     }
     else {
