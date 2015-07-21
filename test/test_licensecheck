@@ -55,7 +55,13 @@ testBSD() {
     license "bsd-1-clause-1.c" "BSD"
     license "bsd-3-clause.cpp" "BSD (3 clause)"
     license "bsd-3-clause-authorsany.c" "BSD (3 clause)"
+}
+
+testMultiLineDeclaration() {
+    # test copyright declared on 2 lines
     license2 "-m --copyright" "bsd-regents.c" "BSD (3 clause)	1987, 1993, 1994 The Regents of the University of California. All rights reserved."
+    # or 3 lines
+    license2 "-m --copyright" "texinfo.tex" "GPL (v3 or later)	1985, 1986, 1988, 1990, 1991, 1992, 1993, 1994, 1995 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Free Software Foundation, Inc."
 }
 
 testLGPL() {

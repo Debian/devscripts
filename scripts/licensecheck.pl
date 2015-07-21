@@ -374,8 +374,8 @@ sub extract_copyright {
 	my $line = shift @c ;
 	my $copyright_match = parse_copyright($line) ;
         if ($copyright_match) {
-	    if ($copyright_match =~ /\d[,.]?\s*$/) {
-		# looks like copyright end with a year, assume the owner is on next line
+	    while ($copyright_match =~ /\d[,.]?\s*$/) {
+		# looks like copyright end with a year, assume the owner is on next line(s)
 		$copyright_match .= ' '. shift @c;
 	    }
 	    $copyright_match =~ s/\s+/ /g;
