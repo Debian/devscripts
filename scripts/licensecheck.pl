@@ -74,7 +74,8 @@ recursively.
 Specify a pattern against which filenames will be matched in order to
 decide which files to check the license of.
 
-The default includes common source files.
+By default, all files of mime type C<text/*> and C<application/xml>
+are parsed. The mime type is given by C<file> command.
 
 =item B<--copyright>
 
@@ -131,6 +132,16 @@ General Public License, version 2 or later.
 
 Adam D. Barratt <adam@adam-barratt.org.uk>
 
+=head1 SEE ALSO
+
+=over
+
+=item *
+
+L<file>
+
+=back
+
 =cut
 
 # see http://stackoverflow.com/questions/6162484/why-does-modern-perl-avoid-utf-8-by-default/6163129#6163129
@@ -168,9 +179,6 @@ my $default_ignore_regex = qr!
 (?:^|/)(?:CVS|RCS|\.pc|\.deps|\{arch\}|\.arch-ids|\.svn|\.hg|_darcs|\.git|
 \.shelf|_MTN|\.bzr(?:\.backup|tags)?)(?:$|/.*$)
 !x;
-
-my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|S|f(77|90)?|go|groovy|scala|clj|p(l|m)|xs|sh|php|py(|x)|rb|java|js|vala|el|sc(i|e)|cs|pas|inc|dtd|xsl|mod|m|tex|mli?|(c|l)?hs)$';
-
 
 # also used to cleanup
 my $copyright_indicator_regex
@@ -273,8 +281,9 @@ GetOptions(\%OPT,
 
 $OPT{'lines'} = $def_lines if $OPT{'lines'} !~ /^[1-9][0-9]*$/;
 my $ignore_regex = length($OPT{ignore}) ? qr/$OPT{ignore}/ : $default_ignore_regex;
-$OPT{'check'} = $default_check_regex if ! length $OPT{'check'};
-my $check_regex = qr/$OPT{check}/;
+
+my $check_regex ;
+$check_regex = qr/$OPT{check}/ if length $OPT{check};
 
 if ($OPT{'noconf'}) {
     fatal("--no-conf is only acceptable as the first command-line option!");
@@ -302,14 +311,14 @@ while (@ARGV) {
 
 	while (my $found = <$FIND>) {
 	    chomp ($found);
-	    next unless $found =~ $check_regex;
+	    next if ( $check_regex and $found !~ $check_regex );
 	    # Skip empty files
 	    next if (-z $found);
 	    push @files, $found unless $found =~ $ignore_regex;
 	}
 	close $FIND;
     } else {
-	next unless ($files_count == 1) or $file =~ $check_regex;
+	next unless ($files_count == 1) or ( $check_regex and $file =~ $check_regex);
 	push @files, $file unless $file =~ $ignore_regex;
     }
 }
@@ -466,7 +475,7 @@ Valid options are:
                             (Default: $def_lines)
    --check, -c            Specify a pattern indicating which files should
                              be checked
-                             (Default: '$default_check_regex')
+                             (Default: All text and xml files)
    --machine, -m          Display in a machine readable way (good for awk)
    --recursive, -r        Add the contents of directories recursively
    --copyright            Also display the file's copyright
