@@ -9,9 +9,11 @@ devscripts (2.15.6) UNRELEASED; urgency=medium
       (Closes: #788777)
     + Handle authenticated checkout when Vcs-Darcs is missing the root /darcs
       directory.
-  * checkbashisms: Fix unescaped, literal curly brace in regex, causing FTBFS
-    with Perl 5.22.  Thanks to Roderich Schupp for the patch.  (Closes:
-    #788707)
+  * checkbashisms:
+    + Fix unescaped, literal curly brace in regex, causing FTBFS with Perl
+      5.22.  Thanks to Roderich Schupp for the patch.  (Closes: #788707)
+    + Improve detection of %q/%b to include when it is at the start of the
+      string.  Thanks to Eero Vuojolahti.  (Closes: #793396)
   * wnpp-check:
     + Use getopt to handle argument parsing.
     + Add --exact switch to match the exact package name instead of a
