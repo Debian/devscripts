@@ -2,7 +2,7 @@
 .SH NAME
 wnpp-check \- check if a package is being packaged or if this has been requested
 .SH SYNOPSIS
-\fBwnpp-check \fIpackage \fR...
+\fBwnpp-check [\fB\-\-exact\fR] \fIpackage \fR...
 .br
 \fBwnpp-check \-\-help\fR|\fB\-\-version\fR
 .SH DESCRIPTION
@@ -20,6 +20,9 @@ Show a summary of options.
 .TP
 .BR \-\-version ", " \-v
 Show version and copyright information.
+.TP
+.BR \-\-exact ", " \-e
+Require an exact package name match, rather than the default substring match.
 .SH SEE ALSO
 https://www.debian.org/devel/wnpp
 .SH EXIT STATUS

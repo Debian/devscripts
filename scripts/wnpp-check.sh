@@ -12,6 +12,7 @@ set -e
 
 CURLORWGET=""
 GETCOMMAND=""
+EXACT=0
 PROGNAME=${0##*/}
 
 usage () { echo \
@@ -32,8 +33,8 @@ Adapted from wnpp-alert, by Arthur Korn <arthur@korn.ch>,
 with modifications by Julian Gilbey <jdg@debian.org>"
 }
 
-TEMP=$(getopt -n "$PROGNAME" -o 'hv' \
-	      -l 'help,version' \
+TEMP=$(getopt -n "$PROGNAME" -o 'hve' \
+	      -l 'help,version,exact' \
 	      -- "$@") || (rc=$?; usage >&2; exit $rc)
 
 eval set -- "$TEMP"
@@ -43,6 +44,7 @@ do
     case "$1" in
 	-h|--help) usage; exit 0 ;;
 	-v|--version) version; exit 0 ;;
+	-e|--exact) EXACT=1 ;;
 	--) shift; break ;;
     esac
     shift
@@ -91,7 +93,11 @@ awk -F' ' '{print "("$1" - #"$2") http://bugs.debian.org/"$2" "$3}' $WNPP | sort
 FOUND=0
 for pkg in $PACKAGES
 do
-    grep $pkg $WNPP_PACKAGES && FOUND=1
+    if [ $EXACT != 1 ]; then
+	grep $pkg $WNPP_PACKAGES && FOUND=1
+    else
+	grep " $pkg$" $WNPP_PACKAGES && FOUND=1
+    fi
 done
 
 exit $FOUND

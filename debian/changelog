@@ -14,6 +14,8 @@ devscripts (2.15.6) UNRELEASED; urgency=medium
     #788707)
   * wnpp-check:
     + Use getopt to handle argument parsing.
+    + Add --exact switch to match the exact package name instead of a
+      substring.  Thanks to Balasankar C.  (Closes: #791918)
 
   [ Dominique Dumont ]
   * licensecheck:
