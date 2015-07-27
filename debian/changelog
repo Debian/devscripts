@@ -12,6 +12,8 @@ devscripts (2.15.6) UNRELEASED; urgency=medium
   * checkbashisms: Fix unescaped, literal curly brace in regex, causing FTBFS
     with Perl 5.22.  Thanks to Roderich Schupp for the patch.  (Closes:
     #788707)
+  * wnpp-check:
+    + Use getopt to handle argument parsing.
 
   [ Dominique Dumont ]
   * licensecheck:
