@@ -65,7 +65,7 @@ checkVersion() {
     rm -f "$CHANGELOG"
     success "--create $start_param --package test-package -v $start_version \"Devscripts Test Suite.\""
     success "$param \"Version test.\""
-    local version=$(dpkg-parsechangelog -l"$CHANGELOG" | sed -n 's/^Version: //p')
+    local version=$(dpkg-parsechangelog -l"$CHANGELOG" -SVersion)
     assertEquals "\"dch $param\" from version $start_version" "$expected_version" "$version"
 }
 
@@ -122,7 +122,7 @@ testUbuntuRebuild() {
 }
 
 verifyMaintainer() {
-    local maintainer="$(dpkg-parsechangelog -l"$CHANGELOG" | sed -n 's/^Maintainer: //p')"
+    local maintainer="$(dpkg-parsechangelog -l"$CHANGELOG" -SMaintainer)"
     assertEquals "\"$1\"" "$DEBFULLNAME <$DEBEMAIL>" "$maintainer"
 }
 

@@ -51,7 +51,7 @@ _debchange()
 	    ;;
 #FIXME: we need "querybts --list" option with no verbose output
 #	--closes)
-#	     package=`dpkg-parsechangelog |grep ^Source|cut -d':' -f2|sed -e s/\ //`
+#	     package=`dpkg-parsechangelog -SSource`
 #	     bugnumber=`querybts --list -b $package|grep ^#|cut -d' ' -f1`
 #	     COMPREPLY=( $( compgen -W "$bugnumber" ) )
 #	    ;;

@@ -231,10 +231,8 @@ if [ ! -f debian/changelog ]; then
 fi
 
 # Figure out package info we need
-mustsetvar PACKAGE "`dpkg-parsechangelog | sed -n 's/^Source: //p'`" \
-    "source package"
-mustsetvar VERSION "`dpkg-parsechangelog | sed -n 's/^Version: //p'`" \
-    "source version"
+mustsetvar PACKAGE "`dpkg-parsechangelog -SSource`" "source package"
+mustsetvar VERSION "`dpkg-parsechangelog -SVersion`" "source version"
 
 # Get epoch and upstream version
 eval `echo "$VERSION" | perl -ne '/^(?:(\d+):)?(.*)/; print "SVERSION=$2\nEPOCH=$1\n";'`

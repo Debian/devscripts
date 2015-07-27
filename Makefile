@@ -10,8 +10,7 @@ all: version make_scripts $(EXAMPLES) translated_manpages
 
 version:
 	rm -f version
-	dpkg-parsechangelog | perl -ne '/^Version: (.*)/ && print $$1' \
-	    > version
+	dpkg-parsechangelog -SVersion > version
 
 conf.default: conf.default.in version
 	rm -f $@ $@.tmp

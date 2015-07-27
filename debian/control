@@ -11,6 +11,7 @@ Standards-Version: 3.9.6
 Build-Depends: bash-completion,
                debhelper (>= 9),
                docbook-xsl,
+               dpkg-dev (>= 1.17.0),
                file,
                libdistro-info-perl,
                libfile-desktopentry-perl,
@@ -39,7 +40,7 @@ Vcs-Git: git://anonscm.debian.org/collab-maint/devscripts.git
 Package: devscripts
 Architecture: any
 Multi-Arch: foreign
-Depends: dpkg-dev (>= 1.16.4),
+Depends: dpkg-dev (>= 1.17.0),
          ${misc:Depends},
          ${perl:Depends},
          ${python3:Depends},

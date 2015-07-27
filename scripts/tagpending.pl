@@ -28,6 +28,7 @@ use strict;
 use warnings;
 use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
+use Dpkg::Changelog::Parse qw(changelog_parse);
 use Devscripts::Debbugs;
 
 sub bugs_info;
@@ -35,7 +36,7 @@ sub bugs_info;
 my $progname = basename($0);
 
 my ($opt_help, $opt_version, $opt_verbose, $opt_noact, $opt_silent);
-my ($opt_online, $opt_confirm, $opt_to, $opt_wnpp, $opt_comments);
+my ($opt_online, $opt_confirm, %opt_to, $opt_wnpp, $opt_comments);
 my $opt_interactive;
 
 # Default options
@@ -45,7 +46,7 @@ $opt_online = 1;
 $opt_noact = 0;
 $opt_confirm = 0;
 $opt_wnpp = 0;
-$opt_to = '';
+%opt_to = ();
 $opt_comments = 1;
 $opt_interactive = 0;
 
@@ -57,13 +58,11 @@ GetOptions("help|h" => \$opt_help,
 	   "silent|s" => \$opt_silent,
 	   "force|f" => sub { $opt_online = 0; },
 	   "confirm|c" => \$opt_confirm,
-	   "to|t=s" => \$opt_to,
+	   "to|t=s" => sub { $opt_to{'-v'} = $_[1] },
 	   "wnpp|w" => \$opt_wnpp,
 	   "interactive|i" => \$opt_interactive,
            )
     or die "Usage: $progname [options]\nRun $progname --help for more details\n";
-
-$opt_to = "-v$opt_to" if $opt_to;
 
 if ($opt_help) {
     help(); exit 0;
@@ -150,39 +149,16 @@ B<bts>(1) and B<dpkg-parsechangelog>(1)
 
 =cut
 
-my $source;
-my @closes;
-my $in_changes=0;
-my $changes='';
-my $header='';
-
-foreach my $file ("debian/changelog") {
-    if (! -f $file) {
-	die "$progname error: $file does not exist!\n";
-    }
+if (! -f 'debian/changelog') {
+  die "$progname error: debian/changelog does not exist!\n";
 }
 
-open PARSED, "dpkg-parsechangelog $opt_to |";
-
-while (<PARSED>) {
-    if (/^Source: (.*)/) {
-	$source = $1;
-    } elsif (/^Closes: (.*)$/) {
-	@closes = split ' ', $1;
-    } elsif (/^Changes: /) {
-	$in_changes = 1;
-    } elsif ($in_changes) {
-	if ($header) {
-	    next unless /^ {3}[^[]/;
-	    $changes .= "\n" if $changes;
-	    $changes .= $_;
-	} else {
-	    $header = $_;
-	}
-    }
-}
-
-close PARSED;
+my $changelog = changelog_parse(%opt_to);
+my $source = $changelog->{Source};
+my @closes = split ' ', $changelog->{Closes};
+my @lines = split /\n/, $changelog->{Changes};
+my $header = $lines[1];
+my $changes = join "\n", grep /^ {3}[^[]/, @lines;
 
 # Add a fake entry to the end of the recorded changes
 # This makes the parsing of the changes simpler

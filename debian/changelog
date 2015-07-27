@@ -16,6 +16,9 @@ devscripts (2.15.6) UNRELEASED; urgency=medium
     + Use getopt to handle argument parsing.
     + Add --exact switch to match the exact package name instead of a
       substring.  Thanks to Balasankar C.  (Closes: #791918)
+  * Replace manual parsing of dpkg-buildpackage's output with the use of its
+    -S switch or the Dpkg::Changelog::Parse Perl module.
+    + Bump minimum required version of dpkg-dev to 1.17.0
 
   [ Dominique Dumont ]
   * licensecheck:

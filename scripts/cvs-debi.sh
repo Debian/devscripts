@@ -220,20 +220,20 @@ if [ "x$opt_package" = "x" ]; then
     if [ -f debian/changelog ]; then
 	# Ok, changelog exists
 	 setq "package" \
-	    "`dpkg-parsechangelog | sed -n 's/^Source: //p'`" \
+	    "`dpkg-parsechangelog -SSource`" \
 		"source package"
 	setq "version" \
-	    "`dpkg-parsechangelog | sed -n 's/^Version: //p'`" \
+	    "`dpkg-parsechangelog -SVersion`" \
 		"source version"
     elif [ "x$opt_cvsmodule" != "x" ]; then
 	# Hmm. Well, see if we can checkout the changelog file
 	rm -f $TEMPFILE
 	cvs -q co -p $TAGOPT $opt_cvsmodule/debian/changelog > $TEMPFILE
         setq "package" \
-	    "`dpkg-parsechangelog -l$TEMPFILE | sed -n 's/^Source: //p'`" \
+	    "`dpkg-parsechangelog -l$TEMPFILE -SSource`" \
           "source package"
         setq "version" \
-          "`dpkg-parsechangelog -l$TEMPFILE | sed -n 's/^Version: //p'`" \
+          "`dpkg-parsechangelog -l$TEMPFILE -SVersion`" \
           "source version"
         rm -f "$TEMPFILE"
     else
@@ -256,14 +256,14 @@ else
     elif [ -f debian/changelog ]; then
 	# Fine, see what the changelog says
 	setq "version" \
-	    "`dpkg-parsechangelog | sed -n 's/^Version: //p'`" \
+	    "`dpkg-parsechangelog -SVersion`" \
 		"source version"
     elif [ "x$opt_cvsmodule" != "x" ]; then
 	# Hmm. The CVS module name is known, so lets us try exporting changelog
 	rm -f $TEMPFILE
 	cvs -q co -p $TAGOPT $opt_cvsmodule/debian/changelog > $TEMPFILE
         setq "version" \
-          "`dpkg-parsechangelog -l$TEMPFILE | sed -n 's/^Version: //p'`" \
+          "`dpkg-parsechangelog -l$TEMPFILE -SVersion`" \
           "source version"
         rm -f "$TEMPFILE"
     else
@@ -272,7 +272,7 @@ else
 	cvsmodule="${prefix}$package"
 	cvs -q co -p $TAGOPT $cvsmodule/debian/changelog > $TEMPFILE
         setq "version" \
-          "`dpkg-parsechangelog -l$TEMPFILE | sed -n 's/^Version: //p'`" \
+          "`dpkg-parsechangelog -l$TEMPFILE -SVersion`" \
           "source version"
         rm -f "$TEMPFILE"
     fi
