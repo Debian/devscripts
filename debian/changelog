@@ -21,6 +21,10 @@ devscripts (2.15.6) UNRELEASED; urgency=medium
   * Replace manual parsing of dpkg-buildpackage's output with the use of its
     -S switch or the Dpkg::Changelog::Parse Perl module.
     + Bump minimum required version of dpkg-dev to 1.17.0
+  * dget: Support arch-qualified package names.  “dget foo:i386” will download
+    the foo binary package for Arch: i386.  “dget --all srcfoo:i386” will
+    download all binary packages from the srcfoo source package that are
+    either Arch: all or Arch: any/i386.  (Closes: #792917)
 
   [ Dominique Dumont ]
   * licensecheck:
