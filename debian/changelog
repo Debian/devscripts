@@ -25,6 +25,8 @@ devscripts (2.15.6) UNRELEASED; urgency=medium
     the foo binary package for Arch: i386.  “dget --all srcfoo:i386” will
     download all binary packages from the srcfoo source package that are
     either Arch: all or Arch: any/i386.  (Closes: #792917)
+  * uscan: Only check for presence of signing key when downloading a new
+    upstream archive.  (Closes: #790047)
 
   [ Dominique Dumont ]
   * licensecheck:

@@ -864,7 +864,7 @@ sub process_watchline ($$$$$$)
 	}
 
 	# Check validity of options
-	if (exists $options{'pgpsigurlmangle'}) {
+	if (($download || $force_download) && exists $options{'pgpsigurlmangle'}) {
 	    if (! $havegpgv) {
 		uscan_warn "$progname warning: pgpsigurlmangle option exists, but you must have gpgv installed to verify\n  in $watchfile, skipping:\n  $line\n";
 		return 1;
