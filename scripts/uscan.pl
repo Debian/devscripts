@@ -554,7 +554,7 @@ for my $dir (@dirs) {
 	}
 
 	my ($package, $debversion, $uversion);
-	$packages = $changelog->{Source};
+	$package = $changelog->{Source};
 	$debversion = $changelog->{Version};
 	if (! defined $package || ! defined $debversion) {
 	    uscan_warn "$progname warning: Problems determining package name and/or version from\n  $dir/debian/changelog, skipping\n";
