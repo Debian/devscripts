@@ -143,6 +143,7 @@ use warnings;
 use warnings    qw< FATAL  utf8     >;
 use Encode qw/decode/;
 
+use Dpkg::IPC qw(spawn);
 use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
 
@@ -321,7 +322,12 @@ while (@files) {
     my $license = '';
 
     # Encode::Guess does not work well, use good old file command to get file encoding
-    my $mime = `file --brief --mime --dereference $file`;
+    my $mime;
+    spawn(exec => ['file', '--brief', '--mime', '--dereference', $file],
+          to_string => \$mime,
+          error_to_file => '/dev/null',
+          nocheck => 1,
+          wait_child => 1);
     my $charset ;
     if ($mime =~ m!(?:text/[\w-]+|application/xml); charset=([\w-]+)!) {
 	$charset = $1;
