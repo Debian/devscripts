@@ -6,6 +6,8 @@ devscripts (2.15.7) UNRELEASED; urgency=medium
       ability to check files with mime types like text/x-c++ and
       application/postscript.  Thanks to Jonas Smedegaard for the patch.
       (Closes: #794282)
+    + Fix an endless loop in parsing certain files.  Thanks to Jonas
+      Smedegaard for the patch.  (Closes: #794263)
 
  -- James McCoy <jamessan@debian.org>  Fri, 31 Jul 2015 19:53:04 -0400
 
