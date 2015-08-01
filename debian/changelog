@@ -1,4 +1,4 @@
-devscripts (2.15.7) UNRELEASED; urgency=medium
+devscripts (2.15.7) unstable; urgency=medium
 
   * licensecheck:
     + Use Dpkg::IPC to run file to avoid shell injection.  (Closes: #794260)
@@ -9,7 +9,7 @@ devscripts (2.15.7) UNRELEASED; urgency=medium
     + Fix an endless loop in parsing certain files.  Thanks to Jonas
       Smedegaard for the patch.  (Closes: #794263)
 
- -- James McCoy <jamessan@debian.org>  Fri, 31 Jul 2015 19:53:04 -0400
+ -- James McCoy <jamessan@debian.org>  Fri, 31 Jul 2015 22:50:33 -0400
 
 devscripts (2.15.6) unstable; urgency=medium
 
