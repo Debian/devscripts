@@ -329,22 +329,23 @@ while (@files) {
           nocheck => 1,
           wait_child => 1);
     my $charset ;
-    if ($mime =~ m!(?:text/[\w-]+|application/xml); charset=([\w-]+)!) {
+    if ($mime =~ m/; charset=((?!binary)(?!unknown)[\w-]+)/) {
 	$charset = $1;
     }
     else {
 	chomp $mime;
 	warn "$0 warning: cannot parse file '$file' with mime type '$mime'\n";
-	next;
+	$charset = 'maybe-binary';
     }
 
     open (my $F, '<' ,$file) or die "Unable to access $file\n";
     binmode $F, ':raw';
 
     while ( <$F>) {
-        last if ($. > $OPT{'lines'});
-        my $data = decode($charset,$_);
-        $content .= $data;
+	last if ($. > $OPT{'lines'});
+	my $data = $_;
+	$data = decode($charset, $data) if $charset ne 'maybe-binary';
+	$content .= $data;
     }
     close($F);
 
