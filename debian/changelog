@@ -1,7 +1,8 @@
 devscripts (2.15.7) unstable; urgency=medium
 
   * licensecheck:
-    + Use Dpkg::IPC to run file to avoid shell injection.  (Closes: #794260)
+    + Use Dpkg::IPC to run file to avoid shell injection.
+      (Closes: #794260, CVE-2015-5704)
     + Change whitelist of mime types to greylist of encodings.  Restores
       ability to check files with mime types like text/x-c++ and
       application/postscript.  Thanks to Jonas Smedegaard for the patch.
