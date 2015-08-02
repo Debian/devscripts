@@ -1,3 +1,11 @@
+devscripts (2.15.8) UNRELEASED; urgency=medium
+
+  * licensecheck:
+    + Avoid argument injection which may cause file to overwrite a file
+      through symlink indirection.  (Closes: #794365, CVE-2015-5705)
+
+ -- James McCoy <jamessan@debian.org>  Sun, 02 Aug 2015 08:56:00 -0400
+
 devscripts (2.15.7) unstable; urgency=medium
 
   * licensecheck:

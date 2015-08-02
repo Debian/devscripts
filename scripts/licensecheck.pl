@@ -323,7 +323,7 @@ while (@files) {
 
     # Encode::Guess does not work well, use good old file command to get file encoding
     my $mime;
-    spawn(exec => ['file', '--brief', '--mime', '--dereference', $file],
+    spawn(exec => ['file', '--brief', '--mime', '--dereference', '--', $file],
           to_string => \$mime,
           error_to_file => '/dev/null',
           nocheck => 1,
