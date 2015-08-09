@@ -172,7 +172,7 @@ for i in `find . -type d -name "debian"`; do
 	echo "Directory $DIR: contains no debian/changelog, skipping" >&2
 	exit
     fi
-    package="`dpkg-parsechangelog | sed -n 's/^Source: //p'`"
+    package="`dpkg-parsechangelog -SSource`"
     if [ -z "$package" ]; then
 	echo "Directory $DIR: unable to determine package name, skipping" >&2
 	exit

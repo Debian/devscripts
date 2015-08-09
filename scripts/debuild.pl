@@ -54,6 +54,7 @@ use File::Basename;
 use filetest 'access';
 use Cwd;
 use Devscripts::Compression;
+use Dpkg::Changelog::Parse qw(changelog_parse);
 use Dpkg::IPC;
 use IO::Handle;  # for flushing
 use vars qw(*BUILD *OLDOUT *OLDERR);  # prevent a warning
@@ -636,17 +637,8 @@ until (-r 'debian/changelog') {
 
 # Find the source package name and version number
 my %changelog;
-my @parsed = grep {/^(Source|Version):/} `dpkg-parsechangelog`
-    or fatal "cannot execute dpkg-parsechangelog | grep: $!";
-foreach (@parsed) {
-    chomp;
-    if (/^(\S+):\s(.+?)\s*$/) { $changelog{$1}=$2; }
-    else {
-	fatal "don't understand dpkg-parsechangelog output: $_";
-    }
-}
-
-if ($?) { fatal "dpkg-parsechangelog | grep failed!" }
+my $c = changelog_parse();
+@changelog{'Source', 'Version'} = @{$c}{'Source', 'Version'};
 
 fatal "no package name in changelog!"
     unless exists $changelog{'Source'};

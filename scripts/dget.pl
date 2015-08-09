@@ -33,6 +33,7 @@ use IO::Dir;
 use IO::File;
 use Digest::MD5;
 use Devscripts::Compression;
+use Dpkg::Control;
 use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
 
@@ -266,11 +267,14 @@ sub quote_version {
 sub apt_get {
     my ($package, $version) = @_;
 
+    my ($archpackage, $arch) = $package;
+    ($package, $arch) = split(/:/, $package, 2);
+
     my $qpackage = quotemeta($package);
     my $qversion = quote_version($version) if $version;
     my @hosts;
 
-    my $apt = new IO::File("LC_ALL=C apt-cache policy $package |") or die "$!";
+    my $apt = IO::File->new("LC_ALL=C apt-cache policy $archpackage |") or die "$!";
     OUTER: while (<$apt>) {
 	if (not $version and /^  Candidate: (.+)/) {
 	    $version = $1;
@@ -287,13 +291,13 @@ sub apt_get {
     }
     close $apt;
     unless ($version) {
-	die "$progname: $package has no installation candidate\n";
+	die "$progname: $archpackage has no installation candidate\n";
     }
     unless (@hosts) {
-	die "$progname: no hostnames in apt-cache policy $package for version $version found\n";
+	die "$progname: no hostnames in apt-cache policy $archpackage for version $version found\n";
     }
 
-    $apt = new IO::File("LC_ALL=C apt-cache show $package=$version |")
+    $apt = IO::File->new("LC_ALL=C apt-cache show $archpackage=$version |")
 	or die "$!";
     my ($v, $p, $filename, $md5sum);
     while (<$apt>) {
@@ -322,7 +326,7 @@ sub apt_get {
     close $apt;
 
     unless ($filename) {
-	die "$progname: no filename for $package ($version) found\n";
+	die "$progname: no filename for $archpackage ($version) found\n";
     }
 
     # find deb lines matching the hosts in the policy output
@@ -481,23 +485,49 @@ for my $arg (@ARGV) {
 	}
 
     # case 2a: --all srcpackage[=version]
-    } elsif ($opt->{'all'} and $arg =~ /^([a-z0-9.+-]{2,})(?:=([a-zA-Z0-9.:~+-]+))?$/) {
-	my ($source, $version) = ($1, $2);
+    } elsif ($opt->{'all'} and $arg =~ /^([a-z0-9.+-:]{2,})(?:=([a-zA-Z0-9.:~+-]+))?$/) {
+	my ($source, $version, $arch) = ($1, $2);
+	($source, $arch) = split(/:/, $source, 2);
 	my $cmd = "apt-cache showsrc $source";
-	#$cmd .= "=$version" if ($version); # unfortunately =version doesn't work here
-	open A, '-|', $cmd;
-	while (<A>) {
-	    next unless /^Binary: (.*)/;
-	    my @packages = split (/, /, $1);
-	    foreach my $package (@packages) {
-		eval { apt_get ($package, $version) } or print "$@";
+	# unfortunately =version doesn't work here, and even if it did, was the
+	# user referring to the source version or the binary version?  The code
+	# assumes binary version.
+	#$cmd .= "=$version" if ($version);
+	open my $showsrc, '-|', $cmd;
+	my $c = Dpkg::Control->new(type => CTRL_INDEX_SRC);
+	while ($c->parse($showsrc, $cmd)) {
+	    if ($arch) {
+		my @packages = grep { $_ } split /\n/, $c->{'Package-List'};
+		# Find all packages whose architecture is either 'all', 'any',
+		# or the given architecture.  The Package-List lines are
+		# $pkg $debtype $section $priority arch=$archlist
+		foreach my $package (@packages) {
+		    $package =~ s/^\s*//;
+		    my ($binary,
+			$debtype,
+			$section,
+			$priority,
+			$archs) = split(/\s+/, $package, 5);
+		    if ($archs =~ m/all/) {
+			eval { apt_get($binary, $version) } or print "$@";
+		    }
+		    elsif ($archs =~ m/any|[=,]$arch/) {
+			eval { apt_get("$binary:$arch", $version) } or print "$@";
+		    }
+		}
+	    }
+	    else {
+		my @packages = split /, /, $c->{Binary};
+		foreach my $package (@packages) {
+		    eval { apt_get ($package, $version) } or print "$@";
+		}
 	    }
 	    last;
 	}
-	close A;
+	close $showsrc;
 
     # case 2b: package[=version]
-    } elsif ($arg =~ /^([a-z0-9.+-]{2,})(?:=([a-zA-Z0-9.:~+-]+))?$/) {
+    } elsif ($arg =~ /^([a-z0-9.+-:]{2,})(?:=([a-zA-Z0-9.:~+-]+))?$/) {
 	apt_get($1, $2);
 
     } else {
@@ -567,7 +597,9 @@ I<package>, the last source version via B<apt-get source> I<package>.
 =item B<-a>, B<--all>
 
 Interpret I<package> as a source package name, and download all binaries as
-found in the output of "apt-cache showsrc I<package>".
+found in the output of "apt-cache showsrc I<package>".  If I<package> is
+arch-qualified, then only binary packages which are "Arch: all", "Arch: any",
+or "Arch: $arch" will be downloaded.
 
 =item B<-b>, B<--backup>
 

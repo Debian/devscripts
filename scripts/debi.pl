@@ -31,7 +31,7 @@ use File::Basename;
 use filetest 'access';
 use Cwd;
 use Dpkg::Control;
-use Dpkg::Changelog::Parse;
+use Dpkg::Changelog::Parse qw(changelog_parse);
 
 my $progname = basename($0,'.pl');  # the '.pl' is for when we're debugging
 my $modified_conf_msg;

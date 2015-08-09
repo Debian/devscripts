@@ -143,6 +143,7 @@ use warnings;
 use warnings    qw< FATAL  utf8     >;
 use Encode qw/decode/;
 
+use Dpkg::IPC qw(spawn);
 use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
 
@@ -168,9 +169,10 @@ my $default_ignore_regex = qr!
 \.shelf|_MTN|\.bzr(?:\.backup|tags)?)(?:$|/.*$)
 !x;
 
-my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|f(77|90)?|go|groovy|scala|clj|p(l|m)|xs|sh|php|py(|x)|rb|java|js|vala|el|sc(i|e)|cs|pas|inc|dtd|xsl|mod|m|tex|mli?|(c|l)?hs)$';
+my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|S|f(77|90)?|go|groovy|scala|clj|p(l|m)|xs|sh|php|py(|x)|rb|java|js|vala|el|sc(i|e)|cs|pas|inc|dtd|xsl|mod|m|tex|mli?|(c|l)?hs)$';
 
 
+# also used to cleanup
 my $copyright_indicator_regex
     = qr!
          (?:copyright	# The full word
@@ -184,9 +186,9 @@ my $copyright_indicator_regex_with_capture = qr!$copyright_indicator_regex(?::\s
 
 my $copyright_disindicator_regex
     = qr!
-     \b(?:info(?:rmation)?	# Discussing copyright information
+	    \b(?:info(?:rmation)?	# Discussing copyright information
             |(notice|statement|claim|string)s?	# Discussing the notice
-            |or|is|in|to        # Part of a sentence
+            |is|in|to        # Part of a sentence
             |(holder|owner)s?       # Part of a sentence
             |ownership              # Part of a sentence
             )\b
@@ -318,38 +320,42 @@ while (@files) {
     my $copyright_match;
     my $copyright = '';
     my $license = '';
-    my %copyrights;
 
     # Encode::Guess does not work well, use good old file command to get file encoding
-    my $mime = `file -bi $file`;
+    my $mime;
+    spawn(exec => ['file', '--brief', '--mime', '--dereference', '--', $file],
+          to_string => \$mime,
+          error_to_file => '/dev/null',
+          nocheck => 1,
+          wait_child => 1);
     my $charset ;
-    if ($mime =~ /charset=([\w-]+)/) {
-        $charset = $1;
+    if ($mime =~ m/; charset=((?!binary)(?!unknown)[\w-]+)/) {
+	$charset = $1;
     }
     else {
-        die "can't find charset of $file\n";
+	chomp $mime;
+	warn "$0 warning: cannot parse file '$file' with mime type '$mime'\n";
+	$charset = 'maybe-binary';
     }
 
     open (my $F, '<' ,$file) or die "Unable to access $file\n";
     binmode $F, ':raw';
 
     while ( <$F>) {
-        last if ($. > $OPT{'lines'});
-        my $data = decode($charset,$_);
-        $content .= $data;
-        $copyright_match = parse_copyright($data);
-        if ($copyright_match) {
-            $copyrights{lc("$copyright_match")} = "$copyright_match";
-        }
+	last if ($. > $OPT{'lines'});
+	my $data = $_;
+	$data = decode($charset, $data) if $charset ne 'maybe-binary';
+	$content .= $data;
     }
     close($F);
 
+    my %copyrights = extract_copyright($content);
     $copyright = join(" / ", reverse sort values %copyrights);
 
     print qq(----- $file header -----\n$content----- end header -----\n\n)
 	if $OPT{'verbose'};
 
-    $license = parselicense(clean_comments($content));
+    $license = parselicense(clean_cruft_and_spaces(clean_comments($content)));
 
     if ($OPT{'machine'}) {
 	print "$file\t$license";
@@ -365,19 +371,39 @@ while (@files) {
     }
 }
 
+sub extract_copyright {
+    my $content = shift;
+    my @c = split /\n/, clean_comments($content);
+
+    my %copyrights;
+
+    while (@c) {
+	my $line = shift @c ;
+	my $copyright_match = parse_copyright($line) ;
+	if ($copyright_match) {
+	    while (@c && $copyright_match =~ /\d[,.]?\s*$/) {
+		# looks like copyright end with a year, assume the owner is on next line(s)
+		$copyright_match .= ' '. shift @c;
+	    }
+	    $copyright_match =~ s/\s+/ /g;
+	    $copyrights{lc("$copyright_match")} = "$copyright_match";
+        }
+    }
+    return %copyrights;
+}
+
 sub parse_copyright {
     my $data = shift ;
     my $copyright = '';
     my $match;
 
     if ( $data !~ $copyright_predisindicator_regex) {
-
+	#print "match against ->$data<-\n";
         if ($data =~ $copyright_indicator_regex_with_capture) {
             $match = $1;
-
             # Ignore lines matching "see foo for copyright information" etc.
             if ($match !~ $copyright_disindicator_regex) {
-                # De-cruft
+		# De-cruft
                 $match =~ s/([,.])?\s*$//;
                 $match =~ s/$copyright_indicator_regex//igx;
                 $match =~ s/^\s+//;
@@ -406,10 +432,18 @@ sub clean_comments {
 
     # Remove Fortran comments
     s/^[cC] //gm;
-    tr/\t\r\n/ /;
 
     # Remove C / C++ comments
     s#(\*/|/[/*])##g;
+
+    return $_;
+}
+
+sub clean_cruft_and_spaces {
+    local $_ = shift or return q{};
+
+    tr/\t\r\n/ /;
+
     # this also removes quotes
     tr% A-Za-z.,@;0-9\(\)/-%%cd;
     tr/ //s;
@@ -466,7 +500,9 @@ sub parselicense {
     my $extrainfo = "";
     my $license = "";
 
-    if ($licensetext =~ /version ([^, ]+?)[.,]? (?:\(?only\)?.? )?(?:of the GNU (Affero )?(Lesser |Library )?General Public License )?(as )?published by the Free Software Foundation/i or
+    if ($licensetext =~ /version ([^ ]+)(?: of the License)?,? or(?: \(at your option\))? version (\d(?:[.-]\d+)*)/) {
+	$gplver = " (v$1 or v$2)";
+    } elsif ($licensetext =~ /version ([^, ]+?)[.,]? (?:\(?only\)?.? )?(?:of the GNU (Affero )?(Lesser |Library )?General Public License )?(as )?published by the Free Software Foundation/i or
 	$licensetext =~ /GNU (?:Affero )?(?:Lesser |Library )?General Public License (?:as )?published by the Free Software Foundation[;,] version ([^, ]+?)[.,]? /i) {
 
 	$gplver = " (v$1)";
@@ -474,8 +510,6 @@ sub parselicense {
 	$gplver = " (v$1)";
     } elsif ($licensetext =~ /either version ([^ ]+)(?: of the License)?, or (?:\(at your option\) )?any later version/) {
 	$gplver = " (v$1 or later)";
-    } elsif ($licensetext =~ /either version ([^ ]+)(?: of the License)?, or \(at your option\) version (\d(?:[\.-]\d+)*)/) {
-	$gplver = " (v$1 or v$2)";
     } elsif ($licensetext =~ /GPL\sas\spublished\sby\sthe\sFree\sSoftware\sFoundation,\sversion\s([\d.]+)/i ) {
 	$gplver = " (v$1)";
     }
@@ -512,7 +546,7 @@ sub parselicense {
 	$license = "GPL$gplver$extrainfo $license";
     }
 
-    if ($licensetext =~ /is\s(?:distributed.*?terms|being\s+released).*?\b(L?GPL)\b/) {
+    if ($licensetext =~ /(?:is|may be)\s(?:(?:distributed|used).*?terms|being\s+released).*?\b(L?GPL)\b/) {
         my $v = $gplver || ' (unversioned/unknown version)';
         $license = "$1$v $license";
     }
@@ -540,7 +574,7 @@ sub parselicense {
 	    $license = "BSD (4 clause) $license";
 	} elsif ($licensetext =~ /(The name(?:\(s\))? .*? may not|Neither the (names? .*?|authors?) nor the names of( (its|their|other|any))? contributors may) be used to endorse or promote products derived from this software/i) {
 	    $license = "BSD (3 clause) $license";
-	} elsif ($licensetext =~ /Redistributions of source code must retain the above copyright notice/i) {
+	} elsif ($licensetext =~ /Redistributions in binary form must reproduce the above copyright notice/i) {
 	    $license = "BSD (2 clause) $license";
 	} else {
 	    $license = "BSD $license";

@@ -630,10 +630,8 @@ case $# in
 	    exit 1
 	fi
 
-	mustsetvar package "`dpkg-parsechangelog | sed -n 's/^Source: //p'`" \
-	    "source package"
-	mustsetvar version "`dpkg-parsechangelog | sed -n 's/^Version: //p'`" \
-	    "source version"
+	mustsetvar package "`dpkg-parsechangelog -SSource`" "source package"
+	mustsetvar version "`dpkg-parsechangelog -SVersion`" "source version"
 
 	if [ "x$sourceonly" = x ]
 	then

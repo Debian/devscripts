@@ -40,7 +40,7 @@ use File::Copy;
 use File::Basename;
 use Cwd;
 use Dpkg::Vendor qw(get_current_vendor);
-use Dpkg::Changelog::Parse;
+use Dpkg::Changelog::Parse qw(changelog_parse);
 use Dpkg::Control;
 use Devscripts::Compression;
 use Devscripts::Debbugs;
@@ -613,7 +613,7 @@ my $CL_URGENCY = '';
 
 if (! $opt_create || ($opt_create && $opt_news)) {
     my $file = $opt_create ? 'debian/changelog' : $changelog_path;
-    $changelog = Dpkg::Changelog::Parse::changelog_parse(file => $file);
+    $changelog = changelog_parse(file => $file);
 
     # Now we've read the changelog, set some variables and then
     # let's check the directory name is sensible
@@ -644,7 +644,7 @@ if (! $opt_create || ($opt_create && $opt_news)) {
     if ($opt_news) {
 	my $found_version = 0;
 	my $found_urgency = 0;
-	my $clog = Dpkg::Changelog::Parse::changelog_parse(file => $real_changelog_path);
+	my $clog = changelog_parse(file => $real_changelog_path);
 	$VERSION = $clog->{Version};
 	$VERSION =~ s/~$//;
 
@@ -1555,15 +1555,10 @@ if ((basename(cwd()) =~ m%^\Q$PACKAGE\E-\Q$UVERSION\E$%) &&
     !$opt_p && !$opt_create) {
     # Find the current version number etc.
     my ($new_version, $new_sversion, $new_uversion);
-    open PARSED, "dpkg-parsechangelog |"
-	or fatal "Cannot execute dpkg-parsechangelog: $!";
-    while (<PARSED>) {
-	if (/^Version:\s(.+?)\s*$/) { $new_version=$1; }
+    my $changelog = changelog_parse();
+    if (exists $changelog->{Version}) {
+	$new_version = $changelog->{Version};
     }
-
-    close PARSED
-	or fatal "Problem executing dpkg-parsechangelog: $!";
-    if ($?) { fatal "dpkg-parsechangelog failed!" }
 
     fatal "No version number in debian/changelog!"
 	unless defined $new_version;

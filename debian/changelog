@@ -1,3 +1,70 @@
+devscripts (2.15.8) unstable; urgency=high
+
+  * licensecheck:
+    + Avoid argument injection which may cause file to overwrite a file
+      through symlink indirection.  (Closes: #794365, CVE-2015-5705)
+
+ -- James McCoy <jamessan@debian.org>  Sun, 02 Aug 2015 09:06:05 -0400
+
+devscripts (2.15.7) unstable; urgency=medium
+
+  * licensecheck:
+    + Use Dpkg::IPC to run file to avoid shell injection.
+      (Closes: #794260, CVE-2015-5704)
+    + Change whitelist of mime types to greylist of encodings.  Restores
+      ability to check files with mime types like text/x-c++ and
+      application/postscript.  Thanks to Jonas Smedegaard for the patch.
+      (Closes: #794282)
+    + Fix an endless loop in parsing certain files.  Thanks to Jonas
+      Smedegaard for the patch.  (Closes: #794263)
+
+ -- James McCoy <jamessan@debian.org>  Fri, 31 Jul 2015 22:50:33 -0400
+
+devscripts (2.15.6) unstable; urgency=medium
+
+  [ Paul Wise ]
+  * Adjust wording of common suffixes passed to repacksuffix
+
+  [ James McCoy ]
+  * debcheckout:
+    + Handle Launchpad Git URLs.  Thanks to Colin Watson for the patch.
+      (Closes: #788777)
+    + Handle authenticated checkout when Vcs-Darcs is missing the root /darcs
+      directory.
+  * checkbashisms:
+    + Fix unescaped, literal curly brace in regex, causing FTBFS with Perl
+      5.22.  Thanks to Roderich Schupp for the patch.  (Closes: #788707)
+    + Improve detection of %q/%b to include when it is at the start of the
+      string.  Thanks to Eero Vuojolahti.  (Closes: #793396)
+  * wnpp-check:
+    + Use getopt to handle argument parsing.
+    + Add --exact switch to match the exact package name instead of a
+      substring.  Thanks to Balasankar C.  (Closes: #791918)
+  * Replace manual parsing of dpkg-buildpackage's output with the use of its
+    -S switch or the Dpkg::Changelog::Parse Perl module.
+    + Bump minimum required version of dpkg-dev to 1.17.0
+  * dget: Support arch-qualified package names.  “dget foo:i386” will download
+    the foo binary package for Arch: i386.  “dget --all srcfoo:i386” will
+    download all binary packages from the srcfoo source package that are
+    either Arch: all or Arch: any/i386.  (Closes: #792917)
+  * uscan: Only check for presence of signing key when downloading a new
+    upstream archive.  (Closes: #790047)
+
+  [ Dominique Dumont ]
+  * licensecheck:
+    * extract © owner when © and owners are specified on 2 or more lines.
+    * fix digia © and license extraction (Closes: #789074)
+    * fix BSD-2-clause detection
+    * parse assembly files with suffix .S
+    * warn if scanned file is not a text file (Closes: #791756)
+
+  [ Mattia Rizzolo ]
+  * uscan: Suggest the correct syntax in the manpage for the dversionmangle
+    option, escaping a '+'. Thanks to Martin Erik Werner for reporting.
+    (Closes: #789389)
+
+ -- James McCoy <jamessan@debian.org>  Mon, 27 Jul 2015 23:12:23 -0400
+
 devscripts (2.15.5~bpo8+1) jessie-backports; urgency=medium
 
   * Rebuild for jessie-backports.

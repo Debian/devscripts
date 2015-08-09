@@ -27,6 +27,7 @@ use strict;
 use warnings;
 use Cwd;
 use Cwd 'abs_path';
+use Dpkg::Changelog::Parse qw(changelog_parse);
 use Dpkg::IPC;
 use File::Basename;
 use File::Copy;
@@ -463,14 +464,14 @@ if (defined $opt_watchfile) {
 	}
 
 	# Figure out package info we need
-	my $changelog = `dpkg-parsechangelog`;
-	unless ($? == 0) {
-	    uscan_die "$progname: Problems running dpkg-parsechangelog\n";
+	my $changelog = eval { changelog_parse(); };
+	if ($@) {
+	    uscan_die "$progname: Problems parsing debian/changelog: $@\n";
 	}
 
 	my ($package, $debversion, $uversion);
-	$changelog =~ /^Source: (.*?)$/m and $package=$1;
-	$changelog =~ /^Version: (.*?)$/m and $debversion=$1;
+	$package = $changelog->{Source};
+	$debversion = $changelog->{Version};
 	if (! defined $package || ! defined $debversion) {
 	    uscan_die "$progname: Problems determining package name and/or version from\n  debian/changelog\n";
 	}
@@ -546,15 +547,15 @@ for my $dir (@dirs) {
     # Check for debian/watch file
     if (-r 'debian/watch' and -r 'debian/changelog') {
 	# Figure out package info we need
-	my $changelog = `dpkg-parsechangelog`;
-	unless ($? == 0) {
-	    uscan_warn "$progname warning: Problems running dpkg-parsechangelog in $dir, skipping\n";
+	my $changelog = eval { changelog_parse(); };
+	if ($@) {
+	    uscan_warn "$progname warning: Problems parse debian/changelog in $dir, skipping\n";
 	    next;
 	}
 
 	my ($package, $debversion, $uversion);
-	$changelog =~ /^Source: (.*?)$/m and $package=$1;
-	$changelog =~ /^Version: (.*?)$/m and $debversion=$1;
+	$package = $changelog->{Source};
+	$debversion = $changelog->{Version};
 	if (! defined $package || ! defined $debversion) {
 	    uscan_warn "$progname warning: Problems determining package name and/or version from\n  $dir/debian/changelog, skipping\n";
 	    next;
@@ -863,7 +864,7 @@ sub process_watchline ($$$$$$)
 	}
 
 	# Check validity of options
-	if (exists $options{'pgpsigurlmangle'}) {
+	if (($download || $force_download) && exists $options{'pgpsigurlmangle'}) {
 	    if (! $havegpgv) {
 		uscan_warn "$progname warning: pgpsigurlmangle option exists, but you must have gpgv installed to verify\n  in $watchfile, skipping:\n  $line\n";
 		return 1;

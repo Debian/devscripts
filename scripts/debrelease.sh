@@ -258,10 +258,8 @@ if ! [ -d "$debsdir" ]; then
     fi
 fi
 
-mustsetvar package "`dpkg-parsechangelog | sed -n 's/^Source: //p'`" \
-    "source package"
-mustsetvar version "`dpkg-parsechangelog | sed -n 's/^Version: //p'`" \
-    "source version"
+mustsetvar package "`dpkg-parsechangelog -SSource`" "source package"
+mustsetvar version "`dpkg-parsechangelog -SVersion`" "source version"
 
 if [ $CHECK_DIRNAME_LEVEL -eq 2 -o \
     \( $CHECK_DIRNAME_LEVEL -eq 1 -a "$CHDIR" = yes \) ]; then

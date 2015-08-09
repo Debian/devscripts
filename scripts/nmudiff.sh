@@ -247,19 +247,19 @@ if ! [ -f debian/changelog ]; then
     exit 1
 fi
 
-SOURCE=$(dpkg-parsechangelog | grep ^Source: | cut -d" " -f2)
+SOURCE=$(dpkg-parsechangelog -SSource)
 if [ -z "$SOURCE" ]; then
     echo "nmudiff: could not determine source package name from changelog!" >&2
     exit 1
 fi
 
-VERSION=$(dpkg-parsechangelog | grep ^Version: | cut -d" " -f2)
+VERSION=$(dpkg-parsechangelog -SVersion)
 if [ -z "$VERSION" ]; then
     echo "nmudiff: could not determine source package version from changelog!" >&2
     exit 1
 fi
 
-CLOSES=$(dpkg-parsechangelog | grep ^Closes: | cut -d" " -f2-)
+CLOSES=$(dpkg-parsechangelog -SCloses)
 
 if [ -z "$CLOSES" ]; then
     # no bug reports, so make a new report in any event
@@ -275,7 +275,7 @@ if [ "$NMUDIFF_NEWREPORT" = "maybe" ]; then
     fi
 fi
 
-OLDVERSION=$(dpkg-parsechangelog -o1 -c1 | grep ^Version: | cut -d" " -f2)
+OLDVERSION=$(dpkg-parsechangelog -o1 -c1 -SVersion)
 if [ -z "$OLDVERSION" ]; then
     echo "nmudiff: could not determine previous package version from changelog!" >&2
     exit 1

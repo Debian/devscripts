@@ -55,7 +55,7 @@ then
 fi
 
 if [ "$VERBOSE" -gt 0 ]; then
-	files=`lsdiff -z ../$(dpkg-parsechangelog | grep ^Source: | sed -e "s/^Source: //")_$(dpkg-parsechangelog | grep ^Version: | sed -e "s/^Version: //").diff.gz 2>/dev/null | grep -v 'debian/'`
+	files=`lsdiff -z ../$(dpkg-parsechangelog -SSource)_$(dpkg-parsechangelog -SVersion).diff.gz 2>/dev/null | grep -v 'debian/'`
 	if [ -n "$files" ]
 	then
 		echo "Following files were modified outside of the debian/ directory:"
