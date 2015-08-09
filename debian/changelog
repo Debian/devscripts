@@ -1,9 +1,14 @@
 devscripts (2.15.9) UNRELEASED; urgency=medium
 
+  [ Joachim Breitner ]
   * mk-origtargz:
     + Work around tar --delete not working unless piping. This should
       make the support for Excluded-Files more reliable.
       Thanks to Felix Natter for identifying the problem and solution.
+
+  [ James McCoy ]
+  * bts:
+    + Add reference to pts-subscribe(1) in bts(1).  (Closes: #794689)
 
  -- Joachim Breitner <nomeata@debian.org>  Tue, 11 Aug 2015 21:12:03 +0200
 
