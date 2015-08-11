@@ -1,3 +1,12 @@
+devscripts (2.15.9) UNRELEASED; urgency=medium
+
+  * mk-origtargz:
+    + Work around tar --delete not working unless piping. This should
+      make the support for Excluded-Files more reliable.
+      Thanks to Felix Natter for identifying the problem and solution.
+
+ -- Joachim Breitner <nomeata@debian.org>  Tue, 11 Aug 2015 21:12:03 +0200
+
 devscripts (2.15.8) unstable; urgency=high
 
   * licensecheck:
