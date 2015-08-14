@@ -155,7 +155,10 @@ if (! -f 'debian/changelog') {
 
 my $changelog = changelog_parse(%opt_to);
 my $source = $changelog->{Source};
-my @closes = split ' ', $changelog->{Closes};
+my @closes;
+if ($changelog->{Closes}) {
+    @closes = split ' ', $changelog->{Closes};
+}
 my @lines = split /\n/, $changelog->{Changes};
 my $header = $lines[1];
 my $changes = join "\n", grep /^ {3}[^[]/, @lines;

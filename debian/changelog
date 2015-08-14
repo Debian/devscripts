@@ -9,6 +9,9 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
   [ James McCoy ]
   * bts:
     + Add reference to pts-subscribe(1) in bts(1).  (Closes: #794689)
+  * tagpending:
+    + Fix warning when there are no fixed bugs in the changelog.  (Closes:
+      #795470)
 
  -- Joachim Breitner <nomeata@debian.org>  Tue, 11 Aug 2015 21:12:03 +0200
 
