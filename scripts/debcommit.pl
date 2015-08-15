@@ -448,7 +448,8 @@ sub getprog {
     if (-d ".bzr") {
 	return "bzr";
     }
-    if (-d ".git") {
+    if (-e ".git") {
+	# With certain forms of git checkouts, .git can be a file instead of a directory
 	return "git";
     }
     if (-d ".hg") {
@@ -474,7 +475,7 @@ sub getprog {
 	if (-d "$dir/.bzr") {
 	    return "bzr";
 	}
-	if (-d "$dir/.git") {
+	if (-e "$dir/.git") {
 	    return "git";
 	}
 	if (-d "$dir/.hg") {

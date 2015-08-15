@@ -5,6 +5,9 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
     + Work around tar --delete not working unless piping. This should
       make the support for Excluded-Files more reliable.
       Thanks to Felix Natter for identifying the problem and solution.
+  * debchange:
+    + Detect git repositories even if .git is a file instead of a directory,
+      as it can be the case with "git worktree" worktrees.
 
   [ James McCoy ]
   * bts:
