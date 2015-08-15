@@ -12,6 +12,7 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
   * tagpending:
     + Fix warning when there are no fixed bugs in the changelog.  (Closes:
       #795470)
+    + Avoid querying the BTS when there are no bugs closed in the changelog.
 
  -- Joachim Breitner <nomeata@debian.org>  Tue, 11 Aug 2015 21:12:03 +0200
 
