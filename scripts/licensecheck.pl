@@ -418,7 +418,7 @@ sub parse_copyright {
                 $match =~ s/^\s+//;
                 $match =~ s/\s{2,}/ /g;
                 $match =~ s/\\@/@/g;
-                $match =~ s/\s*\*\s*$//;
+                $match =~ s/\s*[*#]\s*$//;
                 $copyright = $match;
             }
         }
