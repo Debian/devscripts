@@ -385,6 +385,7 @@ sub extract_copyright {
     my @c = split /\n/, clean_comments($content);
 
     my %copyrights;
+    my $lines_after_copyright_block = 0;
 
     while (@c) {
 	my $line = shift @c ;
@@ -397,6 +398,11 @@ sub extract_copyright {
 	    $copyright_match =~ s/\s+/ /g;
 	    $copyrights{lc("$copyright_match")} = "$copyright_match";
         }
+	elsif (scalar keys %copyrights) {
+	    # skip remaining lines if a copyright blocks was found more than 5 lines ago.
+	    # so a copyright block may contain up to 5 blank lines, but no more
+	    last if $lines_after_copyright_block++ > 5;
+	}
     }
     return %copyrights;
 }
