@@ -23,6 +23,7 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
       not (instead of testing file suffix)
     * remove trailing '#' from © information
     * store only first © block to avoid duplicated information
+    * remove '\' from © information (useful for nroff files)
 
  -- Joachim Breitner <nomeata@debian.org>  Tue, 11 Aug 2015 21:12:03 +0200
 
