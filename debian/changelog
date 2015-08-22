@@ -25,6 +25,12 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
     * store only first © block to avoid duplicated information
     * remove '\' from © information (useful for nroff files)
 
+  [ Adam D. Barratt ]
+  * getbuildlog:
+    + Stop downloading logs from debian-ports explicitly, now that it has
+      been merged into buildd.debian.org and downloading from both locations
+      causes duplicate downloads.  (Closes: #796506)
+
  -- Joachim Breitner <nomeata@debian.org>  Tue, 11 Aug 2015 21:12:03 +0200
 
 devscripts (2.15.8) unstable; urgency=high
