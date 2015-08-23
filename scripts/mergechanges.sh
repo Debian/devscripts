@@ -24,17 +24,18 @@ set -e
 PROGNAME=`basename $0`
 
 synopsis () {
-    echo "Usage: $PROGNAME [-h|--help|--version] [-d] [-i|--indep] [-f] <file1> <file2> [<file> ...]"
+    echo "Usage: $PROGNAME [-h|--help|--version] [-d] [-S|--source] [-i|--indep] [-f] <file1> <file2> [<file> ...]"
 }
 
 usage () {
     synopsis
-    echo <<EOT
+    cat <<EOT
   Merge the changes files <file1>, <file2>, ....  Output on stdout
   unless -f option given, in which case, output to
   <package>_<version>_multi.changes in the same directory as <file1>.
   If -i is given, only source and architecture-independent packages
-  are included in the output."
+  are included in the output.
+  If -S is given, only the source package is included in the output.
 EOT
 }
 
@@ -51,7 +52,8 @@ GNU General Public License, version 2 or later."
 # Commandline parsing
 FILE=0
 DELETE=0
-INDEP_ONLY=0
+REMOVE_ARCHDEP=0
+REMOVE_INDEP=0
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -72,7 +74,12 @@ while [ $# -gt 0 ]; do
 	    shift
 	    ;;
 	-i|--indep)
-	    INDEP_ONLY=1
+	    REMOVE_ARCHDEP=1
+	    shift
+	    ;;
+	-S|--source)
+	    REMOVE_ARCHDEP=1
+	    REMOVE_INDEP=1
 	    shift
 	    ;;
 	-*)
@@ -104,33 +111,45 @@ done
 # and merge them, sorting out duplicates. Skip architectures
 # other than all and source if desired.
 ARCHS=$(grep -h "^Architecture: " "$@" | sed -e "s,^Architecture: ,," | tr ' ' '\n' | sort -u)
-if test ${INDEP_ONLY} = 1; then
+if test ${REMOVE_ARCHDEP} = 1; then
     ARCHS=$(echo "$ARCHS" | grep -E '^(all|source)$')
+fi
+if test ${REMOVE_INDEP} = 1; then
+    ARCHS=$(echo "$ARCHS" | grep -vxF all)
 fi
 ARCHS=$(echo "$ARCHS" | tr '\n' ' ' | sed 's/ $//')
 
 checksum_uniq() {
     local line
     local IFS=
-    if test ${INDEP_ONLY} = 1; then
-        while read line; do
-            case "$line" in
-                (*.dsc|*.diff.gz|*.tar.*|*_all.deb|*_all.udeb)
-                    # source or architecture-independent
-                    echo "$line"
-                    ;;
-                (*.deb|*.udeb)
-                    # architecture-specific, ignore
-                    ;;
-                (*)
-                    echo "Unrecognised file, is it architecture-dependent?" >&2
-                    echo "$line" >&2
-                    exit 1
-                    ;;
-            esac
-        done | awk '{if(arr[$NF] != 1){arr[$NF] = 1; print;}}'
+    if test ${REMOVE_ARCHDEP} = 1 -o ${REMOVE_INDEP} = 1; then
+	while read line; do
+	    case "$line" in
+		(*.dsc|*.diff.gz|*.tar.*)
+		    # source
+		    echo "$line"
+		    ;;
+		(*_all.deb|*_all.udeb)
+		    # architecture-indep
+		    if test ${REMOVE_INDEP} = 0; then
+			echo "$line"
+		    fi
+		    ;;
+		(*.deb|*.udeb)
+		    # architecture-specific
+		    if test ${REMOVE_ARCHDEP} = 0; then
+			echo "$line"
+		    fi
+		    ;;
+		(*)
+		    echo "Unrecognised file, is it architecture-dependent?" >&2
+		    echo "$line" >&2
+		    exit 1
+		    ;;
+	    esac
+	done | awk '{if(arr[$NF] != 1){arr[$NF] = 1; print;}}'
     else
-        awk '{if(arr[$NF] != 1){arr[$NF] = 1; print;}}'
+	awk '{if(arr[$NF] != 1){arr[$NF] = 1; print;}}'
     fi
 }
 
