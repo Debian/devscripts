@@ -34,6 +34,7 @@ devscripts (2.16.2) UNRELEASED; urgency=medium
 
   [ Johannes Schauer ]
   * build-rdeps:
+    + Generate correct dependency for cross builds.  Closes: #794538
     + Improve dependency resolver using dose3.  Closes: #797858
 
   [ Andreas Bombe ]
