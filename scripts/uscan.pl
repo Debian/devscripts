@@ -847,7 +847,7 @@ sub process_watchline ($$$$$$)
 	    (undef, $lastversion, $action) = split ' ', $line, 3;
 	}
 
-	if ((!$lastversion or $lastversion eq 'debian') and not defined $pkg_version) {
+	if ((! defined $lastversion or $lastversion eq 'debian') and not defined $pkg_version) {
 	    uscan_warn "$progname warning: Unable to determine current version\n  in $watchfile, skipping:\n  $line\n";
 	    return 1;
 	}
@@ -915,7 +915,7 @@ sub process_watchline ($$$$$$)
 	$pattern = "(?:(?:$site)?" . quotemeta($basedir) . ")?$filepattern";
     }
 
-    if (! $lastversion or $lastversion eq 'debian') {
+    if (! defined $lastversion or $lastversion eq 'debian') {
 	if (defined $pkg_version) {
 	    $lastversion=$pkg_version;
 	} else {
