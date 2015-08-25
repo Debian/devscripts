@@ -894,7 +894,7 @@ sub process_watchline ($$$$$$)
 	    $filepattern .= '(?:\?.*)?';
 	}
 	# Handle pypi.python.org addresses specially
-	$base =~ s%^https?://pypi\.python\.org/packages/source/./%http://pypi.debian.net/%;
+	$base =~ s%^https?://pypi\.python\.org/packages/source/./%https://pypi.debian.net/%;
 
 	if ($base =~ m%^(\w+://[^/]+)%) {
 	    $site = $1;
