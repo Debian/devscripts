@@ -317,7 +317,7 @@ sub clean_checkout ()
 		push @rm, $file;
 	}
 	close DIR;
-	system ('rm', '-rf', @rm);
+	system ('rm', '-rf', '--', @rm);
 }
 
 sub unpack_tarball ($)
@@ -349,7 +349,7 @@ sub unpack_tarball ($)
 	opendir DIR, $directory or die "opendir $directory: $!";
 	foreach my $file (readdir DIR) {
 		if ($file eq 'debian') {
-			system ('rm', '-rf', "$directory/$file");
+			system ('rm', '-rf', '--', "$directory/$file");
 			next;
 		} elsif ($file eq '.' or $file eq '..') {
 			next;

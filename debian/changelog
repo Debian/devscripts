@@ -8,6 +8,8 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
   * debcommit:
     + Detect git repositories even if .git is a file instead of a directory,
       as it can be the case with "git worktree" worktrees.
+  * origtargz: Call rm -rf with "--", so that files starting with - are not
+    considered arguments by rm.
 
   [ James McCoy ]
   * bts:
