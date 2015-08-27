@@ -82,17 +82,17 @@ checkUbuntuVersion() {
 }
 
 testDebianDistributions() {
+    checkDebianDistribution "jessie-security"
+    checkDebianDistribution "wheezy-security"
+    checkDebianDistribution "stretch-security"
     checkDebianDistribution "experimental"
     checkDebianDistribution "oldstable"
     checkDebianDistribution "oldstable-proposed-updates"
-    checkDebianDistribution "oldstable-security"
     checkDebianDistribution "proposed-updates"
     checkDebianDistribution "stable"
     checkDebianDistribution "stable-proposed-updates"
-    checkDebianDistribution "stable-security"
     checkDebianDistribution "testing"
     checkDebianDistribution "testing-proposed-updates"
-    checkDebianDistribution "testing-security"
     checkDebianDistribution "UNRELEASED"
 }
 

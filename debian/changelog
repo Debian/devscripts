@@ -48,6 +48,12 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
       "true" before using it in a comparison.  The enables the use of 0 as a
       value for the version.  (Closes: #796984)
 
+  [ Gunnar Wolf ]
+  * debchange:
+    + Allow the current prefered security upload targets
+      (wheezy|jessie|stretch)-security instead of their changing
+      counterparts (oldstable|stable|testing)-security (Closes: #797084)
+
  -- Joachim Breitner <nomeata@debian.org>  Tue, 11 Aug 2015 21:12:03 +0200
 
 devscripts (2.15.8) unstable; urgency=high
