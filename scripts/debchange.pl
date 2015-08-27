@@ -42,6 +42,7 @@ use Cwd;
 use Dpkg::Vendor qw(get_current_vendor);
 use Dpkg::Changelog::Parse qw(changelog_parse);
 use Dpkg::Control;
+use Dpkg::Version;
 use Devscripts::Compression;
 use Devscripts::Debbugs;
 use POSIX qw(locale_h strftime);
@@ -1554,19 +1555,18 @@ copy("$changelog_path.dch","$changelog_path") or
 if ((basename(cwd()) =~ m%^\Q$PACKAGE\E-\Q$UVERSION\E$%) &&
     !$opt_p && !$opt_create) {
     # Find the current version number etc.
-    my ($new_version, $new_sversion, $new_uversion);
+    my $v;
     my $changelog = changelog_parse();
     if (exists $changelog->{Version}) {
-	$new_version = $changelog->{Version};
+	$v = Dpkg::Version->new($changelog->{Version});
     }
 
     fatal "No version number in debian/changelog!"
-	unless defined $new_version;
+	unless $v;
 
-    # Is this a native Debian package, i.e., does it have a - in the
-    # version number?
-    $new_version =~ s/^\d+://;  # remove epoch
-    ($new_uversion=$new_version) =~ s/-[^-]*$//;  # remove revision
+    my ($new_version, $new_uversion);
+    $new_version = $v->as_string(omit_epoch => 1);
+    $new_uversion = $v->as_string(omit_epoch => 1, omit_revision => 1);
 
     if ($new_uversion ne $UVERSION) {
 	# Then we rename the directory
@@ -1575,11 +1575,13 @@ if ((basename(cwd()) =~ m%^\Q$PACKAGE\E-\Q$UVERSION\E$%) &&
 	} else {
 	    warn "$progname warning: Couldn't rename directory: $!\n";
 	}
-	# And check whether a new orig tarball exists
-	my @origs = glob("../$PACKAGE\_$new_uversion.*");
-	my $num_origs = grep { /^..\/\Q$PACKAGE\E_\Q$new_uversion\E\.orig\.tar\.$compression_re$/ } @origs;
-	if ($num_origs == 0) {
-	    warn "$progname warning: no orig tarball found for the new version.\n";
+	if (!$v->is_native()) {
+	    # And check whether a new orig tarball exists
+	    my @origs = glob("../$PACKAGE\_$new_uversion.*");
+	    my $num_origs = grep { /^..\/\Q$PACKAGE\E_\Q$new_uversion\E\.orig\.tar\.$compression_re$/ } @origs;
+	    if ($num_origs == 0) {
+		warn "$progname warning: no orig tarball found for the new version.\n";
+	    }
 	}
     }
 }

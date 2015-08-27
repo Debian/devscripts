@@ -19,6 +19,8 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
   * mergechanges:
     + Add -S/--source argument to skip all binary packages.  Thanks to Ansgar
       Burchardt for the patch.  (Closes: #795573)
+  * debchange:
+    + Only emit "no orig tarball" for non-native packages.  (Closes: #797018)
 
   [ Dominique Dumont ]
   * licensecheck:
