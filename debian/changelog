@@ -23,6 +23,9 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
       Burchardt for the patch.  (Closes: #795573)
   * debchange:
     + Only emit "no orig tarball" for non-native packages.  (Closes: #797018)
+  * debcheckout:
+    + Clarify documentation of -f option.  Thanks to Daniel Shahaf for the
+      patch!  (Closes: #797265)
 
   [ Dominique Dumont ]
   * licensecheck:

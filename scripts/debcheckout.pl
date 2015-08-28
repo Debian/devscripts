@@ -119,7 +119,7 @@ should be one of the currently supported repository types.
 Specify the login name to be used in authenticated mode (see B<-a>). This option
 implies B<-a>: you don't need to specify both.
 
-=item B<-f>, B<--file>
+=item B<-f> I<FILE>, B<--file> I<FILE>
 
 Specify that the named file should be extracted from the repository and placed
 in the destination directory. May be used more than once to extract multiple
