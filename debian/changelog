@@ -57,6 +57,10 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
       (wheezy|jessie|stretch)-security instead of their changing
       counterparts (oldstable|stable|testing)-security (Closes: #797084)
 
+  [ Antonio Terceiro ]
+  * chdist:
+    + Add support for running apt-file
+
  -- Joachim Breitner <nomeata@debian.org>  Tue, 11 Aug 2015 21:12:03 +0200
 
 devscripts (2.15.8) unstable; urgency=high

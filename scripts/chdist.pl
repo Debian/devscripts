@@ -68,6 +68,10 @@ Run B<apt-get> inside I<DIST>
 
 Run B<apt-cache> inside I<DIST>
 
+=item B<apt-file> I<DIST> <B<update>|B<search>|...>
+
+Run B<apt-file> inside I<DIST>
+
 =item B<apt-rdepends> I<DIST> [...]
 
 Run B<apt-rdepends> inside I<DIST>
@@ -262,6 +266,19 @@ sub aptcmd
     unshift(@args, aptopts($dist));
     aptconfig($dist);
     exec($cmd, @args);
+}
+
+sub apt_file
+{
+    my ($dist, @args) = @_;
+    dist_check($dist);
+    my $sources_list = $datadir . '/' . $dist . "/etc/apt/sources.list";
+    my $cache_directory = $datadir . '/' . $dist . "/var/cache/apt/apt-file";
+    unshift(@args,
+      '--sources-list', $sources_list,
+      '--cache', $cache_directory
+    );
+    exec('apt-file', @args);
 }
 
 sub bin2src
@@ -665,6 +682,9 @@ given ($command) {
     }
     when ('apt-cache') {
 	aptcmd('apt-cache', @ARGV);
+    }
+    when ('apt-file') {
+	apt_file(@ARGV);
     }
     when ('apt-rdepends') {
 	aptcmd('apt-rdepends', @ARGV);
