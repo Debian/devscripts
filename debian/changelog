@@ -60,6 +60,8 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
   [ Antonio Terceiro ]
   * chdist:
     + Add support for running apt-file
+  * debian/lintian-overrides: remove overrides for false positives that had
+    been fixed in lintian
 
  -- Joachim Breitner <nomeata@debian.org>  Tue, 11 Aug 2015 21:12:03 +0200
 

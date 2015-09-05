@@ -1,5 +1,2 @@
 # "debsnap: grab packages from http://snapshot.debian.org" isn't a homepage
 devscripts: description-possibly-contains-homepage http://snapshot.debian.org
-# using dh causes useless ldconfig calls to be added to post{inst,rm}
-devscripts: postinst-has-useless-call-to-ldconfig
-devscripts: postrm-has-useless-call-to-ldconfig
