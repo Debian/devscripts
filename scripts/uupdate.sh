@@ -237,11 +237,11 @@ mustsetvar VERSION "`dpkg-parsechangelog -SVersion`" "source version"
 # Get epoch and upstream version
 eval `echo "$VERSION" | perl -ne '/^(?:(\d+):)?(.*)/; print "SVERSION=$2\nEPOCH=$1\n";'`
 
-UVERSION=`expr "$SVERSION" : '\(.*\)-[0-9a-zA-Z.+~]*$'` ||
-{
+UVERSION=`expr "$SVERSION" : '\(.*\)-[0-9a-zA-Z.+~]*$'`
+if [ -z "$UVERSION" ]; then
     echo "$PROGNAME: a native Debian package cannot take upstream updates" >&2
     exit 1
-}
+fi
 
 # Save pwd before we goes walkabout
 OPWD=`pwd`
