@@ -74,8 +74,11 @@ recursively.
 Specify a pattern against which filenames will be matched in order to
 decide which files to check the license of.
 
-By default, all files of mime type C<text/*> and C<application/xml>
-are parsed. The mime type is given by C<file> command.
+=item B<-t>, B<--text>
+
+By default, all files are parsed, including binary files. This option
+limits the parsed files to mime type C<text/*> and C<application/xml>.
+The mime type is given by C<file> command.
 
 =item B<--copyright>
 
@@ -218,6 +221,7 @@ my %OPT=(
     recursive      => 0,
     copyright      => 0,
     machine        => 0,
+    text           => 0,
 );
 
 my $def_lines = 60;
@@ -275,6 +279,7 @@ GetOptions(\%OPT,
            "machine|m",
            "noconf|no-conf",
            "recursive|r",
+	   "text|t",
            "verbose!",
            "version|v",
 ) or die "Usage: $progname [options] filelist\nRun $progname --help for more details\n";
@@ -345,6 +350,7 @@ while (@files) {
 	chomp $mime;
 	warn "$0 warning: cannot parse file '$file' with mime type '$mime'\n";
 	$charset = 'maybe-binary';
+	next if $OPT{text};
     }
 
     open (my $F, '<' ,$file) or die "Unable to access $file\n";

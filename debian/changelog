@@ -29,6 +29,7 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
 
   [ Dominique Dumont ]
   * licensecheck:
+    * added --text option to avoid scanning binary files
     * use 'file' command to decide whether to scan a file or
       not (instead of testing file suffix)
     * remove trailing '#' from © information
