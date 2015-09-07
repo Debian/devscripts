@@ -927,6 +927,7 @@ sub process_watchline ($$$$$$)
     my $mangled_lastversion;
     $mangled_lastversion = $lastversion;
     foreach my $pat (@{$options{'dversionmangle'}}) {
+	print STDERR "$progname debug: dversionmangle rule $pat\n" if $debug;
 	if (! safe_replace(\$mangled_lastversion, $pat)) {
 	    uscan_warn "$progname: In $watchfile, potentially"
 	      . " unsafe or malformed dversionmangle"
@@ -936,6 +937,7 @@ sub process_watchline ($$$$$$)
 	    return 1;
 	}
     }
+    print STDERR "$progname debug: dversionmangled last version: $mangled_lastversion\n" if $debug;
     if($opt_download_current_version) {
 	$download_version = $mangled_lastversion;
 	$force_download = 1;
@@ -994,7 +996,7 @@ sub process_watchline ($$$$$$)
 	}
 
 	my $content = $response->content;
-	print STDERR "$progname debug: received content:\n$content\[End of received content]\n"
+	print STDERR "$progname debug: received content:\n$content\n[End of received content]\n"
 	    if $debug;
 
 	if ($content =~ m%^<[?]xml%i &&
@@ -1040,6 +1042,7 @@ sub process_watchline ($$$$$$)
 			    join(".", map { $_ if defined($_) }
 			 	$href =~ m&^$_pattern$&);
 			foreach my $pat (@{$options{'uversionmangle'}}) {
+			    print STDERR "$progname debug: uversionmangle rule $pat\n" if $debug;
 			    if (! safe_replace(\$mangled_version, $pat)) {
 				uscan_warn "$progname: In $watchfile, potentially"
 			 	 . " unsafe or malformed uversionmangle"
@@ -1100,7 +1103,7 @@ sub process_watchline ($$$$$$)
 	}
 
 	my $content = $response->content;
-	print STDERR "$progname debug: received content:\n$content\[End of received content]\n"
+	print STDERR "$progname debug: received content:\n$content\n[End of received content]\n"
 	    if $debug;
 
 	# FTP directory listings either look like:
@@ -1118,6 +1121,7 @@ sub process_watchline ($$$$$$)
 		my $file = $1;
 		my $mangled_version = join(".", $file =~ m/^$pattern$/);
 		foreach my $pat (@{$options{'uversionmangle'}}) {
+		    print STDERR "$progname debug: uversionmangle rule $pat\n" if $debug;
 		    if (! safe_replace(\$mangled_version, $pat)) {
 			uscan_warn "$progname: In $watchfile, potentially"
 			  . " unsafe or malformed uversionmangle"
@@ -1137,6 +1141,7 @@ sub process_watchline ($$$$$$)
 		    my $file = $1;
 		    my $mangled_version = join(".", $file =~ m/^$filepattern$/);
 		    foreach my $pat (@{$options{'uversionmangle'}}) {
+			print STDERR "$progname debug: uversionmangle rule $pat\n" if $debug;
 			if (! safe_replace(\$mangled_version, $pat)) {
 			    uscan_warn "$progname: In $watchfile, potentially"
 			      . " unsafe or malformed uversionmangle"
@@ -1195,12 +1200,15 @@ EOF
 	    return 1;
 	}
     }
+    print STDERR "$progname debug: new version $newversion\n" if $debug;
+    print STDERR "$progname debug: new filename $newfile\n" if $debug;
 
     my $newfile_base=basename($newfile);
     if (exists $options{'filenamemangle'}) {
         $newfile_base=$newfile;
     }
     foreach my $pat (@{$options{'filenamemangle'}}) {
+	print STDERR "$progname debug: filenamemangle rule $pat\n" if $debug;
 	if (! safe_replace(\$newfile_base, $pat)) {
 	    uscan_warn "$progname: In $watchfile, potentially"
 	      . " unsafe or malformed filenamemangle"
@@ -1218,6 +1226,7 @@ EOF
 	    $newfile_base = "$pkg-$newversion.download";
 	}
     }
+    print STDERR "$progname debug: filenamemangled new filename $newfile_base\n" if $debug;
 
     # So what have we got to report now?
     my $upstream_url;
@@ -1285,6 +1294,7 @@ EOF
 	$upstream_url =~ s/&amp;/&/g;
 	if (exists $options{'downloadurlmangle'}) {
 	    foreach my $pat (@{$options{'downloadurlmangle'}}) {
+		print STDERR "$progname debug: downloadurlmangle rule $pat\n" if $debug;
 		if (! safe_replace(\$upstream_url, $pat)) {
 		    uscan_warn "$progname: In $watchfile, potentially"
 		      . " unsafe or malformed downloadurlmangle"
@@ -1300,10 +1310,12 @@ EOF
 	# FTP site
 	$upstream_url = "$base$newfile";
     }
+    print STDERR "$progname debug: downloadurlmangled upstream URL $upstream_url\n" if $debug;
 
     if (exists $options{'pgpsigurlmangle'}) {
 	$pgpsig_url = $upstream_url;
 	foreach my $pat (@{$options{'pgpsigurlmangle'}}) {
+	    print STDERR "$progname debug: pgpsigurlmangle rule $pat\n" if $debug;
 	    if (! safe_replace(\$pgpsig_url, $pat)) {
 		uscan_warn "$progname: In $watchfile, potentially"
 		  . " unsafe or malformed pgpsigurlmangle"
@@ -1313,6 +1325,7 @@ EOF
 		return 1;
 	    }
 	}
+	print STDERR "$progname debug: pgpsigurlmangled upstream URL $pgpsig_url\n" if $debug;
     }
 
     $dehs_tags{'debian-uversion'} = $lastversion;
@@ -1624,7 +1637,7 @@ sub newest_dir ($$$$$) {
 	}
 
 	my $content = $response->content;
-	print STDERR "$progname debug: received content:\n$content\[End of received content\]\n"
+	print STDERR "$progname debug: received content:\n$content\n[End of received content\]\n"
 	    if $debug;
 	# We need this horrid stuff to handle href=foo type
 	# links.  OK, bad HTML, but we have to handle it nonetheless.
@@ -1683,7 +1696,7 @@ sub newest_dir ($$$$$) {
 	}
 
 	my $content = $response->content;
-	print STDERR "$progname debug: received content:\n$content\[End of received content]\n"
+	print STDERR "$progname debug: received content:\n$content\n[End of received content]\n"
 	    if $debug;
 
 	# FTP directory listings either look like:
