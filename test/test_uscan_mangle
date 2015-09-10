@@ -397,11 +397,22 @@ testWatch3WebNonNativeDlUversion() {
     helperWatch siteWebNonNative 1.0 0.0
     COMMAND="$COMMANDOLD"
 }
+testWatch3WebNonNativeDlDversion() {
+    PKG=foo
+    COMMANDOLD="$COMMAND"
+    COMMAND="$COMMAND --download-debversion 0.0-1"
+    WATCHVER="3"
+    WATCHLINE='@@@url@@@/ (?:.*)/'$PKG'-([\.\d]+).tar.gz debian uupdate'
+    helperWatch siteWebNonNative 1.0 0.0
+    COMMAND="$COMMANDOLD"
+}
 ## Debian version is 0.19990101 for future proof while upstream is 19990101
 #testWatch3WebNonNativeLarge() {
 #    PKG=foo
 #    WATCHVER="3"
-#    WATCHLINE='opts=" dversionmangle = s/0\.(.*)/$1/ , oversionmangle = s/(.*)/0.$1/" @@@url@@@  (?:.*)/'$PKG'-([\.\d]+).tar.gz debian uupdate'
+#    WATCHLINE='opts=" dversionmangle = s/0\.(.*)/$1/ , \
+#	oversionmangle = s/(.*)/0.$1/" \
+#	@@@url@@@  (?:.*)/'$PKG'-([\.\d]+).tar.gz debian uupdate'
 #    helperWatch siteWebNonNativeLarge 20000101 20010101 0.
 #}
 #
@@ -409,8 +420,10 @@ testWatch3WebNonNativeDlUversion() {
 #testWatch3XmlNonNative() {
 #    PKG=foo
 #    WATCHVER="3"
-#    WATCHLINE='opts="pagemangle=s%<Key>([^<]*)</Key>%<Key><a href="$1">$1</a></Key>%g" @@@url@@@/ (?:.*)/'$PKG'-([\d\.]+).tar.gz debian uupdate'
+#    WATCHLINE='opts="pagemangle = \
+#	s%<Key>([^<]*)</Key>%<Key><a href=\"$1\">$1</a></Key>%g" \
+#	@@@url@@@/ (?:.*)/'$PKG'-([\d\.]+).tar.gz debian uupdate'
 #    helperWatch siteXmlNonNative 1.0 2.0
 #}
-#
+
 . shunit2

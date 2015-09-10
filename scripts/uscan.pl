@@ -121,6 +121,11 @@ Options:
                    Specify the version which the upstream release must
                    match in order to be considered, rather than using the
                    release with the highest version
+    --download-debversion VERSION
+		   Specify the Debian package version to download the
+		   corresponding upstream release version.  The
+		   dversionmangle and uversionmangle rules are
+		   considered.
     --download-current-version
                    Download the currently packaged version
     --package PACKAGE
@@ -286,7 +291,7 @@ my ($opt_h, $opt_v, $opt_destdir, $opt_download, $opt_force_download,
     $opt_repack_compression, $opt_exclusion, $opt_copyright_file);
 my ($opt_verbose, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
-my $opt_download_version;
+my ($opt_download_version, $opt_download_debversion);
 my $opt_user_agent;
 my $opt_download_current_version;
 
@@ -295,6 +300,7 @@ GetOptions("help" => \$opt_h,
 	   "destdir=s" => \$opt_destdir,
 	   "download!" => \$opt_download,
 	   "download-version=s" => \$opt_download_version,
+	   "download-debversion=s" => \$opt_download_debversion,
 	   "force-download" => \$opt_force_download,
 	   "report" => sub { $opt_download = 0; },
 	   "report-status" => sub { $opt_download = 0; $opt_report = 1; },
@@ -914,7 +920,6 @@ sub process_watchline ($$$$$$)
 	$basedir =~ s%^\w+://[^/]+/%/%;
 	$pattern = "(?:(?:$site)?" . quotemeta($basedir) . ")?$filepattern";
     }
-
     if (! defined $lastversion or $lastversion eq 'debian') {
 	if (defined $pkg_version) {
 	    $lastversion=$pkg_version;
@@ -922,6 +927,14 @@ sub process_watchline ($$$$$$)
 	    uscan_warn "$progname warning: Unable to determine current version\n  in $watchfile, skipping:\n  $line\n";
 	    return 1;
 	}
+    }
+    if (defined $opt_download_debversion) {
+	$lastversion = $opt_download_debversion;
+	$lastversion =~ s/-[^-]+$//;  # revision
+	$lastversion =~ s/^\d+://;    # epoch
+	print STDERR "$progname debug: specified debversion to download: $lastversion\n" if $debug;
+    } else {
+	print STDERR "$progname debug: last pristine tarball version: $lastversion\n" if $debug;
     }
     # And mangle it if requested
     my $mangled_lastversion;
@@ -943,6 +956,10 @@ sub process_watchline ($$$$$$)
 	$force_download = 1;
 	$badversion = 1;
 	print STDERR "$progname debug: Force to download the specified version: $download_version\n" if $debug;
+    } elsif (defined $opt_download_debversion) {
+	$download_version = $mangled_lastversion;
+	$force_download = 1;
+	print STDERR "$progname debug: Force to download the specified debversion (dversionmangled): $download_version\n" if $debug;
     } elsif($opt_download_current_version) {
 	$download_version = $mangled_lastversion;
 	$force_download = 1;
