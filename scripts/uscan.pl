@@ -1517,9 +1517,7 @@ EOF
 	      to_string => \$mk_origtargz_out,
 	      wait_child => 1);
 	chomp($mk_origtargz_out);
-	$path = $1 if $mk_origtargz_out =~ /Successfully .* (?:to|as) ([^,]+)(?:,.*)?\.$/;
-	$newversion = $newversion . $options{'repacksuffix'}
-		if $mk_origtargz_out =~ /Successfully .* adding suffix\.$/;
+	$path = $1 if $mk_origtargz_out =~ /Successfully .* (?:to|as) ([^,]+)\.$/;
 	$path = $1 if $mk_origtargz_out =~ /Leaving (.*) where it is/;
 	$target = basename($path);
     }

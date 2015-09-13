@@ -418,7 +418,7 @@ testSuffix() {
 	makeDebianDir
 	makeDebianCopyright
 	run_mk_origtargz foo "$expected_stderr_after_removal" \
-		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1+dfsg1.orig.tar.gz, deleting 19 files from it and adding suffix." \
+		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1+dfsg1.orig.tar.gz, deleting 19 files from it." \
 		 ../foo-0.1.tar.gz --repack-suffix +dfsg1
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1+dfsg1.orig.tar.gz ]"
 	assertType application/gzip $TMPDIR/foo_0.1+dfsg1.orig.tar.gz
@@ -430,7 +430,7 @@ testSuffixXZ() {
 	makeDebianDir
 	makeDebianCopyright
 	run_mk_origtargz foo "$expected_stderr_after_removal" \
-		"Successfully repacked ../foo-0.1.tar.xz as ../foo_0.1+dfsg1.orig.tar.xz, deleting 19 files from it and adding suffix." \
+		"Successfully repacked ../foo-0.1.tar.xz as ../foo_0.1+dfsg1.orig.tar.xz, deleting 19 files from it." \
 		 ../foo-0.1.tar.xz --repack-suffix +dfsg1
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1+dfsg1.orig.tar.xz ]"
 	assertType application/xz $TMPDIR/foo_0.1+dfsg1.orig.tar.xz
@@ -442,7 +442,7 @@ testSuffixZip() {
 	makeDebianDir
 	makeDebianCopyright
 	run_mk_origtargz foo "$expected_stderr_after_removal" \
-		"Successfully repacked ../foo-0.1.zip as ../foo_0.1+dfsg1.orig.tar.xz, deleting 19 files from it and adding suffix." \
+		"Successfully repacked ../foo-0.1.zip as ../foo_0.1+dfsg1.orig.tar.xz, deleting 19 files from it." \
 		 ../foo-0.1.zip --compression xz --repack-suffix +dfsg1
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1+dfsg1.orig.tar.xz ]"
 	assertType application/xz $TMPDIR/foo_0.1+dfsg1.orig.tar.xz

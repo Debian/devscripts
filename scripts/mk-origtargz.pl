@@ -531,9 +531,7 @@ if ($same_name) {
     }
 }
 
-if ($deletecount and $suffix) {
-    print ", deleting ${deletecount} files from it and adding suffix";
-} elsif ($deletecount) {
+if ($deletecount) {
     print ", deleting ${deletecount} files from it";
 }
 if ($zipfile_deleted) {
