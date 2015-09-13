@@ -167,7 +167,7 @@ END
     ( cd $TMPDIR/repo ;
       zip -q -r $PKG-1.zip * )
 
-    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMANDDEHS --dehs --repack --compression=$to_comp) )
+    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMANDDEHS --repack --compression=$to_comp) )
     assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
 
     TARBALL=${PKG}_1.orig.tar.$to_comp
@@ -215,6 +215,10 @@ Files-Excluded: exclude-this
  */js/jquery.js
  ;?echo?baz;?#
 END
+    if [ -n "$SRCFORMAT" ]; then
+	mkdir -p $PKG/debian/source
+	echo "$SRCFORMAT" > $PKG/debian/source/format
+    fi
 
     mkdir -p repo
     touch repo/include-this
@@ -258,6 +262,7 @@ testFileExclusion() {
       cd $TMPDIR
       OPTS="opts=repacksuffix=+dfsg1,dversionmangle=s/\+dfsg\d*$// "
       SCRIPT="uupdate"
+      SRCFORMAT="3.0 (quilt)"
       helperCreateRepo
       cd repo
       tar cfz $PKG-1.tar.gz * .hidden )
@@ -333,6 +338,7 @@ testFileExclusionZipToTar() {
 
     (
       cd $TMPDIR
+      SRCFORMAT="3.0 (quilt)"
       helperCreateRepo
       cat <<END > $PKG/debian/watch
 version=3
