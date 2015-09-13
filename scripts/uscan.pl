@@ -1547,30 +1547,20 @@ EOF
 	if ($action =~ /^uupdate(\s|$)/) {
 	    push @cmd, "--no-symlink";
 	}
-	if ($verbose) {
-	    push @cmd, "--verbose";
-	}
 
 	if ($watch_version > 1) {
 	    push @cmd, "--upstream-version", $newversion, $path;
 	} else {
 	    push @cmd, $path, $newversion;
 	}
-	my $msg;
 	my $actioncmd = join(" ", @cmd);
 	print "-- Executing user specified script\n     $actioncmd\n" if $verbose;
 	if ($dehs) {
-	    spawn(exec => \@cmd,
-		error_to_string => \$msg,
-		wait_child => 1);
-	    $msg = $msg . 
-		"Executing user specified script: $actioncmd; output:\n";
+	    my $msg = "Executing user specified script: $actioncmd; output:\n";
+	    $msg .= `$actioncmd 2>&1`;
 	    dehs_msg($msg);
 	} else {
-	    spawn(exec => \@cmd,
-		error_to_string => \$msg,
-		wait_child => 1);
-	    print "$msg\n" if $verbose;
+	    system(@cmd);
 	}
     }
 
