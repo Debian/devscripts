@@ -1544,8 +1544,11 @@ EOF
 	my @cmd = shellwords($action);
 
 	# Any symlink requests are already handled by uscan
-	if ($action =~ /^uupdate(\s|$)/) {
+	if ($cmd[0] eq "uupdate") {
 	    push @cmd, "--no-symlink";
+	    if ($verbose) {
+		push @cmd, "--verbose";
+	    }
 	}
 
 	if ($watch_version > 1) {
