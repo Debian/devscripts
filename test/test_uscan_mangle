@@ -375,7 +375,10 @@ testWatch3WebNonNativeR() {
 testWatch3PrWebNonNative() {
     PKG=foo
     WATCHVER="3"
-    WATCHLINE='opts="downloadurlmangle=s%boo/xxx%foo/ooo%;s%boo-%foo-%,filenamemangle=s%.*boo-(.*)%foo-$1% " @@@url@@@/ (?:.*)/boo-([\d\.]+).tar.gz debian uupdate'
+    WATCHLINE='opts="downloadurlmangle = s%boo/xxx%foo/ooo% ; s%boo-%foo-%, \
+                     filenamemangle    = s%.*boo-(.*)%foo-$1% " \
+    @@@url@@@/ (?:.*)/boo-([\d\.]+).tar.gz \
+    debian uupdate'
     helperWatch sitePrWebNonNative 1.0 2.0
 }
 

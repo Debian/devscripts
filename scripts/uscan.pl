@@ -808,33 +808,39 @@ sub process_watchline ($$$$$$)
 
 	    my @opts = split /,/, $opts;
 	    foreach my $opt (@opts) {
-		if ($opt eq 'pasv' or $opt eq 'passive') {
+		if ($opt =~ /^\s*pasv\s*$/ or $opt =~ /^\s*passive\s*$/) {
 		    $options{'pasv'}=1;
 		}
-		elsif ($opt eq 'active' or $opt eq 'nopasv'
-		       or $opt eq 'nopassive') {
+		elsif ($opt =~ /^\s*active\s*$/ or $opt =~ /^\s*nopasv\s*$/
+		       or $opt =~ /^s*nopassive\s*$/) {
 		    $options{'pasv'}=0;
 		}
-		elsif ($opt =~ /^repacksuffix\s*=\s*(.+)/) {
+		elsif ($opt =~ /^\s*repacksuffix\s*=\s*(.+?)\s*$/) {
 		    $options{'repacksuffix'} = $1;
 		}
-		elsif ($opt =~ /^uversionmangle\s*=\s*(.+)/) {
+		elsif ($opt =~ /^\s*uversionmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'uversionmangle'}} = split /;/, $1;
 		}
-		elsif ($opt =~ /^dversionmangle\s*=\s*(.+)/) {
+		elsif ($opt =~ /^\s*dversionmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'dversionmangle'}} = split /;/, $1;
 		}
-		elsif ($opt =~ /^versionmangle\s*=\s*(.+)/) {
+		elsif ($opt =~ /^\s*versionmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'uversionmangle'}} = split /;/, $1;
 		    @{$options{'dversionmangle'}} = split /;/, $1;
 		}
-		elsif ($opt =~ /^filenamemangle\s*=\s*(.+)/) {
+		elsif ($opt =~ /^\s*pagemangle\s*=\s*(.+?)\s*$/) {
+		    @{$options{'pagemangle'}} = split /;/, $1;
+		}
+		elsif ($opt =~ /^\s*filenamemangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'filenamemangle'}} = split /;/, $1;
 		}
-		elsif ($opt =~ /^downloadurlmangle\s*=\s*(.+)/) {
+		elsif ($opt =~ /^\s*oversionmangle\s*=\s*(.+?)\s*$/) {
+		    @{$options{'oversionmangle'}} = split /;/, $1;
+		}
+		elsif ($opt =~ /^\s*downloadurlmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'downloadurlmangle'}} = split /;/, $1;
 		}
-		elsif ($opt =~ /^pgpsigurlmangle\s*=\s*(.+)/) {
+		elsif ($opt =~ /^\s*pgpsigurlmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'pgpsigurlmangle'}} = split /;/, $1;
 		}
 		else {
@@ -937,6 +943,7 @@ sub process_watchline ($$$$$$)
 	print STDERR "$progname debug: last pristine tarball version: $lastversion\n" if $debug;
     }
     # And mangle it if requested
+    print STDERR "$progname debug: last pristine tarball version: $lastversion\n" if $debug;
     my $mangled_lastversion;
     $mangled_lastversion = $lastversion;
     foreach my $pat (@{$options{'dversionmangle'}}) {
@@ -997,8 +1004,7 @@ sub process_watchline ($$$$$$)
 
 	@redirections = @{$user_agent->get_redirections};
 
-	print STDERR "$progname debug: redirections: @redirections\n"
-	    if $debug;
+	print STDERR "$progname debug: redirections: @redirections\n" if ($debug and  @redirections);
 
 	foreach my $_redir (@redirections) {
 	    my $base_dir = $_redir;
