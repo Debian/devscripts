@@ -741,6 +741,33 @@ else
 	DIFF="../${PACKAGE}_$SVERSION.debian.tar.xz"
 	DIFFTYPE=tar
 	DIFFUNPACK="tar --xz -xf"
+    else
+	# non-native package and missing diff.gz/debian.tar.xz.
+	cd $OPWD
+	if [ ! -d debian ]; then
+	    echo "$PROGNAME: None of *.diff.gz, *.debian.tar.xz, or debian/* found. failed;" >&2
+	    echo "aborting..." >&2
+	    exit 1
+	fi
+	if [ -d debian/source -a -r debian/source/format ]; then
+	    if [ "`cat debian/source/format`" = "3.0 (quilt)" ]; then
+		# This is convenience for VCS users.
+		echo "$PROGNAME: debian/source/format is \"3.0 (quilt)\"." >&2
+		echo "$PROGNAME: Auto-generating ${PACKAGE}_$SVERSION.debian.tar.xz" >&2
+		tar --xz -cf ../${PACKAGE}_$SVERSION.debian.tar.xz debian
+		DIFF="../${PACKAGE}_$SVERSION.debian.tar.xz"
+		DIFFTYPE=tar
+		DIFFUNPACK="tar --xz -xf"
+	    else
+		echo "$PROGNAME: debian/source/format isn't \"3.0 (quilt)\"." >&2
+		echo "$PROGNAME: Skip auto-generating ${PACKAGE}_$SVERSION.debian.tar.xz" >&2
+	    fi
+	else
+	    echo "$PROGNAME: debian/source/format is missing." >&2
+	    echo "$PROGNAME: Skip auto-generating ${PACKAGE}_$SVERSION.debian.tar.xz" >&2
+	fi
+	# return back to upstream source
+	cd ../$PACKAGE-$SNEW_VERSION
     fi
 
     if [ "$DIFFTYPE" = diff ]; then
