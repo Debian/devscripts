@@ -409,16 +409,17 @@ testWatch3WebNonNativeDlDversion() {
     helperWatch siteWebNonNative 1.0 0.0
     COMMAND="$COMMANDOLD"
 }
-## Debian version is 0.19990101 for future proof while upstream is 19990101
-#testWatch3WebNonNativeLarge() {
-#    PKG=foo
-#    WATCHVER="3"
-#    WATCHLINE='opts=" dversionmangle = s/0\.(.*)/$1/ , \
-#	oversionmangle = s/(.*)/0.$1/" \
-#	@@@url@@@  (?:.*)/'$PKG'-([\.\d]+).tar.gz debian uupdate'
-#    helperWatch siteWebNonNativeLarge 20000101 20010101 0.
-#}
-#
+
+# Debian version is 0.19990101 for future proof while upstream is 19990101
+testWatch3WebNonNativeLarge() {
+    PKG=foo
+    WATCHVER="3"
+    WATCHLINE='opts=" dversionmangle = s/0\.(.*)/$1/ , \
+	oversionmangle = s/(.*)/0.$1/" \
+	@@@url@@@  (?:.*)/'$PKG'-([\.\d]+).tar.gz debian uupdate'
+    helperWatch siteWebNonNativeLarge 20000101 20010101 0.
+}
+
 # test for pagemangle
 testWatch3XmlNonNative() {
     PKG=foo
