@@ -55,7 +55,7 @@ DEBUGLSLR=":"
 cleanup(){
     kill -9 $(cat $TMPDIR/$REPOPATH/pid)
     rm -rf $TMPDIR
-    $DEBUGECHO " ***** ================================================ *****"
+    echo ""
 }
 
 spawnHttpServer(){
@@ -174,7 +174,8 @@ helperWatch() {
     if [ -n "$PREFIX" ]; then
 	mv $TMPDIR/${PKG}-${VEROLD} $TMPDIR/${PKG}-${PREFIX}${VEROLD}
     fi
-    cd $TMPDIR/${PKG}-${PREFIX}${VEROLD}
+    mv $TMPDIR/${PKG}-${PREFIX}${VEROLD} $TMPDIR/${PKG}
+    cd $TMPDIR/${PKG}
     if [ ! -d debian ]; then
 	makeDebianDir $PKG ${PREFIX}${VEROLD}-$SUFFIX
     fi
@@ -378,6 +379,24 @@ testWatch3PrWebNonNative() {
     helperWatch sitePrWebNonNative 1.0 2.0
 }
 
+testWatch3WebNonNativeDlCurrent() {
+    PKG=foo
+    COMMANDOLD="$COMMAND"
+    COMMAND="$COMMAND --download-current-version"
+    WATCHVER="3"
+    WATCHLINE='@@@url@@@/ (?:.*)/'$PKG'-([\.\d]+).tar.gz debian uupdate'
+    helperWatch siteWebNonNative 1.0 1.0
+    COMMAND="$COMMANDOLD"
+}
+testWatch3WebNonNativeDlUversion() {
+    PKG=foo
+    COMMANDOLD="$COMMAND"
+    COMMAND="$COMMAND --download-version 0.0"
+    WATCHVER="3"
+    WATCHLINE='@@@url@@@/ (?:.*)/'$PKG'-([\.\d]+).tar.gz debian uupdate'
+    helperWatch siteWebNonNative 1.0 0.0
+    COMMAND="$COMMANDOLD"
+}
 ## Debian version is 0.19990101 for future proof while upstream is 19990101
 #testWatch3WebNonNativeLarge() {
 #    PKG=foo

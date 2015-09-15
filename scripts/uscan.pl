@@ -177,6 +177,7 @@ my $destdir = "..";
 my $download = 1;
 my $download_version;
 my $force_download = 0;
+my $badversion = 0;
 my $report = 0; # report even on up-to-date packages?
 my $repack = 0; # repack .tar.bz2, .tar.lzma, .tar.xz or .zip to .tar.gz
 my $default_compression = 'gzip' ;
@@ -361,7 +362,6 @@ $dehs = $opt_dehs if defined $opt_dehs;
 $exclusion = $opt_exclusion if defined $opt_exclusion;
 $copyright_file = $opt_copyright_file if defined $opt_copyright_file;
 $user_agent_string = $opt_user_agent if defined $opt_user_agent;
-$download_version = $opt_download_version if defined $opt_download_version;
 
 if (defined $opt_level) {
     if ($opt_level =~ /^[012]$/) { $check_dirname_level = $opt_level; }
@@ -938,9 +938,19 @@ sub process_watchline ($$$$$$)
 	}
     }
     print STDERR "$progname debug: dversionmangled last version: $mangled_lastversion\n" if $debug;
-    if($opt_download_current_version) {
+    if($opt_download_version) {
+	$download_version = $opt_download_version;
+	$force_download = 1;
+	$badversion = 1;
+	print STDERR "$progname debug: Force to download the specified version: $download_version\n" if $debug;
+    } elsif($opt_download_current_version) {
 	$download_version = $mangled_lastversion;
 	$force_download = 1;
+	$badversion = 1;
+	print STDERR "$progname debug: Force to download the current version: $download_version\n" if $debug;
+    } else {
+	# $download_version = undef;
+	print STDERR "$progname debug: Last pristine tarball version (dversionmangled): $mangled_lastversion\n" if $debug;
     }
 
     # Check all's OK
@@ -1066,6 +1076,7 @@ sub process_watchline ($$$$$$)
 		my @vhrefs = grep { $$_[0] eq $download_version } @hrefs;
 		if (@vhrefs) {
 		    ($newversion, $newfile) = @{$vhrefs[0]};
+		    print STDERR "$progname debug: Found remote URL matiching the requested version.\n" if $debug;
 		} else {
 		    uscan_warn "$progname warning: In $watchfile no matching hrefs for version $download_version"
 			. " in watch line\n  $line\n";
@@ -1077,6 +1088,7 @@ sub process_watchline ($$$$$$)
 	    }
 	} else {
 	    uscan_warn "$progname warning: In $watchfile,\n  no matching hrefs for watch line\n  $line\n";
+	    print STDERR "$progname debug: Picked URL matiching the newest version.\n" if $debug;
 	    return 1;
 	}
     }
@@ -1562,6 +1574,9 @@ EOF
 	    push @cmd, "--no-symlink";
 	    if ($verbose) {
 		push @cmd, "--verbose";
+	    }
+	    if ($badversion) {
+		push @cmd, "-b";
 	    }
 	}
 

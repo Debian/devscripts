@@ -46,6 +46,7 @@ COMMANDDEHS="$COMMAND --dehs"
 cleanup(){
     kill -9 $(cat $TMPDIR/repo/pid)
     rm -rf $TMPDIR
+    echo ""
 }
 
 spawnHttpServer(){

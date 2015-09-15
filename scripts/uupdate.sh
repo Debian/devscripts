@@ -51,6 +51,9 @@ For a patch file:
 Options are:
    --upstream-version <version>, -v <version>
                       specify version number of upstream package
+   --force-bad-version, -b
+                      Force a version number to be less than the current one
+                      (e.g., when backporting).
    --rootcmd <gain-root-command>, -r <gain-root-command>
                       which command to be used to become root
                       for package-building
@@ -100,6 +103,7 @@ mustsetvar () {
 MPATTERN='^(?:[a-zA-Z][a-zA-Z0-9]*(?:-|_|\.))+(\d+\.(?:\d+\.)*\d+)$'
 
 STATUS=0
+BADVERSION=""
 
 # Boilerplate: set config variables
 DEFAULT_UUPDATE_ROOTCMD=
@@ -171,6 +175,7 @@ fi
 
 TEMP=$(getopt -s bash -o v:p:r:ubs \
         --long upstream-version:,patch:,rootcmd: \
+        --long force-bad-version \
 	--long pristine,no-pristine,nopristine \
 	--long symlink,no-symlink,nosymlink \
 	--long no-conf,noconf \
@@ -182,6 +187,8 @@ eval set -- $TEMP
 # Process Parameters
 while [ "$1" ]; do
     case $1 in
+    --force-bad-version|-b)
+	BADVERSION="-b" ;;
     --upstream-version|-v)
 	shift; NEW_VERSION="$1" ;;
     --patch|-p)
@@ -357,7 +364,7 @@ if [ "$PATCH" ]; then
     fi
 
     # Sanity check
-    if dpkg --compare-versions "$NEW_VERSION-$SUFFIX" le "$VERSION"; then
+    if [ -z "$BADVERSION" ] && dpkg --compare-versions "$NEW_VERSION-$SUFFIX" le "$VERSION"; then
 	echo "$PROGNAME: new version $NEW_VERSION-$SUFFIX <= current version $VERSION; aborting!" >&2
 	exit 1
     fi
@@ -480,7 +487,7 @@ if [ "$PATCH" ]; then
 	    STATUS=1
 	fi
 	chmod a+x debian/rules
-	debchange -v "$NEW_VERSION-$SUFFIX" "New upstream release"
+	debchange $BADVERSION -v "$NEW_VERSION-$SUFFIX" "New upstream release"
 	echo "Remember: Your current directory is the OLD sourcearchive!"
 	echo "Do a \"cd ../$PACKAGE-$SNEW_VERSION\" to see the new package"
 	exit
@@ -569,7 +576,7 @@ else
     fi
 
     # Sanity check
-    if dpkg --compare-versions "$NEW_VERSION-$SUFFIX" le "$VERSION"; then
+    if [ -z "$BADVERSION" ] && dpkg --compare-versions "$NEW_VERSION-$SUFFIX" le "$VERSION"; then
 	echo "$PROGNAME: new version $NEW_VERSION-$SUFFIX <= current version $VERSION; aborting!" >&2
 	exit 1
     fi
@@ -889,7 +896,7 @@ else
     if [ -n "$UUPDATE_VERBOSE" ]; then
 	echo "-- New upstream release=$NEW_VERSION-$SUFFIX" >&2
     fi
-    debchange -v "$NEW_VERSION-$SUFFIX" "New upstream release"
+    debchange $BADVERSION -v "$NEW_VERSION-$SUFFIX" "New upstream release"
     echo "Remember: Your current directory is the OLD sourcearchive!"
     echo "Do a \"cd ../$PACKAGE-$SNEW_VERSION\" to see the new package"
 fi
