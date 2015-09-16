@@ -828,14 +828,8 @@ sub process_watchline ($$$$$$)
 		    @{$options{'uversionmangle'}} = split /;/, $1;
 		    @{$options{'dversionmangle'}} = split /;/, $1;
 		}
-		elsif ($opt =~ /^\s*pagemangle\s*=\s*(.+?)\s*$/) {
-		    @{$options{'pagemangle'}} = split /;/, $1;
-		}
 		elsif ($opt =~ /^\s*filenamemangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'filenamemangle'}} = split /;/, $1;
-		}
-		elsif ($opt =~ /^\s*oversionmangle\s*=\s*(.+?)\s*$/) {
-		    @{$options{'oversionmangle'}} = split /;/, $1;
 		}
 		elsif ($opt =~ /^\s*downloadurlmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'downloadurlmangle'}} = split /;/, $1;
