@@ -767,9 +767,6 @@ if ($command_version eq 'dpkg') {
     my $parallel='';
     my $noclean=0;
     my $usepause=0;
-    my $warnable_error=0;  # OK, dpkg-buildpackage defines this but doesn't
-                           # use it.  We'll keep it around just in case it
-                           # does one day...
     my @passopts=();
 
     # extra dpkg-buildpackage variables not initialised there
@@ -830,10 +827,6 @@ if ($command_version eq 'dpkg') {
 	    push(@dpkg_opts, $_), next;
 	/^-C(.*)/ and $desc=$1, push(@dpkg_opts, $_), next;
 	/^-j(auto|\d*)$/ and $parallel=($1 || '-1'), push(@dpkg_opts, $_), next;
-	$_ eq '-W' and $warnable_error=1, push(@passopts, $_),
-	    push(@dpkg_opts, $_), next;
-	$_ eq '-E' and $warnable_error=0, push(@passopts, $_),
-	    push(@dpkg_opts, $_), next;
 	# dpkg-cross specific option
 	if (/^-M/ and $dpkg_cross) { push(@dpkg_opts, $_), next; }
 	if ($emulate_dpkgbp) {
@@ -882,10 +875,6 @@ if ($command_version eq 'dpkg') {
 	    push(@dpkg_opts, $_), next;
 	/^-C(.*)/ and $desc=$1, push(@dpkg_opts, $_), next;
 	/^-j(auto|\d*)$/ and $parallel=($1 || '-1'), push(@dpkg_opts, $_), next;
-	$_ eq '-W' and $warnable_error=1, push(@passopts, $_),
-	    push(@dpkg_opts, $_), next;
-	$_ eq '-E' and $warnable_error=0, push(@passopts, $_),
-	    push(@dpkg_opts, $_), next;
 	# dpkg-cross specific option
 	if (/^-M/ and $dpkg_cross) { push(@dpkg_opts, $_), next; }
 
