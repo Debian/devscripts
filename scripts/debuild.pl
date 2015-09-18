@@ -714,37 +714,17 @@ else {
 if ($command_version eq 'dpkg') {
     # We're going to emulate dpkg-buildpackage and possibly lintian.
     # This will allow us to run hooks.
-    # However, if dpkg-cross is installed (as evidenced by the presence
-    # of /usr/bin/dpkg-cross), then we call the "real" dpkg-buildpackage,
-    # which is actually dpkg-cross's version.  We lose the facility for
-    # hooks in this case, but we're not going to emulate dpkg-cross as well!
 
-    my $dpkg_cross = (-x '/usr/bin/dpkg-cross' ? 1 : 0);
-    if ($dpkg_cross) {
-	# check hooks
-	my @skip_hooks = ();
-	for my $hookname (qw(clean dpkg-source build binary dpkg-genchanges
-			     final-clean)) {
-	    if ($hook{$hookname}) { push @skip_hooks, $hookname; }
-	}
-	if (@skip_hooks) {
-	    warn "$progname: dpkg-cross appears to be present on your system, and you have\nset up some hooks which will not be run (" .
-		join(", ", @skip_hooks) . ");\ndo you wish to continue? (y/n) ";
-	    my $ans = <STDIN>;
-	    exit 1 unless $ans =~ /^y/i;
-	}
-    } else {
-	# check hooks
-	my @skip_hooks = ();
-	for my $hookname (qw(clean dpkg-source build binary dpkg-genchanges
-			     final-clean)) {
-	    if ($hook{$hookname}) { push @skip_hooks, $hookname; }
-	}
-	if (@skip_hooks) {
-	    $emulate_dpkgbp = 1;
-	    warn "$progname: emulating dpkg-buildpackage as the following hooks were defined:\n"
-		. "  " . join(", ", @skip_hooks) . "\n\n";
-	}
+    # check hooks
+    my @skip_hooks = ();
+    for my $hookname (qw(clean dpkg-source build binary dpkg-genchanges
+			 final-clean)) {
+	if ($hook{$hookname}) { push @skip_hooks, $hookname; }
+    }
+    if (@skip_hooks) {
+	$emulate_dpkgbp = 1;
+	warn "$progname: emulating dpkg-buildpackage as the following hooks were defined:\n"
+	    . "  " . join(", ", @skip_hooks) . "\n\n";
     }
 
     # Our first task is to parse the command line options.
@@ -784,7 +764,7 @@ if ($command_version eq 'dpkg') {
 
     # and one for us
     my @debsign_opts = ();
-    # and one for dpkg-cross if needed
+    # and one for dpkg-buildpackage if needed
     my @dpkg_opts = qw(-us -uc);
 
     # Parse dpkg-buildpackage options
@@ -827,8 +807,6 @@ if ($command_version eq 'dpkg') {
 	    push(@dpkg_opts, $_), next;
 	/^-C(.*)/ and $desc=$1, push(@dpkg_opts, $_), next;
 	/^-j(auto|\d*)$/ and $parallel=($1 || '-1'), push(@dpkg_opts, $_), next;
-	# dpkg-cross specific option
-	if (/^-M/ and $dpkg_cross) { push(@dpkg_opts, $_), next; }
 	if ($emulate_dpkgbp) {
 	    fatal "unknown dpkg-buildpackage option in configuration file: $_";
 	} else {
@@ -875,8 +853,6 @@ if ($command_version eq 'dpkg') {
 	    push(@dpkg_opts, $_), next;
 	/^-C(.*)/ and $desc=$1, push(@dpkg_opts, $_), next;
 	/^-j(auto|\d*)$/ and $parallel=($1 || '-1'), push(@dpkg_opts, $_), next;
-	# dpkg-cross specific option
-	if (/^-M/ and $dpkg_cross) { push(@dpkg_opts, $_), next; }
 
 	# these non-dpkg-buildpackage options make us stop
 	if ($_ eq '-L' or $_ eq '--lintian' or /^--lintian-opts$/) {
@@ -1012,32 +988,13 @@ if ($command_version eq 'dpkg') {
 
     run_hook('dpkg-buildpackage', 1);
 
-    if ($dpkg_cross) {
-	unshift @dpkg_opts, ($checkbuilddep ? "-D" : "-d");
-	unshift @dpkg_opts, "-r$root_command" if $root_command;
-	system_withecho('dpkg-buildpackage', @dpkg_opts);
-
-	chdir '..' or fatal "can't chdir: $!";
-	# We're using dpkg-cross, we could now have foo_1.2_i386+sparc.changes
-	# so can't just set $changes = "${pkg}_${sversion}_${arch}.changes"
-	my @changes = glob("${pkg}_${sversion}_*.changes");
-	if (@changes == 0) {
-	    fatal "couldn't find a .changes file!";
-	} elsif (@changes == 1) {
-	    $changes = $changes[0];
-	} else {
-	    # put newest first
-	    @changes = sort { -M $a <=> -M $b } @changes;
-	    $changes = $changes[0];
-	}
-    } elsif ($emulate_dpkgbp == 0) {
+    if (!$emulate_dpkgbp) {
 	unshift @dpkg_opts, ($checkbuilddep ? "-D" : "-d");
 	unshift @dpkg_opts, "-r$root_command" if $root_command;
 	system_withecho('dpkg-buildpackage', @dpkg_opts);
 
 	chdir '..' or fatal "can't chdir: $!";
     } else {
-	# Not using dpkg-cross, so we emulate dpkg-buildpackage ourselves
 	# We emulate the version found in dpkg-buildpackage-snapshot in
 	# the source package with the addition of -j and *FLAGS(_APPEND)
 	# support

@@ -210,12 +210,6 @@ something like: "if [ %a \-eq 1 ]; then ...; fi".
 \fBPlease take care with hooks\fR, as misuse of them can lead to
 packages which FTBFS (fail to build from source).  They can be useful
 for taking snapshots of things or the like.
-.PP
-Finally, only \fBdpkg-buildpackage-hook\fR and the hooks from \fBlintian-hook\fR
-onwards can be used if \fBdpkg-cross\fR is installed.  (This is
-because internally, \fBdebuild\fR reimplements
-\fBdpkg\-buildpackage\fR, but it does not attempt to reimplement the
-\fBdpkg\-cross\fR replacement of this script.)
 .SH "OPTIONS"
 For details, see above.
 .TP
