@@ -614,7 +614,7 @@ foreach my $var (('DBUS_SESSION_BUS_ADDRESS', 'DISPLAY', 'GNOME_KEYRING_SOCKET',
 unless ($preserve_env) {
     foreach my $var (keys %ENV) {
 	delete $ENV{$var} unless
-	    $save_vars{$var} or $var =~ /^(LC|DEB(SIGN)?)_[A-Z_]+$/
+	    $save_vars{$var} or $var =~ /^(LC|DEB)_[A-Z_]+$/
 	    or $var =~ /^(C(PP|XX)?|LD|F)FLAGS(_APPEND)?$/;
     }
 }

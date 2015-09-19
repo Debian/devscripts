@@ -86,11 +86,13 @@ PACKAGE-version.
 .SH ENVIRONMENT VARIABLES
 As environment variables can affect the building of a package, often
 unintentionally, \fBdebuild\fR sanitises the environment by removing
-all environment variables except for \fBTERM\fR, \fBHOME\fR, \fBLOGNAME\fR, \fBGNUPGHOME\fR,
-\fBPGPPATH\fR, \fBGPG_AGENT_INFO\fR, \fBDBUS_SESSION_BUS_ADDRESS\fR, \fBFAKEROOTKEY\fR, \fBDEB_\fI*\fR, the
-(\fBC\fR, \fBCPP\fR, \fBCXX\fR, \fBLD\fR and \fBF\fR)\fBFLAGS\fR variables and their \fB_APPEND\fR counterparts
-and the locale variables \fBLANG\fR and \fBLC_\fI*\fR.  \fBTERM\fR is set to `dumb' if it
-is unset, and \fBPATH\fR is set to "/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11".
+all environment variables except for \fBTERM\fR, \fBHOME\fR, \fBLOGNAME\fR,
+\fBGNUPGHOME\fR, \fBPGPPATH\fR, \fBGPG_AGENT_INFO\fR, \fBGPG_TTY\fR,
+\fBDBUS_SESSION_BUS_ADDRESS\fR, \fBFAKEROOTKEY\fR, \fBDEBEMAIL\fR,
+\fBDEB_\fI*\fR, the (\fBC\fR, \fBCPP\fR, \fBCXX\fR, \fBLD\fR and
+\fBF\fR)\fBFLAGS\fR variables and their \fB_APPEND\fR counterparts and the
+locale variables \fBLANG\fR and \fBLC_\fI*\fR.  \fBTERM\fR is set to `dumb'
+if it is unset, and \fBPATH\fR is set to "/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11".
 .PP
 If a particular environment variable is required to be passed through
 untouched to the build process, this may be specified by using a
