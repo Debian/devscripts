@@ -960,6 +960,7 @@ sub process_watchline ($$$$$$)
     } elsif (defined $opt_download_debversion) {
 	$download_version = $mangled_lastversion;
 	$force_download = 1;
+	$badversion = 1;
 	print STDERR "$progname debug: Force to download the specified debversion (dversionmangled): $download_version\n" if $debug;
     } elsif($opt_download_current_version) {
 	$download_version = $mangled_lastversion;
