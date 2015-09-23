@@ -1781,6 +1781,15 @@ EOF
 	$mangled_newversion = $1 if $target =~ m/[^_]+_(.+)\.orig\.tar\.(?:gz|bz2|lzma|xz)$/;
 	print STDERR "$progname debug: orig.tar.* tarball version (after mk-origtargz): $mangled_newversion\n" if $debug;
     }
+    if (! defined $uscanlog) {
+	$uscanlog = "../${pkg}_${mangled_newversion}.uscan.log";
+	open(USCANLOG, "> $uscanlog") or uscan_die "$progname: could not open $uscanlog for write: $!\n";
+	print USCANLOG "# package downloaded by uscan\n";
+    } else {
+	open(USCANLOG, ">> $uscanlog") or uscan_die "$progname: could not open $uscanlog for append: $!\n";
+    }
+    print USCANLOG "${newfile_base}\t${target}\n";
+    close USCANLOG or uscan_die "$progname: could not close $uscanlog: $!\n";
 
     if ($dehs) {
 	my $msg = "Successfully downloaded updated package $newfile_base\n";
