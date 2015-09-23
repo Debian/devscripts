@@ -828,6 +828,9 @@ sub process_watchline ($$$$$$)
 		    @{$options{'uversionmangle'}} = split /;/, $1;
 		    @{$options{'dversionmangle'}} = split /;/, $1;
 		}
+		elsif ($opt =~ /^\s*pagemangle\s*=\s*(.+?)\s*$/) {
+		    @{$options{'pagemangle'}} = split /;/, $1;
+		}
 		elsif ($opt =~ /^\s*filenamemangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'filenamemangle'}} = split /;/, $1;
 		}
@@ -1027,10 +1030,24 @@ sub process_watchline ($$$$$$)
 	print STDERR "$progname debug: received content:\n$content\n[End of received content]\n"
 	    if $debug;
 
+	# pagenmangle: should not abuse this slow operation
+	foreach my $pat (@{$options{'pagemangle'}}) {
+	    print STDERR "$progname debug: pagemangle rule $pat\n" if $debug;
+	    if (! safe_replace(\$content, $pat)) {
+		uscan_warn "$progname: In $watchfile, potentially"
+		  . " unsafe or malformed pagemangle"
+		  . " pattern:\n  '$pat'"
+		  . " found. Skipping watchline\n"
+		  . "  $line\n";
+		return 1;
+	    }
+	}
 	if ($content =~ m%^<[?]xml%i &&
-	    $content =~ m%xmlns="http://s3.amazonaws.com/doc/2006-03-01/"%) {
+	    $content =~ m%xmlns="http://s3.amazonaws.com/doc/2006-03-01/"% &&
+	    $content !~ m%<Key><a\s+href%) {
 	    # this is an S3 bucket listing.  Insert an 'a href' tag
 	    # into the content for each 'Key', so that it looks like html (LP: #798293)
+	    uscan_warn "*** Amazon special case code is deprecated***\nUse opts=pagemangle rule, instead\n";
 	    print STDERR "$progname debug: fixing s3 listing\n" if $debug;
 	    $content =~ s%<Key>([^<]*)</Key>%<Key><a href="$1">$1</a></Key>%g
 	}
@@ -1051,6 +1068,10 @@ sub process_watchline ($$$$$$)
 	    ($urlbase = $base) =~ s%/[^/]*$%/%;
 	}
 
+	print STDERR "$progname debug: pagemangled content:\n$content\n[End of pagemangled content]\n"
+	    if $debug;
+
+	# search hrefs in web page to obtain a list of uversionmangled version and matching download URL
 	print STDERR "$progname debug: matching pattern(s) @patterns\n" if $debug;
 	my @hrefs;
 	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/sgi) {
