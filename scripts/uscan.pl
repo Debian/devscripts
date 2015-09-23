@@ -50,7 +50,7 @@ BEGIN {
 }
 use Dpkg::Control::Hash;
 
-my $CURRENT_WATCHFILE_VERSION = 3;
+my $CURRENT_WATCHFILE_VERSION = 4;
 
 my $progname = basename($0);
 my $modified_conf_msg;
@@ -69,6 +69,7 @@ our $found = 0;
 
 sub process_watchline ($$$$$$);
 sub process_watchfile ($$$$);
+sub check_compression ($);
 sub recursive_regex_dir ($$$);
 sub newest_dir ($$$$$);
 sub dehs_msg ($);
@@ -200,6 +201,15 @@ my $pkg_report_header = '';
 my $timeout = 20;
 my $user_agent_string = 'Debian uscan ###VERSION###';
 my $exclusion = 1;
+my $origcount = 0;
+my @components = ();
+my $orig;
+my $repacksuffix_used = 0;
+my $uscanlog;
+my $common_newversion ; # undef initially (for MUT, version=same)
+my $common_mangled_newversion ; # undef initially (for MUT)
+my $previous_newversion ; # undef initially (for version=prev, sigmode=prev)
+my $previousfile_base ; # undef initially (for sigmode=prev)
 
 if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg = "  (no configuration files read)";
@@ -346,24 +356,8 @@ $timeout = $opt_timeout if defined $opt_timeout;
 $timeout = 20 unless defined $timeout and $timeout > 0;
 $symlink = $opt_symlink if defined $opt_symlink;
 $verbose = $opt_verbose if defined $opt_verbose;
-if (defined $opt_repack_compression) {
-    # be liberal in what you accept...
-    my %opt2comp = (
-	gz => 'gzip',
-	gzip => 'gzip',
-	bz2 => 'bzip2',
-	bzip2 => 'bzip2',
-	lzma => 'lzma',
-	xz => 'xz',
-    );
-
-    # Normalize compression methods to the names used by Dpkg::Compression
-    if (exists $opt2comp{$opt_repack_compression}) {
-	$repack_compression = $opt2comp{$opt_repack_compression};
-    } else {
-        uscan_die "$progname: invalid compression $opt_repack_compression given.\n";
-    }
-}
+$repack_compression = check_compression($opt_repack_compression)
+	if defined $opt_repack_compression;
 $dehs = $opt_dehs if defined $opt_dehs;
 $exclusion = $opt_exclusion if defined $opt_exclusion;
 $copyright_file = $opt_copyright_file if defined $opt_copyright_file;
@@ -607,12 +601,12 @@ for my $dir (@dirs) {
 
 uscan_warn "$progname: no watch file found\n" if (@debdirs == 0 and $report);
 
-# Was there a --uversion option?
+# Was there a --upstream-version option?
 if (defined $opt_uversion) {
     if (@debdirs == 1) {
 	$debdirs[0][3] = $opt_uversion;
     } else {
-	uscan_warn "$progname warning: ignoring --uversion as more than one debian/watch file found\n";
+	uscan_warn "$progname warning: ignoring --upstream-version as more than one debian/watch file found\n";
     }
 }
 
@@ -740,13 +734,22 @@ exit ($found ? 0 : 1);
 sub process_watchline ($$$$$$)
 {
     my ($line, $watch_version, $pkg_dir, $pkg, $pkg_version, $watchfile) = @_;
+    # $line		watch line string
+    # $watch_version	usually 4 (or 3)
+    # $pkg_dir		usually .
+    # $pkg		the source package name found in debian/changelog
+    # $pkg_version	the last source package version found in debian/changelog
+    # $watchfile	usually debian/watch
 
     my $origline = $line;
     my ($base, $site, $dir, $filepattern, $pattern, $lastversion, $action);
     my $basedir;
     my (@patterns, @sites, @redirections, @basedirs);
-    my %options = ();
-
+    my %options = (
+	'repack' => $repack,
+	'sigtype' => 'mangle',
+	'matchmode' => 'newer'
+	); # non-persistent variables
     my ($request, $response);
     my ($newfile, $newversion);
     my $style='new';
@@ -764,6 +767,7 @@ sub process_watchline ($$$$$$)
     $headers->header('Accept' => '*/*');
     %dehs_tags = ('package' => $pkg);
 
+    # Start parsing the watch line
     if ($watch_version == 1) {
 	($site, $dir, $filepattern, $lastversion, $action) = split ' ', $line, 5;
 
@@ -793,19 +797,37 @@ sub process_watchline ($$$$$$)
 	$base =~ m%^(\w+://[^/]+)%;
 	$site = $1;
 	$pattern = $filepattern;
+
+	# Check $filepattern is OK
+	if (not $filepattern or $filepattern !~ /\(.*\)/) {
+	    uscan_warn "$progname warning: Filename pattern missing version delimiters ()\n  in $watchfile, skipping:\n  $line\n";
+	    return 1;
+	}
     } else {
-	# version 2/3 watchfile
-	if ($line =~ s/^opt(?:ion)?s=//) {
+	# version 2/3/4 watchfile
+	if ($line =~ s/^opt(?:ion)?s\s*=\s*//) {
 	    my $opts;
-	    if ($line =~ s/^"(.*?)"\s+//) {
+	    if ($line =~ s/^"(.*?)"(?:\s+|$)//) {
 		$opts=$1;
-	    } elsif ($line =~ s/^(\S+)\s+//) {
+	    } elsif ($line =~ s/^([^"\s]\S*)(?:\s+|$)//) {
 		$opts=$1;
 	    } else {
 		uscan_warn "$progname warning: malformed opts=... in watchfile, skipping line:\n$origline\n";
 		return 1;
 	    }
-
+	    # $opts	string extracted from the argument of opts=
+	    print STDERR "$progname debug: opts: $opts\n" if $debug;
+	    # $line	watch line string without opts=... part
+	    print STDERR "$progname debug: line: $line\n" if $debug;
+	    # user-agent strings has ,;: in it so special handling
+	    if ($opts =~ /^\s*user-agent\s*=\s*(.+?)\s*$/ or
+		$opts =~ /^\s*useragent\s*=\s*(.+?)\s*$/) {
+		my $user_agent_string = $1;
+		$user_agent_string = $opt_user_agent if defined $opt_user_agent;
+		$user_agent->agent($user_agent_string);
+		print STDERR "$progname debug: User-agent: $user_agent_string\n" if $debug;
+		$opts='';
+	    }
 	    my @opts = split /,/, $opts;
 	    foreach my $opt (@opts) {
 		if ($opt =~ /^\s*pasv\s*$/ or $opt =~ /^\s*passive\s*$/) {
@@ -814,6 +836,23 @@ sub process_watchline ($$$$$$)
 		elsif ($opt =~ /^\s*active\s*$/ or $opt =~ /^\s*nopasv\s*$/
 		       or $opt =~ /^s*nopassive\s*$/) {
 		    $options{'pasv'}=0;
+		}
+		elsif ($opt =~ /^\s*component\s*=\s*(.+?)\s*$/) {
+			$options{'component'} = $1;
+		}
+		elsif ($opt =~ /^\s*sigtype\s*=\s*(.+?)\s*$/) {
+			$options{'sigtype'} = $1;
+		}
+		elsif ($opt =~ /^\s*repack\s*$/) {
+		    # non-persistent $options{'repack'}
+		    $options{'repack'} = 1;
+		}
+		elsif ($opt =~ /^\s*compression\s*=\s*(.+?)\s*$/) {
+		    my $compression = check_compression($1);
+		    # persistent $repack_compression
+		    $repack_compression = $compression if defined $compression;
+		    $repack_compression = check_compression($opt_repack_compression)
+			if defined $opt_repack_compression;
 		}
 		elsif ($opt =~ /^\s*repacksuffix\s*=\s*(.+?)\s*$/) {
 		    $options{'repacksuffix'} = $1;
@@ -849,8 +888,16 @@ sub process_watchline ($$$$$$)
 	    }
 	}
 
+	if ($line eq '') {
+	    print STDERR "$progname debug: watch line only with opts=\"...\" and no URL\n" if $debug;
+	    return 0;
+	}
+	print STDERR "$progname debug: URL ... part of watch line: $line\n" if $debug;
+
+	# 4 parameter watch line
 	($base, $filepattern, $lastversion, $action) = split ' ', $line, 4;
 
+	# 3 parameter watch line (override)
 	if ($base =~ s%/([^/]*\([^/]*\)[^/]*)$%/%) {
 	    # Last component of $base has a pair of parentheses, so no
 	    # separate filepattern field; we remove the filepattern from the
@@ -859,12 +906,26 @@ sub process_watchline ($$$$$$)
 	    (undef, $lastversion, $action) = split ' ', $line, 3;
 	}
 
-	if ((! defined $lastversion or $lastversion eq 'debian') and not defined $pkg_version) {
-	    uscan_warn "$progname warning: Unable to determine current version\n  in $watchfile, skipping:\n  $line\n";
-	    return 1;
+	# Set $lastversion to the numeric last version
+	# Update $options{'matchmode'} (its default "newer")
+	if (! defined $lastversion or $lastversion eq 'debian') {
+	    if (! defined $pkg_version) {
+		uscan_warn "$progname warning: Unable to determine the current version\n  in $watchfile, skipping:\n  $line\n";
+		return 1;
+	    }
+	    $lastversion=$pkg_version;
+	} elsif ($lastversion eq 'ignore') {
+	    $options{'matchmode'}='ignore';
+	    $lastversion='0~0~0~0~0~0';
+	} elsif ($lastversion eq 'same') {
+	    $options{'matchmode'}='same';
+	    $lastversion='0~0~0~0~0~0';
+	} elsif ($lastversion =~ m/^prev/) {
+	    $options{'matchmode'}='previous';
+	    $lastversion='0~0~0~0~0~0';
 	}
 
-	# Check all's OK
+	# Check $filepattern is OK
 	if (not $filepattern or $filepattern !~ /\(.*\)/) {
 	    uscan_warn "$progname warning: Filename pattern missing version delimiters ()\n  in $watchfile, skipping:\n  $line\n";
 	    return 1;
@@ -872,7 +933,7 @@ sub process_watchline ($$$$$$)
 
 	# Check validity of options
 	if ($base =~ /^ftp:/ and exists $options{'downloadurlmangle'}) {
-	    uscan_warn "$progname warning: downloadurlmangle option invalid for ftp sites,\n  ignoring in $watchfile:\n  $line\n";
+	    uscan_warn "$progname warning: downloadurlmangle option invalid for ftp sites,\n  ignoring downloadurlmangle in $watchfile:\n  $line\n";
 	}
 
 	# Check validity of options
@@ -898,6 +959,45 @@ sub process_watchline ($$$$$$)
 		      wait_child => 1);
 		$keyring = $newkeyring
 	    }
+	}
+
+	# Check component for duplication and set $orig to the proper extension string
+	if (defined $options{'component'}) {
+	    if ( grep {$_ eq $options{'component'}} @components ) {
+		uscan_die "$progname: duplicate component name: $options{'component'}\n";
+	    }
+	    push @components, $options{'component'};
+	    $orig = "orig-$options{'component'}";
+	} else {
+	    $origcount++ ;
+	    if ($origcount > 1) {
+		uscan_die "$progname: too many main upstream tarballs\n";
+	    }
+	    $orig = "orig";
+	}
+
+	# Limit use of opts="repacksuffix" to the single upstream package
+	if (defined $options{'repacksuffix'}) {
+	    $repacksuffix_used =1;
+	}
+	if ($repacksuffix_used and @components) {
+	    uscan_die "$progname: repacksuffix is not compatible with the multiple upstream tarballs;  use oversionmangle\n";
+	}
+
+	# Allow 2 char shorthands for opts="sigtype=..." and check
+	if ($options{'sigtype'} =~ m/^ma/) {
+	    $options{'sigtype'} = 'mangle';
+	} elsif ($options{'sigtype'} =~ m/^no/) {
+	    $options{'sigtype'} = 'none';
+	} elsif ($options{'sigtype'} =~ m/^ne/) {
+	    $options{'sigtype'} = 'next';
+	} elsif ($options{'sigtype'} =~ m/^pr/) {
+	    $options{'sigtype'} = 'previous';
+	    $options{'matchmode'} = 'previous';
+	} elsif ($options{'sigtype'} =~ m/^se/) {
+	    $options{'sigtype'} = 'self';
+	} else {
+	    uscan_warn "$progname warning: Unable to determine the signature type for $options{'sigtype'}, use sigtype=mangle\n";
 	}
 
 	# Handle sf.net addresses specially
@@ -926,24 +1026,21 @@ sub process_watchline ($$$$$$)
 	$basedir =~ s%^\w+://[^/]+/%/%;
 	$pattern = "(?:(?:$site)?" . quotemeta($basedir) . ")?$filepattern";
     }
-    if (! defined $lastversion or $lastversion eq 'debian') {
-	if (defined $pkg_version) {
-	    $lastversion=$pkg_version;
-	} else {
-	    uscan_warn "$progname warning: Unable to determine current version\n  in $watchfile, skipping:\n  $line\n";
-	    return 1;
-	}
-    }
+    # End parsing the watch line for all version=1/2/3/4
+    # all options('...') variables have been set
+
+    # Override the last version with --download-debversion
     if (defined $opt_download_debversion) {
 	$lastversion = $opt_download_debversion;
 	$lastversion =~ s/-[^-]+$//;  # revision
 	$lastversion =~ s/^\d+://;    # epoch
-	print STDERR "$progname debug: specified debversion to download: $lastversion\n" if $debug;
+	print STDERR "$progname debug: specified --download-debversion to set the last version: $lastversion\n" if $debug;
     } else {
-	print STDERR "$progname debug: last pristine tarball version: $lastversion\n" if $debug;
+	print STDERR "$progname debug: last orig.tar.* tarball version: $lastversion\n" if $debug;
     }
+
     # And mangle it if requested
-    print STDERR "$progname debug: last pristine tarball version: $lastversion\n" if $debug;
+    print STDERR "$progname debug: last orig.tar.* tarball version: $lastversion\n" if $debug;
     my $mangled_lastversion;
     $mangled_lastversion = $lastversion;
     foreach my $pat (@{$options{'dversionmangle'}}) {
@@ -957,7 +1054,9 @@ sub process_watchline ($$$$$$)
 	    return 1;
 	}
     }
-    print STDERR "$progname debug: dversionmangled last version: $mangled_lastversion\n" if $debug;
+    print STDERR "$progname debug: Last orig.tar.* tarball version (dversionmangled): $mangled_lastversion\n" if $debug;
+
+    # Set $download_version etc. if already known
     if($opt_download_version) {
 	$download_version = $opt_download_version;
 	$force_download = 1;
@@ -973,25 +1072,39 @@ sub process_watchline ($$$$$$)
 	$force_download = 1;
 	$badversion = 1;
 	print STDERR "$progname debug: Force to download the current version: $download_version\n" if $debug;
+    } elsif($options{'matchmode'} eq 'same') {
+	unless (defined $common_newversion) {
+	    uscan_warn "$progname warning: Unable to set matchmode=prev for the line withou opts=sigmode=prev\n  in $watchfile, skipping:\n  $line\n";
+	}
+	$download_version = $common_newversion;
+	$badversion = 1;
+	print STDERR "$progname debug: Download the matching version: $download_version\n" if $debug;
+    } elsif($options{'matchmode'} eq 'previous') {
+	unless (options{'sigmode'} eq 'previous' and defined $previous_newversion) {
+	    uscan_warn "$progname warning: Unable to set matchmode=prev for the line without opts=sigmode=prev\n  in $watchfile, skipping:\n  $line\n";
+	    return 1;
+	}
+	$download_version = $previous_newversion;
+	$badversion = 1;
+	print STDERR "$progname debug: Force to download the current version: $download_version\n" if $debug;
     } else {
-	# $download_version = undef;
-	print STDERR "$progname debug: Last pristine tarball version (dversionmangled): $mangled_lastversion\n" if $debug;
-    }
-
-    # Check all's OK
-    if ($pattern !~ /\(.*\)/) {
-	uscan_warn "$progname warning: Filename pattern missing version delimiters ()\n  in $watchfile, skipping:\n  $line\n";
-	return 1;
+	if (defined $download_version) {
+	    uscan_die "$progname: \$download_version defined after dversionmangle ... strange\n";
+	} else {
+	    print STDERR "$progname debug: \$download_version undefined after dversionmangle\n" if $debug;
+	}
     }
 
     push @patterns, $pattern;
     push @sites, $site;
     push @basedirs, $basedir;
 
+    # Start Checking $site and look for $filepattern which is newer than $lastversion
     # What is the most recent file, based on the filenames?
     # We first have to find the candidates, then we sort them using
     # Devscripts::Versort::upstream_versort
     if ($site =~ m%^http(s)?://%) {
+	# HTTP site
 	if (defined($1) and !$haveSSL) {
 	    uscan_die "$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
 	}
@@ -1115,6 +1228,7 @@ sub process_watchline ($$$$$$)
 		foreach my $href (@hrefs) { print "     $$href[1] ($$href[0])\n"; }
 	    }
 	    if (defined $download_version) {
+		# set $newversion, $newfile matching $download_version if it is found in the web page
 		my @vhrefs = grep { $$_[0] eq $download_version } @hrefs;
 		if (@vhrefs) {
 		    ($newversion, $newfile) = @{$vhrefs[0]};
@@ -1125,6 +1239,7 @@ sub process_watchline ($$$$$$)
 		    return 1;
 		}
 	    } else {
+		# set the newest $newversion, $newfile if $download_version is not defined
 		@hrefs = Devscripts::Versort::upstream_versort(@hrefs);
 		($newversion, $newfile) = @{$hrefs[0]};
 	    }
@@ -1133,14 +1248,8 @@ sub process_watchline ($$$$$$)
 	    print STDERR "$progname debug: Picked URL matiching the newest version.\n" if $debug;
 	    return 1;
 	}
-    }
-    else {
-	# Better be an FTP site
-	if ($site !~ m%^ftp://%) {
-	    uscan_warn "$progname warning: Unknown protocol in $watchfile, skipping:\n  $site\n";
-	    return 1;
-	}
-
+    } elsif ($site =~ m%^ftp://%) {
+	# FTP site
 	if (exists $options{'pasv'}) {
 	    $ENV{'FTP_PASSIVE'}=$options{'pasv'};
 	}
@@ -1216,6 +1325,7 @@ sub process_watchline ($$$$$$)
 		foreach my $file (@files) { print "     $$file[1] ($$file[0])\n"; }
 	    }
 	    if (defined $download_version) {
+		# set $newversion, $newfile matching $download_version if it is found in the web page
 		my @vfiles = grep { $$_[0] eq $download_version } @files;
 		if (@vfiles) {
 		    ($newversion, $newfile) = @{$vfiles[0]};
@@ -1225,6 +1335,7 @@ sub process_watchline ($$$$$$)
 		    return 1;
 		}
 	    } else {
+		# set the newest $newversion, $newfile if $download_version is not defined
 		@files = Devscripts::Versort::upstream_versort(@files);
 		($newversion, $newfile) = @{$files[0]};
 	    }
@@ -1232,7 +1343,12 @@ sub process_watchline ($$$$$$)
 	    uscan_warn "$progname warning: In $watchfile no matching files for watch line\n  $line\n";
 	    return 1;
 	}
+    } else {
+	# Neither HTTP nor FTP
+	uscan_warn "$progname warning: Unknown protocol in $watchfile, skipping:\n  $site\n";
+	return 1;
     }
+    # End Checking $site and look for $filepattern which is newer than $lastversion
 
     # The original version of the code didn't use (...) in the watch
     # file to delimit the version number; thus if there is no (...)
@@ -1254,12 +1370,16 @@ EOF
 	    return 1;
 	}
     }
-    print STDERR "$progname debug: new version $newversion\n" if $debug;
-    print STDERR "$progname debug: new filename $newfile\n" if $debug;
+    # $newversion = version used for pkg-ver.tar.gz and version comparison
+    print STDERR "$progname debug: newest upstream tarball version selected for download (uversionmangled): $newversion\n" if $debug;
+    print STDERR "$progname debug: download filename $newfile\n" if $debug;
+    unless (defined $common_newversion) {
+	$common_newversion = $newversion;
+    }
 
-    my $newfile_base=basename($newfile);
+    my $newfile_base = basename($newfile);
     if (exists $options{'filenamemangle'}) {
-        $newfile_base=$newfile;
+        $newfile_base = $newfile;
     }
     foreach my $pat (@{$options{'filenamemangle'}}) {
 	print STDERR "$progname debug: filenamemangle rule $pat\n" if $debug;
@@ -1381,20 +1501,22 @@ EOF
     }
     print STDERR "$progname debug: downloadurlmangled upstream URL $upstream_url\n" if $debug;
 
-    if (exists $options{'pgpsigurlmangle'}) {
-	$pgpsig_url = $upstream_url;
-	foreach my $pat (@{$options{'pgpsigurlmangle'}}) {
-	    print STDERR "$progname debug: pgpsigurlmangle rule $pat\n" if $debug;
-	    if (! safe_replace(\$pgpsig_url, $pat)) {
-		uscan_warn "$progname: In $watchfile, potentially"
-		  . " unsafe or malformed pgpsigurlmangle"
-		  . " pattern:\n  '$pat'"
-		  . " found. Skipping watchline\n"
-		  . "  $line\n";
-		return 1;
+    if ($options{'sigtype'} eq 'mangle') {
+	if (exists $options{'pgpsigurlmangle'}) {
+	    $pgpsig_url = $upstream_url;
+	    foreach my $pat (@{$options{'pgpsigurlmangle'}}) {
+		print STDERR "$progname debug: pgpsigurlmangle rule $pat\n" if $debug;
+		if (! safe_replace(\$pgpsig_url, $pat)) {
+		    uscan_warn "$progname: In $watchfile, potentially"
+		      . " unsafe or malformed pgpsigurlmangle"
+		      . " pattern:\n  '$pat'"
+		      . " found. Skipping watchline\n"
+		      . "  $line\n";
+		    return 1;
+		}
 	    }
+	    print STDERR "$progname debug: pgpsigurlmangled upstream URL $pgpsig_url\n" if $debug;
 	}
-	print STDERR "$progname debug: pgpsigurlmangled upstream URL $pgpsig_url\n" if $debug;
     }
 
     $dehs_tags{'debian-uversion'} = $lastversion;
@@ -1402,21 +1524,28 @@ EOF
     $dehs_tags{'upstream-version'} = $newversion;
     $dehs_tags{'upstream-url'} = $upstream_url;
 
-    # Can't just use $lastversion eq $newversion, as then 0.01 and 0.1
+    # Can't just use $mangled_lastversion eq $newversion, as then 0.01 and 0.1
     # compare different, whereas they are treated as equal by dpkg
     if (system("dpkg", "--compare-versions", "1:${mangled_lastversion}-0", "eq", "1:${newversion}-0") == 0) {
-	if ($verbose or ($download == 0 and $report and ! $dehs)) {
+	if ($verbose or ($download == 0 and $report and ! $dehs and ($options{'matchmode'} eq 'newer'))) {
 	    print $pkg_report_header;
 	    $pkg_report_header = '';
 	    print "Newest version on remote site is $newversion, local version is $lastversion\n" .
 		($mangled_lastversion eq $lastversion ? "" : " (mangled local version number $mangled_lastversion)\n");
 	    print " => Package is up to date\n";
 	}
-	$dehs_tags{'status'} = "up to date";
-	if (! $force_download) {
-	    return 0;
-	} else {
-	    $download = 1;
+	if ($options{'matchmode'} eq 'newer') {
+	    $dehs_tags{'status'} = "up to date";
+	    if (! $force_download) {
+		return 0;
+	    } else {
+		$download = 1;
+	    }
+	} elsif ($options{'matchmode'} eq 'same') {
+	    $dehs_tags{'status'} = "same as the main tarball";
+	    $download_version=$mangled_lastversion;
+	} else { # ignore
+	    $dehs_tags{'status'} = "unknown";
 	}
     }
 
@@ -1462,8 +1591,8 @@ EOF
 	    return 0;
 	}
 	foreach my $suffix (qw(gz bz2 lzma xz)) {
-	    if (-f "$destdir/${pkg}_${newversion}.orig.tar.$suffix") {
-		print " => ${pkg}_${newversion}.orig.tar.$suffix already in package directory '$destdir'\n"
+	    if (-f "$destdir/${pkg}_${newversion}.${orig}.tar.$suffix") {
+		print " => ${pkg}_${newversion}.${orig}.tar.$suffix already in package directory '$destdir'\n"
 		    if $verbose or ($download == 0 and ! $dehs);
 		return 0;
 	    }
@@ -1552,27 +1681,71 @@ EOF
 	return 1;
     }
     # Check GPG
-    if (defined $pgpsig_url) {
-	print "-- Downloading OpenPGP signature for package as $newfile_base.pgp\n" if $verbose;
-	if (!$downloader->($pgpsig_url, "$destdir/$newfile_base.pgp")) {
-	    return 1;
-	}
+    if ($options{'sigtype'} eq 'mangle') {
+	if (defined $pgpsig_url) {
+	    print "-- Downloading OpenPGP signature for package as $newfile_base.pgp\n" if $verbose;
+	    if (!$downloader->($pgpsig_url, "$destdir/$newfile_base.pgp")) {
+		return 1;
+	    }
 
-	print "-- Verifying OpenPGP signature $newfile_base.pgp for $newfile_base\n" if $verbose;
-	system('/usr/bin/gpgv', '--homedir', '/dev/null',
-	       '--keyring', $keyring,
-	       "$destdir/$newfile_base.pgp", "$destdir/$newfile_base") >> 8 == 0
-		 or uscan_die("$progname warning: OpenPGP signature did not verify.\n");
-    } else {
-	print "-- Checking for common possible upstream OpenPGP signatures\n" if $verbose;
-	foreach my $suffix (qw(asc gpg pgp sig)) {
-	    my $sigrequest = HTTP::Request->new('HEAD' => "$upstream_url.$suffix");
-	    my $sigresponse = $user_agent->request($sigrequest);
-	    if ($sigresponse->is_success()) {
-		uscan_warn "$pkg: Possible OpenPGP signature found at:\n   $upstream_url.$suffix.\n  Please consider adding opts=pgpsigurlmangle=s/\$/.$suffix/\n  to debian/watch.  see uscan(1) for more details.\n";
-		last;
+	    print "-- Verifying OpenPGP signature $newfile_base.pgp for $newfile_base\n" if $verbose;
+	    system('/usr/bin/gpgv', '--homedir', '/dev/null',
+		   '--keyring', $keyring,
+		   "$destdir/$newfile_base.pgp", "$destdir/$newfile_base") >> 8 == 0
+			or uscan_die("$progname: OpenPGP signature did not verify.\n");
+	} else {
+	    print "-- Checking for common possible upstream OpenPGP signatures\n" if $verbose;
+	    foreach my $suffix (qw(asc gpg pgp sig)) {
+		my $sigrequest = HTTP::Request->new('HEAD' => "$upstream_url.$suffix");
+		my $sigresponse = $user_agent->request($sigrequest);
+		if ($sigresponse->is_success()) {
+		    uscan_warn "$pkg: Possible OpenPGP signature found at:\n   $upstream_url.$suffix.\n  Please consider adding opts=pgpsigurlmangle=s/\$/.$suffix/\n  to debian/watch.  see uscan(1) for more details.\n";
+		    last;
+		}
 	    }
 	}
+	$previousfile_base = undef;
+	$previous_newversion = undef;
+    } elsif ($options{'sigtype'} eq 'next') {
+	print "-- Differ checking OpenPGP signature to the next watch line\n" if $verbose;
+	$previousfile_base = $newfile_base;
+	$previous_newversion = $newversion;
+
+    } elsif ($options{'sigtype'} eq 'previous') {
+	if (defined $previousfile_base) {
+	    print "-- Checking OpenPGP signatures of previously downloaded file: $previousfile_base\n" if $verbose;
+	} else {
+	    uscan_die "sigtype=previous requires previous watch line to be sigtype=next.\n";
+	}
+	unless ("$previousfile_base.pgp" eq $newfile_base) {
+	    uscan_die "Rename the download OpenPGP signature file from $newfile_base to $previousfile_base.pgp by filenamemangle.\n";
+	}
+	unless ( -e "$destdir/$previousfile_base.pgp") {
+	    uscan_die "Can't read the OpenPGP signature file $previousfile_base.pgp.\n";
+	}
+	print "-- Verifying OpenPGP signature of $previousfile_base with $previousfile_base.pgp\n" if $verbose;
+	system('/usr/bin/gpgv', '--homedir', '/dev/null',
+	       '--keyring', $keyring,
+	       "$destdir/$previousfile_base.pgp", "$destdir/$previousfile_base") >> 8 == 0
+		    or uscan_die("$progname: OpenPGP signature did not verify.\n");
+	$previousfile_base = undef;
+	$previous_newversion = undef;
+    } elsif ($options{'sigtype'} eq 'self') {
+	print "-- Checking OpenPGP self signatures ... oops, not implemented yet\n" if $verbose;
+	$previousfile_base = undef;
+	$previous_newversion = undef;
+    } elsif ($options{'sigtype'} eq 'none') {
+	print "-- Missing OpenPGP signatures.\n" if $verbose;
+	$previousfile_base = undef;
+	$previous_newversion = undef;
+    } else {
+	uscan_die "unknown sigtype.\n";
+    }
+
+    if (! defined $common_mangled_newversion) {
+	# MUT package always use the same $common_mangled_newversion
+	# MUT disables repacksuffix so it is safe to have this before mk-origtargz
+	$common_mangled_newversion = $mangled_newversion;
     }
 
     # Call mk-origtargz (renames, repacks, etc.)
@@ -1582,11 +1755,12 @@ EOF
     unless ($symlink eq "no") {
 	my @cmd = ("mk-origtargz");
 	push @cmd, "--package", $pkg;
-	push @cmd, "--version", $mangled_newversion;
+	push @cmd, "--version", $common_mangled_newversion;
 	push @cmd, '--repack-suffix', $options{repacksuffix} if defined $options{repacksuffix};
 	push @cmd, "--rename" if $symlink eq "rename";
 	push @cmd, "--copy"   if $symlink eq "copy";
-	push @cmd, "--repack" if $repack;
+	push @cmd, "--repack" if $options{'repack'};
+	push @cmd, "--component", $options{'component'} if defined $options{'component'};
 	push @cmd, "--compression", $repack_compression;
 	push @cmd, "--directory", $destdir;
 	push @cmd, "--copyright-file", "debian/copyright"
@@ -1595,6 +1769,8 @@ EOF
 	    if ($exclusion && defined $copyright_file);
 	push @cmd, $path;
 
+	my $actioncmd = join(" ", @cmd);
+	print "-- Executing internal command\n     $actioncmd\n" if $verbose;
 	spawn(exec => \@cmd,
 	      to_string => \$mk_origtargz_out,
 	      wait_child => 1);
@@ -1603,6 +1779,7 @@ EOF
 	$path = $1 if $mk_origtargz_out =~ /Leaving (.*) where it is/;
 	$target = basename($path);
 	$mangled_newversion = $1 if $target =~ m/[^_]+_(.+)\.orig\.tar\.(?:gz|bz2|lzma|xz)$/;
+	print STDERR "$progname debug: orig.tar.* tarball version (after mk-origtargz): $mangled_newversion\n" if $debug;
     }
 
     if ($dehs) {
@@ -1622,22 +1799,39 @@ EOF
 	}
     }
 
+    if ($mangled_newversion ne $common_mangled_newversion) {
+	# Only non-MUT package changes $mangled_newversion
+	# If MUT, it should not come here since repacksuffix is ''
+	$common_mangled_newversion = $mangled_newversion;
+    }
+
     # Do whatever the user wishes to do
     if ($action) {
 	my @cmd = shellwords($action);
 
-	# Any symlink requests are already handled by uscan
-	if ($cmd[0] eq "uupdate") {
-	    push @cmd, "--no-symlink";
-	    if ($verbose) {
-		push @cmd, "--verbose";
+	# script invocation changed in $watch_version=4
+	if ($watch_version > 3) {
+	    if ($cmd[0] eq "uupdate") {
+		push @cmd, "-f";
+		if ($verbose) {
+		    push @cmd, "--verbose";
+		}
+		if ($badversion) {
+		    push @cmd, "-b";
+	        }
 	    }
-	    if ($badversion) {
-		push @cmd, "-b";
+	    push @cmd, "--upstream-version", $common_mangled_newversion;
+	} elsif ($watch_version > 1) {
+	    # Any symlink requests are already handled by uscan
+	    if ($cmd[0] eq "uupdate") {
+		push @cmd, "--no-symlink";
+		if ($verbose) {
+		    push @cmd, "--verbose";
+		}
+		if ($badversion) {
+		    push @cmd, "-b";
+	        }
 	    }
-	}
-
-	if ($watch_version > 1) {
 	    push @cmd, "--upstream-version", $mangled_newversion, $path;
 	} else {
 	    push @cmd, $path, $mangled_newversion;
@@ -1746,12 +1940,8 @@ sub newest_dir ($$$$$) {
 	    return 1;
 	}
     }
-    else {
-	# Better be an FTP site
-	if ($site !~ m%^ftp://%) {
-	    return 1;
-	}
-
+    elsif ($site =~ m%^ftp://%) {
+	# FTP site
 	if (exists $$optref{'pasv'}) {
 	    $ENV{'FTP_PASSIVE'}=$$optref{'pasv'};
 	}
@@ -1810,6 +2000,10 @@ sub newest_dir ($$$$$) {
 	    uscan_warn "$progname warning: In $watchfile no matching dirs for pattern\n  $base$pattern\n";
 	    return '';
 	}
+    }
+    else {
+	# Neither HTTP nor FTP site
+	return 1;
     }
 }
 
@@ -1882,7 +2076,29 @@ sub process_watchfile ($$$$)
     return $status;
 }
 
+# Check legal values for compression
+sub check_compression ($)
+{
+    my $compression = $_[0];
+    my $canonical_compression;
+    # be liberal in what you accept...
+    my %opt2comp = (
+	gz => 'gzip',
+	gzip => 'gzip',
+	bz2 => 'bzip2',
+	bzip2 => 'bzip2',
+	lzma => 'lzma',
+	xz => 'xz',
+    );
 
+    # Normalize compression methods to the names used by Dpkg::Compression
+    if (exists $opt2comp{$compression}) {
+	$canonical_compression = $opt2comp{$compression};
+    } else {
+        uscan_die "$progname: invalid compression $compression given.\n";
+    }
+    return $canonical_compression;
+}
 # Collect up messages for dehs output into a tag
 sub dehs_msg ($)
 {
