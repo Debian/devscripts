@@ -62,7 +62,7 @@ spawnHttpServer(){
     (
 	mkdir -p $TMPDIR/$REPOPATH
 	cd $TMPDIR/$REPOPATH
-	python "$test_dir/uscan/server.py" &
+	python "$test_dir/uscan/server-head.py" 2>log &
 	echo $! > pid
 	while ! [ -s port ]; do
 	    :
@@ -197,6 +197,75 @@ helperWatch() {
     cleanup
 }
 
+# setup a common watch file test environment to see user-agent
+helperWatchUA() {
+    SITESCRIPT=$1
+    TMPDIR=$(mktemp -d)
+    ORIGDIR=`pwd`
+    cd $TMPDIR
+    # start HTTP server with its root at $TMPDIR/$REPOPATH
+    spawnHttpServer
+    PORT=$(cat $TMPDIR/$REPOPATH/port)
+    $DEBUGECHO " ***** http://localhost:$PORT started showing $TMPDIR/$REPOPATH *****"
+    # make web site
+    $SITESCRIPT
+    # make local $VEROLD source tree
+    mkdir -p $TMPDIR/${PKG}
+    cd $TMPDIR/${PKG}
+    if [ ! -d debian ]; then
+	makeDebianDir $PKG 1.0-$SUFFIX
+    fi
+    $COMMAND
+    USERAGENTX="$(grep -ie '^User-Agent:' ../repo/log |head -1 | perl -p -e "s/\r//g" )"
+    assertTrue "Bad $USERAGENTX" "[ \"$USERAGENTX\" = \"User-Agent: $USERAGENT\" ]"
+    echo "SENT: \"User-Agent: $USERAGENT\""
+    echo "GOT : \"$USERAGENTX\""
+    cd $ORIGDIR
+    cleanup
+}
+
+# setup a common watch file test environment
+helperWatchXZ() {
+    SITESCRIPT=$1
+    VEROLD=$2
+    VERNEW=$3
+    PREFIX=$4
+    TMPDIR=$(mktemp -d)
+    ORIGDIR=`pwd`
+    cd $TMPDIR
+    # start HTTP server with its root at $TMPDIR/$REPOPATH
+    spawnHttpServer
+    PORT=$(cat $TMPDIR/$REPOPATH/port)
+    $DEBUGECHO " ***** http://localhost:$PORT started showing $TMPDIR/$REPOPATH *****"
+    # make web site
+    $SITESCRIPT
+    # make local $VEROLD source tree
+    tar -xzf $TMPDIR/$REPOPATH/$POOLPATH/${PKG}-${VEROLD}.tar.gz
+    if [ -n "$PREFIX" ]; then
+	mv $TMPDIR/${PKG}-${VEROLD} $TMPDIR/${PKG}-${PREFIX}${VEROLD}
+    fi
+    mv $TMPDIR/${PKG}-${PREFIX}${VEROLD} $TMPDIR/${PKG}
+    cd $TMPDIR/${PKG}
+    if [ ! -d debian ]; then
+	makeDebianDir $PKG ${PREFIX}${VEROLD}-$SUFFIX
+    fi
+    $COMMAND
+    assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
+    cd $TMPDIR
+    UTARBALL=${PKG}-${VERNEW}.tar.gz
+    STARBALL=${PKG}_${PREFIX}${VERNEW}.orig.tar.xz
+    assertTrue "$UTARBALL missing: $WATCHLINE" "[ -f $UTARBALL ]"
+    assertTrue "$STARBALL missing: $WATCHLINE" "[ -f $STARBALL ]"
+    # check uupdate
+    if [ "$UUPDATE" = "uupdate" ]; then
+	assertTrue 'pristine tarball is not extracted' "[ -f $TMPDIR/${PKG}-${PREFIX}${VERNEW}/debian/changelog ]"
+	DVERSION=`dpkg-parsechangelog -l$TMPDIR/${PKG}-${PREFIX}${VERNEW}/debian/changelog -SVersion`
+	assertEquals "uscan: Version should be ${PREFIX}${VERNEW}-$SUFFIX but $DVERSION" "$DVERSION" "${PREFIX}${VERNEW}-$SUFFIX"
+    fi
+    $DEBUGLSLR
+    cd $ORIGDIR
+    cleanup
+}
 # populate pool directory
 sitePoolNative() {
     makeUpstreamTar $PKG 0.0 gz native
@@ -428,6 +497,34 @@ testWatch3XmlNonNative() {
 	s%<Key>([^<]*)</Key>%<Key><a href=\"$1\">$1</a></Key>%g" \
 	@@@url@@@/ (?:.*)/'$PKG'-([\d\.]+).tar.gz debian uupdate'
     helperWatch siteXmlNonNative 1.0 2.0
+}
+
+testWatch3WebNonNativeUA() {
+    PKG=foo
+    WATCHVER="3"
+    USERAGENT="foo/bar; baz:12,3.45"
+    WATCHLINE='opts="useragent= '$USERAGENT' "'"\n"'@@@url@@@/ (?:.*)/'$PKG'-([\.\d]+).tar.gz debian uupdate'
+    helperWatchUA siteWebNonNative
+}
+
+# test repack and compression
+testWatch3WebNonNativeXZ() {
+    PKG=foo
+    WATCHVER="3"
+    WATCHLINE='opts=repack,compression=xz @@@url@@@/ (?:.*)/'$PKG'-([\.\d]+).tar.gz debian uupdate'
+    helperWatchXZ siteWebNonNative 1.0 2.0
+}
+
+# test spaces everywhere
+testWatch3PrWebNonNativeXZ() {
+    PKG=foo
+    WATCHVER="3"
+    WATCHLINE='opts = "downloadurlmangle = s%boo/xxx%foo/ooo% ; s%boo-%foo-%, \
+                     filenamemangle    = s%.*boo-(.*)%foo-$1% , \
+                     repack , compression=xz" \
+    @@@url@@@/ (?:.*)/boo-([\d\.]+).tar.gz \
+    debian uupdate'
+    helperWatchXZ sitePrWebNonNative 1.0 2.0
 }
 
 . shunit2
