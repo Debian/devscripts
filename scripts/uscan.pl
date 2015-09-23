@@ -834,6 +834,9 @@ sub process_watchline ($$$$$$)
 		elsif ($opt =~ /^\s*filenamemangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'filenamemangle'}} = split /;/, $1;
 		}
+		elsif ($opt =~ /^\s*oversionmangle\s*=\s*(.+?)\s*$/) {
+		    @{$options{'oversionmangle'}} = split /;/, $1;
+		}
 		elsif ($opt =~ /^\s*downloadurlmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'downloadurlmangle'}} = split /;/, $1;
 		}
@@ -1277,7 +1280,22 @@ EOF
 	    $newfile_base = "$pkg-$newversion.download";
 	}
     }
-    print STDERR "$progname debug: filenamemangled new filename $newfile_base\n" if $debug;
+    print STDERR "$progname debug: new filename selected for download (filenamemangled): $newfile_base\n" if $debug;
+
+    my $mangled_newversion = $newversion;
+    foreach my $pat (@{$options{'oversionmangle'}}) {
+	print STDERR "$progname debug: Oversionmangle rule: $pat\n" if $debug;
+	if (! safe_replace(\$mangled_newversion, $pat)) {
+	    uscan_warn "$progname: In $watchfile, potentially"
+	      . " unsafe or malformed oversionmangle"
+	      . " pattern:\n  '$pat'"
+	      . " found. Skipping watchline\n"
+	      . "  $line\n";
+		return 1;
+	}
+    }
+    # $mangled_newversion = version used for the new orig.tar.gz (a.k.a oversion)
+    print STDERR "$progname debug: new orig.tar.gz tarball version (oversionmangled): $mangled_newversion\n" if $debug;
 
     # So what have we got to report now?
     my $upstream_url;
@@ -1564,7 +1582,7 @@ EOF
     unless ($symlink eq "no") {
 	my @cmd = ("mk-origtargz");
 	push @cmd, "--package", $pkg;
-	push @cmd, "--version", $newversion;
+	push @cmd, "--version", $mangled_newversion;
 	push @cmd, '--repack-suffix', $options{repacksuffix} if defined $options{repacksuffix};
 	push @cmd, "--rename" if $symlink eq "rename";
 	push @cmd, "--copy"   if $symlink eq "copy";
@@ -1584,7 +1602,7 @@ EOF
 	$path = $1 if $mk_origtargz_out =~ /Successfully .* (?:to|as) ([^,]+)(?:,.*)?\.$/;
 	$path = $1 if $mk_origtargz_out =~ /Leaving (.*) where it is/;
 	$target = basename($path);
-	$newversion = $1 if $target =~ m/[^_]+_(.+)\.orig\.tar\.(?:gz|bz2|lzma|xz)$/;
+	$mangled_newversion = $1 if $target =~ m/[^_]+_(.+)\.orig\.tar\.(?:gz|bz2|lzma|xz)$/;
     }
 
     if ($dehs) {
@@ -1620,9 +1638,9 @@ EOF
 	}
 
 	if ($watch_version > 1) {
-	    push @cmd, "--upstream-version", $newversion, $path;
+	    push @cmd, "--upstream-version", $mangled_newversion, $path;
 	} else {
-	    push @cmd, $path, $newversion;
+	    push @cmd, $path, $mangled_newversion;
 	}
 	my $actioncmd = join(" ", @cmd);
 	print "-- Executing user specified script\n     $actioncmd\n" if $verbose;
