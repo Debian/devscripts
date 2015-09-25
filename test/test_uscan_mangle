@@ -17,6 +17,32 @@
 
 test_dir=$(readlink -f "${0%/*}")
 
+GPG=/usr/bin/gpg2
+if [ ! -x $GPG ];then
+    echo "$GPGV missing"
+    exit 1
+fi
+
+PRIVATE_KEY=$test_dir/uscan/PRIVATE_KEY.asc
+PUBLIC_KEY=$test_dir/uscan/PUBLIC_KEY.asc
+
+GPGHOME=$(readlink -f $test_dir/uscan/gpg)
+rm -rf $GPGHOME
+mkdir -p $GPGHOME
+chmod 700 $GPGHOME
+PRIVATE_KEYRING=$GPGHOME/secring.gpg
+PUBLIC_KEYRING=$GPGHOME/pubring.gpg
+
+$GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+    --output $PRIVATE_KEYRING --dearmor $PRIVATE_KEY
+
+$GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+    --output $PUBLIC_KEYRING --dearmor $PUBLIC_KEY
+
+$GPG --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+    --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
+    --list-keys --verbose
+
 # Operation mode
 if test "$1" = --installed; then
     COMMAND="uscan --no-conf"
@@ -173,6 +199,13 @@ END
     echo "version=$WATCHVER" > debian/watch
     echo "$WATCHLINE" | sed -e "s,@@@url@@@,http://localhost:${PORT}/,g" - \
 	>> debian/watch
+    # debian/upstream/signing-key.asc
+    mkdir -p debian/upstream
+    if [ $KEYMODE = "ASC" ]; then
+	cp -f $test_dir/uscan/PUBLIC_KEY.asc debian/upstream/signing-key.asc
+    else
+	cp -f $test_dir/uscan/gpg/pubring.gpg debian/upstream/signing-key.pgp
+    fi
 }
 
 
@@ -202,18 +235,43 @@ makeUpstreamTar() {
 	cd $TMPDIR/$REPOPATH/$POOLPATH
     fi
     case $COMPRESSION in
-	gz|gzip) tar -czf $UPNAME-$UPVER.tar.gz $UPNAME-$UPVER
+	gz|gzip)
+	    NEWTAR=$UPNAME-$UPVER.tar.gz
+	    tar -czf $NEWTAR $UPNAME-$UPVER
 	    ;;
-	bz2|bzip2) tar --bzip2 -cf $UPNAME-$UPVER.tar.bz2 $UPNAME-$UPVER
+	bz2|bzip2)
+	    NEWTAR=$UPNAME-$UPVER.tar.bz2
+	    tar --bzip2 -cf $NEWTAR $UPNAME-$UPVER
 	    ;;
-	xz) tar --xz -cf $UPNAME-$UPVER.tar.xz $UPNAME-$UPVER
+	xz)
+	    NEWTAR= $UPNAME-$UPVER.tar.xz
+	    tar --xz -cf $NEWTAR $UPNAME-$UPVER
 	    ;;
-	zip)zip -r $UPNAME-$UPVER.zip $UPNAME-$UPVER
+	zip)
+	    NEWTAR=$UPNAME-$UPVER.zip
+	    zip -r $NEWTAR $UPNAME-$UPVER
 	    ;;
 	*)  echo "Wrong compression mode: $COMPRESSION"
 	    exit 1
 	    ;;
 	esac
+    case $SIGMODE in
+	ASC) # make $NEWTAR.asc
+	    $GPG --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+		--secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
+		--armor --detach-sign $NEWTAR
+	    ;;
+	BIN) #make $NEWTAR.sig
+	    $GPG --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+		--secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
+		--detach-sign $NEWTAR
+	    ;;
+	SELF) #make $NEWTAR.sig
+	    $GPG --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+		--secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
+		--armor --sign $NEWTAR
+    esac
+    
     cd $OLDDIR
 }
 
@@ -235,6 +293,8 @@ helperWatch() {
     WATCHLINE="${WATCHLINE:-$WATCHLINE0}"
     COMPONENTS=${COMPONENTS:-}
     FILEEXCLUDE=${FILEEXCLUDE:-0}
+    SIGMODE=${SIGMODE:-ASC} # ASC=ASCII or BIN=BINARY or SELF
+    KEYMODE=${KEYMODE:-ASC} # ASC=ASCII AEMORED or BIN=DEARMORED BINARY
     cd $TMPDIR
     # start HTTP server with its root at $TMPDIR/$REPOPATH
     spawnHttpServer
@@ -311,6 +371,8 @@ helperWatch() {
     unset WATCHLINE
     unset COMPONENTS
     unset FILEEXCLUDE
+    unset SIGMODE
+    unset KEYMODE
 }
 
 # setup a common watch file test environment to see user-agent
@@ -378,6 +440,15 @@ siteNonNative() {
     ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz $TMPDIR/$REPOPATH/123/$PKG/ooo/${PKG}-0.0.tar.gz
     ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz $TMPDIR/$REPOPATH/124/$PKG/ooo/${PKG}-1.0.tar.gz
     ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz $TMPDIR/$REPOPATH/125/$PKG/ooo/${PKG}-2.0.tar.gz
+    if [ "$SIGMODE" = "ASC" ]; then
+    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.asc $TMPDIR/$REPOPATH/123/$PKG/ooo/${PKG}-0.0.tar.gz.asc
+    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz.asc $TMPDIR/$REPOPATH/124/$PKG/ooo/${PKG}-1.0.tar.gz.asc
+    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz.asc $TMPDIR/$REPOPATH/125/$PKG/ooo/${PKG}-2.0.tar.gz.asc
+    else
+    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.sig $TMPDIR/$REPOPATH/123/$PKG/ooo/${PKG}-0.0.tar.gz.sig
+    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz.sig $TMPDIR/$REPOPATH/124/$PKG/ooo/${PKG}-1.0.tar.gz.sig
+    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz.sig $TMPDIR/$REPOPATH/125/$PKG/ooo/${PKG}-2.0.tar.gz.sig
+    fi
 }
 
 # hide siteNative behind a web page
@@ -436,9 +507,21 @@ siteWebNonNativeR() {
     mkdir -p $TMPDIR/$REPOPATH/123/foo/ooo/
     mkdir -p $TMPDIR/$REPOPATH/124/foo/ooo/
     mkdir -p $TMPDIR/$REPOPATH/125/foo/ooo/
+    mkdir -p $TMPDIR/$REPOPATH/325/foo/ooo/
+    mkdir -p $TMPDIR/$REPOPATH/424/foo/ooo/
+    mkdir -p $TMPDIR/$REPOPATH/523/foo/ooo/
     ln -sf ../../../$POOLPATH/foo-0.0.tar.gz $TMPDIR/$REPOPATH/125/foo/ooo/foo-0.0.tar.gz
     ln -sf ../../../$POOLPATH/foo-1.0.tar.gz $TMPDIR/$REPOPATH/124/foo/ooo/foo-1.0.tar.gz
     ln -sf ../../../$POOLPATH/foo-2.0.tar.gz $TMPDIR/$REPOPATH/123/foo/ooo/foo-2.0.tar.gz
+    if [ "$SIGMODE" = "ASC" ]; then
+    ln -sf ../../../$POOLPATH/foo-0.0.tar.gz.asc $TMPDIR/$REPOPATH/325/foo/ooo/foo-0.0.tar.gz.asc
+    ln -sf ../../../$POOLPATH/foo-1.0.tar.gz.asc $TMPDIR/$REPOPATH/424/foo/ooo/foo-1.0.tar.gz.asc
+    ln -sf ../../../$POOLPATH/foo-2.0.tar.gz.asc $TMPDIR/$REPOPATH/523/foo/ooo/foo-2.0.tar.gz.asc
+    else
+    ln -sf ../../../$POOLPATH/foo-0.0.tar.gz.sig $TMPDIR/$REPOPATH/325/foo/ooo/foo-0.0.tar.gz.sig
+    ln -sf ../../../$POOLPATH/foo-1.0.tar.gz.sig $TMPDIR/$REPOPATH/424/foo/ooo/foo-1.0.tar.gz.sig
+    ln -sf ../../../$POOLPATH/foo-2.0.tar.gz.sig $TMPDIR/$REPOPATH/523/foo/ooo/foo-2.0.tar.gz.sig
+    fi
     cat <<END > $TMPDIR/$REPOPATH/index.html
 <html>
 <head>
@@ -448,6 +531,9 @@ siteWebNonNativeR() {
 <a href="/125/foo/ooo/foo-0.0.tar.gz">Very old</a> <br/ >
 <a href="/124/foo/ooo/foo-1.0.tar.gz">A bit OLD</a> <br />
 <a href="/123/foo/ooo/foo-2.0.tar.gz">Latest</a> <br />
+<a href="/325/foo/ooo/foo-0.0.tar.gz.asc">Very old sig</a> <br/ >
+<a href="/424/foo/ooo/foo-1.0.tar.gz.asc">A bit OLD sig</a> <br />
+<a href="/523/foo/ooo/foo-2.0.tar.gz.asc">Latest sig</a> <br />
 </body>
 <html>
 END
@@ -535,7 +621,35 @@ END
 
 # test a watch files
 
+### VERSION3 ###
+# version locking calls suffer changes due to uupdate calling differences
+
+# test --download-current-version
+testWatch3WebNonNativeDlCurrent() {
+    WATCHVER=3
+    XCOMMAND="$COMMAND --download-current-version"
+    WATCHLINE='@@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz debian uupdate'
+    helperWatch siteWebNonNative 1.0 1.0
+}
+
+# test --download-version
+testWatch3WebNonNativeDlUversion() {
+    WATCHVER=3
+    XCOMMAND="$COMMAND --download-version 0.0"
+    WATCHLINE='@@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz debian uupdate'
+    helperWatch siteWebNonNative 1.0 0.0
+}
+
+# test --download-debversion uupdate 
+testWatch3WebNonNativeDlDversion() {
+    WATCHVER=3
+    XCOMMAND="$COMMAND --download-debversion 0.0-1"
+    WATCHLINE='@@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz debian uupdate'
+    helperWatch siteWebNonNative 1.0 0.0
+}
+
 ### VERSION 4 ###
+# standard tests
 
 # test native package w/o uupdate, bare HTTP server in normal order
 testWatch4Native() {
@@ -669,6 +783,36 @@ testWatch4PrWebNonNativeXZ() {
     GZREPACK=xz
     helperWatch sitePrWebNonNative
     unset GZREPACK
+}
+
+### VERSION 4 with sig chack ###
+
+# test normal web page
+testWatch4WebNonNativeSig() {
+    WATCHVER=4
+    WATCHLINE='opts = "pgpsigurlmangle = s%(.*)%$1.asc%" \
+		@@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz debian uupdate'
+    helperWatch
+}
+
+# test normal web page (Files-exclude)
+testWatch4WebNonNativeFESig() {
+    FILEEXCLUDE=1
+    WATCHVER=4
+    SIGMODE=BIN
+    KEYMODE=BIN
+    WATCHLINE='opts = "pgpsigurlmangle = s%(.*)%$1.sig%" \
+               @@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz \
+               debian uupdate'
+    helperWatch
+}
+
+# test normal web page (file path reverse order)
+testWatch4WebNonNativeRSig() {
+    WATCHVER=4
+    WATCHLINE='opts = "pgpmode=next" @@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz debian
+opts = "pgpmode=previous" @@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz.asc previous uupdate'
+    helperWatch siteWebNonNativeR
 }
 
 ### VERSION 4 only ###
