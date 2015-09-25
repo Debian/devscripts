@@ -2625,21 +2625,6 @@ EOF
     }
     print STDERR "$progname debug: new filename selected for download (filenamemangled): $newfile_base\n" if $debug;
 
-    my $mangled_newversion = $newversion;
-    foreach my $pat (@{$options{'oversionmangle'}}) {
-	print STDERR "$progname debug: Oversionmangle rule: $pat\n" if $debug;
-	if (! safe_replace(\$mangled_newversion, $pat)) {
-	    uscan_warn "$progname: In $watchfile, potentially"
-	      . " unsafe or malformed oversionmangle"
-	      . " pattern:\n  '$pat'"
-	      . " found. Skipping watchline\n"
-	      . "  $line\n";
-		return 1;
-	}
-    }
-    # $mangled_newversion = version used for the new orig.tar.gz (a.k.a oversion)
-    print STDERR "$progname debug: new orig.tar.gz tarball version (oversionmangled): $mangled_newversion\n" if $debug;
-
     # So what have we got to report now?
     my $upstream_url;
     my $pgpsig_url;
@@ -2961,7 +2946,22 @@ EOF
 	uscan_die "unknown pgpmode.\n";
     }
 
+    my $mangled_newversion = $newversion;
+    foreach my $pat (@{$options{'oversionmangle'}}) {
+	print STDERR "$progname debug: Oversionmangle rule: $pat\n" if $debug;
+	if (! safe_replace(\$mangled_newversion, $pat)) {
+	    uscan_warn "$progname: In $watchfile, potentially"
+	      . " unsafe or malformed oversionmangle"
+	      . " pattern:\n  '$pat'"
+	      . " found. Skipping watchline\n"
+	      . "  $line\n";
+		return 1;
+	}
+    }
+
     if (! defined $common_mangled_newversion) {
+    	# $mangled_newversion = version used for the new orig.tar.gz (a.k.a oversion)
+    	print STDERR "$progname debug: new orig.tar.gz tarball version (oversionmangled): $mangled_newversion\n" if $debug;
 	# MUT package always use the same $common_mangled_newversion
 	# MUT disables repacksuffix so it is safe to have this before mk-origtargz
 	$common_mangled_newversion = $mangled_newversion;
@@ -2997,11 +2997,11 @@ EOF
 	$path = $1 if $mk_origtargz_out =~ /Successfully .* (?:to|as) ([^,]+)(?:,.*)?\.$/;
 	$path = $1 if $mk_origtargz_out =~ /Leaving (.*) where it is/;
 	$target = basename($path);
-	$mangled_newversion = $1 if $target =~ m/[^_]+_(.+)\.orig\.tar\.(?:gz|bz2|lzma|xz)$/;
-	print STDERR "$progname debug: orig.tar.* tarball version (after mk-origtargz): $mangled_newversion\n" if $debug;
+	$common_mangled_newversion = $1 if $target =~ m/[^_]+_(.+)\.orig\.tar\.(?:gz|bz2|lzma|xz)$/;
+	print STDERR "$progname debug: orig.tar.* tarball version (after mk-origtargz): $common_mangled_newversion\n" if $debug;
     }
     if (! defined $uscanlog) {
-	$uscanlog = "../${pkg}_${mangled_newversion}.uscan.log";
+	$uscanlog = "../${pkg}_${common_mangled_newversion}.uscan.log";
 	open(USCANLOG, "> $uscanlog") or uscan_die "$progname: could not open $uscanlog for write: $!\n";
 	print USCANLOG "# package downloaded by uscan\n";
     } else {
@@ -3025,12 +3025,6 @@ EOF
 	if (defined $mk_origtargz_out) {
 	    print $prefix ."$mk_origtargz_out\n";
 	}
-    }
-
-    if ($mangled_newversion ne $common_mangled_newversion) {
-	# Only non-MUT package changes $mangled_newversion
-	# If MUT, it should not come here since repacksuffix is ''
-	$common_mangled_newversion = $mangled_newversion;
     }
 
     # Do whatever the user wishes to do
@@ -3060,9 +3054,9 @@ EOF
 		    push @cmd, "-b";
 	        }
 	    }
-	    push @cmd, "--upstream-version", $mangled_newversion, $path;
+	    push @cmd, "--upstream-version", $common_mangled_newversion, $path;
 	} else {
-	    push @cmd, $path, $mangled_newversion;
+	    push @cmd, $path, $common_mangled_newversion;
 	}
 	my $actioncmd = join(" ", @cmd);
 	print "-- Executing user specified script\n     $actioncmd\n" if $verbose;
