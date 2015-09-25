@@ -559,9 +559,9 @@ B<pgp>, and B<sig>.
 
 If the signature file is downloaded, the downloaded upstream tarball is checked
 for its authenticity against the downloaded signature file using the keyring
-F<debian/upstream/signing-key.pgp> or the armored keyring
-F<debian/upstream/signing-key.asc>. If its signature is not valid, or not made
-by one of the listed keys, B<uscan> will report an error.
+F<debian/upstream-signing-key.pgp>, or F<debian/upstream/signing-key.pgp>; or
+the armored keyring F<debian/upstream/signing-key.asc>. If its signature is not
+valid, or not made by one of the listed keys, B<uscan> will report an error.
 
 If the B<oversionmangle> rule exists, the source tarball version I<oversion> is
 generated from the downloaded upstream version I<uversion> by applying this
@@ -642,8 +642,38 @@ For the basic single upstream tarball case:
   http://example.com/~user/release/foo.html \
   files/foo-([\d\.]*).tar.gz debian uupdate
 
-If source package name is B<foo> and downloaded version of the main upstream
-tarball is B<2.0>, then B<foo_2.0.orig.tar.gz>.
+For the upstream source package is B<foo-2.0.tar.gz>, this watch file downloads
+and creates the Debian orig.tar file B<foo_2.0.orig.tar.gz>.
+
+=head2 HTTP site (pgpsigurlmangle)
+
+For the basic single upstream tarball with the matching signature file in the
+same file path case:
+
+  version=4
+  opts="pgpsigurlmangle=s%(.*)%$1.asc%" \
+  http://example.com/~user/release/foo.html \
+  files/foo-([\d\.]*).tar.gz debian uupdate
+
+For the upstream source package B<foo-2.0.tar.gz> and the upstream signature
+file B<foo-2.0.tar.gz.asc>, this watch file downloads files, verify its
+authenticity using F<debian/upstream-key.pgp> and creates the Debian orig.tar
+file B<foo_2.0.orig.tar.gz>.
+
+=head2 HTTP site (pgpmode)
+
+For the basic single upstream tarball with the matching signature file inot in
+the same file path case:
+
+  version=4
+  opts="pgpmode=next" \
+  http://example.com/~user/release/foo.html \
+  files/(?:\d*)/foo-([\d\.]*).tar.gz debian
+  opts="pgpmode=previous" \
+  http://example.com/~user/release/foo.html \
+  files/(?:\d+)/foo-([\d\.]*).tar.gz.asc previous uupdate
+
+Please note the upstream and signature file share the same version number.
 
 =head2 HTTP site (basic MUT)
 
@@ -656,17 +686,24 @@ For the basic 2 upstream tarball case:
   http://example.com/~user/release/foo.html \
   files/baz-([\d\.]*).tar.gz same uupdate
 
-If source package name is B<foo> and downloaded version of the main upstream
-tarball is B<2.0>, then B<foo_2.0.orig.tar.gz> and B<foo_2.0.orig-baz.tar.gz>
-are created.
+For the main upstream source package B<foo-2.0.tar.gz> and the secondary
+upstream source package B<bar-2.0.tar.gz> which installs under F<baz/>, this
+watch file downloads and creates the Debian orig.tar file
+B<foo_2.0.orig.tar.gz> and B<foo_2.0.orig-baz.tar.gz>.
+
 
 =head2 HTTP site (flexible)
 
-For the maximum flexibility of upstream tarball formats:
+For the maximum flexibility of upstream tarball and signature file extensions:
 
   version=4
-  http://example.com/example-(\d[\d.]*)\.\
-  (?:zip|tgz|tbz2|txz|tar\.(?:gz|bz2|xz)) debian uupdate
+  opts="pgpmode=next" http://example.com/DL/ \
+  files/(?:\d*)/example-(\d[\d.]*)\.\
+  (?:zip|tgz|tbz2|txz|tar\.(?:gz|bz2|xz)) debian
+  opts="pgpmode=prevous" http://example.com/DL/ \
+  files/(?:\d*)/example-(\d[\d.]*)\.\
+  (?:zip|tgz|tbz2|txz|tar\.(?:gz|bz2|xz)\.(?:asc|pgp|gpg|sig)) \
+  previous uupdate
 
 =head2 HTTP site (recursive directory scanning)
 
@@ -784,14 +821,14 @@ some way into one which will work automatically, for example:
   http://prdownload.berlios.de/softdevice/vdr-softdevice-(.+).tgz \
   debian uupdate
 
-=head2 HTTP site (origversionmangle, MUT)
+=head2 HTTP site (oversionmangle, MUT)
 
-The option B<origversionmangle> can be used to mangle the version of the source
+The option B<oversionmangle> can be used to mangle the version of the source
 tarball (B<.orig.tar.gz> and B<.orig-bar.tar.gz>).  For example, B<+dfsg1> can
 be added to the upstream version as:
 
   version=4
-  opts=origversionmangle=s/(.*)/$1+dfsg1/ \
+  opts=oversionmangle=s/(.*)/$1+dfsg1/ \
   http://example.com/~user/release/foo.html \
   files/foo-([\d\.]*).tar.gz debian
   opts="component=bar" \
