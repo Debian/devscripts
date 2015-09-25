@@ -1474,6 +1474,7 @@ my $common_newversion ; # undef initially (for MUT, version=same)
 my $common_mangled_newversion ; # undef initially (for MUT)
 my $previous_newversion ; # undef initially (for version=prev, pgpmode=prev)
 my $previousfile_base ; # undef initially (for pgpmode=prev)
+my $pgp_used = 0;
 
 if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg = "  (no configuration files read)";
@@ -2098,6 +2099,7 @@ sub process_watchline ($$$$$$)
 		}
 		elsif ($opt =~ /^\s*pgpsigurlmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'pgpsigurlmangle'}} = split /;/, $1;
+		    $pgp_used++;
 		}
 		else {
 		    uscan_warn "$progname warning: unrecognised option $opt\n";
@@ -2133,13 +2135,13 @@ sub process_watchline ($$$$$$)
 	    $lastversion=$pkg_version;
 	} elsif ($lastversion eq 'ignore') {
 	    $options{'versionmode'}='ignore';
-	    $lastversion='0~0~0~0~0~0';
+	    $lastversion='0~0~0~0~0~0dummy';
 	} elsif ($lastversion eq 'same') {
 	    $options{'versionmode'}='same';
-	    $lastversion='0~0~0~0~0~0';
+	    $lastversion='0~0~0~0~0~0dummy';
 	} elsif ($lastversion =~ m/^prev/) {
 	    $options{'versionmode'}='previous';
-	    $lastversion='0~0~0~0~0~0';
+	    $lastversion='0~0~0~0~0~0dummy';
 	}
 
 	# Check $filepattern is OK
@@ -2153,8 +2155,34 @@ sub process_watchline ($$$$$$)
 	    uscan_warn "$progname warning: downloadurlmangle option invalid for ftp sites,\n  ignoring downloadurlmangle in $watchfile:\n  $line\n";
 	}
 
-	# Check validity of options
-	if (($download || $force_download) && exists $options{'pgpsigurlmangle'}) {
+	# Limit use of opts="repacksuffix" to the single upstream package
+	if (defined $options{'repacksuffix'}) {
+	    $repacksuffix_used =1;
+	}
+	if ($repacksuffix_used and @components) {
+	    uscan_die "$progname: repacksuffix is not compatible with the multiple upstream tarballs;  use oversionmangle\n";
+	}
+
+	# Allow 2 char shorthands for opts="pgpmode=..." and check
+	if ($options{'pgpmode'} =~ m/^ma/) {
+	    $options{'pgpmode'} = 'mangle';
+	} elsif ($options{'pgpmode'} =~ m/^no/) {
+	    $options{'pgpmode'} = 'none';
+	} elsif ($options{'pgpmode'} =~ m/^ne/) {
+	    $options{'pgpmode'} = 'next';
+	} elsif ($options{'pgpmode'} =~ m/^pr/) {
+	    $options{'pgpmode'} = 'previous';
+	    $options{'versionmode'} = 'previous';
+	    $pgp_used++;
+	} elsif ($options{'pgpmode'} =~ m/^se/) {
+	    $options{'pgpmode'} = 'self';
+	    $pgp_used++;
+	} else {
+	    uscan_warn "$progname warning: Unable to determine the signature type for $options{'pgpmode'}, use pgpmode=mangle\n";
+	}
+
+	# If PGP used, check required programs and generate files
+	if (($download || $force_download) && $pgp_used == 1) {
 	    if (! $havegpgv) {
 		uscan_warn "$progname warning: pgpsigurlmangle option exists, but you must have gpgv installed to verify\n  in $watchfile, skipping:\n  $line\n";
 		return 1;
@@ -2179,42 +2207,20 @@ sub process_watchline ($$$$$$)
 	}
 
 	# Check component for duplication and set $orig to the proper extension string
-	if (defined $options{'component'}) {
-	    if ( grep {$_ eq $options{'component'}} @components ) {
-		uscan_die "$progname: duplicate component name: $options{'component'}\n";
+	if ($options{'pgpmode'} ne 'previous') {
+	    if (defined $options{'component'}) {
+		if ( grep {$_ eq $options{'component'}} @components ) {
+		    uscan_die "$progname: duplicate component name: $options{'component'}\n";
+		}
+		push @components, $options{'component'};
+		$orig = "orig-$options{'component'}";
+	    } else {
+		$origcount++ ;
+		if ($origcount > 1) {
+		    uscan_die "$progname: too many main upstream tarballs\n";
+		}
+		$orig = "orig";
 	    }
-	    push @components, $options{'component'};
-	    $orig = "orig-$options{'component'}";
-	} else {
-	    $origcount++ ;
-	    if ($origcount > 1) {
-		uscan_die "$progname: too many main upstream tarballs\n";
-	    }
-	    $orig = "orig";
-	}
-
-	# Limit use of opts="repacksuffix" to the single upstream package
-	if (defined $options{'repacksuffix'}) {
-	    $repacksuffix_used =1;
-	}
-	if ($repacksuffix_used and @components) {
-	    uscan_die "$progname: repacksuffix is not compatible with the multiple upstream tarballs;  use oversionmangle\n";
-	}
-
-	# Allow 2 char shorthands for opts="pgpmode=..." and check
-	if ($options{'pgpmode'} =~ m/^ma/) {
-	    $options{'pgpmode'} = 'mangle';
-	} elsif ($options{'pgpmode'} =~ m/^no/) {
-	    $options{'pgpmode'} = 'none';
-	} elsif ($options{'pgpmode'} =~ m/^ne/) {
-	    $options{'pgpmode'} = 'next';
-	} elsif ($options{'pgpmode'} =~ m/^pr/) {
-	    $options{'pgpmode'} = 'previous';
-	    $options{'versionmode'} = 'previous';
-	} elsif ($options{'pgpmode'} =~ m/^se/) {
-	    $options{'pgpmode'} = 'self';
-	} else {
-	    uscan_warn "$progname warning: Unable to determine the signature type for $options{'pgpmode'}, use pgpmode=mangle\n";
 	}
 
 	# Handle sf.net addresses specially
@@ -2291,13 +2297,13 @@ sub process_watchline ($$$$$$)
 	print STDERR "$progname debug: Force to download the current version: $download_version\n" if $debug;
     } elsif($options{'versionmode'} eq 'same') {
 	unless (defined $common_newversion) {
-	    uscan_warn "$progname warning: Unable to set versionmode=prev for the line withou opts=pgpmode=prev\n  in $watchfile, skipping:\n  $line\n";
+	    uscan_warn "$progname warning: Unable to set versionmode=prev for the line without opts=pgpmode=prev\n  in $watchfile, skipping:\n  $line\n";
 	}
 	$download_version = $common_newversion;
 	$badversion = 1;
 	print STDERR "$progname debug: Download the matching version: $download_version\n" if $debug;
     } elsif($options{'versionmode'} eq 'previous') {
-	unless (options{'pgpmode'} eq 'previous' and defined $previous_newversion) {
+	unless ($options{'pgpmode'} eq 'previous' and defined $previous_newversion) {
 	    uscan_warn "$progname warning: Unable to set versionmode=prev for the line without opts=pgpmode=prev\n  in $watchfile, skipping:\n  $line\n";
 	    return 1;
 	}
@@ -2807,11 +2813,13 @@ EOF
 		if $verbose or ($download == 0 and ! $dehs);
 	    return 0;
 	}
-	foreach my $suffix (qw(gz bz2 lzma xz)) {
-	    if (-f "$destdir/${pkg}_${newversion}.${orig}.tar.$suffix") {
-		print " => ${pkg}_${newversion}.${orig}.tar.$suffix already in package directory '$destdir'\n"
-		    if $verbose or ($download == 0 and ! $dehs);
-		return 0;
+	if ($options{'pgpmode'} ne 'previous') {
+	    foreach my $suffix (qw(gz bz2 lzma xz)) {
+		if (-f "$destdir/${pkg}_${newversion}.${orig}.tar.$suffix") {
+		    print " => ${pkg}_${newversion}.${orig}.tar.$suffix already in package directory '$destdir'\n"
+			if $verbose or ($download == 0 and ! $dehs);
+		    return 0;
+		}
 	    }
 	}
     }
@@ -2934,16 +2942,10 @@ EOF
 	} else {
 	    uscan_die "pgpmode=previous requires previous watch line to be pgpmode=next.\n";
 	}
-	unless ("$previousfile_base.pgp" eq $newfile_base) {
-	    uscan_die "Rename the download OpenPGP signature file from $newfile_base to $previousfile_base.pgp by filenamemangle.\n";
-	}
-	unless ( -e "$destdir/$previousfile_base.pgp") {
-	    uscan_die "Can't read the OpenPGP signature file $previousfile_base.pgp.\n";
-	}
-	print "-- Verifying OpenPGP signature of $previousfile_base with $previousfile_base.pgp\n" if $verbose;
+	print "-- Verifying OpenPGP signature of $previousfile_base with $newfile_base\n" if $verbose;
 	system('/usr/bin/gpgv', '--homedir', '/dev/null',
 	       '--keyring', $keyring,
-	       "$destdir/$previousfile_base.pgp", "$destdir/$previousfile_base") >> 8 == 0
+	       "$destdir/$newfile_base", "$destdir/$previousfile_base") >> 8 == 0
 		    or uscan_die("$progname: OpenPGP signature did not verify.\n");
 	$previousfile_base = undef;
 	$previous_newversion = undef;
@@ -2969,7 +2971,7 @@ EOF
     my $mk_origtargz_out;
     my $path = "$destdir/$newfile_base";
     my $target = $newfile_base;
-    unless ($symlink eq "no") {
+    unless ($symlink eq "no" or $options{'pgpmode'} eq 'previous') {
 	my @cmd = ("mk-origtargz");
 	push @cmd, "--package", $pkg;
 	push @cmd, "--version", $common_mangled_newversion;
