@@ -1006,7 +1006,6 @@ else
         echo "Old:         <version>-<revision> = $SVERSION"
         echo "Old:         <version>            = $UVERSION"
         echo "New:         <version>            = $NEW_VERSION"
-        ls -1 ${PACKAGE}_${NEW_VERSION}.orig*.tar.*
     fi
     
     if [ "`readlink -f ../${PACKAGE}-$NEW_VERSION`" = "$OPWD" ]; then
