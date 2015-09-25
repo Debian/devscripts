@@ -201,7 +201,7 @@ exactly the same as the one for the first upstream tarball downloaded. (useful
 only for MUT)
 
 =item * B<previous> limits the downloading version of the signature
-file. (used with sigmode=previous)
+file. (used with pgpmode=previous)
 
 =item * B<ignore> does not limit the downloading version of the secondary
 tarballs. (maybe useful for MUT)
@@ -287,7 +287,7 @@ Force to repack the upstream tarball using the compression I<mathod>.
 Add I<suffix> to the version as suffix when the source tarball is repackaged.
 (persistent)  This rule should be used only for the single upstream package.
 
-=item B<sigmode=>I<mode>
+=item B<pgpmode=>I<mode>
 
 Set the pgp/gpg signature verification I<mode>.
 
@@ -1472,8 +1472,8 @@ my $repacksuffix_used = 0;
 my $uscanlog;
 my $common_newversion ; # undef initially (for MUT, version=same)
 my $common_mangled_newversion ; # undef initially (for MUT)
-my $previous_newversion ; # undef initially (for version=prev, sigmode=prev)
-my $previousfile_base ; # undef initially (for sigmode=prev)
+my $previous_newversion ; # undef initially (for version=prev, pgpmode=prev)
+my $previousfile_base ; # undef initially (for pgpmode=prev)
 
 if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg = "  (no configuration files read)";
@@ -1964,8 +1964,8 @@ sub process_watchline ($$$$$$)
     my (@patterns, @sites, @redirections, @basedirs);
     my %options = (
 	'repack' => $repack,
-	'sigtype' => 'mangle',
-	'matchmode' => 'newer'
+	'pgpmode' => 'mangle',
+	'versionmode' => 'newer'
 	); # non-persistent variables
     my ($request, $response);
     my ($newfile, $newversion);
@@ -2057,8 +2057,8 @@ sub process_watchline ($$$$$$)
 		elsif ($opt =~ /^\s*component\s*=\s*(.+?)\s*$/) {
 			$options{'component'} = $1;
 		}
-		elsif ($opt =~ /^\s*sigtype\s*=\s*(.+?)\s*$/) {
-			$options{'sigtype'} = $1;
+		elsif ($opt =~ /^\s*pgpmode\s*=\s*(.+?)\s*$/) {
+			$options{'pgpmode'} = $1;
 		}
 		elsif ($opt =~ /^\s*repack\s*$/) {
 		    # non-persistent $options{'repack'}
@@ -2124,7 +2124,7 @@ sub process_watchline ($$$$$$)
 	}
 
 	# Set $lastversion to the numeric last version
-	# Update $options{'matchmode'} (its default "newer")
+	# Update $options{'versionmode'} (its default "newer")
 	if (! defined $lastversion or $lastversion eq 'debian') {
 	    if (! defined $pkg_version) {
 		uscan_warn "$progname warning: Unable to determine the current version\n  in $watchfile, skipping:\n  $line\n";
@@ -2132,13 +2132,13 @@ sub process_watchline ($$$$$$)
 	    }
 	    $lastversion=$pkg_version;
 	} elsif ($lastversion eq 'ignore') {
-	    $options{'matchmode'}='ignore';
+	    $options{'versionmode'}='ignore';
 	    $lastversion='0~0~0~0~0~0';
 	} elsif ($lastversion eq 'same') {
-	    $options{'matchmode'}='same';
+	    $options{'versionmode'}='same';
 	    $lastversion='0~0~0~0~0~0';
 	} elsif ($lastversion =~ m/^prev/) {
-	    $options{'matchmode'}='previous';
+	    $options{'versionmode'}='previous';
 	    $lastversion='0~0~0~0~0~0';
 	}
 
@@ -2201,20 +2201,20 @@ sub process_watchline ($$$$$$)
 	    uscan_die "$progname: repacksuffix is not compatible with the multiple upstream tarballs;  use oversionmangle\n";
 	}
 
-	# Allow 2 char shorthands for opts="sigtype=..." and check
-	if ($options{'sigtype'} =~ m/^ma/) {
-	    $options{'sigtype'} = 'mangle';
-	} elsif ($options{'sigtype'} =~ m/^no/) {
-	    $options{'sigtype'} = 'none';
-	} elsif ($options{'sigtype'} =~ m/^ne/) {
-	    $options{'sigtype'} = 'next';
-	} elsif ($options{'sigtype'} =~ m/^pr/) {
-	    $options{'sigtype'} = 'previous';
-	    $options{'matchmode'} = 'previous';
-	} elsif ($options{'sigtype'} =~ m/^se/) {
-	    $options{'sigtype'} = 'self';
+	# Allow 2 char shorthands for opts="pgpmode=..." and check
+	if ($options{'pgpmode'} =~ m/^ma/) {
+	    $options{'pgpmode'} = 'mangle';
+	} elsif ($options{'pgpmode'} =~ m/^no/) {
+	    $options{'pgpmode'} = 'none';
+	} elsif ($options{'pgpmode'} =~ m/^ne/) {
+	    $options{'pgpmode'} = 'next';
+	} elsif ($options{'pgpmode'} =~ m/^pr/) {
+	    $options{'pgpmode'} = 'previous';
+	    $options{'versionmode'} = 'previous';
+	} elsif ($options{'pgpmode'} =~ m/^se/) {
+	    $options{'pgpmode'} = 'self';
 	} else {
-	    uscan_warn "$progname warning: Unable to determine the signature type for $options{'sigtype'}, use sigtype=mangle\n";
+	    uscan_warn "$progname warning: Unable to determine the signature type for $options{'pgpmode'}, use pgpmode=mangle\n";
 	}
 
 	# Handle sf.net addresses specially
@@ -2289,16 +2289,16 @@ sub process_watchline ($$$$$$)
 	$force_download = 1;
 	$badversion = 1;
 	print STDERR "$progname debug: Force to download the current version: $download_version\n" if $debug;
-    } elsif($options{'matchmode'} eq 'same') {
+    } elsif($options{'versionmode'} eq 'same') {
 	unless (defined $common_newversion) {
-	    uscan_warn "$progname warning: Unable to set matchmode=prev for the line withou opts=sigmode=prev\n  in $watchfile, skipping:\n  $line\n";
+	    uscan_warn "$progname warning: Unable to set versionmode=prev for the line withou opts=pgpmode=prev\n  in $watchfile, skipping:\n  $line\n";
 	}
 	$download_version = $common_newversion;
 	$badversion = 1;
 	print STDERR "$progname debug: Download the matching version: $download_version\n" if $debug;
-    } elsif($options{'matchmode'} eq 'previous') {
-	unless (options{'sigmode'} eq 'previous' and defined $previous_newversion) {
-	    uscan_warn "$progname warning: Unable to set matchmode=prev for the line without opts=sigmode=prev\n  in $watchfile, skipping:\n  $line\n";
+    } elsif($options{'versionmode'} eq 'previous') {
+	unless (options{'pgpmode'} eq 'previous' and defined $previous_newversion) {
+	    uscan_warn "$progname warning: Unable to set versionmode=prev for the line without opts=pgpmode=prev\n  in $watchfile, skipping:\n  $line\n";
 	    return 1;
 	}
 	$download_version = $previous_newversion;
@@ -2718,7 +2718,7 @@ EOF
     }
     print STDERR "$progname debug: downloadurlmangled upstream URL $upstream_url\n" if $debug;
 
-    if ($options{'sigtype'} eq 'mangle') {
+    if ($options{'pgpmode'} eq 'mangle') {
 	if (exists $options{'pgpsigurlmangle'}) {
 	    $pgpsig_url = $upstream_url;
 	    foreach my $pat (@{$options{'pgpsigurlmangle'}}) {
@@ -2744,21 +2744,21 @@ EOF
     # Can't just use $mangled_lastversion eq $newversion, as then 0.01 and 0.1
     # compare different, whereas they are treated as equal by dpkg
     if (system("dpkg", "--compare-versions", "1:${mangled_lastversion}-0", "eq", "1:${newversion}-0") == 0) {
-	if ($verbose or ($download == 0 and $report and ! $dehs and ($options{'matchmode'} eq 'newer'))) {
+	if ($verbose or ($download == 0 and $report and ! $dehs and ($options{'versionmode'} eq 'newer'))) {
 	    print $pkg_report_header;
 	    $pkg_report_header = '';
 	    print "Newest version on remote site is $newversion, local version is $lastversion\n" .
 		($mangled_lastversion eq $lastversion ? "" : " (mangled local version number $mangled_lastversion)\n");
 	    print " => Package is up to date\n";
 	}
-	if ($options{'matchmode'} eq 'newer') {
+	if ($options{'versionmode'} eq 'newer') {
 	    $dehs_tags{'status'} = "up to date";
 	    if (! $force_download) {
 		return 0;
 	    } else {
 		$download = 1;
 	    }
-	} elsif ($options{'matchmode'} eq 'same') {
+	} elsif ($options{'versionmode'} eq 'same') {
 	    $dehs_tags{'status'} = "same as the main tarball";
 	    $download_version=$mangled_lastversion;
 	} else { # ignore
@@ -2898,7 +2898,7 @@ EOF
 	return 1;
     }
     # Check GPG
-    if ($options{'sigtype'} eq 'mangle') {
+    if ($options{'pgpmode'} eq 'mangle') {
 	if (defined $pgpsig_url) {
 	    print "-- Downloading OpenPGP signature for package as $newfile_base.pgp\n" if $verbose;
 	    if (!$downloader->($pgpsig_url, "$destdir/$newfile_base.pgp")) {
@@ -2923,16 +2923,16 @@ EOF
 	}
 	$previousfile_base = undef;
 	$previous_newversion = undef;
-    } elsif ($options{'sigtype'} eq 'next') {
+    } elsif ($options{'pgpmode'} eq 'next') {
 	print "-- Differ checking OpenPGP signature to the next watch line\n" if $verbose;
 	$previousfile_base = $newfile_base;
 	$previous_newversion = $newversion;
 
-    } elsif ($options{'sigtype'} eq 'previous') {
+    } elsif ($options{'pgpmode'} eq 'previous') {
 	if (defined $previousfile_base) {
 	    print "-- Checking OpenPGP signatures of previously downloaded file: $previousfile_base\n" if $verbose;
 	} else {
-	    uscan_die "sigtype=previous requires previous watch line to be sigtype=next.\n";
+	    uscan_die "pgpmode=previous requires previous watch line to be pgpmode=next.\n";
 	}
 	unless ("$previousfile_base.pgp" eq $newfile_base) {
 	    uscan_die "Rename the download OpenPGP signature file from $newfile_base to $previousfile_base.pgp by filenamemangle.\n";
@@ -2947,16 +2947,16 @@ EOF
 		    or uscan_die("$progname: OpenPGP signature did not verify.\n");
 	$previousfile_base = undef;
 	$previous_newversion = undef;
-    } elsif ($options{'sigtype'} eq 'self') {
+    } elsif ($options{'pgpmode'} eq 'self') {
 	print "-- Checking OpenPGP self signatures ... oops, not implemented yet\n" if $verbose;
 	$previousfile_base = undef;
 	$previous_newversion = undef;
-    } elsif ($options{'sigtype'} eq 'none') {
+    } elsif ($options{'pgpmode'} eq 'none') {
 	print "-- Missing OpenPGP signatures.\n" if $verbose;
 	$previousfile_base = undef;
 	$previous_newversion = undef;
     } else {
-	uscan_die "unknown sigtype.\n";
+	uscan_die "unknown pgpmode.\n";
     }
 
     if (! defined $common_mangled_newversion) {
