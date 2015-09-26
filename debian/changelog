@@ -51,6 +51,29 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
     + Ensure the version field in the watch line is defined, rather than
       "true" before using it in a comparison.  The enables the use of 0 as a
       value for the version.  (Closes: #796984)
+    + Start uupdate with --verbose as needed.  (Closes: #350454)
+    + Add test_uscan_mangle for testing the mangling rules and pgp signature.
+    + Add --download-debversion.  (Closes: #755754)
+    + Add pagemangle.  (Closes: #395439, #705989, #773390)
+    + Add oversionmangle as a part of multiple upstream tarball support.
+      (Closes: #458777)
+    + Add dirversionmangle with $download-version consideration.
+      (Closes: #557768, #734748)
+    + Add the multiple upstream tarball support and extend the OpenPGP support
+      with new watch line options: component, compression, repack, pgpmode,
+      versionmode, decompress.  (Closes: #526443, #531321, #549178, #731725,
+      #738977, #778723)
+    + Updated manpage contents and build it from POD.  (Closes: #573631,
+      #775526, #797787)
+  * uupdate:
+    + Prevent failure when upstream version is 0.  (Closes: #798175)
+    + Work around missing debian.tar.gz for "3.0 (quilt)".  (Closes: 798133)
+    + Add multiple upstream tarball support.  (Closes: #278797, #544638,
+      #570221, #752364, #797045)
+  * mk-origtargz:
+    + Support component name for the multiple upstream tarball support.
+  * debian/control
+    + Add gnupg2/gpgv2 as alternative option to gnupg/gpgv.  (Closes: #788414)
 
   [ Gunnar Wolf ]
   * debchange:
