@@ -105,6 +105,10 @@ the B<uscan> execution with the internal variable states.
 report without downloading the upstream tarball in an XML format for other
 programs such as the Debian External Health System.
 
+=item * The primary objective of B<uscan> is to help identify if the latest
+version upstream tarball is used or not; and to download the latest upstream
+tarball.  All other features are there as best effort features.
+
 =back
 
 =head1 FORMAT OF THE WATCH FILE
@@ -355,7 +359,8 @@ sorting index only.
 
 =item B<pagemangle=>I<rules>
 
-Normalize the downloaded web page string.  (Do not use this unless this is absolutely needed.  B<s> rules should be appled with B<g> option.)
+Normalize the downloaded web page string.  (Do not use this unless this is
+absolutely needed.  Generally, B<g> option is required for rules.)
 
 =item B<uversionmangle=>I<rules>
 
@@ -366,11 +371,6 @@ latest upstream version.
 =item B<versionmangle=>I<rules>
 
 Syntactic shorthand for B<uversionmangle=>I<rules>B<,dversionmangle=>I<rules>
-
-=item B<oversionmangle=>I<rules>
-
-Generate the version string I<< <oversion> >> of the source tarball I<<
-<spkg>_<oversion>.orig.tar.gz >> from I<< <uversion> >>.
 
 =item B<filenamemangle=>I<rules>
 
@@ -385,6 +385,11 @@ Normalize the candidate upstream tarball URL string.
 
 Generate the candidate upstream signature file URL string from the upstream
 tarball URL.
+
+=item B<oversionmangle=>I<rules>
+
+Generate the version string I<< <oversion> >> of the source tarball I<<
+<spkg>_<oversion>.orig.tar.gz >> from I<< <uversion> >>.
 
 =back
 
@@ -1016,10 +1021,19 @@ through the tree).
 
 Specify the I<version> which the upstream release must match in order to be
 considered, rather than using the release with the highest version.
+(a best effort feature)
+
+
+=item B<--download-debversion> I<version>
+
+Specify the Debian package version to download the corresponding upstream
+release version.  The dversionmangle and uversionmangle rules are considered.
+(a best effort feature)
 
 =item B<--download-current-version>
 
-Download the currently packaged version
+Download the currently packaged version.
+(a best effort feature)
 
 =item B<--verbose>
 
@@ -1209,27 +1223,14 @@ variations.
 
 =head2 Custom script
 
-The optional I<script> parameter F<debian/watch> means to execute I<script>
-with options after processing this line if specified.  You can customize this 
-by specifying F<debian/myuupdate> as I<script> and create an executable file
-F<debian/myuupdate> with the following content.
+The optional I<script> parameter in F<debian/watch> means to execute I<script>
+with options after processing this line if specified.
 
-  #!/bin/sh -e
-  # called with --upstream-version <version>
-  uupdate --find "$@"
-  package=`dpkg-parsechangelog | sed -n 's/^Source: //p'`
-  cd ../$package-$2
-  debuild
-
-Then B<uscan> invokes "I<debian/myuupdate> B<--upstream-version> I<version>" to
-perform a fully automatic upstream update of Debian binary packages.
-
-Note that we don't call B<dupload> or B<dput> automatically, as the maintainer
-should perform sanity checks on the software before uploading it to Debian.
-
-Also, for compatibility with other tools such as B<git-buildpackage>, it may not
-be wise to create this kind of custom scripts.  In general, B<uupdate> is
-the best choice for the non-native package.
+For compatibility with other tools such as B<git-buildpackage>, it may not be
+wise to create custom scripts with rondom behavior.  In general, B<uupdate> is
+the best choice for the non-native package and custom scripts, if created,
+should behave as if B<uupdate>.  For possible use case, see
+L<http://bugs.debian.org/748474> as an example.
 
 =head2 Directory name checking
 
@@ -2141,33 +2142,33 @@ sub process_watchline ($$$$$$)
 		elsif ($opt =~ /^\s*repacksuffix\s*=\s*(.+?)\s*$/) {
 		    $options{'repacksuffix'} = $1;
 		}
-		elsif ($opt =~ /^\s*uversionmangle\s*=\s*(.+?)\s*$/) {
-		    @{$options{'uversionmangle'}} = split /;/, $1;
-		}
 		elsif ($opt =~ /^\s*dversionmangle\s*=\s*(.+?)\s*$/) {
-		    @{$options{'dversionmangle'}} = split /;/, $1;
-		}
-		elsif ($opt =~ /^\s*versionmangle\s*=\s*(.+?)\s*$/) {
-		    @{$options{'uversionmangle'}} = split /;/, $1;
 		    @{$options{'dversionmangle'}} = split /;/, $1;
 		}
 		elsif ($opt =~ /^\s*pagemangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'pagemangle'}} = split /;/, $1;
 		}
-		elsif ($opt =~ /^\s*filenamemangle\s*=\s*(.+?)\s*$/) {
-		    @{$options{'filenamemangle'}} = split /;/, $1;
-		}
 		elsif ($opt =~ /^\s*dirversionmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'dirversionmangle'}} = split /;/, $1;
 		}
-		elsif ($opt =~ /^\s*oversionmangle\s*=\s*(.+?)\s*$/) {
-		    @{$options{'oversionmangle'}} = split /;/, $1;
+		elsif ($opt =~ /^\s*uversionmangle\s*=\s*(.+?)\s*$/) {
+		    @{$options{'uversionmangle'}} = split /;/, $1;
+		}
+		elsif ($opt =~ /^\s*versionmangle\s*=\s*(.+?)\s*$/) {
+		    @{$options{'uversionmangle'}} = split /;/, $1;
+		    @{$options{'dversionmangle'}} = split /;/, $1;
+		}
+		elsif ($opt =~ /^\s*filenamemangle\s*=\s*(.+?)\s*$/) {
+		    @{$options{'filenamemangle'}} = split /;/, $1;
 		}
 		elsif ($opt =~ /^\s*downloadurlmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'downloadurlmangle'}} = split /;/, $1;
 		}
 		elsif ($opt =~ /^\s*pgpsigurlmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'pgpsigurlmangle'}} = split /;/, $1;
+		}
+		elsif ($opt =~ /^\s*oversionmangle\s*=\s*(.+?)\s*$/) {
+		    @{$options{'oversionmangle'}} = split /;/, $1;
 		}
 		else {
 		    uscan_warn "$progname warning: unrecognised option $opt\n";
