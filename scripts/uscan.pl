@@ -285,7 +285,7 @@ Force to repack the upstream tarball using the compression I<mathod>.
 =item B<repacksuffix=>I<suffix>
 
 Add I<suffix> to the version as suffix when the source tarball is repackaged.
-(persistent)  This rule should be used only for the single upstream package.
+This rule should be used only for the single upstream package.
 
 =item B<pgpmode=>I<mode>
 
@@ -662,7 +662,7 @@ file B<foo_2.0.orig.tar.gz>.
 
 =head2 HTTP site (pgpmode)
 
-For the basic single upstream tarball with the matching signature file inot in
+For the basic single upstream tarball with the matching signature file not in
 the same file path case:
 
   version=4
@@ -673,7 +673,8 @@ the same file path case:
   http://example.com/~user/release/foo.html \
   files/(?:\d+)/foo-([\d\.]*).tar.gz.asc previous uupdate
 
-Please note the upstream and signature file share the same version number.
+Please note the upstream tarball and the signature file share the same version
+number.
 
 =head2 HTTP site (basic MUT)
 
