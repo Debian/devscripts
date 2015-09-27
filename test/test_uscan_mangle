@@ -424,40 +424,56 @@ siteNative() {
     makeUpstreamTar $PKG 0.0 gz native
     makeUpstreamTar $PKG 1.0 gz native
     makeUpstreamTar $PKG 2.0 gz native
-    mkdir -p $TMPDIR/$REPOPATH/123/$PKG/ooo/
-    mkdir -p $TMPDIR/$REPOPATH/124/$PKG/ooo/
-    mkdir -p $TMPDIR/$REPOPATH/125/$PKG/ooo/
-    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz $TMPDIR/$REPOPATH/123/$PKG/ooo/${PKG}-0.0.tar.gz
-    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz $TMPDIR/$REPOPATH/124/$PKG/ooo/${PKG}-1.0.tar.gz
-    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz $TMPDIR/$REPOPATH/125/$PKG/ooo/${PKG}-2.0.tar.gz
+    mkdir -p $TMPDIR/$REPOPATH/0.0/$PKG/ooo/
+    mkdir -p $TMPDIR/$REPOPATH/1.0/$PKG/ooo/
+    mkdir -p $TMPDIR/$REPOPATH/2.0/$PKG/ooo/
+    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz $TMPDIR/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz $TMPDIR/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz
 }
 
 siteNonNative() {
     local PKG=${1:-foo}
+    local EXTRA=${2:-}
     makeUpstreamTar $PKG 0.0 gz non-native
     makeUpstreamTar $PKG 1.0 gz non-native
     makeUpstreamTar $PKG 2.0 gz non-native
-    mkdir -p $TMPDIR/$REPOPATH/123/$PKG/ooo/
-    mkdir -p $TMPDIR/$REPOPATH/124/$PKG/ooo/
-    mkdir -p $TMPDIR/$REPOPATH/125/$PKG/ooo/
+    mkdir -p $TMPDIR/$REPOPATH/0.0/$PKG/ooo/
+    mkdir -p $TMPDIR/$REPOPATH/1.0/$PKG/ooo/
+    mkdir -p $TMPDIR/$REPOPATH/2.0/$PKG/ooo/
+    if [ -n "$EXTRA" ]; then
+    makeUpstreamTar $PKG 3.0 gz non-native
+    mkdir -p $TMPDIR/$REPOPATH/3.0/$PKG/ooo/
+    fi
     if [ "$SIGMODE" = "ASC" ]; then
-    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz $TMPDIR/$REPOPATH/123/$PKG/ooo/${PKG}-0.0.tar.gz
-    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz $TMPDIR/$REPOPATH/124/$PKG/ooo/${PKG}-1.0.tar.gz
-    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz $TMPDIR/$REPOPATH/125/$PKG/ooo/${PKG}-2.0.tar.gz
-    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.asc $TMPDIR/$REPOPATH/123/$PKG/ooo/${PKG}-0.0.tar.gz.asc
-    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz.asc $TMPDIR/$REPOPATH/124/$PKG/ooo/${PKG}-1.0.tar.gz.asc
-    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz.asc $TMPDIR/$REPOPATH/125/$PKG/ooo/${PKG}-2.0.tar.gz.asc
+    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.asc $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz.asc
+    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz $TMPDIR/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz.asc $TMPDIR/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz.asc
+    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz $TMPDIR/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz.asc $TMPDIR/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz.asc
+    if [ -n "$EXTRA" ]; then
+    ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz $TMPDIR/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz.asc $TMPDIR/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz.asc
+    fi
     elif [ "$SIGMODE" = "BIN" ]; then
-    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz $TMPDIR/$REPOPATH/123/$PKG/ooo/${PKG}-0.0.tar.gz
-    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz $TMPDIR/$REPOPATH/124/$PKG/ooo/${PKG}-1.0.tar.gz
-    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz $TMPDIR/$REPOPATH/125/$PKG/ooo/${PKG}-2.0.tar.gz
-    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.sig $TMPDIR/$REPOPATH/123/$PKG/ooo/${PKG}-0.0.tar.gz.sig
-    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz.sig $TMPDIR/$REPOPATH/124/$PKG/ooo/${PKG}-1.0.tar.gz.sig
-    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz.sig $TMPDIR/$REPOPATH/125/$PKG/ooo/${PKG}-2.0.tar.gz.sig
+    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.sig $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz.sig
+    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz $TMPDIR/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz.sig $TMPDIR/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz.sig
+    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz $TMPDIR/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz.sig $TMPDIR/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz.sig
+    if [ -n "$EXTRA" ]; then
+    ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz $TMPDIR/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz
+    ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz.sig $TMPDIR/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz.sig
+    fi
     elif [ "$SIGMODE" = "SELF" ]; then
-    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.gpg $TMPDIR/$REPOPATH/123/$PKG/ooo/${PKG}-0.0.tar.gz.gpg
-    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz.gpg $TMPDIR/$REPOPATH/124/$PKG/ooo/${PKG}-1.0.tar.gz.gpg
-    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz.gpg $TMPDIR/$REPOPATH/125/$PKG/ooo/${PKG}-2.0.tar.gz.gpg
+    ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.gpg $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz.gpg
+    ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz.gpg $TMPDIR/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz.gpg
+    ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz.gpg $TMPDIR/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz.gpg
+    if [ -n "$EXTRA" ]; then
+    ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz.gpg $TMPDIR/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz.gpg
+    fi
     fi
 }
 
@@ -470,9 +486,9 @@ siteWebNative() {
   <meta charset="utf-8">
 </head>
 <body>
-<a href="/123/foo/ooo/foo-0.0.tar.gz">Very old</a> <br/ >
-<a href="/124/foo/ooo/foo-1.0.tar.gz">A bit OLD</a> <br />
-<a href="/125/foo/ooo/foo-2.0.tar.gz">Latest</a> <br />
+<a href="/0.0/foo/ooo/foo-0.0.tar.gz">Very old</a> <br/ >
+<a href="/1.0/foo/ooo/foo-1.0.tar.gz">A bit OLD</a> <br />
+<a href="/2.0/foo/ooo/foo-2.0.tar.gz">Latest</a> <br />
 </body>
 <html>
 END
@@ -486,9 +502,9 @@ siteWebNonNative() {
   <meta charset="utf-8">
 </head>
 <body>
-<a href="/123/foo/ooo/foo-0.0.tar.gz">Very old</a> <br/ >
-<a href="/124/foo/ooo/foo-1.0.tar.gz">A bit OLD</a> <br />
-<a href="/125/foo/ooo/foo-2.0.tar.gz">Latest</a> <br />
+<a href="/0.0/foo/ooo/foo-0.0.tar.gz">Very old</a> <br/ >
+<a href="/1.0/foo/ooo/foo-1.0.tar.gz">A bit OLD</a> <br />
+<a href="/2.0/foo/ooo/foo-2.0.tar.gz">Latest</a> <br />
 </body>
 <html>
 END
@@ -502,9 +518,9 @@ siteWebNonNative() {
   <meta charset="utf-8">
 </head>
 <body>
-<a href="/123/foo/ooo/foo-0.0.tar.gz">Very old</a> <br/ >
-<a href="/124/foo/ooo/foo-1.0.tar.gz">A bit OLD</a> <br />
-<a href="/125/foo/ooo/foo-2.0.tar.gz">Latest</a> <br />
+<a href="/0.0/foo/ooo/foo-0.0.tar.gz">Very old</a> <br/ >
+<a href="/1.0/foo/ooo/foo-1.0.tar.gz">A bit OLD</a> <br />
+<a href="/2.0/foo/ooo/foo-2.0.tar.gz">Latest</a> <br />
 </body>
 <html>
 END
@@ -594,9 +610,9 @@ sitePrWebNonNative() {
   <meta charset="utf-8">
 </head>
 <body>
-<a href="/123/boo/xxx/boo-0.0.tar.gz">Very old</a> <br/ >
-<a href="/124/boo/xxx/boo-1.0.tar.gz">A bit OLD</a> <br />
-<a href="/125/boo/xxx/boo-2.0.tar.gz">Latest</a> <br />
+<a href="/0.0/boo/xxx/boo-0.0.tar.gz">Very old</a> <br/ >
+<a href="/1.0/boo/xxx/boo-1.0.tar.gz">A bit OLD</a> <br />
+<a href="/2.0/boo/xxx/boo-2.0.tar.gz">Latest</a> <br />
 </body>
 <html>
 END
@@ -606,21 +622,21 @@ siteWebNonNativeLarge() {
     makeUpstreamTar foo 19990101 gz non-native
     makeUpstreamTar foo 20000101 gz non-native
     makeUpstreamTar foo 20010101 gz non-native
-    mkdir -p $REPOPATH/123/foo/ooo/
-    mkdir -p $REPOPATH/124/foo/ooo/
-    mkdir -p $REPOPATH/125/foo/ooo/
-    ln -sf ../../../$POOLPATH/foo-19990101.tar.gz $TMPDIR/$REPOPATH/123/foo/ooo/foo-19990101.tar.gz
-    ln -sf ../../../$POOLPATH/foo-20000101.tar.gz $TMPDIR/$REPOPATH/124/foo/ooo/foo-20000101.tar.gz
-    ln -sf ../../../$POOLPATH/foo-20010101.tar.gz $TMPDIR/$REPOPATH/125/foo/ooo/foo-20010101.tar.gz
+    mkdir -p $REPOPATH/0.0/foo/ooo/
+    mkdir -p $REPOPATH/1.0/foo/ooo/
+    mkdir -p $REPOPATH/2.0/foo/ooo/
+    ln -sf ../../../$POOLPATH/foo-19990101.tar.gz $TMPDIR/$REPOPATH/0.0/foo/ooo/foo-19990101.tar.gz
+    ln -sf ../../../$POOLPATH/foo-20000101.tar.gz $TMPDIR/$REPOPATH/1.0/foo/ooo/foo-20000101.tar.gz
+    ln -sf ../../../$POOLPATH/foo-20010101.tar.gz $TMPDIR/$REPOPATH/2.0/foo/ooo/foo-20010101.tar.gz
     cat <<END > $TMPDIR/$REPOPATH/index.html
 <html>
 <head>
   <meta charset="utf-8">
 </head>
 <body>
-<a href="/123/foo/ooo/foo-19990101.tar.gz">Very old</a> <br/ >
-<a href="/124/foo/ooo/foo-20000101.tar.gz">A bit OLD</a> <br />
-<a href="/125/foo/ooo/foo-20010101.tar.gz">Latest</a> <br />
+<a href="/0.0/foo/ooo/foo-19990101.tar.gz">Very old</a> <br/ >
+<a href="/1.0/foo/ooo/foo-20000101.tar.gz">A bit OLD</a> <br />
+<a href="/2.0/foo/ooo/foo-20010101.tar.gz">Latest</a> <br />
 </body>
 <html>
 END
@@ -634,9 +650,9 @@ siteXmlNonNative() {
   <meta charset="utf-8">
 </head>
 <body>
-<Key>/123/foo/ooo/foo-0.0.tar.gz</Key> <br/ >
-<Key>/124/foo/ooo/foo-1.0.tar.gz</Key> <br />
-<Key>/125/foo/ooo/foo-2.0.tar.gz</Key> <br />
+<Key>/0.0/foo/ooo/foo-0.0.tar.gz</Key> <br/ >
+<Key>/1.0/foo/ooo/foo-1.0.tar.gz</Key> <br />
+<Key>/2.0/foo/ooo/foo-2.0.tar.gz</Key> <br />
 </body>
 <html>
 END
@@ -644,23 +660,25 @@ END
 
 siteWebNonNativeMUT() {
     siteNonNative foo
-    siteNonNative bar
-    siteNonNative baz
+    siteNonNative bar EXTRA
+    siteNonNative baz EXTRA
     cat <<END > $TMPDIR/$REPOPATH/index.html
 <html>
 <head>
   <meta charset="utf-8">
 </head>
 <body>
-<a href="/123/foo/ooo/foo-0.0.tar.gz">Very old</a> <br/ >
-<a href="/124/foo/ooo/foo-1.0.tar.gz">A bit OLD</a> <br />
-<a href="/125/foo/ooo/foo-2.0.tar.gz">Latest</a> <br />
-<a href="/123/bar/ooo/bar-0.0.tar.gz">Very old</a> <br/ >
-<a href="/124/bar/ooo/bar-1.0.tar.gz">A bit OLD</a> <br />
-<a href="/125/bar/ooo/bar-2.0.tar.gz">Latest</a> <br />
-<a href="/123/baz/ooo/baz-0.0.tar.gz">Very old</a> <br/ >
-<a href="/124/baz/ooo/baz-1.0.tar.gz">A bit OLD</a> <br />
-<a href="/125/baz/ooo/baz-2.0.tar.gz">Latest</a> <br />
+<a href="/0.0/foo/ooo/foo-0.0.tar.gz">Very old</a> <br/ >
+<a href="/1.0/foo/ooo/foo-1.0.tar.gz">A bit OLD</a> <br />
+<a href="/2.0/foo/ooo/foo-2.0.tar.gz">Latest</a> <br />
+<a href="/0.0/bar/ooo/bar-0.0.tar.gz">Very old</a> <br/ >
+<a href="/1.0/bar/ooo/bar-1.0.tar.gz">A bit OLD</a> <br />
+<a href="/2.0/bar/ooo/bar-2.0.tar.gz">Latest</a> <br />
+<a href="/3.0/bar/ooo/bar-3.0.tar.gz">OOPS Latest</a> <br />
+<a href="/0.0/baz/ooo/baz-0.0.tar.gz">Very old</a> <br/ >
+<a href="/1.0/baz/ooo/baz-1.0.tar.gz">A bit OLD</a> <br />
+<a href="/2.0/baz/ooo/baz-2.0.tar.gz">Latest</a> <br />
+<a href="/3.0/baz/ooo/baz-3.0.tar.gz">OOPS Latest</a> <br />
 </body>
 <html>
 END
@@ -701,14 +719,14 @@ testWatch3WebNonNativeDlDversion() {
 # test native package w/o uupdate, bare HTTP server in normal order
 testWatch4Native() {
     WATCHVER=4
-    WATCHLINE='@@@url@@@/(\d+)/(.+)/(.+)/foo-([\.\d]+).tar.gz debian'
+    WATCHLINE='@@@url@@@/([\.\d]+)/(.+)/(.+)/foo-([\.\d]+).tar.gz debian'
     helperWatch siteNative
 }
 
 # test non-native package with uupdate, bare HTTP server in normal order
 testWatch4NonNative() {
     WATCHVER=4
-    WATCHLINE='@@@url@@@(\d+)/(.+)/(.+)/ foo-([\.\d]+).tar.gz debian uupdate'
+    WATCHLINE='@@@url@@@([\.\d]+)/(.+)/(.+)/ foo-([\.\d]+).tar.gz debian uupdate'
     helperWatch siteNonNative
 }
 
@@ -746,6 +764,30 @@ testWatch4PrWebNonNative() {
     @@@url@@@/ (?:.*)/boo-([\d\.]+).tar.gz \
     debian uupdate'
     helperWatch sitePrWebNonNative
+}
+
+# test --download-current-version
+testWatch4NonNativeDlCurrent() {
+    WATCHVER=4
+    XCOMMAND="$COMMAND --download-current-version"
+    WATCHLINE='@@@url@@@/([\d\.]+)/foo/ooo/ foo-([\.\d]+).tar.gz debian uupdate'
+    helperWatch siteNonNative 1.0 1.0
+}
+
+# test --download-version
+testWatch4NonNativeDlUversion() {
+    WATCHVER=4
+    XCOMMAND="$COMMAND --download-version 0.0"
+    WATCHLINE='@@@url@@@/([\d\.]+)/foo/ooo/ foo-([\.\d]+).tar.gz debian uupdate'
+    helperWatch siteNonNative 1.0 0.0
+}
+
+# test --download-debversion uupdate 
+testWatch4NonNativeDlDversion() {
+    WATCHVER=4
+    XCOMMAND="$COMMAND --download-debversion 0.0-1"
+    WATCHLINE='@@@url@@@/([\d\.]+)/foo/ooo/ foo-([\.\d]+).tar.gz debian uupdate'
+    helperWatch siteNonNative 1.0 0.0
 }
 
 # test --download-current-version
