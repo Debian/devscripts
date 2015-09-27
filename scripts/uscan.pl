@@ -345,31 +345,37 @@ Don't use PASV mode for the FTP connection.
 
 =item B<dversionmangle=>I<rules>
 
-Normalize the last upstream version string found in
-F<debian/changelog>
+Normalize the last upstream version string found in F<debian/changelog>.  Removal of upstream repackage mark by B<+s/dfsg\d+$//> is usually done here.
+
+=item B<dirversionmangle=>I<rules>
+
+Normalize the directory path string matching the regex in a set of parentheses
+of B<http::/>I<URL> as the sortable version string.  This is used as the
+sorting index only.
 
 =item B<pagemangle=>I<rules>
 
-Normalize the downloaded web page string
+Normalize the downloaded web page string.  (Do not use this unless this is absolutely needed.  B<s> rules should be appled with B<g> option.)
 
 =item B<uversionmangle=>I<rules>
 
-Normalize the candidate upstream version strings
-extracted from hrefs in the source of the web page.
+Normalize the candidate upstream version strings extracted from hrefs in the
+source of the web page.  This is used as the sorting index when selecting the
+latest upstream version.
 
 =item B<versionmangle=>I<rules>
 
 Syntactic shorthand for B<uversionmangle=>I<rules>B<,dversionmangle=>I<rules>
 
-=item B<filenamemangle=>I<rules>
-
-Normalize the downloaded tarball filename string I<< <upkg>-<uversion>.tar.gz
->>.
-
 =item B<oversionmangle=>I<rules>
 
 Generate the version string I<< <oversion> >> of the source tarball I<<
 <spkg>_<oversion>.orig.tar.gz >> from I<< <uversion> >>.
+
+=item B<filenamemangle=>I<rules>
+
+Normalize the downloaded tarball filename string I<< <upkg>-<uversion>.tar.gz
+>>.
 
 =item B<downloadurlmangle=>I<rules>
 
@@ -2151,6 +2157,9 @@ sub process_watchline ($$$$$$)
 		elsif ($opt =~ /^\s*filenamemangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'filenamemangle'}} = split /;/, $1;
 		}
+		elsif ($opt =~ /^\s*dirversionmangle\s*=\s*(.+?)\s*$/) {
+		    @{$options{'dirversionmangle'}} = split /;/, $1;
+		}
 		elsif ($opt =~ /^\s*oversionmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'oversionmangle'}} = split /;/, $1;
 		}
@@ -2246,7 +2255,8 @@ sub process_watchline ($$$$$$)
 
 	# If PGP used, check required programs and generate files
 	print STDERR "$progname debug: \$gpgv_used=$gpgv_used, \$gpg_used=$gpg_used, \$download=$download, \$force_download=$force_download\n" if $debug;
-	print STDERR "$progname debug: \$options{'pgpmode'}=$options{'pgpmode'}, \$options{'pgpsigurlmangle'}=$options{'pgpsigurlmangle'}\n" if $debug;
+	print STDERR "$progname debug: \$options{'pgpmode'}=$options{'pgpmode'}, \$options{'pgpsigurlmangle'}=$options{'pgpsigurlmangle'}\n" if $debug and defined $options{'pgpsigurlmangle'};
+	print STDERR "$progname debug: \$options{'pgpmode'}=$options{'pgpmode'}, \$options{'pgpsigurlmangle'}=undef\n" if $debug and ! defined $options{'pgpsigurlmangle'};
 	if (($download or $force_download) and ($gpgv_used == 1 or $gpg_used == 1)) {
 	    if ($gpgv_used == 1 and ! $havegpgv) {
 		uscan_warn "$progname warning: pgpsigurlmangle option exists, please install gpgv or gpgv2.\n";
@@ -2306,23 +2316,6 @@ sub process_watchline ($$$$$$)
 	# Handle pypi.python.org addresses specially
 	$base =~ s%^https?://pypi\.python\.org/packages/source/./%https://pypi.debian.net/%;
 
-	if ($base =~ m%^(\w+://[^/]+)%) {
-	    $site = $1;
-	} else {
-	    uscan_warn "$progname warning: Can't determine protocol and site in\n  $watchfile, skipping:\n  $line\n";
-	    return 1;
-	}
-
-	# Find the path with the greatest version number matching the regex
-	$base = recursive_regex_dir($base, \%options, $watchfile);
-	if ($base eq '') { return 1; }
-
-	# We're going to make the pattern
-	# (?:(?:http://site.name)?/dir/path/)?base_pattern
-	# It's fine even for ftp sites
-	$basedir = $base;
-	$basedir =~ s%^\w+://[^/]+/%/%;
-	$pattern = "(?:(?:$site)?" . quotemeta($basedir) . ")?$filepattern";
     }
     # End parsing the watch line for all version=1/2/3/4
     # all options('...') variables have been set
@@ -2393,10 +2386,31 @@ sub process_watchline ($$$$$$)
 	}
     }
 
+    if ($watch_version != 1) {
+	if ($base =~ m%^(\w+://[^/]+)%) {
+	    $site = $1;
+	} else {
+	    uscan_warn "$progname warning: Can't determine protocol and site in\n  $watchfile, skipping:\n  $line\n";
+	    return 1;
+	}
+
+	# Find the path with the greatest version number matching the regex
+	$base = recursive_regex_dir($base, \%options, $watchfile);
+	if ($base eq '') { return 1; }
+
+	# We're going to make the pattern
+	# (?:(?:http://site.name)?/dir/path/)?base_pattern
+	# It's fine even for ftp sites
+	$basedir = $base;
+	$basedir =~ s%^\w+://[^/]+/%/%;
+	$pattern = "(?:(?:$site)?" . quotemeta($basedir) . ")?$filepattern";
+    }
+
     push @patterns, $pattern;
     push @sites, $site;
     push @basedirs, $basedir;
 
+    my $match = '';
     # Start Checking $site and look for $filepattern which is newer than $lastversion
     # What is the most recent file, based on the filenames?
     # We first have to find the candidates, then we sort them using
@@ -2490,6 +2504,7 @@ sub process_watchline ($$$$$$)
 	my @hrefs;
 	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/sgi) {
 	    my $href = $2;
+	    my $mangled_version;
 	    $href =~ s/\n//g;
 	    foreach my $_pattern (@patterns) {
 		if ($href =~ m&^$_pattern$&) {
@@ -2497,11 +2512,11 @@ sub process_watchline ($$$$$$)
 			# watch_version 2 only recognised one group; the code
 			# below will break version 2 watchfiles with a construction
 			# such as file-([\d\.]+(-\d+)?) (bug #327258)
-			push @hrefs, [$1, $href];
+			$mangled_version = $1;
 		    } else {
 			# need the map { ... } here to handle cases of (...)?
 			# which may match but then return undef values
-			my $mangled_version =
+			$mangled_version =
 			    join(".", map { $_ if defined($_) }
 			 	$href =~ m&^$_pattern$&);
 			foreach my $pat (@{$options{'uversionmangle'}}) {
@@ -2515,36 +2530,40 @@ sub process_watchline ($$$$$$)
 				return 1;
 			    }
 			}
-			push @hrefs, [$mangled_version, $href];
 		    }
+		    $match = '';
+		    if (defined $download_version) {
+			if ($mangled_version eq $download_version) {
+			    $match = "matched with the download version";
+			}
+		    }
+		    push @hrefs, [$mangled_version, $href, $match];
 		}
 	    }
 	}
 	if (@hrefs) {
-	    if ($verbose) {
-		print "-- Found the following matching hrefs:\n";
-		foreach my $href (@hrefs) { print "     $$href[1] ($$href[0])\n"; }
+	    @hrefs = Devscripts::Versort::upstream_versort(@hrefs);
+	    if ($debug) {
+		print "-- Found the following matching hrefs on the web page (newest first):\n";
+		foreach my $href (@hrefs) { print "     $$href[1] ($$href[0]) $$href[2]\n"; }
 	    }
-	    if (defined $download_version) {
-		# set $newversion, $newfile matching $download_version if it is found in the web page
-		my @vhrefs = grep { $$_[0] eq $download_version } @hrefs;
-		if (@vhrefs) {
-		    ($newversion, $newfile) = @{$vhrefs[0]};
-		    print STDERR "$progname debug: Found remote URL matiching the requested version.\n" if $debug;
-		} else {
-		    uscan_warn "$progname warning: In $watchfile no matching hrefs for version $download_version"
-			. " in watch line\n  $line\n";
-		    return 1;
-		}
+	}
+	if (defined $download_version) {
+	    my @vhrefs = grep { $$_[2] } @hrefs;
+	    if (@vhrefs) {
+		($newversion, $newfile, undef) = @{$vhrefs[0]};
 	    } else {
-		# set the newest $newversion, $newfile if $download_version is not defined
-		@hrefs = Devscripts::Versort::upstream_versort(@hrefs);
-		($newversion, $newfile) = @{$hrefs[0]};
+		uscan_warn "$progname warning: In $watchfile no matching hrefs for version $download_version"
+		    . " in watch line\n  $line\n";
+		return 1;
 	    }
 	} else {
-	    uscan_warn "$progname warning: In $watchfile,\n  no matching hrefs for watch line\n  $line\n";
-	    print STDERR "$progname debug: Picked URL matiching the newest version.\n" if $debug;
-	    return 1;
+	    if (@hrefs) {
+	    	($newversion, $newfile, undef) = @{$hrefs[0]};
+	    } else {
+		uscan_warn "$progname warning: In $watchfile no matching files for watch line\n  $line\n";
+		return 1;
+	    }
 	}
     } elsif ($site =~ m%^ftp://%) {
 	# FTP site
@@ -2592,7 +2611,13 @@ sub process_watchline ($$$$$$)
 			return 1;
 		    }
 		}
-		push @files, [$mangled_version, $file];
+		$match = '';	
+		if (defined $download_version) {
+		    if ($mangled_version eq $download_version) {
+			$match = "matched with the download version";
+		    }
+		}
+		push @files, [$mangled_version, $file, $match];
 	    }
 	} else {
 	    # they all look like:
@@ -2612,34 +2637,39 @@ sub process_watchline ($$$$$$)
 			    return 1;
 			}
 		    }
-		    push @files, [$mangled_version, $file];
+		    $match = '';	
+		    if (defined $download_version) {
+			if ($mangled_version eq $download_version) {
+			    $match = "matched with the download version";
+			}
+		    }
+		    push @files, [$mangled_version, $file, $match];
 		}
 	    }
 	}
-
 	if (@files) {
+	    @files = Devscripts::Versort::upstream_versort(@files);
 	    if ($verbose) {
-		print "-- Found the following matching files:\n";
-		foreach my $file (@files) { print "     $$file[1] ($$file[0])\n"; }
+		print "-- Found the following matching files on the web page (newest first):\n";
+		foreach my $file (@files) { print "     $$file[1] ($$file[0]) $$file[2]\n"; }
 	    }
-	    if (defined $download_version) {
-		# set $newversion, $newfile matching $download_version if it is found in the web page
-		my @vfiles = grep { $$_[0] eq $download_version } @files;
-		if (@vfiles) {
-		    ($newversion, $newfile) = @{$vfiles[0]};
-		} else {
-		    uscan_warn "$progname warning: In $watchfile no matching files for version $download_version"
-			. " in watch line\n  $line\n";
-		    return 1;
-		}
+	}
+	if (defined $download_version) {
+	    my @vfiles = grep { $$_[2] } @files;
+	    if (@vfiles) {
+		($newversion, $newfile, undef) = @{$vfiles[0]};
 	    } else {
-		# set the newest $newversion, $newfile if $download_version is not defined
-		@files = Devscripts::Versort::upstream_versort(@files);
-		($newversion, $newfile) = @{$files[0]};
+		uscan_warn "$progname warning: In $watchfile no matching files for version $download_version"
+		    . " in watch line\n  $line\n";
+		return 1;
 	    }
 	} else {
-	    uscan_warn "$progname warning: In $watchfile no matching files for watch line\n  $line\n";
-	    return 1;
+	    if (@files) {
+	    	($newversion, $newfile, undef) = @{$files[0]};
+	    } else {
+		uscan_warn "$progname warning: In $watchfile no matching files for watch line\n  $line\n";
+		return 1;
+	    }
 	}
     } else {
 	# Neither HTTP nor FTP
@@ -3234,7 +3264,9 @@ sub newest_dir ($$$$$) {
     my ($site, $dir, $pattern, $optref, $watchfile) = @_;
     my $base = $site.$dir;
     my ($request, $response);
+    my $newdir;
 
+    print STDERR "$progname debug: download version requested: $download_version\n" if $debug and defined $download_version; 
     if ($site =~ m%^http(s)?://%) {
 	if (defined($1) and !$haveSSL) {
 	    uscan_die "$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
@@ -3262,28 +3294,48 @@ sub newest_dir ($$$$$) {
 	print STDERR "$progname debug: matching pattern $dirpattern\n"
 	    if $debug;
 	my @hrefs;
+	my $match ='';
 	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi) {
 	    my $href = $2;
 	    if ($href =~ m&^$dirpattern/?$&) {
 		my $mangled_version = join(".", map { $_ // '' } $href =~ m&^$dirpattern/?$&);
-		push @hrefs, [$mangled_version, $href];
+		foreach my $pat (@{$$optref{'dirversionmangle'}}) {
+		    print STDERR "$progname debug: Dirversionnmangle rule: $pat\n" if $debug;
+		    if (! safe_replace(\$mangled_version, $pat)) {
+			uscan_warn "$progname: In $watchfile, potentially"
+			. " unsafe or malformed dirversionmangle"
+			. " pattern:\n  '$pat'"
+			. " found.\n";
+			return 1;
+		    }
+		}
+		$match = '';
+		if (defined $download_version) {
+		    if ($mangled_version eq $download_version) {
+			$match = "matched with the download version";
+		    }
+		}
+		push @hrefs, [$mangled_version, $href, $match];
 	    }
+	}
+	my @vhrefs = grep { $$_[2] } @hrefs;
+	if (@vhrefs) {
+	    $newdir = $vhrefs[0][1];
 	}
 	if (@hrefs) {
 	    @hrefs = Devscripts::Versort::upstream_versort(@hrefs);
 	    if ($debug) {
 		print "-- Found the following matching hrefs (newest first):\n";
-		foreach my $href (@hrefs) { print "     $$href[1] ($$href[0])\n"; }
+		foreach my $href (@hrefs) { print "     $$href[1] ($$href[0]) $$href[2]\n"; }
 	    }
-	    my $newdir = $hrefs[0][1];
-	    # just give the final directory component
-	    $newdir =~ s%/$%%;
-	    $newdir =~ s%^.*/%%;
-	    return $newdir;
+	    $newdir //= $hrefs[0][1];
 	} else {
 	    uscan_warn "$progname warning: In $watchfile,\n  no matching hrefs for pattern\n  $site$dir$pattern";
 	    return '';
 	}
+	# just give the final directory component
+	$newdir =~ s%/$%%;
+	$newdir =~ s%^.*/%%;
     }
     elsif ($site =~ m%^ftp://%) {
 	# FTP site
@@ -3312,6 +3364,7 @@ sub newest_dir ($$$$$) {
 	# so we may have to look for <a href="filename"> type patterns
 	print STDERR "$progname debug: matching pattern $pattern\n" if $debug;
 	my (@dirs);
+	my $match ='';
 
 	# We separate out HTMLised listings from standard listings, so
 	# that we can target our search correctly
@@ -3320,7 +3373,23 @@ sub newest_dir ($$$$$) {
 		m/(?:<\s*a\s+[^>]*href\s*=\s*\")((?-i)$pattern)\"/gi) {
 		my $dir = $1;
 		my $mangled_version = join(".", $dir =~ m/^$pattern$/);
-		push @dirs, [$mangled_version, $dir];
+		foreach my $pat (@{$$optref{'dirversionmangle'}}) {
+		    print STDERR "$progname debug: Dirversionnmangle rule: $pat\n" if $debug;
+		    if (! safe_replace(\$mangled_version, $pat)) {
+			uscan_warn "$progname: In $watchfile, potentially"
+			. " unsafe or malformed dirversionmangle"
+			. " pattern:\n  '$pat'"
+			. " found.\n";
+			return 1;
+		    }
+		}
+		$match = '';
+		if (defined $download_version) {
+		    if ($mangled_version eq $download_version) {
+			$match = "matched with the download version";
+		    }
+		}
+		push @dirs, [$mangled_version, $dir, $match];
 	    }
 	} else {
 	    # they all look like:
@@ -3329,27 +3398,48 @@ sub newest_dir ($$$$$) {
 		if ($ln =~ m/($pattern)(\s+->\s+\S+)?$/) {
 		    my $dir = $1;
 		    my $mangled_version = join(".", $dir =~ m/^$pattern$/);
-		    push @dirs, [$mangled_version, $dir];
+		    foreach my $pat (@{$$optref{'dirversionmangle'}}) {
+			print STDERR "$progname debug: Dirversionnmangle rule: $pat\n" if $debug;
+			if (! safe_replace(\$mangled_version, $pat)) {
+			    uscan_warn "$progname: In $watchfile, potentially"
+			    . " unsafe or malformed dirversionmangle"
+			    . " pattern:\n  '$pat'"
+			    . " found.\n";
+			    return 1;
+			}
+		    }
+		    $match = '';
+		    if (defined $download_version) {
+			if ($mangled_version eq $download_version) {
+			    $match = "matched with the download version";
+			}
+		    }
+		    push @dirs, [$mangled_version, $dir, $match];
 		}
 	    }
 	}
+	my @vdirs = grep { $$_[2] } @dirs;
+	if (@vdirs) {
+	    $newdir = $vdirs[0][1];
+	}
 	if (@dirs) {
-	    if ($debug) {
-		print STDERR "-- Found the following matching dirs:\n";
-		foreach my $dir (@dirs) { print STDERR "     $$dir[1]\n"; }
-	    }
 	    @dirs = Devscripts::Versort::upstream_versort(@dirs);
-	    my ($newversion, $newdir) = @{$dirs[0]};
-	    return $newdir;
+	    if ($debug) {
+		print STDERR "-- Found the following matching FTP dirs (newest first):\n";
+		foreach my $dir (@dirs) { print STDERR "     $$dir[1] ($$dir[0]) $$dir[2]\n"; }
+	    }
+	    $newdir //= $dirs[0][1];
 	} else {
 	    uscan_warn "$progname warning: In $watchfile no matching dirs for pattern\n  $base$pattern\n";
-	    return '';
+	    $newdir = '';
 	}
     }
     else {
 	# Neither HTTP nor FTP site
-	return 1;
+        uscan_warn "$progname: neither HTTP nor FTP site, impossible case for newdir().\n";
+	$newdir = '';
     }
+    return $newdir;
 }
 
 
