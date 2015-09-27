@@ -453,14 +453,14 @@ if (@exclude_globs) {
 		$last_match = $info;
 	    }
 	}
-	if ($last_match) {
+	if (defined $last_match) {
 	    $last_match->{used} = 1;
 	}
     }
 
     for my $info (@exclude_info) {
 	if (!$info->{used}) {
-	    warn "No files matched excluded pattern: $info->{glob}\n";
+	    warn "No files matched excluded pattern as the last matching glob: $info->{glob}\n";
 	}
     }
 
