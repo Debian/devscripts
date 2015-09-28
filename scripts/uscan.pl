@@ -311,13 +311,17 @@ Verify the previous downloaded file by this signature file.  The previous watch 
 
 =item B<self>
 
-Verify the file by the self signature (not implemented yet)
+Verify the file by the self signature
 
 =item B<none>
 
 No signature available. (No warning.)
 
 =back
+
+=item B<decompress>
+
+Decompress compressed archive before the pgp/gpg signature verification.
 
 =item B<user-agent=>I<user-agent-string>
 
@@ -1376,7 +1380,7 @@ eval { require LWP::Protocol::https; };
 if ($@) {
     $haveSSL = 0;
 }
-my $havegpgv = (-x '/usr/bin/gpgv');
+my $havegpgv = first { -x $_ } qw(/usr/bin/gpgv2 /usr/bin/gpgv);
 my $havegpg = first { -x $_ } qw(/usr/bin/gpg2 /usr/bin/gpg);
 
 # Did we find any new upstream versions on our wanderings?
@@ -1525,7 +1529,9 @@ my $common_newversion ; # undef initially (for MUT, version=same)
 my $common_mangled_newversion ; # undef initially (for MUT)
 my $previous_newversion ; # undef initially (for version=prev, pgpmode=prev)
 my $previousfile_base ; # undef initially (for pgpmode=prev)
-my $pgp_used = 0;
+my ($keyring, $gpghome); # must be persistent for MUT
+my $gpgv_used = 0;
+my $gpg_used = 0;
 
 if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg = "  (no configuration files read)";
@@ -2017,6 +2023,7 @@ sub process_watchline ($$$$$$)
     my %options = (
 	'repack' => $repack,
 	'pgpmode' => 'mangle',
+	'decompress' => 0,
 	'versionmode' => 'newer'
 	); # non-persistent variables
     my ($request, $response);
@@ -2024,7 +2031,6 @@ sub process_watchline ($$$$$$)
     my $style='new';
     my $urlbase;
     my $headers = HTTP::Headers->new;
-    my ($keyring, $gpghome);
 
     # Need to clear remembered redirection URLs so we don't try to build URLs
     # from previous watch files or watch lines
@@ -2112,6 +2118,9 @@ sub process_watchline ($$$$$$)
 		elsif ($opt =~ /^\s*pgpmode\s*=\s*(.+?)\s*$/) {
 			$options{'pgpmode'} = $1;
 		}
+		elsif ($opt =~ /^\s*decompress\s*$/) {
+		    $options{'decompress'}=1;
+		}
 		elsif ($opt =~ /^\s*repack\s*$/) {
 		    # non-persistent $options{'repack'}
 		    $options{'repack'} = 1;
@@ -2150,7 +2159,6 @@ sub process_watchline ($$$$$$)
 		}
 		elsif ($opt =~ /^\s*pgpsigurlmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'pgpsigurlmangle'}} = split /;/, $1;
-		    $pgp_used++;
 		}
 		else {
 		    uscan_warn "$progname warning: unrecognised option $opt\n";
@@ -2211,12 +2219,16 @@ sub process_watchline ($$$$$$)
 	    $repacksuffix_used =1;
 	}
 	if ($repacksuffix_used and @components) {
-	    uscan_die "$progname: repacksuffix is not compatible with the multiple upstream tarballs;  use oversionmangle\n";
+	    uscan_warn "$progname: repacksuffix is not compatible with the multiple upstream tarballs;  use oversionmangle\n";
+	    return 1
 	}
 
 	# Allow 2 char shorthands for opts="pgpmode=..." and check
 	if ($options{'pgpmode'} =~ m/^ma/) {
 	    $options{'pgpmode'} = 'mangle';
+	    if (defined $options{'pgpsigurlmangle'}) {
+		$gpgv_used++;
+	    }
 	} elsif ($options{'pgpmode'} =~ m/^no/) {
 	    $options{'pgpmode'} = 'none';
 	} elsif ($options{'pgpmode'} =~ m/^ne/) {
@@ -2224,18 +2236,24 @@ sub process_watchline ($$$$$$)
 	} elsif ($options{'pgpmode'} =~ m/^pr/) {
 	    $options{'pgpmode'} = 'previous';
 	    $options{'versionmode'} = 'previous';
-	    $pgp_used++;
+	    $gpgv_used++;
 	} elsif ($options{'pgpmode'} =~ m/^se/) {
 	    $options{'pgpmode'} = 'self';
-	    $pgp_used++;
+	    $gpg_used++;
 	} else {
 	    uscan_warn "$progname warning: Unable to determine the signature type for $options{'pgpmode'}, use pgpmode=mangle\n";
 	}
 
 	# If PGP used, check required programs and generate files
-	if (($download || $force_download) && $pgp_used == 1) {
-	    if (! $havegpgv) {
-		uscan_warn "$progname warning: pgpsigurlmangle option exists, but you must have gpgv installed to verify\n  in $watchfile, skipping:\n  $line\n";
+	print STDERR "$progname debug: \$gpgv_used=$gpgv_used, \$gpg_used=$gpg_used, \$download=$download, \$force_download=$force_download\n" if $debug;
+	print STDERR "$progname debug: \$options{'pgpmode'}=$options{'pgpmode'}, \$options{'pgpsigurlmangle'}=$options{'pgpsigurlmangle'}\n" if $debug;
+	if (($download or $force_download) and ($gpgv_used == 1 or $gpg_used == 1)) {
+	    if ($gpgv_used == 1 and ! $havegpgv) {
+		uscan_warn "$progname warning: pgpsigurlmangle option exists, please install gpgv or gpgv2.\n";
+		return 1;
+	    }
+	    if ($gpg_used == 1 and ! $havegpg) {
+		uscan_warn "$progname warning: pgpmode=self option exists, please install gnupg or gnupg2.\n";
 		return 1;
 	    }
 	    # upstream-signing-key.pgp is deprecated
@@ -2243,10 +2261,13 @@ sub process_watchline ($$$$$$)
 	    if (!defined $keyring) {
 		uscan_warn "$progname warning: pgpsigurlmangle option exists, but the upstream keyring does not exist\n  in $watchfile, skipping:\n  $line\n";
 		return 1;
+	    } else {
+		print STDERR "$progname debug: Found upstream signing keyring: $keyring\n" if $debug;
 	    }
+
 	    if ($keyring =~ m/\.asc$/) {
 		if (!$havegpg) {
-		    uscan_warn "$progname warning: $keyring is armored but gpg/gpg2 is not available to dearmor it\n  in $watchfile, skipping:\n $line\n";
+		    uscan_warn "$progname warning: $keyring is armored, please install gnupg or gnupg2.\n";
 		    return 1;
 		}
 		# Need to convert an armored key to binary for use by gpgv
@@ -2262,14 +2283,16 @@ sub process_watchline ($$$$$$)
 	if ($options{'pgpmode'} ne 'previous') {
 	    if (defined $options{'component'}) {
 		if ( grep {$_ eq $options{'component'}} @components ) {
-		    uscan_die "$progname: duplicate component name: $options{'component'}\n";
+		    uscan_warn "$progname: duplicate component name: $options{'component'}\n";
+		    return 1;
 		}
 		push @components, $options{'component'};
 		$orig = "orig-$options{'component'}";
 	    } else {
 		$origcount++ ;
 		if ($origcount > 1) {
-		    uscan_die "$progname: too many main upstream tarballs\n";
+		    uscan_warn "$progname: too many main upstream tarballs\n";
+		    return 1;
 		}
 		$orig = "orig";
 	    }
@@ -2942,18 +2965,55 @@ EOF
     if (!$downloader->($upstream_url, "$destdir/$newfile_base")) {
 	return 1;
     }
+    # Decompress archive if requested and applicable
+    my $sigfile_base = $newfile_base;
+    if ($options{'decompress'} and 
+	($options{'pgpmode'} eq 'mangle' or $options{'pgpmode'} eq 'next')) {
+	my $suffix = $sigfile_base;
+	$suffix =~ s/.*?(\.gz|\.xz|\.bz2|\.lzma)?$/$1/;
+	if ($suffix eq '.gz') {
+	    if ( -x '/bin/gunzip') {
+		system('/bin/gunzip', '$destdir/$sigfile_base');
+		$sigfile_base =~ s/(.*?)\.gz/$1/;
+	    } else {
+		uscan_die("$progname: Please install gzip.\n");
+	    }
+	} elsif ($suffix eq '.xz') {
+	    if ( -x '/usr/bin/unxz') {
+		system('/usr/bin/unxz', '$destdir/$sigfile_base');
+		$sigfile_base =~ s/(.*?)\.xz/$1/;
+	    } else {
+		uscan_die("$progname: Please install xz-utils.\n");
+	    }
+	} elsif ($suffix eq '.bz2') {
+	    if ( -x '/bin/bunzip2') {
+		system('/bin/bunzip2', '$destdir/$sigfile_base');
+		$sigfile_base =~ s/(.*?)\.bz2/$1/;
+	    } else {
+		uscan_die("$progname: Please install bzip2.\n");
+	    }
+	} elsif ($suffix eq '.lzma') {
+	    if ( -x '/usr/bin/unlzma') {
+		system('/usr/bin/unlzma', '$destdir/$sigfile_base');
+		$sigfile_base =~ s/(.*?)\.lzma/$1/;
+	    } else {
+		uscan_die("$progname: Please install xz-utils or lzma.\n");
+	    }
+	}
+
+    }
     # Check GPG
     if ($options{'pgpmode'} eq 'mangle') {
 	if (defined $pgpsig_url) {
-	    print "-- Downloading OpenPGP signature for package as $newfile_base.pgp\n" if $verbose;
-	    if (!$downloader->($pgpsig_url, "$destdir/$newfile_base.pgp")) {
+	    print "-- Downloading OpenPGP signature for package as $sigfile_base.pgp\n" if $verbose;
+	    if (!$downloader->($pgpsig_url, "$destdir/$sigfile_base.pgp")) {
 		return 1;
 	    }
 
-	    print "-- Verifying OpenPGP signature $newfile_base.pgp for $newfile_base\n" if $verbose;
-	    system('/usr/bin/gpgv', '--homedir', '/dev/null',
+	    print "-- Verifying OpenPGP signature $sigfile_base.pgp for $sigfile_base\n" if $verbose;
+	    system($havegpgv, '--homedir', '/dev/null',
 		   '--keyring', $keyring,
-		   "$destdir/$newfile_base.pgp", "$destdir/$newfile_base") >> 8 == 0
+		   "$destdir/$sigfile_base.pgp", "$destdir/$sigfile_base") >> 8 == 0
 			or uscan_die("$progname: OpenPGP signature did not verify.\n");
 	} else {
 	    print "-- Checking for common possible upstream OpenPGP signatures\n" if $verbose;
@@ -2970,7 +3030,7 @@ EOF
 	$previous_newversion = undef;
     } elsif ($options{'pgpmode'} eq 'next') {
 	print "-- Differ checking OpenPGP signature to the next watch line\n" if $verbose;
-	$previousfile_base = $newfile_base;
+	$previousfile_base = $sigfile_base;
 	$previous_newversion = $newversion;
 
     } elsif ($options{'pgpmode'} eq 'previous') {
@@ -2980,14 +3040,22 @@ EOF
 	    uscan_die "pgpmode=previous requires previous watch line to be pgpmode=next.\n";
 	}
 	print "-- Verifying OpenPGP signature of $previousfile_base with $newfile_base\n" if $verbose;
-	system('/usr/bin/gpgv', '--homedir', '/dev/null',
+	system($havegpgv, '--homedir', '/dev/null',
 	       '--keyring', $keyring,
 	       "$destdir/$newfile_base", "$destdir/$previousfile_base") >> 8 == 0
 		    or uscan_die("$progname: OpenPGP signature did not verify.\n");
 	$previousfile_base = undef;
 	$previous_newversion = undef;
     } elsif ($options{'pgpmode'} eq 'self') {
-	print "-- Checking OpenPGP self signatures ... oops, not implemented yet\n" if $verbose;
+	$gpghome = tempdir(CLEANUP => 1);
+	$newfile_base = $sigfile_base;
+	$newfile_base =~ s/^(.*?)\.[^\.]+$/$1/;
+	print "-- Verifying OpenPGP self signature of $sigfile_base and extract $newfile_base\n" if $verbose;
+	system($havegpg, '--homedir', $gpghome,
+	       '--no-options', '-q', '--batch', '--no-default-keyring',
+	       '--keyring', $keyring, '--trust-model', 'always', '--decrypt', '-o',
+	       "$destdir/$newfile_base", "$destdir/$sigfile_base") >> 8 == 0
+		    or uscan_die("$progname: OpenPGP signature did not verify.\n");
 	$previousfile_base = undef;
 	$previous_newversion = undef;
     } elsif ($options{'pgpmode'} eq 'none') {
@@ -3126,6 +3194,7 @@ EOF
 
 
 sub recursive_regex_dir ($$$) {
+    # If return '', parent code to cause return 1
     my ($base, $optref, $watchfile)=@_;
 
     $base =~ m%^(\w+://[^/]+)/(.*)$%;
@@ -3160,6 +3229,8 @@ sub recursive_regex_dir ($$$) {
 
 # very similar to code above
 sub newest_dir ($$$$$) {
+    # return string $newdir as success
+    # return string '' if error, to cause grand parent code to return 1
     my ($site, $dir, $pattern, $optref, $watchfile) = @_;
     my $base = $site.$dir;
     my ($request, $response);
@@ -3173,7 +3244,7 @@ sub newest_dir ($$$$$) {
 	$response = $user_agent->request($request);
 	if (! $response->is_success) {
 	    uscan_warn "$progname warning: In watchfile $watchfile, reading webpage\n  $base failed: " . $response->status_line . "\n";
-	    return 1;
+	    return '';
 	}
 
 	my $content = $response->content;
@@ -3211,7 +3282,7 @@ sub newest_dir ($$$$$) {
 	    return $newdir;
 	} else {
 	    uscan_warn "$progname warning: In $watchfile,\n  no matching hrefs for pattern\n  $site$dir$pattern";
-	    return 1;
+	    return '';
 	}
     }
     elsif ($site =~ m%^ftp://%) {
