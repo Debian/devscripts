@@ -85,13 +85,13 @@ Please note the following.
 =over
 
 =item * For simplicity, the compression method used in examples is B<gzip> with
-B<.gz> suffix.  Other methods such as B<xz>, B<bzip2>, and B<lzma> may also be
-used.
+B<.gz> suffix.  Other methods such as B<xz>, B<bzip2>, and B<lzma> with
+corresponding B<xz>, B<bz2>, and B<lzma> suffixes may also be used.
 
-=item * The new B<version=4> enables to handle the MUT package but it is a rare
-case for the Debian packaging.  For the single upstream tarball package, there
-is only one watch line and no I<< ../<spkg>_<oversion>.orig-<component>.tar.gz
->> .
+=item * The new B<version=4> enables to handle the multiple upstream tarball
+(MUT) package but it is a rare case for the Debian packaging.  For the single
+upstream tarball package, there is only one watch line and no I<<
+../<spkg>_<oversion>.orig-<component>.tar.gz >> .
 
 =item * B<uscan> with the B<--report> option produces a human readable report
 without downloading the upstream tarball.
@@ -108,7 +108,7 @@ programs such as the Debian External Health System.
 
 =item * The primary objective of B<uscan> is to help identify if the latest
 version upstream tarball is used or not; and to download the latest upstream
-tarball.  All other features are there as best effort features.
+tarball.  The order of the version is decided by B<dpkg --compare-versions>.
 
 =back
 
@@ -225,15 +225,15 @@ set to B<uupdate>.
 
 =item * The native package should skip specifying I<script>.
 
-=item * The multiple upstream tarball package should specify B<uupdate> as
-I<script> at the last watch line and should skip specifying I<script> at
-the rest of the watch lines.
+=item * The multiple upstream tarball (MUT) package should specify B<uupdate>
+as I<script> at the last watch line and should skip specifying I<script> at the
+rest of the watch lines.
 
 =back
 
 =item * The last format of the watch line is useful to set the persistent
-parameters.  If this is used, this must be followed by the I<URL> defining
-watch line(s).
+parameters: B<user-agent>, B<compression>.  If this format is used, this must
+be followed by the I<URL> defining watch line(s).
 
 =item * [ and ] in the above format are there to mark the optional parts and
 should not be typed.
@@ -263,13 +263,13 @@ Set the name of the secondary source tarball as I<<
 
 =item B<compression=>I<method>
 
-Set the compression I<method> when it is repacked. (persistent)
+Set the compression I<method> when the tarball is repacked. (persistent)
 
 Available I<method> values are B<xz>, B<gzip> (alias B<gz>), B<bzip2> (alias
 B<bz2>), and B<lzma>.
 
 Please note the repack of the upstream tarballs happen only if one of the
-following condition satisfied:
+following condition is satisfied:
 
 =over
 
@@ -278,11 +278,12 @@ CONFIGURATION VARIABLES>.
 
 =item * B<--repack> is set in the commandline.  See <COMMANDLINE OPTIONS>.
 
-=item * B<repack> is set in the watch line as B<opts=>I<...>.
+=item * B<repack> is set in the watch line as B<opts="repack,>I<...>B<">.
 
-=item * The upstream tarballs contain files listed under the B<Files-Excluded>
-and B<Files-Excluded->I<component> stanza of F<debian/copyright>.  See
-mk-origtargz(1).
+=item * B<Files-Excluded> or B<Files-Excluded->I<component> stanzas are set in
+F<debian/copyright> to make B<mk-origtargz> invoked from B<uscan> to remove
+files from the upstream tarball and to repack it.  See L<COPYRIGHT FILE
+EXAMPLES> and mk-origtargz(1).
 
 =back
 
@@ -292,8 +293,9 @@ Force to repack the upstream tarball using the compression I<mathod>.
 
 =item B<repacksuffix=>I<suffix>
 
-Add I<suffix> to the version as suffix when the source tarball is repackaged.
-This rule should be used only for the single upstream package.
+Add I<suffix> to the Debian package upstream version as suffix only when the
+source tarball is repackaged.  This rule should be used only for the single
+upstream tarball package.
 
 =item B<pgpmode=>I<mode>
 
@@ -306,17 +308,24 @@ Set the pgp/gpg signature verification I<mode>.
 Use B<pgpsigurlmangle=>I<rules> to generate the candidate upstream signature
 file URL string from the upstream tarball URL. (default)
 
+If actual B<pgpsigurlmangle> is missing, B<uscan> checks possible URLs for the
+signature file and suggests to add B<pgpsigurlmangle> rule.
+
 =item B<next>
 
-Verify this downloaded file by the next downloaded signature file.  The next watch line must be B<previous>.  Otherwise, no verification.
+Verify this downloaded tarball file with the signature file specified in the
+next watch line.  The next watch line must be B<pgpmode=previous>.  Otherwise,
+no verification.
 
 =item B<previous>
 
-Verify the previous downloaded file by this signature file.  The previous watch line must be B<next>.
+Verify the downloaded tarball file specified in the previous watch line with
+this signature file.  The previous watch line must be B<pgpmode=next>.
 
 =item B<self>
 
-Verify the file by the self signature
+Verify the downloaded file I<foo.ext> with its self signature and extract its
+content tarball file as I<foo>.
 
 =item B<none>
 
@@ -339,53 +348,57 @@ Set the user-agent string used to contact the HTTP(S) server as
 I<user-agent-string>. (persistent)
 
 B<user-agent> option should be specified by itself in the watch line without
-I<URL> and other options to allow using semicolons and commas in it.
+I<URL> by itself to allow using semicolons and commas in it.
 
 =item B<pasv>, B<passsive>
 
-Use PASV mode for the FTP connection.
+Use the PASV mode for the FTP connection.
 
 If the PASV mode is required due to the client side network environment, set
-B<uscan> to use PASV mode via L<COMMANDLINE OPTIONS> or L<DEVSCRIPT
+B<uscan> to use the PASV mode via L<COMMANDLINE OPTIONS> or L<DEVSCRIPT
 CONFIGURATION VARIABLES> instead.
 
 =item B<active>, B<nopasv>
 
-Don't use PASV mode for the FTP connection.
+Don't use the PASV mode for the FTP connection.
 
 =item B<dversionmangle=>I<rules>
 
-Normalize the last upstream version string found in F<debian/changelog>.  Removal of upstream repackage mark by B<+s/dfsg\d+$//> is usually done here.
+Normalize the last upstream version string found in F<debian/changelog> to
+compare it to the available upstream tarball version.  Removal of the Debian
+specific suffix such as B<s/\+dfsg\d*$//> is usually done here.
 
 =item B<dirversionmangle=>I<rules>
 
 Normalize the directory path string matching the regex in a set of parentheses
-of B<http::/>I<URL> as the sortable version string.  This is used as the
-sorting index only.
+of B<http::/>I<URL> as the sortable version index string.  This is used as the
+directory path sorting index only.
 
 =item B<pagemangle=>I<rules>
 
 Normalize the downloaded web page string.  (Do not use this unless this is
-absolutely needed.  Generally, B<g> option is required for rules.)
+absolutely needed.  Generally, B<g> flag is required for these I<rules>.)
+Substitution such as B<s/PRE/~pre/; s/RC/~rc/> may help.
 
 =item B<uversionmangle=>I<rules>
 
 Normalize the candidate upstream version strings extracted from hrefs in the
-source of the web page.  This is used as the sorting index when selecting the
-latest upstream version.
+source of the web page.  This is used as the version sorting index when
+selecting the latest upstream version.
 
 =item B<versionmangle=>I<rules>
 
-Syntactic shorthand for B<uversionmangle=>I<rules>B<,dversionmangle=>I<rules>
+Syntactic shorthand for B<uversionmangle=>I<rules>B<, dversionmangle=>I<rules>
 
 =item B<filenamemangle=>I<rules>
 
 Normalize the downloaded tarball filename string I<< <upkg>-<uversion>.tar.gz
->>.
+>> from the selected href string.
 
 =item B<downloadurlmangle=>I<rules>
 
-Normalize the candidate upstream tarball URL string.
+Convert the selected upstream tarball href string into the accessible URL for
+obfusicated web sites.
 
 =item B<pgpsigurlmangle=>I<rules>
 
@@ -395,18 +408,20 @@ tarball URL.
 =item B<oversionmangle=>I<rules>
 
 Generate the version string I<< <oversion> >> of the source tarball I<<
-<spkg>_<oversion>.orig.tar.gz >> from I<< <uversion> >>.
+<spkg>_<oversion>.orig.tar.gz >> from I<< <uversion> >>.  This should be used
+to add suffix such as B<+dfsg1> to the MUT package.
 
 =back
 
 Here, the mangling rules apply the I<rules> to the pertinent string.  Multiple
-rules can be specified in a mangling rule by making a concatenated string of
-each mangling I<rule> separated by B<;> (semicolon).
+rules can be specified in a mangling rule string by making a concatenated
+string of each mangling I<rule> separated by B<;> (semicolon).
 
-Each mangling I<rule> can not contain B<;> (semicolon) nor B<,> (comma).
+Each mangling I<rule> can not contain B<;> (semicolon), B<,> (comma), or B<">
+(double quote).
 
-Each mangling I<rule> behaves as if a Perl command "I<$string> B<~=>
-I<rule>" is executed.  There are some notable details.
+Each mangling I<rule> behaves as if a Perl command "I<$string> B<=~> I<rule>"
+is executed.  There are some notable details.
 
 =over
 
@@ -434,7 +449,7 @@ Transliterate the characters in the target string.
 B<uscan> reads the first entry in F<debian/changelog> to determine the source
 package name and the last upstream version.
 
-For example, if the first entry of F<debian/changelog> may be:
+For example, if the first entry of F<debian/changelog> is:
 
 =over
 
@@ -442,7 +457,7 @@ For example, if the first entry of F<debian/changelog> may be:
 
 =back
 
-then, the source package name is I<< bar >> and the last upstream version
+then, the source package name is I<< bar >> and the last Debian package version
 is B<3:2.03+dfsg1-4>.
 
 The last upstream version is normalized to B<2.03+dfsg1> by removing the epoch
@@ -472,7 +487,10 @@ it is taken as verbatim.
 
 =item * If the directory name part of I<URL> has parentheses, B<(> and B<)>,
 then B<uscan> recursively searches all possible directories to find a page for
-the newest version.
+the newest version.  If the B<dirversionmangle> rule exists, the generated
+sorting index is used to find the newest version.  If a specific version is
+specified for the download, the matching version string has priority over the
+newest version.
 
 =back
 
@@ -480,23 +498,24 @@ For example, this B<http://>I<URL> may be specified as:
 
 =over
 
-=item * B<http://www.example.org/DL(.+)/>
+=item * B<http://www.example.org/([\d\.]+)/>
 
 =back
 
-Please note the trailing B</> in the above.
+Please note the trailing B</> in the above to make B<([\d\.]+)> as the
+directory.
 
 If the B<pagemangle> rule exists, the whole downloaded web page as a string is
-normalized by applying this rule to it.  This is very powerful tool and needs to
-be used with caution.  If other mangling rules can be used to address your
+normalized by applying this rule to it.  This is very powerful tool and needs
+to be used with caution.  If other mangling rules can be used to address your
 objective, do not use this rule.
 
 The downloaded web page is scanned for hrefs defined in the B<< <a href=" >>
-I<...> B<< "> >> tag to locate the candidate upstream tarball URLs.  These
-candidate upstream tarball URLs are matched by the Perl regex pattern
-I<matching-pattern> such as B<< DL-(?:[\d\.]+?)/foo-(.+)\.tar\.gz >> to
-narrow down the candidates.  This pattern match needs to be anchored at the
-beginning and the end.  For example, candidate URLs may be:
+I<...> B<< "> >> tag to locate the candidate upstream tarball hrefs.  These
+candidate upstream tarball hrefs are matched by the Perl regex pattern
+I<matching-pattern> such as B<< DL-(?:[\d\.]+?)/foo-(.+)\.tar\.gz >> to narrow
+down the candidates.  This pattern match needs to be anchored at the beginning
+and the end.  For example, candidate hrefs may be:
 
 =over
 
@@ -527,39 +546,36 @@ Then, the candidate upstream versions are:
 
 =back
 
-The downloaded tarball filename is basically set to the same as its filename in
-the remote URL.
+The downloaded tarball filename is basically set to the same as the filename in
+the remote URL of the selected href.
 
 If the B<uversionmangle> rule exists, the candidate upstream versions are
 normalized by applying this rule to them. (This rule may be useful if the
-upstream version scheme doesn't sort correctly to identify the newest
-version.)
+upstream version scheme doesn't sort correctly to identify the newest version.)
 
-The upstream tarball URL corresponding to the newest (uversionmangled) candidate
-upstream version newer than the (dversionmangled) last upstream version is
-selected to be the candidate upstream tarball URL.
-
-Here, the order of the version is decided by B<dpkg --compare-versions>.
+The upstream tarball href corresponding to the newest (uversionmangled)
+candidate upstream version newer than the (dversionmangled) last upstream
+version is selected.
 
 If the B<filenamemangle> rule exists, the downloaded tarball filename is
-normalized by applying this rule to it. (This rule may not be as significant
-for modern use cases.  B<mk-origtargz> takes care the proper renaming of the
-source tarballs into <spkg>_<oversion>.orig.tar.gz based on the source package
-name in F<debian/changelog> without relying on the filename of the remote URL.
-Now, B<uupdate> is invoked by B<uscan> with B<--find> option and is not
-expected to rename the downloaded tarball anymore.)
+generated by applying this rule to the selected href. (This rule may not be as
+significant for the modern use case of B<uscan>.  B<mk-origtargz> takes care
+the proper renaming of the source tarballs into <spkg>_<oversion>.orig.tar.gz
+based on the source package name in F<debian/changelog> without relying on the
+filename of the remote URL.  Now, B<uupdate> is invoked by B<uscan> with
+B<--find> option and is not expected to rename the downloaded tarball anymore.)
 
-If the candidate upstream tarball URL is a relative URL, it is converted to a
-absolute URL using the base URL of the web page.  If the B<< <base href=" >> I<
-... > B<< "> >> tag exists in the web page, the candidate upstream tarball URL
-is converted to the absolute URL using the specified base URL in the base tag,
-instead.
+If the selected upstream tarball href is the relative URL, it is converted to
+the absolute URL using the base URL of the web page.  If the B<< <base href="
+>> I< ... > B<< "> >> tag exists in the web page, the selected upstream tarball
+href is converted to the absolute URL using the specified base URL in the base
+tag, instead.
 
-If the B<downloadurlmangle> rule exists, the candidate upstream tarball URL is
+If the B<downloadurlmangle> rule exists, the selected upstream tarball href is
 normalized by applying this rule to it. (This is useful for some sites with the
 obfuscated download URL.)
 
-B<uscan> downloads the candidate upstream tarball to the parent B<../>
+B<uscan> downloads the selected upstream tarball to the parent B<../>
 directory.  For example, the downloaded file may be:
 
 =over
@@ -572,28 +588,29 @@ Let's call this downloaded version B<2.04> in the above example generically as
 I<< <uversion> >> in the following.
 
 If the B<pgpsigurlmangle> rule exists, the upstream signature file URL is
-generated by applying this rule to the (downloadurlmangled) candidate upstream
-tarball URL and the signature file is tried to be downloaded.
+generated by applying this rule to the (downloadurlmangled) selected upstream
+tarball href and the signature file is tried to be downloaded from it.
 
 If the B<pgpsigurlmangle> rule doesn't exist, B<uscan> warns user if the
 matching upstream signature file is available from the same URL with their
 filename being suffixed by the 4 common suffix B<asc>, B<gpg>, B<pgp>, and
-B<sig>.
+B<sig>. (You can avoid this warning by setting B<pgpmode=none>.)
 
 If the signature file is downloaded, the downloaded upstream tarball is checked
 for its authenticity against the downloaded signature file using the keyring
-F<debian/upstream/signing-key.pgp> or
-the armored keyring F<debian/upstream/signing-key.asc>. If its signature is not
-valid, or not made by one of the listed keys, B<uscan> will report an error.
+F<debian/upstream/signing-key.pgp> or the armored keyring
+F<debian/upstream/signing-key.asc>. If its signature is not valid, or not made
+by one of the listed keys, B<uscan> will report an error.
 
 If the B<oversionmangle> rule exists, the source tarball version I<oversion> is
 generated from the downloaded upstream version I<uversion> by applying this
 rule. This rule is useful to add suffix such as B<+dfsg1> to the version of all
 the source packages of the MUT package for which the repacksuffix mechanism
-doesn't work well.
+doesn't work.
 
 B<uscan> invokes B<mk-origtargz> to create the source tarball properly named
-for the source package with B<.orig.> in its filename.
+for the source package with B<.orig.> (or B<< .orig-<component>. >> for the
+secondary tarballs) in its filename.
 
 =over
 
@@ -637,16 +654,15 @@ For example, the repacked upstream tarball may be:
 
 =back
 
-B<uscan> normally invokes "B<uupdate> B<--find --upstream-version>
-I<oversion> " for the version=4 watch file.
+B<uscan> normally invokes "B<uupdate> B<--find --upstream-version> I<oversion>
+" for the version=4 watch file.
 
 Please note that B<--find> option is used here since B<mk-origtargz> has been
 invoked to make B<*.orig.tar.gz> file already.  B<uscan> picks I<< bar >> from
 F<debian/changelog>.
 
-It creates the new upstream source tree under the
-I<< ../bar-<oversion> >> directory and Debianize it leveraging the
-last package contents.
+It creates the new upstream source tree under the I<< ../bar-<oversion> >>
+directory and Debianize it leveraging the last package contents.
 
 =head1 WATCH FILE EXAMPLES
 
@@ -654,139 +670,127 @@ When writing the watch file, you should rely on the latest upstream source
 announcement web page.  You should not try to second guess the upstream archive
 structure if possible.  Here are the typical F<debian/watch> files.
 
-The existence and non-existence of a space before tailing B<\> (back slash) are
-significant.
+The existence and non-existence of a space the before tailing B<\> (back slash)
+are significant.
 
 =head2 HTTP site (basic)
 
-For the basic single upstream tarball case:
+Here is an example for the basic single upstream tarball.
 
   version=4
   http://example.com/~user/release/foo.html \
-  files/foo-([\d\.]*).tar.gz debian uupdate
+      files/foo-([\d\.]+)\.tar\.gz debian uupdate
 
-For the upstream source package is B<foo-2.0.tar.gz>, this watch file downloads
-and creates the Debian orig.tar file B<foo_2.0.orig.tar.gz>.
+For the upstream source package B<foo-2.0.tar.gz>, this watch file downloads
+and creates the Debian B<orig.tar> file B<foo_2.0.orig.tar.gz>.
 
 =head2 HTTP site (pgpsigurlmangle)
 
-For the basic single upstream tarball with the matching signature file in the
-same file path case:
+Here is an example for the basic single upstream tarball with the matching
+signature file in the same file path.
 
   version=4
-  opts="pgpsigurlmangle=s%(.*)%$1.asc%" \
-  http://example.com/~user/release/foo.html \
-  files/foo-([\d\.]*).tar.gz debian uupdate
+  opts="pgpsigurlmangle=s%$%.asc%" http://example.com/release/foo.html \
+      files/foo-([\d\.]+)\.tar\.gz debian uupdate
 
 For the upstream source package B<foo-2.0.tar.gz> and the upstream signature
-file B<foo-2.0.tar.gz.asc>, this watch file downloads files, verify its
-authenticity using F<debian/upstream-key.pgp> and creates the Debian orig.tar
-file B<foo_2.0.orig.tar.gz>.
+file B<foo-2.0.tar.gz.asc>, this watch file downloads these files, verifies the
+authenticity using the keyring F<debian/upstream-key.pgp> and creates the
+Debian B<orig.tar> file B<foo_2.0.orig.tar.gz>.
 
-=head2 HTTP site (pgpmode)
+=head2 HTTP site (pgpmode=next/previous)
 
-For the basic single upstream tarball with the matching signature file not in
-the same file path case:
-
-  version=4
-  opts="pgpmode=next" \
-  http://example.com/~user/release/foo.html \
-  files/(?:\d*)/foo-([\d\.]*).tar.gz debian
-  opts="pgpmode=previous" \
-  http://example.com/~user/release/foo.html \
-  files/(?:\d+)/foo-([\d\.]*).tar.gz.asc previous uupdate
-
-Please note the upstream tarball and the signature file share the same version
-number.
-
-=head2 HTTP site (basic MUT)
-
-For the basic 2 upstream tarball case:
+Here is an example for the basic single upstream tarball with the matching
+signature file in the unrelated file path.
 
   version=4
-  http://example.com/~user/release/foo.html \
-  files/foo-([\d\.]*).tar.gz debian true
-  opts=component=baz \
-  http://example.com/~user/release/foo.html \
-  files/baz-([\d\.]*).tar.gz same uupdate
+  opts="pgpmode=next" http://example.com/release/foo.html \
+      files/(?:\d+)/foo-([\d\.]+)\.tar\.gz debian
+  opts="pgpmode=previous" http://example.com/release/foo.html \
+      files/(?:\d+)/foo-([\d\.]+)\.tar\.gz\.asc previous uupdate
 
-For the main upstream source package B<foo-2.0.tar.gz> and the secondary
-upstream source package B<bar-2.0.tar.gz> which installs under F<baz/>, this
-watch file downloads and creates the Debian orig.tar file
-B<foo_2.0.orig.tar.gz> and B<foo_2.0.orig-baz.tar.gz>.
+B<(?:\d+)> part can be any random value.  The tarball file can have B<53>,
+while the signature file can have B<33>.  
 
+B<([\d\.]+)> part for the signature file has a strict requirement to match that
+for the upstream tarball specified in the previous line by having B<previous>
+as I<version> in the watch line.
 
 =head2 HTTP site (flexible)
 
-For the maximum flexibility of upstream tarball and signature file extensions:
+Here is an example for the maximum flexibility of upstream tarball and
+signature file extensions.
 
   version=4
   opts="pgpmode=next" http://example.com/DL/ \
-  files/(?:\d*)/example-(\d[\d.]*)\.\
-  (?:zip|tgz|tbz2|txz|tar\.(?:gz|bz2|xz)) debian
+      files/(?:\d+)/example-([\d\.]+)\.\
+      (?:zip|tgz|tbz2|txz|tar\.(?:gz|bz2|xz)) debian
   opts="pgpmode=prevous" http://example.com/DL/ \
-  files/(?:\d*)/example-(\d[\d.]*)\.\
-  (?:zip|tgz|tbz2|txz|tar\.(?:gz|bz2|xz)\.(?:asc|pgp|gpg|sig)) \
-  previous uupdate
+      files/(?:\d+)/example-([\d\.]+)\.\
+      (?:zip|tgz|tbz2|txz|tar\.(?:gz|bz2|xz)\.(?:asc|pgp|gpg|sig)) \
+      previous uupdate
+
+=head2 HTTP site (basic MUT)
+
+Here is an example for the basic multiple upstream tarballs.
+
+  version=4
+  opts="pgpsigurlmangle=s%$%.sig%" \
+      http://example.com/release/foo.html \
+      files/foo-([\d\.]+)\.tar\.gz debian
+  opts="pgpsigurlmangle=s%$%.sig%, component=bar" \
+      http://example.com/release/foo.html \
+      files/foobar-([\d\.]+)\.tar\.gz same
+  opts="pgpsigurlmangle=s%$%.sig%, component=baz" \
+      http://example.com/release/foo.html \
+      files/foobaz-([\d\.]+)\.tar\.gz same uupdate
+
+For the main upstream source package B<foo-2.0.tar.gz> and the secondary
+upstream source packages B<foobar-2.0.tar.gz> and B<foobaz-2.0.tar.gz> which
+install under F<bar/> and F<baz/>, this watch file downloads and creates the
+Debian B<orig.tar> file B<foo_2.0.orig.tar.gz>, B<foo_2.0.orig-bar.tar.gz> and
+B<foo_2.0.orig-baz.tar.gz>.  Also, these upstream tarballs are verified by
+their signature files.
 
 =head2 HTTP site (recursive directory scanning)
 
-For recursive directory scanning:
+Here is an example with the recursive directory scanning for the upstream tarball 
+and its signature files released in a directory named
+after their version.
 
   version=4
-  http://tmrc.mit.edu/mirror/twisted/Twisted/(\d\.\d)/ \
-  Twisted-([\d\.]*)\.tar\.xz debian uupdate
+  opts="pgpsigurlmangle=s%$%.sig%, dirversionmangle=s/-PRE/~pre/;s/-RC/~rc/" \
+      http://tmrc.mit.edu/mirror/twisted/Twisted/([\d+\.]+)/ \
+      Twisted-([\d\.]+)\.tar\.xz debian uupdate
 
-or in one string style variant
-
-  version=4
-  http://tmrc.mit.edu/mirror/twisted/\
-  Twisted/(\d\.\d)/Twisted-([\d\.]*)\.tar\.xz debian uupdate
-
-Here, the web site should be able to handle requests to:
+Here, the web site should be accessible at the following URL:
 
   http://tmrc.mit.edu/mirror/twisted/Twisted/
 
-=head2 HTTP site (alternative)
+Here, B<dirversionmangle> option is used to normalize the sorting order of the
+directory names.
 
-For one string style:
+=head2 HTTP site (alternative shorthand)
 
-  version=4
-  http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-(.+)\.tar\.gz \
-  debian uupdate
-
-This is the same as
+For the bare HTTP site where you can directly see archive filenames, the normal
+watch file:
 
   version=4
-  http://www.cpan.org/modules/by-module/Text Text-CSV_XS-(.+)\.tar\.gz \
-  debian uupdate
+  opts="pgpsigurlmangle=s%$%.sig%" \
+      http://www.cpan.org/modules/by-module/Text/ \
+      Text-CSV_XS-(.+)\.tar\.gz \
+      debian uupdate
 
-=head2 HTTP site (sf.net)
-
-For SourceForge based projects, qa.debian.org runs a redirector which allows a
-simpler form of URL. The format below will automatically be rewritten to use
-the redirector.
+can be rewritten in an alternative shorthand form:
 
   version=4
-  http://sf.net/audacity/audacity-src-(.+)\.tar\.gz uupdate
+  opts="pgpsigurlmangle=s%$%.sig%" \
+      http://www.cpan.org/modules/by-module/Text/\
+      Text-CSV_XS-(.+)\.tar\.gz \
+      debian uupdate
 
-=head2 HTTP site (github.com)
-
-For GitHub projects, you can use the tags or releases page.  The archive URLs
-use only the version as the filename.  You can rename the downloaded upstream
-tarball into standard I<project>B<->I<version>B<.tar.gz> using
-B<filenamemangle>:
-
-  version=4
-  opts="filenamemangle=\
-  s/(?:.*?)?v?(\d[\d.]*)\.tar\.gz/<project>-$1.tar.gz/" \
-  https://github.com/<user>/<project>/tags \
-  (?:.*?/)?v?(\d[\d.]*)\.tar\.gz debian uupdate
-
-=head2 HTTP site (code.google.com)
-
-Sites which used to be hosted on the Google Code service should have migrated
-to elsewhere (github?).  Please look for the newer upstream site.
+Please note that I<matching-pattern> of the first example doesn't have
+directory and the subtle difference of a space before the tailing B<\>.
 
 =head2 HTTP site (funny version)
 
@@ -913,6 +917,77 @@ version numbers.)
   ftp://ftp.ibiblio.org/pub/Linux/ALPHA/wine/\
   development/Wine-(.+)\.tar\.gz debian uupdate
 
+=head2 sf.net
+
+For SourceForge based projects, qa.debian.org runs a redirector which allows a
+simpler form of URL. The format below will automatically be rewritten to use
+the redirector with the watch file:
+
+  version=4
+  http://sf.net/<project>/ <tar-name>-(.+)\.tar\.gz debian uupdate
+
+For B<audacity>, set the watch file as:
+
+  version=4
+  http://sf.net/audacity/ audacity-minsrc-(.+)\.tar\.gz debian uupdate
+
+Please note, you can still use normal functionalities of B<uscan> to set up a
+watch file for this site without using the redirector.
+
+  version=4
+  opts="bare, uversionmangle=s/-pre/~pre/, \
+	filenamemangle=s%(?:.*)audacity-minsrc-(.+)\.tar\.xz/download%\
+                         audacity-$1.tar.xz%" \
+	http://sourceforge.net/projects/audacity/files/audacity/(\d[\d\.]+)/ \
+	(?:.*)audacity-minsrc-([\d\.]+)\.tar\.xz/download debian uupdate
+
+Here, B<%> is used as the separator instead of the standard B</>.
+
+=head2 github.com
+
+For GitHub based projects, you can use the tags or releases page.  The archive
+URL uses only the version as the filename.  You can rename the downloaded
+upstream tarball from into the standard F<< <project>-<version>.tar.gz >> using
+B<filenamemangle>:
+
+  version=4
+  opts="filenamemangle="s%(?:.*?)?v?(\d[\d.]*)\.tar\.gz%<project>-$1.tar.gz%" \
+      https://github.com/<user>/<project>/tags \
+      (?:.*?/)?v?(\d[\d.]*)\.tar\.gz debian uupdate
+
+=head2 PiPy
+
+For PiPy based projects, pipy.debian.net runs a redirector which allows a
+simpler form of URL. The format below will automatically be rewritten to use
+the redirector with the watch file:
+
+  version=4
+  https://pipy.python.org/packages/source/<initial>/<project>/ \
+      <tar-name>-(.+)\.tar\.gz debian uupdate
+
+For B<cfn-sphere>, set the watch file as:
+
+  version=4
+  https://pypi.python.org/packages/source/c/cfn-sphere/ \
+      cfn-sphere-([\d\.]+).tar.gz
+
+Please note, you can still use normal functionalities of B<uscan> to set up a
+watch file for this site without using the redirector.
+
+  version=4
+  opts="pgpmode=none, \
+      filenamemangle=s%^.*/cfn-sphere-([\d\.]+).tar.gz#md.*$%\
+      cfn-sphere-$1.tar.gz%" \
+      https://pypi.python.org/pypi/cfn-sphere/ \
+      https://pypi.python.org/packages/source/c/cfn-sphere/\
+      cfn-sphere-([\d\.]+).tar.gz#.*
+
+
+=head2 code.google.com
+
+Sites which used to be hosted on the Google Code service should have migrated
+to elsewhere (github?).  Please look for the newer upstream site.
+
 
 =head1 COPYRIGHT FILE EXAMPLES
 
@@ -1033,7 +1108,7 @@ considered, rather than using the release with the highest version.
 =item B<--download-debversion> I<version>
 
 Specify the Debian package version to download the corresponding upstream
-release version.  The dversionmangle and uversionmangle rules are considered.
+release version.  The B<dversionmangle> and B<uversionmangle> rules are considered.
 (a best effort feature)
 
 =item B<--download-current-version>
@@ -1243,6 +1318,21 @@ the best choice for the non-native package and custom scripts, if created,
 should behave as if B<uupdate>.  For possible use case, see
 L<http://bugs.debian.org/748474> as an example.
 
+=head2 URL diversion
+
+Some popular web sites changed their web page structure causing maintainance
+problems to the watch file.  There are some redirection services created to
+ease maintainance of the watch file.  Currently, B<uscan> makes automatic
+diversion of URL requests to the following URLs to cope with this situation.
+
+=over
+
+=item * L<http://sf.net>
+
+=item * L<http://pypi.python.org>
+
+=back
+
 =head2 Directory name checking
 
 Similarly to several other scripts in the B<devscripts> package, B<uscan>
@@ -1329,6 +1419,8 @@ B<uscan> invokes the standard B<uupdate> as "B<uupdate> B<--no-symlink
 --upstream-version> I<version> B<../>I<spkg>B<_>I<version>B<.orig.tar.gz>".
 
 =item Version 4
+
+The syntax of the watch file is relaxed to allow more spaces for readability.
 
 Although you can have multiple watch lines with different URLs to keep your eyes
 on a single tarball under the version 3, it is not allowed under the version 4.
@@ -1549,7 +1641,7 @@ my $common_newversion ; # undef initially (for MUT, version=same)
 my $common_mangled_newversion ; # undef initially (for MUT)
 my $previous_newversion ; # undef initially (for version=prev, pgpmode=prev)
 my $previousfile_base ; # undef initially (for pgpmode=prev)
-my ($keyring, $gpghome); # must be persistent for MUT
+my ($keyring, $gpghome); # must be shared across watch lines for MUT
 my $gpgv_used = 0;
 my $gpg_used = 0;
 my $bare = 0;
