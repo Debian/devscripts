@@ -32,6 +32,16 @@ addtime ()
 	fi
 }
 
+addprefix ()
+{
+	while IFS= read -r line; do
+		printf "%s: %s\n" "$1" "$line"
+	done
+	if [ ! -z "$line" ]; then
+		printf "%s: %s" "$1" "$line"
+	fi
+}
+
 usage ()
 {
 	echo \
@@ -75,8 +85,15 @@ ERR=$tmp/err
 
 mkfifo $OUT $ERR || exit 1
 
-addtime O < $OUT &
-addtime E < $ERR &
+if [ "${FMT/\%}" != "${FMT}" ] ; then
+	addtime O < $OUT &
+	addtime E < $ERR &
+else
+	# If FMT does not contain a %, use the optimized version that
+	# does not call 'date'.
+	addprefix "${FMT#+} O" < $OUT &
+	addprefix "${FMT#+} E" < $ERR &
+fi
 
 echo "Started $@" | addtime I
 "$@" > $OUT 2> $ERR ; EXIT=$?

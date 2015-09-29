@@ -26,6 +26,9 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
   * debcheckout:
     + Clarify documentation of -f option.  Thanks to Daniel Shahaf for the
       patch!  (Closes: #797265)
+  * annotate-output:
+    + Optimize the case of FORMAT not containing any date format codes.
+      Thanks to Stefan Fritsch for the patch.  (Closes: #799553)
 
   [ Dominique Dumont ]
   * licensecheck:
