@@ -34,6 +34,8 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
       are interesting and this avoids a “Permission denied” warning with apt
       versions that restrict access to the lists/partial directory.  Thanks to
       James Cowgill for the patch.  (Closes: #798252)
+  * wrap-and-sort:
+    + Avoid modifying an empty file.  (Closes: #789579)
 
   [ Dominique Dumont ]
   * licensecheck:
