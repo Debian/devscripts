@@ -35,7 +35,8 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
       versions that restrict access to the lists/partial directory.  Thanks to
       James Cowgill for the patch.  (Closes: #798252)
   * wrap-and-sort:
-    + Avoid modifying an empty file.  (Closes: #789579)
+    + Avoid modifying an empty file.  Thanks to Chris Lamb for the patch.
+      (Closes: #789579)
 
   [ Dominique Dumont ]
   * licensecheck:
