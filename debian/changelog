@@ -29,6 +29,11 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
   * annotate-output:
     + Optimize the case of FORMAT not containing any date format codes.
       Thanks to Stefan Fritsch for the patch.  (Closes: #799553)
+  * build-rdeps:
+    + Avoid recursing into apt's lists directory.  Only the top-level files
+      are interesting and this avoids a “Permission denied” warning with apt
+      versions that restrict access to the lists/partial directory.  Thanks to
+      James Cowgill for the patch.  (Closes: #798252)
 
   [ Dominique Dumont ]
   * licensecheck:
