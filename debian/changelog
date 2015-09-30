@@ -75,7 +75,10 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
   * debian/lintian-overrides: remove overrides for false positives that had
     been fixed in lintian
 
- -- Joachim Breitner <nomeata@debian.org>  Tue, 11 Aug 2015 21:12:03 +0200
+  [ Christoph Berg ]
+  * debcheckout: Add auth mapping for git://github.com.
+
+ -- Christoph Berg <christoph.berg@credativ.de>  Wed, 30 Sep 2015 11:41:04 +0200
 
 devscripts (2.15.8) unstable; urgency=high
 
