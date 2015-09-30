@@ -327,6 +327,11 @@ No signature available. (No warning.)
 
 Decompress compressed archive before the pgp/gpg signature verification.
 
+=item B<bare>
+
+Disable all site specific special case codes such as URL redirector uses and
+page content alterations. (persistent)
+
 =item B<user-agent=>I<user-agent-string>
 
 Set the user-agent string used to contact the HTTP(S) server as
@@ -1059,6 +1064,11 @@ See the below section L<Directory name checking> for an explanation of this opti
 
 See the below section L<Directory name checking> for an explanation of this option.
 
+=item B<--bare>
+
+Disable all site specific special case codes such as URL redirector uses and
+page content alterations.
+
 =item B<--user-agent>, B<--useragent>
 
 Override the default user agent header.
@@ -1463,6 +1473,8 @@ Options:
                    carried out
     --no-dehs      Use traditional uscan output format (default)
     --dehs         Use DEHS style output (XML-type)
+    --bare         Disable all site specific special case codes such as URL
+                   redirector uses and page content alterations.
     --user-agent, --useragent
                    Override the default user agent
     --no-conf, --noconf
@@ -1539,6 +1551,7 @@ my $previousfile_base ; # undef initially (for pgpmode=prev)
 my ($keyring, $gpghome); # must be persistent for MUT
 my $gpgv_used = 0;
 my $gpg_used = 0;
+my $bare = 0;
 
 if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg = "  (no configuration files read)";
@@ -1631,6 +1644,7 @@ my ($opt_h, $opt_v, $opt_destdir, $opt_download, $opt_force_download,
 my ($opt_verbose, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
 my ($opt_download_version, $opt_download_debversion);
+my $opt_bare;
 my $opt_user_agent;
 my $opt_download_current_version;
 
@@ -1657,6 +1671,7 @@ GetOptions("help" => \$opt_h,
 	   "debug" => \$debug,
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
+	   "bare" => \$opt_bare,
 	   "user-agent=s" => \$opt_user_agent,
 	   "useragent=s" => \$opt_user_agent,
 	   "noconf" => \$opt_noconf,
@@ -1690,6 +1705,7 @@ $repack_compression = check_compression($opt_repack_compression)
 $dehs = $opt_dehs if defined $opt_dehs;
 $exclusion = $opt_exclusion if defined $opt_exclusion;
 $copyright_file = $opt_copyright_file if defined $opt_copyright_file;
+$bare = $opt_bare if defined $opt_bare;
 $user_agent_string = $opt_user_agent if defined $opt_user_agent;
 
 if (defined $opt_level) {
@@ -2119,6 +2135,10 @@ sub process_watchline ($$$$$$)
 		       or $opt =~ /^s*nopassive\s*$/) {
 		    $options{'pasv'}=0;
 		}
+		elsif ($opt =~ /^\s*bare\s*$/) {
+		    # persistent $bare
+		    $bare = 1;
+		}
 		elsif ($opt =~ /^\s*component\s*=\s*(.+?)\s*$/) {
 			$options{'component'} = $1;
 		}
@@ -2310,12 +2330,14 @@ sub process_watchline ($$$$$$)
 	}
 
 	# Handle sf.net addresses specially
-	if ($base =~ m%^http://sf\.net/%) {
+	if ($base =~ m%^http://sf\.net/% and ! $bare) {
 	    $base =~ s%^http://sf\.net/%https://qa.debian.org/watch/sf.php/%;
 	    $filepattern .= '(?:\?.*)?';
 	}
 	# Handle pypi.python.org addresses specially
-	$base =~ s%^https?://pypi\.python\.org/packages/source/./%https://pypi.debian.net/%;
+	if ($base =~ m%^https?://pypi\.python\.org/packages/source/% and ! $bare) {
+	    $base =~ s%^https?://pypi\.python\.org/packages/source/./%https://pypi.debian.net/%;
+	}
 
     }
     # End parsing the watch line for all version=1/2/3/4
@@ -2471,9 +2493,10 @@ sub process_watchline ($$$$$$)
 		return 1;
 	    }
 	}
-	if ($content =~ m%^<[?]xml%i &&
-	    $content =~ m%xmlns="http://s3.amazonaws.com/doc/2006-03-01/"% &&
-	    $content !~ m%<Key><a\s+href%) {
+	if ($content =~ m%^<[?]xml%i and
+	    $content =~ m%xmlns="http://s3.amazonaws.com/doc/2006-03-01/"% and
+	    $content !~ m%<Key><a\s+href% and
+	    ! $bare) {
 	    # this is an S3 bucket listing.  Insert an 'a href' tag
 	    # into the content for each 'Key', so that it looks like html (LP: #798293)
 	    uscan_warn "*** Amazon special case code is deprecated***\nUse opts=pagemangle rule, instead\n";
