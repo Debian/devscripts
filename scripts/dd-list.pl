@@ -110,6 +110,12 @@ sub parsefh
     while (<$fh>) {
 	my ($package, $source, $binaries, $maintainer, @uploaders);
 
+	# These source packages are only kept around because of stale binaries
+	# on old archs or due to Built-Using relationships.
+	if (/^Extra-Source-Only:\s+yes/m) {
+	    next;
+	}
+
 	# Binary is shown in _source_Sources and contains all binaries produced by
 	# that source package
 	if (/^Binary:\s+(.*(?:\n .*)*)$/m) {

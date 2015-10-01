@@ -15,19 +15,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+WORKDIR="$(readlink -f "${0%/*}")"
+
 if test "$1" = --installed; then
     COMMAND=dd-list
     shift
 else
-    COMMAND="../scripts/dd-list.pl"
+    COMMAND="$WORKDIR/../scripts/dd-list.pl"
 fi
-
-WORKDIR="$(readlink -f "${0%/*}")"
 
 testBinariesFromSameSource() {
   $COMMAND -s ${WORKDIR}/dd-list/sources vim-gtk vim-nox 2>&1 >/dev/null
   rc=$?
   assertEquals 'packages found' 0 $rc
+}
+
+testExtraSourceOnlyIgnored() {
+  $COMMAND -s ${WORKDIR}/dd-list/sources bzip2 >$SHUNIT_TMPDIR/extra-source.out
+
+  assertFalse 'Jorge listed as uploader' "grep -q Jorge $SHUNIT_TMPDIR/extra-source.out"
 }
 
 . shunit2

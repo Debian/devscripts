@@ -37,6 +37,8 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
   * wrap-and-sort:
     + Avoid modifying an empty file.  Thanks to Chris Lamb for the patch.
       (Closes: #789579)
+  * dd-list:
+    + Omit information from stanzas with “Extra-Source-Only: yes”.
 
   [ Dominique Dumont ]
   * licensecheck:
