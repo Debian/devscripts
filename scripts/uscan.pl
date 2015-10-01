@@ -3384,8 +3384,14 @@ sub newest_dir ($$$$$) {
     my $base = $site.$dir;
     my ($request, $response);
     my $newdir;
+    my $download_version_short;
 
-    print STDERR "$progname debug: download version requested: $download_version\n" if $debug and defined $download_version; 
+    if (defined $download_version) {
+	print STDERR "$progname debug: download version requested: $download_version\n" if $debug;
+	if ($download_version =~ m/^(\w+\.\w+)\.\w+$/) {
+	    $download_version_short = "$1";
+	}
+    }
     if ($site =~ m%^http(s)?://%) {
 	if (defined($1) and !$haveSSL) {
 	    uscan_die "$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
@@ -3434,11 +3440,17 @@ sub newest_dir ($$$$$) {
 			$match = "matched with the download version";
 		    }
 		}
+		if (defined $download_version_short) {
+		    if ($mangled_version eq $download_version_short) {
+			$match = "matched with the download version (partial)";
+		    }
+		}
 		push @hrefs, [$mangled_version, $href, $match];
 	    }
 	}
 	my @vhrefs = grep { $$_[2] } @hrefs;
 	if (@vhrefs) {
+	    @vhrefs = Devscripts::Versort::upstream_versort(@vhrefs);
 	    $newdir = $vhrefs[0][1];
 	}
 	if (@hrefs) {
@@ -3508,6 +3520,11 @@ sub newest_dir ($$$$$) {
 			$match = "matched with the download version";
 		    }
 		}
+		if (defined $download_version_short) {
+		    if ($mangled_version eq $download_version_short) {
+			$match = "matched with the download version (partial)";
+		    }
+		}
 		push @dirs, [$mangled_version, $dir, $match];
 	    }
 	} else {
@@ -3533,12 +3550,18 @@ sub newest_dir ($$$$$) {
 			    $match = "matched with the download version";
 			}
 		    }
+		    if (defined $download_version_short) {
+			if ($mangled_version eq $download_version_short) {
+			    $match = "matched with the download version (partial)";
+			}
+		    }
 		    push @dirs, [$mangled_version, $dir, $match];
 		}
 	    }
 	}
 	my @vdirs = grep { $$_[2] } @dirs;
 	if (@vdirs) {
+	    @vdirs = Devscripts::Versort::upstream_versort(@vdirs);
 	    $newdir = $vdirs[0][1];
 	}
 	if (@dirs) {
