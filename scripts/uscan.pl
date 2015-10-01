@@ -3476,6 +3476,7 @@ sub process_watchfile ($$$$)
     my ($dir, $package, $version, $watchfile) = @_;
     my $watch_version=0;
     my $status=0;
+    my $nextline;
     %dehs_tags = ();
 
     unless (open WATCH, $watchfile) {
@@ -3496,7 +3497,14 @@ sub process_watchfile ($$$$)
 		$status=1;
 		last;
 	    }
-	    $_ .= <WATCH>;
+	    if ($watch_version > 3) {
+	        # drop leading \s only if version 4
+		$nextline = <WATCH>;
+		$nextline =~ s/^\s*//;
+		$_ .= $nextline;
+	    } else {
+		$_ .= <WATCH>;
+	    }
 	    goto CHOMP;
 	}
 
