@@ -305,6 +305,8 @@ if [ -n "$DEBSIGN_PROGRAM" ]; then
 else
     if command -v gpg > /dev/null 2>&1; then
 	signcommand=gpg
+    elif command -v gpg2 > /dev/null 2>&1; then
+	signcommand=gpg2
     fi
 fi
 
