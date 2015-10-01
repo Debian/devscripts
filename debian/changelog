@@ -26,6 +26,17 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
   * debcheckout:
     + Clarify documentation of -f option.  Thanks to Daniel Shahaf for the
       patch!  (Closes: #797265)
+  * annotate-output:
+    + Optimize the case of FORMAT not containing any date format codes.
+      Thanks to Stefan Fritsch for the patch.  (Closes: #799553)
+  * build-rdeps:
+    + Avoid recursing into apt's lists directory.  Only the top-level files
+      are interesting and this avoids a “Permission denied” warning with apt
+      versions that restrict access to the lists/partial directory.  Thanks to
+      James Cowgill for the patch.  (Closes: #798252)
+  * wrap-and-sort:
+    + Avoid modifying an empty file.  Thanks to Chris Lamb for the patch.
+      (Closes: #789579)
 
   [ Dominique Dumont ]
   * licensecheck:
@@ -87,7 +98,10 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
   * debian/lintian-overrides: remove overrides for false positives that had
     been fixed in lintian
 
- -- Joachim Breitner <nomeata@debian.org>  Tue, 11 Aug 2015 21:12:03 +0200
+  [ Christoph Berg ]
+  * debcheckout: Add auth mapping for git://github.com.
+
+ -- Christoph Berg <christoph.berg@credativ.de>  Wed, 30 Sep 2015 11:41:04 +0200
 
 devscripts (2.15.8) unstable; urgency=high
 
