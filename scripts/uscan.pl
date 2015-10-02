@@ -1462,6 +1462,8 @@ use filetest 'access';
 use Getopt::Long qw(:config gnu_getopt);
 use Devscripts::Versort;
 use Text::ParseWords;
+use Digest::MD5;
+
 BEGIN {
     eval { require LWP::UserAgent; };
     if ($@) {
@@ -2421,6 +2423,7 @@ sub process_watchline ($$$$$$)
 		$common_mangled_newversion = undef;
 		$previous_newversion = undef;
 		$previousfile_base = undef;
+		$uscanlog = undef;
 	    }
 	}
 
@@ -3271,14 +3274,35 @@ EOF
 	$common_mangled_newversion = $1 if $target =~ m/[^_]+_(.+)\.orig\.tar\.(?:gz|bz2|lzma|xz)$/;
 	print STDERR "$progname debug: orig.tar.* tarball version (after mk-origtargz): $common_mangled_newversion\n" if $debug;
     }
+
+    # Check pkg-ver.tar.gz and pkg_ver.orig.tar.gz
     if (! defined $uscanlog) {
 	$uscanlog = "../${pkg}_${common_mangled_newversion}.uscan.log";
-	open(USCANLOG, "> $uscanlog") or uscan_die "$progname: could not open $uscanlog for write: $!\n";
-	print USCANLOG "# package downloaded by uscan\n";
+	if (-e $uscanlog) {
+	    uscan_warn "$progname: ??? STRANGE ??? uscan log file already exists: $uscanlog (appending)\n";
+	}
+	open(USCANLOG, ">> $uscanlog") or uscan_die "$progname: could not open $uscanlog for append: $!\n";
+	print USCANLOG "# uscan log\n";
     } else {
 	open(USCANLOG, ">> $uscanlog") or uscan_die "$progname: could not open $uscanlog for append: $!\n";
     }
-    print USCANLOG "${newfile_base}\t${target}\n";
+    my $umd5sum = Digest::MD5->new;
+    my $omd5sum = Digest::MD5->new;
+    open (my $ufh, '<', "../${newfile_base}") or die "Can't open '${newfile_base}': $!";
+    open (my $ofh, '<', "../${target}") or die "Can't open '${target}': $!";
+    $umd5sum->addfile($ufh);
+    $omd5sum->addfile($ofh);
+    close($ufh);
+    close($ofh);
+    my $umd5hex = $umd5sum->hexdigest;
+    my $omd5hex = $omd5sum->hexdigest;
+    if ($umd5hex eq $omd5hex) {
+	print USCANLOG "# == ${newfile_base}\t-->\t${target}\t(same)\n";
+    } else {
+	print USCANLOG "# !! ${newfile_base}\t-->\t${target}\t(changed)\n";
+    }
+    print USCANLOG "$umd5hex  ${newfile_base}\n";
+    print USCANLOG "$omd5hex  ${target}\n";
     close USCANLOG or uscan_die "$progname: could not close $uscanlog: $!\n";
 
     if ($dehs) {
