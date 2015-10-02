@@ -935,7 +935,7 @@ Please note, you can still use normal functionalities of B<uscan> to set up a
 watch file for this site without using the redirector.
 
   version=4
-  opts="bare, uversionmangle=s/-pre/~pre/, \
+  opts="uversionmangle=s/-pre/~pre/, \
 	filenamemangle=s%(?:.*)audacity-minsrc-(.+)\.tar\.xz/download%\
                          audacity-$1.tar.xz%" \
 	http://sourceforge.net/projects/audacity/files/audacity/(\d[\d\.]+)/ \
