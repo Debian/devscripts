@@ -1422,10 +1422,6 @@ B<uscan> invokes the standard B<uupdate> as "B<uupdate> B<--no-symlink
 
 The syntax of the watch file is relaxed to allow more spaces for readability.
 
-Although you can have multiple watch lines with different URLs to keep your eyes
-on a single tarball under the version 3, it is not allowed under the version 4.
-This is to ensure the proper function of B<uupdate>.
-
 If you have custom script in place of B<uupdate>, you may also encounter
 problems.
 
@@ -2415,10 +2411,16 @@ sub process_watchline ($$$$$$)
 	    } else {
 		$origcount++ ;
 		if ($origcount > 1) {
-		    uscan_warn "$progname: too many main upstream tarballs\n";
-		    return 1;
+		    uscan_warn "$progname: more than one main upstream tarballs listed.\n";
 		}
 		$orig = "orig";
+		# reset variables
+		@components = ();
+		$repacksuffix_used =0;
+		$common_newversion = undef;
+		$common_mangled_newversion = undef;
+		$previous_newversion = undef;
+		$previousfile_base = undef;
 	    }
 	}
 
