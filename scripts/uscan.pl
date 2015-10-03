@@ -2479,7 +2479,6 @@ sub process_watchline ($$$$$$)
     }
 
     # And mangle it if requested
-    print STDERR "$progname debug: last orig.tar.* tarball version: $lastversion\n" if $debug;
     my $mangled_lastversion;
     $mangled_lastversion = $lastversion;
     foreach my $pat (@{$options{'dversionmangle'}}) {
@@ -2493,31 +2492,30 @@ sub process_watchline ($$$$$$)
 	    return 1;
 	}
     }
-    print STDERR "$progname debug: Last orig.tar.* tarball version (dversionmangled): $mangled_lastversion\n" if $debug;
 
     # Set $download_version etc. if already known
-    if($opt_download_version) {
+    if(defined $opt_download_version) {
 	$download_version = $opt_download_version;
 	$force_download = 1;
 	$badversion = 1;
-	print STDERR "$progname debug: Force to download the specified version: $download_version\n" if $debug;
+	print STDERR "$progname debug: Download the --download-version specified version: $download_version\n" if $debug;
     } elsif (defined $opt_download_debversion) {
 	$download_version = $mangled_lastversion;
 	$force_download = 1;
 	$badversion = 1;
-	print STDERR "$progname debug: Force to download the specified debversion (dversionmangled): $download_version\n" if $debug;
-    } elsif($opt_download_current_version) {
+	print STDERR "$progname debug: Download the --download-debversion specified version (dversionmangled): $download_version\n" if $debug;
+    } elsif(defined $opt_download_current_version) {
 	$download_version = $mangled_lastversion;
 	$force_download = 1;
 	$badversion = 1;
-	print STDERR "$progname debug: Force to download the current version: $download_version\n" if $debug;
+	print STDERR "$progname debug: Download the --download-current-version specified version: $download_version\n" if $debug;
     } elsif($options{'versionmode'} eq 'same') {
 	unless (defined $common_newversion) {
 	    uscan_warn "$progname warning: Unable to set versionmode=prev for the line without opts=pgpmode=prev\n  in $watchfile, skipping:\n  $line\n";
 	}
 	$download_version = $common_newversion;
 	$badversion = 1;
-	print STDERR "$progname debug: Download the matching version: $download_version\n" if $debug;
+	print STDERR "$progname debug: Download secondary tarball with the matching version: $download_version\n" if $debug;
     } elsif($options{'versionmode'} eq 'previous') {
 	unless ($options{'pgpmode'} eq 'previous' and defined $previous_newversion) {
 	    uscan_warn "$progname warning: Unable to set versionmode=prev for the line without opts=pgpmode=prev\n  in $watchfile, skipping:\n  $line\n";
@@ -2525,12 +2523,14 @@ sub process_watchline ($$$$$$)
 	}
 	$download_version = $previous_newversion;
 	$badversion = 1;
-	print STDERR "$progname debug: Force to download the current version: $download_version\n" if $debug;
+	print STDERR "$progname debug: Download the signature file with the previous tarball's version: $download_version\n" if $debug;
     } else {
+	# $options{'versionmode'} should be debian or ignore
 	if (defined $download_version) {
 	    uscan_die "$progname: \$download_version defined after dversionmangle ... strange\n";
 	} else {
-	    print STDERR "$progname debug: \$download_version undefined after dversionmangle\n" if $debug;
+	    print STDERR "$progname debug: Last orig.tar.* tarball version (dversionmangled): $mangled_lastversion\n" if $debug;
+	    print STDERR "$progname debug: \$download_version undefined after dversionmangle as expected.\n" if $debug;
 	}
     }
 
@@ -2745,6 +2745,7 @@ sub process_watchline ($$$$$$)
 	# We separate out HTMLised listings from standard listings, so
 	# that we can target our search correctly
 	if ($content =~ /<\s*a\s+[^>]*href/i) {
+	    print STDERR "$progname debug: HTMLized FTP listing by the HTTP proxy\n" if $debug;
 	    while ($content =~
 		m/(?:<\s*a\s+[^>]*href\s*=\s*\")((?-i)$pattern)\"/gi) {
 		my $file = $1;
@@ -2769,10 +2770,14 @@ sub process_watchline ($$$$$$)
 		push @files, [$mangled_version, $file, $match];
 	    }
 	} else {
+	    print STDERR "$progname debug: Standard FTP listing.\n" if $debug;
 	    # they all look like:
 	    # info info ... info filename [ -> linkname]
 	    for my $ln (split(/\n/, $content)) {
-		if ($ln =~ m/\s($filepattern)(\s+->\s+\S+)?$/) {
+		$ln =~ s/^d.*$//; # FTP listing of directory, '' skiped by if ($ln...
+		$ln =~ s/\s+->\s+\S+$//; # FTP listing for link destination
+		$ln =~ s/^.*\s(\S+)$/$1/; # filename only
+		if ($ln and $ln =~ m/($filepattern)$/) {
 		    my $file = $1;
 		    my $mangled_version = join(".", $file =~ m/^$filepattern$/);
 		    foreach my $pat (@{$options{'uversionmangle'}}) {
@@ -3551,6 +3556,7 @@ sub newest_dir ($$$$$) {
 	# We separate out HTMLised listings from standard listings, so
 	# that we can target our search correctly
 	if ($content =~ /<\s*a\s+[^>]*href/i) {
+	    print STDERR "$progname debug: HTMLized FTP listing by the HTTP proxy\n" if $debug;
 	    while ($content =~
 		m/(?:<\s*a\s+[^>]*href\s*=\s*\")((?-i)$pattern)\"/gi) {
 		my $dir = $1;
@@ -3581,7 +3587,11 @@ sub newest_dir ($$$$$) {
 	} else {
 	    # they all look like:
 	    # info info ... info filename [ -> linkname]
+	    print STDERR "$progname debug: Standard FTP listing.\n" if $debug;
 	    foreach my $ln (split(/\n/, $content)) {
+		$ln =~ s/^-.*$//; # FTP listing of file, '' skiped by if ($ln...
+		$ln =~ s/\s+->\s+\S+$//; # FTP listing for link destination
+		$ln =~ s/^.*\s(\S+)$/$1/; # filename only
 		if ($ln =~ m/($pattern)(\s+->\s+\S+)?$/) {
 		    my $dir = $1;
 		    my $mangled_version = join(".", $dir =~ m/^$pattern$/);
