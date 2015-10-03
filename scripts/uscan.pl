@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-    print STDERR "$progname debug: new filename selected for download (pre-filenamemangled): $newfile_base\n" if $debug;
 # -*- tab-width: 8; indent-tabs-mode: t; cperl-indent-level: 4 -*-
 
 # uscan: This program looks for watchfiles and checks upstream ftp sites
@@ -2453,7 +2452,7 @@ sub process_watchline ($$$$$$)
 	}
 
 	# Handle sf.net addresses specially
-	if ($base =~ m%^http://sf\.net/% and ! $bare) {
+	if (! $bare and $base =~ m%^http://sf\.net/%) {
 	    print STDERR "$progname debug: sf.net redirection to qa.debian.org/watch/sf.php\n" if $debug;
 	    $base =~ s%^http://sf\.net/%https://qa.debian.org/watch/sf.php/%;
 	    $filepattern .= '(?:\?.*)?';
