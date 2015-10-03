@@ -599,8 +599,9 @@ B<sig>. (You can avoid this warning by setting B<pgpmode=none>.)
 If the signature file is downloaded, the downloaded upstream tarball is checked
 for its authenticity against the downloaded signature file using the keyring
 F<debian/upstream/signing-key.pgp> or the armored keyring
-F<debian/upstream/signing-key.asc>. If its signature is not valid, or not made
-by one of the listed keys, B<uscan> will report an error.
+F<debian/upstream/signing-key.asc>  (see L<KEYRING FILE EXAMPLES>).  If its
+signature is not valid, or not made by one of the listed keys, B<uscan> will
+report an error.
 
 If the B<oversionmangle> rule exists, the source tarball version I<oversion> is
 generated from the downloaded upstream version I<uversion> by applying this
@@ -1020,6 +1021,30 @@ Here is another example for the F<debian/copyright> file which initiates automat
 
 See mk-origtargz(1).
 
+=head1 KEYRING FILE EXAMPLES
+
+If the upstream "B<< uscan test key (no secret) <none@debian.org> >>" signs its
+package and publishes its public key B<72543FAF>, you should download it, check
+its finger print, and store it into the armored keyring file
+F<debian/upstream/signing-key.asc> using the B<gpg> (or B<gpg2>) command as
+follows.
+
+  $ gpg --recv-keys "72543FAF"
+  ...
+  $ gpg --finger "72543FAF"
+  pub   4096R/72543FAF 2015-09-02
+        Key fingerprint = CF21 8F0E 7EAB F584 B7E2  0402 C77E 2D68 7254 3FAF
+  uid                  uscan test key (no secret) <none@debian.org>
+  sub   4096R/52C6ED39 2015-09-02
+  $ cd path/to/<upkg>-<uversion>
+  $ mkdir -p debian/upstream
+  $ gpg --export-options export-minimal --armor --export \
+        'CF21 8F0E 7EAB F584 B7E2  0402 C77E 2D68 7254 3FAF' \
+        >debian/upstream/signing-key.asc
+
+To make the binary keyring file instead, skip B<--armor> and change the storing
+file to F<debian/upstream/signing-key.pgp> in the above example.
+
 =head1 COMMANDLINE OPTIONS
 
 For the basic usage, B<uscan> does not require to set these options.
@@ -1320,9 +1345,9 @@ L<http://bugs.debian.org/748474> as an example.
 
 =head2 URL diversion
 
-Some popular web sites changed their web page structure causing maintainance
+Some popular web sites changed their web page structure causing maintenance
 problems to the watch file.  There are some redirection services created to
-ease maintainance of the watch file.  Currently, B<uscan> makes automatic
+ease maintenance of the watch file.  Currently, B<uscan> makes automatic
 diversion of URL requests to the following URLs to cope with this situation.
 
 =over
