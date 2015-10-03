@@ -3439,12 +3439,16 @@ sub newest_dir ($$$$$) {
     my $base = $site.$dir;
     my ($request, $response);
     my $newdir;
-    my $download_version_short;
+    my $download_version_short1;
+    my $download_version_short2;
+    my $download_version_short3;
 
     if (defined $download_version) {
 	print STDERR "$progname debug: download version requested: $download_version\n" if $debug;
-	if ($download_version =~ m/^(\w+\.\w+)\.\w+$/) {
-	    $download_version_short = "$1";
+	if ($download_version =~ m/^([-~\+\w]+)(\.[-~\+\w]+)?(\.[-~\+\w]+)?(\.[-~\+\w]+)?$/) {
+	    $download_version_short1 = "$1";
+	    $download_version_short2 = "$1$2";
+	    $download_version_short3 = "$1$2$3";
 	}
     }
     if ($site =~ m%^http(s)?://%) {
@@ -3490,15 +3494,17 @@ sub newest_dir ($$$$$) {
 		    }
 		}
 		$match = '';
-		if (defined $download_version) {
-		    if ($mangled_version eq $download_version) {
-			$match = "matched with the download version";
-		    }
+		if (defined $download_version and $mangled_version eq $download_version) {
+		    $match = "matched with the download version";
 		}
-		if (defined $download_version_short) {
-		    if ($mangled_version eq $download_version_short) {
-			$match = "matched with the download version (partial)";
-		    }
+		if (defined $download_version_short3 and $mangled_version eq $download_version_short3) {
+		    $match = "matched with the download version (partial 3)";
+		}
+		if (defined $download_version_short2 and $mangled_version eq $download_version_short2) {
+		    $match = "matched with the download version (partial 2)";
+		}
+		if (defined $download_version_short1 and $mangled_version eq $download_version_short1) {
+		    $match = "matched with the download version (partial 1)";
 		}
 		push @hrefs, [$mangled_version, $href, $match];
 	    }
@@ -3571,15 +3577,17 @@ sub newest_dir ($$$$$) {
 		    }
 		}
 		$match = '';
-		if (defined $download_version) {
-		    if ($mangled_version eq $download_version) {
-			$match = "matched with the download version";
-		    }
+		if (defined $download_version and $mangled_version eq $download_version) {
+		    $match = "matched with the download version";
 		}
-		if (defined $download_version_short) {
-		    if ($mangled_version eq $download_version_short) {
-			$match = "matched with the download version (partial)";
-		    }
+		if (defined $download_version_short3 and $mangled_version eq $download_version_short3) {
+		    $match = "matched with the download version (partial 3)";
+		}
+		if (defined $download_version_short2 and $mangled_version eq $download_version_short2) {
+		    $match = "matched with the download version (partial 2)";
+		}
+		if (defined $download_version_short1 and $mangled_version eq $download_version_short1) {
+		    $match = "matched with the download version (partial 1)";
 		}
 		push @dirs, [$mangled_version, $dir, $match];
 	    }
@@ -3605,15 +3613,17 @@ sub newest_dir ($$$$$) {
 			}
 		    }
 		    $match = '';
-		    if (defined $download_version) {
-			if ($mangled_version eq $download_version) {
-			    $match = "matched with the download version";
-			}
+		    if (defined $download_version and $mangled_version eq $download_version) {
+			$match = "matched with the download version";
 		    }
-		    if (defined $download_version_short) {
-			if ($mangled_version eq $download_version_short) {
-			    $match = "matched with the download version (partial)";
-			}
+		    if (defined $download_version_short3 and $mangled_version eq $download_version_short3) {
+			$match = "matched with the download version (partial 3)";
+		    }
+		    if (defined $download_version_short2 and $mangled_version eq $download_version_short2) {
+			$match = "matched with the download version (partial 2)";
+		    }
+		    if (defined $download_version_short1 and $mangled_version eq $download_version_short1) {
+			$match = "matched with the download version (partial 1)";
 		    }
 		    push @dirs, [$mangled_version, $dir, $match];
 		}
