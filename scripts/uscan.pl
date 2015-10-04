@@ -3446,9 +3446,9 @@ sub newest_dir ($$$$$) {
     if (defined $download_version) {
 	print STDERR "$progname debug: download version requested: $download_version\n" if $debug;
 	if ($download_version =~ m/^([-~\+\w]+)(\.[-~\+\w]+)?(\.[-~\+\w]+)?(\.[-~\+\w]+)?$/) {
-	    $download_version_short1 = "$1";
-	    $download_version_short2 = "$1$2";
-	    $download_version_short3 = "$1$2$3";
+	    $download_version_short1 = "$1" if defined $1;
+	    $download_version_short2 = "$1$2" if defined $2;
+	    $download_version_short3 = "$1$2$3" if defined $3;
 	}
     }
     if ($site =~ m%^http(s)?://%) {
