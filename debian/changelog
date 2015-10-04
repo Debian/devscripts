@@ -39,6 +39,8 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
       (Closes: #789579)
   * dd-list:
     + Omit information from stanzas with “Extra-Source-Only: yes”.
+    + Use only the information from the most recent version of a package
+      within each sources file.  (Closes: #788820)
 
   [ Dominique Dumont ]
   * licensecheck:

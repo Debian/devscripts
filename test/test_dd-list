@@ -36,4 +36,10 @@ testExtraSourceOnlyIgnored() {
   assertFalse 'Jorge listed as uploader' "grep -q Jorge $SHUNIT_TMPDIR/extra-source.out"
 }
 
+testUseOnlyLatestVersion() {
+  $COMMAND -s ${WORKDIR}/dd-list/sources subversion >$SHUNIT_TMPDIR/latest-version.out
+
+  assertFalse 'Troy Heber listed as uploader'  "grep -q Troy $SHUNIT_TMPDIR/latest-version.out"
+}
+
 . shunit2

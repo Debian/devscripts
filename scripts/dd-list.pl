@@ -24,6 +24,7 @@ use strict;
 use warnings;
 use FileHandle;
 use Getopt::Long qw(:config gnu_getopt);
+use Dpkg::Version;
 
 my $version='###VERSION###';
 
@@ -107,6 +108,7 @@ sub parsefh
 				 map { "\Q$_\E" }
 				 keys %package_name;
     }
+    my %info;
     while (<$fh>) {
 	my ($package, $source, $binaries, $maintainer, @uploaders);
 
@@ -141,6 +143,10 @@ sub parsefh
 	    $matches =~ s/\n//g;
 	    @uploaders = split /(?<=>)\s*,\s*/, $matches;
 	}
+	my $version = '0~0~0';
+	if (/^Version:\s+(.*)$/m) {
+	    $version = $1;
+	}
 
 	if (defined $maintainer
 	    && (defined $package || defined $source || defined $binaries)) {
@@ -150,27 +156,39 @@ sub parsefh
 	    if ($check_package) {
 		my @pkgs;
 		if (@pkgs = ($binaries =~ m/$package_names/g)) {
-		    map { $package_name{$_}-- } @pkgs;
+		    $info{$source}{$version}{binaries} = [@pkgs];
 		}
 		elsif ($source !~ m/$package_names/) {
 		    next;
 		}
-		$package_name{$source}--;
-		@names = $print_binary ? @pkgs : $source;
 	    }
 	    else {
-		@names = $print_binary ? $binaries : $source;
+		$info{$source}{$version}{binaries} = [$binaries];
 	    }
-	    push @{$dict{$maintainer}}, @names;
-	    if ($show_uploaders && @uploaders) {
-		foreach my $uploader (@uploaders) {
-		    push @{$dict{$uploader}}, map "$_ (U)", @names;
-		}
-	    }
+	    $info{$source}{$version}{maintainer} = $maintainer;
+	    $info{$source}{$version}{uploaders} = [@uploaders];
 	}
 	else {
 	    warn "E: parse error in stanza $. of $fname\n";
 	    $errors=1;
+	}
+    }
+
+    for my $source (keys %info) {
+	my @versions = sort map { Dpkg::Version->new($_) } keys %{$info{$source}};
+	my $version = $versions[-1];
+	my $srcinfo = $info{$source}{$version};
+	my @names;
+	if ($check_package) {
+	    $package_name{$source}--;
+	    $package_name{$_}-- for @{$srcinfo->{binaries}};
+	}
+	@names = $print_binary ? @{$srcinfo->{binaries}} : $source;
+	push @{$dict{$srcinfo->{maintainer}}}, @names;
+	if ($show_uploaders && @{$srcinfo->{uploaders}}) {
+	    foreach my $uploader (@{$srcinfo->{uploaders}}) {
+		push @{$dict{$uploader}}, map "$_ (U)", @names;
+	    }
 	}
     }
 }
