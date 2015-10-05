@@ -26,6 +26,16 @@ use FileHandle;
 use Getopt::Long qw(:config gnu_getopt);
 use Dpkg::Version;
 
+my $uncompress;
+
+BEGIN {
+    $uncompress = eval {
+	require IO::Uncompress::AnyUncompress;
+	IO::Uncompress::AnyUncompress->import('$AnyUncompressError');
+	1;
+    };
+}
+
 my $version='###VERSION###';
 
 sub normalize_package {
@@ -54,10 +64,14 @@ Usage: dd-list [options] [package ...]
     -d, --dctrl
         Read package list in Debian control data from standard input.
 
+    -z, --uncompress
+        Try to uncompress the --dctrl input before parsing.  Supported
+        compression formats are gz and bzip2.
+
     -s, --sources SOURCES_FILE
         Read package information from given SOURCES_FILE instead of all files
         matching /var/lib/apt/lists/*_source_Sources.  Can be specified
-        multiple times.
+        multiple times.  The files can be gz or bzip2 compressed.
 
     -u, --uploaders
         Also list Uploaders of packages, not only the listed Maintainers
@@ -79,6 +93,7 @@ my $use_stdin=0;
 my $use_dctrl=0;
 my $source_files=[];
 my $show_uploaders=1;
+my $opt_uncompress=0;
 my $print_binary=0;
 GetOptions(
     "help|h" => sub { help(); exit },
@@ -86,12 +101,18 @@ GetOptions(
     "dctrl|d" => \$use_dctrl,
     "sources|s:s@" => \$source_files,
     "uploaders|u!" => \$show_uploaders,
+    'z|uncompress' => \$opt_uncompress,
     "print-binary|b" => \$print_binary,
     "version" => sub { print "dd-list version $version\n" })
 or do {
     help();
     exit(1);
 };
+
+if ($opt_uncompress && !$uncompress) {
+    warn "You must have the libio-compress-perl package installed to use the -z option.\n";
+    exit 1;
+}
 
 my %dict;
 my $errors=0;
@@ -194,7 +215,15 @@ sub parsefh
 }
 
 if ($use_dctrl) {
-    parsefh(\*STDIN, 'STDIN');
+    my $fh;
+    if ($uncompress) {
+	$fh = IO::Uncompress::AnyUncompress->new('-')
+	    or die "E: Unable to decompress STDIN: $AnyUncompressError\n";
+    }
+    else {
+	$fh = \*STDIN;
+    }
+    parsefh($fh, 'STDIN');
 }
 else {
     my @packages;
@@ -217,9 +246,15 @@ else {
     }
 
     foreach my $source (@{$source_files}) {
-	my $fh = FileHandle->new("<$source");
+	my $fh;
+	if ($opt_uncompress || ($uncompress && $source =~ m/\.(?:gz|bz2)$/)) {
+	    $fh = IO::Uncompress::AnyUncompress->new($source);
+	}
+	else {
+	    $fh = FileHandle->new("<$source");
+	}
 	unless (defined $fh) {
-	    warn "E: Couldn't open $fh\n";
+	    warn "E: Couldn't open $source\n";
 	    $errors = 1;
 	    next;
 	}

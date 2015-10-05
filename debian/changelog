@@ -41,6 +41,10 @@ devscripts (2.15.9) UNRELEASED; urgency=medium
     + Omit information from stanzas with “Extra-Source-Only: yes”.
     + Use only the information from the most recent version of a package
       within each sources file.  (Closes: #788820)
+    + Enable reading sources data from gz or bzip2 compressed files.  If the
+      --dctrl switch is being used, the -z switch is needed to enabled
+       decompression.  Compressed files specified with the -s switch will
+       automatically be handled if using a .gz/.bz2 extension.
 
   [ Dominique Dumont ]
   * licensecheck:
