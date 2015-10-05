@@ -108,7 +108,7 @@ sub parsefh
 				 map { "\Q$_\E" }
 				 keys %package_name;
     }
-    my %info;
+    my %sources;
     while (<$fh>) {
 	my ($package, $source, $binaries, $maintainer, @uploaders);
 
@@ -156,17 +156,17 @@ sub parsefh
 	    if ($check_package) {
 		my @pkgs;
 		if (@pkgs = ($binaries =~ m/$package_names/g)) {
-		    $info{$source}{$version}{binaries} = [@pkgs];
+		    $sources{$source}{$version}{binaries} = [@pkgs];
 		}
 		elsif ($source !~ m/$package_names/) {
 		    next;
 		}
 	    }
 	    else {
-		$info{$source}{$version}{binaries} = [$binaries];
+		$sources{$source}{$version}{binaries} = [$binaries];
 	    }
-	    $info{$source}{$version}{maintainer} = $maintainer;
-	    $info{$source}{$version}{uploaders} = [@uploaders];
+	    $sources{$source}{$version}{maintainer} = $maintainer;
+	    $sources{$source}{$version}{uploaders} = [@uploaders];
 	}
 	else {
 	    warn "E: parse error in stanza $. of $fname\n";
@@ -174,10 +174,10 @@ sub parsefh
 	}
     }
 
-    for my $source (keys %info) {
-	my @versions = sort map { Dpkg::Version->new($_) } keys %{$info{$source}};
+    for my $source (keys %sources) {
+	my @versions = sort map { Dpkg::Version->new($_) } keys %{$sources{$source}};
 	my $version = $versions[-1];
-	my $srcinfo = $info{$source}{$version};
+	my $srcinfo = $sources{$source}{$version};
 	my @names;
 	if ($check_package) {
 	    $package_name{$source}--;
