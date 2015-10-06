@@ -1446,7 +1446,7 @@ B<uscan> invokes the standard B<uupdate> as "B<uupdate> B<--no-symlink
 
 The syntax of the watch file is relaxed to allow more spaces for readability.
 
-If you have custom script in place of B<uupdate>, you may also encounter
+If you have a custom script in place of B<uupdate>, you may also encounter
 problems.
 
 B<uscan> invokes the custom I<script> as "I<script> B<--upstream-version>
@@ -2437,7 +2437,7 @@ sub process_watchline ($$$$$$)
 	    } else {
 		$origcount++ ;
 		if ($origcount > 1) {
-		    uscan_warn "$progname: more than one main upstream tarballs listed.\n";
+		    uscan_warn "$progname: more than one main upstream tarball listed.\n";
 		}
 		$orig = "orig";
 		# reset variables
@@ -2458,7 +2458,7 @@ sub process_watchline ($$$$$$)
 	    $filepattern .= '(?:\?.*)?';
 	}
 	# Handle pypi.python.org addresses specially
-	if ($base =~ m%^https?://pypi\.python\.org/packages/source/% and ! $bare) {
+	if (! $bare and $base =~ m%^https?://pypi\.python\.org/packages/source/%) {
 	    print STDERR "$progname debug: pypi.python.org redirection to pypi.debian.net\n" if $debug;
 	    $base =~ s%^https?://pypi\.python\.org/packages/source/./%https://pypi.debian.net/%;
 	}
@@ -2617,10 +2617,10 @@ sub process_watchline ($$$$$$)
 		return 1;
 	    }
 	}
-	if ($content =~ m%^<[?]xml%i and
+	if (! $bare and
+	    $content =~ m%^<[?]xml%i and
 	    $content =~ m%xmlns="http://s3.amazonaws.com/doc/2006-03-01/"% and
-	    $content !~ m%<Key><a\s+href% and
-	    ! $bare) {
+	    $content !~ m%<Key><a\s+href%) {
 	    # this is an S3 bucket listing.  Insert an 'a href' tag
 	    # into the content for each 'Key', so that it looks like html (LP: #798293)
 	    uscan_warn "*** Amazon special case code is deprecated***\nUse opts=pagemangle rule, instead\n";
