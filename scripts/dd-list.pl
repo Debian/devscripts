@@ -24,6 +24,17 @@ use strict;
 use warnings;
 use FileHandle;
 use Getopt::Long qw(:config gnu_getopt);
+use Dpkg::Version;
+
+my $uncompress;
+
+BEGIN {
+    $uncompress = eval {
+	require IO::Uncompress::AnyUncompress;
+	IO::Uncompress::AnyUncompress->import('$AnyUncompressError');
+	1;
+    };
+}
 
 my $version='###VERSION###';
 
@@ -53,10 +64,14 @@ Usage: dd-list [options] [package ...]
     -d, --dctrl
         Read package list in Debian control data from standard input.
 
+    -z, --uncompress
+        Try to uncompress the --dctrl input before parsing.  Supported
+        compression formats are gz and bzip2.
+
     -s, --sources SOURCES_FILE
         Read package information from given SOURCES_FILE instead of all files
         matching /var/lib/apt/lists/*_source_Sources.  Can be specified
-        multiple times.
+        multiple times.  The files can be gz or bzip2 compressed.
 
     -u, --uploaders
         Also list Uploaders of packages, not only the listed Maintainers
@@ -78,6 +93,7 @@ my $use_stdin=0;
 my $use_dctrl=0;
 my $source_files=[];
 my $show_uploaders=1;
+my $opt_uncompress=0;
 my $print_binary=0;
 GetOptions(
     "help|h" => sub { help(); exit },
@@ -85,12 +101,18 @@ GetOptions(
     "dctrl|d" => \$use_dctrl,
     "sources|s:s@" => \$source_files,
     "uploaders|u!" => \$show_uploaders,
+    'z|uncompress' => \$opt_uncompress,
     "print-binary|b" => \$print_binary,
     "version" => sub { print "dd-list version $version\n" })
 or do {
     help();
     exit(1);
 };
+
+if ($opt_uncompress && !$uncompress) {
+    warn "You must have the libio-compress-perl package installed to use the -z option.\n";
+    exit 1;
+}
 
 my %dict;
 my $errors=0;
@@ -107,8 +129,15 @@ sub parsefh
 				 map { "\Q$_\E" }
 				 keys %package_name;
     }
+    my %sources;
     while (<$fh>) {
 	my ($package, $source, $binaries, $maintainer, @uploaders);
+
+	# These source packages are only kept around because of stale binaries
+	# on old archs or due to Built-Using relationships.
+	if (/^Extra-Source-Only:\s+yes/m) {
+	    next;
+	}
 
 	# Binary is shown in _source_Sources and contains all binaries produced by
 	# that source package
@@ -135,6 +164,10 @@ sub parsefh
 	    $matches =~ s/\n//g;
 	    @uploaders = split /(?<=>)\s*,\s*/, $matches;
 	}
+	my $version = '0~0~0';
+	if (/^Version:\s+(.*)$/m) {
+	    $version = $1;
+	}
 
 	if (defined $maintainer
 	    && (defined $package || defined $source || defined $binaries)) {
@@ -144,33 +177,53 @@ sub parsefh
 	    if ($check_package) {
 		my @pkgs;
 		if (@pkgs = ($binaries =~ m/$package_names/g)) {
-		    map { $package_name{$_}-- } @pkgs;
+		    $sources{$source}{$version}{binaries} = [@pkgs];
 		}
 		elsif ($source !~ m/$package_names/) {
 		    next;
 		}
-		$package_name{$source}--;
-		@names = $print_binary ? @pkgs : $source;
 	    }
 	    else {
-		@names = $print_binary ? $binaries : $source;
+		$sources{$source}{$version}{binaries} = [$binaries];
 	    }
-	    push @{$dict{$maintainer}}, @names;
-	    if ($show_uploaders && @uploaders) {
-		foreach my $uploader (@uploaders) {
-		    push @{$dict{$uploader}}, map "$_ (U)", @names;
-		}
-	    }
+	    $sources{$source}{$version}{maintainer} = $maintainer;
+	    $sources{$source}{$version}{uploaders} = [@uploaders];
 	}
 	else {
 	    warn "E: parse error in stanza $. of $fname\n";
 	    $errors=1;
 	}
     }
+
+    for my $source (keys %sources) {
+	my @versions = sort map { Dpkg::Version->new($_) } keys %{$sources{$source}};
+	my $version = $versions[-1];
+	my $srcinfo = $sources{$source}{$version};
+	my @names;
+	if ($check_package) {
+	    $package_name{$source}--;
+	    $package_name{$_}-- for @{$srcinfo->{binaries}};
+	}
+	@names = $print_binary ? @{$srcinfo->{binaries}} : $source;
+	push @{$dict{$srcinfo->{maintainer}}}, @names;
+	if ($show_uploaders && @{$srcinfo->{uploaders}}) {
+	    foreach my $uploader (@{$srcinfo->{uploaders}}) {
+		push @{$dict{$uploader}}, map "$_ (U)", @names;
+	    }
+	}
+    }
 }
 
 if ($use_dctrl) {
-    parsefh(\*STDIN, 'STDIN');
+    my $fh;
+    if ($uncompress) {
+	$fh = IO::Uncompress::AnyUncompress->new('-')
+	    or die "E: Unable to decompress STDIN: $AnyUncompressError\n";
+    }
+    else {
+	$fh = \*STDIN;
+    }
+    parsefh($fh, 'STDIN');
 }
 else {
     my @packages;
@@ -193,9 +246,15 @@ else {
     }
 
     foreach my $source (@{$source_files}) {
-	my $fh = FileHandle->new("<$source");
+	my $fh;
+	if ($opt_uncompress || ($uncompress && $source =~ m/\.(?:gz|bz2)$/)) {
+	    $fh = IO::Uncompress::AnyUncompress->new($source);
+	}
+	else {
+	    $fh = FileHandle->new("<$source");
+	}
 	unless (defined $fh) {
-	    warn "E: Couldn't open $fh\n";
+	    warn "E: Couldn't open $source\n";
 	    $errors = 1;
 	    next;
 	}

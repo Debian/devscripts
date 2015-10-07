@@ -26,3 +26,160 @@ Homepage: http://www.vim.org/
 Directory: pool/main/v/vim
 Priority: source
 Section: editors
+
+Package: bzip2
+Binary: libbz2-1.0, libbz2-dev, bzip2, bzip2-doc
+Version: 1.0.6-7
+Maintainer: Anibal Monsalve Salazar <anibal@debian.org>
+Uploaders: Santiago Ruano Rincón <santiago@debian.org>, Jorge Ernesto Guevara Cuenca <jguevara@debiancolombia.org>
+Build-Depends: gcc-multilib [amd64 i386 kfreebsd-amd64 powerpc ppc64 s390 sparc] | gcc-4.1 (<< 4.1.2) [amd64 i386 kfreebsd-amd64 powerpc ppc64 s390 sparc], dpkg-dev (>= 1.16.0), debhelper (>= 9), dh-exec
+Build-Depends-Indep: texinfo
+Architecture: any all
+Standards-Version: 3.9.5
+Format: 3.0 (quilt)
+Files:
+ d4850752a3386592ae416b3fd6fc2c3a 2261 bzip2_1.0.6-7.dsc
+ 2a1df12bd405cc86790291797673753c 708737 bzip2_1.0.6.orig.tar.bz2
+ 3bc252d3eb0a16a4f5950fac8deb7bb1 59542 bzip2_1.0.6-7.debian.tar.bz2
+Vcs-Browser: http://git.debian.org/?p=collab-maint/bzip2.git
+Vcs-Git: git://git.debian.org/collab-maint/bzip2.git
+Checksums-Sha1:
+ f970fefd8f7cb4a02ec74d3ecc21c31068201b5c 2261 bzip2_1.0.6-7.dsc
+ 3725a0554fa6bb654ef2728fef36bc06aed4e388 708737 bzip2_1.0.6.orig.tar.bz2
+ e5169afbee8f9ee603c253e03421364819a14c12 59542 bzip2_1.0.6-7.debian.tar.bz2
+Checksums-Sha256:
+ 098b7e38d1d634fc361847602bf85753dadeca121b9531f6dba2614b16e0637c 2261 bzip2_1.0.6-7.dsc
+ d70a9ccd8bdf47e302d96c69fecd54925f45d9c7b966bb4ef5f56b770960afa7 708737 bzip2_1.0.6.orig.tar.bz2
+ 17e030ccb2908d15553c1510869e09d8ef41b5f8e72c7c65d1d5503396a5bd3a 59542 bzip2_1.0.6-7.debian.tar.bz2
+Homepage: http://www.bzip.org/
+Package-List: 
+ bzip2 deb utils standard arch=any
+ bzip2-doc deb doc optional arch=all
+ libbz2-1.0 deb libs important arch=any
+ libbz2-dev deb libdevel optional arch=any
+Extra-Source-Only: yes
+Directory: pool/main/b/bzip2
+Priority: source
+Section: utils
+
+Package: bzip2
+Binary: libbz2-1.0, libbz2-dev, bzip2, bzip2-doc
+Version: 1.0.6-8
+Maintainer: Anibal Monsalve Salazar <anibal@debian.org>
+Uploaders: Santiago Ruano Rincón <santiago@debian.org>
+Build-Depends: dpkg-dev (>= 1.16.0), debhelper (>= 9), dh-exec
+Build-Depends-Indep: texinfo
+Architecture: any all
+Standards-Version: 3.9.6
+Format: 3.0 (quilt)
+Files:
+ 7709d3c0a7715bf4f61cc74adc10ee5a 2042 bzip2_1.0.6-8.dsc
+ 2a1df12bd405cc86790291797673753c 708737 bzip2_1.0.6.orig.tar.bz2
+ 72b1174a04f96b62c1f50391c8f41488 59494 bzip2_1.0.6-8.debian.tar.bz2
+Vcs-Browser: http://git.debian.org/?p=collab-maint/bzip2.git
+Vcs-Git: git://git.debian.org/collab-maint/bzip2.git
+Checksums-Sha1:
+ 8bb35859d49d012e1464db621e740e1702a5ad14 2042 bzip2_1.0.6-8.dsc
+ 3725a0554fa6bb654ef2728fef36bc06aed4e388 708737 bzip2_1.0.6.orig.tar.bz2
+ 78c527bdc6eb5727b79d401ebf3ddf2b175af91f 59494 bzip2_1.0.6-8.debian.tar.bz2
+Checksums-Sha256:
+ 46df0e8112487065532829f2340ffd6ca64d46b6ab01b0000694751d3e67fb11 2042 bzip2_1.0.6-8.dsc
+ d70a9ccd8bdf47e302d96c69fecd54925f45d9c7b966bb4ef5f56b770960afa7 708737 bzip2_1.0.6.orig.tar.bz2
+ 60fe87fd3942c385e5921786255a27daf9a962ebc7301a60dfd8d1e1a5c8ce78 59494 bzip2_1.0.6-8.debian.tar.bz2
+Homepage: http://www.bzip.org/
+Package-List: 
+ bzip2 deb utils standard arch=any
+ bzip2-doc deb doc optional arch=all
+ libbz2-1.0 deb libs important arch=any
+ libbz2-dev deb libdevel optional arch=any
+Directory: pool/main/b/bzip2
+Priority: source
+Section: utils
+
+Package: subversion
+Binary: subversion, subversion-dbg, libsvn1, libsvn-dev, libsvn-doc, libapache2-mod-svn, libapache2-svn, python-subversion, subversion-tools, libsvn-java, libsvn-perl, ruby-svn, libsvn-ruby1.8
+Version: 1.8.13-1
+Maintainer: Peter Samuelson <peter@p12n.org>
+Uploaders: Troy Heber <troyh@debian.org>, James McCoy <jamessan@debian.org>
+Build-Depends: debhelper (>= 8), libserf-dev (>= 1.2), zlib1g-dev, libapr1-dev, libaprutil1-dev, libdb5.3-dev, libsasl2-dev, apache2-dev, dh-apache2, libsqlite3-dev (>= 3.7.12), libgnome-keyring-dev, libdbus-1-dev, kdelibs5-dev, quilt, doxygen, autotools-dev, autoconf, libtool-bin, swig, python-all-dev, perl, libperl-dev, ruby, ruby-dev, default-jdk, junit
+Build-Conflicts: libsvn-dev (<< 1.8~), ruby-test-unit
+Architecture: any all
+Standards-Version: 3.9.5
+Format: 1.0
+Files:
+ 4b08c636bc2c67f22cce2f27f04e4bba 3105 subversion_1.8.13-1.dsc
+ 8065b3698d799507fb72dd7926ed32b6 9326793 subversion_1.8.13.orig.tar.gz
+ 4e2ea3b225f551ec470796203bd14803 270351 subversion_1.8.13-1.diff.gz
+Vcs-Browser: http://anonscm.debian.org/viewvc/pkg-subversion/src/1.8.x/
+Vcs-Svn: svn://anonscm.debian.org/pkg-subversion/src/1.8.x/
+Checksums-Sha1:
+ 80a8c73f36c57d476989d949f31cf1504631e5fb 3105 subversion_1.8.13-1.dsc
+ 437cf662b7ed27d2254aa7ca334fdd74b49262ef 9326793 subversion_1.8.13.orig.tar.gz
+ be7fdefbc914b305c38698897f2d061b93942b79 270351 subversion_1.8.13-1.diff.gz
+Checksums-Sha256:
+ 26fb93f8adf42cf1bc3afae7890a4bbfff32d860dcb805eb20d8013bffe3e063 3105 subversion_1.8.13-1.dsc
+ 17e8900a877ac9f0d5ef437c20df437fec4eb2c5cb9882609d2277e2312da52c 9326793 subversion_1.8.13.orig.tar.gz
+ 7cf687a60566f4f41ea70f6e028253880ea0d2b52d6dead5ba99c9e298a8245d 270351 subversion_1.8.13-1.diff.gz
+Homepage: http://subversion.apache.org/
+Package-List: 
+ libapache2-mod-svn deb httpd optional arch=any
+ libapache2-svn deb oldlibs extra arch=all
+ libsvn-dev deb libdevel extra arch=any
+ libsvn-doc deb doc extra arch=all
+ libsvn-java deb java optional arch=any
+ libsvn-perl deb perl optional arch=any
+ libsvn-ruby1.8 deb oldlibs extra arch=all
+ libsvn1 deb libs optional arch=any
+ python-subversion deb python optional arch=any
+ ruby-svn deb ruby optional arch=any
+ subversion deb vcs optional arch=any
+ subversion-dbg deb debug extra arch=any
+ subversion-tools deb vcs extra arch=any
+Testsuite: autopkgtest
+Directory: pool/main/s/subversion
+Priority: source
+Section: vcs
+
+Package: subversion
+Binary: subversion, subversion-dbg, libsvn1, libsvn-dev, libsvn-doc, libapache2-mod-svn, libapache2-svn, python-subversion, subversion-tools, libsvn-java, libsvn-perl, ruby-svn, libsvn-ruby1.8
+Version: 1.9.2-1
+Maintainer: Peter Samuelson <peter@p12n.org>
+Uploaders: James McCoy <jamessan@debian.org>
+Build-Depends: apache2-dev (>= 2.4.16), autoconf, autotools-dev, bash-completion, debhelper (>= 8), default-jdk (>= 2:1.6) [!hurd-i386 !kfreebsd-amd64 !kfreebsd-i386 !hppa !m68k !sparc !sparc64], dh-apache2, dh-python, doxygen, junit [!hurd-i386 !kfreebsd-amd64 !kfreebsd-i386 !hppa !m68k !sparc !sparc64], kdelibs5-dev, libapr1-dev, libaprutil1-dev, libdb5.3-dev, libdbus-1-dev, libgnome-keyring-dev, libperl-dev, libsasl2-dev, libserf-dev (>= 1.3.4), libsqlite3-dev (>= 3.7.12), libtool, perl, python-all-dev (>= 2.7), quilt, ruby, ruby-dev, swig, zlib1g-dev
+Build-Conflicts: libsvn-dev (<< 1.9~)
+Architecture: any all
+Standards-Version: 3.9.5
+Format: 1.0
+Files:
+ ead24ca2537b45470a38ff0c568f371b 3259 subversion_1.9.2-1.dsc
+ c3f4a2d2f21c565617e97f7640c3c81d 10625378 subversion_1.9.2.orig.tar.gz
+ 939a431c1f383a8b93a38c05982c32d8 2418695 subversion_1.9.2-1.diff.gz
+Vcs-Browser: http://anonscm.debian.org/viewvc/pkg-subversion/src/1.9.x/
+Vcs-Svn: svn://anonscm.debian.org/pkg-subversion/src/1.9.x/
+Checksums-Sha1:
+ 48a7fc952190b738f307e85fb87737f173d49dd4 3259 subversion_1.9.2-1.dsc
+ 4c57828c07d21b4777a058f0d3dc973652d18ce9 10625378 subversion_1.9.2.orig.tar.gz
+ aa869fff7dc7116fd4dafc344cd21ca52bbe00c5 2418695 subversion_1.9.2-1.diff.gz
+Checksums-Sha256:
+ 0020561afd37b3cf20661c7e5da23fde210a1cc70ddfd679604216bb0cb368e4 3259 subversion_1.9.2-1.dsc
+ 6fe6ef49114e9ca2942063e339ce886078612c4e6cc58f268a2ff4db4cf0cf19 10625378 subversion_1.9.2.orig.tar.gz
+ 8deef11131ab873821696e83a1bc2fd175773f52fb8619257073896fdb200187 2418695 subversion_1.9.2-1.diff.gz
+Homepage: http://subversion.apache.org/
+Package-List: 
+ libapache2-mod-svn deb httpd optional arch=any
+ libapache2-svn deb oldlibs extra arch=all
+ libsvn-dev deb libdevel extra arch=any
+ libsvn-doc deb doc extra arch=all
+ libsvn-java deb java optional arch=any
+ libsvn-perl deb perl optional arch=any
+ libsvn-ruby1.8 deb oldlibs extra arch=all
+ libsvn1 deb libs optional arch=any
+ python-subversion deb python optional arch=any
+ ruby-svn deb ruby optional arch=any
+ subversion deb vcs optional arch=any
+ subversion-dbg deb debug extra arch=any
+ subversion-tools deb vcs extra arch=any
+Testsuite: autopkgtest
+Directory: pool/main/s/subversion
+Priority: source
+Section: vcs
