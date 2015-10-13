@@ -180,6 +180,7 @@ use Devscripts::Compression qw/compression_is_supported compression_guess_from_f
 use Cwd 'abs_path';
 use File::Copy;
 use Dpkg::Control::Hash;
+use List::MoreUtils qw(uniq);
 
 sub decompress_archive($$);
 sub compress_archive($$$);
@@ -467,6 +468,7 @@ if (@exclude_globs) {
     # ensure files are mentioned before the directory they live in
     # (otherwise tar complains)
     @to_delete = sort {$b cmp $a}  @to_delete;
+    @to_delete = uniq  @to_delete;
 
     $deletecount = scalar(@to_delete);
 }
