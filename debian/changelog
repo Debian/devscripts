@@ -10,8 +10,9 @@ devscripts (2.15.9+multitar1) UNRELEASED; urgency=medium
     + Add pagemangle.  (Closes: #395439, #451051, #705989, #773390)
     + Add oversionmangle as a part of multiple upstream tarball support.
       (Closes: #458777)
-    + Add dirversionmangle with $download-version consideration.
-      (Closes: #375138, #472065, #557768, #734748)
+    + Add dirversionmangle with $download-version consideration with detailed
+      and sorted reporting of all available URLs.
+      (Closes: #363346, #375138, #472065, #516704, #526450, #557768, #734748)
     + Add the multiple upstream tarball support and extend the OpenPGP support
       with new watch line options: component, compression, repack, pgpmode,
       versionmode, decompress.  (Closes: #526443, #531321, #549178, #731725,
@@ -19,13 +20,20 @@ devscripts (2.15.9+multitar1) UNRELEASED; urgency=medium
     + Updated manpage contents and build it from POD.  (Closes: #409094,
       #415680, #573631, #733272, #775526, #790629, #796293, #797787)
     + Improve FTP listing handling. (Closes: #696492)
+    + Add the --overwrite-download, --skip-signature, and similar options
+      to reorganize behavior around existing downloaded files.
+      (Closes: #532182, #740366, #747412)
+    + Reorganize the reporting by uscan and adjust its text strings.
+      (Closes: #582958)
   * uupdate:
     + Prevent failure when upstream version is 0.  (Closes: #798175)
     + Work around missing debian.tar.gz for "3.0 (quilt)".  (Closes: 798133)
-    + Add multiple upstream tarball support.  (Closes: #278797, #544638,
-      #570221, #752364, #797045)
+    + Add multiple upstream tarball support and resolve minor bugs by using
+      dpkg-source as the backend.  (Closes: #278797, #544638, #570221, 
+      #752364, #797045)
   * mk-origtargz:
     + Support component name for the multiple upstream tarball support.
+    + Fix Files-Excluded for duplicate entries. (Closes: #762263)
   * debian/control
     + Add gnupg2/gpgv2 as alternative option to gnupg/gpgv.  (Closes: #788414)
 
