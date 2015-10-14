@@ -375,7 +375,7 @@ directory path sorting index only.
 
 =item B<pagemangle=>I<rules>
 
-Normalize the downloaded web page string.  (Do not use this unless this is
+Normalize the downloaded web page string.  (Don\'t use this unless this is
 absolutely needed.  Generally, B<g> flag is required for these I<rules>.)
 Substitution such as B<s/PRE/~pre/; s/RC/~rc/> may help.
 
@@ -393,6 +393,10 @@ Syntactic shorthand for B<uversionmangle=>I<rules>B<, dversionmangle=>I<rules>
 
 Normalize the downloaded tarball filename string I<< <upkg>-<uversion>.tar.gz
 >> from the selected href string.
+
+If this option doesn't exist, the default upstream tarball filename is found by
+taking the last component of the URL and removing everything after any '?' or
+'#'.
 
 =item B<downloadurlmangle=>I<rules>
 
@@ -815,8 +819,8 @@ See L<COPYRIGHT FILE EXAMPLES>.
 =head2 HTTP site (filenamemangle)
 
 The upstream tarball filename is found by taking the last component of the URL
-and removing everything after any '?'.  If that leaves nothing for filename,
-B<uscan> generate filename using the source package name in
+and removing everything after any '?' or '#'.  If that leaves nothing for
+filename, B<uscan> generate filename using the source package name in
 B<debian/changelog>, the new version, and suffix B<.download> .
 
 If this does not fit to you, use B<filenamemangle>.  For example, F<< <A
@@ -955,14 +959,14 @@ B<filenamemangle>:
       https://github.com/<user>/<project>/tags \
       (?:.*?/)?v?(\d[\d.]*)\.tar\.gz debian uupdate
 
-=head2 PiPy
+=head2 PyPI
 
-For PiPy based projects, pipy.debian.net runs a redirector which allows a
+For PyPI based projects, pypi.debian.net runs a redirector which allows a
 simpler form of URL. The format below will automatically be rewritten to use
 the redirector with the watch file:
 
   version=4
-  https://pipy.python.org/packages/source/<initial>/<project>/ \
+  https://pypi.python.org/packages/source/<initial>/<project>/ \
       <tar-name>-(.+)\.tar\.gz debian uupdate
 
 For B<cfn-sphere>, set the watch file as:
@@ -976,12 +980,9 @@ watch file for this site without using the redirector.
 
   version=4
   opts="pgpmode=none, \
-      filenamemangle=s%^.*/cfn-sphere-([\d\.]+).tar.gz#md.*$%\
-      cfn-sphere-$1.tar.gz%" \
       https://pypi.python.org/pypi/cfn-sphere/ \
       https://pypi.python.org/packages/source/c/cfn-sphere/\
       cfn-sphere-([\d\.]+).tar.gz#.*
-
 
 =head2 code.google.com
 
@@ -1050,19 +1051,97 @@ For the basic usage, B<uscan> does not require to set these options.
 
 =over
 
-=item B<--report>, B<--no-download>
+=item B<--no-conf>, B<--noconf>
 
-Only report about available newer versions but do not download
-anything.
+Don\'t read any configuration files. This can only be used as the first option
+given on the command-line.
 
-=item B<--report-status>
+=item B<--verbose>, B<-v>
 
-Report on the status of all packages, even those which are up-to-date,
-but do not download anything.
+Report verbose information.
 
-=item B<--download>
+=item B<--debug>, B<-vv>
 
-Report and download. (This is the default behavior.)
+Report verbose information including the downloaded
+web pages as processed to STDERR for debugging.
+
+=item B<--dehs>
+
+Send DEHS style output (XML-type) to STDERR, while
+send all other uscan output to STDOUT.
+
+=item B<--no-dehs>
+
+Use only traditional uscan output format (default)
+
+=item B<--download>, B<-d>
+
+Download the new upstream release. (default)
+
+=item B<--force-download>, B<-dd>
+
+Download the new upstream release even if up-to-date (may not overwrite the local file)
+
+=item B<--overwrite-download>, B<-ddd>
+
+Download the new upstream release even if up-to-date (may overwrite the local file)
+
+=item B<--no-download>, B<--nodownload>
+
+Don\'t download and report basic information.
+
+Previously downloaded tarballs may be used.
+
+Change default to B<--no-signature>.
+
+=item B<--report>
+
+Don\'t download and report basic information.
+
+Previously downloaded tarballs are not used.
+
+=item B<--report-status> (= B<--report --verbose>)
+
+Don\'t download and report verbose information.
+
+Previously downloaded tarballs are not used.
+
+=item B<--signature>
+
+Download signature (default)
+
+=item B<--no-signature>
+
+Don\'t download signature but verify if already downloaded.
+
+=item B<--skip-signature>
+
+Don\'t bother download signature nor verifying signature
+
+=item B<--download-version> I<version>
+
+Specify the I<version> which the upstream release must match in order to be
+considered, rather than using the release with the highest version.
+(a best effort feature)
+
+=item B<--download-debversion> I<version>
+
+Specify the Debian package version to download the corresponding upstream
+release version.  The B<dversionmangle> and B<uversionmangle> rules are considered.
+(a best effort feature)
+
+=item B<--download-current-version>
+
+Download the currently packaged version.
+(a best effort feature)
+
+=item B<--check-dirname-level> I<N>
+
+See the below section L<Directory name checking> for an explanation of this option.
+
+=item B<--check-dirname-regex> I<regex>
+
+See the below section L<Directory name checking> for an explanation of this option.
 
 =item B<--destdir>
 
@@ -1070,34 +1149,6 @@ Path of directory to which to download. If the specified path is not absolute,
 it will be relative to one of the current directory or, if directory scanning
 is enabled, the package's
 source directory.
-
-=item B<--force-download>
-
-Download upstream even if up-to-date (will not overwrite local files, however)
-
-=item B<--pasv>
-
-Force PASV mode for FTP connections.
-
-=item B<--no-pasv>
-
-Do not use PASV mode for FTP connections.
-
-=item B<--timeout> I<N>
-
-Set timeout to I<N> seconds (default 20 seconds).
-
-=item B<--no-symlink>
-
-Do not call B<mk-origtargz>.
-
-=item B<--dehs>
-
-Use an XML format for output, as required by the DEHS system.
-
-=item B<--no-dehs>
-
-Use the traditional uscan output format. (This is the default behavior.)
 
 =item B<--package> I<package>
 
@@ -1122,61 +1173,34 @@ B<uscan> must be called from within the Debian package source tree
 (so that F<debian/changelog> can be found simply by stepping up
 through the tree).
 
-=item B<--download-version> I<version>
+=item B<--bare>
 
-Specify the I<version> which the upstream release must match in order to be
-considered, rather than using the release with the highest version.
-(a best effort feature)
-
-
-=item B<--download-debversion> I<version>
-
-Specify the Debian package version to download the corresponding upstream
-release version.  The B<dversionmangle> and B<uversionmangle> rules are considered.
-(a best effort feature)
-
-=item B<--download-current-version>
-
-Download the currently packaged version.
-(a best effort feature)
-
-=item B<--verbose>
-
-Give verbose output.
-
-=item B<--no-verbose>
-
-Don't give verbose output.  (This is the default behavior.)
+Disable all site specific special case codes to perform URL redirections and
+page content alterations.
 
 =item B<--no-exclusion>
 
-Do not automatically exclude files mentioned in F<debian/copyright> field B<Files-Excluded>
+Don\'t automatically exclude files mentioned in F<debian/copyright> field B<Files-Excluded>
 
-=item B<--debug>
+=item B<--pasv>
 
-Dump the downloaded web pages to stdout for debugging your F<watch> file.
+Force PASV mode for FTP connections.
 
-=item B<--check-dirname-level> I<N>
+=item B<--no-pasv>
 
-See the below section L<Directory name checking> for an explanation of this option.
+Don\'t use PASV mode for FTP connections.
 
-=item B<--check-dirname-regex> I<regex>
+=item B<--no-symlink>
 
-See the below section L<Directory name checking> for an explanation of this option.
+Don\'t call B<mk-origtargz>.
 
-=item B<--bare>
+=item B<--timeout> I<N>
 
-Disable all site specific special case codes such as URL redirector uses and
-page content alterations.
+Set timeout to I<N> seconds (default 20 seconds).
 
 =item B<--user-agent>, B<--useragent>
 
 Override the default user agent header.
-
-=item B<--no-conf>, B<--noconf>
-
-Do not read any configuration files. This can only be used as the first option
-given on the command-line.
 
 =item B<--help>
 
@@ -1243,7 +1267,7 @@ variables are:
 =item B<USCAN_DOWNLOAD>
 
 If this is set to B<no>, then newer upstream files will not be downloaded; this
-is equivalent to the B<--report> or B<--no-download> options.
+is equivalent to the B<--no-download> options.
 
 =item B<USCAN_PASV>
 
@@ -1382,10 +1406,10 @@ Never check the directory name.
 
 =item B<1>
 
-Only check the directory name if we have had to  change  directory in
+Only check the directory name if we have had to change directory in
 our search for F<debian/changelog>, that is, the directory containing
-F<debian/changelog> is not  the  directory  from  which B<uscan> was invoked.  This
-is the default behavior.
+F<debian/changelog> is not the directory from which B<uscan> was invoked. 
+This is the default behavior.
 
 =item B<2>
 
@@ -1454,6 +1478,9 @@ I<version>".
 
 B<uscan> invokes the standard B<uupdate> as "B<uupdate> B<--find>
 B<--upstream-version> I<version>".
+
+Restriction for B<--dehs> is lifted by redirecting other output to STDERR when
+it is activated.
 
 =back
 
@@ -1543,39 +1570,36 @@ Usage: $progname [options] [dir ...]
   Process watch files in all .../debian/ subdirs of those listed (or the
   current directory if none listed) to check for upstream releases.
 Options:
-    --report       Only report on newer or absent versions, do not download
-    --report-status
-                   Report status of packages, but do not download
-    --debug        Dump the downloaded web pages to stdout for debugging
-                   your watch file.
-    --destdir      Path of directory to which to download.
-    --download     Report on newer and absent versions, and download (default)
-    --force-download
-                   Always download the upstream release, even if up to date
-    --no-download  Report on newer and absent versions, but don\'t download
-    --pasv         Use PASV mode for FTP connections
-    --no-pasv      Do not use PASV mode for FTP connections (default)
-    --timeout N    Specifies how much time, in seconds, we give remote
-                   servers to respond (default 20 seconds)
-    --no-symlink   Do not call mk-origtargz
-    --verbose      Give verbose output
-    --no-verbose   Don\'t give verbose output (default)
-    --check-dirname-level N
-                   How much to check directory names:
-                   N=0   never
-                   N=1   only when program changes directory (default)
-                   N=2   always
-    --check-dirname-regex REGEX
-                   What constitutes a matching directory name; REGEX is
-                   a Perl regular expression; the string \`PACKAGE\' will
-                   be replaced by the package name; see manpage for details
-                   (default: 'PACKAGE(-.+)?')
-    --watchfile FILE
-                   Specify the watch file rather than using debian/watch;
-                   no directory traversing will be done in this case
-    --upstream-version VERSION
-                   Specify the current upstream version in use rather than
-                   parsing debian/changelog to determine this
+    --no-conf, --noconf
+                   Don\'t read devscripts config files;
+                   must be the first option given
+    --verbose, -v  Report verbose information.
+    --debug, -vv   Report verbose information including the downloaded
+                   web pages as processed to STDERR for debugging.
+    --dehs         Send DEHS style output (XML-type) to STDERR, while
+                   send all other uscan output to STDOUT.
+    --no-dehs      Use only traditional uscan output format (default)
+    --download, -d
+                   Download the new upstream release (default)
+    --force-download, -dd
+                   Download the new upstream release, even if up-to-date
+                   (may not overwrite the local file)
+    --overwrite-download, -ddd
+                   Download the new upstream release, even if up-to-date
+                  (may overwrite the local file)
+    --no-download, --nodownload
+                   Don\'t download and report basic information.
+		   Previously downloaded tarballs may be used.
+                   Change default to --no-signature.
+    --report       Don\'t download and report basic information.
+		   Previously downloaded tarballs are not used.
+    --report-status (= --report --verbose)
+                   Don\'t download and report verbose information.
+		   Previously downloaded tarballs are not used.
+    --signature    Download signature (default)
+    --no-signature Don\'t download signature but verify if already downloaded.
+    --skip-signature
+                   Don\'t bother download signature nor verify it.
     --download-version VERSION
                    Specify the version which the upstream release must
                    match in order to be considered, rather than using the
@@ -1587,23 +1611,40 @@ Options:
 		   considered.
     --download-current-version
                    Download the currently packaged version
+    --check-dirname-level N
+                   Check parent directory name?
+                   N=0   never check parent directory name
+                   N=1   only when $progname changes directory (default)
+                   N=2   always check parent directory name
+    --check-dirname-regex REGEX
+                   What constitutes a matching directory name; REGEX is
+                   a Perl regular expression; the string \`PACKAGE\' will
+                   be replaced by the package name; see manpage for details
+                   (default: 'PACKAGE(-.+)?')
+    --destdir      Path of directory to which to download.
     --package PACKAGE
                    Specify the package name rather than examining
                    debian/changelog; must use --upstream-version and
                    --watchfile with this option, no directory traversing
                    will be performed, no actions (even downloading) will be
                    carried out
-    --no-dehs      Use traditional uscan output format (default)
-    --dehs         Use DEHS style output (XML-type)
-    --bare         Disable all site specific special case codes such as URL
-                   redirector uses and page content alterations.
+    --upstream-version VERSION
+                   Specify the current upstream version in use rather than
+                   parsing debian/changelog to determine this
+    --watchfile FILE
+                   Specify the watch file rather than using debian/watch;
+                   no directory traversing will be done in this case
+    --bare         Disable all site specific special case codes to perform URL
+                   redirections and page content alterations.
+    --no-exclusion Disable automatic exclusion of files mentioned in
+                   debian/copyright field Files-Excluded and Files-Excluded-*
+    --pasv         Use PASV mode for FTP connections
+    --no-pasv      Don\'t use PASV mode for FTP connections (default)
+    --no-symlink   Don\'t call mk-origtargz
+    --timeout N    Specifies how much time, in seconds, we give remote
+                   servers to respond (default 20 seconds)
     --user-agent, --useragent
-                   Override the default user agent
-    --no-conf, --noconf
-                   Don\'t read devscripts config files;
-                   must be the first option given
-    --no-exclusion no automatic exclusion of files mentioned in
-                   debian/copyright field Files-Excluded
+                   Override the default user agent string
     --help         Show this message
     --version      Show version information
 
