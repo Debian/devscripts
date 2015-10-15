@@ -91,7 +91,10 @@ Find all upstream tarballs in \fI../\fR which match
 \fI<pkg>_<version>.orig.tar.{gz|bz2|lzma|xz}\fR or
 \fI<pkg>_<version>.orig\-<component>.tar.{gz|bz2|lzma|xz}\fR ;
 \fB\-\-upstream\-version\fR required; pristine source required;
-not valid for \fB\-\-patch\fR
+not valid for \fB\-\-patch\fR;
+This option uses \fBdpkg\-source\fR as the backend to enable support for the
+multiple upstream tarballs and to resolve minor bugs reported previously.  The
+use of this option is highly recommended.
 .TP
 .B \-\-verbose
 Give verbose output.
