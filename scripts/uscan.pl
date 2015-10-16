@@ -375,7 +375,7 @@ directory path sorting index only.
 
 =item B<pagemangle=>I<rules>
 
-Normalize the downloaded web page string.  (Don\'t use this unless this is
+Normalize the downloaded web page string.  (Don't use this unless this is
 absolutely needed.  Generally, B<g> flag is required for these I<rules>.)
 Substitution such as B<s/PRE/~pre/; s/RC/~rc/> may help.
 
@@ -1053,7 +1053,7 @@ For the basic usage, B<uscan> does not require to set these options.
 
 =item B<--no-conf>, B<--noconf>
 
-Don\'t read any configuration files. This can only be used as the first option
+Don't read any configuration files. This can only be used as the first option
 given on the command-line.
 
 =item B<--verbose>, B<-v>
@@ -1088,7 +1088,7 @@ Download the new upstream release even if up-to-date (may overwrite the local fi
 
 =item B<--no-download>, B<--nodownload>
 
-Don\'t download and report basic information.
+Don't download and report basic information.
 
 Previously downloaded tarballs may be used.
 
@@ -1096,15 +1096,18 @@ Change default to B<--no-signature>.
 
 =item B<--report>
 
-Don\'t download and report basic information.
+Don't download and report basic information.
 
 Previously downloaded tarballs are not used.
 
 =item B<--report-status> (= B<--report --verbose>)
 
-Don\'t download and report verbose information.
+Don't download and report verbose information.
 
 Previously downloaded tarballs are not used.
+
+When the objective of running B<uscan> is to gather the upstream package status
+under the security consciencous environment, please make sure to use this option.
 
 =item B<--signature>
 
@@ -1112,11 +1115,11 @@ Download signature (default)
 
 =item B<--no-signature>
 
-Don\'t download signature but verify if already downloaded.
+Don't download signature but verify if already downloaded.
 
 =item B<--skip-signature>
 
-Don\'t bother download signature nor verifying signature
+Don't bother download signature nor verifying signature
 
 =item B<--download-version> I<version>
 
@@ -1156,8 +1159,8 @@ Specify the name of the package to check for rather than examining
 F<debian/changelog>; this requires the B<--upstream-version> (unless a version
 is specified in the F<watch> file) and B<--watchfile> options as well.
 Furthermore, no directory scanning will be done and nothing will be downloaded.
-This option is probably most useful in conjunction with the DEHS system (and
-B<--dehs>).
+This option automatically sets B<--report> and probably most useful in
+conjunction with the DEHS system (and B<--dehs>).
 
 =item B<--upstream-version> I<upstream-version>
 
@@ -1180,7 +1183,7 @@ page content alterations.
 
 =item B<--no-exclusion>
 
-Don\'t automatically exclude files mentioned in F<debian/copyright> field B<Files-Excluded>
+Don't automatically exclude files mentioned in F<debian/copyright> field B<Files-Excluded>
 
 =item B<--pasv>
 
@@ -1188,11 +1191,11 @@ Force PASV mode for FTP connections.
 
 =item B<--no-pasv>
 
-Don\'t use PASV mode for FTP connections.
+Don't use PASV mode for FTP connections.
 
 =item B<--no-symlink>
 
-Don\'t call B<mk-origtargz>.
+Don't call B<mk-origtargz>.
 
 =item B<--timeout> I<N>
 
