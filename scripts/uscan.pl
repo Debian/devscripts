@@ -92,9 +92,6 @@ corresponding B<xz>, B<bz2>, and B<lzma> suffixes may also be used.
 upstream tarball package, there is only one watch line and no I<<
 ../<spkg>_<oversion>.orig-<component>.tar.gz >> .
 
-=item * B<uscan> with the B<--report> option produces a human readable report
-without downloading the upstream tarball.
-
 =item * B<uscan> with the B<--verbose> option produces a human readable report
 of the B<uscan> execution.
 
@@ -102,12 +99,17 @@ of the B<uscan> execution.
 the B<uscan> execution with the internal variable states.
 
 =item * B<uscan> with the B<--dehs> option produces the upstream package status
-report without downloading the upstream tarball in an XML format for other
-programs such as the Debian External Health System.
+report in an XML format for other programs such as the Debian External Health
+System.
 
 =item * The primary objective of B<uscan> is to help identify if the latest
 version upstream tarball is used or not; and to download the latest upstream
 tarball.  The order of the version is decided by B<dpkg --compare-versions>.
+
+=item * B<uscan> with the B<--safe> option limits the functionality of B<uscan>
+to its primary objective.  Both the repacking of downloaded package and the
+updating the new source tree are skipped to avoid running unsafe scripts.
+This also change default to B<--no-download> and B<--skip-signature>.
 
 =back
 
@@ -1023,11 +1025,18 @@ See mk-origtargz(1).
 
 =head1 KEYRING FILE EXAMPLES
 
-If the upstream "B<< uscan test key (no secret) <none@debian.org> >>" signs its
-package and publishes its public key B<72543FAF>, you should download it, check
-its finger print, and store it into the armored keyring file
-F<debian/upstream/signing-key.asc> using the B<gpg> (or B<gpg2>) command as
-follows.
+Let's assume that the upstream "B<< uscan test key (no secret)
+<none@debian.org> >>" signs its package and publishes its public key
+fingerprint 'B<CF21 8F0E 7EAB F584 B7E2 0402 C77E 2D68 7254 3FAF>' which you
+know is the trusted one.
+
+Please note that the short keyid B<72543FAF> is the last 4 Bytes, the long
+keyid B<C77E2D6872543FAF> is the last 8 Bytes, and the finger print is the last
+20 Bytes of the public key in hexadecimal form.  You can save typing by using
+the short keyid but you must verify the OpenPGP key using its fingerprint.
+
+The armored keyring file F<debian/upstream/signing-key.asc> can be created by
+using the B<gpg> (or B<gpg2>) command as follows.
 
   $ gpg --recv-keys "72543FAF"
   ...
@@ -1038,12 +1047,32 @@ follows.
   sub   4096R/52C6ED39 2015-09-02
   $ cd path/to/<upkg>-<uversion>
   $ mkdir -p debian/upstream
-  $ gpg --export-options export-minimal --armor --export \
+  $ gpg --export --export-options export-minimal --armor \
         'CF21 8F0E 7EAB F584 B7E2  0402 C77E 2D68 7254 3FAF' \
         >debian/upstream/signing-key.asc
 
-To make the binary keyring file instead, skip B<--armor> and change the storing
-file to F<debian/upstream/signing-key.pgp> in the above example.
+The binary keyring file can be created instead by skipping B<--armor> and
+changing the storing file to F<debian/upstream/signing-key.pgp> in the above
+example.  If a group of developers sign the package, you need to list
+fingerprints of all of them in the argument for B<gpg --export ...> to make the
+keyring to contain all OpenPGP keys of them.
+
+Sometimes you may wonder who made a signature file.  You can get the public
+keyid used to create the detached signature file F<foo-2.0.tar.gz.asc> by
+running B<gpg> as:
+
+  $ gpg -vv foo-2.0.tar.gz.asc
+  gpg: armor: BEGIN PGP SIGNATURE
+  gpg: armor header: Version: GnuPG v1
+  :signature packet: algo 1, keyid C77E2D6872543FAF
+  	version 4, created 1445177469, md5len 0, sigclass 0x00
+  	digest algo 2, begin of digest 7a c7
+  	hashed subpkt 2 len 4 (sig created 2015-10-18)
+  	subpkt 16 len 8 (issuer key ID C77E2D6872543FAF)
+  	data: [4091 bits]
+  gpg: assuming signed data in `foo-2.0.tar.gz'
+  gpg: Signature made Sun 18 Oct 2015 11:11:09 PM JST using RSA key ID 72543FAF
+  ...
 
 =head1 COMMANDLINE OPTIONS
 
@@ -1084,34 +1113,19 @@ Download the new upstream release even if up-to-date (may not overwrite the loca
 
 =item B<--overwrite-download>, B<-ddd>
 
-Download the new upstream release even if up-to-date (may overwrite the local file)
+Download the new upstream release even if up-to-date. (may overwrite the local file)
 
 =item B<--no-download>, B<--nodownload>
 
-Don't download and report basic information.
+Don't download and report information.
 
 Previously downloaded tarballs may be used.
 
-Change default to B<--no-signature>.
-
-=item B<--report>
-
-Don't download and report basic information.
-
-Previously downloaded tarballs are not used.
-
-=item B<--report-status> (= B<--report --verbose>)
-
-Don't download and report verbose information.
-
-Previously downloaded tarballs are not used.
-
-When the objective of running B<uscan> is to gather the upstream package status
-under the security consciencous environment, please make sure to use this option.
+Change default to B<--skip-signature>.
 
 =item B<--signature>
 
-Download signature (default)
+Download signature. (default)
 
 =item B<--no-signature>
 
@@ -1119,7 +1133,21 @@ Don't download signature but verify if already downloaded.
 
 =item B<--skip-signature>
 
-Don't bother download signature nor verifying signature
+Don't bother download signature nor verifying signature.
+
+=item B<--safe>, B<--report>
+
+Avoid running unsafe scripts by skipping both the repacking of the downloaded
+package and the updating of the new source tree.
+
+Change default to B<--no-download> and B<--skip-signature>.
+
+When the objective of running B<uscan> is to gather the upstream package status
+under the security conscious environment, please make sure to use this option.
+
+=item B<--report-status>
+
+This is equivalent of setting "B<--verbose --safe>".
 
 =item B<--download-version> I<version>
 
@@ -1159,8 +1187,8 @@ Specify the name of the package to check for rather than examining
 F<debian/changelog>; this requires the B<--upstream-version> (unless a version
 is specified in the F<watch> file) and B<--watchfile> options as well.
 Furthermore, no directory scanning will be done and nothing will be downloaded.
-This option automatically sets B<--report> and probably most useful in
-conjunction with the DEHS system (and B<--dehs>).
+This option automatically sets B<--no-download> and B<--skip-signature>; and
+probably most useful in conjunction with the DEHS system (and B<--dehs>).
 
 =item B<--upstream-version> I<upstream-version>
 
@@ -1271,6 +1299,13 @@ variables are:
 
 If this is set to B<no>, then newer upstream files will not be downloaded; this
 is equivalent to the B<--no-download> options.
+
+=item B<USCAN_SAFE>
+
+If this is set to B<yes>, then B<uscan> avoids running unsafe scripts by
+skipping both the repacking of the downloaded package and the updating of the
+new source tree; this is equivalent to the B<--safe> options; this also sets
+the default to B<--no-download> and B<--skip-signature>.
 
 =item B<USCAN_PASV>
 
@@ -1591,18 +1626,19 @@ Options:
                    Download the new upstream release, even if up-to-date
                   (may overwrite the local file)
     --no-download, --nodownload
-                   Don\'t download and report basic information.
+                   Don\'t download and report information.
 		   Previously downloaded tarballs may be used.
-                   Change default to --no-signature.
-    --report       Don\'t download and report basic information.
-		   Previously downloaded tarballs are not used.
-    --report-status (= --report --verbose)
-                   Don\'t download and report verbose information.
-		   Previously downloaded tarballs are not used.
-    --signature    Download signature (default)
+                   Change default to --skip-signature.
+    --signature    Download signature and verify (default)
     --no-signature Don\'t download signature but verify if already downloaded.
     --skip-signature
                    Don\'t bother download signature nor verify it.
+    --safe, --report
+                   avoid running unsafe scripts by skipping both the repacking
+                   of the downloaded package and the updating of the new
+                   source tree.  Change default to --no-download and
+                   --skip-signature.
+    --report-status (= --safe --verbose)
     --download-version VERSION
                    Specify the version which the upstream release must
                    match in order to be considered, rather than using the
@@ -1880,7 +1916,7 @@ $download = 0 if $safe == 1;
 #              3 = overwrite-download (even if file exists)
 $download = $opt_download if defined $opt_download;
 # $signature: -1 = no downloading signature and no verifying signature, 
-#              0 = no downloading signature but veryfying signature, 
+#              0 = no downloading signature but verifying signature, 
 #              1 = downloading signature and verifying signature
 $signature = -1 if $download== 0; # Change default 1 -> -1
 $signature = $opt_signature if defined $opt_signature;
