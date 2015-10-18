@@ -1057,7 +1057,7 @@ else
         COMP=${DEBIANFILE##*.}
 	NEW_DEBIANFILE="${PACKAGE}_${NEW_VERSION}-$SUFFIX.debian.tar.$COMP"
     fi
-    cp -i $DEBIANFILE ${NEW_DEBIANFILE}
+    cp -i $DEBIANFILE ${NEW_DEBIANFILE} 2>/dev/tty
     
     # fake DSC
     FAKEDSC="${PACKAGE}_${NEW_VERSION}-$SUFFIX.dsc"
