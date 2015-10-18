@@ -3391,8 +3391,13 @@ EOF
     # Check pkg-ver.tar.gz and pkg_ver.orig.tar.gz
     if (! defined $uscanlog) {
 	$uscanlog = "../${pkg}_${common_mangled_newversion}.uscan.log";
+	if (-e "$uscanlog.old") {
+	    unlink "$uscanlog.old" or uscan_die "Can\'t remove old backup log $uscanlog.old: $!";
+	    uscan_msg "Old backup uscan log found.  Remove: $uscanlog.old\n";
+	}
 	if (-e $uscanlog) {
-	    uscan_warn "??? STRANGE ??? uscan log file already exists: $uscanlog (appending)\n";
+	    move($uscanlog, "$uscanlog.old");
+	    uscan_msg "Old uscan log found.  Moved to: $uscanlog.old\n";
 	}
 	open(USCANLOG, ">> $uscanlog") or uscan_die "$progname: could not open $uscanlog for append: $!\n";
 	print USCANLOG "# uscan log\n";
