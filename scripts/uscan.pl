@@ -1686,8 +1686,8 @@ our $passive = 'default';
 my $destdir = "..";
 my $download = 1;
 my $signature = 1;
+my $safe = 0;
 my $download_version;
-my $force_download = 0;
 my $badversion = 0;
 my $repack = 0; # repack .tar.bz2, .tar.lzma, .tar.xz or .zip to .tar.gz
 my $default_compression = 'gzip' ;
@@ -1712,7 +1712,8 @@ my $uscanlog;
 my $common_newversion ; # undef initially (for MUT, version=same)
 my $common_mangled_newversion ; # undef initially (for MUT)
 my $previous_newversion ; # undef initially (for version=prev, pgpmode=prev)
-my $previousfile_base ; # undef initially (for pgpmode=prev)
+my $previous_newfile_base ; # undef initially (for pgpmode=prev)
+my $previous_sigfile_base ; # undef initially (for pgpmode=prev)
 my $previous_download_available ; # undef initially
 my ($keyring, $gpghome); # must be shared across watch lines for MUT
 my $bare = 0;
@@ -1727,6 +1728,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'USCAN_TIMEOUT' => 20,
 		       'USCAN_DESTDIR' => '..',
 		       'USCAN_DOWNLOAD' => 'yes',
+		       'USCAN_SAFE' => 'no',
 		       'USCAN_PASV' => 'default',
 		       'USCAN_SYMLINK' => 'symlink',
 		       'USCAN_VERBOSE' => 'no',
@@ -1756,6 +1758,8 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 	or $config_vars{'USCAN_DESTDIR'}='..';
     $config_vars{'USCAN_DOWNLOAD'} =~ /^(yes|no)$/
 	or $config_vars{'USCAN_DOWNLOAD'}='yes';
+    $config_vars{'USCAN_SAFE'} =~ /^(yes|no)$/
+	or $config_vars{'USCAN_SAFE'}='no';
     $config_vars{'USCAN_PASV'} =~ /^(yes|no|default)$/
 	or $config_vars{'USCAN_PASV'}='default';
     $config_vars{'USCAN_TIMEOUT'} =~ m/^\d+$/
@@ -1787,6 +1791,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $destdir = $config_vars{'USCAN_DESTDIR'}
     	if defined $config_vars{'USCAN_DESTDIR'};
     $download = $config_vars{'USCAN_DOWNLOAD'} eq 'no' ? 0 : 1;
+    $safe = $config_vars{'USCAN_SAFE'} eq 'no' ? 0 : 1;
     $passive = $config_vars{'USCAN_PASV'} eq 'yes' ? 1 :
 	$config_vars{'USCAN_PASV'} eq 'no' ? 0 : 'default';
     $timeout = $config_vars{'USCAN_TIMEOUT'};
@@ -1802,10 +1807,9 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 }
 
 # Now read the command line arguments
-my ($opt_h, $opt_v, $opt_destdir, $opt_download,
+my ($opt_h, $opt_v, $opt_destdir, $opt_safe, $opt_download,
     $opt_signature, $opt_passive, $opt_symlink, $opt_repack,
     $opt_repack_compression, $opt_exclusion, $opt_copyright_file);
-my $opt_report = 0;
 my ($opt_verbose, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
 my ($opt_download_version, $opt_download_debversion);
@@ -1822,8 +1826,8 @@ GetOptions("help" => \$opt_h,
 	   "force-download" => sub { $opt_download = 2; },
 	   "overwrite-download" => sub { $opt_download = 3; },
 	   "nodownload|no-download" => sub { $opt_download = 0; },
-	   "report" => sub { $opt_report = 1; },
-	   "report-status" => sub { $opt_report = 1; $opt_verbose = 1; },
+	   "report|safe" => \$opt_safe,
+	   "report-status" => sub { $opt_safe = 1; $opt_verbose = 1; },
 	   "signature!" => \$opt_signature,
 	   "skipsignature|skip-signature" => sub { $opt_signature = -1; },
 	   "passive|pasv!" => \$opt_passive,
@@ -1864,15 +1868,21 @@ if (! -d "$destdir") {
 
 if (defined $opt_package) {
     $download = 0; # compatibility
-    $signature = 0; # compatibility
     uscan_die "The --package option requires to set the --watchfile option, too.\n"
 	unless defined $opt_watchfile;
 }
+$safe = 1 if defined $opt_safe;
+$download = 0 if $safe == 1;
 
-# $download: 0=no-download, 1=download (default, only-new), 2=force-download, 3=overwrite-download
+# $download:   0 = no-download,
+#              1 = download (default, only-new), 
+#              2 = force-download (even if file is up-to-date version),
+#              3 = overwrite-download (even if file exists)
 $download = $opt_download if defined $opt_download;
-# $signature: -1=no downloading sig and no verifying sig, 0=no downloading sig but veryfy sig, 1=downloadsignature and verify
-$signature = 0 if $download== 0; # Change default 1 -> 0
+# $signature: -1 = no downloading signature and no verifying signature, 
+#              0 = no downloading signature but veryfying signature, 
+#              1 = downloading signature and verifying signature
+$signature = -1 if $download== 0; # Change default 1 -> -1
 $signature = $opt_signature if defined $opt_signature;
 $repack = $opt_repack if defined $opt_repack;
 $passive = $opt_passive if defined $opt_passive;
@@ -2505,7 +2515,8 @@ sub process_watchline ($$$$$$)
 		    $common_newversion = undef;
 		    $common_mangled_newversion = undef;
 		    $previous_newversion = undef;
-		    $previousfile_base = undef;
+		    $previous_newfile_base = undef;
+		    $previous_sigfile_base = undef;
 		    $previous_download_available = undef;
 		    $uscanlog = undef;
 		}
@@ -3062,7 +3073,7 @@ EOF
 		# 0=no-download or 1=download
 		$download = 0;
 	    }
-	} else {
+	} else { # $compver eq 'old'
 	    uscan_msg "   => Only older package available\n";
 	    $dehs_tags{'status'} = "only older package available";
 	    if ($download > 1) {
@@ -3079,7 +3090,6 @@ EOF
     } else { # same/previous -- secondary-tarball or signature-file
 	uscan_die "strange ... <version> stanza = same/previous should have defined \$download_version\n";
     }
-
 
     ############################# BEGIN SUB DOWNLOAD ##################################
     my $downloader = sub {
@@ -3133,21 +3143,19 @@ EOF
     # Download tarball
     my $download_available;
     my $sigfile_base = $newfile_base;
-    if ($opt_report) {
-	uscan_msg "SKIP downloading as requested by --report\n";
-	return 0;
-    } elsif ($options{'pgpmode'} eq 'previous') {
-	$download_available = $previous_download_available;
-	$sigfile_base = $previousfile_base;
-	$newversion = $previous_newversion;
-    } else {
-	# Download package tarball
-	if ($download >0) {
-	    uscan_verbose "Downloading upstream package\n";
+    if ($options{'pgpmode'} ne 'previous') {
+	# try download package
+	if ( $download == 3 and -e "$destdir/$newfile_base") {
+	    uscan_msg "Download and overwrite the existing file: $newfile_base\n";
+	} elsif ( -e "$destdir/$newfile_base") {
+	    uscan_msg "Don\'t download and use the existing file: $newfile_base\n";
+	    $download_available = 1;
+	} elsif ($download >0) {
+	    uscan_msg "Downloading upstream package: $newfile_base\n";
 	    $download_available = $downloader->($upstream_url, "$destdir/$newfile_base");
-	} else {
-	    uscan_verbose "SKIP Downloading upstream package\n";
-	    $download_available = (-e "$destdir/$newfile_base") ? 1 : 0;
+	} else { # $download = 0, 
+	    uscan_msg "Don\'t downloading upstream package: $newfile_base\n";
+	    $download_available = 0;	
 	}
 
 	# Decompress archive if requested and applicable
@@ -3189,17 +3197,13 @@ EOF
 	    }
 	}
     }
-    unless ($download_available) {
-	uscan_warn "FAIL (No upstream tarball found).\n";
-	return 1;
-    }
 
     # Download signature
     my $pgpsig_url;
     my $sigfile;
     my $signature_available;
     if ($options{'pgpmode'} eq 'default') {
-	uscan_verbose "Start checking for common possible upstream OpenPGP signature files\n";
+	uscan_msg "Start checking for common possible upstream OpenPGP signature files\n";
 	foreach my $suffix (qw(asc gpg pgp sig)) {
 	    my $sigrequest = HTTP::Request->new('HEAD' => "$upstream_url.$suffix");
 	    my $sigresponse = $user_agent->request($sigrequest);
@@ -3208,7 +3212,7 @@ EOF
 		last;
 	    }
 	}
-	uscan_verbose "End checking for common possible upstream OpenPGP signature files\n";
+	uscan_msg "End checking for common possible upstream OpenPGP signature files\n";
 	$signature_available = 0;
     } elsif ($options{'pgpmode'} eq 'mangle') {
 	$pgpsig_url = $upstream_url;
@@ -3225,24 +3229,27 @@ EOF
 	}
 	$sigfile = "$sigfile_base.pgp";
 	if ($signature == 1) {
-	    uscan_verbose "Downloading OpenPGP signature from\n   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile\n";
+	    uscan_msg "Downloading OpenPGP signature from\n   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile\n";
 	    $signature_available = $downloader->($pgpsig_url, "$destdir/$sigfile");
-	} else {
-	    uscan_verbose "SKIP Downloading OpenPGP signature from\n   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile\n";
-	    $signature_available = (-e "$destdir/$newfile_base") ? 1 : 0;
+	} else { # -1, 0
+	    uscan_msg "Don\'t downloading OpenPGP signature from\n   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile\n";
+	    $signature_available = (-e "$destdir/$sigfile") ? 1 : 0;
 	}
     } elsif ($options{'pgpmode'} eq 'previous') {
 	$pgpsig_url = $upstream_url;
 	$sigfile = $newfile_base;
 	if ($signature == 1) {
-	    uscan_verbose "Downloading OpenPGP signature from\n   $pgpsig_url (pgpmode=previous)\n   as $sigfile\n";
+	    uscan_msg "Downloading OpenPGP signature from\n   $pgpsig_url (pgpmode=previous)\n   as $sigfile\n";
 	    $signature_available = $downloader->($pgpsig_url, "$destdir/$sigfile");
 	} else { # -1, 0
-	    uscan_verbose "SKIP Downloading OpenPGP signature from\n   $pgpsig_url (pgpmode=previous)\n   as $sigfile\n";
-	    $signature_available = (-e "$destdir/$newfile_base") ? 1 : 0;
+	    uscan_msg "Don\'t downloading OpenPGP signature from\n   $pgpsig_url (pgpmode=previous)\n   as $sigfile\n";
+	    $signature_available = (-e "$destdir/$sigfile") ? 1 : 0;
 	}
+	$download_available = $previous_download_available;
+	$newfile_base = $previous_newfile_base;
+	$sigfile_base = $previous_sigfile_base;
+	uscan_msg "Use $newfile_base as upstream package (pgpmode=previous)\n";
     }
-    # Download signature 
 
     # Signature check
     if ($options{'pgpmode'} eq 'mangle' or $options{'pgpmode'} eq 'previous') {
@@ -3251,10 +3258,16 @@ EOF
 	} elsif (! defined $keyring) {
 	    uscan_warn("FAIL Checking OpenPGP signature (no keyring).\n");
 	    return 1;
+	} elsif ($download_available == 0) {
+	    uscan_warn "FAIL Checking OpenPGP signature (no upstream tarball downloaded).\n";
+	    return 1;
 	} elsif ($signature_available == 0) {
-	    uscan_warn("FAIL Checking OpenPGP signature (no signature file).\n");
+	    uscan_warn("FAIL Checking OpenPGP signature (no signature file downloaded).\n");
 	    return 1;
 	} else {
+	    if ($signature ==0) {
+		uscan_msg "Use the existing file: $sigfile\n";
+	    }
 	    uscan_verbose "Verifying OpenPGP signature $sigfile for $sigfile_base\n";
 	    unless(system($havegpgv, '--homedir', '/dev/null',
 		    '--keyring', $keyring,
@@ -3263,32 +3276,43 @@ EOF
 		return 1;
 	    }
 	}
-	$previousfile_base = undef;
+	$previous_newfile_base = undef;
+	$previous_sigfile_base = undef;
 	$previous_newversion = undef;
 	$previous_download_available = undef;
     } elsif ($options{'pgpmode'} eq 'none' or $options{'pgpmode'} eq 'default') {
 	uscan_verbose "Missing OpenPGP signature.\n";
-	$previousfile_base = undef;
+	$previous_newfile_base = undef;
+	$previous_sigfile_base = undef;
 	$previous_newversion = undef;
 	$previous_download_available = undef;
     } elsif ($options{'pgpmode'} eq 'next') {
 	uscan_verbose "Differ checking OpenPGP signature to the next watch line\n";
-	$previousfile_base = $sigfile_base;
+	$previous_newfile_base = $newfile_base;
+	$previous_sigfile_base = $sigfile_base;
 	$previous_newversion = $newversion;
 	$previous_download_available = $download_available;
     } elsif ($options{'pgpmode'} eq 'self') {
 	$gpghome = tempdir(CLEANUP => 1);
 	$newfile_base = $sigfile_base;
 	$newfile_base =~ s/^(.*?)\.[^\.]+$/$1/;
-	uscan_verbose "Verifying OpenPGP self signature of $sigfile_base and extract $newfile_base\n";
-	unless (system($havegpg, '--homedir', $gpghome,
-	       '--no-options', '-q', '--batch', '--no-default-keyring',
-	       '--keyring', $keyring, '--trust-model', 'always', '--decrypt', '-o',
-	       "$destdir/$newfile_base", "$destdir/$sigfile_base") >> 8 == 0) {
-	    uscan_warn("OpenPGP signature did not verify.\n");
+	if ($signature == -1) {
+	    uscan_warn("SKIP Checking OpenPGP signature (by request).\n");
+	} elsif ($download_available == 0) {
+	    uscan_warn "FAIL Checking OpenPGP signature (no signed upstream tarball downloaded).\n";
 	    return 1;
+	} else {
+	    uscan_verbose "Verifying OpenPGP self signature of $sigfile_base and extract $newfile_base\n";
+	    unless (system($havegpg, '--homedir', $gpghome,
+		    '--no-options', '-q', '--batch', '--no-default-keyring',
+		    '--keyring', $keyring, '--trust-model', 'always', '--decrypt', '-o',
+		    "$destdir/$newfile_base", "$destdir/$sigfile_base") >> 8 == 0) {
+		uscan_warn("OpenPGP signature did not verify.\n");
+		return 1;
+	    }
 	}
-	$previousfile_base = undef;
+	$previous_newfile_base = undef;
+	$previous_sigfile_base = undef;
 	$previous_newversion = undef;
 	$previous_download_available = undef;
     } else {
@@ -3316,13 +3340,25 @@ EOF
 	# MUT disables repacksuffix so it is safe to have this before mk-origtargz
 	$common_mangled_newversion = $mangled_newversion;
     }
-    dehs_msg "Successfully downloaded package $newfile_base\n";
+    dehs_msg "Successfully downloaded package $newfile_base\n" if $options{'pgpmode'} ne 'previous';
 
+    if ($options{'pgpmode'} eq 'next') {
+	uscan_verbose "Read the next watch line (pgpmode=next)\n";
+	return 0;
+    }
+    if ($safe) {
+	uscan_msg "SKIP generation of orig.tar.* and running of script/uupdate (--safe)\n";
+	return 0;
+    }
+    if ($download_available == 0) {
+	uscan_warn "No upstream tarball downloaded.  No further processing with mk_origtargz ...\n";
+	return 1;
+    }
     # Call mk-origtargz (renames, repacks, etc.)
     my $mk_origtargz_out;
     my $path = "$destdir/$newfile_base";
     my $target = $newfile_base;
-    unless ($symlink eq "no" or $options{'pgpmode'} eq 'previous') {
+    unless ($symlink eq "no") {
 	my @cmd = ("mk-origtargz");
 	push @cmd, "--package", $pkg;
 	push @cmd, "--version", $common_mangled_newversion;
