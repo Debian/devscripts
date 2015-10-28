@@ -180,7 +180,6 @@ use Devscripts::Compression qw/compression_is_supported compression_guess_from_f
 use Cwd 'abs_path';
 use File::Copy;
 use Dpkg::Control::Hash;
-use List::MoreUtils qw(uniq);
 
 sub decompress_archive($$);
 sub compress_archive($$$);
@@ -441,6 +440,7 @@ if (@exclude_globs) {
     @files = split /^/, $files;
     chomp @files;
 
+    my %delete;
     # find out what to delete
     my @exclude_info = map { { glob => $_, used => 0, regex => glob_to_regex($_) } } @exclude_globs;
     for my $filename (@files) {
@@ -450,7 +450,7 @@ if (@exclude_globs) {
 				(?:$info->{regex}) # User pattern
 				(?:/.*)?$          # Possible trailing / for a directory
 			      @x) {
-		push @to_delete, $filename if !$last_match;
+		$delete{$filename} = 1 if !$last_match;
 		$last_match = $info;
 	    }
 	}
@@ -467,8 +467,7 @@ if (@exclude_globs) {
 
     # ensure files are mentioned before the directory they live in
     # (otherwise tar complains)
-    @to_delete = sort {$b cmp $a}  @to_delete;
-    @to_delete = uniq  @to_delete;
+    @to_delete = sort {$b cmp $a} keys %delete;
 
     $deletecount = scalar(@to_delete);
 }
@@ -491,7 +490,7 @@ if ($do_repack || $deletecount) {
     unlink $upstream_tar if $mode eq "rename";
     # We have to use piping because --delete is broken otherwise, as documented
     # at https://www.gnu.org/software/tar/manual/html_node/delete.html
-    if (@to_delete > 0) {
+    if (@to_delete) {
 	spawn(exec => ['tar', '--delete', @to_delete ],
 	      from_file => $destfiletar,
 	      to_file => $destfiletar . ".tmp",
