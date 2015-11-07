@@ -2282,6 +2282,7 @@ sub process_watchline ($$$$$$)
     my ($request, $response);
     my ($newfile, $newversion);
     my $style='new';
+    my $versionless = 0;
     my $urlbase;
     my $headers = HTTP::Headers->new;
 
@@ -2465,10 +2466,13 @@ sub process_watchline ($$$$$$)
 	}
 
 	# Check $filepattern is OK
-	if ( $filepattern !~ /\(.*\)/ and
-		not exists $options{'filenamemangle'}) {
-	    uscan_warn "Filename pattern missing version delimiters () without filenamemangle\n  in $watchfile, skipping:\n  $line\n";
-	    return 1;
+	if ( $filepattern !~ /\([^?].*\)/) {
+	    if (exists $options{'filenamemangle'}) {
+		$versionless = 1;
+	    } else {
+		uscan_warn "Filename pattern missing version delimiters () without filenamemangle\n  in $watchfile, skipping:\n  $line\n";
+		return 1;
+	    }
 	}
 
 	# Check validity of options
@@ -2769,9 +2773,13 @@ sub process_watchline ($$$$$$)
 		    } else {
 			# need the map { ... } here to handle cases of (...)?
 			# which may match but then return undef values
-			$mangled_version =
-			    join(".", map { $_ if defined($_) }
-			 	$href =~ m&^$_pattern$&);
+			if ($versionless) {
+			    $mangled_version = '';
+			} else {
+			    $mangled_version =
+				join(".", map { $_ if defined($_) }
+				    $href =~ m&^$_pattern$&);
+			}
 			foreach my $pat (@{$options{'uversionmangle'}}) {
 			    uscan_verbose "uversionmangle rule $pat\n";
 			    if (! safe_replace(\$mangled_version, $pat)) {
@@ -2957,50 +2965,6 @@ EOF
 	    return 1;
 	}
     }
-    # $newversion = version used for pkg-ver.tar.gz and version comparison
-    uscan_verbose "Newest upstream tarball version selected for download (uversionmangled): $newversion\n" if defined $newversion;
-    uscan_verbose "Download filename (fullpath, pre-filenamemangle): $newfile\n";
-
-    my $newfile_base;
-    if (exists $options{'filenamemangle'}) {
-	$newfile_base = $newfile;
-	foreach my $pat (@{$options{'filenamemangle'}}) {
-	    uscan_verbose "filenamemangle rule $pat\n";
-	    if (! safe_replace(\$newfile_base, $pat)) {
-		uscan_warn "In $watchfile, potentially"
-		. " unsafe or malformed filenamemangle"
-		. " pattern:\n  '$pat'"
-		. " found. Skipping watchline\n"
-		. "  $line\n";
-	    return 1;
-	    }
-	}
-	unless ($newversion) {
-	    # uversionmangles version not exist
-	    $newfile_base =~ m/^.+[-_]([^-_]+)(?:\.tar\.(gz|bz2|xz)|\.zip)$/i;
-	    $newversion = $1;
-	    unless ($newversion) {
-		uscan_warn "Fix filenamemangle to produce a filename with the correct version\n";
-		return 1;
-	    }
-	    uscan_verbose "Newest upstream tarball version from the filenamemangled filename: $newversion\n";
-	}
-    } else {
-	$newfile_base = basename($newfile);
-	# Remove HTTP header trash
-	if ($site =~ m%^https?://%) {
-	    $newfile_base =~ s/[\?#].*$//; # PiPy
-	    # just in case this leaves us with nothing
-	    if ($newfile_base eq '') {
-		uscan_warn "No good upstream filename found after removing tailing ?... and #....\n   Use filenamemangle to fix this.\n";
-		return 1;
-	    }
-	}
-    }
-    uscan_verbose "Download filename (filenamemangled): $newfile_base\n";
-    unless (defined $common_newversion) {
-	$common_newversion = $newversion;
-    }
 
     # Determin download URL for tarball or signature
     my $upstream_url;
@@ -3080,6 +3044,55 @@ EOF
 	$upstream_url = "$base$newfile";
     }
     uscan_verbose "Upstream URL (downloadurlmangled):\n   $upstream_url\n";
+
+    # $newversion = version used for pkg-ver.tar.gz and version comparison
+    uscan_verbose "Newest upstream tarball version selected for download (uversionmangled): $newversion\n" if defined $newversion;
+    uscan_verbose "Download filename (fullpath, pre-filenamemangle): $newfile\n";
+
+    my $newfile_base;
+    if (exists $options{'filenamemangle'}) {
+	if ($versionless) {
+	    $newfile_base = $upstream_url;
+	} else {
+	    $newfile_base = $newfile;
+	}
+	foreach my $pat (@{$options{'filenamemangle'}}) {
+	    uscan_verbose "filenamemangle rule $pat\n";
+	    if (! safe_replace(\$newfile_base, $pat)) {
+		uscan_warn "In $watchfile, potentially"
+		. " unsafe or malformed filenamemangle"
+		. " pattern:\n  '$pat'"
+		. " found. Skipping watchline\n"
+		. "  $line\n";
+	    return 1;
+	    }
+	}
+	unless ($newversion) {
+	    # uversionmangles version not exist
+	    $newfile_base =~ m/^.+[-_]([^-_]+)(?:\.tar\.(gz|bz2|xz)|\.zip)$/i;
+	    $newversion = $1;
+	    unless ($newversion) {
+		uscan_warn "Fix filenamemangle to produce a filename with the correct version\n";
+		return 1;
+	    }
+	    uscan_verbose "Newest upstream tarball version from the filenamemangled filename: $newversion\n";
+	}
+    } else {
+	$newfile_base = basename($newfile);
+	# Remove HTTP header trash
+	if ($site =~ m%^https?://%) {
+	    $newfile_base =~ s/[\?#].*$//; # PiPy
+	    # just in case this leaves us with nothing
+	    if ($newfile_base eq '') {
+		uscan_warn "No good upstream filename found after removing tailing ?... and #....\n   Use filenamemangle to fix this.\n";
+		return 1;
+	    }
+	}
+    }
+    uscan_verbose "Download filename (filenamemangled): $newfile_base\n";
+    unless (defined $common_newversion) {
+	$common_newversion = $newversion;
+    }
 
     $dehs_tags{'debian-uversion'} = $lastversion;
     $dehs_tags{'debian-mangled-uversion'} = $mangled_lastversion;
