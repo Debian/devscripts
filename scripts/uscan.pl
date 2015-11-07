@@ -2327,7 +2327,7 @@ sub process_watchline ($$$$$$)
 	$pattern = $filepattern;
 
 	# Check $filepattern is OK
-	if (not $filepattern or $filepattern !~ /\(.*\)/) {
+	if ($filepattern !~ /\(.*\)/) {
 	    uscan_warn "Filename pattern missing version delimiters ()\n  in $watchfile, skipping:\n  $line\n";
 	    return 1;
 	}
@@ -2465,8 +2465,9 @@ sub process_watchline ($$$$$$)
 	}
 
 	# Check $filepattern is OK
-	if (not $filepattern or $filepattern !~ /\(.*\)/) {
-	    uscan_warn "Filename pattern missing version delimiters ()\n  in $watchfile, skipping:\n  $line\n";
+	if ( $filepattern !~ /\(.*\)/ and
+		not exists $options{'filenamemangle'}) {
+	    uscan_warn "Filename pattern missing version delimiters () without filenamemangle\n  in $watchfile, skipping:\n  $line\n";
 	    return 1;
 	}
 
@@ -2957,11 +2958,8 @@ EOF
 	}
     }
     # $newversion = version used for pkg-ver.tar.gz and version comparison
-    uscan_verbose "Newest upstream tarball version selected for download (uversionmangled): $newversion\n";
+    uscan_verbose "Newest upstream tarball version selected for download (uversionmangled): $newversion\n" if defined $newversion;
     uscan_verbose "Download filename (fullpath, pre-filenamemangle): $newfile\n";
-    unless (defined $common_newversion) {
-	$common_newversion = $newversion;
-    }
 
     my $newfile_base;
     if (exists $options{'filenamemangle'}) {
@@ -2977,6 +2975,16 @@ EOF
 	    return 1;
 	    }
 	}
+	unless ($newversion) {
+	    # uversionmangles version not exist
+	    $newfile_base =~ m/^.+[-_]([^-_]+)(?:\.tar\.(gz|bz2|xz)|\.zip)$/i;
+	    $newversion = $1;
+	    unless ($newversion) {
+		uscan_warn "Fix filenamemangle to produce a filename with the correct version\n";
+		return 1;
+	    }
+	    uscan_verbose "Newest upstream tarball version from the filenamemangled filename: $newversion\n";
+	}
     } else {
 	$newfile_base = basename($newfile);
 	# Remove HTTP header trash
@@ -2984,12 +2992,15 @@ EOF
 	    $newfile_base =~ s/[\?#].*$//; # PiPy
 	    # just in case this leaves us with nothing
 	    if ($newfile_base eq '') {
-		$newfile_base = "$pkg-$newversion.download";
 		uscan_warn "No good upstream filename found after removing tailing ?... and #....\n   Use filenamemangle to fix this.\n";
+		return 1;
 	    }
 	}
     }
     uscan_verbose "Download filename (filenamemangled): $newfile_base\n";
+    unless (defined $common_newversion) {
+	$common_newversion = $newversion;
+    }
 
     # Determin download URL for tarball or signature
     my $upstream_url;
