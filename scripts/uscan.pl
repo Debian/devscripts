@@ -3583,6 +3583,7 @@ sub newest_dir ($$$$$) {
 	my $match ='';
 	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi) {
 	    my $href = $2;
+	    uscan_verbose "Matching target for dirversionmangle:   $href\n";
 	    if ($href =~ m&^$dirpattern/?$&) {
 		my $mangled_version = join(".", map { $_ // '' } $href =~ m&^$dirpattern/?$&);
 		foreach my $pat (@{$$optref{'dirversionmangle'}}) {
@@ -3667,6 +3668,7 @@ sub newest_dir ($$$$$) {
 	    while ($content =~
 		m/(?:<\s*a\s+[^>]*href\s*=\s*\")((?-i)$pattern)\"/gi) {
 		my $dir = $1;
+		uscan_verbose "Matching target for dirversionmangle:   $dir\n";
 		my $mangled_version = join(".", $dir =~ m/^$pattern$/);
 		foreach my $pat (@{$$optref{'dirversionmangle'}}) {
 		    uscan_verbose "Dirversionnmangle rule: $pat\n";
@@ -3703,6 +3705,7 @@ sub newest_dir ($$$$$) {
 		$ln =~ s/^.*\s(\S+)$/$1/; # filename only
 		if ($ln =~ m/($pattern)(\s+->\s+\S+)?$/) {
 		    my $dir = $1;
+		    uscan_verbose "Matching target for dirversionmangle:   $dir\n";
 		    my $mangled_version = join(".", $dir =~ m/^$pattern$/);
 		    foreach my $pat (@{$$optref{'dirversionmangle'}}) {
 			uscan_verbose "Dirversionnmangle rule: $pat\n";
