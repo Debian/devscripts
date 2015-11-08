@@ -3025,6 +3025,7 @@ EOF
 
 	# mangle if necessary
 	$upstream_url =~ s/&amp;/&/g;
+	uscan_verbose "Matching target for downloadurlmangle: $upstream_url\n";
 	if (exists $options{'downloadurlmangle'}) {
 	    foreach my $pat (@{$options{'downloadurlmangle'}}) {
 		uscan_verbose "downloadurlmangle rule $pat\n";
@@ -3046,8 +3047,7 @@ EOF
     uscan_verbose "Upstream URL (downloadurlmangled):\n   $upstream_url\n";
 
     # $newversion = version used for pkg-ver.tar.gz and version comparison
-    uscan_verbose "Newest upstream tarball version selected for download (uversionmangled): $newversion\n" if defined $newversion;
-    uscan_verbose "Download filename (fullpath, pre-filenamemangle): $newfile\n";
+    uscan_verbose "Newest upstream tarball version selected for download (uversionmangled): $newversion\n" if $newversion;
 
     my $newfile_base;
     if (exists $options{'filenamemangle'}) {
@@ -3056,6 +3056,7 @@ EOF
 	} else {
 	    $newfile_base = $newfile;
 	}
+	uscan_verbose "Matching target for filenamemangle: $newfile_base\n";
 	foreach my $pat (@{$options{'filenamemangle'}}) {
 	    uscan_verbose "filenamemangle rule $pat\n";
 	    if (! safe_replace(\$newfile_base, $pat)) {
