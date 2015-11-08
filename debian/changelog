@@ -12,7 +12,7 @@ devscripts (2.15.9+multitar1) UNRELEASED; urgency=medium
       (Closes: #458777)
     + Add dirversionmangle with $download-version consideration with detailed
       and sorted reporting of all available URLs.
-      (Closes: #363346, #375138, #472065, #516704, #526450, #557768, #734748)
+      (Closes: #363346, #375138, #472065, #516704, #557768, #734748)
     + Add the multiple upstream tarball support and extend the OpenPGP support
       with new watch line options: component, compression, repack, pgpmode,
       versionmode, decompress.  (Closes: #526443, #531321, #549178, #731725,
@@ -23,6 +23,9 @@ devscripts (2.15.9+multitar1) UNRELEASED; urgency=medium
     + Add the --overwrite-download, --skip-signature, and similar options
       to reorganize behavior around existing downloaded files.
       (Closes: #532182, #740366)
+    + Update filenamemangle to support the version pattern matching in any
+      position of the URL and remove .download hack which breaks 
+      mk-origtargz. (Closes: #526450, #803948, #804239)
     + Reorganize the reporting by uscan and adjust its text strings.
       (Closes: #582958)
   * uupdate:
