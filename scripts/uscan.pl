@@ -375,17 +375,23 @@ Normalize the directory path string matching the regex in a set of parentheses
 of B<http::/>I<URL> as the sortable version index string.  This is used as the
 directory path sorting index only.
 
+Substitution such as B<s/PRE/~pre/; s/RC/~rc/> may help.
+
 =item B<pagemangle=>I<rules>
 
 Normalize the downloaded web page string.  (Don't use this unless this is
 absolutely needed.  Generally, B<g> flag is required for these I<rules>.)
-Substitution such as B<s/PRE/~pre/; s/RC/~rc/> may help.
+
+This is handy if you wish to access Amazon AWS or Subversion repositories in
+which <a href="..."> is not used.
 
 =item B<uversionmangle=>I<rules>
 
 Normalize the candidate upstream version strings extracted from hrefs in the
 source of the web page.  This is used as the version sorting index when
 selecting the latest upstream version.
+
+Substitution such as B<s/PRE/~pre/; s/RC/~rc/> may help.
 
 =item B<versionmangle=>I<rules>
 
