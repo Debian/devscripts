@@ -243,6 +243,36 @@ should not be typed.
 
 =back
 
+There are few special strings which is substituted by B<uscan> to make it easy
+to write the watch file.
+
+=over
+
+=item @PACKAGE@
+
+This is substituted by the source package name found in the first line of the
+F<debian/changelog> file.
+
+=item @ANY_VERSION@
+
+This is substituted by the legal upstream version regex (capturing).
+
+  '[-_](\d[\-+\.:\~\da-zA-Z]*)'
+
+=item @ARCHIVE_EXT@
+
+This is substituted by the legal archive file extention regex (non-capturing).
+
+  '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)'
+
+=item @SIGNATURE_EXT@
+
+This is substituted by the legal signature file extention regex (non-capturing).
+
+  '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)\.(?:asc|pgp|gpg|sig)'
+
+=back
+
 =head1 WATCH FILE OPTIONS
 
 B<uscan> reads the watch options specified in B<opts="> I<...> B<"> to
@@ -696,6 +726,12 @@ Here is an example for the basic single upstream tarball.
   http://example.com/~user/release/foo.html \
       files/foo-([\d\.]+)\.tar\.gz debian uupdate
 
+Or using the special strings:
+
+  version=4
+  http://example.com/~user/release/@PACKAGE@.html \
+      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate
+
 For the upstream source package B<foo-2.0.tar.gz>, this watch file downloads
 and creates the Debian B<orig.tar> file B<foo_2.0.orig.tar.gz>.
 
@@ -705,8 +741,8 @@ Here is an example for the basic single upstream tarball with the matching
 signature file in the same file path.
 
   version=4
-  opts="pgpsigurlmangle=s%$%.asc%" http://example.com/release/foo.html \
-      files/foo-([\d\.]+)\.tar\.gz debian uupdate
+  opts="pgpsigurlmangle=s%$%.asc%" http://example.com/release/@PACKAGE@.html \
+      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate
 
 For the upstream source package B<foo-2.0.tar.gz> and the upstream signature
 file B<foo-2.0.tar.gz.asc>, this watch file downloads these files, verifies the
@@ -719,10 +755,10 @@ Here is an example for the basic single upstream tarball with the matching
 signature file in the unrelated file path.
 
   version=4
-  opts="pgpmode=next" http://example.com/release/foo.html \
-      files/(?:\d+)/foo-([\d\.]+)\.tar\.gz debian
-  opts="pgpmode=previous" http://example.com/release/foo.html \
-      files/(?:\d+)/foo-([\d\.]+)\.tar\.gz\.asc previous uupdate
+  opts="pgpmode=next" http://example.com/release/@PACKAGE@.html \
+      files/(?:\d+)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+  opts="pgpmode=previous" http://example.com/release/@PACKAGE@.html \
+      files/(?:\d+)/@PACKAGE@@ANY_VERSION@@SIGNATURE_EXT@ previous uupdate
 
 B<(?:\d+)> part can be any random value.  The tarball file can have B<53>,
 while the signature file can have B<33>.  
@@ -738,11 +774,9 @@ signature file extensions.
 
   version=4
   opts="pgpmode=next" http://example.com/DL/ \
-      files/(?:\d+)/example-([\d\.]+)\.\
-      (?:zip|tgz|tbz2|txz|tar\.(?:gz|bz2|xz)) debian
+      files/(?:\d+)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
   opts="pgpmode=prevous" http://example.com/DL/ \
-      files/(?:\d+)/example-([\d\.]+)\.\
-      (?:zip|tgz|tbz2|txz|tar\.(?:gz|bz2|xz)\.(?:asc|pgp|gpg|sig)) \
+      files/(?:\d+)/@PACKAGE@@ANY_VERSION@@SIGNATURE_EXT@ \
       previous uupdate
 
 =head2 HTTP site (basic MUT)
@@ -897,8 +931,8 @@ standard page format with:
 
   version=4
   opts=pagemangle="s/<a\s+bogus=/<a href=/g" \
-  http://example.com/release/foo.html \
-  files/foo-([\d\.]*).tar.gz debian uupdate
+  http://example.com/release/@PACKAGE@.html \
+  files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate
 
 Please note the use of B<g> here to replace all occurrences.
 
@@ -908,7 +942,7 @@ converted to the standard page format with:
   version=4
   opts="pagemangle=s%<Key>([^<]*)</Key>%<Key><a href="$1">$1</a></Key>%g" \\
   http://localhost:$PORT/ \
-  (?:.*)/$PKG-([\d\.]+).tar.gz debian uupdate
+  (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate
 
 =head2 FTP site (basic):
 
