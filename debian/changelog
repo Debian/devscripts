@@ -28,6 +28,10 @@ devscripts (2.15.9+multitar1) UNRELEASED; urgency=medium
       mk-origtargz. (Closes: #526450, #803948, #804239)
     + Reorganize the reporting by uscan and adjust its text strings.
       (Closes: #582958)
+    + Add download compression ordering support to prefer xz over gz.
+      (Closes: #763071)
+    + Add generarized search regex support with @PACKAGE@ etc.
+      (Closes: #517637, #539780)
   * uupdate:
     + Prevent failure when upstream version is 0.  (Closes: #798175)
     + Work around missing debian.tar.gz for "3.0 (quilt)".  (Closes: 798133)
