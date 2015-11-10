@@ -289,7 +289,7 @@ helperWatch() {
     GZREPACK=${GZREPACK:-gz}
     XCOMMAND=${XCOMMAND:-$COMMAND}
     WATCHVER="${WATCHVER:-3}"
-    WATCHLINE0="@@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz debian uupdate"
+    WATCHLINE0="@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate"
     WATCHLINE="${WATCHLINE:-$WATCHLINE0}"
     COMPONENTS=${COMPONENTS:-}
     FILEEXCLUDE=${FILEEXCLUDE:-0} # no exclude
@@ -386,7 +386,7 @@ helperWatchUA() {
     POOLPATH=${POOLPATH:-pool}
     XCOMMAND=${XCOMMAND:-$COMMAND}
     WATCHVER="${WATCHVER:-3}"
-    WATCHLINE0="@@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz debian uupdate"
+    WATCHLINE0="@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate"
     WATCHLINE="${WATCHLINE:-$WATCHLINE0}"
     KEYMODE=${KEYMODE:-ASC} # ASC=ASCII AEMORED or BIN=DEARMORED BINARY
     cd $TMPDIR
@@ -719,21 +719,21 @@ testWatch3WebNonNativeDlDversion() {
 # test native package w/o uupdate, bare HTTP server in normal order
 testWatch4Native() {
     WATCHVER=4
-    WATCHLINE='@@@url@@@/([\.\d]+)/(.+)/(.+)/foo-([\.\d]+).tar.gz debian'
+    WATCHLINE='@@@url@@@/([\.\d]+)/(.+)/(.+)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian'
     helperWatch siteNative
 }
 
 # test non-native package with uupdate, bare HTTP server in normal order
 testWatch4NonNative() {
     WATCHVER=4
-    WATCHLINE='@@@url@@@([\.\d]+)/(.+)/(.+)/ foo-([\.\d]+).tar.gz debian uupdate'
+    WATCHLINE='@@@url@@@([\.\d]+)/(.+)/(.+)/ @PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch siteNonNative
 }
 
 # test 3 parameter watch line
 testWatch4WebNative() {
     WATCHVER=4
-    WATCHLINE='@@@url@@@ (?:.*)/foo-([\d\.]+).tar.gz debian'
+    WATCHLINE='@@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian'
     helperWatch siteWebNative
 }
 
@@ -759,9 +759,9 @@ testWatch4WebNonNativeR() {
 # test for downloadurlmangle and filenamemangle for tricky web page
 testWatch4PrWebNonNative() {
     WATCHVER=4
-    WATCHLINE='opts="downloadurlmangle = s%boo/xxx%foo/ooo% ; s%boo-%foo-%, \
-                     filenamemangle    = s%.*boo-(.*)%foo-$1% " \
-    @@@url@@@/ (?:.*)/boo-([\d\.]+).tar.gz \
+    WATCHLINE='opts="downloadurlmangle = s%boo/xxx%@PACKAGE@/ooo% ; s%boo-%@PACKAGE@-%, \
+                     filenamemangle    = s%.*boo-(.*)%@PACKAGE@-$1% " \
+    @@@url@@@/ (?:.*)/boo@ANY_VERSION@@ARCHIVE_EXT@ \
     debian uupdate'
     helperWatch sitePrWebNonNative
 }
@@ -770,7 +770,7 @@ testWatch4PrWebNonNative() {
 testWatch4NonNativeDlCurrent() {
     WATCHVER=4
     XCOMMAND="$COMMAND --download-current-version"
-    WATCHLINE='@@@url@@@/([\d\.]+)/foo/ooo/ foo-([\.\d]+).tar.gz debian uupdate'
+    WATCHLINE='@@@url@@@/([\d\.]+)/@PACKAGE@/ooo/ @PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch siteNonNative 1.0 1.0
 }
 
@@ -778,7 +778,7 @@ testWatch4NonNativeDlCurrent() {
 testWatch4NonNativeDlUversion() {
     WATCHVER=4
     XCOMMAND="$COMMAND --download-version 0.0"
-    WATCHLINE='@@@url@@@/([\d\.]+)/foo/ooo/ foo-([\.\d]+).tar.gz debian uupdate'
+    WATCHLINE='@@@url@@@/([\d\.]+)/@PACKAGE@/ooo/ @PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch siteNonNative 1.0 0.0
 }
 
@@ -786,7 +786,7 @@ testWatch4NonNativeDlUversion() {
 testWatch4NonNativeDlDversion() {
     WATCHVER=4
     XCOMMAND="$COMMAND --download-debversion 0.0-1"
-    WATCHLINE='@@@url@@@/([\d\.]+)/foo/ooo/ foo-([\.\d]+).tar.gz debian uupdate'
+    WATCHLINE='@@@url@@@/([\d\.]+)/@PACKAGE@/ooo/ @PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch siteNonNative 1.0 0.0
 }
 
@@ -794,7 +794,7 @@ testWatch4NonNativeDlDversion() {
 testWatch4WebNonNativeDlCurrent() {
     WATCHVER=4
     XCOMMAND="$COMMAND --download-current-version"
-    WATCHLINE='@@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz debian uupdate'
+    WATCHLINE='@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch siteWebNonNative 1.0 1.0
 }
 
@@ -802,7 +802,7 @@ testWatch4WebNonNativeDlCurrent() {
 testWatch4WebNonNativeDlUversion() {
     WATCHVER=4
     XCOMMAND="$COMMAND --download-version 0.0"
-    WATCHLINE='@@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz debian uupdate'
+    WATCHLINE='@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch siteWebNonNative 1.0 0.0
 }
 
@@ -810,7 +810,7 @@ testWatch4WebNonNativeDlUversion() {
 testWatch4WebNonNativeDlDversion() {
     WATCHVER=4
     XCOMMAND="$COMMAND --download-debversion 0.0-1"
-    WATCHLINE='@@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz debian uupdate'
+    WATCHLINE='@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch siteWebNonNative 1.0 0.0
 }
 
@@ -819,7 +819,7 @@ testWatch4WebNonNativeLarge() {
     WATCHVER=4
     WATCHLINE='opts=" dversionmangle = s/0\.(.*)/$1/ , \
 	oversionmangle = s/(.*)/0.$1/" \
-	@@@url@@@  (?:.*)/foo-([\.\d]+).tar.gz debian uupdate'
+	@@@url@@@  (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch siteWebNonNativeLarge 20000101 20010101 0.
 }
 
@@ -828,7 +828,7 @@ testWatch4XmlNonNative() {
     WATCHVER=4
     WATCHLINE='opts="pagemangle = \
 	s%<Key>([^<]*)</Key>%<Key><a href=\"$1\">$1</a></Key>%g" \
-	@@@url@@@/ (?:.*)/foo-([\d\.]+).tar.gz debian uupdate'
+	@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch siteXmlNonNative
 }
 
@@ -838,7 +838,7 @@ testWatch4WebNonNativeUA() {
     KEYMODE=BIN
     USCAN_HTTP_SERVER="server-head.py"
     USERAGENT="foo/bar; baz:12,3.45"
-    WATCHLINE='opts="useragent= '$USERAGENT' "'"\n"'@@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz debian uupdate'
+    WATCHLINE='opts="useragent= '$USERAGENT' "'"\n"'@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatchUA
     unset USERAGENT
     unset USCAN_HTTP_SERVER
@@ -847,7 +847,7 @@ testWatch4WebNonNativeUA() {
 # test repack and compression
 testWatch4WebNonNativeBZ2() {
     WATCHVER=4
-    WATCHLINE='opts=repack,compression=bz2 @@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz debian uupdate'
+    WATCHLINE='opts=repack,compression=bz2 @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     GZREPACK=bz2
     helperWatch
     unset GZREPACK
@@ -856,7 +856,7 @@ testWatch4WebNonNativeBZ2() {
 # test repack and compression
 testWatch4WebNonNativeXZ() {
     WATCHVER=4
-    WATCHLINE='opts=repack,compression=xz @@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz debian uupdate'
+    WATCHLINE='opts=repack,compression=xz @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     GZREPACK=xz
     helperWatch
     unset GZREPACK
@@ -865,23 +865,23 @@ testWatch4WebNonNativeXZ() {
 # test spaces everywhere
 testWatch4PrWebNonNativeXZ() {
     WATCHVER=4
-    WATCHLINE='opts = "downloadurlmangle = s%boo/xxx%foo/ooo% ; s%boo-%foo-%, \
-                     filenamemangle    = s%.*boo-(.*)%foo-$1% , \
+    WATCHLINE='opts = "downloadurlmangle = s%boo/xxx%@PACKAGE@/ooo% ; s%boo-%@PACKAGE@-%, \
+                     filenamemangle    = s%.*boo-(.*)%@PACKAGE@-$1% , \
                      repack , compression=xz" \
-    @@@url@@@/ (?:.*)/boo-([\d\.]+).tar.gz \
+    @@@url@@@/ (?:.*)/boo@ANY_VERSION@@ARCHIVE_EXT@ \
     debian uupdate'
     GZREPACK=xz
     helperWatch sitePrWebNonNative
     unset GZREPACK
 }
 
-### VERSION 4 with sig chack ###
+### VERSION 4 with sig check ###
 
 # test normal web page with sig(asc)
 testWatch4WebNonNativeSig() {
     WATCHVER=4
     WATCHLINE='opts = "pgpsigurlmangle = s%(.*)%$1.asc%" \
-		@@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz debian uupdate'
+		@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch
 }
 
@@ -892,7 +892,7 @@ testWatch4WebNonNativeFESig() {
     SIGMODE=BIN
     KEYMODE=BIN
     WATCHLINE='opts = "pgpsigurlmangle = s%(.*)%$1.sig%" \
-               @@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz \
+               @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ \
                debian uupdate'
     helperWatch
 }
@@ -900,8 +900,8 @@ testWatch4WebNonNativeFESig() {
 # test normal web page with sig (different file path for sig and tar; reverse order)
 testWatch4WebNonNativeRSig() {
     WATCHVER=4
-    WATCHLINE='opts = "pgpmode=next" @@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz debian
-opts = "pgpmode=previous" @@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz.asc previous uupdate'
+    WATCHLINE='opts = "pgpmode=next" @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts = "pgpmode=previous" @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@.asc previous uupdate'
     helperWatch siteWebNonNativeR
 }
 
@@ -910,7 +910,7 @@ testWatch4WebNonNativeSelfSig() {
     WATCHVER=4
     SIGMODE=SELF
     WATCHLINE='opts = "pgpmode = self" \
-		@@@url@@@/ (?:.*)/foo-([\.\d]+).tar.gz.gpg debian uupdate'
+		@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@.gpg debian uupdate'
     helperWatch siteWebNonNativeR
 }
 
@@ -923,9 +923,9 @@ testWatch4WebNonNativeMUT() {
     SIGMODE=BIN
     FILEEXCLUDE=2
     WATCHLINE='
-opts="              pgpsigurlmangle=s/$/.sig/" @@@url@@@ (?:.*)/foo-([\d\.]+).tar.gz debian
-opts="component=bar,pgpsigurlmangle=s/$/.sig/" @@@url@@@ (?:.*)/bar-([\d\.]+).tar.gz same
-opts="component=baz,pgpsigurlmangle=s/$/.sig/" @@@url@@@ (?:.*)/baz-([\d\.]+).tar.gz same uupdate'
+opts="              pgpsigurlmangle=s/$/.sig/" @@@url@@@ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar,pgpsigurlmangle=s/$/.sig/" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz,pgpsigurlmangle=s/$/.sig/" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same uupdate'
     helperWatch siteWebNonNativeMUT
 }
 
@@ -935,9 +935,9 @@ testWatch4WebNonNativeMUT0() {
     COMPONENTS="foo bar baz"
     FILEEXCLUDE=3
     WATCHLINE='
-opts="component=foo,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/foo-([\d\.]+).tar.gz debian
-opts="component=bar,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/bar-([\d\.]+).tar.gz same
-opts="component=baz,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/baz-([\d\.]+).tar.gz same uupdate'
+opts="component=foo,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/foo@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts="component=bar,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/bar@ANY_VERSION@@ARCHIVE_EXT@ same
+opts="component=baz,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same uupdate'
     helperWatch siteWebNonNativeMUT
 }
 
