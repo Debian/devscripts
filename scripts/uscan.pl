@@ -2444,6 +2444,8 @@ sub process_watchline ($$$$$$)
 		    uscan_warn "unrecognised option $opt\n";
 		}
 	    }
+	    # $line watch line string when no opts=...
+	    uscan_verbose "line: $line\n";
 	}
 
 	if ($line eq '') {
