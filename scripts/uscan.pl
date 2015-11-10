@@ -3869,6 +3869,15 @@ sub process_watchfile ($$$$)
 	# Handle shell \\ -> \
 	s/\\\\/\\/g if $watch_version==1;
 
+	# Handle @PACKAGE@ @ANY_VERSION@ @ARCHIVE_EXT@ substitutions
+	my $any_version = '[-_](\d[\-+\.:\~\da-zA-Z]*)';
+	my $archive_ext = '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)';
+	my $signature_ext = $archive_ext . '\.(?:asc|pgp|gpg|sig)';
+	s/\@PACKAGE\@/$package/g;
+	s/\@ANY_VERSION\@/$any_version/g;
+	s/\@ARCHIVE_EXT\@/$archive_ext/g;
+	s/\@SIGNATURE_EXT\@/$signature_ext/g;
+
 	$status +=
 	    process_watchline($_, $watch_version, $dir, $package, $version,
 			      $watchfile);
