@@ -1600,6 +1600,7 @@ our $found = 0;
 sub process_watchline ($$$$$$);
 sub process_watchfile ($$$$);
 sub check_compression ($);
+sub check_priority ($);
 sub recursive_regex_dir ($$$);
 sub newest_dir ($$$$$);
 sub uscan_die ($);
@@ -2815,7 +2816,8 @@ sub process_watchline ($$$$$$)
 			    $match = "matched with the download version";
 			}
 		    }
-		    push @hrefs, [$mangled_version, $href, $match];
+		    my $priority = check_priority($href);
+		    push @hrefs, [$mangled_version, $priority, $href, $match];
 		}
 	    }
 	}
@@ -2823,14 +2825,14 @@ sub process_watchline ($$$$$$)
 	    @hrefs = Devscripts::Versort::upstream_versort(@hrefs);
 	    my $msg = "Found the following matching hrefs on the web page (newest first):\n";
 	    foreach my $href (@hrefs) {
-		$msg .= "   $$href[1] ($$href[0]) $$href[2]\n";
+		$msg .= "   $$href[2] ($$href[0]) $$href[3]\n";
 	    }
 	    uscan_verbose $msg;
 	}
 	if (defined $download_version) {
-	    my @vhrefs = grep { $$_[2] } @hrefs;
+	    my @vhrefs = grep { $$_[3] } @hrefs;
 	    if (@vhrefs) {
-		($newversion, $newfile, undef) = @{$vhrefs[0]};
+		($newversion, undef, $newfile, undef) = @{$vhrefs[0]};
 	    } else {
 		uscan_warn "In $watchfile no matching hrefs for version $download_version"
 		    . " in watch line\n  $line\n";
@@ -2838,7 +2840,7 @@ sub process_watchline ($$$$$$)
 	    }
 	} else {
 	    if (@hrefs) {
-	    	($newversion, $newfile, undef) = @{$hrefs[0]};
+	    	($newversion, undef, $newfile, undef) = @{$hrefs[0]};
 	    } else {
 		uscan_warn "In $watchfile no matching files for watch line\n  $line\n";
 		return 1;
@@ -2896,7 +2898,8 @@ sub process_watchline ($$$$$$)
 			$match = "matched with the download version";
 		    }
 		}
-		push @files, [$mangled_version, $file, $match];
+		my $priority = check_priority($file);
+		push @files, [$mangled_version, $priority, $file, $match];
 	    }
 	} else {
 	    uscan_verbose "Standard FTP listing.\n";
@@ -2926,7 +2929,8 @@ sub process_watchline ($$$$$$)
 			    $match = "matched with the download version";
 			}
 		    }
-		    push @files, [$mangled_version, $file, $match];
+		    my $priority = check_priority($file);
+		    push @files, [$mangled_version, $priority, $file, $match];
 		}
 	    }
 	}
@@ -2934,14 +2938,14 @@ sub process_watchline ($$$$$$)
 	    @files = Devscripts::Versort::upstream_versort(@files);
 	    my $msg = "Found the following matching files on the web page (newest first):\n";
 	    foreach my $file (@files) {
-		$msg .= "   $$file[1] ($$file[0]) $$file[2]\n";
+		$msg .= "   $$file[2] ($$file[0]) $$file[3]\n";
 	    }
 	    uscan_verbose $msg;
 	}
 	if (defined $download_version) {
-	    my @vfiles = grep { $$_[2] } @files;
+	    my @vfiles = grep { $$_[3] } @files;
 	    if (@vfiles) {
-		($newversion, $newfile, undef) = @{$vfiles[0]};
+		($newversion, undef, $newfile, undef) = @{$vfiles[0]};
 	    } else {
 		uscan_warn "In $watchfile no matching files for version $download_version"
 		    . " in watch line\n  $line\n";
@@ -2949,7 +2953,7 @@ sub process_watchline ($$$$$$)
 	    }
 	} else {
 	    if (@files) {
-	    	($newversion, $newfile, undef) = @{$files[0]};
+	    	($newversion, undef, $newfile, undef) = @{$files[0]};
 	    } else {
 		uscan_warn "In $watchfile no matching files for watch line\n  $line\n";
 		return 1;
@@ -3897,6 +3901,26 @@ sub check_compression ($)
         uscan_die "$progname: invalid compression $compression given.\n";
     }
     return $canonical_compression;
+}
+
+# Check compression priority
+sub check_priority ($)
+{
+    my $href = $_[0];
+    my $priority = 0;
+    if ($href =~ m/\.tar\.gz/i) {
+	$priority = 1;
+    }
+    if ($href =~ m/\.tar\.bz2/i) {
+	$priority = 2;
+    }
+    if ($href =~ m/\.tar\.lzma/i) {
+	$priority = 3;
+    }
+    if ($href =~ m/\.tar\.xz/i) {
+	$priority = 4;
+    }
+    return $priority;
 }
 
 # Message handling
