@@ -8,5 +8,4 @@ _debc()
     fi
     return 0
 }
-complete -o dirnames -F _debc debc
-complete -o dirnames -F _debc debi
+complete -o dirnames -F _debc debc debi
