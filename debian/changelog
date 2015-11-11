@@ -1,7 +1,12 @@
 devscripts (2.15.10) UNRELEASED; urgency=medium
 
+  [ Benjamin Drung ]
   * test_uscan: Fix failure in testFileExclusion due to wrong tarfile name
     test on Ubuntu.
+
+  [ Dominique Dumont ]
+  * licensecheck: parse file matching -c regex whatever its mime
+    type (Closes: #803724)
 
  -- Benjamin Drung <bdrung@debian.org>  Fri, 23 Oct 2015 23:54:58 +0200
 

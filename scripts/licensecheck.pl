@@ -350,7 +350,7 @@ while (@files) {
 	chomp $mime;
 	warn "$0 warning: cannot parse file '$file' with mime type '$mime'\n";
 	$charset = 'maybe-binary';
-	next if $OPT{text};
+	next unless $check_regex; # user asked for this file
     }
 
     open (my $F, '<' ,$file) or die "Unable to access $file\n";
