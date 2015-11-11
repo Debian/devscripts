@@ -72,13 +72,9 @@ recursively.
 =item B<-c=>I<regex>, B<--check=>I<regex>
 
 Specify a pattern against which filenames will be matched in order to
-decide which files to check the license of.
-
-=item B<-t>, B<--text>
-
-By default, all files are parsed, including binary files. This option
-limits the parsed files to mime type C<text/*> and C<application/xml>.
-The mime type is given by C<file> command.
+decide which files to check the license of. By default, only files
+with mime type C<text/*> and C<application/xml> are parsed. The mime
+type is given by C<file> command.
 
 =item B<--copyright>
 
@@ -295,6 +291,10 @@ if ($OPT{'noconf'}) {
 }
 if ($OPT{'help'}) { help(); exit 0; }
 if ($OPT{'version'}) { version(); exit 0; }
+
+if ($OPT{text}) {
+    warn "$0 warning: option -text is deprecated\n"; # remove -text end 2015
+}
 
 die "Usage: $progname [options] filelist\nRun $progname --help for more details\n" unless @ARGV;
 
