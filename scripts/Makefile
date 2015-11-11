@@ -19,7 +19,8 @@ LDFLAGS := $(shell dpkg-buildflags --get LDFLAGS)
 CWRAPPERS = debpkg-wrapper
 SCRIPTS = $(patsubst %.pl,%,$(PL_FILES)) $(patsubst %.sh,%,$(SH_FILES))
 COMPL_FILES := $(wildcard *.bash_completion)
-COMPLETION = $(patsubst %.bash_completion,devscripts.%,$(COMPL_FILES))
+BC_BUILD_DIR:=bash_completion
+COMPLETION = $(patsubst %.bash_completion,$(BC_BUILD_DIR)/%,$(COMPL_FILES))
 COMPL_DIR := $(shell pkg-config --variable=completionsdir bash-completion)
 
 GEN_MAN1S += devscripts.1 mk-origtargz.1
@@ -70,17 +71,19 @@ devscripts.1: devscripts.1.in
 	perl ../debian/genmanpage.pl >> $@.$(PID)
 	mv $@.$(PID) $@
 
-devscripts.%: %.bash_completion
+$(BC_BUILD_DIR):
+	mkdir $(BC_BUILD_DIR)
+
+$(COMPLETION): $(BC_BUILD_DIR)/% : %.bash_completion $(BC_BUILD_DIR)
 	cp $< $@
 
 clean:
 	python3 setup.py clean -a
 	find -name '*.pyc' -delete
 	find -name __pycache__ -delete
-	rm -rf devscripts.egg-info
+	rm -rf devscripts.egg-info $(BC_BUILD_DIR)
 	rm -f $(SCRIPTS) $(patsubst %,%.tmp,$(SCRIPTS)) \
-		$(GEN_MAN1S) $(SCRIPT_LIBS) $(CWRAPPERS) \
-		$(COMPLETION)
+		$(GEN_MAN1S) $(SCRIPT_LIBS) $(CWRAPPERS)
 
 test:
 	$(foreach python,$(shell py3versions -r ../debian/control),$(python) setup.py test$(\n))
@@ -90,7 +93,7 @@ install: all
 	cp $(SCRIPTS) $(DESTDIR)$(BINDIR)
 	ln -sf edit-patch $(DESTDIR)$(BINDIR)/add-patch
 	install -d $(DESTDIR)$(COMPL_DIR)
-	cp $(COMPLETION) $(DESTDIR)$(COMPL_DIR)
+	cp $(BC_BUILD_DIR)/* $(DESTDIR)$(COMPL_DIR)/
 	# Special treatment for debpkg
 	install -d $(DESTDIR)$(DATA_DIR)
 	mv $(DESTDIR)$(BINDIR)/debpkg $(DESTDIR)$(DATA_DIR)

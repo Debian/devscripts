@@ -1,7 +1,20 @@
 devscripts (2.15.10) UNRELEASED; urgency=medium
 
+  [ Benjamin Drung ]
   * test_uscan: Fix failure in testFileExclusion due to wrong tarfile name
     test on Ubuntu.
+
+  [ Nicholas Bamber ]
+  * Fixed issues with current bash completion (Closes: #804492)
+    - Reorganised scripts/Makefile so that bash completion scripts
+      are installed matching their command names - exception the
+      generic pkgnames.bash_completion .
+    - Where necessary added links to bash completion scripts
+      to debian/links to reuse bash completion code
+    - Removed deprecated "have" mechanism from bash completion scripts.
+    - Removed undefined "$filenames" from chdist.bash_completion
+    - Split debi.bash_completion off from pkgnames.bash_completion
+      and added links for both debi/debc and corrected complete commands
 
  -- Benjamin Drung <bdrung@debian.org>  Fri, 23 Oct 2015 23:54:58 +0200
 

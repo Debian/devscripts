@@ -1,0 +1,12 @@
+_debc()
+{
+    local cur
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    COMPREPLY=($(compgen -f -X '!*.changes' -- "$cur"))
+    if echo "$cur" | grep -qs '^[a-z0-9+.-]*$'; then
+        COMPREPLY=(${COMPREPLY[@]} $(apt-cache pkgnames -- $cur 2> /dev/null))
+    fi
+    return 0
+}
+complete -o dirnames -F _debc debc
+complete -o dirnames -F _debc debi

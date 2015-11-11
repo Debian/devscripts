@@ -1,4 +1,3 @@
-have debchange &&
 _debchange()
 {
     local cur prev options
@@ -76,5 +75,5 @@ _debchange()
     return 0
 
 }
-[ "$have" ] && complete -F _debchange debchange
-[ "$have" ] && complete -F _debchange dch
+complete -F _debchange debchange
+complete -F _debchange dch

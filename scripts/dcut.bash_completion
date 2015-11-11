@@ -1,4 +1,3 @@
-have dcut &&
 _dcut()
 {
     local cur prev options commands
@@ -43,4 +42,4 @@ _dcut()
     return 0
 
 }
-[ "$have" ] && complete -F _dcut -o filenames dcut
+complete -F _dcut -o filenames dcut
