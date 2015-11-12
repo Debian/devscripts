@@ -2553,21 +2553,17 @@ sub process_watchline ($$$$$$)
 	}
 
 	# Allow 2 char shorthands for opts="pgpmode=..." and check
-	my $needkeyring;
 	if ($options{'pgpmode'} =~ m/^au/) {
 	    $options{'pgpmode'} = 'auto';
-	    $needkeyring = 1;
 	    if (defined $options{'pgpsigurlmangle'}) {
 		uscan_warn "Ignore pgpsigurlmangle because pgpmode=auto\n";
 		delete $options{'pgpsigurlmangle'};
 	    }
 	} elsif ($options{'pgpmode'} =~ m/^ma/) {
 	    $options{'pgpmode'} = 'mangle';
-	    $needkeyring = 1;
 	    if (not defined $options{'pgpsigurlmangle'}) {
 		uscan_warn "Missing pgpsigurlmangle.  Setting pgpmode=default\n";
 		$options{'pgpmode'} = 'default';
-		$needkeyring = 0;
 	    }
 	} elsif ($options{'pgpmode'} =~ m/^no/) {
 	    $options{'pgpmode'} = 'none';
@@ -2576,36 +2572,15 @@ sub process_watchline ($$$$$$)
 	} elsif ($options{'pgpmode'} =~ m/^pr/) {
 	    $options{'pgpmode'} = 'previous';
 	    $options{'versionmode'} = 'previous'; # no other value allowed
-	    $needkeyring = 1;
 	} elsif ($options{'pgpmode'} =~ m/^se/) {
 	    $options{'pgpmode'} = 'self';
-	    $needkeyring = 1;
 	} else {
 	    $options{'pgpmode'} = 'default';
 	}
 
-	# XXX This needs to be moved out to process_watchfile XXX
 	# If PGP used, check required programs and generate files
 	uscan_debug "\$options{'pgpmode'}=$options{'pgpmode'}, \$options{'pgpsigurlmangle'}=$options{'pgpsigurlmangle'}\n" if defined $options{'pgpsigurlmangle'};
 	uscan_debug "\$options{'pgpmode'}=$options{'pgpmode'}, \$options{'pgpsigurlmangle'}=undef\n" if ! defined $options{'pgpsigurlmangle'};
-	if ($needkeyring) {
-	    # upstream-signing-key.pgp is deprecated
-	    $keyring = first { -r $_ } qw(debian/upstream/signing-key.pgp debian/upstream/signing-key.asc debian/upstream-signing-key.pgp);
-	    if (defined $keyring) {
-		uscan_verbose "Found upstream signing keyring: $keyring\n";
-	    } else {
-		uscan_verbose "PGP signature used, but the upstream keyring does not exist\n";
-	    }
-
-	    if ($keyring =~ m/\.asc$/) {
-		# Need to convert an armored key to binary for use by gpgv
-		$gpghome = tempdir(CLEANUP => 1);
-		my $newkeyring = "$gpghome/trustedkeys.gpg";
-		spawn(exec => [$havegpg, '--homedir', $gpghome, '--no-options', '-q', '--batch', '--no-default-keyring', '--output', $newkeyring, '--dearmor', $keyring],
-		      wait_child => 1);
-		$keyring = $newkeyring
-	    }
-	}
 
 	# Check component for duplication and set $orig to the proper extension string
 	if ($options{'pgpmode'} ne 'previous') {
@@ -3440,6 +3415,9 @@ EOF
 	$newfile_base =~ s/^(.*?)\.[^\.]+$/$1/;
 	if ($signature == -1) {
 	    uscan_warn("SKIP Checking OpenPGP signature (by request).\n");
+	} elsif (! defined $keyring) {
+	    uscan_warn("FAIL Checking OpenPGP signature (no keyring).\n");
+	    return 1;
 	} elsif ($download_available == 0) {
 	    uscan_warn "FAIL Checking OpenPGP signature (no signed upstream tarball downloaded).\n";
 	    return 1;
@@ -3877,6 +3855,22 @@ sub process_watchfile ($$$$)
     %dehs_tags = ();
 
     uscan_verbose "Process $dir/$watchfile (package=$package version=$version)\n";
+
+    # set $keyring: upstream-signing-key.pgp is deprecated
+    $keyring = first { -r $_ } qw(debian/upstream/signing-key.pgp debian/upstream/signing-key.asc debian/upstream-signing-key.pgp);
+    if (defined $keyring) {
+	uscan_verbose "Found upstream signing keyring: $keyring\n";
+    }
+
+    if ($keyring =~ m/\.asc$/) {
+	# Need to convert an armored key to binary for use by gpgv
+	$gpghome = tempdir(CLEANUP => 1);
+	my $newkeyring = "$gpghome/trustedkeys.gpg";
+	spawn(exec => [$havegpg, '--homedir', $gpghome, '--no-options', '-q', '--batch', '--no-default-keyring', '--output', $newkeyring, '--dearmor', $keyring],
+		wait_child => 1);
+	$keyring = $newkeyring
+    }
+
     unless (open WATCH, $watchfile) {
 	uscan_warn "could not open $watchfile: $!\n";
 	return 1;
