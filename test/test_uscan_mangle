@@ -885,6 +885,14 @@ testWatch4WebNonNativeSig() {
     helperWatch
 }
 
+# test normal web page with sig(asc)
+testWatch4WebNonNativeSig() {
+    WATCHVER=4
+    WATCHLINE='opts = "pgpmode = auto" \
+		@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+    helperWatch
+}
+
 # test normal web page with sig(bin) (Files-exclude)
 testWatch4WebNonNativeFESig() {
     FILEEXCLUDE=1
