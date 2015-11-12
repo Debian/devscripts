@@ -344,9 +344,11 @@ while (@files) {
           wait_child => 1);
     my $charset ;
     chomp $mime;
+    my $decode_text = 0;
     if ($mime =~ m/; charset=((?!binary)(?!unknown)[\w-]+)/) {
 	# regular text file, may be postscript
 	$charset = $1;
+	$decode_text = 1;
     }
     elsif ($mime =~ m!application/postscript;\s+charset=([\w-]+)!) {
 	# postscript files with embedded binary are detected as binary
@@ -367,7 +369,7 @@ while (@files) {
     while ( <$F>) {
 	last if ($. > $OPT{'lines'});
 	my $data = $_;
-	$data = decode($charset, $data) if $charset !~ /binary$/;
+	$data = decode($charset, $data) if $decode_text;
 	$content .= $data;
     }
     close($F);
