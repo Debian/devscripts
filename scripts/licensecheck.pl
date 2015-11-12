@@ -343,14 +343,22 @@ while (@files) {
           nocheck => 1,
           wait_child => 1);
     my $charset ;
+    chomp $mime;
     if ($mime =~ m/; charset=((?!binary)(?!unknown)[\w-]+)/) {
+	# regular text file, may be postscript
 	$charset = $1;
     }
-    else {
-	chomp $mime;
-	warn "$0 warning: cannot parse file '$file' with mime type '$mime'\n";
+    elsif ($mime =~ m!application/postscript;\s+charset=([\w-]+)!) {
+	# postscript files with embedded binary are detected as binary
+	$charset = $1;
+    }
+    elsif ($check_regex) {
+	# user asked for the file...
 	$charset = 'maybe-binary';
-	next unless $check_regex; # user asked for this file
+    }
+    else {
+	warn "$0 warning: cannot parse file '$file' with mime type '$mime'\n";
+	next;
     }
 
     open (my $F, '<' ,$file) or die "Unable to access $file\n";
@@ -359,7 +367,7 @@ while (@files) {
     while ( <$F>) {
 	last if ($. > $OPT{'lines'});
 	my $data = $_;
-	$data = decode($charset, $data) if $charset ne 'maybe-binary';
+	$data = decode($charset, $data) if $charset !~ /binary$/;
 	$content .= $data;
     }
     close($F);
