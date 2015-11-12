@@ -334,13 +334,23 @@ Set the pgp/gpg signature verification I<mode>.
 
 =over
 
-=item B<mangle>
+=item B<auto>
+
+B<uscan> checks possible URLs for the signature file and autogenerates
+B<pgpsigurlmangle> rule to use it.
+
+=item B<default>
 
 Use B<pgpsigurlmangle=>I<rules> to generate the candidate upstream signature
 file URL string from the upstream tarball URL. (default)
 
 If actual B<pgpsigurlmangle> is missing, B<uscan> checks possible URLs for the
 signature file and suggests to add B<pgpsigurlmangle> rule.
+
+=item B<mangle>
+
+Use B<pgpsigurlmangle=>I<rules> to generate the candidate upstream signature
+file URL string from the upstream tarball URL.
 
 =item B<next>
 
@@ -2544,7 +2554,14 @@ sub process_watchline ($$$$$$)
 
 	# Allow 2 char shorthands for opts="pgpmode=..." and check
 	my $needkeyring;
-	if ($options{'pgpmode'} =~ m/^ma/) {
+	if ($options{'pgpmode'} =~ m/^au/) {
+	    $options{'pgpmode'} = 'auto';
+	    $needkeyring = 1;
+	    if (defined $options{'pgpsigurlmangle'}) {
+		uscan_warn "Ignore pgpsigurlmangle because pgpmode=auto\n";
+		delete $options{'pgpsigurlmangle'};
+	    }
+	} elsif ($options{'pgpmode'} =~ m/^ma/) {
 	    $options{'pgpmode'} = 'mangle';
 	    $needkeyring = 1;
 	    if (not defined $options{'pgpsigurlmangle'}) {
@@ -3320,19 +3337,26 @@ EOF
     my $pgpsig_url;
     my $sigfile;
     my $signature_available;
-    if ($options{'pgpmode'} eq 'default') {
+    if ($options{'pgpmode'} eq 'default' or $options{'pgpmode'} eq 'auto') {
 	uscan_msg "Start checking for common possible upstream OpenPGP signature files\n";
 	foreach my $suffix (qw(asc gpg pgp sig)) {
 	    my $sigrequest = HTTP::Request->new('HEAD' => "$upstream_url.$suffix");
 	    my $sigresponse = $user_agent->request($sigrequest);
 	    if ($sigresponse->is_success()) {
-		uscan_msg "Possible OpenPGP signature found at:\n   $upstream_url.$suffix.\n   Please consider adding opts=pgpsigurlmangle=s/\$/.$suffix/\n   to debian/watch.  see uscan(1) for more details.\n";
+		if ($options{'pgpmode'} eq 'default') {
+		    uscan_msg "Possible OpenPGP signature found at:\n   $upstream_url.$suffix.\n   Please consider adding opts=pgpsigurlmangle=s/\$/.$suffix/\n   to debian/watch.  see uscan(1) for more details.\n";
+		    $options{'pgpmode'} = 'none';
+		} else {
+		    $options{'pgpmode'} = 'mangle';
+		    $options{'pgpsigurlmangle'} = [ 's/$/.' . $suffix . '/', ];
+		}
 		last;
 	    }
 	}
 	uscan_msg "End checking for common possible upstream OpenPGP signature files\n";
 	$signature_available = 0;
-    } elsif ($options{'pgpmode'} eq 'mangle') {
+    }
+    if ($options{'pgpmode'} eq 'mangle') {
 	$pgpsig_url = $upstream_url;
 	foreach my $pat (@{$options{'pgpsigurlmangle'}}) {
 	    uscan_verbose "pgpsigurlmangle rule $pat\n";
