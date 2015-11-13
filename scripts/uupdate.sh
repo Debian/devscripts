@@ -5,6 +5,7 @@
 # Many modifications by Julian Gilbey <jdg@debian.org> January 1999 onwards
 
 # Copyright 1999-2003, Julian Gilbey
+# Copyright 2015 Osamu Aoki <osamu@debian.org> (OPMODE=3)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -25,6 +26,8 @@
 #  uupdate [-v <Version>] [-r <gain-root-command>] [-u] <new upstream archive>
 # or
 #  uupdate [-r <gain-root-command>] [-u] <new upstream archive> <Version>
+# or
+#  uupdate -v <Version> [-r <gain-root-command>] [-n <name>] [-u] -f
 # For a patch file:
 #  uupdate [-v <Version>] [-r <gain-root-command>] -p <patch>.gz
 #
@@ -46,9 +49,14 @@ usage () {
     echo \
 "Usage for a new archive:
   $PROGNAME [options] <new upstream archive> [<version>]
+or
+  $PROGNAME [options] -f|--find
 For a patch file:
   $PROGNAME [options] --patch|-p <patch>[.gz|.bz2|.lzma|.xz]
 Options are:
+   --no-conf, --noconf
+                      Don't read devscripts config files;
+                      must be the first option given
    --upstream-version <version>, -v <version>
                       specify version number of upstream package
    --force-bad-version, -b
@@ -58,14 +66,17 @@ Options are:
                       which command to be used to become root
                       for package-building
    --pristine, -u     Source is pristine upstream source and should be
-                      copied to <pkg>_<version>.orig.tar.{gz|bz2|lzma|xz}; not valid
-                      for patches
-   --no-symlink       Copy new upstream archive to new location
-                      as <pkg>_<version>.orig.tar.{gz|bz2|lzma|xz} instead of making a
-                      symlink
-   --no-conf, --noconf
-                      Don't read devscripts config files;
-                      must be the first option given
+                      copied to <pkg>_<version>.orig.tar.{gz|bz2|lzma|xz};
+                      not valid for --patch
+   --no-symlink       Copy new upstream archive to new location as
+                      <pkg>_<version>.orig.tar.{gz|bz2|lzma|xz} instead of 
+                      making a symlink;
+		      if it already exists, leave it there as is.
+   --find, -f         Find all upstream tarballs in ../ which match
+		      <pkg>_<version>.orig.tar.{gz|bz2|lzma|xz} or
+		      <pkg>_<version>.orig-<component>.tar.{gz|bz2|lzma|xz} ;
+                      --upstream-version required; pristine source required;
+                      not valid for --patch
    --verbose          Give verbose output
 
 $PROGNAME [--help|--version]
@@ -95,6 +106,21 @@ mustsetvar () {
     fi
 }
 
+findzzz () {
+    LISTNAME=$(ls -1 $@ 2>/dev/null |sed -e 's,\.[^\.]*$,,' | sort | uniq )
+    for f in $LISTNAME ; do
+	if [ -r "$f.xz" ]; then
+		echo "$f.xz"
+	elif [ -r "$f.bz2" ]; then
+		echo "$f.bz2"
+	elif [ -r "$f.gz" ]; then
+		echo "$f.gz"
+	elif [ -r "$f.lzma" ]; then
+		echo "$f.lzma"
+	fi
+    done
+}
+
 # Match Pattern to extract a new version number from a given filename.
 # I already had to fiddle with this a couple of times so I better put it up
 # at front.  It is now written as a Perl regexp to make it nicer.  It only
@@ -113,11 +139,13 @@ VARS="UUPDATE_ROOTCMD UUPDATE_PRISTINE UUPDATE_SYMLINK_ORIG"
 SUFFIX="1"
 
 if which dpkg-vendor >/dev/null 2>&1; then
-    case "$(dpkg-vendor --query Vendor 2>/dev/null)" in
-	"Ubuntu")
-	    SUFFIX="0ubuntu1"
-	    ;;
-    esac
+  VENDER="$(dpkg-vendor --query Vendor 2>/dev/null|tr 'A-Z' 'a-z')"
+  case "$VENDER" in
+  debian) SUFFIX="1" ;;
+  *) SUFFIX="0${VENDER}1" ;;
+  esac
+else
+  SUFFIX="1"
 fi
 
 if [ "$1" = "--no-conf" -o "$1" = "--noconf" ]; then
@@ -173,17 +201,19 @@ else
 fi
 
 
-TEMP=$(getopt -s bash -o v:p:r:ubs \
+TEMP=$(getopt -s bash -o v:p:r:fubs \
         --long upstream-version:,patch:,rootcmd: \
         --long force-bad-version \
 	--long pristine,no-pristine,nopristine \
 	--long symlink,no-symlink,nosymlink \
 	--long no-conf,noconf \
+	--long find \
 	--long verbose \
 	--long help,version -n "$PROGNAME" -- "$@") || (usage >&2; exit 1)
 
 eval set -- $TEMP
 
+OPMODE=2
 # Process Parameters
 while [ "$1" ]; do
     case $1 in
@@ -192,7 +222,9 @@ while [ "$1" ]; do
     --upstream-version|-v)
 	shift; NEW_VERSION="$1" ;;
     --patch|-p)
-	shift; PATCH="$1" ;;
+	shift; PATCH="$1" ; OPMODE=1 ;;
+    --find|-f)
+	OPMODE=3 ;;
     --rootcmd|-r)
 	shift; UUPDATE_ROOTCMD="$1" ;;
     --pristine|-u)
@@ -216,28 +248,37 @@ while [ "$1" ]; do
     shift
 done
 
-if [ -n "$PATCH" ]; then
+if [ "$OPMODE" = 1 ]; then
+    # --patch mode
     if [ $# -ne 0 ]; then
         echo "$PROGNAME: additional archive name/version number is not allowed with --patch" >&2
-	echo "Run $PROGNAME --help for usage information" >&2
+	echo "$PROGNAME: Run $PROGNAME --help for usage information" >&2
         exit 1
     fi
-else
+elif [ "$OPMODE" = 2 ]; then
+    # old "uupdate" used in the version=3 watch file
     case $# in
     0) echo "$PROGNAME: no archive given" >&2 ; exit 1 ;;
     1) ARCHIVE="$1" ;;
     2) ARCHIVE="$1"; NEW_VERSION="$2" ;;
     *) echo "$PROGNAME: too many non-option arguments" >&2
-       echo "Run $PROGNAME --help for usage information" >&2
+       echo "$PROGNAME: Run $PROGNAME --help for usage information" >&2
        exit 1 ;;
     esac
+else
+    # new "uupdate -f ..." used in the version=4 watch file
+    if [ $# -ne 0 ]; then
+        echo "$PROGNAME: additional archive name/version number is not allowed with --component" >&2
+	echo "$PROGNAME: Run $PROGNAME --help for usage information" >&2
+        exit 1
+    fi
 fi
 
 # Get Parameters from current source archive
 
 if [ ! -f debian/changelog ]; then
     echo "$PROGNAME: cannot find debian/changelog." >&2
-    echo "Are you in the top directory of the source tree?" >&2
+    echo "$PROGNAME: Are you in the top directory of the source tree?" >&2
     exit 1
 fi
 
@@ -249,13 +290,17 @@ mustsetvar VERSION "`dpkg-parsechangelog -SVersion`" "source version"
 eval `echo "$VERSION" | perl -ne '/^(?:(\d+):)?(.*)/; print "SVERSION=$2\nEPOCH=$1\n";'`
 
 if [ -n "$UUPDATE_VERBOSE" ]; then
-    echo "PATCH       = \"$PATCH\" is the name of the patch file" >&2
-    echo "ARCHIVE     = \"$ARCHIVE\" is the name of the next tarball" >&2
-    echo "NEW_VERSION = \"$NEW_VERSION\" is the next pristine tarball version" >&2
-    echo "PACKAGE     = \"$PACKAGE\" is in the top of debian/changelog" >&2
-    echo "VERSION     = \"$VERSION\" is in the top of debian/changelog" >&2
-    echo "EPOCH       = \"$EPOCH\" is epoch part of \$VERSION" >&2
-    echo "SVERSION    = \"$SVERSION\" is w/o-epoch part of \$VERSION" >&2
+    if [ "$OPMODE" = 1 ]; then
+    echo "$PROGNAME: PATCH       = \"$PATCH\" is the name of the patch file" >&2
+    fi
+    if [ "$OPMODE" = 2 ]; then
+    echo "$PROGNAME: ARCHIVE     = \"$ARCHIVE\" is the name of the next tarball" >&2
+    echo "$PROGNAME: NEW_VERSION = \"$NEW_VERSION\" is the next pristine tarball version" >&2
+    fi
+    echo "$PROGNAME: PACKAGE     = \"$PACKAGE\" is in the top of debian/changelog" >&2
+    echo "$PROGNAME: VERSION     = \"$VERSION\" is in the top of debian/changelog" >&2
+    echo "$PROGNAME: EPOCH       = \"$EPOCH\" is epoch part of \$VERSION" >&2
+    echo "$PROGNAME: SVERSION    = \"$SVERSION\" is w/o-epoch part of \$VERSION" >&2
 fi
 
 UVERSION=`expr "$SVERSION" : '\(.*\)-[0-9a-zA-Z.+~]*$'`
@@ -265,17 +310,14 @@ if [ -z "$UVERSION" ]; then
 fi
 
 if [ -n "$UUPDATE_VERBOSE" ]; then
-    echo "UVERSION    = \"$UVERSION\" the upstream portion w/o-epoch of \$VERSION" >&2
+    echo "$PROGNAME: UVERSION    = \"$UVERSION\" the upstream portion w/o-epoch of \$VERSION" >&2
 fi
 
 # Save pwd before we goes walkabout
 OPWD=`pwd`
 
-if [ "$PATCH" ]; then
-    if [ "$ARCHIVE" ]; then
-	echo "$PROGNAME: you can only specify a patch or a source code archive, not both!" >&2
-	exit 1
-    fi
+if [ "$OPMODE" = 1 ]; then
+    # --patch mode
     # do the patching
     X="${PATCH##*/}"
     case "$PATCH" in
@@ -346,14 +388,14 @@ if [ "$PATCH" ]; then
 		perl -ne 's/\.diff$//; /'"$MPATTERN"'/ && print $1'`
 	if [ -z "$NEW_VERSION" ]; then
 	    echo "$PROGNAME: new version number not recognized from given filename" >&2
-	    echo "Please run $PROGNAME with the -v option" >&2
+	    echo "$PROGNAME: Please run $PROGNAME with the -v option" >&2
 	    exit 1
 	fi
 
 	if [ -n "$EPOCH" ]; then
-	    echo "New Release will be $EPOCH:$NEW_VERSION-$SUFFIX."
+	    echo "$PROGNAME: New Release will be $EPOCH:$NEW_VERSION-$SUFFIX."
 	else
-	    echo "New Release will be $NEW_VERSION-$SUFFIX."
+	    echo "$PROGNAME: New Release will be $NEW_VERSION-$SUFFIX."
 	fi
     fi
 
@@ -371,12 +413,12 @@ if [ "$PATCH" ]; then
 
     if [ -e "../$PACKAGE-$SNEW_VERSION" ]; then
 	echo "$PROGNAME: $PACKAGE-$SNEW_VERSION already exists in the parent directory!" >&2
-	echo "Aborting...." >&2
+	echo "$PROGNAME: Aborting...." >&2
 	exit 1
     fi
     if [ -e "../$PACKAGE-$SNEW_VERSION.orig" ]; then
 	echo "$PROGNAME: $PACKAGE-$SNEW_VERSION.orig already exists in the parent directory!" >&2
-	echo "Aborting...." >&2
+	echo "$PROGNAME: Aborting...." >&2
 	exit 1
     fi
 
@@ -395,59 +437,57 @@ if [ "$PATCH" ]; then
 	OLDARCHIVETYPE=xz
     else
 	echo "$PROGNAME: can't find/read ${PACKAGE}_$UVERSION.orig.tar.{gz|bz2|lzma|xz}" >&2
-	echo "in the parent directory!" >&2
-	echo "Aborting...." >&2
+	echo "$PROGNAME: in the parent directory!" >&2
+	echo "$PROGNAME: Aborting...." >&2
 	exit 1
     fi
 
     # Clean package
     if [ -n "$UUPDATE_ROOTCMD" ]; then
 	debuild -r"$UUPDATE_ROOTCMD" clean || {
-	    echo "$PROGNAME: couldn't run  debuild -r$UUPDATE_ROOTCMD clean" >&2
-	    echo "successfully.  Why not?" >&2
-	    echo "Aborting...." >&2
+	    echo "$PROGNAME: couldn't run  debuild -r$UUPDATE_ROOTCMD clean successfully." >&2
+	    echo "$PROGNAME: Aborting...." >&2
 	    exit 1
 	}
     else debuild clean || {
-	    echo "$PROGNAME: couldn't run  debuild -r$UUPDATE_ROOTCMD clean" >&2
-	    echo "successfully.  Why not?" >&2
-	    echo "Aborting...." >&2
+	    echo "$PROGNAME: couldn't run  debuild -r$UUPDATE_ROOTCMD clean successfully." >&2
+	    echo "$PROGNAME: Aborting...." >&2
 	    exit 1
 	}
     fi
 
-    cd ..
+    cd `pwd`/..
     rm -rf $PACKAGE-$UVERSION.orig
 
     # Unpacking .orig.tar.gz is not quite trivial any longer ;-)
     TEMP_DIR=$(mktemp -d uupdate.XXXXXXXX) || {
 	echo "$PROGNAME: can't create temporary directory;" >&2
-	echo "aborting..." >&2
+	echo "$PROGNAME: aborting..." >&2
 	exit 1
     }
-    cd $TEMP_DIR
+    cd `pwd`/$TEMP_DIR
     if [ "$OLDARCHIVETYPE" = gz ]; then
 	tar zxf ../$OLDARCHIVE || {
 	    echo "$PROGNAME: can't untar $OLDARCHIVE;" >&2
-	    echo "aborting..." >&2
+	    echo "$PROGNAME: aborting..." >&2
 	    exit 1
 	}
     elif [ "$OLDARCHIVETYPE" = bz2 ]; then
 	tar --bzip2 -xf ../$OLDARCHIVE || {
 	    echo "$PROGNAME: can't untar $OLDARCHIVE;" >&2
-	    echo "aborting..." >&2
+	    echo "$PROGNAME: aborting..." >&2
 	    exit 1
 	}
     elif [ "$OLDARCHIVETYPE" = lzma ]; then
 	tar --lzma -xf ../$OLDARCHIVE || {
 	    echo "$PROGNAME: can't untar $OLDARCHIVE;" >&2
-	    echo "aborting..." >&2
+	    echo "$PROGNAME: aborting..." >&2
 	    exit 1
 	}
     elif [ "$OLDARCHIVETYPE" = xz ]; then
 	tar --xz -xf ../$OLDARCHIVE || {
 	    echo "$PROGNAME: can't untar $OLDARCHIVE;" >&2
-	    echo "aborting..." >&2
+	    echo "$PROGNAME: aborting..." >&2
 	    exit 1
 	}
     else
@@ -461,21 +501,21 @@ if [ "$PATCH" ]; then
 	mkdir ../$PACKAGE-$UVERSION.orig
 	mv * ../$PACKAGE-$UVERSION.orig
     fi
-    cd ..
+    cd `pwd`/..
     rm -rf $TEMP_DIR
 
-    cd $PACKAGE-$UVERSION.orig
+    cd `pwd`/$PACKAGE-$UVERSION.orig
     if ! $CATPATCH > /dev/null; then
 	echo "$PROGNAME: can't run $CATPATCH;" >&2
-	echo "aborting..." >&2
+	echo "$PROGNAME: aborting..." >&2
 	exit 1
     fi
     if $CATPATCH | patch -sp1; then
-	cd ..
+	cd `pwd`/..
 	mv $PACKAGE-$UVERSION.orig $PACKAGE-$SNEW_VERSION.orig
 	echo "-- Originals could be successfully patched"
 	cp -a $PACKAGE-$UVERSION $PACKAGE-$SNEW_VERSION
-	cd $PACKAGE-$SNEW_VERSION
+	cd `pwd`/$PACKAGE-$SNEW_VERSION
 	if $CATPATCH | patch -sp1; then
 	    echo "Success. The supplied diffs worked fine on the Debian sources."
 	else
@@ -488,17 +528,18 @@ if [ "$PATCH" ]; then
 	fi
 	chmod a+x debian/rules
 	debchange $BADVERSION -v "$NEW_VERSION-$SUFFIX" "New upstream release"
-	echo "Remember: Your current directory is the OLD sourcearchive!"
-	echo "Do a \"cd ../$PACKAGE-$SNEW_VERSION\" to see the new package"
+	echo "$PROGNAME: Remember: Your current directory is the OLD sourcearchive!"
+	echo "$PROGNAME: Do a \"cd ../$PACKAGE-$SNEW_VERSION\" to see the new package"
 	exit
     else
 	echo "$PROGNAME: patch failed to apply to original sources $UVERSION" >&2
-	cd ..
+	cd `pwd`/..
 	rm -rf $PACKAGE-$UVERSION.orig
 	exit 1
     fi
-else
+elif [ "$OPMODE" = 2 ]; then
 # This is an original sourcearchive
+    # old "uupdate" used in the version=3 watch file
     if [ "$ARCHIVE" = "" ]; then
 	echo "$PROGNAME: upstream source archive not specified" >&2
 	exit 1
@@ -559,14 +600,14 @@ else
 	NEW_VERSION=`echo "$X" | perl -ne "/$MPATTERN/"' && print $1'`
 	if [ -z "$NEW_VERSION" ]; then
 	    echo "$PROGNAME: new version number not recognized from given filename" >&2
-	    echo "Please run $PROGNAME with the -v option" >&2
+	    echo "$PROGNAME: Please run $PROGNAME with the -v option" >&2
 	    exit 1
 	fi
     fi
     if [ -n "$EPOCH" ]; then
-	echo "New Release will be $EPOCH:$NEW_VERSION-$SUFFIX."
+	echo "$PROGNAME: New Release will be $EPOCH:$NEW_VERSION-$SUFFIX."
     else
-	echo "New Release will be $NEW_VERSION-$SUFFIX."
+	echo "$PROGNAME: New Release will be $NEW_VERSION-$SUFFIX."
     fi
 
     # Strip epoch number
@@ -583,12 +624,12 @@ else
 
     if [ -e "../$PACKAGE-$SNEW_VERSION.orig" ]; then
 	echo "$PROGNAME: original source tree already exists as $PACKAGE-$SNEW_VERSION.orig!" >&2
-	echo "Aborting...." >&2
+	echo "$PROGNAME: Aborting...." >&2
 	exit 1
     fi
     if [ -e "../$PACKAGE-$SNEW_VERSION" ]; then
 	echo "$PROGNAME: source tree for new version already exists as $PACKAGE-$SNEW_VERSION!" >&2
-	echo "Aborting...." >&2
+	echo "$PROGNAME: Aborting...." >&2
 	exit 1
     fi
 
@@ -598,32 +639,32 @@ else
 	  "$(md5sum "../${PACKAGE}_$SNEW_VERSION.orig.tar.gz" | cut -d" " -f1)" ]
     then
 	echo "$PROGNAME: a different ${PACKAGE}_$SNEW_VERSION.orig.tar.gz" >&2
-	echo "already exists in the parent dir;" >&2
-	echo "please check on the situation before trying $PROGNAME again." >&2
+	echo "$PROGNAME: already exists in the parent dir;" >&2
+	echo "$PROGNAME: please check on the situation before trying $PROGNAME again." >&2
 	exit 1
     elif [ -e "../${PACKAGE}_$SNEW_VERSION.orig.tar.bz2" ] && \
 	[ "$(md5sum "${ARCHIVE_PATH}" | cut -d" " -f1)" != \
 	  "$(md5sum "../${PACKAGE}_$SNEW_VERSION.orig.tar.bz2" | cut -d" " -f1)" ]
     then
 	echo "$PROGNAME: a different ${PACKAGE}_$SNEW_VERSION.orig.tar.bz2" >&2
-	echo "already exists in the parent dir;" >&2
-	echo "please check on the situation before trying $PROGNAME again." >&2
+	echo "$PROGNAME: already exists in the parent dir;" >&2
+	echo "$PROGNAME: please check on the situation before trying $PROGNAME again." >&2
 	exit 1
     elif [ -e "../${PACKAGE}_$SNEW_VERSION.orig.tar.lzma" ] && \
 	[ "$(md5sum "${ARCHIVE_PATH}" | cut -d" " -f1)" != \
 	  "$(md5sum "../${PACKAGE}_$SNEW_VERSION.orig.tar.lzma" | cut -d" " -f1)" ]
     then
 	echo "$PROGNAME: a different ${PACKAGE}_$SNEW_VERSION.orig.tar.lzma" >&2
-	echo "already exists in the parent dir;" >&2
-	echo "please check on the situation before trying $PROGNAME again." >&2
+	echo "$PROGNAME: already exists in the parent dir;" >&2
+	echo "$PROGNAME: please check on the situation before trying $PROGNAME again." >&2
 	exit 1
     elif [ -e "../${PACKAGE}_$SNEW_VERSION.orig.tar.xz" ] && \
 	[ "$(md5sum "${ARCHIVE_PATH}" | cut -d" " -f1)" != \
 	  "$(md5sum "../${PACKAGE}_$SNEW_VERSION.orig.tar.xz" | cut -d" " -f1)" ]
     then
 	echo "$PROGNAME: a different ${PACKAGE}_$SNEW_VERSION.orig.tar.xz" >&2
-	echo "already exists in the parent dir;" >&2
-	echo "please check on the situation before trying $PROGNAME again." >&2
+	echo "$PROGNAME: already exists in the parent dir;" >&2
+	echo "$PROGNAME: please check on the situation before trying $PROGNAME again." >&2
 	exit 1
     fi
 
@@ -639,7 +680,7 @@ else
 		../*) LINKARCHIVE="${ARCHIVE#../}" ;;
 	    esac
 	else
-	    echo "Copying pristine source to ${PACKAGE}_$SNEW_VERSION.orig.tar.$TYPE..."
+	    echo "$PROGNAME: Copying pristine source to ${PACKAGE}_$SNEW_VERSION.orig.tar.$TYPE..."
 	fi
 
 	case "$TYPE" in
@@ -673,34 +714,34 @@ else
 		;;
 	    *)
 		echo "$PROGNAME: can't preserve pristine sources from non .tar.{gz|bz2|lzma|xz} upstream archive!" >&2
-		echo "Continuing anyway..." >&2
+		echo "$PROGNAME: Continuing anyway..." >&2
 		;;
 	esac
     fi
 
-    cd ..
+    cd `pwd`/..
     TEMP_DIR=$(mktemp -d uupdate.XXXXXXXX) || {
 	echo "$PROGNAME: can't create temporary directory;" >&2
-	echo "aborting..." >&2
+	echo "$PROGNAME: aborting..." >&2
 	exit 1
     }
-    cd $TEMP_DIR
+    cd `pwd`/$TEMP_DIR
     if [ ! -d "$ARCHIVE_PATH" ]; then
-	echo "-- Untarring the new sourcecode archive $ARCHIVE"
+	echo "$PROGNAME: Untarring the new sourcecode archive $ARCHIVE"
 	$UNPACK "$ARCHIVE_PATH" || {
 	    echo "$PROGNAME: can't unpack: $UNPACK $ARCHIVE_PATH failed;" >&2
-	    echo "aborting..." >&2
+	    echo "$PROGNAME: aborting..." >&2
 	    exit 1
 	}
     else
 	tar -C "$ARCHIVE_PATH/../" -c $X | tar x || {
 	    echo "$PROGNAME: tar -C \"$ARCHIVE_PATH/../\" -c $X | tar x failed;" >&2
-	    echo "aborting..." >&2
+	    echo "$PROGNAME: aborting..." >&2
 	    exit 1
 	}
     fi
 
-    cd ..
+    cd `pwd`/..
     if [ `ls $TEMP_DIR | wc -l` -eq 1 ]; then
 	# The files are stored in the archive under a top directory, we presume
 	mv $TEMP_DIR/* $PACKAGE-$SNEW_VERSION
@@ -714,7 +755,7 @@ else
     fi
     rm -rf $TEMP_DIR
     cp -a $PACKAGE-$SNEW_VERSION $PACKAGE-$SNEW_VERSION.orig
-    cd $PACKAGE-$SNEW_VERSION
+    cd `pwd`/$PACKAGE-$SNEW_VERSION
 
     if [ -r "../${PACKAGE}_$SVERSION.diff.gz" ]; then
 	DIFF="../${PACKAGE}_$SVERSION.diff.gz"
@@ -753,7 +794,7 @@ else
 	cd $OPWD
 	if [ ! -d debian ]; then
 	    echo "$PROGNAME: None of *.diff.gz, *.debian.tar.xz, or debian/* found. failed;" >&2
-	    echo "aborting..." >&2
+	    echo "$PROGNAME: aborting..." >&2
 	    exit 1
 	fi
 	if [ -d debian/source -a -r debian/source/format ]; then
@@ -774,7 +815,7 @@ else
 	    echo "$PROGNAME: Skip auto-generating ${PACKAGE}_$SVERSION.debian.tar.xz" >&2
 	fi
 	# return back to upstream source
-	cd ../$PACKAGE-$SNEW_VERSION
+	cd `pwd`/../$PACKAGE-$SNEW_VERSION
     fi
 
     if [ "$DIFFTYPE" = diff ]; then
@@ -803,9 +844,9 @@ else
 	    for file in $FILES; do
 		if [ -e "$file" ]; then
 		    echo "$PROGNAME warning: file $file was added in old diff, but is now in the upstream source." >&2
-		    echo "Please check that the diff is applied correctly." >&2
-		    echo "(This program will use the pristine upstream version and save the old .diff.gz" >&2
-		    echo "version as $file.debdiff .)" >&2
+		    echo "$PROGNAME: Please check that the diff is applied correctly." >&2
+		    echo "$PROGNAME: (This program will use the pristine upstream version and save the old .diff.gz" >&2
+		    echo "$PROGNAME: version as $file.debdiff .)" >&2
 
 		    if [ -e "$file.upstream" -o -e "$file.debdiff" ]; then
 			FILEEXISTERR=1
@@ -838,12 +879,12 @@ else
 	done < <(find -type l -printf '%l\0%p\0' -delete)
 
 	if $DIFFCAT $DIFF | patch -sNp1 ; then
-	    echo "Success!  The diffs from version $VERSION worked fine."
+	    echo "$PROGNAME: Success!  The diffs from version $VERSION worked fine."
 	else
 	    echo "$PROGNAME: the diffs from version $VERSION did not apply cleanly!" >&2
 	    X=$(find . -name "*.rej")
 	    if [ -n "$X" ]; then
-		echo "Rejected diffs are in $X" >&2
+		echo "$PROGNAME: Rejected diffs are in $X" >&2
 	    fi
 	    STATUS=1
 	fi
@@ -868,20 +909,20 @@ else
     elif [ "$DIFFTYPE" = tar ]; then
 	if [ -d debian ]; then
 	    echo "$PROGNAME warning: using a debian.tar.{gz|bz2|lzma|xz} file in old Debian source," >&2
-	    echo "but upstream also contains a debian/ directory!" >&2
+	    echo "$PROGNAME: but upstream also contains a debian/ directory!" >&2
 	    if [ -e "debian.upstream" ]; then
-		echo "Please apply the diff by hand and take care with this." >&2
+		echo "$PROGNAME: Please apply the diff by hand and take care with this." >&2
 		exit 1
 	    fi
-	    echo "This program will move the upstream directory out of the way" >&2
-	    echo "to debian.upstream/ and use the Debian version" >&2
+	    echo "$PROGNAME: This program will move the upstream directory out of the way" >&2
+	    echo "$PROGNAME: to debian.upstream/ and use the Debian version" >&2
 	    mv debian debian.upstream
 	fi
 	if [ -n "$UUPDATE_VERBOSE" ]; then
-	    echo "-- Use ${DIFF} to create the new debian/ directory." >&2
+	    echo "$PROGNAME: Use ${DIFF} to create the new debian/ directory." >&2
 	fi
 	if $DIFFUNPACK $DIFF; then
-	    echo "Unpacking the debian/ directory from version $VERSION worked fine."
+	    echo "$PROGNAME: Unpacking the debian/ directory from version $VERSION worked fine."
 	else
 	    echo "$PROGNAME: failed to unpack the debian/ directory from version $VERSION!" >&2
 	    exit 1
@@ -894,15 +935,186 @@ else
 	chmod a+x debian/rules
     fi
     if [ -n "$UUPDATE_VERBOSE" ]; then
-	echo "-- New upstream release=$NEW_VERSION-$SUFFIX" >&2
+	echo "$PROGNAME: New upstream release=$NEW_VERSION-$SUFFIX" >&2
     fi
+    [ -e ../${PACKAGE}_${NEW_VERSION}.uscan.log ] && \
+	cp -f ../${PACKAGE}_${NEW_VERSION}.uscan.log debian/uscan.log
     debchange $BADVERSION -v "$NEW_VERSION-$SUFFIX" "New upstream release"
-    echo "Remember: Your current directory is the OLD sourcearchive!"
-    echo "Do a \"cd ../$PACKAGE-$SNEW_VERSION\" to see the new package"
+    echo "$PROGNAME: Remember: Your current directory is the OLD sourcearchive!"
+    echo "$PROGNAME: Do a \"cd ../$PACKAGE-$SNEW_VERSION\" to see the new package"
+
+else
+    # new "uupdate -f ..." used in the version=4 watch file
+
+    # Sanity checks
+    if [ ! -d debian ]; then
+        echo "$PROGNAME: cannot find debian/ directory." >&2
+        echo "$PROGNAME: Are you in the debianized source tree?" >&2
+        echo "$PROGNAME: You may wish to run debmake or dh_make first." >&2
+        exit 1
+    fi
+    
+    if [ ! -x debian/rules ]; then
+        echo "$PROGNAME: cannot find debian/rules." >&2
+        echo "Are you in the top directory of the old source tree?" >&2
+        exit 1
+    fi
+    
+    if [ ! -f debian/changelog ]; then
+        echo "$PROGNAME: cannot find debian/changelog." >&2
+        echo "$PROGNAME: Are you in the top directory of the old source tree?" >&2
+        exit 1
+    fi
+    
+    # Get Parameters from the old source tree
+    
+    if [ -e debian/source -a -e debian/source/format ]; then
+        FORMAT=`cat debian/source/format`
+    else
+        FORMAT='1.0'
+    fi
+    
+    PACKAGE="`dpkg-parsechangelog -SSource`"
+    if [ -z "$PACKAGE" ]; then
+        echo "$PROGNAME: cannot find the source package name in debian/changelog." >&2
+        exit 1
+    fi
+
+    # Variable names follow the convention of old uupdate
+    VERSION="`dpkg-parsechangelog -SVersion`"
+    if [ -z "$VERSION" ]; then
+        echo "$PROGNAME: cannot find the source version name in debian/changelog." >&2
+        exit 1
+    fi
+    
+    EPOCH="${VERSION%:*}"
+    if [ "$EPOCH" = "$VERSION" ]; then
+        EPOCH=""
+    else
+        EPOCH="$EPOCH:"
+    fi
+    SVERSION="${VERSION#*:}"
+    UVERSION="${SVERSION%-*}"
+    if [ "$UVERSION" = "$SVERSION" ]; then
+        echo "$PROGNAME: a native Debian package cannot take upstream updates" >&2
+        exit 1
+    fi
+    
+    if [ -n "$UUPDATE_VERBOSE" ]; then
+        echo "$PROGNAME: Old: <epoch:><version>-<revision> = $VERSION"
+        echo "$PROGNAME: Old: <epoch:>                     = $EPOCH"
+        echo "$PROGNAME: Old:         <version>-<revision> = $SVERSION"
+        echo "$PROGNAME: Old:         <version>            = $UVERSION"
+        echo "$PROGNAME: New:         <version>            = $NEW_VERSION"
+    fi
+    
+    if [ "`readlink -f ../${PACKAGE}-$NEW_VERSION`" = "$OPWD" ]; then
+        echo "$PROGNAME: You can not execute this from ../${PACKAGE}-${NEW_VERSION}/." >&2
+        exit 1
+    fi
+    
+    if [ -e "../${PACKAGE}-$NEW_VERSION" ];then
+        echo "$PROGNAME: ../${PACKAGE}-$NEW_VERSION directory exists." >&2
+        echo "$PROGNAME: remove ../${PACKAGE}-$NEW_VERSION directory." >&2
+        rm -rf ../${PACKAGE}-$NEW_VERSION
+    fi
+    
+    # Move to the archive directory
+    cd `pwd`/..
+    ARCHIVE=$(findzzz ${PACKAGE}_$NEW_VERSION.orig.tar.*z*)
+    if [ "$FORMAT" = "1.0" ]; then
+        DEBIANFILE=$(findzzz ${PACKAGE}_$VERSION.debian.diff.*z*)
+    else
+        DEBIANFILE=$(findzzz ${PACKAGE}_$VERSION.debian.tar.*z*)
+    fi
+    # non-native package and missing diff.gz/debian.tar.xz.
+    cd $OPWD
+    if [ -z "$DEBIANFILE" ]; then
+	if [ -d debian/source -a -r debian/source/format ]; then
+	    if [ "`cat debian/source/format`" = "3.0 (quilt)" ]; then
+		# This is convenience for VCS users.
+		echo "$PROGNAME: debian/source/format is \"3.0 (quilt)\"." >&2
+		echo "$PROGNAME: Auto-generating ${PACKAGE}_$SVERSION.debian.tar.xz" >&2
+		DEBIANFILE="${PACKAGE}_$SVERSION.debian.tar.xz"
+		tar --xz -cf ../$DEBIANFILE debian
+	    else
+		echo "$PROGNAME: debian/source/format isn't \"3.0 (quilt)\"." >&2
+		echo "$PROGNAME: Skip auto-generating ${PACKAGE}_$SVERSION.debian.tar.xz" >&2
+		exit 1
+	    fi
+	else
+	    echo "$PROGNAME: debian/source/format is missing." >&2
+	    echo "$PROGNAME: Skip auto-generating ${PACKAGE}_$SVERSION.debian.tar.xz" >&2
+	    exit 1
+	fi
+    fi
+    # Move to the archive directory
+    cd `pwd`/..
+    if [ "$FORMAT" = "1.0" ]; then
+        COMP=${DEBIANFILE##*.}
+	NEW_DEBIANFILE="${PACKAGE}_${NEW_VERSION}-$SUFFIX.diff.$COMP"
+    else
+        COMP=${DEBIANFILE##*.}
+	NEW_DEBIANFILE="${PACKAGE}_${NEW_VERSION}-$SUFFIX.debian.tar.$COMP"
+    fi
+    cp -i $DEBIANFILE ${NEW_DEBIANFILE} 2>/dev/tty
+    
+    # fake DSC
+    FAKEDSC="${PACKAGE}_${NEW_VERSION}-$SUFFIX.dsc"
+    echo "Format: ${FORMAT}" > "$FAKEDSC"
+    echo "Source: ${PACKAGE}" >> "$FAKEDSC"
+    echo "Version: $EPOCH${NEW_VERSION}-$SUFFIX" >> "$FAKEDSC"
+    echo "Files:" >> "$FAKEDSC"
+    if [ -n "$ARCHIVE" ]; then
+        echo " 01234567890123456789012345678901 1 ${ARCHIVE}" >> "$FAKEDSC"
+	DPKGOPT=""
+    elif [ "$FORMAT" = "1.0" ]; then
+        echo "$PROGNAME: dpkg format \"1.0\" requires the main upstream tarball." >&2
+        exit 1
+    else
+	ARCHIVE="${PACKAGE}_${NEW_VERSION}.orig.tar.gz"
+	mkdir -p ${PACKAGE}-${NEW_VERSION}
+	tar -czf ${ARCHIVE} ${PACKAGE}-${NEW_VERSION}
+	rm -rf ${PACKAGE}-${NEW_VERSION}
+        echo " 01234567890123456789012345678901 1 ${ARCHIVE}" >> "$FAKEDSC"
+    fi
+    for f in $(findzzz ${PACKAGE}_${NEW_VERSION}.orig-*.tar.*z*) ; do
+	echo " 01234567890123456789012345678901 1 $f" >> "$FAKEDSC"
+    done
+    echo " 01234567890123456789012345678901 1 ${NEW_DEBIANFILE}" >> "$FAKEDSC"
+    
+    # unpack source tree
+    if ! dpkg-source --no-copy --no-check -x "$FAKEDSC"; then
+        echo "$PROGNAME: Error with \"dpkg-source --no-copy --no-check -x $FAKEDSC\"" >&2
+        echo "$PROGNAME: Remember: Your current directory is changed back to the old source tree!"
+        echo "$PROGNAME: Do a \"cd ..\" to see $FAKEDSC."
+        exit 1
+    fi
+    # remove bogus DSC and debian.tar files (generate them with dpkg-source -b)
+    if [ -z "$UUPDATE_VERBOSE" ]; then
+        rm -f $FAKEDSC ${NEW_DEBIANFILE}
+    fi
+    
+    # Move to the new source directory
+    if [ ! -d ${PACKAGE}-${NEW_VERSION} ]; then
+        echo "$PROGNAME warning: ${PACKAGE}-${NEW_VERSION} directory missing." >&2
+        ls -l >&2
+        exit 1
+    fi
+    cd `pwd`/${PACKAGE}-${NEW_VERSION}
+    [ ! -d debian ] && echo "$PROGNAME: debian directory missing." >&2 && exit 1
+    # Need to set permission for format=1.0
+    [ -e debian/rules ] && chmod a+x debian/rules
+    [ -e ../${PACKAGE}_${NEW_VERSION}.uscan.log ] && \
+	cp -f ../${PACKAGE}_${NEW_VERSION}.uscan.log debian/uscan.log
+    debchange $BADVERSION -v "$EPOCH$NEW_VERSION-$SUFFIX" "New upstream release"
+    echo "$PROGNAME: Remember: Your current directory is changed back to the old source tree!"
+    echo "$PROGNAME: Do a \"cd ../$PACKAGE-$NEW_VERSION\" to see the new source tree and
+    edit it to be nice Debianized source."
 fi
 
 if [ $STATUS -ne 0 ]; then
-    echo "(Did you see the warnings above?)" >&2
+    echo "$PROGNAME: (Did you see the warnings above?)" >&2
 fi
 
 exit $STATUS

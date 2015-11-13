@@ -51,6 +51,7 @@ my $start_dir = cwd;
 my $verify_sigs = 1;
 my $use_default_keyrings = 1;
 my $verbose = 0;
+my $havegpg = first { -x $_ } qw(/usr/bin/gpg2 /usr/bin/gpg);
 
 sub usage {
     print <<"EOF";
@@ -129,7 +130,7 @@ sub check_signature($\@;\$) {
 
     my $fd = fileno $fh;
     my @cmd;
-    push @cmd, qw(gpg --status-fd), $fd,
+    push @cmd, $havegpg, "--status-fd", $fd,
 	       qw(--batch --no-options --no-default-keyring --always-trust);
     foreach (@$rings) { push @cmd, '--keyring'; push @cmd, $_; }
 

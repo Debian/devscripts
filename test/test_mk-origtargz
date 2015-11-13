@@ -544,7 +544,7 @@ testUnmatchedExclusion() {
 	makeTarBall gz
 	makeDebianDir
 	makeUnmatchedExcludeCopyright
-	run_mk_origtargz foo "No files matched excluded pattern: nomatch" \
+	run_mk_origtargz foo "No files matched excluded pattern as the last matching glob: nomatch" \
 		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.gz, deleting 19 files from it." \
 		 ../foo-0.1.tar.gz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
@@ -556,7 +556,7 @@ testDuplicatePattern() {
 	makeTarBall gz
 	makeDebianDir
 	makeDuplicatePatternCopyright
-	run_mk_origtargz foo "No files matched excluded pattern: exclude-dir1" \
+	run_mk_origtargz foo "No files matched excluded pattern as the last matching glob: exclude-dir1" \
 		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.gz, deleting 19 files from it." \
 		 ../foo-0.1.tar.gz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"

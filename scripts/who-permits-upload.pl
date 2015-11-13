@@ -30,7 +30,7 @@ use constant {SPONSOR_FINGERPRINT => 0, SPONSOR_NAME => 1};
 our $DM_URL = "https://ftp-master.debian.org/dm.txt";
 our $KEYRING = "/usr/share/keyrings/debian-keyring.gpg:/usr/share/keyrings/debian-maintainers.gpg";
 our $TYPE = "package";
-our $GPG = "/usr/bin/gpg";
+our $GPG = first { -x $_ } qw(/usr/bin/gpg2 /usr/bin/gpg);
 our ($HELP, @ARGUMENTS, @DM_DATA, %GPG_CACHE);
 
 binmode STDIN, ':encoding(console_in)';
@@ -160,7 +160,7 @@ under the terms of the General Public License (GPL) version 2 or later.
 
 =head1 SEE ALSO
 
-B<gpg>(1), B<who-uploads>(1)
+B<gpg>(1), B<gpg2>(1), B<who-uploads>(1)
 
 S<I<https://lists.debian.org/debian-devel-announce/2012/09/msg00008.html>>
 
