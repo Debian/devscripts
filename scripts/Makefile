@@ -22,7 +22,7 @@ COMPL_FILES := $(wildcard *.bash_completion)
 COMPLETION = $(patsubst %.bash_completion,devscripts.%,$(COMPL_FILES))
 COMPL_DIR := $(shell pkg-config --variable=completionsdir bash-completion)
 
-GEN_MAN1S += devscripts.1 mk-origtargz.1
+GEN_MAN1S += devscripts.1 mk-origtargz.1 uscan.1
 
 all: $(SCRIPTS) $(GEN_MAN1S) $(CWRAPPERS) $(COMPLETION)
 

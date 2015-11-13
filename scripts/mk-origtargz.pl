@@ -41,7 +41,8 @@ mk-origtargz - rename upstream tarball, optionally changing the compression and 
 B<mk-origtargz> renames the given file to match what is expected by
 B<dpkg-buildpackage>, based on the source package name and version in
 F<debian/changelog>. It can convert B<zip> to B<tar>, optionally change the
-compression scheme and remove files according to B<Files-Excluded> in
+compression scheme and remove files according to B<Files-Excluded> 
+and B<Files-Excluded->I<component> in
 F<debian/copyright>. The resulting file is placed in F<debian/../..>.
 
 If the package name is given via the B<--package> option, no information is
@@ -125,6 +126,13 @@ B<--compression>), recompress it.
 
 If the file has to be modified, because of B<Files-Excluded>, append I<suffix> to the upstream version.
 
+=item B<-c>, B<--component> I<componentname>
+
+Use <componentname> as the component name for the secondary upstream tarball.
+Set I<componentname> as the component namei.  This is used only for the 
+secondary upstream tarball of the Debian source package.  
+Then I<packagename_version.orig-componentiname.tar.gz> is created.
+
 =item B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]
 
 If B<--repack> is used, or if the given file is a B<zip> file, ensure that the resulting file is compressed using the given scheme. The default is B<gzip>.
@@ -179,6 +187,9 @@ sub compress_archive($$$);
 
 my $package = undef;
 my $version = undef;
+my $component = undef;
+my $orig="orig";
+my $excludestanza="Files-Excluded";
 my @exclude_globs = ();
 my @copyright_files = ();
 
@@ -207,6 +218,7 @@ sub setmode {
 GetOptions(
     "package=s" => \$package,
     "version|v=s" => \$version,
+    "component|c=s" => \$component,
     "exclude-file=s" => \@exclude_globs,
     "copyright-file=s" => \@copyright_files,
     "compression=s" => \$compression,
@@ -228,6 +240,11 @@ unless (compression_is_supported($compression)) {
 
 if (defined $package and not defined $version) {
     die_opts "If you use --package, you also have to specify --version."
+}
+
+if (defined $component) {
+    $orig="orig-$component";
+    $excludestanza="Files-Excluded-$component";
 }
 
 if (@ARGV != 1) {
@@ -287,14 +304,14 @@ for my $copyright_file (@copyright_files) {
 	     && defined $data->{format}
 	     && $data->{format} =~ m@^$okformat/?$@)
     {
-	if ($data->{'files-excluded'}) {
-	    push(@exclude_globs, grep { $_ } split(/\s+/, $data->{'files-excluded'}));
+	if ($data->{$excludestanza}) {
+	    push(@exclude_globs, grep { $_ } split(/\s+/, $data->{$excludestanza}));
 	}
     } else {
 	open my $file, '<', $copyright_file or die "Unable to read $copyright_file: $!\n";
 	while (my $line = <$file>) {
-	    if ($line =~ m/\bFiles-Excluded:/i) {
-		warn "WARNING: The file $copyright_file mentions Files-Excluded, but its ".
+	    if ($line =~ m/\b${excludestanza}.*:/i) {
+		warn "WARNING: The file $copyright_file mentions $excludestanza, but its ".
 		     "format is not recognized. Specify Format: ".
 		     "https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/ ".
 		     "in order to remove files from the tarball with mk-origtargz.\n";
@@ -343,7 +360,7 @@ if ($is_tarfile and not $repack) {
 
 
 # Now we know what the final filename will be
-my $destfilebase = sprintf "%s_%s.orig.tar", $package, $version;
+my $destfilebase = sprintf "%s_%s.%s.tar", $package, $version, $orig;
 my $destfiletar = sprintf "%s/%s", $destdir, $destfilebase;
 my $destext = compression_get_property($compression, "file_ext");
 my $destfile = sprintf "%s.%s", $destfiletar, $destext;
@@ -423,6 +440,7 @@ if (@exclude_globs) {
     @files = split /^/, $files;
     chomp @files;
 
+    my %delete;
     # find out what to delete
     my @exclude_info = map { { glob => $_, used => 0, regex => glob_to_regex($_) } } @exclude_globs;
     for my $filename (@files) {
@@ -432,30 +450,30 @@ if (@exclude_globs) {
 				(?:$info->{regex}) # User pattern
 				(?:/.*)?$          # Possible trailing / for a directory
 			      @x) {
-		push @to_delete, $filename if !$last_match;
+		$delete{$filename} = 1 if !$last_match;
 		$last_match = $info;
 	    }
 	}
-	if ($last_match) {
+	if (defined $last_match) {
 	    $last_match->{used} = 1;
 	}
     }
 
     for my $info (@exclude_info) {
 	if (!$info->{used}) {
-	    warn "No files matched excluded pattern: $info->{glob}\n";
+	    warn "No files matched excluded pattern as the last matching glob: $info->{glob}\n";
 	}
     }
 
     # ensure files are mentioned before the directory they live in
     # (otherwise tar complains)
-    @to_delete = sort {$b cmp $a}  @to_delete;
+    @to_delete = sort {$b cmp $a} keys %delete;
 
     $deletecount = scalar(@to_delete);
 }
 
 if ($deletecount) {
-    $destfilebase = sprintf "%s_%s%s.orig.tar", $package, $version, $suffix;
+    $destfilebase = sprintf "%s_%s%s.%s.tar", $package, $version, $suffix, $orig;
     $destfiletar = sprintf "%s/%s", $destdir, $destfilebase;
     $destfile = sprintf "%s.%s", $destfiletar, $destext;
 
@@ -472,7 +490,7 @@ if ($do_repack || $deletecount) {
     unlink $upstream_tar if $mode eq "rename";
     # We have to use piping because --delete is broken otherwise, as documented
     # at https://www.gnu.org/software/tar/manual/html_node/delete.html
-    if (@to_delete > 0) {
+    if (@to_delete) {
 	spawn(exec => ['tar', '--delete', @to_delete ],
 	      from_file => $destfiletar,
 	      to_file => $destfiletar . ".tmp",

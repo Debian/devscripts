@@ -4,6 +4,8 @@ uupdate \- upgrade a source code package from an upstream revision
 .SH SYNOPSIS
 \fBuupdate\fR [\fIoptions\fR] \fInew_upstream_archive\fR [\fIversion\fR]
 .br
+\fBuupdate\fR [\fIoptions\fR] \fB\-\-find\fR|\fB\-f\fR
+.br
 \fBuupdate\fR [\fIoptions\fR] \fB\-\-patch\fR|\fB\-p\fR \fIpatch_file\fR
 .SH DESCRIPTION
 \fBuupdate\fR modifies an existing Debian source code archive to
@@ -52,8 +54,15 @@ This is the default behaviour, and can be switched off using the
 .SH OPTIONS
 This is a summary of what was explained above.
 .TP
-\fB\-\-upstream-version \fIversion\fR, \fB\-v \fIversion\fR
+\fB\-\-no-conf\fR, \fB\-\-noconf\fR
+Do not read any configuration files.  This can only be used as the
+first option given on the command-line.
+.TP
+\fB\-\-upstream\-version \fIversion\fR, \fB\-v \fIversion\fR
 Specify the version number of the upstream package explicitly.
+.TP
+\fB\-\-force\-bad\-version, \fB\-b 
+Force a version number to be less than the current one (e.g., when backporting).
 .TP
 \fB\-\-rootcmd \fIgain-root-command\fR, \fB\-r \fIgain-root-command\fR
 Specify the command to be used to become root to build the package and
@@ -72,16 +81,23 @@ Simply create a symlink when moving a new upstream \fI.tar.gz\fR
 archive to the new \fI<package>_<version>.orig.tar.gz\fR location.
 This is the default behaviour.
 .TP
-.B \-\-verbose
-Give verbose output.
-.TP
 \fB\-\-no\-symlink\fR
 Copy the upstream \fI.tar.gz\fR to the new location instead of making
-a symlink.
+a symlink, if \fI<package>_<version>.orig.tar.gz\fR is missing.  
+Otherwise, do nothing.
 .TP
-\fB\-\-no-conf\fR, \fB\-\-noconf\fR
-Do not read any configuration files.  This can only be used as the
-first option given on the command-line.
+.B \-\-find, \fB\-f\fR
+Find all upstream tarballs in \fI../\fR which match
+\fI<pkg>_<version>.orig.tar.{gz|bz2|lzma|xz}\fR or
+\fI<pkg>_<version>.orig\-<component>.tar.{gz|bz2|lzma|xz}\fR ;
+\fB\-\-upstream\-version\fR required; pristine source required;
+not valid for \fB\-\-patch\fR;
+This option uses \fBdpkg\-source\fR as the backend to enable support for the
+multiple upstream tarballs and to resolve minor bugs reported previously.  The
+use of this option is highly recommended.
+.TP
+.B \-\-verbose
+Give verbose output.
 .TP
 .BR \-\-help ", " \-h
 Display a help message and exit successfully.
