@@ -261,13 +261,13 @@ This is substituted by the legal upstream version regex (capturing).
 
 =item @ARCHIVE_EXT@
 
-This is substituted by the legal archive file extention regex (non-capturing).
+This is substituted by the legal archive file extension regex (non-capturing).
 
   '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)'
 
 =item @SIGNATURE_EXT@
 
-This is substituted by the legal signature file extention regex (non-capturing).
+This is substituted by the legal signature file exsention regex (non-capturing).
 
   '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)\.(?:asc|pgp|gpg|sig)'
 
