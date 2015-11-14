@@ -243,33 +243,33 @@ should not be typed.
 
 =back
 
-There are few special strings which is substituted by B<uscan> to make it easy
+There are few special strings which are substituted by B<uscan> to make it easy
 to write the watch file.
 
 =over
 
-=item @PACKAGE@
+=item B<@PACKAGE@>
 
 This is substituted by the source package name found in the first line of the
 F<debian/changelog> file.
 
-=item @ANY_VERSION@
+=item B<@ANY_VERSION@>
 
 This is substituted by the legal upstream version regex (capturing).
 
-  '[-_](\d[\-+\.:\~\da-zA-Z]*)'
+  [-_](\d[\-+\.:\~\da-zA-Z]*)
 
-=item @ARCHIVE_EXT@
+=item B<@ARCHIVE_EXT@>
 
-This is substituted by the legal archive file extension regex (non-capturing).
+This is substituted by the typical archive file extension regex (non-capturing).
 
-  '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)'
+  (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)
 
-=item @SIGNATURE_EXT@
+=item B<@SIGNATURE_EXT@>
 
-This is substituted by the legal signature file exsention regex (non-capturing).
+This is substituted by the typical signature file exsention regex (non-capturing).
 
-  '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)\.(?:asc|pgp|gpg|sig)'
+  (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)\.(?:asc|pgp|gpg|sig)
 
 =back
 
