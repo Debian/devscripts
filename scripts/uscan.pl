@@ -3860,15 +3860,17 @@ sub process_watchfile ($$$$)
     $keyring = first { -r $_ } qw(debian/upstream/signing-key.pgp debian/upstream/signing-key.asc debian/upstream-signing-key.pgp);
     if (defined $keyring) {
 	uscan_verbose "Found upstream signing keyring: $keyring\n";
-    }
-
-    if ($keyring =~ m/\.asc$/) {
-	# Need to convert an armored key to binary for use by gpgv
-	$gpghome = tempdir(CLEANUP => 1);
-	my $newkeyring = "$gpghome/trustedkeys.gpg";
-	spawn(exec => [$havegpg, '--homedir', $gpghome, '--no-options', '-q', '--batch', '--no-default-keyring', '--output', $newkeyring, '--dearmor', $keyring],
-		wait_child => 1);
-	$keyring = $newkeyring
+	if ($keyring =~ m/\.asc$/) {
+	    # Need to convert an armored key to binary for use by gpgv
+	    $gpghome = tempdir(CLEANUP => 1);
+	    my $newkeyring = "$gpghome/trustedkeys.gpg";
+	    spawn(exec => [$havegpg, '--homedir', $gpghome,
+		    '--no-options', '-q', '--batch',
+		    '--no-default-keyring', '--output',
+		    $newkeyring, '--dearmor', $keyring],
+		    wait_child => 1);
+	    $keyring = $newkeyring
+	}
     }
 
     unless (open WATCH, $watchfile) {
