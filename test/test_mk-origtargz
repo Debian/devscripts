@@ -86,7 +86,7 @@ makeBrokenTarBall () {
 
 makeZipFile () {
 	makeUpstreamFiles
-	(cd $TMPDIR; zip -q -r "foo-0.1.zip" foo-0.1 )
+	(cd $TMPDIR >/dev/null; zip -q -r "foo-0.1.zip" foo-0.1 )
 	rm -rf "$TMPDIR/foo-0.1"
 }
 
@@ -96,7 +96,7 @@ makeJarFile () {
 Manifest-Version: 1.0
 Main-Class: foo.bar
 END
-	(cd $TMPDIR; jar cf "foo-0.1.jar" MANIFEST.MF foo-0.1 )
+	(cd $TMPDIR >/dev/null; jar cf "foo-0.1.jar" MANIFEST.MF foo-0.1 )
 	rm -rf "$TMPDIR/foo-0.1" "$TMPDIR/MANIFEST.MF"
 }
 
@@ -192,7 +192,7 @@ run_mk_origtargz() {
 	shift
 	shift
 	shift
-	output="$( cd $TMPDIR/$dir; LANG=C $MK_ORIGTARGZ "$@" 2> $stderrF )"
+	output="$( cd $TMPDIR/$dir >/dev/null; LANG=C $MK_ORIGTARGZ "$@" 2> $stderrF )"
 	stderr="$(cat $stderrF)"
 	retval=$?
 	assertEquals "standard output of mk-origtargz $*\n" "$exp_stdout" "$output"
