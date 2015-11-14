@@ -7,6 +7,7 @@ test:
 	./test_licensecheck
 	./test_uscan
 	./test_uscan_mangle
+	rm -rf uscan/gpg
 	./test_mk-origtargz
 
 test-installed:
@@ -18,6 +19,7 @@ test-installed:
 	./test_licensecheck --installed
 	./test_uscan --installed
 	./test_uscan_mangle --installed
+	rm -rf uscan/gpg
 	./test_mk-origtargz --installed
 
 online-test:
