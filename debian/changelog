@@ -15,6 +15,10 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
     - Removed undefined "$filenames" from chdist.bash_completion
     - Split debi.bash_completion off from pkgnames.bash_completion
       and added links for both debi/debc and corrected complete commands
+  * Added custom bash completion support for bts (Closes: #499886)
+    - Added --soap-timeout option to bts
+    - Added listcachedbugs command to bts
+    - Split out bts bash completion handling into its own script
 
   [ Dominique Dumont ]
   * licensecheck: parse file matching -c regex whatever its mime

@@ -335,6 +335,10 @@ to use B<mutt> to send emails.
 
 Don't use B<mutt> for sending of mails.
 
+=item B<--soap-timeout=>I<SECONDS>
+
+Specify a timeout for SOAP calls as used by the B<select> and B<status> commands.
+
 =item B<--smtp-host=>I<SMTPHOST>
 
 Specify an SMTP host.  If given, B<bts> will send mail by talking directly to
@@ -582,6 +586,7 @@ my ($opt_cachemode, $opt_mailreader, $opt_sendmail, $opt_smtphost);
 my ($opt_smtpuser, $opt_smtppass, $opt_smtphelo);
 my $opt_cachedelay=5;
 my $opt_mutt;
+my $opt_soap_timeout;
 my $mboxmode = 0;
 my $quiet=0;
 my $opt_ccemail = "";
@@ -620,6 +625,7 @@ GetOptions("help|h" => \$opt_help,
 	   "toolname=s" => \$toolname,
 	   "bts-server=s" => \$btsserver,
 	   "mutt!" => \$opt_mutt,
+       "soap-timeout:i" => \$opt_soap_timeout,
 	   )
     or die "Usage: $progname [options]\nRun $progname --help for more details\n";
 
@@ -648,6 +654,10 @@ if ($opt_mailreader) {
 
 if ($opt_mutt) {
     $use_mutt = 1;
+}
+
+if ($opt_soap_timeout) {
+    Devscripts::Debbugs::soap_timeout($opt_soap_timeout);
 }
 
 if ($opt_sendmail and $opt_smtphost) {
@@ -2331,6 +2341,37 @@ sub bts_cleancache {
     }
 
     untie %timestamp;
+}
+
+=item B<listcachedbugs> [I<number>]
+
+List cached bug ids (intended to support bash completion). The optional number argument
+restricts the list to those bug ids that start with that number.
+
+=cut
+
+sub bts_listcachedbugs {
+    my $number = shift;
+    if (not defined $number) {
+	$number = '';
+    }
+    if ($number =~ m{\D}) {
+	return;
+    }
+    my $untie=0;
+    if (not tied %timestamp) {
+        tie (%timestamp, "Devscripts::DB_File_Lock", $timestampdb,
+             O_RDONLY(), 0600, $DB_HASH, "read")
+            or die "$progname: couldn't open DB file $timestampdb for reading: $!\n";
+	$untie=1;
+    }
+
+    print join "\n", grep { $_ =~ m{^$number\d+$} } sort keys %timestamp;
+    print "\n";
+
+    if ($untie) {
+        untie %timestamp;
+    }
 }
 
 # Add any new commands here.
