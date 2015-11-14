@@ -470,8 +470,15 @@ if ($deletecount) {
 if ($do_repack || $deletecount) {
     decompress_archive($upstream_tar, $destfiletar);
     unlink $upstream_tar if $mode eq "rename";
-    spawn(exec => ['tar', '--delete', '--file', $destfiletar, @to_delete ],
-	  wait_child => 1) if scalar(@to_delete) > 0;
+    # We have to use piping because --delete is broken otherwise, as documented
+    # at https://www.gnu.org/software/tar/manual/html_node/delete.html
+    if (@to_delete > 0) {
+	spawn(exec => ['tar', '--delete', @to_delete ],
+	      from_file => $destfiletar,
+	      to_file => $destfiletar . ".tmp",
+	      wait_child => 1) if scalar(@to_delete) > 0;
+	move ($destfiletar . ".tmp", $destfiletar);
+    }
     compress_archive($destfiletar, $destfile, $compression);
 
     # Symlink no longer makes sense

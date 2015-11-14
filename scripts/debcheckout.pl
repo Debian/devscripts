@@ -80,6 +80,9 @@ for Subversion repositories hosted on alioth this means that
 S<I<svn+ssh://svn.debian.org/...>> will be used instead of
 S<I<svn://svn.debian.org/...>>.
 
+There are built-in rules for alioth.debian.org and github.com. Other hosts
+can be configured using B<DEBCHECKOUT_AUTH_URLS>.
+
 =item B<-d>, B<--details>
 
 Only print a list of detailed information about the package
@@ -119,7 +122,7 @@ should be one of the currently supported repository types.
 Specify the login name to be used in authenticated mode (see B<-a>). This option
 implies B<-a>: you don't need to specify both.
 
-=item B<-f>, B<--file>
+=item B<-f> I<FILE>, B<--file> I<FILE>
 
 Specify that the named file should be extracted from the repository and placed
 in the destination directory. May be used more than once to extract multiple
@@ -448,13 +451,17 @@ sub set_auth($$$$) {
     my $user_url = $url;
 
     # Adjust urls from new-style anonymous access to old-style and then deal
-    # with adjusting for authentication
+    # with adjusting for authentication on alioth
     $url =~ s@(?:alioth\.debian\.org/(?:anonscm/bzr|scm/loggerhead/bzr)|anonscm\.debian\.org/bzr(?:/bzr)?)@bzr.debian.org/bzr@;
     $url =~ s@(?:alioth\.debian\.org/anonscm/darcs|anonscm\.debian\.org/darcs)@darcs.debian.org/darcs@;
     $url =~ s@git://anonscm\.debian\.org@git://git.debian.org@;
     $url =~ s@(?:alioth\.debian\.org/anonscm/git|anonscm\.debian\.org/git)@git.debian.org/git@;
     $url =~ s@(?:alioth\.debian\.org/anonscm/hg|anonscm\.debian\.org/hg)@hg.debian.org/hg@;
     $url =~ s@svn://(?:scm\.alioth|anonscm)\.debian\.org@svn://svn.debian.org@;
+
+    # other providers
+    $url =~ s!git://github\.com/!git\@github.com:!;
+
     given ($repo_type) {
 	when ("bzr") {
 	    $url =~ s|^[\w+]+://(bzr\.debian\.org)/(.*)|bzr+ssh://$user$1/bzr/$2|;

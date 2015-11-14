@@ -1,3 +1,93 @@
+devscripts (2.15.9) unstable; urgency=medium
+
+  [ Joachim Breitner ]
+  * mk-origtargz:
+    + Work around tar --delete not working unless piping. This should
+      make the support for Excluded-Files more reliable.
+      Thanks to Felix Natter for identifying the problem and solution.
+  * debcommit:
+    + Detect git repositories even if .git is a file instead of a directory,
+      as it can be the case with "git worktree" worktrees.
+  * origtargz: Call rm -rf with "--", so that files starting with - are not
+    considered arguments by rm.
+
+  [ James McCoy ]
+  * bts:
+    + Add reference to pts-subscribe(1) in bts(1).  (Closes: #794689)
+  * tagpending:
+    + Fix warning when there are no fixed bugs in the changelog.  (Closes:
+      #795470)
+    + Avoid querying the BTS when there are no bugs closed in the changelog.
+  * mergechanges:
+    + Add -S/--source argument to skip all binary packages.  Thanks to Ansgar
+      Burchardt for the patch.  (Closes: #795573)
+  * debchange:
+    + Only emit "no orig tarball" for non-native packages.  (Closes: #797018)
+  * debcheckout:
+    + Clarify documentation of -f option.  Thanks to Daniel Shahaf for the
+      patch!  (Closes: #797265)
+  * annotate-output:
+    + Optimize the case of FORMAT not containing any date format codes.
+      Thanks to Stefan Fritsch for the patch.  (Closes: #799553)
+  * build-rdeps:
+    + Avoid recursing into apt's lists directory.  Only the top-level files
+      are interesting and this avoids a “Permission denied” warning with apt
+      versions that restrict access to the lists/partial directory.  Thanks to
+      James Cowgill for the patch.  (Closes: #798252)
+  * wrap-and-sort:
+    + Avoid modifying an empty file.  Thanks to Chris Lamb for the patch.
+      (Closes: #789579)
+  * dd-list:
+    + Omit information from stanzas with “Extra-Source-Only: yes”.
+    + Use only the information from the most recent version of a package
+      within each sources file.  (Closes: #788820)
+    + Enable reading sources data from gz or bzip2 compressed files.  If the
+      --dctrl switch is being used, the -z switch is needed to enabled
+       decompression.  Compressed files specified with the -s switch will
+       automatically be handled if using a .gz/.bz2 extension.
+
+  [ Dominique Dumont ]
+  * licensecheck:
+    * added --text option to avoid scanning binary files (Closes: #797562)
+    * use 'file' command to decide whether to scan a file or
+      not (instead of testing file suffix)
+    * remove trailing '#' from © information
+    * store only first © block to avoid duplicated information
+    * remove '\' from © information (useful for nroff files)
+
+  [ Adam D. Barratt ]
+  * getbuildlog:
+    + Stop downloading logs from debian-ports explicitly, now that it has
+      been merged into buildd.debian.org and downloading from both locations
+      causes duplicate downloads.  (Closes: #796506)
+
+  [ Dmitry Shachnev ]
+  * uscan: Use https protocol for pypi.debian.net redirector, now that it
+    is available.  (Closes: #796880)
+
+  [ Osamu Aoki ]
+  * uscan:
+    + Ensure the version field in the watch line is defined, rather than
+      "true" before using it in a comparison.  The enables the use of 0 as a
+      value for the version.  (Closes: #796984)
+
+  [ Gunnar Wolf ]
+  * debchange:
+    + Allow the current preferred security upload targets
+      (wheezy|jessie|stretch)-security instead of their changing
+      counterparts (oldstable|stable|testing)-security (Closes: #797084)
+
+  [ Antonio Terceiro ]
+  * chdist:
+    + Add support for running apt-file
+  * debian/lintian-overrides: remove overrides for false positives that had
+    been fixed in lintian
+
+  [ Christoph Berg ]
+  * debcheckout: Add auth mapping for git://github.com.
+
+ -- James McCoy <jamessan@debian.org>  Mon, 05 Oct 2015 21:00:08 -0400
+
 devscripts (2.15.8~bpo8+1) jessie-backports; urgency=medium
 
   * Rebuild for jessie-backports.

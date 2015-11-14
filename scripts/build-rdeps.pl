@@ -91,7 +91,6 @@ and run apt-get update afterwards or use the update option of this tool.
 use warnings;
 use strict;
 use File::Basename;
-use File::Find;
 use Getopt::Long qw(:config gnu_getopt);
 use Pod::Usage;
 use Data::Dumper;
@@ -307,7 +306,10 @@ if ($opt_distribution) {
 }
 
 # Find sources files
-find(sub { readrelease($_, $1) if /$release_pattern/ }, $sources_path);
+chdir($sources_path);
+for my $release_file (glob "*") {
+	readrelease($release_file, $1) if $release_file =~ /$release_pattern/;
+}
 
 if (!@source_files) {
 	die "$progname: unable to find sources files.\nDid you forget to run apt-get update (or add --update to this command)?";

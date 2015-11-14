@@ -121,6 +121,11 @@ Options:
                    Specify the version which the upstream release must
                    match in order to be considered, rather than using the
                    release with the highest version
+    --download-debversion VERSION
+		   Specify the Debian package version to download the
+		   corresponding upstream release version.  The
+		   dversionmangle and uversionmangle rules are
+		   considered.
     --download-current-version
                    Download the currently packaged version
     --package PACKAGE
@@ -177,6 +182,7 @@ my $destdir = "..";
 my $download = 1;
 my $download_version;
 my $force_download = 0;
+my $badversion = 0;
 my $report = 0; # report even on up-to-date packages?
 my $repack = 0; # repack .tar.bz2, .tar.lzma, .tar.xz or .zip to .tar.gz
 my $default_compression = 'gzip' ;
@@ -285,7 +291,7 @@ my ($opt_h, $opt_v, $opt_destdir, $opt_download, $opt_force_download,
     $opt_repack_compression, $opt_exclusion, $opt_copyright_file);
 my ($opt_verbose, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
-my $opt_download_version;
+my ($opt_download_version, $opt_download_debversion);
 my $opt_user_agent;
 my $opt_download_current_version;
 
@@ -294,6 +300,7 @@ GetOptions("help" => \$opt_h,
 	   "destdir=s" => \$opt_destdir,
 	   "download!" => \$opt_download,
 	   "download-version=s" => \$opt_download_version,
+	   "download-debversion=s" => \$opt_download_debversion,
 	   "force-download" => \$opt_force_download,
 	   "report" => sub { $opt_download = 0; },
 	   "report-status" => sub { $opt_download = 0; $opt_report = 1; },
@@ -361,7 +368,6 @@ $dehs = $opt_dehs if defined $opt_dehs;
 $exclusion = $opt_exclusion if defined $opt_exclusion;
 $copyright_file = $opt_copyright_file if defined $opt_copyright_file;
 $user_agent_string = $opt_user_agent if defined $opt_user_agent;
-$download_version = $opt_download_version if defined $opt_download_version;
 
 if (defined $opt_level) {
     if ($opt_level =~ /^[012]$/) { $check_dirname_level = $opt_level; }
@@ -802,33 +808,33 @@ sub process_watchline ($$$$$$)
 
 	    my @opts = split /,/, $opts;
 	    foreach my $opt (@opts) {
-		if ($opt eq 'pasv' or $opt eq 'passive') {
+		if ($opt =~ /^\s*pasv\s*$/ or $opt =~ /^\s*passive\s*$/) {
 		    $options{'pasv'}=1;
 		}
-		elsif ($opt eq 'active' or $opt eq 'nopasv'
-		       or $opt eq 'nopassive') {
+		elsif ($opt =~ /^\s*active\s*$/ or $opt =~ /^\s*nopasv\s*$/
+		       or $opt =~ /^s*nopassive\s*$/) {
 		    $options{'pasv'}=0;
 		}
-		elsif ($opt =~ /^repacksuffix\s*=\s*(.+)/) {
+		elsif ($opt =~ /^\s*repacksuffix\s*=\s*(.+?)\s*$/) {
 		    $options{'repacksuffix'} = $1;
 		}
-		elsif ($opt =~ /^uversionmangle\s*=\s*(.+)/) {
+		elsif ($opt =~ /^\s*uversionmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'uversionmangle'}} = split /;/, $1;
 		}
-		elsif ($opt =~ /^dversionmangle\s*=\s*(.+)/) {
+		elsif ($opt =~ /^\s*dversionmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'dversionmangle'}} = split /;/, $1;
 		}
-		elsif ($opt =~ /^versionmangle\s*=\s*(.+)/) {
+		elsif ($opt =~ /^\s*versionmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'uversionmangle'}} = split /;/, $1;
 		    @{$options{'dversionmangle'}} = split /;/, $1;
 		}
-		elsif ($opt =~ /^filenamemangle\s*=\s*(.+)/) {
+		elsif ($opt =~ /^\s*filenamemangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'filenamemangle'}} = split /;/, $1;
 		}
-		elsif ($opt =~ /^downloadurlmangle\s*=\s*(.+)/) {
+		elsif ($opt =~ /^\s*downloadurlmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'downloadurlmangle'}} = split /;/, $1;
 		}
-		elsif ($opt =~ /^pgpsigurlmangle\s*=\s*(.+)/) {
+		elsif ($opt =~ /^\s*pgpsigurlmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'pgpsigurlmangle'}} = split /;/, $1;
 		}
 		else {
@@ -847,7 +853,7 @@ sub process_watchline ($$$$$$)
 	    (undef, $lastversion, $action) = split ' ', $line, 3;
 	}
 
-	if ((!$lastversion or $lastversion eq 'debian') and not defined $pkg_version) {
+	if ((! defined $lastversion or $lastversion eq 'debian') and not defined $pkg_version) {
 	    uscan_warn "$progname warning: Unable to determine current version\n  in $watchfile, skipping:\n  $line\n";
 	    return 1;
 	}
@@ -894,7 +900,7 @@ sub process_watchline ($$$$$$)
 	    $filepattern .= '(?:\?.*)?';
 	}
 	# Handle pypi.python.org addresses specially
-	$base =~ s%^https?://pypi\.python\.org/packages/source/./%http://pypi.debian.net/%;
+	$base =~ s%^https?://pypi\.python\.org/packages/source/./%https://pypi.debian.net/%;
 
 	if ($base =~ m%^(\w+://[^/]+)%) {
 	    $site = $1;
@@ -914,8 +920,7 @@ sub process_watchline ($$$$$$)
 	$basedir =~ s%^\w+://[^/]+/%/%;
 	$pattern = "(?:(?:$site)?" . quotemeta($basedir) . ")?$filepattern";
     }
-
-    if (! $lastversion or $lastversion eq 'debian') {
+    if (! defined $lastversion or $lastversion eq 'debian') {
 	if (defined $pkg_version) {
 	    $lastversion=$pkg_version;
 	} else {
@@ -923,10 +928,20 @@ sub process_watchline ($$$$$$)
 	    return 1;
 	}
     }
+    if (defined $opt_download_debversion) {
+	$lastversion = $opt_download_debversion;
+	$lastversion =~ s/-[^-]+$//;  # revision
+	$lastversion =~ s/^\d+://;    # epoch
+	print STDERR "$progname debug: specified debversion to download: $lastversion\n" if $debug;
+    } else {
+	print STDERR "$progname debug: last pristine tarball version: $lastversion\n" if $debug;
+    }
     # And mangle it if requested
+    print STDERR "$progname debug: last pristine tarball version: $lastversion\n" if $debug;
     my $mangled_lastversion;
     $mangled_lastversion = $lastversion;
     foreach my $pat (@{$options{'dversionmangle'}}) {
+	print STDERR "$progname debug: dversionmangle rule $pat\n" if $debug;
 	if (! safe_replace(\$mangled_lastversion, $pat)) {
 	    uscan_warn "$progname: In $watchfile, potentially"
 	      . " unsafe or malformed dversionmangle"
@@ -936,9 +951,25 @@ sub process_watchline ($$$$$$)
 	    return 1;
 	}
     }
-    if($opt_download_current_version) {
+    print STDERR "$progname debug: dversionmangled last version: $mangled_lastversion\n" if $debug;
+    if($opt_download_version) {
+	$download_version = $opt_download_version;
+	$force_download = 1;
+	$badversion = 1;
+	print STDERR "$progname debug: Force to download the specified version: $download_version\n" if $debug;
+    } elsif (defined $opt_download_debversion) {
 	$download_version = $mangled_lastversion;
 	$force_download = 1;
+	$badversion = 1;
+	print STDERR "$progname debug: Force to download the specified debversion (dversionmangled): $download_version\n" if $debug;
+    } elsif($opt_download_current_version) {
+	$download_version = $mangled_lastversion;
+	$force_download = 1;
+	$badversion = 1;
+	print STDERR "$progname debug: Force to download the current version: $download_version\n" if $debug;
+    } else {
+	# $download_version = undef;
+	print STDERR "$progname debug: Last pristine tarball version (dversionmangled): $mangled_lastversion\n" if $debug;
     }
 
     # Check all's OK
@@ -968,8 +999,7 @@ sub process_watchline ($$$$$$)
 
 	@redirections = @{$user_agent->get_redirections};
 
-	print STDERR "$progname debug: redirections: @redirections\n"
-	    if $debug;
+	print STDERR "$progname debug: redirections: @redirections\n" if ($debug and  @redirections);
 
 	foreach my $_redir (@redirections) {
 	    my $base_dir = $_redir;
@@ -994,7 +1024,7 @@ sub process_watchline ($$$$$$)
 	}
 
 	my $content = $response->content;
-	print STDERR "$progname debug: received content:\n$content\[End of received content]\n"
+	print STDERR "$progname debug: received content:\n$content\n[End of received content]\n"
 	    if $debug;
 
 	if ($content =~ m%^<[?]xml%i &&
@@ -1040,6 +1070,7 @@ sub process_watchline ($$$$$$)
 			    join(".", map { $_ if defined($_) }
 			 	$href =~ m&^$_pattern$&);
 			foreach my $pat (@{$options{'uversionmangle'}}) {
+			    print STDERR "$progname debug: uversionmangle rule $pat\n" if $debug;
 			    if (! safe_replace(\$mangled_version, $pat)) {
 				uscan_warn "$progname: In $watchfile, potentially"
 			 	 . " unsafe or malformed uversionmangle"
@@ -1063,6 +1094,7 @@ sub process_watchline ($$$$$$)
 		my @vhrefs = grep { $$_[0] eq $download_version } @hrefs;
 		if (@vhrefs) {
 		    ($newversion, $newfile) = @{$vhrefs[0]};
+		    print STDERR "$progname debug: Found remote URL matiching the requested version.\n" if $debug;
 		} else {
 		    uscan_warn "$progname warning: In $watchfile no matching hrefs for version $download_version"
 			. " in watch line\n  $line\n";
@@ -1074,6 +1106,7 @@ sub process_watchline ($$$$$$)
 	    }
 	} else {
 	    uscan_warn "$progname warning: In $watchfile,\n  no matching hrefs for watch line\n  $line\n";
+	    print STDERR "$progname debug: Picked URL matiching the newest version.\n" if $debug;
 	    return 1;
 	}
     }
@@ -1100,7 +1133,7 @@ sub process_watchline ($$$$$$)
 	}
 
 	my $content = $response->content;
-	print STDERR "$progname debug: received content:\n$content\[End of received content]\n"
+	print STDERR "$progname debug: received content:\n$content\n[End of received content]\n"
 	    if $debug;
 
 	# FTP directory listings either look like:
@@ -1118,6 +1151,7 @@ sub process_watchline ($$$$$$)
 		my $file = $1;
 		my $mangled_version = join(".", $file =~ m/^$pattern$/);
 		foreach my $pat (@{$options{'uversionmangle'}}) {
+		    print STDERR "$progname debug: uversionmangle rule $pat\n" if $debug;
 		    if (! safe_replace(\$mangled_version, $pat)) {
 			uscan_warn "$progname: In $watchfile, potentially"
 			  . " unsafe or malformed uversionmangle"
@@ -1137,6 +1171,7 @@ sub process_watchline ($$$$$$)
 		    my $file = $1;
 		    my $mangled_version = join(".", $file =~ m/^$filepattern$/);
 		    foreach my $pat (@{$options{'uversionmangle'}}) {
+			print STDERR "$progname debug: uversionmangle rule $pat\n" if $debug;
 			if (! safe_replace(\$mangled_version, $pat)) {
 			    uscan_warn "$progname: In $watchfile, potentially"
 			      . " unsafe or malformed uversionmangle"
@@ -1195,12 +1230,15 @@ EOF
 	    return 1;
 	}
     }
+    print STDERR "$progname debug: new version $newversion\n" if $debug;
+    print STDERR "$progname debug: new filename $newfile\n" if $debug;
 
     my $newfile_base=basename($newfile);
     if (exists $options{'filenamemangle'}) {
         $newfile_base=$newfile;
     }
     foreach my $pat (@{$options{'filenamemangle'}}) {
+	print STDERR "$progname debug: filenamemangle rule $pat\n" if $debug;
 	if (! safe_replace(\$newfile_base, $pat)) {
 	    uscan_warn "$progname: In $watchfile, potentially"
 	      . " unsafe or malformed filenamemangle"
@@ -1218,6 +1256,7 @@ EOF
 	    $newfile_base = "$pkg-$newversion.download";
 	}
     }
+    print STDERR "$progname debug: filenamemangled new filename $newfile_base\n" if $debug;
 
     # So what have we got to report now?
     my $upstream_url;
@@ -1285,6 +1324,7 @@ EOF
 	$upstream_url =~ s/&amp;/&/g;
 	if (exists $options{'downloadurlmangle'}) {
 	    foreach my $pat (@{$options{'downloadurlmangle'}}) {
+		print STDERR "$progname debug: downloadurlmangle rule $pat\n" if $debug;
 		if (! safe_replace(\$upstream_url, $pat)) {
 		    uscan_warn "$progname: In $watchfile, potentially"
 		      . " unsafe or malformed downloadurlmangle"
@@ -1300,10 +1340,12 @@ EOF
 	# FTP site
 	$upstream_url = "$base$newfile";
     }
+    print STDERR "$progname debug: downloadurlmangled upstream URL $upstream_url\n" if $debug;
 
     if (exists $options{'pgpsigurlmangle'}) {
 	$pgpsig_url = $upstream_url;
 	foreach my $pat (@{$options{'pgpsigurlmangle'}}) {
+	    print STDERR "$progname debug: pgpsigurlmangle rule $pat\n" if $debug;
 	    if (! safe_replace(\$pgpsig_url, $pat)) {
 		uscan_warn "$progname: In $watchfile, potentially"
 		  . " unsafe or malformed pgpsigurlmangle"
@@ -1313,6 +1355,7 @@ EOF
 		return 1;
 	    }
 	}
+	print STDERR "$progname debug: pgpsigurlmangled upstream URL $pgpsig_url\n" if $debug;
     }
 
     $dehs_tags{'debian-uversion'} = $lastversion;
@@ -1517,9 +1560,10 @@ EOF
 	      to_string => \$mk_origtargz_out,
 	      wait_child => 1);
 	chomp($mk_origtargz_out);
-	$path = $1 if $mk_origtargz_out =~ /Successfully .* (?:to|as) ([^,]+)\.$/;
+	$path = $1 if $mk_origtargz_out =~ /Successfully .* (?:to|as) ([^,]+)(?:,.*)?\.$/;
 	$path = $1 if $mk_origtargz_out =~ /Leaving (.*) where it is/;
 	$target = basename($path);
+	$newversion = $1 if $target =~ m/[^_]+_(.+)\.orig\.tar\.(?:gz|bz2|lzma|xz)$/;
     }
 
     if ($dehs) {
@@ -1544,8 +1588,14 @@ EOF
 	my @cmd = shellwords($action);
 
 	# Any symlink requests are already handled by uscan
-	if ($action =~ /^uupdate(\s|$)/) {
+	if ($cmd[0] eq "uupdate") {
 	    push @cmd, "--no-symlink";
+	    if ($verbose) {
+		push @cmd, "--verbose";
+	    }
+	    if ($badversion) {
+		push @cmd, "-b";
+	    }
 	}
 
 	if ($watch_version > 1) {
@@ -1620,7 +1670,7 @@ sub newest_dir ($$$$$) {
 	}
 
 	my $content = $response->content;
-	print STDERR "$progname debug: received content:\n$content\[End of received content\]\n"
+	print STDERR "$progname debug: received content:\n$content\n[End of received content\]\n"
 	    if $debug;
 	# We need this horrid stuff to handle href=foo type
 	# links.  OK, bad HTML, but we have to handle it nonetheless.
@@ -1679,7 +1729,7 @@ sub newest_dir ($$$$$) {
 	}
 
 	my $content = $response->content;
-	print STDERR "$progname debug: received content:\n$content\[End of received content]\n"
+	print STDERR "$progname debug: received content:\n$content\n[End of received content]\n"
 	    if $debug;
 
 	# FTP directory listings either look like:

@@ -51,6 +51,9 @@ For a patch file:
 Options are:
    --upstream-version <version>, -v <version>
                       specify version number of upstream package
+   --force-bad-version, -b
+                      Force a version number to be less than the current one
+                      (e.g., when backporting).
    --rootcmd <gain-root-command>, -r <gain-root-command>
                       which command to be used to become root
                       for package-building
@@ -63,6 +66,7 @@ Options are:
    --no-conf, --noconf
                       Don't read devscripts config files;
                       must be the first option given
+   --verbose          Give verbose output
 
 $PROGNAME [--help|--version]
   show this message or give version information.
@@ -99,6 +103,7 @@ mustsetvar () {
 MPATTERN='^(?:[a-zA-Z][a-zA-Z0-9]*(?:-|_|\.))+(\d+\.(?:\d+\.)*\d+)$'
 
 STATUS=0
+BADVERSION=""
 
 # Boilerplate: set config variables
 DEFAULT_UUPDATE_ROOTCMD=
@@ -170,9 +175,11 @@ fi
 
 TEMP=$(getopt -s bash -o v:p:r:ubs \
         --long upstream-version:,patch:,rootcmd: \
+        --long force-bad-version \
 	--long pristine,no-pristine,nopristine \
 	--long symlink,no-symlink,nosymlink \
 	--long no-conf,noconf \
+	--long verbose \
 	--long help,version -n "$PROGNAME" -- "$@") || (usage >&2; exit 1)
 
 eval set -- $TEMP
@@ -180,6 +187,8 @@ eval set -- $TEMP
 # Process Parameters
 while [ "$1" ]; do
     case $1 in
+    --force-bad-version|-b)
+	BADVERSION="-b" ;;
     --upstream-version|-v)
 	shift; NEW_VERSION="$1" ;;
     --patch|-p)
@@ -197,6 +206,8 @@ while [ "$1" ]; do
     --no-conf|--noconf)
 	echo "$PROGNAME: $1 is only acceptable as the first command-line option!" >&2
 	exit 1 ;;
+    --verbose)
+	UUPDATE_VERBOSE=yes ;;
     --help) usage; exit 0 ;;
     --version) version; exit 0 ;;
     --)	shift; break ;;
@@ -237,11 +248,25 @@ mustsetvar VERSION "`dpkg-parsechangelog -SVersion`" "source version"
 # Get epoch and upstream version
 eval `echo "$VERSION" | perl -ne '/^(?:(\d+):)?(.*)/; print "SVERSION=$2\nEPOCH=$1\n";'`
 
-UVERSION=`expr "$SVERSION" : '\(.*\)-[0-9a-zA-Z.+~]*$'` ||
-{
+if [ -n "$UUPDATE_VERBOSE" ]; then
+    echo "PATCH       = \"$PATCH\" is the name of the patch file" >&2
+    echo "ARCHIVE     = \"$ARCHIVE\" is the name of the next tarball" >&2
+    echo "NEW_VERSION = \"$NEW_VERSION\" is the next pristine tarball version" >&2
+    echo "PACKAGE     = \"$PACKAGE\" is in the top of debian/changelog" >&2
+    echo "VERSION     = \"$VERSION\" is in the top of debian/changelog" >&2
+    echo "EPOCH       = \"$EPOCH\" is epoch part of \$VERSION" >&2
+    echo "SVERSION    = \"$SVERSION\" is w/o-epoch part of \$VERSION" >&2
+fi
+
+UVERSION=`expr "$SVERSION" : '\(.*\)-[0-9a-zA-Z.+~]*$'`
+if [ -z "$UVERSION" ]; then
     echo "$PROGNAME: a native Debian package cannot take upstream updates" >&2
     exit 1
-}
+fi
+
+if [ -n "$UUPDATE_VERBOSE" ]; then
+    echo "UVERSION    = \"$UVERSION\" the upstream portion w/o-epoch of \$VERSION" >&2
+fi
 
 # Save pwd before we goes walkabout
 OPWD=`pwd`
@@ -339,7 +364,7 @@ if [ "$PATCH" ]; then
     fi
 
     # Sanity check
-    if dpkg --compare-versions "$NEW_VERSION-$SUFFIX" le "$VERSION"; then
+    if [ -z "$BADVERSION" ] && dpkg --compare-versions "$NEW_VERSION-$SUFFIX" le "$VERSION"; then
 	echo "$PROGNAME: new version $NEW_VERSION-$SUFFIX <= current version $VERSION; aborting!" >&2
 	exit 1
     fi
@@ -462,7 +487,7 @@ if [ "$PATCH" ]; then
 	    STATUS=1
 	fi
 	chmod a+x debian/rules
-	debchange -v "$NEW_VERSION-$SUFFIX" "New upstream release"
+	debchange $BADVERSION -v "$NEW_VERSION-$SUFFIX" "New upstream release"
 	echo "Remember: Your current directory is the OLD sourcearchive!"
 	echo "Do a \"cd ../$PACKAGE-$SNEW_VERSION\" to see the new package"
 	exit
@@ -551,7 +576,7 @@ else
     fi
 
     # Sanity check
-    if dpkg --compare-versions "$NEW_VERSION-$SUFFIX" le "$VERSION"; then
+    if [ -z "$BADVERSION" ] && dpkg --compare-versions "$NEW_VERSION-$SUFFIX" le "$VERSION"; then
 	echo "$PROGNAME: new version $NEW_VERSION-$SUFFIX <= current version $VERSION; aborting!" >&2
 	exit 1
     fi
@@ -723,6 +748,33 @@ else
 	DIFF="../${PACKAGE}_$SVERSION.debian.tar.xz"
 	DIFFTYPE=tar
 	DIFFUNPACK="tar --xz -xf"
+    else
+	# non-native package and missing diff.gz/debian.tar.xz.
+	cd $OPWD
+	if [ ! -d debian ]; then
+	    echo "$PROGNAME: None of *.diff.gz, *.debian.tar.xz, or debian/* found. failed;" >&2
+	    echo "aborting..." >&2
+	    exit 1
+	fi
+	if [ -d debian/source -a -r debian/source/format ]; then
+	    if [ "`cat debian/source/format`" = "3.0 (quilt)" ]; then
+		# This is convenience for VCS users.
+		echo "$PROGNAME: debian/source/format is \"3.0 (quilt)\"." >&2
+		echo "$PROGNAME: Auto-generating ${PACKAGE}_$SVERSION.debian.tar.xz" >&2
+		tar --xz -cf ../${PACKAGE}_$SVERSION.debian.tar.xz debian
+		DIFF="../${PACKAGE}_$SVERSION.debian.tar.xz"
+		DIFFTYPE=tar
+		DIFFUNPACK="tar --xz -xf"
+	    else
+		echo "$PROGNAME: debian/source/format isn't \"3.0 (quilt)\"." >&2
+		echo "$PROGNAME: Skip auto-generating ${PACKAGE}_$SVERSION.debian.tar.xz" >&2
+	    fi
+	else
+	    echo "$PROGNAME: debian/source/format is missing." >&2
+	    echo "$PROGNAME: Skip auto-generating ${PACKAGE}_$SVERSION.debian.tar.xz" >&2
+	fi
+	# return back to upstream source
+	cd ../$PACKAGE-$SNEW_VERSION
     fi
 
     if [ "$DIFFTYPE" = diff ]; then
@@ -825,6 +877,9 @@ else
 	    echo "to debian.upstream/ and use the Debian version" >&2
 	    mv debian debian.upstream
 	fi
+	if [ -n "$UUPDATE_VERBOSE" ]; then
+	    echo "-- Use ${DIFF} to create the new debian/ directory." >&2
+	fi
 	if $DIFFUNPACK $DIFF; then
 	    echo "Unpacking the debian/ directory from version $VERSION worked fine."
 	else
@@ -835,8 +890,13 @@ else
 	echo "$PROGNAME: could not find {diff|debian.tar}.{gz|bz2|lzma|xz} from version $VERSION to apply!" >&2
 	exit 1
     fi
-    chmod a+x debian/rules
-    debchange -v "$NEW_VERSION-$SUFFIX" New upstream release
+    if [ -f debian/rules ]; then
+	chmod a+x debian/rules
+    fi
+    if [ -n "$UUPDATE_VERBOSE" ]; then
+	echo "-- New upstream release=$NEW_VERSION-$SUFFIX" >&2
+    fi
+    debchange $BADVERSION -v "$NEW_VERSION-$SUFFIX" "New upstream release"
     echo "Remember: Your current directory is the OLD sourcearchive!"
     echo "Do a \"cd ../$PACKAGE-$SNEW_VERSION\" to see the new package"
 fi

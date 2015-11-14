@@ -74,7 +74,11 @@ recursively.
 Specify a pattern against which filenames will be matched in order to
 decide which files to check the license of.
 
-The default includes common source files.
+=item B<-t>, B<--text>
+
+By default, all files are parsed, including binary files. This option
+limits the parsed files to mime type C<text/*> and C<application/xml>.
+The mime type is given by C<file> command.
 
 =item B<--copyright>
 
@@ -131,6 +135,16 @@ General Public License, version 2 or later.
 
 Adam D. Barratt <adam@adam-barratt.org.uk>
 
+=head1 SEE ALSO
+
+=over
+
+=item *
+
+L<file>
+
+=back
+
 =cut
 
 # see http://stackoverflow.com/questions/6162484/why-does-modern-perl-avoid-utf-8-by-default/6163129#6163129
@@ -168,9 +182,6 @@ my $default_ignore_regex = qr!
 (?:^|/)(?:CVS|RCS|\.pc|\.deps|\{arch\}|\.arch-ids|\.svn|\.hg|_darcs|\.git|
 \.shelf|_MTN|\.bzr(?:\.backup|tags)?)(?:$|/.*$)
 !x;
-
-my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|S|f(77|90)?|go|groovy|scala|clj|p(l|m)|xs|sh|php|py(|x)|rb|java|js|vala|el|sc(i|e)|cs|pas|inc|dtd|xsl|mod|m|tex|mli?|(c|l)?hs)$';
-
 
 # also used to cleanup
 my $copyright_indicator_regex
@@ -210,6 +221,7 @@ my %OPT=(
     recursive      => 0,
     copyright      => 0,
     machine        => 0,
+    text           => 0,
 );
 
 my $def_lines = 60;
@@ -267,14 +279,16 @@ GetOptions(\%OPT,
            "machine|m",
            "noconf|no-conf",
            "recursive|r",
+	   "text|t",
            "verbose!",
            "version|v",
 ) or die "Usage: $progname [options] filelist\nRun $progname --help for more details\n";
 
 $OPT{'lines'} = $def_lines if $OPT{'lines'} !~ /^[1-9][0-9]*$/;
 my $ignore_regex = length($OPT{ignore}) ? qr/$OPT{ignore}/ : $default_ignore_regex;
-$OPT{'check'} = $default_check_regex if ! length $OPT{'check'};
-my $check_regex = qr/$OPT{check}/;
+
+my $check_regex ;
+$check_regex = qr/$OPT{check}/ if length $OPT{check};
 
 if ($OPT{'noconf'}) {
     fatal("--no-conf is only acceptable as the first command-line option!");
@@ -302,14 +316,14 @@ while (@ARGV) {
 
 	while (my $found = <$FIND>) {
 	    chomp ($found);
-	    next unless $found =~ $check_regex;
+	    next if ( $check_regex and $found !~ $check_regex );
 	    # Skip empty files
 	    next if (-z $found);
 	    push @files, $found unless $found =~ $ignore_regex;
 	}
 	close $FIND;
     } else {
-	next unless ($files_count == 1) or $file =~ $check_regex;
+	next unless ($files_count == 1) or ( $check_regex and $file =~ $check_regex);
 	push @files, $file unless $file =~ $ignore_regex;
     }
 }
@@ -336,6 +350,7 @@ while (@files) {
 	chomp $mime;
 	warn "$0 warning: cannot parse file '$file' with mime type '$mime'\n";
 	$charset = 'maybe-binary';
+	next if $OPT{text};
     }
 
     open (my $F, '<' ,$file) or die "Unable to access $file\n";
@@ -376,6 +391,7 @@ sub extract_copyright {
     my @c = split /\n/, clean_comments($content);
 
     my %copyrights;
+    my $lines_after_copyright_block = 0;
 
     while (@c) {
 	my $line = shift @c ;
@@ -388,6 +404,11 @@ sub extract_copyright {
 	    $copyright_match =~ s/\s+/ /g;
 	    $copyrights{lc("$copyright_match")} = "$copyright_match";
         }
+	elsif (scalar keys %copyrights) {
+	    # skip remaining lines if a copyright blocks was found more than 5 lines ago.
+	    # so a copyright block may contain up to 5 blank lines, but no more
+	    last if $lines_after_copyright_block++ > 5;
+	}
     }
     return %copyrights;
 }
@@ -408,8 +429,8 @@ sub parse_copyright {
                 $match =~ s/$copyright_indicator_regex//igx;
                 $match =~ s/^\s+//;
                 $match =~ s/\s{2,}/ /g;
-                $match =~ s/\\@/@/g;
-                $match =~ s/\s*\*\s*$//;
+		$match =~ s/\\//g; # de-cruft nroff files
+                $match =~ s/\s*[*#]\s*$//;
                 $copyright = $match;
             }
         }
@@ -466,7 +487,7 @@ Valid options are:
                             (Default: $def_lines)
    --check, -c            Specify a pattern indicating which files should
                              be checked
-                             (Default: '$default_check_regex')
+                             (Default: All text and xml files)
    --machine, -m          Display in a machine readable way (good for awk)
    --recursive, -r        Add the contents of directories recursively
    --copyright            Also display the file's copyright

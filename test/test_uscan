@@ -16,21 +16,37 @@
 # version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
 
 test_dir=$(readlink -f "${0%/*}")
+
+SUFFIX="1"
+if which dpkg-vendor >/dev/null 2>&1; then
+    case "$(dpkg-vendor --query Vendor 2>/dev/null)" in
+	"Ubuntu")
+	    SUFFIX="0ubuntu1"
+	    ;;
+    esac
+fi
+
 if test "$1" = --installed; then
     COMMAND="uscan --no-conf --compression=xz"
     shift
 else
     top_srcdir=$(readlink -f "${0%/*}/..")
-    make -C "$top_srcdir/scripts" uscan mk-origtargz
+    make -C "$top_srcdir/scripts" uscan mk-origtargz uupdate
     PATH="$top_srcdir/scripts:$PATH"
     PERL5LIB="$top_srcdir/lib"
     export PERL5LIB
     COMMAND="uscan --no-conf --compression=xz"
 fi
 
+COMMANDDEHS="$COMMAND --dehs"
+
+# comment out for debug
+#COMMAND="$COMMAND --debug"
+
 cleanup(){
     kill -9 $(cat $TMPDIR/repo/pid)
     rm -rf $TMPDIR
+    echo ""
 }
 
 spawnHttpServer(){
@@ -93,7 +109,8 @@ END
     ( cd $TMPDIR/repo ;
       tar cfa $PKG-1.$from_ext * )
 
-    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND --dehs --repack --compression=$to_comp) 2>&1 )
+    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMANDDEHS --repack --compression=$to_comp) 2>&1 )
+    assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
 
     TARBALL=${PKG}_1.orig.tar.$to_comp
     if [ "$from_ext" != "tar.$to_comp" ]
@@ -151,7 +168,8 @@ END
     ( cd $TMPDIR/repo ;
       zip -q -r $PKG-1.zip * )
 
-    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMAND --dehs --repack --compression=$to_comp) )
+    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMANDDEHS --repack --compression=$to_comp) )
+    assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
 
     TARBALL=${PKG}_1.orig.tar.$to_comp
     assertTrue 'unrepacked zipfile present' "[ -f $TMPDIR/${PKG}-1.zip ]"
@@ -179,11 +197,11 @@ helperCreateRepo () {
 
     cat <<END > $PKG/debian/watch
 version=3
-${OPTS}http://localhost:$PORT/$PKG-(\d).tar.gz
+${OPTS}http://localhost:$PORT/$PKG-(\d).tar.gz debian $SCRIPT
 END
 
     cat <<END > $PKG/debian/changelog
-$PKG (0-1) unstable; urgency=low
+$PKG (0+dfsg1-$SUFFIX) unstable; urgency=low
 
   * Initial release
 
@@ -198,6 +216,10 @@ Files-Excluded: exclude-this
  */js/jquery.js
  ;?echo?baz;?#
 END
+    if [ -n "$SRCFORMAT" ]; then
+	mkdir -p $PKG/debian/source
+	echo "$SRCFORMAT" > $PKG/debian/source/format
+    fi
 
     mkdir -p repo
     touch repo/include-this
@@ -239,15 +261,18 @@ testFileExclusion() {
 
     (
       cd $TMPDIR
-      OPTS="opts=repacksuffix=+dfsg1 "
+      OPTS="opts=repacksuffix=+dfsg1,dversionmangle=s/\+dfsg\d*$// "
+      SCRIPT="uupdate"
+      SRCFORMAT="3.0 (quilt)"
       helperCreateRepo
       cd repo
       tar cfz $PKG-1.tar.gz * .hidden )
 
     (cd $TMPDIR/$PKG ; $COMMAND)
+    assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
 
     TARBALL=${PKG}_1+dfsg1.orig.tar.gz
-    assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-1.tar.gz ]"
+    assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-$SUFFIX.tar.gz ]"
     assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
     assertFalse 'pristine tarball is a symlink (nothing repacked?)' "[ -L $TMPDIR/$TARBALL ]"
     assertNotNull 'pristine tarball is not gzip-compressed' \
@@ -256,11 +281,16 @@ testFileExclusion() {
 
     helperTestContent
 
+    # check uupdate
+    assertTrue 'pristine tarball is not extracted' "[ -f $TMPDIR/${PKG}-1+dfsg1/debian/changelog ]"
+    DVERSION=`dpkg-parsechangelog -l$TMPDIR/${PKG}-1+dfsg1/debian/changelog -SVersion`
+    assertEquals "uscan: Version should be 1+dfsg1-$SUFFIX but $DVERSION" "$DVERSION" "1+dfsg1-$SUFFIX"
+
     cleanup
 
 }
 
-# the same, but run from a separate directory
+# the same, but run from a separate directory (no way for uupdate, just download)
 testFileExclusionSeparateDir() {
 
     PKG=foo
@@ -270,15 +300,19 @@ testFileExclusionSeparateDir() {
 
     (
       cd $TMPDIR
-      OPTS="opts=repacksuffix=+dfsg1 "
+      SCRIPT=""
+      OPTS="opts=repacksuffix=+dfsg1,dversionmangle=s/\+dfsg\d*$// "
       helperCreateRepo
       cd repo
       tar cfz $PKG-1.tar.gz * .hidden )
 
     mkdir $TMPDIR/otherdir
     (
-    	cd $TMPDIR/otherdir; $COMMAND --package $PKG --force-download --upstream-version 1 --watchfile ../$PKG/debian/watch --copyright-file ../$PKG/debian/copyright
-   )
+	cd $TMPDIR/otherdir; 
+	$COMMAND --package $PKG --force-download --upstream-version 1 \
+		--watchfile ../$PKG/debian/watch --copyright-file ../$PKG/debian/copyright
+    )
+    assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
 
     TARBALL=${PKG}_1+dfsg1.orig.tar.gz
     assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-1.tar.gz ]"
@@ -305,16 +339,18 @@ testFileExclusionZipToTar() {
 
     (
       cd $TMPDIR
+      SRCFORMAT="3.0 (quilt)"
       helperCreateRepo
       cat <<END > $PKG/debian/watch
 version=3
-opts=repacksuffix=+dfsg1 http://localhost:$PORT/$PKG-(\d).zip
+opts=repacksuffix=+dfsg1,dversionmangle=s/\+dfsg\d*$// http://localhost:$PORT/$PKG-(\d).zip debian uupdate
 END
 
       cd repo
       zip -q -r $PKG-1.zip * .hidden )
 
     (cd $TMPDIR/$PKG ; $COMMAND --repack)
+    assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
 
     TARBALL=${PKG}_1+dfsg1.orig.tar.xz
     assertTrue 'unrepacked zipfile not present' "[ -f $TMPDIR/${PKG}-1.zip ]"
@@ -323,6 +359,11 @@ END
                   "$( file $TMPDIR/$TARBALL | grep 'XZ compressed data' )"
     CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
     helperTestContent
+
+    # check uupdate
+    assertTrue 'pristine tarball is not extracted' "[ -f $TMPDIR/${PKG}-1+dfsg1/debian/changelog ]"
+    DVERSION=`dpkg-parsechangelog -l$TMPDIR/${PKG}-1+dfsg1/debian/changelog -SVersion`
+    assertEquals "uscan: Version should be 1+dfsg1-$SUFFIX but $DVERSION" "$DVERSION" "1+dfsg1-$SUFFIX"
 
     cleanup
 

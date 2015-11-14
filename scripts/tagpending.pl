@@ -155,7 +155,10 @@ if (! -f 'debian/changelog') {
 
 my $changelog = changelog_parse(%opt_to);
 my $source = $changelog->{Source};
-my @closes = split ' ', $changelog->{Closes};
+my @closes;
+if ($changelog->{Closes}) {
+    @closes = split ' ', $changelog->{Closes};
+}
 my @lines = split /\n/, $changelog->{Changes};
 my $header = $lines[1];
 my $changes = join "\n", grep /^ {3}[^[]/, @lines;
@@ -166,25 +169,27 @@ $changes .= "   *";
 
 my $pending;
 my $open;
+my %bugs = map { $_ => 1 } @closes;
 
-if ($opt_online) {
-    if (!Devscripts::Debbugs::have_soap()) {
-	die "$progname: The libsoap-lite-perl package is required for online operation; aborting.\n";
+if (%bugs) {
+    if ($opt_online) {
+	if (!Devscripts::Debbugs::have_soap()) {
+	    die "$progname: The libsoap-lite-perl package is required for online operation; aborting.\n";
+	}
+
+	eval {
+	    $pending = Devscripts::Debbugs::select( "src:$source", "status:open", "status:forwarded", "tag:pending" );
+	    $open = Devscripts::Debbugs::select( "src:$source", "status:open", "status:forwarded" );
+	};
+
+	if ($@) {
+	    die "$@\nUse --force to tag all bugs anyway.\n";
+	}
     }
 
-    eval {
-	$pending = Devscripts::Debbugs::select( "src:$source", "status:open", "status:forwarded", "tag:pending" );
-	$open = Devscripts::Debbugs::select( "src:$source", "status:open", "status:forwarded" );
-    };
-
-    if ($@) {
-	die "$@\nUse --force to tag all bugs anyway.\n";
+    if ($pending) {
+	%bugs = ( %bugs, map { $_ => 1 } @{$pending} );
     }
-}
-
-my %bugs = map { $_ => 1} @closes;
-if ($pending) {
-    %bugs = ( %bugs, map { $_ => 1} @{$pending} );
 }
 
 my $bug;

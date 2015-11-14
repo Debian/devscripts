@@ -1,14 +1,14 @@
 # Translation of the devscripts documentation to German.
 # This file is distributed under the same license as the devscripts package.
 # Copyright (C) Christoph Lameter, Julian Gilbey, Klee Dienes.
-# Copyright (C) of this file Chris Leick <c.leick@vollbio.de>, 2012-2014.
+# Copyright (C) of this file Chris Leick <c.leick@vollbio.de>, 2012-2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.14.6\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
 "POT-Creation-Date: 2014-12-23 08:54-0400\n"
-"PO-Revision-Date: 2014-09-23 21:32+0200\n"
+"PO-Revision-Date: 2015-08-09 20:54+0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
 "Language: de\n"
@@ -4105,36 +4105,29 @@ msgstr "B<--sign=>I<Schlüsselkennung>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:125
-#, fuzzy
-#| msgid ""
-#| "This option will override any B<BUILD_OPTS> specified for a chroot in the "
-#| "cowpoke configuration files."
 msgid ""
 "Specify the key to sign packages with.  This will override any B<SIGN_KEYID> "
 "specified for a chroot in the cowpoke configuration files."
 msgstr ""
-"Diese Option wird jede für eine Chroot in den Cowpoke-Konfigurationsdateien "
-"angegebene B<BUILD_OPTS> außer Kraft setzen."
+"gibt den Schlüssel an, mit dem Pakete signiert werden. Dies wird jedes "
+"B<SIGN_KEYID>, das für eine Chroot in den Cowpoke-Konfigurationsdateien "
+"angegeben wurde, außer Kraft setzen."
 
 #. type: TP
 #: ../scripts/cowpoke.1:126
-#, fuzzy, no-wrap
-#| msgid "B<--dupload>, B<--dput>"
+#, no-wrap
 msgid "B<--upload=>I<queue>"
-msgstr "B<--dupload>, B<--dput>"
+msgstr "B<--upload=>I<Warteschlange>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:130
-#, fuzzy
-#| msgid ""
-#| "This option will override any B<BUILD_OPTS> specified for a chroot in the "
-#| "cowpoke configuration files."
 msgid ""
 "Specify the dput queue to upload signed packages to.  This will override any "
 "B<UPLOAD_QUEUE> specified for a chroot in the cowpoke configuration files."
 msgstr ""
-"Diese Option wird jede für eine Chroot in den Cowpoke-Konfigurationsdateien "
-"angegebene B<BUILD_OPTS> außer Kraft setzen."
+"gibt die Dput-Warteschlange an, in die signierte Pakete hochgeladen werden. "
+"Dies wird jede B<UPLOAD_QUEUE>, die für eine Chroot in den "
+"Cowpoke-Konfigurationsdateien angegeben wurde, außer Kraft setzen."
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:134
@@ -4303,15 +4296,6 @@ msgstr "B<SIGN_KEYID>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:194
-#, fuzzy
-#| msgid ""
-#| "If this option is set, it is expected to contain the gpg key ID to pass "
-#| "to B<debsign>(1) if the packages are to be remotely signed.  You will be "
-#| "prompted to confirm whether you wish to sign the packages after all "
-#| "builds are complete.  If this option is unset or an empty string, no "
-#| "attempt to sign packages will be made.  It may be overridden on an "
-#| "I<arch> and I<dist> specific basis using the "
-#| "I<arch>B<_>I<dist>B<_SIGN_KEYID> option described below."
 msgid ""
 "If this option is set, it is expected to contain the gpg key ID to pass to "
 "B<debsign>(1) if the packages are to be remotely signed.  You will be "
@@ -4329,7 +4313,8 @@ msgstr ""
 "kein Versuch unternommen, Pakete zu signieren. Sie kann auf einer "
 "I<architektur>- oder I<distribution>sspezifischen Basis mittels der weiter "
 "unten beschriebenen Option I<Architektur>B<_>I<Distribution>B<_SIGN_KEYID> "
-"außer Kraft gesetzt werden."
+"oder jeweils beim Aufruf mit der Befehlszeilenoption B<--sign> außer Kraft "
+"gesetzt werden."
 
 #. type: TP
 #: ../scripts/cowpoke.1:195
@@ -4339,16 +4324,6 @@ msgstr "B<UPLOAD_QUEUE>"
 
 #. type: Plain text
 #: ../scripts/cowpoke.1:206
-#, fuzzy
-#| msgid ""
-#| "If this option is set, it is expected to contain a 'host' specification "
-#| "for B<dput>(1) which will be used to upload them after they are signed.  "
-#| "You will be prompted to confirm whether you wish to upload the packages "
-#| "after they are signed.  If this option is unset or an empty string, no "
-#| "attempt to upload packages will be made.  If B<SIGN_KEYID> is not set, "
-#| "this option will be ignored entirely.  It may be overridden on an I<arch> "
-#| "and I<dist> specific basis using the I<arch>B<_>I<dist>B<_UPLOAD_QUEUE> "
-#| "option described below."
 msgid ""
 "If this option is set, it is expected to contain a 'host' specification for "
 "B<dput>(1) which will be used to upload them after they are signed.  You "
@@ -4367,8 +4342,8 @@ msgstr ""
 "hochzuladen. Falls B<SIGN_KEYID> nicht gesetzt ist, wird diese Option ganz "
 "ignoriert. Sie kann auf einer I<architektur>- oder "
 "I<distribution>sspezifischen Basis mittels der weiter unten beschriebenen "
-"Option I<Architektur>B<_>I<Distribution>B<_UPLOAD_QUEUE> außer Kraft gesetzt "
-"werden."
+"Option I<Architektur>B<_>I<Distribution>B<_UPLOAD_QUEUE> oder jeweils beim "
+"Aufruf mit der Befehlszeilenoption B<--upload> außer Kraft gesetzt werden."
 
 #. type: TP
 #: ../scripts/cowpoke.1:208
@@ -8885,16 +8860,6 @@ msgstr "B<debdiff> [I<Optionen>] … I<dsc1 dsc2>"
 
 #. type: Plain text
 #: ../scripts/debdiff.1:26
-#, fuzzy
-#| msgid ""
-#| "B<debdiff> takes the names of two Debian package files (I<.deb>s or I<."
-#| "udeb>s) on the command line and compares their contents (considering only "
-#| "the files in the main package, not the maintenance scripts).  It shows "
-#| "which files have been introduced and which removed between the two "
-#| "package files, and is therefore useful for spotting files which may have "
-#| "been inadvertently lost between revisions of the package.  It also checks "
-#| "the file owners and permissions, and compares the control files of the "
-#| "two packages using the B<wdiff> program."
 msgid ""
 "B<debdiff> takes the names of two Debian package files (I<.deb>s or I<."
 "udeb>s) on the command line and compares their contents (considering only "
@@ -8914,7 +8879,8 @@ msgstr ""
 "möglicherweise versehentlich zwischen zwei Revisionen des Pakets verloren "
 "gingen. Es prüft außerdem die Dateibesitzer und Zugriffsrechte und "
 "vergleicht die Steuerdateien der beiden Pakete mittels des Programms "
-"B<wdiff>."
+"B<wdiff>. Falls Sie zwei Debian-Pakete genauer vergleichen wollen, können Sie "
+"das Werkzeug B<debbindiff> benutzen."
 
 #. type: Plain text
 #: ../scripts/debdiff.1:29
@@ -12817,16 +12783,13 @@ msgstr "I<debdiff>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:69
-#, fuzzy
-#| msgid ""
-#| "compare two versions of a Debian package to check for added and removed "
-#| "files [wdiff, patchutils]"
 msgid ""
 "compare two versions of a Debian package to check for added and removed "
 "files. Use the debbindiff package for deep comparisons. [wdiff, patchutils]"
 msgstr ""
 "vergleicht zwei Versionen eines Debian-Pakets, um es auf hinzugefügte oder "
-"entfernte Dateien hin zu untersuchen. [wdiff, patchutils]"
+"entfernte Dateien hin zu untersuchen. Verwenden Sie für genauere Vergleiche "
+"das Paket »debbindiff«. [wdiff, patchutils]"
 
 #. type: IP
 #: ../scripts/devscripts.1:69
