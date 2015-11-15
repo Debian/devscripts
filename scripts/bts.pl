@@ -625,7 +625,7 @@ GetOptions("help|h" => \$opt_help,
 	   "toolname=s" => \$toolname,
 	   "bts-server=s" => \$btsserver,
 	   "mutt!" => \$opt_mutt,
-       "soap-timeout:i" => \$opt_soap_timeout,
+	   "soap-timeout:i" => \$opt_soap_timeout,
 	   )
     or die "Usage: $progname [options]\nRun $progname --help for more details\n";
 
