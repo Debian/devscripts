@@ -2858,6 +2858,63 @@ sub process_watchline ($$$$$$)
 		return 1;
 	    }
 	}
+    } elsif ($site =~ m%^git://%) {
+	# TODO: sanitize $base
+	open(REFS, "-|", 'git', 'ls-remote', $base) ||
+	    die "$progname: you must have the git package installed\n"
+	      . "to use git URLs\n";
+	my (@refs, $line, $ref, $version);
+	while (<REFS>) {
+	    chomp;
+	    $line = $_;
+	    foreach my $_pattern (@patterns) {
+		if ($line =~
+		      m&^([^[:space:]]+)[[:space:]]+(?:refs\/)?$_pattern$&) {
+		    $ref = $1; $version = $2;
+
+		    $version = join(".", map { $_ if defined($_) }
+			$version);
+		    foreach my $_p (@{$options{'uversionmangle'}}) {
+			if (! safe_replace(\$version, $_p)) {
+			    warn "$progname: In $watchfile, potentially"
+			     . " unsafe or malformed uversionmangle"
+			     . " pattern:\n  '$_p'"
+			     . " found. Skipping watchline\n"
+			     . "  $line\n";
+			    return 1;
+			}
+		    }
+		    push @refs, [$version, $ref];
+		}
+	    }
+	}
+	if (@refs) {
+	    my $msg = "Found the following matching refs:\n";
+	    foreach my $ref (@refs) {
+		$msg .= "     $$ref[1] ($$ref[0])\n";
+	    }
+	    uscan_verbose "$msg";
+	    if (defined $download_version) {
+		my @vrefs = grep { $$_[0] eq $download_version } @refs;
+		if (@vrefs) {
+		    ($newversion, $newfile) = @{$vrefs[0]};
+		} else {
+		    warn "$progname warning: In $watchfile no matching"
+			 . " refs for version $download_version"
+			 . " in watch line\n  $line\n";
+		    return 1;
+		}
+
+	    } else {
+		@refs = Devscripts::Versort::versort(@refs);
+		($newversion, $newfile) = @{$refs[0]};
+	    }
+	} else {
+	    warn "$progname warning: In $watchfile,\n" .
+	         " no matching refs for watch line\n" .
+		 " $line\n";
+		 return 1;
+	}
     } elsif ($site =~ m%^ftp://%) {
 	# FTP site
 	if (exists $options{'pasv'}) {
@@ -3072,6 +3129,8 @@ EOF
 		}
 	    }
 	}
+    } elsif ($site =~ m%^git://%) {
+	$upstream_url = "$base $newfile";
     } else {
 	# FTP site
 	$upstream_url = "$base$newfile";
@@ -3120,6 +3179,13 @@ EOF
 		uscan_warn "No good upstream filename found after removing tailing ?... and #....\n   Use filenamemangle to fix this.\n";
 		return 1;
 	    }
+	} elsif ($site =~ m%^git://%) {
+	    # Default name for git archive
+	    my $ext = "tar.xz";
+	    if ($repack) {
+		$ext = "tar.gz";
+	    }
+	    $newfile_base = "$pkg-$newversion.$ext";
 	}
     }
     uscan_verbose "Download filename (filenamemangled): $newfile_base\n";
@@ -3207,6 +3273,26 @@ EOF
 		}
 		return 0;
 	    }
+	} elsif ($url =~ m%^git://%) {
+	    uscan_verbose "Requesting URL:\n   $url\n";
+	    my @cmd = ('git', 'archive', '--format=tar',
+		"--prefix=$pkg-$newversion/",'--remote');
+	    my @upstream_ref = split /[[:space:]]+/, $url, 2;
+	    push @cmd, @upstream_ref;
+	    my (undef, $fnametar) = tempfile(UNLINK => 1);
+	    spawn(exec => \@cmd, to_file => $fnametar, wait_child => 1);
+	    if ($repack) {
+		spawn(exec => ['gzip', '-n', '-9'],
+		      from_file => $fnametar,
+		      to_file => "$fname",
+		      wait_child => 1);
+	    } else {
+		spawn(exec => ['xz', '-c'],
+		      from_file => $fnametar,
+		      to_file => "$fname",
+		      wait_child => 1);
+	    }
+	    uscan_verbose "Generated archive $fname from the git repository.\n";
 	} else {
 	    # FTP site
 	    if (exists $options{'pasv'}) {
