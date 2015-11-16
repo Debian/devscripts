@@ -323,7 +323,7 @@ EXAMPLES> and mk-origtargz(1).
 
 =item B<repack>
 
-Force to repack the upstream tarball using the compression I<mathod>.
+Force to repack the upstream tarball using the compression I<method>.
 
 =item B<repacksuffix=>I<suffix>
 
@@ -1329,7 +1329,7 @@ Instead of symlinking as described above, rename the downloaded files.
 =item B<--repack>
 
 After having downloaded an lzma tar, xz tar, bzip tar or zip archive, repack it
-to a gzip tar archive, if required. The unzip package must be installed in
+to the specified compression (see B<--compression>). The unzip package must be installed in
 order to repack .zip archives, the xz-utils package must be installed to repack
 lzma or xz tar archives.
 
@@ -1792,7 +1792,7 @@ my $signature = 1;
 my $safe = 0;
 my $download_version;
 my $badversion = 0;
-my $repack = 0; # repack .tar.bz2, .tar.lzma, .tar.xz or .zip to .tar.gz
+my $repack = 0; # repack to .tar.$repack_compression if 1
 my $default_compression = 'gzip' ;
 my $repack_compression = $default_compression;
 my $copyright_file = undef;
@@ -2022,11 +2022,9 @@ if ($dehs) {
 # Net::FTP understands this
 if ($passive ne 'default') {
     $ENV{'FTP_PASSIVE'} = $passive;
-}
-elsif (exists $ENV{'FTP_PASSIVE'}) {
+} elsif (exists $ENV{'FTP_PASSIVE'}) {
     $passive = $ENV{'FTP_PASSIVE'};
-}
-else { $passive = undef; }
+} else { $passive = undef; }
 # Now we can say
 #   if (defined $passive) { $ENV{'FTP_PASSIVE'}=$passive; }
 #   else { delete $ENV{'FTP_PASSIVE'}; }
@@ -2230,12 +2228,10 @@ for my $dir (@dirs) {
 
 	uscan_verbose "package=\"$package\" version=\"$uversion\" (no epoch/revision)\n";
 	push @debdirs, [$debversion, $dir, $package, $uversion];
-    }
-    elsif (! -r 'debian/watch') {
+    } elsif (! -r 'debian/watch') {
 	uscan_warn "Found watch file in $dir,\n   but couldn't find/read changelog; skipping\n";
 	next;
-    }
-    elsif (! -f 'debian/watch') {
+    } elsif (! -f 'debian/watch') {
 	uscan_warn "Found watch file in $dir,\n   but it is not readable; skipping\n";
 	next;
     }
@@ -2429,68 +2425,50 @@ sub process_watchline ($$$$$$)
     		uscan_verbose "Parsing $opt\n";
 		if ($opt =~ /^\s*pasv\s*$/ or $opt =~ /^\s*passive\s*$/) {
 		    $options{'pasv'}=1;
-		}
-		elsif ($opt =~ /^\s*active\s*$/ or $opt =~ /^\s*nopasv\s*$/
+		} elsif ($opt =~ /^\s*active\s*$/ or $opt =~ /^\s*nopasv\s*$/
 		       or $opt =~ /^s*nopassive\s*$/) {
 		    $options{'pasv'}=0;
-		}
-		elsif ($opt =~ /^\s*bare\s*$/) {
+		} elsif ($opt =~ /^\s*bare\s*$/) {
 		    # persistent $bare
 		    $bare = 1;
-		}
-		elsif ($opt =~ /^\s*component\s*=\s*(.+?)\s*$/) {
+		} elsif ($opt =~ /^\s*component\s*=\s*(.+?)\s*$/) {
 			$options{'component'} = $1;
-		}
-		elsif ($opt =~ /^\s*pgpmode\s*=\s*(.+?)\s*$/) {
+		} elsif ($opt =~ /^\s*pgpmode\s*=\s*(.+?)\s*$/) {
 			$options{'pgpmode'} = $1;
-		}
-		elsif ($opt =~ /^\s*decompress\s*$/) {
+		} elsif ($opt =~ /^\s*decompress\s*$/) {
 		    $options{'decompress'}=1;
-		}
-		elsif ($opt =~ /^\s*repack\s*$/) {
+		} elsif ($opt =~ /^\s*repack\s*$/) {
 		    # non-persistent $options{'repack'}
 		    $options{'repack'} = 1;
-		}
-		elsif ($opt =~ /^\s*compression\s*=\s*(.+?)\s*$/) {
+		} elsif ($opt =~ /^\s*compression\s*=\s*(.+?)\s*$/) {
 		    my $compression = check_compression($1);
 		    # persistent $repack_compression
 		    $repack_compression = $compression if defined $compression;
 		    $repack_compression = check_compression($opt_repack_compression)
 			if defined $opt_repack_compression;
-		}
-		elsif ($opt =~ /^\s*repacksuffix\s*=\s*(.+?)\s*$/) {
+		} elsif ($opt =~ /^\s*repacksuffix\s*=\s*(.+?)\s*$/) {
 		    $options{'repacksuffix'} = $1;
-		}
-		elsif ($opt =~ /^\s*dversionmangle\s*=\s*(.+?)\s*$/) {
+		} elsif ($opt =~ /^\s*dversionmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'dversionmangle'}} = split /;/, $1;
-		}
-		elsif ($opt =~ /^\s*pagemangle\s*=\s*(.+?)\s*$/) {
+		} elsif ($opt =~ /^\s*pagemangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'pagemangle'}} = split /;/, $1;
-		}
-		elsif ($opt =~ /^\s*dirversionmangle\s*=\s*(.+?)\s*$/) {
+		} elsif ($opt =~ /^\s*dirversionmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'dirversionmangle'}} = split /;/, $1;
-		}
-		elsif ($opt =~ /^\s*uversionmangle\s*=\s*(.+?)\s*$/) {
+		} elsif ($opt =~ /^\s*uversionmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'uversionmangle'}} = split /;/, $1;
-		}
-		elsif ($opt =~ /^\s*versionmangle\s*=\s*(.+?)\s*$/) {
+		} elsif ($opt =~ /^\s*versionmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'uversionmangle'}} = split /;/, $1;
 		    @{$options{'dversionmangle'}} = split /;/, $1;
-		}
-		elsif ($opt =~ /^\s*downloadurlmangle\s*=\s*(.+?)\s*$/) {
+		} elsif ($opt =~ /^\s*downloadurlmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'downloadurlmangle'}} = split /;/, $1;
-		}
-		elsif ($opt =~ /^\s*filenamemangle\s*=\s*(.+?)\s*$/) {
+		} elsif ($opt =~ /^\s*filenamemangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'filenamemangle'}} = split /;/, $1;
-		}
-		elsif ($opt =~ /^\s*pgpsigurlmangle\s*=\s*(.+?)\s*$/) {
+		} elsif ($opt =~ /^\s*pgpsigurlmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'pgpsigurlmangle'}} = split /;/, $1;
 	    	    $options{'pgpmode'} = 'mangle';
-		}
-		elsif ($opt =~ /^\s*oversionmangle\s*=\s*(.+?)\s*$/) {
+		} elsif ($opt =~ /^\s*oversionmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'oversionmangle'}} = split /;/, $1;
-		}
-		else {
+		} else {
 		    uscan_warn "unrecognised option $opt\n";
 		}
 	    }
@@ -2889,8 +2867,11 @@ sub process_watchline ($$$$$$)
 	$request = HTTP::Request->new('GET', $base);
 	$response = $user_agent->request($request);
 	if (exists $options{'pasv'}) {
-	    if (defined $passive) { $ENV{'FTP_PASSIVE'}=$passive; }
-	    else { delete $ENV{'FTP_PASSIVE'}; }
+	    if (defined $passive) {
+		$ENV{'FTP_PASSIVE'}=$passive;
+	    } else {
+		delete $ENV{'FTP_PASSIVE'};
+	    }
 	}
 	if (! $response->is_success) {
 	    uscan_warn "In watch file $watchfile, reading FTP directory\n  $base failed: " . $response->status_line . "\n";
@@ -3028,14 +3009,12 @@ EOF
 	# absolute URL?
 	if ($newfile =~ m%^\w+://%) {
 	    $upstream_url = $newfile;
-	}
-	elsif ($newfile =~ m%^//%) {
+	} elsif ($newfile =~ m%^//%) {
 	    $upstream_url = $site;
 	    $upstream_url =~ s/^(https?:).*/$1/;
 	    $upstream_url .= $newfile;
-	}
-	# absolute filename?
-	elsif ($newfile =~ m%^/%) {
+	} elsif ($newfile =~ m%^/%) {
+	    # absolute filename
 	    # Were there any redirections? If so try using those first
 	    if ($#patterns > 0) {
 		# replace $site here with the one we were redirected to
@@ -3053,9 +3032,8 @@ EOF
 	    } else {
 		$upstream_url = "$sites[0]$newfile";
 	    }
-	}
-	# relative filename, we hope
-	else {
+	} else {
+	    # relative filename, we hope
 	    # Were there any redirections? If so try using those first
 	    if ($#patterns > 0) {
 		# replace $site here with the one we were redirected to
@@ -3094,8 +3072,7 @@ EOF
 		}
 	    }
 	}
-    }
-    else {
+    } else {
 	# FTP site
 	$upstream_url = "$base$newfile";
     }
@@ -3230,8 +3207,7 @@ EOF
 		}
 		return 0;
 	    }
-	}
-	else {
+	} else {
 	    # FTP site
 	    if (exists $options{'pasv'}) {
 		$ENV{'FTP_PASSIVE'}=$options{'pasv'};
@@ -3240,8 +3216,11 @@ EOF
 	    $request = HTTP::Request->new('GET', "$url");
 	    $response = $user_agent->request($request, $fname);
 	    if (exists $options{'pasv'}) {
-		if (defined $passive) { $ENV{'FTP_PASSIVE'}=$passive; }
-		else { delete $ENV{'FTP_PASSIVE'}; }
+		if (defined $passive) {
+		    $ENV{'FTP_PASSIVE'}=$passive;
+		} else {
+		    delete $ENV{'FTP_PASSIVE'};
+		}
 	    }
 	    if (! $response->is_success) {
 		if (defined $pkg_dir) {
@@ -3619,8 +3598,7 @@ sub recursive_regex_dir ($$$) {
 	    uscan_verbose "newest_dir => '$newest_dir'\n";
 	    if ($newest_dir ne '') {
 		$dir .= "$newest_dir";
-	    }
-	    else {
+	    } else {
 		return '';
 	    }
 	} else {
@@ -3728,8 +3706,7 @@ sub newest_dir ($$$$$) {
 	# just give the final directory component
 	$newdir =~ s%/$%%;
 	$newdir =~ s%^.*/%%;
-    }
-    elsif ($site =~ m%^ftp://%) {
+    } elsif ($site =~ m%^ftp://%) {
 	# FTP site
 	if (exists $$optref{'pasv'}) {
 	    $ENV{'FTP_PASSIVE'}=$$optref{'pasv'};
@@ -3738,8 +3715,11 @@ sub newest_dir ($$$$$) {
 	$request = HTTP::Request->new('GET', $base);
 	$response = $user_agent->request($request);
 	if (exists $$optref{'pasv'}) {
-	    if (defined $passive) { $ENV{'FTP_PASSIVE'}=$passive; }
-	    else { delete $ENV{'FTP_PASSIVE'}; }
+	    if (defined $passive) {
+		$ENV{'FTP_PASSIVE'}=$passive;
+	    } else {
+		delete $ENV{'FTP_PASSIVE'};
+	    }
 	}
 	if (! $response->is_success) {
 	    uscan_warn "In watch file $watchfile, reading webpage\n  $base failed: " . $response->status_line . "\n";
@@ -3847,8 +3827,7 @@ sub newest_dir ($$$$$) {
 	    uscan_warn "In $watchfile no matching dirs for pattern\n  $base$pattern\n";
 	    $newdir = '';
 	}
-    }
-    else {
+    } else {
 	# Neither HTTP nor FTP site
         uscan_warn "neither HTTP nor FTP site, impossible case for newdir().\n";
 	$newdir = '';
