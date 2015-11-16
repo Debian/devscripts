@@ -3567,6 +3567,9 @@ EOF
 		if ($badversion) {
 		    push @cmd, "-b";
 	        }
+		if ($download == 3) {
+		    push @cmd, "-o";
+	        }
 	    }
 	    push @cmd, "--upstream-version", $common_mangled_newversion;
 	} elsif ($watch_version > 1) {
@@ -3578,6 +3581,9 @@ EOF
 		}
 		if ($badversion) {
 		    push @cmd, "-b";
+	        }
+		if ($download == 3) {
+		    push @cmd, "-o";
 	        }
 	    }
 	    push @cmd, "--upstream-version", $common_mangled_newversion, $path;
