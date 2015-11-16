@@ -982,8 +982,65 @@ sub process_watchline ($$$$$$)
 	    warn "$progname warning: In $watchfile,\n  no matching hrefs for watch line\n  $line\n";
 	    return 1;
 	}
-    }
-    else {
+    } elsif ($site =~ m%^git://%) {
+	# TODO: sanitize $base
+	open(REFS, "-|", 'git', 'ls-remote', $base) ||
+	    die "$progname: you must have the git package installed\n"
+	      . "to use git URLs\n";
+	my (@refs, $line, $ref, $version);
+	while (<REFS>) {
+	    chomp;
+	    $line = $_;
+	    foreach my $_pattern (@patterns) {
+		if ($line =~
+		      m&^([^[:space:]]+)[[:space:]]+(?:refs\/)?$_pattern$&) {
+		    $ref = $1; $version = $2;
+
+		    $version = join(".", map { $_ if defined($_) }
+			$version);
+		    foreach my $_p (@{$options{'uversionmangle'}}) {
+			if (! safe_replace(\$version, $_p)) {
+			    warn "$progname: In $watchfile, potentially"
+			     . " unsafe or malformed uversionmangle"
+			     . " pattern:\n  '$_p'"
+			     . " found. Skipping watchline\n"
+			     . "  $line\n";
+			    return 1;
+			}
+		    }
+		    push @refs, [$version, $ref];
+		}
+	    }
+	}
+	if (@refs) {
+	    if ($verbose) {
+		print "-- Found the following matching refs:\n";
+		foreach my $ref (@refs) {
+		    print "     $$ref[1] ($$ref[0])\n";
+		}
+	    }
+	    if (defined $download_version) {
+		my @vrefs = grep { $$_[0] eq $download_version } @refs;
+		if (@vrefs) {
+		    ($newversion, $newfile) = @{$vrefs[0]};
+		} else {
+		    warn "$progname warning: In $watchfile no matching"
+			 . " refs for version $download_version"
+			 . " in watch line\n  $line\n";
+		    return 1;
+		}
+
+	    } else {
+		@refs = Devscripts::Versort::versort(@refs);
+		($newversion, $newfile) = @{$refs[0]};
+	    }
+	} else {
+	    warn "$progname warning: In $watchfile,\n" .
+	         " no matching refs for watch line\n" .
+		 " $line\n";
+		 return 1;
+	}
+    } else {
 	# Better be an FTP site
 	if ($site !~ m%^ftp://%) {
 	    warn "$progname warning: Unknown protocol in $watchfile, skipping:\n  $site\n";
@@ -1124,6 +1181,14 @@ EOF
 	    $newfile_base = "$pkg-$newversion.download";
 	}
     }
+    # Default name for git archive
+    if ($site =~ m%^git://%) {
+	my $ext = "tar.xz";
+	if ($repack) {
+	    $ext = "tar.gz";
+	}
+	$newfile_base = "$pkg-$newversion.$ext";
+    }
 
     # So what have we got to report now?
     my $upstream_url;
@@ -1200,8 +1265,9 @@ EOF
 		}
 	    }
 	}
-    }
-    else {
+    } elsif ($site =~ m%^git://%) {
+	$upstream_url = "$base $newfile";
+    } else {
 	# FTP site
 	$upstream_url = "$base$newfile";
     }
@@ -1328,8 +1394,25 @@ EOF
 	    }
 	    return 1;
 	}
-    }
-    else {
+    } elsif ($upstream_url =~ m%^git://%) {
+	my @cmd = ('git', 'archive', '--format=tar',
+	    "--prefix=$pkg-$newversion/",'--remote');
+	my @upstream_ref = split /[[:space:]]+/, $upstream_url, 2;
+	push @cmd, @upstream_ref;
+	my (undef, $fname) = tempfile(UNLINK => 1);
+	spawn(exec => \@cmd, to_file => $fname, wait_child => 1);
+	if ($repack) {
+	    spawn(exec => ['gzip', '-n', '-9'],
+		  from_file => $fname,
+		  to_file => "$destdir/$newfile_base",
+		  wait_child => 1);
+	} else {
+	    spawn(exec => ['xz', '-c'],
+		  from_file => $fname,
+		  to_file => "$destdir/$newfile_base",
+		  wait_child => 1);
+	}
+    } else {
 	# FTP site
 	if (exists $options{'pasv'}) {
 	    $ENV{'FTP_PASSIVE'}=$options{'pasv'};
