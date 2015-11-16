@@ -61,8 +61,11 @@ first option given on the command-line.
 \fB\-\-upstream\-version \fIversion\fR, \fB\-v \fIversion\fR
 Specify the version number of the upstream package explicitly.
 .TP
-\fB\-\-force\-bad\-version, \fB\-b 
+\fB\-\-force\-bad\-version, \fB\-b
 Force a version number to be less than the current one (e.g., when backporting).
+.TP
+\fB\-\-force\-overwrite, \fB\-o
+Force overwriting of the existing *-*.debian.tar.* .
 .TP
 \fB\-\-rootcmd \fIgain-root-command\fR, \fB\-r \fIgain-root-command\fR
 Specify the command to be used to become root to build the package and
