@@ -1057,8 +1057,18 @@ else
         COMP=${DEBIANFILE##*.}
 	NEW_DEBIANFILE="${PACKAGE}_${NEW_VERSION}-$SUFFIX.debian.tar.$COMP"
     fi
-    cp -i $DEBIANFILE ${NEW_DEBIANFILE} 2>/dev/tty
-    
+    if [ -e ${NEW_DEBIANFILE} ]; then
+	if [ "$DEBIANFILE" = "${NEW_DEBIANFILE}" ]; then
+	    echo "$PROGNAME: -> Use existing ${NEW_DEBIANFILE}" >&2
+	else
+	    echo "$PROGNAME: -> Overwrite to ${NEW_DEBIANFILE}" >&2
+	    cp -f $DEBIANFILE ${NEW_DEBIANFILE}
+	fi
+    else
+	echo "$PROGNAME: -> Copy to      ${NEW_DEBIANFILE}" >&2
+	cp $DEBIANFILE ${NEW_DEBIANFILE}
+    fi
+
     # fake DSC
     FAKEDSC="${PACKAGE}_${NEW_VERSION}-$SUFFIX.dsc"
     echo "Format: ${FORMAT}" > "$FAKEDSC"
