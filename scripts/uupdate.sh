@@ -1063,7 +1063,7 @@ else
         COMP=${DEBIANFILE##*.}
 	NEW_DEBIANFILE="${PACKAGE}_${NEW_VERSION}-$SUFFIX.debian.tar.$COMP"
     fi
-    if [ $OVERWRITE = 0 -a -e ${NEW_DEBIANFILE} ]; then
+    if [ $OVERWRITE = 0 and -e ${NEW_DEBIANFILE} ]; then
 	echo "$PROGNAME: ${NEW_DEBIANFILE} already exists.  Start $PROGNAME with -o to overwrite it." >&2
 	exit 1
     else
