@@ -62,8 +62,6 @@ Options are:
    --force-bad-version, -b
                       Force a version number to be less than the current one
                       (e.g., when backporting).
-   --force-overwrite, -o
-                      Force overwriting of the existing *-*.debian.tar.*
    --rootcmd <gain-root-command>, -r <gain-root-command>
                       which command to be used to become root
                       for package-building
@@ -132,7 +130,6 @@ MPATTERN='^(?:[a-zA-Z][a-zA-Z0-9]*(?:-|_|\.))+(\d+\.(?:\d+\.)*\d+)$'
 
 STATUS=0
 BADVERSION=""
-OVERWRITE=0
 
 # Boilerplate: set config variables
 DEFAULT_UUPDATE_ROOTCMD=
@@ -204,10 +201,9 @@ else
 fi
 
 
-TEMP=$(getopt -s bash -o v:p:r:fubos \
+TEMP=$(getopt -s bash -o v:p:r:fubs \
         --long upstream-version:,patch:,rootcmd: \
         --long force-bad-version \
-        --long force-overwrite \
 	--long pristine,no-pristine,nopristine \
 	--long symlink,no-symlink,nosymlink \
 	--long no-conf,noconf \
@@ -223,8 +219,6 @@ while [ "$1" ]; do
     case $1 in
     --force-bad-version|-b)
 	BADVERSION="-b" ;;
-    --force-overwite|-o)
-	OVERWRITE=1 ;;
     --upstream-version|-v)
 	shift; NEW_VERSION="$1" ;;
     --patch|-p)
@@ -1063,12 +1057,8 @@ else
         COMP=${DEBIANFILE##*.}
 	NEW_DEBIANFILE="${PACKAGE}_${NEW_VERSION}-$SUFFIX.debian.tar.$COMP"
     fi
-    if [ $OVERWRITE = 0 and -e ${NEW_DEBIANFILE} ]; then
-	echo "$PROGNAME: ${NEW_DEBIANFILE} already exists.  Start $PROGNAME with -o to overwrite it." >&2
-	exit 1
-    else
-	cp -f $DEBIANFILE ${NEW_DEBIANFILE}
-    fi
+    cp -i $DEBIANFILE ${NEW_DEBIANFILE} 2>/dev/tty
+    
     # fake DSC
     FAKEDSC="${PACKAGE}_${NEW_VERSION}-$SUFFIX.dsc"
     echo "Format: ${FORMAT}" > "$FAKEDSC"
