@@ -5,8 +5,7 @@ _uupdate()
     COMPREPLY=()
     cur=${COMP_WORDS[COMP_CWORD]}
     prev=${COMP_WORDS[COMP_CWORD-1]}
-    options='--upstream-version -v --force-bad-version -b \
-             --force-overwrite -o --rootcmd -r --pristine -u --no-pristine\
+    options='--upstream-version -v --rootcmd -r --pristine -u --no-pristine\
              --symlink -s --no-symlink --no-conf --noconf --help -h --version'
 
     case $prev in
