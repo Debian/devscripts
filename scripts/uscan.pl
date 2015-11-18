@@ -2338,6 +2338,7 @@ sub process_watchline ($$$$$$)
     my (@patterns, @sites, @redirections, @basedirs);
     my %options = (
 	'repack' => $repack,
+	'mode' => 'LWP',
 	'pgpmode' => 'default',
 	'decompress' => 0,
 	'versionmode' => 'newer'
@@ -2433,6 +2434,8 @@ sub process_watchline ($$$$$$)
 		    $bare = 1;
 		} elsif ($opt =~ /^\s*component\s*=\s*(.+?)\s*$/) {
 			$options{'component'} = $1;
+		} elsif ($opt =~ /^\s*mode\s*=\s*(.+?)\s*$/) {
+			$options{'mode'} = $1;
 		} elsif ($opt =~ /^\s*pgpmode\s*=\s*(.+?)\s*$/) {
 			$options{'pgpmode'} = $1;
 		} elsif ($opt =~ /^\s*decompress\s*$/) {
@@ -2673,23 +2676,30 @@ sub process_watchline ($$$$$$)
     }
 
     if ($watch_version != 1) {
-	if ($base =~ m%^(\w+://[^/]+)%) {
-	    $site = $1;
+	if ($options{'mode'} eq 'LWP') {
+	    if ($base =~ m%^(\w+://[^/]+)%) {
+		$site = $1;
+	    } else {
+		uscan_warn "Can't determine protocol and site in\n  $watchfile, skipping:\n  $line\n";
+		return 1;
+	    }
+
+	    # Find the path with the greatest version number matching the regex
+	    $base = recursive_regex_dir($base, \%options, $watchfile);
+	    if ($base eq '') { return 1; }
+
+	    # We're going to make the pattern
+	    # (?:(?:http://site.name)?/dir/path/)?base_pattern
+	    # It's fine even for ftp sites
+	    $basedir = $base;
+	    $basedir =~ s%^\w+://[^/]+/%/%;
+	    $pattern = "(?:(?:$site)?" . quotemeta($basedir) . ")?$filepattern";
 	} else {
-	    uscan_warn "Can't determine protocol and site in\n  $watchfile, skipping:\n  $line\n";
-	    return 1;
+	    $basedir = '';
+	    $pattern = $filepattern;
+	    uscan_debug "base=$base\n";
+	    uscan_debug "pattern=$pattern\n";
 	}
-
-	# Find the path with the greatest version number matching the regex
-	$base = recursive_regex_dir($base, \%options, $watchfile);
-	if ($base eq '') { return 1; }
-
-	# We're going to make the pattern
-	# (?:(?:http://site.name)?/dir/path/)?base_pattern
-	# It's fine even for ftp sites
-	$basedir = $base;
-	$basedir =~ s%^\w+://[^/]+/%/%;
-	$pattern = "(?:(?:$site)?" . quotemeta($basedir) . ")?$filepattern";
     }
 
     push @patterns, $pattern;
@@ -2701,7 +2711,65 @@ sub process_watchline ($$$$$$)
     # What is the most recent file, based on the filenames?
     # We first have to find the candidates, then we sort them using
     # Devscripts::Versort::upstream_versort
-    if ($site =~ m%^http(s)?://%) {
+    if ($options{'mode'} eq 'git') {
+	# TODO: sanitize $base
+	uscan_verbose "Execute: git ls-remote $base\n";
+	open(REFS, "-|", 'git', 'ls-remote', $base) ||
+	    die "$progname: you must have the git package installed\n"
+	      . "to use git URLs\n";
+	my @refs;
+	my $ref;
+	my $version;
+	while (<REFS>) {
+	    chomp;
+	    uscan_debug "$_\n";
+	    if (m&^\S+\s+([^\^\{\}]+)$&) {
+		$ref = $1; # ref w/o ^{}
+		foreach my $_pattern (@patterns) {
+		    $version = join(".", map { $_ if defined($_) }
+			    $ref =~ m&^$_pattern$&);
+		    foreach my $pat (@{$options{'uversionmangle'}}) {
+			if (! safe_replace(\$version, $pat)) {
+			    warn "$progname: In $watchfile, potentially"
+				. " unsafe or malformed uversionmangle"
+				. " pattern:\n  '$pat'"
+				. " found. Skipping watchline\n"
+				. "  $line\n";
+			    return 1;
+			}
+		    }
+		    push @refs, [$version, $ref];
+		}
+	    }
+	}
+	if (@refs) {
+	    @refs = Devscripts::Versort::versort(@refs);
+	    my $msg = "Found the following matching refs:\n";
+	    foreach my $ref (@refs) {
+		$msg .= "     $$ref[1] ($$ref[0])\n";
+	    }
+	    uscan_verbose "$msg";
+	    if (defined $download_version) {
+		my @vrefs = grep { $$_[0] eq $download_version } @refs;
+		if (@vrefs) {
+		    ($newversion, $newfile) = @{$vrefs[0]};
+		} else {
+		    warn "$progname warning: In $watchfile no matching"
+			 . " refs for version $download_version"
+			 . " in watch line\n  $line\n";
+		    return 1;
+		}
+
+	    } else {
+		($newversion, $newfile) = @{$refs[0]};
+	    }
+	} else {
+	    warn "$progname warning: In $watchfile,\n" .
+	         " no matching refs for watch line\n" .
+		 " $line\n";
+		 return 1;
+	}
+    } elsif ($site =~ m%^http(s)?://%) {
 	# HTTP site
 	if (defined($1) and !$haveSSL) {
 	    uscan_die "you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
@@ -2858,63 +2926,6 @@ sub process_watchline ($$$$$$)
 		return 1;
 	    }
 	}
-    } elsif ($site =~ m%^git://%) {
-	# TODO: sanitize $base
-	open(REFS, "-|", 'git', 'ls-remote', $base) ||
-	    die "$progname: you must have the git package installed\n"
-	      . "to use git URLs\n";
-	my (@refs, $line, $ref, $version);
-	while (<REFS>) {
-	    chomp;
-	    $line = $_;
-	    foreach my $_pattern (@patterns) {
-		if ($line =~
-		      m&^([^[:space:]]+)[[:space:]]+(?:refs\/)?$_pattern$&) {
-		    $ref = $1; $version = $2;
-
-		    $version = join(".", map { $_ if defined($_) }
-			$version);
-		    foreach my $_p (@{$options{'uversionmangle'}}) {
-			if (! safe_replace(\$version, $_p)) {
-			    warn "$progname: In $watchfile, potentially"
-			     . " unsafe or malformed uversionmangle"
-			     . " pattern:\n  '$_p'"
-			     . " found. Skipping watchline\n"
-			     . "  $line\n";
-			    return 1;
-			}
-		    }
-		    push @refs, [$version, $ref];
-		}
-	    }
-	}
-	if (@refs) {
-	    my $msg = "Found the following matching refs:\n";
-	    foreach my $ref (@refs) {
-		$msg .= "     $$ref[1] ($$ref[0])\n";
-	    }
-	    uscan_verbose "$msg";
-	    if (defined $download_version) {
-		my @vrefs = grep { $$_[0] eq $download_version } @refs;
-		if (@vrefs) {
-		    ($newversion, $newfile) = @{$vrefs[0]};
-		} else {
-		    warn "$progname warning: In $watchfile no matching"
-			 . " refs for version $download_version"
-			 . " in watch line\n  $line\n";
-		    return 1;
-		}
-
-	    } else {
-		@refs = Devscripts::Versort::versort(@refs);
-		($newversion, $newfile) = @{$refs[0]};
-	    }
-	} else {
-	    warn "$progname warning: In $watchfile,\n" .
-	         " no matching refs for watch line\n" .
-		 " $line\n";
-		 return 1;
-	}
     } elsif ($site =~ m%^ftp://%) {
 	# FTP site
 	if (exists $options{'pasv'}) {
@@ -3032,8 +3043,12 @@ sub process_watchline ($$$$$$)
 	    }
 	}
     } else {
-	# Neither HTTP nor FTP
-	uscan_warn "Unknown protocol in $watchfile, skipping:\n  $site\n";
+	if ($options{'mode'} eq 'LWP') {
+	    # Neither HTTP nor FTP
+	    uscan_warn "Unknown protocol in $watchfile, skipping:\n  $site\n";
+	} else {
+	    uscan_warn "Unknown mode=$options{'mode'} set in $watchfile\n";
+	}
 	return 1;
     }
     # End Checking $site and look for $filepattern which is newer than $lastversion
@@ -3062,7 +3077,9 @@ EOF
     # Determin download URL for tarball or signature
     my $upstream_url;
     # Upstream URL?  Copying code from below - ugh.
-    if ($site =~ m%^https?://%) {
+    if ($options{'mode'} eq 'git') {
+	$upstream_url = "$base $newfile";
+    } elsif ($site =~ m%^https?://%) {
 	# absolute URL?
 	if ($newfile =~ m%^\w+://%) {
 	    $upstream_url = $newfile;
@@ -3129,8 +3146,6 @@ EOF
 		}
 	    }
 	}
-    } elsif ($site =~ m%^git://%) {
-	$upstream_url = "$base $newfile";
     } else {
 	# FTP site
 	$upstream_url = "$base$newfile";
@@ -3171,21 +3186,21 @@ EOF
 	}
     } else {
 	$newfile_base = basename($newfile);
-	# Remove HTTP header trash
-	if ($site =~ m%^https?://%) {
+	if ($options{'mode'} eq 'git') {
+	    # Default name for git archive
+	    if (!$options{'repack'}) {
+		$options{repacksuffix} = 'xz';
+		$repack_compression = 'xz';
+	    }
+	    $newfile_base = "$pkg-$newversion.tar.xz";
+	} elsif ($site =~ m%^https?://%) {
+	    # Remove HTTP header trash
 	    $newfile_base =~ s/[\?#].*$//; # PiPy
 	    # just in case this leaves us with nothing
 	    if ($newfile_base eq '') {
 		uscan_warn "No good upstream filename found after removing tailing ?... and #....\n   Use filenamemangle to fix this.\n";
 		return 1;
 	    }
-	} elsif ($site =~ m%^git://%) {
-	    # Default name for git archive
-	    my $ext = "tar.xz";
-	    if ($repack) {
-		$ext = "tar.gz";
-	    }
-	    $newfile_base = "$pkg-$newversion.$ext";
 	}
     }
     uscan_verbose "Download filename (filenamemangled): $newfile_base\n";
@@ -3252,8 +3267,38 @@ EOF
 
     ############################# BEGIN SUB DOWNLOAD ##################################
     my $downloader = sub {
-	my ($url, $fname) = @_;
-	if ($url =~ m%^http(s)?://%) {
+	my ($url, $fname, $mode) = @_;
+	if ($mode eq 'git') {
+	    my $curdir = getcwd();
+	    $fname =~ m/\.\.\/(.*)-([^_-]*)\.tar\.(gz|xz|bz2|lzma)/;
+	    my $pkg = $1;
+	    my $ver = $2;
+	    my $suffix = $3;
+	    my ($gitrepo, $gitref) = split /[[:space:]]+/, $url, 2;
+	    my $gitrepodir = "$pkg.uscan.$$";
+	    uscan_verbose "Execute: git clone $gitrepo ../$gitrepodir\n";
+	    system('git', 'clone', $gitrepo, "../$gitrepodir") == 0 or die("git clone failed\n");
+	    chdir "../$gitrepodir" or die("Unable to chdir(\"../$gitrepodir\"): $!\n");
+	    uscan_verbose "Execute: git archive --format=tar --prefix=$pkg-$ver/ --output=../$pkg-$ver.tar $gitref\n";
+	    system('git', 'archive', '--format=tar', "--prefix=$pkg-$ver/", "--output=../$pkg-$ver.tar", $gitref);
+	    chdir $curdir or die("Unable to chdir($curdir): $!\n");
+	    if ($suffix eq 'gz') {
+		uscan_verbose "Execute: gzip -n -9 ../$pkg-$ver.tar\n";
+		system("gzip", "-n", "-9", "../$pkg-$ver.tar") == 0 or die("gzip failed\n");
+	    } elsif ($suffix eq 'xz') {
+		uscan_verbose "Execute: xz ../$pkg-$ver.tar\n";
+		system("xz", "../$pkg-$ver.tar") == 0 or die("xz failed\n");
+	    } elsif ($suffix eq 'bz2') {
+		uscan_verbose "Execute: bzip2 ../$pkg-$ver.tar\n";
+		system("bzip2", "../$pkg-$ver.tar") == 0 or die("bzip2 failed\n");
+	    } elsif ($suffix eq 'lzma') {
+		uscan_verbose "Execute: lzma ../$pkg-$ver.tar\n";
+		system("lzma", "../$pkg-$ver.tar") == 0 or die("lzma failed\n");
+	    } else {
+		uscan_warn "Unknown suffix file to repack: $suffix\n";
+		exit 1;
+	    }
+	} elsif ($url =~ m%^http(s)?://%) {
 	    if (defined($1) and !$haveSSL) {
 		uscan_die "$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
 	    }
@@ -3273,26 +3318,6 @@ EOF
 		}
 		return 0;
 	    }
-	} elsif ($url =~ m%^git://%) {
-	    uscan_verbose "Requesting URL:\n   $url\n";
-	    my @cmd = ('git', 'archive', '--format=tar',
-		"--prefix=$pkg-$newversion/",'--remote');
-	    my @upstream_ref = split /[[:space:]]+/, $url, 2;
-	    push @cmd, @upstream_ref;
-	    my (undef, $fnametar) = tempfile(UNLINK => 1);
-	    spawn(exec => \@cmd, to_file => $fnametar, wait_child => 1);
-	    if ($repack) {
-		spawn(exec => ['gzip', '-n', '-9'],
-		      from_file => $fnametar,
-		      to_file => "$fname",
-		      wait_child => 1);
-	    } else {
-		spawn(exec => ['xz', '-c'],
-		      from_file => $fnametar,
-		      to_file => "$fname",
-		      wait_child => 1);
-	    }
-	    uscan_verbose "Generated archive $fname from the git repository.\n";
 	} else {
 	    # FTP site
 	    if (exists $options{'pasv'}) {
@@ -3333,7 +3358,7 @@ EOF
 	    $download_available = 1;
 	} elsif ($download >0) {
 	    uscan_msg "Downloading upstream package: $newfile_base\n";
-	    $download_available = $downloader->($upstream_url, "$destdir/$newfile_base");
+	    $download_available = $downloader->($upstream_url, "$destdir/$newfile_base", $options{'mode'});
 	} else { # $download = 0, 
 	    uscan_msg "Don\'t downloading upstream package: $newfile_base\n";
 	    $download_available = 0;	
@@ -3375,6 +3400,9 @@ EOF
 		    uscan_warn "Please install xz-utils or lzma.\n";
 		    return 1;
 		}
+	    } else {
+		uscan_warn "Unknown type file to decompress: $sigfile_base\n";
+		exit 1;
 	    }
 	}
     }
@@ -3418,7 +3446,7 @@ EOF
 	$sigfile = "$sigfile_base.pgp";
 	if ($signature == 1) {
 	    uscan_msg "Downloading OpenPGP signature from\n   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile\n";
-	    $signature_available = $downloader->($pgpsig_url, "$destdir/$sigfile");
+	    $signature_available = $downloader->($pgpsig_url, "$destdir/$sigfile", $options{'mode'});
 	} else { # -1, 0
 	    uscan_msg "Don\'t downloading OpenPGP signature from\n   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile\n";
 	    $signature_available = (-e "$destdir/$sigfile") ? 1 : 0;
@@ -3428,7 +3456,7 @@ EOF
 	$sigfile = $newfile_base;
 	if ($signature == 1) {
 	    uscan_msg "Downloading OpenPGP signature from\n   $pgpsig_url (pgpmode=previous)\n   as $sigfile\n";
-	    $signature_available = $downloader->($pgpsig_url, "$destdir/$sigfile");
+	    $signature_available = $downloader->($pgpsig_url, "$destdir/$sigfile", $options{'mode'});
 	} else { # -1, 0
 	    uscan_msg "Don\'t downloading OpenPGP signature from\n   $pgpsig_url (pgpmode=previous)\n   as $sigfile\n";
 	    $signature_available = (-e "$destdir/$sigfile") ? 1 : 0;
