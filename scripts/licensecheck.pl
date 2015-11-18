@@ -30,7 +30,7 @@ B<licensecheck> B<--help>|B<--version>
 
 B<licensecheck> [B<--no-conf>] [B<--verbose>] [B<--copyright>]
 [B<-l>|B<--lines=>I<N>] [B<-i>|B<--ignore=>I<regex>] [B<-c>|B<--check=>I<regex>]
-[B<-m>|B<--machine>] [B<-r>|B<--recursive>]
+[B<-m>|B<--machine>] [B<-r>|B<--recursive>]  [B<-e>|B<--encoding=>I<...>]
 I<list of files and directories to check>
 
 =head1 DESCRIPTION
@@ -79,6 +79,13 @@ The default includes common source files.
 =item B<--copyright>
 
 Also display copyright text found within the file
+
+=item B<-e> B<--encoding>
+
+Specifies input encoding of source files. By default, input files are
+not decoded. When encoding is specified, license and copyright
+information are printed on STDOUT as utf8, or garbage if you got the
+encoding wrong.
 
 =item B<-m>, B<--machine>
 
@@ -261,6 +268,7 @@ GetOptions(\%OPT,
            "help|h",
            "check|c=s",
            "copyright",
+	   "encoding|e=s",
            "ignore|i=s",
            "lines|l=i",
            "machine|m",
@@ -326,7 +334,10 @@ while (@files) {
     my $copyright = '';
     my $license = '';
 
-    open (my $F, '<' ,$file) or die "Unable to access $file\n";
+    my $enc = $OPT{encoding} ;
+    my $mode = $enc ? "<:encoding($enc)" : '<';
+    # need to use "<" when encoding is unknown otherwise we break compatibility
+    open (my $F, $mode ,$file) or die "Unable to access $file\n";
 
     while ( <$F>) {
 	last if ($. > $OPT{'lines'});

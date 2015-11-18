@@ -27,6 +27,8 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
       extension instead of mime types provided by "file" command.  The
       list of file extensions is more boring to maintain but also more
       predictable.  (Closes: #803724)
+    + added --encoding option. By default, input files are handled as utf-8
+      Information is printed on STDOUT as utf-8.
     * --text option is deprecated
 
   [ Osamu Aoki ]
