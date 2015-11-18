@@ -21,9 +21,13 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
     - Split out bts bash completion handling into its own script
 
   [ Dominique Dumont ]
-  * licensecheck: parse file matching -c regex whatever its mime
-    type. Parse postscript with embedded binary (Closes: #803724)
-  * licensecheck: --text option is deprecated
+  * licensecheck:
+    * no longer attempts to find encoding or select files to parse
+      using 'file' commands. By default, files are selected using file
+      extension instead of mime types provided by "file" command.  The
+      list of file extensions is more boring to maintain but also more
+      predictable.  (Closes: #803724)
+    * --text option is deprecated
 
   [ Osamu Aoki ]
   * uscan:

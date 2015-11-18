@@ -72,9 +72,9 @@ recursively.
 =item B<-c=>I<regex>, B<--check=>I<regex>
 
 Specify a pattern against which filenames will be matched in order to
-decide which files to check the license of. By default, only files
-with mime type C<text/*> and C<application/xml> are parsed. The mime
-type is given by C<file> command.
+decide which files to check the license of.
+
+The default includes common source files.
 
 =item B<--copyright>
 
@@ -131,16 +131,6 @@ General Public License, version 2 or later.
 
 Adam D. Barratt <adam@adam-barratt.org.uk>
 
-=head1 SEE ALSO
-
-=over
-
-=item *
-
-L<file>
-
-=back
-
 =cut
 
 # see http://stackoverflow.com/questions/6162484/why-does-modern-perl-avoid-utf-8-by-default/6163129#6163129
@@ -151,12 +141,9 @@ use strict;
 use autodie;
 use warnings;
 use warnings    qw< FATAL  utf8     >;
-use Encode qw/decode/;
 
-use Dpkg::IPC qw(spawn);
 use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
-
 
 binmode STDOUT, ':utf8';
 
@@ -179,13 +166,17 @@ my $default_ignore_regex = qr!
 \.shelf|_MTN|\.bzr(?:\.backup|tags)?)(?:$|/.*$)
 !x;
 
+my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|S|f(77|90)?|go|groovy|scala|clj|p(l|m)|xs|sh|php|py(|x)|rb|java|js|vala|el|sc(i|e)|cs|pas|inc|dtd|xsl|mod|m|tex|mli?|(c|l)?hs)$';
+
 # also used to cleanup
 my $copyright_indicator_regex
     = qr!
          (?:copyright	# The full word
-            |copr\.		# Legally-valid abbreviation
-            |©	# Unicode character COPYRIGHT SIGN
-            |\(c\)		# Legally-null representation of sign
+            |copr\.	# Legally-valid abbreviation
+            |\xc2\xa9	# Unicode copyright sign encoded in iso8859
+	    |\x{00a9}	# Unicode character COPYRIGHT SIGN
+	    #|©		# Unicode character COPYRIGHT SIGN
+            |\(c\)	# Legally-null representation of sign
          )
         !lix;
 
@@ -283,7 +274,7 @@ GetOptions(\%OPT,
 $OPT{'lines'} = $def_lines if $OPT{'lines'} !~ /^[1-9][0-9]*$/;
 my $ignore_regex = length($OPT{ignore}) ? qr/$OPT{ignore}/ : $default_ignore_regex;
 
-my $check_regex ;
+my $check_regex = $default_check_regex;
 $check_regex = qr/$OPT{check}/ if length $OPT{check};
 
 if ($OPT{'noconf'}) {
@@ -335,42 +326,11 @@ while (@files) {
     my $copyright = '';
     my $license = '';
 
-    # Encode::Guess does not work well, use good old file command to get file encoding
-    my $mime;
-    spawn(exec => ['file', '--brief', '--mime', '--dereference', '--', $file],
-          to_string => \$mime,
-          error_to_file => '/dev/null',
-          nocheck => 1,
-          wait_child => 1);
-    my $charset ;
-    chomp $mime;
-    my $decode_text = 0;
-    if ($mime =~ m/; charset=((?!binary)(?!unknown)[\w-]+)/) {
-	# regular text file, may be postscript
-	$charset = $1;
-	$decode_text = 1;
-    }
-    elsif ($mime =~ m!application/postscript;\s+charset=([\w-]+)!) {
-	# postscript files with embedded binary are detected as binary
-	$charset = $1;
-    }
-    elsif ($check_regex) {
-	# user asked for the file...
-	$charset = 'maybe-binary';
-    }
-    else {
-	warn "$0 warning: cannot parse file '$file' with mime type '$mime'\n";
-	next;
-    }
-
     open (my $F, '<' ,$file) or die "Unable to access $file\n";
-    binmode $F, ':raw';
 
     while ( <$F>) {
 	last if ($. > $OPT{'lines'});
-	my $data = $_;
-	$data = decode($charset, $data) if $decode_text;
-	$content .= $data;
+	$content .= $_;
     }
     close($F);
 
@@ -497,7 +457,7 @@ Valid options are:
                             (Default: $def_lines)
    --check, -c            Specify a pattern indicating which files should
                              be checked
-                             (Default: All text and xml files)
+                             (Default: '$default_check_regex')
    --machine, -m          Display in a machine readable way (good for awk)
    --recursive, -r        Add the contents of directories recursively
    --copyright            Also display the file's copyright
