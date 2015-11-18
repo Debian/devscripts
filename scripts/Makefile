@@ -22,6 +22,7 @@ COMPL_FILES := $(wildcard *.bash_completion)
 BC_BUILD_DIR:=bash_completion
 COMPLETION = $(patsubst %.bash_completion,$(BC_BUILD_DIR)/%,$(COMPL_FILES))
 COMPL_DIR := $(shell pkg-config --variable=completionsdir bash-completion)
+PKGNAMES:=wnpp-alert wnpp-check mk-build-deps rmadison mass-bug debsnap dd-list build-rdeps who-uploads transition-check getbuildlog dcontrol grep-excuses rc-alert whodepends dget pts-subscribe pts-unsubscribe
 
 GEN_MAN1S += devscripts.1 mk-origtargz.1 uscan.1
 
@@ -94,6 +95,11 @@ install: all
 	ln -sf edit-patch $(DESTDIR)$(BINDIR)/add-patch
 	install -d $(DESTDIR)$(COMPL_DIR)
 	cp $(BC_BUILD_DIR)/* $(DESTDIR)$(COMPL_DIR)/
+	for i in $(PKGNAMES); do                        \
+	    ln -sf pkgnames $(DESTDIR)$(COMPL_DIR)/$$i;  \
+	done
+	ln -sf debchange $(DESTDIR)$(COMPL_DIR)/dch
+	ln -sf debi $(DESTDIR)$(COMPL_DIR)/debc
 	# Special treatment for debpkg
 	install -d $(DESTDIR)$(DATA_DIR)
 	mv $(DESTDIR)$(BINDIR)/debpkg $(DESTDIR)$(DATA_DIR)
