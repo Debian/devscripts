@@ -82,6 +82,11 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
   * debuild:
     + Use _all as the .changes arch for -A builds.  (Closes: #806262)
 
+  [ Daniel Kahn Gillmor ]
+  * debuild:
+    + pass through DBUS_SESSION_BUS_ADDRESS so that gpg-agent can make
+      pinentry-gnome3 work (Closes: #805501)
+
  -- Osamu Aoki <osamu@debian.org>  Wed, 07 Oct 2015 21:46:20 +0900
 
 devscripts (2.15.9) unstable; urgency=medium

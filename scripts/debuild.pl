@@ -397,7 +397,7 @@ foreach (@dpkg_extra_opts) {
 
 # Check @ARGV for debuild options.
 my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
-		     GPG_TTY FAKEROOTKEY LANG DEBEMAIL);
+		     DBUS_SESSION_BUS_ADDRESS GPG_TTY FAKEROOTKEY LANG DEBEMAIL);
 @save_vars{@preserve_vars} = (1) x scalar @preserve_vars;
 {
     no locale;
@@ -607,7 +607,7 @@ $ENV{'TERM'}='dumb' unless exists $ENV{'TERM'};
 
 # Store a few variables for safe keeping.
 my %store_vars;
-foreach my $var (('DISPLAY', 'GNOME_KEYRING_SOCKET', 'GPG_AGENT_INFO', 'SSH_AUTH_SOCK', 'XAUTHORITY')) {
+foreach my $var (('DBUS_SESSION_BUS_ADDRESS', 'DISPLAY', 'GNOME_KEYRING_SOCKET', 'GPG_AGENT_INFO', 'SSH_AUTH_SOCK', 'XAUTHORITY')) {
     $store_vars{$var} = $ENV{$var} if defined $ENV{$var};
 }
 
