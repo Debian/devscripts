@@ -106,6 +106,10 @@ testMPL() {
     license "mpl-2.0-comma.sh" "MPL (v2.0)"
 }
 
+testFreeType() {
+    license2 "-m --copyright" "freetype.c" "FreeType	2001, 2012 David Turner, Robert Wilhelm, and Werner Lemberg."
+}
+
 testCDDL() {
     license2 "-m --copyright" "cddl.h" "CDDL	2006 Sun Microsystems, Inc. All rights reserved"
 }

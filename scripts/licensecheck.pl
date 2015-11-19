@@ -383,6 +383,7 @@ sub extract_copyright {
 		$copyright_match .= ' '. shift @c;
 	    }
 	    $copyright_match =~ s/\s+/ /g;
+	    $copyright_match =~ s/\s*$//;
 	    $copyrights{lc("$copyright_match")} = "$copyright_match";
         }
 	elsif (scalar keys %copyrights) {
@@ -406,9 +407,10 @@ sub parse_copyright {
             # Ignore lines matching "see foo for copyright information" etc.
             if ($match !~ $copyright_disindicator_regex) {
 		# De-cruft
-                $match =~ s/([,.])?\s*$//;
                 $match =~ s/$copyright_indicator_regex//igx;
                 $match =~ s/^\s+//;
+		$match =~ s/\s*\bby\b\s*/ /;
+                $match =~ s/([,.])?\s*$//;
                 $match =~ s/\s{2,}/ /g;
 		$match =~ s/\\//g; # de-cruft nroff files
                 $match =~ s/\s*[*#]\s*$//;
@@ -605,6 +607,10 @@ sub parselicense {
 
     if ($licensetext =~ /(THE BEER-WARE LICENSE)/i) {
 	$license = "Beerware $license";
+    }
+
+    if ($licensetext =~ /distributed under the terms of the FreeType project/i) {
+	$license = "FreeType $license"; # aka FTL see http://www.freetype.org/license.html
     }
 
     if ($licensetext =~ /This source file is subject to version ([^ ]+) of the PHP license/) {
