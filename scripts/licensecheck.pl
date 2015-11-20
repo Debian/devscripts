@@ -374,11 +374,12 @@ sub extract_copyright {
     my %copyrights;
     my $lines_after_copyright_block = 0;
 
+    my $in_copyright_block = 0;
     while (@c) {
 	my $line = shift @c ;
-	my $copyright_match = parse_copyright($line) ;
+	my $copyright_match = parse_copyright($line, \$in_copyright_block) ;
 	if ($copyright_match) {
-	    while (@c && $copyright_match =~ /\d[,.]?\s*$/) {
+	    while (@c and $copyright_match =~ /\d[,.]?\s*$/) {
 		# looks like copyright end with a year, assume the owner is on next line(s)
 		$copyright_match .= ' '. shift @c;
 	    }
@@ -397,6 +398,7 @@ sub extract_copyright {
 
 sub parse_copyright {
     my $data = shift ;
+    my $in_copyright_block_ref = shift;
     my $copyright = '';
     my $match;
 
@@ -404,6 +406,7 @@ sub parse_copyright {
 	#print "match against ->$data<-\n";
         if ($data =~ $copyright_indicator_regex_with_capture) {
             $match = $1;
+	    $$in_copyright_block_ref = 1;
             # Ignore lines matching "see foo for copyright information" etc.
             if ($match !~ $copyright_disindicator_regex) {
 		# De-cruft
@@ -417,6 +420,14 @@ sub parse_copyright {
                 $copyright = $match;
             }
         }
+	elsif ($$in_copyright_block_ref and $data =~ /^\d{2,}[,\s]+/) {
+	    # following lines beginning with a year are supposed to be
+	    # continued copyright blocks
+	    $copyright = $data;
+	}
+	else {
+	    $$in_copyright_block_ref = 0;
+	}
     }
 
     return $copyright;
