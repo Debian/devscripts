@@ -31,9 +31,9 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
       Information is printed on STDOUT as utf-8.
     * --text option is deprecated
     + added freetype license
-    * remove 'by' from copyritght owners
-    * remove white space from end of multiline copyright statements
-    * parse multi-lien copyright blocks (Closes: #519080)
+    * remove 'by' from copyright owners
+    * remove whitespace from end of multi-line copyright statements
+    * parse multi-line copyright blocks (Closes: #519080)
 
   [ Osamu Aoki ]
   * uscan:
@@ -63,7 +63,7 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
       (Closes: #582958)
     + Add download compression ordering support to prefer xz over gz.
       (Closes: #763071)
-    + Add generarized search regex with some special strings @PACKAGE@, 
+    + Add generalized search regex with some special strings @PACKAGE@,
       @ANY_VERSION@, @ARCHIVE_EXT@, and @SIGNATURE_EXT@.
       (Closes: #517637, #539780)
   * uupdate:
