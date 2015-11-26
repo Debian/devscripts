@@ -981,6 +981,8 @@ if ($command_version eq 'dpkg') {
     my ($arch, $dsc, $changes, $build);
     if ($sourceonly) {
 	$arch = 'source';
+    } elsif ($binarytarget eq 'binary-indep') {
+	$arch = 'all';
     } else {
 	$arch = $ENV{DEB_HOST_ARCH};
     }

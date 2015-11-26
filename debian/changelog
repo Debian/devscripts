@@ -78,6 +78,10 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
   * debian/control
     + Add gnupg2/gpgv2 as alternative option to gnupg/gpgv.  (Closes: #788414)
 
+  [ James McCoy ]
+  * debuild:
+    + Use _all as the .changes arch for -A builds.  (Closes: #806262)
+
  -- Osamu Aoki <osamu@debian.org>  Wed, 07 Oct 2015 21:46:20 +0900
 
 devscripts (2.15.9) unstable; urgency=medium
