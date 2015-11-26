@@ -136,7 +136,7 @@ Options:
    -u, --update                   Run apt-get update before searching for build-depends.
                                   (needs root privileges)
    -s, --sudo                     Use sudo when running apt-get update
-                                  (has no effect when -u is ommitted)
+                                  (has no effect when -u is omitted)
    -d, --debug                    Enable the debug mode
    -m, --print-maintainer         Print the maintainer information (experimental)
    --distribution distribution    Select a distribution to search for build-depends

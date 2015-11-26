@@ -302,7 +302,7 @@ devscripts (2.15.5) unstable; urgency=low
     * support eclipse public license (Closes: #587892)
     * handle LGPL as written by IBM (Closes: #587970)
     * handle REM style comments (Closes: #748611)
-  * uscan: use defined-or (//) instead of "||" to avoid loosing
+  * uscan: use defined-or (//) instead of "||" to avoid losing
     '0' version field (Closes: #787767)
 
   [ Piotr Ożarowski ]
@@ -2240,7 +2240,7 @@ devscripts (2.10.60) unstable; urgency=low
   * build-rdeps: Correct spelling error in manpage ("ommitted" -> "omitted").
   * checkbashisms: Correct spelling error in manpage ("preceeded" ->
     "preceded").
-  * decbommit: Correct spelling error in manpage ("commiting" ->
+  * debcommit: Correct spelling error in manpage ("commiting" ->
     "committing").
 
  -- James Vega <jamessan@debian.org>  Fri, 01 Jan 2010 23:30:33 -0500
@@ -4630,7 +4630,7 @@ devscripts (2.10.2) unstable; urgency=low
   * Adding myself to Uploaders
   * bts
     + add option to only get bugs never downloaded before (Closes: #366925)
-    + dont forward bugs within the bts (Closes: #406632)
+    + don't forward bugs within the bts (Closes: #406632)
   * include sample procmail script for autosubscribing to bugs
     (Closes: #353048)
 
