@@ -5,6 +5,7 @@ test:
 	./test_debchange
 	./test_debdiff
 	./test_licensecheck
+	./test_licensecheck_SL
 	./test_uscan
 	./test_uscan_mangle
 	rm -rf uscan/gpg
@@ -17,6 +18,7 @@ test-installed:
 	./test_debchange --installed
 	./test_debdiff --installed
 	./test_licensecheck --installed
+	./test_licensecheck_SL --installed
 	./test_uscan --installed
 	./test_uscan_mangle --installed
 	rm -rf uscan/gpg
