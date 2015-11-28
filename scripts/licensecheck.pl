@@ -544,15 +544,15 @@ sub parselicense {
 	$license = "GENERATED FILE";
     }
 
-    if ($licensetext =~ /(are made available|(is free software.? )?you can redistribute (it|them) and\/or modify (it|them)|is licensed) under the terms of (version [^ ]+ of )?the (GNU (Library |Lesser )General Public License|LGPL)/i) {
+    if ($licensetext =~ /(are made available|(is free software.? )?you can redistribute (it|them) and(?:\/|\s+)or modify (it|them)|is licensed) under the terms of (version [^ ]+ of )?the (GNU (Library |Lesser )General Public License|LGPL)/i) {
 	$license = "LGPL$gplver$extrainfo $license";
     }
 
-    if ($licensetext =~ /is free software.? you can redistribute (it|them) and\/or modify (it|them) under the terms of the (GNU Affero General Public License|AGPL)/i) {
+    if ($licensetext =~ /is free software.? you can redistribute (it|them) and(?:\/|\s+)or modify (it|them) under the terms of the (GNU Affero General Public License|AGPL)/i) {
 	$license = "AGPL$gplver$extrainfo $license";
     }
 
-    if ($licensetext =~ /(is free software.? )?you (can|may) redistribute (it|them) and\/or modify (it|them) under the terms of (?:version [^ ]+ (?:\(?only\)? )?of )?the GNU General Public License/i) {
+    if ($licensetext =~ /(is free software.? )?you (can|may) redistribute (it|them) and(?:\/|\s+)or modify (it|them) under the terms of (?:version [^ ]+ (?:\(?only\)? )?of )?the GNU General Public License/i) {
 	$license = "GPL$gplver$extrainfo $license";
     }
 
