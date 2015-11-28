@@ -3275,9 +3275,9 @@ EOF
 	    my $ver = $2;
 	    my $suffix = $3;
 	    my ($gitrepo, $gitref) = split /[[:space:]]+/, $url, 2;
-	    my $gitrepodir = "$pkg.uscan.$$";
-	    uscan_verbose "Execute: git clone $gitrepo ../$gitrepodir\n";
-	    system('git', 'clone', $gitrepo, "../$gitrepodir") == 0 or die("git clone failed\n");
+	    my $gitrepodir = "$pkg.$$.git";
+	    uscan_verbose "Execute: git clone --bare $gitrepo ../$gitrepodir\n";
+	    system('git', 'clone', '--bare', $gitrepo, "../$gitrepodir") == 0 or die("git clone failed\n");
 	    chdir "../$gitrepodir" or die("Unable to chdir(\"../$gitrepodir\"): $!\n");
 	    uscan_verbose "Execute: git archive --format=tar --prefix=$pkg-$ver/ --output=../$pkg-$ver.tar $gitref\n";
 	    system('git', 'archive', '--format=tar', "--prefix=$pkg-$ver/", "--output=../$pkg-$ver.tar", $gitref);
