@@ -23,6 +23,8 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
     - Tweaked parselicense to capture 'and or' as well as
       'and/or' in GPL licenses (Closes: #559429)
     - Added test for licensecheck versus Software::License
+    - Resolved failure to find license from Software::License generated
+      files from Artistic licenses
 
   [ Dominique Dumont ]
   * licensecheck:

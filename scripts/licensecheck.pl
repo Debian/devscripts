@@ -600,7 +600,7 @@ sub parselicense {
 	$license = "MPL (v$2) $license";
     }
 
-    if ($licensetext =~ /Released under the terms of the Artistic License ([^ ]+)/) {
+    if ($licensetext =~ /(?:This is free software, licensed|Released) under (?:the terms of )?[Tt]he Artistic License ([^ ]+)/) {
 	$license = "Artistic (v$1) $license";
     }
 
