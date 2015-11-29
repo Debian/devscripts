@@ -297,7 +297,8 @@ Set the name of the secondary source tarball as I<<
 Set the compression I<method> when the tarball is repacked. (persistent)
 
 Available I<method> values are B<xz>, B<gzip> (alias B<gz>), B<bzip2> (alias
-B<bz2>), and B<lzma>.  The default is B<gzip>.
+B<bz2>), and B<lzma>.  The default is B<gzip> for normal tarballs, and B<xz>
+for tarballs generated directly from the git repository.
 
 If the debian source format is not in the old 1.0, setting this to B<xz> should
 help reduce the package size when the package is repacked.
@@ -330,6 +331,28 @@ Force to repack the upstream tarball using the compression I<method>.
 Add I<suffix> to the Debian package upstream version as suffix only when the
 source tarball is repackaged.  This rule should be used only for the single
 upstream tarball package.
+
+=item B<mode=>I<mode>
+
+Set the archive download I<mode>.
+
+=over
+
+=item B<LWP>
+
+This mode is the default one which downloads the specified tarball from the
+archive URL on the web.
+
+=item B<git>
+
+This mode accesses the upstream git archive directly with the B<git> command
+and packs the source tree with the specified tag into
+I<spkg-version>B<.tar.xz>.
+
+If the upstream publishes the released tarball via its web interface, please
+use it instead of using this mode.  This mode is the last resort method.
+
+=back
 
 =item B<pgpmode=>I<mode>
 
@@ -731,6 +754,9 @@ When writing the watch file, you should rely on the latest upstream source
 announcement web page.  You should not try to second guess the upstream archive
 structure if possible.  Here are the typical F<debian/watch> files.
 
+Please note that executing B<uscan> with B<-v> or B<-vv> reveals what exactly
+happens internally.
+
 The existence and non-existence of a space the before tailing B<\> (back slash)
 are significant.
 
@@ -1041,7 +1067,7 @@ For B<cfn-sphere>, set the watch file as:
 
   version=4
   https://pypi.python.org/packages/source/c/cfn-sphere/ \
-      cfn-sphere-([\d\.]+).tar.gz
+      cfn-sphere-([\d\.]+).tar.gz debian uupdate
 
 Please note, you can still use normal functionalities of B<uscan> to set up a
 watch file for this site without using the redirector.
@@ -1050,17 +1076,30 @@ watch file for this site without using the redirector.
   opts="pgpmode=none, \
       https://pypi.python.org/pypi/cfn-sphere/ \
       https://pypi.python.org/packages/source/c/cfn-sphere/\
-      cfn-sphere-([\d\.]+).tar.gz#.*
+      cfn-sphere-([\d\.]+).tar.gz#.* debian uupdate
 
 =head2 code.google.com
 
 Sites which used to be hosted on the Google Code service should have migrated
 to elsewhere (github?).  Please look for the newer upstream site.
 
+=head2 direct access to the git repository
+
+If the upstream only publishes its code via the git repository and it has no web
+interface to obtain the releasse tarball, you can use uscan with the tags of
+the git repository.
+
+  version=4
+  opts="mode=git" http://git.ao2.it/tweeper.git \
+  refs/tags/v([\d\.]+) debian uupdate
+
+Please note "B<git ls-remote>" is used to obtain references for tags.  If a tag
+B<v20.5> is the newest tag, the above example downloads I<spkg>B<-20.5.tar.xz>.
 
 =head1 COPYRIGHT FILE EXAMPLES
 
-Here is an example for the F<debian/copyright> file which initiates automatic repackaging of the upstream tarball into I<< <spkg>_<oversion>.orig.tar.gz >>:
+Here is an example for the F<debian/copyright> file which initiates automatic
+repackaging of the upstream tarball into I<< <spkg>_<oversion>.orig.tar.gz >>:
 
   Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
   Files-Excluded: exclude-this
@@ -1071,7 +1110,10 @@ Here is an example for the F<debian/copyright> file which initiates automatic re
 
    ...
 
-Here is another example for the F<debian/copyright> file which initiates automatic repackaging of the multiple upstream tarballs into I<< <spkg>_<oversion>.orig.tar.gz >> and I<< <spkg>_<oversion>.orig-bar.tar.gz >>:
+Here is another example for the F<debian/copyright> file which initiates
+automatic repackaging of the multiple upstream tarballs into 
+I<< <spkg>_<oversion>.orig.tar.gz >> and 
+I<< <spkg>_<oversion>.orig-bar.tar.gz >>:
 
   Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
   Files-Excluded: exclude-this
@@ -1336,9 +1378,10 @@ lzma or xz tar archives.
 =item B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]
 
 In the case where the upstream sources are repacked (either because B<--repack>
-option is given or F<debian/copyright> contains the field B<Files-Excluded>), it is
-possible to control the compression method via the parameter (defaults to
-B<gzip>).
+option is given or F<debian/copyright> contains the field B<Files-Excluded>),
+it is possible to control the compression method via the parameter.  The
+default is B<gzip> for normal tarballs, and B<xz> for tarballs generated
+directly from the git repository.
 
 =item B<--copyright-file> I<copyright-file>
 
