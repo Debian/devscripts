@@ -596,8 +596,11 @@ sub parselicense {
 	}
     }
 
-    if ($licensetext =~ /Mozilla Public License,? (Version|v\.) (\d+(?:\.\d+)?)/) {
-	$license = "MPL (v$2) $license";
+    if ($licensetext =~ /Mozilla Public License,? (?:(?:Version|v\.)\s+)?(\d+(?:\.\d+)?)/) {
+	    $license = "MPL (v$1) $license";
+    }
+    elsif ($licensetext =~ /Mozilla Public License,? \((?:Version|v\.) (\d+(?:\.\d+)?)\)/) {
+        $license = "MPL (v$1) $license";
     }
 
     if ($licensetext =~ /(?:This is free software, licensed|Released) under (?:the terms of )?[Tt]he Artistic License ([^ ]+)/) {
