@@ -1649,8 +1649,9 @@ our $found = 0;
 
 sub process_watchline ($$$$$$);
 sub process_watchfile ($$$$);
-sub check_compression ($);
-sub check_priority ($);
+sub get_compression ($);
+sub get_suffix ($);
+sub get_priority ($);
 sub recursive_regex_dir ($$$);
 sub newest_dir ($$$$$);
 sub uscan_die ($);
@@ -1792,9 +1793,8 @@ my $signature = 1;
 my $safe = 0;
 my $download_version;
 my $badversion = 0;
-my $repack = 0; # repack to .tar.$repack_compression if 1
-my $default_compression = 'gzip' ;
-my $repack_compression = $default_compression;
+my $repack = 0; # repack to .tar.$zsuffix if 1
+my $compression;
 my $copyright_file = undef;
 my $symlink = 'symlink';
 my $verbose = 0;
@@ -1820,7 +1820,7 @@ my $previous_sigfile_base ; # undef initially (for pgpmode=prev)
 my $previous_download_available ; # undef initially
 my ($keyring, $gpghome); # must be shared across watch lines for MUT
 my $bare = 0;
-my $minversion = '0~0~0~0~0~0dummy';
+my $minversion = '';
 
 if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $modified_conf_msg = "  (no configuration files read)";
@@ -1912,7 +1912,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # Now read the command line arguments
 my ($opt_h, $opt_v, $opt_destdir, $opt_safe, $opt_download,
     $opt_signature, $opt_passive, $opt_symlink, $opt_repack,
-    $opt_repack_compression, $opt_exclusion, $opt_copyright_file);
+    $opt_compression, $opt_exclusion, $opt_copyright_file);
 my ($opt_verbose, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
 my ($opt_download_version, $opt_download_debversion);
@@ -1938,7 +1938,7 @@ GetOptions("help" => \$opt_h,
 	   "symlink!" => sub { $opt_symlink = $_[1] ? 'symlink' : 'no'; },
 	   "rename" => sub { $opt_symlink = 'rename'; },
 	   "repack" => sub { $opt_repack = 1; },
-	   "compression=s" => \$opt_repack_compression,
+	   "compression=s" => \$opt_compression,
 	   "package=s" => \$opt_package,
 	   "uversion|upstream-version=s" => \$opt_uversion,
 	   "watchfile=s" => \$opt_watchfile,
@@ -1993,8 +1993,6 @@ $timeout = $opt_timeout if defined $opt_timeout;
 $timeout = 20 unless defined $timeout and $timeout > 0;
 $symlink = $opt_symlink if defined $opt_symlink;
 $verbose = $opt_verbose if defined $opt_verbose;
-$repack_compression = check_compression($opt_repack_compression)
-	if defined $opt_repack_compression;
 $dehs = $opt_dehs if defined $opt_dehs;
 $exclusion = $opt_exclusion if defined $opt_exclusion;
 $copyright_file = $opt_copyright_file if defined $opt_copyright_file;
@@ -2444,11 +2442,7 @@ sub process_watchline ($$$$$$)
 		    # non-persistent $options{'repack'}
 		    $options{'repack'} = 1;
 		} elsif ($opt =~ /^\s*compression\s*=\s*(.+?)\s*$/) {
-		    my $compression = check_compression($1);
-		    # persistent $repack_compression
-		    $repack_compression = $compression if defined $compression;
-		    $repack_compression = check_compression($opt_repack_compression)
-			if defined $opt_repack_compression;
+		    $options{'compression'} = get_compression($1);
 		} elsif ($opt =~ /^\s*repacksuffix\s*=\s*(.+?)\s*$/) {
 		    $options{'repacksuffix'} = $1;
 		} elsif ($opt =~ /^\s*dversionmangle\s*=\s*(.+?)\s*$/) {
@@ -2496,6 +2490,15 @@ sub process_watchline ($$$$$$)
 	    (undef, $lastversion, $action) = split ' ', $line, 3;
 	}
 
+	# compression is persistent
+	if ($options{'mode'} eq 'LWP') {
+	    $compression //= get_compression('gzip'); # keep backward compat.
+	} else {
+	    $compression //= get_compression('xz');
+	}
+	$compression = get_compression($options{'compression'}) if exists $options{'compression'};
+	$compression = get_compression($opt_compression) if defined $opt_compression;
+
 	# Set $lastversion to the numeric last version
 	# Update $options{'versionmode'} (its default "newer")
 	if (! defined $lastversion or $lastversion eq 'debian') {
@@ -2503,7 +2506,7 @@ sub process_watchline ($$$$$$)
 		uscan_warn "Unable to determine the current version\n  in $watchfile, skipping:\n  $line\n";
 		return 1;
 	    }
-	    $lastversion=$pkg_version;
+	    $lastversion = $pkg_version;
 	} elsif ($lastversion eq 'ignore') {
 	    $options{'versionmode'}='ignore';
 	    $lastversion = $minversion;
@@ -2695,6 +2698,7 @@ sub process_watchline ($$$$$$)
 	    $basedir =~ s%^\w+://[^/]+/%/%;
 	    $pattern = "(?:(?:$site)?" . quotemeta($basedir) . ")?$filepattern";
 	} else {
+	    # git tag match is simple
 	    $basedir = '';
 	    $pattern = $filepattern;
 	    uscan_debug "base=$base\n";
@@ -2896,7 +2900,7 @@ sub process_watchline ($$$$$$)
 			    $match = "matched with the download version";
 			}
 		    }
-		    my $priority = check_priority($href);
+		    my $priority = get_priority($href);
 		    push @hrefs, [$mangled_version, $priority, $href, $match];
 		}
 	    }
@@ -2981,7 +2985,7 @@ sub process_watchline ($$$$$$)
 			$match = "matched with the download version";
 		    }
 		}
-		my $priority = check_priority($file);
+		my $priority = get_priority($file);
 		push @files, [$mangled_version, $priority, $file, $match];
 	    }
 	} else {
@@ -3012,7 +3016,7 @@ sub process_watchline ($$$$$$)
 			    $match = "matched with the download version";
 			}
 		    }
-		    my $priority = check_priority($file);
+		    my $priority = get_priority($file);
 		    push @files, [$mangled_version, $priority, $file, $match];
 		}
 	    }
@@ -3185,22 +3189,21 @@ EOF
 	    uscan_verbose "Newest upstream tarball version from the filenamemangled filename: $newversion\n";
 	}
     } else {
-	$newfile_base = basename($newfile);
-	if ($options{'mode'} eq 'git') {
-	    # Default name for git archive
-	    if (!$options{'repack'}) {
-		$options{repacksuffix} = 'xz';
-		$repack_compression = 'xz';
+	if ($options{'mode'} eq 'LWP') {
+	    $newfile_base = basename($newfile);
+	    if ($site =~ m%^https?://%) {
+		# Remove HTTP header trash
+		$newfile_base =~ s/[\?#].*$//; # PiPy
+		# just in case this leaves us with nothing
+		if ($newfile_base eq '') {
+		    uscan_warn "No good upstream filename found after removing tailing ?... and #....\n   Use filenamemangle to fix this.\n";
+		    return 1;
+		}
 	    }
-	    $newfile_base = "$pkg-$newversion.tar.xz";
-	} elsif ($site =~ m%^https?://%) {
-	    # Remove HTTP header trash
-	    $newfile_base =~ s/[\?#].*$//; # PiPy
-	    # just in case this leaves us with nothing
-	    if ($newfile_base eq '') {
-		uscan_warn "No good upstream filename found after removing tailing ?... and #....\n   Use filenamemangle to fix this.\n";
-		return 1;
-	    }
+	} else {
+	    # git tarball name
+	    my $zsuffix = get_suffix($compression);
+	    $newfile_base = "$pkg-$newversion.tar.$zsuffix";
 	}
     }
     uscan_verbose "Download filename (filenamemangled): $newfile_base\n";
@@ -3586,7 +3589,7 @@ EOF
 	push @cmd, "--copy"   if $symlink eq "copy";
 	push @cmd, "--repack" if $options{'repack'};
 	push @cmd, "--component", $options{'component'} if defined $options{'component'};
-	push @cmd, "--compression", $repack_compression;
+	push @cmd, "--compression", $compression;
 	push @cmd, "--directory", $destdir;
 	push @cmd, "--copyright-file", "debian/copyright"
 	    if ($exclusion && -e "debian/copyright");
@@ -4043,8 +4046,8 @@ sub process_watchfile ($$$$)
     return $status;
 }
 
-# Check legal values for compression
-sub check_compression ($)
+# Get legal values for compression
+sub get_compression ($)
 {
     my $compression = $_[0];
     my $canonical_compression;
@@ -4056,19 +4059,45 @@ sub check_compression ($)
 	bzip2 => 'bzip2',
 	lzma => 'lzma',
 	xz => 'xz',
+	zip => 'zip',
     );
 
     # Normalize compression methods to the names used by Dpkg::Compression
     if (exists $opt2comp{$compression}) {
 	$canonical_compression = $opt2comp{$compression};
     } else {
-        uscan_die "$progname: invalid compression $compression given.\n";
+        uscan_die "$progname: invalid compression, $compression given.\n";
     }
     return $canonical_compression;
 }
 
-# Check compression priority
-sub check_priority ($)
+# Get legal values for compression suffix
+sub get_suffix ($)
+{
+    my $compression = $_[0];
+    my $canonical_suffix;
+    # be liberal in what you accept...
+    my %opt2suffix = (
+	gz => 'gz',
+	gzip => 'gz',
+	bz2 => 'bz2',
+	bzip2 => 'bz2',
+	lzma => 'lzma',
+	xz => 'xz',
+	zip => 'zip',
+    );
+
+    # Normalize compression methods to the names used by Dpkg::Compression
+    if (exists $opt2suffix{$compression}) {
+	$canonical_suffix = $opt2suffix{$compression};
+    } else {
+        uscan_die "$progname: invalid suffix, $compression given.\n";
+    }
+    return $canonical_suffix;
+}
+
+# Get compression priority
+sub get_priority ($)
 {
     my $href = $_[0];
     my $priority = 0;
