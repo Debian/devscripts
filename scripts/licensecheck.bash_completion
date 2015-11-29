@@ -1,0 +1,29 @@
+# Debian licensecheck(1) completion                             -*- shell-script -*-
+# Copyright: 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+_licensecheck()
+{
+    local cur prev words cword i _options special _prefix
+    _init_completion || return
+
+    case $prev in
+        --lines)
+            COMPREPLY=( $( compgen -W '120 200 300 400' -- "$cur" ) )
+            return 0
+            ;;
+    esac
+
+    if [[ "$cur" == -* ]]; then
+        _options='--verbose --no-verbose --lines --ignore --recursive --check --copyright --machine'
+        if [[ "$prev" == licensecheck ]]; then
+            _options+=' --no-conf'
+        fi
+        COMPREPLY=( $( compgen -W "${_options}" -- "$cur" ) )
+    else
+        COMPREPLY=( $( compgen -o filenames -f -- "$cur" ) )
+    fi
+
+    return 0
+} &&
+complete -F _licensecheck licensecheck
+        
+# ex: ts=4 sw=4 et filetype=sh
