@@ -73,6 +73,7 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
     + Add generalized search regex with some special strings @PACKAGE@,
       @ANY_VERSION@, @ARCHIVE_EXT@, and @SIGNATURE_EXT@.
       (Closes: #517637, #539780)
+    + Add direct git repository support. (Closes: #663357)
   * uupdate:
     + Prevent failure when upstream version is 0.  (Closes: #798175)
     + Work around missing debian.tar.gz for "3.0 (quilt)".  (Closes: 798133)
