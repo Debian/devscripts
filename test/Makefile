@@ -1,3 +1,9 @@
+# libsoftware-license-perl to be newer than 0.103010-3
+check_unstable = $(shell dpkg --compare-versions \
+	`dpkg-query -W -f='$${Version}' libsoftware-license-perl` \
+	gt '0.103010-3' ; \
+	echo $$?)
+
 test:
 	./test_annotate-output
 	./test_checkbashisms
@@ -5,7 +11,9 @@ test:
 	./test_debchange
 	./test_debdiff
 	./test_licensecheck
-	./test_licensecheck_SL
+	if [ $(check_unstable) = 0 ]; then \
+	./test_licensecheck_SL ;\
+	fi
 	./test_uscan
 	./test_uscan_mangle
 	rm -rf uscan/gpg
@@ -18,7 +26,9 @@ test-installed:
 	./test_debchange --installed
 	./test_debdiff --installed
 	./test_licensecheck --installed
-	./test_licensecheck_SL --installed
+	if [ $(check_unstable) = 0 ]; then \
+	./test_licensecheck_SL --installed ;\
+	fi
 	./test_uscan --installed
 	./test_uscan_mangle --installed
 	rm -rf uscan/gpg
