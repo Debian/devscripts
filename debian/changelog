@@ -75,6 +75,7 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
       @ANY_VERSION@, @ARCHIVE_EXT@, and @SIGNATURE_EXT@.
       (Closes: #517637, #539780)
     + Add direct git repository support. (Closes: #663357)
+    + Add unzipopt support.
   * uupdate:
     + Prevent failure when upstream version is 0.  (Closes: #798175)
     + Work around missing debian.tar.gz for "3.0 (quilt)".  (Closes: 798133)
@@ -84,6 +85,7 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
   * mk-origtargz:
     + Support component name for the multiple upstream tarball support.
     + Fix Files-Excluded for duplicate entries. (Closes: #762263)
+    + Add --unzipopt option. (Closes: #737843)
   * debian/control
     + Add gnupg2/gpgv2 as alternative option to gnupg/gpgv.  (Closes: #788414)
 

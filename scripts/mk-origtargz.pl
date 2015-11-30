@@ -129,9 +129,9 @@ If the file has to be modified, because of B<Files-Excluded>, append I<suffix> t
 =item B<-c>, B<--component> I<componentname>
 
 Use <componentname> as the component name for the secondary upstream tarball.
-Set I<componentname> as the component namei.  This is used only for the 
+Set I<componentname> as the component name.  This is used only for the 
 secondary upstream tarball of the Debian source package.  
-Then I<packagename_version.orig-componentiname.tar.gz> is created.
+Then I<packagename_version.orig-componentname.tar.gz> is created.
 
 =item B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]
 
@@ -140,6 +140,10 @@ If B<--repack> is used, or if the given file is a B<zip> file, ensure that the r
 =item B<-C>, B<--directory> I<directory>
 
 Put the resulting file in the given directory.
+
+=item B<--unzipopt> I<options>
+
+Add the extra options to use with the B<unzip> command such as B<-a>, B<-aa>, and B<-b>.
 
 =back
 
@@ -194,6 +198,7 @@ my @exclude_globs = ();
 my @copyright_files = ();
 
 my $destdir = undef;
+my $unzipopt = undef;
 my $compression = "gzip";
 my $mode = undef; # can be symlink, rename or copy. Can internally be repacked if the file was repacked.
 my $repack = 0;
@@ -228,6 +233,7 @@ GetOptions(
     "repack" => \$repack,
     'repack-suffix|S=s' => \$suffix,
     "directory|C=s" => \$destdir,
+    "unzipopt=s" => \$unzipopt,
     "help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },
 ) or pod2usage({-exitval => 3, -verbose=>1});
 
@@ -381,7 +387,10 @@ if ($is_zipfile) {
     # Parent of the target directory should be under our control
     $tempdir .= '/repack';
     mkdir $tempdir or die("Unable to mkdir($tempdir): $!\n");
-    system('unzip', '-q', '-a', '-d', $tempdir, $upstream_tar) == 0
+    my @cmd = ('unzip', '-q');
+    push @cmd, split ' ', $unzipopt if defined $unzipopt;
+    push @cmd, ('-d', $tempdir, $upstream_tar);
+    system(@cmd) == 0
 	or die("Repacking from zip or jar failed (could not unzip)\n");
 
     # Figure out the top-level contents of the tarball.

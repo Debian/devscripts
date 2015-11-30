@@ -429,6 +429,10 @@ CONFIGURATION VARIABLES> instead.
 
 Don't use the PASV mode for the FTP connection.
 
+=item B<unzipopt=>I<options>
+
+Add the extra options to use with the B<unzip> command such as B<-a>, B<-aa>, and B<-b>.
+
 =item B<dversionmangle=>I<rules>
 
 Normalize the last upstream version string found in F<debian/changelog> to
@@ -2488,6 +2492,8 @@ sub process_watchline ($$$$$$)
 		    $options{'compression'} = get_compression($1);
 		} elsif ($opt =~ /^\s*repacksuffix\s*=\s*(.+?)\s*$/) {
 		    $options{'repacksuffix'} = $1;
+		} elsif ($opt =~ /^\s*unzipopt\s*=\s*(.+?)\s*$/) {
+		    $options{'unzipopt'} = $1;
 		} elsif ($opt =~ /^\s*dversionmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'dversionmangle'}} = split /;/, $1;
 		} elsif ($opt =~ /^\s*pagemangle\s*=\s*(.+?)\s*$/) {
@@ -3638,6 +3644,7 @@ EOF
 	    if ($exclusion && -e "debian/copyright");
 	push @cmd, "--copyright-file", $copyright_file
 	    if ($exclusion && defined $copyright_file);
+	push @cmd, "--unzipopt", $options{'unzipopt'} if defined $options{'unzipopt'};
 	push @cmd, $path;
 
 	my $actioncmd = join(" ", @cmd);
