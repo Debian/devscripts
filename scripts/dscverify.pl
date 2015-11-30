@@ -32,6 +32,7 @@ use File::Temp;
 use File::Basename;
 use POSIX	qw(:errno_h);
 use Getopt::Long qw(:config gnu_getopt);
+use List::Util qw(first);
 
 BEGIN {
     eval { require Digest::MD5; };
