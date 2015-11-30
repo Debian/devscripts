@@ -173,7 +173,7 @@ my $default_ignore_regex = qr!
 \.shelf|_MTN|\.bzr(?:\.backup|tags)?)(?:$|/.*$)
 !x;
 
-my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|S|f(77|90)?|go|groovy|scala|clj|p(l|m)|xs|sh|php|py(|x)|rb|java|js|vala|el|sc(i|e)|cs|pas|inc|dtd|xsl|mod|m|tex|mli?|(c|l)?hs)$';
+my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|S|f(77|90)?|go|groovy|lisp|scala|clj|p(l|m)|xs|sh|php|py(|x)|rb|java|js|vala|el|sc(i|e)|cs|pas|inc|dtd|xsl|mod|m|tex|mli?|(c|l)?hs)$';
 
 # also used to cleanup
 my $copyright_indicator_regex
@@ -564,6 +564,10 @@ sub parselicense {
     if ($licensetext =~ /(?:is|may be)\s(?:(?:distributed|used).*?terms|being\s+released).*?\b(L?GPL)\b/) {
         my $v = $gplver || ' (unversioned/unknown version)';
         $license = "$1$v $license";
+    }
+
+    if ($licensetext =~ /the rights to distribute and use this software as governed by the terms of the Lisp Lesser General Public License|\bLLGPL\b/ ) {
+        $license = "LLGPL $license";
     }
 
     if ($licensetext =~ /This file is part of the .*Qt GUI Toolkit. This file may be distributed under the terms of the Q Public License as defined/) {

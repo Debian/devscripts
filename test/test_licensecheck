@@ -82,6 +82,12 @@ testLGPL() {
     license2  "-m --copyright" "lgpl-digia.c" "LGPL (v2.1 or v3)	2014 Digia Plc and/or its subsidiary(-ies)"
 }
 
+# Lisp Lesser General Public License (BTS #806424) 
+# see http://opensource.franz.com/preamble.html
+testLLGPL() {
+    license2  "-m --copyright" "llgpl.lisp" "LLGPL	2002, 2004 Sven Van Caekenberghe, Beta Nine BVBA"
+}
+
 testGPL() {
     license "gpl-1" "GPL (v1 or later)"
     license "gpl-2" "GPL (v2)"
