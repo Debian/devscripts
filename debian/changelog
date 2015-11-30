@@ -19,8 +19,8 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
     - Added --soap-timeout option to bts
     - Added listcachedbugs command to bts
     - Split out bts bash completion handling into its own script
-  * Added custom bash completion support for debuild, checkbashisms
-    and licensecheck
+  * Added custom bash completion support for debuild, checkbashisms,
+    list-unreleased and licensecheck
   * licensecheck:
     - Tweaked parselicense to capture 'and or' as well as
       'and/or' in GPL licenses (Closes: #559429)
