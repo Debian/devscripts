@@ -431,7 +431,8 @@ Don't use the PASV mode for the FTP connection.
 
 =item B<unzipopt=>I<options>
 
-Add the extra options to use with the B<unzip> command such as B<-a>, B<-aa>, and B<-b>.
+Add the extra options to use with the B<unzip> command, such as B<-a>, B<-aa>,
+and B<-b>, which is run within B<mk-origtargz>.
 
 =item B<dversionmangle=>I<rules>
 
@@ -2958,7 +2959,7 @@ sub process_watchline ($$$$$$)
 	    @hrefs = Devscripts::Versort::upstream_versort(@hrefs);
 	    my $msg = "Found the following matching hrefs on the web page (newest first):\n";
 	    foreach my $href (@hrefs) {
-		$msg .= "   $$href[2] ($$href[0]) $$href[3]\n";
+		$msg .= "   $$href[2] ($$href[0] $$href[1]) $$href[3]\n";
 	    }
 	    uscan_verbose $msg;
 	}
@@ -3074,7 +3075,7 @@ sub process_watchline ($$$$$$)
 	    @files = Devscripts::Versort::upstream_versort(@files);
 	    my $msg = "Found the following matching files on the web page (newest first):\n";
 	    foreach my $file (@files) {
-		$msg .= "   $$file[2] ($$file[0]) $$file[3]\n";
+		$msg .= "   $$file[2] ($$file[0] $$file[1]) $$file[3]\n";
 	    }
 	    uscan_verbose $msg;
 	}
