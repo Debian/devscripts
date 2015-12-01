@@ -11,8 +11,12 @@ _dscextract()
         declare -a _compreply=( $( compgen -o filenames -G '*.dsc' ) )
         COMPREPLY=( $( compgen -W "${_compreply[*]}"  -- "$cur" ) )
     elif [[ "$prev" == *.dsc ]]; then
-        declare -a _compreply=( $( tar tvf ${prev/.dsc/.debian.tar.*} | sed 's! \+! !g' | cut -d' ' -f6 ) )
-        COMPREPLY=( $( compgen -W "${_compreply[*]}"  -- "$cur" ) )
+        if [[ -f ${prev/.dsc/.debian.tar.*} ]]; then
+            declare -a _compreply=( $( tar tvf ${prev/.dsc/.debian.tar.*} | sed 's! \+! !g' | cut -d' ' -f6 ) )
+            COMPREPLY=( $( compgen -W "${_compreply[*]}"  -- "$cur" ) )
+        else 
+            COMPREPLY=()
+        fi
     else
         declare -a _compreply=( $( compgen -W '-f' -o filenames -G '*.dsc' ) )
         COMPREPLY=( $( compgen -W "${_compreply[*]}"  -- "$cur" ) )
