@@ -13,24 +13,27 @@ _mk_origtargz_completion () {
     opts+=" --exclude-file --copyright-file"
     opts+=" --package --directory -C"
     opts+=" --copy --symlink --rename --repack --repack-suffix -S"
-    opts+=" --compression --copyright-file"
+    opts+=" --compression --copyright-file --unzipopt"
 
     case "${prev}" in
         --compression)
             local formats=(gzip bzip2 lzma xz)
-            COMPREPLY=( $(compgen -W "${formats[*]}" -- ${cur}) )
+            COMPREPLY=( $(compgen -W "${formats[*]}" -- "${cur}" ) )
             ;;
 
         --directory|-C)
-            COMPREPLY=( $(compgen -A directory -- ${cur}) )
+            COMPREPLY=( $(compgen -A directory -- "${cur}" ) )
             ;;
 
         --copyright-file)
-            COMPREPLY=( $(compgen -A file -- ${cur}) )
+            COMPREPLY=( $(compgen -A file -- "${cur}" ) )
+            ;;
+        --unzipopt)
+            COMPREPLY=( $(compgen -W '-Z -a -b -D -j -n' -- "${cur}" ) )
             ;;
 
         *)
-            COMPREPLY=($(compgen -W "${opts}" -- ${cur}))  
+            COMPREPLY=($(compgen -W "${opts}" -- "${cur}" ) )  
             ;;
     esac
 }

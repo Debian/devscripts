@@ -21,6 +21,7 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
     - Split out bts bash completion handling into its own script
   * Added custom bash completion support for debuild, checkbashisms,
     list-unreleased, dscverify and licensecheck
+  * Updated custom bash completion handling for mk-origtargz
   * licensecheck:
     - Tweaked parselicense to capture 'and or' as well as
       'and/or' in GPL licenses (Closes: #559429)
