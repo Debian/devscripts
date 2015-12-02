@@ -7,8 +7,8 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
   [ Nicholas Bamber ]
   * Fixed issues with current bash completion (Closes: #804492)
     - Reorganised scripts/Makefile so that bash completion scripts
-      are installed matching their command names - exception the
-      generic pkgnames.bash_completion .
+      are installed matching their command names - an exception being the
+      generic pkgnames.bash_completion.
     - Where necessary added links to bash completion scripts
       to debian/links to reuse bash completion code
     - Removed deprecated "have" mechanism from bash completion scripts.
@@ -34,7 +34,7 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
   * licensecheck:
     * no longer attempts to find encoding or select files to parse
       using 'file' commands. By default, files are selected using file
-      extension instead of mime types provided by "file" command.  The
+      extension instead of MIME types provided by "file" command.  The
       list of file extensions is more boring to maintain but also more
       predictable.  (Closes: #803724)
     + added --encoding option. By default, input files are handled as utf-8
@@ -91,7 +91,7 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
     + Fix Files-Excluded for duplicate entries. (Closes: #762263)
     + Add --unzipopt option. (Closes: #737843)
   * debian/control, dscverify, who-permits-upload, uscan
-    + Add gnupg2/gpgv2 as alternative option to gnupg/gpgv.  (Closes: #788414)
+    + Add gnupg2/gpgv2 as an alternative option to gnupg/gpgv.  (Closes: #788414)
 
   [ James McCoy ]
   * debuild:
