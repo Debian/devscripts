@@ -2950,8 +2950,8 @@ sub process_watchline ($$$$$$)
 			    $match = "matched with the download version";
 			}
 		    }
-		    my $priority = get_priority($href);
-		    push @hrefs, [$mangled_version, $priority, $href, $match];
+		    my $priority = $mangled_version . '.' . get_priority($href);
+		    push @hrefs, [$priority, $mangled_version, $href, $match];
 		}
 	    }
 	}
@@ -2959,14 +2959,14 @@ sub process_watchline ($$$$$$)
 	    @hrefs = Devscripts::Versort::upstream_versort(@hrefs);
 	    my $msg = "Found the following matching hrefs on the web page (newest first):\n";
 	    foreach my $href (@hrefs) {
-		$msg .= "   $$href[2] ($$href[0] $$href[1]) $$href[3]\n";
+		$msg .= "   $$href[2] ($$href[1]) index=$$href[0] $$href[3]\n";
 	    }
 	    uscan_verbose $msg;
 	}
 	if (defined $download_version) {
 	    my @vhrefs = grep { $$_[3] } @hrefs;
 	    if (@vhrefs) {
-		($newversion, undef, $newfile, undef) = @{$vhrefs[0]};
+		(undef, $newversion, $newfile, undef) = @{$vhrefs[0]};
 	    } else {
 		uscan_warn "In $watchfile no matching hrefs for version $download_version"
 		    . " in watch line\n  $line\n";
@@ -2974,7 +2974,7 @@ sub process_watchline ($$$$$$)
 	    }
 	} else {
 	    if (@hrefs) {
-	    	($newversion, undef, $newfile, undef) = @{$hrefs[0]};
+	    	(undef, $newversion, $newfile, undef) = @{$hrefs[0]};
 	    } else {
 		uscan_warn "In $watchfile no matching files for watch line\n  $line\n";
 		return 1;
@@ -3035,8 +3035,8 @@ sub process_watchline ($$$$$$)
 			$match = "matched with the download version";
 		    }
 		}
-		my $priority = get_priority($file);
-		push @files, [$mangled_version, $priority, $file, $match];
+		my $priority = $mangled_version . '.' . get_priority($file);
+		push @files, [$priority, $mangled_version, $file, $match];
 	    }
 	} else {
 	    uscan_verbose "Standard FTP listing.\n";
@@ -3066,8 +3066,8 @@ sub process_watchline ($$$$$$)
 			    $match = "matched with the download version";
 			}
 		    }
-		    my $priority = get_priority($file);
-		    push @files, [$mangled_version, $priority, $file, $match];
+		    my $priority = $mangled_version . '.' . get_priority($file);
+		    push @files, [$priority, $mangled_version, $file, $match];
 		}
 	    }
 	}
@@ -3075,14 +3075,14 @@ sub process_watchline ($$$$$$)
 	    @files = Devscripts::Versort::upstream_versort(@files);
 	    my $msg = "Found the following matching files on the web page (newest first):\n";
 	    foreach my $file (@files) {
-		$msg .= "   $$file[2] ($$file[0] $$file[1]) $$file[3]\n";
+		$msg .= "   $$file[2] ($$file[1]) index=$$file[0] $$file[3]\n";
 	    }
 	    uscan_verbose $msg;
 	}
 	if (defined $download_version) {
 	    my @vfiles = grep { $$_[3] } @files;
 	    if (@vfiles) {
-		($newversion, undef, $newfile, undef) = @{$vfiles[0]};
+		(undef, $newversion, $newfile, undef) = @{$vfiles[0]};
 	    } else {
 		uscan_warn "In $watchfile no matching files for version $download_version"
 		    . " in watch line\n  $line\n";
@@ -3090,7 +3090,7 @@ sub process_watchline ($$$$$$)
 	    }
 	} else {
 	    if (@files) {
-	    	($newversion, undef, $newfile, undef) = @{$files[0]};
+	    	(undef, $newversion, $newfile, undef) = @{$files[0]};
 	    } else {
 		uscan_warn "In $watchfile no matching files for watch line\n  $line\n";
 		return 1;
