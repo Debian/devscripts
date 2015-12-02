@@ -6,44 +6,44 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
 
   [ Nicholas Bamber ]
   * Fixed issues with current bash completion (Closes: #804492)
-    - Reorganised scripts/Makefile so that bash completion scripts
+    + Reorganised scripts/Makefile so that bash completion scripts
       are installed matching their command names - an exception being the
       generic pkgnames.bash_completion.
-    - Where necessary added links to bash completion scripts
+    + Where necessary added links to bash completion scripts
       to debian/links to reuse bash completion code
-    - Removed deprecated "have" mechanism from bash completion scripts.
-    - Removed undefined "$filenames" from chdist.bash_completion
-    - Split debi.bash_completion off from pkgnames.bash_completion
+    + Removed deprecated "have" mechanism from bash completion scripts.
+    + Removed undefined "$filenames" from chdist.bash_completion
+    + Split debi.bash_completion off from pkgnames.bash_completion
       and added links for both debi/debc and corrected complete commands
   * Added custom bash completion support for bts (Closes: #499886)
-    - Added --soap-timeout option to bts
-    - Added listcachedbugs command to bts
-    - Split out bts bash completion handling into its own script
+    + Added --soap-timeout option to bts
+    + Added listcachedbugs command to bts
+    + Split out bts bash completion handling into its own script
   * Added custom bash completion support for debuild, checkbashisms,
     list-unreleased, dscverify, dscextract, what-patch and licensecheck
   * Updated custom bash completion handling for mk-origtargz
   * Added debcheckout to those commnads with package names bash completion
   * licensecheck:
-    - Tweaked parselicense to capture 'and or' as well as
+    + Tweaked parselicense to capture 'and or' as well as
       'and/or' in GPL licenses (Closes: #559429)
-    - Added test for licensecheck versus Software::License
-    - Resolved failure to find license from Software::License generated
+    + Added test for licensecheck versus Software::License
+    + Resolved failure to find license from Software::License generated
       files from Artistic and Mozilla licenses
 
   [ Dominique Dumont ]
   * licensecheck:
-    * no longer attempts to find encoding or select files to parse
+    + no longer attempts to find encoding or select files to parse
       using 'file' commands. By default, files are selected using file
       extension instead of MIME types provided by "file" command.  The
       list of file extensions is more boring to maintain but also more
       predictable.  (Closes: #803724)
     + added --encoding option. By default, input files are handled as utf-8
       Information is printed on STDOUT as utf-8.
-    * --text option is deprecated
+    + --text option is deprecated
     + added freetype license
-    * remove 'by' from copyright owners
-    * remove whitespace from end of multi-line copyright statements
-    * parse multi-line copyright blocks (Closes: #519080)
+    + remove 'by' from copyright owners
+    + remove whitespace from end of multi-line copyright statements
+    + parse multi-line copyright blocks (Closes: #519080)
     + parse .lisp file (part of #806424)
     + added LLGPL license (part of #806424)
 
