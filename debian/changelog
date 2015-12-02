@@ -20,8 +20,9 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
     - Added listcachedbugs command to bts
     - Split out bts bash completion handling into its own script
   * Added custom bash completion support for debuild, checkbashisms,
-    list-unreleased, dscverify, dscextract and licensecheck
+    list-unreleased, dscverify, dscextract, what-patch and licensecheck
   * Updated custom bash completion handling for mk-origtargz
+  * Added debcheckout to those commnads with package names bash completion
   * licensecheck:
     - Tweaked parselicense to capture 'and or' as well as
       'and/or' in GPL licenses (Closes: #559429)
