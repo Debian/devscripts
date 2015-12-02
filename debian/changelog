@@ -90,8 +90,8 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
     + Support component name for the multiple upstream tarball support.
     + Fix Files-Excluded for duplicate entries. (Closes: #762263)
     + Add --unzipopt option. (Closes: #737843)
-  * debian/control, dscverify, who-permits-upload, uscan
-    + Add gnupg2/gpgv2 as an alternative option to gnupg/gpgv.  (Closes: #788414)
+  * debian/control, dscverify, who-permits-upload, uscan:
+    + Add gnupg2/gpgv2 as an alternative option to gnupg/gpgv. (Closes: #788414)
 
   [ James McCoy ]
   * debuild:
