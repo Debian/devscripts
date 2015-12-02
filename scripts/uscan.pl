@@ -2679,7 +2679,6 @@ sub process_watchline ($$$$$$)
     # And mangle it if requested
     my $mangled_lastversion = $lastversion;
     foreach my $pat (@{$options{'dversionmangle'}}) {
-	uscan_verbose "dversionmangle rule $pat\n";
 	if (! safe_replace(\$mangled_lastversion, $pat)) {
 	    uscan_warn "In $watchfile, potentially"
 	      . " unsafe or malformed dversionmangle"
@@ -2688,6 +2687,7 @@ sub process_watchline ($$$$$$)
 	      . "  $line\n";
 	    return 1;
 	}
+	uscan_debug "$mangled_lastversion by dversionmangle rule: $pat\n";
     }
 
     # Set $download_version etc. if already known
@@ -2791,6 +2791,7 @@ sub process_watchline ($$$$$$)
 				. "  $line\n";
 			    return 1;
 			}
+		    uscan_debug "$version by uversionmangle rule: $pat\n";
 		    }
 		    push @refs, [$version, $ref];
 		}
@@ -2863,11 +2864,10 @@ sub process_watchline ($$$$$$)
 	}
 
 	my $content = $response->content;
-	uscan_debug "received content:\n$content\n[End of received content]\n";
+	uscan_debug "received content:\n$content\n[End of received content] by HTTP\n";
 
 	# pagenmangle: should not abuse this slow operation
 	foreach my $pat (@{$options{'pagemangle'}}) {
-	    uscan_verbose "pagemangle rule $pat\n";
 	    if (! safe_replace(\$content, $pat)) {
 		uscan_warn "In $watchfile, potentially"
 		  . " unsafe or malformed pagemangle"
@@ -2876,6 +2876,7 @@ sub process_watchline ($$$$$$)
 		  . "  $line\n";
 		return 1;
 	    }
+	    uscan_debug "processed content:\n$content\n[End of processed content] by pagemangle rule: $pat\n";
 	}
 	if (! $bare and
 	    $content =~ m%^<[?]xml%i and
@@ -2884,7 +2885,8 @@ sub process_watchline ($$$$$$)
 	    # this is an S3 bucket listing.  Insert an 'a href' tag
 	    # into the content for each 'Key', so that it looks like html (LP: #798293)
 	    uscan_warn "*** Amazon AWS special case code is deprecated***\nUse opts=pagemangle rule, instead\n";
-	    $content =~ s%<Key>([^<]*)</Key>%<Key><a href="$1">$1</a></Key>%g
+	    $content =~ s%<Key>([^<]*)</Key>%<Key><a href="$1">$1</a></Key>%g ;
+	    uscan_debug "processed content:\n$content\n[End of processed content] by Amazon AWS special case code\n";
 	}
 
 	# We need this horrid stuff to handle href=foo type
@@ -2902,8 +2904,8 @@ sub process_watchline ($$$$$$)
 	    # May have to strip a base filename
 	    ($urlbase = $base) =~ s%/[^/]*$%/%;
 	}
+	uscan_debug "processed content:\n$content\n[End of processed content] by fix bad HTML code\n";
 
-	uscan_debug "pagemangled content:\n$content\n[End of pagemangled content]\n";
 	# search hrefs in web page to obtain a list of uversionmangled version and matching download URL
 	{
 	    local $, = ',';
@@ -2933,7 +2935,6 @@ sub process_watchline ($$$$$$)
 				    $href =~ m&^$_pattern$&);
 			}
 			foreach my $pat (@{$options{'uversionmangle'}}) {
-			    uscan_verbose "uversionmangle rule $pat\n";
 			    if (! safe_replace(\$mangled_version, $pat)) {
 				uscan_warn "In $watchfile, potentially"
 			 	 . " unsafe or malformed uversionmangle"
@@ -2942,6 +2943,7 @@ sub process_watchline ($$$$$$)
 				  . "  $line\n";
 				return 1;
 			    }
+			    uscan_debug "$mangled_version by uversionmangle rule: $pat\n";
 			}
 		    }
 		    $match = '';
@@ -3001,7 +3003,7 @@ sub process_watchline ($$$$$$)
 	}
 
 	my $content = $response->content;
-	uscan_debug "received content:\n$content\n[End of received content]\n";
+	uscan_debug "received content:\n$content\n[End of received content] by FTP\n";
 
 	# FTP directory listings either look like:
 	# info info ... info filename [ -> linkname]
@@ -3019,7 +3021,6 @@ sub process_watchline ($$$$$$)
 		my $file = $1;
 		my $mangled_version = join(".", $file =~ m/^$pattern$/);
 		foreach my $pat (@{$options{'uversionmangle'}}) {
-		    uscan_verbose "uversionmangle rule $pat\n";
 		    if (! safe_replace(\$mangled_version, $pat)) {
 			uscan_warn "In $watchfile, potentially"
 			  . " unsafe or malformed uversionmangle"
@@ -3028,6 +3029,7 @@ sub process_watchline ($$$$$$)
 			  . "  $line\n";
 			return 1;
 		    }
+		    uscan_debug "$mangled_version by uversionmangle rule: $pat\n";
 		}
 		$match = '';	
 		if (defined $download_version) {
@@ -3050,7 +3052,6 @@ sub process_watchline ($$$$$$)
 		    my $file = $1;
 		    my $mangled_version = join(".", $file =~ m/^$filepattern$/);
 		    foreach my $pat (@{$options{'uversionmangle'}}) {
-			uscan_verbose "uversionmangle rule $pat\n";
 			if (! safe_replace(\$mangled_version, $pat)) {
 			    uscan_warn "In $watchfile, potentially"
 			      . " unsafe or malformed uversionmangle"
@@ -3059,6 +3060,7 @@ sub process_watchline ($$$$$$)
 			      . "  $line\n";
 			    return 1;
 			}
+			uscan_debug "$mangled_version by uversionmangle rule: $pat\n";
 		    }
 		    $match = '';	
 		    if (defined $download_version) {
@@ -3189,7 +3191,6 @@ EOF
 	uscan_verbose "Matching target for downloadurlmangle: $upstream_url\n";
 	if (exists $options{'downloadurlmangle'}) {
 	    foreach my $pat (@{$options{'downloadurlmangle'}}) {
-		uscan_verbose "downloadurlmangle rule $pat\n";
 		if (! safe_replace(\$upstream_url, $pat)) {
 		    uscan_warn "In $watchfile, potentially"
 		      . " unsafe or malformed downloadurlmangle"
@@ -3198,6 +3199,7 @@ EOF
 		      . "  $line\n";
 		    return 1;
 		}
+		uscan_debug "$upstream_url by downloadurlmangle rule: $pat\n";
 	    }
 	}
     } else {
@@ -3218,7 +3220,6 @@ EOF
 	}
 	uscan_verbose "Matching target for filenamemangle: $newfile_base\n";
 	foreach my $pat (@{$options{'filenamemangle'}}) {
-	    uscan_verbose "filenamemangle rule $pat\n";
 	    if (! safe_replace(\$newfile_base, $pat)) {
 		uscan_warn "In $watchfile, potentially"
 		. " unsafe or malformed filenamemangle"
@@ -3227,6 +3228,7 @@ EOF
 		. "  $line\n";
 	    return 1;
 	    }
+	    uscan_debug "$newfile_base by filenamemangle rule: $pat\n";
 	}
 	unless ($newversion) {
 	    # uversionmanglesd version is '', make best effort to set it
@@ -3486,7 +3488,6 @@ EOF
     if ($options{'pgpmode'} eq 'mangle') {
 	$pgpsig_url = $upstream_url;
 	foreach my $pat (@{$options{'pgpsigurlmangle'}}) {
-	    uscan_verbose "pgpsigurlmangle rule $pat\n";
 	    if (! safe_replace(\$pgpsig_url, $pat)) {
 		uscan_warn "In $watchfile, potentially"
 		    . " unsafe or malformed pgpsigurlmangle"
@@ -3495,6 +3496,7 @@ EOF
 		    . "  $line\n";
 		return 1;
 	    }
+	    uscan_debug "$pgpsig_url by pgpsigurlmangle rule: $pat\n";
 	}
 	$sigfile = "$sigfile_base.pgp";
 	if ($signature == 1) {
@@ -3594,7 +3596,6 @@ EOF
 
     my $mangled_newversion = $newversion;
     foreach my $pat (@{$options{'oversionmangle'}}) {
-	uscan_verbose "Oversionmangle rule: $pat\n";
 	if (! safe_replace(\$mangled_newversion, $pat)) {
 	    uscan_warn "In $watchfile, potentially"
 	      . " unsafe or malformed oversionmangle"
@@ -3603,6 +3604,7 @@ EOF
 	      . "  $line\n";
 	    return 1;
 	}
+	uscan_debug "$mangled_newversion by oversionmangle rule: $pat\n";
     }
 
     if (! defined $common_mangled_newversion) {
@@ -3804,7 +3806,7 @@ sub newest_dir ($$$$$) {
 	}
 
 	my $content = $response->content;
-	uscan_debug "received content:\n$content\n[End of received content\]\n";
+	uscan_debug "received content:\n$content\n[End of received content] by HTTP\n";
 	# We need this horrid stuff to handle href=foo type
 	# links.  OK, bad HTML, but we have to handle it nonetheless.
 	# It's bug #89749.
@@ -3823,7 +3825,6 @@ sub newest_dir ($$$$$) {
 	    if ($href =~ m&^$dirpattern/?$&) {
 		my $mangled_version = join(".", map { $_ // '' } $href =~ m&^$dirpattern/?$&);
 		foreach my $pat (@{$$optref{'dirversionmangle'}}) {
-		    uscan_verbose "Dirversionnmangle rule: $pat\n";
 		    if (! safe_replace(\$mangled_version, $pat)) {
 			uscan_warn "In $watchfile, potentially"
 			. " unsafe or malformed dirversionmangle"
@@ -3831,6 +3832,7 @@ sub newest_dir ($$$$$) {
 			. " found.\n";
 			return 1;
 		    }
+		    uscan_debug "$mangled_version by dirversionnmangle rule: $pat\n";
 		}
 		$match = '';
 		if (defined $download_version and $mangled_version eq $download_version) {
@@ -3889,7 +3891,7 @@ sub newest_dir ($$$$$) {
 	}
 
 	my $content = $response->content;
-	uscan_debug "received content:\n$content\n[End of received content]\n";
+	uscan_debug "received content:\n$content\n[End of received content] by FTP\n";
 
 	# FTP directory listings either look like:
 	# info info ... info filename [ -> linkname]
@@ -3909,7 +3911,6 @@ sub newest_dir ($$$$$) {
 		uscan_verbose "Matching target for dirversionmangle:   $dir\n";
 		my $mangled_version = join(".", $dir =~ m/^$pattern$/);
 		foreach my $pat (@{$$optref{'dirversionmangle'}}) {
-		    uscan_verbose "Dirversionnmangle rule: $pat\n";
 		    if (! safe_replace(\$mangled_version, $pat)) {
 			uscan_warn "In $watchfile, potentially"
 			. " unsafe or malformed dirversionmangle"
@@ -3917,6 +3918,7 @@ sub newest_dir ($$$$$) {
 			. " found.\n";
 			return 1;
 		    }
+		    uscan_debug "$mangled_version by dirversionnmangle rule: $pat\n";
 		}
 		$match = '';
 		if (defined $download_version and $mangled_version eq $download_version) {
@@ -3946,7 +3948,6 @@ sub newest_dir ($$$$$) {
 		    uscan_verbose "Matching target for dirversionmangle:   $dir\n";
 		    my $mangled_version = join(".", $dir =~ m/^$pattern$/);
 		    foreach my $pat (@{$$optref{'dirversionmangle'}}) {
-			uscan_verbose "Dirversionnmangle rule: $pat\n";
 			if (! safe_replace(\$mangled_version, $pat)) {
 			    uscan_warn "In $watchfile, potentially"
 			    . " unsafe or malformed dirversionmangle"
@@ -3954,6 +3955,7 @@ sub newest_dir ($$$$$) {
 			    . " found.\n";
 			    return 1;
 			}
+			uscan_debug "$mangled_version by dirversionnmangle rule: $pat\n";
 		    }
 		    $match = '';
 		    if (defined $download_version and $mangled_version eq $download_version) {
