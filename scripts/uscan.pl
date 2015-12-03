@@ -303,8 +303,8 @@ for tarballs generated directly from the git repository.
 If the debian source format is not in the old 1.0, setting this to B<xz> should
 help reduce the package size when the package is repacked.
 
-Please note the repack of the upstream tarballs happen only if one of the
-following condition is satisfied:
+Please note the repack of the upstream tarballs by the B<mk-origtargz> happens
+only if one of the following condition is satisfied:
 
 =over
 
@@ -314,6 +314,8 @@ CONFIGURATION VARIABLES>.
 =item * B<--repack> is set in the commandline.  See <COMMANDLINE OPTIONS>.
 
 =item * B<repack> is set in the watch line as B<opts="repack,>I<...>B<">.
+
+=item * The upstream archive is in the B<zip> type including B<jar>, B<xpi>, ...
 
 =item * B<Files-Excluded> or B<Files-Excluded->I<component> stanzas are set in
 F<debian/copyright> to make B<mk-origtargz> invoked from B<uscan> to remove
