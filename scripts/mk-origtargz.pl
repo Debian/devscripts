@@ -41,9 +41,14 @@ mk-origtargz - rename upstream tarball, optionally changing the compression and 
 B<mk-origtargz> renames the given file to match what is expected by
 B<dpkg-buildpackage>, based on the source package name and version in
 F<debian/changelog>. It can convert B<zip> to B<tar>, optionally change the
-compression scheme and remove files according to B<Files-Excluded> 
-and B<Files-Excluded->I<component> in
-F<debian/copyright>. The resulting file is placed in F<debian/../..>.
+compression scheme and remove files according to B<Files-Excluded> and
+B<Files-Excluded->I<component> in F<debian/copyright>. The resulting file is
+placed in F<debian/../..>.
+
+The archive type for B<zip> is detected by "B<file --dereference --brief
+--mime-type>" command.  So any B<zip> type archives such as B<jar> are treated
+in the same way.  The B<xpi> archive is detected by its extension and is
+handled properly using the B<xpi-unpack> command.
 
 If the package name is given via the B<--package> option, no information is
 read from F<debian/>, and the result file is placed in the current directory.
@@ -69,9 +74,11 @@ The default is to use the package name of the first entry in F<debian/changelog>
 
 =item B<-v>, B<--version> I<version>
 
-Use I<version> as the version of the package. This needs to be the upstream version portion of a full Debian version, i.e. no Debian revision, no epoch.
+Use I<version> as the version of the package. This needs to be the upstream
+version portion of a full Debian version, i.e. no Debian revision, no epoch.
 
-The default is to use the upstream portion of the version of the first entry in F<debian/changelog>.
+The default is to use the upstream portion of the version of the first entry in
+F<debian/changelog>.
 
 =item B<--exclude-file> I<glob>
 
@@ -80,7 +87,11 @@ B<Files-Excluded>.
 
 =item B<--copyright-file> I<filename>
 
-Remove files matching the patterns found in I<filename>, which should have the format of a Debian F<copyright> file (B<Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/> to be precise). Errors parsing that file are silently ignored, exactly as is the case with F<debian/copyright>.
+Remove files matching the patterns found in I<filename>, which should have the
+format of a Debian F<copyright> file 
+(B<Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/>
+to be precise). Errors parsing that file are silently ignored, exactly as is
+the case with F<debian/copyright>.
 
 Unmatched patterns will emit a warning so the user can verify whether it is
 correct.  If there are multiple patterns which match a file, only the last one
@@ -104,18 +115,21 @@ B<--copy>, B<--rename> and B<--symlink> are mutually exclusive.
 Make the resulting file a symlink to the given original file. (This is the
 default behaviour.)
 
-If the file has to be modified (because it is a B<zip> file, because of
-B<--repack> or B<Files-Excluded>), this option behaves like B<--copy>.
+If the file has to be modified (because it is a B<zip>, or B<xpi> file, because
+of B<--repack> or B<Files-Excluded>), this option behaves like B<--copy>.
 
 =item B<--copy>
 
-Make the resulting file a copy of the original file (unless it has to be modified, of course).
+Make the resulting file a copy of the original file (unless it has to be
+modified, of course).
 
 =item B<--rename>
 
 Rename the original file.
 
-If the file has to be modified (because it is a B<zip> file, because of B<--repack> or B<Files-Excluded>), this implies that the original file is deleted afterwards.
+If the file has to be modified (because it is a B<zip>, or B<xpi> file, because
+of B<--repack> or B<Files-Excluded>), this implies that the original file is
+deleted afterwards.
 
 =item B<--repack>
 
@@ -124,7 +138,8 @@ B<--compression>), recompress it.
 
 =item B<-S>, B<--repack-suffix> I<suffix>
 
-If the file has to be modified, because of B<Files-Excluded>, append I<suffix> to the upstream version.
+If the file has to be modified, because of B<Files-Excluded>, append I<suffix>
+to the upstream version.
 
 =item B<-c>, B<--component> I<componentname>
 
@@ -135,7 +150,9 @@ Then I<packagename_version.orig-componentname.tar.gz> is created.
 
 =item B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]
 
-If B<--repack> is used, or if the given file is a B<zip> file, ensure that the resulting file is compressed using the given scheme. The default is B<gzip>.
+If B<--repack> is used, or if the given file is a B<zip> or B<xpi> file, ensure
+that the resulting file is compressed using the given scheme. The default is
+B<gzip>.
 
 =item B<-C>, B<--directory> I<directory>
 
@@ -143,7 +160,8 @@ Put the resulting file in the given directory.
 
 =item B<--unzipopt> I<options>
 
-Add the extra options to use with the B<unzip> command such as B<-a>, B<-aa>, and B<-b>.
+Add the extra options to use with the B<unzip> command such as B<-a>, B<-aa>,
+and B<-b>.
 
 =back
 
@@ -347,6 +365,7 @@ my $mime = compression_guess_from_file($upstream);
 
 my $is_zipfile = (defined $mime and $mime eq 'zip');
 my $is_tarfile = $upstream =~ $tar_regex;
+my $is_xpifile = $upstream =~ /\.xpi$/i;
 
 unless ($is_zipfile or $is_tarfile) {
     # TODO: Should we ignore the name and only look at what file knows?
@@ -380,18 +399,30 @@ my $zipfile_deleted = 0;
 
 # If the file is a zipfile, we need to create a tarfile from it.
 if ($is_zipfile) {
-    system('command -v unzip >/dev/null 2>&1') >> 8 == 0
-	or die("unzip binary not found. You need to install the package unzip to be able to repack .zip upstream archives.\n");
+    if ($is_xpifile) {
+	system('command -v xpi-unpack >/dev/null 2>&1') >> 8 == 0
+	    or die("xpi-unpack binary not found. You need to install the package mozilla-devscripts to be able to repack .xpi upstream archives.\n");
+    } else {
+	system('command -v unzip >/dev/null 2>&1') >> 8 == 0
+	    or die("unzip binary not found. You need to install the package unzip to be able to repack .zip upstream archives.\n");
+    }
 
     my $tempdir = tempdir ("uscanXXXX", TMPDIR => 1, CLEANUP => 1);
     # Parent of the target directory should be under our control
     $tempdir .= '/repack';
-    mkdir $tempdir or die("Unable to mkdir($tempdir): $!\n");
-    my @cmd = ('unzip', '-q');
-    push @cmd, split ' ', $unzipopt if defined $unzipopt;
-    push @cmd, ('-d', $tempdir, $upstream_tar);
-    system(@cmd) == 0
-	or die("Repacking from zip or jar failed (could not unzip)\n");
+    my @cmd;
+    if ($is_xpifile) {
+	@cmd = ('xpi-unpack', $upstream_tar, $tempdir);
+	system(@cmd) >> 8 == 0
+	    or die("Repacking from xpi failed (could not xpi-unpack)\n");
+    } else {
+	mkdir $tempdir or die("Unable to mkdir($tempdir): $!\n");
+	@cmd = ('unzip', '-q');
+	push @cmd, split ' ', $unzipopt if defined $unzipopt;
+	push @cmd, ('-d', $tempdir, $upstream_tar);
+	system(@cmd) >> 8 == 0
+	    or die("Repacking from zip or jar failed (could not unzip)\n");
+    }
 
     # Figure out the top-level contents of the tarball.
     # If we'd pass "." to tar we'd get the same contents, but the filenames would

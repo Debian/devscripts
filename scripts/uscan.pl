@@ -1375,10 +1375,12 @@ Instead of symlinking as described above, rename the downloaded files.
 
 =item B<--repack>
 
-After having downloaded an lzma tar, xz tar, bzip tar or zip archive, repack it
-to the specified compression (see B<--compression>). The unzip package must be installed in
-order to repack .zip archives, the xz-utils package must be installed to repack
-lzma or xz tar archives.
+After having downloaded an lzma tar, xz tar, bzip tar, gz tar, zip, jar, xip
+archive, repack it to the specified compression (see B<--compression>).
+
+The unzip package must be installed in order to repack zip and jar archives,
+the mozilla-devscripts package must be installed to repack xip archives, and
+the xz-utils package must be installed to repack lzma or xz tar archives.
 
 =item B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]
 
