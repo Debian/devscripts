@@ -34,7 +34,7 @@ B<uscan> [I<options>] [I<path>]
 
 =head1 DESCRIPTION
 
-For the basic usage, B<uscan> is executed without any arguments from the root
+For basic usage, B<uscan> is executed without any arguments from the root
 of the Debianized source tree where you see the F<debian/> directory.  Then
 typically the following happens:
 
@@ -44,7 +44,7 @@ typically the following happens:
 source package name I<< <spkg> >> and the last upstream version.
 
 =item * B<uscan> process the watch lines F<debian/watch> from the top to the
-bottom in 1 pass.
+bottom in a single pass.
 
 =over
 
@@ -65,8 +65,8 @@ I<< ../<upkg>-<uversion>.tar.gz >>
 
 =over
 
-=item * Here, I<< ../<spkg>_<oversion>.orig-<component>.tar.gz >> instead for
-the secondary upstream tarball of the multiple upstream tarball (MUT) package.
+=item * For a multiple upstream tarball (MUT) package, the secondary upstream
+tarball will instead be named I<< ../<spkg>_<oversion>.orig-<component>.tar.gz >>.
 
 =back
 
@@ -87,29 +87,29 @@ Please note the following.
 B<.gz> suffix.  Other methods such as B<xz>, B<bzip2>, and B<lzma> with
 corresponding B<xz>, B<bz2>, and B<lzma> suffixes may also be used.
 
-=item * The new B<version=4> enables to handle the multiple upstream tarball
-(MUT) package but it is a rare case for the Debian packaging.  For the single
+=item * The new B<version=4> enables handling of multiple upstream tarball
+(MUT) packages but this is a rare case for Debian packaging.  For a single
 upstream tarball package, there is only one watch line and no I<<
 ../<spkg>_<oversion>.orig-<component>.tar.gz >> .
 
 =item * B<uscan> with the B<--verbose> option produces a human readable report
-of the B<uscan> execution.
+of B<uscan>'s execution.
 
 =item * B<uscan> with the B<--debug> option produces a human readable report of
-the B<uscan> execution with the internal variable states.
+B<uscan>'s execution including internal variable states.
 
-=item * B<uscan> with the B<--dehs> option produces the upstream package status
-report in an XML format for other programs such as the Debian External Health
+=item * B<uscan> with the B<--dehs> option produces an upstream package status
+report in XML format for other programs such as the Debian External Health
 System.
 
 =item * The primary objective of B<uscan> is to help identify if the latest
 version upstream tarball is used or not; and to download the latest upstream
-tarball.  The order of the version is decided by B<dpkg --compare-versions>.
+tarball.  The ordering of versions is decided by B<dpkg --compare-versions>.
 
 =item * B<uscan> with the B<--safe> option limits the functionality of B<uscan>
-to its primary objective.  Both the repacking of downloaded package and the
-updating the new source tree are skipped to avoid running unsafe scripts.
-This also change default to B<--no-download> and B<--skip-signature>.
+to its primary objective.  Both the repacking of downloaded files and
+updating of the source tree are skipped to avoid running unsafe scripts.
+This also changes the default to B<--no-download> and B<--skip-signature>.
 
 =back
 
@@ -125,9 +125,9 @@ The current version 4 format of F<debian/watch> can be summarized as follows:
 
 =item * A line started by B<#> (hash) is a comment line and dropped.
 
-=item * Single B<\> (back slash) at the end of a line is dropped and the
+=item * A single B<\> (back slash) at the end of a line is dropped and the
 next line is concatenated after removing leading spaces and tabs. The
-concatenated line is parsed as a single line. (The existence and non-existence
+concatenated line is parsed as a single line. (The existence or non-existence
 of the space before the tailing single B<\> is significant.)
 
 =item * The first non-comment line is:
@@ -140,9 +140,9 @@ of the space before the tailing single B<\> is significant.)
 
 This is required.
 
-=item * The following non-comment lines (watch lines) specify the rule for the
+=item * The following non-comment lines (watch lines) specify the rules for the
 selection of the candidate upstream tarball URLs and are in one of the
-following 3 formats:
+following three formats:
 
 =over
 
@@ -161,19 +161,18 @@ Here,
 =item * B<opts="> I<...> B<"> specifies the behavior of B<uscan>.  See L<WATCH
 FILE OPTIONS>.
 
-=item * B<http://>I<URL> specifies the web page where the upstream publishes
-the link to the latest upstream source archive.
+=item * B<http://>I<URL> specifies the web page where upstream publishes
+the link to the latest source archive.
 
 =over
 
-=item * B<https://>I<URL> instead may be used, too.
+=item * B<https://>I<URL> may also be used, as may
 
-=item * B<ftp://>I<URL> pointing to the archive directory instead may be used,
-too.
+=item * B<ftp://>I<URL>
 
 =item * Some parts of I<URL> may be in the regex match pattern surrounded
 between B<(> and B<)> such as B</foo/bar-([\.\d]+)/>.  (If multiple
-directories match, the highest version one is picked.) Otherwise, the I<URL>
+directories match, the highest version is picked.) Otherwise, the I<URL>
 is taken as verbatim.
 
 =back
@@ -186,48 +185,48 @@ hrefs in the web page.  See L<WATCH FILE EXAMPLES>.
 =item * All matching parts in B<(> and B<)> are concatenated with B<.> (period)
 to form the upstream version.
 
-=item * If the hrefs do not contain directory, you can combine this with the
+=item * If the hrefs do not contain directories, you can combine this with the
 previous entry. I.e., B<http://>I<URL>B</>I<matching-pattern> .
 
 =back
 
-=item * I<version> limits the downloading upstream tarball.  The newest
-available version is chosen for the download.
+=item * I<version> restricts the upstream tarball which may be downloaded.
+The newest available version is chosen in each case.
 
 =over
 
-=item * B<debian> limits the downloading upstream tarball to be newer than the
+=item * B<debian> requires the downloading upstream tarball to be newer than the
 version obtained from F<debian/changelog>.
 
-=item * I<version-number> such as B<12.5> limits the downloading upstream
+=item * I<version-number> such as B<12.5> requires the upstream
 tarball to be newer than the I<version-number>.
 
-=item * B<same> limits the downloading version of the secondary tarballs to be
-exactly the same as the one for the first upstream tarball downloaded. (useful
+=item * B<same> requires the downloaded version of the secondary tarballs to be
+exactly the same as the one for the first upstream tarball downloaded. (Useful
 only for MUT)
 
-=item * B<previous> limits the downloading version of the signature
-file. (used with pgpmode=previous)
+=item * B<previous> restricts the version of the signature
+file. (Used with pgpmode=previous)
 
-=item * B<ignore> does not limit the downloading version of the secondary
-tarballs. (maybe useful for MUT)
+=item * B<ignore> does not restrict the version of the secondary
+tarballs. (Maybe useful for MUT)
 
 =back
 
 =item * I<script> is executed at the end of B<uscan> execution with appropriate
-arguments provided by the B<uscan>.
+arguments provided by B<uscan>.
 
 =over
 
-=item * The typical Debian package is the non-native package made from one
-upstream tarball.  Only a single line of the watch line in one of the first 2
+=item * The typical Debian package is a non-native package made from one
+upstream tarball.  Only a single line of the watch line in one of the first two
 formats is usually used with its I<version> set to B<debian> and I<script>
 set to B<uupdate>.
 
-=item * The native package should skip specifying I<script>.
+=item * A native package should not specify I<script>.
 
-=item * The multiple upstream tarball (MUT) package should specify B<uupdate>
-as I<script> at the last watch line and should skip specifying I<script> at the
+=item * A multiple upstream tarball (MUT) package should specify B<uupdate>
+as I<script> in the last watch line and should skip specifying I<script> in the
 rest of the watch lines.
 
 =back
@@ -243,14 +242,14 @@ should not be typed.
 
 =back
 
-There are few special strings which are substituted by B<uscan> to make it easy
+There are a few special strings which are substituted by B<uscan> to make it easy
 to write the watch file.
 
 =over
 
 =item B<@PACKAGE@>
 
-This is substituted by the source package name found in the first line of the
+This is substituted with the source package name found in the first line of the
 F<debian/changelog> file.
 
 =item B<@ANY_VERSION@>
@@ -280,8 +279,8 @@ customize its behavior. Multiple options I<option1>, I<option2>, I<option3>,
 ... can be set as B<opts=">I<option1>B<,> I<option2>B<,> I<option3>B<,> I< ...
 >B<"> .  The double quotes are necessary if options contain any spaces.
 
-Unless otherwise noted as persistent, most options are valid only within the
-watch line.
+Unless otherwise noted as persistent, most options are valid only within their
+containing watch line.
 
 The available watch options are:
 
@@ -290,48 +289,48 @@ The available watch options are:
 =item B<component=>I<component>
 
 Set the name of the secondary source tarball as I<<
-<spkg>_<oversion>.orig-<component>.tar.gz >> for the MUT package
+<spkg>_<oversion>.orig-<component>.tar.gz >> for a MUT package.
 
 =item B<compression=>I<method>
 
-Set the compression I<method> when the tarball is repacked. (persistent)
+Set the compression I<method> when the tarball is repacked (persistent).
 
 Available I<method> values are B<xz>, B<gzip> (alias B<gz>), B<bzip2> (alias
 B<bz2>), and B<lzma>.  The default is B<gzip> for normal tarballs, and B<xz>
-for tarballs generated directly from the git repository.
+for tarballs generated directly from a git repository.
 
-If the debian source format is not in the old 1.0, setting this to B<xz> should
+If the debian source format is not 1.0, setting this to B<xz> should
 help reduce the package size when the package is repacked.
 
-Please note the repack of the upstream tarballs by the B<mk-origtargz> happens
-only if one of the following condition is satisfied:
+Please note the repacking of the upstream tarballs by B<mk-origtargz> happens
+only if one of the following conditions is satisfied:
 
 =over
 
 =item * B<USCAN_REPACK> is set in the devscript configuration.  See L<DEVSCRIPT
 CONFIGURATION VARIABLES>.
 
-=item * B<--repack> is set in the commandline.  See <COMMANDLINE OPTIONS>.
+=item * B<--repack> is set on the commandline.  See <COMMANDLINE OPTIONS>.
 
 =item * B<repack> is set in the watch line as B<opts="repack,>I<...>B<">.
 
-=item * The upstream archive is in the B<zip> type including B<jar>, B<xpi>, ...
+=item * The upstream archive is of B<zip> type including B<jar>, B<xpi>, ...
 
 =item * B<Files-Excluded> or B<Files-Excluded->I<component> stanzas are set in
-F<debian/copyright> to make B<mk-origtargz> invoked from B<uscan> to remove
-files from the upstream tarball and to repack it.  See L<COPYRIGHT FILE
+F<debian/copyright> to make B<mk-origtargz> invoked from B<uscan> remove
+files from the upstream tarball and repack it.  See L<COPYRIGHT FILE
 EXAMPLES> and mk-origtargz(1).
 
 =back
 
 =item B<repack>
 
-Force to repack the upstream tarball using the compression I<method>.
+Force repacking of the upstream tarball using the compression I<method>.
 
 =item B<repacksuffix=>I<suffix>
 
-Add I<suffix> to the Debian package upstream version as suffix only when the
-source tarball is repackaged.  This rule should be used only for the single
+Add I<suffix> to the Debian package upstream version only when the
+source tarball is repackaged.  This rule should be used only for a single
 upstream tarball package.
 
 =item B<mode=>I<mode>
@@ -358,13 +357,13 @@ use it instead of using this mode.  This mode is the last resort method.
 
 =item B<pgpmode=>I<mode>
 
-Set the pgp/gpg signature verification I<mode>.
+Set the PGP/GPG signature verification I<mode>.
 
 =over
 
 =item B<auto>
 
-B<uscan> checks possible URLs for the signature file and autogenerates
+B<uscan> checks possible URLs for the signature file and autogenerates a
 B<pgpsigurlmangle> rule to use it.
 
 =item B<default>
@@ -372,8 +371,8 @@ B<pgpsigurlmangle> rule to use it.
 Use B<pgpsigurlmangle=>I<rules> to generate the candidate upstream signature
 file URL string from the upstream tarball URL. (default)
 
-If actual B<pgpsigurlmangle> is missing, B<uscan> checks possible URLs for the
-signature file and suggests to add B<pgpsigurlmangle> rule.
+If the specified B<pgpsigurlmangle> is missing, B<uscan> checks possible URLs
+for the signature file and suggests adding a B<pgpsigurlmangle> rule.
 
 =item B<mangle>
 
@@ -384,7 +383,7 @@ file URL string from the upstream tarball URL.
 
 Verify this downloaded tarball file with the signature file specified in the
 next watch line.  The next watch line must be B<pgpmode=previous>.  Otherwise,
-no verification.
+no verification occurs.
 
 =item B<previous>
 
@@ -408,7 +407,7 @@ Decompress compressed archive before the pgp/gpg signature verification.
 
 =item B<bare>
 
-Disable all site specific special case codes such as URL redirector uses and
+Disable all site specific special case code such as URL redirector uses and
 page content alterations. (persistent)
 
 =item B<user-agent=>I<user-agent-string>
@@ -417,24 +416,24 @@ Set the user-agent string used to contact the HTTP(S) server as
 I<user-agent-string>. (persistent)
 
 B<user-agent> option should be specified by itself in the watch line without
-I<URL> by itself to allow using semicolons and commas in it.
+I<URL>,to allow using semicolons and commas in it.
 
 =item B<pasv>, B<passsive>
 
-Use the PASV mode for the FTP connection.
+Use PASV mode for the FTP connection.
 
-If the PASV mode is required due to the client side network environment, set
-B<uscan> to use the PASV mode via L<COMMANDLINE OPTIONS> or L<DEVSCRIPT
+If PASV mode is required due to the client side network environment, set
+B<uscan> to use PASV mode via L<COMMANDLINE OPTIONS> or L<DEVSCRIPT
 CONFIGURATION VARIABLES> instead.
 
 =item B<active>, B<nopasv>
 
-Don't use the PASV mode for the FTP connection.
+Don't use PASV mode for the FTP connection.
 
 =item B<unzipopt=>I<options>
 
 Add the extra options to use with the B<unzip> command, such as B<-a>, B<-aa>,
-and B<-b>, which is run within B<mk-origtargz>.
+and B<-b>, when executed by B<mk-origtargz>.
 
 =item B<dversionmangle=>I<rules>
 
@@ -473,7 +472,7 @@ Syntactic shorthand for B<uversionmangle=>I<rules>B<, dversionmangle=>I<rules>
 =item B<downloadurlmangle=>I<rules>
 
 Convert the selected upstream tarball href string into the accessible URL for
-obfusicated web sites.
+obfuscated web sites.
 
 =item B<filenamemangle=>I<rules>
 
@@ -496,7 +495,7 @@ tarball URL.
 
 Generate the version string I<< <oversion> >> of the source tarball I<<
 <spkg>_<oversion>.orig.tar.gz >> from I<< <uversion> >>.  This should be used
-to add suffix such as B<+dfsg1> to the MUT package.
+to add a suffix such as B<+dfsg1> to a MUT package.
 
 =back
 
@@ -504,7 +503,7 @@ Here, the mangling rules apply the I<rules> to the pertinent string.  Multiple
 rules can be specified in a mangling rule string by making a concatenated
 string of each mangling I<rule> separated by B<;> (semicolon).
 
-Each mangling I<rule> can not contain B<;> (semicolon), B<,> (comma), or B<">
+Each mangling I<rule> cannot contain B<;> (semicolon), B<,> (comma), or B<">
 (double quote).
 
 Each mangling I<rule> behaves as if a Perl command "I<$string> B<=~> I<rule>"
@@ -519,8 +518,8 @@ is executed.  There are some notable details.
 =item B<s/>I<regex>B</>I<replacement>B</>I<options>
 
 Regex pattern match and replace the target string.  Only the B<g>, B<i> and
-B<x> flags are available.  Use the B<$1> syntax for the back reference (No
-B<\1> syntax).  Code execution is not allowed (i.e. No B<(?{})> nor B<(??{})>
+B<x> flags are available.  Use the B<$1> syntax for back references (No
+B<\1> syntax).  Code execution is not allowed (i.e. no B<(?{})> or B<(??{})>
 constructs).
 
 =item B<y/>I<source>B</>I<dest>B</> or B<tr/>I<source>B</>I<dest>B</>
