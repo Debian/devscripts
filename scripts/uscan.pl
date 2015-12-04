@@ -416,7 +416,7 @@ Set the user-agent string used to contact the HTTP(S) server as
 I<user-agent-string>. (persistent)
 
 B<user-agent> option should be specified by itself in the watch line without
-I<URL>,to allow using semicolons and commas in it.
+I<URL>, to allow using semicolons and commas in it.
 
 =item B<pasv>, B<passsive>
 
