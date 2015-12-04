@@ -9,6 +9,7 @@ test:
 	./test_checkbashisms
 	./test_dd-list
 	./test_debchange
+	./test_package_lifecycle
 	./test_debdiff
 	./test_licensecheck
 	if [ $(check_unstable) = 0 ]; then \
@@ -24,6 +25,7 @@ test-installed:
 	./test_checkbashisms --installed
 	./test_dd-list --installed
 	./test_debchange --installed
+	./test_package_lifecycle --installed
 	./test_debdiff --installed
 	./test_licensecheck --installed
 	if [ $(check_unstable) = 0 ]; then \
