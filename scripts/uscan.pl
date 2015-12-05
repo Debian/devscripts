@@ -2399,6 +2399,10 @@ sub process_watchline ($$$$$$)
     my $urlbase;
     my $headers = HTTP::Headers->new;
 
+    if ($signature <= 0) {
+	$options{'pgpmode'} = 'none';
+    }
+
     # Need to clear remembered redirection URLs so we don't try to build URLs
     # from previous watch files or watch lines
     $user_agent->clear_redirections;
@@ -2514,8 +2518,10 @@ sub process_watchline ($$$$$$)
 		} elsif ($opt =~ /^\s*filenamemangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'filenamemangle'}} = split /;/, $1;
 		} elsif ($opt =~ /^\s*pgpsigurlmangle\s*=\s*(.+?)\s*$/) {
-		    @{$options{'pgpsigurlmangle'}} = split /;/, $1;
-	    	    $options{'pgpmode'} = 'mangle';
+		    if ($signature > 0) {
+			@{$options{'pgpsigurlmangle'}} = split /;/, $1;
+			$options{'pgpmode'} = 'mangle';
+		    }
 		} elsif ($opt =~ /^\s*oversionmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'oversionmangle'}} = split /;/, $1;
 		} else {
