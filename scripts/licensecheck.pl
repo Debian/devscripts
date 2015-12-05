@@ -151,6 +151,9 @@ use warnings    qw< FATAL  utf8     >;
 
 use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
+use File::stat;
+use IO::File;
+use Fcntl qw/:seek/;
 
 binmode STDOUT, ':utf8';
 
@@ -334,16 +337,27 @@ while (@files) {
     my $copyright = '';
     my $license = '';
 
+    my $st = stat $file;
+
     my $enc = $OPT{encoding} ;
     my $mode = $enc ? "<:encoding($enc)" : '<';
     # need to use "<" when encoding is unknown otherwise we break compatibility
-    open (my $F, $mode ,$file) or die "Unable to access $file\n";
+    my $fh = IO::File->new ($file ,$mode) or die "Unable to access $file\n";
 
-    while ( <$F>) {
-	last if ($. > $OPT{'lines'});
-	$content .= $_;
+    while ( my $line = $fh->getline ) {
+	last if ($fh->input_line_number > $OPT{'lines'});
+	$content .= $line;
     }
-    close($F);
+    my $position = $fh->tell; # See IO::Seekable
+
+    my $jump = $st->size - 4800; # yeah, that's 60 x 80 chars
+    $jump = $position if $jump < $position;
+
+    if ( $jump < $st->size) {
+	$fh->seek($jump, SEEK_SET) ; # also IO::Seekable
+	$content .= join('',$fh->getlines);
+    }
+    $fh->close;
 
     my %copyrights = extract_copyright($content);
     $copyright = join(" / ", reverse sort values %copyrights);
