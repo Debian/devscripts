@@ -12,7 +12,3 @@ else
 	dh_gencontrol -- -V'vendor:Suggests=' -V'vendor:Recommends=$(UBU_SUGGESTS)'
 endif
 
-override_dh_clean:
-	dh_clean
-	rm -rf test/uscan/gpg test/package_lifecycle
-

@@ -40,6 +40,8 @@ DEBUGBASH=":"
 #DEBUGBASH="bash -i"
 #DEBUGBASH="ls -laR"
 
+GPGHOME=$(readlink -f $test_dir/uscan/gpg)
+
 GPG=/usr/bin/gpg
 if [ ! -x $GPG ];then
     echo "$GPG missing"
@@ -52,23 +54,25 @@ fi
 
 PRIVATE_KEY=$test_dir/uscan/PRIVATE_KEY.asc
 PUBLIC_KEY=$test_dir/uscan/PUBLIC_KEY.asc
-
-GPGHOME=$(readlink -f $test_dir/uscan/gpg)
-rm -rf $GPGHOME
-mkdir -p $GPGHOME
-chmod 700 $GPGHOME
 PRIVATE_KEYRING=$GPGHOME/secring.gpg
 PUBLIC_KEYRING=$GPGHOME/pubring.gpg
 
-$GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
-    --output $PRIVATE_KEYRING --dearmor $PRIVATE_KEY
 
-$GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
-    --output $PUBLIC_KEYRING --dearmor $PUBLIC_KEY
+oneTimeSetUp () {
 
-$GPG --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
-    --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
-    --list-keys --verbose
+	rm -rf $GPGHOME
+	mkdir -p $GPGHOME
+	chmod 700 $GPGHOME
+	$GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+		--output $PRIVATE_KEYRING --dearmor $PRIVATE_KEY
+
+	$GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+		--output $PUBLIC_KEYRING --dearmor $PUBLIC_KEY
+
+	$GPG --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+		--secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
+		--list-keys --verbose
+}
 
 # Initial Debian revision value is distribution dependent
 SUFFIX="1"
@@ -948,5 +952,10 @@ opts="component=bar,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/bar@ANY_VERSION@
 opts="component=baz,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/baz@ANY_VERSION@@ARCHIVE_EXT@ same uupdate'
     helperWatch siteWebNonNativeMUT
 }
+
+oneTimeTearDown () {
+	rm -rf ${GPGHOME}
+}
+
 
 . shunit2

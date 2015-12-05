@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash 
 
 # Copyright (C) 2015, Nicholas Bamber <nicholas@periapt.co.uk>
 #
@@ -26,40 +26,42 @@ else
 	export PATH PERL5LIB
 fi
 
-GPG=/usr/bin/gpg
-if [ ! -x $GPG ];then
-    echo "$GPG missing"
-    GPG=/usr/bin/gpg2
-    if [ ! -x $GPG ];then
-    echo "$GPG missing"
-    exit 1
-    fi
-fi
-
-PRIVATE_KEY=${WORKDIR}/uscan/PRIVATE_KEY.asc
-PUBLIC_KEY=${WORKDIR}/uscan/PUBLIC_KEY.asc
-
-GPGHOME=$(readlink -f ${WORKDIR}/uscan/gpg)
-rm -rf $GPGHOME
-mkdir -p $GPGHOME
-chmod 700 $GPGHOME
-PRIVATE_KEYRING=$GPGHOME/secring.gpg
-PUBLIC_KEYRING=$GPGHOME/pubring.gpg
-
-$GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
-    --output $PRIVATE_KEYRING --dearmor $PRIVATE_KEY
-
-$GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
-    --output $PUBLIC_KEYRING --dearmor $PUBLIC_KEY
-
-$GPG --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
-    --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
-    --list-keys --verbose
-
 . "${0%/*}/shunit2-helper-functions.sh"
 
-mkdir -p ${WORKDIR}/package_lifecycle/test/debian/source
-cat > ${WORKDIR}/package_lifecycle/test/debian/control <<-EOS
+GPGHOME=$(readlink -f ${WORKDIR}/uscan/gpg)
+
+oneTimeSetUp () {
+	GPG=/usr/bin/gpg
+	if [ ! -x $GPG ];then
+		echo "$GPG missing"
+		GPG=/usr/bin/gpg2
+		if [ ! -x $GPG ];then
+		echo "$GPG missing"
+		exit 1
+		fi
+	fi
+
+	PRIVATE_KEY=${WORKDIR}/uscan/PRIVATE_KEY.asc
+	PUBLIC_KEY=${WORKDIR}/uscan/PUBLIC_KEY.asc
+
+	rm -rf $GPGHOME
+	mkdir -p $GPGHOME
+	chmod 700 $GPGHOME
+	PRIVATE_KEYRING=$GPGHOME/secring.gpg
+	PUBLIC_KEYRING=$GPGHOME/pubring.gpg
+
+	$GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+		--output $PRIVATE_KEYRING --dearmor $PRIVATE_KEY
+
+	$GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+	    --output $PUBLIC_KEYRING --dearmor $PUBLIC_KEY
+
+	$GPG --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+	    --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
+	    --list-keys --verbose
+
+	mkdir -p ${WORKDIR}/package_lifecycle/test/debian/source
+	cat > ${WORKDIR}/package_lifecycle/test/debian/control <<-EOS
 	Source: test
 	Section: devel
 	Priority: optional
@@ -72,19 +74,21 @@ cat > ${WORKDIR}/package_lifecycle/test/debian/control <<-EOS
 	Description: Short description
 	 Longer description
 EOS
-cp /usr/share/doc/debhelper/examples/rules.tiny ${WORKDIR}/package_lifecycle/test/debian/rules
-_DATE=$(LC_ALL=C date '+%a, %d %b %Y %T +0000')
-cat > ${WORKDIR}/package_lifecycle/test/debian/changelog <<-EOS
+	cp /usr/share/doc/debhelper/examples/rules.tiny ${WORKDIR}/package_lifecycle/test/debian/rules
+	_DATE=$(LC_ALL=C date '+%a, %d %b %Y %T +0000')
+	cat > ${WORKDIR}/package_lifecycle/test/debian/changelog <<-EOS
 	test (1.0-1) unstable; urgency=low
 	
 	  * Initial packaging
 	
 	 -- Testophilus Testownik <tester@testity.org>  ${_DATE}
 EOS
-echo 9 > ${WORKDIR}/package_lifecycle/test/debian/compat
-echo '3.0 (quilt)' > ${WORKDIR}/package_lifecycle/test/debian/source/format
-touch ${WORKDIR}/package_lifecycle/test/CONTENTS
-cd ${WORKDIR}/package_lifecycle/ && tar cvf test_1.0.orig.tar --exclude debian -- test/CONTENTS 2>&1 > /dev/null && xz -f test_1.0.orig.tar
+	echo 9 > ${WORKDIR}/package_lifecycle/test/debian/compat
+	echo '3.0 (quilt)' > ${WORKDIR}/package_lifecycle/test/debian/source/format
+	touch ${WORKDIR}/package_lifecycle/test/CONTENTS
+	cd ${WORKDIR}/package_lifecycle/ && tar cvf test_1.0.orig.tar --exclude debian -- test/CONTENTS 2>&1 > /dev/null && xz -f test_1.0.orig.tar
+	cd ${WORKDIR}
+}
 
 runCommandOutCmpFile() {
     local param="$1"
@@ -326,7 +330,10 @@ EOS
   cd ${WORKDIR}
 }
 
+oneTimeTearDown () {
+	rm -rf ${WORKDIR}/package_lifecycle
+}
+
 cd ${WORKDIR}
 . shunit2
 
-rm -rf ${WORKDIR}/package_lifecycle
