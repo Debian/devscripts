@@ -27,11 +27,14 @@ else
 fi
 
 cleanup(){
-    rm -rf $TMPDIR
+	rm -rf $TMPDIR
+	unset LANG
 }
 
 setUp () {
 	TMPDIR=$(mktemp -d test_mk-origtargz.XXXX)
+	LANG=C
+	export LANG
 }
 
 tearDown () {
@@ -160,7 +163,7 @@ END
 
 expected_stderr_after_removal="WARNING: Files-Excluded pattern (exclude-dir2/) should not have a trailing /"
 
-expected_files_after_removal=$(sort <<END
+expected_files_after_removal=$(LANG=C sort <<END
 foo-0.1/
 foo-0.1/a-dir/
 foo-0.1/a-dir/exclude-this-subdir/
