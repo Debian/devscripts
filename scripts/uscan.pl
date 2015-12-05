@@ -2515,7 +2515,7 @@ sub process_watchline ($$$$$$)
 		    @{$options{'filenamemangle'}} = split /;/, $1;
 		} elsif ($opt =~ /^\s*pgpsigurlmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'pgpsigurlmangle'}} = split /;/, $1;
-	    	    $options{'pgpmode'} = 'mangle';
+		    $options{'pgpmode'} = 'mangle';
 		} elsif ($opt =~ /^\s*oversionmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'oversionmangle'}} = split /;/, $1;
 		} else {
@@ -2598,7 +2598,7 @@ sub process_watchline ($$$$$$)
 	# Allow 2 char shorthands for opts="pgpmode=..." and check
 	if ($options{'pgpmode'} =~ m/^au/) {
 	    $options{'pgpmode'} = 'auto';
-	    if (defined $options{'pgpsigurlmangle'}) {
+	    if (exists $options{'pgpsigurlmangle'}) {
 		uscan_warn "Ignore pgpsigurlmangle because pgpmode=auto\n";
 		delete $options{'pgpsigurlmangle'};
 	    }
@@ -3469,7 +3469,7 @@ EOF
     my $pgpsig_url;
     my $sigfile;
     my $signature_available;
-    if ($options{'pgpmode'} eq 'default' or $options{'pgpmode'} eq 'auto') {
+    if (($options{'pgpmode'} eq 'default' or $options{'pgpmode'} eq 'auto') and $signature == 1) {
 	uscan_msg "Start checking for common possible upstream OpenPGP signature files\n";
 	foreach my $suffix (qw(asc gpg pgp sig)) {
 	    my $sigrequest = HTTP::Request->new('HEAD' => "$upstream_url.$suffix");
