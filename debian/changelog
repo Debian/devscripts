@@ -105,7 +105,7 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
     + Fix parsing of sources.list lines with options.  (Closes: #674812)
   * Add apt to Recommends, since various scripts use tools from apt.  (Closes:
     #807065)
-  * Export LANG=C in test_mk-origtargz so the test doesn't fail in non-English
+  * Export LC_ALL=C in test_mk-origtargz so the test doesn't fail in non-English
     locales.
 
   [ Daniel Kahn Gillmor ]

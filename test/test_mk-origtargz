@@ -28,13 +28,13 @@ fi
 
 cleanup(){
 	rm -rf $TMPDIR
-	unset LANG
+	unset LC_ALL
 }
 
 setUp () {
 	TMPDIR=$(mktemp -d test_mk-origtargz.XXXX)
-	LANG=C
-	export LANG
+	LC_ALL=C
+	export LC_ALL
 }
 
 tearDown () {
@@ -163,7 +163,7 @@ END
 
 expected_stderr_after_removal="WARNING: Files-Excluded pattern (exclude-dir2/) should not have a trailing /"
 
-expected_files_after_removal=$(LANG=C sort <<END
+expected_files_after_removal=$(LC_ALL=C sort <<END
 foo-0.1/
 foo-0.1/a-dir/
 foo-0.1/a-dir/exclude-this-subdir/
@@ -195,7 +195,7 @@ run_mk_origtargz() {
 	shift
 	shift
 	shift
-	output="$( cd $TMPDIR/$dir >/dev/null; LANG=C $MK_ORIGTARGZ "$@" 2> $stderrF )"
+	output="$( cd $TMPDIR/$dir >/dev/null; LC_ALL=C $MK_ORIGTARGZ "$@" 2> $stderrF )"
 	stderr="$(cat $stderrF)"
 	retval=$?
 	assertEquals "standard output of mk-origtargz $*\n" "$exp_stdout" "$output"
