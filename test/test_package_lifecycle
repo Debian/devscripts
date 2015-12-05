@@ -93,7 +93,11 @@ runCommandOutCmpFile() {
     local exp_retval=$4
     local stdoutF="${SHUNIT_TMPDIR}/stdout"
     local stderrF="${SHUNIT_TMPDIR}/stderr"
-    eval "${COMMAND} $param"  2> ${stderrF} | grep -v File::FcntlLock | sed -e's!^ -- Testophilus Testownik <tester@testity.org>.*! -- Testophilus Testownik <tester@testity.org>!' > ${stdoutF}
+    eval "${COMMAND} $param"  2> ${stderrF} | \
+	grep -v File::FcntlLock | \
+	grep -v dh_strip_nondeterminism | \
+	sed -e "s/\`/'/g" | \
+	sed -e's!^ -- Testophilus Testownik <tester@testity.org>.*! -- Testophilus Testownik <tester@testity.org>!' > ${stdoutF}
     retval=$?
 	eval "cmp ${stdoutF} ${exp_stdoutfile}" 3>&1 >/dev/null
 	local diffretval=$?
@@ -140,7 +144,6 @@ test_debuild() {
 	   dh_installchangelogs
 	   dh_perl
 	   dh_link
-	   dh_strip_nondeterminism
 	   dh_compress
 	   dh_fixperms
 	   dh_installdeb
@@ -287,7 +290,6 @@ test_debuild2() {
 	   dh_installchangelogs
 	   dh_perl
 	   dh_link
-	   dh_strip_nondeterminism
 	   dh_compress
 	   dh_fixperms
 	   dh_installdeb
