@@ -16,10 +16,13 @@ Build-Depends: bash-completion,
                gnupg | gnupg2,
                libdistro-info-perl,
                libfile-desktopentry-perl,
+               libsoftware-license-perl,
                libtimedate-perl,
+               libuniversal-require-perl,
                liburi-perl,
                libwww-perl,
                lsb-release,
+               mozilla-devscripts,
                perl,
                pkg-config,
                po4a (>= 0.40),
@@ -33,10 +36,7 @@ Build-Depends: bash-completion,
                wdiff,
                xsltproc,
                xz-utils,
-               zip,
-               libsoftware-license-perl,
-               libuniversal-require-perl,
-			   mozilla-devscripts
+               zip
 Testsuite: autopkgtest
 Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/devscripts.git
 Vcs-Git: git://anonscm.debian.org/collab-maint/devscripts.git
