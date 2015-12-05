@@ -101,6 +101,8 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
     + Remove unnecessary requirement that “apt-cache policy $pkg” shows a
       priority of 0 for the Candidate version.  (Closes: #807064)
     + Fix parsing of sources.list lines with options.  (Closes: #674812)
+  * Add apt to Recommends, since various scripts use tools from apt.  (Closes:
+    #807065)
 
   [ Daniel Kahn Gillmor ]
   * debuild:

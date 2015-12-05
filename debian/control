@@ -50,6 +50,7 @@ Depends: dpkg-dev (>= 1.17.0),
          ${python3:Depends},
          ${shlibs:Depends}
 Recommends: at,
+            apt,
             dctrl-tools,
             dput | dupload,
             fakeroot,
