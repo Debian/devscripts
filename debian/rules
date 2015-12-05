@@ -13,5 +13,6 @@ else
 endif
 
 override_dh_clean:
+	dh_clean
 	rm -rf test/uscan/gpg test/package_lifecycle
 
