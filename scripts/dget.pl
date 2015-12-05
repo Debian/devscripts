@@ -280,7 +280,7 @@ sub apt_get {
 	    $version = $1;
 	    $qversion = quote_version($version);
 	}
-	if ($qversion and /^ [ *]{3} ($qversion) 0/) {
+	if ($qversion and /^ [ *]{3} ($qversion) \d/) {
 	    while (<$apt>) {
 		last OUTER unless /^  *(?:\d+) (\S+)/;
 		(my $host = $1) =~ s@/$@@;

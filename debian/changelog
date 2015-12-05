@@ -97,6 +97,9 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
   [ James McCoy ]
   * debuild:
     + Use _all as the .changes arch for -A builds.  (Closes: #806262)
+  * dget:
+    + Remove unnecessary requirement that “apt-cache policy $pkg” shows a
+      priority of 0 for the Candidate version.  (Closes: #807064)
 
   [ Daniel Kahn Gillmor ]
   * debuild:
