@@ -222,6 +222,7 @@ my %OPT=(
 );
 
 my $def_lines = 60;
+my $def_tail = 5000; # roughly 60 lines of 80 chars
 
 # Read configuration files and then command line
 # This is boilerplate
@@ -335,7 +336,6 @@ while (@files) {
     my $content = '';
     my $copyright_match;
     my $copyright = '';
-    my $license = '';
 
     my $st = stat $file;
 
@@ -348,24 +348,36 @@ while (@files) {
 	last if ($fh->input_line_number > $OPT{'lines'});
 	$content .= $line;
     }
-    my $position = $fh->tell; # See IO::Seekable
-
-    my $jump = $st->size - 4800; # yeah, that's 60 x 80 chars
-    $jump = $position if $jump < $position;
-
-    if ( $jump < $st->size) {
-	$fh->seek($jump, SEEK_SET) ; # also IO::Seekable
-	$content .= join('',$fh->getlines);
-    }
-    $fh->close;
 
     my %copyrights = extract_copyright($content);
-    $copyright = join(" / ", reverse sort values %copyrights);
 
     print qq(----- $file header -----\n$content----- end header -----\n\n)
 	if $OPT{'verbose'};
 
-    $license = parselicense(clean_cruft_and_spaces(clean_comments($content)));
+    my $license = parselicense(clean_cruft_and_spaces(clean_comments($content)));
+    $copyright = join(" / ", reverse sort values %copyrights);
+
+    if ( not $copyright and $license eq 'UNKNOWN') {
+	my $position = $fh->tell; # See IO::Seekable
+	my $tail_size = $def_tail;
+	my $jump = $st->size - $tail_size;
+	$jump = $position if $jump < $position;
+
+	my $tail ;
+	if ( $tail_size and $jump < $st->size) {
+	    $fh->seek($jump, SEEK_SET) ; # also IO::Seekable
+	    $tail .= join('',$fh->getlines);
+	}
+
+	print qq(----- $file tail -----\n$tail----- end tail -----\n\n)
+	    if $OPT{'verbose'};
+
+	%copyrights = extract_copyright($tail);
+	$license = parselicense(clean_cruft_and_spaces(clean_comments($tail)));
+	$copyright = join(" / ", reverse sort values %copyrights);
+    }
+
+    $fh->close;
 
     if ($OPT{'machine'}) {
 	print "$file\t$license";
