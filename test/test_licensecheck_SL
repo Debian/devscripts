@@ -29,14 +29,14 @@ my %LICENSES = (
     Mozilla_1_0=>'MPL (v1.0)',
     None=>'UNKNOWN',
     PostgreSQL=>'UNKNOWN',
-#    AGPL_3=>'UNKNOWN',  This is broken since licensecheck started looking at the tail
+    AGPL_3=>'UNKNOWN', # This is broken since licensecheck started looking at the tail
     SSLeay=>'BSD (2 clause)',
     Apache_1_1=>'UNKNOWN',
     Mozilla_1_1=>'MPL (v1.1)',
     GFDL_1_2=>'UNKNOWN',
     Sun=>'UNKNOWN',
     BSD=>'UNKNOWN',
-#    OpenSSL=>'BSD (4 clause)',  This is actually a dual license not simply BSD 4 clause
+    OpenSSL=>'UNKNOWN', # This is actually a dual license not simply BSD 4 clause
     Perl_5=>'UNKNOWN',
 );
 
