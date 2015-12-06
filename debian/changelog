@@ -32,6 +32,7 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
   * Added test for life cycle of package:
     + debuild, dscverify, dscextract, list-unreleased, debdiff
   * Rearranged cleanup of tests to use oneTimeSetUp/oneTimeTearDown
+  * Streamlined structure of test/Makefile
 
   [ Dominique Dumont ]
   * licensecheck:
