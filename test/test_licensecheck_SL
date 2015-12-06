@@ -40,7 +40,12 @@ my %LICENSES = (
     Perl_5=>'UNKNOWN',
 );
 
-plan tests=>scalar(keys %LICENSES);
+my $SL_VERSION=`dpkg-query -W -f='\${Version}' libsoftware-license-perl`;
+if (system("dpkg --compare-versions $SL_VERSION gt 0.103010-3") == 0) {
+	plan tests=>scalar(keys %LICENSES);
+} else {
+	plan skip_all=>"Software::License $SL_VERSION too old for this test";
+}
 
 my $dir = File::Temp->newdir('/tmp/slgenXXXXX');
 my $year = 2000;
