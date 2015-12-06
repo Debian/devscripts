@@ -332,6 +332,7 @@ EOS
 
 oneTimeTearDown () {
 	rm -rf ${WORKDIR}/package_lifecycle
+	rm -rf $GPGHOME
 }
 
 cd ${WORKDIR}
