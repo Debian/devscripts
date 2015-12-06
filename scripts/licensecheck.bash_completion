@@ -6,6 +6,10 @@ _licensecheck()
     _init_completion || return
 
     case $prev in
+        --tail)
+            COMPREPLY=( $( compgen -W '0 1000 2000 3000' -- "$cur" ) )
+            return 0
+            ;;
         --lines)
             COMPREPLY=( $( compgen -W '120 200 300 400' -- "$cur" ) )
             return 0
@@ -13,7 +17,7 @@ _licensecheck()
     esac
 
     if [[ "$cur" == -* ]]; then
-        _options='--verbose --no-verbose --lines --ignore --recursive --check --copyright --machine'
+        _options='--verbose --no-verbose --lines --ignore --recursive --tail --check --copyright --machine'
         if [[ "$prev" == licensecheck ]]; then
             _options+=' --no-conf'
         fi
