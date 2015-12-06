@@ -266,11 +266,14 @@ This is substituted by the typical archive file extension regex (non-capturing).
 
 =item B<@SIGNATURE_EXT@>
 
-This is substituted by the typical signature file exsention regex (non-capturing).
+This is substituted by the typical signature file extension regex (non-capturing).
 
   (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)\.(?:asc|pgp|gpg|sig)
 
 =back
+
+Some file extensions are not included in the above intentionally to avoid false
+positives.  You can still set such file extension patterns manually.
 
 =head1 WATCH FILE OPTIONS
 
@@ -642,6 +645,10 @@ upstream version scheme doesn't sort correctly to identify the newest version.)
 The upstream tarball href corresponding to the newest (uversionmangled)
 candidate upstream version newer than the (dversionmangled) last upstream
 version is selected.
+
+If multiple upstream tarball hrefs corresponding to a single verion with
+different extensions exist, the highest compression one is chosen. (Priority:
+B<< tar.xz > tar.lzma > tar.bz2 > tar.gz >>.)
 
 If the selected upstream tarball href is the relative URL, it is converted to
 the absolute URL using the base URL of the web page.  If the B<< <base href="
@@ -1615,24 +1622,35 @@ in version 2, they will all be used in version 3. To avoid this behavior,
 change the non-version-number groups to be B<(?:> I< ...> B<)> instead of a
 plain B<(> I< ... > B<)> group.
 
-B<uscan> invokes the custom I<script> as "I<script> B<--upstream-version>
+=over
+
+=item * B<uscan> invokes the custom I<script> as "I<script> B<--upstream-version>
 I<version> B<../>I<spkg>B<_>I<version>B<.orig.tar.gz>".
 
-B<uscan> invokes the standard B<uupdate> as "B<uupdate> B<--no-symlink
+=item * B<uscan> invokes the standard B<uupdate> as "B<uupdate> B<--no-symlink
 --upstream-version> I<version> B<../>I<spkg>B<_>I<version>B<.orig.tar.gz>".
 
+=back
+
 =item Version 4
+
+B<devscripts> version 2.15.10: The first incarnation of F<watch> files
+supporting multiple upstream tarballs.
 
 The syntax of the watch file is relaxed to allow more spaces for readability.
 
 If you have a custom script in place of B<uupdate>, you may also encounter
-problems.
+problems updating from Version 3.
 
-B<uscan> invokes the custom I<script> as "I<script> B<--upstream-version>
+=over
+
+=item * B<uscan> invokes the custom I<script> as "I<script> B<--upstream-version>
 I<version>".
 
-B<uscan> invokes the standard B<uupdate> as "B<uupdate> B<--find>
+=item * B<uscan> invokes the standard B<uupdate> as "B<uupdate> B<--find>
 B<--upstream-version> I<version>".
+
+=back
 
 Restriction for B<--dehs> is lifted by redirecting other output to STDERR when
 it is activated.
