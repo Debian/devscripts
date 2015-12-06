@@ -58,6 +58,12 @@ Default is to be quiet.
 Specify the number of lines of each file's header which should be parsed
 for license information. (Default is 60).
 
+=item B<--tail=>I<N>
+
+By default, the last 5k bytes of each files are parsed to get license
+information. You may use this option to set the size of this parsed chunk.
+You may set this value to 0 to avoid parsing the end of the file.
+
 =item B<-i=>I<regex>, B<--ignore=>I<regex>
 
 When processing the list of files and directories, the regular
@@ -278,6 +284,7 @@ GetOptions(\%OPT,
            "machine|m",
            "noconf|no-conf",
            "recursive|r",
+	   "tail",
 	   "text|t",
            "verbose!",
            "version|v",
@@ -359,7 +366,7 @@ while (@files) {
 
     if ( not $copyright and $license eq 'UNKNOWN') {
 	my $position = $fh->tell; # See IO::Seekable
-	my $tail_size = $def_tail;
+	my $tail_size = $OPT{tail} // $def_tail;
 	my $jump = $st->size - $tail_size;
 	$jump = $position if $jump < $position;
 
@@ -505,6 +512,8 @@ Valid options are:
    --lines, -l            Specify how many lines of the file header
                             should be parsed for license information
                             (Default: $def_lines)
+   --tail                 Specify how many bytes to parse at end of file
+                            (Default: $def_tail)
    --check, -c            Specify a pattern indicating which files should
                              be checked
                              (Default: '$default_check_regex')
