@@ -82,6 +82,15 @@ decide which files to check the license of.
 
 The default includes common source files.
 
+=item B<-s>, B<--skipped>
+
+Specify whether to show skipped files, i.e. files found which do not
+match the check regexp (see C<--check> option). Default is to not show
+skipped files.
+
+Note that ignored files (like C<.git> or C<.svn>) are not shown even when
+this option is used.
+
 =item B<--copyright>
 
 Also display copyright text found within the file
@@ -225,6 +234,7 @@ my %OPT=(
     copyright      => 0,
     machine        => 0,
     text           => 0,
+    skipped        => 0,
 );
 
 my $def_lines = 60;
@@ -284,6 +294,7 @@ GetOptions(\%OPT,
            "machine|m",
            "noconf|no-conf",
            "recursive|r",
+	   "skipped|s",
 	   "tail",
 	   "text|t",
            "verbose!",
@@ -326,15 +337,27 @@ while (@ARGV) {
 
 	while (my $found = <$FIND>) {
 	    chomp ($found);
-	    next if ( $check_regex and $found !~ $check_regex );
-	    # Skip empty files
-	    next if (-z $found);
-	    push @files, $found unless $found =~ $ignore_regex;
+	    # Silently skip empty files or ignored files
+	    next if -z $found or $found =~ $ignore_regex;
+	    if ( not $check_regex or $found =~ $check_regex ) {
+		# Silently skip empty files or ignored files
+		push @files, $found ;
+	    }
+	    else {
+		warn "skipped file $found\n" if $OPT{skipped};
+	    }
 	}
 	close $FIND;
-    } else {
-	next unless ($files_count == 1) or ( $check_regex and $file =~ $check_regex);
-	push @files, $file unless $file =~ $ignore_regex;
+    }
+    elsif ($file =~ $ignore_regex) {
+	# Silently skip ignored files
+	next;
+    }
+    elsif ( $files_count == 1 or not $check_regex or $file =~ $check_regex ) {
+	push @files, $file;
+    }
+    else {
+	warn "skipped file $file\n" if $OPT{skipped};
     }
 }
 
@@ -509,6 +532,7 @@ Valid options are:
                           the first option given
    --verbose              Display the header of each file before its
                             license information
+   --skipped, -s          Show skipped files
    --lines, -l            Specify how many lines of the file header
                             should be parsed for license information
                             (Default: $def_lines)
