@@ -111,6 +111,8 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
     #807065)
   * Export LC_ALL=C in test_mk-origtargz so the test doesn't fail in non-English
     locales.
+  * chdist:
+    + Make the apt-file support compatible with 3.x apt-file.
 
   [ Daniel Kahn Gillmor ]
   * debuild:

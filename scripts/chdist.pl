@@ -272,12 +272,19 @@ sub apt_file
 {
     my ($dist, @args) = @_;
     dist_check($dist);
-    my $sources_list = $datadir . '/' . $dist . "/etc/apt/sources.list";
-    my $cache_directory = $datadir . '/' . $dist . "/var/cache/apt/apt-file";
-    unshift(@args,
-      '--sources-list', $sources_list,
-      '--cache', $cache_directory
-    );
+    aptconfig($dist);
+    my $aptconfdir = '/etc/apt/apt.conf.d';
+    my ($aptfile_conf) = glob($aptconfdir.'/*apt-file.conf');
+    if ($aptfile_conf) {
+	# New-style apt-file
+	cp($aptfile_conf, "$datadir/$dist/$aptconfdir");
+    }
+    else {
+	my $cache_directory = $datadir . '/' . $dist . "/var/cache/apt/apt-file";
+	unshift(@args,
+	    '--cache', $cache_directory
+	);
+    }
     exec('apt-file', @args);
 }
 
