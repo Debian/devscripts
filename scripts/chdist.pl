@@ -273,11 +273,23 @@ sub apt_file
     my ($dist, @args) = @_;
     dist_check($dist);
     aptconfig($dist);
-    my $aptconfdir = '/etc/apt/apt.conf.d';
-    my ($aptfile_conf) = glob($aptconfdir.'/*apt-file.conf');
-    if ($aptfile_conf) {
+    my @query = ('dpkg-query', '-W', '-f');
+    open(my $fd, '-|', @query, '${Version}', 'apt-file')
+	or fatal('Unable to run dpkg-query.');
+    my $aptfile_version = <$fd>;
+    close($fd);
+    if (version_compare('3.0~', $aptfile_version) < 0) {
+	open($fd, '-|', @query, '${Conffiles}\n', 'apt-file')
+	    or fatal('Unable to run dpkg-query.');
+	my @aptfile_confs = map { (split)[0] }
+			    grep { /apt\.conf\.d/ } <$fd>;
+	close($fd);
 	# New-style apt-file
-	cp($aptfile_conf, "$datadir/$dist/$aptconfdir");
+	for my $conffile (@aptfile_confs) {
+	    if (! -f "$datadir/$dist/$conffile") {
+		cp($conffile, "$datadir/$dist/$conffile");
+	    }
+	}
     }
     else {
 	my $cache_directory = $datadir . '/' . $dist . "/var/cache/apt/apt-file";
