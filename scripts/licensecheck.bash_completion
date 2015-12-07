@@ -17,7 +17,7 @@ _licensecheck()
     esac
 
     if [[ "$cur" == -* ]]; then
-        _options='--verbose --no-verbose --lines --ignore --recursive --tail --check --copyright --machine'
+        _options='--verbose --no-verbose --lines --ignore --recursive --tail --check --copyright --machine --skipped'
         if [[ "$prev" == licensecheck ]]; then
             _options+=' --no-conf'
         fi
