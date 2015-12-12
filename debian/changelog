@@ -114,6 +114,9 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
     locales.
   * chdist:
     + Make the apt-file support compatible with 3.x apt-file.
+  * debcommit:
+    + When a VCS requires a mangled package version for the tag name, still
+      use the actual package version in the tag message.  (Closes: #802503)
 
   [ Daniel Kahn Gillmor ]
   * debuild:

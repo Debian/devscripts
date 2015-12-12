@@ -651,18 +651,17 @@ sub commit {
 sub tag {
     my ($package, $tag) = @_;
 
+    # Make the message here so we can mangle $tag later, if needed
+    my $tag_msg = "tagging package $package version $tag";
     if ($prog eq 'svn' || $prog eq 'svk') {
 	my $svnpath=`svnpath`;
 	chomp $svnpath;
 	my $tagpath=`svnpath tags`;
 	chomp $tagpath;
 
-	if (! action($prog, "copy", $svnpath, "$tagpath/$tag",
-		     "-m", "tagging package $package version $tag")) {
-	    if (! action($prog, "mkdir", $tagpath,
-			 "-m", "create tag directory") ||
-		! action($prog, "copy", $svnpath, "$tagpath/$tag",
-			 "-m", "tagging package $package version $tag")) {
+	if (! action($prog, "copy", $svnpath, "$tagpath/$tag", "-m", $tag_msg)) {
+	    if (! action($prog, "mkdir", $tagpath, "-m", "create tag directory")
+		|| ! action($prog, "copy", $svnpath, "$tagpath/$tag", "-m", $tag_msg)) {
 		die "debcommit: failed tagging with $tag\n";
 	    }
 	}
@@ -696,47 +695,46 @@ sub tag {
 	    if (! action($prog, "tag", $tag)) {
 		die "debcommit: failed tagging with $tag\n";
 	    }
-        } else {
-		die "debcommit: bazaar or branch version too old to support tags\n";
-        }
+	} else {
+	    die "debcommit: bazaar or branch version too old to support tags\n";
+	}
     }
     elsif ($prog eq 'git') {
-	$tag=~s/^[0-9]+://; # strip epoch
-	$tag=~tr/~/./; # mangle for git
-	if ($tag=~/-/) {
+	$tag =~ s/^[0-9]+://; # strip epoch
+	$tag =~ tr/~/./; # mangle for git
+	if ($tag =~ /-/) {
 	    # not a native package, so tag as a debian release
-	    $tag="debian/$tag";
+	    $tag = "debian/$tag";
 	}
 
 	if ($signtags) {
-		if (defined $keyid) {
-			if (! action($prog, "tag", "-u", $keyid, "-m",
-			             "tagging package $package version $tag", $tag)) {
-	        		die "debcommit: failed tagging with $tag\n";
-			}
+	    my $tag_msg = "tagging package $package version $tag";
+	    if (defined $keyid) {
+		if (! action($prog, "tag", "-u", $keyid, "-m", $tag_msg, $tag)) {
+		    die "debcommit: failed tagging with $tag\n";
 		}
-		else {
-			if (! action($prog, "tag", "-s", "-m",
-			             "tagging package $package version $tag", $tag)) {
-	        		die "debcommit: failed tagging with $tag\n";
-			}
+	    }
+	    else {
+		if (! action($prog, "tag", "-s", "-m", $tag_msg, $tag)) {
+		    die "debcommit: failed tagging with $tag\n";
 		}
+	    }
 	}
 	elsif (! action($prog, "tag", $tag)) {
-	        die "debcommit: failed tagging with $tag\n";
-    	}
+	    die "debcommit: failed tagging with $tag\n";
+	}
     }
     elsif ($prog eq 'hg') {
-	$tag=~s/^[0-9]+://; # strip epoch
+	$tag =~ s/^[0-9]+://; # strip epoch
 	$tag="debian-$tag";
-	if (! action($prog, "tag", "-m", "tagging package $package version $tag", $tag)) {
-	        die "debcommit: failed tagging with $tag\n";
-    	}
+	if (! action($prog, "tag", "-m", $tag_msg, $tag)) {
+	    die "debcommit: failed tagging with $tag\n";
+	}
     }
     elsif ($prog eq 'darcs') {
-       if (! action($prog, "tag", $tag)) {
-               die "debcommit: failed tagging with $tag\n";
-       }
+	if (! action($prog, "tag", $tag)) {
+	    die "debcommit: failed tagging with $tag\n";
+	}
     }
     else {
 	die "debcommit: unknown program $prog";
