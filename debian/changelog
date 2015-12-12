@@ -20,8 +20,8 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
     + Added listcachedbugs command to bts
     + Split out bts bash completion handling into its own script
   * Added custom bash completion support for debuild, checkbashisms,
-    list-unreleased, dscverify, dscextract, what-patch, plotchangelog
-    and licensecheck
+    list-unreleased, dscverify, dscextract, what-patch, plotchangelog,
+    debdiff and licensecheck
   * Updated custom bash completion handling for mk-origtargz
   * Added debcheckout to those commands with package names bash completion
   * licensecheck:
