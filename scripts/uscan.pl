@@ -2405,7 +2405,6 @@ sub process_watchline ($$$$$$)
     my (@patterns, @sites, @redirections, @basedirs);
     my %options = (
 	'repack' => $repack,
-	'get' => 'internal',
 	'mode' => 'LWP',
 	'pgpmode' => 'default',
 	'decompress' => 0,
@@ -2502,8 +2501,6 @@ sub process_watchline ($$$$$$)
 		    $bare = 1;
 		} elsif ($opt =~ /^\s*component\s*=\s*(.+?)\s*$/) {
 			$options{'component'} = $1;
-		} elsif ($opt =~ /^\s*get\s*=\s*(.+?)\s*$/) {
-			$options{'get'} = $1;
 		} elsif ($opt =~ /^\s*mode\s*=\s*(.+?)\s*$/) {
 			$options{'mode'} = $1;
 		} elsif ($opt =~ /^\s*pgpmode\s*=\s*(.+?)\s*$/) {
@@ -2640,36 +2637,6 @@ sub process_watchline ($$$$$$)
 	    $options{'pgpmode'} = 'self';
 	} else {
 	    $options{'pgpmode'} = 'default';
-	}
-
-	if ($options{'mode'} ne 'LWP' and $options{'mode'} ne 'git') {
-	    uscan_warn "Unknown option value: get=$options{'mode'}\n";
-	    return 1;
-	}
-	if ($options{'get'} ne 'internal' and $options{'get'} ne 'get-orig-source') {
-	    uscan_warn "Unknown option value: get=$options{'get'}\n";
-	    return 1;
-	}
-	if ($options{'get'} eq 'get-orig-source' and $options{'pgpmode'} ne 'default') {
-	    uscan_warn "Unknown option value: pgpmode=$options{'pgpmode'} for get=get-orig-source\n";
-	    return 1;
-	}
-    	if ($options{'get'} eq 'get-orig-source') {
-	    unless (open RULES, "debian/rules") {
-		uscan_warn "Couldn't open debian/rules for get=get-orig-source: $!\n" ;
-		return 1;
-	    }
-	    my $get_orig_source=0;
-	    while(<RULES>) {
-		if (/^get-orig-source:/) {
-		    $get_orig_source=1;
-		    last;
-		}
-	    }
-	    if ($get_orig_source == 0) {
-		uscan_warn "Missing get-orig-source in debian/rules for get=get-orig-source\n";
-		return 1;
-	    }
 	}
 
 	# If PGP used, check required programs and generate files
@@ -3458,9 +3425,7 @@ EOF
     # Download tarball
     my $download_available;
     my $sigfile_base = $newfile_base;
-    if ($options{'get'} eq 'get-orig-source') {
-	uscan_msg "Don\'t download file since get=get-orig-source\n";
-    } elsif ($options{'pgpmode'} ne 'previous') {
+    if ($options{'pgpmode'} ne 'previous') {
 	# try download package
 	if ( $download == 3 and -e "$destdir/$newfile_base") {
 	    uscan_msg "Download and overwrite the existing file: $newfile_base\n";
@@ -3522,9 +3487,7 @@ EOF
     my $pgpsig_url;
     my $sigfile;
     my $signature_available;
-    if ($options{'get'} eq 'get-orig-source') {
-	uscan_msg "Don\'t check possible PGP signature files since get=get-orig-source\n";
-    } elsif (($options{'pgpmode'} eq 'default' or $options{'pgpmode'} eq 'auto') and $signature == 1) {
+    if (($options{'pgpmode'} eq 'default' or $options{'pgpmode'} eq 'auto') and $signature == 1) {
 	uscan_msg "Start checking for common possible upstream OpenPGP signature files\n";
 	foreach my $suffix (qw(asc gpg pgp sig)) {
 	    my $sigrequest = HTTP::Request->new('HEAD' => "$upstream_url.$suffix");
@@ -3543,9 +3506,7 @@ EOF
 	uscan_msg "End checking for common possible upstream OpenPGP signature files\n";
 	$signature_available = 0;
     }
-    if ($options{'get'} eq 'get-orig-source') {
-	uscan_msg "Don\'t download signature since get=get-orig-source\n";
-    } elsif ($options{'pgpmode'} eq 'mangle') {
+    if ($options{'pgpmode'} eq 'mangle') {
 	$pgpsig_url = $upstream_url;
 	foreach my $pat (@{$options{'pgpsigurlmangle'}}) {
 	    if (! safe_replace(\$pgpsig_url, $pat)) {
@@ -3583,19 +3544,17 @@ EOF
     }
 
     # Signature check
-    if ($options{'get'} eq 'get-orig-source') {
-	uscan_msg "Don\'t verify signature since get=get-orig-source\n";
-    } elsif ($options{'pgpmode'} eq 'mangle' or $options{'pgpmode'} eq 'previous') {
+    if ($options{'pgpmode'} eq 'mangle' or $options{'pgpmode'} eq 'previous') {
 	if ($signature == -1) {
-	    uscan_warn("SKIP verifying OpenPGP signature (by request).\n");
+	    uscan_warn("SKIP Checking OpenPGP signature (by request).\n");
 	} elsif (! defined $keyring) {
-	    uscan_warn("FAIL verifying OpenPGP signature (no keyring).\n");
+	    uscan_warn("FAIL Checking OpenPGP signature (no keyring).\n");
 	    return 1;
 	} elsif ($download_available == 0) {
-	    uscan_warn "FAIL verifying OpenPGP signature (no upstream tarball downloaded).\n";
+	    uscan_warn "FAIL Checking OpenPGP signature (no upstream tarball downloaded).\n";
 	    return 1;
 	} elsif ($signature_available == 0) {
-	    uscan_warn("FAIL verifying OpenPGP signature (no signature file downloaded).\n");
+	    uscan_warn("FAIL Checking OpenPGP signature (no signature file downloaded).\n");
 	    return 1;
 	} else {
 	    if ($signature ==0) {
@@ -3676,28 +3635,14 @@ EOF
 	# MUT disables repacksuffix so it is safe to have this before mk-origtargz
 	$common_mangled_newversion = $mangled_newversion;
     }
-    if ($options{'pgpmode'} ne 'previous' and $options{'get'} ne 'get-orig-source') {
-	dehs_msg "Successfully downloaded package $newfile_base\n";
-    }
+    dehs_msg "Successfully downloaded package $newfile_base\n" if $options{'pgpmode'} ne 'previous';
 
     if ($options{'pgpmode'} eq 'next') {
 	uscan_verbose "Read the next watch line (pgpmode=next)\n";
 	return 0;
     }
     if ($safe) {
-	if ($options{'get'} ne 'get-orig-source') {
-	    uscan_msg "SKIP generation of orig.tar.* and running of script/uupdate (--safe)\n";
-	} else {
-	    uscan_msg "SKIP running debian/rules get-orig-source (--safe)\n";
-	}
-	return 0;
-    }
-    # The following will not be run under safe mode
-    if ($options{'get'} eq 'get-orig-source') {
-	uscan_msg "Executing for get=get-orig-source:\n   debian/rules get-orig-source \"USCAN_UPSTREAM_URL=$upstream_url\" \"USCAN_NEWFILE=$newfile_base\" \"USCAN_UVERSION=$newversion\" \"USCAN_OVERSION=$mangled_newversion\"\n";
-	spawn(exec => ['debian/rules', 'get-orig-source', "USCAN_UPSTREAM_URL=$upstream_url", "USCAN_NEWFILE=$newfile_base", "USCAN_UVERSION=$newversion", "USCAN_OVERSION=$mangled_newversion"],
-	      wait_child => 1);
-	uscan_msg "For get=get-orig-source, neither mk-origtargz nor uupdate are executed unless they are called in debian/rules.\n";
+	uscan_msg "SKIP generation of orig.tar.* and running of script/uupdate (--safe)\n";
 	return 0;
     }
     if ($download_available == 0) {
