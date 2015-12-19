@@ -117,6 +117,9 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
   * debcommit:
     + When a VCS requires a mangled package version for the tag name, still
       use the actual package version in the tag message.  (Closes: #802503)
+  * bts:
+    + Fix creation of cache dir when $XDG_CACHE_HOME doesn't exist yet.
+      (Closes: #808394)
 
   [ Daniel Kahn Gillmor ]
   * debuild:

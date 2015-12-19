@@ -47,7 +47,7 @@ use strict;
 use warnings;
 use File::Basename;
 use File::Copy;
-use File::Path qw(mkpath make_path rmtree);
+use File::Path qw(make_path rmtree);
 use File::Spec;
 use File::Temp qw/tempfile/;
 use Net::SMTP;
@@ -2207,12 +2207,12 @@ sub bts_cache {
     }
 
     if (! -d $cachedir) {
-	if (! -d dirname($cachedir)) {
-	    mkdir(dirname($cachedir))
-		or die "$progname: couldn't mkdir ".dirname($cachedir).": $!\n";
+	my $err;
+	make_path($cachedir, { error => \$err });
+	if (@$err) {
+	    my $msg = join("\n", map { "couldn't mkdir $_->[0]: $_->[1]" } @$err);
+	    die "$progname: $msg\n";
 	}
-	mkdir($cachedir)
-	    or die "$progname: couldn't mkdir $cachedir: $!\n";
     }
 
     download("css/bugs.css");
@@ -3240,7 +3240,7 @@ sub download_attachments {
 		$data =~ s%<HEAD>%<HEAD><BASE href="../">%;
 		$data = mangle_cache_file($data, $thing, 'full', $timestamp);
 	    }
-	    mkpath(dirname $bug2filename{$msg});
+	    make_path(dirname($bug2filename{$msg}));
 	    open OUT_CACHE, ">$bug2filename{$msg}"
 	        or die "$progname: open cache $bug2filename{$msg}\n";
 	    print OUT_CACHE $data;
