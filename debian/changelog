@@ -120,6 +120,9 @@ devscripts (2.15.10) UNRELEASED; urgency=medium
   * bts:
     + Fix creation of cache dir when $XDG_CACHE_HOME doesn't exist yet.
       (Closes: #808394)
+  * checkbashisms:
+    + Improve detection of bashisms when a ! is included after an
+      if/while/elif conditional.  (Closes: #808271)
 
   [ Daniel Kahn Gillmor ]
   * debuild:

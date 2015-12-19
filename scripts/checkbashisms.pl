@@ -81,7 +81,7 @@ my $status = 0;
 my $makefile = 0;
 my (%bashisms, %string_bashisms, %singlequote_bashisms);
 
-my $LEADIN = qr'(?:(?:^|[`&;(|{])\s*|(?:if|then|do|while|shell)\s+)';
+my $LEADIN = qr'(?:(?:^|[`&;(|{])\s*|(?:(?:if|elif|while)(?:\s+!)?|then|do|shell)\s+)';
 init_hashes;
 
 my @bashisms_keys = sort keys %bashisms;
