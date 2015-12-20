@@ -666,7 +666,10 @@ sub parselicense {
         $license = "MPL (v$1) $license";
     }
 
-    if ($licensetext =~ /(?:^|(?:This is free software, licensed|Released) under (?:the terms of )?)?[Tt]he Artistic License ([v\d.]+)/) {
+    # match when either:
+    # - the text *begins* with "The Artistic license v2.0" which is (hopefully) the actual artistic license v2.0 text.
+    # - a license grant is found. i.e something like "this is free software, licensed under the artistic license v2.0"
+   if ($licensetext =~ /(?:^|(?:This is free software, licensed|Released) under (?:the terms of )?)[Tt]he Artistic License ([v\d.]+)/) {
 	$license = "Artistic (v$1) $license";
     }
 
