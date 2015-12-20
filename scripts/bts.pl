@@ -2210,8 +2210,8 @@ sub bts_cache {
 	my $err;
 	make_path($cachedir, { error => \$err });
 	if (@$err) {
-	    my $msg = join("\n", map { "couldn't mkdir $_->[0]: $_->[1]" } @$err);
-	    die "$progname: $msg\n";
+	    my ($path, $msg) = each(%{$err->[0]});
+	    die "$progname: couldn't mkdir $path: $msg\n";
 	}
     }
 
