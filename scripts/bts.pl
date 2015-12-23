@@ -2131,7 +2131,9 @@ variable if B<DEBEMAIL> is unset). This command may be repeated to cache
 bugs belonging to several people or packages. If multiple packages or
 addresses are supplied, bugs belonging to any of the arguments will be
 cached; those belonging to more than one of the arguments will only be
-downloaded once. The cached bugs are stored in F<~/.devscripts_cache/bts/>.
+downloaded once. The cached bugs are stored in
+F<$XDG_CACHE_HOME/devscripts/bts/> or, if B<XDG_CACHE_HOME> is not set, in
+F<~/.cache/devscripts/bts/>.
 
 You can use the cached bugs with the B<-o> switch. For example:
 
