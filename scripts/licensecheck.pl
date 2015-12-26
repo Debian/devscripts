@@ -207,7 +207,7 @@ my $default_check_regex =
        |lisp
        |scala
        |clj
-       |p(l|m)|xs                 # perl5
+       |p(l|m)?6?|t|xs|pod6?     # perl5 or perl6
        |sh
        |php
        |py(|x)
