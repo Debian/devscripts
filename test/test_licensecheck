@@ -43,6 +43,11 @@ testBoost() {
     license "boost.h" "BSL"
 }
 
+testArtistic() {
+    license2 "-m --copyright" "artistic-2-0-modules.pm" "Artistic (v2.0)	2009 Moritz Lenz and the SVG::Plot contributors (see file"
+    license2 "-m --copyright" "artistic-2-0.txt" "Artistic (v2.0)	2000-2006, The Perl Foundation / 2000 Testophilus Testownik <tester@testity.org>"
+}
+
 testAcademic() {
     license "academic.h" "AFL-3.0"
 }
