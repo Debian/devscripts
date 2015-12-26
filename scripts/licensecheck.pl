@@ -191,7 +191,38 @@ my $default_ignore_regex = qr!
 \.shelf|_MTN|\.bzr(?:\.backup|tags)?)(?:$|/.*$)
 !x;
 
-my $default_check_regex = '\.(c(c|pp|xx)?|h(h|pp|xx)?|S|f(77|90)?|go|groovy|lisp|scala|clj|p(l|m)|xs|sh|php|py(|x)|rb|java|js|vala|el|sc(i|e)|cs|pas|inc|dtd|xsl|mod|m|tex|mli?|(c|l)?hs)$';
+
+my $default_check_regex =
+    qr/\.(
+	   c(c|pp|xx)?           # c and c++
+       |h(h|pp|xx)?              # header files for c and c++
+       |S
+       |f(77|90)?
+       |go
+       |groovy
+       |lisp
+       |scala
+       |clj
+       |p(l|m)|xs                 # perl5
+       |sh
+       |php
+       |py(|x)
+       |rb
+       |java
+       |js
+       |vala
+       |el
+       |sc(i|e)
+       |cs
+       |pas
+       |inc
+       |dtd|xsl
+       |mod
+       |m
+       |tex
+       |mli?
+       |(c|l)?hs
+       )$/x;
 
 # also used to cleanup
 my $copyright_indicator_regex
