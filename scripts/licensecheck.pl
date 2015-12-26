@@ -200,6 +200,7 @@ my $default_check_regex =
         c(c|pp|xx)?              # c and c++
        |h(h|pp|xx)?              # header files for c and c++
        |S
+       |css|less                 # HTML css and similar
        |f(77|90)?
        |go
        |groovy
