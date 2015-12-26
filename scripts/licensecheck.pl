@@ -191,7 +191,6 @@ my $default_ignore_regex = qr!
 \.shelf|_MTN|\.bzr(?:\.backup|tags)?)(?:$|/.*$)
 !x;
 
-
 my $default_check_regex =
     qr!
     /[\w-]+$                      # executable scripts or README like file
@@ -223,6 +222,7 @@ my $default_check_regex =
        |dtd|xsl
        |mod
        |m
+       |md|markdown
        |tex
        |mli?
        |(c|l)?hs
