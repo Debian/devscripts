@@ -193,8 +193,11 @@ my $default_ignore_regex = qr!
 
 
 my $default_check_regex =
-    qr/\.(
-	   c(c|pp|xx)?           # c and c++
+    qr!
+    /[\w-]+$                      # executable scripts or README like file
+    |
+    \.(                          # search for file suffix
+        c(c|pp|xx)?              # c and c++
        |h(h|pp|xx)?              # header files for c and c++
        |S
        |f(77|90)?
@@ -222,7 +225,9 @@ my $default_check_regex =
        |tex
        |mli?
        |(c|l)?hs
-       )$/x;
+     )
+    $
+   !x;
 
 # also used to cleanup
 my $copyright_indicator_regex
