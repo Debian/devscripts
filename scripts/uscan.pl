@@ -3702,8 +3702,8 @@ EOF
     }
     my $umd5sum = Digest::MD5->new;
     my $omd5sum = Digest::MD5->new;
-    open (my $ufh, '<', "../${newfile_base}") or die "Can't open '${newfile_base}': $!";
-    open (my $ofh, '<', "../${target}") or die "Can't open '${target}': $!";
+    open (my $ufh, '<', "${destdir}/${newfile_base}") or die "Can't open '${destdir}/${newfile_base}': $!";
+    open (my $ofh, '<', "${destdir}/${target}") or die "Can't open '${destdir}/${target}': $!";
     $umd5sum->addfile($ufh);
     $omd5sum->addfile($ofh);
     close($ufh);
