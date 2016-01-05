@@ -4,6 +4,7 @@ devscripts (2.15.11) UNRELEASED; urgency=medium
   * uscan:
     - fix regression in uscan when --destdir is set (Closes: #809662)
       Patch by Alex Mestiashvili <mailatgoogl@gmail.com>
+    - fix crash when --rename is passed
 
  -- Antonio Terceiro <terceiro@debian.org>  Tue, 05 Jan 2016 13:01:05 -0200
 

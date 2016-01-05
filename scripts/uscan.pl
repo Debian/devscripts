@@ -3700,23 +3700,25 @@ EOF
     } else {
 	open(USCANLOG, ">> $uscanlog") or uscan_die "$progname: could not open $uscanlog for append: $!\n";
     }
-    my $umd5sum = Digest::MD5->new;
-    my $omd5sum = Digest::MD5->new;
-    open (my $ufh, '<', "${destdir}/${newfile_base}") or die "Can't open '${destdir}/${newfile_base}': $!";
-    open (my $ofh, '<', "${destdir}/${target}") or die "Can't open '${destdir}/${target}': $!";
-    $umd5sum->addfile($ufh);
-    $omd5sum->addfile($ofh);
-    close($ufh);
-    close($ofh);
-    my $umd5hex = $umd5sum->hexdigest;
-    my $omd5hex = $omd5sum->hexdigest;
-    if ($umd5hex eq $omd5hex) {
+    if ($symlink ne "rename") {
+      my $umd5sum = Digest::MD5->new;
+      my $omd5sum = Digest::MD5->new;
+      open (my $ufh, '<', "${destdir}/${newfile_base}") or die "Can't open '${destdir}/${newfile_base}': $!";
+      open (my $ofh, '<', "${destdir}/${target}") or die "Can't open '${destdir}/${target}': $!";
+      $umd5sum->addfile($ufh);
+      $omd5sum->addfile($ofh);
+      close($ufh);
+      close($ofh);
+      my $umd5hex = $umd5sum->hexdigest;
+      my $omd5hex = $omd5sum->hexdigest;
+      if ($umd5hex eq $omd5hex) {
 	print USCANLOG "# == ${newfile_base}\t-->\t${target}\t(same)\n";
-    } else {
+      } else {
 	print USCANLOG "# !! ${newfile_base}\t-->\t${target}\t(changed)\n";
+      }
+      print USCANLOG "$umd5hex  ${newfile_base}\n";
+      print USCANLOG "$omd5hex  ${target}\n";
     }
-    print USCANLOG "$umd5hex  ${newfile_base}\n";
-    print USCANLOG "$omd5hex  ${target}\n";
     close USCANLOG or uscan_die "$progname: could not close $uscanlog: $!\n";
 
     dehs_msg "$mk_origtargz_out\n" if defined $mk_origtargz_out;
