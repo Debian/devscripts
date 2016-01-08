@@ -154,7 +154,7 @@ foreach my $filename (@ARGV) {
 		if ($interpreter =~ m,/bash$,) {
 		    $mode = 1;
 		}
-		elsif ($interpreter !~ m,/(sh|posh)$,) {
+		elsif ($interpreter !~ m,/(sh|dash|posh)$,) {
 ### ksh/zsh?
 		    warn "script $display_filename does not appear to be a /bin/sh script; skipping\n";
 		    $status |= 2;
