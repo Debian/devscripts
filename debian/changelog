@@ -9,6 +9,7 @@ devscripts (2.16.1) UNRELEASED; urgency=medium
   [ James McCoy ]
   * checkbashisms:
     + Recognize dash as a valid shell.
+    + Check scripts which use “#!/path/to/env $interpreter”
 
  -- Antonio Terceiro <terceiro@debian.org>  Tue, 05 Jan 2016 13:01:05 -0200
 

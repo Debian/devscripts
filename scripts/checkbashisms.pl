@@ -139,10 +139,10 @@ foreach my $filename (@ARGV) {
 	next unless ($check_lines_count == -1 or $. <= $check_lines_count);
 
 	if ($. == 1) { # This should be an interpreter line
-	    if (m,^\#!\s*(\S+),) {
+	    if (m,^\#!\s*(?:\S+/env\s+)?(\S+),) {
 		my $interpreter = $1;
 
-		if ($interpreter =~ m,/make$,) {
+		if ($interpreter =~ m,(?:^|/)make$,) {
 		    init_hashes if !$makefile++;
 		    $makefile = 1;
 		} else {
@@ -151,10 +151,10 @@ foreach my $filename (@ARGV) {
 		}
 		next if $opt_force;
 
-		if ($interpreter =~ m,/bash$,) {
+		if ($interpreter =~ m,(?:^|/)bash$,) {
 		    $mode = 1;
 		}
-		elsif ($interpreter !~ m,/(sh|dash|posh)$,) {
+		elsif ($interpreter !~ m,(?:^|/)(sh|dash|posh)$,) {
 ### ksh/zsh?
 		    warn "script $display_filename does not appear to be a /bin/sh script; skipping\n";
 		    $status |= 2;
