@@ -23,6 +23,7 @@ BC_BUILD_DIR:=bash_completion
 COMPLETION = $(patsubst %.bash_completion,$(BC_BUILD_DIR)/%,$(COMPL_FILES))
 COMPL_DIR := $(shell pkg-config --variable=completionsdir bash-completion)
 PKGNAMES:=wnpp-alert wnpp-check mk-build-deps rmadison mass-bug debsnap dd-list build-rdeps who-uploads transition-check getbuildlog dcontrol grep-excuses rc-alert whodepends dget pts-subscribe pts-unsubscribe debcheckout
+PYTHON3_SCRIPTS:=sadt suspicious-source wrap-and-sort
 
 GEN_MAN1S += devscripts.1 mk-origtargz.1 uscan.1
 
@@ -87,6 +88,7 @@ clean:
 		$(GEN_MAN1S) $(SCRIPT_LIBS) $(CWRAPPERS)
 
 test:
+	python3 -m flake8 --max-line-length=99 $(PYTHON3_SCRIPTS)
 	$(foreach python,$(shell py3versions -r ../debian/control),$(python) setup.py test$(\n))
 
 install: all
