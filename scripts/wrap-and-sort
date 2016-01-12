@@ -16,6 +16,7 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 import glob
+import operator
 import optparse
 import os
 import re
@@ -87,8 +88,7 @@ class WrapAndSortControl(Control):
         if sort_paragraphs:
             first = self.paragraphs[:1 + int(keep_first)]
             sortable = self.paragraphs[1 + int(keep_first):]
-            key = lambda x: x.get("Package")
-            self.paragraphs = first + sorted(sortable, key=key)
+            self.paragraphs = first + sorted(sortable, key=operator.itemgetter("Package"))
 
     def _wrap_field(self, control, entry, wrap_always, short_indent,
                     trailing_comma, sort=True):
