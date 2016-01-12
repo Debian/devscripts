@@ -34,6 +34,7 @@ import threading
 
 import debian.deb822 as deb822
 
+
 def chmod_x(path):
     '''
     chmod a+X <path>
@@ -44,8 +45,10 @@ def chmod_x(path):
         os.chmod(path, new_mode)
     return old_mode
 
+
 def annotate_output(child):
     queue = queuemod.Queue()
+
     def reader(fd, tag):
         buf = b''
         while True:
@@ -76,11 +79,14 @@ def annotate_output(child):
     for thread in threads:
         thread.join()
 
+
 class Skip(Exception):
     pass
 
+
 class Fail(Exception):
     pass
+
 
 class Progress(object):
 
@@ -120,6 +126,7 @@ class Progress(object):
     def close(self):
         pass
 
+
 class DefaultProgress(Progress):
 
     def start(self, name):
@@ -139,6 +146,7 @@ class DefaultProgress(Progress):
     def close(self):
         self._write('\n')
 
+
 class VerboseProgress(Progress):
 
     def start(self, name):
@@ -153,6 +161,7 @@ class VerboseProgress(Progress):
 
     def ok(self):
         self._write(self._back + 'ok\n')
+
 
 class TestGroup(object):
 
@@ -204,14 +213,12 @@ class TestGroup(object):
             if isinstance(self._depends_cache, Exception):
                 raise self._check_depends_cache
             return
-        child = ipc.Popen(['dpkg-checkbuilddeps', '-d', self.depends],
-            stderr=ipc.PIPE,
-            env={}
-        )
+        child = ipc.Popen(['dpkg-checkbuilddeps', '-d', self.depends], stderr=ipc.PIPE, env={})
         error = child.stderr.read().decode('ASCII')
         child.stderr.close()
         if child.wait() != 0:
-            error = re.sub('^dpkg-checkbuilddeps: Unmet build dependencies', 'unmet dependencies', error)
+            error = re.sub('^dpkg-checkbuilddeps: Unmet build dependencies', 'unmet dependencies',
+                           error)
             error = error.rstrip()
             skip = Skip(error)
             self._depends_cache = skip
@@ -221,6 +228,7 @@ class TestGroup(object):
 
     def check_restrictions(self, ignored_restrictions):
         restrictions = self.restrictions - frozenset(ignored_restrictions)
+
         class options:
             rw_build_tree_needed = False
             allow_stderr = False
@@ -245,7 +253,8 @@ class TestGroup(object):
         self.check_depends()
         return options
 
-    def run(self, test, progress, ignored_restrictions=(), rw_build_tree=None, built_source_tree=None):
+    def run(self, test, progress, ignored_restrictions=(), rw_build_tree=None,
+            built_source_tree=None):
         progress.start(test)
         ignored_restrictions = set(ignored_restrictions)
         if rw_build_tree:
@@ -269,7 +278,8 @@ class TestGroup(object):
                 try:
                     original_mode = chmod_x(path)
                 except OSError as exc:
-                    progress.skip('{path} could not be made executable: {exc}'.format(path=path, exc=exc))
+                    progress.skip('{path} could not be made executable: {exc}'
+                                  .format(path=path, exc=exc))
                     raise Skip
         try:
             self._run(test, progress, allow_stderr=options.allow_stderr)
@@ -285,12 +295,8 @@ class TestGroup(object):
         tmpdir2 = tempfile.mkdtemp(prefix='sadt.')
         environ = dict(os.environ)
         environ['ADTTMP'] = tmpdir1
-        environ['TMPDIR'] = tmpdir2 # only for compatibility with old DEP-8 spec.
-        child = ipc.Popen([path],
-            stdout=ipc.PIPE,
-            stderr=ipc.PIPE,
-            env=environ,
-        )
+        environ['TMPDIR'] = tmpdir2  # only for compatibility with old DEP-8 spec.
+        child = ipc.Popen([path], stdout=ipc.PIPE, stderr=ipc.PIPE, env=environ)
         output = []
         stderr = False
         for tag, line in annotate_output(child):
@@ -337,19 +343,24 @@ class TestGroup(object):
     def add_tests_directory(self, path):
         self.tests_directory = path
 
+
 def copy_build_tree():
     rw_build_tree = tempfile.mkdtemp(prefix='sadt-rwbt.')
     print('sadt: info: copying build tree to {tree}'.format(tree=rw_build_tree), file=sys.stderr)
     ipc.check_call(['cp', '-a', '.', rw_build_tree])
     return rw_build_tree
 
+
 def main():
     for description in __doc__.splitlines():
-        if description: break
+        if description:
+            break
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument('-v', '--verbose', action='store_true', help='verbose output')
-    parser.add_argument('-b', '--built-source-tree', action='store_true', help='assume built source tree')
-    parser.add_argument('--ignore-restrictions', metavar='<restr>[,<restr>...]', help='ignore specified restrictions', default='')
+    parser.add_argument('-b', '--built-source-tree', action='store_true',
+                        help='assume built source tree')
+    parser.add_argument('--ignore-restrictions', metavar='<restr>[,<restr>...]',
+                        help='ignore specified restrictions', default='')
     parser.add_argument('tests', metavar='<test-name>', nargs='*', help='tests to run')
     options = parser.parse_args()
     options.tests = frozenset(options.tests)
@@ -390,7 +401,8 @@ def main():
                 try:
                     method = getattr(group, 'add_' + lkey)
                 except AttributeError:
-                    print('sadt: warning: unknown field {field}, skipping the whole paragraph'.format(field=key), file=sys.stderr)
+                    print('sadt: warning: unknown field {field}, skipping the whole paragraph'
+                          .format(field=key), file=sys.stderr)
                     group = None
                     break
                 method(value)
@@ -416,7 +428,8 @@ def main():
                             if group_options.rw_build_tree_needed:
                                 rw_build_tree = copy_build_tree()
                                 assert rw_build_tree is not None
-                    group.run(name,
+                    group.run(
+                        name,
                         progress=progress,
                         ignored_restrictions=options.ignore_restrictions,
                         rw_build_tree=rw_build_tree,

@@ -28,17 +28,17 @@ except ImportError:
 
 DEFAULT_WHITELISTED_MIMETYPES = [
     "application/pgp-keys",
-    "application/vnd.font-fontforge-sfd", # font source: fontforge
+    "application/vnd.font-fontforge-sfd",  # font source: fontforge
     "application/x-elc",
     "application/x-empty",
-    "application/x-font-otf",             # font object and source
-    "application/x-font-ttf",             # font object and source
-    "application/x-font-woff",            # font object and source
+    "application/x-font-otf",              # font object and source
+    "application/x-font-ttf",              # font object and source
+    "application/x-font-woff",             # font object and source
     "application/x-symlink",
     "application/xml",
     "audio/x-wav",
-    "font/otf",                           # font object and source
-    "font/ttf",                           # font object and source
+    "font/otf",                            # font object and source
+    "font/ttf",                            # font object and source
     "image/gif",
     "image/jpeg",
     "image/png",
@@ -79,25 +79,26 @@ DEFAULT_WHITELISTED_MIMETYPES = [
 ]
 
 DEFAULT_WHITELISTED_EXTENSIONS = [
-    ".fea",   # font source format: Adobe Font Development Kit for OpenType
-    ".fog",   # font source format: Fontographer
-    ".g2n",   # font source format: fontforge
-    ".gdh",   # font source format: Graphite (headers)
-    ".gdl",   # font source format: Graphite
-    ".glyph", # font source format: cross-toolkit UFO
-    ".gmo",   # GNU Machine Object File (for translations with gettext)
-    ".icns",  # Apple Icon Image format
-    ".java",  # Java source files
-    ".plate", # font source format: Spiro
+    ".fea",    # font source format: Adobe Font Development Kit for OpenType
+    ".fog",    # font source format: Fontographer
+    ".g2n",    # font source format: fontforge
+    ".gdh",    # font source format: Graphite (headers)
+    ".gdl",    # font source format: Graphite
+    ".glyph",  # font source format: cross-toolkit UFO
+    ".gmo",    # GNU Machine Object File (for translations with gettext)
+    ".icns",   # Apple Icon Image format
+    ".java",   # Java source files
+    ".plate",  # font source format: Spiro
     ".rsa",
-    ".sfd",   # font source format: fontforge
-    ".sfdir", # font source format: fontforge
-    ".ttx",   # font source format: fonttools
-    ".ufo",   # font source format: cross-toolkit UFO
-    ".vfb"    # font source format: FontLab
-    ".vtp",   # font source format: OpenType (VOLT)
-    ".xgf",   # font source format: Xgridfit
+    ".sfd",    # font source format: fontforge
+    ".sfdir",  # font source format: fontforge
+    ".ttx",    # font source format: fonttools
+    ".ufo",    # font source format: cross-toolkit UFO
+    ".vfb"     # font source format: FontLab
+    ".vtp",    # font source format: OpenType (VOLT)
+    ".xgf",    # font source format: Xgridfit
 ]
+
 
 def suspicious_source(whitelisted_mimetypes, whitelisted_extensions, directory,
                       verbose=False):
@@ -117,6 +118,7 @@ def suspicious_source(whitelisted_mimetypes, whitelisted_extensions, directory,
         for vcs_dir in (".bzr", "CVS", ".git", ".svn", ".hg", "_darcs"):
             if vcs_dir in dirs:
                 dirs.remove(vcs_dir)
+
 
 def main():
     script_name = os.path.basename(sys.argv[0])
