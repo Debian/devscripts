@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 #
-# Copyright (C) 2010-2014, Benjamin Drung <bdrung@debian.org>
+# Copyright (C) 2010-2016, Benjamin Drung <bdrung@debian.org>
 #               2010, Stefano Rivera <stefanor@ubuntu.com>
 #
 # Permission to use, copy, modify, and/or distribute this software for any
@@ -94,7 +94,7 @@ class WrapAndSortControl(Control):
                     trailing_comma, sort=True):
         # An empty element is not explicitly disallowed by Policy but known to
         # break QA tools, so remove any
-        packages = list(filter(None, [x.strip() for x in control[entry].split(",")]))
+        packages = [x.strip() for x in control[entry].split(",") if x.strip()]
 
         # Sanitize alternative packages. E.g. "a|b  |c" -> "a | b | c"
         packages = [" | ".join([x.strip() for x in p.split("|")]) for p in packages]
@@ -130,7 +130,7 @@ class Install(object):
     def open(self, filename):
         assert os.path.isfile(filename), "%s does not exist." % (filename)
         self.filename = filename
-        self.content = list(filter(None, [l.strip() for l in open(filename).readlines()]))
+        self.content = [l.strip() for l in open(filename).readlines() if l.strip()]
 
     def save(self, filename=None):
         if filename:
