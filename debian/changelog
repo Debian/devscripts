@@ -11,6 +11,9 @@ devscripts (2.16.1) UNRELEASED; urgency=medium
     + Recognize dash as a valid shell.
     + Check scripts which use “#!/path/to/env $interpreter”
 
+  [ Christoph Berg ]
+  * debcheckout: Add auth mapping for https://github.com.
+
  -- Antonio Terceiro <terceiro@debian.org>  Tue, 05 Jan 2016 13:01:05 -0200
 
 devscripts (2.15.10) unstable; urgency=low
