@@ -10,6 +10,7 @@ devscripts (2.16.1) UNRELEASED; urgency=medium
   * checkbashisms:
     + Recognize dash as a valid shell.
     + Check scripts which use “#!/path/to/env $interpreter”
+  * debian/tests/control: Add gcc as a dependency for dpkg-architecture.
 
   [ Christoph Berg ]
   * debcheckout: Add auth mapping for https://github.com.
