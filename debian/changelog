@@ -15,6 +15,9 @@ devscripts (2.16.1) UNRELEASED; urgency=medium
     + Recognize dash as a valid shell.
     + Check scripts which use “#!/path/to/env $interpreter”
   * debian/tests/control: Add gcc as a dependency for dpkg-architecture.
+  * chdist:
+    + Symlink, rather than copy, the archive keyrings into the chdist tree so
+      they don't get stale.  (Closes: #783497)
 
   [ Christoph Berg ]
   * debcheckout: Add auth mapping for https://github.com.

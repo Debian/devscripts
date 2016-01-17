@@ -419,7 +419,10 @@ EOF
 			    debian-archive-removed-keys.gpg
 			    ubuntu-archive-keyring.gpg
 			    ubuntu-archive-removed-keys.gpg)) {
-	cp("/usr/share/keyrings/$keyring", "$dir/etc/apt/trusted.gpg.d/");
+	my $src = "/usr/share/keyrings/$keyring";
+	if (-f $src) {
+	    symlink $src, "$dir/etc/apt/trusted.gpg.d/$keyring";
+	}
     }
     print "Now edit $dir/etc/apt/sources.list\n" unless $version;
     print "Run chdist apt-get $dist update\n";
