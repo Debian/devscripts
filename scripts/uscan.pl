@@ -2295,12 +2295,6 @@ for my $dir (@dirs) {
 
 	uscan_verbose "package=\"$package\" version=\"$uversion\" (no epoch/revision)\n";
 	push @debdirs, [$debversion, $dir, $package, $uversion];
-    } elsif (! -r 'debian/watch') {
-	uscan_warn "Found watch file in $dir,\n   but couldn't find/read changelog; skipping\n";
-	next;
-    } elsif (! -f 'debian/watch') {
-	uscan_warn "Found watch file in $dir,\n   but it is not readable; skipping\n";
-	next;
     }
 }
 

@@ -5,6 +5,10 @@ devscripts (2.16.1) UNRELEASED; urgency=medium
     - fix regression in uscan when --destdir is set (Closes: #809662)
       Patch by Alex Mestiashvili <mailatgoogl@gmail.com>
     - fix crash when --rename is passed
+    - when scanning for directories called 'debian', ignore the ones that
+      don't have a file called 'watch'. This removes several annoying warnings
+      when uscan is run on a package that has several directories called
+      'debian' in its upstream source.
 
   [ James McCoy ]
   * checkbashisms:
