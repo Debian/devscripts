@@ -19,6 +19,11 @@ devscripts (2.16.1) UNRELEASED; urgency=medium
   [ Christoph Berg ]
   * debcheckout: Add auth mapping for https://github.com.
 
+  [ Osamu Aoki ]
+  * uscan:
+    - Fix regressions and glitches in the prioritizing mechanism of packages.
+      (Closes: #809604, #812417)
+
  -- Antonio Terceiro <terceiro@debian.org>  Tue, 05 Jan 2016 13:01:05 -0200
 
 devscripts (2.15.10) unstable; urgency=low

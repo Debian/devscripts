@@ -2779,7 +2779,8 @@ sub process_watchline ($$$$$$)
     # Start Checking $site and look for $filepattern which is newer than $lastversion
     # What is the most recent file, based on the filenames?
     # We first have to find the candidates, then we sort them using
-    # Devscripts::Versort::upstream_versort
+    # Devscripts::Versort::upstream_versort (if it is real upstream version string) or
+    # Devscripts::Versort::versort (if it is suffixed upstream version string)
     if ($options{'mode'} eq 'git') {
 	# TODO: sanitize $base
 	uscan_verbose "Execute: git ls-remote $base\n";
@@ -2813,7 +2814,7 @@ sub process_watchline ($$$$$$)
 	    }
 	}
 	if (@refs) {
-	    @refs = Devscripts::Versort::versort(@refs);
+	    @refs = Devscripts::Versort::upstream_versort(@refs);
 	    my $msg = "Found the following matching refs:\n";
 	    foreach my $ref (@refs) {
 		$msg .= "     $$ref[1] ($$ref[0])\n";
@@ -2967,13 +2968,13 @@ sub process_watchline ($$$$$$)
 			    $match = "matched with the download version";
 			}
 		    }
-		    my $priority = $mangled_version . '.' . get_priority($href);
+		    my $priority = $mangled_version . '-' . get_priority($href);
 		    push @hrefs, [$priority, $mangled_version, $href, $match];
 		}
 	    }
 	}
 	if (@hrefs) {
-	    @hrefs = Devscripts::Versort::upstream_versort(@hrefs);
+	    @hrefs = Devscripts::Versort::versort(@hrefs);
 	    my $msg = "Found the following matching hrefs on the web page (newest first):\n";
 	    foreach my $href (@hrefs) {
 		$msg .= "   $$href[2] ($$href[1]) index=$$href[0] $$href[3]\n";
@@ -3052,7 +3053,7 @@ sub process_watchline ($$$$$$)
 			$match = "matched with the download version";
 		    }
 		}
-		my $priority = $mangled_version . '.' . get_priority($file);
+		my $priority = $mangled_version . '-' . get_priority($file);
 		push @files, [$priority, $mangled_version, $file, $match];
 	    }
 	} else {
@@ -3083,13 +3084,13 @@ sub process_watchline ($$$$$$)
 			    $match = "matched with the download version";
 			}
 		    }
-		    my $priority = $mangled_version . '.' . get_priority($file);
+		    my $priority = $mangled_version . '-' . get_priority($file);
 		    push @files, [$priority, $mangled_version, $file, $match];
 		}
 	    }
 	}
 	if (@files) {
-	    @files = Devscripts::Versort::upstream_versort(@files);
+	    @files = Devscripts::Versort::versort(@files);
 	    my $msg = "Found the following matching files on the web page (newest first):\n";
 	    foreach my $file (@files) {
 		$msg .= "   $$file[2] ($$file[1]) index=$$file[0] $$file[3]\n";
