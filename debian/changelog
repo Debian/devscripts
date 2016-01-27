@@ -4,7 +4,7 @@ devscripts (2.16.1) UNRELEASED; urgency=medium
   * uscan:
     - fix regression in uscan when --destdir is set (Closes: #809662)
       Patch by Alex Mestiashvili <mailatgoogl@gmail.com>
-    - fix crash when --rename is passed
+    - fix crash when --rename is passed  (Closes: #812417)
     - when scanning for directories called 'debian', ignore the ones that
       don't have a file called 'watch'. This removes several annoying warnings
       when uscan is run on a package that has several directories called
@@ -29,7 +29,7 @@ devscripts (2.16.1) UNRELEASED; urgency=medium
   [ Osamu Aoki ]
   * uscan:
     - Fix regressions and glitches in the prioritizing mechanism of packages.
-      (Closes: #809604, #812417)
+      (Closes: #809604)
 
  -- Antonio Terceiro <terceiro@debian.org>  Tue, 05 Jan 2016 13:01:05 -0200
 
