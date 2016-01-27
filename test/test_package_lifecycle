@@ -99,7 +99,7 @@ runCommandOutCmpFile() {
     local stderrF="${SHUNIT_TMPDIR}/stderr"
     eval "${COMMAND} $param"  2> ${stderrF} | \
 	grep -v File::FcntlLock | \
-	grep -v dh_strip_nondeterminism | \
+	grep -v '^  *dh_' | \
 	sed -e "s/\`/'/g" | \
 	sed -e's!^ -- Testophilus Testownik <tester@testity.org>.*! -- Testophilus Testownik <tester@testity.org>!' > ${stdoutF}
     retval=$?
@@ -125,9 +125,6 @@ test_debuild() {
 	dpkg-buildpackage: host architecture ${_ARCH}
 	 fakeroot debian/rules clean
 	dh clean
-	   dh_testdir
-	   dh_auto_clean
-	   dh_clean
 	 dpkg-source -b test
 	dpkg-source: info: using source format '3.0 (quilt)'
 	dpkg-source: info: building test using existing ./test_1.0.orig.tar.xz
@@ -135,25 +132,8 @@ test_debuild() {
 	dpkg-source: info: building test in test_1.0-1.dsc
 	 debian/rules build
 	dh build
-	   dh_testdir
-	   dh_auto_configure
-	   dh_auto_build
-	   dh_auto_test
 	 fakeroot debian/rules binary
 	dh binary
-	   dh_testroot
-	   dh_prep
-	   dh_auto_install
-	   dh_installdocs
-	   dh_installchangelogs
-	   dh_perl
-	   dh_link
-	   dh_compress
-	   dh_fixperms
-	   dh_installdeb
-	   dh_gencontrol
-	   dh_md5sums
-	   dh_builddeb
 	dpkg-deb: building package 'test' in '../test_1.0-1_all.deb'.
 	 dpkg-genchanges  >../test_1.0-1_${_ARCH}.changes
 	dpkg-genchanges: including full source code in upload
@@ -271,9 +251,6 @@ test_debuild2() {
 	dpkg-buildpackage: host architecture ${_ARCH}
 	 fakeroot debian/rules clean
 	dh clean
-	   dh_testdir
-	   dh_auto_clean
-	   dh_clean
 	 dpkg-source -b test
 	dpkg-source: info: using source format '3.0 (quilt)'
 	dpkg-source: info: building test using existing ./test_1.0.orig.tar.xz
@@ -281,25 +258,8 @@ test_debuild2() {
 	dpkg-source: info: building test in test_1.0-2.dsc
 	 debian/rules build
 	dh build
-	   dh_testdir
-	   dh_auto_configure
-	   dh_auto_build
-	   dh_auto_test
 	 fakeroot debian/rules binary
 	dh binary
-	   dh_testroot
-	   dh_prep
-	   dh_auto_install
-	   dh_installdocs
-	   dh_installchangelogs
-	   dh_perl
-	   dh_link
-	   dh_compress
-	   dh_fixperms
-	   dh_installdeb
-	   dh_gencontrol
-	   dh_md5sums
-	   dh_builddeb
 	dpkg-deb: building package 'test' in '../test_1.0-2_all.deb'.
 	 dpkg-genchanges  >../test_1.0-2_${_ARCH}.changes
 	dpkg-genchanges: not including original source code in upload

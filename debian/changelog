@@ -18,6 +18,10 @@ devscripts (2.16.1) UNRELEASED; urgency=medium
   * chdist:
     + Symlink, rather than copy, the archive keyrings into the chdist tree so
       they don't get stale.  (Closes: #783497)
+  * test_package_lifecycle: Ignore listing of dh_* commands in debuild output.
+    The specific commands aren't interesting, so much as the steps that the
+    build goes through.  Fixes FTBFS due to new dh_update_autotools_config
+    command.  (Closes: #812661)
 
   [ Christoph Berg ]
   * debcheckout: Add auth mapping for https://github.com.
