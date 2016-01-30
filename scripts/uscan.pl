@@ -2078,9 +2078,9 @@ if (defined $opt_level) {
 
 $check_dirname_regex = $opt_regex if defined $opt_regex;
 
-uscan_msg "$progname (version ###VERSION###) See $progname(1) for help\n";
+uscan_verbose "$progname (version ###VERSION###) See $progname(1) for help\n";
 if ($dehs) {
-    uscan_msg "The --dehs option enabled.\n" .
+    uscan_verbose "The --dehs option enabled.\n" .
 	"        STDOUT = XML output for use by other programs\n" .
 	"        STDERR = plain text output for human\n" .
 	"        Use the redirection of STDOUT to a file to get the clean XML data\n";
@@ -2140,7 +2140,7 @@ $user_agent->add_handler(
 
 # when --watchfile is used
 if (defined $opt_watchfile) {
-    uscan_msg "Option --watchfile=$opt_watchfile used\n";
+    uscan_verbose "Option --watchfile=$opt_watchfile used\n";
     uscan_die "Can't have directory arguments if using --watchfile" if @ARGV;
 
     # no directory traversing then, and things are very simple
@@ -2208,7 +2208,7 @@ if (defined $opt_watchfile) {
 push @ARGV, '.' if ! @ARGV;
 {
     local $, = ',';
-    uscan_msg "Scan watch files in @ARGV\n";
+    uscan_verbose "Scan watch files in @ARGV\n";
 }
 
 # Run find to find the directories.  We will handle filenames with spaces
@@ -2339,7 +2339,7 @@ for my $debdir (@debdirs) {
 	next;
     }
 
-    uscan_msg "$dir/debian/changelog sets package=\"$package\" version=\"$version\"\n";
+    uscan_verbose "$dir/debian/changelog sets package=\"$package\" version=\"$version\"\n";
     if (process_watchfile($dir, $package, $version, "debian/watch") == 0) {
 	# return 0 == success
 	$donepkgs{$parentdir}{$package} = 1;
@@ -3296,40 +3296,43 @@ EOF
     # Version dependent $download adjustment
     if (defined $download_version) {
 	# Pretend to found a newer upstream version to exit without error
-	uscan_msg "Newest version on remote site is $newversion, specified download version is $download_version\n";
+	uscan_msg "Newest version of $pkg on remote site is $newversion, specified download version is $download_version\n";
 	$found++;
     } elsif ($options{'versionmode'} eq 'newer') {
-	uscan_msg "Newest version on remote site is $newversion, local version is $lastversion\n" .
+	uscan_msg "Newest version of $pkg on remote site is $newversion, local version is $lastversion\n" .
 	    ($mangled_lastversion eq $lastversion ? "" : " (mangled local version is $mangled_lastversion)\n");
 	if ($compver eq 'newer') {
 	    # There's a newer upstream version available, which may already
 	    # be on our system or may not be
-	    uscan_msg "   => Newer package available\n";
+	    uscan_msg "   => Newer package available from\n" .
+		      "      $upstream_url\n";
 	    $dehs_tags{'status'} = "newer package available";
 	    $found++;
 	} elsif ($compver eq 'same') {
-	    uscan_msg "   => Package is up to date\n";
+	    uscan_verbose "   => Package is up to date for from\n" .
+		      "      $upstream_url\n";
 	    $dehs_tags{'status'} = "up to date";
 	    if ($download > 1) {
 		# 2=force-download or 3=overwrite-download
-		uscan_msg "   => Forcing download as requested\n";
+		uscan_verbose "   => Forcing download as requested\n";
 		$found++;
 	    } else {
 		# 0=no-download or 1=download
 		$download = 0;
 	    }
 	} else { # $compver eq 'old'
-	    uscan_msg "   => Only older package available\n";
+	    uscan_verbose "   => Only older package available from\n" .
+		      "      $upstream_url\n";
 	    $dehs_tags{'status'} = "only older package available";
 	    if ($download > 1) {
-		uscan_msg "   => Forcing download as requested\n";
+		uscan_verbose "   => Forcing download as requested\n";
 		$found++;
 	    } else {
 		$download = 0;
 	    }
 	}
     } elsif ($options{'versionmode'} eq 'ignore') {
-	uscan_msg "Newest version on remote site is $newversion, ignore local version\n";
+	uscan_msg "Newest version of $pkg on remote site is $newversion, ignore local version\n";
 	$dehs_tags{'status'} = "package available";
 	$found++;
     } else { # same/previous -- secondary-tarball or signature-file
@@ -3423,15 +3426,15 @@ EOF
     if ($options{'pgpmode'} ne 'previous') {
 	# try download package
 	if ( $download == 3 and -e "$destdir/$newfile_base") {
-	    uscan_msg "Download and overwrite the existing file: $newfile_base\n";
+	    uscan_verbose "Download and overwrite the existing file: $newfile_base\n";
 	} elsif ( -e "$destdir/$newfile_base") {
-	    uscan_msg "Don\'t download and use the existing file: $newfile_base\n";
+	    uscan_verbose "Don\'t download and use the existing file: $newfile_base\n";
 	    $download_available = 1;
 	} elsif ($download >0) {
-	    uscan_msg "Downloading upstream package: $newfile_base\n";
+	    uscan_verbose "Downloading upstream package: $newfile_base\n";
 	    $download_available = $downloader->($upstream_url, "$destdir/$newfile_base", $options{'mode'});
 	} else { # $download = 0, 
-	    uscan_msg "Don\'t downloading upstream package: $newfile_base\n";
+	    uscan_verbose "Don\'t downloading upstream package: $newfile_base\n";
 	    $download_available = 0;	
 	}
 
@@ -3483,13 +3486,13 @@ EOF
     my $sigfile;
     my $signature_available;
     if (($options{'pgpmode'} eq 'default' or $options{'pgpmode'} eq 'auto') and $signature == 1) {
-	uscan_msg "Start checking for common possible upstream OpenPGP signature files\n";
+	uscan_verbose "Start checking for common possible upstream OpenPGP signature files\n";
 	foreach my $suffix (qw(asc gpg pgp sig)) {
 	    my $sigrequest = HTTP::Request->new('HEAD' => "$upstream_url.$suffix");
 	    my $sigresponse = $user_agent->request($sigrequest);
 	    if ($sigresponse->is_success()) {
 		if ($options{'pgpmode'} eq 'default') {
-		    uscan_msg "Possible OpenPGP signature found at:\n   $upstream_url.$suffix.\n   Please consider adding opts=pgpsigurlmangle=s/\$/.$suffix/\n   to debian/watch.  see uscan(1) for more details.\n";
+		    uscan_warn "Possible OpenPGP signature found at:\n   $upstream_url.$suffix.\n   Please consider adding opts=pgpsigurlmangle=s/\$/.$suffix/\n   to debian/watch.  see uscan(1) for more details.\n";
 		    $options{'pgpmode'} = 'none';
 		} else {
 		    $options{'pgpmode'} = 'mangle';
@@ -3498,7 +3501,7 @@ EOF
 		last;
 	    }
 	}
-	uscan_msg "End checking for common possible upstream OpenPGP signature files\n";
+	uscan_verbose "End checking for common possible upstream OpenPGP signature files\n";
 	$signature_available = 0;
     }
     if ($options{'pgpmode'} eq 'mangle') {
@@ -3516,26 +3519,26 @@ EOF
 	}
 	$sigfile = "$sigfile_base.pgp";
 	if ($signature == 1) {
-	    uscan_msg "Downloading OpenPGP signature from\n   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile\n";
+	    uscan_verbose "Downloading OpenPGP signature from\n   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile\n";
 	    $signature_available = $downloader->($pgpsig_url, "$destdir/$sigfile", $options{'mode'});
 	} else { # -1, 0
-	    uscan_msg "Don\'t downloading OpenPGP signature from\n   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile\n";
+	    uscan_verbose "Don\'t downloading OpenPGP signature from\n   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile\n";
 	    $signature_available = (-e "$destdir/$sigfile") ? 1 : 0;
 	}
     } elsif ($options{'pgpmode'} eq 'previous') {
 	$pgpsig_url = $upstream_url;
 	$sigfile = $newfile_base;
 	if ($signature == 1) {
-	    uscan_msg "Downloading OpenPGP signature from\n   $pgpsig_url (pgpmode=previous)\n   as $sigfile\n";
+	    uscan_verbose "Downloading OpenPGP signature from\n   $pgpsig_url (pgpmode=previous)\n   as $sigfile\n";
 	    $signature_available = $downloader->($pgpsig_url, "$destdir/$sigfile", $options{'mode'});
 	} else { # -1, 0
-	    uscan_msg "Don\'t downloading OpenPGP signature from\n   $pgpsig_url (pgpmode=previous)\n   as $sigfile\n";
+	    uscan_verbose "Don\'t downloading OpenPGP signature from\n   $pgpsig_url (pgpmode=previous)\n   as $sigfile\n";
 	    $signature_available = (-e "$destdir/$sigfile") ? 1 : 0;
 	}
 	$download_available = $previous_download_available;
 	$newfile_base = $previous_newfile_base;
 	$sigfile_base = $previous_sigfile_base;
-	uscan_msg "Use $newfile_base as upstream package (pgpmode=previous)\n";
+	uscan_verbose "Use $newfile_base as upstream package (pgpmode=previous)\n";
     }
 
     # Signature check
@@ -3553,7 +3556,7 @@ EOF
 	    return 1;
 	} else {
 	    if ($signature ==0) {
-		uscan_msg "Use the existing file: $sigfile\n";
+		uscan_verbose "Use the existing file: $sigfile\n";
 	    }
 	    uscan_verbose "Verifying OpenPGP signature $sigfile for $sigfile_base\n";
 	    unless(system($havegpgv, '--homedir', '/dev/null',
@@ -3637,7 +3640,7 @@ EOF
 	return 0;
     }
     if ($safe) {
-	uscan_msg "SKIP generation of orig.tar.* and running of script/uupdate (--safe)\n";
+	uscan_verbose "SKIP generation of orig.tar.* and running of script/uupdate (--safe)\n";
 	return 0;
     }
     if ($download_available == 0) {
@@ -3684,11 +3687,11 @@ EOF
 	$uscanlog = "../${pkg}_${common_mangled_newversion}.uscan.log";
 	if (-e "$uscanlog.old") {
 	    unlink "$uscanlog.old" or uscan_die "Can\'t remove old backup log $uscanlog.old: $!";
-	    uscan_msg "Old backup uscan log found.  Remove: $uscanlog.old\n";
+	    uscan_warn "Old backup uscan log found.  Remove: $uscanlog.old\n";
 	}
 	if (-e $uscanlog) {
 	    move($uscanlog, "$uscanlog.old");
-	    uscan_msg "Old uscan log found.  Moved to: $uscanlog.old\n";
+	    uscan_warn "Old uscan log found.  Moved to: $uscanlog.old\n";
 	}
 	open(USCANLOG, ">> $uscanlog") or uscan_die "$progname: could not open $uscanlog for append: $!\n";
 	print USCANLOG "# uscan log\n";
