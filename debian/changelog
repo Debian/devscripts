@@ -14,6 +14,8 @@ devscripts (2.16.1) UNRELEASED; urgency=medium
       install` so that when build dependencies can't be satisfied, you know why.
       Otherwise it would just tell you that the *-build-deps package needs to
       be removed and you will never know why.
+  * debian/control:
+    - change Vcs-Git: to a https:// URL
 
   [ James McCoy ]
   * checkbashisms:
