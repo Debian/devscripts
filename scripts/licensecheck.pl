@@ -644,6 +644,11 @@ sub parselicense {
 	$license = "LGPL$gplver$extrainfo $license";
     }
 
+    # For Perl modules handled by Dist::Zilla
+    if ($licensetext =~ /this is free software,? licensed under:? (?:the )?(?:GNU (?:Library |Lesser )General Public License|LGPL),? version ([\d\.]+)/i) {
+	$license = "LGPL (v$1) $license";
+    }
+
     if ($licensetext =~ /is free software.? you can redistribute (it|them) and(?:\/|\s+)or modify (it|them) under the terms of the (GNU Affero General Public License|AGPL)/i) {
 	$license = "AGPL$gplver$extrainfo $license";
     }
@@ -651,6 +656,8 @@ sub parselicense {
     if ($licensetext =~ /(is free software.? )?you (can|may) redistribute (it|them) and(?:\/|\s+)or modify (it|them) under the terms of (?:version [^ ]+ (?:\(?only\)? )?of )?the GNU General Public License/i) {
 	$license = "GPL$gplver$extrainfo $license";
     }
+
+    
 
     if ($licensetext =~ /is distributed under the terms of the GNU General Public License,/
 	and length $gplver) {

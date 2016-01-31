@@ -41,6 +41,10 @@ devscripts (2.16.1) UNRELEASED; urgency=medium
     - Keep the original compressed file when decompressing it for the
       signature verification. (Closes: #812860)
 
+  [ Dominique Dumont ]
+  * licensecheck:
+    + detect LGPL license in Perl files handled by Dist::Zilla
+
  -- Antonio Terceiro <terceiro@debian.org>  Tue, 05 Jan 2016 13:01:05 -0200
 
 devscripts (2.15.10) unstable; urgency=low
