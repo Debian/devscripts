@@ -2634,8 +2634,12 @@ sub process_watchline ($$$$$$)
 	}
 
 	# If PGP used, check required programs and generate files
-	uscan_debug "\$options{'pgpmode'}=$options{'pgpmode'}, \$options{'pgpsigurlmangle'}=$options{'pgpsigurlmangle'}\n" if defined $options{'pgpsigurlmangle'};
-	uscan_debug "\$options{'pgpmode'}=$options{'pgpmode'}, \$options{'pgpsigurlmangle'}=undef\n" if ! defined $options{'pgpsigurlmangle'};
+	if (exists $options{'pgpsigurlmangle'}) {
+	    my $pgpsigurlmanglestring = join(";", @{$options{'pgpsigurlmangle'}});
+	    uscan_debug "\$options{'pgpmode'}=$options{'pgpmode'}, \$options{'pgpsigurlmangle'}=$pgpsigurlmanglestring\n";
+	} else {
+	    uscan_debug "\$options{'pgpmode'}=$options{'pgpmode'}, \$options{'pgpsigurlmangle'}=undef\n";
+	}
 
 	# Check component for duplication and set $orig to the proper extension string
 	if ($options{'pgpmode'} ne 'previous') {
