@@ -29,6 +29,9 @@ devscripts (2.16.1) UNRELEASED; urgency=medium
     The specific commands aren't interesting, so much as the steps that the
     build goes through.  Fixes FTBFS due to new dh_update_autotools_config
     command.  (Closes: #812661)
+  * dd-list:
+    + Use apt interfaces to find sources files and extract their contents,
+      instead of globbing and directly reading files.
 
   [ Christoph Berg ]
   * debcheckout: Add auth mapping for https://github.com.

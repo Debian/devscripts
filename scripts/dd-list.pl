@@ -25,6 +25,7 @@ use warnings;
 use FileHandle;
 use Getopt::Long qw(:config gnu_getopt);
 use Dpkg::Version;
+use Dpkg::IPC;
 
 my $uncompress;
 
@@ -241,25 +242,69 @@ else {
 	$package_name{normalize_package($name)} = 1;
     }
 
+    my $apt_version;
+    spawn(exec => ['dpkg-query', '-W', '-f', '${source:Version}', 'apt'],
+	  to_string => \$apt_version,
+	  wait_child => 1,
+	  nocheck => 1);
+
+    my $useAptHelper = 0;
+    if (defined $apt_version)
+    {
+	$useAptHelper = version_compare_relation($apt_version, REL_GE, '1.1.8');
+    }
+
     unless (@{$source_files}) {
-	$source_files = [glob('/var/lib/apt/lists/*_source_Sources')];
+	if ($useAptHelper)
+	{
+	    my ($sources, $err);
+	    spawn(exec => ['apt-get', 'indextargets', '--format', '$(FILENAME)',
+			   'Created-By: Sources'],
+		  to_string => \$sources,
+		  error_to_string => \$err,
+		  wait_child => 1,
+		  nocheck => 1);
+	    if ($? >> 8)
+	    {
+		die "Unable to get list of Sources files from apt: $err\n";
+	    }
+
+	    $source_files = [split(/\n/, $sources)];
+	}
+	else
+	{
+	    $source_files = [glob('/var/lib/apt/lists/*_source_Sources')];
+	}
     }
 
     foreach my $source (@{$source_files}) {
 	my $fh;
-	if ($opt_uncompress || ($uncompress && $source =~ m/\.(?:gz|bz2)$/)) {
-	    $fh = IO::Uncompress::AnyUncompress->new($source);
+	if ($useAptHelper)
+	{
+	    my $good = open($fh, '-|', '/usr/lib/apt/apt-helper', 'cat-file', $source);
+	    if (!$good)
+	    {
+		warn "E: Couldn't run apt-helper to get contents of '$source': $!\n";
+		$errors = 1;
+		next;
+	    }
 	}
-	else {
-	    $fh = FileHandle->new("<$source");
-	}
-	unless (defined $fh) {
-	    warn "E: Couldn't open $source\n";
-	    $errors = 1;
-	    next;
+	else
+	{
+	    if ($opt_uncompress || ($uncompress && $source =~ m/\.(?:gz|bz2)$/)) {
+		$fh = IO::Uncompress::AnyUncompress->new($source);
+	    }
+	    else {
+		$fh = FileHandle->new("<$source");
+	    }
+	    unless (defined $fh) {
+		warn "E: Couldn't open $source\n";
+		$errors = 1;
+		next;
+	    }
 	}
 	parsefh($fh, $source, 1);
-	$fh->close;
+	close $fh;
     }
 }
 
