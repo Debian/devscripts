@@ -9,6 +9,7 @@ devscripts (2.16.1) UNRELEASED; urgency=medium
       don't have a file called 'watch'. This removes several annoying warnings
       when uscan is run on a package that has several directories called
       'debian' in its upstream source.
+    - fix English phrases when logging download-related actions
   * mk-build-deps:
     - When installing, pass `-o Debug::pkgProblemResolver=yes` to `apt-get
       install` so that when build dependencies can't be satisfied, you know why.

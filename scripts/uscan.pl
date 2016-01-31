@@ -3430,16 +3430,16 @@ EOF
     if ($options{'pgpmode'} ne 'previous') {
 	# try download package
 	if ( $download == 3 and -e "$destdir/$newfile_base") {
-	    uscan_verbose "Download and overwrite the existing file: $newfile_base\n";
+	    uscan_verbose "Downloading and overwriting existing file: $newfile_base\n";
 	} elsif ( -e "$destdir/$newfile_base") {
-	    uscan_verbose "Don\'t download and use the existing file: $newfile_base\n";
+	    uscan_verbose "Not downloading, using existing file: $newfile_base\n";
 	    $download_available = 1;
 	} elsif ($download >0) {
 	    uscan_verbose "Downloading upstream package: $newfile_base\n";
 	    $download_available = $downloader->($upstream_url, "$destdir/$newfile_base", $options{'mode'});
-	} else { # $download = 0, 
-	    uscan_verbose "Don\'t downloading upstream package: $newfile_base\n";
-	    $download_available = 0;	
+	} else { # $download = 0,
+	    uscan_verbose "Not downloading upstream package: $newfile_base\n";
+	    $download_available = 0;
 	}
 
 	# Decompress archive if requested and applicable
