@@ -643,9 +643,8 @@ sub parselicense {
     if ($licensetext =~ /(are made available|(is free software.? )?you can redistribute (it|them) and(?:\/|\s+)or modify (it|them)|is licensed) under the terms of (version [^ ]+ of )?the (GNU (Library |Lesser )General Public License|LGPL)/i) {
 	$license = "LGPL$gplver$extrainfo $license";
     }
-
     # For Perl modules handled by Dist::Zilla
-    if ($licensetext =~ /this is free software,? licensed under:? (?:the )?(?:GNU (?:Library |Lesser )General Public License|LGPL),? version ([\d\.]+)/i) {
+    elsif ($licensetext =~ /this is free software,? licensed under:? (?:the )?(?:GNU (?:Library |Lesser )General Public License|LGPL),? version ([\d\.]+)/i) {
 	$license = "LGPL (v$1) $license";
     }
 
