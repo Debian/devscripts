@@ -1731,7 +1731,7 @@ sub printwarn($);
 sub uscan_msg($);
 sub uscan_verbose($);
 sub uscan_debug($);
-sub dehs_msg ($);
+sub dehs_verbose ($);
 sub uscan_warn ($);
 
 my $havegpgv = first { -x $_ } qw(/usr/bin/gpgv2 /usr/bin/gpgv);
@@ -3548,7 +3548,7 @@ EOF
     # Signature check
     if ($options{'pgpmode'} eq 'mangle' or $options{'pgpmode'} eq 'previous') {
 	if ($signature == -1) {
-	    uscan_warn("SKIP Checking OpenPGP signature (by request).\n");
+	    uscan_verbose("SKIP Checking OpenPGP signature (by request).\n");
 	} elsif (! defined $keyring) {
 	    uscan_warn("FAIL Checking OpenPGP signature (no keyring).\n");
 	    return 1;
@@ -3637,7 +3637,7 @@ EOF
 	# MUT disables repacksuffix so it is safe to have this before mk-origtargz
 	$common_mangled_newversion = $mangled_newversion;
     }
-    dehs_msg "Successfully downloaded package $newfile_base\n" if $options{'pgpmode'} ne 'previous';
+    dehs_verbose "Successfully downloaded package $newfile_base\n" if $options{'pgpmode'} ne 'previous';
 
     if ($options{'pgpmode'} eq 'next') {
 	uscan_verbose "Read the next watch line (pgpmode=next)\n";
@@ -3723,7 +3723,7 @@ EOF
     }
     close USCANLOG or uscan_die "$progname: could not close $uscanlog: $!\n";
 
-    dehs_msg "$mk_origtargz_out\n" if defined $mk_origtargz_out;
+    dehs_verbose "$mk_origtargz_out\n" if defined $mk_origtargz_out;
     $dehs_tags{target} = $target;
     $dehs_tags{'target-path'} = $path;
 
@@ -3759,7 +3759,7 @@ EOF
 	    push @cmd, $path, $common_mangled_newversion;
 	}
 	my $actioncmd = join(" ", @cmd);
-	dehs_msg "Executing user specified script:\n   $actioncmd\n" .
+	dehs_verbose "Executing user specified script:\n   $actioncmd\n" .
 		`$actioncmd 2>&1`;
     }
 
@@ -4211,19 +4211,19 @@ sub uscan_msg($)
     printwarn "$progname: $msg";
 }
 
-sub dehs_msg ($)
-{
-    my $msg = $_[0];
-    push @{$dehs_tags{'messages'}}, $msg;
-    printwarn "$progname: $msg";
-}
-
 sub uscan_verbose($)
 {
     my $msg = $_[0];
     if ($verbose > 0) {
 	printwarn "$progname info: $msg";
     }
+}
+
+sub dehs_verbose ($)
+{
+    my $msg = $_[0];
+    push @{$dehs_tags{'messages'}}, $msg;
+    uscan_verbose($msg)
 }
 
 sub uscan_warn ($)
