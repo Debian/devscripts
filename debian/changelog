@@ -22,6 +22,8 @@ devscripts (2.16.1) UNRELEASED; urgency=medium
   * checkbashisms:
     + Recognize dash as a valid shell.
     + Check scripts which use “#!/path/to/env $interpreter”
+    + Allow %b as a printf conversion specifier.  Thanks to Mike Frysinger for
+      the patch.  (Closes: #804735)
   * debian/tests/control: Add gcc as a dependency for dpkg-architecture.
   * chdist:
     + Symlink, rather than copy, the archive keyrings into the chdist tree so

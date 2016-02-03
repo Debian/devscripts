@@ -689,7 +689,7 @@ sub init_hashes {
 	qr'\$\(\([\s\w$*/+-]*\w\-\-.*?\)\)'   => q<'$((n--))' should be '$n; $((n=n-1))'>,
 	qr'\$\(\([\s\w$*/+-]*\-\-\w.*?\)\)'   => q<'$((--n))' should be '$((n=n-1))'>,
 	qr'\$\(\([\s\w$*/+-]*\*\*.*?\)\)'   => q<exponentiation is not POSIX>,
-	$LEADIN . qr'printf\s["\'][^"\']*?%[qb].+?["\']' => q<printf %q|%b>,
+	$LEADIN . qr'printf\s["\'][^"\']*?%q.+?["\']' => q<printf %q>,
     );
 
     %singlequote_bashisms = (
