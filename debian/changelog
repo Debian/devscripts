@@ -38,6 +38,9 @@ devscripts (2.16.1) UNRELEASED; urgency=medium
   * dcmd:
     + Support .buildinfo files.  Thanks to Johannes Schauer for the patch.
       (Closes: #774554)
+  * debsnap:
+    + Remove use of JSON module in favor of the core Perl JSON::PP module.
+      Thanks to RjY and Jakub Wilk.  (Closes: #803315)
 
   [ Christoph Berg ]
   * debcheckout: Add auth mapping for https://github.com.
