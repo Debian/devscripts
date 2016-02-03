@@ -142,7 +142,7 @@ for my $patch (@patches) {
 	    $author = $2;
 	} elsif (/^Origin:\s+(.*)\s*/) {
 	    $origin = $1;
-	} elsif (/^bug-debian:\s+http:\/\/bugs\.debian\.org\/([0-9]+)\s*/i) {
+	} elsif (/^bug-debian:\s+https?:\/\/bugs\.debian\.org\/([0-9]+)\s*/i) {
 	    $debbug = $1;
 	} elsif (/^bug-ubuntu:\s+https:\/\/.*launchpad\.net\/.*\/([0-9]+)\s*/i) {
 	    $lpbug = $1;
