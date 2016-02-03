@@ -35,6 +35,9 @@ devscripts (2.16.1) UNRELEASED; urgency=medium
   * dd-list:
     + Use apt interfaces to find sources files and extract their contents,
       instead of globbing and directly reading files.
+  * dcmd:
+    + Support .buildinfo files.  Thanks to Johannes Schauer for the patch.
+      (Closes: #774554)
 
   [ Christoph Berg ]
   * debcheckout: Add auth mapping for https://github.com.
