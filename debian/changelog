@@ -54,6 +54,7 @@ devscripts (2.16.1) UNRELEASED; urgency=medium
     - Fix regressions of the verbosety. (Closes: #809541, #809554)
     - Keep the original compressed file when decompressing it for the
       signature verification. (Closes: #812860)
+    - Write *.uscan.log only when requested by --log. (Closes: #809806)
 
   [ Dominique Dumont ]
   * licensecheck:

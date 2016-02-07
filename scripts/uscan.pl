@@ -1821,6 +1821,7 @@ Options:
                    servers to respond (default 20 seconds)
     --user-agent, --useragent
                    Override the default user agent string
+    --log          Record md5sum changes of repackaging
     --help         Show this message
     --version      Show version information
 
@@ -1980,7 +1981,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 
 # Now read the command line arguments
 my ($opt_h, $opt_v, $opt_destdir, $opt_safe, $opt_download,
-    $opt_signature, $opt_passive, $opt_symlink, $opt_repack,
+    $opt_signature, $opt_passive, $opt_symlink, $opt_repack, $opt_log,
     $opt_compression, $opt_exclusion, $opt_copyright_file);
 my ($opt_verbose, $opt_level, $opt_regex, $opt_noconf);
 my ($opt_package, $opt_uversion, $opt_watchfile, $opt_dehs, $opt_timeout);
@@ -2007,6 +2008,7 @@ GetOptions("help" => \$opt_h,
 	   "symlink!" => sub { $opt_symlink = $_[1] ? 'symlink' : 'no'; },
 	   "rename" => sub { $opt_symlink = 'rename'; },
 	   "repack" => sub { $opt_repack = 1; },
+	   "log" => \$opt_log,
 	   "compression=s" => \$opt_compression,
 	   "package=s" => \$opt_package,
 	   "uversion|upstream-version=s" => \$opt_uversion,
@@ -3686,42 +3688,44 @@ EOF
 	uscan_verbose "New orig.tar.* tarball version (after mk-origtargz): $common_mangled_newversion\n";
     }
 
-    # Check pkg-ver.tar.gz and pkg_ver.orig.tar.gz
-    if (! defined $uscanlog) {
-	$uscanlog = "../${pkg}_${common_mangled_newversion}.uscan.log";
-	if (-e "$uscanlog.old") {
-	    unlink "$uscanlog.old" or uscan_die "Can\'t remove old backup log $uscanlog.old: $!";
-	    uscan_warn "Old backup uscan log found.  Remove: $uscanlog.old\n";
+    if ($opt_log) {
+	# Check pkg-ver.tar.gz and pkg_ver.orig.tar.gz
+	if (! defined $uscanlog) {
+	    $uscanlog = "${destdir}/${pkg}_${common_mangled_newversion}.uscan.log";
+	    if (-e "$uscanlog.old") {
+		unlink "$uscanlog.old" or uscan_die "Can\'t remove old backup log $uscanlog.old: $!";
+		uscan_warn "Old backup uscan log found.  Remove: $uscanlog.old\n";
+	    }
+	    if (-e $uscanlog) {
+		move($uscanlog, "$uscanlog.old");
+		uscan_warn "Old uscan log found.  Moved to: $uscanlog.old\n";
+	    }
+	    open(USCANLOG, ">> $uscanlog") or uscan_die "$progname: could not open $uscanlog for append: $!\n";
+	    print USCANLOG "# uscan log\n";
+	} else {
+	    open(USCANLOG, ">> $uscanlog") or uscan_die "$progname: could not open $uscanlog for append: $!\n";
 	}
-	if (-e $uscanlog) {
-	    move($uscanlog, "$uscanlog.old");
-	    uscan_warn "Old uscan log found.  Moved to: $uscanlog.old\n";
+	if ($symlink ne "rename") {
+	    my $umd5sum = Digest::MD5->new;
+	    my $omd5sum = Digest::MD5->new;
+	    open (my $ufh, '<', "${destdir}/${newfile_base}") or die "Can't open '${destdir}/${newfile_base}': $!";
+	    open (my $ofh, '<', "${destdir}/${target}") or die "Can't open '${destdir}/${target}': $!";
+	    $umd5sum->addfile($ufh);
+	    $omd5sum->addfile($ofh);
+	    close($ufh);
+	    close($ofh);
+	    my $umd5hex = $umd5sum->hexdigest;
+	    my $omd5hex = $omd5sum->hexdigest;
+	    if ($umd5hex eq $omd5hex) {
+		print USCANLOG "# == ${newfile_base}\t-->\t${target}\t(same)\n";
+	    } else {
+		print USCANLOG "# !! ${newfile_base}\t-->\t${target}\t(changed)\n";
+	    }
+	    print USCANLOG "$umd5hex  ${newfile_base}\n";
+	    print USCANLOG "$omd5hex  ${target}\n";
 	}
-	open(USCANLOG, ">> $uscanlog") or uscan_die "$progname: could not open $uscanlog for append: $!\n";
-	print USCANLOG "# uscan log\n";
-    } else {
-	open(USCANLOG, ">> $uscanlog") or uscan_die "$progname: could not open $uscanlog for append: $!\n";
+	close USCANLOG or uscan_die "$progname: could not close $uscanlog: $!\n";
     }
-    if ($symlink ne "rename") {
-      my $umd5sum = Digest::MD5->new;
-      my $omd5sum = Digest::MD5->new;
-      open (my $ufh, '<', "${destdir}/${newfile_base}") or die "Can't open '${destdir}/${newfile_base}': $!";
-      open (my $ofh, '<', "${destdir}/${target}") or die "Can't open '${destdir}/${target}': $!";
-      $umd5sum->addfile($ufh);
-      $omd5sum->addfile($ofh);
-      close($ufh);
-      close($ofh);
-      my $umd5hex = $umd5sum->hexdigest;
-      my $omd5hex = $omd5sum->hexdigest;
-      if ($umd5hex eq $omd5hex) {
-	print USCANLOG "# == ${newfile_base}\t-->\t${target}\t(same)\n";
-      } else {
-	print USCANLOG "# !! ${newfile_base}\t-->\t${target}\t(changed)\n";
-      }
-      print USCANLOG "$umd5hex  ${newfile_base}\n";
-      print USCANLOG "$omd5hex  ${target}\n";
-    }
-    close USCANLOG or uscan_die "$progname: could not close $uscanlog: $!\n";
 
     dehs_verbose "$mk_origtargz_out\n" if defined $mk_origtargz_out;
     $dehs_tags{target} = $target;
