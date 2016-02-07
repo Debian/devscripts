@@ -49,12 +49,14 @@ devscripts (2.16.1) UNRELEASED; urgency=medium
 
   [ Osamu Aoki ]
   * uscan:
-    - Fix regressions and glitches in the prioritizing mechanism of packages.
+    + Fix regressions and glitches in the prioritizing mechanism of packages.
       (Closes: #809604)
-    - Fix regressions of the verbosety. (Closes: #809541, #809554)
-    - Keep the original compressed file when decompressing it for the
+    + Fix regressions of the verbosety. (Closes: #809541, #809554)
+    + Keep the original compressed file when decompressing it for the
       signature verification. (Closes: #812860)
-    - Write *.uscan.log only when requested by --log. (Closes: #809806)
+    + Write *.uscan.log only when requested by --log. (Closes: #809806)
+  * uscan, mk-origtargz:
+    + Document Files-Excluded better.  (Closes: #812119)
 
   [ Dominique Dumont ]
   * licensecheck:

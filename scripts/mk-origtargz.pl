@@ -43,7 +43,10 @@ B<dpkg-buildpackage>, based on the source package name and version in
 F<debian/changelog>. It can convert B<zip> to B<tar>, optionally change the
 compression scheme and remove files according to B<Files-Excluded> and
 B<Files-Excluded->I<component> in F<debian/copyright>. The resulting file is
-placed in F<debian/../..>.
+placed in F<debian/../..>. (In F<debian/copyright>, the B<Files-Excluded> and
+B<Files-Excluded->I<component> stanzas are a part of the first paragraph and
+there is a blank line before the following paragraphs which contain B<Files>
+and other stanzas.  See B<uscan>(1) "COPYRIGHT FILE EXAMPLE".)
 
 The archive type for B<zip> is detected by "B<file --dereference --brief
 --mime-type>" command.  So any B<zip> type archives such as B<jar> are treated

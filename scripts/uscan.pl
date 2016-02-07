@@ -1112,7 +1112,11 @@ B<v20.5> is the newest tag, the above example downloads I<spkg>B<-20.5.tar.xz>.
 =head1 COPYRIGHT FILE EXAMPLES
 
 Here is an example for the F<debian/copyright> file which initiates automatic
-repackaging of the upstream tarball into I<< <spkg>_<oversion>.orig.tar.gz >>:
+repackaging of the upstream tarball into I<< <spkg>_<oversion>.orig.tar.gz >>
+(In F<debian/copyright>, the B<Files-Excluded> and
+B<Files-Excluded->I<component> stanzas are a part of the first paragraph and
+there is a blank line before the following paragraphs which contain B<Files>
+and other stanzas.):
 
   Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
   Files-Excluded: exclude-this
@@ -1121,6 +1125,8 @@ repackaging of the upstream tarball into I<< <spkg>_<oversion>.orig.tar.gz >>:
    .*
    */js/jquery.js
 
+   Files: *
+   Copyright: ...
    ...
 
 Here is another example for the F<debian/copyright> file which initiates
@@ -1140,6 +1146,8 @@ I<< <spkg>_<oversion>.orig-bar.tar.gz >>:
    .*
    */js/jquery.js
 
+   Files: *
+   Copyright: ...
    ...
 
 See mk-origtargz(1).
