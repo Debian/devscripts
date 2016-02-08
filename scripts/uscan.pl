@@ -3441,15 +3441,26 @@ EOF
 	# try download package
 	if ( $download == 3 and -e "$destdir/$newfile_base") {
 	    uscan_verbose "Downloading and overwriting existing file: $newfile_base\n";
+	    $download_available = $downloader->($upstream_url, "$destdir/$newfile_base", $options{'mode'});
+	    if ($download_available) {
+		dehs_verbose "Successfully downloaded package: $newfile_base\n";
+	    } else {
+		dehs_verbose "Failed to download upstream package: $newfile_base\n";
+	    }
 	} elsif ( -e "$destdir/$newfile_base") {
-	    uscan_verbose "Not downloading, using existing file: $newfile_base\n";
 	    $download_available = 1;
+	    dehs_verbose "Not downloading, using existing file: $newfile_base\n";
 	} elsif ($download >0) {
 	    uscan_verbose "Downloading upstream package: $newfile_base\n";
 	    $download_available = $downloader->($upstream_url, "$destdir/$newfile_base", $options{'mode'});
+	    if ($download_available) {
+		dehs_verbose "Successfully downloaded package: $newfile_base\n";
+	    } else {
+		dehs_verbose "Failed to download upstream package: $newfile_base\n";
+	    }
 	} else { # $download = 0,
-	    uscan_verbose "Not downloading upstream package: $newfile_base\n";
 	    $download_available = 0;
+	    dehs_verbose "Not downloading upstream package: $newfile_base\n";
 	}
 
 	# Decompress archive if requested and applicable
@@ -3647,7 +3658,6 @@ EOF
 	# MUT disables repacksuffix so it is safe to have this before mk-origtargz
 	$common_mangled_newversion = $mangled_newversion;
     }
-    dehs_verbose "Successfully downloaded package $newfile_base\n" if $options{'pgpmode'} ne 'previous';
 
     if ($options{'pgpmode'} eq 'next') {
 	uscan_verbose "Read the next watch line (pgpmode=next)\n";
