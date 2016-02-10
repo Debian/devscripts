@@ -56,9 +56,11 @@ Valid options are:
    --version, -v          Display version and copyright info
    --move FROM TO,        The prefix FROM in first packages has
      -m FROM TO             been renamed TO in the new packages
+                            only affects comparing binary packages
                             (multiple permitted)
    --move-regex FROM TO,  The prefix FROM in first packages has
                             been renamed TO in the new packages
+                            only affects comparing binary packages
                             (multiple permitted), using regexp substitution
    --dirs, -d             Note changes in directories as well as files
    --nodirs               Do not note changes in directories (default)

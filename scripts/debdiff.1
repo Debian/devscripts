@@ -68,7 +68,8 @@ in the first package, and the second in the second.  Any files in the
 first listing whose names begin with the first argument are treated as
 having that substituted for the second argument when the file lists
 are compared.  Any number of \fB\-\-move\fR arguments may be given;
-they are processed in the order in which they appear.
+they are processed in the order in which they appear. This only affects
+comparing binary packages, not source packages.
 .TP
 .BI \-\-move\-regex " FROM TO"
 This is the same as \fB\-\-move\fR, except that \fIFROM\fR is treated
