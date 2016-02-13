@@ -4330,6 +4330,7 @@ sub quoted_regex_parse($) {
 	    if ($open == 1) {
 		if ($in_replacement) {
 		    # Separator after end of replacement
+		    uscan_warn "Extra \"$sep\" after end of replacement.\n";
 		    $parsed_ok = 0;
 		    last;
 		} else {
@@ -4346,13 +4347,14 @@ sub quoted_regex_parse($) {
 	    }
 	} elsif ($char eq $closer and ! $last_was_escape) {
 	    $open--;
-	    if ($open) {
+	    if ($open > 0) {
 		if ($in_replacement) {
 		    $replacement .= $char;
 		} else {
 		    $regexp .= $char;
 		}
 	    } elsif ($open < 0) {
+		uscan_warn "Extra \"$closer\" after end of replacement.\n";
 		$parsed_ok = 0;
 		last;
 	    }
@@ -4364,14 +4366,24 @@ sub quoted_regex_parse($) {
 		    $flags .= $char;
 		}
 	    } else {
-		$regexp .= $char;
+		if ($open) {
+		    $regexp .= $char;
+		} elsif ($char !~ m/\s/ ){
+		    uscan_warn "Non-whitespace between <...> and <...> (or similars).\n";
+		    $parsed_ok = 0;
+		    last;
+		}
+		# skip if blanks between <...> and <...> (or similars)
 	    }
 	}
 	# Don't treat \\ as an escape
 	$last_was_escape = ($char eq '\\' and ! $last_was_escape);
     }
 
-    $parsed_ok = 0 unless $in_replacement and $open == 0;
+    unless ($in_replacement and $open == 0) {
+	uscan_warn "Empty replacement string.\n";
+	$parsed_ok = 0;
+    }
 
     return ($parsed_ok, $regexp, $replacement, $flags);
 }
@@ -4388,8 +4400,15 @@ sub safe_replace($$) {
     if ($sep eq '{' or $sep eq '(' or $sep eq '[' or $sep eq '<') {
 	($parsed_ok, $regexp, $replacement, $flags) = quoted_regex_parse($pat);
 
-	return 0 unless $parsed_ok;
+	unless ($parsed_ok) {
+	    uscan_warn "stop mangling: rule=\"$pat\" on \"$in\"\n" .
+		       "  mangling rule with <...>, (...), {...} failed.\n";
+	    return 0;
+	}
     } elsif ($pat !~ /^(?:s|tr|y)$esc((?:\\.|[^\\$esc])*)$esc((?:\\.|[^\\$esc])*)$esc([a-z]*)$/) {
+	$sep = "/" if $sep == '';
+	uscan_warn "stop mangling: rule=\"$pat\" on \"$in\"\n" .
+		   "   rule doesn't match \"(s|tr|y)$sep.*$sep.*$sep.*\" or similar.\n";
 	return 0;
     } else {
 	($regexp, $replacement, $flags) = ($1, $2, $3);
@@ -4398,7 +4417,11 @@ sub safe_replace($$) {
     my $safeflags = $flags;
     if ($op eq 'tr' or $op eq 'y') {
 	$safeflags =~ tr/cds//cd;
-	return 0 if $safeflags ne $flags;
+	if ($safeflags ne $flags) {
+	    uscan_warn "stop mangling: rule=\"$pat\" on \"$in\"\n" .
+		       "   flags must consist of \"cds\" only.\n";
+	    return 0;
+	}
 
 	$regexp =~ s/\\(.)/$1/g;
 	$replacement =~ s/\\(.)/$1/g;
@@ -4409,13 +4432,19 @@ sub safe_replace($$) {
 	eval "\$\$in =~ tr<$regexp><$replacement>$flags;";
 
 	if ($@) {
+	    uscan_warn "stop mangling: rule=\"$pat\" on \"$in\"\n" .
+		       "   mangling \"tr\" or \"y\" rule execution failed.\n";
 	    return 0;
 	} else {
 	    return 1;
 	}
     } else {
 	$safeflags =~ tr/gix//cd;
-	return 0 if $safeflags ne $flags;
+	if ($safeflags ne $flags) {
+	    uscan_warn "stop mangling: rule=\"$pat\" on \"$in\"\n" .
+		       "   flags must consist of \"gix\" only.\n";
+	    return 0;
+	}
 
 	my $global = ($flags =~ s/g//);
 	$flags = "(?$flags)" if length $flags;
@@ -4424,7 +4453,11 @@ sub safe_replace($$) {
 	if ($regexp =~ /(?<!\\)(\\\\)*\\G/) {
 	    $slashg = 1;
 	    # if it's not initial, it is too dangerous
-	    return 0 if $regexp =~ /^.*[^\\](\\\\)*\\G/;
+	    if ($regexp =~ /^.*[^\\](\\\\)*\\G/) {
+		uscan_warn "stop mangling: rule=\"$pat\" on \"$in\"\n" .
+			   "   dangerous use of \\G with regexp=\"$regexp\".\n";
+		return 0;
+	    }
 	}
 
 	# Behave like Perl and treat e.g. "\." in replacement as "."
@@ -4483,7 +4516,11 @@ sub safe_replace($$) {
 		    }
 		}
 	    };
-	    return 0 if $@;
+	    if ($@) {
+		uscan_warn "stop mangling: rule=\"$pat\" on \"$in\"\n" .
+			   "   mangling \"s\" rule execution failed.\n";
+		return 0;
+	    }
 
 	    # No match; leave the original string  untouched but return
 	    # success as there was nothing wrong with the pattern
