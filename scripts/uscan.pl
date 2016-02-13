@@ -4406,7 +4406,7 @@ sub safe_replace($$) {
 	    return 0;
 	}
     } elsif ($pat !~ /^(?:s|tr|y)$esc((?:\\.|[^\\$esc])*)$esc((?:\\.|[^\\$esc])*)$esc([a-z]*)$/) {
-	$sep = "/" if $sep == '';
+	$sep = "/" if $sep eq '';
 	uscan_warn "stop mangling: rule=\"$pat\" on \"$in\"\n" .
 		   "   rule doesn't match \"(s|tr|y)$sep.*$sep.*$sep.*\" or similar.\n";
 	return 0;
