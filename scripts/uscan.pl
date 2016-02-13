@@ -2716,7 +2716,7 @@ sub process_watchline ($$$$$$)
 	      . "  $line\n";
 	    return 1;
 	}
-	uscan_debug "$mangled_lastversion by dversionmangle rule: $pat\n";
+	uscan_debug "$mangled_lastversion by dversionmangle rule.\n";
     }
 
     # Set $download_version etc. if already known
@@ -2821,7 +2821,7 @@ sub process_watchline ($$$$$$)
 				. "  $line\n";
 			    return 1;
 			}
-		    uscan_debug "$version by uversionmangle rule: $pat\n";
+		    uscan_debug "$version by uversionmangle rule.\n";
 		    }
 		    push @refs, [$version, $ref];
 		}
@@ -2906,7 +2906,7 @@ sub process_watchline ($$$$$$)
 		  . "  $line\n";
 		return 1;
 	    }
-	    uscan_debug "processed content:\n$content\n[End of processed content] by pagemangle rule: $pat\n";
+	    uscan_debug "processed content:\n$content\n[End of processed content] by pagemangle rule.\n";
 	}
 	if (! $bare and
 	    $content =~ m%^<[?]xml%i and
@@ -2973,7 +2973,7 @@ sub process_watchline ($$$$$$)
 				  . "  $line\n";
 				return 1;
 			    }
-			    uscan_debug "$mangled_version by uversionmangle rule: $pat\n";
+			    uscan_debug "$mangled_version by uversionmangle rule.\n";
 			}
 		    }
 		    $match = '';
@@ -3059,7 +3059,7 @@ sub process_watchline ($$$$$$)
 			  . "  $line\n";
 			return 1;
 		    }
-		    uscan_debug "$mangled_version by uversionmangle rule: $pat\n";
+		    uscan_debug "$mangled_version by uversionmangle rule.\n";
 		}
 		$match = '';	
 		if (defined $download_version) {
@@ -3090,7 +3090,7 @@ sub process_watchline ($$$$$$)
 			      . "  $line\n";
 			    return 1;
 			}
-			uscan_debug "$mangled_version by uversionmangle rule: $pat\n";
+			uscan_debug "$mangled_version by uversionmangle rule.\n";
 		    }
 		    $match = '';	
 		    if (defined $download_version) {
@@ -3229,7 +3229,7 @@ EOF
 		      . "  $line\n";
 		    return 1;
 		}
-		uscan_debug "$upstream_url by downloadurlmangle rule: $pat\n";
+		uscan_debug "$upstream_url by downloadurlmangle rule.\n";
 	    }
 	}
     } else {
@@ -3258,7 +3258,7 @@ EOF
 		. "  $line\n";
 	    return 1;
 	    }
-	    uscan_debug "$newfile_base by filenamemangle rule: $pat\n";
+	    uscan_debug "$newfile_base by filenamemangle rule.\n";
 	}
 	unless ($newversion) {
 	    # uversionmanglesd version is '', make best effort to set it
@@ -3540,7 +3540,7 @@ EOF
 		    . "  $line\n";
 		return 1;
 	    }
-	    uscan_debug "$pgpsig_url by pgpsigurlmangle rule: $pat\n";
+	    uscan_debug "$pgpsig_url by pgpsigurlmangle rule.\n";
 	}
 	$sigfile = "$sigfile_base.pgp";
 	if ($signature == 1) {
@@ -3648,7 +3648,7 @@ EOF
 	      . "  $line\n";
 	    return 1;
 	}
-	uscan_debug "$mangled_newversion by oversionmangle rule: $pat\n";
+	uscan_debug "$mangled_newversion by oversionmangle rule.\n";
     }
 
     if (! defined $common_mangled_newversion) {
@@ -3879,7 +3879,7 @@ sub newest_dir ($$$$$) {
 			. " found.\n";
 			return 1;
 		    }
-		    uscan_debug "$mangled_version by dirversionnmangle rule: $pat\n";
+		    uscan_debug "$mangled_version by dirversionnmangle rule.\n";
 		}
 		$match = '';
 		if (defined $download_version and $mangled_version eq $download_version) {
@@ -3965,7 +3965,7 @@ sub newest_dir ($$$$$) {
 			. " found.\n";
 			return 1;
 		    }
-		    uscan_debug "$mangled_version by dirversionnmangle rule: $pat\n";
+		    uscan_debug "$mangled_version by dirversionnmangle rule.\n";
 		}
 		$match = '';
 		if (defined $download_version and $mangled_version eq $download_version) {
@@ -4002,7 +4002,7 @@ sub newest_dir ($$$$$) {
 			    . " found.\n";
 			    return 1;
 			}
-			uscan_debug "$mangled_version by dirversionnmangle rule: $pat\n";
+			uscan_debug "$mangled_version by dirversionnmangle rule.\n";
 		    }
 		    $match = '';
 		    if (defined $download_version and $mangled_version eq $download_version) {
@@ -4390,6 +4390,7 @@ sub quoted_regex_parse($) {
 
 sub safe_replace($$) {
     my ($in, $pat) = @_;
+    eval "uscan_debug \"safe_replace input=\\\"\$\$in\\\"\\n\"";
     $pat =~ s/^\s*(.*?)\s*$/$1/;
 
     $pat =~ /^(s|tr|y)(.)/;
@@ -4401,24 +4402,25 @@ sub safe_replace($$) {
 	($parsed_ok, $regexp, $replacement, $flags) = quoted_regex_parse($pat);
 
 	unless ($parsed_ok) {
-	    uscan_warn "stop mangling: rule=\"$pat\" on \"$in\"\n" .
+	    uscan_warn "stop mangling: rule=\"$pat\"\n" .
 		       "  mangling rule with <...>, (...), {...} failed.\n";
 	    return 0;
 	}
     } elsif ($pat !~ /^(?:s|tr|y)$esc((?:\\.|[^\\$esc])*)$esc((?:\\.|[^\\$esc])*)$esc([a-z]*)$/) {
 	$sep = "/" if $sep eq '';
-	uscan_warn "stop mangling: rule=\"$pat\" on \"$in\"\n" .
-		   "   rule doesn't match \"(s|tr|y)$sep.*$sep.*$sep.*\" or similar.\n";
+	uscan_warn "stop mangling: rule=\"$pat\"\n" .
+		   "   rule doesn't match \"(s|tr|y)$sep.*$sep.*$sep.*\" (or similar).\n";
 	return 0;
     } else {
 	($regexp, $replacement, $flags) = ($1, $2, $3);
     }
 
+    uscan_debug "safe_replace with regexp=\"$regexp\", replacement=\"$replacement\", and flags=\"$flags\"\n";
     my $safeflags = $flags;
     if ($op eq 'tr' or $op eq 'y') {
 	$safeflags =~ tr/cds//cd;
 	if ($safeflags ne $flags) {
-	    uscan_warn "stop mangling: rule=\"$pat\" on \"$in\"\n" .
+	    uscan_warn "stop mangling: rule=\"$pat\"\n" .
 		       "   flags must consist of \"cds\" only.\n";
 	    return 0;
 	}
@@ -4432,7 +4434,7 @@ sub safe_replace($$) {
 	eval "\$\$in =~ tr<$regexp><$replacement>$flags;";
 
 	if ($@) {
-	    uscan_warn "stop mangling: rule=\"$pat\" on \"$in\"\n" .
+	    uscan_warn "stop mangling: rule=\"$pat\"\n" .
 		       "   mangling \"tr\" or \"y\" rule execution failed.\n";
 	    return 0;
 	} else {
@@ -4441,7 +4443,7 @@ sub safe_replace($$) {
     } else {
 	$safeflags =~ tr/gix//cd;
 	if ($safeflags ne $flags) {
-	    uscan_warn "stop mangling: rule=\"$pat\" on \"$in\"\n" .
+	    uscan_warn "stop mangling: rule=\"$pat\"\n" .
 		       "   flags must consist of \"gix\" only.\n";
 	    return 0;
 	}
@@ -4454,7 +4456,7 @@ sub safe_replace($$) {
 	    $slashg = 1;
 	    # if it's not initial, it is too dangerous
 	    if ($regexp =~ /^.*[^\\](\\\\)*\\G/) {
-		uscan_warn "stop mangling: rule=\"$pat\" on \"$in\"\n" .
+		uscan_warn "stop mangling: rule=\"$pat\"\n" .
 			   "   dangerous use of \\G with regexp=\"$regexp\".\n";
 		return 0;
 	    }
@@ -4517,7 +4519,7 @@ sub safe_replace($$) {
 		}
 	    };
 	    if ($@) {
-		uscan_warn "stop mangling: rule=\"$pat\" on \"$in\"\n" .
+		uscan_warn "stop mangling: rule=\"$pat\"\n" .
 			   "   mangling \"s\" rule execution failed.\n";
 		return 0;
 	    }
