@@ -1305,10 +1305,10 @@ See the below section L<Directory name checking> for an explanation of this opti
 
 =item B<--destdir>
 
-Path of directory to which to download. If the specified path is not absolute,
-it will be relative to one of the current directory or, if directory scanning
-is enabled, the package's
-source directory.
+Set the path of directory to which to download instead of its default F<../>.
+If the specified path is not absolute, it will be relative to one of the
+current directory or, if directory scanning is enabled, the package's source
+directory.
 
 =item B<--package> I<package>
 
@@ -3358,34 +3358,36 @@ EOF
 	my ($url, $fname, $mode) = @_;
 	if ($mode eq 'git') {
 	    my $curdir = getcwd();
-	    $fname =~ m/\.\.\/(.*)-([^_-]*)\.tar\.(gz|xz|bz2|lzma)/;
-	    my $pkg = $1;
-	    my $ver = $2;
-	    my $suffix = $3;
+	    $fname =~ m%(.*)/([^/]*)-([^_/-]*)\.tar\.(gz|xz|bz2|lzma)%;
+	    my $dst = $1;
+	    my $pkg = $2;
+	    my $ver = $3;
+	    my $suffix = $4;
 	    my ($gitrepo, $gitref) = split /[[:space:]]+/, $url, 2;
 	    my $gitrepodir = "$pkg.$$.git";
-	    uscan_verbose "Execute: git clone --bare $gitrepo ../$gitrepodir\n";
-	    system('git', 'clone', '--bare', $gitrepo, "../$gitrepodir") == 0 or die("git clone failed\n");
-	    chdir "../$gitrepodir" or die("Unable to chdir(\"../$gitrepodir\"): $!\n");
-	    uscan_verbose "Execute: git archive --format=tar --prefix=$pkg-$ver/ --output=../$pkg-$ver.tar $gitref\n";
-	    system('git', 'archive', '--format=tar', "--prefix=$pkg-$ver/", "--output=../$pkg-$ver.tar", $gitref);
-	    chdir $curdir or die("Unable to chdir($curdir): $!\n");
+	    uscan_verbose "Execute: git clone --bare $gitrepo $dst/$gitrepodir\n";
+	    system('git', 'clone', '--bare', $gitrepo, "$dst/$gitrepodir") == 0 or die("git clone failed\n");
+	    chdir "$dst/$gitrepodir" or die("Unable to chdir(\"$dst/$gitrepodir\"): $!\n");
+	    uscan_verbose "Execute: git archive --format=tar --prefix=$pkg-$ver/ --output=$curdir/$dst/$pkg-$ver.tar $gitref\n";
+	    system('git', 'archive', '--format=tar', "--prefix=$pkg-$ver/", "--output=$curdir/$dst/$pkg-$ver.tar", $gitref);
+	    chdir "$curdir/$dst" or die("Unable to chdir($curdir/$dst): $!\n");
 	    if ($suffix eq 'gz') {
-		uscan_verbose "Execute: gzip -n -9 ../$pkg-$ver.tar\n";
-		system("gzip", "-n", "-9", "../$pkg-$ver.tar") == 0 or die("gzip failed\n");
+		uscan_verbose "Execute: gzip -n -9 $pkg-$ver.tar\n";
+		system("gzip", "-n", "-9", "$pkg-$ver.tar") == 0 or die("gzip failed\n");
 	    } elsif ($suffix eq 'xz') {
-		uscan_verbose "Execute: xz ../$pkg-$ver.tar\n";
-		system("xz", "../$pkg-$ver.tar") == 0 or die("xz failed\n");
+		uscan_verbose "Execute: xz $pkg-$ver.tar\n";
+		system("xz", "$pkg-$ver.tar") == 0 or die("xz failed\n");
 	    } elsif ($suffix eq 'bz2') {
-		uscan_verbose "Execute: bzip2 ../$pkg-$ver.tar\n";
-		system("bzip2", "../$pkg-$ver.tar") == 0 or die("bzip2 failed\n");
+		uscan_verbose "Execute: bzip2 $pkg-$ver.tar\n";
+		system("bzip2", "$pkg-$ver.tar") == 0 or die("bzip2 failed\n");
 	    } elsif ($suffix eq 'lzma') {
-		uscan_verbose "Execute: lzma ../$pkg-$ver.tar\n";
-		system("lzma", "../$pkg-$ver.tar") == 0 or die("lzma failed\n");
+		uscan_verbose "Execute: lzma $pkg-$ver.tar\n";
+		system("lzma", "$pkg-$ver.tar") == 0 or die("lzma failed\n");
 	    } else {
 		uscan_warn "Unknown suffix file to repack: $suffix\n";
 		exit 1;
 	    }
+	    chdir "$curdir" or die("Unable to chdir($curdir): $!\n");
 	} elsif ($url =~ m%^http(s)?://%) {
 	    if (defined($1) and !$haveSSL) {
 		uscan_die "$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
