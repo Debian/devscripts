@@ -1,0 +1,88 @@
+# Debian debdiff(1) completion                             -*- shell-script -*-
+# Copyright: 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+_debdiff()
+{
+    local cur prev words cword _options i
+	local _dir=normal
+	local -i _from=-1
+	local -i _to=-1
+    _init_completion || return
+
+    for (( i=1; i<${#words[@]}; i++ )); do
+		if [[ $_dir == @(deb|dsc|changes) ]]; then
+			if (( i == ${#words[@]}-1 )); then
+				break
+			else
+				COMPREPLY=()
+				return 0
+			fi
+		fi
+		if (( ${_from} == -1  && ${_to} == -1 )); then
+			_dir=normal
+		elif (( ${_from} >= 0 && ${_to} == -1 )); then
+			_dir=from
+		elif (( ${_from} >= 0 && ${_to} >= 0 && ${_to} < ${_from} )); then
+			_dir=to
+		else
+			COMPREPLY=( ) 
+			return 0
+		fi
+		if [[ $_dir == normal && ${words[i]} == --from ]]; then
+			_from=0
+			_dir=from
+		elif [[ $_dir == normal && ${words[i]} == *.deb ]]; then
+			_dir=deb
+		elif [[ $_dir == normal && ${words[i]} == *.dsc ]]; then
+			_dir=dsc
+		elif [[ $_dir == normal && ${words[i]} == *.changes ]]; then
+			_dir=changes
+		elif [[ $_dir == from && ${words[i]} == *.deb ]]; then
+			(( ++_from ))
+		elif [[ $_dir == from && ${words[i]} == --to ]]; then
+			_to=0
+			_dir=to
+		elif [[ $_dir = to && ${words[i]} == *.deb ]]; then
+			(( ++_to ))
+		fi
+    done
+
+	if [[ $_dir == normal ]]; then
+
+		if [[ $prev == --debs-dir ]]; then
+			COMPREPLY=$( ( compgen -d -- "$cur" ) )
+		elif [[ $cur == -* ]]; then
+			_options='--from --dirs --nodirs --move --move-regex --nocontrol --control --controlfiles --wdiff-source-control --no-wdiff-source-control --wp --wl --wt --show-moved --noshow-moved --renamed --exclude --diffstat --no-diffstat --auto-ver-sort --no-auto-ver-sort --unpack-tarballs --no-unpack-tarballs --debs-dir --quiet --ignore-space'
+	
+			if [[ $prev == debdiff ]]; then
+				_options+=' --no-conf'
+			fi
+	
+			COMPREPLY=( $( compgen -W "${_options}" -- "$cur" ) )
+		else
+	        declare -a _compreply=( $( compgen -o filenames -G '*.@(deb|dsc|changes)' ) )
+	        COMPREPLY=( $( compgen -W "${_compreply[*]}"  -- "$cur" ) )
+		fi
+	elif [[ $_dir == deb ]]; then
+		declare -a _compreply=( $( compgen -o filenames -G '*.deb' ) )
+        COMPREPLY=( $( compgen -W "${_compreply[*]}"  -- "$cur" ) )
+	elif [[ $_dir = dsc ]]; then
+		declare -a _compreply=( $( compgen -o filenames -G '*.dsc' ) )
+        COMPREPLY=( $( compgen -W "${_compreply[*]}"  -- "$cur" ) )
+	elif [[ $_dir = changes ]]; then
+		declare -a _compreply=( $( compgen -o filenames -G '*.changes' ) )
+        COMPREPLY=( $( compgen -W "${_compreply[*]}"  -- "$cur" ) )
+	else
+	    _options=$(find . -name '*.deb' | sed -e's!\.\/!!' |  paste -s -d' ')
+		if [[ $_dir == from ]]; then
+			if (( $_from > 0 )); then
+				_options+=' --to'
+			fi
+		fi
+		COMPREPLY=( $( compgen -W "${_options}" -- "$cur" ) )
+	fi
+
+    return 0
+} &&
+complete -F _debdiff debdiff
+        
+# ex: ts=4 sw=4 et filetype=sh

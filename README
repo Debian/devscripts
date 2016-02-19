@@ -51,7 +51,7 @@ And now, in mostly alphabetical order, the scripts:
   ssh-client]
 
 - cvs-debuild: A wrapper for cvs-buildpackage to use debuild as its package
-  building program. [cvs-buildpackage, fakeroot, lintian, gnupg]
+  building program. [cvs-buildpackage, fakeroot, lintian, gnupg |gnupg2]
 
 - dcmd: run a given command replacing the name of a .changes or .dsc file
   with each of the files referenced therein
@@ -114,14 +114,14 @@ And now, in mostly alphabetical order, the scripts:
 
 - debrsign: This transfers a .changes/.dsc pair to a remote machine for
   signing, and runs debsign on the remote machine over an SSH connection.
-  [gnupg, debian-keyring, ssh-client]
+  [gnupg | gnupg2, debian-keyring, ssh-client]
 
 - debsign: Use GNU Privacy Guard to sign the changes (and possibly dsc)
   files created by running dpkg-buildpackage with no-sign options.  Useful
   if you are building a package on a remote machine and wish to sign it on
   a local one.  This script is capable of automatically downloading the
-  .changes and .dsc files from a remote machine. [gnupg, debian-keyring,
-  ssh-client]
+  .changes and .dsc files from a remote machine. [gnupg |gnupg2,
+  debian-keyring, ssh-client]
 
 - debsnap: grab packages from http://snapshot.debian.org [libwww-perl,
   libjson-perl]
@@ -134,7 +134,7 @@ And now, in mostly alphabetical order, the scripts:
   installed setuid root.  Debuild can also be used to run various of
   the debian/rules operations with the same root-gaining procedure.
   Debuild will also run lintian to check that the package does not
-  have any major policy violations. [fakeroot, lintian, gnupg]
+  have any major policy violations. [fakeroot, lintian, gnupg | gnupg2]
 
 - deb-reversion: increases a binary package version number and repacks the
   package, useful for porters and the like
@@ -160,7 +160,7 @@ And now, in mostly alphabetical order, the scripts:
 - dscextract: extract a single file from a Debian source package [patchutils]
 
 - dscverify: check the signature and MD5 sums of a dsc file against the most
-  current Debian keyring on your system. [gnupg, debian-keyring,
+  current Debian keyring on your system. [gnupg | gnupg2, debian-keyring,
   libdigest-md5-perl]
 
 - edit-patch: add/edit a patch for a source package and commit the changes
@@ -235,8 +235,8 @@ And now, in mostly alphabetical order, the scripts:
   version based on the new update.  Whilst uscan could be used to release
   the updated version automatically, it is probably better not to without
   testing it first.  Uscan can also verify detached OpenPGP signatures if
-  upstream's signing key is known. [gpgv, gnupg, liblwp-protocol-https-perl,
-  libwww-perl, unzip, xz-utils, file]
+  upstream's signing key is known. [gpgv | gpgv2, gnupg | gnupg2,
+  liblwp-protocol-https-perl, libwww-perl, unzip, xz-utils, file]
 
 - uupdate: Update the package with an archive or patches from
   an upstream author.  This will be of help if you have to update your
@@ -249,10 +249,11 @@ And now, in mostly alphabetical order, the scripts:
 - whodepends: check which maintainers' packages depend on a package
 
 - who-permits-upload: Retrieve information about Debian Maintainer access
-  control lists [gnupg, libencode-locale-perl, libwww-perl, debian-keyring]
+  control lists [gnupg | gnupg2, libencode-locale-perl, libwww-perl,
+  debian-keyring]
 
 - who-uploads: determine the most recent uploaders of a package to the Debian
-  archive [gnupg, debian-keyring, debian-maintainers, wget]
+  archive [gnupg | gnupg2, debian-keyring, debian-maintainers, wget]
 
 - wnpp-alert: list installed packages which are orphaned or up for adoption
   [wget | curl]

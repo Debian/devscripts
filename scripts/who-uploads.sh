@@ -69,6 +69,16 @@ DEFAULT_WHOUPLOADS_MAXUPLOADS=3
 DEFAULT_WHOUPLOADS_DATE=no
 VARS="WHOUPLOADS_KEYRINGS WHOUPLOADS_MAXUPLOADS WHOUPLOADS_DATE"
 
+GPG=/usr/bin/gpg
+if [ ! -x $GPG ];then
+    echo "$GPG missing"
+    GPG=/usr/bin/gpg2
+    if [ ! -x $GPG ];then
+	echo "$GPG missing"
+	exit 1
+    fi
+fi
+
 if [ "$1" = "--no-conf" -o "$1" = "--noconf" ]; then
     shift
     MODIFIED_CONF_MSG="$MODIFIED_CONF_MSG
@@ -226,10 +236,10 @@ for package; do
 	    DATE=$(echo "$HTML_TEXT" |  sed -ne 's%<li><em>Date</em>: \(.*\)</li>%\1%p')
 	fi
 
-	GPG_ID=$(echo "$GPG_TEXT" | LC_ALL=C gpg $GPG_NO_KEYRING --keyid-format long --verify 2>&1 |
+	GPG_ID=$(echo "$GPG_TEXT" | LC_ALL=C $GPG $GPG_NO_KEYRING --keyid-format long --verify 2>&1 |
 	         sed -rne 's/.*using [^ ]* key ([0-9A-Z]+).*/\1/p')
 
-	UPLOADER=$(gpg $GPG_OPTIONS \
+	UPLOADER=$($GPG $GPG_OPTIONS \
 	           "${GPG_DEFAULT_KEYRINGS[@]}" "${GPG_KEYRINGS[@]}" \
 	           --list-key --with-colons $GPG_ID 2>/dev/null |
 	           awk  -F: '/@debian\.org>/ { a = $10; exit} /^pub/ { a = $10 } END { print a }' )

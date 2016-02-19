@@ -11,3 +11,4 @@ ifeq ($(shell dpkg-vendor --derives-from Ubuntu && echo ubuntu),ubuntu)
 else
 	dh_gencontrol -- -V'vendor:Suggests=' -V'vendor:Recommends=$(UBU_SUGGESTS)'
 endif
+

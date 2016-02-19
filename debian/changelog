@@ -1,3 +1,210 @@
+devscripts (2.16.1) unstable; urgency=medium
+
+  [ Antonio Terceiro ]
+  * uscan:
+    - fix regression in uscan when --destdir is set (Closes: #809662)
+      Patch by Alex Mestiashvili <mailatgoogl@gmail.com>
+    - fix crash when --rename is passed  (Closes: #812417)
+    - when scanning for directories called 'debian', ignore the ones that
+      don't have a file called 'watch'. This removes several annoying warnings
+      when uscan is run on a package that has several directories called
+      'debian' in its upstream source.
+    - fix English phrases when logging download-related actions
+  * mk-build-deps:
+    - When installing, pass `-o Debug::pkgProblemResolver=yes` to `apt-get
+      install` so that when build dependencies can't be satisfied, you know why.
+      Otherwise it would just tell you that the *-build-deps package needs to
+      be removed and you will never know why.
+  * debian/control:
+    - change Vcs-Git: to a https:// URL
+
+  [ James McCoy ]
+  * checkbashisms:
+    + Recognize dash as a valid shell.
+    + Check scripts which use “#!/path/to/env $interpreter”
+    + Allow %b as a printf conversion specifier.  Thanks to Mike Frysinger for
+      the patch.  (Closes: #804735)
+  * debian/tests/control: Add gcc as a dependency for dpkg-architecture.
+  * chdist:
+    + Symlink, rather than copy, the archive keyrings into the chdist tree so
+      they don't get stale.  (Closes: #783497)
+  * test_package_lifecycle: Ignore listing of dh_* commands in debuild output.
+    The specific commands aren't interesting, so much as the steps that the
+    build goes through.  Fixes FTBFS due to new dh_update_autotools_config
+    command.  (Closes: #812661)
+  * dd-list:
+    + Use apt interfaces to find sources files and extract their contents,
+      instead of globbing and directly reading files.
+  * dcmd:
+    + Support .buildinfo files.  Thanks to Johannes Schauer for the patch.
+      (Closes: #774554)
+  * debsnap:
+    + Remove use of JSON module in favor of the core Perl JSON::PP module.
+      Thanks to RjY and Jakub Wilk.  (Closes: #803315)
+  * dep3changelog:
+    + Recognize https URLs for Bug-Debian.  (Closes: #750024)
+
+  [ Christoph Berg ]
+  * debcheckout: Add auth mapping for https://github.com.
+
+  [ Osamu Aoki ]
+  * uscan:
+    + Fix regressions and glitches in the prioritizing mechanism of packages.
+      (Closes: #809604)
+    + Fix regressions of the verbosety. (Closes: #809541, #809554)
+    + Keep the original compressed file when decompressing it for the
+      signature verification. (Closes: #812860)
+    + Write *.uscan.log only when requested by --log. (Closes: #809806)
+    + Fix syntax of GitHub watch file example.  (Closes: #814447)
+  * uscan, mk-origtargz:
+    + Document Files-Excluded better.  (Closes: #812119)
+
+  [ Dominique Dumont ]
+  * licensecheck:
+    + detect LGPL license in Perl files handled by Dist::Zilla
+
+ -- James McCoy <jamessan@debian.org>  Thu, 11 Feb 2016 21:07:17 -0500
+
+devscripts (2.15.10) unstable; urgency=low
+
+  [ Benjamin Drung ]
+  * test_uscan: Fix failure in testFileExclusion due to wrong tarfile name
+    test on Ubuntu.
+
+  [ Nicholas Bamber ]
+  * Fixed issues with current bash completion (Closes: #804492)
+    + Reorganised scripts/Makefile so that bash completion scripts
+      are installed matching their command names - an exception being the
+      generic pkgnames.bash_completion.
+    + Where necessary added links to bash completion scripts
+      to debian/links to reuse bash completion code
+    + Removed deprecated "have" mechanism from bash completion scripts.
+    + Removed undefined "$filenames" from chdist.bash_completion
+    + Split debi.bash_completion off from pkgnames.bash_completion
+      and added links for both debi/debc and corrected complete commands
+  * Added custom bash completion support for bts (Closes: #499886)
+    + Added --soap-timeout option to bts
+    + Added listcachedbugs command to bts
+    + Split out bts bash completion handling into its own script
+  * Added custom bash completion support for debuild, checkbashisms,
+    list-unreleased, dscverify, dscextract, what-patch, plotchangelog,
+    debdiff and licensecheck
+  * Updated custom bash completion handling for mk-origtargz
+  * Added debcheckout to those commands with package names bash completion
+  * licensecheck:
+    + Tweaked parselicense to capture 'and or' as well as
+      'and/or' in GPL licenses (Closes: #559429)
+    + Added test for licensecheck versus Software::License
+    + Resolved failure to find license from Software::License generated
+      files from Artistic and Mozilla licenses
+  * Added test for life cycle of package:
+    + debuild, dscverify, dscextract, list-unreleased, debdiff
+  * Rearranged cleanup of tests to use oneTimeSetUp/oneTimeTearDown
+  * Streamlined structure of test/Makefile
+  * Updated .gitignore
+
+  [ Dominique Dumont ]
+  * licensecheck:
+    + no longer attempts to find encoding or select files to parse
+      using 'file' commands. By default, files are selected using file
+      extension instead of MIME types provided by "file" command.  The
+      list of file extensions is more boring to maintain but also more
+      predictable.  (Closes: #803724)
+    + added --encoding option. By default, input files are handled as utf-8
+      Information is printed on STDOUT as utf-8.
+    + --text option is deprecated
+    + added freetype license
+    + remove 'by' from copyright owners
+    + remove whitespace from end of multi-line copyright statements
+    + parse multi-line copyright blocks (Closes: #519080)
+    + parse .lisp file (part of #806424)
+    + added LLGPL license (part of #806424)
+    + licensecheck: show skipped file with --skipped (Closes: #806424)
+    + also parse last 5kb of a file
+    + parse source file without suffix (e.g script, README)
+    + parse .css or .less file
+    + parse perl6 files (.pl6 .pm6 .pod6 ...)
+    + parse markdown files (.md or .markdown)
+    * tweaked to parse Artistic 2.0 license file
+    * improved detection of artistic 2.0 licenses
+
+  [ Osamu Aoki ]
+  * uscan:
+    + Start uupdate with --verbose as needed.  (Closes: #350454)
+    + Add test_uscan_mangle for testing the mangling rules and pgp signature.
+    + Add --download-debversion.  (Closes: #755754)
+    + Add pagemangle.  (Closes: #395439, #451051, #538717, #705989, #773390)
+    + Add oversionmangle as a part of multiple upstream tarball support.
+      (Closes: #458777)
+    + Add dirversionmangle with $download-version consideration with detailed
+      and sorted reporting of all available URLs.
+      (Closes: #363346, #375138, #472065, #516704, #557768, #734748)
+    + Add the multiple upstream tarball support and extend the OpenPGP support
+      with new watch line options: component, compression, repack, pgpmode,
+      versionmode, decompress.  (Closes: #526443, #531321, #549178, #731725,
+      #738977, #778723, #800704)
+    + Updated manpage contents and build it from POD.  (Closes: #409094,
+      #415680, #573631, #648632, #733272, #775526, #790629, #796293, #797787)
+    + Improve FTP listing handling. (Closes: #696492)
+    + Add the --overwrite-download, --skip-signature, and similar options
+      to reorganize behavior around existing downloaded files.
+      (Closes: #532182, #740366, #801165)
+    + Update filenamemangle to support the version pattern matching in any
+      position of the URL and remove .download hack which breaks 
+      mk-origtargz. (Closes: #526450, #803948, #804239)
+    + Reorganize the reporting by uscan and adjust its text strings.
+      (Closes: #582958)
+    + Add download compression ordering support to prefer xz over gz.
+      (Closes: #763071)
+    + Add generalized search regex with some special strings @PACKAGE@,
+      @ANY_VERSION@, @ARCHIVE_EXT@, and @SIGNATURE_EXT@.
+      (Closes: #517637, #539780)
+    + Add direct git repository support. (Closes: #663357)
+    + Add unzipopt support.
+  * uupdate:
+    + Prevent failure when upstream version is 0.  (Closes: #798175)
+    + Work around missing debian.tar.gz for "3.0 (quilt)".  (Closes: 798133)
+    + Add multiple upstream tarball support and resolve minor bugs by using
+      dpkg-source as the backend.  (Closes: #278797, #544638, #570221, 
+      #752364, #797045)
+  * mk-origtargz:
+    + Support component name for the multiple upstream tarball support.
+    + Fix Files-Excluded for duplicate entries. (Closes: #762263)
+    + Add --unzipopt option. (Closes: #737843)
+    + Add xpi files support. (Closes: #751984)
+  * debian/control, dscverify, who-permits-upload, uscan:
+    + Add gnupg2/gpgv2 as an alternative option to gnupg/gpgv. (Closes: #788414)
+
+  [ James McCoy ]
+  * debuild:
+    + Use _all as the .changes arch for -A builds.  (Closes: #806262)
+  * dget:
+    + Remove unnecessary requirement that “apt-cache policy $pkg” shows a
+      priority of 0 for the Candidate version.  (Closes: #807064)
+    + Fix parsing of sources.list lines with options.  (Closes: #674812)
+  * Add apt to Recommends, since various scripts use tools from apt.  (Closes:
+    #807065)
+  * Export LC_ALL=C in test_mk-origtargz so the test doesn't fail in non-English
+    locales.
+  * chdist:
+    + Make the apt-file support compatible with 3.x apt-file.
+  * debcommit:
+    + When a VCS requires a mangled package version for the tag name, still
+      use the actual package version in the tag message.  (Closes: #802503)
+  * bts:
+    + Fix creation of cache dir when $XDG_CACHE_HOME doesn't exist yet.
+      (Closes: #808394)
+  * checkbashisms:
+    + Improve detection of bashisms when a ! is included after an
+      if/while/elif conditional.  (Closes: #808271)
+
+  [ Daniel Kahn Gillmor ]
+  * debuild:
+    + pass through DBUS_SESSION_BUS_ADDRESS so that gpg-agent can make
+      pinentry-gnome3 work (Closes: #805501)
+
+ -- James McCoy <jamessan@debian.org>  Wed, 30 Dec 2015 20:44:35 -0500
+
 devscripts (2.15.9~bpo8+1) jessie-backports; urgency=medium
 
   * Rebuild for jessie-backports.
@@ -238,7 +445,7 @@ devscripts (2.15.5) unstable; urgency=low
     * support eclipse public license (Closes: #587892)
     * handle LGPL as written by IBM (Closes: #587970)
     * handle REM style comments (Closes: #748611)
-  * uscan: use defined-or (//) instead of "||" to avoid loosing
+  * uscan: use defined-or (//) instead of "||" to avoid losing
     '0' version field (Closes: #787767)
 
   [ Piotr Ożarowski ]
@@ -2176,7 +2383,7 @@ devscripts (2.10.60) unstable; urgency=low
   * build-rdeps: Correct spelling error in manpage ("ommitted" -> "omitted").
   * checkbashisms: Correct spelling error in manpage ("preceeded" ->
     "preceded").
-  * decbommit: Correct spelling error in manpage ("commiting" ->
+  * debcommit: Correct spelling error in manpage ("commiting" ->
     "committing").
 
  -- James Vega <jamessan@debian.org>  Fri, 01 Jan 2010 23:30:33 -0500
@@ -4566,7 +4773,7 @@ devscripts (2.10.2) unstable; urgency=low
   * Adding myself to Uploaders
   * bts
     + add option to only get bugs never downloaded before (Closes: #366925)
-    + dont forward bugs within the bts (Closes: #406632)
+    + don't forward bugs within the bts (Closes: #406632)
   * include sample procmail script for autosubscribing to bugs
     (Closes: #353048)
 

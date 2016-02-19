@@ -1,8 +1,6 @@
 possible bashism in bashisms/printf.sh line 3 ('printf -v var ...' should be var='$(printf ...)'):
 printf -v some_var "this is a BASHISM"
-possible bashism in bashisms/printf.sh line 5 (printf %q|%b):
+possible bashism in bashisms/printf.sh line 5 (printf %q):
 printf "the use of %q is bad\n" "BASHISMS" >/dev/null
-possible bashism in bashisms/printf.sh line 7 (printf %q|%b):
-printf "this is another BASHISM: %b" "\n" >/dev/null
-possible bashism in bashisms/printf.sh line 9 (printf %q|%b):
+possible bashism in bashisms/printf.sh line 7 (printf %q):
 printf "%q leading the string is bad\n" "BASHISMS" >/dev/null

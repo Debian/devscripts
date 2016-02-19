@@ -30,7 +30,7 @@ B<licensecheck> B<--help>|B<--version>
 
 B<licensecheck> [B<--no-conf>] [B<--verbose>] [B<--copyright>]
 [B<-l>|B<--lines=>I<N>] [B<-i>|B<--ignore=>I<regex>] [B<-c>|B<--check=>I<regex>]
-[B<-m>|B<--machine>] [B<-r>|B<--recursive>]
+[B<-m>|B<--machine>] [B<-r>|B<--recursive>]  [B<-e>|B<--encoding=>I<...>]
 I<list of files and directories to check>
 
 =head1 DESCRIPTION
@@ -58,6 +58,12 @@ Default is to be quiet.
 Specify the number of lines of each file's header which should be parsed
 for license information. (Default is 60).
 
+=item B<--tail=>I<N>
+
+By default, the last 5k bytes of each files are parsed to get license
+information. You may use this option to set the size of this parsed chunk.
+You may set this value to 0 to avoid parsing the end of the file.
+
 =item B<-i=>I<regex>, B<--ignore=>I<regex>
 
 When processing the list of files and directories, the regular
@@ -80,9 +86,25 @@ By default, all files are parsed, including binary files. This option
 limits the parsed files to mime type C<text/*> and C<application/xml>.
 The mime type is given by C<file> command.
 
+=item B<-s>, B<--skipped>
+
+Specify whether to show skipped files, i.e. files found which do not
+match the check regexp (see C<--check> option). Default is to not show
+skipped files.
+
+Note that ignored files (like C<.git> or C<.svn>) are not shown even when
+this option is used.
+
 =item B<--copyright>
 
 Also display copyright text found within the file
+
+=item B<-e> B<--encoding>
+
+Specifies input encoding of source files. By default, input files are
+not decoded. When encoding is specified, license and copyright
+information are printed on STDOUT as utf8, or garbage if you got the
+encoding wrong.
 
 =item B<-m>, B<--machine>
 
@@ -155,12 +177,12 @@ use strict;
 use autodie;
 use warnings;
 use warnings    qw< FATAL  utf8     >;
-use Encode qw/decode/;
 
-use Dpkg::IPC qw(spawn);
 use Getopt::Long qw(:config gnu_getopt);
 use File::Basename;
-
+use File::stat;
+use IO::File;
+use Fcntl qw/:seek/;
 
 binmode STDOUT, ':utf8';
 
@@ -183,13 +205,54 @@ my $default_ignore_regex = qr!
 \.shelf|_MTN|\.bzr(?:\.backup|tags)?)(?:$|/.*$)
 !x;
 
+my $default_check_regex =
+    qr!
+    /[\w-]+$                      # executable scripts or README like file
+    |
+    \.(                          # search for file suffix
+        c(c|pp|xx)?              # c and c++
+       |h(h|pp|xx)?              # header files for c and c++
+       |S
+       |css|less                 # HTML css and similar
+       |f(77|90)?
+       |go
+       |groovy
+       |lisp
+       |scala
+       |clj
+       |p(l|m)?6?|t|xs|pod6?     # perl5 or perl6
+       |sh
+       |php
+       |py(|x)
+       |rb
+       |java
+       |js
+       |vala
+       |el
+       |sc(i|e)
+       |cs
+       |pas
+       |inc
+       |dtd|xsl
+       |mod
+       |m
+       |md|markdown
+       |tex
+       |mli?
+       |(c|l)?hs
+     )
+    $
+   !x;
+
 # also used to cleanup
 my $copyright_indicator_regex
     = qr!
          (?:copyright	# The full word
-            |copr\.		# Legally-valid abbreviation
-            |©	# Unicode character COPYRIGHT SIGN
-            |\(c\)		# Legally-null representation of sign
+            |copr\.	# Legally-valid abbreviation
+            |\xc2\xa9	# Unicode copyright sign encoded in iso8859
+	    |\x{00a9}	# Unicode character COPYRIGHT SIGN
+	    #|©		# Unicode character COPYRIGHT SIGN
+            |\(c\)	# Legally-null representation of sign
          )
         !lix;
 
@@ -222,9 +285,11 @@ my %OPT=(
     copyright      => 0,
     machine        => 0,
     text           => 0,
+    skipped        => 0,
 );
 
 my $def_lines = 60;
+my $def_tail = 5000; # roughly 60 lines of 80 chars
 
 # Read configuration files and then command line
 # This is boilerplate
@@ -274,11 +339,14 @@ GetOptions(\%OPT,
            "help|h",
            "check|c=s",
            "copyright",
+	   "encoding|e=s",
            "ignore|i=s",
            "lines|l=i",
            "machine|m",
            "noconf|no-conf",
            "recursive|r",
+	   "skipped|s",
+	   "tail",
 	   "text|t",
            "verbose!",
            "version|v",
@@ -287,7 +355,7 @@ GetOptions(\%OPT,
 $OPT{'lines'} = $def_lines if $OPT{'lines'} !~ /^[1-9][0-9]*$/;
 my $ignore_regex = length($OPT{ignore}) ? qr/$OPT{ignore}/ : $default_ignore_regex;
 
-my $check_regex ;
+my $check_regex = $default_check_regex;
 $check_regex = qr/$OPT{check}/ if length $OPT{check};
 
 if ($OPT{'noconf'}) {
@@ -295,6 +363,10 @@ if ($OPT{'noconf'}) {
 }
 if ($OPT{'help'}) { help(); exit 0; }
 if ($OPT{'version'}) { version(); exit 0; }
+
+if ($OPT{text}) {
+    warn "$0 warning: option -text is deprecated\n"; # remove -text end 2015
+}
 
 die "Usage: $progname [options] filelist\nRun $progname --help for more details\n" unless @ARGV;
 
@@ -316,15 +388,27 @@ while (@ARGV) {
 
 	while (my $found = <$FIND>) {
 	    chomp ($found);
-	    next if ( $check_regex and $found !~ $check_regex );
-	    # Skip empty files
-	    next if (-z $found);
-	    push @files, $found unless $found =~ $ignore_regex;
+	    # Silently skip empty files or ignored files
+	    next if -z $found or $found =~ $ignore_regex;
+	    if ( not $check_regex or $found =~ $check_regex ) {
+		# Silently skip empty files or ignored files
+		push @files, $found ;
+	    }
+	    else {
+		warn "skipped file $found\n" if $OPT{skipped};
+	    }
 	}
 	close $FIND;
-    } else {
-	next unless ($files_count == 1) or ( $check_regex and $file =~ $check_regex);
-	push @files, $file unless $file =~ $ignore_regex;
+    }
+    elsif ($file =~ $ignore_regex) {
+	# Silently skip ignored files
+	next;
+    }
+    elsif ( $files_count == 1 or not $check_regex or $file =~ $check_regex ) {
+	push @files, $file;
+    }
+    else {
+	warn "skipped file $file\n" if $OPT{skipped};
     }
 }
 
@@ -333,44 +417,48 @@ while (@files) {
     my $content = '';
     my $copyright_match;
     my $copyright = '';
-    my $license = '';
 
-    # Encode::Guess does not work well, use good old file command to get file encoding
-    my $mime;
-    spawn(exec => ['file', '--brief', '--mime', '--dereference', '--', $file],
-          to_string => \$mime,
-          error_to_file => '/dev/null',
-          nocheck => 1,
-          wait_child => 1);
-    my $charset ;
-    if ($mime =~ m/; charset=((?!binary)(?!unknown)[\w-]+)/) {
-	$charset = $1;
-    }
-    else {
-	chomp $mime;
-	warn "$0 warning: cannot parse file '$file' with mime type '$mime'\n";
-	$charset = 'maybe-binary';
-	next if $OPT{text};
-    }
+    my $st = stat $file;
 
-    open (my $F, '<' ,$file) or die "Unable to access $file\n";
-    binmode $F, ':raw';
+    my $enc = $OPT{encoding} ;
+    my $mode = $enc ? "<:encoding($enc)" : '<';
+    # need to use "<" when encoding is unknown otherwise we break compatibility
+    my $fh = IO::File->new ($file ,$mode) or die "Unable to access $file\n";
 
-    while ( <$F>) {
-	last if ($. > $OPT{'lines'});
-	my $data = $_;
-	$data = decode($charset, $data) if $charset ne 'maybe-binary';
-	$content .= $data;
+    while ( my $line = $fh->getline ) {
+	last if ($fh->input_line_number > $OPT{'lines'});
+	$content .= $line;
     }
-    close($F);
 
     my %copyrights = extract_copyright($content);
-    $copyright = join(" / ", reverse sort values %copyrights);
 
     print qq(----- $file header -----\n$content----- end header -----\n\n)
 	if $OPT{'verbose'};
 
-    $license = parselicense(clean_cruft_and_spaces(clean_comments($content)));
+    my $license = parselicense(clean_cruft_and_spaces(clean_comments($content)));
+    $copyright = join(" / ", reverse sort values %copyrights);
+
+    if ( not $copyright and $license eq 'UNKNOWN') {
+	my $position = $fh->tell; # See IO::Seekable
+	my $tail_size = $OPT{tail} // $def_tail;
+	my $jump = $st->size - $tail_size;
+	$jump = $position if $jump < $position;
+
+	my $tail ;
+	if ( $tail_size and $jump < $st->size) {
+	    $fh->seek($jump, SEEK_SET) ; # also IO::Seekable
+	    $tail .= join('',$fh->getlines);
+	}
+
+	print qq(----- $file tail -----\n$tail----- end tail -----\n\n)
+	    if $OPT{'verbose'};
+
+	%copyrights = extract_copyright($tail);
+	$license = parselicense(clean_cruft_and_spaces(clean_comments($tail)));
+	$copyright = join(" / ", reverse sort values %copyrights);
+    }
+
+    $fh->close;
 
     if ($OPT{'machine'}) {
 	print "$file\t$license";
@@ -393,15 +481,17 @@ sub extract_copyright {
     my %copyrights;
     my $lines_after_copyright_block = 0;
 
+    my $in_copyright_block = 0;
     while (@c) {
 	my $line = shift @c ;
-	my $copyright_match = parse_copyright($line) ;
+	my $copyright_match = parse_copyright($line, \$in_copyright_block) ;
 	if ($copyright_match) {
-	    while (@c && $copyright_match =~ /\d[,.]?\s*$/) {
+	    while (@c and $copyright_match =~ /\d[,.]?\s*$/) {
 		# looks like copyright end with a year, assume the owner is on next line(s)
 		$copyright_match .= ' '. shift @c;
 	    }
 	    $copyright_match =~ s/\s+/ /g;
+	    $copyright_match =~ s/\s*$//;
 	    $copyrights{lc("$copyright_match")} = "$copyright_match";
         }
 	elsif (scalar keys %copyrights) {
@@ -415,6 +505,7 @@ sub extract_copyright {
 
 sub parse_copyright {
     my $data = shift ;
+    my $in_copyright_block_ref = shift;
     my $copyright = '';
     my $match;
 
@@ -422,18 +513,28 @@ sub parse_copyright {
 	#print "match against ->$data<-\n";
         if ($data =~ $copyright_indicator_regex_with_capture) {
             $match = $1;
+	    $$in_copyright_block_ref = 1;
             # Ignore lines matching "see foo for copyright information" etc.
             if ($match !~ $copyright_disindicator_regex) {
 		# De-cruft
-                $match =~ s/([,.])?\s*$//;
                 $match =~ s/$copyright_indicator_regex//igx;
                 $match =~ s/^\s+//;
+		$match =~ s/\s*\bby\b\s*/ /;
+                $match =~ s/([,.])?\s*$//;
                 $match =~ s/\s{2,}/ /g;
 		$match =~ s/\\//g; # de-cruft nroff files
                 $match =~ s/\s*[*#]\s*$//;
                 $copyright = $match;
             }
         }
+	elsif ($$in_copyright_block_ref and $data =~ /^\d{2,}[,\s]+/) {
+	    # following lines beginning with a year are supposed to be
+	    # continued copyright blocks
+	    $copyright = $data;
+	}
+	else {
+	    $$in_copyright_block_ref = 0;
+	}
     }
 
     return $copyright;
@@ -482,9 +583,12 @@ Valid options are:
                           the first option given
    --verbose              Display the header of each file before its
                             license information
+   --skipped, -s          Show skipped files
    --lines, -l            Specify how many lines of the file header
                             should be parsed for license information
                             (Default: $def_lines)
+   --tail                 Specify how many bytes to parse at end of file
+                            (Default: $def_tail)
    --check, -c            Specify a pattern indicating which files should
                              be checked
                              (Default: All text and xml files)
@@ -550,17 +654,23 @@ sub parselicense {
 	$license = "GENERATED FILE";
     }
 
-    if ($licensetext =~ /(are made available|(is free software.? )?you can redistribute (it|them) and\/or modify (it|them)|is licensed) under the terms of (version [^ ]+ of )?the (GNU (Library |Lesser )General Public License|LGPL)/i) {
+    if ($licensetext =~ /(are made available|(is free software.? )?you can redistribute (it|them) and(?:\/|\s+)or modify (it|them)|is licensed) under the terms of (version [^ ]+ of )?the (GNU (Library |Lesser )General Public License|LGPL)/i) {
 	$license = "LGPL$gplver$extrainfo $license";
     }
+    # For Perl modules handled by Dist::Zilla
+    elsif ($licensetext =~ /this is free software,? licensed under:? (?:the )?(?:GNU (?:Library |Lesser )General Public License|LGPL),? version ([\d\.]+)/i) {
+	$license = "LGPL (v$1) $license";
+    }
 
-    if ($licensetext =~ /is free software.? you can redistribute (it|them) and\/or modify (it|them) under the terms of the (GNU Affero General Public License|AGPL)/i) {
+    if ($licensetext =~ /is free software.? you can redistribute (it|them) and(?:\/|\s+)or modify (it|them) under the terms of the (GNU Affero General Public License|AGPL)/i) {
 	$license = "AGPL$gplver$extrainfo $license";
     }
 
-    if ($licensetext =~ /(is free software.? )?you (can|may) redistribute (it|them) and\/or modify (it|them) under the terms of (?:version [^ ]+ (?:\(?only\)? )?of )?the GNU General Public License/i) {
+    if ($licensetext =~ /(is free software.? )?you (can|may) redistribute (it|them) and(?:\/|\s+)or modify (it|them) under the terms of (?:version [^ ]+ (?:\(?only\)? )?of )?the GNU General Public License/i) {
 	$license = "GPL$gplver$extrainfo $license";
     }
+
+    
 
     if ($licensetext =~ /is distributed under the terms of the GNU General Public License,/
 	and length $gplver) {
@@ -570,6 +680,10 @@ sub parselicense {
     if ($licensetext =~ /(?:is|may be)\s(?:(?:distributed|used).*?terms|being\s+released).*?\b(L?GPL)\b/) {
         my $v = $gplver || ' (unversioned/unknown version)';
         $license = "$1$v $license";
+    }
+
+    if ($licensetext =~ /the rights to distribute and use this software as governed by the terms of the Lisp Lesser General Public License|\bLLGPL\b/ ) {
+        $license = "LLGPL $license";
     }
 
     if ($licensetext =~ /This file is part of the .*Qt GUI Toolkit. This file may be distributed under the terms of the Q Public License as defined/) {
@@ -602,11 +716,17 @@ sub parselicense {
 	}
     }
 
-    if ($licensetext =~ /Mozilla Public License,? (Version|v\.) (\d+(?:\.\d+)?)/) {
-	$license = "MPL (v$2) $license";
+    if ($licensetext =~ /Mozilla Public License,? (?:(?:Version|v\.)\s+)?(\d+(?:\.\d+)?)/) {
+	    $license = "MPL (v$1) $license";
+    }
+    elsif ($licensetext =~ /Mozilla Public License,? \((?:Version|v\.) (\d+(?:\.\d+)?)\)/) {
+        $license = "MPL (v$1) $license";
     }
 
-    if ($licensetext =~ /Released under the terms of the Artistic License ([^ ]+)/) {
+    # match when either:
+    # - the text *begins* with "The Artistic license v2.0" which is (hopefully) the actual artistic license v2.0 text.
+    # - a license grant is found. i.e something like "this is free software, licensed under the artistic license v2.0"
+   if ($licensetext =~ /(?:^\s*|(?:This is free software, licensed|Released|be used|use and modify this (?:module|software)) under (?:the terms of )?)[Tt]he Artistic License ([v\d.]*\d)/) {
 	$license = "Artistic (v$1) $license";
     }
 
@@ -624,6 +744,10 @@ sub parselicense {
 
     if ($licensetext =~ /(THE BEER-WARE LICENSE)/i) {
 	$license = "Beerware $license";
+    }
+
+    if ($licensetext =~ /distributed under the terms of the FreeType project/i) {
+	$license = "FreeType $license"; # aka FTL see http://www.freetype.org/license.html
     }
 
     if ($licensetext =~ /This source file is subject to version ([^ ]+) of the PHP license/) {

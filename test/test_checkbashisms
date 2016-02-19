@@ -43,6 +43,10 @@ test_535368() {
     clean "-f bashisms/535368.mk"
 }
 
+test_808271() {
+    found "bashisms/808271.sh" "$(cat bashisms/808271.sh.out)"
+}
+
 test_arith() {
     found "bashisms/arith.sh" "$(cat bashisms/arith.sh.out)"
 }

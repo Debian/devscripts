@@ -101,6 +101,14 @@ my $soapurl='Debbugs/SOAP/1';
 our $btsurl='http://bugs.debian.org/';
 my @errors;
 
+our $soap_timeout;
+sub soap_timeout {
+    my $timeout_arg = shift;
+    if (defined $timeout_arg and $timeout_arg =~ m{^[1-9]\d*$}) {
+        $soap_timeout = $timeout_arg;
+    }
+}
+
 sub init_soap {
     my $soapproxyurl;
     if ($btsurl =~ m%^https?://(.*)/?$%) {
@@ -110,7 +118,11 @@ sub init_soap {
     }
     $soapproxyurl =~ s%//$%/%;
     $soapproxyurl .= 'cgi-bin/soap.cgi';
-    my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl);
+    my %options;
+    if ($soap_timeout) {
+        $options{timeout} = $soap_timeout;
+    }
+    my $soap = SOAP::Lite->uri($soapurl)->proxy($soapproxyurl, %options);
 
     $soap->transport->env_proxy();
     $soap->on_fault(\&getSOAPError);

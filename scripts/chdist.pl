@@ -272,12 +272,31 @@ sub apt_file
 {
     my ($dist, @args) = @_;
     dist_check($dist);
-    my $sources_list = $datadir . '/' . $dist . "/etc/apt/sources.list";
-    my $cache_directory = $datadir . '/' . $dist . "/var/cache/apt/apt-file";
-    unshift(@args,
-      '--sources-list', $sources_list,
-      '--cache', $cache_directory
-    );
+    aptconfig($dist);
+    my @query = ('dpkg-query', '-W', '-f');
+    open(my $fd, '-|', @query, '${Version}', 'apt-file')
+	or fatal('Unable to run dpkg-query.');
+    my $aptfile_version = <$fd>;
+    close($fd);
+    if (version_compare('3.0~', $aptfile_version) < 0) {
+	open($fd, '-|', @query, '${Conffiles}\n', 'apt-file')
+	    or fatal('Unable to run dpkg-query.');
+	my @aptfile_confs = map { (split)[0] }
+			    grep { /apt\.conf\.d/ } <$fd>;
+	close($fd);
+	# New-style apt-file
+	for my $conffile (@aptfile_confs) {
+	    if (! -f "$datadir/$dist/$conffile") {
+		cp($conffile, "$datadir/$dist/$conffile");
+	    }
+	}
+    }
+    else {
+	my $cache_directory = $datadir . '/' . $dist . "/var/cache/apt/apt-file";
+	unshift(@args,
+	    '--cache', $cache_directory
+	);
+    }
     exec('apt-file', @args);
 }
 
@@ -400,7 +419,10 @@ EOF
 			    debian-archive-removed-keys.gpg
 			    ubuntu-archive-keyring.gpg
 			    ubuntu-archive-removed-keys.gpg)) {
-	cp("/usr/share/keyrings/$keyring", "$dir/etc/apt/trusted.gpg.d/");
+	my $src = "/usr/share/keyrings/$keyring";
+	if (-f $src) {
+	    symlink $src, "$dir/etc/apt/trusted.gpg.d/$keyring";
+	}
     }
     print "Now edit $dir/etc/apt/sources.list\n" unless $version;
     print "Run chdist apt-get $dist update\n";

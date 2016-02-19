@@ -1,0 +1,22 @@
+# Debian dscextract(1) completion                             -*- shell-script -*-
+# Copyright: 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+_dscextract()
+{
+    local cur prev words cword _options
+    _init_completion || return
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-f' -- "$cur" ) )
+    elif [[ "$prev" == -f ]]; then
+        declare -a _compreply=( $( compgen -o filenames -G '*.dsc' ) )
+        COMPREPLY=( $( compgen -W "${_compreply[*]}"  -- "$cur" ) )
+    elif [[ "$prev" == *.dsc ]]; then
+        declare -a _compreply=( $( tar tvf ${prev/.dsc/.debian.tar.*} 2>/dev/null | sed 's! \+! !g' | cut -d' ' -f6 ) )
+        COMPREPLY=( $( compgen -W "${_compreply[*]}"  -- "$cur" ) )
+    else
+        declare -a _compreply=( $( compgen -W '-f' -o filenames -G '*.dsc' ) )
+        COMPREPLY=( $( compgen -W "${_compreply[*]}"  -- "$cur" ) )
+    fi
+
+    return 0
+} && complete -F _dscextract dscextract

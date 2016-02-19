@@ -81,7 +81,7 @@ my $status = 0;
 my $makefile = 0;
 my (%bashisms, %string_bashisms, %singlequote_bashisms);
 
-my $LEADIN = qr'(?:(?:^|[`&;(|{])\s*|(?:if|then|do|while|shell)\s+)';
+my $LEADIN = qr'(?:(?:^|[`&;(|{])\s*|(?:(?:if|elif|while)(?:\s+!)?|then|do|shell)\s+)';
 init_hashes;
 
 my @bashisms_keys = sort keys %bashisms;
@@ -139,10 +139,10 @@ foreach my $filename (@ARGV) {
 	next unless ($check_lines_count == -1 or $. <= $check_lines_count);
 
 	if ($. == 1) { # This should be an interpreter line
-	    if (m,^\#!\s*(\S+),) {
+	    if (m,^\#!\s*(?:\S+/env\s+)?(\S+),) {
 		my $interpreter = $1;
 
-		if ($interpreter =~ m,/make$,) {
+		if ($interpreter =~ m,(?:^|/)make$,) {
 		    init_hashes if !$makefile++;
 		    $makefile = 1;
 		} else {
@@ -151,10 +151,10 @@ foreach my $filename (@ARGV) {
 		}
 		next if $opt_force;
 
-		if ($interpreter =~ m,/bash$,) {
+		if ($interpreter =~ m,(?:^|/)bash$,) {
 		    $mode = 1;
 		}
-		elsif ($interpreter !~ m,/(sh|posh)$,) {
+		elsif ($interpreter !~ m,(?:^|/)(sh|dash|posh)$,) {
 ### ksh/zsh?
 		    warn "script $display_filename does not appear to be a /bin/sh script; skipping\n";
 		    $status |= 2;
@@ -689,7 +689,7 @@ sub init_hashes {
 	qr'\$\(\([\s\w$*/+-]*\w\-\-.*?\)\)'   => q<'$((n--))' should be '$n; $((n=n-1))'>,
 	qr'\$\(\([\s\w$*/+-]*\-\-\w.*?\)\)'   => q<'$((--n))' should be '$((n=n-1))'>,
 	qr'\$\(\([\s\w$*/+-]*\*\*.*?\)\)'   => q<exponentiation is not POSIX>,
-	$LEADIN . qr'printf\s["\'][^"\']*?%[qb].+?["\']' => q<printf %q|%b>,
+	$LEADIN . qr'printf\s["\'][^"\']*?%q.+?["\']' => q<printf %q>,
     );
 
     %singlequote_bashisms = (

@@ -109,7 +109,7 @@ END
     ( cd $TMPDIR/repo ;
       tar cfa $PKG-1.$from_ext * )
 
-    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMANDDEHS --repack --compression=$to_comp) 2>&1 )
+    OUTPUT=$( cd $TMPDIR/$PKG ; $COMMANDDEHS --repack --compression=$to_comp )
     assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
 
     TARBALL=${PKG}_1.orig.tar.$to_comp

@@ -1,0 +1,20 @@
+# Debian dscverify(1) completion                             -*- shell-script -*-
+# Copyright: 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+_dscverify()
+{
+    local cur prev words cword _options
+    _init_completion || return
+
+    if [[ "$cur" == -* ]]; then
+        _options='--keyring --no-default-keyrings --no-sig-check --verbose'
+        if [[ "$prev" == licensecheck ]]; then
+            _options+=' --no-conf'
+        fi
+        COMPREPLY=( $( compgen -W "${_options}" -- "$cur" ) )
+    else
+        declare -a _compreply=( $( compgen -o filenames -G '*.@(dsc|changes)' ) )
+        COMPREPLY=( $( compgen -W "${_compreply[*]}"  -- "$cur" ) )
+    fi
+
+    return 0
+} && complete -F _dscverify dscverify

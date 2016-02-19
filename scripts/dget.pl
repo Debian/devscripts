@@ -280,7 +280,7 @@ sub apt_get {
 	    $version = $1;
 	    $qversion = quote_version($version);
 	}
-	if ($qversion and /^ [ *]{3} ($qversion) 0/) {
+	if ($qversion and /^ [ *]{3} ($qversion) \d/) {
 	    while (<$apt>) {
 		last OUTER unless /^  *(?:\d+) (\S+)/;
 		(my $host = $1) =~ s@/$@@;
@@ -333,23 +333,22 @@ sub apt_get {
     my %repositories;
     # the regexp within the map below can be removed and replaced with only the quotemeta statement once bug #154868 is fixed
     my $host_re = '(?:' . (join '|', map { my $host = quotemeta; $host =~ s@^(\w+\\:\\/\\/[^:/]+)\\/@$1(?::[0-9]+)?\\/@; $host; } @hosts) . ')';
+
+    my @sources;
     if (-f "/etc/apt/sources.list") {
-	$apt = new IO::File("/etc/apt/sources.list") or die "/etc/apt/sources.list: $!";
-	while (<$apt>) {
-	    if (/^\s*deb\s*($host_re\b)/) {
-		$repositories{$1} = 1;
-	    }
-	}
-	close $apt;
+	push @sources, "/etc/apt/sources.list";
     }
     my %dir;
     tie %dir, "IO::Dir", "/etc/apt/sources.list.d";
     foreach (keys %dir) {
 	next unless /\.list$/;
-	$_ = "/etc/apt/sources.list.d/$_";
-	$apt = new IO::File("$_") or die "$_: $!";
+	push @sources, "/etc/apt/sources.list.d/$_";
+    }
+
+    foreach my $source (@sources) {
+	$apt = IO::File->new($source) or die "$source: $!";
 	while (<$apt>) {
-	    if (/^\s*deb\s*($host_re\b)/) {
+	    if (/^\s*deb\s*(?:\[[^]]*\]\s*)?($host_re\b)/) {
 		$repositories{$1} = 1;
 	    }
 	}

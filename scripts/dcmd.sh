@@ -66,7 +66,7 @@ maybe_expand()
 {
     local dir
     local sedre
-    if [ -e "$1" ] && (endswith "$1" .changes || endswith "$1" .dsc); then
+    if [ -e "$1" ] && (endswith "$1" .changes || endswith "$1" .dsc || endswith "$1" .buildinfo); then
 	# Need to escape whatever separator is being used in sed expression so
 	# it doesn't prematurely end the s command
 	dir=$(dirname "$1" | sed 's/,/\\,/g')
@@ -78,7 +78,7 @@ maybe_expand()
 }
 
 DSC=1; BCHANGES=1; SCHANGES=1; ARCHDEB=1; INDEPDEB=1; TARBALL=1; DIFF=1
-CHANGES=1; DEB=1; ARCHUDEB=1; INDEPUDEB=1; UDEB=1;
+CHANGES=1; DEB=1; ARCHUDEB=1; INDEPUDEB=1; UDEB=1; BUILDINFO=1;
 FILTERED=0; FAIL_MISSING=1
 EXTRACT_PACKAGE_NAME=0
 SORT=0
@@ -109,7 +109,7 @@ while [ $# -gt 0 ]; do
 		    exit 1;;
 		0)  FILTERED=1; DSC=0; BCHANGES=0; SCHANGES=0; CHANGES=0
 		    ARCHDEB=0; INDEPDEB=0; DEB=0; ARCHUDEB=0; INDEPUDEB=0
-		    UDEB=0; TARBALL=0; DIFF=0;;
+		    UDEB=0; TARBALL=0; DIFF=0; BUILDINFO=0;;
 	    esac;;
 	*) break;;
     esac
@@ -117,6 +117,7 @@ while [ $# -gt 0 ]; do
     case "$TYPE" in
 	"") ;;
 	dsc) [ "$FILTERED" = "1" ] && DSC=1 || DSC=0;;
+	buildinfo) [ "$FILTERED" = "1" ] && BUILDINFO=1 || BUILDINFO=0;;
 	changes) [ "$FILTERED" = "1" ] &&
 	    { BCHANGES=1; SCHANGES=1; CHANGES=1; } ||
 	    { BCHANGES=0; SCHANGES=0; CHANGES=0; } ;;
@@ -156,7 +157,7 @@ $arg"
     else
 	SEEN_INDEPDEB=0; SEEN_ARCHDEB=0; SEEN_SCHANGES=0; SEEN_BCHANGES=0
 	SEEN_INDEPUDEB=0; SEEN_ARCHUDEB=0; SEEN_UDEB=0;
-	SEEN_TARBALL=0; SEEN_DIFF=0; SEEN_DSC=0
+	SEEN_TARBALL=0; SEEN_DIFF=0; SEEN_DSC=0; SEEN_BUILDINFO=0;
 	MISSING=0
 	newarg=""
 	# Output those items from the expanded list which were
@@ -206,6 +207,9 @@ $THISARG\";"
 		[ "$DSC" = "0" ] || echo "newarg=\"\$newarg
 $THISARG\";"
 		echo "SEEN_DSC=1;"
+		[ "$BUILDINFO" = "0" ] || echo "newarg=\"\$newarg
+$THISARG\";"
+		echo "SEEN_BUILDINFO=1;"
 	    elif endswith "$THISARG" .diff.gz; then
 		[ "$DIFF" = "0" ] || echo "newarg=\"\$newarg
 $THISARG\";"
@@ -227,6 +231,9 @@ $THISARG\";"
 	elif endswith "$arg" .dsc; then
 	    [ "$DSC" = "1" ] || INCLUDEARG=0
 	    SEEN_DSC=1
+	elif endswith "$arg" .buildinfo; then
+	    [ "$BUILDINFO" = "1" ] || INCLUDEARG=0
+	    SEEN_BUILDINFO=1
 	fi
 
 	if [ "$FAIL_MISSING" = "1" ] && [ "$FILTERED" = "1" ]; then
@@ -270,6 +277,9 @@ $THISARG\";"
 
 	    fi
 
+	    if [ "$BUILDINFO" = "1" ] && [ "$SEEN_BUILDINFO" = "0" ]; then
+		MISSING=1; echo "$arg: .buildinfo file not found" >&2
+	    fi
 	    if [ "$DSC" = "1" ] && [ "$SEEN_DSC" = "0" ]; then
 		MISSING=1; echo "$arg: .dsc file not found" >&2
 	    fi

@@ -1,0 +1,83 @@
+#!/usr/bin/perl 
+
+use File::Temp qw();
+use Software::License;
+require UNIVERSAL::require;
+use Test::More;
+
+my $COMMAND = ($ARGV[0] eq '--installed')
+            ? "licensecheck --no-conf"
+            : "../scripts/licensecheck.pl --no-conf";
+
+my %LICENSES = (
+    Apache_2_0=>'Apache (v2.0)',
+    FreeBSD=>'BSD (2 clause)',
+    GPL_1=>'GPL (v1)',
+    GPL_2=>'GPL (v2)',
+    GPL_3=>'GPL (v3)',
+    LGPL_2=>'LGPL (v2)',
+    LGPL_2_1=>'LGPL (v2.1)',
+    LGPL_3_0=>'LGPL (v3)',
+    MIT=>'MIT/X11 (BSD like)',
+    Mozilla_2_0=>'MPL (v2.0)',
+    QPL_1_0=>'QPL',
+    Zlib=>'zlib/libpng',
+    CC0_1_0=>'UNKNOWN',
+    GFDL_1_3=>'UNKNOWN',
+    Artistic_1_0=>'Artistic (v1.0)',
+    Artistic_2_0=>'Artistic (v2.0)',
+    Mozilla_1_0=>'MPL (v1.0)',
+    None=>'UNKNOWN',
+    PostgreSQL=>'UNKNOWN',
+    AGPL_3=>'UNKNOWN', # This is broken since licensecheck started looking at the tail
+    SSLeay=>'BSD (2 clause)',
+    Apache_1_1=>'UNKNOWN',
+    Mozilla_1_1=>'MPL (v1.1)',
+    GFDL_1_2=>'UNKNOWN',
+    Sun=>'UNKNOWN',
+    BSD=>'UNKNOWN',
+    OpenSSL=>'UNKNOWN', # This is actually a dual license not simply BSD 4 clause
+    Perl_5=>'UNKNOWN',
+);
+
+my $SL_VERSION=`dpkg-query -W -f='\${Version}' libsoftware-license-perl`;
+if (system("dpkg --compare-versions $SL_VERSION gt 0.103010-3") == 0) {
+	plan tests=>scalar(keys %LICENSES);
+} else {
+	plan skip_all=>"Software::License $SL_VERSION too old for this test";
+}
+
+my $dir = File::Temp->newdir('/tmp/slgenXXXXX');
+my $year = 2000;
+foreach my $license (keys %LICENSES) {
+	my $slfile = $dir->dirname . "/$license";
+	my $module = "Software::License::$license";
+	$module->require;
+	my $slobj = $module->new({
+		holder => 'Testophilus Testownik <tester@testity.org>',
+		year=>$year,
+	});
+	open my $fh, '>', $slfile;
+	print $fh $slobj->notice;
+	print $fh $slobj->debian_text;
+	close $fh;
+	++$year;
+}
+my $dirname=$dir->dirname;
+open(my $fh, "$COMMAND --recursive -c '.+' $dirname |") or die "can't run licensecheck: $!";
+while(my $line = <$fh>) {
+    if ($line =~ m{^$dirname/(\w+): (.+)$}) {
+        my $file=$1;
+        my $result=$2;
+        my $success = is($result, $LICENSES{$file}, $file);
+        if ($LICENSES{$file} eq 'UNKNOWN' and $success) {
+            diag("licensecheck failed to parse $file as expected");
+        }
+    }
+    else {
+        die "Unexpected output: $line";
+    }
+}
+
+    
+    

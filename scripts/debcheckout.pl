@@ -460,7 +460,7 @@ sub set_auth($$$$) {
     $url =~ s@svn://(?:scm\.alioth|anonscm)\.debian\.org@svn://svn.debian.org@;
 
     # other providers
-    $url =~ s!git://github\.com/!git\@github.com:!;
+    $url =~ s!(?:git|https?)://github\.com/!git\@github.com:!;
 
     given ($repo_type) {
 	when ("bzr") {

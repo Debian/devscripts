@@ -1,0 +1,310 @@
+# Debian bts(1) completion                             -*- shell-script -*-
+# Copyright: 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+
+_get_version_from_package()
+{
+    local _pkg=$1
+    [[ -n $_pkg ]] || return 
+    apt-cache madison $_pkg 2> /dev/null | cut -d'|' -f2 | sort | uniq | paste -s -d' '
+}
+
+# This works really well unless someone sets up nasty firewall rules like:
+# sudo iptables -A OUTPUT -d 206.12.19.140 -j DROP
+# sudo iptables -A OUTPUT -d 140.211.166.26 -j DROP
+# These block access to the Debian bugs SOAP interface.
+# Hence we need a timeout.
+# Of course if the SOAP interface is blocked then so is the caching interface.
+# So really this would only affect someone who only accidentally hit the TAB key.
+_get_version_from_bug()
+{
+    local -i _bug=$1
+    _get_version_from_package $( bts --soap-timeout=2 status $_bug fields:package 2> /dev/null | cut -f2 )
+}
+
+_suggest_packages()
+{
+    apt-cache --no-generate pkgnames "$1" 2> /dev/null
+}
+
+_suggest_bugs()
+{
+    bts --offline listcachedbugs "$1" 2> /dev/null
+}
+
+_bts()
+{
+    local cur prev words cword
+    _init_completion -n = || return
+
+    # Note:
+    # The long lists of subcommands are not the same and not necessarily to be kept in sync.
+    # The first is used to suggest commands after a '.' or ','.
+    # The second is to hook in special handling (which may be as little as admitting we 
+    # we can't handle it further) or the default special handling (list of bug ids).
+    # This also includes "by" and "with" which are not even subcommands.
+    # The third is similar to the first - what to suggest after the bts command (and options).
+    # but this includes the "help" and "version" commands.
+
+    # A sequence of bts commands can be on one command line separated by "." or ",". 
+    if [[ $prev == @(.|,) ]]; then
+        COMPREPLY=( $( compgen -W 'show bugs unmerge select status clone done reopen archive unarchive retitle summary submitter reassign found notfound fixed notfixed block unblock merge forcemerge tags affects user usertags claim unclaim severity forwarded notforwarded package limit owner noowner subscribe unsubscribe reportspam spamreport' -- "$cur" ) )
+        return 0
+    fi
+
+    # Identify the last command in the command line.
+    local special punctuation i
+    for (( i=${#words[@]}-1; i > 0; i-- )); do
+        if [[ ${words[i]} == @(show|bugs|select|limit|unmerge|status|clone|done|reopen|archive|unarchive|retitle|summary|submitter|reassign|found|notfound|fixed|notfixed|block|unblock|merge|forcemerge|tags|affects|user|usertags|claim|unclaim|severity|forwarded|notforwarded|package|owner|noowner|subscribe|unsubscribe|reportspam|spamreport|cache|cleancache|by|with) ]]; then
+            special=${words[i]}
+            break
+        fi
+        if [[ ${words[i]} == @(+|-|=) ]]; then
+            punctuation=${words[i]}
+        fi
+    done
+
+    if [[ -n $special ]]; then
+
+    # The command separator must be surrounded by white space.
+    if [[ "$cur" == @(,|.) ]]; then
+        COMPREPLY=( $cur )
+        return 0
+    fi
+
+    case $special in
+        show|bugs)
+            # bugs/show supports a few limited options
+            # but as args we accept bug ids, package names and release-critical
+            if [[ "$cur" == -* ]]; then
+                COMPREPLY=( $( compgen -W '-o --offline --online -m --mbox \
+                    --no-cache --cache' -- "$cur" ) )
+            elif [[ "$cur" == release-critical/* ]]; then
+                local _pkg=${cur#release-critical/}
+                COMPREPLY=( $( _suggest_packages "$_pkg" | sed -e's!^!release-critical/!' ) )
+            else
+                COMPREPLY=( $( compgen -W 'release-critical RC' -- "$cur" ) \
+                    $( _suggest_bugs "$cur" ) \
+                    $( _suggest_packages "$cur" ) )
+            fi
+            return 0
+            ;;
+        status)
+            # we accept "verbose" and bug ids
+            COMPREPLY=( $( compgen -W 'verbose' -- "$cur" ) \
+                $( _suggest_bugs "$cur" ) )
+            return 0
+            ;;
+        clone)
+            # we accept 1 bug id and then generate new clone ids
+            if [[ "$prev" == +([0-9]) ]]; then
+                COMPREPLY=( $( compgen -W '-1' -- "$cur" ) )
+            elif [[ "$prev" == -+([0-9]) ]]; then
+                local -i j
+                (( j=$prev-1 ))
+                COMPREPLY=( $( compgen -W $j -- "$cur" ) )
+            else
+                COMPREPLY=( $( _suggest_bugs "$cur" ) )
+            fi
+            return 0
+            ;;
+        done|found|notfound|fixed|notfixed)
+            # Try to guess the version 
+            if [[ "$prev" == +([0-9]) ]]; then
+                local _versions=$( _get_version_from_bug $prev )
+                if [[ -n $_versions ]]; then
+                    COMPREPLY=( $( compgen -W $_versions -- "$cur" ) )
+                else
+                    COMPREPLY=( )
+                fi
+            else
+                COMPREPLY=( $( _suggest_bugs "$cur" ) )
+            fi
+            return 0
+            ;;
+        reopen|claim|unclaim|owner|subscribe|unsubscribe)
+            if [[ "$prev" == +([0-9]) && -n $DEBEMAIL ]]; then
+                COMPREPLY=( $( compgen -W $DEBEMAIL -- "$cur" ) )
+            else
+                COMPREPLY=( $( _suggest_bugs "$cur" ) )
+            fi
+            return 0
+            ;;
+        reassign)
+            # Must have at least one bug id.
+            # Once we have a package name, all that remains is an optional version.
+            if [[ "$prev" == $special ]]; then
+                COMPREPLY=( $( _suggest_bugs "$cur" ) )
+            elif [[ "$prev" == +([0-9]) ]]; then
+                COMPREPLY=( $( _suggest_bugs "$cur" ) \
+                $( _suggest_packages "$cur" ) )
+            else
+                local _versions=$( _get_version_from_package $prev )
+                COMPREPLY=( $( compgen -W $_versions -- "$cur" ) )
+            fi
+            return 0
+            ;;
+        block|unblock)
+            # Must have at least one bug id.
+            if [[ "$prev" == $special ]]; then
+                COMPREPLY=( $( _suggest_bugs "$cur" ) )
+            elif [[ "$prev" == +([0-9]) ]]; then
+                COMPREPLY=( $( compgen -W 'by with' -- "$cur" ) )
+            else
+                COMPREPLY=( )
+            fi
+            return 0
+            ;;
+        unmerge|forwarded|notforwarded|noowner)
+            # Must have at most one bug id.
+            if [[ "$prev" == $special ]]; then
+                COMPREPLY=( $( _suggest_bugs "$cur" ) )
+            else
+                COMPREPLY=( )
+            fi
+            return 0
+            ;;
+        tags)
+            # Must have one bug id.
+            if [[ "$prev" == $special ]]; then
+                COMPREPLY=( $( _suggest_bugs "$cur" ) )
+            elif [[ -n $punctuation ]]; then
+                # The official list is mirrored
+                # https://www.debian.org/Bugs/server-control#tag
+                # in the variable @gTags; we copy it verbatim here.
+                COMPREPLY=( $( compgen -W 'patch wontfix moreinfo unreproducible help pending security upstream confirmed fixed fixed-upstream fixed-in-experimental d-i ipv6 lfs l10n potato woody sarge sarge-ignore etch etch-ignore lenny lenny-ignore squeeze squeeze-ignore wheezy wheezy-ignore jessie jessie-ignore sid experimental' -- "$cur" ) )
+            else
+                COMPREPLY=()
+                COMPREPLY[0]='= '
+                COMPREPLY[1]='+ '
+                COMPREPLY[2]='- '
+            fi
+            return 0
+            ;;
+        affects)
+            # Must have one bug id.
+            if [[ "$prev" == $special ]]; then
+                COMPREPLY=( $( _suggest_bugs "$cur" ) )
+            elif [[ -n $punctuation ]]; then
+                COMPREPLY=( $( _suggest_packages "$cur" ) )
+            else
+                COMPREPLY=()
+                COMPREPLY[0]='= '
+                COMPREPLY[1]='+ '
+                COMPREPLY[2]='- '
+            fi
+            return 0
+            ;;
+        user)
+            if [[ "$prev" == $special && -n $DEBEMAIL ]]; then
+                COMPREPLY=( $( compgen -W $DEBEMAIL -- "$cur" ) )
+            else
+                COMPREPLY=( )
+            fi
+            return 0
+            ;;
+        usertags)
+            # Must have one bug id.
+            if [[ "$prev" == $special ]]; then
+                COMPREPLY=( $( _suggest_bugs "$cur" ) )
+            elif [[ -z $punctuation ]]; then
+                COMPREPLY=()
+                COMPREPLY[0]='= '
+                COMPREPLY[1]='+ '
+                COMPREPLY[2]='- '
+            else 
+                COMPREPLY=()
+            fi
+            return 0
+            ;;
+        severity)
+            if [[ "$prev" == $special ]]; then
+                COMPREPLY=( $( _suggest_bugs "$cur" ) )
+            elif [[ "$prev" == +([0-9]) ]]; then
+                COMPREPLY=( $( compgen -W 'wishlist minor normal important serious \
+                    grave critical' -- "$cur" ) )
+            else
+                COMPREPLY=()
+            fi
+            return 0
+            ;;
+        select|limit)
+            # can't handle ":". Give up for now.
+            COMPREPLY=( )
+            return 0
+            ;;
+        package)
+            COMPREPLY=( $( _suggest_packages "$cur" ) )
+            return 0
+            ;;
+        cache)
+            # cache supports a few limited options
+            # but as args we accept bug ids, package names and release-critical
+            if [[ "$prev" == --cache-mode ]]; then
+                COMPREPLY=( $( compgen -W 'min mbox full' -- "$cur" ) )
+            elif [[ "$cur" == release-critical/* ]]; then
+                local _pkg=${cur#release-critical/}
+                COMPREPLY=( $( _suggest_packages "$_pkg" | sed -e's!^!release-critical/!' ) )
+            elif [[ "$cur" == -* ]]; then
+                COMPREPLY=( $( compgen -W '--cache-mode --force-refresh -f \
+                    --include-resolved -q --quiet' -- "$cur" ) )
+            else
+                COMPREPLY=( $( compgen -W 'release-critical RC' -- "$cur" ) \
+                    $( _suggest_packages "$cur" ) )
+            fi
+            return 0
+            ;;
+        cleancache)
+            if [[ "$prev" == $special ]]; then
+                COMPREPLY=( $( compgen -W 'ALL' -- "$cur" ) \
+                    $( _suggest_bugs "$cur" ) \
+                    $( _suggest_packages "$cur" ) )
+            else
+                COMPREPLY=( )
+            fi
+            return 0
+            ;;
+        *)
+            COMPREPLY=( $( _suggest_bugs "$cur" ) )
+            return 0
+            ;;
+        esac
+    fi
+        
+    case $prev in
+        --cache-mode)
+             COMPREPLY=( $( compgen -W 'min mbox full' -- "$cur" ) )
+             return 0
+             ;;
+        --cache-delay)
+             COMPREPLY=( $( compgen -W '5 60 120 240 600' -- "$cur" ) )
+             return 0
+             ;;
+    esac
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-o --offline --online -n --no-action --cache --no-cache --cache-mode --cache-delay --mbox --no-use-default-cc --mutt --no-mutt -f --force-refresh --no-force-refresh --only-new --include-resolved --no-include-resolved --no-ack --ack -i --interactive --force-interactivei --no-interactive -q --quiet' -- "$cur" ) )
+    else
+        COMPREPLY=( $( compgen -W 'show bugs unmerge select status clone done reopen archive unarchive retitle summary submitter reassign found notfound fixed notfixed block unblock merge forcemerge tags affects user usertags claim unclaim severity forwarded notforwarded package limit owner noowner subscribe unsubscribe reportspam spamreport cache cleancache version help' -- "$cur" ) )
+    fi
+
+    # !!! not handled !!!
+    # --mailreader=READER
+    # --cc-addr=CC_EMAIL_ADDRESS
+    # --use-default-cc
+    # --sendmail=SENDMAILCMD
+    # --smtp-host=SMTPHOST
+    # --smtp-username=USERNAME
+    # --smtp-password=PASSWORD
+    # --smtp-helo=HELO
+    # --bts-server
+    # --no-conf, --noconf
+    #
+    # anything with colons for now
+    # for similar reasons having issues with tags XXXX = 
+    # no special handling for select
+
+    return 0
+} &&
+complete -F _bts bts
+        
+# ex: ts=4 sw=4 et filetype=sh

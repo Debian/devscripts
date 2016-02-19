@@ -1,0 +1,93 @@
+# Debian debuild(1) completion                             -*- shell-script -*-
+# Copyright: 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+_debuild()
+{
+    local cur prev words cword i _options special _prefix
+    _init_completion || return
+
+    for (( i=${#words[@]}-1; i > 0; i-- )); do
+        if [[ ${words[i]} == @(binary|binary-arch|binary-indep|clean|--lintian-opts) ]]; then
+            special=${words[i]}
+            break
+        fi
+    done
+
+    if [[ -n $special ]]; then
+
+        case $special in
+            --lintian-opts)
+                case $prev in
+                    --include-dir)
+                        COMPREPLY=( $( compgen -o filenames -d -- "$cur" ) )
+                        return 0
+                        ;;
+                    --tags-from-file|--cfg|--suppress-tags-from-file)
+                        COMPREPLY=( $( compgen -o filenames -f -- "$cur" ) )
+                        return 0
+                        ;;
+                    --color)
+                        COMPREPLY=( $( compgen -W 'never always auto html' -- "$cur" ) )
+                        return 0
+                        ;;
+                    --display-source)
+                        COMPREPLY=( $( compgen -W 'policy devref' -- "$cur" ) )
+                        return 0
+                        ;;
+                esac
+                COMPREPLY=( $( compgen -W '-C --ftp-master-rejects --tags --tags-from-file --color --default-display-level --display-source --display-experimental --no-display-experimental --fail-on-warnings --info --display-info --no-override --pedantic --show-overrides --suppress-tags --suppress-tags-from-file --cfg --no-cfg --ignore-lintian-env --include-dir' -- "$cur" ) )
+                return 0
+                ;;
+            *)
+                COMPREPLY=( $( compgen -W 'binary binary-arch binary-indep clean' -- "$cur" ) )
+                return 0
+                ;;
+        esac
+    fi
+        
+    case $prev in
+        --rootcmd)
+            _options=
+            for i in fakeroot super sudo
+            do
+                which $i > /dev/null && _options+=" ${i}"
+            done
+            COMPREPLY=( $( compgen -W "${_options}" -- "$cur" ) )
+            return 0
+            ;;
+        --preserve-envvar)
+            COMPREPLY=( $( compgen -o nospace -e -- "$cur" ) )
+            return 0
+            ;;
+        --set-envvar)
+            COMPREPLY=( $( compgen -o nospace -e -S'=' -- "$cur" ) )
+            return 0
+            ;;
+        --prepend-path|--admindir)
+            COMPREPLY=( $( compgen -o filenames -d -- "$cur" ))
+            return 0
+            ;;
+        --check-dirname-level)
+            COMPREPLY=( $( compgen -W '0 1 2' -- "$cur" ) )
+            return 0
+            ;;
+        -j)
+            COMPREPLY=( $( compgen -W 'auto 1 2 3 4 5 6' -- "$cur" ) )
+            return 0
+            ;;
+    esac
+
+    if [[ "$cur" == -* ]]; then
+        _options='--preserve-envvar --set-envvar --rootcmd --preserve-env --prepend-path --lintian --no-lintian --no-tgz-check --tgz-check --username --clear-hooks --check-dirname-level --check-dirname-regex -d -D --dpkg-buildpackage-hook --clean-hook --dpkg-source-hook --dpkg-build-hook --dpkg-binary-hook --dpkg-genchanges-hook --final-clean-hook --lintian-hook signing-hook post-dpkg-buildpackage-hook --lintian-opts -g -G -b -B -A -S -F -si -sa -sd -v -C -m -e -a --host-type --target-arch --target-type -P -j -D -d -nc -tc --admindir --changes-options --source-options -z -Z -i -I -sn -ss -sA -sk -su -sr -sK -sU -sR --force-sign -us -uc -k -p --check-option --check-command -R -r'
+        if [[ "$prev" == debuild ]]; then
+            _options+=' --no-conf'
+        fi
+        COMPREPLY=( $( compgen -W "${_options}" -- "$cur" ) )
+    else
+        COMPREPLY=( $( compgen -W 'binary binary-arch binary-indep clean' -- "$cur" ) )
+    fi
+
+    return 0
+} &&
+complete -F _debuild debuild
+        
+# ex: ts=4 sw=4 et filetype=sh

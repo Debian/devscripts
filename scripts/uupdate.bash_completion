@@ -1,4 +1,3 @@
-have uupdate &&
 _uupdate()
 {
     local cur prev options
@@ -7,7 +6,8 @@ _uupdate()
     cur=${COMP_WORDS[COMP_CWORD]}
     prev=${COMP_WORDS[COMP_CWORD-1]}
     options='--upstream-version -v --rootcmd -r --pristine -u --no-pristine\
-             --symlink -s --no-symlink --no-conf --noconf --help -h --version'
+             --symlink -s --no-symlink --no-conf --noconf --help -h --version\
+             --force-bad-version -b'
 
     case $prev in
 	--pristine | -u)
@@ -29,4 +29,4 @@ _uupdate()
     return 0
 
 }
-[ "$have" ] && complete -F _uupdate -o filenames uupdate
+complete -F _uupdate -o filenames uupdate

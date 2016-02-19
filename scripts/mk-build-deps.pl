@@ -52,7 +52,7 @@ Install the generated packages and its build-dependencies.
 =item B<-t>, B<--tool>
 
 When installing the generated package use the specified tool.
-(default: B<apt-get --no-install-recommends>)
+(default: B<apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends>)
 
 =item B<-r>, B<--remove>
 
@@ -124,7 +124,7 @@ my @packages;
 
 my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
 my %config_vars = (
-		    'MKBUILDDEPS_TOOL' => '/usr/bin/apt-get --no-install-recommends',
+		    'MKBUILDDEPS_TOOL' => '/usr/bin/apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends',
 		    'MKBUILDDEPS_REMOVE_AFTER_INSTALL' => 'no',
 		    'MKBUILDDEPS_ROOTCMD' => '',
 		    );

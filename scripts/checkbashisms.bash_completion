@@ -1,0 +1,18 @@
+# Debian checkbashisms(1) completion                             -*- shell-script -*-
+# Copyright: 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+_checkbashisms()
+{
+    local cur prev words cword special
+    _init_completion || return
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '--newline --posix --force --extra' -- "$cur" ) )
+    else
+        COMPREPLY=( $( compgen -o filenames -f -- "$cur" ) )
+    fi
+
+    return 0
+} &&
+complete -F _checkbashisms checkbashisms
+        
+# ex: ts=4 sw=4 et filetype=sh

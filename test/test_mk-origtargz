@@ -27,11 +27,14 @@ else
 fi
 
 cleanup(){
-    rm -rf $TMPDIR
+	rm -rf $TMPDIR
+	unset LC_ALL
 }
 
 setUp () {
 	TMPDIR=$(mktemp -d test_mk-origtargz.XXXX)
+	LC_ALL=C
+	export LC_ALL
 }
 
 tearDown () {
@@ -86,7 +89,7 @@ makeBrokenTarBall () {
 
 makeZipFile () {
 	makeUpstreamFiles
-	(cd $TMPDIR; zip -q -r "foo-0.1.zip" foo-0.1 )
+	(cd $TMPDIR >/dev/null; zip -q -r "foo-0.1.zip" foo-0.1 )
 	rm -rf "$TMPDIR/foo-0.1"
 }
 
@@ -96,7 +99,7 @@ makeJarFile () {
 Manifest-Version: 1.0
 Main-Class: foo.bar
 END
-	(cd $TMPDIR; jar cf "foo-0.1.jar" MANIFEST.MF foo-0.1 )
+	(cd $TMPDIR >/dev/null; jar cf "foo-0.1.jar" MANIFEST.MF foo-0.1 )
 	rm -rf "$TMPDIR/foo-0.1" "$TMPDIR/MANIFEST.MF"
 }
 
@@ -160,7 +163,7 @@ END
 
 expected_stderr_after_removal="WARNING: Files-Excluded pattern (exclude-dir2/) should not have a trailing /"
 
-expected_files_after_removal=$(sort <<END
+expected_files_after_removal=$(LC_ALL=C sort <<END
 foo-0.1/
 foo-0.1/a-dir/
 foo-0.1/a-dir/exclude-this-subdir/
@@ -192,7 +195,7 @@ run_mk_origtargz() {
 	shift
 	shift
 	shift
-	output="$( cd $TMPDIR/$dir; LANG=C $MK_ORIGTARGZ "$@" 2> $stderrF )"
+	output="$( cd $TMPDIR/$dir >/dev/null; LC_ALL=C $MK_ORIGTARGZ "$@" 2> $stderrF )"
 	stderr="$(cat $stderrF)"
 	retval=$?
 	assertEquals "standard output of mk-origtargz $*\n" "$exp_stdout" "$output"
@@ -370,7 +373,9 @@ testRepackXpi2XZ() {
 	makeZipFile
 	mv $TMPDIR/foo-0.1.zip $TMPDIR/foo-0.1.xpi
 	run_mk_origtargz "" "" \
-		"Successfully repacked foo-0.1.xpi as foo_0.1.orig.tar.xz." \
+		"Unpacking foo-0.1.xpi
+Unpacked xpi file.
+Successfully repacked foo-0.1.xpi as foo_0.1.orig.tar.xz." \
 		--package foo --version 0.1 foo-0.1.xpi --compression xz
 	assertTrue "original xpi file does not exist" "[ -e $TMPDIR/foo-0.1.xpi ]"
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
@@ -544,7 +549,7 @@ testUnmatchedExclusion() {
 	makeTarBall gz
 	makeDebianDir
 	makeUnmatchedExcludeCopyright
-	run_mk_origtargz foo "No files matched excluded pattern: nomatch" \
+	run_mk_origtargz foo "No files matched excluded pattern as the last matching glob: nomatch" \
 		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.gz, deleting 19 files from it." \
 		 ../foo-0.1.tar.gz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
@@ -556,7 +561,7 @@ testDuplicatePattern() {
 	makeTarBall gz
 	makeDebianDir
 	makeDuplicatePatternCopyright
-	run_mk_origtargz foo "No files matched excluded pattern: exclude-dir1" \
+	run_mk_origtargz foo "No files matched excluded pattern as the last matching glob: exclude-dir1" \
 		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.gz, deleting 19 files from it." \
 		 ../foo-0.1.tar.gz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"

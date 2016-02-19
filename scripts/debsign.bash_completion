@@ -1,4 +1,3 @@
-have debsign &&
 _debsign()
 {
     local cur prev options
@@ -27,4 +26,4 @@ _debsign()
     return 0
 
 }
-[ "$have" ] && complete -F _debsign -o filenames debsign
+complete -F _debsign -o filenames debsign

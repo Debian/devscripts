@@ -23,6 +23,7 @@ use File::Basename;
 use Cwd qw/cwd abs_path/;
 use File::Path qw/make_path/;
 use Dpkg::Version;
+use JSON::PP;
 
 my $progname = basename($0);
 
@@ -38,17 +39,6 @@ if ($@) {
 	die "$progname: Unable to run: the libwww-perl package is not installed";
     } else {
 	die "$progname: Unable to run: Couldn't load LWP::Simple: $@";
-    }
-}
-
-eval {
-    require JSON;
-};
-if ($@) {
-    if ($@ =~ m/Can\'t locate JSON/) {
-	die "$progname: Unable to run: the libjson-perl package is not installed";
-    } else {
-	die "$progname: Unable to run: Couldn't load JSON: $@";
     }
 }
 
@@ -114,7 +104,7 @@ sub fetch_json_page
     verbose "Getting json $json_url\n";
     my $content = LWP::Simple::get($json_url);
     return unless defined $content;
-    my $json = JSON->new();
+    my $json = JSON::PP->new();
 
     # these are some nice json options to relax restrictions a bit:
     my $json_text = $json->allow_nonref->utf8->relaxed->decode($content);

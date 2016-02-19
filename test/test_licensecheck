@@ -43,6 +43,11 @@ testBoost() {
     license "boost.h" "BSL"
 }
 
+testArtistic() {
+    license2 "-m --copyright" "artistic-2-0-modules.pm" "Artistic (v2.0)	2009 Moritz Lenz and the SVG::Plot contributors (see file"
+    license2 "-m --copyright" "artistic-2-0.txt" "Artistic (v2.0)	2000-2006, The Perl Foundation / 2000 Testophilus Testownik <tester@testity.org>"
+}
+
 testAcademic() {
     license "academic.h" "AFL-3.0"
 }
@@ -62,6 +67,12 @@ testMultiLineDeclaration() {
     license2 "-m --copyright" "bsd-regents.c" "BSD (3 clause)	1987, 1993, 1994 The Regents of the University of California. All rights reserved."
     # or 3 lines
     license2 "-m --copyright" "texinfo.tex" "GPL (v3 or later)	1985, 1986, 1988, 1990, 1991, 1992, 1993, 1994, 1995 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Free Software Foundation, Inc."
+    # BTS #519080
+    license2 "-m --copyright" "multi-line-copyright.c" "Public domain GPL (v3)	2008 Aaron Plattner, NVIDIA Corporation / 2005 Lars Knoll & Zack Rusin, Trolltech / 2000 Keith Packard, member of The XFree86 Project, Inc"
+}
+
+testDuplicatedCopyright() {
+    license2 "-m --copyright" "duplicated-copyright.rb" "Apache (v2.0)	2002-2015, OpenNebula Project (OpenNebula.org), C12G Labs"
 }
 
 testDuplicatedCopyright() {
@@ -78,11 +89,19 @@ testLGPL() {
     license "lgpl-no-version.h" "LGPL (unversioned/unknown version)"
     license2  "-m --copyright" "lgpl-big-blue.h" "LGPL (v2.1)	2000, 2010 IBM Corporation and others. All rights reserved"
     license2  "-m --copyright" "lgpl-digia.c" "LGPL (v2.1 or v3)	2014 Digia Plc and/or its subsidiary(-ies)"
+    license2  "-m --copyright" "lgpl-by-dist-zilla.pl" "LGPL (v2.1)	2016 Dominique Dumont"
+}
+
+# Lisp Lesser General Public License (BTS #806424) 
+# see http://opensource.franz.com/preamble.html
+testLLGPL() {
+    license2  "-m --copyright" "llgpl.lisp" "LLGPL	2002, 2004 Sven Van Caekenberghe, Beta Nine BVBA"
 }
 
 testGPL() {
     license "gpl-1" "GPL (v1 or later)"
     license "gpl-2" "GPL (v2)"
+    license "bug-559429" "GPL (v2)"
     license "gpl-2+" "GPL (v2 or later)"
     license "gpl-2+.scm" "GPL (v2 or later)"
     license "gpl-2-comma.sh" "GPL (v2)"
@@ -104,6 +123,10 @@ testMPL() {
     license "mpl-1.1.sh" "MPL (v1.1)"
     license "mpl-2.0.sh" "MPL (v2.0)"
     license "mpl-2.0-comma.sh" "MPL (v2.0)"
+}
+
+testFreeType() {
+    license2 "-m --copyright" "freetype.c" "FreeType	2001, 2012 David Turner, Robert Wilhelm, and Werner Lemberg."
 }
 
 testCDDL() {
@@ -134,7 +157,12 @@ testRegexpKiller() {
 }
 
 testEncoding () {
-    license2 "-m --copyright" "copr-iso8859.h" "GPL (v2) (with incorrect FSF address)	2011 Heinrich Müller <henmull@src.gnome.org>"
-    license2 "-m --copyright" "copr-utf8.h" "GPL (v2 or later)	2004-2015 Oliva 'f00' Oberto / 2001-2010 Paul 'bar' Stevénsön"
+    license2 "-m --copyright --encoding iso-8859-1" "copr-iso8859.h" "GPL (v2) (with incorrect FSF address)	2011 Heinrich Müller <henmull@src.gnome.org>"
+    license2 "-m --copyright --encoding utf8" "copr-utf8.h" "GPL (v2 or later)	2004-2015 Oliva 'f00' Oberto / 2001-2010 Paul 'bar' Stevénsön"
 }
+
+testInfoAtEnd () {
+    license2 "-m --copyright" "info-at-eof.h" "MIT/X11 (BSD like)	1994-2012 Lua.org, PUC-Rio. All rights reserved"
+}
+
 . shunit2
