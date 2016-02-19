@@ -2708,7 +2708,6 @@ sub process_watchline ($$$$$$)
     # And mangle it if requested
     my $mangled_lastversion = $lastversion;
     foreach my $pat (@{$options{'dversionmangle'}}) {
-	print STDERR "$progname debug: dversionmangle rule $pat\n" if $debug;
 	if (! safe_replace(\$mangled_lastversion, $pat)) {
 	    uscan_warn "In $watchfile, potentially"
 	      . " unsafe or malformed dversionmangle"
@@ -2966,7 +2965,6 @@ sub process_watchline ($$$$$$)
 				    $href =~ m&^$_pattern$&);
 			}
 			foreach my $pat (@{$options{'uversionmangle'}}) {
-			    print STDERR "$progname debug: uversionmangle rule $pat\n" if $debug;
 			    if (! safe_replace(\$mangled_version, $pat)) {
 				uscan_warn "In $watchfile, potentially"
 			 	 . " unsafe or malformed uversionmangle"
@@ -3053,7 +3051,6 @@ sub process_watchline ($$$$$$)
 		my $file = $1;
 		my $mangled_version = join(".", $file =~ m/^$pattern$/);
 		foreach my $pat (@{$options{'uversionmangle'}}) {
-		    print STDERR "$progname debug: uversionmangle rule $pat\n" if $debug;
 		    if (! safe_replace(\$mangled_version, $pat)) {
 			uscan_warn "In $watchfile, potentially"
 			  . " unsafe or malformed uversionmangle"
@@ -3085,7 +3082,6 @@ sub process_watchline ($$$$$$)
 		    my $file = $1;
 		    my $mangled_version = join(".", $file =~ m/^$filepattern$/);
 		    foreach my $pat (@{$options{'uversionmangle'}}) {
-			print STDERR "$progname debug: uversionmangle rule $pat\n" if $debug;
 			if (! safe_replace(\$mangled_version, $pat)) {
 			    uscan_warn "In $watchfile, potentially"
 			      . " unsafe or malformed uversionmangle"
@@ -3163,8 +3159,6 @@ EOF
 	    return 1;
 	}
     }
-    print STDERR "$progname debug: new version $newversion\n" if $debug;
-    print STDERR "$progname debug: new filename $newfile\n" if $debug;
 
     # Determin download URL for tarball or signature
     my $upstream_url;
@@ -3227,7 +3221,6 @@ EOF
 	uscan_verbose "Matching target for downloadurlmangle: $upstream_url\n";
 	if (exists $options{'downloadurlmangle'}) {
 	    foreach my $pat (@{$options{'downloadurlmangle'}}) {
-		print STDERR "$progname debug: downloadurlmangle rule $pat\n" if $debug;
 		if (! safe_replace(\$upstream_url, $pat)) {
 		    uscan_warn "In $watchfile, potentially"
 		      . " unsafe or malformed downloadurlmangle"

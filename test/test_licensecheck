@@ -75,10 +75,6 @@ testDuplicatedCopyright() {
     license2 "-m --copyright" "duplicated-copyright.rb" "Apache (v2.0)	2002-2015, OpenNebula Project (OpenNebula.org), C12G Labs"
 }
 
-testDuplicatedCopyright() {
-    license2 "-m --copyright" "duplicated-copyright.rb" "Apache (v2.0)	2002-2015, OpenNebula Project (OpenNebula.org), C12G Labs"
-}
-
 testLGPL() {
     license "lgpl-2.1.c" "LGPL (v2.1)"
     license "lgpl-2.1.h" "LGPL (v2.1)"
