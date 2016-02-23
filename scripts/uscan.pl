@@ -1214,6 +1214,10 @@ For the basic usage, B<uscan> does not require to set these options.
 Don't read any configuration files. This can only be used as the first option
 given on the command-line.
 
+=item B<--no-verbose>
+
+Don't report verbose information. (default)
+
 =item B<--verbose>, B<-v>
 
 Report verbose information.
@@ -1230,7 +1234,7 @@ send all other uscan output to STDOUT.
 
 =item B<--no-dehs>
 
-Use only traditional uscan output format (default)
+Use only traditional uscan output format. (default)
 
 =item B<--download>, B<-d>
 
@@ -1238,7 +1242,7 @@ Download the new upstream release. (default)
 
 =item B<--force-download>, B<-dd>
 
-Download the new upstream release even if up-to-date (may not overwrite the local file)
+Download the new upstream release even if up-to-date. (may not overwrite the local file)
 
 =item B<--overwrite-download>, B<-ddd>
 
@@ -1340,7 +1344,7 @@ page content alterations.
 
 =item B<--no-exclusion>
 
-Don't automatically exclude files mentioned in F<debian/copyright> field B<Files-Excluded>
+Don't automatically exclude files mentioned in F<debian/copyright> field B<Files-Excluded>.
 
 =item B<--pasv>
 
@@ -1756,6 +1760,7 @@ Options:
     --no-conf, --noconf
                    Don\'t read devscripts config files;
                    must be the first option given
+    --no-verbose   Don\'t rReport verbose information.
     --verbose, -v  Report verbose information.
     --debug, -vv   Report verbose information including the downloaded
                    web pages as processed to STDERR for debugging.
