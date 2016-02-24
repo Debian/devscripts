@@ -1760,7 +1760,7 @@ Options:
     --no-conf, --noconf
                    Don\'t read devscripts config files;
                    must be the first option given
-    --no-verbose   Don\'t rReport verbose information.
+    --no-verbose   Don\'t report verbose information.
     --verbose, -v  Report verbose information.
     --debug, -vv   Report verbose information including the downloaded
                    web pages as processed to STDERR for debugging.
