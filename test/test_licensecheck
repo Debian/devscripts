@@ -129,6 +129,10 @@ testCDDL() {
     license2 "-m --copyright" "cddl.h" "CDDL	2006 Sun Microsystems, Inc. All rights reserved"
 }
 
+testISC() {
+    license2 "-m --copyright" "libuv-isc.am" "ISC	2013, Ben Noordhuis <info@bnoordhuis.nl>"
+}
+
 testMachine() {
     license2 "-m" "beerware.cpp" "Beerware"
     license2 "--machine" "lgpl-2.1.h" "LGPL (v2.1)"
