@@ -222,7 +222,15 @@ if (-d $opt{destdir}) {
 	fatal "Destination dir $opt{destdir} already exists.\nPlease (re)move it first, or use --force to overwrite.";
     }
 }
-make_path($opt{destdir});
+
+my $mkdir_done = 0;
+my $mkDestDir = sub {
+    unless ($mkdir_done)
+    {
+	make_path($opt{destdir});
+	$mkdir_done = 1;
+    }
+};
 
 my $json_text = fetch_json_page($baseurl);
 unless ($json_text && @{$json_text->{result}}) {
@@ -266,6 +274,7 @@ if ($opt{binary}) {
 	    my $file_name = basename($fileinfo->{name});
 	    if (!have_file("$opt{destdir}/$file_name", $hash)) {
 		verbose "Getting file $file_name: $file_url";
+		$mkDestDir->();
 		LWP::Simple::getstore($file_url, "$opt{destdir}/$file_name");
 	    }
 	}
@@ -299,6 +308,7 @@ else {
 	    $file_name = basename($file_name);
 	    if (!have_file("$opt{destdir}/$file_name", $hash)) {
 		verbose "Getting file $file_name: $file_url";
+		$mkDestDir->();
 		LWP::Simple::getstore($file_url, "$opt{destdir}/$file_name");
 	    }
 	}

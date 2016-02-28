@@ -9,7 +9,12 @@ devscripts (2.16.2) UNRELEASED; urgency=medium
 
   [ Dominique Dumont ]
   * licensecheck:
-    - parse (c) owner with email like info@foo.com
+    + parse (c) owner with email like info@foo.com
+
+  [ James McCoy ]
+  * debsnap:
+    + Only make the destination directory if there is something to download.
+      (Closes: #816022)
 
  -- Osamu Aoki <osamu@debian.org>  Sat, 13 Feb 2016 22:10:05 +0900
 
