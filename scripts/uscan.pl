@@ -447,7 +447,7 @@ specific suffix such as B<s/\+dfsg\d*$//> is usually done here.
 =item B<dirversionmangle=>I<rules>
 
 Normalize the directory path string matching the regex in a set of parentheses
-of B<http::/>I<URL> as the sortable version index string.  This is used as the
+of B<http://>I<URL> as the sortable version index string.  This is used as the
 directory path sorting index only.
 
 Substitution such as B<s/PRE/~pre/; s/RC/~rc/> may help.
