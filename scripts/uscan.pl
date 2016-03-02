@@ -1686,12 +1686,12 @@ Gilbey.
 use 5.010;  # defined-or (//)
 use strict;
 use warnings;
-use Cwd;
-use Cwd 'abs_path';
+use Cwd qw/cwd abs_path/;
 use Dpkg::Changelog::Parse qw(changelog_parse);
 use Dpkg::IPC;
 use File::Basename;
-use File::Copy;
+use File::Copy qw/copy/;
+use File::Spec qw/catfile/;
 use File::Temp qw/tempfile tempdir/;
 use List::Util qw/first/;
 use filetest 'access';
@@ -1893,6 +1893,7 @@ my $exclusion = 1;
 my $origcount = 0;
 my @components = ();
 my $orig;
+my @origtars = ();
 my $repacksuffix_used = 0;
 my $uscanlog;
 my $common_newversion ; # undef initially (for MUT, version=same)
@@ -3713,6 +3714,7 @@ EOF
 	$common_mangled_newversion = $1 if $target =~ m/[^_]+_(.+)\.orig\.tar\.(?:gz|bz2|lzma|xz)$/;
 	uscan_verbose "New orig.tar.* tarball version (after mk-origtargz): $common_mangled_newversion\n";
     }
+    push @origtars, $target;
 
     if ($opt_log) {
 	# Check pkg-ver.tar.gz and pkg_ver.orig.tar.gz
@@ -3773,6 +3775,11 @@ EOF
 	        }
 	    }
 	    push @cmd, "--upstream-version", $common_mangled_newversion;
+	    if (abs_path($destdir) ne abs_path("..")) {
+		foreach my $origtar (@origtars) {
+		    copy(catfile($destdir, $origtar), catfile("..", $origtar));
+		}
+	    }
 	} elsif ($watch_version > 1) {
 	    # Any symlink requests are already handled by uscan
 	    if ($cmd[0] eq "uupdate") {
@@ -4063,6 +4070,7 @@ sub process_watchfile ($$$$)
     my $status=0;
     my $nextline;
     %dehs_tags = ();
+    @origtars = ();
 
     uscan_verbose "Process $dir/$watchfile (package=$package version=$version)\n";
 
