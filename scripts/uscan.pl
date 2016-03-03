@@ -1229,8 +1229,8 @@ web pages as processed to STDERR for debugging.
 
 =item B<--dehs>
 
-Send DEHS style output (XML-type) to STDERR, while
-send all other uscan output to STDOUT.
+Send DEHS style output (XML-type) to STDOUT, while
+send all other uscan output to STDERR.
 
 =item B<--no-dehs>
 
@@ -1764,8 +1764,8 @@ Options:
     --verbose, -v  Report verbose information.
     --debug, -vv   Report verbose information including the downloaded
                    web pages as processed to STDERR for debugging.
-    --dehs         Send DEHS style output (XML-type) to STDERR, while
-                   send all other uscan output to STDOUT.
+    --dehs         Send DEHS style output (XML-type) to STDOUT, while
+                   send all other uscan output to STDERR.
     --no-dehs      Use only traditional uscan output format (default)
     --download, -d
                    Download the new upstream release (default)
