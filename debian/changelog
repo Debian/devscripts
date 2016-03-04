@@ -7,6 +7,8 @@ devscripts (2.16.2) UNRELEASED; urgency=medium
       tests.
     + Reactivate --no-verbose mode.  Closes: #815645 
     + Fix --destdir for version 4.  Closes:#814686
+  * test_uscan:
+    + Fix non-{Debian,Ubuntu} cases.  Closes: #816645
 
   [ Dominique Dumont ]
   * licensecheck:

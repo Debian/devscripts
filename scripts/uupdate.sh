@@ -136,16 +136,14 @@ DEFAULT_UUPDATE_ROOTCMD=
 DEFAULT_UUPDATE_PRISTINE=yes
 DEFAULT_UUPDATE_SYMLINK_ORIG=yes
 VARS="UUPDATE_ROOTCMD UUPDATE_PRISTINE UUPDATE_SYMLINK_ORIG"
-SUFFIX="1"
 
+SUFFIX="1"
 if which dpkg-vendor >/dev/null 2>&1; then
   VENDER="$(dpkg-vendor --query Vendor 2>/dev/null|tr 'A-Z' 'a-z')"
   case "$VENDER" in
-  debian) SUFFIX="1" ;;
-  *) SUFFIX="0${VENDER}1" ;;
+    debian) SUFFIX="1" ;;
+    *) SUFFIX="0${VENDER}1" ;;
   esac
-else
-  SUFFIX="1"
 fi
 
 if [ "$1" = "--no-conf" -o "$1" = "--noconf" ]; then
