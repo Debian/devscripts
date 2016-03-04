@@ -2806,7 +2806,7 @@ sub process_watchline ($$$$$$)
 	# TODO: sanitize $base
 	uscan_verbose "Execute: git ls-remote $base\n";
 	open(REFS, "-|", 'git', 'ls-remote', $base) ||
-	    die "$progname: you must have the git package installed\n"
+	    uscan_die "$progname: you must have the git package installed\n"
 	      . "to use git URLs\n";
 	my @refs;
 	my $ref;
@@ -3373,28 +3373,28 @@ EOF
 	    my ($gitrepo, $gitref) = split /[[:space:]]+/, $url, 2;
 	    my $gitrepodir = "$pkg.$$.git";
 	    uscan_verbose "Execute: git clone --bare $gitrepo $dst/$gitrepodir\n";
-	    system('git', 'clone', '--bare', $gitrepo, "$dst/$gitrepodir") == 0 or die("git clone failed\n");
-	    chdir "$dst/$gitrepodir" or die("Unable to chdir(\"$dst/$gitrepodir\"): $!\n");
+	    system('git', 'clone', '--bare', $gitrepo, "$dst/$gitrepodir") == 0 or uscan_die("git clone failed\n");
+	    chdir "$dst/$gitrepodir" or uscan_die("Unable to chdir(\"$dst/$gitrepodir\"): $!\n");
 	    uscan_verbose "Execute: git archive --format=tar --prefix=$pkg-$ver/ --output=$curdir/$dst/$pkg-$ver.tar $gitref\n";
 	    system('git', 'archive', '--format=tar', "--prefix=$pkg-$ver/", "--output=$curdir/$dst/$pkg-$ver.tar", $gitref);
-	    chdir "$curdir/$dst" or die("Unable to chdir($curdir/$dst): $!\n");
+	    chdir "$curdir/$dst" or uscan_die("Unable to chdir($curdir/$dst): $!\n");
 	    if ($suffix eq 'gz') {
 		uscan_verbose "Execute: gzip -n -9 $pkg-$ver.tar\n";
-		system("gzip", "-n", "-9", "$pkg-$ver.tar") == 0 or die("gzip failed\n");
+		system("gzip", "-n", "-9", "$pkg-$ver.tar") == 0 or uscan_die("gzip failed\n");
 	    } elsif ($suffix eq 'xz') {
 		uscan_verbose "Execute: xz $pkg-$ver.tar\n";
-		system("xz", "$pkg-$ver.tar") == 0 or die("xz failed\n");
+		system("xz", "$pkg-$ver.tar") == 0 or uscan_die("xz failed\n");
 	    } elsif ($suffix eq 'bz2') {
 		uscan_verbose "Execute: bzip2 $pkg-$ver.tar\n";
-		system("bzip2", "$pkg-$ver.tar") == 0 or die("bzip2 failed\n");
+		system("bzip2", "$pkg-$ver.tar") == 0 or uscan_die("bzip2 failed\n");
 	    } elsif ($suffix eq 'lzma') {
 		uscan_verbose "Execute: lzma $pkg-$ver.tar\n";
-		system("lzma", "$pkg-$ver.tar") == 0 or die("lzma failed\n");
+		system("lzma", "$pkg-$ver.tar") == 0 or uscan_die("lzma failed\n");
 	    } else {
 		uscan_warn "Unknown suffix file to repack: $suffix\n";
 		exit 1;
 	    }
-	    chdir "$curdir" or die("Unable to chdir($curdir): $!\n");
+	    chdir "$curdir" or uscan_die("Unable to chdir($curdir): $!\n");
 	} elsif ($url =~ m%^http(s)?://%) {
 	    if (defined($1) and !$haveSSL) {
 		uscan_die "$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
@@ -3736,8 +3736,8 @@ EOF
 	if ($symlink ne "rename") {
 	    my $umd5sum = Digest::MD5->new;
 	    my $omd5sum = Digest::MD5->new;
-	    open (my $ufh, '<', "${destdir}/${newfile_base}") or die "Can't open '${destdir}/${newfile_base}': $!";
-	    open (my $ofh, '<', "${destdir}/${target}") or die "Can't open '${destdir}/${target}': $!";
+	    open (my $ufh, '<', "${destdir}/${newfile_base}") or uscan_die "Can't open '${destdir}/${newfile_base}': $!";
+	    open (my $ofh, '<', "${destdir}/${target}") or uscan_die "Can't open '${destdir}/${target}': $!";
 	    $umd5sum->addfile($ufh);
 	    $omd5sum->addfile($ofh);
 	    close($ufh);
