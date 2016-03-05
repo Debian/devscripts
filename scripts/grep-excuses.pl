@@ -193,8 +193,10 @@ if (system("command -v wget >/dev/null 2>&1") != 0) {
 sub grep_autoremovals () {
     print DEBUG "Fetching $rmurl\n";
 
-    open REMOVALS, "wget -q -O - $rmurl |" or
-	die "$progname: wget $rmurl failed: $!\n";
+    unless (open REMOVALS, "wget -q -O - $rmurl |") {
+	warn "$progname: wget $rmurl failed: $!\n";
+	return;
+    }
 
     my $wantmaint = 0;
     my %reportpkgs;
@@ -220,14 +222,20 @@ sub grep_autoremovals () {
 	}
 	warn "$progname: unprocessed line $. in $rmurl:\n$_";
     }
-    $?=0; close REMOVALS or die "$progname: fetch $rmurl failed ($? $!)\n";
+    $?=0;
+    unless (close REMOVALS) {
+	my $rc = $? >> 8;
+	warn "$progname: fetch $rmurl failed ($rc $!)\n";
+    }
 
     return unless %reportpkgs;
 
     print DEBUG "Fetching $rmurl_yaml\n";
 
-    open REMOVALS, "wget -q -O - $rmurl_yaml |" or
-	die "$progname: wget $rmurl_yaml failed: $!\n";
+    unless (open REMOVALS, "wget -q -O - $rmurl_yaml |") {
+	warn "$progname: wget $rmurl_yaml failed: $!\n";
+	return;
+    }
 
     my $reporting = 0;
     while (<REMOVALS>) {
@@ -253,7 +261,12 @@ sub grep_autoremovals () {
 	warn "$progname: unprocessed line $. in $rmurl_yaml:\n$_";
     }
 
-    $?=0; close REMOVALS or die "$progname: fetch $rmurl_yaml failed ($? $!)\n";
+    $?=0;
+    unless (close REMOVALS)
+    {
+	my $rc = $? >> 8;
+	warn "$progname: fetch $rmurl_yaml failed ($rc $!)\n";
+    }
 
     foreach my $pkg (keys %reportpkgs) {
 	print "$pkg (AUTOREMOVAL)\n  $reportpkgs{$pkg}\n" or die $!;

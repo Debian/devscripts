@@ -20,6 +20,9 @@ devscripts (2.16.2) UNRELEASED; urgency=medium
       (Closes: #816022)
   * uscan:
     + Fix typo in dirversionmangle help.  (Closes: #816231)
+  * grep-excuses:
+    + Report excuses even when autoremoval info isn't reachable.  (Closes:
+      #816723)
 
  -- Osamu Aoki <osamu@debian.org>  Sat, 13 Feb 2016 22:10:05 +0900
 
