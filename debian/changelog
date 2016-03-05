@@ -18,6 +18,8 @@ devscripts (2.16.2) UNRELEASED; urgency=medium
   * debsnap:
     + Only make the destination directory if there is something to download.
       (Closes: #816022)
+    + Add --first & --last options to define a range of versions to download.
+      Based on a patch by Ivo De Decker.  (Closes: #675867)
   * uscan:
     + Fix typo in dirversionmangle help.  (Closes: #816231)
   * grep-excuses:

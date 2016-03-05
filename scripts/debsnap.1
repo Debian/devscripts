@@ -55,6 +55,18 @@ This can be given multiple times in order to download binary packages for
 multiple architectures.
 
 .TP
+.B \-\-first
+Specify the minimum version of a package which will be downloaded.  Any
+versions which compare larger than this, according to \fBdpkg\fP, will be
+considered for download.  May be used in combination with \fB\-\-last\fP.
+
+.TP
+.B \-\-last
+Specify the maximum version of a package which will be downloaded.  Any package
+versions which compare less than this, according to \fBdpkg\fP, will be
+considered for download.  May be used in combination with \fB\-\-first\fP.
+
+.TP
 .BR \-h ", " \-\-help
 Show a summary of these options.
 
