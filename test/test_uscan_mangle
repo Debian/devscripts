@@ -77,10 +77,10 @@ oneTimeSetUp () {
 # Initial Debian revision value is distribution dependent
 SUFFIX="1"
 if which dpkg-vendor >/dev/null 2>&1; then
-    case "$(dpkg-vendor --query Vendor 2>/dev/null)" in
-	"Ubuntu")
-	    SUFFIX="0ubuntu1"
-	    ;;
+    VENDER="$(dpkg-vendor --query Vendor 2>/dev/null|tr 'A-Z' 'a-z')"
+    case "$VENDER" in
+	debian) SUFFIX="1" ;;
+	*) SUFFIX="0${VENDER}1" ;;
     esac
 fi
 
