@@ -10,6 +10,8 @@ devscripts (2.16.2) UNRELEASED; urgency=medium
     + Always use uscan_warn and uscan_die.
   * test_uscan:
     + Fix non-{Debian,Ubuntu} cases.  Closes: #816645
+  * debsnap:
+    + Add --list option.  Closes: #816910
 
   [ Dominique Dumont ]
   * licensecheck:

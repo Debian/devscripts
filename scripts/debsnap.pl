@@ -84,6 +84,7 @@ The following options are supported:
                                         Default is ./source-<package name>
     -f, --force                         Force overwriting an existing
                                         destdir
+    --list                              Don't download but just list versions
     --binary                            Download binary packages instead of
                                         source packages
     -a <architecture>,
@@ -216,7 +217,7 @@ sub keep_version($)
 read_conf(@ARGV);
 Getopt::Long::Configure('gnu_compat');
 Getopt::Long::Configure('no_ignore_case');
-GetOptions(\%opt, 'verbose|v', 'destdir|d=s', 'force|f', 'help|h', 'version', 'first=s', 'last=s', 'binary', 'architecture|a=s@') || usage(1);
+GetOptions(\%opt, 'verbose|v', 'destdir|d=s', 'force|f', 'help|h', 'version', 'first=s', 'last=s', 'list', 'binary', 'architecture|a=s@') || usage(1);
 
 usage(0) if $opt{help};
 usage(1) unless @ARGV;
@@ -277,7 +278,17 @@ unless (@versions) {
     warn "$progname: No matching versions found for $package\n";
     $warnings++;
 }
-if ($opt{binary}) {
+if ($opt{list}) {
+    foreach my $version (@versions) {
+	if ($opt{binary}) {
+	    print "$version->{binary_version}\n";
+	}
+	else {
+	    print "$version->{version}\n";
+	}
+    } 
+}
+elsif ($opt{binary}) {
     foreach my $version (@versions) {
 	my $src_json = fetch_json_page("$opt{baseurl}/mr/package/$version->{source}/$version->{version}/binfiles/$version->{name}/$version->{binary_version}?fileinfo=1");
 
