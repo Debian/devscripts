@@ -1700,14 +1700,19 @@ use Devscripts::Versort;
 use Text::ParseWords;
 use Digest::MD5;
 
+sub uscan_die ($);
+sub uscan_warn ($);
+# From here, do not use bare "warn" nor "die".
+# Use "uscan_warn" or "uscan_die" instead to make --dehs work as expected.
+
 BEGIN {
     eval { require LWP::UserAgent; };
     if ($@) {
 	my $progname = basename($0);
 	if ($@ =~ /^Can\'t locate LWP\/UserAgent\.pm/) {
-	    die "$progname: you must have the libwww-perl package installed\nto use this script\n";
+	    uscan_die "$progname: you must have the libwww-perl package installed\nto use this script\n";
 	} else {
-	    die "$progname: problem loading the LWP::UserAgent module:\n  $@\nHave you installed the libwww-perl package?\n";
+	    uscan_die "$progname: problem loading the LWP::UserAgent module:\n  $@\nHave you installed the libwww-perl package?\n";
 	}
     }
 }
@@ -1735,7 +1740,6 @@ sub get_suffix ($);
 sub get_priority ($);
 sub recursive_regex_dir ($$$);
 sub newest_dir ($$$$$);
-sub uscan_die ($);
 sub dehs_output ();
 sub quoted_regex_replace ($);
 sub safe_replace ($$);
@@ -1744,7 +1748,6 @@ sub uscan_msg($);
 sub uscan_verbose($);
 sub uscan_debug($);
 sub dehs_verbose ($);
-sub uscan_warn ($);
 
 my $havegpgv = first { -x $_ } qw(/usr/bin/gpgv2 /usr/bin/gpgv);
 my $havegpg = first { -x $_ } qw(/usr/bin/gpg2 /usr/bin/gpg);
@@ -2040,7 +2043,7 @@ GetOptions("help" => \$opt_h,
 	   "copyright-file=s" => \$opt_copyright_file,
 	   "download-current-version" => \$opt_download_current_version,
 	   )
-    or die "Usage: $progname [options] [directories]\nRun $progname --help for more details\n";
+    or uscan_die "Usage: $progname [options] [directories]\nRun $progname --help for more details\n";
 
 if ($opt_noconf) {
     die "$progname: --no-conf is only acceptable as the first command-line option!\n";
@@ -2821,7 +2824,7 @@ sub process_watchline ($$$$$$)
 			    $ref =~ m&^$_pattern$&);
 		    foreach my $pat (@{$options{'uversionmangle'}}) {
 			if (! safe_replace(\$version, $pat)) {
-			    warn "$progname: In $watchfile, potentially"
+			    uscan_warn "$progname: In $watchfile, potentially"
 				. " unsafe or malformed uversionmangle"
 				. " pattern:\n  '$pat'"
 				. " found. Skipping watchline\n"
@@ -2846,7 +2849,7 @@ sub process_watchline ($$$$$$)
 		if (@vrefs) {
 		    ($newversion, $newfile) = @{$vrefs[0]};
 		} else {
-		    warn "$progname warning: In $watchfile no matching"
+		    uscan_warn "$progname warning: In $watchfile no matching"
 			 . " refs for version $download_version"
 			 . " in watch line\n  $line\n";
 		    return 1;
@@ -2856,7 +2859,7 @@ sub process_watchline ($$$$$$)
 		($newversion, $newfile) = @{$refs[0]};
 	    }
 	} else {
-	    warn "$progname warning: In $watchfile,\n" .
+	    uscan_warn "$progname warning: In $watchfile,\n" .
 	         " no matching refs for watch line\n" .
 		 " $line\n";
 		 return 1;
