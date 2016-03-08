@@ -3379,7 +3379,7 @@ EOF
 	    system('git', 'clone', '--bare', $gitrepo, "$dst/$gitrepodir") == 0 or uscan_die("git clone failed\n");
 	    chdir "$dst/$gitrepodir" or uscan_die("Unable to chdir(\"$dst/$gitrepodir\"): $!\n");
 	    uscan_verbose "Execute: git archive --format=tar --prefix=$pkg-$ver/ --output=$curdir/$dst/$pkg-$ver.tar $gitref\n";
-	    system('git', 'archive', '--format=tar', "--prefix=$pkg-$ver/", "--output=$curdir/$dst/$pkg-$ver.tar", $gitref);
+	    system('git', 'archive', '--format=tar', "--prefix=$pkg-$ver/", "--output=$curdir/$dst/$pkg-$ver.tar", $gitref) == 0 or uscan_die("git archive failed\n");;
 	    chdir "$curdir/$dst" or uscan_die("Unable to chdir($curdir/$dst): $!\n");
 	    if ($suffix eq 'gz') {
 		uscan_verbose "Execute: gzip -n -9 $pkg-$ver.tar\n";
@@ -3481,7 +3481,7 @@ EOF
 	    $suffix =~ s/.*?(\.gz|\.xz|\.bz2|\.lzma)?$/$1/;
 	    if ($suffix eq '.gz') {
 		if ( -x '/bin/gunzip') {
-		    system('/bin/gunzip', "--keep", "$destdir/$sigfile_base");
+		    system('/bin/gunzip', "--keep", "$destdir/$sigfile_base") == 0 or uscan_die("gunzip $destdir/$sigfile_base failed\n");
 		    $sigfile_base =~ s/(.*?)\.gz/$1/;
 		} else {
 		    uscan_warn("Please install gzip.\n");
@@ -3489,7 +3489,7 @@ EOF
 		}
 	    } elsif ($suffix eq '.xz') {
 		if ( -x '/usr/bin/unxz') {
-		    system('/usr/bin/unxz', "--keep", "$destdir/$sigfile_base");
+		    system('/usr/bin/unxz', "--keep", "$destdir/$sigfile_base") == 0 or uscan_die("unxz $destdir/$sigfile_base failed\n");
 		    $sigfile_base =~ s/(.*?)\.xz/$1/;
 		} else {
 		    uscan_warn("Please install xz-utils.\n");
@@ -3497,7 +3497,7 @@ EOF
 		}
 	    } elsif ($suffix eq '.bz2') {
 		if ( -x '/bin/bunzip2') {
-		    system('/bin/bunzip2', "--keep", "$destdir/$sigfile_base");
+		    system('/bin/bunzip2', "--keep", "$destdir/$sigfile_base") == 0 or uscan_die("bunzip2 $destdir/$sigfile_base failed\n");
 		    $sigfile_base =~ s/(.*?)\.bz2/$1/;
 		} else {
 		    uscan_warn("Please install bzip2.\n");
@@ -3505,7 +3505,7 @@ EOF
 		}
 	    } elsif ($suffix eq '.lzma') {
 		if ( -x '/usr/bin/unlzma') {
-		    system('/usr/bin/unlzma', "--keep", "$destdir/$sigfile_base");
+		    system('/usr/bin/unlzma', "--keep", "$destdir/$sigfile_base") == 0 or uscan_die("unlzma $destdir/$sigfile_base failed\n");
 		    $sigfile_base =~ s/(.*?)\.lzma/$1/;
 		} else {
 		    uscan_warn "Please install xz-utils or lzma.\n";
@@ -3799,8 +3799,9 @@ EOF
 	    push @cmd, $path, $common_mangled_newversion;
 	}
 	my $actioncmd = join(" ", @cmd);
-	dehs_verbose "Executing user specified script:\n   $actioncmd\n" .
-		`$actioncmd 2>&1`;
+	my $actioncmdmsg = `$actioncmd 2>&1`;
+	$? == 0 or uscan_die "$progname: Failed to Execute user specified script:\n   $actioncmd\n" . $actioncmdmsg;
+	dehs_verbose "Executing user specified script:\n   $actioncmd\n" . $actioncmdmsg;
     }
 
     return 0;
