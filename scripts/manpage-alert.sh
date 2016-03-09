@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh -e
 #
 # Copyright 2005 Branden Robinson
 # Changes copyright 2007 by their respective authors
@@ -19,13 +19,18 @@
 
 usage() {
     cat <<EOF
-Usage: manpage-alert [options | paths]
+Usage: manpage-alert [options] [paths]
   Options:
     -h, --help          This usage screen.
-    -V, --version       Display the version and copyright information
+    -v, --version       Display the version and copyright information.
+    -f, --file          Show filenames of missing manpages
+                        without any leading text.
+    -p, --package       Show filenames of missing manpages
+                        with their package name.
+    -n, --no-stat       Do not show statistics at the end.
 
-  This script will locate executables in the given paths for which no
-  manpage is available.
+  This script will locate executables in the given paths with manpage
+  outputs for which no manpage is available and its statictics.
 
   If no paths are specified on the command line, "/bin /sbin /usr/bin
   /usr/sbin /usr/games" will be used by default.
@@ -34,7 +39,7 @@ EOF
 
 version() {
     cat <<EOF
-This is manpage-alert, from the Debian devscripts package, version ###VERSION###
+This is manpage-alert, from the Debian devscripts package, version ###VERSION###.
 This code is (C) 2005 by Branden Robinson, all rights reserved.
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the
@@ -42,10 +47,33 @@ GNU General Public License, version 2 or later.
 EOF
 }
 
-case "$1" in
-    --help|-h) usage; exit 0;;
-    --version|-V) version; exit 0;;
-esac
+showpackage() {
+    PKGNAME="$(LANG=C dpkg-query -S "$1" 2> /dev/null || true )"
+    if [ -n "$PKGNAME" ]; then
+        echo "$PKGNAME" | sed -e 's/diversion by \(.+\) to:/\1/'
+    fi
+}
+
+SHOWPACKAGE=DEFAULT
+SHOWSTAT=TRUE
+
+while [ -n "$1" ]; do
+    case "$1" in
+        -h|--help) usage; exit 0;;
+        -v|--version) version; exit 0;;
+        -p|--package) SHOWPACKAGE=PACKAGE
+            shift
+            ;;
+        -f|--file) SHOWPACKAGE=FILE
+            shift
+            ;;
+        -n|--no-stat) SHOWSTAT=FALSE
+            shift
+            ;;
+        *)  break
+            ;;
+    esac
+done
 
 if [ $# -lt 1 ]; then
     set -- /bin /sbin /usr/bin /usr/sbin /usr/games
@@ -59,24 +87,33 @@ for DIR in "$@"; do
     for F in "$DIR"/*; do
         # Skip as it's a symlink to /usr/bin
         if [ "$F" = "/usr/bin/X11" ]; then continue; fi
-
         NUM_EXECUTABLES=$(( $NUM_EXECUTABLES + 1 ))
 
-        OUT=$(man -w -S 1:8:6 "${F##*/}" 2>&1 >/dev/null)
-        RET=$?
-        if [ $RET = "0" ]; then
+        if OUT=$(man -w -S 1:8:6 "${F##*/}" 2>&1 >/dev/null); then
             NUM_MANPAGES_FOUND=$(( $NUM_MANPAGES_FOUND + 1 ))
         else
-            echo "$OUT" | perl -ne "next if /^.*'man 7 undocumented'.*$/;" \
-              -e "s,(\W)\Q${F##*/}\E(?:\b|$),\1$F,; s,//,/,; print;"
+            if [ $SHOWPACKAGE = "PACKAGE" ]; then 
+                # echo "<packagename>: <filename>"
+                showpackage "$F"
+            elif [ $SHOWPACKAGE = "FILE" ]; then
+                # echo "<filename>"
+                echo "$F"
+            else
+                # echo "No manual entry for <filename>"
+                echo "$OUT" | perl -ne "next if /^.*'man 7 undocumented'.*$/;" \
+                  -e "s,(\W)\Q${F##*/}\E(?:\b|$),\1$F,; s,//,/,; print;"
+            fi
             NUM_MANPAGES_MISSING=$(( $NUM_MANPAGES_MISSING + 1 ))
         fi
     done
 done
 
+if [ $SHOWSTAT = "TRUE" ]; then 
+echo
 printf "Of %d commands, found manpages for %d (%d missing).\n" \
     $NUM_EXECUTABLES \
     $NUM_MANPAGES_FOUND \
     $NUM_MANPAGES_MISSING
+fi
 
 # vim:set ai et sw=4 ts=4 tw=80:
