@@ -60,7 +60,7 @@ SHOWSTAT=TRUE
 while [ -n "$1" ]; do
     case "$1" in
         -h|--help) usage; exit 0;;
-        -v|--version) version; exit 0;;
+        -v|-V|--version) version; exit 0;; # -V for backward compatibility
         -p|--package) SHOWPACKAGE=PACKAGE
             shift
             ;;
