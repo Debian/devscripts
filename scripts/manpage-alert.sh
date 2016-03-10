@@ -22,7 +22,7 @@ usage() {
 Usage: manpage-alert [options] [paths]
   Options:
     -h, --help          This usage screen.
-    -v, --version       Display the version and copyright information.
+    -V, --version       Display the version and copyright information.
     -f, --file          Show filenames of missing manpages
                         without any leading text.
     -p, --package       Show filenames of missing manpages
@@ -60,7 +60,7 @@ SHOWSTAT=TRUE
 while [ -n "$1" ]; do
     case "$1" in
         -h|--help) usage; exit 0;;
-        -v|-V|--version) version; exit 0;; # -V for backward compatibility
+        -V|--version) version; exit 0;;
         -p|--package) SHOWPACKAGE=PACKAGE
             shift
             ;;
