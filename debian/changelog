@@ -15,6 +15,8 @@ devscripts (2.16.2) UNRELEASED; urgency=medium
     + Add --list option.  Closes: #610048, #679763, #816910
   * manpage-alert:
     + Show package name etc.  Closes: #497320
+  * bts:
+    + Fail if --sendmail is broken.  Closes: #809318
 
   [ Dominique Dumont ]
   * licensecheck:
