@@ -48,9 +48,17 @@ EOF
 }
 
 showpackage() {
-    PKGNAME="$(LANG=C dpkg-query -S "$1" 2> /dev/null || true )"
+    F="$1"
+    PKGNAME="$(LANG=C dpkg-query -S "$F" 2> /dev/null || true )"
+    # symlink may be created by postinst script for alternatives etc.,
+    if [ -z "$PKGNAME" ]; then
+        F=$(readlink -f "$F")
+        PKGNAME="$(LANG=C dpkg-query -S "$F" 2> /dev/null || true )"
+    fi
     if [ -n "$PKGNAME" ]; then
         echo "$PKGNAME" | sed -e 's/diversion by \(.+\) to:/\1/'
+    else
+        echo "unknown_package: $F"
     fi
 }
 
