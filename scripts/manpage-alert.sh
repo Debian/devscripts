@@ -50,17 +50,28 @@ EOF
 showpackage() {
     F1="$1"
     P1="$(LANG=C dpkg-query -S "$F1" 2> /dev/null || true )"
-    P1="$(echo "$P1" | sed -e 's/diversion by \(.+\) to:/\1/')"
+    Q1=""; R1=""; Q2=""; R2=""
+    if [ -n "$P1" ]; then
+        Q1="$(echo "$P1" | grep -v "^diversion by" || true)"
+        R1="$(echo "$P1" | sed -ne 's/^diversion by \(.*\) to:.*$/\1/p'): $F1"
+    fi
     # symlink may be created by postinst script for alternatives etc.,
-    if [ -z "$P1" ] && [ -L "$F1" ]; then
+    if [ -z "$Q1" ] && [ -L "$F1" ]; then
         F2=$(readlink -f "$F1")
         P2="$(LANG=C dpkg-query -S "$F2" 2> /dev/null || true )"
-        P2="$(echo "$P2" | sed -e 's/diversion by \(.+\) to:/\1/')"
+        if [ -n "$P2" ]; then
+            Q2="$(echo "$P2" | grep -v "^diversion by" || true)"
+            R2="$(echo "$P2" | sed -ne 's/^diversion by \(.*\) to:.*$/\1/p'): $F2"
+        fi
     fi
-    if [ -n "$P1" ]; then
-        echo "$P1"
-    elif [ -n "$P2" ]; then
-        echo "unknown_package: $F1 -> $P2"
+    if [ -n "$Q1" ]; then
+        echo "$Q1"
+    elif [ -n "$R1" ]; then
+        echo "$R1 (diversion)"
+    elif [ -n "$Q2" ]; then
+        echo "unknown_package: $F1 -> $Q2"
+    elif [ -n "$R2" ]; then
+        echo "unknown_package: $F1 -> $R2 (diversion)"
     else
         echo "unknown_package: $F1"
     fi
