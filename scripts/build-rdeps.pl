@@ -306,22 +306,25 @@ sub findreversebuilddeps {
 
 		(my $buildarch_file = $source_file) =~ s/_source_Sources$/_binary-${opt_buildarch}_Packages/;
 
-		my $ceve_cmd = "dose-ceve -T debsrc -r $package -G pkg"
-			. " --deb-native-arch=$opt_buildarch deb://$buildarch_file"
-			. " debsrc://$source_file";
+		my @ceve_cmd = ('dose-ceve', '-T', 'debsrc', '-r', $package, '-G', 'pkg',
+		    "--deb-native-arch=$opt_buildarch", "deb://$buildarch_file", "debsrc://$source_file");
 		if ($opt_buildarch ne $opt_hostarch) {
-			$ceve_cmd .= " --deb-host-arch=$opt_hostarch";
-			(my $hostarch_file = $source_file) =~ s/_source_Sources$/_binary-${opt_hostarch}_Packages/;
-			$ceve_cmd .= " deb://$hostarch_file";
+			(my $hostarch_file = $source_file) =~ s/_source_Sources(\.\w+)?$/_binary-${opt_hostarch}_Packages$1/;
+			push(@ceve_cmd, "--deb-host-arch=$opt_hostarch", "deb://$hostarch_file");
 		}
-		$ceve_cmd .= " | grep-dctrl -n -s Package '' | sort -u |";
-		print STDERR "DEBUG: executing: $ceve_cmd" if ($opt_debug);
-		open(SOURCES, $ceve_cmd);
+		my %sources;
+		print STDERR 'DEBUG: executing: '.join(' ', @ceve_cmd) if ($opt_debug);
+		open(SOURCES, '-|', @ceve_cmd);
 		while(<SOURCES>) {
-			chomp;
-			print "$_";
+		    next unless s/^Package:\s+//;
+		    chomp;
+		    $sources{$_} = 1;
+		}
+		for my $source (sort keys %sources)
+		{
+			print $source;
 			if ($opt_maintainer) {
-			    my $maintainer = `apt-cache showsrc $_ | grep-dctrl -n -s Maintainer '' | sort -u`;
+			    my $maintainer = `apt-cache showsrc $source | grep-dctrl -n -s Maintainer '' | sort -u`;
 			    print " ($maintainer)";
 			}
 			print "\n";
