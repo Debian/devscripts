@@ -1,4 +1,6 @@
 #!/usr/bin/perl
+# -*- tab-width: 8; indent-tabs-mode: t; cperl-indent-level: 4 -*-
+# vim: set shiftwidth=4 tabstop=8 noexpandtab:
 #   Copyright (C) Patrick Schoenfeld
 #                 2015 Johannes Schauer <josch@debian.org>
 #
@@ -151,11 +153,11 @@ my $opt_hostarch;
 my $opt_without_ceve;
 
 if (system('command -v grep-dctrl >/dev/null 2>&1')) {
-	die "$progname: Fatal error. grep-dctrl is not available.\nPlease install the 'dctrl-tools' package.\n";
+    die "$progname: Fatal error. grep-dctrl is not available.\nPlease install the 'dctrl-tools' package.\n";
 }
 
 sub version {
-	print <<"EOT";
+    print <<"EOT";
 This is $progname $version, from the Debian devscripts package, v. ###VERSION###
 This code is copyright by Patrick Schoenfeld, all rights reserved.
 It comes with ABSOLUTELY NO WARRANTY. You are free to redistribute this code
@@ -165,7 +167,7 @@ exit (0);
 }
 
 sub usage {
-	print <<"EOT";
+    print <<"EOT";
 usage: $progname packagename
        $progname --help
        $progname --version
@@ -297,114 +299,114 @@ sub addsources {
 }
 
 sub findreversebuilddeps {
-	my ($package, $source_file) = @_;
-	my $count=0;
+    my ($package, $source_file) = @_;
+    my $count=0;
 
-	if ($use_ceve) {
-		die "build arch undefined" if ! defined $opt_buildarch;
-		die "host arch undefined" if ! defined $opt_hostarch;
+    if ($use_ceve) {
+	die "build arch undefined" if ! defined $opt_buildarch;
+	die "host arch undefined" if ! defined $opt_hostarch;
 
-		(my $buildarch_file = $source_file) =~ s/_source_Sources$/_binary-${opt_buildarch}_Packages/;
+	(my $buildarch_file = $source_file) =~ s/_source_Sources$/_binary-${opt_buildarch}_Packages/;
 
-		my @ceve_cmd = ('dose-ceve', '-T', 'debsrc', '-r', $package, '-G', 'pkg',
-		    "--deb-native-arch=$opt_buildarch", "deb://$buildarch_file", "debsrc://$source_file");
-		if ($opt_buildarch ne $opt_hostarch) {
-			(my $hostarch_file = $source_file) =~ s/_source_Sources(\.\w+)?$/_binary-${opt_hostarch}_Packages$1/;
-			push(@ceve_cmd, "--deb-host-arch=$opt_hostarch", "deb://$hostarch_file");
-		}
-		my %sources;
-		print STDERR 'DEBUG: executing: '.join(' ', @ceve_cmd) if ($opt_debug);
-		open(SOURCES, '-|', @ceve_cmd);
-		while(<SOURCES>) {
-		    next unless s/^Package:\s+//;
-		    chomp;
-		    $sources{$_} = 1;
-		}
-		for my $source (sort keys %sources)
-		{
-			print $source;
-			if ($opt_maintainer) {
-			    my $maintainer = `apt-cache showsrc $source | grep-dctrl -n -s Maintainer '' | sort -u`;
-			    print " ($maintainer)";
-			}
-			print "\n";
-			$count += 1;
-		}
-	} else {
-		my %packages;
-		my $depending_package;
-		open(PACKAGES, '-|', $dctrl, '-r', '-F', 'Build-Depends,Build-Depends-Indep', "\\(^\\|, \\)$package", '-s', 'Package,Build-Depends,Build-Depends-Indep,Maintainer', $source_file);
+	my @ceve_cmd = ('dose-ceve', '-T', 'debsrc', '-r', $package, '-G', 'pkg',
+	    "--deb-native-arch=$opt_buildarch", "deb://$buildarch_file", "debsrc://$source_file");
+	if ($opt_buildarch ne $opt_hostarch) {
+	    (my $hostarch_file = $source_file) =~ s/_source_Sources(\.\w+)?$/_binary-${opt_hostarch}_Packages$1/;
+	    push(@ceve_cmd, "--deb-host-arch=$opt_hostarch", "deb://$hostarch_file");
+	}
+	my %sources;
+	print STDERR 'DEBUG: executing: '.join(' ', @ceve_cmd) if ($opt_debug);
+	open(SOURCES, '-|', @ceve_cmd);
+	while(<SOURCES>) {
+	    next unless s/^Package:\s+//;
+	    chomp;
+	    $sources{$_} = 1;
+	}
+	for my $source (sort keys %sources)
+	{
+	    print $source;
+	    if ($opt_maintainer) {
+		my $maintainer = `apt-cache showsrc $source | grep-dctrl -n -s Maintainer '' | sort -u`;
+		print " ($maintainer)";
+	    }
+	    print "\n";
+	    $count += 1;
+	}
+    } else {
+	my %packages;
+	my $depending_package;
+	open(PACKAGES, '-|', $dctrl, '-r', '-F', 'Build-Depends,Build-Depends-Indep', "\\(^\\|, \\)$package", '-s', 'Package,Build-Depends,Build-Depends-Indep,Maintainer', $source_file);
 
-		while(<PACKAGES>) {
-			chomp;
-			print STDERR "$_\n" if ($opt_debug);
-			if (/Package: (.*)$/) {
-				$depending_package = $1;
-				$packages{$depending_package}->{'Build-Depends'} = 0;
-			}
-			elsif (/Maintainer: (.*)$/) {
-				if ($depending_package) {
-					$packages{$depending_package}->{'Maintainer'} = $1;
-				}
-			}
-			elsif (/Build-Depends: (.*)$/ or /Build-Depends-Indep: (.*)$/) {
-				if ($depending_package) {
-					print STDERR "$1\n" if ($opt_debug);
-					if ($1 =~ /^(.*\s)?\Q$package\E(?::[a-zA-Z0-9][a-zA-Z0-9-]*)?([\s,]|$)/) {
-						$packages{$depending_package}->{'Build-Depends'} = 1;
-					}
-				}
-			}
+	while(<PACKAGES>) {
+	    chomp;
+	    print STDERR "$_\n" if ($opt_debug);
+	    if (/Package: (.*)$/) {
+		$depending_package = $1;
+		$packages{$depending_package}->{'Build-Depends'} = 0;
+	    }
+	    elsif (/Maintainer: (.*)$/) {
+		if ($depending_package) {
+		    $packages{$depending_package}->{'Maintainer'} = $1;
 		}
-
-		while($depending_package = each(%packages)) {
-			if ($packages{$depending_package}->{'Build-Depends'} != 1) {
-				print STDERR "Ignoring package $depending_package because its not really build depending on $package.\n" if ($opt_debug);
-				next;
-			}
-			print $depending_package;
-			if ($opt_maintainer) {
-				print " ($packages{$depending_package}->{'Maintainer'})";
-			}
-			print "\n";
-			$count+=1;
+	    }
+	    elsif (/Build-Depends: (.*)$/ or /Build-Depends-Indep: (.*)$/) {
+		if ($depending_package) {
+		    print STDERR "$1\n" if ($opt_debug);
+		    if ($1 =~ /^(.*\s)?\Q$package\E(?::[a-zA-Z0-9][a-zA-Z0-9-]*)?([\s,]|$)/) {
+			$packages{$depending_package}->{'Build-Depends'} = 1;
+		    }
 		}
+	    }
 	}
 
-	if ($count == 0) {
-		print "No reverse build-depends found for $package.\n\n"
+	while($depending_package = each(%packages)) {
+	    if ($packages{$depending_package}->{'Build-Depends'} != 1) {
+		print STDERR "Ignoring package $depending_package because its not really build depending on $package.\n" if ($opt_debug);
+		next;
+	    }
+	    print $depending_package;
+	    if ($opt_maintainer) {
+		print " ($packages{$depending_package}->{'Maintainer'})";
+	    }
+	    print "\n";
+	    $count+=1;
 	}
-	else {
-		print "\nFound a total of $count reverse build-depend(s) for $package.\n\n";
-	}
+    }
+
+    if ($count == 0) {
+	print "No reverse build-depends found for $package.\n\n"
+    }
+    else {
+	print "\nFound a total of $count reverse build-depend(s) for $package.\n\n";
+    }
 }
 
 if ($#ARGV < 0) { usage; exit(0); }
 
 
 GetOptions(
-	"u|update" => \$opt_update,
-	"s|sudo" => \$opt_sudo,
-	"m|print-maintainer" => \$opt_maintainer,
-	"distribution=s" => \$opt_distribution,
-	"only-main" => \$opt_mainonly,
-	"exclude-component=s" => \@opt_exclude_components,
-	"origin=s" => \$opt_origin,
-	"host-arch=s" => \$opt_hostarch,
-	"build-arch=s" => \$opt_buildarch,
-#	"profiles=s" => \$opt_profiles, # FIXME: add build profile support
-#	                                         once dose-ceve has a
-#	                                         --deb-profiles option
-	"old" => \$opt_without_ceve,
-	"d|debug" => \$opt_debug,
-	"h|help" => sub { usage; },
-	"v|version" => sub { version; }
+    "u|update" => \$opt_update,
+    "s|sudo" => \$opt_sudo,
+    "m|print-maintainer" => \$opt_maintainer,
+    "distribution=s" => \$opt_distribution,
+    "only-main" => \$opt_mainonly,
+    "exclude-component=s" => \@opt_exclude_components,
+    "origin=s" => \$opt_origin,
+    "host-arch=s" => \$opt_hostarch,
+    "build-arch=s" => \$opt_buildarch,
+#   "profiles=s" => \$opt_profiles, # FIXME: add build profile support
+#                                            once dose-ceve has a
+#                                            --deb-profiles option
+    "old" => \$opt_without_ceve,
+    "d|debug" => \$opt_debug,
+    "h|help" => sub { usage; },
+    "v|version" => sub { version; }
 ) or do { usage; exit 1; };
 
 my $package = shift;
 
 if (!$package) {
-	die "$progname: missing argument. expecting packagename\n";
+    die "$progname: missing argument. expecting packagename\n";
 }
 
 print STDERR "DEBUG: Package => $package\n" if ($opt_debug);
@@ -457,49 +459,49 @@ if ($use_ceve) {
 }
 
 if ($opt_update) {
-	print STDERR "DEBUG: Updating apt-cache before search\n" if ($opt_debug);
-	my @cmd;
-	if ($opt_sudo) {
-		print STDERR "DEBUG: Using sudo to become root\n" if ($opt_debug);
-		push(@cmd, 'sudo');
-	}
-	push(@cmd, 'apt-get', 'update');
-	system @cmd;
+    print STDERR "DEBUG: Updating apt-cache before search\n" if ($opt_debug);
+    my @cmd;
+    if ($opt_sudo) {
+	print STDERR "DEBUG: Using sudo to become root\n" if ($opt_debug);
+	push(@cmd, 'sudo');
+    }
+    push(@cmd, 'apt-get', 'update');
+    system @cmd;
 }
 
 if ($opt_distribution) {
-	print STDERR "DEBUG: Setting distribution to $opt_distribution\n" if ($opt_debug);
-	$release_pattern = '(.*_dists_' . $opt_distribution . ')_(?:In)*Release$';
+    print STDERR "DEBUG: Setting distribution to $opt_distribution\n" if ($opt_debug);
+    $release_pattern = '(.*_dists_' . $opt_distribution . ')_(?:In)*Release$';
 }
 
 # Find sources files
 chdir($sources_path);
 for my $release_file (glob "*") {
-	readrelease($release_file, $1) if $release_file =~ /$release_pattern/;
+    readrelease($release_file, $1) if $release_file =~ /$release_pattern/;
 }
 
 if (!@source_files) {
-	die "$progname: unable to find sources files.\nDid you forget to run apt-get update (or add --update to this command)?";
+    die "$progname: unable to find sources files.\nDid you forget to run apt-get update (or add --update to this command)?";
 }
 
 foreach my $source_file (@source_files) {
-	if ($source_file =~ /main/) {
-		print "Reverse Build-depends in main:\n";
-		print "------------------------------\n\n";
-		findreversebuilddeps($package, "$sources_path/$source_file");
-	}
+    if ($source_file =~ /main/) {
+	print "Reverse Build-depends in main:\n";
+	print "------------------------------\n\n";
+	findreversebuilddeps($package, "$sources_path/$source_file");
+    }
 
-	if ($source_file =~ /contrib/) {
-		print "Reverse Build-depends in contrib:\n";
-		print "---------------------------------\n\n";
-		findreversebuilddeps($package, "$sources_path/$source_file");
-	}
+    if ($source_file =~ /contrib/) {
+	print "Reverse Build-depends in contrib:\n";
+	print "---------------------------------\n\n";
+	findreversebuilddeps($package, "$sources_path/$source_file");
+    }
 
-	if ($source_file =~ /non-free/) {
-		print "Reverse Build-depends in non-free:\n";
-		print "----------------------------------\n\n";
-		findreversebuilddeps($package, "$sources_path/$source_file");
-	}
+    if ($source_file =~ /non-free/) {
+	print "Reverse Build-depends in non-free:\n";
+	print "----------------------------------\n\n";
+	findreversebuilddeps($package, "$sources_path/$source_file");
+    }
 }
 
 =head1 LICENSE
