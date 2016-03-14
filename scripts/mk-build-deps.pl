@@ -126,6 +126,7 @@ General Public License, version 2 or later.
 
 =cut
 
+use 5.01;
 use strict;
 use warnings;
 use Getopt::Long qw(:config gnu_getopt);
