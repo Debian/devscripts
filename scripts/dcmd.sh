@@ -207,6 +207,7 @@ $THISARG\";"
 		[ "$DSC" = "0" ] || echo "newarg=\"\$newarg
 $THISARG\";"
 		echo "SEEN_DSC=1;"
+	    elif endswith "$THISARG" .buildinfo; then
 		[ "$BUILDINFO" = "0" ] || echo "newarg=\"\$newarg
 $THISARG\";"
 		echo "SEEN_BUILDINFO=1;"

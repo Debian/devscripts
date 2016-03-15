@@ -43,6 +43,11 @@ devscripts (2.16.2) UNRELEASED; urgency=medium
   * mk-build-deps:
     + Typo fix. Closes: #770642
 
+  [ Adam D. Barratt ]
+  * dcmd:
+    + Correctly filter .buildinfo files.  This also avoids listing .dsc
+      files twice.  (Closes: #818275)
+
  -- Osamu Aoki <osamu@debian.org>  Sat, 13 Feb 2016 22:10:05 +0900
 
 devscripts (2.16.1) unstable; urgency=medium
