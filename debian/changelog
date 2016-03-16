@@ -33,6 +33,7 @@ devscripts (2.16.2) UNRELEASED; urgency=medium
   * grep-excuses:
     + Report excuses even when autoremoval info isn't reachable.  (Closes:
       #816723)
+  * Replace references to debbindiff with diffoscope.  (Closes: #818299)
 
   [ Johannes Schauer ]
   * build-rdeps:

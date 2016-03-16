@@ -77,7 +77,7 @@ Recommends: apt,
 Suggests: bsd-mailx | mailx,
           build-essential,
           cvs-buildpackage,
-          debbindiff,
+          diffoscope,
           devscripts-el,
           dose-extra (>= 4.0),
           gnuplot,
@@ -136,7 +136,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
     basing commit message on changelog [cvs | darcs | subversion | svk | tla |
     bzr | git-core | mercurial, libtimedate-perl]
   - debdiff: compare two versions of a Debian package to check for
-    added and removed files. Use the debbindiff package for deep comparisons.
+    added and removed files. Use the diffoscope package for deep comparisons.
     [wdiff, patchutils]
   - debi: install a just-built package
   - debpkg: dpkg wrapper to be able to manage/test packages without su
