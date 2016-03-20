@@ -3088,7 +3088,7 @@ sub process_watchline ($$$$$$)
 		$ln =~ s/^d.*$//; # FTP listing of directory, '' skiped by if ($ln...
 		$ln =~ s/\s+->\s+\S+$//; # FTP listing for link destination
 		$ln =~ s/^.*\s(\S+)$/$1/; # filename only
-		if ($ln and $ln =~ m/($filepattern)$/) {
+		if ($ln and $ln =~ m/^($filepattern)$/) {
 		    my $file = $1;
 		    my $mangled_version = join(".", $file =~ m/^$filepattern$/);
 		    foreach my $pat (@{$options{'uversionmangle'}}) {
@@ -4009,7 +4009,7 @@ sub newest_dir ($$$$$) {
 		$ln =~ s/^-.*$//; # FTP listing of file, '' skiped by if ($ln...
 		$ln =~ s/\s+->\s+\S+$//; # FTP listing for link destination
 		$ln =~ s/^.*\s(\S+)$/$1/; # filename only
-		if ($ln =~ m/($pattern)(\s+->\s+\S+)?$/) {
+		if ($ln =~ m/^($pattern)(\s+->\s+\S+)?$/) {
 		    my $dir = $1;
 		    uscan_verbose "Matching target for dirversionmangle:   $dir\n";
 		    my $mangled_version = join(".", $dir =~ m/^$pattern$/);
