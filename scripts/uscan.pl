@@ -2564,7 +2564,7 @@ sub process_watchline ($$$$$$)
 	}
 
 	# 4 parameter watch line
-	($base, $filepattern, $lastversion, $action) = split ' ', $line, 4;
+	($base, $filepattern, $lastversion, $action) = split /\s+/, $line, 4;
 
 	# 3 parameter watch line (override)
 	if ($base =~ s%/([^/]*\([^/]*\)[^/]*)$%/%) {
@@ -2572,8 +2572,9 @@ sub process_watchline ($$$$$$)
 	    # separate filepattern field; we remove the filepattern from the
 	    # end of $base and rescan the rest of the line
 	    $filepattern = $1;
-	    (undef, $lastversion, $action) = split ' ', $line, 3;
+	    (undef, $lastversion, $action) = split /\s+/, $line, 3;
 	}
+	$lastversion //= '';
 
 	# compression is persistent
 	if ($options{'mode'} eq 'LWP') {
@@ -2586,7 +2587,7 @@ sub process_watchline ($$$$$$)
 
 	# Set $lastversion to the numeric last version
 	# Update $options{'versionmode'} (its default "newer")
-	if (! defined $lastversion or $lastversion eq 'debian') {
+	if (!length($lastversion) or $lastversion eq 'debian') {
 	    if (! defined $pkg_version) {
 		uscan_warn "Unable to determine the current version\n  in $watchfile, skipping:\n  $line\n";
 		return 1;

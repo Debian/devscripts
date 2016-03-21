@@ -3,6 +3,8 @@ devscripts (2.16.3) UNRELEASED; urgency=medium
   * uscan:
     + Fix regression in processing FTP listings when file pattern is the tail
       of another filename.  (Closes: #818727)
+    + Handle trailing spaces on the watch line when determining whether the
+      line specifies the version to check.  (Closes: #818865)
 
  -- James McCoy <jamessan@debian.org>  Sun, 20 Mar 2016 12:26:04 -0400
 
