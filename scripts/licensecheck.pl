@@ -404,7 +404,29 @@ while (@files) {
 
     my $enc = $OPT{encoding} ;
 
-    my ($license, $copyright) = parse_file($file, $enc) ;
+    my ($license, $copyright) ;
+
+    my $ok = 0;
+    my @try = $enc ? ($enc, 'latin-1', undef) : (undef);
+
+    while (not $ok and @try) {
+	my $try_enc = shift @try;
+
+	eval { ($license, $copyright) = parse_file($file, $try_enc) ; };
+
+	if ($@ and $@ =~ /does not map to Unicode/) {
+	    my $str_enc = $enc // 'binary';
+	    my $next_enc = $try[0] // 'binary';
+	    print "file $file cannot be read with $str_enc encoding, will try $next_enc:\n$@"
+		if $OPT{'verbose'};
+	}
+	elsif ($@) {
+	    die $@;
+	}
+	else {
+	    last;
+	}
+    }
 
     if ($OPT{'machine'}) {
 	print "$file\t$license";

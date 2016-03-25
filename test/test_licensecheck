@@ -159,6 +159,9 @@ testRegexpKiller() {
 testEncoding () {
     license2 "-m --copyright --encoding iso-8859-1" "copr-iso8859.h" "GPL (v2) (with incorrect FSF address)	2011 Heinrich Müller <henmull@src.gnome.org>"
     license2 "-m --copyright --encoding utf8" "copr-utf8.h" "GPL (v2 or later)	2004-2015 Oliva 'f00' Oberto / 2001-2010 Paul 'bar' Stevénsön"
+
+    # test wrong user choice and fallback
+    license2 "-m --copyright --encoding utf8" "copr-iso8859.h" "GPL (v2) (with incorrect FSF address)	2011 Heinrich Müller <henmull@src.gnome.org>"
 }
 
 testInfoAtEnd () {
