@@ -410,7 +410,7 @@ while (@files) {
     my $enc = $OPT{encoding} ;
     my $mode = $enc ? "<:encoding($enc)" : '<';
     # need to use "<" when encoding is unknown otherwise we break compatibility
-    my $fh = IO::File->new ($file ,$mode) or die "Unable to access $file\n";
+    my $fh = IO::File->new ($file ,$mode) or die "Unable to access $file: $!\n";
 
     while ( my $line = $fh->getline ) {
 	last if ($fh->input_line_number > $OPT{'lines'});
