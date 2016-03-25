@@ -401,13 +401,33 @@ while (@ARGV) {
 
 while (@files) {
     my $file = shift @files;
+
+    my $enc = $OPT{encoding} ;
+
+    my ($license, $copyright) = parse_file($file, $enc) ;
+
+    if ($OPT{'machine'}) {
+	print "$file\t$license";
+	print "\t" . ($copyright or "*No copyright*") if $OPT{'copyright'};
+	print "\n";
+    } else {
+	print "$file: ";
+	print "*No copyright* " unless $copyright;
+	print $license . "\n";
+	print "  [Copyright: " . $copyright . "]\n"
+	  if $copyright and $OPT{'copyright'};
+	print "\n" if $OPT{'copyright'};
+    }
+}
+
+sub parse_file {
+    my $file = shift;
+    my $enc = shift;
     my $content = '';
     my $copyright_match;
     my $copyright = '';
 
     my $st = stat $file;
-
-    my $enc = $OPT{encoding} ;
     my $mode = $enc ? "<:encoding($enc)" : '<';
     # need to use "<" when encoding is unknown otherwise we break compatibility
     my $fh = IO::File->new ($file ,$mode) or die "Unable to access $file: $!\n";
@@ -446,19 +466,7 @@ while (@files) {
     }
 
     $fh->close;
-
-    if ($OPT{'machine'}) {
-	print "$file\t$license";
-	print "\t" . ($copyright or "*No copyright*") if $OPT{'copyright'};
-	print "\n";
-    } else {
-	print "$file: ";
-	print "*No copyright* " unless $copyright;
-	print $license . "\n";
-	print "  [Copyright: " . $copyright . "]\n"
-	  if $copyright and $OPT{'copyright'};
-	print "\n" if $OPT{'copyright'};
-    }
+    return ($license, $copyright);
 }
 
 sub extract_copyright {
