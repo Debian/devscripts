@@ -1,3 +1,11 @@
+devscripts (2.16.2~bpo8+1) jessie-backports; urgency=medium
+
+  * Rebuild for jessie-backports.
+    + Revert debbindiff → diffoscope change, since diffoscope isn't in
+      jessie(-backports).
+
+ -- James McCoy <jamessan@debian.org>  Thu, 31 Mar 2016 21:28:11 -0400
+
 devscripts (2.16.2) unstable; urgency=medium
 
   [ Osamu Aoki ]

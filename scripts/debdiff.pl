@@ -98,7 +98,7 @@ Valid options are:
 Default settings modified by devscripts configuration files:
 $modified_conf_msg
 
-Use the diffoscope package for deeper comparisons of .deb files.
+Use the debbindiff package for deeper comparisons of .deb files.
 EOF
 }
 
