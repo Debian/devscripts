@@ -77,10 +77,10 @@ oneTimeSetUp () {
 # Initial Debian revision value is distribution dependent
 SUFFIX="1"
 if which dpkg-vendor >/dev/null 2>&1; then
-    case "$(dpkg-vendor --query Vendor 2>/dev/null)" in
-	"Ubuntu")
-	    SUFFIX="0ubuntu1"
-	    ;;
+    VENDER="$(dpkg-vendor --query Vendor 2>/dev/null|tr 'A-Z' 'a-z')"
+    case "$VENDER" in
+	debian) SUFFIX="1" ;;
+	*) SUFFIX="0${VENDER}1" ;;
     esac
 fi
 
@@ -889,8 +889,48 @@ testWatch4WebNonNativeSig() {
     helperWatch
 }
 
-# test normal web page with sig(asc)
-testWatch4WebNonNativeSig() {
+# test normal web page with sig(asc) with < and >
+testWatch4WebNonNativeSigAngleBraket() {
+    WATCHVER=4
+    WATCHLINE='opts = "pgpsigurlmangle = s<(.*)><$1.asc>" \
+		@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+    helperWatch
+}
+
+# test normal web page with sig(asc) with < and > with space
+testWatch4WebNonNativeSigAngleBraketSpace() {
+    WATCHVER=4
+    WATCHLINE='opts = "pgpsigurlmangle = s<(.*)> <$1.asc>" \
+		@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+    helperWatch
+}
+
+# test normal web page with sig(asc) with < and > with tab
+testWatch4WebNonNativeSigAngleBraketTab() {
+    WATCHVER=4
+    WATCHLINE='opts = "pgpsigurlmangle = s<(.*)>	<$1.asc>" \
+		@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+    helperWatch
+}
+
+# test normal web page with sig(asc) with [ and ]
+testWatch4WebNonNativeSigSquareBraket() {
+    WATCHVER=4
+    WATCHLINE='opts = "pgpsigurlmangle = s[(.*)][$1.asc]" \
+		@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+    helperWatch
+}
+
+# test normal web page with sig(asc) with { and }
+testWatch4WebNonNativeSigCurlyBraket() {
+    WATCHVER=4
+    WATCHLINE='opts = "pgpsigurlmangle = s{(.*)}{$1.asc}" \
+		@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
+    helperWatch
+}
+
+# test normal web page with sig(asc) - auto
+testWatch4WebNonNativeSigAuto() {
     WATCHVER=4
     WATCHLINE='opts = "pgpmode = auto" \
 		@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'

@@ -542,11 +542,9 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
         and $config_vars{'BTS_SENDMAIL_COMMAND'} ne '/usr/sbin/sendmail') {
 	my $cmd = (split ' ', $config_vars{'BTS_SENDMAIL_COMMAND'})[0];
 	unless ($cmd =~ /^~?[A-Za-z0-9_\-\+\.\/]*$/) {
-	    warn "BTS_SENDMAIL_COMMAND contained funny characters: $cmd\nReverting to default value /usr/sbin/sendmail\n";
-	    $config_vars{'BTS_SENDMAIL_COMMAND'}='/usr/sbin/sendmail';
+	    die "BTS_SENDMAIL_COMMAND contained funny characters: $cmd\nPlease fix the configuration file.\n";
 	} elsif (system("command -v $cmd >/dev/null 2>&1") != 0) {
-	    warn "BTS_SENDMAIL_COMMAND $cmd could not be executed.\nReverting to default value /usr/sbin/sendmail\n";
-	    $config_vars{'BTS_SENDMAIL_COMMAND'}='/usr/sbin/sendmail';
+	    die "BTS_SENDMAIL_COMMAND $cmd could not be executed.\nPlease fix the configuration file.\n";
 	}
     }
 
@@ -678,11 +676,9 @@ if ($opt_sendmail) {
 	and $opt_sendmail ne $sendmailcmd) {
 	my $cmd = (split ' ', $opt_sendmail)[0];
 	unless ($cmd =~ /^~?[A-Za-z0-9_\-\+\.\/]*$/) {
-	    warn "--sendmail command contained funny characters: $cmd\nReverting to default value $sendmailcmd\n";
-	    undef $opt_sendmail;
+	    die "--sendmail command contained funny characters: $cmd\n";
 	} elsif (system("command -v $cmd >/dev/null 2>&1") != 0) {
-	    warn "--sendmail command $cmd could not be executed.\nReverting to default value $sendmailcmd\n";
-	    undef $opt_sendmail;
+	    die "--sendmail command $cmd could not be executed.\n";
 	}
     }
 }

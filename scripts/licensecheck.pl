@@ -258,15 +258,16 @@ my $copyright_indicator_regex
 
 my $copyright_indicator_regex_with_capture = qr!$copyright_indicator_regex(?::\s*|\s+)(\S.*)$!lix;
 
+# avoid ditching things like <info@foo.com>
 my $copyright_disindicator_regex
-    = qr!
-	    \b(?:info(?:rmation)?	# Discussing copyright information
+    = qr{
+	    \b(?:info(?:rmation)?(?!@)	# Discussing copyright information
             |(notice|statement|claim|string)s?	# Discussing the notice
             |is|in|to        # Part of a sentence
             |(holder|owner)s?       # Part of a sentence
             |ownership              # Part of a sentence
             )\b
-        !ix;
+        }ix;
 
 my $copyright_predisindicator_regex
     = qr!(

@@ -61,10 +61,34 @@ the B<--install> switch.
 
 =item B<-a> I<foo>, B<--arch> I<foo>
 
-If the source package has architecture-specific build dependencies, produce
-a package for architecture I<foo>, not for the system architecture. (If the
-source package does not have architecture-specific build dependencies,
-the package produced is always for the pseudo-architecture B<all>.)
+Set the architecture of the produced binary package to I<foo>. If this option
+is not given, fall back to the value given by B<--host-arch>. If neither this
+option nor B<--host-arch> are given but the Build-Depends contain architecture
+restrictions, use the value printed by `dpkg-architecture -qDEB_HOST_ARCH`.
+Otherwise, use I<all>.
+
+The package architecture must be equal to the host architecture except if the
+package architecture is I<all>.
+
+The package architecture cannot be I<all> if the build and host architecture
+differ.
+
+=item B<--host-arch> I<foo>
+
+Set the host architecture the binary package is built for. This defaults to
+the value printed by `dpkg-architecture -qDEB_HOST_ARCH`. Use this option to
+create a binary package that is able to satisfy crossbuild dependencies.
+
+If this option is used together with B<--arch>, then they must be equal except
+if the value of B<--arch> is I<all>.
+
+If B<--arch> is not given, then this option also sets the package architecture.
+
+=item B<--build-arch> I<foo>
+
+Set the build architecture the binary package is built for. This defaults to
+the value printed by `dpkg-architecture -qDEB_BUILD_ARCH`. Use this option to
+create a binary package that is able to satisfy crossbuild dependencies.
 
 =item B<-B>, B<--build-dep>
 
@@ -102,6 +126,7 @@ General Public License, version 2 or later.
 
 =cut
 
+use 5.01;
 use strict;
 use warnings;
 use Getopt::Long qw(:config gnu_getopt);
@@ -110,13 +135,14 @@ use Pod::Usage;
 use Dpkg::Control;
 use Dpkg::Version;
 use Dpkg::IPC;
+use Dpkg::Deps;
 use FileHandle;
 use Text::ParseWords;
 
 my $progname = basename($0);
 my $opt_install;
 my $opt_remove=0;
-my ($opt_help, $opt_version, $opt_arch, $opt_dep, $opt_indep);
+my ($opt_help, $opt_version, $opt_arch, $opt_dep, $opt_indep, $opt_hostarch, $opt_buildarch);
 my $control;
 my $install_tool;
 my $root_cmd;
@@ -186,6 +212,8 @@ GetOptions("help|h" => \$opt_help,
            "remove|r" => \$opt_remove,
            "tool|t=s" => \$install_tool,
            "arch|a=s" => \$opt_arch,
+           "host-arch=s" => \$opt_hostarch,
+           "build-arch=s" => \$opt_buildarch,
            "build-dep|B" => \$opt_dep,
            "build-indep|A" => \$opt_indep,
            "root-cmd|s=s" => \$root_cmd,
@@ -412,17 +440,79 @@ sub build_equiv
 {
     my ($opts) = @_;
     my $args = '';
-    my $arch = 'all';
+
+    my $packagearch = 'all';
 
     if (defined $opt_arch) {
-	$args = "--arch=$opt_arch ";
-	$arch = $opt_arch;
+	$packagearch = $opt_arch;
+    } elsif (defined $opt_hostarch) {
+	$packagearch = $opt_hostarch;
+    } elsif ($opts->{depends} =~ m/\[|\]/) {
+	chomp($packagearch = `dpkg-architecture -qDEB_HOST_ARCH`);
     }
-    elsif ($opts->{depends} =~ m/\[|\]/) {
-	spawn(exec => ['dpkg-architecture', '-qDEB_HOST_ARCH'],
-	      to_string => \$arch,
-	      wait_child => 1);
-	chomp($arch);
+    if ($packagearch ne "all") {
+	$args .= "--arch=$packagearch ";
+    }
+
+    chomp(my $buildarch = `dpkg-architecture -qDEB_BUILD_ARCH`);
+    if (defined $opt_buildarch) {
+	$buildarch = $opt_buildarch;
+    }
+
+    chomp(my $hostarch = `dpkg-architecture -qDEB_HOST_ARCH`);
+    if (defined $opt_hostarch) {
+	$hostarch = $opt_hostarch;
+    }
+
+    if ($packagearch eq "all") {
+	if ($buildarch ne $hostarch) {
+	    die "build architecture \"$buildarch\" is unequal host architecture \"$hostarch\" in which case the package architecture must not be \"all\" (but \"$hostarch\" instead)\n";
+	}
+    } elsif ($packagearch ne $hostarch) {
+	die "The package architecture must be equal to the host architecture except if the package architecture is \"all\"\n";
+    }
+
+    my $build_profiles = [ split /\s+/, ($ENV{'DEB_BUILD_PROFILES'} // "") ];
+
+    my $positive = deps_parse($opts->{depends} // "",
+	reduce_arch => 1,
+	host_arch => $hostarch,
+	build_arch => $buildarch,
+	build_dep => 1,
+	reduce_profiles => 1,
+	build_profiles => $build_profiles);
+    my $negative = deps_parse($opts->{conflicts} // "",
+	reduce_arch => 1,
+	host_arch => $hostarch,
+	build_arch => $buildarch,
+	build_dep => 1,
+	union => 1,
+	reduce_profiles => 1,
+	build_profiles => $build_profiles);
+
+    # either remove :native for native builds or replace it by the build
+    # architecture
+    my $handle_native_archqual = sub {
+        my ($dep) = @_;
+        if ($dep->{archqual} && $dep->{archqual} eq "native") {
+            if ($hostarch eq $buildarch) {
+                $dep->{archqual} = undef;
+            } else {
+                $dep->{archqual} = $buildarch;
+            }
+        }
+        return 1;
+    };
+    deps_iterate($positive, $handle_native_archqual);
+    deps_iterate($negative, $handle_native_archqual);
+
+    my $pkgname;
+    my $buildess = "build-essential:$buildarch";
+    if ($buildarch eq $hostarch) {
+	$pkgname = "$opts->{name}-$opts->{type}";
+    } else {
+	$pkgname = "$opts->{name}-cross-$opts->{type}";
+	$buildess .= ", crossbuild-essential-$hostarch:$buildarch";
     }
 
     my $readme = '/usr/share/devscripts/README.mk-build-deps';
@@ -431,11 +521,11 @@ sub build_equiv
     print EQUIVS "Section: devel\n" .
     "Priority: optional\n".
     "Standards-Version: 3.7.3\n\n".
-    "Package: $opts->{name}-$opts->{type}\n".
-    "Architecture: $arch\n".
-    "Depends: build-essential, $opts->{depends}\n";
+    "Package: $pkgname\n".
+    "Architecture: $packagearch\n".
+    "Depends: $buildess, $positive\n";
 
-    print EQUIVS "Conflicts: $opts->{conflicts}\n" if $opts->{conflicts};
+    print EQUIVS "Conflicts: $negative\n" if $negative;
 
     # Allow the file not to exist to ease testing
     print EQUIVS "Readme: $readme\n" if -r $readme;
@@ -444,17 +534,16 @@ sub build_equiv
     print EQUIVS "Version: $version\n";
 
     print EQUIVS "Description: build-dependencies for $opts->{name}\n" .
-    " Depencency package to build the '$opts->{name}' package\n";
+    " Dependency package to build the '$opts->{name}' package\n";
 
     close EQUIVS;
 
     my $v = Dpkg::Version->new($version);
     # The version in the .deb filename will not contain the epoch
     $version = $v->as_string(omit_epoch => 1);
-    my $package = "$opts->{name}-$opts->{type}";
-    my $deb_file = "${package}_${version}_${arch}.deb";
+    my $deb_file = "${pkgname}_${version}_${packagearch}.deb";
     return {
-	package => $package,
+	package => $pkgname,
 	deb_file => $deb_file
     };
 }

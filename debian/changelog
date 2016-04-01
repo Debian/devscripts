@@ -1,3 +1,57 @@
+devscripts (2.16.2) unstable; urgency=medium
+
+  [ Osamu Aoki ]
+  * uscan:
+    + Print proper warnings for bad rules.  Closes: #814049
+    + Fix glitches around rules such as "s<...> <...>g" and add their
+      tests.
+    + Reactivate --no-verbose mode.  Closes: #815645 
+    + Fix --destdir for version 4.  Closes:#814686
+    + Always use uscan_warn and uscan_die.
+    + Die if the action script fails.  Closes: #810976
+  * test_uscan:
+    + Fix non-{Debian,Ubuntu} cases.  Closes: #816645
+  * debsnap:
+    + Add --list option.  Closes: #610048, #679763, #816910
+  * manpage-alert:
+    + Show package name etc.  Closes: #497320
+  * bts:
+    + Fail if --sendmail is broken.  Closes: #809318
+
+  [ Dominique Dumont ]
+  * licensecheck:
+    + parse (c) owner with email like info@foo.com
+
+  [ James McCoy ]
+  * debsnap:
+    + Only make the destination directory if there is something to download.
+      (Closes: #816022)
+    + Add --first & --last options to define a range of versions to download.
+      Based on a patch by Ivo De Decker.  (Closes: #675867)
+  * uscan:
+    + Fix typo in dirversionmangle help.  (Closes: #816231)
+  * grep-excuses:
+    + Report excuses even when autoremoval info isn't reachable.  (Closes:
+      #816723)
+  * Replace references to debbindiff with diffoscope.  (Closes: #818299)
+  * Declare compliance with policy 3.9.7, no changes required.
+
+  [ Johannes Schauer ]
+  * build-rdeps:
+    + Generate correct dependency for cross builds.  Closes: #794538
+    + Improve dependency resolver using dose3.  Closes: #797858
+
+  [ Andreas Bombe ]
+  * mk-build-deps:
+    + Typo fix. Closes: #770642
+
+  [ Adam D. Barratt ]
+  * dcmd:
+    + Correctly filter .buildinfo files.  This also avoids listing .dsc
+      files twice.  (Closes: #818275)
+
+ -- James McCoy <jamessan@debian.org>  Sat, 19 Mar 2016 14:34:39 -0400
+
 devscripts (2.16.1~bpo8+1) jessie-backports; urgency=medium
 
   * Rebuild for jessie-backports.

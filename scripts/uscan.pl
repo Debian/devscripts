@@ -447,7 +447,7 @@ specific suffix such as B<s/\+dfsg\d*$//> is usually done here.
 =item B<dirversionmangle=>I<rules>
 
 Normalize the directory path string matching the regex in a set of parentheses
-of B<http::/>I<URL> as the sortable version index string.  This is used as the
+of B<http://>I<URL> as the sortable version index string.  This is used as the
 directory path sorting index only.
 
 Substitution such as B<s/PRE/~pre/; s/RC/~rc/> may help.
@@ -1214,6 +1214,10 @@ For the basic usage, B<uscan> does not require to set these options.
 Don't read any configuration files. This can only be used as the first option
 given on the command-line.
 
+=item B<--no-verbose>
+
+Don't report verbose information. (default)
+
 =item B<--verbose>, B<-v>
 
 Report verbose information.
@@ -1225,12 +1229,12 @@ web pages as processed to STDERR for debugging.
 
 =item B<--dehs>
 
-Send DEHS style output (XML-type) to STDERR, while
-send all other uscan output to STDOUT.
+Send DEHS style output (XML-type) to STDOUT, while
+send all other uscan output to STDERR.
 
 =item B<--no-dehs>
 
-Use only traditional uscan output format (default)
+Use only traditional uscan output format. (default)
 
 =item B<--download>, B<-d>
 
@@ -1238,7 +1242,7 @@ Download the new upstream release. (default)
 
 =item B<--force-download>, B<-dd>
 
-Download the new upstream release even if up-to-date (may not overwrite the local file)
+Download the new upstream release even if up-to-date. (may not overwrite the local file)
 
 =item B<--overwrite-download>, B<-ddd>
 
@@ -1305,10 +1309,10 @@ See the below section L<Directory name checking> for an explanation of this opti
 
 =item B<--destdir>
 
-Path of directory to which to download. If the specified path is not absolute,
-it will be relative to one of the current directory or, if directory scanning
-is enabled, the package's
-source directory.
+Set the path of directory to which to download instead of its default F<../>.
+If the specified path is not absolute, it will be relative to one of the
+current directory or, if directory scanning is enabled, the package's source
+directory.
 
 =item B<--package> I<package>
 
@@ -1340,7 +1344,7 @@ page content alterations.
 
 =item B<--no-exclusion>
 
-Don't automatically exclude files mentioned in F<debian/copyright> field B<Files-Excluded>
+Don't automatically exclude files mentioned in F<debian/copyright> field B<Files-Excluded>.
 
 =item B<--pasv>
 
@@ -1682,12 +1686,12 @@ Gilbey.
 use 5.010;  # defined-or (//)
 use strict;
 use warnings;
-use Cwd;
-use Cwd 'abs_path';
+use Cwd qw/cwd abs_path/;
 use Dpkg::Changelog::Parse qw(changelog_parse);
 use Dpkg::IPC;
 use File::Basename;
-use File::Copy;
+use File::Copy qw/copy/;
+use File::Spec qw/catfile/;
 use File::Temp qw/tempfile tempdir/;
 use List::Util qw/first/;
 use filetest 'access';
@@ -1696,14 +1700,19 @@ use Devscripts::Versort;
 use Text::ParseWords;
 use Digest::MD5;
 
+sub uscan_die ($);
+sub uscan_warn ($);
+# From here, do not use bare "warn" nor "die".
+# Use "uscan_warn" or "uscan_die" instead to make --dehs work as expected.
+
 BEGIN {
     eval { require LWP::UserAgent; };
     if ($@) {
 	my $progname = basename($0);
 	if ($@ =~ /^Can\'t locate LWP\/UserAgent\.pm/) {
-	    die "$progname: you must have the libwww-perl package installed\nto use this script\n";
+	    uscan_die "$progname: you must have the libwww-perl package installed\nto use this script\n";
 	} else {
-	    die "$progname: problem loading the LWP::UserAgent module:\n  $@\nHave you installed the libwww-perl package?\n";
+	    uscan_die "$progname: problem loading the LWP::UserAgent module:\n  $@\nHave you installed the libwww-perl package?\n";
 	}
     }
 }
@@ -1731,7 +1740,6 @@ sub get_suffix ($);
 sub get_priority ($);
 sub recursive_regex_dir ($$$);
 sub newest_dir ($$$$$);
-sub uscan_die ($);
 sub dehs_output ();
 sub quoted_regex_replace ($);
 sub safe_replace ($$);
@@ -1740,7 +1748,6 @@ sub uscan_msg($);
 sub uscan_verbose($);
 sub uscan_debug($);
 sub dehs_verbose ($);
-sub uscan_warn ($);
 
 my $havegpgv = first { -x $_ } qw(/usr/bin/gpgv2 /usr/bin/gpgv);
 my $havegpg = first { -x $_ } qw(/usr/bin/gpg2 /usr/bin/gpg);
@@ -1756,11 +1763,12 @@ Options:
     --no-conf, --noconf
                    Don\'t read devscripts config files;
                    must be the first option given
+    --no-verbose   Don\'t report verbose information.
     --verbose, -v  Report verbose information.
     --debug, -vv   Report verbose information including the downloaded
                    web pages as processed to STDERR for debugging.
-    --dehs         Send DEHS style output (XML-type) to STDERR, while
-                   send all other uscan output to STDOUT.
+    --dehs         Send DEHS style output (XML-type) to STDOUT, while
+                   send all other uscan output to STDERR.
     --no-dehs      Use only traditional uscan output format (default)
     --download, -d
                    Download the new upstream release (default)
@@ -1888,6 +1896,7 @@ my $exclusion = 1;
 my $origcount = 0;
 my @components = ();
 my $orig;
+my @origtars = ();
 my $repacksuffix_used = 0;
 my $uscanlog;
 my $common_newversion ; # undef initially (for MUT, version=same)
@@ -2023,6 +2032,7 @@ GetOptions("help" => \$opt_h,
 	   "watchfile=s" => \$opt_watchfile,
 	   "dehs!" => \$opt_dehs,
 	   "v|verbose+" => \$opt_verbose,
+	   "noverbose|no-verbose" => sub { $opt_verbose = 0; },
 	   "debug" => sub { $opt_verbose = 2; },
 	   "check-dirname-level=s" => \$opt_level,
 	   "check-dirname-regex=s" => \$opt_regex,
@@ -2033,7 +2043,7 @@ GetOptions("help" => \$opt_h,
 	   "copyright-file=s" => \$opt_copyright_file,
 	   "download-current-version" => \$opt_download_current_version,
 	   )
-    or die "Usage: $progname [options] [directories]\nRun $progname --help for more details\n";
+    or uscan_die "Usage: $progname [options] [directories]\nRun $progname --help for more details\n";
 
 if ($opt_noconf) {
     die "$progname: --no-conf is only acceptable as the first command-line option!\n";
@@ -2716,7 +2726,7 @@ sub process_watchline ($$$$$$)
 	      . "  $line\n";
 	    return 1;
 	}
-	uscan_debug "$mangled_lastversion by dversionmangle rule: $pat\n";
+	uscan_debug "$mangled_lastversion by dversionmangle rule.\n";
     }
 
     # Set $download_version etc. if already known
@@ -2799,7 +2809,7 @@ sub process_watchline ($$$$$$)
 	# TODO: sanitize $base
 	uscan_verbose "Execute: git ls-remote $base\n";
 	open(REFS, "-|", 'git', 'ls-remote', $base) ||
-	    die "$progname: you must have the git package installed\n"
+	    uscan_die "$progname: you must have the git package installed\n"
 	      . "to use git URLs\n";
 	my @refs;
 	my $ref;
@@ -2814,14 +2824,14 @@ sub process_watchline ($$$$$$)
 			    $ref =~ m&^$_pattern$&);
 		    foreach my $pat (@{$options{'uversionmangle'}}) {
 			if (! safe_replace(\$version, $pat)) {
-			    warn "$progname: In $watchfile, potentially"
+			    uscan_warn "$progname: In $watchfile, potentially"
 				. " unsafe or malformed uversionmangle"
 				. " pattern:\n  '$pat'"
 				. " found. Skipping watchline\n"
 				. "  $line\n";
 			    return 1;
 			}
-		    uscan_debug "$version by uversionmangle rule: $pat\n";
+		    uscan_debug "$version by uversionmangle rule.\n";
 		    }
 		    push @refs, [$version, $ref];
 		}
@@ -2839,7 +2849,7 @@ sub process_watchline ($$$$$$)
 		if (@vrefs) {
 		    ($newversion, $newfile) = @{$vrefs[0]};
 		} else {
-		    warn "$progname warning: In $watchfile no matching"
+		    uscan_warn "$progname warning: In $watchfile no matching"
 			 . " refs for version $download_version"
 			 . " in watch line\n  $line\n";
 		    return 1;
@@ -2849,7 +2859,7 @@ sub process_watchline ($$$$$$)
 		($newversion, $newfile) = @{$refs[0]};
 	    }
 	} else {
-	    warn "$progname warning: In $watchfile,\n" .
+	    uscan_warn "$progname warning: In $watchfile,\n" .
 	         " no matching refs for watch line\n" .
 		 " $line\n";
 		 return 1;
@@ -2906,7 +2916,7 @@ sub process_watchline ($$$$$$)
 		  . "  $line\n";
 		return 1;
 	    }
-	    uscan_debug "processed content:\n$content\n[End of processed content] by pagemangle rule: $pat\n";
+	    uscan_debug "processed content:\n$content\n[End of processed content] by pagemangle rule.\n";
 	}
 	if (! $bare and
 	    $content =~ m%^<[?]xml%i and
@@ -2973,7 +2983,7 @@ sub process_watchline ($$$$$$)
 				  . "  $line\n";
 				return 1;
 			    }
-			    uscan_debug "$mangled_version by uversionmangle rule: $pat\n";
+			    uscan_debug "$mangled_version by uversionmangle rule.\n";
 			}
 		    }
 		    $match = '';
@@ -3059,7 +3069,7 @@ sub process_watchline ($$$$$$)
 			  . "  $line\n";
 			return 1;
 		    }
-		    uscan_debug "$mangled_version by uversionmangle rule: $pat\n";
+		    uscan_debug "$mangled_version by uversionmangle rule.\n";
 		}
 		$match = '';	
 		if (defined $download_version) {
@@ -3090,7 +3100,7 @@ sub process_watchline ($$$$$$)
 			      . "  $line\n";
 			    return 1;
 			}
-			uscan_debug "$mangled_version by uversionmangle rule: $pat\n";
+			uscan_debug "$mangled_version by uversionmangle rule.\n";
 		    }
 		    $match = '';	
 		    if (defined $download_version) {
@@ -3229,7 +3239,7 @@ EOF
 		      . "  $line\n";
 		    return 1;
 		}
-		uscan_debug "$upstream_url by downloadurlmangle rule: $pat\n";
+		uscan_debug "$upstream_url by downloadurlmangle rule.\n";
 	    }
 	}
     } else {
@@ -3258,7 +3268,7 @@ EOF
 		. "  $line\n";
 	    return 1;
 	    }
-	    uscan_debug "$newfile_base by filenamemangle rule: $pat\n";
+	    uscan_debug "$newfile_base by filenamemangle rule.\n";
 	}
 	unless ($newversion) {
 	    # uversionmanglesd version is '', make best effort to set it
@@ -3358,34 +3368,36 @@ EOF
 	my ($url, $fname, $mode) = @_;
 	if ($mode eq 'git') {
 	    my $curdir = getcwd();
-	    $fname =~ m/\.\.\/(.*)-([^_-]*)\.tar\.(gz|xz|bz2|lzma)/;
-	    my $pkg = $1;
-	    my $ver = $2;
-	    my $suffix = $3;
+	    $fname =~ m%(.*)/([^/]*)-([^_/-]*)\.tar\.(gz|xz|bz2|lzma)%;
+	    my $dst = $1;
+	    my $pkg = $2;
+	    my $ver = $3;
+	    my $suffix = $4;
 	    my ($gitrepo, $gitref) = split /[[:space:]]+/, $url, 2;
 	    my $gitrepodir = "$pkg.$$.git";
-	    uscan_verbose "Execute: git clone --bare $gitrepo ../$gitrepodir\n";
-	    system('git', 'clone', '--bare', $gitrepo, "../$gitrepodir") == 0 or die("git clone failed\n");
-	    chdir "../$gitrepodir" or die("Unable to chdir(\"../$gitrepodir\"): $!\n");
-	    uscan_verbose "Execute: git archive --format=tar --prefix=$pkg-$ver/ --output=../$pkg-$ver.tar $gitref\n";
-	    system('git', 'archive', '--format=tar', "--prefix=$pkg-$ver/", "--output=../$pkg-$ver.tar", $gitref);
-	    chdir $curdir or die("Unable to chdir($curdir): $!\n");
+	    uscan_verbose "Execute: git clone --bare $gitrepo $dst/$gitrepodir\n";
+	    system('git', 'clone', '--bare', $gitrepo, "$dst/$gitrepodir") == 0 or uscan_die("git clone failed\n");
+	    chdir "$dst/$gitrepodir" or uscan_die("Unable to chdir(\"$dst/$gitrepodir\"): $!\n");
+	    uscan_verbose "Execute: git archive --format=tar --prefix=$pkg-$ver/ --output=$curdir/$dst/$pkg-$ver.tar $gitref\n";
+	    system('git', 'archive', '--format=tar', "--prefix=$pkg-$ver/", "--output=$curdir/$dst/$pkg-$ver.tar", $gitref) == 0 or uscan_die("git archive failed\n");;
+	    chdir "$curdir/$dst" or uscan_die("Unable to chdir($curdir/$dst): $!\n");
 	    if ($suffix eq 'gz') {
-		uscan_verbose "Execute: gzip -n -9 ../$pkg-$ver.tar\n";
-		system("gzip", "-n", "-9", "../$pkg-$ver.tar") == 0 or die("gzip failed\n");
+		uscan_verbose "Execute: gzip -n -9 $pkg-$ver.tar\n";
+		system("gzip", "-n", "-9", "$pkg-$ver.tar") == 0 or uscan_die("gzip failed\n");
 	    } elsif ($suffix eq 'xz') {
-		uscan_verbose "Execute: xz ../$pkg-$ver.tar\n";
-		system("xz", "../$pkg-$ver.tar") == 0 or die("xz failed\n");
+		uscan_verbose "Execute: xz $pkg-$ver.tar\n";
+		system("xz", "$pkg-$ver.tar") == 0 or uscan_die("xz failed\n");
 	    } elsif ($suffix eq 'bz2') {
-		uscan_verbose "Execute: bzip2 ../$pkg-$ver.tar\n";
-		system("bzip2", "../$pkg-$ver.tar") == 0 or die("bzip2 failed\n");
+		uscan_verbose "Execute: bzip2 $pkg-$ver.tar\n";
+		system("bzip2", "$pkg-$ver.tar") == 0 or uscan_die("bzip2 failed\n");
 	    } elsif ($suffix eq 'lzma') {
-		uscan_verbose "Execute: lzma ../$pkg-$ver.tar\n";
-		system("lzma", "../$pkg-$ver.tar") == 0 or die("lzma failed\n");
+		uscan_verbose "Execute: lzma $pkg-$ver.tar\n";
+		system("lzma", "$pkg-$ver.tar") == 0 or uscan_die("lzma failed\n");
 	    } else {
 		uscan_warn "Unknown suffix file to repack: $suffix\n";
 		exit 1;
 	    }
+	    chdir "$curdir" or uscan_die("Unable to chdir($curdir): $!\n");
 	} elsif ($url =~ m%^http(s)?://%) {
 	    if (defined($1) and !$haveSSL) {
 		uscan_die "$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
@@ -3469,7 +3481,7 @@ EOF
 	    $suffix =~ s/.*?(\.gz|\.xz|\.bz2|\.lzma)?$/$1/;
 	    if ($suffix eq '.gz') {
 		if ( -x '/bin/gunzip') {
-		    system('/bin/gunzip', "--keep", "$destdir/$sigfile_base");
+		    system('/bin/gunzip', "--keep", "$destdir/$sigfile_base") == 0 or uscan_die("gunzip $destdir/$sigfile_base failed\n");
 		    $sigfile_base =~ s/(.*?)\.gz/$1/;
 		} else {
 		    uscan_warn("Please install gzip.\n");
@@ -3477,7 +3489,7 @@ EOF
 		}
 	    } elsif ($suffix eq '.xz') {
 		if ( -x '/usr/bin/unxz') {
-		    system('/usr/bin/unxz', "--keep", "$destdir/$sigfile_base");
+		    system('/usr/bin/unxz', "--keep", "$destdir/$sigfile_base") == 0 or uscan_die("unxz $destdir/$sigfile_base failed\n");
 		    $sigfile_base =~ s/(.*?)\.xz/$1/;
 		} else {
 		    uscan_warn("Please install xz-utils.\n");
@@ -3485,7 +3497,7 @@ EOF
 		}
 	    } elsif ($suffix eq '.bz2') {
 		if ( -x '/bin/bunzip2') {
-		    system('/bin/bunzip2', "--keep", "$destdir/$sigfile_base");
+		    system('/bin/bunzip2', "--keep", "$destdir/$sigfile_base") == 0 or uscan_die("bunzip2 $destdir/$sigfile_base failed\n");
 		    $sigfile_base =~ s/(.*?)\.bz2/$1/;
 		} else {
 		    uscan_warn("Please install bzip2.\n");
@@ -3493,7 +3505,7 @@ EOF
 		}
 	    } elsif ($suffix eq '.lzma') {
 		if ( -x '/usr/bin/unlzma') {
-		    system('/usr/bin/unlzma', "--keep", "$destdir/$sigfile_base");
+		    system('/usr/bin/unlzma', "--keep", "$destdir/$sigfile_base") == 0 or uscan_die("unlzma $destdir/$sigfile_base failed\n");
 		    $sigfile_base =~ s/(.*?)\.lzma/$1/;
 		} else {
 		    uscan_warn "Please install xz-utils or lzma.\n";
@@ -3540,7 +3552,7 @@ EOF
 		    . "  $line\n";
 		return 1;
 	    }
-	    uscan_debug "$pgpsig_url by pgpsigurlmangle rule: $pat\n";
+	    uscan_debug "$pgpsig_url by pgpsigurlmangle rule.\n";
 	}
 	$sigfile = "$sigfile_base.pgp";
 	if ($signature == 1) {
@@ -3648,7 +3660,7 @@ EOF
 	      . "  $line\n";
 	    return 1;
 	}
-	uscan_debug "$mangled_newversion by oversionmangle rule: $pat\n";
+	uscan_debug "$mangled_newversion by oversionmangle rule.\n";
     }
 
     if (! defined $common_mangled_newversion) {
@@ -3705,6 +3717,7 @@ EOF
 	$common_mangled_newversion = $1 if $target =~ m/[^_]+_(.+)\.orig\.tar\.(?:gz|bz2|lzma|xz)$/;
 	uscan_verbose "New orig.tar.* tarball version (after mk-origtargz): $common_mangled_newversion\n";
     }
+    push @origtars, $target;
 
     if ($opt_log) {
 	# Check pkg-ver.tar.gz and pkg_ver.orig.tar.gz
@@ -3726,8 +3739,8 @@ EOF
 	if ($symlink ne "rename") {
 	    my $umd5sum = Digest::MD5->new;
 	    my $omd5sum = Digest::MD5->new;
-	    open (my $ufh, '<', "${destdir}/${newfile_base}") or die "Can't open '${destdir}/${newfile_base}': $!";
-	    open (my $ofh, '<', "${destdir}/${target}") or die "Can't open '${destdir}/${target}': $!";
+	    open (my $ufh, '<', "${destdir}/${newfile_base}") or uscan_die "Can't open '${destdir}/${newfile_base}': $!";
+	    open (my $ofh, '<', "${destdir}/${target}") or uscan_die "Can't open '${destdir}/${target}': $!";
 	    $umd5sum->addfile($ufh);
 	    $omd5sum->addfile($ofh);
 	    close($ufh);
@@ -3765,6 +3778,11 @@ EOF
 	        }
 	    }
 	    push @cmd, "--upstream-version", $common_mangled_newversion;
+	    if (abs_path($destdir) ne abs_path("..")) {
+		foreach my $origtar (@origtars) {
+		    copy(catfile($destdir, $origtar), catfile("..", $origtar));
+		}
+	    }
 	} elsif ($watch_version > 1) {
 	    # Any symlink requests are already handled by uscan
 	    if ($cmd[0] eq "uupdate") {
@@ -3781,8 +3799,9 @@ EOF
 	    push @cmd, $path, $common_mangled_newversion;
 	}
 	my $actioncmd = join(" ", @cmd);
-	dehs_verbose "Executing user specified script:\n   $actioncmd\n" .
-		`$actioncmd 2>&1`;
+	my $actioncmdmsg = `$actioncmd 2>&1`;
+	$? == 0 or uscan_die "$progname: Failed to Execute user specified script:\n   $actioncmd\n" . $actioncmdmsg;
+	dehs_verbose "Executing user specified script:\n   $actioncmd\n" . $actioncmdmsg;
     }
 
     return 0;
@@ -3879,7 +3898,7 @@ sub newest_dir ($$$$$) {
 			. " found.\n";
 			return 1;
 		    }
-		    uscan_debug "$mangled_version by dirversionnmangle rule: $pat\n";
+		    uscan_debug "$mangled_version by dirversionnmangle rule.\n";
 		}
 		$match = '';
 		if (defined $download_version and $mangled_version eq $download_version) {
@@ -3965,7 +3984,7 @@ sub newest_dir ($$$$$) {
 			. " found.\n";
 			return 1;
 		    }
-		    uscan_debug "$mangled_version by dirversionnmangle rule: $pat\n";
+		    uscan_debug "$mangled_version by dirversionnmangle rule.\n";
 		}
 		$match = '';
 		if (defined $download_version and $mangled_version eq $download_version) {
@@ -4002,7 +4021,7 @@ sub newest_dir ($$$$$) {
 			    . " found.\n";
 			    return 1;
 			}
-			uscan_debug "$mangled_version by dirversionnmangle rule: $pat\n";
+			uscan_debug "$mangled_version by dirversionnmangle rule.\n";
 		    }
 		    $match = '';
 		    if (defined $download_version and $mangled_version eq $download_version) {
@@ -4055,6 +4074,7 @@ sub process_watchfile ($$$$)
     my $status=0;
     my $nextline;
     %dehs_tags = ();
+    @origtars = ();
 
     uscan_verbose "Process $dir/$watchfile (package=$package version=$version)\n";
 
@@ -4330,6 +4350,7 @@ sub quoted_regex_parse($) {
 	    if ($open == 1) {
 		if ($in_replacement) {
 		    # Separator after end of replacement
+		    uscan_warn "Extra \"$sep\" after end of replacement.\n";
 		    $parsed_ok = 0;
 		    last;
 		} else {
@@ -4346,13 +4367,14 @@ sub quoted_regex_parse($) {
 	    }
 	} elsif ($char eq $closer and ! $last_was_escape) {
 	    $open--;
-	    if ($open) {
+	    if ($open > 0) {
 		if ($in_replacement) {
 		    $replacement .= $char;
 		} else {
 		    $regexp .= $char;
 		}
 	    } elsif ($open < 0) {
+		uscan_warn "Extra \"$closer\" after end of replacement.\n";
 		$parsed_ok = 0;
 		last;
 	    }
@@ -4364,20 +4386,31 @@ sub quoted_regex_parse($) {
 		    $flags .= $char;
 		}
 	    } else {
-		$regexp .= $char;
+		if ($open) {
+		    $regexp .= $char;
+		} elsif ($char !~ m/\s/ ){
+		    uscan_warn "Non-whitespace between <...> and <...> (or similars).\n";
+		    $parsed_ok = 0;
+		    last;
+		}
+		# skip if blanks between <...> and <...> (or similars)
 	    }
 	}
 	# Don't treat \\ as an escape
 	$last_was_escape = ($char eq '\\' and ! $last_was_escape);
     }
 
-    $parsed_ok = 0 unless $in_replacement and $open == 0;
+    unless ($in_replacement and $open == 0) {
+	uscan_warn "Empty replacement string.\n";
+	$parsed_ok = 0;
+    }
 
     return ($parsed_ok, $regexp, $replacement, $flags);
 }
 
 sub safe_replace($$) {
     my ($in, $pat) = @_;
+    eval "uscan_debug \"safe_replace input=\\\"\$\$in\\\"\\n\"";
     $pat =~ s/^\s*(.*?)\s*$/$1/;
 
     $pat =~ /^(s|tr|y)(.)/;
@@ -4388,17 +4421,29 @@ sub safe_replace($$) {
     if ($sep eq '{' or $sep eq '(' or $sep eq '[' or $sep eq '<') {
 	($parsed_ok, $regexp, $replacement, $flags) = quoted_regex_parse($pat);
 
-	return 0 unless $parsed_ok;
+	unless ($parsed_ok) {
+	    uscan_warn "stop mangling: rule=\"$pat\"\n" .
+		       "  mangling rule with <...>, (...), {...} failed.\n";
+	    return 0;
+	}
     } elsif ($pat !~ /^(?:s|tr|y)$esc((?:\\.|[^\\$esc])*)$esc((?:\\.|[^\\$esc])*)$esc([a-z]*)$/) {
+	$sep = "/" if $sep eq '';
+	uscan_warn "stop mangling: rule=\"$pat\"\n" .
+		   "   rule doesn't match \"(s|tr|y)$sep.*$sep.*$sep\[a-z\]*\" (or similar).\n";
 	return 0;
     } else {
 	($regexp, $replacement, $flags) = ($1, $2, $3);
     }
 
+    uscan_debug "safe_replace with regexp=\"$regexp\", replacement=\"$replacement\", and flags=\"$flags\"\n";
     my $safeflags = $flags;
     if ($op eq 'tr' or $op eq 'y') {
 	$safeflags =~ tr/cds//cd;
-	return 0 if $safeflags ne $flags;
+	if ($safeflags ne $flags) {
+	    uscan_warn "stop mangling: rule=\"$pat\"\n" .
+		       "   flags must consist of \"cds\" only.\n";
+	    return 0;
+	}
 
 	$regexp =~ s/\\(.)/$1/g;
 	$replacement =~ s/\\(.)/$1/g;
@@ -4409,13 +4454,19 @@ sub safe_replace($$) {
 	eval "\$\$in =~ tr<$regexp><$replacement>$flags;";
 
 	if ($@) {
+	    uscan_warn "stop mangling: rule=\"$pat\"\n" .
+		       "   mangling \"tr\" or \"y\" rule execution failed.\n";
 	    return 0;
 	} else {
 	    return 1;
 	}
     } else {
 	$safeflags =~ tr/gix//cd;
-	return 0 if $safeflags ne $flags;
+	if ($safeflags ne $flags) {
+	    uscan_warn "stop mangling: rule=\"$pat\"\n" .
+		       "   flags must consist of \"gix\" only.\n";
+	    return 0;
+	}
 
 	my $global = ($flags =~ s/g//);
 	$flags = "(?$flags)" if length $flags;
@@ -4424,7 +4475,11 @@ sub safe_replace($$) {
 	if ($regexp =~ /(?<!\\)(\\\\)*\\G/) {
 	    $slashg = 1;
 	    # if it's not initial, it is too dangerous
-	    return 0 if $regexp =~ /^.*[^\\](\\\\)*\\G/;
+	    if ($regexp =~ /^.*[^\\](\\\\)*\\G/) {
+		uscan_warn "stop mangling: rule=\"$pat\"\n" .
+			   "   dangerous use of \\G with regexp=\"$regexp\".\n";
+		return 0;
+	    }
 	}
 
 	# Behave like Perl and treat e.g. "\." in replacement as "."
@@ -4483,7 +4538,11 @@ sub safe_replace($$) {
 		    }
 		}
 	    };
-	    return 0 if $@;
+	    if ($@) {
+		uscan_warn "stop mangling: rule=\"$pat\"\n" .
+			   "   mangling \"s\" rule execution failed.\n";
+		return 0;
+	    }
 
 	    # No match; leave the original string  untouched but return
 	    # success as there was nothing wrong with the pattern

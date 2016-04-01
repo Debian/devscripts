@@ -47,7 +47,9 @@ my %config_vars = ();
 
 my %opt = (architecture => []);
 my $package = '';
-my $pkgversion = '';
+my $pkgversion;
+my $firstversion;
+my $lastversion;
 my $warnings = 0;
 
 sub fatal($);
@@ -82,6 +84,7 @@ The following options are supported:
                                         Default is ./source-<package name>
     -f, --force                         Force overwriting an existing
                                         destdir
+    --list                              Don't download but just list versions
     --binary                            Download binary packages instead of
                                         source packages
     -a <architecture>,
@@ -187,13 +190,34 @@ sub verbose($)
     print "$msg" if $opt{verbose};
 }
 
+sub keep_version($)
+{
+    my $version = shift;
+    if (defined $pkgversion) {
+	return version_compare_relation($pkgversion, REL_EQ, $version);
+    }
+    if (defined $firstversion) {
+	if ($firstversion > $version) {
+	    verbose "skip version $version: older than first";
+	    return 0;
+	}
+    }
+    if (defined $lastversion) {
+	if ($lastversion < $version) {
+	    verbose "skip version $version: newer than last";
+	    return 0;
+	}
+    }
+    return 1;
+}
+
 ###
 # Main program
 ###
 read_conf(@ARGV);
 Getopt::Long::Configure('gnu_compat');
 Getopt::Long::Configure('no_ignore_case');
-GetOptions(\%opt, 'verbose|v', 'destdir|d=s', 'force|f', 'help|h', 'version', 'binary', 'architecture|a=s@') || usage(1);
+GetOptions(\%opt, 'verbose|v', 'destdir|d=s', 'force|f', 'help|h', 'version', 'first=s', 'last=s', 'list', 'binary', 'architecture|a=s@') || usage(1);
 
 usage(0) if $opt{help};
 usage(1) unless @ARGV;
@@ -201,7 +225,17 @@ $package = shift;
 if (@ARGV) {
     my $version = shift;
     $pkgversion = Dpkg::Version->new($version, check => 1);
-    fatal "Invalid version '$version'" unless $pkgversion;
+    fatal "Invalid version '$version'" unless $pkgversion->is_valid;
+}
+
+if (defined $opt{first}) {
+    $firstversion = Dpkg::Version->new($opt{first}, check => 1);
+    fatal "Invalid version '$opt{first}'" unless $firstversion->is_valid();
+}
+
+if (defined $opt{last}) {
+    $lastversion = Dpkg::Version->new($opt{last}, check => 1);
+    fatal "Invalid version '$opt{last}'" unless $lastversion->is_valid();
 }
 
 $package eq '' && usage(1);
@@ -222,7 +256,15 @@ if (-d $opt{destdir}) {
 	fatal "Destination dir $opt{destdir} already exists.\nPlease (re)move it first, or use --force to overwrite.";
     }
 }
-make_path($opt{destdir});
+
+my $mkdir_done = 0;
+my $mkDestDir = sub {
+    unless ($mkdir_done)
+    {
+	make_path($opt{destdir});
+	$mkdir_done = 1;
+    }
+};
 
 my $json_text = fetch_json_page($baseurl);
 unless ($json_text && @{$json_text->{result}}) {
@@ -230,15 +272,23 @@ unless ($json_text && @{$json_text->{result}}) {
 }
 
 my @versions = @{$json_text->{result}};
-if ($pkgversion) {
-    @versions = $opt{binary} ? grep { !($_->{binary_version} <=> $pkgversion) } @versions
-                             : grep { !($_->{version} <=> $pkgversion) } @versions;
-    unless (@versions) {
-	warn "$progname: No matching versions found for $package\n";
-	$warnings++;
-    }
+@versions = $opt{binary} ? grep { keep_version($_->{binary_version}) } @versions
+			 : grep { keep_version($_->{version}) } @versions;
+unless (@versions) {
+    warn "$progname: No matching versions found for $package\n";
+    $warnings++;
 }
-if ($opt{binary}) {
+if ($opt{list}) {
+    foreach my $version (@versions) {
+	if ($opt{binary}) {
+	    print "$version->{binary_version}\n";
+	}
+	else {
+	    print "$version->{version}\n";
+	}
+    } 
+}
+elsif ($opt{binary}) {
     foreach my $version (@versions) {
 	my $src_json = fetch_json_page("$opt{baseurl}/mr/package/$version->{source}/$version->{version}/binfiles/$version->{name}/$version->{binary_version}?fileinfo=1");
 
@@ -266,6 +316,7 @@ if ($opt{binary}) {
 	    my $file_name = basename($fileinfo->{name});
 	    if (!have_file("$opt{destdir}/$file_name", $hash)) {
 		verbose "Getting file $file_name: $file_url";
+		$mkDestDir->();
 		LWP::Simple::getstore($file_url, "$opt{destdir}/$file_name");
 	    }
 	}
@@ -299,6 +350,7 @@ else {
 	    $file_name = basename($file_name);
 	    if (!have_file("$opt{destdir}/$file_name", $hash)) {
 		verbose "Getting file $file_name: $file_url";
+		$mkDestDir->();
 		LWP::Simple::getstore($file_url, "$opt{destdir}/$file_name");
 	    }
 	}

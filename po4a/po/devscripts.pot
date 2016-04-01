@@ -6790,7 +6790,7 @@ msgid ""
 "lost between revisions of the package.  It also checks the file owners and "
 "permissions, and compares the control files of the two packages using the "
 "B<wdiff> program.  If you want a deeper comparison of two Debian package "
-"files you can use the B<debbindiff> tool."
+"files you can use the B<diffoscope> tool."
 msgstr ""
 
 #. type: Plain text
@@ -7254,7 +7254,7 @@ msgstr ""
 #: ../scripts/debdiff.1:224
 msgid ""
 "B<diffstat>(1), B<dpkg-deb>(1), B<interdiff>(1), B<wdiff>(1), "
-"B<devscripts.conf>(5), B<debbindiff>(1)"
+"B<devscripts.conf>(5), B<diffoscope>(1)"
 msgstr ""
 
 #. type: Plain text
@@ -9687,7 +9687,7 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/devscripts.1:43
-msgid "check whether a /bin/sh script contains any common bash-specific contructs"
+msgid "check whether a /bin/sh script contains any common bash-specific constructs"
 msgstr ""
 
 #. type: IP
@@ -9849,7 +9849,7 @@ msgstr ""
 #: ../scripts/devscripts.1:69
 msgid ""
 "compare two versions of a Debian package to check for added and removed "
-"files. Use the debbindiff package for deep comparisons. [wdiff, patchutils]"
+"files. Use the diffoscope package for deep comparisons. [wdiff, patchutils]"
 msgstr ""
 
 #. type: IP
