@@ -1,11 +1,16 @@
 devscripts (2.16.3) UNRELEASED; urgency=medium
 
+  [ James McCoy ]
   * uscan:
     + Fix regression in processing FTP listings when file pattern is the tail
       of another filename.  (Closes: #818727)
     + Handle trailing spaces on the watch line when determining whether the
       line specifies the version to check.  (Closes: #818865)
     + xip → xpi in the manpage.  (Closes: #819106)
+
+  [ Paul Wise ]
+  * Update chdist bash-completion file with the architectures currently
+    (as of 2016-04-02) listed on buildd.debian.org
 
  -- James McCoy <jamessan@debian.org>  Sun, 20 Mar 2016 12:26:04 -0400
 
