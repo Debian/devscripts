@@ -76,13 +76,13 @@ output, which might be a binary package name.
 .TP
 .BR \-z ", " \-\-uncompress
 Try to uncompress the \-\-dctrl input before parsing.  Supported compression
-formats are gz and bzip2.
+formats are gz, bzip2 or xz.
 .TP
 \fB\-s\fR, \fB\-\-sources\fR \fISources_file\fR
 Read package information from the specified \fISources_file\fRs.  This can be
-given multiple times.  The files can be gz or bzip2 compressed.  If the
-filename does not end in \fI.gz\fR or \fI.bz2\fR, then the \fB-z\fR option
-must be used.
+given multiple times.  The files can be gz, bzip2 or xz compressed.  If the
+filename does not end in \fI.gz\fR, \fI.bz2\fR or \fI.xz\fR, then the \fB-z\fR
+option must be used.
 .IP
 If no \fISources_file\fRs are specified, any files matching
 \fI/var/lib/apt/lists/*_source_Sources\fR will be used.
