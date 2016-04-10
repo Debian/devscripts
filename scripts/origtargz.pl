@@ -33,11 +33,12 @@ origtargz - fetch the orig tarball of a Debian package from various sources, and
 
 =head1 DESCRIPTION
 
-B<origtargz> downloads the orig tarball of a Debian package, and optionally
-unpacks it into the current directory. The version number to be used is
-determined from F<debian/changelog>. The main use for B<origtargz> is with
-debian-dir-only repository checkouts. It should be invoked from the top level
-directory of an unpacked Debian source package.
+B<origtargz> downloads the orig tarball of a Debian package, and also unpacks
+it into the current directory, if it just contains a F<debian> directory. The
+main use for B<origtargz> is with debian-dir-only repository checkouts, but it
+is useful as a general tarball download wrapper. The version number for the
+tarball to be downloaded is determined from F<debian/changelog>. It should be
+invoked from the top level directory of an unpacked Debian source package.
 
 Various download locations are tried:
 
@@ -74,8 +75,8 @@ for the patch system in use (e.g. source format "3.0 (quilt)"), and will even
 remove all patches from the package when no patch system is in use (the
 original "1.0" source format).
 
-The default behavior is to unpack the orig tarball on the first invocation of
-B<origtargz> in a debian-dir-only checkout.
+The default behavior is to unpack the orig tarball if the current directory
+is empty except for a F<debian> directory and the VCS files mentioned above.
 
 =head1 NOTES
 
