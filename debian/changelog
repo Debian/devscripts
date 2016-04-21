@@ -1,3 +1,10 @@
+devscripts (2.16.4) UNRELEASED; urgency=medium
+
+  * mk-build-deps:
+    + Only remove the deb after install if --remove was specified.
+
+ -- James McCoy <jamessan@debian.org>  Thu, 21 Apr 2016 19:53:58 -0400
+
 devscripts (2.16.3) unstable; urgency=medium
 
   [ James McCoy ]

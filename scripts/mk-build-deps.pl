@@ -402,7 +402,7 @@ if ($opt_install) {
 		warn "$progname: Unable to install $pkg";
 		$err = 1;
 	    }
-	    else {
+	    elsif ($opt_remove) {
 		unlink $deb_files[$i];
 	    }
 	}
@@ -415,12 +415,6 @@ if ($opt_install) {
 	# resolve a proper way to get the build-dep packages installed
 	system @root, 'dpkg', '--remove', @pkg_names;
 	die("$progname: Unable to install all build-dep packages\n");
-
-	if ($opt_remove) {
-	    foreach my $file (@deb_files) {
-		unlink $file;
-	    }
-	}
     }
 }
 
