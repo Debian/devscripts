@@ -1,4 +1,4 @@
-devscripts (2.16.4) UNRELEASED; urgency=medium
+devscripts (2.16.4) unstable; urgency=medium
 
   * mk-build-deps:
     + Only remove the deb after install if --remove was specified.
@@ -6,7 +6,7 @@ devscripts (2.16.4) UNRELEASED; urgency=medium
     + Return early from process_watchline if no download or sig verification
       is taking place.  (Closes: #822233)
 
- -- James McCoy <jamessan@debian.org>  Thu, 21 Apr 2016 19:53:58 -0400
+ -- James McCoy <jamessan@debian.org>  Sat, 23 Apr 2016 21:33:42 -0400
 
 devscripts (2.16.3) unstable; urgency=medium
 
