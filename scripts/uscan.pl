@@ -3364,6 +3364,13 @@ EOF
 	uscan_die "strange ... <version> stanza = same/previous should have defined \$download_version\n";
     }
 
+    # If we're not downloading or performing signature verification, we can
+    # stop here
+    if (!$download || $signature == -1)
+    {
+	return 0;
+    }
+
     ############################# BEGIN SUB DOWNLOAD ##################################
     my $downloader = sub {
 	my ($url, $fname, $mode) = @_;
