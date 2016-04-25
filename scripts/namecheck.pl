@@ -21,12 +21,6 @@ If those patterns aren't sufficient then you may create your own additions and
 add them to the script.  If you wish to have your own version of the patterns
 you may save them into the file ~/.namecheckrc
 
-=head1 HOMEPAGE
-
-The most recent version of this script may be found here:
-
-http://mybin.repository.steve.org.uk/?raw-file/tip/namecheck
-
 =head1 AUTHOR
 
 Steve
