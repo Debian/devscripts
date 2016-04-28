@@ -237,7 +237,7 @@ my $default_check_regex =
 # also used to cleanup
 my $copyright_indicator_regex
     = qr!
-         (?:copyright	# The full word
+         (?:copyright(?:-holders?)?	# The full word (or slightly more)
             |copr\.	# Legally-valid abbreviation
             |\xc2\xa9	# Unicode copyright sign encoded in iso8859
 	    |\x{00a9}	# Unicode character COPYRIGHT SIGN
