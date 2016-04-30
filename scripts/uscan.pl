@@ -1395,11 +1395,11 @@ Instead of symlinking as described above, rename the downloaded files.
 
 =item B<--repack>
 
-After having downloaded an lzma tar, xz tar, bzip tar, gz tar, zip, jar, xip
+After having downloaded an lzma tar, xz tar, bzip tar, gz tar, zip, jar, xpi
 archive, repack it to the specified compression (see B<--compression>).
 
 The unzip package must be installed in order to repack zip and jar archives,
-the mozilla-devscripts package must be installed to repack xip archives, and
+the mozilla-devscripts package must be installed to repack xpi archives, and
 the xz-utils package must be installed to repack lzma or xz tar archives.
 
 =item B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]
@@ -2564,7 +2564,7 @@ sub process_watchline ($$$$$$)
 	}
 
 	# 4 parameter watch line
-	($base, $filepattern, $lastversion, $action) = split ' ', $line, 4;
+	($base, $filepattern, $lastversion, $action) = split /\s+/, $line, 4;
 
 	# 3 parameter watch line (override)
 	if ($base =~ s%/([^/]*\([^/]*\)[^/]*)$%/%) {
@@ -2572,8 +2572,9 @@ sub process_watchline ($$$$$$)
 	    # separate filepattern field; we remove the filepattern from the
 	    # end of $base and rescan the rest of the line
 	    $filepattern = $1;
-	    (undef, $lastversion, $action) = split ' ', $line, 3;
+	    (undef, $lastversion, $action) = split /\s+/, $line, 3;
 	}
+	$lastversion //= '';
 
 	# compression is persistent
 	if ($options{'mode'} eq 'LWP') {
@@ -2586,7 +2587,7 @@ sub process_watchline ($$$$$$)
 
 	# Set $lastversion to the numeric last version
 	# Update $options{'versionmode'} (its default "newer")
-	if (! defined $lastversion or $lastversion eq 'debian') {
+	if (!length($lastversion) or $lastversion eq 'debian') {
 	    if (! defined $pkg_version) {
 		uscan_warn "Unable to determine the current version\n  in $watchfile, skipping:\n  $line\n";
 		return 1;
@@ -3088,7 +3089,7 @@ sub process_watchline ($$$$$$)
 		$ln =~ s/^d.*$//; # FTP listing of directory, '' skiped by if ($ln...
 		$ln =~ s/\s+->\s+\S+$//; # FTP listing for link destination
 		$ln =~ s/^.*\s(\S+)$/$1/; # filename only
-		if ($ln and $ln =~ m/($filepattern)$/) {
+		if ($ln and $ln =~ m/^($filepattern)$/) {
 		    my $file = $1;
 		    my $mangled_version = join(".", $file =~ m/^$filepattern$/);
 		    foreach my $pat (@{$options{'uversionmangle'}}) {
@@ -3361,6 +3362,13 @@ EOF
 	$found++;
     } else { # same/previous -- secondary-tarball or signature-file
 	uscan_die "strange ... <version> stanza = same/previous should have defined \$download_version\n";
+    }
+
+    # If we're not downloading or performing signature verification, we can
+    # stop here
+    if (!$download || $signature == -1)
+    {
+	return 0;
     }
 
     ############################# BEGIN SUB DOWNLOAD ##################################
@@ -4009,7 +4017,7 @@ sub newest_dir ($$$$$) {
 		$ln =~ s/^-.*$//; # FTP listing of file, '' skiped by if ($ln...
 		$ln =~ s/\s+->\s+\S+$//; # FTP listing for link destination
 		$ln =~ s/^.*\s(\S+)$/$1/; # filename only
-		if ($ln =~ m/($pattern)(\s+->\s+\S+)?$/) {
+		if ($ln =~ m/^($pattern)(\s+->\s+\S+)?$/) {
 		    my $dir = $1;
 		    uscan_verbose "Matching target for dirversionmangle:   $dir\n";
 		    my $mangled_version = join(".", $dir =~ m/^$pattern$/);

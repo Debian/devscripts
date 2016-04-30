@@ -67,12 +67,12 @@ Usage: dd-list [options] [package ...]
 
     -z, --uncompress
         Try to uncompress the --dctrl input before parsing.  Supported
-        compression formats are gz and bzip2.
+        compression formats are gz, bzip2 and xz.
 
     -s, --sources SOURCES_FILE
         Read package information from given SOURCES_FILE instead of all files
         matching /var/lib/apt/lists/*_source_Sources.  Can be specified
-        multiple times.  The files can be gz or bzip2 compressed.
+        multiple times.  The files can be gz, bzip2 or xz compressed.
 
     -u, --uploaders
         Also list Uploaders of packages, not only the listed Maintainers
@@ -291,7 +291,7 @@ else {
 	}
 	else
 	{
-	    if ($opt_uncompress || ($uncompress && $source =~ m/\.(?:gz|bz2)$/)) {
+	    if ($opt_uncompress || ($uncompress && $source =~ m/\.(?:gz|bz2|xz)$/)) {
 		$fh = IO::Uncompress::AnyUncompress->new($source);
 	    }
 	    else {

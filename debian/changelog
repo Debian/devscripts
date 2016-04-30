@@ -1,3 +1,34 @@
+devscripts (2.16.4) unstable; urgency=medium
+
+  * mk-build-deps:
+    + Only remove the deb after install if --remove was specified.
+  * uscan:
+    + Return early from process_watchline if no download or sig verification
+      is taking place.  (Closes: #822233)
+
+ -- James McCoy <jamessan@debian.org>  Sat, 23 Apr 2016 21:33:42 -0400
+
+devscripts (2.16.3) unstable; urgency=medium
+
+  [ James McCoy ]
+  * uscan:
+    + Fix regression in processing FTP listings when file pattern is the tail
+      of another filename.  (Closes: #818727)
+    + Handle trailing spaces on the watch line when determining whether the
+      line specifies the version to check.  (Closes: #818865)
+    + xip → xpi in the manpage.  (Closes: #819106)
+
+  [ Paul Wise ]
+  * Update chdist bash-completion file with the architectures currently
+    (as of 2016-04-02) listed on buildd.debian.org
+  * Support xz compressed files in dd-list
+
+  [ Christoph Berg ]
+  * origtargz: Clarify manpage about when the tarball is unpacked.
+    (Closes: #820494)
+
+ -- James McCoy <jamessan@debian.org>  Wed, 20 Apr 2016 21:18:30 -0400
+
 devscripts (2.16.2~bpo8+1) jessie-backports; urgency=medium
 
   * Rebuild for jessie-backports.
