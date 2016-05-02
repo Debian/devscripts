@@ -1,3 +1,11 @@
+devscripts (2.16.5) UNRELEASED; urgency=medium
+
+  * uscan:
+    + Import catfile from File::Spec::Functions to fix use of unqualified
+      name.  Thanks to Craig Small for the patch.  (Closes: #823218)
+
+ -- James McCoy <jamessan@debian.org>  Mon, 02 May 2016 19:41:06 -0400
+
 devscripts (2.16.4) unstable; urgency=medium
 
   * mk-build-deps:

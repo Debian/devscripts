@@ -1691,7 +1691,7 @@ use Dpkg::Changelog::Parse qw(changelog_parse);
 use Dpkg::IPC;
 use File::Basename;
 use File::Copy qw/copy/;
-use File::Spec qw/catfile/;
+use File::Spec::Functions qw/catfile/;
 use File::Temp qw/tempfile tempdir/;
 use List::Util qw/first/;
 use filetest 'access';
