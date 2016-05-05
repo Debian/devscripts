@@ -10,6 +10,9 @@ devscripts (2.16.5) UNRELEASED; urgency=medium
     + Clarify --no-symlink meaning.  (Closes: #819111)
     + No output if upstream == debian and no errors.  (Closes: #822649)
     + Better @ANY_VERSION@ regex.  (Closes: #821224)
+  * uupdate:
+    + Use "dpkg-source --skip-patches ..." with -f to prevent patches to be
+      applied.  Thanks Herbert Parentes Fortes Neto.  (Closes: #823350)
 
  -- James McCoy <jamessan@debian.org>  Mon, 02 May 2016 19:41:06 -0400
 

@@ -1092,7 +1092,7 @@ else
     echo " 01234567890123456789012345678901 1 ${NEW_DEBIANFILE}" >> "$FAKEDSC"
     
     # unpack source tree
-    if ! dpkg-source --no-copy --no-check -x "$FAKEDSC"; then
+    if ! dpkg-source --skip-patches --no-copy --no-check -x "$FAKEDSC"; then
         echo "$PROGNAME: Error with \"dpkg-source --no-copy --no-check -x $FAKEDSC\"" >&2
         echo "$PROGNAME: Remember: Your current directory is changed back to the old source tree!"
         echo "$PROGNAME: Do a \"cd ..\" to see $FAKEDSC."
