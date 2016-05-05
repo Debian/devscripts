@@ -101,6 +101,8 @@ runCommandOutCmpFile() {
 	grep -v File::FcntlLock | \
 	grep -v '^  *dh_' | \
 	sed -e "s/\`/'/g" | \
+	sed -e "s/^dpkg-buildpackage: info: /dpkg-buildpackage: /g" | \
+	sed -e "s/^dpkg-genchanges: info: /dpkg-genchanges: /g" | \
 	sed -e's!^ -- Testophilus Testownik <tester@testity.org>.*! -- Testophilus Testownik <tester@testity.org>!' > ${stdoutF}
     retval=$?
 	eval "cmp ${stdoutF} ${exp_stdoutfile}" 3>&1 >/dev/null
