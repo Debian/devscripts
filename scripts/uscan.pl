@@ -3324,9 +3324,9 @@ EOF
 	uscan_msg "Newest version of $pkg on remote site is $newversion, specified download version is $download_version\n";
 	$found++;
     } elsif ($options{'versionmode'} eq 'newer') {
-	uscan_msg "Newest version of $pkg on remote site is $newversion, local version is $lastversion\n" .
-	    ($mangled_lastversion eq $lastversion ? "" : " (mangled local version is $mangled_lastversion)\n");
 	if ($compver eq 'newer') {
+	    uscan_msg "Newest version of $pkg on remote site is $newversion, local version is $lastversion\n" .
+		($mangled_lastversion eq $lastversion ? "" : " (mangled local version is $mangled_lastversion)\n");
 	    # There's a newer upstream version available, which may already
 	    # be on our system or may not be
 	    uscan_msg "   => Newer package available from\n" .
@@ -3334,6 +3334,8 @@ EOF
 	    $dehs_tags{'status'} = "newer package available";
 	    $found++;
 	} elsif ($compver eq 'same') {
+	    uscan_verbose "Newest version of $pkg on remote site is $newversion, local version is $lastversion\n" .
+		($mangled_lastversion eq $lastversion ? "" : " (mangled local version is $mangled_lastversion)\n");
 	    uscan_verbose "   => Package is up to date for from\n" .
 		      "      $upstream_url\n";
 	    $dehs_tags{'status'} = "up to date";
@@ -3346,6 +3348,8 @@ EOF
 		$download = 0;
 	    }
 	} else { # $compver eq 'old'
+	    uscan_verbose "Newest version of $pkg on remote site is $newversion, local version is $lastversion\n" .
+		($mangled_lastversion eq $lastversion ? "" : " (mangled local version is $mangled_lastversion)\n");
 	    uscan_verbose "   => Only older package available from\n" .
 		      "      $upstream_url\n";
 	    $dehs_tags{'status'} = "only older package available";

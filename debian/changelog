@@ -1,8 +1,13 @@
 devscripts (2.16.5) UNRELEASED; urgency=medium
 
+  [ James McCoy ]
   * uscan:
     + Import catfile from File::Spec::Functions to fix use of unqualified
       name.  Thanks to Craig Small for the patch.  (Closes: #823218)
+
+  [ Osamu Aoki ]
+  * uscan:
+    + No output if upstream == debian and no errors.  (Closes: #820798)
 
  -- James McCoy <jamessan@debian.org>  Mon, 02 May 2016 19:41:06 -0400
 
