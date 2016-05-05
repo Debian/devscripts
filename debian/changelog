@@ -8,6 +8,7 @@ devscripts (2.16.5) UNRELEASED; urgency=medium
   [ Osamu Aoki ]
   * uscan:
     + No output if upstream == debian and no errors.  (Closes: #820798)
+    + Better @ANY_VERSION@ regex.  (Closes: #821224)
 
  -- James McCoy <jamessan@debian.org>  Mon, 02 May 2016 19:41:06 -0400
 

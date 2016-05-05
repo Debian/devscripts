@@ -256,7 +256,7 @@ F<debian/changelog> file.
 
 This is substituted by the legal upstream version regex (capturing).
 
-  [-_](\d[\-+\.:\~\da-zA-Z]*)
+  [-_]?(\d[\-+\.:\~\da-zA-Z]*)
 
 =item B<@ARCHIVE_EXT@>
 
@@ -3273,7 +3273,7 @@ EOF
 	}
 	unless ($newversion) {
 	    # uversionmanglesd version is '', make best effort to set it
-	    $newfile_base =~ m/^.+[-_]([^-_]+)(?:\.tar\.(gz|bz2|xz)|\.zip)$/i;
+	    $newfile_base =~ m/^.+[-_]?(\d[\-+\.:\~\da-zA-Z]*)(?:\.tar\.(gz|bz2|xz)|\.zip)$/i;
 	    $newversion = $1;
 	    unless ($newversion) {
 		uscan_warn "Fix filenamemangle to produce a filename with the correct version\n";
@@ -4158,7 +4158,7 @@ sub process_watchfile ($$$$)
 	s/\\\\/\\/g if $watch_version==1;
 
 	# Handle @PACKAGE@ @ANY_VERSION@ @ARCHIVE_EXT@ substitutions
-	my $any_version = '[-_](\d[\-+\.:\~\da-zA-Z]*)';
+	my $any_version = '[-_]?(\d[\-+\.:\~\da-zA-Z]*)';
 	my $archive_ext = '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)';
 	my $signature_ext = $archive_ext . '\.(?:asc|pgp|gpg|sig)';
 	s/\@PACKAGE\@/$package/g;
