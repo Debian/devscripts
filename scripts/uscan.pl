@@ -1356,7 +1356,7 @@ Don't use PASV mode for FTP connections.
 
 =item B<--no-symlink>
 
-Don't call B<mk-origtargz>.
+Don't rename nor repack upstream tarball.
 
 =item B<--timeout> I<N>
 
@@ -1832,7 +1832,7 @@ Options:
                    debian/copyright field Files-Excluded and Files-Excluded-*
     --pasv         Use PASV mode for FTP connections
     --no-pasv      Don\'t use PASV mode for FTP connections (default)
-    --no-symlink   Don\'t call mk-origtargz
+    --no-symlink   Don\'t rename nor repack upstream tarball
     --timeout N    Specifies how much time, in seconds, we give remote
                    servers to respond (default 20 seconds)
     --user-agent, --useragent
