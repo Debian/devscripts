@@ -646,7 +646,7 @@ The upstream tarball href corresponding to the newest (uversionmangled)
 candidate upstream version newer than the (dversionmangled) last upstream
 version is selected.
 
-If multiple upstream tarball hrefs corresponding to a single verion with
+If multiple upstream tarball hrefs corresponding to a single version with
 different extensions exist, the highest compression one is chosen. (Priority:
 B<< tar.xz > tar.lzma > tar.bz2 > tar.gz >>.)
 
