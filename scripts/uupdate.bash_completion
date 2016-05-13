@@ -10,20 +10,20 @@ _uupdate()
              --force-bad-version -b'
 
     case $prev in
-	--pristine | -u)
+        --pristine | -u)
             COMPREPLY=( $(
-	        compgen -G "${cur}*[!debian].tar.gz"
-	        compgen -G "${cur}*[!debian].tar.bz2"
-	        compgen -G "${cur}*[!debian].tar.xz"
-	        compgen -G "${cur}*.tgz"
-	        compgen -G "${cur}*.zip"
-	        compgen -G "${cur}*.lzma" ) )
-	    ;;
+                compgen -G "${cur}*[!debian].tar.gz"
+                compgen -G "${cur}*[!debian].tar.bz2"
+                compgen -G "${cur}*[!debian].tar.xz"
+                compgen -G "${cur}*.tgz"
+                compgen -G "${cur}*.zip"
+                compgen -G "${cur}*.lzma" ) )
+            ;;
         --help | -h | --version)
            ;;
-	*)
-	    COMPREPLY=( $( compgen -W "$options" | grep "^$cur" ) )
-	    ;;
+        *)
+            COMPREPLY=( $( compgen -W "$options" | grep "^$cur" ) )
+            ;;
     esac
 
     return 0

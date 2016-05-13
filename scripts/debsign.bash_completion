@@ -9,18 +9,18 @@ _debsign()
              --re-sign --no-re-sign --debs-dir --no-conf --noconf'
 
     case $prev in
-	-k)
-	    keyid_options=`gpg -K|grep ^sec|cut -d'/' -f2|cut -d' ' -f1`
-	    COMPREPLY=( $( compgen -W "$keyid_options" | grep ^$cur ) )
-	    ;;
-	*)
-	    COMPREPLY=( $(
-		    compgen -G "${cur}*.changes"
-		    compgen -G "${cur}*.dsc"
-		    compgen -G "${cur}*.commands"
-		    compgen -W "$options" | grep "^$cur"
-		) )
-	    ;;
+        -k)
+            keyid_options=`gpg -K|grep ^sec|cut -d'/' -f2|cut -d' ' -f1`
+            COMPREPLY=( $( compgen -W "$keyid_options" | grep ^$cur ) )
+            ;;
+        *)
+            COMPREPLY=( $(
+                    compgen -G "${cur}*.changes"
+                    compgen -G "${cur}*.dsc"
+                    compgen -G "${cur}*.commands"
+                    compgen -W "$options" | grep "^$cur"
+                ) )
+            ;;
     esac
 
     return 0

@@ -5,14 +5,14 @@ _plotchangelog()
     local cur prev words cword _options
     _init_completion || return
 
-	_options='--linecount --bugcount --cumulative --no-version --no-maint --urgency --verbose'
+    _options='--linecount --bugcount --cumulative --no-version --no-maint --urgency --verbose'
 
     if [[ $prev == plotchangelog ]]; then
-		_options+=' --no-conf'
-	fi
+        _options+=' --no-conf'
+    fi
 
-	_options+=' '
-	_options+=$(find . -name changelog | sed -e's!\.\/!!' |  paste -s -d' ')
+    _options+=' '
+    _options+=$(find . -name changelog | sed -e's!\.\/!!' |  paste -s -d' ')
 
     COMPREPLY=( $( compgen -W "${_options}" -- "$cur" ) )
 
