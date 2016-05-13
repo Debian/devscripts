@@ -1,4 +1,4 @@
-# Debian debuild(1) completion                             -*- shell-script -*-
+# Debian debuild(1) completion.
 # Copyright: 2015, Nicholas Bamber <nicholas@periapt.co.uk>
 _debuild()
 {
@@ -89,5 +89,11 @@ _debuild()
     return 0
 } &&
 complete -F _debuild debuild
-        
-# ex: ts=4 sw=4 et filetype=sh
+
+
+# Local variables:
+# coding: utf-8
+# mode: shell-script
+# indent-tabs-mode: nil
+# End:
+# vim: fileencoding=utf-8 filetype=sh expandtabs shiftwidth=4 :

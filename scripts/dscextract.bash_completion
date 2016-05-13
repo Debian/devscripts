@@ -1,4 +1,4 @@
-# Debian dscextract(1) completion                             -*- shell-script -*-
+# Debian dscextract(1) completion.
 # Copyright: 2015, Nicholas Bamber <nicholas@periapt.co.uk>
 _dscextract()
 {
@@ -20,3 +20,11 @@ _dscextract()
 
     return 0
 } && complete -F _dscextract dscextract
+
+
+# Local variables:
+# coding: utf-8
+# mode: shell-script
+# indent-tabs-mode: nil
+# End:
+# vim: fileencoding=utf-8 filetype=sh expandtabs shiftwidth=4 :
