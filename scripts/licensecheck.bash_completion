@@ -1,5 +1,9 @@
-# Debian licensecheck(1) completion.
-# Copyright: 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+# /usr/share/bash-completion/completions/licensecheck
+# Bash command completion for ‘licensecheck(1)’.
+# Documentation: ‘bash(1)’, section “Programmable Completion”.
+
+# Copyright © 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+
 _licensecheck()
 {
     local cur prev words cword i _options special _prefix

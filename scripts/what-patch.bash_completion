@@ -1,3 +1,7 @@
+# /usr/share/bash-completion/completions/what-patch
+# Bash command completion for ‘what-patch(1)’.
+# Documentation: ‘bash(1)’, section “Programmable Completion”.
+
 complete -W '-v' -o filenames -d what-patch
 
 

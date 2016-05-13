@@ -1,3 +1,7 @@
+# /usr/share/bash-completion/completions/list-unreleased
+# Bash command completion for ‘list-unreleased(1)’.
+# Documentation: ‘bash(1)’, section “Programmable Completion”.
+
 complete -W '-c -R' -o filenames -d list-unreleased
 
 

@@ -1,5 +1,9 @@
-# Debian dscextract(1) completion.
-# Copyright: 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+# /usr/share/bash-completion/completions/dscextract
+# Bash command completion for ‘dscextract(1)’.
+# Documentation: ‘bash(1)’, section “Programmable Completion”.
+
+# Copyright © 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+
 _dscextract()
 {
     local cur prev words cword _options

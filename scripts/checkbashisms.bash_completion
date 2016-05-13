@@ -1,5 +1,9 @@
-# Debian checkbashisms(1) completion.
-# Copyright: 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+# /usr/share/bash-completion/completions/checkbashisms
+# Bash command completion for ‘checkbashisms(1)’.
+# Documentation: ‘bash(1)’, section “Programmable Completion”.
+
+# Copyright © 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+
 _checkbashisms()
 {
     local cur prev words cword special

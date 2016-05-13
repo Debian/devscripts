@@ -1,5 +1,9 @@
-# Debian debdiff(1) completion.
-# Copyright: 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+# /usr/share/bash-completion/completions/debdiff
+# Bash command completion for ‘debdiff(1)’.
+# Documentation: ‘bash(1)’, section “Programmable Completion”.
+
+# Copyright © 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+
 _debdiff()
 {
     local cur prev words cword _options i

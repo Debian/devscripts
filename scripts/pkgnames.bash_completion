@@ -1,3 +1,7 @@
+# /usr/share/bash-completion/completions/pkgnames
+# Bash command completion for commands that expect a Debian package name.
+# Documentation: ‘bash(1)’, section “Programmable Completion”.
+
 _pkg_names()
 {
     local cur prev opts
