@@ -54,7 +54,7 @@ devscripts (2.16.2) unstable; urgency=medium
     + Print proper warnings for bad rules.  Closes: #814049
     + Fix glitches around rules such as "s<...> <...>g" and add their
       tests.
-    + Reactivate --no-verbose mode.  Closes: #815645 
+    + Reactivate --no-verbose mode.  Closes: #815645
     + Fix --destdir for version 4.  Closes:#814686
     + Always use uscan_warn and uscan_die.
     + Die if the action script fails.  Closes: #810976
@@ -253,7 +253,7 @@ devscripts (2.15.10) unstable; urgency=low
       to reorganize behavior around existing downloaded files.
       (Closes: #532182, #740366, #801165)
     + Update filenamemangle to support the version pattern matching in any
-      position of the URL and remove .download hack which breaks 
+      position of the URL and remove .download hack which breaks
       mk-origtargz. (Closes: #526450, #803948, #804239)
     + Reorganize the reporting by uscan and adjust its text strings.
       (Closes: #582958)
@@ -268,7 +268,7 @@ devscripts (2.15.10) unstable; urgency=low
     + Prevent failure when upstream version is 0.  (Closes: #798175)
     + Work around missing debian.tar.gz for "3.0 (quilt)".  (Closes: 798133)
     + Add multiple upstream tarball support and resolve minor bugs by using
-      dpkg-source as the backend.  (Closes: #278797, #544638, #570221, 
+      dpkg-source as the backend.  (Closes: #278797, #544638, #570221,
       #752364, #797045)
   * mk-origtargz:
     + Support component name for the multiple upstream tarball support.
