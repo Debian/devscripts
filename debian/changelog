@@ -14,7 +14,13 @@ devscripts (2.16.5) UNRELEASED; urgency=medium
     + Use "dpkg-source --skip-patches ..." with -f to prevent patches to be
       applied.  Thanks Herbert Parentes Fortes Neto.  (Closes: #823350)
 
- -- James McCoy <jamessan@debian.org>  Mon, 02 May 2016 19:41:06 -0400
+  [ Ben Finney ]
+  * scripts/*.bash_completion:
+    + Render U+0009 TAB to spaces.
+    + Normalise editor hints to preserve formatting.
+    + Standardise explanatory header block.
+
+ -- Ben Finney <ben+debian@benfinney.id.au>  Sat, 14 May 2016 13:54:07 +1000
 
 devscripts (2.16.4) unstable; urgency=medium
 
