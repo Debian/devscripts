@@ -7,10 +7,12 @@
 
 _debdiff()
 {
-    local cur prev words cword options i
+    local options i
     local file_list_mode=normal
     local -i move_from=-1
     local -i move_to=-1
+
+    local cur prev words cword
     _init_completion || return
 
     for (( i=1; i<${#words[@]}; i++ )); do
