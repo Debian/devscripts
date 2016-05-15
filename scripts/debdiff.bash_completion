@@ -15,6 +15,21 @@ _debdiff()
     local cur prev words cword
     _init_completion || return
 
+    options='-h --help -v --version'
+    options+=' -q --quiet'
+    options+=' -d --dirs --nodirs'
+    options+=' -w --ignore-space'
+    options+=' --diffstat --no-diffstat'
+    options+=' --auto-ver-sort --no-auto-ver-sort'
+    options+=' --unpack-tarballs --no-unpack-tarballs'
+    options+=' --control --nocontrol --controlfiles'
+    options+=' --wdiff-source-control --no-wdiff-source-control --wp --wl --wt'
+    options+=' --show-moved --noshow-moved --renamed'
+    options+=' --debs-dir'
+    options+=' --from'
+    options+=' --move --move-regex'
+    options+=' --exclude'
+
     for (( i=1; i<${#words[@]}; i++ )); do
         if [[ $file_list_mode == @(deb|dsc|changes) ]]; then
             if (( i == ${#words[@]}-1 )); then
@@ -58,8 +73,6 @@ _debdiff()
         if [[ $prev == --debs-dir ]]; then
             COMPREPLY=$( ( compgen -d -- "$cur" ) )
         elif [[ $cur == -* ]]; then
-            options='--from --dirs --nodirs --move --move-regex --nocontrol --control --controlfiles --wdiff-source-control --no-wdiff-source-control --wp --wl --wt --show-moved --noshow-moved --renamed --exclude --diffstat --no-diffstat --auto-ver-sort --no-auto-ver-sort --unpack-tarballs --no-unpack-tarballs --debs-dir --quiet --ignore-space'
-    
             if [[ $prev == debdiff ]]; then
                 options+=' --no-conf'
             fi
