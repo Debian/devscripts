@@ -8,6 +8,7 @@
 _debdiff()
 {
     local options i
+    local command_name=debdiff
     local file_list_mode=normal
     local -i move_from=-1
     local -i move_to=-1
@@ -29,6 +30,19 @@ _debdiff()
     options+=' --from'
     options+=' --move --move-regex'
     options+=' --exclude'
+
+    unset COMPREPLY
+
+    case "$prev" in
+        "$command_name")
+            options+=' --noconf --no-conf'
+            ;;
+
+    esac
+
+    if [[ -v COMPREPLY ]] ; then
+        return 0
+    fi
 
     for (( i=1; i<${#words[@]}; i++ )); do
         if [[ $file_list_mode == @(deb|dsc|changes) ]]; then
@@ -73,10 +87,6 @@ _debdiff()
         if [[ $prev == --debs-dir ]]; then
             COMPREPLY=$( ( compgen -d -- "$cur" ) )
         elif [[ $cur == -* ]]; then
-            if [[ $prev == debdiff ]]; then
-                options+=' --no-conf'
-            fi
-    
             COMPREPLY=( $( compgen -W "${options}" -- "$cur" ) )
         else
             declare -a _compreply=( $( compgen -o filenames -G '*.@(deb|dsc|changes)' ) )
