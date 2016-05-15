@@ -38,6 +38,10 @@ _debdiff()
             options+=' --noconf --no-conf'
             ;;
 
+        --debs-dir)
+            COMPREPLY=( $( compgen -A directory -- "$cur" ) )
+            ;;
+
     esac
 
     if [[ -v COMPREPLY ]] ; then
@@ -84,9 +88,7 @@ _debdiff()
 
     if [[ $file_list_mode == normal ]]; then
 
-        if [[ $prev == --debs-dir ]]; then
-            COMPREPLY=$( ( compgen -d -- "$cur" ) )
-        elif [[ $cur == -* ]]; then
+        if [[ $cur == -* ]]; then
             COMPREPLY=( $( compgen -W "${options}" -- "$cur" ) )
         else
             declare -a _compreply=( $( compgen -o filenames -G '*.@(deb|dsc|changes)' ) )
