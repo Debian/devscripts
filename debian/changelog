@@ -21,6 +21,8 @@ devscripts (2.16.5) UNRELEASED; urgency=medium
     + Render U+0009 TAB to spaces.
     + Normalise editor hints to preserve formatting.
     + Standardise explanatory header block.
+  * debdiff:
+    + Include all options in Bash command completion.  (Closes: #824372)
 
   [ Paul Wise ]
   * licensecheck:
