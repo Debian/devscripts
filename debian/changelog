@@ -23,6 +23,7 @@ devscripts (2.16.5) UNRELEASED; urgency=medium
     + Standardise explanatory header block.
   * debdiff:
     + Include all options in Bash command completion.  (Closes: #824372)
+    + Correct Bash completion for ‘--debs-dir’ option.  (Closes: #824369)
 
   [ Paul Wise ]
   * licensecheck:
