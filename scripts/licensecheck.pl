@@ -777,6 +777,16 @@ sub parselicense {
 	    push @spdx_license, 'BSD';
 	}
     }
+    elsif ($licensetext =~ /licen[sc]ebsd(?:-(\d)-clause)?/i) {
+	if ($1) {
+	    $license = "BSD ($1 clause) $license";
+	    push @spdx_license, "BSD-$1-Clause";
+	 }
+	else {
+	    $license = "BSD $license";
+	    push @spdx_license, "BSD";
+	}
+    }
 
     if ($licensetext =~ /Mozilla Public License,? (?:(?:Version|v\.)\s+)?(\d+(?:\.\d+)?)/) {
 	$license = "MPL (v$1) $license";

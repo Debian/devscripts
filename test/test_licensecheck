@@ -63,6 +63,8 @@ testBSD() {
     license "bsd-1-clause-1.c" "BSD"
     license "bsd-3-clause.cpp" "BSD (3 clause)"
     license "bsd-3-clause-authorsany.c" "BSD (3 clause)"
+    license2 "-m --copyright" "mame-style.c" "BSD (3 clause)	Miodrag Milanovic"
+    license2 "-m --copyright --deb-fmt" "mame-style.c" "BSD-3-Clause	Miodrag Milanovic"
 }
 
 testMultiLineDeclaration() {
