@@ -26,6 +26,12 @@ devscripts (2.16.5) UNRELEASED; urgency=medium
     + Detect files containing "Generated data" as generated
     + Detect files containing "edit the original" as generated
 
+  [ Dominique Dumont ]
+  * licensecheck:
+    + added --deb-fmt option to use dep-5 license keywords (see #472199)
+    + parse "copyright-holders: John Doe" (See #820798)
+    + Parse "license: BSD-x-Clause" declaration (Closes: #820798)
+
  -- Ben Finney <ben+debian@benfinney.id.au>  Sat, 14 May 2016 13:54:07 +1000
 
 devscripts (2.16.4) unstable; urgency=medium
