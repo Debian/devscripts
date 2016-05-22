@@ -46,6 +46,8 @@ testBoost() {
 testArtistic() {
     license2 "-m --copyright" "artistic-2-0-modules.pm" "Artistic (v2.0)	2009 Moritz Lenz and the SVG::Plot contributors (see file"
     license2 "-m --copyright" "artistic-2-0.txt" "Artistic (v2.0)	2000-2006, The Perl Foundation / 2000 Testophilus Testownik <tester@testity.org>"
+    license2 "-m --copyright --deb-fmt" "artistic-2-0-modules.pm" "Artistic-2.0	2009 Moritz Lenz and the SVG::Plot contributors (see file"
+    license2 "-m --copyright --deb-fmt" "artistic-2-0.txt" "Artistic-2.0	2000-2006, The Perl Foundation / 2000 Testophilus Testownik <tester@testity.org>"
 }
 
 testAcademic() {
@@ -54,6 +56,7 @@ testAcademic() {
 
 testEclipse() {
     license2 "-m --copyright" "epl.h" "EPL-1.0	2004, 2006 IBM Corporation and others"
+    license2 "-m --copyright --deb-fmt" "epl.h" "EPL-1.0	2004, 2006 IBM Corporation and others"
 }
 
 testBSD() {
@@ -86,6 +89,9 @@ testLGPL() {
     license2  "-m --copyright" "lgpl-big-blue.h" "LGPL (v2.1)	2000, 2010 IBM Corporation and others. All rights reserved"
     license2  "-m --copyright" "lgpl-digia.c" "LGPL (v2.1 or v3)	2014 Digia Plc and/or its subsidiary(-ies)"
     license2  "-m --copyright" "lgpl-by-dist-zilla.pl" "LGPL (v2.1)	2016 Dominique Dumont"
+    license2  "-m --copyright --deb-fmt" "lgpl-big-blue.h" "LGPL-2.1	2000, 2010 IBM Corporation and others. All rights reserved"
+    license2  "-m --copyright --deb-fmt" "lgpl-digia.c" "LGPL-2.1 or LGPL-3	2014 Digia Plc and/or its subsidiary(-ies)"
+    license2  "-m --copyright --deb-fmt" "lgpl-by-dist-zilla.pl" "LGPL-2.1	2016 Dominique Dumont"
 }
 
 # Lisp Lesser General Public License (BTS #806424) 
@@ -123,6 +129,7 @@ testMPL() {
 
 testFreeType() {
     license2 "-m --copyright" "freetype.c" "FreeType	2001, 2012 David Turner, Robert Wilhelm, and Werner Lemberg."
+    license2 "-m --copyright --deb-fmt" "freetype.c" "FTL	2001, 2012 David Turner, Robert Wilhelm, and Werner Lemberg."
 }
 
 testCDDL() {
