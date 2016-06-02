@@ -13,6 +13,8 @@ devscripts (2.16.5) UNRELEASED; urgency=medium
   * uupdate:
     + Use "dpkg-source --skip-patches ..." with -f to prevent patches to be
       applied.  Thanks Herbert Parentes Fortes Neto.  (Closes: #823350)
+  * test_package_lifecycle:
+    + Handle new output format for dpkg-dev utilities.  (Closes: #825228)
 
   [ Ben Finney ]
   * scripts/*.bash_completion:
