@@ -421,7 +421,7 @@ I<user-agent-string>. (persistent)
 B<user-agent> option should be specified by itself in the watch line without
 I<URL>, to allow using semicolons and commas in it.
 
-=item B<pasv>, B<passsive>
+=item B<pasv>, B<passive>
 
 Use PASV mode for the FTP connection.
 
