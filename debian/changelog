@@ -4,6 +4,9 @@ devscripts (2.16.5) UNRELEASED; urgency=medium
   * uscan:
     + Import catfile from File::Spec::Functions to fix use of unqualified
       name.  Thanks to Craig Small for the patch.  (Closes: #823218)
+    + Use builtin die function when telling the user they don't have
+      LWP::UserAgent installed, instead of calling an undefined function.
+      (Closes: #826146)
 
   [ Osamu Aoki ]
   * uscan:

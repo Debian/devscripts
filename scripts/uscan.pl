@@ -1688,6 +1688,7 @@ use strict;
 use warnings;
 use Cwd qw/cwd abs_path/;
 use Dpkg::Changelog::Parse qw(changelog_parse);
+use Dpkg::Control::Hash;
 use Dpkg::IPC;
 use File::Basename;
 use File::Copy qw/copy/;
@@ -1700,23 +1701,22 @@ use Devscripts::Versort;
 use Text::ParseWords;
 use Digest::MD5;
 
-sub uscan_die ($);
-sub uscan_warn ($);
-# From here, do not use bare "warn" nor "die".
-# Use "uscan_warn" or "uscan_die" instead to make --dehs work as expected.
-
 BEGIN {
     eval { require LWP::UserAgent; };
     if ($@) {
 	my $progname = basename($0);
 	if ($@ =~ /^Can\'t locate LWP\/UserAgent\.pm/) {
-	    uscan_die "$progname: you must have the libwww-perl package installed\nto use this script\n";
+	    die "$progname: you must have the libwww-perl package installed\nto use this script\n";
 	} else {
-	    uscan_die "$progname: problem loading the LWP::UserAgent module:\n  $@\nHave you installed the libwww-perl package?\n";
+	    die "$progname: problem loading the LWP::UserAgent module:\n  $@\nHave you installed the libwww-perl package?\n";
 	}
     }
 }
-use Dpkg::Control::Hash;
+
+sub uscan_die ($);
+sub uscan_warn ($);
+# From here, do not use bare "warn" nor "die".
+# Use "uscan_warn" or "uscan_die" instead to make --dehs work as expected.
 
 my $CURRENT_WATCHFILE_VERSION = 4;
 
