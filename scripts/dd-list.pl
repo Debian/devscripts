@@ -100,7 +100,7 @@ GetOptions(
     "help|h" => sub { help(); exit },
     "stdin|i" => \$use_stdin,
     "dctrl|d" => \$use_dctrl,
-    "sources|s:s@" => \$source_files,
+    "sources|s=s@" => \$source_files,
     "uploaders|u!" => \$show_uploaders,
     'z|uncompress' => \$opt_uncompress,
     "print-binary|b" => \$print_binary,
