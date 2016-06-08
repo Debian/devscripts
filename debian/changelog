@@ -1,8 +1,13 @@
 devscripts (2.16.6) UNRELEASED; urgency=medium
 
+  [ James McCoy ]
   * uscan:
     + Fix typo of "passive" in description of PASV FTP mode.  Thanks to Yann
       Dirson for the patch.  (Closes: #826321)
+
+  [ Paul Wise ]
+  * uscan:
+    + Fix typo of "passive" in description of git repository mode
 
  -- James McCoy <jamessan@debian.org>  Sat, 04 Jun 2016 13:46:07 -0400
 

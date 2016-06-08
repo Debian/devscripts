@@ -1099,7 +1099,7 @@ to elsewhere (github?).  Please look for the newer upstream site.
 =head2 direct access to the git repository
 
 If the upstream only publishes its code via the git repository and it has no web
-interface to obtain the releasse tarball, you can use uscan with the tags of
+interface to obtain the release tarball, you can use uscan with the tags of
 the git repository.
 
   version=4
