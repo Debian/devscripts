@@ -1219,8 +1219,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 
     if (($opt_v or $opt_i or $opt_l or $opt_d) and
 	$opt_release_heuristic eq 'changelog' and
-	$changelog->{Distribution} eq 'UNRELEASED' and
-	$distribution eq 'UNRELEASED') {
+	$changelog->{Distribution} eq 'UNRELEASED') {
 
 	$merge = 1;
     } else {

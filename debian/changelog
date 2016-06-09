@@ -8,6 +8,10 @@ devscripts (2.16.6) UNRELEASED; urgency=medium
     + Require an argument for ‘-s’ option, as intended, fixing a compatibility
       issue with Perl 5.24's Getopt::Long.  Thanks to Niko Tyni for the patch.
       (Closes: #826401)
+  * debchange:
+    + Merging the existing changelog stanza when a package is UNRELEASED and
+      --newversion is used now also happens with --distribution.  Thanks to
+      Ilias Tsitsimpi for the patch.  (Closes: #826837)
 
   [ Paul Wise ]
   * uscan:
