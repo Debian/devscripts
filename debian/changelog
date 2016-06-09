@@ -4,6 +4,10 @@ devscripts (2.16.6) UNRELEASED; urgency=medium
   * uscan:
     + Fix typo of "passive" in description of PASV FTP mode.  Thanks to Yann
       Dirson for the patch.  (Closes: #826321)
+  * dd-list:
+    + Require an argument for ‘-s’ option, as intended, fixing a compatibility
+      issue with Perl 5.24's Getopt::Long.  Thanks to Niko Tyni for the patch.
+      (Closes: #826401)
 
   [ Paul Wise ]
   * uscan:
