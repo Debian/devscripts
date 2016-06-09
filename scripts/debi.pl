@@ -86,6 +86,7 @@ Usage: $progname [options] [.changes file] [package ...]
     -t<target>        Search for changes file made for GNU <target> arch
     --debs-dir DIR    Look for the changes and debs files in DIR instead of
                       the parent of the current package directory
+    --list-debs       only list the .deb files; don't display their contents
     --multi           Search for multiarch .changes file made by dpkg-cross
     --check-dirname-level N
                       How much to check directory names:
@@ -180,6 +181,7 @@ my ($opt_help, $opt_version, $opt_a, $opt_t, $opt_debsdir, $opt_multi);
 my $opt_upgrade;
 my ($opt_level, $opt_regex, $opt_noconf);
 my ($opt_tool, $opt_with_depends);
+my ($opt_list_debs);
 GetOptions("help" => \$opt_help,
 	   "version" => \$opt_version,
 	   "a=s" => \$opt_a,
@@ -193,6 +195,7 @@ GetOptions("help" => \$opt_help,
 	   "tool=s" => \$opt_tool,
 	   "noconf" => \$opt_noconf,
 	   "no-conf" => \$opt_noconf,
+	   "list-debs" => \$opt_list_debs,
 	   )
     or die "Usage: $progname [options] [.changes file] [package ...]\nRun $progname --help for more details\n";
 
@@ -385,6 +388,10 @@ if ($progname eq 'debi') {
 } else {
     # $progname eq 'debc'
     foreach my $deb (@debs) {
+	if ($opt_list_debs) {
+	    printf "%s/%s\n", cwd(), $deb;
+	    next;
+	}
 	print "$deb\n";
 	print '-' x length($deb), "\n";
 	system('dpkg-deb', '-I', $deb) == 0
