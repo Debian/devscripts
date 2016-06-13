@@ -1086,7 +1086,7 @@ Please note, you can still use normal functionalities of B<uscan> to set up a
 watch file for this site without using the redirector.
 
   version=4
-  opts="pgpmode=none, \
+  opts="pgpmode=none" \
       https://pypi.python.org/pypi/cfn-sphere/ \
       https://pypi.python.org/packages/source/c/cfn-sphere/\
       cfn-sphere-([\d\.]+).tar.gz#.* debian uupdate
@@ -1103,7 +1103,8 @@ interface to obtain the release tarball, you can use uscan with the tags of
 the git repository.
 
   version=4
-  opts="mode=git" http://git.ao2.it/tweeper.git \
+  opts="mode=git, pgpmode=none" \
+  http://git.ao2.it/tweeper.git \
   refs/tags/v([\d\.]+) debian uupdate
 
 Please note "B<git ls-remote>" is used to obtain references for tags.  If a tag
