@@ -324,7 +324,7 @@ elsif ($opt{binary}) {
 }
 else {
     foreach my $version (@versions) {
-	my $src_json = fetch_json_page("$baseurl/$version->{version}/srcfiles?fileinfo=1");
+	my $src_json = fetch_json_page("$baseurl$version->{version}/srcfiles?fileinfo=1");
 	unless ($src_json) {
 	    warn "$progname: No source files found for $package version $version->{version}\n";
 	    $warnings++;
