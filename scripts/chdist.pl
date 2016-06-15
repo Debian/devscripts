@@ -60,6 +60,10 @@ Display version information.
 
 Prepare a new tree named I<DIST>
 
+=item B<apt> I<DIST> <B<update>|B<source>|B<show>|B<showsrc>|...>
+
+Run B<apt> inside I<DIST>
+
 =item B<apt-get> I<DIST> <B<update>|B<source>|...>
 
 Run B<apt-get> inside I<DIST>
@@ -425,7 +429,7 @@ EOF
 	}
     }
     print "Now edit $dir/etc/apt/sources.list\n" unless $version;
-    print "Run chdist apt-get $dist update\n";
+    print "Run chdist apt $dist update\n";
     print "And enjoy.\n";
 }
 
@@ -698,6 +702,9 @@ my $command = shift @ARGV;
 given ($command) {
     when ('create') {
 	dist_create(@ARGV);
+    }
+    when ('apt') {
+	aptcmd('apt', @ARGV);
     }
     when ('apt-get') {
 	aptcmd('apt-get', @ARGV);

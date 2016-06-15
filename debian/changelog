@@ -18,6 +18,8 @@ devscripts (2.16.6) UNRELEASED; urgency=medium
     + Fix typo of "release" in description of git repository mode
   * debsnap:
     + Avoid an extra / in the srcfiles URL
+  * chdist:
+    + add support for apt and suggest it instead of apt-get
 
   [ Antonio Terceiro ]
   * debc:
