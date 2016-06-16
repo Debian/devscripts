@@ -3380,7 +3380,7 @@ EOF
     my $downloader = sub {
 	my ($url, $fname, $mode) = @_;
 	if ($mode eq 'git') {
-	    my $curdir = getcwd();
+	    my $curdir = cwd();
 	    $fname =~ m%(.*)/([^/]*)-([^_/-]*)\.tar\.(gz|xz|bz2|lzma)%;
 	    my $dst = $1;
 	    my $pkg = $2;
