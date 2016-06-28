@@ -1752,7 +1752,7 @@ sub dehs_verbose ($);
 
 my $havegpgv = first { -x $_ } qw(/usr/bin/gpgv2 /usr/bin/gpgv);
 my $havegpg = first { -x $_ } qw(/usr/bin/gpg2 /usr/bin/gpg);
-uscan_die "Please install gpgv or gpgv2.\n" unless defined $havegpg;
+uscan_die "Please install gpgv or gpgv2.\n" unless defined $havegpgv;
 uscan_die "Please install gnupg or gnupg2.\n" unless defined $havegpg;
 
 sub usage {
