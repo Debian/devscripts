@@ -90,7 +90,7 @@ metadata.
 
 For Debian package repositories that keep the full upstream source, other tools
 should be used to upgrade the repository from the new tarball. See
-B<git-import-orig>(1) and B<svn-upgrade>(1) for examples. B<origtargz> is still
+B<gbp-import-orig>(1) and B<svn-upgrade>(1) for examples. B<origtargz> is still
 useful for downloading the current tarball.
 
 =head1 OPTIONS
@@ -157,7 +157,7 @@ will remove upstream files even if they are stored in VCS.
 
 =head1 SEE ALSO
 
-B<debcheckout>(1), B<git-import-orig>(1), B<pristine-tar>(1), B<svn-upgrade>(1), B<uupdate>(1)
+B<debcheckout>(1), B<gbp-import-orig>(1), B<pristine-tar>(1), B<svn-upgrade>(1), B<uupdate>(1)
 
 =head1 AUTHOR
 

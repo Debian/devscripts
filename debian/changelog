@@ -14,6 +14,8 @@ devscripts (2.16.6) UNRELEASED; urgency=medium
     + Merging the existing changelog stanza when a package is UNRELEASED and
       --newversion is used now also happens with --distribution.  Thanks to
       Ilias Tsitsimpi for the patch.  (Closes: #826837)
+  * Replace git-import-orig references with gbp-import-orig.  Thanks to Guido
+    Günther for the patch.  (Closes: #828758)
 
   [ Paul Wise ]
   * uscan:
