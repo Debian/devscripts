@@ -6,8 +6,6 @@ OUR_TESTS=						\
 	debchange					\
 	package_lifecycle			\
 	debdiff						\
-	licensecheck				\
-	licensecheck_SL				\
 	uscan						\
 	uscan_mangle				\
 	mk-origtargz				

@@ -16,6 +16,8 @@ devscripts (2.16.6) UNRELEASED; urgency=medium
       Ilias Tsitsimpi for the patch.  (Closes: #826837)
   * Replace git-import-orig references with gbp-import-orig.  Thanks to Guido
     Günther for the patch.  (Closes: #828758)
+  * Remove licensecheck script and add a Recommends for the new licensecheck
+    package.  (Closes: #828872)
 
   [ Paul Wise ]
   * uscan:

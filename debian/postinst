@@ -277,15 +277,6 @@ EOF
             # Added in devscripts 2.10.3
             cat >> /etc/devscripts.conf <<EOF
 
-##### licensecheck options added in version 2.10.3
-#
-# Print the file header being parsed before the corresponding license
-# information?
-# LICENSECHECK_VERBOSE=no
-#
-# How many lines of each file should be parsed for license information?
-# LICENSECHECK_PARSELINES=60
-
 ##### debchange option added in version 2.10.3
 #
 # Use a fixed timezone in changelog entries?

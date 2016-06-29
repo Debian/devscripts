@@ -61,6 +61,7 @@ Recommends: apt,
             libencode-locale-perl,
             liburi-perl,
             libwww-perl,
+            licensecheck,
             lintian,
             man-db,
             patch,
@@ -169,7 +170,6 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - getbuildlog: download package build logs from Debian auto-builders [wget]
   - grep-excuses: grep the update_excuses.html file for your packages
     [libterm-size-perl, wget, w3m]
-  - licensecheck: attempt to determine the license of source files
   - list-unreleased: search for unreleased packages
   - manpage-alert: locate binaries without corresponding manpages [man-db]
   - mass-bug: mass-file bug reports [bsd-mailx | mailx]
