@@ -36,7 +36,7 @@ repository.
 
 =item B<-R>, B<--release-use-changelog>
 
-When used in conjunction with B<--release>, if there are uncommited
+When used in conjunction with B<--release>, if there are uncommitted
 changes to the changelog then derive the commit message from those
 changes rather than using the default message.
 

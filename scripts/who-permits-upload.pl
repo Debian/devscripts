@@ -65,7 +65,7 @@ present, the default value I<https://ftp-master.debian.org/dm.txt> is used.
 
 =item B<--help>, B<-h>
 
-Display an usage summary and exit.
+Display a usage summary and exit.
 
 =item B<--keyring=>I<keyring>, B<-s> I<keyring>
 

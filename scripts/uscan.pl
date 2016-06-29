@@ -830,7 +830,7 @@ signature file extensions.
   version=4
   opts="pgpmode=next" http://example.com/DL/ \
       files/(?:\d+)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
-  opts="pgpmode=prevous" http://example.com/DL/ \
+  opts="pgpmode=previous" http://example.com/DL/ \
       files/(?:\d+)/@PACKAGE@@ANY_VERSION@@SIGNATURE_EXT@ \
       previous uupdate
 
@@ -1536,7 +1536,7 @@ The optional I<script> parameter in F<debian/watch> means to execute I<script>
 with options after processing this line if specified.
 
 For compatibility with other tools such as B<git-buildpackage>, it may not be
-wise to create custom scripts with rondom behavior.  In general, B<uupdate> is
+wise to create custom scripts with random behavior.  In general, B<uupdate> is
 the best choice for the non-native package and custom scripts, if created,
 should behave as if B<uupdate>.  For possible use case, see
 L<http://bugs.debian.org/748474> as an example.
