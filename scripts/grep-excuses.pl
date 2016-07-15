@@ -70,7 +70,7 @@ Usage: $progname [options] [<maintainer>|<package>]
 Options:
   --no-conf, --noconf Don\'t read devscripts config files;
                       must be the first option given
-  --wipnity, -w       Check <https://release.debian.org/migration/>.  A package
+  --wipnity, -w       Check <https://qa.debian.org/excuses.php>.  A package
                       name must be given when using this option.
   --no-autoremovals   Do not investigate and report autoremovals
   --help              Show this help
@@ -101,9 +101,9 @@ if (system("command -v w3m >/dev/null 2>&1") != 0) {
 }
 
 while( my $package=shift ) {
-    my $dump = `w3m -dump -cols $columns "https://release.debian.org/migration/testing.pl?package=$package"`;
-    $dump =~ s/^.*?(?=Checking)//s;
-    $dump =~ s/^\[.*//ms;
+    my $dump = `w3m -dump -cols $columns "https://qa.debian.org/excuses.php?package=$package"`;
+    $dump =~ s/.*(Excuse for .*)\s+Maintainer page.*/$1/ms;
+    $dump =~ s/.*(No excuse for .*)\s+Maintainer page.*/$1/ms;
     print($dump);
     }
 }
