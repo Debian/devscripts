@@ -700,8 +700,8 @@ sub tag {
 	}
     }
     elsif ($prog eq 'git') {
-	$tag =~ s/^[0-9]+://; # strip epoch
-	$tag =~ tr/~/./; # mangle for git
+	$tag =~ tr/~/_/; # mangle for git
+	$tag =~ tr/:/%/;
 	if ($tag =~ /-/) {
 	    # not a native package, so tag as a debian release
 	    $tag = "debian/$tag";
