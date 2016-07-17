@@ -39,7 +39,7 @@ fatal_error() {
     exit 1
 }
 
-# check if the given binary is installed and give a error if not
+# check if the given binary is installed and give an error if not
 # arg1: binary
 # arg2: error message
 require_installed() {
@@ -124,14 +124,14 @@ edit_patch_quilt() {
     top_patch=$(quilt top)
     echo "Top patch: $top_patch"
     if [ -e $PREFIX/$1 ]; then
-        # if its a existing patch and we are at the end of the stack,
+        # if it's an existing patch and we are at the end of the stack,
         # go back at the beginning
         if ! quilt unapplied; then
             quilt pop -a
         fi
         quilt push $1
     else
-        # if its a new patch make sure we are at the end of the stack
+        # if it's a new patch, make sure we are at the end of the stack
         if quilt unapplied >/dev/null; then
             quilt push -a
         fi
