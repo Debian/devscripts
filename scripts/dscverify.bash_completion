@@ -11,7 +11,7 @@ _dscverify()
 
     if [[ "$cur" == -* ]]; then
         _options='--keyring --no-default-keyrings --no-sig-check --verbose'
-        if [[ "$prev" == licensecheck ]]; then
+        if [[ "$prev" == dscverify ]]; then
             _options+=' --no-conf'
         fi
         COMPREPLY=( $( compgen -W "${_options}" -- "$cur" ) )
