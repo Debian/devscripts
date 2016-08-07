@@ -163,6 +163,7 @@ our (@gTags, @valid_tags, %valid_tags);
            "lenny", "lenny-ignore", "squeeze", "squeeze-ignore",
            "wheezy", "wheezy-ignore", "jessie", "jessie-ignore",
            "stretch", "stretch-ignore", "buster", "buster-ignore",
+           "bullseye", "bullseye-ignore",
          );
 
 *valid_tags = \@gTags;
