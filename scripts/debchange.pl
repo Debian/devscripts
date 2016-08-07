@@ -472,7 +472,7 @@ if ($vendor eq 'Ubuntu' and ($opt_n or $opt_bn or $opt_qa or $opt_bpo)) {
 # Check the distro name given.
 if (defined $opt_D) {
     if ($vendor eq 'Debian') {
-	unless ($opt_D =~ /^(experimental|unstable|UNRELEASED|((old)?stable|testing)(-proposed-updates)?|proposed-updates|(wheezy|jessie|stretch)-security)$/) {
+	unless ($opt_D =~ /^(experimental|unstable|UNRELEASED|((old)?stable|testing)(-proposed-updates)?|proposed-updates|(wheezy|jessie|stretch|buster|bullseye)-security)$/) {
 	    my $deb_info = get_debian_distro_info();
 	    my ($oldstable_backports, $stable_backports) = ("", "");
 	    if ($deb_info == 0) {
