@@ -2,7 +2,7 @@
 #
 # origtargz: fetch the orig tarball of a Debian package from various sources,
 # and unpack it
-# Copyright (C) 2012-2013  Christoph Berg <myon@debian.org>
+# Copyright (C) 2012-2016  Christoph Berg <myon@debian.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -234,7 +234,7 @@ sub download_origtar ()
 			link $f[0], "../$basename" or
 				symlink $f[0], "../$basename" or
 				die "symlink: $!";
-			return $f[0];
+			return "../$basename";
 		}
 	}
 
@@ -329,18 +329,16 @@ sub unpack_tarball ($)
 	print "Unpacking $origtar\n";
 
 	# unpack
-	chdir $tmpdir or die "chdir $tmpdir: $!";
-	system ('tar', 'xf', "../$origtar");
+	system ('tar', "--directory=$tmpdir", '-xf', "$origtar");
 	if ($? >> 8) {
-		print STDERR "tar xf $origtar failed\n";
+		print STDERR "unpacking $origtar failed\n";
 		return 0;
 	}
-	chdir '..';
 
 	# figure out which directory was created
 	my @dirs = glob "$tmpdir/*/";
 	unless (@dirs) {
-		print STDERR "tar xf $origtar did not create any directory\n";
+		print STDERR "unpacking $origtar did not create any directory\n";
 		return 0;
 	}
 	my $directory = $dirs[0];
