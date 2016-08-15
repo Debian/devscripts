@@ -2962,6 +2962,7 @@ sub process_watchline ($$$$$$)
 	    $href =~ s/\n//g;
 	    $href =~ s/^\s+//;
 	    $href =~ s/\s+$//;
+	    uscan_debug "Checking href $href\n";
 	    foreach my $_pattern (@patterns) {
 		if ($href =~ m&^$_pattern$&) {
 		    if ($watch_version == 2) {
