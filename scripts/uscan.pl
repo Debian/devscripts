@@ -2957,7 +2957,11 @@ sub process_watchline ($$$$$$)
 	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/sgi) {
 	    my $href = $2;
 	    my $mangled_version;
+	    # Remove whitespace from URLs:
+	    # https://www.w3.org/TR/html5/links.html#links-created-by-a-and-area-elements
 	    $href =~ s/\n//g;
+	    $href =~ s/^\s+//;
+	    $href =~ s/\s+$//;
 	    foreach my $_pattern (@patterns) {
 		if ($href =~ m&^$_pattern$&) {
 		    if ($watch_version == 2) {

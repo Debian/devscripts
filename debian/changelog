@@ -5,6 +5,8 @@ devscripts (2.16.7) UNRELEASED; urgency=medium
     + Fix the script for the removal of testing.pl from release.debian.org
   * dscverify:
     + Fix bash completion of the --no-conf option
+  * uscan:
+    + Strip whitespace from hrefs before processing (Closes: #833779)
   * Suggest reprotest for reproducible builds testing (Closes: #786755)
 
   [ Jakub Wilk ]
