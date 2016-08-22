@@ -59,19 +59,20 @@ PUBLIC_KEYRING=$GPGHOME/pubring.gpg
 
 
 oneTimeSetUp () {
+    rm -rf $GPGHOME
+    mkdir -p $GPGHOME
+    chmod 700 $GPGHOME
+    $GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+	    --output $PRIVATE_KEYRING --dearmor $PRIVATE_KEY
 
-	rm -rf $GPGHOME
-	mkdir -p $GPGHOME
-	chmod 700 $GPGHOME
-	$GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
-		--output $PRIVATE_KEYRING --dearmor $PRIVATE_KEY
+    $GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+	    --output $PUBLIC_KEYRING --dearmor $PUBLIC_KEY
 
-	$GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
-		--output $PUBLIC_KEYRING --dearmor $PUBLIC_KEY
+    $GPG --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+	    --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
+	    --list-keys --verbose
 
-	$GPG --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
-		--secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
-		--list-keys --verbose
+    export GNUPGHOME=$GPGHOME
 }
 
 # Initial Debian revision value is distribution dependent
@@ -994,7 +995,8 @@ opts="component=baz,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/baz@ANY_VERSION@
 }
 
 oneTimeTearDown () {
-	rm -rf ${GPGHOME}
+    gpgconf --homedir "$GPGHOME" --verbose --kill gpg-agent
+    rm -rf ${GPGHOME}
 }
 
 

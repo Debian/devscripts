@@ -295,6 +295,7 @@ EOS
 
 oneTimeTearDown () {
 	rm -rf ${WORKDIR}/package_lifecycle
+	gpgconf --homedir "$GPGHOME" --kill gpg-agent
 	rm -rf $GPGHOME
 }
 
