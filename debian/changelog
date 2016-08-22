@@ -21,6 +21,10 @@ devscripts (2.16.7) UNRELEASED; urgency=medium
   [ Christoph Berg ]
   * origtargz: Fix unpacking of tarballs found in --path.
 
+  [ James McCoy ]
+  * Remove . from @INC when loading modules dynamically. [CVE-2016-1238]
+    (Closes: #832441)
+
  -- Paul Wise <pabs@debian.org>  Fri, 15 Jul 2016 22:36:19 +0800
 
 devscripts (2.16.6) unstable; urgency=medium

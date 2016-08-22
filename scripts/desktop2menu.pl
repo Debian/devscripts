@@ -64,6 +64,7 @@ use File::Basename;
 my $progname = basename($0);
 
 BEGIN {
+    pop @INC if $INC[-1] eq '.';
     # Load the File::DesktopEntry module safely
     eval { require File::DesktopEntry; };
     if ($@) {

@@ -24,6 +24,7 @@ use File::Basename;
 use Getopt::Long qw(:config gnu_getopt);
 
 BEGIN {
+    pop @INC if $INC[-1] eq '.';
     # Load the URI::Escape module safely
     eval { require URI::Escape; };
     if ($@) {

@@ -26,6 +26,7 @@ use strict;
 use warnings;
 use Cwd;
 use Fcntl;
+use Digest::MD5;
 use Dpkg::IPC;
 use File::Spec;
 use File::Temp;
@@ -33,17 +34,6 @@ use File::Basename;
 use POSIX	qw(:errno_h);
 use Getopt::Long qw(:config gnu_getopt);
 use List::Util qw(first);
-
-BEGIN {
-    eval { require Digest::MD5; };
-    if ($@) {
-	my $progname = basename $0;
-	if ($@ =~ /^Can\'t locate Digest\/MD5\.pm/) {
-	    die "$progname: you must have the libdigest-md5-perl package installed\nto use this script\n";
-	}
-	die "$progname: problem loading the Digest::MD5 module:\n  $@\nHave you installed the libdigest-md5-perl package?\n";
-    }
-}
 
 my $progname = basename $0;
 my $modified_conf_msg;

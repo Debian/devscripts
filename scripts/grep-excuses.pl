@@ -32,6 +32,7 @@ my $term_size_broken;
 
 sub have_term_size {
     return ($term_size_broken ? 0 : 1) if defined $term_size_broken;
+    pop @INC if $INC[-1] eq '.';
     # Load the Term::Size module safely
     eval { require Term::Size; };
     if ($@) {

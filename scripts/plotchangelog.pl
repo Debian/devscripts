@@ -32,6 +32,7 @@ use Fcntl;
 use Getopt::Long qw(:config gnu_getopt);
 
 BEGIN {
+    pop @INC if $INC[-1] eq '.';
     eval { require Date::Parse; import Date::Parse (); };
     if ($@) {
 	my $progname = basename($0);

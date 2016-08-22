@@ -24,6 +24,7 @@ use File::Basename;
 use Getopt::Long qw(:config gnu_getopt);
 
 BEGIN {
+    pop @INC if $INC[-1] eq '.';
     # Load the URI::Escape and LWP::UserAgent modules safely
     my $progname = basename($0,'.pl');
     eval { require URI::Escape; };

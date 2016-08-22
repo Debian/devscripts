@@ -1703,6 +1703,7 @@ use Text::ParseWords;
 use Digest::MD5;
 
 BEGIN {
+    pop @INC if $INC[-1] eq '.';
     eval { require LWP::UserAgent; };
     if ($@) {
 	my $progname = basename($0);
