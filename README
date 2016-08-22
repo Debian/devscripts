@@ -160,8 +160,7 @@ And now, in mostly alphabetical order, the scripts:
 - dscextract: extract a single file from a Debian source package [patchutils]
 
 - dscverify: check the signature and MD5 sums of a dsc file against the most
-  current Debian keyring on your system. [gnupg | gnupg2, debian-keyring,
-  libdigest-md5-perl]
+  current Debian keyring on your system. [gnupg | gnupg2, debian-keyring]
 
 - edit-patch: add/edit a patch for a source package and commit the changes
   [quilt | dpatch | cdbs]

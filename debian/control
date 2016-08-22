@@ -163,7 +163,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
     control field needed [build-essential, strace]
   - dscextract: extract a single file from a Debian source package [patchutils]
   - dscverify: verify the integrity of a Debian package from the
-    .changes or .dsc files [gnupg | gnupg2, debian-keyring, libdigest-md5-perl]
+    .changes or .dsc files [gnupg | gnupg2, debian-keyring]
   - edit-patch: add/edit a patch for a source package and commit the changes
     [quilt | dpatch | cdbs]
   - getbuildlog: download package build logs from Debian auto-builders [wget]
