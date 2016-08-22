@@ -2957,11 +2957,8 @@ sub process_watchline ($$$$$$)
 	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/sgi) {
 	    my $href = $2;
 	    my $mangled_version;
-	    # Remove whitespace from URLs:
-	    # https://www.w3.org/TR/html5/links.html#links-created-by-a-and-area-elements
 	    $href =~ s/\n//g;
-	    $href =~ s/^\s+//;
-	    $href =~ s/\s+$//;
+	    $href = fix_href($href);
 	    uscan_debug "Checking href $href\n";
 	    foreach my $_pattern (@patterns) {
 		if ($href =~ m&^$_pattern$&) {
@@ -3065,7 +3062,7 @@ sub process_watchline ($$$$$$)
 	    uscan_verbose "HTMLized FTP listing by the HTTP proxy\n";
 	    while ($content =~
 		m/(?:<\s*a\s+[^>]*href\s*=\s*\")((?-i)$pattern)\"/gi) {
-		my $file = $1;
+		my $file = fix_href($1);
 		my $mangled_version = join(".", $file =~ m/^$pattern$/);
 		foreach my $pat (@{$options{'uversionmangle'}}) {
 		    if (! safe_replace(\$mangled_version, $pat)) {
@@ -3904,7 +3901,7 @@ sub newest_dir ($$$$$) {
 	my @hrefs;
 	my $match ='';
 	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi) {
-	    my $href = $2;
+	    my $href = fix_href($2);
 	    uscan_verbose "Matching target for dirversionmangle:   $href\n";
 	    if ($href =~ m&^$dirpattern/?$&) {
 		my $mangled_version = join(".", map { $_ // '' } $href =~ m&^$dirpattern/?$&);
@@ -4424,6 +4421,18 @@ sub quoted_regex_parse($) {
     }
 
     return ($parsed_ok, $regexp, $replacement, $flags);
+}
+
+sub fix_href
+{
+    my ($href) = @_;
+
+    # Remove whitespace from URLs:
+    # https://www.w3.org/TR/html5/links.html#links-created-by-a-and-area-elements
+    $href =~ s/^\s+//;
+    $href =~ s/\s+$//;
+
+    return $href;
 }
 
 sub safe_replace($$) {
