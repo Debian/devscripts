@@ -1,0 +1,68 @@
+.TH DEBREPRO 1 "Debian Utilities" "DEBIAN" \" -*- nroff -*-
+.SH NAME
+debrepro \- reproduciblity tester for Debian packages
+.SH SYNOPSIS
+\fBdebrepro\fR [\fISOURCEDIR\fR]
+.SH DESCRIPTION
+\fBdebrepro\fR will build a given source directory twice, with a set of
+variation between the first and second build, and compare the binary packages
+produced. If \fBdiffoscope\fR is installed, it is used to compare non-matching
+binaries. If \fBdisorderfs\fR is installed, it is used during the build to
+inject non-determinism in filesystem listing operations.
+.PP
+\fISOURCEDIR\fR must be a directory containing an unpacked Debian source
+package. If \fISOURCEDIR\fR is ommited, the current directory is assumed.
+.SH OUTPUT DIRECTORY
+At the very end of a build, \fBdebrepro\fR will inform the location of the
+output directory where the build artifacts can be found. The contents of this
+directory is as follows:
+.TP
+.BR \fI«outdir»/first\fR
+contains the results of the first build, including a copy of the source tree,
+and the resulting binary packages.
+.TP
+.BR \fI«outdir»/first/build.sh\fR
+contains the exact build script that was used in the first build.
+.TP
+.BR \fI«outdir»/second\fR
+contains the results of the second build, including a copy of the source tree,
+and the resulting binary packages.
+.TP
+.BR \fI«outdir»/second/build.sh\fR
+contains the exact build script that was used in the second build.
+.PP
+diff'ing \fI«outdir»/first/build.sh\fR and \fI«outdir»/second/build.sh\fR is an
+excellent way of figuring out exactly what changed between the two builds.
+.SH SUPPORTED VARIATIONS
+.TP
+.BR \fBUSER\fR
+The \fI$USER\fR environment name will contain different values between the
+first and second builds.
+.TP
+.BR \fBPATH\fR
+During the second build, a fake, unexisting directory will be appended to the
+\fI$PATH\fR environment variable.
+.TP
+.BR \fBumask\fR
+The builds will use different umask settings.
+.TP
+.BR \fBlocale\fR
+Both \fI$LC_ALL\fR and \fI$LANG\fR will be different across the two builds.
+.TP
+.BR \fBtimezone\fR
+\fI$TZ\fR will be different across builds.
+.TP
+.BR \fBfilesystem\ ordering\fR
+If \fBdisorderfs\fR is installed, both builds will be done under a disorderfs
+overlay directory. This will cause filesystem listing operations to be return
+items in a non-deterministic order.
+.TP
+.BR \fBtime\fR
+The second build will be executed 213 days, 7 hours and 13 minutes in the
+future with regards to the current time.
+.BR
+.SH "SEE ALSO"
+.BR diffoscope (1),
+.BR disorderfs (1),
+.SH AUTHOR
+Antonio Terceiro <terceiro@debian.org>.

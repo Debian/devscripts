@@ -82,8 +82,10 @@ Suggests: adequate,
           cvs-buildpackage,
           devscripts-el,
           diffoscope,
+          disorderfs,
           dose-extra (>= 4.0),
           duck,
+          faketime,
           gnuplot,
           gpgv | gpgv2,
           how-can-i-help,
@@ -148,6 +150,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
     [wdiff, patchutils]
   - debi: install a just-built package
   - debpkg: dpkg wrapper to be able to manage/test packages without su
+  - debrepro: reproducibility tester for debian packages  [faketime,
+    diffoscope, disorderfs]
   - debrelease: wrapper around dupload or dput [dupload | dput, ssh-client]
   - debsign, debrsign: sign a .changes/.dsc pair without needing any of
     the rest of the package to be present; can sign the pair remotely

@@ -112,6 +112,14 @@ And now, in mostly alphabetical order, the scripts:
   version to upload, and then calls dupload or dput to actually perform
   the upload. [dupload | dput, ssh-client]
 
+- debrepro: A script that tests reproducibility of Debian packages. It will
+  build a given source directory twice, with a set of variation between the
+  first and second build, and compare the binary packages produced. If
+  diffoscope is installed, it is used to compare non-matching binaries. If
+  disorderfs is installed, it is used during the build to inject
+  non-determinism in filesystem listing operations.
+  [faketime, diffoscope, disorderfs]
+
 - debrsign: This transfers a .changes/.dsc pair to a remote machine for
   signing, and runs debsign on the remote machine over an SSH connection.
   [gnupg | gnupg2, debian-keyring, ssh-client]
