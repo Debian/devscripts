@@ -109,9 +109,7 @@ build() {
 }
 
 binmatch() {
-  local h1=$(sha1sum "$1" | awk '{print($1)}')
-  local h2=$(sha1sum "$2" | awk '{print($1)}')
-  test "$h1" = "$h2"
+  cmp -q "$1" "$2"
 }
 
 compare() {
