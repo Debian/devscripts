@@ -109,7 +109,7 @@ build() {
 }
 
 binmatch() {
-  cmp -q "$1" "$2"
+  cmp --silent "$1" "$2"
 }
 
 compare() {
