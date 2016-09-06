@@ -178,11 +178,13 @@ change_version()
     done
     [ -z "$LOGFILE" ] && { echo "changelog file not found"; return 1; }
     mkdir -p debian
-    zcat $LOGFILE > debian/changelog
+    zcat "$LOGFILE" > debian/changelog
     shift
-    dch $DCH_OPTIONS -v $VERSION -- $@
+    dch $DCH_OPTIONS -v "$VERSION" -- "$@"
     call_hook
-    gzip -9 -c debian/changelog >| $LOGFILE
+    gzip -9 -c debian/changelog >| "$LOGFILE"
+    MD5SUM=$(md5sum "$LOGFILE")
+    sed -i "s@^[^ ]*  $LOGFILE\$@$MD5SUM@" DEBIAN/md5sums
   else
     call_hook
   fi

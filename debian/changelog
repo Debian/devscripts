@@ -9,6 +9,10 @@ devscripts (2.16.8) UNRELEASED; urgency=medium
   * New script: debrepro, a simple reproducibility tester specific for Debian
     packages.  (Closes: #786755)
 
+  [ James McCoy ]
+  * deb-reversion: Update md5sum of changelog if it's changed.  (Closes:
+    #836725)
+
  -- Paul Wise <pabs@debian.org>  Sat, 27 Aug 2016 13:58:14 +0800
 
 devscripts (2.16.7) unstable; urgency=medium
