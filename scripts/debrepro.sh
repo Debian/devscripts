@@ -60,6 +60,8 @@ create_build_script() {
   echo "# package"
   echo
 
+  echo 'export SOURCE_DATE_EPOCH=$(date -d "$(dpkg-parsechangelog -SDate)" +%s)'
+
   variation PATH
   vary 'export PATH="$PATH":/i/capture/the/path'
 
