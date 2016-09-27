@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: devscripts 2.16.4\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
 "POT-Creation-Date: 2016-06-28 20:31-0400\n"
-"PO-Revision-Date: 2016-09-14 21:46+0200\n"
+"PO-Revision-Date: 2016-09-25 18:56+0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
 "Language: de\n"
@@ -18846,8 +18846,8 @@ msgid ""
 "* B<uscan> process the watch lines F<debian/watch> from the top to the "
 "bottom in a single pass."
 msgstr ""
-"* B<uscan> verarbeitet die »watch«-Zeilen F<debian/watch> von oben nach "
-"unten in einem einzigen Durchlauf."
+"* B<uscan> verarbeitet die Watch-Zeilen F<debian/watch> von oben nach unten "
+"in einem einzigen Durchlauf."
 
 #. type: =item
 #: ../scripts/uscan.pl:51
@@ -18882,8 +18882,8 @@ msgid ""
 "I<< ../<upkg>-<uversion>.tar.gz >>"
 msgstr ""
 "* B<uscan> speichert den heruntergeladenen Tarball ins übergeordnete  B<../> "
-"Verzeichnis: I<< ../<Ursprungsautorenpaket>-<neueste-"
-"Ursprungsautorenversion>.tar.gz >>"
+"Verzeichnis: I<< "
+"../<Ursprungsautorenpaket>-<neueste-Ursprungsautorenversion>.tar.gz >>"
 
 #. type: =item
 #: ../scripts/uscan.pl:63
@@ -18904,8 +18904,8 @@ msgid ""
 "gz >>."
 msgstr ""
 "* Bei einem Paket aus mehreren Tarbällen der Ursprungsautoren (MUT) wird der "
-"untergeordnete Tarball der Ursprungsautoren stattdessen I<< ../"
-"<Quellpaket>_<Originalversion>.orig-<Komponente>.tar.gz >> genannt."
+"untergeordnete Tarball der Ursprungsautoren stattdessen "
+"I<< ../<Quellpaket>_<Originalversion>.orig-<Komponente>.tar.gz >> genannt."
 
 #. type: =item
 #: ../scripts/uscan.pl:73
@@ -18951,8 +18951,8 @@ msgstr ""
 "* Die neue B<Version=4> aktiviert die Behandlung von Paketen mit mehreren "
 "Tarbällen der Ursprungsautoren (MUT), dies ist aber ein seltener Fall bei "
 "der Debian-Paketierung. Für ein einzelnes Tarball-Paket der Ursprungsautoren "
-"gibt es nur eine »watch«-Zeile und kein I<< ../"
-"<Quellpaket>_<Originalversion>.orig-<Komponente>.tar.gz >> ."
+"gibt es nur eine Watch-Zeile und kein I<< "
+"../<Quellpaket>_<Originalversion>.orig-<Komponente>.tar.gz >> ."
 
 #. type: =item
 #: ../scripts/uscan.pl:95
@@ -19077,9 +19077,9 @@ msgid ""
 "selection of the candidate upstream tarball URLs and are in one of the "
 "following three formats:"
 msgstr ""
-"* Die folgenden Nichtkommentarzeilen (»watch«-Zeilen) geben die Regeln für "
-"die Auswahl der Kandidaten für Tarball-URLs der Ursprungsautoren in einem "
-"der folgenden drei Formate an:"
+"* Die folgenden Nichtkommentarzeilen (Watch-Zeilen) geben die Regeln für die "
+"Auswahl der Kandidaten für Tarball-URLs der Ursprungsautoren in einem der "
+"folgenden drei Formate an:"
 
 #. type: =item
 #: ../scripts/uscan.pl:149
@@ -19249,7 +19249,7 @@ msgid ""
 msgstr ""
 "* Das typische Debian-Paket ist ein nichtnatives Paket, das aus einem "
 "Tarball der Ursprungsautoren erstellt wurde. Üblicherweise wird nur eine "
-"einzelne Zeile der »watch«-Zeile in einem der beiden ersten Formate benutzt. "
+"einzelne Zeile der Watch-Zeile in einem der beiden ersten Formate benutzt. "
 "Dabei wird I<version> auf B<debian> und I<script> auf B<uupdate> gesetzt."
 
 #. type: =item
@@ -19265,8 +19265,8 @@ msgid ""
 "rest of the watch lines."
 msgstr ""
 "* Ein Paket aus mehreren Tarbällen der Ursprungsautoren (MUT) sollte "
-"B<uupdate> als I<script> in der letzten »watch«-Zeile angeben und die Angabe "
-"von I<script> in den restlichen »watch«-Zeilen überspringen."
+"B<uupdate> als I<script> in der letzten Watch-Zeile angeben und die Angabe "
+"von I<script> in den restlichen Watch-Zeilen überspringen."
 
 #. type: =item
 #: ../scripts/uscan.pl:234
@@ -19275,9 +19275,9 @@ msgid ""
 "parameters: B<user-agent>, B<compression>.  If this format is used, this "
 "must be followed by the I<URL> defining watch line(s)."
 msgstr ""
-"* Das letzte Format einer »watch«-Zeile ist nützlich, um beständige "
-"Parameter zu setzen: B<user-agent>, B<compression>. Falls dieses Format "
-"benutzt wird, muss darauf die I<URL> folgen, die »watch«-Zeilen definiert."
+"* Das letzte Format einer Watch-Zeile ist nützlich, um beständige Parameter "
+"zu setzen: B<user-agent>, B<compression>. Falls dieses Format benutzt wird, "
+"muss darauf die I<URL> folgen, die Watch-Zeilen definiert."
 
 #. type: =item
 #: ../scripts/uscan.pl:238
@@ -19295,7 +19295,7 @@ msgid ""
 "easy to write the watch file."
 msgstr ""
 "Es gibt ein paar spezielle Zeichenketten, die durch B<uscan> ersetzt werden, "
-"um das Schreiben der »watch«-Datei zu erleichtern."
+"um das Schreiben der Watch-Datei zu erleichtern."
 
 #. type: =item
 #: ../scripts/uscan.pl:250
@@ -19418,12 +19418,12 @@ msgid ""
 "their containing watch line."
 msgstr ""
 "Sofern sie nicht als beständig notiert sind, sind die meisten Optionen nur "
-"innerhalb der »watch«-Zeile gültig, in der sie stehen."
+"innerhalb der Watch-Zeile gültig, in der sie stehen."
 
 #. type: textblock
 #: ../scripts/uscan.pl:288
 msgid "The available watch options are:"
-msgstr "Die verfügbaren »watch«-Optionen sind:"
+msgstr "Die verfügbaren Watch-Optionen sind:"
 
 #. type: =item
 #: ../scripts/uscan.pl:292
@@ -19478,9 +19478,9 @@ msgid ""
 "Please note the repacking of the upstream tarballs by B<mk-origtargz> "
 "happens only if one of the following conditions is satisfied:"
 msgstr ""
-"Bitte beachten Sie, dass das erneute Packen des Tarballs der "
-"Ursprungsautoren durch B<mk-origtargz> nur vorkommt, wenn eine der folgenden "
-"Bedingungen erfüllt ist:"
+"Bitte beachten Sie, dass das erneute Packen des Tarballs der Ursprungsautoren "
+"durch B<mk-origtargz> nur vorkommt, wenn eine der folgenden Bedingungen "
+"erfüllt ist:"
 
 #. type: =item
 #: ../scripts/uscan.pl:313
@@ -19491,9 +19491,9 @@ msgstr ""
 "* B<USCAN_REPACK> ist in der Devscripts-Konfiguration gesetzt. (Siehe "
 "L<DEVSCRIPT-KONFIGURATIONSVARIABLEN>."
 
-# FIXME missing format character
 #. type: =item
 #: ../scripts/uscan.pl:316
+# FIXME missing format character
 msgid "* B<--repack> is set on the commandline.  See <COMMANDLINE OPTIONS>."
 msgstr ""
 "* B<--repack> wurde auf der Befehlszeile gesetzt. Siehe "
@@ -19503,8 +19503,7 @@ msgstr ""
 #: ../scripts/uscan.pl:318
 msgid "* B<repack> is set in the watch line as B<opts=\"repack,>I<...>B<\">."
 msgstr ""
-"* B<repack> wurde in der »watch«-Zeile als B<opts=\"repack,>I<…>B<\"> "
-"gesetzt."
+"* B<repack> wurde in der Watch-Zeile als B<opts=\"repack,>I<…>B<\"> gesetzt."
 
 #. type: =item
 #: ../scripts/uscan.pl:320
@@ -19521,10 +19520,11 @@ msgid ""
 "files from the upstream tarball and repack it.  See L<COPYRIGHT FILE "
 "EXAMPLES> and mk-origtargz(1)."
 msgstr ""
-"* In F<debian/copyright> sind B<Files-Excluded>- oder B<Files-Excluded-"
-">I<Komponente>-Absätze gesetzt, damit das von B<uscan> aufgerufene B<mk-"
-"origtargz> Dateien aus dem Tarball der Ursprungsautoren entfernt und ihn "
-"erneut packt. Siehe L<BEISPIELE FÜR COPYRIGHT-DATEIEN> und mk-origtargz(1)."
+"* In F<debian/copyright> sind B<Files-Excluded>- oder "
+"B<Files-Excluded->I<Komponente>-Absätze gesetzt, damit das von B<uscan> "
+"aufgerufene B<mk-origtargz> Dateien aus dem Tarball der Ursprungsautoren "
+"entfernt und ihn erneut packt. Siehe L<BEISPIELE FÜR COPYRIGHT-DATEIEN> und "
+"mk-origtargz(1)."
 
 #. type: =item
 #: ../scripts/uscan.pl:329
@@ -19576,8 +19576,8 @@ msgid ""
 "This mode is the default one which downloads the specified tarball from the "
 "archive URL on the web."
 msgstr ""
-"Dieser Modus ist die Voreinstellung, durch den der angegebene Tarball von "
-"der Archiv-URL im Web heruntergeladen wird."
+"Dieser Modus ist die Voreinstellung, durch den der angegebene Tarball von der "
+"Archiv-URL im Web heruntergeladen wird."
 
 #. type: textblock
 #: ../scripts/uscan.pl:352
@@ -19635,9 +19635,9 @@ msgid ""
 "Use B<pgpsigurlmangle=>I<rules> to generate the candidate upstream signature "
 "file URL string from the upstream tarball URL. (default)"
 msgstr ""
-"verwendet B<pgpsigurlmangle=>I<Regeln>, um die zur Auswahl stehende URL-"
-"Zeichenkette der Signaturdatei für die Tarball-URL der Ursprungsautoren zu "
-"erzeugen. (Voreinstellung)"
+"verwendet B<pgpsigurlmangle=>I<Regeln>, um die zur Auswahl stehende "
+"URL-Zeichenkette der Signaturdatei für die Tarball-URL der Ursprungsautoren "
+"zu erzeugen. (Voreinstellung)"
 
 #. type: textblock
 #: ../scripts/uscan.pl:377
@@ -19646,8 +19646,8 @@ msgid ""
 "URLs for the signature file and suggests adding a B<pgpsigurlmangle> rule."
 msgstr ""
 "Falls die angegebene B<pgpsigurlmangle> fehlt, überprüft B<uscan> mögliche "
-"URLs auf Signaturdateien und schlägt die Aufnahme einer B<pgpsigurlmangle>-"
-"Regel vor."
+"URLs auf Signaturdateien und schlägt die Aufnahme einer "
+"B<pgpsigurlmangle>-Regel vor."
 
 #. type: =item
 #: ../scripts/uscan.pl:380
@@ -19660,9 +19660,9 @@ msgid ""
 "Use B<pgpsigurlmangle=>I<rules> to generate the candidate upstream signature "
 "file URL string from the upstream tarball URL."
 msgstr ""
-"verwendet B<pgpsigurlmangle=>I<Regeln>, um die zu Auswahl stehende URL-"
-"Zeichenkette der Signaturdatei für die Tarball-URL der Ursprungsautoren zu "
-"erzeugen."
+"verwendet B<pgpsigurlmangle=>I<Regeln>, um die zu Auswahl stehende "
+"URL-Zeichenkette der Signaturdatei für die Tarball-URL der Ursprungsautoren "
+"zu erzeugen."
 
 #. type: =item
 #: ../scripts/uscan.pl:385
@@ -19677,7 +19677,7 @@ msgid ""
 "Otherwise, no verification occurs."
 msgstr ""
 "prüft diesen heruntergeladenen Tarball mit der Signaturdatei, die in der "
-"nächsten »watch«-Zeile angegeben ist. Die nächste »watch«-Zeile muss "
+"nächsten Watch-Zeile angegeben ist. Die nächste Watch-Zeile muss "
 "B<pgpmode=previous> lauten, sonst findet keine Prüfung statt."
 
 #. type: =item
@@ -19691,8 +19691,8 @@ msgid ""
 "Verify the downloaded tarball file specified in the previous watch line with "
 "this signature file.  The previous watch line must be B<pgpmode=next>."
 msgstr ""
-"prüft den in der vorhergehenden »watch«-Zeile angegebenen heruntergeladenen "
-"Tarball mit dieser Signaturdatei. Die vorhergehende »watch«-Zeile muss "
+"prüft den in der vorhergehenden Watch-Zeile angegebenen heruntergeladenen "
+"Tarball mit dieser Signaturdatei. Die vorhergehende Watch-Zeile muss "
 "B<pgpmode=next> lauten."
 
 #. type: =item
@@ -19742,8 +19742,8 @@ msgid ""
 "Disable all site specific special case code such as URL redirector uses and "
 "page content alterations. (persistent)"
 msgstr ""
-"deaktiviert allen Site-spezifischen Kode für Sonderfälle wie den Gebrauch "
-"von URL-Weiterleitungen und Änderungen des Seiteninhalts. (beständig)"
+"deaktiviert allen Site-spezifischen Kode für Sonderfälle wie den Gebrauch von "
+"URL-Weiterleitungen und Änderungen des Seiteninhalts. (beständig)"
 
 #. type: =item
 #: ../scripts/uscan.pl:416
@@ -19765,7 +19765,7 @@ msgid ""
 "B<user-agent> option should be specified by itself in the watch line without "
 "I<URL>, to allow using semicolons and commas in it."
 msgstr ""
-"Die Option B<user-agent> sollte allein in der »watch«-Zeile ohne I<URL> "
+"Die Option B<user-agent> sollte allein in der Watch-Zeile ohne I<URL> "
 "angegeben werden, um die Verwendung von Strichpunkten oder Kommas darin zu "
 "ermöglichen."
 
@@ -19812,8 +19812,8 @@ msgid ""
 "aa>, and B<-b>, when executed by B<mk-origtargz>."
 msgstr ""
 "fügt die zusätzlichen Optionen hinzu, die mit dem Befehl B<unzip> verwendet "
-"werden, wie beispielsweise B<-a>, B<-aa> und B<-b>, wenn er durch B<mk-"
-"origtargz> ausgeführt wird."
+"werden, wie beispielsweise B<-a>, B<-aa> und B<-b>, wenn er durch "
+"B<mk-origtargz> ausgeführt wird."
 
 #. type: =item
 #: ../scripts/uscan.pl:441
@@ -19829,8 +19829,8 @@ msgid ""
 msgstr ""
 "bringt die letzte in F<debian/changelog> gefundene Versionszeichenkette der "
 "Ursprungsautoren in Normalform, um sie mit der verfügbaren Tarball-Version "
-"der Ursprungsautoren zu vergleichen. Üblicherweise wird hier die Debian-"
-"spezifische Erweiterung wie B<s/\\+dfsg\\d*$//> entfernt."
+"der Ursprungsautoren zu vergleichen. Üblicherweise wird hier die "
+"Debian-spezifische Erweiterung wie B<s/\\+dfsg\\d*$//> entfernt."
 
 #. type: =item
 #: ../scripts/uscan.pl:447
@@ -19875,8 +19875,8 @@ msgid ""
 "This is handy if you wish to access Amazon AWS or Subversion repositories in "
 "which <a href=\"...\"> is not used."
 msgstr ""
-"Dies ist praktisch, falls Sie auf Amazon AWS oder Subversion-Depots "
-"zugreifen wollen, bei denen <a href=\"…\"> nicht verwendet wird."
+"Dies ist praktisch, falls Sie auf Amazon AWS oder Subversion-Depots zugreifen "
+"wollen, bei denen <a href=\"…\"> nicht verwendet wird."
 
 #. type: =item
 #: ../scripts/uscan.pl:463
@@ -19890,9 +19890,9 @@ msgid ""
 "source of the web page.  This is used as the version sorting index when "
 "selecting the latest upstream version."
 msgstr ""
-"bringt die aus den Hrefs in der Quelle der Webseite extrahierten Kandidaten-"
-"Versionszeichenketten der Ursprungsautoren in Normalform. Dies wird als "
-"Sortierindex für Versionen benutzt, wenn die neueste Version der "
+"bringt die aus den Hrefs in der Quelle der Webseite extrahierten "
+"Kandidaten-Versionszeichenketten der Ursprungsautoren in Normalform. Dies "
+"wird als Sortierindex für Versionen benutzt, wenn die neueste Version der "
 "Ursprungsautoren ausgewählt wird."
 
 #. type: =item
@@ -19906,8 +19906,8 @@ msgid ""
 "Syntactic shorthand for B<uversionmangle=>I<rules>B<, "
 "dversionmangle=>I<rules>"
 msgstr ""
-"syntaktische Kurzschrift für B<uversionmangle=>I<Regeln>B<,"
-"dversionmangle=>I<Regeln>"
+"syntaktische Kurzschrift für "
+"B<uversionmangle=>I<Regeln>B<,dversionmangle=>I<Regeln>"
 
 #. type: =item
 #: ../scripts/uscan.pl:475
@@ -19938,12 +19938,12 @@ msgid ""
 "the generated upstream tarball filename."
 msgstr ""
 "erzeugt aus der ausgewählten Href-Zeichenkette den Tarball-Dateinamen der "
-"Ursprungsautoren, falls I<Suchmuster> die I<< <neueste-"
-"Ursprungsautorenversion> >> aus der ausgewählten Href-Zeichenkette "
-"extrahieren kann. Andernfalls wird der Tarball-Dateiname der "
-"Ursprungsautoren aus seiner vollständigen URL-Zeichenkette erzeugt und die "
-"fehlende I<< <neueste-Ursprungsautorenversion> >> aus dem erzeugten Tarball-"
-"Dateinamen der Ursprungsautoren gesetzt."
+"Ursprungsautoren, falls I<Suchmuster> die I<< "
+"<neueste-Ursprungsautorenversion> >> aus der ausgewählten Href-Zeichenkette "
+"extrahieren kann. Andernfalls wird der Tarball-Dateiname der Ursprungsautoren "
+"aus seiner vollständigen URL-Zeichenkette erzeugt und die fehlende I<< "
+"<neueste-Ursprungsautorenversion> >> aus dem erzeugten Tarball-Dateinamen der "
+"Ursprungsautoren gesetzt."
 
 #. type: textblock
 #: ../scripts/uscan.pl:488
@@ -19983,9 +19983,9 @@ msgid ""
 "used to add a suffix such as B<+dfsg1> to a MUT package."
 msgstr ""
 "erzeugt die Versionszeichenkette I<< <Originalversion> >> des Quell-Tarballs "
-"I<< <Quellpaket>_<Originalversion>.orig.tar.gz >> aus I<< <neueste-"
-"Ursprungsautorenversion> >>. Dies sollte verwendet werden, um einem MUT-"
-"Paket eine Erweiterung wie B<+dfsg1> hinzuzufügen."
+"I<< <Quellpaket>_<Originalversion>.orig.tar.gz >> aus I<< "
+"<neueste-Ursprungsautorenversion> >>. Dies sollte verwendet werden, um einem "
+"MUT-Paket eine Erweiterung wie B<+dfsg1> hinzuzufügen."
 
 #. type: textblock
 #: ../scripts/uscan.pl:505
@@ -20014,8 +20014,8 @@ msgid ""
 "Each mangling I<rule> behaves as if a Perl command \"I<$string> B<=~> I<rule>"
 "\" is executed.  There are some notable details."
 msgstr ""
-"Jede Zerlegungs-I<Regel> verhält sich, als ob ein Perl-Befehl »I<"
-"$Zeichenkette B<=~> I<Regel>« ausgeführt würde. Es gibt einige "
+"Jede Zerlegungs-I<Regel> verhält sich, als ob ein Perl-Befehl "
+"»I<$Zeichenkette B<=~> I<Regel>« ausgeführt würde. Es gibt einige "
 "beachtenswerte Einzelheiten."
 
 #. type: =item
@@ -20036,11 +20036,10 @@ msgid ""
 "\\1> syntax).  Code execution is not allowed (i.e. no B<(?{})> or B<(??{})> "
 "constructs)."
 msgstr ""
-"gleicht Muster eines regulären Ausdrucks ab und ersetzt die "
-"Zielzeichenkette. Nur die Schalter B<g>, B<i> und B<x> sind verfügbar. "
-"Verwenden Sie für Rückwärtsreferenzen die B<$1>-Syntax (nicht die B<\\1>-"
-"Syntax). Das Ausführen von Code ist nicht erlaubt (d.h. keine B<(?{})>- oder "
-"B<(??{})>-Konstrukte)."
+"gleicht Muster eines regulären Ausdrucks ab und ersetzt die Zielzeichenkette. "
+"Nur die Schalter B<g>, B<i> und B<x> sind verfügbar. Verwenden Sie für "
+"Rückwärtsreferenzen die B<$1>-Syntax (nicht die B<\\1>-Syntax). Das Ausführen "
+"von Code ist nicht erlaubt (d.h. keine B<(?{})>- oder B<(??{})>-Konstrukte)."
 
 #. type: =item
 #: ../scripts/uscan.pl:528
@@ -20091,9 +20090,8 @@ msgid ""
 "The last upstream version is normalized to B<2.03+dfsg1> by removing the "
 "epoch and the Debian revision."
 msgstr ""
-"Die neuste Version der Ursprungsautoren wird auf die Normalform "
-"B<2.03+dfsg1> gebracht, indem die Epoche und die Debian-Revision entfernt "
-"werden."
+"Die neuste Version der Ursprungsautoren wird auf die Normalform B<2.03+dfsg1> "
+"gebracht, indem die Epoche und die Debian-Revision entfernt werden."
 
 #. type: textblock
 #: ../scripts/uscan.pl:555
@@ -20112,8 +20110,8 @@ msgstr ""
 "B<2.03+dfsg1> ist, zeigt dies an, dass der Tarball neu gepackt wurde. Die "
 "Endung B<+dfsg1> wird durch die Zeichenkettenersetzung B<s/\\+dfsg\\d*$//> "
 "entfernt, um die neuste Version der Ursprungsautoren B<2.03> nach "
-"Dversionmangle zu erzeugen. Sie wird mit den Kandidaten-Tarball-Versionen "
-"der Ursprungsautoren wie B<2.03>, B<2.04>, … verglichen, die auf deren Site "
+"Dversionmangle zu erzeugen. Sie wird mit den Kandidaten-Tarball-Versionen der "
+"Ursprungsautoren wie B<2.03>, B<2.04>, … verglichen, die auf deren Site "
 "gefunden wurden. Setzen Sie diese Regel daher wie folgt:"
 
 #. type: =item
@@ -20127,8 +20125,8 @@ msgid ""
 "B<uscan> downloads a web page from B<http://>I<URL> specified in F<debian/"
 "watch>."
 msgstr ""
-"B<uscan> lädt eine in F<debian/watch> angegebene Webseite von B<http://"
-">I<URL> herunter."
+"B<uscan> lädt eine in F<debian/watch> angegebene Webseite von "
+"B<http://>I<URL> herunter."
 
 #. type: =item
 #: ../scripts/uscan.pl:574
@@ -20136,8 +20134,8 @@ msgid ""
 "* If the directory name part of I<URL> has no parentheses, B<(> and B<)>, it "
 "is taken as verbatim."
 msgstr ""
-"* Falls der Verzeichnisnamensteil von I<URL> keine Klammern, B<(> und B<)>, "
-"hat, wird er als wortgetreu angesehen."
+"* Falls der Verzeichnisnamensteil von I<URL> keine Klammern, B<(> und "
+"B<)>, hat, wird er als wortgetreu angesehen."
 
 #. type: =item
 #: ../scripts/uscan.pl:577
@@ -20150,8 +20148,8 @@ msgid ""
 "the newest version."
 msgstr ""
 "* Falls der Verzeichnisnamensteil von I<URL> keine Klammern, B<(> und B<)>, "
-"hat, durchsucht B<uscan> rekursiv alle möglichen Verzeichnisse, um eine "
-"Seite mit der neuesten Version zu finden. Wenn die Regel B<dirversionmangle> "
+"hat, durchsucht B<uscan> rekursiv alle möglichen Verzeichnisse, um eine Seite "
+"mit der neuesten Version zu finden. Wenn die Regel B<dirversionmangle> "
 "existiert, wird der erzeugte Sortierindex zum Finden der neuesten Version "
 "benutzt. Falls eine spezielle Version zum Herunterladen angegeben wurde, hat "
 "die passende Versionszeichenkette eine höhere Priorität als die neueste "
@@ -20176,9 +20174,9 @@ msgstr ""
 "Bitte beachten Sie oben das abschließende B</>, das B<([\\d\\.]+)> zum "
 "Verzeichnis macht."
 
-# FIXME s/is/is a/
 #. type: textblock
 #: ../scripts/uscan.pl:597
+# FIXME s/is/is a/
 msgid ""
 "If the B<pagemangle> rule exists, the whole downloaded web page as a string "
 "is normalized by applying this rule to it.  This is very powerful tool and "
@@ -20201,14 +20199,14 @@ msgid ""
 "narrow down the candidates.  This pattern match needs to be anchored at the "
 "beginning and the end.  For example, candidate hrefs may be:"
 msgstr ""
-"Die heruntergeladene Webseite wird nach Hrefs gescannt, die in der "
-"Markierung B<< <a href=\" >> I<…> B<< \"> >> definiert sind, um die "
-"Kandidaten-Tarball-Hrefs der Ursprungsautoren zu orten. Diese Kandidaten-"
-"Tarball-Hrefs der Ursprungsautoren werden mit dem regulären Perl-"
-"Ausdrucksmuster I<Suchmuster> wie B<< DL-(?:[\\d\\.]+?)/foo-(.+)\\.tar\\.gz "
-">> verglichen, um die Auswahl der Kandidaten zu begrenzen. Diese Mustersuche "
-"muss mit dem Anfang und dem Ende verankert werden. Kandidaten-Hrefs können "
-"zum Beispiel wie folgt aussehen:"
+"Die heruntergeladene Webseite wird nach Hrefs gescannt, die in der Markierung "
+"B<< <a href=\" >> I<…> B<< \"> >> definiert sind, um die "
+"Kandidaten-Tarball-Hrefs der Ursprungsautoren zu orten. Diese "
+"Kandidaten-Tarball-Hrefs der Ursprungsautoren werden mit dem regulären "
+"Perl-Ausdrucksmuster I<Suchmuster> wie B<< "
+"DL-(?:[\\d\\.]+?)/foo-(.+)\\.tar\\.gz >> verglichen, um die Auswahl der "
+"Kandidaten zu begrenzen. Diese Mustersuche muss mit dem Anfang und dem Ende "
+"verankert werden. Kandidaten-Hrefs können zum Beispiel wie folgt aussehen:"
 
 #. type: =item
 #: ../scripts/uscan.pl:611
@@ -20269,9 +20267,8 @@ msgid ""
 "The downloaded tarball filename is basically set to the same as the filename "
 "in the remote URL of the selected href."
 msgstr ""
-"Der Dateiname des heruntergeladenen Tarballs wird grundsätzlich auf "
-"denselben Dateinamen gesetzt, wie der in der fernen URL der ausgewählten "
-"Href."
+"Der Dateiname des heruntergeladenen Tarballs wird grundsätzlich auf denselben "
+"Dateinamen gesetzt, wie der in der fernen URL der ausgewählten Href."
 
 #. type: textblock
 #: ../scripts/uscan.pl:641
@@ -20307,8 +20304,8 @@ msgid ""
 msgstr ""
 "Falls mehrere Tarball-Hrefs der Ursprungsautoren zu einer einzigen Version "
 "mit verschiedenen existierenden Erweiterungen gehören, wird die am höchsten "
-"komprimierte ausgewählt. (Priorität: B<< tar.xz > tar.lzma > tar.bz2 > tar."
-"gz >>.)"
+"komprimierte ausgewählt. (Priorität: B<< tar.xz > tar.lzma > tar.bz2 > "
+"tar.gz >>.)"
 
 #. type: textblock
 #: ../scripts/uscan.pl:653
@@ -20323,8 +20320,8 @@ msgstr ""
 "ist, wird sie mittels der Basis-URL der Webseite in eine absolute URL "
 "umgewandelt. Falls die Markierung B<< <base href=\" >> I< … > B<< \"> >> auf "
 "der Webseite existiert, wird die ausgewählte Tarball-Href der "
-"Ursprungsautoren stattdessen mittels der angegebenen Basis-URL in der Basis-"
-"Markierung in eine absolute URL umgewandelt."
+"Ursprungsautoren stattdessen mittels der angegebenen Basis-URL in der "
+"Basis-Markierung in eine absolute URL umgewandelt."
 
 #. type: textblock
 #: ../scripts/uscan.pl:659
@@ -20333,8 +20330,8 @@ msgid ""
 "is normalized by applying this rule to it. (This is useful for some sites "
 "with the obfuscated download URL.)"
 msgstr ""
-"Falls die Regel B<downloadurlmangle> existiert, wird die ausgewählte Tarball-"
-"Href der Ursprungsautoren durch Anwenden dieser Regel in Normalform "
+"Falls die Regel B<downloadurlmangle> existiert, wird die ausgewählte "
+"Tarball-Href der Ursprungsautoren durch Anwenden dieser Regel in Normalform "
 "gebracht. (Dies ist für einige Sites mit verschleierter Herunterlade-URL "
 "nützlich.)"
 
@@ -20350,12 +20347,12 @@ msgid ""
 msgstr ""
 "Falls die Regel B<filenamemangle> existiert, wird der Dateiname des "
 "heruntergeladenen Tarballs durch Anwenden dieser Regel auf die ausgewählte "
-"Href erzeugt, falls I<Suchmuster> die neueste Version I<< <neueste-"
-"Ursprungsautorenversion> >> der Ursprungsautoren aus der ausgewählten Href-"
-"Zeichenkette extrahieren kann. Andernfalls wird der Tarball-Dateiname der "
-"Ursprungsautoren aus seiner vollständigen URL-Zeichenkette und die fehlende "
-"I<< <neueste-Ursprungsautorenversion> >> aus dem erzeugten Tarball-"
-"Dateinamen der Ursprungsautoren erzeugt."
+"Href erzeugt, falls I<Suchmuster> die neueste Version I<< "
+"<neueste-Ursprungsautorenversion> >> der Ursprungsautoren aus der "
+"ausgewählten Href-Zeichenkette extrahieren kann. Andernfalls wird der "
+"Tarball-Dateiname der Ursprungsautoren aus seiner vollständigen "
+"URL-Zeichenkette und die fehlende I<< <neueste-Ursprungsautorenversion> >> "
+"aus dem erzeugten Tarball-Dateinamen der Ursprungsautoren erzeugt."
 
 #. type: textblock
 #: ../scripts/uscan.pl:670
@@ -20432,11 +20429,12 @@ msgid ""
 msgstr ""
 "Falls die Signaturdatei heruntergeladen wird, wird der Tarball der "
 "Ursprungsautoren anhand dieser Signaturdatei auf seine Echtheit hin "
-"überprüft. Dies geschieht mittels des Schlüsselbunds F<debian/upstream/"
-"signing-key.pgp> oder des gehärteten Schlüsselbunds F<debian/upstream/"
-"signing-key.asc> (siehe L<BEISPIELE FÜR SCHLÜSSELBUNDDATEIEN>). Falls seine "
-"Signatur ungültig ist oder nicht durch einen der aufgeführten Schlüssel "
-"erstellt wurde, wird B<uscan> einen Fehler melden."
+"überprüft. Dies geschieht mittels des Schlüsselbunds "
+"F<debian/upstream/signing-key.pgp> oder der ASCII-Hülle des Schlüsselbunds "
+"F<debian/upstream/signing-key.asc> (siehe L<BEISPIELE FÜR "
+"SCHLÜSSELBUNDDATEIEN>). Falls seine Signatur ungültig ist oder nicht durch "
+"einen der aufgeführten Schlüssel erstellt wurde, wird B<uscan> einen Fehler "
+"melden."
 
 #. type: textblock
 #: ../scripts/uscan.pl:702
@@ -20447,11 +20445,11 @@ msgid ""
 "version of all the source packages of the MUT package for which the "
 "repacksuffix mechanism doesn't work."
 msgstr ""
-"Falls die Regel B<oversionmangle> existiert, wird die Quellcode-Tarball-"
-"Version I<Originalversion> aus der heruntergeladenen I<neueste-"
-"Ursprungsautorenversion> erzeugt, indem diese Regel angewandt wird. Diese "
-"Regel ist nützlich, um eine Erweiterung wie B<+dfsg1> an die Version aller "
-"Quellpakete des MUT-Pakets anzuhängen, bei denen der Mechanismus "
+"Falls die Regel B<oversionmangle> existiert, wird die "
+"Quellcode-Tarball-Version I<Originalversion> aus der heruntergeladenen "
+"I<neueste-Ursprungsautorenversion> erzeugt, indem diese Regel angewandt wird. "
+"Diese Regel ist nützlich, um eine Erweiterung wie B<+dfsg1> an die Version "
+"aller Quellpakete des MUT-Pakets anzuhängen, bei denen der Mechanismus "
 "»repacksuffix« nicht funktioniert."
 
 #. type: textblock
@@ -20478,11 +20476,11 @@ msgid ""
 "source package name found in F<debian/changelog>. The generated symlink may "
 "be:"
 msgstr ""
-"B<mk-origtargz> erstellt einen symbolischen Verweis I<< ../"
-"bar_<Originalversion>.orig.tar.gz >>, der auf den heruntergeladenen lokalen "
-"Tarball der Ursprungsautoren verweist. I<< bar >> ist hier der in F<debian/"
-"changelog> gefundene Quellpaketname. Der erzeugte symbolische Verweis könnte "
-"lauten:"
+"B<mk-origtargz> erstellt einen symbolischen Verweis "
+"I<< ../bar_<Originalversion>.orig.tar.gz >>, der auf den heruntergeladenen "
+"lokalen Tarball der Ursprungsautoren verweist. I<< bar >> ist hier der in "
+"F<debian/changelog> gefundene Quellpaketname. Der erzeugte symbolische "
+"Verweis könnte lauten:"
 
 #. type: =item
 #: ../scripts/uscan.pl:722
@@ -20516,14 +20514,15 @@ msgid ""
 "the B<repacksuffix> option for the single upstream package.  Here I<< "
 "<oversion> >> is updated to be I<< <oversion><suffix> >>."
 msgstr ""
-"B<mk-origtargz> prüft den Dateinamenschnipsel des B<Files-Excluded>-"
-"Abschnitts im ersten Teil von F<debian/copyright> und entfernt entsprechende "
-"Dateien, um einen neu gepackten Tarball der Ursprungsautoren zu erstellen. "
-"Normalerweise wird der neu gepackte Tarball der Ursprungsautoren mit der "
-"I<Endung> in I<< ../bar_<Originalversion><Endung>.orig.tar.gz >> umbenannt. "
-"Für das einzelne Paket der Ursprungsautoren wird die Option B<repacksuffix> "
-"benutzt. I<< <Originalversion> >> wird hier auf I<< "
-"<Originalversion><Endung> >> aktualisiert."
+"B<mk-origtargz> prüft den Dateinamenschnipsel des "
+"B<Files-Excluded>-Abschnitts im ersten Teil von F<debian/copyright> und "
+"entfernt entsprechende Dateien, um einen neu gepackten Tarball der "
+"Ursprungsautoren zu erstellen. Normalerweise wird der neu gepackte Tarball "
+"der Ursprungsautoren mit der I<Endung> in I<< "
+"../bar_<Originalversion><Endung>.orig.tar.gz >> umbenannt. Für das einzelne "
+"Paket der Ursprungsautoren wird die Option B<repacksuffix> benutzt. I<< "
+"<Originalversion> >> wird hier auf I<< <Originalversion><Endung> >> "
+"aktualisiert."
 
 #. type: textblock
 #: ../scripts/uscan.pl:738
@@ -20540,8 +20539,8 @@ msgid ""
 "So the combined options are set as B<opts=\"dversionmangle=s/\\+dfsg\\d*$// ,"
 "repacksuffix=+dfsg1\">, instead."
 msgstr ""
-"Daher werden die kombinierten Optionen stattdessen als B<opts="
-"\"dversionmangle=s/\\+dfsg\\d*$// ,repacksuffix=+dfsg1\"> gesetzt."
+"Daher werden die kombinierten Optionen stattdessen als "
+"B<opts=\"dversionmangle=s/\\+dfsg\\d*$// ,repacksuffix=+dfsg1\"> gesetzt."
 
 #. type: textblock
 #: ../scripts/uscan.pl:744
@@ -20561,7 +20560,7 @@ msgid ""
 "I<oversion> \" for the version=4 watch file."
 msgstr ""
 "B<uscan> ruft normalerweise »B<uupdate> B<--find --upstream-version> "
-"I<Originalversion>« für die »version=4«-»watch«-Datei auf."
+"I<Originalversion>« für die »version=4«-Watch-Datei auf."
 
 #. type: textblock
 #: ../scripts/uscan.pl:757
@@ -20570,9 +20569,9 @@ msgid ""
 "been invoked to make B<*.orig.tar.gz> file already.  B<uscan> picks I<< bar "
 ">> from F<debian/changelog>."
 msgstr ""
-"Bitte beachten Sie, dass hier die Option B<--find> benutzt wird, da B<mk-"
-"origtargz> bereits aufgerufen wurde, um die Datei B<*.orig.tar.gz> zu "
-"erstellen."
+"Bitte beachten Sie, dass hier die Option B<--find> benutzt wird, da "
+"B<mk-origtargz> bereits aufgerufen wurde, um die Datei B<*.orig.tar.gz> zu "
+"erstellen. B<uscan> nimmt I<< bar >> aus F<debian/changelog>."
 
 #. type: textblock
 #: ../scripts/uscan.pl:761
@@ -20596,10 +20595,10 @@ msgid ""
 "announcement web page.  You should not try to second guess the upstream "
 "archive structure if possible.  Here are the typical F<debian/watch> files."
 msgstr ""
-"Wenn Sie die »watch«-Datei schreiben, sollten Sie sich auf die Webseite "
+"Wenn Sie die Watch-Datei schreiben, sollten Sie sich auf die Webseite "
 "verlassen, die zuletzt die Quelle der Ursprungsautoren ankündigte. Sie "
-"sollten wenn möglich nicht versuchen, die Archivstruktur der "
-"Ursprungsautoren vorauszusagen. Hier folgen typische F<debian/watch>-Dateien."
+"sollten wenn möglich nicht versuchen, die Archivstruktur der Ursprungsautoren "
+"vorauszusagen. Es folgen typische F<debian/watch>-Dateien."
 
 #. type: textblock
 #: ../scripts/uscan.pl:770
@@ -20612,6 +20611,7 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/uscan.pl:773
+# FIXME s/the before/before the/ and s/are/is/
 msgid ""
 "The existence and non-existence of a space the before tailing B<\\> (back "
 "slash)  are significant."
@@ -20628,7 +20628,7 @@ msgstr "HTTP-Site (einfach)"
 #: ../scripts/uscan.pl:778
 msgid "Here is an example for the basic single upstream tarball."
 msgstr ""
-"Hier folgt ein Beispiel für einen einfachen einzelnen Tarball der "
+"Es folgt ein Beispiel für einen einfachen einzelnen Tarball der "
 "Ursprungsautoren."
 
 #. type: verbatim
@@ -20670,8 +20670,8 @@ msgid ""
 "For the upstream source package B<foo-2.0.tar.gz>, this watch file downloads "
 "and creates the Debian B<orig.tar> file B<foo_2.0.orig.tar.gz>."
 msgstr ""
-"Diese »watch«-Datei lädt für das Quellpaket B<foo-2.0.tar.gz> der "
-"Ursprungsautoren die Debian-B<orig.tar>-Datei B<foo_2.0.orig.tar.gz>."
+"Diese Watch-Datei lädt für das Quellpaket B<foo-2.0.tar.gz> der "
+"Ursprungsautoren die Debian-B<orig.tar>-Datei B<foo_2.0.orig.tar.gz> herunter."
 
 #. type: =head2
 #: ../scripts/uscan.pl:793
@@ -20684,7 +20684,7 @@ msgid ""
 "Here is an example for the basic single upstream tarball with the matching "
 "signature file in the same file path."
 msgstr ""
-"Hier folgt ein Beispiel für einen einfachen einzelnen Tarball der "
+"Es folgt ein Beispiel für einen einfachen einzelnen Tarball der "
 "Ursprungsautoren mit der passenden Signaturdatei im selben Dateipfad."
 
 #. type: verbatim
@@ -20710,10 +20710,10 @@ msgid ""
 "the Debian B<orig.tar> file B<foo_2.0.orig.tar.gz>."
 msgstr ""
 "Für das Quellpaket B<foo-2.0.tar.gz> der Ursprungsautoren und die "
-"Signaturdatei B<foo-2.0.tar.gz.asc> der Ursprungsautoren lädt diese »watch«-"
-"Datei diese Dateien herunter, prüft die Echtheit mittels des Schlüsselbunds "
-"F<debian/upstream-key.pgp> und erstellt die Debian-B<orig.tar>-Datei "
-"B<foo_2.0.orig.tar.gz>."
+"Signaturdatei B<foo-2.0.tar.gz.asc> der Ursprungsautoren lädt diese "
+"Watch-Datei diese Dateien herunter, prüft die Echtheit mittels des "
+"Schlüsselbunds F<debian/upstream-key.pgp> und erstellt die "
+"Debian-B<orig.tar>-Datei B<foo_2.0.orig.tar.gz>."
 
 #. type: =head2
 #: ../scripts/uscan.pl:807
@@ -20726,7 +20726,7 @@ msgid ""
 "Here is an example for the basic single upstream tarball with the matching "
 "signature file in the unrelated file path."
 msgstr ""
-"Hier folgt ein Beispiel für einen einfachen einzelnen Tarball der "
+"Es folgt ein Beispiel für einen einfachen einzelnen Tarball der "
 "Ursprungsautoren mit der passenden Signaturdatei im nicht zugehörigen "
 "Dateipfad."
 
@@ -20764,10 +20764,9 @@ msgid ""
 "that for the upstream tarball specified in the previous line by having "
 "B<previous> as I<version> in the watch line."
 msgstr ""
-"Der Teil B<([\\d\\.]+)> für die Signaturdatei hat eine strikte "
-"Voraussetzung, zum in der vorhergehenden Zeile angegebenen Tarball der "
-"Ursprungsautoren zu passen, die in der »watch«-Zeile als I<Version> "
-"B<previous> enthält."
+"Der Teil B<([\\d\\.]+)> für die Signaturdatei hat eine strikte Voraussetzung, "
+"zum in der vorhergehenden Zeile angegebenen Tarball der Ursprungsautoren zu "
+"passen, die in der Watch-Zeile als I<Version> B<previous> enthält."
 
 #. type: =head2
 #: ../scripts/uscan.pl:825
@@ -20780,7 +20779,7 @@ msgid ""
 "Here is an example for the maximum flexibility of upstream tarball and "
 "signature file extensions."
 msgstr ""
-"Hier folgt ein Beispiel für die maximale Flexibilität beim Tarball der "
+"Es folgt ein Beispiel für die maximale Flexibilität beim Tarball der "
 "Ursprungsautoren und Signaturdateierweiterungen."
 
 #. type: verbatim
@@ -20856,7 +20855,7 @@ msgstr ""
 "Für das Hauptquellpaket der Ursprungsautoren B<foo-2.0.tar.gz> und die "
 "untergeordneten Quellpakete der Ursprungsautoren B<foobar-2.0.tar.gz> und "
 "B<foobaz-2.0.tar.gz>, die unter F<bar/> und F<baz/> installiert werden, lädt "
-"diese »watch«-Datei die Debian-B<orig.tar>-Dateien B<foo_2.0.orig.tar.gz>, "
+"diese Watch-Datei die Debian-B<orig.tar>-Dateien B<foo_2.0.orig.tar.gz>, "
 "B<foo_2.0.orig-bar.tar.gz> und B<foo_2.0.orig-baz.tar.gz> herunter und "
 "erstellt sie. Außerdem werden diese Tarbälle der Ursprungsautoren anhand "
 "ihrer Signaturdateien überprüft."
@@ -20864,7 +20863,7 @@ msgstr ""
 #. type: =head2
 #: ../scripts/uscan.pl:859
 msgid "HTTP site (recursive directory scanning)"
-msgstr "HTTP-Site (rekursives Scannen des Verzeichnisses)"
+msgstr "HTTP-Site (rekursives Durchsuchen des Verzeichnisses)"
 
 #. type: textblock
 #: ../scripts/uscan.pl:861
@@ -20873,9 +20872,9 @@ msgid ""
 "tarball and its signature files released in a directory named after their "
 "version."
 msgstr ""
-"Hier folgt ein Beispiel mit dem rekursiven Scannen des Verzeichnisses nach "
-"dem Tarball der Ursprungsautoren und ihrer Signaturdatei, die in einem "
-"Verzeichnis veröffentlicht wurden, das nach ihrer Version benannt ist."
+"Es folgt ein Beispiel mit dem rekursiven Durchsuchen des Verzeichnisses nach "
+"dem Tarball der Ursprungsautoren und seiner Signaturdatei, die in einem "
+"Verzeichnis veröffentlicht wurden, das nach seiner Version benannt ist."
 
 #. type: verbatim
 #: ../scripts/uscan.pl:865
@@ -20929,7 +20928,7 @@ msgid ""
 "normal watch file:"
 msgstr ""
 "Für die blanke HTTP-Site, auf der Sie direkt die Archivdateinamen sehen "
-"können, ist die normale »watch«-Datei:"
+"können, ist die normale Watch-Datei:"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:882
@@ -20979,8 +20978,8 @@ msgid ""
 "directory and the subtle difference of a space before the tailing B<\\>."
 msgstr ""
 "Bitte beachten Sie, dass das I<Suchmuster> des ersten Beispiels kein "
-"Verzeichnis hatte und der feine Unterschied ein Leerraum vor dem B<\\> am "
-"Ende war."
+"Verzeichnis hat und der feine Unterschied ein Leerraum vor dem B<\\> am Ende "
+"war."
 
 #. type: =head2
 #: ../scripts/uscan.pl:899
@@ -21022,8 +21021,8 @@ msgid ""
 "The upstream part of the Debian version number can be mangled to indicate "
 "the source package was repackaged to clean up non-DFSG files:"
 msgstr ""
-"Der Ursprungsautorenteil der Debian-Versionsnummer kann verwürfelt werden, "
-"um anzuzeigen, dass das Quellpaket zum Aufräumen von Nicht-DFSG-Dateien neu "
+"Der Ursprungsautorenteil der Debian-Versionsnummer kann verarbeitet werden, "
+"um anzuzeigen, dass das Quellpaket zum Entfernen von Nicht-DFSG-Dateien neu "
 "gepackt wurde:"
 
 #. type: verbatim
@@ -21067,8 +21066,9 @@ msgid ""
 "handled as:"
 msgstr ""
 "Falls dies nicht ihren Bedürfnissen entspricht, benutzen Sie "
-"B<filenamemangle>. F<< <A href=\"http://foo.bar.org/dl/?path=&dl=foo-0.1.1."
-"tar.gz\"> >> könnte zum Beispiel wie folgt gehandhabt werden:"
+"B<filenamemangle>. F<< <A "
+"href=\"http://foo.bar.org/dl/?path=&dl=foo-0.1.1.tar.gz\"> >> könnte zum "
+"Beispiel wie folgt gehandhabt werden:"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:928
@@ -21111,15 +21111,15 @@ msgstr ""
 "  debian uupdate\n"
 "\n"
 
-# FIXME s/<I>matching-pattern>/I<matching-pattern>/
 #. type: textblock
 #: ../scripts/uscan.pl:941
+# FIXME s/<I>matching-pattern>/I<matching-pattern>/
 msgid ""
 "If the href string has no version using <I>matching-pattern>, the version "
 "can be obtained from the full URL using B<filenamemangle>."
 msgstr ""
 "Falls die Href-Zeichenkette mittels I<Suchmuster> keine Version aufweist, "
-"kann sie anhand der vollständigen URL mittels B<filenamemangle> bezogen "
+"kann sie anhand der vollständigen URL mittels B<filenamemangle> ermittelt "
 "werden."
 
 #. type: verbatim
@@ -21152,10 +21152,10 @@ msgid ""
 "way into one which will work automatically, for example:"
 msgstr ""
 "Die Option B<downloadurlmangle> kann benutzt werden, um die URL der Datei zu "
-"verwürfeln, die heruntergeladen werden soll. Dies kann nur mit B<http://> "
-"URLs benutzt werden. Dies kann nötig sein, falls der auf der Webseite "
-"angegebene Verweis auf irgendeine Weise in einen umgewandelt werden muss, "
-"der automatisch funktioniert, zum Beispiel:"
+"verarbeiten, die heruntergeladen werden soll. Dies kann nur mit "
+"B<http://>-URLs benutzt werden. Dies kann nötig sein, falls der auf der "
+"Webseite angegebene Verweis auf irgendeine Weise in einen umgewandelt werden "
+"muss, der automatisch funktioniert, zum Beispiel:"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:957
@@ -21187,10 +21187,10 @@ msgid ""
 "tarball (B<.orig.tar.gz> and B<.orig-bar.tar.gz>).  For example, B<+dfsg1> "
 "can be added to the upstream version as:"
 msgstr ""
-"Die Option B<oversionmangle> kann benutzt werden, um die Version des Quell-"
-"Tarballs  (B<.orig.tar.gz> und B<.orig-bar.tar.gz>) zu verwürfeln. B<+dfsg1> "
-"kann der Version der Ursprungsautoren zum Beispiel wie folgt hinzugefügt "
-"werden:"
+"Die Option B<oversionmangle> kann benutzt werden, um die Version des "
+"Quell-Tarballs  (B<.orig.tar.gz> und B<.orig-bar.tar.gz>) zu verarbeiten. "
+"B<+dfsg1> kann der Version der Ursprungsautoren zum Beispiel wie folgt "
+"hinzugefügt werden:"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:969
@@ -21229,11 +21229,11 @@ msgid ""
 "converted to the standard page format with:"
 msgstr ""
 "Die Option B<pagemangle> kann benutzt werden, um die heruntergeladene "
-"Webseite vor dem Anwenden anderer Regeln zu verwürfeln. Die Nichtstandard-"
-"Webseite ohne ordnungsgemäße B<< <a href=\" >> << … >> B<< \"> >>-Einträge "
-"kann umgewandelt werden. Falls F<foo.html> zum Beispiel B<< <a bogus=\" >> "
-"I<< … >> B<< \"> >> benutzt, kann dies wie folgt in das Standardseitenformat "
-"umgewandelt werden:"
+"Webseite vor dem Anwenden anderer Regeln zu verarbeiten. Die "
+"Nichtstandard-Webseite ohne ordnungsgemäße B<< <a href=\" >> << … >> B<< \"> "
+">>-Einträge kann umgewandelt werden. Falls F<foo.html> zum Beispiel B<< <a "
+"bogus=\" >> I<< … >> B<< \"> >> benutzt, kann dies wie folgt in das "
+"Standardseitenformat umgewandelt werden:"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:987
@@ -21255,8 +21255,7 @@ msgstr ""
 #: ../scripts/uscan.pl:992
 msgid "Please note the use of B<g> here to replace all occurrences."
 msgstr ""
-"Bitte beachten Sie, dass die Verwendung von B<g> hier jedes Vorkommen "
-"ersetzt."
+"Bitte beachten Sie, dass die Verwendung von B<g> hier jedes Vorkommen ersetzt."
 
 #. type: textblock
 #: ../scripts/uscan.pl:994
@@ -21329,8 +21328,8 @@ msgid ""
 "the one in the filename is escaped by B<\\>."
 msgstr ""
 "Bitte beachten Sie, dass diese URL mit I< … >B<libs/Atlas-C++/>I< … > "
-"verbunden ist. Das erste B<++> im Verzeichnispfad wird als wörtlich "
-"genommen, während es im Dateinamen durch B<\\> maskiert wird."
+"verbunden ist. Das erste B<++> im Verzeichnispfad wird wörtlich verstanden, "
+"während es im Dateinamen durch B<\\> maskiert wird."
 
 #. type: =head2
 #: ../scripts/uscan.pl:1018
@@ -21346,10 +21345,10 @@ msgid ""
 "basename version number, not any path version numbers.)"
 msgstr ""
 "Dies ist eine weitere Art, eine Site mit komischen Versionsnummern zu "
-"handhaben, diesmal mittels Verwürfeln (Anpassen von Paketnamen). (Beachten "
-"Sie, dass mehrere Gruppen vor dem Verwürfeln zusammengefügt werden und dass "
-"dieses Verwürfeln nur für die Versionsnummer des Basispfads und nicht für "
-"die Versionsnummern aller Pfade durchgeführt wird.)"
+"handhaben, diesmal mittels Verarbeiten. (Beachten Sie, dass mehrere Gruppen "
+"vor dem Verarbeiten zusammengefügt werden und dass dieses Verarbeiten nur für "
+"die Versionsnummer des Basispfads und nicht für die Versionsnummern aller "
+"Pfade durchgeführt wird.)"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1026
@@ -21379,10 +21378,10 @@ msgid ""
 "a simpler form of URL. The format below will automatically be rewritten to "
 "use the redirector with the watch file:"
 msgstr ""
-"qa.debian.org führt eine Weiterleitung aus, die eine einfachere Form für "
-"eine URL Sourceforge-basierter Projekte bietet. Das nachfolgende Format wird "
-"automatisch umgeschrieben, um den Weiterleitungsdienst mit der »watch«-"
-"Dateizu verwenden:"
+"qa.debian.org führt eine Weiterleitung aus, die eine einfachere Form für eine "
+"URL von Sourceforge-basierten Projekten bietet. Das nachfolgende Format wird "
+"automatisch umgeschrieben, um den Weiterleitungsdienst mit der Watch-Datei zu "
+"verwenden:"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1037
@@ -21399,7 +21398,7 @@ msgstr ""
 #. type: textblock
 #: ../scripts/uscan.pl:1040
 msgid "For B<audacity>, set the watch file as:"
-msgstr "Schreiben Sie die »watch«-Datei für B<audacity> wie folgt:"
+msgstr "Schreiben Sie die Watch-Datei für B<audacity> wie folgt:"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1042
@@ -21420,7 +21419,7 @@ msgid ""
 "a watch file for this site without using the redirector."
 msgstr ""
 "Bitte beachten Sie, dass Sie auch weiterhin normale Funktionalitäten von "
-"B<uscan> benutzen können, um eine »watch«-Datei für diese Site einrichten zu "
+"B<uscan> benutzen können, um eine Watch-Datei für diese Site einrichten zu "
 "können, ohne dabei die Weiterleitung zu verwenden."
 
 #. type: verbatim
@@ -21455,17 +21454,18 @@ msgstr "github.com"
 
 #. type: textblock
 #: ../scripts/uscan.pl:1059
+# FIXME from into --> word is missing
 msgid ""
 "For GitHub based projects, you can use the tags or releases page.  The "
 "archive URL uses only the version as the filename.  You can rename the "
 "downloaded upstream tarball from into the standard F<< <project>-<version>."
 "tar.gz >> using B<filenamemangle>:"
 msgstr ""
-"Für Projekte, die auf GitHub basieren, können Sie die Markierungs- oder "
-"Veröffentlichungsseite benutzen. Die Archiv-URL verwendet nur die Version "
-"als Dateiname. Sie können den heruntergeladenen Tarball der Ursprungsautoren "
-"mittels B<filenamemangle> in die Vorgabe F<< <Projekt>-<Version>.tar.gz >> "
-"umbenennen:"
+"Für Projekte, die auf GitHub verwaltet werden, können Sie die Markierungs- "
+"oder Veröffentlichungsseite benutzen. Die Archiv-URL verwendet nur die "
+"Version als Dateiname. Sie können den heruntergeladenen Tarball der "
+"Ursprungsautoren mittels B<filenamemangle> in die Vorgabe F<< "
+"<Projekt>-<Version>.tar.gz >> umbenennen:"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1064
@@ -21498,7 +21498,7 @@ msgstr ""
 "Für Projekte, die auf PyPI basieren, führt pypi.debian.net einen "
 "Weiterleitungsdienst aus, der eine einfachere Form der URL ermöglicht. Das "
 "nachfolgende Format wird automatisch umgeschrieben, um den "
-"Weiterleitungsdienst mit der »watch«-Datei zu verwenden:"
+"Weiterleitungsdienst mit der Watch-Datei zu verwenden:"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1075
@@ -21517,7 +21517,7 @@ msgstr ""
 #. type: textblock
 #: ../scripts/uscan.pl:1079
 msgid "For B<cfn-sphere>, set the watch file as:"
-msgstr "Schreiben Sie die »watch«-Datei für B<cfn-sphere> wie folgt:"
+msgstr "Schreiben Sie die Watch-Datei für B<cfn-sphere> wie folgt:"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1081
@@ -21562,8 +21562,8 @@ msgid ""
 "Sites which used to be hosted on the Google Code service should have "
 "migrated to elsewhere (github?).  Please look for the newer upstream site."
 msgstr ""
-"Sites, die vom Google-Code-Dienst beherbergt werden, sollten an eine andere "
-"Stelle (Github?) migriert werden. Bitte halten Sie Ausschau nach einer "
+"Sites, die vom Google-Code-Dienst beherbergt wurden, sollten zu einer anderen "
+"Stelle (Github?) migriert worden sein. Bitte halten Sie Ausschau nach einer "
 "neueren Site der Ursprungsautoren."
 
 #. type: =head2
@@ -21606,8 +21606,8 @@ msgid ""
 "tar.xz>."
 msgstr ""
 "Bitte beachten Sie, dass »B<git ls-remote>« benutzt wird, um Bezüge zu "
-"Markierungen zu bekommen. Falls eine Markierung B<v20.5> am neusten ist, "
-"lädt das vorhergehende Beispiel I<Quellpaket>B<-20.5.tar.xz> herunter."
+"Markierungen zu bekommen. Falls eine Markierung B<v20.5> am neusten ist, lädt "
+"das vorhergehende Beispiel I<Quellpaket>B<-20.5.tar.xz> herunter."
 
 #. type: =head1
 #: ../scripts/uscan.pl:1113
@@ -21624,12 +21624,12 @@ msgid ""
 "is a blank line before the following paragraphs which contain B<Files> and "
 "other stanzas.):"
 msgstr ""
-"Hier folgt ein Beispiel für die Datei F<debian/copyright> die ein "
-"automatisches erneutes Packen des Tarballs der Ursprungsautoren in I<< "
-"<Quellpaket>_<Originalversion>.orig.tar.gz >> anstößt (In F<debian/"
-"copyright> sind die Absätze B<Files-Excluded> und B<Files-Excluded-"
-">I<Komponente> ein Teil des ersten Abschnitts und dort ist eine leere Zeile "
-"vor den folgenden Abschnitten, die B<Files> und andere Absätze enthalten.):"
+"Es folgt ein Beispiel für die Datei F<debian/copyright> die ein automatisches "
+"erneutes Packen des Tarballs der Ursprungsautoren in I<< "
+"<Quellpaket>_<Originalversion>.orig.tar.gz >> anstößt (In F<debian/copyright> "
+"sind die Absätze B<Files-Excluded> und B<Files-Excluded->I<Komponente> ein "
+"Teil des ersten Abschnitts und dort ist eine leere Zeile vor den folgenden "
+"Abschnitten, die B<Files> und andere Absätze enthalten.):"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1122
@@ -21674,9 +21674,9 @@ msgid ""
 ">>:"
 msgstr ""
 "Hier ein weiteres Beispiel für die F<debian/copyright>-Datei, die ein "
-"automatisches erneutes Packen des Tarballs mit mehreren Paketen (MUT) der "
-"Ursprungsautoren in I<< <Quellpaket>_<Originalversion>.orig.tar.gz >> und "
-"I<< <Quellpaket>_<Originalversion>.orig-bar.tar.gz >> anstößt."
+"automatisches erneutes Packen der Tarbälle mit mehreren Paketen (MUT) der "
+"Ursprungsautoren in I<< <Quellpaket>_<Originalversion>.orig.tar.gz >> und I<< "
+"<Quellpaket>_<Originalversion>.orig-bar.tar.gz >> anstößt."
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1138
@@ -21727,7 +21727,7 @@ msgid ""
 "know is the trusted one."
 msgstr ""
 "Nehmen wir einmal an, dass »B<< uscan test key (no secret) <none@debian.org> "
-">> der Ursprungsautoren ihr Paket signiert und den Fingerabdruck des "
+">> der Ursprungsautoren Pakete signiert und den Fingerabdruck des "
 "öffentlichen Schlüssels »B<CF21 8F0E 7EAB F584 B7E2 0402 C77E 2D68 7254 "
 "3FAF>« veröffentlicht, von dem Sie wissen, dass er verteauenswürdig ist."
 
@@ -21753,8 +21753,8 @@ msgid ""
 "The armored keyring file F<debian/upstream/signing-key.asc> can be created "
 "by using the B<gpg> (or B<gpg2>) command as follows."
 msgstr ""
-"Diese gehärtete Schlüsselbunddatei F<debian/upstream/signing-key.asc> kann "
-"mit dem Befehl B<gpg> (oder B<gpg2>) wie folgt erstellt werden:"
+"Die ASCII-Hülle der Schlüsselbunddatei F<debian/upstream/signing-key.asc> "
+"kann mit dem Befehl B<gpg> (oder B<gpg2>) wie folgt erstellt werden:"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:1171
@@ -21797,12 +21797,12 @@ msgid ""
 "fingerprints of all of them in the argument for B<gpg --export ...> to make "
 "the keyring to contain all OpenPGP keys of them."
 msgstr ""
-"Die binäre Schlüsselbunddatei kann in obigem Beispiel kann stattdessen durch "
-"Auslassen von B<--armor> und Ändern der gespeicherten Datei in F<debian/"
-"upstream/signing-key.pgp> erstellt werden. Falls eine Gruppe von Entwicklern "
-"das Paket signiert, müssen Sie die Fingerabdrücke von ihnen allen im "
-"Argument für B<gpg --export …> aufführen, damit der Schlüsselbund alle ihre "
-"OpenPGP-Schlüssel enthält."
+"Die binäre Schlüsselbunddatei in obigem Beispiel kann stattdessen durch "
+"Auslassen von B<--armor> und Ändern der gespeicherten Datei in "
+"F<debian/upstream/signing-key.pgp> erstellt werden. Falls eine Gruppe von "
+"Entwicklern das Paket signiert, müssen Sie die Fingerabdrücke von ihnen allen "
+"im Argument für B<gpg --export …> aufführen, damit der Schlüsselbund alle "
+"ihre OpenPGP-Schlüssel enthält."
 
 #. type: textblock
 #: ../scripts/uscan.pl:1190
@@ -21812,7 +21812,7 @@ msgid ""
 "running B<gpg> as:"
 msgstr ""
 "Manchmal fragen Sie sich vielleicht, wer die Signaturdatei erstellt hat. Sie "
-"können die öffentliche Schlüsselkennung erhalten, um die separate "
+"können die öffentliche Schlüsselkennung erhalten, um die abgetrennte "
 "Signaturdatei F<foo-2.0.tar.gz.asc> zu erstellen, indem Sie B<gpg> wie folgt "
 "ausführen:"
 
@@ -21898,7 +21898,7 @@ msgid ""
 "Report verbose information including the downloaded web pages as processed "
 "to STDERR for debugging."
 msgstr ""
-"berichtet detaillierte Informationen einschließlich heruntergeladenen "
+"berichtet detaillierte Informationen einschließlich heruntergeladener "
 "Webseiten als verarbeitet zur Fehlersuche auf die Standardfehlerausgabe."
 
 #. type: =item
@@ -21923,7 +21923,8 @@ msgstr "B<--no-dehs>"
 #. type: textblock
 #: ../scripts/uscan.pl:1238
 msgid "Use only traditional uscan output format. (default)"
-msgstr "verwendet nur das traditionelle Uscan-Ausgabeformat.(Voreinstellung)"
+msgstr ""
+"verwendet nur das traditionelle Uscan-Ausgabeformat.(Voreinstellung)"
 
 #. type: =item
 #: ../scripts/uscan.pl:1240
@@ -21934,7 +21935,7 @@ msgstr "B<--download>, B<-d>"
 #: ../scripts/uscan.pl:1242
 msgid "Download the new upstream release. (default)"
 msgstr ""
-"lädt die neue Veröffentlichung der Ursprungsautoren herunter.(Voreinstellung)"
+"lädt die neue Veröffentlichung der Ursprungsautoren herunter. (Voreinstellung)"
 
 #. type: =item
 #: ../scripts/uscan.pl:1244
@@ -21947,8 +21948,8 @@ msgid ""
 "Download the new upstream release even if up-to-date. (may not overwrite the "
 "local file)"
 msgstr ""
-"lädt die neue Veröffentlichung der Ursprungsautoren sogar dann herunter, "
-"wenn sie aktuell ist. (wird jedoch nicht die lokale Datei überschreiben)"
+"lädt die neue Veröffentlichung der Ursprungsautoren sogar dann herunter, wenn "
+"sie aktuell ist (wird jedoch nicht die lokale Datei überschreiben)."
 
 #. type: =item
 #: ../scripts/uscan.pl:1248
@@ -21961,8 +21962,8 @@ msgid ""
 "Download the new upstream release even if up-to-date. (may overwrite the "
 "local file)"
 msgstr ""
-"lädt die neue Veröffentlichung der Ursprungsautoren sogar dann herunter, "
-"wenn sie aktuell ist. (kann die lokale Datei überschreiben)"
+"lädt die neue Veröffentlichung der Ursprungsautoren sogar dann herunter, wenn "
+"sie aktuell ist (kann die lokale Datei überschreiben)."
 
 #. type: =item
 #: ../scripts/uscan.pl:1252
@@ -22014,8 +22015,7 @@ msgstr "B<--skip-signature>"
 #. type: textblock
 #: ../scripts/uscan.pl:1270
 msgid "Don't bother download signature nor verifying signature."
-msgstr ""
-"belästigt weder mit dem Herunterladen noch mit dem Prüfen der Signatur."
+msgstr "belästigt weder mit dem Herunterladen noch mit dem Prüfen der Signatur."
 
 #. type: =item
 #: ../scripts/uscan.pl:1272
@@ -22071,9 +22071,8 @@ msgid ""
 "effort feature)"
 msgstr ""
 "gibt die I<Version> an, zu der die Veröffentlichung der Ursprungsautoren "
-"passen muss, um anstelle der Veröffentlichung mit der höchsten "
-"Versionsnummer berücksichtigt zu werden. (eine Funktionalität mit bester "
-"Leistung)"
+"passen muss, um anstelle der Veröffentlichung mit der höchsten Versionsnummer "
+"berücksichtigt zu werden (eine bestmöglich erfüllte Funktionalität)."
 
 #. type: =item
 #: ../scripts/uscan.pl:1292
@@ -22089,8 +22088,8 @@ msgid ""
 msgstr ""
 "gibt die Debian-Paketversion an, um die entsprechende "
 "Veröffentlichungsversion der Ursprungsautoren herunterzuladen. Die Regeln "
-"B<dversionmangle> und B<uversionmangle> werden berücksichtigt. (eine "
-"Funktionalität mit bester Leistung)"
+"B<dversionmangle> und B<uversionmangle> werden berücksichtigt (eine "
+"bestmöglich erfüllte Funktionalität)."
 
 #. type: =item
 #: ../scripts/uscan.pl:1298
@@ -22101,8 +22100,8 @@ msgstr "B<--download-current-version>"
 #: ../scripts/uscan.pl:1300
 msgid "Download the currently packaged version.  (a best effort feature)"
 msgstr ""
-"lädt die aktuelle paketierte Version herunter. (eine Funktionalität mit "
-"bester Leistung)"
+"lädt die aktuelle paketierte Version herunter (eine bestmöglich erfüllte "
+"Funktionalität)."
 
 #. type: textblock
 #: ../scripts/uscan.pl:1305 ../scripts/uscan.pl:1309
@@ -22110,7 +22109,7 @@ msgid ""
 "See the below section L<Directory name checking> for an explanation of this "
 "option."
 msgstr ""
-"Die Erklärung dieser Option finden Sie im vorhergehenden Abschnitt B<Prüfung "
+"Die Erklärung dieser Option finden Sie im nachfolgenden Abschnitt B<Prüfung "
 "von Verzeichnisnamen>."
 
 #. type: =item
@@ -22126,10 +22125,10 @@ msgid ""
 "current directory or, if directory scanning is enabled, the package's source "
 "directory."
 msgstr ""
-"setzt den Pfad des Verzeichnisses in das anstelle des voreingestellten F<../"
-"> heruntergeladen werden soll. Falls der angegebene Pfad nicht absolut ist, "
+"setzt den Pfad des Verzeichnisses in das anstelle des voreingestellten F<../> "
+"heruntergeladen werden soll. Falls der angegebene Pfad nicht absolut ist, "
 "wird er entweder relativ zum aktuellen Verzeichnis oder, falls "
-"Verzeichnisauswertung aktiviert ist, das Quellverzeichnis des Pakets sein."
+"Verzeichnisauswertung aktiviert ist, zum Quellverzeichnis des Pakets sein."
 
 #. type: textblock
 #: ../scripts/uscan.pl:1320
@@ -22162,10 +22161,10 @@ msgid ""
 "F<debian/changelog> to determine it. This is ignored if a directory scan is "
 "being performed and more than one F<debian/watch> file is found."
 msgstr ""
-"gibt die aktuelle Version der Ursprungsautoren an, statt die F<debian/"
-"watch>- oder F<debian/changelog>-Datei zu untersuchen, um sie zu bestimmen. "
-"Dies wird ignoriert, falls ein Verzeichnis-Scan durchgeführt und mehr als "
-"eine F<debian/watch>-Datei gefunden wird."
+"gibt die aktuelle Version der Ursprungsautoren an, statt die F<debian/watch>- "
+"oder F<debian/changelog>-Datei zu untersuchen, um sie zu bestimmen. Dies wird "
+"ignoriert, falls ein Verzeichnis-Scan durchgeführt und mehr als eine "
+"F<debian/watch>-Datei gefunden wird."
 
 #. type: =item
 #: ../scripts/uscan.pl:1333
@@ -22180,8 +22179,8 @@ msgid ""
 "called from within the Debian package source tree (so that F<debian/"
 "changelog> can be found simply by stepping up through the tree)."
 msgstr ""
-"gibt die I<»watch«-Datei> an, statt einen Verzeichnis-Scan durchzuführen, um "
-"sie zu bestimmen. Falls diese Option ohne B<--package> benutzt wird, muss "
+"gibt die I<Watch-Datei> an, statt eine Verzeichnisdurchsuchung durchzuführen, "
+"um sie zu bestimmen. Falls diese Option ohne B<--package> benutzt wird, muss "
 "B<uscan> aus dem Debian-Paketquellenverzeichnisbaum aufgerufen werden (so "
 "dass F<debian/changelog> einfach beim Hochlaufen des Verzeichnisbaums "
 "gefunden werden kann)."
@@ -22197,8 +22196,8 @@ msgid ""
 "Disable all site specific special case codes to perform URL redirections and "
 "page content alterations."
 msgstr ""
-"deaktiviert alle Site-spezifischen Codes für Sonderfälle, um URL-"
-"Weiterleitungen und Änderungen des Seiteninhalts durchzuführen."
+"deaktiviert alle Site-spezifischen Codes für Sonderfälle, die "
+"URL-Weiterleitungen und Änderungen des Seiteninhalts durchführen."
 
 #. type: =item
 #: ../scripts/uscan.pl:1346
@@ -22276,8 +22275,8 @@ msgstr "gibt eine kurze Gebrauchsinformation."
 msgid ""
 "B<uscan> also accepts following options and passes them to B<mk-origtargz>:"
 msgstr ""
-"B<uscan> akzeptiert außerdem die folgenden Optionen und leitet sie an B<mk-"
-"origtargz> weiter:"
+"B<uscan> akzeptiert außerdem die folgenden Optionen und leitet sie an "
+"B<mk-origtargz> weiter:"
 
 #. type: textblock
 #: ../scripts/uscan.pl:1386
@@ -22309,8 +22308,8 @@ msgid ""
 "archive, repack it to the specified compression (see B<--compression>)."
 msgstr ""
 "Nachdem ein »lzma«-, »tar«,- »xz tar«,- »bzip tar«,- »gz tar«,- »zip«,- "
-"»jar«- oder »xpi«,-Archiv heruntergeladen wurde, wird es mit einer "
-"speziellen Komprimierung neu gepackt (siehe B<--compression>)."
+"»jar«- oder »xpi«,-Archiv heruntergeladen wurde, wird es mit einer speziellen "
+"Komprimierung neu gepackt (siehe B<--compression>)."
 
 #. type: textblock
 #: ../scripts/uscan.pl:1402
@@ -22320,9 +22319,9 @@ msgid ""
 "the xz-utils package must be installed to repack lzma or xz tar archives."
 msgstr ""
 "Das Paket Unzip muss installiert sein, um die Zip- und Jar-Archive neu zu "
-"packen, das Paket Mozilla-Devscripts muss installiert sein, um die Xpi-"
-"Archive neu zu packen und das Paket Xz-Utils muss installiert sein, um die "
-"LZMA- oder Xz-Archive neu zu packen."
+"packen, das Paket Mozilla-Devscripts muss installiert sein, um die "
+"Xpi-Archive neu zu packen und das Paket Xz-Utils muss installiert sein, um "
+"die LZMA- oder Xz-Tar-Archive neu zu packen."
 
 #. type: textblock
 #: ../scripts/uscan.pl:1408
@@ -22336,8 +22335,8 @@ msgstr ""
 "Falls die Quellen der Originalautoren neu gepackt wurden (entweder weil die "
 "Option B<--repack> angegeben wurde oder F<debian/copyright> das Feld B<Files-"
 "Excluded> enthält), ist es möglich, die Komprimierungsmethode über diesen "
-"Parameter zu steuern (Voreinstellung ist für normale Tarbälle B<gzip> und "
-"B<xz> für Tarbälle, die direkt aus dem Git-Depot erstellt werden)."
+"Parameter zu steuern. Voreinstellung ist für normale Tarbälle B<gzip> und "
+"B<xz> für Tarbälle, die direkt aus dem Git-Depot erstellt werden."
 
 #. type: =item
 #: ../scripts/uscan.pl:1414
@@ -22379,8 +22378,8 @@ msgid ""
 "noconf>, then these files will not be read. The currently recognized "
 "variables are:"
 msgstr ""
-"Die beiden Konfigurationsdateien F</etc/devscripts.conf> und F<~/."
-"devscripts> werden durch eine Shell in dieser Reihenfolge eingelesen, um "
+"Die beiden Konfigurationsdateien F</etc/devscripts.conf> und "
+"F<~/.devscripts> werden durch eine Shell in dieser Reihenfolge eingelesen, um "
 "Konfigurationsvariablen zu setzen. Diese können durch Befehlszeilenoptionen "
 "außer Kraft gesetzt werden. Zu diesem Zweck werden Umgebungsvariablen "
 "ignoriert. Falls die erste angegebene Befehlszeilenoption B<--noconf> ist, "
@@ -22416,8 +22415,8 @@ msgstr ""
 "Falls dies auf B<yes> gesetzt ist, verhindert B<uscan> die Ausführung "
 "unsicherer Skripte, indem das erneute Packen heruntergeladener Pakete als "
 "auch das Aktualisieren des Quellverzeichnisbaums übersprungen werden. Dies "
-"entspricht den B<--safe>-Optionen. Außerdem setzt dies die Voreinstellung "
-"auf B<--no-download> und B<--skip-signature>."
+"entspricht den B<--safe>-Optionen. Außerdem setzt dies die Voreinstellung auf "
+"B<--no-download> und B<--skip-signature>."
 
 #. type: =item
 #: ../scripts/uscan.pl:1447
@@ -22432,9 +22431,9 @@ msgid ""
 "makes the choice (primarily based on the B<FTP_PASSIVE> environment "
 "variable)."
 msgstr ""
-"Falls dies auf »yes« oder »no« gesetzt ist, wird dies erzwingen, dass FTP-"
-"Verbindungen den PASV-Modus verwenden beziehungsweise nicht verwenden. Falls "
-"dies auf »default« gesetzt ist, wird B<Net::FTP>(3) eine Auswahl treffen "
+"Falls dies auf »yes« oder »no« gesetzt ist, wird dies erzwingen, dass "
+"FTP-Verbindungen den PASV-Modus verwenden beziehungsweise nicht verwenden. "
+"Falls dies auf »default« gesetzt ist, wird B<Net::FTP>(3) eine Auswahl treffen "
 "(basiert hauptsächlich auf der Umgebungsvariable B<FTP_PASSIVE>)."
 
 #. type: =item
@@ -22467,8 +22466,8 @@ msgstr ""
 "Falls dies auf »no« gesetzt ist, wird kein symbolischer Verweis für "
 "I<Paket>_I<Version>B<.orig.tar.{gz|bz2|lzma|xz}> erstellt (entspricht der "
 "Option B<--no-symlink>). Falls es auf B<yes> oder B<symlink> gesetzt ist, "
-"dann werden symbolische Verweise erstellt. Falls es auf »rename« gesetzt "
-"ist, werden die Dateien umbenannt (entspricht der Option B<--rename>)."
+"dann werden symbolische Verweise erstellt. Falls es auf »rename« gesetzt ist, "
+"werden die Dateien umbenannt (entspricht der Option B<--rename>)."
 
 #. type: =item
 #: ../scripts/uscan.pl:1465
@@ -22591,7 +22590,7 @@ msgstr ""
 #. type: =head1
 #: ../scripts/uscan.pl:1518
 msgid "ADVANCED FEATURES"
-msgstr "ERWEITERTE FUNKTIONALITÄTEN"
+msgstr "FORTGESCHRITTENE FUNKTIONALITÄTEN"
 
 #. type: textblock
 #: ../scripts/uscan.pl:1520
@@ -22610,9 +22609,9 @@ msgid ""
 "subdirectories looking for F<debian/watch> to process them all.  See "
 "L<Directory name checking>."
 msgstr ""
-"Tatsächlich scannt B<uscan>  nicht nur das aktuelle Verzeichnis, sondern "
-"auch alle Unterverzeichnisse nach F<debian/watch>, um sie alle zu "
-"verarbeiten. Siehe L<Prüfung von Verzeichnisnamen>."
+"Tatsächlich durchsucht B<uscan> nicht nur das aktuelle Verzeichnis, sondern "
+"auch alle Unterverzeichnisse nach F<debian/watch>, um sie alle zu verarbeiten. "
+"Siehe L<Prüfung von Verzeichnisnamen>."
 
 #. type: textblock
 #: ../scripts/uscan.pl:1527
@@ -22629,8 +22628,8 @@ msgid ""
 "See L<COMMANDLINE OPTIONS> and L<DEVSCRIPT CONFIGURATION VARIABLES> for "
 "other variations."
 msgstr ""
-"Weitere Variationen finden Sie unter L<BEFEHLZEILENOPTIONEN> und L<DEVSCRIPT-"
-"KONFIGURATIONSVARIABLEN>."
+"Weitere Variationen finden Sie unter L<BEFEHLZEILENOPTIONEN> und "
+"L<DEVSCRIPT-KONFIGURATIONSVARIABLEN>."
 
 #. type: =head2
 #: ../scripts/uscan.pl:1533
@@ -22643,12 +22642,13 @@ msgid ""
 "The optional I<script> parameter in F<debian/watch> means to execute "
 "I<script> with options after processing this line if specified."
 msgstr ""
-"Der optionale Parameter I<Skript> in F<debian/watch> bedeutet, dass "
-"I<Skript> mit Optionen nach der Verarbeitung dieser Zeile ausgeführt wird, "
-"falls angegeben."
+"Der optionale Parameter I<Skript> in F<debian/watch> bedeutet, dass I<Skript> "
+"mit Optionen nach der Verarbeitung dieser Zeile ausgeführt wird, falls "
+"angegeben."
 
 #. type: textblock
 #: ../scripts/uscan.pl:1538
+# FIXME s/rondom/random/
 msgid ""
 "For compatibility with other tools such as B<git-buildpackage>, it may not "
 "be wise to create custom scripts with rondom behavior.  In general, "
@@ -22657,12 +22657,12 @@ msgid ""
 "L<http://bugs.debian.org/748474> as an example."
 msgstr ""
 "Um die Kompatibilität mit anderen Werkzeugen wie B<git-buildpackage> zu "
-"wahren, ist es vermutlich keine gute Idee benutzerdefinierte Skripte mit "
+"wahren, ist es vermutlich keine gute Idee, benutzerdefinierte Skripte mit "
 "zufälligem Verhalten zu erstellen. Im Allgemeinen ist B<uupdate> die beste "
 "Wahl für das nichtnative Paket und benutzerdefinierte Skripte, falls sie "
 "erstellt wurden, sollten sich wie B<uupdate> verhalten. Einen möglichen "
-"Anwendungsfall finden Sie beispielsweise unter L<http://bugs.debian."
-"org/748474>."
+"Anwendungsfall finden Sie beispielsweise unter "
+"L<http://bugs.debian.org/748474>."
 
 #. type: =head2
 #: ../scripts/uscan.pl:1544
@@ -22677,9 +22677,9 @@ msgid ""
 "ease maintenance of the watch file.  Currently, B<uscan> makes automatic "
 "diversion of URL requests to the following URLs to cope with this situation."
 msgstr ""
-"Einige populären Websites haben ihre Seintenstuktur geändert, was "
-"Wartungsprobleme mit der »watch«-Datei verursachte. Es gibt einige "
-"Weiterleitungsdienste, die erstellt wurden, um die Wartung der »watch«-Datei "
+"Einige populären Websites haben ihre Seitenstruktur geändert, was "
+"Wartungsprobleme mit der Watch-Datei verursachte. Es gibt einige "
+"Weiterleitungsdienste, die erstellt wurden, um die Wartung der Watch-Datei "
 "zu erleichtern. Derzeit leitet B<uscan> URL-Anfragen automatisch an die "
 "folgenden URLs weiter, um diese Situation zu bewältigen."
 
@@ -22710,16 +22710,16 @@ msgid ""
 "check-dirname-regex>."
 msgstr ""
 "Ähnlich wie viele andere Skripte im Paket B<devscripts>, erkundet B<uscan> "
-"die abgefragten Verzeichnisbäume nach F<debian/changelog>- und F<debian/"
-"watch>-Dateien. Als eine Schutzmaßnahme gegen verirrte Dateien, die "
+"die abgefragten Verzeichnisbäume nach F<debian/changelog>- und "
+"F<debian/watch>-Dateien. Als eine Schutzmaßnahme gegen verirrte Dateien, die "
 "potenziell Probleme bereiten und um die Leistung zu steigern, wird es den "
-"Namen des übergeordneten Verzeichnisses untersuchen, sobald es die F<debian/"
-"changelog>-Datei findet, und prüfen, ob der Verzeichnisname dem Paketnamen "
-"entspricht. Es wird nur versuchen, neuere Versionen des Pakets "
+"Namen des übergeordneten Verzeichnisses untersuchen, sobald es die "
+"F<debian/changelog>-Datei findet, und prüfen, ob der Verzeichnisname dem "
+"Paketnamen entspricht. Es wird nur versuchen, neuere Versionen des Pakets "
 "herunterzuladen und dann jede angefragte Aktion durchführen, falls der "
 "Verzeichnisname zum Paketnamen passt. Wie dies genau geschieht, wird durch "
 "die beiden Konfigurationsdateivariablen B<DEVSCRIPTS_CHECK_DIRNAME_LEVEL> "
-"und B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> sowie ihre entsprechenden "
+"und B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> sowie ihren entsprechenden "
 "Befehlszeilenoptionen B<--check-dirname-level> und B<--check-dirname-regex> "
 "geregelt."
 
@@ -22754,16 +22754,16 @@ msgstr ""
 "Der Verzeichnisname wird geprüft, indem getestet wird, ob der aktuelle "
 "Verzeichnisname (wie er durch pwd(1) bestimmt wurde) zum regulären Ausdruck "
 "passt, der durch die Konfigurationsdateioption "
-"B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> oder die Befehlszeilenoption B<--check-"
-"dirname-regex> I<regulärer_Ausdruck> angegeben wurde. Hierbei ist "
+"B<DEVSCRIPTS_CHECK_DIRNAME_REGEX> oder die Befehlszeilenoption "
+"B<--check-dirname-regex> I<regulärer_Ausdruck> angegeben wurde. Hierbei ist "
 "regulärer_Ausdruck ein regulärer Perl-Ausdruck (siehe perlre(3perl)), der an "
 "den Anfang und das Ende verankert wird. Falls regulärer_Ausdruck ein B</> "
 "enthält, muss er auf den vollständigen Verzeichnispfad passen. Falls nicht, "
 "dann muss er auf den vollständigen Verzeichnisnamen passen. Falls "
 "regulärer_Ausdruck die Zeichenkette I<Paket> beinhaltet, wird dies durch den "
 "Namen des Quellpakets ersetzt, wie er aus F<debian/changelog> bestimmt wird. "
-"Der vorgegebene Wert für den regulären_Ausdruck ist: I<Paket>B<(-.+)?>, "
-"daher entspricht er Verzeichnisnamen wie B<Paket> und I<Paket>-I<Version>."
+"Der vorgegebene Wert für den regulären_Ausdruck ist: I<Paket>B<(-.+)?>, daher "
+"entspricht er Verzeichnisnamen wie B<Paket> und I<Paket>-I<Version>."
 
 #. type: =head1
 #: ../scripts/uscan.pl:1606
@@ -22777,9 +22777,10 @@ msgid ""
 "features which have been added in each F<watch> file version, and the first "
 "version of the B<devscripts> package which understood them."
 msgstr ""
-"Dieser Abschnitt beschreibt kurz die rückwärtsinkompatiblen F<watch>-"
-"Dateifunktionalitäten, die in jeder F<watch>-Dateiversion hinzugefügt "
-"wurden, und die erste Version des B<devscripts>-Pakets, das sie verstand."
+"Dieser Abschnitt beschreibt kurz die rückwärtsinkompatiblen "
+"F<watch>-Dateifunktionalitäten, die in jeder F<watch>-Dateiversion "
+"hinzugefügt wurden, und die erste Version des B<devscripts>-Pakets, das sie "
+"verstand."
 
 #. type: =item
 #: ../scripts/uscan.pl:1614
@@ -22793,8 +22794,8 @@ msgid ""
 "use it.  If you are upgrading from a pre-version 2 F<watch> file, you are "
 "advised to read this manpage and to start from scratch."
 msgstr ""
-"Uu jener Zeit war die F<watch>-Dateisyntax signifikant anders. Verwenden Sie "
-"sie nicht. Falls Sie ein Upgrade von einer F<watch>-Datei der Vorversion 2 "
+"Zu jener Zeit war die F<watch>-Dateisyntax signifikant anders. Verwenden Sie "
+"sie nicht. Falls Sie ein Upgrade von einer F<watch>-Datei einer Version vor 2 "
 "durchführen, wird Ihnen empfohlen, diese Handbuchseite zu lesen und von "
 "Grund auf neu zu beginnen."
 
@@ -22809,8 +22810,8 @@ msgid ""
 "B<devscripts> version 2.6.90: The first incarnation of the current style of "
 "F<watch> files."
 msgstr ""
-"B<devscripts>-Version 2.6.90: die erste Verkörperung des aktuellen F<watch>-"
-"Dateistils"
+"B<devscripts>-Version 2.6.90: die erste Verkörperung des aktuellen "
+"F<watch>-Dateistils"
 
 #. type: =item
 #: ../scripts/uscan.pl:1625
@@ -22825,10 +22826,10 @@ msgid ""
 "version number in several parts, version number mangling. Later versions "
 "have also introduced URL mangling."
 msgstr ""
-"B<devscripts>-Version 2.8.12 führte das Folgende ein: korrekte Handhabung "
-"von Sonderzeichen regulärer Ausdrücke im Pfadteil, Verzeichnis-/"
-"Pfadmusterabgleich, Versionsnummern in mehreren Teilen, "
-"Versionsnummerverwürfelung. Neuere Versionen haben außerden URL-Verwürfelung "
+"B<devscripts>-Version 2.8.12 führte das Folgende ein: korrekte Handhabung von "
+"Sonderzeichen regulärer Ausdrücke im Pfadteil, "
+"Verzeichnis-/Pfadmusterabgleich, Versionsnummern in mehreren Teilen, "
+"Versionsnummerverarbeitung. Neuere Versionen haben außerden URL-Verarbeitung "
 "eingeführt."
 
 #. type: textblock
@@ -22853,8 +22854,9 @@ msgid ""
 "* B<uscan> invokes the custom I<script> as \"I<script> B<--upstream-version> "
 "I<version> B<../>I<spkg>B<_>I<version>B<.orig.tar.gz>\"."
 msgstr ""
-"* B<uscan> ruft das benutzerdefinierte I<Skript> als »I<Skript> B<--upstream-"
-"version> I<Version> B<../>I<Quellpaket>B<_>I<Version>B<.orig.tar.gz>« auf."
+"* B<uscan> ruft das benutzerdefinierte I<Skript> als »I<Skript> "
+"B<--upstream-version> I<Version> "
+"B<../>I<Quellpaket>B<_>I<Version>B<.orig.tar.gz>« auf."
 
 #. type: =item
 #: ../scripts/uscan.pl:1643
@@ -22862,9 +22864,9 @@ msgid ""
 "* B<uscan> invokes the standard B<uupdate> as \"B<uupdate> B<--no-symlink --"
 "upstream-version> I<version> B<../>I<spkg>B<_>I<version>B<.orig.tar.gz>\"."
 msgstr ""
-"* B<uscan> ruft das Standard-B<uupdate> als »B<uupdate> B<--no-symlink --"
-"upstream-version> I<Version> B<../>I<Quellpaket>B<_>I<Version>B<.orig.tar."
-"gz> auf."
+"* B<uscan> ruft das Standard-B<uupdate> als »B<uupdate> B<--no-symlink "
+"--upstream-version> I<Version> "
+"B<../>I<Quellpaket>B<_>I<Version>B<.orig.tar.gz> auf."
 
 #. type: =item
 #: ../scripts/uscan.pl:1648
@@ -22885,8 +22887,8 @@ msgstr ""
 msgid ""
 "The syntax of the watch file is relaxed to allow more spaces for readability."
 msgstr ""
-"Die Syntax der »watch«-Datei ist im Umgang mit mehreren Leerräumen zum "
-"Steigern der Lesbarkeit zwanglos."
+"Die Syntax der Watch-Datei wurde gelockert, um zur Lesbarkeit den Umgang mit "
+"mehr Leerräumen zu erlauben."
 
 #. type: textblock
 #: ../scripts/uscan.pl:1655
@@ -22904,8 +22906,8 @@ msgid ""
 "* B<uscan> invokes the custom I<script> as \"I<script> B<--upstream-version> "
 "I<version>\"."
 msgstr ""
-"* B<uscan> ruft das benutzerdefinierte I<Skript> als »I<Skript> B<--upstream-"
-"version> I<Version>« auf."
+"* B<uscan> ruft das benutzerdefinierte I<Skript> als »I<Skript> "
+"B<--upstream-version> I<Version>« auf."
 
 #. type: =item
 #: ../scripts/uscan.pl:1663
@@ -22913,8 +22915,8 @@ msgid ""
 "* B<uscan> invokes the standard B<uupdate> as \"B<uupdate> B<--find> B<--"
 "upstream-version> I<version>\"."
 msgstr ""
-"* B<uscan> ruft das Standard-B<uupdate> als »B<uupdate> B<--find> B<--"
-"upstream-version> I<Version>« auf."
+"* B<uscan> ruft das Standard-B<uupdate> als »B<uupdate> B<--find> "
+"B<--upstream-version> I<Version>« auf."
 
 #. type: textblock
 #: ../scripts/uscan.pl:1668
@@ -22922,7 +22924,7 @@ msgid ""
 "Restriction for B<--dehs> is lifted by redirecting other output to STDERR "
 "when it is activated."
 msgstr ""
-"Die Beschränkung für B<--dehs> wird angehoben, indem andere Ausgaben auf die "
+"Die Beschränkung für B<--dehs> wird aufgehoben, indem andere Ausgaben auf die "
 "Standardfehlerausgabe umgeleitet werden, wenn sie aktiviert ist."
 
 #. type: textblock
@@ -22942,8 +22944,8 @@ msgstr ""
 "Die Originalversion wurde von Christoph Lameter <clameter@debian.org> "
 "geschrieben. Bedeutende Verbesserungen, Änderungen und Fehlerbehebungen "
 "wurden von Julian Gilbey <jdg@debian.org> vorgenommen. Piotr Roszatycki "
-"<dexter@debian.org> fügte HTTP-Unterstützung hinzu. Das Programm wurde neu "
-"in Perl von Julian Gilbey geschrieben."
+"<dexter@debian.org> fügte HTTP-Unterstützung hinzu. Das Programm wurde neu in "
+"Perl von Julian Gilbey geschrieben."
 
 #. type: TH
 #: ../scripts/uupdate.1:1
@@ -23191,12 +23193,13 @@ msgid ""
 msgstr ""
 "findet alle Tarbälle der Ursprungsautoren in I<../>, die "
 "I<E<lt>PaketE<gt>_E<lt>VersionE<gt>.orig.tar.{gz|bz2|lzma|xz}> oder "
-"I<E<lt>PaketE<gt>_E<lt>VersionE<gt>.orig-E<lt>KomponenteE<gt>.tar.{gz|bz2|"
-"lzma|xz}> entsprechen. B<--upstream-version> wird benötigt. Unveränderter "
-"Quelltext ist erforderlich. Dies ist nicht für B<--patch> gültig. Diese "
-"Option verwendet B<dpkg-source> als Oberfläche, um Unterstützung für mehrere "
-"Tarbälle der Ursprungsautoren zu aktivieren und vorher gemeldete kleine "
-"Fehler zu lösen. Der Gebrauch dieser Option wird nachdrücklich empfohlen."
+"I<E<lt>PaketE<gt>_E<lt>VersionE<gt>.orig-E<lt>KomponenteE<gt>.tar."
+"{gz|bz2|lzma|xz}> entsprechen. B<--upstream-version> wird benötigt. "
+"Unveränderter Quelltext ist erforderlich. Dies ist nicht für B<--patch> "
+"gültig. Diese Option verwendet B<dpkg-source> als Backend, um Unterstützung "
+"für mehrere Tarbälle der Ursprungsautoren zu aktivieren und früher gemeldete "
+"kleine Fehler zu lösen. Der Gebrauch dieser Option wird nachdrücklich "
+"empfohlen."
 
 #. type: Plain text
 #: ../scripts/uupdate.1:101
@@ -23300,8 +23303,9 @@ msgid ""
 "aborted if this directory already exists."
 msgstr ""
 "Das Archiv wird in ein Verzeichnis, dessen Namen den Anforderungen der "
-"Debian-Richtlinien genügt, entpackt: Paketversion_der_Ursprungsautoren.orig. "
-"Falls das Verzeichnis bereits existiert, wird die Verarbeitung abgebrochen."
+"Debian-Richtlinien genügt, entpackt: Paketversion_der_Ursprungsautoren."
+"orig. Falls das Verzeichnis bereits existiert, wird die Verarbeitung "
+"abgebrochen."
 
 #. type: TP
 #: ../scripts/uupdate.1:141 ../scripts/uupdate.1:169
@@ -24061,8 +24065,8 @@ msgid ""
 "B<wnpp-alert> to the previous output (cached in the file I<wnpp-diff>) and "
 "output the differences."
 msgstr ""
-"vergleicht die Ausgabe von B<wnpp-alert>, falls das Verzeichnis I<"
-"$XDG_CACHE_HOME/devscripts> existiert, mit der vorherigen Ausgabe (in der "
+"vergleicht die Ausgabe von B<wnpp-alert>, falls das Verzeichnis "
+"I<$XDG_CACHE_HOME/devscripts> existiert, mit der vorherigen Ausgabe (in der "
 "Datei I<wnpp-diff> zwischengespeichert) und gibt die Unterschiede aus."
 
 #. type: Plain text
@@ -24206,8 +24210,8 @@ msgstr ""
 "Standardmäßig werden die Listen nur in mehrere Zeilen aufgeteilt, falls die "
 "Einträge länger als die maximale Längenbeschränkung von 79 Zeichen sind. "
 "B<wrap-and-sort> sortiert die Paketlisten in Debian-Steuerdateien und allen "
-"I<.dirs>-, I<.docs>-, I<.examples>-, I<.info>-, I<.install>-, I<.links>-, I<."
-"maintscript> und I<.manpages>-Dateien. Daneben entfernt B<wrap-and-sort> "
+"I<.dirs>-, I<.docs>-, I<.examples>-, I<.info>-, I<.install>-, I<.links>-, "
+"I<.maintscript> und I<.manpages>-Dateien. Daneben entfernt B<wrap-and-sort> "
 "abschließende Leerräume in diesen Dateien."
 
 #. type: Plain text
