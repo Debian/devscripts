@@ -500,7 +500,7 @@ sub dist_compare(\@$$) {
      # Escaped versions
      my @esc_vers = @versions;
      foreach my $vers (@esc_vers) {
-        $vers =~ s|\+|\\\+|;
+        $vers =~ s|\+|\\\+| if defined $vers;
      }
 
      # Do compare
@@ -585,7 +585,7 @@ sub compare_src_bin {
     foreach my $package (@all_packages) {
 	my $line = "$package ";
 	my $status = "";
-	my $details;
+	my $details = '';
 
 	foreach my $type (@comp_types) {
 	    if ( $packages{$type}{$package} ) {
