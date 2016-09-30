@@ -34,7 +34,7 @@ use IO::File;
 use Digest::MD5;
 use Devscripts::Compression;
 use Dpkg::Control;
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use File::Basename;
 
 # global variables

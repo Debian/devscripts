@@ -182,7 +182,7 @@ options to "bzr commit" will be generated to associate the revision and the bugs
 
 use warnings;
 use strict;
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use Cwd;
 use File::Basename;
 use File::Temp;

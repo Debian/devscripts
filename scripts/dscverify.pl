@@ -32,7 +32,7 @@ use File::Spec;
 use File::Temp;
 use File::Basename;
 use POSIX	qw(:errno_h);
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use List::Util qw(first);
 
 my $progname = basename $0;

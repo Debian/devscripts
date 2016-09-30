@@ -1697,7 +1697,7 @@ use File::Spec::Functions qw/catfile/;
 use File::Temp qw/tempfile tempdir/;
 use List::Util qw/first/;
 use filetest 'access';
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use Devscripts::Versort;
 use Text::ParseWords;
 use Digest::MD5;

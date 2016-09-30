@@ -171,7 +171,7 @@ B<origtargz> and this manpage have been written by Christoph Berg
 use strict;
 use warnings;
 use File::Temp qw/tempdir/;
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use Pod::Usage;
 
 my @dirs = ();

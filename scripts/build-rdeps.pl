@@ -128,7 +128,7 @@ and run apt-get update afterwards or use the update option of this tool.
 use warnings;
 use strict;
 use File::Basename;
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use Pod::Usage;
 use Data::Dumper;
 my $progname = basename($0);

@@ -26,7 +26,7 @@ use File::Basename;
 use File::Copy qw(move);
 use File::Path qw(make_path);
 use File::Spec;
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 
 sub remove_duplicate_values($);
 sub store_if_relevant(%);

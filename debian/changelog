@@ -12,6 +12,8 @@ devscripts (2.16.8) UNRELEASED; urgency=medium
   [ James McCoy ]
   * deb-reversion: Update md5sum of changelog if it's changed.  (Closes:
     #836725)
+  * Change Getopt::Long configuration to disable gnu_compat so an '=' isn't
+    required for optional arguments (e.g. "dch --news=").
 
  -- Paul Wise <pabs@debian.org>  Sat, 27 Aug 2016 13:58:14 +0800
 

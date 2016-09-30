@@ -26,7 +26,7 @@
 
 use strict;
 use warnings;
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use File::Basename;
 use Dpkg::Changelog::Parse qw(changelog_parse);
 use Devscripts::Debbugs;

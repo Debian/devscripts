@@ -29,7 +29,7 @@ use FileHandle;
 use File::Basename;
 use File::Temp qw/ tempfile /;
 use Fcntl;
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 
 BEGIN {
     pop @INC if $INC[-1] eq '.';

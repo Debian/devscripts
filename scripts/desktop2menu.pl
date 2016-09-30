@@ -58,7 +58,7 @@ Sune Vuorela <debian@pusling.com> with modifications by Adam D. Barratt
 
 use warnings;
 use strict;
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use File::Basename;
 
 my $progname = basename($0);
