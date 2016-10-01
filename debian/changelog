@@ -1,3 +1,11 @@
+devscripts (2.16.9) UNRELEASED; urgency=medium
+
+  * debsnap:
+    + Fix "no binaries for given arch" detection so it doesn't download
+      binaries for unspecified archs.  (Closes: #839533)
+
+ -- James McCoy <jamessan@debian.org>  Sat, 01 Oct 2016 13:26:57 -0400
+
 devscripts (2.16.8) unstable; urgency=medium
 
   [ Paul Wise ]

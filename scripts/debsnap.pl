@@ -301,9 +301,11 @@ elsif ($opt{binary}) {
 	my @results = @{$src_json->{result}};
 	if (@{$opt{architecture}})
 	{
-	    my %archs = map { ($_ => 1) } @{$opt{architecture}};
-	    @results = grep { $archs{$_->{architecture}}-- } @results;
-	    my @missing = grep { $archs{$_} == 1 } sort keys %archs;
+	    my %archs = map { ($_ => 0) } @{$opt{architecture}};
+	    @results = grep {
+	        exists $archs{$_->{architecture}} && ++$archs{$_->{architecture}}
+	    } @results;
+	    my @missing = grep { $archs{$_} == 0 } sort keys %archs;
 	    if (@missing) {
 		warn "$progname: No binary packages found for $package version $version->{binary_version} on " . join(', ', @missing) . "\n";
 		$warnings++;
