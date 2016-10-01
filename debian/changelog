@@ -17,6 +17,9 @@ devscripts (2.16.8) UNRELEASED; urgency=medium
   * chdist:
     + Silence warnings about uninitialized values.  Thanks to Christoph Biedl
       for the patch.  (Closes: #838185)
+    + For compare-bin-packages, use the newest version of a package if
+      multiple versions exist.  Thanks to Christoph Biedl for the patch.
+      (Closes: #838184)
 
  -- Paul Wise <pabs@debian.org>  Sat, 27 Aug 2016 13:58:14 +0800
 

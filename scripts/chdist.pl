@@ -470,8 +470,15 @@ sub dist_compare(\@$$) {
      foreach my $file ( @files ) {
         my $parsed_file = parseFile($file);
         foreach my $package ( keys(%{$parsed_file}) ) {
-           if ( $packages{$dist}{$package} ) {
-              warn "W: Package $package is already listed for $dist. Not overriding.\n";
+           if ($packages{$dist}{$package}) {
+              my $version = $packages{$dist}{$package}{Version};
+              my $alt_ver = $parsed_file->{$package}{Version};
+              my $delta = $version && $alt_ver && version_compare($version, $alt_ver);
+              if (defined($delta) && $delta < 0) {
+                 $packages{$dist}{$package} = $parsed_file->{$package};
+              } else {
+                 warn "W: Package $package is already listed for $dist. Not overriding.\n";
+              }
            } else {
               $packages{$dist}{$package} = $parsed_file->{$package};
            }
