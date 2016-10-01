@@ -220,6 +220,7 @@ Getopt::Long::Configure('no_ignore_case');
 GetOptions(\%opt, 'verbose|v', 'destdir|d=s', 'force|f', 'help|h', 'version', 'first=s', 'last=s', 'list', 'binary', 'architecture|a=s@') || usage(1);
 
 usage(0) if $opt{help};
+version() if $opt{version};
 usage(1) unless @ARGV;
 $package = shift;
 if (@ARGV) {
