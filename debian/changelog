@@ -5,6 +5,9 @@ devscripts (2.16.9) UNRELEASED; urgency=medium
       binaries for unspecified archs.  (Closes: #839533)
     + Add handling for the --version switch, as advertised by --help.
       (Closes: #839537)
+  * bts:
+    + Switch to Net::SMTPS to support STARTTLS.  Based on a patch by Andrew
+      Shadura.  (Closes: #518622)
 
  -- James McCoy <jamessan@debian.org>  Sat, 01 Oct 2016 13:26:57 -0400
 
