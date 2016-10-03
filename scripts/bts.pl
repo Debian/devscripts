@@ -74,7 +74,7 @@ $SIG{'__WARN__'} = sub { warn $_[0] unless $_[0] =~ /^Parsing of undecoded UTF-8
 my $it = undef;
 my $last_user = '';
 my $lwp_broken = undef;
-my $smtp_ssl_broken = undef;
+my $smtps_broken = undef;
 my $authen_sasl_broken;
 my $ua;
 
@@ -98,21 +98,21 @@ sub have_lwp() {
     return $lwp_broken ? 0 : 1;
 }
 
-sub have_smtp_ssl() {
-    return ($smtp_ssl_broken ? 0 : 1) if defined $smtp_ssl_broken;
+sub have_smtps() {
+    return ($smtps_broken ? 0 : 1) if defined $smtps_broken;
     eval {
-	require Net::SMTP::SSL;
+	require Net::SMTPS;
     };
 
     if ($@) {
-	if ($@ =~ m%^Can\'t locate Net/SMTP/SSL%) {
-	    $smtp_ssl_broken="the libnet-smtp-ssl-perl package is not installed";
+	if ($@ =~ m%^Can\'t locate Net/SMTPS%) {
+	    $smtps_broken="the libnet-smtps-perl package is not installed";
 	} else {
-	    $smtp_ssl_broken="couldn't load Net::SMTP::SSL: $@";
+	    $smtps_broken="couldn't load Net::SMTPS: $@";
 	}
     }
-    else { $smtp_ssl_broken=''; }
-    return $smtp_ssl_broken ? 0 : 1;
+    else { $smtps_broken=''; }
+    return $smtps_broken ? 0 : 1;
 }
 
 sub have_authen_sasl() {
@@ -348,6 +348,9 @@ this SMTP host rather than by invoking a B<sendmail> command.
 The host name may be followed by a colon (":") and a port number in
 order to use a port other than the default.  It may also begin with
 "ssmtp://" or "smtps://" to indicate that SMTPS should be used.
+
+If SMTPS not specified, B<bts> will still try to use STARTTLS if it's advertised
+by the SMTP host.
 
 Note that one of B<$DEBEMAIL> or B<$EMAIL> must be set in the environment in order
 to use direct SMTP connections to send emails.
@@ -2617,18 +2620,25 @@ sub send_mail {
 	    my ($host, $port) = split(/:/, $1);
 	    $port ||= '465';
 
-	    if (have_smtp_ssl) {
-		$smtp = Net::SMTP::SSL->new($host, Port => $port,
-		    Hello => $smtphelo) or die "$progname: failed to open SMTPS connection to $smtphost\n($@)\n";
+	    if (have_smtps) {
+		$smtp = Net::SMTPS->new($host, Port => $port,
+		    Hello => $smtphelo, doSSL => 'ssl')
+		    or die "$progname: failed to open SMTPS connection to $smtphost\n($@)\n";
 	    } else {
-		die "$progname: Unable to establish SMTPS connection: $smtp_ssl_broken\n";
+		die "$progname: Unable to establish SMTPS connection: $smtps_broken\n";
 	    }
 	} else {
 	    my ($host, $port) = split(/:/, $smtphost);
 	    $port ||= '25';
 
-	    $smtp = Net::SMTP->new($host, Port => $port, Hello => $smtphelo)
-		or die "$progname: failed to open SMTP connection to $smtphost\n($@)\n";
+	    if (have_smtps) {
+		$smtp = Net::SMTPS->new($host, Port => $port,
+		    Hello => $smtphelo, doSSL => 'starttls')
+		    or die "$progname: failed to open SMTP connection to $smtphost\n($@)\n";
+	    } else {
+		$smtp = Net::SMTP->new($host, Port => $port, Hello => $smtphelo)
+		    or die "$progname: failed to open SMTP connection to $smtphost\n($@)\n";
+	    }
 	}
 	if ($smtpuser) {
 	    if (have_authen_sasl) {
