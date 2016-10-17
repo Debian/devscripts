@@ -1,5 +1,6 @@
 devscripts (2.16.9) UNRELEASED; urgency=medium
 
+  [ James McCoy ]
   * debsnap:
     + Fix "no binaries for given arch" detection so it doesn't download
       binaries for unspecified archs.  (Closes: #839533)
@@ -8,6 +9,11 @@ devscripts (2.16.9) UNRELEASED; urgency=medium
   * bts:
     + Switch to Net::SMTPS to support STARTTLS.  Based on a patch by Andrew
       Shadura.  (Closes: #518622)
+
+  [ Antonio Terceiro ]
+  * debrepro:
+    + Don't vary the build path, as the reproducibility efforts assume (AIUI)
+      the build path is fixed.
 
  -- James McCoy <jamessan@debian.org>  Sat, 01 Oct 2016 13:26:57 -0400
 

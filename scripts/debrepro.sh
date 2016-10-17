@@ -99,15 +99,15 @@ create_build_script() {
 
 build() {
   export which_build="$1"
-  mkdir "$tmpdir/$which_build"
-  cp -r "$SOURCE" "$tmpdir/$which_build/source"
-  cd "$tmpdir/$which_build/source"
+  mkdir "$tmpdir/build"
+  cp -r "$SOURCE" "$tmpdir/build/source"
 
+  cd "$tmpdir/build/source"
   create_build_script > ../build.sh
-
   sh ../build.sh
-
   cd -
+
+  mv "$tmpdir/build" "$tmpdir/$which_build"
 }
 
 binmatch() {
