@@ -12,8 +12,10 @@ devscripts (2.16.9) UNRELEASED; urgency=medium
 
   [ Antonio Terceiro ]
   * debrepro:
-    + Don't vary the build path, as the reproducibility efforts assume (AIUI)
-      the build path is fixed.
+    + Don't vary the build path. See
+      https://wiki.debian.org/ReproducibleBuilds/History (section "Giving up
+      on build paths") for an explanation on why it is not currently feasible
+      to vary build paths for reproducible builds.
 
  -- James McCoy <jamessan@debian.org>  Sat, 01 Oct 2016 13:26:57 -0400
 
