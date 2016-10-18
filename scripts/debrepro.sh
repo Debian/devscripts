@@ -38,11 +38,7 @@ variation() {
 
 vary() {
   local first="$1"
-  local second="${2:-}"
-  if [ -z "$second" ]; then
-    second="$first"
-    first=''
-  fi
+  local second="$2"
   if [ "$which_build" = 'first' ]; then
     if [ -n "$first" ]; then
       echo "$first"
@@ -63,7 +59,7 @@ create_build_script() {
   echo 'export SOURCE_DATE_EPOCH=$(date -d "$(dpkg-parsechangelog -SDate)" +%s)'
 
   variation PATH
-  vary 'export PATH="$PATH":/i/capture/the/path'
+  vary '' 'export PATH="$PATH":/i/capture/the/path'
 
   variation USER
   vary 'export USER=user1' 'export USER=user2'
