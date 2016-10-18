@@ -56,8 +56,6 @@ create_build_script() {
   echo "# package"
   echo
 
-  echo 'export SOURCE_DATE_EPOCH=$(date -d "$(dpkg-parsechangelog -SDate)" +%s)'
-
   variation PATH
   vary '' 'export PATH="$PATH":/i/capture/the/path'
 
@@ -83,13 +81,9 @@ create_build_script() {
     echo 'cd ../disorderfs'
   fi
 
-  echo
-  echo 'dpkg-source --before-build .'
-  echo 'fakeroot debian/rules clean'
-
   variation date
-  vary 'fakeroot debian/rules binary' \
-    'faketime "+213days +7hours +13minutes" fakeroot debian/rules binary'
+  vary 'dpkg-buildpackage -b -us -uc' \
+    'dpkg-buildpackage -b -us -uc -r"faketime +213days+7hours+13minutes fakeroot"'
 }
 
 
