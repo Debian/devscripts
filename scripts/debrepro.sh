@@ -3,6 +3,7 @@
 # debrepro: a reproducibility tester for Debian packages
 #
 # © 2016 Antonio Terceiro <terceiro@debian.org>
+# Copyright © 2016 Guillem Jover <guillem@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -100,28 +101,22 @@ build() {
   mv "$tmpdir/build" "$tmpdir/$which_build"
 }
 
-binmatch() {
-  cmp --silent "$1" "$2"
-}
-
 compare() {
   rc=0
-  for first_deb in "$tmpdir"/first/*.deb; do
-    deb="$(basename "$first_deb")"
-    second_deb="$tmpdir"/second/"$deb"
-    if binmatch "$first_deb" "$second_deb"; then
-      echo "✓ $deb: binaries match"
-    else
-      echo ""
-      rc=1
-      if which diffoscope >/dev/null; then
-        diffoscope "$first_deb" "$second_deb" || true
-      else
-        echo "✗ $deb: binaries don't match"
-      fi
-    fi
-  done
-  if [ "$rc" -ne 0 ]; then
+  first_changes=$(echo "$tmpdir"/first/*.changes)
+  changes="$(basename "$first_changes")"
+  second_changes="$tmpdir/second/$changes"
+
+  if which diffoscope >/dev/null; then
+    diffoscope "$first_changes" "$second_changes" || rc=1
+  else
+    debdiff -q -d --control --controlfiles ALL \
+      "$first_changes" "$second_changes" || rc=1
+  fi
+  if [ "$rc" -eq 0 ]; then
+    echo "✓ $changes: artifacts match"
+  else
+    echo "✗ $changes: artifacts do not match"
     echo "E: package is not reproducible."
     if ! which diffoscope >/dev/null; then
       echo "I: install diffoscope for a deeper comparison between binaries"
