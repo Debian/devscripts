@@ -17,6 +17,12 @@ devscripts (2.16.9) UNRELEASED; urgency=medium
       on build paths") for an explanation on why it is not currently feasible
       to vary build paths for reproducible builds.
 
+  [ Guillem Jover ]
+  * debrepro:
+    + Simplify and make the vary() function more clear
+    + Use dpkg-buildpackage instead of ad-hoc code
+    + Compare .changes files and fallback to use debdiff
+
  -- James McCoy <jamessan@debian.org>  Sat, 01 Oct 2016 13:26:57 -0400
 
 devscripts (2.16.8) unstable; urgency=medium
