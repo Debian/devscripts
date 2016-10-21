@@ -18,7 +18,7 @@ devscripts (2.16.9) UNRELEASED; urgency=medium
       to vary build paths for reproducible builds.
 
   [ Guillem Jover ]
-  * debrepro:
+  * debrepro improvements (Closes: #841149):
     + Simplify and make the vary() function more clear
     + Use dpkg-buildpackage instead of ad-hoc code
     + Compare .changes files and fallback to use debdiff
