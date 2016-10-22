@@ -1,0 +1,97 @@
+=head1 NAME
+
+debrepro - reproduciblity tester for Debian packages
+
+=head1 SYNOPSIS
+
+B<debrepro> [I<SOURCEDIR>]
+
+=head1  DESCRIPTION
+
+B<debrepro> will build a given source directory twice, with a set of
+variation between the first and the second build, and compare the binary
+packages produced. If B<diffoscope> is installed, it is used to compare
+non-matching binaries. If B<disorderfs> is installed, it is used during
+the build to inject non-determinism in filesystem listing operations.
+
+I<SOURCEDIR> must be a directory containing an unpacked Debian source
+package. If I<SOURCEDIR> is omitted, the current directory is assumed.
+
+=head1 OUTPUT DIRECTORY
+
+At the very end of a build, B<debrepro> will inform the location of the
+output directory where the build artifacts can be found. The contents of
+this directory are as follows:
+
+=over
+
+=item I<$OUTPUTDIR/first>
+
+contains the results of the first build, including a copy of the source
+tree, and the resulting binary packages.
+
+=item I<$OUTPUTDIR/first/build.sh>
+
+contains the exact build script that was used in the first build.
+
+=item I<$OUTPUTDIR/second>
+
+contains the results of the second build, including a copy of the source tree,
+and the resulting binary packages.
+
+=item I<$OUTPUTDIR/second/build.sh>
+
+contains the exact build script that was used in the second build.
+
+=back
+
+Taking a B<diff(1)> between I<$OUTPUTDIR/first/build.sh> and
+I<$OUTPUTDIR/second/build.sh> is an excellent way of figuring out
+exactly what changed between the two builds.
+
+=head1 SUPPORTED VARIATIONS
+
+=over
+
+=item B<USER>
+
+The I<$USER> environment variable will contain different values between the
+first and second builds.
+
+=item B<PATH>
+
+During the second build, a fake, unexisting directory will be appended to the
+I<$PATH> environment variable.
+
+=item B<umask>
+
+The builds will use different umask settings.
+
+=item B<locale>
+
+Both I<$LC_ALL> and I<$LANG> will be different across the two builds.
+
+=item B<timezone>
+
+I<$TZ> will be different across builds.
+
+=item filesystem ordering
+
+If B<disorderfs> is installed, both builds will be done under a disorderfs
+overlay directory. This will cause filesystem listing operations to be return
+items in a non-deterministic order.
+
+=item B<time>
+
+The second build will be executed 213 days, 7 hours and 13 minutes in the
+future with regards to the current time.
+
+=back
+
+=head1 SEE ALSO
+
+diffoscope (1), disorderfs (1),
+
+=head1  AUTHOR
+
+Antonio Terceiro <terceiro@debian.org>.

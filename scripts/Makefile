@@ -25,7 +25,7 @@ COMPL_DIR := $(shell pkg-config --variable=completionsdir bash-completion)
 PKGNAMES:=wnpp-alert wnpp-check mk-build-deps rmadison mass-bug debsnap dd-list build-rdeps who-uploads transition-check getbuildlog dcontrol grep-excuses rc-alert whodepends dget pts-subscribe pts-unsubscribe debcheckout
 PYTHON3_SCRIPTS:=sadt suspicious-source wrap-and-sort
 
-GEN_MAN1S += devscripts.1 mk-origtargz.1 uscan.1
+GEN_MAN1S += debrepro.1 devscripts.1 mk-origtargz.1 uscan.1
 
 all: $(SCRIPTS) $(GEN_MAN1S) $(CWRAPPERS) $(COMPLETION)
 
