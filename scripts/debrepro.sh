@@ -84,7 +84,7 @@ create_build_script() {
 
   variation date
   vary 'dpkg-buildpackage -b -us -uc' \
-    'dpkg-buildpackage -b -us -uc -r"faketime +213days+7hours+13minutes fakeroot"'
+    'faketime +213days+7hours+13minutes dpkg-buildpackage -b -us -uc'
 }
 
 
