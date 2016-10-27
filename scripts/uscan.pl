@@ -1535,6 +1535,8 @@ variations.
 The optional I<script> parameter in F<debian/watch> means to execute I<script>
 with options after processing this line if specified.
 
+See L<HISTORY AND UPGRADING> for how B<uscan> invokes the custom I<script>.
+
 For compatibility with other tools such as B<git-buildpackage>, it may not be
 wise to create custom scripts with random behavior.  In general, B<uupdate> is
 the best choice for the non-native package and custom scripts, if created,
