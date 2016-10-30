@@ -241,8 +241,8 @@ for package; do
 
 	UPLOADER=$($GPG $GPG_OPTIONS \
 	           "${GPG_DEFAULT_KEYRINGS[@]}" "${GPG_KEYRINGS[@]}" \
-	           --list-key --with-colons $GPG_ID 2>/dev/null |
-	           awk  -F: '/@debian\.org>/ { a = $10; exit} /^pub/ { a = $10 } END { print a }' )
+	           --list-key --with-colons --fixed-list-mode $GPG_ID 2>/dev/null |
+	           awk  -F: '/@debian\.org>/ { a = $10; exit} /^uid/ { a = $10; exit} END { print a }' )
 	if [ -z "$UPLOADER" ]; then UPLOADER="<unrecognised public key ($GPG_ID)>"; fi
 
 	output="$VERSION to $DISTRO: $UPLOADER"

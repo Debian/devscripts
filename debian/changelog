@@ -24,6 +24,10 @@ devscripts (2.16.9) UNRELEASED; urgency=medium
     + Use dpkg-buildpackage instead of ad-hoc code
     + Compare .changes files and fallback to use debdiff
 
+  [ Paul Wise ]
+  * who-uploads:
+    + Fix search for user IDs with gpg2 and no @debian.org user IDs
+
  -- James McCoy <jamessan@debian.org>  Sat, 01 Oct 2016 13:26:57 -0400
 
 devscripts (2.16.8) unstable; urgency=medium
