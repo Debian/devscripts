@@ -801,7 +801,7 @@ signature file in the same file path.
 
 For the upstream source package B<foo-2.0.tar.gz> and the upstream signature
 file B<foo-2.0.tar.gz.asc>, this watch file downloads these files, verifies the
-authenticity using the keyring F<debian/upstream-key.pgp> and creates the
+authenticity using the keyring F<debian/upstream/signing-key.asc> and creates the
 Debian B<orig.tar> file B<foo_2.0.orig.tar.gz>.
 
 =head2 HTTP site (pgpmode=next/previous)
