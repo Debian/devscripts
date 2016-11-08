@@ -17,6 +17,9 @@ devscripts (2.16.9) UNRELEASED; urgency=medium
       on build paths") for an explanation on why it is not currently feasible
       to vary build paths for reproducible builds.
     + convert mapage to POD
+    + in case of non-matching binaries, call diffoscope only on the .changes
+      files instead of on the .deb files. This way we even get get diff in
+      .buildinfo between the builds.
 
   [ Guillem Jover ]
   * debrepro improvements (Closes: #841149):

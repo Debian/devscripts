@@ -112,20 +112,17 @@ compare() {
     if binmatch "$first_deb" "$second_deb"; then
       echo "✓ $deb: binaries match"
     else
-      echo ""
+      echo "✗ $deb: binaries don't match"
       rc=1
-      if which diffoscope >/dev/null; then
-        diffoscope "$first_deb" "$second_deb" || true
-      else
-        echo "✗ $deb: binaries don't match"
-      fi
     fi
   done
   if [ "$rc" -ne 0 ]; then
-    echo "E: package is not reproducible."
-    if ! which diffoscope >/dev/null; then
-      echo "I: install diffoscope for a deeper comparison between binaries"
+    if which diffoscope >/dev/null; then
+      diffoscope "$tmpdir"/first/*.changes "$tmpdir"/second/*.changes || true
+    else
+      echo "I: install diffoscope for a deep comparison between artifacts"
     fi
+    echo "E: package is not reproducible."
   fi
   return "$rc"
 }
