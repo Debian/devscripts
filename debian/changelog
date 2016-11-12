@@ -28,7 +28,7 @@ devscripts (2.16.9) UNRELEASED; urgency=medium
 
   [ Paul Wise ]
   * who-uploads:
-    + Fix search for user IDs with gpg2 and no @debian.org user IDs
+    + Fix search for user IDs with gpg2 and no @debian.org user IDs (Closes: #843961)
   * uscan:
     + Fix a mention of the location of the upstream signing key (Closes: #842542)
 
