@@ -96,6 +96,11 @@ Explicitly set the build architecture. The default is the value of
 `dpkg-architecture -qDEB_BUILD_ARCH`. This option only works if dose-extra >=
 4.0 is installed.
 
+=item B<--no-meta>
+
+Don't print meta information (header, counter). Making it easier to use in
+scripts.
+
 =item B<-d>, B<--debug>
 
 Run the debug mode
@@ -151,6 +156,7 @@ my @opt_exclude_components;
 my $opt_buildarch;
 my $opt_hostarch;
 my $opt_without_ceve;
+my $opt_no_meta;
 
 if (system('command -v grep-dctrl >/dev/null 2>&1')) {
     die "$progname: Fatal error. grep-dctrl is not available.\nPlease install the 'dctrl-tools' package.\n";
@@ -179,6 +185,7 @@ Options:
                                   (needs root privileges)
    -s, --sudo                     Use sudo when running apt-get update
                                   (has no effect when -u is omitted)
+   --no-meta                      Don't print meta information
    -d, --debug                    Enable the debug mode
    -m, --print-maintainer         Print the maintainer information (experimental)
    --distribution distribution    Select a distribution to search for build-depends
@@ -373,11 +380,13 @@ sub findreversebuilddeps {
 	}
     }
 
-    if ($count == 0) {
-	print "No reverse build-depends found for $package.\n\n"
-    }
-    else {
-	print "\nFound a total of $count reverse build-depend(s) for $package.\n\n";
+    if (!$opt_no_meta) {
+	if ($count == 0) {
+	    print "No reverse build-depends found for $package.\n\n"
+	}
+	else {
+	    print "\nFound a total of $count reverse build-depend(s) for $package.\n\n";
+	}
     }
 }
 
@@ -398,6 +407,7 @@ GetOptions(
 #                                            once dose-ceve has a
 #                                            --deb-profiles option
     "old" => \$opt_without_ceve,
+    "no-meta" => \$opt_no_meta,
     "d|debug" => \$opt_debug,
     "h|help" => sub { usage; },
     "v|version" => sub { version; }
@@ -486,20 +496,26 @@ if (!@source_files) {
 
 foreach my $source_file (@source_files) {
     if ($source_file =~ /main/) {
-	print "Reverse Build-depends in main:\n";
-	print "------------------------------\n\n";
+	if (!$opt_no_meta) {
+	    print "Reverse Build-depends in main:\n";
+	    print "------------------------------\n\n";
+	}
 	findreversebuilddeps($package, "$sources_path/$source_file");
     }
 
     if ($source_file =~ /contrib/) {
-	print "Reverse Build-depends in contrib:\n";
-	print "---------------------------------\n\n";
+	if (!$opt_no_meta) {
+	    print "Reverse Build-depends in contrib:\n";
+	    print "---------------------------------\n\n";
+	}
 	findreversebuilddeps($package, "$sources_path/$source_file");
     }
 
     if ($source_file =~ /non-free/) {
-	print "Reverse Build-depends in non-free:\n";
-	print "----------------------------------\n\n";
+	if (!$opt_no_meta) {
+	    print "Reverse Build-depends in non-free:\n";
+	    print "----------------------------------\n\n";
+	}
 	findreversebuilddeps($package, "$sources_path/$source_file");
     }
 }

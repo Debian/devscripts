@@ -32,6 +32,10 @@ devscripts (2.16.9) UNRELEASED; urgency=medium
   * uscan:
     + Fix a mention of the location of the upstream signing key (Closes: #842542)
 
+  [ Jochen Sprickerhof ]
+  * build-rdeps:
+    + add --no-meta option for use in scripts (Closes: #844327)
+
  -- James McCoy <jamessan@debian.org>  Sat, 01 Oct 2016 13:26:57 -0400
 
 devscripts (2.16.8) unstable; urgency=medium
