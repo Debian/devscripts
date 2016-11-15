@@ -96,7 +96,7 @@ Explicitly set the build architecture. The default is the value of
 `dpkg-architecture -qDEB_BUILD_ARCH`. This option only works if dose-extra >=
 4.0 is installed.
 
-=item B<--no-meta>
+=item B<--quiet>
 
 Don't print meta information (header, counter). Making it easier to use in
 scripts.
@@ -156,7 +156,7 @@ my @opt_exclude_components;
 my $opt_buildarch;
 my $opt_hostarch;
 my $opt_without_ceve;
-my $opt_no_meta;
+my $opt_quiet;
 
 if (system('command -v grep-dctrl >/dev/null 2>&1')) {
     die "$progname: Fatal error. grep-dctrl is not available.\nPlease install the 'dctrl-tools' package.\n";
@@ -185,7 +185,7 @@ Options:
                                   (needs root privileges)
    -s, --sudo                     Use sudo when running apt-get update
                                   (has no effect when -u is omitted)
-   --no-meta                      Don't print meta information
+   -q, --quiet                    Don't print meta information
    -d, --debug                    Enable the debug mode
    -m, --print-maintainer         Print the maintainer information (experimental)
    --distribution distribution    Select a distribution to search for build-depends
@@ -380,7 +380,7 @@ sub findreversebuilddeps {
 	}
     }
 
-    if (!$opt_no_meta) {
+    if (!$opt_quiet) {
 	if ($count == 0) {
 	    print "No reverse build-depends found for $package.\n\n"
 	}
@@ -407,7 +407,7 @@ GetOptions(
 #                                            once dose-ceve has a
 #                                            --deb-profiles option
     "old" => \$opt_without_ceve,
-    "no-meta" => \$opt_no_meta,
+    "q|quiet" => \$opt_quiet,
     "d|debug" => \$opt_debug,
     "h|help" => sub { usage; },
     "v|version" => sub { version; }
@@ -496,7 +496,7 @@ if (!@source_files) {
 
 foreach my $source_file (@source_files) {
     if ($source_file =~ /main/) {
-	if (!$opt_no_meta) {
+	if (!$opt_quiet) {
 	    print "Reverse Build-depends in main:\n";
 	    print "------------------------------\n\n";
 	}
@@ -504,7 +504,7 @@ foreach my $source_file (@source_files) {
     }
 
     if ($source_file =~ /contrib/) {
-	if (!$opt_no_meta) {
+	if (!$opt_quiet) {
 	    print "Reverse Build-depends in contrib:\n";
 	    print "---------------------------------\n\n";
 	}
@@ -512,7 +512,7 @@ foreach my $source_file (@source_files) {
     }
 
     if ($source_file =~ /non-free/) {
-	if (!$opt_no_meta) {
+	if (!$opt_quiet) {
 	    print "Reverse Build-depends in non-free:\n";
 	    print "----------------------------------\n\n";
 	}
