@@ -715,18 +715,6 @@ if ($command_version eq 'dpkg') {
     # We're going to emulate dpkg-buildpackage and possibly lintian.
     # This will allow us to run hooks.
 
-    # check hooks
-    my @skip_hooks = ();
-    for my $hookname (qw(clean dpkg-source build binary dpkg-genchanges
-			 final-clean)) {
-	if ($hook{$hookname}) { push @skip_hooks, $hookname; }
-    }
-    if (@skip_hooks) {
-	$emulate_dpkgbp = 1;
-	warn "$progname: emulating dpkg-buildpackage as the following hooks were defined:\n"
-	    . "  " . join(", ", @skip_hooks) . "\n\n";
-    }
-
     # Our first task is to parse the command line options.
 
     # And before we get too excited, does lintian even exist?
@@ -766,6 +754,25 @@ if ($command_version eq 'dpkg') {
     my @debsign_opts = ();
     # and one for dpkg-buildpackage if needed
     my @dpkg_opts = qw(-us -uc);
+
+    my %debuild2dpkg = (
+        'dpkg-buildpackage' => 'init',
+        'clean' => 'preclean',
+        'dpkg-source' => 'source',
+        'build' => 'build',
+        'binary' => 'binary',
+        'dpkg-genchanges' => 'changes',
+        'postclean' => 'final-clean',
+        'lintian' => 'check',
+    );
+
+    for my $h_name (@hooks) {
+	if (exists $debuild2dpkg{$h_name}) {
+	    push(@dpkg_opts,
+		sprintf('--hook-%s=%s', $debuild2dpkg{$h_name}, $hook{$h_name}));
+	    delete $hook{$h_name};
+	}
+    }
 
     # Parse dpkg-buildpackage options
     # First process @dpkg_extra_opts from above
@@ -986,8 +993,6 @@ if ($command_version eq 'dpkg') {
     open STDOUT, ">&BUILD" or fatal "can't reopen stdout: $!";
     open STDERR, ">&BUILD" or fatal "can't reopen stderr: $!";
 
-    run_hook('dpkg-buildpackage', 1);
-
     if (!$emulate_dpkgbp) {
 	unshift @dpkg_opts, ($checkbuilddep ? "-D" : "-d");
 	unshift @dpkg_opts, "-r$root_command" if $root_command;
@@ -1070,8 +1075,6 @@ EOT
 	    }
 	}
 
-	run_hook('clean', ! $noclean);
-
 	# Next dpkg-buildpackage action: clean
 	unless ($noclean) {
 	    if ($< == 0) {
@@ -1080,8 +1083,6 @@ EOT
 		system_withecho($root_command, 'debian/rules', 'clean');
 	    }
 	}
-
-	run_hook('dpkg-source', ! $binaryonly);
 
 	# Next dpkg-buildpackage action: dpkg-source
 	if (! $binaryonly) {
@@ -1097,13 +1098,9 @@ EOT
 	    chdir $dirn or fatal "can't chdir $dirn: $!";
 	}
 
-	run_hook('build', ! $sourceonly);
-
 	# Next dpkg-buildpackage action: build and binary targets
 	if (! $sourceonly) {
 	    system_withecho('debian/rules', 'build');
-
-	    run_hook('binary', 1);
 
 	    if ($< == 0) {
 		system_withecho('debian/rules', $binarytarget);
@@ -1113,11 +1110,6 @@ EOT
 	} elsif ($hook{'binary'}) {
 	    push @warnings, "$progname: not running binary hook '$hook{'binary'}' as -S option used\n";
 	}
-
-	# We defer the signing the .dsc file until after dpkg-genchanges has
-	# been run
-
-	run_hook('dpkg-genchanges', 1);
 
 	# Because of our messing around with STDOUT and wanting to pass
 	# arguments safely to dpkg-genchanges means that we're gonna have to
@@ -1152,8 +1144,6 @@ EOT
 	    push (@warnings, "Ubuntu merge policy: when merging Ubuntu packages with Debian, changelog must describe the remaining Ubuntu changes")
 		unless $ch =~ /Changes:.*(remaining|Ubuntu)(.|\n )*(differen|changes)/is;
 	}
-
-	run_hook('final-clean', $cleansource);
 
 	# Final dpkg-buildpackage action: clean target again
 	if ($cleansource) {
@@ -1209,17 +1199,6 @@ EOT
 
 	chdir '..' or fatal "can't chdir: $!";
     } # end of debuild dpkg-buildpackage emulation
-
-    run_hook('lintian', $run_lintian && $lintian_exists);
-
-    if ($run_lintian && $lintian_exists) {
-	$<=$>=$uid;  # Give up on root privileges if we can
-	$(=$)=$gid;
-	print "Now running lintian...\n";
-	# The remaining items in @ARGV, if any, are lintian options
-	system('lintian', @lintian_extra_opts, @lintian_opts, $changes);
-	print "Finished running lintian.\n";
-    }
 
     # They've insisted.  Who knows why?!
     if (($signchanges or $signsource) and $usepause) {
