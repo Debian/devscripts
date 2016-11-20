@@ -992,6 +992,15 @@ if ($command_version eq 'dpkg') {
 	exit 1 unless $ans =~ /^y/i;
     }
 
+    # Convert debuild-specific _APPEND variables to those recognized by
+    # dpkg-buildpackage
+    my @buildflags = qw(CPPFLAGS CFLAGS CXXFLAGS FFLAGS LDFLAGS);
+    foreach my $flag (@buildflags) {
+	if (exists $ENV{"${flag}_APPEND"}) {
+	    $ENV{"DEB_${flag}_APPEND"} = delete $ENV{"${flag}_APPEND"};
+	}
+    }
+
     # We'll need to be a bit cleverer to determine the changes file name;
     # see below
     $build="${pkg}_${sversion}_${arch}.build";
