@@ -877,7 +877,7 @@ if ($command_version eq 'dpkg') {
 	/^-j(auto|\d*)$/ and $parallel=($1 || '-1'), push(@dpkg_opts, $_), next;
 
 	# these non-dpkg-buildpackage options make us stop
-	if ($_ eq '-L' or $_ eq '--lintian' or /^--lintian-opts$/) {
+	if ($_ eq '--lintian-opts') {
 	    unshift @ARGV, $_;
 	    last;
 	}
@@ -895,29 +895,15 @@ if ($command_version eq 'dpkg') {
     }
 
     # Pick up lintian options if necessary
-    if ($run_lintian && @ARGV) {
+    if (@ARGV) {
 	# Check that option is sensible
-    LIN_OPTS:
-	while (@ARGV) {
-	    my $whichlin = shift;
-	    if ($whichlin eq '-L' or $whichlin eq '--lintian') {
+	if ($ARGV[0] eq '--lintian-opts') {
+	    if (! $run_lintian) {
 		push @warnings,
-		    "the $whichlin option is deprecated for indicating the start\nof lintian options, please use --lintian-opts instead\n  (I substituted -L with --lintian-opts this time)";
-		$whichlin = '--lintian-opts';
+		    "$ARGV[0] option given but not running lintian!";
 	    }
-	    if ($whichlin eq '--lintian-opts') {
-		if (! $run_lintian) {
-		    push @warnings,
-		        "$whichlin option given but not running lintian!";
-		}
-		while ($_=shift) {
-		    if (/^--lintian-opts$/) {
-			unshift @ARGV, $_;
-			next LIN_OPTS;
-		    }
-		    push @lintian_opts, $_;
-		}
-	    }
+	    shift;
+	    push(@lintian_opts, @ARGV);
 	}
     }
 
