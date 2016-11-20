@@ -53,7 +53,6 @@ use 5.008;
 use File::Basename;
 use filetest 'access';
 use Cwd;
-use Devscripts::Compression;
 use Dpkg::Changelog::Parse qw(changelog_parse);
 use Dpkg::IPC;
 use IO::Handle;  # for flushing
@@ -63,12 +62,9 @@ my $progname=basename($0);
 my $modified_conf_msg;
 my @warnings;
 
-my $compression_re = compression_get_file_extension_regex();
-
 # Predeclare functions
 sub system_withecho(@);
 sub run_hook ($$);
-sub fileomitted (\@$);
 sub fatal($);
 
 sub usage
@@ -390,8 +386,6 @@ foreach (@dpkg_extra_opts) {
     /^-r(.*)$/ and $root_command=$1, next;
     $_ eq '-d' and $checkbuilddep=0, next;
     $_ eq '-D' and $checkbuilddep=1, next;
-    /^-a(.*)/ and $_ ne '-ap' and $checkbuilddep=0, next;
-    $_ eq '-S' and $checkbuilddep=0, next;
 }
 
 # Check @ARGV for debuild options.
@@ -722,27 +716,15 @@ if ($command_version eq 'dpkg') {
     # dpkg-buildpackage variables explicitly initialised in dpkg-buildpackage
     my $signsource=1;
     my $signchanges=1;
-    my $cleansource=0;
     my $binarytarget='binary';
-    my $sourcestyle='';
     my $since='';
-    my $maint='';
-    my $desc='';
-    my $parallel='';
-    my $noclean=0;
     my $usepause=0;
-    my @passopts=();
 
     # extra dpkg-buildpackage variables not initialised there
-    my $diffignore='';
-    my @tarignore=();
     my $sourceonly='';
     my $binaryonly='';
     my $targetarch='';
     my $targetgnusystem='';
-    my $changedby='';
-    my $compression='';
-    my $comp_level='';
 
     my $dirn = basename(cwd());
 
@@ -780,21 +762,11 @@ if ($command_version eq 'dpkg') {
 	/^-p/ and push(@debsign_opts, $_), next;  # Key selection options
 	/^-k/ and push(@debsign_opts, $_), next;  # Ditto
 	/^-[dD]$/ and next;  # already been processed
-	/^-s(pgp|gpg)$/ and push(@debsign_opts, $_), next;  # Key selection
 	$_ eq '-us' and $signsource=0, next;
 	$_ eq '-uc' and $signchanges=0, next;
 	$_ eq '-ap' and $usepause=1, next;
 	/^-a(.*)/ and $targetarch=$1, push(@dpkg_opts, $_), next;
-	    # Explained below; no implied -d here, as already done
-	/^-s[iad]$/ and $sourcestyle=$_, push(@dpkg_opts, $_), next;
-	/^-i/ and $diffignore=$_, push(@dpkg_opts, $_), next;
-	/^-I/ and push(@tarignore, $_), push(@dpkg_opts, $_), next;
-	/^-Z/ and $compression=$_, push(@dpkg_opts, $_), next;
-	/^-z/ and $comp_level=$_, push(@dpkg_opts, $_), next;
-	$_ eq '-tc' and $cleansource=1, push(@dpkg_opts, $_), next;
 	/^-t(.*)/ and $targetgnusystem=$1, push(@dpkg_opts, $_), next; # Ditto
-	$_ eq '-nc' and $noclean=1, push(@dpkg_opts, $_),
-	    next;
 	$_ eq '-b' and $binaryonly=$_, $binarytarget='binary',
 	    push(@dpkg_opts, $_), next;
 	$_ eq '-B' and $binaryonly=$_, $binarytarget='binary-arch',
@@ -829,13 +801,8 @@ if ($command_version eq 'dpkg') {
 	    push(@dpkg_opts, $argstr);
 	}
 	/^-v(.*)/ and $since=$1, push(@dpkg_opts, $_), next;
-	/^-m(.*)/ and $maint=$1, push(@debsign_opts, $_), push(@dpkg_opts, $_),
-	    next;
-	/^-e(.*)/ and $changedby=$1, push(@debsign_opts, $_),
-	    push(@dpkg_opts, $_), next;
-	/^-C(.*)/ and $desc=$1, push(@dpkg_opts, $_), next;
-	/^-j(auto|\d*)$/ and $parallel=($1 || '-1'), push(@dpkg_opts, $_), next;
-	warn "$progname: unknown dpkg-buildpackage option in configuration file: $_\n";
+	/^-m(.*)/ and push(@debsign_opts, $_), push(@dpkg_opts, $_), next;
+	/^-e(.*)/ and push(@debsign_opts, $_), push(@dpkg_opts, $_), next;
 	push (@dpkg_opts, $_);
     }
 
@@ -844,23 +811,12 @@ if ($command_version eq 'dpkg') {
 	/^-r(.*)/ and $root_command=$1, next;
 	/^-p/ and push(@debsign_opts, $_), next;  # Key selection options
 	/^-k/ and push(@debsign_opts, $_), next;  # Ditto
-	$_ eq '-d' and $checkbuilddep=0, next;
-	$_ eq '-D' and $checkbuilddep=1, next;
-	/^-s(pgp|gpg)$/ and push(@debsign_opts, $_), next;  # Key selection
 	$_ eq '-us' and $signsource=0, next;
 	$_ eq '-uc' and $signchanges=0, next;
 	$_ eq '-ap' and $usepause=1, next;
-	/^-a(.*)/ and $targetarch=$1, $checkbuilddep=0, push(@dpkg_opts, $_),
+	/^-a(.*)/ and $targetarch=$1, push(@dpkg_opts, $_),
 	    next;
-	/^-s[iad]$/ and $sourcestyle=$_, push(@dpkg_opts, $_), next;
-	/^-i/ and $diffignore=$_, push(@dpkg_opts, $_), next;
-	/^-I/ and push(@tarignore, $_), push(@dpkg_opts, $_), next;
-	/^-Z/ and $compression=$_, push(@dpkg_opts, $_), next;
-	/^-z/ and $comp_level=$_, push(@dpkg_opts, $_), next;
-	$_ eq '-tc' and $cleansource=1, push(@dpkg_opts, $_), next;
-	/^-t(.*)/ and $targetgnusystem=$1, $checkbuilddep=0, next;
-	$_ eq '-nc' and $noclean=1, push(@dpkg_opts, $_),
-	    next;
+	/^-t(.*)/ and $targetgnusystem=$1, next;
 	$_ eq '-b' and $binaryonly=$_, $binarytarget='binary',
 	    push(@dpkg_opts, $_), next;
 	$_ eq '-B' and $binaryonly=$_, $binarytarget='binary-arch',
@@ -895,19 +851,14 @@ if ($command_version eq 'dpkg') {
 	    push(@dpkg_opts, $argstr);
 	}
 	/^-v(.*)/ and $since=$1, push(@dpkg_opts, $_), next;
-	/^-m(.*)/ and $maint=$1, push(@debsign_opts, $_), push(@dpkg_opts, $_),
-	    next;
-	/^-e(.*)/ and $changedby=$1, push(@debsign_opts, $_),
-	    push(@dpkg_opts, $_), next;
-	/^-C(.*)/ and $desc=$1, push(@dpkg_opts, $_), next;
-	/^-j(auto|\d*)$/ and $parallel=($1 || '-1'), push(@dpkg_opts, $_), next;
+	/^-m(.*)/ and push(@debsign_opts, $_), push(@dpkg_opts, $_), next;
+	/^-e(.*)/ and push(@debsign_opts, $_), push(@dpkg_opts, $_), next;
 
 	# these non-dpkg-buildpackage options make us stop
 	if ($_ eq '--lintian-opts') {
 	    unshift @ARGV, $_;
 	    last;
 	}
-	warn "$progname: unknown dpkg-buildpackage/debuild option: $_\n";
 	push (@dpkg_opts, $_);
     }
 
@@ -1097,11 +1048,6 @@ sub system_withecho(@) {
     }
 }
 
-sub fileomitted (\@$) {
-    my ($files, $pat) = @_;
-    return (scalar(grep { /$pat$/ } @$files) == 0);
-}
-
 sub run_hook ($$) {
     my ($hook, $act) = @_;
     return unless $hook{$hook};
@@ -1135,52 +1081,4 @@ sub fatal($) {
 	open STDERR, ">&", \*OLDERR;
     }
     die $msg;
-}
-
-# Dpkg::BuildOptions::parse and ::set
-sub parsebuildopts {
-    my ($env) = @_;
-
-    $env ||= $ENV{DEB_BUILD_OPTIONS};
-
-    unless ($env) { return {}; }
-
-    my %opts;
-
-    foreach (split(/\s+/, $env)) {
-	unless (/^([a-z][a-z0-9_-]*)(=(\S*))?$/) {
-	    warn("$progname: invalid flag in DEB_BUILD_OPTIONS: $_\n");
-	    next;
-	}
-
-        my ($k, $v) = ($1, $3 || '');
-
-        # Sanity checks
-	if ($k =~ /^(noopt|nostrip|nocheck)$/ && length($v)) {
-	    $v = '';
-	} elsif ($k eq 'parallel' && $v !~ /^-?\d+$/) {
-	    next;
-	}
-
-	$opts{$k} = $v;
-    }
-
-    return \%opts;
-}
-
-sub setbuildopts {
-    my ($opts, $overwrite) = @_;
-    $overwrite = 1 if not defined($overwrite);
-
-    my $new = {};
-    $new = parsebuildopts() unless $overwrite;
-
-    while (my ($k, $v) = each %$opts) {
-	$new->{$k} = $v;
-    }
-
-    my $env = join(" ", map { $new->{$_} ? $_ . "=" . $new->{$_} : $_ } keys %$new);
-
-    $ENV{DEB_BUILD_OPTIONS} = $env;
-    return $env;
 }
