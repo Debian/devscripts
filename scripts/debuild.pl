@@ -585,6 +585,21 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
 	    next;
 	}
 
+	if ($arg =~ /^--hook-(sign|done)=(.*)$/) {
+	    my $name = $1;
+	    my $opt = $2;
+	    unless (defined($opt)) {
+		fatal "$arg requires an argmuent,\nrun $progname --help for usage information";
+	    }
+	    if ($name eq 'sign') {
+		$hook{signing} = $opt;
+	    }
+	    else {
+		$hook{'post-dpkg-buildpackage'} = $opt;
+	    }
+	    next;
+	}
+
 	if ($arg eq '--clear-hooks') { $hook{@hooks} = ('') x @hooks; next; }
 
 	# Not a debuild option, so give up.
