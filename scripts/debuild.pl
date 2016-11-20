@@ -803,7 +803,32 @@ if ($command_version eq 'dpkg') {
 	$_ eq '-A' and $binaryonly=$_, $binarytarget='binary-indep',
 	    push(@dpkg_opts, $_), next;
 	$_ eq '-S' and $sourceonly=$_, push(@dpkg_opts, $_), next;
-	    # Explained below, no implied -d
+	$_ eq '-F' and $binarytarget='binary', push(@dpkg_opts, $_), next;
+	$_ eq '-G' and $binarytarget='binary-arch', push(@dpkg_opts, $_), next;
+	$_ eq '-g' and $binarytarget='binary-indep', push(@dpkg_opts, $_), next;
+	if (/^--build=(.*)$/) {
+	    my $argstr = $_;
+	    my @builds = split(/,/, $1);
+	    my ($binary, $source);
+	    for my $build (@builds) {
+		if ($build =~ m/^(?:binary|full)$/) {
+		    $source++ if $1 eq 'full';
+		    $binary++;
+		    $binarytarget = 'binary';
+		}
+		elsif ($build eq 'any') {
+		    $binary++;
+		    $binarytarget = 'binary-arch';
+		}
+		elsif ($build eq 'all') {
+		    $binary++;
+		    $binarytarget = 'binary-indep';
+		}
+	    }
+	    $binaryonly = (!$source && $binary);
+	    $sourceonly = ($source && !$binary);
+	    push(@dpkg_opts, $argstr);
+	}
 	/^-v(.*)/ and $since=$1, push(@dpkg_opts, $_), next;
 	/^-m(.*)/ and $maint=$1, push(@debsign_opts, $_), push(@dpkg_opts, $_),
 	    next;
@@ -848,8 +873,33 @@ if ($command_version eq 'dpkg') {
 	    push(@dpkg_opts, $_), next;
 	$_ eq '-A' and $binaryonly=$_, $binarytarget='binary-indep',
 	    push(@dpkg_opts, $_), next;
-	$_ eq '-S' and $sourceonly=$_, $checkbuilddep=0, push(@dpkg_opts, $_),
-	    next;
+	$_ eq '-S' and $sourceonly=$_, push(@dpkg_opts, $_), next;
+	$_ eq '-F' and $binarytarget='binary', push(@dpkg_opts, $_), next;
+	$_ eq '-G' and $binarytarget='binary-arch', push(@dpkg_opts, $_), next;
+	$_ eq '-g' and $binarytarget='binary-indep', push(@dpkg_opts, $_), next;
+	if (/^--build=(.*)$/) {
+	    my $argstr = $_;
+	    my @builds = split(/,/, $1);
+	    my ($binary, $source);
+	    for my $build (@builds) {
+		if ($build =~ m/^(?:binary|full)$/) {
+		    $source++ if $1 eq 'full';
+		    $binary++;
+		    $binarytarget = 'binary';
+		}
+		elsif ($build eq 'any') {
+		    $binary++;
+		    $binarytarget = 'binary-arch';
+		}
+		elsif ($build eq 'all') {
+		    $binary++;
+		    $binarytarget = 'binary-indep';
+		}
+	    }
+	    $binaryonly = (!$source && $binary);
+	    $sourceonly = ($source && !$binary);
+	    push(@dpkg_opts, $argstr);
+	}
 	/^-v(.*)/ and $since=$1, push(@dpkg_opts, $_), next;
 	/^-m(.*)/ and $maint=$1, push(@debsign_opts, $_), push(@dpkg_opts, $_),
 	    next;
