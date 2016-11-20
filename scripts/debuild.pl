@@ -189,7 +189,6 @@ my $logging=0;
 my $tgz_check=1;
 my $prepend_path='';
 my $username='';
-my $emulate_dpkgbp = 0;
 my @hooks = (qw(dpkg-buildpackage clean dpkg-source build binary dpkg-genchanges
 		final-clean lintian signing post-dpkg-buildpackage));
 my %hook;
@@ -836,13 +835,8 @@ if ($command_version eq 'dpkg') {
 	    push(@dpkg_opts, $_), next;
 	/^-C(.*)/ and $desc=$1, push(@dpkg_opts, $_), next;
 	/^-j(auto|\d*)$/ and $parallel=($1 || '-1'), push(@dpkg_opts, $_), next;
-	if ($emulate_dpkgbp) {
-	    fatal "unknown dpkg-buildpackage option in configuration file: $_";
-	} else {
-	    warn "$progname: unknown dpkg-buildpackage option in configuration file: $_\n";
-	    push (@dpkg_opts, $_);
-	    next;
-	}
+	warn "$progname: unknown dpkg-buildpackage option in configuration file: $_\n";
+	push (@dpkg_opts, $_);
     }
 
     while ($_=shift) {
@@ -913,17 +907,8 @@ if ($command_version eq 'dpkg') {
 	    unshift @ARGV, $_;
 	    last;
 	}
-	if ($emulate_dpkgbp) {
-	    fatal "unknown dpkg-buildpackage/debuild option: $_";
-	} else {
-	    warn "$progname: unknown dpkg-buildpackage/debuild option: $_\n";
-	    push (@dpkg_opts, $_);
-	    next;
-	}
-    }
-
-    if ($sourceonly and $binaryonly) {
-	fatal "cannot combine dpkg-buildpackage options $sourceonly and $binaryonly";
+	warn "$progname: unknown dpkg-buildpackage/debuild option: $_\n";
+	push (@dpkg_opts, $_);
     }
 
     # Pick up lintian options if necessary
@@ -940,18 +925,6 @@ if ($command_version eq 'dpkg') {
 	else {
 	    # It must be a debian/rules target
 	    push(@dpkg_opts, '--target', @ARGV);
-	}
-    }
-
-    if ($< != 0) {
-	$root_command ||= 'fakeroot';
-	# Only fakeroot is a default, so that's the only one we'll
-	# check for
-	if ($root_command eq 'fakeroot') {
-	    system('fakeroot true 2>/dev/null');
-	    if ($? >> 8 != 0) {
-		fatal "problem running fakeroot: either install the fakeroot package,\nuse a -r option to select another root command program to use or\nrun me as root!";
-	    }
 	}
     }
 
@@ -998,9 +971,9 @@ if ($command_version eq 'dpkg') {
 
     # Handle dpkg source format "3.0 (git)" packages (no tarballs)
     if ( -r "debian/source/format" ) {
-        open FMT, "debian/source/format" or die $!;
-        my $srcfmt = <FMT>; close FMT; chomp $srcfmt;
-        if ( $srcfmt eq "3.0 (git)" ) { $tgz_check = 0; }
+	open FMT, "debian/source/format" or die $!;
+	my $srcfmt = <FMT>; close FMT; chomp $srcfmt;
+	if ( $srcfmt eq "3.0 (git)" ) { $tgz_check = 0; }
     }
 
     $dsc = "${pkg}_${sversion}.dsc";
@@ -1030,214 +1003,27 @@ if ($command_version eq 'dpkg') {
     open STDOUT, ">&BUILD" or fatal "can't reopen stdout: $!";
     open STDERR, ">&BUILD" or fatal "can't reopen stderr: $!";
 
-    if (!$emulate_dpkgbp) {
-	if (defined($checkbuilddep)) {
-	    unshift @dpkg_opts, ($checkbuilddep ? "-D" : "-d");
-	}
-	unshift @dpkg_opts, "-r$root_command" if $root_command;
-	system_withecho('dpkg-buildpackage', @dpkg_opts);
+    if (defined($checkbuilddep)) {
+	unshift @dpkg_opts, ($checkbuilddep ? "-D" : "-d");
+    }
+    unshift @dpkg_opts, "-r$root_command" if $root_command;
+    system_withecho('dpkg-buildpackage', @dpkg_opts);
 
-	chdir '..' or fatal "can't chdir: $!";
-    } else {
-	# We emulate the version found in dpkg-buildpackage-snapshot in
-	# the source package with the addition of -j and *FLAGS(_APPEND)
-	# support
+    chdir '..' or fatal "can't chdir: $!";
 
-	my $build_opts = parsebuildopts();
+    open CHANGES, '<', $changes or fatal "can't open $changes for reading: $!";
+    my @changefilecontents = <CHANGES>;
+    close CHANGES;
 
-	# From dpkg-buildpackage 1.14.15
-	if ($parallel) {
-	    $parallel = $build_opts->{parallel}
-		if (defined $build_opts->{parallel});
-	    $ENV{MAKEFLAGS} ||= '';
-
-	    if ($parallel eq 'auto') {
-		# Most Unices.
-		$parallel = qx(getconf _NPROCESSORS_ONLN 2>/dev/null);
-		# Fallback for at least Irix.
-		$parallel = qx(getconf _NPROC_ONLN 2>/dev/null) if $?;
-		chomp $parallel;
-	    }
-	    if ($parallel eq '-1') {
-		$ENV{MAKEFLAGS} .= " -j";
-	    } else {
-		$ENV{MAKEFLAGS} .= " -j$parallel";
-	    }
-
-	    $build_opts->{parallel} = $parallel;
-	    setbuildopts($build_opts);
-	}
-
-	# From dpkg-buildpackage 1.14.18
-	# (with messages tweaked as we don't support localization)
-	my $default_flags = defined $build_opts->{noopt} ? "-g -O0" : "-g -O2";
-	my %flags = (	CPPFLAGS => '',
-			CFLAGS   => $default_flags,
-			CXXFLAGS => $default_flags,
-			FFLAGS   => $default_flags,
-			LDFLAGS  => '',
-		    );
-
-	foreach my $flag (keys %flags) {
-	    if ($ENV{$flag}) {
-	        print "$progname: using $flag from environment: $ENV{$flag}\n";
-	    } else {
-	        $ENV{$flag} = $flags{$flag};
-		print "$progname: set $flag to defailt value: $ENV{$flag}\n";
-	    }
-	    if ($ENV{"${flag}_APPEND"}) {
-	        $ENV{$flag} .= " ".$ENV{"${flag}_APPEND"};
-	    }
-	}
-
-	chdir '..' or fatal "can't chdir ..: $!";
-	system_withecho('dpkg-source', '--before-build', $dirn);
-	chdir $dirn or fatal "can't chdir $dirn: $!";
-
-	# First dpkg-buildpackage action: run dpkg-checkbuilddeps
-	if ($checkbuilddep) {
-	    if ($binarytarget eq 'binary-arch') {
-		system('dpkg-checkbuilddeps -B');
-	    } elsif ($binarytarget eq 'binary-indep') {
-		system('dpkg-checkbuilddeps -A');
-	    } else {
-		system('dpkg-checkbuilddeps');
-	    }
-	    if ($?>>8) {
-		fatal <<"EOT";
-You do not appear to have all build dependencies properly met, aborting.
-(Use -d flag to override.)
-You can use mk-build-deps to generate a dummy package which Depends on all the
-required packages, or you can install them manually using dpkg or apt using
-the error messages just above this message.
-EOT
-	    }
-	}
-
-	# Next dpkg-buildpackage action: clean
-	unless ($noclean) {
-	    if ($< == 0) {
-		system_withecho('debian/rules', 'clean');
-	    } else {
-		system_withecho($root_command, 'debian/rules', 'clean');
-	    }
-	}
-
-	# Next dpkg-buildpackage action: dpkg-source
-	if (! $binaryonly) {
-	    my @cmd = (qw(dpkg-source));
-	    push @cmd, @passopts;
-	    push @cmd, $diffignore if $diffignore;
-	    push @cmd, $compression if $compression;
-	    push @cmd, $comp_level if $comp_level;
-	    push @cmd, @tarignore;
-	    push @cmd, "-b", $dirn;
-	    chdir '..' or fatal "can't chdir ..: $!";
-	    system_withecho(@cmd);
-	    chdir $dirn or fatal "can't chdir $dirn: $!";
-	}
-
-	# Next dpkg-buildpackage action: build and binary targets
-	if (! $sourceonly) {
-	    system_withecho('debian/rules', 'build');
-
-	    if ($< == 0) {
-		system_withecho('debian/rules', $binarytarget);
-	    } else {
-		system_withecho($root_command, 'debian/rules', $binarytarget);
-	    }
-	} elsif ($hook{'binary'}) {
-	    push @warnings, "$progname: not running binary hook '$hook{'binary'}' as -S option used\n";
-	}
-
-	# Because of our messing around with STDOUT and wanting to pass
-	# arguments safely to dpkg-genchanges means that we're gonna have to
-	# do it manually :(
-	my @cmd = ('dpkg-genchanges');
-	foreach ($binaryonly, $sourceonly, $sourcestyle) {
-	    push @cmd, $_ if $_;
-	}
-	push @cmd, "-m$maint" if $maint;
-	push @cmd, "-e$changedby" if $changedby;
-	push @cmd, "-v$since" if $since;
-	push @cmd, "-C$desc" if $desc;
-	print STDERR " ", join(" ", @cmd), "\n";
-
-	open GENCHANGES, "-|", @cmd or fatal "can't exec dpkg-genchanges: $!";
-	my @changefilecontents;
-	@changefilecontents = <GENCHANGES>;
-	close GENCHANGES
-	    or warn "$progname: dpkg-genchanges failed!\n", exit ($?>>8);
-	open CHANGES, "> ../$changes"
-	    or fatal "can't open ../$changes for writing: $!";
-	print CHANGES @changefilecontents;
-	close CHANGES
-	    or fatal "problem writing to ../$changes: $!";
-
-	# check Ubuntu merge Policy: When merging with Debian, -v must be used
-	# and the remaining changes described
-	my $ch = join "\n", @changefilecontents;
-	if ($sourceonly && $version =~ /ubuntu1$/ && $ENV{'DEBEMAIL'} =~ /ubuntu/ &&
-	    $ch =~ /(merge|sync).*Debian/i) {
-	    push (@warnings, "Ubuntu merge policy: when merging Ubuntu packages with Debian, -v must be used") unless $since;
-	    push (@warnings, "Ubuntu merge policy: when merging Ubuntu packages with Debian, changelog must describe the remaining Ubuntu changes")
-		unless $ch =~ /Changes:.*(remaining|Ubuntu)(.|\n )*(differen|changes)/is;
-	}
-
-	# Final dpkg-buildpackage action: clean target again
-	if ($cleansource) {
-	    if ($< == 0) {
-		system_withecho('debian/rules', 'clean');
-	    } else {
-		system_withecho($root_command, 'debian/rules', 'clean');
-	    }
-	}
-
-	chdir '..' or fatal "can't chdir ..: $!";
-	system_withecho('dpkg-source', '--after-build', $dirn);
-	chdir $dirn or fatal "can't chdir $dirn: $!";
-
-	# identify the files listed in $changes; this will be used for the
-	# emulation of the dpkg-buildpackage fileomitted() function
-
-	my @files;
-	my $infiles=0;
-	foreach (@changefilecontents) {
-	    /^Files:/ and $infiles=1, next;
-	    next unless $infiles;
-	    last if /^[^ ]/; # no need to go further
-	    # so we're looking at a filename with lots of info before it
-	    / (\S+)$/ and push @files, $1;
-	}
-
-	my $srcmsg;
-
-	my $ext = $compression_re;
-	if (fileomitted @files, '\.deb') {
-	    # source only upload
-	    if (fileomitted @files, "\\.diff\\.$ext" and fileomitted @files, "\\.debian\\.tar\\.$ext") {
-		$srcmsg='source only upload: Debian-native package';
-	    } elsif (fileomitted @files, "\\.orig\\.tar\\.$ext") {
-		$srcmsg='source only, diff-only upload (original source NOT included)';
-	    } else {
-		$srcmsg='source only upload (original source is included)';
-	    }
-	} else {
-	    if (fileomitted @files, '\.dsc') {
-		$srcmsg='binary only upload (no source included)'
-	    } elsif (fileomitted @files, "\\.diff\\.$ext" and fileomitted @files, "\\.debian\\.tar\\.$ext") {
-		$srcmsg='full upload; Debian-native package (full source is included)';
-	    } elsif (fileomitted @files, "\\.orig\\.tar\\.$ext") {
-		$srcmsg='binary and diff upload (original source NOT included)';
-	    } else {
-		$srcmsg='full upload (original source is included)';
-	    }
-	}
-
-	print "dpkg-buildpackage (debuild emulation): $srcmsg\n";
-
-	chdir '..' or fatal "can't chdir: $!";
-    } # end of debuild dpkg-buildpackage emulation
+    # check Ubuntu merge Policy: When merging with Debian, -v must be used
+    # and the remaining changes described
+    my $ch = join "\n", @changefilecontents;
+    if ($sourceonly && $version =~ /ubuntu1$/ && $ENV{'DEBEMAIL'} =~ /ubuntu/ &&
+	$ch =~ /(merge|sync).*Debian/i) {
+	push (@warnings, "Ubuntu merge policy: when merging Ubuntu packages with Debian, -v must be used") unless $since;
+	push (@warnings, "Ubuntu merge policy: when merging Ubuntu packages with Debian, changelog must describe the remaining Ubuntu changes")
+	    unless $ch =~ /Changes:.*(remaining|Ubuntu)(.|\n )*(differen|changes)/is;
+    }
 
     # They've insisted.  Who knows why?!
     if (($signchanges or $signsource) and $usepause) {
@@ -1248,9 +1034,9 @@ EOT
     run_hook('signing', ($signchanges || (! $sourceonly and $signsource)) );
 
     if ($signchanges) {
-    foreach my $var (keys %store_vars) {
-        $ENV{$var} = $store_vars{$var};
-    }
+	foreach my $var (keys %store_vars) {
+	    $ENV{$var} = $store_vars{$var};
+	}
 	print "Now signing changes and any dsc files...\n";
 	if ($username) {
 	    system('debrsign', @debsign_opts, $username, $changes) == 0
@@ -1258,7 +1044,7 @@ EOT
 	} else {
 	    system('debsign', @debsign_opts, $changes) == 0
 		or fatal "running debsign failed";
-        }
+	}
     }
     elsif (! $sourceonly and $signsource) {
 	print "Now signing dsc file...\n";
