@@ -174,7 +174,6 @@ my $preserve_env=0;
 my %save_vars;
 my $root_command='';
 my $run_lintian=1;
-my $lintian_exists=0;
 my @dpkg_extra_opts=();
 my @lintian_extra_opts=();
 my @lintian_opts=();
@@ -707,12 +706,6 @@ if ($command_version eq 'dpkg') {
 
     # Our first task is to parse the command line options.
 
-    # And before we get too excited, does lintian even exist?
-    if ($run_lintian) {
-	system("command -v lintian >/dev/null 2>&1") == 0
-	    and $lintian_exists=1;
-    }
-
     # dpkg-buildpackage variables explicitly initialised in dpkg-buildpackage
     my $signsource=1;
     my $signchanges=1;
@@ -965,6 +958,10 @@ if ($command_version eq 'dpkg') {
 
     if (defined($checkbuilddep)) {
 	unshift @dpkg_opts, ($checkbuilddep ? "-D" : "-d");
+    }
+    if ($run_lintian) {
+	push(@dpkg_opts, '--check-command=lintian',
+	    map { "--check-option=$_" } @lintian_opts);
     }
     unshift @dpkg_opts, "-r$root_command" if $root_command;
     system_withecho('dpkg-buildpackage', @dpkg_opts);
