@@ -182,7 +182,7 @@ my $lintian_exists=0;
 my @dpkg_extra_opts=();
 my @lintian_extra_opts=();
 my @lintian_opts=();
-my $checkbuilddep=1;
+my $checkbuilddep;
 my $check_dirname_level = 1;
 my $check_dirname_regex = 'PACKAGE(-.+)?';
 my $logging=0;
@@ -995,7 +995,9 @@ if ($command_version eq 'dpkg') {
     open STDERR, ">&BUILD" or fatal "can't reopen stderr: $!";
 
     if (!$emulate_dpkgbp) {
-	unshift @dpkg_opts, ($checkbuilddep ? "-D" : "-d");
+	if (defined($checkbuilddep)) {
+	    unshift @dpkg_opts, ($checkbuilddep ? "-D" : "-d");
+	}
 	unshift @dpkg_opts, "-r$root_command" if $root_command;
 	system_withecho('dpkg-buildpackage', @dpkg_opts);
 
