@@ -732,7 +732,7 @@ my %debuild2dpkg = (
 );
 
 for my $h_name (@hooks) {
-    if (exists $debuild2dpkg{$h_name}) {
+    if (exists $debuild2dpkg{$h_name} && $hook{$h_name}) {
 	push(@dpkg_opts,
 	    sprintf('--hook-%s=%s', $debuild2dpkg{$h_name}, $hook{$h_name}));
 	delete $hook{$h_name};
