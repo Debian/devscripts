@@ -11,7 +11,7 @@ Standards-Version: 3.9.8
 Build-Depends: bash-completion,
                debhelper (>= 9),
                docbook-xsl,
-               dpkg-dev (>= 1.17.0),
+               dpkg-dev (>= 1.17.6),
                file,
                gnupg | gnupg2,
                libdistro-info-perl,
@@ -43,7 +43,7 @@ Vcs-Git: https://anonscm.debian.org/git/collab-maint/devscripts.git
 Package: devscripts
 Architecture: any
 Multi-Arch: foreign
-Depends: dpkg-dev (>= 1.17.0),
+Depends: dpkg-dev (>= 1.17.6),
          ${misc:Depends},
          ${perl:Depends},
          ${python3:Depends},

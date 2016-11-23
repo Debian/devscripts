@@ -19,6 +19,8 @@ devscripts (2.16.9) UNRELEASED; urgency=medium
         debuild now just passes it through.  (Closes: #826508)
     + Honor -a option regardless of which debuild mode is being used, since
       both modes now invoke dpkg-buildpackage.  (Closes: #611896)
+    + Bump dpkg-dev (Build-)Depends to 1.17.6 for dpkg-buildpackage's
+      --check-command and --hook-* options.
   * Fix test debuild test failures due to new dpkg-genbuildinfo calls.
     (Closes: #844910)
 
