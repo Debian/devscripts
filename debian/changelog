@@ -9,6 +9,18 @@ devscripts (2.16.9) UNRELEASED; urgency=medium
   * bts:
     + Switch to Net::SMTPS to support STARTTLS.  Based on a patch by Andrew
       Shadura.  (Closes: #518622)
+  * Refactor debuild to remove dpkg-buildpackage emulation and generally be a
+    much thinner wrapper around dpkg-buildpackage.  (Closes: #789581)
+    + Remove claim from man page that dpkg-buildpackage doesn't support hooks.
+      (Closes: #765495)
+    + Remove handling of all dpkg-buildpackage options that aren't directly
+      used by debuild.
+      - This fixes the issue where debuild didn't understand "-Jauto", as
+        debuild now just passes it through.  (Closes: #826508)
+    + Honor -a option regardless of which debuild mode is being used, since
+      both modes now invoke dpkg-buildpackage.  (Closes: #611896)
+  * Fix test debuild test failures due to new dpkg-genbuildinfo calls.
+    (Closes: #844910)
 
   [ Antonio Terceiro ]
   * debrepro:

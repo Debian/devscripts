@@ -53,7 +53,6 @@ use 5.008;
 use File::Basename;
 use filetest 'access';
 use Cwd;
-use Devscripts::Compression;
 use Dpkg::Changelog::Parse qw(changelog_parse);
 use Dpkg::IPC;
 use IO::Handle;  # for flushing
@@ -63,12 +62,9 @@ my $progname=basename($0);
 my $modified_conf_msg;
 my @warnings;
 
-my $compression_re = compression_get_file_extension_regex();
-
 # Predeclare functions
 sub system_withecho(@);
 sub run_hook ($$);
-sub fileomitted (\@$);
 sub fatal($);
 
 sub usage
@@ -178,18 +174,16 @@ my $preserve_env=0;
 my %save_vars;
 my $root_command='';
 my $run_lintian=1;
-my $lintian_exists=0;
 my @dpkg_extra_opts=();
 my @lintian_extra_opts=();
 my @lintian_opts=();
-my $checkbuilddep=1;
+my $checkbuilddep;
 my $check_dirname_level = 1;
 my $check_dirname_regex = 'PACKAGE(-.+)?';
 my $logging=0;
 my $tgz_check=1;
 my $prepend_path='';
 my $username='';
-my $emulate_dpkgbp = 0;
 my @hooks = (qw(dpkg-buildpackage clean dpkg-source build binary dpkg-genchanges
 		final-clean lintian signing post-dpkg-buildpackage));
 my %hook;
@@ -391,8 +385,6 @@ foreach (@dpkg_extra_opts) {
     /^-r(.*)$/ and $root_command=$1, next;
     $_ eq '-d' and $checkbuilddep=0, next;
     $_ eq '-D' and $checkbuilddep=1, next;
-    /^-a(.*)/ and $_ ne '-ap' and $checkbuilddep=0, next;
-    $_ eq '-S' and $checkbuilddep=0, next;
 }
 
 # Check @ARGV for debuild options.
@@ -585,6 +577,21 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
 	    next;
 	}
 
+	if ($arg =~ /^--hook-(sign|done)=(.*)$/) {
+	    my $name = $1;
+	    my $opt = $2;
+	    unless (defined($opt)) {
+		fatal "$arg requires an argmuent,\nrun $progname --help for usage information";
+	    }
+	    if ($name eq 'sign') {
+		$hook{signing} = $opt;
+	    }
+	    else {
+		$hook{'post-dpkg-buildpackage'} = $opt;
+	    }
+	    next;
+	}
+
 	if ($arg eq '--clear-hooks') { $hook{@hooks} = ('') x @hooks; next; }
 
 	# Not a debuild option, so give up.
@@ -614,7 +621,7 @@ foreach my $var (('DBUS_SESSION_BUS_ADDRESS', 'DISPLAY', 'GNOME_KEYRING_SOCKET',
 unless ($preserve_env) {
     foreach my $var (keys %ENV) {
 	delete $ENV{$var} unless
-	    $save_vars{$var} or $var =~ /^(LC|DEB(SIGN)?)_[A-Z_]+$/
+	    $save_vars{$var} or $var =~ /^(LC|DEB)_[A-Z_]+$/
 	    or $var =~ /^(C(PP|XX)?|LD|F)FLAGS(_APPEND)?$/;
     }
 }
@@ -691,682 +698,335 @@ if ( $< != 0 && $> == 0 ) { $< = $> }
 my $gid=$(;
 if ( $( != 0 && $) == 0 ) { $( = $) }
 
-# Now let's look at our options, if any.  The first task is to decide
-# which version of debuild we wish to run.  The rule is as follows: we
-# want to run the first version (calling debian/rules explicitly) if
-# there is at most one initial -r... argument, and all of the others
-# are one of binary, binary-arch, binary-indep or clean.  We run the
-# second version otherwise.  Note that the -r option is the only one
-# stripped from the argument list.
+# Our first task is to parse the command line options.
 
-my $command_version='rules';
+# dpkg-buildpackage variables explicitly initialised in dpkg-buildpackage
+my $signsource=1;
+my $signchanges=1;
+my $binarytarget='binary';
+my $since='';
+my $usepause=0;
 
-if (@ARGV == 0) { $command_version='dpkg'; }
-else {
-    foreach (@ARGV) {
-	if ( ! /^(binary|binary-indep|binary-arch|clean)$/) {
-	    $command_version='dpkg';
-	    last;
-	}
+# extra dpkg-buildpackage variables not initialised there
+my $sourceonly='';
+my $binaryonly='';
+my $targetarch='';
+my $targetgnusystem='';
+
+my $dirn = basename(cwd());
+
+# and one for us
+my @debsign_opts = ();
+# and one for dpkg-buildpackage if needed
+my @dpkg_opts = qw(-us -uc);
+
+my %debuild2dpkg = (
+    'dpkg-buildpackage' => 'init',
+    'clean' => 'preclean',
+    'dpkg-source' => 'source',
+    'build' => 'build',
+    'binary' => 'binary',
+    'dpkg-genchanges' => 'changes',
+    'postclean' => 'final-clean',
+    'lintian' => 'check',
+);
+
+for my $h_name (@hooks) {
+    if (exists $debuild2dpkg{$h_name} && $hook{$h_name}) {
+	push(@dpkg_opts,
+	    sprintf('--hook-%s=%s', $debuild2dpkg{$h_name}, $hook{$h_name}));
+	delete $hook{$h_name};
     }
 }
 
-if ($command_version eq 'dpkg') {
-    # We're going to emulate dpkg-buildpackage and possibly lintian.
-    # This will allow us to run hooks.
-    # However, if dpkg-cross is installed (as evidenced by the presence
-    # of /usr/bin/dpkg-cross), then we call the "real" dpkg-buildpackage,
-    # which is actually dpkg-cross's version.  We lose the facility for
-    # hooks in this case, but we're not going to emulate dpkg-cross as well!
+# Parse dpkg-buildpackage options
+# First process @dpkg_extra_opts from above
 
-    my $dpkg_cross = (-x '/usr/bin/dpkg-cross' ? 1 : 0);
-    if ($dpkg_cross) {
-	# check hooks
-	my @skip_hooks = ();
-	for my $hookname (qw(clean dpkg-source build binary dpkg-genchanges
-			     final-clean)) {
-	    if ($hook{$hookname}) { push @skip_hooks, $hookname; }
-	}
-	if (@skip_hooks) {
-	    warn "$progname: dpkg-cross appears to be present on your system, and you have\nset up some hooks which will not be run (" .
-		join(", ", @skip_hooks) . ");\ndo you wish to continue? (y/n) ";
-	    my $ans = <STDIN>;
-	    exit 1 unless $ans =~ /^y/i;
-	}
-    } else {
-	# check hooks
-	my @skip_hooks = ();
-	for my $hookname (qw(clean dpkg-source build binary dpkg-genchanges
-			     final-clean)) {
-	    if ($hook{$hookname}) { push @skip_hooks, $hookname; }
-	}
-	if (@skip_hooks) {
-	    $emulate_dpkgbp = 1;
-	    warn "$progname: emulating dpkg-buildpackage as the following hooks were defined:\n"
-		. "  " . join(", ", @skip_hooks) . "\n\n";
-	}
-    }
-
-    # Our first task is to parse the command line options.
-
-    # And before we get too excited, does lintian even exist?
-    if ($run_lintian) {
-	system("command -v lintian >/dev/null 2>&1") == 0
-	    and $lintian_exists=1;
-    }
-
-    # dpkg-buildpackage variables explicitly initialised in dpkg-buildpackage
-    my $signsource=1;
-    my $signchanges=1;
-    my $cleansource=0;
-    my $binarytarget='binary';
-    my $sourcestyle='';
-    my $since='';
-    my $maint='';
-    my $desc='';
-    my $parallel='';
-    my $noclean=0;
-    my $usepause=0;
-    my $warnable_error=0;  # OK, dpkg-buildpackage defines this but doesn't
-                           # use it.  We'll keep it around just in case it
-                           # does one day...
-    my @passopts=();
-
-    # extra dpkg-buildpackage variables not initialised there
-    my $diffignore='';
-    my @tarignore=();
-    my $sourceonly='';
-    my $binaryonly='';
-    my $targetarch='';
-    my $targetgnusystem='';
-    my $changedby='';
-    my $compression='';
-    my $comp_level='';
-
-    my $dirn = basename(cwd());
-
-    # and one for us
-    my @debsign_opts = ();
-    # and one for dpkg-cross if needed
-    my @dpkg_opts = qw(-us -uc);
-
-    # Parse dpkg-buildpackage options
-    # First process @dpkg_extra_opts from above
-
-    foreach (@dpkg_extra_opts) {
-	$_ eq '-h' and
-	    warn "You have a -h option in your configuration file!  Ignoring.\n", next;
-	/^-r/ and next;  # already been processed
-	/^-p/ and push(@debsign_opts, $_), next;  # Key selection options
-	/^-k/ and push(@debsign_opts, $_), next;  # Ditto
-	/^-[dD]$/ and next;  # already been processed
-	/^-s(pgp|gpg)$/ and push(@debsign_opts, $_), next;  # Key selection
-	$_ eq '-us' and $signsource=0, next;
-	$_ eq '-uc' and $signchanges=0, next;
-	$_ eq '-ap' and $usepause=1, next;
-	/^-a(.*)/ and $targetarch=$1, push(@dpkg_opts, $_), next;
-	    # Explained below; no implied -d here, as already done
-	/^-s[iad]$/ and $sourcestyle=$_, push(@dpkg_opts, $_), next;
-	/^-i/ and $diffignore=$_, push(@dpkg_opts, $_), next;
-	/^-I/ and push(@tarignore, $_), push(@dpkg_opts, $_), next;
-	/^-Z/ and $compression=$_, push(@dpkg_opts, $_), next;
-	/^-z/ and $comp_level=$_, push(@dpkg_opts, $_), next;
-	$_ eq '-tc' and $cleansource=1, push(@dpkg_opts, $_), next;
-	/^-t(.*)/ and $targetgnusystem=$1, push(@dpkg_opts, $_), next; # Ditto
-	$_ eq '-nc' and $noclean=1, push(@dpkg_opts, $_),
-	    next;
-	$_ eq '-b' and $binaryonly=$_, $binarytarget='binary',
-	    push(@dpkg_opts, $_), next;
-	$_ eq '-B' and $binaryonly=$_, $binarytarget='binary-arch',
-	    push(@dpkg_opts, $_), next;
-	$_ eq '-A' and $binaryonly=$_, $binarytarget='binary-indep',
-	    push(@dpkg_opts, $_), next;
-	$_ eq '-S' and $sourceonly=$_, push(@dpkg_opts, $_), next;
-	    # Explained below, no implied -d
-	/^-v(.*)/ and $since=$1, push(@dpkg_opts, $_), next;
-	/^-m(.*)/ and $maint=$1, push(@debsign_opts, $_), push(@dpkg_opts, $_),
-	    next;
-	/^-e(.*)/ and $changedby=$1, push(@debsign_opts, $_),
-	    push(@dpkg_opts, $_), next;
-	/^-C(.*)/ and $desc=$1, push(@dpkg_opts, $_), next;
-	/^-j(auto|\d*)$/ and $parallel=($1 || '-1'), push(@dpkg_opts, $_), next;
-	$_ eq '-W' and $warnable_error=1, push(@passopts, $_),
-	    push(@dpkg_opts, $_), next;
-	$_ eq '-E' and $warnable_error=0, push(@passopts, $_),
-	    push(@dpkg_opts, $_), next;
-	# dpkg-cross specific option
-	if (/^-M/ and $dpkg_cross) { push(@dpkg_opts, $_), next; }
-	if ($emulate_dpkgbp) {
-	    fatal "unknown dpkg-buildpackage option in configuration file: $_";
-	} else {
-	    warn "$progname: unknown dpkg-buildpackage option in configuration file: $_\n";
-	    push (@dpkg_opts, $_);
-	    next;
-	}
-    }
-
-    while ($_=shift) {
-	$_ eq '-h' and usage(), exit 0;
-	/^-r(.*)/ and $root_command=$1, next;
-	/^-p/ and push(@debsign_opts, $_), next;  # Key selection options
-	/^-k/ and push(@debsign_opts, $_), next;  # Ditto
-	$_ eq '-d' and $checkbuilddep=0, next;
-	$_ eq '-D' and $checkbuilddep=1, next;
-	/^-s(pgp|gpg)$/ and push(@debsign_opts, $_), next;  # Key selection
-	$_ eq '-us' and $signsource=0, next;
-	$_ eq '-uc' and $signchanges=0, next;
-	$_ eq '-ap' and $usepause=1, next;
-	/^-a(.*)/ and $targetarch=$1, $checkbuilddep=0, push(@dpkg_opts, $_),
-	    next;
-	/^-s[iad]$/ and $sourcestyle=$_, push(@dpkg_opts, $_), next;
-	/^-i/ and $diffignore=$_, push(@dpkg_opts, $_), next;
-	/^-I/ and push(@tarignore, $_), push(@dpkg_opts, $_), next;
-	/^-Z/ and $compression=$_, push(@dpkg_opts, $_), next;
-	/^-z/ and $comp_level=$_, push(@dpkg_opts, $_), next;
-	$_ eq '-tc' and $cleansource=1, push(@dpkg_opts, $_), next;
-	/^-t(.*)/ and $targetgnusystem=$1, $checkbuilddep=0, next;
-	$_ eq '-nc' and $noclean=1, push(@dpkg_opts, $_),
-	    next;
-	$_ eq '-b' and $binaryonly=$_, $binarytarget='binary',
-	    push(@dpkg_opts, $_), next;
-	$_ eq '-B' and $binaryonly=$_, $binarytarget='binary-arch',
-	    push(@dpkg_opts, $_), next;
-	$_ eq '-A' and $binaryonly=$_, $binarytarget='binary-indep',
-	    push(@dpkg_opts, $_), next;
-	$_ eq '-S' and $sourceonly=$_, $checkbuilddep=0, push(@dpkg_opts, $_),
-	    next;
-	/^-v(.*)/ and $since=$1, push(@dpkg_opts, $_), next;
-	/^-m(.*)/ and $maint=$1, push(@debsign_opts, $_), push(@dpkg_opts, $_),
-	    next;
-	/^-e(.*)/ and $changedby=$1, push(@debsign_opts, $_),
-	    push(@dpkg_opts, $_), next;
-	/^-C(.*)/ and $desc=$1, push(@dpkg_opts, $_), next;
-	/^-j(auto|\d*)$/ and $parallel=($1 || '-1'), push(@dpkg_opts, $_), next;
-	$_ eq '-W' and $warnable_error=1, push(@passopts, $_),
-	    push(@dpkg_opts, $_), next;
-	$_ eq '-E' and $warnable_error=0, push(@passopts, $_),
-	    push(@dpkg_opts, $_), next;
-	# dpkg-cross specific option
-	if (/^-M/ and $dpkg_cross) { push(@dpkg_opts, $_), next; }
-
-	# these non-dpkg-buildpackage options make us stop
-	if ($_ eq '-L' or $_ eq '--lintian' or /^--lintian-opts$/) {
-	    unshift @ARGV, $_;
-	    last;
-	}
-	if ($emulate_dpkgbp) {
-	    fatal "unknown dpkg-buildpackage/debuild option: $_";
-	} else {
-	    warn "$progname: unknown dpkg-buildpackage/debuild option: $_\n";
-	    push (@dpkg_opts, $_);
-	    next;
-	}
-    }
-
-    if ($sourceonly and $binaryonly) {
-	fatal "cannot combine dpkg-buildpackage options $sourceonly and $binaryonly";
-    }
-
-    # Pick up lintian options if necessary
-    if ($run_lintian && @ARGV) {
-	# Check that option is sensible
-    LIN_OPTS:
-	while (@ARGV) {
-	    my $whichlin = shift;
-	    if ($whichlin eq '-L' or $whichlin eq '--lintian') {
-		push @warnings,
-		    "the $whichlin option is deprecated for indicating the start\nof lintian options, please use --lintian-opts instead\n  (I substituted -L with --lintian-opts this time)";
-		$whichlin = '--lintian-opts';
+foreach (@dpkg_extra_opts) {
+    $_ eq '-h' and
+	warn "You have a -h option in your configuration file!  Ignoring.\n", next;
+    /^-r/ and next;  # already been processed
+    /^-p/ and push(@debsign_opts, $_), next;  # Key selection options
+    /^-k/ and push(@debsign_opts, $_), next;  # Ditto
+    /^-[dD]$/ and next;  # already been processed
+    $_ eq '-us' and $signsource=0, next;
+    $_ eq '-uc' and $signchanges=0, next;
+    $_ eq '-ap' and $usepause=1, next;
+    /^-a(.*)/ and $targetarch=$1, push(@dpkg_opts, $_), next;
+    /^-t(.*)/ and $targetgnusystem=$1, push(@dpkg_opts, $_), next; # Ditto
+    $_ eq '-b' and $binaryonly=$_, $binarytarget='binary',
+	push(@dpkg_opts, $_), next;
+    $_ eq '-B' and $binaryonly=$_, $binarytarget='binary-arch',
+	push(@dpkg_opts, $_), next;
+    $_ eq '-A' and $binaryonly=$_, $binarytarget='binary-indep',
+	push(@dpkg_opts, $_), next;
+    $_ eq '-S' and $sourceonly=$_, push(@dpkg_opts, $_), next;
+    $_ eq '-F' and $binarytarget='binary', push(@dpkg_opts, $_), next;
+    $_ eq '-G' and $binarytarget='binary-arch', push(@dpkg_opts, $_), next;
+    $_ eq '-g' and $binarytarget='binary-indep', push(@dpkg_opts, $_), next;
+    if (/^--build=(.*)$/) {
+	my $argstr = $_;
+	my @builds = split(/,/, $1);
+	my ($binary, $source);
+	for my $build (@builds) {
+	    if ($build =~ m/^(?:binary|full)$/) {
+		$source++ if $1 eq 'full';
+		$binary++;
+		$binarytarget = 'binary';
 	    }
-	    if ($whichlin eq '--lintian-opts') {
-		if (! $run_lintian) {
-		    push @warnings,
-		        "$whichlin option given but not running lintian!";
-		}
-		while ($_=shift) {
-		    if (/^--lintian-opts$/) {
-			unshift @ARGV, $_;
-			next LIN_OPTS;
-		    }
-		    push @lintian_opts, $_;
-		}
+	    elsif ($build eq 'any') {
+		$binary++;
+		$binarytarget = 'binary-arch';
+	    }
+	    elsif ($build eq 'all') {
+		$binary++;
+		$binarytarget = 'binary-indep';
 	    }
 	}
+	$binaryonly = (!$source && $binary);
+	$sourceonly = ($source && !$binary);
+	push(@dpkg_opts, $argstr);
     }
-
-    if ($< != 0) {
-	$root_command ||= 'fakeroot';
-	# Only fakeroot is a default, so that's the only one we'll
-	# check for
-	if ($root_command eq 'fakeroot') {
-	    system('fakeroot true 2>/dev/null');
-	    if ($? >> 8 != 0) {
-		fatal "problem running fakeroot: either install the fakeroot package,\nuse a -r option to select another root command program to use or\nrun me as root!";
-	    }
-	}
-    }
-
-    if ($signchanges==1 and $signsource==0) {
-	push @warnings,
-	    "I will sign the .dsc file anyway as a signed .changes file was requested\n";
-	$signsource=1;  # may not be strictly necessary, but for clarity!
-    }
-
-    # Next dpkg-buildpackage steps:
-    # mustsetvar package/version have been done above; we've called the
-    # results $pkg and $version
-    # mustsetvar maintainer is only needed for signing, so we leave that
-    # to debsign or dpkg-sig
-    # Call to dpkg-architecture to set DEB_{BUILD,HOST}_* environment
-    # variables
-    my @dpkgarch = 'dpkg-architecture';
-    if ($targetarch) {
-	push @dpkgarch, "-a${targetarch}";
-    }
-    if ($targetgnusystem) {
-	push @dpkgarch, "-t${targetgnusystem}";
-    }
-    push @dpkgarch, '-f';
-
-    my $archinfo;
-    spawn(exec => [@dpkgarch],
-	  to_string => \$archinfo,
-	  wait_child => 1);
-    foreach (split /\n/, $archinfo) {
-	/^(.*)=(.*)$/ and $ENV{$1} = $2;
-    }
-
-    # We need to do the arch, pv, pva stuff to figure out
-    # what the changes file will be called,
-    my ($arch, $dsc, $changes, $build);
-    if ($sourceonly) {
-	$arch = 'source';
-    } elsif ($binarytarget eq 'binary-indep') {
-	$arch = 'all';
-    } else {
-	$arch = $ENV{DEB_HOST_ARCH};
-    }
-
-    # Handle dpkg source format "3.0 (git)" packages (no tarballs)
-    if ( -r "debian/source/format" ) {
-        open FMT, "debian/source/format" or die $!;
-        my $srcfmt = <FMT>; close FMT; chomp $srcfmt;
-        if ( $srcfmt eq "3.0 (git)" ) { $tgz_check = 0; }
-    }
-
-    $dsc = "${pkg}_${sversion}.dsc";
-    my $orig_prefix = "${pkg}_${uversion}.orig.tar";
-    my $origdir = basename(cwd()) . ".orig";
-    if (! $binaryonly and $tgz_check and $uversion ne $sversion
-	and ! -f "../${orig_prefix}.bz2" and ! -f "../${orig_prefix}.lzma"
-	and ! -f "../${orig_prefix}.gz" and ! -f "../${orig_prefix}.xz"
-	and ! -d "../$origdir") {
-	print STDERR "This package has a Debian revision number but there does"
-	    . " not seem to be\nan appropriate original tar file or .orig"
-	    . " directory in the parent directory;\n(expected one of"
-	    . " ${orig_prefix}.gz, ${orig_prefix}.bz2,\n${orig_prefix}.lzma, "
-	    . " ${orig_prefix}.xz or $origdir)\ncontinue anyway? (y/n) ";
-	my $ans = <STDIN>;
-	exit 1 unless $ans =~ /^y/i;
-    }
-
-    # We'll need to be a bit cleverer to determine the changes file name;
-    # see below
-    $build="${pkg}_${sversion}_${arch}.build";
-    $changes="${pkg}_${sversion}_${arch}.changes";
-    open BUILD, "| tee ../$build" or fatal "couldn't open pipe to tee: $!";
-    $logging=1;
-    close STDOUT;
-    close STDERR;
-    open STDOUT, ">&BUILD" or fatal "can't reopen stdout: $!";
-    open STDERR, ">&BUILD" or fatal "can't reopen stderr: $!";
-
-    run_hook('dpkg-buildpackage', 1);
-
-    if ($dpkg_cross) {
-	unshift @dpkg_opts, ($checkbuilddep ? "-D" : "-d");
-	unshift @dpkg_opts, "-r$root_command" if $root_command;
-	system_withecho('dpkg-buildpackage', @dpkg_opts);
-
-	chdir '..' or fatal "can't chdir: $!";
-	# We're using dpkg-cross, we could now have foo_1.2_i386+sparc.changes
-	# so can't just set $changes = "${pkg}_${sversion}_${arch}.changes"
-	my @changes = glob("${pkg}_${sversion}_*.changes");
-	if (@changes == 0) {
-	    fatal "couldn't find a .changes file!";
-	} elsif (@changes == 1) {
-	    $changes = $changes[0];
-	} else {
-	    # put newest first
-	    @changes = sort { -M $a <=> -M $b } @changes;
-	    $changes = $changes[0];
-	}
-    } elsif ($emulate_dpkgbp == 0) {
-	unshift @dpkg_opts, ($checkbuilddep ? "-D" : "-d");
-	unshift @dpkg_opts, "-r$root_command" if $root_command;
-	system_withecho('dpkg-buildpackage', @dpkg_opts);
-
-	chdir '..' or fatal "can't chdir: $!";
-    } else {
-	# Not using dpkg-cross, so we emulate dpkg-buildpackage ourselves
-	# We emulate the version found in dpkg-buildpackage-snapshot in
-	# the source package with the addition of -j and *FLAGS(_APPEND)
-	# support
-
-	my $build_opts = parsebuildopts();
-
-	# From dpkg-buildpackage 1.14.15
-	if ($parallel) {
-	    $parallel = $build_opts->{parallel}
-		if (defined $build_opts->{parallel});
-	    $ENV{MAKEFLAGS} ||= '';
-
-	    if ($parallel eq 'auto') {
-		# Most Unices.
-		$parallel = qx(getconf _NPROCESSORS_ONLN 2>/dev/null);
-		# Fallback for at least Irix.
-		$parallel = qx(getconf _NPROC_ONLN 2>/dev/null) if $?;
-		chomp $parallel;
-	    }
-	    if ($parallel eq '-1') {
-		$ENV{MAKEFLAGS} .= " -j";
-	    } else {
-		$ENV{MAKEFLAGS} .= " -j$parallel";
-	    }
-
-	    $build_opts->{parallel} = $parallel;
-	    setbuildopts($build_opts);
-	}
-
-	# From dpkg-buildpackage 1.14.18
-	# (with messages tweaked as we don't support localization)
-	my $default_flags = defined $build_opts->{noopt} ? "-g -O0" : "-g -O2";
-	my %flags = (	CPPFLAGS => '',
-			CFLAGS   => $default_flags,
-			CXXFLAGS => $default_flags,
-			FFLAGS   => $default_flags,
-			LDFLAGS  => '',
-		    );
-
-	foreach my $flag (keys %flags) {
-	    if ($ENV{$flag}) {
-	        print "$progname: using $flag from environment: $ENV{$flag}\n";
-	    } else {
-	        $ENV{$flag} = $flags{$flag};
-		print "$progname: set $flag to defailt value: $ENV{$flag}\n";
-	    }
-	    if ($ENV{"${flag}_APPEND"}) {
-	        $ENV{$flag} .= " ".$ENV{"${flag}_APPEND"};
-	    }
-	}
-
-	chdir '..' or fatal "can't chdir ..: $!";
-	system_withecho('dpkg-source', '--before-build', $dirn);
-	chdir $dirn or fatal "can't chdir $dirn: $!";
-
-	# First dpkg-buildpackage action: run dpkg-checkbuilddeps
-	if ($checkbuilddep) {
-	    if ($binarytarget eq 'binary-arch') {
-		system('dpkg-checkbuilddeps -B');
-	    } elsif ($binarytarget eq 'binary-indep') {
-		system('dpkg-checkbuilddeps -A');
-	    } else {
-		system('dpkg-checkbuilddeps');
-	    }
-	    if ($?>>8) {
-		fatal <<"EOT";
-You do not appear to have all build dependencies properly met, aborting.
-(Use -d flag to override.)
-You can use mk-build-deps to generate a dummy package which Depends on all the
-required packages, or you can install them manually using dpkg or apt using
-the error messages just above this message.
-EOT
-	    }
-	}
-
-	run_hook('clean', ! $noclean);
-
-	# Next dpkg-buildpackage action: clean
-	unless ($noclean) {
-	    if ($< == 0) {
-		system_withecho('debian/rules', 'clean');
-	    } else {
-		system_withecho($root_command, 'debian/rules', 'clean');
-	    }
-	}
-
-	run_hook('dpkg-source', ! $binaryonly);
-
-	# Next dpkg-buildpackage action: dpkg-source
-	if (! $binaryonly) {
-	    my @cmd = (qw(dpkg-source));
-	    push @cmd, @passopts;
-	    push @cmd, $diffignore if $diffignore;
-	    push @cmd, $compression if $compression;
-	    push @cmd, $comp_level if $comp_level;
-	    push @cmd, @tarignore;
-	    push @cmd, "-b", $dirn;
-	    chdir '..' or fatal "can't chdir ..: $!";
-	    system_withecho(@cmd);
-	    chdir $dirn or fatal "can't chdir $dirn: $!";
-	}
-
-	run_hook('build', ! $sourceonly);
-
-	# Next dpkg-buildpackage action: build and binary targets
-	if (! $sourceonly) {
-	    system_withecho('debian/rules', 'build');
-
-	    run_hook('binary', 1);
-
-	    if ($< == 0) {
-		system_withecho('debian/rules', $binarytarget);
-	    } else {
-		system_withecho($root_command, 'debian/rules', $binarytarget);
-	    }
-	} elsif ($hook{'binary'}) {
-	    push @warnings, "$progname: not running binary hook '$hook{'binary'}' as -S option used\n";
-	}
-
-	# We defer the signing the .dsc file until after dpkg-genchanges has
-	# been run
-
-	run_hook('dpkg-genchanges', 1);
-
-	# Because of our messing around with STDOUT and wanting to pass
-	# arguments safely to dpkg-genchanges means that we're gonna have to
-	# do it manually :(
-	my @cmd = ('dpkg-genchanges');
-	foreach ($binaryonly, $sourceonly, $sourcestyle) {
-	    push @cmd, $_ if $_;
-	}
-	push @cmd, "-m$maint" if $maint;
-	push @cmd, "-e$changedby" if $changedby;
-	push @cmd, "-v$since" if $since;
-	push @cmd, "-C$desc" if $desc;
-	print STDERR " ", join(" ", @cmd), "\n";
-
-	open GENCHANGES, "-|", @cmd or fatal "can't exec dpkg-genchanges: $!";
-	my @changefilecontents;
-	@changefilecontents = <GENCHANGES>;
-	close GENCHANGES
-	    or warn "$progname: dpkg-genchanges failed!\n", exit ($?>>8);
-	open CHANGES, "> ../$changes"
-	    or fatal "can't open ../$changes for writing: $!";
-	print CHANGES @changefilecontents;
-	close CHANGES
-	    or fatal "problem writing to ../$changes: $!";
-
-	# check Ubuntu merge Policy: When merging with Debian, -v must be used
-	# and the remaining changes described
-	my $ch = join "\n", @changefilecontents;
-	if ($sourceonly && $version =~ /ubuntu1$/ && $ENV{'DEBEMAIL'} =~ /ubuntu/ &&
-	    $ch =~ /(merge|sync).*Debian/i) {
-	    push (@warnings, "Ubuntu merge policy: when merging Ubuntu packages with Debian, -v must be used") unless $since;
-	    push (@warnings, "Ubuntu merge policy: when merging Ubuntu packages with Debian, changelog must describe the remaining Ubuntu changes")
-		unless $ch =~ /Changes:.*(remaining|Ubuntu)(.|\n )*(differen|changes)/is;
-	}
-
-	run_hook('final-clean', $cleansource);
-
-	# Final dpkg-buildpackage action: clean target again
-	if ($cleansource) {
-	    if ($< == 0) {
-		system_withecho('debian/rules', 'clean');
-	    } else {
-		system_withecho($root_command, 'debian/rules', 'clean');
-	    }
-	}
-
-	chdir '..' or fatal "can't chdir ..: $!";
-	system_withecho('dpkg-source', '--after-build', $dirn);
-	chdir $dirn or fatal "can't chdir $dirn: $!";
-
-	# identify the files listed in $changes; this will be used for the
-	# emulation of the dpkg-buildpackage fileomitted() function
-
-	my @files;
-	my $infiles=0;
-	foreach (@changefilecontents) {
-	    /^Files:/ and $infiles=1, next;
-	    next unless $infiles;
-	    last if /^[^ ]/; # no need to go further
-	    # so we're looking at a filename with lots of info before it
-	    / (\S+)$/ and push @files, $1;
-	}
-
-	my $srcmsg;
-
-	my $ext = $compression_re;
-	if (fileomitted @files, '\.deb') {
-	    # source only upload
-	    if (fileomitted @files, "\\.diff\\.$ext" and fileomitted @files, "\\.debian\\.tar\\.$ext") {
-		$srcmsg='source only upload: Debian-native package';
-	    } elsif (fileomitted @files, "\\.orig\\.tar\\.$ext") {
-		$srcmsg='source only, diff-only upload (original source NOT included)';
-	    } else {
-		$srcmsg='source only upload (original source is included)';
-	    }
-	} else {
-	    if (fileomitted @files, '\.dsc') {
-		$srcmsg='binary only upload (no source included)'
-	    } elsif (fileomitted @files, "\\.diff\\.$ext" and fileomitted @files, "\\.debian\\.tar\\.$ext") {
-		$srcmsg='full upload; Debian-native package (full source is included)';
-	    } elsif (fileomitted @files, "\\.orig\\.tar\\.$ext") {
-		$srcmsg='binary and diff upload (original source NOT included)';
-	    } else {
-		$srcmsg='full upload (original source is included)';
-	    }
-	}
-
-	print "dpkg-buildpackage (debuild emulation): $srcmsg\n";
-
-	chdir '..' or fatal "can't chdir: $!";
-    } # end of debuild dpkg-buildpackage emulation
-
-    run_hook('lintian', $run_lintian && $lintian_exists);
-
-    if ($run_lintian && $lintian_exists) {
-	$<=$>=$uid;  # Give up on root privileges if we can
-	$(=$)=$gid;
-	print "Now running lintian...\n";
-	# The remaining items in @ARGV, if any, are lintian options
-	system('lintian', @lintian_extra_opts, @lintian_opts, $changes);
-	print "Finished running lintian.\n";
-    }
-
-    # They've insisted.  Who knows why?!
-    if (($signchanges or $signsource) and $usepause) {
-	print "Press the return key to start signing process\n";
-	<STDIN>;
-    }
-
-    run_hook('signing', ($signchanges || (! $sourceonly and $signsource)) );
-
-    if ($signchanges) {
-    foreach my $var (keys %store_vars) {
-        $ENV{$var} = $store_vars{$var};
-    }
-	print "Now signing changes and any dsc files...\n";
-	if ($username) {
-	    system('debrsign', @debsign_opts, $username, $changes) == 0
-		or fatal "running debrsign failed";
-	} else {
-	    system('debsign', @debsign_opts, $changes) == 0
-		or fatal "running debsign failed";
-        }
-    }
-    elsif (! $sourceonly and $signsource) {
-	print "Now signing dsc file...\n";
-	if ($username) {
-	    system('debrsign', @debsign_opts, $username, $dsc) == 0
-		or fatal "running debrsign failed";
-	} else {
-	    system('debsign', @debsign_opts, $dsc) == 0
-		or fatal "running debsign failed";
-	}
-    }
-
-    run_hook('post-dpkg-buildpackage', 1);
-
-    # Any warnings?
-    if (@warnings) {
-	# Don't know why we need this, but seems that we do, otherwise,
-	# the warnings get muddled up with the other output.
-	IO::Handle::flush(\*STDOUT);
-
-	my $warns = @warnings > 1 ? "S" : "";
-	warn "\nWARNING$warns generated by $progname:\n" .
-	    join("\n", @warnings) . "\n";
-    }
-    # close the logging process
-    close STDOUT;
-    close STDERR;
-    close BUILD;
-    open STDOUT, ">&", \*OLDOUT;
-    open STDERR, ">&", \*OLDERR;
-    exit 0;
+    /^-v(.*)/ and $since=$1, push(@dpkg_opts, $_), next;
+    /^-m(.*)/ and push(@debsign_opts, $_), push(@dpkg_opts, $_), next;
+    /^-e(.*)/ and push(@debsign_opts, $_), push(@dpkg_opts, $_), next;
+    push (@dpkg_opts, $_);
 }
-else {
-    # Running debian/rules.  Do dpkg-checkbuilddeps first
-    if ($checkbuilddep) {
-	if ($ARGV[0] eq 'binary-arch') {
-	    system('dpkg-checkbuilddeps -B');
-	} elsif ($ARGV[0] eq 'binary-indep') {
-	    system('dpkg-checkbuilddeps -A');
-	} else {
-	    system('dpkg-checkbuilddeps');
-	}
-	if ($?>>8) {
-	    fatal <<"EOT";
-You do not appear to have all build dependencies properly met.
-You can use mk-build-deps to generate a dummy package which
-Depends on all the required packages, or you can install them
-manually using dpkg or apt using the error messages just above
-this message.
-EOT
-	}
-    }
 
-    # Don't try to use the root command if we are already running as root
-    if ( $< == 0 ) {
-	system ('debian/rules', @ARGV) == 0
-	    or fatal "couldn't exec debian/rules: $!";
+while ($_=shift) {
+    $_ eq '-h' and usage(), exit 0;
+    /^-r(.*)/ and $root_command=$1, next;
+    /^-p/ and push(@debsign_opts, $_), next;  # Key selection options
+    /^-k/ and push(@debsign_opts, $_), next;  # Ditto
+    $_ eq '-us' and $signsource=0, next;
+    $_ eq '-uc' and $signchanges=0, next;
+    $_ eq '-ap' and $usepause=1, next;
+    /^-a(.*)/ and $targetarch=$1, push(@dpkg_opts, $_),
+	next;
+    /^-t(.*)/ and $targetgnusystem=$1, next;
+    $_ eq '-b' and $binaryonly=$_, $binarytarget='binary',
+	push(@dpkg_opts, $_), next;
+    $_ eq '-B' and $binaryonly=$_, $binarytarget='binary-arch',
+	push(@dpkg_opts, $_), next;
+    $_ eq '-A' and $binaryonly=$_, $binarytarget='binary-indep',
+	push(@dpkg_opts, $_), next;
+    $_ eq '-S' and $sourceonly=$_, push(@dpkg_opts, $_), next;
+    $_ eq '-F' and $binarytarget='binary', push(@dpkg_opts, $_), next;
+    $_ eq '-G' and $binarytarget='binary-arch', push(@dpkg_opts, $_), next;
+    $_ eq '-g' and $binarytarget='binary-indep', push(@dpkg_opts, $_), next;
+    if (/^--build=(.*)$/) {
+	my $argstr = $_;
+	my @builds = split(/,/, $1);
+	my ($binary, $source);
+	for my $build (@builds) {
+	    if ($build =~ m/^(?:binary|full)$/) {
+		$source++ if $1 eq 'full';
+		$binary++;
+		$binarytarget = 'binary';
+	    }
+	    elsif ($build eq 'any') {
+		$binary++;
+		$binarytarget = 'binary-arch';
+	    }
+	    elsif ($build eq 'all') {
+		$binary++;
+		$binarytarget = 'binary-indep';
+	    }
+	}
+	$binaryonly = (!$source && $binary);
+	$sourceonly = ($source && !$binary);
+	push(@dpkg_opts, $argstr);
+    }
+    /^-v(.*)/ and $since=$1, push(@dpkg_opts, $_), next;
+    /^-m(.*)/ and push(@debsign_opts, $_), push(@dpkg_opts, $_), next;
+    /^-e(.*)/ and push(@debsign_opts, $_), push(@dpkg_opts, $_), next;
+
+    # these non-dpkg-buildpackage options make us stop
+    if ($_ eq '--lintian-opts') {
+	unshift @ARGV, $_;
+	last;
+    }
+    push (@dpkg_opts, $_);
+}
+
+# Pick up lintian options if necessary
+if (@ARGV) {
+    # Check that option is sensible
+    if ($ARGV[0] eq '--lintian-opts') {
+	if (! $run_lintian) {
+	    push @warnings,
+		"$ARGV[0] option given but not running lintian!";
+	}
+	shift;
+	push(@lintian_opts, @ARGV);
     }
     else {
-	# So we'll use the selected or default root command
-	system ($root_command, 'debian/rules', @ARGV) == 0
-	    or fatal "couldn't exec $root_command debian/rules: $!";
+	# It must be a debian/rules target
+	push(@dpkg_opts, '--target', @ARGV);
     }
-
-    # Any warnings?
-    if (@warnings) {
-	my $warns = @warnings > 1 ? "s" : "";
-	warn "Warning$warns generated by debuild:\n" .
-	    join("\n", @warnings) . "\n";
-    }
-    exit 0;
 }
+
+if ($signchanges==1 and $signsource==0) {
+    push @warnings,
+	"I will sign the .dsc file anyway as a signed .changes file was requested\n";
+    $signsource=1;  # may not be strictly necessary, but for clarity!
+}
+
+# Next dpkg-buildpackage steps:
+# mustsetvar package/version have been done above; we've called the
+# results $pkg and $version
+# mustsetvar maintainer is only needed for signing, so we leave that
+# to debsign or dpkg-sig
+# Call to dpkg-architecture to set DEB_{BUILD,HOST}_* environment
+# variables
+my @dpkgarch = 'dpkg-architecture';
+if ($targetarch) {
+    push @dpkgarch, "-a${targetarch}";
+}
+if ($targetgnusystem) {
+    push @dpkgarch, "-t${targetgnusystem}";
+}
+push @dpkgarch, '-f';
+
+my $archinfo;
+spawn(exec => [@dpkgarch],
+      to_string => \$archinfo,
+      wait_child => 1);
+foreach (split /\n/, $archinfo) {
+    /^(.*)=(.*)$/ and $ENV{$1} = $2;
+}
+
+# We need to do the arch, pv, pva stuff to figure out
+# what the changes file will be called,
+my ($arch, $dsc, $changes, $build);
+if ($sourceonly) {
+    $arch = 'source';
+} elsif ($binarytarget eq 'binary-indep') {
+    $arch = 'all';
+} else {
+    $arch = $ENV{DEB_HOST_ARCH};
+}
+
+# Handle dpkg source format "3.0 (git)" packages (no tarballs)
+if ( -r "debian/source/format" ) {
+    open FMT, "debian/source/format" or die $!;
+    my $srcfmt = <FMT>; close FMT; chomp $srcfmt;
+    if ( $srcfmt eq "3.0 (git)" ) { $tgz_check = 0; }
+}
+
+$dsc = "${pkg}_${sversion}.dsc";
+my $orig_prefix = "${pkg}_${uversion}.orig.tar";
+my $origdir = basename(cwd()) . ".orig";
+if (! $binaryonly and $tgz_check and $uversion ne $sversion
+    and ! -f "../${orig_prefix}.bz2" and ! -f "../${orig_prefix}.lzma"
+    and ! -f "../${orig_prefix}.gz" and ! -f "../${orig_prefix}.xz"
+    and ! -d "../$origdir") {
+    print STDERR "This package has a Debian revision number but there does"
+	. " not seem to be\nan appropriate original tar file or .orig"
+	. " directory in the parent directory;\n(expected one of"
+	. " ${orig_prefix}.gz, ${orig_prefix}.bz2,\n${orig_prefix}.lzma, "
+	. " ${orig_prefix}.xz or $origdir)\ncontinue anyway? (y/n) ";
+    my $ans = <STDIN>;
+    exit 1 unless $ans =~ /^y/i;
+}
+
+# Convert debuild-specific _APPEND variables to those recognized by
+# dpkg-buildpackage
+my @buildflags = qw(CPPFLAGS CFLAGS CXXFLAGS FFLAGS LDFLAGS);
+foreach my $flag (@buildflags) {
+    if (exists $ENV{"${flag}_APPEND"}) {
+	$ENV{"DEB_${flag}_APPEND"} = delete $ENV{"${flag}_APPEND"};
+    }
+}
+
+# We'll need to be a bit cleverer to determine the changes file name;
+# see below
+$build="${pkg}_${sversion}_${arch}.build";
+$changes="${pkg}_${sversion}_${arch}.changes";
+open BUILD, "| tee ../$build" or fatal "couldn't open pipe to tee: $!";
+$logging=1;
+close STDOUT;
+close STDERR;
+open STDOUT, ">&BUILD" or fatal "can't reopen stdout: $!";
+open STDERR, ">&BUILD" or fatal "can't reopen stderr: $!";
+
+if (defined($checkbuilddep)) {
+    unshift @dpkg_opts, ($checkbuilddep ? "-D" : "-d");
+}
+if ($run_lintian) {
+    push(@dpkg_opts, '--check-command=lintian',
+	map { "--check-option=$_" } @lintian_opts);
+}
+unshift @dpkg_opts, "-r$root_command" if $root_command;
+system_withecho('dpkg-buildpackage', @dpkg_opts);
+
+chdir '..' or fatal "can't chdir: $!";
+
+open CHANGES, '<', $changes or fatal "can't open $changes for reading: $!";
+my @changefilecontents = <CHANGES>;
+close CHANGES;
+
+# check Ubuntu merge Policy: When merging with Debian, -v must be used
+# and the remaining changes described
+my $ch = join "\n", @changefilecontents;
+if ($sourceonly && $version =~ /ubuntu1$/ && $ENV{'DEBEMAIL'} =~ /ubuntu/ &&
+    $ch =~ /(merge|sync).*Debian/i) {
+    push (@warnings, "Ubuntu merge policy: when merging Ubuntu packages with Debian, -v must be used") unless $since;
+    push (@warnings, "Ubuntu merge policy: when merging Ubuntu packages with Debian, changelog must describe the remaining Ubuntu changes")
+	unless $ch =~ /Changes:.*(remaining|Ubuntu)(.|\n )*(differen|changes)/is;
+}
+
+# They've insisted.  Who knows why?!
+if (($signchanges or $signsource) and $usepause) {
+    print "Press the return key to start signing process\n";
+    <STDIN>;
+}
+
+run_hook('signing', ($signchanges || (! $sourceonly and $signsource)) );
+
+if ($signchanges) {
+    foreach my $var (keys %store_vars) {
+	$ENV{$var} = $store_vars{$var};
+    }
+    print "Now signing changes and any dsc files...\n";
+    if ($username) {
+	system('debrsign', @debsign_opts, $username, $changes) == 0
+	    or fatal "running debrsign failed";
+    } else {
+	system('debsign', @debsign_opts, $changes) == 0
+	    or fatal "running debsign failed";
+    }
+}
+elsif (! $sourceonly and $signsource) {
+    print "Now signing dsc file...\n";
+    if ($username) {
+	system('debrsign', @debsign_opts, $username, $dsc) == 0
+	    or fatal "running debrsign failed";
+    } else {
+	system('debsign', @debsign_opts, $dsc) == 0
+	    or fatal "running debsign failed";
+    }
+}
+
+run_hook('post-dpkg-buildpackage', 1);
+
+# Any warnings?
+if (@warnings) {
+    # Don't know why we need this, but seems that we do, otherwise,
+    # the warnings get muddled up with the other output.
+    IO::Handle::flush(\*STDOUT);
+
+    my $warns = @warnings > 1 ? "S" : "";
+    warn "\nWARNING$warns generated by $progname:\n" .
+	join("\n", @warnings) . "\n";
+}
+# close the logging process
+close STDOUT;
+close STDERR;
+close BUILD;
+open STDOUT, ">&", \*OLDOUT;
+open STDERR, ">&", \*OLDERR;
+exit 0;
 
 ###### Subroutines
 
@@ -1376,11 +1036,6 @@ sub system_withecho(@) {
     if ($?>>8) {
 	fatal "@_ failed";
     }
-}
-
-sub fileomitted (\@$) {
-    my ($files, $pat) = @_;
-    return (scalar(grep { /$pat$/ } @$files) == 0);
 }
 
 sub run_hook ($$) {
@@ -1416,52 +1071,4 @@ sub fatal($) {
 	open STDERR, ">&", \*OLDERR;
     }
     die $msg;
-}
-
-# Dpkg::BuildOptions::parse and ::set
-sub parsebuildopts {
-    my ($env) = @_;
-
-    $env ||= $ENV{DEB_BUILD_OPTIONS};
-
-    unless ($env) { return {}; }
-
-    my %opts;
-
-    foreach (split(/\s+/, $env)) {
-	unless (/^([a-z][a-z0-9_-]*)(=(\S*))?$/) {
-	    warn("$progname: invalid flag in DEB_BUILD_OPTIONS: $_\n");
-	    next;
-	}
-
-        my ($k, $v) = ($1, $3 || '');
-
-        # Sanity checks
-	if ($k =~ /^(noopt|nostrip|nocheck)$/ && length($v)) {
-	    $v = '';
-	} elsif ($k eq 'parallel' && $v !~ /^-?\d+$/) {
-	    next;
-	}
-
-	$opts{$k} = $v;
-    }
-
-    return \%opts;
-}
-
-sub setbuildopts {
-    my ($opts, $overwrite) = @_;
-    $overwrite = 1 if not defined($overwrite);
-
-    my $new = {};
-    $new = parsebuildopts() unless $overwrite;
-
-    while (my ($k, $v) = each %$opts) {
-	$new->{$k} = $v;
-    }
-
-    my $env = join(" ", map { $new->{$_} ? $_ . "=" . $new->{$_} : $_ } keys %$new);
-
-    $ENV{DEB_BUILD_OPTIONS} = $env;
-    return $env;
 }
