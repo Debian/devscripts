@@ -147,52 +147,71 @@ the \fBdpkg-statoverride\fR program to change the permissions of
 preserved across upgrades.
 .SH HOOKS
 \fBdebuild\fR supports a number of hooks when running
-\fBdpkg\-buildpackage\fR.  Note that if any of the hooks from
-\fBclean-hook\fR to \fBfinal-clean\fR (inclusive) are used, \fBdebuild\fR
-will emulate some sections of the \fBdpkg-buildpackage\fR process
-rather than running them directly, as \fBdpkg-buildpackage\fR
-does not support hooks.  The available hooks are as follows:
+\fBdpkg\-buildpackage\fR.  Note that the hooks \fBdpkg-buildpackage\fR
+to \fBlintian\fR (inclusive) are passed through to \fBdpkg-buildpackage\fR
+using its corresponding \fB\-\-hook-\fR\fIname\fR option.  The available
+hooks are as follows:
 .TP
 \fBdpkg-buildpackage-hook
 Run before \fBdpkg-buildpackage\fR begins by calling \fBdpkg-checkbuilddeps\fR.
+.IP
+Corresponds to \fBdpkg\fR's \fBinit\fR hook.
 .TP
 \fBclean-hook
 Run before \fBdpkg-buildpackage\fR runs \fBdebian/rules clean\fR to clean the
 source tree.  (Run even if the tree is not being cleaned because \fB\-nc\fR
 is used.)
+.IP
+Corresponds to \fBdpkg\fR's \fBpreclean\fR hook.
 .TP
 \fBdpkg-source-hook
 Run after cleaning the tree and before running \fBdpkg-source\fR.  (Run even
 if \fBdpkg-source\fR is not being called because \fB\-b\fR, \fB\-B\fR, or \fB\-A\fR is used.)
+.IP
+Corresponds to \fBdpkg\fR's \fBsource\fR hook.
 .TP
 \fBdpkg-build-hook\fR
 Run after \fBdpkg-source\fR and before calling \fBdebian/rules build\fR.  (Run
 even if this is a source-only build, so \fBdebian/rules build\fR is not
 being called.)
+.IP
+Corresponds to \fBdpkg\fR's \fBbuild\fR hook.
 .TP
 \fBdpkg-binary-hook
 Run between \fBdebian/rules build\fR and \fBdebian/rules binary\fR(\fB\-arch\fR).  Run
 \fBonly\fR if a binary package is being built.
+.IP
+Corresponds to \fBdpkg\fR's \fBbinary\fR hook.
 .TP
 \fBdpkg-genchanges-hook
 Run after the binary package is built and before calling
 \fBdpkg-genchanges\fR.
+.IP
+Corresponds to \fBdpkg\fR's \fBchanges\fR hook.
 .TP
 \fBfinal-clean-hook
 Run after \fBdpkg-genchanges\fR and before the final \fBdebian/rules clean\fR.
 (Run even if we are not cleaning the tree post-build, which is the
 default.)
+.IP
+Corresponds to \fBdpkg\fR's \fBpostclean\fR hook.
 .TP
 \fBlintian-hook
 Run (once) before calling \fBlintian\fR.  (Run even if we are
 not calling \fBlintian\fR.)
+.IP
+Corresponds to \fBdpkg\fR's \fBcheck\fR hook.
 .TP
 \fBsigning-hook
 Run after calling \fBlintian\fR before any signing takes place.
 (Run even if we are not signing anything.)
+.IP
+Corresponds to \fBdpkg\fR's \fBsign\fR hook, but is run by \fBdebuild\fR.
 .TP
 \fBpost-dpkg-buildpackage-hook
 Run after everything has finished.
+.IP
+Corresponds to \fBdpkg\fR's \fBdone\fR hook, but is run by \fBdebuild\fR.
 .PP
 A hook command can be specified either in the configuration file as,
 for example, DEBUILD_SIGNING_HOOK='foo' (note the hyphens change into
