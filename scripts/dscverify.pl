@@ -138,6 +138,7 @@ sub check_signature($\@;\$) {
 	print $out if ($verbose);
 	return $err || $@;
     }
+    print $err if ($verbose);
 
     seek($fh, 0, SEEK_SET);
     my $status;

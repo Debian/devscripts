@@ -21,8 +21,11 @@ devscripts (2.16.9) UNRELEASED; urgency=medium
       both modes now invoke dpkg-buildpackage.  (Closes: #611896)
     + Bump dpkg-dev (Build-)Depends to 1.17.6 for dpkg-buildpackage's
       --check-command and --hook-* options.
-  * Fix test debuild test failures due to new dpkg-genbuildinfo calls.
+  * Fix debuild test failures due to new dpkg-genbuildinfo calls.
     (Closes: #844910)
+  * dscverify:
+    + Always display gpg output if --verbose is used, regardless of whether
+      verification succeeds.  (Closes: #735416)
 
   [ Antonio Terceiro ]
   * debrepro:
