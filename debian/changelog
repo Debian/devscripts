@@ -8,6 +8,11 @@ devscripts (2.16.10) UNRELEASED; urgency=medium
   * debrepro:
     + document exit status in manpage
 
+  [ James McCoy ]
+  * debuild:
+    + Fix mapping of debuild final-clean hook to dpkg-buildpackage's
+      postclean.
+
  -- Afif Elghraoui <afif@debian.org>  Wed, 23 Nov 2016 23:50:46 -0800
 
 devscripts (2.16.9) unstable; urgency=medium

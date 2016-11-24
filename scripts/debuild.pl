@@ -727,7 +727,7 @@ my %debuild2dpkg = (
     'build' => 'build',
     'binary' => 'binary',
     'dpkg-genchanges' => 'changes',
-    'postclean' => 'final-clean',
+    'final-clean' => 'postclean',
     'lintian' => 'check',
 );
 
