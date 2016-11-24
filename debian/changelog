@@ -35,7 +35,7 @@ devscripts (2.16.9) unstable; urgency=medium
       to vary build paths for reproducible builds.
     + convert mapage to POD
     + in case of non-matching binaries, call diffoscope only on the .changes
-      files instead of on the .deb files. This way we even get get diff in
+      files instead of on the .deb files. This way we even get diff in
       .buildinfo between the builds.
 
   [ Guillem Jover ]
@@ -45,9 +45,11 @@ devscripts (2.16.9) unstable; urgency=medium
 
   [ Paul Wise ]
   * who-uploads:
-    + Fix search for user IDs with gpg2 and no @debian.org user IDs (Closes: #843961)
+    + Fix search for user IDs with gpg2 and no @debian.org user IDs (Closes:
+      #843961)
   * uscan:
-    + Fix a mention of the location of the upstream signing key (Closes: #842542)
+    + Fix a mention of the location of the upstream signing key (Closes:
+      #842542)
 
   [ Jochen Sprickerhof ]
   * build-rdeps:
