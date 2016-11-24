@@ -622,7 +622,8 @@ unless ($preserve_env) {
     foreach my $var (keys %ENV) {
 	delete $ENV{$var} unless
 	    $save_vars{$var} or $var =~ /^(LC|DEB)_[A-Z_]+$/
-	    or $var =~ /^(C(PP|XX)?|LD|F)FLAGS(_APPEND)?$/;
+	    or $var =~ /^(C(PP|XX)?|LD|F)FLAGS(_APPEND)?$/
+	    or $var eq 'SOURCE_DATE_EPOCH';
     }
 }
 
