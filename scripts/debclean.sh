@@ -194,7 +194,7 @@ for i in `find . -type d -name "debian"`; do
     fi
 
     # We now know we're OK and debuild won't complain about the dirname
-    debuild $CHECKBUILDDEP clean
+    debuild $CHECKBUILDDEP -- clean
 
     # Clean up the package related files
     if [ "$DEBCLEAN_CLEANDEBS" = yes ]; then
