@@ -88,6 +88,29 @@ future with regards to the current time.
 
 =back
 
+=head1 EXIT STATUS
+
+=over
+
+=item 0
+
+Package is reproducible.
+
+Reproducible here means that the two builds produced the exactly the
+same binaries, under the set of variations that B<debrepro> tests. Other
+sources of non-determinism in builds that are not yet tested might still
+affect builds in the wild.
+
+=item 1
+
+Package is not reproducible.
+
+=item 2
+
+The given input is not a valid Debian source package.
+
+=back
+
 =head1 SEE ALSO
 
 diffoscope (1), disorderfs (1),
