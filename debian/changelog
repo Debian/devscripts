@@ -16,6 +16,10 @@ devscripts (2.16.10) UNRELEASED; urgency=medium
     + Require a '--' between debuild options and debian/rules target so we
       know where options end.  (Closes: #845566)
 
+  [ Ximin Luo ]
+  * debpatch:
+    + New script, Apply a debdiff to a Debian source package. (Closes: #845659)
+
  -- Afif Elghraoui <afif@debian.org>  Wed, 23 Nov 2016 23:50:46 -0800
 
 devscripts (2.16.9) unstable; urgency=medium
