@@ -63,6 +63,8 @@ my $modified_conf_msg;
 my @warnings;
 
 # Predeclare functions
+sub setDebuildHook;
+sub setDpkgHook;
 sub system_withecho(@);
 sub run_hook ($$);
 sub fatal($);
@@ -187,8 +189,19 @@ my $username='';
 my @hooks = (qw(dpkg-buildpackage clean dpkg-source build binary dpkg-genchanges
 		final-clean lintian signing post-dpkg-buildpackage));
 my %hook;
-$hook{@hooks} = ('') x @hooks;
-
+@hook{@hooks} = ('') x @hooks;
+# dpkg-buildpackage runs all hooks in the source tree, while debuild runs some
+# in the parent directory.  Use %externalHook to check which run out of tree
+my %externalHook;
+@externalHook{@hooks} = (0) x @hooks;
+$externalHook{lintian} = 1;
+$externalHook{signing} = 1;
+$externalHook{'post-dpkg-buildpackage'} = 1;
+# Track which hooks are run by dpkg-buildpackage vs. debuild
+my %dpkgHook;
+@dpkgHook{@hooks} = (1) x @hooks;
+$dpkgHook{signing} = 0;
+$dpkgHook{'post-dpkg-buildpackage'} = 0;
 
 # First handle private options from cvs-debuild
 my ($cvsdeb_file, $cvslin_file);
@@ -331,7 +344,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     for my $hookname (@hooks) {
 	my $config_name = uc "debuild_${hookname}_hook";
 	$config_name =~ tr/-/_/;
-	$hook{$hookname} = $config_vars{$config_name};
+	setDebuildHook($hookname, $config_vars{$config_name});
     }
 
     # Now parse the opts lists
@@ -561,7 +574,8 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
 	    unless (defined ($opt = shift)) {
 		fatal "$arg requires an argument,\nrun $progname --help for usage information";
 	    }
-	    $hook{$argkey} = $opt;
+
+	    setDebuildHook($argkey, $opt);
 	    next;
 	}
 
@@ -573,7 +587,7 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
 		fatal "unknown hook option $arg,\nrun $progname --help for usage information";
 	    }
 
-	    $hook{$argkey} = $opt;
+	    setDebuildHook($argkey, $opt);
 	    next;
 	}
 
@@ -584,10 +598,10 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
 		fatal "$arg requires an argmuent,\nrun $progname --help for usage information";
 	    }
 	    if ($name eq 'sign') {
-		$hook{signing} = $opt;
+		setDpkgHook('signing', $opt);
 	    }
 	    else {
-		$hook{'post-dpkg-buildpackage'} = $opt;
+		setDpkgHook('post-dpkg-buildpackage', $opt);
 	    }
 	    next;
 	}
@@ -1049,6 +1063,36 @@ else {
 exit 0;
 
 ###### Subroutines
+
+sub setDebuildHook() {
+    my ($name, $val) = @_;
+
+    unless (grep /^$name$/, @hooks) {
+	fatal "unknown hook $name,\nrun $progname --help for usage information";
+    }
+
+    if ($externalHook{$name} && $dpkgHook{$name}) {
+	$hook{$name} = 'cd ..; '.$val;
+    }
+    else {
+	$hook{$name} = $val;
+    }
+}
+
+sub setDpkgHook() {
+    my ($name, $val) = @_;
+
+    unless (grep /^$name$/, @hooks) {
+	fatal "unknown hook $name,\nrun $progname --help for usage information";
+    }
+
+    if ($externalHook{$name} && !$dpkgHook{$name}) {
+	$hook{$name} = 'cd ..; '.$val;
+    }
+    else {
+	$hook{$name} = $val;
+    }
+}
 
 sub system_withecho(@) {
     print STDERR " ", join(" ", @_), "\n";

@@ -155,6 +155,8 @@ hooks are as follows:
 \fBdpkg-buildpackage-hook
 Run before \fBdpkg-buildpackage\fR begins by calling \fBdpkg-checkbuilddeps\fR.
 .IP
+Hook is run inside the unpacked source.
+.IP
 Corresponds to \fBdpkg\fR's \fBinit\fR hook.
 .TP
 \fBclean-hook
@@ -162,11 +164,15 @@ Run before \fBdpkg-buildpackage\fR runs \fBdebian/rules clean\fR to clean the
 source tree.  (Run even if the tree is not being cleaned because \fB\-nc\fR
 is used.)
 .IP
+Hook is run inside the unpacked source.
+.IP
 Corresponds to \fBdpkg\fR's \fBpreclean\fR hook.
 .TP
 \fBdpkg-source-hook
 Run after cleaning the tree and before running \fBdpkg-source\fR.  (Run even
 if \fBdpkg-source\fR is not being called because \fB\-b\fR, \fB\-B\fR, or \fB\-A\fR is used.)
+.IP
+Hook is run inside the unpacked source.
 .IP
 Corresponds to \fBdpkg\fR's \fBsource\fR hook.
 .TP
@@ -175,17 +181,23 @@ Run after \fBdpkg-source\fR and before calling \fBdebian/rules build\fR.  (Run
 even if this is a source-only build, so \fBdebian/rules build\fR is not
 being called.)
 .IP
+Hook is run inside the unpacked source.
+.IP
 Corresponds to \fBdpkg\fR's \fBbuild\fR hook.
 .TP
 \fBdpkg-binary-hook
 Run between \fBdebian/rules build\fR and \fBdebian/rules binary\fR(\fB\-arch\fR).  Run
 \fBonly\fR if a binary package is being built.
 .IP
+Hook is run inside the unpacked source.
+.IP
 Corresponds to \fBdpkg\fR's \fBbinary\fR hook.
 .TP
 \fBdpkg-genchanges-hook
 Run after the binary package is built and before calling
 \fBdpkg-genchanges\fR.
+.IP
+Hook is run inside the unpacked source.
 .IP
 Corresponds to \fBdpkg\fR's \fBchanges\fR hook.
 .TP
@@ -194,11 +206,15 @@ Run after \fBdpkg-genchanges\fR and before the final \fBdebian/rules clean\fR.
 (Run even if we are not cleaning the tree post-build, which is the
 default.)
 .IP
+Hook is run inside the unpacked source.
+.IP
 Corresponds to \fBdpkg\fR's \fBpostclean\fR hook.
 .TP
 \fBlintian-hook
 Run (once) before calling \fBlintian\fR.  (Run even if we are
 not calling \fBlintian\fR.)
+.IP
+Hook is run from parent directory of unpacked source.
 .IP
 Corresponds to \fBdpkg\fR's \fBcheck\fR hook.
 .TP
@@ -206,10 +222,14 @@ Corresponds to \fBdpkg\fR's \fBcheck\fR hook.
 Run after calling \fBlintian\fR before any signing takes place.
 (Run even if we are not signing anything.)
 .IP
+Hook is run from parent directory of unpacked source.
+.IP
 Corresponds to \fBdpkg\fR's \fBsign\fR hook, but is run by \fBdebuild\fR.
 .TP
 \fBpost-dpkg-buildpackage-hook
 Run after everything has finished.
+.IP
+Hook is run from parent directory of unpacked source.
 .IP
 Corresponds to \fBdpkg\fR's \fBdone\fR hook, but is run by \fBdebuild\fR.
 .PP
