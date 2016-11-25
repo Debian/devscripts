@@ -92,7 +92,7 @@ future with regards to the current time.
 
 =over
 
-=item 0
+=item 0Z<>
 
 Package is reproducible.
 
@@ -101,11 +101,11 @@ same binaries, under the set of variations that B<debrepro> tests. Other
 sources of non-determinism in builds that are not yet tested might still
 affect builds in the wild.
 
-=item 1
+=item 1Z<>
 
 Package is not reproducible.
 
-=item 2
+=item 2Z<>
 
 The given input is not a valid Debian source package.
 
