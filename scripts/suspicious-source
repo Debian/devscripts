@@ -150,5 +150,6 @@ def main():
     suspicious_source(options.whitelisted_mimetypes, whitelisted_extensions,
                       options.directory, options.verbose)
 
+
 if __name__ == "__main__":
     main()
