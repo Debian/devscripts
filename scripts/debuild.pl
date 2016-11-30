@@ -1071,7 +1071,7 @@ sub setDebuildHook() {
 	fatal "unknown hook $name,\nrun $progname --help for usage information";
     }
 
-    if ($externalHook{$name} && $dpkgHook{$name}) {
+    if ($externalHook{$name} && $dpkgHook{$name} && $val) {
 	$hook{$name} = 'cd ..; '.$val;
     }
     else {
@@ -1086,7 +1086,7 @@ sub setDpkgHook() {
 	fatal "unknown hook $name,\nrun $progname --help for usage information";
     }
 
-    if ($externalHook{$name} && !$dpkgHook{$name}) {
+    if ($externalHook{$name} && !$dpkgHook{$name} && $val) {
 	$hook{$name} = 'cd ..; '.$val;
     }
     else {

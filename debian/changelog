@@ -1,3 +1,10 @@
+devscripts (2.16.11) UNRELEASED; urgency=medium
+
+  * debuild:
+    + Avoid setting a hook to just "cd ..; ".
+
+ -- James McCoy <jamessan@debian.org>  Wed, 30 Nov 2016 00:05:18 -0500
+
 devscripts (2.16.10) unstable; urgency=medium
 
   [ Afif Elghraoui ]
