@@ -1,7 +1,13 @@
 devscripts (2.16.11) UNRELEASED; urgency=medium
 
+  [ James McCoy ]
   * debuild:
     + Avoid setting a hook to just "cd ..; ".
+
+  [ Antonio Terceiro ]
+  * debclean:
+    + do not descend on subdirectories if current directory is already a
+      Debian source package.
 
  -- James McCoy <jamessan@debian.org>  Wed, 30 Nov 2016 00:05:18 -0500
 

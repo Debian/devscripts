@@ -160,7 +160,14 @@ fi
 # Script to clean up debian directories
 
 OPWD="`pwd`"
-for i in `find . -type d -name "debian"`; do
+
+if [ -d debian/changelog ]; then
+  directories=./debian
+else
+  directories=$(find . -type d -name "debian")
+fi
+
+for i in $directories; do
     (  # subshell to not lose where we are
     DIR=${i%/debian}
     echo "Cleaning in directory $DIR"
