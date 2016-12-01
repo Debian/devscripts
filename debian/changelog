@@ -9,7 +9,7 @@ devscripts (2.16.11) UNRELEASED; urgency=medium
     + do not descend on subdirectories if current directory is already a
       Debian source package.
     + fix manpage to mention what exactly is executed on each directory (i.e.
-      debclean calls `debuild -- clean`, no `debian/rules clean`)
+      debclean calls `debuild -- clean`, not `debian/rules clean`)
 
  -- James McCoy <jamessan@debian.org>  Wed, 30 Nov 2016 00:05:18 -0500
 
