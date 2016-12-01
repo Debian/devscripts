@@ -162,9 +162,9 @@ fi
 OPWD="`pwd`"
 
 if [ -d debian/changelog ]; then
-  directories=./debian
+    directories=./debian
 else
-  directories=$(find . -type d -name "debian")
+    directories=$(find . -type d -name "debian")
 fi
 
 for i in $directories; do
