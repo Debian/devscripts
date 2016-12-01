@@ -161,7 +161,7 @@ fi
 
 OPWD="`pwd`"
 
-if [ -d debian/changelog ]; then
+if [ -f debian/changelog ]; then
     directories=./debian
 else
     directories=$(find . -type d -name "debian")
