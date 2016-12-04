@@ -19,6 +19,10 @@
 
 set -eu
 
+usage() {
+  echo "usage: $0 [OPTIONS] [SOURCEDIR]"
+}
+
 first_banner=y
 banner() {
   if [ "$first_banner" = n ]; then
@@ -37,8 +41,17 @@ variation() {
 }
 
 vary() {
-  local first="$1"
-  local second="$2"
+  local var="$1"
+
+  for skipped in $skip_variations; do
+    if [ "$skipped" = "$var" ]; then
+      return
+    fi
+  done
+
+  variation "$var"
+  local first="$2"
+  local second="$3"
   if [ "$which_build" = 'first' ]; then
     if [ -n "$first" ]; then
       echo "$first"
@@ -56,34 +69,41 @@ create_build_script() {
   echo "# package"
   echo
 
-  variation PATH
-  vary '' 'export PATH="$PATH":/i/capture/the/path'
+  vary path \
+    '' \
+    'export PATH="$PATH":/i/capture/the/path'
 
-  variation USER
-  vary 'export USER=user1' 'export USER=user2'
+  vary user \
+    'export USER=user1' \
+    'export USER=user2'
 
-  variation umask
-  vary 'umask 0022' 'umask 0002'
+  vary umask \
+    'umask 0022' \
+    'umask 0002'
 
-  variation locale
-  vary 'export LC_ALL=C.UTF-8 LANG=C.UTF-8' \
+  vary locale \
+    'export LC_ALL=C.UTF-8 LANG=C.UTF-8' \
     'export LC_ALL=pt_BR.UTF-8 LANG=pt_BR.UTF-8'
 
-  variation timezone
-  vary 'export TZ=UTC' \
+  vary timezone \
+    'export TZ=UTC' \
     'export TZ=Asia/Tokyo'
 
   if which disorderfs >/dev/null; then
-    variation filesystem ordering
-    echo 'mkdir ../disorderfs'
-    echo 'disorderfs --shuffle-dirents=yes $(pwd) ../disorderfs'
-    echo 'trap "cd .. && fusermount -u disorderfs && rmdir disorderfs" INT TERM EXIT'
-    echo 'cd ../disorderfs'
+    disorderfs_commands='mkdir ../disorderfs &&
+disorderfs --shuffle-dirents=yes $(pwd) ../disorderfs &&
+trap "cd .. && fusermount -u disorderfs && rmdir disorderfs" INT TERM EXIT &&
+cd ../disorderfs'
+    vary filesystem-ordering \
+      '' \
+      "$disorderfs_commands"
   fi
 
-  variation date
-  vary 'dpkg-buildpackage -b -us -uc' \
-    'faketime +213days+7hours+13minutes dpkg-buildpackage -b -us -uc'
+  vary time \
+    'build_prefix=""' \
+    'build_prefix="faketime +213days+7hours+13minutes"'
+
+  echo '$build_prefix dpkg-buildpackage -b -us -uc'
 }
 
 
@@ -126,6 +146,34 @@ compare() {
   fi
   return "$rc"
 }
+
+TEMP=$(getopt -n "debrepro" -o 's:' \
+	      -l 'skip:' \
+	      -- "$@") || (rc=$?; usage >&2; exit $rc)
+eval set -- "$TEMP"
+
+skip_variations=""
+while true; do
+  case "$1" in
+    -s|--skip)
+      case "$2" in
+	user|path|umask|locale|timezone|filesystem-ordering)
+	  skip_variations="$skip_variations $2"
+	  ;;
+	*)
+	  echo "E: invalid variation name $2"
+	  exit 1
+	  ;;
+      esac
+      shift
+      ;;
+    --)
+      shift
+      break
+      ;;
+  esac
+  shift
+done
 
 SOURCE="${1:-}"
 if [ -z "$SOURCE" ]; then

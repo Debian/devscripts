@@ -12,6 +12,9 @@ devscripts (2.16.11) UNRELEASED; urgency=medium
       Debian source package.
     + fix manpage to mention what exactly is executed on each directory (i.e.
       debclean calls `debuild -- clean`, not `debian/rules clean`)
+  * debrepro:
+    + add -s/--skip option to skip any of the supported variations
+      (Closes: #846365)
 
  -- James McCoy <jamessan@debian.org>  Wed, 30 Nov 2016 00:05:18 -0500
 
