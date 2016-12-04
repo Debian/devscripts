@@ -877,6 +877,7 @@ if (@ARGV) {
 	}
 	shift;
 	push(@lintian_opts, @ARGV);
+	undef @ARGV;
     }
 }
 

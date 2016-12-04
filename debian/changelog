@@ -3,6 +3,8 @@ devscripts (2.16.11) UNRELEASED; urgency=medium
   [ James McCoy ]
   * debuild:
     + Avoid setting a hook to just "cd ..; ".
+    + Clear @ARGV if running lintian to avoid treating @ARGV as debian/rules
+      targets to run.  (Closes: #846863)
 
   [ Antonio Terceiro ]
   * debclean:
