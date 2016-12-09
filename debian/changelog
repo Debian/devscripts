@@ -1,5 +1,6 @@
 devscripts (2.16.12) UNRELEASED; urgency=medium
 
+  [ James McCoy ]
   * mergechanges:
     + Add handling for buildinfo files, based on a patch by Simon McVittie.
       (Closes: #843470)
@@ -7,6 +8,11 @@ devscripts (2.16.12) UNRELEASED; urgency=medium
     + Move invocation of lintian back into debuild.  This restores the
       behavior of ignoring the return code of lintian (Closes: #847168) and
       only running lintian when it is present (Closes: #846711).
+
+  [ Antonio Terceiro ]
+  * debrepro:
+    + export NO_FAKE_STAT=1 when using faketime to avoid faking stat() calls
+      (see discussion in bug #846365)
 
  -- James McCoy <jamessan@debian.org>  Mon, 05 Dec 2016 22:58:29 -0500
 

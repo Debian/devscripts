@@ -104,7 +104,7 @@ cd ../disorderfs'
 
     vary time \
         'build_prefix=""' \
-        'build_prefix="faketime +213days+7hours+13minutes"'
+        'build_prefix="faketime +213days+7hours+13minutes"; export NO_FAKE_STAT=1'
 
     echo '$build_prefix dpkg-buildpackage -b -us -uc'
 }
