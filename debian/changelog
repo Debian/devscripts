@@ -3,6 +3,10 @@ devscripts (2.16.12) UNRELEASED; urgency=medium
   * mergechanges:
     + Add handling for buildinfo files, based on a patch by Simon McVittie.
       (Closes #843470)
+  * debuild:
+    + Move invocation of lintian back into debuild.  This restores the
+      behavior of ignoring the return code of lintian (Closes: #847168) and
+      only running lintian when it is present (Closes: 846711).
 
  -- James McCoy <jamessan@debian.org>  Mon, 05 Dec 2016 22:58:29 -0500
 

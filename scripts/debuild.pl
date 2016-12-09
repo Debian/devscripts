@@ -176,6 +176,7 @@ my $preserve_env=0;
 my %save_vars;
 my $root_command='';
 my $run_lintian=1;
+my $lintian_exists=0;
 my @dpkg_extra_opts=();
 my @lintian_extra_opts=();
 my @lintian_opts=();
@@ -200,6 +201,7 @@ $externalHook{'post-dpkg-buildpackage'} = 1;
 # Track which hooks are run by dpkg-buildpackage vs. debuild
 my %dpkgHook;
 @dpkgHook{@hooks} = (1) x @hooks;
+$dpkgHook{lintian} = 0;
 $dpkgHook{signing} = 0;
 $dpkgHook{'post-dpkg-buildpackage'} = 0;
 
@@ -591,13 +593,16 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
 	    next;
 	}
 
-	if ($arg =~ /^--hook-(sign|done)=(.*)$/) {
+	if ($arg =~ /^--hook-(check|sign|done)=(.*)$/) {
 	    my $name = $1;
 	    my $opt = $2;
 	    unless (defined($opt)) {
 		fatal "$arg requires an argmuent,\nrun $progname --help for usage information";
 	    }
-	    if ($name eq 'sign') {
+	    if ($name eq 'check') {
+		setDpkgHook('lintian', $opt);
+	    }
+	    elsif ($name eq 'sign') {
 		setDpkgHook('signing', $opt);
 	    }
 	    else {
@@ -743,7 +748,6 @@ my %debuild2dpkg = (
     'binary' => 'binary',
     'dpkg-genchanges' => 'changes',
     'final-clean' => 'postclean',
-    'lintian' => 'check',
 );
 
 for my $h_name (@hooks) {
@@ -977,6 +981,9 @@ if (@ARGV) {
     }
 }
 else {
+    if ($run_lintian && system('command -v lintian >/dev/null 2>&1') == 0) {
+	$lintian_exists = 1;
+    }
     # We'll need to be a bit cleverer to determine the changes file name;
     # see below
     $build="${pkg}_${sversion}_${arch}.build";
@@ -988,10 +995,6 @@ else {
     open STDOUT, ">&BUILD" or fatal "can't reopen stdout: $!";
     open STDERR, ">&BUILD" or fatal "can't reopen stderr: $!";
 
-    if ($run_lintian) {
-	push(@dpkg_opts, '--check-command=lintian',
-	    map { "--check-option=$_" } @lintian_opts);
-    }
     system_withecho('dpkg-buildpackage', @dpkg_opts);
 
     chdir '..' or fatal "can't chdir: $!";
@@ -1008,6 +1011,16 @@ else {
 	push (@warnings, "Ubuntu merge policy: when merging Ubuntu packages with Debian, -v must be used") unless $since;
 	push (@warnings, "Ubuntu merge policy: when merging Ubuntu packages with Debian, changelog must describe the remaining Ubuntu changes")
 	    unless $ch =~ /Changes:.*(remaining|Ubuntu)(.|\n )*(differen|changes)/is;
+    }
+
+    run_hook('lintian', $run_lintian && $lintian_exists);
+
+    if ($run_lintian && $lintian_exists) {
+	$<=$>=$uid;  # Give up on root privileges if we can
+	$(=$)=$gid;
+	print "Now running lintian...\n";
+	system('lintian', @lintian_extra_opts, @lintian_opts, $changes);
+	print "Finished running lintian.\n";
     }
 
     # They've insisted.  Who knows why?!
