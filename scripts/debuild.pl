@@ -772,6 +772,7 @@ foreach (@dpkg_extra_opts) {
     $_ eq '-uc' and $signchanges=0, next;
     $_ eq '-ap' and $usepause=1, next;
     /^-a(.*)/ and $targetarch=$1, push(@dpkg_opts, $_), next;
+    $_ eq '-tc' and push(@dpkg_opts, $_), next;
     /^-t(.*)/ and $targetgnusystem=$1, push(@dpkg_opts, $_), next; # Ditto
     $_ eq '-b' and $binaryonly=$_, $binarytarget='binary',
 	push(@dpkg_opts, $_), next;
@@ -822,6 +823,7 @@ while ($_=shift) {
     $_ eq '-ap' and $usepause=1, next;
     /^-a(.*)/ and $targetarch=$1, push(@dpkg_opts, $_),
 	next;
+    $_ eq '-tc' and push(@dpkg_opts, $_), next;
     /^-t(.*)/ and $targetgnusystem=$1, next;
     $_ eq '-b' and $binaryonly=$_, $binarytarget='binary',
 	push(@dpkg_opts, $_), next;

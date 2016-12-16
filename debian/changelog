@@ -4,6 +4,11 @@ devscripts (2.16.13) UNRELEASED; urgency=medium
   * uscan:
     + Add .sign to the default OpenPGP extensions list
 
+  [ James McCoy ]
+  * debuild:
+    + Pass "-tc" through to dpkg-buildpackage instead of treating it as
+      "-t c".  (Closes: #848210)
+
  -- Paul Wise <pabs@debian.org>  Fri, 16 Dec 2016 09:30:40 +0800
 
 devscripts (2.16.12) unstable; urgency=medium
