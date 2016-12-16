@@ -268,7 +268,7 @@ This is substituted by the typical archive file extension regex (non-capturing).
 
 This is substituted by the typical signature file extension regex (non-capturing).
 
-  (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)\.(?:asc|pgp|gpg|sig)
+  (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)\.(?:asc|pgp|gpg|sig|sign)
 
 =back
 
@@ -689,8 +689,8 @@ tarball href and the signature file is tried to be downloaded from it.
 
 If the B<pgpsigurlmangle> rule doesn't exist, B<uscan> warns user if the
 matching upstream signature file is available from the same URL with their
-filename being suffixed by the 4 common suffix B<asc>, B<gpg>, B<pgp>, and
-B<sig>. (You can avoid this warning by setting B<pgpmode=none>.)
+filename being suffixed by the 4 common suffix B<asc>, B<gpg>, B<pgp>, B<sig>
+and B<sign>. (You can avoid this warning by setting B<pgpmode=none>.)
 
 If the signature file is downloaded, the downloaded upstream tarball is checked
 for its authenticity against the downloaded signature file using the keyring
@@ -3542,7 +3542,7 @@ EOF
     my $signature_available;
     if (($options{'pgpmode'} eq 'default' or $options{'pgpmode'} eq 'auto') and $signature == 1) {
 	uscan_verbose "Start checking for common possible upstream OpenPGP signature files\n";
-	foreach my $suffix (qw(asc gpg pgp sig)) {
+	foreach my $suffix (qw(asc gpg pgp sig sign)) {
 	    my $sigrequest = HTTP::Request->new('HEAD' => "$upstream_url.$suffix");
 	    my $sigresponse = $user_agent->request($sigrequest);
 	    if ($sigresponse->is_success()) {
@@ -4166,7 +4166,7 @@ sub process_watchfile ($$$$)
 	# Handle @PACKAGE@ @ANY_VERSION@ @ARCHIVE_EXT@ substitutions
 	my $any_version = '[-_]?(\d[\-+\.:\~\da-zA-Z]*)';
 	my $archive_ext = '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)';
-	my $signature_ext = $archive_ext . '\.(?:asc|pgp|gpg|sig)';
+	my $signature_ext = $archive_ext . '\.(?:asc|pgp|gpg|sig|sign)';
 	s/\@PACKAGE\@/$package/g;
 	s/\@ANY_VERSION\@/$any_version/g;
 	s/\@ARCHIVE_EXT\@/$archive_ext/g;
