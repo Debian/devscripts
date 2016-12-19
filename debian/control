@@ -19,7 +19,6 @@ Build-Depends: bash-completion,
                libfile-desktopentry-perl,
                libgit-wrapper-perl,
                liblist-compare-perl,
-               libparse-debianchangelog-perl,
                libtimedate-perl,
                liburi-perl,
                libwww-perl,
@@ -64,7 +63,6 @@ Recommends: apt,
             libencode-locale-perl,
             libgit-wrapper-perl,
             liblist-compare-perl,
-            libparse-debianchangelog-perl,
             liburi-perl,
             libwww-perl,
             licensecheck,
@@ -188,8 +186,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
     [quilt | dpatch | cdbs]
   - getbuildlog: download package build logs from Debian auto-builders [wget]
   - git-deborig: try to produce Debian orig.tar using git-archive(1)
-    [libdpkg-perl, libgit-wrapper-perl, liblist-compare-perl,
-    libparse-debianchangelog-perl]
+    [libdpkg-perl, libgit-wrapper-perl, liblist-compare-perl]
   - grep-excuses: grep the update_excuses.html file for your packages
     [libterm-size-perl, wget, w3m]
   - list-unreleased: search for unreleased packages

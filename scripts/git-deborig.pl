@@ -63,8 +63,8 @@ use strict;
 use warnings;
 no warnings "experimental::smartmatch";
 
-use Parse::DebianChangelog;
 use Git::Wrapper;
+use Dpkg::Changelog::Parse;
 use Dpkg::Version;
 use List::Compare;
 
@@ -86,12 +86,10 @@ foreach my $arg ( @ARGV ) {
 }
 
 # Extract source package name and version from d/changelog
-my $changelog = Parse::DebianChangelog->init();
-$changelog->parse( { infile => "debian/changelog" } );
-my $changelog_data = $changelog->dpkg();
-my $version = Dpkg::Version->new($changelog_data->{"Version"});
+my $changelog = Dpkg::Changelog::Parse->changelog_parse({});
+my $version = $changelog->{Version};
+my $source = $changelog->{Source};
 my $upstream_version = $version->version();
-my $source = $changelog_data->{"Source"};
 
 # Sanity check #2
 die "this looks like a native package .." if $version->is_native();
