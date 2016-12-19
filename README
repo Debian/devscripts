@@ -175,6 +175,10 @@ And now, in mostly alphabetical order, the scripts:
 
 - getbuildlog: download package build logs from Debian auto-builders [wget]
 
+- git-deborig: try to produce Debian orig.tar using git-archive(1)
+  [libdpkg-perl, libgit-wrapper-perl, liblist-compare-perl,
+  libparse-debianchangelog-perl]
+
 - grep-excuses: grep the update_excuses.html file to find out what is
   happening to your packages. [libterm-size-perl, wget, w3m]
 

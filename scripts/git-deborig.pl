@@ -1,0 +1,188 @@
+#!/usr/bin/perl
+
+# git-deborig -- try to produce Debian orig.tar using git-archive(1)
+
+# Copyright (C) 2016  Sean Whitton <spwhitton@spwhitton.name>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or (at
+# your option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+=head1 NAME
+
+git-deborig - try to produce Debian orig.tar using git-archive(1)
+
+=head1 SYNOPSIS
+
+B<git deborig> [B<-f>] [I<TAG>]
+
+=head1 DESCRIPTION
+
+B<git-deborig> tries to produce the orig.tar you need for your upload
+by calling git-archive(1) on an existing git tag.  It was written with
+the dgit-maint-merge(7) workflow in mind, but can be used with other
+workflows.
+
+B<git-deborig> will try several common tag names.  If this fails, or
+if more than one of those common tags are present, you can specify the
+tag to archive on the command line.
+
+B<git-deborig> should be invoked from the root of the git repository,
+which should contain I<debian/changelog>.
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<-f>
+
+Overwrite any existing orig.tar in the parent directory.
+
+=back
+
+=head1 SEE ALSO
+
+dgit-maint-merge(7)
+
+=head1 AUTHOR
+
+B<git-deborig> was written by Sean Whitton <spwhitton@spwhitton.name>.
+
+=cut
+
+use strict;
+use warnings;
+no warnings "experimental::smartmatch";
+
+use Parse::DebianChangelog;
+use Git::Wrapper;
+use Dpkg::Version;
+use List::Compare;
+
+# Sanity check #1
+die "pwd doesn't look like a Debian source package in a git repository ..\n"
+  unless ( -d ".git" && -e "debian/changelog" );
+
+# Process command line args
+die "usage: git deborig [-f] [TAG]\n"
+  if ( scalar @ARGV >= 3 || (scalar @ARGV == 2 && !("-f" ~~ @ARGV)) );
+my $overwrite = 0;
+my $user_tag;
+foreach my $arg ( @ARGV ) {
+    if ( $arg eq "-f" ) {
+        $overwrite = 1;
+    } else {
+        $user_tag = $arg;
+    }
+}
+
+# Extract source package name and version from d/changelog
+my $changelog = Parse::DebianChangelog->init();
+$changelog->parse( { infile => "debian/changelog" } );
+my $changelog_data = $changelog->dpkg();
+my $version = Dpkg::Version->new($changelog_data->{"Version"});
+my $upstream_version = $version->version();
+my $source = $changelog_data->{"Source"};
+
+# Sanity check #2
+die "this looks like a native package .." if $version->is_native();
+
+# Default to gzip
+my $compressor = "gzip";
+my $compression = "gz";
+# Now check if we can use xz
+if ( -e "debian/source/format" ) {
+    open( my $format_fh, '<', "debian/source/format" )
+      or die "couldn't open debian/source/format for reading";
+    my $format = <$format_fh>;
+    chomp($format) if defined $format;
+    if ( $format eq "3.0 (quilt)" ) {
+        $compressor = "xz";
+        $compression = "xz";
+    }
+    close $format_fh;
+}
+
+my $orig = "../${source}_$upstream_version.orig.tar.$compression";
+die "$orig already exists: not overwriting without -f\n"
+  if ( -e $orig && ! $overwrite );
+
+# Get available git tags
+my $git = Git::Wrapper->new(".");
+my @all_tags = $git->tag();
+
+if ( defined $user_tag ) {      # User told us the tag to archive
+    if ( $user_tag ~~ @all_tags ) {
+        archive_tag($user_tag);
+    } else {
+        die "the tag $user_tag does not exist in this repository\n";
+    }
+} else {    # User didn't specify a tag to archive
+    # convert according to DEP-14 rules
+    my $git_upstream_version = $upstream_version;
+    $git_upstream_version =~ y/:~/%_/;
+    $git_upstream_version =~ s/\.(?=\.|$|lock$)/.#/g;
+    # See which candidate version tags are present in the repo
+    my @candidate_tags = ("$git_upstream_version",
+                          "v$git_upstream_version",
+                          "upstream/$git_upstream_version"
+                         );
+    my $lc = List::Compare->new(\@all_tags, \@candidate_tags);
+    my @version_tags = $lc->get_intersection();
+
+    # If there is only one candidate version tag, we're good to go.
+    # Otherwise, let the user know they can tell us which one to use
+    if ( scalar @version_tags > 1 ) {
+        print "tags ", join(", ", @version_tags), " all exist in this repository\n";
+        print "tell me which one you want to make an orig.tar from: git deborig TAG\n";
+        exit 1;
+    } elsif ( scalar @version_tags < 1 ) {
+        die "couldn't find any of the following tags: ",
+          join(", ", @candidate_tags), "\n";
+    } else {
+        my $tag = shift @version_tags;
+        archive_tag($tag);
+    }
+}
+
+sub archive_tag {
+    my $tag = shift;
+
+    # For compatibility with dgit, we have to override any
+    # export-subst and export-ignore git attributes that might be set
+    rename ".git/info/attributes", ".git/info/attributes-deborig"
+      if ( -e ".git/info/attributes" );
+    my $attributes_fh;
+    unless ( open( $attributes_fh, '>', ".git/info/attributes" ) ) {
+        rename ".git/info/attributes-deborig", ".git/info/attributes"
+          if ( -e ".git/info/attributes-deborig" );
+        die "could not open .git/info/attributes for writing";
+    }
+    print $attributes_fh "* -export-subst\n";
+    print $attributes_fh "* -export-ignore\n";
+    close $attributes_fh;
+
+    # git-archive(1) can be taught to invoke xz by adding some lines
+    # to ~/.gitconfig.  So that this script always works, we just pipe
+    # to the compression tool
+    system "git archive \\
+ --prefix=$source-$upstream_version/\\
+ --format=tar $tag \\
+ | $compressor > $orig";
+
+    # Restore situation before we messed around with git attributes
+    if ( -e ".git/info/attributes-deborig" ) {
+        rename ".git/info/attributes-deborig", ".git/info/attributes";
+    } else {
+        unlink ".git/info/attributes";
+    }
+}
