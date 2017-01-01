@@ -1,7 +1,12 @@
 devscripts (2.16.14) UNRELEASED; urgency=medium
 
+  [ Sean Whitton ]
   * New script: git-deborig, a wrapper around git-archive(1) to generate
     Debian orig.tar files.
+
+  [ Paul Wise ]
+  * grep-excuses:
+    + Ignore new --- header line in autoremovals.yaml.cgi
 
  -- Sean Whitton <spwhitton@spwhitton.name>  Mon, 19 Dec 2016 09:51:35 +0000
 

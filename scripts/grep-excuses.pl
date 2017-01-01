@@ -256,7 +256,7 @@ sub grep_autoremovals () {
 	    }
 	    next;
 	}
-	if (m%^$% || m%^\#%) {
+	if (m%^$% || m%^\#% || m{^---$}) {
 	    next;
 	}
 	warn "$progname: unprocessed line $. in $rmurl_yaml:\n$_";
