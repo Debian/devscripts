@@ -23,18 +23,18 @@ git-deborig - try to produce Debian orig.tar using git-archive(1)
 
 =head1 SYNOPSIS
 
-B<git deborig> [B<-f>] [I<TAG>]
+B<git deborig> [B<-f>] [I<REF>]
 
 =head1 DESCRIPTION
 
 B<git-deborig> tries to produce the orig.tar you need for your upload
-by calling git-archive(1) on an existing git tag.  It was written with
-the dgit-maint-merge(7) workflow in mind, but can be used with other
-workflows.
+by calling git-archive(1) on an existing git tag or branch head.  It
+was written with the dgit-maint-merge(7) workflow in mind, but can be
+used with other workflows.
 
 B<git-deborig> will try several common tag names.  If this fails, or
 if more than one of those common tags are present, you can specify the
-tag to archive on the command line.
+tag or branch head to archive on the command line (I<REF> above).
 
 B<git-deborig> should be invoked from the root of the git repository,
 which should contain I<debian/changelog>.
@@ -74,15 +74,15 @@ die "pwd doesn't look like a Debian source package in a git repository ..\n"
   unless ( -d ".git" && -e "debian/changelog" );
 
 # Process command line args
-die "usage: git deborig [-f] [TAG]\n"
+die "usage: git deborig [-f] [REF]\n"
   if ( scalar @ARGV >= 3 || (scalar @ARGV == 2 && !("-f" ~~ @ARGV)) );
 my $overwrite = 0;
-my $user_tag;
+my $user_ref;
 foreach my $arg ( @ARGV ) {
     if ( $arg eq "-f" ) {
         $overwrite = 1;
     } else {
-        $user_tag = $arg;
+        $user_ref = $arg;
     }
 }
 
@@ -115,21 +115,20 @@ my $orig = "../${source}_$upstream_version.orig.tar.$compression";
 die "$orig already exists: not overwriting without -f\n"
   if ( -e $orig && ! $overwrite );
 
-# Get available git tags
-my $git = Git::Wrapper->new(".");
-my @all_tags = $git->tag();
+if ( defined $user_ref ) {      # User told us the tag/branch to archive
+    # We leave it to git-archive(1) to determine whether or not this
+    # ref exists; this keeps us forward-compatible
+    archive_ref($user_ref);
+} else {    # User didn't specify a tag/branch to archive
+    # Get available git tags
+    my $git = Git::Wrapper->new(".");
+    my @all_tags = $git->tag();
 
-if ( defined $user_tag ) {      # User told us the tag to archive
-    if ( $user_tag ~~ @all_tags ) {
-        archive_tag($user_tag);
-    } else {
-        die "the tag $user_tag does not exist in this repository\n";
-    }
-} else {    # User didn't specify a tag to archive
     # convert according to DEP-14 rules
     my $git_upstream_version = $upstream_version;
     $git_upstream_version =~ y/:~/%_/;
     $git_upstream_version =~ s/\.(?=\.|$|lock$)/.#/g;
+
     # See which candidate version tags are present in the repo
     my @candidate_tags = ("$git_upstream_version",
                           "v$git_upstream_version",
@@ -145,16 +144,18 @@ if ( defined $user_tag ) {      # User told us the tag to archive
         print "tell me which one you want to make an orig.tar from: git deborig TAG\n";
         exit 1;
     } elsif ( scalar @version_tags < 1 ) {
-        die "couldn't find any of the following tags: ",
+        print "couldn't find any of the following tags: ",
           join(", ", @candidate_tags), "\n";
+        print "tell me a tag or branch head to make an orig.tar from: git deborig REF\n";
+        exit 1;
     } else {
         my $tag = shift @version_tags;
-        archive_tag($tag);
+        archive_ref($tag);
     }
 }
 
-sub archive_tag {
-    my $tag = shift;
+sub archive_ref {
+    my $ref = shift;
 
     # For compatibility with dgit, we have to override any
     # export-subst and export-ignore git attributes that might be set
@@ -172,7 +173,7 @@ sub archive_tag {
 
     spawn(exec => ['git', '-c', "tar.tar.${compression}.command=${compressor}",
                    'archive', "--prefix=${source}-${upstream_version}/",
-                   '-o', $orig, $tag],
+                   '-o', $orig, $ref],
           to_file => $orig,
           wait_child => 1,
           nocheck => 1);
