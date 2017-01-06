@@ -172,7 +172,7 @@ sub archive_tag {
 
     spawn(exec => ['git', '-c', "tar.tar.${compression}.command=${compressor}",
                    'archive', "--prefix=${source}-${upstream_version}/",
-                   '--format=xz', $tag],
+                   '-o', $orig, $tag],
           to_file => $orig,
           wait_child => 1,
           nocheck => 1);
