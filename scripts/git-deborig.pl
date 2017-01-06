@@ -170,7 +170,7 @@ sub archive_tag {
     print $attributes_fh "* -export-ignore\n";
     close $attributes_fh;
 
-    spawn(exec => ['git', '-c', "tar.${compression}.command=${compressor}",
+    spawn(exec => ['git', '-c', "tar.tar.${compression}.command=${compressor}",
                    'archive', "--prefix=${source}-${upstream_version}/",
                    '--format=xz', $tag],
           to_file => $orig,
