@@ -51,7 +51,7 @@ Overwrite any existing orig.tar in the parent directory.
 
 =head1 SEE ALSO
 
-dgit-maint-merge(7)
+git-archive(1), dgit-maint-merge(7)
 
 =head1 AUTHOR
 
