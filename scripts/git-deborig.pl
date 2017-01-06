@@ -65,6 +65,7 @@ no warnings "experimental::smartmatch";
 
 use Git::Wrapper;
 use Dpkg::Changelog::Parse;
+use Dpkg::IPC;
 use Dpkg::Version;
 use List::Compare;
 
@@ -95,7 +96,7 @@ my $upstream_version = $version->version();
 die "this looks like a native package .." if $version->is_native();
 
 # Default to gzip
-my $compressor = "gzip";
+my $compressor = "gzip -cn";
 my $compression = "gz";
 # Now check if we can use xz
 if ( -e "debian/source/format" ) {
@@ -104,7 +105,7 @@ if ( -e "debian/source/format" ) {
     my $format = <$format_fh>;
     chomp($format) if defined $format;
     if ( $format eq "3.0 (quilt)" ) {
-        $compressor = "xz";
+        $compressor = "xz -c";
         $compression = "xz";
     }
     close $format_fh;
@@ -169,13 +170,12 @@ sub archive_tag {
     print $attributes_fh "* -export-ignore\n";
     close $attributes_fh;
 
-    # git-archive(1) can be taught to invoke xz by adding some lines
-    # to ~/.gitconfig.  So that this script always works, we just pipe
-    # to the compression tool
-    system "git archive \\
- --prefix=$source-$upstream_version/\\
- --format=tar $tag \\
- | $compressor > $orig";
+    spawn(exec => ['git', '-c', "tar.${compression}.command=${compressor}",
+                   'archive', "--prefix=${source}-${upstream_version}/",
+                   '--format=xz', $tag],
+          to_file => $orig,
+          wait_child => 1,
+          nocheck => 1);
 
     # Restore situation before we messed around with git attributes
     if ( -e ".git/info/attributes-deborig" ) {
