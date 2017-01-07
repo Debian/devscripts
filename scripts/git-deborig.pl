@@ -174,7 +174,6 @@ sub archive_ref {
     spawn(exec => ['git', '-c', "tar.tar.${compression}.command=${compressor}",
                    'archive', "--prefix=${source}-${upstream_version}/",
                    '-o', $orig, $ref],
-          to_file => $orig,
           wait_child => 1,
           nocheck => 1);
 
