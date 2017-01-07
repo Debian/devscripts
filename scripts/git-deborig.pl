@@ -2,7 +2,7 @@
 
 # git-deborig -- try to produce Debian orig.tar using git-archive(1)
 
-# Copyright (C) 2016  Sean Whitton <spwhitton@spwhitton.name>
+# Copyright (C) 2016-2017  Sean Whitton <spwhitton@spwhitton.name>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
