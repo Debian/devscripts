@@ -11,6 +11,8 @@ devscripts (2.16.14) UNRELEASED; urgency=medium
   [ James McCoy ]
   * Check for existence of gpg/gpg2 in $PATH rather than absolute paths.
     (Closes: #850655)
+  * wrap-and-sort:
+    + Support debian/clean files.  (Closes: #850662)
 
  -- Sean Whitton <spwhitton@spwhitton.name>  Mon, 19 Dec 2016 09:51:35 +0000
 
