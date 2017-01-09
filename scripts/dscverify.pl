@@ -42,7 +42,7 @@ my $start_dir = cwd;
 my $verify_sigs = 1;
 my $use_default_keyrings = 1;
 my $verbose = 0;
-my $havegpg = first { -x $_ } qw(/usr/bin/gpg2 /usr/bin/gpg);
+my $havegpg = first { !system('sh', '-c', "command -v $_ >/dev/null 2>&1")  } qw(gpg2 gpg);
 
 sub usage {
     print <<"EOF";

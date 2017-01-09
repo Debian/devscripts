@@ -8,6 +8,10 @@ devscripts (2.16.14) UNRELEASED; urgency=medium
   * grep-excuses:
     + Ignore new --- header line in autoremovals.yaml.cgi
 
+  [ James McCoy ]
+  * Check for existence of gpg/gpg2 in $PATH rather than absolute paths.
+    (Closes: #850655)
+
  -- Sean Whitton <spwhitton@spwhitton.name>  Mon, 19 Dec 2016 09:51:35 +0000
 
 devscripts (2.16.13) unstable; urgency=medium

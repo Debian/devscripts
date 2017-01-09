@@ -42,11 +42,11 @@ DEBUGBASH=":"
 
 GPGHOME=$(readlink -f $test_dir/uscan/gpg)
 
-GPG=/usr/bin/gpg
-if [ ! -x $GPG ];then
+GPG=gpg
+if !command -v $GPG >/dev/null 2>&1; then
     echo "$GPG missing"
-    GPG=/usr/bin/gpg2
-    if [ ! -x $GPG ];then
+    GPG=gpg2
+    if ! command -v $GPG >/dev/null 2>&1; then
 	echo "$GPG missing"
 	exit 1
     fi

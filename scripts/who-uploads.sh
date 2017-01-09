@@ -69,11 +69,11 @@ DEFAULT_WHOUPLOADS_MAXUPLOADS=3
 DEFAULT_WHOUPLOADS_DATE=no
 VARS="WHOUPLOADS_KEYRINGS WHOUPLOADS_MAXUPLOADS WHOUPLOADS_DATE"
 
-GPG=/usr/bin/gpg
-if [ ! -x $GPG ];then
+GPG=gpg
+if ! command -v $GPG >/dev/null 2>&1; then
     echo "$GPG missing"
-    GPG=/usr/bin/gpg2
-    if [ ! -x $GPG ];then
+    GPG=gpg2
+    if  ! command -v $GPG >/dev/null 2>&1; then
 	echo "$GPG missing"
 	exit 1
     fi

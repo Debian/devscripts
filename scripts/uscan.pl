@@ -1753,8 +1753,8 @@ sub uscan_verbose($);
 sub uscan_debug($);
 sub dehs_verbose ($);
 
-my $havegpgv = first { -x $_ } qw(/usr/bin/gpgv2 /usr/bin/gpgv);
-my $havegpg = first { -x $_ } qw(/usr/bin/gpg2 /usr/bin/gpg);
+my $havegpgv = first { !system('sh', '-c', "command -v $_ >/dev/null 2>&1") } qw(gpgv2 gpgv);
+my $havegpg = first { !system('sh', '-c', "command -v $_ >/dev/null 2>&1") } qw(gpg2 gpg);
 uscan_die "Please install gpgv or gpgv2.\n" unless defined $havegpgv;
 uscan_die "Please install gnupg or gnupg2.\n" unless defined $havegpg;
 

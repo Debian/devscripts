@@ -31,7 +31,7 @@ use List::Util qw(first);
 our $DM_URL = "https://ftp-master.debian.org/dm.txt";
 our $KEYRING = "/usr/share/keyrings/debian-keyring.gpg:/usr/share/keyrings/debian-maintainers.gpg";
 our $TYPE = "package";
-our $GPG = first { -x $_ } qw(/usr/bin/gpg2 /usr/bin/gpg);
+our $GPG = first { !system('sh', '-c', "command -v $_ >/dev/null 2>&1") } qw(gpg2 gpg);
 our ($HELP, @ARGUMENTS, @DM_DATA, %GPG_CACHE);
 
 binmode STDIN, ':encoding(console_in)';
