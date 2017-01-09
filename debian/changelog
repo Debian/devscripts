@@ -1,4 +1,4 @@
-devscripts (2.16.14) UNRELEASED; urgency=medium
+devscripts (2.17.0) UNRELEASED; urgency=medium
 
   [ Sean Whitton ]
   * New script: git-deborig, a wrapper around git-archive(1) to generate
@@ -13,6 +13,8 @@ devscripts (2.16.14) UNRELEASED; urgency=medium
     (Closes: #850655)
   * wrap-and-sort:
     + Support debian/clean files.  (Closes: #850662)
+  * Remove bash completion for dcut, since src:dput will be providing it.
+    (Closes: #850684)
 
  -- Sean Whitton <spwhitton@spwhitton.name>  Mon, 19 Dec 2016 09:51:35 +0000
 
