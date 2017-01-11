@@ -1,4 +1,4 @@
-devscripts (2.17.0) UNRELEASED; urgency=medium
+devscripts (2.17.0) unstable; urgency=medium
 
   [ Sean Whitton ]
   * New script: git-deborig, a wrapper around git-archive(1) to generate
@@ -19,7 +19,7 @@ devscripts (2.17.0) UNRELEASED; urgency=medium
     + Verify exit status of “dpkg-source -x” and propagate failure.  (Closes:
       #850845)
 
- -- Sean Whitton <spwhitton@spwhitton.name>  Mon, 19 Dec 2016 09:51:35 +0000
+ -- James McCoy <jamessan@debian.org>  Tue, 10 Jan 2017 23:21:45 -0500
 
 devscripts (2.16.13) unstable; urgency=medium
 
