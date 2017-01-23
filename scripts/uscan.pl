@@ -1088,7 +1088,7 @@ watch file for this site without using the redirector.
   version=4
   opts="pgpmode=none" \
       https://pypi.python.org/pypi/cfn-sphere/ \
-      https://pypi.python.org/packages/source/c/cfn-sphere/\
+      https://pypi.python.org/packages/.*/.*/.*/\
       cfn-sphere-([\d\.]+).tar.gz#.* debian uupdate
 
 =head2 code.google.com
