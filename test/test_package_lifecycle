@@ -100,6 +100,7 @@ runCommandOutCmpFile() {
     eval "${COMMAND} $param"  2> ${stderrF} | \
 	grep -v File::FcntlLock | \
 	grep -v '^  *dh_' | \
+	grep -v '^dh_gencontrol debug symbol wrapper:' | \
 	sed -e "s/\`/'/g" | \
 	sed -e "s/^dpkg-buildpackage: info: /dpkg-buildpackage: /g" | \
 	sed -e "s/^dpkg-genchanges: info: /dpkg-genchanges: /g" | \
@@ -118,7 +119,7 @@ runCommandOutCmpFile() {
 test_debuild() {
   export GNUPGHOME=$GPGHOME
   cd ${WORKDIR}/package_lifecycle/test
-  COMMAND='debuild --no-conf --no-lintian --preserve-envvar=PATH --preserve-envvar=PERL5LIB --preserve-envvar=DEBFULLNAME --preserve-envvar=DEBEMAIL --preserve-envvar=GNUPGHOME'
+  COMMAND='debuild --no-conf --no-lintian --preserve-envvar=PATH --preserve-envvar=PERL5LIB --preserve-envvar=DEBFULLNAME --preserve-envvar=DEBEMAIL --preserve-envvar=GNUPGHOME --set-envvar=NO_PKG_MANGLE=1'
   cat > ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
 	 dpkg-buildpackage -us -uc
 	dpkg-buildpackage: source package test
@@ -220,7 +221,7 @@ test_debchange () {
 	
 	 -- Testophilus Testownik <tester@testity.org>
 EOS
-  runCommand "-i 'new killer app functionality'" "" "" 0
+  runCommand "-iU 'new killer app functionality'" "" "" 0
   COMMAND=cat
   runCommandOutCmpFile "debian/changelog" "../debchange.txt" "" 0
   cd ${WORKDIR}
@@ -244,7 +245,7 @@ EOS
 test_debuild2() {
   export GNUPGHOME=$GPGHOME
   cd ${WORKDIR}/package_lifecycle/test
-  COMMAND='debuild --no-conf --no-lintian --preserve-envvar=PATH --preserve-envvar=PERL5LIB --preserve-envvar=DEBFULLNAME --preserve-envvar=DEBEMAIL --preserve-envvar=GNUPGHOME'
+  COMMAND='debuild --no-conf --no-lintian --preserve-envvar=PATH --preserve-envvar=PERL5LIB --preserve-envvar=DEBFULLNAME --preserve-envvar=DEBEMAIL --preserve-envvar=GNUPGHOME --set-envvar=NO_PKG_MANGLE=1'
   cat > ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
 	 dpkg-buildpackage -us -uc
 	dpkg-buildpackage: source package test

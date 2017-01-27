@@ -1,4 +1,4 @@
-devscripts (2.17.1) UNRELEASED; urgency=medium
+devscripts (2.17.2) UNRELEASED; urgency=medium
 
   [ Osamu Aoki ]
   * uscan:
@@ -11,8 +11,12 @@ devscripts (2.17.1) UNRELEASED; urgency=medium
   [ Mattia Rizzolo ]
   * dscverify:
     + Remove reference to the long gone debian-maintainers package.
+  * test_package_lifecycle:
+    + Import patch from Ubuntu to have the test pass on their builders too:
+      filter out output from pkg-create-dbgsym's dh_gencontrol wrapper, pass
+      --set-envvar=NO_PKG_MANGLE=1 to debuild, and pass -U to debchange.
 
- -- Mattia Rizzolo <mattia@debian.org>  Fri, 27 Jan 2017 14:36:18 +0100
+ -- Mattia Rizzolo <mattia@debian.org>  Fri, 27 Jan 2017 14:56:35 +0100
 
 devscripts (2.17.0) unstable; urgency=medium
 
