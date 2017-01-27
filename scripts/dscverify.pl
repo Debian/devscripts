@@ -46,7 +46,7 @@ my $havegpg = first { !system('sh', '-c', "command -v $_ >/dev/null 2>&1")  } qw
 
 sub usage {
     print <<"EOF";
-Usage: $progname [options] dsc-or-changes-file ...
+Usage: $progname [options] changes-or-buildinfo-dsc-file ...
   Options: --help      Display this message
            --version   Display version and copyright information
            --keyring <keyring>
@@ -213,7 +213,7 @@ sub process_file {
 	}
     }
 
-    my @spec = map { split /\n/ } $out =~ /^Files:\s*\n((?:[ \t]+.*\n)+)/mgi;
+    my @spec = map { split /\n/ } $out =~ /^(?:Checksums-Md5|Files):\s*\n((?:[ \t]+.*\n)+)/mgi;
     unless (@spec) {
 	xwarn "no file spec lines in $file\n";
 	return;
@@ -342,7 +342,7 @@ sub process_file {
 
 	close FILE;
 
-	if ($filename =~ /\.dsc$/ && $verify_sigs) {
+	if ($filename =~ /\.(?:dsc|buildinfo)$/ && $verify_sigs) {
 	    $sigcheck = check_signature $filename, @rings;
 	    if ($sigcheck) {
 		xwarn "$filename failed signature check:\n$sigcheck";
@@ -358,7 +358,7 @@ sub process_file {
 }
 
 sub main {
-    @ARGV or xdie "no .changes or .dsc files specified\n";
+    @ARGV or xdie "no .changes, .buildinfo or .dsc files specified\n";
 
     my @rings;
 
@@ -416,7 +416,7 @@ sub main {
 	'verbose' => \$verbose,
     ) or do { usage; exit 1 };
 
-    @ARGV or xdie "no .changes or .dsc files specified\n";
+    @ARGV or xdie "no .changes, .buildinfo or .dsc files specified\n";
 
     @rings = get_rings @rings if $use_default_keyrings and $verify_sigs;
 
