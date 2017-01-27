@@ -15,6 +15,8 @@ devscripts (2.17.2) UNRELEASED; urgency=medium
     + Import patch from Ubuntu to have the test pass on their builders too:
       filter out output from pkg-create-dbgsym's dh_gencontrol wrapper, pass
       --set-envvar=NO_PKG_MANGLE=1 to debuild, and pass -U to debchange.
+  * debian/tests/control:
+    + Depend on build-essential.
 
  -- Mattia Rizzolo <mattia@debian.org>  Fri, 27 Jan 2017 14:56:35 +0100
 
