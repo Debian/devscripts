@@ -6,10 +6,8 @@ dscverify \- verify the validity of a Debian package
 .SH DESCRIPTION
 \fBdscverify\fR checks that the GPG signatures on the given
 \fI.changes\fR, \fI.buildinfo\fP or \fI.dsc\fR files are good signatures
-made by keys in
-the current Debian keyrings, found in the \fIdebian-keyring\fR
-and \fIdebian-maintainers\fR
-packages.  (Additional keyrings can be specified using the
+made by keys in the current Debian keyrings, found in the \fIdebian-keyring\fR
+package.  (Additional keyrings can be specified using the
 \fB--keyring\fR option any number of times.)  It then checks that the
 other files listed in the \fI.changes\fR, \fI.buildinfo\fP or \fI.dsc\fR
 files have the

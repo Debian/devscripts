@@ -5,7 +5,12 @@ devscripts (2.17.1) UNRELEASED; urgency=medium
     + PyPI packages location change.  (Closes: #851590)
 
   [ Guillem Jover ]
-  * dscverify: Add support for .buildinfo files.  (Closes: #852801)
+  * dscverify:
+    + Add support for .buildinfo files.  (Closes: #852801)
+
+  [ Mattia Rizzolo ]
+  * dscverify:
+    + Remove reference to the long gone debian-maintainers package.
 
  -- Mattia Rizzolo <mattia@debian.org>  Fri, 27 Jan 2017 14:36:18 +0100
 
