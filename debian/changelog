@@ -18,6 +18,11 @@ devscripts (2.17.1) UNRELEASED; urgency=medium
   * debian/tests/control:
     + Depend on build-essential.
 
+  [ James McCoy ]
+  * test_package_lifecycle:
+    + Ignore debhelper's new "create-stamp" output to fix the test failure.
+      (Closes: #852918)
+
  -- Mattia Rizzolo <mattia@debian.org>  Fri, 27 Jan 2017 14:56:35 +0100
 
 devscripts (2.17.0) unstable; urgency=medium

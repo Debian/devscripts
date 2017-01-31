@@ -101,6 +101,7 @@ runCommandOutCmpFile() {
 	grep -v File::FcntlLock | \
 	grep -v '^  *dh_' | \
 	grep -v '^dh_gencontrol debug symbol wrapper:' | \
+	grep -v '^  *create-stamp debian/debhelper' | \
 	sed -e "s/\`/'/g" | \
 	sed -e "s/^dpkg-buildpackage: info: /dpkg-buildpackage: /g" | \
 	sed -e "s/^dpkg-genchanges: info: /dpkg-genchanges: /g" | \
