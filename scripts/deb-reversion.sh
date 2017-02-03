@@ -62,7 +62,7 @@ err()
 
 CURDIR="$(pwd)"
 SHORTOPTS=hVo:v:ck:Ds:b
-LONGOPTS=help,version,old-version:new-version:,calculate-only,hook:,debug,string:,force-bad-version
+LONGOPTS=help,version,old-version:,new-version:,calculate-only,hook:,debug,string:,force-bad-version
 eval set -- "$(getopt -s bash -o $SHORTOPTS -l $LONGOPTS -n $PROGNAME -- "$@")"
 
 CALCULATE=0
