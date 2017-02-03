@@ -1071,8 +1071,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 	    $opt_p=1;
 	}
 
-	if (system("dpkg --compare-versions $VERSION le $NEW_VERSION" .
-		  " 2>/dev/null 1>&2")) {
+	if (version_compare($VERSION, $NEW_VERSION) == 1) {
 	    if ($opt_b or ($opt_allow_lower and $NEW_VERSION =~ /$opt_allow_lower/)) {
 		warn "$progname warning: new version ($NEW_VERSION) is less than\n" .
 		    "the current version number ($VERSION).\n";

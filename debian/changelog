@@ -7,6 +7,10 @@ devscripts (2.17.7) UNRELEASED; urgency=medium
   * debchange:
     + Target stretch-backports with --bpo.
 
+  [ Hilko Bengen ]
+  * debchange:
+    + Replace dpkg call with Dpkg::Version::compare_version  (Closes: #854366)
+
  -- Paul Wise <pabs@debian.org>  Sat, 17 Jun 2017 13:11:35 +0800
 
 devscripts (2.17.6) unstable; urgency=medium
