@@ -1,9 +1,8 @@
 #!/bin/sh
 
-# This program is designed to GPG sign a .dsc and .changes file pair
-# in the form needed for a legal Debian upload.  It is based in part
-# on dpkg-buildpackage.  It takes one argument: the name of the
-# .changes file.
+# This program is designed to GPG sign .dsc, .buildinfo, or .changes
+# files (or any combination of these) in the form needed for a legal
+# Debian upload.  It is based in part on dpkg-buildpackage.
 
 # Debian GNU/Linux debsign.  Copyright (C) 1999 Julian Gilbey.
 # Modifications to work with GPG by Joseph Carter and Julian Gilbey
@@ -60,13 +59,13 @@ mkremotefilesdir () {
 
 usage () {
     echo \
-"Usage: debsign [options] [changes, dsc or commands file]
+"Usage: debsign [options] [changes, buildinfo, dsc or commands file]
   Options:
     -r [username@]remotehost
-                    The machine on which the changes/dsc files live.
-                    A changes file with full pathname (or relative
-                    to the remote home directory) must be given in
-                    such a case
+                    The machine on which the files live. If given, then a
+                    changes file with full pathname (or relative to the
+                    remote home directory) must be given as the main
+                    argument in the rest of the command line.
     -k<keyid>       The key to use for signing
     -p<sign-command>  The command to use for signing
     -e<maintainer>  Sign using key of <maintainer> (takes precedence over -m)
@@ -78,16 +77,16 @@ usage () {
     --re-sign       Re-sign if the file is already signed.
     --no-re-sign    Don't re-sign if the file is already signed.
     --debs-dir <directory>
-                    The location of the .changes / .dsc files when called from
+                    The location of the files to be signed when called from
                     within a source tree (default "..")
     --no-conf, --noconf
                     Don't read devscripts config files;
                     must be the first option given
     --help          Show this message
     --version       Show version and copyright information
-  If a commands or dsc or changes file is specified, it and any .dsc files in
-  the changes file are signed, otherwise debian/changelog is parsed to find
-  the changes file.
+  If an explicit filename is specified, it along with any child .buildinfo and
+  .dsc files are signed. Otherwise, debian/changelog is parsed to find the
+  changes file.
 
 $MODIFIED_CONF_MSG"
 }
@@ -225,7 +224,7 @@ unsignfile() {
 # successful invocation of debsign?  We give the user the option of
 # resigning the file or accepting it as is.  Returns success if already
 # and failure if the file needs signing.  Parameters: $1=filename,
-# $2=file description for message (dsc or changes)
+# $2=file type for message (e.g. "changes", "commands")
 check_already_signed () {
     file_is_already_signed "$1" || return 1
 
@@ -736,7 +735,7 @@ case $# in
 	    exit 1
 	fi
 	if [ -n "$remotehost" ]; then
-	    echo "$PROGNAME: Need to specify a .changes, .dsc or .commands file location with -r!" >&2
+	    echo "$PROGNAME: Need to specify a remote file location when giving -r!" >&2
 	    exit 1
 	fi
 	if [ ! -r debian/changelog ]; then
@@ -818,7 +817,7 @@ case $# in
 		    commands=$1
 		    ;;
 		*)
-		    echo "$PROGNAME: Only a .changes, .dsc or .commands file is allowed as argument!" >&2
+		    echo "$PROGNAME: Only a .changes, .buildinfo, .dsc or .commands file is allowed as argument!" >&2
 		    exit 1 ;;
 	    esac
 	    dosigning
