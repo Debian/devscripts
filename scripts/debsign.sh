@@ -114,6 +114,10 @@ temp_filename() {
     echo "$filename"
 }
 
+to_bool() {
+    if "$@"; then echo true; else echo false; fi
+}
+
 movefile() {
     if [ -w "$(dirname "$2")" ]; then
 	mv -f -- "$1" "$2"
@@ -199,14 +203,24 @@ withecho () {
     "$@"
 }
 
+file_is_already_signed() {
+    test "$(head -n 1 "$1")" = "-----BEGIN PGP SIGNED MESSAGE-----"
+}
+
+unsignfile() {
+    UNSIGNED_FILE="$(temp_filename "$1" "unsigned")"
+
+    sed -e '1,/^$/d; /^$/,$d' "$1" > "$UNSIGNED_FILE"
+    movefile "$UNSIGNED_FILE" "$1"
+}
+
 # Has the dsc file already been signed, perhaps from a previous, partially
 # successful invocation of debsign?  We give the user the option of
 # resigning the file or accepting it as is.  Returns success if already
 # and failure if the file needs signing.  Parameters: $1=filename,
 # $2=file description for message (dsc or changes)
 check_already_signed () {
-    [ "`head -n 1 \"$1\"`" = "-----BEGIN PGP SIGNED MESSAGE-----" ] || \
-	return 1
+    file_is_already_signed "$1" || return 1
 
     local resign
     if [ "$opt_re_sign" = "true" ]; then
@@ -228,10 +242,7 @@ check_already_signed () {
     [ "$resign" = "true" ] || \
 	return 0
 
-    UNSIGNED_FILE="$(temp_filename "$1" "unsigned")"
-
-    sed -e '1,/^$/d; /^$/,$d' "$1" > "$UNSIGNED_FILE"
-    movefile "$UNSIGNED_FILE" "$1"
+    withecho unsignfile "$1"
     return 1
 }
 
@@ -363,6 +374,119 @@ if [ -z "$signcommand" ]; then
     exit 1
 fi
 
+ensure_local_copy() {
+    local remotehost="$1"
+    local remotefile="$2"
+    local file="$3"
+    local type="$4"
+    if [ -n "$remotehost" ]
+    then
+	withecho scp "$remotehost:$remotefile" "$file"
+    fi
+
+    if [ ! -f "$file" -o ! -r "$file" ]
+    then
+	echo "$PROGNAME: Can't find or can't read $type file $file!" >&2
+	exit 1
+    fi
+}
+
+fixup_control() {
+    local filter_out="$1"
+    local childtype="$2"
+    local parenttype="$3"
+    local child="$4"
+    local parent="$5"
+    test -r "$child" || {
+	echo "$PROGNAME: Can't read .$childtype file $child!" >&2
+	return 1
+    }
+
+    local md5=$(md5sum "$child" | cut -d' ' -f1)
+    local sha1=$(sha1sum "$child" | cut -d' ' -f1)
+    local sha256=$(sha256sum "$child" | cut -d' ' -f1)
+    perl -i -pe 'BEGIN {
+    '" \$file=\"$child\"; \$md5=\"$md5\"; "'
+    '" \$sha1=\"$sha1\"; \$sha256=\"$sha256\"; "'
+    $size=(-s $file); ($base=$file) =~ s|.*/||;
+    $infiles=0; $insha1=0; $insha256=0; $format="";
+    }
+    if(/^Format:\s+(.*)/) {
+	$format=$1;
+	die "Unrecognised .$parenttype format: $format\n"
+	    unless $format =~ /^\d+(\.\d+)*$/;
+	($major, $minor) = split(/\./, $format);
+	$major+=0;$minor+=0;
+	die "Unsupported .$parenttype format: $format\n"
+	    if('"$filter_out"');
+    }
+    /^Files:/i && ($infiles=1,$insha1=0,$insha256=0);
+    if(/^Checksums-Sha1:/i) {$insha1=1;$infiles=0;$insha256=0;}
+    elsif(/^Checksums-Sha256:/i) {
+	$insha256=1;$infiles=0;$insha1=0;
+    } elsif(/^Checksums-.*?:/i) {
+	die "Unknown checksum format: $_\n";
+    }
+    /^\s*$/ && ($infiles=0,$insha1=0,$insha256=0);
+    if ($infiles &&
+	/^ (\S+) (\d+) (\S+) (\S+) \Q$base\E\s*$/) {
+	$_ = " $md5 $size $3 $4 $base\n";
+	$infiles=0;
+    }
+    if ($insha1 &&
+	/^ (\S+) (\d+) \Q$base\E\s*$/) {
+	$_ = " $sha1 $size $base\n";
+	$insha1=0;
+    }
+    if ($insha256 &&
+	/^ (\S+) (\d+) \Q$base\E\s*$/) {
+	$_ = " $sha256 $size $base\n";
+	$insha256=0;
+    }' "$parent"
+}
+
+fixup_buildinfo() {
+    fixup_control '$major < 1 and $minor < 2' dsc buildinfo "$@"
+}
+
+fixup_changes() {
+    local childtype="$1"
+    shift
+    fixup_control '$major!=1 or $minor > 8 or $minor < 7' $childtype changes "$@"
+}
+
+withtempfile() {
+    local filetype="$1"
+    local mainfile="$2"
+    shift 2
+    local temp_file="$(temp_filename "$mainfile" "temp")"
+    cp "$mainfile" "$temp_file"
+    if "$@" "$temp_file"; then
+	if ! cmp -s "$mainfile" "$temp_file"; then
+	    # emulate output of "withecho" but on the mainfile
+	    echo " $@" "$mainfile" >&2
+	fi
+	movefile "$temp_file" "$mainfile"
+    else
+	rm "$temp_file"
+	echo "$PROGNAME: Error processing .$filetype file (see above)" >&2
+	exit 1
+    fi
+}
+
+guess_signas() {
+    if [ -n "$maint" ]
+    then maintainer="$maint"
+    # Try the new "Changed-By:" field first
+    else maintainer=`sed -n 's/^Changed-By: //p' $1`
+    fi
+    if [ -z "$maint" ]
+    then maintainer=`sed -n 's/^Maintainer: //p' $1`
+    fi
+
+    echo "${signkey:-$maintainer}"
+}
+
 dosigning() {
     # Do we have to download the changes file?
     if [ -n "$remotehost" ]
@@ -371,10 +495,12 @@ dosigning() {
 	cd "$remotefilesdir"
 
 	remotechanges=$changes
+	remotebuildinfo=$buildinfo
 	remotedsc=$dsc
 	remotecommands=$commands
 	remotedir="`perl -e 'chomp($_="'"$dsc"'"); m%/% && s%/[^/]*$%% && print'`"
 	changes=`basename "$changes"`
+	buildinfo=`basename "$buildinfo"`
 	dsc=`basename "$dsc"`
 	commands=`basename "$commands"`
 
@@ -404,113 +530,68 @@ dosigning() {
 
     if [ -n "$changes" ]
     then
-	if [ ! -f "$changes" -o ! -r "$changes" ]
-	then
-	    echo "$PROGNAME: Can't find or can't read changes file $changes!" >&2
-	    exit 1
-	fi
+	signas="$(guess_signas "$changes")"
+	hasdsc="$(to_bool grep -q `basename "$dsc"` "$changes")"
+	hasbuildinfo="$(to_bool grep -q `basename "$buildinfo"` "$changes")"
 
-	check_already_signed "$changes" "changes" && {
+	ensure_local_copy "" "" "$changes" changes
+	if check_already_signed "$changes" "changes"; then
 	   echo "Leaving current signature unchanged." >&2
-	   return
-	}
-	if [ -n "$maint" ]
-	then maintainer="$maint"
-	# Try the "Changed-By:" field first
-	else maintainer=`sed -n 's/^Changed-By: //p' $changes`
-	fi
-	if [ -z "$maintainer" ]
-	then maintainer=`sed -n 's/^Maintainer: //p' $changes`
-	fi
-
-	signas="${signkey:-$maintainer}"
-
-	# Is there a dsc file listed in the changes file?
-	if grep -q `basename "$dsc"` "$changes"
-	then
-	    if [ -n "$remotehost" ]
-	    then
-		withecho scp "$remotehost:$remotedsc" "$dsc"
-	    fi
-
-	    if [ ! -f "$dsc" -o ! -r "$dsc" ]
-	    then
-		echo "$PROGNAME: Can't find or can't read dsc file $dsc!" >&2
-		exit 1
-	    fi
-	    check_already_signed "$dsc" "dsc" || withecho signfile "$dsc" "$signas"
-	    dsc_md5=`md5sum $dsc | cut -d' ' -f1`
-	    dsc_sha1=`sha1sum $dsc | cut -d' ' -f1`
-	    dsc_sha256=`sha256sum $dsc | cut -d' ' -f1`
-
-	    temp_changes="$(temp_filename "$changes" "temp")"
-	    cp "$changes" "$temp_changes"
-	    if perl -i -pe 'BEGIN {
-		'" \$dsc_file=\"$dsc\"; \$dsc_md5=\"$dsc_md5\"; "'
-		'" \$dsc_sha1=\"$dsc_sha1\"; \$dsc_sha256=\"$dsc_sha256\"; "'
-		$dsc_size=(-s $dsc_file); ($dsc_base=$dsc_file) =~ s|.*/||;
-		$infiles=0; $insha1=0; $insha256=0; $format="";
-		}
-		if(/^Format:\s+(.*)/) {
-		    $format=$1;
-		    die "Unrecognised .changes format: $format\n"
-			unless $format =~ /^\d+(\.\d+)*$/;
-		    ($major, $minor) = split(/\./, $format);
-		    $major+=0;$minor+=0;
-		    die "Unsupported .changes format: $format\n"
-			if($major!=1 or $minor > 8 or $minor < 7);
-		}
-		/^Files:/i && ($infiles=1,$insha1=0,$insha256=0);
-		if(/^Checksums-Sha1:/i) {$insha1=1;$infiles=0;$insha256=0;}
-		elsif(/^Checksums-Sha256:/i) {
-		    $insha256=1;$infiles=0;$insha1=0;
-		} elsif(/^Checksums-.*?:/i) {
-		    die "Unknown checksum format: $_\n";
-		}
-		/^\s*$/ && ($infiles=0,$insha1=0,$insha256=0);
-		if ($infiles &&
-		    /^ (\S+) (\d+) (\S+) (\S+) \Q$dsc_base\E\s*$/) {
-		    $_ = " $dsc_md5 $dsc_size $3 $4 $dsc_base\n";
-		    $infiles=0;
-		}
-		if ($insha1 &&
-		    /^ (\S+) (\d+) \Q$dsc_base\E\s*$/) {
-		    $_ = " $dsc_sha1 $dsc_size $dsc_base\n";
-		    $insha1=0;
-		}
-		if ($insha256 &&
-		    /^ (\S+) (\d+) \Q$dsc_base\E\s*$/) {
-		    $_ = " $dsc_sha256 $dsc_size $dsc_base\n";
-		    $insha256=0;
-		}' "$temp_changes"
-	    then
-		movefile "$temp_changes" "$changes"
-	    else
-		rm "$temp_changes"
-		echo "$PROGNAME: Error processing .changes file (see above)" >&2
-		exit 1
-	    fi
-
-	    withecho signfile "$changes" "$signas"
-
-	    if [ -n "$remotehost" ]
-	    then
-		withecho scp "$changes" "$dsc" "$remotehost:$remotedir"
-		PRECIOUS_FILES=$(($PRECIOUS_FILES - 2))
-	    fi
-
-	    echo "Successfully signed dsc and changes files"
 	else
-	    withecho signfile "$changes" "$signas"
 
-	    if [ -n "$remotehost" ]
-	    then
-		withecho scp "$changes" "$remotehost:$remotedir"
-		PRECIOUS_FILES=$(($PRECIOUS_FILES - 1))
+	    if $hasbuildinfo; then
+		ensure_local_copy "$remotehost" "$remotebuildinfo" "$buildinfo" buildinfo
+		if check_already_signed "$buildinfo" "buildinfo"; then
+		   echo "Leaving current signature unchanged." >&2
+		else
+		    if $hasdsc; then
+			ensure_local_copy "$remotehost" "$remotedsc" "$dsc" dsc
+			check_already_signed "$dsc" dsc || withecho signfile "$dsc" "$signas"
+			withtempfile "buildinfo" "$buildinfo" fixup_buildinfo "$dsc"
+			withtempfile "changes" "$changes" fixup_changes dsc "$dsc"
+		    fi
+		    withecho signfile "$buildinfo" "$signas"
+		    withtempfile "changes" "$changes" fixup_changes buildinfo "$buildinfo"
+		fi
+	    elif $hasdsc; then
+		ensure_local_copy "$remotehost" "$remotedsc" "$dsc" dsc
+		check_already_signed "$dsc" dsc || withecho signfile "$dsc" "$signas"
+		withtempfile "changes" "$changes" fixup_changes dsc "$dsc"
 	    fi
 
-	    echo "Successfully signed changes file"
+	    withecho signfile "$changes" "$signas"
 	fi
+
+	case "$hasdsc $hasbuildinfo" in
+	"false false")
+	    filetypes="changes file"
+	    filessigned=1
+	    withecho_scp() { withecho scp "$changes" "$@"; }
+	    ;;
+	"true false")
+	    filetypes="dsc and changes files"
+	    filessigned=2
+	    withecho_scp() { withecho scp "$changes" "$dsc" "$@"; }
+	    ;;
+	"false true")
+	    filetypes="buildinfo and changes files"
+	    filessigned=2
+	    withecho_scp() { withecho scp "$changes" "$buildinfo" "$@"; }
+	    ;;
+	"true true")
+	    filetypes="dsc, buildinfo and changes files"
+	    filessigned=3
+	    withecho_scp() { withecho scp "$changes" "$buildinfo" "$dsc" "$@"; }
+	    ;;
+	esac
+
+	if [ -n "$remotehost" ]
+	then
+	    withecho_scp "$remotehost:$remotedir"
+	    PRECIOUS_FILES=$(($PRECIOUS_FILES - filessigned))
+	fi
+
+	echo "Successfully signed $filetypes"
     elif [ -n "$commands" ] # sign .commands file
     then
 	if [ ! -f "$commands" -o ! -r "$commands" ]
@@ -580,27 +661,13 @@ for valid format" >&2;
 
 	echo "Successfully signed commands file"
     else # only a dsc file to sign; much easier
-	if [ ! -f "$dsc" -o ! -r "$dsc" ]
-	then
-	    echo "$PROGNAME: Can't find or can't read dsc file $dsc!" >&2
-	    exit 1
-	fi
+	signas="$(guess_signas "$changes")"
 
+	ensure_local_copy "" "" "$dsc" dsc
 	check_already_signed "$dsc" dsc && {
 	    echo "Leaving current signature unchanged." >&2
 	    return
 	}
-	if [ -n "$maint" ]
-	then maintainer="$maint"
-	# Try the new "Changed-By:" field first
-	else maintainer=`sed -n 's/^Changed-By: //p' $dsc`
-	fi
-	if [ -z "$maint" ]
-	then maintainer=`sed -n 's/^Maintainer: //p' $dsc`
-	 fi
-
-	signas="${signkey:-$maintainer}"
-
 	withecho signfile "$dsc" "$signas"
 
 	if [ -n "$remotehost" ]
@@ -654,9 +721,11 @@ case $# in
 	pv="${package}_${sversion}"
 	pva="${package}_${sversion}_${arch}"
 	dsc="$debsdir/$pv.dsc"
+	buildinfo="$debsdir/$pva.buildinfo"
 	changes="$debsdir/$pva.changes"
 	if [ -n "$multiarch" -o ! -r $changes ]; then
 	    changes=$(ls "$debsdir/${package}_${sversion}_*+*.changes" "$debsdir/${package}_${sversion}_multi.changes" 2>/dev/null | head -1)
+	    # TODO: what about buildinfo?
 	    if [ -z "$multiarch" ]; then
 		if [ -n "$changes" ]; then
 		    echo "$PROGNAME: could not find normal .changes file but found multiarch file:" >&2
@@ -679,17 +748,20 @@ case $# in
 	    case "$1" in
 		*.dsc)
 		    changes=
+		    buildinfo=
 		    dsc=$1
 		    commands=
 		    ;;
 	        *.changes)
 		    changes=$1
+		    buildinfo="${changes%.changes}.buildinfo"
 		    dsc=`echo $changes | \
 			perl -pe 's/\.changes$/.dsc/; s/(.*)_(.*)_(.*)\.dsc/\1_\2.dsc/'`
 		    commands=
 		    ;;
 		*.commands)
 		    changes=
+		    buildinfo=
 		    dsc=
 		    commands=$1
 		    ;;
