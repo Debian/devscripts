@@ -334,6 +334,7 @@ sub store_if_relevant(%) {
 	my $bug_string = "Package: $pkgname\n" .
 	    $comment .  # non-empty comments always contain the trailing \n
 	    "Bug:     $args{num}\n" .
+	    "Bug-URL: https://bugs.debian.org/$args{num}\n" .
 	    "Title:   " . unhtmlsanit($args{name}) . "\n" .
 	    "Flags:   " . $flags . "\n" .
 	    (defined $args{dists} ? "Dists:  " . $dists . "\n" : "") .

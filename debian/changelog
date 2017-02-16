@@ -1,7 +1,12 @@
 devscripts (2.17.2) UNRELEASED; urgency=medium
 
+  [ James McCoy ]
   * deb-reversion:
     + Correct parsing of long-form --new-version switch.  (Closes: #853919)
+
+  [ Antonio Terceiro ]
+  * rc-alert:
+    + add bug URL to the output.
 
  -- James McCoy <jamessan@debian.org>  Thu, 02 Feb 2017 21:42:22 -0500
 
