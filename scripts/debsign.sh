@@ -27,6 +27,8 @@ set -e
 PRECIOUS_FILES=0
 PROGNAME=`basename $0`
 MODIFIED_CONF_MSG='Default settings modified by devscripts configuration files:'
+HAVE_SIGNED=""
+NUM_SIGNED=0
 
 # Temporary directories
 signingdir=""
@@ -160,11 +162,14 @@ mustsetvar () {
 # of dpkg-buildpackage, because we do not know all of the necessary
 # information when this function is read first.
 signfile () {
+    local type="$1"
+    local file="$2"
+    local signas="$3"
     local savestty=$(stty -g 2>/dev/null) || true
     mksigningdir
-    UNSIGNED_FILE="$signingdir/$(basename "$1")"
+    UNSIGNED_FILE="$signingdir/$(basename "$file")"
     ASCII_SIGNED_FILE="${UNSIGNED_FILE}.asc"
-    (cat "$1" ; echo "") > "$UNSIGNED_FILE"
+    (cat "$file" ; echo "") > "$UNSIGNED_FILE"
 
     gpgversion=`$signcommand --version | head -n 1 | cut -d' ' -f3`
     gpgmajorversion=`echo $gpgversion | cut -d. -f1`
@@ -172,7 +177,7 @@ signfile () {
 
     if [ $gpgmajorversion -gt 1 -o $gpgminorversion -ge 4 ]
     then
-	    $signcommand --local-user "$2" --clearsign \
+	    $signcommand --local-user "$signas" --clearsign \
 		--list-options no-show-policy-urls \
 		--armor --textmode --output "$ASCII_SIGNED_FILE"\
 		"$UNSIGNED_FILE" || \
@@ -182,7 +187,7 @@ signfile () {
 	      exit $SAVESTAT
 	    }
     else
-	    $signcommand --local-user "$2" --clearsign \
+	    $signcommand --local-user "$signas" --clearsign \
 		--no-show-policy-url \
 		--armor --textmode --output "$ASCII_SIGNED_FILE" \
 		"$UNSIGNED_FILE" || \
@@ -195,7 +200,9 @@ signfile () {
     stty $savestty 2>/dev/null || true
     echo
     PRECIOUS_FILES=$(($PRECIOUS_FILES + 1))
-    movefile "$ASCII_SIGNED_FILE" "$1"
+    HAVE_SIGNED="${HAVE_SIGNED:+${HAVE_SIGNED}, }$type"
+    NUM_SIGNED=$((NUM_SIGNED + 1))
+    movefile "$ASCII_SIGNED_FILE" "$file"
 }
 
 withecho () {
@@ -381,7 +388,10 @@ ensure_local_copy() {
     local type="$4"
     if [ -n "$remotehost" ]
     then
-	withecho scp "$remotehost:$remotefile" "$file"
+	if [ ! -f "$file" ]
+	then
+	    withecho scp "$remotehost:$remotefile" "$file"
+	fi
     fi
 
     if [ ! -f "$file" -o ! -r "$file" ]
@@ -487,6 +497,106 @@ guess_signas() {
     echo "${signkey:-$maintainer}"
 }
 
+maybesign_dsc() {
+    local signas="$1"
+    local remotehost="$2"
+    local remotedsc="$3"
+    local dsc="$4"
+
+    ensure_local_copy "$remotehost" "$remotedsc" "$dsc" dsc
+    if check_already_signed "$dsc" dsc; then
+	echo "Leaving current signature unchanged." >&2
+	return
+    fi
+
+    withecho signfile dsc "$dsc" "$signas"
+
+    if [ -n "$remotehost" ]
+    then
+	withecho scp "$dsc" "$remotehost:$remotedsc"
+	PRECIOUS_FILES=$(($PRECIOUS_FILES - 1))
+    fi
+}
+
+maybesign_buildinfo() {
+    local signas="$1"
+    local remotehost="$2"
+    local remotebuildinfo="$3"
+    local buildinfo="$4"
+    local remotedsc="$5"
+    local dsc="$6"
+
+    ensure_local_copy "$remotehost" "$remotebuildinfo" "$buildinfo" buildinfo
+    if check_already_signed "$buildinfo" "buildinfo"; then
+       echo "Leaving current signature unchanged." >&2
+       return
+    fi
+
+    if grep -q `basename "$dsc"` "$buildinfo"; then
+	maybesign_dsc "$signas" "$remotehost" "$remotedsc" "$dsc"
+	withtempfile buildinfo "$buildinfo" fixup_buildinfo "$dsc"
+    fi
+
+    withecho signfile buildinfo "$buildinfo" "$signas"
+
+    if [ -n "$remotehost" ]
+    then
+	withecho scp "$buildinfo" "$remotehost:$remotebuildinfo"
+	PRECIOUS_FILES=$(($PRECIOUS_FILES - 1))
+    fi
+}
+
+maybesign_changes() {
+    local signas="$1"
+    local remotehost="$2"
+    local remotechanges="$3"
+    local changes="$4"
+    local remotebuildinfo="$5"
+    local buildinfo="$6"
+    local remotedsc="$7"
+    local dsc="$8"
+
+    ensure_local_copy "$remotehost" "$remotechanges" "$changes" changes
+    if check_already_signed "$changes" "changes"; then
+	echo "Leaving current signature unchanged." >&2
+	return
+    fi
+
+    hasdsc="$(to_bool grep -q `basename "$dsc"` "$changes")"
+    hasbuildinfo="$(to_bool grep -q `basename "$buildinfo"` "$changes")"
+
+    if $hasbuildinfo; then
+	# assume that this will also sign the same dsc if it's available
+	maybesign_buildinfo "$signas" "$remotehost" \
+	    "$remotebuildinfo" "$buildinfo" \
+	    "$remotedsc" "$dsc"
+    elif $hasdsc; then
+	maybesign_dsc "$signas" "$remotehost" "$remotedsc" "$dsc"
+    fi
+
+    if $hasdsc; then
+	withtempfile changes "$changes" fixup_changes dsc "$dsc"
+    fi
+    if $hasbuildinfo; then
+	withtempfile changes "$changes" fixup_changes buildinfo "$buildinfo"
+    fi
+    withecho signfile changes "$changes" "$signas"
+
+    if [ -n "$remotehost" ]
+    then
+	withecho scp "$changes" "$remotehost:$remotechanges"
+	PRECIOUS_FILES=$(($PRECIOUS_FILES - 1))
+    fi
+}
+
+report_signed() {
+    if [ $NUM_SIGNED -eq 1 ]; then
+	echo "Successfully signed $HAVE_SIGNED file"
+    elif [ $NUM_SIGNED -gt 0 ]; then
+	echo "Successfully signed $HAVE_SIGNED files"
+    fi
+}
+
 dosigning() {
     # Do we have to download the changes file?
     if [ -n "$remotehost" ]
@@ -504,22 +614,13 @@ dosigning() {
 	dsc=`basename "$dsc"`
 	commands=`basename "$commands"`
 
-	if [ -n "$changes" ]
-	then
-	    if [ ! -f "$changes" ]
-	    then
-		withecho scp "$remotehost:$remotechanges" .
-	    fi
-	elif [ -n "$dsc" ]
-	then withecho scp "$remotehost:$remotedsc" "$dsc"
-	else withecho scp "$remotehost:$remotecommands" "$commands"
-	fi
-
 	if [ -n "$changes" ] && echo "$changes" | egrep -q '[][*?]'
 	then
+	    withecho scp "$remotehost:$remotechanges" .
 	    for changes in $changes
 	    do
 		printf "\n"
+		buildinfo="${remotedir+$remotedir/}${changes%.changes}.buildinfo"
 		dsc=`echo "${remotedir+$remotedir/}$changes" | \
 		    perl -pe 's/\.changes$/.dsc/; s/(.*)_(.*)_(.*)\.dsc/\1_\2.dsc/'`
 		dosigning;
@@ -528,71 +629,7 @@ dosigning() {
 	fi
     fi
 
-    if [ -n "$changes" ]
-    then
-	signas="$(guess_signas "$changes")"
-	hasdsc="$(to_bool grep -q `basename "$dsc"` "$changes")"
-	hasbuildinfo="$(to_bool grep -q `basename "$buildinfo"` "$changes")"
-
-	ensure_local_copy "" "" "$changes" changes
-	if check_already_signed "$changes" "changes"; then
-	   echo "Leaving current signature unchanged." >&2
-	else
-
-	    if $hasbuildinfo; then
-		ensure_local_copy "$remotehost" "$remotebuildinfo" "$buildinfo" buildinfo
-		if check_already_signed "$buildinfo" "buildinfo"; then
-		   echo "Leaving current signature unchanged." >&2
-		else
-		    if $hasdsc; then
-			ensure_local_copy "$remotehost" "$remotedsc" "$dsc" dsc
-			check_already_signed "$dsc" dsc || withecho signfile "$dsc" "$signas"
-			withtempfile "buildinfo" "$buildinfo" fixup_buildinfo "$dsc"
-			withtempfile "changes" "$changes" fixup_changes dsc "$dsc"
-		    fi
-		    withecho signfile "$buildinfo" "$signas"
-		    withtempfile "changes" "$changes" fixup_changes buildinfo "$buildinfo"
-		fi
-	    elif $hasdsc; then
-		ensure_local_copy "$remotehost" "$remotedsc" "$dsc" dsc
-		check_already_signed "$dsc" dsc || withecho signfile "$dsc" "$signas"
-		withtempfile "changes" "$changes" fixup_changes dsc "$dsc"
-	    fi
-
-	    withecho signfile "$changes" "$signas"
-	fi
-
-	case "$hasdsc $hasbuildinfo" in
-	"false false")
-	    filetypes="changes file"
-	    filessigned=1
-	    withecho_scp() { withecho scp "$changes" "$@"; }
-	    ;;
-	"true false")
-	    filetypes="dsc and changes files"
-	    filessigned=2
-	    withecho_scp() { withecho scp "$changes" "$dsc" "$@"; }
-	    ;;
-	"false true")
-	    filetypes="buildinfo and changes files"
-	    filessigned=2
-	    withecho_scp() { withecho scp "$changes" "$buildinfo" "$@"; }
-	    ;;
-	"true true")
-	    filetypes="dsc, buildinfo and changes files"
-	    filessigned=3
-	    withecho_scp() { withecho scp "$changes" "$buildinfo" "$dsc" "$@"; }
-	    ;;
-	esac
-
-	if [ -n "$remotehost" ]
-	then
-	    withecho_scp "$remotehost:$remotedir"
-	    PRECIOUS_FILES=$(($PRECIOUS_FILES - filessigned))
-	fi
-
-	echo "Successfully signed $filetypes"
-    elif [ -n "$commands" ] # sign .commands file
+    if [ -n "$commands" ] # sign .commands file
     then
 	if [ ! -f "$commands" -o ! -r "$commands" ]
 	then
@@ -600,6 +637,7 @@ dosigning() {
 	    exit 1
 	fi
 
+	ensure_local_copy "$remotehost" "$remotecommands" "$commands" commands
 	check_already_signed "$commands" commands && {
 	    echo "Leaving current signature unchanged." >&2
 	    return
@@ -651,7 +689,7 @@ for valid format" >&2;
 
 	signas="${signkey:-$maintainer}"
 
-	withecho signfile "$commands" "$signas"
+	withecho signfile commands "$commands" "$signas"
 
 	if [ -n "$remotehost" ]
 	then
@@ -659,24 +697,31 @@ for valid format" >&2;
 	    PRECIOUS_FILES=$(($PRECIOUS_FILES - 1))
 	fi
 
-	echo "Successfully signed commands file"
-    else # only a dsc file to sign; much easier
+	report_signed
+
+    elif [ -n "$changes" ]
+    then
 	signas="$(guess_signas "$changes")"
+	maybesign_changes "$signas" "$remotehost" \
+	    "$remotechanges" "$changes" \
+	    "$remotebuildinfo" "$buildinfo" \
+	    "$remotedsc" "$dsc"
+	report_signed
 
-	ensure_local_copy "" "" "$dsc" dsc
-	check_already_signed "$dsc" dsc && {
-	    echo "Leaving current signature unchanged." >&2
-	    return
-	}
-	withecho signfile "$dsc" "$signas"
+    elif [ -n "$buildinfo" ]
+    then
+	signas="$(guess_signas "$buildinfo")"
+	maybesign_buildinfo "$signas" "$remotehost" \
+	    "$remotebuildinfo" "$buildinfo" \
+	    "$remotedsc" "$dsc"
+	report_signed
 
-	if [ -n "$remotehost" ]
-	then
-	    withecho scp "$dsc" "$remotehost:$remotedsc"
-	    PRECIOUS_FILES=$(($PRECIOUS_FILES - 1))
-	fi
+    else
+	signas="$(guess_signas "$dsc")"
+	maybesign_dsc "$signas" "$remotehost" \
+	    "$remotedsc" "$dsc"
+	report_signed
 
-	echo "Successfully signed dsc file"
     fi
 }
 
@@ -725,7 +770,7 @@ case $# in
 	changes="$debsdir/$pva.changes"
 	if [ -n "$multiarch" -o ! -r $changes ]; then
 	    changes=$(ls "$debsdir/${package}_${sversion}_*+*.changes" "$debsdir/${package}_${sversion}_multi.changes" 2>/dev/null | head -1)
-	    # TODO: what about buildinfo?
+	    # TODO: dpkg-cross does not yet do buildinfo, so don't worry about it here
 	    if [ -z "$multiarch" ]; then
 		if [ -n "$changes" ]; then
 		    echo "$PROGNAME: could not find normal .changes file but found multiarch file:" >&2
@@ -750,6 +795,13 @@ case $# in
 		    changes=
 		    buildinfo=
 		    dsc=$1
+		    commands=
+		    ;;
+	        *.buildinfo)
+		    changes=
+		    buildinfo=$1
+		    dsc=`echo $buildinfo | \
+			perl -pe 's/\.buildinfo$/.dsc/; s/(.*)_(.*)_(.*)\.dsc/\1_\2.dsc/'`
 		    commands=
 		    ;;
 	        *.changes)
