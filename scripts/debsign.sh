@@ -418,7 +418,7 @@ fixup_control() {
     '" \$file=\"$child\"; \$md5=\"$md5\"; "'
     '" \$sha1=\"$sha1\"; \$sha256=\"$sha256\"; "'
     $size=(-s $file); ($base=$file) =~ s|.*/||;
-    $infiles=0; $insha1=0; $insha256=0; $format="";
+    $infiles=0; $inmd5=0; $insha1=0; $insha256=0; $format="";
     }
     if(/^Format:\s+(.*)/) {
 	$format=$1;
@@ -429,18 +429,25 @@ fixup_control() {
 	die "Unsupported .$parenttype format: $format\n"
 	    if('"$filter_out"');
     }
-    /^Files:/i && ($infiles=1,$insha1=0,$insha256=0);
-    if(/^Checksums-Sha1:/i) {$insha1=1;$infiles=0;$insha256=0;}
+    /^Files:/i && ($infiles=1,$inmd5=0,$insha1=0,$insha256=0);
+    if(/^Checksums-Sha1:/i) {$insha1=1;$infiles=0;$inmd5=0;$insha256=0;}
     elsif(/^Checksums-Sha256:/i) {
-	$insha256=1;$infiles=0;$insha1=0;
+	$insha256=1;$infiles=0;$inmd5=0;$insha1=0;
+    } elsif(/^Checksums-Md5:/i) {
+	$inmd5=1;$infiles=0;$insha1=0;$insha256=0;
     } elsif(/^Checksums-.*?:/i) {
 	die "Unknown checksum format: $_\n";
     }
-    /^\s*$/ && ($infiles=0,$insha1=0,$insha256=0);
+    /^\s*$/ && ($infiles=0,$inmd5=0,$insha1=0,$insha256=0);
     if ($infiles &&
 	/^ (\S+) (\d+) (\S+) (\S+) \Q$base\E\s*$/) {
 	$_ = " $md5 $size $3 $4 $base\n";
 	$infiles=0;
+    }
+    if ($inmd5 &&
+	/^ (\S+) (\d+) \Q$base\E\s*$/) {
+        $_ = " $md5 $size $base\n";
+        $inmd5=0;
     }
     if ($insha1 &&
 	/^ (\S+) (\d+) \Q$base\E\s*$/) {
@@ -455,7 +462,7 @@ fixup_control() {
 }
 
 fixup_buildinfo() {
-    fixup_control '$major < 1 and $minor < 2' dsc buildinfo "$@"
+    fixup_control '$major != 0 or $minor > 2' dsc buildinfo "$@"
 }
 
 fixup_changes() {
