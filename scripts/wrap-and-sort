@@ -27,8 +27,12 @@ from devscripts.control import Control
 CONTROL_LIST_FIELDS = (
     "Breaks",
     "Build-Conflicts",
+    "Build-Conflicts-Arch",
+    "Build-Conflicts-Indep",
     "Build-Depends",
+    "Build-Depends-Arch",
     "Build-Depends-Indep",
+    "Built-Using",
     "Conflicts",
     "Depends",
     "Enhances",
