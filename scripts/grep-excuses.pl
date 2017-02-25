@@ -23,6 +23,27 @@ use strict;
 use warnings;
 use File::Basename;
 
+my $yaml_broken;
+sub have_yaml()
+{
+    return ($yaml_broken ? 0 : 1) if defined $yaml_broken;
+
+    eval {
+	require YAML::Syck;
+    };
+
+    if ($@) {
+	if ($@ =~ m/^Can't locate YAML/) {
+	    $yaml_broken = 'the libyaml-syck-perl package is not installed';
+	} else {
+	    $yaml_broken = "couldn't load YAML::Syck $@";
+	}
+    } else {
+	$yaml_broken = '';
+    }
+    return $yaml_broken ? 0 : 1;
+}
+
 # Needed for --wipnity option
 
 open DEBUG, ">/dev/null" or die $!;
@@ -51,7 +72,7 @@ sub have_term_size {
 my $progname = basename($0);
 my $modified_conf_msg;
 
-my $url='https://release.debian.org/britney/update_excuses.html.gz';
+my $url='https://release.debian.org/britney/excuses.yaml';
 
 my $rmurl='https://udd.debian.org/cgi-bin/autoremovals.cgi';
 my $rmurl_yaml='https://udd.debian.org/cgi-bin/autoremovals.yaml.cgi';
@@ -277,59 +298,55 @@ sub grep_autoremovals () {
 
 grep_autoremovals() if $do_autoremovals;
 
+if (!have_yaml()) {
+    die "$progname: Unable to parse excuses: $yaml_broken\n";
+}
+
 print DEBUG "Fetching $url\n";
 
-open EXCUSES, "wget -q -O - $url | zcat |" or
-    die "$progname: wget | zcat failed: $!\n";
+my $yaml = `wget -q -O - $url`;
+if ($? == -1) {
+    die "$progname: unable to run wget: $!\n";
+} elsif ($? >> 8) {
+    die "$progname: wget exited $?\n";
+}
 
-my $item='';
-my $mainlist=0;
-my $sublist=0;
-while (<EXCUSES>) {
-    if (! $mainlist) {
-	# Have we found the start of the actual content?
-	next unless /^\s*<ul>\s*$/;
-	$mainlist=1;
-	next;
-    }
-    # Have we reached the end?
-    if (! $sublist and m%</ul>%) {
-	$mainlist=0;
-	next;
-    }
-    next unless $mainlist;
-    # Strip hyperlinks
-    my $saveline=$_;
-    s%<a\s[^>]*>%%g;
-    s%</a>%%g;
-    s%&gt;%>%g;
-    s%&lt;%<%g;
-    # New item?
-    if (! $sublist and /^\s*<li>/) {
-	s%<li>%%;
-	s%<li>%\n%g;
-	$item = $_;
-    }
-    elsif (! $sublist and /^\s*<ul>/) {
-	$sublist=1;
-    }
-    elsif ($sublist and m%</ul>%) {
-	$sublist=0;
-	# Did the last item match?
-	if ($item=~/^-?\Q$string\E\s/ or
-	    $item=~/^\s*Maintainer:\s[^\n]*\b\Q$string\E\b[^\n]*$/m) {
-	    print $item;
+my $excuses = YAML::Syck::Load($yaml);
+for my $source (@{$excuses->{sources}})
+{
+    next if $source->{source} =~ m/_pu$/;
+    if ($source->{source} =~ m/\Q$string\E/
+	|| (exists $source->{maintainer}
+	    && $source->{maintainer} =~ m/\Q$string\E/))
+    {
+	printf("%s (%s to %s)\n", $source->{source},
+	    $source->{'old-version'}, $source->{'new-version'});
+	if (exists $source->{maintainer})
+	{
+	    printf("    Maintainer: $source->{maintainer}\n");
+	}
+	my %age = %{$source->{policy_info}{age}};
+	if ($age{'current-age'} >= $age{'age-requirement'})
+	{
+	    printf("    %d days old (needed %d days)\n",
+		$age{'current-age'},
+		$age{'age-requirement'});
+	}
+	else
+	{
+	    printf("    Too young, only %d of %d days old\n",
+		$age{'current-age'},
+		$age{'age-requirement'});
+	}
+	for my $excuse (@{$source->{excuses}})
+	{
+	    $excuse =~ s@<a\s[^>]+>@@g;
+	    $excuse =~ s@</a>@@g;
+	    $excuse =~ s@&lt;@<@g;
+	    $excuse =~ s@&gt;@>@g;
+	    print "    $excuse\n";
 	}
     }
-    elsif ($sublist and /^\s*<li>/) {
-	s%<li>%    %;
-	s%<li>%\n    %g;
-	$item .= $_;
-    }
-    else {
-	warn "$progname: unrecognised line in update_excuses (line $.):\n$saveline";
-    }
 }
-close EXCUSES or die "$progname: read/zcat failed: $!\n";
 
 exit 0;
