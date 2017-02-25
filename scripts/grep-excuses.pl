@@ -306,6 +306,7 @@ while (<EXCUSES>) {
     # New item?
     if (! $sublist and /^\s*<li>/) {
 	s%<li>%%;
+	s%<li>%\n%g;
 	$item = $_;
     }
     elsif (! $sublist and /^\s*<ul>/) {
@@ -316,13 +317,12 @@ while (<EXCUSES>) {
 	# Did the last item match?
 	if ($item=~/^-?\Q$string\E\s/ or
 	    $item=~/^\s*Maintainer:\s[^\n]*\b\Q$string\E\b[^\n]*$/m) {
-	    # In case there are embedded <li> tags
-	    $item =~ s%<li>%\n    %g;
 	    print $item;
 	}
     }
     elsif ($sublist and /^\s*<li>/) {
 	s%<li>%    %;
+	s%<li>%\n    %g;
 	$item .= $_;
     }
     else {
