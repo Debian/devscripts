@@ -92,20 +92,21 @@ You are free to redistribute this code under the terms of the
 GNU General Public License, version 2 or later.
 EOF
 
-sub wipnity {
-die "$progname: Couldn't run wipnity: $term_size_broken\n" unless have_term_size();
+sub wipnity
+{
+    die "$progname: Couldn't run wipnity: $term_size_broken\n" unless have_term_size();
 
-my $columns = Term::Size::chars();
+    my $columns = Term::Size::chars();
 
-if (system("command -v w3m >/dev/null 2>&1") != 0) {
-    die "$progname: wipnity mode requires the w3m package to be installed\n";
-}
+    if (system("command -v w3m >/dev/null 2>&1") != 0) {
+	die "$progname: wipnity mode requires the w3m package to be installed\n";
+    }
 
-while( my $package=shift ) {
-    my $dump = `w3m -dump -cols $columns "https://qa.debian.org/excuses.php?package=$package"`;
-    $dump =~ s/.*(Excuse for .*)\s+Maintainer page.*/$1/ms;
-    $dump =~ s/.*(No excuse for .*)\s+Maintainer page.*/$1/ms;
-    print($dump);
+    while( my $package=shift ) {
+	my $dump = `w3m -dump -cols $columns "https://qa.debian.org/excuses.php?package=$package"`;
+	$dump =~ s/.*(Excuse for .*)\s+Maintainer page.*/$1/ms;
+	$dump =~ s/.*(No excuse for .*)\s+Maintainer page.*/$1/ms;
+	print($dump);
     }
 }
 
