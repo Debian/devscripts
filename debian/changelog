@@ -6,6 +6,9 @@ devscripts (2.17.2) UNRELEASED; urgency=medium
   * grep-excuses:
     + Improve robustness of HTML parsing to avoid issues like #856104, until
       grep-excuses is converted to consume YAML.
+  * debsign:
+    + Add support for *.buildinfo files.  Thanks to Ximin Luo and Guillem
+      Jover for the patches!  (Closes: #855282)
 
   [ Antonio Terceiro ]
   * rc-alert:

@@ -198,7 +198,7 @@ sub process_file {
 	}
     }
 
-    if ($file =~ /\.changes$/ and $out =~ /^Format:\s*(.*)$/mi) {
+    if ($file =~ /\.(changes|buildinfo)$/ and $out =~ /^Format:\s*(.*)$/mi) {
 	my $format = $1;
 	unless ($format =~ /^(\d+)\.(\d+)$/) {
 	    xwarn "$file has an unrecognised format: $format\n";
@@ -207,7 +207,8 @@ sub process_file {
 	my ($major, $minor) = split /\./, $format;
 	$major += 0;
 	$minor += 0;
-	unless ($major == 1 and $minor <= 8) {
+	if ($file =~ /\.changes$/ and ($major != 1 or $minor > 8) or
+	    $file =~ /\.buildinfo$/ and ($major != 0 or $minor > 2)) {
 	    xwarn "$file is an unsupported format: $format\n";
 	    return;
 	}
@@ -220,7 +221,7 @@ sub process_file {
     }
 
     my @checksums = map { split /\n/ } $out =~ /^Checksums-(\S+):\s*\n/mgi;
-    @checksums = grep {!/^Sha(1|256)$/i} @checksums;
+    @checksums = grep {!/^(Md5|Sha(1|256))$/i} @checksums;
     if (@checksums) {
 	xwarn "$file contains unsupported checksums:\n"
 	    . join (", ", @checksums) . "\n";
