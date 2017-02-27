@@ -146,12 +146,30 @@ test_debuild() {
 	 dpkg-source --after-build test
 	dpkg-buildpackage: full upload (original source is included)
 	Now signing changes and any dsc files...
-	 signfile test_1.0-1.dsc uscan test key (no secret) <none@debian.org>
-	
-	 signfile test_1.0-1_${_ARCH}.changes uscan test key (no secret) <none@debian.org>
-	
-	Successfully signed dsc and changes files
 EOS
+  if which dpkg-genbuildinfo >/dev/null 2>&1; then
+    cat >> ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
+	 signfile dsc test_1.0-1.dsc uscan test key (no secret) <none@debian.org>
+	
+	 fixup_buildinfo test_1.0-1.dsc test_1.0-1_${_ARCH}.buildinfo
+	 signfile buildinfo test_1.0-1_${_ARCH}.buildinfo uscan test key (no secret) <none@debian.org>
+	
+	 fixup_changes dsc test_1.0-1.dsc test_1.0-1_${_ARCH}.changes
+	 fixup_changes buildinfo test_1.0-1_${_ARCH}.buildinfo test_1.0-1_${_ARCH}.changes
+	 signfile changes test_1.0-1_${_ARCH}.changes uscan test key (no secret) <none@debian.org>
+	
+	Successfully signed dsc, buildinfo, changes files
+EOS
+  else
+    cat >> ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
+	 signfile dsc test_1.0-1.dsc uscan test key (no secret) <none@debian.org>
+	
+	 fixup_changes dsc test_1.0-1.dsc test_1.0-1_${_ARCH}.changes
+	 signfile changes test_1.0-1_${_ARCH}.changes uscan test key (no secret) <none@debian.org>
+	
+	Successfully signed dsc, changes files
+EOS
+  fi
   runCommandOutCmpFile "-k'uscan test key (no secret) <none@debian.org>'" "${WORKDIR}/package_lifecycle/debuild.txt" "" 0
   cd ${WORKDIR}
 }
@@ -272,12 +290,30 @@ test_debuild2() {
 	 dpkg-source --after-build test
 	dpkg-buildpackage: binary and diff upload (original source NOT included)
 	Now signing changes and any dsc files...
-	 signfile test_1.0-2.dsc uscan test key (no secret) <none@debian.org>
-	
-	 signfile test_1.0-2_${_ARCH}.changes uscan test key (no secret) <none@debian.org>
-	
-	Successfully signed dsc and changes files
 EOS
+  if which dpkg-genbuildinfo >/dev/null 2>&1; then
+    cat >> ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
+	 signfile dsc test_1.0-2.dsc uscan test key (no secret) <none@debian.org>
+	
+	 fixup_buildinfo test_1.0-2.dsc test_1.0-2_${_ARCH}.buildinfo
+	 signfile buildinfo test_1.0-2_${_ARCH}.buildinfo uscan test key (no secret) <none@debian.org>
+	
+	 fixup_changes dsc test_1.0-2.dsc test_1.0-2_${_ARCH}.changes
+	 fixup_changes buildinfo test_1.0-2_${_ARCH}.buildinfo test_1.0-2_${_ARCH}.changes
+	 signfile changes test_1.0-2_${_ARCH}.changes uscan test key (no secret) <none@debian.org>
+	
+	Successfully signed dsc, buildinfo, changes files
+EOS
+  else
+    cat >> ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
+	 signfile dsc test_1.0-2.dsc uscan test key (no secret) <none@debian.org>
+	
+	 fixup_changes dsc test_1.0-2.dsc test_1.0-2_${_ARCH}.changes
+	 signfile changes test_1.0-2_${_ARCH}.changes uscan test key (no secret) <none@debian.org>
+	
+	Successfully signed dsc, changes files
+EOS
+  fi
   runCommandOutCmpFile "-k'uscan test key (no secret) <none@debian.org>'" "${WORKDIR}/package_lifecycle/debuild.txt" "" 0
   cd ${WORKDIR}
 }
