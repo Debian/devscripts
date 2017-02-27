@@ -208,7 +208,8 @@ sub process_file {
 	$major += 0;
 	$minor += 0;
 	if ($file =~ /\.changes$/ and ($major != 1 or $minor > 8) or
-	    $file =~ /\.buildinfo$/ and ($major != 0 or $minor > 2)) {
+	    $file =~ /\.buildinfo$/ and (($major != 0 or $minor > 2) and
+	                                 ($major != 1 or $minor > 0))) {
 	    xwarn "$file is an unsupported format: $format\n";
 	    return;
 	}

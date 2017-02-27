@@ -462,7 +462,7 @@ fixup_control() {
 }
 
 fixup_buildinfo() {
-    fixup_control '$major != 0 or $minor > 2' dsc buildinfo "$@"
+    fixup_control '($major != 0 or $minor > 2) and ($major != 1 or $minor > 0)' dsc buildinfo "$@"
 }
 
 fixup_changes() {
