@@ -325,18 +325,21 @@ for my $source (@{$excuses->{sources}})
 	{
 	    printf("    Maintainer: $source->{maintainer}\n");
 	}
-	my %age = %{$source->{policy_info}{age}};
-	if ($age{'current-age'} >= $age{'age-requirement'})
+	if (exists $source->{policy_info})
 	{
-	    printf("    %d days old (needed %d days)\n",
-		$age{'current-age'},
-		$age{'age-requirement'});
-	}
-	else
-	{
-	    printf("    Too young, only %d of %d days old\n",
-		$age{'current-age'},
-		$age{'age-requirement'});
+	    my %age = %{$source->{policy_info}{age}};
+	    if ($age{'current-age'} >= $age{'age-requirement'})
+	    {
+		printf("    %d days old (needed %d days)\n",
+		    $age{'current-age'},
+		    $age{'age-requirement'});
+	    }
+	    else
+	    {
+		printf("    Too young, only %d of %d days old\n",
+		    $age{'current-age'},
+		    $age{'age-requirement'});
+	    }
 	}
 	for my $excuse (@{$source->{excuses}})
 	{
