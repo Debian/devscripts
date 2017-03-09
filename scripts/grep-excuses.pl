@@ -314,12 +314,11 @@ if ($? == -1) {
 my $excuses = YAML::Syck::Load($yaml);
 for my $source (@{$excuses->{sources}})
 {
-    next if $source->{source} =~ m/_pu$/;
-    if ($source->{source} eq $string
+    if ($source->{'item-name'} eq $string
 	|| (exists $source->{maintainer}
 	    && $source->{maintainer} =~ m/\b\Q$string\E\b/))
     {
-	printf("%s (%s to %s)\n", $source->{source},
+	printf("%s (%s to %s)\n", $source->{'item-name'},
 	    $source->{'old-version'}, $source->{'new-version'});
 	if (exists $source->{maintainer})
 	{
