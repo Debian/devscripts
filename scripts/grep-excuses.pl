@@ -315,9 +315,9 @@ my $excuses = YAML::Syck::Load($yaml);
 for my $source (@{$excuses->{sources}})
 {
     next if $source->{source} =~ m/_pu$/;
-    if ($source->{source} =~ m/\Q$string\E/
+    if ($source->{source} eq $string
 	|| (exists $source->{maintainer}
-	    && $source->{maintainer} =~ m/\Q$string\E/))
+	    && $source->{maintainer} =~ m/\b\Q$string\E\b/))
     {
 	printf("%s (%s to %s)\n", $source->{source},
 	    $source->{'old-version'}, $source->{'new-version'});
