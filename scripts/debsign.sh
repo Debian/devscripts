@@ -797,7 +797,7 @@ case $# in
 		exit 1
 	    fi
 	fi
-	derive_childinfo "$changes" dsc
+	derive_childfile "$changes" dsc
 	derive_childfile "$changes" buildinfo
 	dosigning;
 	;;
