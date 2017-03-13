@@ -496,7 +496,7 @@ guess_signas() {
     # Try the new "Changed-By:" field first
     else maintainer=`sed -n 's/^Changed-By: //p' $1`
     fi
-    if [ -z "$maint" ]
+    if [ -z "$maintainer" ]
     then maintainer=`sed -n 's/^Maintainer: //p' $1`
     fi
 
