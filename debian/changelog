@@ -3,6 +3,8 @@ devscripts (2.17.3) UNRELEASED; urgency=medium
   * debsign:
     + Fix auto-detection of the signer.  Regression introduced in 2.17.2.
       (Closes: #857537)
+    + Determine the names of related files from the file listings in
+      .changes/.buildinfo.  (Closes: #857536)
 
  -- James McCoy <jamessan@debian.org>  Sun, 12 Mar 2017 22:19:34 -0400
 

@@ -626,9 +626,8 @@ dosigning() {
 	    for changes in $changes
 	    do
 		printf "\n"
-		buildinfo="${remotedir+$remotedir/}${changes%.changes}.buildinfo"
-		dsc=`echo "${remotedir+$remotedir/}$changes" | \
-		    perl -pe 's/\.changes$/.dsc/; s/(.*)_(.*)_(.*)\.dsc/\1_\2.dsc/'`
+		derive_childfile "$changes" buildinfo
+		derive_childfile "$changes" dsc
 		dosigning;
 	    done
 	    exit 0;
@@ -731,6 +730,15 @@ for valid format" >&2;
     fi
 }
 
+derive_childfile() {
+    local base="$1"
+    local ext="$2"
+
+    mustsetvar "$ext" \
+      "$(sed -n '/^\(Checksum\|Files\)/,/^\(Checksum\|Files\)/s/.*[ 	]\([^ ]*\.'"$ext"'\)$/\1/p' "$base" | head -n1)" \
+      "$ext filename from $base"
+}
+
 # If there is a command-line parameter, it is the name of a .changes file
 # If not, we must be at the top level of a source tree and will figure
 # out its name from debian/changelog
@@ -769,10 +777,7 @@ case $# in
 	fi
 
 	sversion=`echo "$version" | perl -pe 's/^\d+://'`
-	pv="${package}_${sversion}"
 	pva="${package}_${sversion}_${arch}"
-	dsc="$debsdir/$pv.dsc"
-	buildinfo="$debsdir/$pva.buildinfo"
 	changes="$debsdir/$pva.changes"
 	if [ -n "$multiarch" -o ! -r $changes ]; then
 	    changes=$(ls "$debsdir/${package}_${sversion}_*+*.changes" "$debsdir/${package}_${sversion}_multi.changes" 2>/dev/null | head -1)
@@ -792,6 +797,8 @@ case $# in
 		exit 1
 	    fi
 	fi
+	derive_childinfo "$changes" dsc
+	derive_childfile "$changes" buildinfo
 	dosigning;
 	;;
 
@@ -806,15 +813,13 @@ case $# in
 	        *.buildinfo)
 		    changes=
 		    buildinfo=$1
-		    dsc=`echo $buildinfo | \
-			perl -pe 's/\.buildinfo$/.dsc/; s/(.*)_(.*)_(.*)\.dsc/\1_\2.dsc/'`
+		    derive_childfile "$buildinfo" dsc
 		    commands=
 		    ;;
 	        *.changes)
 		    changes=$1
-		    buildinfo="${changes%.changes}.buildinfo"
-		    dsc=`echo $changes | \
-			perl -pe 's/\.changes$/.dsc/; s/(.*)_(.*)_(.*)\.dsc/\1_\2.dsc/'`
+		    derive_childfile "$changes" buildinfo
+		    derive_childfile "$changes" dsc
 		    commands=
 		    ;;
 		*.commands)
