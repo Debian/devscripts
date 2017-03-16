@@ -506,10 +506,8 @@ guess_signas() {
 maybesign_dsc() {
     local signas="$1"
     local remotehost="$2"
-    local remotedsc="$3"
-    local dsc="$4"
+    local dsc="$3"
 
-    ensure_local_copy "$remotehost" "$remotedsc" "$dsc" dsc
     if check_already_signed "$dsc" dsc; then
 	echo "Leaving current signature unchanged." >&2
 	return
@@ -519,7 +517,7 @@ maybesign_dsc() {
 
     if [ -n "$remotehost" ]
     then
-	withecho scp "$dsc" "$remotehost:$remotedsc"
+	withecho scp "$dsc" "$remotehost:$remotedir"
 	PRECIOUS_FILES=$(($PRECIOUS_FILES - 1))
     fi
 }
@@ -527,19 +525,16 @@ maybesign_dsc() {
 maybesign_buildinfo() {
     local signas="$1"
     local remotehost="$2"
-    local remotebuildinfo="$3"
-    local buildinfo="$4"
-    local remotedsc="$5"
-    local dsc="$6"
+    local buildinfo="$3"
+    local dsc="$4"
 
-    ensure_local_copy "$remotehost" "$remotebuildinfo" "$buildinfo" buildinfo
     if check_already_signed "$buildinfo" "buildinfo"; then
        echo "Leaving current signature unchanged." >&2
        return
     fi
 
-    if grep -q `basename "$dsc"` "$buildinfo"; then
-	maybesign_dsc "$signas" "$remotehost" "$remotedsc" "$dsc"
+    if [ -n "$dsc" ]; then
+	maybesign_dsc "$signas" "$remotehost" "$dsc"
 	withtempfile buildinfo "$buildinfo" fixup_buildinfo "$dsc"
     fi
 
@@ -547,7 +542,7 @@ maybesign_buildinfo() {
 
     if [ -n "$remotehost" ]
     then
-	withecho scp "$buildinfo" "$remotehost:$remotebuildinfo"
+	withecho scp "$buildinfo" "$remotehost:$remotedir"
 	PRECIOUS_FILES=$(($PRECIOUS_FILES - 1))
     fi
 }
@@ -555,29 +550,23 @@ maybesign_buildinfo() {
 maybesign_changes() {
     local signas="$1"
     local remotehost="$2"
-    local remotechanges="$3"
-    local changes="$4"
-    local remotebuildinfo="$5"
-    local buildinfo="$6"
-    local remotedsc="$7"
-    local dsc="$8"
+    local changes="$3"
+    local buildinfo="$4"
+    local dsc="$5"
 
-    ensure_local_copy "$remotehost" "$remotechanges" "$changes" changes
     if check_already_signed "$changes" "changes"; then
 	echo "Leaving current signature unchanged." >&2
 	return
     fi
 
-    hasdsc="$(to_bool grep -q `basename "$dsc"` "$changes")"
-    hasbuildinfo="$(to_bool grep -q `basename "$buildinfo"` "$changes")"
+    hasdsc="$(to_bool [ -n "$dsc" ])"
+    hasbuildinfo="$(to_bool [ -n "$buildinfo" ])"
 
     if $hasbuildinfo; then
 	# assume that this will also sign the same dsc if it's available
-	maybesign_buildinfo "$signas" "$remotehost" \
-	    "$remotebuildinfo" "$buildinfo" \
-	    "$remotedsc" "$dsc"
+	maybesign_buildinfo "$signas" "$remotehost" "$buildinfo" "$dsc"
     elif $hasdsc; then
-	maybesign_dsc "$signas" "$remotehost" "$remotedsc" "$dsc"
+	maybesign_dsc "$signas" "$remotehost" "$dsc"
     fi
 
     if $hasdsc; then
@@ -590,7 +579,7 @@ maybesign_changes() {
 
     if [ -n "$remotehost" ]
     then
-	withecho scp "$changes" "$remotehost:$remotechanges"
+	withecho scp "$changes" "$remotehost:$remotedir"
 	PRECIOUS_FILES=$(($PRECIOUS_FILES - 1))
     fi
 }
@@ -614,20 +603,26 @@ dosigning() {
 	remotebuildinfo=$buildinfo
 	remotedsc=$dsc
 	remotecommands=$commands
-	remotedir="`perl -e 'chomp($_="'"$dsc"'"); m%/% && s%/[^/]*$%% && print'`"
 	changes=`basename "$changes"`
 	buildinfo=`basename "$buildinfo"`
 	dsc=`basename "$dsc"`
 	commands=`basename "$commands"`
 
+	if [ -n "$changes" ]; then
+	    if [ ! -f "$changes" ]; then
+		# Special handling for changes to support supplying a glob
+		# and downloading all matching changes files (c.f., #491627)
+		withecho scp "$remotehost:$remotechanges" .
+	    fi
+	fi
+
 	if [ -n "$changes" ] && echo "$changes" | egrep -q '[][*?]'
 	then
-	    withecho scp "$remotehost:$remotechanges" .
 	    for changes in $changes
 	    do
+		dsc=
+		buildinfo=
 		printf "\n"
-		derive_childfile "$changes" buildinfo
-		derive_childfile "$changes" dsc
 		dosigning;
 	    done
 	    exit 0;
@@ -636,12 +631,6 @@ dosigning() {
 
     if [ -n "$commands" ] # sign .commands file
     then
-	if [ ! -f "$commands" -o ! -r "$commands" ]
-	then
-	    echo "$PROGNAME: Can't find or can't read commands file $commands!" >&2
-	    exit 1
-	fi
-
 	ensure_local_copy "$remotehost" "$remotecommands" "$commands" commands
 	check_already_signed "$commands" commands && {
 	    echo "Leaving current signature unchanged." >&2
@@ -698,7 +687,7 @@ for valid format" >&2;
 
 	if [ -n "$remotehost" ]
 	then
-	    withecho scp "$commands" "$remotehost:$remotecommands"
+	    withecho scp "$commands" "$remotehost:$remotedir"
 	    PRECIOUS_FILES=$(($PRECIOUS_FILES - 1))
 	fi
 
@@ -706,25 +695,39 @@ for valid format" >&2;
 
     elif [ -n "$changes" ]
     then
+	ensure_local_copy "$remotehost" "$remotechanges" "$changes" changes
+	derive_childfile "$changes" dsc
+	if [ -n "$dsc" ]
+	then
+	    ensure_local_copy "$remotehost" "${remotedir}$dsc" "$dsc" dsc
+	fi
+	derive_childfile "$changes" buildinfo
+	if [ -n "$buildinfo" ]
+	then
+	    ensure_local_copy "$remotehost" "${remotedir}$buildinfo" "$buildinfo" buildinfo
+	fi
 	signas="$(guess_signas "$changes")"
 	maybesign_changes "$signas" "$remotehost" \
-	    "$remotechanges" "$changes" \
-	    "$remotebuildinfo" "$buildinfo" \
-	    "$remotedsc" "$dsc"
+	    "$changes" "$buildinfo" "$dsc"
 	report_signed
 
     elif [ -n "$buildinfo" ]
     then
+	ensure_local_copy "$remotehost" "$remotebuildinfo" "$buildinfo" buildinfo
+	derive_childfile "$buildinfo" dsc
+	if [ -n "$dsc" ]
+	then
+	    ensure_local_copy "$remotehost" "${remotedir}$dsc" "$dsc" dsc
+	fi
 	signas="$(guess_signas "$buildinfo")"
 	maybesign_buildinfo "$signas" "$remotehost" \
-	    "$remotebuildinfo" "$buildinfo" \
-	    "$remotedsc" "$dsc"
+	    "$buildinfo" "$dsc"
 	report_signed
 
     else
+	ensure_local_copy "$remotehost" "$remotehost" "$remotedsc" dsc
 	signas="$(guess_signas "$dsc")"
-	maybesign_dsc "$signas" "$remotehost" \
-	    "$remotedsc" "$dsc"
+	maybesign_dsc "$signas" "$remotehost" "$dsc"
 	report_signed
 
     fi
@@ -734,9 +737,27 @@ derive_childfile() {
     local base="$1"
     local ext="$2"
 
-    mustsetvar "$ext" \
-      "$(sed -n '/^\(Checksum\|Files\)/,/^\(Checksum\|Files\)/s/.*[ 	]\([^ ]*\.'"$ext"'\)$/\1/p' "$base" | head -n1)" \
-      "$ext filename from $base"
+    local fname dir
+    fname="$(sed -n '/^\(Checksum\|Files\)/,/^\(Checksum\|Files\)/s/.*[ 	]\([^ ]*\.'"$ext"'\)$/\1/p' "$base" | head -n1)"
+    get_dirname "$base" dir
+    eval "$ext=\"${dir}$fname\""
+}
+
+get_dirname() {
+    local path="$1"
+    local varname="$2"
+
+    local d
+    d="$(dirname "$path")"
+
+    if [ "$d" = "." ]
+    then
+	d=""
+    else
+	d="$d/"
+    fi
+
+    eval "$varname=\"$d\""
 }
 
 # If there is a command-line parameter, it is the name of a .changes file
@@ -803,35 +824,28 @@ case $# in
 	;;
 
     *)	while [ $# -gt 0 ]; do
+	    changes=
+	    buildinfo=
+	    dsc=
+	    commands=
 	    case "$1" in
 		*.dsc)
-		    changes=
-		    buildinfo=
 		    dsc=$1
-		    commands=
 		    ;;
 	        *.buildinfo)
-		    changes=
 		    buildinfo=$1
-		    derive_childfile "$buildinfo" dsc
-		    commands=
 		    ;;
 	        *.changes)
 		    changes=$1
-		    derive_childfile "$changes" buildinfo
-		    derive_childfile "$changes" dsc
-		    commands=
 		    ;;
 		*.commands)
-		    changes=
-		    buildinfo=
-		    dsc=
 		    commands=$1
 		    ;;
 		*)
 		    echo "$PROGNAME: Only a .changes, .buildinfo, .dsc or .commands file is allowed as argument!" >&2
 		    exit 1 ;;
 	    esac
+	    get_dirname "$1" remotedir
 	    dosigning
 	    shift
 	done
