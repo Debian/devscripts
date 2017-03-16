@@ -1,4 +1,4 @@
-devscripts (2.17.3) UNRELEASED; urgency=medium
+devscripts (2.17.3) unstable; urgency=medium
 
   * debsign:
     + Fix auto-detection of the signer.  Regression introduced in 2.17.2.
@@ -8,7 +8,7 @@ devscripts (2.17.3) UNRELEASED; urgency=medium
     + In remote mode, ensure files are copied locally before trying to use
       them.  Regression introduced in 2.17.2.  (Closes: #857716)
 
- -- James McCoy <jamessan@debian.org>  Sun, 12 Mar 2017 22:19:34 -0400
+ -- James McCoy <jamessan@debian.org>  Wed, 15 Mar 2017 23:28:00 -0400
 
 devscripts (2.17.2) unstable; urgency=medium
 
