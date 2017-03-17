@@ -739,8 +739,13 @@ derive_childfile() {
 
     local fname dir
     fname="$(sed -n '/^\(Checksum\|Files\)/,/^\(Checksum\|Files\)/s/.*[ 	]\([^ ]*\.'"$ext"'\)$/\1/p' "$base" | head -n1)"
-    get_dirname "$base" dir
-    eval "$ext=\"${dir}$fname\""
+    if [ -n "$fname" ]
+    then
+	get_dirname "$base" dir
+	eval "$ext=\"${dir}$fname\""
+    else
+	eval "$ext="
+    fi
 }
 
 get_dirname() {
