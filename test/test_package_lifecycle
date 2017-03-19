@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 # Copyright (C) 2015, Nicholas Bamber <nicholas@periapt.co.uk>
 #
@@ -28,7 +28,7 @@ fi
 
 . "${0%/*}/shunit2-helper-functions.sh"
 
-GPGHOME=$(readlink -f ${WORKDIR}/uscan/gpg)
+GPGHOME=$(mktemp -d -p /tmp gpg.XXXXX)
 
 oneTimeSetUp () {
 	GPG=gpg
@@ -44,19 +44,16 @@ oneTimeSetUp () {
 	PRIVATE_KEY=${WORKDIR}/uscan/PRIVATE_KEY.asc
 	PUBLIC_KEY=${WORKDIR}/uscan/PUBLIC_KEY.asc
 
-	rm -rf $GPGHOME
-	mkdir -p $GPGHOME
-	chmod 700 $GPGHOME
 	PRIVATE_KEYRING=$GPGHOME/secring.gpg
 	PUBLIC_KEYRING=$GPGHOME/pubring.gpg
 
-	$GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+	$GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
 		--output $PRIVATE_KEYRING --dearmor $PRIVATE_KEY
 
-	$GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+	$GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
 	    --output $PUBLIC_KEYRING --dearmor $PUBLIC_KEY
 
-	$GPG --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+	$GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
 	    --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
 	    --list-keys --verbose
 
@@ -335,7 +332,7 @@ EOS
 oneTimeTearDown () {
 	rm -rf ${WORKDIR}/package_lifecycle
 	gpgconf --homedir "$GPGHOME" --kill gpg-agent
-	rm -rf $GPGHOME
+	rm -rf "$GPGHOME"
 }
 
 cd ${WORKDIR}

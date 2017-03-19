@@ -40,7 +40,7 @@ DEBUGBASH=":"
 #DEBUGBASH="bash -i"
 #DEBUGBASH="ls -laR"
 
-GPGHOME=$(readlink -f $test_dir/uscan/gpg)
+GPGHOME=$(mktemp -d -p /tmp gpg.XXXXX)
 
 GPG=gpg
 if !command -v $GPG >/dev/null 2>&1; then
@@ -59,16 +59,13 @@ PUBLIC_KEYRING=$GPGHOME/pubring.gpg
 
 
 oneTimeSetUp () {
-    rm -rf $GPGHOME
-    mkdir -p $GPGHOME
-    chmod 700 $GPGHOME
-    $GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+    $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
 	    --output $PRIVATE_KEYRING --dearmor $PRIVATE_KEY
 
-    $GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+    $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
 	    --output $PUBLIC_KEYRING --dearmor $PUBLIC_KEY
 
-    $GPG --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+    $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
 	    --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
 	    --list-keys --verbose
 
@@ -209,7 +206,7 @@ END
     if [ "$KEYMODE" = "ASC" ]; then
 	cp -f $test_dir/uscan/PUBLIC_KEY.asc debian/upstream/signing-key.asc
     else
-	cp -f $test_dir/uscan/gpg/pubring.gpg debian/upstream/signing-key.pgp
+	cp -f "$GPGHOME/pubring.gpg" debian/upstream/signing-key.pgp
     fi
 }
 
@@ -262,17 +259,17 @@ makeUpstreamTar() {
 	esac
     case $SIGMODE in
 	ASC) # make $NEWTAR.asc
-	    $GPG --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+	    $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
 		--secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
 		--armor --detach-sign $NEWTAR
 	    ;;
 	BIN) #make $NEWTAR.sig
-	    $GPG --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+	    $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
 		--secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
 		--detach-sign $NEWTAR
 	    ;;
 	SELF) #make $NEWTAR.gpg
-	    $GPG --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+	    $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
 		--secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
 		--sign $NEWTAR
     esac
@@ -996,7 +993,7 @@ opts="component=baz,pgpsigurlmangle=s/$/.asc/" @@@url@@@ (?:.*)/baz@ANY_VERSION@
 
 oneTimeTearDown () {
     gpgconf --homedir "$GPGHOME" --verbose --kill gpg-agent
-    rm -rf ${GPGHOME}
+    rm -rf "$GPGHOME"
 }
 
 
