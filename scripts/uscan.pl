@@ -885,7 +885,16 @@ watch file:
       Text-CSV_XS-(.+)\.tar\.gz \
       debian uupdate
 
-can be rewritten in an alternative shorthand form:
+can be rewritten in an alternative shorthand form only with a single string
+covering URL and filename:
+
+  version=4
+  opts="pgpsigurlmangle=s%$%.sig%" \
+      http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-(.+)\.tar\.gz \
+      debian uupdate
+
+In version=4, initial white spaces are dropped.  Thus, this alternative
+shorthand form can also be written as:
 
   version=4
   opts="pgpsigurlmangle=s%$%.sig%" \
@@ -893,8 +902,8 @@ can be rewritten in an alternative shorthand form:
       Text-CSV_XS-(.+)\.tar\.gz \
       debian uupdate
 
-Please note that I<matching-pattern> of the first example doesn't have
-directory and the subtle difference of a space before the tailing B<\>.
+Please note that the subtle difference of a space before the tailing B<\>
+between the first and the last examples.
 
 =head2 HTTP site (funny version)
 
@@ -1065,6 +1074,9 @@ B<filenamemangle>:
   opts="filenamemangle=s%(?:.*?)?v?(\d[\d.]*)\.tar\.gz%<project>-$1.tar.gz%" \
       https://github.com/<user>/<project>/tags \
       (?:.*?/)?v?(\d[\d.]*)\.tar\.gz debian uupdate
+
+Note that the "tags" downloads do not include Git submodules in the .tar.gz
+whilst the "releases" do.
 
 =head2 PyPI
 
