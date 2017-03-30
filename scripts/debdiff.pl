@@ -367,7 +367,7 @@ if (! $type) {
 }
 
 # We collect up the individual deb information in the hashes
-# %deb1 and %deb2, each key of which is a .deb name and each value is
+# %debs1 and %debs2, each key of which is a .deb name and each value is
 # a list ref.  Note we need to use our, not my, as we will be symbolically
 # referencing these variables
 my @CommonDebs = ();
