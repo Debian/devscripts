@@ -902,7 +902,7 @@ shorthand form can also be written as:
       Text-CSV_XS-(.+)\.tar\.gz \
       debian uupdate
 
-Please note that the subtle difference of a space before the tailing B<\>
+Please note the subtle difference of a space before the tailing B<\>
 between the first and the last examples.
 
 =head2 HTTP site (funny version)
