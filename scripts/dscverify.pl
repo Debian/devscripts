@@ -28,6 +28,7 @@ use Cwd;
 use Fcntl;
 use Digest::MD5;
 use Dpkg::IPC;
+use File::HomeDir;
 use File::Spec;
 use File::Temp;
 use File::Basename;
@@ -94,6 +95,7 @@ sub get_rings {
     my @rings = @_;
     my @keyrings = qw(/usr/share/keyrings/debian-keyring.gpg
 	    /usr/share/keyrings/debian-maintainers.gpg);
+    $ENV{HOME} = File::HomeDir->my_home;
     if (defined $ENV{HOME} && -r "$ENV{HOME}/.gnupg/trustedkeys.gpg") {
 	unshift(@keyrings, "$ENV{HOME}/.gnupg/trustedkeys.gpg");
     }

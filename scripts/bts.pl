@@ -47,6 +47,7 @@ use strict;
 use warnings;
 use File::Basename;
 use File::Copy;
+use File::HomeDir;
 use File::Path qw(make_path rmtree);
 use File::Spec;
 use File::Temp qw/tempfile/;
@@ -173,6 +174,7 @@ my @valid_severities=qw(wishlist minor normal important
 
 my $browser;  # Will set if necessary
 
+$ENV{HOME} = File::HomeDir->my_home;
 my $cachedir = $ENV{XDG_CACHE_HOME} || File::Spec->catdir($ENV{HOME}, '.cache');
 $cachedir = File::Spec->catdir($cachedir, 'devscripts', 'bts');
 

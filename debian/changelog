@@ -12,6 +12,9 @@ devscripts (2.17.6) UNRELEASED; urgency=medium
   [ Paul Wise ]
   * chdist:
     + add support for running aptitude
+  * Make various scripts work when HOME is unset:
+    bts chdist debcommit dscverify grep-excuses
+    namecheck rc-alert svnpath wnpp-alert
 
  -- Osamu Aoki <osamu@debian.org>  Fri, 31 Mar 2017 02:03:30 +0900
 

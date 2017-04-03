@@ -40,7 +40,7 @@ Provide a usage message.
 
 =item B<-d>, B<--data-dir> I<DIR>
 
-Choose data directory (default: F<$HOME/.chdist/>).
+Choose data directory (default: F<~/.chdist/>).
 
 =item B<-a>, B<--arch> I<ARCH>
 
@@ -143,6 +143,7 @@ use warnings;
 no if $] >= 5.018, 'warnings', 'experimental::smartmatch';
 use feature 'switch';
 use File::Copy qw(cp);
+use File::HomeDir;
 use File::Path qw(make_path);
 use File::Basename;
 use Getopt::Long qw(:config gnu_compat bundling require_order);
@@ -181,7 +182,7 @@ License, version 2 or (at your option) any later version.
 EOF
 
 my $arch;
-my $datadir = $ENV{'HOME'} . '/.chdist';
+my $datadir = File::HomeDir->my_home . '/.chdist';
 
 GetOptions(
   "h|help"       => \$help,

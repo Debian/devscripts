@@ -185,6 +185,7 @@ use strict;
 use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use Cwd;
 use File::Basename;
+use File::HomeDir;
 use File::Temp;
 my $progname = basename($0);
 
@@ -460,7 +461,7 @@ sub getprog {
     }
 
     # Test for this file to avoid interactive prompting from svk.
-    if (-d "$ENV{HOME}/.svk/local") {
+    if (-d File::HomeDir->my_home."/.svk/local") {
 	# svk has no useful directories so try to run it.
 	my $svkpath=`svk info . 2>/dev/null| grep -i '^Depot Path:' | cut -d ' ' -f 3`;
 	if (length $svkpath) {
