@@ -6,7 +6,7 @@ _chdist ()
 {
   local cur=$2 prev=$3
   local options='--help -h --data-dir -d --arch -a'
-  local commands='create apt apt-get apt-cache apt-rdepends
+  local commands='create apt apt-get apt-cache apt-rdepends aptitude
            src2bin bin2src
        compare-packages compare-bin-packages
        compare-versions compare-bin-versions
@@ -31,7 +31,7 @@ _chdist ()
     -@(-help|h)|list)
         return 0
     ;;
-    create|apt|apt-get|apt-cache|apt-rdepends|src2bin|bin2src|compare-packages|compare-bin-packages|compare-versions|compare-bin-versions|grep-dctrl-packages|grep-dctrl-sources)
+    create|apt|apt-get|apt-cache|apt-rdepends|aptitude|src2bin|bin2src|compare-packages|compare-bin-packages|compare-versions|compare-bin-versions|grep-dctrl-packages|grep-dctrl-sources)
         COMPREPLY=( $( compgen -W "$dists" -- $cur ) )
     return 0
   esac

@@ -80,6 +80,10 @@ Run B<apt-file> inside I<DIST>
 
 Run B<apt-rdepends> inside I<DIST>
 
+=item B<aptitude> I<DIST> [...]
+
+Run B<aptitude> inside I<DIST>
+
 =item B<src2bin> I<DIST SRCPKG>
 
 List binary packages for I<SRCPKG> in I<DIST>
@@ -724,6 +728,9 @@ given ($command) {
     }
     when ('apt-rdepends') {
 	aptcmd('apt-rdepends', @ARGV);
+    }
+    when ('aptitude') {
+	aptcmd('aptitude', @ARGV);
     }
     when ('bin2src') {
 	bin2src(@ARGV);
