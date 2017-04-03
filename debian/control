@@ -46,6 +46,7 @@ Package: devscripts
 Architecture: any
 Multi-Arch: foreign
 Depends: dpkg-dev (>= 1.17.6),
+         libfile-homedir-perl,
          ${misc:Depends},
          ${perl:Depends},
          ${python3:Depends},
