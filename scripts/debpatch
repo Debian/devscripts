@@ -62,6 +62,9 @@ def read_dch_patch(dch_patch):
     # this should be true all the time in practice
     source_version = str(Changelog(source_str, 1)[0].version)
     target = Changelog(target_str, 1)[0]
+    if source_version == str(target.version):
+        # TODO: it could be possible to deal with this, but is a bit complex
+        raise ValueError("don't (yet) know how to deal with d/changelog patch that edits the same version")
     return source_version, target
 
 def apply_dch_patch(source_file, current, patch_name, old_version, target, dry_run):
