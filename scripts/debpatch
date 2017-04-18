@@ -20,6 +20,7 @@ Depends on dpkg-dev, devscripts, python3-unidiff, quilt.
 """
 
 import argparse
+import email.utils
 import hashlib
 import io
 import logging
@@ -30,6 +31,9 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
+
+from debian.changelog import Changelog, ChangeBlock
 
 dirname = os.path.dirname
 basename = os.path.basename
@@ -39,22 +43,6 @@ C = subprocess.check_call
 DCH_DUMMY_TAIL = "\n -- debpatch dummy tool <infinity0@debian.org>  Thu, 01 Jan 1970 00:00:00 +0000\n\n"
 TRY_ENCODINGS = ["utf-8", "latin-1"]
 DISTRIBUTION_DEFAULT = "experimental"
-
-def parse_dch(dch_str, *args):
-    return subprocess.run(
-        ["dpkg-parsechangelog", "-l-", "-c1"] + list(args),
-        input=dch_str,
-        check=True,
-        universal_newlines=True,
-        stdout=subprocess.PIPE,
-        ).stdout.rstrip()
-
-def read_dch(dch_str):
-    dch = {}
-    for i in ("Version", "Distribution", "Urgency", "Maintainer"):
-        dch[i] = parse_dch(dch_str, "-S"+i)
-    dch["Changes"] = "".join(parse_dch(dch_str, "-SChanges").splitlines(True)[3:])
-    return dch
 
 def is_dch(path):
     return (basename(path) == 'changelog'
@@ -72,68 +60,42 @@ def read_dch_patch(dch_patch):
     target_str = hunk_lines_to_str(hunk.target_lines())
     # here we assume the debdiff has enough context to see the previous version
     # this should be true all the time in practice
-    source_version = parse_dch(source_str, "-SVersion")
-    target = read_dch(target_str)
+    source_version = str(Changelog(source_str, 1)[0].version)
+    target = Changelog(target_str, 1)[0]
     return source_version, target
 
 def apply_dch_patch(source_file, current, patch_name, old_version, target, dry_run):
-    # Do not change this text, unless you also add logic to detect markers from
-    # previously-released versions.
-    marker = "Patch %s applied by debpatch(1)." % patch_name
-    if marker in current["Changes"]:
-        logging.info("patch %s already applied to d/changelog", patch_name)
-        return target["Version"]
-
+    target_version = str(target.version)
     dch_args = []
     dch_env = dict(os.environ)
 
-    if target["Distribution"] == "UNRELEASED":
-        # UNRELEASED causes hard-to-reason-about behaviours in dch, let's avoid that
-        newdist = current["Distribution"] if current["Distribution"] != "UNRELEASED" else DISTRIBUTION_DEFAULT
-        logging.info("using distribution '%s' instead of 'UNRELEASED'", newdist)
-        target["Distribution"] = newdist
-
-    if not old_version or not target["Version"].startswith(old_version):
-        logging.warn("don't know how to reapply version-change %s to %s" %
-            (old_version, target["Version"]))
-        version = subprocess.check_output(["sh", "-c",
-            "EDITOR=cat dch -n 2>/dev/null | dpkg-parsechangelog -l- -SVersion"
-            ]).decode("utf-8").rstrip()
+    if not old_version or not target_version.startswith(old_version):
+        logging.warn("don't know how to rebase version-change (%s => %s) onto %s" %
+            (old_version, target_version, old_version))
+        newlog = subprocess.getoutput("EDITOR=cat dch -n 2>/dev/null").rstrip()
+        version = str(Changelog(newlog, 1)[0].version)
         logging.warn("using version %s based on `dch -n`; feel free to make me smarter", version)
     else:
-        version_suffix = target["Version"][len(old_version):]
-        version = current["Version"] + version_suffix
+        version_suffix = target_version[len(old_version):]
+        version = str(current[0].version) + version_suffix
         logging.info("using version %s based on suffix %s", version, version_suffix)
 
     if dry_run:
         return version
 
-    dch_args += ["-v", version]
-    dch_args += ["--force-distribution", "-D", target["Distribution"]]
-    dch_args += ["-u", target["Urgency"]]
-    if "Maintainer" in target:
-        dch_env["DEBEMAIL"] = target["Maintainer"]
-        del dch_env["DEBFULLNAME"]
+    current._blocks.insert(0, target)
+    current.set_version(version)
 
-    changes = target["Changes"]
-    if changes.lstrip().startswith("["):
-        changes = "\n" + changes
-
-    token = "DEBPATCH PLACEHOLDER %s DELETEME" % random.randint(0, 2**64)
-    shutil.copy(source_file, source_file + ".debpatch.bak")
+    shutil.copy(source_file, source_file + ".new")
     try:
-        C(["dch", "-c", source_file] + dch_args + [token])
-        C(["dch", "-c", source_file, "-a", marker], )
-        C(["sed", "-e", "/%s/c\\\n%s" % (token, changes.replace("\n", "\\\n")), "-i", source_file])
+        with open(source_file + ".new", "w") as fp:
+            current.write_to_open_file(fp)
+        os.rename(source_file + ".new", source_file)
     except:
-        os.rename(source_file, source_file + ".debpatch.err")
         logging.warn("failed to patch %s", source_file)
-        logging.warn("half-applied changes in %s", source_file + ".debpatch.err")
+        logging.warn("half-applied changes in %s", source_file + ".new")
         logging.warn("current working directory is %s", os.getcwd())
-        os.rename(source_file + ".debpatch.bak", source_file)
         raise
-    else:
-        os.unlink(source_file + ".debpatch.bak")
 
 def call_patch(patch_str, *args, check=True, **kwargs):
     return subprocess.run(
@@ -152,34 +114,27 @@ def check_patch(patch_str, *args, **kwargs):
         stderr=subprocess.DEVNULL,
         **kwargs).returncode == 0
 
-def apply_patch_str(patch_name, patch_str):
-    if check_patch(patch_str, "-N"):
-        call_patch(patch_str)
-        logging.info("patch %s applies!", patch_name)
-    elif check_patch(patch_str, "-R"):
-        logging.info("patch %s already applied", patch_name)
-    else:
-        call_patch(patch_str, "--dry-run")
-        raise ValueError("patch %s doesn't apply!", patch_name)
-
 def debpatch(patch, patch_name, args):
-    if len(patch_name) > 60:
-        # this messes with our dch "already applied" logic detection, sorry
-        raise ValueError("pick a shorter patch name; sorry")
-
     # don't change anything if...
     dry_run = args.target_version
+
+    with open(args.changelog) as fp:
+        current = Changelog(fp.read())
 
     changelog = list(filter(lambda x: is_dch(x.path), patch))
     if not changelog:
         logging.info("no debian/changelog in patch: %s" % args.patch_file)
         old_version = None
-        target = {
-            "Version": None,
-            "Distribution": DISTRIBUTION_DEFAULT,
-            "Urgency": "low",
-            "Changes": "  * Rebase patch %s." % patch_name,
-        }
+        target = ChangeBlock(
+            package = current[0].package,
+            author = "%s <%s>" % (os.getenv("DEBFULLNAME"), os.getenv("DEBEMAIL")),
+            date = email.utils.formatdate(time.time(), localtime=True),
+            version = None,
+            distributions = args.distribution,
+            urgency = "low",
+            changes = ["", "  * Rebase patch %s." % patch_name, ""],
+        )
+        target.add_trailing_line("")
     elif len(changelog) > 1:
         raise ValueError("more than one debian/changelog patch???")
     else:
@@ -189,22 +144,31 @@ def debpatch(patch, patch_name, args):
     if args.source_version:
         if old_version:
             print(old_version)
-        return
+        return False
 
     if not dry_run:
-        apply_patch_str(patch_name, str(patch))
+        patch_str = str(patch)
+        if check_patch(patch_str, "-N"):
+            call_patch(patch_str)
+            logging.info("patch %s applies!", patch_name)
+        elif check_patch(patch_str, "-R"):
+            logging.warn("patch %s already applied", patch_name)
+            return False
+        else:
+            call_patch(patch_str, "--dry-run", "-f")
+            raise ValueError("patch %s doesn't apply!", patch_name)
 
     # only apply d/changelog patch if the rest of the patch applied
-    with open(args.changelog) as fp:
-        current = read_dch(fp.read())
     new_version = apply_dch_patch(args.changelog, current, patch_name, old_version, target, dry_run)
     if args.target_version:
         print(new_version)
-        return
+        return False
 
     if args.repl:
         import code
         code.interact(local=locals())
+
+    return True
 
 def main(args):
     parser = argparse.ArgumentParser(
@@ -213,6 +177,9 @@ def main(args):
         help='Output more information')
     parser.add_argument('-c', '--changelog', default='debian/changelog',
         help='Path to debian/changelog; default: %(default)s')
+    parser.add_argument('-D', '--distribution', default='experimental',
+        help='Distribution to use, if the patch doesn\'t already contain a '
+             'changelog; default: %(default)s')
     parser.add_argument('--repl', action="store_true",
         help="Run the python REPL after processing.")
     parser.add_argument('--source-version', action="store_true",
@@ -283,8 +250,8 @@ def main(args):
             C(["dpkg-source", "-x", "--skip-patches", args.orig_dsc_or_dir, builddir], stdout=stdout)
             origdir = os.getcwd()
             os.chdir(builddir)
-            debpatch(patch, patch_name, args)
-            if dry_run:
+            did_patch = debpatch(patch, patch_name, args)
+            if dry_run or not did_patch:
                 return
             os.chdir(origdir)
             try:
