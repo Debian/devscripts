@@ -268,7 +268,7 @@ This is substituted by the typical archive file extension regex (non-capturing).
 
 This is substituted by the typical signature file extension regex (non-capturing).
 
-  (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)\.(?:asc|pgp|gpg|sig)
+  (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)\.(?:asc|pgp|gpg|sig|sign)
 
 =back
 
@@ -689,8 +689,8 @@ tarball href and the signature file is tried to be downloaded from it.
 
 If the B<pgpsigurlmangle> rule doesn't exist, B<uscan> warns user if the
 matching upstream signature file is available from the same URL with their
-filename being suffixed by the 4 common suffix B<asc>, B<gpg>, B<pgp>, and
-B<sig>. (You can avoid this warning by setting B<pgpmode=none>.)
+filename being suffixed by the 4 common suffix B<asc>, B<gpg>, B<pgp>, B<sig>
+and B<sign>. (You can avoid this warning by setting B<pgpmode=none>.)
 
 If the signature file is downloaded, the downloaded upstream tarball is checked
 for its authenticity against the downloaded signature file using the keyring
@@ -885,7 +885,16 @@ watch file:
       Text-CSV_XS-(.+)\.tar\.gz \
       debian uupdate
 
-can be rewritten in an alternative shorthand form:
+can be rewritten in an alternative shorthand form only with a single string
+covering URL and filename:
+
+  version=4
+  opts="pgpsigurlmangle=s%$%.sig%" \
+      http://www.cpan.org/modules/by-module/Text/Text-CSV_XS-(.+)\.tar\.gz \
+      debian uupdate
+
+In version=4, initial white spaces are dropped.  Thus, this alternative
+shorthand form can also be written as:
 
   version=4
   opts="pgpsigurlmangle=s%$%.sig%" \
@@ -893,8 +902,8 @@ can be rewritten in an alternative shorthand form:
       Text-CSV_XS-(.+)\.tar\.gz \
       debian uupdate
 
-Please note that I<matching-pattern> of the first example doesn't have
-directory and the subtle difference of a space before the tailing B<\>.
+Please note the subtle difference of a space before the tailing B<\>
+between the first and the last examples.
 
 =head2 HTTP site (funny version)
 
@@ -1066,6 +1075,9 @@ B<filenamemangle>:
       https://github.com/<user>/<project>/tags \
       (?:.*?/)?v?(\d[\d.]*)\.tar\.gz debian uupdate
 
+Note that the "tags" downloads do not include Git submodules in the .tar.gz
+whilst the "releases" do.
+
 =head2 PyPI
 
 For PyPI based projects, pypi.debian.net runs a redirector which allows a
@@ -1088,7 +1100,7 @@ watch file for this site without using the redirector.
   version=4
   opts="pgpmode=none" \
       https://pypi.python.org/pypi/cfn-sphere/ \
-      https://pypi.python.org/packages/source/c/cfn-sphere/\
+      https://pypi.python.org/packages/.*/.*/.*/\
       cfn-sphere-([\d\.]+).tar.gz#.* debian uupdate
 
 =head2 code.google.com
@@ -1753,8 +1765,8 @@ sub uscan_verbose($);
 sub uscan_debug($);
 sub dehs_verbose ($);
 
-my $havegpgv = first { -x $_ } qw(/usr/bin/gpgv2 /usr/bin/gpgv);
-my $havegpg = first { -x $_ } qw(/usr/bin/gpg2 /usr/bin/gpg);
+my $havegpgv = first { !system('sh', '-c', "command -v $_ >/dev/null 2>&1") } qw(gpgv2 gpgv);
+my $havegpg = first { !system('sh', '-c', "command -v $_ >/dev/null 2>&1") } qw(gpg2 gpg);
 uscan_die "Please install gpgv or gpgv2.\n" unless defined $havegpgv;
 uscan_die "Please install gnupg or gnupg2.\n" unless defined $havegpg;
 
@@ -3542,7 +3554,7 @@ EOF
     my $signature_available;
     if (($options{'pgpmode'} eq 'default' or $options{'pgpmode'} eq 'auto') and $signature == 1) {
 	uscan_verbose "Start checking for common possible upstream OpenPGP signature files\n";
-	foreach my $suffix (qw(asc gpg pgp sig)) {
+	foreach my $suffix (qw(asc gpg pgp sig sign)) {
 	    my $sigrequest = HTTP::Request->new('HEAD' => "$upstream_url.$suffix");
 	    my $sigresponse = $user_agent->request($sigrequest);
 	    if ($sigresponse->is_success()) {
@@ -4166,7 +4178,7 @@ sub process_watchfile ($$$$)
 	# Handle @PACKAGE@ @ANY_VERSION@ @ARCHIVE_EXT@ substitutions
 	my $any_version = '[-_]?(\d[\-+\.:\~\da-zA-Z]*)';
 	my $archive_ext = '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)';
-	my $signature_ext = $archive_ext . '\.(?:asc|pgp|gpg|sig)';
+	my $signature_ext = $archive_ext . '\.(?:asc|pgp|gpg|sig|sign)';
 	s/\@PACKAGE\@/$package/g;
 	s/\@ANY_VERSION\@/$any_version/g;
 	s/\@ARCHIVE_EXT\@/$archive_ext/g;

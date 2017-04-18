@@ -24,6 +24,7 @@ use warnings;
 use Devscripts::Packages;
 use File::Basename;
 use File::Copy qw(move);
+use File::HomeDir;
 use File::Path qw(make_path);
 use File::Spec;
 use Getopt::Long qw(:config bundling permute no_getopt_compat);
@@ -34,6 +35,7 @@ sub human_flags($);
 sub unhtmlsanit($);
 sub dt_parse_request($);
 
+$ENV{HOME} = File::HomeDir->my_home;
 my $cachedir = $ENV{XDG_CACHE_HOME} || File::Spec->catdir($ENV{HOME}, '.cache');
 $cachedir = File::Spec->catdir($cachedir, 'devscripts', 'rc-alert');
 
@@ -334,6 +336,7 @@ sub store_if_relevant(%) {
 	my $bug_string = "Package: $pkgname\n" .
 	    $comment .  # non-empty comments always contain the trailing \n
 	    "Bug:     $args{num}\n" .
+	    "Bug-URL: https://bugs.debian.org/$args{num}\n" .
 	    "Title:   " . unhtmlsanit($args{name}) . "\n" .
 	    "Flags:   " . $flags . "\n" .
 	    (defined $args{dists} ? "Dists:  " . $dists . "\n" : "") .

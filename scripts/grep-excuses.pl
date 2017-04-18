@@ -22,6 +22,7 @@ use 5.006;
 use strict;
 use warnings;
 use File::Basename;
+use File::HomeDir;
 
 # Needed for --wipnity option
 
@@ -57,7 +58,7 @@ my $rmurl='https://udd.debian.org/cgi-bin/autoremovals.cgi';
 my $rmurl_yaml='https://udd.debian.org/cgi-bin/autoremovals.yaml.cgi';
 
 # No longer use these - see bug#309802
-my $cachedir = $ENV{'HOME'}."/.devscripts_cache/";
+my $cachedir = File::HomeDir->my_home."/.devscripts_cache/";
 my $cachefile = $cachedir . basename($url);
 unlink $cachefile if -f $cachefile;
 
@@ -256,7 +257,7 @@ sub grep_autoremovals () {
 	    }
 	    next;
 	}
-	if (m%^$% || m%^\#%) {
+	if (m%^$% || m%^\#% || m{^---$}) {
 	    next;
 	}
 	warn "$progname: unprocessed line $. in $rmurl_yaml:\n$_";
@@ -306,6 +307,7 @@ while (<EXCUSES>) {
     # New item?
     if (! $sublist and /^\s*<li>/) {
 	s%<li>%%;
+	s%<li>%\n%g;
 	$item = $_;
     }
     elsif (! $sublist and /^\s*<ul>/) {
@@ -316,13 +318,12 @@ while (<EXCUSES>) {
 	# Did the last item match?
 	if ($item=~/^-?\Q$string\E\s/ or
 	    $item=~/^\s*Maintainer:\s[^\n]*\b\Q$string\E\b[^\n]*$/m) {
-	    # In case there are embedded <li> tags
-	    $item =~ s%<li>%\n    %g;
 	    print $item;
 	}
     }
     elsif ($sublist and /^\s*<li>/) {
 	s%<li>%    %;
+	s%<li>%\n    %g;
 	$item .= $_;
     }
     else {

@@ -63,6 +63,8 @@ my $modified_conf_msg;
 my @warnings;
 
 # Predeclare functions
+sub setDebuildHook;
+sub setDpkgHook;
 sub system_withecho(@);
 sub run_hook ($$);
 sub fatal($);
@@ -174,6 +176,7 @@ my $preserve_env=0;
 my %save_vars;
 my $root_command='';
 my $run_lintian=1;
+my $lintian_exists=0;
 my @dpkg_extra_opts=();
 my @lintian_extra_opts=();
 my @lintian_opts=();
@@ -187,8 +190,20 @@ my $username='';
 my @hooks = (qw(dpkg-buildpackage clean dpkg-source build binary dpkg-genchanges
 		final-clean lintian signing post-dpkg-buildpackage));
 my %hook;
-$hook{@hooks} = ('') x @hooks;
-
+@hook{@hooks} = ('') x @hooks;
+# dpkg-buildpackage runs all hooks in the source tree, while debuild runs some
+# in the parent directory.  Use %externalHook to check which run out of tree
+my %externalHook;
+@externalHook{@hooks} = (0) x @hooks;
+$externalHook{lintian} = 1;
+$externalHook{signing} = 1;
+$externalHook{'post-dpkg-buildpackage'} = 1;
+# Track which hooks are run by dpkg-buildpackage vs. debuild
+my %dpkgHook;
+@dpkgHook{@hooks} = (1) x @hooks;
+$dpkgHook{lintian} = 0;
+$dpkgHook{signing} = 0;
+$dpkgHook{'post-dpkg-buildpackage'} = 0;
 
 # First handle private options from cvs-debuild
 my ($cvsdeb_file, $cvslin_file);
@@ -331,7 +346,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     for my $hookname (@hooks) {
 	my $config_name = uc "debuild_${hookname}_hook";
 	$config_name =~ tr/-/_/;
-	$hook{$hookname} = $config_vars{$config_name};
+	setDebuildHook($hookname, $config_vars{$config_name});
     }
 
     # Now parse the opts lists
@@ -561,7 +576,8 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
 	    unless (defined ($opt = shift)) {
 		fatal "$arg requires an argument,\nrun $progname --help for usage information";
 	    }
-	    $hook{$argkey} = $opt;
+
+	    setDebuildHook($argkey, $opt);
 	    next;
 	}
 
@@ -573,21 +589,24 @@ my @preserve_vars = qw(TERM HOME LOGNAME PGPPATH GNUPGHOME GPG_AGENT_INFO
 		fatal "unknown hook option $arg,\nrun $progname --help for usage information";
 	    }
 
-	    $hook{$argkey} = $opt;
+	    setDebuildHook($argkey, $opt);
 	    next;
 	}
 
-	if ($arg =~ /^--hook-(sign|done)=(.*)$/) {
+	if ($arg =~ /^--hook-(check|sign|done)=(.*)$/) {
 	    my $name = $1;
 	    my $opt = $2;
 	    unless (defined($opt)) {
 		fatal "$arg requires an argmuent,\nrun $progname --help for usage information";
 	    }
-	    if ($name eq 'sign') {
-		$hook{signing} = $opt;
+	    if ($name eq 'check') {
+		setDpkgHook('lintian', $opt);
+	    }
+	    elsif ($name eq 'sign') {
+		setDpkgHook('signing', $opt);
 	    }
 	    else {
-		$hook{'post-dpkg-buildpackage'} = $opt;
+		setDpkgHook('post-dpkg-buildpackage', $opt);
 	    }
 	    next;
 	}
@@ -729,7 +748,6 @@ my %debuild2dpkg = (
     'binary' => 'binary',
     'dpkg-genchanges' => 'changes',
     'final-clean' => 'postclean',
-    'lintian' => 'check',
 );
 
 for my $h_name (@hooks) {
@@ -754,6 +772,7 @@ foreach (@dpkg_extra_opts) {
     $_ eq '-uc' and $signchanges=0, next;
     $_ eq '-ap' and $usepause=1, next;
     /^-a(.*)/ and $targetarch=$1, push(@dpkg_opts, $_), next;
+    $_ eq '-tc' and push(@dpkg_opts, $_), next;
     /^-t(.*)/ and $targetgnusystem=$1, push(@dpkg_opts, $_), next; # Ditto
     $_ eq '-b' and $binaryonly=$_, $binarytarget='binary',
 	push(@dpkg_opts, $_), next;
@@ -804,6 +823,7 @@ while ($_=shift) {
     $_ eq '-ap' and $usepause=1, next;
     /^-a(.*)/ and $targetarch=$1, push(@dpkg_opts, $_),
 	next;
+    $_ eq '-tc' and push(@dpkg_opts, $_), next;
     /^-t(.*)/ and $targetgnusystem=$1, next;
     $_ eq '-b' and $binaryonly=$_, $binarytarget='binary',
 	push(@dpkg_opts, $_), next;
@@ -863,6 +883,7 @@ if (@ARGV) {
 	}
 	shift;
 	push(@lintian_opts, @ARGV);
+	undef @ARGV;
     }
 }
 
@@ -962,6 +983,9 @@ if (@ARGV) {
     }
 }
 else {
+    if ($run_lintian && system('command -v lintian >/dev/null 2>&1') == 0) {
+	$lintian_exists = 1;
+    }
     # We'll need to be a bit cleverer to determine the changes file name;
     # see below
     $build="${pkg}_${sversion}_${arch}.build";
@@ -973,10 +997,6 @@ else {
     open STDOUT, ">&BUILD" or fatal "can't reopen stdout: $!";
     open STDERR, ">&BUILD" or fatal "can't reopen stderr: $!";
 
-    if ($run_lintian) {
-	push(@dpkg_opts, '--check-command=lintian',
-	    map { "--check-option=$_" } @lintian_opts);
-    }
     system_withecho('dpkg-buildpackage', @dpkg_opts);
 
     chdir '..' or fatal "can't chdir: $!";
@@ -993,6 +1013,16 @@ else {
 	push (@warnings, "Ubuntu merge policy: when merging Ubuntu packages with Debian, -v must be used") unless $since;
 	push (@warnings, "Ubuntu merge policy: when merging Ubuntu packages with Debian, changelog must describe the remaining Ubuntu changes")
 	    unless $ch =~ /Changes:.*(remaining|Ubuntu)(.|\n )*(differen|changes)/is;
+    }
+
+    run_hook('lintian', $run_lintian && $lintian_exists);
+
+    if ($run_lintian && $lintian_exists) {
+	$<=$>=$uid;  # Give up on root privileges if we can
+	$(=$)=$gid;
+	print "Now running lintian...\n";
+	system('lintian', @lintian_extra_opts, @lintian_opts, $changes);
+	print "Finished running lintian.\n";
     }
 
     # They've insisted.  Who knows why?!
@@ -1049,6 +1079,36 @@ else {
 exit 0;
 
 ###### Subroutines
+
+sub setDebuildHook() {
+    my ($name, $val) = @_;
+
+    unless (grep /^$name$/, @hooks) {
+	fatal "unknown hook $name,\nrun $progname --help for usage information";
+    }
+
+    if ($externalHook{$name} && $dpkgHook{$name} && $val) {
+	$hook{$name} = 'cd ..; '.$val;
+    }
+    else {
+	$hook{$name} = $val;
+    }
+}
+
+sub setDpkgHook() {
+    my ($name, $val) = @_;
+
+    unless (grep /^$name$/, @hooks) {
+	fatal "unknown hook $name,\nrun $progname --help for usage information";
+    }
+
+    if ($externalHook{$name} && !$dpkgHook{$name} && $val) {
+	$hook{$name} = 'cd ..; '.$val;
+    }
+    else {
+	$hook{$name} = $val;
+    }
+}
 
 sub system_withecho(@) {
     print STDERR " ", join(" ", @_), "\n";

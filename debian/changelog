@@ -1,4 +1,186 @@
-devscripts (2.16.10) UNRELEASED; urgency=medium
+devscripts (2.17.6) UNRELEASED; urgency=medium
+
+  [ Osamu Aoki ]
+  * uscan:
+    + Update manpage on the github.com behavior and the alternative
+      shorthand form.  (Closes: #836507, #859089)
+
+  [ Adam D. Barratt ]
+  * uscan: fix a typo in the manpage
+  * debdiff: fix a typo
+
+  [ Paul Wise ]
+  * chdist:
+    + add support for running aptitude
+  * debcheckout:
+    + handle cgit URLs too. Thanks to Rhonda for the suggestion.
+  * Make various scripts work when HOME is unset:
+    bts chdist debcommit dscverify grep-excuses
+    namecheck rc-alert svnpath wnpp-alert
+
+  [ Ximin Luo ]
+  * debpatch:
+    + New script, Apply a debdiff to a Debian source package. (Closes: #845659)
+
+ -- Osamu Aoki <osamu@debian.org>  Fri, 31 Mar 2017 02:03:30 +0900
+
+devscripts (2.17.5) unstable; urgency=medium
+
+  * Create GNUPGHOME in /tmp to fix CI failures due to long path names.
+
+ -- James McCoy <jamessan@debian.org>  Sat, 18 Mar 2017 21:18:46 -0400
+
+devscripts (2.17.4) unstable; urgency=medium
+
+  * debsign:
+    + Don't try to sign a buildinfo file when one isn't listed in the
+      changes/dsc.  (Closes: #857964)
+
+ -- James McCoy <jamessan@debian.org>  Thu, 16 Mar 2017 22:41:27 -0400
+
+devscripts (2.17.3) unstable; urgency=medium
+
+  * debsign:
+    + Fix auto-detection of the signer.  Regression introduced in 2.17.2.
+      (Closes: #857537)
+    + Determine the names of related files from the file listings in
+      .changes/.buildinfo.  (Closes: #857536)
+    + In remote mode, ensure files are copied locally before trying to use
+      them.  Regression introduced in 2.17.2.  (Closes: #857716)
+
+ -- James McCoy <jamessan@debian.org>  Wed, 15 Mar 2017 23:28:00 -0400
+
+devscripts (2.17.2) unstable; urgency=medium
+
+  [ James McCoy ]
+  * deb-reversion:
+    + Correct parsing of long-form --new-version switch.  (Closes: #853919)
+  * grep-excuses:
+    + Improve robustness of HTML parsing to avoid issues like #856104, until
+      grep-excuses is converted to consume YAML.
+  * debsign:
+    + Add support for *.buildinfo files.  Thanks to Ximin Luo and Guillem
+      Jover for the patches!  (Closes: #855282)
+  * debian/tests/control: Add mozilla-devscripts to Depends, as needed by
+    mk-origtargz's tests.
+
+  [ Antonio Terceiro ]
+  * rc-alert:
+    + Add bug URL to the output.
+
+  [ Guillem Jover ]
+  * wrap-and-sort:
+    + Deal with Build-Conflicts-{Arch,Indep}, Build-Depends-Arch and
+      Built-Using fields.  (Closes: #855433)
+
+  [ Mattia Rizzolo ]
+  * Remove Ryan Niebur from Uploaders after a request from the MIA Team.
+    Thank you for all your past contributions!  (Closes: #856374)
+
+ -- James McCoy <jamessan@debian.org>  Sun, 05 Mar 2017 22:23:37 -0500
+
+devscripts (2.17.1) unstable; urgency=medium
+
+  [ Osamu Aoki ]
+  * uscan:
+    + PyPI packages location change.  (Closes: #851590)
+
+  [ Guillem Jover ]
+  * dscverify:
+    + Add support for .buildinfo files.  (Closes: #852801)
+
+  [ Mattia Rizzolo ]
+  * dscverify:
+    + Remove reference to the long gone debian-maintainers package.
+  * test_package_lifecycle:
+    + Import patch from Ubuntu to have the test pass on their builders too:
+      filter out output from pkg-create-dbgsym's dh_gencontrol wrapper, pass
+      --set-envvar=NO_PKG_MANGLE=1 to debuild, and pass -U to debchange.
+  * debian/tests/control:
+    + Depend on build-essential.
+
+  [ James McCoy ]
+  * test_package_lifecycle:
+    + Ignore debhelper's new "create-stamp" output to fix the test failure.
+      (Closes: #852918)
+
+ -- James McCoy <jamessan@debian.org>  Wed, 01 Feb 2017 21:25:00 -0500
+
+devscripts (2.17.0) unstable; urgency=medium
+
+  [ Sean Whitton ]
+  * New script: git-deborig, a wrapper around git-archive(1) to generate
+    Debian orig.tar files.
+
+  [ Paul Wise ]
+  * grep-excuses:
+    + Ignore new --- header line in autoremovals.yaml.cgi
+
+  [ James McCoy ]
+  * Check for existence of gpg/gpg2 in $PATH rather than absolute paths.
+    (Closes: #850655)
+  * wrap-and-sort:
+    + Support debian/clean files.  (Closes: #850662)
+  * Remove bash completion for dcut, since src:dput will be providing it.
+    (Closes: #850684)
+  * dget:
+    + Verify exit status of “dpkg-source -x” and propagate failure.  (Closes:
+      #850845)
+
+ -- James McCoy <jamessan@debian.org>  Tue, 10 Jan 2017 23:21:45 -0500
+
+devscripts (2.16.13) unstable; urgency=medium
+
+  [ Paul Wise ]
+  * uscan:
+    + Add .sign to the default OpenPGP extensions list
+
+  [ James McCoy ]
+  * debuild:
+    + Pass "-tc" through to dpkg-buildpackage instead of treating it as
+      "-t c".  (Closes: #848210)
+
+ -- James McCoy <jamessan@debian.org>  Thu, 15 Dec 2016 21:41:54 -0500
+
+devscripts (2.16.12) unstable; urgency=medium
+
+  [ James McCoy ]
+  * mergechanges:
+    + Add handling for buildinfo files, based on a patch by Simon McVittie.
+      (Closes: #843470)
+  * debuild:
+    + Move invocation of lintian back into debuild.  This restores the
+      behavior of ignoring the return code of lintian (Closes: #847168) and
+      only running lintian when it is present (Closes: #846711).
+
+  [ Antonio Terceiro ]
+  * debrepro:
+    + export NO_FAKE_STAT=1 when using faketime to avoid faking stat() calls
+      (see discussion in bug #846365)
+
+ -- James McCoy <jamessan@debian.org>  Fri, 09 Dec 2016 17:24:12 -0500
+
+devscripts (2.16.11) unstable; urgency=medium
+
+  [ James McCoy ]
+  * debuild:
+    + Avoid setting a hook to just "cd ..; ".
+    + Clear @ARGV if running lintian to avoid treating @ARGV as debian/rules
+      targets to run.  (Closes: #846863)
+
+  [ Antonio Terceiro ]
+  * debclean:
+    + do not descend on subdirectories if current directory is already a
+      Debian source package.
+    + fix manpage to mention what exactly is executed on each directory (i.e.
+      debclean calls `debuild -- clean`, not `debian/rules clean`)
+  * debrepro:
+    + add -s/--skip option to skip any of the supported variations
+      (Closes: #846365)
+
+ -- James McCoy <jamessan@debian.org>  Sun, 04 Dec 2016 21:19:15 -0500
+
+devscripts (2.16.10) unstable; urgency=medium
 
   [ Afif Elghraoui ]
   * debcommit:
@@ -15,12 +197,11 @@ devscripts (2.16.10) UNRELEASED; urgency=medium
     + Preserve SOURCE_DATE_EPOCH in the environment.
     + Require a '--' between debuild options and debian/rules target so we
       know where options end.  (Closes: #845566)
+    + Adjust hook commands to account for dpkg-buildpackage running from a
+      different directory than debuild used for the lintian, signing, and
+      post-dpkg-buildpackage hooks.  (Closes: #845628)
 
-  [ Ximin Luo ]
-  * debpatch:
-    + New script, Apply a debdiff to a Debian source package. (Closes: #845659)
-
- -- Afif Elghraoui <afif@debian.org>  Wed, 23 Nov 2016 23:50:46 -0800
+ -- James McCoy <jamessan@debian.org>  Sat, 26 Nov 2016 13:21:58 -0500
 
 devscripts (2.16.9) unstable; urgency=medium
 

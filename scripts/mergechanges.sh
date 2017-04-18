@@ -125,17 +125,17 @@ checksum_uniq() {
     if test ${REMOVE_ARCHDEP} = 1 -o ${REMOVE_INDEP} = 1; then
 	while read line; do
 	    case "$line" in
-		(*.dsc|*.diff.gz|*.tar.*)
+		(*.dsc|*.diff.gz|*.tar.*|*_source.buildinfo)
 		    # source
 		    echo "$line"
 		    ;;
-		(*_all.deb|*_all.udeb)
+		(*_all.deb|*_all.udeb|*_all.buildinfo)
 		    # architecture-indep
 		    if test ${REMOVE_INDEP} = 0; then
 			echo "$line"
 		    fi
 		    ;;
-		(*.deb|*.udeb)
+		(*.deb|*.udeb|*.buildinfo)
 		    # architecture-specific
 		    if test ${REMOVE_ARCHDEP} = 0; then
 			echo "$line"

@@ -56,6 +56,8 @@ For example, the author uses this file:
 
 =cut
 
+use File::HomeDir;
+
 $ENV{LANG}="C";
 
 my $wanted=shift;
@@ -79,8 +81,9 @@ if (length $wanted) {
 	# Now jut substitute into it.
 	$url=~s!/(?:trunk|branches|tags)($|/)!/$wanted$1!;
 
-	if (-e "$ENV{HOME}/.svnpath") {
-		require "$ENV{HOME}/.svnpath";
+	my $svnpath = File::HomeDir->my_home."/.svnpath";
+	if (-e $svnpath) {
+		require $svnpath;
 	}
 }
 

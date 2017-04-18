@@ -19,7 +19,7 @@ PROGNAME="${0##*/}"
 # TODO: Remove use of OLDCACHEDDIR post-Stretch
 OLDCACHEDIR=~/.devscripts_cache
 OLDCACHEDDIFF="${OLDCACHEDIR}/wnpp-diff"
-CACHEDIR=${XDG_CACHE_HOME:-$HOME/.cache}
+CACHEDIR=${XDG_CACHE_HOME:-~/.cache}
 CACHEDIR=${CACHEDIR%/}/devscripts
 CACHEDDIFF="${CACHEDIR}/wnpp-diff"
 CURLORWGET=""

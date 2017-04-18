@@ -5,17 +5,14 @@ debsign \- sign a Debian .changes and .dsc file pair using GPG
 \fBdebsign\fR [\fIoptions\fR] [\fIchanges-file\fR|\fIdsc-file\fR|\fIcommands-file\fR ...]
 .SH DESCRIPTION
 \fBdebsign\fR mimics the signing aspects (and bugs) of
-\fBdpkg-buildpackage\fR(1).  It takes either an unsigned \fI.dsc\fR
-file or an unsigned \fI.changes\fR file (along with the associated
-unsigned \fI.dsc\fR file found by replacing the architecture name and
-\fI.changes\fR by \fI.dsc\fR if it appears in the \fI.changes\fR
-file), and signs them using the GNU Privacy Guard.  It is
-careful to calculate the size and checksums of the newly signed
-\fI.dsc\fR file and replace the original values in the \fI.changes\fR
-file.
+\fBdpkg-buildpackage\fR(1).  It takes a \fI.dsc\fR, \fI.buildinfo\fR, or
+\fI.changes\fR file and signs it, and any child \fI.dsc\fR,
+\fI.buildinfo\fR, or \fI.changes\fR files directly or indirectly
+referenced by it, using the GNU Privacy Guard. It is careful to
+calculate the size and checksums of any newly signed child files and
+replace the original values in the parent file.
 .PP
-If a \fI.changes\fR, \fI.dsc\fR or \fI.commands\fR file is specified,
-it is signed, otherwise, \fIdebian/changelog\fR is parsed to determine
+If no file is specified, \fIdebian/changelog\fR is parsed to determine
 the name of the \fI.changes\fR file to look for in the parent
 directory.
 .PP
@@ -25,25 +22,28 @@ and the name specified in the Uploader field is used for signing.
 .PP
 This utility is useful if a developer must build a package on one
 machine where it is unsafe to sign it; they need then only transfer
-the small \fI.dsc\fR and \fI.changes\fR files to a safe machine and
-then use the \fBdebsign\fR program to sign them before
+the small \fI.dsc\fR, \fI.buildinfo\fR and \fI.changes\fR files to a
+safe machine and then use the \fBdebsign\fR program to sign them before
 transferring them back.  This process can be automated in two ways.
-If the files to be signed live on the \fBremote\fR machine, the \fB\-r\fR
-option may be used to copy them to the local machine and back again
-after signing.  If the files live on the \fBlocal\fR machine, then they may
-be transferred to the remote machine for signing using
-\fBdebrsign\fR(1).
+If the files to be signed live on the \fBremote\fR machine, the
+\fB\-r\fR option may be used to copy them to the local machine and back
+again after signing.  If the files live on the \fBlocal\fR machine, then
+they may be transferred to the remote machine for signing using
+\fBdebrsign\fR(1).  However note that it is probably safer to have your
+trusted signing machine use \fBdebsign\fR to connect to the untrusted
+non-signing machine, rather than using \fBdebrsign\fR to make the
+connection in the reverse direction.
 .PP
 This program can take default settings from the \fBdevscripts\fR
 configuration files, as described below.
 .SH OPTIONS
 .TP
 .B \-r \fR[\fIusername\fB@\fR]\fIremotehost\fR
-The \fI.changes\fR and \fI.dsc\fR files live on the specified remote
-host.  In this case, a \fI.changes\fR file must be explicitly named,
-with an absolute directory or one relative to the remote home
+The files to be signed live on the specified remote host.  In this case,
+a \fI.dsc\fR, \fI.buildinfo\fR or \fI.changes\fR file must be explicitly
+named, with an absolute directory or one relative to the remote home
 directory.  \fBscp\fR will be used for the copying.  The
-\fR[\fIusername\fB@\fR]\fIremotehost\fB:\fIchanges\fR syntax is
+\fR[\fIusername\fB@\fR]\fIremotehost\fB:\fIfilename\fR syntax is
 permitted as an alternative.  Wildcards (\fB*\fR etc.) are allowed.
 .TP
 .B \-p\fIprogname\fR
@@ -89,10 +89,9 @@ signed file is found the user is asked if he or she likes to use the
 current signature.
 .TP
 \fB\-\-debs\-dir\fR \fIDIR\fR
-Look for the \fI.changes\fR and \fI.dsc\fR files in directory
-\fIDIR\fR instead of the parent of the source directory.  This should
-either be an absolute path or relative to the top of the source
-directory.
+Look for the files to be signed in directory \fIDIR\fR instead of the
+parent of the source directory.  This should either be an absolute path
+or relative to the top of the source directory.
 .TP
 \fB\-\-no-conf\fR, \fB\-\-noconf\fR
 Do not read any configuration files.  This can only be used as the
@@ -123,14 +122,13 @@ And this is the \fB\-k\fR option.
 Always re-sign files even if they are already signed, without prompting.
 .TP
 .B DEBRELEASE_DEBS_DIR
-This specifies the directory in which to look for the \fI.changes\fR
-and \fI.dsc\fR files, and is either an absolute path or relative to
-the top of the source tree.  This corresponds to the
-\fB\-\-debs\-dir\fR command line option.  This directive could be
-used, for example, if you always use \fBpbuilder\fR or
-\fBsvn-buildpackage\fR to build your packages.  Note that it also
-affects \fBdebrelease\fR(1) in the same way, hence the strange name of
-the option.
+This specifies the directory in which to look for the files to be
+signed, and is either an absolute path or relative to the top of the
+source tree.  This corresponds to the \fB\-\-debs\-dir\fR command line
+option.  This directive could be used, for example, if you always use
+\fBpbuilder\fR or \fBsvn-buildpackage\fR to build your packages.  Note
+that it also affects \fBdebrelease\fR(1) in the same way, hence the
+strange name of the option.
 .SH "SEE ALSO"
 .BR debrsign (1),
 .BR debuild (1),

@@ -6,10 +6,13 @@ debclean \- clean up a sourcecode tree
 .SH DESCRIPTION
 \fBdebclean\fR walks through the directory tree starting at the
 directory tree in which it was invoked, and executes
-.I debian/rules clean
+.I debuild -- clean
 for each Debian source directory encountered.  These directories are
 recognised by containing a debian/changelog file for a package whose
 name matches that of the directory.  Name matching is described below.
+.PP
+If \fBdebclean\fR is invoked from a directory that is already a Debian source
+package, it will not descend into its subdirectories.
 .PP
 Also, if the \fB\-\-cleandebs\fR option is given, then in every
 directory containing a Debian source tree, all files named *.deb,

@@ -4,7 +4,7 @@ debrepro - reproduciblity tester for Debian packages
 
 =head1 SYNOPSIS
 
-B<debrepro> [I<SOURCEDIR>]
+B<debrepro> [I<OPTIONS>] [I<SOURCEDIR>]
 
 =head1  DESCRIPTION
 
@@ -53,12 +53,12 @@ exactly what changed between the two builds.
 
 =over
 
-=item B<USER>
+=item B<user>
 
 The I<$USER> environment variable will contain different values between the
 first and second builds.
 
-=item B<PATH>
+=item B<path>
 
 During the second build, a fake, unexisting directory will be appended to the
 I<$PATH> environment variable.
@@ -75,7 +75,7 @@ Both I<$LC_ALL> and I<$LANG> will be different across the two builds.
 
 I<$TZ> will be different across builds.
 
-=item filesystem ordering
+=item filesystem-ordering
 
 If B<disorderfs> is installed, both builds will be done under a disorderfs
 overlay directory. This will cause filesystem listing operations to be return
@@ -85,6 +85,17 @@ items in a non-deterministic order.
 
 The second build will be executed 213 days, 7 hours and 13 minutes in the
 future with regards to the current time.
+
+=back
+
+=head1 OPTIONS
+
+=over
+
+=item -s VARIATION, --skip VARIATION
+
+Don't perform the named VARIATION. Variation names are the ones used in
+their description in section B<SUPPORTED VARIATIONS>.
 
 =back
 
