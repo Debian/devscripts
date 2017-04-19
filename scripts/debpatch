@@ -41,6 +41,7 @@ C = subprocess.check_call
 
 # this can be any valid value, it doesn't appear in the final output
 DCH_DUMMY_TAIL = "\n -- debpatch dummy tool <infinity0@debian.org>  Thu, 01 Jan 1970 00:00:00 +0000\n\n"
+CHBLOCK_DUMMY_PACKAGE = "debpatch PLACEHOLDER"
 TRY_ENCODINGS = ["utf-8", "latin-1"]
 DISTRIBUTION_DEFAULT = "experimental"
 
@@ -62,9 +63,6 @@ def read_dch_patch(dch_patch):
     # this should be true all the time in practice
     source_version = str(Changelog(source_str, 1)[0].version)
     target = Changelog(target_str, 1)[0]
-    if source_version == str(target.version):
-        # TODO: it could be possible to deal with this, but is a bit complex
-        raise ValueError("don't (yet) know how to deal with d/changelog patch that edits the same version")
     return source_version, target
 
 def apply_dch_patch(source_file, current, patch_name, old_version, target, dry_run):
@@ -119,17 +117,14 @@ def check_patch(patch_str, *args, **kwargs):
 
 def debpatch(patch, patch_name, args):
     # don't change anything if...
-    dry_run = args.target_version
-
-    with open(args.changelog) as fp:
-        current = Changelog(fp.read())
+    dry_run = args.target_version or args.source_version
 
     changelog = list(filter(lambda x: is_dch(x.path), patch))
     if not changelog:
         logging.info("no debian/changelog in patch: %s" % args.patch_file)
         old_version = None
         target = ChangeBlock(
-            package = current[0].package,
+            package = CHBLOCK_DUMMY_PACKAGE,
             author = "%s <%s>" % (os.getenv("DEBFULLNAME"), os.getenv("DEBEMAIL")),
             date = email.utils.formatdate(time.time(), localtime=True),
             version = None,
@@ -148,6 +143,12 @@ def debpatch(patch, patch_name, args):
         if old_version:
             print(old_version)
         return False
+
+    # read this here so --source-version can work even without a d/changelog
+    with open(args.changelog) as fp:
+        current = Changelog(fp.read())
+    if target.package == CHBLOCK_DUMMY_PACKAGE:
+        target.package = current[0].package
 
     if not dry_run:
         patch_str = str(patch)
