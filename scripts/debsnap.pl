@@ -320,7 +320,7 @@ elsif ($opt{binary}) {
 	    if (!have_file("$opt{destdir}/$file_name", $hash)) {
 		verbose "Getting file $file_name: $file_url";
 		$mkDestDir->();
-		LWP::Simple::getstore($file_url, "$opt{destdir}/$file_name");
+		LWP::Simple::mirror($file_url, "$opt{destdir}/$file_name");
 	    }
 	}
     }
@@ -361,7 +361,7 @@ else {
 	if (!have_file("$opt{destdir}/$dsc_name", $dsc_hash)) {
 	    verbose "Getting dsc file $dsc_name: $file_url";
 	    $mkDestDir->();
-	    LWP::Simple::getstore($file_url, "$opt{destdir}/$dsc_name");
+	    LWP::Simple::mirror($file_url, "$opt{destdir}/$dsc_name");
 	}
 
 	# Get the list of files from the dsc:
@@ -403,7 +403,7 @@ else {
 	    if (!have_file("$opt{destdir}/$file_name", $file_hash)) {
 		verbose "Getting file $file_name: $file_url";
 		$mkDestDir->();
-		LWP::Simple::getstore($file_url, "$opt{destdir}/$file_name");
+		LWP::Simple::mirror($file_url, "$opt{destdir}/$file_name");
 	    }
 	}
     }
