@@ -334,24 +334,73 @@ else {
 	    next;
 	}
 
+	# Get the dsc file and parse it to get the list of files to be
+	# restored (this should fix most issues with multi-tarball
+	# source packages):
+	my $dsc_name;
+	my $dsc_hash;
 	foreach my $hash (keys %{$src_json->{fileinfo}}) {
 	    my $fileinfo = $src_json->{fileinfo}{$hash};
-	    my $file_name;
-	    # fileinfo may match multiple files (e.g., orig tarball for iceweasel 3.0.12)
 	    foreach my $info (@$fileinfo) {
-		if ($info->{name} =~ m/^\Q${package}\E/) {
-		    $file_name = $info->{name};
+		if ($info->{name} =~ m/^\Q${package}\E_.*\.dsc/) {
+		    $dsc_name = $info->{name};
+		    $dsc_hash = $hash;
 		    last;
 		}
 	    }
-	    unless ($file_name) {
-		warn "$progname: No files with hash $hash matched '${package}'\n";
+	    last if $dsc_name;
+	}
+	unless ($dsc_name) {
+	    warn "$progname: No dsc file detected for $package version $version->{version}\n";
+	    $warnings++;
+	    next;
+	}
+
+	# Retrieve the dsc file:
+	my $file_url = "$opt{baseurl}/file/$dsc_hash";
+	if (!have_file("$opt{destdir}/$dsc_name", $dsc_hash)) {
+	    verbose "Getting dsc file $dsc_name: $file_url";
+	    $mkDestDir->();
+	    LWP::Simple::getstore($file_url, "$opt{destdir}/$dsc_name");
+	}
+
+	# Get the list of files from the dsc:
+	my @files;
+	open my $fh, '<', "$opt{destdir}/$dsc_name"
+	    or die "unable to open the dsc file $opt{destdir}/$dsc_name";
+	while (<$fh> !~ /^Files:/) { }
+	while (<$fh> =~ /^ (\S+) (\d+) (\S+)$/) {
+	    my ($checksum, $size, $file) = ($1, $2, $3);
+	    push @files, $file;
+	}
+	close $fh
+	    or die "unable to close the dsc file";
+
+	# Iterate over files and find the right contents:
+	foreach my $file_name (@files) {
+	    my $file_hash;
+	    foreach my $hash (keys %{$src_json->{fileinfo}}) {
+		my $fileinfo = $src_json->{fileinfo}{$hash};
+
+		foreach my $info (@{$fileinfo}) {
+		    if ($info->{name} eq $file_name) {
+			$file_hash = $hash;
+			last;
+		    }
+		}
+		last if $file_hash;
+	    }
+	    unless ($file_hash) {
+		# Warning: this next statement will only move to the
+		# next files, not the next package
+		print "$progname: No hash found for file $file_name needed by $package version $version->{version}\n";
 		$warnings++;
 		next;
 	    }
-	    my $file_url = "$opt{baseurl}/file/$hash";
+
+	    my $file_url = "$opt{baseurl}/file/$file_hash";
 	    $file_name = basename($file_name);
-	    if (!have_file("$opt{destdir}/$file_name", $hash)) {
+	    if (!have_file("$opt{destdir}/$file_name", $file_hash)) {
 		verbose "Getting file $file_name: $file_url";
 		$mkDestDir->();
 		LWP::Simple::getstore($file_url, "$opt{destdir}/$file_name");

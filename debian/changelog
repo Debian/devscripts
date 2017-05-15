@@ -11,6 +11,10 @@ devscripts (2.17.7) UNRELEASED; urgency=medium
   * debchange:
     + Replace dpkg call with Dpkg::Version::compare_version  (Closes: #854366)
 
+  [ Cyril Brulebois ]
+  * debsnap:
+    + parse the dsc file when downloading source packages.  (Closes: #862668)
+
  -- Paul Wise <pabs@debian.org>  Sat, 17 Jun 2017 13:11:35 +0800
 
 devscripts (2.17.6) unstable; urgency=medium
