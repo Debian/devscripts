@@ -1,3 +1,11 @@
+devscripts (2.17.5~bpo8+1) UNRELEASED; urgency=medium
+
+  * Rebuild for jessie-backports.
+  * Revert diffoscope → debbindiff change from 2.16.2~bpo8+1, since diffoscope
+    is in jessie-backports now.
+
+ -- James McCoy <jamessan@debian.org>  Wed, 24 May 2017 23:36:57 -0400
+
 devscripts (2.17.5) unstable; urgency=medium
 
   * Create GNUPGHOME in /tmp to fix CI failures due to long path names.

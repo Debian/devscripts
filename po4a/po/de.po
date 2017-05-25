@@ -9048,7 +9048,7 @@ msgid ""
 "lost between revisions of the package.  It also checks the file owners and "
 "permissions, and compares the control files of the two packages using the "
 "B<wdiff> program.  If you want a deeper comparison of two Debian package "
-"files you can use the B<debbindiff> tool."
+"files you can use the B<diffoscope> tool."
 msgstr ""
 "B<debdiff> nimmt die Namen zweier Debian-Pakete (I<.deb>s oder I<.udeb>s) "
 "auf der Befehlszeile entgegen und vergleicht ihren Inhalt (dabei werden nur "
@@ -9059,7 +9059,7 @@ msgstr ""
 "gingen. Es prüft außerdem die Dateibesitzer und Zugriffsrechte und "
 "vergleicht die Steuerdateien der beiden Pakete mittels des Programms "
 "B<wdiff>. Falls Sie zwei Debian-Pakete genauer vergleichen wollen, können "
-"Sie das Werkzeug B<debbindiff> benutzen."
+"Sie das Werkzeug B<diffoscope> benutzen."
 
 #. type: Plain text
 #: ../scripts/debdiff.1:29
@@ -9665,10 +9665,10 @@ msgstr ""
 #: ../scripts/debdiff.1:241
 msgid ""
 "B<diffstat>(1), B<dpkg-deb>(1), B<interdiff>(1), B<wdiff>(1), B<devscripts."
-"conf>(5), B<debbindiff>(1)"
+"conf>(5), B<diffoscope>(1)"
 msgstr ""
 "B<diffstat>(1), B<dpkg-deb>(1), B<interdiff>(1), B<wdiff>(1), B<devscripts."
-"conf>(5), B<debbindiff>(1)"
+"conf>(5), B<diffoscope>(1)"
 
 #. type: Plain text
 #: ../scripts/debdiff.1:246
@@ -13043,11 +13043,11 @@ msgstr "I<debdiff>(1)"
 #: ../scripts/devscripts.1:69
 msgid ""
 "compare two versions of a Debian package to check for added and removed "
-"files. Use the debbindiff package for deep comparisons. [wdiff, patchutils]"
+"files. Use the diffoscope package for deep comparisons. [wdiff, patchutils]"
 msgstr ""
 "vergleicht zwei Versionen eines Debian-Pakets, um es auf hinzugefügte oder "
 "entfernte Dateien hin zu untersuchen. Verwenden Sie für genauere Vergleiche "
-"das Paket »debbindiff«. [wdiff, patchutils]"
+"das Paket »diffoscope«. [wdiff, patchutils]"
 
 #. type: IP
 #: ../scripts/devscripts.1:69
