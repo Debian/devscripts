@@ -1,5 +1,9 @@
-# Debian dscverify(1) completion                             -*- shell-script -*-
-# Copyright: 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+# /usr/share/bash-completion/completions/dscverify
+# Bash command completion for ‘dscverify(1)’.
+# Documentation: ‘bash(1)’, section “Programmable Completion”.
+
+# Copyright © 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+
 _dscverify()
 {
     local cur prev words cword _options
@@ -7,7 +11,7 @@ _dscverify()
 
     if [[ "$cur" == -* ]]; then
         _options='--keyring --no-default-keyrings --no-sig-check --verbose'
-        if [[ "$prev" == licensecheck ]]; then
+        if [[ "$prev" == dscverify ]]; then
             _options+=' --no-conf'
         fi
         COMPREPLY=( $( compgen -W "${_options}" -- "$cur" ) )
@@ -18,3 +22,11 @@ _dscverify()
 
     return 0
 } && complete -F _dscverify dscverify
+
+
+# Local variables:
+# coding: utf-8
+# mode: shell-script
+# indent-tabs-mode: nil
+# End:
+# vim: fileencoding=utf-8 filetype=sh expandtab shiftwidth=4 :

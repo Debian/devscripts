@@ -2,15 +2,15 @@
 .SH NAME
 dscverify \- verify the validity of a Debian package
 .SH SYNOPSIS
-\fBdscverify\fR [\fB\-\-keyring \fIkeyring\fR] ... \fIchanges_or_dsc_filename\fR ...
+\fBdscverify\fR [\fB\-\-keyring \fIkeyring\fR] ... \fIchanges_or_buildinfo_or_dsc_filename\fR ...
 .SH DESCRIPTION
 \fBdscverify\fR checks that the GPG signatures on the given
-\fI.changes\fR or \fI.dsc\fR files are good signatures made by keys in
-the current Debian keyrings, found in the \fIdebian-keyring\fR
-and \fIdebian-maintainers\fR
-packages.  (Additional keyrings can be specified using the
+\fI.changes\fR, \fI.buildinfo\fP or \fI.dsc\fR files are good signatures
+made by keys in the current Debian keyrings, found in the \fIdebian-keyring\fR
+package.  (Additional keyrings can be specified using the
 \fB--keyring\fR option any number of times.)  It then checks that the
-other files listed in the \fI.changes\fR or \fI.dsc\fR files have the
+other files listed in the \fI.changes\fR, \fI.buildinfo\fP or \fI.dsc\fR
+files have the
 correct sizes and checksums (MD5 plus SHA1 and SHA256 if the latter are
 present).  The exit status is 0 if there are no problems and non-zero
 otherwise.
@@ -28,7 +28,8 @@ first option given on the command-line.
 .TP
 \fB\-\-nosigcheck\fR, \fB\-\-no\-sig\-check\fR, \fB-u\fR
 Skip the signature verification step. That is, only verify the sizes and
-checksums of the files listed in the \fI.changes\fR or \fI.dsc\fR files.
+checksums of the files listed in the \fI.changes\fR, \fI.buildinfo\fP or
+\fI.dsc\fR files.
 .TP
 \fB\-\-verbose\fR
 Do not suppress GPG output.

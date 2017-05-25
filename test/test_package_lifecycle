@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 
 # Copyright (C) 2015, Nicholas Bamber <nicholas@periapt.co.uk>
 #
@@ -28,14 +28,14 @@ fi
 
 . "${0%/*}/shunit2-helper-functions.sh"
 
-GPGHOME=$(readlink -f ${WORKDIR}/uscan/gpg)
+GPGHOME=$(mktemp -d -p /tmp gpg.XXXXX)
 
 oneTimeSetUp () {
-	GPG=/usr/bin/gpg
-	if [ ! -x $GPG ];then
+	GPG=gpg
+	if ! command -v $GPG >/dev/null 2>&1;then
 		echo "$GPG missing"
-		GPG=/usr/bin/gpg2
-		if [ ! -x $GPG ];then
+		GPG=gpg2
+		if ! command -v $GPG >/dev/null 2>&1;then
 		echo "$GPG missing"
 		exit 1
 		fi
@@ -44,19 +44,16 @@ oneTimeSetUp () {
 	PRIVATE_KEY=${WORKDIR}/uscan/PRIVATE_KEY.asc
 	PUBLIC_KEY=${WORKDIR}/uscan/PUBLIC_KEY.asc
 
-	rm -rf $GPGHOME
-	mkdir -p $GPGHOME
-	chmod 700 $GPGHOME
 	PRIVATE_KEYRING=$GPGHOME/secring.gpg
 	PUBLIC_KEYRING=$GPGHOME/pubring.gpg
 
-	$GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+	$GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
 		--output $PRIVATE_KEYRING --dearmor $PRIVATE_KEY
 
-	$GPG -v --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+	$GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
 	    --output $PUBLIC_KEYRING --dearmor $PUBLIC_KEY
 
-	$GPG --homedir $GPGHOME --no-options -q --batch --no-default-keyring \
+	$GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
 	    --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
 	    --list-keys --verbose
 
@@ -100,7 +97,13 @@ runCommandOutCmpFile() {
     eval "${COMMAND} $param"  2> ${stderrF} | \
 	grep -v File::FcntlLock | \
 	grep -v '^  *dh_' | \
+	grep -v '^dh_gencontrol debug symbol wrapper:' | \
+	grep -v '^  *create-stamp debian/debhelper' | \
 	sed -e "s/\`/'/g" | \
+	sed -e "s/^dpkg-buildpackage: info: /dpkg-buildpackage: /g" | \
+	sed -e "s/^dpkg-genchanges: info: /dpkg-genchanges: /g" | \
+	sed -e "/^ dpkg-genbuildinfo/d" | \
+	sed -e "/^gpg: /d" | \
 	sed -e's!^ -- Testophilus Testownik <tester@testity.org>.*! -- Testophilus Testownik <tester@testity.org>!' > ${stdoutF}
     retval=$?
 	eval "cmp ${stdoutF} ${exp_stdoutfile}" 3>&1 >/dev/null
@@ -114,9 +117,9 @@ runCommandOutCmpFile() {
 test_debuild() {
   export GNUPGHOME=$GPGHOME
   cd ${WORKDIR}/package_lifecycle/test
-  COMMAND='debuild --no-conf --no-lintian --preserve-envvar=PATH --preserve-envvar=PERL5LIB --preserve-envvar=DEBFULLNAME --preserve-envvar=DEBEMAIL --preserve-envvar=GNUPGHOME'
+  COMMAND='debuild --no-conf --no-lintian --preserve-envvar=PATH --preserve-envvar=PERL5LIB --preserve-envvar=DEBFULLNAME --preserve-envvar=DEBEMAIL --preserve-envvar=GNUPGHOME --set-envvar=NO_PKG_MANGLE=1'
   cat > ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
-	 dpkg-buildpackage -rfakeroot -D -us -uc
+	 dpkg-buildpackage -us -uc
 	dpkg-buildpackage: source package test
 	dpkg-buildpackage: source version 1.0-1
 	dpkg-buildpackage: source distribution unstable
@@ -140,12 +143,30 @@ test_debuild() {
 	 dpkg-source --after-build test
 	dpkg-buildpackage: full upload (original source is included)
 	Now signing changes and any dsc files...
-	 signfile test_1.0-1.dsc uscan test key (no secret) <none@debian.org>
-	
-	 signfile test_1.0-1_${_ARCH}.changes uscan test key (no secret) <none@debian.org>
-	
-	Successfully signed dsc and changes files
 EOS
+  if which dpkg-genbuildinfo >/dev/null 2>&1; then
+    cat >> ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
+	 signfile dsc test_1.0-1.dsc uscan test key (no secret) <none@debian.org>
+	
+	 fixup_buildinfo test_1.0-1.dsc test_1.0-1_${_ARCH}.buildinfo
+	 signfile buildinfo test_1.0-1_${_ARCH}.buildinfo uscan test key (no secret) <none@debian.org>
+	
+	 fixup_changes dsc test_1.0-1.dsc test_1.0-1_${_ARCH}.changes
+	 fixup_changes buildinfo test_1.0-1_${_ARCH}.buildinfo test_1.0-1_${_ARCH}.changes
+	 signfile changes test_1.0-1_${_ARCH}.changes uscan test key (no secret) <none@debian.org>
+	
+	Successfully signed dsc, buildinfo, changes files
+EOS
+  else
+    cat >> ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
+	 signfile dsc test_1.0-1.dsc uscan test key (no secret) <none@debian.org>
+	
+	 fixup_changes dsc test_1.0-1.dsc test_1.0-1_${_ARCH}.changes
+	 signfile changes test_1.0-1_${_ARCH}.changes uscan test key (no secret) <none@debian.org>
+	
+	Successfully signed dsc, changes files
+EOS
+  fi
   runCommandOutCmpFile "-k'uscan test key (no secret) <none@debian.org>'" "${WORKDIR}/package_lifecycle/debuild.txt" "" 0
   cd ${WORKDIR}
 }
@@ -216,7 +237,7 @@ test_debchange () {
 	
 	 -- Testophilus Testownik <tester@testity.org>
 EOS
-  runCommand "-i 'new killer app functionality'" "" "" 0
+  runCommand "-iU 'new killer app functionality'" "" "" 0
   COMMAND=cat
   runCommandOutCmpFile "debian/changelog" "../debchange.txt" "" 0
   cd ${WORKDIR}
@@ -240,9 +261,9 @@ EOS
 test_debuild2() {
   export GNUPGHOME=$GPGHOME
   cd ${WORKDIR}/package_lifecycle/test
-  COMMAND='debuild --no-conf --no-lintian --preserve-envvar=PATH --preserve-envvar=PERL5LIB --preserve-envvar=DEBFULLNAME --preserve-envvar=DEBEMAIL --preserve-envvar=GNUPGHOME'
+  COMMAND='debuild --no-conf --no-lintian --preserve-envvar=PATH --preserve-envvar=PERL5LIB --preserve-envvar=DEBFULLNAME --preserve-envvar=DEBEMAIL --preserve-envvar=GNUPGHOME --set-envvar=NO_PKG_MANGLE=1'
   cat > ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
-	 dpkg-buildpackage -rfakeroot -D -us -uc
+	 dpkg-buildpackage -us -uc
 	dpkg-buildpackage: source package test
 	dpkg-buildpackage: source version 1.0-2
 	dpkg-buildpackage: source distribution UNRELEASED
@@ -266,12 +287,30 @@ test_debuild2() {
 	 dpkg-source --after-build test
 	dpkg-buildpackage: binary and diff upload (original source NOT included)
 	Now signing changes and any dsc files...
-	 signfile test_1.0-2.dsc uscan test key (no secret) <none@debian.org>
-	
-	 signfile test_1.0-2_${_ARCH}.changes uscan test key (no secret) <none@debian.org>
-	
-	Successfully signed dsc and changes files
 EOS
+  if which dpkg-genbuildinfo >/dev/null 2>&1; then
+    cat >> ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
+	 signfile dsc test_1.0-2.dsc uscan test key (no secret) <none@debian.org>
+	
+	 fixup_buildinfo test_1.0-2.dsc test_1.0-2_${_ARCH}.buildinfo
+	 signfile buildinfo test_1.0-2_${_ARCH}.buildinfo uscan test key (no secret) <none@debian.org>
+	
+	 fixup_changes dsc test_1.0-2.dsc test_1.0-2_${_ARCH}.changes
+	 fixup_changes buildinfo test_1.0-2_${_ARCH}.buildinfo test_1.0-2_${_ARCH}.changes
+	 signfile changes test_1.0-2_${_ARCH}.changes uscan test key (no secret) <none@debian.org>
+	
+	Successfully signed dsc, buildinfo, changes files
+EOS
+  else
+    cat >> ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
+	 signfile dsc test_1.0-2.dsc uscan test key (no secret) <none@debian.org>
+	
+	 fixup_changes dsc test_1.0-2.dsc test_1.0-2_${_ARCH}.changes
+	 signfile changes test_1.0-2_${_ARCH}.changes uscan test key (no secret) <none@debian.org>
+	
+	Successfully signed dsc, changes files
+EOS
+  fi
   runCommandOutCmpFile "-k'uscan test key (no secret) <none@debian.org>'" "${WORKDIR}/package_lifecycle/debuild.txt" "" 0
   cd ${WORKDIR}
 }
@@ -292,7 +331,8 @@ EOS
 
 oneTimeTearDown () {
 	rm -rf ${WORKDIR}/package_lifecycle
-	rm -rf $GPGHOME
+	gpgconf --homedir "$GPGHOME" --kill gpg-agent
+	rm -rf "$GPGHOME"
 }
 
 cd ${WORKDIR}

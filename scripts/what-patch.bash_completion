@@ -1,1 +1,13 @@
+# /usr/share/bash-completion/completions/what-patch
+# Bash command completion for ‘what-patch(1)’.
+# Documentation: ‘bash(1)’, section “Programmable Completion”.
+
 complete -W '-v' -o filenames -d what-patch
+
+
+# Local variables:
+# coding: utf-8
+# mode: shell-script
+# indent-tabs-mode: nil
+# End:
+# vim: fileencoding=utf-8 filetype=sh expandtab shiftwidth=4 :

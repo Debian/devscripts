@@ -34,7 +34,7 @@ use IO::File;
 use Digest::MD5;
 use Devscripts::Compression;
 use Dpkg::Control;
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use File::Basename;
 
 # global variables
@@ -470,16 +470,19 @@ for my $arg (@ARGV) {
 	    push @cmd, '--no-check' unless $dget_verify;
 	    if ($opt->{'build'}) {
 		my @output = `LC_ALL=C @cmd $found_dsc`;
+		my $rc = $?;
 		print @output unless $opt->{'quiet'};
+		exit $rc >> 8 if $rc >> 8 != 0;
 		foreach (@output) {
 		    if ( /^dpkg-source: (?:info: )?extracting .* in (.*)/ ) {
 			chdir $1;
-			system 'dpkg-buildpackage', '-b', '-uc';
-			last;
+			exec 'dpkg-buildpackage', '-b', '-uc';
+			die "Unable to run dpkg-buildpackage: $!";
 		    }
 		}
 	    } elsif ($dget_unpack) {
 		system @cmd, $found_dsc;
+		exit $? >> 8 if $? >> 8 != 0;
 	    }
 	}
 

@@ -244,7 +244,7 @@ use strict;
 use warnings;
 no if $] >= 5.018, 'warnings', 'experimental::smartmatch';
 use feature 'switch';
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use Pod::Usage;
 use File::Basename;
 use File::Copy qw/copy/;

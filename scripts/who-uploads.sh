@@ -69,11 +69,11 @@ DEFAULT_WHOUPLOADS_MAXUPLOADS=3
 DEFAULT_WHOUPLOADS_DATE=no
 VARS="WHOUPLOADS_KEYRINGS WHOUPLOADS_MAXUPLOADS WHOUPLOADS_DATE"
 
-GPG=/usr/bin/gpg
-if [ ! -x $GPG ];then
+GPG=gpg
+if ! command -v $GPG >/dev/null 2>&1; then
     echo "$GPG missing"
-    GPG=/usr/bin/gpg2
-    if [ ! -x $GPG ];then
+    GPG=gpg2
+    if  ! command -v $GPG >/dev/null 2>&1; then
 	echo "$GPG missing"
 	exit 1
     fi
@@ -241,8 +241,8 @@ for package; do
 
 	UPLOADER=$($GPG $GPG_OPTIONS \
 	           "${GPG_DEFAULT_KEYRINGS[@]}" "${GPG_KEYRINGS[@]}" \
-	           --list-key --with-colons $GPG_ID 2>/dev/null |
-	           awk  -F: '/@debian\.org>/ { a = $10; exit} /^pub/ { a = $10 } END { print a }' )
+	           --list-key --with-colons --fixed-list-mode $GPG_ID 2>/dev/null |
+	           awk  -F: '/@debian\.org>/ { a = $10; exit} /^uid/ { a = $10; exit} END { print a }' )
 	if [ -z "$UPLOADER" ]; then UPLOADER="<unrecognised public key ($GPG_ID)>"; fi
 
 	output="$VERSION to $DISTRO: $UPLOADER"

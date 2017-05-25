@@ -32,6 +32,7 @@ my $term_size_broken;
 
 sub have_term_size {
     return ($term_size_broken ? 0 : 1) if defined $term_size_broken;
+    pop @INC if $INC[-1] eq '.';
     # Load the Term::Size module safely
     eval { require Term::Size; };
     if ($@) {
@@ -70,7 +71,7 @@ Usage: $progname [options] [<maintainer>|<package>]
 Options:
   --no-conf, --noconf Don\'t read devscripts config files;
                       must be the first option given
-  --wipnity, -w       Check <https://release.debian.org/migration/>.  A package
+  --wipnity, -w       Check <https://qa.debian.org/excuses.php>.  A package
                       name must be given when using this option.
   --no-autoremovals   Do not investigate and report autoremovals
   --help              Show this help
@@ -101,9 +102,9 @@ if (system("command -v w3m >/dev/null 2>&1") != 0) {
 }
 
 while( my $package=shift ) {
-    my $dump = `w3m -dump -cols $columns "https://release.debian.org/migration/testing.pl?package=$package"`;
-    $dump =~ s/^.*?(?=Checking)//s;
-    $dump =~ s/^\[.*//ms;
+    my $dump = `w3m -dump -cols $columns "https://qa.debian.org/excuses.php?package=$package"`;
+    $dump =~ s/.*(Excuse for .*)\s+Maintainer page.*/$1/ms;
+    $dump =~ s/.*(No excuse for .*)\s+Maintainer page.*/$1/ms;
     print($dump);
     }
 }
@@ -255,7 +256,7 @@ sub grep_autoremovals () {
 	    }
 	    next;
 	}
-	if (m%^$% || m%^\#%) {
+	if (m%^$% || m%^\#% || m{^---$}) {
 	    next;
 	}
 	warn "$progname: unprocessed line $. in $rmurl_yaml:\n$_";
@@ -305,6 +306,7 @@ while (<EXCUSES>) {
     # New item?
     if (! $sublist and /^\s*<li>/) {
 	s%<li>%%;
+	s%<li>%\n%g;
 	$item = $_;
     }
     elsif (! $sublist and /^\s*<ul>/) {
@@ -315,13 +317,12 @@ while (<EXCUSES>) {
 	# Did the last item match?
 	if ($item=~/^-?\Q$string\E\s/ or
 	    $item=~/^\s*Maintainer:\s[^\n]*\b\Q$string\E\b[^\n]*$/m) {
-	    # In case there are embedded <li> tags
-	    $item =~ s%<li>%\n    %g;
 	    print $item;
 	}
     }
     elsif ($sublist and /^\s*<li>/) {
 	s%<li>%    %;
+	s%<li>%\n    %g;
 	$item .= $_;
     }
     else {

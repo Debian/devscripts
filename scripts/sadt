@@ -229,12 +229,12 @@ class TestGroup(object):
     def check_restrictions(self, ignored_restrictions):
         restrictions = self.restrictions - frozenset(ignored_restrictions)
 
-        class options:
+        class Options:
             rw_build_tree_needed = False
             allow_stderr = False
         for r in restrictions:
             if r == 'rw-build-tree':
-                options.rw_build_tree_needed = True
+                Options.rw_build_tree_needed = True
             elif r == 'needs-root':
                 if os.getuid() != 0:
                     raise Skip('this test needs root privileges')
@@ -243,10 +243,10 @@ class TestGroup(object):
             elif r == 'build-needed':
                 raise Skip('source tree not built')
             elif r == 'allow-stderr':
-                options.allow_stderr = True
+                Options.allow_stderr = True
             else:
                 raise Skip('unknown restriction: {restr}'.format(restr=r))
-        return options
+        return Options
 
     def check(self, ignored_restrictions=()):
         options = self.check_restrictions(ignored_restrictions)
@@ -470,6 +470,7 @@ def main():
     if rw_build_tree is not None:
         shutil.rmtree(rw_build_tree)
     sys.exit(n_fail > 0)
+
 
 if __name__ == '__main__':
     main()

@@ -60,6 +60,10 @@ Display version information.
 
 Prepare a new tree named I<DIST>
 
+=item B<apt> I<DIST> <B<update>|B<source>|B<show>|B<showsrc>|...>
+
+Run B<apt> inside I<DIST>
+
 =item B<apt-get> I<DIST> <B<update>|B<source>|...>
 
 Run B<apt-get> inside I<DIST>
@@ -425,7 +429,7 @@ EOF
 	}
     }
     print "Now edit $dir/etc/apt/sources.list\n" unless $version;
-    print "Run chdist apt-get $dist update\n";
+    print "Run chdist apt $dist update\n";
     print "And enjoy.\n";
 }
 
@@ -466,8 +470,15 @@ sub dist_compare(\@$$) {
      foreach my $file ( @files ) {
         my $parsed_file = parseFile($file);
         foreach my $package ( keys(%{$parsed_file}) ) {
-           if ( $packages{$dist}{$package} ) {
-              warn "W: Package $package is already listed for $dist. Not overriding.\n";
+           if ($packages{$dist}{$package}) {
+              my $version = $packages{$dist}{$package}{Version};
+              my $alt_ver = $parsed_file->{$package}{Version};
+              my $delta = $version && $alt_ver && version_compare($version, $alt_ver);
+              if (defined($delta) && $delta < 0) {
+                 $packages{$dist}{$package} = $parsed_file->{$package};
+              } else {
+                 warn "W: Package $package is already listed for $dist. Not overriding.\n";
+              }
            } else {
               $packages{$dist}{$package} = $parsed_file->{$package};
            }
@@ -496,7 +507,7 @@ sub dist_compare(\@$$) {
      # Escaped versions
      my @esc_vers = @versions;
      foreach my $vers (@esc_vers) {
-        $vers =~ s|\+|\\\+|;
+        $vers =~ s|\+|\\\+| if defined $vers;
      }
 
      # Do compare
@@ -581,7 +592,7 @@ sub compare_src_bin {
     foreach my $package (@all_packages) {
 	my $line = "$package ";
 	my $status = "";
-	my $details;
+	my $details = '';
 
 	foreach my $type (@comp_types) {
 	    if ( $packages{$type}{$package} ) {
@@ -698,6 +709,9 @@ my $command = shift @ARGV;
 given ($command) {
     when ('create') {
 	dist_create(@ARGV);
+    }
+    when ('apt') {
+	aptcmd('apt', @ARGV);
     }
     when ('apt-get') {
 	aptcmd('apt-get', @ARGV);

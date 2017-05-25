@@ -1,1 +1,13 @@
+# /usr/share/bash-completion/completions/list-unreleased
+# Bash command completion for ‘list-unreleased(1)’.
+# Documentation: ‘bash(1)’, section “Programmable Completion”.
+
 complete -W '-c -R' -o filenames -d list-unreleased
+
+
+# Local variables:
+# coding: utf-8
+# mode: shell-script
+# indent-tabs-mode: nil
+# End:
+# vim: fileencoding=utf-8 filetype=sh expandtab shiftwidth=4 :

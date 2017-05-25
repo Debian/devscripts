@@ -1,3 +1,13 @@
+devscripts (2.16.10) unstable; urgency=medium
+
+  debuild's target mode (i.e. where it runs the specified debian/rules
+  targets) now requires a '--' between the debuild options and the targets
+  that need to be run.
+
+  For example, "debuild -d -- build-arch binary-arch".
+
+ -- James McCoy <jamessan@debian.org>  Thu, 24 Nov 2016 14:25:12 -0500
+
 devscripts (2.14.0) unstable; urgency=medium
 
   uscan now looks for upstream's keyring under debian/upstream/ as either

@@ -23,7 +23,7 @@
 use strict;
 use warnings;
 use FileHandle;
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use Dpkg::Version;
 use Dpkg::IPC;
 
@@ -100,7 +100,7 @@ GetOptions(
     "help|h" => sub { help(); exit },
     "stdin|i" => \$use_stdin,
     "dctrl|d" => \$use_dctrl,
-    "sources|s:s@" => \$source_files,
+    "sources|s=s@" => \$source_files,
     "uploaders|u!" => \$show_uploaders,
     'z|uncompress' => \$opt_uncompress,
     "print-binary|b" => \$print_binary,

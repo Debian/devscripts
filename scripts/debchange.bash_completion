@@ -1,3 +1,7 @@
+# /usr/share/bash-completion/completions/debchange
+# Bash command completion for ‘debchange(1)’.
+# Documentation: ‘bash(1)’, section “Programmable Completion”.
+
 _debchange()
 {
     local cur prev options
@@ -42,30 +46,30 @@ _debchange()
     urgency='low medium high critical'
 
     case $prev in
-	--changelog | -c | --news)
-	    COMPREPLY=( $( compgen -G "${cur}*" ) )
-	    ;;
-	--check-dirname-level)
-	    COMPREPLY=( $( compgen -W [0 1 2] ) )
-	    ;;
+        --changelog | -c | --news)
+            COMPREPLY=( $( compgen -G "${cur}*" ) )
+            ;;
+        --check-dirname-level)
+            COMPREPLY=( $( compgen -W [0 1 2] ) )
+            ;;
 #FIXME: we need "querybts --list" option with no verbose output
-#	--closes)
-#	     package=`dpkg-parsechangelog -SSource`
-#	     bugnumber=`querybts --list -b $package|grep ^#|cut -d' ' -f1`
-#	     COMPREPLY=( $( compgen -W "$bugnumber" ) )
-#	    ;;
-	-D | --distribution)
-	    COMPREPLY=( $( compgen -W "$distro" ) )
-	    ;;
-	--newversion | -v | --package | --local | -l | --allow-lower-version)
-	    ;;
-	--release-heuristic)
-	    COMPREPLY=( $( compgen -W 'log changelog' ) )
-	    ;;
-	-u | --urgency)
-	    COMPREPLY=( $( compgen -W "$urgency" ) )
-	    ;;
-	*)
+#       --closes)
+#            package=`dpkg-parsechangelog -SSource`
+#            bugnumber=`querybts --list -b $package|grep ^#|cut -d' ' -f1`
+#            COMPREPLY=( $( compgen -W "$bugnumber" ) )
+#           ;;
+        -D | --distribution)
+            COMPREPLY=( $( compgen -W "$distro" ) )
+            ;;
+        --newversion | -v | --package | --local | -l | --allow-lower-version)
+            ;;
+        --release-heuristic)
+            COMPREPLY=( $( compgen -W 'log changelog' ) )
+            ;;
+        -u | --urgency)
+            COMPREPLY=( $( compgen -W "$urgency" ) )
+            ;;
+        *)
             COMPREPLY=( $(
                     compgen -W "$options" | grep "^$cur"
                 ) )
@@ -76,3 +80,11 @@ _debchange()
 
 }
 complete -F _debchange debchange dch
+
+
+# Local variables:
+# coding: utf-8
+# mode: shell-script
+# indent-tabs-mode: nil
+# End:
+# vim: fileencoding=utf-8 filetype=sh expandtab shiftwidth=4 :

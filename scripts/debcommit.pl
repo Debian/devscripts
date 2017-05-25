@@ -36,7 +36,7 @@ repository.
 
 =item B<-R>, B<--release-use-changelog>
 
-When used in conjunction with B<--release>, if there are uncommited
+When used in conjunction with B<--release>, if there are uncommitted
 changes to the changelog then derive the commit message from those
 changes rather than using the default message.
 
@@ -182,7 +182,7 @@ options to "bzr commit" will be generated to associate the revision and the bugs
 
 use warnings;
 use strict;
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use Cwd;
 use File::Basename;
 use File::Temp;
@@ -700,8 +700,8 @@ sub tag {
 	}
     }
     elsif ($prog eq 'git') {
-	$tag =~ s/^[0-9]+://; # strip epoch
-	$tag =~ tr/~/./; # mangle for git
+	$tag =~ tr/~/_/; # mangle for git
+	$tag =~ tr/:/%/;
 	if ($tag =~ /-/) {
 	    # not a native package, so tag as a debian release
 	    $tag = "debian/$tag";

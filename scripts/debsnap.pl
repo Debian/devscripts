@@ -18,7 +18,7 @@
 use strict;
 use warnings;
 
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use File::Basename;
 use Cwd qw/cwd abs_path/;
 use File::Path qw/make_path/;
@@ -220,6 +220,7 @@ Getopt::Long::Configure('no_ignore_case');
 GetOptions(\%opt, 'verbose|v', 'destdir|d=s', 'force|f', 'help|h', 'version', 'first=s', 'last=s', 'list', 'binary', 'architecture|a=s@') || usage(1);
 
 usage(0) if $opt{help};
+version() if $opt{version};
 usage(1) unless @ARGV;
 $package = shift;
 if (@ARGV) {
@@ -301,9 +302,11 @@ elsif ($opt{binary}) {
 	my @results = @{$src_json->{result}};
 	if (@{$opt{architecture}})
 	{
-	    my %archs = map { ($_ => 1) } @{$opt{architecture}};
-	    @results = grep { $archs{$_->{architecture}}-- } @results;
-	    my @missing = grep { $archs{$_} == 1 } sort keys %archs;
+	    my %archs = map { ($_ => 0) } @{$opt{architecture}};
+	    @results = grep {
+	        exists $archs{$_->{architecture}} && ++$archs{$_->{architecture}}
+	    } @results;
+	    my @missing = grep { $archs{$_} == 0 } sort keys %archs;
 	    if (@missing) {
 		warn "$progname: No binary packages found for $package version $version->{binary_version} on " . join(', ', @missing) . "\n";
 		$warnings++;
@@ -324,7 +327,7 @@ elsif ($opt{binary}) {
 }
 else {
     foreach my $version (@versions) {
-	my $src_json = fetch_json_page("$baseurl/$version->{version}/srcfiles?fileinfo=1");
+	my $src_json = fetch_json_page("$baseurl$version->{version}/srcfiles?fileinfo=1");
 	unless ($src_json) {
 	    warn "$progname: No source files found for $package version $version->{version}\n";
 	    $warnings++;

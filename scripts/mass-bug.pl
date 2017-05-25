@@ -150,7 +150,7 @@ F</usr/sbin/sendmail>.  Same as the B<--sendmail> command line option.
 
 use strict;
 use warnings;
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use Text::Wrap;
 use File::Basename;
 use POSIX qw(locale_h strftime);

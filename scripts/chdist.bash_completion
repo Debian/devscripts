@@ -1,13 +1,17 @@
+# /usr/share/bash-completion/completions/chdist
+# Bash command completion for ‘chdist(1)’.
+# Documentation: ‘bash(1)’, section “Programmable Completion”.
+
 _chdist ()
 {
   local cur=$2 prev=$3
   local options='--help -h --data-dir -d --arch -a'
-  local commands='create apt-get apt-cache apt-rdepends
+  local commands='create apt apt-get apt-cache apt-rdepends
            src2bin bin2src
-	   compare-packages compare-bin-packages
-	   compare-versions compare-bin-versions
-	   grep-dctrl-packages grep-dctrl-sources
-	   list'
+       compare-packages compare-bin-packages
+       compare-versions compare-bin-versions
+       grep-dctrl-packages grep-dctrl-sources
+       list'
   # Sync'd with buildd.debian.org on 2016-04-02:
   local archs="all alpha amd64 arm64 armel armhf hppa hurd-i386 i386 ia64 kfreebsd-amd64 kfreebsd-i386 m68k mips mips64el mipsel powerpc powerpcspe ppc64 ppc64el s390 s390x sh4 sparc sparc64 x32"
   local dists=$(ls $HOME/.chdist 2>/dev/null)
@@ -27,9 +31,9 @@ _chdist ()
     -@(-help|h)|list)
         return 0
     ;;
-    create|apt-get|apt-cache|apt-rdepends|src2bin|bin2src|compare-packages|compare-bin-packages|compare-versions|compare-bin-versions|grep-dctrl-packages|grep-dctrl-sources)
+    create|apt|apt-get|apt-cache|apt-rdepends|src2bin|bin2src|compare-packages|compare-bin-packages|compare-versions|compare-bin-versions|grep-dctrl-packages|grep-dctrl-sources)
         COMPREPLY=( $( compgen -W "$dists" -- $cur ) )
-	return 0
+    return 0
   esac
 
   if [[ "$cur" == -* ]]; then
@@ -48,3 +52,9 @@ _chdist ()
 complete -F _chdist chdist
 
 
+# Local variables:
+# coding: utf-8
+# mode: shell-script
+# indent-tabs-mode: nil
+# End:
+# vim: fileencoding=utf-8 filetype=sh expandtab shiftwidth=4 :

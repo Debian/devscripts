@@ -27,8 +27,12 @@ from devscripts.control import Control
 CONTROL_LIST_FIELDS = (
     "Breaks",
     "Build-Conflicts",
+    "Build-Conflicts-Arch",
+    "Build-Conflicts-Indep",
     "Build-Depends",
+    "Build-Depends-Arch",
     "Build-Depends-Indep",
+    "Built-Using",
     "Conflicts",
     "Depends",
     "Enhances",
@@ -41,6 +45,7 @@ CONTROL_LIST_FIELDS = (
 )
 
 SUPPORTED_FILES = (
+    "clean",
     "control",
     "control*.in",
     "copyright",
@@ -260,6 +265,7 @@ def main():
         options.files = get_files(options.debian_directory)
 
     wrap_and_sort(options)
+
 
 if __name__ == "__main__":
     main()

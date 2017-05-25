@@ -1,5 +1,9 @@
-# Debian dscextract(1) completion                             -*- shell-script -*-
-# Copyright: 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+# /usr/share/bash-completion/completions/dscextract
+# Bash command completion for ‘dscextract(1)’.
+# Documentation: ‘bash(1)’, section “Programmable Completion”.
+
+# Copyright © 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+
 _dscextract()
 {
     local cur prev words cword _options
@@ -20,3 +24,11 @@ _dscextract()
 
     return 0
 } && complete -F _dscextract dscextract
+
+
+# Local variables:
+# coding: utf-8
+# mode: shell-script
+# indent-tabs-mode: nil
+# End:
+# vim: fileencoding=utf-8 filetype=sh expandtab shiftwidth=4 :

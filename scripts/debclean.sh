@@ -160,7 +160,14 @@ fi
 # Script to clean up debian directories
 
 OPWD="`pwd`"
-for i in `find . -type d -name "debian"`; do
+
+if [ -f debian/changelog ]; then
+    directories=./debian
+else
+    directories=$(find . -type d -name "debian")
+fi
+
+for i in $directories; do
     (  # subshell to not lose where we are
     DIR=${i%/debian}
     echo "Cleaning in directory $DIR"
@@ -194,7 +201,7 @@ for i in `find . -type d -name "debian"`; do
     fi
 
     # We now know we're OK and debuild won't complain about the dirname
-    debuild $CHECKBUILDDEP clean
+    debuild $CHECKBUILDDEP -- clean
 
     # Clean up the package related files
     if [ "$DEBCLEAN_CLEANDEBS" = yes ]; then

@@ -256,7 +256,7 @@ F<debian/changelog> file.
 
 This is substituted by the legal upstream version regex (capturing).
 
-  [-_](\d[\-+\.:\~\da-zA-Z]*)
+  [-_]?(\d[\-+\.:\~\da-zA-Z]*)
 
 =item B<@ARCHIVE_EXT@>
 
@@ -268,7 +268,7 @@ This is substituted by the typical archive file extension regex (non-capturing).
 
 This is substituted by the typical signature file extension regex (non-capturing).
 
-  (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)\.(?:asc|pgp|gpg|sig)
+  (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)\.(?:asc|pgp|gpg|sig|sign)
 
 =back
 
@@ -421,7 +421,7 @@ I<user-agent-string>. (persistent)
 B<user-agent> option should be specified by itself in the watch line without
 I<URL>, to allow using semicolons and commas in it.
 
-=item B<pasv>, B<passsive>
+=item B<pasv>, B<passive>
 
 Use PASV mode for the FTP connection.
 
@@ -646,7 +646,7 @@ The upstream tarball href corresponding to the newest (uversionmangled)
 candidate upstream version newer than the (dversionmangled) last upstream
 version is selected.
 
-If multiple upstream tarball hrefs corresponding to a single verion with
+If multiple upstream tarball hrefs corresponding to a single version with
 different extensions exist, the highest compression one is chosen. (Priority:
 B<< tar.xz > tar.lzma > tar.bz2 > tar.gz >>.)
 
@@ -689,8 +689,8 @@ tarball href and the signature file is tried to be downloaded from it.
 
 If the B<pgpsigurlmangle> rule doesn't exist, B<uscan> warns user if the
 matching upstream signature file is available from the same URL with their
-filename being suffixed by the 4 common suffix B<asc>, B<gpg>, B<pgp>, and
-B<sig>. (You can avoid this warning by setting B<pgpmode=none>.)
+filename being suffixed by the 4 common suffix B<asc>, B<gpg>, B<pgp>, B<sig>
+and B<sign>. (You can avoid this warning by setting B<pgpmode=none>.)
 
 If the signature file is downloaded, the downloaded upstream tarball is checked
 for its authenticity against the downloaded signature file using the keyring
@@ -801,7 +801,7 @@ signature file in the same file path.
 
 For the upstream source package B<foo-2.0.tar.gz> and the upstream signature
 file B<foo-2.0.tar.gz.asc>, this watch file downloads these files, verifies the
-authenticity using the keyring F<debian/upstream-key.pgp> and creates the
+authenticity using the keyring F<debian/upstream/signing-key.asc> and creates the
 Debian B<orig.tar> file B<foo_2.0.orig.tar.gz>.
 
 =head2 HTTP site (pgpmode=next/previous)
@@ -830,7 +830,7 @@ signature file extensions.
   version=4
   opts="pgpmode=next" http://example.com/DL/ \
       files/(?:\d+)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
-  opts="pgpmode=prevous" http://example.com/DL/ \
+  opts="pgpmode=previous" http://example.com/DL/ \
       files/(?:\d+)/@PACKAGE@@ANY_VERSION@@SIGNATURE_EXT@ \
       previous uupdate
 
@@ -1086,9 +1086,9 @@ Please note, you can still use normal functionalities of B<uscan> to set up a
 watch file for this site without using the redirector.
 
   version=4
-  opts="pgpmode=none, \
+  opts="pgpmode=none" \
       https://pypi.python.org/pypi/cfn-sphere/ \
-      https://pypi.python.org/packages/source/c/cfn-sphere/\
+      https://pypi.python.org/packages/.*/.*/.*/\
       cfn-sphere-([\d\.]+).tar.gz#.* debian uupdate
 
 =head2 code.google.com
@@ -1099,11 +1099,12 @@ to elsewhere (github?).  Please look for the newer upstream site.
 =head2 direct access to the git repository
 
 If the upstream only publishes its code via the git repository and it has no web
-interface to obtain the releasse tarball, you can use uscan with the tags of
+interface to obtain the release tarball, you can use uscan with the tags of
 the git repository.
 
   version=4
-  opts="mode=git" http://git.ao2.it/tweeper.git \
+  opts="mode=git, pgpmode=none" \
+  http://git.ao2.it/tweeper.git \
   refs/tags/v([\d\.]+) debian uupdate
 
 Please note "B<git ls-remote>" is used to obtain references for tags.  If a tag
@@ -1356,7 +1357,7 @@ Don't use PASV mode for FTP connections.
 
 =item B<--no-symlink>
 
-Don't call B<mk-origtargz>.
+Don't rename nor repack upstream tarball.
 
 =item B<--timeout> I<N>
 
@@ -1534,8 +1535,10 @@ variations.
 The optional I<script> parameter in F<debian/watch> means to execute I<script>
 with options after processing this line if specified.
 
+See L<HISTORY AND UPGRADING> for how B<uscan> invokes the custom I<script>.
+
 For compatibility with other tools such as B<git-buildpackage>, it may not be
-wise to create custom scripts with rondom behavior.  In general, B<uupdate> is
+wise to create custom scripts with random behavior.  In general, B<uupdate> is
 the best choice for the non-native package and custom scripts, if created,
 should behave as if B<uupdate>.  For possible use case, see
 L<http://bugs.debian.org/748474> as an example.
@@ -1688,35 +1691,36 @@ use strict;
 use warnings;
 use Cwd qw/cwd abs_path/;
 use Dpkg::Changelog::Parse qw(changelog_parse);
+use Dpkg::Control::Hash;
 use Dpkg::IPC;
 use File::Basename;
 use File::Copy qw/copy/;
-use File::Spec qw/catfile/;
+use File::Spec::Functions qw/catfile/;
 use File::Temp qw/tempfile tempdir/;
 use List::Util qw/first/;
 use filetest 'access';
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use Devscripts::Versort;
 use Text::ParseWords;
 use Digest::MD5;
+
+BEGIN {
+    pop @INC if $INC[-1] eq '.';
+    eval { require LWP::UserAgent; };
+    if ($@) {
+	my $progname = basename($0);
+	if ($@ =~ /^Can\'t locate LWP\/UserAgent\.pm/) {
+	    die "$progname: you must have the libwww-perl package installed\nto use this script\n";
+	} else {
+	    die "$progname: problem loading the LWP::UserAgent module:\n  $@\nHave you installed the libwww-perl package?\n";
+	}
+    }
+}
 
 sub uscan_die ($);
 sub uscan_warn ($);
 # From here, do not use bare "warn" nor "die".
 # Use "uscan_warn" or "uscan_die" instead to make --dehs work as expected.
-
-BEGIN {
-    eval { require LWP::UserAgent; };
-    if ($@) {
-	my $progname = basename($0);
-	if ($@ =~ /^Can\'t locate LWP\/UserAgent\.pm/) {
-	    uscan_die "$progname: you must have the libwww-perl package installed\nto use this script\n";
-	} else {
-	    uscan_die "$progname: problem loading the LWP::UserAgent module:\n  $@\nHave you installed the libwww-perl package?\n";
-	}
-    }
-}
-use Dpkg::Control::Hash;
 
 my $CURRENT_WATCHFILE_VERSION = 4;
 
@@ -1749,9 +1753,9 @@ sub uscan_verbose($);
 sub uscan_debug($);
 sub dehs_verbose ($);
 
-my $havegpgv = first { -x $_ } qw(/usr/bin/gpgv2 /usr/bin/gpgv);
-my $havegpg = first { -x $_ } qw(/usr/bin/gpg2 /usr/bin/gpg);
-uscan_die "Please install gpgv or gpgv2.\n" unless defined $havegpg;
+my $havegpgv = first { !system('sh', '-c', "command -v $_ >/dev/null 2>&1") } qw(gpgv2 gpgv);
+my $havegpg = first { !system('sh', '-c', "command -v $_ >/dev/null 2>&1") } qw(gpg2 gpg);
+uscan_die "Please install gpgv or gpgv2.\n" unless defined $havegpgv;
 uscan_die "Please install gnupg or gnupg2.\n" unless defined $havegpg;
 
 sub usage {
@@ -1832,7 +1836,7 @@ Options:
                    debian/copyright field Files-Excluded and Files-Excluded-*
     --pasv         Use PASV mode for FTP connections
     --no-pasv      Don\'t use PASV mode for FTP connections (default)
-    --no-symlink   Don\'t call mk-origtargz
+    --no-symlink   Don\'t rename nor repack upstream tarball
     --timeout N    Specifies how much time, in seconds, we give remote
                    servers to respond (default 20 seconds)
     --user-agent, --useragent
@@ -2957,6 +2961,8 @@ sub process_watchline ($$$$$$)
 	    my $href = $2;
 	    my $mangled_version;
 	    $href =~ s/\n//g;
+	    $href = fix_href($href);
+	    uscan_debug "Checking href $href\n";
 	    foreach my $_pattern (@patterns) {
 		if ($href =~ m&^$_pattern$&) {
 		    if ($watch_version == 2) {
@@ -3059,7 +3065,7 @@ sub process_watchline ($$$$$$)
 	    uscan_verbose "HTMLized FTP listing by the HTTP proxy\n";
 	    while ($content =~
 		m/(?:<\s*a\s+[^>]*href\s*=\s*\")((?-i)$pattern)\"/gi) {
-		my $file = $1;
+		my $file = fix_href($1);
 		my $mangled_version = join(".", $file =~ m/^$pattern$/);
 		foreach my $pat (@{$options{'uversionmangle'}}) {
 		    if (! safe_replace(\$mangled_version, $pat)) {
@@ -3273,7 +3279,7 @@ EOF
 	}
 	unless ($newversion) {
 	    # uversionmanglesd version is '', make best effort to set it
-	    $newfile_base =~ m/^.+[-_]([^-_]+)(?:\.tar\.(gz|bz2|xz)|\.zip)$/i;
+	    $newfile_base =~ m/^.+[-_]?(\d[\-+\.:\~\da-zA-Z]*)(?:\.tar\.(gz|bz2|xz)|\.zip)$/i;
 	    $newversion = $1;
 	    unless ($newversion) {
 		uscan_warn "Fix filenamemangle to produce a filename with the correct version\n";
@@ -3324,9 +3330,9 @@ EOF
 	uscan_msg "Newest version of $pkg on remote site is $newversion, specified download version is $download_version\n";
 	$found++;
     } elsif ($options{'versionmode'} eq 'newer') {
-	uscan_msg "Newest version of $pkg on remote site is $newversion, local version is $lastversion\n" .
-	    ($mangled_lastversion eq $lastversion ? "" : " (mangled local version is $mangled_lastversion)\n");
 	if ($compver eq 'newer') {
+	    uscan_msg "Newest version of $pkg on remote site is $newversion, local version is $lastversion\n" .
+		($mangled_lastversion eq $lastversion ? "" : " (mangled local version is $mangled_lastversion)\n");
 	    # There's a newer upstream version available, which may already
 	    # be on our system or may not be
 	    uscan_msg "   => Newer package available from\n" .
@@ -3334,6 +3340,8 @@ EOF
 	    $dehs_tags{'status'} = "newer package available";
 	    $found++;
 	} elsif ($compver eq 'same') {
+	    uscan_verbose "Newest version of $pkg on remote site is $newversion, local version is $lastversion\n" .
+		($mangled_lastversion eq $lastversion ? "" : " (mangled local version is $mangled_lastversion)\n");
 	    uscan_verbose "   => Package is up to date for from\n" .
 		      "      $upstream_url\n";
 	    $dehs_tags{'status'} = "up to date";
@@ -3346,6 +3354,8 @@ EOF
 		$download = 0;
 	    }
 	} else { # $compver eq 'old'
+	    uscan_verbose "Newest version of $pkg on remote site is $newversion, local version is $lastversion\n" .
+		($mangled_lastversion eq $lastversion ? "" : " (mangled local version is $mangled_lastversion)\n");
 	    uscan_verbose "   => Only older package available from\n" .
 		      "      $upstream_url\n";
 	    $dehs_tags{'status'} = "only older package available";
@@ -3375,7 +3385,7 @@ EOF
     my $downloader = sub {
 	my ($url, $fname, $mode) = @_;
 	if ($mode eq 'git') {
-	    my $curdir = getcwd();
+	    my $curdir = cwd();
 	    $fname =~ m%(.*)/([^/]*)-([^_/-]*)\.tar\.(gz|xz|bz2|lzma)%;
 	    my $dst = $1;
 	    my $pkg = $2;
@@ -3532,7 +3542,7 @@ EOF
     my $signature_available;
     if (($options{'pgpmode'} eq 'default' or $options{'pgpmode'} eq 'auto') and $signature == 1) {
 	uscan_verbose "Start checking for common possible upstream OpenPGP signature files\n";
-	foreach my $suffix (qw(asc gpg pgp sig)) {
+	foreach my $suffix (qw(asc gpg pgp sig sign)) {
 	    my $sigrequest = HTTP::Request->new('HEAD' => "$upstream_url.$suffix");
 	    my $sigresponse = $user_agent->request($sigrequest);
 	    if ($sigresponse->is_success()) {
@@ -3894,7 +3904,7 @@ sub newest_dir ($$$$$) {
 	my @hrefs;
 	my $match ='';
 	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi) {
-	    my $href = $2;
+	    my $href = fix_href($2);
 	    uscan_verbose "Matching target for dirversionmangle:   $href\n";
 	    if ($href =~ m&^$dirpattern/?$&) {
 		my $mangled_version = join(".", map { $_ // '' } $href =~ m&^$dirpattern/?$&);
@@ -4154,9 +4164,9 @@ sub process_watchfile ($$$$)
 	s/\\\\/\\/g if $watch_version==1;
 
 	# Handle @PACKAGE@ @ANY_VERSION@ @ARCHIVE_EXT@ substitutions
-	my $any_version = '[-_](\d[\-+\.:\~\da-zA-Z]*)';
+	my $any_version = '[-_]?(\d[\-+\.:\~\da-zA-Z]*)';
 	my $archive_ext = '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)';
-	my $signature_ext = $archive_ext . '\.(?:asc|pgp|gpg|sig)';
+	my $signature_ext = $archive_ext . '\.(?:asc|pgp|gpg|sig|sign)';
 	s/\@PACKAGE\@/$package/g;
 	s/\@ANY_VERSION\@/$any_version/g;
 	s/\@ARCHIVE_EXT\@/$archive_ext/g;
@@ -4414,6 +4424,18 @@ sub quoted_regex_parse($) {
     }
 
     return ($parsed_ok, $regexp, $replacement, $flags);
+}
+
+sub fix_href
+{
+    my ($href) = @_;
+
+    # Remove whitespace from URLs:
+    # https://www.w3.org/TR/html5/links.html#links-created-by-a-and-area-elements
+    $href =~ s/^\s+//;
+    $href =~ s/\s+$//;
+
+    return $href;
 }
 
 sub safe_replace($$) {

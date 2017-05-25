@@ -26,24 +26,14 @@ use strict;
 use warnings;
 use Cwd;
 use Fcntl;
+use Digest::MD5;
 use Dpkg::IPC;
 use File::Spec;
 use File::Temp;
 use File::Basename;
 use POSIX	qw(:errno_h);
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use List::Util qw(first);
-
-BEGIN {
-    eval { require Digest::MD5; };
-    if ($@) {
-	my $progname = basename $0;
-	if ($@ =~ /^Can\'t locate Digest\/MD5\.pm/) {
-	    die "$progname: you must have the libdigest-md5-perl package installed\nto use this script\n";
-	}
-	die "$progname: problem loading the Digest::MD5 module:\n  $@\nHave you installed the libdigest-md5-perl package?\n";
-    }
-}
 
 my $progname = basename $0;
 my $modified_conf_msg;
@@ -52,11 +42,11 @@ my $start_dir = cwd;
 my $verify_sigs = 1;
 my $use_default_keyrings = 1;
 my $verbose = 0;
-my $havegpg = first { -x $_ } qw(/usr/bin/gpg2 /usr/bin/gpg);
+my $havegpg = first { !system('sh', '-c', "command -v $_ >/dev/null 2>&1")  } qw(gpg2 gpg);
 
 sub usage {
     print <<"EOF";
-Usage: $progname [options] dsc-or-changes-file ...
+Usage: $progname [options] changes-or-buildinfo-dsc-file ...
   Options: --help      Display this message
            --version   Display version and copyright information
            --keyring <keyring>
@@ -148,6 +138,7 @@ sub check_signature($\@;\$) {
 	print $out if ($verbose);
 	return $err || $@;
     }
+    print $err if ($verbose);
 
     seek($fh, 0, SEEK_SET);
     my $status;
@@ -207,7 +198,7 @@ sub process_file {
 	}
     }
 
-    if ($file =~ /\.changes$/ and $out =~ /^Format:\s*(.*)$/mi) {
+    if ($file =~ /\.(changes|buildinfo)$/ and $out =~ /^Format:\s*(.*)$/mi) {
 	my $format = $1;
 	unless ($format =~ /^(\d+)\.(\d+)$/) {
 	    xwarn "$file has an unrecognised format: $format\n";
@@ -216,20 +207,22 @@ sub process_file {
 	my ($major, $minor) = split /\./, $format;
 	$major += 0;
 	$minor += 0;
-	unless ($major == 1 and $minor <= 8) {
+	if ($file =~ /\.changes$/ and ($major != 1 or $minor > 8) or
+	    $file =~ /\.buildinfo$/ and (($major != 0 or $minor > 2) and
+	                                 ($major != 1 or $minor > 0))) {
 	    xwarn "$file is an unsupported format: $format\n";
 	    return;
 	}
     }
 
-    my @spec = map { split /\n/ } $out =~ /^Files:\s*\n((?:[ \t]+.*\n)+)/mgi;
+    my @spec = map { split /\n/ } $out =~ /^(?:Checksums-Md5|Files):\s*\n((?:[ \t]+.*\n)+)/mgi;
     unless (@spec) {
 	xwarn "no file spec lines in $file\n";
 	return;
     }
 
     my @checksums = map { split /\n/ } $out =~ /^Checksums-(\S+):\s*\n/mgi;
-    @checksums = grep {!/^Sha(1|256)$/i} @checksums;
+    @checksums = grep {!/^(Md5|Sha(1|256))$/i} @checksums;
     if (@checksums) {
 	xwarn "$file contains unsupported checksums:\n"
 	    . join (", ", @checksums) . "\n";
@@ -351,7 +344,7 @@ sub process_file {
 
 	close FILE;
 
-	if ($filename =~ /\.dsc$/ && $verify_sigs) {
+	if ($filename =~ /\.(?:dsc|buildinfo)$/ && $verify_sigs) {
 	    $sigcheck = check_signature $filename, @rings;
 	    if ($sigcheck) {
 		xwarn "$filename failed signature check:\n$sigcheck";
@@ -367,7 +360,7 @@ sub process_file {
 }
 
 sub main {
-    @ARGV or xdie "no .changes or .dsc files specified\n";
+    @ARGV or xdie "no .changes, .buildinfo or .dsc files specified\n";
 
     my @rings;
 
@@ -425,7 +418,7 @@ sub main {
 	'verbose' => \$verbose,
     ) or do { usage; exit 1 };
 
-    @ARGV or xdie "no .changes or .dsc files specified\n";
+    @ARGV or xdie "no .changes, .buildinfo or .dsc files specified\n";
 
     @rings = get_rings @rings if $use_default_keyrings and $verify_sigs;
 

@@ -26,7 +26,7 @@ use File::Basename;
 use File::Copy qw(move);
 use File::Path qw(make_path);
 use File::Spec;
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 
 sub remove_duplicate_values($);
 sub store_if_relevant(%);
@@ -334,6 +334,7 @@ sub store_if_relevant(%) {
 	my $bug_string = "Package: $pkgname\n" .
 	    $comment .  # non-empty comments always contain the trailing \n
 	    "Bug:     $args{num}\n" .
+	    "Bug-URL: https://bugs.debian.org/$args{num}\n" .
 	    "Title:   " . unhtmlsanit($args{name}) . "\n" .
 	    "Flags:   " . $flags . "\n" .
 	    (defined $args{dists} ? "Dists:  " . $dists . "\n" : "") .

@@ -1,3 +1,393 @@
+devscripts (2.17.5) unstable; urgency=medium
+
+  * Create GNUPGHOME in /tmp to fix CI failures due to long path names.
+
+ -- James McCoy <jamessan@debian.org>  Sat, 18 Mar 2017 21:18:46 -0400
+
+devscripts (2.17.4) unstable; urgency=medium
+
+  * debsign:
+    + Don't try to sign a buildinfo file when one isn't listed in the
+      changes/dsc.  (Closes: #857964)
+
+ -- James McCoy <jamessan@debian.org>  Thu, 16 Mar 2017 22:41:27 -0400
+
+devscripts (2.17.3) unstable; urgency=medium
+
+  * debsign:
+    + Fix auto-detection of the signer.  Regression introduced in 2.17.2.
+      (Closes: #857537)
+    + Determine the names of related files from the file listings in
+      .changes/.buildinfo.  (Closes: #857536)
+    + In remote mode, ensure files are copied locally before trying to use
+      them.  Regression introduced in 2.17.2.  (Closes: #857716)
+
+ -- James McCoy <jamessan@debian.org>  Wed, 15 Mar 2017 23:28:00 -0400
+
+devscripts (2.17.2) unstable; urgency=medium
+
+  [ James McCoy ]
+  * deb-reversion:
+    + Correct parsing of long-form --new-version switch.  (Closes: #853919)
+  * grep-excuses:
+    + Improve robustness of HTML parsing to avoid issues like #856104, until
+      grep-excuses is converted to consume YAML.
+  * debsign:
+    + Add support for *.buildinfo files.  Thanks to Ximin Luo and Guillem
+      Jover for the patches!  (Closes: #855282)
+  * debian/tests/control: Add mozilla-devscripts to Depends, as needed by
+    mk-origtargz's tests.
+
+  [ Antonio Terceiro ]
+  * rc-alert:
+    + Add bug URL to the output.
+
+  [ Guillem Jover ]
+  * wrap-and-sort:
+    + Deal with Build-Conflicts-{Arch,Indep}, Build-Depends-Arch and
+      Built-Using fields.  (Closes: #855433)
+
+  [ Mattia Rizzolo ]
+  * Remove Ryan Niebur from Uploaders after a request from the MIA Team.
+    Thank you for all your past contributions!  (Closes: #856374)
+
+ -- James McCoy <jamessan@debian.org>  Sun, 05 Mar 2017 22:23:37 -0500
+
+devscripts (2.17.1) unstable; urgency=medium
+
+  [ Osamu Aoki ]
+  * uscan:
+    + PyPI packages location change.  (Closes: #851590)
+
+  [ Guillem Jover ]
+  * dscverify:
+    + Add support for .buildinfo files.  (Closes: #852801)
+
+  [ Mattia Rizzolo ]
+  * dscverify:
+    + Remove reference to the long gone debian-maintainers package.
+  * test_package_lifecycle:
+    + Import patch from Ubuntu to have the test pass on their builders too:
+      filter out output from pkg-create-dbgsym's dh_gencontrol wrapper, pass
+      --set-envvar=NO_PKG_MANGLE=1 to debuild, and pass -U to debchange.
+  * debian/tests/control:
+    + Depend on build-essential.
+
+  [ James McCoy ]
+  * test_package_lifecycle:
+    + Ignore debhelper's new "create-stamp" output to fix the test failure.
+      (Closes: #852918)
+
+ -- James McCoy <jamessan@debian.org>  Wed, 01 Feb 2017 21:25:00 -0500
+
+devscripts (2.17.0) unstable; urgency=medium
+
+  [ Sean Whitton ]
+  * New script: git-deborig, a wrapper around git-archive(1) to generate
+    Debian orig.tar files.
+
+  [ Paul Wise ]
+  * grep-excuses:
+    + Ignore new --- header line in autoremovals.yaml.cgi
+
+  [ James McCoy ]
+  * Check for existence of gpg/gpg2 in $PATH rather than absolute paths.
+    (Closes: #850655)
+  * wrap-and-sort:
+    + Support debian/clean files.  (Closes: #850662)
+  * Remove bash completion for dcut, since src:dput will be providing it.
+    (Closes: #850684)
+  * dget:
+    + Verify exit status of “dpkg-source -x” and propagate failure.  (Closes:
+      #850845)
+
+ -- James McCoy <jamessan@debian.org>  Tue, 10 Jan 2017 23:21:45 -0500
+
+devscripts (2.16.13) unstable; urgency=medium
+
+  [ Paul Wise ]
+  * uscan:
+    + Add .sign to the default OpenPGP extensions list
+
+  [ James McCoy ]
+  * debuild:
+    + Pass "-tc" through to dpkg-buildpackage instead of treating it as
+      "-t c".  (Closes: #848210)
+
+ -- James McCoy <jamessan@debian.org>  Thu, 15 Dec 2016 21:41:54 -0500
+
+devscripts (2.16.12) unstable; urgency=medium
+
+  [ James McCoy ]
+  * mergechanges:
+    + Add handling for buildinfo files, based on a patch by Simon McVittie.
+      (Closes: #843470)
+  * debuild:
+    + Move invocation of lintian back into debuild.  This restores the
+      behavior of ignoring the return code of lintian (Closes: #847168) and
+      only running lintian when it is present (Closes: #846711).
+
+  [ Antonio Terceiro ]
+  * debrepro:
+    + export NO_FAKE_STAT=1 when using faketime to avoid faking stat() calls
+      (see discussion in bug #846365)
+
+ -- James McCoy <jamessan@debian.org>  Fri, 09 Dec 2016 17:24:12 -0500
+
+devscripts (2.16.11) unstable; urgency=medium
+
+  [ James McCoy ]
+  * debuild:
+    + Avoid setting a hook to just "cd ..; ".
+    + Clear @ARGV if running lintian to avoid treating @ARGV as debian/rules
+      targets to run.  (Closes: #846863)
+
+  [ Antonio Terceiro ]
+  * debclean:
+    + do not descend on subdirectories if current directory is already a
+      Debian source package.
+    + fix manpage to mention what exactly is executed on each directory (i.e.
+      debclean calls `debuild -- clean`, not `debian/rules clean`)
+  * debrepro:
+    + add -s/--skip option to skip any of the supported variations
+      (Closes: #846365)
+
+ -- James McCoy <jamessan@debian.org>  Sun, 04 Dec 2016 21:19:15 -0500
+
+devscripts (2.16.10) unstable; urgency=medium
+
+  [ Afif Elghraoui ]
+  * debcommit:
+    + Use standard version mangling for git tags. (Closes: #770187)
+
+  [ Antonio Terceiro ]
+  * debrepro:
+    + document exit status in manpage
+
+  [ James McCoy ]
+  * debuild:
+    + Fix mapping of debuild final-clean hook to dpkg-buildpackage's
+      postclean.
+    + Preserve SOURCE_DATE_EPOCH in the environment.
+    + Require a '--' between debuild options and debian/rules target so we
+      know where options end.  (Closes: #845566)
+    + Adjust hook commands to account for dpkg-buildpackage running from a
+      different directory than debuild used for the lintian, signing, and
+      post-dpkg-buildpackage hooks.  (Closes: #845628)
+
+ -- James McCoy <jamessan@debian.org>  Sat, 26 Nov 2016 13:21:58 -0500
+
+devscripts (2.16.9) unstable; urgency=medium
+
+  [ James McCoy ]
+  * debsnap:
+    + Fix "no binaries for given arch" detection so it doesn't download
+      binaries for unspecified archs.  (Closes: #839533)
+    + Add handling for the --version switch, as advertised by --help.
+      (Closes: #839537)
+  * bts:
+    + Switch to Net::SMTPS to support STARTTLS.  Based on a patch by Andrew
+      Shadura.  (Closes: #518622)
+  * Refactor debuild to remove dpkg-buildpackage emulation and generally be a
+    much thinner wrapper around dpkg-buildpackage.  (Closes: #789581)
+    + Remove claim from man page that dpkg-buildpackage doesn't support hooks.
+      (Closes: #765495)
+    + Remove handling of all dpkg-buildpackage options that aren't directly
+      used by debuild.
+      - This fixes the issue where debuild didn't understand "-Jauto", as
+        debuild now just passes it through.  (Closes: #826508)
+    + Honor -a option regardless of which debuild mode is being used, since
+      both modes now invoke dpkg-buildpackage.  (Closes: #611896)
+    + Bump dpkg-dev (Build-)Depends to 1.17.6 for dpkg-buildpackage's
+      --check-command and --hook-* options.
+  * Fix debuild test failures due to new dpkg-genbuildinfo calls.
+    (Closes: #844910)
+  * dscverify:
+    + Always display gpg output if --verbose is used, regardless of whether
+      verification succeeds.  (Closes: #735416)
+
+  [ Antonio Terceiro ]
+  * debrepro:
+    + Don't vary the build path. See
+      https://wiki.debian.org/ReproducibleBuilds/History (section "Giving up
+      on build paths") for an explanation on why it is not currently feasible
+      to vary build paths for reproducible builds.
+    + convert mapage to POD
+    + in case of non-matching binaries, call diffoscope only on the .changes
+      files instead of on the .deb files. This way we even get diff in
+      .buildinfo between the builds.
+
+  [ Guillem Jover ]
+  * debrepro improvements (Closes: #841149):
+    + Simplify and make the vary() function more clear
+    + Use dpkg-buildpackage instead of ad-hoc code
+
+  [ Paul Wise ]
+  * who-uploads:
+    + Fix search for user IDs with gpg2 and no @debian.org user IDs (Closes:
+      #843961)
+  * uscan:
+    + Fix a mention of the location of the upstream signing key (Closes:
+      #842542)
+
+  [ Jochen Sprickerhof ]
+  * build-rdeps:
+    + add -q/--quiet option for use in scripts (Closes: #844327)
+
+ -- James McCoy <jamessan@debian.org>  Wed, 23 Nov 2016 22:47:38 -0500
+
+devscripts (2.16.8) unstable; urgency=medium
+
+  [ Paul Wise ]
+  * Add some more Debian development & QA tools to Suggests:
+    adequate autopkgtest bls-standalone check-all-the-things
+    duck how-can-i-help piuparts ratt
+
+  [ Antonio Terceiro ]
+  * New script: debrepro, a simple reproducibility tester specific for Debian
+    packages.  (Closes: #786755)
+
+  [ James McCoy ]
+  * deb-reversion: Update md5sum of changelog if it's changed.  (Closes:
+    #836725)
+  * Change Getopt::Long configuration to disable gnu_compat so an '=' isn't
+    required for optional arguments (e.g. "dch --news=").
+  * chdist:
+    + Silence warnings about uninitialized values.  Thanks to Christoph Biedl
+      for the patch.  (Closes: #838185)
+    + For compare-bin-packages, use the newest version of a package if
+      multiple versions exist.  Thanks to Christoph Biedl for the patch.
+      (Closes: #838184)
+
+ -- James McCoy <jamessan@debian.org>  Fri, 30 Sep 2016 22:17:07 -0400
+
+devscripts (2.16.7) unstable; urgency=medium
+
+  [ Paul Wise ]
+  * grep-excuses:
+    + Fix the script for the removal of testing.pl from release.debian.org
+  * dscverify:
+    + Fix bash completion of the --no-conf option
+  * uscan:
+    + Strip whitespace from hrefs before processing (Closes: #833779)
+    + Debug mode: print hrefs before checking them
+  * Suggest reprotest for reproducible builds testing (Closes: #786755)
+
+  [ Jakub Wilk ]
+  * wnpp-alert:
+    + Use HTTPS.
+
+  [ Salvatore Bonaccorso ]
+  * debchange: Add support for buster and bullseye
+  * bts: Add the "bullseye" and "bullseye-ignore" tags.
+
+  [ Christoph Berg ]
+  * origtargz: Fix unpacking of tarballs found in --path.
+
+  [ James McCoy ]
+  * Remove . from @INC when loading modules dynamically. [CVE-2016-1238]
+    (Closes: #832441)
+
+ -- James McCoy <jamessan@debian.org>  Mon, 22 Aug 2016 00:01:48 -0400
+
+devscripts (2.16.6) unstable; urgency=medium
+
+  [ James McCoy ]
+  * uscan:
+    + Fix typo of "passive" in description of PASV FTP mode.  Thanks to Yann
+      Dirson for the patch.  (Closes: #826321)
+    + Fix an “undefined subroutine” error by using the, already imported, cwd
+      function instead of getcwd.  (Closes: #827422)
+  * dd-list:
+    + Require an argument for ‘-s’ option, as intended, fixing a compatibility
+      issue with Perl 5.24's Getopt::Long.  Thanks to Niko Tyni for the patch.
+      (Closes: #826401)
+  * debchange:
+    + Merging the existing changelog stanza when a package is UNRELEASED and
+      --newversion is used now also happens with --distribution.  Thanks to
+      Ilias Tsitsimpi for the patch.  (Closes: #826837)
+  * Replace git-import-orig references with gbp-import-orig.  Thanks to Guido
+    Günther for the patch.  (Closes: #828758)
+  * Remove licensecheck script and add a Recommends for the new licensecheck
+    package.  (Closes: #828872)
+
+  [ Paul Wise ]
+  * uscan:
+    + Fix typo of "release" in description of git repository mode
+  * debsnap:
+    + Avoid an extra / in the srcfiles URL
+  * chdist:
+    + add support for apt and suggest it instead of apt-get
+
+  [ Antonio Terceiro ]
+  * debc:
+    + Added --list-debs option, which makes debc only list the filenames of
+      the .deb files, and none of their contents.
+
+  [ Osamu Aoki ]
+  * uscan:
+    + Fix watch file examples around pgpmode=none.
+
+  [ Jakub Wilk ]
+  * debcommit:
+    + Fix typo in the manual page.
+  * debdiff:
+    + Fix typo in the manual page.
+  * uscan:
+    + Fix gpgv existence check.
+    + Fix typos in the manual page.
+  * who-permits-upload:
+    + Fix typo in the manual page.
+  * README:
+    + Fix typo.
+
+ -- James McCoy <jamessan@debian.org>  Sun, 03 Jul 2016 15:17:31 -0400
+
+devscripts (2.16.5) unstable; urgency=medium
+
+  [ James McCoy ]
+  * uscan:
+    + Import catfile from File::Spec::Functions to fix use of unqualified
+      name.  Thanks to Craig Small for the patch.  (Closes: #823218)
+    + Use builtin die function when telling the user they don't have
+      LWP::UserAgent installed, instead of calling an undefined function.
+      (Closes: #826146)
+  * Declare compliance with policy 3.9.8, no changes needed.
+
+  [ Osamu Aoki ]
+  * uscan:
+    + Clarify --no-symlink meaning.  (Closes: #819111)
+    + No output if upstream == debian and no errors.  (Closes: #822649)
+    + Better @ANY_VERSION@ regex.  (Closes: #821224)
+  * uupdate:
+    + Use "dpkg-source --skip-patches ..." with -f to prevent patches to be
+      applied.  Thanks Herbert Parentes Fortes Neto.  (Closes: #823350)
+  * test_package_lifecycle:
+    + Handle new output format for dpkg-dev utilities.  (Closes: #825228)
+
+  [ Ben Finney ]
+  * scripts/*.bash_completion:
+    + Render U+0009 TAB to spaces.
+    + Normalise editor hints to preserve formatting.
+    + Standardise explanatory header block.
+  * debdiff:
+    + Include all options in Bash command completion.  (Closes: #824372)
+    + Correct Bash completion for ‘--debs-dir’ option.  (Closes: #824369)
+
+  [ Paul Wise ]
+  * licensecheck:
+    + Detect files containing "do not modify" as generated
+    + Detect files containing "Generated data" as generated
+    + Detect files containing "edit the original" as generated
+
+  [ Dominique Dumont ]
+  * licensecheck:
+    + added --deb-fmt option to use dep-5 license keywords (see #472199)
+    + parse "copyright-holders: John Doe" (See #820798)
+    + Parse "license: BSD-x-Clause" declaration (Closes: #820798)
+
+ -- James McCoy <jamessan@debian.org>  Fri, 03 Jun 2016 21:14:43 -0400
+
 devscripts (2.16.4~bpo8+1) jessie-backports; urgency=medium
 
   * Rebuild for jessie-backports.
@@ -50,7 +440,7 @@ devscripts (2.16.2) unstable; urgency=medium
     + Print proper warnings for bad rules.  Closes: #814049
     + Fix glitches around rules such as "s<...> <...>g" and add their
       tests.
-    + Reactivate --no-verbose mode.  Closes: #815645 
+    + Reactivate --no-verbose mode.  Closes: #815645
     + Fix --destdir for version 4.  Closes:#814686
     + Always use uscan_warn and uscan_die.
     + Die if the action script fails.  Closes: #810976
@@ -255,7 +645,7 @@ devscripts (2.15.10) unstable; urgency=low
       to reorganize behavior around existing downloaded files.
       (Closes: #532182, #740366, #801165)
     + Update filenamemangle to support the version pattern matching in any
-      position of the URL and remove .download hack which breaks 
+      position of the URL and remove .download hack which breaks
       mk-origtargz. (Closes: #526450, #803948, #804239)
     + Reorganize the reporting by uscan and adjust its text strings.
       (Closes: #582958)
@@ -270,7 +660,7 @@ devscripts (2.15.10) unstable; urgency=low
     + Prevent failure when upstream version is 0.  (Closes: #798175)
     + Work around missing debian.tar.gz for "3.0 (quilt)".  (Closes: 798133)
     + Add multiple upstream tarball support and resolve minor bugs by using
-      dpkg-source as the backend.  (Closes: #278797, #544638, #570221, 
+      dpkg-source as the backend.  (Closes: #278797, #544638, #570221,
       #752364, #797045)
   * mk-origtargz:
     + Support component name for the multiple upstream tarball support.

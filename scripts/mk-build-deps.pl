@@ -129,7 +129,7 @@ General Public License, version 2 or later.
 use 5.01;
 use strict;
 use warnings;
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use File::Basename;
 use Pod::Usage;
 use Dpkg::Control;
