@@ -725,7 +725,7 @@ for valid format" >&2;
 	report_signed
 
     else
-	ensure_local_copy "$remotehost" "$remotehost" "$remotedsc" dsc
+	ensure_local_copy "$remotehost" "$remotedsc" "$dsc" dsc
 	signas="$(guess_signas "$dsc")"
 	maybesign_dsc "$signas" "$remotehost" "$dsc"
 	report_signed
