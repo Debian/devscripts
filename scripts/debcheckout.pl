@@ -455,7 +455,7 @@ sub set_auth($$$$) {
     $url =~ s@(?:alioth\.debian\.org/(?:anonscm/bzr|scm/loggerhead/bzr)|anonscm\.debian\.org/bzr(?:/bzr)?)@bzr.debian.org/bzr@;
     $url =~ s@(?:alioth\.debian\.org/anonscm/darcs|anonscm\.debian\.org/darcs)@darcs.debian.org/darcs@;
     $url =~ s@git://anonscm\.debian\.org@git://git.debian.org@;
-    $url =~ s@(?:alioth\.debian\.org/anonscm/git|anonscm\.debian\.org/git)@git.debian.org/git@;
+    $url =~ s@(?:alioth\.debian\.org/anonscm/c?git|anonscm\.debian\.org/c?git)@git.debian.org/git@;
     $url =~ s@(?:alioth\.debian\.org/anonscm/hg|anonscm\.debian\.org/hg)@hg.debian.org/hg@;
     $url =~ s@svn://(?:scm\.alioth|anonscm)\.debian\.org@svn://svn.debian.org@;
 
@@ -971,8 +971,9 @@ sub guess_repo_type($$) {
 	$repo_type = $1;
     } elsif ($repo_url =~ /^https?:\/\/(svn|git|hg|bzr|darcs)\.debian\.org/) {
 	$repo_type = $1;
-    } elsif ($repo_url =~ m@^https?://anonscm.debian.org/(svn|git|hg|bzr|darcs)/@) {
+    } elsif ($repo_url =~ m@^https?://anonscm.debian.org/(svn|c?git|hg|bzr|darcs)/@) {
 	$repo_type = $1;
+	$repo_type =~ s/cgit/git/;
     }
     return $repo_type;
 }

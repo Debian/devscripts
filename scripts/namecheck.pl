@@ -53,6 +53,12 @@ use LWP::UserAgent;
 
 
 #
+# A module for finding the user home dir.
+#
+use File::HomeDir;
+
+
+#
 #  Get the name from the command line.
 #
 my $name = shift;
@@ -95,7 +101,7 @@ exit;
 
 sub loadPatterns
 {
-    my $file  = $ENV{ 'HOME' } . "/.namecheckrc";
+    my $file  = File::HomeDir->my_home . "/.namecheckrc";
     my @lines = ();
 
     if ( -e $file )

@@ -1,3 +1,36 @@
+devscripts (2.17.6) unstable; urgency=medium
+
+  [ Osamu Aoki ]
+  * uscan:
+    + Update manpage on the github.com behavior and the alternative
+      shorthand form.  (Closes: #836507, #859089)
+
+  [ Adam D. Barratt ]
+  * uscan: fix a typo in the manpage
+  * debdiff: fix a typo
+
+  [ Paul Wise ]
+  * chdist:
+    + add support for running aptitude
+  * debcheckout:
+    + handle cgit URLs too. Thanks to Rhonda for the suggestion.
+  * Make various scripts work when HOME is unset:
+    bts chdist debcommit dscverify grep-excuses
+    namecheck rc-alert svnpath wnpp-alert
+
+  [ Antonio Terceiro ]
+  * debrepro:
+    + check for dependencies before doing any builds (Closes: #862586)
+
+  [ James Clarke ]
+  * debsign:
+    + Fix signing a dsc directly.  (Closes: #863497)
+
+  [ Jean-Pierre Giraud ]
+  * French translation update (Closes: #863983)
+
+ -- James McCoy <jamessan@debian.org>  Sat, 03 Jun 2017 14:29:24 -0400
+
 devscripts (2.17.5~bpo8+1) jessie-backports; urgency=medium
 
   * Rebuild for jessie-backports.

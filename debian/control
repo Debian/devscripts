@@ -16,6 +16,7 @@ Build-Depends: bash-completion,
                libdistro-info-perl,
                libdpkg-perl,
                libfile-desktopentry-perl,
+               libfile-homedir-perl,
                libgit-wrapper-perl,
                liblist-compare-perl,
                libtimedate-perl,
@@ -46,6 +47,7 @@ Package: devscripts
 Architecture: any
 Multi-Arch: foreign
 Depends: dpkg-dev (>= 1.17.6),
+         libfile-homedir-perl,
          ${misc:Depends},
          ${perl:Depends},
          ${python3:Depends},

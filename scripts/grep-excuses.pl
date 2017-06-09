@@ -22,6 +22,7 @@ use 5.006;
 use strict;
 use warnings;
 use File::Basename;
+use File::HomeDir;
 
 # Needed for --wipnity option
 
@@ -57,7 +58,7 @@ my $rmurl='https://udd.debian.org/cgi-bin/autoremovals.cgi';
 my $rmurl_yaml='https://udd.debian.org/cgi-bin/autoremovals.yaml.cgi';
 
 # No longer use these - see bug#309802
-my $cachedir = $ENV{'HOME'}."/.devscripts_cache/";
+my $cachedir = File::HomeDir->my_home."/.devscripts_cache/";
 my $cachefile = $cachedir . basename($url);
 unlink $cachefile if -f $cachefile;
 
