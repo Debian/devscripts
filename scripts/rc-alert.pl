@@ -435,7 +435,7 @@ sub human_dists($) {
     }
 }
 
-# Reverse of master.debian.org:/org/bugs.debian.org/cgi-bin/common.pl
+# Reverse of master.debian.org:/srv/bugs.debian.org/cgi-bin/common.pl
 sub unhtmlsanit ($) {
     my %saniarray = ('lt','<', 'gt','>', 'amp','&', 'quot', '"');
     my $in = $_[0];

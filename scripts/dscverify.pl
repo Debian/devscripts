@@ -99,7 +99,7 @@ sub get_rings {
     if (defined $ENV{HOME} && -r "$ENV{HOME}/.gnupg/trustedkeys.gpg") {
 	unshift(@keyrings, "$ENV{HOME}/.gnupg/trustedkeys.gpg");
     }
-    unshift(@keyrings, '/org/keyring.debian.org/keyrings/debian-keyring.gpg');
+    unshift(@keyrings, '/srv/keyring.debian.org/keyrings/debian-keyring.gpg');
     if (system('dpkg-vendor', '--derives-from', 'Ubuntu') == 0) {
         unshift(@keyrings, qw(/usr/share/keyrings/ubuntu-master-keyring.gpg
 			      /usr/share/keyrings/ubuntu-archive-keyring.gpg));
