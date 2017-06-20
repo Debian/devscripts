@@ -161,7 +161,7 @@ Options:
          distribution name
   --bpo
          Increment the Debian release number for a backports upload
-         to "jessie-backports"
+         to "stretch-backports"
   -l, --local <suffix>
          Add a suffix to the Debian version number for a local build
   -b, --force-bad-version
@@ -606,8 +606,8 @@ my $MAINTAINER = 'MAINTAINER';
 my $EMAIL = 'EMAIL';
 my $DISTRIBUTION = 'UNRELEASED';
 my $bpo_dist = '';
-my %bpo_dists = ( 60, 'squeeze', 70, 'wheezy', 8, 'jessie' );
-my $latest_bpo_dist = '8';
+my %bpo_dists = ( 60, 'squeeze', 70, 'wheezy', 8, 'jessie', 9, 'stretch' );
+my $latest_bpo_dist = '9';
 my $CHANGES = '';
 # Changelog urgency, possibly propogated to NEWS files
 my $CL_URGENCY = '';
