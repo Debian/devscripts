@@ -3,6 +3,7 @@ devscripts (2.17.6+deb9u1) UNRELEASED; urgency=medium
   [ Mattia Rizzolo ]
   * debchange:
     + Target stretch-backports with --bpo.
+    + Support $codename{,-{proposed-updates,security}} as well.
 
  -- James McCoy <jamessan@debian.org>  Tue, 11 Jul 2017 21:28:50 -0400
 

@@ -472,7 +472,7 @@ if ($vendor eq 'Ubuntu' and ($opt_n or $opt_bn or $opt_qa or $opt_bpo)) {
 # Check the distro name given.
 if (defined $opt_D) {
     if ($vendor eq 'Debian') {
-	unless ($opt_D =~ /^(experimental|unstable|UNRELEASED|((old)?stable|testing)(-proposed-updates)?|proposed-updates|(wheezy|jessie|stretch|buster|bullseye)-security)$/) {
+	unless ($opt_D =~ /^(experimental|unstable|sid|UNRELEASED|((old){0,2}stable|testing|wheezy|jessie|stretch|buster|bullseye)(-proposed-updates|-security)?|proposed-updates)$/) {
 	    my $deb_info = get_debian_distro_info();
 	    my ($oldstable_backports, $stable_backports) = ("", "");
 	    if ($deb_info == 0) {
@@ -487,9 +487,12 @@ if (defined $opt_D) {
 	    if ($deb_info == 0 || $opt_D !~ m/^(\Q$stable_backports\E|\Q$oldstable_backports\E)$/) {
 		$stable_backports = ", " . $stable_backports if $stable_backports;
 		$oldstable_backports = ", " . $oldstable_backports if $oldstable_backports;
-		warn "$progname warning: Recognised distributions are: unstable, testing, stable,\n"
-		     . "oldstable, experimental, {testing-,stable-,oldstable-,}proposed-updates,\n"
-		     . "{testing,stable,oldstable}-security$oldstable_backports$stable_backports and UNRELEASED.\n"
+		warn "$progname warning: Recognised distributions are: \n"
+		     . "experimental, unstable, testing, stable, oldstable, oldoldstable,\n"
+                     . "{bullseye,buster,stretch,jessie,wheezy}-proposed-updates,\n"
+		     . "{testing,stable,oldstable,oldoldstable}-proposed-updates,\n"
+                     . "{bullseye,buster,stretch,jessie,wheezy}-security,\n"
+		     . "{testing,stable,oldstable,oldoldstable}}-security$oldstable_backports$stable_backports and UNRELEASED.\n"
 		     . "Using your request anyway.\n";
 		$warnings++ if not $opt_force_dist;
 	    }

@@ -82,14 +82,21 @@ checkUbuntuVersion() {
 }
 
 testDebianDistributions() {
+    checkDebianDistribution "bullseye"
     checkDebianDistribution "bullseye-security"
+    checkDebianDistribution "buster"
     checkDebianDistribution "buster-security"
+    checkDebianDistribution "stretch"
     checkDebianDistribution "stretch-security"
+    checkDebianDistribution "jessie"
+    checkDebianDistribution "jessie-proposed-updates"
     checkDebianDistribution "jessie-security"
     checkDebianDistribution "wheezy-security"
     checkDebianDistribution "experimental"
     checkDebianDistribution "oldstable"
     checkDebianDistribution "oldstable-proposed-updates"
+    checkDebianDistribution "oldoldstable"
+    checkDebianDistribution "oldoldstable-proposed-updates"
     checkDebianDistribution "proposed-updates"
     checkDebianDistribution "stable"
     checkDebianDistribution "stable-proposed-updates"
