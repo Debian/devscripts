@@ -6,6 +6,7 @@ devscripts (2.17.7) UNRELEASED; urgency=medium
   [ Mattia Rizzolo ]
   * debchange:
     + Target stretch-backports with --bpo.
+    + Support $codename{,-{proposed-updates,security}} as well.
 
   [ Hilko Bengen ]
   * debchange:
