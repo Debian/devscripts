@@ -3,7 +3,7 @@ devscripts (2.17.6+deb9u1) UNRELEASED; urgency=medium
   [ Mattia Rizzolo ]
   * debchange:
     + Target stretch-backports with --bpo.  Closes: #867662
-    + Support $codename{,-{proposed-updates,security}} as well.
+    + Support $codename{,-{proposed-updates,security}} as well. Closes: #789587
   * bts:
     + Add patch from Samuel Thibault <sthibault@debian.org> to add support for
       the new 'a11y' tag.  Closes: #867416
