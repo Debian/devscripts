@@ -3690,12 +3690,12 @@ sub browse {
     elsif ($caching && have_lwp() && $thing ne '') {
 	if (! $hascache) {
 	    if (! -d dirname($cachedir)) {
-		unless (mkdir(dirname($cachedir))) {
+		unless (make_path(dirname($cachedir))) {
 		    warn "$progname: couldn't mkdir ".dirname($cachedir).": $!\n";
 		    goto LIVE;
 		}
 	    }
-	    unless (mkdir($cachedir)) {
+	    unless (make_path($cachedir)) {
 		warn "$progname: couldn't mkdir $cachedir: $!\n";
 		goto LIVE;
 	    }
