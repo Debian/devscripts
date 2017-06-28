@@ -102,7 +102,7 @@ And now, in mostly alphabetical order, the scripts:
   debian/changelog are dealt with specially, to avoid the conflicts that
   changelog diffs typically produce when applied naively. May be used to check
   that old patches still apply to newer versions of those packages.
-  [python3-unidiff, quilt]
+  [python3-debian, python3-unidiff, quilt]
 
 - debpkg: A wrapper for dpkg used by debi to allow convenient testing
   of packages.  For debpkg to work, it needs to be made setuid root,
