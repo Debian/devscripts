@@ -153,7 +153,7 @@ $version = '2.9.6' if $version =~ /\#/;  # for testing unconfigured version
 my $new_cache_format_version = '2.9.6';
 
 # The official list is mirrored
-# bugs-mirror.debian.org:/org/bugs.debian.org/etc/config
+# bugs-mirror.debian.org:/srv/bugs.debian.org/etc/config
 # in the variable @gTags; we copy it verbatim here.
 our (@gTags, @valid_tags, %valid_tags);
 @gTags = ( "patch", "wontfix", "moreinfo", "unreproducible", "fixed",

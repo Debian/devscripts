@@ -19,6 +19,25 @@
 
 set -eu
 
+check_dependencies() {
+    for optional in disorderfs diffoscope; do
+        if ! which "$optional" > /dev/null; then
+            echo "W: $optional not installed, there will be missing functionality" >&2
+        fi
+    done
+
+    local failed=''
+    for mandatory in faketime; do
+        if ! which "$mandatory" > /dev/null; then
+            echo "E: $mandatory not installed, cannot proceed." >&2
+            failed=yes
+        fi
+    done
+    if [ -n "$failed" ]; then
+        exit 3
+    fi
+}
+
 usage() {
     echo "usage: $0 [OPTIONS] [SOURCEDIR]"
     echo ""
@@ -189,6 +208,8 @@ fi
 
 tmpdir=$(mktemp --directory --tmpdir debrepro.XXXXXXXXXX)
 trap "echo; echo 'I: artifacts left in $tmpdir'" INT TERM EXIT
+
+check_dependencies
 
 banner "First build"
 build first

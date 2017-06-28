@@ -1,4 +1,28 @@
-devscripts (2.17.6) UNRELEASED; urgency=medium
+devscripts (2.17.7) UNRELEASED; urgency=medium
+
+  [ Paul Wise ]
+  * Switch from /org to /srv in paths on debian.org servers
+
+  [ Mattia Rizzolo ]
+  * debchange:
+    + Target stretch-backports with --bpo.
+    + Support $codename{,-{proposed-updates,security}} as well. Closes: #789587
+
+  [ Hilko Bengen ]
+  * debchange:
+    + Replace dpkg call with Dpkg::Version::compare_version  (Closes: #854366)
+
+  [ Cyril Brulebois ]
+  * debsnap:
+    + parse the dsc file when downloading source packages.  (Closes: #862668)
+
+  [ Ximin Luo ]
+  * debpatch:
+    + New script, Apply a debdiff to a Debian source package. (Closes: #845659)
+
+ -- Paul Wise <pabs@debian.org>  Sat, 17 Jun 2017 13:11:35 +0800
+
+devscripts (2.17.6) unstable; urgency=medium
 
   [ Osamu Aoki ]
   * uscan:
@@ -18,11 +42,18 @@ devscripts (2.17.6) UNRELEASED; urgency=medium
     bts chdist debcommit dscverify grep-excuses
     namecheck rc-alert svnpath wnpp-alert
 
-  [ Ximin Luo ]
-  * debpatch:
-    + New script, Apply a debdiff to a Debian source package. (Closes: #845659)
+  [ Antonio Terceiro ]
+  * debrepro:
+    + check for dependencies before doing any builds (Closes: #862586)
 
- -- Osamu Aoki <osamu@debian.org>  Fri, 31 Mar 2017 02:03:30 +0900
+  [ James Clarke ]
+  * debsign:
+    + Fix signing a dsc directly.  (Closes: #863497)
+
+  [ Jean-Pierre Giraud ]
+  * French translation update (Closes: #863983)
+
+ -- James McCoy <jamessan@debian.org>  Sat, 03 Jun 2017 14:29:24 -0400
 
 devscripts (2.17.5) unstable; urgency=medium
 
