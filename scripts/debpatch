@@ -45,6 +45,11 @@ CHBLOCK_DUMMY_PACKAGE = "debpatch PLACEHOLDER"
 TRY_ENCODINGS = ["utf-8", "latin-1"]
 DISTRIBUTION_DEFAULT = "experimental"
 
+def workaround_dpkg_865430(dscfile, origdir, stdout):
+    f = subprocess.check_output(["dcmd", "--tar", "echo", dscfile]).rstrip()
+    if not os.path.exists(os.path.join(origdir.encode("utf-8"), os.path.basename(f))):
+        C(["dcmd", "--tar", "cp", dscfile, origdir], stdout=stdout)
+
 def is_dch(path):
     return (basename(path) == 'changelog'
         and basename(dirname(path)) == 'debian'
@@ -243,16 +248,18 @@ def main(args):
         os.chdir(args.orig_dsc_or_dir)
         debpatch(patch, patch_name, args)
     elif os.path.isfile(args.orig_dsc_or_dir):
-        parts = os.path.splitext(os.path.basename(args.orig_dsc_or_dir))
+        dscfile = args.orig_dsc_or_dir
+        parts = os.path.splitext(os.path.basename(dscfile))
         if parts[1] != ".dsc":
-            raise ValueError("unrecognised patch target: %s" % args.orig_dsc_or_dir)
+            raise ValueError("unrecognised patch target: %s" % dscfile)
         extractdir = args.directory if args.directory else tempfile.mkdtemp()
         if not os.path.isdir(extractdir):
             os.makedirs(extractdir)
         try:
             builddir = os.path.join(extractdir, parts[0]) # dpkg-source doesn't like existing dirs
-            C(["dpkg-source", "-x", "--skip-patches", args.orig_dsc_or_dir, builddir], stdout=stdout)
+            C(["dpkg-source", "-x", "--skip-patches", dscfile, builddir], stdout=stdout)
             origdir = os.getcwd()
+            workaround_dpkg_865430(dscfile, origdir, stdout)
             os.chdir(builddir)
             did_patch = debpatch(patch, patch_name, args)
             if dry_run or not did_patch:
