@@ -16,6 +16,10 @@ devscripts (2.17.7) UNRELEASED; urgency=medium
   * debsnap:
     + parse the dsc file when downloading source packages.  (Closes: #862668)
 
+  [ Ximin Luo ]
+  * debpatch:
+    + New script, Apply a debdiff to a Debian source package. (Closes: #845659)
+
  -- Paul Wise <pabs@debian.org>  Sat, 17 Jun 2017 13:11:35 +0800
 
 devscripts (2.17.6) unstable; urgency=medium

@@ -1,0 +1,112 @@
+.\" Copyright (c) 2016, Ximin Luo <infinity0@debian.org>
+.\"
+.\" This program is free software; you can redistribute it and/or
+.\" modify it under the terms of the GNU General Public License
+.\" as published by the Free Software Foundation; either version 3
+.\" of the License, or (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\"
+.\" See file /usr/share/common-licenses/GPL-3 for more details.
+.\"
+.TH DEBPATCH 1 "Debian Utilities" "DEBIAN"
+
+.SH NAME
+debpatch \- apply a debdiff to a Debian source package
+
+.SH SYNOPSIS
+.B debpatch
+[options] [orig_dsc_or_dir] [patch_file]
+.br
+.B debpatch
+[options] < [patch_file]
+
+.SH DESCRIPTION
+.B debpatch
+takes a \fIpatchfile\fR that describes the differences between two Debian
+source packages \fIold\fR and \fInew\fR, and applies it to a target Debian
+source package \fIorig\fR.
+.PP
+\fIorig\fR could either be the same as \fIold\fR or it could be different.
+\fIpatchfile\fR is expected to be a unified diff between two Debian source
+trees, as what
+.BR debdiff (1)
+normally generates.
+.PP
+Any changes to \fIdebian/changelog\fR are dealt with specially, to avoid the
+conflicts that changelog diffs typically produce when applied naively. The
+exact behaviour may be tweaked in the future, so one should not rely on it.
+.PP
+If \fIpatchfile\fR does not apply to \fIorig\fR, even after the special-casing
+of \fIdebian/changelog\fR, no changes are made and
+.BR debpatch (1)
+will exit with a non-zero error code.
+
+.SH ARGUMENTS
+.TP
+orig_dsc_or_dir
+Target to apply the patch to. This can either be an unpacked source tree, or a
+\[char46]dsc file. In the former case, the directory is modified in\-place; in
+the latter case, a second .dsc is created. Default: \fI.\fP
+.TP
+patch_file
+Patch file to apply, in the format output by
+.BR debdiff (1).
+Default:
+\fI\,/dev/stdin\/\fP
+
+.SH OPTIONS
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+show this help message and exit
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+Output more information
+.TP
+\fB\-c\fR CHANGELOG, \fB\-\-changelog\fR CHANGELOG
+Path to debian/changelog; default: debian/changelog
+.TP
+\fB\-D\fR DISTRIBUTION, \fB\-\-distribution\fR DISTRIBUTION
+Distribution to use, if the patch doesn't already contain a changelog; default:
+experimental
+.TP
+\fB\-\-repl\fR
+Run the python REPL after processing.
+.TP
+\fB\-\-source\-version\fR
+Don't apply the patch; instead print out the version of the package that it is
+supposed to be applied to, or nothing if the patch does not specify a source
+version.
+.TP
+\fB\-\-target\-version\fR
+Don't apply the patch; instead print out the new version of the package
+.BR debpatch (1)
+would generate, when the patch is applied to the the given target
+package, as specified by the other arguments.
+.SS "For .dsc patch targets:"
+.TP
+\fB\-\-no\-clean\fR
+Don't clean temporary directories after a failure, so you can examine what
+failed.
+.TP
+\fB\-\-quilt\-refresh\fR
+If the building of the new source package fails, try to refresh patches using
+.BR quilt (1)
+then try building it again.
+.TP
+\fB\-d\fR DIRECTORY, \fB\-\-directory\fR DIRECTORY
+Extract the .dsc into this directory, which won't be cleaned up after
+.BR debpatch (1)
+exits. If not given, then it will be extracted to a temporary directory.
+
+.SH AUTHORS
+\fBdebpatch\fR and this manual page were written by Ximin Luo
+<infinity0@debian.org>
+.PP
+Both are released under the GNU General Public License, version 3 or later.
+
+.SH SEE ALSO
+.BR debdiff (1)

@@ -1,0 +1,319 @@
+#!/usr/bin/python3
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# See file /usr/share/common-licenses/GPL-3 for more details.
+#
+"""
+Apply a debdiff to a Debian source package.
+
+It handles d/changelog hunks specially, to avoid conflicts.
+
+Depends on dpkg-dev, devscripts, python3-unidiff, quilt.
+"""
+
+import argparse
+import email.utils
+import hashlib
+import logging
+import os
+import unidiff
+import shutil
+import subprocess
+import sys
+import tempfile
+import time
+
+from debian.changelog import Changelog, ChangeBlock
+
+dirname = os.path.dirname
+basename = os.path.basename
+C = subprocess.check_call
+
+# this can be any valid value, it doesn't appear in the final output
+DCH_DUMMY_TAIL = "\n -- debpatch dummy tool <infinity0@debian.org>  " \
+                 "Thu, 01 Jan 1970 00:00:00 +0000\n\n"
+CHBLOCK_DUMMY_PACKAGE = "debpatch PLACEHOLDER"
+TRY_ENCODINGS = ["utf-8", "latin-1"]
+DISTRIBUTION_DEFAULT = "experimental"
+
+
+def workaround_dpkg_865430(dscfile, origdir, stdout):
+    f = subprocess.check_output(["dcmd", "--tar", "echo", dscfile]).rstrip()
+    if not os.path.exists(os.path.join(origdir.encode("utf-8"), os.path.basename(f))):
+        C(["dcmd", "--tar", "cp", dscfile, origdir], stdout=stdout)
+
+
+def is_dch(path):
+    return (basename(path) == 'changelog'
+            and basename(dirname(path)) == 'debian'
+            and dirname(dirname(dirname(path))) == '')
+
+
+def hunk_lines_to_str(hunk_lines):
+    return "".join(map(lambda x: str(x)[1:], hunk_lines))
+
+
+def read_dch_patch(dch_patch):
+    if len(dch_patch) > 1:
+        raise ValueError("don't know how to deal with debian/changelog patch "
+                         "that has more than one hunk")
+    hunk = dch_patch[0]
+    source_str = hunk_lines_to_str(hunk.source_lines()) + DCH_DUMMY_TAIL
+    target_str = hunk_lines_to_str(hunk.target_lines())
+    # here we assume the debdiff has enough context to see the previous version
+    # this should be true all the time in practice
+    source_version = str(Changelog(source_str, 1)[0].version)
+    target = Changelog(target_str, 1)[0]
+    return source_version, target
+
+
+def apply_dch_patch(source_file, current, patch_name, old_version, target, dry_run):
+    target_version = str(target.version)
+
+    if not old_version or not target_version.startswith(old_version):
+        logging.warn("don't know how to rebase version-change (%s => %s) onto %s" %
+                     (old_version, target_version, old_version))
+        newlog = subprocess.getoutput("EDITOR=cat dch -n 2>/dev/null").rstrip()
+        version = str(Changelog(newlog, 1)[0].version)
+        logging.warn("using version %s based on `dch -n`; feel free to make me smarter", version)
+    else:
+        version_suffix = target_version[len(old_version):]
+        version = str(current[0].version) + version_suffix
+        logging.info("using version %s based on suffix %s", version, version_suffix)
+
+    if dry_run:
+        return version
+
+    current._blocks.insert(0, target)
+    current.set_version(version)
+
+    shutil.copy(source_file, source_file + ".new")
+    try:
+        with open(source_file + ".new", "w") as fp:
+            current.write_to_open_file(fp)
+        os.rename(source_file + ".new", source_file)
+    except:
+        logging.warn("failed to patch %s", source_file)
+        logging.warn("half-applied changes in %s", source_file + ".new")
+        logging.warn("current working directory is %s", os.getcwd())
+        raise
+
+
+def call_patch(patch_str, *args, check=True, **kwargs):
+    return subprocess.run(
+        ["patch", "-p1"] + list(args),
+        input=patch_str,
+        universal_newlines=True,
+        check=check,
+        **kwargs)
+
+
+def check_patch(patch_str, *args, **kwargs):
+    return call_patch(patch_str,
+                      "--dry-run", "-f", "--silent",
+                      *args,
+                      check=False,
+                      stdout=subprocess.DEVNULL,
+                      stderr=subprocess.DEVNULL,
+                      **kwargs).returncode == 0
+
+
+def debpatch(patch, patch_name, args):
+    # don't change anything if...
+    dry_run = args.target_version or args.source_version
+
+    changelog = list(filter(lambda x: is_dch(x.path), patch))
+    if not changelog:
+        logging.info("no debian/changelog in patch: %s" % args.patch_file)
+        old_version = None
+        target = ChangeBlock(
+            package=CHBLOCK_DUMMY_PACKAGE,
+            author="%s <%s>" % (os.getenv("DEBFULLNAME"), os.getenv("DEBEMAIL")),
+            date=email.utils.formatdate(time.time(), localtime=True),
+            version=None,
+            distributions=args.distribution,
+            urgency="low",
+            changes=["", "  * Rebase patch %s." % patch_name, ""],
+        )
+        target.add_trailing_line("")
+    elif len(changelog) > 1:
+        raise ValueError("more than one debian/changelog patch???")
+    else:
+        patch.remove(changelog[0])
+        old_version, target = read_dch_patch(changelog[0])
+
+    if args.source_version:
+        if old_version:
+            print(old_version)
+        return False
+
+    # read this here so --source-version can work even without a d/changelog
+    with open(args.changelog) as fp:
+        current = Changelog(fp.read())
+    if target.package == CHBLOCK_DUMMY_PACKAGE:
+        target.package = current[0].package
+
+    if not dry_run:
+        patch_str = str(patch)
+        if check_patch(patch_str, "-N"):
+            call_patch(patch_str)
+            logging.info("patch %s applies!", patch_name)
+        elif check_patch(patch_str, "-R"):
+            logging.warn("patch %s already applied", patch_name)
+            return False
+        else:
+            call_patch(patch_str, "--dry-run", "-f")
+            raise ValueError("patch %s doesn't apply!", patch_name)
+
+    # only apply d/changelog patch if the rest of the patch applied
+    new_version = apply_dch_patch(args.changelog, current, patch_name,
+                                  old_version, target, dry_run)
+    if args.target_version:
+        print(new_version)
+        return False
+
+    if args.repl:
+        import code
+        code.interact(local=locals())
+
+    return True
+
+
+def main(args):
+    parser = argparse.ArgumentParser(
+        description='Apply a debdiff to a Debian source package')
+    parser.add_argument(
+        '-v', '--verbose', action="store_true",
+        help='Output more information',
+    )
+    parser.add_argument(
+        '-c', '--changelog', default='debian/changelog',
+        help='Path to debian/changelog; default: %(default)s',
+    )
+    parser.add_argument(
+        '-D', '--distribution', default='experimental',
+        help='Distribution to use, if the patch doesn\'t already '
+        'contain a changelog; default: %(default)s',
+    )
+    parser.add_argument(
+        '--repl', action="store_true",
+        help="Run the python REPL after processing.",
+    )
+    parser.add_argument(
+        '--source-version', action="store_true",
+        help='Don\'t apply the patch; instead print out the version of the '
+        'package that it is supposed to be applied to, or nothing if '
+        'the patch does not specify a source version.',
+    )
+    parser.add_argument(
+        '--target-version', action="store_true",
+        help="Don't apply the patch; instead print out the new version of the "
+        "package debpatch(1) would generate, when the patch is applied to the "
+        "the given target package, as specified by the other arguments.",
+    )
+    parser.add_argument(
+        'orig_dsc_or_dir', nargs='?', default=".",
+        help="Target to apply the patch to. This can either be an unpacked "
+        "source tree, or a .dsc file. In the former case, the directory is "
+        "modified in-place; in the latter case, a second .dsc is created. "
+        "Default: %(default)s",
+    )
+    parser.add_argument(
+        'patch_file', nargs='?', default="/dev/stdin",
+        help="Patch file to apply, in the format output by debdiff(1). "
+        "Default: %(default)s",
+    )
+    group1 = parser.add_argument_group('Options for .dsc patch targets')
+    group1.add_argument(
+        '--no-clean', action="store_true",
+        help="Don't clean temporary directories after a failure, so you can "
+        "examine what failed.",
+    )
+    group1.add_argument(
+        '--quilt-refresh', action="store_true",
+        help="If the building of the new source package fails, try to refresh "
+        "patches using quilt(1) then try building it again.",
+    )
+    group1.add_argument(
+        '-d', '--directory', default=None,
+        help="Extract the .dsc into this directory, which won't be cleaned up "
+        "after debpatch(1) exits. If not given, then it will be extracted to a "
+        "temporary directory.",
+    )
+    args = parser.parse_args(args)
+
+    if args.verbose:
+        logging.getLogger().setLevel(logging.DEBUG)
+
+    with open(args.patch_file, 'rb') as fp:
+        data = fp.read()
+    for enc in TRY_ENCODINGS:
+        try:
+            patch = unidiff.PatchSet(data.splitlines(keepends=True), encoding=enc)
+            break
+        except:
+            if enc == TRY_ENCODINGS[-1]:
+                raise
+            else:
+                continue
+
+    patch_name = '%s:%s' % (
+        basename(args.patch_file),
+        hashlib.sha256(data).hexdigest()[:20 if args.patch_file == '/dev/stdin' else 8])
+    quiet = args.source_version or args.target_version
+    dry_run = args.source_version or args.target_version
+    stdout = subprocess.DEVNULL if quiet else None  # user can redirect stderr themselves
+
+    # change directory before applying patches
+    if os.path.isdir(args.orig_dsc_or_dir):
+        os.chdir(args.orig_dsc_or_dir)
+        debpatch(patch, patch_name, args)
+    elif os.path.isfile(args.orig_dsc_or_dir):
+        dscfile = args.orig_dsc_or_dir
+        parts = os.path.splitext(os.path.basename(dscfile))
+        if parts[1] != ".dsc":
+            raise ValueError("unrecognised patch target: %s" % dscfile)
+        extractdir = args.directory if args.directory else tempfile.mkdtemp()
+        if not os.path.isdir(extractdir):
+            os.makedirs(extractdir)
+        try:
+            builddir = os.path.join(extractdir, parts[0])  # dpkg-source doesn't like existing dirs
+            C(["dpkg-source", "-x", "--skip-patches", dscfile, builddir], stdout=stdout)
+            origdir = os.getcwd()
+            workaround_dpkg_865430(dscfile, origdir, stdout)
+            os.chdir(builddir)
+            did_patch = debpatch(patch, patch_name, args)
+            if dry_run or not did_patch:
+                return
+            os.chdir(origdir)
+            try:
+                C(["dpkg-source", "-b", builddir])
+            except subprocess.CalledProcessError:
+                if args.quilt_refresh:
+                    C(["sh", "-c", """
+set -ex
+export QUILT_PATCHES=debian/patches
+while quilt push; do quilt refresh; done
+"""
+                       ], cwd=builddir)
+                    C(["dpkg-source", "-b", builddir])
+                else:
+                    raise
+        finally:
+            cleandir = builddir if args.directory else extractdir
+            if args.no_clean:
+                logging.warn("you should clean up temp files in %s", cleandir)
+            else:
+                shutil.rmtree(cleandir)
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))
