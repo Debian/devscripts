@@ -112,10 +112,12 @@ create_build_script() {
         'export TZ=Asia/Tokyo'
 
     if which disorderfs >/dev/null; then
-        disorderfs_commands='mkdir ../disorderfs &&
-disorderfs --shuffle-dirents=yes $(pwd) ../disorderfs &&
-trap "cd .. && fusermount -u disorderfs && rmdir disorderfs" INT TERM EXIT &&
-cd ../disorderfs'
+        disorderfs_commands='cd .. &&
+mv source orig &&
+mkdir source &&
+disorderfs --shuffle-dirents=yes orig source &&
+trap "cd .. && fusermount -u source && rmdir source && mv orig source" INT TERM EXIT &&
+cd source'
         vary filesystem-ordering \
             '' \
             "$disorderfs_commands"

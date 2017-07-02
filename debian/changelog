@@ -20,6 +20,14 @@ devscripts (2.17.7) UNRELEASED; urgency=medium
   * debpatch:
     + New script, Apply a debdiff to a Debian source package. (Closes: #845659)
 
+  [ Antonio Terceiro ]
+  * debrepro:
+    + When applying disorderfs to the second build, make sure the final path
+      from where the package is built is the same as in the first build, to
+      avoid differences in binaries due to the build path. There is no good
+      solution for making builds independent of build path yet, so the current
+      practice is to run both builds at the same location.
+
  -- Paul Wise <pabs@debian.org>  Sat, 17 Jun 2017 13:11:35 +0800
 
 devscripts (2.17.6) unstable; urgency=medium
