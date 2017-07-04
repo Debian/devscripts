@@ -305,7 +305,7 @@ if (!have_yaml()) {
 
 print DEBUG "Fetching $url\n";
 
-my $yaml = `wget -q -O - $url`;
+my $yaml = `wget -q -O - '$url'`;
 if ($? == -1) {
     die "$progname: unable to run wget: $!\n";
 } elsif ($? >> 8) {
