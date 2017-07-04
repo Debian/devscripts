@@ -28,6 +28,12 @@ devscripts (2.17.7) UNRELEASED; urgency=medium
       solution for making builds independent of build path yet, so the current
       practice is to run both builds at the same location.
 
+  [ James McCoy ]
+  * uscan:
+    + Use Dpkg::Version instead of shelling out to dpkg to compare upstream &
+      mangled versions.  This improves the performance slightly and also
+      avoids dpkg's errors about malformed versions.  (Closes: #866998)
+
  -- Paul Wise <pabs@debian.org>  Sat, 17 Jun 2017 13:11:35 +0800
 
 devscripts (2.17.6) unstable; urgency=medium

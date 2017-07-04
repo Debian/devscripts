@@ -1705,6 +1705,7 @@ use Cwd qw/cwd abs_path/;
 use Dpkg::Changelog::Parse qw(changelog_parse);
 use Dpkg::Control::Hash;
 use Dpkg::IPC;
+use Dpkg::Version;
 use File::Basename;
 use File::Copy qw/copy/;
 use File::Spec::Functions qw/catfile/;
@@ -3327,13 +3328,15 @@ EOF
     $dehs_tags{'upstream-version'} = $newversion;
     $dehs_tags{'upstream-url'} = $upstream_url;
 
+    my $mangled_ver = Dpkg::Version->new("1:${mangled_lastversion}-0", check => 0);
+    my $upstream_ver = Dpkg::Version->new("1:${newversion}-0", check => 0);
     my $compver;
-    if (system("dpkg", "--compare-versions", "1:${mangled_lastversion}-0", "eq", "1:${newversion}-0") >> 8 == 0) {
-	$compver = 'same';  # ${mangled_lastversion} == ${newversion}
-    } elsif (system("dpkg", "--compare-versions", "1:${mangled_lastversion}-0", "gt", "1:${newversion}-0") >> 8 == 0) {
-	$compver = 'older'; # ${mangled_lastversion} >> ${newversion}
+    if ($mangled_ver == $upstream_ver) {
+	$compver = 'same';
+    } elsif ($mangled_ver > $upstream_ver) {
+	$compver = 'older';
     } else {
-	$compver = 'newer'; # ${mangled_lastversion} << ${newversion}
+	$compver = 'newer';
     }
 
     # Version dependent $download adjustment
