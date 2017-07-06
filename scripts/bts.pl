@@ -160,7 +160,7 @@ our (@gTags, @valid_tags, %valid_tags);
            "potato", "woody", "sid", "help", "security", "upstream",
            "pending", "sarge", "sarge-ignore", "experimental", "d-i",
            "confirmed", "ipv6", "lfs", "fixed-in-experimental",
-           "fixed-upstream", "l10n", "newcomer", "etch", "etch-ignore",
+           "fixed-upstream", "a11y", "l10n", "newcomer", "etch", "etch-ignore",
            "lenny", "lenny-ignore", "squeeze", "squeeze-ignore",
            "wheezy", "wheezy-ignore", "jessie", "jessie-ignore",
            "stretch", "stretch-ignore", "buster", "buster-ignore",
