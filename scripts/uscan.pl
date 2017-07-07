@@ -1525,6 +1525,10 @@ examined, a newer upstream version was located.
 
 No newer upstream versions were located for any of the F<watch> files examined.
 
+=item B<2>
+
+GPG signature verification failed.
+
 =back
 
 =head1 ADVANCED FEATURES
@@ -3632,8 +3636,7 @@ EOF
 	    unless(system($havegpgv, '--homedir', '/dev/null',
 		    '--keyring', $keyring,
 		    "$destdir/$sigfile", "$destdir/$sigfile_base") >> 8 == 0) {
-		uscan_warn("OpenPGP signature did not verify.\n");
-		return 1;
+		uscan_die("OpenPGP signature did not verify.\n");
 	    }
 	}
 	$previous_newfile_base = undef;
@@ -3647,7 +3650,7 @@ EOF
 	$previous_newversion = undef;
 	$previous_download_available = undef;
     } elsif ($options{'pgpmode'} eq 'next') {
-	uscan_verbose "Differ checking OpenPGP signature to the next watch line\n";
+	uscan_verbose "Defer checking OpenPGP signature to the next watch line\n";
 	$previous_newfile_base = $newfile_base;
 	$previous_sigfile_base = $sigfile_base;
 	$previous_newversion = $newversion;
