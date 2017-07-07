@@ -89,32 +89,37 @@ _debdiff () {
         fi
     done
 
-    if [[ $file_list_mode == normal ]]; then
-
-        if [[ $cur == -* ]]; then
-            COMPREPLY=( $( compgen -W "${options[*]}" -- "$cur" ) )
-        else
-            declare -a _compreply=( $( compgen -o filenames -G '*.@(deb|dsc|changes)' ) )
-            COMPREPLY=( $( compgen -W "${_compreply[*]}" -- "$cur" ) )
-        fi
-    elif [[ $file_list_mode == deb ]]; then
-        declare -a _compreply=( $( compgen -o filenames -G '*.deb' ) )
-        COMPREPLY=( $( compgen -W "${_compreply[*]}" -- "$cur" ) )
-    elif [[ $file_list_mode == dsc ]]; then
-        declare -a _compreply=( $( compgen -o filenames -G '*.dsc' ) )
-        COMPREPLY=( $( compgen -W "${_compreply[*]}" -- "$cur" ) )
-    elif [[ $file_list_mode == changes ]]; then
-        declare -a _compreply=( $( compgen -o filenames -G '*.changes' ) )
-        COMPREPLY=( $( compgen -W "${_compreply[*]}" -- "$cur" ) )
-    else
-        options=$(find . -name '*.deb' | sed -e's!\.\/!!' | paste -s -d' ')
-        if [[ $file_list_mode == from ]]; then
-            if (( $move_from > 0 )); then
-                options+=( --to )
+    case $file_list_mode in
+        normal)
+            if [[ $cur == -* ]]; then
+                COMPREPLY=( $( compgen -W "${options[*]}" -- "$cur" ) )
+            else
+                declare -a _compreply=( $( compgen -o filenames -G '*.@(deb|dsc|changes)' ) )
+                COMPREPLY=( $( compgen -W "${_compreply[*]}" -- "$cur" ) )
             fi
-        fi
-        COMPREPLY=( $( compgen -W "${options[*]}" -- "$cur" ) )
-    fi
+            ;;
+        deb)
+            declare -a _compreply=( $( compgen -o filenames -G '*.deb' ) )
+            COMPREPLY=( $( compgen -W "${_compreply[*]}" -- "$cur" ) )
+            ;;
+        dsc)
+            declare -a _compreply=( $( compgen -o filenames -G '*.dsc' ) )
+            COMPREPLY=( $( compgen -W "${_compreply[*]}" -- "$cur" ) )
+            ;;
+        changes)
+            declare -a _compreply=( $( compgen -o filenames -G '*.changes' ) )
+            COMPREPLY=( $( compgen -W "${_compreply[*]}" -- "$cur" ) )
+            ;;
+        *)
+            options=$(find . -name '*.deb' | sed -e's!\.\/!!' | paste -s -d' ')
+            if [[ $file_list_mode == from ]]; then
+                if (( $move_from > 0 )); then
+                    options+=( --to )
+                fi
+            fi
+            COMPREPLY=( $( compgen -W "${options[*]}" -- "$cur" ) )
+            ;;
+    esac
 
     return 0
 
