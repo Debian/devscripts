@@ -36,6 +36,9 @@ devscripts (2.17.7) UNRELEASED; urgency=medium
     + Use Dpkg::Version instead of shelling out to dpkg to compare upstream &
       mangled versions.  This improves the performance slightly and also
       avoids dpkg's errors about malformed versions.  (Closes: #866998)
+    + When GPG verification is configured but the verification fails (either
+      during actual verification or because of missing keyring/signature),
+      exit uscan with an error.  (Closes: #841910)
   * grep-excuses:
     + Use YAML::Syck to parse excuses.yaml instead of using regex to pick
       apart update_excuses.html.

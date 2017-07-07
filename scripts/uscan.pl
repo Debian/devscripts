@@ -3596,7 +3596,7 @@ EOF
 	    uscan_verbose "Downloading OpenPGP signature from\n   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile\n";
 	    $signature_available = $downloader->($pgpsig_url, "$destdir/$sigfile", $options{'mode'});
 	} else { # -1, 0
-	    uscan_verbose "Don\'t downloading OpenPGP signature from\n   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile\n";
+	    uscan_verbose "Not downloading OpenPGP signature from\n   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile\n";
 	    $signature_available = (-e "$destdir/$sigfile") ? 1 : 0;
 	}
     } elsif ($options{'pgpmode'} eq 'previous') {
@@ -3606,7 +3606,7 @@ EOF
 	    uscan_verbose "Downloading OpenPGP signature from\n   $pgpsig_url (pgpmode=previous)\n   as $sigfile\n";
 	    $signature_available = $downloader->($pgpsig_url, "$destdir/$sigfile", $options{'mode'});
 	} else { # -1, 0
-	    uscan_verbose "Don\'t downloading OpenPGP signature from\n   $pgpsig_url (pgpmode=previous)\n   as $sigfile\n";
+	    uscan_verbose "Not downloading OpenPGP signature from\n   $pgpsig_url (pgpmode=previous)\n   as $sigfile\n";
 	    $signature_available = (-e "$destdir/$sigfile") ? 1 : 0;
 	}
 	$download_available = $previous_download_available;
@@ -3620,14 +3620,12 @@ EOF
 	if ($signature == -1) {
 	    uscan_verbose("SKIP Checking OpenPGP signature (by request).\n");
 	} elsif (! defined $keyring) {
-	    uscan_warn("FAIL Checking OpenPGP signature (no keyring).\n");
-	    return 1;
+	    uscan_die("FAIL Checking OpenPGP signature (no keyring).\n");
 	} elsif ($download_available == 0) {
 	    uscan_warn "FAIL Checking OpenPGP signature (no upstream tarball downloaded).\n";
 	    return 1;
 	} elsif ($signature_available == 0) {
-	    uscan_warn("FAIL Checking OpenPGP signature (no signature file downloaded).\n");
-	    return 1;
+	    uscan_die("FAIL Checking OpenPGP signature (no signature file downloaded).\n");
 	} else {
 	    if ($signature ==0) {
 		uscan_verbose "Use the existing file: $sigfile\n";
@@ -3662,8 +3660,7 @@ EOF
 	if ($signature == -1) {
 	    uscan_warn("SKIP Checking OpenPGP signature (by request).\n");
 	} elsif (! defined $keyring) {
-	    uscan_warn("FAIL Checking OpenPGP signature (no keyring).\n");
-	    return 1;
+	    uscan_die("FAIL Checking OpenPGP signature (no keyring).\n");
 	} elsif ($download_available == 0) {
 	    uscan_warn "FAIL Checking OpenPGP signature (no signed upstream tarball downloaded).\n";
 	    return 1;
@@ -3673,8 +3670,7 @@ EOF
 		    '--no-options', '-q', '--batch', '--no-default-keyring',
 		    '--keyring', $keyring, '--trust-model', 'always', '--decrypt', '-o',
 		    "$destdir/$newfile_base", "$destdir/$sigfile_base") >> 8 == 0) {
-		uscan_warn("OpenPGP signature did not verify.\n");
-		return 1;
+		uscan_die("OpenPGP signature did not verify.\n");
 	    }
 	}
 	$previous_newfile_base = undef;
