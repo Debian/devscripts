@@ -6,8 +6,8 @@
 # certain conditions; see the end of this file for copyright
 # information, grant of license, and disclaimer of warranty.
 
-_debdiff()
-{
+_have debdiff &&
+_debdiff () {
     local options i
     local command_name=debdiff
     local file_list_mode=normal
@@ -115,6 +115,7 @@ _debdiff()
     fi
 
     return 0
+
 } &&
 complete -F _debdiff debdiff
 
