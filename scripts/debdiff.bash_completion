@@ -91,7 +91,9 @@ _debdiff () {
 
     case $file_list_mode in
         normal)
-            if [[ $cur == -* ]]; then
+            if [[ $prev == --debs-dir ]]; then
+                COMPREPLY=$( ( compgen -d -- "$cur" ) )
+            elif [[ $cur == -* ]]; then
                 COMPREPLY=( $( compgen -W "${options[*]}" -- "$cur" ) )
             else
                 declare -a _compreply=( $( compgen -o filenames -G '*.@(deb|dsc|changes)' ) )
