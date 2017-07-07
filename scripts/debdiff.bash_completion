@@ -8,14 +8,14 @@
 
 _have debdiff &&
 _debdiff () {
+    local cur prev words cword
+    _init_completion || return
+
     local options i
     local command_name=debdiff
     local file_list_mode=normal
     local -i move_from=-1
     local -i move_to=-1
-
-    local cur prev words cword
-    _init_completion || return
 
     options='-h --help -v --version'
     options+=' -q --quiet'
