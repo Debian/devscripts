@@ -1525,10 +1525,6 @@ examined, a newer upstream version was located.
 
 No newer upstream versions were located for any of the F<watch> files examined.
 
-=item B<2>
-
-GPG signature verification failed.
-
 =back
 
 =head1 ADVANCED FEATURES
