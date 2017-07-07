@@ -2,40 +2,43 @@
 # Bash command completion for ‘debdiff(1)’.
 # Documentation: ‘bash(1)’, section “Programmable Completion”.
 
-# Copyright © 2016 Ben Finney <ben+debian@benfinney.id.au>
-# Copyright © 2015, Nicholas Bamber <nicholas@periapt.co.uk>
+# This is free software, and you are welcome to redistribute it under
+# certain conditions; see the end of this file for copyright
+# information, grant of license, and disclaimer of warranty.
 
-_debdiff()
-{
-    local options i
-    local command_name=debdiff
-    local file_list_mode=normal
-    local -i move_from=-1
-    local -i move_to=-1
-
+_have debdiff &&
+_debdiff () {
     local cur prev words cword
     _init_completion || return
 
-    options='-h --help -v --version'
-    options+=' -q --quiet'
-    options+=' -d --dirs --nodirs'
-    options+=' -w --ignore-space'
-    options+=' --diffstat --no-diffstat'
-    options+=' --auto-ver-sort --no-auto-ver-sort'
-    options+=' --unpack-tarballs --no-unpack-tarballs'
-    options+=' --control --nocontrol --controlfiles'
-    options+=' --wdiff-source-control --no-wdiff-source-control --wp --wl --wt'
-    options+=' --show-moved --noshow-moved --renamed'
-    options+=' --debs-dir'
-    options+=' --from'
-    options+=' --move --move-regex'
-    options+=' --exclude'
+    local i
+    local command_name=debdiff
+    local options=(
+        -h --help -v --version
+        -q --quiet
+        -d --dirs --nodirs
+        -w --ignore-space
+        --diffstat --no-diffstat
+        --auto-ver-sort --no-auto-ver-sort
+        --unpack-tarballs --no-unpack-tarballs
+        --control --nocontrol --controlfiles
+        --wdiff-source-control --no-wdiff-source-control --wp --wl --wt
+        --show-moved --noshow-moved --renamed
+        --debs-dir
+        --from
+        --move --move-regex
+        --exclude
+    )
+
+    local file_list_mode=normal
+    local -i move_from=-1
+    local -i move_to=-1
 
     unset COMPREPLY
 
     case "$prev" in
         "$command_name")
-            options+=' --noconf --no-conf'
+            options+=( --noconf --no-conf )
             ;;
 
         --debs-dir)
@@ -64,7 +67,7 @@ _debdiff()
         elif (( ${move_from} >= 0 && ${move_to} >= 0 && ${move_to} < ${move_from} )); then
             file_list_mode=to
         else
-            COMPREPLY=( ) 
+            COMPREPLY=()
             return 0
         fi
         if [[ $file_list_mode == normal && ${words[i]} == --from ]]; then
@@ -86,37 +89,51 @@ _debdiff()
         fi
     done
 
-    if [[ $file_list_mode == normal ]]; then
-
-        if [[ $cur == -* ]]; then
-            COMPREPLY=( $( compgen -W "${options}" -- "$cur" ) )
-        else
-            declare -a _compreply=( $( compgen -o filenames -G '*.@(deb|dsc|changes)' ) )
-            COMPREPLY=( $( compgen -W "${_compreply[*]}"  -- "$cur" ) )
-        fi
-    elif [[ $file_list_mode == deb ]]; then
-        declare -a _compreply=( $( compgen -o filenames -G '*.deb' ) )
-        COMPREPLY=( $( compgen -W "${_compreply[*]}"  -- "$cur" ) )
-    elif [[ $file_list_mode = dsc ]]; then
-        declare -a _compreply=( $( compgen -o filenames -G '*.dsc' ) )
-        COMPREPLY=( $( compgen -W "${_compreply[*]}"  -- "$cur" ) )
-    elif [[ $file_list_mode = changes ]]; then
-        declare -a _compreply=( $( compgen -o filenames -G '*.changes' ) )
-        COMPREPLY=( $( compgen -W "${_compreply[*]}"  -- "$cur" ) )
-    else
-        options=$(find . -name '*.deb' | sed -e's!\.\/!!' |  paste -s -d' ')
-        if [[ $file_list_mode == from ]]; then
-            if (( $move_from > 0 )); then
-                options+=' --to'
+    case $file_list_mode in
+        normal)
+            if [[ $cur == -* ]]; then
+                COMPREPLY=( $( compgen -W "${options[*]}" -- "$cur" ) )
+            else
+                declare -a _compreply=( $( compgen -o filenames -G '*.@(deb|dsc|changes)' ) )
+                COMPREPLY=( $( compgen -W "${_compreply[*]}" -- "$cur" ) )
             fi
-        fi
-        COMPREPLY=( $( compgen -W "${options}" -- "$cur" ) )
-    fi
+            ;;
+        deb)
+            declare -a _compreply=( $( compgen -o filenames -G '*.deb' ) )
+            COMPREPLY=( $( compgen -W "${_compreply[*]}" -- "$cur" ) )
+            ;;
+        dsc)
+            declare -a _compreply=( $( compgen -o filenames -G '*.dsc' ) )
+            COMPREPLY=( $( compgen -W "${_compreply[*]}" -- "$cur" ) )
+            ;;
+        changes)
+            declare -a _compreply=( $( compgen -o filenames -G '*.changes' ) )
+            COMPREPLY=( $( compgen -W "${_compreply[*]}" -- "$cur" ) )
+            ;;
+        *)
+            options=$(find . -name '*.deb' | sed -e's!\.\/!!' | paste -s -d' ')
+            if [[ $file_list_mode == from ]]; then
+                if (( $move_from > 0 )); then
+                    options+=( --to )
+                fi
+            fi
+            COMPREPLY=( $( compgen -W "${options[*]}" -- "$cur" ) )
+            ;;
+    esac
 
     return 0
+
 } &&
 complete -F _debdiff debdiff
 
+
+# Copyright © 2016–2017 Ben Finney <ben+debian@benfinney.id.au>
+# Copyright © 2015 Nicholas Bamber <nicholas@periapt.co.uk>
+#
+# This is free software: you may copy, modify, and/or distribute this work
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; version 2 of that license or any later version.
+# No warranty expressed or implied. See the file ‘LICENSE.GPL-2’ for details.
 
 # Local variables:
 # coding: utf-8
