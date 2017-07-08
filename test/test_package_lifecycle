@@ -286,6 +286,39 @@ test_debuild2() {
 	dpkg-genchanges: not including original source code in upload
 	 dpkg-source --after-build test
 	dpkg-buildpackage: binary and diff upload (original source NOT included)
+EOS
+  runCommandOutCmpFile "-k'uscan test key (no secret) <none@debian.org>'" "${WORKDIR}/package_lifecycle/debuild.txt" "" 0
+  cd ${WORKDIR}
+}
+
+test_debuild_forcesign() {
+  export GNUPGHOME=$GPGHOME
+  cd ${WORKDIR}/package_lifecycle/test
+  COMMAND='debuild --no-conf --no-lintian --preserve-envvar=PATH --preserve-envvar=PERL5LIB --preserve-envvar=DEBFULLNAME --preserve-envvar=DEBEMAIL --preserve-envvar=GNUPGHOME --set-envvar=NO_PKG_MANGLE=1 --force-sign'
+  cat > ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
+	 dpkg-buildpackage -us -uc
+	dpkg-buildpackage: source package test
+	dpkg-buildpackage: source version 1.0-2
+	dpkg-buildpackage: source distribution UNRELEASED
+	dpkg-buildpackage: source changed by Testophilus Testownik <tester@testity.org>
+	 dpkg-source --before-build test
+	dpkg-buildpackage: host architecture ${_ARCH}
+	 fakeroot debian/rules clean
+	dh clean
+	 dpkg-source -b test
+	dpkg-source: info: using source format '3.0 (quilt)'
+	dpkg-source: info: building test using existing ./test_1.0.orig.tar.xz
+	dpkg-source: info: building test in test_1.0-2.debian.tar.xz
+	dpkg-source: info: building test in test_1.0-2.dsc
+	 debian/rules build
+	dh build
+	 fakeroot debian/rules binary
+	dh binary
+	dpkg-deb: building package 'test' in '../test_1.0-2_all.deb'.
+	 dpkg-genchanges  >../test_1.0-2_${_ARCH}.changes
+	dpkg-genchanges: not including original source code in upload
+	 dpkg-source --after-build test
+	dpkg-buildpackage: binary and diff upload (original source NOT included)
 	Now signing changes and any dsc files...
 EOS
   if which dpkg-genbuildinfo >/dev/null 2>&1; then

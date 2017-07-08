@@ -12,10 +12,12 @@ debuild \- build a Debian package
 package.  It first runs \fBdpkg-buildpackage\fR, then runs
 \fBlintian\fR on the \fI.changes\fR file created
 (assuming that \fBlintian\fR is installed), and
-finally signs the \fI.changes\fR and/or \fI.dsc\fR files as
-appropriate (using \fBdebsign\fR(1) to do this instead of
-\fBdpkg-buildpackage\fR(1) itself; all relevant key-signing options
-are passed on).  Parameters can be passed to \fBdpkg-buildpackage\fR
+finally signs the appropriate files (using \fBdebsign\fR(1) to do
+this instead of \fBdpkg-buildpackage\fR(1) itself; all relevant
+key-signing options are passed on).
+Signing will be skipped if the distribution is \fIUNRELEASED\fR, unless
+\fBdpkg-buildpackage\fR's \fB\-\-force-sign\fR option is used.
+Parameters can be passed to \fBdpkg-buildpackage\fR
 and \fBlintian\fR, where the parameters to the latter are
 indicated with the \fB\-\-lintian-opts\fR option.
 The allowable options in this case are

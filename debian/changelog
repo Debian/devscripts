@@ -49,6 +49,9 @@ devscripts (2.17.7) UNRELEASED; urgency=medium
     + When an empty message is provided on the command-line, do not add an
       empty entry to the changelog.  Thanks to Adam Barratt for the patch.
       (Closes: #830968)
+  * debuild:
+    + Disable signing if the target distribution is "UNRELEASED", but honor
+      dpkg-buildpackage's --force-sign as an override.  (Closes: #861020)
 
   [ Ben Finney ]
   * debdiff:

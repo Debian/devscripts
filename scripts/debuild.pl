@@ -665,7 +665,7 @@ until (-r 'debian/changelog') {
 # Find the source package name and version number
 my %changelog;
 my $c = changelog_parse();
-@changelog{'Source', 'Version'} = @{$c}{'Source', 'Version'};
+@changelog{'Source', 'Version', 'Distribution'} = @{$c}{'Source', 'Version', 'Distribution'};
 
 fatal "no package name in changelog!"
     unless exists $changelog{'Source'};
@@ -721,8 +721,9 @@ if ( $( != 0 && $) == 0 ) { $( = $) }
 # Our first task is to parse the command line options.
 
 # dpkg-buildpackage variables explicitly initialised in dpkg-buildpackage
-my $signsource=1;
-my $signchanges=1;
+my $forcesign;
+my $signsource = $changelog{Distribution} ne 'UNRELEASED';
+my $signchanges = $changelog{Distribution} ne 'UNRELEASED';
 my $binarytarget='binary';
 my $since='';
 my $usepause=0;
@@ -770,6 +771,7 @@ foreach (@dpkg_extra_opts) {
     /^-[dD]$/ and next;  # already been processed
     $_ eq '-us' and $signsource=0, next;
     $_ eq '-uc' and $signchanges=0, next;
+    $_ eq '--force-sign' and $forcesign=1, next;
     $_ eq '-ap' and $usepause=1, next;
     /^-a(.*)/ and $targetarch=$1, push(@dpkg_opts, $_), next;
     $_ eq '-tc' and push(@dpkg_opts, $_), next;
@@ -820,6 +822,7 @@ while ($_=shift) {
     /^-k/ and push(@debsign_opts, $_), next;  # Ditto
     $_ eq '-us' and $signsource=0, next;
     $_ eq '-uc' and $signchanges=0, next;
+    $_ eq '--force-sign' and $forcesign=1, next;
     $_ eq '-ap' and $usepause=1, next;
     /^-a(.*)/ and $targetarch=$1, push(@dpkg_opts, $_),
 	next;
@@ -885,6 +888,11 @@ if (@ARGV) {
 	push(@lintian_opts, @ARGV);
 	undef @ARGV;
     }
+}
+
+if ($forcesign) {
+    $signchanges = 1;
+    $signsource = 1;
 }
 
 if ($signchanges==1 and $signsource==0) {
