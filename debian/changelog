@@ -52,6 +52,9 @@ devscripts (2.17.7) UNRELEASED; urgency=medium
   * debuild:
     + Disable signing if the target distribution is "UNRELEASED", but honor
       dpkg-buildpackage's --force-sign as an override.  (Closes: #861020)
+  * debsnap:
+    + Preserve the remote mtime of the downloaded file.  Thanks to Guillem
+      Jover for the patch.  (Closes: #860863)
 
   [ Ben Finney ]
   * debdiff:
