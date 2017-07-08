@@ -164,8 +164,33 @@ testEncoding() {
     success "-s \"Security upload\""
     verifyMaintainer "dch -s"
 
-    success "--bpo \"Backporrts upload\""
+    success "--bpo \"Backports upload\""
     verifyMaintainer "dch --bpo"
+}
+
+verifyEntryLines() {
+    success "$1"
+    local changes="$(dpkg-parsechangelog -l"$CHANGELOG" -SChanges | fgrep '*')"
+    assertEquals "\"$changes\"" 1 "$(echo "$changes" | wc -l)"
+}
+
+# Any options which automatically add their own entry to the changelog should
+# elide an empty entry if the user passes an empty string as the entry.
+testEmptyMessage() {
+    rm -f "$CHANGELOG"
+    success "--create -D unstable --package test-package -v 1.0-1 'First upload'"
+
+    verifyEntryLines "--nmu ''"
+
+    verifyEntryLines "--bin-nmu ''"
+
+    verifyEntryLines "--qa ''"
+
+    verifyEntryLines "--security ''"
+
+    verifyEntryLines "--bpo ''"
+
+    verifyEntryLines "--team ''"
 }
 
 . shunit2

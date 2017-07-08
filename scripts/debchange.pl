@@ -1253,7 +1253,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 	    print O "  * Rebuild for $bpo_dist.\n";
 	    $line = 1;
 	}
-	if (@closes_text or $TEXT) {
+	if (@closes_text or $TEXT or $EMPTY_TEXT) {
 	    foreach (@closes_text) { format_line($_, 1); }
 	    if (length $TEXT) { format_line($TEXT, 1); }
 	} elsif ($opt_news) {
