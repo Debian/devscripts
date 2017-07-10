@@ -40,9 +40,9 @@ basename = os.path.basename
 C = subprocess.check_call
 
 # this can be any valid value, it doesn't appear in the final output
-DCH_DUMMY_TAIL = "\n -- debpatch dummy tool <infinity0@debian.org>  " \
+DCH_DUMMY_TAIL = "\n -- debdiff-apply dummy tool <infinity0@debian.org>  " \
                  "Thu, 01 Jan 1970 00:00:00 +0000\n\n"
-CHBLOCK_DUMMY_PACKAGE = "debpatch PLACEHOLDER"
+CHBLOCK_DUMMY_PACKAGE = "debdiff-apply PLACEHOLDER"
 TRY_ENCODINGS = ["utf-8", "latin-1"]
 DISTRIBUTION_DEFAULT = "experimental"
 
@@ -128,7 +128,7 @@ def check_patch(patch_str, *args, **kwargs):
                       **kwargs).returncode == 0
 
 
-def debpatch(patch, patch_name, args):
+def debdiff_apply(patch, patch_name, args):
     # don't change anything if...
     dry_run = args.target_version or args.source_version
 
@@ -218,7 +218,7 @@ def main(args):
     parser.add_argument(
         '--target-version', action="store_true",
         help="Don't apply the patch; instead print out the new version of the "
-        "package debpatch(1) would generate, when the patch is applied to the "
+        "package debdiff-apply(1) would generate, when the patch is applied to the "
         "the given target package, as specified by the other arguments.",
     )
     parser.add_argument(
@@ -247,7 +247,7 @@ def main(args):
     group1.add_argument(
         '-d', '--directory', default=None,
         help="Extract the .dsc into this directory, which won't be cleaned up "
-        "after debpatch(1) exits. If not given, then it will be extracted to a "
+        "after debdiff-apply(1) exits. If not given, then it will be extracted to a "
         "temporary directory.",
     )
     args = parser.parse_args(args)
@@ -277,7 +277,7 @@ def main(args):
     # change directory before applying patches
     if os.path.isdir(args.orig_dsc_or_dir):
         os.chdir(args.orig_dsc_or_dir)
-        debpatch(patch, patch_name, args)
+        debdiff_apply(patch, patch_name, args)
     elif os.path.isfile(args.orig_dsc_or_dir):
         dscfile = args.orig_dsc_or_dir
         parts = os.path.splitext(os.path.basename(dscfile))
@@ -292,7 +292,7 @@ def main(args):
             origdir = os.getcwd()
             workaround_dpkg_865430(dscfile, origdir, stdout)
             os.chdir(builddir)
-            did_patch = debpatch(patch, patch_name, args)
+            did_patch = debdiff_apply(patch, patch_name, args)
             if dry_run or not did_patch:
                 return
             os.chdir(origdir)

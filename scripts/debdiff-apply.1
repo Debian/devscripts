@@ -12,20 +12,20 @@
 .\"
 .\" See file /usr/share/common-licenses/GPL-3 for more details.
 .\"
-.TH DEBPATCH 1 "Debian Utilities" "DEBIAN"
+.TH debdiff-apply 1 "Debian Utilities" "DEBIAN"
 
 .SH NAME
-debpatch \- apply a debdiff to a Debian source package
+debdiff-apply \- apply a debdiff to a Debian source package
 
 .SH SYNOPSIS
-.B debpatch
+.B debdiff-apply
 [options] [orig_dsc_or_dir] [patch_file]
 .br
-.B debpatch
+.B debdiff-apply
 [options] < [patch_file]
 
 .SH DESCRIPTION
-.B debpatch
+.B debdiff-apply
 takes a \fIpatchfile\fR that describes the differences between two Debian
 source packages \fIold\fR and \fInew\fR, and applies it to a target Debian
 source package \fIorig\fR.
@@ -42,7 +42,7 @@ exact behaviour may be tweaked in the future, so one should not rely on it.
 .PP
 If \fIpatchfile\fR does not apply to \fIorig\fR, even after the special-casing
 of \fIdebian/changelog\fR, no changes are made and
-.BR debpatch (1)
+.BR debdiff-apply (1)
 will exit with a non-zero error code.
 
 .SH ARGUMENTS
@@ -83,7 +83,7 @@ version.
 .TP
 \fB\-\-target\-version\fR
 Don't apply the patch; instead print out the new version of the package
-.BR debpatch (1)
+.BR debdiff-apply (1)
 would generate, when the patch is applied to the the given target
 package, as specified by the other arguments.
 .SS "For .dsc patch targets:"
@@ -99,11 +99,11 @@ then try building it again.
 .TP
 \fB\-d\fR DIRECTORY, \fB\-\-directory\fR DIRECTORY
 Extract the .dsc into this directory, which won't be cleaned up after
-.BR debpatch (1)
+.BR debdiff-apply (1)
 exits. If not given, then it will be extracted to a temporary directory.
 
 .SH AUTHORS
-\fBdebpatch\fR and this manual page were written by Ximin Luo
+\fBdebdiff-apply\fR and this manual page were written by Ximin Luo
 <infinity0@debian.org>
 .PP
 Both are released under the GNU General Public License, version 3 or later.
