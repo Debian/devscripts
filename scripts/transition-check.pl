@@ -175,7 +175,7 @@ die "$progname: Unable to retrieve transition information: $lwp_broken\n"
     unless have_lwp;
 
 init_agent() unless $ua;
-my $request = HTTP::Request->new('GET', 'http://ftp-master.debian.org/testing/hints/transitions.yaml');
+my $request = HTTP::Request->new('GET', 'https://ftp-master.debian.org/transitions.yaml');
 my $response = $ua->request($request);
 if (!$response->is_success) {
     die "$progname: Failed to retrieve transitions list: $!\n";
