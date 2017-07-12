@@ -127,7 +127,7 @@ cd source'
         'build_prefix=""' \
         'build_prefix="faketime +213days+7hours+13minutes"; export NO_FAKE_STAT=1'
 
-    echo '$build_prefix dpkg-buildpackage -b -us -uc'
+    echo '${build_prefix:-} dpkg-buildpackage -b -us -uc'
 }
 
 
@@ -181,7 +181,7 @@ while true; do
     case "$1" in
         -s|--skip)
             case "$2" in
-                user|path|umask|locale|timezone|filesystem-ordering)
+                user|path|umask|locale|timezone|filesystem-ordering|time)
                     skip_variations="$skip_variations $2"
                     ;;
                 *)
