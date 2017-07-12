@@ -8,6 +8,10 @@ devscripts (2.17.9) UNRELEASED; urgency=medium
   * debrepro:
     + support skipping the 'time' variation.
 
+  [ Ximin Luo ]
+  * debdiff-apply:
+    + Actually install it in the debian package, by adding it to setup.py
+
  -- Adam D. Barratt <adam@adam-barratt.org.uk>  Tue, 11 Jul 2017 21:15:37 +0100
 
 devscripts (2.17.8) unstable; urgency=medium
