@@ -7,6 +7,8 @@ devscripts (2.17.9) UNRELEASED; urgency=medium
   [ Mattia Rizzolo ]
   * debrepro:
     + support skipping the 'time' variation.
+  * debchange:
+    + Fix test failure when building in Ubuntu.
 
   [ Ximin Luo ]
   * debdiff-apply:
