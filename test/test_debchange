@@ -169,7 +169,7 @@ testEncoding() {
 }
 
 verifyEntryLines() {
-    success "$1"
+    success "--vendor Debian $1"
     local changes="$(dpkg-parsechangelog -l"$CHANGELOG" -SChanges | fgrep '*')"
     assertEquals "\"$changes\"" 1 "$(echo "$changes" | wc -l)"
 }
