@@ -50,6 +50,7 @@ cleanup(){
 }
 
 spawnHttpServer(){
+    unset http_proxy
     (
 	mkdir -p $TMPDIR/repo
 	cd $TMPDIR/repo

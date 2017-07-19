@@ -89,6 +89,7 @@ cleanup(){
 }
 
 spawnHttpServer(){
+    unset http_proxy
     (
 	USCAN_HTTP_SERVER=${USCAN_HTTP_SERVER:-server.py}
 	mkdir -p $TMPDIR/$REPOPATH
