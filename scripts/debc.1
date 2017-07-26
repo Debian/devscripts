@@ -83,6 +83,13 @@ this option.
 See the above section \fBDirectory name checking\fR for an explanation of
 this option.
 .TP
+\fB\-\-list-changes\fR
+List the filename of the .changes file, and do not display anything else. This
+option only makes sense if a .changes file is NOT passed explicitly in the
+command line. This can be used for example in a script that needs to reference
+the .changes file, without having to duplicate the heuristics for finding it
+that debc already implements.
+.TP
 \fB\-\-list-debs\fR
 List the filenames of the .deb packages, and do not display their contents.
 .TP

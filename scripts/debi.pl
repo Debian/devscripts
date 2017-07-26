@@ -86,6 +86,7 @@ Usage: $progname [options] [.changes file] [package ...]
     -t<target>        Search for changes file made for GNU <target> arch
     --debs-dir DIR    Look for the changes and debs files in DIR instead of
                       the parent of the current package directory
+    --list-changes    only list the .changes file
     --list-debs       only list the .deb files; don't display their contents
     --multi           Search for multiarch .changes file made by dpkg-cross
     --check-dirname-level N
@@ -181,7 +182,7 @@ my ($opt_help, $opt_version, $opt_a, $opt_t, $opt_debsdir, $opt_multi);
 my $opt_upgrade;
 my ($opt_level, $opt_regex, $opt_noconf);
 my ($opt_tool, $opt_with_depends);
-my ($opt_list_debs);
+my ($opt_list_changes, $opt_list_debs);
 GetOptions("help" => \$opt_help,
 	   "version" => \$opt_version,
 	   "a=s" => \$opt_a,
@@ -195,6 +196,7 @@ GetOptions("help" => \$opt_help,
 	   "tool=s" => \$opt_tool,
 	   "noconf" => \$opt_noconf,
 	   "no-conf" => \$opt_noconf,
+	   "list-changes" => \$opt_list_changes,
 	   "list-debs" => \$opt_list_debs,
 	   )
     or die "Usage: $progname [options] [.changes file] [package ...]\nRun $progname --help for more details\n";
@@ -321,6 +323,11 @@ EOF
 	$mchanges ||= "$debsdir/${package}_${sversion}_multi.changes"
 	    if -f "$debsdir/${package}_${sversion}_multi.changes";
     }
+}
+
+if ($opt_list_changes) {
+  printf "%s\n", $changes;
+  exit(0);
 }
 
 chdir dirname($changes)
