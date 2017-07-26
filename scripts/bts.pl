@@ -4195,7 +4195,7 @@ Please see L<https://www.debian.org/Bugs/server-control> for
 more details on how to control the BTS using emails and
 L<https://www.debian.org/Bugs/> for more information about the BTS.
 
-querybts(1), reportbug(1), pts-subscribe(1)
+querybts(1), reportbug(1), pts-subscribe(1), devscripts.conf(5)
 
 =head1 COPYRIGHT
 
