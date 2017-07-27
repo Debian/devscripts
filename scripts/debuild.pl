@@ -73,7 +73,7 @@ sub usage
 {
     print <<"EOF";
 First usage method:
-  $progname [<debuild options>] binary|binary-arch|binary-indep|clean ...
+  $progname [<debuild options>] -- binary|binary-arch|binary-indep|clean ...
     to run debian/rules with given parameter(s).  Options here are
         --no-conf, --noconf      Don\'t read devscripts config files;
                                  must be the first option given
