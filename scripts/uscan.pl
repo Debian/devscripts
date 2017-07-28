@@ -3292,7 +3292,7 @@ EOF
 	}
 	unless ($newversion) {
 	    # uversionmanglesd version is '', make best effort to set it
-	    $newfile_base =~ m/^.+[-_]?(\d[\-+\.:\~\da-zA-Z]*)(?:\.tar\.(gz|bz2|xz)|\.zip)$/i;
+	    $newfile_base =~ m/^.+?[-_]?(\d[\-+\.:\~\da-zA-Z]*)(?:\.tar\.(gz|bz2|xz)|\.zip)$/i;
 	    $newversion = $1;
 	    unless ($newversion) {
 		uscan_warn "Fix filenamemangle to produce a filename with the correct version\n";
