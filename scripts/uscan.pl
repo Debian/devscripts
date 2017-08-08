@@ -689,7 +689,7 @@ tarball href and the signature file is tried to be downloaded from it.
 
 If the B<pgpsigurlmangle> rule doesn't exist, B<uscan> warns user if the
 matching upstream signature file is available from the same URL with their
-filename being suffixed by the 4 common suffix B<asc>, B<gpg>, B<pgp>, B<sig>
+filename being suffixed by the 5 common suffix B<asc>, B<gpg>, B<pgp>, B<sig>
 and B<sign>. (You can avoid this warning by setting B<pgpmode=none>.)
 
 If the signature file is downloaded, the downloaded upstream tarball is checked
