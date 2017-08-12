@@ -25,6 +25,7 @@ devscripts (2.17.10) UNRELEASED; urgency=medium
   * uscan:
     + Fix the new package version regex for filenamemangle.  Closes: #869150
     + Fix example URL for pagemangle.  Closes: #864914
+    + Set $origcount to 0 for each watch file. Closes: #840232
 
  -- Mattia Rizzolo <mattia@debian.org>  Tue, 25 Jul 2017 14:18:24 +0200
 
