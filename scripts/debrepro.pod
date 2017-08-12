@@ -1,6 +1,6 @@
 =head1 NAME
 
-debrepro - reproduciblity tester for Debian packages
+debrepro - reproducibility tester for Debian packages
 
 =head1 SYNOPSIS
 
@@ -9,10 +9,11 @@ B<debrepro> [I<OPTIONS>] [I<SOURCEDIR>]
 =head1  DESCRIPTION
 
 B<debrepro> will build a given source directory twice, with a set of
-variation between the first and the second build, and compare the binary
-packages produced. If B<diffoscope> is installed, it is used to compare
-non-matching binaries. If B<disorderfs> is installed, it is used during
-the build to inject non-determinism in filesystem listing operations.
+variations between the first and the second build, and compare the
+produced binary packages. If B<diffoscope> is installed, it is used to
+compare non-matching binaries. If B<disorderfs> is installed, it is used
+during the build to inject non-determinism in filesystem listing
+operations.
 
 I<SOURCEDIR> must be a directory containing an unpacked Debian source
 package. If I<SOURCEDIR> is omitted, the current directory is assumed.
@@ -20,28 +21,28 @@ package. If I<SOURCEDIR> is omitted, the current directory is assumed.
 =head1 OUTPUT DIRECTORY
 
 At the very end of a build, B<debrepro> will inform the location of the
-output directory where the build artifacts can be found. The contents of
-this directory are as follows:
+output directory where the build artifacts can be found. In that
+directory, you will find:
 
 =over
 
 =item I<$OUTPUTDIR/first>
 
-contains the results of the first build, including a copy of the source
+Contains the results of the first build, including a copy of the source
 tree, and the resulting binary packages.
 
 =item I<$OUTPUTDIR/first/build.sh>
 
-contains the exact build script that was used in the first build.
+Contains the exact build script that was used in the first build.
 
 =item I<$OUTPUTDIR/second>
 
-contains the results of the second build, including a copy of the source tree,
+Contains the results of the second build, including a copy of the source tree,
 and the resulting binary packages.
 
 =item I<$OUTPUTDIR/second/build.sh>
 
-contains the exact build script that was used in the second build.
+Contains the exact build script that was used in the second build.
 
 =back
 
@@ -60,7 +61,7 @@ first and second builds.
 
 =item B<path>
 
-During the second build, a fake, unexisting directory will be appended to the
+During the second build, a fake, non-existing directory will be appended to the
 I<$PATH> environment variable.
 
 =item B<umask>
@@ -84,7 +85,7 @@ items in a non-deterministic order.
 =item B<time>
 
 The second build will be executed 213 days, 7 hours and 13 minutes in the
-future with regards to the current time.
+future with regards to the current time (using B<faketime(1)>).
 
 =back
 
