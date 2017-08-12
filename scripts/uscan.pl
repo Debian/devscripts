@@ -3673,6 +3673,8 @@ EOF
 	$previous_sigfile_base = undef;
 	$previous_newversion = undef;
 	$previous_download_available = undef;
+    } elsif ($options{'pgpmode'} eq 'auto') {
+	uscan_verbose "Don't check OpenPGP signature\n";
     } else {
 	uscan_warn "strange ... unknown pgpmode = $options{'pgpmode'}\n";
 	return 1;
