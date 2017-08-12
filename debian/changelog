@@ -15,13 +15,14 @@ devscripts (2.17.10) UNRELEASED; urgency=medium
   * debuild:
     + Add "--" in --help output for debian/rules mode.
 
-  [ Osamu Aoki ]
-  * uscan:
-    + Fix the new package version regex for filenamemangle.  Closes: #869150
-
   [ Daniel Shahaf ]
   * bts:
     + Add devscripts.conf(5) to "See also".  Closes: #869842
+
+  [ Osamu Aoki ]
+  * uscan:
+    + Fix the new package version regex for filenamemangle.  Closes: #869150
+    + Fix example URL for pagemangle.  Closes: #864914
 
  -- Mattia Rizzolo <mattia@debian.org>  Tue, 25 Jul 2017 14:18:24 +0200
 

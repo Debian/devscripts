@@ -995,7 +995,7 @@ standard page format with:
 
   version=4
   opts=pagemangle="s/<a\s+bogus=/<a href=/g" \
-  http://example.com/release/@PACKAGE@.html \
+  http://example.com/release/foo.html \
   files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate
 
 Please note the use of B<g> here to replace all occurrences.
@@ -1005,7 +1005,7 @@ converted to the standard page format with:
 
   version=4
   opts="pagemangle=s%<Key>([^<]*)</Key>%<Key><a href="$1">$1</a></Key>%g" \\
-  http://localhost:$PORT/ \
+  http://example.com/release/foo.html \
   (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate
 
 =head2 FTP site (basic):
