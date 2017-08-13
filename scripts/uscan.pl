@@ -4125,6 +4125,7 @@ sub process_watchfile ($$$$)
 	}
     }
 
+    $origcount = 0; # reset to 0 for each watch file
     unless (open WATCH, $watchfile) {
 	uscan_warn "could not open $watchfile: $!\n";
 	return 1;
@@ -4184,7 +4185,6 @@ sub process_watchfile ($$$$)
 	s/\@ARCHIVE_EXT\@/$archive_ext/g;
 	s/\@SIGNATURE_EXT\@/$signature_ext/g;
 
-    	$origcount = 0; # reset to 0 for each watch file
 	$status +=
 	    process_watchline($_, $watch_version, $dir, $package, $version,
 			      $watchfile);
