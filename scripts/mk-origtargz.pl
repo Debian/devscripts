@@ -104,6 +104,28 @@ Both the B<--exclude-file> and B<--copyright-file> options amend the list of
 patterns found in F<debian/copyright>. If you do not want to read that file,
 you will have to use B<--package>.
 
+=item B<--signature> I<signature-mode>
+
+Set I<signature-mode>:
+
+=over
+
+=item 0 for no signature
+
+=item 1 for normal detached signature
+
+=item 2 for signature on decompressed
+
+=item 3 for self signature
+
+=back
+
+=item B<--signature-file> I<signature-file>
+
+Use I<signature-file> as the signature file corresponding to the Debian source
+package to create a B<dpkg-source> (post-stretch) compatible signature file.
+(optional)
+
 =back
 
 =head2 Action options
@@ -227,6 +249,9 @@ my $suffix = '';
 
 my $upstream = undef;
 
+my $signature = 0;
+my $signature_file = "";
+
 # option parsing
 
 sub die_opts ($) {
@@ -247,6 +272,8 @@ GetOptions(
     "component|c=s" => \$component,
     "exclude-file=s" => \@exclude_globs,
     "copyright-file=s" => \@copyright_files,
+    "signature=i" => \$signature,
+    "signature-file=s" => \$signature_file,
     "compression=s" => \$compression,
     "symlink" => \&setmode,
     "rename" => \&setmode,
@@ -386,6 +413,10 @@ if ($is_tarfile and not $repack) {
     }
 }
 
+# Gather information about the signature file.
+
+my $is_ascfile = $signature_file =~ /\.asc$/i;
+my $is_gpgfile = $signature_file =~ /\.(gpg|pgp|sig|sign)$/i;
 
 # Now we know what the final filename will be
 my $destfilebase = sprintf "%s_%s.%s.tar", $package, $version, $orig;
@@ -393,6 +424,30 @@ my $destfiletar = sprintf "%s/%s", $destdir, $destfilebase;
 my $destext = compression_get_property($compression, "file_ext");
 my $destfile = sprintf "%s.%s", $destfiletar, $destext;
 
+my $destsigfile;
+if ($signature == 1) {
+    $destsigfile = sprintf "%s.asc", $destfile;
+} elsif ($signature == 2) {
+    $destsigfile = sprintf "%s.asc", $destfiletar;
+} else {
+    # XXX FIXME XXX place holder
+    $destsigfile = sprintf "%s.asc", $destfile;
+}
+
+if ($signature != 0) {
+    if ($is_gpgfile) {
+	my $enarmor = `gpg --output - --enarmor $signature_file 2>&1`;
+	$? == 0 or die "mk-origtargz: Failed to convert $signature_file to *.asc\n";
+	$enarmor =~ s/ARMORED FILE/SIGNATURE/;
+	$enarmor =~ /^Comment:/d;
+	open(DESTSIG, ">> $destsigfile") or die "mk-origtargz: Failed to open $destsigfile for append: $!\n";
+	print DESTSIG $enarmor;
+    } else {
+	if (abs_path($signature_file) ne abs_path($destsigfile)) {
+	    copy $signature_file, $destsigfile;
+	}
+    }
+}
 
 # $upstream_tar is $upstream, unless the latter was a zip file.
 my $upstream_tar = $upstream;
