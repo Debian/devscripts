@@ -3744,7 +3744,7 @@ EOF
 	$path = $1 if $mk_origtargz_out =~ /Successfully .* (?:to|as) ([^,]+)(?:,.*)?\.$/;
 	$path = $1 if $mk_origtargz_out =~ /Leaving (.*) where it is/;
 	$target = basename($path);
-	$common_mangled_newversion = $1 if $target =~ m/[^_]+_(.+)\.orig\.tar\.(?:gz|bz2|lzma|xz)$/;
+	$common_mangled_newversion = $1 if $target =~ m/[^_]+_(.+)\.orig(?:-.+)?\.tar\.(?:gz|bz2|lzma|xz)$/;
 	uscan_verbose "New orig.tar.* tarball version (after mk-origtargz): $common_mangled_newversion\n";
     }
     push @origtars, $target;
