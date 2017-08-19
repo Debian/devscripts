@@ -3507,7 +3507,6 @@ EOF
 	    $download_available = 0;
 	    dehs_verbose "Not downloading upstream package: $newfile_base\n";
 	}
-
 	# Decompress archive if requested and applicable
 	if ($download_available and $options{'decompress'}) {
 	    my $suffix = $sigfile_base;
@@ -3668,6 +3667,8 @@ EOF
 		    "$destdir/$newfile_base", "$destdir/$sigfile_base") >> 8 == 0) {
 		uscan_die("OpenPGP signature did not verify.\n");
 	    }
+	    # XXX FIXME XXX extract signature as detached signature to $destdir/$sigfile_base
+	    $signature_available = 3;
 	}
 	$previous_newfile_base = undef;
 	$previous_sigfile_base = undef;
@@ -3713,7 +3714,30 @@ EOF
 	uscan_warn "No upstream tarball downloaded.  No further processing with mk_origtargz ...\n";
 	return 1;
     }
+    if ($signature_available == 1 and $options{'decompress'}) {
+	$signature_available = 2;
+    }
+    #########################################################################
+    # upstream tar file and, if available, signature file are downloaded
+    # by parsing a watch file line.
+    #########################################################################
+    # upstream tarball: $destdir/$newfile_base   -- original tar.gz-like
+    # upstream tarball: $destdir/$sigfile_base   -- decompressed tar if requested
+    #  * for pgpmode=self                        -- the tarball as gpg extracted
+    #  * for other cases                         -- the tarball as downloaded
+    # signature file:   $destdir/$sigfile"
+    #  * for $signature_available = 0            -- no signature file 
+    #  * for $signature_available = 1            -- normal signature file
+    #  * for $signature_available = 2            -- signature file on decompressed
+    #  * for $signature_available = 3            -- non-detached signature (XXX FIXME XXX)
+    #      If pgpmode=self case in the above is fixed, below 
+    #      " and ($options{'pgpmode'} ne 'self')" may be dropped.
+    # New version after making the new orig[-component].tar.gz:
+    #     $common_mangled_newversion
+    #         -- this is true when repacksuffix isn't used.
+    #########################################################################
     # Call mk-origtargz (renames, repacks, etc.)
+    #########################################################################
     my $mk_origtargz_out;
     my $path = "$destdir/$newfile_base";
     my $target = $newfile_base;
@@ -3724,6 +3748,10 @@ EOF
 	push @cmd, '--repack-suffix', $options{repacksuffix} if defined $options{repacksuffix};
 	push @cmd, "--rename" if $symlink eq "rename";
 	push @cmd, "--copy"   if $symlink eq "copy";
+	push @cmd, "--signature $signature_available" 
+            if ($signature_available != 0);
+	push @cmd, "--signature-file $destdir/$sigfile" 
+            if ($signature_available == 1 and $signature_available == 2);
 	push @cmd, "--repack" if $options{'repack'};
 	push @cmd, "--component", $options{'component'} if defined $options{'component'};
 	push @cmd, "--compression", $compression;
