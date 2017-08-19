@@ -3481,6 +3481,8 @@ EOF
 
     # Download tarball
     my $download_available;
+    my $signature_available;
+    my $sigfile;
     my $sigfile_base = $newfile_base;
     if ($options{'pgpmode'} ne 'previous') {
 	# try download package
@@ -3507,8 +3509,36 @@ EOF
 	    $download_available = 0;
 	    dehs_verbose "Not downloading upstream package: $newfile_base\n";
 	}
+    }
+    if ($options{'pgpmode'} eq 'self') {
+	$gpghome = tempdir(CLEANUP => 1);
+	$sigfile_base =~ s/^(.*?)\.[^\.]+$/$1/; # drop .gpg, .asc, ...
+	if ($signature == -1) {
+	    uscan_warn("SKIP Checking OpenPGP signature (by request).\n");
+	    $download_available = -1; # can't proceed with self-signature archive
+	    $signature_available = 0;
+	} elsif (! defined $keyring) {
+	    uscan_die("FAIL Checking OpenPGP signature (no keyring).\n");
+	} elsif ($download_available == 0) {
+	    uscan_warn "FAIL Checking OpenPGP signature (no signed upstream tarball downloaded).\n";
+	    return 1;
+	} else {
+	    uscan_verbose "Verifying OpenPGP self signature of $newfile_base and extract $sigfile_base\n";
+	    unless (system($havegpg, '--homedir', $gpghome,
+		    '--no-options', '-q', '--batch', '--no-default-keyring',
+		    '--keyring', $keyring, '--trust-model', 'always', '--decrypt', '-o',
+		    "$destdir/$sigfile_base", "$destdir/$newfile_base") >> 8 == 0) {
+		uscan_die("OpenPGP signature did not verify.\n");
+	    }
+	    # XXX FIXME XXX extract signature as detached signature to $destdir/$sigfile
+	    $sigfile = $newfile_base; # XXX FIXME XXX place holder
+	    $newfile_base = $sigfile_base;
+	    $signature_available = 3;
+	}
+    }
+    if ($options{'pgpmode'} ne 'previous') {
 	# Decompress archive if requested and applicable
-	if ($download_available and $options{'decompress'}) {
+	if ($download_available == 1 and $options{'decompress'}) {
 	    my $suffix = $sigfile_base;
 	    $suffix =~ s/.*?(\.gz|\.xz|\.bz2|\.lzma)?$/$1/;
 	    if ($suffix eq '.gz') {
@@ -3552,8 +3582,6 @@ EOF
 
     # Download signature
     my $pgpsig_url;
-    my $sigfile;
-    my $signature_available;
     if (($options{'pgpmode'} eq 'default' or $options{'pgpmode'} eq 'auto') and $signature == 1) {
 	uscan_verbose "Start checking for common possible upstream OpenPGP signature files\n";
 	foreach my $suffix (qw(asc gpg pgp sig sign)) {
@@ -3649,27 +3677,6 @@ EOF
 	$previous_newversion = $newversion;
 	$previous_download_available = $download_available;
     } elsif ($options{'pgpmode'} eq 'self') {
-	$gpghome = tempdir(CLEANUP => 1);
-	$newfile_base = $sigfile_base;
-	$newfile_base =~ s/^(.*?)\.[^\.]+$/$1/;
-	if ($signature == -1) {
-	    uscan_warn("SKIP Checking OpenPGP signature (by request).\n");
-	} elsif (! defined $keyring) {
-	    uscan_die("FAIL Checking OpenPGP signature (no keyring).\n");
-	} elsif ($download_available == 0) {
-	    uscan_warn "FAIL Checking OpenPGP signature (no signed upstream tarball downloaded).\n";
-	    return 1;
-	} else {
-	    uscan_verbose "Verifying OpenPGP self signature of $sigfile_base and extract $newfile_base\n";
-	    unless (system($havegpg, '--homedir', $gpghome,
-		    '--no-options', '-q', '--batch', '--no-default-keyring',
-		    '--keyring', $keyring, '--trust-model', 'always', '--decrypt', '-o',
-		    "$destdir/$newfile_base", "$destdir/$sigfile_base") >> 8 == 0) {
-		uscan_die("OpenPGP signature did not verify.\n");
-	    }
-	    # XXX FIXME XXX extract signature as detached signature to $destdir/$sigfile_base
-	    $signature_available = 3;
-	}
 	$previous_newfile_base = undef;
 	$previous_sigfile_base = undef;
 	$previous_newversion = undef;
@@ -3714,6 +3721,10 @@ EOF
 	uscan_warn "No upstream tarball downloaded.  No further processing with mk_origtargz ...\n";
 	return 1;
     }
+    if ($download_available == -1) {
+	uscan_warn "No upstream tarball unpacked from self signature file.  No further processing with mk_origtargz ...\n";
+	return 1;
+    }
     if ($signature_available == 1 and $options{'decompress'}) {
 	$signature_available = 2;
     }
@@ -3748,9 +3759,9 @@ EOF
 	push @cmd, '--repack-suffix', $options{repacksuffix} if defined $options{repacksuffix};
 	push @cmd, "--rename" if $symlink eq "rename";
 	push @cmd, "--copy"   if $symlink eq "copy";
-	push @cmd, "--signature $signature_available" 
+	push @cmd, "--signature", $signature_available
             if ($signature_available != 0);
-	push @cmd, "--signature-file $destdir/$sigfile" 
+	push @cmd, "--signature-file", "$destdir/$sigfile" 
             if ($signature_available == 1 and $signature_available == 2);
 	push @cmd, "--repack" if $options{'repack'};
 	push @cmd, "--component", $options{'component'} if defined $options{'component'};
