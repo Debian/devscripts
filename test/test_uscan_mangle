@@ -38,6 +38,7 @@ DEBUGBASH=":"
 #COMMAND="$COMMAND --debug"
 #DEBUGECHO=echo
 #DEBUGLSLR="ls -laR"
+#DEBUGLSLR="ls -la"
 #DEBUGBASH="bash -i"
 
 GPGHOME=$(mktemp -d -p /tmp gpg.XXXXX)
@@ -319,13 +320,42 @@ helperWatch() {
     if grep -q "uupdate" $TMPDIR/${PKG}/debian/watch ; then
 	UUPDATE=uupdate
     fi
+    local PGP=""
+    if grep -q "pgpurlmangle" $TMPDIR/${PKG}/debian/watch ; then
+	PGP=pgp
+    fi
     $XCOMMAND
     assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
     cd $TMPDIR
+    $DEBUGLSLR
     UTARBALL=${PKG}-${VERNEW}.tar.gz
     STARBALL=${PKG}_${PREFIX}${VERNEW}.orig.tar.$GZREPACK
     assertTrue "$UTARBALL missing: $WATCHLINE" "[ -f $UTARBALL ]"
     assertTrue "$STARBALL missing: $WATCHLINE" "[ -f $STARBALL ]"
+    if [ "$PGP" = "pgp" ]; then
+	UTARSIG=${PKG}-${VERNEW}.tar.gz.sig
+	if [ -f $UTARSIG ]; then
+	    UTARSIG=${PKG}-${VERNEW}.tar.gz.asc
+	fi
+	STARSUG=${PKG}_${PREFIX}${VERNEW}.orig.tar.$GZREPACK.asc
+	assertTrue "$UTARSIG and *.sig missing: $WATCHLINE" "[ -f $UTARSIG ]"
+	assertTrue "$STARSIG missing: $WATCHLINE" "[ -f $STARSIG ]"
+    fi
+    for cpnt in $COMPONENTS; do
+	UTARBALL=${cpnt}-${VERNEW}.tar.gz
+	STARBALL=${PKG}_${PREFIX}${VERNEW}.orig-${cpnt}.tar.$GZREPACK
+	assertTrue "$UTARBALL missing: $WATCHLINE" "[ -f $UTARBALL ]"
+	assertTrue "$STARBALL missing: $WATCHLINE" "[ -f $STARBALL ]"
+	if [ "$PGP" = "pgp" ]; then
+	    UTARSIG=${cpnt}-${VERNEW}.tar.gz.sig
+	    if [ -f $UTARSIG ]; then
+		UTARSIG=${cpnt}-${VERNEW}.tar.gz.asc
+	    fi
+	    STARSUG=${PKG}_${PREFIX}${VERNEW}.orig-${cpnt}.tar.$GZREPACK.asc
+	    assertTrue "$UTARSIG and *.sig missing: $WATCHLINE" "[ -f $UTARSIG ]"
+	    assertTrue "$STARSIG missing: $WATCHLINE" "[ -f $STARSIG ]"
+	fi
+    done
     # check uupdate
     if [ "$UUPDATE" = "uupdate" ]; then
 	cd $TMPDIR/${PKG}-${PREFIX}${VERNEW}
