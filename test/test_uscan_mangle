@@ -37,8 +37,8 @@ DEBUGBASH=":"
 # comment out for debug
 #COMMAND="$COMMAND --debug"
 #DEBUGECHO=echo
+#DEBUGLSLR="ls -laR"
 #DEBUGBASH="bash -i"
-#DEBUGBASH="ls -laR"
 
 GPGHOME=$(mktemp -d -p /tmp gpg.XXXXX)
 
