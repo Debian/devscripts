@@ -181,7 +181,7 @@ END
     elif [ "$FILEEXCLUDE" = "3" ]; then
 	# exclude for foo bar baz
 	cat <<'END' >> debian/copyright
-Files-Excludedi-foo: exclude-this
+Files-Excluded-foo: exclude-this
  */exclude-dir
  .*
  */js/jquery.js
