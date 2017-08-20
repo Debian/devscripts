@@ -3762,7 +3762,7 @@ EOF
 	push @cmd, "--signature", $signature_available
             if ($signature_available != 0);
 	push @cmd, "--signature-file", "$destdir/$sigfile" 
-            if ($signature_available == 1 and $signature_available == 2);
+            if ($signature_available != 0);
 	push @cmd, "--repack" if $options{'repack'};
 	push @cmd, "--component", $options{'component'} if defined $options{'component'};
 	push @cmd, "--compression", $compression;
