@@ -4,6 +4,9 @@ devscripts (2.17.10) UNRELEASED; urgency=medium
   * debian/tests/control:
     + Add dependency on debhelper; apparently autopkgtest in ubuntu doesn't
       pull it otherwise
+  * debian/control:
+    + Mark build-dependencies needed only for the tests with the <!nocheck>
+      build profile; partially addresses: #870640
 
   [ Antonio Terceiro ]
   * debc:
