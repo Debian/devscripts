@@ -7,6 +7,8 @@ devscripts (2.17.10) UNRELEASED; urgency=medium
   * debian/control:
     + Mark build-dependencies needed only for the tests with the <!nocheck>
       build profile; partially addresses: #870640
+  * debian/source/options:
+    + Remove the file, compression=xz has been the default for a long while.
 
   [ Antonio Terceiro ]
   * debc:
