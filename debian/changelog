@@ -9,6 +9,8 @@ devscripts (2.17.10) UNRELEASED; urgency=medium
       build profile; partially addresses: #870640
   * debian/source/options:
     + Remove the file, compression=xz has been the default for a long while.
+  * debian/TODO:
+    + Remove the file, unusued (=> outdated) since 2008 and mostly empty.
 
   [ Antonio Terceiro ]
   * debc:
