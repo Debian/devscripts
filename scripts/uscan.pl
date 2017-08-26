@@ -2618,7 +2618,7 @@ sub process_watchline ($$$$$$)
 	    $lastversion = $minversion;
 	} elsif ($lastversion =~ m/^prev/) {
 	    $options{'versionmode'}='previous';
-	    $lastversion = $minversion;
+	    # set $lastversion = $previous_newversion later
 	}
 
 	# Check $filepattern is OK
@@ -2665,6 +2665,7 @@ sub process_watchline ($$$$$$)
 	} elsif ($options{'pgpmode'} =~ m/^pr/) {
 	    $options{'pgpmode'} = 'previous';
 	    $options{'versionmode'} = 'previous'; # no other value allowed
+	    # set $lastversion = $previous_newversion later
 	} elsif ($options{'pgpmode'} =~ m/^se/) {
 	    $options{'pgpmode'} = 'self';
 	} else {
@@ -2729,6 +2730,9 @@ sub process_watchline ($$$$$$)
 	$lastversion =~ s/-[^-]+$//;  # revision
 	$lastversion =~ s/^\d+://;    # epoch
 	uscan_verbose "specified --download-debversion to set the last version: $lastversion\n";
+    } elsif($options{'versionmode'} eq 'previous') {
+	$lastversion = $previous_newversion;
+	uscan_verbose "Previous version downloaded: $lastversion\n";
     } else {
 	uscan_verbose "Last orig.tar.* tarball version (from debian/changelog): $lastversion\n";
     }
@@ -3676,6 +3680,10 @@ EOF
 	$previous_sigfile_base = $sigfile_base;
 	$previous_newversion = $newversion;
 	$previous_download_available = $download_available;
+	uscan_verbose "previous_newfile_base = $newfile_base\n";
+	uscan_verbose "previous_sigfile_base = $sigfile_base\n";
+	uscan_verbose "previous_newversion = $newversion\n";
+	uscan_verbose "previous_download_available = $download_available\n";
     } elsif ($options{'pgpmode'} eq 'self') {
 	$previous_newfile_base = undef;
 	$previous_sigfile_base = undef;
