@@ -36,6 +36,7 @@ DEBUGLSLR=":"
 DEBUGBASH=":"
 # comment out for debug
 #COMMAND="$COMMAND --debug"
+#COMMAND="$COMMAND --verbose"
 #DEBUGECHO=echo
 #DEBUGLSLR="ls -laR"
 #DEBUGLSLR="ls -la"
@@ -324,6 +325,9 @@ helperWatch() {
     if grep -q "pgpurlmangle" $TMPDIR/${PKG}/debian/watch ; then
 	PGP=pgp
     fi
+    if grep -q "pgpmode=previous" $TMPDIR/${PKG}/debian/watch ; then
+	PGP=pgp
+    fi
     $XCOMMAND
     assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
     cd $TMPDIR
@@ -334,7 +338,7 @@ helperWatch() {
     assertTrue "$STARBALL missing: $WATCHLINE" "[ -f $STARBALL ]"
     if [ "$PGP" = "pgp" ]; then
 	UTARSIG=${PKG}-${VERNEW}.tar.gz.sig
-	if [ -f $UTARSIG ]; then
+	if [ ! -f $UTARSIG ]; then
 	    UTARSIG=${PKG}-${VERNEW}.tar.gz.asc
 	fi
 	STARSUG=${PKG}_${PREFIX}${VERNEW}.orig.tar.$GZREPACK.asc
@@ -348,7 +352,7 @@ helperWatch() {
 	assertTrue "$STARBALL missing: $WATCHLINE" "[ -f $STARBALL ]"
 	if [ "$PGP" = "pgp" ]; then
 	    UTARSIG=${cpnt}-${VERNEW}.tar.gz.sig
-	    if [ -f $UTARSIG ]; then
+	    if [ ! -f $UTARSIG ]; then
 		UTARSIG=${cpnt}-${VERNEW}.tar.gz.asc
 	    fi
 	    STARSUG=${PKG}_${PREFIX}${VERNEW}.orig-${cpnt}.tar.$GZREPACK.asc
@@ -983,6 +987,15 @@ testWatch4WebNonNativeRSig() {
     WATCHVER=4
     WATCHLINE='opts = "pgpmode=next" @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
 opts = "pgpmode=previous" @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@.asc previous uupdate'
+    helperWatch siteWebNonNativeR
+}
+
+# test normal web page with sig (different file path for sig and tar; reverse order, BIN)
+testWatch4WebNonNativeRSigBIN() {
+    WATCHVER=4
+    SIGMODE=BIN
+    WATCHLINE='opts = "pgpmode=next" @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts = "pgpmode=previous" @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@.sig previous uupdate'
     helperWatch siteWebNonNativeR
 }
 
