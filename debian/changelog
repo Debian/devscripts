@@ -34,6 +34,7 @@ devscripts (2.17.10) UNRELEASED; urgency=medium
     + Fix example URL for pagemangle.  Closes: #864914
     + Set $origcount to 0 for each watch file. Closes: #840232
     + Don't fail on pgpmode=auto. Closes: #852537
+    + Don't fail on pgpmode=previous. Closes: #840943, #873289
     + Rename and convert the detached signature with updated mk-origtargz.
   * mk-origtargz 
     + Rename and convert the detached signature. Closes: #832267, #870281
