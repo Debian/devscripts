@@ -999,6 +999,16 @@ opts = "pgpmode=previous" @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@.
     helperWatch siteWebNonNativeR
 }
 
+# test normal web page with sig (different file path for sig and tar; reverse order, BIN BIN)
+testWatch4WebNonNativeRSigBINiBIN() {
+    WATCHVER=4
+    SIGMODE=BIN
+    KEYMODE=BIN
+    WATCHLINE='opts = "pgpmode=next" @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian
+opts = "pgpmode=previous" @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@.sig previous uupdate'
+    helperWatch siteWebNonNativeR
+}
+
 # test normal web page with sig (self)
 testWatch4WebNonNativeSelfSig() {
     WATCHVER=4
