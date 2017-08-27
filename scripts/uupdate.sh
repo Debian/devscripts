@@ -525,7 +525,11 @@ if [ "$OPMODE" = 1 ]; then
 	    STATUS=1
 	fi
 	chmod a+x debian/rules
-	debchange $BADVERSION -v "$NEW_VERSION-$SUFFIX" "New upstream release"
+	if [ -z "$BADVERSION" ]; then
+	    debchange -v "$NEW_VERSION-$SUFFIX" "New upstream release"
+	else
+	    debchange $BADVERSION -v "$NEW_VERSION-$SUFFIX" ""
+	fi
 	echo "$PROGNAME: Remember: Your current directory is the OLD sourcearchive!"
 	echo "$PROGNAME: Do a \"cd ../$PACKAGE-$SNEW_VERSION\" to see the new package"
 	exit
@@ -937,12 +941,16 @@ elif [ "$OPMODE" = 2 ]; then
     fi
     [ -e ../${PACKAGE}_${NEW_VERSION}.uscan.log ] && \
 	cp -f ../${PACKAGE}_${NEW_VERSION}.uscan.log debian/uscan.log
-    debchange $BADVERSION -v "$NEW_VERSION-$SUFFIX" "New upstream release"
+    if [ -z "$BADVERSION" ]; then
+	debchange -v "$NEW_VERSION-$SUFFIX" "New upstream release"
+    else
+	debchange $BADVERSION -v "$NEW_VERSION-$SUFFIX" ""
+    fi
     echo "$PROGNAME: Remember: Your current directory is the OLD sourcearchive!"
     echo "$PROGNAME: Do a \"cd ../$PACKAGE-$SNEW_VERSION\" to see the new package"
 
 else
-    # new "uupdate -f ..." used in the version=4 watch file
+    # OPMODE=3:  new "uupdate -f ..." used in the version=4 watch file
 
     # Sanity checks
     if [ ! -d debian ]; then
@@ -1115,7 +1123,11 @@ else
     [ -e debian/rules ] && chmod a+x debian/rules
     [ -e ../${PACKAGE}_${NEW_VERSION}.uscan.log ] && \
 	cp -f ../${PACKAGE}_${NEW_VERSION}.uscan.log debian/uscan.log
-    debchange $BADVERSION -v "$EPOCH$NEW_VERSION-$SUFFIX" "New upstream release"
+    if [ -z "$BADVERSION" ]; then
+	debchange -v "$EPOCH$NEW_VERSION-$SUFFIX" "New upstream release"
+    else
+	debchange $BADVERSION -v "$EPOCH$NEW_VERSION-$SUFFIX" ""
+    fi
     echo "$PROGNAME: Remember: Your current directory is changed back to the old source tree!"
     echo "$PROGNAME: Do a \"cd ../$PACKAGE-$NEW_VERSION\" to see the new source tree and
     edit it to be nice Debianized source."
