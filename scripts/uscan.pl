@@ -693,8 +693,7 @@ filename being suffixed by the 5 common suffix B<asc>, B<gpg>, B<pgp>, B<sig>
 and B<sign>. (You can avoid this warning by setting B<pgpmode=none>.)
 
 If the signature file is downloaded, the downloaded upstream tarball is checked
-for its authenticity against the downloaded signature file using the keyring
-F<debian/upstream/signing-key.pgp> or the armored keyring
+for its authenticity against the downloaded signature file using the armored keyring
 F<debian/upstream/signing-key.asc>  (see L<KEYRING FILE EXAMPLES>).  If its
 signature is not valid, or not made by one of the listed keys, B<uscan> will
 report an error.
@@ -1174,15 +1173,17 @@ know is the trusted one.
 
 Please note that the short keyid B<72543FAF> is the last 4 Bytes, the long
 keyid B<C77E2D6872543FAF> is the last 8 Bytes, and the finger print is the last
-20 Bytes of the public key in hexadecimal form.  You can save typing by using
-the short keyid but you must verify the OpenPGP key using its fingerprint.
+20 Bytes of the public key in hexadecimal form.  Considering the existence of
+the collision attack on the short keyid, the use of the long keyid is
+recommended for receiving keys from the public key servers.  You must verify
+the downloaded OpenPGP key using its fingerprint.
 
 The armored keyring file F<debian/upstream/signing-key.asc> can be created by
 using the B<gpg> (or B<gpg2>) command as follows.
 
-  $ gpg --recv-keys "72543FAF"
+  $ gpg --recv-keys "C77E2D6872543FAF"
   ...
-  $ gpg --finger "72543FAF"
+  $ gpg --finger "C77E2D6872543FAF"
   pub   4096R/72543FAF 2015-09-02
         Key fingerprint = CF21 8F0E 7EAB F584 B7E2  0402 C77E 2D68 7254 3FAF
   uid                  uscan test key (no secret) <none@debian.org>
@@ -1193,11 +1194,12 @@ using the B<gpg> (or B<gpg2>) command as follows.
         'CF21 8F0E 7EAB F584 B7E2  0402 C77E 2D68 7254 3FAF' \
         >debian/upstream/signing-key.asc
 
-The binary keyring file can be created instead by skipping B<--armor> and
-changing the storing file to F<debian/upstream/signing-key.pgp> in the above
-example.  If a group of developers sign the package, you need to list
-fingerprints of all of them in the argument for B<gpg --export ...> to make the
-keyring to contain all OpenPGP keys of them.
+The binary keyring files, F<debian/upstream/signing-key.pgp> and
+F<debian/upstream-signing-key.pgp>, are still supported but deprecated.
+
+If a group of developers sign the package, you need to list fingerprints of all
+of them in the argument for B<gpg --export ...> to make the keyring to contain
+all OpenPGP keys of them.
 
 Sometimes you may wonder who made a signature file.  You can get the public
 keyid used to create the detached signature file F<foo-2.0.tar.gz.asc> by
@@ -1707,9 +1709,10 @@ use Dpkg::Control::Hash;
 use Dpkg::IPC;
 use Dpkg::Version;
 use File::Basename;
-use File::Copy qw/copy/;
+use File::Copy qw/copy move/;
 use File::Spec::Functions qw/catfile/;
 use File::Temp qw/tempfile tempdir/;
+use File::Path qw/make_path/;
 use List::Util qw/first/;
 use filetest 'access';
 use Getopt::Long qw(:config bundling permute no_getopt_compat);
@@ -4155,11 +4158,30 @@ sub process_watchfile ($$$$)
 
     uscan_verbose "Process $dir/$watchfile (package=$package version=$version)\n";
 
-    # set $keyring: upstream-signing-key.pgp is deprecated
-    $keyring = first { -r $_ } qw(debian/upstream/signing-key.pgp debian/upstream/signing-key.asc debian/upstream-signing-key.pgp);
+    # set $keyring: upstream/signing-key.pgp and upstream-signing-key.pgp are deprecated but supported
+    if ( -r "debian/upstream/signing-key.asc") {
+	$keyring = "debian/upstream/signing-key.asc";
+    } else {
+	my $binkeyring = first { -r $_ } qw(debian/upstream/signing-key.pgp debian/upstream-signing-key.pgp);
+	if (defined $binkeyring) {
+	    make_path('debian/upstream', 0700, 'true');
+	    # convert to the policy complying armored key
+	    uscan_verbose "Found upstream binary signing keyring: $binkeyring\n";
+	    # Need to convert to an armored key
+	    $keyring = "debian/upstream/signing-key.asc";
+	    spawn(exec => [$havegpg, '--homedir', "/dev/null",
+		    '--no-options', '-q', '--batch',
+		    '--no-default-keyring', '--output',
+		    $keyring, '--enarmor', $binkeyring],
+		    wait_child => 1);
+	    uscan_warn "Generated upstream signing keyring: $keyring\n";
+	    move $binkeyring, "$binkeyring.backup";
+	    uscan_verbose "Renamed upstream binary signing keyring: $binkeyring.backup\n";
+	}
+    }
     if (defined $keyring) {
 	uscan_verbose "Found upstream signing keyring: $keyring\n";
-	if ($keyring =~ m/\.asc$/) {
+	if ($keyring =~ m/\.asc$/) { # always true
 	    # Need to convert an armored key to binary for use by gpgv
 	    $gpghome = tempdir(CLEANUP => 1);
 	    my $newkeyring = "$gpghome/trustedkeys.gpg";
