@@ -36,8 +36,10 @@ devscripts (2.17.10) UNRELEASED; urgency=medium
     + Don't fail on pgpmode=auto. Closes: #852537
     + Don't fail on pgpmode=previous. Closes: #840943, #873289
     + Rename and convert the detached signature with updated mk-origtargz.
+      Closes: #727096
   * mk-origtargz 
-    + Rename and convert the detached signature. Closes: #832267, #870281
+    + Rename and convert the detached signature. Closes: #832267, #837173,
+      #870281
   * uupdate 
     + -b option is not "New upstream release". Closes: #842468, #845610
 
