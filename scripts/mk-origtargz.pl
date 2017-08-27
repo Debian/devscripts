@@ -413,41 +413,11 @@ if ($is_tarfile and not $repack) {
     }
 }
 
-# Gather information about the signature file.
-
-my $is_ascfile = $signature_file =~ /\.asc$/i;
-my $is_gpgfile = $signature_file =~ /\.(gpg|pgp|sig|sign)$/i;
-
 # Now we know what the final filename will be
 my $destfilebase = sprintf "%s_%s.%s.tar", $package, $version, $orig;
 my $destfiletar = sprintf "%s/%s", $destdir, $destfilebase;
 my $destext = compression_get_property($compression, "file_ext");
 my $destfile = sprintf "%s.%s", $destfiletar, $destext;
-
-my $destsigfile;
-if ($signature == 1) {
-    $destsigfile = sprintf "%s.asc", $destfile;
-} elsif ($signature == 2) {
-    $destsigfile = sprintf "%s.asc", $destfiletar;
-} else {
-    # XXX FIXME XXX place holder
-    $destsigfile = sprintf "%s.asc", $destfile;
-}
-
-if ($signature != 0) {
-    if ($is_gpgfile) {
-	my $enarmor = `gpg --output - --enarmor $signature_file 2>&1`;
-	$? == 0 or die "mk-origtargz: Failed to convert $signature_file to *.asc\n";
-	$enarmor =~ s/ARMORED FILE/SIGNATURE/;
-	$enarmor =~ /^Comment:/d;
-	open(DESTSIG, ">> $destsigfile") or die "mk-origtargz: Failed to open $destsigfile for append: $!\n";
-	print DESTSIG $enarmor;
-    } else {
-	if (abs_path($signature_file) ne abs_path($destsigfile)) {
-	    copy $signature_file, $destsigfile;
-	}
-    }
-}
 
 # $upstream_tar is $upstream, unless the latter was a zip file.
 my $upstream_tar = $upstream;
@@ -602,7 +572,7 @@ if ($do_repack || $deletecount) {
     $upstream_tar = $destfile;
 }
 
-# Final step: symlink, copy or rename.
+# Final step: symlink, copy or rename for tarball.
 
 my $same_name = abs_path($destfile) eq abs_path($upstream);
 unless ($same_name) {
@@ -615,6 +585,47 @@ unless ($same_name) {
 	copy $upstream_tar, $destfile;
     } elsif ($mode eq "rename") {
 	move $upstream_tar, $destfile;
+    }
+}
+
+# Final step: symlink, copy or rename for signature file.
+
+my $is_ascfile = $signature_file =~ /\.asc$/i;
+my $is_gpgfile = $signature_file =~ /\.(gpg|pgp|sig|sign)$/i;
+
+my $destsigfile;
+if ($signature == 1) {
+    $destsigfile = sprintf "%s.asc", $destfile;
+} elsif ($signature == 2) {
+    $destsigfile = sprintf "%s.asc", $destfiletar;
+} else {
+    # XXX FIXME XXX place holder
+    $destsigfile = sprintf "%s.asc", $destfile;
+}
+
+if ($signature != 0) {
+    if ($mode eq "repack") {
+	print "Skip adding upstream signature since tarball is repacked.\n";
+    } elsif ($is_gpgfile) {
+	my $enarmor = `gpg --output - --enarmor $signature_file 2>&1`;
+	$? == 0 or die "mk-origtargz: Failed to convert $signature_file to *.asc\n";
+	$enarmor =~ s/ARMORED FILE/SIGNATURE/;
+	$enarmor =~ /^Comment:/d;
+	open(DESTSIG, ">> $destsigfile") or die "mk-origtargz: Failed to open $destsigfile for append: $!\n";
+	print DESTSIG $enarmor;
+    } else {
+	if (abs_path($signature_file) ne abs_path($destsigfile)) {
+	    if ($mode eq "symlink") {
+		my $rel = File::Spec->abs2rel($signature_file, $destdir);
+		symlink $rel, $destsigfile;
+	    } elsif ($mode eq "copy") {
+		copy $signature_file, $destsigfile;
+	    } elsif ($mode eq "rename") {
+		move $signature_file, $destsigfile;
+	    } else {
+		die "Strange mode=\"$mode\"\n";
+	    }
+	}
     }
 }
 
