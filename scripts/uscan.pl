@@ -1003,7 +1003,7 @@ If F<foo.html> uses B<< <Key> >> I<< ... >> B<< </Key> >>, this can be
 converted to the standard page format with:
 
   version=4
-  opts="pagemangle=s%<Key>([^<]*)</Key>%<Key><a href="$1">$1</a></Key>%g" \\
+  opts="pagemangle=s%<Key>([^<]*)</Key>%<Key><a href="$1">$1</a></Key>%g" \
   http://example.com/release/foo.html \
   (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate
 
