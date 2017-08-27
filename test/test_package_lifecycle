@@ -30,6 +30,12 @@ fi
 
 GPGHOME=$(mktemp -d -p /tmp gpg.XXXXX)
 
+if [ $(id -u) -eq 0 ]; then
+  FAKEROOT=
+else
+  FAKEROOT="fakeroot "
+fi
+
 oneTimeSetUp () {
 	GPG=gpg
 	if ! command -v $GPG >/dev/null 2>&1;then
@@ -126,7 +132,7 @@ test_debuild() {
 	dpkg-buildpackage: source changed by Testophilus Testownik <tester@testity.org>
 	 dpkg-source --before-build test
 	dpkg-buildpackage: host architecture ${_ARCH}
-	 fakeroot debian/rules clean
+	 ${FAKEROOT}debian/rules clean
 	dh clean
 	 dpkg-source -b test
 	dpkg-source: info: using source format '3.0 (quilt)'
@@ -135,7 +141,7 @@ test_debuild() {
 	dpkg-source: info: building test in test_1.0-1.dsc
 	 debian/rules build
 	dh build
-	 fakeroot debian/rules binary
+	 ${FAKEROOT}debian/rules binary
 	dh binary
 	dpkg-deb: building package 'test' in '../test_1.0-1_all.deb'.
 	 dpkg-genchanges  >../test_1.0-1_${_ARCH}.changes
@@ -270,7 +276,7 @@ test_debuild2() {
 	dpkg-buildpackage: source changed by Testophilus Testownik <tester@testity.org>
 	 dpkg-source --before-build test
 	dpkg-buildpackage: host architecture ${_ARCH}
-	 fakeroot debian/rules clean
+	 ${FAKEROOT}debian/rules clean
 	dh clean
 	 dpkg-source -b test
 	dpkg-source: info: using source format '3.0 (quilt)'
@@ -279,7 +285,7 @@ test_debuild2() {
 	dpkg-source: info: building test in test_1.0-2.dsc
 	 debian/rules build
 	dh build
-	 fakeroot debian/rules binary
+	 ${FAKEROOT}debian/rules binary
 	dh binary
 	dpkg-deb: building package 'test' in '../test_1.0-2_all.deb'.
 	 dpkg-genchanges  >../test_1.0-2_${_ARCH}.changes
@@ -303,7 +309,7 @@ test_debuild_forcesign() {
 	dpkg-buildpackage: source changed by Testophilus Testownik <tester@testity.org>
 	 dpkg-source --before-build test
 	dpkg-buildpackage: host architecture ${_ARCH}
-	 fakeroot debian/rules clean
+	 ${FAKEROOT}debian/rules clean
 	dh clean
 	 dpkg-source -b test
 	dpkg-source: info: using source format '3.0 (quilt)'
@@ -312,7 +318,7 @@ test_debuild_forcesign() {
 	dpkg-source: info: building test in test_1.0-2.dsc
 	 debian/rules build
 	dh build
-	 fakeroot debian/rules binary
+	 ${FAKEROOT}debian/rules binary
 	dh binary
 	dpkg-deb: building package 'test' in '../test_1.0-2_all.deb'.
 	 dpkg-genchanges  >../test_1.0-2_${_ARCH}.changes
