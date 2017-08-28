@@ -12,7 +12,7 @@ if os.path.exists(changelog):
     if match:
         version = match.group(1)
 
-scripts = "debdiff-apply sadt suspicious-source wrap-and-sort".split()
+scripts = "debdiff-apply sadt suspicious-source wrap-and-sort reproducible-check".split()
 
 if __name__ == '__main__':
     setup(

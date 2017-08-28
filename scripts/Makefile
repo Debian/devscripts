@@ -24,9 +24,9 @@ COMPLETION = $(patsubst %.bash_completion,$(BC_BUILD_DIR)/%,$(COMPL_FILES))
 COMPL_DIR := $(shell pkg-config --variable=completionsdir bash-completion)
 PKGNAMES:=wnpp-alert wnpp-check mk-build-deps rmadison mass-bug debsnap dd-list build-rdeps who-uploads transition-check getbuildlog dcontrol grep-excuses rc-alert whodepends dget pts-subscribe pts-unsubscribe debcheckout
 # also update the list in setup.py
-PYTHON3_SCRIPTS:=debdiff-apply sadt suspicious-source wrap-and-sort
+PYTHON3_SCRIPTS:=debdiff-apply sadt suspicious-source wrap-and-sort reproducible-check
 
-GEN_MAN1S += debrepro.1 devscripts.1 mk-origtargz.1 uscan.1
+GEN_MAN1S += debrepro.1 devscripts.1 mk-origtargz.1 uscan.1 reproducible-check.1
 
 all: $(SCRIPTS) $(GEN_MAN1S) $(CWRAPPERS) $(COMPLETION)
 
@@ -73,6 +73,9 @@ devscripts.1: devscripts.1.in
 	cat $< > $@.$(PID)
 	perl ../debian/genmanpage.pl >> $@.$(PID)
 	mv $@.$(PID) $@
+
+reproducible-check.1: reproducible-check
+	help2man --no-info --no-discard-stderr ./reproducible-check >$@
 
 $(BC_BUILD_DIR):
 	mkdir $(BC_BUILD_DIR)
