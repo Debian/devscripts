@@ -2,6 +2,8 @@
 
 UBU_SUGGESTS=debian-keyring, equivs, liblwp-protocol-https-perl, libsoap-lite-perl
 
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
 %:
 	dh $@ --with python3
 
