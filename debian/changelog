@@ -14,6 +14,9 @@ devscripts (2.17.10) UNRELEASED; urgency=medium
   * debian/rules:
     + Enable hardening build flags.  Closes: #873379
       Thanks Chris Lamb <lamby@debian.org> for the patch.
+  * reproducible-check:
+    + New script from Chris Lamb to check the reproducibility status of the
+      installed packages.  Closes: #872514
 
   [ Antonio Terceiro ]
   * debc:
