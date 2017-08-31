@@ -122,8 +122,8 @@ Suggests: adequate,
           svn-buildpackage,
           w3m,
           ${vendor:Suggests}
-Breaks: ubuntu-dev-tools (<< 0.147~), hardening-includes
-Replaces: ubuntu-dev-tools (<< 0.124~), hardening-includes
+Breaks: hardening-includes, ubuntu-dev-tools (<< 0.147~)
+Replaces: hardening-includes, ubuntu-dev-tools (<< 0.124~)
 Description: scripts to make the life of a Debian Package maintainer easier
  Contains the following scripts, dependencies/recommendations shown in
  brackets afterwards:
