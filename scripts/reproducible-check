@@ -37,7 +37,7 @@ class ReproducibleCheck(object):
     NAME = os.path.basename(__file__)
     CACHE = os.path.join(xdg_cache_home, NAME, 'reproducible.json.bz')
     VERSION = 1
-    STATUS_URL = 'https://tests.reproducible-builds.org/reproducible.json.bz2'
+    STATUS_URL = 'https://tests.reproducible-builds.org/debian/reproducible.json.bz2'
 
     @classmethod
     def parse(cls):
