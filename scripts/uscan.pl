@@ -3546,9 +3546,9 @@ EOF
     if ($options{'pgpmode'} ne 'previous') {
 	# Decompress archive if requested and applicable
 	if ($download_available == 1 and $options{'decompress'}) {
-	    my $suffix = $sigfile_base;
-	    $suffix =~ s/.*?(\.gz|\.xz|\.bz2|\.lzma)?$/$1/;
-	    if ($suffix eq '.gz') {
+	    my $suffix_gz = $sigfile_base;
+	    $suffix_gz =~ s/.*?(\.gz|\.xz|\.bz2|\.lzma)?$/$1/;
+	    if ($suffix_gz eq '.gz') {
 		if ( -x '/bin/gunzip') {
 		    system('/bin/gunzip', "--keep", "$destdir/$sigfile_base") == 0 or uscan_die("gunzip $destdir/$sigfile_base failed\n");
 		    $sigfile_base =~ s/(.*?)\.gz/$1/;
@@ -3556,7 +3556,7 @@ EOF
 		    uscan_warn("Please install gzip.\n");
 		    return 1;
 		}
-	    } elsif ($suffix eq '.xz') {
+	    } elsif ($suffix_gz eq '.xz') {
 		if ( -x '/usr/bin/unxz') {
 		    system('/usr/bin/unxz', "--keep", "$destdir/$sigfile_base") == 0 or uscan_die("unxz $destdir/$sigfile_base failed\n");
 		    $sigfile_base =~ s/(.*?)\.xz/$1/;
@@ -3564,7 +3564,7 @@ EOF
 		    uscan_warn("Please install xz-utils.\n");
 		    return 1;
 		}
-	    } elsif ($suffix eq '.bz2') {
+	    } elsif ($suffix_gz eq '.bz2') {
 		if ( -x '/bin/bunzip2') {
 		    system('/bin/bunzip2', "--keep", "$destdir/$sigfile_base") == 0 or uscan_die("bunzip2 $destdir/$sigfile_base failed\n");
 		    $sigfile_base =~ s/(.*?)\.bz2/$1/;
@@ -3572,7 +3572,7 @@ EOF
 		    uscan_warn("Please install bzip2.\n");
 		    return 1;
 		}
-	    } elsif ($suffix eq '.lzma') {
+	    } elsif ($suffix_gz eq '.lzma') {
 		if ( -x '/usr/bin/unlzma') {
 		    system('/usr/bin/unlzma', "--keep", "$destdir/$sigfile_base") == 0 or uscan_die("unlzma $destdir/$sigfile_base failed\n");
 		    $sigfile_base =~ s/(.*?)\.lzma/$1/;
@@ -3589,18 +3589,19 @@ EOF
 
     # Download signature
     my $pgpsig_url;
+    my $suffix_sig;
     if (($options{'pgpmode'} eq 'default' or $options{'pgpmode'} eq 'auto') and $signature == 1) {
 	uscan_verbose "Start checking for common possible upstream OpenPGP signature files\n";
-	foreach my $suffix (qw(asc gpg pgp sig sign)) {
-	    my $sigrequest = HTTP::Request->new('HEAD' => "$upstream_url.$suffix");
+	foreach $suffix_sig (qw(asc gpg pgp sig sign)) {
+	    my $sigrequest = HTTP::Request->new('HEAD' => "$upstream_url.$suffix_sig");
 	    my $sigresponse = $user_agent->request($sigrequest);
 	    if ($sigresponse->is_success()) {
 		if ($options{'pgpmode'} eq 'default') {
-		    uscan_warn "Possible OpenPGP signature found at:\n   $upstream_url.$suffix.\n   Please consider adding opts=pgpsigurlmangle=s/\$/.$suffix/\n   to debian/watch.  see uscan(1) for more details.\n";
+		    uscan_warn "Possible OpenPGP signature found at:\n   $upstream_url.$suffix_sig\n * Add opts=pgpsigurlmangle=s/\$/.$suffix_sig/ or opts=pgpmode=auto to debian/watch\n * Add debian/upstream/signing-key.asc.\n See uscan(1) for more details\n";
 		    $options{'pgpmode'} = 'none';
-		} else {
+		} else { # auto
 		    $options{'pgpmode'} = 'mangle';
-		    $options{'pgpsigurlmangle'} = [ 's/$/.' . $suffix . '/', ];
+		    $options{'pgpsigurlmangle'} = [ 's/$/.' . $suffix_sig . '/', ];
 		}
 		last;
 	    }
@@ -3619,9 +3620,19 @@ EOF
 		    . "  $line\n";
 		return 1;
 	    }
+	    if (! $suffix_sig) {
+		my $upstream_url_stem = $upstream_url;
+		my $pgpsig_url_stem = $pgpsig_url;
+		$upstream_url_stem =~ s/\?.*$//;
+		$pgpsig_url_stem =~ s/\?.*$//;
+		$suffix_sig = substr($pgpsig_url_stem, length($upstream_url_stem)+1,);
+		if ($suffix_sig and $suffix_sig !~ m/^[a-zA-Z]+$/) { # strange suffix
+		    $suffix_sig = "pgp";
+		}
+	    }
 	    uscan_debug "$pgpsig_url by pgpsigurlmangle rule.\n";
 	}
-	$sigfile = "$sigfile_base.pgp";
+	$sigfile = "$sigfile_base.$suffix_sig";
 	if ($signature == 1) {
 	    uscan_verbose "Downloading OpenPGP signature from\n   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile\n";
 	    $signature_available = $downloader->($pgpsig_url, "$destdir/$sigfile", $options{'mode'});
