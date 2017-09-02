@@ -325,7 +325,10 @@ helperWatch() {
     if grep -q "pgpurlmangle" $TMPDIR/${PKG}/debian/watch ; then
 	PGP=pgp
     fi
-    if grep -q "pgpmode=previous" $TMPDIR/${PKG}/debian/watch ; then
+    if grep -q "pgpmode *= *auto" $TMPDIR/${PKG}/debian/watch ; then
+	PGP=pgp
+    fi
+    if grep -q "pgpmode *= *previous" $TMPDIR/${PKG}/debian/watch ; then
 	PGP=pgp
     fi
     $XCOMMAND
