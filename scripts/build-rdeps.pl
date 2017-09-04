@@ -3,6 +3,7 @@
 # vim: set shiftwidth=4 tabstop=8 noexpandtab:
 #   Copyright (C) Patrick Schoenfeld
 #                 2015 Johannes Schauer <josch@debian.org>
+#                 2017 James McCoy <jamessan@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -134,17 +135,14 @@ use warnings;
 use strict;
 use File::Basename;
 use Getopt::Long qw(:config bundling permute no_getopt_compat);
-use Pod::Usage;
-use Data::Dumper;
+
+use Dpkg::Control;
+use Dpkg::Vendor qw(get_current_vendor);
+
 my $progname = basename($0);
 my $version = '1.0';
-my $dctrl = "grep-dctrl";
-my $sources_path = "/var/lib/apt/lists/";
-my $release_pattern = '(.*_dists_(sid|unstable))_(?:In)*Release$';
 my $use_ceve = 0;
 my $ceve_compatible;
-my %seen_origins;
-my @source_files;
 my $opt_debug;
 my $opt_update;
 my $opt_sudo;
@@ -220,105 +218,116 @@ sub test_ceve {
     return $ceve_compatible;
 }
 
-# Sub to test if a given section shall be included in the result
-sub test_for_valid_component {
-    my $filebase = shift;
-
-    if ($opt_mainonly and $filebase =~ /(contrib|non-free)/) {
-	return -1;
+sub is_devel_release
+{
+    my $ctrl = shift;
+    if (get_current_vendor() eq 'Debian') {
+	return $ctrl->{Suite} eq 'unstable' || $ctrl->{Codename} eq 'sid';
+    } else {
+	return $ctrl->{Suite} eq 'devel';
     }
-    foreach my $component (@opt_exclude_components) {
-	if ($filebase =~ /$component/) {
-	    return -1;
-	}
-    }
-
-    if (! -e "$sources_path/$filebase") {
-	print STDERR "Warning: Ignoring missing sources file $filebase. (Missing component in sources.list?)\n";
-	return -1;
-    }
-
-    if ($use_ceve) {
-	die "build arch undefined" if ! defined $opt_buildarch;
-	die "host arch undefined" if ! defined $opt_hostarch;
-	my $packages_path = "$sources_path/$filebase";
-	if ($filebase !~ /_source_Sources$/) {
-	    print STDERR "Warning: Ignoring sources file $filebase because of unexpected postfix\n";
-	    return -1;
-	}
-	$packages_path =~ s/_source_Sources$/_binary-${opt_buildarch}_Packages/;
-	if (! -e $packages_path) {
-	    print STDERR "Warning: Ignoring sources file $filebase because no corresponding buildarch Packages file for $opt_buildarch was found (required for ceve)\n";
-	    return -1;
-	}
-	if ($opt_buildarch ne $opt_hostarch) {
-	    $packages_path =~ s/_source_Sources$/_binary-${opt_hostarch}_Packages/;
-	    if (! -e $packages_path) {
-		print STDERR "Warning: Ignoring sources file $filebase because no corresponding buildarch Packages file for $opt_hostarch was found (required for ceve)\n";
-		return -1;
-	    }
-	}
-    }
-
-    print STDERR "DEBUG: Component ($filebase) may not be excluded.\n" if ($opt_debug);
-    return 0;
 }
 
-# Scan Release files and add appropriate Sources files
-sub readrelease {
-    my ($file, $base) = @_;
-    open(RELEASE, '<', "$sources_path/$file");
-    while (<RELEASE>) {
-	if (/^Origin:\s*(.+)\s*$/) {
-	    my $origin = $1;
-	    # skip undesired (non-specified or already seen) origins
-	    if (($opt_origin && $origin !~ /^\s*\Q$opt_origin\E\s*$/)
-	        || $seen_origins{$origin}) {
-		last;
-	    }
-	    $seen_origins{$origin} = 1;
-	}
-	elsif (/^(?:MD5|SHA)\w+:/) {
-	    # from a list of checksums, grab names of Sources files
-	    while (<RELEASE>) {
-		last unless /^ /;
-		if (/([^ ]+\/Sources)$/) {
-		    addsources($base, $1);
-		}
-	    }
-	    last;
-	}
+sub indextargets
+{
+    my @cmd = ('apt-get', 'indextargets', 'DefaultEnabled: yes');
+
+    if (!$use_ceve) {
+	# ceve needs both Packages and Sources
+	push(@cmd, 'Created-By: Sources');
     }
-    close(RELEASE);
+
+    if ($opt_origin) {
+	push(@cmd, "Origin: $opt_origin");
+    }
+
+    if ($opt_mainonly) {
+	push(@cmd, 'Component: main');
+    }
+
+    print STDERR 'DEBUG: Running '. join(' ', map {"'$_'"} @cmd) ."\n" if $opt_debug;
+    return @cmd;
 }
 
-# Add a *_Sources file if test_for_valid_component likes it
-sub addsources {
-    my ($base, $filename) = @_;
-    # main/source/Sources
-    $filename =~ s/\//_/g;
-    # -> ftp.debian.org_..._main_source_Sources
-    $filename = "${base}_${filename}";
-    if (test_for_valid_component($filename) == 0) {
-	push(@source_files, $filename);
-	print STDERR "DEBUG: Added source file: $filename\n" if ($opt_debug);
+# Gather information about the available package/source lists.
+#
+# Returns a hash reference following this structure:
+#
+# <site> => {
+#     <suite> => {
+#         <component> => {
+#             sources => $src_fname,
+#             <arch1> => $arch1_fname,
+#             ...,
+#         },
+#     },
+# ...,
+sub collect_files
+{
+    my %info = ();
+
+    open(my $targets, '-|', indextargets());
+
+    until (eof $targets) {
+	my $ctrl = Dpkg::Control->new(type => CTRL_UNKNOWN);
+	if (!$ctrl->parse($targets, 'apt-get indextargets')) {
+	    next;
+	}
+	# Only need Sources/Packages stanzas
+	if ($ctrl->{'Created-By'} ne 'Packages'
+	    && $ctrl->{'Created-By'} ne 'Sources') {
+	    next;
+	}
+
+	# In expected components
+	if (!$opt_mainonly && exists $ctrl->{Component}
+	    && @opt_exclude_components) {
+	    my $invalid_component = '(?:'. join('|', map { "\Q$_\E" } @opt_exclude_components) .')';
+	    if ($ctrl->{Component} =~ m/$invalid_component/) {
+		next;
+	    }
+	}
+
+	# And the provided distribution
+	if ($opt_distribution) {
+	    if ($ctrl->{Suite} !~ m/\Q$opt_distribution\E/
+		&& $ctrl->{Codename} !~ m/\Q$opt_distribution\E/) {
+		next;
+	    }
+	} elsif (!is_devel_release($ctrl)) {
+	    next;
+	}
+
+	$info{$ctrl->{Site}}{$ctrl->{Suite}}{$ctrl->{Component}} ||= {};
+	my $ref = $info{$ctrl->{Site}}{$ctrl->{Suite}}{$ctrl->{Component}};
+
+	if ($ctrl->{'Created-By'} eq 'Sources') {
+	    $ref->{sources} = $ctrl->{Filename};
+	    print STDERR "DEBUG: Added source file: $ctrl->{Filename}\n" if $opt_debug;
+	} else {
+	    $ref->{$ctrl->{Architecture}} = $ctrl->{Filename};
+	}
     }
+    close($targets);
+
+    return \%info;
 }
 
 sub findreversebuilddeps {
-    my ($package, $source_file) = @_;
+    my ($package, $info) = @_;
     my $count=0;
 
+    my $source_file = $info->{sources};
     if ($use_ceve) {
 	die "build arch undefined" if ! defined $opt_buildarch;
 	die "host arch undefined" if ! defined $opt_hostarch;
 
-	(my $buildarch_file = $source_file) =~ s/_source_Sources$/_binary-${opt_buildarch}_Packages/;
+	my $buildarch_file = $info->{$opt_buildarch};
+	my $hostarch_file = $info->{$opt_hostarch};
 
 	my @ceve_cmd = ('dose-ceve', '-T', 'debsrc', '-r', $package, '-G', 'pkg',
 	    "--deb-native-arch=$opt_buildarch", "deb://$buildarch_file", "debsrc://$source_file");
 	if ($opt_buildarch ne $opt_hostarch) {
-	    (my $hostarch_file = $source_file) =~ s/_source_Sources(\.\w+)?$/_binary-${opt_hostarch}_Packages$1/;
 	    push(@ceve_cmd, "--deb-host-arch=$opt_hostarch", "deb://$hostarch_file");
 	}
 	my %sources;
@@ -342,7 +351,7 @@ sub findreversebuilddeps {
     } else {
 	my %packages;
 	my $depending_package;
-	open(PACKAGES, '-|', $dctrl, '-r', '-F', 'Build-Depends,Build-Depends-Indep', "\\(^\\|, \\)$package", '-s', 'Package,Build-Depends,Build-Depends-Indep,Maintainer', $source_file);
+	open(PACKAGES, '-|', 'grep-dctrl', '-r', '-F', 'Build-Depends,Build-Depends-Indep', "\\(^\\|, \\)$package", '-s', 'Package,Build-Depends,Build-Depends-Indep,Maintainer', $source_file);
 
 	while(<PACKAGES>) {
 	    chomp;
@@ -479,44 +488,23 @@ if ($opt_update) {
     system @cmd;
 }
 
-if ($opt_distribution) {
-    print STDERR "DEBUG: Setting distribution to $opt_distribution\n" if ($opt_debug);
-    $release_pattern = '(.*_dists_' . $opt_distribution . ')_(?:In)*Release$';
-}
+my $file_info = collect_files();
 
-# Find sources files
-chdir($sources_path);
-for my $release_file (glob "*") {
-    readrelease($release_file, $1) if $release_file =~ /$release_pattern/;
-}
-
-if (!@source_files) {
+if (!%{$file_info}) {
     die "$progname: unable to find sources files.\nDid you forget to run apt-get update (or add --update to this command)?";
 }
 
-foreach my $source_file (@source_files) {
-    if ($source_file =~ /main/) {
-	if (!$opt_quiet) {
-	    print "Reverse Build-depends in main:\n";
-	    print "------------------------------\n\n";
+foreach my $site (sort keys %{$file_info}) {
+    foreach my $suite (sort keys %{$file_info->{$site}}) {
+	foreach my $comp (qw(main contrib non-free)) {
+	    if (exists $file_info->{$site}{$suite}{$comp}) {
+		if (!$opt_quiet) {
+		    print "Reverse Build-depends in ${comp}:\n";
+		    print "------------------------------\n\n";
+		}
+		findreversebuilddeps($package, $file_info->{$site}{$suite}{$comp});
+	    }
 	}
-	findreversebuilddeps($package, "$sources_path/$source_file");
-    }
-
-    if ($source_file =~ /contrib/) {
-	if (!$opt_quiet) {
-	    print "Reverse Build-depends in contrib:\n";
-	    print "---------------------------------\n\n";
-	}
-	findreversebuilddeps($package, "$sources_path/$source_file");
-    }
-
-    if ($source_file =~ /non-free/) {
-	if (!$opt_quiet) {
-	    print "Reverse Build-depends in non-free:\n";
-	    print "----------------------------------\n\n";
-	}
-	findreversebuilddeps($package, "$sources_path/$source_file");
     }
 }
 

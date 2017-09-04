@@ -135,7 +135,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
     libauthen-sasl-perl, libnet-smtps-perl, libsoap-lite-perl, liburi-perl,
     libwww-perl, bsd-mailx | mailx]
   - build-rdeps: search for all packages that build-depend on a given package
-    [dctrl-tools, dose-extra]
+    [dctrl-tools, dose-extra, libdpkg-perl]
   - chdist: tool to easily play with several distributions [dctrl-tools]
   - checkbashisms: check whether a /bin/sh script contains any common
     bash-specific constructs
