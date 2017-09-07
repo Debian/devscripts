@@ -35,6 +35,7 @@ devscripts (2.17.10) UNRELEASED; urgency=medium
     + Use apt interfaces to find and read the sources files, fixing --old
       (non-dose) behavior when sources files are compressed.  (Closes:
       #698240)
+    + Check Build-Depends-Arch for dependencies.
 
   [ Daniel Shahaf ]
   * bts:

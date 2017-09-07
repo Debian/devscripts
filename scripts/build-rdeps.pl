@@ -355,7 +355,7 @@ sub findreversebuilddeps {
 		next;
 	    }
 	    print STDERR "$ctrl\n" if ($opt_debug);
-	    for my $relation (qw(Build-Depends Build-Depends-Indep)) {
+	    for my $relation (qw(Build-Depends Build-Depends-Indep Build-Depends-Arch)) {
 		if (exists $ctrl->{$relation}) {
 		    if ($ctrl->{$relation} =~ m/^(.*\s)?\Q$package\E(?::[a-zA-Z0-9][a-zA-Z0-9-]*)?([\s,]|$)/) {
 			$packages{$ctrl->{Package}}{Maintainer} = $ctrl->{Maintainer};
