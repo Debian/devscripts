@@ -18,6 +18,8 @@ CFLAGS += -std=c99
 LDFLAGS := $(shell dpkg-buildflags --get LDFLAGS)
 CWRAPPERS = debpkg-wrapper
 SCRIPTS = $(patsubst %.pl,%,$(PL_FILES)) $(patsubst %.sh,%,$(SH_FILES))
+PL_CHECKS = $(patsubst %.pl,%.pl_check,$(PL_FILES))
+SH_CHECKS = $(patsubst %.pl,%.sh_check,$(SH_FILES))
 COMPL_FILES := $(wildcard *.bash_completion)
 BC_BUILD_DIR:=bash_completion
 COMPLETION = $(patsubst %.bash_completion,$(BC_BUILD_DIR)/%,$(COMPL_FILES))
@@ -44,14 +46,11 @@ ifeq ($(shell dpkg-vendor --query Vendor),Ubuntu)
 # will be for preparing PPA uploads.
 	sed -i 's/get_ubuntu_devel_distro()/"$(shell lsb_release -cs)"/' $@
 endif
-	perl -I ../lib -c $@
 
 %.tmp: %.sh $(VERSION_FILE)
 	sed -e "s/###VERSION###/$(VERSION)/" $<  > $@
-	bash -n $@
 %.tmp: %.pl $(VERSION_FILE)
 	sed -e "s/###VERSION###/$(VERSION)/" $<  > $@
-	perl -I ../lib -c $@
 %: %.tmp
 	cp $< $@
 	chmod +x $@
@@ -65,6 +64,13 @@ endif
 %.1: %.dbk
 	xsltproc --nonet -o $@ \
 	  /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl $<
+
+# Syntax checker
+%.sh.check: %
+	bash -n $<
+
+%.pl_check: %
+	perl -I ../lib -c $<
 
 # There is a slight chance this gets called twice, once here from here and once
 # from ../po4a/Makefile. Treat files with care.
@@ -91,7 +97,7 @@ clean:
 	rm -f $(SCRIPTS) $(patsubst %,%.tmp,$(SCRIPTS)) \
 		$(GEN_MAN1S) $(SCRIPT_LIBS) $(CWRAPPERS)
 
-test:
+test: $(PL_CHECKS) $(SH_CHECKS)
 	python3 -m flake8 --max-line-length=99 $(PYTHON3_SCRIPTS)
 	$(foreach python,$(shell py3versions -r ../debian/control),$(python) setup.py test$(\n))
 
