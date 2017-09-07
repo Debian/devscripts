@@ -156,10 +156,6 @@ my $opt_hostarch;
 my $opt_without_ceve;
 my $opt_quiet;
 
-if (system('command -v grep-dctrl >/dev/null 2>&1')) {
-    die "$progname: Fatal error. grep-dctrl is not available.\nPlease install the 'dctrl-tools' package.\n";
-}
-
 sub version {
     print <<"EOT";
 This is $progname $version, from the Debian devscripts package, v. ###VERSION###
@@ -349,37 +345,28 @@ sub findreversebuilddeps {
 	    $count += 1;
 	}
     } else {
-	my %packages;
-	my $depending_package;
-	open(PACKAGES, '-|', 'grep-dctrl', '-r', '-F', 'Build-Depends,Build-Depends-Indep', "\\(^\\|, \\)$package", '-s', 'Package,Build-Depends,Build-Depends-Indep,Maintainer', $source_file);
+	open(my $out, '-|', '/usr/lib/apt/apt-helper', 'cat-file', $source_file)
+	    or die "$progname: Unable to run \"apt-helper cat-file '$source_file'\": $!";
 
-	while(<PACKAGES>) {
-	    chomp;
-	    print STDERR "$_\n" if ($opt_debug);
-	    if (/Package: (.*)$/) {
-		$depending_package = $1;
-		$packages{$depending_package}->{'Build-Depends'} = 0;
+	my %packages;
+	until (eof $out) {
+	    my $ctrl = Dpkg::Control->new(type => CTRL_INDEX_SRC);
+	    if (!$ctrl->parse($out, 'apt-helper cat-file')) {
+		next;
 	    }
-	    elsif (/Maintainer: (.*)$/) {
-		if ($depending_package) {
-		    $packages{$depending_package}->{'Maintainer'} = $1;
-		}
-	    }
-	    elsif (/Build-Depends: (.*)$/ or /Build-Depends-Indep: (.*)$/) {
-		if ($depending_package) {
-		    print STDERR "$1\n" if ($opt_debug);
-		    if ($1 =~ /^(.*\s)?\Q$package\E(?::[a-zA-Z0-9][a-zA-Z0-9-]*)?([\s,]|$)/) {
-			$packages{$depending_package}->{'Build-Depends'} = 1;
+	    print STDERR "$ctrl\n" if ($opt_debug);
+	    for my $relation (qw(Build-Depends Build-Depends-Indep)) {
+		if (exists $ctrl->{$relation}) {
+		    if ($ctrl->{$relation} =~ m/^(.*\s)?\Q$package\E(?::[a-zA-Z0-9][a-zA-Z0-9-]*)?([\s,]|$)/) {
+			$packages{$ctrl->{Package}}{Maintainer} = $ctrl->{Maintainer};
 		    }
 		}
 	    }
 	}
 
-	while($depending_package = each(%packages)) {
-	    if ($packages{$depending_package}->{'Build-Depends'} != 1) {
-		print STDERR "Ignoring package $depending_package because its not really build depending on $package.\n" if ($opt_debug);
-		next;
-	    }
+	close($out);
+
+	while (my $depending_package = each(%packages)) {
 	    print $depending_package;
 	    if ($opt_maintainer) {
 		print " ($packages{$depending_package}->{'Maintainer'})";
@@ -462,6 +449,10 @@ if (!$use_ceve and !$opt_without_ceve) {
 }
 
 if ($use_ceve) {
+    if (system('command -v grep-dctrl >/dev/null 2>&1')) {
+	die "$progname: Fatal error. grep-dctrl is not available.\nPlease install the 'dctrl-tools' package.\n";
+    }
+
     # set hostarch and buildarch if they have not been set yet
     if (!$opt_hostarch) {
 	$opt_hostarch = `dpkg-architecture --query DEB_HOST_ARCH`;
