@@ -526,9 +526,9 @@ sub munge_url($$)
 }
 
 # Checkout a given repository in a given destination directory.
-sub checkout_repo($$$) {
-    my ($repo_type, $repo_url, $destdir) = @_;
-    my @cmd;
+sub checkout_repo($$$$) {
+    my ($repo_type, $repo_url, $destdir, $anon_repo_url) = @_;
+    my (@cmd, @extracmd);
 
     given ($repo_type) {
 	when ("arch") { @cmd = ("tla", "grab", $repo_url); }  # XXX ???
@@ -541,10 +541,26 @@ sub checkout_repo($$$) {
 	}
 	when ("darcs") { @cmd = ("darcs", "get", $repo_url); }
 	when ("git") {
+	    my $push_url;
+
+	    if (defined $anon_repo_url and length $anon_repo_url) {
+		if ($repo_url =~ m|(.*)\s+-b\s+(.*)|) {
+		    $push_url = $1;
+		} else {
+		    $push_url = $repo_url;
+		}
+
+		$repo_url = $anon_repo_url;
+	    }
+
 	    if ($repo_url =~ m|(.*)\s+-b\s+(.*)|) {
 	      @cmd = ("git", "clone", $1, "-b", $2);
 	    } else {
 	      @cmd = ("git", "clone", $repo_url);
+	    }
+
+	    if ($push_url) {
+		@extracmd = ('git', 'remote', 'set-url', '--push', 'origin', $push_url);
 	    }
 	}
 	when ("hg") { @cmd = ("hg", "clone", $repo_url); }
@@ -555,6 +571,25 @@ sub checkout_repo($$$) {
     print "@cmd ...\n";
     system @cmd;
     my $rc = $? >> 8;
+
+    if ($rc == 0 && @extracmd) {
+	my $oldcwd = getcwd();
+	my $clonedir;
+
+	print "@extracmd ...\n";
+
+	if (length $destdir) {
+	    $clonedir = $destdir;
+	} else {
+	    ($clonedir = $repo_url) =~ s|.*/(.*)(.git)?|$1|;
+	}
+
+	chdir $clonedir;
+	system @extracmd;
+	$rc = $? >> 8;
+	chdir($oldcwd);
+    }
+
     return $rc;
 }
 
@@ -996,6 +1031,7 @@ sub main() {
     my $use_package = ''; # use this package instead of guessing from the URL
     my $repo_type = "svn";  # default repo typo, overridden by '-t'
     my $repo_url = "";	  # repository URL
+    my $anon_repo_url;    # repository URL (before auth mangling)
     my $user = "";	  # login name (authenticated mode only)
     my $browse_url = "";    # online browsable repository URL
     my $git_track = "";     # list of remote GIT branches to --track
@@ -1081,8 +1117,10 @@ EOF
     }
 
     $repo_url = munge_url($repo_type, $repo_url);
-    $repo_url = set_auth($repo_type, $repo_url, $user, $dont_act)
-	if $auth and not @files;
+    if ($auth and not @files) {
+	$anon_repo_url = $repo_url;
+	$repo_url = set_auth($repo_type, $repo_url, $user, $dont_act);
+    }
     print_repo($repo_type, $repo_url) if $print_mode;		# ... then quit
     print_details($repo_type, $repo_url) if $details_mode;	# ... then quit
     if (length $pkg) {
@@ -1093,7 +1131,7 @@ EOF
     if (@files) {
 	$rc = checkout_files($repo_type, $repo_url, $destdir, $browse_url);
     } else {
-	$rc = checkout_repo($repo_type, $repo_url, $destdir);
+	$rc = checkout_repo($repo_type, $repo_url, $destdir, $anon_repo_url);
     }   # XXX: there is no way to know for sure what is the destdir :-(
     die "checkout failed (the command above returned a non-zero exit code)\n"
 	if $rc != 0;
