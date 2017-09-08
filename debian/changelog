@@ -41,6 +41,9 @@ devscripts (2.17.10) UNRELEASED; urgency=medium
       Vcs-Git URL, but sets remote.<name>.pushurl to the rewritten
       authenticated URL.  Thanks to Andreas Henriksson for the patch!
       (Closes: #753838)
+  * debsign:
+    + Use --with-colons in bash completion to fix key completion with gpg2.
+      (Closes: #837380)
 
   [ Daniel Shahaf ]
   * bts:
