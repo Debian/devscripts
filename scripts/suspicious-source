@@ -79,6 +79,7 @@ DEFAULT_WHITELISTED_MIMETYPES = [
 ]
 
 DEFAULT_WHITELISTED_EXTENSIONS = [
+    ".el",     # elisp source files
     ".fea",    # font source format: Adobe Font Development Kit for OpenType
     ".fog",    # font source format: Fontographer
     ".g2n",    # font source format: fontforge

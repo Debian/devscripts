@@ -46,6 +46,8 @@ devscripts (2.17.10) UNRELEASED; urgency=medium
       (Closes: #837380)
   * rc-alert:
     + Clarify the error when curl/wget dies.  (Closes: #820426)
+  * suspicious-source:
+    + Whitelist elisp (.el) files.  (Closes: #807754)
 
   [ Daniel Shahaf ]
   * bts:
