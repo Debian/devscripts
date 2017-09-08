@@ -184,6 +184,7 @@ if (! -d $cachedir) {
     }
 }
 
+my $usingcache = 0;
 if (-d $cachedir) {
     chdir $cachedir or die "$progname: can't cd $cachedir: $!\n";
 
@@ -201,6 +202,7 @@ if (-d $cachedir) {
 	die "$progname: Unknown download program $curl_or_wget!\n";
     }
     open BUGS, $cachefile or die "$progname: could not read $cachefile: $!\n";
+    $usingcache = 1;
 }
 else {
     open BUGS, "$getcommand $url |" or
@@ -291,7 +293,12 @@ foreach my $stanza (@stanzas) {
 }
 for (sort {$a <=> $b } keys %pkg_store) { print $pkg_store{$_}; }
 
-close BUGS or die "$progname: could not close $cachefile: $!\n";
+if ($usingcache) {
+  close BUGS or die "$progname: could not close $cachefile: $!\n";
+} else {
+  close BUGS or die $! ? "$progname: could not close $curl_or_wget pipe: $!\n"
+		       : "$progname: exit status from $curl_or_wget: $?\n";
+}
 
 exit 0;
 

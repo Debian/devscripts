@@ -44,6 +44,8 @@ devscripts (2.17.10) UNRELEASED; urgency=medium
   * debsign:
     + Use --with-colons in bash completion to fix key completion with gpg2.
       (Closes: #837380)
+  * rc-alert:
+    + Clarify the error when curl/wget dies.  (Closes: #820426)
 
   [ Daniel Shahaf ]
   * bts:
