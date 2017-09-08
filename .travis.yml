@@ -4,6 +4,11 @@ language: generic
 services:
   - docker
 
+env:
+  - TRAVIS_DEBIAN_DISTRIBUTION=stretch TRAVIS_DEBIAN_BACKPORTS=true
+  - TRAVIS_DEBIAN_DISTRIBUTION=unstable DEB_BUILD_PROFILES=nocheck DEB_BUILD_OPTIONS=nocheck
+  - TRAVIS_DEBIAN_DISTRIBUTION=unstable
+
 script:
   - wget -O- http://travis.debian.net/script.sh | sh -
 
