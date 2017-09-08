@@ -66,6 +66,7 @@ devscripts (2.17.10) UNRELEASED; urgency=medium
   * mk-origtargz
     + Rename and convert the detached signature. Closes: #832267, #837173,
       #870281
+    + Skip upstream signature when repacking.  Closes: #874667
   * uupdate 
     + -b option is not "New upstream release". Closes: #842468, #845610
   * Made source package bootstrappable. Closes: #870640

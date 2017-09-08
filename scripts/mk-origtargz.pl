@@ -249,6 +249,12 @@ my $suffix = '';
 
 my $upstream = undef;
 
+# $signature values
+# 0: No upstream signature file
+# 1: Upstream signature file on compressed tar.gz
+# 2: Upstream signature file on uncompressed tar
+# 3: Upstream signature as non-detached
+# 4: Repacked
 my $signature = 0;
 my $signature_file = "";
 
@@ -427,6 +433,9 @@ my $zipfile_deleted = 0;
 
 # If the file is a zipfile, we need to create a tarfile from it.
 if ($is_zipfile) {
+    if ($signature) {
+	$signature = 4; # repack upstream file
+    }
     if ($is_xpifile) {
 	system('command -v xpi-unpack >/dev/null 2>&1') >> 8 == 0
 	    or die("xpi-unpack binary not found. You need to install the package mozilla-devscripts to be able to repack .xpi upstream archives.\n");
@@ -554,6 +563,9 @@ if ($deletecount) {
 
 # Actually do the unpack, remove, pack cycle
 if ($do_repack || $deletecount) {
+    if ($signature) {
+	$signature = 4; # repack upstream file
+    }
     decompress_archive($upstream_tar, $destfiletar);
     unlink $upstream_tar if $mode eq "rename";
     # We have to use piping because --delete is broken otherwise, as documented
@@ -598,15 +610,16 @@ if ($signature == 1) {
     $destsigfile = sprintf "%s.asc", $destfile;
 } elsif ($signature == 2) {
     $destsigfile = sprintf "%s.asc", $destfiletar;
-} else {
+} elsif ($signature == 3) {
     # XXX FIXME XXX place holder
     $destsigfile = sprintf "%s.asc", $destfile;
+} else {
+    # $signature == 0 or 4
+    $destsigfile = "";
 }
 
-if ($signature != 0) {
-    if ($mode eq "repack") {
-	print "Skip adding upstream signature since tarball is repacked.\n";
-    } elsif ($is_gpgfile) {
+if ($signature == 1 or $signature == 2) {
+   if ($is_gpgfile) {
 	my $enarmor = `gpg --output - --enarmor $signature_file 2>&1`;
 	$? == 0 or die "mk-origtargz: Failed to convert $signature_file to *.asc\n";
 	$enarmor =~ s/ARMORED FILE/SIGNATURE/;
@@ -627,6 +640,10 @@ if ($signature != 0) {
 	    }
 	}
     }
+} elsif ($signature == 3) {
+    print "Skip adding upstream signature since upstream file has non-detached signature file.\n";
+} elsif ($signature == 4) {
+    print "Skip adding upstream signature since upstream file is repacked.\n";
 }
 
 # Final check: Is the tarball usable
