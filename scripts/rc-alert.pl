@@ -178,14 +178,9 @@ if (system("command -v wget >/dev/null 2>&1") == 0) {
     die "$progname: this program requires either the wget or curl package to be installed\n";
 }
 
-# TODO: Remove oldcache handling post-Stretch
-my $oldcache = File::Spec->catfile($ENV{HOME}, '.devscripts_cache', 'all.html');
 if (! -d $cachedir) {
-    if (-f $oldcache || $forcecache) {
+    if ($forcecache) {
 	make_path($cachedir);
-	if (-f $oldcache) {
-	    move($oldcache, $cachefile);
-	}
     }
 }
 
