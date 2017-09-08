@@ -416,8 +416,6 @@ exit($overall);
 
 __END__
 
-=pod
-
 =head1 NAME
 
 hardening-check - check binaries for security hardening features
