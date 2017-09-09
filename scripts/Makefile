@@ -32,10 +32,10 @@ GEN_MAN1S += debrepro.1 devscripts.1 mk-origtargz.1 uscan.1 reproducible-check.1
 
 all: $(SCRIPTS) $(GEN_MAN1S) $(CWRAPPERS) $(COMPLETION)
 
+scripts: $(SCRIPTS)
+
 $(VERSION_FILE):
 	$(MAKE) -C .. version
-
-%: %.sh
 
 debchange: debchange.pl $(VERSION_FILE)
 	cp $< $@
@@ -66,9 +66,11 @@ endif
 	  /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl $<
 
 # Syntax checker
-%.sh.check: %
+test_sh: $(SH_CHECKS)
+%.sh_check: %
 	bash -n $<
 
+test_pl: $(PL_CHECKS)
 %.pl_check: %
 	perl -I ../lib -c $<
 
@@ -97,7 +99,8 @@ clean:
 	rm -f $(SCRIPTS) $(patsubst %,%.tmp,$(SCRIPTS)) \
 		$(GEN_MAN1S) $(SCRIPT_LIBS) $(CWRAPPERS)
 
-test: $(PL_CHECKS) $(SH_CHECKS)
+
+test: test_pl test_sh
 	python3 -m flake8 --max-line-length=99 $(PYTHON3_SCRIPTS)
 	$(foreach python,$(shell py3versions -r ../debian/control),$(python) setup.py test$(\n))
 
