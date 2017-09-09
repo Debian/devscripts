@@ -32,7 +32,9 @@ clean: clean_scripts clean_translated_manpages
 online-test:
 	$(MAKE) -C test/ online-test
 
-test: test_test test_scripts
+test:
+	$(MAKE) test_scripts
+	$(MAKE) test_test
 
 test-installed:
 	$(MAKE) -C test/ $@
