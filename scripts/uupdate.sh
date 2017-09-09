@@ -528,7 +528,7 @@ if [ "$OPMODE" = 1 ]; then
 	if [ -z "$BADVERSION" ]; then
 	    debchange -v "$NEW_VERSION-$SUFFIX" "New upstream release"
 	else
-	    debchange $BADVERSION -v "$NEW_VERSION-$SUFFIX" ""
+	    debchange $BADVERSION -v "$NEW_VERSION-$SUFFIX" " "
 	fi
 	echo "$PROGNAME: Remember: Your current directory is the OLD sourcearchive!"
 	echo "$PROGNAME: Do a \"cd ../$PACKAGE-$SNEW_VERSION\" to see the new package"
@@ -944,7 +944,7 @@ elif [ "$OPMODE" = 2 ]; then
     if [ -z "$BADVERSION" ]; then
 	debchange -v "$NEW_VERSION-$SUFFIX" "New upstream release"
     else
-	debchange $BADVERSION -v "$NEW_VERSION-$SUFFIX" ""
+	debchange $BADVERSION -v "$NEW_VERSION-$SUFFIX" " "
     fi
     echo "$PROGNAME: Remember: Your current directory is the OLD sourcearchive!"
     echo "$PROGNAME: Do a \"cd ../$PACKAGE-$SNEW_VERSION\" to see the new package"
@@ -1126,7 +1126,7 @@ else
     if [ -z "$BADVERSION" ]; then
 	debchange -v "$EPOCH$NEW_VERSION-$SUFFIX" "New upstream release"
     else
-	debchange $BADVERSION -v "$EPOCH$NEW_VERSION-$SUFFIX" ""
+	debchange $BADVERSION -v "$EPOCH$NEW_VERSION-$SUFFIX" " "
     fi
     echo "$PROGNAME: Remember: Your current directory is changed back to the old source tree!"
     echo "$PROGNAME: Do a \"cd ../$PACKAGE-$NEW_VERSION\" to see the new source tree and
