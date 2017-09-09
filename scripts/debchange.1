@@ -11,8 +11,12 @@ the Debian changelog in the current source tree.  This command must be
 run from within that tree.  If the text of the change is given on the
 command line, \fBdebchange\fR will run in batch mode and simply add the
 text, with line breaks as necessary, at the appropriate place in
-\fIdebian/changelog\fR (or the changelog specified by options, as
-described below).  If no text is specified then \fBdebchange\fR
+\fIdebian/changelog\fR (or the changelog specified by options, as described
+below).  If the text given on the command line is a null string,
+\fBdebchange\fR will run in batch mode without adding any text.  If the
+text given on the command line is a space string, \fBdebchange\fR will run
+in batch mode and add a blank changelog entry.
+If no text is specified then \fBdebchange\fR
 will run the editor as determined by \fBsensible-editor\fR for you to
 edit the file.  (The environment variables \fBVISUAL\fR and
 \fBEDITOR\fR are used in this order to determine which editor to use.)

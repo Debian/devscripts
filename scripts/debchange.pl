@@ -1411,7 +1411,8 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
 
     if (! $opt_r) {
 	# Add a multi-maintainer header...
-	if ($multimaint) {
+	if ($multimaint and
+		(@closes_text or $TEXT or $opt_news or !$EMPTY_TEXT)) {
 	    # ...unless there already is one for this maintainer.
 	    if (!defined $maintline) {
 		print O "\n  [ $MAINTAINER ]\n";

@@ -69,6 +69,9 @@ devscripts (2.17.10) UNRELEASED; urgency=medium
     + Skip upstream signature when repacking.  Closes: #874667
   * uupdate 
     + -b option is not "New upstream release". Closes: #842468, #845610
+    + Use space as the argument of debchange to create an empty entry
+      template.
+  * debchange: Handle multimaint case properly.  Closes: #842468
   * Made source package bootstrappable. Closes: #870640
 
   [ Antonio Terceiro ]
