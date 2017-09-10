@@ -31,8 +31,9 @@ if test "$1" = --installed; then
     shift
 else
     top_srcdir=$(readlink -f "${0%/*}/..")
-    make -C "$top_srcdir/scripts" uscan mk-origtargz uupdate
+    make -C "$top_srcdir/scripts" uscan mk-origtargz uupdate debchange
     PATH="$top_srcdir/scripts:$PATH"
+    export PATH
     PERL5LIB="$top_srcdir/lib"
     export PERL5LIB
     COMMAND="uscan --no-conf --compression=xz"

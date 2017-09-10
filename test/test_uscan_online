@@ -14,7 +14,19 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-COMMAND="${0%/*}/../scripts/uscan.pl --no-conf"
+# Operation mode
+if test "$1" = --installed; then
+    COMMAND="uscan --no-conf"
+    shift
+else
+    top_srcdir=$(readlink -f "${0%/*}/..")
+    make -C "$top_srcdir/scripts" uscan mk-origtargz uupdate debchange
+    PATH="$top_srcdir/scripts:$PATH"
+    export PATH
+    PERL5LIB="$top_srcdir/lib"
+    export PERL5LIB
+    COMMAND="uscan --no-conf"
+fi
 
 . "${0%/*}/shunit2-helper-functions.sh"
 
