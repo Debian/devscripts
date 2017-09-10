@@ -74,7 +74,7 @@ test_pl: $(PL_CHECKS)
 %.pl_check: %
 	perl -I ../lib -c $<
 
-test_py: $(PYTHON3_SCRIPTS) 
+test_py: $(PYTHON3_SCRIPTS) $(VERSION_FILE) 
 	python3 -m flake8 --max-line-length=99 $(PYTHON3_SCRIPTS)
 	$(foreach python,$(shell py3versions -r ../debian/control),$(python) setup.py test$(\n))
 
