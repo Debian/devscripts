@@ -74,6 +74,10 @@ test_pl: $(PL_CHECKS)
 %.pl_check: %
 	perl -I ../lib -c $<
 
+test_py: $(PYTHON3_SCRIPTS) 
+	python3 -m flake8 --max-line-length=99 $(PYTHON3_SCRIPTS)
+	$(foreach python,$(shell py3versions -r ../debian/control),$(python) setup.py test$(\n))
+
 # There is a slight chance this gets called twice, once here from here and once
 # from ../po4a/Makefile. Treat files with care.
 PID := $(shell echo $$$$-$$PPID)
@@ -100,9 +104,7 @@ clean:
 		$(GEN_MAN1S) $(SCRIPT_LIBS) $(CWRAPPERS)
 
 
-test: test_pl test_sh
-	python3 -m flake8 --max-line-length=99 $(PYTHON3_SCRIPTS)
-	$(foreach python,$(shell py3versions -r ../debian/control),$(python) setup.py test$(\n))
+test: test_pl test_sh test_py
 
 install: all
 	python3 setup.py install --root="$(DESTDIR)" --no-compile --install-layout=deb
@@ -120,4 +122,4 @@ install: all
 	mv $(DESTDIR)$(BINDIR)/debpkg $(DESTDIR)$(DATA_DIR)
 	cp debpkg-wrapper $(DESTDIR)$(BINDIR)/debpkg
 
-.PHONY: test
+.PHONY: test test_pl test_sh test_py all install clean scripts
