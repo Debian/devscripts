@@ -87,7 +87,10 @@ devscripts.1: devscripts.1.in
 	mv $@.$(PID) $@
 
 reproducible-check.1: reproducible-check
-	help2man --no-info --no-discard-stderr ./reproducible-check >$@
+	help2man \
+		--no-info \
+		--no-discard-stderr \
+		./reproducible-check >$@
 
 $(BC_BUILD_DIR):
 	mkdir $(BC_BUILD_DIR)
