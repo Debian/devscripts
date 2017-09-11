@@ -88,6 +88,7 @@ devscripts.1: devscripts.1.in
 
 reproducible-check.1: reproducible-check
 	help2man \
+		--name="Reports on the reproducible status of installed packages" \
 		--no-info \
 		--no-discard-stderr \
 		./reproducible-check >$@
