@@ -91,7 +91,7 @@ reproducible-check.1: reproducible-check
 		--name="Reports on the reproducible status of installed packages" \
 		--no-info \
 		--no-discard-stderr \
-		./reproducible-check >$@
+		./$< >$@
 
 $(BC_BUILD_DIR):
 	mkdir $(BC_BUILD_DIR)
