@@ -225,6 +225,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
     [bsd-mailx | mailx, at]
   - rc-alert: list installed packages which have release-critical bugs
     [wget | curl]
+  - reproducible-check: reports on the reproducible status of installed
+    packages [python3-apt, python3-requests, python3-termcolor, python3-xdg]
   - rmadison: remotely query the Debian archive database about packages
     [liburi-perl, wget | curl]
   - sadt: run DEP-8 tests [python3-debian]
