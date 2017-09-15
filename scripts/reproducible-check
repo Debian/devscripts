@@ -20,6 +20,7 @@ import bz2
 import apt
 import sys
 import json
+import time
 import logging
 import requests
 import argparse
@@ -44,6 +45,7 @@ class ReproducibleCheck(object):
     CACHE = os.path.join(xdg_cache_home, NAME, 'reproducible.json.bz2')
     VERSION = 1
     STATUS_URL = 'https://tests.reproducible-builds.org/debian/reproducible.json.bz2'
+    CACHE_AGE_SECONDS = 86400
 
     @classmethod
     def parse(cls):
@@ -105,9 +107,13 @@ class ReproducibleCheck(object):
     def update_cache(self):
         self.log.debug("Checking cache file %s ...", self.CACHE)
 
-        if os.path.exists(self.CACHE):
-            self.log.debug("Cache is up to date")
-            return
+        try:
+            if os.path.getmtime(self.CACHE) >= \
+                    time.time() - self.CACHE_AGE_SECONDS:
+                self.log.debug("Cache is up to date")
+                return
+        except OSError:
+            pass
 
         self.log.info("Updating cache...")
 
