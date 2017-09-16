@@ -38,7 +38,7 @@ class ReproducibleCheck(object):
     NAME = os.path.basename(__file__)
     VERSION = 1
 
-    STATUS_URL = 'https://tests.reproducible-builds.org/debian/reproducible.json.bz2'
+    STATUS_URL = 'https://tests.reproducible-builds.org/debian/reproducible-tracker.json.bz2'
 
     CACHE = os.path.join(xdg_cache_home, NAME, os.path.basename(STATUS_URL))
     CACHE_AGE_SECONDS = 86400
@@ -125,9 +125,10 @@ class ReproducibleCheck(object):
 
         with bz2.open(self.CACHE) as f:
             return {
-                (x['package'], x['architecture'], x['version'])
+                (x['package'], y['architecture'], x['version'])
                 for x in json.loads(f.read().decode('utf-8'))
-                if x['status'] == 'unreproducible'
+                for y in x['architecture_details']
+                if y['status'] == 'unreproducible'
             }
 
     def get_installed_packages(self):
