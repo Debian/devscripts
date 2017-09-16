@@ -28,12 +28,6 @@ import collections
 
 from xdg.BaseDirectory import xdg_cache_home
 
-try:
-    from termcolor import colored
-except ImportError:
-    def colored(val, *args, **kwargs):
-        return val
-
 
 class ReproducibleCheck(object):
     HELP = """
@@ -154,18 +148,15 @@ class ReproducibleCheck(object):
         for key, binaries in sorted(unreproducible.items()):
             source, architecture, version = key
 
-            url = 'https://tests.reproducible-builds.org/debian/{}' \
-                .format(source)
             binaries_fmt = '({}) '.format(', '.join(binaries)) \
                 if binaries != [source] else ''
 
-            print("{} {} ({}) is unreproducible {}<{}>".format(
-                colored('W:', 'red'),
-                colored(source, attrs=['bold']),
+            print("{} ({}) is unreproducible {}".format(
+                source,
                 version,
                 binaries_fmt,
-                colored(url, attrs=['underline']),
-            ))
+            ), end='')
+            print("<https://tests.reproducible-builds.org/debian/{}>".format(source))
 
         print("{}/{} ({:.2f}%) of installed binary packages are unreproducible.".format(
             num_unreproducible,
