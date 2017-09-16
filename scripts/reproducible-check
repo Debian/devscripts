@@ -168,7 +168,7 @@ class ReproducibleCheck(object):
         ))
 
     def output_raw(self, unreproducible, installed):
-        for x in sorted(x for xs in set(unreproducible.values()) for x in xs):
+        for x in sorted(x for xs in unreproducible.values() for x in set(xs)):
             print(x)
 
 
