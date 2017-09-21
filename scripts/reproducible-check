@@ -157,8 +157,8 @@ class ReproducibleCheck(object):
 
             print("{}{} ({}) is unreproducible {}".format(
                 source,
-                '/{}'.format(architecture) \
-                    if architecture != default_architecture else '',
+                '/{}'.format(architecture)
+                if architecture != default_architecture else '',
                 version,
                 binaries_fmt,
             ), end='')
