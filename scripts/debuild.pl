@@ -721,9 +721,11 @@ if ( $( != 0 && $) == 0 ) { $( = $) }
 # Our first task is to parse the command line options.
 
 # dpkg-buildpackage variables explicitly initialised in dpkg-buildpackage
+my $nosign;
 my $forcesign;
 my $signsource = $changelog{Distribution} ne 'UNRELEASED';
 my $signchanges = $changelog{Distribution} ne 'UNRELEASED';
+my $signbuildinfo = $changelog{Distribution} ne 'UNRELEASED';
 my $binarytarget='binary';
 my $since='';
 my $usepause=0;
@@ -739,7 +741,7 @@ my $dirn = basename(cwd());
 # and one for us
 my @debsign_opts = ();
 # and one for dpkg-buildpackage if needed
-my @dpkg_opts = qw(-us -uc);
+my @dpkg_opts = qw(-us -uc -ui);
 
 my %debuild2dpkg = (
     'dpkg-buildpackage' => 'init',
@@ -770,7 +772,12 @@ foreach (@dpkg_extra_opts) {
     /^-k/ and push(@debsign_opts, $_), next;  # Ditto
     /^-[dD]$/ and next;  # already been processed
     $_ eq '-us' and $signsource=0, next;
+    $_ eq '--unsigned-source' and $signsource=0, next;
     $_ eq '-uc' and $signchanges=0, next;
+    $_ eq '--unsigned-changes' and $signchanges=0, next;
+    $_ eq '-ui' and $signbuildinfo=0, next;
+    $_ eq '--unsigned-buildinfo' and $signbuildinfo=0, next;
+    $_ eq '--no-sign' and $nosign=1, next;
     $_ eq '--force-sign' and $forcesign=1, next;
     $_ eq '-ap' and $usepause=1, next;
     /^-a(.*)/ and $targetarch=$1, push(@dpkg_opts, $_), next;
@@ -821,7 +828,12 @@ while ($_=shift) {
     /^-p/ and push(@debsign_opts, $_), next;  # Key selection options
     /^-k/ and push(@debsign_opts, $_), next;  # Ditto
     $_ eq '-us' and $signsource=0, next;
+    $_ eq '--unsigned-source' and $signsource=0, next;
     $_ eq '-uc' and $signchanges=0, next;
+    $_ eq '--unsigned-changes' and $signchanges=0, next;
+    $_ eq '-ui' and $signbuildinfo=0, next;
+    $_ eq '--unsigned-buildinfo' and $signbuildinfo=0, next;
+    $_ eq '--no-sign' and $nosign=1, next;
     $_ eq '--force-sign' and $forcesign=1, next;
     $_ eq '-ap' and $usepause=1, next;
     /^-a(.*)/ and $targetarch=$1, push(@dpkg_opts, $_),
@@ -890,15 +902,26 @@ if (@ARGV) {
     }
 }
 
+if ($nosign) {
+    $signchanges = 0;
+    $signsource = 0;
+    $signbuildinfo = 0;
+}
+
 if ($forcesign) {
     $signchanges = 1;
     $signsource = 1;
+    $signbuildinfo = 1;
 }
 
 if ($signchanges==1 and $signsource==0) {
     push @warnings,
-	"I will sign the .dsc file anyway as a signed .changes file was requested\n";
-    $signsource=1;  # may not be strictly necessary, but for clarity!
+        "Setting -us without setting -uc, signing .dsc anyway\n";
+}
+
+if ($signchanges==1 and $signbuildinfo==0) {
+    push @warnings,
+        "Setting -ui without setting -uc, signing .buildinfo anyway\n";
 }
 
 # Next dpkg-buildpackage steps:

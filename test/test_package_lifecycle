@@ -125,7 +125,7 @@ test_debuild() {
   cd ${WORKDIR}/package_lifecycle/test
   COMMAND='debuild --no-conf --no-lintian --preserve-envvar=PATH --preserve-envvar=PERL5LIB --preserve-envvar=DEBFULLNAME --preserve-envvar=DEBEMAIL --preserve-envvar=GNUPGHOME --set-envvar=NO_PKG_MANGLE=1'
   cat > ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
-	 dpkg-buildpackage -us -uc
+	 dpkg-buildpackage -us -uc -ui
 	dpkg-buildpackage: source package test
 	dpkg-buildpackage: source version 1.0-1
 	dpkg-buildpackage: source distribution unstable
@@ -269,7 +269,7 @@ test_debuild2() {
   cd ${WORKDIR}/package_lifecycle/test
   COMMAND='debuild --no-conf --no-lintian --preserve-envvar=PATH --preserve-envvar=PERL5LIB --preserve-envvar=DEBFULLNAME --preserve-envvar=DEBEMAIL --preserve-envvar=GNUPGHOME --set-envvar=NO_PKG_MANGLE=1'
   cat > ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
-	 dpkg-buildpackage -us -uc
+	 dpkg-buildpackage -us -uc -ui
 	dpkg-buildpackage: source package test
 	dpkg-buildpackage: source version 1.0-2
 	dpkg-buildpackage: source distribution UNRELEASED
@@ -302,7 +302,7 @@ test_debuild_forcesign() {
   cd ${WORKDIR}/package_lifecycle/test
   COMMAND='debuild --no-conf --no-lintian --preserve-envvar=PATH --preserve-envvar=PERL5LIB --preserve-envvar=DEBFULLNAME --preserve-envvar=DEBEMAIL --preserve-envvar=GNUPGHOME --set-envvar=NO_PKG_MANGLE=1 --force-sign'
   cat > ${WORKDIR}/package_lifecycle/debuild.txt <<-EOS
-	 dpkg-buildpackage -us -uc
+	 dpkg-buildpackage -us -uc -ui
 	dpkg-buildpackage: source package test
 	dpkg-buildpackage: source version 1.0-2
 	dpkg-buildpackage: source distribution UNRELEASED
