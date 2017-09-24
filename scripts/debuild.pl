@@ -855,8 +855,12 @@ while ($_=shift) {
 	my @builds = split(/,/, $1);
 	my ($binary, $source);
 	for my $build (@builds) {
-	    if ($build =~ m/^(?:binary|full)$/) {
-		$source++ if $1 eq 'full';
+	    if ($build eq 'full') {
+		$source++;
+		$binary++;
+		$binarytarget = 'binary';
+	    }
+	    elsif ($build eq 'binary') {
 		$binary++;
 		$binarytarget = 'binary';
 	    }
