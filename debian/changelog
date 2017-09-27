@@ -12,7 +12,18 @@ devscripts (2.17.11) UNRELEASED; urgency=medium
   * Removed Martin Zobel-Helas, Patrick Schoenfeld, and Benjamin Drung
     from Uploaders after asking them.
 
- -- James McCoy <jamessan@debian.org>  Wed, 13 Sep 2017 23:23:20 -0400
+  [ Chris Lamb ]
+  * reproducible-check: Match name on remote server.
+    - Use the restricted JSON file that hides transient issues.
+      (Closes: #875861)
+    - Handle multi-architecture systems. (Closes: #875887)
+    * Expire cache file after 1 day and base local cache name on the
+      remote filename.
+    * Various flake8-related tidyintidying
+  * debian/control: Add missing entry in package long description
+    for reproducible-check.
+
+ -- Chris Lamb <lamby@debian.org>  Wed, 27 Sep 2017 13:24:39 +0100
 
 devscripts (2.17.10) unstable; urgency=medium
 
