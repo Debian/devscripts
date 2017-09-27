@@ -2,7 +2,7 @@
 #
 # origtargz: fetch the orig tarball of a Debian package from various sources,
 # and unpack it
-# Copyright (C) 2012-2016  Christoph Berg <myon@debian.org>
+# Copyright (C) 2012-2017  Christoph Berg <myon@debian.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -290,7 +290,7 @@ sub download_origtar ()
 
 	if (-f "debian/watch") {
 		print "Trying uscan --download-current-version ...\n";
-		system "uscan --download-current-version --rename\n";
+		system "uscan --download-current-version --force-download --rename\n";
 	}
 
 	if (my @f = glob "../${package}_$fileversion.orig.tar.*") {

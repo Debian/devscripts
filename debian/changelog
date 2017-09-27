@@ -23,6 +23,10 @@ devscripts (2.17.11) UNRELEASED; urgency=medium
   * debian/control: Add missing entry in package long description
     for reproducible-check.
 
+  [ Christoph Berg ]
+  * origtargz: Add --force-download to uscan --download-current version;
+    recent uscan versions require it.
+
  -- Chris Lamb <lamby@debian.org>  Wed, 27 Sep 2017 13:24:39 +0100
 
 devscripts (2.17.10) unstable; urgency=medium
