@@ -1167,16 +1167,27 @@ See mk-origtargz(1).
 =head1 KEYRING FILE EXAMPLES
 
 Let's assume that the upstream "B<< uscan test key (no secret)
-<none@debian.org> >>" signs its package and publishes its public key
-fingerprint 'B<CF21 8F0E 7EAB F584 B7E2 0402 C77E 2D68 7254 3FAF>' which you
-know is the trusted one.
+<none@debian.org> >>" signs its package with a secret OpenPGP key and publishes
+the corresponding public OpenPGP key.  This public OpenPGP key can be
+identified in 3 ways using the hexadecimal form.
 
-Please note that the short keyid B<72543FAF> is the last 4 Bytes, the long
-keyid B<C77E2D6872543FAF> is the last 8 Bytes, and the finger print is the last
-20 Bytes of the public key in hexadecimal form.  Considering the existence of
-the collision attack on the short keyid, the use of the long keyid is
-recommended for receiving keys from the public key servers.  You must verify
-the downloaded OpenPGP key using its fingerprint.
+=over
+
+=item * The fingerprint as the 20 byte data calculated from the public OpenPGP
+key. E.  g., 'B<CF21 8F0E 7EAB F584 B7E2 0402 C77E 2D68 7254 3FAF>'
+
+=item * The long keyid as the last 8 byte data of the fingerprint. E. g.,
+'B<C77E2D6872543FAF>'
+
+=item * The short keyid is the last 4 byte data of the fingerprint. E. g.,
+'B<72543FAF>'
+
+=back
+
+Considering the existence of the collision attack on the short keyid, the use
+of the long keyid is recommended for receiving keys from the public key
+servers.  You must verify the downloaded OpenPGP key using its full fingerprint
+value which you know is the trusted one.
 
 The armored keyring file F<debian/upstream/signing-key.asc> can be created by
 using the B<gpg> (or B<gpg2>) command as follows.
