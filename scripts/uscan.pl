@@ -1485,7 +1485,7 @@ equivalent to the B<--timeout> option.
 If this is set to no, then a I<pkg>_I<version>B<.orig.tar.{gz|bz2|lzma|xz}>
 symlink will not be made (equivalent to the B<--no-symlink> option). If it is
 set to B<yes> or B<symlink>, then the symlinks will be made. If it is set to
-rename, then the files are renamed (equivalent to the B<--rename> option).
+B<rename>, then the files are renamed (equivalent to the B<--rename> option).
 
 =item B<USCAN_DEHS_OUTPUT>
 
