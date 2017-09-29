@@ -2757,14 +2757,17 @@ sub process_watchline ($$$$$$)
     # Set $download_version etc. if already known
     if(defined $opt_download_version) {
 	$download_version = $opt_download_version;
+	$download = 2 if $download == 1; # Change default 1 -> 2
 	$badversion = 1;
 	uscan_verbose "Download the --download-version specified version: $download_version\n";
     } elsif (defined $opt_download_debversion) {
 	$download_version = $mangled_lastversion;
+	$download = 2 if $download == 1; # Change default 1 -> 2
 	$badversion = 1;
 	uscan_verbose "Download the --download-debversion specified version (dversionmangled): $download_version\n";
     } elsif(defined $opt_download_current_version) {
 	$download_version = $mangled_lastversion;
+	$download = 2 if $download == 1; # Change default 1 -> 2
 	$badversion = 1;
 	uscan_verbose "Download the --download-current-version specified version: $download_version\n";
     } elsif($options{'versionmode'} eq 'same') {
@@ -2773,6 +2776,7 @@ sub process_watchline ($$$$$$)
 	    return 1;
 	}
 	$download_version = $common_newversion;
+	$download = 2 if $download == 1; # Change default 1 -> 2
 	$badversion = 1;
 	uscan_verbose "Download secondary tarball with the matching version: $download_version\n";
     } elsif($options{'versionmode'} eq 'previous') {
@@ -2781,6 +2785,7 @@ sub process_watchline ($$$$$$)
 	    return 1;
 	}
 	$download_version = $previous_newversion;
+	$download = 2 if $download == 1; # Change default 1 -> 2
 	$badversion = 1;
 	uscan_verbose "Download the signature file with the previous tarball's version: $download_version\n";
     } else {
