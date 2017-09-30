@@ -195,6 +195,7 @@ pod2usage({-exitval => 3}) if (@ARGV > 0 or $unpack !~ /^(no|once|yes)$/);
 
 my ($package, $version, $origversion, $fileversion);
 
+chdir ".." if (! -f "debian/changelog" and -f "../debian/changelog");
 open F, "debian/changelog" or die "debian/changelog: $!\n";
 my $line = <F>;
 close F;
