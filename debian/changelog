@@ -28,6 +28,10 @@ devscripts (2.17.11) UNRELEASED; urgency=medium
   [ Christoph Berg ]
   * origtargz: Allow invocation from subdirectory. (Closes: #702636)
 
+  [ Cyril Brulebois ]
+  * debsign: Fix bash completion by using file extensions instead of
+    using globs.  Closes: #877440
+
  -- Chris Lamb <lamby@debian.org>  Wed, 27 Sep 2017 13:24:39 +0100
 
 devscripts (2.17.10) unstable; urgency=medium
