@@ -4,6 +4,10 @@ devscripts (2.17.6+deb9u2) UNRELEASED; urgency=medium
   * uscan:
     + Fix the new package version regex for filenamemangle.  Closes: #869150
 
+  [ Cyril Brulebois ]
+  * debsign: Fix bash completion by using file extensions instead of
+    using globs.  Closes: #877440
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 30 Sep 2017 22:19:56 +0200
 
 devscripts (2.17.6+deb9u1) stretch; urgency=medium
