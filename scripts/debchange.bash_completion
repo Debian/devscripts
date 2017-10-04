@@ -13,7 +13,7 @@ _debchange()
              -r --release --force-save-on-release --no-force-save-on-release\
              --create --empty --package --auto-nmu --no-auto-nmu -n --nmu\
              --bin-nmu -q --qa -R --rebuild -s --security --team -U --upstream\
-             --bpo -l --local -b --force-bad-version --allow-lower-version\
+             --bpo --stable -l --local -b --force-bad-version --allow-lower-version\
              --force-distribution --closes --noquery --query -d --fromdirname\
              -p --preserve --no-preserve --vendor -D --distribution\
              -u --urgency -c --changelog --news --nomultimaint --multimaint\
