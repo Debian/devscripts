@@ -15,15 +15,15 @@ devscripts (2.17.11) UNRELEASED; urgency=medium
   * Correct information on the OpenPGP fingerprint etc.  Closes: #877104
 
   [ Chris Lamb ]
-  * reproducible-check: Match name on remote server.
-    - Use the restricted JSON file that hides transient issues.
-      (Closes: #875861)
-    - Handle multi-architecture systems. (Closes: #875887)
-    * Expire cache file after 1 day and base local cache name on the
+  * reproducible-check:
+    + Match name of the json file on remote server.
+    + Use the restricted JSON file that hides transient issues.  Closes: #875861
+    + Handle multi-architecture systems.  Closes: #875887
+    + Expire cache file after 1 day and base local cache name on the
       remote filename.
-    * Various flake8-related tidyintidying
-  * debian/control: Add missing entry in package long description
-    for reproducible-check.
+    + Various flake8-related tidyintidying.
+  * debian/control:
+    + Mention reproducible-check in the package long description.
   * debchange:
     + Add support for preparing uploads to stable with the new --stable flag.
       Closes: #871657
