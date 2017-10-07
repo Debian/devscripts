@@ -24,6 +24,9 @@ devscripts (2.17.11) UNRELEASED; urgency=medium
     * Various flake8-related tidyintidying
   * debian/control: Add missing entry in package long description
     for reproducible-check.
+  * debchange:
+    + Add support for preparing uploads to stable with the new --stable flag.
+      Closes: #871657
 
   [ Christoph Berg ]
   * origtargz: Allow invocation from subdirectory. (Closes: #702636)
