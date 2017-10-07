@@ -39,6 +39,8 @@ devscripts (2.17.11) UNRELEASED; urgency=medium
   * debchange:
     + Update the manpage to mention that --bpo now targets stretch-backports,
       not jessie-backports.  Closes: #877877
+  * debian/control:
+    + Annotate the build-dependencies on perl and python3-all with :any.
 
  -- Chris Lamb <lamby@debian.org>  Wed, 27 Sep 2017 13:24:39 +0100
 
