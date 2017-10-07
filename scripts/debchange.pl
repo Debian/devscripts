@@ -1137,7 +1137,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 		# If it's not already a backport make it so
 		# otherwise we can be safe if we behave like dch -i
 		$end .= "~bpo$latest_dist+1";
-	    } elsif ($opt_stable and not $start =~ /\+deb[0-9]u/) {
+	    } elsif ($opt_stable and not $start =~ /\+deb\d+u/) {
 		$end .= "+deb${latest_dist}u1";
 	    } elsif ($opt_l and not $start =~ /\Q$opt_l\E/) {
 		# If it's not already a local package make it so
@@ -1172,7 +1172,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 		# based on the version of the previous backport
 		if ($opt_bpo) {
 		    my $previous_dist = $start;
-		    $previous_dist =~ s/^.*~bpo([0-9]+)\+$/$1/;
+		    $previous_dist =~ s/^.*~bpo(\d+)\+$/$1/;
 		    if (defined $previous_dist and defined
 			$bpo_dists{$previous_dist}) {
 			$bpo_dist = $bpo_dists{$previous_dist} . '-backports';
@@ -1186,7 +1186,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 		# based on the version of the previous upload
 		if ($opt_stable) {
 		    my $previous_dist = $start;
-		    $previous_dist =~ s/^.*+deb([0-9]+)u$/$1/;
+		    $previous_dist =~ s/^.*+deb(\d+)u$/$1/;
 		    if (defined $previous_dist and defined
 			$stable_dists{$previous_dist}) {
 			$stable_dist = $stable_dists{$previous_dist};
