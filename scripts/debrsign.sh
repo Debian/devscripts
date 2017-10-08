@@ -133,6 +133,8 @@ case $# in
 		changes=$2
 		dsc=`echo $changes | \
 		    perl -pe 's/\.changes$/.dsc/; s/(.*)_(.*)_(.*)\.dsc/\1_\2.dsc/'`
+		buildinfo=`echo $changes | \
+		    perl -pe 's/\.changes$/.buildinfo/; s/(.*)_(.*)_(.*)\.buildinfo/\1_\2_\3.buildinfo/'`
 		;;
 	    *)	echo "$PROGNAME: Only a .changes or .dsc file is allowed as second argument!" >&2
 		exit 1 ;;
@@ -177,6 +179,7 @@ case $# in
 	pv="${package}_${sversion}"
 	pva="${package}_${sversion}${arch:+_${arch}}"
 	dsc="../$pv.dsc"
+	buildinfo="../$pva.buildinfo"
 	changes="../$pva.changes"
 	if [ -n "$multiarch" -o ! -r $changes ]; then
 	    changes=$(ls "../${package}_${sversion}_*+*.changes" "../${package}_${sversion}_multi.changes" 2>/dev/null | head -1)
@@ -207,8 +210,10 @@ then
         exit 1
 fi
 
-changesbase=`basename "$changes"`
-dscbase=`basename "$dsc"`
+declare -A base
+base["$changes"]=`basename "$changes"`
+base["$dsc"]=`basename "$dsc"`
+base["$buildinfo"]=`basename "$buildinfo"`
 
 if [ -n "$changes" ]
 then
@@ -219,26 +224,35 @@ then
     fi
 
     # Is there a dsc file listed in the changes file?
-    if grep -q "$dscbase" "$changes"
+    if grep -q "${base[$dsc]}" "$changes"
     then
 	if [ ! -f "$dsc" -o ! -r "$dsc" ]
 	then
 	    echo "Can't find or can't read dsc file $dsc!" >&2
 	    exit 1
 	fi
-
-	# Now do the real work
-	withecho scp "$changes" "$dsc" "$remotehost:\$HOME"
-	withecho ssh -t "$remotehost" "debsign $signargs $changesbase"
-	withecho scp "$remotehost:\$HOME/$changesbase" "$changes"
-	withecho scp "$remotehost:\$HOME/$dscbase" "$dsc"
-	withecho ssh "$remotehost" "rm -f $changesbase $dscbase"
     else
-	withecho scp "$changes" "$remotehost:\$HOME"
-	withecho ssh -t "$remotehost" "debsign $signargs $changesbase"
-	withecho scp "$remotehost:\$HOME/$changesbase" "$changes"
-	withecho ssh "$remotehost" "rm -f $changesbase"
+        unset base["$dsc"]
     fi
+    # Is there a buildinfo file listed in the changes file?
+    if grep -q "${base[$buildinfo]}" "$changes"
+    then
+	if [ ! -f "$buildinfo" -o ! -r "$buildinfo" ]
+	then
+	    echo "Can't find or can't read buildinfo file $buildinfo!" >&2
+	    exit 1
+	fi
+    else
+        unset base["$buildinfo"]
+    fi
+    # Now do the real work
+    withecho scp "${!base[@]}" "$remotehost:\$HOME"
+    withecho ssh -t "$remotehost" "debsign $signargs ${base[$changes]}"
+    for file in "${!base[@]}"
+    do
+	withecho scp "$remotehost:\$HOME/${base["$file"]}" "$file"
+    done
+    withecho ssh "$remotehost" "rm -f ${base[@]}"
 
     echo "Successfully signed changes file"
 else
