@@ -6,13 +6,19 @@ devscripts (2.17.11) UNRELEASED; urgency=medium
   * Remove myself from Uploaders.
 
   [ Osamu Aoki ]
-  * Support newer and long dpkg-buildpackage options --no-sign,
-    --unsigned-source, --unsigned-changes, -ui, and --unsigned-buildinfo and
-    bump dpkg-bev version to 1.18.19.  Closes: #876024
-  * Removed Martin Zobel-Helas, Patrick Schoenfeld, and Benjamin Drung
-    from Uploaders after asking them.
-  * Auto set --force-download when appropriate to prevent regression.
-  * Correct information on the OpenPGP fingerprint etc.  Closes: #877104
+  * debuild:
+    + Support newer and long dpkg-buildpackage options --no-sign,
+      --unsigned-source, --unsigned-changes, -ui and --unsigned-buildinfo,
+      therefore bumping the dpkg-bev build-dependency to version to 1.18.19.
+      Closes: #876024
+  * debian/control:
+    + Remov Martin Zobel-Helas, Patrick Schoenfeld and Benjamin Drung
+      from Uploaders after asking them.
+      Thanks for all your contributions!
+  * uscan:
+    + Auto set --force-download when appropriate to retain the
+      previous behaviour.
+    + Correct information about the OpenPGP key fingerprints.  Closes: #877104
 
   [ Chris Lamb ]
   * reproducible-check:
@@ -29,11 +35,13 @@ devscripts (2.17.11) UNRELEASED; urgency=medium
       Closes: #871657
 
   [ Christoph Berg ]
-  * origtargz: Allow invocation from subdirectory. (Closes: #702636)
+  * origtargz:
+    + Allow invocation from subdirectory.  Closes: #702636
 
   [ Cyril Brulebois ]
-  * debsign: Fix bash completion by using file extensions instead of
-    using globs.  Closes: #877440
+  * debsign:
+    + Fix bash completion by using file extensions instead of
+      using globs.  Closes: #877440
 
   [ Mattia Rizzolo ]
   * debchange:
