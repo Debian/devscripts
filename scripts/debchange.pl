@@ -434,7 +434,7 @@ if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
 
 # Only allow at most one non-help option
 fatal "Only one of -a, -i, -e, -r, -v, -d, -n/--nmu, --bin-nmu, -q/--qa, -R/--rebuild, -s/--security, --team, --bpo, --stable, -l/--local is allowed;\ntry $progname --help for more help"
-    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) + ($opt_n?1:0) + ($opt_bn?1:0) + ($opt_qa?1:0) + ($opt_R?1:0) + ($opt_s?1:0) + ($opt_team?1:0) + ($opt_bpo?1:0) + ($opt_l?1:0) > 1;
+    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) + ($opt_n?1:0) + ($opt_bn?1:0) + ($opt_qa?1:0) + ($opt_R?1:0) + ($opt_s?1:0) + ($opt_team?1:0) + ($opt_bpo?1:0) + ($opt_stable?1:0) + ($opt_l?1:0) > 1;
 
 if ($opt_s) {
     $opt_u = "high";
@@ -543,13 +543,13 @@ fatal "--package cannot be used when creating a NEWS file"
 
 if ($opt_create) {
     if ($opt_a || $opt_i || $opt_e || $opt_r || $opt_b || $opt_n || $opt_bn ||
-	    $opt_qa || $opt_R || $opt_s || $opt_team || $opt_bpo || $opt_l ||
-	    $opt_allow_lower) {
-	warn "$progname warning: ignoring -a/-i/-e/-r/-b/--allow-lower-version/-n/--bin-nmu/-q/--qa/-R/-s/--team/--bpo/--stable,-l options with --create\n";
-	$warnings++;
+            $opt_qa || $opt_R || $opt_s || $opt_team || $opt_bpo ||
+            $opt_stable || $opt_l || $opt_allow_lower) {
+        warn "$progname warning: ignoring -a/-i/-e/-r/-b/--allow-lower-version/-n/--bin-nmu/-q/--qa/-R/-s/--team/--bpo/--stable,-l options with --create\n";
+        $warnings++;
     }
     if ($opt_package && $opt_d) {
-	fatal "Can only use one of --package and -d";
+        fatal "Can only use one of --package and -d";
     }
 }
 
