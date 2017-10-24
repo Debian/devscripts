@@ -1043,12 +1043,12 @@ simpler form of URL. The format below will automatically be rewritten to use
 the redirector with the watch file:
 
   version=4
-  http://sf.net/<project>/ <tar-name>-(.+)\.tar\.gz debian uupdate
+  https://sf.net/<project>/ <tar-name>-(.+)\.tar\.gz debian uupdate
 
 For B<audacity>, set the watch file as:
 
   version=4
-  http://sf.net/audacity/ audacity-minsrc-(.+)\.tar\.gz debian uupdate
+  https://sf.net/audacity/ audacity-minsrc-(.+)\.tar\.gz debian uupdate
 
 Please note, you can still use normal functionalities of B<uscan> to set up a
 watch file for this site without using the redirector.
@@ -2723,9 +2723,9 @@ sub process_watchline ($$$$$$)
 	}
 
 	# Handle sf.net addresses specially
-	if (! $bare and $base =~ m%^http://sf\.net/%) {
+	if (! $bare and $base =~ m%^https?://sf\.net/%) {
 	    uscan_verbose "sf.net redirection to qa.debian.org/watch/sf.php\n";
-	    $base =~ s%^http://sf\.net/%https://qa.debian.org/watch/sf.php/%;
+	    $base =~ s%^https?://sf\.net/%https://qa.debian.org/watch/sf.php/%;
 	    $filepattern .= '(?:\?.*)?';
 	}
 	# Handle pypi.python.org addresses specially
