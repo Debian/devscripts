@@ -12,6 +12,9 @@ devscripts (2.17.6+deb9u2) UNRELEASED; urgency=medium
   * debchange:
     + Update the manpage to mention that --bpo now targets stretch-backports,
       not jessie-backports.  Closes: #877877
+  * uscan:
+    + Apply patch from Stephen Kitt <skitt@debian.org> to support https in the
+      sf.net special redirector.  Closes: #879207
 
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 30 Sep 2017 22:19:56 +0200
 
