@@ -9,7 +9,7 @@ devscripts (2.17.11) UNRELEASED; urgency=medium
   * debuild:
     + Support newer and long dpkg-buildpackage options --no-sign,
       --unsigned-source, --unsigned-changes, -ui and --unsigned-buildinfo,
-      therefore bumping the dpkg-bev build-dependency to version to 1.18.19.
+      therefore bumping the dpkg-bev dependency to version to 1.18.19.
       Closes: #876024
   * debian/control:
     + Remov Martin Zobel-Helas, Patrick Schoenfeld and Benjamin Drung
