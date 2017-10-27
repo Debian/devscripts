@@ -52,6 +52,7 @@ devscripts (2.17.11) UNRELEASED; urgency=medium
     + Add myself to uploaders.
     + Bump Standards-Version to 4.1.1, no changes needed.
     + Drop Testsuite:autopkgtest field, it's automatically added by dpkg-source.
+    + Promote sensible-utils from Recommends to Depends.
   * debrsign:
     + Apply patch from Gilles Filippini <pini@debian.org> to add support for
       .buildinfo files.  Closes: #862324
