@@ -55,6 +55,9 @@ devscripts (2.17.11) UNRELEASED; urgency=medium
   * uscan:
     + Apply patch from Stephen Kitt <skitt@debian.org> to support https in the
       sf.net special redirector.  Closes: #879207
+  * tests:
+    + mk-origtargz: fix check with dpkg 1.19.x.  Thanks to Adam Conrad
+      <adconrad@debian.org> for the patch.  Closes: #879798
 
  -- Chris Lamb <lamby@debian.org>  Wed, 27 Sep 2017 13:24:39 +0100
 

@@ -536,11 +536,16 @@ testCopyrightFormatWarning() {
 testBrokenTarWarning() {
 	makeBrokenTarBall
 	makeDebianDir
+	if dpkg --compare-versions $(dpkg-query -W -f='${Version}' libdpkg-perl) lt 1.19.0~; then
+		local SUBPROCESS_ERROR="gave error exit status 2"
+	else
+		local SUBPROCESS_ERROR="subprocess returned exit status 2"
+	fi
 	run_mk_origtargz foo \
 		"tar: This does not look like a tar archive
 tar: Skipping to next header
 tar: Exiting with failure status due to previous errors
-$PROGNAME: error: tar --list --auto-compress --file ../foo_0.1.orig.tar.xz gave error exit status 2" \
+$PROGNAME: error: tar --list --auto-compress --file ../foo_0.1.orig.tar.xz $SUBPROCESS_ERROR" \
 		"" \
 		 ../foo-0.1.tar.gz --repack --compression xz
 }
