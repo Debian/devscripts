@@ -50,6 +50,7 @@ devscripts (2.17.11) UNRELEASED; urgency=medium
   * debian/control:
     + Annotate the build-dependencies on perl and python3-all with :any.
     + Add myself to uploaders.
+    + Bump Standards-Version to 4.1.1, no changes needed.
   * debrsign:
     + Apply patch from Gilles Filippini <pini@debian.org> to add support for
       .buildinfo files.  Closes: #862324
