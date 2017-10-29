@@ -1,11 +1,13 @@
 devscripts (2.17.12) UNRELEASED; urgency=medium
 
-  * Team upload.
-
   [ Adam D. Barratt ]
   * Fix typo in 2.7.11 changelog ("dpkg-bev" -> "dpkg-dev")
 
- -- Adam D. Barratt <adam@adam-barratt.org.uk>  Fri, 27 Oct 2017 19:00:14 +0100
+  [ Chris Lamb ]
+  * debuild:
+    + Print the actual arguments we make to lintian.  Closes: #880124
+
+ -- Mattia Rizzolo <mattia@debian.org>  Mon, 30 Oct 2017 07:48:10 +0100
 
 devscripts (2.17.11) unstable; urgency=medium
 
