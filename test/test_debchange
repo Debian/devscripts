@@ -166,6 +166,9 @@ testEncoding() {
 
     success "--bpo \"Backports upload\""
     verifyMaintainer "dch --bpo"
+
+    success "--stable \"Stable upload\""
+    verifyMaintainer "dch --stable"
 }
 
 verifyEntryLines() {

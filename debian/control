@@ -2,16 +2,14 @@ Source: devscripts
 Section: devel
 Priority: optional
 Maintainer: Devscripts Devel Team <devscripts-devel@lists.alioth.debian.org>
-Uploaders: James McCoy <jamessan@debian.org>,
-           Martin Zobel-Helas <zobel@debian.org>,
-           Patrick Schoenfeld <schoenfeld@debian.org>,
-           Benjamin Drung <bdrung@debian.org>
-Standards-Version: 4.1.0
+Uploaders:
+ Mattia Rizzolo <mattia@debian.org>,
+Standards-Version: 4.1.1
 Build-Depends: bash-completion,
                debhelper (>= 10),
                dh-python,
                docbook-xsl,
-               dpkg-dev (>= 1.17.6),
+               dpkg-dev (>= 1.18.19),
                file <!nocheck>,
                gnupg <!nocheck> | gnupg2 <!nocheck>,
                help2man,
@@ -26,11 +24,11 @@ Build-Depends: bash-completion,
                libwww-perl <!nocheck>,
                lsb-release <!nocheck>,
                mozilla-devscripts <!nocheck>,
-               perl,
+               perl:any,
                pkg-config,
                po4a,
                pylint <!nocheck>,
-               python3-all,
+               python3-all:any,
                python3-apt <!nocheck>,
                python3-debian <!nocheck>,
                python3-flake8 <!nocheck>,
@@ -45,15 +43,15 @@ Build-Depends: bash-completion,
                xsltproc,
                xz-utils <!nocheck>,
                zip <!nocheck>
-Testsuite: autopkgtest
 Vcs-Browser: https://anonscm.debian.org/git/collab-maint/devscripts.git
 Vcs-Git: https://anonscm.debian.org/git/collab-maint/devscripts.git
 
 Package: devscripts
 Architecture: any
 Multi-Arch: foreign
-Depends: dpkg-dev (>= 1.17.6),
+Depends: dpkg-dev (>= 1.18.19),
          libfile-homedir-perl,
+         sensible-utils,
          ${misc:Depends},
          ${perl:Depends},
          ${python3:Depends},
@@ -83,7 +81,6 @@ Recommends: apt,
             python3-requests,
             python3-unidiff,
             python3-xdg,
-            sensible-utils,
             strace,
             unzip,
             wdiff,
@@ -225,6 +222,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
     [bsd-mailx | mailx, at]
   - rc-alert: list installed packages which have release-critical bugs
     [wget | curl]
+  - reproducible-check: reports on the reproducible status of installed
+    packages [python3-apt, python3-requests, python3-termcolor, python3-xdg]
   - rmadison: remotely query the Debian archive database about packages
     [liburi-perl, wget | curl]
   - sadt: run DEP-8 tests [python3-debian]

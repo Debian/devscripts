@@ -62,7 +62,7 @@ B<apt-get source> is tried when B<apt-cache showsrc> reports a matching version.
 
 =item *
 
-Finally, B<uscan --download-current-version> is tried.
+Finally, B<uscan --download --download-current-version> is tried.
 
 =back
 
@@ -195,6 +195,7 @@ pod2usage({-exitval => 3}) if (@ARGV > 0 or $unpack !~ /^(no|once|yes)$/);
 
 my ($package, $version, $origversion, $fileversion);
 
+chdir ".." if (! -f "debian/changelog" and -f "../debian/changelog");
 open F, "debian/changelog" or die "debian/changelog: $!\n";
 my $line = <F>;
 close F;
@@ -289,8 +290,8 @@ sub download_origtar ()
 	# try uscan
 
 	if (-f "debian/watch") {
-		print "Trying uscan --download-current-version ...\n";
-		system "uscan --download-current-version --rename\n";
+		print "Trying uscan --download --download-current-version ...\n";
+		system "uscan --download --download-current-version --rename\n";
 	}
 
 	if (my @f = glob "../${package}_$fileversion.orig.tar.*") {

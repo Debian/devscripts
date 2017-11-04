@@ -66,11 +66,11 @@ GNU General Public License, version 2 or later."
 mustsetvar () {
     if [ "x$2" = x ]
     then
-	echo >&2 "$PROGNAME: unable to determine $3"
-	exit 1
+        echo >&2 "$PROGNAME: unable to determine $3"
+        exit 1
     else
-	# echo "$PROGNAME: $3 is $2"
-	eval "$1=\"\$2\""
+        # echo "$PROGNAME: $3 is $2"
+        eval "$1=\"\$2\""
     fi
 }
 
@@ -104,16 +104,15 @@ while [ $# != 0 ]
 do
     value="`echo x\"$1\" | sed -e 's/^x-.//'`"
     case "$1" in
-	-S)	sourceonly="true" ;;
-	-a*)	targetarch="$value" ;;
-	-t*)	targetgnusystem="$value" ;;
-	--multi) multiarch="true" ;;
-	--help)	usage; exit 0 ;;
-	--version)
-		version; exit 0 ;;
-        --path) DEBRSIGN_PGP_PATH="$value" ;;
-	-*)	signargs="$signargs '$1'" ;;
-	*)	break ;;
+        -S)         sourceonly="true" ;;
+        -a*)        targetarch="$value" ;;
+        -t*)        targetgnusystem="$value" ;;
+        --multi)    multiarch="true" ;;
+        --help)     usage; exit 0 ;;
+        --version)  version; exit 0 ;;
+        --path)     DEBRSIGN_PGP_PATH="$value" ;;
+        -*)         signargs="$signargs '$1'" ;;
+        *)          break ;;
     esac
     shift
 done
@@ -123,82 +122,87 @@ done
 # top level of a source tree and will figure out its name from
 # debian/changelog
 case $# in
-    2)	remotehost="$1"
-	case "$2" in
-	    *.dsc)
-		changes=
-		dsc=$2
-		;;
-	    *.changes)
-		changes=$2
-		dsc=`echo $changes | \
-		    perl -pe 's/\.changes$/.dsc/; s/(.*)_(.*)_(.*)\.dsc/\1_\2.dsc/'`
-		;;
-	    *)	echo "$PROGNAME: Only a .changes or .dsc file is allowed as second argument!" >&2
-		exit 1 ;;
-	esac
-	;;
+    2)  remotehost="$1"
+        case "$2" in
+            *.dsc)
+                changes=
+                dsc=$2
+                ;;
+            *.changes)
+                changes=$2
+                dsc=`echo $changes | \
+                    perl -pe 's/\.changes$/.dsc/; s/(.*)_(.*)_(.*)\.dsc/\1_\2.dsc/'`
+                buildinfo=`echo $changes | \
+                    perl -pe 's/\.changes$/.buildinfo/; s/(.*)_(.*)_(.*)\.buildinfo/\1_\2_\3.buildinfo/'`
+                ;;
+            *)
+                echo "$PROGNAME: Only a .changes or .dsc file is allowed as second argument!" >&2
+                exit 1
+                ;;
+        esac
+        ;;
 
-    1)	remotehost="$1"
-	case "$1" in
-	*.changes)
-		echo "$PROGNAME: You must pass the address of the signing host as as the first argument" >&2
-		exit 1
-	;;
-	*)
-		# We have to parse debian/changelog to find the current version
-		if [ ! -r debian/changelog ]; then
-			echo "$PROGNAME: Must be run from top of source dir or a .changes file given as arg" >&2
-			exit 1
-		fi
-	;;
-	esac
+    1)  remotehost="$1"
+        case "$1" in
+            *.changes)
+                echo "$PROGNAME: You must pass the address of the signing host as as the first argument" >&2
+                exit 1
+                ;;
+            *)
+                # We have to parse debian/changelog to find the current version
+                if [ ! -r debian/changelog ]; then
+                    echo "$PROGNAME: Must be run from top of source dir or a .changes file given as arg" >&2
+                    exit 1
+                fi
+                ;;
+        esac
 
 
-	mustsetvar package "`dpkg-parsechangelog -SSource`" "source package"
-	mustsetvar version "`dpkg-parsechangelog -SVersion`" "source version"
+        mustsetvar package "`dpkg-parsechangelog -SSource`" "source package"
+        mustsetvar version "`dpkg-parsechangelog -SVersion`" "source version"
 
-	if [ "x$sourceonly" = x ]
-	then
-	    if [ -n "$targetarch" ] && [ -n "$targetgnusystem" ]; then
-		mustsetvar arch "$(dpkg-architecture "-a${targetarch}" "-t${targetgnusystem}" -qDEB_HOST_ARCH)" "build architecture"
-	    elif [ -n "$targetarch" ]; then
-		mustsetvar arch "$(dpkg-architecture "-a${targetarch}" -qDEB_HOST_ARCH)" "build architecture"
-	    elif [ -n "$targetgnusystem" ]; then
-		mustsetvar arch "$(dpkg-architecture "-t${targetgnusystem}" -qDEB_HOST_ARCH)" "build architecture"
-	    else
-		mustsetvar arch "$(dpkg-architecture -qDEB_HOST_ARCH)" "build architecture"
-	    fi
-	else
-	    arch=source
-	fi
+        if [ "x$sourceonly" = x ]
+        then
+            if [ -n "$targetarch" ] && [ -n "$targetgnusystem" ]; then
+                mustsetvar arch "$(dpkg-architecture "-a${targetarch}" "-t${targetgnusystem}" -qDEB_HOST_ARCH)" "build architecture"
+            elif [ -n "$targetarch" ]; then
+                mustsetvar arch "$(dpkg-architecture "-a${targetarch}" -qDEB_HOST_ARCH)" "build architecture"
+            elif [ -n "$targetgnusystem" ]; then
+                mustsetvar arch "$(dpkg-architecture "-t${targetgnusystem}" -qDEB_HOST_ARCH)" "build architecture"
+            else
+                mustsetvar arch "$(dpkg-architecture -qDEB_HOST_ARCH)" "build architecture"
+            fi
+        else
+            arch=source
+        fi
 
-	sversion=`echo "$version" | perl -pe 's/^\d+://'`
-	pv="${package}_${sversion}"
-	pva="${package}_${sversion}${arch:+_${arch}}"
-	dsc="../$pv.dsc"
-	changes="../$pva.changes"
-	if [ -n "$multiarch" -o ! -r $changes ]; then
-	    changes=$(ls "../${package}_${sversion}_*+*.changes" "../${package}_${sversion}_multi.changes" 2>/dev/null | head -1)
-	    if [ -z "$multiarch" ]; then
-		if [ -n "$changes" ]; then
-		    echo "$PROGNAME: could not find normal .changes file but found multiarch file:" >&2
-		    echo "  $changes" >&2
-		    echo "Using this changes file instead." >&2
-		else
-		    echo "$PROGNAME: Can't find or can't read changes file $changes!" >&2
-		    exit 1
-		fi
-	    elif [ -n "$multiarch" -a -z "$changes" ]; then
-		echo "$PROGNAME: could not find any multiarch .changes file with name" >&2
-		echo "../${package}_${sversion}_*.changes" >&2
-		exit 1
-	    fi
-	fi
-	;;
+        sversion=`echo "$version" | perl -pe 's/^\d+://'`
+        pv="${package}_${sversion}"
+        pva="${package}_${sversion}${arch:+_${arch}}"
+        dsc="../$pv.dsc"
+        buildinfo="../$pva.buildinfo"
+        changes="../$pva.changes"
+        if [ -n "$multiarch" -o ! -r $changes ]; then
+            changes=$(ls "../${package}_${sversion}_*+*.changes" "../${package}_${sversion}_multi.changes" 2>/dev/null | head -1)
+            if [ -z "$multiarch" ]; then
+                if [ -n "$changes" ]; then
+                    echo "$PROGNAME: could not find normal .changes file but found multiarch file:" >&2
+                    echo "  $changes" >&2
+                    echo "Using this changes file instead." >&2
+                else
+                    echo "$PROGNAME: Can't find or can't read changes file $changes!" >&2
+                    exit 1
+                fi
+            elif [ -n "$multiarch" -a -z "$changes" ]; then
+                echo "$PROGNAME: could not find any multiarch .changes file with name" >&2
+                echo "../${package}_${sversion}_*.changes" >&2
+                exit 1
+            fi
+        fi
+        ;;
 
-    *)	echo "Usage: $PROGNAME [options] [user@]remotehost [.changes or .dsc file]" >&2
-	exit 1 ;;
+    *)        echo "Usage: $PROGNAME [options] [user@]remotehost [.changes or .dsc file]" >&2
+        exit 1 ;;
 esac
 
 if [ "x$remotehost" == "x" ]
@@ -207,45 +211,56 @@ then
         exit 1
 fi
 
-changesbase=`basename "$changes"`
-dscbase=`basename "$dsc"`
+declare -A base
+base["$changes"]=`basename "$changes"`
+base["$dsc"]=`basename "$dsc"`
+base["$buildinfo"]=`basename "$buildinfo"`
 
 if [ -n "$changes" ]
 then
     if [ ! -f "$changes" -o ! -r "$changes" ]
     then
-	echo "Can't find or can't read changes file $changes!" >&2
-	exit 1
+        echo "Can't find or can't read changes file $changes!" >&2
+        exit 1
     fi
 
     # Is there a dsc file listed in the changes file?
-    if grep -q "$dscbase" "$changes"
+    if grep -q "${base[$dsc]}" "$changes"
     then
-	if [ ! -f "$dsc" -o ! -r "$dsc" ]
-	then
-	    echo "Can't find or can't read dsc file $dsc!" >&2
-	    exit 1
-	fi
-
-	# Now do the real work
-	withecho scp "$changes" "$dsc" "$remotehost:\$HOME"
-	withecho ssh -t "$remotehost" "debsign $signargs $changesbase"
-	withecho scp "$remotehost:\$HOME/$changesbase" "$changes"
-	withecho scp "$remotehost:\$HOME/$dscbase" "$dsc"
-	withecho ssh "$remotehost" "rm -f $changesbase $dscbase"
+        if [ ! -f "$dsc" -o ! -r "$dsc" ]
+        then
+            echo "Can't find or can't read dsc file $dsc!" >&2
+            exit 1
+        fi
     else
-	withecho scp "$changes" "$remotehost:\$HOME"
-	withecho ssh -t "$remotehost" "debsign $signargs $changesbase"
-	withecho scp "$remotehost:\$HOME/$changesbase" "$changes"
-	withecho ssh "$remotehost" "rm -f $changesbase"
+        unset base["$dsc"]
     fi
+    # Is there a buildinfo file listed in the changes file?
+    if grep -q "${base[$buildinfo]}" "$changes"
+    then
+        if [ ! -f "$buildinfo" -o ! -r "$buildinfo" ]
+        then
+            echo "Can't find or can't read buildinfo file $buildinfo!" >&2
+            exit 1
+        fi
+    else
+        unset base["$buildinfo"]
+    fi
+    # Now do the real work
+    withecho scp "${!base[@]}" "$remotehost:\$HOME"
+    withecho ssh -t "$remotehost" "debsign $signargs ${base[$changes]}"
+    for file in "${!base[@]}"
+    do
+        withecho scp "$remotehost:\$HOME/${base["$file"]}" "$file"
+    done
+    withecho ssh "$remotehost" "rm -f ${base[@]}"
 
     echo "Successfully signed changes file"
 else
     if [ ! -f "$dsc" -o ! -r "$dsc" ]
     then
-	echo "Can't find or can't read dsc file $dsc!" >&2
-	exit 1
+        echo "Can't find or can't read dsc file $dsc!" >&2
+        exit 1
     fi
 
     withecho scp "$dsc" "$remotehost:\$HOME"

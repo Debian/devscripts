@@ -1,3 +1,68 @@
+devscripts (2.17.11) unstable; urgency=medium
+
+  [ James McCoy ]
+  * Remove myself from Uploaders.
+
+  [ Osamu Aoki ]
+  * debuild:
+    + Support newer and long dpkg-buildpackage options --no-sign,
+      --unsigned-source, --unsigned-changes, -ui and --unsigned-buildinfo,
+      therefore bumping the dpkg-bev dependency to version to 1.18.19.
+      Closes: #876024
+  * debian/control:
+    + Remov Martin Zobel-Helas, Patrick Schoenfeld and Benjamin Drung
+      from Uploaders after asking them.
+      Thanks for all your contributions!
+  * uscan:
+    + Auto set --force-download when appropriate to retain the
+      previous behaviour.
+    + Correct information about the OpenPGP key fingerprints.  Closes: #877104
+
+  [ Chris Lamb ]
+  * reproducible-check:
+    + Match name of the json file on remote server.
+    + Use the restricted JSON file that hides transient issues.  Closes: #875861
+    + Handle multi-architecture systems.  Closes: #875887
+    + Expire cache file after 1 day and base local cache name on the
+      remote filename.
+    + Various flake8-related tidyintidying.
+  * debian/control:
+    + Mention reproducible-check in the package long description.
+  * debchange:
+    + Add support for preparing uploads to stable with the new --stable flag.
+      Closes: #871657
+
+  [ Christoph Berg ]
+  * origtargz:
+    + Allow invocation from subdirectory.  Closes: #702636
+
+  [ Cyril Brulebois ]
+  * debsign:
+    + Fix bash completion by using file extensions instead of
+      using globs.  Closes: #877440
+
+  [ Mattia Rizzolo ]
+  * debchange:
+    + Update the manpage to mention that --bpo now targets stretch-backports,
+      not jessie-backports.  Closes: #877877
+  * debian/control:
+    + Annotate the build-dependencies on perl and python3-all with :any.
+    + Add myself to uploaders.
+    + Bump Standards-Version to 4.1.1, no changes needed.
+    + Drop Testsuite:autopkgtest field, it's automatically added by dpkg-source.
+    + Promote sensible-utils from Recommends to Depends.
+  * debrsign:
+    + Apply patch from Gilles Filippini <pini@debian.org> to add support for
+      .buildinfo files.  Closes: #862324
+  * uscan:
+    + Apply patch from Stephen Kitt <skitt@debian.org> to support https in the
+      sf.net special redirector.  Closes: #879207
+  * tests:
+    + mk-origtargz: fix check with dpkg 1.19.x.  Thanks to Adam Conrad
+      <adconrad@debian.org> for the patch.  Closes: #879798
+
+ -- Mattia Rizzolo <mattia@debian.org>  Fri, 27 Oct 2017 14:52:18 +0200
+
 devscripts (2.17.10~bpo9+1) stretch-backports; urgency=medium
 
   * Rebuild for stretch-backports.

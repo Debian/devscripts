@@ -1043,12 +1043,12 @@ simpler form of URL. The format below will automatically be rewritten to use
 the redirector with the watch file:
 
   version=4
-  http://sf.net/<project>/ <tar-name>-(.+)\.tar\.gz debian uupdate
+  https://sf.net/<project>/ <tar-name>-(.+)\.tar\.gz debian uupdate
 
 For B<audacity>, set the watch file as:
 
   version=4
-  http://sf.net/audacity/ audacity-minsrc-(.+)\.tar\.gz debian uupdate
+  https://sf.net/audacity/ audacity-minsrc-(.+)\.tar\.gz debian uupdate
 
 Please note, you can still use normal functionalities of B<uscan> to set up a
 watch file for this site without using the redirector.
@@ -1167,16 +1167,27 @@ See mk-origtargz(1).
 =head1 KEYRING FILE EXAMPLES
 
 Let's assume that the upstream "B<< uscan test key (no secret)
-<none@debian.org> >>" signs its package and publishes its public key
-fingerprint 'B<CF21 8F0E 7EAB F584 B7E2 0402 C77E 2D68 7254 3FAF>' which you
-know is the trusted one.
+<none@debian.org> >>" signs its package with a secret OpenPGP key and publishes
+the corresponding public OpenPGP key.  This public OpenPGP key can be
+identified in 3 ways using the hexadecimal form.
 
-Please note that the short keyid B<72543FAF> is the last 4 Bytes, the long
-keyid B<C77E2D6872543FAF> is the last 8 Bytes, and the finger print is the last
-20 Bytes of the public key in hexadecimal form.  Considering the existence of
-the collision attack on the short keyid, the use of the long keyid is
-recommended for receiving keys from the public key servers.  You must verify
-the downloaded OpenPGP key using its fingerprint.
+=over
+
+=item * The fingerprint as the 20 byte data calculated from the public OpenPGP
+key. E.  g., 'B<CF21 8F0E 7EAB F584 B7E2 0402 C77E 2D68 7254 3FAF>'
+
+=item * The long keyid as the last 8 byte data of the fingerprint. E. g.,
+'B<C77E2D6872543FAF>'
+
+=item * The short keyid is the last 4 byte data of the fingerprint. E. g.,
+'B<72543FAF>'
+
+=back
+
+Considering the existence of the collision attack on the short keyid, the use
+of the long keyid is recommended for receiving keys from the public key
+servers.  You must verify the downloaded OpenPGP key using its full fingerprint
+value which you know is the trusted one.
 
 The armored keyring file F<debian/upstream/signing-key.asc> can be created by
 using the B<gpg> (or B<gpg2>) command as follows.
@@ -1474,7 +1485,7 @@ equivalent to the B<--timeout> option.
 If this is set to no, then a I<pkg>_I<version>B<.orig.tar.{gz|bz2|lzma|xz}>
 symlink will not be made (equivalent to the B<--no-symlink> option). If it is
 set to B<yes> or B<symlink>, then the symlinks will be made. If it is set to
-rename, then the files are renamed (equivalent to the B<--rename> option).
+B<rename>, then the files are renamed (equivalent to the B<--rename> option).
 
 =item B<USCAN_DEHS_OUTPUT>
 
@@ -2712,9 +2723,9 @@ sub process_watchline ($$$$$$)
 	}
 
 	# Handle sf.net addresses specially
-	if (! $bare and $base =~ m%^http://sf\.net/%) {
+	if (! $bare and $base =~ m%^https?://sf\.net/%) {
 	    uscan_verbose "sf.net redirection to qa.debian.org/watch/sf.php\n";
-	    $base =~ s%^http://sf\.net/%https://qa.debian.org/watch/sf.php/%;
+	    $base =~ s%^https?://sf\.net/%https://qa.debian.org/watch/sf.php/%;
 	    $filepattern .= '(?:\?.*)?';
 	}
 	# Handle pypi.python.org addresses specially
@@ -2757,14 +2768,17 @@ sub process_watchline ($$$$$$)
     # Set $download_version etc. if already known
     if(defined $opt_download_version) {
 	$download_version = $opt_download_version;
+	$download = 2 if $download == 1; # Change default 1 -> 2
 	$badversion = 1;
 	uscan_verbose "Download the --download-version specified version: $download_version\n";
     } elsif (defined $opt_download_debversion) {
 	$download_version = $mangled_lastversion;
+	$download = 2 if $download == 1; # Change default 1 -> 2
 	$badversion = 1;
 	uscan_verbose "Download the --download-debversion specified version (dversionmangled): $download_version\n";
     } elsif(defined $opt_download_current_version) {
 	$download_version = $mangled_lastversion;
+	$download = 2 if $download == 1; # Change default 1 -> 2
 	$badversion = 1;
 	uscan_verbose "Download the --download-current-version specified version: $download_version\n";
     } elsif($options{'versionmode'} eq 'same') {
@@ -2773,6 +2787,7 @@ sub process_watchline ($$$$$$)
 	    return 1;
 	}
 	$download_version = $common_newversion;
+	$download = 2 if $download == 1; # Change default 1 -> 2
 	$badversion = 1;
 	uscan_verbose "Download secondary tarball with the matching version: $download_version\n";
     } elsif($options{'versionmode'} eq 'previous') {
@@ -2781,6 +2796,7 @@ sub process_watchline ($$$$$$)
 	    return 1;
 	}
 	$download_version = $previous_newversion;
+	$download = 2 if $download == 1; # Change default 1 -> 2
 	$badversion = 1;
 	uscan_verbose "Download the signature file with the previous tarball's version: $download_version\n";
     } else {

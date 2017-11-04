@@ -19,10 +19,10 @@ _debsign()
             ;;
         *)
             COMPREPLY=( $(
-                    compgen -G "${cur}*.changes"
-                    compgen -G "${cur}*.buildinfo"
-                    compgen -G "${cur}*.dsc"
-                    compgen -G "${cur}*.commands"
+                    compgen -f -X "!*.changes"   -- "$cur"
+                    compgen -f -X "!*.buildinfo" -- "$cur"
+                    compgen -f -X "!*.dsc"       -- "$cur"
+                    compgen -f -X "!*.commands"  -- "$cur"
                     compgen -W "$options" | grep "^$cur"
                 ) )
             ;;
