@@ -6,6 +6,8 @@ devscripts (2.17.12) UNRELEASED; urgency=medium
   [ Chris Lamb ]
   * debuild:
     + Print the actual arguments we make to lintian.  Closes: #880124
+  * dget:
+    + Support downloading packages through gopher://.  Closes: #880649
 
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 30 Oct 2017 07:48:10 +0100
 
