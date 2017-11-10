@@ -40,6 +40,8 @@ if [ -n "${1}" ]; then
         MAINT="pkg-perl-maintainers@lists.alioth.debian.org"
     elif [ "${1}" = "pkg-zsh" ]; then
         MAINT="pkg-zsh-devel@lists.alioth.debian.org"
+    elif [ "${1}" = "qa" ]; then
+        MAINT="packages@qa.debian.org"
     else
         MAINT="${1}@debian.org"
     fi
