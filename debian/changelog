@@ -13,6 +13,7 @@ devscripts (2.17.12) UNRELEASED; urgency=medium
   * Add ltnu (Long Time No Upload).
   * Add scripts/hardening-check{,.1} and debian/debhelper-build-stamp to
     .gitignore.
+  * Remove trailing whitespace in previous changelog entry.
 
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 30 Oct 2017 07:48:10 +0100
 
@@ -151,7 +152,7 @@ devscripts (2.17.10) unstable; urgency=medium
     + Rename and convert the detached signature. Closes: #832267, #837173,
       #870281
     + Skip upstream signature when repacking.  Closes: #874667
-  * uupdate 
+  * uupdate
     + -b option is not "New upstream release". Closes: #842468, #845610
     + Use space as the argument of debchange to create an empty entry
       template.
