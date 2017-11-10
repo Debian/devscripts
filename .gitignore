@@ -3,6 +3,7 @@ build-stamp-arch
 build-stamp-indep
 conf.default
 debian/*.debhelper
+debian/debhelper-build-stamp
 debian/devscripts.debhelper.log
 debian/devscripts.substvars
 debian/devscripts/
@@ -80,6 +81,8 @@ scripts/getbuildlog
 scripts/git-deborig
 scripts/git-deborig.1
 scripts/grep-excuses
+scripts/hardening-check
+scripts/hardening-check.1
 scripts/libvfork.o
 scripts/libvfork.so.0
 scripts/list-unreleased
