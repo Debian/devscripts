@@ -112,6 +112,7 @@ Suggests: adequate,
           mozilla-devscripts,
           mutt,
           piuparts,
+          postgresql-client,
           quilt,
           ratt,
           reprotest,
@@ -202,6 +203,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
     libyaml-syck-perl, wget, w3m]
   - hardening-check: report the hardening characteristics of a set of binaries
   - list-unreleased: search for unreleased packages
+  - ltnu: List all uploads of packages by the given uploader or maintainer and
+    display them ordered by the last upload [postgresql-client]
   - manpage-alert: locate binaries without corresponding manpages [man-db]
   - mass-bug: mass-file bug reports [bsd-mailx | mailx]
   - mergechanges: merge .changes files from the same release but built
