@@ -165,6 +165,9 @@ testEncoding() {
     success "-s \"Security upload\""
     verifyMaintainer "dch -s"
 
+    success "-s \"LTS Security upload\""
+    verifyMaintainer "dch --lts"
+
     success "--bpo \"Backports upload\""
     verifyMaintainer "dch --bpo"
 
