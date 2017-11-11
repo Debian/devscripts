@@ -1172,13 +1172,13 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 		# based on the version of the previous upload
 		if ($opt_stable || $opt_bpo || $opt_s) {
 		    my $previous_dist = $start;
-		    $previous_dist =~ s/^.*[+~]deb(\d+)u$/$1/;
+		    $previous_dist =~ s/^.*[+~](?:deb|bpo)(\d+)(?:u\+)\d+$/$1/;
 		    if (defined $previous_dist and defined $dists{$previous_dist}) {
                 if ($opt_s) {
                     $guessed_dist = $dists{$previous_dist} . '-security';
                 } elsif ($opt_bpo) {
                     $guessed_dist = $dists{$previous_dist} . '-backports';
-                } else {
+                } elsif ($opt_stable) {
                     $guessed_dist = $dists{$previous_dist};
                 }
             } elsif ($opt_s) {
