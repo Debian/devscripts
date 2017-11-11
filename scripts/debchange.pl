@@ -1173,21 +1173,20 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 		if ($opt_stable || $opt_bpo || $opt_s) {
 		    my $previous_dist = $start;
 		    $previous_dist =~ s/^.*[+~]deb(\d+)u$/$1/;
-		    if (defined $previous_dist and defined
-			$dists{$previous_dist}) {
-                        if ($opt_s) {
-                            $guessed_dist = $dists{$previous_dist} . '-security';
-                        } elsif ($opt_bpo) {
-                            $guessed_dist = $dists{$previous_dist} . '-backports';
-                        } else {
-                            $guessed_dist = $dists{$previous_dist};
-                        }
-                    } elsif ($opt_s) {
-                        $guessed_dist = $dists{$latest_dist} . '-security';
-                    } else {
-			# Fallback to using the previous distribution
-			$guessed_dist = $changelog->{Distribution};
-		    }
+		    if (defined $previous_dist and defined $dists{$previous_dist}) {
+                if ($opt_s) {
+                    $guessed_dist = $dists{$previous_dist} . '-security';
+                } elsif ($opt_bpo) {
+                    $guessed_dist = $dists{$previous_dist} . '-backports';
+                } else {
+                    $guessed_dist = $dists{$previous_dist};
+                }
+            } elsif ($opt_s) {
+                    $guessed_dist = $dists{$latest_dist} . '-security';
+            } else {
+                # Fallback to using the previous distribution
+                $guessed_dist = $changelog->{Distribution};
+            }
 		}
 
 
