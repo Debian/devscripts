@@ -15,6 +15,12 @@ devscripts (2.17.12) UNRELEASED; urgency=medium
     .gitignore.
   * Remove trailing whitespace in previous changelog entry.
 
+  [ Antoine Beaupré ]
+  * debchange:
+    + Refactor and unify version information.
+    + Add support for uploads to Debian LTS with the new --lts flag.
+      Closes: #762715
+
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 30 Oct 2017 07:48:10 +0100
 
 devscripts (2.17.11) unstable; urgency=medium
