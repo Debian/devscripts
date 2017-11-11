@@ -611,11 +611,11 @@ my $VERSION = 'VERSION';
 my $MAINTAINER = 'MAINTAINER';
 my $EMAIL = 'EMAIL';
 my $DISTRIBUTION = 'UNRELEASED';
-my $bpo_dist = '';
-my %bpo_dists = ( 60, 'squeeze', 70, 'wheezy', 8, 'jessie', 9, 'stretch' );
-my $stable_dist = '';
-my %stable_dists = ( 8, 'jessie', 9, 'stretch' );
+# when updating the lines below also update the help text, the manpage and the testcases.
+my %dists = ( 60, 'squeeze', 70, 'wheezy', 7, 'wheezy', 8, 'jessie', 9, 'stretch' );
 my $latest_dist = '9';
+# dist guessed from backports, SRU, security uploads...
+my $guessed_dist = '';
 my $CHANGES = '';
 # Changelog urgency, possibly propogated to NEWS files
 my $CL_URGENCY = '';
@@ -1168,31 +1168,25 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 		    $end++;
 		}
 
-		# Attempt to set the distribution for a backport correctly
-		# based on the version of the previous backport
-		if ($opt_bpo) {
-		    my $previous_dist = $start;
-		    $previous_dist =~ s/^.*~bpo(\d+)\+$/$1/;
-		    if (defined $previous_dist and defined
-			$bpo_dists{$previous_dist}) {
-			$bpo_dist = $bpo_dists{$previous_dist} . '-backports';
-		    } else {
-			# Fallback to using the previous distribution
-			$bpo_dist = $changelog->{Distribution};
-		    }
-		}
-
 		# Attempt to set the distribution for a stable upload correctly
 		# based on the version of the previous upload
-		if ($opt_stable) {
+		if ($opt_stable || $opt_bpo || $opt_s) {
 		    my $previous_dist = $start;
-		    $previous_dist =~ s/^.*+deb(\d+)u$/$1/;
+		    $previous_dist =~ s/^.*[+~]deb(\d+)u$/$1/;
 		    if (defined $previous_dist and defined
-			$stable_dists{$previous_dist}) {
-			$stable_dist = $stable_dists{$previous_dist};
-		    } else {
+			$dists{$previous_dist}) {
+                        if ($opt_s) {
+                            $guessed_dist = $dists{$previous_dist} . '-security';
+                        } elsif ($opt_bpo) {
+                            $guessed_dist = $dists{$previous_dist} . '-backports';
+                        } else {
+                            $guessed_dist = $dists{$previous_dist};
+                        }
+                    } elsif ($opt_s) {
+                        $guessed_dist = $dists{$latest_dist} . '-security';
+                    } else {
 			# Fallback to using the previous distribution
-			$stable_dist = $changelog->{Distribution};
+			$guessed_dist = $changelog->{Distribution};
 		    }
 		}
 
@@ -1231,12 +1225,12 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
     }
 
     if ($opt_bpo) {
-	$bpo_dist ||= $bpo_dists{$latest_dist} . '-backports';
+	$guessed_dist ||= $dists{$latest_dist} . '-backports';
     }
     if ($opt_stable) {
-	$stable_dist ||= $stable_dists{$latest_dist};
+	$guessed_dist ||= $dists{$latest_dist};
     }
-    my $distribution = $opt_D || $bpo_dist || $stable_dist || (($opt_release_heuristic eq 'changelog') ? "UNRELEASED" : $DISTRIBUTION);
+    my $distribution = $opt_D || $guessed_dist || (($opt_release_heuristic eq 'changelog') ? "UNRELEASED" : $DISTRIBUTION);
 
     my $urgency = $opt_u;
     if ($opt_news) {
@@ -1275,7 +1269,7 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 	    print O "  * Team upload.\n";
 	    $line = 1;
 	} elsif ($opt_bpo && ! $opt_news) {
-	    print O "  * Rebuild for $bpo_dist.\n";
+	    print O "  * Rebuild for $guessed_dist.\n";
 	    $line = 1;
 	}
 	if (@closes_text or $TEXT or $EMPTY_TEXT) {
@@ -1334,11 +1328,11 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
 	    else {
 		my $tmpver = $1;
 		$tmpver =~ s/^\s+//;
-		if ($tmpver =~ m/~bpo(\d+)\+/ && exists $bpo_dists{$1}) {
-		    $dist_indicator = "$bpo_dists{$1}-backports";
+		if ($tmpver =~ m/~bpo(\d+)\+/ && exists $dists{$1}) {
+		    $dist_indicator = "$dists{$1}-backports";
 		}
-		if ($tmpver =~ m/\+deb(\d+)u/ && exists $stable_dists{$1}) {
-		    $dist_indicator = "$stable_dists{$1}";
+		if ($tmpver =~ m/\+deb(\d+)u/ && exists $dists{$1}) {
+		    $dist_indicator = "$dists{$1}";
 		}
 	    }
 	}
