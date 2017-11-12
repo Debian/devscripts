@@ -495,9 +495,9 @@ if (defined $opt_D) {
 		$oldstable_backports = ", " . $oldstable_backports if $oldstable_backports;
 		warn "$progname warning: Recognised distributions are: \n"
 		     . "experimental, unstable, testing, stable, oldstable, oldoldstable,\n"
-                     . "{bullseye,buster,stretch,jessie,wheezy}-proposed-updates,\n"
+		     . "{bullseye,buster,stretch,jessie,wheezy}-proposed-updates,\n"
 		     . "{testing,stable,oldstable,oldoldstable}-proposed-updates,\n"
-                     . "{bullseye,buster,stretch,jessie,wheezy}-security,\n"
+		     . "{bullseye,buster,stretch,jessie,wheezy}-security,\n"
 		     . "{testing,stable,oldstable,oldoldstable}}-security$oldstable_backports$stable_backports and UNRELEASED.\n"
 		     . "Using your request anyway.\n";
 		$warnings++ if not $opt_force_dist;
@@ -546,13 +546,13 @@ fatal "--package cannot be used when creating a NEWS file"
 
 if ($opt_create) {
     if ($opt_a || $opt_i || $opt_e || $opt_r || $opt_b || $opt_n || $opt_bn ||
-            $opt_qa || $opt_R || $opt_s || $opt_lts || $opt_team || $opt_bpo ||
-            $opt_stable || $opt_l || $opt_allow_lower) {
-        warn "$progname warning: ignoring -a/-i/-e/-r/-b/--allow-lower-version/-n/--bin-nmu/-q/--qa/-R/-s/--lts/--team/--bpo/--stable,-l options with --create\n";
-        $warnings++;
+	    $opt_qa || $opt_R || $opt_s || $opt_lts || $opt_team || $opt_bpo ||
+	    $opt_stable || $opt_l || $opt_allow_lower) {
+	warn "$progname warning: ignoring -a/-i/-e/-r/-b/--allow-lower-version/-n/--bin-nmu/-q/--qa/-R/-s/--lts/--team/--bpo/--stable,-l options with --create\n";
+	$warnings++;
     }
     if ($opt_package && $opt_d) {
-        fatal "Can only use one of --package and -d";
+	fatal "Can only use one of --package and -d";
     }
 }
 
@@ -968,7 +968,7 @@ if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r &&
 	my @UPFILES = glob("../$PACKAGE\_$SVERSION\_*.upload");
 	if (@UPFILES > 1) {
 	    fatal "Found more than one appropriate .upload file!\n" .
-	        "Please use an explicit -a, -i or -v option instead.";
+		"Please use an explicit -a, -i or -v option instead.";
 	}
 	elsif (@UPFILES == 0) { $opt_a = 1 }
 	else {
@@ -1132,10 +1132,10 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_lts || $
 		$start = "$upstream_version-$debian_revision";
 		$end = "";
 	    } elsif ($opt_R and $vendor eq 'Ubuntu' and
-	             not $start =~ /build/ and not $start =~ /ubuntu/) {
+		     not $start =~ /build/ and not $start =~ /ubuntu/) {
 		$end .= "build1";
 	    } elsif ($opt_R and $vendor eq 'Tanglu' and
-	             not "$start$end" =~ /(b\d+)$/ and not $start =~ /tanglu/) {
+		     not "$start$end" =~ /(b\d+)$/ and not $start =~ /tanglu/) {
 		$end .= "b1";
 	    } elsif ($opt_bpo and not $start =~ /~bpo[0-9]+\+$/) {
 		# If it's not already a backport make it so
@@ -1143,9 +1143,9 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_lts || $
 		$end .= "~bpo$latest_dist+1";
 	    } elsif ($opt_stable and not $start =~ /\+deb\d+u/) {
 		$end .= "+deb${latest_dist}u1";
-            } elsif ($opt_lts and not $start =~ /\+deb\d+u/) {
-                $end .= "+deb${lts_dist}u1";
-                $guessed_dist = $dists{$lts_dist} . '-security';
+	    } elsif ($opt_lts and not $start =~ /\+deb\d+u/) {
+		$end .= "+deb${lts_dist}u1";
+		$guessed_dist = $dists{$lts_dist} . '-security';
 	    } elsif ($opt_l and not $start =~ /\Q$opt_l\E/) {
 		# If it's not already a local package make it so
 		# otherwise we can be safe if we behave like dch -i
@@ -1181,21 +1181,21 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_lts || $
 		    my $previous_dist = $start;
 		    $previous_dist =~ s/^.*[+~](?:deb|bpo)(\d+)(?:u\+)$/$1/;
 		    if (defined $previous_dist and defined $dists{$previous_dist}) {
-                if ($opt_s || $opt_lts) {
-                    $guessed_dist = $dists{$previous_dist} . '-security';
-                } elsif ($opt_bpo) {
-                    $guessed_dist = $dists{$previous_dist} . '-backports';
-                } elsif ($opt_stable) {
-                    $guessed_dist = $dists{$previous_dist};
-                }
-            } elsif ($opt_s) {
-                    $guessed_dist = $dists{$latest_dist} . '-security';
-            } elsif ($opt_lts) {
-                    $guessed_dist = $dists{$lts_dist} . '-security';
-            } else {
-                # Fallback to using the previous distribution
-                $guessed_dist = $changelog->{Distribution};
-            }
+			if ($opt_s || $opt_lts) {
+			    $guessed_dist = $dists{$previous_dist} . '-security';
+			} elsif ($opt_bpo) {+
+			    $guessed_dist = $dists{$previous_dist} . '-backports';
+			} elsif ($opt_stable) {
+			    $guessed_dist = $dists{$previous_dist};
+			}
+		    } elsif ($opt_s) {
+			$guessed_dist = $dists{$latest_dist} . '-security';
+		    } elsif ($opt_lts) {
+			$guessed_dist = $dists{$lts_dist} . '-security';
+		    } else {
+			# Fallback to using the previous distribution
+			$guessed_dist = $changelog->{Distribution};
+		    }
 		}
 
 
