@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# vim: set shiftwidth=4 tabstop=8 noexpandtab:
 
 # debchange: update the debian changelog using your favorite visual editor
 # For options, see the usage message below.
