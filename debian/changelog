@@ -21,6 +21,10 @@ devscripts (2.17.12) UNRELEASED; urgency=medium
     + Add support for uploads to Debian LTS with the new --lts flag.
       Closes: #762715
 
+  [ James McCoy ]
+  * grep-excuses:
+    + Show when dependencies are blocking the migration.  (Closes: #881906)
+
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 30 Oct 2017 07:48:10 +0100
 
 devscripts (2.17.11) unstable; urgency=medium

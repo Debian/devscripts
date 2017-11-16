@@ -343,6 +343,17 @@ for my $source (@{$excuses->{sources}})
 		    $age{'age-requirement'});
 	    }
 	}
+	if (exists $source->{dependencies})
+	{
+	    for my $blocker (@{$source->{dependencies}{'blocked-by'}}) {
+		printf("    Depends: %s %s (not considered)\n",
+		    $source->{'item-name'}, $blocker);
+	    }
+	    for my $after (@{$source->{dependencies}{'migrate-after'}}) {
+		printf("    Depends: %s %s\n",
+		    $source->{'item-name'}, $after);
+	    }
+	}
 	for my $excuse (@{$source->{excuses}})
 	{
 	    $excuse =~ s@<a\s[^>]+>@@g;
