@@ -21,6 +21,7 @@
 use 5.006;
 use strict;
 use warnings;
+use Data::Dumper;
 use File::Basename;
 use File::HomeDir;
 
@@ -319,6 +320,7 @@ for my $source (@{$excuses->{sources}})
 	|| (exists $source->{maintainer}
 	    && $source->{maintainer} =~ m/\b\Q$string\E\b/))
     {
+	print DEBUG Dumper($source);
 	printf("%s (%s to %s)\n", $source->{'item-name'},
 	    $source->{'old-version'}, $source->{'new-version'});
 	if (exists $source->{maintainer})
