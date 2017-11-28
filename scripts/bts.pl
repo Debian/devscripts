@@ -155,6 +155,9 @@ my $new_cache_format_version = '2.9.6';
 # The official list is mirrored
 # bugs-mirror.debian.org:/srv/bugs.debian.org/etc/config
 # in the variable @gTags; we copy it verbatim here.
+#
+# Note that it is also in the POD documentation in the bts_tag
+# function below, look for "potato".
 our (@gTags, @valid_tags, %valid_tags);
 @gTags = ( "patch", "wontfix", "moreinfo", "unreproducible", "fixed",
            "potato", "woody", "sid", "help", "security", "upstream",
@@ -1562,8 +1565,20 @@ will remove all tags from the specified I<bug>.
 Adding/removing the B<security> tag will add "team\@security.debian.org"
 to the Cc list of the control email.
 
-=cut
+The list of valid tags and their significance is available at
+L<https://www.debian.org/Bugs/Developer#tags>. The current valid tags
+are:
 
+patch, wontfix, moreinfo, unreproducible, help, newcomer, pending,
+security, upstream, confirmed, fixed, fixed-upstream,
+fixed-in-experimental, d-i, ipv6, lfs, l10n, a11y
+
+There is also a tag for each release of Debian since "potato". Note
+that this list may be out of date, see the website for the most up to
+date source.
+=cut
+# note that the tag list is also in the @gtag variable, look for
+# "potato" above.
 sub bts_tags {
     my $bug=checkbug(shift) or die "bts tags: tag what bug?\n";
     if (! @_) {
