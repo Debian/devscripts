@@ -27,6 +27,11 @@ devscripts (2.17.12) UNRELEASED; urgency=medium
   * grep-excuses:
     + Show when dependencies are blocking the migration.  (Closes: #881906)
 
+  [ Antonio Terceiro ]
+  * uscan:
+    + decode HTTP responses, to support pages that are served encoded with
+      gzip (`Content-Encoding: gzip`)
+
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 30 Oct 2017 07:48:10 +0100
 
 devscripts (2.17.11) unstable; urgency=medium

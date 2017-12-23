@@ -2944,7 +2944,7 @@ sub process_watchline ($$$$$$)
 	    }
 	}
 
-	my $content = $response->content;
+	my $content = $response->decoded_content;
 	uscan_debug "received content:\n$content\n[End of received content] by HTTP\n";
 
 	# pagenmangle: should not abuse this slow operation
