@@ -32,6 +32,9 @@ devscripts (2.17.12) UNRELEASED; urgency=medium
     + decode HTTP responses, to support pages that are served encoded with
       gzip (`Content-Encoding: gzip`)
 
+  [ Christoph Berg ]
+  * debcheckout: Support salsa.debian.org.
+
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 30 Oct 2017 07:48:10 +0100
 
 devscripts (2.17.11) unstable; urgency=medium
