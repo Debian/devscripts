@@ -114,7 +114,7 @@ from the URL, use this package name.
 =item B<-t> I<TYPE>, B<--type> I<TYPE>
 
 Override the repository type (which defaults to some heuristics based
-on the URL or, in case of heuristic failure, the fallback "svn");
+on the URL or, in case of heuristic failure, the fallback "git");
 should be one of the currently supported repository types.
 
 =item B<-u> I<USERNAME>, B<--user> I<USERNAME>
@@ -1030,7 +1030,7 @@ sub main() {
     my $print_mode = 0;	  # print only mode
     my $details_mode = 0;	  # details only mode
     my $use_package = ''; # use this package instead of guessing from the URL
-    my $repo_type = "svn";  # default repo typo, overridden by '-t'
+    my $repo_type = "git";  # default repo typo, overridden by '-t'
     my $repo_url = "";	  # repository URL
     my $anon_repo_url;    # repository URL (before auth mangling)
     my $user = "";	  # login name (authenticated mode only)
