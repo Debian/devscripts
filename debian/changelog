@@ -20,6 +20,10 @@ devscripts (2.17.6+deb9u2) UNRELEASED; urgency=medium
       isn't portable between dash and bash, fixing FTBFS in systems using bash
       as /bin/sh.
 
+  [ Christoph Berg ]
+  * debcheckout:
+    + Support salsa.debian.org.
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 30 Sep 2017 22:19:56 +0200
 
 devscripts (2.17.6+deb9u1) stretch; urgency=medium
