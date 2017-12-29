@@ -43,6 +43,7 @@ devscripts (2.17.12) UNRELEASED; urgency=medium
   * test/uscan_mangle:
     + Use a real newline instead of embedding \n in a shell variable, which
       isn't portable between dash and bash.
+  * Bump debhelper compat level to 11.
 
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 30 Oct 2017 07:48:10 +0100
 
