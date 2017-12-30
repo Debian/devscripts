@@ -1,7 +1,7 @@
-devscripts (2.17.12) UNRELEASED; urgency=medium
+devscripts (2.17.12) unstable; urgency=medium
 
   [ Adam D. Barratt ]
-  * Fix typo in 2.7.11 changelog ("dpkg-bev" -> "dpkg-dev")
+  * Fix typo in 2.7.11 changelog ("dpkg-bev" -> "dpkg-dev").
 
   [ Chris Lamb ]
   * debuild:
@@ -10,9 +10,7 @@ devscripts (2.17.12) UNRELEASED; urgency=medium
     + Support downloading packages through gopher://.  Closes: #880649
 
   [ Axel Beckert ]
-  * Add ltnu (Long Time No Upload).
-  * Add scripts/hardening-check{,.1} and debian/debhelper-build-stamp to
-    .gitignore.
+  * Add new script: ltnu (Long Time No Upload).
   * Remove trailing whitespace in previous changelog entry.
 
   [ Antoine Beaupré ]
@@ -25,12 +23,12 @@ devscripts (2.17.12) UNRELEASED; urgency=medium
 
   [ James McCoy ]
   * grep-excuses:
-    + Show when dependencies are blocking the migration.  (Closes: #881906)
+    + Show when dependencies are blocking the migration.  Closes: #881906
 
   [ Antonio Terceiro ]
   * uscan:
     + decode HTTP responses, to support pages that are served encoded with
-      gzip (`Content-Encoding: gzip`)
+      gzip (`Content-Encoding: gzip`).
 
   [ Christoph Berg ]
   * debcheckout:
@@ -49,7 +47,7 @@ devscripts (2.17.12) UNRELEASED; urgency=medium
     + Add missing build-dependency on fakeroot.
     + Set Rules-Requires-Root: no.
 
- -- Mattia Rizzolo <mattia@debian.org>  Fri, 29 Dec 2017 23:28:05 +0100
+ -- Mattia Rizzolo <mattia@debian.org>  Sat, 30 Dec 2017 23:44:18 +0100
 
 devscripts (2.17.11) unstable; urgency=medium
 
