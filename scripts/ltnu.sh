@@ -22,6 +22,7 @@ far implemented shortcuts:
 
 * pkg-perl = pkg-perl-maintainers@lists.alioth.debian.org
 * pkg-zsh  = pkg-zsh-devel@lists.alioth.debian.org
+* pkg-gnustep = pkg-gnustep-maintainers@lists.alioth.debian.org
 "
     exit 0
 fi
@@ -40,6 +41,8 @@ if [ -n "${1}" ]; then
         MAINT="pkg-perl-maintainers@lists.alioth.debian.org"
     elif [ "${1}" = "pkg-zsh" ]; then
         MAINT="pkg-zsh-devel@lists.alioth.debian.org"
+    elif [ "${1}" = "pkg-gnustep" ]; then
+        MAINT="pkg-gnustep-maintainers@lists.alioth.debian.org"
     elif [ "${1}" = "qa" ]; then
         MAINT="packages@qa.debian.org"
     else
