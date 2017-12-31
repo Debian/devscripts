@@ -37,12 +37,12 @@ MAINT="${DEBEMAIL}"
 if [ -n "${1}" ]; then
     if echo "${1}" | fgrep -q @; then
         MAINT="${1}"
+    elif [ "${1}" = "pkg-gnustep" ]; then
+        MAINT="pkg-gnustep-maintainers@lists.alioth.debian.org"
     elif [ "${1}" = "pkg-perl" ]; then
         MAINT="pkg-perl-maintainers@lists.alioth.debian.org"
     elif [ "${1}" = "pkg-zsh" ]; then
         MAINT="pkg-zsh-devel@lists.alioth.debian.org"
-    elif [ "${1}" = "pkg-gnustep" ]; then
-        MAINT="pkg-gnustep-maintainers@lists.alioth.debian.org"
     elif [ "${1}" = "qa" ]; then
         MAINT="packages@qa.debian.org"
     else
