@@ -1,6 +1,7 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright (C) 2012, Benjamin Drung <bdrung@debian.org>
+#            ©  2017  Mattia Rizzolo <mattia@debian.org>
 #
 # Permission to use, copy, modify, and/or distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -164,6 +165,9 @@ testEncoding() {
     success "-s \"Security upload\""
     verifyMaintainer "dch -s"
 
+    success "-s \"LTS Security upload\""
+    verifyMaintainer "dch --lts"
+
     success "--bpo \"Backports upload\""
     verifyMaintainer "dch --bpo"
 
@@ -194,6 +198,27 @@ testEmptyMessage() {
     verifyEntryLines "--bpo ''"
 
     verifyEntryLines "--team ''"
+}
+
+verifyGuessedDistribution() {
+    # $1 → initial suite
+    # $2 → action
+    # $3 → expected suite after the action
+    rm -f "$CHANGELOG"
+    success "--create -D $1 --package test-package -v 1.0-1 'First upload'"
+    success "$2 'Second Upload'"
+    success "-r ''"
+    local dist="$(dpkg-parsechangelog -l"$CHANGELOG" -SDistribution)"
+    assertEquals "$3" "$dist"
+}
+
+testGuessedDistribution() {
+    verifyGuessedDistribution unstable -i unstable
+    verifyGuessedDistribution experimental -i experimental
+    verifyGuessedDistribution jessie-backports -i jessie-backports
+    verifyGuessedDistribution jessie -i jessie
+    verifyGuessedDistribution unstable --bpo stretch-backports
+    verifyGuessedDistribution unstable --stable stretch
 }
 
 . shunit2

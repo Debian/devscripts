@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# vim: set shiftwidth=4 tabstop=8 noexpandtab:
 
 # debchange: update the debian changelog using your favorite visual editor
 # For options, see the usage message below.
@@ -154,6 +155,8 @@ Options:
          Increment the Debian release number for a no-change rebuild
   -s, --security
          Increment the Debian release number for a Debian Security Team upload
+  --lts
+         Increment the Debian release number for a LTS Security Team upload
   --team
          Increment the Debian release number for a team upload
   -U, --upstream
@@ -231,7 +234,7 @@ Options:
   --version
          Display version information
   At most one of -a, -i, -e, -r, -v, -d, -n, --bin-nmu, -q, --qa, -R, -s,
-  --team, --bpo, --stable, -l (or their long equivalents) may be used.
+  --lts, --team, --bpo, --stable, -l (or their long equivalents) may be used.
   With no options, one of -i or -a is chosen by looking at the release
   specified in the changelog.
 
@@ -351,7 +354,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # with older debchange versions.
 my ($opt_help, $opt_version);
 my ($opt_i, $opt_a, $opt_e, $opt_r, $opt_v, $opt_b, $opt_d, $opt_D, $opt_u, $opt_force_dist);
-my ($opt_n, $opt_bn, $opt_qa, $opt_R, $opt_s, $opt_team, $opt_U, $opt_bpo, $opt_stable, $opt_l, $opt_c, $opt_m, $opt_M, $opt_create, $opt_package, @closes);
+my ($opt_n, $opt_bn, $opt_qa, $opt_R, $opt_s, $opt_lts, $opt_team, $opt_U, $opt_bpo, $opt_stable, $opt_l, $opt_c, $opt_m, $opt_M, $opt_create, $opt_package, @closes);
 my ($opt_news);
 my ($opt_level, $opt_regex, $opt_noconf, $opt_empty);
 
@@ -381,6 +384,7 @@ GetOptions("help|h" => \$opt_help,
 	   "team" => \$opt_team,
 	   "U|upstream" => \$opt_U,
 	   "bpo" => \$opt_bpo,
+           "lts" => \$opt_lts,
 	   "stable" => \$opt_stable,
 	   "l|local=s" => \$opt_l,
 	   "query!" => \$opt_query,
@@ -433,8 +437,8 @@ if (defined $opt_level) {
 if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
 
 # Only allow at most one non-help option
-fatal "Only one of -a, -i, -e, -r, -v, -d, -n/--nmu, --bin-nmu, -q/--qa, -R/--rebuild, -s/--security, --team, --bpo, --stable, -l/--local is allowed;\ntry $progname --help for more help"
-    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) + ($opt_n?1:0) + ($opt_bn?1:0) + ($opt_qa?1:0) + ($opt_R?1:0) + ($opt_s?1:0) + ($opt_team?1:0) + ($opt_bpo?1:0) + ($opt_stable?1:0) + ($opt_l?1:0) > 1;
+fatal "Only one of -a, -i, -e, -r, -v, -d, -n/--nmu, --bin-nmu, -q/--qa, -R/--rebuild, -s/--security, --lts, --team, --bpo, --stable, -l/--local is allowed;\ntry $progname --help for more help"
+    if ($opt_i?1:0) + ($opt_a?1:0) + ($opt_e?1:0) + ($opt_r?1:0) + ($opt_v?1:0) + ($opt_d?1:0) + ($opt_n?1:0) + ($opt_bn?1:0) + ($opt_qa?1:0) + ($opt_R?1:0) + ($opt_s?1:0) + ($opt_lts?1:0) + ($opt_team?1:0) + ($opt_bpo?1:0) + ($opt_stable?1:0) + ($opt_l?1:0) > 1;
 
 if ($opt_s) {
     $opt_u = "high";
@@ -468,7 +472,7 @@ if (defined $opt_vendor && $opt_vendor) {
     }
 }
 $vendor ||= 'Debian';
-if ($vendor eq 'Ubuntu' and ($opt_n or $opt_bn or $opt_qa or $opt_bpo or $opt_stable)) {
+if ($vendor eq 'Ubuntu' and ($opt_n or $opt_bn or $opt_qa or $opt_bpo or $opt_stable or $opt_lts)) {
     $vendor = 'Debian';
 }
 
@@ -492,9 +496,9 @@ if (defined $opt_D) {
 		$oldstable_backports = ", " . $oldstable_backports if $oldstable_backports;
 		warn "$progname warning: Recognised distributions are: \n"
 		     . "experimental, unstable, testing, stable, oldstable, oldoldstable,\n"
-                     . "{bullseye,buster,stretch,jessie,wheezy}-proposed-updates,\n"
+		     . "{bullseye,buster,stretch,jessie,wheezy}-proposed-updates,\n"
 		     . "{testing,stable,oldstable,oldoldstable}-proposed-updates,\n"
-                     . "{bullseye,buster,stretch,jessie,wheezy}-security,\n"
+		     . "{bullseye,buster,stretch,jessie,wheezy}-security,\n"
 		     . "{testing,stable,oldstable,oldoldstable}}-security$oldstable_backports$stable_backports and UNRELEASED.\n"
 		     . "Using your request anyway.\n";
 		$warnings++ if not $opt_force_dist;
@@ -543,13 +547,13 @@ fatal "--package cannot be used when creating a NEWS file"
 
 if ($opt_create) {
     if ($opt_a || $opt_i || $opt_e || $opt_r || $opt_b || $opt_n || $opt_bn ||
-            $opt_qa || $opt_R || $opt_s || $opt_team || $opt_bpo ||
-            $opt_stable || $opt_l || $opt_allow_lower) {
-        warn "$progname warning: ignoring -a/-i/-e/-r/-b/--allow-lower-version/-n/--bin-nmu/-q/--qa/-R/-s/--team/--bpo/--stable,-l options with --create\n";
-        $warnings++;
+	    $opt_qa || $opt_R || $opt_s || $opt_lts || $opt_team || $opt_bpo ||
+	    $opt_stable || $opt_l || $opt_allow_lower) {
+	warn "$progname warning: ignoring -a/-i/-e/-r/-b/--allow-lower-version/-n/--bin-nmu/-q/--qa/-R/-s/--lts/--team/--bpo/--stable,-l options with --create\n";
+	$warnings++;
     }
     if ($opt_package && $opt_d) {
-        fatal "Can only use one of --package and -d";
+	fatal "Can only use one of --package and -d";
     }
 }
 
@@ -611,11 +615,12 @@ my $VERSION = 'VERSION';
 my $MAINTAINER = 'MAINTAINER';
 my $EMAIL = 'EMAIL';
 my $DISTRIBUTION = 'UNRELEASED';
-my $bpo_dist = '';
-my %bpo_dists = ( 60, 'squeeze', 70, 'wheezy', 8, 'jessie', 9, 'stretch' );
-my $stable_dist = '';
-my %stable_dists = ( 8, 'jessie', 9, 'stretch' );
+# when updating the lines below also update the help text, the manpage and the testcases.
+my %dists = ( 60, 'squeeze', 70, 'wheezy', 7, 'wheezy', 8, 'jessie', 9, 'stretch' );
+my $lts_dist = '7';
 my $latest_dist = '9';
+# dist guessed from backports, SRU, security uploads...
+my $guessed_dist = '';
 my $CHANGES = '';
 # Changelog urgency, possibly propogated to NEWS files
 my $CL_URGENCY = '';
@@ -820,7 +825,7 @@ if ($opt_M) {
 
 #####
 
-if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and
+if ($opt_auto_nmu eq 'yes' and ! $opt_v and ! $opt_l and ! $opt_s and ! $opt_lts and
     ! $opt_team and ! $opt_qa and ! $opt_R and ! $opt_bpo and ! $opt_bn and
     ! $opt_n and ! $opt_c and ! $opt_stable and
     ! (exists $ENV{'CHANGELOG'} and length $ENV{'CHANGELOG'}) and ! $opt_M and
@@ -957,14 +962,14 @@ if ($opt_news && !$opt_i && !$opt_a) {
 
 # Are we going to have to figure things out for ourselves?
 if (! $opt_i && ! $opt_v && ! $opt_d && ! $opt_a && ! $opt_e && ! $opt_r &&
-    ! $opt_n && ! $opt_bn && ! $opt_qa && ! $opt_R && ! $opt_s && ! $opt_team &&
+    ! $opt_n && ! $opt_bn && ! $opt_qa && ! $opt_R && ! $opt_s && !$opt_lts && ! $opt_team &&
     ! $opt_bpo && ! $opt_stable && ! $opt_l && ! $opt_create) {
     # Yes, we are
     if ($opt_release_heuristic eq 'log') {
 	my @UPFILES = glob("../$PACKAGE\_$SVERSION\_*.upload");
 	if (@UPFILES > 1) {
 	    fatal "Found more than one appropriate .upload file!\n" .
-	        "Please use an explicit -a, -i or -v option instead.";
+		"Please use an explicit -a, -i or -v option instead.";
 	}
 	elsif (@UPFILES == 0) { $opt_a = 1 }
 	else {
@@ -1034,7 +1039,7 @@ my $line;
 my $optionsok=0;
 my $merge=0;
 
-if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
+if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_lts || $opt_team ||
      $opt_bpo || $opt_stable || $opt_l || $opt_v || $opt_d ||
     ($opt_news && $VERSION ne $changelog->{Version})) && ! $opt_create) {
 
@@ -1128,10 +1133,10 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 		$start = "$upstream_version-$debian_revision";
 		$end = "";
 	    } elsif ($opt_R and $vendor eq 'Ubuntu' and
-	             not $start =~ /build/ and not $start =~ /ubuntu/) {
+		     not $start =~ /build/ and not $start =~ /ubuntu/) {
 		$end .= "build1";
 	    } elsif ($opt_R and $vendor eq 'Tanglu' and
-	             not "$start$end" =~ /(b\d+)$/ and not $start =~ /tanglu/) {
+		     not "$start$end" =~ /(b\d+)$/ and not $start =~ /tanglu/) {
 		$end .= "b1";
 	    } elsif ($opt_bpo and not $start =~ /~bpo[0-9]+\+$/) {
 		# If it's not already a backport make it so
@@ -1139,6 +1144,9 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 		$end .= "~bpo$latest_dist+1";
 	    } elsif ($opt_stable and not $start =~ /\+deb\d+u/) {
 		$end .= "+deb${latest_dist}u1";
+	    } elsif ($opt_lts and not $start =~ /\+deb\d+u/) {
+		$end .= "+deb${lts_dist}u1";
+		$guessed_dist = $dists{$lts_dist} . '-security';
 	    } elsif ($opt_l and not $start =~ /\Q$opt_l\E/) {
 		# If it's not already a local package make it so
 		# otherwise we can be safe if we behave like dch -i
@@ -1168,31 +1176,26 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 		    $end++;
 		}
 
-		# Attempt to set the distribution for a backport correctly
-		# based on the version of the previous backport
-		if ($opt_bpo) {
-		    my $previous_dist = $start;
-		    $previous_dist =~ s/^.*~bpo(\d+)\+$/$1/;
-		    if (defined $previous_dist and defined
-			$bpo_dists{$previous_dist}) {
-			$bpo_dist = $bpo_dists{$previous_dist} . '-backports';
-		    } else {
-			# Fallback to using the previous distribution
-			$bpo_dist = $changelog->{Distribution};
-		    }
-		}
-
 		# Attempt to set the distribution for a stable upload correctly
 		# based on the version of the previous upload
-		if ($opt_stable) {
+		if ($opt_stable || $opt_bpo || $opt_s || $opt_lts) {
 		    my $previous_dist = $start;
-		    $previous_dist =~ s/^.*+deb(\d+)u$/$1/;
-		    if (defined $previous_dist and defined
-			$stable_dists{$previous_dist}) {
-			$stable_dist = $stable_dists{$previous_dist};
+		    $previous_dist =~ s/^.*[+~](?:deb|bpo)(\d+)(?:u\+)$/$1/;
+		    if (defined $previous_dist and defined $dists{$previous_dist}) {
+			if ($opt_s || $opt_lts) {
+			    $guessed_dist = $dists{$previous_dist} . '-security';
+			} elsif ($opt_bpo) {+
+			    $guessed_dist = $dists{$previous_dist} . '-backports';
+			} elsif ($opt_stable) {
+			    $guessed_dist = $dists{$previous_dist};
+			}
+		    } elsif ($opt_s) {
+			$guessed_dist = $dists{$latest_dist} . '-security';
+		    } elsif ($opt_lts) {
+			$guessed_dist = $dists{$lts_dist} . '-security';
 		    } else {
 			# Fallback to using the previous distribution
-			$stable_dist = $changelog->{Distribution};
+			$guessed_dist = $changelog->{Distribution};
 		    }
 		}
 
@@ -1231,12 +1234,12 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
     }
 
     if ($opt_bpo) {
-	$bpo_dist ||= $bpo_dists{$latest_dist} . '-backports';
+	$guessed_dist ||= $dists{$latest_dist} . '-backports';
     }
     if ($opt_stable) {
-	$stable_dist ||= $stable_dists{$latest_dist};
+	$guessed_dist ||= $dists{$latest_dist};
     }
-    my $distribution = $opt_D || $bpo_dist || $stable_dist || (($opt_release_heuristic eq 'changelog') ? "UNRELEASED" : $DISTRIBUTION);
+    my $distribution = $opt_D || $guessed_dist || (($opt_release_heuristic eq 'changelog') ? "UNRELEASED" : $DISTRIBUTION);
 
     my $urgency = $opt_u;
     if ($opt_news) {
@@ -1271,11 +1274,14 @@ if (($opt_i || $opt_n || $opt_bn || $opt_qa || $opt_R || $opt_s || $opt_team ||
 		print O "  * Non-maintainer upload by the Security Team.\n";
 	    }
 	    $line = 1;
+	} elsif ($opt_lts && ! $opt_news) {
+		print O "  * Non-maintainer upload by the LTS Security Team.\n";
+		$line = 1;
 	} elsif ($opt_team && ! $opt_news) {
 	    print O "  * Team upload.\n";
 	    $line = 1;
 	} elsif ($opt_bpo && ! $opt_news) {
-	    print O "  * Rebuild for $bpo_dist.\n";
+	    print O "  * Rebuild for $guessed_dist.\n";
 	    $line = 1;
 	}
 	if (@closes_text or $TEXT or $EMPTY_TEXT) {
@@ -1334,11 +1340,11 @@ if (($opt_r || $opt_a || $merge) && ! $opt_create) {
 	    else {
 		my $tmpver = $1;
 		$tmpver =~ s/^\s+//;
-		if ($tmpver =~ m/~bpo(\d+)\+/ && exists $bpo_dists{$1}) {
-		    $dist_indicator = "$bpo_dists{$1}-backports";
+		if ($tmpver =~ m/~bpo(\d+)\+/ && exists $dists{$1}) {
+		    $dist_indicator = "$dists{$1}-backports";
 		}
-		if ($tmpver =~ m/\+deb(\d+)u/ && exists $stable_dists{$1}) {
-		    $dist_indicator = "$stable_dists{$1}";
+		if ($tmpver =~ m/\+deb(\d+)u/ && exists $dists{$1}) {
+		    $dist_indicator = "$dists{$1}";
 		}
 	    }
 	}

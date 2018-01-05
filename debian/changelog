@@ -1,3 +1,54 @@
+devscripts (2.17.12) unstable; urgency=medium
+
+  [ Adam D. Barratt ]
+  * Fix typo in 2.7.11 changelog ("dpkg-bev" -> "dpkg-dev").
+
+  [ Chris Lamb ]
+  * debuild:
+    + Print the actual arguments we make to lintian.  Closes: #880124
+  * dget:
+    + Support downloading packages through gopher://.  Closes: #880649
+
+  [ Axel Beckert ]
+  * Add new script: ltnu (Long Time No Upload).
+  * Remove trailing whitespace in previous changelog entry.
+
+  [ Antoine Beaupré ]
+  * debchange:
+    + Refactor and unify version information.
+    + Add support for uploads to Debian LTS with the new --lts flag.
+      Closes: #762715
+  * bts:
+    + Add list of tags to documentation.  Closes: #883658
+
+  [ James McCoy ]
+  * grep-excuses:
+    + Show when dependencies are blocking the migration.  Closes: #881906
+
+  [ Antonio Terceiro ]
+  * uscan:
+    + decode HTTP responses, to support pages that are served encoded with
+      gzip (`Content-Encoding: gzip`).
+
+  [ Christoph Berg ]
+  * debcheckout:
+    + Support salsa.debian.org.
+    + Set "git" as default repository type so https:// URLs use it.
+
+  [ Mattia Rizzolo ]
+  * debdiff-apply:
+    + Avoid using Python bare exceptions, to appease flake8's E722.
+  * test/uscan_mangle:
+    + Use a real newline instead of embedding \n in a shell variable, which
+      isn't portable between dash and bash.
+  * Bump debhelper compat level to 11.
+  * debian/control:
+    + Bump Standards-Version to 4.1.3, no changes needed.
+    + Add missing build-dependency on fakeroot.
+    + Set Rules-Requires-Root: no.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Sat, 30 Dec 2017 23:44:18 +0100
+
 devscripts (2.17.11~bpo9+1) stretch-backports; urgency=medium
 
   * Rebuild for stretch-backports.
@@ -13,10 +64,10 @@ devscripts (2.17.11) unstable; urgency=medium
   * debuild:
     + Support newer and long dpkg-buildpackage options --no-sign,
       --unsigned-source, --unsigned-changes, -ui and --unsigned-buildinfo,
-      therefore bumping the dpkg-bev dependency to version to 1.18.19.
+      therefore bumping the dpkg-dev dependency to version to 1.18.19.
       Closes: #876024
   * debian/control:
-    + Remov Martin Zobel-Helas, Patrick Schoenfeld and Benjamin Drung
+    + Remove Martin Zobel-Helas, Patrick Schoenfeld and Benjamin Drung
       from Uploaders after asking them.
       Thanks for all your contributions!
   * uscan:
@@ -145,7 +196,7 @@ devscripts (2.17.10) unstable; urgency=medium
     + Rename and convert the detached signature. Closes: #832267, #837173,
       #870281
     + Skip upstream signature when repacking.  Closes: #874667
-  * uupdate 
+  * uupdate
     + -b option is not "New upstream release". Closes: #842468, #845610
     + Use space as the argument of debchange to create an empty entry
       template.

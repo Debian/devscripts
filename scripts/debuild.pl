@@ -1055,8 +1055,9 @@ else {
     if ($run_lintian && $lintian_exists) {
 	$<=$>=$uid;  # Give up on root privileges if we can
 	$(=$)=$gid;
-	print "Now running lintian...\n";
-	system('lintian', @lintian_extra_opts, @lintian_opts, $changes);
+	my @lintian = ('lintian', @lintian_extra_opts, @lintian_opts, $changes);
+	print "Now running @lintian ...\n";
+	system(@lintian);
 	print "Finished running lintian.\n";
     }
 

@@ -102,7 +102,7 @@ def apply_dch_patch(source_file, current, patch_name, old_version, target, dry_r
         with open(source_file + ".new", "w") as fp:
             current.write_to_open_file(fp)
         os.rename(source_file + ".new", source_file)
-    except:
+    except Exception:
         logging.warn("failed to patch %s", source_file)
         logging.warn("half-applied changes in %s", source_file + ".new")
         logging.warn("current working directory is %s", os.getcwd())
@@ -261,7 +261,7 @@ def main(args):
         try:
             patch = unidiff.PatchSet(data.splitlines(keepends=True), encoding=enc)
             break
-        except:
+        except Exception:
             if enc == TRY_ENCODINGS[-1]:
                 raise
             else:

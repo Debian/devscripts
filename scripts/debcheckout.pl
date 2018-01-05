@@ -74,13 +74,13 @@ B<GENERAL OPTIONS>
 =item B<-a>, B<--auth>
 
 Work in authenticated mode; this means that for known repositories (mainly those
-hosted on S<I<https://alioth.debian.org>>) URL rewriting is attempted before
+hosted on S<I<https://salsa.debian.org>>) URL rewriting is attempted before
 checking out, to ensure that the repository can be committed to. For example,
-for Subversion repositories hosted on alioth this means that
-S<I<svn+ssh://svn.debian.org/...>> will be used instead of
-S<I<svn://svn.debian.org/...>>.
+for Git repositories hosted on Salsa this means that
+S<I<git@salsa.debian.org:...git>> will be used instead of
+S<I<https://salsa.debian.org/...git>>.
 
-There are built-in rules for alioth.debian.org and github.com. Other hosts
+There are built-in rules for salsa.debian.org, alioth.debian.org and github.com. Other hosts
 can be configured using B<DEBCHECKOUT_AUTH_URLS>.
 
 =item B<-d>, B<--details>
@@ -114,7 +114,7 @@ from the URL, use this package name.
 =item B<-t> I<TYPE>, B<--type> I<TYPE>
 
 Override the repository type (which defaults to some heuristics based
-on the URL or, in case of heuristic failure, the fallback "svn");
+on the URL or, in case of heuristic failure, the fallback "git");
 should be one of the currently supported repository types.
 
 =item B<-u> I<USERNAME>, B<--user> I<USERNAME>
@@ -198,9 +198,9 @@ for authenticated mode (see B<-a>) have failed.
 References to matching substrings in the replacement texts are
 allowed as usual in Perl by the means of B<$1>, B<$2>, ... and so on.
 
-This setting can be used to enable authenticated mode for most repositories
-out there.  Note that the Debian repositories on S<alioth.debian.org>
-(S<$vcs.debian.org>) are implicitly defined.
+This setting is used to configure the "authenticated mode" location for
+repositories. The Debian repositories on S<salsa.debian.org> are implicitly
+defined, as is S<github.com>.
 
 Here is a sample snippet suitable for the configuration files:
 
@@ -439,7 +439,7 @@ sub user_set_auth($$) {
 }
 
 # Patch a given repository URL to ensure that the checked out out repository
-# can be committed to. Only works for well known repositories (mainly Alioth's).
+# can be committed to. Only works for well known repositories (mainly Salsa's).
 sub set_auth($$$$) {
     my ($repo_type, $url, $user, $dont_act) = @_;
 
@@ -450,7 +450,7 @@ sub set_auth($$$$) {
     $user_local =~ s|(.*)(@)|$1|;
     my $user_url = $url;
 
-    # Adjust urls from new-style anonymous access to old-style and then deal
+    # Adjust alioth urls from new-style anonymous access to old-style and then deal
     # with adjusting for authentication on alioth
     $url =~ s@(?:alioth\.debian\.org/(?:anonscm/bzr|scm/loggerhead/bzr)|anonscm\.debian\.org/bzr(?:/bzr)?)@bzr.debian.org/bzr@;
     $url =~ s@(?:alioth\.debian\.org/anonscm/darcs|anonscm\.debian\.org/darcs)@darcs.debian.org/darcs@;
@@ -478,7 +478,8 @@ sub set_auth($$$$) {
 	    }
 	}
 	when ("git") {
-	    if ($url =~ m%(/users/|~)%) {
+	    if ($url =~ s!^https://salsa.debian.org/!git\@salsa.debian.org:!) {
+	    } elsif ($url =~ m%(/users/|~)%) {
 		$user_url =~ s|^\w+://(git\.debian\.org)/git/users/(.*?)/.*|$2|;
 		$user_url =~ s|^\w+://(git\.debian\.org)/~(.*?)/.*|$2|;
 
@@ -505,7 +506,7 @@ sub set_auth($$$$) {
     if ($url eq $old_url) { # last attempt: try with user-defined rules
 	$url = user_set_auth($repo_type, $url);
     }
-    die "can't use authenticated mode on repository '$url' since it is not a known repository (e.g. alioth)\n"
+    die "can't use authenticated mode on repository '$url' since it is not a known repository (e.g. salsa.debian.org)\n"
 	if $url eq $old_url;
     return $url;
 }
@@ -1029,7 +1030,7 @@ sub main() {
     my $print_mode = 0;	  # print only mode
     my $details_mode = 0;	  # details only mode
     my $use_package = ''; # use this package instead of guessing from the URL
-    my $repo_type = "svn";  # default repo typo, overridden by '-t'
+    my $repo_type = "git";  # default repo typo, overridden by '-t'
     my $repo_url = "";	  # repository URL
     my $anon_repo_url;    # repository URL (before auth mangling)
     my $user = "";	  # login name (authenticated mode only)

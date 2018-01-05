@@ -1,0 +1,94 @@
+=head1 NAME
+
+ltnu - lists packages of a maintainer ordered by last upload
+
+=head1 SYNOPSIS
+
+B<env> DEBEMAIL=I<maintainer> B<ltnu>
+
+B<ltnu> I<maintainer>
+
+B<ltnu> --help
+
+=head1 DESCRIPTION
+
+B<ltnu> (Long Time No Upload) queries the public mirror of the
+Ultimate Debian Database (udd-mirror.debian.net) for all uploads of
+packages by the given uploader or maintainer and displays them ordered
+by the last upload of that package to Debian Unstable, oldest uploads
+first.
+
+Its primary purpose is to check which of your own or your team's
+packages haven't been uploaded for a long time and likely need a
+packaging revamp. It's less suitable for MIA team purposes as it
+doesn't make a difference with regards to who actually uploaded a
+package.
+
+=head1 PARAMETERS
+
+The maintainer/uploader to query can be given either by setting
+C<$DEBEMAIL> as environment variable or as single commandline parameter.
+
+If a commandline parameter does not contain an C<@>, C<@debian.org> is
+appended, e.g. C<ltnu abe> queries for C<abe@debian.org>.
+
+Exceptions are some shortcuts for common, long e-mail addresses. So
+far implemented shortcuts:
+
+=over 10
+
+=item pkg-perl
+
+pkg-perl-maintainers@lists.alioth.debian.org
+
+=item pkg-zsh
+
+pkg-zsh-devel@lists.alioth.debian.org
+
+=item qa
+
+packages@qa.debian.org
+
+=back
+
+=head1 ENVIRONMENT
+
+The following environment variables are honoured:
+
+=over
+
+=item DEBEMAIL
+
+Used for querying if no parameter is given.
+
+=item PAGER
+
+Used by B<psql> as pager.
+
+=back
+
+=head1 EXAMPLE
+
+    $ ltnu pkg-zsh
+             source          |     ver      |        uploaded
+    -------------------------+--------------+------------------------
+     zgen                    | 0~20150919-3 | 2016-08-24 04:55:31+00
+     zplug                   | 2.4.1-1      | 2017-01-13 09:51:26+00
+     zsh-syntax-highlighting | 0.6.0-1      | 2017-08-30 09:06:26+00
+     zsh                     | 5.4.2-2      | 2017-11-02 20:56:55+00
+    (4 rows)
+
+=head1 DEPENDENCIES
+
+B<ltnu> uses the PostgreSQL client command B<psql> and hence needs
+Debian's B<postgresql-client> package to be installed.
+
+=head1 AUTHOR, COPYRIGHT, LICENSE
+
+Copyright 2017 Axel Beckert <L<abe@debian.org>>. Licensed under the GNU
+General Public License, version 2 or later.
+
+=head1 SEE ALSO
+
+L<https://udd-mirror.debian.net/>, L<https://udd.debian.org/>,
+L<https://wiki.debian.org/UltimateDebianDatabase>

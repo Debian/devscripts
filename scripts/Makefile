@@ -28,7 +28,7 @@ PKGNAMES:=wnpp-alert wnpp-check mk-build-deps rmadison mass-bug debsnap dd-list 
 # also update the list in setup.py
 PYTHON3_SCRIPTS:=debdiff-apply sadt suspicious-source wrap-and-sort reproducible-check
 
-GEN_MAN1S += debrepro.1 devscripts.1 mk-origtargz.1 uscan.1 reproducible-check.1
+GEN_MAN1S += debrepro.1 devscripts.1 ltnu.1 mk-origtargz.1 uscan.1 reproducible-check.1
 
 all: $(SCRIPTS) $(GEN_MAN1S) $(CWRAPPERS) $(COMPLETION)
 

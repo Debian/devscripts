@@ -21,6 +21,7 @@
 use 5.006;
 use strict;
 use warnings;
+use Data::Dumper;
 use File::Basename;
 use File::HomeDir;
 
@@ -319,6 +320,7 @@ for my $source (@{$excuses->{sources}})
 	|| (exists $source->{maintainer}
 	    && $source->{maintainer} =~ m/\b\Q$string\E\b/))
     {
+	print DEBUG Dumper($source);
 	printf("%s (%s to %s)\n", $source->{'item-name'},
 	    $source->{'old-version'}, $source->{'new-version'});
 	if (exists $source->{maintainer})
@@ -339,6 +341,17 @@ for my $source (@{$excuses->{sources}})
 		printf("    Too young, only %d of %d days old\n",
 		    $age{'current-age'},
 		    $age{'age-requirement'});
+	    }
+	}
+	if (exists $source->{dependencies})
+	{
+	    for my $blocker (@{$source->{dependencies}{'blocked-by'}}) {
+		printf("    Depends: %s %s (not considered)\n",
+		    $source->{'item-name'}, $blocker);
+	    }
+	    for my $after (@{$source->{dependencies}{'migrate-after'}}) {
+		printf("    Depends: %s %s\n",
+		    $source->{'item-name'}, $after);
 	    }
 	}
 	for my $excuse (@{$source->{excuses}})
