@@ -1576,7 +1576,9 @@ fixed-in-experimental, d-i, ipv6, lfs, l10n, a11y
 There is also a tag for each release of Debian since "potato". Note
 that this list may be out of date, see the website for the most up to
 date source.
+
 =cut
+
 # note that the tag list is also in the @gtag variable, look for
 # "potato" above.
 sub bts_tags {
