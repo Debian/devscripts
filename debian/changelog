@@ -12,6 +12,9 @@ devscripts (2.18.1) UNRELEASED; urgency=medium
   * bts:
     + Fix syntax issue in the POD documentation, so it can be built with an
       older pod as well.
+  * ltnu:
+    + Avoid using L<> with emails in the POD documentation, so it can be built
+      with an older pod as well.
 
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 03 Jan 2018 14:31:54 +0100
 
