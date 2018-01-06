@@ -4,6 +4,9 @@ devscripts (2.17.12~bpo9+1) stretch-backports; urgency=medium
   * bts:
     + Fix syntax issue in the POD documentation, so it can be built with an
       older pod as well.
+  * ltnu:
+    + Avoid using L<> with emails in the POD documentation, so it can be built
+      with an older pod as well.
 
  -- Mattia Rizzolo <mattia@debian.org>  Fri, 05 Jan 2018 11:49:06 +0100
 
