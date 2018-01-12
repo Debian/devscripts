@@ -138,7 +138,10 @@ of the space before the tailing single B<\> is significant.)
 
 =back
 
-This is required.
+This is a required line and the recommended version number.
+
+If you use "B<version=3>" instead here, many features may not work as
+documented here.  See L<HISTORY AND UPGRADING>.
 
 =item * The following non-comment lines (watch lines) specify the rules for the
 selection of the candidate upstream tarball URLs and are in one of the
