@@ -475,10 +475,17 @@ Substitution such as B<s/PRE/~pre/; s/RC/~rc/> may help.
 
 Syntactic shorthand for B<uversionmangle=>I<rules>B<, dversionmangle=>I<rules>
 
+=item B<hrefdecode=percent-encoding>
+
+Convert the selected upstream tarball href string from the percent-encoded
+hexadecimal string to the decoded normal URL string for obfuscated web sites.
+Only B<percent-encoding> is available and it is decoded with
+B<s/%([A-Fa-f\d]{2})/chr hex $1/eg>.
+
 =item B<downloadurlmangle=>I<rules>
 
 Convert the selected upstream tarball href string into the accessible URL for
-obfuscated web sites.
+obfuscated web sites.  This is run after B<hrefdecode>.
 
 =item B<filenamemangle=>I<rules>
 
@@ -2575,6 +2582,8 @@ sub process_watchline ($$$$$$)
 		} elsif ($opt =~ /^\s*versionmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'uversionmangle'}} = split /;/, $1;
 		    @{$options{'dversionmangle'}} = split /;/, $1;
+		} elsif ($opt =~ /^\s*hrefdecode\s*=\s*(.+?)\s*$/) {
+		    $options{'hrefdecode'} = $1;
 		} elsif ($opt =~ /^\s*downloadurlmangle\s*=\s*(.+?)\s*$/) {
 		    @{$options{'downloadurlmangle'}} = split /;/, $1;
 		} elsif ($opt =~ /^\s*filenamemangle\s*=\s*(.+?)\s*$/) {
@@ -2845,6 +2854,7 @@ sub process_watchline ($$$$$$)
 
     my $match = '';
     # Start Checking $site and look for $filepattern which is newer than $lastversion
+    uscan_debug "Start Checking $site and look for $filepattern which is newer than $lastversion.\n";
     # What is the most recent file, based on the filenames?
     # We first have to find the candidates, then we sort them using
     # Devscripts::Versort::upstream_versort (if it is real upstream version string) or
@@ -3001,6 +3011,16 @@ sub process_watchline ($$$$$$)
 	    my $mangled_version;
 	    $href =~ s/\n//g;
 	    $href = fix_href($href);
+	    if (exists $options{'hrefdecode'}) {
+		if ($options{'hrefdecode'} eq 'percent-encoding') {
+		    uscan_debug "... Decoding from href: $href\n";
+		    $href =~ s/%([A-Fa-f\d]{2})/chr hex $1/eg ;
+		} else {
+		    uscan_warn "Illegal value for hrefdecode: "
+			     . "$options{'hrefdecode'}\n";
+		    return 1;
+	        }
+	    }
 	    uscan_debug "Checking href $href\n";
 	    foreach my $_pattern (@patterns) {
 		if ($href =~ m&^$_pattern$&) {
