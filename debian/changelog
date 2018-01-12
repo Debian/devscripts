@@ -16,6 +16,9 @@ devscripts (2.18.1) UNRELEASED; urgency=medium
     + Avoid using L<> with emails in the POD documentation, so it can be built
       with an older pod as well.
 
+  [ Osamu Aoki ]
+  * uupdate: bash completion fix by Julian Gilbey.  Closes: #834006 
+
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 03 Jan 2018 14:31:54 +0100
 
 devscripts (2.17.12) unstable; urgency=medium
