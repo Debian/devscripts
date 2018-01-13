@@ -351,7 +351,8 @@ Set the archive download I<mode>.
 =item B<LWP>
 
 This mode is the default one which downloads the specified tarball from the
-archive URL on the web.
+archive URL on the web.  Automatically internal B<mode> value is updated to
+either B<http> or B<ftp> by URL.
 
 =item B<git>
 
@@ -2578,13 +2579,13 @@ sub process_watchfile ($$$$)
 # or
 #   http://site.name/dir/path/base pattern-(.+)\.tar\.gz [version [action]]
 #
-# Lines can be prefixed with opts=<opts>.
+# watch_version=3 and 4: See POD for details.
+#
+# Lines can be prefixed with opts=<opts> but can be folded for readability.
 #
 # Then the patterns matched will be checked to find the one with the
 # greatest version number (as determined by the (...) group), using the
 # Debian version number comparison algorithm described below.
-#
-# watch_version=3 and 4: See POD.
 
 sub process_watchline ($$$$$$)
 {
@@ -2762,10 +2763,21 @@ sub process_watchline ($$$$$$)
 	    $filepattern = $1;
 	    (undef, $lastversion, $action) = split /\s+/, $line, 3;
 	}
+	# Always define "" if not defined
 	$lastversion //= '';
-
-	# compression is persistent
+	$action //= '';
 	if ($options{'mode'} eq 'LWP') {
+	    if ($base =~ m%^https?://%) {
+		$options{'mode'} = 'http';
+	    } elsif ($base =~ m%^ftp://%) {
+		$options{'mode'} = 'ftp';
+	    } else {
+		uscan_warn "unknown protocol for LWP: $base\n";
+		return 1;
+	    }
+	}
+	# compression is persistent
+	if ($options{'mode'} eq 'http' or $options{'mode'} eq 'ftp') {
 	    $compression //= get_compression('gzip'); # keep backward compat.
 	} else {
 	    $compression //= get_compression('xz');
@@ -2966,7 +2978,7 @@ sub process_watchline ($$$$$$)
     }
 
     if ($watch_version != 1) {
-	if ($options{'mode'} eq 'LWP') {
+	if ($options{'mode'} eq 'http' or $options{'mode'} eq 'ftp') {
 	    if ($base =~ m%^(\w+://[^/]+)%) {
 		$site = $1;
 	    } else {
@@ -2986,20 +2998,28 @@ sub process_watchline ($$$$$$)
 	    $pattern = "(?:(?:$site)?" . quotemeta($basedir) . ")?$filepattern";
 	} else {
 	    # git tag match is simple
-	    $basedir = '';
+            $site = $base; # dummy
+	    $basedir = ''; # dummy
 	    $pattern = $filepattern;
-	    uscan_debug "base=$base\n";
-	    uscan_debug "pattern=$pattern\n";
 	}
     }
 
-    push @patterns, $pattern;
     push @sites, $site;
     push @basedirs, $basedir;
+    push @patterns, $pattern;
 
     my $match = '';
     # Start Checking $site and look for $filepattern which is newer than $lastversion
-    uscan_debug "Start Checking $site and look for $filepattern which is newer than $lastversion.\n";
+    uscan_debug "watch file has:\n"
+	. "    \$base        = $base\n"
+	. "    \$filepattern = $filepattern\n"
+	. "    \$lastversion = $lastversion\n"
+	. "    \$action      = $action\n"
+	. "    mode         = $options{'mode'}\n"
+	. "    pgpmode      = $options{'pgpmode'}\n"
+	. "    versionmode  = $options{'versionmode'}\n"
+	. "    \$site        = $site\n"
+	. "    \$basedir     = $basedir\n";
     # What is the most recent file, based on the filenames?
     # We first have to find the candidates, then we sort them using
     # Devscripts::Versort::upstream_versort (if it is real upstream version string) or
@@ -3076,7 +3096,7 @@ sub process_watchline ($$$$$$)
 #######################################################################
 # }}} code 3.1.1: search $newversion, $newfile (git mode)
 #######################################################################
-    } elsif ($site =~ m%^http(s)?://%) {
+    } elsif ($options{'mode'} eq 'http') {
 #######################################################################
 # {{{ code 3.1.2: search $newversion, $newfile (http mode)
 #######################################################################
@@ -3251,7 +3271,7 @@ sub process_watchline ($$$$$$)
 #######################################################################
 # }}} code 3.1.2: search $newversion, $newfile (http mode)
 #######################################################################
-    } elsif ($site =~ m%^ftp://%) {
+    } elsif ($options{'mode'} eq 'ftp') {
 #######################################################################
 # {{{ code 3.1.3: search $newversion, $newfile (ftp mode)
 #######################################################################
@@ -3377,12 +3397,7 @@ sub process_watchline ($$$$$$)
 #######################################################################
 # {{{ code 3.1.4: search $newversion, $newfile (non-existing mode)
 #######################################################################
-	if ($options{'mode'} eq 'LWP') {
-	    # mode=LWP but neither HTTP nor FTP
-	    uscan_warn "Unknown protocol in $watchfile, skipping:\n  $site\n";
-	} else {
-	    uscan_warn "Unknown mode=$options{'mode'} set in $watchfile\n";
-	}
+	uscan_warn "Unknown mode=$options{'mode'} set in $watchfile\n";
 	return 1;
 #######################################################################
 # }}} code 3.1.4: search $newversion, $newfile (non-existing mode)
@@ -3557,9 +3572,9 @@ EOF
 	    uscan_verbose "Newest upstream tarball version from the filenamemangled filename: $newversion\n";
 	}
     } else {
-	if ($options{'mode'} eq 'LWP') {
+	if ($options{'mode'} eq 'http' or $options{'mode'} eq 'ftp') {
 	    $newfile_base = basename($newfile);
-	    if ($site =~ m%^https?://%) {
+	    if ($options{'mode'} eq 'http') {
 		# Remove HTTP header trash
 		$newfile_base =~ s/[\?#].*$//; # PiPy
 		# just in case this leaves us with nothing
@@ -3568,7 +3583,7 @@ EOF
 		    return 1;
 		}
 	    }
-	} else {
+	} else { # options{'mode'} eq 'git' or options{'mode'} eq 'git-dumb'
 	    # git tarball name
 	    my $zsuffix = get_suffix($compression);
 	    $newfile_base = "$pkg-$newversion.tar.$zsuffix";
@@ -4808,6 +4823,7 @@ sub safe_replace($$)
 	$replacement =~ s/\\\Q$sep\E/$sep/g;
 	# If bracketing quotes were used, also unescape the
 	# closing version
+	# {{ dummy for editor
 	$replacement =~ s/\\\Q}\E/}/g if $sep eq '{';
 	$replacement =~ s/\\\Q]\E/]/g if $sep eq '[';
 	$replacement =~ s/\\\Q)\E/)/g if $sep eq '(';
