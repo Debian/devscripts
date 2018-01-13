@@ -22,6 +22,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+#######################################################################
+# {{{ code 0: POD for manpage
+#######################################################################
 =pod
 
 =head1 NAME
@@ -825,7 +828,7 @@ signature file in the unrelated file path.
       files/(?:\d+)/@PACKAGE@@ANY_VERSION@@SIGNATURE_EXT@ previous uupdate
 
 B<(?:\d+)> part can be any random value.  The tarball file can have B<53>,
-while the signature file can have B<33>.  
+while the signature file can have B<33>.
 
 B<([\d\.]+)> part for the signature file has a strict requirement to match that
 for the upstream tarball specified in the previous line by having B<previous>
@@ -867,7 +870,7 @@ their signature files.
 
 =head2 HTTP site (recursive directory scanning)
 
-Here is an example with the recursive directory scanning for the upstream tarball 
+Here is an example with the recursive directory scanning for the upstream tarball
 and its signature files released in a directory named
 after their version.
 
@@ -1152,8 +1155,8 @@ and other stanzas.):
    ...
 
 Here is another example for the F<debian/copyright> file which initiates
-automatic repackaging of the multiple upstream tarballs into 
-I<< <spkg>_<oversion>.orig.tar.gz >> and 
+automatic repackaging of the multiple upstream tarballs into
+I<< <spkg>_<oversion>.orig.tar.gz >> and
 I<< <spkg>_<oversion>.orig-bar.tar.gz >>:
 
   Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
@@ -1521,7 +1524,7 @@ equivalent to the B<--destdir> option.
 
 If this is set to yes, then after having downloaded a bzip tar, lzma tar, xz
 tar, or zip archive, uscan will repack it to the specified compression (see
-B<--compression>). This is equivalent to the B<--repack> option.  
+B<--compression>). This is equivalent to the B<--repack> option.
 
 =item B<USCAN_EXCLUSION>
 
@@ -1620,7 +1623,7 @@ Never check the directory name.
 
 Only check the directory name if we have had to change directory in
 our search for F<debian/changelog>, that is, the directory containing
-F<debian/changelog> is not the directory from which B<uscan> was invoked. 
+F<debian/changelog> is not the directory from which B<uscan> was invoked.
 This is the default behavior.
 
 =item B<2>
@@ -1721,6 +1724,13 @@ Gilbey.
 
 =cut
 
+#######################################################################
+# }}} code 0: POD for manpage
+#######################################################################
+#######################################################################
+# {{{ code 1: initializer, command parser, and loop over watchfiles
+#######################################################################
+
 use 5.010;  # defined-or (//)
 use strict;
 use warnings;
@@ -1754,8 +1764,26 @@ BEGIN {
     }
 }
 
-sub uscan_die ($);
+sub process_watchfile ($$$$);
+sub process_watchline ($$$$$$);
+sub printwarn ($);
+sub uscan_msg($);
+sub uscan_verbose($);
+sub dehs_verbose ($);
 sub uscan_warn ($);
+sub uscan_debug($);
+sub uscan_die ($);
+sub dehs_output ();
+sub fix_href ($);
+sub downloader ($$$$$);
+sub recursive_regex_dir ($$$);
+sub newest_dir ($$$$$);
+sub get_compression ($);
+sub get_suffix ($);
+sub get_priority ($);
+sub quoted_regex_parse($);
+sub safe_replace($$);
+
 # From here, do not use bare "warn" nor "die".
 # Use "uscan_warn" or "uscan_die" instead to make --dehs work as expected.
 
@@ -1773,22 +1801,6 @@ if ($@) {
 
 # Did we find any new upstream versions on our wanderings?
 our $found = 0;
-
-sub process_watchline ($$$$$$);
-sub process_watchfile ($$$$);
-sub get_compression ($);
-sub get_suffix ($);
-sub get_priority ($);
-sub recursive_regex_dir ($$$);
-sub newest_dir ($$$$$);
-sub dehs_output ();
-sub quoted_regex_replace ($);
-sub safe_replace ($$);
-sub printwarn($);
-sub uscan_msg($);
-sub uscan_verbose($);
-sub uscan_debug($);
-sub dehs_verbose ($);
 
 my $havegpgv = first { !system('sh', '-c', "command -v $_ >/dev/null 2>&1") } qw(gpgv2 gpgv);
 my $havegpg = first { !system('sh', '-c', "command -v $_ >/dev/null 2>&1") } qw(gpg2 gpg);
@@ -2108,12 +2120,12 @@ $safe = 1 if defined $opt_safe;
 $download = 0 if $safe == 1;
 
 # $download:   0 = no-download,
-#              1 = download (default, only-new), 
+#              1 = download (default, only-new),
 #              2 = force-download (even if file is up-to-date version),
 #              3 = overwrite-download (even if file exists)
 $download = $opt_download if defined $opt_download;
-# $signature: -1 = no downloading signature and no verifying signature, 
-#              0 = no downloading signature but verifying signature, 
+# $signature: -1 = no downloading signature and no verifying signature,
+#              0 = no downloading signature but verifying signature,
 #              1 = downloading signature and verifying signature
 $signature = -1 if $download== 0; # Change default 1 -> -1
 $signature = $opt_signature if defined $opt_signature;
@@ -2415,9 +2427,139 @@ $dehs_end_output=1;
 dehs_output if $dehs;
 exit ($found ? 0 : 1);
 
+#######################################################################
+# }}} code 1: initializer, command parser, and loop over watchfiles
+#######################################################################
+#######################################################################
+# {{{ code 2: process watchfile by looping over watchline
+#######################################################################
 
-# This is the heart of the code: Process a single watch line
-#
+# parameters are dir, package, upstream version, good dirname
+sub process_watchfile ($$$$)
+{
+    my ($dir, $package, $version, $watchfile) = @_;
+    my $watch_version=0;
+    my $status=0;
+    my $nextline;
+    %dehs_tags = ();
+    @origtars = ();
+
+    uscan_verbose "Process $dir/$watchfile (package=$package version=$version)\n";
+
+    # set $keyring: upstream/signing-key.pgp and upstream-signing-key.pgp are deprecated but supported
+    if ( -r "debian/upstream/signing-key.asc") {
+	$keyring = "debian/upstream/signing-key.asc";
+    } else {
+	my $binkeyring = first { -r $_ } qw(debian/upstream/signing-key.pgp debian/upstream-signing-key.pgp);
+	if (defined $binkeyring) {
+	    make_path('debian/upstream', 0700, 'true');
+	    # convert to the policy complying armored key
+	    uscan_verbose "Found upstream binary signing keyring: $binkeyring\n";
+	    # Need to convert to an armored key
+	    $keyring = "debian/upstream/signing-key.asc";
+	    spawn(exec => [$havegpg, '--homedir', "/dev/null",
+		    '--no-options', '-q', '--batch',
+		    '--no-default-keyring', '--output',
+		    $keyring, '--enarmor', $binkeyring],
+		    wait_child => 1);
+	    uscan_warn "Generated upstream signing keyring: $keyring\n";
+	    move $binkeyring, "$binkeyring.backup";
+	    uscan_verbose "Renamed upstream binary signing keyring: $binkeyring.backup\n";
+	}
+    }
+    if (defined $keyring) {
+	uscan_verbose "Found upstream signing keyring: $keyring\n";
+	if ($keyring =~ m/\.asc$/) { # always true
+	    # Need to convert an armored key to binary for use by gpgv
+	    $gpghome = tempdir(CLEANUP => 1);
+	    my $newkeyring = "$gpghome/trustedkeys.gpg";
+	    spawn(exec => [$havegpg, '--homedir', $gpghome,
+		    '--no-options', '-q', '--batch',
+		    '--no-default-keyring', '--output',
+		    $newkeyring, '--dearmor', $keyring],
+		    wait_child => 1);
+	    $keyring = $newkeyring
+	}
+    }
+
+    $origcount = 0; # reset to 0 for each watch file
+    unless (open WATCH, $watchfile) {
+	uscan_warn "could not open $watchfile: $!\n";
+	return 1;
+    }
+
+    while (<WATCH>) {
+	next if /^\s*\#/;
+	next if /^\s*$/;
+	s/^\s*//;
+
+    CHOMP:
+	chomp;
+	if (s/(?<!\\)\\$//) {
+	    if (eof(WATCH)) {
+		uscan_warn "$watchfile ended with \\; skipping last line\n";
+		$status=1;
+		last;
+	    }
+	    if ($watch_version > 3) {
+	        # drop leading \s only if version 4
+		$nextline = <WATCH>;
+		$nextline =~ s/^\s*//;
+		$_ .= $nextline;
+	    } else {
+		$_ .= <WATCH>;
+	    }
+	    goto CHOMP;
+	}
+
+	if (! $watch_version) {
+	    if (/^version\s*=\s*(\d+)(\s|$)/) {
+		$watch_version=$1;
+		if ($watch_version < 2 or
+		    $watch_version > $CURRENT_WATCHFILE_VERSION) {
+		    uscan_warn "$watchfile version number is unrecognised; skipping watch file\n";
+		    last;
+		}
+		next;
+	    } else {
+		uscan_warn "$watchfile is an obsolete version 1 watch file;\n   please upgrade to a higher version\n   (see uscan(1) for details).\n";
+		$watch_version=1;
+	    }
+	}
+
+	# Are there any warnings from this part to give if we're using dehs?
+	dehs_output if $dehs;
+
+	# Handle shell \\ -> \
+	s/\\\\/\\/g if $watch_version==1;
+
+	# Handle @PACKAGE@ @ANY_VERSION@ @ARCHIVE_EXT@ substitutions
+	my $any_version = '[-_]?(\d[\-+\.:\~\da-zA-Z]*)';
+	my $archive_ext = '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)';
+	my $signature_ext = $archive_ext . '\.(?:asc|pgp|gpg|sig|sign)';
+	s/\@PACKAGE\@/$package/g;
+	s/\@ANY_VERSION\@/$any_version/g;
+	s/\@ARCHIVE_EXT\@/$archive_ext/g;
+	s/\@SIGNATURE_EXT\@/$signature_ext/g;
+
+	$status +=
+	    process_watchline($_, $watch_version, $dir, $package, $version,
+			      $watchfile);
+	dehs_output if $dehs;
+    }
+
+    close WATCH or
+	$status=1, uscan_warn "problems reading $watchfile: $!\n";
+
+    return $status;
+}
+#######################################################################
+# }}} code 2: process watchfile by looping over watchline
+#######################################################################
+
+#######################################################################
+# {{{ code 3: process watchline
+#######################################################################
 # watch_version=1: Lines have up to 5 parameters which are:
 #
 # $1 = Remote site
@@ -2446,6 +2588,9 @@ exit ($found ? 0 : 1);
 
 sub process_watchline ($$$$$$)
 {
+#######################################################################
+# {{{ code 3.0: initializer and watchline parser
+#######################################################################
     my ($line, $watch_version, $pkg_dir, $pkg, $pkg_version, $watchfile) = @_;
     # $line		watch line string
     # $watch_version	usually 4 (or 3)
@@ -2859,7 +3004,17 @@ sub process_watchline ($$$$$$)
     # We first have to find the candidates, then we sort them using
     # Devscripts::Versort::upstream_versort (if it is real upstream version string) or
     # Devscripts::Versort::versort (if it is suffixed upstream version string)
+#######################################################################
+# }}} code 3.0: initializer and watchline parser
+#######################################################################
+
+#######################################################################
+# {{{ code 3.1: search $newversion, $newfile in $content
+#######################################################################
     if ($options{'mode'} eq 'git') {
+#######################################################################
+# {{{ code 3.1.1: search $newversion, $newfile (git mode)
+#######################################################################
 	# TODO: sanitize $base
 	uscan_verbose "Execute: git ls-remote $base\n";
 	open(REFS, "-|", 'git', 'ls-remote', $base) ||
@@ -2918,7 +3073,13 @@ sub process_watchline ($$$$$$)
 		 " $line\n";
 		 return 1;
 	}
+#######################################################################
+# }}} code 3.1.1: search $newversion, $newfile (git mode)
+#######################################################################
     } elsif ($site =~ m%^http(s)?://%) {
+#######################################################################
+# {{{ code 3.1.2: search $newversion, $newfile (http mode)
+#######################################################################
 	# HTTP site
 	if (defined($1) and !$haveSSL) {
 	    uscan_die "you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
@@ -3009,7 +3170,6 @@ sub process_watchline ($$$$$$)
 	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/sgi) {
 	    my $href = $2;
 	    my $mangled_version;
-	    $href =~ s/\n//g;
 	    $href = fix_href($href);
 	    if (exists $options{'hrefdecode'}) {
 		if ($options{'hrefdecode'} eq 'percent-encoding') {
@@ -3088,7 +3248,13 @@ sub process_watchline ($$$$$$)
 		return 1;
 	    }
 	}
+#######################################################################
+# }}} code 3.1.2: search $newversion, $newfile (http mode)
+#######################################################################
     } elsif ($site =~ m%^ftp://%) {
+#######################################################################
+# {{{ code 3.1.3: search $newversion, $newfile (ftp mode)
+#######################################################################
 	# FTP site
 	if (exists $options{'pasv'}) {
 	    $ENV{'FTP_PASSIVE'}=$options{'pasv'};
@@ -3137,7 +3303,7 @@ sub process_watchline ($$$$$$)
 		    }
 		    uscan_debug "$mangled_version by uversionmangle rule.\n";
 		}
-		$match = '';	
+		$match = '';
 		if (defined $download_version) {
 		    if ($mangled_version eq $download_version) {
 			$match = "matched with the download version";
@@ -3168,7 +3334,7 @@ sub process_watchline ($$$$$$)
 			}
 			uscan_debug "$mangled_version by uversionmangle rule.\n";
 		    }
-		    $match = '';	
+		    $match = '';
 		    if (defined $download_version) {
 			if ($mangled_version eq $download_version) {
 			    $match = "matched with the download version";
@@ -3204,17 +3370,32 @@ sub process_watchline ($$$$$$)
 		return 1;
 	    }
 	}
+#######################################################################
+# }}} code 3.1.3: search $newversion, $newfile (ftp mode)
+#######################################################################
     } else {
+#######################################################################
+# {{{ code 3.1.4: search $newversion, $newfile (non-existing mode)
+#######################################################################
 	if ($options{'mode'} eq 'LWP') {
-	    # Neither HTTP nor FTP
+	    # mode=LWP but neither HTTP nor FTP
 	    uscan_warn "Unknown protocol in $watchfile, skipping:\n  $site\n";
 	} else {
 	    uscan_warn "Unknown mode=$options{'mode'} set in $watchfile\n";
 	}
 	return 1;
+#######################################################################
+# }}} code 3.1.4: search $newversion, $newfile (non-existing mode)
+#######################################################################
     }
     # End Checking $site and look for $filepattern which is newer than $lastversion
+#######################################################################
+# }}} code 3.1: search $newversion, $newfile in $content
+#######################################################################
 
+#######################################################################
+# {{{ code 3.2: watchfile version=1 and older backward compatibility
+#######################################################################
     # The original version of the code didn't use (...) in the watch
     # file to delimit the version number; thus if there is no (...)
     # in the pattern, we will use the old heuristics, otherwise we
@@ -3235,13 +3416,28 @@ EOF
 	    return 1;
 	}
     }
+#######################################################################
+# }}} code 3.2: watchfile version=1 and older backward compatibility
+#######################################################################
 
-    # Determin download URL for tarball or signature
+#######################################################################
+# {{{ code 3.3: determine $upstream_url
+#######################################################################
+    # Determine download URL for tarball or signature
     my $upstream_url;
     # Upstream URL?  Copying code from below - ugh.
     if ($options{'mode'} eq 'git') {
+#######################################################################
+# {{{ code 3.3.1: determine $upstream_url (git mode)
+#######################################################################
 	$upstream_url = "$base $newfile";
+#######################################################################
+# }}} code 3.3.1: determine $upstream_url (git mode)
+#######################################################################
     } elsif ($site =~ m%^https?://%) {
+#######################################################################
+# {{{ code 3.3.2: determine $upstream_url (http mode)
+#######################################################################
 	# absolute URL?
 	if ($newfile =~ m%^\w+://%) {
 	    $upstream_url = $newfile;
@@ -3308,12 +3504,26 @@ EOF
 		uscan_debug "$upstream_url by downloadurlmangle rule.\n";
 	    }
 	}
+#######################################################################
+# }}} code 3.3.2: determine $upstream_url (http mode)
+#######################################################################
     } else {
-	# FTP site
+#######################################################################
+# {{{ code 3.3.3: determine $upstream_url (ftp mode)
+#######################################################################
 	$upstream_url = "$base$newfile";
+#######################################################################
+# }}} code 3.3.3: determine $upstream_url (ftp mode)
+#######################################################################
     }
     uscan_verbose "Upstream URL (downloadurlmangled):\n   $upstream_url\n";
+#######################################################################
+# }}} code 3.3: determine $upstream_url
+#######################################################################
 
+#######################################################################
+# {{{ code 3.4: determine $newversion and $newfile_base
+#######################################################################
     # $newversion = version used for pkg-ver.tar.gz and version comparison
     uscan_verbose "Newest upstream tarball version selected for download (uversionmangled): $newversion\n" if $newversion;
 
@@ -3365,6 +3575,13 @@ EOF
 	}
     }
     uscan_verbose "Download filename (filenamemangled): $newfile_base\n";
+#######################################################################
+# }}} code 3.4: determine $newversion and $newfile_base
+#######################################################################
+
+#######################################################################
+# {{{ code 3.5: compare $newversion against $mangled_lastversion
+#######################################################################
     unless (defined $common_newversion) {
 	$common_newversion = $newversion;
     }
@@ -3441,91 +3658,13 @@ EOF
     {
 	return 0;
     }
+#######################################################################
+# }}} code 3.5: compare $newversion against $mangled_lastversion
+#######################################################################
 
-    ############################# BEGIN SUB DOWNLOAD ##################################
-    my $downloader = sub {
-	my ($url, $fname, $mode) = @_;
-	if ($mode eq 'git') {
-	    my $curdir = cwd();
-	    $fname =~ m%(.*)/([^/]*)-([^_/-]*)\.tar\.(gz|xz|bz2|lzma)%;
-	    my $dst = $1;
-	    my $pkg = $2;
-	    my $ver = $3;
-	    my $suffix = $4;
-	    my ($gitrepo, $gitref) = split /[[:space:]]+/, $url, 2;
-	    my $gitrepodir = "$pkg.$$.git";
-	    uscan_verbose "Execute: git clone --bare $gitrepo $dst/$gitrepodir\n";
-	    system('git', 'clone', '--bare', $gitrepo, "$dst/$gitrepodir") == 0 or uscan_die("git clone failed\n");
-	    chdir "$dst/$gitrepodir" or uscan_die("Unable to chdir(\"$dst/$gitrepodir\"): $!\n");
-	    uscan_verbose "Execute: git archive --format=tar --prefix=$pkg-$ver/ --output=$curdir/$dst/$pkg-$ver.tar $gitref\n";
-	    system('git', 'archive', '--format=tar', "--prefix=$pkg-$ver/", "--output=$curdir/$dst/$pkg-$ver.tar", $gitref) == 0 or uscan_die("git archive failed\n");;
-	    chdir "$curdir/$dst" or uscan_die("Unable to chdir($curdir/$dst): $!\n");
-	    if ($suffix eq 'gz') {
-		uscan_verbose "Execute: gzip -n -9 $pkg-$ver.tar\n";
-		system("gzip", "-n", "-9", "$pkg-$ver.tar") == 0 or uscan_die("gzip failed\n");
-	    } elsif ($suffix eq 'xz') {
-		uscan_verbose "Execute: xz $pkg-$ver.tar\n";
-		system("xz", "$pkg-$ver.tar") == 0 or uscan_die("xz failed\n");
-	    } elsif ($suffix eq 'bz2') {
-		uscan_verbose "Execute: bzip2 $pkg-$ver.tar\n";
-		system("bzip2", "$pkg-$ver.tar") == 0 or uscan_die("bzip2 failed\n");
-	    } elsif ($suffix eq 'lzma') {
-		uscan_verbose "Execute: lzma $pkg-$ver.tar\n";
-		system("lzma", "$pkg-$ver.tar") == 0 or uscan_die("lzma failed\n");
-	    } else {
-		uscan_warn "Unknown suffix file to repack: $suffix\n";
-		exit 1;
-	    }
-	    chdir "$curdir" or uscan_die("Unable to chdir($curdir): $!\n");
-	} elsif ($url =~ m%^http(s)?://%) {
-	    if (defined($1) and !$haveSSL) {
-		uscan_die "$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
-	    }
-	    # substitute HTML entities
-	    # Is anything else than "&amp;" required?  I doubt it.
-	    uscan_verbose "Requesting URL:\n   $url\n";
-	    my $headers = HTTP::Headers->new;
-	    $headers->header('Accept' => '*/*');
-	    $headers->header('Referer' => $base);
-	    $request = HTTP::Request->new('GET', $url, $headers);
-	    $response = $user_agent->request($request, $fname);
-	    if (! $response->is_success) {
-		if (defined $pkg_dir) {
-		    uscan_warn "In directory $pkg_dir, downloading\n  $url failed: " . $response->status_line . "\n";
-		} else {
-		    uscan_warn "Downloading\n $url failed:\n" . $response->status_line . "\n";
-		}
-		return 0;
-	    }
-	} else {
-	    # FTP site
-	    if (exists $options{'pasv'}) {
-		$ENV{'FTP_PASSIVE'}=$options{'pasv'};
-	    }
-	    uscan_verbose "Requesting URL:\n   $url\n";
-	    $request = HTTP::Request->new('GET', "$url");
-	    $response = $user_agent->request($request, $fname);
-	    if (exists $options{'pasv'}) {
-		if (defined $passive) {
-		    $ENV{'FTP_PASSIVE'}=$passive;
-		} else {
-		    delete $ENV{'FTP_PASSIVE'};
-		}
-	    }
-	    if (! $response->is_success) {
-		if (defined $pkg_dir) {
-		    uscan_warn "In directory $pkg_dir, downloading\n  $url failed: " . $response->status_line . "\n";
-		} else {
-		    uscan_warn "Downloading\n $url failed:\n" . $response->status_line . "\n";
-		}
-		return 0;
-	    }
-	}
-	return 1;
-    };
-    ############################# END SUB DOWNLOAD ##################################
-
-    # Download tarball
+#######################################################################
+# {{{ code 3.6: download tarball
+#######################################################################
     my $download_available;
     my $signature_available;
     my $sigfile;
@@ -3534,7 +3673,7 @@ EOF
 	# try download package
 	if ( $download == 3 and -e "$destdir/$newfile_base") {
 	    uscan_verbose "Downloading and overwriting existing file: $newfile_base\n";
-	    $download_available = $downloader->($upstream_url, "$destdir/$newfile_base", $options{'mode'});
+	    $download_available = downloader($upstream_url, "$destdir/$newfile_base", \%options, $base, $pkg_dir);
 	    if ($download_available) {
 		dehs_verbose "Successfully downloaded package: $newfile_base\n";
 	    } else {
@@ -3545,7 +3684,7 @@ EOF
 	    dehs_verbose "Not downloading, using existing file: $newfile_base\n";
 	} elsif ($download >0) {
 	    uscan_verbose "Downloading upstream package: $newfile_base\n";
-	    $download_available = $downloader->($upstream_url, "$destdir/$newfile_base", $options{'mode'});
+	    $download_available = downloader($upstream_url, "$destdir/$newfile_base", \%options, $base, $pkg_dir);
 	    if ($download_available) {
 		dehs_verbose "Successfully downloaded package: $newfile_base\n";
 	    } else {
@@ -3625,8 +3764,13 @@ EOF
 	    }
 	}
     }
+#######################################################################
+# }}} code 3.6: download tarball
+#######################################################################
 
-    # Download signature
+#######################################################################
+# {{{ code 3.7: download signature
+#######################################################################
     my $pgpsig_url;
     my $suffix_sig;
     if (($options{'pgpmode'} eq 'default' or $options{'pgpmode'} eq 'auto') and $signature == 1) {
@@ -3674,7 +3818,7 @@ EOF
 	$sigfile = "$sigfile_base.$suffix_sig";
 	if ($signature == 1) {
 	    uscan_verbose "Downloading OpenPGP signature from\n   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile\n";
-	    $signature_available = $downloader->($pgpsig_url, "$destdir/$sigfile", $options{'mode'});
+	    $signature_available = downloader($pgpsig_url, "$destdir/$sigfile", \%options, $base, $pkg_dir);
 	} else { # -1, 0
 	    uscan_verbose "Not downloading OpenPGP signature from\n   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile\n";
 	    $signature_available = (-e "$destdir/$sigfile") ? 1 : 0;
@@ -3684,7 +3828,7 @@ EOF
 	$sigfile = $newfile_base;
 	if ($signature == 1) {
 	    uscan_verbose "Downloading OpenPGP signature from\n   $pgpsig_url (pgpmode=previous)\n   as $sigfile\n";
-	    $signature_available = $downloader->($pgpsig_url, "$destdir/$sigfile", $options{'mode'});
+	    $signature_available = downloader($pgpsig_url, "$destdir/$sigfile", \%options, $base, $pkg_dir);
 	} else { # -1, 0
 	    uscan_verbose "Not downloading OpenPGP signature from\n   $pgpsig_url (pgpmode=previous)\n   as $sigfile\n";
 	    $signature_available = (-e "$destdir/$sigfile") ? 1 : 0;
@@ -3694,8 +3838,13 @@ EOF
 	$sigfile_base = $previous_sigfile_base;
 	uscan_verbose "Use $newfile_base as upstream package (pgpmode=previous)\n";
     }
+#######################################################################
+# }}} code 3.7: download signature
+#######################################################################
 
-    # Signature check
+#######################################################################
+# {{{ code 3.8: signature verification (pgpmode)
+#######################################################################
     if ($options{'pgpmode'} eq 'mangle' or $options{'pgpmode'} eq 'previous') {
 	if ($signature == -1) {
 	    uscan_verbose("SKIP Checking OpenPGP signature (by request).\n");
@@ -3748,7 +3897,6 @@ EOF
 	uscan_warn "strange ... unknown pgpmode = $options{'pgpmode'}\n";
 	return 1;
     }
-
     my $mangled_newversion = $newversion;
     foreach my $pat (@{$options{'oversionmangle'}}) {
 	if (! safe_replace(\$mangled_newversion, $pat)) {
@@ -3769,7 +3917,6 @@ EOF
 	# MUT disables repacksuffix so it is safe to have this before mk-origtargz
 	$common_mangled_newversion = $mangled_newversion;
     }
-
     if ($options{'pgpmode'} eq 'next') {
 	uscan_verbose "Read the next watch line (pgpmode=next)\n";
 	return 0;
@@ -3789,6 +3936,13 @@ EOF
     if ($signature_available == 1 and $options{'decompress'}) {
 	$signature_available = 2;
     }
+#######################################################################
+# }}} code 3.8: signature verification (pgpmode)
+#######################################################################
+
+#######################################################################
+# {{{ code 3.9: call mk-origtargz
+#######################################################################
     #########################################################################
     # upstream tar file and, if available, signature file are downloaded
     # by parsing a watch file line.
@@ -3798,11 +3952,11 @@ EOF
     #  * for pgpmode=self                        -- the tarball as gpg extracted
     #  * for other cases                         -- the tarball as downloaded
     # signature file:   $destdir/$sigfile"
-    #  * for $signature_available = 0            -- no signature file 
+    #  * for $signature_available = 0            -- no signature file
     #  * for $signature_available = 1            -- normal signature file
     #  * for $signature_available = 2            -- signature file on decompressed
     #  * for $signature_available = 3            -- non-detached signature (XXX FIXME XXX)
-    #      If pgpmode=self case in the above is fixed, below 
+    #      If pgpmode=self case in the above is fixed, below
     #      " and ($options{'pgpmode'} ne 'self')" may be dropped.
     # New version after making the new orig[-component].tar.gz:
     #     $common_mangled_newversion
@@ -3822,7 +3976,7 @@ EOF
 	push @cmd, "--copy"   if $symlink eq "copy";
 	push @cmd, "--signature", $signature_available
             if ($signature_available != 0);
-	push @cmd, "--signature-file", "$destdir/$sigfile" 
+	push @cmd, "--signature-file", "$destdir/$sigfile"
             if ($signature_available != 0);
 	push @cmd, "--repack" if $options{'repack'};
 	push @cmd, "--component", $options{'component'} if defined $options{'component'};
@@ -3891,7 +4045,13 @@ EOF
     dehs_verbose "$mk_origtargz_out\n" if defined $mk_origtargz_out;
     $dehs_tags{target} = $target;
     $dehs_tags{'target-path'} = $path;
+#######################################################################
+# }}} code 3.9: call mk-origtargz
+#######################################################################
 
+#######################################################################
+# {{{ code 3.10: call uupdate
+#######################################################################
     # Do whatever the user wishes to do
     if ($action) {
 	my @cmd = shellwords($action);
@@ -3935,10 +4095,215 @@ EOF
     }
 
     return 0;
+#######################################################################
+# }}} code 3.10: call uupdate
+#######################################################################
+}
+#######################################################################
+# }}} code 3: process watchline
+#######################################################################
+
+#######################################################################
+# {{{ code 4: utility functions (message)
+#######################################################################
+# Message handling
+sub printwarn ($)
+{
+    my $msg = $_[0];
+    if ($dehs) {
+	warn $msg;
+    } else {
+	print $msg;
+    }
 }
 
+sub uscan_msg($)
+{
+    my $msg = $_[0];
+    printwarn "$progname: $msg";
+}
 
-sub recursive_regex_dir ($$$) {
+sub uscan_verbose($)
+{
+    my $msg = $_[0];
+    if ($verbose > 0) {
+	printwarn "$progname info: $msg";
+    }
+}
+
+sub dehs_verbose ($)
+{
+    my $msg = $_[0];
+    push @{$dehs_tags{'messages'}}, $msg;
+    uscan_verbose($msg)
+}
+
+sub uscan_warn ($)
+{
+    my $msg = $_[0];
+    push @{$dehs_tags{'warnings'}}, $msg if $dehs;
+    warn "$progname warn: $msg";
+}
+
+sub uscan_debug($)
+{
+    my $msg = $_[0];
+    warn "$progname debug: $msg" if $verbose > 1;
+}
+
+sub uscan_die ($)
+{
+    my $msg = $_[0];
+    if ($dehs) {
+	%dehs_tags = ('errors' => "$msg");
+	$dehs_end_output=1;
+	dehs_output;
+    }
+    die "$progname die: $msg";
+}
+
+sub dehs_output ()
+{
+    return unless $dehs;
+
+    if (! $dehs_start_output) {
+	print "<dehs>\n";
+	$dehs_start_output=1;
+    }
+
+    for my $tag (qw(package debian-uversion debian-mangled-uversion
+		    upstream-version upstream-url
+		    status target target-path messages warnings errors)) {
+	if (exists $dehs_tags{$tag}) {
+	    if (ref $dehs_tags{$tag} eq "ARRAY") {
+		foreach my $entry (@{$dehs_tags{$tag}}) {
+		    $entry =~ s/</&lt;/g;
+		    $entry =~ s/>/&gt;/g;
+		    $entry =~ s/&/&amp;/g;
+		    print "<$tag>$entry</$tag>\n";
+		}
+	    } else {
+		$dehs_tags{$tag} =~ s/</&lt;/g;
+		$dehs_tags{$tag} =~ s/>/&gt;/g;
+		$dehs_tags{$tag} =~ s/&/&amp;/g;
+		print "<$tag>$dehs_tags{$tag}</$tag>\n";
+	    }
+	}
+    }
+    if ($dehs_end_output) {
+	print "</dehs>\n";
+    }
+
+    # Don't repeat output
+    %dehs_tags = ();
+}
+#######################################################################
+# }}} code 4: utility functions (message)
+#######################################################################
+
+#######################################################################
+# {{{ code 5: utility functions (download)
+#######################################################################
+sub fix_href ($)
+{
+    my ($href) = @_;
+
+    # Remove newline (code moved from outside fix_href)
+    $href =~ s/\n//g;
+
+    # Remove whitespace from URLs:
+    # https://www.w3.org/TR/html5/links.html#links-created-by-a-and-area-elements
+    $href =~ s/^\s+//;
+    $href =~ s/\s+$//;
+
+    return $href;
+}
+
+sub downloader ($$$$$)
+{
+	my ($url, $fname, $optref, $base, $pkg_dir) = @_;
+	my ($request, $response);
+	if ($$optref{'mode'} eq 'git') {
+	    my $curdir = cwd();
+	    $fname =~ m%(.*)/([^/]*)-([^_/-]*)\.tar\.(gz|xz|bz2|lzma)%;
+	    my $dst = $1;
+	    my $pkg = $2;
+	    my $ver = $3;
+	    my $suffix = $4;
+	    my ($gitrepo, $gitref) = split /[[:space:]]+/, $url, 2;
+	    my $gitrepodir = "$pkg.$$.git";
+	    uscan_verbose "Execute: git clone --bare $gitrepo $dst/$gitrepodir\n";
+	    system('git', 'clone', '--bare', $gitrepo, "$dst/$gitrepodir") == 0 or uscan_die("git clone failed\n");
+	    chdir "$dst/$gitrepodir" or uscan_die("Unable to chdir(\"$dst/$gitrepodir\"): $!\n");
+	    uscan_verbose "Execute: git archive --format=tar --prefix=$pkg-$ver/ --output=$curdir/$dst/$pkg-$ver.tar $gitref\n";
+	    system('git', 'archive', '--format=tar', "--prefix=$pkg-$ver/", "--output=$curdir/$dst/$pkg-$ver.tar", $gitref) == 0 or uscan_die("git archive failed\n");;
+	    chdir "$curdir/$dst" or uscan_die("Unable to chdir($curdir/$dst): $!\n");
+	    if ($suffix eq 'gz') {
+		uscan_verbose "Execute: gzip -n -9 $pkg-$ver.tar\n";
+		system("gzip", "-n", "-9", "$pkg-$ver.tar") == 0 or uscan_die("gzip failed\n");
+	    } elsif ($suffix eq 'xz') {
+		uscan_verbose "Execute: xz $pkg-$ver.tar\n";
+		system("xz", "$pkg-$ver.tar") == 0 or uscan_die("xz failed\n");
+	    } elsif ($suffix eq 'bz2') {
+		uscan_verbose "Execute: bzip2 $pkg-$ver.tar\n";
+		system("bzip2", "$pkg-$ver.tar") == 0 or uscan_die("bzip2 failed\n");
+	    } elsif ($suffix eq 'lzma') {
+		uscan_verbose "Execute: lzma $pkg-$ver.tar\n";
+		system("lzma", "$pkg-$ver.tar") == 0 or uscan_die("lzma failed\n");
+	    } else {
+		uscan_warn "Unknown suffix file to repack: $suffix\n";
+		exit 1;
+	    }
+	    chdir "$curdir" or uscan_die("Unable to chdir($curdir): $!\n");
+	} elsif ($url =~ m%^http(s)?://%) {
+	    if (defined($1) and !$haveSSL) {
+		uscan_die "$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
+	    }
+	    # substitute HTML entities
+	    # Is anything else than "&amp;" required?  I doubt it.
+	    uscan_verbose "Requesting URL:\n   $url\n";
+	    my $headers = HTTP::Headers->new;
+	    $headers->header('Accept' => '*/*');
+	    $headers->header('Referer' => $base);
+	    $request = HTTP::Request->new('GET', $url, $headers);
+	    $response = $user_agent->request($request, $fname);
+	    if (! $response->is_success) {
+		if (defined $pkg_dir) {
+		    uscan_warn "In directory $pkg_dir, downloading\n  $url failed: " . $response->status_line . "\n";
+		} else {
+		    uscan_warn "Downloading\n $url failed:\n" . $response->status_line . "\n";
+		}
+		return 0;
+	    }
+	} else {
+	    # FTP site
+	    if (exists $$optref{'pasv'}) {
+		$ENV{'FTP_PASSIVE'}=$$optref{'pasv'};
+	    }
+	    uscan_verbose "Requesting URL:\n   $url\n";
+	    $request = HTTP::Request->new('GET', "$url");
+	    $response = $user_agent->request($request, $fname);
+	    if (exists $$optref{'pasv'}) {
+		if (defined $passive) {
+		    $ENV{'FTP_PASSIVE'}=$passive;
+		} else {
+		    delete $ENV{'FTP_PASSIVE'};
+		}
+	    }
+	    if (! $response->is_success) {
+		if (defined $pkg_dir) {
+		    uscan_warn "In directory $pkg_dir, downloading\n  $url failed: " . $response->status_line . "\n";
+		} else {
+		    uscan_warn "Downloading\n $url failed:\n" . $response->status_line . "\n";
+		}
+		return 0;
+	    }
+	}
+	return 1;
+    };
+
+sub recursive_regex_dir ($$$)
+{
     # If return '', parent code to cause return 1
     my ($base, $optref, $watchfile)=@_;
 
@@ -3970,7 +4335,8 @@ sub recursive_regex_dir ($$$) {
 
 
 # very similar to code above
-sub newest_dir ($$$$$) {
+sub newest_dir ($$$$$)
+{
     # return string $newdir as success
     # return string '' if error, to cause grand parent code to return 1
     my ($site, $dir, $pattern, $optref, $watchfile) = @_;
@@ -4194,128 +4560,13 @@ sub newest_dir ($$$$$) {
     }
     return $newdir;
 }
+#######################################################################
+# }}} code 5: utility functions (download)
+#######################################################################
 
-
-# parameters are dir, package, upstream version, good dirname
-sub process_watchfile ($$$$)
-{
-    my ($dir, $package, $version, $watchfile) = @_;
-    my $watch_version=0;
-    my $status=0;
-    my $nextline;
-    %dehs_tags = ();
-    @origtars = ();
-
-    uscan_verbose "Process $dir/$watchfile (package=$package version=$version)\n";
-
-    # set $keyring: upstream/signing-key.pgp and upstream-signing-key.pgp are deprecated but supported
-    if ( -r "debian/upstream/signing-key.asc") {
-	$keyring = "debian/upstream/signing-key.asc";
-    } else {
-	my $binkeyring = first { -r $_ } qw(debian/upstream/signing-key.pgp debian/upstream-signing-key.pgp);
-	if (defined $binkeyring) {
-	    make_path('debian/upstream', 0700, 'true');
-	    # convert to the policy complying armored key
-	    uscan_verbose "Found upstream binary signing keyring: $binkeyring\n";
-	    # Need to convert to an armored key
-	    $keyring = "debian/upstream/signing-key.asc";
-	    spawn(exec => [$havegpg, '--homedir', "/dev/null",
-		    '--no-options', '-q', '--batch',
-		    '--no-default-keyring', '--output',
-		    $keyring, '--enarmor', $binkeyring],
-		    wait_child => 1);
-	    uscan_warn "Generated upstream signing keyring: $keyring\n";
-	    move $binkeyring, "$binkeyring.backup";
-	    uscan_verbose "Renamed upstream binary signing keyring: $binkeyring.backup\n";
-	}
-    }
-    if (defined $keyring) {
-	uscan_verbose "Found upstream signing keyring: $keyring\n";
-	if ($keyring =~ m/\.asc$/) { # always true
-	    # Need to convert an armored key to binary for use by gpgv
-	    $gpghome = tempdir(CLEANUP => 1);
-	    my $newkeyring = "$gpghome/trustedkeys.gpg";
-	    spawn(exec => [$havegpg, '--homedir', $gpghome,
-		    '--no-options', '-q', '--batch',
-		    '--no-default-keyring', '--output',
-		    $newkeyring, '--dearmor', $keyring],
-		    wait_child => 1);
-	    $keyring = $newkeyring
-	}
-    }
-
-    $origcount = 0; # reset to 0 for each watch file
-    unless (open WATCH, $watchfile) {
-	uscan_warn "could not open $watchfile: $!\n";
-	return 1;
-    }
-
-    while (<WATCH>) {
-	next if /^\s*\#/;
-	next if /^\s*$/;
-	s/^\s*//;
-
-    CHOMP:
-	chomp;
-	if (s/(?<!\\)\\$//) {
-	    if (eof(WATCH)) {
-		uscan_warn "$watchfile ended with \\; skipping last line\n";
-		$status=1;
-		last;
-	    }
-	    if ($watch_version > 3) {
-	        # drop leading \s only if version 4
-		$nextline = <WATCH>;
-		$nextline =~ s/^\s*//;
-		$_ .= $nextline;
-	    } else {
-		$_ .= <WATCH>;
-	    }
-	    goto CHOMP;
-	}
-
-	if (! $watch_version) {
-	    if (/^version\s*=\s*(\d+)(\s|$)/) {
-		$watch_version=$1;
-		if ($watch_version < 2 or
-		    $watch_version > $CURRENT_WATCHFILE_VERSION) {
-		    uscan_warn "$watchfile version number is unrecognised; skipping watch file\n";
-		    last;
-		}
-		next;
-	    } else {
-		uscan_warn "$watchfile is an obsolete version 1 watch file;\n   please upgrade to a higher version\n   (see uscan(1) for details).\n";
-		$watch_version=1;
-	    }
-	}
-
-	# Are there any warnings from this part to give if we're using dehs?
-	dehs_output if $dehs;
-
-	# Handle shell \\ -> \
-	s/\\\\/\\/g if $watch_version==1;
-
-	# Handle @PACKAGE@ @ANY_VERSION@ @ARCHIVE_EXT@ substitutions
-	my $any_version = '[-_]?(\d[\-+\.:\~\da-zA-Z]*)';
-	my $archive_ext = '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)';
-	my $signature_ext = $archive_ext . '\.(?:asc|pgp|gpg|sig|sign)';
-	s/\@PACKAGE\@/$package/g;
-	s/\@ANY_VERSION\@/$any_version/g;
-	s/\@ARCHIVE_EXT\@/$archive_ext/g;
-	s/\@SIGNATURE_EXT\@/$signature_ext/g;
-
-	$status +=
-	    process_watchline($_, $watch_version, $dir, $package, $version,
-			      $watchfile);
-	dehs_output if $dehs;
-    }
-
-    close WATCH or
-	$status=1, uscan_warn "problems reading $watchfile: $!\n";
-
-    return $status;
-}
-
+#######################################################################
+# {{{ code 6: utility functions (compression)
+#######################################################################
 # Get legal values for compression
 sub get_compression ($)
 {
@@ -4385,100 +4636,15 @@ sub get_priority ($)
     }
     return $priority;
 }
+#######################################################################
+# }}} code 6: utility functions (compression)
+#######################################################################
 
-# Message handling
-sub printwarn ($)
+#######################################################################
+# {{{ code 7: utility functions (regex)
+#######################################################################
+sub quoted_regex_parse($)
 {
-    my $msg = $_[0];
-    if ($dehs) {
-	warn $msg;
-    } else {
-	print $msg;
-    }
-}
-
-sub uscan_msg($)
-{
-    my $msg = $_[0];
-    printwarn "$progname: $msg";
-}
-
-sub uscan_verbose($)
-{
-    my $msg = $_[0];
-    if ($verbose > 0) {
-	printwarn "$progname info: $msg";
-    }
-}
-
-sub dehs_verbose ($)
-{
-    my $msg = $_[0];
-    push @{$dehs_tags{'messages'}}, $msg;
-    uscan_verbose($msg)
-}
-
-sub uscan_warn ($)
-{
-    my $msg = $_[0];
-    push @{$dehs_tags{'warnings'}}, $msg if $dehs;
-    warn "$progname warn: $msg";
-}
-
-sub uscan_debug($)
-{
-    my $msg = $_[0];
-    warn "$progname debug: $msg" if $verbose > 1;
-}
-
-sub uscan_die ($)
-{
-    my $msg = $_[0];
-    if ($dehs) {
-	%dehs_tags = ('errors' => "$msg");
-	$dehs_end_output=1;
-	dehs_output;
-    }
-    die "$progname die: $msg";
-}
-
-sub dehs_output ()
-{
-    return unless $dehs;
-
-    if (! $dehs_start_output) {
-	print "<dehs>\n";
-	$dehs_start_output=1;
-    }
-
-    for my $tag (qw(package debian-uversion debian-mangled-uversion
-		    upstream-version upstream-url
-		    status target target-path messages warnings errors)) {
-	if (exists $dehs_tags{$tag}) {
-	    if (ref $dehs_tags{$tag} eq "ARRAY") {
-		foreach my $entry (@{$dehs_tags{$tag}}) {
-		    $entry =~ s/</&lt;/g;
-		    $entry =~ s/>/&gt;/g;
-		    $entry =~ s/&/&amp;/g;
-		    print "<$tag>$entry</$tag>\n";
-		}
-	    } else {
-		$dehs_tags{$tag} =~ s/</&lt;/g;
-		$dehs_tags{$tag} =~ s/>/&gt;/g;
-		$dehs_tags{$tag} =~ s/&/&amp;/g;
-		print "<$tag>$dehs_tags{$tag}</$tag>\n";
-	    }
-	}
-    }
-    if ($dehs_end_output) {
-	print "</dehs>\n";
-    }
-
-    # Don't repeat output
-    %dehs_tags = ();
-}
-
-sub quoted_regex_parse($) {
     my $pattern = shift;
     my %closers = ('{', '}', '[', ']', '(', ')', '<', '>');
 
@@ -4558,19 +4724,8 @@ sub quoted_regex_parse($) {
     return ($parsed_ok, $regexp, $replacement, $flags);
 }
 
-sub fix_href
+sub safe_replace($$)
 {
-    my ($href) = @_;
-
-    # Remove whitespace from URLs:
-    # https://www.w3.org/TR/html5/links.html#links-created-by-a-and-area-elements
-    $href =~ s/^\s+//;
-    $href =~ s/\s+$//;
-
-    return $href;
-}
-
-sub safe_replace($$) {
     my ($in, $pat) = @_;
     eval "uscan_debug \"safe_replace input=\\\"\$\$in\\\"\\n\"";
     $pat =~ s/^\s*(.*?)\s*$/$1/;
@@ -4736,3 +4891,6 @@ sub safe_replace($$) {
 	return 1;
     }
 }
+#######################################################################
+# }}} code 7: utility functions (regex)
+#######################################################################
