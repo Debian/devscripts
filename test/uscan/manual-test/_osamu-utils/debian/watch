@@ -1,0 +1,5 @@
+version=4
+opts="mode=git,pretty=describe,pgpmode=no, \
+    uversionmangle=s/^/0.0~/" \
+    https://github.com/osamuaoki/osamu-utils.git \
+    HEAD debian uupdate
