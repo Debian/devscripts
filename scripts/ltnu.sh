@@ -33,6 +33,13 @@ if [ ! -x /usr/bin/psql ]; then
     exit 2
 fi
 
+# Some option parsing
+QUERY_UPLOADER=1
+if [ "$1" = "-m" ]; then
+    QUERY_UPLOADER=0
+    shift
+fi
+
 MAINT="${DEBEMAIL}"
 if [ -n "${1}" ]; then
     if echo "${1}" | fgrep -q @; then
@@ -59,6 +66,11 @@ if [ -z "${PAGER}" -o "${PAGER}" = "less" ]; then
     export PAGER="less -S"
 fi
 
+UPLOADER=''
+if [ "$QUERY_UPLOADER" = 1 ]; then
+   UPLOADER=" or uploaders like '%<${MAINT}>%'"
+fi
+
 env PGPASSWORD=udd-mirror psql --host=udd-mirror.debian.net --user=udd-mirror udd --command="
 select source,
        max(version) as ver,
@@ -67,8 +79,7 @@ from upload_history
 where distribution='unstable' and
       source in (select source
                  from sources
-                 where ( maintainer_email='${MAINT}' or
-                         uploaders like '%<${MAINT}>%' ) and
+                 where ( maintainer_email='${MAINT}' $UPLOADER ) and
                        release='sid')
 group by source
 order by max(date) asc;

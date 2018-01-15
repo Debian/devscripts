@@ -25,6 +25,11 @@ devscripts (2.18.1) UNRELEASED; urgency=medium
   * debrepro:
     + Add a --help option and include options description in the usage output.
 
+  [ Axel Beckert ]
+  * ltnu:
+    + Add option "-m" to only look in the Maintainer field and not also in
+      the Uploaders field.  Closes: #887380
+
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 03 Jan 2018 14:31:54 +0100
 
 devscripts (2.17.12) unstable; urgency=medium

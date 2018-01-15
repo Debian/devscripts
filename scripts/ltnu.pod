@@ -4,9 +4,9 @@ ltnu - lists packages of a maintainer ordered by last upload
 
 =head1 SYNOPSIS
 
-B<env> DEBEMAIL=I<maintainer> B<ltnu>
+B<env> DEBEMAIL=I<maintainer> B<ltnu> [-m]
 
-B<ltnu> I<maintainer>
+B<ltnu> [-m] I<maintainer>
 
 B<ltnu> --help
 
@@ -23,6 +23,16 @@ packages haven't been uploaded for a long time and likely need a
 packaging revamp. It's less suitable for MIA team purposes as it
 doesn't make a difference with regards to who actually uploaded a
 package.
+
+=head1 OPTIONS
+
+=over 4
+
+=item -m
+
+Only search in the Maintainer field and ignore the Uploaders field.
+
+=back
 
 =head1 PARAMETERS
 
