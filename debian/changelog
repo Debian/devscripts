@@ -80,6 +80,10 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
   * debcheckout:
     + Fix incorrect interpretation of system() error codes.  Closes: #895307
 
+  [ Cyril Brulebois ]
+  * debdiff:
+    + Make bash completion autocomplete on *.udeb files.  Closes: #887358
+
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 03 Sep 2018 22:42:37 +0200
 
 devscripts (2.18.4) unstable; urgency=medium

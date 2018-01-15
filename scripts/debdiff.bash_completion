@@ -75,16 +75,22 @@ _debdiff () {
             file_list_mode=from
         elif [[ $file_list_mode == normal && ${words[i]} == *.deb ]]; then
             file_list_mode=deb
+        elif [[ $file_list_mode == normal && ${words[i]} == *.udeb ]]; then
+            file_list_mode=deb
         elif [[ $file_list_mode == normal && ${words[i]} == *.dsc ]]; then
             file_list_mode=dsc
         elif [[ $file_list_mode == normal && ${words[i]} == *.changes ]]; then
             file_list_mode=changes
         elif [[ $file_list_mode == from && ${words[i]} == *.deb ]]; then
             (( ++move_from ))
+        elif [[ $file_list_mode == from && ${words[i]} == *.udeb ]]; then
+            (( ++move_from ))
         elif [[ $file_list_mode == from && ${words[i]} == --to ]]; then
             move_to=0
             file_list_mode=to
         elif [[ $file_list_mode = to && ${words[i]} == *.deb ]]; then
+            (( ++move_to ))
+        elif [[ $file_list_mode = to && ${words[i]} == *.udeb ]]; then
             (( ++move_to ))
         fi
     done
@@ -97,13 +103,13 @@ _debdiff () {
             elif [[ $cur == -* ]]; then
                 COMPREPLY=( $( compgen -W "${options[*]}" -- "$cur" ) )
             else
-                COMPREPLY=( $( compgen -G "${cur}*.@(deb|dsc|changes)" ) )
+                COMPREPLY=( $( compgen -G "${cur}*.@(deb|udeb|dsc|changes)" ) )
                 compopt -o filenames
                 compopt -o plusdirs
             fi
             ;;
         deb|from|to)
-            COMPREPLY=( $( compgen -G "${cur}*.deb" ) )
+            COMPREPLY=( $( compgen -G "${cur}*.deb" "${cur}*.udeb" ) )
             if (( $move_from > 0 && $move_to < 0 )) ; then
                 COMPREPLY+=( $( compgen -W "--to" -- "$cur" ) )
             fi
