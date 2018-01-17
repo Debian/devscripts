@@ -1902,13 +1902,14 @@ sub uscan_die ($);
 sub dehs_output ();
 sub fix_href ($);
 sub downloader ($$$$$);
-sub recursive_regex_dir ($$$);
-sub newest_dir ($$$$$);
+sub recursive_regex_dir ($$$$);
+sub newest_dir ($$$$$$);
 sub get_compression ($);
 sub get_suffix ($);
 sub get_priority ($);
 sub quoted_regex_parse($);
 sub safe_replace($$);
+sub mangle($$$$$);
 
 # From here, do not use bare "warn" nor "die".
 # Use "uscan_warn" or "uscan_die" instead to make --dehs work as expected.
@@ -3086,18 +3087,10 @@ sub process_watchline ($$$$$$)
 
     # And mangle it if requested
     my $mangled_lastversion = $lastversion;
-    foreach my $pat (@{$options{'dversionmangle'}}) {
-	if (! safe_replace(\$mangled_lastversion, $pat)) {
-	    uscan_warn "In $watchfile, potentially"
-	      . " unsafe or malformed dversionmangle"
-	      . " pattern:\n  '$pat'"
-	      . " found. Skipping watchline\n"
-	      . "  $line\n";
-	    return 1;
-	}
-	uscan_debug "$mangled_lastversion by dversionmangle rule.\n";
+    if (mangle($watchfile, \$line, 'dversionmangle:',
+	    \@{$options{'dversionmangle'}}, \$mangled_lastversion)) {
+	return 1;
     }
-
     # Set $download_version etc. if already known
     if(defined $opt_download_version) {
 	$download_version = $opt_download_version;
@@ -3151,7 +3144,7 @@ sub process_watchline ($$$$$$)
 	    }
 
 	    # Find the path with the greatest version number matching the regex
-	    $base = recursive_regex_dir($base, \%options, $watchfile);
+	    $base = recursive_regex_dir($base, \%options, $watchfile, \$line);
 	    if ($base eq '') { return 1; }
 
 	    # We're going to make the pattern
@@ -3245,16 +3238,9 @@ if ($options{'mode'} eq 'http') {
 	uscan_debug "received content:\n$content\n[End of received content] by HTTP\n";
 
 	# pagenmangle: should not abuse this slow operation
-	foreach my $pat (@{$options{'pagemangle'}}) {
-	    if (! safe_replace(\$content, $pat)) {
-		uscan_warn "In $watchfile, potentially"
-		  . " unsafe or malformed pagemangle"
-		  . " pattern:\n  '$pat'"
-		  . " found. Skipping watchline\n"
-		  . "  $line\n";
-		return 1;
-	    }
-	    uscan_debug "processed content:\n$content\n[End of processed content] by pagemangle rule.\n";
+	if (mangle($watchfile, \$line, 'pagemangle:\n',
+		\@{$options{'pagemangle'}}, \$content)) {
+	    return 1;
 	}
 	if (! $bare and
 	    $content =~ m%^<[?]xml%i and
@@ -3323,16 +3309,10 @@ if ($options{'mode'} eq 'http') {
 				join(".", map { $_ if defined($_) }
 				    $href =~ m&^$_pattern$&);
 			}
-			foreach my $pat (@{$options{'uversionmangle'}}) {
-			    if (! safe_replace(\$mangled_version, $pat)) {
-				uscan_warn "In $watchfile, potentially"
-			 	 . " unsafe or malformed uversionmangle"
-				  . " pattern:\n  '$pat'"
-				  . " found. Skipping watchline\n"
-				  . "  $line\n";
-				return 1;
-			    }
-			    uscan_debug "$mangled_version by uversionmangle rule.\n";
+
+			if (mangle($watchfile, \$line, 'uversionmangle:',
+				\@{$options{'uversionmangle'}}, \$mangled_version)) {
+			    return 1;
 			}
 		    }
 		    $match = '';
@@ -3416,16 +3396,9 @@ if ($options{'mode'} eq 'http') {
 		m/(?:<\s*a\s+[^>]*href\s*=\s*\")((?-i)$pattern)\"/gi) {
 		my $file = fix_href($1);
 		my $mangled_version = join(".", $file =~ m/^$pattern$/);
-		foreach my $pat (@{$options{'uversionmangle'}}) {
-		    if (! safe_replace(\$mangled_version, $pat)) {
-			uscan_warn "In $watchfile, potentially"
-			  . " unsafe or malformed uversionmangle"
-			  . " pattern:\n  '$pat'"
-			  . " found. Skipping watchline\n"
-			  . "  $line\n";
-			return 1;
-		    }
-		    uscan_debug "$mangled_version by uversionmangle rule.\n";
+		if (mangle($watchfile, \$line, 'uversionmangle:',
+			\@{$options{'uversionmangle'}}, \$mangled_version)) {
+		    return 1;
 		}
 		$match = '';
 		if (defined $download_version) {
@@ -3447,16 +3420,9 @@ if ($options{'mode'} eq 'http') {
 		if ($ln and $ln =~ m/^($filepattern)$/) {
 		    my $file = $1;
 		    my $mangled_version = join(".", $file =~ m/^$filepattern$/);
-		    foreach my $pat (@{$options{'uversionmangle'}}) {
-			if (! safe_replace(\$mangled_version, $pat)) {
-			    uscan_warn "In $watchfile, potentially"
-			      . " unsafe or malformed uversionmangle"
-			      . " pattern:\n  '$pat'"
-			      . " found. Skipping watchline\n"
-			      . "  $line\n";
-			    return 1;
-			}
-			uscan_debug "$mangled_version by uversionmangle rule.\n";
+		    if (mangle($watchfile, \$line, 'uversionmangle:',
+			    \@{$options{'uversionmangle'}}, \$mangled_version)) {
+			return 1;
 		    }
 		    $match = '';
 		    if (defined $download_version) {
@@ -3525,16 +3491,9 @@ if ($options{'mode'} eq 'http') {
 	    $newversion=`git --git-dir=$destdir/$gitrepo_dir describe --tags`;
 	    $newversion =~ s/-/./g ;
 	    chomp($newversion);
-	    foreach my $pat (@{$options{'uversionmangle'}}) {
-		if (! safe_replace(\$newversion, $pat)) {
-		    uscan_warn "$progname: In $watchfile, potentially"
-			. " unsafe or malformed uversionmangle"
-			. " pattern:\n  '$pat'"
-			. " found. Skipping watchline\n"
-			. "  $line\n";
-		    return 1;
-		}
-	    uscan_debug "$newversion by uversionmangle rule.\n";
+	    if (mangle($watchfile, \$line, 'uversionmangle:',
+		    \@{$options{'uversionmangle'}}, \$newversion)) {
+		return 1;
 	    }
 	} else {
 	    $newversion=`git --git-dir=$destdir/$gitrepo_dir log -1 --date=format:$options{'date'} --pretty="$options{'pretty'}"`;
@@ -3561,16 +3520,9 @@ if ($options{'mode'} eq 'http') {
 		foreach my $_pattern (@patterns) {
 		    $version = join(".", map { $_ if defined($_) }
 			    $ref =~ m&^$_pattern$&);
-		    foreach my $pat (@{$options{'uversionmangle'}}) {
-			if (! safe_replace(\$version, $pat)) {
-			    uscan_warn "$progname: In $watchfile, potentially"
-				. " unsafe or malformed uversionmangle"
-				. " pattern:\n  '$pat'"
-				. " found. Skipping watchline\n"
-				. "  $line\n";
-			    return 1;
-			}
-		    uscan_debug "$version by uversionmangle rule.\n";
+		    if (mangle($watchfile, \$line, 'uversionmangle:',
+			    \@{$options{'uversionmangle'}}, \$version)) {
+			return 1;
 		    }
 		    push @refs, [$version, $ref];
 		}
@@ -3725,16 +3677,9 @@ EOF
 	$upstream_url =~ s/&amp;/&/g;
 	uscan_verbose "Matching target for downloadurlmangle: $upstream_url\n";
 	if (exists $options{'downloadurlmangle'}) {
-	    foreach my $pat (@{$options{'downloadurlmangle'}}) {
-		if (! safe_replace(\$upstream_url, $pat)) {
-		    uscan_warn "In $watchfile, potentially"
-		      . " unsafe or malformed downloadurlmangle"
-		      . " pattern:\n  '$pat'"
-		      . " found. Skipping watchline\n"
-		      . "  $line\n";
-		    return 1;
-		}
-		uscan_debug "$upstream_url by downloadurlmangle rule.\n";
+	    if (mangle($watchfile, \$line, 'downloadurlmangle:',
+		    \@{$options{'downloadurlmangle'}}, \$upstream_url)) {
+		return 1;
 	    }
 	}
 #######################################################################
@@ -3771,16 +3716,9 @@ EOF
 	    $newfile_base = $newfile;
 	}
 	uscan_verbose "Matching target for filenamemangle: $newfile_base\n";
-	foreach my $pat (@{$options{'filenamemangle'}}) {
-	    if (! safe_replace(\$newfile_base, $pat)) {
-		uscan_warn "In $watchfile, potentially"
-		. " unsafe or malformed filenamemangle"
-		. " pattern:\n  '$pat'"
-		. " found. Skipping watchline\n"
-		. "  $line\n";
+	if (mangle($watchfile, \$line, 'filenamemangle:',
+		\@{$options{'filenamemangle'}}, \$newfile_base)) {
 	    return 1;
-	    }
-	    uscan_debug "$newfile_base by filenamemangle rule.\n";
 	}
 	unless ($newversion) {
 	    # uversionmanglesd version is '', make best effort to set it
@@ -4025,26 +3963,20 @@ EOF
     }
     if ($options{'pgpmode'} eq 'mangle') {
 	$pgpsig_url = $upstream_url;
-	foreach my $pat (@{$options{'pgpsigurlmangle'}}) {
-	    if (! safe_replace(\$pgpsig_url, $pat)) {
-		uscan_warn "In $watchfile, potentially"
-		    . " unsafe or malformed pgpsigurlmangle"
-		    . " pattern:\n  '$pat'"
-		    . " found. Skipping watchline\n"
-		    . "  $line\n";
-		return 1;
+	if (mangle($watchfile, \$line, 'pgpsigurlmangle:',
+		\@{$options{'pgpsigurlmangle'}}, \$pgpsig_url)) {
+	    return 1;
+	}
+	if (! $suffix_sig) {
+	    my $upstream_url_stem = $upstream_url;
+	    my $pgpsig_url_stem = $pgpsig_url;
+	    $upstream_url_stem =~ s/\?.*$//;
+	    $pgpsig_url_stem =~ s/\?.*$//;
+	    $suffix_sig = substr($pgpsig_url_stem, length($upstream_url_stem)+1,);
+	    if ($suffix_sig and $suffix_sig !~ m/^[a-zA-Z]+$/) { # strange suffix
+		$suffix_sig = "pgp";
 	    }
-	    if (! $suffix_sig) {
-		my $upstream_url_stem = $upstream_url;
-		my $pgpsig_url_stem = $pgpsig_url;
-		$upstream_url_stem =~ s/\?.*$//;
-		$pgpsig_url_stem =~ s/\?.*$//;
-		$suffix_sig = substr($pgpsig_url_stem, length($upstream_url_stem)+1,);
-		if ($suffix_sig and $suffix_sig !~ m/^[a-zA-Z]+$/) { # strange suffix
-		    $suffix_sig = "pgp";
-		}
-	    }
-	    uscan_debug "$pgpsig_url by pgpsigurlmangle rule.\n";
+	    uscan_debug "Add $suffix_sig suffix based on $pgpsig_url.\n";
 	}
 	$sigfile = "$sigfile_base.$suffix_sig";
 	if ($signature == 1) {
@@ -4129,16 +4061,9 @@ EOF
 	return 1;
     }
     my $mangled_newversion = $newversion;
-    foreach my $pat (@{$options{'oversionmangle'}}) {
-	if (! safe_replace(\$mangled_newversion, $pat)) {
-	    uscan_warn "In $watchfile, potentially"
-	      . " unsafe or malformed oversionmangle"
-	      . " pattern:\n  '$pat'"
-	      . " found. Skipping watchline\n"
-	      . "  $line\n";
-	    return 1;
-	}
-	uscan_debug "$mangled_newversion by oversionmangle rule.\n";
+    if (mangle($watchfile, \$line, 'oversionmangle:',
+	    \@{$options{'oversionmangle'}}, \$mangled_newversion)) {
+	return 1;
     }
 
     if (! defined $common_mangled_newversion) {
@@ -4545,10 +4470,10 @@ sub downloader ($$$$$)
     return 1;
 }
 
-sub recursive_regex_dir ($$$)
+sub recursive_regex_dir ($$$$)
 {
     # If return '', parent code to cause return 1
-    my ($base, $optref, $watchfile)=@_;
+    my ($base, $optref, $watchfile, $lineptr)=@_;
 
     $base =~ m%^(\w+://[^/]+)/(.*)$%;
     my $site = $1;
@@ -4562,7 +4487,8 @@ sub recursive_regex_dir ($$$)
 	if ($dirpattern =~ /\(.*\)/) {
 	    uscan_verbose "dir=>$dir  dirpattern=>$dirpattern\n";
 	    my $newest_dir =
-		newest_dir($site, $dir, $dirpattern, $optref, $watchfile);
+		newest_dir($site, $dir, $dirpattern, $optref, $watchfile,
+		$lineptr);
 	    uscan_verbose "newest_dir => '$newest_dir'\n";
 	    if ($newest_dir ne '') {
 		$dir .= "$newest_dir";
@@ -4578,11 +4504,11 @@ sub recursive_regex_dir ($$$)
 
 
 # very similar to code above
-sub newest_dir ($$$$$)
+sub newest_dir ($$$$$$)
 {
     # return string $newdir as success
     # return string '' if error, to cause grand parent code to return 1
-    my ($site, $dir, $pattern, $optref, $watchfile) = @_;
+    my ($site, $dir, $pattern, $optref, $watchfile, $lineptr) = @_;
     my $base = $site.$dir;
     my ($request, $response);
     my $newdir;
@@ -4629,15 +4555,9 @@ sub newest_dir ($$$$$)
 	    uscan_verbose "Matching target for dirversionmangle:   $href\n";
 	    if ($href =~ m&^$dirpattern/?$&) {
 		my $mangled_version = join(".", map { $_ // '' } $href =~ m&^$dirpattern/?$&);
-		foreach my $pat (@{$$optref{'dirversionmangle'}}) {
-		    if (! safe_replace(\$mangled_version, $pat)) {
-			uscan_warn "In $watchfile, potentially"
-			. " unsafe or malformed dirversionmangle"
-			. " pattern:\n  '$pat'"
-			. " found.\n";
-			return 1;
-		    }
-		    uscan_debug "$mangled_version by dirversionnmangle rule.\n";
+		if (mangle($watchfile, $lineptr, 'dirversionmangle:',
+			\@{$$optref{'dirversionmangle'}}, \$mangled_version)) {
+		    return 1;
 		}
 		$match = '';
 		if (defined $download_version and $mangled_version eq $download_version) {
@@ -4716,15 +4636,9 @@ sub newest_dir ($$$$$)
 		my $dir = $1;
 		uscan_verbose "Matching target for dirversionmangle:   $dir\n";
 		my $mangled_version = join(".", $dir =~ m/^$pattern$/);
-		foreach my $pat (@{$$optref{'dirversionmangle'}}) {
-		    if (! safe_replace(\$mangled_version, $pat)) {
-			uscan_warn "In $watchfile, potentially"
-			. " unsafe or malformed dirversionmangle"
-			. " pattern:\n  '$pat'"
-			. " found.\n";
-			return 1;
-		    }
-		    uscan_debug "$mangled_version by dirversionnmangle rule.\n";
+		if (mangle($watchfile, $lineptr, 'dirversionmangle:',
+			\@{$$optref{'dirversionmangle'}}, \$mangled_version)) {
+		    return 1;
 		}
 		$match = '';
 		if (defined $download_version and $mangled_version eq $download_version) {
@@ -4753,15 +4667,9 @@ sub newest_dir ($$$$$)
 		    my $dir = $1;
 		    uscan_verbose "Matching target for dirversionmangle:   $dir\n";
 		    my $mangled_version = join(".", $dir =~ m/^$pattern$/);
-		    foreach my $pat (@{$$optref{'dirversionmangle'}}) {
-			if (! safe_replace(\$mangled_version, $pat)) {
-			    uscan_warn "In $watchfile, potentially"
-			    . " unsafe or malformed dirversionmangle"
-			    . " pattern:\n  '$pat'"
-			    . " found.\n";
-			    return 1;
-			}
-			uscan_debug "$mangled_version by dirversionnmangle rule.\n";
+		    if (mangle($watchfile, $lineptr, 'dirversionmangle:',
+			    \@{$$optref{'dirversionmangle'}}, \$mangled_version)) {
+			return 1;
 		    }
 		    $match = '';
 		    if (defined $download_version and $mangled_version eq $download_version) {
@@ -5137,6 +5045,29 @@ sub safe_replace($$)
 	return 1;
     }
 }
+
+# call this as
+#    if mangle($watchfile, \$line, 'uversionmangle:',
+#	    \@{$options{'uversionmangle'}}, \$version) {
+#	return 1;
+#    }
+sub mangle($$$$$)
+{
+    my ($watchfile, $lineptr, $name, $rulesptr, $verptr) = @_;
+    foreach my $pat (@{$rulesptr}) {
+	if (! safe_replace($verptr, $pat)) {
+	    uscan_warn "In $watchfile, potentially"
+		. " unsafe or malformed $name"
+		. " pattern:\n  '$pat'"
+		. " found. Skipping watchline\n"
+		. "  $$lineptr\n";
+		return 1;
+	}
+	uscan_debug "After $name $$verptr\n";
+    }
+    return 0;
+}
+
 #######################################################################
 # }}} code 7: utility functions (regex)
 #######################################################################
