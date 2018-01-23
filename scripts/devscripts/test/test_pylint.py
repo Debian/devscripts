@@ -40,7 +40,7 @@ class PylintTestCase(unittest.TestCase):
             if 'python' in f.readline():
                 files.append(script)
             f.close()
-        cmd = ['pylint', '--rcfile=devscripts/test/pylint.conf', '-E',
+        cmd = ['pylint3', '--rcfile=devscripts/test/pylint.conf', '-E',
                '--include-ids=y', '--'] + files
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE, close_fds=True)
