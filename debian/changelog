@@ -1,3 +1,15 @@
+devscripts (2.17.6+deb9u1) stretch; urgency=medium
+
+  [ Mattia Rizzolo ]
+  * debchange:
+    + Target stretch-backports with --bpo.  Closes: #867662
+    + Support $codename{,-{proposed-updates,security}} as well. Closes: #789587
+  * bts:
+    + Add patch from Samuel Thibault <sthibault@debian.org> to add support for
+      the new 'a11y' tag.  Closes: #867416
+
+ -- James McCoy <jamessan@debian.org>  Thu, 13 Jul 2017 21:20:04 -0400
+
 devscripts (2.17.6~bpo8+1) jessie-backports; urgency=medium
 
   * Rebuild for jessie-backports.
