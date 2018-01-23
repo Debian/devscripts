@@ -1,16 +1,16 @@
-#!/usr/bin/python
-import BaseHTTPServer
-import SimpleHTTPServer
+#!/usr/bin/python3
+import http.server
+from http.server import SimpleHTTPRequestHandler
 import logging
 
-class GetHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
+class GetHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
-	logging.error(self.headers)
-        SimpleHTTPServer.SimpleHTTPRequestHandler.do_GET(self)
+        logging.error(self.headers)
+        SimpleHTTPRequestHandler.do_GET(self)
 
 def test():
     Handler = GetHandler
-    httpd = BaseHTTPServer.HTTPServer(('', 0), Handler)
+    httpd = http.server.HTTPServer(('', 0), Handler)
 
     sa = httpd.socket.getsockname()
     with open('port', 'w') as f:

@@ -97,7 +97,7 @@ spawnHttpServer(){
 	USCAN_HTTP_SERVER=${USCAN_HTTP_SERVER:-server.py}
 	mkdir -p $TMPDIR/$REPOPATH
 	cd $TMPDIR/$REPOPATH
-	python "$test_dir/uscan/$USCAN_HTTP_SERVER" 2>log &
+	python3 "$test_dir/uscan/$USCAN_HTTP_SERVER" 2>log &
 	echo $! > pid
 	while ! [ -s port ]; do
 	    :

@@ -55,7 +55,7 @@ spawnHttpServer(){
     (
 	mkdir -p $TMPDIR/repo
 	cd $TMPDIR/repo
-	python "$test_dir/uscan/server.py" &
+	python3 "$test_dir/uscan/server.py" &
 	echo $! > pid
 	while ! [ -s port ]; do
 	    :
