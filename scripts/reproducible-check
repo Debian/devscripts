@@ -26,7 +26,13 @@ import requests
 import argparse
 import collections
 
-from xdg.BaseDirectory import xdg_cache_home
+try:
+    from xdg.BaseDirectory import xdg_cache_home
+except ImportError:
+    print("This script requires the xdg python3 module.", file=sys.stderr)
+    print("Please install the python3-xdg Debian package in order to use"
+          "this utility.", file=sys.stderr)
+    sys.exit(1)
 
 
 class ReproducibleCheck(object):

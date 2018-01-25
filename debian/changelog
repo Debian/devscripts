@@ -15,6 +15,8 @@ devscripts (2.18.1) UNRELEASED; urgency=medium
   * ltnu:
     + Avoid using L<> with emails in the POD documentation, so it can be built
       with an older pod as well.
+  * reproducible-check:
+    + Instruct to install python3-xdg if missing.  Closes: #888307
 
   [ Osamu Aoki ]
   * uupdate:
