@@ -8,6 +8,7 @@ OUR_TESTS=						\
 	debdiff						\
 	uscan						\
 	uscan_mangle				\
+	uscan_ftp				\
 	mk-origtargz				
 
 test: $(foreach i,$(OUR_TESTS),test_$(i).test)

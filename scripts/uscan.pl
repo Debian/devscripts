@@ -3968,11 +3968,8 @@ EOF
 	    return 1;
 	}
 	if (! $suffix_sig) {
-	    my $upstream_url_stem = $upstream_url;
-	    my $pgpsig_url_stem = $pgpsig_url;
-	    $upstream_url_stem =~ s/\?.*$//;
-	    $pgpsig_url_stem =~ s/\?.*$//;
-	    $suffix_sig = substr($pgpsig_url_stem, length($upstream_url_stem)+1,);
+	    $suffix_sig = $pgpsig_url;
+	    $suffix_sig =~ s/^.*\.//;
 	    if ($suffix_sig and $suffix_sig !~ m/^[a-zA-Z]+$/) { # strange suffix
 		$suffix_sig = "pgp";
 	    }
