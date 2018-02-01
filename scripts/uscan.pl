@@ -874,6 +874,19 @@ file B<foo-2.0.tar.gz.asc>, this watch file downloads these files, verifies the
 authenticity using the keyring F<debian/upstream/signing-key.asc> and creates the
 Debian B<orig.tar> file B<foo_2.0.orig.tar.gz>.
 
+Here is another example for the basic single upstream tarball with the matching
+signature file on decompressed tarball in the same file path.
+
+  version=4
+  opts="pgpsigurlmangle=s%@ARCHIVE_EXT@$%.asc%,decompress" \
+      http://example.com/release/@PACKAGE@.html \
+      files/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate
+
+For the upstream source package B<foo-2.0.tar.gz> and the upstream signature
+file B<foo-2.0.tar.asc>, this watch file downloads these files, verifies the
+authenticity using the keyring F<debian/upstream/signing-key.asc> and creates the
+Debian B<orig.tar> file B<foo_2.0.orig.tar.gz>.
+
 =head2 HTTP site (pgpmode=next/previous)
 
 Here is an example for the basic single upstream tarball with the matching
