@@ -13,10 +13,13 @@ def test():
     handler = FTPHandler
     handler.authorizer = authorizer
 
-    logging.basicConfig(filename='log', level=logging.INFO)
-    #logging.basicConfig(filename='log', level=logging.DEBUG)
+    logging.basicConfig(filename='info.log', level=logging.INFO)
+    #logging.basicConfig(filename='debuag.log', level=logging.DEBUG)
 
-    ftpserver = FTPServer(("127.0.0.1", 2121), handler)
+    ftpserver = FTPServer(("127.0.0.1", 0), handler)
+    sa = ftpserver.socket.getsockname()
+    with open('port', 'w') as f:
+        f.write(str(sa[1]))
     ftpserver.serve_forever()
 
 if __name__ == '__main__':
