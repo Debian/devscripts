@@ -1,6 +1,5 @@
-# test_pylint.py - Run pylint in errors-only mode.
-#
-# Copyright (C) 2010, Stefano Rivera <stefanor@ubuntu.com>
+# Copyright (C) 2010, Stefano Rivera <stefanor@debian.org>
+# Copyright (C) 2017-2018, Benjamin Drung <bdrung@debian.org>
 #
 # Permission to use, copy, modify, and/or distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -14,57 +13,60 @@
 # OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 # PERFORMANCE OF THIS SOFTWARE.
 
+"""test_pylint.py - Run pylint"""
+
+import os
 import re
 import subprocess
+import sys
 import unittest
 
-from . import SCRIPTS
+from . import get_source_files, unittest_verbosity
 
-WHITELIST = [re.compile(': %s$' % x) for x in (
-    # Wildcard import:
-    r"No name '\w+Error' in module 'launchpadlib\.errors'",
-    # https://www.logilab.org/ticket/51250:
-    r"Module 'hashlib' has no '(md5|sha(1|224|256|384|512))' member",
-    # mox:
-    r"Instance of '.+' has no '(WithSideEffects|MultipleTimes|AndReturn)' "
-    r"member",
-)]
+CONFIG = os.path.join(os.path.dirname(__file__), "pylint.conf")
 
 
 class PylintTestCase(unittest.TestCase):
+    """
+    This unittest class provides a test that runs the pylint code check
+    on the Python source code. The list of source files is provided by
+    the get_source_files() function and pylint is purely configured via
+    a config file.
+    """
+
     def test_pylint(self):
-        "Test: Run pylint on Python source code"
-        files = ['devscripts']
-        for script in SCRIPTS:
-            f = open(script, 'r', encoding='utf-8')
-            if 'python' in f.readline():
-                files.append(script)
-            f.close()
-        cmd = ['pylint3', '--rcfile=devscripts/test/pylint.conf', '-E',
-               '--include-ids=y', '--'] + files
-        process = subprocess.Popen(cmd, stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE, close_fds=True)
+        """Test: Run pylint on Python source code"""
 
+        with open("/proc/self/cmdline", "r") as cmdline_file:
+            python_binary = cmdline_file.read().split("\0")[0]
+        cmd = [python_binary, "-m", "pylint", "--rcfile=" + CONFIG, "--"] + get_source_files()
+        env = os.environ.copy()
+        env["PYLINTHOME"] = ".pylint.d"
+        if unittest_verbosity() >= 2:
+            sys.stderr.write("Running following command:\n{}\n".format(" ".join(cmd)))
+        process = subprocess.Popen(cmd, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                   close_fds=True)
         out, err = process.communicate()
-        if err != '':
-            raise unittest.SkipTest('pylint crashed :/')
 
-        filtered_out = []
-        detected_in = ''
-        # pylint: disable=E1103
-        for line in out.splitlines():
-            # pylint: enable=E1103
-            if line.startswith('************* '):
-                detected_in = line
-                continue
+        if process.returncode != 0:
+            # Strip trailing summary (introduced in pylint 1.7). This summary might look like:
+            #
+            # ------------------------------------
+            # Your code has been rated at 10.00/10
+            #
+            out = re.sub("^(-+|Your code has been rated at .*)$", "", out.decode(),
+                         flags=re.MULTILINE).rstrip()
 
-            for reg_exp in WHITELIST:
-                if reg_exp.search(line):
-                    break
-            else:
-                filtered_out.append(detected_in)
-                filtered_out.append(line)
+            # Strip logging of used config file (introduced in pylint 1.8)
+            err = re.sub("^Using config file .*\n", "", err.decode()).rstrip()
 
-        self.assertEqual(filtered_out, [],
-                         "pylint found errors.\n"
-                         "Filtered Output:\n" + '\n'.join(filtered_out))
+            msgs = []
+            if err:
+                msgs.append("pylint exited with code {} and has unexpected output on stderr:\n{}"
+                            .format(process.returncode, err))
+            if out:
+                msgs.append("pylint found issues:\n{}".format(out))
+            if not msgs:
+                msgs.append("pylint exited with code {} and has no output on stdout or stderr."
+                            .format(process.returncode))
+            self.fail("\n".join(msgs))

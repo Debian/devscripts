@@ -25,5 +25,5 @@ if __name__ == '__main__':
         version=get_version(),
         scripts=SCRIPTS,
         packages=['devscripts', 'devscripts/test'],
-        test_suite='devscripts.test.discover',
+        test_suite='devscripts.test',
     )
