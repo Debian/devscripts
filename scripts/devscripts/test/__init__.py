@@ -22,6 +22,14 @@ if sys.version_info < (2, 7):
 else:
     import unittest
 
+SCRIPTS = [
+    "debdiff-apply",
+    "reproducible-check",
+    "sadt",
+    "suspicious-source",
+    "wrap-and-sort",
+]
+
 
 def discover():
     # import __main__ triggers code re-execution

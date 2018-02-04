@@ -20,14 +20,14 @@ import select
 import signal
 import subprocess
 import time
+import unittest
 
-import setup
-from devscripts.test import unittest
+from . import SCRIPTS
 
 TIMEOUT = 5
 
 
-def load_tests(loader, tests, pattern):
+def load_tests(loader, tests, pattern):  # pylint: disable=unused-argument
     "Give HelpTestCase a chance to populate before loading its test cases"
     suite = unittest.TestSuite()
     HelpTestCase.populate()
@@ -38,7 +38,7 @@ def load_tests(loader, tests, pattern):
 class HelpTestCase(unittest.TestCase):
     @classmethod
     def populate(cls):
-        for script in setup.scripts:
+        for script in SCRIPTS:
             setattr(cls, 'test_' + script, cls.make_help_tester(script))
 
     @classmethod

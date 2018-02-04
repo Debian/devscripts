@@ -26,18 +26,15 @@ import email.utils
 import hashlib
 import logging
 import os
-import unidiff
 import shutil
 import subprocess
 import sys
 import tempfile
 import time
 
-from debian.changelog import Changelog, ChangeBlock
+import unidiff
 
-dirname = os.path.dirname
-basename = os.path.basename
-C = subprocess.check_call
+from debian.changelog import Changelog, ChangeBlock
 
 # this can be any valid value, it doesn't appear in the final output
 DCH_DUMMY_TAIL = "\n -- debdiff-apply dummy tool <infinity0@debian.org>  " \
@@ -48,15 +45,16 @@ DISTRIBUTION_DEFAULT = "experimental"
 
 
 def workaround_dpkg_865430(dscfile, origdir, stdout):
-    f = subprocess.check_output(["dcmd", "--tar", "echo", dscfile]).rstrip()
-    if not os.path.exists(os.path.join(origdir.encode("utf-8"), os.path.basename(f))):
-        C(["dcmd", "--tar", "cp", dscfile, origdir], stdout=stdout)
+    filename = subprocess.check_output(["dcmd", "--tar", "echo", dscfile]).rstrip()
+    if not os.path.exists(os.path.join(origdir.encode("utf-8"), os.path.basename(filename))):
+        subprocess.check_call(["dcmd", "--tar", "cp", dscfile, origdir], stdout=stdout)
 
 
 def is_dch(path):
-    return (basename(path) == 'changelog'
-            and basename(dirname(path)) == 'debian'
-            and dirname(dirname(dirname(path))) == '')
+    dirname = os.path.dirname(path)
+    return (os.path.basename(path) == 'changelog'
+            and os.path.basename(dirname) == 'debian'
+            and os.path.dirname(os.path.dirname(dirname)) == '')
 
 
 def hunk_lines_to_str(hunk_lines):
@@ -77,15 +75,16 @@ def read_dch_patch(dch_patch):
     return source_version, target
 
 
-def apply_dch_patch(source_file, current, patch_name, old_version, target, dry_run):
+def apply_dch_patch(source_file, current, old_version, target, dry_run):
     target_version = str(target.version)
 
     if not old_version or not target_version.startswith(old_version):
-        logging.warn("don't know how to rebase version-change (%s => %s) onto %s" %
-                     (old_version, target_version, old_version))
+        logging.warning("don't know how to rebase version-change (%s => %s) onto %s",
+                        old_version, target_version, old_version)
         newlog = subprocess.getoutput("EDITOR=cat dch -n 2>/dev/null").rstrip()
         version = str(Changelog(newlog, 1)[0].version)
-        logging.warn("using version %s based on `dch -n`; feel free to make me smarter", version)
+        logging.warning("using version %s based on `dch -n`; feel free to make me smarter",
+                        version)
     else:
         version_suffix = target_version[len(old_version):]
         version = str(current[0].version) + version_suffix
@@ -94,7 +93,7 @@ def apply_dch_patch(source_file, current, patch_name, old_version, target, dry_r
     if dry_run:
         return version
 
-    current._blocks.insert(0, target)
+    current._blocks.insert(0, target)  # pylint: disable=protected-access
     current.set_version(version)
 
     shutil.copy(source_file, source_file + ".new")
@@ -103,10 +102,11 @@ def apply_dch_patch(source_file, current, patch_name, old_version, target, dry_r
             current.write_to_open_file(fp)
         os.rename(source_file + ".new", source_file)
     except Exception:
-        logging.warn("failed to patch %s", source_file)
-        logging.warn("half-applied changes in %s", source_file + ".new")
-        logging.warn("current working directory is %s", os.getcwd())
+        logging.warning("failed to patch %s", source_file)
+        logging.warning("half-applied changes in %s", source_file + ".new")
+        logging.warning("current working directory is %s", os.getcwd())
         raise
+    return version
 
 
 def call_patch(patch_str, *args, check=True, **kwargs):
@@ -134,7 +134,7 @@ def debdiff_apply(patch, patch_name, args):
 
     changelog = list(filter(lambda x: is_dch(x.path), patch))
     if not changelog:
-        logging.info("no debian/changelog in patch: %s" % args.patch_file)
+        logging.info("no debian/changelog in patch: %s", args.patch_file)
         old_version = None
         target = ChangeBlock(
             package=CHBLOCK_DUMMY_PACKAGE,
@@ -169,15 +169,14 @@ def debdiff_apply(patch, patch_name, args):
             call_patch(patch_str)
             logging.info("patch %s applies!", patch_name)
         elif check_patch(patch_str, "-R"):
-            logging.warn("patch %s already applied", patch_name)
+            logging.warning("patch %s already applied", patch_name)
             return False
         else:
             call_patch(patch_str, "--dry-run", "-f")
-            raise ValueError("patch %s doesn't apply!", patch_name)
+            raise ValueError("patch %s doesn't apply!" % (patch_name))
 
     # only apply d/changelog patch if the rest of the patch applied
-    new_version = apply_dch_patch(args.changelog, current, patch_name,
-                                  old_version, target, dry_run)
+    new_version = apply_dch_patch(args.changelog, current, old_version, target, dry_run)
     if args.target_version:
         print(new_version)
         return False
@@ -189,7 +188,7 @@ def debdiff_apply(patch, patch_name, args):
     return True
 
 
-def main(args):
+def parse_args(args):
     parser = argparse.ArgumentParser(
         description='Apply a debdiff to a Debian source package')
     parser.add_argument(
@@ -250,8 +249,12 @@ def main(args):
         "after debdiff-apply(1) exits. If not given, then it will be extracted to a "
         "temporary directory.",
     )
-    args = parser.parse_args(args)
+    return parser.parse_args(args)
 
+
+def main(args):
+    # Split this function! pylint: disable=too-many-branches,too-many-locals,too-many-statements
+    args = parse_args(args)
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
 
@@ -261,14 +264,14 @@ def main(args):
         try:
             patch = unidiff.PatchSet(data.splitlines(keepends=True), encoding=enc)
             break
-        except Exception:
+        except Exception:  # pylint: disable=broad-except
             if enc == TRY_ENCODINGS[-1]:
                 raise
             else:
                 continue
 
     patch_name = '%s:%s' % (
-        basename(args.patch_file),
+        os.path.basename(args.patch_file),
         hashlib.sha256(data).hexdigest()[:20 if args.patch_file == '/dev/stdin' else 8])
     quiet = args.source_version or args.target_version
     dry_run = args.source_version or args.target_version
@@ -288,7 +291,8 @@ def main(args):
             os.makedirs(extractdir)
         try:
             builddir = os.path.join(extractdir, parts[0])  # dpkg-source doesn't like existing dirs
-            C(["dpkg-source", "-x", "--skip-patches", dscfile, builddir], stdout=stdout)
+            subprocess.check_call(["dpkg-source", "-x", "--skip-patches", dscfile, builddir],
+                                  stdout=stdout)
             origdir = os.getcwd()
             workaround_dpkg_865430(dscfile, origdir, stdout)
             os.chdir(builddir)
@@ -297,22 +301,21 @@ def main(args):
                 return
             os.chdir(origdir)
             try:
-                C(["dpkg-source", "-b", builddir])
+                subprocess.check_call(["dpkg-source", "-b", builddir])
             except subprocess.CalledProcessError:
                 if args.quilt_refresh:
-                    C(["sh", "-c", """
+                    subprocess.check_call(["sh", "-c", """
 set -ex
 export QUILT_PATCHES=debian/patches
 while quilt push; do quilt refresh; done
-"""
-                       ], cwd=builddir)
-                    C(["dpkg-source", "-b", builddir])
+"""], cwd=builddir)
+                    subprocess.check_call(["dpkg-source", "-b", builddir])
                 else:
                     raise
         finally:
             cleandir = builddir if args.directory else extractdir
             if args.no_clean:
-                logging.warn("you should clean up temp files in %s", cleandir)
+                logging.warning("you should clean up temp files in %s", cleandir)
             else:
                 shutil.rmtree(cleandir)
 

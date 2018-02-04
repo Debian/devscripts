@@ -16,9 +16,9 @@
 
 import re
 import subprocess
+import unittest
 
-import setup
-from devscripts.test import unittest
+from . import SCRIPTS
 
 WHITELIST = [re.compile(': %s$' % x) for x in (
     # Wildcard import:
@@ -35,7 +35,7 @@ class PylintTestCase(unittest.TestCase):
     def test_pylint(self):
         "Test: Run pylint on Python source code"
         files = ['devscripts']
-        for script in setup.scripts:
+        for script in SCRIPTS:
             f = open(script, 'r', encoding='utf-8')
             if 'python' in f.readline():
                 files.append(script)
