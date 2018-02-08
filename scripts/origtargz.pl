@@ -2,7 +2,7 @@
 #
 # origtargz: fetch the orig tarball of a Debian package from various sources,
 # and unpack it
-# Copyright (C) 2012-2016  Christoph Berg <myon@debian.org>
+# Copyright (C) 2012-2018  Christoph Berg <myon@debian.org>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -68,12 +68,12 @@ Finally, B<uscan --download --download-current-version> is tried.
 
 When asked to unpack the orig tarball, B<origtargz> will remove all files and
 directories from the current directory, except the debian directory, and the
-VCS repository directories. Some files outside F<debian/> which are often stored
-in VCS even for debian-dir-only repositories are also preserved (F<.bzr-builddeb>,
-F<.gitignore>, F<.hgignore>). I<Note that this will drop all non-committed changes>
+VCS repository directories. I<Note that this will drop all non-committed changes>
 for the patch system in use (e.g. source format "3.0 (quilt)"), and will even
 remove all patches from the package when no patch system is in use (the
-original "1.0" source format).
+original "1.0" source format). Some VCS control files outside F<debian/>
+preserved (F<.bzr-builddeb>, F<.bzr-ignore>, F<.gitignore>, F<.hgignore>), if
+stored in VCS.
 
 The default behavior is to unpack the orig tarball if the current directory
 is empty except for a F<debian> directory and the VCS files mentioned above.
@@ -312,7 +312,11 @@ sub clean_checkout ()
 		next if ($file eq '.' or $file eq '..');
 		next if ($file eq 'debian');
 		next if ($file =~ /^(\.bzr|\.git|\.hg|\.svn|CVS|_darcs)$/);
-		if ($file =~ /^(\.bzr(ignore|-builddeb)|\.gitignore|\.hgignore)$/) {
+		if ($file eq '.gitignore' and -d '.git') { # preserve .gitignore if it's from git
+			next if `git ls-files .gitignore` eq ".gitignore\n";
+		}
+		if (($file =~ /^\.bzr(ignore|-builddeb)$/ and -d '.bzr') or
+		    ($file eq '.hgignore' and -d '.hg')) {
 			print "Notice: not deleting $file (likely to come from VCS checkout)\n";
 			next;
 		}
