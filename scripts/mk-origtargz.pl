@@ -572,11 +572,24 @@ if ($do_repack || $deletecount) {
     # We have to use piping because --delete is broken otherwise, as documented
     # at https://www.gnu.org/software/tar/manual/html_node/delete.html
     if (@to_delete) {
-	spawn(exec => ['tar', '--delete', @to_delete ],
-	      from_file => $destfiletar,
-	      to_file => $destfiletar . ".tmp",
-	      wait_child => 1) if scalar(@to_delete) > 0;
-	move ($destfiletar . ".tmp", $destfiletar);
+	# ARG_MAX: max number of bytes exec() can handle
+	my $arg_max;
+	spawn(
+	    exec => ['getconf', 'ARG_MAX'],
+	    to_string => \$arg_max,
+	    wait_child => 1
+	);
+	# usually NAME_MAX=255, but here we use 128 to be on the safe side.
+	$arg_max = int($arg_max / 128);
+	# We use this lame splice on a totally arbitrary $arg_max because
+	# counting how many bytes there are in @to_delete is too inefficient.
+	while (my @next_n = splice @to_delete, 0, $arg_max) {
+	    spawn(exec => ['tar', '--delete', @next_n ],
+		  from_file => $destfiletar,
+		  to_file => $destfiletar . ".tmp",
+		  wait_child => 1) if scalar(@next_n) > 0;
+	    move ($destfiletar . ".tmp", $destfiletar);
+	}
     }
     compress_archive($destfiletar, $destfile, $compression);
 

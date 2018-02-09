@@ -17,6 +17,9 @@ devscripts (2.18.1) UNRELEASED; urgency=medium
       with an older pod as well.
   * reproducible-check:
     + Instruct to install python3-xdg if missing.  Closes: #888307
+  * mk-origtargz:
+    + Split list of files to delete if the list gets too long to fit ARG_MAX.
+      Thanks to Ximin Luo <infinity0> for the initial patch.  Closes: #855464
 
   [ Osamu Aoki ]
   * uupdate:
