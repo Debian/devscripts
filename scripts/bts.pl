@@ -483,6 +483,7 @@ first option given on the command-line.
 my $offlinemode = 0;
 my $caching     = 1;
 my $cachemode   = 'min';
+my $cachemode_re = '^(full|mbox|min)$';
 my $refreshmode = 0;
 my $updatemode  = 0;
 my $mailreader  = 'mutt -f %s';
@@ -549,7 +550,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
       or $config_vars{'BTS_OFFLINE'} = 'no';
     $config_vars{'BTS_CACHE'} =~ /^(yes|no)$/
       or $config_vars{'BTS_CACHE'} = 'yes';
-    $config_vars{'BTS_CACHE_MODE'} =~ /^(min|mbox|full)$/
+    $config_vars{'BTS_CACHE_MODE'} =~ $cachemode_re
       or $config_vars{'BTS_CACHE_MODE'} = 'min';
     $config_vars{'BTS_FORCE_REFRESH'} =~ /^(yes|no)$/
       or $config_vars{'BTS_FORCE_REFRESH'} = 'no';
@@ -736,7 +737,7 @@ if ($opt_sendmail) {
 }
 
 if ($opt_cachemode) {
-    if ($opt_cachemode =~ /^(min|mbox|full)$/) {
+    if ($opt_cachemode =~ $cachemode_re) {
         $cachemode = $opt_cachemode;
     } else {
         warn
@@ -2266,7 +2267,7 @@ sub bts_cache {
         ($updatemode, $sub_updatemode) = ($sub_updatemode, $updatemode);
     }
     if (defined $sub_cachemode) {
-        if ($sub_cachemode =~ /^(min|mbox|full)$/) {
+        if ($sub_cachemode =~ $cachemode_re) {
             ($cachemode, $sub_cachemode) = ($sub_cachemode, $cachemode);
         } else {
             warn
