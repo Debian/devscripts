@@ -363,7 +363,7 @@ my (
     $opt_package, @closes
 );
 my ($opt_news);
-my ($opt_level, $opt_regex, $opt_noconf, $opt_empty);
+my ($opt_noconf, $opt_empty);
 
 Getopt::Long::Configure('bundling');
 GetOptions(
@@ -406,8 +406,8 @@ GetOptions(
     "m|maintmaint"           => \$opt_m,
     "M|controlmaint"         => \$opt_M,
     "t|mainttrailer!"        => \$opt_t,
-    "check-dirname-level=s"  => \$opt_level,
-    "check-dirname-regex=s"  => \$opt_regex,
+    "check-dirname-level=s"  => \$check_dirname_level,
+    "check-dirname-regex=s"  => \$check_dirname_regex,
     "noconf"                 => \$opt_noconf,
     "no-conf"                => \$opt_noconf,
     "release-heuristic=s"    => \$opt_release_heuristic,
@@ -436,14 +436,9 @@ if ($opt_noconf) {
 if ($opt_help)    { usage;   exit 0; }
 if ($opt_version) { version; exit 0; }
 
-if (defined $opt_level) {
-    if ($opt_level =~ /^[012]$/) { $check_dirname_level = $opt_level; }
-    else {
+if ($check_dirname_level !~ /^[012]$/) {
         fatal "Unrecognised --check-dirname-level value (allowed are 0,1,2)";
-    }
 }
-
-if (defined $opt_regex) { $check_dirname_regex = $opt_regex; }
 
 # Only allow at most one non-help option
 fatal
