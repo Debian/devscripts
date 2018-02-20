@@ -263,7 +263,7 @@ my $opt_multimaint_merge      = 0;
 my $opt_tz                    = undef;
 my $opt_t                     = '';
 my $opt_allow_lower           = '';
-my $opt_auto_nmu              = 'yes';
+my $opt_auto_nmu              = 1;
 my $opt_force_save_on_release = 1;
 my $opt_vendor                = undef;
 
@@ -343,7 +343,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $opt_t = ($config_vars{'DEBCHANGE_MAINTTRAILER'} eq 'no' ? 0 : 1)
       if $config_vars{'DEBCHANGE_MAINTTRAILER'};
     $opt_allow_lower = $config_vars{'DEBCHANGE_LOWER_VERSION_PATTERN'};
-    $opt_auto_nmu    = $config_vars{'DEBCHANGE_AUTO_NMU'};
+    $opt_auto_nmu    = $config_vars{'DEBCHANGE_AUTO_NMU'} eq 'yes';
     $opt_force_save_on_release
       = $config_vars{'DEBCHANGE_FORCE_SAVE_ON_RELEASE'} eq 'yes' ? 1 : 0;
     $opt_vendor = $config_vars{'DEBCHANGE_VENDOR'};
@@ -883,7 +883,7 @@ if ($opt_M) {
 #####
 
 if (
-        $opt_auto_nmu eq 'yes'
+        $opt_auto_nmu
     and !$opt_v
     and !$opt_l
     and !$opt_s
