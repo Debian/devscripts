@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 PROGNAME=`basename $0`
 MODIFIED_CONF_MSG='Default settings modified by devscripts configuration files:'
 
