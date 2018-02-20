@@ -1,5 +1,6 @@
 
 include ../Makefile.common
+include /usr/share/dpkg/vendor.mk
 DESTDIR =
 
 define \n
@@ -58,7 +59,7 @@ $(VERSION_FILE):
 debchange: debchange.pl $(VERSION_FILE)
 	cp $< $@
 	sed -i "s/###VERSION###/$(VERSION)/" $@
-ifeq ($(shell dpkg-vendor --query Vendor),Ubuntu)
+ifeq ($(DEB_VENDOR),Ubuntu)
 # On Ubuntu always default to targeting the release that it's built on,
 # not the current devel release, since its primary use on stable releases
 # will be for preparing PPA uploads.
