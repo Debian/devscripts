@@ -247,7 +247,7 @@ elif [ -e ".svn/deb-layout" ]; then
     fi
 fi
 
-# check sanity of debdir
+# check sanity of debsdir
 if ! [ -d "$debsdir" ]; then
     if [ -n "$debsdir_warning" ]; then
 	echo "$PROGNAME: $debsdir_warning" >&2
