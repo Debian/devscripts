@@ -70,7 +70,8 @@ Usage: plotchangelog [options] changelog ...
 	          --verbose       Outputs the gnuplot script.
                   --help          Show this message.
                   --version       Display version and copyright information.
-                  --noconf        Don\'t read devscripts configuration files
+                  --noconf --no-conf Don\'t read devscripts configuration files
+                                  Must be the first option.
 
   At most one of -l and -b (or their long equivalents) may be used.
 
