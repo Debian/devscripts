@@ -498,8 +498,8 @@ my $noaction    = 0;
 my $sendmail_t       = '^/usr/sbin/sendmail$|^/usr/sbin/exim';
 my $includeresolved  = 1;
 my $requestack       = 1;
-my $interactive      = 0;
-my $forceinteractive = 0;
+my $interactive_re   = '^(force|no|yes)$';
+my $interactive      = 'no';
 my $ccemail          = "";
 my $toolname         = "";
 my $btsserver        = 'https://bugs.debian.org';
@@ -564,7 +564,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
       or $config_vars{'BTS_INCLUDE_RESOLVED'} = 'yes';
     $config_vars{'BTS_SUPPRESS_ACKS'} =~ /^(yes|no)$/
       or $config_vars{'BTS_SUPPRESS_ACKS'} = 'no';
-    $config_vars{'BTS_INTERACTIVE'} =~ /^(yes|no|force)$/
+    $config_vars{'BTS_INTERACTIVE'} =~ $interactive_re
       or $config_vars{'BTS_INTERACTIVE'} = 'no';
 
     if (!length $config_vars{'BTS_SMTP_HOST'}
@@ -600,8 +600,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     $smtphelo         = $config_vars{'BTS_SMTP_HELO'};
     $includeresolved  = $config_vars{'BTS_INCLUDE_RESOLVED'} eq 'yes' ? 1 : 0;
     $requestack       = $config_vars{'BTS_SUPPRESS_ACKS'} eq 'no'     ? 1 : 0;
-    $interactive      = $config_vars{'BTS_INTERACTIVE'} eq 'no'       ? 0 : 1;
-    $forceinteractive = $config_vars{'BTS_INTERACTIVE'} eq 'force'    ? 1 : 0;
+    $interactive      = $config_vars{'BTS_INTERACTIVE'};
     $ccemail          = $config_vars{'BTS_DEFAULT_CC'};
     $btsserver        = $config_vars{'BTS_SERVER'};
 }
@@ -649,9 +648,9 @@ GetOptions(
     "noconf|no-conf"            => \$opt_noconf,
     "include-resolved!"         => \$includeresolved,
     "ack!"                      => \$requestack,
-    "i|interactive"             => \$interactive,
-    "no-interactive"    => sub { $interactive = 0; $forceinteractive = 0; },
-    "force-interactive" => sub { $interactive = 1; $forceinteractive = 1; },
+    "i|interactive"             => sub { $interactive = 'yes'; },
+    "no-interactive"            => sub { $interactive = 'no'; },
+    "force-interactive"         => sub { $interactive = 'force'; },
     "use-default-cc!"   => \$use_default_cc,
     "toolname=s"        => \$toolname,
     "bts-server=s"      => \$btsserver,
@@ -1289,7 +1288,7 @@ sub bts_done {
     # Force interactive mode since done mails shouldn't be sent without an
     # explanation
     if (not $use_mutt) {
-        $forceinteractive = 1;
+        $interactive = 'force';
     }
 
     # Include the submitter in the email, so we act like a mail to -done
@@ -2806,7 +2805,7 @@ sub mailbtsall {
     $charset =~ s/^ANSI_X3\.4-19(68|86)$/US-ASCII/;
     $subject = MIME_encode_mimewords($subject, 'Charset' => $charset);
 
-    if ($forceinteractive) {
+    if ($interactive eq 'force') {
         $ccemail .= ", " if length $ccemail;
         $ccemail .= generate_packages_cc();
     }
@@ -2894,9 +2893,9 @@ sub confirmmail {
 
     return ($header, $body) if $noaction;
 
-    $body = edit($body) if $forceinteractive;
+    $body = edit($body) if $interactive eq 'force';
     my $setHeader = 0;
-    if ($interactive) {
+    if ($interactive ne 'no') {
         while (1) {
             print "\n", $header, "\n", $body, "\n---\n";
             print "OK to send? [Y/n/e] ";
@@ -2909,8 +2908,8 @@ sub confirmmail {
             } elsif (/^e/i) {
                 # Since the user has chosen to edit the message, we go ahead
                 # and add the $ccpackages Ccs (if they haven't already been
-                # added due to $forceinteractive).
-                if (!$forceinteractive && !$setHeader) {
+                # added due to interactive).
+                if ($interactive ne 'force' && !$setHeader) {
                     $setHeader = 1;
                     my $ccs = generate_packages_cc();
                     if ($header =~ m/^Cc: (.*?)$/m) {
@@ -2932,7 +2931,7 @@ sub addfooter() {
     my $body = shift;
 
     $body .= "thanks\n";
-    if ($forceinteractive) {
+    if ($interactive eq 'force') {
         if (-r $ENV{'HOME'} . "/.signature") {
             if (open SIG, "<", $ENV{'HOME'} . "/.signature") {
                 $body .= "-- \n";
