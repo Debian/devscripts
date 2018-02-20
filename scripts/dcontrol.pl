@@ -72,6 +72,7 @@ Query package and source control files for all Debian distributions.
 Options:
     -s --show-suite  Add headers for distribution the control file is from
     -d --debug       Print URL queried
+    --noconf --no-conf Ignore configuration files (must be first option).
 
 Modifiers:
     =version         Exact version match
@@ -180,6 +181,7 @@ GetOptions(
     "s|show-suite" => \$opt->{'show-suite'},
     "h|help"       => \$opt->{'help'},
     "V|version"    => \$opt->{'version'},
+    'noconf|no-conf' => \$opt->{'noconf'},
   )
   or die
   "$progname: unrecognised option. Run $progname --help for more details.\n";
