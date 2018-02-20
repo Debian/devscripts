@@ -2664,7 +2664,7 @@ sub send_mail {
     my $message = fold_from_header("From: $from") . "\n";
     $message .= "To: $to\n"               if length $to;
     $message .= "Cc: $cc\n"               if length $cc;
-    $message .= "X-Debbugs-No-Ack: Yes\n" if $requestack == 0;
+    $message .= "X-Debbugs-No-Ack: Yes\n" if not $requestack;
     $message
       .= "Subject: $subject\n"
       . "Date: $date\n"
@@ -2850,7 +2850,7 @@ sub mailbtsall {
 
         $header = "To: $btsemail\n";
         $header .= "Cc: $ccemail\n"          if length $ccemail;
-        $header .= "X-Debbugs-No-Ack: Yes\n" if $requestack == 0;
+        $header .= "X-Debbugs-No-Ack: Yes\n" if not $requestack;
         $header .= "Subject: $subject\n"
           . "User-Agent: devscripts bts/$version$toolname\n" . "\n";
 
