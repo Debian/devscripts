@@ -12,10 +12,6 @@ VERSION = $(shell cat $(VERSION_FILE))
 
 PL_FILES := $(wildcard *.pl)
 SH_FILES = $(wildcard *.sh)
-CPPFLAGS := $(shell dpkg-buildflags --get CPPFLAGS)
-CFLAGS := $(shell dpkg-buildflags --get CFLAGS)
-CFLAGS += -std=c99
-LDFLAGS := $(shell dpkg-buildflags --get LDFLAGS)
 CWRAPPERS = debpkg-wrapper
 SCRIPTS = $(patsubst %.pl,%,$(PL_FILES)) $(patsubst %.sh,%,$(SH_FILES))
 PL_CHECKS = $(patsubst %.pl,%.pl_check,$(PL_FILES))
