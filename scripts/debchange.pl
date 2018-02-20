@@ -258,6 +258,7 @@ my $check_dirname_regex       = 'PACKAGE(-.+)?';
 my $opt_p                     = 0;
 my $opt_query                 = 1;
 my $opt_release_heuristic     = 'changelog';
+my $opt_release_heuristic_re  = '^(changelog|log)$';
 my $opt_multimaint            = 1;
 my $opt_multimaint_merge      = 0;
 my $opt_tz                    = undef;
@@ -312,7 +313,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
       or $config_vars{'DEBCHANGE_QUERY_BTS'} = 'yes';
     $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} =~ /^[012]$/
       or $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} = 1;
-    $config_vars{'DEBCHANGE_RELEASE_HEURISTIC'} =~ /^(log|changelog)$/
+    $config_vars{'DEBCHANGE_RELEASE_HEURISTIC'} =~ $opt_release_heuristic_re
       or $config_vars{'DEBCHANGE_RELEASE_HEURISTIC'} = 'changelog';
     $config_vars{'DEBCHANGE_MULTIMAINT'} =~ /^(yes|no)$/
       or $config_vars{'DEBCHANGE_MULTIMAINT'} = 'yes';
@@ -438,6 +439,9 @@ if ($opt_version) { version; exit 0; }
 
 if ($check_dirname_level !~ /^[012]$/) {
         fatal "Unrecognised --check-dirname-level value (allowed are 0,1,2)";
+}
+if ($opt_release_heuristic !~ $opt_release_heuristic_re) {
+    fatal "Allowed values for --release-heuristics are log and changelog.";
 }
 if (defined $vendor and $vendor eq '') {
     fatal "Value for vendor must not be empty.";
