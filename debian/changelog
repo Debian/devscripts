@@ -19,6 +19,9 @@ devscripts (2.17.6+deb9u2) UNRELEASED; urgency=medium
     + Use a real newline instead of embedding \n in a shell variable, which
       isn't portable between dash and bash, fixing FTBFS in systems using bash
       as /bin/sh.
+  * debian/control:
+    + Change maintainer email from alioth to devscripts@packages.debian.org.
+    + Move the Git repository to salsa.debian.org.
 
   [ Christoph Berg ]
   * debcheckout:
