@@ -46,6 +46,11 @@ devscripts (2.18.1) UNRELEASED; urgency=medium
   [ Christoph Berg ]
   * origtargz: Make --clean remove .gitignore if it's not in git.
 
+  [ Benjamin Drung ]
+  * Fix all pylint3 issues.
+  * Update Python unittests to support pylint 1.8.
+  * Convert flake8 test into a unittest.
+
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 03 Jan 2018 14:31:54 +0100
 
 devscripts (2.17.12) unstable; urgency=medium
