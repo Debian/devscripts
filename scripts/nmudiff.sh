@@ -49,7 +49,7 @@ $MODIFIED_CONF_MSG"
 }
 
 version () {
-	cat <<EOF
+    cat <<EOF
 This is $PROGNAME, from the Debian devscripts package, version ###VERSION###
 This code is copyright 2006 by Steinar H. Gunderson, with modifications
 copyright 2006 by Julian Gilbey <jdg@debian.org>.
@@ -76,62 +76,71 @@ if [ "$1" = "--no-conf" -o "$1" = "--noconf" ]; then
 
     # set defaults
     for var in $VARS; do
-	eval "$var=\$DEFAULT_$var"
+    eval "$var=\$DEFAULT_$var"
     done
 else
     # Run in a subshell for protection against accidental errors
     # in the config files
     eval $(
-	set +e
-	for var in $VARS; do
-	    eval "$var=\$DEFAULT_$var"
-	done
+    set +e
+    for var in $VARS; do
+        eval "$var=\$DEFAULT_$var"
+    done
 
-	for file in /etc/devscripts.conf ~/.devscripts
-	  do
-	  [ -r $file ] && . $file
-	done
+    for file in /etc/devscripts.conf ~/.devscripts
+      do
+      [ -r $file ] && . $file
+    done
 
-	set | egrep '^(NMUDIFF|BTS|DEVSCRIPTS)_')
+    set | egrep '^(NMUDIFF|BTS|DEVSCRIPTS)_')
 
     # check sanity
     case "$BTS_SENDMAIL_COMMAND" in
-	"") BTS_SENDMAIL_COMMAND=/usr/sbin/sendmail ;;
-	*) ;;
+    "")
+        BTS_SENDMAIL_COMMAND=/usr/sbin/sendmail*
+        ;;
+    *)
+        ;;
     esac
     if [ "$NMUDIFF_DELAY" = "XX" ]; then
-	# Fine
-	:
+        # Fine
+        :
     else
-	if ! [ "$NMUDIFF_DELAY" -ge 0 ] 2>/dev/null; then
-	    NMUDIFF_DELAY=XX
-	fi
+        if ! [ "$NMUDIFF_DELAY" -ge 0 ] 2>/dev/null; then
+            NMUDIFF_DELAY=XX
+        fi
     fi
     case "$NMUDIFF_MUTT" in
-	yes|no) ;;
-	*) NMUDIFF_MUTT=yes ;;
+    yes|no)
+        ;;
+    *)
+        NMUDIFF_MUTT=yes
+        ;;
     esac
     case "$NMUDIFF_NEWREPORT" in
-	yes|no|maybe) ;;
-	*) NMUDIFF_NEWREPORT=maybe ;;
+    yes|no|maybe)
+        ;;
+    *)
+        NMUDIFF_NEWREPORT=maybe
+        ;;
     esac
 #    case "$DEVSCRIPTS_CHECK_DIRNAME_LEVEL" in
-#	0|1|2) ;;
-#	*) DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1 ;;
+#    0|1|2) ;;
+#    *) DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1 ;;
 #    esac
 
     # set config message
     MODIFIED_CONF=''
     for var in $VARS; do
-	eval "if [ \"\$$var\" != \"\$DEFAULT_$var\" ]; then
-	    MODIFIED_CONF_MSG=\"\$MODIFIED_CONF_MSG
+    eval "if [ \"\$$var\" != \"\$DEFAULT_$var\" ]; then
+        MODIFIED_CONF_MSG=\"\$MODIFIED_CONF_MSG
   $var=\$$var\";
-	MODIFIED_CONF=yes;
-	fi"
+    MODIFIED_CONF=yes;
+    fi"
     done
 
     if [ -z "$MODIFIED_CONF" ]; then
-	MODIFIED_CONF_MSG="$MODIFIED_CONF_MSG
+    MODIFIED_CONF_MSG="$MODIFIED_CONF_MSG
   (none)"
     fi
 fi
@@ -143,10 +152,10 @@ fi
 # Need -o option to getopt or else it doesn't work
 # Removed: --long check-dirname-level:,check-dirname-regex: \
 TEMP=$(getopt -s bash -o "h" \
-	--long sendmail:,from:,new,old,mutt,no-mutt,nomutt \
-	--long delay:,no-delay,nodelay \
-	--long no-conf,noconf \
-        --long help,version -n "$PROGNAME" -- "$@") || (usage >&2; exit 1)
+    --long sendmail:,from:,new,old,mutt,no-mutt,nomutt \
+    --long delay:,no-delay,nodelay \
+    --long no-conf,noconf \
+    --long help,version -n "$PROGNAME" -- "$@") || (usage >&2; exit 1)
 
 eval set -- $TEMP
 
@@ -154,57 +163,78 @@ eval set -- $TEMP
 while [ "$1" ]; do
     case $1 in
 #     --check-dirname-level)
-# 	shift
+#     shift
 #         case "$1" in
-# 	0|1|2) CHECK_DIRNAME_LEVEL=$1 ;;
-# 	*) echo "$PROGNAME: unrecognised --check-dirname-level value (allowed are 0,1,2)" >&2
-# 	   exit 1 ;;
+#     0|1|2) CHECK_DIRNAME_LEVEL=$1 ;;
+#     *) echo "$PROGNAME: unrecognised --check-dirname-level value (allowed are 0,1,2)" >&2
+#        exit 1 ;;
 #         esac
-# 	;;
+#     ;;
 #     --check-dirname-regex)
-# 	shift; 	CHECK_DIRNAME_REGEX="$1" ;;
+#     shift;     CHECK_DIRNAME_REGEX="$1" ;;
     --delay)
-	shift
-	if [ "$1" = "XX" ]; then
-	    # Fine
-	    NMUDIFF_DELAY="$1"
-	else
-	    if ! [ "$1" -ge 0 ] 2>/dev/null; then
-		NMUDIFF_DELAY=XX
-	    else
-		NMUDIFF_DELAY="$1"
-	    fi
-	fi
-	;;
-    --nodelay|--no-delay)
-	NMUDIFF_DELAY=0 ;;
-    --mutt)
-	NMUDIFF_MUTT=yes ;;
-    --nomutt|--no-mutt)
-	NMUDIFF_MUTT=no ;;
-    --new)
-	NMUDIFF_NEWREPORT=yes ;;
-    --old)
-	NMUDIFF_NEWREPORT=no ;;
-    --sendmail)
-	shift
-	case "$1" in
-	    "") echo "$PROGNAME: SENDMAIL command cannot be empty, using default" >&2
-		;;
-	    *) BTS_SENDMAIL_COMMAND="$1" ;;
-        esac
+        shift
+        if [ "$1" = "XX" ]; then
+            # Fine
+            NMUDIFF_DELAY="$1"
+        else
+            if ! [ "$1" -ge 0 ] 2>/dev/null; then
+                NMUDIFF_DELAY=XX
+            else
+                NMUDIFF_DELAY="$1"
+            fi
+        fi
         ;;
+    --nodelay|--no-delay)
+        NMUDIFF_DELAY=0
+        ;;
+    --mutt)
+        NMUDIFF_MUTT=yes
+        ;;
+    --nomutt|--no-mutt)
+        NMUDIFF_MUTT=no
+        ;;
+    --new)
+        NMUDIFF_NEWREPORT=yes
+        ;;
+    --old)
+        NMUDIFF_NEWREPORT=no
+        ;;
+    --sendmail)
+        shift
+        case "$1" in
+        "")
+            echo "$PROGNAME: SENDMAIL command cannot be empty, using default" >&2
+            ;;
+        *)
+            BTS_SENDMAIL_COMMAND="$1"
+            ;;
+        esac
+    ;;
     --from)
-	shift
-	FROM="$1"
-	;;
+        shift
+        FROM="$1"
+        ;;
     --no-conf|--noconf)
-	echo "$PROGNAME: $1 is only acceptable as the first command-line option!" >&2
-	exit 1 ;;
-    --help|-h) usage; exit 0 ;;
-    --version) version; exit 0 ;;
-    --)	shift; break ;;
-    *) echo "$PROGNAME: bug in option parser, sorry!" >&2 ; exit 1 ;;
+        echo "$PROGNAME: $1 is only acceptable as the first command-line option!" >&2
+        exit 1
+        ;;
+    --help|-h)
+        usage;
+        exit 0
+        ;;
+    --version)
+        version;
+        exit 0
+        ;;
+    --)
+        shift;
+        break
+        ;;
+    *)
+        echo "$PROGNAME: bug in option parser, sorry!" >&2 ;
+        exit 1
+        ;;
     esac
     shift
 done
@@ -223,22 +253,22 @@ fi
 
 if [ "$NMUDIFF_MUTT" = no ]; then
     if [ -z "$FROM" ]; then
-	: ${FROMNAME:="$DEBFULLNAME"}
-	: ${FROMNAME:="$NAME"}
+    : ${FROMNAME:="$DEBFULLNAME"}
+    : ${FROMNAME:="$NAME"}
     fi
     : ${FROM:="$DEBEMAIL"}
     : ${FROM:="$EMAIL"}
     if [ -z "$FROM" ]; then
-	echo "$PROGNAME: must set email address either with DEBEMAIL environment variable" >&2
-	echo "or EMAIL environment variable or using --from command line option." >&2
-	exit 1
+    echo "$PROGNAME: must set email address either with DEBEMAIL environment variable" >&2
+    echo "or EMAIL environment variable or using --from command line option." >&2
+    exit 1
     fi
     if [ -n "$FROMNAME" ]; then
-	# If $FROM looks like "Name <email@address>" then extract just the address
-	if [ "$FROM" = "$(echo "$FROM" | sed -ne '/^\(.*\) *<\(.*\)> *$/p')" ]; then
-	    FROM="$(echo "$FROM" | sed -ne 's/^\(.*\) *<\(.*\)> *$/\2/p')"
-	fi
-	FROM="$FROMNAME <$FROM>"
+    # If $FROM looks like "Name <email@address>" then extract just the address
+    if [ "$FROM" = "$(echo "$FROM" | sed -ne '/^\(.*\) *<\(.*\)> *$/p')" ]; then
+        FROM="$(echo "$FROM" | sed -ne 's/^\(.*\) *<\(.*\)> *$/\2/p')"
+    fi
+    FROM="$FROMNAME <$FROM>"
     fi
 fi
 
@@ -268,10 +298,10 @@ fi
 
 if [ "$NMUDIFF_NEWREPORT" = "maybe" ]; then
     if $(expr match "$CLOSES" ".* " > /dev/null); then
-	# multiple bug reports, so make a new report
-	NMUDIFF_NEWREPORT=yes
+    # multiple bug reports, so make a new report
+    NMUDIFF_NEWREPORT=yes
     else
-	NMUDIFF_NEWREPORT=no
+    NMUDIFF_NEWREPORT=no
     fi
 fi
 
@@ -317,17 +347,17 @@ Severity: normal
 Tags: patch pending"
 else
     for b in $CLOSES; do
-	TO_ADDRESSES_SENDMAIL="$TO_ADDRESSES_SENDMAIL,
-  $b@bugs.debian.org"
-	TO_ADDRESSES_MUTT="$TO_ADDRESSES_MUTT $b@bugs.debian.org"
-	if [ "`bts select bugs:$b tag:patch`" != "$b" ]; then
-	    TAGS="$TAGS
+    TO_ADDRESSES_SENDMAIL="$TO_ADDRESSES_SENDMAIL,
+    $b@bugs.debian.org"
+    TO_ADDRESSES_MUTT="$TO_ADDRESSES_MUTT $b@bugs.debian.org"
+    if [ "`bts select bugs:$b tag:patch`" != "$b" ]; then
+        TAGS="$TAGS
 Control: tags $b + patch"
-	fi
-	if [ "$NMUDIFF_DELAY" != "0" ] && [ "`bts select bugs:$b tag:pending`" != "$b" ]; then
-	    TAGS="$TAGS
+    fi
+    if [ "$NMUDIFF_DELAY" != "0" ] && [ "`bts select bugs:$b tag:pending`" != "$b" ]; then
+        TAGS="$TAGS
 Control: tags $b + pending"
-	fi
+    fi
     done
     TO_ADDRESSES_SENDMAIL=$(echo "$TO_ADDRESSES_SENDMAIL" | tail -n +2)
     if [ "$TAGS" != "" ]; then
@@ -365,37 +395,35 @@ X-NMUDIFF-Version: ###VERSION###
 
 $TAGS
 $DELAY_HEADER
-Dear maintainer,
 
 $BODY
 
-Regards.
 EOF
 
     cat ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff >> "$TMPNAM"
     sensible-editor "$TMPNAM"
     if [ $? -ne 0 ]; then
-	echo "nmudiff: sensible-editor exited with error, aborting." >&2
-	rm -f ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff "$TMPNAM"
-	exit 1
+    echo "nmudiff: sensible-editor exited with error, aborting." >&2
+    rm -f ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff "$TMPNAM"
+    exit 1
     fi
 
     while : ; do
-	echo -n "Do you want to go ahead and submit the bug report now? (y/n) "
-	read response
-	case "$response" in
-	    y*) break;;
-	    n*) echo "OK, then, aborting." >&2
-		rm -f ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff "$TMPNAM"
-		exit 1
-		;;
-	esac
+    echo -n "Do you want to go ahead and submit the bug report now? (y/n) "
+    read response
+    case "$response" in
+        y*) break;;
+        n*) echo "OK, then, aborting." >&2
+        rm -f ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff "$TMPNAM"
+        exit 1
+        ;;
+    esac
     done
 
     case "$BTS_SENDMAIL_COMMAND" in
-	/usr/sbin/sendmail*|/usr/sbin/exim*)
-	    BTS_SENDMAIL_COMMAND="$BTS_SENDMAIL_COMMAND -t" ;;
-	*)  ;;
+    /usr/sbin/sendmail*|/usr/sbin/exim*)
+        BTS_SENDMAIL_COMMAND="$BTS_SENDMAIL_COMMAND -t" ;;
+    *)  ;;
     esac
 
     $BTS_SENDMAIL_COMMAND < "$TMPNAM"
@@ -404,17 +432,15 @@ else # NMUDIFF_MUTT=yes
     cat <<EOF > "$TMPNAM"
 $TAGS
 $DELAY_HEADER
-Dear maintainer,
 
 $BODY
 
-Regards.
 EOF
 
     mutt -s "$SOURCE: diff for NMU version $VERSION" -i "$TMPNAM" \
-	-e "my_hdr X-NMUDIFF-Version: ###VERSION###" \
-	-a ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff $BCC_ADDRESS_MUTT \
-	-- $TO_ADDRESSES_MUTT
+    -e "my_hdr X-NMUDIFF-Version: ###VERSION###" \
+    -a ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff $BCC_ADDRESS_MUTT \
+    -- $TO_ADDRESSES_MUTT
 
 fi
 

@@ -26,6 +26,8 @@ devscripts (2.18.2) UNRELEASED; urgency=medium
       also in non-dry-run-mode when verbosity is enabled.
     + s/self.opts/self.args/g
     + Removes also the beginning empty lines of a file
+  * nmudiff:
+    + Clean up some indentations
 
   [ Mattia Rizzolo ]
   * mk-origtargz:
