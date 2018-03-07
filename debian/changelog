@@ -27,6 +27,10 @@ devscripts (2.18.2) UNRELEASED; urgency=medium
     + s/self.opts/self.args/g
     + Removes also the beginning empty lines of a file
 
+  [ Mattia Rizzolo ]
+  * mk-origtargz:
+    + Deal with Hurd where `getconf ARG_MAX` returns "undefined".
+
  -- Pierre-Elliott Bécue <becue@crans.org>  Wed, 07 Mar 2018 20:17:05 +0100
 
 devscripts (2.18.1) unstable; urgency=medium
