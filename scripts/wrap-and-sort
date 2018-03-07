@@ -298,10 +298,12 @@ def main():
 
     # Only report at the end, to avoid potential clash with --verbose
     if modified_files and args.verbose:
-        print("--- Modified files ---")
-        print("\n".join(modified_files))
         if args.dry_run:
-            print("Note that this was a dry run, no file was actually updated.")
+            header = "--- Dry run, these files would be modified ---"
+        else:
+            header = "--- Modified files ---"
+        print(header)
+        print("\n".join(modified_files))
     elif args.verbose:
         print("--- No file needs modification ---")
 
