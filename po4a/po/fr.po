@@ -19925,11 +19925,9 @@ msgstr "SUSPICIOUS-SOURCE"
 #. type: Plain text
 #: ../doc/suspicious-source.1:20
 msgid ""
-"suspicious-source - search for files that are not the GPL's \"preferred form "
-"of modification\""
+"suspicious-source - search for files that do not meet the GPL's definition "
+"of \"source\" for a work"
 msgstr ""
-"suspicious-source - Rechercher des fichiers qui ne sont pas sous la « forme "
-"la plus adéquate pour les modifications » demandée par la GPL"
 
 #. type: Plain text
 #: ../doc/suspicious-source.1:23
@@ -19939,16 +19937,11 @@ msgstr "B<suspicious-source> [I<options>]"
 #. type: Plain text
 #: ../doc/suspicious-source.1:30
 msgid ""
-"B<suspicious-source> is a script that outputs a list of files which are not "
-"common source files.  This should be run in the root of a source tree to "
-"find files which might not be the \"preferred form of modification\" that "
-"the GPL and other licenses require."
+"B<suspicious-source> outputs a list of files which are probably not the "
+"source form of a work. This should be run in the root of a source tree to "
+"find files which might not be, in the definition from the GNU GPL, the "
+"\"preferred form of the work for making modifications to it\"."
 msgstr ""
-"B<suspicious-source> affiche une liste de fichiers qui ne sont pas des "
-"fichiers source usuels. Elle devrait être exécutée depuis le répertoire "
-"racine d'une arborescence source pour trouver les fichiers qui risquent de "
-"ne pas être sous la « forme la plus adéquate pour les modifications » comme "
-"exigé par la GPL et d'autres licences."
 
 #. type: Plain text
 #: ../doc/suspicious-source.1:33
