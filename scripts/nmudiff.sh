@@ -42,6 +42,8 @@ usage () {
     --no-conf, --noconf
                       Don't read devscripts config files;
                       must be the first option given
+    --template=TEMPLATEFILE
+                      Use content of TEMPLATEFILE for message.
     --help, -h        Show this help information.
     --version         Show version and copyright information.
 
@@ -155,6 +157,7 @@ TEMP=$(getopt -s bash -o "h" \
     --long sendmail:,from:,new,old,mutt,no-mutt,nomutt \
     --long delay:,no-delay,nodelay \
     --long no-conf,noconf \
+    --long template: \
     --long help,version -n "$PROGNAME" -- "$@") || (usage >&2; exit 1)
 
 eval set -- $TEMP
@@ -218,6 +221,19 @@ while [ "$1" ]; do
     --no-conf|--noconf)
         echo "$PROGNAME: $1 is only acceptable as the first command-line option!" >&2
         exit 1
+        ;;
+    --template)
+        shift
+        case "$1" in
+            "") echo "$PROGNAME: TEMPLATEFILE cannot be empty, using default" >&2
+            ;;
+            *)  if [ -f "$1" ]; then
+                    NMUDIFF_TEMPLATE="$1"
+                else
+                    echo "$PROGNAME: TEMPLATEFILE must exist, using default" >&2
+                fi
+            ;;
+        esac
         ;;
     --help|-h)
         usage;
@@ -367,20 +383,26 @@ fi
 
 TMPNAM="$(tempfile)"
 
-if [ "$NMUDIFF_DELAY" = "XX" ]; then
+if [ "$NMUDIFF_DELAY" = "XX" ] && [ "$NMUDIFF_TEMPLATE" = "" ]; then
     DELAY_HEADER="
 [Replace XX with correct value]"
 fi
 
-if [ "$NMUDIFF_DELAY" = "0" ]; then
-    BODY="$(printf "%s\n%s\n" \
+if [ "$NMUDIFF_TEMPLATE" != "" ]; then
+    BODY=$(cat "$NMUDIFF_TEMPLATE")
+elif [ "$NMUDIFF_DELAY" = "0" ]; then
+    BODY="$(printf "%s\n\n%s\n%s\n\n%s" \
+"Dear maintainer," \
 "I've prepared an NMU for $SOURCE (versioned as $VERSION). The diff" \
-"is attached to this message.")"
+"is attached to this message." \
+"Regards.")"
 else
-    BODY="$(printf "%s\n%s\n%s\n" \
+    BODY="$(printf "%s\n\n%s\n%s\n%s\n\n%s" \
+"Dear maintainer," \
 "I've prepared an NMU for $SOURCE (versioned as $VERSION) and" \
 "uploaded it to DELAYED/$NMUDIFF_DELAY. Please feel free to tell me if I" \
-"should delay it longer.")"
+"should delay it longer." \
+"Regards.")"
 fi
 
 if [ "$NMUDIFF_MUTT" = no ]; then
