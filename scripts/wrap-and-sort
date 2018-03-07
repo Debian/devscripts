@@ -163,6 +163,7 @@ class Install(object):
                 if not self.args.dry_run:
                     erase_and_write(install_file, to_write)
                 return True
+        return False
 
     def sort(self):
         self.content = sorted(self.content)
@@ -185,6 +186,7 @@ def remove_trailing_whitespaces(filename, args):
             if not args.dry_run:
                 erase_and_write(file_object, new_content)
             return True
+    return False
 
 
 def sort_list(unsorted_list):
