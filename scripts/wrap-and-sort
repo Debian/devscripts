@@ -70,35 +70,30 @@ SUPPORTED_FILES = (
 
 
 class WrapAndSortControl(Control):
-    def __init__(self, filename, max_line_length):
+    def __init__(self, filename, args):
         super().__init__(filename)
-        self.max_line_length = max_line_length
+        self.opts = args
 
-    def wrap_and_sort(self, wrap_always, short_indent, sort_paragraphs,
-                      keep_first, trailing_comma):
-        # pylint: disable=too-many-arguments
+    def wrap_and_sort(self):
         for paragraph in self.paragraphs:
             for field in CONTROL_LIST_FIELDS:
                 if field in paragraph:
-                    self._wrap_field(paragraph, field, wrap_always,
-                                     short_indent, trailing_comma)
+                    self._wrap_field(paragraph, field, True)
             if "Uploaders" in paragraph:
-                self._wrap_field(paragraph, "Uploaders", wrap_always,
-                                 short_indent, trailing_comma, False)
+                self._wrap_field(paragraph, "Uploaders", False)
             if "Architecture" in paragraph:
                 archs = set(paragraph["Architecture"].split())
                 # Sort, with wildcard entries (such as linux-any) first:
                 archs = sorted(archs, key=lambda x: ("any" not in x, x))
                 paragraph["Architecture"] = " ".join(archs)
 
-        if sort_paragraphs:
-            first = self.paragraphs[:1 + int(keep_first)]
-            sortable = self.paragraphs[1 + int(keep_first):]
-            self.paragraphs = first + sorted(sortable, key=operator.itemgetter("Package"))
+        if self.opts.sort_binary_packages:
+            first = self.paragraphs[:1 + int(self.opts.keep_first)]
+            sortable = self.paragraphs[1 + int(self.opts.keep_first):]
+            sort_key = operator.itemgetter("Package")
+            self.paragraphs = first + sorted(sortable, key=sort_key)
 
-    def _wrap_field(self, control, entry, wrap_always, short_indent,
-                    trailing_comma, sort=True):
-        # pylint: disable=too-many-arguments
+    def _wrap_field(self, control, entry, sort):
         # An empty element is not explicitly disallowed by Policy but known to
         # break QA tools, so remove any
         packages = [x.strip() for x in control[entry].split(",") if x.strip()]
@@ -112,26 +107,27 @@ class WrapAndSortControl(Control):
             packages = sort_list(packages)
 
         length = len(entry) + sum([2 + len(package) for package in packages])
-        if wrap_always or length > self.max_line_length:
+        if self.opts.wrap_always or length > self.opts.max_line_length:
             indentation = " "
-            if not short_indent:
-                indentation *= len(entry) + 2
+            if not self.opts.short_indent:
+                indentation *= len(entry) + len(": ")
             packages_with_indention = [indentation + x for x in packages]
             packages_with_indention = ",\n".join(packages_with_indention)
-            if trailing_comma:
+            if self.opts.trailing_comma:
                 packages_with_indention += ','
-            if short_indent:
+            if self.opts.short_indent:
                 control[entry] = "\n" + packages_with_indention
             else:
                 control[entry] = packages_with_indention.strip()
         else:
-            control[entry] = ", ".join(packages).strip()
+            control[entry] = ", ".join(packages)
 
 
 class Install(object):
-    def __init__(self, filename):
+    def __init__(self, filename, args):
         self.content = None
         self.filename = None
+        self.opts = args
         self.open(filename)
 
     def open(self, filename):
@@ -174,12 +170,10 @@ def wrap_and_sort(args):
     for control_file in control_files:
         if args.verbose:
             print(control_file)
-        control = WrapAndSortControl(control_file, args.max_line_length)
+        control = WrapAndSortControl(control_file, args)
         if args.cleanup:
             control.strip_trailing_spaces()
-        control.wrap_and_sort(args.wrap_always, args.short_indent,
-                              args.sort_binary_packages, args.keep_first,
-                              args.trailing_comma)
+        control.wrap_and_sort()
         control.save()
 
     copyright_files = [f for f in args.files
@@ -194,7 +188,7 @@ def wrap_and_sort(args):
     for install_file in sorted(install_files):
         if args.verbose:
             print(install_file)
-        install = Install(install_file)
+        install = Install(install_file, args)
         install.sort()
         install.save()
 
