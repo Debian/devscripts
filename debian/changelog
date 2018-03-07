@@ -14,11 +14,20 @@ devscripts (2.18.2) UNRELEASED; urgency=medium
   * dep3changelog:
     + Make parsing less strict about blank lines. (Closes: #858287)
 
+  [ Ben Wiederhake ]
+  * wrap-and-sort:
+    + Add a dry-run option. (Closes: #808574)
+
   [ Pierre-Elliott Bécue ]
   * d/control:
     +  Add myself to uploaders.
+  * wrap-and-sort:
+    + Tweak the way files are handled, and print the modified file list in
+      also in non-dry-run-mode when verbosity is enabled.
+    + s/self.opts/self.args/g
+    + Removes also the beginning empty lines of a file
 
- -- Pierre-Elliott Bécue <becue@crans.org>  Wed, 07 Mar 2018 12:46:12 +0100
+ -- Pierre-Elliott Bécue <becue@crans.org>  Wed, 07 Mar 2018 20:17:05 +0100
 
 devscripts (2.18.1) unstable; urgency=medium
 
