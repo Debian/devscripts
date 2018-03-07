@@ -154,7 +154,7 @@ class Install(object):
             if l.strip()
         ]
 
-    def save(self, modified_files):
+    def save(self):
         to_write = "\n".join(self.content) + "\n"
 
         with open(self.filename, "r+") as install_file:
@@ -162,13 +162,13 @@ class Install(object):
             if to_write != content:
                 if not self.args.dry_run:
                     erase_and_write(install_file, to_write)
-                modified_files.append(self.filename)
+                return True
 
     def sort(self):
         self.content = sorted(self.content)
 
 
-def remove_trailing_whitespaces(filename, args, modified_files):
+def remove_trailing_whitespaces(filename, args):
     assert os.path.isfile(filename), "%s does not exist." % (filename)
     with open(filename, "r+") as file_object:
         content = file_object.read()
@@ -184,7 +184,7 @@ def remove_trailing_whitespaces(filename, args, modified_files):
         if new_content != content:
             if not args.dry_run:
                 erase_and_write(file_object, new_content)
-            modified_files.append(filename)
+            return True
 
 
 def sort_list(unsorted_list):
@@ -213,7 +213,8 @@ def wrap_and_sort(args):
     for copyright_file in copyright_files:
         if args.verbose:
             print(copyright_file)
-        remove_trailing_whitespaces(copyright_file, args, modified_files)
+        if remove_trailing_whitespaces(copyright_file, args):
+            modified_files.append(copyright_file)
 
     pattern = "(dirs|docs|examples|info|install|links|maintscript|manpages)$"
     install_files = [f for f in args.files if re.search(pattern, f)]
@@ -222,7 +223,8 @@ def wrap_and_sort(args):
             print(install_file)
         install = Install(install_file, args)
         install.sort()
-        install.save(modified_files)
+        if install.save():
+            modified_files.append(install_file)
 
     return modified_files
 
