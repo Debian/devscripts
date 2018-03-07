@@ -8,6 +8,7 @@ devscripts (2.18.2) UNRELEASED; urgency=medium
   * wrap-and-sort:
     + Tweak the way files are handled, and print the modified file list in
       also in non-dry-run-mode when verbosity is enabled.
+    + s/self.opts/self.args/g
 
  -- Mattia Rizzolo <mattia@debian.org>  Tue, 06 Mar 2018 16:27:47 +0100
 

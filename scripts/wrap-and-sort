@@ -79,7 +79,7 @@ def erase_and_write(file_ob, data):
 class WrapAndSortControl(Control):
     def __init__(self, filename, args):
         super().__init__(filename)
-        self.opts = args
+        self.args = args
 
     def wrap_and_sort(self):
         for paragraph in self.paragraphs:
@@ -94,9 +94,9 @@ class WrapAndSortControl(Control):
                 archs = sorted(archs, key=lambda x: ("any" not in x, x))
                 paragraph["Architecture"] = " ".join(archs)
 
-        if self.opts.sort_binary_packages:
-            first = self.paragraphs[:1 + int(self.opts.keep_first)]
-            sortable = self.paragraphs[1 + int(self.opts.keep_first):]
+        if self.args.sort_binary_packages:
+            first = self.paragraphs[:1 + int(self.args.keep_first)]
+            sortable = self.paragraphs[1 + int(self.args.keep_first):]
             sort_key = operator.itemgetter("Package")
             self.paragraphs = first + sorted(sortable, key=sort_key)
 
@@ -114,15 +114,15 @@ class WrapAndSortControl(Control):
             packages = sort_list(packages)
 
         length = len(entry) + sum([2 + len(package) for package in packages])
-        if self.opts.wrap_always or length > self.opts.max_line_length:
+        if self.args.wrap_always or length > self.args.max_line_length:
             indentation = " "
-            if not self.opts.short_indent:
+            if not self.args.short_indent:
                 indentation *= len(entry) + len(": ")
             packages_with_indention = [indentation + x for x in packages]
             packages_with_indention = ",\n".join(packages_with_indention)
-            if self.opts.trailing_comma:
+            if self.args.trailing_comma:
                 packages_with_indention += ','
-            if self.opts.short_indent:
+            if self.args.short_indent:
                 control[entry] = "\n" + packages_with_indention
             else:
                 control[entry] = packages_with_indention.strip()
@@ -142,7 +142,7 @@ class Install(object):
     def __init__(self, filename, args):
         self.content = None
         self.filename = None
-        self.opts = args
+        self.args = args
         self.open(filename)
 
     def open(self, filename):
@@ -160,7 +160,7 @@ class Install(object):
         with open(self.filename, "r+") as install_file:
             content = install_file.read()
             if to_write != content:
-                if not self.opts.dry_run:
+                if not self.args.dry_run:
                     erase_and_write(install_file, to_write)
                 modified_files.append(self.filename)
 
