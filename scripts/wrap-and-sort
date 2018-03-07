@@ -69,6 +69,13 @@ SUPPORTED_FILES = (
 )
 
 
+def erase_and_write(file_ob, data):
+    """When a file is opened via r+ mode, replaces its content with data"""
+    file_ob.seek(0)
+    file_ob.write(data)
+    file_ob.truncate()
+
+
 class WrapAndSortControl(Control):
     def __init__(self, filename, args):
         super().__init__(filename)
@@ -122,6 +129,14 @@ class WrapAndSortControl(Control):
         else:
             control[entry] = ", ".join(packages)
 
+    def check_changed(self):
+        """Checks if the content has changed in the control file"""
+        content = "\n".join([x.dump() for x in self.paragraphs])
+        with open(self.filename, "r") as control_file:
+            if content != control_file.read():
+                return True
+        return False
+
 
 class Install(object):
     def __init__(self, filename, args):
@@ -133,30 +148,43 @@ class Install(object):
     def open(self, filename):
         assert os.path.isfile(filename), "%s does not exist." % (filename)
         self.filename = filename
-        self.content = [l.strip() for l in open(filename).readlines() if l.strip()]
+        self.content = [
+            l.strip()
+            for l in open(filename).readlines()
+            if l.strip()
+        ]
 
-    def save(self, filename=None):
-        if filename:
-            self.filename = filename
-        install_file = open(self.filename, "w")
-        install_file.write("\n".join(self.content) + "\n")
-        install_file.close()
+    def save(self, modified_files):
+        to_write = "\n".join(self.content) + "\n"
+
+        with open(self.filename, "r+") as install_file:
+            content = install_file.read()
+            if to_write != content:
+                if not self.opts.dry_run:
+                    erase_and_write(install_file, to_write)
+                modified_files.append(self.filename)
 
     def sort(self):
         self.content = sorted(self.content)
 
 
-def remove_trailing_whitespaces(filename):
+def remove_trailing_whitespaces(filename, args, modified_files):
     assert os.path.isfile(filename), "%s does not exist." % (filename)
-    content = open(filename).read()
-    if not content:
-        return
-    content = content.rstrip() + "\n"
-    lines = content.split("\n")
-    lines = [l.rstrip() for l in lines]
-    new_content = "\n".join(lines)
-    with open(filename, "w") as _file:
-        _file.write(new_content)
+    with open(filename, "r+") as file_object:
+        content = file_object.read()
+        if not content:
+            return
+        new_content = content.rstrip() + "\n"
+        new_content = "\n".join(
+            [
+                line.rstrip()
+                for line in new_content.split('\n')
+            ],
+        )
+        if new_content != content:
+            if not args.dry_run:
+                erase_and_write(file_object, new_content)
+            modified_files.append(filename)
 
 
 def sort_list(unsorted_list):
@@ -166,6 +194,7 @@ def sort_list(unsorted_list):
 
 
 def wrap_and_sort(args):
+    modified_files = []
     control_files = [f for f in args.files if re.search("/control[^/]*$", f)]
     for control_file in control_files:
         if args.verbose:
@@ -174,14 +203,17 @@ def wrap_and_sort(args):
         if args.cleanup:
             control.strip_trailing_spaces()
         control.wrap_and_sort()
-        control.save()
+        if control.check_changed():
+            if not args.dry_run:
+                control.save()
+            modified_files.append(control_file)
 
     copyright_files = [f for f in args.files
                        if re.search("/copyright[^/]*$", f)]
     for copyright_file in copyright_files:
         if args.verbose:
             print(copyright_file)
-        remove_trailing_whitespaces(copyright_file)
+        remove_trailing_whitespaces(copyright_file, args, modified_files)
 
     pattern = "(dirs|docs|examples|info|install|links|maintscript|manpages)$"
     install_files = [f for f in args.files if re.search(pattern, f)]
@@ -190,7 +222,9 @@ def wrap_and_sort(args):
             print(install_file)
         install = Install(install_file, args)
         install.sort()
-        install.save()
+        install.save(modified_files)
+
+    return modified_files
 
 
 def get_files(debian_directory):
@@ -241,6 +275,10 @@ def main():
     parser.add_argument("--max-line-length", type=int, default=79,
                         help="set maximum allowed line length before wrapping "
                              "(default: %(default)i)")
+    parser.add_argument("-N", "--dry-run", dest="dry_run", action="store_true",
+                        default=False,
+                        help="do not modify any file, instead only"
+                             "print the files that would be modified")
 
     args = parser.parse_args()
 
@@ -255,7 +293,17 @@ def main():
     if not args.files:
         args.files = get_files(args.debian_directory)
 
-    wrap_and_sort(args)
+    modified_files = wrap_and_sort(args)
+
+
+    # Only report at the end, to avoid potential clash with --verbose
+    if modified_files and args.verbose:
+        print("--- Modified files ---")
+        print("\n".join(modified_files))
+        if args.dry_run:
+            print("Note that this was a dry run, no file was actually updated.")
+    elif args.verbose:
+        print("--- No file needs modification ---")
 
 
 if __name__ == "__main__":

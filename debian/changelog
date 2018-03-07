@@ -1,5 +1,13 @@
 devscripts (2.18.2) UNRELEASED; urgency=medium
 
+  [ Ben Wiederhake ]
+  * wrap-and-sort:
+    + Add a dry-run option. (Closes: #808574)
+
+  [ Pierre-Elliott Bécue ]
+  * wrap-and-sort:
+    + Tweak the way files are handled, and print the modified file list in
+      also in non-dry-run-mode when verbosity is enabled.
 
  -- Mattia Rizzolo <mattia@debian.org>  Tue, 06 Mar 2018 16:27:47 +0100
 
