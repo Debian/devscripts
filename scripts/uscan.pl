@@ -269,13 +269,13 @@ This is substituted by the legal upstream version regex (capturing).
 
 This is substituted by the typical archive file extension regex (non-capturing).
 
-  (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)
+  (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip|tgz|tbz|txz)
 
 =item B<@SIGNATURE_EXT@>
 
 This is substituted by the typical signature file extension regex (non-capturing).
 
-  (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)\.(?:asc|pgp|gpg|sig|sign)
+  (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip|tgz|tbz|txz)\.(?:asc|pgp|gpg|sig|sign)
 
 =back
 
@@ -2681,7 +2681,7 @@ sub process_watchfile ($$$$)
 
 	# Handle @PACKAGE@ @ANY_VERSION@ @ARCHIVE_EXT@ substitutions
 	my $any_version = '[-_]?(\d[\-+\.:\~\da-zA-Z]*)';
-	my $archive_ext = '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip)';
+	my $archive_ext = '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip|tgz|tbz|txz)';
 	my $signature_ext = $archive_ext . '\.(?:asc|pgp|gpg|sig|sign)';
 	s/\@PACKAGE\@/$package/g;
 	s/\@ANY_VERSION\@/$any_version/g;
