@@ -18,6 +18,11 @@ devscripts (2.18.2) UNRELEASED; urgency=medium
   * wrap-and-sort:
     + Add a dry-run option. (Closes: #808574)
 
+  [ Hilko Bengen ]
+  * debsnap:
+    + Complain about existing destdir only when it is created (Closes:
+    #884177)
+
   [ Pierre-Elliott Bécue ]
   * d/control:
     +  Add myself to uploaders.

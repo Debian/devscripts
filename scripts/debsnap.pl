@@ -252,18 +252,18 @@ if ($opt{binary}) {
     $baseurl = "$opt{baseurl}/mr/package/$package/";
 }
 
-if (-d $opt{destdir}) {
-    unless ($opt{force} || cwd() eq abs_path($opt{destdir})) {
-	fatal "Destination dir $opt{destdir} already exists.\nPlease (re)move it first, or use --force to overwrite.";
-    }
-}
-
 my $mkdir_done = 0;
 my $mkDestDir = sub {
     unless ($mkdir_done)
     {
-	make_path($opt{destdir});
-	$mkdir_done = 1;
+        if (-d $opt{destdir}) {
+            unless ($opt{force} || cwd() eq abs_path($opt{destdir})) {
+            fatal "Destination dir $opt{destdir} already exists.\nPlease (re)move it first, or use --force to overwrite.";
+            }
+        }
+
+        make_path($opt{destdir});
+        $mkdir_done = 1;
     }
 };
 
