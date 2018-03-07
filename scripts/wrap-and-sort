@@ -174,7 +174,7 @@ def remove_trailing_whitespaces(filename, args, modified_files):
         content = file_object.read()
         if not content:
             return
-        new_content = content.rstrip() + "\n"
+        new_content = content.strip() + "\n"
         new_content = "\n".join(
             [
                 line.rstrip()
