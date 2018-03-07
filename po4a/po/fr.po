@@ -19928,6 +19928,8 @@ msgid ""
 "suspicious-source - search for files that do not meet the GPL's definition "
 "of \"source\" for a work"
 msgstr ""
+"suspicious-source - Rechercher des fichiers qui ne sont pas sous la « forme "
+"la plus adéquate pour les modifications » demandée par la GPL"
 
 #. type: Plain text
 #: ../doc/suspicious-source.1:23
@@ -19942,6 +19944,11 @@ msgid ""
 "find files which might not be, in the definition from the GNU GPL, the "
 "\"preferred form of the work for making modifications to it\"."
 msgstr ""
+"B<suspicious-source> affiche une liste de fichiers qui ne sont pas des "
+"fichiers source usuels. Il devrait être exécuté depuis le répertoire "
+"racine d'une arborescence source pour trouver les fichiers qui risquent de "
+"ne pas être sous la « forme la plus adéquate pour les modifications » telle "
+"que définie par la GPL ou d'autres licences."
 
 #. type: Plain text
 #: ../doc/suspicious-source.1:33
