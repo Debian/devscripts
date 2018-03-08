@@ -2,35 +2,35 @@ devscripts (2.18.2) UNRELEASED; urgency=medium
 
   [ Daniel Kahn Gillmor ]
   * uscan:
-    + Add short archive extensions (tbz, txz, tgz) into the @ARCHIVE_EXT@
-      regexp. (Closes: #823624)
+    + Add short archive extensions (tbz, txz, tgz) in the @ARCHIVE_EXT@
+      regexp.  Closes: #823624
 
   [ Ben Finney ]
   * suspicious-source:
-    + Correct “preferred form of the work for making modifications to it”.
-    (Closes: #859617)
+    + Correct "preferred form of the work for making modifications to it".
+      Closes: #859617
 
   [ Nish Aravamudan ]
   * dep3changelog:
-    + Make parsing less strict about blank lines. (Closes: #858287)
+    + Make parsing less strict about blank lines.
+      Closes: #858287; LP: #1673292
 
   [ Ben Wiederhake ]
   * wrap-and-sort:
-    + Add a dry-run option. (Closes: #808574)
+    + Add a dry-run option.  Closes: #808574
 
   [ Hilko Bengen ]
   * debsnap:
-    + Complain about existing destdir only when it is created (Closes:
-    #884177)
+    + Complain about existing destdir only when it is created.
+      Closes: #884177
 
   [ Pierre-Elliott Bécue ]
   * d/control:
-    +  Add myself to uploaders.
+    + Add myself to uploaders.
   * wrap-and-sort:
     + Tweak the way files are handled, and print the modified file list in
       also in non-dry-run-mode when verbosity is enabled.
-    + s/self.opts/self.args/g
-    + Removes also the beginning empty lines of a file
+    + Remove empty lines at the beginning of a file.
 
   [ Mattia Rizzolo ]
   * mk-origtargz:
