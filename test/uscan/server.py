@@ -1,10 +1,10 @@
-#!/usr/bin/python
-import BaseHTTPServer
-from SimpleHTTPServer import SimpleHTTPRequestHandler
+#!/usr/bin/python3
+import http.server
+from http.server import SimpleHTTPRequestHandler
 
 def test():
     SimpleHTTPRequestHandler.protocol_version='HTTP/1.0'
-    httpd = BaseHTTPServer.HTTPServer(('', 0), SimpleHTTPRequestHandler)
+    httpd = http.server.HTTPServer(('', 0), SimpleHTTPRequestHandler)
 
     sa = httpd.socket.getsockname()
     with open('port', 'w') as f:

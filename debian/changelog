@@ -1,3 +1,58 @@
+devscripts (2.18.1) unstable; urgency=medium
+
+  [ Yavor Doganov ]
+  * ltnu:
+    + Add pkg-gnustep shortcut.  Closes: #885917
+
+  [ Steve Langasek ]
+  * tests:
+    + Fix test_debchange when run on Debian derivatives.  Closes: #886211
+
+  [ Mattia Rizzolo ]
+  * bts:
+    + Fix syntax issue in the POD documentation, so it can be built with an
+      older pod as well.
+  * ltnu:
+    + Avoid using L<> with emails in the POD documentation, so it can be built
+      with an older pod as well.
+  * reproducible-check:
+    + Instruct to install python3-xdg if missing.  Closes: #888307
+  * mk-origtargz:
+    + Split list of files to delete if the list gets too long to fit ARG_MAX.
+      Thanks to Ximin Luo <infinity0> for the initial patch.  Closes: #855464
+  * debian/control:
+    + Change maintainer email from alioth to devscripts@packages.debian.org.
+    + Move the Git repository to salsa.debian.org.
+
+  [ Osamu Aoki ]
+  * uupdate:
+    + bash completion fix by Julian Gilbey.  Closes: #834006
+  * uscan:
+    + clarify importance of version=4.  Closes: #884880
+    + add hrefdecode option.  Closes: #884604
+    + git HEAD tracking features.  Closes: #811565
+    + refine target directory documentation.  Closes: #841519
+    + add test for FTP protocol.
+
+  [ James McCoy ]
+  * debrepro:
+    + Add a --help option and include options description in the usage output.
+
+  [ Axel Beckert ]
+  * ltnu:
+    + Add option "-m" to only look in the Maintainer field and not also in
+      the Uploaders field.  Closes: #887380
+
+  [ Christoph Berg ]
+  * origtargz: Make --clean remove .gitignore if it's not in git.
+
+  [ Benjamin Drung ]
+  * Fix all pylint3 issues.
+  * Update Python unittests to support pylint 1.8.
+  * Convert flake8 test into a unittest.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Tue, 06 Mar 2018 16:23:00 +0100
+
 devscripts (2.17.12~bpo9+1) stretch-backports; urgency=medium
 
   * Rebuild for stretch-backports.

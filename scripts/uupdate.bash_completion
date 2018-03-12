@@ -25,8 +25,11 @@ _uupdate()
             ;;
         --help | -h | --version)
            ;;
-        *)
+        -*)
             COMPREPLY=( $( compgen -W "$options" | grep "^$cur" ) )
+            ;;
+        *)
+            _filedir
             ;;
     esac
 

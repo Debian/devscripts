@@ -205,9 +205,10 @@ verifyGuessedDistribution() {
     # $2 → action
     # $3 → expected suite after the action
     rm -f "$CHANGELOG"
-    success "--create -D $1 --package test-package -v 1.0-1 'First upload'"
-    success "$2 'Second Upload'"
-    success "-r ''"
+    vdeb="--vendor Debian"
+    success "$vdeb --create -D $1 --package test-package -v 1.0-1 'First upload'"
+    success "$vdeb $2 'Second Upload'"
+    success "$vdeb -r ''"
     local dist="$(dpkg-parsechangelog -l"$CHANGELOG" -SDistribution)"
     assertEquals "$3" "$dist"
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 #
-# Copyright (C) 2010-2016, Benjamin Drung <bdrung@debian.org>
+# Copyright (C) 2010-2018, Benjamin Drung <bdrung@debian.org>
 #               2010, Stefano Rivera <stefanor@ubuntu.com>
 #
 # Permission to use, copy, modify, and/or distribute this software for any
@@ -15,9 +15,9 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
+import argparse
 import glob
 import operator
-import optparse
 import os
 import re
 import sys
@@ -76,6 +76,7 @@ class WrapAndSortControl(Control):
 
     def wrap_and_sort(self, wrap_always, short_indent, sort_paragraphs,
                       keep_first, trailing_comma):
+        # pylint: disable=too-many-arguments
         for paragraph in self.paragraphs:
             for field in CONTROL_LIST_FIELDS:
                 if field in paragraph:
@@ -97,6 +98,7 @@ class WrapAndSortControl(Control):
 
     def _wrap_field(self, control, entry, wrap_always, short_indent,
                     trailing_comma, sort=True):
+        # pylint: disable=too-many-arguments
         # An empty element is not explicitly disallowed by Policy but known to
         # break QA tools, so remove any
         packages = [x.strip() for x in control[entry].split(",") if x.strip()]
@@ -151,15 +153,14 @@ class Install(object):
 def remove_trailing_whitespaces(filename):
     assert os.path.isfile(filename), "%s does not exist." % (filename)
     content = open(filename).read()
-    if len(content) == 0:
+    if not content:
         return
     content = content.rstrip() + "\n"
     lines = content.split("\n")
     lines = [l.rstrip() for l in lines]
     new_content = "\n".join(lines)
-    f = open(filename, "w")
-    f.write(new_content)
-    f.close()
+    with open(filename, "w") as _file:
+        _file.write(new_content)
 
 
 def sort_list(unsorted_list):
@@ -168,30 +169,30 @@ def sort_list(unsorted_list):
     return sorted(packages) + sorted(special)
 
 
-def wrap_and_sort(options):
-    control_files = [f for f in options.files if re.search("/control[^/]*$", f)]
+def wrap_and_sort(args):
+    control_files = [f for f in args.files if re.search("/control[^/]*$", f)]
     for control_file in control_files:
-        if options.verbose:
+        if args.verbose:
             print(control_file)
-        control = WrapAndSortControl(control_file, options.max_line_length)
-        if options.cleanup:
+        control = WrapAndSortControl(control_file, args.max_line_length)
+        if args.cleanup:
             control.strip_trailing_spaces()
-        control.wrap_and_sort(options.wrap_always, options.short_indent,
-                              options.sort_binary_packages, options.keep_first,
-                              options.trailing_comma)
+        control.wrap_and_sort(args.wrap_always, args.short_indent,
+                              args.sort_binary_packages, args.keep_first,
+                              args.trailing_comma)
         control.save()
 
-    copyright_files = [f for f in options.files
+    copyright_files = [f for f in args.files
                        if re.search("/copyright[^/]*$", f)]
     for copyright_file in copyright_files:
-        if options.verbose:
+        if args.verbose:
             print(copyright_file)
         remove_trailing_whitespaces(copyright_file)
 
     pattern = "(dirs|docs|examples|info|install|links|maintscript|manpages)$"
-    install_files = [f for f in options.files if re.search(pattern, f)]
+    install_files = [f for f in args.files if re.search(pattern, f)]
     for install_file in sorted(install_files):
-        if options.verbose:
+        if args.verbose:
             print(install_file)
         install = Install(install_file)
         install.sort()
@@ -210,61 +211,57 @@ def get_files(debian_directory):
 
 def main():
     script_name = os.path.basename(sys.argv[0])
-    usage = "%s [options]" % (script_name)
     epilog = "See %s(1) for more info." % (script_name)
-    parser = optparse.OptionParser(usage=usage, epilog=epilog)
+    parser = argparse.ArgumentParser(epilog=epilog)
 
-    parser.add_option("-a", "--wrap-always", action="store_true", default=False,
-                      help="wrap lists even if they do not exceed the line length limit")
-    parser.add_option("-s", "--short-indent", dest="short_indent",
-                      help="only indent wrapped lines by one space (default is "
-                           "in-line with the field name)",
-                      action="store_true", default=False)
-    parser.add_option("-b", "--sort-binary-packages",
-                      help="Sort binary package paragraphs by name",
-                      dest="sort_binary_packages", action="store_true",
-                      default=False)
-    parser.add_option("-k", "--keep-first",
-                      help="When sorting binary package paragraphs, leave the "
-                           "first one at the top. Unqualified debhelper "
-                           "configuration files are applied to the first "
-                           "package.",
-                      dest="keep_first", action="store_true", default=False)
-    parser.add_option("-n", "--no-cleanup", help="don't cleanup whitespaces",
-                      dest="cleanup", action="store_false", default=True)
-    parser.add_option("-t", "--trailing-comma", help="add trailing comma",
-                      dest="trailing_comma", action="store_true",
-                      default=False)
-    parser.add_option("-d", "--debian-directory", dest="debian_directory",
-                      help="location of the 'debian' directory (default: "
-                           "./debian)", metavar="PATH", default="debian")
-    parser.add_option("-f", "--file", metavar="FILE",
-                      dest="files", action="append", default=list(),
-                      help="Wrap and sort only the specified file.")
-    parser.add_option("-v", "--verbose",
-                      help="print all files that are touched",
-                      dest="verbose", action="store_true", default=False)
-    parser.add_option("--max-line-length", type='int', default=79,
-                      help="set maximum allowed line length before wrapping (default: %default)")
+    parser.add_argument("-a", "--wrap-always", action="store_true", default=False,
+                        help="wrap lists even if they do not exceed the line length limit")
+    parser.add_argument("-s", "--short-indent", dest="short_indent",
+                        help="only indent wrapped lines by one space (default is "
+                             "in-line with the field name)",
+                        action="store_true", default=False)
+    parser.add_argument("-b", "--sort-binary-packages",
+                        help="Sort binary package paragraphs by name",
+                        dest="sort_binary_packages", action="store_true",
+                        default=False)
+    parser.add_argument("-k", "--keep-first",
+                        help="When sorting binary package paragraphs, leave the "
+                             "first one at the top. Unqualified debhelper "
+                             "configuration files are applied to the first "
+                             "package.",
+                        dest="keep_first", action="store_true", default=False)
+    parser.add_argument("-n", "--no-cleanup", help="don't cleanup whitespaces",
+                        dest="cleanup", action="store_false", default=True)
+    parser.add_argument("-t", "--trailing-comma", help="add trailing comma",
+                        dest="trailing_comma", action="store_true",
+                        default=False)
+    parser.add_argument("-d", "--debian-directory", dest="debian_directory",
+                        help="location of the 'debian' directory (default: ./debian)",
+                        metavar="PATH", default="debian")
+    parser.add_argument("-f", "--file", metavar="FILE",
+                        dest="files", action="append", default=list(),
+                        help="Wrap and sort only the specified file.")
+    parser.add_argument("-v", "--verbose",
+                        help="print all files that are touched",
+                        dest="verbose", action="store_true", default=False)
+    parser.add_argument("--max-line-length", type=int, default=79,
+                        help="set maximum allowed line length before wrapping "
+                             "(default: %(default)i)")
 
-    (options, args) = parser.parse_args()
+    args = parser.parse_args()
 
-    if len(args) != 0:
-        parser.error("Unsupported additional parameters specified: %s" %
-                     ", ".join(args))
-
-    if not os.path.isdir(options.debian_directory):
+    if not os.path.isdir(args.debian_directory):
         parser.error('Debian directory not found, expecting "%s".' %
-                     options.debian_directory)
+                     args.debian_directory)
 
-    not_found = [f for f in options.files if not os.path.isfile(f)]
+    not_found = [f for f in args.files if not os.path.isfile(f)]
     if not_found:
         parser.error('Specified files not found: %s' % ", ".join(not_found))
 
-    if not options.files:
-        options.files = get_files(options.debian_directory)
+    if not args.files:
+        args.files = get_files(args.debian_directory)
 
-    wrap_and_sort(options)
+    wrap_and_sort(args)
 
 
 if __name__ == "__main__":

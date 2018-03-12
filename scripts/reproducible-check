@@ -15,18 +15,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import bz2
-import apt
-import sys
-import json
-import time
-import logging
-import requests
 import argparse
+import bz2
 import collections
+import json
+import logging
+import os
+import sys
+import time
 
-from xdg.BaseDirectory import xdg_cache_home
+import apt
+import requests
+
+try:
+    from xdg.BaseDirectory import xdg_cache_home
+except ImportError:
+    print("This script requires the xdg python3 module.", file=sys.stderr)
+    print("Please install the python3-xdg Debian package in order to use"
+          "this utility.", file=sys.stderr)
+    sys.exit(1)
 
 
 class ReproducibleCheck(object):
@@ -132,7 +139,8 @@ class ReproducibleCheck(object):
                 if y['status'] == 'unreproducible'
             }
 
-    def get_installed_packages(self):
+    @staticmethod
+    def get_installed_packages():
         result = collections.defaultdict(list)
 
         for x in apt.Cache():
@@ -145,7 +153,8 @@ class ReproducibleCheck(object):
 
         return result
 
-    def output_by_source(self, unreproducible, installed):
+    @staticmethod
+    def output_by_source(unreproducible, installed):
         num_installed = sum(len(x) for x in installed.keys())
         num_unreproducible = sum(len(x) for x in unreproducible.keys())
         default_architecture = apt.apt_pkg.config.find('APT::Architecture')
@@ -167,14 +176,15 @@ class ReproducibleCheck(object):
                 source,
             ))
 
-        x = "{}/{} ({:.2f}%) of installed binary packages are unreproducible."
-        print(x.format(
+        msg = "{}/{} ({:.2f}%) of installed binary packages are unreproducible."
+        print(msg.format(
             num_unreproducible,
             num_installed,
             100. * num_unreproducible / num_installed,
         ))
 
-    def output_raw(self, unreproducible, installed):
+    @staticmethod
+    def output_raw(unreproducible, installed):  # pylint: disable=unused-argument
         for x in sorted(x for xs in unreproducible.values() for x in set(xs)):
             print(x)
 

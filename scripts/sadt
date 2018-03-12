@@ -99,7 +99,8 @@ class Progress(object):
         else:
             self._back = ''
 
-    def _write(self, s):
+    @staticmethod
+    def _write(s):
         sys.stdout.write(s)
         sys.stdout.flush()
 
@@ -172,6 +173,7 @@ class TestGroup(object):
         self.depends = '@'
         self.tests_directory = 'debian/tests'
         self._check_depends_cache = None
+        self._depends_cache = None
 
     def __iter__(self):
         return iter(self.tests)
@@ -211,7 +213,7 @@ class TestGroup(object):
     def check_depends(self):
         if self._check_depends_cache is not None:
             if isinstance(self._depends_cache, Exception):
-                raise self._check_depends_cache
+                raise self._check_depends_cache  # false positive, pylint: disable=raising-bad-type
             return
         child = ipc.Popen(['dpkg-checkbuilddeps', '-d', self.depends], stderr=ipc.PIPE, env={})
         error = child.stderr.read().decode('ASCII')
@@ -229,7 +231,7 @@ class TestGroup(object):
     def check_restrictions(self, ignored_restrictions):
         restrictions = self.restrictions - frozenset(ignored_restrictions)
 
-        class Options:
+        class Options:  # pylint: disable=too-few-public-methods
             rw_build_tree_needed = False
             allow_stderr = False
         for r in restrictions:
@@ -289,7 +291,7 @@ class TestGroup(object):
             if cwd is not None:
                 os.chdir(cwd)
 
-    def _run(self, test, progress, allow_stderr=False):
+    def _run(self, test, progress, allow_stderr=False):  # pylint: disable=too-many-locals
         path = os.path.join(self.tests_directory, test)
         tmpdir1 = tempfile.mkdtemp(prefix='sadt.')
         tmpdir2 = tempfile.mkdtemp(prefix='sadt.')
@@ -352,10 +354,9 @@ def copy_build_tree():
 
 
 def main():
-    for description in __doc__.splitlines():
-        if description:
-            break
-    parser = argparse.ArgumentParser(description=description)
+    # TODO: refactor main function
+    # pylint: disable=too-many-branches,too-many-statements,too-many-locals,too-many-nested-blocks
+    parser = argparse.ArgumentParser(description=__doc__.strip())
     parser.add_argument('-v', '--verbose', action='store_true', help='verbose output')
     parser.add_argument('-b', '--built-source-tree', action='store_true',
                         help='assume built source tree')
@@ -377,7 +378,8 @@ def main():
     with file:
         for n, para in enumerate(deb822.Packages.iter_paragraphs(file)):
             if n == 0:
-                para['Source']
+                # FIXME statement with no effect
+                # para['Source']
                 for field in 'Build-Depends', 'Build-Depends-Indep':
                     try:
                         build_depends += deb822.PkgRelation.parse_relations(para[field])

@@ -1,0 +1,7 @@
+version=4
+opts="hrefdecode=percent-encoding, pgpmode=no, \
+ filenamemangle=s/.*dl_class_([\d.]+)\.tar\.gz/dl-poly-classic-$1\.tar\.gz/" \
+https://ccpforge.cse.rl.ac.uk/gf/project/dl_poly_classic/frs/ \
+ /gf/download/frsrelease/\d+/\d+/dl_class_([\d.]+)\.tar\.gz debian uupdate
+
+

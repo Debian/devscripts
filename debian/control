@@ -1,7 +1,7 @@
 Source: devscripts
 Section: devel
 Priority: optional
-Maintainer: Devscripts Devel Team <devscripts-devel@lists.alioth.debian.org>
+Maintainer: Devscripts Maintainers <devscripts@packages.debian.org>
 Uploaders:
  Mattia Rizzolo <mattia@debian.org>,
 Build-Depends: bash-completion,
@@ -27,12 +27,13 @@ Build-Depends: bash-completion,
                perl:any,
                pkg-config,
                po4a,
-               pylint <!nocheck>,
+               pylint3 <!nocheck>,
                python3-all:any,
                python3-apt <!nocheck>,
                python3-debian <!nocheck>,
                python3-flake8 <!nocheck>,
                python3-magic <!nocheck>,
+               python3-pyftpdlib <!nocheck>,
                python3-requests <!nocheck>,
                python3-setuptools,
                python3-unidiff <!nocheck>,
@@ -45,8 +46,8 @@ Build-Depends: bash-completion,
                zip <!nocheck>
 Standards-Version: 4.1.3
 Rules-Requires-Root: no
-Vcs-Browser: https://anonscm.debian.org/git/collab-maint/devscripts.git
-Vcs-Git: https://anonscm.debian.org/git/collab-maint/devscripts.git
+Vcs-Browser: https://salsa.debian.org/debian/devscripts
+Vcs-Git: https://salsa.debian.org/debian/devscripts.git
 
 Package: devscripts
 Architecture: any

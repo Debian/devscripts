@@ -43,6 +43,8 @@ usage() {
     echo ""
     echo "Options:"
     echo ""
+    echo " -s,--skip VARIATION    Don't perform the named variation"
+    echo " -h,--help              Display this help message and exit"
 }
 
 first_banner=y
@@ -171,8 +173,8 @@ compare() {
     return "$rc"
 }
 
-TEMP=$(getopt -n "debrepro" -o 's:' \
-    -l 'skip:' \
+TEMP=$(getopt -n "debrepro" -o 'hs:' \
+    -l 'help,skip:' \
     -- "$@") || (rc=$?; usage >&2; exit $rc)
 eval set -- "$TEMP"
 
@@ -190,6 +192,10 @@ while true; do
                     ;;
             esac
             shift
+            ;;
+        -h|--help)
+            usage
+            exit
             ;;
         --)
             shift
