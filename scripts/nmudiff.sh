@@ -44,6 +44,8 @@ usage () {
                       must be the first option given
     --no-pending, --nopending
                       Don't add the 'pending' tag
+    --non-dd, --nondd
+                      Mention in the email that you require sponsorship.
     --template=TEMPLATEFILE
                       Use content of TEMPLATEFILE for message.
     --help, -h        Show this help information.
@@ -161,6 +163,7 @@ TEMP=$(getopt -s bash -o "h" \
     --long delay:,no-delay,nodelay \
     --long no-conf,noconf \
     --long no-pending,nopending \
+    --long non-dd,nondd \
     --long template: \
     --long help,version -n "$PROGNAME" -- "$@") || (usage >&2; exit 1)
 
@@ -197,6 +200,9 @@ while [ "$1" ]; do
         ;;
     --nopending|--no-pending)
         NMUDIFF_PENDING=""
+        ;;
+    --nondd|--non-dd)
+        NMUDIFF_NONDD=yes
         ;;
     --mutt)
         NMUDIFF_MUTT=yes
@@ -397,6 +403,13 @@ fi
 
 if [ "$NMUDIFF_TEMPLATE" != "" ]; then
     BODY=$(cat "$NMUDIFF_TEMPLATE")
+elif [ "$NMUDIFF_NONDD" = "yes" ]; then
+    BODY="$(printf "%s\n\n%s\n%s\n\n%s\n\n%s" \
+"Dear maintainer," \
+"I've prepared an NMU for $SOURCE (versioned as $VERSION). The diff" \
+"is attached to this message." \
+"I require a sponsor to have it uploaded." \
+"Regards.")"
 elif [ "$NMUDIFF_DELAY" = "0" ]; then
     BODY="$(printf "%s\n\n%s\n%s\n\n%s" \
 "Dear maintainer," \

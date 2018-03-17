@@ -27,7 +27,7 @@ devscripts (2.18.2) unstable; urgency=medium
   [ Mònica Ramírez Arceda ]
   * nmudiff:
     + Add a template argument to provide a different email from the one in the
-      script. (Closes: #555863)
+      script.  Closes: #555863
 
   [ Pierre-Elliott Bécue ]
   * d/control:
@@ -39,12 +39,14 @@ devscripts (2.18.2) unstable; urgency=medium
   * nmudiff:
     + Clean up some indentations
     + Add a no-pending option to not add the pending tag if needed.
+    + Add a non-dd option to ask for a sponsor in the email.
+      Closes: #662794
 
   [ Mattia Rizzolo ]
   * mk-origtargz:
     + Deal with Hurd where `getconf ARG_MAX` returns "undefined".
 
- -- Pierre-Elliott Bécue <becue@crans.org>  Sat, 17 Mar 2018 20:13:47 +0100
+ -- Pierre-Elliott Bécue <becue@crans.org>  Sat, 17 Mar 2018 20:21:44 +0100
 
 devscripts (2.18.1) unstable; urgency=medium
 
