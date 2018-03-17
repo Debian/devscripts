@@ -42,6 +42,8 @@ usage () {
     --no-conf, --noconf
                       Don't read devscripts config files;
                       must be the first option given
+    --no-pending, --nopending
+                      Don't add the 'pending' tag
     --template=TEMPLATEFILE
                       Use content of TEMPLATEFILE for message.
     --help, -h        Show this help information.
@@ -65,7 +67,8 @@ DEFAULT_NMUDIFF_DELAY="XX"
 DEFAULT_NMUDIFF_MUTT="yes"
 DEFAULT_NMUDIFF_NEWREPORT="maybe"
 DEFAULT_BTS_SENDMAIL_COMMAND="/usr/sbin/sendmail"
-VARS="NMUDIFF_DELAY NMUDIFF_MUTT NMUDIFF_NEWREPORT BTS_SENDMAIL_COMMAND"
+DEFAULT_NMUDIFF_PENDING=" pending"
+VARS="NMUDIFF_DELAY NMUDIFF_MUTT NMUDIFF_NEWREPORT BTS_SENDMAIL_COMMAND NMUDIFF_PENDING"
 # Don't think it's worth including this stuff
 # DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1
 # DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.+)?'
@@ -157,6 +160,7 @@ TEMP=$(getopt -s bash -o "h" \
     --long sendmail:,from:,new,old,mutt,no-mutt,nomutt \
     --long delay:,no-delay,nodelay \
     --long no-conf,noconf \
+    --long no-pending,nopending \
     --long template: \
     --long help,version -n "$PROGNAME" -- "$@") || (usage >&2; exit 1)
 
@@ -190,6 +194,9 @@ while [ "$1" ]; do
         ;;
     --nodelay|--no-delay)
         NMUDIFF_DELAY=0
+        ;;
+    --nopending|--no-pending)
+        NMUDIFF_PENDING=""
         ;;
     --mutt)
         NMUDIFF_MUTT=yes
@@ -360,7 +367,7 @@ if [ "$NMUDIFF_NEWREPORT" = "yes" ]; then
     TAGS="Package: $SOURCE
 Version: $OLDVERSION
 Severity: normal
-Tags: patch pending"
+Tags: patch ${NMUDIFF_PENDING}"
 else
     for b in $CLOSES; do
     TO_ADDRESSES_SENDMAIL="$TO_ADDRESSES_SENDMAIL,
@@ -370,7 +377,7 @@ else
         TAGS="$TAGS
 Control: tags $b + patch"
     fi
-    if [ "$NMUDIFF_DELAY" != "0" ] && [ "`bts select bugs:$b tag:pending`" != "$b" ]; then
+    if [ "$NMUDIFF_DELAY" != "0" ] && [ "`bts select bugs:$b tag:pending`" != "$b" ] && [ $NMUDIFF_PENDING ]; then
         TAGS="$TAGS
 Control: tags $b + pending"
     fi
