@@ -38,9 +38,7 @@ class PylintTestCase(unittest.TestCase):
     def test_pylint(self):
         """Test: Run pylint on Python source code"""
 
-        with open("/proc/self/cmdline", "r") as cmdline_file:
-            python_binary = cmdline_file.read().split("\0")[0]
-        cmd = [python_binary, "-m", "pylint", "--rcfile=" + CONFIG, "--"] + get_source_files()
+        cmd = [sys.executable, "-m", "pylint", "--rcfile=" + CONFIG, "--"] + get_source_files()
         env = os.environ.copy()
         env["PYLINTHOME"] = ".pylint.d"
         if unittest_verbosity() >= 2:
