@@ -44,6 +44,7 @@ devscripts (2.18.2) unstable; urgency=medium
   [ Mattia Rizzolo ]
   * mk-origtargz:
     + Deal with Hurd where `getconf ARG_MAX` returns "undefined".
+  * Fix some pylint issues that are reported only by stretch's pylint.
 
  -- Pierre-Elliott Bécue <becue@crans.org>  Sat, 17 Mar 2018 20:21:44 +0100
 

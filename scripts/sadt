@@ -226,7 +226,7 @@ class TestGroup(object):
             self._depends_cache = skip
             raise skip
         else:
-            self._depends_cache = True
+            self._depends_cache = True  # pylint: disable=redefined-variable-type
 
     def check_restrictions(self, ignored_restrictions):
         restrictions = self.restrictions - frozenset(ignored_restrictions)
@@ -458,13 +458,13 @@ def main():
     print(separator1)
     print(gettext.ngettext('Ran {n} test', 'Ran {n} tests', n_test).format(n=n_test))
     print()
-    extra_message = []
+    fmt_message = []
     if n_skip > 0:
-        extra_message += ['skipped={n}'.format(n=n_skip)]
+        fmt_message += ['skipped={n}'.format(n=n_skip)]
     if n_fail > 0:
-        extra_message += ['failures={n}'.format(n=n_fail)]
-    if extra_message:
-        extra_message = ' ({msg})'.format(msg=', '.join(extra_message))
+        fmt_message += ['failures={n}'.format(n=n_fail)]
+    if fmt_message:
+        extra_message = ' ({msg})'.format(msg=', '.join(fmt_message))
     else:
         extra_message = ''
     message = ('OK' if n_fail == 0 else 'FAILED') + extra_message
