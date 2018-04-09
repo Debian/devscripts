@@ -526,6 +526,20 @@ sub munge_url($$)
     return $repo_url;
 }
 
+# returns an error code after system(). If system() exited normally, this is the
+# error code of the child process. If it exited with a signal (if a user hit
+# C-c, say) then this returns something <0. In either case, errorcode()==0 means
+# "success"
+sub errorcode
+{
+    my $code = $? >> 8;
+    if( $code == 0 && $? != 0)
+    {
+        return -$?;
+    }
+    return $code;
+}
+
 # Checkout a given repository in a given destination directory.
 sub checkout_repo($$$$) {
     my ($repo_type, $repo_url, $destdir, $anon_repo_url) = @_;
@@ -571,7 +585,7 @@ sub checkout_repo($$$$) {
     @cmd = set_destdir($repo_type, $destdir, @cmd) if length $destdir;
     print "@cmd ...\n";
     system @cmd;
-    my $rc = $? >> 8;
+    my $rc = errorcode();
 
     if ($rc == 0 && @extracmd) {
 	my $oldcwd = getcwd();
@@ -587,7 +601,7 @@ sub checkout_repo($$$$) {
 
 	chdir $clonedir;
 	system @extracmd;
-	$rc = $? >> 8;
+	$rc = errorcode();
 	chdir($oldcwd);
     }
 
@@ -672,9 +686,9 @@ sub checkout_files($$$$) {
 			$module);
 		print "\n@cmd ...\n";
 		system @cmd;
-		if (($? >> 8) != 0) {
+		if (errorcode() != 0) {
 		    chdir $oldcwd;
-		    return ($? >> 8);
+		    return (errorcode());
 		} else {
 		    chdir $oldcwd;
 		    if (copy("$tempdir/$module", $dir)) {
@@ -899,7 +913,7 @@ sub unpack_source($$$$$) {
     push @args, $version ? "$srcpkg=$version" : $srcpkg;
     system('apt-get', @args);
     chdir $oldcwd;
-    if ($? >> 8) {
+    if (errorcode()) {
 	print STDERR "apt-get source failed\n";
 	return 0;
     }
@@ -1155,7 +1169,7 @@ EOF
 	if ($$tg_info{'topgit'} eq 'yes') {
 	    print "TopGit detected, populating top-bases ...\n";
 	    system("cd $wcdir && tg remote --populate origin");
-	    $rc = $? >> 8;
+	    $rc = errorcode();
 	    print STDERR "TopGit population failed\n" if $rc != 0;
 	}
 	system("cd $wcdir && git config user.name \"$ENV{'DEBFULLNAME'}\"")
