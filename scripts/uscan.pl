@@ -4440,6 +4440,7 @@ sub downloader ($$$$$)
 	my $curdir = cwd();
 	$fname =~ m%(.*)/([^/]*)-([^_/-]*)\.tar\.(gz|xz|bz2|lzma)%;
 	my $dst = $1;
+	my $abs_dst = abs_path($dst);
 	my $pkg = $2;
 	my $ver = $3;
 	my $suffix = $4;
@@ -4456,14 +4457,14 @@ sub downloader ($$$$$)
 		$gitrepo_state=2;
 	    }
 	}
-	uscan_verbose "Execute: git --git-dir=$destdir/$gitrepo_dir archive --format=tar --prefix=$pkg-$ver/ --output=$curdir/$dst/$pkg-$ver.tar $gitref\n";
-	system('git', "--git-dir=$destdir/$gitrepo_dir", 'archive', '--format=tar', "--prefix=$pkg-$ver/", "--output=$curdir/$dst/$pkg-$ver.tar", $gitref) == 0 or uscan_die("git archive failed\n");
+	uscan_verbose "Execute: git --git-dir=$destdir/$gitrepo_dir archive --format=tar --prefix=$pkg-$ver/ --output=$abs_dst/$pkg-$ver.tar $gitref\n";
+	system('git', "--git-dir=$destdir/$gitrepo_dir", 'archive', '--format=tar', "--prefix=$pkg-$ver/", "--output=$abs_dst/$pkg-$ver.tar", $gitref) == 0 or uscan_die("git archive failed\n");
 	# If git cloned repo exists and not --debug ($verbose=1) -> remove it
 	if ($gitrepo_state > 0 and $verbose < 1) {
-	    system('rm', '-rf', "$curdir/$dst/$gitrepo_dir");
+	    system('rm', '-rf', "$abs_dst/$gitrepo_dir");
 	    $gitrepo_state=0;
 	}
-	chdir "$curdir/$dst" or uscan_die("Unable to chdir($curdir/$dst): $!\n");
+	chdir "$abs_dst" or uscan_die("Unable to chdir($abs_dst): $!\n");
 	if ($suffix eq 'gz') {
 	    uscan_verbose "Execute: gzip -n -9 $pkg-$ver.tar\n";
 	    system("gzip", "-n", "-9", "$pkg-$ver.tar") == 0 or uscan_die("gzip failed\n");
