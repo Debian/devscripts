@@ -27,6 +27,11 @@ devscripts (2.17.6+deb9u2) UNRELEASED; urgency=medium
   * debcheckout:
     + Support salsa.debian.org.
 
+  [ Adam D. Barratt ]
+  * debdiff:
+    + Sort shlibs files before comparing. The order of entries is not
+      significant.
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 30 Sep 2017 22:19:56 +0200
 
 devscripts (2.17.6+deb9u1) stretch; urgency=medium
