@@ -1041,7 +1041,7 @@ sub wdiff_control_files($$$$$)
 
     foreach my $cf (@cf) {
 	next unless -f "$dir1/$cf" and -f "$dir2/$cf";
-	if ($cf eq 'control' or $cf eq 'conffiles') {
+	if ($cf eq 'control' or $cf eq 'conffiles' or $cf eq 'shlibs') {
 	    for my $file ("$dir1/$cf", "$dir2/$cf") {
 		my ($fd, @hdrs);
 		open $fd, '<', $file or fatal "Cannot read $file: $!";
