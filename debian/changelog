@@ -52,7 +52,12 @@ devscripts (2.18.2) UNRELEASED; urgency=medium
       significant.
 
   [ Paul Wise ]
-  * chdist, cowpoke: default to deb.debian.org instead
+  * chdist, cowpoke:
+    + Default to deb.debian.org instead.
+
+  [ Antonio Terceiro ]
+  * uscan:
+    + Redirect Alioth's gemwatch to gemwatch.debian.net.  MR: !2
 
  -- Pierre-Elliott Bécue <becue@crans.org>  Sat, 17 Mar 2018 20:21:44 +0100
 
