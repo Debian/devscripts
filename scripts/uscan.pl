@@ -3080,6 +3080,11 @@ sub process_watchline ($$$$$$)
 	    uscan_verbose "pypi.python.org redirection to pypi.debian.net\n";
 	    $base =~ s%^https?://pypi\.python\.org/packages/source/./%https://pypi.debian.net/%;
 	}
+	# Handle pkg-ruby-extras gemwatch addresses specially
+	if ($base =~ m%^https?://pkg-ruby-extras\.alioth\.debian\.org/cgi-bin/gemwatch%) {
+	  uscan_warn "redirecting DEPRECATED pkg-ruby-extras.alioth.debian.org/cgi-bin/gemwatch to gemwatch.debian.net\n";
+	  $base =~ s%^https?://pkg-ruby-extras\.alioth\.debian\.org/cgi-bin/gemwatch%https://gemwatch.debian.net%;
+	}
 
     }
     # End parsing the watch line for all version=1/2/3/4
