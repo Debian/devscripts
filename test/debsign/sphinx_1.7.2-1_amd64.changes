@@ -1,0 +1,54 @@
+Format: 1.8
+Date: Fri, 13 Apr 2018 22:52:25 +0100
+Source: sphinx
+Binary: python-sphinx python3-sphinx sphinx-common sphinx-doc libjs-sphinxdoc
+Architecture: source all
+Version: 1.7.2-1
+Distribution: UNRELEASED
+Urgency: medium
+Maintainer: Debian Python Modules Team <python-modules-team@lists.alioth.debian.org>
+Changed-By: Chris Lamb <lamby@debian.org>
+Description:
+ libjs-sphinxdoc - JavaScript support for Sphinx documentation
+ python-sphinx - documentation generator for Python projects (implemented in Pytho
+ python3-sphinx - documentation generator for Python projects (implemented in Pytho
+ sphinx-common - documentation generator for Python projects - common data
+ sphinx-doc - documentation generator for Python projects - documentation
+Changes:
+ sphinx (1.7.2-1) UNRELEASED; urgency=medium
+ .
+   [ Chris Lamb ]
+   * New upstream release.
+ .
+   [ Dmitry Shachnev ]
+   * Merge 1.6.7-2 upload from unstable.
+Checksums-Sha1:
+ 8c7ad722576ad1a475691020ca2320b1040dc203 2871 sphinx_1.7.2-1.dsc
+ 1d1fa6954ae216cd44ea52dfc67063f26939c8f5 4719536 sphinx_1.7.2.orig.tar.gz
+ facfa686a3a0bc98c269e16e66427f96e00889ad 34268 sphinx_1.7.2-1.debian.tar.xz
+ 36a42125afd83731e05596d7037314399622e400 88720 libjs-sphinxdoc_1.7.2-1_all.deb
+ 8c2ecdf4e4ffd1f4880b486e53c99207c4d69dbc 443380 python-sphinx_1.7.2-1_all.deb
+ e518d97dceb77d827734d48ac02313fc0ed4b08c 441676 python3-sphinx_1.7.2-1_all.deb
+ 01e65d2e2c45121e06aff6f46427d6a31251e67c 432892 sphinx-common_1.7.2-1_all.deb
+ 8bec16b4db2ddf6776f7cfdcf04cd07fe32269ed 1198352 sphinx-doc_1.7.2-1_all.deb
+ 9dd0efdf2ff555e9c8122012ad44bc6c5db53596 14355 sphinx_1.7.2-1_amd64.buildinfo
+Checksums-Sha256:
+ 52d1d62f68aa9bab1504a0491faf6f4de7658ccc3c65e40871b894ad1ce504ed 2871 sphinx_1.7.2-1.dsc
+ 5a1c9a0fec678c24b9a2f5afba240c04668edb7f45c67ce2ed008996b3f21ae2 4719536 sphinx_1.7.2.orig.tar.gz
+ a6a825914b19cfdbc22df858b0cecc497765dad2058deae20a88a6a2f9d57d24 34268 sphinx_1.7.2-1.debian.tar.xz
+ c6267177819e0a27b8f9296b1d5106e253e84cf0722fbdf8d2bff489befb81d8 88720 libjs-sphinxdoc_1.7.2-1_all.deb
+ c55dc8f59798a835e6f78adfd95d73f9cf3382e440cdf96b2edbdb1990280f23 443380 python-sphinx_1.7.2-1_all.deb
+ 3f2b279b572d2fc36d9cc84c9fcded242ed930d42350e1d980c4aed45ee4ae2a 441676 python3-sphinx_1.7.2-1_all.deb
+ ece661af9ca87723169f48e68a45af0b5157da4b724a185b99ef42ed22e5f378 432892 sphinx-common_1.7.2-1_all.deb
+ 67722aa0934b9ebce8a870a34542104017491766c2515665c07128ad46b4e6b7 1198352 sphinx-doc_1.7.2-1_all.deb
+ 2b70197cc0cc88a48776fd266c501546819055f4c5c85d845bcb0f621b4789fe 14355 sphinx_1.7.2-1_amd64.buildinfo
+Files:
+ e6d086f0f2453055bab4ba6677f6af3f 2871 python optional sphinx_1.7.2-1.dsc
+ 21a08e994e6a289ed14eecefde2b4f2f 4719536 python optional sphinx_1.7.2.orig.tar.gz
+ e147e2afa47e7e58d1288ad8818c3de0 34268 python optional sphinx_1.7.2-1.debian.tar.xz
+ 4a4df0c2ce6f087414a5dc5802885fd2 88720 javascript optional libjs-sphinxdoc_1.7.2-1_all.deb
+ 15b065a197e938715bf501b33066adf2 443380 python optional python-sphinx_1.7.2-1_all.deb
+ 942189b1dd93faa36faa3552a9d40042 441676 python optional python3-sphinx_1.7.2-1_all.deb
+ f6a5889bd4e807800239721d365a5f62 432892 python optional sphinx-common_1.7.2-1_all.deb
+ 86497c90b6cda029576933778357004e 1198352 doc optional sphinx-doc_1.7.2-1_all.deb
+ a7a033cc426d486daf5bea22dab538cb 14355 python optional sphinx_1.7.2-1_amd64.buildinfo
