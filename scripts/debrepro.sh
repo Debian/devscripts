@@ -110,8 +110,8 @@ create_build_script() {
         'export LC_ALL=pt_BR.UTF-8 LANG=pt_BR.UTF-8'
 
     vary timezone \
-        'export TZ=UTC' \
-        'export TZ=Asia/Tokyo'
+        'export TZ=GMT+12' \
+        'export TZ=GMT-14'
 
     if which disorderfs >/dev/null; then
         disorderfs_commands='cd .. &&
