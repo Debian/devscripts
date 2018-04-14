@@ -1,0 +1,113 @@
+#!/bin/sh
+
+# Copyright (C) 2018, Chris Lamb <lamby@debian.org>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+
+WORKDIR="$(readlink -f "${0%/*}")"
+
+if test "$1" = --installed; then
+	COMMAND="debsign --no-conf"
+	shift
+else
+	COMMAND="$WORKDIR/../scripts/debsign.sh --no-conf"
+fi
+
+GPG=gpg
+GPGHOME=$(mktemp -d -p /tmp gpg.XXXXX)
+if ! command -v $GPG >/dev/null 2>&1; then
+	echo "$GPG missing"
+	GPG=gpg2
+	if ! command -v $GPG >/dev/null 2>&1; then
+		echo "$GPG missing"
+		exit 1
+	fi
+fi
+
+oneTimeSetUp () {
+	$GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
+		--output $GPGHOME/secring.gpg --dearmor $WORKDIR/debsign/private_key.asc
+
+	$GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
+		--output $GPGHOME/pubring.gpg --dearmor $WORKDIR/debsign/public_key.asc
+
+	export GNUPGHOME=$GPGHOME
+}
+
+oneTimeTearDown () {
+	gpgconf --homedir "$GPGHOME" --verbose --kill gpg-agent
+	rm -rf "$GPGHOME"
+}
+
+setUp() {
+	TEMPDIR=$(mktemp -d -p /tmp debsign.XXXXX)
+	cp $WORKDIR/debsign/* $TEMPDIR
+	CHANGES=$(echo $TEMPDIR/*changes)
+}
+
+tearDown() {
+	rm -rf $TEMPDIR
+}
+
+assertSigned() {
+	expected=$1
+	shift
+	$COMMAND "$@" $CHANGES >$TEMPDIR/stdout 2>$TEMPDIR/stderr
+	rc=$?
+	assertEquals 'error code' $expected $rc
+}
+
+testEmailKeyID () {
+	assertSigned 0 -k none@debian.org
+}
+
+testShortKeyID () {
+	assertSigned 1 -k 72543FAF
+	assertTrue 'error not seen' "grep -q 'short key ID' $TEMPDIR/stderr"
+}
+
+testPrefixedShortKeyID () {
+	assertSigned 1 -k 0x72543FAF
+	assertTrue 'error not seen' "grep -q 'short key ID' $TEMPDIR/stderr"
+}
+
+testLongKeyID() {
+	assertSigned 0 -k C77E2D6872543FAF
+	assertTrue 'not signed' "grep -q 'BEGIN PGP SIGNATURE' $CHANGES"
+}
+
+testPrefixedLongKeyID() {
+	assertSigned 0 -k 0xC77E2D6872543FAF
+	assertTrue 'not signed' "grep -q 'BEGIN PGP SIGNATURE' $CHANGES"
+}
+
+testFingerprintKeyID () {
+	assertSigned 0 -k CF218F0E7EABF584B7E20402C77E2D6872543FAF
+}
+
+testUnknownKeyID () {
+	assertSigned 2 -k AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+	assertTrue 'warning not seen' "grep -q 'No secret key' $TEMPDIR/stderr"
+}
+
+testNameKeyID () {
+	assertSigned 0 -k 'uscan test key (no secret)'
+}
+
+testFullNameAsKeyID () {
+	assertSigned 0 -k 'uscan test key (no secret) <none@debian.org>'
+}
+
+. shunit2

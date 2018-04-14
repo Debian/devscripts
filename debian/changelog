@@ -61,6 +61,11 @@ devscripts (2.18.2) UNRELEASED; urgency=medium
   * debrepro:
     + Vary between timezones that are more than 1 day apart.  MR: !3
 
+  [ Chris Lamb ]
+  * debsign:
+    + To prevent collision attacks, refuse to sign with short key IDs (eg.
+      0xCAFEBABE) and warn when not using full GPG fingerprint.  MR: !1
+
  -- Pierre-Elliott Bécue <becue@crans.org>  Sat, 17 Mar 2018 20:21:44 +0100
 
 devscripts (2.18.1) unstable; urgency=medium
