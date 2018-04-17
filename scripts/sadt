@@ -296,8 +296,8 @@ class TestGroup(object):
         tmpdir1 = tempfile.mkdtemp(prefix='sadt.')
         tmpdir2 = tempfile.mkdtemp(prefix='sadt.')
         environ = dict(os.environ)
-        environ['ADTTMP'] = tmpdir1
-        environ['TMPDIR'] = tmpdir2  # only for compatibility with old DEP-8 spec.
+        environ['AUTOPKGTEST_TMP'] = tmpdir1
+        environ['ADTTMP'] = tmpdir2  # only for compatibility with old DEP-8 spec.
         child = ipc.Popen([path], stdout=ipc.PIPE, stderr=ipc.PIPE, env=environ)
         output = []
         stderr = False
