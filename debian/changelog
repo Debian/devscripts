@@ -66,6 +66,10 @@ devscripts (2.18.2) UNRELEASED; urgency=medium
     + To prevent collision attacks, refuse to sign with short key IDs (eg.
       0xCAFEBABE) and warn when not using full GPG fingerprint.  MR: !1
 
+  [ Dmitry Shachnev ]
+  * sadt:
+    + Set AUTOPKGTEST_TMP environment variable.  MR: !5
+
  -- Pierre-Elliott Bécue <becue@crans.org>  Sat, 17 Mar 2018 20:21:44 +0100
 
 devscripts (2.18.1) unstable; urgency=medium
