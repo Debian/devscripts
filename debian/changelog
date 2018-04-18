@@ -60,6 +60,8 @@ devscripts (2.18.2) UNRELEASED; urgency=medium
     + Redirect Alioth's gemwatch to gemwatch.debian.net.  MR: !2
   * debrepro:
     + Vary between timezones that are more than 1 day apart.  MR: !3
+    + Add a --before-second-build option, to inject extra command before
+      the second build runs.  MR: !4
 
   [ Chris Lamb ]
   * debsign:
