@@ -226,7 +226,7 @@ class TestGroup(object):
             self._depends_cache = skip
             raise skip
         else:
-            self._depends_cache = True  # pylint: disable=redefined-variable-type
+            self._depends_cache = True
 
     def check_restrictions(self, ignored_restrictions):
         restrictions = self.restrictions - frozenset(ignored_restrictions)
