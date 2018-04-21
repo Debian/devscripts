@@ -61,8 +61,8 @@ B<git-deborig> was written by Sean Whitton <spwhitton@spwhitton.name>.
 
 use strict;
 use warnings;
-no warnings "experimental::smartmatch";
 
+use Getopt::Long;
 use Git::Wrapper;
 use Dpkg::Changelog::Parse;
 use Dpkg::IPC;
@@ -74,16 +74,15 @@ die "pwd doesn't look like a Debian source package in a git repository ..\n"
   unless ( -d ".git" && -e "debian/changelog" );
 
 # Process command line args
-die "usage: git deborig [-f] [REF]\n"
-  if ( scalar @ARGV >= 3 || (scalar @ARGV == 2 && !("-f" ~~ @ARGV)) );
-my $overwrite = 0;
-my $user_ref;
-foreach my $arg ( @ARGV ) {
-    if ( $arg eq "-f" ) {
-        $overwrite = 1;
-    } else {
-        $user_ref = $arg;
-    }
+my $overwrite = '';
+my $user_ref = '';
+GetOptions (
+            'f' => \$overwrite,
+           ) || usage();
+if ( scalar @ARGV == 1 ) {
+    $user_ref = shift @ARGV;
+} elsif ( scalar @ARGV >= 2) {
+    usage();
 }
 
 # Extract source package name and version from d/changelog
@@ -115,7 +114,7 @@ my $orig = "../${source}_$upstream_version.orig.tar.$compression";
 die "$orig already exists: not overwriting without -f\n"
   if ( -e $orig && ! $overwrite );
 
-if ( defined $user_ref ) {      # User told us the tag/branch to archive
+if ( $user_ref ) {      # User told us the tag/branch to archive
     # We leave it to git-archive(1) to determine whether or not this
     # ref exists; this keeps us forward-compatible
     archive_ref($user_ref);
@@ -183,4 +182,8 @@ sub archive_ref {
     } else {
         unlink ".git/info/attributes";
     }
+}
+
+sub usage {
+    die "usage: git deborig [-f] [REF]\n";
 }
