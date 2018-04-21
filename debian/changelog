@@ -72,6 +72,12 @@ devscripts (2.18.2) UNRELEASED; urgency=medium
   * sadt:
     + Set AUTOPKGTEST_TMP environment variable.  MR: !5
 
+  [ Sean Whitton ]
+  * git-deborig:  MR: !7
+    + New --just-print option.
+      - Add recommends on libstring-shellquote-perl.
+    + New --version option.
+
  -- Pierre-Elliott Bécue <becue@crans.org>  Sat, 17 Mar 2018 20:21:44 +0100
 
 devscripts (2.18.1) unstable; urgency=medium
