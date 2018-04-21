@@ -23,7 +23,7 @@ git-deborig - try to produce Debian orig.tar using git-archive(1)
 
 =head1 SYNOPSIS
 
-B<git deborig> [B<-f>] [B<--just-print>] [B<--version=>I<VERSION>] [I<REF>]
+B<git deborig> [B<--force>|B<-f>] [B<--just-print>] [B<--version=>I<VERSION>] [I<REF>]
 
 =head1 DESCRIPTION
 
@@ -43,7 +43,7 @@ which should contain I<debian/changelog>.
 
 =over 4
 
-=item B<-f>
+=item B<-f>|B<--force>
 
 Overwrite any existing orig.tar in the parent directory.
 
@@ -95,7 +95,7 @@ my $user_version = '';
 my $user_ref = '';
 my $just_print = '';
 GetOptions (
-            'f' => \$overwrite,
+            'force|f' => \$overwrite,
             'just-print' => \$just_print,
             'version=s' => \$user_version
            ) || usage();
@@ -144,7 +144,7 @@ if ( -e "debian/source/format" ) {
 }
 
 my $orig = "../${source}_$upstream_version.orig.tar.$compression";
-die "$orig already exists: not overwriting without -f\n"
+die "$orig already exists: not overwriting without --force\n"
   if ( -e $orig && ! $overwrite && ! $just_print );
 
 if ( $user_ref ) {      # User told us the tag/branch to archive
@@ -226,5 +226,5 @@ sub archive_ref_or_just_print {
 }
 
 sub usage {
-    die "usage: git deborig [-f] [--just-print] [--version=VERSION] [REF]\n";
+    die "usage: git deborig [--force|-f] [--just-print] [--version=VERSION] [REF]\n";
 }
