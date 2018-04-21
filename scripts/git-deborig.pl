@@ -23,7 +23,7 @@ git-deborig - try to produce Debian orig.tar using git-archive(1)
 
 =head1 SYNOPSIS
 
-B<git deborig> [B<-f>] [I<REF>]
+B<git deborig> [B<-f>] [B<--version=>I<VERSION>] [I<REF>]
 
 =head1 DESCRIPTION
 
@@ -46,6 +46,11 @@ which should contain I<debian/changelog>.
 =item B<-f>
 
 Overwrite any existing orig.tar in the parent directory.
+
+=item B<--version=>I<VERSION>
+
+Instead of reading the new upstream version from the first entry in
+the Debian changelog, use I<VERSION>.
 
 =back
 
@@ -75,9 +80,11 @@ die "pwd doesn't look like a Debian source package in a git repository ..\n"
 
 # Process command line args
 my $overwrite = '';
+my $user_version = '';
 my $user_ref = '';
 GetOptions (
             'f' => \$overwrite,
+            'version=s' => \$user_version
            ) || usage();
 if ( scalar @ARGV == 1 ) {
     $user_ref = shift @ARGV;
@@ -85,14 +92,27 @@ if ( scalar @ARGV == 1 ) {
     usage();
 }
 
-# Extract source package name and version from d/changelog
+# Extract source package name from d/changelog and either extract
+# version too, or parse user-supplied version
+my $version;
 my $changelog = Dpkg::Changelog::Parse->changelog_parse({});
-my $version = $changelog->{Version};
+if ( $user_version ) {
+    $version = Dpkg::Version->new($user_version);
+} else {
+    $version = $changelog->{Version};
+}
 my $source = $changelog->{Source};
 my $upstream_version = $version->version();
 
 # Sanity check #2
-die "this looks like a native package .." if $version->is_native();
+die "version number $version is not valid ..\n" unless $version->is_valid();
+
+# Sanity check #3
+# Only complain if the user didn't supply a version, because the user
+# is not required to include a Debian revision when they pass
+# --version
+die "this looks like a native package .."
+  if ( !$user_version && $version->is_native() );
 
 # Default to gzip
 my $compressor = "gzip -cn";
@@ -185,5 +205,5 @@ sub archive_ref {
 }
 
 sub usage {
-    die "usage: git deborig [-f] [REF]\n";
+    die "usage: git deborig [-f] [--version=VERSION] [REF]\n";
 }
