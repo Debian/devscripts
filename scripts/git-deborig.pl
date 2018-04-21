@@ -23,7 +23,7 @@ git-deborig - try to produce Debian orig.tar using git-archive(1)
 
 =head1 SYNOPSIS
 
-B<git deborig> [B<--force>|B<-f>] [B<--just-print>] [B<--version=>I<VERSION>] [I<REF>]
+B<git deborig> [B<--force>|B<-f>] [B<--just-print>] [B<--version=>I<VERSION>] [I<COMMITTISH>]
 
 =head1 DESCRIPTION
 
@@ -34,7 +34,7 @@ used with other workflows.
 
 B<git-deborig> will try several common tag names.  If this fails, or
 if more than one of those common tags are present, you can specify the
-tag or branch head to archive on the command line (I<REF> above).
+tag or branch head to archive on the command line (I<COMMITTISH> above).
 
 B<git-deborig> should be invoked from the root of the git repository,
 which should contain I<debian/changelog>.
@@ -178,7 +178,7 @@ if ( $user_ref ) {      # User told us the tag/branch to archive
     } elsif ( scalar @version_tags < 1 ) {
         print "couldn't find any of the following tags: ",
           join(", ", @candidate_tags), "\n";
-        print "tell me a tag or branch head to make an orig.tar from: git deborig REF\n";
+        print "tell me a tag or branch head to make an orig.tar from: git deborig COMMITTISH\n";
         exit 1;
     } else {
         my $tag = shift @version_tags;
@@ -226,5 +226,5 @@ sub archive_ref_or_just_print {
 }
 
 sub usage {
-    die "usage: git deborig [--force|-f] [--just-print] [--version=VERSION] [REF]\n";
+    die "usage: git deborig [--force|-f] [--just-print] [--version=VERSION] [COMMITTISH]\n";
 }
