@@ -1,0 +1,10 @@
+image: 'debian:unstable'
+
+before_script:
+  - apt-get update -qq && apt-get install -y -qq equivs
+  - ./scripts/mk-build-deps.pl -t 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -qqy' -i -r debian/control
+  - make
+
+test:
+  script:
+    - make test

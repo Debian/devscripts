@@ -174,7 +174,7 @@ def remove_trailing_whitespaces(filename, args):
     with open(filename, "r+") as file_object:
         content = file_object.read()
         if not content:
-            return
+            return True
         new_content = content.strip() + "\n"
         new_content = "\n".join(
             [
@@ -298,7 +298,6 @@ def main():
         args.files = get_files(args.debian_directory)
 
     modified_files = wrap_and_sort(args)
-
 
     # Only report at the end, to avoid potential clash with --verbose
     if modified_files and args.verbose:

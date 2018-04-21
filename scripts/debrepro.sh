@@ -185,7 +185,7 @@ TEMP=$(getopt -n "debrepro" -o 'hs:b:' \
 eval set -- "$TEMP"
 
 skip_variations=""
-pre_second_build_command=''
+before_second_build_command=''
 while true; do
     case "$1" in
         -s|--skip)
