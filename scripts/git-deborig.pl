@@ -23,7 +23,7 @@ git-deborig - try to produce Debian orig.tar using git-archive(1)
 
 =head1 SYNOPSIS
 
-B<git deborig> [B<-f>] [B<--version=>I<VERSION>] [I<REF>]
+B<git deborig> [B<-f>] [B<--just-print>] [B<--version=>I<VERSION>] [I<REF>]
 
 =head1 DESCRIPTION
 
@@ -46,6 +46,16 @@ which should contain I<debian/changelog>.
 =item B<-f>
 
 Overwrite any existing orig.tar in the parent directory.
+
+=item B<--just-print>
+
+Instead of actually invoking git-archive(1), output information about
+how it would be invoked.  Ignores I<--force>.
+
+Note that running the git-archive(1) invocation outputted with this
+option may not produce the same output.  This is because
+B<git-deborig> takes care to disable all git attributes otherwise
+heeded by git-archive(1).
 
 =item B<--version=>I<VERSION>
 
@@ -73,6 +83,7 @@ use Dpkg::Changelog::Parse;
 use Dpkg::IPC;
 use Dpkg::Version;
 use List::Compare;
+use String::ShellQuote;
 
 # Sanity check #1
 die "pwd doesn't look like a Debian source package in a git repository ..\n"
@@ -82,8 +93,10 @@ die "pwd doesn't look like a Debian source package in a git repository ..\n"
 my $overwrite = '';
 my $user_version = '';
 my $user_ref = '';
+my $just_print = '';
 GetOptions (
             'f' => \$overwrite,
+            'just-print' => \$just_print,
             'version=s' => \$user_version
            ) || usage();
 if ( scalar @ARGV == 1 ) {
@@ -132,12 +145,12 @@ if ( -e "debian/source/format" ) {
 
 my $orig = "../${source}_$upstream_version.orig.tar.$compression";
 die "$orig already exists: not overwriting without -f\n"
-  if ( -e $orig && ! $overwrite );
+  if ( -e $orig && ! $overwrite && ! $just_print );
 
 if ( $user_ref ) {      # User told us the tag/branch to archive
     # We leave it to git-archive(1) to determine whether or not this
     # ref exists; this keeps us forward-compatible
-    archive_ref($user_ref);
+    archive_ref_or_just_print($user_ref);
 } else {    # User didn't specify a tag/branch to archive
     # Get available git tags
     my $git = Git::Wrapper->new(".");
@@ -169,41 +182,49 @@ if ( $user_ref ) {      # User told us the tag/branch to archive
         exit 1;
     } else {
         my $tag = shift @version_tags;
-        archive_ref($tag);
+        archive_ref_or_just_print($tag);
     }
 }
 
-sub archive_ref {
+sub archive_ref_or_just_print {
     my $ref = shift;
 
-    # For compatibility with dgit, we have to override any
-    # export-subst and export-ignore git attributes that might be set
-    rename ".git/info/attributes", ".git/info/attributes-deborig"
-      if ( -e ".git/info/attributes" );
-    my $attributes_fh;
-    unless ( open( $attributes_fh, '>', ".git/info/attributes" ) ) {
-        rename ".git/info/attributes-deborig", ".git/info/attributes"
-          if ( -e ".git/info/attributes-deborig" );
-        die "could not open .git/info/attributes for writing";
-    }
-    print $attributes_fh "* -export-subst\n";
-    print $attributes_fh "* -export-ignore\n";
-    close $attributes_fh;
-
-    spawn(exec => ['git', '-c', "tar.tar.${compression}.command=${compressor}",
-                   'archive', "--prefix=${source}-${upstream_version}/",
-                   '-o', $orig, $ref],
-          wait_child => 1,
-          nocheck => 1);
-
-    # Restore situation before we messed around with git attributes
-    if ( -e ".git/info/attributes-deborig" ) {
-        rename ".git/info/attributes-deborig", ".git/info/attributes";
+    my $cmd = ['git', '-c', "tar.tar.${compression}.command=${compressor}",
+               'archive', "--prefix=${source}-${upstream_version}/",
+               '-o', $orig, $ref];
+    if ( $just_print ) {
+        print "$ref\n";
+        print "$orig\n";
+        my @cmd_mapped = map { shell_quote($_) } @$cmd;
+        print "@cmd_mapped\n";
     } else {
-        unlink ".git/info/attributes";
+        # For compatibility with dgit, we have to override any
+        # export-subst and export-ignore git attributes that might be set
+        rename ".git/info/attributes", ".git/info/attributes-deborig"
+          if ( -e ".git/info/attributes" );
+        my $attributes_fh;
+        unless ( open( $attributes_fh, '>', ".git/info/attributes" ) ) {
+            rename ".git/info/attributes-deborig", ".git/info/attributes"
+              if ( -e ".git/info/attributes-deborig" );
+            die "could not open .git/info/attributes for writing";
+        }
+        print $attributes_fh "* -export-subst\n";
+        print $attributes_fh "* -export-ignore\n";
+        close $attributes_fh;
+
+        spawn(exec => $cmd,
+              wait_child => 1,
+              nocheck => 1);
+
+        # Restore situation before we messed around with git attributes
+        if ( -e ".git/info/attributes-deborig" ) {
+            rename ".git/info/attributes-deborig", ".git/info/attributes";
+        } else {
+            unlink ".git/info/attributes";
+        }
     }
 }
 
 sub usage {
-    die "usage: git deborig [-f] [--version=VERSION] [REF]\n";
+    die "usage: git deborig [-f] [--just-print] [--version=VERSION] [REF]\n";
 }
