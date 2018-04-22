@@ -45,6 +45,8 @@ devscripts (2.18.2) UNRELEASED; urgency=medium
   * mk-origtargz:
     + Deal with Hurd where `getconf ARG_MAX` returns "undefined".
   * Fix some pylint issues that are reported only by stretch's pylint.
+  * d/control:
+    + Bump Standards-Version to 4.1.4, no changes needed.
 
   [ Adam D. Barratt ]
   * debdiff:
