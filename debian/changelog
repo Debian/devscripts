@@ -49,6 +49,8 @@ devscripts (2.18.2) UNRELEASED; urgency=medium
     + Bump Standards-Version to 4.1.4, no changes needed.
   * test_package_lifecycle:
     + Don't depend on /usr/share/doc being available on the build host.
+  * sadt:
+    + Fixup the check_depends() caching functionality.  MR: !9
 
   [ Adam D. Barratt ]
   * debdiff:
