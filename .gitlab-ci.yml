@@ -1,10 +1,25 @@
-image: 'debian:unstable'
-
 before_script:
-  - apt-get update -qq && apt-get install -y -qq equivs
-  - ./scripts/mk-build-deps.pl -t 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -qqy' -i -r debian/control
+  - apt-get -q update
+  - apt-get -q -y install --no-install-recommends aspcud apt-cudf
+  - apt-get -q -y --solver aspcud -o APT::Solver::Strict-Pinning=0 -o Debug::pkgProblemResolver=yes build-dep .
   - make
 
-test:
+.test_template: &test
   script:
     - make test
+
+test:unstable:
+  <<: *test
+  image: debian:unstable
+
+test:testing:
+  <<: *test
+  image: debian:testing
+
+test:stable-bpo:
+  <<: *test
+  image: debian:stable-backports
+
+test:ubuntu-devel:
+  <<: *test
+  image: ubuntu:devel
