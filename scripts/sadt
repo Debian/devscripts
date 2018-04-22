@@ -172,7 +172,7 @@ class TestGroup(object):
         self.features = frozenset()
         self.depends = '@'
         self.tests_directory = 'debian/tests'
-        self._check_depends_cache = None
+        self._depends_checked = False
         self._depends_cache = None
 
     def __iter__(self):
@@ -211,9 +211,9 @@ class TestGroup(object):
         self.depends = deb822.PkgRelation.str(or_clauses)
 
     def check_depends(self):
-        if self._check_depends_cache is not None:
+        if self._depends_checked:
             if isinstance(self._depends_cache, Exception):
-                raise self._check_depends_cache  # false positive, pylint: disable=raising-bad-type
+                raise self._depends_cache  # fpos, pylint: disable=raising-bad-type
             return
         child = ipc.Popen(['dpkg-checkbuilddeps', '-d', self.depends], stderr=ipc.PIPE, env={})
         error = child.stderr.read().decode('ASCII')
@@ -226,7 +226,7 @@ class TestGroup(object):
             self._depends_cache = skip
             raise skip
         else:
-            self._depends_cache = True  # pylint: disable=redefined-variable-type
+            self._depends_checked = True
 
     def check_restrictions(self, ignored_restrictions):
         restrictions = self.restrictions - frozenset(ignored_restrictions)
