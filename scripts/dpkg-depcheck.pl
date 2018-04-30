@@ -378,7 +378,7 @@ sub getusedfiles (@)
 	$file = $opts{"strace-output"} || `tempfile -p depcheck`;
 	chomp $file;
 	$file =~ s%^(\s)%./$1%;
-	my @strace_cmd=('strace', '-e', 'trace=open,execve',  '-f',
+	my @strace_cmd=('strace', '-e', 'trace=open,openat,execve',  '-f',
 			'-q', '-o', $file, @_);
 	$ENV{'LC_ALL'}="C" if $opts{"C"};
 	system(@strace_cmd);
@@ -392,9 +392,9 @@ sub getusedfiles (@)
     open FILE, $file or die "Cannot open $file for reading: $!\n";
     while (<FILE>) {
 	# We only consider absolute filenames
-	m/^\d+\s+(\w+)\(\"(\/.*?)\",.*\) = (-?\d+)/ or next;
+	m/^\d+\s+(\w+)\((?:[\w\d_]*, )?\"(\/.*?)\",.*\) = (-?\d+)/ or next;
 	my ($syscall, $filename, $status) = ($1, $2, $3);
-	if ($syscall eq 'open') { next unless $status >= 0; }
+	if ($syscall eq 'open' || $syscall eq 'openat') { next unless $status >= 0; }
 	elsif ($syscall eq 'execve') { next unless $status == 0; }
 	else { next; }  # unrecognised syscall
 	next if $feature{"discard-check-version"} and
