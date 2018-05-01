@@ -24,9 +24,36 @@ COMPL_FILES := $(wildcard *.bash_completion)
 BC_BUILD_DIR:=bash_completion
 COMPLETION = $(patsubst %.bash_completion,$(BC_BUILD_DIR)/%,$(COMPL_FILES))
 COMPL_DIR := $(shell pkg-config --variable=completionsdir bash-completion)
-PKGNAMES:=wnpp-alert wnpp-check mk-build-deps rmadison mass-bug debsnap dd-list build-rdeps who-uploads transition-check getbuildlog dcontrol grep-excuses rc-alert whodepends dget pts-subscribe pts-unsubscribe debcheckout
+PKGNAMES := \
+	build-rdeps \
+	dcontrol \
+	dd-list \
+	debcheckout \
+	debsnap \
+	dget \
+	getbuildlog \
+	grep-excuses \
+	mass-bug \
+	mk-build-deps \
+	pts-subscribe \
+	pts-unsubscribe \
+	rc-alert \
+	rmadison \
+	transition-check \
+	who-uploads \
+	whodepends \
+	wnpp-alert \
+	wnpp-check \
+	$(nil)
 
-GEN_MAN1S += debrepro.1 devscripts.1 ltnu.1 mk-origtargz.1 uscan.1 reproducible-check.1
+GEN_MAN1S += \
+	debrepro.1 \
+	devscripts.1 \
+	ltnu.1 \
+	mk-origtargz.1 \
+	reproducible-check.1 \
+	uscan.1 \
+	$(nil)
 
 all: $(SCRIPTS) $(GEN_MAN1S) $(CWRAPPERS) $(COMPLETION)
 
