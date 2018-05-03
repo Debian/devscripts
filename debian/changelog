@@ -1,3 +1,11 @@
+devscripts (2.18.3) UNRELEASED; urgency=medium
+
+  [ Maximiliano Curia ]
+  * dpkg-depcheck:
+    + Also trace openat syscall.  MR: !11
+
+ -- Mattia Rizzolo <mattia@debian.org>  Mon, 23 Apr 2018 00:48:40 +0200
+
 devscripts (2.18.2) unstable; urgency=medium
 
   [ Daniel Kahn Gillmor ]
