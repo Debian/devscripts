@@ -129,7 +129,7 @@ for my $patch (@patches) {
 		next;
 	    }
 	}
-	last if (/^---/ || /^\s*$/);
+	last if (/^---/);
 	chomp;
 	# only if there was a shebang do we strip comment chars
 	s/^# // if ($dpatch);

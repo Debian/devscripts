@@ -380,6 +380,15 @@ if [ -z "$signcommand" ]; then
     exit 1
 fi
 
+if echo "${signkey}" | grep -E -qs '^(0x)?[a-zA-Z0-9]{8}$'; then
+    echo "Refusing to sign with short key ID '$signkey'!" >&2
+    exit 1
+fi
+
+if echo "${signkey}" | grep -E -qs '^(0x)?[a-zA-Z0-9]{16}$'; then
+    echo "long key IDs are discouraged; please use key fingerprints instead" >&2
+fi
+
 ensure_local_copy() {
     local remotehost="$1"
     local remotefile="$2"

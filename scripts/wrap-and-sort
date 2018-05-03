@@ -69,36 +69,38 @@ SUPPORTED_FILES = (
 )
 
 
-class WrapAndSortControl(Control):
-    def __init__(self, filename, max_line_length):
-        super().__init__(filename)
-        self.max_line_length = max_line_length
+def erase_and_write(file_ob, data):
+    """When a file is opened via r+ mode, replaces its content with data"""
+    file_ob.seek(0)
+    file_ob.write(data)
+    file_ob.truncate()
 
-    def wrap_and_sort(self, wrap_always, short_indent, sort_paragraphs,
-                      keep_first, trailing_comma):
-        # pylint: disable=too-many-arguments
+
+class WrapAndSortControl(Control):
+    def __init__(self, filename, args):
+        super().__init__(filename)
+        self.args = args
+
+    def wrap_and_sort(self):
         for paragraph in self.paragraphs:
             for field in CONTROL_LIST_FIELDS:
                 if field in paragraph:
-                    self._wrap_field(paragraph, field, wrap_always,
-                                     short_indent, trailing_comma)
+                    self._wrap_field(paragraph, field, True)
             if "Uploaders" in paragraph:
-                self._wrap_field(paragraph, "Uploaders", wrap_always,
-                                 short_indent, trailing_comma, False)
+                self._wrap_field(paragraph, "Uploaders", False)
             if "Architecture" in paragraph:
                 archs = set(paragraph["Architecture"].split())
                 # Sort, with wildcard entries (such as linux-any) first:
                 archs = sorted(archs, key=lambda x: ("any" not in x, x))
                 paragraph["Architecture"] = " ".join(archs)
 
-        if sort_paragraphs:
-            first = self.paragraphs[:1 + int(keep_first)]
-            sortable = self.paragraphs[1 + int(keep_first):]
-            self.paragraphs = first + sorted(sortable, key=operator.itemgetter("Package"))
+        if self.args.sort_binary_packages:
+            first = self.paragraphs[:1 + int(self.args.keep_first)]
+            sortable = self.paragraphs[1 + int(self.args.keep_first):]
+            sort_key = operator.itemgetter("Package")
+            self.paragraphs = first + sorted(sortable, key=sort_key)
 
-    def _wrap_field(self, control, entry, wrap_always, short_indent,
-                    trailing_comma, sort=True):
-        # pylint: disable=too-many-arguments
+    def _wrap_field(self, control, entry, sort):
         # An empty element is not explicitly disallowed by Policy but known to
         # break QA tools, so remove any
         packages = [x.strip() for x in control[entry].split(",") if x.strip()]
@@ -112,55 +114,79 @@ class WrapAndSortControl(Control):
             packages = sort_list(packages)
 
         length = len(entry) + sum([2 + len(package) for package in packages])
-        if wrap_always or length > self.max_line_length:
+        if self.args.wrap_always or length > self.args.max_line_length:
             indentation = " "
-            if not short_indent:
-                indentation *= len(entry) + 2
+            if not self.args.short_indent:
+                indentation *= len(entry) + len(": ")
             packages_with_indention = [indentation + x for x in packages]
             packages_with_indention = ",\n".join(packages_with_indention)
-            if trailing_comma:
+            if self.args.trailing_comma:
                 packages_with_indention += ','
-            if short_indent:
+            if self.args.short_indent:
                 control[entry] = "\n" + packages_with_indention
             else:
                 control[entry] = packages_with_indention.strip()
         else:
-            control[entry] = ", ".join(packages).strip()
+            control[entry] = ", ".join(packages)
+
+    def check_changed(self):
+        """Checks if the content has changed in the control file"""
+        content = "\n".join([x.dump() for x in self.paragraphs])
+        with open(self.filename, "r") as control_file:
+            if content != control_file.read():
+                return True
+        return False
 
 
 class Install(object):
-    def __init__(self, filename):
+    def __init__(self, filename, args):
         self.content = None
         self.filename = None
+        self.args = args
         self.open(filename)
 
     def open(self, filename):
         assert os.path.isfile(filename), "%s does not exist." % (filename)
         self.filename = filename
-        self.content = [l.strip() for l in open(filename).readlines() if l.strip()]
+        self.content = [
+            l.strip()
+            for l in open(filename).readlines()
+            if l.strip()
+        ]
 
-    def save(self, filename=None):
-        if filename:
-            self.filename = filename
-        install_file = open(self.filename, "w")
-        install_file.write("\n".join(self.content) + "\n")
-        install_file.close()
+    def save(self):
+        to_write = "\n".join(self.content) + "\n"
+
+        with open(self.filename, "r+") as install_file:
+            content = install_file.read()
+            if to_write != content:
+                if not self.args.dry_run:
+                    erase_and_write(install_file, to_write)
+                return True
+        return False
 
     def sort(self):
         self.content = sorted(self.content)
 
 
-def remove_trailing_whitespaces(filename):
+def remove_trailing_whitespaces(filename, args):
     assert os.path.isfile(filename), "%s does not exist." % (filename)
-    content = open(filename).read()
-    if not content:
-        return
-    content = content.rstrip() + "\n"
-    lines = content.split("\n")
-    lines = [l.rstrip() for l in lines]
-    new_content = "\n".join(lines)
-    with open(filename, "w") as _file:
-        _file.write(new_content)
+    with open(filename, "r+") as file_object:
+        content = file_object.read()
+        if not content:
+            return True
+        new_content = content.strip() + "\n"
+        new_content = "\n".join(
+            [
+                line.rstrip()
+                for line in new_content.split('\n')
+            ],
+        )
+        if new_content != content:
+            if not args.dry_run:
+                erase_and_write(file_object, new_content)
+            return True
+    return False
 
 
 def sort_list(unsorted_list):
@@ -170,33 +196,39 @@ def sort_list(unsorted_list):
 
 
 def wrap_and_sort(args):
+    modified_files = []
     control_files = [f for f in args.files if re.search("/control[^/]*$", f)]
     for control_file in control_files:
         if args.verbose:
             print(control_file)
-        control = WrapAndSortControl(control_file, args.max_line_length)
+        control = WrapAndSortControl(control_file, args)
         if args.cleanup:
             control.strip_trailing_spaces()
-        control.wrap_and_sort(args.wrap_always, args.short_indent,
-                              args.sort_binary_packages, args.keep_first,
-                              args.trailing_comma)
-        control.save()
+        control.wrap_and_sort()
+        if control.check_changed():
+            if not args.dry_run:
+                control.save()
+            modified_files.append(control_file)
 
     copyright_files = [f for f in args.files
                        if re.search("/copyright[^/]*$", f)]
     for copyright_file in copyright_files:
         if args.verbose:
             print(copyright_file)
-        remove_trailing_whitespaces(copyright_file)
+        if remove_trailing_whitespaces(copyright_file, args):
+            modified_files.append(copyright_file)
 
     pattern = "(dirs|docs|examples|info|install|links|maintscript|manpages)$"
     install_files = [f for f in args.files if re.search(pattern, f)]
     for install_file in sorted(install_files):
         if args.verbose:
             print(install_file)
-        install = Install(install_file)
+        install = Install(install_file, args)
         install.sort()
-        install.save()
+        if install.save():
+            modified_files.append(install_file)
+
+    return modified_files
 
 
 def get_files(debian_directory):
@@ -247,6 +279,10 @@ def main():
     parser.add_argument("--max-line-length", type=int, default=79,
                         help="set maximum allowed line length before wrapping "
                              "(default: %(default)i)")
+    parser.add_argument("-N", "--dry-run", dest="dry_run", action="store_true",
+                        default=False,
+                        help="do not modify any file, instead only"
+                             "print the files that would be modified")
 
     args = parser.parse_args()
 
@@ -261,7 +297,18 @@ def main():
     if not args.files:
         args.files = get_files(args.debian_directory)
 
-    wrap_and_sort(args)
+    modified_files = wrap_and_sort(args)
+
+    # Only report at the end, to avoid potential clash with --verbose
+    if modified_files and args.verbose:
+        if args.dry_run:
+            header = "--- Dry run, these files would be modified ---"
+        else:
+            header = "--- Modified files ---"
+        print(header)
+        print("\n".join(modified_files))
+    elif args.verbose:
+        print("--- No file needs modification ---")
 
 
 if __name__ == "__main__":

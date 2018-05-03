@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# vim: set shiftwidth=4 tabstop=8 noexpandtab:
 
 # Copyright © 2010, David Paleino <d.paleino@gmail.com>,
 #
@@ -252,16 +253,15 @@ if ($opt{binary}) {
     $baseurl = "$opt{baseurl}/mr/package/$package/";
 }
 
-if (-d $opt{destdir}) {
-    unless ($opt{force} || cwd() eq abs_path($opt{destdir})) {
-	fatal "Destination dir $opt{destdir} already exists.\nPlease (re)move it first, or use --force to overwrite.";
-    }
-}
-
 my $mkdir_done = 0;
 my $mkDestDir = sub {
-    unless ($mkdir_done)
-    {
+    unless ($mkdir_done) {
+	if (-d $opt{destdir}) {
+	    unless ($opt{force} || cwd() eq abs_path($opt{destdir})) {
+		fatal "Destination dir $opt{destdir} already exists.\nPlease (re)move it first, or use --force to overwrite.";
+	    }
+	}
+
 	make_path($opt{destdir});
 	$mkdir_done = 1;
     }
@@ -304,7 +304,7 @@ elsif ($opt{binary}) {
 	{
 	    my %archs = map { ($_ => 0) } @{$opt{architecture}};
 	    @results = grep {
-	        exists $archs{$_->{architecture}} && ++$archs{$_->{architecture}}
+		exists $archs{$_->{architecture}} && ++$archs{$_->{architecture}}
 	    } @results;
 	    my @missing = grep { $archs{$_} == 0 } sort keys %archs;
 	    if (@missing) {

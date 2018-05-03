@@ -77,7 +77,8 @@ oneTimeSetUp () {
 	Description: Short description
 	 Longer description
 EOS
-	cp /usr/share/doc/debhelper/examples/rules.tiny ${WORKDIR}/package_lifecycle/test/debian/rules
+	printf '#!/usr/bin/make -f\n%%:\n\tdh $@' > ${WORKDIR}/package_lifecycle/test/debian/rules
+	chmod +x ${WORKDIR}/package_lifecycle/test/debian/rules
 	_DATE=$(LC_ALL=C date '+%a, %d %b %Y %T +0000')
 	cat > ${WORKDIR}/package_lifecycle/test/debian/changelog <<-EOS
 	test (1.0-1) unstable; urgency=low

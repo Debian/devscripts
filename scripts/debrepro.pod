@@ -98,6 +98,18 @@ future with regards to the current time (using B<faketime(1)>).
 Don't perform the named VARIATION. Variation names are the ones used in
 their description in section B<SUPPORTED VARIATIONS>.
 
+=item -b COMMAND, --before-second-build COMMAND
+
+Run COMMAND before performing the second build. This can be used for
+example to apply a patch to a source tree for the second build, and
+check whether (or how) the resulting binaries are affected.
+
+Examples:
+
+  $ debrepro --before-second-build "git checkout branch-with-changes"
+
+  $ debrepro --before-second-build "patch -p1 < /path/to/patch"
+
 =item -h, --help
 
 Display this help message and exit.

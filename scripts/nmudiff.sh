@@ -42,6 +42,12 @@ usage () {
     --no-conf, --noconf
                       Don't read devscripts config files;
                       must be the first option given
+    --no-pending, --nopending
+                      Don't add the 'pending' tag
+    --non-dd, --nondd
+                      Mention in the email that you require sponsorship.
+    --template=TEMPLATEFILE
+                      Use content of TEMPLATEFILE for message.
     --help, -h        Show this help information.
     --version         Show version and copyright information.
 
@@ -63,7 +69,8 @@ DEFAULT_NMUDIFF_DELAY="XX"
 DEFAULT_NMUDIFF_MUTT="yes"
 DEFAULT_NMUDIFF_NEWREPORT="maybe"
 DEFAULT_BTS_SENDMAIL_COMMAND="/usr/sbin/sendmail"
-VARS="NMUDIFF_DELAY NMUDIFF_MUTT NMUDIFF_NEWREPORT BTS_SENDMAIL_COMMAND"
+DEFAULT_NMUDIFF_PENDING=" pending"
+VARS="NMUDIFF_DELAY NMUDIFF_MUTT NMUDIFF_NEWREPORT BTS_SENDMAIL_COMMAND NMUDIFF_PENDING"
 # Don't think it's worth including this stuff
 # DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_LEVEL=1
 # DEFAULT_DEVSCRIPTS_CHECK_DIRNAME_REGEX='PACKAGE(-.+)?'
@@ -146,7 +153,10 @@ TEMP=$(getopt -s bash -o "h" \
 	--long sendmail:,from:,new,old,mutt,no-mutt,nomutt \
 	--long delay:,no-delay,nodelay \
 	--long no-conf,noconf \
-        --long help,version -n "$PROGNAME" -- "$@") || (usage >&2; exit 1)
+	--long no-pending,nopending \
+	--long non-dd,nondd \
+	--long template: \
+	--long help,version -n "$PROGNAME" -- "$@") || (usage >&2; exit 1)
 
 eval set -- $TEMP
 
@@ -178,6 +188,10 @@ while [ "$1" ]; do
 	;;
     --nodelay|--no-delay)
 	NMUDIFF_DELAY=0 ;;
+    --nopending|--no-pending)
+	NMUDIFF_PENDING="" ;;
+    --nondd|--non-dd)
+	NMUDIFF_NONDD=yes ;;
     --mutt)
 	NMUDIFF_MUTT=yes ;;
     --nomutt|--no-mutt)
@@ -201,6 +215,19 @@ while [ "$1" ]; do
     --no-conf|--noconf)
 	echo "$PROGNAME: $1 is only acceptable as the first command-line option!" >&2
 	exit 1 ;;
+    --template)
+	shift
+	case "$1" in
+	    "") echo "$PROGNAME: TEMPLATEFILE cannot be empty, using default" >&2
+	    ;;
+	    *)	if [ -f "$1" ]; then
+		    NMUDIFF_TEMPLATE="$1"
+		else
+		    echo "$PROGNAME: TEMPLATEFILE must exist, using default" >&2
+		fi
+	    ;;
+	esac
+	;;
     --help|-h) usage; exit 0 ;;
     --version) version; exit 0 ;;
     --)	shift; break ;;
@@ -314,7 +341,7 @@ if [ "$NMUDIFF_NEWREPORT" = "yes" ]; then
     TAGS="Package: $SOURCE
 Version: $OLDVERSION
 Severity: normal
-Tags: patch pending"
+Tags: patch ${NMUDIFF_PENDING}"
 else
     for b in $CLOSES; do
 	TO_ADDRESSES_SENDMAIL="$TO_ADDRESSES_SENDMAIL,
@@ -323,9 +350,9 @@ else
 	if [ "`bts select bugs:$b tag:patch`" != "$b" ]; then
 	    TAGS="$TAGS
 Control: tags $b + patch"
-	fi
-	if [ "$NMUDIFF_DELAY" != "0" ] && [ "`bts select bugs:$b tag:pending`" != "$b" ]; then
-	    TAGS="$TAGS
+    fi
+    if [ "$NMUDIFF_DELAY" != "0" ] && [ "`bts select bugs:$b tag:pending`" != "$b" ] && [ $NMUDIFF_PENDING ]; then
+	TAGS="$TAGS
 Control: tags $b + pending"
 	fi
     done
@@ -337,20 +364,33 @@ fi
 
 TMPNAM="$(tempfile)"
 
-if [ "$NMUDIFF_DELAY" = "XX" ]; then
+if [ "$NMUDIFF_DELAY" = "XX" ] && [ "$NMUDIFF_TEMPLATE" = "" ]; then
     DELAY_HEADER="
 [Replace XX with correct value]"
 fi
 
-if [ "$NMUDIFF_DELAY" = "0" ]; then
-    BODY="$(printf "%s\n%s\n" \
+if [ "$NMUDIFF_TEMPLATE" != "" ]; then
+    BODY=$(cat "$NMUDIFF_TEMPLATE")
+elif [ "$NMUDIFF_NONDD" = "yes" ]; then
+    BODY="$(printf "%s\n\n%s\n%s\n\n%s\n\n%s" \
+"Dear maintainer," \
 "I've prepared an NMU for $SOURCE (versioned as $VERSION). The diff" \
-"is attached to this message.")"
+"is attached to this message." \
+"I require a sponsor to have it uploaded." \
+"Regards.")"
+elif [ "$NMUDIFF_DELAY" = "0" ]; then
+    BODY="$(printf "%s\n\n%s\n%s\n\n%s" \
+"Dear maintainer," \
+"I've prepared an NMU for $SOURCE (versioned as $VERSION). The diff" \
+"is attached to this message." \
+"Regards.")"
 else
-    BODY="$(printf "%s\n%s\n%s\n" \
+    BODY="$(printf "%s\n\n%s\n%s\n%s\n\n%s" \
+"Dear maintainer," \
 "I've prepared an NMU for $SOURCE (versioned as $VERSION) and" \
 "uploaded it to DELAYED/$NMUDIFF_DELAY. Please feel free to tell me if I" \
-"should delay it longer.")"
+"should delay it longer." \
+"Regards.")"
 fi
 
 if [ "$NMUDIFF_MUTT" = no ]; then
@@ -365,11 +405,9 @@ X-NMUDIFF-Version: ###VERSION###
 
 $TAGS
 $DELAY_HEADER
-Dear maintainer,
 
 $BODY
 
-Regards.
 EOF
 
     cat ../${SOURCE}-${VERSION_NO_EPOCH}-nmu.diff >> "$TMPNAM"
@@ -404,11 +442,9 @@ else # NMUDIFF_MUTT=yes
     cat <<EOF > "$TMPNAM"
 $TAGS
 $DELAY_HEADER
-Dear maintainer,
 
 $BODY
 
-Regards.
 EOF
 
     mutt -s "$SOURCE: diff for NMU version $VERSION" -i "$TMPNAM" \

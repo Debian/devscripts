@@ -1,3 +1,95 @@
+devscripts (2.18.2) unstable; urgency=medium
+
+  [ Daniel Kahn Gillmor ]
+  * uscan:
+    + Add short archive extensions (tbz, txz, tgz) in the @ARCHIVE_EXT@
+      regexp.  Closes: #823624
+
+  [ Ben Finney ]
+  * suspicious-source:
+    + Correct "preferred form of the work for making modifications to it".
+      Closes: #859617
+
+  [ Nish Aravamudan ]
+  * dep3changelog:
+    + Make parsing less strict about blank lines.
+      Closes: #858287; LP: #1673292
+
+  [ Ben Wiederhake ]
+  * wrap-and-sort:
+    + Add a dry-run option.  Closes: #808574
+
+  [ Hilko Bengen ]
+  * debsnap:
+    + Complain about existing destdir only when it is created.
+      Closes: #884177
+
+  [ Mònica Ramírez Arceda ]
+  * nmudiff:
+    + Add a template argument to provide a different email from the one in the
+      script.  Closes: #555863
+
+  [ Pierre-Elliott Bécue ]
+  * d/control:
+    + Add myself to uploaders.
+  * wrap-and-sort:
+    + Tweak the way files are handled, and print the modified file list in
+      also in non-dry-run-mode when verbosity is enabled.
+    + Remove empty lines at the beginning of a file.
+  * nmudiff:
+    + Add a no-pending option to not add the pending tag if needed.
+    + Add a non-dd option to ask for a sponsor in the email.
+      Closes: #662794
+
+  [ Mattia Rizzolo ]
+  * mk-origtargz:
+    + Deal with Hurd where `getconf ARG_MAX` returns "undefined".
+  * Fix some pylint issues that are reported only by stretch's pylint.
+  * d/control:
+    + Bump Standards-Version to 4.1.4, no changes needed.
+  * test_package_lifecycle:
+    + Don't depend on /usr/share/doc being available on the build host.
+  * sadt:
+    + Fixup the check_depends() caching functionality.  MR: !9
+
+  [ Adam D. Barratt ]
+  * debdiff:
+    + Sort shlibs files before comparing. The order of entries is not
+      significant.
+
+  [ Paul Wise ]
+  * chdist, cowpoke:
+    + Default to deb.debian.org instead.
+
+  [ Antonio Terceiro ]
+  * uscan:
+    + Redirect Alioth's gemwatch to gemwatch.debian.net.  MR: !2
+  * debrepro:
+    + Vary between timezones that are more than 1 day apart.  MR: !3
+    + Add a --before-second-build option, to inject extra command before
+      the second build runs.  MR: !4
+    + Add a testcase.  MR: !8
+
+  [ Chris Lamb ]
+  * debsign:
+    + To prevent collision attacks, refuse to sign with short key IDs (eg.
+      0xCAFEBABE) and warn when not using full GPG fingerprint.  MR: !1
+
+  [ Dmitry Shachnev ]
+  * sadt:
+    + Set AUTOPKGTEST_TMP environment variable.  MR: !5
+
+  [ Sean Whitton ]
+  * git-deborig:  MR: !7
+    + New --just-print option.
+      - Add recommends and build-depends on libstring-shellquote-perl.
+    + New --version option.
+    + New --force alias for -f.
+    + Correct terminology ref->committish (see gitglossary(7)).
+    + Add to the manpage details about gitattributes(5) manipulation.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Mon, 23 Apr 2018 00:33:07 +0200
+
 devscripts (2.18.1~bpo9+1) stretch-backports; urgency=medium
 
   * Rebuild for stretch-backports.

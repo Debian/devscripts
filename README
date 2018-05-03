@@ -183,7 +183,8 @@ And now, in mostly alphabetical order, the scripts:
 - getbuildlog: download package build logs from Debian auto-builders [wget]
 
 - git-deborig: try to produce Debian orig.tar using git-archive(1)
-  [libdpkg-perl, libgit-wrapper-perl, liblist-compare-perl]
+  [libdpkg-perl, libgit-wrapper-perl, liblist-compare-perl,
+  libstring-shellquote-perl]
 
 - grep-excuses: grep britney's excuses to find out what is happening to your
   packages. [libterm-size-perl, libyaml-syck-perl, wget, w3m]

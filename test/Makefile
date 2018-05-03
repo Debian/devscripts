@@ -6,6 +6,8 @@ OUR_TESTS=						\
 	debchange					\
 	package_lifecycle			\
 	debdiff						\
+	debrepro				\
+	debsign					\
 	uscan						\
 	uscan_mangle				\
 	uscan_ftp				\

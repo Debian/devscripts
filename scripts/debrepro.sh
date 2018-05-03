@@ -110,8 +110,8 @@ create_build_script() {
         'export LC_ALL=pt_BR.UTF-8 LANG=pt_BR.UTF-8'
 
     vary timezone \
-        'export TZ=UTC' \
-        'export TZ=Asia/Tokyo'
+        'export TZ=GMT+12' \
+        'export TZ=GMT-14'
 
     if which disorderfs >/dev/null; then
         disorderfs_commands='cd .. &&
@@ -136,6 +136,12 @@ cd source'
 build() {
     export which_build="$1"
     mkdir "$tmpdir/build"
+
+    if [ "$which_build" = second ] && [ -n "$before_second_build_command" ]; then
+        banner "I: running before second build: $before_second_build_command"
+        $before_second_build_command
+    fi
+
     cp -r "$SOURCE" "$tmpdir/build/source"
 
     cd "$tmpdir/build/source"
@@ -173,12 +179,13 @@ compare() {
     return "$rc"
 }
 
-TEMP=$(getopt -n "debrepro" -o 'hs:' \
-    -l 'help,skip:' \
+TEMP=$(getopt -n "debrepro" -o 'hs:b:' \
+    -l 'help,skip:,before-second-build:' \
     -- "$@") || (rc=$?; usage >&2; exit $rc)
 eval set -- "$TEMP"
 
 skip_variations=""
+before_second_build_command=''
 while true; do
     case "$1" in
         -s|--skip)
@@ -191,6 +198,10 @@ while true; do
                     exit 1
                     ;;
             esac
+            shift
+            ;;
+        -b|--before-second-build)
+            before_second_build_command="$2"
             shift
             ;;
         -h|--help)

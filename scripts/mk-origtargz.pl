@@ -579,7 +579,10 @@ if ($do_repack || $deletecount) {
 	    to_string => \$arg_max,
 	    wait_child => 1
 	);
-	# usually NAME_MAX=255, but here we use 128 to be on the safe side.
+	# Under Hurd `getconf` above returns "undefined".
+	# It's apparently unlimited (?), so we just use a arbitrary number.
+	if ($arg_max =~ /\D/) { $arg_max = 131072; }
+	# Usually NAME_MAX=255, but here we use 128 to be on the safe side.
 	$arg_max = int($arg_max / 128);
 	# We use this lame splice on a totally arbitrary $arg_max because
 	# counting how many bytes there are in @to_delete is too inefficient.

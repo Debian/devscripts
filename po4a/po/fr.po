@@ -13,7 +13,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
-"POT-Creation-Date: 2018-03-06 15:59+0100\n"
+"POT-Creation-Date: 2018-04-23 00:33+0200\n"
 "PO-Revision-Date: 2017-05-26 16:17+0200\n"
 "Last-Translator: Jean-Pierre Giraud <jean-pierregiraud@neuf.fr>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
@@ -221,7 +221,7 @@ msgstr ""
 #: ../scripts/dep3changelog.1:15 ../scripts/dget.pl:595
 #: ../scripts/diff2patches.1:16 ../scripts/dpkg-depcheck.1:15
 #: ../scripts/dscextract.1:14 ../scripts/dscverify.1:17
-#: ../scripts/getbuildlog.1:24 ../scripts/git-deborig.pl:42
+#: ../scripts/getbuildlog.1:24 ../scripts/git-deborig.pl:47
 #: ../scripts/grep-excuses.1:14 ../scripts/hardening-check.pl:491
 #: ../scripts/list-unreleased.1:12 ../scripts/ltnu.pod:27
 #: ../scripts/manpage-alert.1:12 ../scripts/mass-bug.pl:59
@@ -270,7 +270,7 @@ msgstr "B<-h>, B<--help>"
 #: ../scripts/annotate-output.1:19 ../scripts/debchange.1:401
 #: ../scripts/debclean.1:90 ../scripts/debrelease.1:102
 #: ../scripts/debsign.1:102 ../scripts/dep3changelog.1:19
-#: ../scripts/dscverify.1:40 ../scripts/nmudiff.1:76
+#: ../scripts/dscverify.1:40 ../scripts/nmudiff.1:80
 #: ../scripts/pts-subscribe.1:31 ../scripts/uupdate.1:104
 #: ../scripts/who-uploads.1:47
 msgid "Display a help message and exit successfully."
@@ -358,16 +358,16 @@ msgstr ""
 #: ../scripts/debchange.1:481 ../scripts/debcheckout.pl:231
 #: ../scripts/debclean.1:110 ../scripts/debcommit.pl:912
 #: ../scripts/debdiff.1:234 ../scripts/debdiff-apply.1:111
-#: ../scripts/debi.1:132 ../scripts/debrepro.pod:134
+#: ../scripts/debi.1:132 ../scripts/debrepro.pod:146
 #: ../scripts/debrelease.1:132 ../scripts/deb-reversion.dbk:247
 #: ../scripts/debrsign.1:66 ../scripts/debsign.1:132 ../scripts/debsnap.1:134
 #: ../scripts/debuild.1:447 ../scripts/dep3changelog.1:28
 #: ../scripts/dget.pl:717 ../scripts/diff2patches.1:45
 #: ../scripts/dpkg-depcheck.1:118 ../scripts/dpkg-genbuilddeps.1:30
-#: ../scripts/dscverify.1:76 ../scripts/git-deborig.pl:52
+#: ../scripts/dscverify.1:76 ../scripts/git-deborig.pl:72
 #: ../scripts/grep-excuses.1:45 ../scripts/hardening-check.pl:574
 #: ../scripts/list-unreleased.1:19 ../scripts/ltnu.pod:105
-#: ../scripts/mk-origtargz.pl:204 ../scripts/nmudiff.1:108
+#: ../scripts/mk-origtargz.pl:204 ../scripts/nmudiff.1:112
 #: ../scripts/origtargz.pl:158 ../scripts/plotchangelog.1:124
 #: ../scripts/pts-subscribe.1:51 ../scripts/rc-alert.1:121
 #: ../scripts/rmadison.pl:371 ../scripts/sadt.pod:69
@@ -410,19 +410,19 @@ msgstr ""
 #: ../scripts/debc.1:129 ../scripts/debchange.1:487
 #: ../scripts/debcheckout.pl:236 ../scripts/debclean.1:113
 #: ../scripts/debcommit.pl:908 ../scripts/debdiff.1:242 ../scripts/debi.1:135
-#: ../scripts/debpkg.1:23 ../scripts/debrepro.pod:138
+#: ../scripts/debpkg.1:23 ../scripts/debrepro.pod:150
 #: ../scripts/debrelease.1:136 ../scripts/deb-reversion.dbk:292
 #: ../scripts/debrsign.1:70 ../scripts/debsign.1:144 ../scripts/debuild.1:459
 #: ../scripts/desktop2menu.pl:52 ../scripts/dep3changelog.1:26
 #: ../scripts/dget.pl:709 ../scripts/diff2patches.1:48
 #: ../scripts/dpkg-genbuilddeps.1:36 ../scripts/dscextract.1:32
 #: ../scripts/dscverify.1:81 ../scripts/getbuildlog.1:41
-#: ../scripts/git-deborig.pl:56 ../scripts/grep-excuses.1:47
+#: ../scripts/git-deborig.pl:76 ../scripts/grep-excuses.1:47
 #: ../scripts/hardening-check.pl:562 ../scripts/list-unreleased.1:21
 #: ../scripts/manpage-alert.1:28 ../scripts/mass-bug.pl:523
 #: ../scripts/mergechanges.1:28 ../scripts/mk-build-deps.pl:118
 #: ../scripts/mk-origtargz.pl:208 ../scripts/namecheck.pl:24
-#: ../scripts/nmudiff.1:112 ../scripts/origtargz.pl:162
+#: ../scripts/nmudiff.1:116 ../scripts/origtargz.pl:162
 #: ../scripts/plotchangelog.1:126 ../scripts/pts-subscribe.1:56
 #: ../scripts/rc-alert.1:125 ../scripts/rmadison.pl:375
 #: ../scripts/svnpath.pl:96 ../scripts/transition-check.pl:81
@@ -2894,7 +2894,7 @@ msgstr ""
 #: ../scripts/debrsign.1:57 ../scripts/debsign.1:105 ../scripts/debuild.1:327
 #: ../scripts/dget.pl:665 ../scripts/dpkg-depcheck.1:102
 #: ../scripts/dscverify.1:43 ../scripts/grep-excuses.1:35
-#: ../scripts/mass-bug.pl:132 ../scripts/nmudiff.1:79
+#: ../scripts/mass-bug.pl:132 ../scripts/nmudiff.1:83
 #: ../scripts/plotchangelog.1:106 ../scripts/pts-subscribe.1:42
 #: ../scripts/rmadison.pl:322 ../scripts/uupdate.1:107
 #: ../scripts/who-uploads.1:50
@@ -3009,7 +3009,7 @@ msgstr ""
 "place de B<mutt>. Équivalent à l'option de ligne de commande B<--mailreader>."
 
 #. type: TP
-#: ../scripts/bts.pl:4150 ../scripts/mass-bug.pl:142 ../scripts/nmudiff.1:104
+#: ../scripts/bts.pl:4150 ../scripts/mass-bug.pl:142 ../scripts/nmudiff.1:108
 #, no-wrap
 msgid "B<BTS_SENDMAIL_COMMAND>"
 msgstr "B<BTS_SENDMAIL_COMMAND>"
@@ -3435,7 +3435,7 @@ msgstr "Exécuter le mode de débogage."
 #: ../scripts/build-rdeps.pl:109 ../scripts/cowpoke.1:131
 #: ../scripts/debclean.1:87 ../scripts/diff2patches.1:22
 #: ../scripts/grep-excuses.1:23 ../scripts/mass-bug.pl:117
-#: ../scripts/nmudiff.1:73 ../scripts/plotchangelog.1:92
+#: ../scripts/nmudiff.1:77 ../scripts/plotchangelog.1:92
 #: ../scripts/uscan.pl:1525
 #, no-wrap
 msgid "B<--help>"
@@ -3452,7 +3452,7 @@ msgstr "Afficher les informations sur l'utilisation."
 #: ../scripts/debrelease.1:102 ../scripts/debsign.1:102 ../scripts/debsnap.1:77
 #: ../scripts/dep3changelog.1:19 ../scripts/diff2patches.1:25
 #: ../scripts/dscverify.1:40 ../scripts/grep-excuses.1:26
-#: ../scripts/mass-bug.pl:121 ../scripts/nmudiff.1:76
+#: ../scripts/mass-bug.pl:121 ../scripts/nmudiff.1:80
 #: ../scripts/plotchangelog.1:95 ../scripts/pts-subscribe.1:31
 #: ../scripts/rmadison.pl:309 ../scripts/uscan.pl:1529 ../scripts/uupdate.1:104
 #: ../scripts/who-uploads.1:47
@@ -6618,7 +6618,7 @@ msgstr ""
 #. type: Plain text
 #: ../scripts/debc.1:108 ../scripts/debchange.1:410 ../scripts/debclean.1:99
 #: ../scripts/debi.1:115 ../scripts/debrelease.1:111 ../scripts/debrsign.1:63
-#: ../scripts/debsign.1:111 ../scripts/nmudiff.1:85
+#: ../scripts/debsign.1:111 ../scripts/nmudiff.1:89
 #: ../scripts/pts-subscribe.1:48 ../scripts/uupdate.1:113
 #: ../scripts/who-uploads.1:56
 msgid ""
@@ -7819,7 +7819,7 @@ msgstr ""
 #: ../scripts/debchange.1:404 ../scripts/debclean.1:93
 #: ../scripts/debrelease.1:105 ../scripts/debsign.1:105
 #: ../scripts/dep3changelog.1:22 ../scripts/dscverify.1:43
-#: ../scripts/nmudiff.1:79 ../scripts/pts-subscribe.1:34
+#: ../scripts/nmudiff.1:83 ../scripts/pts-subscribe.1:34
 #: ../scripts/uupdate.1:107 ../scripts/who-uploads.1:50
 msgid "Display version and copyright information and exit successfully."
 msgstr "Afficher la version et le copyright, puis quitter avec succès."
@@ -10668,20 +10668,54 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/debrepro.pod:101
+msgid "-b COMMAND, --before-second-build COMMAND"
+msgstr ""
+
+#. type: textblock
+#: ../scripts/debrepro.pod:103
+msgid ""
+"Run COMMAND before performing the second build. This can be used for example "
+"to apply a patch to a source tree for the second build, and check whether "
+"(or how) the resulting binaries are affected."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/debrepro.pod:107
+msgid "Examples:"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/debrepro.pod:109
+#, no-wrap
+msgid ""
+"  $ debrepro --before-second-build \"git checkout branch-with-changes\"\n"
+"\n"
+msgstr ""
+
+#. type: verbatim
+#: ../scripts/debrepro.pod:111
+#, no-wrap
+msgid ""
+"  $ debrepro --before-second-build \"patch -p1 < /path/to/patch\"\n"
+"\n"
+msgstr ""
+
+#. type: =item
+#: ../scripts/debrepro.pod:113
 #, fuzzy
 #| msgid "B<-h>, B<--help>"
 msgid "-h, --help"
 msgstr "B<-h>, B<--help>"
 
 #. type: textblock
-#: ../scripts/debrepro.pod:103
+#: ../scripts/debrepro.pod:115
 #, fuzzy
 #| msgid "Display a help message and exit."
 msgid "Display this help message and exit."
 msgstr "Afficher un message d'aide et quitter."
 
 #. type: SH
-#: ../scripts/debrepro.pod:107 ../scripts/debsnap.1:102
+#: ../scripts/debrepro.pod:119 ../scripts/debsnap.1:102
 #: ../scripts/dscextract.1:20 ../scripts/transition-check.pl:54
 #: ../scripts/uscan.pl:1654 ../scripts/wnpp-check.1:28
 #, no-wrap
@@ -10689,18 +10723,18 @@ msgid "EXIT STATUS"
 msgstr "VALEURS DE RETOUR"
 
 #. type: =item
-#: ../scripts/debrepro.pod:111 ../scripts/transition-check.pl:61
+#: ../scripts/debrepro.pod:123 ../scripts/transition-check.pl:61
 #: ../scripts/who-permits-upload.pl:120
 msgid "0Z<>"
 msgstr "0Z<>"
 
 #. type: textblock
-#: ../scripts/debrepro.pod:113
+#: ../scripts/debrepro.pod:125
 msgid "Package is reproducible."
 msgstr "Le paquet est reproductible."
 
 #. type: textblock
-#: ../scripts/debrepro.pod:115
+#: ../scripts/debrepro.pod:127
 msgid ""
 "Reproducible here means that the two builds produced the exactly the same "
 "binaries, under the set of variations that B<debrepro> tests. Other sources "
@@ -10714,43 +10748,43 @@ msgstr ""
 "vraie vie."
 
 #. type: =item
-#: ../scripts/debrepro.pod:120 ../scripts/transition-check.pl:66
+#: ../scripts/debrepro.pod:132 ../scripts/transition-check.pl:66
 #: ../scripts/who-permits-upload.pl:124
 msgid "1Z<>"
 msgstr "1Z<>"
 
 #. type: textblock
-#: ../scripts/debrepro.pod:122
+#: ../scripts/debrepro.pod:134
 msgid "Package is not reproducible."
 msgstr "Le paquet n'est pas reproductible."
 
 #. type: =item
-#: ../scripts/debrepro.pod:124 ../scripts/who-permits-upload.pl:128
+#: ../scripts/debrepro.pod:136 ../scripts/who-permits-upload.pl:128
 msgid "2Z<>"
 msgstr "2Z<>"
 
 #. type: textblock
-#: ../scripts/debrepro.pod:126
+#: ../scripts/debrepro.pod:138
 msgid "The given input is not a valid Debian source package."
 msgstr "L'entrée donnée n'est pas un paquet source Debian valable."
 
 #. type: =item
-#: ../scripts/debrepro.pod:128
+#: ../scripts/debrepro.pod:140
 msgid "3Z<>"
 msgstr "3Z<>"
 
 #. type: textblock
-#: ../scripts/debrepro.pod:130
+#: ../scripts/debrepro.pod:142
 msgid "Required programs are missing."
 msgstr ""
 
 #. type: textblock
-#: ../scripts/debrepro.pod:136
+#: ../scripts/debrepro.pod:148
 msgid "diffoscope (1), disorderfs (1),"
 msgstr "B<diffoscope>(1), B<disorderfs>(1),"
 
 #. type: textblock
-#: ../scripts/debrepro.pod:140
+#: ../scripts/debrepro.pod:152
 msgid "Antonio Terceiro <terceiro@debian.org>."
 msgstr "Antonio Terceiro <terceiro@debian.org>."
 
@@ -14171,9 +14205,13 @@ msgstr "B<git-deborig>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:107
+#, fuzzy
+#| msgid ""
+#| "try to produce Debian orig.tar using git-archive(1) [libdpkg-perl, libgit-"
+#| "wrapper-perl, liblist-compare-perl]"
 msgid ""
 "try to produce Debian orig.tar using git-archive(1) [libdpkg-perl, libgit-"
-"wrapper-perl, liblist-compare-perl]"
+"wrapper-perl, liblist-compare-perl, libstring-shellquote-perl]"
 msgstr ""
 "essayer de produire orig.tar de Debian avec B<git-archive>(1) [libdpkg-perl, "
 "libgit-wrapper-perl, liblist-compare-perl]"
@@ -15734,8 +15772,8 @@ msgstr ""
 "I<fichier> est relatif au répertoire de premier niveau contenu dans le "
 "paquet, c'est-à-dire une fois enlevé le premier répertoire."
 
-#. type: =item
-#: ../scripts/dscextract.1:15 ../scripts/git-deborig.pl:46
+#. type: TP
+#: ../scripts/dscextract.1:15
 #, no-wrap
 msgid "B<-f>"
 msgstr "B<-f>"
@@ -16116,8 +16154,10 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/git-deborig.pl:26
-msgid "B<git deborig> [B<-f>] [I<REF>]"
-msgstr "B<git deborig> [B<-f>] [I<RÉF>]"
+msgid ""
+"B<git deborig> [B<--force>|B<-f>] [B<--just-print>] [B<--"
+"version=>I<VERSION>] [I<COMMITTISH>]"
+msgstr ""
 
 #. type: textblock
 #: ../scripts/git-deborig.pl:30
@@ -16134,10 +16174,15 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/git-deborig.pl:35
+#, fuzzy
+#| msgid ""
+#| "B<git-deborig> will try several common tag names.  If this fails, or if "
+#| "more than one of those common tags are present, you can specify the tag "
+#| "or branch head to archive on the command line (I<REF> above)."
 msgid ""
 "B<git-deborig> will try several common tag names.  If this fails, or if more "
 "than one of those common tags are present, you can specify the tag or branch "
-"head to archive on the command line (I<REF> above)."
+"head to archive on the command line (I<COMMITTISH> above)."
 msgstr ""
 "B<git-deborig> essaiera plusieurs noms d'étiquette courants. S'il échoue, ou "
 "si plus d'une étiquette courante sont présentes, il est possible de préciser "
@@ -16147,24 +16192,82 @@ msgstr ""
 #. type: textblock
 #: ../scripts/git-deborig.pl:39
 msgid ""
+"B<git-deborig> will override gitattributes(5) that would cause the contents "
+"of the tarball generated by git-archive(1) not to be identical with the "
+"commitish archived: the B<export-subst> and B<export-ignore> attributes."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/git-deborig.pl:44
+msgid ""
 "B<git-deborig> should be invoked from the root of the git repository, which "
 "should contain I<debian/changelog>."
 msgstr ""
 "B<git-deborig> devrait être invoqué à partir de la racine du dépôt git qui "
 "devrait contenir I<debian/changelog>."
 
+#. type: =item
+#: ../scripts/git-deborig.pl:51
+#, fuzzy
+#| msgid "B<-f>, B<--force>"
+msgid "B<-f>|B<--force>"
+msgstr "B<-f>, B<--force>"
+
 #. type: textblock
-#: ../scripts/git-deborig.pl:48
+#: ../scripts/git-deborig.pl:53
 msgid "Overwrite any existing orig.tar in the parent directory."
 msgstr "Écraser tout fichier I<orig.tar> existant dans le répertoire parent."
 
+#. type: =item
+#: ../scripts/git-deborig.pl:55
+#, fuzzy
+#| msgid "B<-p>, B<--print>"
+msgid "B<--just-print>"
+msgstr "B<-p>, B<--print>"
+
 #. type: textblock
-#: ../scripts/git-deborig.pl:54
+#: ../scripts/git-deborig.pl:57
+msgid ""
+"Instead of actually invoking git-archive(1), output information about how it "
+"would be invoked.  Ignores I<--force>."
+msgstr ""
+
+#. type: textblock
+#: ../scripts/git-deborig.pl:60
+msgid ""
+"Note that running the git-archive(1) invocation outputted with this option "
+"may not produce the same output.  This is because B<git-deborig> takes care "
+"to disables git attributes otherwise heeded by git-archive(1), as detailed "
+"above."
+msgstr ""
+
+#. type: =item
+#: ../scripts/git-deborig.pl:65
+#, fuzzy
+#| msgid "B<--version>"
+msgid "B<--version=>I<VERSION>"
+msgstr "B<--version>"
+
+#. type: textblock
+#: ../scripts/git-deborig.pl:67
+#, fuzzy
+#| msgid ""
+#| "The default is to use the upstream portion of the version of the first "
+#| "entry in F<debian/changelog>."
+msgid ""
+"Instead of reading the new upstream version from the first entry in the "
+"Debian changelog, use I<VERSION>."
+msgstr ""
+"Par défaut, la partie amont de la version est prise dans la première entrée "
+"de F<debian/changelog>."
+
+#. type: textblock
+#: ../scripts/git-deborig.pl:74
 msgid "git-archive(1), dgit-maint-merge(7)"
 msgstr "B<git-archive>(1), B<dgit-maint-merge>(7)"
 
 #. type: textblock
-#: ../scripts/git-deborig.pl:58
+#: ../scripts/git-deborig.pl:78
 msgid "B<git-deborig> was written by Sean Whitton <spwhitton@spwhitton.name>."
 msgstr ""
 "B<git-deborig> a été écrit par Sean Whitton <spwhitton@spwhitton.name>."
@@ -18229,13 +18332,27 @@ msgid "Equivalent to B<--delay 0>."
 msgstr "Équivalent à B<--delay 0>."
 
 #. type: TP
-#: ../scripts/nmudiff.1:85
+#: ../scripts/nmudiff.1:73
+#, fuzzy, no-wrap
+#| msgid "B<--from> I<EMAIL>"
+msgid "B<--template> I<TEMPLATEFILE>"
+msgstr "B<--from> I<EMAIL>"
+
+#. type: Plain text
+#: ../scripts/nmudiff.1:77
+msgid ""
+"Use content of TEMPLATEFILE for message body instead of default template.  "
+"If TEMPLATEFILE does not exist, default template is applied."
+msgstr ""
+
+#. type: TP
+#: ../scripts/nmudiff.1:89
 #, no-wrap
 msgid "B<NMUDIFF_DELAY>"
 msgstr "B<NMUDIFF_DELAY>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:91
+#: ../scripts/nmudiff.1:95
 msgid ""
 "If this is set to a number, e-mails generated by B<nmudiff> will by default "
 "mention an upload to the DELAYED queue, delayed for the specified number of "
@@ -18247,13 +18364,13 @@ msgstr ""
 "valeur B<0> indique que la file d'attente différée n'a pas été utilisée."
 
 #. type: TP
-#: ../scripts/nmudiff.1:91
+#: ../scripts/nmudiff.1:95
 #, no-wrap
 msgid "B<NMUDIFF_MUTT>"
 msgstr "B<NMUDIFF_MUTT>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:96
+#: ../scripts/nmudiff.1:100
 msgid ""
 "Can be I<yes> (default) or I<no>, and specifies whether to use B<mutt> to "
 "compose and send the message or not, as described above."
@@ -18262,13 +18379,13 @@ msgstr ""
 "B<mutt> pour écrire et envoyer le message, tel que décrit ci-dessus."
 
 #. type: TP
-#: ../scripts/nmudiff.1:96
+#: ../scripts/nmudiff.1:100
 #, no-wrap
 msgid "B<NMUDIFF_NEWREPORT>"
 msgstr "B<NMUDIFF_NEWREPORT>"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:104
+#: ../scripts/nmudiff.1:108
 msgid ""
 "This option controls whether a new bug report is made, or whether the diff "
 "is sent to the bugs closed by this NMU.  Can be I<maybe> (default), which "
@@ -18285,7 +18402,7 @@ msgstr ""
 "corrigé, auquel cas un nouveau rapport est toujours créé)."
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:108
+#: ../scripts/nmudiff.1:112
 msgid ""
 "If this is set, specifies a B<sendmail> command to use instead of I</usr/"
 "sbin/sendmail>.  Same as the B<--sendmail> command line option."
@@ -18295,12 +18412,12 @@ msgstr ""
 "B<--sendmail>."
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:112
+#: ../scripts/nmudiff.1:116
 msgid "B<debdiff>(1), B<sensible-editor>(1), B<devscripts.conf>(5)"
 msgstr "B<debdiff>(1), B<sensible-editor>(1), B<devscripts.conf>(5)"
 
 #. type: Plain text
-#: ../scripts/nmudiff.1:116
+#: ../scripts/nmudiff.1:120
 msgid ""
 "B<nmudiff> was written and is copyright 2006 by Steinar H. Gunderson and "
 "modified by Julian Gilbey E<lt>jdg@debian.orgE<gt>.  The software may be "
@@ -19925,8 +20042,8 @@ msgstr "SUSPICIOUS-SOURCE"
 #. type: Plain text
 #: ../doc/suspicious-source.1:20
 msgid ""
-"suspicious-source - search for files that are not the GPL's \"preferred form "
-"of modification\""
+"suspicious-source - search for files that do not meet the GPL's definition "
+"of \"source\" for a work"
 msgstr ""
 "suspicious-source - Rechercher des fichiers qui ne sont pas sous la « forme "
 "la plus adéquate pour les modifications » demandée par la GPL"
@@ -19938,17 +20055,23 @@ msgstr "B<suspicious-source> [I<options>]"
 
 #. type: Plain text
 #: ../doc/suspicious-source.1:30
+#, fuzzy
+#| msgid ""
+#| "B<suspicious-source> outputs a list of files which are probably not the "
+#| "source form of a work. This should be run in the root of a source tree to "
+#| "find files which might not be, in the definition from the GNU GPL, the "
+#| "\"preferred form of the work for making modifications to it\"."
 msgid ""
-"B<suspicious-source> is a script that outputs a list of files which are not "
-"common source files.  This should be run in the root of a source tree to "
-"find files which might not be the \"preferred form of modification\" that "
-"the GPL and other licenses require."
+"B<suspicious-source> outputs a list of files which are probably not the "
+"source form of a work.  This should be run in the root of a source tree to "
+"find files which might not be, in the definition from the GNU GPL, the "
+"\"preferred form of the work for making modifications to it\"."
 msgstr ""
 "B<suspicious-source> affiche une liste de fichiers qui ne sont pas des "
-"fichiers source usuels. Elle devrait être exécutée depuis le répertoire "
-"racine d'une arborescence source pour trouver les fichiers qui risquent de "
-"ne pas être sous la « forme la plus adéquate pour les modifications » comme "
-"exigé par la GPL et d'autres licences."
+"fichiers source usuels. Il devrait être exécuté depuis le répertoire racine "
+"d'une arborescence source pour trouver les fichiers qui risquent de ne pas "
+"être sous la « forme la plus adéquate pour les modifications » telle que "
+"définie par la GPL ou d'autres licences."
 
 #. type: Plain text
 #: ../doc/suspicious-source.1:33
@@ -20979,9 +21102,12 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:272
-#, no-wrap
+#, fuzzy, no-wrap
+#| msgid ""
+#| "  (?i)\\.(?:tar\\.xz|tar\\.bz2|tar\\.gz|zip)\n"
+#| "\n"
 msgid ""
-"  (?i)\\.(?:tar\\.xz|tar\\.bz2|tar\\.gz|zip)\n"
+"  (?i)\\.(?:tar\\.xz|tar\\.bz2|tar\\.gz|zip|tgz|tbz|txz)\n"
 "\n"
 msgstr ""
 "  (?i)\\.(?:tar\\.xz|tar\\.bz2|tar\\.gz|zip)\n"
@@ -21003,9 +21129,12 @@ msgstr ""
 
 #. type: verbatim
 #: ../scripts/uscan.pl:278
-#, no-wrap
+#, fuzzy, no-wrap
+#| msgid ""
+#| "  (?i)\\.(?:tar\\.xz|tar\\.bz2|tar\\.gz|zip)\\.(?:asc|pgp|gpg|sig|sign)\n"
+#| "\n"
 msgid ""
-"  (?i)\\.(?:tar\\.xz|tar\\.bz2|tar\\.gz|zip)\\.(?:asc|pgp|gpg|sig|sign)\n"
+"  (?i)\\.(?:tar\\.xz|tar\\.bz2|tar\\.gz|zip|tgz|tbz|txz)\\.(?:asc|pgp|gpg|sig|sign)\n"
 "\n"
 msgstr ""
 "  (?i)\\.(?:tar\\.xz|tar\\.bz2|tar\\.gz|zip)\\.(?:asc|pgp|gpg|sig|sign)\n"
@@ -26579,6 +26708,9 @@ msgid ""
 msgstr ""
 "Cette page de manuel a été écrite pour le paquet B<devscripts> par le "
 "responsable du paquet, Julian Gilbey E<lt>jdg@debian.orgE<gt>."
+
+#~ msgid "B<git deborig> [B<-f>] [I<REF>]"
+#~ msgstr "B<git deborig> [B<-f>] [I<RÉF>]"
 
 #~ msgid "This is required."
 #~ msgstr "Cela est requis."
