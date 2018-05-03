@@ -44,7 +44,6 @@ PKGNAMES := \
 	whodepends \
 	wnpp-alert \
 	wnpp-check \
-	$(nil)
 
 GEN_MAN1S += \
 	debrepro.1 \
@@ -53,7 +52,6 @@ GEN_MAN1S += \
 	mk-origtargz.1 \
 	reproducible-check.1 \
 	uscan.1 \
-	$(nil)
 
 all: $(SCRIPTS) $(GEN_MAN1S) $(CWRAPPERS) $(COMPLETION)
 
