@@ -89,10 +89,21 @@ use Dpkg::IPC;
 use Dpkg::Version;
 use List::Compare;
 use String::ShellQuote;
+use Try::Tiny;
+
+my $git = Git::Wrapper->new(".");
 
 # Sanity check #1
-die "pwd doesn't look like a Debian source package in a git repository ..\n"
-  unless ( -d ".git" && -e "debian/changelog" );
+try {
+    $git->rev_parse({ git_dir => 1 });
+}
+catch {
+    die "pwd doesn't look like a git repository ..\n";
+};
+
+# Sanity check #2
+die "pwd doesn't look like a Debian source package ..\n"
+  unless ( -e "debian/changelog" );
 
 # Process command line args
 my $overwrite = '';
@@ -122,7 +133,7 @@ if ( $user_version ) {
 my $source = $changelog->{Source};
 my $upstream_version = $version->version();
 
-# Sanity check #2
+# Sanity check #3
 die "version number $version is not valid ..\n" unless $version->is_valid();
 
 # Sanity check #3
@@ -158,7 +169,6 @@ if ( $user_ref ) {      # User told us the tag/branch to archive
     archive_ref_or_just_print($user_ref);
 } else {    # User didn't specify a tag/branch to archive
     # Get available git tags
-    my $git = Git::Wrapper->new(".");
     my @all_tags = $git->tag();
 
     # convert according to DEP-14 rules
