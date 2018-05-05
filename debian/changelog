@@ -4,6 +4,11 @@ devscripts (2.18.3) UNRELEASED; urgency=medium
   * dpkg-depcheck:
     + Also trace openat syscall.  MR: !11
 
+  [ Sean Whitton ]
+  * git-deborig:
+    + Now works in a git worktree.
+      Closes: #897050; MR: !12
+
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 23 Apr 2018 00:48:40 +0200
 
 devscripts (2.18.2) unstable; urgency=medium
