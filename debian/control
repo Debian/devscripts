@@ -22,6 +22,7 @@ Build-Depends: bash-completion,
                liblist-compare-perl <!nocheck>,
                libstring-shellquote-perl <!nocheck>,
                libtimedate-perl <!nocheck>,
+               libtry-tiny-perl <!nocheck>,
                liburi-perl <!nocheck>,
                libwww-perl <!nocheck>,
                lsb-release <!nocheck>,
@@ -74,6 +75,7 @@ Recommends: apt,
             libgit-wrapper-perl,
             liblist-compare-perl,
             libstring-shellquote-perl,
+            libtry-tiny-perl,
             liburi-perl,
             libwww-perl,
             licensecheck,
@@ -205,7 +207,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - getbuildlog: download package build logs from Debian auto-builders [wget]
   - git-deborig: try to produce Debian orig.tar using git-archive(1)
     [libdpkg-perl, libgit-wrapper-perl, liblist-compare-perl,
-    libstring-shellquote-perl]
+    libstring-shellquote-perl, libtry-tiny-perl]
   - grep-excuses: grep britney's excuses for your packages [libterm-size-perl,
     libyaml-syck-perl, wget, w3m]
   - hardening-check: report the hardening characteristics of a set of binaries
