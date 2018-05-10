@@ -221,14 +221,13 @@ foreach my $url (@url) {
         push @ssl_errors, 5;
     }
     system @cmd, $url . (($url =~ m/\?/)?'&':'?')."package=" . join("+", map { uri_escape($_) } @ARGV) . "&text=on&" . join ("&", @args);
-    foreach (@ssl_errors)
-    {
-        if ($? >> 8 == $_)
-        {
-           die "Problem with SSL CACERT check:\n Have you installed the ca-certificates package?\n";
+    my $rc = $? >> 8;
+    if ($rc != 0) {
+        if (grep $rc, @ssl_errors) {
+            die "Problem with SSL CACERT check:\n Have you installed the ca-certificates package?\n";
         }
+        $status = 1;
     }
-    $status = 1 if ($? >> 8 != 0);
 }
 
 exit $status;
