@@ -332,7 +332,7 @@ class TestGroup(object):
         self.tests = frozenset(tests)
 
     def add_restrictions(self, restrictions):
-        restrictions = restrictions.split()
+        restrictions = re.split(r'\s*,?\s+', restrictions)
         self.restrictions = frozenset(restrictions)
 
     def add_features(self, features):
