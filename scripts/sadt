@@ -328,7 +328,7 @@ class TestGroup(object):
             raise Fail(fail_reason, ''.join(output))
 
     def add_tests(self, tests):
-        tests = tests.split()
+        tests = re.split(r'\s*,?\s+', tests)
         self.tests = frozenset(tests)
 
     def add_restrictions(self, restrictions):
