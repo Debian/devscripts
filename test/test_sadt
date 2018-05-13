@@ -1,0 +1,63 @@
+#!/bin/sh
+
+# Copyright (C) 2018, Antonio Terceiro <terceiro@debian.org>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+. ${0%/*}/test_helper.sh
+
+if test "$1" = --installed; then
+    sadt="sadt"
+    shift
+else
+    sadt="$(readlink -f "${0%/*}/../scripts/sadt")"
+fi
+
+samples="${0%/*}/sadt"
+
+run_sadt() {
+    dir="$1"
+    shift
+    (cd "$samples/$dir" && $sadt "$@")
+}
+
+test_passes() {
+    assertPasses run_sadt passes
+}
+
+test_fails() {
+    assertFails run_sadt fails
+}
+
+test_space_separated_tests() {
+    assertPasses run_sadt space-separated-tests
+    assertFalse "skipped=1 found in output" "grep -q skipped=1 $log"
+}
+
+test_comma_separated_tests() {
+    assertPasses run_sadt comma-separated-tests
+    assertFalse "skipped=1 found in output" "grep -q skipped=1 $log"
+}
+
+test_space_separated_restrictions() {
+    assertPasses run_sadt space-separated-restrictions
+    assertFalse "skipped=1 found in output" "grep -q skipped=1 $log"
+}
+
+test_comma_separated_restrictions() {
+    assertPasses run_sadt comma-separated-restrictions
+    assertFalse "skipped=1 found in output" "grep -q skipped=1 $log"
+}
+
+. shunit2

@@ -9,6 +9,7 @@ OUR_TESTS= \
 	debsign \
 	mk-origtargz \
 	package_lifecycle \
+	sadt \
 	uscan \
 	uscan_ftp \
 	uscan_mangle \
