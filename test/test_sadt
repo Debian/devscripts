@@ -60,4 +60,15 @@ test_comma_separated_restrictions() {
     assertFalse "skipped=1 found in output" "grep -q skipped=1 $log"
 }
 
+test_tests_directory() {
+    assertPasses run_sadt tests-directory
+    assertFalse "skipped=1 found in output" "grep -q skipped=1 $log"
+}
+
+test_test_command() {
+    assertPasses run_sadt test-command --verbose
+    assertTrue "recognizes Test-Command" "grep 'O: Test-Command is supported' $log"
+    assertTrue "recognizes Test-Command" "grep tests=1 $log"
+}
+
 . shunit2

@@ -153,6 +153,101 @@ class VerboseProgress(Progress):
         self._write('\n')
 
 
+class TestCommand(object):
+
+    def __init__(self, group, command):
+        self.group = group
+        self.command = command
+
+    def __str__(self):
+        return self.command
+
+    def get_command(self):
+        return ['sh', '-c', self.command]
+
+    def prepare(self, progress, rw_build_tree):
+        pass
+
+    def cleanup(self):
+        pass
+
+    def run(self, progress, allow_stderr=False):  # pylint: disable=too-many-locals
+        command = self.get_command()
+        tmpdir1 = tempfile.mkdtemp(prefix='sadt.')
+        tmpdir2 = tempfile.mkdtemp(prefix='sadt.')
+        environ = dict(os.environ)
+        environ['AUTOPKGTEST_TMP'] = tmpdir1
+        environ['ADTTMP'] = tmpdir2  # only for compatibility with old DEP-8 spec.
+        child = ipc.Popen(command, stdout=ipc.PIPE, stderr=ipc.PIPE, env=environ)
+        output = []
+        stderr = False
+        for tag, line in annotate_output(child):
+            if tag == 'E':
+                stderr = True
+            this_line = '{tag}: {line}'.format(
+                tag=tag,
+                line=line.decode(sys.stdout.encoding, 'replace'),
+            )
+            progress.output(this_line)
+            output.append(this_line)
+        for fp in child.stdout, child.stderr:
+            fp.close()
+        rc = child.wait()
+        shutil.rmtree(tmpdir1)
+        shutil.rmtree(tmpdir2)
+        if rc == 0:
+            if stderr and not allow_stderr:
+                rc = -1
+                fail_reason = 'stderr non-empty'
+                progress.fail(self, fail_reason)
+            else:
+                progress.ok(self)
+        else:
+            fail_reason = 'exit code: {rc}'.format(rc=rc)
+            progress.fail(self, fail_reason)
+        if rc != 0:
+            raise Fail(self, fail_reason, ''.join(output))
+
+
+class Test(TestCommand):
+
+    def __init__(self, group, testname):
+        self.testname = testname
+        self.original_mode = None
+        self.cwd = None
+        super(Test, self).__init__(group, testname)
+
+    @property
+    def path(self):
+        return os.path.join(self.group.tests_directory, self.testname)
+
+    def __str__(self):
+        return self.testname
+
+    def get_command(self):
+        return [self.path]
+
+    def prepare(self, progress, rw_build_tree):
+        if rw_build_tree:
+            self.cwd = os.getcwd()
+            os.chdir(rw_build_tree)
+            chmod_x(self.path)
+        else:
+            if not os.access(self.path, os.X_OK):
+                try:
+                    self.original_mode = chmod_x(self.path)
+                except OSError as exc:
+                    progress.skip(self.testname, '{path} could not be made executable: {exc}'
+                                  .format(path=self.path, exc=exc))
+                    raise Skip
+
+    def cleanup(self):
+        if self.original_mode is not None:
+            os.chmod(self.path, self.original_mode)
+        if self.cwd is not None:
+            os.chdir(self.cwd)
+
+
 class TestGroup(object):
 
     def __init__(self):
@@ -257,70 +352,19 @@ class TestGroup(object):
         except Skip as exc:
             progress.skip(test, str(exc))
             raise
-        path = os.path.join(self.tests_directory, test)
-        original_mode = None
-        if rw_build_tree:
-            cwd = os.getcwd()
-            os.chdir(rw_build_tree)
-            chmod_x(path)
-        else:
-            cwd = None
-            if not os.access(path, os.X_OK):
-                try:
-                    original_mode = chmod_x(path)
-                except OSError as exc:
-                    progress.skip(test, '{path} could not be made executable: {exc}'
-                                  .format(path=path, exc=exc))
-                    raise Skip
+        test.prepare(progress, rw_build_tree)
         try:
             progress.start(test)
-            self._run(test, progress, allow_stderr=options.allow_stderr)
+            test.run(progress, allow_stderr=options.allow_stderr)
         finally:
-            if original_mode is not None:
-                os.chmod(path, original_mode)
-            if cwd is not None:
-                os.chdir(cwd)
-
-    def _run(self, test, progress, allow_stderr=False):  # pylint: disable=too-many-locals
-        path = os.path.join(self.tests_directory, test)
-        tmpdir1 = tempfile.mkdtemp(prefix='sadt.')
-        tmpdir2 = tempfile.mkdtemp(prefix='sadt.')
-        environ = dict(os.environ)
-        environ['AUTOPKGTEST_TMP'] = tmpdir1
-        environ['ADTTMP'] = tmpdir2  # only for compatibility with old DEP-8 spec.
-        child = ipc.Popen([path], stdout=ipc.PIPE, stderr=ipc.PIPE, env=environ)
-        output = []
-        stderr = False
-        for tag, line in annotate_output(child):
-            if tag == 'E':
-                stderr = True
-            this_line = '{tag}: {line}'.format(
-                tag=tag,
-                line=line.decode(sys.stdout.encoding, 'replace'),
-            )
-            progress.output(this_line)
-            output.append(this_line)
-        for fp in child.stdout, child.stderr:
-            fp.close()
-        rc = child.wait()
-        shutil.rmtree(tmpdir1)
-        shutil.rmtree(tmpdir2)
-        if rc == 0:
-            if stderr and not allow_stderr:
-                rc = -1
-                fail_reason = 'stderr non-empty'
-                progress.fail(test, fail_reason)
-            else:
-                progress.ok(test)
-        else:
-            fail_reason = 'exit code: {rc}'.format(rc=rc)
-            progress.fail(test, fail_reason)
-        if rc != 0:
-            raise Fail(test, fail_reason, ''.join(output))
+            test.cleanup()
 
     def add_tests(self, tests):
-        tests = re.split(r'\s*,?\s+', tests)
+        tests = [Test(self, t) for t in re.split(r'\s*,?\s+', tests)]
         self.tests = frozenset(tests)
+
+    def add_test_command(self, test_command):
+        self.tests = frozenset([TestCommand(self, test_command)])
 
     def add_restrictions(self, restrictions):
         restrictions = re.split(r'\s*,?\s+', restrictions)
