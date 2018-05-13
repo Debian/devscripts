@@ -1,4 +1,5 @@
 #!/bin/sh
+# vim: set shiftwidth=4 tabstop=8 noexpandtab:
 
 # Copyright (C) 2018, Osamu Aoki <osamu@debian.org>
 #
@@ -100,16 +101,21 @@ cleanup(){
 
 spawnFtpServer(){
     (
-	USCAN_FTP_SERVER=${USCAN_FTP_SERVER:-ftpserver.py}
+	local USCAN_FTP_SERVER=${USCAN_FTP_SERVER:-ftpserver.py}
 	mkdir -p $TMPDIR/$REPOPATH
 	cd $TMPDIR/$REPOPATH
 	echo "FTP starting ... $TMPDIR/$REPOPATH"
 	python3 "$test_dir/uscan/$USCAN_FTP_SERVER" 2>log &
-	echo $! > pid
+	local pid=$!
+	echo $pid > pid
 	while ! [ -s port ]; do
-	    :
+	    sleep 2s
+	    if ! kill -0 $pid 2> /dev/null ; then
+		echo "The FTP server returned an error:"
+		cat log
+		exit 1
+	    fi
 	done
-	unset USCAN_FTP_SERVER
     )
 }
 
@@ -242,7 +248,7 @@ helperWatch() {
     WATCHLINE="${WATCHLINE:-$WATCHLINE0}"
     cd $TMPDIR
     # start FTP server with its root at $TMPDIR/$REPOPATH
-    spawnFtpServer
+    spawnFtpServer || exit 1
     PORT=$(cat $TMPDIR/repo/port)
     $DEBUGECHO " ***** ftp://localhost:$PORT started showing $TMPDIR/$REPOPATH *****"
     # make web site
@@ -325,7 +331,7 @@ helperWatchZip() {
     WATCHLINE="${WATCHLINE:-$WATCHLINE0}"
     cd $TMPDIR
     # start FTP server with its root at $TMPDIR/$REPOPATH
-    spawnFtpServer
+    spawnFtpServer || exit 1
     PORT=$(cat $TMPDIR/repo/port)
     $DEBUGECHO " ***** ftp://localhost:$PORT started showing $TMPDIR/$REPOPATH *****"
     # make web site

@@ -15,6 +15,11 @@ devscripts (2.18.3) UNRELEASED; urgency=medium
       either from wget or from curl.
       Closes: #882347
 
+  [ Mattia Rizzolo ]
+  * test_uscan_ftp:
+    + Handle errors coming from the ftpserver.py subprocess to avoid possible
+      endless loops.  Closes: #898370
+
  -- Pierre-Elliott Bécue <becue@crans.org>  Thu, 10 May 2018 13:23:58 +0200
 
 devscripts (2.18.2) unstable; urgency=medium
