@@ -19,6 +19,8 @@ devscripts (2.18.3) UNRELEASED; urgency=medium
   * test_uscan_ftp:
     + Handle errors coming from the ftpserver.py subprocess to avoid possible
       endless loops.  Closes: #898370
+  * d/tests/control:
+    + Add missing test-dep on python3-pyftpdlib.  Closes: #898450
 
  -- Pierre-Elliott Bécue <becue@crans.org>  Thu, 10 May 2018 13:23:58 +0200
 
