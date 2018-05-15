@@ -371,7 +371,7 @@ class TestGroup(object):
         self.restrictions = frozenset(restrictions)
 
     def add_features(self, features):
-        features = features.split()
+        features = re.split(r'\s*,?\s+', features)
         self.features = frozenset(features)
 
     def add_depends(self, depends):
