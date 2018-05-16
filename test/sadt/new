@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+
+for sample in $@; do
+    mkdir -p "$sample"/debian/tests
+    touch "$sample/debian/control"
+    echo "Tests: $sample" > "$sample"/debian/tests/control
+done

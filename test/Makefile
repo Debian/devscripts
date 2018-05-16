@@ -1,17 +1,18 @@
 
-OUR_TESTS=						\
-	annotate-output				\
-	checkbashisms				\
-	dd-list						\
-	debchange					\
-	package_lifecycle			\
-	debdiff						\
-	debrepro				\
-	debsign					\
-	uscan						\
-	uscan_mangle				\
-	uscan_ftp				\
-	mk-origtargz				
+OUR_TESTS= \
+	annotate-output \
+	checkbashisms \
+	dd-list \
+	debchange \
+	debdiff \
+	debrepro \
+	debsign \
+	mk-origtargz \
+	package_lifecycle \
+	sadt \
+	uscan \
+	uscan_ftp \
+	uscan_mangle \
 
 test: $(foreach i,$(OUR_TESTS),test_$(i).test)
 
