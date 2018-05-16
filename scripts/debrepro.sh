@@ -226,7 +226,7 @@ if [ ! -f "$SOURCE/debian/changelog" ]; then
 fi
 
 tmpdir=$(mktemp --directory --tmpdir debrepro.XXXXXXXXXX)
-trap "echo; echo 'I: artifacts left in $tmpdir'" INT TERM EXIT
+trap "if [ \$? -eq 0 ]; then rm -rf $tmpdir; else echo; echo 'I: artifacts left in $tmpdir'; fi" INT TERM EXIT
 
 check_dependencies
 

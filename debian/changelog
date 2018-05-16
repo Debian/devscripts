@@ -37,6 +37,8 @@ devscripts (2.18.3) UNRELEASED; urgency=medium
     + test_debrepro: extract helper functions into test_helper.sh.
     + Makefile: remove trailing tabs, and sort.
     + sadt: add basic tests.
+  * debrepro:
+    + cleanup files if package is reproducible
 
  -- Pierre-Elliott Bécue <becue@crans.org>  Thu, 10 May 2018 13:23:58 +0200
 
