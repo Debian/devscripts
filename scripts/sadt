@@ -115,13 +115,42 @@ class Progress(object):
 
 class DefaultProgress(Progress):
 
+    _hourglass = r'/-\|'
+
+    def __init__(self):
+        self._counter = 0
+        self._output = False
+        if sys.stdout.isatty():
+            self._back = '\b'
+        else:
+            self._back = ''
+
+    def _reset(self):
+        if self._output:
+            self._write(self._back)
+
+    def start(self, name):
+        self._output = False
+
+    def output(self, line):
+        if not self._back:
+            return
+        hourglass = self._hourglass
+        c = self._counter + 1
+        self._reset()
+        self._write(hourglass[c % len(hourglass)])
+        self._counter = c
+        self._output = True
+
     def skip(self, name, reason):
         self._write('S')
 
     def fail(self, name, reason):
+        self._reset()
         self._write('F')
 
     def ok(self, name):
+        self._reset()
         self._write('.')
 
     def close(self):
