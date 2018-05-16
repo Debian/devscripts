@@ -174,10 +174,12 @@ class VerboseProgress(Progress):
         self._write('{test}: SKIP ({reason})\n'.format(test=name, reason=reason))
 
     def fail(self, name, reason):
+        self._separator()
         self._write('{test}: FAIL ({reason})\n'.format(test=name, reason=reason))
         self._write('\n')
 
     def ok(self, name):
+        self._separator()
         self._write('{test}: PASS\n'.format(test=name))
         self._write('\n')
 
