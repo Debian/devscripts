@@ -193,6 +193,10 @@ class TestCommand(object):
     def __str__(self):
         return self.command
 
+    @property
+    def name(self):
+        return str(self)
+
     def get_command(self):
         return ['sh', '-c', self.command]
 
@@ -483,8 +487,8 @@ def main():
     rw_build_tree = None
     try:
         for group in test_groups:
-            for name in group:
-                if options.tests and name not in options.tests:
+            for test in group:
+                if options.tests and test.name not in options.tests:
                     continue
                 try:
                     if rw_build_tree is None:
@@ -497,7 +501,7 @@ def main():
                                 rw_build_tree = copy_build_tree()
                                 assert rw_build_tree is not None
                     group.run(
-                        name,
+                        test,
                         progress=progress,
                         ignored_restrictions=options.ignore_restrictions,
                         rw_build_tree=rw_build_tree,
@@ -506,7 +510,7 @@ def main():
                 except Skip:
                     n_skip += 1
                 except Fail as exc:
-                    failures += [(name, exc)]
+                    failures += [(test, exc)]
                 else:
                     n_ok += 1
     finally:
