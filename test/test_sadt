@@ -71,4 +71,10 @@ test_test_command() {
     assertTrue "recognizes Test-Command" "grep tests=1 $log"
 }
 
+test_run_specific_tests() {
+    assertPasses run_sadt comma-separated-tests --verbose test1
+    assertTrue "runs test1" "grep '^test1:' $log"
+    assertFalse "does not run test2" "grep '^test2:' $log"
+}
+
 . shunit2

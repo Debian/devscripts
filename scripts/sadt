@@ -115,13 +115,42 @@ class Progress(object):
 
 class DefaultProgress(Progress):
 
+    _hourglass = r'/-\|'
+
+    def __init__(self):
+        self._counter = 0
+        self._output = False
+        if sys.stdout.isatty():
+            self._back = '\b'
+        else:
+            self._back = ''
+
+    def _reset(self):
+        if self._output:
+            self._write(self._back)
+
+    def start(self, name):
+        self._output = False
+
+    def output(self, line):
+        if not self._back:
+            return
+        hourglass = self._hourglass
+        c = self._counter + 1
+        self._reset()
+        self._write(hourglass[c % len(hourglass)])
+        self._counter = c
+        self._output = True
+
     def skip(self, name, reason):
         self._write('S')
 
     def fail(self, name, reason):
+        self._reset()
         self._write('F')
 
     def ok(self, name):
+        self._reset()
         self._write('.')
 
     def close(self):
@@ -145,10 +174,12 @@ class VerboseProgress(Progress):
         self._write('{test}: SKIP ({reason})\n'.format(test=name, reason=reason))
 
     def fail(self, name, reason):
+        self._separator()
         self._write('{test}: FAIL ({reason})\n'.format(test=name, reason=reason))
         self._write('\n')
 
     def ok(self, name):
+        self._separator()
         self._write('{test}: PASS\n'.format(test=name))
         self._write('\n')
 
@@ -161,6 +192,10 @@ class TestCommand(object):
 
     def __str__(self):
         return self.command
+
+    @property
+    def name(self):
+        return str(self)
 
     def get_command(self):
         return ['sh', '-c', self.command]
@@ -452,8 +487,8 @@ def main():
     rw_build_tree = None
     try:
         for group in test_groups:
-            for name in group:
-                if options.tests and name not in options.tests:
+            for test in group:
+                if options.tests and test.name not in options.tests:
                     continue
                 try:
                     if rw_build_tree is None:
@@ -466,7 +501,7 @@ def main():
                                 rw_build_tree = copy_build_tree()
                                 assert rw_build_tree is not None
                     group.run(
-                        name,
+                        test,
                         progress=progress,
                         ignored_restrictions=options.ignore_restrictions,
                         rw_build_tree=rw_build_tree,
@@ -475,7 +510,7 @@ def main():
                 except Skip:
                     n_skip += 1
                 except Fail as exc:
-                    failures += [(name, exc)]
+                    failures += [(test, exc)]
                 else:
                     n_ok += 1
     finally:
