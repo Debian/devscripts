@@ -300,7 +300,7 @@ def main():
     modified_files = wrap_and_sort(args)
 
     # Only report at the end, to avoid potential clash with --verbose
-    if modified_files and args.verbose:
+    if modified_files and (args.verbose or args.dry_run):
         if args.dry_run:
             header = "--- Dry run, these files would be modified ---"
         else:
