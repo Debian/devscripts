@@ -1,4 +1,4 @@
-devscripts (2.18.3) UNRELEASED; urgency=medium
+devscripts (2.18.3) unstable; urgency=medium
 
   [ Maximiliano Curia ]
   * dpkg-depcheck:
@@ -23,7 +23,7 @@ devscripts (2.18.3) UNRELEASED; urgency=medium
     + Add missing test-dep on python3-pyftpdlib.  Closes: #898450
 
   [ Antonio Terceiro ]
-  * sadt: Several improvments from MR: !13 and MR: !15
+  * sadt: Several improvements from MR: !13 and MR: !15
     + Support comma-separated restrictions.
     + support comma-separated tests.  Closes: #881825
     + Split features by commas or whitespace.
@@ -43,7 +43,7 @@ devscripts (2.18.3) UNRELEASED; urgency=medium
   [ Paul Wise ]
   * wrap-and-sort: allow using --dry-run without --verbose
 
- -- Pierre-Elliott Bécue <becue@crans.org>  Thu, 10 May 2018 13:23:58 +0200
+ -- Mattia Rizzolo <mattia@debian.org>  Wed, 23 May 2018 13:32:26 +0200
 
 devscripts (2.18.2) unstable; urgency=medium
 
