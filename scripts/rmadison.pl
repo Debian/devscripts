@@ -208,18 +208,26 @@ foreach my $url (@url) {
     print "$url:\n" if @url > 1;
     $url = $url_map{$url} if $url_map{$url};
     my @cmd;
+    my @ssl_errors;
     if ( -x "/usr/bin/curl" ) {
         @cmd = qw/curl -f -s -S -L/;
         push @cmd, "--cacert", $ssl_ca_file if $ssl_ca_file;
         push @cmd, "--capath", $ssl_ca_path if $ssl_ca_path;
-
+        push @ssl_errors, (60, 77);
     } else {
         @cmd = qw/wget -q -O -/;
         push @cmd, "--ca-certificate=$ssl_ca_file" if $ssl_ca_file;
         push @cmd, "--ca-directory=$ssl_ca_path"   if $ssl_ca_path;
+        push @ssl_errors, 5;
     }
     system @cmd, $url . (($url =~ m/\?/)?'&':'?')."package=" . join("+", map { uri_escape($_) } @ARGV) . "&text=on&" . join ("&", @args);
-    $status = 1 if ($? >> 8 != 0);
+    my $rc = $? >> 8;
+    if ($rc != 0) {
+        if (grep $rc, @ssl_errors) {
+            die "Problem with SSL CACERT check:\n Have you installed the ca-certificates package?\n";
+        }
+        $status = 1;
+    }
 }
 
 exit $status;

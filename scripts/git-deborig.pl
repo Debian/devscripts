@@ -89,10 +89,21 @@ use Dpkg::IPC;
 use Dpkg::Version;
 use List::Compare;
 use String::ShellQuote;
+use Try::Tiny;
+
+my $git = Git::Wrapper->new(".");
 
 # Sanity check #1
-die "pwd doesn't look like a Debian source package in a git repository ..\n"
-  unless ( -d ".git" && -e "debian/changelog" );
+try {
+    $git->rev_parse({ git_dir => 1 });
+}
+catch {
+    die "pwd doesn't look like a git repository ..\n";
+};
+
+# Sanity check #2
+die "pwd doesn't look like a Debian source package ..\n"
+  unless ( -e "debian/changelog" );
 
 # Process command line args
 my $overwrite = '';
@@ -122,7 +133,7 @@ if ( $user_version ) {
 my $source = $changelog->{Source};
 my $upstream_version = $version->version();
 
-# Sanity check #2
+# Sanity check #3
 die "version number $version is not valid ..\n" unless $version->is_valid();
 
 # Sanity check #3
@@ -158,7 +169,6 @@ if ( $user_ref ) {      # User told us the tag/branch to archive
     archive_ref_or_just_print($user_ref);
 } else {    # User didn't specify a tag/branch to archive
     # Get available git tags
-    my $git = Git::Wrapper->new(".");
     my @all_tags = $git->tag();
 
     # convert according to DEP-14 rules
@@ -203,15 +213,20 @@ sub archive_ref_or_just_print {
         my @cmd_mapped = map { shell_quote($_) } @$cmd;
         print "@cmd_mapped\n";
     } else {
+        my ($info_attributes) =
+          $git->rev_parse(qw|--git-path info/attributes|);
+        my ($deborig_attributes) =
+          $git->rev_parse(qw|--git-path info/attributes-deborig|);
+
         # For compatibility with dgit, we have to override any
         # export-subst and export-ignore git attributes that might be set
-        rename ".git/info/attributes", ".git/info/attributes-deborig"
-          if ( -e ".git/info/attributes" );
+        rename $info_attributes, $deborig_attributes
+          if ( -e $info_attributes );
         my $attributes_fh;
-        unless ( open( $attributes_fh, '>', ".git/info/attributes" ) ) {
-            rename ".git/info/attributes-deborig", ".git/info/attributes"
-              if ( -e ".git/info/attributes-deborig" );
-            die "could not open .git/info/attributes for writing";
+        unless ( open( $attributes_fh, '>', $info_attributes ) ) {
+            rename $deborig_attributes, $info_attributes
+              if ( -e $deborig_attributes );
+            die "could not open $info_attributes for writing";
         }
         print $attributes_fh "* -export-subst\n";
         print $attributes_fh "* -export-ignore\n";
@@ -222,10 +237,10 @@ sub archive_ref_or_just_print {
               nocheck => 1);
 
         # Restore situation before we messed around with git attributes
-        if ( -e ".git/info/attributes-deborig" ) {
-            rename ".git/info/attributes-deborig", ".git/info/attributes";
+        if ( -e $deborig_attributes ) {
+            rename $deborig_attributes, $info_attributes;
         } else {
-            unlink ".git/info/attributes";
+            unlink $info_attributes;
         }
     }
 }

@@ -1,3 +1,50 @@
+devscripts (2.18.3) unstable; urgency=medium
+
+  [ Maximiliano Curia ]
+  * dpkg-depcheck:
+    + Also trace openat syscall.  Closes: #898418; MR: !11
+
+  [ Sean Whitton ]
+  * git-deborig:
+    + Now works in a git worktree.
+      Closes: #897050; MR: !12
+
+  [ Pierre-Elliott Bécue ]
+  * rmadison:
+    + Make it verbose when the failure is due to a SSL CACERT check failure,
+      either from wget or from curl.
+      Closes: #882347
+
+  [ Mattia Rizzolo ]
+  * test/test_uscan_ftp:
+    + Handle errors coming from the ftpserver.py subprocess to avoid possible
+      endless loops.  Closes: #898370
+  * d/tests/control:
+    + Add missing test-dep on python3-pyftpdlib.  Closes: #898450
+
+  [ Antonio Terceiro ]
+  * sadt: Several improvements from MR: !13 and MR: !15
+    + Support comma-separated restrictions.
+    + support comma-separated tests.  Closes: #881825
+    + Split features by commas or whitespace.
+    + Recognize (and ignore) the needs-recommends restriction.
+    + Improve output:
+      - Display output of commands in verbose output.
+      - Improve organization of verbose output.  Closes: #748852
+      - Print extra separator at the end of test log.
+    + Add support for Test-Command: in debian/tests/control.  Closes: #781963
+  * test:
+    + test_debrepro: extract helper functions into test_helper.sh.
+    + Makefile: remove trailing tabs, and sort.
+    + sadt: add basic tests.
+  * debrepro:
+    + Cleanup files if package is reproducible.
+
+  [ Paul Wise ]
+  * wrap-and-sort: allow using --dry-run without --verbose
+
+ -- Mattia Rizzolo <mattia@debian.org>  Wed, 23 May 2018 13:32:26 +0200
+
 devscripts (2.18.2~bpo9+1) stretch-backports; urgency=medium
 
   * Rebuild for stretch-backports.
