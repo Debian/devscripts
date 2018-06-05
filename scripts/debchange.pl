@@ -1598,7 +1598,7 @@ if ((basename(cwd()) =~ m%^\Q$PACKAGE\E-\Q$UVERSION\E$%) &&
     }
 
     fatal "No version number in debian/changelog!"
-	unless $v->is_valid();
+	unless defined($v) and $v->is_valid();
 
     my ($new_version, $new_uversion);
     $new_version = $v->as_string(omit_epoch => 1);
