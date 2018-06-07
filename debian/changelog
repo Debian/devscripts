@@ -4,6 +4,8 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
   * debchange:
     + Replace implicit boolean evaluation of a Dpkg::Version object by
       Dpkg::Version::is_valid().  Closes: #900703
+  * bts:
+    + Add the new 'ftbfs' tag to the list of known tags.  Closes: #900963
 
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 23 May 2018 16:57:40 +0200
 

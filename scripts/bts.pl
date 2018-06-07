@@ -163,11 +163,12 @@ our (@gTags, @valid_tags, %valid_tags);
            "potato", "woody", "sid", "help", "security", "upstream",
            "pending", "sarge", "sarge-ignore", "experimental", "d-i",
            "confirmed", "ipv6", "lfs", "fixed-in-experimental",
-           "fixed-upstream", "a11y", "l10n", "newcomer", "etch", "etch-ignore",
+           "fixed-upstream", "l10n", "newcomer", "a11y", "ftbfs",
+           "etch", "etch-ignore",
            "lenny", "lenny-ignore", "squeeze", "squeeze-ignore",
-           "wheezy", "wheezy-ignore", "jessie", "jessie-ignore",
+           "wheezy", "wheezy-ignore","jessie", "jessie-ignore",
            "stretch", "stretch-ignore", "buster", "buster-ignore",
-           "bullseye", "bullseye-ignore",
+           "bullseye","bullseye-ignore",
          );
 
 *valid_tags = \@gTags;
@@ -1569,9 +1570,9 @@ The list of valid tags and their significance is available at
 L<https://www.debian.org/Bugs/Developer#tags>. The current valid tags
 are:
 
-patch, wontfix, moreinfo, unreproducible, help, newcomer, pending,
-security, upstream, confirmed, fixed, fixed-upstream,
-fixed-in-experimental, d-i, ipv6, lfs, l10n, a11y
+patch, wontfix, moreinfo, unreproducible, fixed, help, security, upstream,
+pending, d-i, confirmed, ipv6, lfs, fixed-upstream, l10n, newcomer,
+a11y, ftbfs
 
 There is also a tag for each release of Debian since "potato". Note
 that this list may be out of date, see the website for the most up to
