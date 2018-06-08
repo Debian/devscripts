@@ -1222,7 +1222,7 @@ upstream release with an automatically generated version string.
 
 Please note that a local shallow copy of the git repository is made with "B<git
 clone --bare --depth=1> ..." normally in the target directory.  B<uscan>
-generates the new upstream version with "B<git log --date=%Y%m%d
+generates the new upstream version with "B<git log --date=format:%Y%m%d
 --pretty=0.0~git%cd.%h>" on this local copy of repository as its default
 behavior.
 
