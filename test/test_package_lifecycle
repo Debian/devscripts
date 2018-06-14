@@ -357,7 +357,7 @@ EOS
 
 test_debdiff () {
   cd ${WORKDIR}/package_lifecycle
-  COMMAND='debdiff'
+  COMMAND='debdiff --no-conf'
   cat > ${WORKDIR}/package_lifecycle/debdiff.txt <<-EOS
 	File lists identical (after any substitutions)
 	

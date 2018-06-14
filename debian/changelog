@@ -11,6 +11,10 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
   * uscan:
     + Fix wrong git log command in manpage.  MR:!16
 
+  [ Simon McVittie ]
+  * tests/test_package_lifecycle:
+    + Don't load ~/.devscripts while calling debdiff.  MR: !17
+
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 23 May 2018 16:57:40 +0200
 
 devscripts (2.18.3) unstable; urgency=medium
