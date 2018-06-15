@@ -206,7 +206,7 @@ class TestCommand(object):
     def cleanup(self):
         pass
 
-    def run(self, progress, allow_stderr=False):  # pylint: disable=too-many-locals
+    def run(self, progress, options):   # pylint: disable=too-many-locals
         command = self.get_command()
         tmpdir1 = tempfile.mkdtemp(prefix='sadt.')
         tmpdir2 = tempfile.mkdtemp(prefix='sadt.')
@@ -231,7 +231,7 @@ class TestCommand(object):
         shutil.rmtree(tmpdir1)
         shutil.rmtree(tmpdir2)
         if rc == 0:
-            if stderr and not allow_stderr:
+            if stderr and not options.allow_stderr:
                 rc = -1
                 fail_reason = 'stderr non-empty'
                 progress.fail(self, fail_reason)
@@ -394,7 +394,7 @@ class TestGroup(object):
         test.prepare(progress, rw_build_tree)
         try:
             progress.start(test)
-            test.run(progress, allow_stderr=options.allow_stderr)
+            test.run(progress, options)
         finally:
             test.cleanup()
 
