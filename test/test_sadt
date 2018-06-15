@@ -36,6 +36,10 @@ test_passes() {
     assertPasses run_sadt passes
 }
 
+test_flaky() {
+    assertPasses run_sadt flaky
+}
+
 test_fails() {
     assertFails run_sadt fails
 }
