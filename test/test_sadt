@@ -40,6 +40,15 @@ test_flaky() {
     assertPasses run_sadt flaky
 }
 
+test_skippable() {
+    assertPasses run_sadt skippable
+}
+
+test_skippable_fails() {
+    assertFails run_sadt unskippable
+    assertFails run_sadt unskipped
+}
+
 test_fails() {
     assertFails run_sadt fails
 }

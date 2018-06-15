@@ -234,6 +234,12 @@ class TestCommand(object):
         rc = child.wait()
         shutil.rmtree(tmpdir1)
         shutil.rmtree(tmpdir2)
+
+        if rc == 77 and options.skippable:
+            reason = 'exit status 77 and marked as skippable'
+            progress.skip(self, reason)
+            raise Skip(self, reason, ''.join(output))
+
         fail_reason = None
 
         if rc == 0:
@@ -298,6 +304,7 @@ class TestOptions:  # pylint: disable=too-few-public-methods
         self.allow_stderr = False
         self.flaky = False
         self.rw_build_tree_needed = False
+        self.skippable = False
 
 
 class TestGroup(object):
@@ -382,6 +389,8 @@ class TestGroup(object):
                 options.allow_stderr = True
             elif r == 'flaky':
                 options.flaky = True
+            elif r == 'skippable':
+                options.skippable = True
             else:
                 raise Skip('unknown restriction: {restr}'.format(restr=r))
         return options
