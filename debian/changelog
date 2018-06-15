@@ -14,6 +14,12 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
   [ Simon McVittie ]
   * tests/test_package_lifecycle:
     + Don't load ~/.devscripts while calling debdiff.  MR: !17
+  * sadt:
+    + Implement new restrictions from autopkgtest git master.  MR: !18
+      - 'flaky': if this test fails, the failure is logged but is not
+        counted as a failure
+      - 'skippable': if this test exits 77, it counts as skipped,
+        not failed (even if it wrote to stderr)
 
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 23 May 2018 16:57:40 +0200
 
