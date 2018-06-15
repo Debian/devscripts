@@ -83,6 +83,10 @@ class Skip(Exception):
     pass
 
 
+class Flaky(Exception):
+    pass
+
+
 class Fail(Exception):
     pass
 
@@ -206,7 +210,7 @@ class TestCommand(object):
     def cleanup(self):
         pass
 
-    def run(self, progress, allow_stderr=False):  # pylint: disable=too-many-locals
+    def run(self, progress, options):   # pylint: disable=too-many-locals
         command = self.get_command()
         tmpdir1 = tempfile.mkdtemp(prefix='sadt.')
         tmpdir2 = tempfile.mkdtemp(prefix='sadt.')
@@ -230,18 +234,30 @@ class TestCommand(object):
         rc = child.wait()
         shutil.rmtree(tmpdir1)
         shutil.rmtree(tmpdir2)
+
+        if rc == 77 and options.skippable:
+            reason = 'exit status 77 and marked as skippable'
+            progress.skip(self, reason)
+            raise Skip(self, reason, ''.join(output))
+
+        fail_reason = None
+
         if rc == 0:
-            if stderr and not allow_stderr:
+            if stderr and not options.allow_stderr:
                 rc = -1
                 fail_reason = 'stderr non-empty'
-                progress.fail(self, fail_reason)
-            else:
-                progress.ok(self)
         else:
             fail_reason = 'exit code: {rc}'.format(rc=rc)
-            progress.fail(self, fail_reason)
+
         if rc != 0:
+            if options.flaky:
+                progress.skip(self, fail_reason)
+                raise Flaky(self, fail_reason, ''.join(output))
+
+            progress.fail(self, fail_reason)
             raise Fail(self, fail_reason, ''.join(output))
+
+        progress.ok(self)
 
 
 class Test(TestCommand):
@@ -281,6 +297,14 @@ class Test(TestCommand):
             os.chmod(self.path, self.original_mode)
         if self.cwd is not None:
             os.chdir(self.cwd)
+
+
+class TestOptions:  # pylint: disable=too-few-public-methods
+    def __init__(self):
+        self.allow_stderr = False
+        self.flaky = False
+        self.rw_build_tree_needed = False
+        self.skippable = False
 
 
 class TestGroup(object):
@@ -348,14 +372,12 @@ class TestGroup(object):
             self._depends_checked = True
 
     def check_restrictions(self, ignored_restrictions):
+        options = TestOptions()
         restrictions = self.restrictions - frozenset(ignored_restrictions)
 
-        class Options:  # pylint: disable=too-few-public-methods
-            rw_build_tree_needed = False
-            allow_stderr = False
         for r in restrictions:
             if r == 'rw-build-tree':
-                Options.rw_build_tree_needed = True
+                options.rw_build_tree_needed = True
             elif r == 'needs-root':
                 if os.getuid() != 0:
                     raise Skip('this test needs root privileges')
@@ -364,10 +386,14 @@ class TestGroup(object):
             elif r == 'build-needed':
                 raise Skip('source tree not built')
             elif r == 'allow-stderr':
-                Options.allow_stderr = True
+                options.allow_stderr = True
+            elif r == 'flaky':
+                options.flaky = True
+            elif r == 'skippable':
+                options.skippable = True
             else:
                 raise Skip('unknown restriction: {restr}'.format(restr=r))
-        return Options
+        return options
 
     def check(self, ignored_restrictions=()):
         options = self.check_restrictions(ignored_restrictions)
@@ -390,7 +416,7 @@ class TestGroup(object):
         test.prepare(progress, rw_build_tree)
         try:
             progress.start(test)
-            test.run(progress, allow_stderr=options.allow_stderr)
+            test.run(progress, options)
         finally:
             test.cleanup()
 
@@ -482,6 +508,7 @@ def main():
                 group.expand_depends(binary_packages, build_depends)
                 test_groups += [group]
     failures = []
+    flakes = []
     n_skip = n_ok = 0
     progress = VerboseProgress() if options.verbose else DefaultProgress()
     rw_build_tree = None
@@ -511,22 +538,31 @@ def main():
                     n_skip += 1
                 except Fail as exc:
                     failures += [(test, exc)]
+                except Flaky as exc:
+                    flakes += [(test, exc)]
                 else:
                     n_ok += 1
     finally:
         progress.close()
     n_fail = len(failures)
-    n_test = n_fail + n_skip + n_ok
+    n_flake = len(flakes)
+    n_test = n_fail + n_flake + n_skip + n_ok
     if failures:
         for name, exception in failures:
             print('=' * 70)
             print('FAIL: {test} ({reason})'.format(test=name, reason=exception.args[1]))
+    if flakes:
+        for name, exception in flakes:
+            print('=' * 70)
+            print('FLAKY: {test} ({reason})'.format(test=name, reason=exception.args[1]))
     print()
     fmt_message = ['tests={n}'.format(n=n_test)]
     if n_skip > 0:
         fmt_message += ['skipped={n}'.format(n=n_skip)]
     if n_fail > 0:
         fmt_message += ['failures={n}'.format(n=n_fail)]
+    if n_flake > 0:
+        fmt_message += ['flaky={n}'.format(n=n_flake)]
     if fmt_message:
         extra_message = ' ({msg})'.format(msg=', '.join(fmt_message))
     else:
