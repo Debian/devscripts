@@ -283,6 +283,12 @@ class Test(TestCommand):
             os.chdir(self.cwd)
 
 
+class TestOptions:  # pylint: disable=too-few-public-methods
+    def __init__(self):
+        self.allow_stderr = False
+        self.rw_build_tree_needed = False
+
+
 class TestGroup(object):
 
     def __init__(self):
@@ -348,14 +354,12 @@ class TestGroup(object):
             self._depends_checked = True
 
     def check_restrictions(self, ignored_restrictions):
+        options = TestOptions()
         restrictions = self.restrictions - frozenset(ignored_restrictions)
 
-        class Options:  # pylint: disable=too-few-public-methods
-            rw_build_tree_needed = False
-            allow_stderr = False
         for r in restrictions:
             if r == 'rw-build-tree':
-                Options.rw_build_tree_needed = True
+                options.rw_build_tree_needed = True
             elif r == 'needs-root':
                 if os.getuid() != 0:
                     raise Skip('this test needs root privileges')
@@ -364,10 +368,10 @@ class TestGroup(object):
             elif r == 'build-needed':
                 raise Skip('source tree not built')
             elif r == 'allow-stderr':
-                Options.allow_stderr = True
+                options.allow_stderr = True
             else:
                 raise Skip('unknown restriction: {restr}'.format(restr=r))
-        return Options
+        return options
 
     def check(self, ignored_restrictions=()):
         options = self.check_restrictions(ignored_restrictions)
