@@ -249,7 +249,7 @@ helperWatch() {
     cd $TMPDIR
     # start FTP server with its root at $TMPDIR/$REPOPATH
     spawnFtpServer || exit 1
-    PORT=$(cat $TMPDIR/repo/port)
+    PORT=$(cat $TMPDIR/$REPOPATH/port)
     $DEBUGECHO " ***** ftp://localhost:$PORT started showing $TMPDIR/$REPOPATH *****"
     # make web site
     $SITESCRIPT
@@ -332,7 +332,7 @@ helperWatchZip() {
     cd $TMPDIR
     # start FTP server with its root at $TMPDIR/$REPOPATH
     spawnFtpServer || exit 1
-    PORT=$(cat $TMPDIR/repo/port)
+    PORT=$(cat $TMPDIR/$REPOPATH/port)
     $DEBUGECHO " ***** ftp://localhost:$PORT started showing $TMPDIR/$REPOPATH *****"
     # make web site
     $SITESCRIPT
