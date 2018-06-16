@@ -20,6 +20,9 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
         counted as a failure.
       - 'skippable': if this test exits 77, it counts as skipped,
         not failed (even if it wrote to stderr).
+  * uscan:
+    + Handle absolute USCAN_DESTDIR correctly in git mode.
+      Closes: #895279; MR: !14
 
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 23 May 2018 16:57:40 +0200
 
