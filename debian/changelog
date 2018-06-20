@@ -24,6 +24,12 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
     + Handle absolute USCAN_DESTDIR correctly in git mode.
       Closes: #895279; MR: !14
 
+  [ Sean Whitton ]
+  * git-deborig:  MR !19
+    + When suggesting the user run git-deborig again with more arguments,
+      include all the arguments the user originally passed in the
+      suggestion.
+
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 23 May 2018 16:57:40 +0200
 
 devscripts (2.18.3) unstable; urgency=medium

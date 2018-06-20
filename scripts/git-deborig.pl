@@ -106,6 +106,7 @@ die "pwd doesn't look like a Debian source package ..\n"
   unless ( -e "debian/changelog" );
 
 # Process command line args
+my $orig_args = join(" ", map { shell_quote($_) } ( "git", "deborig", @ARGV ));
 my $overwrite = '';
 my $user_version = '';
 my $user_ref = '';
@@ -188,12 +189,12 @@ if ( $user_ref ) {      # User told us the tag/branch to archive
     # Otherwise, let the user know they can tell us which one to use
     if ( scalar @version_tags > 1 ) {
         print "tags ", join(", ", @version_tags), " all exist in this repository\n";
-        print "tell me which one you want to make an orig.tar from: git deborig TAG\n";
+        print "tell me which one you want to make an orig.tar from: $orig_args TAG\n";
         exit 1;
     } elsif ( scalar @version_tags < 1 ) {
         print "couldn't find any of the following tags: ",
           join(", ", @candidate_tags), "\n";
-        print "tell me a tag or branch head to make an orig.tar from: git deborig COMMITTISH\n";
+        print "tell me a tag or branch head to make an orig.tar from: $orig_args COMMITTISH\n";
         exit 1;
     } else {
         my $tag = shift @version_tags;
