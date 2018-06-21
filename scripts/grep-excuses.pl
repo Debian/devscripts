@@ -313,6 +313,54 @@ if ($? == -1) {
     die "$progname: wget exited $?\n";
 }
 
+sub migration_headline ($) {
+    my ($source) = @_;
+    sprintf("%s (%s to %s)", $source->{'item-name'},
+	    $source->{'old-version'}, $source->{'new-version'});
+}
+
+sub print_migration_excuse_info ($) {
+    my ($source) = @_;
+    if (exists $source->{maintainer})
+    {
+	printf("    Maintainer: $source->{maintainer}\n");
+    }
+    if (exists $source->{policy_info})
+    {
+	my %age = %{$source->{policy_info}{age}};
+	if ($age{'current-age'} >= $age{'age-requirement'})
+	{
+	    printf("    %d days old (needed %d days)\n",
+		$age{'current-age'},
+		$age{'age-requirement'});
+	}
+	else
+	{
+	    printf("    Too young, only %d of %d days old\n",
+		$age{'current-age'},
+		$age{'age-requirement'});
+	}
+    }
+    if (exists $source->{dependencies})
+    {
+	for my $blocker (@{$source->{dependencies}{'blocked-by'}}) {
+	    printf("    Depends: %s %s (not considered)\n",
+		$source->{'item-name'}, $blocker);
+	}
+	for my $after (@{$source->{dependencies}{'migrate-after'}}) {
+	    printf("    Depends: %s %s\n",
+		$source->{'item-name'}, $after);
+	}
+    }
+    for my $excuse (@{$source->{excuses}})
+    {
+	$excuse =~ s@</?[^>]+>@@g;
+	$excuse =~ s@&lt;@<@g;
+	$excuse =~ s@&gt;@>@g;
+	print "    $excuse\n";
+    }
+}
+
 my $excuses = YAML::Syck::Load($yaml);
 for my $source (@{$excuses->{sources}})
 {
@@ -320,47 +368,7 @@ for my $source (@{$excuses->{sources}})
 	|| (exists $source->{maintainer}
 	    && $source->{maintainer} =~ m/\b\Q$string\E\b/))
     {
-	print DEBUG Dumper($source);
-	printf("%s (%s to %s)\n", $source->{'item-name'},
-	    $source->{'old-version'}, $source->{'new-version'});
-	if (exists $source->{maintainer})
-	{
-	    printf("    Maintainer: $source->{maintainer}\n");
-	}
-	if (exists $source->{policy_info})
-	{
-	    my %age = %{$source->{policy_info}{age}};
-	    if ($age{'current-age'} >= $age{'age-requirement'})
-	    {
-		printf("    %d days old (needed %d days)\n",
-		    $age{'current-age'},
-		    $age{'age-requirement'});
-	    }
-	    else
-	    {
-		printf("    Too young, only %d of %d days old\n",
-		    $age{'current-age'},
-		    $age{'age-requirement'});
-	    }
-	}
-	if (exists $source->{dependencies})
-	{
-	    for my $blocker (@{$source->{dependencies}{'blocked-by'}}) {
-		printf("    Depends: %s %s (not considered)\n",
-		    $source->{'item-name'}, $blocker);
-	    }
-	    for my $after (@{$source->{dependencies}{'migrate-after'}}) {
-		printf("    Depends: %s %s\n",
-		    $source->{'item-name'}, $after);
-	    }
-	}
-	for my $excuse (@{$source->{excuses}})
-	{
-	    $excuse =~ s@</?[^>]+>@@g;
-	    $excuse =~ s@&lt;@<@g;
-	    $excuse =~ s@&gt;@>@g;
-	    print "    $excuse\n";
-	}
+	print_migration_excuse_info($source);
     }
 }
 
