@@ -356,8 +356,7 @@ for my $source (@{$excuses->{sources}})
 	}
 	for my $excuse (@{$source->{excuses}})
 	{
-	    $excuse =~ s@<a\s[^>]+>@@g;
-	    $excuse =~ s@</a>@@g;
+	    $excuse =~ s@</?[^>]+>@@g;
 	    $excuse =~ s@&lt;@<@g;
 	    $excuse =~ s@&gt;@>@g;
 	    print "    $excuse\n";
