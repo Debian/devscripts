@@ -50,6 +50,7 @@ sub have_yaml()
 
 open DEBUG, ">/dev/null" or die $!;
 my $do_autoremovals = 1;
+my $do_autopkgtests = 0;
 
 my $term_size_broken;
 
@@ -189,6 +190,7 @@ while (@ARGV and $ARGV[0] =~ /^-/) {
 	shift; next;
     }
     if ($ARGV[0] eq '--no-autoremovals') { $do_autoremovals=0; shift; next; }
+    if ($ARGV[0] eq '--autopkgtests') { $do_autopkgtests=1; shift; next; }
     if ($ARGV[0] eq '--help') { usage(); exit 0; }
     if ($ARGV[0] eq '--version') { print $version; exit 0; }
     if ($ARGV[0] =~ /^--no-?conf$/) {
@@ -319,8 +321,8 @@ sub migration_headline ($) {
 	    $source->{'old-version'}, $source->{'new-version'});
 }
 
-sub print_migration_excuse_info ($) {
-    my ($source) = @_;
+sub print_migration_excuse_info ($;$) {
+    my ($source, $summary) = @_;
     if (exists $source->{maintainer})
     {
 	printf("    Maintainer: $source->{maintainer}\n");
@@ -354,6 +356,7 @@ sub print_migration_excuse_info ($) {
     }
     for my $excuse (@{$source->{excuses}})
     {
+	next if $summary and $excuse =~ m/^autopkgtest /;
 	$excuse =~ s@</?[^>]+>@@g;
 	$excuse =~ s@&lt;@<@g;
 	$excuse =~ s@&gt;@>@g;
@@ -368,7 +371,53 @@ for my $source (@{$excuses->{sources}})
 	|| (exists $source->{maintainer}
 	    && $source->{maintainer} =~ m/\b\Q$string\E\b/))
     {
+	print migration_headline($source), "\n";
 	print_migration_excuse_info($source);
+    }
+}
+
+if ($do_autopkgtests)
+{
+    require DBI;
+    my $dbh = DBI->connect('DBI:Pg:dbname=udd;host=udd-mirror.debian.net',
+			   'udd-mirror','udd-mirror',
+			   { RaiseError => 1 });
+    # https://www.postgresql.org/docs/9.5/static/functions-matching.html
+    my $regexp = $string;
+    $regexp =~ s{[^0-9a-z]}{\\$&}ig;
+    $regexp = "\\y$regexp\\y";
+    my $pkgs =
+	$dbh->selectall_arrayref('select distinct source from sources where'.
+				 ' maintainer_name ~ ? or'.
+				 ' maintainer_email ~ ?',
+				 { },
+				 $regexp, $regexp);
+    my %wantpkgs;
+    $wantpkgs{$_->[0]}++ foreach @$pkgs;
+    use Data::Dumper;
+
+    for my $source (@{$excuses->{sources}})
+    {
+	my $autopkgtests = $source->{'policy_info'}{'autopkgtest'};
+	foreach my $k (sort keys %$autopkgtests)
+	{
+	    $k =~ m{/} or next;
+	    my ($testpkg, $testvsn) = ($`,$');
+	    $wantpkgs{$testpkg} or next;
+	    my $arches = $autopkgtests->{$k};
+	    foreach my $arch (sort keys %$arches)
+	    {
+		my $info = $arches->{$arch};
+		next if $info->[0] eq 'PASS';
+		printf "\nautopkgtest regression\n";
+		printf "    in %s (%s) on %s\n", $testpkg, $testvsn, $arch;
+		printf "    due to %s\n", migration_headline($source);
+		print "test info\n";
+		print "    $_\n" foreach @$info;
+		print "migration excuses for $source->{'item-name'}\n";
+		print_migration_excuse_info($source,1);
+	    }
+	}
     }
 }
 
