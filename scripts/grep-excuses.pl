@@ -41,7 +41,7 @@ END
 
 open DEBUG, ">/dev/null" or die $!;
 my $do_autoremovals = 1;
-my $do_autopkgtests = 0;
+my $do_autopkgtests;
 
 my $term_size_broken;
 
@@ -137,6 +137,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
     my %config_vars = (
 		       'GREP_EXCUSES_MAINTAINER' => '',
+		       'GREP_EXCUSES_AUTOPKGTESTS' => 0,
 		       );
     my %config_default = %config_vars;
 
@@ -161,6 +162,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     chomp $modified_conf_msg;
 
     $string = $config_vars{'GREP_EXCUSES_MAINTAINER'};
+    $do_autopkgtests = $config_vars{'GREP_EXCUSES_AUTOPKGTESTS'};
 }
 
 while (@ARGV and $ARGV[0] =~ /^-/) {
@@ -182,6 +184,7 @@ while (@ARGV and $ARGV[0] =~ /^-/) {
     }
     if ($ARGV[0] eq '--no-autoremovals') { $do_autoremovals=0; shift; next; }
     if ($ARGV[0] eq '--autopkgtests') { $do_autopkgtests=1; shift; next; }
+    if ($ARGV[0] eq '--no-autopkgtests') { $do_autopkgtests=0; shift; next; }
     if ($ARGV[0] eq '--help') { usage(); exit 0; }
     if ($ARGV[0] eq '--version') { print $version; exit 0; }
     if ($ARGV[0] =~ /^--no-?conf$/) {
