@@ -367,7 +367,9 @@ for my $source (@{$excuses->{sources}})
 
 if ($do_autopkgtests)
 {
-    require DBI;
+    flush STDOUT or die $!;
+    require_friendly qw(DBI);
+    require_friendly qw(DBD::Pg);
     my $dbh = DBI->connect('DBI:Pg:dbname=udd;host=udd-mirror.debian.net',
 			   'udd-mirror','udd-mirror',
 			   { RaiseError => 1 });
