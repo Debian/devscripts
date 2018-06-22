@@ -394,7 +394,6 @@ if ($do_autopkgtests)
 				 $regexp, $regexp);
     my %wantpkgs;
     $wantpkgs{$_->[0]}++ foreach @$pkgs;
-    use Data::Dumper;
 
     for my $source (@{$excuses->{sources}})
     {
