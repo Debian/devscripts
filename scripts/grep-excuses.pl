@@ -25,25 +25,16 @@ use Data::Dumper;
 use File::Basename;
 use File::HomeDir;
 
-my $yaml_broken;
-sub have_yaml()
-{
-    return ($yaml_broken ? 0 : 1) if defined $yaml_broken;
-
-    eval {
-	require YAML::Syck;
-    };
-
-    if ($@) {
-	if ($@ =~ m/^Can't locate YAML/) {
-	    $yaml_broken = 'the libyaml-syck-perl package is not installed';
-	} else {
-	    $yaml_broken = "couldn't load YAML::Syck $@";
-	}
-    } else {
-	$yaml_broken = '';
-    }
-    return $yaml_broken ? 0 : 1;
+sub require_friendly ($) {
+    my ($mod) = @_;
+    return if eval "require $mod;";
+    my $pkg = lc $mod;
+    $pkg =~ s/::/-/g;
+    $pkg = "lib$pkg-perl";
+    die <<END;
+$@
+grep-excuses: We need $mod.  Try installing $pkg.
+END
 }
 
 # Needed for --wipnity option
@@ -302,9 +293,7 @@ sub grep_autoremovals () {
 
 grep_autoremovals() if $do_autoremovals;
 
-if (!have_yaml()) {
-    die "$progname: Unable to parse excuses: $yaml_broken\n";
-}
+require_friendly qw(YAML::Syck);
 
 print DEBUG "Fetching $url\n";
 
