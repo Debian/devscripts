@@ -27,6 +27,14 @@ Show a brief usage message.
 .B \-\-version
 Show version and copyright information.
 .TP
+.B \-\-autopkgtests
+Investigate and show autopkgtest (ci.debian.net) failures
+in your packages
+but apparently caused by new versions of other packages
+trying to migrate.
+.RB ( \-\-no-autopkgtests
+can be used to override GREP_EXCUSES_AUTOPKGTESTS.)
+.TP
 .B \-\-no\-autoremovals
 Investigate and show only testing propagation excuses, not autoremovals.
 .TP
@@ -42,6 +50,11 @@ purpose.  The currently recognised variable is:
 .B GREP_EXCUSES_MAINTAINER
 The default maintainer, email or package to grep for if none is
 specified on the command line.
+.TP
+.B GREP_EXCUSES_AUTOPKGTESTS
+Boolean: whether to show autopkgtest failures in other packages.
+See
+.BR \-\-autopkgtests .
 .SH "SEE ALSO"
 .BR devscripts.conf (5)
 .SH AUTHOR
