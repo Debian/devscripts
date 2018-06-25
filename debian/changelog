@@ -30,6 +30,10 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
       include all the arguments the user originally passed in the
       suggestion.
 
+  [ James McCoy ]
+  * grep-excuses:
+    + Strip all HTML tags, not just anchors, from excuses.  MR !20
+
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 23 May 2018 16:57:40 +0200
 
 devscripts (2.18.3) unstable; urgency=medium
