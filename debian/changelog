@@ -34,6 +34,10 @@ devscripts (2.17.6+deb9u2) UNRELEASED; urgency=medium
     + Sort shlibs files before comparing. The order of entries is not
       significant.
 
+  [ Lev Lazinskiy ]
+  * uscan:
+    + Handle --copy argument.  Closes: #895209; MR !22
+
  -- Mattia Rizzolo <mattia@debian.org>  Sat, 30 Sep 2017 22:19:56 +0200
 
 devscripts (2.17.6+deb9u1) stretch; urgency=medium
