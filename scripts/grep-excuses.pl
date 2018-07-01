@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-# vim: set shiftwidth=4 tabstop=8 noexpandtab:
 # Grep debian testing excuses file.
 #
 # Copyright 2002 Joey Hess <joeyh@debian.org>
@@ -298,8 +297,6 @@ sub grep_autoremovals () {
 grep_autoremovals() if $do_autoremovals;
 
 require_friendly qw(YAML::Syck);
-no warnings 'once';
-$YAML::Syck::LoadBlessed = 0;
 
 print DEBUG "Fetching $url\n";
 
