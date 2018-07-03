@@ -6,6 +6,10 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
       Dpkg::Version::is_valid().  Closes: #900703
   * bts:
     + Add the new 'ftbfs' tag to the list of known tags.  Closes: #900963
+  * grep-excuses:
+    + Avoid unintended blessing during YAML loading.
+      Thanks to Ansgar Burchardt <ansgar@debian.org> for reporting and
+      providing a patch.  Closes: #902409; CVE-2018-13043
 
   [ Shengjing Zhu ]
   * uscan:

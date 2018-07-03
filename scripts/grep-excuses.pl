@@ -298,6 +298,8 @@ sub grep_autoremovals () {
 grep_autoremovals() if $do_autoremovals;
 
 require_friendly qw(YAML::Syck);
+no warnings 'once';
+$YAML::Syck::LoadBlessed = 0;
 
 print DEBUG "Fetching $url\n";
 
