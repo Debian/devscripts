@@ -2037,6 +2037,7 @@ Options:
 Options passed on to mk-origtargz:
     --symlink      Create a correctly named symlink to downloaded file (default)
     --rename       Rename instead of symlinking
+    --copy         Copy instead of symlinking
     --repack       Repack downloaded archives to change compression
     --compression [ gzip | bzip2 | lzma | xz ]
                    When the upstream sources are repacked, use compression COMP
@@ -2218,6 +2219,7 @@ GetOptions("help" => \$opt_h,
 	   "timeout=i" => \$opt_timeout,
 	   "symlink!" => sub { $opt_symlink = $_[1] ? 'symlink' : 'no'; },
 	   "rename" => sub { $opt_symlink = 'rename'; },
+	   "copy" => sub { $opt_symlink = 'copy'; },
 	   "repack" => sub { $opt_repack = 1; },
 	   "log" => \$opt_log,
 	   "compression=s" => \$opt_compression,

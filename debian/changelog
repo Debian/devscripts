@@ -39,6 +39,10 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
     + Add --autopkgtest option to show autopkgtest failures in the target
       package which are caused by new versions of other packages.  MR !21
 
+  [ Lev Lazinskiy ]
+  * uscan:
+    + Handle --copy argument.  Closes: #895209; MR !22
+
   [ Translation updates ]
   * French, thanks to jean-pierre giraud.  Closes: #902815
 
