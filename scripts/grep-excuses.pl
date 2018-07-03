@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# vim: set shiftwidth=4 tabstop=8 noexpandtab:
 # Grep debian testing excuses file.
 #
 # Copyright 2002 Joey Hess <joeyh@debian.org>
