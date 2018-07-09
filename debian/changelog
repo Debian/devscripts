@@ -10,6 +10,8 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
     + Avoid unintended blessing during YAML loading.
       Thanks to Ansgar Burchardt <ansgar@debian.org> for reporting and
       providing a patch.  Closes: #902409; CVE-2018-13043
+  * uscan:
+    + Remove wrong information about GitHub releases.  Closes: #902842
 
   [ Shengjing Zhu ]
   * uscan:

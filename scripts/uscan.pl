@@ -1158,9 +1158,6 @@ B<filenamemangle>:
       https://github.com/<user>/<project>/tags \
       (?:.*?/)?v?(\d[\d.]*)\.tar\.gz debian uupdate
 
-Note that the "tags" downloads do not include Git submodules in the .tar.gz
-whilst the "releases" do.
-
 =head2 PyPI
 
 For PyPI based projects, pypi.debian.net runs a redirector which allows a
