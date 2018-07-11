@@ -26,6 +26,13 @@ echo '======================================================================='
 
 test_dir=$(readlink -f "${0%/*}")
 
+ARCHITECTURE="$(dpkg-architecture -qDEB_HOST_ARCH)"
+if [ "$ARCHITECTURE" = "hurd-i386" ]; then
+    # hurd-i386 lacks sem_open() which is required by the python ftp server
+    echo "This test is not supported on $ARCHITECTURE, skipping"
+    exit 0
+fi
+
 # Operation mode
 if test "$1" = --installed; then
     COMMAND="uscan --no-conf"
