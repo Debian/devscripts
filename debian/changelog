@@ -52,6 +52,11 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
   [ Translation updates ]
   * French, thanks to jean-pierre giraud.  Closes: #902815
 
+  [ Kees Cook ]
+  * hardening-check:
+    + Drain both stdout/stderr while waiting for readelf to exit to prevent
+      readelf from getting blocked on a full pipe.  (Closes: #903482)
+
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 23 May 2018 16:57:40 +0200
 
 devscripts (2.18.3) unstable; urgency=medium
