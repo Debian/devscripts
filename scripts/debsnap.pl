@@ -226,17 +226,17 @@ usage(1) unless @ARGV;
 $package = shift;
 if (@ARGV) {
     my $version = shift;
-    $pkgversion = Dpkg::Version->new($version, check => 1);
-    fatal "Invalid version '$version'" unless $pkgversion->is_valid;
+    $pkgversion = Dpkg::Version->new($version);
+    fatal "Invalid version '$version'" unless $pkgversion->is_valid();
 }
 
 if (defined $opt{first}) {
-    $firstversion = Dpkg::Version->new($opt{first}, check => 1);
+    $firstversion = Dpkg::Version->new($opt{first});
     fatal "Invalid version '$opt{first}'" unless $firstversion->is_valid();
 }
 
 if (defined $opt{last}) {
-    $lastversion = Dpkg::Version->new($opt{last}, check => 1);
+    $lastversion = Dpkg::Version->new($opt{last});
     fatal "Invalid version '$opt{last}'" unless $lastversion->is_valid();
 }
 

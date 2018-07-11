@@ -39,6 +39,9 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
   [ James McCoy ]
   * grep-excuses:
     + Strip all HTML tags, not just anchors, from excuses.  MR !20
+  * debsnap:
+    + Disable explicit validity checking in Dpkg::Version constructor so
+      there's an actual object to call is_valid() on.  (Closes: #903479)
 
   [ Ian Jackson ]
   * grep-excuses:
