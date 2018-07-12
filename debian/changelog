@@ -60,6 +60,9 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
     + Drain both stdout/stderr while waiting for readelf to exit to prevent
       readelf from getting blocked on a full pipe.  (Closes: #903482)
 
+  [ Christoph Berg ]
+  * namecheck: Drop code.google.com, it's down.
+
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 23 May 2018 16:57:40 +0200
 
 devscripts (2.18.3) unstable; urgency=medium
