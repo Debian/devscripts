@@ -63,6 +63,16 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
   [ Christoph Berg ]
   * namecheck: Drop code.google.com, it's down.
 
+  [ Adam D. Barratt ]
+  * bts:
+    + Support fetching bugs from debbugs.gnu.org (Closes: #904432)
+      - force CGI URL to be "/cgi/" rather than "/cgi-bin/" when using
+        the gnu.org server
+      - match both "/cgi/" and "/cgi-bin/" when rewriting URLs in cache
+        files
+      - allow links to mbox files to contain additional HTML attributes
+    + Pre-emptively support HTTPS URLs when parsing release-critical pages
+
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 23 May 2018 16:57:40 +0200
 
 devscripts (2.18.3) unstable; urgency=medium
