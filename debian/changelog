@@ -72,6 +72,7 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
         files
       - allow links to mbox files to contain additional HTML attributes
     + Pre-emptively support HTTPS URLs when parsing release-critical pages
+    + Really use HTTPS by default for bugs.debian.org.
 
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 23 May 2018 16:57:40 +0200
 
