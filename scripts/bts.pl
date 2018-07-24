@@ -3196,7 +3196,7 @@ sub download_attachments {
     # occurrence of either "[<a " or plain "<a ", preserving any "[".
     my @data = split /(?:(?=\[<[Aa]\s)|(?<!\[)(?=<[Aa]\s))/, $toppage;
     foreach (@data) {
-	next unless m%<a(?: class=\".*?\")? href="(?:/cgi-bin/)?((bugreport\.cgi[^\"]+)">|(version\.cgi[^\"]+)"><img[^>]* src="(?:/cgi-bin/)?([^\"]+)">|(version\.cgi[^\"]+)">)%i;
+	next unless m%<a(?: class=\".*?\")? href="(?:/cgi(?:-bin)?/)?((bugreport\.cgi[^\"]+)">|(version\.cgi[^\"]+)"><img[^>]* src="(?:/cgi(?:-bin)?/)?([^\"]+)">|(version\.cgi[^\"]+)">)%i;
 
 	my $ref = $5;
 	$ref = $4 if not defined $ref;
@@ -3356,8 +3356,8 @@ sub mangle_cache_file {
     if ($thing =~ /^release-critical/) {
 	@data = split /(?=<[Aa])/, $data;
 	foreach (@data) {
-	    s%<a href="(http://$btsserver/cgi-bin/bugreport\.cgi.*bug=(\d+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$1">online</a>)%i;
-	    s%<a href="(http://$btsserver/cgi-bin/pkgreport\.cgi.*pkg=([^\"&;]+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$1">online</a>)%i;
+	    s%<a href="(http://$btsserver/cgi(?:-bin)?/bugreport\.cgi.*bug=(\d+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$1">online</a>)%i;
+	    s%<a href="(http://$btsserver/cgi(?:-bin)?/pkgreport\.cgi.*pkg=([^\"&;]+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$1">online</a>)%i;
 	    # References to other bug lists on bugs.d.o/release-critical
 	    if (m%<a href="((?:debian|other)[-a-z/]+\.html)"%i) {
 		my $ref = 'release-critical/'.$1;
@@ -3374,51 +3374,51 @@ sub mangle_cache_file {
 	# occurrence of either "[<a " or plain "<a ", preserving any "[".
 	@data = split /(?:(?=\[<[Aa]\s)|(?<!\[)(?=<[Aa]\s))/, $data;
 	foreach (@data) {
-	    if (m%<a(?: class=\".*?\")? href=\"(?:/cgi-bin/)?bugreport\.cgi[^\?]*\?.*?;?bug=(\d+)%i) {
+	    if (m%<a(?: class=\".*?\")? href=\"(?:/cgi(?:-bin)?/)?bugreport\.cgi[^\?]*\?.*?;?bug=(\d+)%i) {
 		my $bug = $1;
 		my ($msg, $filename) = href_to_filename($_);
 		if ($bug eq $thing and defined $msg) {
 		    if ($fullmode or
 			(! $fullmode and exists $$bug2filename{$msg})) {
-			s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(bugreport\.cgi[^\"]*)">(.+?)</a>%<a$1 href="$filename">$3</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+			s%<a((?: class=\".*?\")?) href="(?:/cgi(?:-bin)?/)?(bugreport\.cgi[^\"]*)">(.+?)</a>%<a$1 href="$filename">$3</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
 		    } else {
-			s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(bugreport\.cgi[^\"]*)">(.+?)</a>%$3 (<a$1 href="$btscgiurl$2">online</a>)%i;
+			s%<a((?: class=\".*?\")?) href="(?:/cgi(?:-bin)?/)?(bugreport\.cgi[^\"]*)">(.+?)</a>%$3 (<a$1 href="$btscgiurl$2">online</a>)%i;
 		    }
 		} else {
-		    s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(bugreport\.cgi[^\?]*\?.*?bug=(\d+))"(.*?)>(.+?)</a>%<a$1 href="$3.html"$4>$5</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+		    s%<a((?: class=\".*?\")?) href="(?:/cgi(?:-bin)?/)?(bugreport\.cgi[^\?]*\?.*?bug=(\d+))"(.*?)>(.+?)</a>%<a$1 href="$3.html"$4>$5</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
 		}
 	    } else {
-		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(pkgreport\.cgi\?(?:pkg|maint)=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%gi;
-		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(pkgreport\.cgi\?src=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="src_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
-		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(pkgreport\.cgi\?submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="from_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
-		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(pkgreport\.cgi\?.*?;?archive=([^\"&;]+);submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="from_$4_3Barchive_3D$3.html">$5</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
-		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(pkgreport\.cgi\?.*?;?package=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%gi;
-		s%<a((?: class=\".*?\")?) href="(?:/cgi-bin/)?(bugspam\.cgi[^\"]+)">%<a$1 href="$btscgiurl$2">%i;
+		s%<a((?: class=\".*?\")?) href="(?:/cgi(?:-bin)?/)?(pkgreport\.cgi\?(?:pkg|maint)=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%gi;
+		s%<a((?: class=\".*?\")?) href="(?:/cgi(?:-bin)?/)?(pkgreport\.cgi\?src=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="src_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+		s%<a((?: class=\".*?\")?) href="(?:/cgi(?:-bin)?/)?(pkgreport\.cgi\?submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="from_$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+		s%<a((?: class=\".*?\")?) href="(?:/cgi(?:-bin)?/)?(pkgreport\.cgi\?.*?;?archive=([^\"&;]+);submitter=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="from_$4_3Barchive_3D$3.html">$5</a> (<a$1 href="$btscgiurl$2">online</a>)%i;
+		s%<a((?: class=\".*?\")?) href="(?:/cgi(?:-bin)?/)?(pkgreport\.cgi\?.*?;?package=([^\"&;]+)[^\"]*)">(.+?)</a>%<a$1 href="$3.html">$4</a> (<a$1 href="$btscgiurl$2">online</a>)%gi;
+		s%<a((?: class=\".*?\")?) href="(?:/cgi(?:-bin)?/)?(bugspam\.cgi[^\"]+)">%<a$1 href="$btscgiurl$2">%i;
 		s%<a((?: class=\".*?\")?) href="/([0-9]+?)">(.+?)</a>%<a$1 href="$2.html">$3</a> (<a$1 href="$btsurl$2">online</a>)%i;
 
 		# Version graphs
 		# - remove 'package=' and move the package to the front
-		s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?)([^\"]+)package=([^;\"]+)([^\"]+\"|\")>%$1$3;$2$4>%gi;
+		s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi(?:-bin)?/)?version\.cgi\?)([^\"]+)package=([^;\"]+)([^\"]+\"|\")>%$1$3;$2$4>%gi;
 		# - replace 'found=' with '.f.' and 'fixed=' with '.fx.'
-		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?)(.*?;)found=([^\"]+)\">%$1$2.f.$3">%i;
-		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?)(.*?;)fixed=([^\"]+)\">%$1$2.fx.$3">%i;
-		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?found=)([^\"]+)\">%$1.f.$2">%i;
-		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?fixed=)([^\"]+)\">%$1.fx.$2">%i;
+		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi(?:-bin)?/)?version\.cgi\?)(.*?;)found=([^\"]+)\">%$1$2.f.$3">%i;
+		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi(?:-bin)?/)?version\.cgi\?)(.*?;)fixed=([^\"]+)\">%$1$2.fx.$3">%i;
+		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi(?:-bin)?/)?version\.cgi\?found=)([^\"]+)\">%$1.f.$2">%i;
+		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi(?:-bin)?/)?version\.cgi\?fixed=)([^\"]+)\">%$1.fx.$2">%i;
 		# - replace '%2F' or '%2C' (a URL-encoded / or ,) with '.'
-		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?[^\%]*)\%2[FC]([^\"]+)\">%$1.$2">%gi;
+		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi(?:-bin)?/)?version\.cgi\?[^\%]*)\%2[FC]([^\"]+)\">%$1.$2">%gi;
 		# - display collapsed graph images at 25%
 		s%(<img[^>]* src=\"[^\"]+);collapse=1([^\"]+)\">%$1$2.co" width="25\%" height="25\%">%gi;
 		#   - and link to the collapsed graph
 		s%(<a[^>]* href=\"[^\"]+);collapse=1([^\"]+)\">%$1$2.co">%gi;
 		# - remove any other parameters
-		1 while s%((?:<img[^>]* src|<a[^>]* href)=\"(?:/cgi-bin/)?version\.cgi\?[^\"]+);(?:\w+=\d+)([^>]+)\>%$1$2>%gi;
+		1 while s%((?:<img[^>]* src|<a[^>]* href)=\"(?:/cgi(?:-bin)?/)?version\.cgi\?[^\"]+);(?:\w+=\d+)([^>]+)\>%$1$2>%gi;
 		# - remove any +s (encoded spaces)
-		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?[^\+]*)\+([^\"]+)\">%$1$2">%gi;
+		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi(?:-bin)?/)?version\.cgi\?[^\+]*)\+([^\"]+)\">%$1$2">%gi;
 		# - remove trailing ";" and ";." from previous substitutions
-		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?[^\"]+);\.(.*?)>%$1.$2>%gi;
-		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?[^\"]+);\">%$1">%gi;
+		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi(?:-bin)?/)?version\.cgi\?[^\"]+);\.(.*?)>%$1.$2>%gi;
+		1 while s%((?:<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi(?:-bin)?/)?version\.cgi\?[^\"]+);\">%$1">%gi;
 		# - final reference should be $package.$versions[.co].png
-		s%(<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi-bin/)?version\.cgi\?([^\"]+)(\"[^>]*)>%$1$2.png$3>%gi;
+		s%(<img[^>]* src=\"|<a[^>]* href=\")(?:/cgi(?:-bin)?/)?version\.cgi\?([^\"]+)(\"[^>]*)>%$1$2.png$3>%gi;
 	    }
 	}
     }
@@ -3552,7 +3552,7 @@ sub href_to_filename {
     my $href = $_[0];
     my ($msg, $filename);
 
-    if ($href =~ m%\[<a(?: class=\".*?\")? href="((?:/cgi-bin/)?bugreport\.cgi([^\?]*)\?[^\"]*)">.*?\(([^,]*), .*?\)\]%) {
+    if ($href =~ m%\[<a(?: class=\".*?\")? href="((?:/cgi(?:-bin)?/)?bugreport\.cgi([^\?]*)\?[^\"]*)">.*?\(([^,]*), .*?\)\]%) {
 	# this looks like an attachment; $4 should give the MIME-type
 	my $uri = URI->new($1);
 	my $urlfilename = $2;
@@ -3583,7 +3583,7 @@ sub href_to_filename {
 	    $filename = "$bug/$msg$fileext";
 	}
     }
-    elsif ($href =~ m%<a(?: class=\".*?\")? href="((?:/cgi-bin/)?bugreport\.cgi([^\?]*)\?([^"]*))".*?>%) {
+    elsif ($href =~ m%<a(?: class=\".*?\")? href="((?:/cgi(?:-bin)?/)?bugreport\.cgi([^\?]*)\?([^"]*))".*?>%) {
 	my $uri = URI->new($1);
 	my $urlfilename = $2;
 	my $bug = $uri->query_param_delete('bug');
@@ -3630,7 +3630,7 @@ sub href_to_filename {
 	    return undef;
 	}
     }
-    elsif ($href =~ m%<(?:a[^>]* href|img [^>]* src)="((?:/cgi-bin/)?version\.cgi\?[^"]+)"[^>]*>%i) {
+    elsif ($href =~ m%<(?:a[^>]* href|img [^>]* src)="((?:/cgi(?:-bin)?/)?version\.cgi\?[^"]+)"[^>]*>%i) {
 	my $uri = URI->new($1);
 	my %params = $uri->query_form();
 
@@ -3738,7 +3738,7 @@ sub browse {
 		open (OUT_LIVE, ">&", $fh)
 		    or die "$progname: writing to temporary file: $!\n";
 		# Correct relative urls to point to the bts.
-		$live =~ s%\shref="(?:/cgi-bin/)?(\w+\.cgi)% href="$btscgiurl$1%g;
+		$live =~ s%\shref="(?:/cgi(?:-bin)?/)?(\w+\.cgi)% href="$btscgiurl$1%g;
 		print OUT_LIVE $live;
 		# Some browsers don't like unseekable filehandles,
 		# so use filename
