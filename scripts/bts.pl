@@ -731,6 +731,9 @@ if ($btsserver =~ m%^https?://(.*)/?$%) {
 }
 $btsurl =~ s%//$%/%;
 my $btscgiurl=$btsurl . 'cgi-bin/';
+if ($btsserver =~ /^debbugs\.gnu\.org/) {
+    $btscgiurl=$btsurl . 'cgi/';
+}
 my $btscgipkgurl=$btscgiurl . 'pkgreport.cgi';
 my $btscgibugurl=$btscgiurl . 'bugreport.cgi';
 my $btscgispamurl=$btscgiurl . 'bugspam.cgi';
