@@ -510,7 +510,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 		       'BTS_SUPPRESS_ACKS' => 'no',
 		       'BTS_INTERACTIVE' => 'no',
 		       'BTS_DEFAULT_CC' => '',
-		       'BTS_SERVER' => 'bugs.debian.org',
+		       'BTS_SERVER' =>  $btsserver,
 		       );
     my %config_default = %config_vars;
 
