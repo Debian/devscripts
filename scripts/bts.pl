@@ -3356,8 +3356,8 @@ sub mangle_cache_file {
     if ($thing =~ /^release-critical/) {
 	@data = split /(?=<[Aa])/, $data;
 	foreach (@data) {
-	    s%<a href="(http://$btsserver/cgi(?:-bin)?/bugreport\.cgi.*bug=(\d+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$1">online</a>)%i;
-	    s%<a href="(http://$btsserver/cgi(?:-bin)?/pkgreport\.cgi.*pkg=([^\"&;]+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$1">online</a>)%i;
+	    s%<a href="(https?://$btsserver/cgi(?:-bin)?/bugreport\.cgi.*bug=(\d+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$1">online</a>)%i;
+	    s%<a href="(https?://$btsserver/cgi(?:-bin)?/pkgreport\.cgi.*pkg=([^\"&;]+)[^\"]*)">(.+?)</a>%<a href="$2.html">$3</a> (<a href="$1">online</a>)%i;
 	    # References to other bug lists on bugs.d.o/release-critical
 	    if (m%<a href="((?:debian|other)[-a-z/]+\.html)"%i) {
 		my $ref = 'release-critical/'.$1;
@@ -3365,7 +3365,7 @@ sub mangle_cache_file {
 		s%<a href="((?:debian|other)[-a-z/]+\.html)">(.+?)</a>%<a href="$ref">$2</a> (<a href="${btsurl}release-critical/$1">online</a>)%i;
 	    }
 	    # Maintainer email address - YUCK!!
-	    s%<a href="(http://$btsserver/([^\"?]*\@[^\"?]*))">(.+?)</a>&gt;%<a href="$2.html">$3</a>&gt; (<a href="$1">online</a>)%i;
+	    s%<a href="(https?://$btsserver/([^\"?]*\@[^\"?]*))">(.+?)</a>&gt;%<a href="$2.html">$3</a>&gt; (<a href="$1">online</a>)%i;
 	    # Graph - we don't download
 	    s%<img src="graph.png" alt="Graph of RC bugs">%<img src="${btsurl}release-critical/graph.png" alt="Graph of RC bugs (online)">%
 	}
