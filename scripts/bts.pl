@@ -3196,7 +3196,7 @@ sub download_attachments {
     # occurrence of either "[<a " or plain "<a ", preserving any "[".
     my @data = split /(?:(?=\[<[Aa]\s)|(?<!\[)(?=<[Aa]\s))/, $toppage;
     foreach (@data) {
-	next unless m%<a(?: class=\".*?\")? href="(?:/cgi(?:-bin)?/)?((bugreport\.cgi[^\"]+)">|(version\.cgi[^\"]+)"><img[^>]* src="(?:/cgi(?:-bin)?/)?([^\"]+)">|(version\.cgi[^\"]+)">)%i;
+	next unless m%<a(?: class=\".*?\")? href="(?:/cgi(?:-bin)?/)?((bugreport\.cgi[^\"]+)"(?: .*?)?>|(version\.cgi[^\"]+)"><img[^>]* src="(?:/cgi(?:-bin)?/)?([^\"]+)">|(version\.cgi[^\"]+)">)%i;
 
 	my $ref = $5;
 	$ref = $4 if not defined $ref;
