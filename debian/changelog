@@ -65,13 +65,13 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
 
   [ Adam D. Barratt ]
   * bts:
-    + Support fetching bugs from debbugs.gnu.org (Closes: #904432)
-      - force CGI URL to be "/cgi/" rather than "/cgi-bin/" when using
-        the gnu.org server
-      - match both "/cgi/" and "/cgi-bin/" when rewriting URLs in cache
-        files
-      - allow links to mbox files to contain additional HTML attributes
-    + Pre-emptively support HTTPS URLs when parsing release-critical pages
+    + Support fetching bugs from debbugs.gnu.org: (Closes: #904432)
+      - Force CGI URL to be "/cgi/" rather than "/cgi-bin/" when using
+        the gnu.org server.
+      - Match both "/cgi/" and "/cgi-bin/" when rewriting URLs in cache
+        files.
+      - Allow links to mbox files to contain additional HTML attributes.
+    + Pre-emptively support HTTPS URLs when parsing release-critical pages.
     + Really use HTTPS by default for bugs.debian.org.
 
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 23 May 2018 16:57:40 +0200
