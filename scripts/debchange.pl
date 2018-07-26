@@ -622,7 +622,7 @@ my $latest_dist = '9';
 # dist guessed from backports, SRU, security uploads...
 my $guessed_dist = '';
 my $CHANGES = '';
-# Changelog urgency, possibly propogated to NEWS files
+# Changelog urgency, possibly propagated to NEWS files
 my $CL_URGENCY = '';
 
 if (! $opt_create || ($opt_create && $opt_news)) {
@@ -758,7 +758,7 @@ if (exists $env{'UBUMAIL'} and $env{'UBUMAIL'} =~ /^(.*)\s+<(.*)>$/) {
     $env{'UBUMAIL'} = $2;
 }
 
-# Now use the gleaned values to detemine our MAINTAINER and EMAIL values
+# Now use the gleaned values to determine our MAINTAINER and EMAIL values
 if (! $opt_m and ! $opt_M) {
     if (exists $env{'DEBFULLNAME'}) {
 	$MAINTAINER = $env{'DEBFULLNAME'};

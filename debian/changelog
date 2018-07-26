@@ -1808,7 +1808,7 @@ devscripts (2.14.5) unstable; urgency=medium
 
   * debchange:
     + Verify $opt_vendor is defined before trying to use it to avoid a warning
-      about an unitialized variable.
+      about an uninitialized variable.
     + utf-8 decode the maintainer name when reading it from the changelog.
       (Closes: #750855)
   * uscan: Use HEAD instead of GET to check for possible GPG signature URLs.
@@ -1969,7 +1969,7 @@ devscripts (2.13.9) unstable; urgency=low
     + Fix handling of 'dirname' exclusions, so 'dirname/*' isn't required.
 
   [ Salvatore Bonaccorso ]
-  * uscan: Fix unitialized value warning when copyright is not in
+  * uscan: Fix uninitialized value warning when copyright is not in
     copyright-format 1.0.  (Closes: #732807)
 
  -- James McCoy <jamessan@debian.org>  Mon, 23 Dec 2013 15:28:45 -0500
@@ -2182,7 +2182,7 @@ devscripts (2.13.2) unstable; urgency=low
     Maintainer access control lists.  (Closes: #688830)
 
   [ David Prévot ]
-  * Formating manpages review.  (Closes: #707299)
+  * Formatting manpages review.  (Closes: #707299)
 
   [ Translation updates ]
   * French, David Prévot.
@@ -3678,7 +3678,7 @@ devscripts (2.10.53) unstable; urgency=low
     an 'Upload to $DIST' line and sets the distribution accordingly, when
     the --release parameter is used. (Closes: #515346)
   * debi:
-    + Implement a --with-depends switch to install depencies of the
+    + Implement a --with-depends switch to install dependencies of the
       package together with the package
       (Closes: #511061)
     + Implement a --tool switch to choose the tool for installing
@@ -4207,7 +4207,7 @@ devscripts (2.10.39) unstable; urgency=low
   * bts:
     + Allow an explicit HELO to be specified when connecting via SMTP.
     + If a HELO is not specified then attempt to use the content of
-      /etc/mailname instread.
+      /etc/mailname instead.
     + Expand on the definition of "claim" in the manpage. (Closes: #501142)
     + Trim anything that doesn't look like an e-mail address from $DEBEMAIL or
       $EMAIL before using it for un/claim or un/subscribe. (Closes: #501162)
@@ -4921,7 +4921,7 @@ devscripts (2.10.21) unstable; urgency=low
       http://darcs.d.o/~foo/bar/baz against user foo
     + Ignore a repository owner mismatch in "print mode"
     + In authenticated mode, ensure that a checked-out personal git.d.o
-      respository will be writable by the user passed on the command line
+      repository will be writable by the user passed on the command line
       (Closes: #447791)
   * debcommit: Strip epochs from hg tags (Closes: #473593)
   * debdiff: Add a --diffstat option (Closes: #370286)
@@ -7503,7 +7503,7 @@ devscripts (2.5.2) unstable; urgency=low
     made that mistake in as many days...) (closes: #50549)
   * Added a simple debian-test script to check that I get the version
     numbering right....
-  * Added build dependecies (which wasn't really that hard...)
+  * Added build dependencies (which wasn't really that hard...)
   * Correct debdiff problem: forgot to chdir back after looking at first
     changes file
   * debit now runs debian-test *without* su nobody; I believe that it is
@@ -7859,7 +7859,7 @@ devscripts (2.0.2) unstable; urgency=low
 devscripts (2.0.1) unstable; urgency=low
 
   * Corrected silly LIBDIR bug in uscan
-  * Corrected missing newline characted in debchange
+  * Corrected missing newline character in debchange
 
  -- Julian Gilbey <jdg@debian.org>  Thu,  7 Jan 1999 18:24:58 +0000
 

@@ -246,8 +246,8 @@ if [ "x$opt_package" = "x" ]; then
     else
 	# Well. We don't know what this package is.
 	echo >&2 " This does not appear be a Debian source tree, since"
-	echo >&2 " theres is no debian/changelog, and there was no"
-	echo >&2 " package name or cvs module given on the comand line"
+	echo >&2 " there is no debian/changelog, and there was no"
+	echo >&2 " package name or cvs module given on the command line"
 	echo >&2 " it is hard to figure out what the package name "
 	echo >&2 " should be. I give up."
 	exit 1

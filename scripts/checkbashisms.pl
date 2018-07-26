@@ -467,7 +467,7 @@ foreach my $filename (@ARGV) {
 		    my $pos = 0;
 		    pos($cat_string) = $pos;
 		    while ($cat_string =~ s/\G(.*?)\\/$1/) {
-			# postition += length of match + the character
+			# position += length of match + the character
 			# that followed the backslash:
 			$pos += length($1)+1;
 			pos($cat_string) = $pos;
@@ -633,7 +633,7 @@ sub init_hashes {
 		=> q<function names should only contain [a-z0-9_]>,
 	$LEADIN . qr'(push|pop)d(\s|\Z)' =>    q<(push|pop)d>,
 	$LEADIN . qr'export\s+-[^p]' =>  q<export only takes -p as an option>,
-	qr'(?:^|\s+)[<>]\(.*?\)'	    => q<\<() process substituion>,
+	qr'(?:^|\s+)[<>]\(.*?\)'	    => q<\<() process substitution>,
 	$LEADIN . qr'readonly\s+-[af]' => q<readonly -[af]>,
 	$LEADIN . qr'(sh|\$\{?SHELL\}?) -[rD]' => q<sh -[rD]>,
 	$LEADIN . qr'(sh|\$\{?SHELL\}?) --\w+' =>  q<sh --long-option>,
