@@ -122,7 +122,7 @@ sub read_conf
     %config_vars = (
 	'DEBSNAP_VERBOSE' => 'no',
 	'DEBSNAP_DESTDIR' => '',
-	'DEBSNAP_BASE_URL' => 'http://snapshot.debian.org',
+	'DEBSNAP_BASE_URL' => 'https://snapshot.debian.org',
     );
 
     my %config_default = %config_vars;
