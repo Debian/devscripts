@@ -41,7 +41,7 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
     + Strip all HTML tags, not just anchors, from excuses.  MR !20
   * debsnap:
     + Disable explicit validity checking in Dpkg::Version constructor so
-      there's an actual object to call is_valid() on.  (Closes: #903479)
+      there's an actual object to call is_valid() on.  Closes: #903479
 
   [ Ian Jackson ]
   * grep-excuses:
@@ -58,14 +58,14 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
   [ Kees Cook ]
   * hardening-check:
     + Drain both stdout/stderr while waiting for readelf to exit to prevent
-      readelf from getting blocked on a full pipe.  (Closes: #903482)
+      readelf from getting blocked on a full pipe.  Closes: #903482
 
   [ Christoph Berg ]
   * namecheck: Drop code.google.com, it's down.
 
   [ Adam D. Barratt ]
   * bts:
-    + Support fetching bugs from debbugs.gnu.org: (Closes: #904432)
+    + Support fetching bugs from debbugs.gnu.org:  Closes: #904432
       - Force CGI URL to be "/cgi/" rather than "/cgi-bin/" when using
         the gnu.org server.
       - Match both "/cgi/" and "/cgi-bin/" when rewriting URLs in cache
@@ -73,6 +73,10 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
       - Allow links to mbox files to contain additional HTML attributes.
     + Pre-emptively support HTTPS URLs when parsing release-critical pages.
     + Really use HTTPS by default for bugs.debian.org.
+
+  [ Guillem Jover ]
+  * debsnap:
+    + Switch to HTTPS for connections to snapshot.debian.org.  Closes: #904659
 
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 23 May 2018 16:57:40 +0200
 
