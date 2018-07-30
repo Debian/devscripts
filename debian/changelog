@@ -12,6 +12,8 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
       providing a patch.  Closes: #902409; CVE-2018-13043
   * uscan:
     + Remove wrong information about GitHub releases.  Closes: #902842
+  * test/test_uscan_ftp:
+    + Skip test on hurd-i386, hurd is missing a required feature.  MR: !23
 
   [ Shengjing Zhu ]
   * uscan:
