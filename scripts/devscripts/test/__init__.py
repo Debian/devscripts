@@ -34,7 +34,7 @@ def get_source_files():
     files = []
     for code_file in SCRIPTS + modules + py_files:
         is_script = code_file in SCRIPTS
-        if not os.path.exists(code_file):
+        if not os.path.exists(code_file):  # pragma: no cover
             # The alternative path is needed for Debian's pybuild
             alternative = os.path.join(os.environ.get("OLDPWD", ""), code_file)
             code_file = alternative if os.path.exists(alternative) else code_file
@@ -59,4 +59,4 @@ def unittest_verbosity():
         if isinstance(self, unittest.TestProgram):
             return self.verbosity
         frame = frame.f_back
-    return None
+    return None  # pragma: no cover

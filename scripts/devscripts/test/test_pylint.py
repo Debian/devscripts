@@ -45,7 +45,7 @@ class PylintTestCase(unittest.TestCase):
                                    close_fds=True)
         out, err = process.communicate()
 
-        if process.returncode != 0:
+        if process.returncode != 0:  # pragma: no cover
             # Strip trailing summary (introduced in pylint 1.7). This summary might look like:
             #
             # ------------------------------------

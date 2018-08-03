@@ -38,7 +38,7 @@ class Flake8TestCase(unittest.TestCase):
                                    stderr=subprocess.PIPE, close_fds=True)
 
         out, err = process.communicate()
-        if process.returncode != 0:
+        if process.returncode != 0:  # pragma: no cover
             msgs = []
             if err:
                 msgs.append("flake8 exited with code {} and has unexpected output on stderr:\n{}"
