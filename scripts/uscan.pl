@@ -3293,7 +3293,7 @@ if ($options{'mode'} eq 'http') {
 	    uscan_verbose "Matching pattern:\n   @patterns\n";
 	}
 	my @hrefs;
-	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/sgi) {
+        while ($content =~ m/<\s*a\s+[^>]*(?<=\s)href\s*=\s*([\"\'])(.*?)\1/sgi) {
 	    my $href = $2;
 	    my $mangled_version;
 	    $href = fix_href($href);
