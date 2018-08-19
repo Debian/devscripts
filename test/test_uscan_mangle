@@ -725,6 +725,23 @@ siteWebNonNativeMUT() {
 END
 }
 
+siteWebNonNativeGetOnlyHref() {
+    siteNonNative foo
+    cat <<END > $TMPDIR/$REPOPATH/index.html
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body>
+<a href="/0.0/foo/ooo/foo-0.0.tar.gz">Very old</a> <br/ >
+<a href="/1.0/bar/ooo/foo-1.0.tar.gz">A bit OLD</a> <br />
+<a href="/2.0/foo/ooo/foo-2.0.tar.gz" data-foobar-href="">Latest</a> <br />
+<aueu href="/2.0/foo/ooo/foo-3.0.tar.gz" data-foobar-href="">Nothing here</a> <br />
+</body>
+<html>
+END
+}
+
 # test a watch files
 
 ### VERSION3 ###
@@ -915,6 +932,13 @@ testWatch4PrWebNonNativeXZ() {
     GZREPACK=xz
     helperWatch sitePrWebNonNative
     unset GZREPACK
+}
+
+# test get strictly href from links and not something like foo-href. See #904578 and MR !25
+testWatchGetOnlyHref() {
+    WATCHVER=4
+	WATCHLINE='@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian	uupdate'
+    helperWatch siteWebNonNativeGetOnlyHref 1.0 2.0
 }
 
 ### VERSION 4 with sig check ###
