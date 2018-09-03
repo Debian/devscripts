@@ -15,7 +15,7 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
   * test/test_uscan_ftp:
     + Skip test on hurd-i386, hurd is missing a required feature.  MR: !23
   * test/pylint:
-    + Temporarly disable the test, as pylist is currently uninstallable,
+    + Temporarily disable the test, as pylist is currently uninstallable,
       see #902631.
 
   [ Shengjing Zhu ]
