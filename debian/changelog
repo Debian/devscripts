@@ -93,6 +93,10 @@ devscripts (2.18.4) UNRELEASED; urgency=medium
     + Fix error handling to avoid having all curl/wget errors to be treated
       as SSL errors.  Closes: #907683
 
+  [ Javi Sabalete ]
+  * debcommit:
+    + Always use annotate tags with git.  MR: !24
+
  -- Mattia Rizzolo <mattia@debian.org>  Wed, 23 May 2018 16:57:40 +0200
 
 devscripts (2.18.3) unstable; urgency=medium
