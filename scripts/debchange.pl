@@ -617,7 +617,7 @@ my $EMAIL = 'EMAIL';
 my $DISTRIBUTION = 'UNRELEASED';
 # when updating the lines below also update the help text, the manpage and the testcases.
 my %dists = ( 60, 'squeeze', 70, 'wheezy', 7, 'wheezy', 8, 'jessie', 9, 'stretch' );
-my $lts_dist = '7';
+my $lts_dist = '8';
 my $latest_dist = '9';
 # dist guessed from backports, SRU, security uploads...
 my $guessed_dist = '';
