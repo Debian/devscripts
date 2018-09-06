@@ -30,7 +30,7 @@ Usage: manpage-alert [options] [paths]
     -n, --no-stat       Do not show statistics at the end.
 
   This script will locate executables in the given paths with manpage
-  outputs for which no manpage is available and its statictics.
+  outputs for which no manpage is available and its statistics.
 
   If no paths are specified on the command line, "/bin /sbin /usr/bin
   /usr/sbin /usr/games" will be used by default.

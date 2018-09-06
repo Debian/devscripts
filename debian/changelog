@@ -1,3 +1,107 @@
+devscripts (2.18.4) unstable; urgency=medium
+
+  [ Mattia Rizzolo ]
+  * debchange:
+    + Replace implicit boolean evaluation of a Dpkg::Version object by
+      Dpkg::Version::is_valid().  Closes: #900703
+  * bts:
+    + Add the new 'ftbfs' tag to the list of known tags.  Closes: #900963
+  * grep-excuses:
+    + Avoid unintended blessing during YAML loading.
+      Thanks to Ansgar Burchardt <ansgar@debian.org> for reporting and
+      providing a patch.  Closes: #902409; CVE-2018-13043
+  * uscan:
+    + Remove wrong information about GitHub releases.  Closes: #902842
+  * test/test_uscan_ftp:
+    + Skip test on hurd-i386, hurd is missing a required feature.  MR: !23
+  * test/pylint:
+    + Temporarily disable the test, as pylist is currently uninstallable,
+      see #902631.
+  * debian/control:
+    + Comment-out build-dependency on pylint3.
+    + Bump Standards-Version to 4.2.1, no changes needed.
+
+  [ Shengjing Zhu ]
+  * uscan:
+    + Fix wrong git log command in manpage.  MR:!16
+
+  [ Simon McVittie ]
+  * tests/test_package_lifecycle:
+    + Don't load ~/.devscripts while calling debdiff.  MR: !17
+  * sadt:
+    + Implement new restrictions from autopkgtest git master.  MR: !18
+      - 'flaky': if this test fails, the failure is logged but is not
+        counted as a failure.
+      - 'skippable': if this test exits 77, it counts as skipped,
+        not failed (even if it wrote to stderr).
+  * uscan:
+    + Handle absolute USCAN_DESTDIR correctly in git mode.
+      Closes: #895279; MR: !14
+
+  [ Sean Whitton ]
+  * git-deborig:  MR !19
+    + When suggesting the user run git-deborig again with more arguments,
+      include all the arguments the user originally passed in the
+      suggestion.
+
+  [ James McCoy ]
+  * grep-excuses:
+    + Strip all HTML tags, not just anchors, from excuses.  MR !20
+  * debsnap:
+    + Disable explicit validity checking in Dpkg::Version constructor so
+      there's an actual object to call is_valid() on.  Closes: #903479
+
+  [ Ian Jackson ]
+  * grep-excuses:
+    + Add --autopkgtest option to show autopkgtest failures in the target
+      package which are caused by new versions of other packages.  MR !21
+
+  [ Lev Lazinskiy ]
+  * uscan:
+    + Handle --copy argument.  Closes: #895209; MR !22
+
+  [ Translation updates ]
+  * French, thanks to jean-pierre giraud.  Closes: #902815
+
+  [ Kees Cook ]
+  * hardening-check:
+    + Drain both stdout/stderr while waiting for readelf to exit to prevent
+      readelf from getting blocked on a full pipe.  Closes: #903482
+
+  [ Christoph Berg ]
+  * namecheck: Drop code.google.com, it's down.
+
+  [ Adam D. Barratt ]
+  * bts:
+    + Support fetching bugs from debbugs.gnu.org:  Closes: #904432
+      - Force CGI URL to be "/cgi/" rather than "/cgi-bin/" when using
+        the gnu.org server.
+      - Match both "/cgi/" and "/cgi-bin/" when rewriting URLs in cache
+        files.
+      - Allow links to mbox files to contain additional HTML attributes.
+    + Pre-emptively support HTTPS URLs when parsing release-critical pages.
+    + Really use HTTPS by default for bugs.debian.org.
+
+  [ Guillem Jover ]
+  * debsnap:
+    + Switch to HTTPS for connections to snapshot.debian.org.  Closes: #904659
+
+  [ Agustin Henze ]
+  * uscan:
+    + Use stricter match to find href attribute to avoid invalid URLs.
+      Closes: #904578; MR !25
+
+  [ Jakub Wilk ]
+  * rmadison:
+    + Fix error handling to avoid having all curl/wget errors to be treated
+      as SSL errors.  Closes: #907683
+
+  [ Javi Sabalete ]
+  * debcommit:
+    + Always use annotate tags with git.  MR: !24
+
+ -- Mattia Rizzolo <mattia@debian.org>  Mon, 03 Sep 2018 22:30:44 +0200
+
 devscripts (2.18.3~bpo9+1) stretch-backports; urgency=medium
 
   * Rebuild for stretch-backports.
@@ -1773,7 +1877,7 @@ devscripts (2.14.5) unstable; urgency=medium
 
   * debchange:
     + Verify $opt_vendor is defined before trying to use it to avoid a warning
-      about an unitialized variable.
+      about an uninitialized variable.
     + utf-8 decode the maintainer name when reading it from the changelog.
       (Closes: #750855)
   * uscan: Use HEAD instead of GET to check for possible GPG signature URLs.
@@ -1934,7 +2038,7 @@ devscripts (2.13.9) unstable; urgency=low
     + Fix handling of 'dirname' exclusions, so 'dirname/*' isn't required.
 
   [ Salvatore Bonaccorso ]
-  * uscan: Fix unitialized value warning when copyright is not in
+  * uscan: Fix uninitialized value warning when copyright is not in
     copyright-format 1.0.  (Closes: #732807)
 
  -- James McCoy <jamessan@debian.org>  Mon, 23 Dec 2013 15:28:45 -0500
@@ -2147,7 +2251,7 @@ devscripts (2.13.2) unstable; urgency=low
     Maintainer access control lists.  (Closes: #688830)
 
   [ David Prévot ]
-  * Formating manpages review.  (Closes: #707299)
+  * Formatting manpages review.  (Closes: #707299)
 
   [ Translation updates ]
   * French, David Prévot.
@@ -3643,7 +3747,7 @@ devscripts (2.10.53) unstable; urgency=low
     an 'Upload to $DIST' line and sets the distribution accordingly, when
     the --release parameter is used. (Closes: #515346)
   * debi:
-    + Implement a --with-depends switch to install depencies of the
+    + Implement a --with-depends switch to install dependencies of the
       package together with the package
       (Closes: #511061)
     + Implement a --tool switch to choose the tool for installing
@@ -4172,7 +4276,7 @@ devscripts (2.10.39) unstable; urgency=low
   * bts:
     + Allow an explicit HELO to be specified when connecting via SMTP.
     + If a HELO is not specified then attempt to use the content of
-      /etc/mailname instread.
+      /etc/mailname instead.
     + Expand on the definition of "claim" in the manpage. (Closes: #501142)
     + Trim anything that doesn't look like an e-mail address from $DEBEMAIL or
       $EMAIL before using it for un/claim or un/subscribe. (Closes: #501162)
@@ -4886,7 +4990,7 @@ devscripts (2.10.21) unstable; urgency=low
       http://darcs.d.o/~foo/bar/baz against user foo
     + Ignore a repository owner mismatch in "print mode"
     + In authenticated mode, ensure that a checked-out personal git.d.o
-      respository will be writable by the user passed on the command line
+      repository will be writable by the user passed on the command line
       (Closes: #447791)
   * debcommit: Strip epochs from hg tags (Closes: #473593)
   * debdiff: Add a --diffstat option (Closes: #370286)
@@ -7468,7 +7572,7 @@ devscripts (2.5.2) unstable; urgency=low
     made that mistake in as many days...) (closes: #50549)
   * Added a simple debian-test script to check that I get the version
     numbering right....
-  * Added build dependecies (which wasn't really that hard...)
+  * Added build dependencies (which wasn't really that hard...)
   * Correct debdiff problem: forgot to chdir back after looking at first
     changes file
   * debit now runs debian-test *without* su nobody; I believe that it is
@@ -7824,7 +7928,7 @@ devscripts (2.0.2) unstable; urgency=low
 devscripts (2.0.1) unstable; urgency=low
 
   * Corrected silly LIBDIR bug in uscan
-  * Corrected missing newline characted in debchange
+  * Corrected missing newline character in debchange
 
  -- Julian Gilbey <jdg@debian.org>  Thu,  7 Jan 1999 18:24:58 +0000
 

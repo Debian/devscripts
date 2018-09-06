@@ -174,7 +174,7 @@ _bts()
                 # The official list is mirrored
                 # https://www.debian.org/Bugs/server-control#tag
                 # in the variable @gTags; we copy it verbatim here.
-                COMPREPLY=( $( compgen -W 'patch wontfix moreinfo unreproducible help pending security upstream confirmed fixed fixed-upstream fixed-in-experimental d-i ipv6 lfs l10n potato woody sarge sarge-ignore etch etch-ignore lenny lenny-ignore squeeze squeeze-ignore wheezy wheezy-ignore jessie jessie-ignore sid experimental' -- "$cur" ) )
+                COMPREPLY=( $( compgen -W 'patch wontfix moreinfo unreproducible fixed potato woody sid help security upstream pending sarge sarge-ignore experimental d-i confirmed ipv6 lfs fixed-in-experimental fixed-upstream l10n newcomer a11y ftbfs etch etch-ignore lenny lenny-ignore squeeze squeeze-ignore wheezy wheezy-ignore jessie jessie-ignore stretch stretch-ignore buster buster-ignore bullseye bullseye-ignore' -- "$cur" ) )
             else
                 COMPREPLY=()
                 COMPREPLY[0]='= '

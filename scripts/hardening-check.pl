@@ -9,6 +9,7 @@ use Pod::Usage;
 use IPC::Open3;
 use Symbol qw(gensym);
 use Term::ANSIColor;
+use IO::Select;
 
 my $skip_pie = 0;
 my $skip_stackprotector = 0;
@@ -180,19 +181,35 @@ sub output(@) {
     $stdout = gensym;
     $stderr = gensym;
     $pid = open3(gensym, $stdout, $stderr, @cmd);
-    my $collect = "";
-    while ( <$stdout> ) {
-        $collect .= $_;
+
+    my $selector = IO::Select->new();
+    $selector->add($stdout);
+    $selector->add($stderr);
+
+    my $collect_out = "";
+    my $collect_err = "";
+
+    while (!eof($stdout) || !eof($stderr)) {
+        my @ready = $selector->can_read();
+        foreach my $fh (@ready) {
+            my $buf;
+            read($fh, $buf, 4096);
+
+            if ($fh == $stdout) {
+                $collect_out .= $buf;
+            } else {
+                $collect_err .= $buf;
+            }
+        }
     }
+
     waitpid($pid, 0);
     my $rc = $?;
     if ($rc != 0) {
-        while ( <$stderr> ) {
-            print STDERR;
-        }
+        print STDERR $collect_err;
         return "";
     }
-    return $collect;
+    return $collect_out;
 }
 
 # Find the libc used in this executable, if any.

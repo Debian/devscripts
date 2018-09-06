@@ -127,7 +127,7 @@ arch=$ARCH&ver=$LASTVERSION&stamp=[[:digit:]]+"
 	arch=${match##*arch=}
 	arch=${arch%%&*}
 	match=`echo $match | sed -e 's/\+/%2B/g'`
-	# Mimick wget's behaviour, using a numerical suffix if needed,
+	# Mimic wget's behaviour, using a numerical suffix if needed,
 	# to support downloading several logs for a given tuple
 	# (unfortunately, -nc and -O means only the first file gets
 	# downloaded):

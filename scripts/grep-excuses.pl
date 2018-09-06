@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+# vim: set shiftwidth=4 tabstop=8 noexpandtab:
 # Grep debian testing excuses file.
 #
 # Copyright 2002 Joey Hess <joeyh@debian.org>
@@ -25,31 +26,23 @@ use Data::Dumper;
 use File::Basename;
 use File::HomeDir;
 
-my $yaml_broken;
-sub have_yaml()
-{
-    return ($yaml_broken ? 0 : 1) if defined $yaml_broken;
-
-    eval {
-	require YAML::Syck;
-    };
-
-    if ($@) {
-	if ($@ =~ m/^Can't locate YAML/) {
-	    $yaml_broken = 'the libyaml-syck-perl package is not installed';
-	} else {
-	    $yaml_broken = "couldn't load YAML::Syck $@";
-	}
-    } else {
-	$yaml_broken = '';
-    }
-    return $yaml_broken ? 0 : 1;
+sub require_friendly ($) {
+    my ($mod) = @_;
+    return if eval "require $mod;";
+    my $pkg = lc $mod;
+    $pkg =~ s/::/-/g;
+    $pkg = "lib$pkg-perl";
+    die <<END;
+$@
+grep-excuses: We need $mod.  Try installing $pkg.
+END
 }
 
 # Needed for --wipnity option
 
 open DEBUG, ">/dev/null" or die $!;
 my $do_autoremovals = 1;
+my $do_autopkgtests;
 
 my $term_size_broken;
 
@@ -145,6 +138,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
     my %config_vars = (
 		       'GREP_EXCUSES_MAINTAINER' => '',
+		       'GREP_EXCUSES_AUTOPKGTESTS' => 0,
 		       );
     my %config_default = %config_vars;
 
@@ -169,6 +163,7 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     chomp $modified_conf_msg;
 
     $string = $config_vars{'GREP_EXCUSES_MAINTAINER'};
+    $do_autopkgtests = $config_vars{'GREP_EXCUSES_AUTOPKGTESTS'};
 }
 
 while (@ARGV and $ARGV[0] =~ /^-/) {
@@ -189,6 +184,8 @@ while (@ARGV and $ARGV[0] =~ /^-/) {
 	shift; next;
     }
     if ($ARGV[0] eq '--no-autoremovals') { $do_autoremovals=0; shift; next; }
+    if ($ARGV[0] eq '--autopkgtests') { $do_autopkgtests=1; shift; next; }
+    if ($ARGV[0] eq '--no-autopkgtests') { $do_autopkgtests=0; shift; next; }
     if ($ARGV[0] eq '--help') { usage(); exit 0; }
     if ($ARGV[0] eq '--version') { print $version; exit 0; }
     if ($ARGV[0] =~ /^--no-?conf$/) {
@@ -300,8 +297,10 @@ sub grep_autoremovals () {
 
 grep_autoremovals() if $do_autoremovals;
 
-if (!have_yaml()) {
-    die "$progname: Unable to parse excuses: $yaml_broken\n";
+require_friendly qw(YAML::Syck);
+{
+    no warnings 'once';
+    $YAML::Syck::LoadBlessed = 0;
 }
 
 print DEBUG "Fetching $url\n";
@@ -313,6 +312,55 @@ if ($? == -1) {
     die "$progname: wget exited $?\n";
 }
 
+sub migration_headline ($) {
+    my ($source) = @_;
+    sprintf("%s (%s to %s)", $source->{'item-name'},
+	    $source->{'old-version'}, $source->{'new-version'});
+}
+
+sub print_migration_excuse_info ($;$) {
+    my ($source, $summary) = @_;
+    if (exists $source->{maintainer})
+    {
+	printf("    Maintainer: $source->{maintainer}\n");
+    }
+    if (exists $source->{policy_info})
+    {
+	my %age = %{$source->{policy_info}{age}};
+	if ($age{'current-age'} >= $age{'age-requirement'})
+	{
+	    printf("    %d days old (needed %d days)\n",
+		$age{'current-age'},
+		$age{'age-requirement'});
+	}
+	else
+	{
+	    printf("    Too young, only %d of %d days old\n",
+		$age{'current-age'},
+		$age{'age-requirement'});
+	}
+    }
+    if (exists $source->{dependencies})
+    {
+	for my $blocker (@{$source->{dependencies}{'blocked-by'}}) {
+	    printf("    Depends: %s %s (not considered)\n",
+		$source->{'item-name'}, $blocker);
+	}
+	for my $after (@{$source->{dependencies}{'migrate-after'}}) {
+	    printf("    Depends: %s %s\n",
+		$source->{'item-name'}, $after);
+	}
+    }
+    for my $excuse (@{$source->{excuses}})
+    {
+	next if $summary and $excuse =~ m/^autopkgtest /;
+	$excuse =~ s@</?[^>]+>@@g;
+	$excuse =~ s@&lt;@<@g;
+	$excuse =~ s@&gt;@>@g;
+	print "    $excuse\n";
+    }
+}
+
 my $excuses = YAML::Syck::Load($yaml);
 for my $source (@{$excuses->{sources}})
 {
@@ -320,47 +368,53 @@ for my $source (@{$excuses->{sources}})
 	|| (exists $source->{maintainer}
 	    && $source->{maintainer} =~ m/\b\Q$string\E\b/))
     {
-	print DEBUG Dumper($source);
-	printf("%s (%s to %s)\n", $source->{'item-name'},
-	    $source->{'old-version'}, $source->{'new-version'});
-	if (exists $source->{maintainer})
+	print migration_headline($source), "\n";
+	print_migration_excuse_info($source);
+    }
+}
+
+if ($do_autopkgtests)
+{
+    flush STDOUT or die $!;
+    require_friendly qw(DBI);
+    require_friendly qw(DBD::Pg);
+    my $dbh = DBI->connect('DBI:Pg:dbname=udd;host=udd-mirror.debian.net',
+			   'udd-mirror','udd-mirror',
+			   { RaiseError => 1 });
+    # https://www.postgresql.org/docs/9.5/static/functions-matching.html
+    my $regexp = $string;
+    $regexp =~ s{[^0-9a-z]}{\\$&}ig;
+    $regexp = "\\y$regexp\\y";
+    my $pkgs =
+	$dbh->selectall_arrayref('select distinct source from sources where'.
+				 ' maintainer_name ~ ? or'.
+				 ' maintainer_email ~ ?',
+				 { },
+				 $regexp, $regexp);
+    my %wantpkgs;
+    $wantpkgs{$_->[0]}++ foreach @$pkgs;
+
+    for my $source (@{$excuses->{sources}})
+    {
+	my $autopkgtests = $source->{'policy_info'}{'autopkgtest'};
+	foreach my $k (sort keys %$autopkgtests)
 	{
-	    printf("    Maintainer: $source->{maintainer}\n");
-	}
-	if (exists $source->{policy_info})
-	{
-	    my %age = %{$source->{policy_info}{age}};
-	    if ($age{'current-age'} >= $age{'age-requirement'})
+	    $k =~ m{/} or next;
+	    my ($testpkg, $testvsn) = ($`,$');
+	    $wantpkgs{$testpkg} or next;
+	    my $arches = $autopkgtests->{$k};
+	    foreach my $arch (sort keys %$arches)
 	    {
-		printf("    %d days old (needed %d days)\n",
-		    $age{'current-age'},
-		    $age{'age-requirement'});
+		my $info = $arches->{$arch};
+		next if $info->[0] eq 'PASS';
+		printf "\nautopkgtest regression\n";
+		printf "    in %s (%s) on %s\n", $testpkg, $testvsn, $arch;
+		printf "    due to %s\n", migration_headline($source);
+		print "test info\n";
+		print "    $_\n" foreach @$info;
+		print "migration excuses for $source->{'item-name'}\n";
+		print_migration_excuse_info($source,1);
 	    }
-	    else
-	    {
-		printf("    Too young, only %d of %d days old\n",
-		    $age{'current-age'},
-		    $age{'age-requirement'});
-	    }
-	}
-	if (exists $source->{dependencies})
-	{
-	    for my $blocker (@{$source->{dependencies}{'blocked-by'}}) {
-		printf("    Depends: %s %s (not considered)\n",
-		    $source->{'item-name'}, $blocker);
-	    }
-	    for my $after (@{$source->{dependencies}{'migrate-after'}}) {
-		printf("    Depends: %s %s\n",
-		    $source->{'item-name'}, $after);
-	    }
-	}
-	for my $excuse (@{$source->{excuses}})
-	{
-	    $excuse =~ s@<a\s[^>]+>@@g;
-	    $excuse =~ s@</a>@@g;
-	    $excuse =~ s@&lt;@<@g;
-	    $excuse =~ s@&gt;@>@g;
-	    print "    $excuse\n";
 	}
     }
 }

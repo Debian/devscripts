@@ -26,6 +26,13 @@ echo '======================================================================='
 
 test_dir=$(readlink -f "${0%/*}")
 
+ARCHITECTURE="$(dpkg-architecture -qDEB_HOST_ARCH)"
+if [ "$ARCHITECTURE" = "hurd-i386" ]; then
+    # hurd-i386 lacks sem_open() which is required by the python ftp server
+    echo "This test is not supported on $ARCHITECTURE, skipping"
+    exit 0
+fi
+
 # Operation mode
 if test "$1" = --installed; then
     COMMAND="uscan --no-conf"
@@ -249,7 +256,7 @@ helperWatch() {
     cd $TMPDIR
     # start FTP server with its root at $TMPDIR/$REPOPATH
     spawnFtpServer || exit 1
-    PORT=$(cat $TMPDIR/repo/port)
+    PORT=$(cat $TMPDIR/$REPOPATH/port)
     $DEBUGECHO " ***** ftp://localhost:$PORT started showing $TMPDIR/$REPOPATH *****"
     # make web site
     $SITESCRIPT
@@ -332,7 +339,7 @@ helperWatchZip() {
     cd $TMPDIR
     # start FTP server with its root at $TMPDIR/$REPOPATH
     spawnFtpServer || exit 1
-    PORT=$(cat $TMPDIR/repo/port)
+    PORT=$(cat $TMPDIR/$REPOPATH/port)
     $DEBUGECHO " ***** ftp://localhost:$PORT started showing $TMPDIR/$REPOPATH *****"
     # make web site
     $SITESCRIPT

@@ -1158,9 +1158,6 @@ B<filenamemangle>:
       https://github.com/<user>/<project>/tags \
       (?:.*?/)?v?(\d[\d.]*)\.tar\.gz debian uupdate
 
-Note that the "tags" downloads do not include Git submodules in the .tar.gz
-whilst the "releases" do.
-
 =head2 PyPI
 
 For PyPI based projects, pypi.debian.net runs a redirector which allows a
@@ -1222,7 +1219,7 @@ upstream release with an automatically generated version string.
 
 Please note that a local shallow copy of the git repository is made with "B<git
 clone --bare --depth=1> ..." normally in the target directory.  B<uscan>
-generates the new upstream version with "B<git log --date=%Y%m%d
+generates the new upstream version with "B<git log --date=format:%Y%m%d
 --pretty=0.0~git%cd.%h>" on this local copy of repository as its default
 behavior.
 
@@ -2037,6 +2034,7 @@ Options:
 Options passed on to mk-origtargz:
     --symlink      Create a correctly named symlink to downloaded file (default)
     --rename       Rename instead of symlinking
+    --copy         Copy instead of symlinking
     --repack       Repack downloaded archives to change compression
     --compression [ gzip | bzip2 | lzma | xz ]
                    When the upstream sources are repacked, use compression COMP
@@ -2218,6 +2216,7 @@ GetOptions("help" => \$opt_h,
 	   "timeout=i" => \$opt_timeout,
 	   "symlink!" => sub { $opt_symlink = $_[1] ? 'symlink' : 'no'; },
 	   "rename" => sub { $opt_symlink = 'rename'; },
+	   "copy" => sub { $opt_symlink = 'copy'; },
 	   "repack" => sub { $opt_repack = 1; },
 	   "log" => \$opt_log,
 	   "compression=s" => \$opt_compression,
@@ -3294,7 +3293,7 @@ if ($options{'mode'} eq 'http') {
 	    uscan_verbose "Matching pattern:\n   @patterns\n";
 	}
 	my @hrefs;
-	while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/sgi) {
+        while ($content =~ m/<\s*a\s+[^>]*(?<=\s)href\s*=\s*([\"\'])(.*?)\1/sgi) {
 	    my $href = $2;
 	    my $mangled_version;
 	    $href = fix_href($href);
@@ -4440,6 +4439,7 @@ sub downloader ($$$$$)
 	my $curdir = cwd();
 	$fname =~ m%(.*)/([^/]*)-([^_/-]*)\.tar\.(gz|xz|bz2|lzma)%;
 	my $dst = $1;
+	my $abs_dst = abs_path($dst);
 	my $pkg = $2;
 	my $ver = $3;
 	my $suffix = $4;
@@ -4456,14 +4456,14 @@ sub downloader ($$$$$)
 		$gitrepo_state=2;
 	    }
 	}
-	uscan_verbose "Execute: git --git-dir=$destdir/$gitrepo_dir archive --format=tar --prefix=$pkg-$ver/ --output=$curdir/$dst/$pkg-$ver.tar $gitref\n";
-	system('git', "--git-dir=$destdir/$gitrepo_dir", 'archive', '--format=tar', "--prefix=$pkg-$ver/", "--output=$curdir/$dst/$pkg-$ver.tar", $gitref) == 0 or uscan_die("git archive failed\n");
+	uscan_verbose "Execute: git --git-dir=$destdir/$gitrepo_dir archive --format=tar --prefix=$pkg-$ver/ --output=$abs_dst/$pkg-$ver.tar $gitref\n";
+	system('git', "--git-dir=$destdir/$gitrepo_dir", 'archive', '--format=tar', "--prefix=$pkg-$ver/", "--output=$abs_dst/$pkg-$ver.tar", $gitref) == 0 or uscan_die("git archive failed\n");
 	# If git cloned repo exists and not --debug ($verbose=1) -> remove it
 	if ($gitrepo_state > 0 and $verbose < 1) {
-	    system('rm', '-rf', "$curdir/$dst/$gitrepo_dir");
+	    system('rm', '-rf', "$abs_dst/$gitrepo_dir");
 	    $gitrepo_state=0;
 	}
-	chdir "$curdir/$dst" or uscan_die("Unable to chdir($curdir/$dst): $!\n");
+	chdir "$abs_dst" or uscan_die("Unable to chdir($abs_dst): $!\n");
 	if ($suffix eq 'gz') {
 	    uscan_verbose "Execute: gzip -n -9 $pkg-$ver.tar\n";
 	    system("gzip", "-n", "-9", "$pkg-$ver.tar") == 0 or uscan_die("gzip failed\n");

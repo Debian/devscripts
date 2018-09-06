@@ -30,7 +30,7 @@ Build-Depends: bash-completion,
                perl:any,
                pkg-config,
                po4a,
-               pylint3 <!nocheck>,
+#               pylint3 <!nocheck>,
                python3-all:any,
                python3-apt <!nocheck>,
                python3-debian <!nocheck>,
@@ -47,7 +47,7 @@ Build-Depends: bash-completion,
                xsltproc,
                xz-utils <!nocheck>,
                zip <!nocheck>
-Standards-Version: 4.1.4
+Standards-Version: 4.2.1
 Rules-Requires-Root: no
 Vcs-Browser: https://salsa.debian.org/debian/devscripts
 Vcs-Git: https://salsa.debian.org/debian/devscripts.git
@@ -117,6 +117,7 @@ Suggests: adequate,
           libterm-size-perl,
           libtimedate-perl,
           libyaml-syck-perl,
+          libdbd-pg-perl,
           mozilla-devscripts,
           mutt,
           piuparts,
@@ -183,7 +184,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
     the rest of the package to be present; can sign the pair remotely
     or fetch the pair from a remote machine for signing [gnupg | gnupg2,
     debian-keyring, ssh-client]
-  - debsnap: grab packages from http://snapshot.debian.org [libwww-perl]
+  - debsnap: grab packages from https://snapshot.debian.org [libwww-perl]
   - debuild: wrapper to build a package without having to su or worry
     about how to invoke dpkg to build using fakeroot.  Also deals
     with common environment problems, umask etc. [fakeroot, lintian,
@@ -208,8 +209,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
   - git-deborig: try to produce Debian orig.tar using git-archive(1)
     [libdpkg-perl, libgit-wrapper-perl, liblist-compare-perl,
     libstring-shellquote-perl, libtry-tiny-perl]
-  - grep-excuses: grep britney's excuses for your packages [libterm-size-perl,
-    libyaml-syck-perl, wget, w3m]
+  - grep-excuses: grep britney's excuses for your packages [libdbd-pg-perl,
+    libterm-size-perl, libyaml-syck-perl, wget, w3m]
   - hardening-check: report the hardening characteristics of a set of binaries
   - list-unreleased: search for unreleased packages
   - ltnu: List all uploads of packages by the given uploader or maintainer and

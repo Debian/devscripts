@@ -266,5 +266,4 @@ http://savannah.gnu.org/projects/%s  | Invalid Group
 http://sourceforge.net/projects/%s   | Invalid Project
 http://www.ohloh.net/projects/%s     | Sorry, the page you are trying to view is not here
 https://gna.org/projects/%s          | Invalid Group
-http://code.google.com/p/%s          | Not Found
 http://projects.apache.org/projects/%s.html | Not Found

@@ -650,10 +650,11 @@ sub commit {
 }
 
 sub tag {
-    my ($package, $tag) = @_;
+    my ($package, $tag, $tag_msg) = @_;
 
     # Make the message here so we can mangle $tag later, if needed
-    my $tag_msg = "tagging package $package version $tag";
+    $tag_msg = ! defined $message ? "tagging package $package version $tag" : "$message";
+
     if ($prog eq 'svn' || $prog eq 'svk') {
 	my $svnpath=`svnpath`;
 	chomp $svnpath;
@@ -711,17 +712,17 @@ sub tag {
 	if ($signtags) {
 	    my $tag_msg = "tagging package $package version $tag";
 	    if (defined $keyid) {
-		if (! action($prog, "tag", "-u", $keyid, "-m", $tag_msg, $tag)) {
+		if (! action($prog, "tag", "-a", "-u", $keyid, "-m", $tag_msg, $tag)) {
 		    die "debcommit: failed tagging with $tag\n";
 		}
 	    }
 	    else {
-		if (! action($prog, "tag", "-s", "-m", $tag_msg, $tag)) {
+		if (! action($prog, "tag", "-a", "-s", "-m", $tag_msg, $tag)) {
 		    die "debcommit: failed tagging with $tag\n";
 		}
 	    }
 	}
-	elsif (! action($prog, "tag", $tag)) {
+        elsif (! action($prog, "tag", "-a", "-m", $tag_msg, $tag)) {
 	    die "debcommit: failed tagging with $tag\n";
 	}
     }
