@@ -33,9 +33,11 @@ class Flake8TestCase(unittest.TestCase):
         """Test: Run flake8 on Python source code"""
         with open("/proc/self/cmdline", "r") as cmdline_file:
             python_binary = cmdline_file.read().split("\0")[0]
-        cmd = [python_binary, "-m", "flake8", "--max-line-length=99"] + get_source_files()
+        cmd = [python_binary, "-m", "flake8",
+               "--max-line-length=99"] + get_source_files()
         if unittest_verbosity() >= 2:
-            sys.stderr.write("Running following command:\n{}\n".format(" ".join(cmd)))
+            sys.stderr.write(
+                "Running following command:\n{}\n".format(" ".join(cmd)))
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE, close_fds=True)
 
@@ -46,7 +48,8 @@ class Flake8TestCase(unittest.TestCase):
                 msgs.append("flake8 exited with code {} and has unexpected output on stderr:\n{}"
                             .format(process.returncode, err.decode().rstrip()))
             if out:
-                msgs.append("flake8 found issues:\n{}".format(out.decode().rstrip()))
+                msgs.append("flake8 found issues:\n{}".format(
+                    out.decode().rstrip()))
             if not msgs:
                 msgs.append("flake8 exited with code {} and has no output on stdout or stderr."
                             .format(process.returncode))

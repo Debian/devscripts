@@ -23,7 +23,8 @@ from devscripts.logger import Logger
 try:
     import magic
 except ImportError:
-    Logger.error("Please install 'python3-magic' in order to use this utility.")
+    Logger.error(
+        "Please install 'python3-magic' in order to use this utility.")
     sys.exit(1)
 
 DEFAULT_WHITELISTED_MIMETYPES = [

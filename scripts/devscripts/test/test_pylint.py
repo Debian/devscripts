@@ -40,11 +40,13 @@ class PylintTestCase(unittest.TestCase):
 
         with open("/proc/self/cmdline", "r") as cmdline_file:
             python_binary = cmdline_file.read().split("\0")[0]
-        cmd = [python_binary, "-m", "pylint", "--rcfile=" + CONFIG, "--"] + get_source_files()
+        cmd = [python_binary, "-m", "pylint",
+               "--rcfile=" + CONFIG, "--"] + get_source_files()
         env = os.environ.copy()
         env["PYLINTHOME"] = ".pylint.d"
         if unittest_verbosity() >= 2:
-            sys.stderr.write("Running following command:\n{}\n".format(" ".join(cmd)))
+            sys.stderr.write(
+                "Running following command:\n{}\n".format(" ".join(cmd)))
         process = subprocess.Popen(cmd, env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                    close_fds=True)
         out, err = process.communicate()

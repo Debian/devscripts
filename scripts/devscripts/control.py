@@ -24,7 +24,8 @@ from devscripts.logger import Logger
 try:
     import debian.deb822
 except ImportError:
-    Logger.error("Please install 'python3-debian' in order to use this utility.")
+    Logger.error(
+        "Please install 'python3-debian' in order to use this utility.")
     sys.exit(1)
 
 
