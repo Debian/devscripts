@@ -4,9 +4,7 @@ include Makefile.common
 
 DESTDIR =
 
-EXAMPLES = conf.default
-
-all: version make_scripts $(EXAMPLES) translated_manpages
+all: version make_scripts conf.default translated_manpages
 
 version:
 	rm -f version
@@ -44,7 +42,7 @@ install: all install_scripts
 	    "$(DESTDIR)$(DATA_DIR)" "$(DESTDIR)$(TEMPLATES_DIR)" \
 	    "$(DESTDIR)$(DOCDIR)" "$(DESTDIR)$(MAN1DIR)"
 	for f in lib/*; do cp -a "$$f" "$(DESTDIR)$(PERLMOD_DIR)"; done
-	install -m0644 $(EXAMPLES) "$(DESTDIR)$(DATA_DIR)"
+	install -m0644 conf.default "$(DESTDIR)$(DATA_DIR)"
 	install -m0644 templates/README.mk-build-deps "$(DESTDIR)$(TEMPLATES_DIR)"
 	install -m0644 README "$(DESTDIR)$(DOCDIR)"
 	install -m0644 doc/*.1 "$(DESTDIR)$(MAN1DIR)"
