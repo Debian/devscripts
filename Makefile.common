@@ -10,4 +10,5 @@ DOCDIR = $(PREFIX)/share/doc/devscripts
 MAN1DIR = $(PREFIX)/share/man/man1
 PERLMOD_DIR = $(shell perl -MConfig -e 'print $$Config{vendorlib}')
 DATA_DIR = $(PREFIX)/share/devscripts
+TEMPLATES_DIR = $(DATA_DIR)/templates
 SYSCONFDIR = /etc

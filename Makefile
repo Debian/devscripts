@@ -4,7 +4,7 @@ include Makefile.common
 
 DESTDIR =
 
-EXAMPLES = conf.default README.mk-build-deps
+EXAMPLES = conf.default
 
 all: version make_scripts $(EXAMPLES) translated_manpages
 
@@ -41,9 +41,11 @@ test-installed:
 
 install: all install_scripts
 	install -d "$(DESTDIR)$(PERLMOD_DIR)" \
-	    "$(DESTDIR)$(DATA_DIR)" "$(DESTDIR)$(DOCDIR)" "$(DESTDIR)$(MAN1DIR)"
+	    "$(DESTDIR)$(DATA_DIR)" "$(DESTDIR)$(TEMPLATES_DIR)" \
+	    "$(DESTDIR)$(DOCDIR)" "$(DESTDIR)$(MAN1DIR)"
 	for f in lib/*; do cp -a "$$f" "$(DESTDIR)$(PERLMOD_DIR)"; done
 	install -m0644 $(EXAMPLES) "$(DESTDIR)$(DATA_DIR)"
+	install -m0644 templates/README.mk-build-deps "$(DESTDIR)$(TEMPLATES_DIR)"
 	install -m0644 README "$(DESTDIR)$(DOCDIR)"
 	install -m0644 doc/*.1 "$(DESTDIR)$(MAN1DIR)"
 	ln -sf edit-patch.1 "$(DESTDIR)$(MAN1DIR)/add-patch.1"

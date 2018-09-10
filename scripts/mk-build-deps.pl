@@ -509,7 +509,7 @@ sub build_equiv
 	$buildess .= ", crossbuild-essential-$hostarch:$buildarch";
     }
 
-    my $readme = '/usr/share/devscripts/README.mk-build-deps';
+    my $readme = '/usr/share/devscripts/templates/README.mk-build-deps';
     open EQUIVS, "| equivs-build $args-"
 	or die "$progname: Failed to execute equivs-build: $!\n";
     print EQUIVS "Section: devel\n" .
