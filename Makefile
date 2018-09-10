@@ -40,7 +40,7 @@ test-installed:
 	$(MAKE) -C test/ $@
 
 install: all install_scripts
-	install -d "$(DESTDIR)$(EXAMPLES_DIR)" "$(DESTDIR)$(PERLMOD_DIR)" \
+	install -d "$(DESTDIR)$(PERLMOD_DIR)" \
 	    "$(DESTDIR)$(DATA_DIR)" "$(DESTDIR)$(DOCDIR)" "$(DESTDIR)$(MAN1DIR)"
 	for f in lib/*; do cp -a "$$f" "$(DESTDIR)$(PERLMOD_DIR)"; done
 	install -m0644 $(EXAMPLES) "$(DESTDIR)$(DATA_DIR)"
