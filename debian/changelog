@@ -12,9 +12,11 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
 
   [ Benjamin Drung ]
   * test:
-    + Use sys.executable
-    + Avoid creating .pylint.d directory
-  * debsign: Fix incomplete .buildinfo entry when an at sign is in the path
+    + Use sys.executable instead of looking at /proc/self/cmdline.
+    + Avoid creating .pylint.d directory.
+    + Ignore some error-handling code when computing the test coverage.
+  * debsign:
+    + Fix incomplete .buildinfo entry when an at ('@') sign is in the path.
 
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 03 Sep 2018 22:42:37 +0200
 
