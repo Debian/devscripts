@@ -9,6 +9,8 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
     + Install the README used for the equivs package into a directory
       named /templates/ to avoid the new lintian tag
       package-contains-documentation-outside-usr-share-doc.
+  * wrap-and-sort:
+    + Update man-page to list the --dry-run option.  Closes: #908036
 
   [ Benjamin Drung ]
   * test:

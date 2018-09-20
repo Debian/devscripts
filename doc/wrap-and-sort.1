@@ -50,6 +50,7 @@ Sort binary package paragraphs by name.
 .TP
 \fB\-k\fR, \fB\-\-keep\-first\fR
 When sorting binary package paragraphs, leave the first one at the top.
+
 Unqualified
 .BR debhelper (7)
 configuration files are applied to the first package.
@@ -58,9 +59,9 @@ configuration files are applied to the first package.
 Do not remove trailing whitespaces.
 .TP
 \fB\-t\fR, \fB\-\-trailing-comma\fR
-Add a trailing comma at the end of the sorted fields. This minimizes
-future differences in the VCS commits when additional dependencies are
-appended or removed.
+Add a trailing comma at the end of the sorted fields.
+This minimizes future differences in the VCS commits when additional
+dependencies are appended or removed.
 .TP
 \fB\-d \fIpath\fR, \fB\-\-debian\-directory=\fIpath\fR
 Location of the \fIdebian\fR directory (default: \fI./debian\fR).
@@ -75,8 +76,12 @@ Print all files that are touched.
 .TP
 \fB\-\-max\-line\-length=\fImax_line_length\fR
 Set the maximum allowed line length. Package lists in the Debian \fIcontrol\fR
-file that exceed this length limit will be wrapped. The default maximum line
-length is 79 characters.
+file that exceed this length limit will be wrapped.
+
+The default maximum line length is 79 characters.
+.TP
+\fB\-N\fR, \fB\-\-dry\-run\fR
+Do not modify any file, instead only print the files that would be modified.
 
 .SH AUTHORS
 \fBwrap\-and\-sort\fP and this manpage have been written by
