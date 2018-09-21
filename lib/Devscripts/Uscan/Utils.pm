@@ -2,7 +2,6 @@ package Devscripts::Uscan::Utils;
 
 use strict;
 use Devscripts::Uscan::Output;
-use Dpkg::IPC;
 use IPC::Run qw(run);
 use Exporter 'import';
 use File::Basename;
@@ -743,7 +742,11 @@ sub uscan_exec {
         local $, = ' ';
         uscan_verbose "Execute: @_...\n";
     }
-    spawn( exec => \@_, wait_child => 1);
+    run \@_;
+    if($?) {
+        local $, = ' ';
+        uscan_die "Command failed (@_)";
+    }
 }
 
 #######################################################################

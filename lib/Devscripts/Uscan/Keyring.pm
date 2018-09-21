@@ -99,7 +99,7 @@ sub verify {
     uscan_verbose(
         "Verifying OpenPGP self signature of $newfile and extract $sigfile\n");
     unless (
-        uscan_exec( $self->{gpg}, '--homedir', $self->{gpghome},
+        uscan_exec_no_fail( $self->{gpg}, '--homedir', $self->{gpghome},
             '--no-options',         '-q',        '--batch',
             '--no-default-keyring', '--keyring', $self->{keyring},
             '--trust-model',        'always',    '--decrypt',
@@ -115,7 +115,7 @@ sub verifyv {
     my ( $self, $sigfile, $base ) = @_;
     uscan_verbose("Verifying OpenPGP signature $sigfile for $base\n");
     unless (
-        uscan_exec( $self->{gpgv}, '--homedir', '/dev/null', '--keyring',
+        uscan_exec_no_fail( $self->{gpgv}, '--homedir', '/dev/null', '--keyring',
             $self->{keyring}, $sigfile, $base
         ) >> 8 == 0
       )

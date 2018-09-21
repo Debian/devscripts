@@ -1098,10 +1098,7 @@ sub download_file_and_sig {
             $suffix_gz =~ s/.*?(\.gz|\.xz|\.bz2|\.lzma)?$/$1/;
             if ( $suffix_gz eq '.gz' ) {
                 if ( -x '/bin/gunzip' ) {
-                    uscan_exec_no_fail( '/bin/gunzip', "--keep",
-                        "$self->{config}->{destdir}/$sigfile_base" ) == 0
-                      or uscan_die(
-                        "gunzip $self->{config}->{destdir}/$sigfile_base failed\n");
+                    uscan_exec( '/bin/gunzip', "--keep", "$self->{config}->{destdir}/$sigfile_base" );
                     $sigfile_base =~ s/(.*?)\.gz/$1/;
                 }
                 else {
@@ -1111,10 +1108,7 @@ sub download_file_and_sig {
             }
             elsif ( $suffix_gz eq '.xz' ) {
                 if ( -x '/usr/bin/unxz' ) {
-                    uscan_exec_no_fail( '/usr/bin/unxz', "--keep",
-                        "$self->{config}->{destdir}/$sigfile_base" ) == 0
-                      or
-                      uscan_die("unxz $self->{config}->{destdir}/$sigfile_base failed\n");
+                    uscan_exec( '/usr/bin/unxz', "--keep", "$self->{config}->{destdir}/$sigfile_base" );
                     $sigfile_base =~ s/(.*?)\.xz/$1/;
                 }
                 else {
@@ -1124,10 +1118,8 @@ sub download_file_and_sig {
             }
             elsif ( $suffix_gz eq '.bz2' ) {
                 if ( -x '/bin/bunzip2' ) {
-                    uscan_exec_no_fail( '/bin/bunzip2', "--keep",
-                        "$self->{config}->{destdir}/$sigfile_base" ) == 0
-                      or uscan_die(
-                        "bunzip2 $self->{config}->{destdir}/$sigfile_base failed\n");
+                    uscan_exec( '/bin/bunzip2', "--keep",
+                        "$self->{config}->{destdir}/$sigfile_base" );
                     $sigfile_base =~ s/(.*?)\.bz2/$1/;
                 }
                 else {
@@ -1137,10 +1129,8 @@ sub download_file_and_sig {
             }
             elsif ( $suffix_gz eq '.lzma' ) {
                 if ( -x '/usr/bin/unlzma' ) {
-                    uscan_exec_no_fail( '/usr/bin/unlzma', "--keep",
-                        "$self->{config}->{destdir}/$sigfile_base" ) == 0
-                      or uscan_die(
-                        "unlzma $self->{config}->{destdir}/$sigfile_base failed\n");
+                    uscan_exec( '/usr/bin/unlzma', "--keep",
+                        "$self->{config}->{destdir}/$sigfile_base" );
                     $sigfile_base =~ s/(.*?)\.lzma/$1/;
                 }
                 else {

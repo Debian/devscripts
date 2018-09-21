@@ -134,7 +134,7 @@ sub download ($$$$$$) {
                 $self->gitrepo_state(2);
             }
         }
-        uscan_exec(
+        uscan_exec_no_fail(
             'git',                 "--git-dir=$destdir/$gitrepo_dir",
             'archive',             '--format=tar',
             "--prefix=$pkg-$ver/", "--output=$abs_dst/$pkg-$ver.tar",
@@ -146,25 +146,21 @@ sub download ($$$$$$) {
         if ( $self->gitrepo_state > 0 and $verbose < 1 ) {
 
             # TODO: replace this
-            uscan_exec( 'rm', '-rf', "$abs_dst/$gitrepo_dir" );
+            uscan_exec_no_fail( 'rm', '-rf', "$abs_dst/$gitrepo_dir" );
             $self->gitrepo_state(0);
         }
         chdir "$abs_dst" or uscan_die("Unable to chdir($abs_dst): $!\n");
         if ( $suffix eq 'gz' ) {
-            uscan_exec_no_fail( "gzip", "-n", "-9", "$pkg-$ver.tar" ) == 0
-              or uscan_die("gzip failed\n");
+            uscan_exec( "gzip", "-n", "-9", "$pkg-$ver.tar" );
         }
         elsif ( $suffix eq 'xz' ) {
-            uscan_exec_no_fail( "xz", "$pkg-$ver.tar" ) == 0
-              or uscan_die("xz failed\n");
+            uscan_exec( "xz", "$pkg-$ver.tar" );
         }
         elsif ( $suffix eq 'bz2' ) {
-            uscan_exec_no_fail( "bzip2", "$pkg-$ver.tar" ) == 0
-              or uscan_die("bzip2 failed\n");
+            uscan_exec( "bzip2", "$pkg-$ver.tar" );
         }
         elsif ( $suffix eq 'lzma' ) {
-            uscan_exec_no_fail( "lzma", "$pkg-$ver.tar" ) == 0
-              or uscan_die("lzma failed\n");
+            uscan_exec( "lzma", "$pkg-$ver.tar" );
         }
         else {
             uscan_warn "Unknown suffix file to repack: $suffix\n";
