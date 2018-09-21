@@ -20,6 +20,7 @@ Build-Depends: bash-completion,
                libfile-homedir-perl <!nocheck>,
                libgit-wrapper-perl <!nocheck>,
                liblist-compare-perl <!nocheck>,
+               libmoo-perl <!nocheck>,
                libstring-shellquote-perl <!nocheck>,
                libtimedate-perl <!nocheck>,
                libtry-tiny-perl <!nocheck>,
@@ -74,6 +75,7 @@ Recommends: apt,
             libencode-locale-perl,
             libgit-wrapper-perl,
             liblist-compare-perl,
+            libmoo-perl,
             libstring-shellquote-perl,
             libtry-tiny-perl,
             liburi-perl,
@@ -249,7 +251,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
     transitions for which uploads to unstable are currently blocked
     [libwww-perl, libyaml-syck-perl]
   - uscan: scan upstream sites for new releases of packages [gpgv | gpgv2,
-    gnupg |gnupg2, liblwp-protocol-https-perl, libwww-perl, unzip,
+    gnupg |gnupg2, liblwp-protocol-https-perl, libmoo-perl, libwww-perl, unzip,
     xz-utils, file]
   - uupdate: integrate upstream changes into a source package [patch]
   - what-patch: determine what patch system, if any, a source package is using

@@ -896,7 +896,7 @@ testWatch4WebNonNativeUA() {
     KEYMODE=BIN
     USCAN_HTTP_SERVER="server-head.py"
     USERAGENT="foo/bar; baz:12,3.45"
-    WATCHLINE='opts="useragent= '$USERAGENT' "'"
+    WATCHLINE='opts="useragent= '$USERAGENT' "'" \
 "'@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatchUA
     unset USERAGENT
