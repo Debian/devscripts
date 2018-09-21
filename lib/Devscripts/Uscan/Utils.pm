@@ -190,14 +190,6 @@ sub newest_dir ($$$$$$$$) {
         uscan_verbose "Requesting URL:\n   $base\n";
         $request = HTTP::Request->new( 'GET', $base );
         $response = $downloader->user_agent->request($request);
-        #if ( exists $$optref{'pasv'} ) {
-            if ( defined $downloader->passive ) {
-                $ENV{'FTP_PASSIVE'} = $downloader->passive;
-            }
-            else {
-                delete $ENV{'FTP_PASSIVE'};
-            }
-        #}
         if ( !$response->is_success ) {
             uscan_warn
               "In watch file $watchfile, reading webpage\n  $base failed: "

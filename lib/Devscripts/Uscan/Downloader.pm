@@ -28,7 +28,20 @@ BEGIN {
 has agent =>
   ( is => 'rw', default => sub { "Debian uscan $main::uscan_version" } );
 has timeout => ( is => 'rw' );
-has passive => ( is => 'rw' );
+has passive => (
+    is      => 'rw',
+    trigger => sub {
+        my ( $self, $nv ) = @_;
+        if ($nv) {
+            uscan_verbose "Set passive mode";
+            $ENV{'FTP_PASSIVE'} = $self->passive;
+        }
+        elsif ( $ENV{'FTP_PASSIVE'} ) {
+            uscan_verbose "Unset passive mode";
+            delete $ENV{'FTP_PASSIVE'};
+        }
+    }
+);
 has destdir => ( is => 'rw' );
 
 # 0: no repo, 1: shallow clone, 2: full clone
@@ -93,20 +106,9 @@ sub download ($$$$$$) {
         }
     }
     elsif ( $optref->mode eq 'ftp' ) {
-        if ( $self->passive ) {
-            $ENV{'FTP_PASSIVE'} = $self->passive;
-        }
         uscan_verbose "Requesting URL:\n   $url\n";
         $request = HTTP::Request->new( 'GET', "$url" );
         $response = $self->user_agent->request( $request, $fname );
-        if ( $self->passive ) {
-            if ( defined $self->passive ) {
-                $ENV{'FTP_PASSIVE'} = $self->passive;
-            }
-            else {
-                delete $ENV{'FTP_PASSIVE'};
-            }
-        }
         if ( !$response->is_success ) {
             if ( defined $pkg_dir ) {
                 uscan_warn

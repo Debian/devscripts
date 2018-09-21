@@ -16,18 +16,9 @@ sub ftp_search {
     my ($self) = @_;
 
     # FTP site
-    if ( $self->downloader->passive ) {
-        $ENV{'FTP_PASSIVE'} = $self->downloader->passive;
-    }
     uscan_verbose "Requesting URL:\n   $self->{parse_result}->{base}\n";
     my $request = HTTP::Request->new( 'GET', $self->parse_result->{base} );
     my $response = $self->downloader->user_agent->request($request);
-    if ( $self->downloader->passive ) {
-        $ENV{'FTP_PASSIVE'} = $self->downloader->passive;
-    }
-    else {
-        delete $ENV{'FTP_PASSIVE'};
-    }
     if ( !$response->is_success ) {
         uscan_warn
 "In watch file $self->{watchfile}, reading FTP directory\n  $self->{parse_result}->{base} failed: "
