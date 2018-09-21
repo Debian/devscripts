@@ -29,6 +29,9 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
       - This adds a new dependency on libmoo-perl for uscan (Recommended).
     + Optimize code
       - Set FTP passive mode in a trigger
+      - Don't use system()
+        + This adds a new dependency on libipc-run-perl for uscan
+          (Recommended).
 
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 03 Sep 2018 22:42:37 +0200
 

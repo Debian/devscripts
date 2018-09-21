@@ -2,6 +2,7 @@ package Devscripts::Uscan::Keyring;
 
 use strict;
 use Devscripts::Uscan::Output;
+use Devscripts::Uscan::Utils;
 use Dpkg::IPC;
 use File::Copy qw/copy move/;
 use File::Path qw/make_path/;
@@ -12,10 +13,10 @@ sub new {
     my ($class) = @_;
     my $keyring;
     my $havegpgv =
-      first { !system( 'sh', '-c', "command -v $_ >/dev/null 2>&1" ) }
+      first { not uscan_exec_no_fail( 'sh', '-c', "command -v $_ >/dev/null 2>&1" ) }
     qw(gpgv2 gpgv);
     my $havegpg =
-      first { !system( 'sh', '-c', "command -v $_ >/dev/null 2>&1" ) }
+      first { not uscan_exec_no_fail( 'sh', '-c', "command -v $_ >/dev/null 2>&1" ) }
     qw(gpg2 gpg);
     uscan_die("Please install gpgv or gpgv2.\n")   unless defined $havegpgv;
     uscan_die("Please install gnupg or gnupg2.\n") unless defined $havegpg;
@@ -98,7 +99,7 @@ sub verify {
     uscan_verbose(
         "Verifying OpenPGP self signature of $newfile and extract $sigfile\n");
     unless (
-        system( $self->{gpg}, '--homedir', $self->{gpghome},
+        uscan_exec( $self->{gpg}, '--homedir', $self->{gpghome},
             '--no-options',         '-q',        '--batch',
             '--no-default-keyring', '--keyring', $self->{keyring},
             '--trust-model',        'always',    '--decrypt',
@@ -114,7 +115,7 @@ sub verifyv {
     my ( $self, $sigfile, $base ) = @_;
     uscan_verbose("Verifying OpenPGP signature $sigfile for $base\n");
     unless (
-        system( $self->{gpgv}, '--homedir', '/dev/null', '--keyring',
+        uscan_exec( $self->{gpgv}, '--homedir', '/dev/null', '--keyring',
             $self->{keyring}, $sigfile, $base
         ) >> 8 == 0
       )

@@ -1098,7 +1098,7 @@ sub download_file_and_sig {
             $suffix_gz =~ s/.*?(\.gz|\.xz|\.bz2|\.lzma)?$/$1/;
             if ( $suffix_gz eq '.gz' ) {
                 if ( -x '/bin/gunzip' ) {
-                    system( '/bin/gunzip', "--keep",
+                    uscan_exec_no_fail( '/bin/gunzip', "--keep",
                         "$self->{config}->{destdir}/$sigfile_base" ) == 0
                       or uscan_die(
                         "gunzip $self->{config}->{destdir}/$sigfile_base failed\n");
@@ -1111,7 +1111,7 @@ sub download_file_and_sig {
             }
             elsif ( $suffix_gz eq '.xz' ) {
                 if ( -x '/usr/bin/unxz' ) {
-                    system( '/usr/bin/unxz', "--keep",
+                    uscan_exec_no_fail( '/usr/bin/unxz', "--keep",
                         "$self->{config}->{destdir}/$sigfile_base" ) == 0
                       or
                       uscan_die("unxz $self->{config}->{destdir}/$sigfile_base failed\n");
@@ -1124,7 +1124,7 @@ sub download_file_and_sig {
             }
             elsif ( $suffix_gz eq '.bz2' ) {
                 if ( -x '/bin/bunzip2' ) {
-                    system( '/bin/bunzip2', "--keep",
+                    uscan_exec_no_fail( '/bin/bunzip2', "--keep",
                         "$self->{config}->{destdir}/$sigfile_base" ) == 0
                       or uscan_die(
                         "bunzip2 $self->{config}->{destdir}/$sigfile_base failed\n");
@@ -1137,7 +1137,7 @@ sub download_file_and_sig {
             }
             elsif ( $suffix_gz eq '.lzma' ) {
                 if ( -x '/usr/bin/unlzma' ) {
-                    system( '/usr/bin/unlzma', "--keep",
+                    uscan_exec_no_fail( '/usr/bin/unlzma', "--keep",
                         "$self->{config}->{destdir}/$sigfile_base" ) == 0
                       or uscan_die(
                         "unlzma $self->{config}->{destdir}/$sigfile_base failed\n");

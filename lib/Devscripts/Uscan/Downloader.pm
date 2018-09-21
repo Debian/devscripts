@@ -124,23 +124,17 @@ sub download ($$$$$$) {
 
         if ( $self->gitrepo_state == 0 ) {
             if ( $optref->gitmode eq 'shallow' ) {
-                uscan_verbose
-"Execute: git clone --bare --depth=1 $base $destdir/$gitrepo_dir\n";
-                system( 'git', 'clone', '--bare', '--depth=1', $base,
+                uscan_exec( 'git', 'clone', '--bare', '--depth=1', $base,
                     "$destdir/$gitrepo_dir" );
                 $self->gitrepo_state(1);
             }
             else {
-                uscan_verbose
-                  "Execute: git clone --bare $base $destdir/$gitrepo_dir\n";
-                system( 'git', 'clone', '--bare', $base,
+                uscan_exec( 'git', 'clone', '--bare', $base,
                     "$destdir/$gitrepo_dir" );
                 $self->gitrepo_state(2);
             }
         }
-        uscan_verbose
-"Execute: git --git-dir=$destdir/$gitrepo_dir archive --format=tar --prefix=$pkg-$ver/ --output=$abs_dst/$pkg-$ver.tar $gitref\n";
-        system(
+        uscan_exec(
             'git',                 "--git-dir=$destdir/$gitrepo_dir",
             'archive',             '--format=tar',
             "--prefix=$pkg-$ver/", "--output=$abs_dst/$pkg-$ver.tar",
@@ -150,28 +144,26 @@ sub download ($$$$$$) {
 
         # If git cloned repo exists and not --debug ($verbose=1) -> remove it
         if ( $self->gitrepo_state > 0 and $verbose < 1 ) {
-            system( 'rm', '-rf', "$abs_dst/$gitrepo_dir" );
+
+            # TODO: replace this
+            uscan_exec( 'rm', '-rf', "$abs_dst/$gitrepo_dir" );
             $self->gitrepo_state(0);
         }
         chdir "$abs_dst" or uscan_die("Unable to chdir($abs_dst): $!\n");
         if ( $suffix eq 'gz' ) {
-            uscan_verbose "Execute: gzip -n -9 $pkg-$ver.tar\n";
-            system( "gzip", "-n", "-9", "$pkg-$ver.tar" ) == 0
+            uscan_exec_no_fail( "gzip", "-n", "-9", "$pkg-$ver.tar" ) == 0
               or uscan_die("gzip failed\n");
         }
         elsif ( $suffix eq 'xz' ) {
-            uscan_verbose "Execute: xz $pkg-$ver.tar\n";
-            system( "xz", "$pkg-$ver.tar" ) == 0
+            uscan_exec_no_fail( "xz", "$pkg-$ver.tar" ) == 0
               or uscan_die("xz failed\n");
         }
         elsif ( $suffix eq 'bz2' ) {
-            uscan_verbose "Execute: bzip2 $pkg-$ver.tar\n";
-            system( "bzip2", "$pkg-$ver.tar" ) == 0
+            uscan_exec_no_fail( "bzip2", "$pkg-$ver.tar" ) == 0
               or uscan_die("bzip2 failed\n");
         }
         elsif ( $suffix eq 'lzma' ) {
-            uscan_verbose "Execute: lzma $pkg-$ver.tar\n";
-            system( "lzma", "$pkg-$ver.tar" ) == 0
+            uscan_exec_no_fail( "lzma", "$pkg-$ver.tar" ) == 0
               or uscan_die("lzma failed\n");
         }
         else {

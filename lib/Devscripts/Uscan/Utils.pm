@@ -2,14 +2,16 @@ package Devscripts::Uscan::Utils;
 
 use strict;
 use Devscripts::Uscan::Output;
+use Dpkg::IPC;
+use IPC::Run qw(run);
 use Exporter 'import';
 use File::Basename;
 
 our @EXPORT = (
     qw(fix_href recursive_regex_dir newest_dir get_compression
-      get_suffix get_priority quoted_regex_parse safe_replace mangle)
+      get_suffix get_priority quoted_regex_parse safe_replace mangle
+      uscan_exec uscan_exec_no_fail)
 );
-
 
 #######################################################################
 # {{{ code 5: utility functions (download)
@@ -31,7 +33,9 @@ sub fix_href ($) {
 sub recursive_regex_dir ($$$$$$) {
 
     # If return '', parent code to cause return 1
-    my ( $downloader, $base, $dirversionmangle, $watchfile, $lineptr, $download_version ) = @_;
+    my ( $downloader, $base, $dirversionmangle, $watchfile, $lineptr,
+        $download_version )
+      = @_;
 
     $base =~ m%^(\w+://[^/]+)/(.*)$%;
     my $site = $1;
@@ -45,8 +49,8 @@ sub recursive_regex_dir ($$$$$$) {
         if ( $dirpattern =~ /\(.*\)/ ) {
             uscan_verbose "dir=>$dir  dirpattern=>$dirpattern\n";
             my $newest_dir =
-              newest_dir( $downloader, $site, $dir, $dirpattern, $dirversionmangle,
-                $watchfile, $lineptr, $download_version );
+              newest_dir( $downloader, $site, $dir, $dirpattern,
+                $dirversionmangle, $watchfile, $lineptr, $download_version );
             uscan_verbose "newest_dir => '$newest_dir'\n";
             if ( $newest_dir ne '' ) {
                 $dir .= "$newest_dir";
@@ -68,8 +72,9 @@ sub newest_dir ($$$$$$$$) {
 
     # return string $newdir as success
     # return string '' if error, to cause grand parent code to return 1
-    my ( $downloader, $site, $dir, $pattern, $dirversionmangle, $watchfile, $lineptr, $download_version ) =
-      @_;
+    my ( $downloader, $site, $dir, $pattern, $dirversionmangle, $watchfile,
+        $lineptr, $download_version )
+      = @_;
     my $base = $site . $dir;
     my ( $request, $response );
     my $newdir;
@@ -127,8 +132,8 @@ sub newest_dir ($$$$$$$$) {
                   join( ".", map { $_ // '' } $href =~ m&^$dirpattern/?$& );
                 if (
                     mangle(
-                        $watchfile, $lineptr, 'dirversionmangle:',
-                        \@{ $dirversionmangle },
+                        $watchfile,          $lineptr,
+                        'dirversionmangle:', \@{$dirversionmangle},
                         \$mangled_version
                     )
                   )
@@ -221,8 +226,8 @@ sub newest_dir ($$$$$$$$) {
                 my $mangled_version = join( ".", $dir =~ m/^$pattern$/ );
                 if (
                     mangle(
-                        $watchfile, $lineptr, 'dirversionmangle:',
-                        \@{ $dirversionmangle },
+                        $watchfile,          $lineptr,
+                        'dirversionmangle:', \@{$dirversionmangle},
                         \$mangled_version
                     )
                   )
@@ -268,8 +273,8 @@ sub newest_dir ($$$$$$$$) {
                     my $mangled_version = join( ".", $dir =~ m/^$pattern$/ );
                     if (
                         mangle(
-                            $watchfile, $lineptr, 'dirversionmangle:',
-                            \@{ $dirversionmangle },
+                            $watchfile,          $lineptr,
+                            'dirversionmangle:', \@{$dirversionmangle},
                             \$mangled_version
                         )
                       )
@@ -722,6 +727,23 @@ sub mangle($$$$$) {
         uscan_debug "After $name $$verptr\n";
     }
     return 0;
+}
+
+sub uscan_exec_no_fail {
+    {
+        local $, = ' ';
+        uscan_verbose "Execute: @_...\n";
+    }
+    run \@_;
+    return $?;
+}
+
+sub uscan_exec {
+    {
+        local $, = ' ';
+        uscan_verbose "Execute: @_...\n";
+    }
+    spawn( exec => \@_, wait_child => 1);
 }
 
 #######################################################################
