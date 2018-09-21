@@ -78,7 +78,7 @@ sub download ($$$$$$) {
     my ( $self, $url, $fname, $optref, $base, $pkg_dir ) = @_;
     my ( $request, $response );
     if ( $optref->mode eq 'http' ) {
-        if ( defined($1) and !$self->ssl ) {
+        if ( $url =~ /^https/ and !$self->ssl ) {
             uscan_die
 "$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
         }
