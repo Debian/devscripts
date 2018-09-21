@@ -92,16 +92,9 @@ sub download ($$$$$$) {
         $request = HTTP::Request->new( 'GET', $url, $headers );
         $response = $self->user_agent->request( $request, $fname );
         if ( !$response->is_success ) {
-
-            if ( defined $pkg_dir ) {
-                uscan_warn
-                  "In directory $pkg_dir, downloading\n  $url failed: "
-                  . $response->status_line . "\n";
-            }
-            else {
-                uscan_warn "Downloading\n $url failed:\n"
-                  . $response->status_line . "\n";
-            }
+            uscan_warn( defined $pkg_dir ? "In directory $pkg_dir, d" : "D" )
+              . "ownloading\n  $url failed: "
+              . $response->status_line . "\n";
             return 0;
         }
     }
@@ -110,15 +103,9 @@ sub download ($$$$$$) {
         $request = HTTP::Request->new( 'GET', "$url" );
         $response = $self->user_agent->request( $request, $fname );
         if ( !$response->is_success ) {
-            if ( defined $pkg_dir ) {
-                uscan_warn
-                  "In directory $pkg_dir, downloading\n  $url failed: "
-                  . $response->status_line . "\n";
-            }
-            else {
-                uscan_warn "Downloading\n $url failed:\n"
-                  . $response->status_line . "\n";
-            }
+            uscan_warn( defined $pkg_dir ? "In directory $pkg_dir, d" : "D" )
+              . "ownloading\n  $url failed: "
+              . $response->status_line . "\n";
             return 0;
         }
     }
