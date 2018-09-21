@@ -23,6 +23,11 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
   [ Chris Lamb ]
   * PEP8-ify a number of Python scripts.  MR: !27
 
+  [ Xavier Guimard ]
+  * uscan:
+    + rewrite uscan using object-oriented code
+    + add libmoo-perl in dependencies
+
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 03 Sep 2018 22:42:37 +0200
 
 devscripts (2.18.4) unstable; urgency=medium
