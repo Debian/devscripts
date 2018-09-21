@@ -37,7 +37,8 @@ def get_source_files():
         if not os.path.exists(code_file):  # pragma: no cover
             # The alternative path is needed for Debian's pybuild
             alternative = os.path.join(os.environ.get("OLDPWD", ""), code_file)
-            code_file = alternative if os.path.exists(alternative) else code_file
+            if os.path.exists(alternative):
+                code_file = alternative
         if is_script:
             with open(code_file, "rb") as script_file:
                 shebang = script_file.readline().decode("utf-8")

@@ -106,7 +106,8 @@ class WrapAndSortControl(Control):
         packages = [x.strip() for x in control[entry].split(",") if x.strip()]
 
         # Sanitize alternative packages. E.g. "a|b  |c" -> "a | b | c"
-        packages = [" | ".join([x.strip() for x in p.split("|")]) for p in packages]
+        packages = [" | ".join([x.strip() for x in p.split("|")])
+                    for p in packages]
 
         if sort:
             # Remove duplicate entries
