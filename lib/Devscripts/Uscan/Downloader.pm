@@ -31,6 +31,7 @@ has agent =>
 has timeout => ( is => 'rw' );
 has passive => (
     is      => 'rw',
+    default => 'default',
     trigger => sub {
         my ( $self, $nv ) = @_;
         if ($nv) {

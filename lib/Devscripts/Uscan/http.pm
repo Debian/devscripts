@@ -92,14 +92,7 @@ sub http_search {
         uscan_debug
 "processed content:\n$content\n[End of processed content] by Amazon AWS special case code\n";
     }
-
-    # We need this horrid stuff to handle href=foo type
-    # links.  OK, bad HTML, but we have to handle it nonetheless.
-    # It's bug #89749.
-    $content =~ s/href\s*=\s*(?=[^\"\'])([^\s>]+)/href="$1"/ig;
-
-    # Strip comments
-    $content =~ s/<!-- .*?-->//sg;
+    clean_content(\$content);
 
     # Is there a base URL given?
     if ( $content =~ /<\s*base\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/i ) {
@@ -342,13 +335,7 @@ sub http_newdir {
     uscan_debug
       "received content:\n$content\n[End of received content] by HTTP\n";
 
-    # We need this horrid stuff to handle href=foo type
-    # links.  OK, bad HTML, but we have to handle it nonetheless.
-    # It's bug #89749.
-    $content =~ s/href\s*=\s*(?=[^\"\'])([^\s>]+)/href="$1"/ig;
-
-    # Strip comments
-    $content =~ s/<!-- .*?-->//sg;
+    clean_content(\$content);
 
     my $dirpattern = "(?:(?:$site)?" . quotemeta($dir) . ")?$pattern";
 
@@ -421,6 +408,18 @@ sub http_newdir {
     $newdir =~ s%/$%%;
     $newdir =~ s%^.*/%%;
     return ($newdir);
+}
+
+sub clean_content {
+    my($content) = @_;
+    # We need this horrid stuff to handle href=foo type
+    # links.  OK, bad HTML, but we have to handle it nonetheless.
+    # It's bug #89749.
+    $$content =~ s/href\s*=\s*(?=[^\"\'])([^\s>]+)/href="$1"/ig;
+
+    # Strip comments
+    $$content =~ s/<!-- .*?-->//sg;
+    return $content;
 }
 
 1;
