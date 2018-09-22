@@ -395,7 +395,8 @@ EOF
 sub version {
     print <<"EOF";
 This is $progname, from the Debian devscripts package, version $main::uscan_version
-This code is copyright 1999-2006 by Julian Gilbey, all rights reserved.
+This code is copyright 1999-2006 by Julian Gilbey and 2018 by Xavier Guimard,
+all rights reserved.
 Original code by Christoph Lameter.
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the
