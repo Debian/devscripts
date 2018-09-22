@@ -117,6 +117,8 @@ sub BUILD {
         s/^\s*//;
 
       CHOMP:
+
+        # Reassemble lines splitted using \
         chomp;
         if (s/(?<!\\)\\$//) {
             if ( eof(WATCH) ) {
@@ -138,24 +140,39 @@ sub BUILD {
             goto CHOMP;
         }
 
+        # "version" must be the first field
         if ( !$watch_version ) {
-            if (/^version\s*=\s*(\d+)(\s|$)/) {
+
+            # Looking for "version" field.
+            if (/^version\s*=\s*(\d+)(\s|$)/) {    # Found
                 $watch_version = $1;
+
+                # Note that version=1 watchfiles have no "version" field so
+                # authorizated values are >= 2 and <= CURRENT_WATCHFILE_VERSION
                 if (   $watch_version < 2
                     or $watch_version > $main::CURRENT_WATCHFILE_VERSION )
                 {
+                    # "version" field found but has no authorizated value
                     uscan_warn
 "$args->{watchfile} version number is unrecognised; skipping watch file\n";
                     last;
                 }
+
+                # Next line
                 next;
             }
+
+            # version=1 is deprecated
             else {
                 uscan_warn
-"$args->{watchfile} is an obsolete version 1 watch file;\n   please upgrade to a higher version\n   (see uscan(1) for details).\n";
+                  "$args->{watchfile} is an obsolete version 1 watch file;\n"
+                  . "   please upgrade to a higher version\n"
+                  . "   (see uscan(1) for details).\n";
                 $watch_version = 1;
             }
         }
+
+        # "version" is fixed, parsing lines now
 
         # Are there any warnings from this part to give if we're using dehs?
         dehs_output if ($dehs);
