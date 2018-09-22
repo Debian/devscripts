@@ -16,6 +16,7 @@ our @EXPORT = qw(http_search http_upstream_url http_newfile_base);
 ##################################
 sub http_search {
     my ($self) = @_;
+
     # $content: web page to be scraped to find the URLs to be downloaded
     if ( defined($1) and $self->downloader->ssl ) {
         uscan_die
@@ -78,7 +79,7 @@ sub http_search {
     {
         return undef;
     }
-    if (    !$self->shared->{bare}
+    if (   !$self->shared->{bare}
         and $content =~ m%^<[?]xml%i
         and $content =~ m%xmlns="http://s3.amazonaws.com/doc/2006-03-01/"%
         and $content !~ m%<Key><a\s+href% )
@@ -171,8 +172,9 @@ sub http_search {
                     }
                 }
                 my $match = '';
-                if (defined  $self->shared->{download_version} ) {
-                    if ( $mangled_version eq $self->shared->{download_version} ) {
+                if ( defined $self->shared->{download_version} ) {
+                    if ( $mangled_version eq $self->shared->{download_version} )
+                    {
                         $match = "matched with the download version";
                     }
                 }
@@ -191,7 +193,7 @@ sub http_search {
         uscan_verbose $msg;
     }
     my ( $newversion, $newfile );
-    if (defined  $self->shared->{download_version} ) {
+    if ( defined $self->shared->{download_version} ) {
 
         # extract ones which has $match in the above loop defined
         my @vhrefs = grep { $$_[3] } @hrefs;
@@ -307,6 +309,118 @@ sub http_upstream_url {
         }
     }
     return $upstream_url;
+}
+
+sub http_newdir {
+    my (
+        $https,     $downloader, $site,
+        $dir,       $pattern,    $dirversionmangle,
+        $watchfile, $lineptr,    $download_version
+    ) = @_;
+
+    my ( $request, $response, $newdir );
+    my ( $download_version_short1, $download_version_short2,
+        $download_version_short3 )
+      = partial_version($download_version);
+    my $base = $site . $dir;
+
+    if ( defined($https) and !$downloader->ssl ) {
+        uscan_die
+"$progname: you must have the liblwp-protocol-https-perl package installed\n"
+          . "to use https URLs\n";
+    }
+    $request = HTTP::Request->new( 'GET', $base );
+    $response = $downloader->user_agent->request($request);
+    if ( !$response->is_success ) {
+        uscan_warn
+          "In watch file $watchfile, reading webpage\n  $base failed: "
+          . $response->status_line . "\n";
+        return '';
+    }
+
+    my $content = $response->content;
+    uscan_debug
+      "received content:\n$content\n[End of received content] by HTTP\n";
+
+    # We need this horrid stuff to handle href=foo type
+    # links.  OK, bad HTML, but we have to handle it nonetheless.
+    # It's bug #89749.
+    $content =~ s/href\s*=\s*(?=[^\"\'])([^\s>]+)/href="$1"/ig;
+
+    # Strip comments
+    $content =~ s/<!-- .*?-->//sg;
+
+    my $dirpattern = "(?:(?:$site)?" . quotemeta($dir) . ")?$pattern";
+
+    uscan_verbose "Matching pattern:\n   $dirpattern\n";
+    my @hrefs;
+    my $match = '';
+    while ( $content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi ) {
+        my $href = fix_href($2);
+        uscan_verbose "Matching target for dirversionmangle:   $href\n";
+        if ( $href =~ m&^$dirpattern/?$& ) {
+            my $mangled_version =
+              join( ".", map { $_ // '' } $href =~ m&^$dirpattern/?$& );
+            if (
+                mangle(
+                    $watchfile,          $lineptr,
+                    'dirversionmangle:', \@{$dirversionmangle},
+                    \$mangled_version
+                )
+              )
+            {
+                return 1;
+            }
+            $match = '';
+            if ( defined $download_version
+                and $mangled_version eq $download_version )
+            {
+                $match = "matched with the download version";
+            }
+            if ( defined $download_version_short3
+                and $mangled_version eq $download_version_short3 )
+            {
+                $match = "matched with the download version (partial 3)";
+            }
+            if ( defined $download_version_short2
+                and $mangled_version eq $download_version_short2 )
+            {
+                $match = "matched with the download version (partial 2)";
+            }
+            if ( defined $download_version_short1
+                and $mangled_version eq $download_version_short1 )
+            {
+                $match = "matched with the download version (partial 1)";
+            }
+            push @hrefs, [ $mangled_version, $href, $match ];
+        }
+    }
+
+    # extract ones which has $match in the above loop defined
+    my @vhrefs = grep { $$_[2] } @hrefs;
+    if (@vhrefs) {
+        @vhrefs = Devscripts::Versort::upstream_versort(@vhrefs);
+        $newdir = $vhrefs[0][1];
+    }
+    if (@hrefs) {
+        @hrefs = Devscripts::Versort::upstream_versort(@hrefs);
+        my $msg = "Found the following matching directories (newest first):\n";
+        foreach my $href (@hrefs) {
+            $msg .= "   $$href[1] ($$href[0]) $$href[2]\n";
+        }
+        uscan_verbose $msg;
+        $newdir //= $hrefs[0][1];
+    }
+    else {
+        uscan_warn
+"In $watchfile,\n  no matching hrefs for pattern\n  $site$dir$pattern";
+        return '';
+    }
+
+    # just give the final directory component
+    $newdir =~ s%/$%%;
+    $newdir =~ s%^.*/%%;
+    return ($newdir);
 }
 
 1;

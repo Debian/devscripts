@@ -3,8 +3,11 @@ package Devscripts::Uscan::_xtp;
 
 use strict;
 use File::Basename;
+use Exporter 'import';
 use Devscripts::Uscan::Output;
 use Devscripts::Uscan::Utils;
+
+our @EXPORT = ('partial_version');
 
 sub _xtp_newfile_base {
     my ($self) = @_;
@@ -64,4 +67,21 @@ sub _xtp_newfile_base {
     }
     return $newfile_base;
 }
+
+sub partial_version {
+    my ($download_version) = @_;
+    my ( $d1, $d2, $d3 );
+    if ( defined $download_version ) {
+        uscan_verbose "download version requested: $download_version\n";
+        if ( $download_version =~
+            m/^([-~\+\w]+)(\.[-~\+\w]+)?(\.[-~\+\w]+)?(\.[-~\+\w]+)?$/ )
+        {
+            $d1 = "$1"     if defined $1;
+            $d2 = "$1$2"   if defined $2;
+            $d3 = "$1$2$3" if defined $3;
+        }
+    }
+    return ( $d1, $d2, $d3 );
+}
+
 1;

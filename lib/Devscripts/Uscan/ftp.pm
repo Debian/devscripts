@@ -148,4 +148,151 @@ sub ftp_upstream_url {
 
 *ftp_newfile_base = \&Devscripts::Uscan::_xtp::_xtp_newfile_base;
 
+sub ftp_newdir {
+    my ( $downloader, $site, $dir, $pattern, $dirversionmangle, $watchfile,
+        $lineptr, $download_version )
+      = @_;
+
+    my ( $request, $response, $newdir );
+    my ( $download_version_short1, $download_version_short2,
+        $download_version_short3 )
+      = partial_version($download_version);
+    my $base = $site . $dir;
+    $request = HTTP::Request->new( 'GET', $base );
+    $response = $downloader->user_agent->request($request);
+    if ( !$response->is_success ) {
+        uscan_warn
+          "In watch file $watchfile, reading webpage\n  $base failed: "
+          . $response->status_line . "\n";
+        return '';
+    }
+
+    my $content = $response->content;
+    uscan_debug
+      "received content:\n$content\n[End of received content] by FTP\n";
+
+    # FTP directory listings either look like:
+    # info info ... info filename [ -> linkname]
+    # or they're HTMLised (if they've been through an HTTP proxy)
+    # so we may have to look for <a href="filename"> type patterns
+    uscan_verbose "matching pattern $pattern\n";
+    my (@dirs);
+    my $match = '';
+
+    # We separate out HTMLised listings from standard listings, so
+    # that we can target our search correctly
+    if ( $content =~ /<\s*a\s+[^>]*href/i ) {
+        uscan_verbose "HTMLized FTP listing by the HTTP proxy\n";
+        while (
+            $content =~ m/(?:<\s*a\s+[^>]*href\s*=\s*\")((?-i)$pattern)\"/gi )
+        {
+            my $dir = $1;
+            uscan_verbose "Matching target for dirversionmangle:   $dir\n";
+            my $mangled_version = join( ".", $dir =~ m/^$pattern$/ );
+            if (
+                mangle(
+                    $watchfile,          $lineptr,
+                    'dirversionmangle:', \@{$dirversionmangle},
+                    \$mangled_version
+                )
+              )
+            {
+                return 1;
+            }
+            $match = '';
+            if ( defined $download_version
+                and $mangled_version eq $download_version )
+            {
+                $match = "matched with the download version";
+            }
+            if ( defined $download_version_short3
+                and $mangled_version eq $download_version_short3 )
+            {
+                $match = "matched with the download version (partial 3)";
+            }
+            if ( defined $download_version_short2
+                and $mangled_version eq $download_version_short2 )
+            {
+                $match = "matched with the download version (partial 2)";
+            }
+            if ( defined $download_version_short1
+                and $mangled_version eq $download_version_short1 )
+            {
+                $match = "matched with the download version (partial 1)";
+            }
+            push @dirs, [ $mangled_version, $dir, $match ];
+        }
+    }
+    else {
+        # they all look like:
+        # info info ... info filename [ -> linkname]
+        uscan_verbose "Standard FTP listing.\n";
+        foreach my $ln ( split( /\n/, $content ) ) {
+            $ln =~ s/^-.*$//;    # FTP listing of file, '' skiped by if ($ln...
+            $ln =~ s/\s+->\s+\S+$//;     # FTP listing for link destination
+            $ln =~ s/^.*\s(\S+)$/$1/;    # filename only
+            if ( $ln =~ m/^($pattern)(\s+->\s+\S+)?$/ ) {
+                my $dir = $1;
+                uscan_verbose "Matching target for dirversionmangle:   $dir\n";
+                my $mangled_version = join( ".", $dir =~ m/^$pattern$/ );
+                if (
+                    mangle(
+                        $watchfile,          $lineptr,
+                        'dirversionmangle:', \@{$dirversionmangle},
+                        \$mangled_version
+                    )
+                  )
+                {
+                    return 1;
+                }
+                $match = '';
+                if ( defined $download_version
+                    and $mangled_version eq $download_version )
+                {
+                    $match = "matched with the download version";
+                }
+                if ( defined $download_version_short3
+                    and $mangled_version eq $download_version_short3 )
+                {
+                    $match = "matched with the download version (partial 3)";
+                }
+                if ( defined $download_version_short2
+                    and $mangled_version eq $download_version_short2 )
+                {
+                    $match = "matched with the download version (partial 2)";
+                }
+                if ( defined $download_version_short1
+                    and $mangled_version eq $download_version_short1 )
+                {
+                    $match = "matched with the download version (partial 1)";
+                }
+                push @dirs, [ $mangled_version, $dir, $match ];
+            }
+        }
+    }
+
+    # extract ones which has $match in the above loop defined
+    my @vdirs = grep { $$_[2] } @dirs;
+    if (@vdirs) {
+        @vdirs  = Devscripts::Versort::upstream_versort(@vdirs);
+        $newdir = $vdirs[0][1];
+    }
+    if (@dirs) {
+        @dirs = Devscripts::Versort::upstream_versort(@dirs);
+        my $msg =
+          "Found the following matching FTP directories (newest first):\n";
+        foreach my $dir (@dirs) {
+            $msg .= "   $$dir[1] ($$dir[0]) $$dir[2]\n";
+        }
+        uscan_verbose $msg;
+        $newdir //= $dirs[0][1];
+    }
+    else {
+        uscan_warn
+          "In $watchfile no matching dirs for pattern\n  $base$pattern\n";
+        $newdir = '';
+    }
+    return $newdir;
+}
+
 1;
