@@ -80,8 +80,9 @@ sub download ($$$$$$) {
     my ( $request, $response );
     if ( $optref->mode eq 'http' ) {
         if ( $url =~ /^https/ and !$self->ssl ) {
-            uscan_die
-"$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
+            uscan_die "$progname: you must have the "
+              . "liblwp-protocol-https-perl package installed\n"
+              . "to use https URLs\n";
         }
 
         # substitute HTML entities
@@ -147,8 +148,8 @@ sub download ($$$$$$) {
         if ( $self->gitrepo_state > 0 and $verbose < 1 ) {
 
             my $err;
-            removetree("$abs_dst/$gitrepo_dir",{error=>\$err});
-            if(@$err) {
+            removetree( "$abs_dst/$gitrepo_dir", { error => \$err } );
+            if (@$err) {
                 local $, = "\n\t";
                 uscan_warn "Errors during git repo clean:\n\t@$err\n";
             }
