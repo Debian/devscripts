@@ -42,8 +42,9 @@ sub new {
 
             # Need to convert to an armored key
             $keyring = "debian/upstream/signing-key.asc";
-            uscan_warn "Found old pgp keyring, converting it.\n"
-              . "Please remove $binkeyring after ckecking $keyring\n";
+            uscan_warn "Found binary keyring ($binkeyring),"
+              . " please \"armor\" it to $keyring. Example:\n"
+              . "   gpg --output $keyring --enarmor $binkeyring\n";
             spawn(
                 exec => [
                     $havegpg,               '--homedir',
