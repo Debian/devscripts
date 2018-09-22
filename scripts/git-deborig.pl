@@ -214,10 +214,15 @@ sub archive_ref_or_just_print {
         my @cmd_mapped = map { shell_quote($_) } @$cmd;
         print "@cmd_mapped\n";
     } else {
+        my ($info_dir) =
+          $git->rev_parse(qw|--git-path info/|);
         my ($info_attributes) =
           $git->rev_parse(qw|--git-path info/attributes|);
         my ($deborig_attributes) =
           $git->rev_parse(qw|--git-path info/attributes-deborig|);
+
+        # sometimes the info/ dir may not exist
+        mkdir $info_dir unless ( -e $info_dir );
 
         # For compatibility with dgit, we have to override any
         # export-subst and export-ignore git attributes that might be set
