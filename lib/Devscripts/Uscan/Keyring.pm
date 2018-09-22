@@ -12,11 +12,13 @@ use List::Util qw/first/;
 sub new {
     my ($class) = @_;
     my $keyring;
-    my $havegpgv =
-      first { not uscan_exec_no_fail( 'sh', '-c', "command -v $_ >/dev/null 2>&1" ) }
+    my $havegpgv = first {
+        not uscan_exec_no_fail( 'sh', '-c', "command -v $_ >/dev/null 2>&1" )
+    }
     qw(gpgv2 gpgv);
-    my $havegpg =
-      first { not uscan_exec_no_fail( 'sh', '-c', "command -v $_ >/dev/null 2>&1" ) }
+    my $havegpg = first {
+        not uscan_exec_no_fail( 'sh', '-c', "command -v $_ >/dev/null 2>&1" )
+    }
     qw(gpg2 gpg);
     uscan_die("Please install gpgv or gpgv2.\n")   unless defined $havegpgv;
     uscan_die("Please install gnupg or gnupg2.\n") unless defined $havegpg;
@@ -40,6 +42,8 @@ sub new {
 
             # Need to convert to an armored key
             $keyring = "debian/upstream/signing-key.asc";
+            uscan_warn "Found old pgp keyring, converting it.\n"
+              . "Please remove $binkeyring after ckecking $keyring\n";
             spawn(
                 exec => [
                     $havegpg,               '--homedir',
@@ -99,11 +103,15 @@ sub verify {
     uscan_verbose(
         "Verifying OpenPGP self signature of $newfile and extract $sigfile\n");
     unless (
-        uscan_exec_no_fail( $self->{gpg}, '--homedir', $self->{gpghome},
-            '--no-options',         '-q',        '--batch',
-            '--no-default-keyring', '--keyring', $self->{keyring},
-            '--trust-model',        'always',    '--decrypt',
-            '-o',                   "$sigfile",  "$newfile"
+        uscan_exec_no_fail(
+            $self->{gpg},           '--homedir',
+            $self->{gpghome},       '--no-options',
+            '-q',                   '--batch',
+            '--no-default-keyring', '--keyring',
+            $self->{keyring},       '--trust-model',
+            'always',               '--decrypt',
+            '-o',                   "$sigfile",
+            "$newfile"
         ) >> 8 == 0
       )
     {
@@ -115,8 +123,9 @@ sub verifyv {
     my ( $self, $sigfile, $base ) = @_;
     uscan_verbose("Verifying OpenPGP signature $sigfile for $base\n");
     unless (
-        uscan_exec_no_fail( $self->{gpgv}, '--homedir', '/dev/null', '--keyring',
-            $self->{keyring}, $sigfile, $base
+        uscan_exec_no_fail(
+            $self->{gpgv},    '--homedir', '/dev/null', '--keyring',
+            $self->{keyring}, $sigfile,    $base
         ) >> 8 == 0
       )
     {
