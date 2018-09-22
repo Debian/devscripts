@@ -5,6 +5,7 @@ use Devscripts::Uscan::Output;
 use Devscripts::Uscan::Utils;
 use Dpkg::IPC;
 use File::Copy qw/copy move/;
+use File::Which;
 use File::Path qw/make_path/;
 use File::Temp qw/tempfile tempdir/;
 use List::Util qw/first/;
@@ -13,11 +14,11 @@ sub new {
     my ($class) = @_;
     my $keyring;
     my $havegpgv = first {
-        not uscan_exec_no_fail( 'sh', '-c', "command -v $_ >/dev/null 2>&1" )
+        which $_
     }
     qw(gpgv2 gpgv);
     my $havegpg = first {
-        not uscan_exec_no_fail( 'sh', '-c', "command -v $_ >/dev/null 2>&1" )
+        which $_
     }
     qw(gpg2 gpg);
     uscan_die("Please install gpgv or gpgv2.\n")   unless defined $havegpgv;

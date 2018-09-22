@@ -33,6 +33,8 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
         + This adds a new dependency on libipc-run-perl for uscan
           (Recommended).
       - Avoid system() calls
+        + This adds a new dependency on libfile-which-perl for uscan
+          (Recommended).
       - Avoid code dup
     + Behaviour changes
       - Warn when find old pgp keyring
