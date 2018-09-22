@@ -32,6 +32,8 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
       - Don't use system()
         + This adds a new dependency on libipc-run-perl for uscan
           (Recommended).
+      - Avoid system() calls
+      - Avoid code dup
 
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 03 Sep 2018 22:42:37 +0200
 
