@@ -28,6 +28,10 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
     + Rewrite using object-oriented code.  MR: !28
       - This adds a new dependency on libmoo-perl for uscan (Recommended).
 
+  [ Sean Whitton ]
+  * git-deborig:
+    + Don't fail when .git/info does not exist.  Closes: #909339; MR: !29
+
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 03 Sep 2018 22:42:37 +0200
 
 devscripts (2.18.4) unstable; urgency=medium
