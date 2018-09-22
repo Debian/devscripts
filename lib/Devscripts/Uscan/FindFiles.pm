@@ -41,51 +41,8 @@ sub find_watch_files {
                 }
             }
 
-            # Figure out package info we need
-            my $changelog = eval { changelog_parse(); };
-            if ($@) {
-                uscan_die "Problems parsing debian/changelog: $@\n";
-            }
-
-            my ( $package, $debversion, $uversion );
-            $package = $changelog->{Source};
-            uscan_die
-              "Problem determining the package name from debian/changelog\n"
-              unless defined $package;
-            $debversion = $changelog->{Version};
-            uscan_die "Problem determining the version from debian/changelog\n"
-              unless defined $debversion;
-
-            # Check the directory is properly named for safety
-            if ( $config->check_dirname_level == 2
-                or ( $config->check_dirname_level == 1 and cwd() ne $opwd ) )
-            {
-                my $good_dirname;
-                my $re = $config->check_dirname_regex;
-                $re =~ s/PACKAGE/\Q$package\E/g;
-                if ( $re =~ m%/% ) {
-                    $good_dirname = ( cwd() =~ m%^$re$% );
-                }
-                else {
-                    $good_dirname = ( basename( cwd() ) =~ m%^$re$% );
-                }
-                uscan_die "The directory name "
-                  . basename( cwd() )
-                  . " doesn't match the requirement of\n"
-                  . "   --check_dirname_level=$config->{check_dirname_level} --check-dirname-regex=$re .\n"
-                  . "   Set --check-dirname-level=0 to disable this sanity check feature.\n"
-                  unless defined $good_dirname;
-            }
-
-            # Get current upstream version number
-            if ( defined $config->uversion ) {
-                $uversion = $config->uversion;
-            }
-            else {
-                $uversion = $debversion;
-                $uversion =~ s/-[^-]+$//;    # revision
-                $uversion =~ s/^\d+://;      # epoch
-            }
+            my ( $package, $debversion, $uversion ) =
+              scan_changelog( $config, $opwd, 1 );
 
             return ( [ cwd(), $package, $uversion, $config->watchfile ] );
         }
@@ -138,58 +95,9 @@ sub find_watch_files {
                   "Problems reading debian/changelog in $dir, skipping\n";
                 next;
             }
-
-            # Figure out package info we need
-            my $changelog = eval { changelog_parse(); };
-            if ($@) {
-                uscan_warn
-                  "Problems parse debian/changelog in $dir, skipping\n";
-                next;
-            }
-
-            my ( $package, $debversion, $uversion );
-            $package = $changelog->{Source};
-            unless ( defined $package ) {
-                uscan_warn
-"Problem determining the package name from debian/changelog\n";
-                next;
-            }
-            $debversion = $changelog->{Version};
-            unless ( defined $debversion ) {
-                uscan_warn
-                  "Problem determining the version from debian/changelog\n";
-                next;
-            }
-            uscan_verbose
-"package=\"$package\" version=\"$debversion\" (as seen in debian/changelog)\n";
-
-            # Check the directory is properly named for safety
-            if ( $config->check_dirname_level == 2
-                or ( $config->check_dirname_level == 1 and cwd() ne $opwd ) )
-            {
-                my $good_dirname;
-                my $re = $config->check_dirname_regex;
-                $re =~ s/PACKAGE/\Q$package\E/g;
-                if ( $re =~ m%/% ) {
-                    $good_dirname = ( cwd() =~ m%^$re$% );
-                }
-                else {
-                    $good_dirname = ( basename( cwd() ) =~ m%^$re$% );
-                }
-                unless ( defined $good_dirname ) {
-                    uscan_die "The directory name "
-                      . basename( cwd() )
-                      . " doesn't match the requirement of\n"
-                      . "   --check_dirname_level=$config->{check_dirname_level} --check-dirname-regex=$re .\n"
-                      . "   Set --check-dirname-level=0 to disable this sanity check feature.\n";
-                    next;
-                }
-            }
-
-            # Get upstream version number
-            $uversion = $debversion;
-            $uversion =~ s/-[^-]+$//;    # revision
-            $uversion =~ s/^\d+://;      # epoch
+            my ( $package, $debversion, $uversion ) =
+              scan_changelog( $config, $opwd );
+            next unless ($package);
 
             uscan_verbose
 "package=\"$package\" version=\"$uversion\" (no epoch/revision)\n";
@@ -252,4 +160,57 @@ sub find_watch_files {
     return @results;
 }
 
+sub scan_changelog {
+    my ( $config, $opwd, $die ) = @_;
+    my $out =
+      $die ? sub { uscan_die(@_) } : sub { uscan_warn( $_[0] . ', skipping' ) };
+
+    # Figure out package info we need
+    my $changelog = eval { changelog_parse(); };
+    if ($@) {
+        return $out ("Problems parsing debian/changelog:\n");
+    }
+
+    my ( $package, $debversion, $uversion );
+    $package = $changelog->{Source};
+    return $out ("Problem determining the package name from debian/changelog\n")
+      unless defined $package;
+    $debversion = $changelog->{Version};
+    return $out ("Problem determining the version from debian/changelog\n")
+      unless defined $debversion;
+    uscan_verbose
+"package=\"$package\" version=\"$debversion\" (as seen in debian/changelog)\n";
+
+    # Check the directory is properly named for safety
+    if ( $config->check_dirname_level == 2
+        or ( $config->check_dirname_level == 1 and cwd() ne $opwd ) )
+    {
+        my $good_dirname;
+        my $re = $config->check_dirname_regex;
+        $re =~ s/PACKAGE/\Q$package\E/g;
+        if ( $re =~ m%/% ) {
+            $good_dirname = ( cwd() =~ m%^$re$% );
+        }
+        else {
+            $good_dirname = ( basename( cwd() ) =~ m%^$re$% );
+        }
+        return $out ( "The directory name "
+              . basename( cwd() )
+              . " doesn't match the requirement of\n"
+              . "   --check_dirname_level=$config->{check_dirname_level} --check-dirname-regex=$re .\n"
+              . "   Set --check-dirname-level=0 to disable this sanity check feature.\n"
+        ) unless defined $good_dirname;
+    }
+
+    # Get current upstream version number
+    if ( defined $config->uversion ) {
+        $uversion = $config->uversion;
+    }
+    else {
+        $uversion = $debversion;
+        $uversion =~ s/-[^-]+$//;    # revision
+        $uversion =~ s/^\d+://;      # epoch
+    }
+    return ( $package, $debversion, $uversion );
+}
 1;

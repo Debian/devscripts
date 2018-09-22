@@ -22,9 +22,7 @@ sub git_search {
         if (    $self->gitmode eq 'shallow'
             and $self->parse_result->{filepattern} eq 'HEAD' )
         {
-            uscan_verbose
-"Execute: git clone --bare --depth=1 $self->{base} $self->{destdir}/$self->{gitrepo_dir}\n";
-            system( 'git', 'clone', '--bare', '--depth=1', $self->base,
+            uscan_exec( 'git', 'clone', '--bare', '--depth=1', $self->base,
                 "$self->{destdir}/$self->{gitrepo_dir}" );
             $self->downloader->gitrepo_state(1);
         }
@@ -32,16 +30,12 @@ sub git_search {
             and $self->parse_result->{filepattern} ne 'HEAD' )
         {    # heads/<branch>
             $newfile =~ s&^heads/&&;    # Set to <branch>
-            uscan_verbose
-"Execute: git clone --bare --depth=1 -b $newfile $self->{base} $self->{destdir}/$self->{gitrepo_dir}\n";
-            system( 'git', 'clone', '--bare', '--depth=1', '-b', "$newfile",
+            uscan_exec( 'git', 'clone', '--bare', '--depth=1', '-b', "$newfile",
                 $self->base, "$self->{destdir}/$self->{gitrepo_dir}" );
             $self->downloader->gitrepo_state(1);
         }
         else {
-            uscan_verbose
-"Execute: git clone --bare $self->{base} $self->{destdir}/$self->{gitrepo_dir}\n";
-            system( 'git', 'clone', '--bare', $self->base,
+            uscan_exec( 'git', 'clone', '--bare', $self->base,
                 "$self->{destdir}/$self->{gitrepo_dir}" );
             $self->downloader->gitrepo_state(2);
         }

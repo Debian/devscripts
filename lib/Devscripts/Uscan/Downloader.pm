@@ -2,6 +2,7 @@ package Devscripts::Uscan::Downloader;
 
 use strict;
 use Cwd qw/cwd abs_path/;
+use File::Path;
 use Devscripts::Uscan::CatchRedirections;
 use Devscripts::Uscan::Output;
 use Moo;
@@ -28,7 +29,21 @@ BEGIN {
 has agent =>
   ( is => 'rw', default => sub { "Debian uscan $main::uscan_version" } );
 has timeout => ( is => 'rw' );
-has passive => ( is => 'rw' );
+has passive => (
+    is      => 'rw',
+    default => 'default',
+    trigger => sub {
+        my ( $self, $nv ) = @_;
+        if ($nv) {
+            uscan_verbose "Set passive mode";
+            $ENV{'FTP_PASSIVE'} = $self->passive;
+        }
+        elsif ( $ENV{'FTP_PASSIVE'} ) {
+            uscan_verbose "Unset passive mode";
+            delete $ENV{'FTP_PASSIVE'};
+        }
+    }
+);
 has destdir => ( is => 'rw' );
 
 # 0: no repo, 1: shallow clone, 2: full clone
@@ -65,9 +80,10 @@ sub download ($$$$$$) {
     my ( $self, $url, $fname, $optref, $base, $pkg_dir ) = @_;
     my ( $request, $response );
     if ( $optref->mode eq 'http' ) {
-        if ( defined($1) and !$self->ssl ) {
-            uscan_die
-"$progname: you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
+        if ( $url =~ /^https/ and !$self->ssl ) {
+            uscan_die "$progname: you must have the "
+              . "liblwp-protocol-https-perl package installed\n"
+              . "to use https URLs\n";
         }
 
         # substitute HTML entities
@@ -79,44 +95,20 @@ sub download ($$$$$$) {
         $request = HTTP::Request->new( 'GET', $url, $headers );
         $response = $self->user_agent->request( $request, $fname );
         if ( !$response->is_success ) {
-
-            if ( defined $pkg_dir ) {
-                uscan_warn
-                  "In directory $pkg_dir, downloading\n  $url failed: "
-                  . $response->status_line . "\n";
-            }
-            else {
-                uscan_warn "Downloading\n $url failed:\n"
-                  . $response->status_line . "\n";
-            }
+            uscan_warn( defined $pkg_dir ? "In directory $pkg_dir, d" : "D" )
+              . "ownloading\n  $url failed: "
+              . $response->status_line . "\n";
             return 0;
         }
     }
     elsif ( $optref->mode eq 'ftp' ) {
-        if ( $self->passive ) {
-            $ENV{'FTP_PASSIVE'} = $self->passive;
-        }
         uscan_verbose "Requesting URL:\n   $url\n";
         $request = HTTP::Request->new( 'GET', "$url" );
         $response = $self->user_agent->request( $request, $fname );
-        if ( $self->passive ) {
-            if ( defined $self->passive ) {
-                $ENV{'FTP_PASSIVE'} = $self->passive;
-            }
-            else {
-                delete $ENV{'FTP_PASSIVE'};
-            }
-        }
         if ( !$response->is_success ) {
-            if ( defined $pkg_dir ) {
-                uscan_warn
-                  "In directory $pkg_dir, downloading\n  $url failed: "
-                  . $response->status_line . "\n";
-            }
-            else {
-                uscan_warn "Downloading\n $url failed:\n"
-                  . $response->status_line . "\n";
-            }
+            uscan_warn( defined $pkg_dir ? "In directory $pkg_dir, d" : "D" )
+              . "ownloading\n  $url failed: "
+              . $response->status_line . "\n";
             return 0;
         }
     }
@@ -135,23 +127,17 @@ sub download ($$$$$$) {
 
         if ( $self->gitrepo_state == 0 ) {
             if ( $optref->gitmode eq 'shallow' ) {
-                uscan_verbose
-"Execute: git clone --bare --depth=1 $base $destdir/$gitrepo_dir\n";
-                system( 'git', 'clone', '--bare', '--depth=1', $base,
+                uscan_exec( 'git', 'clone', '--bare', '--depth=1', $base,
                     "$destdir/$gitrepo_dir" );
                 $self->gitrepo_state(1);
             }
             else {
-                uscan_verbose
-                  "Execute: git clone --bare $base $destdir/$gitrepo_dir\n";
-                system( 'git', 'clone', '--bare', $base,
+                uscan_exec( 'git', 'clone', '--bare', $base,
                     "$destdir/$gitrepo_dir" );
                 $self->gitrepo_state(2);
             }
         }
-        uscan_verbose
-"Execute: git --git-dir=$destdir/$gitrepo_dir archive --format=tar --prefix=$pkg-$ver/ --output=$abs_dst/$pkg-$ver.tar $gitref\n";
-        system(
+        uscan_exec_no_fail(
             'git',                 "--git-dir=$destdir/$gitrepo_dir",
             'archive',             '--format=tar',
             "--prefix=$pkg-$ver/", "--output=$abs_dst/$pkg-$ver.tar",
@@ -161,29 +147,27 @@ sub download ($$$$$$) {
 
         # If git cloned repo exists and not --debug ($verbose=1) -> remove it
         if ( $self->gitrepo_state > 0 and $verbose < 1 ) {
-            system( 'rm', '-rf', "$abs_dst/$gitrepo_dir" );
+
+            my $err;
+            removetree( "$abs_dst/$gitrepo_dir", { error => \$err } );
+            if (@$err) {
+                local $, = "\n\t";
+                uscan_warn "Errors during git repo clean:\n\t@$err\n";
+            }
             $self->gitrepo_state(0);
         }
         chdir "$abs_dst" or uscan_die("Unable to chdir($abs_dst): $!\n");
         if ( $suffix eq 'gz' ) {
-            uscan_verbose "Execute: gzip -n -9 $pkg-$ver.tar\n";
-            system( "gzip", "-n", "-9", "$pkg-$ver.tar" ) == 0
-              or uscan_die("gzip failed\n");
+            uscan_exec( "gzip", "-n", "-9", "$pkg-$ver.tar" );
         }
         elsif ( $suffix eq 'xz' ) {
-            uscan_verbose "Execute: xz $pkg-$ver.tar\n";
-            system( "xz", "$pkg-$ver.tar" ) == 0
-              or uscan_die("xz failed\n");
+            uscan_exec( "xz", "$pkg-$ver.tar" );
         }
         elsif ( $suffix eq 'bz2' ) {
-            uscan_verbose "Execute: bzip2 $pkg-$ver.tar\n";
-            system( "bzip2", "$pkg-$ver.tar" ) == 0
-              or uscan_die("bzip2 failed\n");
+            uscan_exec( "bzip2", "$pkg-$ver.tar" );
         }
         elsif ( $suffix eq 'lzma' ) {
-            uscan_verbose "Execute: lzma $pkg-$ver.tar\n";
-            system( "lzma", "$pkg-$ver.tar" ) == 0
-              or uscan_die("lzma failed\n");
+            uscan_exec( "lzma", "$pkg-$ver.tar" );
         }
         else {
             uscan_warn "Unknown suffix file to repack: $suffix\n";

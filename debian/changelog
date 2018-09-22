@@ -27,6 +27,15 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
   * uscan:
     + Rewrite using object-oriented code.  MR: !28
       - This adds a new dependency on libmoo-perl for uscan (Recommended).
+    + Optimize code:  MR: !30
+      - Set FTP passive mode in a trigger.
+      - Avoid system() calls.
+        + This adds a new dependency on libipc-run-perl and libfile-which-perl
+          for uscan (Recommended).
+      - Avoid code duplication.
+    + Behaviour changes:
+      - Warn when find old pgp keyring.
+    + Add myself to authors list.
 
   [ Sean Whitton ]
   * git-deborig:

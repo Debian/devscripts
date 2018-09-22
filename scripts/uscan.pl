@@ -9,6 +9,8 @@
 # Modified by Julian Gilbey <jdg@debian.org>
 # HTTP support added by Piotr Roszatycki <dexter@debian.org>
 # Rewritten in Perl, Copyright 2002-2006, Julian Gilbey
+# Rewritten in Object Oriented Perl, copyright 2018, Xavier Guimard
+# <yadd@debian.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -1839,7 +1841,7 @@ The original version of uscan was written by Christoph Lameter
 <clameter@debian.org>. Significant improvements, changes and bugfixes were
 made by Julian Gilbey <jdg@debian.org>. HTTP support was added by Piotr
 Roszatycki <dexter@debian.org>. The program was rewritten in Perl by Julian
-Gilbey.
+Gilbey. Xavier Guimard converted it in object-oriented Perl using L<Moo>.
 
 =cut
 

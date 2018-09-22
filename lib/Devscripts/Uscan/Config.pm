@@ -95,21 +95,29 @@ sub parse_conf_files {
             USCAN_REPACK USCAN_EXCLUSION)
           )
         {
-            $config_vars{$_} =~ /^(yes|no)$/ or $config_vars{$_} = undef;
+            if ( $config_vars{$_} ) {
+                $config_vars{$_} =~ /^(yes|no)$/ or $config_vars{$_} = undef;
+            }
         }
         $config_vars{'USCAN_DESTDIR'} =~ /^\s*(\S+)\s*$/
-          or $config_vars{'USCAN_DESTDIR'} = undef;
-        $config_vars{'USCAN_PASV'} =~ /^(yes|no|default)$/
+          or $config_vars{'USCAN_DESTDIR'} = undef
+          if ( $config_vars{'USCAN_DESTDIR'} );
+        (         $config_vars{'USCAN_PASV'}
+              and $config_vars{'USCAN_PASV'} =~ /^(yes|no|default)$/ )
           or $config_vars{'USCAN_PASV'} = 'default';
         $config_vars{'USCAN_TIMEOUT'} =~ m/^\d+$/
-          or $config_vars{'USCAN_TIMEOUT'} = undef;
+          or $config_vars{'USCAN_TIMEOUT'} = undef
+          if $config_vars{'USCAN_TIMEOUT'};
         $config_vars{'USCAN_SYMLINK'} =~ /^(yes|no|symlinks?|rename)$/
-          or $config_vars{'USCAN_SYMLINK'} = 'yes';
+          or $config_vars{'USCAN_SYMLINK'} = 'yes'
+          if $config_vars{'USCAN_SYMLINK'};
         $config_vars{'USCAN_SYMLINK'} = 'symlink'
-          if $config_vars{'USCAN_SYMLINK'} eq 'yes'
-          or $config_vars{'USCAN_SYMLINK'} =~ /^symlinks?$/;
+          if $config_vars{'USCAN_SYMLINK'}
+          and ($config_vars{'USCAN_SYMLINK'} eq 'yes'
+            or $config_vars{'USCAN_SYMLINK'} =~ /^symlinks?$/ );
         $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} =~ /^[012]$/
-          or $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} = undef;
+          or $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} = undef
+          if $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'};
 
         $self->{modified_conf_msg} ||= "  (none)\n";
         chomp $self->{modified_conf_msg};
@@ -395,7 +403,8 @@ EOF
 sub version {
     print <<"EOF";
 This is $progname, from the Debian devscripts package, version $main::uscan_version
-This code is copyright 1999-2006 by Julian Gilbey, all rights reserved.
+This code is copyright 1999-2006 by Julian Gilbey and 2018 by Xavier Guimard,
+all rights reserved.
 Original code by Christoph Lameter.
 This program comes with ABSOLUTELY NO WARRANTY.
 You are free to redistribute this code under the terms of the
