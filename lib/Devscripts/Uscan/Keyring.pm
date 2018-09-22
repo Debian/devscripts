@@ -43,8 +43,8 @@ sub new {
 
             # Need to convert to an armored key
             $keyring = "debian/upstream/signing-key.asc";
-            uscan_warn "Found binary keyring ($binkeyring),"
-              . " please \"armor\" it to $keyring. Example:\n"
+            uscan_warn "Found binary keyring ($binkeyring).\n"
+              . " Please save it in armored format in $keyring. For example:\n"
               . "   gpg --output $keyring --enarmor $binkeyring\n";
             spawn(
                 exec => [
