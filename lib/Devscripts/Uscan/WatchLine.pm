@@ -1232,10 +1232,9 @@ sub download_file_and_sig {
               . "   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile";
             $self->signature_available(
                 $self->downloader->download(
-                    $pgpsig_url, "$self->{config}->{destdir}/$sigfile",
-                    $self,       $self->parse_result->{base},
-                    $self->pkg_dir,
-                    $self->mode
+                    $pgpsig_url,    "$self->{config}->{destdir}/$sigfile",
+                    $self,          $self->parse_result->{base},
+                    $self->pkg_dir, $self->mode
                 )
             );
         }
@@ -1254,10 +1253,9 @@ sub download_file_and_sig {
               . "   $pgpsig_url (pgpmode=previous)\n   as $sigfile";
             $self->signature_available(
                 $self->downloader->download(
-                    $pgpsig_url, "$self->{config}->{destdir}/$sigfile",
-                    $self,       $self->parse_result->{base},
-                    $self->pkg_dir,
-                    $self->mode
+                    $pgpsig_url,    "$self->{config}->{destdir}/$sigfile",
+                    $self,          $self->parse_result->{base},
+                    $self->pkg_dir, $self->mode
                 )
             );
         }
@@ -1555,12 +1553,10 @@ sub mkorigtargz {
             push @cmd, $path, $self->shared->{common_mangled_newversion};
         }
         my $actioncmd = join( " ", @cmd );
-        my $actioncmdmsg = `$actioncmd 2>&1`;
-        $? == 0
-          or uscan_die
-          "$progname: Failed to Execute user specified script:\n   $actioncmd\n"
-          . $actioncmdmsg;
-        dehs_verbose "Executing user specified script:\n   $actioncmd\n"
+        my $actioncmdmsg;
+        spawn( exec => \@cmd, wait_child => 1, to_string => \$actioncmdmsg );
+        local $, = ' ';
+        dehs_verbose "Executing user specified script:\n   @cmd\n"
           . $actioncmdmsg;
     }
 
@@ -1568,7 +1564,7 @@ sub mkorigtargz {
 }
 
 sub clean {
-    my($self) = @_;
+    my ($self) = @_;
     $self->_do('clean');
 }
 

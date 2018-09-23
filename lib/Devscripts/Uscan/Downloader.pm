@@ -76,7 +76,7 @@ has user_agent => (
 
 has ssl => ( is => 'rw', default => sub { $haveSSL } );
 
-sub download ($$$$$$) {
+sub download ($$$$$$$) {
     my ( $self, $url, $fname, $optref, $base, $pkg_dir, $mode ) = @_;
     my ( $request, $response );
     $mode ||= $optref->mode;

@@ -4,6 +4,7 @@ use strict;
 use Cwd qw/abs_path/;
 use Devscripts::Uscan::Output;
 use Devscripts::Uscan::Utils;
+use Dpkg::IPC;
 use Exporter qw(import);
 use File::Path 'remove_tree';
 
@@ -57,8 +58,16 @@ sub git_search {
         if ( $self->pretty eq 'describe' ) {
 
             # use unannotated tags to be on safe side
-            $newversion =
-`git --git-dir=$self->{config}->{destdir}/$self->{gitrepo_dir} describe --tags`;
+            spawn(
+                exec => [
+                    'git',
+                    "--git-dir=$self->{config}->{destdir}/$self->{gitrepo_dir}",
+                    'describe',
+                    '--tags'
+                ],
+                wait_child => 1,
+                to_string  => \$newversion
+            );
             $newversion =~ s/-/./g;
             chomp($newversion);
             if (
@@ -73,8 +82,18 @@ sub git_search {
             }
         }
         else {
-            $newversion =
-`git --git-dir=$self->{config}->{destdir}/$self->{gitrepo_dir} log -1 --date=format:$self->{date} --pretty="$self->{pretty}"`;
+            spawn(
+                exec => [
+                    'git',
+                    "--git-dir=$self->{config}->{destdir}/$self->{gitrepo_dir}",
+                    'log',
+                    '-1',
+                    "--date=format:$self->{date}",
+                    "--pretty=$self->{pretty}"
+                ],
+                wait_child => 1,
+                to_string  => \$newversion
+            );
             chomp($newversion);
         }
     }
