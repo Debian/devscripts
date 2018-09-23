@@ -224,7 +224,7 @@ sub process_lines {
 
         # search newfile and newversion
         my $res = $_->process;
-        $self->status($res) and return $self->{status};
+        $self->status($res);
     }
     return $self->{status};
 }
