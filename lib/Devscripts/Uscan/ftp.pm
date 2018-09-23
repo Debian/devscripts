@@ -16,31 +16,30 @@ sub ftp_search {
     my ($self) = @_;
 
     # FTP site
-    uscan_verbose "Requesting URL:\n   $self->{parse_result}->{base}\n";
+    uscan_verbose "Requesting URL:\n   $self->{parse_result}->{base}";
     my $request = HTTP::Request->new( 'GET', $self->parse_result->{base} );
     my $response = $self->downloader->user_agent->request($request);
     if ( !$response->is_success ) {
         uscan_warn
 "In watch file $self->{watchfile}, reading FTP directory\n  $self->{parse_result}->{base} failed: "
-          . $response->status_line . "\n";
+          . $response->status_line . "";
         return undef;
     }
 
     my $content = $response->content;
-    uscan_debug
-      "received content:\n$content\n[End of received content] by FTP\n";
+    uscan_debug "received content:\n$content\n[End of received content] by FTP";
 
     # FTP directory listings either look like:
     # info info ... info filename [ -> linkname]
     # or they're HTMLised (if they've been through an HTTP proxy)
     # so we may have to look for <a href="filename"> type patterns
-    uscan_verbose "matching pattern $self->{parse_result}->{pattern}\n";
+    uscan_verbose "matching pattern $self->{parse_result}->{pattern}";
     my (@files);
 
     # We separate out HTMLised listings from standard listings, so
     # that we can target our search correctly
     if ( $content =~ /<\s*a\s+[^>]*href/i ) {
-        uscan_verbose "HTMLized FTP listing by the HTTP proxy\n";
+        uscan_verbose "HTMLized FTP listing by the HTTP proxy";
         while ( $content =~
 m/(?:<\s*a\s+[^>]*href\s*=\s*\")((?-i)$self->{parse_result}->{pattern})\"/gi
           )
@@ -69,7 +68,7 @@ m/(?:<\s*a\s+[^>]*href\s*=\s*\")((?-i)$self->{parse_result}->{pattern})\"/gi
         }
     }
     else {
-        uscan_verbose "Standard FTP listing.\n";
+        uscan_verbose "Standard FTP listing.";
 
         # they all look like:
         # info info ... info filename [ -> linkname]
@@ -124,7 +123,7 @@ m/(?:<\s*a\s+[^>]*href\s*=\s*\")((?-i)$self->{parse_result}->{pattern})\"/gi
         else {
             uscan_warn
 "In $self->{watchfile} no matching files for version $self->{shared}->{download_version}"
-              . " in watch line\n  $self->{line}\n";
+              . " in watch line\n  $self->{line}";
             return undef;
         }
     }
@@ -134,7 +133,7 @@ m/(?:<\s*a\s+[^>]*href\s*=\s*\")((?-i)$self->{parse_result}->{pattern})\"/gi
         }
         else {
             uscan_warn
-"In $self->{watchfile} no matching files for watch line\n  $self->{line}\n";
+"In $self->{watchfile} no matching files for watch line\n  $self->{line}";
             return undef;
         }
     }
@@ -163,31 +162,30 @@ sub ftp_newdir {
     if ( !$response->is_success ) {
         uscan_warn
           "In watch file $watchfile, reading webpage\n  $base failed: "
-          . $response->status_line . "\n";
+          . $response->status_line;
         return '';
     }
 
     my $content = $response->content;
-    uscan_debug
-      "received content:\n$content\n[End of received content] by FTP\n";
+    uscan_debug "received content:\n$content\n[End of received content] by FTP";
 
     # FTP directory listings either look like:
     # info info ... info filename [ -> linkname]
     # or they're HTMLised (if they've been through an HTTP proxy)
     # so we may have to look for <a href="filename"> type patterns
-    uscan_verbose "matching pattern $pattern\n";
+    uscan_verbose "matching pattern $pattern";
     my (@dirs);
     my $match = '';
 
     # We separate out HTMLised listings from standard listings, so
     # that we can target our search correctly
     if ( $content =~ /<\s*a\s+[^>]*href/i ) {
-        uscan_verbose "HTMLized FTP listing by the HTTP proxy\n";
+        uscan_verbose "HTMLized FTP listing by the HTTP proxy";
         while (
             $content =~ m/(?:<\s*a\s+[^>]*href\s*=\s*\")((?-i)$pattern)\"/gi )
         {
             my $dir = $1;
-            uscan_verbose "Matching target for dirversionmangle:   $dir\n";
+            uscan_verbose "Matching target for dirversionmangle:   $dir";
             my $mangled_version = join( ".", $dir =~ m/^$pattern$/ );
             if (
                 mangle(
@@ -226,14 +224,14 @@ sub ftp_newdir {
     else {
         # they all look like:
         # info info ... info filename [ -> linkname]
-        uscan_verbose "Standard FTP listing.\n";
+        uscan_verbose "Standard FTP listing.";
         foreach my $ln ( split( /\n/, $content ) ) {
             $ln =~ s/^-.*$//;    # FTP listing of file, '' skiped by if ($ln...
             $ln =~ s/\s+->\s+\S+$//;     # FTP listing for link destination
             $ln =~ s/^.*\s(\S+)$/$1/;    # filename only
             if ( $ln =~ m/^($pattern)(\s+->\s+\S+)?$/ ) {
                 my $dir = $1;
-                uscan_verbose "Matching target for dirversionmangle:   $dir\n";
+                uscan_verbose "Matching target for dirversionmangle:   $dir";
                 my $mangled_version = join( ".", $dir =~ m/^$pattern$/ );
                 if (
                     mangle(
@@ -289,7 +287,7 @@ sub ftp_newdir {
     }
     else {
         uscan_warn
-          "In $watchfile no matching dirs for pattern\n  $base$pattern\n";
+          "In $watchfile no matching dirs for pattern\n  $base$pattern";
         $newdir = '';
     }
     return $newdir;

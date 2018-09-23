@@ -21,8 +21,8 @@ sub new {
         which $_
     }
     qw(gpg2 gpg);
-    uscan_die("Please install gpgv or gpgv2.\n")   unless defined $havegpgv;
-    uscan_die("Please install gnupg or gnupg2.\n") unless defined $havegpg;
+    uscan_die("Please install gpgv or gpgv2.")   unless defined $havegpgv;
+    uscan_die("Please install gnupg or gnupg2.") unless defined $havegpg;
 
     # upstream/signing-key.pgp and upstream-signing-key.pgp are deprecated
     # but supported
@@ -38,14 +38,13 @@ sub new {
             make_path( 'debian/upstream', 0700, 'true' );
 
             # convert to the policy complying armored key
-            uscan_verbose(
-                "Found upstream binary signing keyring: $binkeyring\n");
+            uscan_verbose("Found upstream binary signing keyring: $binkeyring");
 
             # Need to convert to an armored key
             $keyring = "debian/upstream/signing-key.asc";
-            uscan_warn "Found deprecated binary keyring ($binkeyring).\n"
+            uscan_warn "Found deprecated binary keyring ($binkeyring)."
               . "Please save it in armored format in $keyring. For example:\n"
-              . "   gpg --output $keyring --enarmor $binkeyring\n";
+              . "   gpg --output $keyring --enarmor $binkeyring";
             spawn(
                 exec => [
                     $havegpg,               '--homedir',
@@ -57,18 +56,17 @@ sub new {
                 ],
                 wait_child => 1
             );
-            uscan_warn("Generated upstream signing keyring: $keyring\n");
+            uscan_warn("Generated upstream signing keyring: $keyring");
             move $binkeyring, "$binkeyring.backup";
             uscan_verbose(
-                "Renamed upstream binary signing keyring: $binkeyring.backup\n"
-            );
+                "Renamed upstream binary signing keyring: $binkeyring.backup");
         }
     }
 
     # Need to convert an armored key to binary for use by gpgv
     my $gpghome;
     if ( defined $keyring ) {
-        uscan_verbose("Found upstream signing keyring: $keyring\n");
+        uscan_verbose("Found upstream signing keyring: $keyring");
         if ( $keyring =~ m/\.asc$/ ) {    # always true
             $gpghome = tempdir( CLEANUP => 1 );
             my $newkeyring = "$gpghome/trustedkeys.gpg";
@@ -103,7 +101,7 @@ sub new {
 sub verify {
     my ( $self, $sigfile, $newfile ) = @_;
     uscan_verbose(
-        "Verifying OpenPGP self signature of $newfile and extract $sigfile\n");
+        "Verifying OpenPGP self signature of $newfile and extract $sigfile");
     unless (
         uscan_exec_no_fail(
             $self->{gpg},           '--homedir',
@@ -117,13 +115,13 @@ sub verify {
         ) >> 8 == 0
       )
     {
-        uscan_die("OpenPGP signature did not verify.\n");
+        uscan_die("OpenPGP signature did not verify.");
     }
 }
 
 sub verifyv {
     my ( $self, $sigfile, $base ) = @_;
-    uscan_verbose("Verifying OpenPGP signature $sigfile for $base\n");
+    uscan_verbose("Verifying OpenPGP signature $sigfile for $base");
     unless (
         uscan_exec_no_fail(
             $self->{gpgv},    '--homedir', '/dev/null', '--keyring',
@@ -131,7 +129,7 @@ sub verifyv {
         ) >> 8 == 0
       )
     {
-        uscan_die("OpenPGP signature did not verify.\n");
+        uscan_die("OpenPGP signature did not verify.");
     }
 }
 

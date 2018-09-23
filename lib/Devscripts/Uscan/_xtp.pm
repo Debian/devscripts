@@ -21,7 +21,7 @@ sub _xtp_newfile_base {
         else {
             $newfile_base = $self->search_result->{newfile};
         }
-        uscan_verbose "Matching target for filenamemangle: $newfile_base\n";
+        uscan_verbose "Matching target for filenamemangle: $newfile_base";
         if (
             mangle(
                 $self->watchfile,  \$self->line,
@@ -41,12 +41,12 @@ sub _xtp_newfile_base {
             $self->search_result->{newversion} = $1;
             unless ( $self->search_result->{newversion} ) {
                 uscan_warn
-"Fix filenamemangle to produce a filename with the correct version\n";
+"Fix filenamemangle to produce a filename with the correct version";
                 $self->status(1);
                 return undef;
             }
             uscan_verbose
-"Newest upstream tarball version from the filenamemangled filename: $self->{search_result}->{newversion}\n";
+"Newest upstream tarball version from the filenamemangled filename: $self->{search_result}->{newversion}";
         }
     }
     else {
@@ -59,7 +59,7 @@ sub _xtp_newfile_base {
                 # just in case this leaves us with nothing
             if ( $newfile_base eq '' ) {
                 uscan_warn
-"No good upstream filename found after removing tailing ?... and #....\n   Use filenamemangle to fix this.\n";
+"No good upstream filename found after removing tailing ?... and #....\n   Use filenamemangle to fix this.";
                 $self->status(1);
                 return undef;
             }
@@ -72,7 +72,7 @@ sub partial_version {
     my ($download_version) = @_;
     my ( $d1, $d2, $d3 );
     if ( defined $download_version ) {
-        uscan_verbose "download version requested: $download_version\n";
+        uscan_verbose "download version requested: $download_version";
         if ( $download_version =~
             m/^([-~\+\w]+)(\.[-~\+\w]+)?(\.[-~\+\w]+)?(\.[-~\+\w]+)?$/ )
         {

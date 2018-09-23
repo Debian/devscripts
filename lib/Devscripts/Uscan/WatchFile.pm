@@ -103,11 +103,11 @@ sub BUILD {
     uscan_verbose "Process watch file at: $args->{watchfile}\n"
       . "    package = $args->{package}\n"
       . "    version = $args->{pkg_version}\n"
-      . "    pkg_dir = $args->{pkg_dir}\n";
+      . "    pkg_dir = $args->{pkg_dir}";
 
     $self->origcount(0);    # reset to 0 for each watch file
     unless ( open WATCH, $args->{watchfile} ) {
-        uscan_warn "could not open $args->{watchfile}: $!\n";
+        uscan_warn "could not open $args->{watchfile}: $!";
         return 1;
     }
 
@@ -123,7 +123,7 @@ sub BUILD {
         if (s/(?<!\\)\\$//) {
             if ( eof(WATCH) ) {
                 uscan_warn
-                  "$args->{watchfile} ended with \\; skipping last line\n";
+                  "$args->{watchfile} ended with \\; skipping last line";
                 $self->status(1);
                 last;
             }
@@ -154,7 +154,7 @@ sub BUILD {
                 {
                     # "version" field found but has no authorizated value
                     uscan_warn
-"$args->{watchfile} version number is unrecognised; skipping watch file\n";
+"$args->{watchfile} version number is unrecognised; skipping watch file";
                     last;
                 }
 
@@ -167,7 +167,7 @@ sub BUILD {
                 uscan_warn
                   "$args->{watchfile} is an obsolete version 1 watch file;\n"
                   . "   please upgrade to a higher version\n"
-                  . "   (see uscan(1) for details).\n";
+                  . "   (see uscan(1) for details).";
                 $watch_version = 1;
             }
         }
@@ -214,7 +214,7 @@ sub BUILD {
 
     close WATCH
       or $self->status(1),
-      uscan_warn "problems reading $$args->{watchfile}: $!\n";
+      uscan_warn "problems reading $$args->{watchfile}: $!";
     $self->watch_version($watch_version);
 }
 

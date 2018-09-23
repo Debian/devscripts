@@ -1898,7 +1898,7 @@ foreach (@wf) {
     dehs_output if ($dehs);
 }
 
-uscan_verbose "Scan finished\n";
+uscan_verbose "Scan finished";
 
 # Are there any warnings to give if we're using dehs?
 $dehs_end_output = 1;

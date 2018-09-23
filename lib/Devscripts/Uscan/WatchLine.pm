@@ -226,7 +226,7 @@ sub process {
 
 sub parse {
     my ($self) = @_;
-    uscan_debug "parse line $self->{line}\n";
+    uscan_debug "parse line $self->{line}";
 
     # Need to clear remembered redirection URLs so we don't try to build URLs
     # from previous watch files or watch lines
@@ -269,7 +269,7 @@ EOF
                 $self->style('old');
                 uscan_warn
                   "Using very old style of filename pattern in $watchfile\n"
-                  . "  (this might lead to incorrect results): $3\n";
+                  . "  (this might lead to incorrect results): $3";
             }
         }
 
@@ -283,7 +283,7 @@ EOF
         # Check $filepattern is OK
         if ( $filepattern !~ /\(.*\)/ ) {
             uscan_warn "Filename pattern missing version delimiters ()\n"
-              . "  in $watchfile, skipping:\n  $self->{line}\n";
+              . "  in $watchfile, skipping:\n  $self->{line}";
             return $self->status(1);
         }
     }
@@ -299,15 +299,15 @@ EOF
             }
             else {
                 uscan_warn
-"malformed opts=... in watch file, skipping line:\n$self->{line}\n";
+"malformed opts=... in watch file, skipping line:\n$self->{line}";
                 return $self->status(1);
             }
 
             # $opts	string extracted from the argument of opts=
-            uscan_verbose "opts: $opts\n";
+            uscan_verbose "opts: $opts";
 
             # $self->line watch line string without opts=... part
-            uscan_verbose "line: $self->{line}\n";
+            uscan_verbose "line: $self->{line}";
 
             # user-agent strings has ,;: in it so special handling
             if (   $opts =~ /^\s*user-agent\s*=\s*(.+?)\s*$/
@@ -317,12 +317,12 @@ EOF
                 $user_agent_string = $self->config->user_agent
                   if $self->config->user_agent;
                 $self->downloader->user_agent->agent($user_agent_string);
-                uscan_verbose "User-agent: $user_agent_string\n";
+                uscan_verbose "User-agent: $user_agent_string";
                 $opts = '';
             }
             my @opts = split /,/, $opts;
             foreach my $opt (@opts) {
-                uscan_verbose "Parsing $opt\n";
+                uscan_verbose "Parsing $opt";
                 if ( $opt =~ /^\s*pasv\s*$/ or $opt =~ /^\s*passive\s*$/ ) {
                     $self->downloader->passive(1);
                 }
@@ -402,16 +402,16 @@ EOF
                     $self->$1( [ split /;/, $2 ] );
                 }
                 else {
-                    uscan_warn "unrecognised option $opt\n";
+                    uscan_warn "unrecognised option $opt";
                 }
             }
 
             # $self->line watch line string when no opts=...
-            uscan_verbose "line: $self->{line}\n";
+            uscan_verbose "line: $self->{line}";
         }
 
         if ( $self->line eq '' ) {
-            uscan_verbose "watch line only with opts=\"...\" and no URL\n";
+            uscan_verbose "watch line only with opts=\"...\" and no URL";
             return $self->status(1);
         }
 
@@ -440,7 +440,7 @@ EOF
                 $self->mode('ftp');
             }
             else {
-                uscan_warn "unknown protocol for LWP: $base\n";
+                uscan_warn "unknown protocol for LWP: $base";
                 return $self->status(1);
             }
         }
@@ -460,7 +460,7 @@ EOF
         if ( !length($lastversion) or $lastversion eq 'debian' ) {
             if ( !defined $self->pkg_version ) {
                 uscan_warn "Unable to determine the current version\n"
-                  . "  in $watchfile, skipping:\n  $self->{line}\n";
+                  . "  in $watchfile, skipping:\n  $self->{line}";
                 return $self->status(1);
             }
             $lastversion = $self->pkg_version;
@@ -497,7 +497,7 @@ EOF
             else {
                 uscan_warn
                   "Tag pattern missing version delimiters () in $watchfile"
-                  . ", skipping:\n  $self->{line}\n";
+                  . ", skipping:\n  $self->{line}";
                 return $self->status(1);
             }
         }
@@ -508,7 +508,7 @@ EOF
         {
             uscan_warn "downloadurlmangle option invalid for ftp sites,\n"
               . "  ignoring downloadurlmangle in $watchfile:\n"
-              . "  $self->{line}\n";
+              . "  $self->{line}";
             return $self->status(1);
         }
 
@@ -516,7 +516,7 @@ EOF
         if ( $self->repacksuffix and @{ $self->shared->{components} } ) {
             uscan_warn
 "repacksuffix is not compatible with the multiple upstream tarballs;\n"
-              . "  use oversionmangle\n";
+              . "  use oversionmangle";
             return $self->status(1);
         }
 
@@ -524,15 +524,14 @@ EOF
         if ( $self->pgpmode =~ m/^au/ ) {
             $self->pgpmode('auto');
             if ( @{ $self->pgpsigurlmangle } ) {
-                uscan_warn "Ignore pgpsigurlmangle because pgpmode=auto\n";
+                uscan_warn "Ignore pgpsigurlmangle because pgpmode=auto";
                 $self->pgpsigurlmangle( [] );
             }
         }
         elsif ( $self->pgpmode =~ m/^ma/ ) {
             $self->pgpmode('mangle');
             if ( not @{ $self->pgpsigurlmangle } ) {
-                uscan_warn
-                  "Missing pgpsigurlmangle.  Setting pgpmode=default\n";
+                uscan_warn "Missing pgpsigurlmangle.  Setting pgpmode=default";
                 $self->pgpmode('default');
             }
         }
@@ -559,11 +558,11 @@ EOF
             my $pgpsigurlmanglestring =
               join( ";", @{ $self->pgpsigurlmangle } );
             uscan_debug "\$self->{'pgpmode'}=$self->{'pgpmode'}, "
-              . "\$self->{'pgpsigurlmangle'}=$pgpsigurlmanglestring\n";
+              . "\$self->{'pgpsigurlmangle'}=$pgpsigurlmanglestring";
         }
         else {
             uscan_debug "\$self->{'pgpmode'}=$self->{'pgpmode'}, "
-              . "\$self->{'pgpsigurlmangle'}=undef\n";
+              . "\$self->{'pgpsigurlmangle'}=undef";
         }
 
         # Check component for duplication and set $orig to the proper
@@ -573,7 +572,7 @@ EOF
                 if ( grep { $_ eq $self->component }
                     @{ $self->shared->{components} } )
                 {
-                    uscan_warn "duplicate component name: $self->{component}\n";
+                    uscan_warn "duplicate component name: $self->{component}";
                     return $self->status(1);
                 }
                 push @{ $self->shared->{components} }, $self->component;
@@ -581,7 +580,7 @@ EOF
             else {
                 $self->shared->{origcount}++;
                 if ( $self->shared->{origcount} > 1 ) {
-                    uscan_warn "more than one main upstream tarballs listed.\n";
+                    uscan_warn "more than one main upstream tarballs listed.";
 
                     # reset variables
                     @{ $self->shared->{components} } = ();
@@ -611,7 +610,7 @@ EOF
 
         # Handle sf.net addresses specially
         if ( !$self->shared->{bare} and $base =~ m%^https?://sf\.net/% ) {
-            uscan_verbose "sf.net redirection to qa.debian.org/watch/sf.php\n";
+            uscan_verbose "sf.net redirection to qa.debian.org/watch/sf.php";
             $base =~ s%^https?://sf\.net/%https://qa.debian.org/watch/sf.php/%;
             $filepattern .= '(?:\?.*)?';
         }
@@ -620,7 +619,7 @@ EOF
         if (   !$self->shared->{bare}
             and $base =~ m%^https?://pypi\.python\.org/packages/source/% )
         {
-            uscan_verbose "pypi.python.org redirection to pypi.debian.net\n";
+            uscan_verbose "pypi.python.org redirection to pypi.debian.net";
             $base =~
 s%^https?://pypi\.python\.org/packages/source/./%https://pypi.debian.net/%;
         }
@@ -631,7 +630,7 @@ s%^https?://pypi\.python\.org/packages/source/./%https://pypi.debian.net/%;
         {
             uscan_warn
 "redirecting DEPRECATED pkg-ruby-extras.alioth.debian.org/cgi-bin/gemwatch"
-              . " to gemwatch.debian.net\n";
+              . " to gemwatch.debian.net";
             $base =~
 s%^https?://pkg-ruby-extras\.alioth\.debian\.org/cgi-bin/gemwatch%https://gemwatch.debian.net%;
         }
@@ -647,15 +646,15 @@ s%^https?://pkg-ruby-extras\.alioth\.debian\.org/cgi-bin/gemwatch%https://gemwat
         $lastversion =~ s/-[^-]+$//;    # revision
         $lastversion =~ s/^\d+://;      # epoch
         uscan_verbose
-"specified --download-debversion to set the last version: $lastversion\n";
+"specified --download-debversion to set the last version: $lastversion";
     }
     elsif ( $self->versionmode eq 'previous' ) {
         $lastversion = $self->shared->{previous_newversion};
-        uscan_verbose "Previous version downloaded: $lastversion\n";
+        uscan_verbose "Previous version downloaded: $lastversion";
     }
     else {
         uscan_verbose
-"Last orig.tar.* tarball version (from debian/changelog): $lastversion\n";
+"Last orig.tar.* tarball version (from debian/changelog): $lastversion";
     }
 
     # And mangle it if requested
@@ -678,7 +677,7 @@ s%^https?://pkg-ruby-extras\.alioth\.debian\.org/cgi-bin/gemwatch%https://gemwat
           if $self->shared->{download} == 1;    # Change default 1 -> 2
         $self->badversion(1);
         uscan_verbose "Download the --download-version specified version: "
-          . "$self->{shared}->{download_version}\n";
+          . "$self->{shared}->{download_version}";
     }
     elsif ( $self->config->download_debversion ) {
         $self->shared->{download_version} = $mangled_lastversion;
@@ -686,7 +685,7 @@ s%^https?://pkg-ruby-extras\.alioth\.debian\.org/cgi-bin/gemwatch%https://gemwat
           if $self->shared->{download} == 1;    # Change default 1 -> 2
         $self->badversion(1);
         uscan_verbose "Download the --download-debversion specified version "
-          . "(dversionmangled): $self->{shared}->{download_version}\n";
+          . "(dversionmangled): $self->{shared}->{download_version}";
     }
     elsif ( $self->config->download_current_version ) {
         $self->shared->{download_version} = $mangled_lastversion;
@@ -695,14 +694,14 @@ s%^https?://pkg-ruby-extras\.alioth\.debian\.org/cgi-bin/gemwatch%https://gemwat
         $self->badversion(1);
         uscan_verbose
           "Download the --download-current-version specified version: "
-          . "$self->{shared}->{download_version}\n";
+          . "$self->{shared}->{download_version}";
     }
     elsif ( $self->versionmode eq 'same' ) {
         unless ( defined $self->shared->{common_newversion} ) {
             uscan_warn
 "Unable to set versionmode=prev for the line without opts=pgpmode=prev\n"
               . "  in $watchfile, skipping:\n"
-              . "  $self->{line}\n";
+              . "  $self->{line}";
             return $self->status(1);
         }
         $self->shared->{download_version} = $self->shared->{common_newversion};
@@ -710,7 +709,7 @@ s%^https?://pkg-ruby-extras\.alioth\.debian\.org/cgi-bin/gemwatch%https://gemwat
           if $self->shared->{download} == 1;    # Change default 1 -> 2
         $self->badversion(1);
         uscan_verbose "Download secondary tarball with the matching version: "
-          . "$self->{shared}->{download_version}\n";
+          . "$self->{shared}->{download_version}";
     }
     elsif ( $self->versionmode eq 'previous' ) {
         unless ( $self->pgpmode eq 'previous'
@@ -718,7 +717,7 @@ s%^https?://pkg-ruby-extras\.alioth\.debian\.org/cgi-bin/gemwatch%https://gemwat
         {
             uscan_warn
 "Unable to set versionmode=prev for the line without opts=pgpmode=prev\n"
-              . "  in $watchfile, skipping:\n  $self->{line}\n";
+              . "  in $watchfile, skipping:\n  $self->{line}";
             return $self->status(1);
         }
         $self->shared->{download_version} =
@@ -728,17 +727,17 @@ s%^https?://pkg-ruby-extras\.alioth\.debian\.org/cgi-bin/gemwatch%https://gemwat
         $self->badversion(1);
         uscan_verbose
           "Download the signature file with the previous tarball's version:"
-          . " $self->{shared}->{download_version}\n";
+          . " $self->{shared}->{download_version}";
     }
     else {
         # $options{'versionmode'} should be debian or ignore
         if ( defined $self->shared->{download_version} ) {
             uscan_die
-              "\$download_version defined after dversionmangle ... strange\n";
+              "\$download_version defined after dversionmangle ... strange";
         }
         else {
             uscan_verbose "Last orig.tar.* tarball version (dversionmangled):"
-              . " $mangled_lastversion\n";
+              . " $mangled_lastversion";
         }
     }
 
@@ -750,7 +749,7 @@ s%^https?://pkg-ruby-extras\.alioth\.debian\.org/cgi-bin/gemwatch%https://gemwat
             else {
                 uscan_warn "Can't determine protocol and site in\n"
                   . "  $watchfile, skipping:\n"
-                  . "  $self->{line}\n";
+                  . "  $self->{line}";
                 return $self->status(1);
             }
 
@@ -794,7 +793,7 @@ s%^https?://pkg-ruby-extras\.alioth\.debian\.org/cgi-bin/gemwatch%https://gemwat
       . "    pgpmode      = $self->{pgpmode}\n"
       . "    versionmode  = $self->{versionmode}\n"
       . "    \$site        = $site\n"
-      . "    \$basedir     = $basedir\n";
+      . "    \$basedir     = $basedir";
 
     $self->parse_result(
         {
@@ -824,7 +823,7 @@ s%^https?://pkg-ruby-extras\.alioth\.debian\.org/cgi-bin/gemwatch%https://gemwat
 
 sub search {
     my ($self) = @_;
-    uscan_debug "line: search()\n";
+    uscan_debug "line: search()";
     my ( $newversion, $newfile ) = $self->_do('search');
     unless ( $newversion and $newfile ) {
         return $self->status(1);
@@ -834,7 +833,7 @@ sub search {
       . "    \$filepattern = $self->{parse_result}->{filepattern} found\n"
       . "    \$newfile     = $newfile\n"
       . "    \$newversion  = $newversion which is newer than\n"
-      . "    \$lastversion = $self->{parse_result}->{lastversion}\n";
+      . "    \$lastversion = $self->{parse_result}->{lastversion}";
     $self->search_result(
         {
             newversion => $newversion,
@@ -870,7 +869,7 @@ EOF
 # III - Determine upstream_url
 sub get_upstream_url {
     my ($self) = @_;
-    uscan_debug "line: get_upstream_url()\n";
+    uscan_debug "line: get_upstream_url()";
     if ( $self->parse_result->{site} =~ m%^https?://% ) {
         $self->mode('http');
     }
@@ -880,25 +879,25 @@ sub get_upstream_url {
     $self->upstream_url( $self->_do('upstream_url') );
     $self->status and return $self->status;
     uscan_verbose "Upstream URL(+tag) to download is identified as"
-      . "    $self->{upstream_url}\n";
+      . "    $self->{upstream_url}";
     return $self->status;
 }
 
 # IV - Determine newfile_base
 sub get_newfile_base {
     my ($self) = @_;
-    uscan_debug "line: get_newfile_base()\n";
+    uscan_debug "line: get_newfile_base()";
     $self->newfile_base( $self->_do('newfile_base') );
     return $self->status if ( $self->status );
     uscan_verbose
-      "Filename (filenamemangled) for downloaded file: $self->{newfile_base}\n";
+      "Filename (filenamemangled) for downloaded file: $self->{newfile_base}";
     return $self->status;
 }
 
 # V - Compare newversion against mangled_lastversion
 sub cmp_versions {
     my ($self) = @_;
-    uscan_debug "line: cmp_versions()\n";
+    uscan_debug "line: cmp_versions()";
     my $mangled_lastversion = $self->parse_result->{mangled_lastversion};
     unless ( defined $self->shared->{common_newversion} ) {
         $self->shared->{common_newversion} = $self->search_result->{newversion};
@@ -931,7 +930,7 @@ sub cmp_versions {
         # Pretend to find a newer upstream version to exit without error
         uscan_msg "Newest version of $self->{pkg} on remote site is "
           . "$self->{search_result}->{newversion}, "
-          . "specified download version is $self->{shared}->{download_version}\n";
+          . "specified download version is $self->{shared}->{download_version}";
         $main::found++;
     }
     elsif ( $self->versionmode eq 'newer' ) {
@@ -948,7 +947,7 @@ sub cmp_versions {
             # There's a newer upstream version available, which may already
             # be on our system or may not be
             uscan_msg "   => Newer package available from\n"
-              . "      $self->{upstream_url}\n";
+              . "      $self->{upstream_url}";
             $dehs_tags->{'status'} = "newer package available";
             $main::found++;
         }
@@ -962,12 +961,12 @@ sub cmp_versions {
                 : " (mangled local version is $mangled_lastversion)\n"
               );
             uscan_verbose "   => Package is up to date for from\n"
-              . "      $self->{upstream_url}\n";
+              . "      $self->{upstream_url}";
             $dehs_tags->{'status'} = "up to date";
             if ( $self->shared->{download} > 1 ) {
 
                 # 2=force-download or 3=overwrite-download
-                uscan_verbose "   => Forcing download as requested\n";
+                uscan_verbose "   => Forcing download as requested";
                 $main::found++;
             }
             else {
@@ -985,10 +984,10 @@ sub cmp_versions {
                 : " (mangled local version is $mangled_lastversion)\n"
               );
             uscan_verbose "   => Only older package available from\n"
-              . "      $self->{upstream_url}\n";
+              . "      $self->{upstream_url}";
             $dehs_tags->{'status'} = "only older package available";
             if ( $self->shared->{download} > 1 ) {
-                uscan_verbose "   => Forcing download as requested\n";
+                uscan_verbose "   => Forcing download as requested";
                 $main::found++;
             }
             else {
@@ -999,13 +998,13 @@ sub cmp_versions {
     elsif ( $self->versionmode eq 'ignore' ) {
         uscan_msg "Newest version of $self->{pkg} on remote site is "
           . $self->search_result->{newversion}
-          . ", ignore local version\n";
+          . ", ignore local version";
         $dehs_tags->{'status'} = "package available";
         $main::found++;
     }
     else {    # same/previous -- secondary-tarball or signature-file
         uscan_die "strange ... <version> stanza = same/previous "
-          . "should have defined \$download_version\n";
+          . "should have defined \$download_version";
     }
     return 0;
 }
@@ -1013,7 +1012,7 @@ sub cmp_versions {
 # VI - Download tarball and signature
 sub download_file_and_sig {
     my ($self) = @_;
-    uscan_debug "line: download_file_and_sig()\n";
+    uscan_debug "line: download_file_and_sig()";
 
     # If we're not downloading or performing signature verification, we can
     # stop here
@@ -1033,7 +1032,7 @@ sub download_file_and_sig {
             and -e "$self->{config}->{destdir}/$self->{newfile_base}" )
         {
             uscan_verbose
-"Downloading and overwriting existing file: $self->{newfile_base}\n";
+"Downloading and overwriting existing file: $self->{newfile_base}";
             $download_available = $self->downloader->download(
                 $self->upstream_url,
                 "$self->{config}->{destdir}/$self->{newfile_base}",
@@ -1056,8 +1055,7 @@ sub download_file_and_sig {
               "Not downloading, using existing file: $self->{newfile_base}\n";
         }
         elsif ( $self->shared->{download} > 0 ) {
-            uscan_verbose
-              "Downloading upstream package: $self->{newfile_base}\n";
+            uscan_verbose "Downloading upstream package: $self->{newfile_base}";
             $download_available = $self->downloader->download(
                 $self->upstream_url,
                 "$self->{config}->{destdir}/$self->{newfile_base}",
@@ -1093,7 +1091,7 @@ sub download_file_and_sig {
         }
         elsif ( $download_available == 0 ) {
             uscan_warn
-"FAIL Checking OpenPGP signature (no signed upstream tarball downloaded).\n";
+"FAIL Checking OpenPGP signature (no signed upstream tarball downloaded).";
             return $self->status(1);
         }
         else {
@@ -1154,12 +1152,12 @@ sub download_file_and_sig {
                     $sigfile_base =~ s/(.*?)\.lzma/$1/;
                 }
                 else {
-                    uscan_warn "Please install xz-utils or lzma.\n";
+                    uscan_warn "Please install xz-utils or lzma.";
                     return $self->status(1);
                 }
             }
             else {
-                uscan_warn "Unknown type file to decompress: $sigfile_base\n";
+                uscan_warn "Unknown type file to decompress: $sigfile_base";
                 exit 1;
             }
         }
@@ -1172,7 +1170,7 @@ sub download_file_and_sig {
         and $self->shared->{signature} == 1 )
     {
         uscan_verbose
-"Start checking for common possible upstream OpenPGP signature files\n";
+          "Start checking for common possible upstream OpenPGP signature files";
         foreach $suffix_sig (qw(asc gpg pgp sig sign)) {
             my $sigrequest =
               HTTP::Request->new(
@@ -1186,7 +1184,7 @@ sub download_file_and_sig {
                       . " * Add opts=pgpsigurlmangle=s/\$/.$suffix_sig/ or "
                       . "opts=pgpmode=auto to debian/watch\n"
                       . " * Add debian/upstream/signing-key.asc.\n"
-                      . " See uscan(1) for more details\n";
+                      . " See uscan(1) for more details";
                     $self->pgpmode('none');
                 }
                 else {    # auto
@@ -1197,7 +1195,7 @@ sub download_file_and_sig {
             }
         }
         uscan_verbose
-          "End checking for common possible upstream OpenPGP signature files\n";
+          "End checking for common possible upstream OpenPGP signature files";
         $self->signature_available(0);
     }
     if ( $self->pgpmode eq 'mangle' ) {
@@ -1219,12 +1217,12 @@ sub download_file_and_sig {
             {    # strange suffix
                 $suffix_sig = "pgp";
             }
-            uscan_debug "Add $suffix_sig suffix based on $pgpsig_url.\n";
+            uscan_debug "Add $suffix_sig suffix based on $pgpsig_url.";
         }
         $sigfile = "$sigfile_base.$suffix_sig";
         if ( $self->shared->{signature} == 1 ) {
             uscan_verbose "Downloading OpenPGP signature from\n"
-              . "   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile\n";
+              . "   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile";
             $self->signature_available(
                 $self->downloader->download(
                     $pgpsig_url, "$self->{config}->{destdir}/$sigfile",
@@ -1235,7 +1233,7 @@ sub download_file_and_sig {
         }
         else {    # -1, 0
             uscan_verbose "Not downloading OpenPGP signature from\n"
-              . "   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile\n";
+              . "   $pgpsig_url (pgpsigurlmangled)\n   as $sigfile";
             $self->signature_available(
                 ( -e "$self->{config}->{destdir}/$sigfile" ) ? 1 : 0 );
         }
@@ -1245,7 +1243,7 @@ sub download_file_and_sig {
         $sigfile    = $self->newfile_base;
         if ( $self->shared->{signature} == 1 ) {
             uscan_verbose "Downloading OpenPGP signature from\n"
-              . "   $pgpsig_url (pgpmode=previous)\n   as $sigfile\n";
+              . "   $pgpsig_url (pgpmode=previous)\n   as $sigfile";
             $self->signature_available(
                 $self->downloader->download(
                     $pgpsig_url, "$self->{config}->{destdir}/$sigfile",
@@ -1256,7 +1254,7 @@ sub download_file_and_sig {
         }
         else {    # -1, 0
             uscan_verbose "Not downloading OpenPGP signature from\n"
-              . "   $pgpsig_url (pgpmode=previous)\n   as $sigfile\n";
+              . "   $pgpsig_url (pgpmode=previous)\n   as $sigfile";
             $self->signature_available(
                 ( -e "$self->{config}->{destdir}/$sigfile" ) ? 1 : 0 );
         }
@@ -1264,7 +1262,7 @@ sub download_file_and_sig {
         $self->{newfile_base} = $self->shared->{previous_newfile_base};
         $sigfile_base         = $self->shared->{previous_sigfile_base};
         uscan_verbose
-          "Use $self->{newfile_base} as upstream package (pgpmode=previous)\n";
+          "Use $self->{newfile_base} as upstream package (pgpmode=previous)";
     }
 
     # 6.3 verify signature
@@ -1279,7 +1277,7 @@ sub download_file_and_sig {
         }
         elsif ( $download_available == 0 ) {
             uscan_warn
-"FAIL Checking OpenPGP signature (no upstream tarball downloaded).\n";
+"FAIL Checking OpenPGP signature (no upstream tarball downloaded).";
             return $self->status(1);
         }
         elsif ( $self->signature_available == 0 ) {
@@ -1289,7 +1287,7 @@ sub download_file_and_sig {
         }
         else {
             if ( $self->shared->{signature} == 0 ) {
-                uscan_verbose "Use the existing file: $sigfile\n";
+                uscan_verbose "Use the existing file: $sigfile";
             }
             $self->keyring->verifyv(
                 "$self->{config}->{destdir}/$sigfile",
@@ -1302,25 +1300,24 @@ sub download_file_and_sig {
         $self->shared->{previous_download_available} = undef;
     }
     elsif ( $self->pgpmode eq 'none' or $self->pgpmode eq 'default' ) {
-        uscan_verbose "Missing OpenPGP signature.\n";
+        uscan_verbose "Missing OpenPGP signature.";
         $self->shared->{previous_newfile_base}       = undef;
         $self->shared->{previous_sigfile_base}       = undef;
         $self->shared->{previous_newversion}         = undef;
         $self->shared->{previous_download_available} = undef;
     }
     elsif ( $self->pgpmode eq 'next' ) {
-        uscan_verbose
-          "Defer checking OpenPGP signature to the next watch line\n";
+        uscan_verbose "Defer checking OpenPGP signature to the next watch line";
         $self->shared->{previous_newfile_base} = $self->newfile_base;
         $self->shared->{previous_sigfile_base} = $sigfile_base;
         $self->shared->{previous_newversion} =
           $self->search_result->{newversion};
         $self->shared->{previous_download_available} = $download_available;
-        uscan_verbose "previous_newfile_base = $self->{newfile_base}\n";
-        uscan_verbose "previous_sigfile_base = $sigfile_base\n";
+        uscan_verbose "previous_newfile_base = $self->{newfile_base}";
+        uscan_verbose "previous_sigfile_base = $sigfile_base";
         uscan_verbose
-          "previous_newversion = $self->{search_result}->{newversion}\n";
-        uscan_verbose "previous_download_available = $download_available\n";
+          "previous_newversion = $self->{search_result}->{newversion}";
+        uscan_verbose "previous_download_available = $download_available";
     }
     elsif ( $self->pgpmode eq 'self' ) {
         $self->shared->{previous_newfile_base}       = undef;
@@ -1329,10 +1326,10 @@ sub download_file_and_sig {
         $self->shared->{previous_download_available} = undef;
     }
     elsif ( $self->pgpmode eq 'auto' ) {
-        uscan_verbose "Don't check OpenPGP signature\n";
+        uscan_verbose "Don't check OpenPGP signature";
     }
     else {
-        uscan_warn "strange ... unknown pgpmode = $self->{pgpmode}\n";
+        uscan_warn "strange ... unknown pgpmode = $self->{pgpmode}";
         return $self->status(1);
     }
     my $mangled_newversion = $self->search_result->{newversion};
@@ -1351,29 +1348,29 @@ sub download_file_and_sig {
 
    # $mangled_newversion = version used for the new orig.tar.gz (a.k.a oversion)
         uscan_verbose
-"New orig.tar.* tarball version (oversionmangled): $mangled_newversion\n";
+"New orig.tar.* tarball version (oversionmangled): $mangled_newversion";
 
       # MUT package always use the same $common_mangled_newversion
       # MUT disables repacksuffix so it is safe to have this before mk-origtargz
         $self->shared->{common_mangled_newversion} = $mangled_newversion;
     }
     if ( $self->pgpmode eq 'next' ) {
-        uscan_verbose "Read the next watch line (pgpmode=next)\n";
+        uscan_verbose "Read the next watch line (pgpmode=next)";
         return 0;
     }
     if ( $self->safe ) {
         uscan_verbose "SKIP generation of orig.tar.* "
-          . "and running of script/uupdate (--safe)\n";
+          . "and running of script/uupdate (--safe)";
         return 0;
     }
     if ( $download_available == 0 ) {
         uscan_warn "No upstream tarball downloaded."
-          . " No further processing with mk_origtargz ...\n";
+          . " No further processing with mk_origtargz ...";
         return $self->status(1);
     }
     if ( $download_available == -1 ) {
         uscan_warn "No upstream tarball unpacked from self signature file."
-          . " No further processing with mk_origtargz ...\n";
+          . " No further processing with mk_origtargz ...";
         return $self->status(1);
     }
     if ( $self->signature_available == 1 and $self->decompress ) {
@@ -1386,7 +1383,7 @@ sub download_file_and_sig {
 
 sub mkorigtargz {
     my ($self) = @_;
-    uscan_debug "line: mkorigtargz()\n";
+    uscan_debug "line: mkorigtargz()";
     return 0 unless ( $self->must_download );
     my $mk_origtargz_out;
     my $path   = "$self->{config}->{destdir}/$self->{newfile_base}";
@@ -1418,7 +1415,7 @@ sub mkorigtargz {
         push @cmd, $path;
 
         my $actioncmd = join( " ", @cmd );
-        uscan_verbose "Executing internal command:\n   $actioncmd\n";
+        uscan_verbose "Executing internal command:\n   $actioncmd";
         spawn(
             exec       => \@cmd,
             to_string  => \$mk_origtargz_out,
@@ -1433,7 +1430,7 @@ sub mkorigtargz {
         $self->shared->{common_mangled_newversion} = $1
           if $target =~ m/[^_]+_(.+)\.orig(?:-.+)?\.tar\.(?:gz|bz2|lzma|xz)$/;
         uscan_verbose "New orig.tar.* tarball version (after mk-origtargz): "
-          . "$self->{shared}->{common_mangled_newversion}\n";
+          . "$self->{shared}->{common_mangled_newversion}";
     }
     push @{ $self->shared->{origtars} }, $target;
 
@@ -1448,23 +1445,23 @@ sub mkorigtargz {
                   or uscan_die "Can\'t remove old backup log "
                   . "$self->{shared}->{uscanlog}.old: $!";
                 uscan_warn "Old backup uscan log found. "
-                  . "Remove: $self->{shared}->{uscanlog}.old\n";
+                  . "Remove: $self->{shared}->{uscanlog}.old";
             }
             if ( -e $self->shared->uscanlog ) {
                 move( $self->shared->uscanlog,
                     "$self->{shared}->{uscanlog}.old" );
                 uscan_warn "Old uscan log found. "
-                  . "Moved to: $self->{shared}->{uscanlog}.old\n";
+                  . "Moved to: $self->{shared}->{uscanlog}.old";
             }
             open( USCANLOG, ">> $self->{shared}->{uscanlog}" )
               or uscan_die "$progname: could not open "
-              . "$self->{shared}->{uscanlog} for append: $!\n";
+              . "$self->{shared}->{uscanlog} for append: $!";
             print USCANLOG "# uscan log\n";
         }
         else {
             open( USCANLOG, ">> $self->{shared}->{uscanlog}" )
               or uscan_die "$progname: could not open "
-              . "$self->{shared}->{uscanlog} for append: $!\n";
+              . "$self->{shared}->{uscanlog} for append: $!";
         }
         if ( $self->symlink ne "rename" ) {
             my $umd5sum = Digest::MD5->new;
@@ -1496,7 +1493,7 @@ sub mkorigtargz {
         }
         close USCANLOG
           or uscan_die
-          "$progname: could not close $self->{shared}->{uscanlog} $!\n";
+          "$progname: could not close $self->{shared}->{uscanlog} $!";
     }
 
     dehs_verbose "$mk_origtargz_out\n" if $mk_origtargz_out;
@@ -1569,7 +1566,7 @@ sub _do {
     $sub = $mode . "_$sub";
     eval "use Devscripts::Uscan::$mode" unless ( $self->can($sub) );
     if ($@) {
-        uscan_warn "Unknown '$mode' mode set in $self->{watchfile} ($@)\n";
+        uscan_warn "Unknown '$mode' mode set in $self->{watchfile} ($@)";
         $self->status(1);
     }
     return $self->$sub;

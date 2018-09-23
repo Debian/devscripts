@@ -212,11 +212,11 @@ sub parse_command_line {
         "watchfile=s"                  => \$opt_watchfile,
       )
       or uscan_die
-"Usage: $progname [options] [directories]\nRun $progname --help for more details\n";
+"Usage: $progname [options] [directories]\nRun $progname --help for more details";
 
     if ($opt_noconf) {
         die
-"$progname: --no-conf is only acceptable as the first command-line option!\n";
+"$progname: --no-conf is only acceptable as the first command-line option!";
     }
     if ($opt_h) { $self->usage();   exit 0; }
     if ($opt_v) { $self->version(); exit 0; }
@@ -241,16 +241,16 @@ sub parse_command_line {
 
     if ( !-d "$self->{destdir}" ) {
         uscan_die
-"The directory to store downloaded files is missing: $self->{destdir}\n";
+"The directory to store downloaded files is missing: $self->{destdir}";
     }
 
     uscan_verbose
-      "The directory to store downloaded files(\$destdir): $self->{destdir}\n";
+      "The directory to store downloaded files(\$destdir): $self->{destdir}";
 
     if ( defined $opt_package ) {
         $self->download(0);    # compatibility
         uscan_die
-          "The --package option requires to set the --watchfile option, too.\n"
+          "The --package option requires to set the --watchfile option, too."
           unless defined $opt_watchfile;
     }
     $self->safe(1) if defined $opt_safe;
@@ -275,19 +275,19 @@ sub parse_command_line {
         }
         else {
             uscan_die
-"Unrecognised --check-dirname-level value (allowed are 0,1,2): $opt_level\n";
+"Unrecognised --check-dirname-level value (allowed are 0,1,2): $opt_level";
         }
     }
 
     $self->{check_dirname_regex} = $opt_regex if defined $opt_regex;
 
     uscan_verbose
-      "$progname (version $main::uscan_version) See $progname(1) for help\n";
+      "$progname (version $main::uscan_version) See $progname(1) for help";
     if ($dehs) {
         uscan_verbose "The --dehs option enabled.\n"
           . "        STDOUT = XML output for use by other programs\n"
           . "        STDERR = plain text output for human\n"
-          . "        Use the redirection of STDOUT to a file to get the clean XML data\n";
+          . "        Use the redirection of STDOUT to a file to get the clean XML data";
     }
     if ( defined $self->watchfile and @ARGV ) {
         uscan_die "Can't have directory arguments if using --watchfile";

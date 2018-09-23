@@ -18,13 +18,14 @@ our ( $dehs, $dehs_tags, $dehs_start_output, $dehs_end_output, $verbose ) =
 
 our $progname = basename($0);
 
-sub printwarn ($) {
-    my $msg = $_[0];
-    if ($dehs) {
-        warn $msg;
+sub printwarn {
+    my ( $msg, $w ) = @_;
+    chomp $msg;
+    if ( $w or $dehs ) {
+        print STDERR "$msg\n";
     }
     else {
-        print $msg;
+        print "$msg\n";
     }
 }
 
@@ -42,19 +43,24 @@ sub uscan_verbose($) {
 
 sub dehs_verbose ($) {
     my $msg = $_[0];
-    push @{ $dehs_tags->{'messages'} }, $msg;
+    push @{ $dehs_tags->{'messages'} }, "$msg\n";
     uscan_verbose($msg);
+}
+
+sub who_called {
+    my @out = caller(1);
+    return "[$out[0]: $out[2]]";
 }
 
 sub uscan_warn ($) {
     my $msg = $_[0];
     push @{ $dehs_tags->{'warnings'} }, $msg if $dehs;
-    warn "$progname warn: $msg";
+    printwarn( "$progname warn: $msg " . who_called, 1 );
 }
 
 sub uscan_debug($) {
     my $msg = $_[0];
-    warn "$progname debug: $msg" if $verbose > 1;
+    printwarn "$progname debug: $msg" if $verbose > 1;
 }
 
 sub uscan_die ($) {
@@ -64,7 +70,8 @@ sub uscan_die ($) {
         $dehs_end_output = 1;
         dehs_output();
     }
-    die "$progname die: $msg";
+    printwarn( "$progname die: $msg " . who_called, 1 );
+    exit(1);
 }
 
 sub dehs_output () {

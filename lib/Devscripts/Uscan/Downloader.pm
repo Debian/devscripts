@@ -15,11 +15,11 @@ BEGIN {
         my $progname = basename($0);
         if ( $@ =~ /^Can\'t locate LWP\/UserAgent\.pm/ ) {
             die "$progname: you must have the libwww-perl package installed\n"
-              . "to use this script\n";
+              . "to use this script";
         }
         else {
             die "$progname: problem loading the LWP::UserAgent module:\n  $@\n"
-              . "Have you installed the libwww-perl package?\n";
+              . "Have you installed the libwww-perl package?";
         }
     }
     eval { require LWP::Protocol::https; };
@@ -35,7 +35,7 @@ has passive => (
     trigger => sub {
         my ( $self, $nv ) = @_;
         if ($nv) {
-            uscan_verbose "Set passive mode: $self->{passive}\n";
+            uscan_verbose "Set passive mode: $self->{passive}";
             $ENV{'FTP_PASSIVE'} = $self->passive;
         }
         elsif ( $ENV{'FTP_PASSIVE'} ) {
@@ -83,12 +83,12 @@ sub download ($$$$$$) {
         if ( $url =~ /^https/ and !$self->ssl ) {
             uscan_die "$progname: you must have the "
               . "liblwp-protocol-https-perl package installed\n"
-              . "to use https URLs\n";
+              . "to use https URLs";
         }
 
         # substitute HTML entities
         # Is anything else than "&amp;" required?  I doubt it.
-        uscan_verbose "Requesting URL:\n   $url\n";
+        uscan_verbose "Requesting URL:\n   $url";
         my $headers = HTTP::Headers->new;
         $headers->header( 'Accept'  => '*/*' );
         $headers->header( 'Referer' => $base );
@@ -97,18 +97,18 @@ sub download ($$$$$$) {
         if ( !$response->is_success ) {
             uscan_warn( defined $pkg_dir ? "In directory $pkg_dir, d" : "D" )
               . "ownloading\n  $url failed: "
-              . $response->status_line . "\n";
+              . $response->status_line;
             return 0;
         }
     }
     elsif ( $optref->mode eq 'ftp' ) {
-        uscan_verbose "Requesting URL:\n   $url\n";
+        uscan_verbose "Requesting URL:\n   $url";
         $request = HTTP::Request->new( 'GET', "$url" );
         $response = $self->user_agent->request( $request, $fname );
         if ( !$response->is_success ) {
             uscan_warn( defined $pkg_dir ? "In directory $pkg_dir, d" : "D" )
               . "ownloading\n  $url failed: "
-              . $response->status_line . "\n";
+              . $response->status_line;
             return 0;
         }
     }
@@ -143,7 +143,7 @@ sub download ($$$$$$) {
             "--prefix=$pkg-$ver/", "--output=$abs_dst/$pkg-$ver.tar",
             $gitref
           ) == 0
-          or uscan_die("git archive failed\n");
+          or uscan_die("git archive failed");
 
         # If git cloned repo exists and not --debug ($verbose=1) -> remove it
         if ( $self->gitrepo_state > 0 and $verbose < 1 ) {
@@ -152,11 +152,11 @@ sub download ($$$$$$) {
             removetree( "$abs_dst/$gitrepo_dir", { error => \$err } );
             if (@$err) {
                 local $, = "\n\t";
-                uscan_warn "Errors during git repo clean:\n\t@$err\n";
+                uscan_warn "Errors during git repo clean:\n\t@$err";
             }
             $self->gitrepo_state(0);
         }
-        chdir "$abs_dst" or uscan_die("Unable to chdir($abs_dst): $!\n");
+        chdir "$abs_dst" or uscan_die("Unable to chdir($abs_dst): $!");
         if ( $suffix eq 'gz' ) {
             uscan_exec( "gzip", "-n", "-9", "$pkg-$ver.tar" );
         }
@@ -170,10 +170,10 @@ sub download ($$$$$$) {
             uscan_exec( "lzma", "$pkg-$ver.tar" );
         }
         else {
-            uscan_warn "Unknown suffix file to repack: $suffix\n";
+            uscan_warn "Unknown suffix file to repack: $suffix";
             exit 1;
         }
-        chdir "$curdir" or uscan_die("Unable to chdir($curdir): $!\n");
+        chdir "$curdir" or uscan_die("Unable to chdir($curdir): $!");
     }
     return 1;
 }
