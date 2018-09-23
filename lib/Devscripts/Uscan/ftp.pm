@@ -7,7 +7,7 @@ use Devscripts::Uscan::Utils;
 use Exporter qw(import);
 use Devscripts::Uscan::_xtp;
 
-our @EXPORT = qw(ftp_search ftp_upstream_url ftp_newfile_base);
+our @EXPORT = qw(ftp_search ftp_upstream_url ftp_newfile_base ftp_clean);
 
 #######################################################################
 # search $newfile $newversion (ftp mode)
@@ -292,5 +292,8 @@ sub ftp_newdir {
     }
     return $newdir;
 }
+
+# Nothing to clean here
+sub ftp_clean { 0 }
 
 1;

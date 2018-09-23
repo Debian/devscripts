@@ -176,7 +176,10 @@ sub process {
       or $self->download_file_and_sig
 
       #  - make orig.tar.gz
-      or $self->mkorigtargz;
+      or $self->mkorigtargz
+
+      #  - clean (used by git)
+      or $self->clean;
     return $self->status;
 }
 
@@ -373,7 +376,6 @@ EOF
 /^\s*((?:(?:(?:git)?m|hrefdec)od|dat)e|(?:componen|unzipop)t|p(?:gpmode|retty)|repacksuffix)\s*=\s*(.+?)\s*$/
                   )
                 {
-                    print STDERR "#### mode: $1 => $2\n";  # if($opt eq 'mode');
                     $self->$1($2);
                 }
                 elsif ( $opt =~ /^\s*versionmangle\s*=\s*(.+?)\s*$/ ) {
@@ -1563,6 +1565,11 @@ sub mkorigtargz {
     }
 
     return 0;
+}
+
+sub clean {
+    my($self) = @_;
+    $self->_do('clean');
 }
 
 # Internal sub to call sub modules (git, http,...)

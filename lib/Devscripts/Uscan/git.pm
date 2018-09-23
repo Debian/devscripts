@@ -5,8 +5,9 @@ use Cwd qw/abs_path/;
 use Devscripts::Uscan::Output;
 use Devscripts::Uscan::Utils;
 use Exporter qw(import);
+use File::Path 'remove_tree';
 
-our @EXPORT = qw(git_search git_upstream_url git_newfile_base);
+our @EXPORT = qw(git_search git_upstream_url git_newfile_base git_clean);
 
 ######################################################
 # search $newfile $newversion (git mode/versionless)
@@ -159,6 +160,23 @@ sub git_newfile_base {
     my $zsuffix      = get_suffix( $self->compression );
     my $newfile_base = "$self->{pkg}-$self->{newversion}.tar.$zsuffix";
     return $newfile_base;
+}
+
+sub git_clean {
+    my ($self) = @_;
+
+    # If git cloned repo exists and not --debug ($verbose=1) -> remove it
+    if ( $self->downloader->gitrepo_state > 0 and $verbose < 1 ) {
+        my $err;
+        remove_tree "$self->{config}->{destdir}/" . $self->gitrepo_dir,
+          { error => \$err };
+        if (@$err) {
+            local $, = "\n\t";
+            uscan_warn "Errors during git repo clean:\n\t@$err";
+        }
+        $self->downloader->gitrepo_state(0);
+    }
+    return 0;
 }
 
 1;

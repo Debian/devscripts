@@ -2,7 +2,6 @@ package Devscripts::Uscan::Downloader;
 
 use strict;
 use Cwd qw/cwd abs_path/;
-use File::Path;
 use Devscripts::Uscan::CatchRedirections;
 use Devscripts::Uscan::Output;
 use Devscripts::Uscan::Utils;
@@ -147,17 +146,6 @@ sub download ($$$$$$) {
           ) == 0
           or uscan_die("git archive failed");
 
-        # If git cloned repo exists and not --debug ($verbose=1) -> remove it
-        if ( $self->gitrepo_state > 0 and $verbose < 1 ) {
-
-            my $err;
-            removetree( "$abs_dst/$gitrepo_dir", { error => \$err } );
-            if (@$err) {
-                local $, = "\n\t";
-                uscan_warn "Errors during git repo clean:\n\t@$err";
-            }
-            $self->gitrepo_state(0);
-        }
         chdir "$abs_dst" or uscan_die("Unable to chdir($abs_dst): $!");
         if ( $suffix eq 'gz' ) {
             uscan_exec( "gzip", "-n", "-9", "$pkg-$ver.tar" );

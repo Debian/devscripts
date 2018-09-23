@@ -7,7 +7,7 @@ use Devscripts::Uscan::Utils;
 use Exporter qw(import);
 use Devscripts::Uscan::_xtp;
 
-our @EXPORT = qw(http_search http_upstream_url http_newfile_base);
+our @EXPORT = qw(http_search http_upstream_url http_newfile_base http_clean);
 
 *http_newfile_base = \&Devscripts::Uscan::_xtp::_xtp_newfile_base;
 
@@ -409,6 +409,9 @@ sub http_newdir {
     $newdir =~ s%^.*/%%;
     return ($newdir);
 }
+
+# Nothing to clean here
+sub http_clean {0}
 
 sub clean_content {
     my ($content) = @_;
