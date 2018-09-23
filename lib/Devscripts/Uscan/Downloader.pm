@@ -35,7 +35,7 @@ has passive => (
     trigger => sub {
         my ( $self, $nv ) = @_;
         if ($nv) {
-            uscan_verbose "Set passive mode";
+            uscan_verbose "Set passive mode: $self->{passive}\n";
             $ENV{'FTP_PASSIVE'} = $self->passive;
         }
         elsif ( $ENV{'FTP_PASSIVE'} ) {
