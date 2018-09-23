@@ -5,6 +5,7 @@ $| = 1;
 use strict;
 
 use Devscripts::Uscan::Output;
+use Dpkg::IPC;
 use Exporter 'import';
 use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use Moo;
@@ -68,88 +69,100 @@ sub parse_conf_files {
         shift @ARGV;
     }
     else {
-        my @config_files = ( '/etc/devscripts.conf', '~/.devscripts' );
-        my %config_vars;
+        my @config_files =
+          grep { -r $_ } ( '/etc/devscripts.conf', '~/.devscripts' );
+        if (@config_files) {
+            my %config_vars;
 
-        my $shell_cmd;
+            my $shell_cmd =
+                'for file in '
+              . join( " ", @config_files )
+              . '; do . $file; done;';
 
-        # Set defaults
-        foreach my $var ( keys %config_vars ) {
-            $shell_cmd .= qq[$var="$config_vars{$var}";\n];
-        }
-        $shell_cmd .= 'for file in ' . join( " ", @config_files ) . "; do\n";
-        $shell_cmd .= '[ -f $file ] && . $file; done;' . "\n";
-
-        # Read back values
-        foreach my $var ( keys %config_vars ) {
-            $shell_cmd .= "echo \$$var;\n";
-        }
-        my $shell_out = `/bin/bash -c '$shell_cmd'`;
-        @config_vars{ keys %config_vars } = split /\n/, $shell_out, -1;
-
-        # Check validity
-
-        # Ignore bad boolean values
-        foreach (
-            qw(USCAN_DOWNLOAD USCAN_SAFE USCAN_VERBOSE USCAN_DEHS_OUTPUT
-            USCAN_REPACK USCAN_EXCLUSION)
-          )
-        {
-            if ( $config_vars{$_} ) {
-                $config_vars{$_} =~ /^(yes|no)$/ or $config_vars{$_} = undef;
-            }
-        }
-        $config_vars{'USCAN_DESTDIR'} =~ /^\s*(\S+)\s*$/
-          or $config_vars{'USCAN_DESTDIR'} = undef
-          if ( $config_vars{'USCAN_DESTDIR'} );
-        (         $config_vars{'USCAN_PASV'}
-              and $config_vars{'USCAN_PASV'} =~ /^(yes|no|default)$/ )
-          or $config_vars{'USCAN_PASV'} = 'default';
-        $config_vars{'USCAN_TIMEOUT'} =~ m/^\d+$/
-          or $config_vars{'USCAN_TIMEOUT'} = undef
-          if $config_vars{'USCAN_TIMEOUT'};
-        $config_vars{'USCAN_SYMLINK'} =~ /^(yes|no|symlinks?|rename)$/
-          or $config_vars{'USCAN_SYMLINK'} = 'yes'
-          if $config_vars{'USCAN_SYMLINK'};
-        $config_vars{'USCAN_SYMLINK'} = 'symlink'
-          if $config_vars{'USCAN_SYMLINK'}
-          and ($config_vars{'USCAN_SYMLINK'} eq 'yes'
-            or $config_vars{'USCAN_SYMLINK'} =~ /^symlinks?$/ );
-        $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} =~ /^[012]$/
-          or $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} = undef
-          if $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'};
-
-        $self->{modified_conf_msg} ||= "  (none)\n";
-        chomp $self->{modified_conf_msg};
-
-        foreach (
-            qw(USCAN_DESTDIR USCAN_DOWNLOAD USCAN_SAFE USCAN_TIMEOUT
-            USCAN_VERBOSE USCAN_DEHS_OUTPUT DEVSCRIPTS_CHECK_DIRNAME_LEVEL
-            DEVSCRIPTS_CHECK_DIRNAME_REGEX USCAN_REPACK USCAN_EXCLUSION
-            USCAN_SYMLINK USCAN_USER_AGENT)
-          )
-        {
-            my $name = lc($_);
-            $name =~ s/^(?:uscan|devscripts)_//;
-            if (
-                defined(
-                    $config_vars{$_} and $config_vars{$_} ne $self->$name
-                )
+            # Read back values
+            foreach my $var (
+                qw(DEVSCRIPTS_CHECK_DIRNAME_LEVEL DEVSCRIPTS_CHECK_DIRNAME_REGEX
+                USCAN_DEHS_OUTPUT USCAN_DESTDIR USCAN_DOWNLOAD USCAN_EXCLUSION
+                USCAN_PASV USCAN_REPACK USCAN_SAFE USCAN_SYMLINK USCAN_TIMEOUT
+                USCAN_USER_AGENT USCAN_VERBOSE)
               )
             {
-                $self->{modified_conf_msg} .= "  $_=$config_vars{$_}\n";
-                $self->$name( $config_vars{$_} );
+                $shell_cmd .= "echo \$$var;\n";
             }
-        }
+            my $shell_out;
+            spawn(
+                exec       => [ '/bin/bash', '-c', $shell_cmd ],
+                wait_child => 1,
+                to_string  => \$shell_out
+            );
+            @config_vars{ keys %config_vars } = split /\n/, $shell_out, -1;
 
-        my $tmp = $self->passive;
-        $self->passive(
-              $config_vars{'USCAN_PASV'} eq 'yes' ? 1
-            : $config_vars{'USCAN_PASV'} eq 'no'  ? 0
-            :                                       'default'
-        );
-        $self->{modified_conf_msg} .= "  USCAN_PASV=$config_vars{USCAN_PASV}\n"
-          unless ( $tmp = $self->passive );
+            # Check validity
+
+            # Ignore bad boolean values
+            foreach (
+                qw(USCAN_DOWNLOAD USCAN_SAFE USCAN_VERBOSE USCAN_DEHS_OUTPUT
+                USCAN_REPACK USCAN_EXCLUSION)
+              )
+            {
+                if ( $config_vars{$_} ) {
+                    $config_vars{$_} =~ /^(yes|no)$/
+                      or $config_vars{$_} = undef;
+                }
+            }
+            $config_vars{'USCAN_DESTDIR'} =~ /^\s*(\S+)\s*$/
+              or $config_vars{'USCAN_DESTDIR'} = undef
+              if ( $config_vars{'USCAN_DESTDIR'} );
+            (         $config_vars{'USCAN_PASV'}
+                  and $config_vars{'USCAN_PASV'} =~ /^(yes|no|default)$/ )
+              or $config_vars{'USCAN_PASV'} = 'default';
+            $config_vars{'USCAN_TIMEOUT'} =~ m/^\d+$/
+              or $config_vars{'USCAN_TIMEOUT'} = undef
+              if $config_vars{'USCAN_TIMEOUT'};
+            $config_vars{'USCAN_SYMLINK'} =~ /^(yes|no|symlinks?|rename)$/
+              or $config_vars{'USCAN_SYMLINK'} = 'yes'
+              if $config_vars{'USCAN_SYMLINK'};
+            $config_vars{'USCAN_SYMLINK'} = 'symlink'
+              if $config_vars{'USCAN_SYMLINK'}
+              and ($config_vars{'USCAN_SYMLINK'} eq 'yes'
+                or $config_vars{'USCAN_SYMLINK'} =~ /^symlinks?$/ );
+            $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} =~ /^[012]$/
+              or $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} = undef
+              if $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'};
+
+            $self->{modified_conf_msg} ||= "  (none)\n";
+            chomp $self->{modified_conf_msg};
+
+            foreach (
+                qw(USCAN_DESTDIR USCAN_DOWNLOAD USCAN_SAFE USCAN_TIMEOUT
+                USCAN_VERBOSE USCAN_DEHS_OUTPUT DEVSCRIPTS_CHECK_DIRNAME_LEVEL
+                DEVSCRIPTS_CHECK_DIRNAME_REGEX USCAN_REPACK USCAN_EXCLUSION
+                USCAN_SYMLINK USCAN_USER_AGENT)
+              )
+            {
+                my $name = lc($_);
+                $name =~ s/^(?:uscan|devscripts)_//;
+                if (
+                    defined(
+                        $config_vars{$_} and $config_vars{$_} ne $self->$name
+                    )
+                  )
+                {
+                    $self->{modified_conf_msg} .= "  $_=$config_vars{$_}\n";
+                    $self->$name( $config_vars{$_} );
+                }
+            }
+
+            my $tmp = $self->passive;
+            $self->passive(
+                  $config_vars{'USCAN_PASV'} eq 'yes' ? 1
+                : $config_vars{'USCAN_PASV'} eq 'no'  ? 0
+                :                                       'default'
+            );
+            $self->{modified_conf_msg} .=
+              "  USCAN_PASV=$config_vars{USCAN_PASV}\n"
+              unless ( $tmp = $self->passive );
+        }
     }
     return $self;
 }
