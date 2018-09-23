@@ -156,9 +156,10 @@ sub git_upstream_url {
 }
 
 sub git_newfile_base {
-    my ($self)       = @_;
-    my $zsuffix      = get_suffix( $self->compression );
-    my $newfile_base = "$self->{pkg}-$self->{newversion}.tar.$zsuffix";
+    my ($self) = @_;
+    my $zsuffix = get_suffix( $self->compression );
+    my $newfile_base =
+      "$self->{pkg}-$self->{search_result}->{newversion}.tar.$zsuffix";
     return $newfile_base;
 }
 
