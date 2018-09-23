@@ -95,9 +95,9 @@ sub download ($$$$$$) {
         $request = HTTP::Request->new( 'GET', $url, $headers );
         $response = $self->user_agent->request( $request, $fname );
         if ( !$response->is_success ) {
-            uscan_warn( defined $pkg_dir ? "In directory $pkg_dir, d" : "D" )
-              . "ownloading\n  $url failed: "
-              . $response->status_line;
+            uscan_warn( ( defined $pkg_dir ? "In directory $pkg_dir, d" : "D" )
+                . "ownloading\n  $url failed: "
+                  . $response->status_line );
             return 0;
         }
     }
