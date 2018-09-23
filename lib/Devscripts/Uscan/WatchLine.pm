@@ -405,7 +405,7 @@ EOF
                     $self->$1( [ split /;/, $2 ] );
                 }
                 else {
-                    uscan_warn "unrecognised option $opt";
+                    uscan_warn "unrecognized option $opt";
                 }
             }
 
