@@ -5,6 +5,7 @@ use Cwd qw/cwd abs_path/;
 use File::Path;
 use Devscripts::Uscan::CatchRedirections;
 use Devscripts::Uscan::Output;
+use Devscripts::Uscan::Utils;
 use Moo;
 
 our $haveSSL;
@@ -77,9 +78,10 @@ has user_agent => (
 has ssl => ( is => 'rw', default => sub { $haveSSL } );
 
 sub download ($$$$$$) {
-    my ( $self, $url, $fname, $optref, $base, $pkg_dir ) = @_;
+    my ( $self, $url, $fname, $optref, $base, $pkg_dir, $mode ) = @_;
     my ( $request, $response );
-    if ( $optref->mode eq 'http' ) {
+    $mode ||= $optref->mode;
+    if ( $mode eq 'http' ) {
         if ( $url =~ /^https/ and !$self->ssl ) {
             uscan_die "$progname: you must have the "
               . "liblwp-protocol-https-perl package installed\n"
@@ -101,7 +103,7 @@ sub download ($$$$$$) {
             return 0;
         }
     }
-    elsif ( $optref->mode eq 'ftp' ) {
+    elsif ( $mode eq 'ftp' ) {
         uscan_verbose "Requesting URL:\n   $url";
         $request = HTTP::Request->new( 'GET', "$url" );
         $response = $self->user_agent->request( $request, $fname );

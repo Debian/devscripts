@@ -22,28 +22,42 @@ sub git_search {
         if (    $self->gitmode eq 'shallow'
             and $self->parse_result->{filepattern} eq 'HEAD' )
         {
-            uscan_exec( 'git', 'clone', '--bare', '--depth=1', $self->base,
-                "$self->{destdir}/$self->{gitrepo_dir}" );
+            uscan_exec(
+                'git', 'clone', '--bare', '--depth=1',
+                $self->parse_result->{base},
+                "$self->{config}->{destdir}/" . $self->gitrepo_dir
+            );
             $self->downloader->gitrepo_state(1);
         }
         elsif ( $self->gitmode eq 'shallow'
             and $self->parse_result->{filepattern} ne 'HEAD' )
         {    # heads/<branch>
             $newfile =~ s&^heads/&&;    # Set to <branch>
-            uscan_exec( 'git', 'clone', '--bare', '--depth=1', '-b', "$newfile",
-                $self->base, "$self->{destdir}/$self->{gitrepo_dir}" );
+            uscan_exec(
+                'git',
+                'clone',
+                '--bare',
+                '--depth=1',
+                '-b',
+                "$newfile",
+                $self->parse_result->{base},
+                "$self->{config}->{destdir}/" . $self->gitrepo_dir
+            );
             $self->downloader->gitrepo_state(1);
         }
         else {
-            uscan_exec( 'git', 'clone', '--bare', $self->base,
-                "$self->{destdir}/$self->{gitrepo_dir}" );
+            uscan_exec(
+                'git', 'clone', '--bare',
+                $self->parse_result->{base},
+                "$self->{config}->{destdir}/" . $self->gitrepo_dir
+            );
             $self->downloader->gitrepo_state(2);
         }
         if ( $self->pretty eq 'describe' ) {
 
             # use unannotated tags to be on safe side
             $newversion =
-`git --git-dir=$self->{destdir}/$self->{gitrepo_dir} describe --tags`;
+`git --git-dir=$self->{config}->{destdir}/$self->{gitrepo_dir} describe --tags`;
             $newversion =~ s/-/./g;
             chomp($newversion);
             if (
@@ -59,7 +73,7 @@ sub git_search {
         }
         else {
             $newversion =
-`git --git-dir=$self->{destdir}/$self->{gitrepo_dir} log -1 --date=format:$self->{date} --pretty="$self->{pretty}"`;
+`git --git-dir=$self->{config}->{destdir}/$self->{gitrepo_dir} log -1 --date=format:$self->{date} --pretty="$self->{pretty}"`;
             chomp($newversion);
         }
     }
@@ -67,15 +81,15 @@ sub git_search {
     # search $newfile $newversion (git mode w/tag)
     ################################################
     elsif ( $self->mode eq 'git' ) {
-        uscan_verbose "Execute: git ls-remote $self->{base}\n";
-        open( REFS, "-|", 'git', 'ls-remote', $self->base )
-          || uscan_die "$progname: you must have the git package installed\n";
+        uscan_verbose "Execute: git ls-remote $self->{base}";
+        open( REFS, "-|", 'git', 'ls-remote', $self->parse_result->{base} )
+          || uscan_die "$progname: you must have the git package installed";
         my @refs;
         my $ref;
         my $version;
         while (<REFS>) {
             chomp;
-            uscan_debug "$_\n";
+            uscan_debug "$_";
             if (m&^\S+\s+([^\^\{\}]+)$&) {
                 $ref = $1;    # ref w/o ^{}
                 foreach my $_pattern ( @{ $self->patterns } ) {
@@ -114,7 +128,7 @@ sub git_search {
                     uscan_warn
                       "$progname warning: In $self->{watchfile} no matching"
                       . " refs for version $self->{download_version}"
-                      . " in watch line\n  $self->{line}\n";
+                      . " in watch line\n  $self->{line}";
                     return undef;
                 }
 
@@ -126,7 +140,7 @@ sub git_search {
         else {
             uscan_warn "$progname warning: In $self->{watchfile},\n"
               . " no matching refs for watch line\n"
-              . " $self->{line}\n";
+              . " $self->{line}";
             return undef;
         }
     }
@@ -135,7 +149,8 @@ sub git_search {
 
 sub git_upstream_url {
     my ($self) = @_;
-    my $upstream_url = $self->base . ' ' . $self->newfile;
+    my $upstream_url =
+      $self->parse_result->{base} . ' ' . $self->search_result->{newfile};
     return $upstream_url;
 }
 

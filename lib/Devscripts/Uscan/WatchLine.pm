@@ -373,6 +373,7 @@ EOF
 /^\s*((?:(?:(?:git)?m|hrefdec)od|dat)e|(?:componen|unzipop)t|p(?:gpmode|retty)|repacksuffix)\s*=\s*(.+?)\s*$/
                   )
                 {
+                    print STDERR "#### mode: $1 => $2\n";  # if($opt eq 'mode');
                     $self->$1($2);
                 }
                 elsif ( $opt =~ /^\s*versionmangle\s*=\s*(.+?)\s*$/ ) {
@@ -870,7 +871,9 @@ EOF
 sub get_upstream_url {
     my ($self) = @_;
     uscan_debug "line: get_upstream_url()";
-    if ( $self->parse_result->{site} =~ m%^https?://% ) {
+    if ( $self->parse_result->{site} =~ m%^https?://%
+        and not $self->mode eq 'git' )
+    {
         $self->mode('http');
     }
     elsif ( not $self->mode ) {
@@ -1038,7 +1041,8 @@ sub download_file_and_sig {
                 "$self->{config}->{destdir}/$self->{newfile_base}",
                 $self,
                 $self->parse_result->{base},
-                $self->pkg_dir
+                $self->pkg_dir,
+                $self->mode
             );
             if ($download_available) {
                 dehs_verbose
@@ -1061,7 +1065,8 @@ sub download_file_and_sig {
                 "$self->{config}->{destdir}/$self->{newfile_base}",
                 $self,
                 $self->parse_result->{base},
-                $self->pkg_dir
+                $self->pkg_dir,
+                $self->mode,
             );
             if ($download_available) {
                 dehs_verbose
@@ -1227,7 +1232,8 @@ sub download_file_and_sig {
                 $self->downloader->download(
                     $pgpsig_url, "$self->{config}->{destdir}/$sigfile",
                     $self,       $self->parse_result->{base},
-                    $self->pkg_dir
+                    $self->pkg_dir,
+                    $self->mode
                 )
             );
         }
@@ -1248,7 +1254,8 @@ sub download_file_and_sig {
                 $self->downloader->download(
                     $pgpsig_url, "$self->{config}->{destdir}/$sigfile",
                     $self,       $self->parse_result->{base},
-                    $self->pkg_dir
+                    $self->pkg_dir,
+                    $self->mode
                 )
             );
         }
