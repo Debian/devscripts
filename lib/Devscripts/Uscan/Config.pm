@@ -7,6 +7,7 @@ use strict;
 use Devscripts::Uscan::Output;
 use Dpkg::IPC;
 use Exporter 'import';
+use File::HomeDir;
 use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use Moo;
 
@@ -48,6 +49,8 @@ has watchfile  => ( is => 'rw' );
 # Internal attributes
 
 has modified_conf_msg => ( is => 'rw' );
+
+$ENV{HOME} = File::HomeDir->my_home;
 
 sub parse {
     my ($self) = @_;
