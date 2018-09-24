@@ -22,6 +22,15 @@ use File::Copy qw/copy move/;
 use List::Util qw/first/;
 use Moo;
 
+use constant {
+    ANY_VERSION => '[-_]?(\d[\-+\.:\~\da-zA-Z]*)',
+    ARCHIVE_EXT => '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip|tgz|tbz|txz)',
+    DEB_EXT  => '\+(debian|dfsg|ds|deb)(\.)?(\d+)?$',
+};
+use constant {
+    SIGNATURE_EXT => ARCHIVE_EXT . '\.(?:asc|pgp|gpg|sig|sign)',
+};
+
 # Required new() parameters
 has config      => ( is => 'rw', required => 1 );
 has package     => ( is => 'ro', required => 1 );    # Debian package
@@ -185,9 +194,10 @@ sub BUILD {
         my $archive_ext = '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip|tgz|tbz|txz)';
         my $signature_ext = $archive_ext . '\.(?:asc|pgp|gpg|sig|sign)';
         s/\@PACKAGE\@/$args->{package}/g;
-        s/\@ANY_VERSION\@/$any_version/g;
-        s/\@ARCHIVE_EXT\@/$archive_ext/g;
-        s/\@SIGNATURE_EXT\@/$signature_ext/g;
+        s/\@ANY_VERSION\@/ANY_VERSION/ge;
+        s/\@ARCHIVE_EXT\@/ARCHIVE_EXT/ge;
+        s/\@SIGNATURE_EXT\@/SIGNATURE_EXT/ge;
+        s/\@DEB_EXT\@/DEB_EXT/ge;
 
         push @{ $self->watchlines }, Devscripts::Uscan::WatchLine->new(
             {

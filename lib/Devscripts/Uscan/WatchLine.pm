@@ -386,11 +386,28 @@ EOF
                     $self->pgpsigurlmangle( [ split /;/, $1 ] );
                     $self->pgpmode('mangle');
                 }
+                elsif ( $opt =~ /^\s*dversionmangle\s*=\s*(.+?)\s*$/ ) {
+
+                    $self->dversionmangle(
+                        [
+                            map {
+
+                                # If dversionmangle is "auto", replace it by
+                                # DEB_EXT removal
+                                $_ eq 'auto'
+                                  ? ( 's/'
+                                      . &Devscripts::Uscan::WatchFile::DEB_EXT
+                                      . '//' )
+                                  : ($_)
+                            } split /;/,
+                            $1
+                        ]
+                    );
+                }
 
                 # Handle other *mangle:
                 #
                 # $ regexp-assemble <<EOF
-                # dversionmangle
                 # pagemangle
                 # dirversionmangle
                 # uversionmangle
@@ -399,7 +416,7 @@ EOF
                 # oversionmangle
                 # EOF
                 elsif ( $opt =~
-/^\s*((?:d(?:(?:ir)?version|ownloadurl)|(?:filenam|pag)e|[ou]version)mangle)\s*=\s*(.+?)\s*$/
+/^\s*((?:d(?:ownloadurl|irversion)|(?:filenam|pag)e|[ou]version)mangle)\s*=\s*(.+?)\s*$/
                   )
                 {
                     $self->$1( [ split /;/, $2 ] );
