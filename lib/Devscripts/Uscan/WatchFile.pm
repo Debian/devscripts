@@ -25,7 +25,7 @@ use Moo;
 use constant {
     ANY_VERSION => '[-_]?(\d[\-+\.:\~\da-zA-Z]*)',
     ARCHIVE_EXT => '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip|tgz|tbz|txz)',
-    DEB_EXT  => '\+(debian|dfsg|ds|deb)(\.)?(\d+)?$',
+    DEB_EXT  => '[\+~](debian|dfsg|ds|deb)(\.)?(\d+)?$',
 };
 use constant {
     SIGNATURE_EXT => ARCHIVE_EXT . '\.(?:asc|pgp|gpg|sig|sign)',
