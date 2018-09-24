@@ -135,7 +135,7 @@ sub parse_conf_files {
             $self->{modified_conf_msg} ||= "  (none)\n";
             chomp $self->{modified_conf_msg};
 
-            $verbose = $config_vars{'USCAN_VERBOSE'} eq 'yes' ? 1 : 0;
+            $verbose = $config_vars{'USCAN_VERBOSE'} eq 'yes' ? 1 : undef;
 
             foreach (
                 qw(USCAN_DESTDIR USCAN_DOWNLOAD USCAN_SAFE USCAN_TIMEOUT
