@@ -284,7 +284,7 @@ This is substituted by the typical signature file extension regex (non-capturing
 
 This is substituted by the typical Debian extension regexp (capturing).
 
-  \+(debian|dfsg|ds|deb)(\.)?(\d+)?$
+  [\+~](debian|dfsg|ds|deb)(\.)?(\d+)?$
 
 =back
 
