@@ -7,6 +7,7 @@ use strict;
 use Devscripts::Uscan::Output;
 use Dpkg::IPC;
 use Exporter 'import';
+use File::HomeDir;
 use Getopt::Long qw(:config bundling permute no_getopt_compat);
 use Moo;
 
@@ -49,6 +50,8 @@ has watchfile  => ( is => 'rw' );
 
 has modified_conf_msg => ( is => 'rw' );
 
+$ENV{HOME} = File::HomeDir->my_home;
+
 sub parse {
     my ($self) = @_;
 
@@ -70,8 +73,14 @@ sub parse_conf_files {
     }
     else {
         my @config_files =
-          grep { -r $_ } ( '/etc/devscripts.conf', '~/.devscripts' );
+          grep { -r $_ } ( '/etc/devscripts.conf', "$ENV{HOME}/.devscripts" );
         if (@config_files) {
+            my @keys = (
+                qw(DEVSCRIPTS_CHECK_DIRNAME_LEVEL DEVSCRIPTS_CHECK_DIRNAME_REGEX
+                  USCAN_DEHS_OUTPUT USCAN_DESTDIR USCAN_DOWNLOAD USCAN_EXCLUSION
+                  USCAN_PASV USCAN_REPACK USCAN_SAFE USCAN_SYMLINK USCAN_TIMEOUT
+                  USCAN_USER_AGENT USCAN_VERBOSE)
+            );
             my %config_vars;
 
             my $shell_cmd =
@@ -80,13 +89,7 @@ sub parse_conf_files {
               . '; do . $file; done;';
 
             # Read back values
-            foreach my $var (
-                qw(DEVSCRIPTS_CHECK_DIRNAME_LEVEL DEVSCRIPTS_CHECK_DIRNAME_REGEX
-                USCAN_DEHS_OUTPUT USCAN_DESTDIR USCAN_DOWNLOAD USCAN_EXCLUSION
-                USCAN_PASV USCAN_REPACK USCAN_SAFE USCAN_SYMLINK USCAN_TIMEOUT
-                USCAN_USER_AGENT USCAN_VERBOSE)
-              )
-            {
+            foreach my $var (@keys) {
                 $shell_cmd .= "echo \$$var;\n";
             }
             my $shell_out;
@@ -95,7 +98,7 @@ sub parse_conf_files {
                 wait_child => 1,
                 to_string  => \$shell_out
             );
-            @config_vars{ keys %config_vars } = split /\n/, $shell_out, -1;
+            @config_vars{@keys} = split /\n/, $shell_out, -1;
 
             # Check validity
 
@@ -129,25 +132,21 @@ sub parse_conf_files {
             $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} =~ /^[012]$/
               or $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'} = undef
               if $config_vars{'DEVSCRIPTS_CHECK_DIRNAME_LEVEL'};
-
             $self->{modified_conf_msg} ||= "  (none)\n";
             chomp $self->{modified_conf_msg};
 
+            $verbose = $config_vars{'USCAN_VERBOSE'} eq 'yes' ? 1 : 0;
+
             foreach (
                 qw(USCAN_DESTDIR USCAN_DOWNLOAD USCAN_SAFE USCAN_TIMEOUT
-                USCAN_VERBOSE USCAN_DEHS_OUTPUT DEVSCRIPTS_CHECK_DIRNAME_LEVEL
+                USCAN_DEHS_OUTPUT DEVSCRIPTS_CHECK_DIRNAME_LEVEL
                 DEVSCRIPTS_CHECK_DIRNAME_REGEX USCAN_REPACK USCAN_EXCLUSION
                 USCAN_SYMLINK USCAN_USER_AGENT)
               )
             {
                 my $name = lc($_);
                 $name =~ s/^(?:uscan|devscripts)_//;
-                if (
-                    defined(
-                        $config_vars{$_} and $config_vars{$_} ne $self->$name
-                    )
-                  )
-                {
+                if ( $config_vars{$_} and $config_vars{$_} ne $self->$name ) {
                     $self->{modified_conf_msg} .= "  $_=$config_vars{$_}\n";
                     $self->$name( $config_vars{$_} );
                 }
@@ -252,7 +251,7 @@ sub parse_command_line {
     }
     no strict;
 
-    if ( !-d "$self->{destdir}" ) {
+    if ( !-d $self->destdir ) {
         uscan_die
 "The directory to store downloaded files is missing: $self->{destdir}";
     }

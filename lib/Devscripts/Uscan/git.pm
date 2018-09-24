@@ -185,8 +185,8 @@ sub git_newfile_base {
 sub git_clean {
     my ($self) = @_;
 
-    # If git cloned repo exists and not --debug ($verbose=1) -> remove it
-    if ( $self->downloader->gitrepo_state > 0 and $verbose < 1 ) {
+    # If git cloned repo exists and not --debug ($verbose=2) -> remove it
+    if ( $self->downloader->gitrepo_state > 0 and $verbose < 2 ) {
         my $err;
         remove_tree "$self->{config}->{destdir}/" . $self->gitrepo_dir,
           { error => \$err };
