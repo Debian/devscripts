@@ -38,6 +38,11 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
     + Add myself to authors list.
     + Clean temporary git repo.  Closes: #909418; MR: !32
       - Keep it only if --debug is set (previously kept if --verbose).  MR: !33
+    + Add @DEB_EXT@ macro containing [\+~](debian|dfsg|ds|deb)(\.)?(\d+)?$.
+      - add also a "auto" value for dversionmangle which is replaced by
+        dversionmangle=s/@DEB_EXT@//.
+      - modify test_uscan to test these values.
+      - Closes: #908528; MR: !35
 
   [ Sean Whitton ]
   * git-deborig:

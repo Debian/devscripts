@@ -280,6 +280,12 @@ This is substituted by the typical signature file extension regex (non-capturing
 
   (?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip|tgz|tbz|txz)\.(?:asc|pgp|gpg|sig|sign)
 
+=item B<@DEB_EXT@>
+
+This is substituted by the typical Debian extension regexp (capturing).
+
+  [\+~](debian|dfsg|ds|deb)(\.)?(\d+)?$
+
 =back
 
 Some file extensions are not included in the above intentionally to avoid false
@@ -505,7 +511,10 @@ and B<-b>, when executed by B<mk-origtargz>.
 
 Normalize the last upstream version string found in F<debian/changelog> to
 compare it to the available upstream tarball version.  Removal of the Debian
-specific suffix such as B<s/\+dfsg\d*$//> is usually done here.
+specific suffix such as B<s/@DEB_EXT@//> is usually done here.
+
+You can also use B<dversionmangle=auto>, this is exactly the same than
+B<dversionmangle=s/@DEB_EXT@//>
 
 =item B<dirversionmangle=>I<rules>
 

@@ -263,7 +263,7 @@ testFileExclusion() {
 
     (
       cd $TMPDIR
-      OPTS="opts=repacksuffix=+dfsg1,dversionmangle=s/\+dfsg\d*$// "
+      OPTS="opts=repacksuffix=+dfsg1,dversionmangle=s/@DEB_EXT@// "
       SCRIPT="uupdate"
       SRCFORMAT="3.0 (quilt)"
       helperCreateRepo
@@ -303,7 +303,7 @@ testFileExclusionSeparateDir() {
     (
       cd $TMPDIR
       SCRIPT=""
-      OPTS="opts=repacksuffix=+dfsg1,dversionmangle=s/\+dfsg\d*$// "
+      OPTS="opts=repacksuffix=+dfsg1,dversionmangle=auto "
       helperCreateRepo
       cd repo
       tar cfz $PKG-1.tar.gz * .hidden )
@@ -345,7 +345,7 @@ testFileExclusionZipToTar() {
       helperCreateRepo
       cat <<END > $PKG/debian/watch
 version=3
-opts=repacksuffix=+dfsg1,dversionmangle=s/\+dfsg\d*$// http://localhost:$PORT/$PKG-(\d).zip debian uupdate
+opts=repacksuffix=+dfsg1,dversionmangle=s/@DEB_EXT@// http://localhost:$PORT/$PKG-(\d).zip debian uupdate
 END
 
       cd repo
