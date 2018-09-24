@@ -1921,6 +1921,7 @@ exit( $found ? 0 : 1 );
 sub process_watchfile {
     my ( $pkg_dir, $package, $version, $watchfile ) = @_;
     my $opwd = cwd();
+    chdir $pkg_dir;
 
     my $wf = Devscripts::Uscan::WatchFile->new(
         {
@@ -1933,7 +1934,6 @@ sub process_watchfile {
     );
     return $wf->status if ( $wf->status );
 
-    chdir $pkg_dir;
     my $res = $wf->process_lines;
     chdir $opwd;
     return $res;
