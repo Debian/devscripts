@@ -232,7 +232,7 @@ sub parse_command_line {
     }
     if ($opt_h) { $self->usage();   exit 0; }
     if ($opt_v) { $self->version(); exit 0; }
-    $verbose = $opt_verbose // 0;
+    $verbose //= $opt_verbose // 0;
 
     # Now we can set the other variables according to the command line options
 
