@@ -46,16 +46,16 @@ sub recursive_regex_dir ($$$$$$) {
 
     foreach my $dirpattern (@dirs) {
         if ( $dirpattern =~ /\(.*\)/ ) {
-            uscan_verbose "dir=>$dir  dirpattern=>$dirpattern\n";
+            uscan_verbose "dir=>$dir  dirpattern=>$dirpattern";
             my $newest_dir =
               newest_dir( $downloader, $site, $dir, $dirpattern,
                 $dirversionmangle, $watchfile, $lineptr, $download_version );
-            uscan_verbose "newest_dir => '$newest_dir'\n";
+            uscan_verbose "newest_dir => '$newest_dir'";
             if ( $newest_dir ne '' ) {
                 $dir .= "$newest_dir";
             }
             else {
-                uscan_debug "No \$newest_dir\n";
+                uscan_debug "No \$newest_dir";
                 return '';
             }
         }
@@ -74,19 +74,19 @@ sub newest_dir ($$$$$$$$) {
     my ( $downloader, $site, $dir, $pattern, $dirversionmangle, $watchfile,
         $lineptr, $download_version )
       = @_;
-    my ( $newdir );
-    uscan_verbose "Requesting URL:\n   $site$dir\n";
+    my ($newdir);
+    uscan_verbose "Requesting URL:\n   $site$dir";
     if ( $site =~ m%^http(s)?://% ) {
-         require Devscripts::Uscan::http;
-         $newdir = Devscripts::Uscan::http::http_newdir($1,@_);
+        require Devscripts::Uscan::http;
+        $newdir = Devscripts::Uscan::http::http_newdir( $1, @_ );
     }
     elsif ( $site =~ m%^ftp://% ) {
-         require Devscripts::Uscan::ftp;
-         $newdir = Devscripts::Uscan::ftp::ftp_newdir(@_);
+        require Devscripts::Uscan::ftp;
+        $newdir = Devscripts::Uscan::ftp::ftp_newdir(@_);
     }
     else {
         # Neither HTTP nor FTP site
-        uscan_warn "neither HTTP nor FTP site, impossible case for newdir().\n";
+        uscan_warn "neither HTTP nor FTP site, impossible case for newdir().";
         $newdir = '';
     }
     return $newdir;
@@ -119,7 +119,7 @@ sub get_compression ($) {
         $canonical_compression = $opt2comp{$compression};
     }
     else {
-        uscan_die "$progname: invalid compression, $compression given.\n";
+        uscan_die "$progname: invalid compression, $compression given.";
     }
     return $canonical_compression;
 }
@@ -145,7 +145,7 @@ sub get_suffix ($) {
         $canonical_suffix = $opt2suffix{$compression};
     }
     else {
-        uscan_die "$progname: invalid suffix, $compression given.\n";
+        uscan_die "$progname: invalid suffix, $compression given.";
     }
     return $canonical_suffix;
 }
@@ -198,7 +198,7 @@ sub quoted_regex_parse($) {
                 if ($in_replacement) {
 
                     # Separator after end of replacement
-                    uscan_warn "Extra \"$sep\" after end of replacement.\n";
+                    uscan_warn "Extra \"$sep\" after end of replacement.";
                     $parsed_ok = 0;
                     last;
                 }
@@ -228,7 +228,7 @@ sub quoted_regex_parse($) {
                 }
             }
             elsif ( $open < 0 ) {
-                uscan_warn "Extra \"$closer\" after end of replacement.\n";
+                uscan_warn "Extra \"$closer\" after end of replacement.";
                 $parsed_ok = 0;
                 last;
             }
@@ -248,7 +248,7 @@ sub quoted_regex_parse($) {
                 }
                 elsif ( $char !~ m/\s/ ) {
                     uscan_warn
-                      "Non-whitespace between <...> and <...> (or similars).\n";
+                      "Non-whitespace between <...> and <...> (or similars).";
                     $parsed_ok = 0;
                     last;
                 }
@@ -262,7 +262,7 @@ sub quoted_regex_parse($) {
     }
 
     unless ( $in_replacement and $open == 0 ) {
-        uscan_warn "Empty replacement string.\n";
+        uscan_warn "Empty replacement string.";
         $parsed_ok = 0;
     }
 
@@ -285,7 +285,7 @@ sub safe_replace($$) {
 
         unless ($parsed_ok) {
             uscan_warn "stop mangling: rule=\"$pat\"\n"
-              . "  mangling rule with <...>, (...), {...} failed.\n";
+              . "  mangling rule with <...>, (...), {...} failed.";
             return 0;
         }
     }
@@ -295,7 +295,7 @@ sub safe_replace($$) {
     {
         $sep = "/" if $sep eq '';
         uscan_warn "stop mangling: rule=\"$pat\"\n"
-          . "   rule doesn't match \"(s|tr|y)$sep.*$sep.*$sep\[a-z\]*\" (or similar).\n";
+          . "   rule doesn't match \"(s|tr|y)$sep.*$sep.*$sep\[a-z\]*\" (or similar).";
         return 0;
     }
     else {
@@ -303,13 +303,13 @@ sub safe_replace($$) {
     }
 
     uscan_debug
-"safe_replace with regexp=\"$regexp\", replacement=\"$replacement\", and flags=\"$flags\"\n";
+"safe_replace with regexp=\"$regexp\", replacement=\"$replacement\", and flags=\"$flags\"";
     my $safeflags = $flags;
     if ( $op eq 'tr' or $op eq 'y' ) {
         $safeflags =~ tr/cds//cd;
         if ( $safeflags ne $flags ) {
             uscan_warn "stop mangling: rule=\"$pat\"\n"
-              . "   flags must consist of \"cds\" only.\n";
+              . "   flags must consist of \"cds\" only.";
             return 0;
         }
 
@@ -323,7 +323,7 @@ sub safe_replace($$) {
 
         if ($@) {
             uscan_warn "stop mangling: rule=\"$pat\"\n"
-              . "   mangling \"tr\" or \"y\" rule execution failed.\n";
+              . "   mangling \"tr\" or \"y\" rule execution failed.";
             return 0;
         }
         else {
@@ -334,7 +334,7 @@ sub safe_replace($$) {
         $safeflags =~ tr/gix//cd;
         if ( $safeflags ne $flags ) {
             uscan_warn "stop mangling: rule=\"$pat\"\n"
-              . "   flags must consist of \"gix\" only.\n";
+              . "   flags must consist of \"gix\" only.";
             return 0;
         }
 
@@ -348,7 +348,7 @@ sub safe_replace($$) {
             # if it's not initial, it is too dangerous
             if ( $regexp =~ /^.*[^\\](\\\\)*\\G/ ) {
                 uscan_warn "stop mangling: rule=\"$pat\"\n"
-                  . "   dangerous use of \\G with regexp=\"$regexp\".\n";
+                  . "   dangerous use of \\G with regexp=\"$regexp\".";
                 return 0;
             }
         }
@@ -421,7 +421,7 @@ sub safe_replace($$) {
             };
             if ($@) {
                 uscan_warn "stop mangling: rule=\"$pat\"\n"
-                  . "   mangling \"s\" rule execution failed.\n";
+                  . "   mangling \"s\" rule execution failed.";
                 return 0;
             }
 
@@ -473,10 +473,10 @@ sub mangle($$$$$) {
               . " unsafe or malformed $name"
               . " pattern:\n  '$pat'"
               . " found. Skipping watchline\n"
-              . "  $$lineptr\n";
+              . "  $$lineptr";
             return 1;
         }
-        uscan_debug "After $name $$verptr\n";
+        uscan_debug "After $name $$verptr";
     }
     return 0;
 }
@@ -484,7 +484,7 @@ sub mangle($$$$$) {
 sub uscan_exec_no_fail {
     {
         local $, = ' ';
-        uscan_verbose "Execute: @_...\n";
+        uscan_verbose "Execute: @_...";
     }
     run \@_;
     return $?;
@@ -493,10 +493,10 @@ sub uscan_exec_no_fail {
 sub uscan_exec {
     {
         local $, = ' ';
-        uscan_verbose "Execute: @_...\n";
+        uscan_verbose "Execute: @_...";
     }
     run \@_;
-    if($?) {
+    if ($?) {
         local $, = ' ';
         uscan_die "Command failed (@_)";
     }

@@ -7,7 +7,7 @@ use Devscripts::Uscan::Utils;
 use Exporter qw(import);
 use Devscripts::Uscan::_xtp;
 
-our @EXPORT = qw(http_search http_upstream_url http_newfile_base);
+our @EXPORT = qw(http_search http_upstream_url http_newfile_base http_clean);
 
 *http_newfile_base = \&Devscripts::Uscan::_xtp::_xtp_newfile_base;
 
@@ -20,21 +20,21 @@ sub http_search {
     # $content: web page to be scraped to find the URLs to be downloaded
     if ( defined($1) and $self->downloader->ssl ) {
         uscan_die
-"you must have the liblwp-protocol-https-perl package installed\nto use https URLs\n";
+"you must have the liblwp-protocol-https-perl package installed\nto use https URLs";
     }
-    uscan_verbose "Requesting URL:\n   $self->{parse_result}->{base}\n";
+    uscan_verbose "Requesting URL:\n   $self->{parse_result}->{base}";
     my $request = HTTP::Request->new( 'GET', $self->parse_result->{base} );
     my $response = $self->downloader->user_agent->request($request);
     if ( !$response->is_success ) {
         uscan_warn
 "In watchfile $self->{watchfile}, reading webpage\n  $self->{parse_result}->{base} failed: "
-          . $response->status_line . "\n";
+          . $response->status_line;
         return undef;
     }
 
     my @redirections = @{ $self->downloader->user_agent->get_redirections };
 
-    uscan_verbose "redirections: @redirections\n" if @redirections;
+    uscan_verbose "redirections: @redirections" if @redirections;
 
     foreach my $_redir (@redirections) {
         my $base_dir = $_redir;
@@ -66,7 +66,7 @@ sub http_search {
 
     my $content = $response->decoded_content;
     uscan_debug
-      "received content:\n$content\n[End of received content] by HTTP\n";
+      "received content:\n$content\n[End of received content] by HTTP";
 
     # pagenmangle: should not abuse this slow operation
     if (
@@ -87,12 +87,12 @@ sub http_search {
      # this is an S3 bucket listing.  Insert an 'a href' tag
      # into the content for each 'Key', so that it looks like html (LP: #798293)
         uscan_warn
-"*** Amazon AWS special case code is deprecated***\nUse opts=pagemangle rule, instead\n";
+"*** Amazon AWS special case code is deprecated***\nUse opts=pagemangle rule, instead";
         $content =~ s%<Key>([^<]*)</Key>%<Key><a href="$1">$1</a></Key>%g;
         uscan_debug
-"processed content:\n$content\n[End of processed content] by Amazon AWS special case code\n";
+"processed content:\n$content\n[End of processed content] by Amazon AWS special case code";
     }
-    clean_content(\$content);
+    clean_content( \$content );
 
     # Is there a base URL given?
     if ( $content =~ /<\s*base\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/i ) {
@@ -107,12 +107,12 @@ sub http_search {
           s%/[^/]*$%/%;
     }
     uscan_debug
-"processed content:\n$content\n[End of processed content] by fix bad HTML code\n";
+"processed content:\n$content\n[End of processed content] by fix bad HTML code";
 
 # search hrefs in web page to obtain a list of uversionmangled version and matching download URL
     {
         local $, = ',';
-        uscan_verbose "Matching pattern:\n   @{$self->{patterns}}\n";
+        uscan_verbose "Matching pattern:\n   @{$self->{patterns}}";
     }
     my @hrefs;
     while ( $content =~ m/<\s*a\s+[^>]*(?<=\s)href\s*=\s*([\"\'])(.*?)\1/sgi ) {
@@ -121,16 +121,16 @@ sub http_search {
         $href = fix_href($href);
         if ( defined $self->hrefdecode ) {
             if ( $self->hrefdecode eq 'percent-encoding' ) {
-                uscan_debug "... Decoding from href: $href\n";
+                uscan_debug "... Decoding from href: $href";
                 $href =~ s/%([A-Fa-f\d]{2})/chr hex $1/eg;
             }
             else {
                 uscan_warn "Illegal value for hrefdecode: "
-                  . "$self->{hrefdecode}\n";
+                  . "$self->{hrefdecode}";
                 return undef;
             }
         }
-        uscan_debug "Checking href $href\n";
+        uscan_debug "Checking href $href";
         foreach my $_pattern ( @{ $self->patterns } ) {
             if ( $href =~ m&^$_pattern$& ) {
                 if ( $self->watch_version == 2 ) {
@@ -196,7 +196,7 @@ sub http_search {
         else {
             uscan_warn
 "In $self->{watchfile} no matching hrefs for version $self->{shared}->{download_version}"
-              . " in watch line\n  $self->{line}\n";
+              . " in watch line\n  $self->{line}";
             return undef;
         }
     }
@@ -206,7 +206,7 @@ sub http_search {
         }
         else {
             uscan_warn
-"In $self->{watchfile} no matching files for watch line\n  $self->{line}\n";
+"In $self->{watchfile} no matching files for watch line\n  $self->{line}";
             return undef;
         }
     }
@@ -247,7 +247,7 @@ sub http_upstream_url {
             if ( !defined($upstream_url) ) {
                 uscan_verbose
                   "Unable to determine upstream url from redirections,\n"
-                  . "defaulting to using site specified in watch file\n";
+                  . "defaulting to using site specified in watch file";
                 $upstream_url = "$self->{sites}->[0]$newfile";
             }
         }
@@ -276,7 +276,7 @@ sub http_upstream_url {
             if ( !defined($upstream_url) ) {
                 uscan_verbose
                   "Unable to determine upstream url from redirections,\n"
-                  . "defaulting to using site specified in watch file\n";
+                  . "defaulting to using site specified in watch file";
                 $upstream_url = "$self->{parse_result}->{urlbase}$newfile";
             }
         }
@@ -287,7 +287,7 @@ sub http_upstream_url {
 
     # mangle if necessary
     $upstream_url =~ s/&amp;/&/g;
-    uscan_verbose "Matching target for downloadurlmangle: $upstream_url\n";
+    uscan_verbose "Matching target for downloadurlmangle: $upstream_url";
     if ( @{ $self->downloadurlmangle } ) {
         if (
             mangle(
@@ -320,31 +320,31 @@ sub http_newdir {
     if ( defined($https) and !$downloader->ssl ) {
         uscan_die
 "$progname: you must have the liblwp-protocol-https-perl package installed\n"
-          . "to use https URLs\n";
+          . "to use https URLs";
     }
     $request = HTTP::Request->new( 'GET', $base );
     $response = $downloader->user_agent->request($request);
     if ( !$response->is_success ) {
         uscan_warn
           "In watch file $watchfile, reading webpage\n  $base failed: "
-          . $response->status_line . "\n";
+          . $response->status_line;
         return '';
     }
 
     my $content = $response->content;
     uscan_debug
-      "received content:\n$content\n[End of received content] by HTTP\n";
+      "received content:\n$content\n[End of received content] by HTTP";
 
-    clean_content(\$content);
+    clean_content( \$content );
 
     my $dirpattern = "(?:(?:$site)?" . quotemeta($dir) . ")?$pattern";
 
-    uscan_verbose "Matching pattern:\n   $dirpattern\n";
+    uscan_verbose "Matching pattern:\n   $dirpattern";
     my @hrefs;
     my $match = '';
     while ( $content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi ) {
         my $href = fix_href($2);
-        uscan_verbose "Matching target for dirversionmangle:   $href\n";
+        uscan_verbose "Matching target for dirversionmangle:   $href";
         if ( $href =~ m&^$dirpattern/?$& ) {
             my $mangled_version =
               join( ".", map { $_ // '' } $href =~ m&^$dirpattern/?$& );
@@ -410,8 +410,12 @@ sub http_newdir {
     return ($newdir);
 }
 
+# Nothing to clean here
+sub http_clean {0}
+
 sub clean_content {
-    my($content) = @_;
+    my ($content) = @_;
+
     # We need this horrid stuff to handle href=foo type
     # links.  OK, bad HTML, but we have to handle it nonetheless.
     # It's bug #89749.
