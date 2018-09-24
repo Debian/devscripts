@@ -11,6 +11,8 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
       package-contains-documentation-outside-usr-share-doc.
   * wrap-and-sort:
     + Update man-page to list the --dry-run option.  Closes: #908036
+  * test/pylint:
+    + Re-enable the test again.
 
   [ Benjamin Drung ]
   * test:
@@ -60,7 +62,7 @@ devscripts (2.18.4) unstable; urgency=medium
   * test/test_uscan_ftp:
     + Skip test on hurd-i386, hurd is missing a required feature.  MR: !23
   * test/pylint:
-    + Temporarily disable the test, as pylist is currently uninstallable,
+    + Temporarily disable the test, as pylint is currently uninstallable,
       see #902631.
   * debian/control:
     + Comment-out build-dependency on pylint3.
