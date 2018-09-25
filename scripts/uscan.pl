@@ -467,6 +467,10 @@ this signature file.  The previous watch line must be B<pgpmode=next>.
 Verify the downloaded file I<foo.ext> with its self signature and extract its
 content tarball file as I<foo>.
 
+=item B<gittag>
+
+Verify tag signature if B<mode=git>.
+
 =item B<none>
 
 No signature available. (No warning.)
@@ -1216,6 +1220,8 @@ Please note "B<git ls-remote>" is used to obtain references for tags.
 If a tag B<v20.5> is the newest tag, the above example downloads
 I<spkg>B<-20.5.tar.xz> after making a full clone of the git repository which is
 needed for dumb git server.
+
+If tags are signed, set B<pgpmode=gittag> to verify them.
 
 =head2 direct access to the git repository (HEAD)
 
