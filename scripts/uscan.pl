@@ -205,8 +205,8 @@ The newest available version is chosen in each case.
 
 =over
 
-=item * B<debian> requires the downloading upstream tarball to be newer than the
-version obtained from F<debian/changelog>.
+=item * B<debian> I<(default)> requires the downloading upstream tarball to be
+newer than the version obtained from F<debian/changelog>.
 
 =item * I<version-number> such as B<12.5> requires the upstream
 tarball to be newer than the I<version-number>.
@@ -224,7 +224,7 @@ tarballs. (Maybe useful for MUT)
 =back
 
 =item * I<script> is executed at the end of B<uscan> execution with appropriate
-arguments provided by B<uscan>.
+arguments provided by B<uscan> I<(default: no action)>.
 
 =over
 
