@@ -46,6 +46,8 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
         dversionmangle=s/@DEB_EXT@//.
       - modify test_uscan to test these values.
       - Closes: #908528; MR: !35
+    + Add "pgpmode=gittag" option to verify git tag signature if any.
+      Closes: #827065; MR: !38
 
   [ Sean Whitton ]
   * git-deborig:

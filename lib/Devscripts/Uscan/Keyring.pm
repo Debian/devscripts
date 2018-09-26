@@ -6,7 +6,7 @@ use Devscripts::Uscan::Utils;
 use Dpkg::IPC;
 use File::Copy qw/copy move/;
 use File::Which;
-use File::Path qw/make_path/;
+use File::Path qw/make_path remove_tree/;
 use File::Temp qw/tempfile tempdir/;
 use List::Util qw/first/;
 
@@ -47,12 +47,11 @@ sub new {
               . "   gpg --output $keyring --enarmor $binkeyring";
             spawn(
                 exec => [
-                    $havegpg,               '--homedir',
-                    "/dev/null",            '--no-options',
-                    '-q',                   '--batch',
-                    '--no-default-keyring', '--output',
-                    $keyring,               '--enarmor',
-                    $binkeyring
+                    $havegpg,
+                    '--homedir' => "/dev/null",
+                    '--no-options', '-q', '--batch', '--no-default-keyring',
+                    '--output' => $keyring,
+                    '--enarmor', $binkeyring
                 ],
                 wait_child => 1
             );
@@ -72,12 +71,11 @@ sub new {
             my $newkeyring = "$gpghome/trustedkeys.gpg";
             spawn(
                 exec => [
-                    $havegpg,               '--homedir',
-                    $gpghome,               '--no-options',
-                    '-q',                   '--batch',
-                    '--no-default-keyring', '--output',
-                    $newkeyring,            '--dearmor',
-                    $keyring
+                    $havegpg,
+                    '--homedir' => $gpghome,
+                    '--no-options', '-q', '--batch', '--no-default-keyring',
+                    '--output' => $newkeyring,
+                    '--dearmor', $keyring
                 ],
                 wait_child => 1
             );
@@ -104,13 +102,12 @@ sub verify {
         "Verifying OpenPGP self signature of $newfile and extract $sigfile");
     unless (
         uscan_exec_no_fail(
-            $self->{gpg},           '--homedir',
-            $self->{gpghome},       '--no-options',
-            '-q',                   '--batch',
-            '--no-default-keyring', '--keyring',
-            $self->{keyring},       '--trust-model',
-            'always',               '--decrypt',
-            '-o',                   "$sigfile",
+            $self->{gpg},
+            '--homedir' => $self->{gpghome},
+            '--no-options', '-q', '--batch', '--no-default-keyring',
+            '--keyring' => $self->{keyring},
+            '--trust-model', 'always', '--decrypt',
+            '-o' => "$sigfile",
             "$newfile"
         ) >> 8 == 0
       )
@@ -124,13 +121,59 @@ sub verifyv {
     uscan_verbose("Verifying OpenPGP signature $sigfile for $base");
     unless (
         uscan_exec_no_fail(
-            $self->{gpgv},    '--homedir', '/dev/null', '--keyring',
-            $self->{keyring}, $sigfile,    $base
+            $self->{gpgv},
+            '--homedir' => '/dev/null',
+            '--keyring' => $self->{keyring},
+            $sigfile, $base
         ) >> 8 == 0
       )
     {
         uscan_die("OpenPGP signature did not verify.");
     }
+}
+
+sub verify_git {
+    my ( $self, $gitdir, $tag ) = @_;
+    my $commit;
+    spawn(
+        exec      => [ 'git', '--git-dir', "../$gitdir", 'show-ref', $tag ],
+        to_string => \$commit
+    );
+    uscan_die "git tag not found" unless ($commit);
+    $commit =~ s/\s.*$//;
+    chomp $commit;
+    my $file;
+    spawn(
+        exec => [ 'git', '--git-dir', "../$gitdir", 'cat-file', '-p', $commit ],
+        to_string => \$file
+    );
+    my $dir;
+    spawn( exec => [ 'mktemp', '-d' ], to_string => \$dir );
+    chomp $dir;
+
+    unless ( $file =~ /^(.*?\n)(\-+\s*BEGIN PGP SIGNATURE\s*\-+.*)$/s ) {
+        uscan_die "Tag $tag is not signed";
+    }
+    open F, ">$dir/txt" or die $!;
+    open S, ">$dir/sig" or die $!;
+    print F $1;
+    print S $2;
+    close F;
+    close S;
+
+    unless (
+        uscan_exec_no_fail(
+            $self->{gpg},
+            '--homedir' => $self->{gpghome},
+            '--keyring' => $self->{keyring},
+            '--verify',
+            "$dir/sig", "$dir/txt"
+        ) >> 8 == 0
+      )
+    {
+        uscan_die("OpenPGP signature did not verify.");
+    }
+    remove_tree($dir);
 }
 
 1;

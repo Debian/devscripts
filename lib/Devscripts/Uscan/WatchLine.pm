@@ -569,6 +569,9 @@ EOF
         elsif ( $self->pgpmode =~ m/^se/ ) {
             $self->pgpmode('self');
         }
+        elsif ( $self->pgpmode =~ m/^git/ ) {
+            $self->pgpmode('gittag');
+        }
         else {
             $self->pgpmode('default');
         }
@@ -1035,6 +1038,7 @@ sub cmp_versions {
 sub download_file_and_sig {
     my ($self) = @_;
     uscan_debug "line: download_file_and_sig()";
+    my $skip_git_vrfy;
 
     # If we're not downloading or performing signature verification, we can
     # stop here
@@ -1076,6 +1080,7 @@ sub download_file_and_sig {
             $download_available = 1;
             dehs_verbose
               "Not downloading, using existing file: $self->{newfile_base}\n";
+            $skip_git_vrfy = 1;
         }
         elsif ( $self->shared->{download} > 0 ) {
             uscan_verbose "Downloading upstream package: $self->{newfile_base}";
@@ -1351,6 +1356,20 @@ sub download_file_and_sig {
     }
     elsif ( $self->pgpmode eq 'auto' ) {
         uscan_verbose "Don't check OpenPGP signature";
+    }
+    elsif ( $self->pgpmode eq 'gittag' ) {
+        if ($skip_git_vrfy) {
+            uscan_warn "File already downloaded, skipping gpg verification";
+        }
+        elsif ( !$self->keyring ) {
+            uscan_warn "No keyring file, skipping gpg verification";
+        }
+        else {
+            my ( $gitrepo, $gitref ) = split /[[:space:]]+/,
+              $self->upstream_url;
+            $self->keyring->verify_git( $self->pkg . "-temporary.$$.git",
+                $gitref );
+        }
     }
     else {
         uscan_warn "strange ... unknown pgpmode = $self->{pgpmode}";
