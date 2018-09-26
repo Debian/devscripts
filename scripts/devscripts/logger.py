@@ -1,4 +1,3 @@
-#
 #   logger.py - A simple logging helper class
 #
 #   Copyright (C) 2010, Benjamin Drung <bdrung@debian.org>
@@ -30,7 +29,7 @@ def escape_arg(arg):
     return '"%s"' % arg.replace('\\', r'\\').replace('"', r'\"')
 
 
-class Logger(object):
+class Logger:
     script_name = os.path.basename(sys.argv[0])
     verbose = False
 

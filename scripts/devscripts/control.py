@@ -45,7 +45,7 @@ def _insert_after(paragraph, item_before, new_item, new_value):
         paragraph[new_item] = new_value
 
 
-class Control(object):
+class Control:
     """Represents a debian/control file"""
 
     def __init__(self, filename):

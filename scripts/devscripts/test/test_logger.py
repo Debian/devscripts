@@ -36,6 +36,7 @@ class LoggerTestCase(unittest.TestCase):
         Logger.verbose = self._verbose
 
     def testCommand(self):
+        # pylint: disable=no-member
         Logger.command(('ls', 'a b'))
         self.assertEqual(Logger.stdout.getvalue(), '')
         Logger.set_verbosity(True)
@@ -44,11 +45,13 @@ class LoggerTestCase(unittest.TestCase):
         self.assertEqual(Logger.stderr.getvalue(), '')
 
     def testNoArgs(self):
+        # pylint: disable=no-member
         Logger.normal('hello %s')
         self.assertEqual(Logger.stdout.getvalue(), 'test: hello %s\n')
         self.assertEqual(Logger.stderr.getvalue(), '')
 
     def testArgs(self):
+        # pylint: disable=no-member
         Logger.normal('hello %s', 'world')
         self.assertEqual(Logger.stdout.getvalue(), 'test: hello world\n')
         self.assertEqual(Logger.stderr.getvalue(), '')

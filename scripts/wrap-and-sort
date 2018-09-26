@@ -139,7 +139,7 @@ class WrapAndSortControl(Control):
         return False
 
 
-class Install(object):
+class Install:
     def __init__(self, filename, args):
         self.content = None
         self.filename = None

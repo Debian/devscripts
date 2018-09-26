@@ -13,6 +13,7 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
     + Update man-page to list the --dry-run option.  Closes: #908036
   * test/pylint:
     + Re-enable the test again.
+    + Appease the new pylint rule useless-object-inheritance.
 
   [ Benjamin Drung ]
   * test:

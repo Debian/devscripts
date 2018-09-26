@@ -30,8 +30,7 @@ import subprocess as ipc
 import sys
 import tempfile
 import threading
-
-import debian.deb822 as deb822
+from debian import deb822
 
 
 def chmod_x(path):
@@ -91,7 +90,7 @@ class Fail(Exception):
     pass
 
 
-class Progress(object):
+class Progress:
 
     @staticmethod
     def _write(s):
@@ -190,7 +189,7 @@ class VerboseProgress(Progress):
         self._write('\n')
 
 
-class TestCommand(object):
+class TestCommand:
 
     def __init__(self, group, command):
         self.group = group
@@ -311,8 +310,7 @@ class TestOptions:  # pylint: disable=too-few-public-methods
         self.skippable = False
 
 
-class TestGroup(object):
-
+class TestGroup:
     def __init__(self):
         self.tests = []
         self.restrictions = frozenset()
