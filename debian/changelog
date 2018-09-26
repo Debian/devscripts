@@ -11,6 +11,8 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
       package-contains-documentation-outside-usr-share-doc.
   * wrap-and-sort:
     + Update man-page to list the --dry-run option.  Closes: #908036
+  * test/pylint:
+    + Re-enable the test again.
 
   [ Benjamin Drung ]
   * test:

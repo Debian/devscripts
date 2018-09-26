@@ -26,7 +26,6 @@ from . import get_source_files, unittest_verbosity
 CONFIG = os.path.join(os.path.dirname(__file__), "pylint.conf")
 
 
-@unittest.skip("pylint is currently unusable.  #902631")
 class PylintTestCase(unittest.TestCase):
     """
     This unittest class provides a test that runs the pylint code check
