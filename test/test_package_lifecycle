@@ -17,7 +17,7 @@
 
 WORKDIR=$(readlink -f "${0%/*}")
 declare _ARCH=$(dpkg-architecture -qDEB_BUILD_ARCH)
-if dpkg --compare-versions "$(dpkg-query -W -f='${Version}' dpkg-dev )" lt "1.9.1"; then
+if dpkg --compare-versions "$(dpkg-query -W -f='${Version}' dpkg-dev )" lt "1.19.1~"; then
     declare -r _pkgbuilddir="test"
 else
     declare -r _pkgbuilddir="."
