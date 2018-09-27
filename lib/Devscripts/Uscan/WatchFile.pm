@@ -1,14 +1,93 @@
-
-=pod
-
 =head1 NAME
 
 Devscripts::Uscan::WatchFile - watchfile object for L<uscan>
 
+=head1 SYNOPSIS
+
+  use Devscripts::Uscan::Config;
+  use Devscripts::Uscan::WatchFile;
+  
+  my $config = Devscripts::Uscan::Config->new({
+    # Uscan config parameters. Example:
+    destdir => '..',
+  });
+
+  # You can use Devscripts::Uscan::FindFiles to find watchfiles
+  
+  my $wf = Devscripts::Uscan::WatchFile->new({
+      config      => $config,
+      package     => $package,
+      pkg_dir     => $pkg_dir,
+      pkg_version => $version,
+      watchfile   => $watchfile,
+  });
+  return $wf->status if ( $wf->status );
+  
+  # Do the job
+  return $wf->process_lines;
+
 =head1 DESCRIPTION
+
+Uscan class to parse watchfiles.
+
+=head1 METHODS
+
+=head2 new() I<(Constructor)>
 
 Parse watch file and creates L<Devscripts::Uscan::WatchLine> objects for
 each line.
+
+=head3 Required parameters
+
+=over
+
+=item config: L<Devscripts::Uscan::Config> object
+
+=item package: Debian package name
+
+=item pkg_dir: Working directory
+
+=item pkg_version: Current Debian package version
+
+=back
+
+=head2 Main accessors
+
+=over
+
+=item watchlines: ref to the array that contains watchlines objects
+
+=item watch_version: format version of the watchfile
+
+=back
+
+=head2 process_lines()
+
+Method that launches Devscripts::Uscan::WatchLine::process() on each watchline.
+
+=head1 SEE ALSO
+
+L<uscan>, L<Devscripts::Uscan::WatchLine>, L<Devscripts::Uscan::Config>,
+L<Devscripts::Uscan::FindFiles>
+
+=head1 AUTHOR
+
+B<uscan> was originally written by Christoph Lameter
+E<lt>clameter@debian.orgE<gt> (I believe), modified by Julian Gilbey
+E<lt>jdg@debian.orgE<gt>. HTTP support was added by Piotr Roszatycki
+E<lt>dexter@debian.orgE<gt>. B<uscan> was rewritten in Perl by Julian Gilbey.
+Xavier Guimard E<lt>yadd@debian.orgE<gt> rewrote uscan in object
+oriented Perl.
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2002-2006 by Julian Gilbey <jdg@debian.org>,
+2018 by Xavier Guimard <yadd@debian.org>
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
 
 =cut
 
