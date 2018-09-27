@@ -14,6 +14,8 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
   * test/pylint:
     + Re-enable the test again.
     + Appease the new pylint rule useless-object-inheritance.
+  * test/test_package_lifecycle:
+    + Adapt the expected output for dpkg-source 1.19.1.  Closes: #909719
 
   [ Benjamin Drung ]
   * test:

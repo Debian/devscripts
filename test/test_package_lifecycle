@@ -17,6 +17,11 @@
 
 WORKDIR=$(readlink -f "${0%/*}")
 declare _ARCH=$(dpkg-architecture -qDEB_BUILD_ARCH)
+if dpkg --compare-versions "$(dpkg-query -W -f='${Version}' dpkg-dev )" lt "1.9.1"; then
+    declare -r _pkgbuilddir="test"
+else
+    declare -r _pkgbuilddir="."
+fi
 
 if test "$1" = --installed; then
     shift
@@ -131,11 +136,11 @@ test_debuild() {
 	dpkg-buildpackage: source version 1.0-1
 	dpkg-buildpackage: source distribution unstable
 	dpkg-buildpackage: source changed by Testophilus Testownik <tester@testity.org>
-	 dpkg-source --before-build test
+	 dpkg-source --before-build ${_pkgbuilddir}
 	dpkg-buildpackage: host architecture ${_ARCH}
 	 ${FAKEROOT}debian/rules clean
 	dh clean
-	 dpkg-source -b test
+	 dpkg-source -b ${_pkgbuilddir}
 	dpkg-source: info: using source format '3.0 (quilt)'
 	dpkg-source: info: building test using existing ./test_1.0.orig.tar.xz
 	dpkg-source: info: building test in test_1.0-1.debian.tar.xz
@@ -147,7 +152,7 @@ test_debuild() {
 	dpkg-deb: building package 'test' in '../test_1.0-1_all.deb'.
 	 dpkg-genchanges  >../test_1.0-1_${_ARCH}.changes
 	dpkg-genchanges: including full source code in upload
-	 dpkg-source --after-build test
+	 dpkg-source --after-build ${_pkgbuilddir}
 	dpkg-buildpackage: full upload (original source is included)
 	Now signing changes and any dsc files...
 EOS
@@ -275,11 +280,11 @@ test_debuild2() {
 	dpkg-buildpackage: source version 1.0-2
 	dpkg-buildpackage: source distribution UNRELEASED
 	dpkg-buildpackage: source changed by Testophilus Testownik <tester@testity.org>
-	 dpkg-source --before-build test
+	 dpkg-source --before-build ${_pkgbuilddir}
 	dpkg-buildpackage: host architecture ${_ARCH}
 	 ${FAKEROOT}debian/rules clean
 	dh clean
-	 dpkg-source -b test
+	 dpkg-source -b ${_pkgbuilddir}
 	dpkg-source: info: using source format '3.0 (quilt)'
 	dpkg-source: info: building test using existing ./test_1.0.orig.tar.xz
 	dpkg-source: info: building test in test_1.0-2.debian.tar.xz
@@ -291,7 +296,7 @@ test_debuild2() {
 	dpkg-deb: building package 'test' in '../test_1.0-2_all.deb'.
 	 dpkg-genchanges  >../test_1.0-2_${_ARCH}.changes
 	dpkg-genchanges: not including original source code in upload
-	 dpkg-source --after-build test
+	 dpkg-source --after-build ${_pkgbuilddir}
 	dpkg-buildpackage: binary and diff upload (original source NOT included)
 EOS
   runCommandOutCmpFile "-k'uscan test key (no secret) <none@debian.org>'" "${WORKDIR}/package_lifecycle/debuild.txt" "" 0
@@ -308,11 +313,11 @@ test_debuild_forcesign() {
 	dpkg-buildpackage: source version 1.0-2
 	dpkg-buildpackage: source distribution UNRELEASED
 	dpkg-buildpackage: source changed by Testophilus Testownik <tester@testity.org>
-	 dpkg-source --before-build test
+	 dpkg-source --before-build ${_pkgbuilddir}
 	dpkg-buildpackage: host architecture ${_ARCH}
 	 ${FAKEROOT}debian/rules clean
 	dh clean
-	 dpkg-source -b test
+	 dpkg-source -b ${_pkgbuilddir}
 	dpkg-source: info: using source format '3.0 (quilt)'
 	dpkg-source: info: building test using existing ./test_1.0.orig.tar.xz
 	dpkg-source: info: building test in test_1.0-2.debian.tar.xz
@@ -324,7 +329,7 @@ test_debuild_forcesign() {
 	dpkg-deb: building package 'test' in '../test_1.0-2_all.deb'.
 	 dpkg-genchanges  >../test_1.0-2_${_ARCH}.changes
 	dpkg-genchanges: not including original source code in upload
-	 dpkg-source --after-build test
+	 dpkg-source --after-build ${_pkgbuilddir}
 	dpkg-buildpackage: binary and diff upload (original source NOT included)
 	Now signing changes and any dsc files...
 EOS
