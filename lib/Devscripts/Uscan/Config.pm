@@ -1,3 +1,25 @@
+=head1 NAME
+
+Devscripts::Uscan::Config - uscan configuration object
+
+=head1 SYNOPSIS
+
+  use Devscripts::Uscan::Config;
+  my $config = Devscripts::Uscan::Config->new->parse;
+
+=head1 DESCRIPTION
+
+Uscan configuration object. It can scan configuration files
+(B</etc/devscripts.conf> and B<~/.devscripts>) and command line arguments.
+
+=head1 METHODS
+
+=head2 new()
+
+Constructor
+
+=cut
+
 package Devscripts::Uscan::Config;
 
 $| = 1;
@@ -52,6 +74,12 @@ has modified_conf_msg => ( is => 'rw' );
 
 $ENV{HOME} = File::HomeDir->my_home;
 
+=head2 parse()
+
+Launches B<parse_conf_files()> and B<parse_command_line()>
+
+=cut
+
 sub parse {
     my ($self) = @_;
 
@@ -64,6 +92,12 @@ sub parse {
 }
 
 # I - Parse /etc/devscripts.conf and ~/.devscripts
+=head2 parse_conf_files()
+
+Reads values in B</etc/devscripts.conf> and B<~/.devscripts>
+
+=cut
+
 sub parse_conf_files {
     my ($self) = @_;
 
@@ -167,6 +201,11 @@ sub parse_conf_files {
 }
 
 # II - Parse command line
+=head2 parse_command_line()
+
+Parse command line arguments
+
+=cut
 sub parse_command_line {
     my ($self) = @_;
 
@@ -425,3 +464,28 @@ EOF
 }
 
 1;
+__END__
+=head1 SEE ALSO
+
+L<uscan>
+
+=head1 AUTHOR
+
+B<uscan> was originally written by Christoph Lameter
+E<lt>clameter@debian.orgE<gt> (I believe), modified by Julian Gilbey
+E<lt>jdg@debian.orgE<gt>. HTTP support was added by Piotr Roszatycki
+E<lt>dexter@debian.orgE<gt>. B<uscan> was rewritten in Perl by Julian Gilbey.
+Xavier Guimard E<lt>yadd@debian.orgE<gt> rewrote uscan in object
+oriented Perl.
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2002-2006 by Julian Gilbey <jdg@debian.org>,
+2018 by Xavier Guimard <yadd@debian.org>
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+=cut

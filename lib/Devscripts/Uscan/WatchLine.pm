@@ -7,7 +7,9 @@ Devscripts::Uscan::WatchLine - watch line object for L<uscan>
 
 =head1 DESCRIPTION
 
-Parse a watchfile line and do the job.
+Uscan class to parse watchfiles.
+
+=head1 MAIN METHODS
 
 =cut
 
@@ -29,7 +31,36 @@ use Text::ParseWords;
 ### ACCESSORS ###
 #################
 
-# 1 - Require new() parameters
+=head2 new() I<(Constructor)>
+
+=head3 Required parameters
+
+=over
+
+=item B<shared>: ref to hash containing line options shared between lines. See
+L<Devscripts::Uscan::WatchFile> code to see required keys.
+
+=item B<keyring>: L<Devscripts::Uscan::Keyring> object
+
+=item B<config>: L<Devscripts::Uscan::Config> object
+
+=item B<downloader>: L<Devscripts::Uscan::Downloader> object
+
+=item B<line>: search line (assembled in one line)
+
+=item B<pkg>: Debian package name
+
+=item B<pkg_dir>: Debian package source directory
+
+=item B<pkg_version>: Debian package version
+
+=item B<watchfile>: Current watchfile
+
+=item B<watch_version>: Version of current watchfile
+
+=back
+
+=cut
 
 foreach (
 
@@ -43,13 +74,36 @@ foreach (
     'pkg_dir',       # usually .
     'pkg_version',   # last source package version
                      # found in debian/changelog
-    'repack', 'safe', 'symlink', 'versionmode',
     'watchfile',        # usually debian/watch
     'watch_version',    # usually 4 (or 3)
   )
 {
     has $_ => ( is => 'rw', required => 1 );
 }
+
+has repack => (
+    is => 'rw',
+    lazy => 1,
+    default => sub { $_[0]->config->{repack} },
+);
+
+has safe => (
+    is => 'rw',
+    lazy => 1,
+    default => sub { $_[0]->config->{safe} },
+);
+
+has symlink => (
+    is => 'rw',
+    lazy => 1,
+    default => sub { $_[0]->config->{symlink} },
+);
+
+has versionmode => (
+    is => 'rw',
+    lazy => 1,
+    default => sub { 'newer' },
+);
 
 # 2 - Line options read/write attributes
 
@@ -151,9 +205,19 @@ has headers => (
     },
 );
 
-# public int process()
-#
-# Launch all steps and return 0 if succeed, 1 else
+###############
+# Main method #
+###############
+=head2 process()
+
+Launches all needed methods in this order: parse(), search(),
+get_upstream_url(), get_newfile_base(), cmp_versions(),
+download_file_and_sig(), mkorigtargz(), clean()
+
+If one method returns a non 0 value, it stops and return this error code.
+
+=cut
+
 sub process {
     my ($self) = @_;
 
@@ -183,13 +247,35 @@ sub process {
     return $self->status;
 }
 
-#############
-### STEPS ###
-#############
+#########
+# STEPS #
+#########
+=head2 Steps
 
-#######################################################################
-# I - Parse line
-#######################################################################
+=cut
+
+# I - parse
+=head3 parse()
+
+Parse the line and return 0 if nothing bad happen. It populates
+C<$self-E<gt>parse_result> accessor with a hash that contains the
+following keys:
+
+=over
+
+=item base
+=item filepattern
+=item lastversion
+=item action
+=item site
+=item basedir
+=item mangled_lastversion
+=item pattern
+
+=back
+
+=cut
+
 # watch_version=1: Lines have up to 5 parameters which are:
 #
 # $1 = Remote site
@@ -838,11 +924,29 @@ s%^https?://pkg-ruby-extras\.alioth\.debian\.org/cgi-bin/gemwatch%https://gemwat
     return $self->status;
 }
 
-# II - Search new file and new version
-#
-# newfile:    URL/tag pointing to the file to be downloaded
-# newversion: version number to be used for the downloaded file
-#             This is for http
+# II - search
+=head3 search()
+
+Search new file link and new version on the remote site using either:
+
+=over
+
+=item L<Devscripts::Uscan::http>::http_search()
+=item L<Devscripts::Uscan::ftp>::ftp_search()
+=item L<Devscripts::Uscan::git>::git_search()
+
+=back
+
+It populates B<$self-E<gt>search_result> hash ref with the following keys:
+
+=over
+
+=item B<newversion>: URL/tag pointing to the file to be downloaded
+=item B<newfile>: version number to be used for the downloaded file
+
+=back
+
+=cut
 
 sub search {
     my ($self) = @_;
@@ -889,7 +993,23 @@ EOF
     return $self->status;
 }
 
-# III - Determine upstream_url
+# III - get_upstream_url
+=head3 get_upstream_url()
+
+Transform newfile/newversion into upstream url using either:
+
+=over
+
+=item L<Devscripts::Uscan::http>::http_upstream_url()
+=item L<Devscripts::Uscan::ftp>::ftp_upstream_url()
+=item L<Devscripts::Uscan::git>::git_upstream_url()
+
+=back
+
+Result is stored in B<$self-E<gt>upstream_url> accessor.
+
+=cut
+
 sub get_upstream_url {
     my ($self) = @_;
     uscan_debug "line: get_upstream_url()";
@@ -908,7 +1028,23 @@ sub get_upstream_url {
     return $self->status;
 }
 
-# IV - Determine newfile_base
+# IV - get_newfile_base
+=head3 get_newfile_base()
+
+Calculates the filename (filenamemangled) for downloaded file using either:
+
+=over
+
+=item L<Devscripts::Uscan::http>::http_newfile_base()
+=item L<Devscripts::Uscan::ftp>::ftp_newfile_base()
+=item L<Devscripts::Uscan::git>::git_newfile_base()
+
+=back
+
+Result is stored in B<$self-E<gt>newfile_base> accessor.
+
+=cut
+
 sub get_newfile_base {
     my ($self) = @_;
     uscan_debug "line: get_newfile_base()";
@@ -919,7 +1055,13 @@ sub get_newfile_base {
     return $self->status;
 }
 
-# V - Compare newversion against mangled_lastversion
+# V - cmp_versions
+=head3 cmp_versions()
+
+Compare available and local versions.
+
+=cut
+
 sub cmp_versions {
     my ($self) = @_;
     uscan_debug "line: cmp_versions()";
@@ -1034,7 +1176,13 @@ sub cmp_versions {
     return 0;
 }
 
-# VI - Download tarball and signature
+# VI - download_file_and_sig
+=head3 download_file_and_sig()
+
+Download file and, if available and needed, signature files.
+
+=cut
+
 sub download_file_and_sig {
     my ($self) = @_;
     uscan_debug "line: download_file_and_sig()";
@@ -1425,6 +1573,13 @@ sub download_file_and_sig {
     return $self->status;
 }
 
+# VII - mkorigtargz
+=head3 mkorigtargz()
+
+Call L<mk_origtargz> to build source tarball.
+
+=cut
+
 sub mkorigtargz {
     my ($self) = @_;
     uscan_debug "line: mkorigtargz()";
@@ -1600,6 +1755,21 @@ sub mkorigtargz {
     return 0;
 }
 
+# VIII - clean
+=head3 clean()
+
+Clean temporary files using either:
+
+=over
+
+=item L<Devscripts::Uscan::http>::http_clean()
+=item L<Devscripts::Uscan::ftp>::ftp_clean()
+=item L<Devscripts::Uscan::git>::git_clean()
+
+=back
+
+=cut
+
 sub clean {
     my ($self) = @_;
     $self->_do('clean');
@@ -1620,3 +1790,28 @@ sub _do {
 }
 
 1;
+
+=head1 SEE ALSO
+
+L<uscan>, L<Devscripts::Uscan::WatchFile>, L<Devscripts::Uscan::Config>
+
+=head1 AUTHOR
+
+B<uscan> was originally written by Christoph Lameter
+E<lt>clameter@debian.orgE<gt> (I believe), modified by Julian Gilbey
+E<lt>jdg@debian.orgE<gt>. HTTP support was added by Piotr Roszatycki
+E<lt>dexter@debian.orgE<gt>. B<uscan> was rewritten in Perl by Julian Gilbey.
+Xavier Guimard E<lt>yadd@debian.orgE<gt> rewrote uscan in object
+oriented Perl.
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2002-2006 by Julian Gilbey <jdg@debian.org>,
+2018 by Xavier Guimard <yadd@debian.org>
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+=cut
