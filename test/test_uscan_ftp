@@ -16,15 +16,8 @@
 # On Debian systems, the complete text of the GNU General Public License
 # version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
 
-echo '======================================================================='
-echo '*** uscan FTP test ***'
-echo '======================================================================='
-# Although test_uscan does a very good job on checking details of file
-# filtering during repacking, it is not easy to debug problems of repacking
-# since it uses --dehs mode.  This FTP test script tries to provide debug
-# platform for the repacking with different method.
-
-test_dir=$(readlink -f "${0%/*}")
+TESTTYPE=FTP
+. ./lib_test_uscan
 
 ARCHITECTURE="$(dpkg-architecture -qDEB_HOST_ARCH)"
 if [ "$ARCHITECTURE" = "hurd-i386" ]; then
@@ -33,19 +26,7 @@ if [ "$ARCHITECTURE" = "hurd-i386" ]; then
     exit 0
 fi
 
-# Operation mode
-if test "$1" = --installed; then
-    COMMAND="uscan --no-conf"
-    shift
-else
-    top_srcdir=$(readlink -f "${0%/*}/..")
-    make -C "$top_srcdir/scripts" uscan mk-origtargz uupdate debchange
-    PATH="$top_srcdir/scripts:$PATH"
-    export PATH
-    PERL5LIB="$top_srcdir/lib"
-    export PERL5LIB
-    COMMAND="uscan --no-conf"
-fi
+COMMAND="uscan --no-conf"
 # set safe defaults
 WEBSCRIPT=":"
 DEBUGECHO=":"
@@ -58,37 +39,6 @@ DEBUGBASH=":"
 #DEBUGLSLR="ls -laR"
 #DEBUGLSLR="ls -la"
 #DEBUGBASH="bash -i"
-
-GPGHOME=$(mktemp -d -p /tmp gpg.XXXXX)
-
-GPG=gpg
-if !command -v $GPG >/dev/null 2>&1; then
-    echo "$GPG missing"
-    GPG=gpg2
-    if ! command -v $GPG >/dev/null 2>&1; then
-	echo "$GPG missing"
-	exit 1
-    fi
-fi
-
-PRIVATE_KEY=$test_dir/uscan/PRIVATE_KEY.asc
-PUBLIC_KEY=$test_dir/uscan/PUBLIC_KEY.asc
-PRIVATE_KEYRING=$GPGHOME/secring.gpg
-PUBLIC_KEYRING=$GPGHOME/pubring.gpg
-
-oneTimeSetUp () {
-    $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-	    --output $PRIVATE_KEYRING --dearmor $PRIVATE_KEY
-
-    $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-	    --output $PUBLIC_KEYRING --dearmor $PUBLIC_KEY
-
-    $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-	    --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
-	    --list-keys --verbose
-
-    export GNUPGHOME=$GPGHOME
-}
 
 # Initial Debian revision value is distribution dependent
 SUFFIX="1"
@@ -229,11 +179,13 @@ makeUpstreamTar() {
     $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
 	--secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
 	--armor --detach-sign $NEWTAR
-    NEWTAR=$UPNAME-$UPVER.tar
-    $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-	--secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
-	--armor --detach-sign $NEWTAR
+    if [ "$COMPRESSION" != "zip" ]; then
+        NEWTAR=$UPNAME-$UPVER.tar
+        $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
+          --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
+          --armor --detach-sign $NEWTAR
 
+    fi
     cd $OLDDIR
 }
 
@@ -529,11 +481,5 @@ testWatch4NonNativeUngzsig() {
     WATCHLINE='opts=pgpsigurlmangle=s/.gz$/.asc/,decompress @@@url@@@([\.\d]+)/(.+)/(.+)/ @PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     helperWatch siteNonNative
 }
-
-oneTimeTearDown () {
-    gpgconf --homedir "$GPGHOME" --verbose --kill gpg-agent
-    rm -rf "$GPGHOME"
-}
-
 
 . shunit2

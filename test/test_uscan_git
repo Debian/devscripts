@@ -15,62 +15,18 @@
 # On Debian systems, the complete text of the GNU General Public License
 # version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
 
+TESTTYPE=Git
+. ./lib_test_uscan
 
-echo '======================================================================='
-echo '*** uscan Git test ***'
-echo '======================================================================='
-test_dir=$(readlink -f "${0%/*}")
-
-if test "$1" = --installed; then
-    shift
-else
-    top_srcdir=$(readlink -f "${0%/*}/..")
-    make -C "$top_srcdir/scripts" uscan mk-origtargz uupdate debchange
-    PATH="$top_srcdir/scripts:$PATH"
-    export PATH
-    PERL5LIB="$top_srcdir/lib"
-    export PERL5LIB
-fi
 COMMAND="uscan --no-conf --compression=xz --dehs"
 
 # comment out for debug
-COMMAND="$COMMAND --verbose"
+#COMMAND="$COMMAND --verbose"
 #COMMAND="$COMMAND --debug"
 
 cleanup(){
     rm -rf $TMPDIR
     echo ""
-}
-
-GPGHOME=$(mktemp -d -p /tmp gpg.XXXXX)
-
-GPG=gpg
-if !command -v $GPG >/dev/null 2>&1; then
-    echo "$GPG missing"
-    GPG=gpg2
-    if ! command -v $GPG >/dev/null 2>&1; then
-    echo "$GPG missing"
-    exit 1
-    fi
-fi
-
-PRIVATE_KEY=$test_dir/uscan/PRIVATE_KEY.asc
-PUBLIC_KEY=$test_dir/uscan/PUBLIC_KEY.asc
-PRIVATE_KEYRING=$GPGHOME/secring.gpg
-PUBLIC_KEYRING=$GPGHOME/pubring.gpg
-
-oneTimeSetUp () {
-    $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-        --output $PRIVATE_KEYRING --dearmor $PRIVATE_KEY
-
-    $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-        --output $PUBLIC_KEYRING --dearmor $PUBLIC_KEY
-
-    $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-        --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
-        --list-keys --verbose
-
-    export GNUPGHOME=$GPGHOME
 }
 
 spawnGitRepo(){
