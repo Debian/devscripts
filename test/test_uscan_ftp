@@ -45,8 +45,8 @@ SUFFIX="1"
 if which dpkg-vendor >/dev/null 2>&1; then
     VENDER="$(dpkg-vendor --query Vendor 2>/dev/null|tr 'A-Z' 'a-z')"
     case "$VENDER" in
-	debian) SUFFIX="1" ;;
-	*) SUFFIX="0${VENDER}1" ;;
+        debian) SUFFIX="1" ;;
+        *) SUFFIX="0${VENDER}1" ;;
     esac
 fi
 
@@ -58,21 +58,21 @@ cleanup(){
 
 spawnFtpServer(){
     (
-	local USCAN_FTP_SERVER=${USCAN_FTP_SERVER:-ftpserver.py}
-	mkdir -p $TMPDIR/$REPOPATH
-	cd $TMPDIR/$REPOPATH
-	echo "FTP starting ... $TMPDIR/$REPOPATH"
-	python3 "$test_dir/uscan/$USCAN_FTP_SERVER" 2>log &
-	local pid=$!
-	echo $pid > pid
-	while ! [ -s port ]; do
-	    sleep 2s
-	    if ! kill -0 $pid 2> /dev/null ; then
-		echo "The FTP server returned an error:"
-		cat log
-		exit 1
-	    fi
-	done
+        local USCAN_FTP_SERVER=${USCAN_FTP_SERVER:-ftpserver.py}
+        mkdir -p $TMPDIR/$REPOPATH
+        cd $TMPDIR/$REPOPATH
+        echo "FTP starting ... $TMPDIR/$REPOPATH"
+        python3 "$test_dir/uscan/$USCAN_FTP_SERVER" 2>log &
+        local pid=$!
+        echo $pid > pid
+        while ! [ -s port ]; do
+            sleep 2s
+            if ! kill -0 $pid 2> /dev/null ; then
+                echo "The FTP server returned an error:"
+                cat log
+                exit 1
+            fi
+        done
     )
 }
 
@@ -100,7 +100,7 @@ makeDebianDir() {
 
     cat <<END > debian/rules
 %:
-	dh $@
+        dh $@
 END
 chmod 755 debian/rules
 
@@ -113,20 +113,20 @@ $DEBNAME ($DEBVER) unstable; urgency=low
 END
     # debian/source/format
     case $DEBVER in
-	*-*) # non-native package
-	    echo "3.0 (quilt)" > debian/source/format
-	     ;;
-	*) # native package
-	    echo "3.0 (native)" > debian/source/format
-	     ;;
+        *-*) # non-native package
+            echo "3.0 (quilt)" > debian/source/format
+             ;;
+        *) # native package
+            echo "3.0 (native)" > debian/source/format
+             ;;
     esac
     # debian/copyright
     echo "Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/" \
-	> debian/copyright
+        > debian/copyright
     # debian/watch
     echo "version=$WATCHVER" > debian/watch
     echo "$WATCHLINE" | sed -e "s,@@@url@@@,ftp://127.0.0.1:${PORT}/,g" - \
-	>> debian/watch
+        >> debian/watch
     # debian/upstream/signing-key.asc
     mkdir -p debian/upstream
     cp -f $test_dir/uscan/PUBLIC_KEY.asc debian/upstream/signing-key.asc
@@ -144,41 +144,41 @@ makeUpstreamTar() {
     cd $TMPDIR/$REPOPATH/$POOLPATH
     touch $UPNAME-$UPVER/FILE.$UPNAME.$UPVER
     if [ "$TYPE" = "native" ]; then
-	cd $TMPDIR/$REPOPATH/$POOLPATH/$UPNAME-$UPVER
-	makeDebianDir $UPNAME $UPVER
-	cd $TMPDIR/$REPOPATH/$POOLPATH
+        cd $TMPDIR/$REPOPATH/$POOLPATH/$UPNAME-$UPVER
+        makeDebianDir $UPNAME $UPVER
+        cd $TMPDIR/$REPOPATH/$POOLPATH
     fi
     case $COMPRESSION in
-	gz|gzip)
-	    NEWTAR=$UPNAME-$UPVER.tar
-	    tar -cf $NEWTAR $UPNAME-$UPVER
-	    NEWTAR=$UPNAME-$UPVER.tar.gz
-	    tar -czf $NEWTAR $UPNAME-$UPVER
-	    ;;
-	bz2|bzip2)
-	    NEWTAR=$UPNAME-$UPVER.tar
-	    tar -cf $NEWTAR $UPNAME-$UPVER
-	    NEWTAR=$UPNAME-$UPVER.tar.bz2
-	    tar --bzip2 -cf $NEWTAR $UPNAME-$UPVER
-	    ;;
-	xz)
-	    NEWTAR=$UPNAME-$UPVER.tar
-	    tar -cf $NEWTAR $UPNAME-$UPVER
-	    NEWTAR= $UPNAME-$UPVER.tar.xz
-	    tar --xz -cf $NEWTAR $UPNAME-$UPVER
-	    ;;
-	zip)
-	    NEWTAR=$UPNAME-$UPVER.zip
-	    zip -r $NEWTAR $UPNAME-$UPVER
-	    ;;
-	*)  echo "Wrong compression mode: $COMPRESSION"
-	    exit 1
-	    ;;
+        gz|gzip)
+            NEWTAR=$UPNAME-$UPVER.tar
+            tar -cf $NEWTAR $UPNAME-$UPVER
+            NEWTAR=$UPNAME-$UPVER.tar.gz
+            tar -czf $NEWTAR $UPNAME-$UPVER
+            ;;
+        bz2|bzip2)
+            NEWTAR=$UPNAME-$UPVER.tar
+            tar -cf $NEWTAR $UPNAME-$UPVER
+            NEWTAR=$UPNAME-$UPVER.tar.bz2
+            tar --bzip2 -cf $NEWTAR $UPNAME-$UPVER
+            ;;
+        xz)
+            NEWTAR=$UPNAME-$UPVER.tar
+            tar -cf $NEWTAR $UPNAME-$UPVER
+            NEWTAR= $UPNAME-$UPVER.tar.xz
+            tar --xz -cf $NEWTAR $UPNAME-$UPVER
+            ;;
+        zip)
+            NEWTAR=$UPNAME-$UPVER.zip
+            zip -r $NEWTAR $UPNAME-$UPVER
+            ;;
+        *)  echo "Wrong compression mode: $COMPRESSION"
+            exit 1
+            ;;
     esac
     # make $NEWTAR.asc
     $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-	--secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
-	--armor --detach-sign $NEWTAR
+        --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
+        --armor --detach-sign $NEWTAR
     if [ "$COMPRESSION" != "zip" ]; then
         NEWTAR=$UPNAME-$UPVER.tar
         $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
@@ -215,26 +215,26 @@ helperWatch() {
     # make local $VEROLD source tree
     tar -xzf $TMPDIR/$REPOPATH/$POOLPATH/${PKG}-${VEROLD}.tar.gz
     if [ -n "$PREFIX" ]; then
-	mv $TMPDIR/${PKG}-${VEROLD} $TMPDIR/${PKG}-${PREFIX}${VEROLD}
+        mv $TMPDIR/${PKG}-${VEROLD} $TMPDIR/${PKG}-${PREFIX}${VEROLD}
     fi
     mv $TMPDIR/${PKG}-${PREFIX}${VEROLD} $TMPDIR/${PKG}
     cd $TMPDIR/${PKG}
     if [ ! -d debian ]; then
-	makeDebianDir $PKG ${PREFIX}${VEROLD}-$SUFFIX
+        makeDebianDir $PKG ${PREFIX}${VEROLD}-$SUFFIX
     fi
     local UUPDATE=""
     if grep -q "uupdate" $TMPDIR/${PKG}/debian/watch ; then
-	UUPDATE=uupdate
+        UUPDATE=uupdate
     fi
     local PGP=""
     if grep -q "pgpurlmangle" $TMPDIR/${PKG}/debian/watch ; then
-	PGP=pgp
+        PGP=pgp
     fi
     if grep -q "pgpmode *= *auto" $TMPDIR/${PKG}/debian/watch ; then
-	PGP=pgp
+        PGP=pgp
     fi
     if grep -q "pgpmode *= *previous" $TMPDIR/${PKG}/debian/watch ; then
-	PGP=pgp
+        PGP=pgp
     fi
     $XCOMMAND
     assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
@@ -245,21 +245,21 @@ helperWatch() {
     assertTrue "$UTARBALL missing: $WATCHLINE" "[ -f $UTARBALL ]"
     assertTrue "$STARBALL missing: $WATCHLINE" "[ -f $STARBALL ]"
     if [ "$PGP" = "pgp" ]; then
-	UTARSIG=${PKG}-${VERNEW}.tar.gz.asc
-	if [ ! -f $UTARSIG ]; then
-	    UTARSIG=${PKG}-${VERNEW}.tar.asc
-	fi
-	STARSUG=${PKG}_${PREFIX}${VERNEW}.orig.tar.$GZREPACK.asc
-	assertTrue "$UTARSIG and *.sig missing: $WATCHLINE" "[ -f $UTARSIG ]"
-	assertTrue "$STARSIG missing: $WATCHLINE" "[ -f $STARSIG ]"
+        UTARSIG=${PKG}-${VERNEW}.tar.gz.asc
+        if [ ! -f $UTARSIG ]; then
+            UTARSIG=${PKG}-${VERNEW}.tar.asc
+        fi
+        STARSUG=${PKG}_${PREFIX}${VERNEW}.orig.tar.$GZREPACK.asc
+        assertTrue "$UTARSIG and *.sig missing: $WATCHLINE" "[ -f $UTARSIG ]"
+        assertTrue "$STARSIG missing: $WATCHLINE" "[ -f $STARSIG ]"
     fi
     # check uupdate
     if [ "$UUPDATE" = "uupdate" ]; then
-	cd $TMPDIR/${PKG}-${PREFIX}${VERNEW}
-	assertTrue 'pristine tarball is not extracted' "[ -f debian/changelog ]"
-	DVERSION=`dpkg-parsechangelog -ldebian/changelog -SVersion`
-	assertEquals "uscan: Version should be ${PREFIX}${VERNEW}-$SUFFIX but $DVERSION" "$DVERSION" "${PREFIX}${VERNEW}-$SUFFIX"
-	cd $TMPDIR
+        cd $TMPDIR/${PKG}-${PREFIX}${VERNEW}
+        assertTrue 'pristine tarball is not extracted' "[ -f debian/changelog ]"
+        DVERSION=`dpkg-parsechangelog -ldebian/changelog -SVersion`
+        assertEquals "uscan: Version should be ${PREFIX}${VERNEW}-$SUFFIX but $DVERSION" "$DVERSION" "${PREFIX}${VERNEW}-$SUFFIX"
+        cd $TMPDIR
     fi
     $DEBUGBASH
     cd $ORIGDIR
@@ -298,26 +298,26 @@ helperWatchZip() {
     # make local $VEROLD source tree
     unzip $TMPDIR/$REPOPATH/$POOLPATH/${PKG}-${VEROLD}.zip
     if [ -n "$PREFIX" ]; then
-	mv $TMPDIR/${PKG}-${VEROLD} $TMPDIR/${PKG}-${PREFIX}${VEROLD}
+        mv $TMPDIR/${PKG}-${VEROLD} $TMPDIR/${PKG}-${PREFIX}${VEROLD}
     fi
     mv $TMPDIR/${PKG}-${PREFIX}${VEROLD} $TMPDIR/${PKG}
     cd $TMPDIR/${PKG}
     if [ ! -d debian ]; then
-	makeDebianDir $PKG ${PREFIX}${VEROLD}-$SUFFIX
+        makeDebianDir $PKG ${PREFIX}${VEROLD}-$SUFFIX
     fi
     local UUPDATE=""
     if grep -q "uupdate" $TMPDIR/${PKG}/debian/watch ; then
-	UUPDATE=uupdate
+        UUPDATE=uupdate
     fi
     local PGP=""
     if grep -q "pgpurlmangle" $TMPDIR/${PKG}/debian/watch ; then
-	PGP=pgp
+        PGP=pgp
     fi
     if grep -q "pgpmode *= *auto" $TMPDIR/${PKG}/debian/watch ; then
-	PGP=pgp
+        PGP=pgp
     fi
     if grep -q "pgpmode *= *previous" $TMPDIR/${PKG}/debian/watch ; then
-	PGP=pgp
+        PGP=pgp
     fi
     $XCOMMAND
     assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
@@ -328,18 +328,18 @@ helperWatchZip() {
     assertTrue "$UTARBALL missing: $WATCHLINE" "[ -f $UTARBALL ]"
     assertTrue "$STARBALL missing: $WATCHLINE" "[ -f $STARBALL ]"
     if [ "$PGP" = "pgp" ]; then
-	UTARSIG=${PKG}-${VERNEW}.zip.asc
-	STARSUG=${PKG}_${PREFIX}${VERNEW}.orig.tar.$GZREPACK.asc
-	assertTrue "$UTARSIG and *.sig missing: $WATCHLINE" "[ -f $UTARSIG ]"
-	assertTrue "$STARSIG missing: $WATCHLINE" "[ -f $STARSIG ]"
+        UTARSIG=${PKG}-${VERNEW}.zip.asc
+        STARSUG=${PKG}_${PREFIX}${VERNEW}.orig.tar.$GZREPACK.asc
+        assertTrue "$UTARSIG and *.sig missing: $WATCHLINE" "[ -f $UTARSIG ]"
+        assertTrue "$STARSIG missing: $WATCHLINE" "[ -f $STARSIG ]"
     fi
     # check uupdate
     if [ "$UUPDATE" = "uupdate" ]; then
-	cd $TMPDIR/${PKG}-${PREFIX}${VERNEW}
-	assertTrue 'pristine tarball is not extracted' "[ -f debian/changelog ]"
-	DVERSION=`dpkg-parsechangelog -ldebian/changelog -SVersion`
-	assertEquals "uscan: Version should be ${PREFIX}${VERNEW}-$SUFFIX but $DVERSION" "$DVERSION" "${PREFIX}${VERNEW}-$SUFFIX"
-	cd $TMPDIR
+        cd $TMPDIR/${PKG}-${PREFIX}${VERNEW}
+        assertTrue 'pristine tarball is not extracted' "[ -f debian/changelog ]"
+        DVERSION=`dpkg-parsechangelog -ldebian/changelog -SVersion`
+        assertEquals "uscan: Version should be ${PREFIX}${VERNEW}-$SUFFIX but $DVERSION" "$DVERSION" "${PREFIX}${VERNEW}-$SUFFIX"
+        cd $TMPDIR
     fi
     $DEBUGBASH
     cd $ORIGDIR
