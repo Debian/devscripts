@@ -81,6 +81,30 @@ foreach (
     has $_ => ( is => 'rw', required => 1 );
 }
 
+has repack => (
+    is => 'rw',
+    lazy => 1,
+    default => sub { $_[0]->config->{repack} },
+);
+
+has safe => (
+    is => 'rw',
+    lazy => 1,
+    default => sub { $_[0]->config->{safe} },
+);
+
+has symlink => (
+    is => 'rw',
+    lazy => 1,
+    default => sub { $_[0]->config->{symlink} },
+);
+
+has versionmode => (
+    is => 'rw',
+    lazy => 1,
+    default => sub { 'newer' },
+);
+
 # 2 - Line options read/write attributes
 
 foreach (

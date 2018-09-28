@@ -293,10 +293,6 @@ sub BUILD {
                 pkg_version   => $self->pkg_version,
                 watch_version => $watch_version,
                 watchfile     => $self->watchfile,
-                repack        => $self->config->repack,
-                safe          => $self->config->safe,
-                symlink       => $self->config->symlink,
-                versionmode   => 'newer',
             }
         );
     }
