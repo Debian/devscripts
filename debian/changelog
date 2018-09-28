@@ -11,11 +11,13 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
       package-contains-documentation-outside-usr-share-doc.
   * wrap-and-sort:
     + Update man-page to list the --dry-run option.  Closes: #908036
-  * test/pylint:
-    + Re-enable the test again.
-    + Appease the new pylint rule useless-object-inheritance.
-  * test/test_package_lifecycle:
-    + Adapt the expected output for dpkg-source 1.19.1.  Closes: #909719
+  * tests:
+    + pylint:
+      - Re-enable the test again.
+      - Appease the new pylint rule useless-object-inheritance.
+    + test_package_lifecycle:
+      - Adapt the expected output for dpkg-source 1.19.1.  Closes: #909719
+    + Use `set -u` in all the test files.
 
   [ Benjamin Drung ]
   * test:

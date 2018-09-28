@@ -15,7 +15,9 @@
 # ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
-if test "$1" = --installed; then
+set -u
+
+if test "${1:-}" = --installed; then
     COMMAND="dch --no-conf"
     shift
 else

@@ -15,10 +15,12 @@
 # On Debian systems, the complete text of the GNU General Public License
 # version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
 
+set -u
+
 test_dir=$(readlink -f "${0%/*}")
 
 # Operation mode
-if test "$1" = --installed; then
+if test "${1:-}" = --installed; then
     COMMAND="uscan --no-conf"
     shift
 else
@@ -153,7 +155,7 @@ END
     # debian/copyright
     echo "Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/" \
 	> debian/copyright
-    if [ "$FILEEXCLUDE" = "1" ]; then
+    if [ "${FILEEXCLUDE:-0}" = "1" ]; then
 	# exclude just for main
 	cat <<'END' >> debian/copyright
 Files-Excluded: exclude-this
@@ -162,7 +164,7 @@ Files-Excluded: exclude-this
  */js/jquery.js
  ;?echo?baz;?#
 END
-    elif [ "$FILEEXCLUDE" = "2" ]; then
+    elif [ "${FILEEXCLUDE:-0}" = "2" ]; then
 	# exclude for main(=foo) bar baz
 	cat <<'END' >> debian/copyright
 Files-Excluded: exclude-this
@@ -181,7 +183,7 @@ Files-Excluded-baz: exclude-this
  */js/jquery.js
  ;?echo?baz;?#
 END
-    elif [ "$FILEEXCLUDE" = "3" ]; then
+    elif [ "${FILEEXCLUDE:-0}" = "3" ]; then
 	# exclude for foo bar baz
 	cat <<'END' >> debian/copyright
 Files-Excluded-foo: exclude-this
@@ -261,7 +263,7 @@ makeUpstreamTar() {
 	    exit 1
 	    ;;
 	esac
-    case $SIGMODE in
+    case "${SIGMODE:-}" in  # undefined SIGMODE → no sig
 	ASC) # make $NEWTAR.asc
 	    $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
 		--secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
@@ -277,7 +279,7 @@ makeUpstreamTar() {
 		--secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
 		--sign $NEWTAR
     esac
-    
+
     cd $OLDDIR
 }
 
@@ -286,7 +288,7 @@ helperWatch() {
     local SITESCRIPT=${1:-siteWebNonNative}
     local VEROLD=${2:-1.0}
     local VERNEW=${3:-2.0}
-    local PREFIX=$4
+    local PREFIX="${4:-}"
     local TMPDIR=$(mktemp -d)
     ORIGDIR=`pwd`
     PKG=${PKG:-foo}
@@ -345,7 +347,7 @@ helperWatch() {
 	if [ ! -f $UTARSIG ]; then
 	    UTARSIG=${PKG}-${VERNEW}.tar.gz.asc
 	fi
-	STARSUG=${PKG}_${PREFIX}${VERNEW}.orig.tar.$GZREPACK.asc
+	STARSIG=${PKG}_${PREFIX}${VERNEW}.orig.tar.$GZREPACK.asc
 	assertTrue "$UTARSIG and *.sig missing: $WATCHLINE" "[ -f $UTARSIG ]"
 	assertTrue "$STARSIG missing: $WATCHLINE" "[ -f $STARSIG ]"
     fi
@@ -359,7 +361,7 @@ helperWatch() {
 	    if [ ! -f $UTARSIG ]; then
 		UTARSIG=${cpnt}-${VERNEW}.tar.gz.asc
 	    fi
-	    STARSUG=${PKG}_${PREFIX}${VERNEW}.orig-${cpnt}.tar.$GZREPACK.asc
+	    STARSIG=${PKG}_${PREFIX}${VERNEW}.orig-${cpnt}.tar.$GZREPACK.asc
 	    assertTrue "$UTARSIG and *.sig missing: $WATCHLINE" "[ -f $UTARSIG ]"
 	    assertTrue "$STARSIG missing: $WATCHLINE" "[ -f $STARSIG ]"
 	fi
@@ -486,7 +488,7 @@ siteNonNative() {
     makeUpstreamTar $PKG 3.0 gz non-native
     mkdir -p $TMPDIR/$REPOPATH/3.0/$PKG/ooo/
     fi
-    if [ "$SIGMODE" = "ASC" ]; then
+    if [ "${SIGMODE:-}" = "ASC" ]; then
     ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz
     ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.asc $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz.asc
     ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz $TMPDIR/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz
@@ -497,7 +499,7 @@ siteNonNative() {
     ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz $TMPDIR/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz
     ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz.asc $TMPDIR/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz.asc
     fi
-    elif [ "$SIGMODE" = "BIN" ]; then
+    elif [ "${SIGMODE:-}" = "BIN" ]; then
     ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz
     ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.sig $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz.sig
     ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz $TMPDIR/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz
@@ -508,7 +510,7 @@ siteNonNative() {
     ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz $TMPDIR/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz
     ln -sf ../../../$POOLPATH/${PKG}-3.0.tar.gz.sig $TMPDIR/$REPOPATH/3.0/$PKG/ooo/${PKG}-3.0.tar.gz.sig
     fi
-    elif [ "$SIGMODE" = "SELF" ]; then
+    elif [ "${SIGMODE:-}" = "SELF" ]; then
     ln -sf ../../../$POOLPATH/${PKG}-0.0.tar.gz.gpg $TMPDIR/$REPOPATH/0.0/$PKG/ooo/${PKG}-0.0.tar.gz.gpg
     ln -sf ../../../$POOLPATH/${PKG}-1.0.tar.gz.gpg $TMPDIR/$REPOPATH/1.0/$PKG/ooo/${PKG}-1.0.tar.gz.gpg
     ln -sf ../../../$POOLPATH/${PKG}-2.0.tar.gz.gpg $TMPDIR/$REPOPATH/2.0/$PKG/ooo/${PKG}-2.0.tar.gz.gpg

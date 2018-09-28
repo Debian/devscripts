@@ -15,6 +15,8 @@
 # On Debian systems, the complete text of the GNU General Public License
 # version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
 
+set -u
+
 test_dir=$(readlink -f "${0%/*}")
 
 SUFFIX="1"
@@ -26,7 +28,7 @@ if which dpkg-vendor >/dev/null 2>&1; then
     esac
 fi
 
-if test "$1" = --installed; then
+if test "${1:-}" = --installed; then
     COMMAND="uscan --no-conf --compression=xz"
     shift
 else
@@ -70,7 +72,7 @@ containsName(){
   echo $?
 }
 
-. "${0%/*}/shunit2-helper-functions.sh"
+. "$test_dir/shunit2-helper-functions.sh"
 
 # The following tests do the following: (1) create a minimal Debian package
 # directory, containing minimal files debian/{changelog,watch,copyright},
@@ -199,7 +201,7 @@ helperCreateRepo () {
 
     cat <<END > $PKG/debian/watch
 version=3
-${OPTS}http://localhost:$PORT/$PKG-(\d).tar.gz debian $SCRIPT
+${OPTS:-}http://localhost:$PORT/$PKG-(\d).tar.gz debian ${SCRIPT:-}
 END
 
     cat <<END > $PKG/debian/changelog
@@ -218,7 +220,7 @@ Files-Excluded: exclude-this
  */js/jquery.js
  ;?echo?baz;?#
 END
-    if [ -n "$SRCFORMAT" ]; then
+    if [ -n "${SRCFORMAT:-}" ]; then
 	mkdir -p $PKG/debian/source
 	echo "$SRCFORMAT" > $PKG/debian/source/format
     fi

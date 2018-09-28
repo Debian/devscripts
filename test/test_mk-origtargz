@@ -16,7 +16,9 @@
 # On Debian systems, the complete text of the GNU General Public License
 # version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
 
-if test "$1" = --installed; then
+set -u
+
+if test "${1:-}" = --installed; then
     MK_ORIGTARGZ="mk-origtargz"
     PROGNAME="mk-origtargz"
     shift

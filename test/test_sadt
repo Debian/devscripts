@@ -15,9 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+set -u
+
 . ${0%/*}/test_helper.sh
 
-if test "$1" = --installed; then
+if test "${1:-}" = --installed; then
     sadt="sadt"
     shift
 else

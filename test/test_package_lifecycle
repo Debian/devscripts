@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+set -u
+
 WORKDIR=$(readlink -f "${0%/*}")
 declare _ARCH=$(dpkg-architecture -qDEB_BUILD_ARCH)
 if dpkg --compare-versions "$(dpkg-query -W -f='${Version}' dpkg-dev )" lt "1.19.1~"; then
@@ -23,11 +25,11 @@ else
     declare -r _pkgbuilddir="."
 fi
 
-if test "$1" = --installed; then
+if test "${1:-}" = --installed; then
     shift
 else
     PATH=${WORKDIR}/../scripts:${PATH}
-	PERL5LIB=${WORKDIR}/../lib:${PERL5LIB}
+	PERL5LIB=${WORKDIR}/../lib:${PERL5LIB:-}
 	export PATH PERL5LIB
 fi
 

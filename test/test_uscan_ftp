@@ -16,6 +16,8 @@
 # On Debian systems, the complete text of the GNU General Public License
 # version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
 
+set -u
+
 echo '======================================================================='
 echo '*** uscan FTP test ***'
 echo '======================================================================='
@@ -34,7 +36,7 @@ if [ "$ARCHITECTURE" = "hurd-i386" ]; then
 fi
 
 # Operation mode
-if test "$1" = --installed; then
+if test "${1:-}" = --installed; then
     COMMAND="uscan --no-conf"
     shift
 else
@@ -242,7 +244,7 @@ helperWatch() {
     local SITESCRIPT=${1:-siteWebNonNative}
     local VEROLD=${2:-1.0}
     local VERNEW=${3:-2.0}
-    local PREFIX=$4
+    local PREFIX="${4:-}"
     local TMPDIR=$(mktemp -d)
     ORIGDIR=`pwd`
     PKG=${PKG:-foo}
@@ -262,7 +264,7 @@ helperWatch() {
     $SITESCRIPT
     # make local $VEROLD source tree
     tar -xzf $TMPDIR/$REPOPATH/$POOLPATH/${PKG}-${VEROLD}.tar.gz
-    if [ -n "$PREFIX" ]; then
+    if [ -n "${PREFIX}" ]; then
 	mv $TMPDIR/${PKG}-${VEROLD} $TMPDIR/${PKG}-${PREFIX}${VEROLD}
     fi
     mv $TMPDIR/${PKG}-${PREFIX}${VEROLD} $TMPDIR/${PKG}
@@ -325,7 +327,7 @@ helperWatchZip() {
     local SITESCRIPT=${1:-siteWebNonNative}
     local VEROLD=${2:-1.0}
     local VERNEW=${3:-2.0}
-    local PREFIX=$4
+    local PREFIX="${4:-}"
     local TMPDIR=$(mktemp -d)
     ORIGDIR=`pwd`
     PKG=${PKG:-foo}
