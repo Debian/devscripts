@@ -18,6 +18,8 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
     + test_package_lifecycle:
       - Adapt the expected output for dpkg-source 1.19.1.  Closes: #909719
     + Use `set -u` in all the test files.
+    + Move some the temporary directories into SHUNIT_TMPDIR, to have more
+      assurances that they are cleaned up at the end.
 
   [ Benjamin Drung ]
   * test:

@@ -88,7 +88,7 @@ helperTestRepack() {
     file_output="$3"
 
     PKG=foo
-    TMPDIR=$(mktemp -d)
+    TMPDIR=$(mktemp -d -p "$SHUNIT_TMPDIR")
 
     mkdir -p $TMPDIR/$PKG/debian
     spawnHttpServer
@@ -147,7 +147,7 @@ testRepackZip_XZ() {
     file_output="XZ compressed data"
 
     PKG=foo
-    TMPDIR=$(mktemp -d)
+    TMPDIR=$(mktemp -d -p "$SHUNIT_TMPDIR")
     spawnHttpServer
     PORT=$(cat $TMPDIR/repo/port)
 
@@ -259,7 +259,7 @@ helperTestContent() {
 testFileExclusion() {
 
     PKG=foo
-    TMPDIR=$(mktemp -d)
+    TMPDIR=$(mktemp -d -p "$SHUNIT_TMPDIR")
     spawnHttpServer
     PORT=$(cat $TMPDIR/repo/port)
 
@@ -298,7 +298,7 @@ testFileExclusion() {
 testFileExclusionSeparateDir() {
 
     PKG=foo
-    TMPDIR=$(mktemp -d)
+    TMPDIR=$(mktemp -d -p "$SHUNIT_TMPDIR")
     spawnHttpServer
     PORT=$(cat $TMPDIR/repo/port)
 
@@ -337,7 +337,7 @@ testFileExclusionSeparateDir() {
 testFileExclusionZipToTar() {
 
     PKG=foo
-    TMPDIR=$(mktemp -d)
+    TMPDIR=$(mktemp -d -p "$SHUNIT_TMPDIR")
     spawnHttpServer
     PORT=$(cat $TMPDIR/repo/port)
 
