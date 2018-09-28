@@ -39,8 +39,8 @@ testS3Bucket() {
                    sed 's@\(</[A-Za-z]*>\)@\1\n@g' | grep '<Key>RDSCli-' | \
                    sed 's@.*<Key>RDSCli-\([-0-9.]*\)\.zip</Key>.*@\1@g' | \
                    sort -n | tail -n 1)
-    local result="uscan.pl: Newest version of rdscli on remote site is ${latest}, local version is 1.4.007
-uscan.pl:    => Newer package available from
+    local result="uscan: Newest version of rdscli on remote site is ${latest}, local version is 1.4.007
+uscan:    => Newer package available from
       http://s3.amazonaws.com/rds-downloads/RDSCli-${latest}.zip"
     found "s3bucket" "rdscli" "1.4.007" "$result"
 }
