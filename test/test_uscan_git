@@ -1,0 +1,156 @@
+#!/bin/sh
+
+# Copyright (C) 2018, Xavier <yadd@debian.org>
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 3 of the License, or (at your
+# option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+# Public License for more details.
+#
+# On Debian systems, the complete text of the GNU General Public License
+# version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
+
+
+echo '======================================================================='
+echo '*** uscan Git test ***'
+echo '======================================================================='
+test_dir=$(readlink -f "${0%/*}")
+
+if test "$1" = --installed; then
+	shift
+else
+	top_srcdir=$(readlink -f "${0%/*}/..")
+	make -C "$top_srcdir/scripts" uscan mk-origtargz uupdate debchange
+	PATH="$top_srcdir/scripts:$PATH"
+	export PATH
+	PERL5LIB="$top_srcdir/lib"
+	export PERL5LIB
+fi
+COMMAND="uscan --no-conf --compression=xz --dehs"
+
+# comment out for debug
+COMMAND="$COMMAND --verbose"
+#COMMAND="$COMMAND --debug"
+
+cleanup(){
+    rm -rf $TMPDIR
+    echo ""
+}
+
+GPGHOME=$(mktemp -d -p /tmp gpg.XXXXX)
+
+GPG=gpg
+if !command -v $GPG >/dev/null 2>&1; then
+    echo "$GPG missing"
+    GPG=gpg2
+    if ! command -v $GPG >/dev/null 2>&1; then
+	echo "$GPG missing"
+	exit 1
+    fi
+fi
+
+PRIVATE_KEY=$test_dir/uscan/PRIVATE_KEY.asc
+PUBLIC_KEY=$test_dir/uscan/PUBLIC_KEY.asc
+PRIVATE_KEYRING=$GPGHOME/secring.gpg
+PUBLIC_KEYRING=$GPGHOME/pubring.gpg
+
+oneTimeSetUp () {
+    $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
+	    --output $PRIVATE_KEYRING --dearmor $PRIVATE_KEY
+
+    $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
+	    --output $PUBLIC_KEYRING --dearmor $PUBLIC_KEY
+
+    $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
+	    --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
+	    --list-keys --verbose
+
+    export GNUPGHOME=$GPGHOME
+}
+
+spawnGitRepo(){
+	mkdir -p $TMPDIR/repo
+	(cd $TMPDIR/repo
+	git init
+	git config user.name "Joe Developer"
+	git config user.email "none@debian.org"
+	touch changelog file.c
+	git add changelog file.c
+	git commit -a -m 'Init'
+	for version in 1.0 2.0; do
+		echo "# Version $version" >> file.c
+		cat >> changelog <<END
+Version $version
+
+END
+		git commit -a -m "Releasing $version"
+		git tag -s -u 72543FAF -m "Version $version" "v$version"
+	done)
+}
+
+trap cleanup 1 2 3 13 15
+
+containsName(){
+  echo "$1" | fgrep -q "$2"
+  echo $?
+}
+
+. "${0%/*}/shunit2-helper-functions.sh"
+
+PKG=foo
+
+makeDebianDir() {
+	WATCHARGS=$1
+	TMPDIR=$(mktemp -d)
+	mkdir -p $TMPDIR/$PKG/debian/upstream
+	spawnGitRepo
+	REPO=$TMPDIR/REPO
+
+    cat <<END > $TMPDIR/$PKG/debian/watch
+version=4
+opts="mode=git,gitmode=shallow,$WATCHARGS" \
+file:///$TMPDIR/repo refs/tags/v([\d\.]+) debian
+END
+
+    cat <<END > $TMPDIR/$PKG/debian/changelog
+$PKG (0-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
+END
+	cp -f $test_dir/uscan/PUBLIC_KEY.asc $TMPDIR/$PKG/debian/upstream/signing-key.asc
+}
+
+helperLaunch() {
+	WATCHARGS=$1
+	ARGS=$2
+	makeDebianDir $WATCHARGS
+	OUTPUT=$( cd $TMPDIR/$PKG ; $COMMAND --watchfile=debian/watch $ARGS)
+	assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
+}
+
+testGit() {
+	helperLaunch "pgpmode=none"
+	TARBALL=${PKG}_2.0.orig.tar.xz
+	assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-2.0.tar.xz ]"
+	assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
+	assertTrue 'pristine tarball is a symlink' "[ -L $TMPDIR/$TARBALL ]"
+	cleanup
+}
+
+testGitSignedTag() {
+	helperLaunch "pgpmode=gittag"
+	TARBALL=${PKG}_2.0.orig.tar.xz
+	assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-2.0.tar.xz ]"
+	assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
+	assertTrue 'pristine tarball is a symlink' "[ -L $TMPDIR/$TARBALL ]"
+	cleanup
+}
+
+. shunit2
