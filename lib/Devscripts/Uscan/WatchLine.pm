@@ -1363,6 +1363,7 @@ sub download_file_and_sig {
         }
         elsif ( !$self->keyring ) {
             uscan_warn "No keyring file, skipping gpg verification";
+            return $self->status(1);
         }
         else {
             my ( $gitrepo, $gitref ) = split /[[:space:]]+/,
