@@ -27,7 +27,7 @@ sub git_search {
             uscan_exec(
                 'git', 'clone', '--bare', '--depth=1',
                 $self->parse_result->{base},
-                "$self->{config}->{destdir}/" . $self->gitrepo_dir
+                "$self->{downloader}->{destdir}/" . $self->gitrepo_dir
             );
             $self->downloader->gitrepo_state(1);
         }
@@ -43,7 +43,7 @@ sub git_search {
                 '-b',
                 "$newfile",
                 $self->parse_result->{base},
-                "$self->{config}->{destdir}/" . $self->gitrepo_dir
+                "$self->{downloader}->{destdir}/" . $self->gitrepo_dir
             );
             $self->downloader->gitrepo_state(1);
         }
@@ -51,7 +51,7 @@ sub git_search {
             uscan_exec(
                 'git', 'clone', '--bare',
                 $self->parse_result->{base},
-                "$self->{config}->{destdir}/" . $self->gitrepo_dir
+                "$self->{downloader}->{destdir}/" . $self->gitrepo_dir
             );
             $self->downloader->gitrepo_state(2);
         }
@@ -61,7 +61,7 @@ sub git_search {
             spawn(
                 exec => [
                     'git',
-                    "--git-dir=$self->{config}->{destdir}/$self->{gitrepo_dir}",
+"--git-dir=$self->{downloader}->{destdir}/$self->{gitrepo_dir}",
                     'describe',
                     '--tags'
                 ],
@@ -85,7 +85,7 @@ sub git_search {
             spawn(
                 exec => [
                     'git',
-                    "--git-dir=$self->{config}->{destdir}/$self->{gitrepo_dir}",
+"--git-dir=$self->{downloader}->{destdir}/$self->{gitrepo_dir}",
                     'log',
                     '-1',
                     "--date=format:$self->{date}",
@@ -188,13 +188,19 @@ sub git_clean {
     # If git cloned repo exists and not --debug ($verbose=2) -> remove it
     if ( $self->downloader->gitrepo_state > 0 and $verbose < 2 ) {
         my $err;
-        remove_tree "$self->{config}->{destdir}/" . $self->gitrepo_dir,
+        uscan_verbose "Removing git repo ($self->{downloader}->{destdir}/"
+          . $self->gitrepo_dir . ")";
+        remove_tree "$self->{downloader}->{destdir}/" . $self->gitrepo_dir,
           { error => \$err };
         if (@$err) {
             local $, = "\n\t";
             uscan_warn "Errors during git repo clean:\n\t@$err";
         }
         $self->downloader->gitrepo_state(0);
+    }
+    else {
+        uscan_debug "Keep git repo ($self->{downloader}->{destdir}/"
+          . $self->gitrepo_dir . ")";
     }
     return 0;
 }

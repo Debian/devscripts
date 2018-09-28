@@ -1,0 +1,71 @@
+#!/bin/sh
+
+# Copyright (C) 2018, Xavier <yadd@debian.org>
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 3 of the License, or (at your
+# option) any later version.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General
+# Public License for more details.
+#
+# On Debian systems, the complete text of the GNU General Public License
+# version 3 can be found in the /usr/share/common-licenses/GPL-3 file.
+
+echo '======================================================================='
+echo "*** uscan $TESTTYPE test ***"
+echo '======================================================================='
+
+test_dir=$(readlink -f "${0%/*}")
+
+# Operation mode
+if test "${1:-}" = --installed; then
+    shift
+else
+    top_srcdir=$(readlink -f "${0%/*}/..")
+    make -C "$top_srcdir/scripts" uscan mk-origtargz uupdate debchange
+    PATH="$top_srcdir/scripts:$PATH"
+    export PATH
+    PERL5LIB="$top_srcdir/lib"
+    export PERL5LIB
+fi
+
+GPGHOME=$(mktemp -d -p /tmp gpg.XXXXX)
+
+GPG=gpg
+if !command -v $GPG >/dev/null 2>&1; then
+    echo "$GPG missing"
+    GPG=gpg2
+    if ! command -v $GPG >/dev/null 2>&1; then
+        echo "$GPG missing"
+        exit 1
+    fi
+fi
+
+PRIVATE_KEY=$test_dir/uscan/PRIVATE_KEY.asc
+PUBLIC_KEY=$test_dir/uscan/PUBLIC_KEY.asc
+PRIVATE_KEYRING=$GPGHOME/secring.gpg
+PUBLIC_KEYRING=$GPGHOME/pubring.gpg
+
+oneTimeSetUp () {
+    $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
+        --output $PRIVATE_KEYRING --dearmor $PRIVATE_KEY
+
+    $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
+        --output $PUBLIC_KEYRING --dearmor $PUBLIC_KEY
+
+    $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
+        --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
+        --list-keys --verbose
+
+    export GNUPGHOME=$GPGHOME
+}
+
+oneTimeTearDown () {
+    gpgconf --homedir "$GPGHOME" --verbose --kill gpg-agent
+    rm -rf "$GPGHOME"
+}
+

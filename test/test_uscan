@@ -23,8 +23,8 @@ SUFFIX="1"
 if which dpkg-vendor >/dev/null 2>&1; then
     VENDER="$(dpkg-vendor --query Vendor 2>/dev/null|tr 'A-Z' 'a-z')"
     case "$VENDER" in
-	debian) SUFFIX="1" ;;
-	*) SUFFIX="0${VENDER}1" ;;
+        debian) SUFFIX="1" ;;
+        *) SUFFIX="0${VENDER}1" ;;
     esac
 fi
 
@@ -55,13 +55,13 @@ cleanup(){
 spawnHttpServer(){
     unset http_proxy
     (
-	mkdir -p $TMPDIR/repo
-	cd $TMPDIR/repo
-	python3 "$test_dir/uscan/server.py" &
-	echo $! > pid
-	while ! [ -s port ]; do
-	    :
-	done
+        mkdir -p $TMPDIR/repo
+        cd $TMPDIR/repo
+        python3 "$test_dir/uscan/server.py" &
+        echo $! > pid
+        while ! [ -s port ]; do
+            :
+        done
     )
 }
 
@@ -119,13 +119,13 @@ END
     TARBALL=${PKG}_1.orig.tar.$to_comp
     if [ "$from_ext" != "tar.$to_comp" ]
     then
-	assertFalse 'unrepacked tarball still present' "[ -f $TMPDIR/${PKG}_1.orig.$from_ext ]"
+        assertFalse 'unrepacked tarball still present' "[ -f $TMPDIR/${PKG}_1.orig.$from_ext ]"
     fi
     assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
     assertNotNull "pristine tarball is not $to_comp-compressed" \
                   "$( file -L $TMPDIR/$TARBALL | grep "$file_output" )"
     CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
-    assertTrue 'file contents missing'	\
+    assertTrue 'file contents missing'        \
                 $(containsName "$CONTENTS" content)
     assertTrue "malfored target in dehs output: $OUTPUT" \
                $(containsName "$OUTPUT" "<target>$TARBALL</target>")
@@ -181,7 +181,7 @@ END
     assertNotNull "pristine tarball is not $to_comp-compressed" \
                   "$( file -L $TMPDIR/$TARBALL | grep "$file_output" )"
     CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
-    assertTrue 'file contents missing'	\
+    assertTrue 'file contents missing'        \
                 $(containsName "$CONTENTS" content)
     assertTrue "malfored target in dehs output: $OUTPUT" \
                $(containsName "$OUTPUT" "<target>$TARBALL</target>")
@@ -221,8 +221,8 @@ Files-Excluded: exclude-this
  ;?echo?baz;?#
 END
     if [ -n "${SRCFORMAT:-}" ]; then
-	mkdir -p $PKG/debian/source
-	echo "$SRCFORMAT" > $PKG/debian/source/format
+        mkdir -p $PKG/debian/source
+        echo "$SRCFORMAT" > $PKG/debian/source/format
     fi
 
     mkdir -p repo
@@ -240,19 +240,19 @@ END
 }
 
 helperTestContent() {
-    assertTrue 'file that must be present is excluded in the tarball'	\
+    assertTrue 'file that must be present is excluded in the tarball'        \
                 $(containsName "$CONTENTS" include-this)
-    assertFalse 'file that must be excluded is present in the tarball'	\
+    assertFalse 'file that must be excluded is present in the tarball'        \
                 $(containsName "$CONTENTS" exclude-this)
-    assertFalse "dir that must be excluded is present in the tarball"	\
+    assertFalse "dir that must be excluded is present in the tarball"        \
                 $(containsName "$CONTENTS" exclude-dir)
-    assertFalse "subdir that must be excluded is present in the tarball"	\
+    assertFalse "subdir that must be excluded is present in the tarball"        \
                 $(containsName "$CONTENTS" subdir)
-    assertFalse "non-root-file that must be excluded is present in the tarball"	\
+    assertFalse "non-root-file that must be excluded is present in the tarball"        \
                 $(containsName "$CONTENTS" jquery.js)
-    assertFalse "hidden file that must be excluded is present in the zip file"	\
+    assertFalse "hidden file that must be excluded is present in the zip file"        \
                 $(containsName "$CONTENTS" .hidden)
-    assertFalse "path with whitespace that must be excluded is present"	\
+    assertFalse "path with whitespace that must be excluded is present"        \
                 $(containsName "$CONTENTS" "; echo baz; #/")
 }
 
@@ -312,9 +312,9 @@ testFileExclusionSeparateDir() {
 
     mkdir $TMPDIR/otherdir
     (
-	cd $TMPDIR/otherdir; 
-	$COMMAND --package $PKG --force-download --upstream-version 1 \
-		--watchfile ../$PKG/debian/watch --copyright-file ../$PKG/debian/copyright
+        cd $TMPDIR/otherdir; 
+        $COMMAND --package $PKG --force-download --upstream-version 1 \
+                --watchfile ../$PKG/debian/watch --copyright-file ../$PKG/debian/copyright
     )
     assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
 

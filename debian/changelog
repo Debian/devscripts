@@ -56,6 +56,9 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
       Closes: #827065; MR: !38
     + Document the default values of the 'version' and 'script' options.
       Closes: #907289; MR: !40
+    + Add tests for git mode.
+      - This adds a new build dependency on git.  MR: !42
+      - De-duplicate test code.
 
   [ Sean Whitton ]
   * git-deborig:

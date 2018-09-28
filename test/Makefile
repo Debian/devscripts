@@ -12,6 +12,7 @@ OUR_TESTS= \
 	sadt \
 	uscan \
 	uscan_ftp \
+	uscan_git \
 	uscan_mangle \
 
 test: $(foreach i,$(OUR_TESTS),test_$(i).test)
