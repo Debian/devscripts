@@ -22,14 +22,14 @@ echo '======================================================================='
 test_dir=$(readlink -f "${0%/*}")
 
 if test "$1" = --installed; then
-	shift
+    shift
 else
-	top_srcdir=$(readlink -f "${0%/*}/..")
-	make -C "$top_srcdir/scripts" uscan mk-origtargz uupdate debchange
-	PATH="$top_srcdir/scripts:$PATH"
-	export PATH
-	PERL5LIB="$top_srcdir/lib"
-	export PERL5LIB
+    top_srcdir=$(readlink -f "${0%/*}/..")
+    make -C "$top_srcdir/scripts" uscan mk-origtargz uupdate debchange
+    PATH="$top_srcdir/scripts:$PATH"
+    export PATH
+    PERL5LIB="$top_srcdir/lib"
+    export PERL5LIB
 fi
 COMMAND="uscan --no-conf --compression=xz --dehs"
 
@@ -49,8 +49,8 @@ if !command -v $GPG >/dev/null 2>&1; then
     echo "$GPG missing"
     GPG=gpg2
     if ! command -v $GPG >/dev/null 2>&1; then
-	echo "$GPG missing"
-	exit 1
+    echo "$GPG missing"
+    exit 1
     fi
 fi
 
@@ -61,36 +61,36 @@ PUBLIC_KEYRING=$GPGHOME/pubring.gpg
 
 oneTimeSetUp () {
     $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-	    --output $PRIVATE_KEYRING --dearmor $PRIVATE_KEY
+        --output $PRIVATE_KEYRING --dearmor $PRIVATE_KEY
 
     $GPG -v --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-	    --output $PUBLIC_KEYRING --dearmor $PUBLIC_KEY
+        --output $PUBLIC_KEYRING --dearmor $PUBLIC_KEY
 
     $GPG --homedir "$GPGHOME" --no-options -q --batch --no-default-keyring \
-	    --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
-	    --list-keys --verbose
+        --secret-keyring $PRIVATE_KEYRING --default-key 72543FAF \
+        --list-keys --verbose
 
     export GNUPGHOME=$GPGHOME
 }
 
 spawnGitRepo(){
-	mkdir -p $TMPDIR/repo
-	(cd $TMPDIR/repo
-	git init
-	git config user.name "Joe Developer"
-	git config user.email "none@debian.org"
-	touch changelog file.c
-	git add changelog file.c
-	git commit -a -m 'Init'
-	for version in 1.0 2.0; do
-		echo "# Version $version" >> file.c
-		cat >> changelog <<END
+    mkdir -p $TMPDIR/repo
+    (cd $TMPDIR/repo
+    git init
+    git config user.name "Joe Developer"
+    git config user.email "none@debian.org"
+    touch changelog file.c
+    git add changelog file.c
+    git commit -a -m 'Init'
+    for version in 1.0 2.0; do
+        echo "# Version $version" >> file.c
+        cat >> changelog <<END
 Version $version
 
 END
-		git commit -a -m "Releasing $version"
-		git tag -s -u 72543FAF -m "Version $version" "v$version"
-	done)
+        git commit -a -m "Releasing $version"
+        git tag -s -u 72543FAF -m "Version $version" "v$version"
+    done)
 }
 
 trap cleanup 1 2 3 13 15
@@ -105,11 +105,11 @@ containsName(){
 PKG=foo
 
 makeDebianDir() {
-	WATCHARGS=$1
-	TMPDIR=$(mktemp -d)
-	mkdir -p $TMPDIR/$PKG/debian/upstream
-	spawnGitRepo
-	REPO=$TMPDIR/REPO
+    WATCHARGS=$1
+    TMPDIR=$(mktemp -d)
+    mkdir -p $TMPDIR/$PKG/debian/upstream
+    spawnGitRepo
+    REPO=$TMPDIR/REPO
 
     cat <<END > $TMPDIR/$PKG/debian/watch
 version=4
@@ -124,33 +124,33 @@ $PKG (0-1) unstable; urgency=low
 
  -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
 END
-	cp -f $test_dir/uscan/PUBLIC_KEY.asc $TMPDIR/$PKG/debian/upstream/signing-key.asc
+    cp -f $test_dir/uscan/PUBLIC_KEY.asc $TMPDIR/$PKG/debian/upstream/signing-key.asc
 }
 
 helperLaunch() {
-	WATCHARGS=$1
-	ARGS=$2
-	makeDebianDir $WATCHARGS
-	OUTPUT=$( cd $TMPDIR/$PKG ; $COMMAND --watchfile=debian/watch $ARGS)
-	assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
+    WATCHARGS=$1
+    ARGS=$2
+    makeDebianDir $WATCHARGS
+    OUTPUT=$( cd $TMPDIR/$PKG ; $COMMAND --watchfile=debian/watch $ARGS)
+    assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
 }
 
 testGit() {
-	helperLaunch "pgpmode=none"
-	TARBALL=${PKG}_2.0.orig.tar.xz
-	assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-2.0.tar.xz ]"
-	assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
-	assertTrue 'pristine tarball is a symlink' "[ -L $TMPDIR/$TARBALL ]"
-	cleanup
+    helperLaunch "pgpmode=none"
+    TARBALL=${PKG}_2.0.orig.tar.xz
+    assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-2.0.tar.xz ]"
+    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
+    assertTrue 'pristine tarball is a symlink' "[ -L $TMPDIR/$TARBALL ]"
+    cleanup
 }
 
 testGitSignedTag() {
-	helperLaunch "pgpmode=gittag"
-	TARBALL=${PKG}_2.0.orig.tar.xz
-	assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-2.0.tar.xz ]"
-	assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
-	assertTrue 'pristine tarball is a symlink' "[ -L $TMPDIR/$TARBALL ]"
-	cleanup
+    helperLaunch "pgpmode=gittag"
+    TARBALL=${PKG}_2.0.orig.tar.xz
+    assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-2.0.tar.xz ]"
+    assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
+    assertTrue 'pristine tarball is a symlink' "[ -L $TMPDIR/$TARBALL ]"
+    cleanup
 }
 
 . shunit2
