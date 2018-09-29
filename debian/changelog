@@ -64,6 +64,17 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
   * git-deborig:
     + Don't fail when .git/info does not exist.  Closes: #909339; MR: !29
 
+  [ James McCoy ]
+  * Audit usage of Dpkg::Version in all scripts.  MR: !44
+    + mk-build-deps: Check whether version object exists before trying to use
+      it.  This silences Dpkg::Version's new warning about usage in boolean
+      context.
+    + Devscripts::Uscan::WatchLine: Add missing Dpkg::Version import
+    + chdist: Explicitly import version_compare() from Dpkg::Version
+    + mk-origtargz: Use Dpkg::Version->is_native() instead of reading
+      internals
+    + git-deborig: Check sanity of version object before using it
+
  -- Mattia Rizzolo <mattia@debian.org>  Mon, 03 Sep 2018 22:42:37 +0200
 
 devscripts (2.18.4) unstable; urgency=medium
