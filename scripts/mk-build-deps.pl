@@ -524,7 +524,10 @@ sub build_equiv
     # Allow the file not to exist to ease testing
     print EQUIVS "Readme: $readme\n" if -r $readme;
 
-    my $version = $opts->{version} || '1.0';
+    my $version = '1.0';
+    if (exists $opts->{version}) {
+	$version = $opts->{version};
+    }
     print EQUIVS "Version: $version\n";
 
     print EQUIVS "Description: build-dependencies for $opts->{name}\n" .

@@ -21,6 +21,7 @@ use Devscripts::Uscan::Keyring;
 use Devscripts::Uscan::Output;
 use Devscripts::Uscan::Utils;
 use Dpkg::IPC;
+use Dpkg::Version;
 use File::Basename;
 use File::Spec::Functions qw/catfile/;
 use HTTP::Headers;

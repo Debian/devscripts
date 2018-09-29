@@ -148,7 +148,7 @@ use File::Path qw(make_path);
 use File::Basename;
 use Getopt::Long qw(:config gnu_compat bundling require_order);
 use Cwd qw(abs_path cwd);
-use Dpkg::Version;
+use Dpkg::Version qw(version_compare);
 use Pod::Usage;
 
 # Redefine Pod::Text's cmd_i so pod2usage converts I<...> to <...> instead of
