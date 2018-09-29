@@ -42,7 +42,7 @@ sub new {
 
             # Need to convert to an armored key
             $keyring = "debian/upstream/signing-key.asc";
-            uscan_warn "Found deprecated binary keyring ($binkeyring)."
+            uscan_warn "Found deprecated binary keyring ($binkeyring). "
               . "Please save it in armored format in $keyring. For example:\n"
               . "   gpg --output $keyring --enarmor $binkeyring";
             spawn(
