@@ -131,11 +131,12 @@ if ( $user_version ) {
 } else {
     $version = $changelog->{Version};
 }
-my $source = $changelog->{Source};
-my $upstream_version = $version->version();
 
 # Sanity check #3
 die "version number $version is not valid ..\n" unless $version->is_valid();
+
+my $source = $changelog->{Source};
+my $upstream_version = $version->version();
 
 # Sanity check #3
 # Only complain if the user didn't supply a version, because the user
