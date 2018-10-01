@@ -7,7 +7,8 @@ use Devscripts::Uscan::Utils;
 use Exporter qw(import);
 use Devscripts::Uscan::_xtp;
 
-our @EXPORT = qw(http_search http_upstream_url http_newfile_base http_clean);
+our @EXPORT = qw(http_search http_upstream_url http_newfile_base http_clean
+  html_search parse_href);
 
 *http_newfile_base = \&Devscripts::Uscan::_xtp::_xtp_newfile_base;
 
@@ -68,114 +69,7 @@ sub http_search {
     uscan_debug
       "received content:\n$content\n[End of received content] by HTTP";
 
-    # pagenmangle: should not abuse this slow operation
-    if (
-        mangle(
-            $self->watchfile, \$self->line,
-            'pagemangle:\n', [ @{ $self->pagemangle } ],
-            \$content
-        )
-      )
-    {
-        return undef;
-    }
-    if (   !$self->shared->{bare}
-        and $content =~ m%^<[?]xml%i
-        and $content =~ m%xmlns="http://s3.amazonaws.com/doc/2006-03-01/"%
-        and $content !~ m%<Key><a\s+href% )
-    {
-     # this is an S3 bucket listing.  Insert an 'a href' tag
-     # into the content for each 'Key', so that it looks like html (LP: #798293)
-        uscan_warn
-"*** Amazon AWS special case code is deprecated***\nUse opts=pagemangle rule, instead";
-        $content =~ s%<Key>([^<]*)</Key>%<Key><a href="$1">$1</a></Key>%g;
-        uscan_debug
-"processed content:\n$content\n[End of processed content] by Amazon AWS special case code";
-    }
-    clean_content( \$content );
-
-    # Is there a base URL given?
-    if ( $content =~ /<\s*base\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/i ) {
-
-        # Ensure it ends with /
-        $self->parse_result->{urlbase} = "$2/";
-        $self->parse_result->{urlbase} =~ s%//$%/%;
-    }
-    else {
-        # May have to strip a base filename
-        ( $self->parse_result->{urlbase} = $self->parse_result->{base} ) =~
-          s%/[^/]*$%/%;
-    }
-    uscan_debug
-"processed content:\n$content\n[End of processed content] by fix bad HTML code";
-
-# search hrefs in web page to obtain a list of uversionmangled version and matching download URL
-    {
-        local $, = ',';
-        uscan_verbose "Matching pattern:\n   @{$self->{patterns}}";
-    }
-    my @hrefs;
-    while ( $content =~ m/<\s*a\s+[^>]*(?<=\s)href\s*=\s*([\"\'])(.*?)\1/sgi ) {
-        my $href = $2;
-        my $mangled_version;
-        $href = fix_href($href);
-        if ( defined $self->hrefdecode ) {
-            if ( $self->hrefdecode eq 'percent-encoding' ) {
-                uscan_debug "... Decoding from href: $href";
-                $href =~ s/%([A-Fa-f\d]{2})/chr hex $1/eg;
-            }
-            else {
-                uscan_warn "Illegal value for hrefdecode: "
-                  . "$self->{hrefdecode}";
-                return undef;
-            }
-        }
-        uscan_debug "Checking href $href";
-        foreach my $_pattern ( @{ $self->patterns } ) {
-            if ( $href =~ m&^$_pattern$& ) {
-                if ( $self->watch_version == 2 ) {
-
-                    # watch_version 2 only recognised one group; the code
-                    # below will break version 2 watch files with a construction
-                    # such as file-([\d\.]+(-\d+)?) (bug #327258)
-                    $mangled_version = $1;
-                }
-                else {
-                    # need the map { ... } here to handle cases of (...)?
-                    # which may match but then return undef values
-                    if ( $self->versionless ) {
-
-                        # exception, otherwise $mangled_version = 1
-                        $mangled_version = '';
-                    }
-                    else {
-                        $mangled_version = join( ".",
-                            map { $_ if defined($_) } $href =~ m&^$_pattern$& );
-                    }
-
-                    if (
-                        mangle(
-                            $self->watchfile,  \$self->line,
-                            'uversionmangle:', \@{ $self->uversionmangle },
-                            \$mangled_version
-                        )
-                      )
-                    {
-                        return undef;
-                    }
-                }
-                my $match = '';
-                if ( defined $self->shared->{download_version} ) {
-                    if ( $mangled_version eq $self->shared->{download_version} )
-                    {
-                        $match = "matched with the download version";
-                    }
-                }
-                my $priority = $mangled_version . '-' . get_priority($href);
-                push @hrefs, [ $priority, $mangled_version, $href, $match ];
-            }
-        }
-    }
+    my @hrefs = $self->html_search($content);
     if (@hrefs) {
         @hrefs = Devscripts::Versort::versort(@hrefs);
         my $msg =
@@ -411,7 +305,7 @@ sub http_newdir {
 }
 
 # Nothing to clean here
-sub http_clean {0}
+sub http_clean { 0 }
 
 sub clean_content {
     my ($content) = @_;
@@ -424,6 +318,124 @@ sub clean_content {
     # Strip comments
     $$content =~ s/<!-- .*?-->//sg;
     return $content;
+}
+
+sub html_search {
+    my ( $self, $content ) = @_;
+
+    # pagenmangle: should not abuse this slow operation
+    if (
+        mangle(
+            $self->watchfile, \$self->line,
+            'pagemangle:\n', [ @{ $self->pagemangle } ],
+            \$content
+        )
+      )
+    {
+        return undef;
+    }
+    if (   !$self->shared->{bare}
+        and $content =~ m%^<[?]xml%i
+        and $content =~ m%xmlns="http://s3.amazonaws.com/doc/2006-03-01/"%
+        and $content !~ m%<Key><a\s+href% )
+    {
+     # this is an S3 bucket listing.  Insert an 'a href' tag
+     # into the content for each 'Key', so that it looks like html (LP: #798293)
+        uscan_warn
+"*** Amazon AWS special case code is deprecated***\nUse opts=pagemangle rule, instead";
+        $content =~ s%<Key>([^<]*)</Key>%<Key><a href="$1">$1</a></Key>%g;
+        uscan_debug
+"processed content:\n$content\n[End of processed content] by Amazon AWS special case code";
+    }
+    clean_content( \$content );
+
+    # Is there a base URL given?
+    if ( $content =~ /<\s*base\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/i ) {
+
+        # Ensure it ends with /
+        $self->parse_result->{urlbase} = "$2/";
+        $self->parse_result->{urlbase} =~ s%//$%/%;
+    }
+    else {
+        # May have to strip a base filename
+        ( $self->parse_result->{urlbase} = $self->parse_result->{base} ) =~
+          s%/[^/]*$%/%;
+    }
+    uscan_debug
+"processed content:\n$content\n[End of processed content] by fix bad HTML code";
+
+# search hrefs in web page to obtain a list of uversionmangled version and matching download URL
+    {
+        local $, = ',';
+        uscan_verbose "Matching pattern:\n   @{$self->{patterns}}";
+    }
+    my @hrefs;
+    while ( $content =~ m/<\s*a\s+[^>]*(?<=\s)href\s*=\s*([\"\'])(.*?)\1/sgi ) {
+        my $href = $2;
+        $href = fix_href($href);
+        if ( defined $self->hrefdecode ) {
+            if ( $self->hrefdecode eq 'percent-encoding' ) {
+                uscan_debug "... Decoding from href: $href";
+                $href =~ s/%([A-Fa-f\d]{2})/chr hex $1/eg;
+            }
+            else {
+                uscan_warn "Illegal value for hrefdecode: "
+                  . "$self->{hrefdecode}";
+                return undef;
+            }
+        }
+        uscan_debug "Checking href $href";
+        foreach my $_pattern ( @{ $self->patterns } ) {
+            if ( $href =~ /^$_pattern$/ ) {
+                push @hrefs, $self->parse_href( $href, $_pattern, $1 );
+            }
+        }
+    }
+    return @hrefs;
+}
+
+sub parse_href {
+    my ( $self, $href, $_pattern, $match ) = @_;
+    my $mangled_version;
+    if ( $self->watch_version == 2 ) {
+
+        # watch_version 2 only recognised one group; the code
+        # below will break version 2 watch files with a construction
+        # such as file-([\d\.]+(-\d+)?) (bug #327258)
+        $mangled_version = $match;
+    }
+    else {
+        # need the map { ... } here to handle cases of (...)?
+        # which may match but then return undef values
+        if ( $self->versionless ) {
+
+            # exception, otherwise $mangled_version = 1
+            $mangled_version = '';
+        }
+        else {
+            $mangled_version =
+              join( ".", map { $_ if defined($_) } $href =~ m&^$_pattern$& );
+        }
+
+        if (
+            mangle(
+                $self->watchfile,  \$self->line,
+                'uversionmangle:', \@{ $self->uversionmangle },
+                \$mangled_version
+            )
+          )
+        {
+            return ();
+        }
+    }
+    my $match = '';
+    if ( defined $self->shared->{download_version} ) {
+        if ( $mangled_version eq $self->shared->{download_version} ) {
+            $match = "matched with the download version";
+        }
+    }
+    my $priority = $mangled_version . '-' . get_priority($href);
+    return [ $priority, $mangled_version, $href, $match ];
 }
 
 1;
