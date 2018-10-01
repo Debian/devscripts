@@ -60,6 +60,9 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
     + Add tests for git mode.
       - This adds a new build dependency on git.  MR: !42
       - De-duplicate test code.
+    + Add a new "searchmode" line option to parse raw/plain content instead of
+      just the href= attributes of <a> html tags.  Can be used to e.g. easily
+      check .json files.  Closes: #897382; MR: !39
 
   [ Sean Whitton ]
   * git-deborig:

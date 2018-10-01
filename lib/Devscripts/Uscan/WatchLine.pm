@@ -110,7 +110,7 @@ has versionmode => (
 
 foreach (
     qw(
-    component hrefdecode repacksuffix unzipopt
+    component hrefdecode repacksuffix unzipopt searchmode
     dirversionmangle downloadurlmangle dversionmangle filenamemangle pagemangle
     oversionmangle oversionmanglepagemangle pgpsigurlmangle uversionmangle
     versionmangle
@@ -457,10 +457,11 @@ EOF
                 # pgpmode
                 # pretty
                 # repacksuffix
+                # searchmode
                 # unzipopt
                 # EOF
                 elsif ( $opt =~
-/^\s*((?:(?:(?:git)?m|hrefdec)od|dat)e|(?:componen|unzipop)t|p(?:gpmode|retty)|repacksuffix)\s*=\s*(.+?)\s*$/
+/^\s*((?:(?:(?:search|git)?m|hrefdec)od|dat)e|(?:componen|unzipop)t|p(?:gpmode|retty)|repacksuffix)\s*=\s*(.+?)\s*$/
                   )
                 {
                     $self->$1($2);

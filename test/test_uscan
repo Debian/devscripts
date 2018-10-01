@@ -373,4 +373,45 @@ END
 
 }
 
+testPlainMode() {
+    PKG=foo
+    TMPDIR=$(mktemp -d)
+    spawnHttpServer
+    PORT=$(cat $TMPDIR/repo/port)
+
+    mkdir -p $TMPDIR/$PKG/debian
+
+    cat <<END > $TMPDIR/$PKG/debian/watch
+version=4
+opts="searchmode=plain" \
+http://localhost:$PORT/src.json http://localhost:$PORT/foo-(\d).zip
+END
+
+    cat <<END > $TMPDIR/$PKG/debian/changelog
+$PKG (0-1) unstable; urgency=low
+
+  * Initial release
+
+ -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
+END
+
+    mkdir -p $TMPDIR/repo/foo
+    touch $TMPDIR/repo/foo/content
+
+    ( cd $TMPDIR/repo ;
+      zip -q -r $PKG-1.zip *;
+      cat > src.json <<END
+{"1.0":{"tarball":"http://localhost:$PORT/foo-1.zip"}}
+END
+      )
+
+    OUTPUT=$( (cd $TMPDIR/$PKG ; $COMMANDDEHS) )
+    assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
+
+    TARBALL=${PKG}_1.orig.tar.$to_comp
+    assertTrue 'unrepacked zipfile present' "[ -f $TMPDIR/${PKG}-1.zip ]"
+
+    cleanup
+}
+
 . shunit2

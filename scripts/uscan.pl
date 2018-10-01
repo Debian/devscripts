@@ -477,6 +477,26 @@ No signature available. (No warning.)
 
 =back
 
+=item B<searchmode=>I<mode>
+
+Set the parsing search mode.
+
+=over
+
+=item B<html> I<(default)>: search pattern in "href" parameter of E<lt>aE<gt>
+HTML tags
+
+=item B<plain>: search pattern in the full page
+
+This is usefull is page content is not HTML but in JSON. Example with
+npmjs.com:
+
+  version=4
+  opts="searchmode=plain" \
+   https://registry.npmjs.org/aes-js https://registry.npmjs.com/aes-js/-/aes-js-(\d[\d\.]*)@ARCHIVE_EXT@
+
+=back
+
 =item B<decompress>
 
 Decompress compressed archive before the pgp/gpg signature verification.
