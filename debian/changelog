@@ -60,6 +60,8 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
     + Add tests for git mode.
       - This adds a new build dependency on git.  MR: !42
       - De-duplicate test code.
+    + Add "searchmode" line option to parse brut content. The goal is to avoid
+      using fakeupstream.cgi for npmjs packages.  Closes: #897382; MR: !39
 
   [ Sean Whitton ]
   * git-deborig:

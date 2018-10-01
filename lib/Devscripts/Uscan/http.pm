@@ -8,7 +8,7 @@ use Exporter qw(import);
 use Devscripts::Uscan::_xtp;
 
 our @EXPORT = qw(http_search http_upstream_url http_newfile_base http_clean
-  html_search parse_href);
+  html_search plain_search parse_href);
 
 *http_newfile_base = \&Devscripts::Uscan::_xtp::_xtp_newfile_base;
 
@@ -69,7 +69,18 @@ sub http_search {
     uscan_debug
       "received content:\n$content\n[End of received content] by HTTP";
 
-    my @hrefs = $self->html_search($content);
+    my @hrefs;
+    if ( !$self->searchmode or $self->searchmode eq 'html' ) {
+        @hrefs = $self->html_search($content);
+    }
+    elsif ( $self->searchmode eq 'plain' ) {
+        @hrefs = $self->plain_search($content);
+    }
+    else {
+        uscan_warn 'Unknown searchmode "' . $self->searchmode . '", skipping';
+        return undef;
+    }
+
     if (@hrefs) {
         @hrefs = Devscripts::Versort::versort(@hrefs);
         my $msg =
@@ -389,6 +400,17 @@ sub html_search {
             if ( $href =~ /^$_pattern$/ ) {
                 push @hrefs, $self->parse_href( $href, $_pattern, $1 );
             }
+        }
+    }
+    return @hrefs;
+}
+
+sub plain_search {
+    my ( $self, $content ) = @_;
+    my @hrefs;
+    foreach my $_pattern ( @{ $self->patterns } ) {
+        while ( $content =~ s/.*?($_pattern)// ) {
+            push @hrefs, $self->parse_href( $1, $_pattern, $2 );
         }
     }
     return @hrefs;
