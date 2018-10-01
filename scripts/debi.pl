@@ -34,6 +34,7 @@ use Dpkg::Control;
 use Dpkg::Changelog::Parse qw(changelog_parse);
 use IPC::Run qw(run);
 use IO::Handle;
+use Dpkg::IPC;
 
 my $progname = basename($0, '.pl');    # the '.pl' is for when we're debugging
 my $modified_conf_msg;
@@ -128,7 +129,7 @@ my $debsdir;
 my $debsdir_warning;
 my $check_dirname_level = 1;
 my $check_dirname_regex = 'PACKAGE(-.+)?';
-my $install_tool        = 'apt-get';
+my $install_tool        = (-t STDOUT ? 'apt' : 'apt-get');
 
 # Next, read configuration files and then command line
 # The next stuff is boilerplate
@@ -411,13 +412,19 @@ if (!@debs) {
 if ($progname eq 'debi') {
     my @upgrade = $opt_upgrade ? ('-O') : ();
     if ($opt_with_depends) {
-        system('debpkg', @upgrade, '--unpack', @debs) == 0
-          or die "$progname: debpkg --unpack failed \n";
-        system($install_tool, '-f', 'install') == 0
-          or die "$progname: " . $install_tool . ' -f install failed\n';
+        if ($install_tool =~ /^apt(?:-get)?$/) {
+            spawn(exec => [$install_tool, 'install', "./$changes"]);
+        } else {
+            spawn(exec => ['debpkg', @upgrade, '--unpack', @debs]);
+            spawn(exec => [$install_tool, '-f', 'install']);
+        }
     } else {
-        system('debpkg', @upgrade, '-i', @debs) == 0
-          or die "$progname: debpkg -i failed\n";
+        if ($install_tool =~ /^apt(?:-get)?$/) {
+            spawn(exec =>
+                  [$install_tool, 'install', '--only-upgrade', "./$changes"]);
+        } else {
+            spawn(exec => ['debpkg', @upgrade, '-i', @debs]);
+        }
     }
 } else {
     # $progname eq 'debc'
