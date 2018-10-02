@@ -26,30 +26,34 @@ use Getopt::Long qw(:config bundling permute no_getopt_compat);
 BEGIN {
     pop @INC if $INC[-1] eq '.';
     # Load the URI::Escape and LWP::UserAgent modules safely
-    my $progname = basename($0,'.pl');
+    my $progname = basename($0, '.pl');
     eval { require URI::Escape; };
     if ($@) {
-       if ($@ =~ /^Can\'t locate URI\/Escape\.pm/) {
-           die "$progname: you must have the liburi-perl package installed\nto use this script\n";
-       }
-       die "$progname: problem loading the URI::Escape module:\n  $@\nHave you installed the liburi-perl package?\n";
+        if ($@ =~ /^Can\'t locate URI\/Escape\.pm/) {
+            die
+"$progname: you must have the liburi-perl package installed\nto use this script\n";
+        }
+        die
+"$progname: problem loading the URI::Escape module:\n  $@\nHave you installed the liburi-perl package?\n";
     }
     import URI::Escape;
 
     eval { require LWP::UserAgent; };
     if ($@) {
-       my $progname = basename $0;
-       if ($@ =~ /^Can\'t locate LWP/) {
-           die "$progname: you must have the libwww-perl package installed\nto use this script\n";
-       }
-       die "$progname: problem loading the LWP::UserAgent module:\n  $@\nHave you installed the libwww-perl package?\n";
+        my $progname = basename $0;
+        if ($@ =~ /^Can\'t locate LWP/) {
+            die
+"$progname: you must have the libwww-perl package installed\nto use this script\n";
+        }
+        die
+"$progname: problem loading the LWP::UserAgent module:\n  $@\nHave you installed the libwww-perl package?\n";
     }
     import LWP::UserAgent;
 }
 
 # global variables
 
-my $progname = basename($0,'.pl');  # the '.pl' is for when we're debugging
+my $progname = basename($0, '.pl');    # the '.pl' is for when we're debugging
 my $modified_conf_msg;
 my $dcontrol_url;
 my $opt;
@@ -102,37 +106,37 @@ EOF
 sub apt_get {
     my ($arg) = @_;
     unless ($arg =~ /^([\w.+-]+)/) {
-	die "$arg does not start with a valid package name\n";
+        die "$arg does not start with a valid package name\n";
     }
     my $url = "$dcontrol_url?package=" . uri_escape($1);
     if ($arg =~ /=([\w~:.+-]+)/) {
-	$url .= "&version=" . uri_escape($1);
+        $url .= "&version=" . uri_escape($1);
     }
     if ($arg =~ /@([\w.-]+)/) {
-	$url .= "&architecture=$1";
+        $url .= "&architecture=$1";
     }
     if ($arg =~ m!/([\w-]*):([\w/-]*)//([\w/-]*)!) {
-	$url .= "&archive=$1&suite=$2&component=$3";
+        $url .= "&archive=$1&suite=$2&component=$3";
     } elsif ($arg =~ m!/([\w/-]*)//([\w/-]*)!) {
-	$url .= "&suite=$1&component=$2";
+        $url .= "&suite=$1&component=$2";
     } elsif ($arg =~ m!/([\w-]*):([\w-]*)/([\w/-]*)!) {
-	$url .= "&archive=$1&suite=$2&component=$3";
+        $url .= "&archive=$1&suite=$2&component=$3";
     } elsif ($arg =~ m!/([\w-]*):([\w-]*)!) {
-	$url .= "&archive=$1&suite=$2";
+        $url .= "&archive=$1&suite=$2";
     } elsif ($arg =~ m!/([\w-]*)/([\w/-]*)!) {
-	$url .= "&suite=$1&component=$2";
+        $url .= "&suite=$1&component=$2";
     } elsif ($arg =~ m!/([\w\/-]+)!) {
-	$url .= "&suite=$1";
+        $url .= "&suite=$1";
     }
     if ($opt->{'show-suite'}) {
-	$url .= "&annotate=yes";
+        $url .= "&annotate=yes";
     }
     print "$url\n" if $opt->{debug};
-    my $response = $ua->get ($url);
+    my $response = $ua->get($url);
     if ($response->is_success) {
-	print $response->content . "\n";
+        print $response->content . "\n";
     } else {
-	die $response->status_line;
+        die $response->status_line;
     }
 }
 
@@ -143,27 +147,26 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
     shift;
 } else {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
-    my %config_vars = (
-		       'DCONTROL_URL' => 'https://qa.debian.org/cgi-bin/dcontrol',
-		       );
+    my %config_vars
+      = ('DCONTROL_URL' => 'https://qa.debian.org/cgi-bin/dcontrol',);
     my %config_default = %config_vars;
 
     my $shell_cmd;
     # Set defaults
     foreach my $var (keys %config_vars) {
-	$shell_cmd .= "$var='$config_vars{$var}';\n";
+        $shell_cmd .= "$var='$config_vars{$var}';\n";
     }
-    $shell_cmd .= 'for file in ' . join(" ",@config_files) . "; do\n";
+    $shell_cmd .= 'for file in ' . join(" ", @config_files) . "; do\n";
     $shell_cmd .= '[ -f $file ] && . $file; done;' . "\n";
     # Read back values
     foreach my $var (keys %config_vars) { $shell_cmd .= "echo \$$var;\n" }
     my $shell_out = `/bin/bash -c '$shell_cmd'`;
-    @config_vars{keys %config_vars} = split /\n/, $shell_out, -1;
+    @config_vars{ keys %config_vars } = split /\n/, $shell_out, -1;
 
     foreach my $var (sort keys %config_vars) {
-	if ($config_vars{$var} ne $config_default{$var}) {
-	    $modified_conf_msg .= "  $var=$config_vars{$var}\n";
-	}
+        if ($config_vars{$var} ne $config_default{$var}) {
+            $modified_conf_msg .= "  $var=$config_vars{$var}\n";
+        }
     }
     $modified_conf_msg ||= "  (none)\n";
     chomp $modified_conf_msg;
@@ -173,27 +176,29 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 
 # handle options
 GetOptions(
-    "d|debug"      =>  \$opt->{'debug'},
-    "s|show-suite" =>  \$opt->{'show-suite'},
-    "h|help"       =>  \$opt->{'help'},
-    "V|version"    =>  \$opt->{'version'},
-)
-    or die "$progname: unrecognised option. Run $progname --help for more details.\n";
+    "d|debug"      => \$opt->{'debug'},
+    "s|show-suite" => \$opt->{'show-suite'},
+    "h|help"       => \$opt->{'help'},
+    "V|version"    => \$opt->{'version'},
+  )
+  or die
+  "$progname: unrecognised option. Run $progname --help for more details.\n";
 
-if ($opt->{'help'}) { usage(); exit 0; }
+if ($opt->{'help'})    { usage();   exit 0; }
 if ($opt->{'version'}) { version(); exit 0; }
 if ($opt->{'no-conf'}) {
-    die "$progname: --no-conf is only acceptable as the first command-line option!\n";
+    die
+"$progname: --no-conf is only acceptable as the first command-line option!\n";
 }
 
-if (! @ARGV) {
+if (!@ARGV) {
     usage();
     exit 1;
 }
 
 # handle arguments
 while (my $arg = shift @ARGV) {
-    apt_get ($arg);
+    apt_get($arg);
 }
 
 =head1 NAME

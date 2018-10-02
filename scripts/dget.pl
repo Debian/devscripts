@@ -39,12 +39,12 @@ use File::Basename;
 
 # global variables
 
-my $progname = basename($0,'.pl');  # the '.pl' is for when we're debugging
+my $progname = basename($0, '.pl');    # the '.pl' is for when we're debugging
 my $found_dsc;
 my $wget;
 my $opt;
 my $backup_dir = "backup";
-my @dget_path = ("/var/cache/apt/archives");
+my @dget_path  = ("/var/cache/apt/archives");
 my $modified_conf_msg;
 
 my $compression_re = compression_get_file_extension_regex();
@@ -55,7 +55,8 @@ if (system("command -v curl >/dev/null 2>&1") == 0) {
 } elsif (system("command -v wget >/dev/null 2>&1") == 0) {
     $wget = "wget";
 } else {
-    die "$progname: can't find either curl or wget; you need at least one of these\ninstalled to run me!\n";
+    die
+"$progname: can't find either curl or wget; you need at least one of these\ninstalled to run me!\n";
 }
 
 # functions
@@ -105,22 +106,21 @@ GNU General Public License, version 2 or later.
 EOF
 }
 
-
 sub wget {
     my ($file, $url) = @_;
 
     # schemes not supported by all backends
     if ($url =~ m!^(file|copy):(.+)!) {
-	my $path = abs_path($2);
-	unless ($path) {
-	    warn "$progname: unable to resolve full path for $2: $!\n";
-	    return 1;
-	}
-	if ($1 eq "copy" or not link($path, $file)) {
-	    system 'cp', '-aL', $path, $file;
-	    return $? >> 8;
-	}
-	return;
+        my $path = abs_path($2);
+        unless ($path) {
+            warn "$progname: unable to resolve full path for $2: $!\n";
+            return 1;
+        }
+        if ($1 eq "copy" or not link($path, $file)) {
+            system 'cp', '-aL', $path, $file;
+            return $? >> 8;
+        }
+        return;
     }
 
     my @cmd = ($wget);
@@ -128,8 +128,11 @@ sub wget {
     # with a non-zero error code by default if a document is not found
     push @cmd, "-f", "-L" if $wget eq "curl";
     push @cmd, ($wget eq "wget" ? "-nv" : ("-s", "-S")) if $opt->{'quiet'};
-    push @cmd, ($wget eq "wget" ? "--no-check-certificate" : "--insecure") if $opt->{'insecure'};
-    push @cmd, ($wget eq "wget" ? "--no-cache" : ("--header", "Pragma: no-cache")) if $opt->{'no-cache'};
+    push @cmd, ($wget eq "wget" ? "--no-check-certificate" : "--insecure")
+      if $opt->{'insecure'};
+    push @cmd,
+      ($wget eq "wget" ? "--no-cache" : ("--header", "Pragma: no-cache"))
+      if $opt->{'no-cache'};
     push @cmd, ($wget eq "wget" ? "-O" : "-o");
     system @cmd, $file, $url;
     return $? >> 8;
@@ -139,99 +142,105 @@ sub backup_or_unlink {
     my $file = shift;
     return unless -e $file;
     if ($opt->{'backup'}) {
-	unless (-d $backup_dir) {
-	    mkdir $backup_dir or die "mkdir $backup_dir: $!";
-	}
-	rename $file, "$backup_dir/$file" or die "rename $file $backup_dir/$file: $!";
+        unless (-d $backup_dir) {
+            mkdir $backup_dir or die "mkdir $backup_dir: $!";
+        }
+        rename $file, "$backup_dir/$file"
+          or die "rename $file $backup_dir/$file: $!";
     } else {
-	unlink $file or die "unlink $file: $!";
+        unlink $file or die "unlink $file: $!";
     }
 }
 
 # some files both are in .dsc and .changes, download only once
 my %seen;
+
 sub get_file {
     my ($dir, $file, $md5sum) = @_;
     return 1 if $seen{$file};
 
     if ($md5sum eq "unlink") {
-	backup_or_unlink($file);
+        backup_or_unlink($file);
     }
 
     # check the existing file's md5sum
     if (-e $file) {
-	my $md5 = Digest::MD5->new;
-	my $fh5 = new IO::File($file) or die "$file: $!";
-	my $md5sum_new = Digest::MD5->new->addfile($fh5)->hexdigest();
-	close $fh5;
-	if (not $md5sum or ($md5sum_new eq $md5sum)) {
-	    print "$progname: using existing $file\n" unless $opt->{'quiet'};
-	} else {
-	    print "$progname: removing $file (md5sum does not match)\n" unless $opt->{'quiet'};
-	    backup_or_unlink($file);
-	}
+        my $md5        = Digest::MD5->new;
+        my $fh5        = new IO::File($file) or die "$file: $!";
+        my $md5sum_new = Digest::MD5->new->addfile($fh5)->hexdigest();
+        close $fh5;
+        if (not $md5sum or ($md5sum_new eq $md5sum)) {
+            print "$progname: using existing $file\n" unless $opt->{'quiet'};
+        } else {
+            print "$progname: removing $file (md5sum does not match)\n"
+              unless $opt->{'quiet'};
+            backup_or_unlink($file);
+        }
     }
 
     # look for the file in other local directories
     unless (-e $file) {
-	foreach my $path (@dget_path) {
-	    next unless -e "$path/$file";
+        foreach my $path (@dget_path) {
+            next unless -e "$path/$file";
 
-	    my $fh5 = new IO::File("$path/$file") or next;
-	    my $md5 = Digest::MD5->new;
-	    my $md5sum_new = Digest::MD5->new->addfile($fh5)->hexdigest();
-	    close $fh5;
+            my $fh5        = new IO::File("$path/$file") or next;
+            my $md5        = Digest::MD5->new;
+            my $md5sum_new = Digest::MD5->new->addfile($fh5)->hexdigest();
+            close $fh5;
 
-	    if ($md5sum_new eq $md5sum) {
-		if (link "$path/$file", $file) {
-		    print "$progname: using $path/$file (hardlink)\n" unless $opt->{'quiet'};
-		} else {
-		    print "$progname: using $path/$file (copy)\n" unless $opt->{'quiet'};
-		    system 'cp', '-aL', "$path/$file", $file;
-		}
-		last;
-	    }
-	}
+            if ($md5sum_new eq $md5sum) {
+                if (link "$path/$file", $file) {
+                    print "$progname: using $path/$file (hardlink)\n"
+                      unless $opt->{'quiet'};
+                } else {
+                    print "$progname: using $path/$file (copy)\n"
+                      unless $opt->{'quiet'};
+                    system 'cp', '-aL', "$path/$file", $file;
+                }
+                last;
+            }
+        }
     }
 
     # finally get it from the web
     unless (-e $file) {
-	print "$progname: retrieving $dir/$file\n" unless $opt->{'quiet'};
-	if (wget($file, "$dir/$file")) {
-	    warn "$progname: $wget $file $dir/$file failed\n";
-	    unlink $file;
-	}
+        print "$progname: retrieving $dir/$file\n" unless $opt->{'quiet'};
+        if (wget($file, "$dir/$file")) {
+            warn "$progname: $wget $file $dir/$file failed\n";
+            unlink $file;
+        }
     }
 
     # try apt-get if it is still not there
     my $ext = $compression_re;
-    if (not -e $file and $file =~ m!^([a-z0-9][a-z0-9.+-]+)_[^/]+\.(?:diff|tar)\.$ext$!) {
-	my @cmd = ('apt-get', 'source', '--print-uris', $1);
-	my $cmd = join ' ', @cmd;
-	open(my $apt, '-|', @cmd) or die "$cmd: $!";
-	while(<$apt>) {
-	    if (/'(\S+)'\s+\S+\s+\d+\s+([\da-f]+)/i and $2 eq $md5sum) {
-		if (wget($file, $1)) {
-		    warn "$progname: $wget $file $1 failed\n";
-		    unlink $file;
-		}
-	    }
-	}
-	close $apt;
+    if (not -e $file
+        and $file =~ m!^([a-z0-9][a-z0-9.+-]+)_[^/]+\.(?:diff|tar)\.$ext$!) {
+        my @cmd = ('apt-get', 'source', '--print-uris', $1);
+        my $cmd = join ' ', @cmd;
+        open(my $apt, '-|', @cmd) or die "$cmd: $!";
+        while (<$apt>) {
+            if (/'(\S+)'\s+\S+\s+\d+\s+([\da-f]+)/i and $2 eq $md5sum) {
+                if (wget($file, $1)) {
+                    warn "$progname: $wget $file $1 failed\n";
+                    unlink $file;
+                }
+            }
+        }
+        close $apt;
     }
 
     # still not there, return
     unless (-e $file) {
-	return 0;
+        return 0;
     }
 
     $seen{$file} = 1;
 
     if ($file =~ /\.(?:changes|dsc)$/) {
-	parse_file($dir, $file);
+        parse_file($dir, $file);
     }
     if ($file =~ /\.dsc$/) {
-	$found_dsc = $file;
+        $found_dsc = $file;
     }
 
     return 1;
@@ -243,12 +252,12 @@ sub parse_file {
     my $fh = new IO::File($file);
     open $fh, $file or die "$file: $!";
     while (<$fh>) {
-	if (/^ ([0-9a-f]{32}) (?:\S+ )*(\S+)$/) {
-	    my ($_sum, $_file) = ($1, $2);
-	    $_file !~ m,[/\x00],
-		or die "File name contains invalid characters: $_file";
+        if (/^ ([0-9a-f]{32}) (?:\S+ )*(\S+)$/) {
+            my ($_sum, $_file) = ($1, $2);
+            $_file !~ m,[/\x00],
+              or die "File name contains invalid characters: $_file";
             get_file($dir, $_file, $_sum) or return;
-	}
+        }
     }
     close $fh;
 }
@@ -256,9 +265,11 @@ sub parse_file {
 sub quote_version {
     my $version = shift;
     $version = quotemeta($version);
-    $version =~ s/^([^:]+:)/(?:$1)?/; # Epochs are not part of the filename
-    $version =~ s/-([^.-]+)$/-$1(?:\\+b\\d+|\.0\.\\d+)?/; # BinNMU: -x -> -x.0.1 -x+by
-    $version =~ s/-([^.-]+\.[^.-]+)$/-$1(?:\\+b\\d+|\.\\d+)?/; # -x.y -> -x.y.1 -x.y+bz
+    $version =~ s/^([^:]+:)/(?:$1)?/;    # Epochs are not part of the filename
+    $version
+      =~ s/-([^.-]+)$/-$1(?:\\+b\\d+|\.0\.\\d+)?/; # BinNMU: -x -> -x.0.1 -x+by
+    $version =~ s/-([^.-]+\.[^.-]+)$/-$1(?:\\+b\\d+|\.\\d+)?/
+      ;                                            # -x.y -> -x.y.1 -x.y+bz
     return $version;
 }
 
@@ -274,98 +285,107 @@ sub apt_get {
     my $qversion = quote_version($version) if $version;
     my @hosts;
 
-    my $apt = IO::File->new("LC_ALL=C apt-cache policy $archpackage |") or die "$!";
-    OUTER: while (<$apt>) {
-	if (not $version and /^  Candidate: (.+)/) {
-	    $version = $1;
-	    $qversion = quote_version($version);
-	}
-	if ($qversion and /^ [ *]{3} ($qversion) \d/) {
-	    while (<$apt>) {
-		last OUTER unless /^  *(?:\d+) (\S+)/;
-		(my $host = $1) =~ s@/$@@;
-		next if $host eq '/var/lib/dpkg/status';
-		push @hosts, $host;
-	    }
-	}
+    my $apt = IO::File->new("LC_ALL=C apt-cache policy $archpackage |")
+      or die "$!";
+  OUTER: while (<$apt>) {
+        if (not $version and /^  Candidate: (.+)/) {
+            $version  = $1;
+            $qversion = quote_version($version);
+        }
+        if ($qversion and /^ [ *]{3} ($qversion) \d/) {
+            while (<$apt>) {
+                last OUTER unless /^  *(?:\d+) (\S+)/;
+                (my $host = $1) =~ s@/$@@;
+                next if $host eq '/var/lib/dpkg/status';
+                push @hosts, $host;
+            }
+        }
     }
     close $apt;
     unless ($version) {
-	die "$progname: $archpackage has no installation candidate\n";
+        die "$progname: $archpackage has no installation candidate\n";
     }
     unless (@hosts) {
-	die "$progname: no hostnames in apt-cache policy $archpackage for version $version found\n";
+        die
+"$progname: no hostnames in apt-cache policy $archpackage for version $version found\n";
     }
 
     $apt = IO::File->new("LC_ALL=C apt-cache show $archpackage=$version |")
-	or die "$!";
+      or die "$!";
     my ($v, $p, $filename, $md5sum);
     while (<$apt>) {
-	if (/^Package: $qpackage$/) {
-	    $p = $package;
-	}
-	if (/^Version: $qversion$/) {
-	    $v = $version;
-	}
-	if (/^Filename: (.*)/) {
-	    $filename = $1;
-	}
-	if (/^MD5sum: (.*)/) {
-	    $md5sum = $1;
-	}
-	if (/^Description:/) { # we assume this is the last field
-	    if ($p and $v and $filename) {
-		last;
-	    }
-	    undef $p;
-	    undef $v;
-	    undef $filename;
-	    undef $md5sum;
-	}
+        if (/^Package: $qpackage$/) {
+            $p = $package;
+        }
+        if (/^Version: $qversion$/) {
+            $v = $version;
+        }
+        if (/^Filename: (.*)/) {
+            $filename = $1;
+        }
+        if (/^MD5sum: (.*)/) {
+            $md5sum = $1;
+        }
+        if (/^Description:/) {    # we assume this is the last field
+            if ($p and $v and $filename) {
+                last;
+            }
+            undef $p;
+            undef $v;
+            undef $filename;
+            undef $md5sum;
+        }
     }
     close $apt;
 
     unless ($filename) {
-	die "$progname: no filename for $archpackage ($version) found\n";
+        die "$progname: no filename for $archpackage ($version) found\n";
     }
 
     # find deb lines matching the hosts in the policy output
     my %repositories;
-    # the regexp within the map below can be removed and replaced with only the quotemeta statement once bug #154868 is fixed
-    my $host_re = '(?:' . (join '|', map { my $host = quotemeta; $host =~ s@^(\w+\\:\\/\\/[^:/]+)\\/@$1(?::[0-9]+)?\\/@; $host; } @hosts) . ')';
+# the regexp within the map below can be removed and replaced with only the quotemeta statement once bug #154868 is fixed
+    my $host_re = '(?:' . (
+        join '|',
+        map {
+            my $host = quotemeta;
+            $host =~ s@^(\w+\\:\\/\\/[^:/]+)\\/@$1(?::[0-9]+)?\\/@;
+            $host;
+        } @hosts
+    ) . ')';
 
     my @sources;
     if (-f "/etc/apt/sources.list") {
-	push @sources, "/etc/apt/sources.list";
+        push @sources, "/etc/apt/sources.list";
     }
     my %dir;
     tie %dir, "IO::Dir", "/etc/apt/sources.list.d";
     foreach (keys %dir) {
-	next unless /\.list$/;
-	push @sources, "/etc/apt/sources.list.d/$_";
+        next unless /\.list$/;
+        push @sources, "/etc/apt/sources.list.d/$_";
     }
 
     foreach my $source (@sources) {
-	$apt = IO::File->new($source) or die "$source: $!";
-	while (<$apt>) {
-	    if (/^\s*deb\s*(?:\[[^]]*\]\s*)?($host_re\b)/) {
-		$repositories{$1} = 1;
-	    }
-	}
-	close $apt;
+        $apt = IO::File->new($source) or die "$source: $!";
+        while (<$apt>) {
+            if (/^\s*deb\s*(?:\[[^]]*\]\s*)?($host_re\b)/) {
+                $repositories{$1} = 1;
+            }
+        }
+        close $apt;
     }
     unless (%repositories) {
-	die "no repository found in /etc/apt/sources.list or sources.list.d";
+        die "no repository found in /etc/apt/sources.list or sources.list.d";
     }
 
     # try each repository in turn
     foreach my $repository (keys %repositories) {
-	my ($dir, $file) = ($repository, $filename);
-	if ($filename =~ /(.*)\/([^\/]*)$/) {
-	    ($dir, $file) = ("$repository/$1", $2);
-	}
+        my ($dir, $file) = ($repository, $filename);
+        if ($filename =~ /(.*)\/([^\/]*)$/) {
+            ($dir, $file) = ("$repository/$1", $2);
+        }
 
-	get_file($dir, $file, $md5sum) and return;
+        get_file($dir, $file, $md5sum) and return;
     }
     exit 1;
 }
@@ -383,33 +403,33 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 } else {
     my @config_files = ('/etc/devscripts.conf', '~/.devscripts');
     my %config_vars = (
-		       'DGET_PATH' => '',
-		       'DGET_UNPACK' => 'yes',
-		       'DGET_VERIFY' => 'yes',
-		       );
+        'DGET_PATH'   => '',
+        'DGET_UNPACK' => 'yes',
+        'DGET_VERIFY' => 'yes',
+    );
     my %config_default = %config_vars;
 
     my $shell_cmd;
     # Set defaults
     foreach my $var (keys %config_vars) {
-	$shell_cmd .= "$var='$config_vars{$var}';\n";
+        $shell_cmd .= "$var='$config_vars{$var}';\n";
     }
-    $shell_cmd .= 'for file in ' . join(" ",@config_files) . "; do\n";
+    $shell_cmd .= 'for file in ' . join(" ", @config_files) . "; do\n";
     $shell_cmd .= '[ -f $file ] && . $file; done;' . "\n";
     # Read back values
     foreach my $var (keys %config_vars) { $shell_cmd .= "echo \$$var;\n" }
     my $shell_out = `/bin/bash -c '$shell_cmd'`;
-    @config_vars{keys %config_vars} = split /\n/, $shell_out, -1;
+    @config_vars{ keys %config_vars } = split /\n/, $shell_out, -1;
 
     foreach my $var (sort keys %config_vars) {
-	if ($config_vars{$var} ne $config_default{$var}) {
-	    $modified_conf_msg .= "  $var=$config_vars{$var}\n";
-	}
+        if ($config_vars{$var} ne $config_default{$var}) {
+            $modified_conf_msg .= "  $var=$config_vars{$var}\n";
+        }
     }
     $modified_conf_msg ||= "  (none)\n";
     chomp $modified_conf_msg;
 
-    $dget_path = $config_vars{'DGET_PATH'};
+    $dget_path   = $config_vars{'DGET_PATH'};
     $dget_unpack = $config_vars{'DGET_UNPACK'} =~ /^y/i;
     $dget_verify = $config_vars{'DGET_VERIFY'} =~ /^y/i;
 }
@@ -417,39 +437,42 @@ if (@ARGV and $ARGV[0] =~ /^--no-?conf$/) {
 # handle options
 Getopt::Long::Configure('bundling');
 GetOptions(
-    "a|all"      =>  \$opt->{'all'},
-    "b|backup"   =>  \$opt->{'backup'},
-    "q|quiet"    =>  \$opt->{'quiet'},
-    "build"      =>  \$opt->{'build'},
-    "d|download-only"
-                 =>  sub { $dget_unpack = 0 },
-    "x|extract"  =>  sub { $dget_unpack = 1 },
-    "u|allow-unauthenticated"
-                 =>  sub { $dget_verify = 0 },
-    "insecure"   =>  \$opt->{'insecure'},
-    "no-cache"   =>  \$opt->{'no-cache'},
-    "noconf|no-conf"   =>  \$opt->{'no-conf'},
-    "path=s"     =>  sub {
-	if ($_[1] eq '') { $dget_path=''; } else { $dget_path .= ":$_[1]"; } },
-    "h|help"     =>  \$opt->{'help'},
-    "V|version"  =>  \$opt->{'version'},
-)
-    or die "$progname: unrecognised option. Run $progname --help for more details.\n";
+    "a|all"                   => \$opt->{'all'},
+    "b|backup"                => \$opt->{'backup'},
+    "q|quiet"                 => \$opt->{'quiet'},
+    "build"                   => \$opt->{'build'},
+    "d|download-only"         => sub { $dget_unpack = 0 },
+    "x|extract"               => sub { $dget_unpack = 1 },
+    "u|allow-unauthenticated" => sub { $dget_verify = 0 },
+    "insecure"                => \$opt->{'insecure'},
+    "no-cache"                => \$opt->{'no-cache'},
+    "noconf|no-conf"          => \$opt->{'no-conf'},
+    "path=s"                  => sub {
+        if ($_[1] eq '') { $dget_path = ''; }
+        else             { $dget_path .= ":$_[1]"; }
+    },
+    "h|help"    => \$opt->{'help'},
+    "V|version" => \$opt->{'version'},
+  )
+  or die
+  "$progname: unrecognised option. Run $progname --help for more details.\n";
 
-if ($opt->{'help'}) { usage(); exit 0; }
+if ($opt->{'help'})    { usage();   exit 0; }
 if ($opt->{'version'}) { version(); exit 0; }
 if ($opt->{'no-conf'}) {
-    die "$progname: --no-conf is only acceptable as the first command-line option!\n";
+    die
+"$progname: --no-conf is only acceptable as the first command-line option!\n";
 }
 
 if ($dget_path) {
     foreach my $p (split /:/, $dget_path) {
-	push @dget_path, $p if -d $p;
+        push @dget_path, $p if -d $p;
     }
 }
 
-if (! @ARGV) {
-    die "Usage: $progname [options] URL|package[=version]\nRun $progname --help for more details.\n";
+if (!@ARGV) {
+    die
+"Usage: $progname [options] URL|package[=version]\nRun $progname --help for more details.\n";
 }
 
 # handle arguments
@@ -457,83 +480,82 @@ for my $arg (@ARGV) {
     $found_dsc = "";
 
     # case 1: URL
-    if ($arg =~ /^((?:copy|file|ftp|gopher|http|rsh|rsync|ssh|www).*)\/([^\/]+\.\w+)$/) {
-	get_file($1, $2, "unlink") or exit 1;
-	if ($found_dsc) {
-	    if ($dget_verify) { # We are duplicating work here a bit as
-		# dpkg-source -x will also verify signatures. Still, we
-		# also want to barf with -d, and on unsigned packages.
-		system 'dscverify', $found_dsc;
-		exit $? >> 8 if $? >> 8 != 0;
-	    }
-	    my @cmd = qw(dpkg-source -x);
-	    push @cmd, '--no-check' unless $dget_verify;
-	    if ($opt->{'build'}) {
-		my @output = `LC_ALL=C @cmd $found_dsc`;
-		my $rc = $?;
-		print @output unless $opt->{'quiet'};
-		exit $rc >> 8 if $rc >> 8 != 0;
-		foreach (@output) {
-		    if ( /^dpkg-source: (?:info: )?extracting .* in (.*)/ ) {
-			chdir $1;
-			exec 'dpkg-buildpackage', '-b', '-uc';
-			die "Unable to run dpkg-buildpackage: $!";
-		    }
-		}
-	    } elsif ($dget_unpack) {
-		system @cmd, $found_dsc;
-		exit $? >> 8 if $? >> 8 != 0;
-	    }
-	}
+    if ($arg
+        =~ /^((?:copy|file|ftp|gopher|http|rsh|rsync|ssh|www).*)\/([^\/]+\.\w+)$/
+    ) {
+        get_file($1, $2, "unlink") or exit 1;
+        if ($found_dsc) {
+            if ($dget_verify) {    # We are duplicating work here a bit as
+                    # dpkg-source -x will also verify signatures. Still, we
+                    # also want to barf with -d, and on unsigned packages.
+                system 'dscverify', $found_dsc;
+                exit $? >> 8 if $? >> 8 != 0;
+            }
+            my @cmd = qw(dpkg-source -x);
+            push @cmd, '--no-check' unless $dget_verify;
+            if ($opt->{'build'}) {
+                my @output = `LC_ALL=C @cmd $found_dsc`;
+                my $rc     = $?;
+                print @output unless $opt->{'quiet'};
+                exit $rc >> 8 if $rc >> 8 != 0;
+                foreach (@output) {
+                    if (/^dpkg-source: (?:info: )?extracting .* in (.*)/) {
+                        chdir $1;
+                        exec 'dpkg-buildpackage', '-b', '-uc';
+                        die "Unable to run dpkg-buildpackage: $!";
+                    }
+                }
+            } elsif ($dget_unpack) {
+                system @cmd, $found_dsc;
+                exit $? >> 8 if $? >> 8 != 0;
+            }
+        }
 
-    # case 2a: --all srcpackage[=version]
-    } elsif ($opt->{'all'} and $arg =~ /^([a-z0-9.+-:]{2,})(?:=([a-zA-Z0-9.:~+-]+))?$/) {
-	my ($source, $version, $arch) = ($1, $2);
-	($source, $arch) = split(/:/, $source, 2);
-	my $cmd = "apt-cache showsrc $source";
-	# unfortunately =version doesn't work here, and even if it did, was the
-	# user referring to the source version or the binary version?  The code
-	# assumes binary version.
-	#$cmd .= "=$version" if ($version);
-	open my $showsrc, '-|', $cmd;
-	my $c = Dpkg::Control->new(type => CTRL_INDEX_SRC);
-	while ($c->parse($showsrc, $cmd)) {
-	    if ($arch) {
-		my @packages = grep { $_ } split /\n/, $c->{'Package-List'};
-		# Find all packages whose architecture is either 'all', 'any',
-		# or the given architecture.  The Package-List lines are
-		# $pkg $debtype $section $priority arch=$archlist
-		foreach my $package (@packages) {
-		    $package =~ s/^\s*//;
-		    my ($binary,
-			$debtype,
-			$section,
-			$priority,
-			$archs) = split(/\s+/, $package, 5);
-		    if ($archs =~ m/all/) {
-			eval { apt_get($binary, $version) } or print "$@";
-		    }
-		    elsif ($archs =~ m/any|[=,]$arch/) {
-			eval { apt_get("$binary:$arch", $version) } or print "$@";
-		    }
-		}
-	    }
-	    else {
-		my @packages = split /, /, $c->{Binary};
-		foreach my $package (@packages) {
-		    eval { apt_get ($package, $version) } or print "$@";
-		}
-	    }
-	    last;
-	}
-	close $showsrc;
+        # case 2a: --all srcpackage[=version]
+    } elsif ($opt->{'all'}
+        and $arg =~ /^([a-z0-9.+-:]{2,})(?:=([a-zA-Z0-9.:~+-]+))?$/) {
+        my ($source, $version, $arch) = ($1, $2);
+        ($source, $arch) = split(/:/, $source, 2);
+        my $cmd = "apt-cache showsrc $source";
+        # unfortunately =version doesn't work here, and even if it did, was the
+        # user referring to the source version or the binary version?  The code
+        # assumes binary version.
+        #$cmd .= "=$version" if ($version);
+        open my $showsrc, '-|', $cmd;
+        my $c = Dpkg::Control->new(type => CTRL_INDEX_SRC);
+        while ($c->parse($showsrc, $cmd)) {
+            if ($arch) {
+                my @packages = grep { $_ } split /\n/, $c->{'Package-List'};
+                # Find all packages whose architecture is either 'all', 'any',
+                # or the given architecture.  The Package-List lines are
+                # $pkg $debtype $section $priority arch=$archlist
+                foreach my $package (@packages) {
+                    $package =~ s/^\s*//;
+                    my ($binary, $debtype, $section, $priority, $archs)
+                      = split(/\s+/, $package, 5);
+                    if ($archs =~ m/all/) {
+                        eval { apt_get($binary, $version) } or print "$@";
+                    } elsif ($archs =~ m/any|[=,]$arch/) {
+                        eval { apt_get("$binary:$arch", $version) }
+                          or print "$@";
+                    }
+                }
+            } else {
+                my @packages = split /, /, $c->{Binary};
+                foreach my $package (@packages) {
+                    eval { apt_get($package, $version) } or print "$@";
+                }
+            }
+            last;
+        }
+        close $showsrc;
 
-    # case 2b: package[=version]
+        # case 2b: package[=version]
     } elsif ($arg =~ /^([a-z0-9.+-:]{2,})(?:=([a-zA-Z0-9.:~+-]+))?$/) {
-	apt_get($1, $2);
+        apt_get($1, $2);
 
     } else {
-	usage();
+        usage();
     }
 }
 

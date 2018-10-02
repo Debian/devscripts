@@ -103,22 +103,22 @@ catch {
 
 # Sanity check #2
 die "pwd doesn't look like a Debian source package ..\n"
-  unless ( -e "debian/changelog" );
+  unless (-e "debian/changelog");
 
 # Process command line args
-my $orig_args = join(" ", map { shell_quote($_) } ( "git", "deborig", @ARGV ));
+my $orig_args = join(" ", map { shell_quote($_) } ("git", "deborig", @ARGV));
 my $overwrite = '';
 my $user_version = '';
-my $user_ref = '';
-my $just_print = '';
-GetOptions (
-            'force|f' => \$overwrite,
-            'just-print' => \$just_print,
-            'version=s' => \$user_version
-           ) || usage();
-if ( scalar @ARGV == 1 ) {
+my $user_ref     = '';
+my $just_print   = '';
+GetOptions(
+    'force|f'    => \$overwrite,
+    'just-print' => \$just_print,
+    'version=s'  => \$user_version
+) || usage();
+if (scalar @ARGV == 1) {
     $user_ref = shift @ARGV;
-} elsif ( scalar @ARGV >= 2) {
+} elsif (scalar @ARGV >= 2) {
     usage();
 }
 
@@ -126,7 +126,7 @@ if ( scalar @ARGV == 1 ) {
 # version too, or parse user-supplied version
 my $version;
 my $changelog = Dpkg::Changelog::Parse->changelog_parse({});
-if ( $user_version ) {
+if ($user_version) {
     $version = Dpkg::Version->new($user_version);
 } else {
     $version = $changelog->{Version};
@@ -135,7 +135,7 @@ if ( $user_version ) {
 # Sanity check #3
 die "version number $version is not valid ..\n" unless $version->is_valid();
 
-my $source = $changelog->{Source};
+my $source           = $changelog->{Source};
 my $upstream_version = $version->version();
 
 # Sanity check #3
@@ -143,19 +143,19 @@ my $upstream_version = $version->version();
 # is not required to include a Debian revision when they pass
 # --version
 die "this looks like a native package .."
-  if ( !$user_version && $version->is_native() );
+  if (!$user_version && $version->is_native());
 
 # Default to gzip
-my $compressor = "gzip -cn";
+my $compressor  = "gzip -cn";
 my $compression = "gz";
 # Now check if we can use xz
-if ( -e "debian/source/format" ) {
-    open( my $format_fh, '<', "debian/source/format" )
+if (-e "debian/source/format") {
+    open(my $format_fh, '<', "debian/source/format")
       or die "couldn't open debian/source/format for reading";
     my $format = <$format_fh>;
     chomp($format) if defined $format;
-    if ( $format eq "3.0 (quilt)" ) {
-        $compressor = "xz -c";
+    if ($format eq "3.0 (quilt)") {
+        $compressor  = "xz -c";
         $compression = "xz";
     }
     close $format_fh;
@@ -163,14 +163,14 @@ if ( -e "debian/source/format" ) {
 
 my $orig = "../${source}_$upstream_version.orig.tar.$compression";
 die "$orig already exists: not overwriting without --force\n"
-  if ( -e $orig && ! $overwrite && ! $just_print );
+  if (-e $orig && !$overwrite && !$just_print);
 
-if ( $user_ref ) {      # User told us the tag/branch to archive
-    # We leave it to git-archive(1) to determine whether or not this
-    # ref exists; this keeps us forward-compatible
+if ($user_ref) {    # User told us the tag/branch to archive
+        # We leave it to git-archive(1) to determine whether or not this
+        # ref exists; this keeps us forward-compatible
     archive_ref_or_just_print($user_ref);
 } else {    # User didn't specify a tag/branch to archive
-    # Get available git tags
+            # Get available git tags
     my @all_tags = $git->tag();
 
     # convert according to DEP-14 rules
@@ -179,23 +179,26 @@ if ( $user_ref ) {      # User told us the tag/branch to archive
     $git_upstream_version =~ s/\.(?=\.|$|lock$)/.#/g;
 
     # See which candidate version tags are present in the repo
-    my @candidate_tags = ("$git_upstream_version",
-                          "v$git_upstream_version",
-                          "upstream/$git_upstream_version"
-                         );
+    my @candidate_tags = (
+        "$git_upstream_version", "v$git_upstream_version",
+        "upstream/$git_upstream_version"
+    );
     my $lc = List::Compare->new(\@all_tags, \@candidate_tags);
     my @version_tags = $lc->get_intersection();
 
     # If there is only one candidate version tag, we're good to go.
     # Otherwise, let the user know they can tell us which one to use
-    if ( scalar @version_tags > 1 ) {
-        print "tags ", join(", ", @version_tags), " all exist in this repository\n";
-        print "tell me which one you want to make an orig.tar from: $orig_args TAG\n";
+    if (scalar @version_tags > 1) {
+        print "tags ", join(", ", @version_tags),
+          " all exist in this repository\n";
+        print
+"tell me which one you want to make an orig.tar from: $orig_args TAG\n";
         exit 1;
-    } elsif ( scalar @version_tags < 1 ) {
+    } elsif (scalar @version_tags < 1) {
         print "couldn't find any of the following tags: ",
           join(", ", @candidate_tags), "\n";
-        print "tell me a tag or branch head to make an orig.tar from: $orig_args COMMITTISH\n";
+        print
+"tell me a tag or branch head to make an orig.tar from: $orig_args COMMITTISH\n";
         exit 1;
     } else {
         my $tag = shift @version_tags;
@@ -206,45 +209,48 @@ if ( $user_ref ) {      # User told us the tag/branch to archive
 sub archive_ref_or_just_print {
     my $ref = shift;
 
-    my $cmd = ['git', '-c', "tar.tar.${compression}.command=${compressor}",
-               'archive', "--prefix=${source}-${upstream_version}/",
-               '-o', $orig, $ref];
-    if ( $just_print ) {
+    my $cmd = [
+        'git', '-c', "tar.tar.${compression}.command=${compressor}",
+        'archive', "--prefix=${source}-${upstream_version}/",
+        '-o', $orig, $ref
+    ];
+    if ($just_print) {
         print "$ref\n";
         print "$orig\n";
         my @cmd_mapped = map { shell_quote($_) } @$cmd;
         print "@cmd_mapped\n";
     } else {
-        my ($info_dir) =
-          $git->rev_parse(qw|--git-path info/|);
-        my ($info_attributes) =
-          $git->rev_parse(qw|--git-path info/attributes|);
-        my ($deborig_attributes) =
-          $git->rev_parse(qw|--git-path info/attributes-deborig|);
+        my ($info_dir) = $git->rev_parse(qw|--git-path info/|);
+        my ($info_attributes)
+          = $git->rev_parse(qw|--git-path info/attributes|);
+        my ($deborig_attributes)
+          = $git->rev_parse(qw|--git-path info/attributes-deborig|);
 
         # sometimes the info/ dir may not exist
-        mkdir $info_dir unless ( -e $info_dir );
+        mkdir $info_dir unless (-e $info_dir);
 
         # For compatibility with dgit, we have to override any
         # export-subst and export-ignore git attributes that might be set
         rename $info_attributes, $deborig_attributes
-          if ( -e $info_attributes );
+          if (-e $info_attributes);
         my $attributes_fh;
-        unless ( open( $attributes_fh, '>', $info_attributes ) ) {
+        unless (open($attributes_fh, '>', $info_attributes)) {
             rename $deborig_attributes, $info_attributes
-              if ( -e $deborig_attributes );
+              if (-e $deborig_attributes);
             die "could not open $info_attributes for writing";
         }
         print $attributes_fh "* -export-subst\n";
         print $attributes_fh "* -export-ignore\n";
         close $attributes_fh;
 
-        spawn(exec => $cmd,
-              wait_child => 1,
-              nocheck => 1);
+        spawn(
+            exec       => $cmd,
+            wait_child => 1,
+            nocheck    => 1
+        );
 
         # Restore situation before we messed around with git attributes
-        if ( -e $deborig_attributes ) {
+        if (-e $deborig_attributes) {
             rename $deborig_attributes, $info_attributes;
         } else {
             unlink $info_attributes;
@@ -253,5 +259,6 @@ sub archive_ref_or_just_print {
 }
 
 sub usage {
-    die "usage: git deborig [--force|-f] [--just-print] [--version=VERSION] [COMMITTISH]\n";
+    die
+"usage: git deborig [--force|-f] [--just-print] [--version=VERSION] [COMMITTISH]\n";
 }

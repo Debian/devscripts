@@ -1,3 +1,4 @@
+
 =head1 NAME
 
 Devscripts::Uscan::FindFiles - watchfile finder
@@ -61,35 +62,31 @@ sub find_watch_files {
     my $opwd = cwd();
 
     # when --watchfile is used
-    if ( defined $config->watchfile ) {
+    if (defined $config->watchfile) {
         uscan_verbose "Option --watchfile=$config->{watchfile} used";
         my ($config) = (@_);
 
         # no directory traversing then, and things are very simple
-        if ( defined $config->package ) {
+        if (defined $config->package) {
 
             # no need to even look for a changelog!
             return (
-                [
-                    '.', $config->package, $config->uversion,
-                    $config->watchfile
-                ]
+                ['.', $config->package, $config->uversion, $config->watchfile]
             );
-        }
-        else {
+        } else {
             # Check for debian/changelog file
-            until ( -r 'debian/changelog' ) {
+            until (-r 'debian/changelog') {
                 chdir '..' or uscan_die "can't chdir ..: $!";
-                if ( cwd() eq '/' ) {
+                if (cwd() eq '/') {
                     uscan_die "Are you in the source code tree?\n"
                       . "   Cannot find readable debian/changelog anywhere!";
                 }
             }
 
-            my ( $package, $debversion, $uversion ) =
-              scan_changelog( $config, $opwd, 1 );
+            my ($package, $debversion, $uversion)
+              = scan_changelog($config, $opwd, 1);
 
-            return ( [ cwd(), $package, $uversion, $config->watchfile ] );
+            return ([cwd(), $package, $uversion, $config->watchfile]);
         }
     }
 
@@ -122,11 +119,11 @@ sub find_watch_files {
     for my $dir (@dirs) {
         $dir =~ s%/debian$%%;
 
-        unless ( chdir $origdir ) {
+        unless (chdir $origdir) {
             uscan_warn "Couldn't chdir back to $origdir, skipping: $!";
             next;
         }
-        unless ( chdir $dir ) {
+        unless (chdir $dir) {
             uscan_warn "Couldn't chdir $dir, skipping: $!";
             next;
         }
@@ -134,30 +131,29 @@ sub find_watch_files {
         uscan_verbose "Check debian/watch and debian/changelog in $dir";
 
         # Check for debian/watch file
-        if ( -r 'debian/watch' ) {
-            unless ( -r 'debian/changelog' ) {
+        if (-r 'debian/watch') {
+            unless (-r 'debian/changelog') {
                 uscan_warn
                   "Problems reading debian/changelog in $dir, skipping";
                 next;
             }
-            my ( $package, $debversion, $uversion ) =
-              scan_changelog( $config, $opwd );
+            my ($package, $debversion, $uversion)
+              = scan_changelog($config, $opwd);
             next unless ($package);
 
             uscan_verbose
               "package=\"$package\" version=\"$uversion\" (no epoch/revision)";
-            push @debdirs, [ $debversion, $dir, $package, $uversion ];
+            push @debdirs, [$debversion, $dir, $package, $uversion];
         }
     }
 
     uscan_warn "No watch file found" unless @debdirs;
 
     # Was there a --upstream-version option?
-    if ( defined $config->uversion ) {
-        if ( @debdirs == 1 ) {
+    if (defined $config->uversion) {
+        if (@debdirs == 1) {
             $debdirs[0][3] = $config->uversion;
-        }
-        else {
+        } else {
             uscan_warn
 "ignoring --upstream-version as more than one debian/watch file found";
         }
@@ -180,67 +176,67 @@ sub find_watch_files {
         my $package   = $$debdir[1];
         my $version   = $$debdir[2];
 
-        if ( exists $donepkgs{$parentdir}{$package} ) {
+        if (exists $donepkgs{$parentdir}{$package}) {
             uscan_warn
 "Skipping $dir/debian/watch\n   as this package has already been found";
             next;
         }
 
-        unless ( chdir $origdir ) {
+        unless (chdir $origdir) {
             uscan_warn "Couldn't chdir back to $origdir, skipping: $!";
             next;
         }
-        unless ( chdir $dir ) {
+        unless (chdir $dir) {
             uscan_warn "Couldn't chdir $dir, skipping: $!";
             next;
         }
 
         uscan_verbose
 "$dir/debian/changelog sets package=\"$package\" version=\"$version\"";
-        push @results, [ $dir, $package, $version, "debian/watch", cwd ];
+        push @results, [$dir, $package, $version, "debian/watch", cwd];
     }
-    unless ( chdir $origdir ) {
+    unless (chdir $origdir) {
         uscan_die "Couldn't chdir back to $origdir! $!";
     }
     return @results;
 }
 
 sub scan_changelog {
-    my ( $config, $opwd, $die ) = @_;
-    my $out =
-      $die ? sub { uscan_die(@_) } : sub { uscan_warn( $_[0] . ', skipping' ) };
+    my ($config, $opwd, $die) = @_;
+    my $out
+      = $die
+      ? sub { uscan_die(@_) }
+      : sub { uscan_warn($_[0] . ', skipping') };
 
     # Figure out package info we need
     my $changelog = eval { changelog_parse(); };
     if ($@) {
-        return $out ("Problems parsing debian/changelog:");
+        return $out->("Problems parsing debian/changelog:");
     }
 
-    my ( $package, $debversion, $uversion );
+    my ($package, $debversion, $uversion);
     $package = $changelog->{Source};
-    return $out ("Problem determining the package name from debian/changelog")
+    return $out->("Problem determining the package name from debian/changelog")
       unless defined $package;
     $debversion = $changelog->{Version};
-    return $out ("Problem determining the version from debian/changelog")
+    return $out->("Problem determining the version from debian/changelog")
       unless defined $debversion;
     uscan_verbose
 "package=\"$package\" version=\"$debversion\" (as seen in debian/changelog)";
 
     # Check the directory is properly named for safety
-    if ( $config->check_dirname_level == 2
-        or ( $config->check_dirname_level == 1 and cwd() ne $opwd ) )
-    {
+    if ($config->check_dirname_level == 2
+        or ($config->check_dirname_level == 1 and cwd() ne $opwd)) {
         my $good_dirname;
         my $re = $config->check_dirname_regex;
         $re =~ s/PACKAGE/\Q$package\E/g;
-        if ( $re =~ m%/% ) {
-            $good_dirname = ( cwd() =~ m%^$re$% );
+        if ($re =~ m%/%) {
+            $good_dirname = (cwd() =~ m%^$re$%);
+        } else {
+            $good_dirname = (basename(cwd()) =~ m%^$re$%);
         }
-        else {
-            $good_dirname = ( basename( cwd() ) =~ m%^$re$% );
-        }
-        return $out ( "The directory name "
-              . basename( cwd() )
+        return $out->("The directory name "
+              . basename(cwd())
               . " doesn't match the requirement of\n"
               . "   --check_dirname_level=$config->{check_dirname_level} --check-dirname-regex=$re .\n"
               . "   Set --check-dirname-level=0 to disable this sanity check feature."
@@ -248,14 +244,13 @@ sub scan_changelog {
     }
 
     # Get current upstream version number
-    if ( defined $config->uversion ) {
+    if (defined $config->uversion) {
         $uversion = $config->uversion;
-    }
-    else {
+    } else {
         $uversion = $debversion;
         $uversion =~ s/-[^-]+$//;    # revision
         $uversion =~ s/^\d+://;      # epoch
     }
-    return ( $package, $debversion, $uversion );
+    return ($package, $debversion, $uversion);
 }
 1;

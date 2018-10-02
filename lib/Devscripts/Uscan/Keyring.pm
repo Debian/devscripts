@@ -26,19 +26,19 @@ sub new {
 
     # upstream/signing-key.pgp and upstream-signing-key.pgp are deprecated
     # but supported
-    if ( -r "debian/upstream/signing-key.asc" ) {
+    if (-r "debian/upstream/signing-key.asc") {
         $keyring = "debian/upstream/signing-key.asc";
-    }
-    else {
+    } else {
         my $binkeyring = first { -r $_ } qw(
           debian/upstream/signing-key.pgp
           debian/upstream-signing-key.pgp
         );
-        if ( defined $binkeyring ) {
-            make_path( 'debian/upstream', 0700, 'true' );
+        if (defined $binkeyring) {
+            make_path('debian/upstream', 0700, 'true');
 
             # convert to the policy complying armored key
-            uscan_verbose("Found upstream binary signing keyring: $binkeyring");
+            uscan_verbose(
+                "Found upstream binary signing keyring: $binkeyring");
 
             # Need to convert to an armored key
             $keyring = "debian/upstream/signing-key.asc";
@@ -64,10 +64,10 @@ sub new {
 
     # Need to convert an armored key to binary for use by gpgv
     my $gpghome;
-    if ( defined $keyring ) {
+    if (defined $keyring) {
         uscan_verbose("Found upstream signing keyring: $keyring");
-        if ( $keyring =~ m/\.asc$/ ) {    # always true
-            $gpghome = tempdir( CLEANUP => 1 );
+        if ($keyring =~ m/\.asc$/) {    # always true
+            $gpghome = tempdir(CLEANUP => 1);
             my $newkeyring = "$gpghome/trustedkeys.gpg";
             spawn(
                 exec => [
@@ -97,7 +97,7 @@ sub new {
 }
 
 sub verify {
-    my ( $self, $sigfile, $newfile ) = @_;
+    my ($self, $sigfile, $newfile) = @_;
     uscan_verbose(
         "Verifying OpenPGP self signature of $newfile and extract $sigfile");
     unless (
@@ -110,14 +110,13 @@ sub verify {
             '-o' => "$sigfile",
             "$newfile"
         ) >> 8 == 0
-      )
-    {
+    ) {
         uscan_die("OpenPGP signature did not verify.");
     }
 }
 
 sub verifyv {
-    my ( $self, $sigfile, $base ) = @_;
+    my ($self, $sigfile, $base) = @_;
     uscan_verbose("Verifying OpenPGP signature $sigfile for $base");
     unless (
         uscan_exec_no_fail(
@@ -126,17 +125,16 @@ sub verifyv {
             '--keyring' => $self->{keyring},
             $sigfile, $base
         ) >> 8 == 0
-      )
-    {
+    ) {
         uscan_die("OpenPGP signature did not verify.");
     }
 }
 
 sub verify_git {
-    my ( $self, $gitdir, $tag ) = @_;
+    my ($self, $gitdir, $tag) = @_;
     my $commit;
     spawn(
-        exec      => [ 'git', '--git-dir', "../$gitdir", 'show-ref', $tag ],
+        exec      => ['git', '--git-dir', "../$gitdir", 'show-ref', $tag],
         to_string => \$commit
     );
     uscan_die "git tag not found" unless ($commit);
@@ -144,14 +142,14 @@ sub verify_git {
     chomp $commit;
     my $file;
     spawn(
-        exec => [ 'git', '--git-dir', "../$gitdir", 'cat-file', '-p', $commit ],
+        exec => ['git', '--git-dir', "../$gitdir", 'cat-file', '-p', $commit],
         to_string => \$file
     );
     my $dir;
-    spawn( exec => [ 'mktemp', '-d' ], to_string => \$dir );
+    spawn(exec => ['mktemp', '-d'], to_string => \$dir);
     chomp $dir;
 
-    unless ( $file =~ /^(.*?\n)(\-+\s*BEGIN PGP SIGNATURE\s*\-+.*)$/s ) {
+    unless ($file =~ /^(.*?\n)(\-+\s*BEGIN PGP SIGNATURE\s*\-+.*)$/s) {
         uscan_die "Tag $tag is not signed";
     }
     open F, ">$dir/txt" or die $!;
@@ -169,8 +167,7 @@ sub verify_git {
             '--verify',
             "$dir/sig", "$dir/txt"
         ) >> 8 == 0
-      )
-    {
+    ) {
         uscan_die("OpenPGP signature did not verify.");
     }
     remove_tree($dir);

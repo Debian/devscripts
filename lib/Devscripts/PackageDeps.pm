@@ -26,26 +26,24 @@ use Carp;
 use Dpkg::Control;
 require 5.006_000;
 
-
 # This reads in a package file list, such as /var/lib/dpkg/status,
 # and parses it.
 
 # Syntax: new Devscripts::PackageDeps($filename)
 
-sub new ($$)
-{
-    my $this = shift;
-    my $class = ref ($this) || $this;
+sub new ($$) {
+    my $this     = shift;
+    my $class    = ref($this) || $this;
     my $filename = shift;
 
     my $self = {};
 
-    if (! defined $filename) {
-	croak ("requires filename as parameter");
+    if (!defined $filename) {
+        croak("requires filename as parameter");
     }
 
-    bless ($self, $class);
-    $self->parse ($filename);
+    bless($self, $class);
+    $self->parse($filename);
     return $self;
 }
 
@@ -53,91 +51,86 @@ sub new ($$)
 
 my $multiarch;
 
-sub multiarch ()
-{
+sub multiarch () {
     if (!defined $multiarch) {
-	$multiarch = (system('dpkg --assert-multi-arch >/dev/null 2>&1') >> 8) == 0;
+        $multiarch
+          = (system('dpkg --assert-multi-arch >/dev/null 2>&1') >> 8) == 0;
     }
     return $multiarch;
 }
 
-sub parse ($$)
-{
-    my $self = shift;
+sub parse ($$) {
+    my $self     = shift;
     my $filename = shift;
 
-    if (! defined $filename) {
-	croak("requires filename as parameter");
+    if (!defined $filename) {
+        croak("requires filename as parameter");
     }
-    open PACKAGE_FILE, $filename or
-	croak("Unable to load $filename: $!");
+    open PACKAGE_FILE, $filename
+      or croak("Unable to load $filename: $!");
 
     my $ctrl;
- PACKAGE_ENTRY:
+  PACKAGE_ENTRY:
     while (defined($ctrl = Dpkg::Control->new(type => CTRL_FILE_STATUS))
-	   && $ctrl->parse(\*PACKAGE_FILE, $filename)) {
+        && $ctrl->parse(\*PACKAGE_FILE, $filename)) {
 
-	# So we've got a package
-	my $pkg = $ctrl->{Package};
-	my @deps = ();
+        # So we've got a package
+        my $pkg  = $ctrl->{Package};
+        my @deps = ();
 
-	if ($ctrl->{Status} =~ /^\S+\s+\S+\s+(\S+)$/) {
-	    my $status = $1;
-	    unless ($status eq 'installed' or $status eq 'unpacked') {
-		undef $ctrl;
-		next PACKAGE_ENTRY;
-	    }
-	}
+        if ($ctrl->{Status} =~ /^\S+\s+\S+\s+(\S+)$/) {
+            my $status = $1;
+            unless ($status eq 'installed' or $status eq 'unpacked') {
+                undef $ctrl;
+                next PACKAGE_ENTRY;
+            }
+        }
 
-	for my $dep (qw(Depends Pre-Depends)) {
-	    if (exists $ctrl->{$dep}) {
-		my $value = $ctrl->{$dep};
-		$value =~ s/\([^)]+\)//g;  # ignore versioning information
-		$value =~ tr/ \t//d;  # remove spaces
-		my @dep_pkgs = split /,/, $value;
-		foreach my $dep_pkg (@dep_pkgs) {
-		    my @dep_pkg_alts = split /\|/, $dep_pkg;
-		    if (@dep_pkg_alts == 1) { push @deps, $dep_pkg_alts[0]; }
-		    else { push @deps, \@dep_pkg_alts; }
-		}
-	    }
-	}
+        for my $dep (qw(Depends Pre-Depends)) {
+            if (exists $ctrl->{$dep}) {
+                my $value = $ctrl->{$dep};
+                $value =~ s/\([^)]+\)//g;    # ignore versioning information
+                $value =~ tr/ \t//d;         # remove spaces
+                my @dep_pkgs = split /,/, $value;
+                foreach my $dep_pkg (@dep_pkgs) {
+                    my @dep_pkg_alts = split /\|/, $dep_pkg;
+                    if   (@dep_pkg_alts == 1) { push @deps, $dep_pkg_alts[0]; }
+                    else                      { push @deps, \@dep_pkg_alts; }
+                }
+            }
+        }
 
-	$self->{$pkg} = \@deps;
-	if ($ctrl->{Architecture} ne 'all' && multiarch) {
-	    my $arch = $ctrl->{Architecture};
-	    @deps = map { "$_:$arch" } @deps;
-	    $self->{"$pkg:$arch"} = \@deps;
-	}
-	undef $ctrl;
+        $self->{$pkg} = \@deps;
+        if ($ctrl->{Architecture} ne 'all' && multiarch) {
+            my $arch = $ctrl->{Architecture};
+            @deps = map { "$_:$arch" } @deps;
+            $self->{"$pkg:$arch"} = \@deps;
+        }
+        undef $ctrl;
     }
-    close PACKAGE_FILE or
-	croak("Problems encountered reading $filename: $!");
+    close PACKAGE_FILE
+      or croak("Problems encountered reading $filename: $!");
 }
-
 
 # Get direct dependency information for a specified package
 # Returns an array or array ref depending on context
 
 # Syntax: $obj->dependencies($package)
 
-sub dependencies ($$)
-{
+sub dependencies ($$) {
     my $self = shift;
-    my $pkg = shift;
+    my $pkg  = shift;
 
-    if (! defined $pkg) {
-	croak("requires package as parameter");
+    if (!defined $pkg) {
+        croak("requires package as parameter");
     }
 
-    if (! exists $self->{$pkg}) {
-	return undef;
+    if (!exists $self->{$pkg}) {
+        return undef;
     }
 
-    return wantarray ?
-	@{$self->{$pkg}} : $self->{$pkg};
+    return wantarray ? @{ $self->{$pkg} } : $self->{$pkg};
 }
-
 
 # Get full dependency information for a specified package or packages,
 # including the packages themselves.
@@ -148,29 +141,27 @@ sub dependencies ($$)
 
 # Syntax: $obj->full_dependencies(@packages)
 
-sub full_dependencies ($@)
-{
-    my $self = shift;
+sub full_dependencies ($@) {
+    my $self      = shift;
     my @toprocess = @_;
     my %deps;
 
     return wantarray ? () : [] unless @toprocess;
 
     while (@toprocess) {
-	my $next = shift @toprocess;
-	$next = $$next[0] if ref $next;
-	# Already seen?
-	next if exists $deps{$next};
-	# Known package?
-	next unless exists $self->{$next};
-	# Mark it as a dependency
-	$deps{$next} = 1;
-	push @toprocess, @{$self->{$next}};
+        my $next = shift @toprocess;
+        $next = $$next[0] if ref $next;
+        # Already seen?
+        next if exists $deps{$next};
+        # Known package?
+        next unless exists $self->{$next};
+        # Mark it as a dependency
+        $deps{$next} = 1;
+        push @toprocess, @{ $self->{$next} };
     }
 
-    return wantarray ? keys %deps : [ keys %deps ];
+    return wantarray ? keys %deps : [keys %deps];
 }
-
 
 # Given a set of packages, find a minimal set with respect to the
 # pre-partial order of dependency.
@@ -186,10 +177,9 @@ sub full_dependencies ($@)
 
 # Syntax: $obj->min_dependencies(@packages)
 
-sub min_dependencies ($@)
-{
-    my $self = shift;
-    my @pkgs = @_;
+sub min_dependencies ($@) {
+    my $self     = shift;
+    my @pkgs     = @_;
     my @min_pkgs = ();
     my %dep_pkgs = ();
 
@@ -203,81 +193,81 @@ sub min_dependencies ($@)
 
     # Initialise
     foreach my $pkg (@pkgs) {
-	$forward_deps{$pkg} = {};
-	$reverse_deps{$pkg} = {};
+        $forward_deps{$pkg} = {};
+        $reverse_deps{$pkg} = {};
     }
 
     foreach my $pkg (@pkgs) {
-	next unless exists $self->{$pkg};
-	my @pkg_deps = @{$self->{$pkg}};
-	while (@pkg_deps) {
-	    my $dep = shift @pkg_deps;
-	    if (ref $dep) {
-		unshift @pkg_deps, @$dep;
-		next;
-	    }
-	    if (exists $forward_deps{$dep}) {
-		$forward_deps{$pkg}{$dep} = 1;
-		$reverse_deps{$dep}{$pkg} = 1;
-	    }
-	}
+        next unless exists $self->{$pkg};
+        my @pkg_deps = @{ $self->{$pkg} };
+        while (@pkg_deps) {
+            my $dep = shift @pkg_deps;
+            if (ref $dep) {
+                unshift @pkg_deps, @$dep;
+                next;
+            }
+            if (exists $forward_deps{$dep}) {
+                $forward_deps{$pkg}{$dep} = 1;
+                $reverse_deps{$dep}{$pkg} = 1;
+            }
+        }
     }
 
     # We start removing packages from the tree if they have no dependencies.
     # Once we have no such packages left, we must have mutual or cyclic
     # dependencies, so we pick a random one to remove and then start again.
     # We continue this until there are no packages left in the graph.
- PACKAGE:
+  PACKAGE:
     while (scalar keys %forward_deps) {
-	foreach my $pkg (keys %forward_deps) {
-	    if (scalar keys %{$forward_deps{$pkg}} == 0) {
-		# Great, no dependencies!
-		if (scalar keys %{$reverse_deps{$pkg}}) {
-		    # This package is depended upon, so we can remove it
-		    # with care
-		    foreach my $dep_pkg (keys %{$reverse_deps{$pkg}}) {
-			# take the first mentioned package for the
-			# recorded list of depended-upon packages
-			$dep_pkgs{$pkg} ||= $dep_pkg;
-			delete $forward_deps{$dep_pkg}{$pkg};
-		    }
-		} else {
-		    # This package is not depended upon, so it must
-		    # go into our mindep list
-		    push @min_pkgs, $pkg;
-		}
-		# Now remove this node
-		delete $forward_deps{$pkg};
-		delete $reverse_deps{$pkg};
-		next PACKAGE;
-	    }
-	}
+        foreach my $pkg (keys %forward_deps) {
+            if (scalar keys %{ $forward_deps{$pkg} } == 0) {
+                # Great, no dependencies!
+                if (scalar keys %{ $reverse_deps{$pkg} }) {
+                    # This package is depended upon, so we can remove it
+                    # with care
+                    foreach my $dep_pkg (keys %{ $reverse_deps{$pkg} }) {
+                        # take the first mentioned package for the
+                        # recorded list of depended-upon packages
+                        $dep_pkgs{$pkg} ||= $dep_pkg;
+                        delete $forward_deps{$dep_pkg}{$pkg};
+                    }
+                } else {
+                    # This package is not depended upon, so it must
+                    # go into our mindep list
+                    push @min_pkgs, $pkg;
+                }
+                # Now remove this node
+                delete $forward_deps{$pkg};
+                delete $reverse_deps{$pkg};
+                next PACKAGE;
+            }
+        }
 
-	# Oh, we didn't find any package which didn't depend on any other.
-	# We'll pick a random one, then.  At least *some* package must
-	# be depended upon in this situation; let's pick one of these.
-	foreach my $pkg (keys %forward_deps) {
-	    next unless scalar keys %{$reverse_deps{$pkg}} > 0;
+        # Oh, we didn't find any package which didn't depend on any other.
+        # We'll pick a random one, then.  At least *some* package must
+        # be depended upon in this situation; let's pick one of these.
+        foreach my $pkg (keys %forward_deps) {
+            next unless scalar keys %{ $reverse_deps{$pkg} } > 0;
 
-	    foreach my $dep_pkg (keys %{$forward_deps{$pkg}}) {
-		delete $reverse_deps{$dep_pkg}{$pkg};
-	    }
-	    foreach my $dep_pkg (keys %{$reverse_deps{$pkg}}) {
-		# take the first mentioned package for the
-		# recorded list of depended-upon packages
-		$dep_pkgs{$pkg} ||= $dep_pkg;
-		delete $forward_deps{$dep_pkg}{$pkg};
-	    }
+            foreach my $dep_pkg (keys %{ $forward_deps{$pkg} }) {
+                delete $reverse_deps{$dep_pkg}{$pkg};
+            }
+            foreach my $dep_pkg (keys %{ $reverse_deps{$pkg} }) {
+                # take the first mentioned package for the
+                # recorded list of depended-upon packages
+                $dep_pkgs{$pkg} ||= $dep_pkg;
+                delete $forward_deps{$dep_pkg}{$pkg};
+            }
 
-	    # Now remove this node
-	    delete $forward_deps{$pkg};
-	    delete $reverse_deps{$pkg};
-	    # And onto the next package
-	    goto PACKAGE;
-	}
+            # Now remove this node
+            delete $forward_deps{$pkg};
+            delete $reverse_deps{$pkg};
+            # And onto the next package
+            goto PACKAGE;
+        }
 
-	# Ouch!  We shouldn't ever get here
-	croak("Couldn't determine mindeps; this can't happen!");
+        # Ouch!  We shouldn't ever get here
+        croak("Couldn't determine mindeps; this can't happen!");
     }
 
     return (\@min_pkgs, \%dep_pkgs);

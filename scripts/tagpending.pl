@@ -35,39 +35,42 @@ sub bugs_info;
 
 my $progname = basename($0);
 
-my ($opt_help, $opt_version, $opt_verbose, $opt_noact, $opt_silent);
-my ($opt_online, $opt_confirm, %opt_to, $opt_wnpp, $opt_comments);
+my ($opt_help,   $opt_version, $opt_verbose, $opt_noact, $opt_silent);
+my ($opt_online, $opt_confirm, %opt_to,      $opt_wnpp,  $opt_comments);
 my $opt_interactive;
 
 # Default options
-$opt_silent = 0;
-$opt_verbose = 0;
-$opt_online = 1;
-$opt_noact = 0;
-$opt_confirm = 0;
-$opt_wnpp = 0;
-%opt_to = ();
-$opt_comments = 1;
+$opt_silent      = 0;
+$opt_verbose     = 0;
+$opt_online      = 1;
+$opt_noact       = 0;
+$opt_confirm     = 0;
+$opt_wnpp        = 0;
+%opt_to          = ();
+$opt_comments    = 1;
 $opt_interactive = 0;
 
-GetOptions("help|h" => \$opt_help,
-	   "version" => \$opt_version,
-	   "verbose|v!" => \$opt_verbose,
-	   "noact|n" => \$opt_noact,
-	   "comments!" => \$opt_comments,
-	   "silent|s" => \$opt_silent,
-	   "force|f" => sub { $opt_online = 0; },
-	   "confirm|c" => \$opt_confirm,
-	   "to|t=s" => sub { $opt_to{'-v'} = $_[1] },
-	   "wnpp|w" => \$opt_wnpp,
-	   "interactive|i" => \$opt_interactive,
-           )
-    or die "Usage: $progname [options]\nRun $progname --help for more details\n";
+GetOptions(
+    "help|h"        => \$opt_help,
+    "version"       => \$opt_version,
+    "verbose|v!"    => \$opt_verbose,
+    "noact|n"       => \$opt_noact,
+    "comments!"     => \$opt_comments,
+    "silent|s"      => \$opt_silent,
+    "force|f"       => sub { $opt_online = 0; },
+    "confirm|c"     => \$opt_confirm,
+    "to|t=s"        => sub { $opt_to{'-v'} = $_[1] },
+    "wnpp|w"        => \$opt_wnpp,
+    "interactive|i" => \$opt_interactive,
+  )
+  or die "Usage: $progname [options]\nRun $progname --help for more details\n";
 
 if ($opt_help) {
-    help(); exit 0;
+    help();
+    exit 0;
 } elsif ($opt_version) {
-    version(); exit 0;
+    version();
+    exit 0;
 }
 
 if ($opt_verbose and $opt_silent) {
@@ -149,18 +152,18 @@ B<bts>(1) and B<dpkg-parsechangelog>(1)
 
 =cut
 
-if (! -f 'debian/changelog') {
-  die "$progname error: debian/changelog does not exist!\n";
+if (!-f 'debian/changelog') {
+    die "$progname error: debian/changelog does not exist!\n";
 }
 
 my $changelog = changelog_parse(%opt_to);
-my $source = $changelog->{Source};
+my $source    = $changelog->{Source};
 my @closes;
 if ($changelog->{Closes}) {
     @closes = split ' ', $changelog->{Closes};
 }
-my @lines = split /\n/, $changelog->{Changes};
-my $header = $lines[1];
+my @lines   = split /\n/, $changelog->{Changes};
+my $header  = $lines[1];
 my $changes = join "\n", grep /^ {3}[^[]/, @lines;
 
 # Add a fake entry to the end of the recorded changes
@@ -173,102 +176,114 @@ my %bugs = map { $_ => 1 } @closes;
 
 if (%bugs) {
     if ($opt_online) {
-	if (!Devscripts::Debbugs::have_soap()) {
-	    die "$progname: The libsoap-lite-perl package is required for online operation; aborting.\n";
-	}
+        if (!Devscripts::Debbugs::have_soap()) {
+            die
+"$progname: The libsoap-lite-perl package is required for online operation; aborting.\n";
+        }
 
-	eval {
-	    $pending = Devscripts::Debbugs::select( "src:$source", "status:open", "status:forwarded", "tag:pending" );
-	    $open = Devscripts::Debbugs::select( "src:$source", "status:open", "status:forwarded" );
-	};
+        eval {
+            $pending = Devscripts::Debbugs::select(
+                "src:$source",      "status:open",
+                "status:forwarded", "tag:pending"
+            );
+            $open = Devscripts::Debbugs::select("src:$source", "status:open",
+                "status:forwarded");
+        };
 
-	if ($@) {
-	    die "$@\nUse --force to tag all bugs anyway.\n";
-	}
+        if ($@) {
+            die "$@\nUse --force to tag all bugs anyway.\n";
+        }
     }
 
     if ($pending) {
-	%bugs = ( %bugs, map { $_ => 1 } @{$pending} );
+        %bugs = (%bugs, map { $_ => 1 } @{$pending});
     }
 }
 
 my $bug;
 my $message;
-my @to_tag = ();
+my @to_tag      = ();
 my @wnpp_to_tag = ();
 
 foreach $bug (keys %bugs) {
     print "Checking bug #$bug: " if $opt_verbose;
 
     if (grep /^$bug$/, @{$pending}) {
-	print "already marked pending\n" if $opt_verbose;
+        print "already marked pending\n" if $opt_verbose;
     } else {
-	if (grep /^$bug$/, @{$open} or not $opt_online) {
-	    print "needs tag\n" if $opt_verbose;
-	    push (@to_tag, $bug);
-	} else {
-	    if ($opt_wnpp) {
-		my $status = Devscripts::Debbugs::status($bug);
-		if ($status->{$bug}->{package} eq 'wnpp') {
-		    if ($status->{$bug}->{tags} !~ /pending/) {
-			print "wnpp needs tag\n" if $opt_verbose;
-			push (@wnpp_to_tag, $bug);
-		    } else {
-			print "wnpp already marked pending\n" if $opt_verbose;
-		    }
-		} else {
-		    $message = "is closed or does not belong to this package (check bug # or force)\n";
+        if (grep /^$bug$/, @{$open} or not $opt_online) {
+            print "needs tag\n" if $opt_verbose;
+            push(@to_tag, $bug);
+        } else {
+            if ($opt_wnpp) {
+                my $status = Devscripts::Debbugs::status($bug);
+                if ($status->{$bug}->{package} eq 'wnpp') {
+                    if ($status->{$bug}->{tags} !~ /pending/) {
+                        print "wnpp needs tag\n" if $opt_verbose;
+                        push(@wnpp_to_tag, $bug);
+                    } else {
+                        print "wnpp already marked pending\n" if $opt_verbose;
+                    }
+                } else {
+                    $message
+                      = "is closed or does not belong to this package (check bug # or force)\n";
 
-		    print "Warning: #$bug " if not $opt_verbose;
-		    print "$message";
-		}
-	    } else {
-		$message = "is closed or does not belong to this package (check bug # or force)\n";
+                    print "Warning: #$bug " if not $opt_verbose;
+                    print "$message";
+                }
+            } else {
+                $message
+                  = "is closed or does not belong to this package (check bug # or force)\n";
 
-		print "Warning: #$bug " if not $opt_verbose;
-		print "$message";
-	    }
-	}
+                print "Warning: #$bug " if not $opt_verbose;
+                print "$message";
+            }
+        }
     }
 }
 
 if (!@to_tag and !@wnpp_to_tag) {
     print "$progname info: Nothing to do, exiting.\n"
-	if $opt_verbose or !$opt_silent;
+      if $opt_verbose or !$opt_silent;
     exit 0;
 }
 
 my @sourcepkgs = ();
 my @thiscloses = ();
 my $thischange = '';
-my $comments = '';
+my $comments   = '';
 
 if (@to_tag or @wnpp_to_tag) {
     if ($opt_comments) {
-	foreach my $change (split /\n/, $changes) {
+        foreach my $change (split /\n/, $changes) {
             if ($change =~ /^ {3}\*(.*)/) {
-		# Adapted from dpkg-parsechangelog / Changelog.pm
-		while ($thischange && ($thischange =~
-		  /closes:\s*(?:bug)?\#?\s?\d+(?:,\s*(?:bug)?\#?\s?\d+)*/sig)) {
-		    push(@thiscloses, $& =~ /\#?\s?(\d+)/g);
-		}
+                # Adapted from dpkg-parsechangelog / Changelog.pm
+                while (
+                    $thischange
+                    && ($thischange
+                        =~ /closes:\s*(?:bug)?\#?\s?\d+(?:,\s*(?:bug)?\#?\s?\d+)*/sig
+                    )
+                ) {
+                    push(@thiscloses, $& =~ /\#?\s?(\d+)/g);
+                }
 
-		foreach my $bug (@thiscloses) {
-		    if ($bug and grep /^$bug$/, @to_tag or grep /^$bug$/, @wnpp_to_tag) {
-			$comments .= $thischange;
-			last;
-		    }
-		}
+                foreach my $bug (@thiscloses) {
+                    if ($bug and grep /^$bug$/,
+                        @to_tag or grep /^$bug$/, @wnpp_to_tag) {
+                        $comments .= $thischange;
+                        last;
+                    }
+                }
 
-		@thiscloses = ();
-		$thischange = $change;
-	    } else {
-		$thischange .= $change . "\n";
-	    }
-	}
+                @thiscloses = ();
+                $thischange = $change;
+            } else {
+                $thischange .= $change . "\n";
+            }
+        }
 
-	$comments = $header . "\n \n" . $comments . "\n \n"
-	    if $comments;
+        $comments = $header . "\n \n" . $comments . "\n \n"
+          if $comments;
     }
 }
 
@@ -279,50 +294,50 @@ if ($opt_noact and not $opt_interactive) {
     bugs_info "wnpp" if $opt_wnpp;
 } else {
     if (!$opt_silent) {
-	bugs_info;
-	bugs_info "wnpp" if $opt_wnpp;
+        bugs_info;
+        bugs_info "wnpp" if $opt_wnpp;
     }
 
     if ($opt_interactive) {
-	if ($opt_noact) {
-	    push(@bts_args, "-n");
-	    print "\nWould send this BTS mail:\n\n";
-	} else {
-	    push(@bts_args, "-i");
-	}
+        if ($opt_noact) {
+            push(@bts_args, "-n");
+            print "\nWould send this BTS mail:\n\n";
+        } else {
+            push(@bts_args, "-i");
+        }
     }
 
     if (@to_tag) {
-	push(@bts_args, "limit", "source:$source");
+        push(@bts_args, "limit", "source:$source");
 
-	if ($comments) {
-	    $comments =~ s/\n\n/\n/sg;
-	    $comments =~ s/\n\n/\n/m;
-	    $comments =~ s/^ /#/mg;
-	    push(@bts_args, $comments);
-	    # We don't want to add comments twice if there are
+        if ($comments) {
+            $comments =~ s/\n\n/\n/sg;
+            $comments =~ s/\n\n/\n/m;
+            $comments =~ s/^ /#/mg;
+            push(@bts_args, $comments);
+            # We don't want to add comments twice if there are
             # both package and wnpp bugs
-	    $comments = '';
-	}
+            $comments = '';
+        }
 
-	foreach my $bug (@to_tag) {
-	    push(@bts_args, ".", "tag", $bug, "+", "pending");
-	    push(@bts_args, "confirmed") if $opt_confirm;
-	}
+        foreach my $bug (@to_tag) {
+            push(@bts_args, ".", "tag", $bug, "+", "pending");
+            push(@bts_args, "confirmed") if $opt_confirm;
+        }
     }
     if (@wnpp_to_tag) {
-	push(@bts_args, ".") if scalar @bts_args > 1;
-	push(@bts_args, "package", "wnpp");
+        push(@bts_args, ".") if scalar @bts_args > 1;
+        push(@bts_args, "package", "wnpp");
 
-	if ($comments) {
-	    $comments =~ s/\n\n/\n/sg;
-	    $comments =~ s/^ /#/mg;
-	    push(@bts_args, $comments);
-	}
+        if ($comments) {
+            $comments =~ s/\n\n/\n/sg;
+            $comments =~ s/^ /#/mg;
+            push(@bts_args, $comments);
+        }
 
-	foreach my $wnpp_bug (@wnpp_to_tag) {
-	    push(@bts_args, ".", "tag", $wnpp_bug, "+", "pending");
-	}
+        foreach my $wnpp_bug (@wnpp_to_tag) {
+            push(@bts_args, ".", "tag", $wnpp_bug, "+", "pending");
+        }
     }
 
     system @bts_args;
@@ -333,21 +348,21 @@ sub bugs_info {
     my @bugs;
 
     if ($type eq "wnpp") {
-	if (@wnpp_to_tag) {
-	    @bugs = @wnpp_to_tag;
-	} else {
-	    return;
-	}
+        if (@wnpp_to_tag) {
+            @bugs = @wnpp_to_tag;
+        } else {
+            return;
+        }
     } else {
-	@bugs = @to_tag;
+        @bugs = @to_tag;
     }
 
     print "$progname info: ";
 
     if ($opt_noact) {
-	print "would tag";
+        print "would tag";
     } else {
-	print "tagging";
+        print "tagging";
     }
 
     print " these";
@@ -357,14 +372,14 @@ sub bugs_info {
     print ":";
 
     foreach my $bug (@bugs) {
-	print " $bug";
+        print " $bug";
     }
 
     print "\n";
 }
 
 sub help {
-   print <<"EOF";
+    print <<"EOF";
 Usage: $progname [options]
 
 Valid options are:

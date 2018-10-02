@@ -15,24 +15,25 @@ our @EXPORT = qw(git_search git_upstream_url git_newfile_base git_clean);
 ######################################################
 sub git_search {
     my ($self) = @_;
-    my ( $newfile, $newversion );
-    if ( $self->versionless ) {
-        $newfile = $self->parse_result->{filepattern};  # HEAD or heads/<branch>
-        if ( $self->pretty eq 'describe' ) {
+    my ($newfile, $newversion);
+    if ($self->versionless) {
+        $newfile = $self->parse_result->{filepattern}; # HEAD or heads/<branch>
+        if ($self->pretty eq 'describe') {
             $self->gitmode('full');
         }
         if (    $self->gitmode eq 'shallow'
-            and $self->parse_result->{filepattern} eq 'HEAD' )
-        {
+            and $self->parse_result->{filepattern} eq 'HEAD') {
             uscan_exec(
-                'git', 'clone', '--bare', '--depth=1',
+                'git',
+                'clone',
+                '--bare',
+                '--depth=1',
                 $self->parse_result->{base},
                 "$self->{downloader}->{destdir}/" . $self->gitrepo_dir
             );
             $self->downloader->gitrepo_state(1);
-        }
-        elsif ( $self->gitmode eq 'shallow'
-            and $self->parse_result->{filepattern} ne 'HEAD' )
+        } elsif ($self->gitmode eq 'shallow'
+            and $self->parse_result->{filepattern} ne 'HEAD')
         {    # heads/<branch>
             $newfile =~ s&^heads/&&;    # Set to <branch>
             uscan_exec(
@@ -46,8 +47,7 @@ sub git_search {
                 "$self->{downloader}->{destdir}/" . $self->gitrepo_dir
             );
             $self->downloader->gitrepo_state(1);
-        }
-        else {
+        } else {
             uscan_exec(
                 'git', 'clone', '--bare',
                 $self->parse_result->{base},
@@ -55,7 +55,7 @@ sub git_search {
             );
             $self->downloader->gitrepo_state(2);
         }
-        if ( $self->pretty eq 'describe' ) {
+        if ($self->pretty eq 'describe') {
 
             # use unannotated tags to be on safe side
             spawn(
@@ -76,12 +76,10 @@ sub git_search {
                     'uversionmangle:', \@{ $self->uversionmangle },
                     \$newversion
                 )
-              )
-            {
+            ) {
                 return undef;
             }
-        }
-        else {
+        } else {
             spawn(
                 exec => [
                     'git',
@@ -100,9 +98,9 @@ sub git_search {
     ################################################
     # search $newfile $newversion (git mode w/tag)
     ################################################
-    elsif ( $self->mode eq 'git' ) {
+    elsif ($self->mode eq 'git') {
         uscan_verbose "Execute: git ls-remote $self->{base}";
-        open( REFS, "-|", 'git', 'ls-remote', $self->parse_result->{base} )
+        open(REFS, "-|", 'git', 'ls-remote', $self->parse_result->{base})
           || uscan_die "$progname: you must have the git package installed";
         my @refs;
         my $ref;
@@ -112,20 +110,19 @@ sub git_search {
             uscan_debug "$_";
             if (m&^\S+\s+([^\^\{\}]+)$&) {
                 $ref = $1;    # ref w/o ^{}
-                foreach my $_pattern ( @{ $self->patterns } ) {
-                    $version = join( ".",
-                        map { $_ if defined($_) } $ref =~ m&^$_pattern$& );
+                foreach my $_pattern (@{ $self->patterns }) {
+                    $version = join(".",
+                        map { $_ if defined($_) } $ref =~ m&^$_pattern$&);
                     if (
                         mangle(
                             $self->watchfile,  \$self->line,
                             'uversionmangle:', \@{ $self->uversionmangle },
                             \$version
                         )
-                      )
-                    {
+                    ) {
                         return undef;
                     }
-                    push @refs, [ $version, $ref ];
+                    push @refs, [$version, $ref];
                 }
             }
         }
@@ -136,15 +133,14 @@ sub git_search {
                 $msg .= "     $$ref[1] ($$ref[0])\n";
             }
             uscan_verbose "$msg";
-            if ( $self->shared->{download_version} ) {
+            if ($self->shared->{download_version}) {
 
 # extract ones which has $version in the above loop matched with $download_version
-                my @vrefs =
-                  grep { $$_[0] eq $self->shared->{download_version} } @refs;
+                my @vrefs
+                  = grep { $$_[0] eq $self->shared->{download_version} } @refs;
                 if (@vrefs) {
-                    ( $newversion, $newfile ) = @{ $vrefs[0] };
-                }
-                else {
+                    ($newversion, $newfile) = @{ $vrefs[0] };
+                } else {
                     uscan_warn
                       "$progname warning: In $self->{watchfile} no matching"
                       . " refs for version $self->{download_version}"
@@ -152,33 +148,31 @@ sub git_search {
                     return undef;
                 }
 
+            } else {
+                ($newversion, $newfile) = @{ $refs[0] };
             }
-            else {
-                ( $newversion, $newfile ) = @{ $refs[0] };
-            }
-        }
-        else {
+        } else {
             uscan_warn "$progname warning: In $self->{watchfile},\n"
               . " no matching refs for watch line\n"
               . " $self->{line}";
             return undef;
         }
     }
-    return ( $newversion, $newfile );
+    return ($newversion, $newfile);
 }
 
 sub git_upstream_url {
     my ($self) = @_;
-    my $upstream_url =
-      $self->parse_result->{base} . ' ' . $self->search_result->{newfile};
+    my $upstream_url
+      = $self->parse_result->{base} . ' ' . $self->search_result->{newfile};
     return $upstream_url;
 }
 
 sub git_newfile_base {
     my ($self) = @_;
-    my $zsuffix = get_suffix( $self->compression );
-    my $newfile_base =
-      "$self->{pkg}-$self->{search_result}->{newversion}.tar.$zsuffix";
+    my $zsuffix = get_suffix($self->compression);
+    my $newfile_base
+      = "$self->{pkg}-$self->{search_result}->{newversion}.tar.$zsuffix";
     return $newfile_base;
 }
 
@@ -186,7 +180,7 @@ sub git_clean {
     my ($self) = @_;
 
     # If git cloned repo exists and not --debug ($verbose=2) -> remove it
-    if ( $self->downloader->gitrepo_state > 0 and $verbose < 2 ) {
+    if ($self->downloader->gitrepo_state > 0 and $verbose < 2) {
         my $err;
         uscan_verbose "Removing git repo ($self->{downloader}->{destdir}/"
           . $self->gitrepo_dir . ")";
@@ -197,8 +191,7 @@ sub git_clean {
             uscan_warn "Errors during git repo clean:\n\t@$err";
         }
         $self->downloader->gitrepo_state(0);
-    }
-    else {
+    } else {
         uscan_debug "Keep git repo ($self->{downloader}->{destdir}/"
           . $self->gitrepo_dir . ")";
     }
