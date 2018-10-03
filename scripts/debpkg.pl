@@ -18,7 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-
 # All this program does is to check that it is either running as root
 # or setuid root, and then exec dpkg with the command line options.
 
@@ -54,28 +53,28 @@ EOF
 ##
 ## handle command-line options
 ##
-if (! @ARGV) { print STDERR $usage; exit 1; }
-if ($ARGV[0] eq '--help') { print $usage; exit 0; }
-if ($ARGV[0] eq '--version') { print $version; exit 0; }
+if (!@ARGV)                  { print STDERR $usage; exit 1; }
+if ($ARGV[0] eq '--help')    { print $usage;        exit 0; }
+if ($ARGV[0] eq '--version') { print $version;      exit 0; }
 
 # We *do* preserve locale variables; dpkg should know how to handle
 # them, and anyone running this with root privileges has total power
 # over the system anyway, so doesn't really need to worry about forging
 # locale data.  We don't try to preserve TEXTDOMAIN and the like.
 foreach my $var (keys %ENV) {
-	delete $ENV{$var} unless
-		$var =~ /^(PATH|TERM|HOME|LOGNAME|LANG)$/ or
-			$var =~ /^LC_[A-Z]+$/;
+    delete $ENV{$var}
+      unless $var =~ /^(PATH|TERM|HOME|LOGNAME|LANG)$/
+      or $var =~ /^LC_[A-Z]+$/;
 }
 
 $ENV{'PATH'} = "/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11";
 # $ENV{'PATH'} = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/bin/X11";
-$ENV{'TERM'}='dumb' unless defined $ENV{'TERM'};
+$ENV{'TERM'} = 'dumb' unless defined $ENV{'TERM'};
 
 # Pick up superuser privileges if we are running setuid root
-if ( $< != 0 && $> == 0 ) { $< = $>; }
+if ($< != 0 && $> == 0) { $< = $>; }
 fatal "debpkg is only useful if it is run by root or setuid root!"
-	if $< != 0;
+  if $< != 0;
 
 # Pick up group 'root'
 $( = $) = 0;
@@ -88,9 +87,9 @@ exec 'dpkg', @clean_argv or fatal "Couldn't exec dpkg: $!\n";
 ###### Subroutines
 
 sub fatal($) {
-    my ($pack,$file,$line);
-    ($pack,$file,$line) = caller();
+    my ($pack, $file, $line);
+    ($pack, $file, $line) = caller();
     (my $msg = "$progname: fatal error at line $line:\n@_\n") =~ tr/\0//d;
-	 $msg =~ s/\n\n$/\n/;
+    $msg =~ s/\n\n$/\n/;
     die $msg;
 }

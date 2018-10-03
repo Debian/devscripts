@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# vim: set shiftwidth=4 tabstop=8 noexpandtab:
+# vim: set ai shiftwidth=4 tabstop=4 expandtab:
 #
 # mk-origtargz: Rename upstream tarball, optionally changing the compression
 # and removing unwanted files.
@@ -21,7 +21,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
 
 =head1 NAME
 
@@ -212,7 +211,6 @@ B<mk-origtargz> and this manpage have been written by Joachim Breitner
 
 =cut
 
-
 use strict;
 use warnings;
 use File::Temp qw/tempdir/;
@@ -224,7 +222,8 @@ use Dpkg::IPC;
 use Dpkg::Version;
 use File::Spec;
 
-use Devscripts::Compression qw/compression_is_supported compression_guess_from_file compression_get_property/;
+use Devscripts::Compression
+  qw/compression_is_supported compression_guess_from_file compression_get_property/;
 use Cwd 'abs_path';
 use File::Copy;
 use Dpkg::Control::Hash;
@@ -232,19 +231,19 @@ use Dpkg::Control::Hash;
 sub decompress_archive($$);
 sub compress_archive($$$);
 
-
-my $package = undef;
-my $version = undef;
-my $component = undef;
-my $orig="orig";
-my $excludestanza="Files-Excluded";
-my @exclude_globs = ();
+my $package         = undef;
+my $version         = undef;
+my $component       = undef;
+my $orig            = "orig";
+my $excludestanza   = "Files-Excluded";
+my @exclude_globs   = ();
 my @copyright_files = ();
 
-my $destdir = undef;
-my $unzipopt = undef;
+my $destdir     = undef;
+my $unzipopt    = undef;
 my $compression = "gzip";
-my $mode = undef; # can be symlink, rename or copy. Can internally be repacked if the file was repacked.
+my $mode        = undef
+  ; # can be symlink, rename or copy. Can internally be repacked if the file was repacked.
 my $repack = 0;
 my $suffix = '';
 
@@ -256,60 +255,61 @@ my $upstream = undef;
 # 2: Upstream signature file on uncompressed tar
 # 3: Upstream signature as non-detached
 # 4: Repacked
-my $signature = 0;
+my $signature      = 0;
 my $signature_file = "";
 
 # option parsing
 
 sub die_opts ($) {
-    pod2usage({-exitval => 3, -verbose => 1, -msg => shift @_});
+    pod2usage({ -exitval => 3, -verbose => 1, -msg => shift @_ });
 }
 
 sub setmode {
     my $newmode = shift @_;
     if (defined $mode and $mode ne $newmode) {
-	die_opts (sprintf "--%s and --%s are mutually exclusive", $mode, $newmode);
+        die_opts(sprintf "--%s and --%s are mutually exclusive",
+            $mode, $newmode);
     }
     $mode = $newmode;
 }
 
 GetOptions(
-    "package=s" => \$package,
-    "version|v=s" => \$version,
-    "component|c=s" => \$component,
-    "exclude-file=s" => \@exclude_globs,
-    "copyright-file=s" => \@copyright_files,
-    "signature=i" => \$signature,
-    "signature-file=s" => \$signature_file,
-    "compression=s" => \$compression,
-    "symlink" => \&setmode,
-    "rename" => \&setmode,
-    "copy" => \&setmode,
-    "repack" => \$repack,
+    "package=s"         => \$package,
+    "version|v=s"       => \$version,
+    "component|c=s"     => \$component,
+    "exclude-file=s"    => \@exclude_globs,
+    "copyright-file=s"  => \@copyright_files,
+    "signature=i"       => \$signature,
+    "signature-file=s"  => \$signature_file,
+    "compression=s"     => \$compression,
+    "symlink"           => \&setmode,
+    "rename"            => \&setmode,
+    "copy"              => \&setmode,
+    "repack"            => \$repack,
     'repack-suffix|S=s' => \$suffix,
-    "directory|C=s" => \$destdir,
-    "unzipopt=s" => \$unzipopt,
-    "help|h" => sub { pod2usage({-exitval => 0, -verbose => 1}); },
-) or pod2usage({-exitval => 3, -verbose=>1});
+    "directory|C=s"     => \$destdir,
+    "unzipopt=s"        => \$unzipopt,
+    "help|h" => sub { pod2usage({ -exitval => 0, -verbose => 1 }); },
+) or pod2usage({ -exitval => 3, -verbose => 1 });
 
 $mode ||= "symlink";
 
 # sanity checks
 unless (compression_is_supported($compression)) {
-    die_opts (sprintf "Unknown compression scheme %s", $compression);
+    die_opts(sprintf "Unknown compression scheme %s", $compression);
 }
 
 if (defined $package and not defined $version) {
-    die_opts "If you use --package, you also have to specify --version."
+    die_opts "If you use --package, you also have to specify --version.";
 }
 
 if (defined $component) {
-    $orig="orig-$component";
-    $excludestanza="Files-Excluded-$component";
+    $orig          = "orig-$component";
+    $excludestanza = "Files-Excluded-$component";
 }
 
 if (@ARGV != 1) {
-    die_opts "Please specify original tarball."
+    die_opts "Please specify original tarball.";
 }
 $upstream = $ARGV[0];
 
@@ -320,67 +320,70 @@ unless (defined $package) {
     my $c = Dpkg::Changelog::Debian->new(range => { count => 1 });
     $c->load('debian/changelog');
     if (my $msg = $c->get_parse_errors()) {
-	die "could not parse debian/changelog:\n$msg";
+        die "could not parse debian/changelog:\n$msg";
     }
     my ($entry) = @{$c};
     $package = $entry->get_source();
 
     # get version number
     unless (defined $version) {
-	my $debversion = Dpkg::Version->new($entry->get_version());
-	if ($debversion->is_native()) {
-	    print "Package with native version number $debversion; mk-origtargz makes no sense for native packages.\n";
-	    exit 0;
-	}
-	$version = $debversion->version();
+        my $debversion = Dpkg::Version->new($entry->get_version());
+        if ($debversion->is_native()) {
+            print
+"Package with native version number $debversion; mk-origtargz makes no sense for native packages.\n";
+            exit 0;
+        }
+        $version = $debversion->version();
     }
 
     unshift @copyright_files, "debian/copyright" if -r "debian/copyright";
 
     # set destination directory
     unless (defined $destdir) {
-	$destdir = "..";
+        $destdir = "..";
     }
 } else {
     unless (defined $destdir) {
-	$destdir = ".";
+        $destdir = ".";
     }
 }
 
 for my $copyright_file (@copyright_files) {
     # get files-excluded
     my $data = Dpkg::Control::Hash->new();
-    my $okformat = qr'https?://www.debian.org/doc/packaging-manuals/copyright-format/[.\d]+';
+    my $okformat
+      = qr'https?://www.debian.org/doc/packaging-manuals/copyright-format/[.\d]+';
     eval {
-	$data->load($copyright_file);
-	1;
+        $data->load($copyright_file);
+        1;
     } or do {
-	undef $data;
+        undef $data;
     };
     if (not -e $copyright_file) {
-	die "File $copyright_file not found.";
-    } elsif (   $data
-	     && defined $data->{format}
-	     && $data->{format} =~ m@^$okformat/?$@)
-    {
-	if ($data->{$excludestanza}) {
-	    push(@exclude_globs, grep { $_ } split(/\s+/, $data->{$excludestanza}));
-	}
+        die "File $copyright_file not found.";
+    } elsif ($data
+        && defined $data->{format}
+        && $data->{format} =~ m@^$okformat/?$@) {
+        if ($data->{$excludestanza}) {
+            push(@exclude_globs,
+                grep { $_ } split(/\s+/, $data->{$excludestanza}));
+        }
     } else {
-	open my $file, '<', $copyright_file or die "Unable to read $copyright_file: $!\n";
-	while (my $line = <$file>) {
-	    if ($line =~ m/\b${excludestanza}.*:/i) {
-		warn "WARNING: The file $copyright_file mentions $excludestanza, but its ".
-		     "format is not recognized. Specify Format: ".
-		     "https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/ ".
-		     "in order to remove files from the tarball with mk-origtargz.\n";
-		last;
-	    }
-	}
-	close $file;
+        open my $file, '<', $copyright_file
+          or die "Unable to read $copyright_file: $!\n";
+        while (my $line = <$file>) {
+            if ($line =~ m/\b${excludestanza}.*:/i) {
+                warn
+"WARNING: The file $copyright_file mentions $excludestanza, but its "
+                  . "format is not recognized. Specify Format: "
+                  . "https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/ "
+                  . "in order to remove files from the tarball with mk-origtargz.\n";
+                last;
+            }
+        }
+        close $file;
     }
 }
-
 
 # Gather information about the upstream file.
 
@@ -393,7 +396,7 @@ my $tar_regex = qr/\.(tar\.gz   |tgz
 		     )$/x;
 
 unless (-e $upstream) {
-    die "Could not read $upstream: $!"
+    die "Could not read $upstream: $!";
 }
 
 my $mime = compression_guess_from_file($upstream);
@@ -404,17 +407,17 @@ my $is_xpifile = $upstream =~ /\.xpi$/i;
 
 unless ($is_zipfile or $is_tarfile) {
     # TODO: Should we ignore the name and only look at what file knows?
-    die "Parameter $upstream does not look like a tar archive or a zip file."
+    die "Parameter $upstream does not look like a tar archive or a zip file.";
 }
 
 if ($is_tarfile and not $repack) {
     # If we are not explicitly repacking, but need to generate a file
     # (usually due to Files-Excluded), then we want to use the original
     # compression scheme.
-    $compression = compression_guess_from_file ($upstream);
+    $compression = compression_guess_from_file($upstream);
 
     if (not defined $compression) {
-	die "Unknown or no compression used in $upstream."
+        die "Unknown or no compression used in $upstream.";
     }
 }
 
@@ -433,60 +436,68 @@ my $zipfile_deleted = 0;
 # If the file is a zipfile, we need to create a tarfile from it.
 if ($is_zipfile) {
     if ($signature) {
-	$signature = 4; # repack upstream file
+        $signature = 4;    # repack upstream file
     }
     if ($is_xpifile) {
-	system('command -v xpi-unpack >/dev/null 2>&1') >> 8 == 0
-	    or die("xpi-unpack binary not found. You need to install the package mozilla-devscripts to be able to repack .xpi upstream archives.\n");
+        system('command -v xpi-unpack >/dev/null 2>&1') >> 8 == 0
+          or die(
+"xpi-unpack binary not found. You need to install the package mozilla-devscripts to be able to repack .xpi upstream archives.\n"
+          );
     } else {
-	system('command -v unzip >/dev/null 2>&1') >> 8 == 0
-	    or die("unzip binary not found. You need to install the package unzip to be able to repack .zip upstream archives.\n");
+        system('command -v unzip >/dev/null 2>&1') >> 8 == 0
+          or die(
+"unzip binary not found. You need to install the package unzip to be able to repack .zip upstream archives.\n"
+          );
     }
 
-    my $tempdir = tempdir ("uscanXXXX", TMPDIR => 1, CLEANUP => 1);
+    my $tempdir = tempdir("uscanXXXX", TMPDIR => 1, CLEANUP => 1);
     # Parent of the target directory should be under our control
     $tempdir .= '/repack';
     my @cmd;
     if ($is_xpifile) {
-	@cmd = ('xpi-unpack', $upstream_tar, $tempdir);
-	system(@cmd) >> 8 == 0
-	    or die("Repacking from xpi failed (could not xpi-unpack)\n");
+        @cmd = ('xpi-unpack', $upstream_tar, $tempdir);
+        system(@cmd) >> 8 == 0
+          or die("Repacking from xpi failed (could not xpi-unpack)\n");
     } else {
-	mkdir $tempdir or die("Unable to mkdir($tempdir): $!\n");
-	@cmd = ('unzip', '-q');
-	push @cmd, split ' ', $unzipopt if defined $unzipopt;
-	push @cmd, ('-d', $tempdir, $upstream_tar);
-	system(@cmd) >> 8 == 0
-	    or die("Repacking from zip or jar failed (could not unzip)\n");
+        mkdir $tempdir or die("Unable to mkdir($tempdir): $!\n");
+        @cmd = ('unzip', '-q');
+        push @cmd, split ' ', $unzipopt if defined $unzipopt;
+        push @cmd, ('-d', $tempdir, $upstream_tar);
+        system(@cmd) >> 8 == 0
+          or die("Repacking from zip or jar failed (could not unzip)\n");
     }
 
-    # Figure out the top-level contents of the tarball.
-    # If we'd pass "." to tar we'd get the same contents, but the filenames would
-    # start with ./, which is confusing later.
-    # This should also be more reliable than, say, changing directories and globbing.
+# Figure out the top-level contents of the tarball.
+# If we'd pass "." to tar we'd get the same contents, but the filenames would
+# start with ./, which is confusing later.
+# This should also be more reliable than, say, changing directories and globbing.
     opendir(TMPDIR, $tempdir) || die("Can't open $tempdir $!\n");
-    my @files = grep {$_ ne "." && $_ ne ".."} readdir(TMPDIR);
+    my @files = grep { $_ ne "." && $_ ne ".." } readdir(TMPDIR);
     close TMPDIR;
 
     # tar it all up
-    spawn(exec => ['tar',
-		   '--owner=root', '--group=root', '--mode=a+rX',
-		   '--create', '--file', "$destfiletar",
-		   '--directory', $tempdir,
-		   @files],
-	wait_child => 1);
+    spawn(
+        exec => [
+            'tar',      '--owner=root', '--group=root', '--mode=a+rX',
+            '--create', '--file',       "$destfiletar", '--directory',
+            $tempdir,   @files
+        ],
+        wait_child => 1
+    );
     unless (-e "$destfiletar") {
-	die("Repacking from zip or jar to tar.$destext failed (could not create tarball)\n");
+        die(
+"Repacking from zip or jar to tar.$destext failed (could not create tarball)\n"
+        );
     }
     compress_archive($destfiletar, $destfile, $compression);
 
     # rename means the user did not want this file to exist afterwards
     if ($mode eq "rename") {
-	unlink $upstream_tar;
-	$zipfile_deleted++;
+        unlink $upstream_tar;
+        $zipfile_deleted++;
     }
 
-    $mode = "repack";
+    $mode         = "repack";
     $upstream_tar = $destfile;
 }
 
@@ -498,7 +509,7 @@ my $do_repack = 0;
 if ($repack) {
     my $comp = compression_guess_from_file($upstream_tar);
     unless ($comp) {
-	die("Cannot determine compression method of $upstream_tar");
+        die("Cannot determine compression method of $upstream_tar");
     }
     $do_repack = $comp ne $compression;
 }
@@ -510,92 +521,103 @@ my @to_delete;
 if (@exclude_globs) {
     my @files;
     my $files;
-    spawn(exec => ['tar', '-t', '-a', '-f', $upstream_tar],
-	  to_string => \$files,
-	  wait_child => 1);
+    spawn(
+        exec       => ['tar', '-t', '-a', '-f', $upstream_tar],
+        to_string  => \$files,
+        wait_child => 1
+    );
     @files = split /^/, $files;
     chomp @files;
 
     my %delete;
     # find out what to delete
-    my @exclude_info = map { { glob => $_, used => 0, regex => glob_to_regex($_) } } @exclude_globs;
+    my @exclude_info
+      = map { { glob => $_, used => 0, regex => glob_to_regex($_) } }
+      @exclude_globs;
     for my $filename (@files) {
-	my $last_match;
-	for my $info (@exclude_info) {
-	    if ($filename =~ m@^(?:[^/]*/)?        # Possible leading directory, ignore it
+        my $last_match;
+        for my $info (@exclude_info) {
+            if (
+                $filename
+                =~ m@^(?:[^/]*/)?        # Possible leading directory, ignore it
 				(?:$info->{regex}) # User pattern
 				(?:/.*)?$          # Possible trailing / for a directory
-			      @x) {
-		$delete{$filename} = 1 if !$last_match;
-		$last_match = $info;
-	    }
-	}
-	if (defined $last_match) {
-	    $last_match->{used} = 1;
-	}
+			      @x
+            ) {
+                $delete{$filename} = 1 if !$last_match;
+                $last_match = $info;
+            }
+        }
+        if (defined $last_match) {
+            $last_match->{used} = 1;
+        }
     }
 
     for my $info (@exclude_info) {
-	if (!$info->{used}) {
-	    warn "No files matched excluded pattern as the last matching glob: $info->{glob}\n";
-	}
+        if (!$info->{used}) {
+            warn
+"No files matched excluded pattern as the last matching glob: $info->{glob}\n";
+        }
     }
 
     # ensure files are mentioned before the directory they live in
     # (otherwise tar complains)
-    @to_delete = sort {$b cmp $a} keys %delete;
+    @to_delete = sort { $b cmp $a } keys %delete;
 
     $deletecount = scalar(@to_delete);
 }
 
 if ($deletecount) {
-    $destfilebase = sprintf "%s_%s%s.%s.tar", $package, $version, $suffix, $orig;
-    $destfiletar = sprintf "%s/%s", $destdir, $destfilebase;
-    $destfile = sprintf "%s.%s", $destfiletar, $destext;
+    $destfilebase = sprintf "%s_%s%s.%s.tar", $package, $version, $suffix,
+      $orig;
+    $destfiletar = sprintf "%s/%s", $destdir,     $destfilebase;
+    $destfile    = sprintf "%s.%s", $destfiletar, $destext;
 
     # Zip -> tar process already created $destfile, so need to rename it
     if ($is_zipfile) {
-	move $upstream_tar, $destfile;
-	$upstream_tar = $destfile;
+        move $upstream_tar, $destfile;
+        $upstream_tar = $destfile;
     }
 }
 
 # Actually do the unpack, remove, pack cycle
 if ($do_repack || $deletecount) {
     if ($signature) {
-	$signature = 4; # repack upstream file
+        $signature = 4;    # repack upstream file
     }
     decompress_archive($upstream_tar, $destfiletar);
     unlink $upstream_tar if $mode eq "rename";
     # We have to use piping because --delete is broken otherwise, as documented
     # at https://www.gnu.org/software/tar/manual/html_node/delete.html
     if (@to_delete) {
-	# ARG_MAX: max number of bytes exec() can handle
-	my $arg_max;
-	spawn(
-	    exec => ['getconf', 'ARG_MAX'],
-	    to_string => \$arg_max,
-	    wait_child => 1
-	);
-	# Under Hurd `getconf` above returns "undefined".
-	# It's apparently unlimited (?), so we just use a arbitrary number.
-	if ($arg_max =~ /\D/) { $arg_max = 131072; }
-	# Usually NAME_MAX=255, but here we use 128 to be on the safe side.
-	$arg_max = int($arg_max / 128);
-	# We use this lame splice on a totally arbitrary $arg_max because
-	# counting how many bytes there are in @to_delete is too inefficient.
-	while (my @next_n = splice @to_delete, 0, $arg_max) {
-	    spawn(exec => ['tar', '--delete', @next_n ],
-		  from_file => $destfiletar,
-		  to_file => $destfiletar . ".tmp",
-		  wait_child => 1) if scalar(@next_n) > 0;
-	    move ($destfiletar . ".tmp", $destfiletar);
-	}
+        # ARG_MAX: max number of bytes exec() can handle
+        my $arg_max;
+        spawn(
+            exec       => ['getconf', 'ARG_MAX'],
+            to_string  => \$arg_max,
+            wait_child => 1
+        );
+        # Under Hurd `getconf` above returns "undefined".
+        # It's apparently unlimited (?), so we just use a arbitrary number.
+        if ($arg_max =~ /\D/) { $arg_max = 131072; }
+        # Usually NAME_MAX=255, but here we use 128 to be on the safe side.
+        $arg_max = int($arg_max / 128);
+        # We use this lame splice on a totally arbitrary $arg_max because
+        # counting how many bytes there are in @to_delete is too inefficient.
+        while (my @next_n = splice @to_delete, 0, $arg_max) {
+            spawn(
+                exec       => ['tar', '--delete', @next_n],
+                from_file  => $destfiletar,
+                to_file    => $destfiletar . ".tmp",
+                wait_child => 1
+            ) if scalar(@next_n) > 0;
+            move($destfiletar . ".tmp", $destfiletar);
+        }
     }
     compress_archive($destfiletar, $destfile, $compression);
 
     # Symlink no longer makes sense
-    $mode = "repack";
+    $mode         = "repack";
     $upstream_tar = $destfile;
 }
 
@@ -603,15 +625,17 @@ if ($do_repack || $deletecount) {
 
 my $same_name = abs_path($destfile) eq abs_path($upstream);
 unless ($same_name) {
-    if ($mode ne "repack") { die "Assertion failed" unless $upstream_tar eq $upstream; }
+    if ($mode ne "repack") {
+        die "Assertion failed" unless $upstream_tar eq $upstream;
+    }
 
     if ($mode eq "symlink") {
-	my $rel = File::Spec->abs2rel( $upstream_tar, $destdir );
-	symlink $rel, $destfile;
+        my $rel = File::Spec->abs2rel($upstream_tar, $destdir);
+        symlink $rel, $destfile;
     } elsif ($mode eq "copy") {
-	copy $upstream_tar, $destfile;
+        copy $upstream_tar, $destfile;
     } elsif ($mode eq "rename") {
-	move $upstream_tar, $destfile;
+        move $upstream_tar, $destfile;
     }
 }
 
@@ -634,29 +658,32 @@ if ($signature == 1) {
 }
 
 if ($signature == 1 or $signature == 2) {
-   if ($is_gpgfile) {
-	my $enarmor = `gpg --output - --enarmor $signature_file 2>&1`;
-	$? == 0 or die "mk-origtargz: Failed to convert $signature_file to *.asc\n";
-	$enarmor =~ s/ARMORED FILE/SIGNATURE/;
-	$enarmor =~ /^Comment:/d;
-	open(DESTSIG, ">> $destsigfile") or die "mk-origtargz: Failed to open $destsigfile for append: $!\n";
-	print DESTSIG $enarmor;
+    if ($is_gpgfile) {
+        my $enarmor = `gpg --output - --enarmor $signature_file 2>&1`;
+        $? == 0
+          or die "mk-origtargz: Failed to convert $signature_file to *.asc\n";
+        $enarmor =~ s/ARMORED FILE/SIGNATURE/;
+        $enarmor =~ /^Comment:/d;
+        open(DESTSIG, ">> $destsigfile")
+          or die "mk-origtargz: Failed to open $destsigfile for append: $!\n";
+        print DESTSIG $enarmor;
     } else {
-	if (abs_path($signature_file) ne abs_path($destsigfile)) {
-	    if ($mode eq "symlink") {
-		my $rel = File::Spec->abs2rel($signature_file, $destdir);
-		symlink $rel, $destsigfile;
-	    } elsif ($mode eq "copy") {
-		copy $signature_file, $destsigfile;
-	    } elsif ($mode eq "rename") {
-		move $signature_file, $destsigfile;
-	    } else {
-		die "Strange mode=\"$mode\"\n";
-	    }
-	}
+        if (abs_path($signature_file) ne abs_path($destsigfile)) {
+            if ($mode eq "symlink") {
+                my $rel = File::Spec->abs2rel($signature_file, $destdir);
+                symlink $rel, $destsigfile;
+            } elsif ($mode eq "copy") {
+                copy $signature_file, $destsigfile;
+            } elsif ($mode eq "rename") {
+                move $signature_file, $destsigfile;
+            } else {
+                die "Strange mode=\"$mode\"\n";
+            }
+        }
     }
 } elsif ($signature == 3) {
-    print "Skip adding upstream signature since upstream file has non-detached signature file.\n";
+    print
+"Skip adding upstream signature since upstream file has non-detached signature file.\n";
 } elsif ($signature == 4) {
     print "Skip adding upstream signature since upstream file is repacked.\n";
 }
@@ -665,9 +692,11 @@ if ($signature == 1 or $signature == 2) {
 
 # We are lazy and rely on Dpkg::IPC to report an error message (spawn does not report back the error code).
 # We don't expect this to occur often anyways.
-my $ret = spawn(exec => ['tar', '--list', '--auto-compress', '--file', $destfile ],
-      wait_child => 1,
-      to_file => '/dev/null');
+my $ret = spawn(
+    exec       => ['tar', '--list', '--auto-compress', '--file', $destfile],
+    wait_child => 1,
+    to_file    => '/dev/null'
+);
 
 # Tell the use what we did
 
@@ -678,15 +707,15 @@ if ($same_name) {
     print "Leaving $destfile_nice where it is";
 } else {
     if ($is_zipfile or $do_repack or $deletecount) {
-	print "Successfully repacked $upstream_nice as $destfile_nice";
+        print "Successfully repacked $upstream_nice as $destfile_nice";
     } elsif ($mode eq "symlink") {
-	print "Successfully symlinked $upstream_nice to $destfile_nice";
+        print "Successfully symlinked $upstream_nice to $destfile_nice";
     } elsif ($mode eq "copy") {
-	print "Successfully copied $upstream_nice to $destfile_nice";
+        print "Successfully copied $upstream_nice to $destfile_nice";
     } elsif ($mode eq "rename") {
-	print "Successfully renamed $upstream_nice to $destfile_nice";
+        print "Successfully renamed $upstream_nice to $destfile_nice";
     } else {
-	die "Unknown mode $mode."
+        die "Unknown mode $mode.";
     }
 }
 
@@ -694,7 +723,7 @@ if ($deletecount) {
     print ", deleting ${deletecount} files from it";
 }
 if ($zipfile_deleted) {
-    print ", and removed the original file"
+    print ", and removed the original file";
 }
 print ".\n";
 
@@ -704,25 +733,29 @@ sub decompress_archive($$) {
     my ($from_file, $to_file) = @_;
     my $comp = compression_guess_from_file($from_file);
     unless ($comp) {
-	die("Cannot determine compression method of $from_file");
+        die("Cannot determine compression method of $from_file");
     }
 
     my $cmd = compression_get_property($comp, 'decomp_prog');
-    spawn(exec => $cmd,
-	  from_file => $from_file,
-	  to_file => $to_file,
-	  wait_child => 1);
+    spawn(
+        exec       => $cmd,
+        from_file  => $from_file,
+        to_file    => $to_file,
+        wait_child => 1
+    );
 }
 
 sub compress_archive($$$) {
     my ($from_file, $to_file, $comp) = @_;
 
     my $cmd = compression_get_property($comp, 'comp_prog');
-    push(@{$cmd}, '-'.compression_get_property($comp, 'default_level'));
-    spawn(exec => $cmd,
-	  from_file => $from_file,
-	  to_file => $to_file,
-	  wait_child => 1);
+    push(@{$cmd}, '-' . compression_get_property($comp, 'default_level'));
+    spawn(
+        exec       => $cmd,
+        from_file  => $from_file,
+        to_file    => $to_file,
+        wait_child => 1
+    );
     unlink $from_file;
 }
 
@@ -731,43 +764,53 @@ sub glob_to_regex {
     my ($glob) = @_;
 
     if ($glob =~ m@/$@) {
-	warn "WARNING: Files-Excluded pattern ($glob) should not have a trailing /\n";
-	chop($glob);
+        warn
+"WARNING: Files-Excluded pattern ($glob) should not have a trailing /\n";
+        chop($glob);
     }
     if ($glob =~ m/(?<!\\)(?:\\{2})*\\(?![\\*?])/) {
-	die "Invalid Files-Excluded pattern ($glob), \\ can only escape \\, *, or ? characters\n";
+        die
+"Invalid Files-Excluded pattern ($glob), \\ can only escape \\, *, or ? characters\n";
     }
 
     my ($regex, $escaping);
     for my $c ($glob =~ m/(.)/gs) {
-	if ($c eq '.' || $c eq '(' || $c eq ')' || $c eq '|' ||
-	    $c eq '+' || $c eq '^' || $c eq '$' || $c eq '@' || $c eq '%' ||
-	    $c eq '{' || $c eq '}' || $c eq '[' || $c eq ']' ||
-	    # Escape '#' since we're using /x in the pattern match
-	    $c eq '#') {
-	    $regex .= "\\$c";
-	}
-	elsif ($c eq '*') {
-	    $regex .= $escaping ? "\\*" : ".*";
-	}
-	elsif ($c eq '?') {
-	    $regex .= $escaping ? "\\?" : ".";
-	}
-	elsif ($c eq "\\") {
-	    if ($escaping) {
-		$regex .= "\\\\";
-		$escaping = 0;
-	    }
-	    else {
-		$escaping = 1;
-	    }
-	    next;
-	}
-	else {
-	    $regex .= $c;
-	    $escaping = 0;
-	}
-	$escaping = 0;
+        if (
+               $c eq '.'
+            || $c eq '('
+            || $c eq ')'
+            || $c eq '|'
+            || $c eq '+'
+            || $c eq '^'
+            || $c eq '$'
+            || $c eq '@'
+            || $c eq '%'
+            || $c eq '{'
+            || $c eq '}'
+            || $c eq '['
+            || $c eq ']'
+            ||
+            # Escape '#' since we're using /x in the pattern match
+            $c eq '#'
+        ) {
+            $regex .= "\\$c";
+        } elsif ($c eq '*') {
+            $regex .= $escaping ? "\\*" : ".*";
+        } elsif ($c eq '?') {
+            $regex .= $escaping ? "\\?" : ".";
+        } elsif ($c eq "\\") {
+            if ($escaping) {
+                $regex .= "\\\\";
+                $escaping = 0;
+            } else {
+                $escaping = 1;
+            }
+            next;
+        } else {
+            $regex .= $c;
+            $escaping = 0;
+        }
+        $escaping = 0;
     }
 
     return $regex;

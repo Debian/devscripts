@@ -58,33 +58,33 @@ For example, the author uses this file:
 
 use File::HomeDir;
 
-$ENV{LANG}="C";
+$ENV{LANG} = "C";
 
-my $wanted=shift;
-my $path=shift;
+my $wanted = shift;
+my $path   = shift;
 
 if (length $path) {
-	chdir $path || die "$path: unreadable\n";
+    chdir $path || die "$path: unreadable\n";
 }
 
 our $url = `svn info . 2>/dev/null|grep -i ^URL: | cut -d ' ' -f 2`;
-if (! length $url) {
-	# Try svk instead.
-	$url = `svk info .| grep -i '^Depot Path:' | cut -d ' ' -f 3`;
+if (!length $url) {
+    # Try svk instead.
+    $url = `svk info .| grep -i '^Depot Path:' | cut -d ' ' -f 3`;
 }
 
-if (! length $url) {
-	die "cannot get url";
+if (!length $url) {
+    die "cannot get url";
 }
 
 if (length $wanted) {
-	# Now jut substitute into it.
-	$url=~s!/(?:trunk|branches|tags)($|/)!/$wanted$1!;
+    # Now jut substitute into it.
+    $url =~ s!/(?:trunk|branches|tags)($|/)!/$wanted$1!;
 
-	my $svnpath = File::HomeDir->my_home."/.svnpath";
-	if (-e $svnpath) {
-		require $svnpath;
-	}
+    my $svnpath = File::HomeDir->my_home . "/.svnpath";
+    if (-e $svnpath) {
+        require $svnpath;
+    }
 }
 
 print $url;

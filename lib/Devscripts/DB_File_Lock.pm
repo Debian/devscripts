@@ -17,7 +17,7 @@ require 5.004;
 use strict;
 use vars qw($VERSION @ISA $locks);
 
-@ISA = qw(DB_File);
+@ISA     = qw(DB_File);
 $VERSION = '0.05';
 
 use DB_File ();
@@ -26,145 +26,143 @@ use Carp qw(croak carp);
 use Symbol ();
 
 # import function can't be inherited, so this magic required
-sub import
-{
-	my $ourname = shift;
-	my @imports = @_; # dynamic scoped var, still in scope after package call in eval
-	my $module = caller;
-	my $calling = $ISA[0];
-	eval " package $module; import $calling, \@imports; ";
+sub import {
+    my $ourname = shift;
+    my @imports
+      = @_;    # dynamic scoped var, still in scope after package call in eval
+    my $module  = caller;
+    my $calling = $ISA[0];
+    eval " package $module; import $calling, \@imports; ";
 }
 
-sub _lock_and_tie
-{
-	my $package = shift;
+sub _lock_and_tie {
+    my $package = shift;
 
-	## Grab the type of tie
+    ## Grab the type of tie
 
-	my $tie_type = pop @_;
+    my $tie_type = pop @_;
 
-	## There are two ways of passing data defined by DB_File
+    ## There are two ways of passing data defined by DB_File
 
-	my $lock_data;
-	my @dbfile_data;
+    my $lock_data;
+    my @dbfile_data;
 
-	if ( @_ == 5 ) {
-		$lock_data = pop @_;
-		@dbfile_data = @_;
-	} elsif ( @_ == 2 ) {
-		$lock_data = pop @_;
-		@dbfile_data = @{$_[0]};
-	} else {
-		croak "invalid number of arguments";
-	}
+    if (@_ == 5) {
+        $lock_data   = pop @_;
+        @dbfile_data = @_;
+    } elsif (@_ == 2) {
+        $lock_data   = pop @_;
+        @dbfile_data = @{ $_[0] };
+    } else {
+        croak "invalid number of arguments";
+    }
 
-	## Decipher the lock_data
+    ## Decipher the lock_data
 
-	my $mode;
-	my $nonblocking   = 0;
-	my $lockfile_name = $dbfile_data[0] . ".lock";
-	my $lockfile_mode;
+    my $mode;
+    my $nonblocking   = 0;
+    my $lockfile_name = $dbfile_data[0] . ".lock";
+    my $lockfile_mode;
 
-	if ( lc($lock_data) eq "read" ) {
-		$mode = "read";
-	} elsif ( lc($lock_data) eq "write" ) {
-		$mode = "write";
-	} elsif ( ref($lock_data) eq "HASH" ) {
-		$mode = lc $lock_data->{mode};
-		croak "invalid mode ($mode)" if ( $mode ne "read" and $mode ne "write" );
-		$nonblocking = $lock_data->{nonblocking};
-		$lockfile_name = $lock_data->{lockfile_name} if ( defined $lock_data->{lockfile_name} );
-		$lockfile_mode = $lock_data->{lockfile_mode};
-	} else {
-		croak "invalid lock_data ($lock_data)";
-	}
+    if (lc($lock_data) eq "read") {
+        $mode = "read";
+    } elsif (lc($lock_data) eq "write") {
+        $mode = "write";
+    } elsif (ref($lock_data) eq "HASH") {
+        $mode = lc $lock_data->{mode};
+        croak "invalid mode ($mode)" if ($mode ne "read" and $mode ne "write");
+        $nonblocking   = $lock_data->{nonblocking};
+        $lockfile_name = $lock_data->{lockfile_name}
+          if (defined $lock_data->{lockfile_name});
+        $lockfile_mode = $lock_data->{lockfile_mode};
+    } else {
+        croak "invalid lock_data ($lock_data)";
+    }
 
-	## Warn about opening a lockfile for writing when only locking for reading
+    ## Warn about opening a lockfile for writing when only locking for reading
 
-	# NOTE: This warning disabled for RECNO because RECNO seems to require O_RDWR
-	# even when opening only for reading.
+  # NOTE: This warning disabled for RECNO because RECNO seems to require O_RDWR
+  # even when opening only for reading.
 
-	carp "opening with write access when locking only for reading (use O_RDONLY to fix)"
-		if (
-			( $dbfile_data[1] && O_RDWR or $dbfile_data[1] && O_WRONLY ) # any kind of write access
-			and $mode eq "read"                                          # and opening for reading
-			and $tie_type ne "TIEARRAY"                                  # and not RECNO
-		);
+    carp
+"opening with write access when locking only for reading (use O_RDONLY to fix)"
+      if ((
+               $dbfile_data[1] && O_RDWR
+            or $dbfile_data[1] && O_WRONLY
+        )                              # any kind of write access
+        and $mode eq "read"            # and opening for reading
+        and $tie_type ne "TIEARRAY"    # and not RECNO
+      );
 
-	## Determine the mode of the lockfile, if not given
+    ## Determine the mode of the lockfile, if not given
 
-	# THEORY: if someone can read or write the database file, we must allow
-	# them to read and write the lockfile.
+    # THEORY: if someone can read or write the database file, we must allow
+    # them to read and write the lockfile.
 
-	if ( not defined $lockfile_mode ) {
-		$lockfile_mode = 0600; # we must be allowed to read/write lockfile
-		$lockfile_mode |= 0060 if ( $dbfile_data[2] & 0060 );
-		$lockfile_mode |= 0006 if ( $dbfile_data[2] & 0006 );
-	 }
+    if (not defined $lockfile_mode) {
+        $lockfile_mode = 0600;    # we must be allowed to read/write lockfile
+        $lockfile_mode |= 0060 if ($dbfile_data[2] & 0060);
+        $lockfile_mode |= 0006 if ($dbfile_data[2] & 0006);
+    }
 
-	## Open the lockfile, lock it, and open the database
+    ## Open the lockfile, lock it, and open the database
 
-	my $lockfile_fh = Symbol::gensym();
-	my $saved_umask = umask(0000) if ( umask() & $lockfile_mode );
-	my $open_ok = sysopen($lockfile_fh, $lockfile_name, O_RDWR|O_CREAT,
-            $lockfile_mode);
-	umask($saved_umask) if ( defined $saved_umask );
-	$open_ok or croak "could not open lockfile ($lockfile_name)";
+    my $lockfile_fh = Symbol::gensym();
+    my $saved_umask = umask(0000) if (umask() & $lockfile_mode);
+    my $open_ok     = sysopen($lockfile_fh, $lockfile_name, O_RDWR | O_CREAT,
+        $lockfile_mode);
+    umask($saved_umask) if (defined $saved_umask);
+    $open_ok or croak "could not open lockfile ($lockfile_name)";
 
-	my $flock_flags = ($mode eq "write" ? LOCK_EX : LOCK_SH) | ($nonblocking ? LOCK_NB : 0);
-	if ( not flock $lockfile_fh, $flock_flags ) {
-		close $lockfile_fh;
-		return undef if ( $nonblocking );
-		croak "could not flock lockfile";
-	}
+    my $flock_flags
+      = ($mode eq "write" ? LOCK_EX : LOCK_SH) | ($nonblocking ? LOCK_NB : 0);
+    if (not flock $lockfile_fh, $flock_flags) {
+        close $lockfile_fh;
+        return undef if ($nonblocking);
+        croak "could not flock lockfile";
+    }
 
-	my $self = $tie_type eq "TIEHASH"
-		? $package->SUPER::TIEHASH(@_)
-		: $package->SUPER::TIEARRAY(@_);
-	if ( not $self ) {
-		close $lockfile_fh;
-		return $self;
-	}
+    my $self
+      = $tie_type eq "TIEHASH"
+      ? $package->SUPER::TIEHASH(@_)
+      : $package->SUPER::TIEARRAY(@_);
+    if (not $self) {
+        close $lockfile_fh;
+        return $self;
+    }
 
-	## Store the info for the DESTROY function
+    ## Store the info for the DESTROY function
 
-	my $id = "" . $self;
-	$id =~ s/^[^=]+=//; # remove the package name in case re-blessing occurs
-	$locks->{$id} = $lockfile_fh;
+    my $id = "" . $self;
+    $id =~ s/^[^=]+=//;    # remove the package name in case re-blessing occurs
+    $locks->{$id} = $lockfile_fh;
 
-	## Return the object
+    ## Return the object
 
-	return $self;
+    return $self;
 }
 
-sub TIEHASH
-{
-	return _lock_and_tie(@_, 'TIEHASH');
+sub TIEHASH {
+    return _lock_and_tie(@_, 'TIEHASH');
 }
 
-sub TIEARRAY
-{
-	return _lock_and_tie(@_, 'TIEARRAY');
+sub TIEARRAY {
+    return _lock_and_tie(@_, 'TIEARRAY');
 }
 
-sub DESTROY
-{
-	my $self = shift;
+sub DESTROY {
+    my $self = shift;
 
-	my $id = "" . $self;
-	$id =~ s/^[^=]+=//;
-	my $lockfile_fh = $locks->{$id};
-	delete $locks->{$id};
+    my $id = "" . $self;
+    $id =~ s/^[^=]+=//;
+    my $lockfile_fh = $locks->{$id};
+    delete $locks->{$id};
 
-	$self->SUPER::DESTROY(@_);
+    $self->SUPER::DESTROY(@_);
 
-	# un-flock not needed, as we close here
-	close $lockfile_fh;
+    # un-flock not needed, as we close here
+    close $lockfile_fh;
 }
-
-
-
-
 
 1;
 __END__

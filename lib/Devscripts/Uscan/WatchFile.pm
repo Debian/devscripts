@@ -1,3 +1,4 @@
+
 =head1 NAME
 
 Devscripts::Uscan::WatchFile - watchfile object for L<uscan>
@@ -104,55 +105,48 @@ use Moo;
 use constant {
     ANY_VERSION => '[-_]?(\d[\-+\.:\~\da-zA-Z]*)',
     ARCHIVE_EXT => '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip|tgz|tbz|txz)',
-    DEB_EXT  => '[\+~](debian|dfsg|ds|deb)(\.)?(\d+)?$',
+    DEB_EXT     => '[\+~](debian|dfsg|ds|deb)(\.)?(\d+)?$',
 };
-use constant {
-    SIGNATURE_EXT => ARCHIVE_EXT . '\.(?:asc|pgp|gpg|sig|sign)',
-};
+use constant { SIGNATURE_EXT => ARCHIVE_EXT . '\.(?:asc|pgp|gpg|sig|sign)', };
 
 # Required new() parameters
-has config      => ( is => 'rw', required => 1 );
-has package     => ( is => 'ro', required => 1 );    # Debian package
-has pkg_dir     => ( is => 'ro', required => 1 );
-has pkg_version => ( is => 'ro', required => 1 );
+has config      => (is => 'rw', required => 1);
+has package     => (is => 'ro', required => 1);    # Debian package
+has pkg_dir     => (is => 'ro', required => 1);
+has pkg_version => (is => 'ro', required => 1);
 has bare        => (
     is      => 'rw',
     lazy    => 1,
-    default => sub { $_[0]->config->bare }
-);
+    default => sub { $_[0]->config->bare });
 has download => (
     is      => 'rw',
     lazy    => 1,
-    default => sub { $_[0]->config->download }
-);
+    default => sub { $_[0]->config->download });
 has downloader => (
     is      => 'ro',
     lazy    => 1,
     default => sub {
-        Devscripts::Uscan::Downloader->new(
-            {
-                timeout => $_[0]->config->timeout,
-                agent   => $_[0]->config->user_agent,
-                passive => $_[0]->config->passive,
-                destdir => $_[0]->config->destdir,
-            }
-        );
+        Devscripts::Uscan::Downloader->new({
+            timeout => $_[0]->config->timeout,
+            agent   => $_[0]->config->user_agent,
+            passive => $_[0]->config->passive,
+            destdir => $_[0]->config->destdir,
+        });
     },
 );
 has signature => (
     is       => 'rw',
     required => 1,
     lazy     => 1,
-    default  => sub { $_[0]->config->signature }
-);
-has watchfile => ( is => 'ro', required => 1 );    # usualy debian/watch
+    default  => sub { $_[0]->config->signature });
+has watchfile => (is => 'ro', required => 1);    # usualy debian/watch
 
 # Internal attributes
-has origcount     => ( is => 'rw' );
-has origtars      => ( is => 'rw', default => sub { [] } );
-has status        => ( is => 'rw', default => sub { 0 } );
-has watch_version => ( is => 'rw' );
-has watchlines    => ( is => 'rw', default => sub { [] } );
+has origcount     => (is => 'rw');
+has origtars      => (is => 'rw', default => sub { [] });
+has status        => (is => 'rw', default => sub { 0 });
+has watch_version => (is => 'rw');
+has watchlines    => (is => 'rw', default => sub { [] });
 
 # Values shared between lines
 has shared => (
@@ -179,11 +173,10 @@ has shared => (
 );
 has keyring => (
     is      => 'ro',
-    default => sub { Devscripts::Uscan::Keyring->new }
-);
+    default => sub { Devscripts::Uscan::Keyring->new });
 
 sub BUILD {
-    my ( $self, $args ) = @_;
+    my ($self, $args) = @_;
     my $watch_version = 0;
     my $nextline;
     $dehs_tags = {};
@@ -194,7 +187,7 @@ sub BUILD {
       . "    pkg_dir = $args->{pkg_dir}";
 
     $self->origcount(0);    # reset to 0 for each watch file
-    unless ( open WATCH, $args->{watchfile} ) {
+    unless (open WATCH, $args->{watchfile}) {
         uscan_warn "could not open $args->{watchfile}: $!";
         return 1;
     }
@@ -209,27 +202,26 @@ sub BUILD {
         # Reassemble lines splitted using \
         chomp;
         if (s/(?<!\\)\\$//) {
-            if ( eof(WATCH) ) {
+            if (eof(WATCH)) {
                 uscan_warn
                   "$args->{watchfile} ended with \\; skipping last line";
                 $self->status(1);
                 last;
             }
-            if ( $watch_version > 3 ) {
+            if ($watch_version > 3) {
 
                 # drop leading \s only if version 4
                 $nextline = <WATCH>;
                 $nextline =~ s/^\s*//;
                 $_ .= $nextline;
-            }
-            else {
+            } else {
                 $_ .= <WATCH>;
             }
             goto CHOMP;
         }
 
         # "version" must be the first field
-        if ( !$watch_version ) {
+        if (!$watch_version) {
 
             # Looking for "version" field.
             if (/^version\s*=\s*(\d+)(\s|$)/) {    # Found
@@ -238,8 +230,7 @@ sub BUILD {
                 # Note that version=1 watchfiles have no "version" field so
                 # authorizated values are >= 2 and <= CURRENT_WATCHFILE_VERSION
                 if (   $watch_version < 2
-                    or $watch_version > $main::CURRENT_WATCHFILE_VERSION )
-                {
+                    or $watch_version > $main::CURRENT_WATCHFILE_VERSION) {
                     # "version" field found but has no authorizated value
                     uscan_warn
 "$args->{watchfile} version number is unrecognised; skipping watch file";
@@ -278,8 +269,7 @@ sub BUILD {
         s/\@SIGNATURE_EXT\@/SIGNATURE_EXT/ge;
         s/\@DEB_EXT\@/DEB_EXT/ge;
 
-        push @{ $self->watchlines }, Devscripts::Uscan::WatchLine->new(
-            {
+        push @{ $self->watchlines }, Devscripts::Uscan::WatchLine->new({
                 # Shared between lines
                 config     => $self->config,
                 downloader => $self->downloader,
@@ -293,8 +283,7 @@ sub BUILD {
                 pkg_version   => $self->pkg_version,
                 watch_version => $watch_version,
                 watchfile     => $self->watchfile,
-            }
-        );
+        });
     }
 
     close WATCH
@@ -305,7 +294,7 @@ sub BUILD {
 
 sub process_lines {
     my ($self) = shift;
-    foreach ( @{ $self->watchlines } ) {
+    foreach (@{ $self->watchlines }) {
 
         # search newfile and newversion
         my $res = $_->process;

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 # -*- tab-width: 8; indent-tabs-mode: t; cperl-indent-level: 4 -*-
-# vim:set ai sts=4 ts=8 tw=80:
+# vim: set ai shiftwidth=4 tabstop=4 expandtab:
 
 # uscan: This program looks for watch files and checks upstream ftp sites
 # for later versions of the software.
@@ -488,7 +488,7 @@ HTML tags
 
 =item B<plain>: search pattern in the full page
 
-This is usefull is page content is not HTML but in JSON. Example with
+This is useful is page content is not HTML but in JSON. Example with
 npmjs.com:
 
   version=4
@@ -1938,27 +1938,25 @@ uscan_verbose "Scan finished";
 # Are there any warnings to give if we're using dehs?
 $dehs_end_output = 1;
 dehs_output if ($dehs);
-exit( $found ? 0 : 1 );
+exit($found ? 0 : 1);
 
 #######################################################################
 # {{{ code 2: process watchfile by looping over watchline
 #######################################################################
 
 sub process_watchfile {
-    my ( $pkg_dir, $package, $version, $watchfile ) = @_;
+    my ($pkg_dir, $package, $version, $watchfile) = @_;
     my $opwd = cwd();
     chdir $pkg_dir;
 
-    my $wf = Devscripts::Uscan::WatchFile->new(
-        {
-            config      => $config,
-            package     => $package,
-            pkg_dir     => $pkg_dir,
-            pkg_version => $version,
-            watchfile   => $watchfile,
-        }
-    );
-    return $wf->status if ( $wf->status );
+    my $wf = Devscripts::Uscan::WatchFile->new({
+        config      => $config,
+        package     => $package,
+        pkg_dir     => $pkg_dir,
+        pkg_version => $version,
+        watchfile   => $watchfile,
+    });
+    return $wf->status if ($wf->status);
 
     my $res = $wf->process_lines;
     chdir $opwd;

@@ -11,123 +11,123 @@ use Symbol qw(gensym);
 use Term::ANSIColor;
 use IO::Select;
 
-my $skip_pie = 0;
+my $skip_pie            = 0;
 my $skip_stackprotector = 0;
-my $skip_fortify = 0;
-my $skip_relro = 0;
-my $skip_bindnow = 0;
-my $report_functions = 0;
+my $skip_fortify        = 0;
+my $skip_relro          = 0;
+my $skip_bindnow        = 0;
+my $report_functions    = 0;
 my $find_libc_functions = 0;
-my $color = 0;
-my $lintian = 0;
-my $verbose = 0;
-my $debug = 0;
-my $quiet = 0;
-my $help = 0;
-my $man = 0;
+my $color               = 0;
+my $lintian             = 0;
+my $verbose             = 0;
+my $debug               = 0;
+my $quiet               = 0;
+my $help                = 0;
+my $man                 = 0;
 
 GetOptions(
-        "nopie|p+" => \$skip_pie,
-        "nostackprotector|s+" => \$skip_stackprotector,
-        "nofortify|f+" => \$skip_fortify,
-        "norelro|r+" => \$skip_relro,
-        "nobindnow|b+" => \$skip_bindnow,
-        "report-functions|R!" => \$report_functions,
-        "find-libc-functions|F!" => \$find_libc_functions,
-        "color|c!" => \$color,
-        "lintian|l!" => \$lintian,
-        "verbose|v!" => \$verbose,
-        "debug!" => \$debug,
-        "quiet|q!" => \$quiet,
-        "help|h|?" => \$help,
-        "man|H" => \$man,
-    ) or pod2usage(2);
+    "nopie|p+"               => \$skip_pie,
+    "nostackprotector|s+"    => \$skip_stackprotector,
+    "nofortify|f+"           => \$skip_fortify,
+    "norelro|r+"             => \$skip_relro,
+    "nobindnow|b+"           => \$skip_bindnow,
+    "report-functions|R!"    => \$report_functions,
+    "find-libc-functions|F!" => \$find_libc_functions,
+    "color|c!"               => \$color,
+    "lintian|l!"             => \$lintian,
+    "verbose|v!"             => \$verbose,
+    "debug!"                 => \$debug,
+    "quiet|q!"               => \$quiet,
+    "help|h|?"               => \$help,
+    "man|H"                  => \$man,
+) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage(-exitstatus => 0, -verbose => 2, -noperldoc => 1) if $man;
 
 my $overall = 0;
-my $rc = 0;
-my $report = "";
+my $rc      = 0;
+my $report  = "";
 my @tags;
 my %libc = (
-    'asprintf' => 1,
-    'confstr' => 1,
-    'dprintf' => 1,
-    'fdelt' => 1,
-    'fgets' => 1,
-    'fgets_unlocked' => 1,
-    'fgetws' => 1,
+    'asprintf'        => 1,
+    'confstr'         => 1,
+    'dprintf'         => 1,
+    'fdelt'           => 1,
+    'fgets'           => 1,
+    'fgets_unlocked'  => 1,
+    'fgetws'          => 1,
     'fgetws_unlocked' => 1,
-    'fprintf' => 1,
-    'fread' => 1,
-    'fread_unlocked' => 1,
-    'fwprintf' => 1,
-    'getcwd' => 1,
-    'getdomainname' => 1,
-    'getgroups' => 1,
-    'gethostname' => 1,
-    'getlogin_r' => 1,
-    'gets' => 1,
-    'getwd' => 1,
-    'longjmp' => 1,
-    'mbsnrtowcs' => 1,
-    'mbsrtowcs' => 1,
-    'mbstowcs' => 1,
-    'memcpy' => 1,
-    'memmove' => 1,
-    'mempcpy' => 1,
-    'memset' => 1,
-    'obstack_printf' => 1,
+    'fprintf'         => 1,
+    'fread'           => 1,
+    'fread_unlocked'  => 1,
+    'fwprintf'        => 1,
+    'getcwd'          => 1,
+    'getdomainname'   => 1,
+    'getgroups'       => 1,
+    'gethostname'     => 1,
+    'getlogin_r'      => 1,
+    'gets'            => 1,
+    'getwd'           => 1,
+    'longjmp'         => 1,
+    'mbsnrtowcs'      => 1,
+    'mbsrtowcs'       => 1,
+    'mbstowcs'        => 1,
+    'memcpy'          => 1,
+    'memmove'         => 1,
+    'mempcpy'         => 1,
+    'memset'          => 1,
+    'obstack_printf'  => 1,
     'obstack_vprintf' => 1,
-    'poll' => 1,
-    'ppoll' => 1,
-    'pread64' => 1,
-    'pread' => 1,
-    'printf' => 1,
-    'ptsname_r' => 1,
-    'read' => 1,
-    'readlink' => 1,
-    'readlinkat' => 1,
-    'realpath' => 1,
-    'recv' => 1,
-    'recvfrom' => 1,
-    'snprintf' => 1,
-    'sprintf' => 1,
-    'stpcpy' => 1,
-    'stpncpy' => 1,
-    'strcat' => 1,
-    'strcpy' => 1,
-    'strncat' => 1,
-    'strncpy' => 1,
-    'swprintf' => 1,
-    'syslog' => 1,
-    'ttyname_r' => 1,
-    'vasprintf' => 1,
-    'vdprintf' => 1,
-    'vfprintf' => 1,
-    'vfwprintf' => 1,
-    'vprintf' => 1,
-    'vsnprintf' => 1,
-    'vsprintf' => 1,
-    'vswprintf' => 1,
-    'vsyslog' => 1,
-    'vwprintf' => 1,
-    'wcpcpy' => 1,
-    'wcpncpy' => 1,
-    'wcrtomb' => 1,
-    'wcscat' => 1,
-    'wcscpy' => 1,
-    'wcsncat' => 1,
-    'wcsncpy' => 1,
-    'wcsnrtombs' => 1,
-    'wcsrtombs' => 1,
-    'wcstombs' => 1,
-    'wctomb' => 1,
-    'wmemcpy' => 1,
-    'wmemmove' => 1,
-    'wmempcpy' => 1,
-    'wmemset' => 1,
-    'wprintf' => 1,
+    'poll'            => 1,
+    'ppoll'           => 1,
+    'pread64'         => 1,
+    'pread'           => 1,
+    'printf'          => 1,
+    'ptsname_r'       => 1,
+    'read'            => 1,
+    'readlink'        => 1,
+    'readlinkat'      => 1,
+    'realpath'        => 1,
+    'recv'            => 1,
+    'recvfrom'        => 1,
+    'snprintf'        => 1,
+    'sprintf'         => 1,
+    'stpcpy'          => 1,
+    'stpncpy'         => 1,
+    'strcat'          => 1,
+    'strcpy'          => 1,
+    'strncat'         => 1,
+    'strncpy'         => 1,
+    'swprintf'        => 1,
+    'syslog'          => 1,
+    'ttyname_r'       => 1,
+    'vasprintf'       => 1,
+    'vdprintf'        => 1,
+    'vfprintf'        => 1,
+    'vfwprintf'       => 1,
+    'vprintf'         => 1,
+    'vsnprintf'       => 1,
+    'vsprintf'        => 1,
+    'vswprintf'       => 1,
+    'vsyslog'         => 1,
+    'vwprintf'        => 1,
+    'wcpcpy'          => 1,
+    'wcpncpy'         => 1,
+    'wcrtomb'         => 1,
+    'wcscat'          => 1,
+    'wcscpy'          => 1,
+    'wcsncat'         => 1,
+    'wcsncpy'         => 1,
+    'wcsnrtombs'      => 1,
+    'wcsrtombs'       => 1,
+    'wcstombs'        => 1,
+    'wctomb'          => 1,
+    'wmemcpy'         => 1,
+    'wmemmove'        => 1,
+    'wmempcpy'        => 1,
+    'wmemset'         => 1,
+    'wprintf'         => 1,
 );
 
 # Report a good test.
@@ -139,6 +139,7 @@ sub good {
     }
     good_msg("$name: $msg_color");
 }
+
 sub good_msg($) {
     my ($msg) = @_;
     if ($quiet == 0) {
@@ -161,8 +162,7 @@ sub bad($$$$$) {
     $msg = "$long_name: " . $msg;
     if ($ignore) {
         $msg .= " (ignored)";
-    }
-    else {
+    } else {
         $rc = 1;
         if ($lintian) {
             push(@tags, "$name:$file");
@@ -176,11 +176,11 @@ sub output(@) {
     my (@cmd) = @_;
     my ($pid, $stdout, $stderr);
     if ($debug) {
-        print join(" ", @cmd),"\n";
+        print join(" ", @cmd), "\n";
     }
     $stdout = gensym;
     $stderr = gensym;
-    $pid = open3(gensym, $stdout, $stderr, @cmd);
+    $pid    = open3(gensym, $stdout, $stderr, @cmd);
 
     my $selector = IO::Select->new();
     $selector->add($stdout);
@@ -241,7 +241,6 @@ sub find_functions($$) {
     return \%funcs;
 }
 
-
 $ENV{'LANG'} = "C";
 
 if ($find_libc_functions) {
@@ -264,17 +263,17 @@ foreach my $file (@ARGV) {
     my $elf = 1;
 
     $report = "$file:";
-    @tags = ();
+    @tags   = ();
 
     # Get program headers.
-    my $PROG_REPORT=output("readelf", "-lW", $file);
+    my $PROG_REPORT = output("readelf", "-lW", $file);
     if (length($PROG_REPORT) == 0) {
         $overall = 1;
         next;
     }
 
     # Get ELF headers.
-    my $DYN_REPORT=output("readelf", "-dW", $file);
+    my $DYN_REPORT = output("readelf", "-dW", $file);
 
     # Get list of all symbols needing external resolution.
     my $functions = find_functions($file, 1);
@@ -289,18 +288,14 @@ foreach my $file (@ARGV) {
         if ($PROG_REPORT =~ /^ *\bPHDR\b/m) {
             # Executable, DYN ELF type.
             good($name, "yes");
-        }
-        else {
+        } else {
             # Shared library, DYN ELF type.
             good($name, "no, regular shared library (ignored)");
         }
-    }
-    elsif ($elftype eq "EXEC") {
+    } elsif ($elftype eq "EXEC") {
         # Executable, EXEC ELF type.
-        bad("no-pie", $file, $name,
-            "no, normal executable!", $skip_pie);
-    }
-    else {
+        bad("no-pie", $file, $name, "no, normal executable!", $skip_pie);
+    } else {
         $elf = 0;
         # Is this an ar file with objects?
         open(AR, "<$file");
@@ -308,8 +303,7 @@ foreach my $file (@ARGV) {
         close(AR);
         if ($header eq "!<arch>\n") {
             good($name, "no, object archive (ignored)");
-        }
-        else {
+        } else {
             # ELF type is neither DYN nor EXEC.
             bad("unknown-elf", $file, $name,
                 "not a known ELF type!? ($elftype)", 0);
@@ -318,13 +312,12 @@ foreach my $file (@ARGV) {
 
     # Stack-protected
     $name = " Stack protected";
-    if (defined($functions->{'__stack_chk_fail'}) ||
-        (!$elf && defined($functions->{'__stack_chk_fail_local'}))) {
-        good($name, "yes")
-    }
-    else {
-        bad("no-stackprotector", $file, $name,
-            "no, not found!", $skip_stackprotector);
+    if (defined($functions->{'__stack_chk_fail'})
+        || (!$elf && defined($functions->{'__stack_chk_fail_local'}))) {
+        good($name, "yes");
+    } else {
+        bad("no-stackprotector", $file, $name, "no, not found!",
+            $skip_stackprotector);
     }
 
     # Fortified Source
@@ -343,23 +336,21 @@ foreach my $file (@ARGV) {
         if ($#unprotected == -1) {
             # Certain.
             good($name, "yes");
-        }
-        else {
+        } else {
             # Vague, due to possible compile-time optimization,
             # multiple linkages, etc. Assume "yes" for now.
             good($name, "yes", " (some protected functions found)");
         }
-    }
-    else {
+    } else {
         if ($#unprotected == -1) {
             unknown($name, "unknown, no protectable libc functions used");
-        }
-        else {
+        } else {
             # Vague, since it's possible to have the compile-time
             # optimizations do away with them, or be unverifiable
             # at runtime. Assume "no" for now.
             bad("no-fortify-functions", $file, $name,
-                "no, only unprotected functions found!", $skip_fortify);
+                "no, only unprotected functions found!",
+                $skip_fortify);
         }
     }
     if ($verbose) {
@@ -391,14 +382,14 @@ foreach my $file (@ARGV) {
 
     # BIND_NOW
     # This marking keeps changing:
-    # 0x0000000000000018 (BIND_NOW)           
+    # 0x0000000000000018 (BIND_NOW)
     # 0x000000006ffffffb (FLAGS)              Flags: BIND_NOW
     # 0x000000006ffffffb (FLAGS_1)            Flags: NOW
 
     $name = " Immediate binding";
-    if ($DYN_REPORT =~ /^\s*\S+\s+\(BIND_NOW\)/m ||
-        $DYN_REPORT =~ /^\s*\S+\s+\(FLAGS\).*\bBIND_NOW\b/m ||
-        $DYN_REPORT =~ /^\s*\S+\s+\(FLAGS_1\).*\bNOW\b/m) {
+    if (   $DYN_REPORT =~ /^\s*\S+\s+\(BIND_NOW\)/m
+        || $DYN_REPORT =~ /^\s*\S+\s+\(FLAGS\).*\bBIND_NOW\b/m
+        || $DYN_REPORT =~ /^\s*\S+\s+\(FLAGS_1\).*\bNOW\b/m) {
         good($name, "yes");
     } else {
         if ($elf) {
@@ -409,12 +400,12 @@ foreach my $file (@ARGV) {
     }
 
     if (!$lintian && (!$quiet || $rc != 0)) {
-        print $report,"\n";
+        print $report, "\n";
     }
 
     if ($report_functions) {
         for my $name (keys(%{$functions})) {
-            print $name,"\n";
+            print $name, "\n";
         }
     }
 

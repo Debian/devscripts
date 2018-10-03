@@ -16,7 +16,7 @@ Comment: This is a package written originally by
  dpkg-perl package, copyright (C) 1997  Klee Dienes <klee@mit.edu>
  .
  Many of the scripts were originally written by other people. Please
- see the individual copyright bellow. Some files don't have an explicit
+ see the individual copyright below. Some files don't have an explicit
  statement of copyright ownership. Pursuant to the Berne Convention for the
  Protection of Literary and Artistic Works, it is assumed that all content
  is copyright by its respective authors unless otherwise stated
@@ -142,11 +142,6 @@ Copyright: 2005, Lars Wirzenius
  2005, Joey Hess <joeyh@debian.org>
 License: GPL-2+
 
-Files: scripts/debc.pl
-Copyright: 1999, Jim Van Zandt <jrv@vanzandt.mv.com>
- 1999-2003, Julian Gilbey <jdg@debian.org>
-License: GPL-2+
-
 Files: scripts/debcheckout.pl
 Copyright: 2007-2009, Stefano Zacchiroli <zack@debian.org>
  2010, Christoph Berg <myon@debian.org>
@@ -244,7 +239,7 @@ Files: scripts/ltnu.*
 Copyright: 2017, Axel Beckert <abe@debian.org>
 License: GPL-2+
 
-Files: manpage-alert.*
+Files: scripts/manpage-alert.*
 Copyright: 2005, Branden Robinson
 License: GPL-2+
 Comment: Changes copyright 2007 by their respective authors
@@ -344,8 +339,8 @@ License: Artistic
  This program is free software; you can redistribute it and/or modify
  it under the terms of the Artistic License, which comes with Perl.
  .
- The complete text of Artistic License can be found in
- https://opensource.org/licenses/artistic-license-1.0
+ On Debian systems, the complete text of the Artistic License can be
+ found in `/usr/share/common-licenses/Artistic'.
 
 License: Artistic-2.0
  Copyright (c) 2000-2006, The Perl Foundation.
@@ -544,16 +539,16 @@ License: GPL-1+
  the Free Software Foundation; either version 1, or (at your option)
  any later version.
  .
- The complete text of version 1 of the GNU General
- Public License can be found in http://opensource.org/licenses/GPL-1.0
+ On Debian systems, the complete text of version 1 of the GNU General
+ Public License can be found in `/usr/share/common-licenses/GPL-1'
 
 License: GPL-2
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation; version 2.
  .
- The complete text of version 2 of the GNU General
- Public License can be found in http://opensource.org/licenses/GPL-2.0
+ On Debian systems, the complete text of version 2 of the GNU General
+ Public License can be found in `/usr/share/common-licenses/GPL-2'
 
 License: GPL-2+
  This program is free software; you can redistribute it and/or modify
@@ -561,16 +556,16 @@ License: GPL-2+
  the Free Software Foundation; either version 2, or (at your option)
  any later version.
  .
- The complete text of version 2 of the GNU General
- Public License can be found in http://opensource.org/licenses/GPL-2.0
+ On Debian systems, the complete text of version 2 of the GNU General
+ Public License can be found in `/usr/share/common-licenses/GPL-2'
 
 License: GPL-3
  This program is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation; version 3.
  .
- The complete text of version 3 of the GNU General
- Public License can be found in http://opensource.org/licenses/GPL-3.0
+ On Debian systems, the complete text of version 3 of the GNU General
+ Public License can be found in `/usr/share/common-licenses/GPL-3'
 
 License: GPL-3+
  This program is free software; you can redistribute it and/or modify
@@ -578,8 +573,8 @@ License: GPL-3+
  the Free Software Foundation; either version 3, or (at your option)
  any later version.
  .
- The complete text of version 3 of the GNU General
- Public License can be found in http://opensource.org/licenses/GPL-3.0
+ On Debian systems, the complete text of version 3 of the GNU General
+ Public License can be found in `/usr/share/common-licenses/GPL-3'
 
 License: ISC
  Permission to use, copy, modify, and/or distribute this software for any

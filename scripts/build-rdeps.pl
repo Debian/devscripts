@@ -1,6 +1,6 @@
 #!/usr/bin/perl
-# -*- tab-width: 8; indent-tabs-mode: t; cperl-indent-level: 4 -*-
-# vim: set shiftwidth=4 tabstop=8 noexpandtab:
+# -*- tab-width: 4; indent-tabs-mode: t; cperl-indent-level: 4 -*-
+# vim: set ai shiftwidth=4 tabstop=4 expandtab:
 #   Copyright (C) Patrick Schoenfeld
 #                 2015 Johannes Schauer <josch@debian.org>
 #                 2017 James McCoy <jamessan@debian.org>
@@ -140,7 +140,7 @@ use Dpkg::Control;
 use Dpkg::Vendor qw(get_current_vendor);
 
 my $progname = basename($0);
-my $version = '1.0';
+my $version  = '1.0';
 my $use_ceve = 0;
 my $ceve_compatible;
 my $opt_debug;
@@ -163,7 +163,7 @@ This code is copyright by Patrick Schoenfeld, all rights reserved.
 It comes with ABSOLUTELY NO WARRANTY. You are free to redistribute this code
 under the terms of the GNU General Public License, version 2 or later.
 EOT
-exit (0);
+    exit(0);
 }
 
 sub usage {
@@ -193,7 +193,7 @@ Options:
    --old                          Use the old simple reverse dependency resolution
 
 EOT
-version;
+    version;
 }
 
 sub test_ceve {
@@ -203,45 +203,45 @@ sub test_ceve {
     # ceve version
     system('dose-ceve -T debsrc debsrc:///dev/null > /dev/null 2>&1');
     if ($? == -1) {
-	print STDERR "DEBUG: dose-ceve cannot be executed: $!\n" if ($opt_debug);
-	$ceve_compatible = 0;
+        print STDERR "DEBUG: dose-ceve cannot be executed: $!\n"
+          if ($opt_debug);
+        $ceve_compatible = 0;
     } elsif ($? == 0) {
-	$ceve_compatible = 1;
+        $ceve_compatible = 1;
     } else {
-	print STDERR "DEBUG: dose-ceve is too old\n" if ($opt_debug);
-	$ceve_compatible = 0;
+        print STDERR "DEBUG: dose-ceve is too old\n" if ($opt_debug);
+        $ceve_compatible = 0;
     }
     return $ceve_compatible;
 }
 
-sub is_devel_release
-{
+sub is_devel_release {
     my $ctrl = shift;
     if (get_current_vendor() eq 'Debian') {
-	return $ctrl->{Suite} eq 'unstable' || $ctrl->{Codename} eq 'sid';
+        return $ctrl->{Suite} eq 'unstable' || $ctrl->{Codename} eq 'sid';
     } else {
-	return $ctrl->{Suite} eq 'devel';
+        return $ctrl->{Suite} eq 'devel';
     }
 }
 
-sub indextargets
-{
+sub indextargets {
     my @cmd = ('apt-get', 'indextargets', 'DefaultEnabled: yes');
 
     if (!$use_ceve) {
-	# ceve needs both Packages and Sources
-	push(@cmd, 'Created-By: Sources');
+        # ceve needs both Packages and Sources
+        push(@cmd, 'Created-By: Sources');
     }
 
     if ($opt_origin) {
-	push(@cmd, "Origin: $opt_origin");
+        push(@cmd, "Origin: $opt_origin");
     }
 
     if ($opt_mainonly) {
-	push(@cmd, 'Component: main');
+        push(@cmd, 'Component: main');
     }
 
-    print STDERR 'DEBUG: Running '. join(' ', map {"'$_'"} @cmd) ."\n" if $opt_debug;
+    print STDERR 'DEBUG: Running ' . join(' ', map { "'$_'" } @cmd) . "\n"
+      if $opt_debug;
     return @cmd;
 }
 
@@ -258,51 +258,54 @@ sub indextargets
 #         },
 #     },
 # ...,
-sub collect_files
-{
+sub collect_files {
     my %info = ();
 
     open(my $targets, '-|', indextargets());
 
     until (eof $targets) {
-	my $ctrl = Dpkg::Control->new(type => CTRL_UNKNOWN);
-	if (!$ctrl->parse($targets, 'apt-get indextargets')) {
-	    next;
-	}
-	# Only need Sources/Packages stanzas
-	if ($ctrl->{'Created-By'} ne 'Packages'
-	    && $ctrl->{'Created-By'} ne 'Sources') {
-	    next;
-	}
+        my $ctrl = Dpkg::Control->new(type => CTRL_UNKNOWN);
+        if (!$ctrl->parse($targets, 'apt-get indextargets')) {
+            next;
+        }
+        # Only need Sources/Packages stanzas
+        if (   $ctrl->{'Created-By'} ne 'Packages'
+            && $ctrl->{'Created-By'} ne 'Sources') {
+            next;
+        }
 
-	# In expected components
-	if (!$opt_mainonly && exists $ctrl->{Component}
-	    && @opt_exclude_components) {
-	    my $invalid_component = '(?:'. join('|', map { "\Q$_\E" } @opt_exclude_components) .')';
-	    if ($ctrl->{Component} =~ m/$invalid_component/) {
-		next;
-	    }
-	}
+        # In expected components
+        if (   !$opt_mainonly
+            && exists $ctrl->{Component}
+            && @opt_exclude_components) {
+            my $invalid_component = '(?:'
+              . join('|', map { "\Q$_\E" } @opt_exclude_components) . ')';
+            if ($ctrl->{Component} =~ m/$invalid_component/) {
+                next;
+            }
+        }
 
-	# And the provided distribution
-	if ($opt_distribution) {
-	    if ($ctrl->{Suite} !~ m/\Q$opt_distribution\E/
-		&& $ctrl->{Codename} !~ m/\Q$opt_distribution\E/) {
-		next;
-	    }
-	} elsif (!is_devel_release($ctrl)) {
-	    next;
-	}
+        # And the provided distribution
+        if ($opt_distribution) {
+            if (   $ctrl->{Suite} !~ m/\Q$opt_distribution\E/
+                && $ctrl->{Codename} !~ m/\Q$opt_distribution\E/) {
+                next;
+            }
+        } elsif (!is_devel_release($ctrl)) {
+            next;
+        }
 
-	$info{$ctrl->{Site}}{$ctrl->{Suite}}{$ctrl->{Component}} ||= {};
-	my $ref = $info{$ctrl->{Site}}{$ctrl->{Suite}}{$ctrl->{Component}};
+        $info{ $ctrl->{Site} }{ $ctrl->{Suite} }{ $ctrl->{Component} } ||= {};
+        my $ref
+          = $info{ $ctrl->{Site} }{ $ctrl->{Suite} }{ $ctrl->{Component} };
 
-	if ($ctrl->{'Created-By'} eq 'Sources') {
-	    $ref->{sources} = $ctrl->{Filename};
-	    print STDERR "DEBUG: Added source file: $ctrl->{Filename}\n" if $opt_debug;
-	} else {
-	    $ref->{$ctrl->{Architecture}} = $ctrl->{Filename};
-	}
+        if ($ctrl->{'Created-By'} eq 'Sources') {
+            $ref->{sources} = $ctrl->{Filename};
+            print STDERR "DEBUG: Added source file: $ctrl->{Filename}\n"
+              if $opt_debug;
+        } else {
+            $ref->{ $ctrl->{Architecture} } = $ctrl->{Filename};
+        }
     }
     close($targets);
 
@@ -311,103 +314,115 @@ sub collect_files
 
 sub findreversebuilddeps {
     my ($package, $info) = @_;
-    my $count=0;
+    my $count = 0;
 
     my $source_file = $info->{sources};
     if ($use_ceve) {
-	die "build arch undefined" if ! defined $opt_buildarch;
-	die "host arch undefined" if ! defined $opt_hostarch;
+        die "build arch undefined" if !defined $opt_buildarch;
+        die "host arch undefined"  if !defined $opt_hostarch;
 
-	my $buildarch_file = $info->{$opt_buildarch};
-	my $hostarch_file = $info->{$opt_hostarch};
+        my $buildarch_file = $info->{$opt_buildarch};
+        my $hostarch_file  = $info->{$opt_hostarch};
 
-	my @ceve_cmd = ('dose-ceve', '-T', 'debsrc', '-r', $package, '-G', 'pkg',
-	    "--deb-native-arch=$opt_buildarch", "deb://$buildarch_file", "debsrc://$source_file");
-	if ($opt_buildarch ne $opt_hostarch) {
-	    push(@ceve_cmd, "--deb-host-arch=$opt_hostarch", "deb://$hostarch_file");
-	}
-	my %sources;
-	print STDERR 'DEBUG: executing: '.join(' ', @ceve_cmd) if ($opt_debug);
-	open(SOURCES, '-|', @ceve_cmd);
-	while(<SOURCES>) {
-	    next unless s/^Package:\s+//;
-	    chomp;
-	    $sources{$_} = 1;
-	}
-	for my $source (sort keys %sources)
-	{
-	    print $source;
-	    if ($opt_maintainer) {
-		my $maintainer = `apt-cache showsrc $source | grep-dctrl -n -s Maintainer '' | sort -u`;
-		print " ($maintainer)";
-	    }
-	    print "\n";
-	    $count += 1;
-	}
+        my @ceve_cmd = (
+            'dose-ceve',             '-T',
+            'debsrc',                '-r',
+            $package,                '-G',
+            'pkg',                   "--deb-native-arch=$opt_buildarch",
+            "deb://$buildarch_file", "debsrc://$source_file"
+        );
+        if ($opt_buildarch ne $opt_hostarch) {
+            push(@ceve_cmd,
+                "--deb-host-arch=$opt_hostarch",
+                "deb://$hostarch_file");
+        }
+        my %sources;
+        print STDERR 'DEBUG: executing: ' . join(' ', @ceve_cmd)
+          if ($opt_debug);
+        open(SOURCES, '-|', @ceve_cmd);
+        while (<SOURCES>) {
+            next unless s/^Package:\s+//;
+            chomp;
+            $sources{$_} = 1;
+        }
+        for my $source (sort keys %sources) {
+            print $source;
+            if ($opt_maintainer) {
+                my $maintainer
+                  = `apt-cache showsrc $source | grep-dctrl -n -s Maintainer '' | sort -u`;
+                print " ($maintainer)";
+            }
+            print "\n";
+            $count += 1;
+        }
     } else {
-	open(my $out, '-|', '/usr/lib/apt/apt-helper', 'cat-file', $source_file)
-	    or die "$progname: Unable to run \"apt-helper cat-file '$source_file'\": $!";
+        open(my $out, '-|', '/usr/lib/apt/apt-helper', 'cat-file',
+            $source_file)
+          or die
+"$progname: Unable to run \"apt-helper cat-file '$source_file'\": $!";
 
-	my %packages;
-	until (eof $out) {
-	    my $ctrl = Dpkg::Control->new(type => CTRL_INDEX_SRC);
-	    if (!$ctrl->parse($out, 'apt-helper cat-file')) {
-		next;
-	    }
-	    print STDERR "$ctrl\n" if ($opt_debug);
-	    for my $relation (qw(Build-Depends Build-Depends-Indep Build-Depends-Arch)) {
-		if (exists $ctrl->{$relation}) {
-		    if ($ctrl->{$relation} =~ m/^(.*\s)?\Q$package\E(?::[a-zA-Z0-9][a-zA-Z0-9-]*)?([\s,]|$)/) {
-			$packages{$ctrl->{Package}}{Maintainer} = $ctrl->{Maintainer};
-		    }
-		}
-	    }
-	}
+        my %packages;
+        until (eof $out) {
+            my $ctrl = Dpkg::Control->new(type => CTRL_INDEX_SRC);
+            if (!$ctrl->parse($out, 'apt-helper cat-file')) {
+                next;
+            }
+            print STDERR "$ctrl\n" if ($opt_debug);
+            for my $relation (
+                qw(Build-Depends Build-Depends-Indep Build-Depends-Arch)) {
+                if (exists $ctrl->{$relation}) {
+                    if ($ctrl->{$relation}
+                        =~ m/^(.*\s)?\Q$package\E(?::[a-zA-Z0-9][a-zA-Z0-9-]*)?([\s,]|$)/
+                    ) {
+                        $packages{ $ctrl->{Package} }{Maintainer}
+                          = $ctrl->{Maintainer};
+                    }
+                }
+            }
+        }
 
-	close($out);
+        close($out);
 
-	while (my $depending_package = each(%packages)) {
-	    print $depending_package;
-	    if ($opt_maintainer) {
-		print " ($packages{$depending_package}->{'Maintainer'})";
-	    }
-	    print "\n";
-	    $count+=1;
-	}
+        while (my $depending_package = each(%packages)) {
+            print $depending_package;
+            if ($opt_maintainer) {
+                print " ($packages{$depending_package}->{'Maintainer'})";
+            }
+            print "\n";
+            $count += 1;
+        }
     }
 
     if (!$opt_quiet) {
-	if ($count == 0) {
-	    print "No reverse build-depends found for $package.\n\n"
-	}
-	else {
-	    print "\nFound a total of $count reverse build-depend(s) for $package.\n\n";
-	}
+        if ($count == 0) {
+            print "No reverse build-depends found for $package.\n\n";
+        } else {
+            print
+"\nFound a total of $count reverse build-depend(s) for $package.\n\n";
+        }
     }
 }
 
 if ($#ARGV < 0) { usage; exit(0); }
 
-
 GetOptions(
-    "u|update" => \$opt_update,
-    "s|sudo" => \$opt_sudo,
-    "m|print-maintainer" => \$opt_maintainer,
-    "distribution=s" => \$opt_distribution,
-    "only-main" => \$opt_mainonly,
+    "u|update"            => \$opt_update,
+    "s|sudo"              => \$opt_sudo,
+    "m|print-maintainer"  => \$opt_maintainer,
+    "distribution=s"      => \$opt_distribution,
+    "only-main"           => \$opt_mainonly,
     "exclude-component=s" => \@opt_exclude_components,
-    "origin=s" => \$opt_origin,
-    "host-arch=s" => \$opt_hostarch,
-    "build-arch=s" => \$opt_buildarch,
-#   "profiles=s" => \$opt_profiles, # FIXME: add build profile support
-#                                            once dose-ceve has a
-#                                            --deb-profiles option
-    "old" => \$opt_without_ceve,
-    "q|quiet" => \$opt_quiet,
-    "d|debug" => \$opt_debug,
-    "h|help" => sub { usage; },
-    "v|version" => sub { version; }
-) or do { usage; exit 1; };
+    "origin=s"            => \$opt_origin,
+    "host-arch=s"         => \$opt_hostarch,
+    "build-arch=s"        => \$opt_buildarch,
+    #   "profiles=s" => \$opt_profiles, # FIXME: add build profile support
+    #                                            once dose-ceve has a
+    #                                            --deb-profiles option
+    "old"       => \$opt_without_ceve,
+    "q|quiet"   => \$opt_quiet,
+    "d|debug"   => \$opt_debug,
+    "h|help"    => sub { usage; },
+    "v|version" => sub { version; }) or do { usage; exit 1; };
 
 my $package = shift;
 
@@ -419,51 +434,58 @@ print STDERR "DEBUG: Package => $package\n" if ($opt_debug);
 
 if ($opt_hostarch) {
     if ($opt_without_ceve) {
-	die "$progname: the --host-arch option cannot be used together with --old\n";
+        die
+"$progname: the --host-arch option cannot be used together with --old\n";
     }
     if (test_ceve()) {
-	$use_ceve = 1;
+        $use_ceve = 1;
     } else {
-	die "$progname: the --host-arch option requires dose-extra >= 4.0 to be installed\n";
+        die
+"$progname: the --host-arch option requires dose-extra >= 4.0 to be installed\n";
     }
 }
 
 if ($opt_buildarch) {
     if ($opt_without_ceve) {
-	die "$progname: the --build-arch option cannot be used together with --old\n";
+        die
+"$progname: the --build-arch option cannot be used together with --old\n";
     }
     if (test_ceve()) {
-	$use_ceve = 1;
+        $use_ceve = 1;
     } else {
-	die "$progname: the --build-arch option requires dose-extra >= 4.0 to be installed\n";
+        die
+"$progname: the --build-arch option requires dose-extra >= 4.0 to be installed\n";
     }
 }
 
 # if ceve usage has not been activated yet, check if it can be activated
 if (!$use_ceve and !$opt_without_ceve) {
     if (test_ceve()) {
-	$use_ceve = 1;
+        $use_ceve = 1;
     } else {
-	print STDERR "WARNING: dose-extra >= 4.0 is not installed. Falling back to old unreliable behaviour.\n";
+        print STDERR
+"WARNING: dose-extra >= 4.0 is not installed. Falling back to old unreliable behaviour.\n";
     }
 }
 
 if ($use_ceve) {
     if (system('command -v grep-dctrl >/dev/null 2>&1')) {
-	die "$progname: Fatal error. grep-dctrl is not available.\nPlease install the 'dctrl-tools' package.\n";
+        die
+"$progname: Fatal error. grep-dctrl is not available.\nPlease install the 'dctrl-tools' package.\n";
     }
 
     # set hostarch and buildarch if they have not been set yet
     if (!$opt_hostarch) {
-	$opt_hostarch = `dpkg-architecture --query DEB_HOST_ARCH`;
-	chomp $opt_hostarch;
+        $opt_hostarch = `dpkg-architecture --query DEB_HOST_ARCH`;
+        chomp $opt_hostarch;
     }
     if (!$opt_buildarch) {
-	$opt_buildarch = `dpkg-architecture --query DEB_BUILD_ARCH`;
-	chomp $opt_buildarch;
+        $opt_buildarch = `dpkg-architecture --query DEB_BUILD_ARCH`;
+        chomp $opt_buildarch;
     }
     print STDERR "DEBUG: running with dose-ceve resolver\n" if ($opt_debug);
-    print STDERR "DEBUG: buildarch=$opt_buildarch hostarch=$opt_hostarch\n" if ($opt_debug);
+    print STDERR "DEBUG: buildarch=$opt_buildarch hostarch=$opt_hostarch\n"
+      if ($opt_debug);
 } else {
     print STDERR "DEBUG: running with old resolver\n" if ($opt_debug);
 }
@@ -472,8 +494,8 @@ if ($opt_update) {
     print STDERR "DEBUG: Updating apt-cache before search\n" if ($opt_debug);
     my @cmd;
     if ($opt_sudo) {
-	print STDERR "DEBUG: Using sudo to become root\n" if ($opt_debug);
-	push(@cmd, 'sudo');
+        print STDERR "DEBUG: Using sudo to become root\n" if ($opt_debug);
+        push(@cmd, 'sudo');
     }
     push(@cmd, 'apt-get', 'update');
     system @cmd;
@@ -482,20 +504,22 @@ if ($opt_update) {
 my $file_info = collect_files();
 
 if (!%{$file_info}) {
-    die "$progname: unable to find sources files.\nDid you forget to run apt-get update (or add --update to this command)?";
+    die
+"$progname: unable to find sources files.\nDid you forget to run apt-get update (or add --update to this command)?";
 }
 
 foreach my $site (sort keys %{$file_info}) {
-    foreach my $suite (sort keys %{$file_info->{$site}}) {
-	foreach my $comp (qw(main contrib non-free)) {
-	    if (exists $file_info->{$site}{$suite}{$comp}) {
-		if (!$opt_quiet) {
-		    print "Reverse Build-depends in ${comp}:\n";
-		    print "------------------------------\n\n";
-		}
-		findreversebuilddeps($package, $file_info->{$site}{$suite}{$comp});
-	    }
-	}
+    foreach my $suite (sort keys %{ $file_info->{$site} }) {
+        foreach my $comp (qw(main contrib non-free)) {
+            if (exists $file_info->{$site}{$suite}{$comp}) {
+                if (!$opt_quiet) {
+                    print "Reverse Build-depends in ${comp}:\n";
+                    print "------------------------------\n\n";
+                }
+                findreversebuilddeps($package,
+                    $file_info->{$site}{$suite}{$comp});
+            }
+        }
     }
 }
 

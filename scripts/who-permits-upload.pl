@@ -17,24 +17,29 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-
 use strict;
 use Dpkg::Control;
 use LWP::UserAgent;
 use Encode::Locale;
 use Encode;
 use Getopt::Long;
-use constant {TYPE_PACKAGE => "package", TYPE_UID => "uid", TYPE_SPONSOR => "sponsor"};
-use constant {SPONSOR_FINGERPRINT => 0, SPONSOR_NAME => 1};
+use constant {
+    TYPE_PACKAGE => "package",
+    TYPE_UID     => "uid",
+    TYPE_SPONSOR => "sponsor"
+};
+use constant { SPONSOR_FINGERPRINT => 0, SPONSOR_NAME => 1 };
 use List::Util qw(first);
 
 our $DM_URL = "https://ftp-master.debian.org/dm.txt";
-our $KEYRING = "/usr/share/keyrings/debian-keyring.gpg:/usr/share/keyrings/debian-maintainers.gpg";
+our $KEYRING
+  = "/usr/share/keyrings/debian-keyring.gpg:/usr/share/keyrings/debian-maintainers.gpg";
 our $TYPE = "package";
-our $GPG = first { !system('sh', '-c', "command -v $_ >/dev/null 2>&1") } qw(gpg2 gpg);
+our $GPG = first { !system('sh', '-c', "command -v $_ >/dev/null 2>&1") }
+qw(gpg2 gpg);
 our ($HELP, @ARGUMENTS, @DM_DATA, %GPG_CACHE);
 
-binmode STDIN, ':encoding(console_in)';
+binmode STDIN,  ':encoding(console_in)';
 binmode STDOUT, ':encoding(console_out)';
 binmode STDERR, ':encoding(console_out)';
 
@@ -167,127 +172,121 @@ S<I<https://lists.debian.org/debian-devel-announce/2012/09/msg00008.html>>
 
 =cut
 
-
-GetOptions ("help|h" => \$HELP,
+GetOptions(
+    "help|h"      => \$HELP,
     "keyring|k=s" => \$KEYRING,
-    "dmfile|d=s" => \$DM_URL,
-    "search|s=s" => \$TYPE,
-    );
+    "dmfile|d=s"  => \$DM_URL,
+    "search|s=s"  => \$TYPE,
+);
 # pop positionals
 @ARGUMENTS = @ARGV;
 
 $TYPE = lc($TYPE);
-if ($TYPE eq 'package')
-{
+if ($TYPE eq 'package') {
     $TYPE = TYPE_PACKAGE;
-}
-elsif ($TYPE eq 'uid')
-{
+} elsif ($TYPE eq 'uid') {
     $TYPE = TYPE_UID;
-}
-elsif ($TYPE eq 'sponsor')
-{
+} elsif ($TYPE eq 'sponsor') {
     $TYPE = TYPE_SPONSOR;
-}
-else
-{
+} else {
     usage();
 }
 
-if ($HELP)
-{
+if ($HELP) {
     usage();
 }
 
-if (not @ARGUMENTS)
-{
+if (not @ARGUMENTS) {
     usage();
 }
 
-sub usage
-{
-    print STDERR ("Usage: $0 [-h][-s KEYRING][-d DM_URL][-s SEARCH_TYPE] QUERY [QUERY ...]\n");
+sub usage {
+    print STDERR (
+"Usage: $0 [-h][-s KEYRING][-d DM_URL][-s SEARCH_TYPE] QUERY [QUERY ...]\n"
+    );
     print STDERR "Retrieve permissions granted to Debian Maintainers (DM)\n";
     print STDERR "\n";
     print STDERR "-h, --help\n";
     print STDERR "\t\t\tDisplay this usage summary and exit\n";
     print STDERR "-k, --keyring=KEYRING\n";
-    print STDERR "\t\t\tUse the supplied keyring file(s) instead of the default\n";
+    print STDERR
+      "\t\t\tUse the supplied keyring file(s) instead of the default\n";
     print STDERR "\t\t\tkeyring. Separate arguments by a colon (\":\")\n";
     print STDERR "-d, --dmfile=DM_URL\n";
     print STDERR "\t\t\tRetrieve DM permissions from the supplied URL.\n";
     print STDERR "\t\t\tDefault is https://ftp-master.debian.org/dm.txt\n";
     print STDERR "-s, --search=SEARCH_TYPE\n";
     print STDERR "\t\t\tSupplied QUERY arguments are interpreted as:\n";
-    print STDERR "\t\t\tpackage name when SEARCH_TYPE is \"package\" (default)\n";
+    print STDERR
+      "\t\t\tpackage name when SEARCH_TYPE is \"package\" (default)\n";
     print STDERR "\t\t\tDM user name id when SEARCH_TYPE is \"uid\"\n";
     print STDERR "\t\t\tsponsor user id when SEARCH_TYPE is \"sponsor\"\n";
     exit 2;
 }
 
-sub leave
-{
+sub leave {
     my $reason = shift;
     chomp $reason;
     print STDERR "$reason\n";
     exit 1;
 }
 
-sub lookup_fingerprint
-{
+sub lookup_fingerprint {
     my $fingerprint = shift;
-    my $uid = "";
+    my $uid         = "";
 
-    if (exists $GPG_CACHE{$fingerprint})
-    {
+    if (exists $GPG_CACHE{$fingerprint}) {
         return $GPG_CACHE{$fingerprint};
     }
 
     my @gpg_arguments;
-    foreach my $keyring (split(":", "$KEYRING"))
-    {
-        if (! -f $keyring)
-        {
+    foreach my $keyring (split(":", "$KEYRING")) {
+        if (!-f $keyring) {
             leave("Keyring $keyring is not accessible");
         }
         push(@gpg_arguments, ("--keyring", $keyring));
     }
-    push(@gpg_arguments, ("--no-options", "--no-auto-check-trustdb", "--no-default-keyring", "--list-key", "--with-colons", encode(locale => $fingerprint)));
+    push(
+        @gpg_arguments,
+        (
+            "--no-options",         "--no-auto-check-trustdb",
+            "--no-default-keyring", "--list-key",
+            "--with-colons", encode(locale => $fingerprint)));
     open(CMD, '-|', $GPG, @gpg_arguments) || leave "$GPG: $!\n";
     binmode CMD, ':utf8';
-    while (my $l = <CMD>)
-    {
-        if ($l =~ /^pub/)
-        {
+    while (my $l = <CMD>) {
+        if ($l =~ /^pub/) {
             $uid = $l;
-            # Consume the rest of the output to avoid a potential SIGPIPE when closing CMD
+ # Consume the rest of the output to avoid a potential SIGPIPE when closing CMD
             my @junk = <CMD>;
             last;
         }
     }
     my @fields = split(":", $uid);
     $uid = $fields[9];
-    close(CMD) || leave("gpg returned an error looking for $fingerprint: ". ($? >> 8));
+    close(CMD)
+      || leave("gpg returned an error looking for $fingerprint: " . ($? >> 8));
 
     $GPG_CACHE{$fingerprint} = $uid;
 
     return $uid;
 }
 
-sub parse_data
-{
+sub parse_data {
     my $raw_data = shift;
-    my $parser = Dpkg::Control->new(type => CTRL_UNKNOWN, allow_duplicate => 1);
-    open(my $fh, '+<:utf8', \$raw_data) || leave('unable to read dm data: '.$!);
+    my $parser
+      = Dpkg::Control->new(type => CTRL_UNKNOWN, allow_duplicate => 1);
+    open(my $fh, '+<:utf8', \$raw_data)
+      || leave('unable to read dm data: ' . $!);
     my @dm_data = ();
 
-    while ($parser->parse($fh))
-    {
-        foreach my $package (split(/,/, $parser->{Allow}))
-        {
-            if ($package =~ m/([a-z0-9\+\-\.]+)\s+\((\w+)\)/s)
-            {
-                my @package_row = ($1, $parser->{Fingerprint}, $parser->{Uid}, $2, SPONSOR_FINGERPRINT);
+    while ($parser->parse($fh)) {
+        foreach my $package (split(/,/, $parser->{Allow})) {
+            if ($package =~ m/([a-z0-9\+\-\.]+)\s+\((\w+)\)/s) {
+                my @package_row = (
+                    $1, $parser->{Fingerprint},
+                    $parser->{Uid}, $2, SPONSOR_FINGERPRINT
+                );
                 push(@dm_data, \@package_row);
             }
         }
@@ -295,26 +294,23 @@ sub parse_data
     return @dm_data;
 }
 
-
-sub find_matching_row
-{
+sub find_matching_row {
     my $pattern = shift;
-    my $type = shift;
+    my $type    = shift;
     my @return_rows;
-    foreach my $package (@DM_DATA)
-    {
+    foreach my $package (@DM_DATA) {
         # $package is an array ref in the format
         # (package, dm_fingerprint, dm_uid, sponsor_fingerprint callback)
-        push(@return_rows, $package) if ($type eq TYPE_PACKAGE && $pattern eq $package->[0]);
-        push(@return_rows, $package) if ($type eq TYPE_UID &&  $package->[2] =~ m/$pattern/);
-        if ($type eq TYPE_SPONSOR)
-        {
+        push(@return_rows, $package)
+          if ($type eq TYPE_PACKAGE && $pattern eq $package->[0]);
+        push(@return_rows, $package)
+          if ($type eq TYPE_UID && $package->[2] =~ m/$pattern/);
+        if ($type eq TYPE_SPONSOR) {
             # the sponsor function is a key id so far, mark we looked it up
             # already
             $package->[3] = lookup_fingerprint($package->[3]);
             $package->[4] = SPONSOR_NAME;
-            if ($package->[3] =~ m/$pattern/)
-            {
+            if ($package->[3] =~ m/$pattern/) {
                 push(@return_rows, $package);
             }
         }
@@ -327,32 +323,27 @@ $http->timeout(10);
 $http->env_proxy;
 
 my $response = $http->get($DM_URL);
-if ($response->is_success)
-{
+if ($response->is_success) {
     @DM_DATA = parse_data($response->content);
-}
-else
-{
-    leave "Could not retrieve DM file: $DM_URL Server returned: " . $response->status_line;
+} else {
+    leave "Could not retrieve DM file: $DM_URL Server returned: "
+      . $response->status_line;
 }
 
-foreach my $argument (@ARGUMENTS)
-{
+foreach my $argument (@ARGUMENTS) {
     $argument = decode(locale => $argument);
     my @rows = find_matching_row($argument, $TYPE);
-    if (not @rows)
-    {
+    if (not @rows) {
         leave("No $TYPE matches $argument");
     }
-    foreach my $row (@rows)
-    {
-        # $package is an array ref in the format
-        # (package, dm_fingerprint, dm_uid, sponsor_fingerprint, sponsor_type_flag)
+    foreach my $row (@rows) {
+    # $package is an array ref in the format
+    # (package, dm_fingerprint, dm_uid, sponsor_fingerprint, sponsor_type_flag)
         my $sponsor = $row->[3];
-        if ($row->[4] != SPONSOR_NAME)
-        {
+        if ($row->[4] != SPONSOR_NAME) {
             $row->[3] = lookup_fingerprint($row->[3]);
         }
-        printf("Package: %s DM: %s Sponsor: %s\n", $row->[0], $row->[2], $row->[3] );
+        printf("Package: %s DM: %s Sponsor: %s\n",
+            $row->[0], $row->[2], $row->[3]);
     }
 }

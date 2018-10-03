@@ -97,11 +97,12 @@ select("submitter:jrandomdeveloper@example.com", "tag:wontfix")
 use strict;
 use warnings;
 
-my $soapurl='Debbugs/SOAP/1';
-our $btsurl='http://bugs.debian.org/';
+my $soapurl = 'Debbugs/SOAP/1';
+our $btsurl = 'http://bugs.debian.org/';
 my @errors;
 
 our $soap_timeout;
+
 sub soap_timeout {
     my $timeout_arg = shift;
     if (defined $timeout_arg and $timeout_arg =~ m{^[1-9]\d*$}) {
@@ -112,9 +113,9 @@ sub soap_timeout {
 sub init_soap {
     my $soapproxyurl;
     if ($btsurl =~ m%^https?://(.*)/?$%) {
-	$soapproxyurl = $btsurl . '/';
+        $soapproxyurl = $btsurl . '/';
     } else {
-	$soapproxyurl = 'http://' . $btsurl . '/';
+        $soapproxyurl = 'http://' . $btsurl . '/';
     }
     $soapproxyurl =~ s%//$%/%;
     $soapproxyurl .= 'cgi-bin/soap.cgi';
@@ -131,21 +132,19 @@ sub init_soap {
 }
 
 my $soap_broken;
+
 sub have_soap {
     return ($soap_broken ? 0 : 1) if defined $soap_broken;
-    eval {
-	require SOAP::Lite;
-    };
+    eval { require SOAP::Lite; };
 
     if ($@) {
-	if ($@ =~ m%^Can't locate SOAP/%) {
-	    $soap_broken="the libsoap-lite-perl package is not installed";
-	} else {
-	    $soap_broken="couldn't load SOAP::Lite: $@";
-	}
-    }
-    else {
-	$soap_broken = 0;
+        if ($@ =~ m%^Can't locate SOAP/%) {
+            $soap_broken = "the libsoap-lite-perl package is not installed";
+        } else {
+            $soap_broken = "couldn't load SOAP::Lite: $@";
+        }
+    } else {
+        $soap_broken = 0;
     }
     return ($soap_broken ? 0 : 1);
 }
@@ -154,9 +153,9 @@ sub getSOAPError {
     my ($soap, $result) = @_;
     my $err;
     if (ref($result)) {
-	$err = $result->faultstring;
+        $err = $result->faultstring;
     } else {
-	$err = $soap->transport->status;
+        $err = $soap->transport->status;
     }
     chomp $err;
     push @errors, $err;
@@ -169,19 +168,19 @@ sub usertags {
 
     my @args = @_;
 
-    my $soap = init_soap();
+    my $soap     = init_soap();
     my $usertags = $soap->get_usertag(@_);
 
     if (@errors or not defined $usertags) {
-	my $error = join("\n", @errors);
-	die "Error retrieving usertags from SOAP server: $error\n";
+        my $error = join("\n", @errors);
+        die "Error retrieving usertags from SOAP server: $error\n";
     }
 
     my $result = $usertags->result();
 
     if (@errors or not defined $result) {
-	my $error = join("\n", @errors);
-	die "Error retrieving usertags from SOAP server: $error\n";
+        my $error = join("\n", @errors);
+        die "Error retrieving usertags from SOAP server: $error\n";
     }
 
     return $result;
@@ -189,71 +188,70 @@ sub usertags {
 
 sub select {
     die "Couldn't run select: $soap_broken\n" unless have_soap();
-    my @args = @_;
-    my %valid_keys = (package => 'package',
-                      pkg     => 'package',
-                      src     => 'src',
-                      source  => 'src',
-                      maint   => 'maint',
-                      maintainer => 'maint',
-                      submitter => 'submitter',
-                      from => 'submitter',
-                      status    => 'status',
-                      tag       => 'tag',
-                      tags      => 'tag',
-                      usertag   => 'tag',
-                      usertags  => 'tag',
-                      owner     => 'owner',
-                      dist      => 'dist',
-                      distribution => 'dist',
-                      bugs       => 'bugs',
-                      archive    => 'archive',
-                      severity   => 'severity',
-                      correspondent => 'correspondent',
-                      affects       => 'affects',
+    my @args       = @_;
+    my %valid_keys = (
+        package       => 'package',
+        pkg           => 'package',
+        src           => 'src',
+        source        => 'src',
+        maint         => 'maint',
+        maintainer    => 'maint',
+        submitter     => 'submitter',
+        from          => 'submitter',
+        status        => 'status',
+        tag           => 'tag',
+        tags          => 'tag',
+        usertag       => 'tag',
+        usertags      => 'tag',
+        owner         => 'owner',
+        dist          => 'dist',
+        distribution  => 'dist',
+        bugs          => 'bugs',
+        archive       => 'archive',
+        severity      => 'severity',
+        correspondent => 'correspondent',
+        affects       => 'affects',
     );
     my %users;
     my %search_parameters;
     my $soap = init_soap();
     for my $arg (@args) {
-	my ($key,$value) = split /:/, $arg, 2;
-	next unless $key;
-	if (exists $valid_keys{$key}) {
-	    if ($valid_keys{$key} eq 'archive') {
-		$search_parameters{$valid_keys{$key}} = $value
-		    if $value;
-	    } else {
-		push @{$search_parameters{$valid_keys{$key}}},
-		    $value if $value;
-	    }
-	} elsif ($key =~/users?$/) {
-	    $users{$value} = 1 if $value;
-	} else {
-	    warn "select(): Unrecognised key: $key\n";
-	}
+        my ($key, $value) = split /:/, $arg, 2;
+        next unless $key;
+        if (exists $valid_keys{$key}) {
+            if ($valid_keys{$key} eq 'archive') {
+                $search_parameters{ $valid_keys{$key} } = $value
+                  if $value;
+            } else {
+                push @{ $search_parameters{ $valid_keys{$key} } }, $value
+                  if $value;
+            }
+        } elsif ($key =~ /users?$/) {
+            $users{$value} = 1 if $value;
+        } else {
+            warn "select(): Unrecognised key: $key\n";
+        }
     }
     my %usertags;
     for my $user (keys %users) {
-	my $ut = usertags($user);
-	next unless defined $ut and $ut ne "";
-	for my $tag (keys %{$ut}) {
-	    push @{$usertags{$tag}},
-	    @{$ut->{$tag}};
-	}
+        my $ut = usertags($user);
+        next unless defined $ut and $ut ne "";
+        for my $tag (keys %{$ut}) {
+            push @{ $usertags{$tag} }, @{ $ut->{$tag} };
+        }
     }
     my $bugs = $soap->get_bugs(%search_parameters,
-	(keys %usertags)?(usertags=>\%usertags):()
-    );
+        (keys %usertags) ? (usertags => \%usertags) : ());
 
     if (@errors or not defined $bugs) {
-	my $error = join("\n", @errors);
-	die "Error while retrieving bugs from SOAP server: $error\n";
+        my $error = join("\n", @errors);
+        die "Error while retrieving bugs from SOAP server: $error\n";
     }
 
     my $result = $bugs->result();
     if (@errors or not defined $result) {
-	my $error = join( "\n", @errors );
-	die "Error while retrieving bugs from SOAP server: $error\n";
+        my $error = join("\n", @errors);
+        die "Error while retrieving bugs from SOAP server: $error\n";
     }
 
     return $result;
@@ -267,21 +265,23 @@ sub status {
 
     my $result = {};
     while (my @slice = splice(@args, 0, 500)) {
-	my $bugs = $soap->get_status(@slice);
+        my $bugs = $soap->get_status(@slice);
 
-	if (@errors or not defined $bugs) {
-	    my $error = join("\n", @errors);
-	    die "Error while retrieving bug statuses from SOAP server: $error\n";
-	}
+        if (@errors or not defined $bugs) {
+            my $error = join("\n", @errors);
+            die
+              "Error while retrieving bug statuses from SOAP server: $error\n";
+        }
 
-	my $tmp = $bugs->result();
+        my $tmp = $bugs->result();
 
-	if (@errors or not defined $tmp) {
-	    my $error = join("\n", @errors);
-	    die "Error while retrieving bug statuses from SOAP server: $error\n";
-	}
+        if (@errors or not defined $tmp) {
+            my $error = join("\n", @errors);
+            die
+              "Error while retrieving bug statuses from SOAP server: $error\n";
+        }
 
-	%$result = (%$result, %$tmp);
+        %$result = (%$result, %$tmp);
     }
 
     return $result;
@@ -290,16 +290,17 @@ sub status {
 sub versions {
     die "Couldn't run versions: $soap_broken\n" unless have_soap();
 
-    my @args = @_;
-    my %valid_keys = (package => 'package',
-                      pkg     => 'package',
-                      src => 'source',
-                      source => 'source',
-                      time => 'time',
-                      binary => 'no_source_arch',
-                      notsource => 'no_source_arch',
-                      archs => 'return_archs',
-                      displayarch => 'return_archs',
+    my @args       = @_;
+    my %valid_keys = (
+        package     => 'package',
+        pkg         => 'package',
+        src         => 'source',
+        source      => 'source',
+        time        => 'time',
+        binary      => 'no_source_arch',
+        notsource   => 'no_source_arch',
+        archs       => 'return_archs',
+        displayarch => 'return_archs',
     );
 
     my %search_parameters;
@@ -307,15 +308,15 @@ sub versions {
     my @dists = ();
 
     for my $arg (@args) {
-	my ($key,$value) = split /:/, $arg, 2;
-	$value ||= "1";
-	if ($key =~ /^arch(itecture)?$/) {
-	    push @archs, $value;
-	} elsif ($key =~ /^dist(ribution)?$/) {
-	    push @dists, $value;
-	} elsif (exists $valid_keys{$key}) {
-	    $search_parameters{$valid_keys{$key}} = $value;
-	}
+        my ($key, $value) = split /:/, $arg, 2;
+        $value ||= "1";
+        if ($key =~ /^arch(itecture)?$/) {
+            push @archs, $value;
+        } elsif ($key =~ /^dist(ribution)?$/) {
+            push @dists, $value;
+        } elsif (exists $valid_keys{$key}) {
+            $search_parameters{ $valid_keys{$key} } = $value;
+        }
     }
 
     $search_parameters{arch} = \@archs if @archs;
@@ -326,15 +327,16 @@ sub versions {
     my $versions = $soap->get_versions(%search_parameters);
 
     if (@errors or not defined $versions) {
-	my $error = join("\n", @errors);
-	die "Error while retrieving package versions from SOAP server: $error\n";
+        my $error = join("\n", @errors);
+        die
+          "Error while retrieving package versions from SOAP server: $error\n";
     }
 
     my $result = $versions->result();
 
     if (@errors or not defined $result) {
-	my $error = join("\n", @errors);
-	die "Error while retrieivng package versions from SOAP server: $error";
+        my $error = join("\n", @errors);
+        die "Error while retrieivng package versions from SOAP server: $error";
     }
 
     return $result;
@@ -347,7 +349,7 @@ sub versions_with_arch {
     my $versions = versions(@args, 'displayarch:1');
 
     if (not defined $versions) {
-	die "Error while retrieivng package versions from SOAP server: $@";
+        die "Error while retrieivng package versions from SOAP server: $@";
     }
 
     return $versions;
@@ -364,15 +366,15 @@ sub newest_bugs {
     my $bugs = $soap->newest_bugs($count);
 
     if (@errors or not defined $bugs) {
-	my $error = join("\n", @errors);
-	die "Error while retrieving newest bug list from SOAP server: $error";
+        my $error = join("\n", @errors);
+        die "Error while retrieving newest bug list from SOAP server: $error";
     }
 
     my $result = $bugs->result();
 
     if (@errors or not defined $result) {
-	my $error = join("\n", @errors);
-	die "Error while retrieving newest bug list from SOAP server: $error";
+        my $error = join("\n", @errors);
+        die "Error while retrieving newest bug list from SOAP server: $error";
     }
 
     return $result;
@@ -394,15 +396,15 @@ sub bug_log {
     my $log = $soap->get_bug_log($bug, $message);
 
     if (@errors or not defined $log) {
-	my $error = join("\n", @errors);
-	die "Error while retrieving bug log from SOAP server: $error\n";
+        my $error = join("\n", @errors);
+        die "Error while retrieving bug log from SOAP server: $error\n";
     }
 
     my $result = $log->result();
 
     if (@errors or not defined $result) {
-	my $error = join("\n", @errors);
-	die "Error while retrieving bug log from SOAP server: $error\n";
+        my $error = join("\n", @errors);
+        die "Error while retrieving bug log from SOAP server: $error\n";
     }
 
     return $result;
@@ -410,28 +412,30 @@ sub bug_log {
 
 sub binary_to_source {
     die "Couldn't run binary_to_source: $soap_broken\n"
-	unless have_soap();
+      unless have_soap();
 
     my $soap = init_soap();
 
     my $binpkg = shift;
     my $binver = shift;
-    my $arch = shift;
+    my $arch   = shift;
 
     return if not defined $binpkg or not defined $binver;
 
     my $mapping = $soap->binary_to_source($binpkg, $binver, $arch);
 
     if (@errors or not defined $mapping) {
-	my $error = join("\n", @errors);
-	die "Error while retrieving binary to source mapping from SOAP server: $error\n";
+        my $error = join("\n", @errors);
+        die
+"Error while retrieving binary to source mapping from SOAP server: $error\n";
     }
 
     my $result = $mapping->result();
 
     if (@errors or not defined $result) {
-	my $error = join("\n", @errors);
-	die "Error while retrieving binary to source mapping from SOAP server: $error\n";
+        my $error = join("\n", @errors);
+        die
+"Error while retrieving binary to source mapping from SOAP server: $error\n";
     }
 
     return $result;
@@ -439,7 +443,7 @@ sub binary_to_source {
 
 sub source_to_binary {
     die "Couldn't run source_to_binary: $soap_broken\n"
-	unless have_soap();
+      unless have_soap();
 
     my $soap = init_soap();
 
@@ -451,15 +455,17 @@ sub source_to_binary {
     my $mapping = $soap->source_to_binary($srcpkg, $srcver);
 
     if (@errors or not defined $mapping) {
-	my $error = join("\n", @errors);
-	die "Error while retrieving source to binary mapping from SOAP server: $error\n";
+        my $error = join("\n", @errors);
+        die
+"Error while retrieving source to binary mapping from SOAP server: $error\n";
     }
 
     my $result = $mapping->result();
 
     if (@errors or not defined $result) {
-	my $error = join("\n", @errors);
-	die "Error while retrieving source to binary mapping from SOAP server: $error\n";
+        my $error = join("\n", @errors);
+        die
+"Error while retrieving source to binary mapping from SOAP server: $error\n";
     }
 
     return $result;

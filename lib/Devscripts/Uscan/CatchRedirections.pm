@@ -8,7 +8,7 @@ my @uscan_redirections;
 sub redirect_ok {
     my $self = shift;
     my ($request) = @_;
-    if ( $self->SUPER::redirect_ok(@_) ) {
+    if ($self->SUPER::redirect_ok(@_)) {
         push @uscan_redirections, $request->uri;
         return 1;
     }

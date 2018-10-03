@@ -4,11 +4,8 @@ use strict;
 use Cwd qw/abs_path/;
 use Devscripts::Uscan::Output;
 use Devscripts::Uscan::Utils;
-use Exporter qw(import);
 use Devscripts::Uscan::_xtp;
-
-our @EXPORT = qw(http_search http_upstream_url http_newfile_base http_clean
-  html_search plain_search parse_href);
+use Moo::Role;
 
 *http_newfile_base = \&Devscripts::Uscan::_xtp::_xtp_newfile_base;
 
@@ -19,14 +16,14 @@ sub http_search {
     my ($self) = @_;
 
     # $content: web page to be scraped to find the URLs to be downloaded
-    if ( defined($1) and $self->downloader->ssl ) {
+    if (defined($1) and $self->downloader->ssl) {
         uscan_die
 "you must have the liblwp-protocol-https-perl package installed\nto use https URLs";
     }
     uscan_verbose "Requesting URL:\n   $self->{parse_result}->{base}";
-    my $request = HTTP::Request->new( 'GET', $self->parse_result->{base} );
+    my $request = HTTP::Request->new('GET', $self->parse_result->{base});
     my $response = $self->downloader->user_agent->request($request);
-    if ( !$response->is_success ) {
+    if (!$response->is_success) {
         uscan_warn
 "In watchfile $self->{watchfile}, reading webpage\n  $self->{parse_result}->{base} failed: "
           . $response->status_line;
@@ -41,7 +38,7 @@ sub http_search {
         my $base_dir = $_redir;
 
         $base_dir =~ s%^\w+://[^/]+/%/%;
-        if ( $_redir =~ m%^(\w+://[^/]+)% ) {
+        if ($_redir =~ m%^(\w+://[^/]+)%) {
             my $base_site = $1;
 
             push @{ $self->patterns },
@@ -54,7 +51,7 @@ sub http_search {
             # remove the filename, if any
             my $base_dir_orig = $base_dir;
             $base_dir =~ s%/[^/]*$%/%;
-            if ( $base_dir ne $base_dir_orig ) {
+            if ($base_dir ne $base_dir_orig) {
                 push @{ $self->patterns },
                     "(?:(?:$base_site)?"
                   . quotemeta($base_dir)
@@ -70,52 +67,47 @@ sub http_search {
       "received content:\n$content\n[End of received content] by HTTP";
 
     my @hrefs;
-    if ( !$self->searchmode or $self->searchmode eq 'html' ) {
+    if (!$self->searchmode or $self->searchmode eq 'html') {
         @hrefs = $self->html_search($content);
-    }
-    elsif ( $self->searchmode eq 'plain' ) {
+    } elsif ($self->searchmode eq 'plain') {
         @hrefs = $self->plain_search($content);
-    }
-    else {
+    } else {
         uscan_warn 'Unknown searchmode "' . $self->searchmode . '", skipping';
         return undef;
     }
 
     if (@hrefs) {
         @hrefs = Devscripts::Versort::versort(@hrefs);
-        my $msg =
-"Found the following matching hrefs on the web page (newest first):\n";
+        my $msg
+          = "Found the following matching hrefs on the web page (newest first):\n";
         foreach my $href (@hrefs) {
             $msg .= "   $$href[2] ($$href[1]) index=$$href[0] $$href[3]\n";
         }
         uscan_verbose $msg;
     }
-    my ( $newversion, $newfile );
-    if ( defined $self->shared->{download_version} ) {
+    my ($newversion, $newfile);
+    if (defined $self->shared->{download_version}) {
 
         # extract ones which has $match in the above loop defined
         my @vhrefs = grep { $$_[3] } @hrefs;
         if (@vhrefs) {
-            ( undef, $newversion, $newfile, undef ) = @{ $vhrefs[0] };
-        }
-        else {
+            (undef, $newversion, $newfile, undef) = @{ $vhrefs[0] };
+        } else {
             uscan_warn
 "In $self->{watchfile} no matching hrefs for version $self->{shared}->{download_version}"
               . " in watch line\n  $self->{line}";
             return undef;
         }
-    }
-    else {
+    } else {
         if (@hrefs) {
-            ( undef, $newversion, $newfile, undef ) = @{ $hrefs[0] };
-        }
-        else {
+            (undef, $newversion, $newfile, undef) = @{ $hrefs[0] };
+        } else {
             uscan_warn
 "In $self->{watchfile} no matching files for watch line\n  $self->{line}";
             return undef;
         }
     }
-    return ( $newversion, $newfile );
+    return ($newversion, $newfile);
 }
 
 #######################################################################
@@ -126,66 +118,59 @@ sub http_upstream_url {
     my ($self) = @_;
     my $upstream_url;
     my $newfile = $self->search_result->{newfile};
-    if ( $newfile =~ m%^\w+://% ) {
+    if ($newfile =~ m%^\w+://%) {
         $upstream_url = $newfile;
-    }
-    elsif ( $newfile =~ m%^//% ) {
+    } elsif ($newfile =~ m%^//%) {
         $upstream_url = $self->parse_result->{site};
         $upstream_url =~ s/^(https?:).*/$1/;
         $upstream_url .= $newfile;
-    }
-    elsif ( $newfile =~ m%^/% ) {
+    } elsif ($newfile =~ m%^/%) {
 
         # absolute filename
         # Were there any redirections? If so try using those first
-        if ( $#{ $self->patterns } > 0 ) {
+        if ($#{ $self->patterns } > 0) {
 
             # replace $site here with the one we were redirected to
-            foreach my $index ( 0 .. $#{ $self->patterns } ) {
-                if ( "$self->{sites}->[$index]$newfile" =~
-                    m&^$self->{patterns}->[$index]$& )
-                {
+            foreach my $index (0 .. $#{ $self->patterns }) {
+                if ("$self->{sites}->[$index]$newfile"
+                    =~ m&^$self->{patterns}->[$index]$&) {
                     $upstream_url = "$self->{sites}->[$index]$newfile";
                     last;
                 }
             }
-            if ( !defined($upstream_url) ) {
+            if (!defined($upstream_url)) {
                 uscan_verbose
                   "Unable to determine upstream url from redirections,\n"
                   . "defaulting to using site specified in watch file";
                 $upstream_url = "$self->{sites}->[0]$newfile";
             }
-        }
-        else {
+        } else {
             $upstream_url = "$self->{sites}->[0]$newfile";
         }
-    }
-    else {
+    } else {
         # relative filename, we hope
         # Were there any redirections? If so try using those first
-        if ( $#{ $self->patterns } > 0 ) {
+        if ($#{ $self->patterns } > 0) {
 
             # replace $site here with the one we were redirected to
-            foreach my $index ( 0 .. $#{ $self->patterns } ) {
+            foreach my $index (0 .. $#{ $self->patterns }) {
 
                 # skip unless the basedir looks like a directory
                 next unless $self->{basedirs}->[$index] =~ m%/$%;
                 my $nf = "$self->{basedirs}->[$index]$newfile";
-                if ( "$self->{sites}->[$index]$nf" =~
-                    m&^$self->{patterns}->[$index]$& )
-                {
+                if ("$self->{sites}->[$index]$nf"
+                    =~ m&^$self->{patterns}->[$index]$&) {
                     $upstream_url = "$self->{sites}->[$index]$nf";
                     last;
                 }
             }
-            if ( !defined($upstream_url) ) {
+            if (!defined($upstream_url)) {
                 uscan_verbose
                   "Unable to determine upstream url from redirections,\n"
                   . "defaulting to using site specified in watch file";
                 $upstream_url = "$self->{parse_result}->{urlbase}$newfile";
             }
-        }
-        else {
+        } else {
             $upstream_url = "$self->{parse_result}->{urlbase}$newfile";
         }
     }
@@ -193,15 +178,14 @@ sub http_upstream_url {
     # mangle if necessary
     $upstream_url =~ s/&amp;/&/g;
     uscan_verbose "Matching target for downloadurlmangle: $upstream_url";
-    if ( @{ $self->downloadurlmangle } ) {
+    if (@{ $self->downloadurlmangle }) {
         if (
             mangle(
                 $self->watchfile,     \$self->line,
                 'downloadurlmangle:', \@{ $self->downloadurlmangle },
                 \$upstream_url
             )
-          )
-        {
+        ) {
             $self->status(1);
             return undef;
         }
@@ -216,20 +200,20 @@ sub http_newdir {
         $watchfile, $lineptr,    $download_version
     ) = @_;
 
-    my ( $request, $response, $newdir );
-    my ( $download_version_short1, $download_version_short2,
-        $download_version_short3 )
+    my ($request, $response, $newdir);
+    my ($download_version_short1, $download_version_short2,
+        $download_version_short3)
       = partial_version($download_version);
     my $base = $site . $dir;
 
-    if ( defined($https) and !$downloader->ssl ) {
+    if (defined($https) and !$downloader->ssl) {
         uscan_die
 "$progname: you must have the liblwp-protocol-https-perl package installed\n"
           . "to use https URLs";
     }
-    $request = HTTP::Request->new( 'GET', $base );
+    $request = HTTP::Request->new('GET', $base);
     $response = $downloader->user_agent->request($request);
-    if ( !$response->is_success ) {
+    if (!$response->is_success) {
         uscan_warn
           "In watch file $watchfile, reading webpage\n  $base failed: "
           . $response->status_line;
@@ -240,51 +224,46 @@ sub http_newdir {
     uscan_debug
       "received content:\n$content\n[End of received content] by HTTP";
 
-    clean_content( \$content );
+    clean_content(\$content);
 
     my $dirpattern = "(?:(?:$site)?" . quotemeta($dir) . ")?$pattern";
 
     uscan_verbose "Matching pattern:\n   $dirpattern";
     my @hrefs;
     my $match = '';
-    while ( $content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi ) {
+    while ($content =~ m/<\s*a\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/gi) {
         my $href = fix_href($2);
         uscan_verbose "Matching target for dirversionmangle:   $href";
-        if ( $href =~ m&^$dirpattern/?$& ) {
-            my $mangled_version =
-              join( ".", map { $_ // '' } $href =~ m&^$dirpattern/?$& );
+        if ($href =~ m&^$dirpattern/?$&) {
+            my $mangled_version
+              = join(".", map { $_ // '' } $href =~ m&^$dirpattern/?$&);
             if (
                 mangle(
                     $watchfile,          $lineptr,
                     'dirversionmangle:', \@{$dirversionmangle},
                     \$mangled_version
                 )
-              )
-            {
+            ) {
                 return 1;
             }
             $match = '';
-            if ( defined $download_version
-                and $mangled_version eq $download_version )
-            {
+            if (defined $download_version
+                and $mangled_version eq $download_version) {
                 $match = "matched with the download version";
             }
-            if ( defined $download_version_short3
-                and $mangled_version eq $download_version_short3 )
-            {
+            if (defined $download_version_short3
+                and $mangled_version eq $download_version_short3) {
                 $match = "matched with the download version (partial 3)";
             }
-            if ( defined $download_version_short2
-                and $mangled_version eq $download_version_short2 )
-            {
+            if (defined $download_version_short2
+                and $mangled_version eq $download_version_short2) {
                 $match = "matched with the download version (partial 2)";
             }
-            if ( defined $download_version_short1
-                and $mangled_version eq $download_version_short1 )
-            {
+            if (defined $download_version_short1
+                and $mangled_version eq $download_version_short1) {
                 $match = "matched with the download version (partial 1)";
             }
-            push @hrefs, [ $mangled_version, $href, $match ];
+            push @hrefs, [$mangled_version, $href, $match];
         }
     }
 
@@ -302,8 +281,7 @@ sub http_newdir {
         }
         uscan_verbose $msg;
         $newdir //= $hrefs[0][1];
-    }
-    else {
+    } else {
         uscan_warn
 "In $watchfile,\n  no matching hrefs for pattern\n  $site$dir$pattern";
         return '';
@@ -332,45 +310,42 @@ sub clean_content {
 }
 
 sub html_search {
-    my ( $self, $content ) = @_;
+    my ($self, $content) = @_;
 
     # pagenmangle: should not abuse this slow operation
     if (
         mangle(
             $self->watchfile, \$self->line,
-            'pagemangle:\n', [ @{ $self->pagemangle } ],
+            'pagemangle:\n', [@{ $self->pagemangle }],
             \$content
         )
-      )
-    {
+    ) {
         return undef;
     }
     if (   !$self->shared->{bare}
         and $content =~ m%^<[?]xml%i
         and $content =~ m%xmlns="http://s3.amazonaws.com/doc/2006-03-01/"%
-        and $content !~ m%<Key><a\s+href% )
-    {
-     # this is an S3 bucket listing.  Insert an 'a href' tag
-     # into the content for each 'Key', so that it looks like html (LP: #798293)
+        and $content !~ m%<Key><a\s+href%) {
+    # this is an S3 bucket listing.  Insert an 'a href' tag
+    # into the content for each 'Key', so that it looks like html (LP: #798293)
         uscan_warn
 "*** Amazon AWS special case code is deprecated***\nUse opts=pagemangle rule, instead";
         $content =~ s%<Key>([^<]*)</Key>%<Key><a href="$1">$1</a></Key>%g;
         uscan_debug
 "processed content:\n$content\n[End of processed content] by Amazon AWS special case code";
     }
-    clean_content( \$content );
+    clean_content(\$content);
 
     # Is there a base URL given?
-    if ( $content =~ /<\s*base\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/i ) {
+    if ($content =~ /<\s*base\s+[^>]*href\s*=\s*([\"\'])(.*?)\1/i) {
 
         # Ensure it ends with /
         $self->parse_result->{urlbase} = "$2/";
         $self->parse_result->{urlbase} =~ s%//$%/%;
-    }
-    else {
+    } else {
         # May have to strip a base filename
-        ( $self->parse_result->{urlbase} = $self->parse_result->{base} ) =~
-          s%/[^/]*$%/%;
+        ($self->parse_result->{urlbase} = $self->parse_result->{base})
+          =~ s%/[^/]*$%/%;
     }
     uscan_debug
 "processed content:\n$content\n[End of processed content] by fix bad HTML code";
@@ -381,24 +356,23 @@ sub html_search {
         uscan_verbose "Matching pattern:\n   @{$self->{patterns}}";
     }
     my @hrefs;
-    while ( $content =~ m/<\s*a\s+[^>]*(?<=\s)href\s*=\s*([\"\'])(.*?)\1/sgi ) {
+    while ($content =~ m/<\s*a\s+[^>]*(?<=\s)href\s*=\s*([\"\'])(.*?)\1/sgi) {
         my $href = $2;
         $href = fix_href($href);
-        if ( defined $self->hrefdecode ) {
-            if ( $self->hrefdecode eq 'percent-encoding' ) {
+        if (defined $self->hrefdecode) {
+            if ($self->hrefdecode eq 'percent-encoding') {
                 uscan_debug "... Decoding from href: $href";
                 $href =~ s/%([A-Fa-f\d]{2})/chr hex $1/eg;
-            }
-            else {
+            } else {
                 uscan_warn "Illegal value for hrefdecode: "
                   . "$self->{hrefdecode}";
                 return undef;
             }
         }
         uscan_debug "Checking href $href";
-        foreach my $_pattern ( @{ $self->patterns } ) {
-            if ( $href =~ /^$_pattern$/ ) {
-                push @hrefs, $self->parse_href( $href, $_pattern, $1 );
+        foreach my $_pattern (@{ $self->patterns }) {
+            if ($href =~ /^$_pattern$/) {
+                push @hrefs, $self->parse_href($href, $_pattern, $1);
             }
         }
     }
@@ -406,37 +380,35 @@ sub html_search {
 }
 
 sub plain_search {
-    my ( $self, $content ) = @_;
+    my ($self, $content) = @_;
     my @hrefs;
-    foreach my $_pattern ( @{ $self->patterns } ) {
-        while ( $content =~ s/.*?($_pattern)// ) {
-            push @hrefs, $self->parse_href( $1, $_pattern, $2 );
+    foreach my $_pattern (@{ $self->patterns }) {
+        while ($content =~ s/.*?($_pattern)//) {
+            push @hrefs, $self->parse_href($1, $_pattern, $2);
         }
     }
     return @hrefs;
 }
 
 sub parse_href {
-    my ( $self, $href, $_pattern, $match ) = @_;
+    my ($self, $href, $_pattern, $match) = @_;
     my $mangled_version;
-    if ( $self->watch_version == 2 ) {
+    if ($self->watch_version == 2) {
 
         # watch_version 2 only recognised one group; the code
         # below will break version 2 watch files with a construction
         # such as file-([\d\.]+(-\d+)?) (bug #327258)
         $mangled_version = $match;
-    }
-    else {
+    } else {
         # need the map { ... } here to handle cases of (...)?
         # which may match but then return undef values
-        if ( $self->versionless ) {
+        if ($self->versionless) {
 
             # exception, otherwise $mangled_version = 1
             $mangled_version = '';
-        }
-        else {
-            $mangled_version =
-              join( ".", map { $_ if defined($_) } $href =~ m&^$_pattern$& );
+        } else {
+            $mangled_version
+              = join(".", map { $_ if defined($_) } $href =~ m&^$_pattern$&);
         }
 
         if (
@@ -445,19 +417,18 @@ sub parse_href {
                 'uversionmangle:', \@{ $self->uversionmangle },
                 \$mangled_version
             )
-          )
-        {
+        ) {
             return ();
         }
     }
-    my $match = '';
-    if ( defined $self->shared->{download_version} ) {
-        if ( $mangled_version eq $self->shared->{download_version} ) {
+    $match = '';
+    if (defined $self->shared->{download_version}) {
+        if ($mangled_version eq $self->shared->{download_version}) {
             $match = "matched with the download version";
         }
     }
     my $priority = $mangled_version . '-' . get_priority($href);
-    return [ $priority, $mangled_version, $href, $match ];
+    return [$priority, $mangled_version, $href, $match];
 }
 
 1;

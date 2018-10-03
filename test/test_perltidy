@@ -1,0 +1,38 @@
+#!/bin/sh
+
+set -u
+
+cd $(readlink -f ${0%/*}/..)
+
+LIST=`find lib/ scripts/ -iname '*.pl' -or -iname '*.pm'`
+res=0
+
+# Don't run this test with old Perltidy versions
+if test `perl -MPerl::Tidy -le 'print $Perl::Tidy::VERSION'` -lt 20180000;then
+    echo "perltidy version too old, skipping this test"
+    exit 0
+fi
+
+# perltidy test is ran only during dev
+if dpkg-parsechangelog -c0|grep 'Distribution: UNRELEASED' >/dev/null; then
+
+    # perltidy test isn't ran in autopkgtest environment
+    if test "${AUTOPKGTEST_TMP:-0}" = "0"; then
+        for file in $LIST; do
+            perltidy $file
+            if ! diff $file $file.tdy; then
+                echo "## $file isn't formatted using perltidy (see below)" >&2
+                res=1
+            else
+                echo " $file: ok"
+            fi
+            rm $file.tdy
+        done
+    else
+        echo "Test skipped in autopkgtest"
+    fi
+else
+    echo "Test skipped with released package"
+fi
+
+exit $res

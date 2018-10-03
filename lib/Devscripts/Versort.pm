@@ -28,33 +28,30 @@
 package Devscripts::Versort;
 use Dpkg::Version;
 
-sub versort (@)
-{
+sub versort (@) {
     return _versort(0, sub { return shift->[0] }, @_);
 }
 
-sub deb_versort (@)
-{
+sub deb_versort (@) {
     return _versort(1, sub { return shift->[0] }, @_);
 }
 
-sub upstream_versort (@)
-{
+sub upstream_versort (@) {
     return _versort(0, sub { return "1:" . shift->[0] . "-0" }, @_);
 }
 
-sub _versort ($@)
-{
+sub _versort ($@) {
     my ($check, $getversion, @namever_pairs) = @_;
 
     foreach my $pair (@namever_pairs) {
-	unshift(@$pair, Dpkg::Version->new(&$getversion($pair), check => $check));
+        unshift(@$pair,
+            Dpkg::Version->new(&$getversion($pair), check => $check));
     }
 
     my @sorted = sort { $b->[0] <=> $a->[0] } @namever_pairs;
 
     foreach my $pair (@sorted) {
-	shift @$pair;
+        shift @$pair;
     }
 
     return @sorted;

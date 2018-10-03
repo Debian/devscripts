@@ -14,6 +14,7 @@ OUR_TESTS= \
 	uscan_ftp \
 	uscan_git \
 	uscan_mangle \
+	perltidy \
 
 test: $(foreach i,$(OUR_TESTS),test_$(i).test)
 
