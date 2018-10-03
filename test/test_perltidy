@@ -6,13 +6,6 @@ cd $(readlink -f ${0%/*}/..)
 
 
 testPerldity() {
-    # Don't run this test with old Perltidy versions
-    if test `perl -MPerl::Tidy -le 'print $Perl::Tidy::VERSION'` -lt 20180000; then
-        echo "SKIP: perltidy version too old, skipping this test."
-        startSkipping
-        return
-    fi
-
     # perltidy test is ran only during dev
     if test "$(dpkg-parsechangelog -c0 -SDistribution)" != UNRELEASED; then
         echo "SKIP: Not checking a released version with perltidy."
@@ -23,6 +16,13 @@ testPerldity() {
     # perltidy test isn't ran in autopkgtest environment
     if test "${1:-}" = --installed; then
         echo "SKIP: Not running perltidy in autopkgtest."
+        startSkipping
+        return
+    fi
+
+    # Don't run this test with old Perltidy versions
+    if test `perl -MPerl::Tidy -le 'print $Perl::Tidy::VERSION'` -lt 20180000; then
+        echo "SKIP: perltidy version too old, skipping this test."
         startSkipping
         return
     fi
