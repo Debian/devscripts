@@ -4,10 +4,8 @@ use strict;
 use Cwd qw/abs_path/;
 use Devscripts::Uscan::Output;
 use Devscripts::Uscan::Utils;
-use Exporter qw(import);
 use Devscripts::Uscan::_xtp;
-
-our @EXPORT = qw(ftp_search ftp_upstream_url ftp_newfile_base ftp_clean);
+use Moo::Role;
 
 #######################################################################
 # search $newfile $newversion (ftp mode)

@@ -5,10 +5,8 @@ use Cwd qw/abs_path/;
 use Devscripts::Uscan::Output;
 use Devscripts::Uscan::Utils;
 use Dpkg::IPC;
-use Exporter qw(import);
 use File::Path 'remove_tree';
-
-our @EXPORT = qw(git_search git_upstream_url git_newfile_base git_clean);
+use Moo::Role;
 
 ######################################################
 # search $newfile $newversion (git mode/versionless)

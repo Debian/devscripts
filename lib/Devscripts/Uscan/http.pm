@@ -4,11 +4,8 @@ use strict;
 use Cwd qw/abs_path/;
 use Devscripts::Uscan::Output;
 use Devscripts::Uscan::Utils;
-use Exporter qw(import);
 use Devscripts::Uscan::_xtp;
-
-our @EXPORT = qw(http_search http_upstream_url http_newfile_base http_clean
-  html_search plain_search parse_href);
+use Moo::Role;
 
 *http_newfile_base = \&Devscripts::Uscan::_xtp::_xtp_newfile_base;
 
@@ -424,7 +421,7 @@ sub parse_href {
             return ();
         }
     }
-    my $match = '';
+    $match = '';
     if (defined $self->shared->{download_version}) {
         if ($mangled_version eq $self->shared->{download_version}) {
             $match = "matched with the download version";

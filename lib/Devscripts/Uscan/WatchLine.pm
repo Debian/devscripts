@@ -1674,7 +1674,7 @@ sub _do {
     my $mode = $self->mode;
     $mode =~ s/git-dumb/git/;
     $sub = $mode . "_$sub";
-    eval "use Devscripts::Uscan::$mode" unless ($self->can($sub));
+    with("Devscripts::Uscan::$mode") unless ($self->can($sub));
     if ($@) {
         uscan_warn "Unknown '$mode' mode set in $self->{watchfile} ($@)";
         $self->status(1);
