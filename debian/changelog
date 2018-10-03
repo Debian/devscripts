@@ -20,6 +20,8 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
     + Use `set -u` in all the test files.
     + Move some the temporary directories into SHUNIT_TMPDIR, to have more
       assurances that they are cleaned up at the end.
+    + In autopkgtest, avoid using the deprecated needs-recomends option, and
+      instead explicitly list all the required packages.
 
   [ Benjamin Drung ]
   * test:
