@@ -37,6 +37,9 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
   * Add .perltidyrc to format Perl files and reformat all Perl files.  MR: !47
     - Add a new test test_perltidy to verify that scripts are well formatted.
     - This adds a new build dependency on perltidy.
+  * tests:  MR: !48
+    - Add faketime to the dependencies in d/tests/control.
+    - Fix test_mk-origtargz random failure.
   * uscan:
     + Rewrite using object-oriented code.  MR: !28
       - This adds a new dependency on libmoo-perl for uscan (Recommended).
