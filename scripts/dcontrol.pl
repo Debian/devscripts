@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# vim:sw=4:sta:
+# vim: set ai shiftwidth=4 tabstop=4 expandtab:
 
 #   dcontrol - Query Debian control files across releases and architectures
 #   Copyright (C) 2009 Christoph Berg <myon@debian.org>

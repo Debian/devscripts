@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# vim:sw=4:sta:
+# vim: set ai shiftwidth=4 tabstop=4 expandtab:
 
 # Copyright (C) 2006-2013 Christoph Berg <myon@debian.org>
 #           (C) 2010 Uli Martens <uli@youam.net>

@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# vim:sw=4:sta:
+# vim: set ai shiftwidth=4 tabstop=4 expandtab:
 
 #   dget - Download Debian source and binary packages
 #   Copyright (C) 2005-2013 Christoph Berg <myon@debian.org>

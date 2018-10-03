@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 # -*- tab-width: 8; indent-tabs-mode: t; cperl-indent-level: 4 -*-
-# vim:set ai sts=4 ts=8 tw=80:
+# vim: set ai shiftwidth=4 tabstop=4 expandtab:
 
 # uscan: This program looks for watch files and checks upstream ftp sites
 # for later versions of the software.

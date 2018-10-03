@@ -1,6 +1,6 @@
 #!/usr/bin/perl
-# -*- tab-width: 8; indent-tabs-mode: t; cperl-indent-level: 4 -*-
-# vim: set shiftwidth=4 tabstop=8 noexpandtab:
+# -*- tab-width: 4; indent-tabs-mode: t; cperl-indent-level: 4 -*-
+# vim: set ai shiftwidth=4 tabstop=4 expandtab:
 #   Copyright (C) Patrick Schoenfeld
 #                 2015 Johannes Schauer <josch@debian.org>
 #                 2017 James McCoy <jamessan@debian.org>

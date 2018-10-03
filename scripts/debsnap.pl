@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# vim: set shiftwidth=4 tabstop=8 noexpandtab:
+# vim: set ai shiftwidth=4 tabstop=4 expandtab:
 
 # Copyright © 2010, David Paleino <d.paleino@gmail.com>,
 #

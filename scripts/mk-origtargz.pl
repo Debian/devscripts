@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# vim: set shiftwidth=4 tabstop=8 noexpandtab:
+# vim: set ai shiftwidth=4 tabstop=4 expandtab:
 #
 # mk-origtargz: Rename upstream tarball, optionally changing the compression
 # and removing unwanted files.
