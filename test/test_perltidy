@@ -4,38 +4,38 @@ set -u
 
 cd $(readlink -f ${0%/*}/..)
 
-# Don't run this test with old Perltidy versions
-if test `perl -MPerl::Tidy -le 'print $Perl::Tidy::VERSION'` -lt 20180000; then
-    echo "SKIP: perltidy version too old, skipping this test."
-    exit 0
-fi
 
-# perltidy test is ran only during dev
-if test "$(dpkg-parsechangelog -c0 -SDistribution)" != UNRELEASED; then
-    echo "SKIP: Not checking a released version with perltidy."
-    exit 0
-fi
-
-# perltidy test isn't ran in autopkgtest environment
-if test "${1:-}" = --installed; then
-    echo "SKIP: Not running perltidy in autopkgtest."
-    exit 0
-fi
-
-echo "Test: perltidy..."
-
-LIST=`find lib/ scripts/ -iname '*.pl' -or -iname '*.pm'`
-res=0
-
-for file in $LIST; do
-    perltidy $file
-    if ! diff -u $file $file.tdy; then
-        echo "## $file isn't formatted using perltidy (see above)" >&2
-        res=1
-    else
-        echo " $file: ok"
+testPerldity() {
+    # Don't run this test with old Perltidy versions
+    if test `perl -MPerl::Tidy -le 'print $Perl::Tidy::VERSION'` -lt 20180000; then
+        echo "SKIP: perltidy version too old, skipping this test."
+        startSkipping
+        return
     fi
-    rm $file.tdy
-done
 
-exit $res
+    # perltidy test is ran only during dev
+    if test "$(dpkg-parsechangelog -c0 -SDistribution)" != UNRELEASED; then
+        echo "SKIP: Not checking a released version with perltidy."
+        startSkipping
+        return
+    fi
+
+    # perltidy test isn't ran in autopkgtest environment
+    if test "${1:-}" = --installed; then
+        echo "SKIP: Not running perltidy in autopkgtest."
+        startSkipping
+        return
+    fi
+
+    LIST=`find lib/ scripts/ -iname '*.pl' -or -iname '*.pm'`
+
+    for file in $LIST; do
+        perltidy --output-path="$SHUNIT_TMPDIR/" "$file"
+        cmp -s "$file" "$SHUNIT_TMPDIR/$(basename "$file").tdy"
+        retval=$?
+        assertEquals "## $file isn't following perltidy" 0 "$retval"
+    done
+
+}
+
+. shunit2
