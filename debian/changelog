@@ -34,6 +34,9 @@ devscripts (2.18.5) UNRELEASED; urgency=medium
 
   [ Xavier Guimard ]
   * Rewrite debian/copyright using copyright-format 1.0.  MR: !41
+  * Add .perltidyrc to format Perl files and format all Perl files.  MR: !47
+    - add also test_perltidy to verify that scripts are well formatted
+    - this adds a new build dependency on perltidy
   * uscan:
     + Rewrite using object-oriented code.  MR: !28
       - This adds a new dependency on libmoo-perl for uscan (Recommended).
