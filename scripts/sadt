@@ -412,6 +412,7 @@ class TestGroup:
         if built_source_tree:
             ignored_restrictions.add('build-needed')
         ignored_restrictions.add('needs-recommends')
+        ignored_restrictions.add('superficial')
         try:
             options = self.check(ignored_restrictions)
         except Skip as exc:

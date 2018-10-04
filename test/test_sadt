@@ -38,6 +38,11 @@ test_passes() {
     assertPasses run_sadt passes
 }
 
+test_superficial() {
+    assertPasses run_sadt superficial
+    assertFails run_sadt superficial-fails
+}
+
 test_flaky() {
     assertPasses run_sadt flaky
 }
