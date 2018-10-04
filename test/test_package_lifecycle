@@ -71,6 +71,8 @@ oneTimeSetUp () {
 	    --list-keys --verbose
 
 	mkdir -p ${WORKDIR}/package_lifecycle/test/debian/source
+	#Rules-Requires-Root: no  ## this requires changing all the expected strings
+	#                         ## do it once debian stretch is oldstable...
 	cat > ${WORKDIR}/package_lifecycle/test/debian/control <<-EOS
 	Source: test
 	Section: devel

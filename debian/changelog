@@ -8,6 +8,11 @@ devscripts (2.18.6) UNRELEASED; urgency=medium
   * sadt:
     + Ignore the new test restriction "superficial".  MR: !50
 
+  [ Mattia Rizzolo ]
+  * tests:
+    + Fix autopkgtest that was failing due to missing test dependency
+      on fakeroot.  Closes: #910262
+
  -- Antonio Terceiro <terceiro@debian.org>  Thu, 04 Oct 2018 08:35:22 -0300
 
 devscripts (2.18.5) unstable; urgency=medium
