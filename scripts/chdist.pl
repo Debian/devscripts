@@ -340,6 +340,7 @@ sub src2bin {
         fatal("no package name provided. Exiting.");
     }
     my @args = (aptopts($dist), 'showsrc', $pkg);
+    aptconfig($dist);
     my $pid = open(CACHE, '-|', 'apt-cache', @args);
     if (!defined($pid)) {
         fatal("Couldn't run apt-cache: $!");
