@@ -1922,6 +1922,15 @@ BEGIN {
 
 my $config = Devscripts::Uscan::Config->new->parse;
 
+uscan_verbose
+  "$progname (version $uscan_version) See $progname(1) for help";
+if ($dehs) {
+    uscan_verbose "The --dehs option enabled.\n"
+      . "        STDOUT = XML output for use by other programs\n"
+      . "        STDERR = plain text output for human\n"
+      . "        Use the redirection of STDOUT to a file to get the clean XML data";
+}
+
 # Did we find any new upstream versions on our wanderings?
 our $found = 0;
 

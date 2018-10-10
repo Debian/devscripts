@@ -2,9 +2,8 @@ package Devscripts::Uscan::Utils;
 
 use strict;
 use Devscripts::Uscan::Output;
-use IPC::Run qw(run);
+use Devscripts::Utils;
 use Exporter 'import';
-use File::Basename;
 
 our @EXPORT = (
     qw(fix_href recursive_regex_dir newest_dir get_compression
@@ -455,26 +454,9 @@ sub mangle($$$$$) {
     return 0;
 }
 
-sub uscan_exec_no_fail {
-    {
-        local $, = ' ';
-        uscan_verbose "Execute: @_...";
-    }
-    run \@_;
-    return $?;
-}
+*uscan_exec_no_fail = \&ds_exec_no_fail;
 
-sub uscan_exec {
-    {
-        local $, = ' ';
-        uscan_verbose "Execute: @_...";
-    }
-    run \@_;
-    if ($?) {
-        local $, = ' ';
-        uscan_die "Command failed (@_)";
-    }
-}
+*uscan_exec = \&ds_exec;
 
 #######################################################################
 # }}} code 7: utility functions (regex)

@@ -200,6 +200,8 @@ has headers => (
     },
 );
 
+my $minversion = '';
+
 ###############
 # Main method #
 ###############
@@ -405,11 +407,11 @@ EOF
             foreach my $opt (@opts) {
                 uscan_verbose "Parsing $opt";
                 if ($opt =~ /^\s*pasv\s*$/ or $opt =~ /^\s*passive\s*$/) {
-                    $self->downloader->passive(1);
+                    $self->downloader->pasv(1);
                 } elsif ($opt =~ /^\s*active\s*$/
                     or $opt =~ /^\s*nopasv\s*$/
                     or $opt =~ /^s*nopassive\s*$/) {
-                    $self->downloader->passive(0);
+                    $self->downloader->pasv(0);
                 }
 
                 # Line option "compression" is ignored if "--compression"
@@ -549,10 +551,10 @@ EOF
             $lastversion = $self->pkg_version;
         } elsif ($lastversion eq 'ignore') {
             $self->versionmode('ignore');
-            $lastversion = $self->config->minversion;
+            $lastversion = $minversion;
         } elsif ($lastversion eq 'same') {
             $self->versionmode('same');
-            $lastversion = $self->config->minversion;
+            $lastversion = $minversion;
         } elsif ($lastversion =~ m/^prev/) {
             $self->versionmode('previous');
 
@@ -1253,8 +1255,7 @@ sub download_file_and_sig {
                     return $self->status(1);
                 }
             } else {
-                uscan_warn "Unknown type file to decompress: $sigfile_base";
-                exit 1;
+                uscan_die "Unknown type file to decompress: $sigfile_base";
             }
         }
     }

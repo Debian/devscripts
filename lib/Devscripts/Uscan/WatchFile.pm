@@ -129,7 +129,7 @@ has downloader => (
         Devscripts::Uscan::Downloader->new({
             timeout => $_[0]->config->timeout,
             agent   => $_[0]->config->user_agent,
-            passive => $_[0]->config->passive,
+            pasv    => $_[0]->config->pasv,
             destdir => $_[0]->config->destdir,
         });
     },
