@@ -1922,8 +1922,7 @@ BEGIN {
 
 my $config = Devscripts::Uscan::Config->new->parse;
 
-uscan_verbose
-  "$progname (version $uscan_version) See $progname(1) for help";
+uscan_verbose "$progname (version $uscan_version) See $progname(1) for help";
 if ($dehs) {
     uscan_verbose "The --dehs option enabled.\n"
       . "        STDOUT = XML output for use by other programs\n"
