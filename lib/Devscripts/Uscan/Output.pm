@@ -1,17 +1,18 @@
 package Devscripts::Uscan::Output;
 
 use strict;
+use Devscripts::Output;
 use Exporter 'import';
 use File::Basename;
 
-our @EXPORT = (qw(
+our @EXPORT = (
+    @Devscripts::Output::EXPORT, qw(
       uscan_msg uscan_verbose dehs_verbose uscan_warn uscan_debug uscan_die
       dehs_output $dehs $verbose $dehs_tags $dehs_start_output $dehs_end_output
-      $progname
-));
+      ));
 
 # ACCESSORS
-our ($dehs, $dehs_tags, $dehs_start_output, $dehs_end_output, $verbose)
+our ($dehs, $dehs_tags, $dehs_start_output, $dehs_end_output)
   = (0, {}, 0, 0);
 
 our $progname = basename($0);
@@ -26,17 +27,9 @@ sub printwarn {
     }
 }
 
-sub uscan_msg($) {
-    my $msg = $_[0];
-    printwarn "$progname: $msg";
-}
+*uscan_msg = \&ds_msg;
 
-sub uscan_verbose($) {
-    my $msg = $_[0];
-    if ($verbose > 0) {
-        printwarn "$progname info: $msg";
-    }
-}
+*uscan_verbose = \&ds_verbose;
 
 sub dehs_verbose ($) {
     my $msg = $_[0];
@@ -44,21 +37,13 @@ sub dehs_verbose ($) {
     uscan_verbose($msg);
 }
 
-sub who_called {
-    my @out = caller(1);
-    return "[$out[0]: $out[2]]";
-}
-
 sub uscan_warn ($) {
     my $msg = $_[0];
     push @{ $dehs_tags->{'warnings'} }, $msg if $dehs;
-    printwarn("$progname warn: $msg " . who_called, 1);
+    printwarn("$progname warn: $msg" . &Devscripts::Output::who_called, 1);
 }
 
-sub uscan_debug($) {
-    my $msg = $_[0];
-    printwarn "$progname debug: $msg" if $verbose > 1;
-}
+*uscan_debug = \&ds_debug;
 
 sub uscan_die ($) {
     my $msg = $_[0];
@@ -67,8 +52,11 @@ sub uscan_die ($) {
         $dehs_end_output = 1;
         dehs_output();
     }
-    printwarn("$progname die: $msg " . who_called, 1);
-    exit(1);
+    $msg = "$progname die: $msg" . &Devscripts::Output::who_called;
+    if ($Devscripts::Output::die_on_error) {
+        die $msg;
+    }
+    printwarn($msg, 1);
 }
 
 sub dehs_output () {

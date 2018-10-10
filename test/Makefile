@@ -1,5 +1,6 @@
 
 OUR_TESTS= \
+	perl \
 	annotate-output \
 	checkbashisms \
 	dd-list \

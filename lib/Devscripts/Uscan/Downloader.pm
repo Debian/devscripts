@@ -28,14 +28,14 @@ BEGIN {
 has agent =>
   (is => 'rw', default => sub { "Debian uscan $main::uscan_version" });
 has timeout => (is => 'rw');
-has passive => (
+has pasv => (
     is      => 'rw',
     default => 'default',
     trigger => sub {
         my ($self, $nv) = @_;
         if ($nv) {
-            uscan_verbose "Set passive mode: $self->{passive}";
-            $ENV{'FTP_PASSIVE'} = $self->passive;
+            uscan_verbose "Set passive mode: $self->{pasv}";
+            $ENV{'FTP_PASSIVE'} = $self->pasv;
         } elsif ($ENV{'FTP_PASSIVE'}) {
             uscan_verbose "Unset passive mode";
             delete $ENV{'FTP_PASSIVE'};
@@ -147,8 +147,7 @@ sub download ($$$$$$$$) {
         } elsif ($suffix eq 'lzma') {
             uscan_exec("lzma", "$pkg-$ver.tar");
         } else {
-            uscan_warn "Unknown suffix file to repack: $suffix";
-            exit 1;
+            uscan_die "Unknown suffix file to repack: $suffix";
         }
         chdir "$curdir" or uscan_die("Unable to chdir($curdir): $!");
     }
