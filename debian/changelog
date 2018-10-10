@@ -4,6 +4,10 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
   * chdist:
     + Make src2bin use the chosen dist config instead of the host's.  MR: !52
 
+  [ Xavier Guimard ]
+  * uscan:
+    + fix bad pkg name in git HEAD mode.  Closes: #896136; MR: !54
+
  -- Mattia Rizzolo <mattia@debian.org>  Tue, 09 Oct 2018 23:07:22 +0200
 
 devscripts (2.18.6) unstable; urgency=medium

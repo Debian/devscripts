@@ -1145,6 +1145,7 @@ sub download_file_and_sig {
                 $self,
                 $self->parse_result->{base},
                 $self->pkg_dir,
+                $self->pkg,
                 $self->mode
             );
             if ($download_available) {
@@ -1168,6 +1169,7 @@ sub download_file_and_sig {
                 $self,
                 $self->parse_result->{base},
                 $self->pkg_dir,
+                $self->pkg,
                 $self->mode,
             );
             if ($download_available) {
@@ -1317,7 +1319,8 @@ sub download_file_and_sig {
                 $self->downloader->download(
                     $pgpsig_url,    "$self->{config}->{destdir}/$sigfile",
                     $self,          $self->parse_result->{base},
-                    $self->pkg_dir, $self->mode
+                    $self->pkg_dir, $self->pkg,
+                    $self->mode
                 ));
         } else {    # -1, 0
             uscan_verbose "Not downloading OpenPGP signature from\n"
@@ -1335,7 +1338,8 @@ sub download_file_and_sig {
                 $self->downloader->download(
                     $pgpsig_url,    "$self->{config}->{destdir}/$sigfile",
                     $self,          $self->parse_result->{base},
-                    $self->pkg_dir, $self->mode
+                    $self->pkg_dir, $self->pkg,
+                    $self->mode
                 ));
         } else {    # -1, 0
             uscan_verbose "Not downloading OpenPGP signature from\n"

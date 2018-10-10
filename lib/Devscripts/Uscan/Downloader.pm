@@ -71,8 +71,8 @@ has user_agent => (
 
 has ssl => (is => 'rw', default => sub { $haveSSL });
 
-sub download ($$$$$$$) {
-    my ($self, $url, $fname, $optref, $base, $pkg_dir, $mode) = @_;
+sub download ($$$$$$$$) {
+    my ($self, $url, $fname, $optref, $base, $pkg_dir, $pkg, $mode) = @_;
     my ($request, $response);
     $mode ||= $optref->mode;
     if ($mode eq 'http') {
@@ -109,12 +109,11 @@ sub download ($$$$$$$) {
     } else {    # elsif ($$optref{'mode'} eq 'git')
         my $destdir = $self->destdir;
         my $curdir  = cwd();
-        $fname =~ m%(.*)/([^/]*)-([^_/-]*)\.tar\.(gz|xz|bz2|lzma)%;
+        $fname =~ m%(.*)/$pkg-([^_/]*)\.tar\.(gz|xz|bz2|lzma)%;
         my $dst     = $1;
         my $abs_dst = abs_path($dst);
-        my $pkg     = $2;
-        my $ver     = $3;
-        my $suffix  = $4;
+        my $ver     = $2;
+        my $suffix  = $3;
         my $gitrepo_dir
           = "$pkg-temporary.$$.git";    # same as outside of downloader
         my ($gitrepo, $gitref) = split /[[:space:]]+/, $url, 2;
