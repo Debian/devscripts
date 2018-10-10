@@ -542,7 +542,7 @@ sub build_equiv {
     print EQUIVS "Readme: $readme\n" if -r $readme;
 
     my $version = '1.0';
-    if (exists $opts->{version}) {
+    if (defined $opts->{version}) {
         $version = $opts->{version};
     }
     print EQUIVS "Version: $version\n";

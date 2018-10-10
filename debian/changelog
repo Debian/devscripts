@@ -32,6 +32,11 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
     + Add patch by Joost van Baal-Ilić to allow building a package even if the
       package doesn't have any build dependencies.  Closes: #910369
 
+  [ Eli Uriegas ]
+  * mk-build-deps:
+    + Fixed an issue where version was getting set to an undefined value in
+      build_equiv
+
  -- Mattia Rizzolo <mattia@debian.org>  Tue, 09 Oct 2018 23:07:22 +0200
 
 devscripts (2.18.6) unstable; urgency=medium
