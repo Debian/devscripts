@@ -15,6 +15,10 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
     + Download only the good ref in gitmode shallow.  Closes: #910709; MR: !57
     + Fix documentation: -dd isn't usable, but --dd is.  MR: !58
 
+  [ Daniel Kahn Gillmor ]
+  * uscan:
+    + Fix typo in documentation, s/hush/hash.  Closes: #910759
+
  -- Mattia Rizzolo <mattia@debian.org>  Tue, 09 Oct 2018 23:07:22 +0200
 
 devscripts (2.18.6) unstable; urgency=medium
