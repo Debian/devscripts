@@ -24,7 +24,7 @@ if test "$(perl -MPerl::Tidy -le 'print $Perl::Tidy::VERSION')" -lt 20180000; th
 fi
 
 
-testPerldity() {
+testPerltidy() {
     LIST=$(find "$base/lib/" "$base/scripts/" -iname '*.pl' -or -iname '*.pm')
 
     for file in $LIST; do
