@@ -20,6 +20,7 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
     + Rewritten using common Perl files.  MR: !55
     + Don't override compression when set in command line when we are
       implicitly repacking.  Closes: #894518; MR: !60
+    + Switch default compression from gzip to xz.  Closes: #910803
 
   [ Daniel Kahn Gillmor ]
   * uscan:

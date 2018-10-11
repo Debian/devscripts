@@ -295,7 +295,7 @@ testRepackGZ2GZ() {
 	makeTarBall gz
 	run_mk_origtargz "" "" \
 		"Successfully copied foo-0.1.tar.gz to foo_0.1.orig.tar.gz." \
-		--package foo --version 0.1 --copy foo-0.1.tar.gz --repack
+		--package foo --version 0.1 --copy foo-0.1.tar.gz --repack --compression gzip
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
 	assertType application/gzip $TMPDIR/foo_0.1.orig.tar.gz
 }
@@ -304,7 +304,7 @@ testRepackGZ2XZ() {
 	makeTarBall gz
 	run_mk_origtargz "" ""\
 		"Successfully repacked foo-0.1.tar.gz as foo_0.1.orig.tar.xz." \
-		--package foo --version 0.1 --copy foo-0.1.tar.gz --repack --compression xz
+		--package foo --version 0.1 --copy foo-0.1.tar.gz --repack
 	assertFalse "wrong result does exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
 	assertType application/xz $TMPDIR/foo_0.1.orig.tar.xz
@@ -314,7 +314,7 @@ testRepackXZ2GZ() {
 	makeTarBall xz
 	run_mk_origtargz "" "" \
 		"Successfully repacked foo-0.1.tar.xz as foo_0.1.orig.tar.gz." \
-		--package foo --version 0.1 --copy foo-0.1.tar.xz --repack
+		--package foo --version 0.1 --copy foo-0.1.tar.xz --repack --compression gzip
 	assertFalse "wrong result does exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
 	assertType application/gzip $TMPDIR/foo_0.1.orig.tar.gz
@@ -324,7 +324,7 @@ testRepackZip2GZ() {
 	makeZipFile
 	run_mk_origtargz "" "" \
 		"Successfully repacked foo-0.1.zip as foo_0.1.orig.tar.gz." \
-		--package foo --version 0.1 --copy foo-0.1.zip
+		--package foo --version 0.1 --copy foo-0.1.zip --compression gzip
 	assertTrue "original zip file does not exist" "[ -e $TMPDIR/foo-0.1.zip ]"
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
 	assertType application/gzip $TMPDIR/foo_0.1.orig.tar.gz
@@ -339,7 +339,7 @@ testRepackJar2GZ() {
 	makeJarFile
 	run_mk_origtargz "" "" \
 		"Successfully repacked foo-0.1.jar as foo_0.1.orig.tar.gz." \
-		--package foo --version 0.1 --copy foo-0.1.jar
+		--package foo --version 0.1 --copy foo-0.1.jar --compression gzip
 	assertTrue "original zip file does not exist" "[ -e $TMPDIR/foo-0.1.jar ]"
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
 	assertType application/gzip $TMPDIR/foo_0.1.orig.tar.gz
@@ -349,7 +349,7 @@ testRepackZip2GZRename() {
 	makeZipFile
 	run_mk_origtargz "" "" \
 		"Successfully repacked foo-0.1.zip as foo_0.1.orig.tar.gz, and removed the original file." \
-		--package foo --version 0.1 --rename foo-0.1.zip
+		--package foo --version 0.1 --rename foo-0.1.zip --compression gzip
 	assertFalse "original zip file does exist" "[ -e $TMPDIR/foo-0.1.zip ]"
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
 	assertType application/gzip $TMPDIR/foo_0.1.orig.tar.gz
@@ -359,7 +359,7 @@ testRepackZip2XZ() {
 	makeZipFile
 	run_mk_origtargz "" "" \
 		"Successfully repacked foo-0.1.zip as foo_0.1.orig.tar.xz." \
-		--package foo --version 0.1 foo-0.1.zip --compression xz
+		--package foo --version 0.1 foo-0.1.zip
 	assertTrue "original zip file does not exist" "[ -e $TMPDIR/foo-0.1.zip ]"
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
 	assertType application/xz $TMPDIR/foo_0.1.orig.tar.xz
@@ -372,7 +372,7 @@ testRepackXpi2XZ() {
 		"Unpacking foo-0.1.xpi
 Unpacked xpi file.
 Successfully repacked foo-0.1.xpi as foo_0.1.orig.tar.xz." \
-		--package foo --version 0.1 foo-0.1.xpi --compression xz
+		--package foo --version 0.1 foo-0.1.xpi
 	assertTrue "original xpi file does not exist" "[ -e $TMPDIR/foo-0.1.xpi ]"
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
 	assertType application/xz $TMPDIR/foo_0.1.orig.tar.xz
@@ -408,7 +408,7 @@ testExcludeZip() {
 	makeDebianCopyright
 	run_mk_origtargz foo "$expected_stderr_after_removal" \
 		"Successfully repacked ../foo-0.1.zip as ../foo_0.1.orig.tar.xz, deleting 19 files from it." \
-		 ../foo-0.1.zip --compression xz
+		 ../foo-0.1.zip
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
 	assertType application/xz $TMPDIR/foo_0.1.orig.tar.xz
 	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1.orig.tar.xz | sort)"
@@ -444,7 +444,7 @@ testSuffixZip() {
 	makeDebianCopyright
 	run_mk_origtargz foo "$expected_stderr_after_removal" \
 		"Successfully repacked ../foo-0.1.zip as ../foo_0.1+dfsg1.orig.tar.xz, deleting 19 files from it." \
-		 ../foo-0.1.zip --compression xz --repack-suffix +dfsg1
+		 ../foo-0.1.zip --repack-suffix +dfsg1
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1+dfsg1.orig.tar.xz ]"
 	assertType application/xz $TMPDIR/foo_0.1+dfsg1.orig.tar.xz
 	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1+dfsg1.orig.tar.xz | sort)"
@@ -543,7 +543,7 @@ tar: Skipping to next header
 tar: Exiting with failure status due to previous errors
 $PROGNAME: error: tar --list --auto-compress --file ../foo_0.1.orig.tar.xz $SUBPROCESS_ERROR" \
 		"" \
-		 ../foo-0.1.tar.gz --repack --compression xz
+		 ../foo-0.1.tar.gz --repack
 }
 
 testUnmatchedExclusion() {
