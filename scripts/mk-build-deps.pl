@@ -306,7 +306,7 @@ while ($control = shift) {
             $build_conflicts .= $conflict_indep;
         }
 
-        die "$progname: Unable to find build-deps for $ctrl->{$name}\n"
+        warn "$progname: Unable to find build-deps for $ctrl->{$name}\n"
           unless $build_deps;
 
         if (exists $ctrl->{Version}) {
