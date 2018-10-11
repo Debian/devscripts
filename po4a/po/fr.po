@@ -10,19 +10,20 @@
 # PHAN Thi Thanh <pthanh2003@hotmail.com>, 2009.
 # David Prévot <david@tilapin.org>, 2010-2014.
 # Jean-Pierre Giraud <jean-pierregiraud@neuf.fr>, 2017-2018.
+# Xavier Guimard <yadd@debian.org>, 2018
 msgid ""
 msgstr ""
 "Project-Id-Version: devscripts\n"
 "POT-Creation-Date: 2018-10-03 12:33+0200\n"
-"PO-Revision-Date: 2018-06-18 00:10+0200\n"
-"Last-Translator: Jean-Pierre Giraud <jean-pierregiraud@neuf.fr>\n"
+"PO-Revision-Date: 2018-10-11 18:28+0200\n"
+"Last-Translator: Xavier Guimard <yadd@debian.org>\n"
 "Language-Team: French <debian-l10n-french@lists.debian.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 2.1.1\n"
 
 #. type: TH
 #: ../scripts/annotate-output.1:1
@@ -2227,11 +2228,6 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/bts.pl:1607
-#, fuzzy
-#| msgid ""
-#| "patch, wontfix, moreinfo, unreproducible, help, newcomer, pending, "
-#| "security, upstream, confirmed, fixed, fixed-upstream, fixed-in-"
-#| "experimental, d-i, ipv6, lfs, l10n, a11y"
 msgid ""
 "patch, wontfix, moreinfo, unreproducible, fixed, help, security, upstream, "
 "pending, d-i, confirmed, ipv6, lfs, fixed-upstream, l10n, newcomer, a11y, "
@@ -11895,10 +11891,6 @@ msgstr ""
 
 #. type: Plain text
 #: ../scripts/debsnap.1:20
-#, fuzzy
-#| msgid ""
-#| "The only publicly available snapshot archive is currently located at "
-#| "I<http://snapshot.debian.org>"
 msgid ""
 "The only publicly available snapshot archive is currently located at "
 "I<https://snapshot.debian.org>"
@@ -12096,8 +12088,6 @@ msgstr "L'URL de base pour l'archive d'instantanés (« snapshots »)."
 
 #. type: Plain text
 #: ../scripts/debsnap.1:101
-#, fuzzy
-#| msgid "If unset this defaults to I<http://snapshot.debian.org>"
 msgid "If unset this defaults to I<https://snapshot.debian.org>"
 msgstr ""
 "Si elle n'est pas définie, la valeur par défaut est I<http://snapshot.debian."
@@ -13965,8 +13955,6 @@ msgstr "B<debsnap>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:83
-#, fuzzy
-#| msgid "grab packages from http://snapshot.debian.org [libwww-perl]"
 msgid "grab packages from https://snapshot.debian.org [libwww-perl]"
 msgstr "récupérer des paquets de http://snapshot.debian.org [libwww-perl]"
 
@@ -14151,10 +14139,6 @@ msgstr "B<grep-excuses>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:109
-#, fuzzy
-#| msgid ""
-#| "grep britney's excuses for your packages [libterm-size-perl, libyaml-syck-"
-#| "perl, wget, w3m]"
 msgid ""
 "grep britney's excuses for your packages [libdbd-pg-perl, libterm-size-perl, "
 "libyaml-syck-perl, wget, w3m]"
@@ -14458,9 +14442,10 @@ msgstr "B<uscan>(1)"
 #, fuzzy
 #| msgid ""
 #| "scan upstream sites for new releases of packages [gpgv | gpgv2, gnupg |"
-#| "gnupg2, liblwp-protocol-https-perl, libwww-perl, unzip, xz-utils, file]"
+#| "gnupg2, libfile-which-perl, libipc-run-perl, liblwp-protocol-https-perl, "
+#| "libmoo-perl, libwww-perl, unzip, xz-utils, file]"
 msgid ""
-"scan upstream sites for new releases of packages [gpgv | gpgv2, gnupg |"
+"scan upstream sites for new releases of packages [gpgv | gpgv2, gnupg | "
 "gnupg2, libfile-which-perl, libipc-run-perl, liblwp-protocol-https-perl, "
 "libmoo-perl, libwww-perl, unzip, xz-utils, file]"
 msgstr ""
@@ -16261,10 +16246,9 @@ msgstr "Affiche un bref message d'aide."
 
 #. type: TP
 #: ../scripts/grep-excuses.1:29
-#, fuzzy, no-wrap
-#| msgid "B<--auto-ver-sort>"
+#, no-wrap
 msgid "B<--autopkgtests>"
-msgstr "B<--auto-ver-sort>"
+msgstr "B<--autopkgtest>"
 
 #. type: Plain text
 #: ../scripts/grep-excuses.1:37
@@ -16273,6 +16257,10 @@ msgid ""
 "but apparently caused by new versions of other packages trying to migrate.  "
 "(B<--no-autopkgtests> can be used to override GREP_EXCUSES_AUTOPKGTESTS.)"
 msgstr ""
+"Examine et montre les erreurs autopkgtest (ci.debian.net) dans ce paquet "
+"mais apparemment causées par de nouvelles versions d'autres paquets en cours "
+"de migration. (B<--no-autopkgtests> peut être utilisé pour surcharger "
+"GREP_EXCUSES_AUTOPKGTESTS.)"
 
 #. type: TP
 #: ../scripts/grep-excuses.1:37
@@ -16318,8 +16306,7 @@ msgstr ""
 
 #. type: TP
 #: ../scripts/grep-excuses.1:53
-#, fuzzy, no-wrap
-#| msgid "B<GREP_EXCUSES_MAINTAINER>"
+#, no-wrap
 msgid "B<GREP_EXCUSES_AUTOPKGTESTS>"
 msgstr "B<GREP_EXCUSES_MAINTAINER>"
 
@@ -16329,6 +16316,8 @@ msgid ""
 "Boolean: whether to show autopkgtest failures in other packages.  See B<--"
 "autopkgtests>."
 msgstr ""
+"Booléen: montrer ou non les erreurs autopkgtest dans les autres paquets. "
+"Voir B<--autopkgtests>."
 
 #. type: Plain text
 #: ../scripts/grep-excuses.1:60 ../scripts/plotchangelog.1:126
@@ -20912,10 +20901,6 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/uscan.pl:208
-#, fuzzy
-#| msgid ""
-#| "* B<debian> requires the downloading upstream tarball to be newer than "
-#| "the version obtained from F<debian/changelog>."
 msgid ""
 "* B<debian> I<(default)> requires the downloading upstream tarball to be "
 "newer than the version obtained from F<debian/changelog>."
@@ -20963,16 +20948,12 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/uscan.pl:226
-#, fuzzy
-#| msgid ""
-#| "* I<script> is executed at the end of B<uscan> execution with appropriate "
-#| "arguments provided by B<uscan>."
 msgid ""
 "* I<script> is executed at the end of B<uscan> execution with appropriate "
 "arguments provided by B<uscan> I<(default: no action)>."
 msgstr ""
 "– I<script> est exécuté à la fin de l'exécution d'B<uscan> avec les "
-"paramètres appropriés fournis par B<uscan>."
+"paramètres appropriés fournis par B<uscan> I<(défaut: pas d'action)>."
 
 #. type: =item
 #: ../scripts/uscan.pl:231
@@ -21119,21 +21100,15 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/uscan.pl:283
-#, fuzzy
-#| msgid "B<@ARCHIVE_EXT@>"
 msgid "B<@DEB_EXT@>"
-msgstr "B<@ARCHIVE_EXT@>"
+msgstr "B<@DEB_EXT@>"
 
 #. type: textblock
 #: ../scripts/uscan.pl:285
-#, fuzzy
-#| msgid ""
-#| "This is substituted by the typical archive file extension regex (non-"
-#| "capturing)."
 msgid "This is substituted by the typical Debian extension regexp (capturing)."
 msgstr ""
-"Cette chaîne est remplacée par l'expression rationnelle de l'extension "
-"habituelle de fichier d'archive (sans capture)."
+"Cette chaîne est remplacée par l'expression rationnelle de habituelle de "
+"Debian (sans capture)."
 
 #. type: verbatim
 #: ../scripts/uscan.pl:287
@@ -21142,6 +21117,8 @@ msgid ""
 "  [\\+~](debian|dfsg|ds|deb)(\\.)?(\\d+)?$\n"
 "\n"
 msgstr ""
+"  [\\+~](debian|dfsg|ds|deb)(\\.)?(\\d+)?$\n"
+"\n"
 
 #. type: textblock
 #: ../scripts/uscan.pl:291
@@ -21614,15 +21591,13 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/uscan.pl:470
-#, fuzzy
-#| msgid "B<git>"
 msgid "B<gittag>"
-msgstr "B<git>"
+msgstr "B<gittag>"
 
 #. type: textblock
 #: ../scripts/uscan.pl:472
 msgid "Verify tag signature if B<mode=git>."
-msgstr ""
+msgstr "Vérifie la signature du tag si B<mode=git>."
 
 #. type: =item
 #: ../scripts/uscan.pl:474
@@ -21636,17 +21611,13 @@ msgstr "Pas de signature disponible. (Pas d'alerte.)"
 
 #. type: =item
 #: ../scripts/uscan.pl:480
-#, fuzzy
-#| msgid "B<mode=>I<mode>"
 msgid "B<searchmode=>I<mode>"
-msgstr "B<mode=>I<mode>"
+msgstr "B<searchmode=>I<mode>"
 
 #. type: textblock
 #: ../scripts/uscan.pl:482
-#, fuzzy
-#| msgid "Set the archive download I<mode>."
 msgid "Set the parsing search mode."
-msgstr "Configurer le I<mode> de téléchargement de l'archive."
+msgstr "Configurer le mode de recherche."
 
 #. type: =item
 #: ../scripts/uscan.pl:486
@@ -21654,11 +21625,13 @@ msgid ""
 "B<html> I<(default)>: search pattern in \"href\" parameter of E<lt>aE<gt> "
 "HTML tags"
 msgstr ""
+"B<html> I<(défaut))>: recherche l'expression dans les paramètres \"href\" "
+"des tags HTML E<lt>aE<gt>"
 
 #. type: =item
 #: ../scripts/uscan.pl:489
 msgid "B<plain>: search pattern in the full page"
-msgstr ""
+msgstr "B<plain>: recherche l'expression dans la page entière"
 
 #. type: textblock
 #: ../scripts/uscan.pl:491
@@ -21666,6 +21639,8 @@ msgid ""
 "This is useful is page content is not HTML but in JSON. Example with npmjs."
 "com:"
 msgstr ""
+"C'est utile si le contenu de la page n'est pas au format HTML mais au format "
+"JSON. Exemple avec npmjs.com :"
 
 #. type: verbatim
 #: ../scripts/uscan.pl:494
@@ -21676,6 +21651,10 @@ msgid ""
 "   https://registry.npmjs.org/aes-js https://registry.npmjs.com/aes-js/-/aes-js-(\\d[\\d\\.]*)@ARCHIVE_EXT@\n"
 "\n"
 msgstr ""
+"  version=4\n"
+"  opts=\"searchmode=plain\" \\\n"
+"   https://registry.npmjs.org/aes-js https://registry.npmjs.com/aes-js/-/aes-js-(\\d[\\d\\.]*)@ARCHIVE_EXT@\n"
+"\n"
 
 #. type: =item
 #: ../scripts/uscan.pl:500
@@ -21782,11 +21761,6 @@ msgstr "B<dversionmangle=>I<règles>"
 
 #. type: textblock
 #: ../scripts/uscan.pl:536
-#, fuzzy
-#| msgid ""
-#| "Normalize the last upstream version string found in F<debian/changelog> "
-#| "to compare it to the available upstream tarball version.  Removal of the "
-#| "Debian specific suffix such as B<s/\\+dfsg\\d*$//> is usually done here."
 msgid ""
 "Normalize the last upstream version string found in F<debian/changelog> to "
 "compare it to the available upstream tarball version.  Removal of the Debian "
@@ -21803,6 +21777,8 @@ msgid ""
 "You can also use B<dversionmangle=auto>, this is exactly the same than "
 "B<dversionmangle=s/@DEB_EXT@//>"
 msgstr ""
+"Il est également possible d'utiliser B<dversionmangle=auto>, ce qui est "
+"exactement la même chose que B<dversionmangle=s/@DEB_EXT@//>"
 
 #. type: =item
 #: ../scripts/uscan.pl:543
@@ -23666,7 +23642,7 @@ msgstr ""
 #. type: textblock
 #: ../scripts/uscan.pl:1244
 msgid "If tags are signed, set B<pgpmode=gittag> to verify them."
-msgstr ""
+msgstr "Si les tags sont signés, utiliser B<pgpmode=gittag> pour les vérifier."
 
 #. type: =head2
 #: ../scripts/uscan.pl:1246
@@ -23705,13 +23681,6 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/uscan.pl:1258
-#, fuzzy
-#| msgid ""
-#| "Please note that a local shallow copy of the git repository is made with "
-#| "\"B<git clone --bare --depth=1> ...\" normally in the target directory.  "
-#| "B<uscan> generates the new upstream version with \"B<git log --date=%Y%m"
-#| "%d --pretty=0.0~git%cd.%h>\" on this local copy of repository as its "
-#| "default behavior."
 msgid ""
 "Please note that a local shallow copy of the git repository is made with "
 "\"B<git clone --bare --depth=1> ...\" normally in the target directory.  "
@@ -24089,7 +24058,9 @@ msgstr "Télécharger la nouvelle version amont. (Par défaut)"
 
 #. type: =item
 #: ../scripts/uscan.pl:1412
-msgid "B<--force-download>, B<-dd>"
+#, fuzzy
+#| msgid "B<--force-download>, B<-dd>"
+msgid "B<--force-download>, B<--dd>"
 msgstr "B<--force-download>, B<-dd>>"
 
 #. type: textblock
@@ -24103,7 +24074,9 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/uscan.pl:1416
-msgid "B<--overwrite-download>, B<-ddd>"
+#, fuzzy
+#| msgid "B<--overwrite-download>, B<-ddd>"
+msgid "B<--overwrite-download>, B<--ddd>"
 msgstr "B<--overwrite-download>, B<-ddd>"
 
 #. type: textblock
@@ -25163,13 +25136,6 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/uscan.pl:1875
-#, fuzzy
-#| msgid ""
-#| "The original version of uscan was written by Christoph Lameter "
-#| "<clameter@debian.org>. Significant improvements, changes and bugfixes "
-#| "were made by Julian Gilbey <jdg@debian.org>. HTTP support was added by "
-#| "Piotr Roszatycki <dexter@debian.org>. The program was rewritten in Perl "
-#| "by Julian Gilbey."
 msgid ""
 "The original version of uscan was written by Christoph Lameter "
 "<clameter@debian.org>. Significant improvements, changes and bugfixes were "
@@ -25182,7 +25148,8 @@ msgstr ""
 "modifications et des corrections de bogues ont été apportées par Julian "
 "Gilbey <jdg@debian.org>. La prise en charge d'HTTP a été ajouté par Piotr "
 "Roszatycki <dexter@debian.org>. Le programme a été réécrit en Perl par "
-"Julian Gilbey."
+"Julian Gilbey. Xavier Guimard l'a convertit en Perl orienté-objet en "
+"utilisant L<Moo>"
 
 #. type: TH
 #: ../scripts/uupdate.1:1
@@ -26486,23 +26453,16 @@ msgstr "B<-k>, B<--keep-first>"
 
 #. type: Plain text
 #: ../doc/wrap-and-sort.1:53
-#, fuzzy
-#| msgid "Sort binary package paragraphs by name."
 msgid "When sorting binary package paragraphs, leave the first one at the top."
-msgstr "Trier les paragraphes du paquet binaire par nom."
+msgstr ""
+"Lors du tri les paragraphes du paquet binaire, laisser le premier en haut."
 
 #. type: Plain text
 #: ../doc/wrap-and-sort.1:57
-#, fuzzy
-#| msgid ""
-#| "When sorting binary package paragraphs, leave the first one at the top.  "
-#| "Unqualified B<debhelper>(7)  configuration files are applied to the first "
-#| "package."
 msgid ""
 "Unqualified B<debhelper>(7)  configuration files are applied to the first "
 "package."
 msgstr ""
-"Lors du tri des paragraphes du paquet binaire, laisser le premier en haut. "
 "Les fichiers de configuration de B<debhelper>(7) sans condition sont "
 "appliqués au premier paquet."
 
@@ -26525,11 +26485,6 @@ msgstr "B<-t>, B<--trailing-comma>"
 
 #. type: Plain text
 #: ../doc/wrap-and-sort.1:65
-#, fuzzy
-#| msgid ""
-#| "Add a trailing comma at the end of the sorted fields. This minimizes "
-#| "future differences in the VCS commits when additional dependencies are "
-#| "appended or removed."
 msgid ""
 "Add a trailing comma at the end of the sorted fields.  This minimizes future "
 "differences in the VCS commits when additional dependencies are appended or "
@@ -26580,39 +26535,32 @@ msgstr "B<--max-line-length=>I<taille_maximale_ligne>"
 
 #. type: Plain text
 #: ../doc/wrap-and-sort.1:80
-#, fuzzy
-#| msgid ""
-#| "Set the maximum allowed line length. Package lists in the Debian "
-#| "I<control> file that exceed this length limit will be wrapped. The "
-#| "default maximum line length is 79 characters."
 msgid ""
 "Set the maximum allowed line length. Package lists in the Debian I<control> "
 "file that exceed this length limit will be wrapped."
 msgstr ""
 "Définir la taille maximale de ligne permise. Les listes de paquet dans le "
 "fichier I<control> de Debian qui dépassent cette taille limite seront "
-"ajustées. Par défaut, la taille maximale de ligne est de 79 caractères."
+"ajustées."
 
 #. type: Plain text
 #: ../doc/wrap-and-sort.1:82
 msgid "The default maximum line length is 79 characters."
-msgstr ""
+msgstr " Par défaut, la taille maximale de ligne est de 79 caractères."
 
 #. type: TP
 #: ../doc/wrap-and-sort.1:82
-#, fuzzy, no-wrap
-#| msgid "B<-d>, B<--debug>"
+#, no-wrap
 msgid "B<-N>, B<--dry-run>"
 msgstr "B<-d>, B<--debug>"
 
 #. type: Plain text
 #: ../doc/wrap-and-sort.1:85
-#, fuzzy
-#| msgid ""
-#| "Do not actually do anything, but do print the commands that would be run."
 msgid ""
 "Do not modify any file, instead only print the files that would be modified."
-msgstr "Ne rien faire, mais afficher les commandes qui seraient exécutées."
+msgstr ""
+"Ne pas modifier de fichiers, mais afficher les fichiers qui devraient être "
+"modifiés."
 
 #. type: Plain text
 #: ../doc/wrap-and-sort.1:89
