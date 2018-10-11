@@ -120,8 +120,10 @@ sub download ($$$$$$$$) {
 
         if ($self->gitrepo_state == 0) {
             if ($optref->gitmode eq 'shallow') {
-                uscan_exec('git', 'clone', '--bare', '--depth=1', $base,
-                    "$destdir/$gitrepo_dir");
+                my $tag = $gitref;
+                $tag =~ s|.*/||;
+                uscan_exec('git', 'clone', '--bare', '--depth=1', '-b', $tag,
+                    $base, "$destdir/$gitrepo_dir");
                 $self->gitrepo_state(1);
             } else {
                 uscan_exec('git', 'clone', '--bare', $base,
