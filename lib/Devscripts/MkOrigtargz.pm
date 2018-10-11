@@ -74,7 +74,8 @@ sub make_orig_targz {
         # (usually due to Files-Excluded), then we want to use the original
         # compression scheme.
         $self->config->compression(
-            compression_guess_from_file($self->config->upstream));
+            compression_guess_from_file($self->config->upstream))
+          unless (defined $self->config->compression);
 
         if (not defined $self->config->compression) {
             ds_die
@@ -82,6 +83,9 @@ sub make_orig_targz {
             return $self->status(1);
         }
     }
+    $self->config->compression(
+        &Devscripts::MkOrigtargz::Config::default_compression)
+      unless (defined $self->config->compression);
 
     # Now we know what the final filename will be
     my $destfilebase = sprintf "%s_%s.%s.tar", $self->config->package,

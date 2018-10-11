@@ -275,12 +275,12 @@ testFileExclusion() {
     (cd $TMPDIR/$PKG ; $COMMAND)
     assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
 
-    TARBALL=${PKG}_1+dfsg1.orig.tar.gz
+    TARBALL=${PKG}_1+dfsg1.orig.tar.xz
     assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-1.tar.gz ]"
     assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
     assertFalse 'pristine tarball is a symlink (nothing repacked?)' "[ -L $TMPDIR/$TARBALL ]"
-    assertNotNull 'pristine tarball is not gzip-compressed' \
-                  "$( file $TMPDIR/$TARBALL | grep 'gzip compressed data' )"
+    assertNotNull 'pristine tarball is not XZ-compressed' \
+                  "$( file $TMPDIR/$TARBALL | grep -i 'XZ compressed data' )"
     CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
 
     helperTestContent
@@ -318,12 +318,12 @@ testFileExclusionSeparateDir() {
     )
     assertEquals "uscan: exit_code!=0 but exit_code=0" "$?" "0"
 
-    TARBALL=${PKG}_1+dfsg1.orig.tar.gz
+    TARBALL=${PKG}_1+dfsg1.orig.tar.xz
     assertTrue 'downloaded tarfile not present' "[ -f $TMPDIR/${PKG}-1.tar.gz ]"
     assertTrue 'pristine tarball is not created' "[ -f $TMPDIR/$TARBALL ]"
     assertFalse 'pristine tarball is a symlink (nothing repacked?)' "[ -L $TMPDIR/$TARBALL ]"
-    assertNotNull 'pristine tarball is not gzip-compressed' \
-                  "$( file $TMPDIR/$TARBALL | grep 'gzip compressed data' )"
+    assertNotNull 'pristine tarball is not XZ-compressed' \
+                  "$( file $TMPDIR/$TARBALL | grep -i 'XZ compressed data' )"
     CONTENTS="$(tar atf $TMPDIR/$TARBALL)"
 
     helperTestContent

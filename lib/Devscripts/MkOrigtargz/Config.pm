@@ -7,6 +7,8 @@ use Devscripts::Uscan::Output;
 use Exporter 'import';
 use Moo;
 
+use constant default_compression => 'gzip';
+
 extends 'Devscripts::Config';
 
 # Command-line parameters
@@ -57,7 +59,6 @@ use constant keys => [
               unless compression_is_supported($_[1]);
             $_[0]->compression($_[1]);
         },
-        'gzip'
     ],
     ['symlink', undef, \&setmode],
     ['rename',  undef, \&setmode],
