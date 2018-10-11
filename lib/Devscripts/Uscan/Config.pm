@@ -103,7 +103,7 @@ use constant keys => [
     # 2.3 - More complex options
 
     # "download" and its aliases
-    ['download!',      'USCAN_DOWNLOAD', 'bool', 1],
+    ['download|d!',    'USCAN_DOWNLOAD', 'bool', 1],
     ['force-download', undef,            sub     { $_[0]->download(2) }],
     ['dd',             undef,            sub     { $_[0]->download(2) }],
     ['no-download', undef, sub { $_[0]->download(0); return 1; }],

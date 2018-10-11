@@ -1409,11 +1409,11 @@ Use only traditional uscan output format. (default)
 
 Download the new upstream release. (default)
 
-=item B<--force-download>, B<-dd>
+=item B<--force-download>, B<--dd>
 
 Download the new upstream release even if up-to-date. (may not overwrite the local file)
 
-=item B<--overwrite-download>, B<-ddd>
+=item B<--overwrite-download>, B<--ddd>
 
 Download the new upstream release even if up-to-date. (may overwrite the local file)
 
