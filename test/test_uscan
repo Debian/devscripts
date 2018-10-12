@@ -90,7 +90,7 @@ helperTestRepack() {
     PKG=foo
     TMPDIR=$(mktemp -d -p "$SHUNIT_TMPDIR")
 
-    mkdir -p $TMPDIR/$PKG/debian
+    mkdir -p $TMPDIR/$PKG/debian/source
     spawnHttpServer
     PORT=$(cat $TMPDIR/repo/port)
 
@@ -107,6 +107,7 @@ $PKG (0-1) unstable; urgency=low
  -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
 END
 
+    echo -n '3.0 (quilt)' > $TMPDIR/$PKG/debian/source/format
     mkdir -p $TMPDIR/repo/foo
     touch $TMPDIR/repo/foo/content
 
@@ -151,7 +152,7 @@ testRepackZip_XZ() {
     spawnHttpServer
     PORT=$(cat $TMPDIR/repo/port)
 
-    mkdir -p $TMPDIR/$PKG/debian
+    mkdir -p $TMPDIR/$PKG/debian/source
 
     cat <<END > $TMPDIR/$PKG/debian/watch
 version=3
@@ -165,6 +166,7 @@ $PKG (0-1) unstable; urgency=low
 
  -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
 END
+    echo -n '3.0 (quilt)' > $TMPDIR/$PKG/debian/source/format
 
     mkdir -p $TMPDIR/repo/foo
     touch $TMPDIR/repo/foo/content

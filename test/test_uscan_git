@@ -66,6 +66,7 @@ makeDebianDir() {
     WATCHARGS=$1
     TMPDIR=$(mktemp -d)
     mkdir -p $TMPDIR/$PKG/debian/upstream
+    mkdir -p $TMPDIR/$PKG/debian/source
     spawnGitRepo
     REPO=$TMPDIR/REPO
 
@@ -82,6 +83,7 @@ $PKG (0-1) unstable; urgency=low
 
  -- Joe Developer <jd@debian.org>  Mon, 02 Nov 2013 22:21:31 -0100
 END
+    echo -n '3.0 (quilt)' > $TMPDIR/$PKG/debian/source/format
     cp -f $test_dir/uscan/PUBLIC_KEY.asc $TMPDIR/$PKG/debian/upstream/signing-key.asc
 }
 
