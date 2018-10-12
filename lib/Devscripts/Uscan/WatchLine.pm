@@ -1489,44 +1489,41 @@ sub mkorigtargz {
     my $path   = "$self->{config}->{destdir}/$self->{newfile_base}";
     my $target = $self->newfile_base;
     unless ($self->symlink eq "no") {
-        my @cmd = ("mk-origtargz");
-        push @cmd, "--package", $self->pkg;
-        push @cmd, "--version", $self->shared->{common_mangled_newversion};
-        push @cmd, '--repack-suffix', $self->repacksuffix
+        require Devscripts::MkOrigtargz;
+        @ARGV = ();
+        push @ARGV, "--package", $self->pkg;
+        push @ARGV, "--version", $self->shared->{common_mangled_newversion};
+        push @ARGV, '--repack-suffix', $self->repacksuffix
           if $self->repacksuffix;
-        push @cmd, "--rename" if $self->symlink eq "rename";
-        push @cmd, "--copy"   if $self->symlink eq "copy";
-        push @cmd, "--signature", $self->signature_available
+        push @ARGV, "--rename" if $self->symlink eq "rename";
+        push @ARGV, "--copy"   if $self->symlink eq "copy";
+        push @ARGV, "--signature", $self->signature_available
           if ($self->signature_available != 0);
-        push @cmd, "--signature-file",
+        push @ARGV, "--signature-file",
           "$self->{config}->{destdir}/$self->{search_result}->{sigfile}"
           if ($self->signature_available != 0);
-        push @cmd, "--repack" if $self->repack;
-        push @cmd, "--component", $self->component
+        push @ARGV, "--repack" if $self->repack;
+        push @ARGV, "--component", $self->component
           if $self->component;
-        push @cmd, "--compression",    $self->compression;
-        push @cmd, "--directory",      $self->config->destdir;
-        push @cmd, "--copyright-file", "debian/copyright"
+        push @ARGV, "--compression",    $self->compression;
+        push @ARGV, "--directory",      $self->config->destdir;
+        push @ARGV, "--copyright-file", "debian/copyright"
           if ($self->config->exclusion && -e "debian/copyright");
-        push @cmd, "--copyright-file", $self->config->copyright_file
+        push @ARGV, "--copyright-file", $self->config->copyright_file
           if ($self->config->exclusion && $self->config->copyright_file);
-        push @cmd, "--unzipopt", $self->unzipopt
+        push @ARGV, "--unzipopt", $self->unzipopt
           if $self->unzipopt;
-        push @cmd, $path;
+        push @ARGV, $path;
+        my $tmp = $Devscripts::Output::die_on_error;
 
-        my $actioncmd = join(" ", @cmd);
-        uscan_verbose "Executing internal command:\n   $actioncmd";
-        spawn(
-            exec       => \@cmd,
-            to_string  => \$mk_origtargz_out,
-            wait_child => 1
-        );
-        chomp($mk_origtargz_out);
-        $path = $1
-          if $mk_origtargz_out
-          =~ /Successfully .* (?:to|as) ([^,]+)(?:,.*)?\.$/;
-        $path = $1 if $mk_origtargz_out =~ /Leaving (.*) where it is/;
-        $target = basename($path);
+        uscan_verbose "Launck mk-origtargz with options:\n   "
+          . join(" ", @ARGV);
+        my $mk = Devscripts::MkOrigtargz->new;
+        $mk->do;
+        uscan_die "mk-origtargz failed" if ($mk->status);
+
+        $path                                      = $mk->destfile_nice;
+        $target                                    = basename($path);
         $self->shared->{common_mangled_newversion} = $1
           if $target =~ m/[^_]+_(.+)\.orig(?:-.+)?\.tar\.(?:gz|bz2|lzma|xz)$/;
         uscan_verbose "New orig.tar.* tarball version (after mk-origtargz): "
