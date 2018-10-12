@@ -7,7 +7,7 @@ use Devscripts::Uscan::Output;
 use Exporter 'import';
 use Moo;
 
-use constant default_compression => 'gzip';
+use constant default_compression => 'xz';
 
 extends 'Devscripts::Config';
 
