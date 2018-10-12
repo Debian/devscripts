@@ -77,6 +77,11 @@ makeTarBall () {
 	tar --create --auto-compress --file "$TMPDIR/foo-0.1.tar.$comp" --directory "$TMPDIR" foo-0.1
 	rm -rf "$TMPDIR/foo-0.1"
 }
+makeSimpleTar () {
+       makeUpstreamFiles
+       tar --create --file "$TMPDIR/foo-0.1.tar" --directory "$TMPDIR" foo-0.1
+       rm -rf "$TMPDIR/foo-0.1"
+}
 makeBrokenTarBall () {
 	echo foo > foo.txt
 	tar cf - foo.txt | sed -e 's/^/foo/' | gzip > "$TMPDIR/foo-0.1.tar.gz"
@@ -376,6 +381,15 @@ Successfully repacked foo-0.1.xpi as foo_0.1.orig.tar.xz." \
 	assertTrue "original xpi file does not exist" "[ -e $TMPDIR/foo-0.1.xpi ]"
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
 	assertType application/xz $TMPDIR/foo_0.1.orig.tar.xz
+}
+
+testRepackTAR2XZ() {
+       makeSimpleTar
+       run_mk_origtargz "" "" \
+               "Successfully repacked foo-0.1.tar as foo_0.1.orig.tar.xz." \
+               --package foo --version 0.1 --copy foo-0.1.tar --repack
+       assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
+       assertType application/xz $TMPDIR/foo_0.1.orig.tar.xz
 }
 
 testExclude() {

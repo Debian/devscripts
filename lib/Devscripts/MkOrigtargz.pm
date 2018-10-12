@@ -27,9 +27,10 @@ use Moo;
 # tar\.xz
 # txz
 # tar\.Z
+# tar
 # END
 use constant tar_regex =>
-  qr/t(?:ar\.(?:[gx]z|lzma|bz2|Z)|lz(?:ma?)?|[gx]z|bz2?)/;
+  qr/t(?:ar(?:\.(?:[gx]z|lzma|bz2|Z))?|lz(?:ma?)?|[gx]z|bz2?)$/;
 
 has config => (
     is      => 'rw',
@@ -57,9 +58,10 @@ sub make_orig_targz {
     my ($self) = @_;
     my $mime = compression_guess_from_file($self->config->upstream);
 
-    my $is_zipfile = (defined $mime and $mime eq 'zip');
-    my $is_tarfile = $self->config->upstream =~ tar_regex;
-    my $is_xpifile = $self->config->upstream =~ /\.xpi$/i;
+    my $is_zipfile    = (defined $mime and $mime eq 'zip');
+    my $is_tarfile    = $self->config->upstream =~ tar_regex;
+    my $is_simple_tar = $self->config->upstream =~ /\.tar$/;
+    my $is_xpifile    = $self->config->upstream =~ /\.xpi$/i;
 
     unless ($is_zipfile or $is_tarfile) {
         # TODO: Should we ignore the name and only look at what file knows?
@@ -282,8 +284,12 @@ sub make_orig_targz {
         if ($self->config->signature) {
             $self->config->signature(4);    # repack upstream file
         }
-        eval { decompress_archive($upstream_tar, $destfiletar) };
-        return $self->status(1) if ($@);
+        if ($is_simple_tar) {
+            copy $upstream_tar, $destfiletar;
+        } else {
+            eval { decompress_archive($upstream_tar, $destfiletar) };
+            return $self->status(1) if ($@);
+        }
         unlink $upstream_tar if $self->config->mode eq "rename";
     # We have to use piping because --delete is broken otherwise, as documented
     # at https://www.gnu.org/software/tar/manual/html_node/delete.html

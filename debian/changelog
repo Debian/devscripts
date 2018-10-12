@@ -21,6 +21,7 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
     + Don't override compression when set in command line when we are
       implicitly repacking.  Closes: #894518; MR: !60
     + Switch default compression from gzip to xz.  Closes: #910803; MR: !61
+    + Accept uncompress tarball as source file.  Closes: #838682
 
   [ Daniel Kahn Gillmor ]
   * uscan:
