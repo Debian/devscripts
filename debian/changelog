@@ -14,7 +14,10 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
     + Modified to use common Perl modules.  MR: !51
     + Download only the good ref in gitmode shallow.  Closes: #910709; MR: !57
     + Fix documentation: -dd isn't usable, but --dd is.  MR: !58
+    + Embed mk-origtargz instead of launching it and parse stdout.  MR: !55
   * French translation update.  MR: !59
+  * mk-origtargz:
+    + Rewritten using common Perl files.  MR: !55
 
   [ Daniel Kahn Gillmor ]
   * uscan:
