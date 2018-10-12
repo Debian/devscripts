@@ -48,6 +48,7 @@ my %mime2comp = (
     "application/zip"          => "zip",
     "application/x-compress"   => "compress",
     "application/java-archive" => "zip",
+    "application/x-tar"        => "tar",
 );
 
 sub compression_guess_from_file {
