@@ -20,13 +20,17 @@ set -u
 
 if test "${1:-}" = --installed; then
     MK_ORIGTARGZ="mk-origtargz"
-    PROGNAME="mk-origtargz"
     shift
 else
     top_srcdir=$(readlink -f "${0%/*}/..")
-    MK_ORIGTARGZ="perl -I $top_srcdir/lib $top_srcdir/scripts/mk-origtargz.pl"
-    PROGNAME="mk-origtargz.pl"
+    make -C "$top_srcdir/scripts" mk-origtargz
+    MK_ORIGTARGZ="perl -I $top_srcdir/lib $top_srcdir/scripts/mk-origtargz"
+    PATH="$top_srcdir/scripts:$PATH"
+    export PATH
+    PERL5LIB="$top_srcdir/lib"
+    export PERL5LIB
 fi
+PROGNAME="mk-origtargz"
 
 LC_ALL=C
 export LC_ALL
@@ -153,7 +157,7 @@ Files-Excluded: exclude-this*
 END
 }
 
-expected_stderr_after_removal="WARNING: Files-Excluded pattern (exclude-dir2/) should not have a trailing /"
+expected_stderr_after_removal="mk-origtargz warn: Files-Excluded pattern (exclude-dir2/) should not have a trailing /"
 
 expected_files_after_removal=$(LC_ALL=C sort <<END
 foo-0.1/
@@ -519,7 +523,7 @@ testCopyrightFormatWarning() {
 	makeDebianDir
 	makeWrongDebianCopyright
 	run_mk_origtargz foo \
-		"WARNING: The file debian/copyright mentions Files-Excluded, but its format is not recognized. Specify Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/ in order to remove files from the tarball with mk-origtargz." \
+		"mk-origtargz warn: The file debian/copyright mentions Files-Excluded, but its format is not recognized. Specify Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/ in order to remove files from the tarball with mk-origtargz." \
 		"Successfully symlinked ../foo-0.1.tar.gz to ../foo_0.1.orig.tar.gz." \
 		 ../foo-0.1.tar.gz
 
@@ -546,7 +550,7 @@ testUnmatchedExclusion() {
 	makeTarBall gz
 	makeDebianDir
 	makeUnmatchedExcludeCopyright
-	run_mk_origtargz foo "No files matched excluded pattern as the last matching glob: nomatch" \
+	run_mk_origtargz foo "mk-origtargz warn: No files matched excluded pattern as the last matching glob: nomatch" \
 		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.gz, deleting 19 files from it." \
 		 ../foo-0.1.tar.gz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
@@ -558,7 +562,7 @@ testDuplicatePattern() {
 	makeTarBall gz
 	makeDebianDir
 	makeDuplicatePatternCopyright
-	run_mk_origtargz foo "No files matched excluded pattern as the last matching glob: exclude-dir1" \
+	run_mk_origtargz foo "mk-origtargz warn: No files matched excluded pattern as the last matching glob: exclude-dir1" \
 		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.gz, deleting 19 files from it." \
 		 ../foo-0.1.tar.gz
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
