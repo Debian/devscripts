@@ -88,9 +88,9 @@ sub make_orig_targz {
     if (-r 'debian/source/format') {
         open F, 'debian/source/format';
         my $str = <F>;
-        unless ($str =~ /^([\d\.]+)/ and $1 >= 3.0) {
+        unless ($str =~ /^([\d\.]+)/ and $1 >= 2.0) {
             ds_warn
-              "Source format is earlier than 3.0, switch compression to gzip";
+              "Source format is earlier than 2.0, switch compression to gzip";
             $self->config->compression('gzip');
         }
         close F;
