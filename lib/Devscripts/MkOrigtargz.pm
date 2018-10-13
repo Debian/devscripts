@@ -85,6 +85,19 @@ sub make_orig_targz {
             return $self->status(1);
         }
     }
+    if (-r 'debian/source/format') {
+        open F, 'debian/source/format';
+        my $str = <F>;
+        unless ($str =~ /^([\d\.]+)/ and $1 >= 3.0) {
+            ds_warn
+              "Source format is earlier than 3.0, switch compression to gzip";
+            $self->config->compression('gzip');
+        }
+        close F;
+    } elsif (-d 'debian') {
+        ds_warn "Missing debian/source/format, switch compression to gzip";
+        $self->config->compression('gzip');
+    }
     $self->config->compression(
         &Devscripts::MkOrigtargz::Config::default_compression)
       unless (defined $self->config->compression);
