@@ -103,11 +103,11 @@ use List::Util qw/first/;
 use Moo;
 
 use constant {
-    ANY_VERSION => '[-_]?(\d[\-+\.:\~\da-zA-Z]*)',
-    ARCHIVE_EXT => '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip|tgz|tbz|txz)',
-    DEB_EXT     => '[\+~](debian|dfsg|ds|deb)(\.)?(\d+)?$',
+    ANY_VERSION => '(?:[-_]?(\d[\-+\.:\~\da-zA-Z]*))',
+    ARCHIVE_EXT => '(?i)(?:\.(?:tar\.xz|tar\.bz2|tar\.gz|zip|tgz|tbz|txz))',
+    DEB_EXT     => '(?:[\+~](debian|dfsg|ds|deb)(\.)?(\d+)?$)',
 };
-use constant { SIGNATURE_EXT => ARCHIVE_EXT . '\.(?:asc|pgp|gpg|sig|sign)', };
+use constant SIGNATURE_EXT => ARCHIVE_EXT . '(?:\.(?:asc|pgp|gpg|sig|sign))';
 
 # Required new() parameters
 has config      => (is => 'rw', required => 1);
@@ -260,9 +260,6 @@ sub BUILD {
         s/\\\\/\\/g if $watch_version == 1;
 
         # Handle @PACKAGE@ @ANY_VERSION@ @ARCHIVE_EXT@ substitutions
-        my $any_version = '[-_]?(\d[\-+\.:\~\da-zA-Z]*)';
-        my $archive_ext = '(?i)\.(?:tar\.xz|tar\.bz2|tar\.gz|zip|tgz|tbz|txz)';
-        my $signature_ext = $archive_ext . '\.(?:asc|pgp|gpg|sig|sign)';
         s/\@PACKAGE\@/$args->{package}/g;
         s/\@ANY_VERSION\@/ANY_VERSION/ge;
         s/\@ARCHIVE_EXT\@/ARCHIVE_EXT/ge;
