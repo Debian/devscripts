@@ -533,12 +533,7 @@ EOF
         }
 
         # compression is persistent
-        $self->compression((
-                     $self->mode eq 'http'
-                  or $self->mode eq 'ftp'
-            )
-            ? get_compression('gzip')    # keep backward compat
-            : get_compression('xz')) unless ($self->compression);
+        $self->compression('default') unless ($self->compression);
 
         # Set $lastversion to the numeric last version
         # Update $self->versionmode (its default "newer")

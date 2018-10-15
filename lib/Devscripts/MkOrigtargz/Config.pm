@@ -88,27 +88,23 @@ use constant keys => [
 ];
 
 use constant rules => [
-    sub {
-        $_[0]->{mode} ||= 'symlink';
-    },
+    # Check --package if --version is used
     sub {
         return (
               (defined $_[0]->{package} and not defined $_[0]->{version})
             ? (0, 'If you use --package, you also have to specify --version')
             : (1));
     },
+    # Check that a tarball has been given and store it in $self->upstream
     sub {
+        return (0, 'Please specify original tarball') unless (@ARGV == 1);
+        $_[0]->upstream($ARGV[0]);
         return (
-            @ARGV == 1
-            ? ($_[0]->upstream($ARGV[0]))
-            : (0, 'Please specify original tarball'));
-    },
-    sub {
-        return (
-            -e $_[0]->upstream($ARGV[0])
+            -r $_[0]->upstream
             ? (1)
             : (0, "Could not read $_[0]->{upstream}: $!"));
     },
+    # Get Debian pakage name an version unless given
     sub {
         my ($self) = @_;
         unless (defined $self->package) {
@@ -116,7 +112,7 @@ use constant rules => [
             my $c = Dpkg::Changelog::Debian->new(range => { count => 1 });
             $c->load('debian/changelog');
             if (my $msg = $c->get_parse_errors()) {
-                die "could not parse debian/changelog:\n$msg";
+                return (0, "could not parse debian/changelog:\n$msg");
             }
             my ($entry) = @{$c};
             $self->package($entry->get_source());
@@ -125,9 +121,10 @@ use constant rules => [
             unless (defined $self->version) {
                 my $debversion = Dpkg::Version->new($entry->get_version());
                 if ($debversion->is_native()) {
-                    ds_warn
-"Package with native version number $debversion; mk-origtargz makes no sense for native packages.\n";
-                    exit 0;
+                    return (0,
+                            "Package with native version number $debversion; "
+                          . "mk-origtargz makes no sense for native packages."
+                    );
                 }
                 $self->version($debversion->version());
             }
@@ -144,6 +141,7 @@ use constant rules => [
                 $self->directory('.');
             }
         }
+        return 1;
     },
     # Get upstream type and compression
     sub {
@@ -193,6 +191,7 @@ use constant rules => [
     # Default compression
     sub {
         my ($self) = @_;
+        # Case 1: format is 1.0
         if (-r 'debian/source/format') {
             open F, 'debian/source/format';
             my $str = <F>;
@@ -200,15 +199,27 @@ use constant rules => [
                 ds_warn
 "Source format is earlier than 2.0, switch compression to gzip";
                 $self->compression('gzip');
+                $self->repack(1) unless ($self->upstream_comp eq 'gzip');
             }
             close F;
         } elsif (-d 'debian') {
             ds_warn "Missing debian/source/format, switch compression to gzip";
             $self->compression('gzip');
+            $self->repack(1) unless ($self->upstream_comp eq 'gzip');
+        } elsif ($self->upstream_type eq 'tar') {
+            # Uncompressed tar
+            if (!$self->upstream_comp) {
+                $self->repack(1);
+            }
         }
-        $self->compression(default_compression)
-          unless (defined $self->compression);
+        # Set to default. Will be changed after setting do_repack
+        $self->compression('default')
+          unless ($self->compression);
         return 1;
+    },
+    sub {
+        my ($self) = @_;
+        $self->{mode} ||= 'symlink';
     },
 ];
 

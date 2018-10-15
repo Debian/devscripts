@@ -286,7 +286,7 @@ helperWatchZip() {
     PKG=${PKG:-foo}
     REPOPATH=${REPOPATH:-repo}
     POOLPATH=${POOLPATH:-pool}
-    GZREPACK=${GZREPACK:-gz}
+    GZREPACK=${GZREPACK:-xz}
     XCOMMAND=${XCOMMAND:-$COMMAND}
     WATCHVER="${WATCHVER:-3}"
     WATCHLINE0="@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate"

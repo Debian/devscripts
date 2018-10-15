@@ -315,11 +315,9 @@ Set the name of the secondary source tarball as I<<
 Set the compression I<method> when the tarball is repacked (persistent).
 
 Available I<method> values are B<xz>, B<gzip> (alias B<gz>), B<bzip2> (alias
-B<bz2>), and B<lzma>.  The default is B<gzip> for normal tarballs, and B<xz>
-for tarballs generated directly from a git repository.
-
-If the debian source format is not 1.0, setting this to B<xz> should
-help reduce the package size when the package is repacked.
+B<bz2>), B<lzma>, B<default>. The default method is B<xz>. When uscan is
+launched in a debian source repository which format is "1.0" or undefined,
+default method switches to B<gzip>.
 
 Please note the repacking of the upstream tarballs by B<mk-origtargz> happens
 only if one of the following conditions is satisfied:

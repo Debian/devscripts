@@ -46,8 +46,10 @@ sub make_orig_targz {
       $self->config->version, $self->config->orig;
     my $destfiletar = sprintf "%s/%s", $self->config->directory, $destfilebase;
     my $destext
-      = compression_get_property($self->config->compression, "file_ext");
-    my $destfile = sprintf "%s.%s", $destfiletar, $destext;
+      = $self->config->compression eq 'default'
+      ? 'default'
+      : compression_get_property($self->config->compression, "file_ext");
+    my $destfile;
 
     # $upstream_tar is $upstream, unless the latter was a zip file.
     my $upstream_tar = $self->config->upstream;
@@ -57,6 +59,7 @@ sub make_orig_targz {
 
     # If the file is a zipfile, we need to create a tarfile from it.
     if ($self->config->upstream_type eq 'zip') {
+        $destfile = $self->fix_dest_file($destfiletar);
         if ($self->config->signature) {
             $self->config->signature(4);    # repack upstream file
         }
@@ -141,7 +144,13 @@ sub make_orig_targz {
             ds_die("Cannot determine compression method of $upstream_tar");
             return $self->status(1);
         }
-        $do_repack = $comp ne $self->config->compression;
+        $do_repack = (
+            $comp eq 'tar'
+              or (  $self->config->compression ne 'default'
+                and $comp ne $self->config->compression)
+              or (  $self->config->compression eq 'default'
+                and $comp ne
+                &Devscripts::MkOrigtargz::Config::default_compression));
     }
 
     # Removing files
@@ -207,7 +216,7 @@ sub make_orig_targz {
           $self->config->orig;
         $destfiletar = sprintf "%s/%s", $self->config->directory,
           $destfilebase;
-        $destfile = sprintf "%s.%s", $destfiletar, $destext;
+        $destfile = $self->fix_dest_file($destfiletar);
 
         # Zip -> tar process already created $destfile, so need to rename it
         if ($self->config->upstream_type eq 'zip') {
@@ -218,18 +227,20 @@ sub make_orig_targz {
 
     # Actually do the unpack, remove, pack cycle
     if ($do_repack || $deletecount) {
+        $destfile ||= $self->fix_dest_file($destfiletar);
         if ($self->config->signature) {
             $self->config->signature(4);    # repack upstream file
         }
-        if (!$self->config->upstream_comp) {
-            copy $upstream_tar, $destfiletar;
-        } else {
+        if ($self->config->upstream_comp) {
             eval { decompress_archive($upstream_tar, $destfiletar) };
             return $self->status(1) if ($@);
+        } else {
+            copy $upstream_tar, $destfiletar;
         }
         unlink $upstream_tar if $self->config->mode eq "rename";
-    # We have to use piping because --delete is broken otherwise, as documented
-    # at https://www.gnu.org/software/tar/manual/html_node/delete.html
+        # We have to use piping because --delete is broken otherwise, as
+        # documented at
+        # https://www.gnu.org/software/tar/manual/html_node/delete.html
         if (@to_delete) {
             # ARG_MAX: max number of bytes exec() can handle
             my $arg_max;
@@ -243,8 +254,9 @@ sub make_orig_targz {
             if ($arg_max =~ /\D/) { $arg_max = 131072; }
             # Usually NAME_MAX=255, but here we use 128 to be on the safe side.
             $arg_max = int($arg_max / 128);
-          # We use this lame splice on a totally arbitrary $arg_max because
-          # counting how many bytes there are in @to_delete is too inefficient.
+            # We use this lame splice on a totally arbitrary $arg_max because
+            # counting how many bytes there are in @to_delete is too
+            # inefficient.
             while (my @next_n = splice @to_delete, 0, $arg_max) {
                 spawn(
                     exec       => ['tar', '--delete', @next_n],
@@ -259,11 +271,17 @@ sub make_orig_targz {
             compress_archive($destfiletar, $destfile,
                 $self->config->compression);
         };
-        return $self->status(1) if ($@);
+        if ($@) {
+            ds_die $@;
+            return $self->status(1);
+        }
 
         # Symlink no longer makes sense
         $self->config->mode('repack');
         $upstream_tar = $destfile;
+    } else {
+        $destfile = $self->fix_dest_file($destfiletar,
+            compression_guess_from_file($upstream_tar), 1);
     }
 
     # Final step: symlink, copy or rename for tarball.
@@ -351,8 +369,9 @@ sub make_orig_targz {
 
     # Final check: Is the tarball usable
 
-# We are lazy and rely on Dpkg::IPC to report an error message (spawn does not report back the error code).
-# We don't expect this to occur often anyways.
+    # We are lazy and rely on Dpkg::IPC to report an error message
+    # (spawn does not report back the error code).
+    # We don't expect this to occur often anyways.
     my $ret = spawn(
         exec => ['tar', '--list', '--auto-compress', '--file', $destfile],
         wait_child => 1,
@@ -455,6 +474,7 @@ sub glob_to_regex {
             || $c eq '['
             || $c eq ']'
             ||
+
             # Escape '#' since we're using /x in the pattern match
             $c eq '#'
         ) {
@@ -525,6 +545,16 @@ sub parse_copyrights {
             }
         }
     }
+}
+
+sub fix_dest_file {
+    my ($self, $destfiletar, $comp, $force) = @_;
+    if ($self->config->compression eq 'default' or $force) {
+        $self->config->compression($comp
+              || &Devscripts::MkOrigtargz::Config::default_compression);
+    }
+    return sprintf "%s.%s", $destfiletar,
+      compression_get_property($self->config->compression, "file_ext");
 }
 
 1;

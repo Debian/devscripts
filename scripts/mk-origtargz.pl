@@ -173,10 +173,10 @@ Set I<componentname> as the component name.  This is used only for the
 secondary upstream tarball of the Debian source package.  
 Then I<packagename_version.orig-componentname.tar.gz> is created.
 
-=item B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]
+=item B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> | B<default> ]
 
-If B<--repack> is used, or if the given file is a B<zip> or B<xpi> file, ensure
-that the resulting file is compressed using the given scheme. The default is
+The default method is B<xz>. When mk-origtargz is launched in a debian source
+repository which format is "1.0" or undefined, default method switches to
 B<gzip>.
 
 =item B<-C>, B<--directory> I<directory>
