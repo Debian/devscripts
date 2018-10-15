@@ -14,23 +14,7 @@ use Dpkg::Version;
 use File::Copy;
 use File::Spec;
 use File::Temp qw/tempdir/;
-use File::Which;
 use Moo;
-
-# regexp-assemble << END
-# tar\.gz
-# tgz
-# tar\.bz2
-# tbz2?
-# tar\.lzma
-# tlz(?:ma?)?
-# tar\.xz
-# txz
-# tar\.Z
-# tar
-# END
-use constant tar_regex =>
-  qr/t(?:ar(?:\.(?:[gx]z|lzma|bz2|Z))?|lz(?:ma?)?|[gx]z|bz2?)$/;
 
 has config => (
     is      => 'rw',
@@ -56,51 +40,6 @@ sub do {
 
 sub make_orig_targz {
     my ($self) = @_;
-    my $mime = compression_guess_from_file($self->config->upstream);
-
-    my $is_zipfile    = (defined $mime and $mime eq 'zip');
-    my $is_tarfile    = $self->config->upstream =~ tar_regex;
-    my $is_simple_tar = $self->config->upstream =~ /\.tar$/;
-    my $is_xpifile    = $self->config->upstream =~ /\.xpi$/i;
-
-    unless ($is_zipfile or $is_tarfile) {
-        # TODO: Should we ignore the name and only look at what file knows?
-        ds_die 'Parameter '
-          . $self->config->upstream
-          . ' does not look like a tar archive or a zip file.';
-        return $self->status(1);
-    }
-
-    if ($is_tarfile and not $self->config->repack) {
-        # If we are not explicitly repacking, but need to generate a file
-        # (usually due to Files-Excluded), then we want to use the original
-        # compression scheme.
-        $self->config->compression(
-            compression_guess_from_file($self->config->upstream))
-          unless (defined $self->config->compression);
-
-        if (not defined $self->config->compression) {
-            ds_die
-              "Unknown or no compression used in $self->config->upstream.";
-            return $self->status(1);
-        }
-    }
-    if (-r 'debian/source/format') {
-        open F, 'debian/source/format';
-        my $str = <F>;
-        unless ($str =~ /^([\d\.]+)/ and $1 >= 2.0) {
-            ds_warn
-              "Source format is earlier than 2.0, switch compression to gzip";
-            $self->config->compression('gzip');
-        }
-        close F;
-    } elsif (-d 'debian') {
-        ds_warn "Missing debian/source/format, switch compression to gzip";
-        $self->config->compression('gzip');
-    }
-    $self->config->compression(
-        &Devscripts::MkOrigtargz::Config::default_compression)
-      unless (defined $self->config->compression);
 
     # Now we know what the final filename will be
     my $destfilebase = sprintf "%s_%s.%s.tar", $self->config->package,
@@ -117,31 +56,16 @@ sub make_orig_targz {
     my $zipfile_deleted = 0;
 
     # If the file is a zipfile, we need to create a tarfile from it.
-    if ($is_zipfile) {
+    if ($self->config->upstream_type eq 'zip') {
         if ($self->config->signature) {
             $self->config->signature(4);    # repack upstream file
-        }
-        if ($is_xpifile) {
-            unless (which 'xpi-unpack') {
-                ds_die( "xpi-unpack binary not found."
-                      . " You need to install the package mozilla-devscripts"
-                      . " to be able to repack .xpi upstream archives.\n");
-                return $self->status(1);
-            }
-        } else {
-            unless (which 'unzip') {
-                ds_die( "unzip binary not found."
-                      . " You need to install the package unzip"
-                      . " to be able to repack .zip upstream archives.\n");
-                return $self->status(1);
-            }
         }
 
         my $tempdir = tempdir("uscanXXXX", TMPDIR => 1, CLEANUP => 1);
         # Parent of the target directory should be under our control
         $tempdir .= '/repack';
         my @cmd;
-        if ($is_xpifile) {
+        if ($self->config->upstream_comp eq 'xpi') {
             @cmd = ('xpi-unpack', $upstream_tar, $tempdir);
             unless (ds_exec_no_fail(@cmd) >> 8 == 0) {
                 ds_die("Repacking from xpi failed (could not xpi-unpack)\n");
@@ -286,7 +210,7 @@ sub make_orig_targz {
         $destfile = sprintf "%s.%s", $destfiletar, $destext;
 
         # Zip -> tar process already created $destfile, so need to rename it
-        if ($is_zipfile) {
+        if ($self->config->upstream_type eq 'zip') {
             move($upstream_tar, $destfile);
             $upstream_tar = $destfile;
         }
@@ -297,7 +221,7 @@ sub make_orig_targz {
         if ($self->config->signature) {
             $self->config->signature(4);    # repack upstream file
         }
-        if ($is_simple_tar) {
+        if (!$self->config->upstream_comp) {
             copy $upstream_tar, $destfiletar;
         } else {
             eval { decompress_archive($upstream_tar, $destfiletar) };
@@ -444,7 +368,9 @@ sub make_orig_targz {
     if ($same_name) {
         print "Leaving $destfile_nice where it is";
     } else {
-        if ($is_zipfile or $do_repack or $deletecount) {
+        if (   $self->config->upstream_type eq 'zip'
+            or $do_repack
+            or $deletecount) {
             print "Successfully repacked $upstream_nice as $destfile_nice";
         } elsif ($self->config->mode eq "symlink") {
             print "Successfully symlinked $upstream_nice to $destfile_nice";

@@ -2,12 +2,29 @@ package Devscripts::MkOrigtargz::Config;
 
 use strict;
 
-use Devscripts::Compression 'compression_is_supported';
+use Devscripts::Compression qw'compression_is_supported
+  compression_guess_from_file
+  compression_get_property';
 use Devscripts::Uscan::Output;
 use Exporter 'import';
+use File::Which;
 use Moo;
 
 use constant default_compression => 'xz';
+# regexp-assemble << END
+# tar\.gz
+# tgz
+# tar\.bz2
+# tbz2?
+# tar\.lzma
+# tlz(?:ma?)?
+# tar\.xz
+# txz
+# tar\.Z
+# tar
+# END
+use constant tar_regex =>
+  qr/t(?:ar(?:\.(?:[gx]z|lzma|bz2|Z))?|lz(?:ma?)?|[gx]z|bz2?)$/;
 
 extends 'Devscripts::Config';
 
@@ -30,6 +47,8 @@ has mode          => (is => 'rw');
 has orig          => (is => 'rw', default => sub { 'orig' });
 has excludestanza => (is => 'rw', default => sub { 'Files-Excluded' });
 has upstream      => (is => 'rw');
+has upstream_type => (is => 'rw');
+has upstream_comp => (is => 'rw');
 
 use constant keys => [
     ['package=s'],
@@ -125,7 +144,72 @@ use constant rules => [
                 $self->directory('.');
             }
         }
-    }
+    },
+    # Get upstream type and compression
+    sub {
+        my ($self) = @_;
+        my $mime = compression_guess_from_file($self->upstream);
+
+        if (defined $mime and $mime eq 'zip') {
+            $self->upstream_type('zip');
+            my ($prog, $pkg);
+            if ($self->upstream =~ /\.xpi$/i) {
+                $self->upstream_comp('xpi');
+                $prog = 'xpi-unpack';
+                $pkg  = 'mozilla-devscripts';
+            } else {
+                $self->upstream_comp('zip');
+                $prog = $pkg = 'unzip';
+            }
+            return (0,
+                    "$prog binary not found."
+                  . " You need to install the package $pkg"
+                  . " to be able to repack "
+                  . $self->upstream_type
+                  . " upstream archives.\n")
+              unless (which $prog);
+        } elsif ($self->upstream =~ tar_regex) {
+            $self->upstream_type('tar');
+            if ($self->upstream =~ /\.tar$/) {
+                $self->upstream_comp('');
+            } else {
+                unless (
+                    $self->upstream_comp(
+                        compression_guess_from_file($self->upstream))
+                ) {
+                    return (0,
+                        "Unknown compression used in $self->{upstream}");
+                }
+            }
+        } else {
+            # TODO: Should we ignore the name and only look at what file knows?
+            return (0,
+                    'Parameter '
+                  . $self->upstream
+                  . ' does not look like a tar archive or a zip file.');
+        }
+        return 1;
+    },
+    # Default compression
+    sub {
+        my ($self) = @_;
+        if (-r 'debian/source/format') {
+            open F, 'debian/source/format';
+            my $str = <F>;
+            unless ($str =~ /^([\d\.]+)/ and $1 >= 2.0) {
+                ds_warn
+"Source format is earlier than 2.0, switch compression to gzip";
+                $self->compression('gzip');
+            }
+            close F;
+        } elsif (-d 'debian') {
+            ds_warn "Missing debian/source/format, switch compression to gzip";
+            $self->compression('gzip');
+        }
+        $self->compression(default_compression)
+          unless (defined $self->compression);
+        return 1;
+    },
 ];
 
 sub setmode {
