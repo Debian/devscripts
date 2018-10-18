@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: devscripts 2.16.4\n"
 "Report-Msgid-Bugs-To: devscripts@packages.debian.org\n"
-"POT-Creation-Date: 2018-10-03 12:33+0200\n"
+"POT-Creation-Date: 2018-10-18 09:42+0200\n"
 "PO-Revision-Date: 2016-09-25 18:56+0200\n"
 "Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
 "Language-Team: de <debian-l10n-german@lists.debian.org>\n"
@@ -14501,7 +14501,7 @@ msgstr "I<uscan>(1)"
 #| "scan upstream sites for new releases of packages [gpgv | gpgv2, gnupg |"
 #| "gnupg2, liblwp-protocol-https-perl, libwww-perl, unzip, xz-utils, file]"
 msgid ""
-"scan upstream sites for new releases of packages [gpgv | gpgv2, gnupg |"
+"scan upstream sites for new releases of packages [gpgv | gpgv2, gnupg | "
 "gnupg2, libfile-which-perl, libipc-run-perl, liblwp-protocol-https-perl, "
 "libmoo-perl, libwww-perl, unzip, xz-utils, file]"
 msgstr ""
@@ -24196,7 +24196,9 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/uscan.pl:1412
-msgid "B<--force-download>, B<-dd>"
+#, fuzzy
+#| msgid "B<--force-download>, B<-dd>"
+msgid "B<--force-download>, B<--dd>"
 msgstr "B<--force-download>, B<-dd>"
 
 #. type: textblock
@@ -24210,7 +24212,9 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/uscan.pl:1416
-msgid "B<--overwrite-download>, B<-ddd>"
+#, fuzzy
+#| msgid "B<--overwrite-download>, B<-ddd>"
+msgid "B<--overwrite-download>, B<--ddd>"
 msgstr "B<--overwrite-download>, B<-ddd>"
 
 #. type: textblock
