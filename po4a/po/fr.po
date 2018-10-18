@@ -14439,19 +14439,14 @@ msgstr "B<uscan>(1)"
 
 #. type: Plain text
 #: ../scripts/devscripts.1:153
-#, fuzzy
-#| msgid ""
-#| "scan upstream sites for new releases of packages [gpgv | gpgv2, gnupg |"
-#| "gnupg2, libfile-which-perl, libipc-run-perl, liblwp-protocol-https-perl, "
-#| "libmoo-perl, libwww-perl, unzip, xz-utils, file]"
 msgid ""
 "scan upstream sites for new releases of packages [gpgv | gpgv2, gnupg | "
 "gnupg2, libfile-which-perl, libipc-run-perl, liblwp-protocol-https-perl, "
 "libmoo-perl, libwww-perl, unzip, xz-utils, file]"
 msgstr ""
 "surveiller la disponibilité d'une nouvelle version amont de paquets [gpgv | "
-"gpgv2, gnupg | gnupg2, liblwp-protocol-https-perl, libwww-perl, unzip, xz-"
-"utils, file]"
+"gpgv2, gnupg | gnupg2, libfile-which-perl, libipc-run-perl, "
+"liblwp-protocol-https-perl, libmoo-perl, libwww-perl, unzip, xz-utils, file]"
 
 #. type: IP
 #: ../scripts/devscripts.1:153
@@ -17998,10 +17993,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/mk-origtargz.pl:176
-#, fuzzy
-#| msgid "B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]"
 msgid "B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> | B<default> ]"
-msgstr "B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> ]"
+msgstr "B<--compression> [ B<gzip> | B<bzip2> | B<lzma> | B<xz> | B<default> ]"
 
 #. type: textblock
 #: ../scripts/mk-origtargz.pl:178
@@ -21193,11 +21186,6 @@ msgstr ""
 
 #. type: textblock
 #: ../scripts/uscan.pl:317
-#, fuzzy
-#| msgid ""
-#| "Available I<method> values are B<xz>, B<gzip> (alias B<gz>), B<bzip2> "
-#| "(alias B<bz2>), and B<lzma>.  The default is B<gzip> for normal tarballs, "
-#| "and B<xz> for tarballs generated directly from a git repository."
 msgid ""
 "Available I<method> values are what mk-origtargz supports, so B<xz>, B<gzip> "
 "(alias B<gz>), B<bzip2> (alias B<bz2>), B<lzma>, B<default>. The default "
@@ -21206,9 +21194,9 @@ msgid ""
 "B<gzip>."
 msgstr ""
 "Les valeurs de I<méthode> disponibles sont B<xz>, B<gzip> (alias B<gz>), "
-"B<bzip2> (alias B<bz2>) et B<lzma>. La valeur par défaut est B<gzip> pour "
-"des archives normales et B<xz> pour des archives créées directement à partir "
-"d'un dépôt git."
+"B<bzip2> (alias B<bz2>) B<lzma> et B<default>. La valeur par défaut est "
+"B<xz>. Lorsque uscan est lancé dans un répertoire source Debian et que le "
+"format est \"1.0\" ou n'est pas défini, la méthode par défaut devient B<gzip>."
 
 #. type: textblock
 #: ../scripts/uscan.pl:323
@@ -24054,10 +24042,8 @@ msgstr "Télécharger la nouvelle version amont. (Par défaut)"
 
 #. type: =item
 #: ../scripts/uscan.pl:1411
-#, fuzzy
-#| msgid "B<--force-download>, B<-dd>"
 msgid "B<--force-download>, B<--dd>"
-msgstr "B<--force-download>, B<-dd>>"
+msgstr "B<--force-download>, B<--dd>>"
 
 #. type: textblock
 #: ../scripts/uscan.pl:1413
@@ -24070,10 +24056,8 @@ msgstr ""
 
 #. type: =item
 #: ../scripts/uscan.pl:1415
-#, fuzzy
-#| msgid "B<--overwrite-download>, B<-ddd>"
 msgid "B<--overwrite-download>, B<--ddd>"
-msgstr "B<--overwrite-download>, B<-ddd>"
+msgstr "B<--overwrite-download>, B<--ddd>"
 
 #. type: textblock
 #: ../scripts/uscan.pl:1417
@@ -27637,22 +27621,16 @@ msgstr ""
 #~ msgid "B<--diff>"
 #~ msgstr "B<--diff>"
 
-#, fuzzy
-#~| msgid ""
-#~| "# Similarly, the upstream part of the Debian version number can be\n"
-#~| "# mangled:\n"
-#~| "opts=dversionmangle=s/\\e.dfsg\\e.\\ed+$// \\e\n"
-#~| "  http://some.site.org/some/path/foobar-(.+)\\e.tar\\e.gz\n"
 #~ msgid ""
 #~ "# If the package is repacked using the Files-Excluded field in\n"
 #~ "# debian/copyright, the +dfsg suffix can instead be added with:\n"
 #~ "opts=uversionmangle=s/$/+dfsg/ \\e\n"
 #~ "  http://some.site.org/some/path/foobar-(.+)\\e.tar\\e.gz\n"
 #~ msgstr ""
-#~ "# De manière similaire, la partie de la version amont du numéro de\n"
-#~ "# version Debian peut être modifiée :\n"
-#~ "opts=dversionmangle=s/\\e.dfsg\\e.\\ed+$// \\e\n"
-#~ "  http://un.site.org/un/chemin/toto-(.+)\\e.tar\\e.gz\n"
+#~ "# Si le paquet est reconstruit en utilisant le champ Files-Excluded dans\n"
+#~ "# debian/copyright, le suffixe +dfsg peut à la place être ajouté avec:\n"
+#~ "opts=uversionmangle=s/$/+dfsg/ \\e\n"
+#~ "  http://some.site.org/some/path/foobar-(.+)\\e.tar\\e.gz\n"
 
 #~ msgid ""
 #~ "Make orig.tar.gz symlinks to any downloaded files if their extensions are "
