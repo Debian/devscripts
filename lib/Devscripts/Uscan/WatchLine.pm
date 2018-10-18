@@ -714,7 +714,12 @@ EOF
 "specified --download-debversion to set the last version: $lastversion";
     } elsif ($self->versionmode eq 'previous') {
         $lastversion = $self->shared->{previous_newversion};
-        uscan_verbose "Previous version downloaded: $lastversion";
+        # $lastversion is set only if something was downloaded before
+        if ($lastversion) {
+            uscan_verbose "Previous version downloaded: $lastversion";
+        } else {
+            uscan_verbose "Previous version not set, skipping";
+        }
     } else {
         uscan_verbose
 "Last orig.tar.* tarball version (from debian/changelog): $lastversion";
@@ -772,9 +777,14 @@ EOF
     } elsif ($self->versionmode eq 'previous') {
         unless ($self->pgpmode eq 'previous'
             and defined $self->shared->{previous_newversion}) {
-            uscan_warn
+            if ($self->shared->{download}) {
+                uscan_warn
 "Unable to set versionmode=prev for the line without opts=pgpmode=prev\n"
-              . "  in $watchfile, skipping:\n  $self->{line}";
+                  . "  in $watchfile, skipping:\n  $self->{line}";
+            } else {
+                uscan_warn "Nothing was downloaded before, skipping pgp check";
+                uscan_verbose "  line " . $self->line;
+            }
             return $self->status(1);
         }
         $self->shared->{download_version}

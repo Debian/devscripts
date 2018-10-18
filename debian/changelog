@@ -17,6 +17,8 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
     + Embed mk-origtargz instead of launching it and parse stdout.  MR: !55
     + Enclose the whole @ANY_VERSION@, @ARCHIVE_EXT@, @DEB_EXT@ and
       @SIGNATURE_EXT into non-capturing groups (See #910910).  MR: !66
+    + Disable pgpmode=previous lines if nothing was downloaded.
+      Closes: #910910; MR: !69
   * French translation update.  MR: !59
   * mk-origtargz:
     + Rewritten using common Perl files.  MR: !55
