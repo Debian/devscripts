@@ -19,6 +19,7 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
       @SIGNATURE_EXT into non-capturing groups (See #910910).  MR: !66
     + Disable pgpmode=previous lines if nothing was downloaded.
       Closes: #910910; MR: !69
+    + Use new value 'default' for compression when not chosen.  MR: !68
   * French translation update.  MR: !59
   * mk-origtargz:
     + Rewritten using common Perl files.  MR: !55
@@ -28,6 +29,8 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
     + Switch default compression from gzip to xz if source format is 2.0 or if
       mk-origtargz isn't used in a debian source directory
       Closes: #910803; MR: !61; MMR: !63
+    + Refactor the whole configuration management code, and add a 'default'
+      compression to let mk-origtargz choose.  MR: !68
 
   [ Daniel Kahn Gillmor ]
   * uscan:

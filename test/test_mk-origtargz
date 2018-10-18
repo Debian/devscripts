@@ -419,11 +419,11 @@ testExclude() {
 	makeDebianDir
 	makeDebianCopyright
 	run_mk_origtargz foo "$expected_stderr_after_removal" \
-		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.gz, deleting 19 files from it." \
+		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.xz, deleting 19 files from it." \
 		 ../foo-0.1.tar.gz
-	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
-	assertType application/gzip $TMPDIR/foo_0.1.orig.tar.gz
-	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1.orig.tar.gz | sort)"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
+	assertType application/xz $TMPDIR/foo_0.1.orig.tar.xz
+	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1.orig.tar.xz | sort)"
 }
 
 testExcludeXZ() {
@@ -455,11 +455,11 @@ testSuffix() {
 	makeDebianDir
 	makeDebianCopyright
 	run_mk_origtargz foo "$expected_stderr_after_removal" \
-		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1+dfsg1.orig.tar.gz, deleting 19 files from it." \
+		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1+dfsg1.orig.tar.xz, deleting 19 files from it." \
 		 ../foo-0.1.tar.gz --repack-suffix +dfsg1
-	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1+dfsg1.orig.tar.gz ]"
-	assertType application/gzip $TMPDIR/foo_0.1+dfsg1.orig.tar.gz
-	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1+dfsg1.orig.tar.gz | sort)"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1+dfsg1.orig.tar.xz ]"
+	assertType application/xz $TMPDIR/foo_0.1+dfsg1.orig.tar.xz
+	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1+dfsg1.orig.tar.xz | sort)"
 }
 
 testSuffixXZ() {
@@ -535,23 +535,23 @@ testSameNameExclude() {
 	makeDebianCopyright
 	run_mk_origtargz foo "$expected_stderr_after_removal" \
 		"Leaving ../foo_0.1.orig.tar.gz where it is, deleting 19 files from it." \
-		 ../foo_0.1.orig.tar.gz
+		 ../foo_0.1.orig.tar.gz --compression=gzip
 	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
 	assertFalse "result is a symlink" "[ -L $TMPDIR/foo_0.1.orig.tar.gz ]"
 	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1.orig.tar.gz | sort)"
 }
 
 testSameNameExcludeSymlink() {
-	makeTarBall gz
-	ln -s foo-0.1.tar.gz $TMPDIR/foo_0.1.orig.tar.gz
+	makeTarBall xz
+	ln -s foo-0.1.tar.xz $TMPDIR/foo_0.1.orig.tar.xz
 	makeDebianDir
 	makeDebianCopyright
 	run_mk_origtargz foo "$expected_stderr_after_removal" \
-		"Leaving ../foo_0.1.orig.tar.gz where it is, deleting 19 files from it." \
-		 ../foo_0.1.orig.tar.gz
-	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
-	assertTrue "result is not a symlink" "[ -L $TMPDIR/foo_0.1.orig.tar.gz ]"
-	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1.orig.tar.gz | sort)"
+		"Leaving ../foo_0.1.orig.tar.xz where it is, deleting 19 files from it." \
+		 ../foo_0.1.orig.tar.xz
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
+	assertTrue "result is not a symlink" "[ -L $TMPDIR/foo_0.1.orig.tar.xz ]"
+	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1.orig.tar.xz | sort)"
 }
 
 testCopyrightFormatWarning() {
@@ -587,11 +587,11 @@ testUnmatchedExclusion() {
 	makeDebianDir
 	makeUnmatchedExcludeCopyright
 	run_mk_origtargz foo "mk-origtargz warn: No files matched excluded pattern as the last matching glob: nomatch" \
-		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.gz, deleting 19 files from it." \
+		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.xz, deleting 19 files from it." \
 		 ../foo-0.1.tar.gz
-	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
-	assertType application/gzip $TMPDIR/foo_0.1.orig.tar.gz
-	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1.orig.tar.gz | sort)"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
+	assertType application/xz $TMPDIR/foo_0.1.orig.tar.xz
+	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1.orig.tar.xz | sort)"
 }
 
 testDuplicatePattern() {
@@ -599,11 +599,11 @@ testDuplicatePattern() {
 	makeDebianDir
 	makeDuplicatePatternCopyright
 	run_mk_origtargz foo "mk-origtargz warn: No files matched excluded pattern as the last matching glob: exclude-dir1" \
-		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.gz, deleting 19 files from it." \
+		"Successfully repacked ../foo-0.1.tar.gz as ../foo_0.1.orig.tar.xz, deleting 19 files from it." \
 		 ../foo-0.1.tar.gz
-	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.gz ]"
-	assertType application/gzip $TMPDIR/foo_0.1.orig.tar.gz
-	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1.orig.tar.gz | sort)"
+	assertTrue "result does not exist" "[ -e $TMPDIR/foo_0.1.orig.tar.xz ]"
+	assertType application/xz $TMPDIR/foo_0.1.orig.tar.xz
+	assertEquals "file contents" "$expected_files_after_removal" "$(tar taf $TMPDIR/foo_0.1.orig.tar.xz | sort)"
 }
 
 . shunit2

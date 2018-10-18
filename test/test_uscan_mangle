@@ -252,7 +252,8 @@ helperWatch() {
     PKG=${PKG:-foo}
     REPOPATH=${REPOPATH:-repo}
     POOLPATH=${POOLPATH:-pool}
-    GZREPACK=${GZREPACK:-gz}
+    GZREPACK=${GZREPACK:-xz}
+    MGZREPACK=${MGZREPACK:-gz}
     XCOMMAND=${XCOMMAND:-$COMMAND}
     WATCHVER="${WATCHVER:-3}"
     WATCHLINE0="@@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate"
@@ -297,7 +298,7 @@ helperWatch() {
     cd $TMPDIR
     $DEBUGLSLR
     UTARBALL=${PKG}-${VERNEW}.tar.gz
-    STARBALL=${PKG}_${PREFIX}${VERNEW}.orig.tar.$GZREPACK
+    STARBALL=${PKG}_${PREFIX}${VERNEW}.orig.tar.$MGZREPACK
     assertTrue "$UTARBALL missing: $WATCHLINE" "[ -f $UTARBALL ]"
     assertTrue "$STARBALL missing: $WATCHLINE" "[ -f $STARBALL ]"
     if [ "$PGP" = "pgp" ]; then
@@ -305,7 +306,7 @@ helperWatch() {
         if [ ! -f $UTARSIG ]; then
             UTARSIG=${PKG}-${VERNEW}.tar.gz.asc
         fi
-        STARSIG=${PKG}_${PREFIX}${VERNEW}.orig.tar.$GZREPACK.asc
+        STARSIG=${PKG}_${PREFIX}${VERNEW}.orig.tar.$MGZREPACK.asc
         assertTrue "$UTARSIG and *.sig missing: $WATCHLINE" "[ -f $UTARSIG ]"
         assertTrue "$STARSIG missing: $WATCHLINE" "[ -f $STARSIG ]"
     fi
@@ -368,6 +369,7 @@ helperWatch() {
     unset REPOPATH
     unset POOLPATH
     unset GZREPACK
+    unset MGZREPACK
     unset XCOMMAND
     unset WATCHVER
     unset WATCHLINE
@@ -763,6 +765,7 @@ testWatch4WebNonNative() {
 
 # test normal web page (Files-exclude)
 testWatch4WebNonNativeFE() {
+    MGZREPACK=xz
     FILEEXCLUDE=1
     WATCHVER=4
     helperWatch
@@ -868,12 +871,14 @@ testWatch4WebNonNativeBZ2() {
     WATCHVER=4
     WATCHLINE='opts=repack,compression=bz2 @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     GZREPACK=bz2
+    MGZREPACK=bz2
     helperWatch
     unset GZREPACK
 }
 
 # test repack and compression
 testWatch4WebNonNativeXZ() {
+    MGZREPACK=xz
     WATCHVER=4
     WATCHLINE='opts=repack,compression=xz @@@url@@@/ (?:.*)/@PACKAGE@@ANY_VERSION@@ARCHIVE_EXT@ debian uupdate'
     GZREPACK=xz
@@ -883,6 +888,7 @@ testWatch4WebNonNativeXZ() {
 
 # test spaces everywhere
 testWatch4PrWebNonNativeXZ() {
+    MGZREPACK=xz
     WATCHVER=4
     WATCHLINE='opts = "downloadurlmangle = s%boo/xxx%@PACKAGE@/ooo% ; s%boo-%@PACKAGE@-%, \
                      filenamemangle    = s%.*boo-(.*)%@PACKAGE@-$1% , \
@@ -961,6 +967,7 @@ testWatch4WebNonNativeSigAuto() {
 
 # test normal web page with sig(bin) (Files-exclude)
 testWatch4WebNonNativeFESig() {
+    MGZREPACK=xz
     FILEEXCLUDE=1
     WATCHVER=4
     SIGMODE=BIN
@@ -1011,6 +1018,7 @@ testWatch4WebNonNativeSelfSig() {
 
 # test normal web page (MUT)
 testWatch4WebNonNativeMUT() {
+    MGZREPACK=xz
     WATCHVER=4
     COMPONENTS="bar baz"
     SIGMODE=BIN
