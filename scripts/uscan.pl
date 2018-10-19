@@ -370,7 +370,7 @@ and packs the source tree with the specified tag via I<matching-pattern> into
 I<spkg-version>B<.tar.xz>.
 
 If the upstream publishes the released tarball via its web interface, please
-use it instead of using this mode.  This mode is the last resort method.
+use it instead of using this mode. This mode is the last resort method.
 
 For git mode, I<matching-pattern> specifies the full string matching pattern for
 tags instead of hrefs. If I<matching-pattern> is set to
@@ -390,6 +390,11 @@ The local repository is temporarily created as a bare git repository directory
 under the destination directory where the downloaded archive is generated.  This
 is normally erased after the B<uscan> execution.  This local repository is kept
 if B<--debug> option is used.
+
+If current directory is a git repository and searched repository exists in
+"remote" sources, then uscan will use it instead of cloning separately.
+The only local change is that uscan wil launch a "fetch" command to refresh
+this repository.
 
 =back
 
@@ -425,6 +430,9 @@ B<strftime> manpage.  The default is B<date=%Y%m%d>.
 Set the git clone operation I<mode>. The default is B<gitmode=shallow>.  For
 some dumb git server, you may need to manually set B<gitmode=full> to force full
 clone operation.
+
+If current directory is a git repository and searched repository exists in
+"remote" sources, then uscan will use it instead of cloning separately.
 
 =item B<pgpmode=>I<mode>
 

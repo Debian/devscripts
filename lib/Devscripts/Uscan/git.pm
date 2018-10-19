@@ -97,8 +97,37 @@ sub git_search {
     # search $newfile $newversion (git mode w/tag)
     ################################################
     elsif ($self->mode eq 'git') {
-        uscan_verbose "Execute: git ls-remote $self->{base}";
-        open(REFS, "-|", 'git', 'ls-remote', $self->parse_result->{base})
+        my @args = ('ls-remote', $self->parse_result->{base});
+        # Try to use local upstream branch if available
+        if (-d '.git') {
+            my $out;
+            eval {
+                spawn(
+                    exec       => ['git', 'remote', '--verbose', 'show'],
+                    wait_child => 1,
+                    to_string  => \$out
+                );
+            };
+            # Check if git repo found in debian/watch exists in
+            # `git remote show` output
+            if ($out and $out =~ /^(\S+)\s+\Q$self->{parse_result}->{base}\E/m)
+            {
+                $self->downloader->git_upstream($1);
+                uscan_warn
+                  "Using $self->{downloader}->{git_upstream} remote origin";
+                # Found, launch a "fetch" to be up to date
+                spawn(
+                    exec => ['git', 'fetch', $self->downloader->git_upstream],
+                    wait_child => 1
+                );
+                @args = ('show-ref');
+            }
+        }
+        {
+            local $, = ' ';
+            uscan_verbose "Execute: git @args $self->{parse_result}->{base}";
+        }
+        open(REFS, "-|", 'git', @args)
           || uscan_die "$progname: you must have the git package installed";
         my @refs;
         my $ref;
@@ -178,7 +207,9 @@ sub git_clean {
     my ($self) = @_;
 
     # If git cloned repo exists and not --debug ($verbose=2) -> remove it
-    if ($self->downloader->gitrepo_state > 0 and $verbose < 2) {
+    if (    $self->downloader->gitrepo_state > 0
+        and $verbose < 2
+        and !$self->downloader->git_upstream) {
         my $err;
         uscan_verbose "Removing git repo ($self->{downloader}->{destdir}/"
           . $self->gitrepo_dir . ")";

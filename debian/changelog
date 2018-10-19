@@ -23,6 +23,7 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
     + Use new value 'default' for compression when not chosen.  MR: !68
     + Fix regression from 2.18.5 where the User-Agent string was not set to
       the default value.  Closes: #911401; MR: !73
+    + Use git upstream remote when available in git mode.  Closes: #910777
   * French translation update.  MR: !59
   * mk-origtargz:
     + Rewritten using common Perl files.  MR: !55
