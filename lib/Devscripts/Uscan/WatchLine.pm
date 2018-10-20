@@ -398,7 +398,8 @@ EOF
                 or $opts =~ /^\s*useragent\s*=\s*(.+?)\s*$/) {
                 my $user_agent_string = $1;
                 $user_agent_string = $self->config->user_agent
-                  if $self->config->user_agent;
+                  if $self->config->user_agent ne
+                  &Devscripts::Uscan::Config::default_user_agent;
                 $self->downloader->user_agent->agent($user_agent_string);
                 uscan_verbose "User-agent: $user_agent_string";
                 $opts = '';

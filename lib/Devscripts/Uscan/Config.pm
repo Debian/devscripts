@@ -27,6 +27,9 @@ extends 'Devscripts::Config';
 
 our $CURRENT_WATCHFILE_VERSION = 4;
 
+use constant default_user_agent => "Debian uscan"
+  . ($main::uscan_version ? " $main::uscan_version" : '');
+
 our @EXPORT = (qw($CURRENT_WATCHFILE_VERSION));
 
 # I - ACCESSORS
@@ -85,9 +88,16 @@ use constant keys => [
         },
         '..'
     ],
-    ['exclusion!',             'USCAN_EXCLUSION', 'bool',    1],
-    ['timeout=i',              'USCAN_TIMEOUT',   qr/^\d+$/, 20],
-    ['user-agent|useragent=s', 'USCAN_USER_AGENT',],
+    ['exclusion!', 'USCAN_EXCLUSION', 'bool',    1],
+    ['timeout=i',  'USCAN_TIMEOUT',   qr/^\d+$/, 20],
+    [
+        'user-agent|useragent=s',
+        'USCAN_USER_AGENT',
+        qr/\w/,
+        sub {
+            default_user_agent;
+        }
+    ],
     ['repack', 'USCAN_REPACK', 'bool'],
     # 2.2 - Simple command line args
     ['bare', undef, 'bool', 0],
@@ -115,7 +125,8 @@ use constant keys => [
         'pasv|passive',
         'USCAN_PASV',
         sub {
-            return $_[0]->pasv('default') unless ($_[1] =~ /^(yes|0|1|no)$/);
+            return $_[0]->pasv('default')
+              unless ($_[1] =~ /^(yes|0|1|no)$/);
             $_[0]->pasv({
                     yes => 1,
                     1   => 1,
@@ -175,7 +186,8 @@ use constant rules => [
     sub {
         my $self = shift;
         if ($self->package) {
-            $self->download(0) unless ($self->download > 1);    # compatibility
+            $self->download(0)
+              unless ($self->download > 1);    # compatibility
             return (0,
 "The --package option requires to set the --watchfile option, too."
             ) unless defined $self->watchfile;

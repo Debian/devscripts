@@ -20,6 +20,7 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
     + Disable pgpmode=previous lines if nothing was downloaded.
       Closes: #910910; MR: !69
     + Use new value 'default' for compression when not chosen.  MR: !68
+    + User-agent string was not set to default value.  Closes: #911401
   * French translation update.  MR: !59
   * mk-origtargz:
     + Rewritten using common Perl files.  MR: !55

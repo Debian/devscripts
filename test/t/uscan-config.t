@@ -1,4 +1,4 @@
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 BEGIN {
     use_ok('Devscripts::Uscan::Config');
@@ -14,3 +14,4 @@ ok(
 
 ok($conf->symlink eq 'rename', ' symlink=rename');
 ok($conf->download_version eq '1.0',' download_version=1.0');
+ok($conf->user_agent =~ /^Debian uscan/, qq' user agent starts with "Debian uscan" ($conf->{user_agent})');
