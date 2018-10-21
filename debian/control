@@ -231,7 +231,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
     package which may be installed to satisfy the build-dependencies of the
     given package [equivs]
   - mk-origtargz: rename upstream tarball, optionally changing the compression
-    and removing unwanted files [unzip, xz-utils, file]
+    and removing unwanted files [file, libfile-which-perl, unzip, xz-utils]
   - namecheck: check project names are not already taken
   - nmudiff: mail a diff of the current package against the previous version
     to the BTS to assist in tracking NMUs [patchutils, mutt]

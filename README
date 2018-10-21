@@ -211,7 +211,7 @@ And now, in mostly alphabetical order, the scripts:
 
 - mk-origtargz: Rename upstream tarball, optionally changing the compression
   and removing unwanted files.
-  [unzip, xz-utils, file]
+  [libfile-which-perl, unzip, xz-utils, file]
 
 - namecheck: Check project names are not already taken.
 
@@ -256,9 +256,9 @@ And now, in mostly alphabetical order, the scripts:
   version based on the new update.  Whilst uscan could be used to release
   the updated version automatically, it is probably better not to without
   testing it first.  Uscan can also verify detached OpenPGP signatures if
-  upstream's signing key is known. [gpgv | gpgv2, gnupg | gnupg2,
+  upstream's signing key is known. [file, gpgv | gpgv2, gnupg | gnupg2,
   libfile-which-perl, liblwp-protocol-https-perl, libmoo-perl, libwww-perl,
-  unzip, xz-utils, file]
+  unzip, xz-utils]
 
 - uupdate: Update the package with an archive or patches from
   an upstream author.  This will be of help if you have to update your
