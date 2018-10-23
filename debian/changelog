@@ -48,7 +48,15 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
       /tmp.  Thanks to Jakub Wilk for reporting.  Closes: #911720
   * README:
     + Normalize by always appending a full stop at the end of the sentence.
-    + Document the role of 'Suggests'ed packages.
+    + Document the role of "Suggests"ed packages.
+    + Introduce the concept of "core" scripts, for which base dependencies are
+      expected to be marked as hard "Depends".  For now the following scripts
+      are considered core: dcmd dd-list debchange debcheckout debclean debdiff
+      debsign debuild uscan.
+  * debian/copyright:
+    + Per the above definition of "core scripts", promote the following
+      packages to Depends: fakeroot, file, gnupg|gnupg2, gpgv|gpgv2,
+      libfile-which-perl, libwww-perl, patchutils, wdiff.
 
   [ Eli Uriegas ]
   * mk-build-deps:
