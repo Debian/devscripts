@@ -62,6 +62,7 @@ Architecture: any
 Multi-Arch: foreign
 Depends: dpkg-dev (>= 1.18.19),
          libfile-homedir-perl,
+         libipc-run-perl,
          libmoo-perl,
          sensible-utils,
          ${misc:Depends},
@@ -80,7 +81,6 @@ Recommends: apt,
             libencode-locale-perl,
             libgit-wrapper-perl,
             libfile-which-perl,
-            libipc-run-perl,
             liblist-compare-perl,
             libstring-shellquote-perl,
             libtry-tiny-perl,
@@ -231,7 +231,7 @@ Description: scripts to make the life of a Debian Package maintainer easier
     package which may be installed to satisfy the build-dependencies of the
     given package [equivs]
   - mk-origtargz: rename upstream tarball, optionally changing the compression
-    and removing unwanted files [unzip, xz-utils, file]
+    and removing unwanted files [file, libfile-which-perl, unzip, xz-utils]
   - namecheck: check project names are not already taken
   - nmudiff: mail a diff of the current package against the previous version
     to the BTS to assist in tracking NMUs [patchutils, mutt]
@@ -257,9 +257,8 @@ Description: scripts to make the life of a Debian Package maintainer easier
     transitions for which uploads to unstable are currently blocked
     [libwww-perl, libyaml-syck-perl]
   - uscan: scan upstream sites for new releases of packages [gpgv | gpgv2,
-    gnupg | gnupg2, libfile-which-perl, libipc-run-perl,
-    liblwp-protocol-https-perl, libmoo-perl, libwww-perl, unzip, xz-utils,
-    file]
+    gnupg | gnupg2, file, libfile-which-perl, liblwp-protocol-https-perl,
+    libmoo-perl, libwww-perl, unzip, xz-utils]
   - uupdate: integrate upstream changes into a source package [patch]
   - what-patch: determine what patch system, if any, a source package is using
     [patchutils]

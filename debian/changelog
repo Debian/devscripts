@@ -8,7 +8,8 @@ devscripts (2.18.7) UNRELEASED; urgency=medium
   * Perl scripts:
     + Add common modules to parse configuration, command line and normalize
       output.  MR: !51
-      - This moves libmoo-perl dependency from "Recommends" to "Depends".
+      - This moves libmoo-perl and libipc-run-perl dependency from "Recommends"
+        to "Depends".  MR: !51 and !74
   * uscan:
     + Fix bad package name in git HEAD mode.  Closes: #896136
     + Modified to use common Perl modules.  MR: !51
